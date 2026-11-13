@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import { nrlBoardChallengeStatus, nrlBoardTarget } from '@/lib/nrlBoardTarget';
 import {
-  createNrlCareer, nrlCareerFinance, nrlOffseasonClubs, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
+  createNrlCareer, nrlCareerFinance, nrlCoachRetentionQuote, nrlOffseasonClubs, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { createNrlSeason, NRL_ROLES, nrlFitLineup, nrlStarterOptions } from '@/lib/nrlManager';
 
@@ -69,6 +69,9 @@ describe('NRL Manager Board challenge', () => {
     const bytes = JSON.stringify(completed);
     const restored = readNrlCareerSave(bytes)!;
     expect(status(restored)).toBe('must-move');
+    const withCoach = { ...restored, finance: { ...restored.finance, coachHire: { role: 'defense' as const, round: 1, paidRounds: 31 } } };
+    expect(nrlCoachRetentionQuote(withCoach).reason).toMatch(/requires you to move/);
+    expect(reduceNrlCareer(withCoach, { type: 'setCoachRetention', enabled: true, year: 2027, clubId: 'storm' })).toBe(withCoach);
     expect(stay(restored) === restored).toBe(true);
     expect(move(restored, 'storm') === restored).toBe(true);
     expect(nrlOffseasonClubs(restored).some(club => club.id === 'chiefs')).toBe(true);

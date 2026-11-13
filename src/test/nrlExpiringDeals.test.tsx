@@ -70,6 +70,37 @@ afterEach(() => {
 });
 
 describe('NRL season review for expiring deals', () => {
+  it('previews, confirms and cancels staff retention before moving clubs', () => {
+    const hired = reduceNrlCareer(createNrlCareer('storm', 4), { type: 'hireCoach', role: 'attack', year: 2026, round: 1 });
+    const closed = finish(hired);
+    const view = open(closed);
+    const before = raw();
+    click('Review assistant extension');
+    expect(screen.getByText(/No new signing fee/)).toBeVisible();
+    expect(raw()).toBe(before);
+    click('Cancel preview');
+    expect(raw()).toBe(before);
+    click('Review assistant extension');
+    click('Confirm assistant extension');
+    const pending = raw()!;
+    expect(JSON.parse(pending).coachRetention).toBe(true);
+    expect(screen.getByText(/wages reserved for 2027/i)).toBeVisible();
+    view.unmount();
+    open(pending);
+    click('Cancel assistant extension');
+    expect(raw()).toBe(before);
+    click('Review assistant extension');
+    click('Confirm assistant extension');
+    fireEvent.click(screen.getByText('Change clubs for 2027'));
+    expect(screen.getByText(/Moving clubs cancels the assistant extension/)).toBeVisible();
+    fireEvent.change(screen.getByLabelText('Club to manage'), { target: { value: 'bears' } });
+    click('Start 2027 with Bears');
+    const moved = readNrlCareerSave(raw())!;
+    expect(moved.season.clubId).toBe('bears');
+    expect(moved.coachRetention).toBeUndefined();
+    expect(moved.finance.coachHire).toBeUndefined();
+  });
+
   it('previews the league recruitment deals without saving and records only an explicit selection', async () => {
     const view = open(completed);
     const details = screen.getByText('League recruitment').closest('details')!;

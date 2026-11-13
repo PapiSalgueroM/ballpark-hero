@@ -10,7 +10,7 @@ import {
   nrlBoardPathwaysIncome, nrlBoardPathwaysQuote,
   nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractCounteroffer, nrlContractOffer,
-  nrlCoachQuote, nrlCoachSpend, nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
+  nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
   nrlLeagueRecruitmentPreview,
   nrlRecruitmentBrief,
@@ -562,6 +562,38 @@ function MedicalFacilities({ career, onAction, disabled }: { career: NrlCareerSt
   );
 }
 
+function AssistantExtension({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const [preview, setPreview] = useState(false);
+  const title = useRef<HTMLHeadingElement>(null);
+  const { year, clubId, phase } = career.season;
+  if (phase !== 'complete' || career.retired || !career.finance.coachHire || year >= NRL_LAST_YEAR) return null;
+  const { reason, reservedWages } = nrlCoachRetentionQuote(career);
+  const coach = nrlCoachQuote(career).current!;
+  const toggle = (enabled: boolean) => {
+    if (onAction({ type: 'setCoachRetention', year, clubId, enabled })) {
+      setPreview(false);
+      title.current?.focus();
+    }
+  };
+  return (
+    <section className="mt-3 space-y-2 rounded-lg border border-border bg-background p-3 text-sm">
+      <h3 ref={title} tabIndex={-1} className="font-bold outline-none">Assistant extension</h3>
+      <p>{coach.name} · {coachLabels[coach.role]}</p>
+      {career.coachRetention ? <>
+        <p role="status" className="text-muted-foreground">{money(reservedWages)} wages reserved for {year + 1}. The agreement applies if you stay at this club.</p>
+        <Button type="button" size="lg" variant="outline" disabled={disabled} onClick={() => toggle(false)}>Cancel assistant extension</Button>
+      </> : reason ? <p className="text-muted-foreground">{reason}</p> : preview ? <>
+        <p className="text-muted-foreground">Keep {coach.name} for one more season. No new signing fee. Reserve {money(reservedWages)} from club cash for {year + 1} wages. Moving clubs or retiring cancels the agreement.</p>
+        <div className="flex flex-wrap gap-2">
+          <Button type="button" size="lg" variant="outline" onClick={() => { setPreview(false); title.current?.focus(); }}>Cancel preview</Button>
+          <Button type="button" size="lg" disabled={disabled} onClick={() => toggle(true)}>Confirm assistant extension</Button>
+        </div>
+      </> : <Button type="button" size="lg" variant="outline" disabled={disabled}
+        onClick={() => { setPreview(true); title.current?.focus(); }}>Review assistant extension</Button>}
+    </section>
+  );
+}
+
 function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { year, clubId, round } = career.season;
   const { candidates, current, fee, wagePerRound, remainingWages, reason, developmentReason } = nrlCoachQuote(career);
@@ -577,6 +609,7 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
             <p className="font-semibold" data-nrl-coach-current>{current.name} · {coachLabels[current.role]}</p>
             <p className="mt-1 text-muted-foreground">{coachEffects[current.role]}</p>
             <p className="mt-2 text-muted-foreground">Signed through this season. Remaining wages {money(remainingWages)}.</p>
+            {career.finance.coachHire?.retained && <p className="mt-1 text-muted-foreground">Retained from {year - 1}. No new signing fee.</p>}
             {current.role === 'development' && (
               <>
                 <h3 className="mt-3 font-semibold">Development appearances</h3>
@@ -593,6 +626,7 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
                 ) : <p className="mt-1 text-muted-foreground">No eligible players are signed to return yet.</p>}
               </>
             )}
+            <AssistantExtension career={career} onAction={onAction} disabled={disabled} />
           </>
         ) : (
           <>
@@ -1204,10 +1238,13 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           : application.response === 'vacancy-closed' ? 'no longer has an opening.' : 'declined your application.'}
       </p>
       {application.response === 'offered' && (
-        <Button type="button" size="lg" className="mt-2 w-full px-2 sm:w-auto" disabled={disabled}
-          onClick={() => onAction({ type: 'acceptOffseasonJob', year, clubId, destinationId: application.clubId })}>
-          Accept offer and start {year + 1}
-        </Button>
+        <>
+          {career.coachRetention && <p className="text-sm text-muted-foreground">Accepting this job cancels the assistant extension.</p>}
+          <Button type="button" size="lg" className="mt-2 w-full px-2 sm:w-auto" disabled={disabled}
+            onClick={() => onAction({ type: 'acceptOffseasonJob', year, clubId, destinationId: application.clubId })}>
+            Accept offer and start {year + 1}
+          </Button>
+        </>
       )}
     </div>
   );
@@ -1238,6 +1275,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       {!retired && <BoardPathways career={career} onAction={onAction} disabled={disabled} />}
       {!retired && !career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
       {finished && !retired && year < NRL_LAST_YEAR && <ExpiringDeals career={career} onAction={onAction} disabled={disabled} />}
+      <AssistantExtension career={career} onAction={onAction} disabled={disabled} />
       <LeagueRecruitment career={career} onAction={onAction} disabled={disabled}
         nextClubId={nextClub?.id ?? (application?.response === 'offered' ? application.clubId : undefined)} />
       {finished && !retired && year < NRL_LAST_YEAR && !mustMove && (
@@ -1252,6 +1290,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           </summary>
           <div className="space-y-2 pb-3 text-sm">
             <p className="text-muted-foreground">Take over the new club’s squad and contracts. If you return to a club, you resume its last balance and medical facilities.</p>
+            {career.coachRetention && <p className="text-muted-foreground">Moving clubs cancels the assistant extension.</p>}
             {openings.length > 0 && <section className="rounded-lg border border-border p-2" aria-labelledby="nrl-openings-title">
               <h3 id="nrl-openings-title" className="font-bold">Suggested openings</h3>
               <p className="text-muted-foreground">
@@ -1302,7 +1341,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       )}
       {finished && !retired && !disabled && (
         <RetireDoor className="mt-3" door="Retire from management" title={`Retire after the ${year} season?`}
-          lines={['Your career record stays in this save slot.']} keep="Keep managing" confirm="Yes, retire"
+          lines={['Your career record stays in this save slot.', ...(career.coachRetention ? ['Retiring cancels the assistant extension.'] : [])]}
+          keep="Keep managing" confirm="Yes, retire"
           onRetire={() => onAction({ type: 'retireCareer', year, clubId })} />
       )}
       <CareerRecord history={career.history} />
@@ -1373,6 +1413,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 {coach && staffSpend && <p className="text-sm text-muted-foreground" data-nrl-coach-receipt>
                   {coachLabels[coach.role]} · {money(staffSpend.signingFee + staffSpend.wages)} total staff cost
                 </p>}
+                {record.coachRetained && <p className="text-sm text-muted-foreground">Assistant retained for {record.year + 1}.</p>}
                 {record.coachDevelopment && (
                   <p className="text-sm text-muted-foreground">
                     {record.coachDevelopment.length === 0 ? 'Development assistant · No additional ratings gained'
