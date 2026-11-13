@@ -1,10 +1,16 @@
-## 2026-11-12 Puck Detective roster clue wording
+## 2026-11-13: Home consent flow and current verification
+
+The b94dd2a43 review source has the same complete build inputs as compiled 918fdab2f; their only file difference is this state record. Actual application types, the ordinary build, all 23 page readers, separate snapshot boots and redirects, all 16 download caps and 400 isolation probes pass. Home cookie choices now occupy document flow after the header, leaving Daily links unobscured. Thirty-seven consent tests and four phone/desktop journeys pass. Game consent behavior and ad rules are unchanged.
+
+The 494dedb hosted batch has 15 successes, 32 failures, one timed-out cancellation and one active run at 03:33 UTC. Career save recovery now passes all 33 normal cases and 23 copied faults locally; Academy/Stadium loads pass all 13 normal cases, eight copied controls and three corpus controls. Only their stale test hooks changed. The older 845-harness audit still waits for its Summer balance children. See the [readiness record](plans/2026-11-12-site-readiness.md) for exact artifacts, live releases and unresolved work.
+
+## 2026-11-13: Puck Detective roster clue wording published
 
 Puck Detective now explains in the game, Help and guide that its team and jersey clues use a stored roster snapshot. The Hockey hub describes the same source. This release keeps the existing roster rows, Daily draw, scoring and save format.
 
 The normal grid archive refresh preserved all 348 published boards through November 11 Eastern byte for byte. A scoped SEO build refreshed only Hockey and Puck Detective and their sitemap dates. App types, 13 focused tests, 17 output checks, the browser boot check, and all 16 existing route-size caps passed. Six paired 320px and 390px browser checks against the prior main build kept both archive clue cards and exact active and finished save bytes across reload. The new note fit on both screens, with no page errors or score writes.
 
-Awaiting hosted qualification and publication.
+Both hosted workflows passed. Merge `84e670759` was confirmed in Lovable before deployment `53d22eb9-1d2d-40ef-b27a-a7d4b1c7fb0a`. The published copy and metadata, 348 unchanged archive boards, six paired phone checks with pinned live JavaScript and all 172 public routes pass. IndexNow accepted both changed URLs. This publishes the explanation; the original report's separate dated-roster refresh remains open, and its admin status is unchanged.
 
 ## 2026-11-13: NRL halftime reserve and roster-copy verification
 
