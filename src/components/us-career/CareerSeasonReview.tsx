@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState, type MouseEvent } from 'react';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { cn } from '@/lib/utils';
 import { formatNumber } from '@/lib/formatNumber';
 import CareerSeasonComparison from '@/components/us-career/CareerSeasonComparison';
 import CareerSeasonHighs from '@/components/us-career/CareerSeasonHighs';
+import { UsSeasonCentreOpen } from '@/components/us-career/season/UsSeasonCentreHost';
 
 const finite = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
 const recorded = (value: unknown) => finite(value) ? String(value) : 'Not recorded';
@@ -27,6 +28,8 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
   const [tab, setTab] = useState<Tab>('Overview');
   const [comparing, setComparing] = useState(false);
   const [highs, setHighs] = useState(false);
+  const centre = useContext(UsSeasonCentreOpen);
+  const [loadingReplay, setLoadingReplay] = useState(false);
   const compareButton = useRef<HTMLButtonElement>(null);
   const highsButton = useRef<HTMLButtonElement>(null);
   const returnCompare = useRef(false);
@@ -39,6 +42,14 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
   const season = selected === null ? undefined : career.seasons[selected];
   const previous = selected !== null && selected > 0 ? career.seasons[selected - 1] : undefined;
   const detail = season ? sport.reviewStats(season, career.pos) : null;
+  const openPlayoffs = async (event: MouseEvent<HTMLButtonElement>) => {
+    if (!centre || !season || loadingReplay) return;
+    const from = event.currentTarget;
+    setLoadingReplay(true);
+    const ready = await centre.ready(from);
+    setLoadingReplay(false);
+    if (ready && from.isConnected) centre.open({ career, row: season, playoffsOnly: true, from });
+  };
 
   useEffect(() => {
     if (comparing || highs) return;
@@ -107,6 +118,11 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
             </div>)}
           </dl>
           <p className="text-xs text-muted-foreground">These are the numbers kept in your save. Older saves may not have every field.</p>
+          {tab === 'Postseason' && centre && sport.canReplayPlayoffs?.(career, season) && (
+            <button type="button" className={control} aria-busy={loadingReplay || undefined} onClick={openPlayoffs}>
+              {loadingReplay ? 'Loading playoff replay...' : 'Replay team playoffs'}
+            </button>
+          )}
         </>}
       </div>
     </section>}

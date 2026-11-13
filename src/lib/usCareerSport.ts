@@ -394,4 +394,6 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
    *  Round 1212: handed who is asking as well (his position and his club of that season), for a position
    *  or a club the view cannot show yet. A binding that takes fewer arguments ignores the rest. */
   seasonCentreHeld?: (year: number, eraId?: string, who?: { pos: string; team: string }) => string | null;
+  /** A read-only team postseason replay of a supported saved season. */
+  canReplayPlayoffs?: (career: UsCareerCore, row: UsCareerSeason) => boolean;
 }

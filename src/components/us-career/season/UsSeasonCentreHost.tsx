@@ -29,6 +29,7 @@ import { hasPendingSaves, settlePendingSaves } from '@/lib/safeStorage';
 export interface UsSeasonCentreRequest {
   career: UsCareerCore;
   row: UsCareerSeason;
+  playoffsOnly?: boolean;
   /** The element that asked, to give focus back to when there is no curtain. */
   from?: HTMLElement | null;
 }
@@ -128,7 +129,7 @@ export function UsSeasonCentreHost({ sport, children }: { sport: UsCareerSport; 
       {request && Viewer && (
         <div data-no-prerender>
           <div className="fixed inset-0 z-40 bg-background" data-us-centre-cover />
-          <Viewer sport={sport} career={request.career} row={request.row} onClose={close} />
+          <Viewer sport={sport} career={request.career} row={request.row} playoffsOnly={request.playoffsOnly} onClose={close} />
         </div>
       )}
       {failed && !request && (
