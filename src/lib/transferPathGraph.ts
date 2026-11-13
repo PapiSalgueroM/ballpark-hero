@@ -58,21 +58,35 @@ function addSpell(keys: ClubSeasonKeys, club: string, season: string): void {
   for (let year = span[0]; year <= span[1]; year += 1) keys.span.add(`${club}::${year}`);
 }
 
+function lampardWithChelseaCareer<T extends {
+  name: string; career: ReadonlyArray<Pick<CareerPlayer['career'][number], 'club' | 'season'>>;
+}>(players: readonly T[]): T | undefined {
+  const matches = players.filter(player => player.name === 'Frank Lampard');
+  const lampard = matches.length === 1 ? matches[0] : undefined;
+  return lampard?.career.some(stint => stint.club === 'Chelsea' && stint.season === '2013-2014') ? lampard : undefined;
+}
+
+// Both club match reports verify the 2015 teammates. Keep this evidence in the
+// Transfer Path graph so career-clue rows and saved reveal counts stay intact.
+// https://www.newyorkcityfc.com/news/new-york-city-fc-dc-united-recap
+// https://www.dcunited.com/news/dc-united-clinches-berth-audi-2015-mls-cup-playoffs
+export function verifiedClassicStint(
+  identities: readonly CareerPlayer[], pool: Parameters<typeof lampardWithChelseaCareer>[0] = identities,
+) {
+  const lampard = lampardWithChelseaCareer(identities);
+  if (lampard?.nationality !== 'England' || lampard.position !== 'CM') return undefined;
+  const player = pool === identities ? lampard : lampardWithChelseaCareer(pool);
+  if (player) return { player: player.name, club: 'New York City FC', season: '2015' };
+}
+
 /** name -> the keys the link rule is judged on */
 export function clubSeasonsOf(players: CareerPlayer[], includeVerifiedStints = false): Map<string, ClubSeasonKeys> {
   const map = new Map<string, ClubSeasonKeys>();
-  const lampardRows = includeVerifiedStints ? players.filter(player => player.name === 'Frank Lampard') : [];
-  const lampard = lampardRows.length === 1 ? lampardRows[0] : undefined;
-  // Both club match reports verify the 2015 teammates. This is a Transfer Path
-  // edge only, so career-clue rows and the saved reveal counts stay intact.
-  // https://www.newyorkcityfc.com/news/new-york-city-fc-dc-united-recap
-  // https://www.dcunited.com/news/dc-united-clinches-berth-audi-2015-mls-cup-playoffs
-  const verifiedLampard = lampard?.nationality === 'England' && lampard.position === 'CM'
-    && lampard.career.some(stint => stint.club === 'Chelsea' && stint.season === '2013-2014') ? lampard : undefined;
+  const verified = includeVerifiedStints ? verifiedClassicStint(players) : undefined;
   for (const p of players) {
     const keys: ClubSeasonKeys = { exact: new Set(), calendar: new Set(), span: new Set() };
     for (const s of p.career) addSpell(keys, s.club, s.season);
-    if (p === verifiedLampard) addSpell(keys, 'New York City FC', '2015');
+    if (verified?.player === p.name) addSpell(keys, verified.club, verified.season);
     map.set(p.name, keys);
   }
   return map;

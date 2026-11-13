@@ -95,7 +95,7 @@ if (CONTROL === 'exactonly' || CONTROL === 'overlap') {
     : '   NEGATIVE CONTROL ON: the generator lets two split seasons that share a year link, the fix that invents teammates');
 }
 const lib = await import(libHref);
-const { buildGraph, distances, expandCompactCareers, neighbours, sharedClub } = lib;
+const { buildGraph, distances, expandCompactCareers, hintProblems, neighbours, parseTransferPathCompanionMigration, sharedClub } = lib;
 
 /* ── the page's module, patched for its two controls ─────────────────────── */
 const GRAPH_TS = path.join(ROOT, 'src/lib/transferPathGraph.ts');
@@ -115,7 +115,7 @@ if (CONTROL === 'page' || CONTROL === 'pageshare') {
 const ENTRY = path.join(os.tmpdir(), 'tps-entry.mjs'), BUNDLE = path.join(os.tmpdir(), 'tps-bundle.mjs');
 const p = f => f.replaceAll('\\', '/');
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-fs.writeFileSync(ENTRY, `export { buildSeasonIndex, clubSeasonsOf, linkedFrom, shareClub } from '${p(graphTsPath)}';\nexport { isEuropeanClub, playersUnderRule } from '${p(ROOT)}/src/lib/transferPathModes.ts';\nexport { careerPlayers as fallbackPlayers } from '${p(ROOT)}/src/data/careerPlayers.ts';\nexport { default as fallbackPuzzles } from '${p(ROOT)}/src/data/transferPathPuzzles.ts';\n`);
+fs.writeFileSync(ENTRY, `export { buildSeasonIndex, clubSeasonsOf, linkedFrom, shareClub, verifiedClassicStint } from '${p(graphTsPath)}';\nexport { isEuropeanClub, playersUnderRule } from '${p(ROOT)}/src/lib/transferPathModes.ts';\nexport { careerPlayers as fallbackPlayers } from '${p(ROOT)}/src/data/careerPlayers.ts';\nexport { default as fallbackPuzzles } from '${p(ROOT)}/src/data/transferPathPuzzles.ts';\n`);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') } });
 const page = await import(pathToFileURL(BUNDLE).href);
 
@@ -384,16 +384,37 @@ if (!CONTROL) {
     }
     return result;
   };
-  const pulled = read(path.join(ROOT, 'scripts/data/transferPathPull/puzzles.txt')).trim().split('\n')
-    .map(line => { const [id, playerA, playerB] = line.split('|'); return { id, playerA, playerB }; });
-  const puzzles = [...new Map([...pulled, ...page.fallbackPuzzles].map(puzzle => [puzzle.id, puzzle])).values()];
-  for (const { id, playerA, playerB } of puzzles) {
-    if (!beforeKeys.has(playerA) || !afterKeys.has(playerA)) { fail(`${id} start is absent from the career pool`); continue; }
-    const prior = shortest(beforeKeys, beforeIndex, playerA).get(playerB);
-    const next = shortest(afterKeys, afterIndex, playerA).get(playerB);
-    if (prior !== next) fail(`${id} shortest length changed from ${prior} to ${next}`);
+  const companion = parseTransferPathCompanionMigration(read(path.join(ROOT,
+    'supabase/migrations/20260907173202_quarantine_unreachable_transfer_path_puzzles_and_refresh_hints.sql')));
+  const puzzles = [...companion.desired, ...page.fallbackPuzzles];
+  const generated = buildGraph(players, page.verifiedClassicStint(pool, players));
+  const fallback = buildGraph(pool, page.verifiedClassicStint(pool));
+  const changed = [];
+  for (const [index, start] of fallback.names.entries()) {
+    const prior = shortest(beforeKeys, beforeIndex, start);
+    const next = shortest(afterKeys, afterIndex, start);
+    const fromGenerator = distances(fallback, start);
+    for (const end of fallback.names.slice(index + 1)) {
+      if (next.get(end) !== fromGenerator.get(end)) fail(`corrected graph distances differ for ${start} to ${end}`);
+      if (prior.get(end) !== next.get(end)) changed.push(`${start} to ${end}`);
+    }
   }
-  console.log(`   ${puzzles.length} retained and fallback shortest lengths match; Everyday gains the two verified links.`);
+  const expected = [
+    'Alessandro Del Piero to Frank Lampard', 'Andrea Pirlo to Frank Lampard', 'Andrea Pirlo to Kevin De Bruyne',
+    'Andrea Pirlo to Mohamed Salah', 'Carlos Tevez to Frank Lampard', 'Claude Makélélé to David Villa',
+    'David Villa to Frank Lampard', 'David Villa to Michael Ballack',
+  ];
+  if (changed.join('|') !== expected.join('|')) fail(`the verified stint changes unexpected shortest pairs: ${changed.join('; ')}`);
+  for (const { id, playerA, playerB, minSteps, hint } of companion.desired) {
+    const errors = hintProblems(generated, playerA, playerB, minSteps, hint);
+    if (errors.length) fail(`${id} held applied minimum or hint is invalid: ${errors.join('; ')}`);
+  }
+  for (const { id, playerA, playerB, minSteps, hint } of page.fallbackPuzzles) {
+    const errors = hintProblems(fallback, playerA, playerB, minSteps, hint);
+    if (errors.length) fail(`${id} held minimum or hint is invalid: ${errors.join('; ')}`);
+  }
+  const totalPairs = fallback.names.length * (fallback.names.length - 1) / 2;
+  console.log(`   All ${totalPairs} Classic distances agree between corrected game and generator; ${changed.length} shorter pairs, all ${puzzles.length} stored minimum/hint entries hold.`);
 }
 
 console.log('');
