@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/integrations/supabase/client';
+import { loadSupabase } from '@/integrations/supabase/loadClient';
 import {
   getStreakState,
   getTopPerGameStreaks,
@@ -51,6 +51,7 @@ async function syncToProfileIfPossible(userId: string, state: StreakState): Prom
   // store stays the source of truth. Dynamic access because the table is
   // newer than the generated types (same pattern as src/lib/completions.ts).
   try {
+    const supabase = await loadSupabase();
     await (supabase.from as any)('profiles').upsert(
       { user_id: userId, streak_state: state, updated_at: new Date().toISOString() },
       { onConflict: 'user_id' },

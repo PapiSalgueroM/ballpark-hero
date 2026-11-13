@@ -69,7 +69,7 @@
  *   7. THE LIVE TABLES, optional. One HEAD request per table with a count header
  *      (Prefer: count=exact, one key column selected, limit 1; nothing but the
  *      count comes back), the URL and key read from the literals in
- *      src/integrations/supabase/client.ts (never the VITE env vars). Each count
+ *      src/integrations/supabase/config.ts (never the VITE env vars). Each count
  *      must be the one its migration was measured at or the one it leaves; a
  *      later round that changes one of these tables on purpose updates the
  *      migration's constants, or retires this check once the migration is
@@ -142,7 +142,7 @@ const SQL = Object.fromEntries(Object.entries(SQL_FILES).map(([k, f]) => [k, rea
 const AUDIT = read(path.join(ROOT, 'docs', 'audits', 'college-tables-2026-09-30.md'));
 const PH_TS_PATH = path.join(ROOT, 'src', 'lib', 'placeholderName.ts');
 const CBB_TS_PATH = path.join(ROOT, 'src', 'lib', 'cbbPrograms.ts');
-const CLIENT_TS_PATH = path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts');
+const CLIENT_TS_PATH = path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts');
 const PH_TS = read(PH_TS_PATH);
 const PH_MJS = read(path.join(SCRIPTS, 'lib', 'placeholderName.mjs'));
 const DRAFT_MJS_PATH = path.join(SCRIPTS, 'lib', 'draftRounds.mjs');
@@ -730,7 +730,7 @@ async function sectionLive(files) {
   const client = codeOnly(read(CLIENT_TS_PATH));
   const url = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)?.[1];
   const key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)?.[1];
-  if (!url || !key) return { out: ['src/integrations/supabase/client.ts does not carry SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY as literals'], lines: [] };
+  if (!url || !key) return { out: ['src/integrations/supabase/config.ts does not carry SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY as literals'], lines: [] };
   /* table, its migration, and its key column (the cfb tables have no id; rk is their key). */
   const TABLES = [['nfl_draft_picks', 'nfl', 'id'], ['ncaa_player_stats', 'ncaa', 'id'], ['cfb_qb_stats', 'qb', 'rk'], ['cfb_rb_stats', 'rb', 'rk'], ['cbb_programs', 'cbb', 'id']];
   const out = [];

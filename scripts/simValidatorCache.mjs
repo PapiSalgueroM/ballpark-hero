@@ -80,7 +80,7 @@ const attrKey = (player, attribute) => `attr|${normalize(player)}|${normalize(at
 const pairKey = (player, row, column) => normalize(`${player}|${row}|${column}`);
 const sqlText = s => s.replace(/''/g, "'");
 
-const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const HEAD = { apikey: KEY, Authorization: `Bearer ${KEY}`, 'Content-Type': 'application/json' };

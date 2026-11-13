@@ -63,7 +63,7 @@ if (CONTROL && !['substring', 'dropmap', 'denyonmiss'].includes(CONTROL)) {
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
-const client = readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+const client = readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const HEAD = { apikey: KEY, Authorization: `Bearer ${KEY}` };

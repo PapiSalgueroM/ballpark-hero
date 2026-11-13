@@ -1,4 +1,4 @@
-import { supabase } from '@/integrations/supabase/client';
+import { loadSupabase } from '@/integrations/supabase/loadClient';
 import { recordGameCompletion as recordStreakCompletion, getEtDateString, getStreakState } from '@/lib/streaks';
 import { nameModerationError } from '@/lib/nameModeration';
 
@@ -238,12 +238,13 @@ export function recordActivity(gamePath: string, score?: number, playerName?: st
     const row: { game: string; score?: number; player_name?: string } = { game };
     if (typeof score === 'number' && Number.isFinite(score)) row.score = score;
     row.player_name = playerName || getCurrentPlayerName();
-    (supabase.from as any)('game_completions')
-      .insert(row)
+    void loadSupabase()
+      .then(supabase => (supabase.from as any)('game_completions').insert(row))
       .then(({ error }: { error: unknown }) => {
         if (error) console.debug('[completions] activity insert failed (ignored):', error);
         else { try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ } }
-      });
+      })
+      .catch(() => { /* best effort only */ });
     bumpLocalTodayCount(game);
   } catch {
     // Never let a tracking failure break gameplay.
@@ -279,8 +280,9 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
     // added directly via SQL, not through a generated-types migration), so
     // this table is addressed dynamically rather than through the typed
     // `.from()` overloads.
-    (supabase.from as any)('game_completions')
-      .insert(row)
+    const client = loadSupabase();
+    void client
+      .then(supabase => (supabase.from as any)('game_completions').insert(row))
       .then(({ error }: { error: unknown }) => {
         if (error) {
           // Swallow silently, this must never surface to the player.
@@ -291,7 +293,8 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
              waiting for the next poll. */
           try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ }
         }
-      });
+      })
+      .catch(() => { /* best effort only */ });
 
     /* Round 300: THE ONE RECORDER. Before this round there were three
        pipelines and which ones a game fed depended on which helper it
@@ -314,7 +317,7 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
        authenticated on the server: record_auth_completion takes the player
        from auth.uid(), so a stale or forged local session is refused there
        rather than trusted here. */
-    supabase.auth.getSession()
+    void client.then(supabase => supabase.auth.getSession())
       .then(({ data }) => {
         const user = data?.session?.user;
         if (user) return saveAuthCompletion(user.id, game, typeof score === 'number' && Number.isFinite(score) ? score : 0, correctAnswers);
@@ -386,6 +389,7 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
  * these would move the same public board he has not decided about yet.
  */
 export async function saveAuthCompletion(userId: string, gameSlug: string, score: number, correctAnswers: number): Promise<boolean> {
+  const supabase = await loadSupabase();
   const { error } = await (supabase.rpc as any)('record_auth_completion', {
     p_game_slug: gameSlug,
     p_score: score,

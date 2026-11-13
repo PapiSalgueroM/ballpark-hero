@@ -42,13 +42,13 @@ the need.
   wrap them in a new component instead.
 - `src/hooks/` game loops and stateful logic. `src/lib/` pure logic and helpers.
   `src/types/` shared types. `src/data/` static content and the game registry.
-- `src/integrations/supabase/client.ts` the only Supabase entry point.
+- `src/integrations/supabase/client.ts` creates the SDK client. `config.ts` provides its public URL and key.
 
 ## Hard rules
 
-- **Supabase:** always import `supabase`, `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` from
-  `@/integrations/supabase/client`. Never read `VITE_SUPABASE_*` env vars, they point at a
-  deleted project.
+- **Supabase:** import `supabase` from `@/integrations/supabase/client`. HTTP-only callers
+  can import `SUPABASE_URL` and `SUPABASE_PUBLISHABLE_KEY` from `@/integrations/supabase/config`.
+  Never read `VITE_SUPABASE_*` env vars, which point at a deleted project.
 - **A new sport is data, not a new engine.** Reuse the existing hook or lib for career, manager,
   grid, connect4 and front office games and inject the sport. Fix a bug in every sibling that
   shares the shape.

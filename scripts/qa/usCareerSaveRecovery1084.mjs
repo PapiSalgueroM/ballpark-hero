@@ -59,7 +59,7 @@ const assets = new Map(assetEntries.map(entry => {
 }));
 assert(assets.has(fontSheets[0]));
 const assetPayloadHashes = () => Object.fromEntries(assetEntries.map(entry => [entry.file, digest(fs.readFileSync(path.join(path.dirname(CACHE), entry.file)))]));
-const serviceOrigin = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
+const serviceOrigin = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
 const writeJSON = (file, value) => fs.writeFileSync(path.join(OUT, file), JSON.stringify(value, null, 2));
 function sourceHashes() {
   const result = {};

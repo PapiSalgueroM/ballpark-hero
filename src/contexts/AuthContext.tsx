@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { User, Session } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+import type { User, Session } from '@supabase/supabase-js';
+import { loadSupabase } from '@/integrations/supabase/loadClient';
+import { AUTH_STORAGE_KEY, onSupabaseClientReady } from '@/integrations/supabase/clientReady';
+import { hasVerifiedLocalStorageWrites, probeStorageWrites, subscribeStorageTrouble } from '@/lib/safeStorage';
 import { cacheDisplayName } from '@/lib/completions';
 
 /** Mirrors the live `profiles` table exactly (verified against the schema in
@@ -34,6 +36,24 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+function needsAccountClient(): boolean {
+  const { pathname, search, hash } = window.location;
+  if (pathname !== '/' && !hasVerifiedLocalStorageWrites()) return true;
+  if (/^\/(?:profile|admin|reset-password)(?:\/|$)/.test(pathname)) return true;
+  const params = [new URLSearchParams(search), new URLSearchParams(hash.slice(1))];
+  if (params.some(part => part.has('access_token') || part.has('error_description') || part.has('code')
+    || part.get('type') === 'recovery')) return true;
+  try {
+    if (window.localStorage.getItem(AUTH_STORAGE_KEY) !== null
+      || window.localStorage.getItem(AUTH_STORAGE_KEY + '-code-verifier') !== null) return true;
+  } catch {
+    return true;
+  }
+  // Home has no game storage notice to verify that a guest can write.
+  if (pathname === '/') probeStorageWrites();
+  return !hasVerifiedLocalStorageWrites();
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
@@ -41,6 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   const fetchProfile = async (userId: string) => {
+    const supabase = await loadSupabase();
     const { data, error } = await supabase
       .from('profiles')
       .select('*')
@@ -64,14 +85,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        // Password-recovery links can land on any page (if the redirect URL
-        // allowlist ever falls out of sync, Supabase falls back to the site
-        // root). The recovery session is already captured at this point, so
-        // route the player to the set-a-new-password screen no matter where
-        // the link dropped them.
+    let active = true;
+    let requested = false;
+    let attached = false;
+    let unsubscribe: (() => void) | undefined;
+    const attach = async (supabase: Awaited<ReturnType<typeof loadSupabase>>) => {
+      if (!active || attached) return;
+      attached = true;
+      // Subscribe before reading the session so a recovery link cannot be missed.
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        if (!active) return;
+        // A recovery link can land on any page if its redirect URL is not accepted.
         if (event === 'PASSWORD_RECOVERY' && window.location.pathname !== '/reset-password') {
           window.location.replace('/reset-password');
           return;
@@ -80,34 +104,57 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(session?.user ?? null);
 
         if (session?.user) {
-          // Use setTimeout to avoid potential race conditions
-          setTimeout(() => fetchProfile(session.user.id), 0);
+          // Leave the auth callback before querying a profile through the same client.
+          setTimeout(() => { if (active) void fetchProfile(session.user.id); }, 0);
         } else {
           setProfile(null);
         }
 
         setLoading(false);
-      }
-    );
+      });
+      unsubscribe = () => subscription.unsubscribe();
 
-    // THEN check for existing session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!active) return;
       setSession(session);
       setUser(session?.user ?? null);
-
-      if (session?.user) {
-        fetchProfile(session.user.id);
-      }
-
+      if (session?.user) void fetchProfile(session.user.id);
       setLoading(false);
-    });
+    };
+
+    const finishFailedLoad = () => { if (active) setLoading(false); };
+    const start = () => {
+      if (requested || attached) return;
+      requested = true;
+      void loadSupabase().then(attach).catch(() => {
+        requested = false;
+        finishFailedLoad();
+      });
+    };
+    // The account form and some data routes import the same client directly.
+    const unwatchClient = onSupabaseClientReady(client => { void attach(client).catch(finishFailedLoad); });
+    const storageChanged = (event: StorageEvent) => {
+      if (event.key === AUTH_STORAGE_KEY && event.newValue !== null) start();
+    };
+    let unwatchStorage: (() => void) | undefined;
+    if (needsAccountClient()) start();
+    else if (!attached) {
+      setLoading(false);
+      window.addEventListener('storage', storageChanged);
+      unwatchStorage = subscribeStorageTrouble(() => { if (!hasVerifiedLocalStorageWrites()) start(); });
+    }
 
     return () => {
-      subscription.unsubscribe();
+      active = false;
+      unwatchClient();
+      unwatchStorage?.();
+      window.removeEventListener('storage', storageChanged);
+      unsubscribe?.();
     };
   }, []);
 
   const signUp = async (email: string, password: string) => {
+    const supabase = await loadSupabase();
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -122,6 +169,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signIn = async (email: string, password: string) => {
+    const supabase = await loadSupabase();
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -130,6 +178,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const signOut = async () => {
+    const supabase = await loadSupabase();
     await supabase.auth.signOut();
     setProfile(null);
     cacheDisplayName(null);
@@ -138,6 +187,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const updateProfile = async (updates: Partial<Profile>) => {
     if (!user) return { error: new Error('Not authenticated') };
 
+    const supabase = await loadSupabase();
     const { error } = await supabase
       .from('profiles')
       .upsert(

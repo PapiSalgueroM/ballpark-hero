@@ -171,10 +171,10 @@ console.log(`   ${yearsInList.length} years, ${Object.values(CHAMPIONS).filter(B
 
 /* -------------------------------------------- 1: the live table, whole */
 console.log('1) the live table');
-const clientTs = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8');
+const clientTs = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8');
 const urlMatch = clientTs.match(/https:\/\/[a-z0-9]+\.supabase\.co/);
 const keyMatch = clientTs.match(/eyJ[A-Za-z0-9_.-]+/);
-if (!urlMatch || !keyMatch) { console.error('FATAL: could not extract the Supabase URL and key from client.ts'); process.exit(1); }
+if (!urlMatch || !keyMatch) { console.error('FATAL: could not extract the Supabase URL and key from config.ts'); process.exit(1); }
 /* Connection: close so the socket is gone before the verdict. Calling
    process.exit with a keep-alive fetch socket still closing trips a libuv
    assertion on Windows and the exit code comes back as 127, so the verdict
