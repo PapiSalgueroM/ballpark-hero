@@ -1,8 +1,8 @@
-import { useRoutePath } from '@/hooks/useRoutePath';
-import { useState, useEffect, useRef, ReactNode } from 'react';
+import { useRef, ReactNode } from 'react';
 import { HelpCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
+import { useRulesGateState } from '@/hooks/useRulesGateState';
 
 interface RulesGateProps {
   /** Dialog title, e.g. "How to Play Missing XI". */
@@ -15,6 +15,7 @@ interface RulesGateProps {
   /** aria-label for the trigger button. Defaults to "How to play". */
   triggerLabel?: string;
   className?: string;
+  state?: ReturnType<typeof useRulesGateState>;
 }
 
 /**
@@ -34,29 +35,11 @@ export function RulesGate({
   floatingTrigger = true,
   triggerLabel = 'How to play',
   className,
+  state,
 }: RulesGateProps) {
-  const pathname = useRoutePath();
-  const [open, setOpen] = useState(false);
+  const ownState = useRulesGateState({ enabled: !state });
+  const { open, setOpen } = state ?? ownState;
   const triggerRef = useRef<HTMLButtonElement>(null);
-  const localStorageKey = `rules-gate-seen:${pathname}`;
-
-  // The rules dialog remains visible on first entry to a game route, then
-  // turns into a reusable "?" button. This stays on the same path so
-  // first-timers do not get the pop-up every single visit, but a returning
-  // player still has a fast way to reopen it.
-  useEffect(() => {
-    try {
-      if (typeof window === 'undefined') return;
-      const seen = localStorage.getItem(localStorageKey);
-      if (!seen) {
-        setOpen(true);
-        localStorage.setItem(localStorageKey, '1');
-      }
-    } catch {
-      // Storage is not available in every browser mode.
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <>

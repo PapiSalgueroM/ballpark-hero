@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ArrowRight, BedDouble, BriefcaseBusiness, ChevronDown, ClipboardList, Radio, Table2, Trophy, Zap } from 'lucide-react';
+import { CookieConsent } from '@/components/CookieConsent';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { RulesGate } from '@/components/game/RulesGate';
@@ -15,6 +16,7 @@ import { NRL_SEASONS, type NrlYear } from '@/data/nrlManager2026';
 import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
 import { useArrivalTop } from '@/hooks/useArrivalTop';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useRulesGateState } from '@/hooks/useRulesGateState';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
@@ -1057,11 +1059,21 @@ export default function NrlTeamManager() {
   const { search } = useLocation();
   const entry = resolveContinueSave(NRL_SAVE_ENTRY, search);
   if (!entry) return <Navigate to={NRL_SAVE_ENTRY.path} replace />;
-  const showSlots = new URLSearchParams(search).get('view') === 'saves';
-  return <NrlManagerScreen key={showSlots ? 'slots' : entry.saveKey} entry={entry} showSlots={showSlots} />;
+  return <NrlManagerRoute entry={entry} search={search} />;
 }
 
-function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots: boolean }) {
+function NrlManagerRoute({ entry, search }: { entry: ContinueSave; search: string }) {
+  const rules = useRulesGateState({ immediate: true });
+  const showSlots = new URLSearchParams(search).get('view') === 'saves';
+  return <>
+    <CookieConsent inline waitForRulesHost={rules.open} />
+    <NrlManagerScreen key={showSlots ? 'slots' : entry.saveKey} entry={entry} showSlots={showSlots} rules={rules} />
+  </>;
+}
+
+function NrlManagerScreen({ entry, showSlots, rules }: {
+  entry: ContinueSave; showSlots: boolean; rules: ReturnType<typeof useRulesGateState>;
+}) {
   const navigate = useNavigate();
   const [initial] = useState(() => {
     if (showSlots) return null;
@@ -1176,7 +1188,7 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
             {career?.openingRoster && <p className="mt-1 text-xs text-muted-foreground">2026 opening matchday snapshot. Ratings, contracts, wages and later squads are simulated.</p>}
             {!showSlots && <Button type="button" size="lg" variant="ghost" className="mt-1 px-2" onClick={openSlots}>Career saves</Button>}
           </div>
-          <RulesGate title="How to play NRL Team Manager" floatingTrigger={false} className="min-h-11 min-w-11">
+          <RulesGate title="How to play NRL Team Manager" floatingTrigger={false} className="min-h-11 min-w-11" state={rules}>
             <ul className="list-disc space-y-2 pl-5">
               <li>Choose 2026 or 2027, then pick a club. The Perth Bears enter in 2027. In 2026 you can choose opening matchday names. Ratings, contracts, fixtures and results are simulated.</li>
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>

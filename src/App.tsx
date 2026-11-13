@@ -15,6 +15,7 @@ import { SiteMenuProvider } from "@/components/layout/SiteMenuHost";
 import { LiveTicker } from "@/components/layout/LiveTicker";
 import { UpdateNudge } from "@/components/layout/UpdateNudge";
 import { Footer } from "@/components/game/Footer";
+import { normalizeRoutePath } from "@/lib/routePath";
 import Index from "./pages/Index";
 const Footle = lazy(() => import("./pages/Footle"));
 const FreeKick = lazy(() => import("./pages/FreeKick"));
@@ -347,6 +348,7 @@ const AppContent = () => {
   const { pathname, search } = useLocation();
   const gameRoute = isGameRoute(pathname);
   const opensCareerRules = /^\/(?:nba|nfl|mlb|nhl)-my-career\/?$/.test(pathname);
+  const nrlOwnsConsent = normalizeRoutePath(pathname) === "/nrl-team-manager";
   return (
     <SiteMenuProvider>
       {/* Round 215: the first tab stop on every page jumps a keyboard player
@@ -365,7 +367,7 @@ const AppContent = () => {
       {/* Round 1142: one line, game routes only, and only in a browser that
           will not keep anything. Renders nothing for everybody else. */}
       <StorageNotice />
-      {gameRoute && !opensCareerRules && <CookieConsent inline />}
+      {gameRoute && !opensCareerRules && !nrlOwnsConsent && <CookieConsent inline />}
       <Suspense fallback={<RouteLoader />}>
       {/* Round 544: around the routes, inside Suspense. A render throw in one
           game now costs that game and nothing else: the header above and the
