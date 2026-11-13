@@ -1041,10 +1041,11 @@ async function partPure() {
      sorted, because nothing reads them in order and a rules table derives
      them in its own. */
   const sortedKeys = rec => Object.fromEntries(Object.keys(rec).sort().map(k => [k, rec[k]]));
+  const startOnlyIds = new Set((cm.CLUB_MANAGER_START_LEAGUES ?? cm.REAL_LEAGUES).filter(l => !cm.REAL_LEAGUES.includes(l)).map(l => l.id));
   got.views = {
     pyramids: hash(cm.PYRAMIDS),
     nations: hash(cm.NATIONS),
-    leagueNations: hash(sortedKeys(cm.LEAGUE_NATIONS)),
+    leagueNations: hash(sortedKeys(Object.fromEntries(Object.entries(cm.LEAGUE_NATIONS).filter(([id]) => !startOnlyIds.has(id))))),
     euroSlots: hash(sortedKeys(Object.fromEntries(Object.entries(cm.EURO_SLOTS).map(([k, v]) => [k, sortedKeys(v)])))),
     eraIds: hash(Object.keys(cm.ERA_LEAGUES)),
     historic: hash(['now', 'era2005', 'era2010', 'era2015', 'era2020', ''].map(e => eras.isHistoricEra(e))),
@@ -1067,7 +1068,7 @@ async function partPure() {
    in memory and both must be named. */
 async function noIdBranches(cm) {
   console.log('3d) no league or nation id is branched on outside the rules table');
-  const ids = [...new Set([...Object.keys(cm.LEAGUE_RULES), ...cm.NATIONS.map(n => n.id)])];
+  const ids = [...new Set([...Object.keys(cm.LEAGUE_RULES), ...(cm.CLUB_MANAGER_START_NATIONS ?? cm.NATIONS).map(n => n.id)])];
   const leagueIds = Object.keys(cm.LEAGUE_RULES);
   const files = [
     ...fs.readdirSync(path.join(ROOT, 'src', 'lib')).filter(f => /^clubManager.*\.ts$/.test(f)).map(f => `src/lib/${f}`),
@@ -1124,10 +1125,12 @@ function tableIsComplete(cm, all) {
   console.log('3b) the rules table: a row for every league, every row used, every reference real');
   const R = cm.LEAGUE_RULES;
   if (!R) { fail('LEAGUE_RULES is not exported'); return; }
-  const defIds = new Set(all.map(({ l }) => l.id));
+  const defs = new Map([...all.map(({ l }) => l), ...(cm.CLUB_MANAGER_START_LEAGUES ?? cm.REAL_LEAGUES)].map(l => [l.id, l]));
+  const defIds = new Set(defs.keys());
   for (const id of defIds) if (!Object.prototype.hasOwnProperty.call(R, id)) fail(`league ${id} has no LEAGUE_RULES row`);
   for (const id of Object.keys(R)) if (!defIds.has(id)) fail(`LEAGUE_RULES has a row for ${id}, which no league def uses`);
-  const nationIds = new Set(cm.NATIONS.map(n => n.id));
+  const starterNations = cm.CLUB_MANAGER_START_NATIONS ?? cm.NATIONS;
+  const nationIds = new Set(starterNations.map(n => n.id));
   for (const [id, r] of Object.entries(R)) {
     if (!nationIds.has(r.nationId)) fail(`${id} names nation ${r.nationId}, which NATIONS does not hold`);
     if (r.season !== 'autumnSpring' && r.season !== 'calendarYear') fail(`${id} does not say which calendar its real league plays`);
@@ -1140,7 +1143,7 @@ function tableIsComplete(cm, all) {
       else if (below.ladder !== 'promotion') fail(`${id}'s second tier ${r.secondTier} does not talk about promotion`);
       if (r.drop < 1) fail(`${id} has a second tier and relegates nobody`);
     }
-    const def = all.find(({ l }) => l.id === id)?.l;
+    const def = defs.get(id);
     /* Round 832 review: a drop the divisions cannot carry. The summer only
        trades when both sides can move the full count, so a second tier with
        fewer clubs than the drop above it (or a league dropping its whole size)
@@ -1158,8 +1161,8 @@ function tableIsComplete(cm, all) {
     if (def && def.cupName !== r.cup) fail(`${id}'s league def carries cup ${def.cupName} where its row says ${r.cup}`);
     if (def && def.euro !== (r.europe !== null)) fail(`${id}'s league def has euro ${def.euro} where its row has places ${JSON.stringify(r.europe)}`);
   }
-  for (const n of cm.NATIONS) if (!n.leagueIds.length) fail(`nation ${n.id} has no league`);
-  console.log(`   ${Object.keys(R).length} rows for ${defIds.size} leagues, ${cm.NATIONS.length} nations, ${cm.PYRAMIDS.length} pyramids`);
+  for (const n of starterNations) if (!n.leagueIds.length) fail(`nation ${n.id} has no league`);
+  console.log(`   ${Object.keys(R).length} rows for ${defIds.size} leagues, ${nationIds.size} nations, ${cm.PYRAMIDS.length} pyramids`);
 }
 
 /* The name guard's list of era names is exactly the era players whose names

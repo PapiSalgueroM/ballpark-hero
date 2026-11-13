@@ -16,7 +16,7 @@ import {
   changeLive, startSecondHalf, startExtraTime, markLiveMinute, setInstructions,
   setDuty, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
   setShootoutOrder,
-  DEFAULT_ERA_ID, ordinaryClubAllowed,
+  DEFAULT_ERA_ID, ordinaryClubAllowed, isScopedStarterClub,
   releasePlayer, signFreeAgent,
   doorRefusal, loanOutRefusal,
   applyForJob, joinClubInSummer,
@@ -652,6 +652,7 @@ export function useClubManager() {
   useEffect(() => () => { dropStartHold(); }, [dropStartHold]);
   const chooseClub = useCallback((clubName: string, eraId?: string) => {
     if (clubName && (!ordinaryClubAllowed(clubName) || (eraId && isHistoricEra(eraId) && kLeagueMember(clubName)))) return;
+    if (eraId && eraId !== DEFAULT_ERA_ID && isScopedStarterClub(clubName)) return;
     setPendingClub(clubName);
     const key = clubName && eraId ? startFixtureKey(clubName, eraId) : null;
     fixtureFetch.current = key && !realLeagueFixturesLoaded(key) ? { key, done: ensureRealLeagueFixtures(key).catch(() => undefined) } : null;
@@ -671,6 +672,7 @@ export function useClubManager() {
     if (!pendingClub) return;
     const club = pendingClub, era = eraId ?? DEFAULT_ERA_ID, edit = validWorldEdit(worldEdit ?? null);
     if (!ordinaryClubAllowed(club) || (isHistoricEra(era) && kLeagueMember(club))) return;
+    if (isScopedStarterClub(club) && (era !== DEFAULT_ERA_ID || edit)) return;
     const begin = () => {
       const fresh = startCareer(club, era, undefined, manager, undefined, edit);
       /* Round 549: a mid season takeover plays the run-in first, under the

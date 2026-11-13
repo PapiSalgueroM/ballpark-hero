@@ -176,6 +176,7 @@ const BOUND_KEYS = [
   'superlig-2026-27-v1',
   'bundesliga2-2026-27-v1',
   'ligue2-2026-27-v1',
+  'j1-2026-27-v1',
 ];
 const EXPECT_BOUND = process.env.CM_LEAGUE_FIXTURES_EXPECT_BOUND || '';
 const CONTROL = process.env.CM_LEAGUE_FIXTURES_CONTROL || '';
@@ -596,8 +597,13 @@ async function gameRegistryAndHelp() {
   const WORDS = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen'];
   const countWord = entry[1] ? ((/fixture list in (\w+) more leagues?/.exec(entry[1]) || [])[1] || '') : '';
   const examples = entry[1] === undefined ? [] : [...entry[1].matchAll(/data-cm-fixture-example="([a-z0-9]+):([^"]+)">([^<]*)</g)].map(m => ({ leagueId: m[1], club: m[2], text: unescape(m[3]) }));
+  const additions = [...page.matchAll(/data-cm-fixture-added="([a-z0-9]+)">([^<]*)</g)];
   const news = entry[1] === undefined ? { found: false, ids: [], text: '', count: 0, countWord: '', examples }
-    : { found: true, ids: entry[2].split(' ').filter(Boolean), text: entry[3], count: WORDS.indexOf(countWord), countWord, examples };
+    : {
+        found: true, ids: [...entry[2].split(' ').filter(Boolean), ...additions.map(m => m[1])],
+        text: [entry[3], ...additions.map(m => m[2])].join(' '),
+        count: WORDS.indexOf(countWord) + additions.length, countWord, examples,
+      };
   return { registry, help, news };
 }
 

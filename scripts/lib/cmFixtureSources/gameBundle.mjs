@@ -3,7 +3,7 @@
  * by bundling a small entry with esbuild and importing the result.
  *
  * The fixture tool and the fixture harness both need the game's clubs for a
- * league (REAL_LEAGUES in src/lib/clubManager.ts), and the harness needs every
+ * league (CLUB_MANAGER_START_LEAGUES in src/lib/clubManager.ts), and the harness needs every
  * ledger under src/data as the object the game would import, never as text.
  * Each call bundles into its own uniquely named temp files, so two runs at
  * once cannot read each other's bundle.
@@ -42,8 +42,8 @@ export async function importBundled(entrySource) {
 /** The game's league rows for a new 2026/27 career: id, name and clubs in the game's spellings. */
 export async function gameLeagues() {
   const mod = await importBundled(
-    "import { REAL_LEAGUES } from '@/lib/clubManager';\n"
-    + 'export const leagues = REAL_LEAGUES.map(l => ({ id: l.id, name: l.name, clubs: [...l.clubs] }));\n',
+    "import { CLUB_MANAGER_START_LEAGUES } from '@/lib/clubManager';\n"
+    + 'export const leagues = CLUB_MANAGER_START_LEAGUES.map(l => ({ id: l.id, name: l.name, clubs: [...l.clubs] }));\n',
   );
   return mod.leagues;
 }

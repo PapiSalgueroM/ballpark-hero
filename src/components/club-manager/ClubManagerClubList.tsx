@@ -1,4 +1,4 @@
-import { REAL_LEAGUES, isPartialClub, CM_ROSTER_META, ordinaryClubAllowed } from '@/lib/clubManager';
+import { CLUB_MANAGER_START_LEAGUES, isPartialClub, usesGeneratedOpeningSquad, CM_ROSTER_META, ordinaryClubAllowed } from '@/lib/clubManager';
 import { K_LEAGUE_2026 } from '@/data/kLeague2026';
 // Round 1035: the A-League Men squads were read later than the bake, on their own date.
 // Round 1052: so was every gathered league after it; each generated file says its own, in join order.
@@ -19,12 +19,12 @@ export function ClubManagerClubList() {
   return (
     <div className="mt-10 text-left text-sm text-muted-foreground leading-relaxed space-y-3">
       <h2 className="text-base font-semibold text-foreground">Every league and club in Club Manager</h2>
-      <p>{`Existing 27-league roster snapshots: ${CM_ROSTER_META.asOf}; ${generatedLeagueDateClauses().join('; ')}. K League 1 has no verified opening rosters here; its starting squads are generated.`}</p>
+      <p>{`Existing 27-league roster snapshots: ${CM_ROSTER_META.asOf}; ${generatedLeagueDateClauses().join('; ')}. K League 1, J1 League and the Chinese Super League use generated opening squads.`}</p>
       <p>Partial data means the market data covers only part of that squad, or none of it, and the rest is filled with youth players.</p>
-      {REAL_LEAGUES.map(l => (
+      {CLUB_MANAGER_START_LEAGUES.map(l => (
         <div key={l.id}>
           <h3 className="font-medium text-foreground">{l.id === K_LEAGUE_2026.id ? `${l.name} members (${l.clubs.length}), ${l.clubs.filter(c => ordinaryClubAllowed(c)).length} ordinary jobs` : `${l.name} clubs you can manage (${l.clubs.length})`}</h3>
-          <p className="mt-1">{`${l.clubs.map(c => l.id === K_LEAGUE_2026.id ? `${c} (generated starting squad${ordinaryClubAllowed(c) ? '' : '; opponent, ordinary job unavailable'})` : (isPartialClub(c) ? `${c} (partial data)` : c)).join(', ')}.`}</p>
+          <p className="mt-1">{`${l.clubs.map(c => usesGeneratedOpeningSquad(c) ? `${c} (generated starting squad${ordinaryClubAllowed(c) ? '' : '; opponent, ordinary job unavailable'})` : (isPartialClub(c) ? `${c} (partial data)` : c)).join(', ')}.`}</p>
         </div>
       ))}
     </div>

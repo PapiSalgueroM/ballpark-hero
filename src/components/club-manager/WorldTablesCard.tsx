@@ -4,6 +4,7 @@ import { worldLeagueDefs, careerLeagueOf, sortedWorldTable, leagueRounds, league
 import type { CareerState, TableRow } from '@/lib/clubManager';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { FlagImg } from '@/components/FlagImg';
+import { CSL_LEAGUE_2026 } from '@/data/cslLeague2026';
 import { K_LEAGUE_2026 } from '@/data/kLeague2026';
 
 interface WorldTablesCardProps {
@@ -85,6 +86,8 @@ export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCard
   const preseason = rows.length > 0 && rows.every(r => r.w + r.d + r.l === 0);
   const footnote = preseason ? undefined : tiebreakFootnote(leagueTiebreak(active.id), rows, career.pairResults?.[active.id]);
   const kLeagueModel = active.id === K_LEAGUE_2026.id;
+  const cslModel = active.id === CSL_LEAGUE_2026.id;
+  const openingDeductions = cslModel && preseason && rows.some(row => row.pts < 0);
 
   return (
     <div className="space-y-3" data-world-tables>
@@ -127,17 +130,17 @@ export function WorldTablesCard({ career, myRows, onClubClick }: WorldTablesCard
             rows={rows}
             myClub={career.clubName}
             title={preseason
-              ? `${active.name} · pre-season, alphabetical order`
+              ? `${active.name} · pre-season, ${openingDeductions ? 'opening deductions' : 'alphabetical order'}`
               : `${active.name} · round ${Math.min(played, total)} of ${total}`}
             preseason={preseason}
             onClubClick={onClubClick}
             footnote={kLeagueModel && footnote ? `Game tiebreak: ${footnote}` : footnote}
-            zoneTop={kLeagueModel ? 0 : undefined}
+            zoneTop={kLeagueModel || cslModel ? 0 : undefined}
             scoutLine={kLeagueModel ? 'Tap a club to open its squad page.' : undefined}
           />
           {preseason && (
-            <p className="text-[9px] text-muted-foreground px-1">
-              No games yet, so the order means nothing. Positions appear with the first round.
+            <p data-cm-csl-opening-points={openingDeductions || undefined} className="text-[9px] text-muted-foreground px-1">
+              {openingDeductions ? 'The table is ordered by points, including the opening deductions.' : 'No games yet, so the order means nothing.'} Positions appear with the first round.
             </p>
           )}
           {!mine && !preseason && (

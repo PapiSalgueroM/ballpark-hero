@@ -73,9 +73,23 @@ export function ClubHeading({ crest, clubName, seasonLabel, season, difficulty, 
   );
 }
 
-export function ClubStatus({ positionLabel, stadium, budgetLabel, noMatches, formDots, trophyCount }: {
+export function LeagueSeasonNotice({ league, leagueGames }: { league: 'k' | 'csl' | 'j1'; leagueGames: number }) {
+  if (league === 'k') return <p data-cm-kleague-model className="text-xs text-muted-foreground mb-4">K League 1 plays 22 simulated league games on the shared August to May calendar. The real 2026 league used 33 games, then 5 split games. The split, Korea Cup, AFC competitions and promotion/relegation are not played here.</p>;
+  if (league === 'csl') return <p data-cm-csl-model className="text-xs text-muted-foreground mb-4">Chinese Super League plays 30 games on Club Manager's simulated calendar. The 2026 start includes real opening point deductions. The CFA Cup, Super Cup, AFC competitions and promotion and relegation are outside this league model.</p>;
+  return <p data-cm-j1-model className="text-xs text-muted-foreground mb-4">J1 plays {leagueGames} league games with generated opening squads and simulated dates and results. The Emperor's Cup, J.League Cup, AFC competitions and J2 promotion and relegation are outside this league model.</p>;
+}
+
+export function KLeagueCupNotice() {
+  return <p data-cm-kleague-cup className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">The Korea Cup is not played here. This K League 1 season is a 22-game league simulation on the shared calendar. Its real 2026 split, AFC competitions and promotion/relegation are not played either.</p>;
+}
+
+const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
+  W: 'bg-emerald-500', D: 'bg-yellow-500', L: 'bg-red-500',
+};
+
+export function ClubStatus({ positionLabel, stadium, budgetLabel, form, trophyCount }: {
   positionLabel: string; stadium: { name: ReactNode; capacity: number | null } | null;
-  budgetLabel: ReactNode; noMatches: boolean; formDots: ReactNode; trophyCount: number;
+  budgetLabel: ReactNode; form: readonly ('W' | 'D' | 'L')[]; trophyCount: number;
 }) {
   return <>
           {/* Round 99: found by playing it. Before a ball is kicked every
@@ -90,8 +104,8 @@ export function ClubStatus({ positionLabel, stadium, budgetLabel, noMatches, for
           )}
           <span className="text-gold font-semibold">{budgetLabel}</span>
           <span className="inline-flex items-center gap-1">
-            {noMatches && <span>No matches yet</span>}
-            {formDots}
+            {form.length === 0 && <span>No matches yet</span>}
+            {form.map((f, i) => <span key={i} className={cn('w-2 h-2 rounded-full', FORM_TONE[f])} />)}
           </span>
           {trophyCount > 0 && <span>🏆×{trophyCount}</span>}
   </>;

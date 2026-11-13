@@ -27,10 +27,10 @@
  */
 import {
   playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, leagueRulesOf, CUP_LABELS, UCL_LABELS,
-  cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives,
+  cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives, seasonScoreLeaguePoints,
   /* Round 783: the mid season takeover an accepted application walks into. */
   startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, livingWorldOf, customExitUclField, SAVE_CAPS,
-  clubAvailableInCareer, careerHasKLeagueWorld,
+  clubAvailableInCareer, careerHasKLeagueWorld, careerScopedLeagueId,
   /* Round 1335: the old season rules' switch, read by both handovers. */
   legacySeason,
   /* Round 1502: the watched Champions League across a move, and where its nights sit. */
@@ -993,6 +993,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
     fresh = startCareer(club, eraId, undefined, career.manager, {
       yearsOn,
       kLeagueActive: careerHasKLeagueWorld(career),
+      scopedLeagueId: careerScopedLeagueId(career),
       uclField: career.uclField ? customExitUclField(career, career.uclField) : null,
       keepLeagueOverrides: true,
       ...(worldRosterView(departed) || worldSeedOf(departed) !== undefined
@@ -1132,7 +1133,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
 function handoverFrom(s: CareerState) {
   const row = s.table.find(r => r.club === s.clubName);
   return {
-    pts: row ? row.pts : 0,
+    pts: seasonScoreLeaguePoints(s, row),
     played: row ? row.w + row.d + row.l : 0,
     cupRank: cupProgressRank(s).rank,
     euroRank: uclProgressRank(s).rank,
