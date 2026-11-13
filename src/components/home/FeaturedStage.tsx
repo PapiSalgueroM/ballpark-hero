@@ -31,7 +31,11 @@ export function FeaturedStage() {
   return (
     <section aria-labelledby="home-stage-title" data-home-stage="" className={styles.deck}>
       <h2 id="home-stage-title" className="sr-only">Main event</h2>
-      <nav aria-label="Sport hubs" className={styles.sports}>
+      <nav aria-label="Sports shortcuts" className={styles.sports}>
+        <a href="#sport-rugby" style={sportStyle('rugby')} className={styles.sportLink}>
+          <SportGlyph sport="rugby" className={styles.sportGlyph} />
+          <span>Rugby League</span>
+        </a>
         {HUB_NAV.map(hub => {
           const sport = CATEGORY_SPORT[hub.titles[0]];
           return (

@@ -192,6 +192,11 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
   const second = secondOptions.find(option => option.reserveId === secondReserveId);
   const heldName = live.heldReserveId && squad.find(player => player.id === live.heldReserveId)?.name;
   const name = (id: string) => squad.find(player => player.id === id)?.name;
+  const halfChoices = {
+    year, round: fixture.round, tactic, talk,
+    interchange: chosen && { starterId: chosen.starterId, reserveId: chosen.reserveId },
+    secondInterchange: second && { starterId: second.starterId, reserveId: second.reserveId },
+  };
   return (
     <section className="space-y-4" aria-labelledby="nrl-halftime">
       <div className="rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
@@ -281,10 +286,51 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
         </p>
       </fieldset>
       <Button type="button" size="lg" className="w-full" disabled={disabled}
-        onClick={() => onAction({ type: 'finishLive', year, round: fixture.round, tactic, talk,
-          interchange: chosen && { starterId: chosen.starterId, reserveId: chosen.reserveId },
-          secondInterchange: second && { starterId: second.starterId, reserveId: second.reserveId } })}>
+        onClick={() => onAction({ type: 'finishLive', ...halfChoices })}>
         Play second half <ArrowRight aria-hidden="true" />
+      </Button>
+      <Button type="button" size="lg" variant="outline" className="w-full" disabled={disabled}
+        onClick={() => onAction({ type: 'reachMinute60', ...halfChoices })}>
+        Play to 60 minutes
+      </Button>
+    </section>
+  );
+}
+
+function LiveMinute60({ live, year, onAction, disabled }: {
+  live: NrlLiveHalf; year: number; onAction: (action: NrlAction) => void; disabled: boolean;
+}) {
+  const stage = live.minute60!;
+  const [tactic, setTactic] = useState(stage.tactic);
+  const { fixture } = live;
+  const sides = [[fixture.homeId, stage.homeScoring], [fixture.awayId, stage.awayScoring]] as const;
+  return (
+    <section className="space-y-4" aria-labelledby="nrl-minute60">
+      <div className="rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
+        <h2 id="nrl-minute60" className="font-display text-2xl font-black">60 minutes</h2>
+        <ul className="mt-3 grid grid-cols-2 gap-3" aria-label="Score after 60 minutes">
+          {sides.map(([clubId, scoring]) => (
+            <li key={clubId} className="min-w-0 rounded-xl bg-black/20 p-3">
+              <p className="break-words text-sm font-semibold">{shortName(year, clubId)}</p>
+              <strong className="block font-display text-3xl tabular-nums">{nrlScorePoints(scoring)}</strong>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-4">
+        <legend className="px-1 font-bold">Closing tactic</legend>
+        <p className="mt-2 text-sm text-muted-foreground">Keep your plan or change it for the final 20 minutes and any extra time.</p>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {tactics.map(option => (
+            <Button key={option.id} type="button" size="lg" className="px-3" disabled={disabled}
+              variant={tactic === option.id ? 'default' : 'outline'} aria-pressed={tactic === option.id}
+              onClick={() => setTactic(option.id)}>{option.label}</Button>
+          ))}
+        </div>
+      </fieldset>
+      <Button type="button" size="lg" className="w-full" disabled={disabled}
+        onClick={() => onAction({ type: 'finishMinute60', year, round: fixture.round, tactic })}>
+        Play final 20 minutes <ArrowRight aria-hidden="true" />
       </Button>
     </section>
   );
@@ -518,7 +564,9 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
   const { coachRole, coachBonus } = nrlCoachTactics(career.finance);
   const [hold, setHold] = useState<{ year: number; round: number; reserveId: string }>();
   if (season.live) {
-    return <LiveHalftime live={season.live} season={season} title={next.title} onAction={onAction} disabled={disabled} coachRole={coachRole} coachBonus={coachBonus} />;
+    return season.live.minute60
+      ? <LiveMinute60 live={season.live} year={year} onAction={onAction} disabled={disabled} />
+      : <LiveHalftime live={season.live} season={season} title={next.title} onAction={onAction} disabled={disabled} coachRole={coachRole} coachBonus={coachBonus} />;
   }
   const club = shortName(year, clubId);
   const match = next.clubMatch;
@@ -552,6 +600,9 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
       </p>
       {lastMatch?.halftimeTalk && <p className="mt-2 text-sm text-muted-foreground" data-nrl-halftime-talk>
         Half-time talk: {halftimeTalkLabels[lastMatch.halftimeTalk]}.
+      </p>}
+      {lastMatch?.minute60Tactic && <p className="mt-2 text-sm text-muted-foreground" data-nrl-minute60-tactic>
+        60-minute tactic change: {tactics.find(option => option.id === lastMatch.minute60Tactic)?.label}.
       </p>}
       {goldenPoint && (
         <p className="mt-2 text-sm text-muted-foreground" data-nrl-golden-point>
@@ -1367,7 +1418,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     if (next === before) return false;
     const result = persist(next);
     if (result === 'moved' || result === 'too-large') return false;
-    if (action.type === 'finishLive') setShowLiveResult(true);
+    if (action.type === 'finishLive' || action.type === 'finishMinute60') setShowLiveResult(true);
     const newSeason = next.season.year !== before.season.year;
     if (action.type === 'advance' || newSeason) setShowLiveResult(false);
     if (newSeason) setPanel('match');

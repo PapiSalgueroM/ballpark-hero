@@ -7116,6 +7116,12 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
      the goal expectations below are solved to reproduce it. */
   const targetAt = (roundIndex: number) =>
     clamp(0.3 + (state.overall - 75) * 0.012 + eliteBonus - roundIndex * 0.04, 0.15, 0.75);
+  // Keep qualification and the play-off on the existing model. A strong
+  // season with regular playing time can help the club in the main bracket.
+  const knockoutForm = isUcl && season.type === "playing" && !season.injurySevere
+    && (season.leagueApps ?? 0) >= 20 && season.ovr !== undefined
+    ? seasonPerformanceBoost(season.ovr, season.rating) / 3
+    : 0;
   /* Round 972: the old qualification rate (85 percent at tier 1, 35 at tier 2)
      always meant "in the knockout rounds", because nothing came before them,
      and it keeps meaning that. A first stage is now played in front of them,
@@ -7214,7 +7220,9 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
     usedOpponents.add(opponent);
 
     const legs = round === "Final" ? finalLegs : round === "PO" ? 2 : tieLegs;
-    const target = targetAt(round === "PO" ? 0 : ladder.indexOf(round));
+    const target = round === "PO"
+      ? targetAt(0)
+      : targetAt(ladder.indexOf(round)) + knockoutForm;
     /* Aggregate goal difference over N legs is the difference of two Poissons,
        so its mean is 2*N*edge and its variance about 2*N*UCL_BASE_LAMBDA. The
        probability of finishing ahead is therefore about
