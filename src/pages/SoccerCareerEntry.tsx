@@ -52,7 +52,7 @@ export default function SoccerCareerEntry() {
   const starting = useRef(false);
 
   if (saved !== null) return (
-    <Suspense fallback={<main id="dukb-main" role="status" className="mx-auto p-4 text-sm text-muted-foreground">Opening your career...</main>}>
+    <Suspense fallback={<main id="dukb-main" role="status" className="mx-auto min-h-svh p-4 text-sm text-muted-foreground">Opening your career...</main>}>
       <SavedSoccerCareer entry={{ saved }} />
     </Suspense>
   );
