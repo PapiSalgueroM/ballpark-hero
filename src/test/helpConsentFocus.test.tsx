@@ -37,6 +37,25 @@ afterEach(() => {
 });
 
 describe('pending cookie choices belong to the open help focus scope', () => {
+  it('places pending choices inside a newly opened rules dialog before its first paint', async () => {
+    render(<Fixture initialOpen={false} inline />);
+    const opener = screen.getByRole('button', { name: 'How to play' });
+    expect(screen.getByRole('region', { name: 'Cookie choices' })).toHaveAttribute('data-game-consent-inline');
+
+    const firstDelivery = new Promise<boolean>(resolve => {
+      const observer = new MutationObserver(() => {
+        const host = document.querySelector('[data-dukb-help-cookie-choices]');
+        if (!host) return;
+        observer.disconnect();
+        resolve(!!host.querySelector('[aria-label="Cookie choices"]'));
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    });
+    fireEvent.click(opener);
+
+    expect(await firstDelivery).toBe(true);
+  });
+
   for (const choice of ['Reject all', 'Accept all'] as const) {
     it(`${choice} receives focus inside initial rules and keeps its original consent behavior`, async () => {
       render(<Fixture />);
