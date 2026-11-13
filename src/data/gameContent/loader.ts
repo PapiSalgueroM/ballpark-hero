@@ -21,7 +21,7 @@ import type { GameContent, GameContentMap } from './types';
  * new game whose guide is not reachable is a failure, not a silent blank.
  */
 export type ContentBundle =
-  | 'soccer1' | 'soccer2' | 'football' | 'college' | 'basketball'
+  | 'soccer1' | 'soccer2' | 'football' | 'college' | 'basketball' | 'nbaMyCareer'
   | 'baseball' | 'hockey' | 'moreSports' | 'world'
   | 'clubManagement' | 'stadiumManagement' | 'academyManagement' | 'aussieRulesManagement' | 'nrlManagement';
 
@@ -53,7 +53,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/nba-gauntlet-draft': 'basketball',
   '/nba-grid': 'basketball',
   '/nba-higher-lower': 'basketball',
-  '/nba-my-career': 'basketball',
+  '/nba-my-career': 'nbaMyCareer',
   '/nba-starting-5': 'basketball',
   '/nba-stat-line': 'basketball',
   '/perfect-lineup-nba': 'basketball',
@@ -185,6 +185,7 @@ const LOADERS: Record<ContentBundle, () => Promise<Record<string, GameContentMap
   football: () => import('./football'),
   college: () => import('./college'),
   basketball: () => import('./basketball'),
+  nbaMyCareer: () => import('./nbaMyCareer'),
   baseball: () => import('./baseball'),
   hockey: () => import('./hockey'),
   moreSports: () => import('./moreSports'),
