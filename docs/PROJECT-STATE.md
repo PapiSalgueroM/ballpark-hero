@@ -1,3 +1,9 @@
+## 2026-11-11 Build Your XI player selection on WebKit
+
+A native tap on Thibaut Courtois in a Real Madrid 4-4-2 could close the picker before selecting him. WebKit sent a mouse down after touch release, moved focus to the main region and caused the picker to drop the list before the click. The shared picker now cancels the option mouse down default so the click can select the player. Touch and pen still wait for the completed click. The skip link and the outside focus handler stay in place.
+
+The captured public Madrid rows reproduced the failed tap on the published build and main. The draft accepted exactly one selection on Windows WebKit 26.4 and 26.6. A trusted Chromium drag scrolled the list 105 pixels without a selection, and touch cancel, mouse, keyboard and outside dismissal controls passed. The type gate, production build, 15 output checks and all 16 route caps passed. Published release pending.
+
 ## 2026-11-07: Club Manager historical roster counts live
 
 [PR #532](https://github.com/PapiSalgueroM/ballpark-hero/pull/532) published from main `c3b5ca4afaf9b4dadcd748f340e8e8e3e4a1a1dd`, App tree `133fcd3d26a4d237178e5c7efee723048da0aef2`, Lovable deployment `510b1df1-2172-42c0-90f9-d9f9c997b840`.
