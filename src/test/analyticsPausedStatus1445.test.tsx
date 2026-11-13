@@ -64,9 +64,9 @@ describe('Analytics paused status1445', () => {
     await waitFor(() => expect(region).toHaveFocus());
     expect(within(region).queryAllByRole('checkbox', { name: /Analytics/i }).length,
       'ANALYTICS_PAUSED_1445_DEAD_CONTROL').toBe(0);
-    const explanation = within(region).getByText('Analytics is paused.', { exact: true }).closest('p')!;
+    const explanation = within(region).getByText('Google Analytics is paused.', { exact: true }).closest('p')!;
     expect(explanation).toBeVisible();
-    expect(explanation).toHaveTextContent('Google Analytics is off while we check its privacy settings.');
+    expect(explanation).toHaveTextContent('Lovable still measures basic visits.');
     expect(explanation).not.toHaveAttribute('role'); expect(explanation).not.toHaveAttribute('tabindex');
     expect(explanation.querySelector('input, button, [role="checkbox"], [role="button"], [tabindex]')).toBeNull();
     expect(within(region).getByRole('link', { name: 'Learn more' })).toHaveAttribute('href', '/privacy');
