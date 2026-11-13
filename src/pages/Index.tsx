@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, useDeferredValue, lazy, Suspense, type ReactNode } from 'react';
+import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, useDeferredValue, lazy, memo, Suspense, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin } from 'lucide-react';
@@ -95,15 +95,18 @@ export default function Index() {
   const { paths: gamePicks, toggle: changeGamePick, storageFailed: picksStorageFailed } = useGamePicks();
   const dailyGamesRef = useRef<HTMLDivElement>(null);
   const pickAnchor = useRef<{ node: HTMLElement; top: number } | null>(null);
+  const picksAtCommit = useRef(gamePicks);
   const toggleGamePick = useCallback((path: string, node?: HTMLElement) => {
-    const changesShelf = gamePicks.length === 0 || (gamePicks.length === 1 && gamePicks[0] === path);
-    const box = node?.getBoundingClientRect();
+    const picks = picksAtCommit.current;
+    const changesShelf = picks.length === 0 || (picks.length === 1 && picks[0] === path);
+    const box = changesShelf ? node?.getBoundingClientRect() : undefined;
     pickAnchor.current = changesShelf && node && box && box.bottom > 0 && box.top < window.innerHeight
       ? { node, top: box.top }
       : null;
     changeGamePick(path);
-  }, [changeGamePick, gamePicks]);
+  }, [changeGamePick]);
   useLayoutEffect(() => {
+    picksAtCommit.current = gamePicks;
     const anchor = pickAnchor.current;
     pickAnchor.current = null;
     if (!anchor?.node.isConnected) return;
@@ -767,7 +770,7 @@ function HomeTileStyles() {
    thing on the card that tells two games of the same sport apart at a
    glance. The description is clamped to two lines so a grid of cards lines
    up in rows. */
-function GameCard({ game, badgeDate, bestScore, pinned, onTogglePick, compact = false }: {
+const GameCard = memo(function GameCard({ game, badgeDate, bestScore, pinned, onTogglePick, compact = false }: {
   game: GameDef;
   badgeDate: string;
   bestScore?: number;
@@ -825,4 +828,4 @@ function GameCard({ game, badgeDate, bestScore, pinned, onTogglePick, compact = 
     <GamePickButton game={game} pinned={pinned} onToggle={path => onTogglePick(path, cardRef.current ?? undefined)} className="absolute right-1.5 top-1.5" />
     </div>
   );
-}
+});
