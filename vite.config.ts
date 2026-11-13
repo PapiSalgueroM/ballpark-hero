@@ -104,7 +104,7 @@ const inlineSnapshotAssets = (root: string) => {
     const bootCover = `<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>`;
     const inject =
       calmBoot + "\n    " +
-      styles.map(h => `<link rel="stylesheet" crossorigin href="${h}" media="print" onload="this.media='all'">`).join("\n    ") +
+      styles.map(h => `<link rel="stylesheet" crossorigin href="${h}" media="print" data-dukb-app-style fetchpriority="high" onload="this.media='all'" onerror="this.media='all'">`).join("\n    ") +
       (styles.length ? `\n    <noscript>${styles.map(h => `<link rel="stylesheet" href="${h}">`).join("")}</noscript>\n    ` : "") +
       modules.map(sr => `<script type="module" crossorigin src="${sr}"></script>`).join("\n    ");
 
