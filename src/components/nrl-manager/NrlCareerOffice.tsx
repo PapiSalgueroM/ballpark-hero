@@ -85,9 +85,10 @@ function OfferForm({ career, entry, onAction, onClose, disabled }: {
   );
 }
 
-function PlayerRow({ player, entry, career, onAction, disabled, onShortlist }: {
+function PlayerRow({ player, entry, career, onAction, disabled, onShortlist, expiryStatus }: {
   player: CareerPlayer; entry?: MarketEntry; career: NrlCareerState; onAction: Dispatch; disabled: boolean;
   onShortlist?: (saved: boolean) => void;
+  expiryStatus?: string;
 }) {
   const [editing, setEditing] = useState(false);
   const [agreed, setAgreed] = useState(false);
@@ -103,6 +104,7 @@ function PlayerRow({ player, entry, career, onAction, disabled, onShortlist }: {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="min-w-0">
           <p className="font-bold">{player.name}{career.openingRoster && !isNrlOpeningMatchdayPlayer(player.id) && ' (generated)'}</p>
+          {expiryStatus && <p className="text-sm font-semibold">{expiryStatus}</p>}
           <p className="text-sm text-muted-foreground">{player.role} · Age {player.age} · {player.rating} OVR · {player.potential} potential</p>
           {contract && (
             <p className="text-sm text-muted-foreground">
@@ -219,6 +221,30 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
         {squad.map(player => <PlayerRow key={player.id} player={player} entry={offers.get(player.id)} career={career} onAction={onAction} disabled={disabled} />)}
       </ul>
     </>
+  );
+}
+
+function ExpiringDeals({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const { year, clubId } = career.season;
+  const expiring = nrlCareerSquad(career).filter(player => player.contract?.endYear === year);
+  if (expiring.length === 0) return null;
+  const unsigned = expiring.filter(player => !player.futureContract).length;
+  const offers = new Map(nrlCareerMarket(career).filter(entry => entry.kind === 'renewal' && entry.startYear === year + 1)
+    .map(entry => [entry.player.id, entry]));
+  return (
+    <details className="group mt-3 rounded-xl border border-border bg-background px-3">
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <span>Deals ending this season <span className="font-normal text-muted-foreground">· {unsigned} unsigned</span></span>
+        <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <p className="text-sm text-muted-foreground">Unsigned deals end when the next season starts. The game fills any open squad places.</p>
+      <ul className="mt-1 divide-y divide-border">
+        {expiring.map(player => (
+          <PlayerRow key={player.id} player={player} entry={offers.get(player.id)} career={career} onAction={onAction} disabled={disabled}
+            expiryStatus={player.futureContract ? player.futureContract.clubId === clubId ? 'Renewed' : 'Agreed elsewhere' : 'Unsigned'} />
+        ))}
+      </ul>
+    </details>
   );
 }
 
@@ -793,6 +819,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       )}
       {!retired && challengeStatus && <div className="mt-3"><NrlBoardChallengeNotice season={career.season} status={challengeStatus} /></div>}
       {!retired && !career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
+      {finished && !retired && year < NRL_LAST_YEAR && <ExpiringDeals career={career} onAction={onAction} disabled={disabled} />}
       {finished && !retired && year < NRL_LAST_YEAR && !mustMove && (
         <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled} onClick={() => onAction({ type: 'startNextSeason' })}>
           Start {year + 1}<ArrowRight aria-hidden="true" />
