@@ -14,7 +14,7 @@ export function SiteMenu() {
   const placement = useSiteMenuPlacement();
   const trigger = placement?.trigger ?? ownTrigger;
   const id = useId();
-  const { key } = useLocation();
+  const { key, pathname } = useLocation();
 
   useEffect(() => { setOpen(false); }, [key]);
   useEffect(() => {
@@ -39,6 +39,10 @@ export function SiteMenu() {
   };
 
   const host = placement?.host;
+  // Keep the loading NRL trigger reachable without reserving a row that its game header removes.
+  const fallbackClass = /^\/nrl-team-manager\/?$/.test(pathname)
+    ? 'absolute top-0 left-0 z-[60] md:top-8 flex h-11 items-center border-b border-border/40 bg-background'
+    : 'flex h-11 items-center border-b border-border/40 bg-background';
   const button = <Button ref={placement?.setTrigger ?? trigger} type="button" variant="ghost" aria-label="Open site menu"
     aria-haspopup="dialog" aria-expanded={open} aria-controls={open && Panel ? id : undefined}
     aria-busy={open && !Panel && !failed ? true : undefined}
@@ -49,7 +53,7 @@ export function SiteMenu() {
     {!host && 'Menu'}
   </Button>;
   return <>
-    {host ? createPortal(button, host) : <div data-site-chrome="" className="flex h-11 items-center border-b border-border/40 bg-background">{button}</div>}
+    {host ? createPortal(button, host) : <div data-site-chrome="" className={fallbackClass}>{button}</div>}
     {Panel ? <Panel open={open} onOpenChange={setOpen} returnFocusRef={trigger} id={id} /> : open && (
       <div role="region" aria-label="Site menu loading" data-site-chrome="" onKeyDown={closeOnEscape}
         className="fixed left-3 right-3 top-28 z-50 max-w-sm rounded-xl border border-border bg-card p-4 shadow-lg">
