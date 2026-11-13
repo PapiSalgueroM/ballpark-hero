@@ -153,29 +153,36 @@ function MatchdayLineup({ nation, choice, disabled, onChange }: {
   );
 }
 
-export default function NrlWorldCup({ onBack }: { onBack: () => void }) {
+interface Appointment {
+  run: NrlWorldCupRun | null;
+  stale: boolean;
+  locked: boolean;
+  saveFailed: boolean;
+  saveTooLarge: boolean;
+  onStart: (nation: NrlWorldCupNation) => boolean;
+  onPlay: (previous: NrlWorldCupRun, next: NrlWorldCupRun) => boolean;
+  onRetry: () => void;
+}
+
+export default function NrlWorldCup({ onBack, appointment }: { onBack: () => void; appointment?: Appointment }) {
+  if (!appointment) return <StandaloneWorldCup onBack={onBack} />;
+  const unreadable = Boolean(appointment.run && !readNrlWorldCupSave(JSON.stringify(appointment.run)));
+  return <WorldCupCampaign {...appointment} run={unreadable ? null : appointment.run} unreadable={unreadable} onBack={onBack} appointment />;
+}
+
+function StandaloneWorldCup({ onBack }: { onBack: () => void }) {
   const [initial] = useState(readSave);
   const [run, setRun] = useState(initial.run);
   const [unreadable, setUnreadable] = useState(initial.raw !== null && initial.run === null);
-  const [nation, setNation] = useState<NrlWorldCupNation>(initial.run?.nation ?? 'australia');
-  const [tactic, setTactic] = useState<NrlTactic>('balanced');
-  const [lineup, setLineup] = useState<NrlWorldCupLineup>({});
   const [saveFailed, setSaveFailed] = useState(false);
   const [changed, setChanged] = useState(false);
-  const [restart, setRestart] = useState(false);
   const current = useRef(run);
   const committed = useRef(initial.raw);
-  const heading = useRef<HTMLHeadingElement>(null);
-  const status = useRef<HTMLParagraphElement>(null);
   const { moved } = useSaveFenceWatch(SAVE_KEY);
   const stale = changed || moved;
-  const report = run ? nrlWorldCupResults(run) : null;
-  const step = run?.tactics.length ?? 0;
-  const canPickLineup = Boolean(run && report && nrlWorldCupCanPickLineup(run, step + 1, report));
 
   useEffect(() => {
     saveFence.adopt(SAVE_KEY);
-    heading.current?.focus();
     return () => saveFence.release(SAVE_KEY);
   }, []);
 
@@ -209,20 +216,46 @@ export default function NrlWorldCup({ onBack }: { onBack: () => void }) {
     onBack();
   }
 
-  function start() {
+  function start(nation: NrlWorldCupNation) {
     const seed = crypto.getRandomValues(new Uint32Array(1))[0];
-    if (save(createNrlWorldCup(seed, nation)) === 'moved') return;
+    if (save(createNrlWorldCup(seed, nation)) === 'moved') return false;
     setUnreadable(false);
+    return true;
+  }
+
+  return <WorldCupCampaign run={run} unreadable={unreadable} stale={stale} locked={false} saveFailed={saveFailed} saveTooLarge={false}
+    onBack={leave} onStart={start} onPlay={(previous, next) => current.current === previous && save(next) !== 'moved'}
+    onRetry={() => { if (current.current) save(current.current); }} />;
+}
+
+function WorldCupCampaign({ run, unreadable, stale, locked, saveFailed, saveTooLarge, onBack, onStart, onPlay, onRetry, appointment }: Appointment & {
+  unreadable: boolean; onBack: () => void; appointment?: true;
+}) {
+  const [nation, setNation] = useState<NrlWorldCupNation>(run?.nation ?? 'australia');
+  const [tactic, setTactic] = useState<NrlTactic>('balanced');
+  const [lineup, setLineup] = useState<NrlWorldCupLineup>({});
+  const [restart, setRestart] = useState(false);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const status = useRef<HTMLParagraphElement>(null);
+  const disabled = stale || locked;
+  const report = run ? nrlWorldCupResults(run) : null;
+  const step = run?.tactics.length ?? 0;
+  const canPickLineup = Boolean(run && report && nrlWorldCupCanPickLineup(run, step + 1, report));
+
+  useEffect(() => { heading.current?.focus(); }, []);
+
+  function start() {
+    if (!onStart(nation)) return;
     setRestart(false);
     setTactic('balanced');
     setLineup({});
   }
 
   function play() {
-    if (!current.current) return;
+    if (!run) return;
     const choice = lineup.swap !== undefined || lineup.firstReserve !== undefined ? lineup : undefined;
-    const next = advanceNrlWorldCup(current.current, step + 1, tactic, choice);
-    if (next === current.current || save(next) === 'moved') return;
+    const next = advanceNrlWorldCup(run, step + 1, tactic, choice);
+    if (next === run || !onPlay(run, next)) return;
     setLineup({});
     if (step === stages.length - 1) status.current?.focus();
   }
@@ -230,41 +263,48 @@ export default function NrlWorldCup({ onBack }: { onBack: () => void }) {
   return (
     <section aria-labelledby="nrl-world-cup-title" className="space-y-4 rounded-xl border border-border bg-card p-3 sm:p-5">
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <h2 id="nrl-world-cup-title" ref={heading} tabIndex={-1} className="font-display text-xl font-bold outline-none sm:text-2xl">2026 Rugby League World Cup</h2>
-        <Button type="button" size="lg" variant="outline" className="px-3" onClick={leave}>Back to club manager</Button>
+        <h2 id="nrl-world-cup-title" ref={heading} tabIndex={-1} className="font-display text-xl font-bold outline-none sm:text-2xl">
+          {appointment ? '2026 World Cup national appointment' : '2026 Rugby League World Cup'}
+        </h2>
+        <Button type="button" size="lg" variant="outline" className="px-3" onClick={onBack}>Back to club manager</Button>
       </div>
       <p className="text-sm text-muted-foreground">Coach one of ten men’s national teams through the published 2026 fixtures. The game uses each nation’s opening squad, with optional matchday changes and simulated ratings and results.</p>
-      {stale && <p className="rounded-md border border-border p-2 text-sm" role="status">The World Cup changed in another tab. Go back and open it again to load the newer run.</p>}
+      {appointment && <p className="text-sm text-muted-foreground">This appointment saves in your club career. You can return between rounds and keep it when you change clubs or start another season.</p>}
+      {stale && <p className="rounded-md border border-border p-2 text-sm" role="status">{appointment
+        ? 'This career changed in another tab. Return to the club manager and reload your season.' : 'The World Cup changed in another tab. Go back and open it again to load the newer run.'}</p>}
+      {locked && !stale && step < stages.length && <p className="text-sm text-muted-foreground">The appointment is currently read-only.</p>}
+      {saveTooLarge && !stale && <p className="rounded-md border border-border p-2 text-sm" role="status">This career reached the save size limit. Your last saved progress is still in this slot.</p>}
       {saveFailed && !stale && <div className="rounded-md border border-border p-2 text-sm" role="status">
         <p>Progress is still in this tab. Retry before leaving.</p>
-        <Button type="button" size="lg" variant="outline" className="mt-2 px-3" onClick={() => current.current && save(current.current)}>Retry World Cup save</Button>
+        <Button type="button" size="lg" variant="outline" className="mt-2 px-3" onClick={onRetry}>Retry World Cup save</Button>
       </div>}
-      {unreadable && <p className="text-sm text-muted-foreground">The saved run could not be read. Starting a new World Cup replaces it.</p>}
-      {(!run || restart) && <div className="grid items-end gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
+      {unreadable && <p className="text-sm text-muted-foreground">{appointment
+        ? 'The appointment could not be read. Your club career is still available.' : 'The saved run could not be read. Starting a new World Cup replaces it.'}</p>}
+      {(!run || restart) && !(unreadable && appointment) && <div className="grid items-end gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
         <label className="min-w-0 space-y-1 text-sm font-semibold">
           <span>Coach a nation</span>
-          <select className={selectClass} value={nation} disabled={stale} onChange={event => setNation(event.target.value as NrlWorldCupNation)}>
+          <select className={selectClass} value={nation} disabled={disabled} onChange={event => setNation(event.target.value as NrlWorldCupNation)}>
             {nations.map(id => <option key={id} value={id}>{nationNames[id]}</option>)}
           </select>
         </label>
-        <Button type="button" size="lg" disabled={stale} onClick={start}>Start World Cup</Button>
+        <Button type="button" size="lg" disabled={disabled} onClick={start}>{appointment ? 'Accept national appointment' : 'Start World Cup'}</Button>
         {restart && <p className="text-sm text-muted-foreground">Starting replaces the previous tournament in this browser.</p>}
       </div>}
       {run && report && !restart && <div className="space-y-3">
         <p className="font-semibold">Coaching {nationNames[run.nation]}</p>
         <p ref={status} tabIndex={-1} aria-live="polite" className="text-sm font-semibold" role={stale || saveFailed ? undefined : 'status'}>{stageSummary(run, report)}</p>
-        {canPickLineup && <MatchdayLineup key={step} nation={run.nation} choice={lineup} disabled={stale} onChange={setLineup} />}
+        {canPickLineup && <MatchdayLineup key={step} nation={run.nation} choice={lineup} disabled={disabled} onChange={setLineup} />}
         {step < stages.length ? (
           <div className="grid items-end gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
             <label className="min-w-0 space-y-1 text-sm font-semibold">
               <span>World Cup tactic</span>
-              <select className={selectClass} value={tactic} disabled={stale} onChange={event => setTactic(event.target.value as NrlTactic)}>
+              <select className={selectClass} value={tactic} disabled={disabled} onChange={event => setTactic(event.target.value as NrlTactic)}>
                 {NRL_TACTICS.map(id => <option key={id} value={id}>{tacticNames[id]}</option>)}
               </select>
             </label>
-            <Button type="button" size="lg" disabled={stale} onClick={play}>Play {stages[step]}</Button>
+            <Button type="button" size="lg" disabled={disabled} onClick={play}>Play {stages[step]}</Button>
           </div>
-        ) : <Button type="button" size="lg" variant="outline" disabled={stale || saveFailed} onClick={() => setRestart(true)}>New World Cup</Button>}
+        ) : !appointment && <Button type="button" size="lg" variant="outline" disabled={stale || saveFailed} onClick={() => setRestart(true)}>New World Cup</Button>}
         {run.lineups && <ul className="space-y-1 text-sm" aria-label="Saved matchday changes">
           {Object.entries(run.lineups).map(([stage, change]) => change && <li key={stage} className="break-words">
             <span className="font-semibold">{stages[Number(stage) - 1]} </span>{lineupSummary(run.nation, change)}

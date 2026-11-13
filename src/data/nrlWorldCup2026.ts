@@ -1,4 +1,7 @@
 import type { NrlRole } from '@/lib/nrlManager';
+import type { NrlWorldCupNation } from '@/lib/nrlWorldCupSave';
+
+export { NRL_WORLD_CUP_2026_POOLS, type NrlWorldCupNation } from '@/lib/nrlWorldCupSave';
 
 // Official men's draw, tournament rules and final fixture dates.
 // https://www.intrl.sport/article/639/irl-rugby-league-world-cup-2026-mens,-womens-wheelchair-draws-announced
@@ -6,14 +9,6 @@ import type { NrlRole } from '@/lib/nrlManager';
 // https://www.nrl.com/draw/?competition=131&round=2&season=2026
 // https://www.nrl.com/draw/?competition=131&round=3&season=2026
 // https://www.nrl.com/news/2026/09/18/eyntk-world-cup-2026/
-export const NRL_WORLD_CUP_2026_POOLS = {
-  A: ['australia', 'new-zealand', 'fiji', 'cook-islands'],
-  B: ['england', 'samoa', 'lebanon'],
-  C: ['tonga', 'papua-new-guinea', 'france'],
-} as const;
-
-export type NrlWorldCupNation = typeof NRL_WORLD_CUP_2026_POOLS[keyof typeof NRL_WORLD_CUP_2026_POOLS][number];
-
 // Men's Pool A opener and final matchday lists. The IRL match record specifies the left and right backs.
 // https://www.intrl.sport/match-details/2563
 // https://www.nrl.com/news/2026/10/13/world-cup-team-lists-mens-round-1/
