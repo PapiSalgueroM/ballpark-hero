@@ -2,7 +2,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { CookieConsent } from "@/components/CookieConsent";
 import { StorageNotice, isGameRoute } from "@/components/StorageNotice";
 import { GameAdInventory } from "@/components/ads/GameAdInventory";
-import { lazy, Suspense, useEffect, useRef, useSyncExternalStore } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
 import BrokenSaveRestore from "@/components/BrokenSaveRestore";
@@ -75,6 +75,10 @@ const GuessNascarDriver = lazy(() => import("./pages/GuessNascarDriver"));
 const NascarChain = lazy(() => import("./pages/NascarChain"));
 const SoccerGrid = lazy(() => import("./pages/SoccerGrid"));
 const FantasyDraft = lazy(() => import("./pages/FantasyDraft"));
+const FantasyDraftToaster = lazy(() => import("./pages/FantasyDraft").then(
+  module => ({ default: module.Toaster }),
+  () => ({ default: () => null }),
+));
 const Conquest = lazy(() => import("./pages/Conquest"));
 const WorldCupPredictor = lazy(() => import("./pages/WorldCupPredictor"));
 const SoccerCareer = lazy(() => import("./pages/SoccerCareerEntry"));
@@ -639,11 +643,20 @@ const AppContent = () => {
   );
 };
 
+function FantasyDraftNotifications() {
+  const { pathname } = useLocation();
+  const inDraft = normalizeRoutePath(pathname).toLowerCase() === "/fantasy-draft";
+  const [visitedDraft, setVisitedDraft] = useState(inDraft);
+  useEffect(() => { if (inDraft) setVisitedDraft(true); }, [inDraft]);
+  return inDraft || visitedDraft ? <Suspense fallback={null}><FantasyDraftToaster /></Suspense> : null;
+}
+
 const App = () => (
   <AuthProvider>
     <Sonner />
     <UpdateNudge />
     <BrowserRouter>
+      <FantasyDraftNotifications />
       <AppContent />
     </BrowserRouter>
   </AuthProvider>

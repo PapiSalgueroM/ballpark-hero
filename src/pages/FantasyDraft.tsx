@@ -524,4 +524,5 @@ const FantasyDraft = () => {
   );
 };
 
+export { Toaster } from "@/components/ui/toaster";
 export default FantasyDraft;
