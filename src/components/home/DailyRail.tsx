@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CalendarDays, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { getTodayET } from '@/lib/dateUtils';
@@ -18,8 +18,8 @@ import { SportGlyph, sportStyle } from './SportGlyph';
  * streak record and fails if a single character differs.
  *
  * The day is pinned once at mount, the rule every daily game follows, so
- * the pick cannot change under somebody reading it at midnight. The page
- * itself never scrolls: the arrows move the rail, and only when pressed.
+ * the pick cannot change under somebody reading it at midnight. The arrows
+ * move the rail inside the page, horizontally on phones and vertically on wide screens.
  */
 export function DailyRail({ today }: { today?: string }) {
   const day = useRef(today ?? getTodayET()).current;
@@ -29,45 +29,50 @@ export function DailyRail({ today }: { today?: string }) {
     return { spotlight: pick, rest: dealtBySport(all.filter(g => g !== pick)), total: all.length };
   }, [day]);
   const railRef = useRef<HTMLDivElement>(null);
+  const [atStart, setAtStart] = useState(true);
 
   const nudge = (dir: 1 | -1) => {
     const el = railRef.current;
-    if (!el) return;
+    if (!el || (dir < 0 && atStart)) return;
     let reduce = false;
     try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { /* old browser: animate */ }
-    el.scrollBy({ left: dir * Math.round(el.clientWidth * 0.8), behavior: reduce ? 'auto' : 'smooth' });
+    const behavior = reduce ? 'auto' : 'smooth';
+    if (el.scrollHeight > el.clientHeight && el.scrollWidth <= el.clientWidth) {
+      el.scrollBy({ top: dir * Math.round(el.clientHeight * 0.8), behavior });
+    } else {
+      el.scrollBy({ left: dir * Math.round(el.clientWidth * 0.8), behavior });
+    }
   };
 
   if (total === 0) return null;
 
   return (
-    <section aria-labelledby="home-dailies" data-home-dailies="">
-      <div className="mb-3 flex items-end justify-between gap-4">
-        <div className="min-w-0">
-          <h2 id="home-dailies" className="flex items-center gap-2.5 text-lg font-display font-bold text-foreground">
-            <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary/15 text-primary ring-1 ring-inset ring-primary/30">
-              <CalendarDays className="h-4 w-4" />
-            </span>
+    <section aria-labelledby="home-dailies" data-home-dailies="" className="lg:overflow-hidden lg:rounded-2xl lg:border lg:border-border lg:bg-surface-1 lg:px-3 lg:pb-3 lg:pt-2.5 xl:px-4">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-1">
+        <div className="min-w-0 flex-1 basis-36">
+          <h2 id="home-dailies" className="flex items-center gap-2 text-lg font-display font-bold text-foreground">
+            <CalendarDays aria-hidden="true" className="h-4 w-4 shrink-0 text-primary" />
             Daily puzzles
           </h2>
-          <p className="mt-1 text-xs text-muted-foreground md:pl-[42px]">
-            {total} daily boards, the same one for everybody. New ones at midnight Eastern.
+          <p className="mt-1 text-xs text-muted-foreground">
+            {total} boards. New at midnight Eastern.
           </p>
         </div>
-        <div className="hidden shrink-0 gap-1.5 sm:flex">
-          <button type="button" onClick={() => nudge(-1)} aria-label="Scroll the daily puzzles back" className="grid h-9 w-9 place-items-center rounded-full border border-border bg-surface-1 text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground">
-            <ChevronLeft className="h-4 w-4" />
+        <div className="flex shrink-0 gap-1">
+          <button type="button" onClick={() => nudge(-1)} aria-label="Scroll the daily puzzles back" aria-disabled={atStart} className="grid h-11 w-11 place-items-center rounded-lg border border-border bg-surface-1 text-muted-foreground hover:border-primary/40 hover:text-foreground aria-disabled:opacity-50">
+            <ChevronLeft aria-hidden="true" className="h-4 w-4 lg:rotate-90" />
           </button>
-          <button type="button" onClick={() => nudge(1)} aria-label="Scroll the daily puzzles on" className="grid h-9 w-9 place-items-center rounded-full border border-border bg-surface-1 text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground">
-            <ChevronRight className="h-4 w-4" />
+          <button type="button" onClick={() => nudge(1)} aria-label="Scroll the daily puzzles on" className="grid h-11 w-11 place-items-center rounded-lg border border-border bg-surface-1 text-muted-foreground hover:border-primary/40 hover:text-foreground">
+            <ChevronRight aria-hidden="true" className="h-4 w-4 lg:rotate-90" />
           </button>
         </div>
       </div>
 
-      {/* On a phone the rail runs to the screen edge, the way a thumb
-          expects; on a wider screen it stays inside the page's column and
-          fades out at the right so the cut reads as "more this way". */}
-      <div ref={railRef} className="-mx-4 snap-x overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-2 [scrollbar-width:thin] sm:mx-0 sm:scroll-px-0 sm:px-0 sm:[mask-image:linear-gradient(to_right,#000_calc(100%-56px),transparent)]">
+      {/* Leave the next card in view so touch users can see that the list scrolls. */}
+      <div ref={railRef} onScroll={event => {
+        const { scrollLeft, scrollTop } = event.currentTarget;
+        setAtStart(scrollLeft === 0 && scrollTop === 0);
+      }} className="-mx-4 snap-x overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-2 [scrollbar-width:thin] sm:mx-0 sm:scroll-px-0 sm:px-0 lg:max-h-[17.5rem] lg:snap-y lg:overflow-x-hidden lg:overflow-y-auto">
         {/* The whole rail is dated, not just the spotlight. `rest` drops the
             game the date picked, so the set of chips is different every day:
             today the rail has no CBB Program chip because it is the
@@ -78,9 +83,9 @@ export function DailyRail({ today }: { today?: string }) {
             frozen into a saved file, but the block IS volatile and saying so
             is the honest declaration rather than an exception. The visitor
             keeps the whole rail; only a photograph of the page loses it. */}
-        <ul data-no-prerender="" className="grid w-max auto-cols-max grid-flow-col grid-rows-2 gap-2.5 sm:pr-14">
+        <ul data-no-prerender="" className="grid w-max auto-cols-max grid-flow-col grid-rows-2 gap-2.5 lg:w-full lg:grid-flow-row lg:grid-cols-1 lg:grid-rows-none lg:pr-1">
           {spotlight && (
-            <li className="row-span-2 snap-start">
+            <li className="row-span-2 snap-start lg:row-span-1">
               <Spotlight game={spotlight} />
             </li>
           )}
@@ -103,12 +108,12 @@ function Spotlight({ game }: { game: GameDef }) {
       style={sportStyle(sport)}
       data-daily-spotlight={game.path}
       data-no-prerender=""
-      className="group relative flex h-full w-[252px] flex-col justify-between gap-2 overflow-hidden rounded-2xl border border-tile/40 bg-surface-1 p-4 transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-tile/70"
+      className="group relative flex h-full w-[224px] flex-col justify-between gap-2 overflow-hidden rounded-xl border border-tile/40 bg-surface-1 p-3 hover:border-tile/70 lg:min-h-36 lg:w-full lg:bg-background"
     >
       <span aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(120%_100%_at_100%_0%,hsl(var(--tile)/0.22),transparent_60%)]" />
       <SportGlyph sport={sport} className="pointer-events-none absolute -right-5 -top-5 h-24 w-24 text-tile opacity-[0.12]" />
       <div className="relative">
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-primary px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-primary-foreground">
+        <span className="text-xs font-semibold text-primary">
           Today's puzzle
         </span>
         <h3 className="mt-2.5 font-display text-lg font-bold leading-tight text-foreground">
@@ -138,9 +143,9 @@ function DailyChip({ game }: { game: GameDef }) {
       to={game.path}
       style={sportStyle(sport)}
       data-daily-chip={game.path}
-      className="group flex h-[80px] w-[184px] items-center gap-3 rounded-xl border border-border/80 bg-surface-1 px-3 transition-[border-color,background-color] duration-200 hover:border-tile/60 hover:bg-surface-2"
+      className="group flex h-16 w-[168px] items-center gap-2 rounded-lg border border-border/80 bg-surface-1 px-2.5 hover:border-tile/60 hover:bg-surface-2 lg:min-h-14 lg:w-full lg:bg-background"
     >
-      <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-tile/15 text-xl ring-1 ring-inset ring-tile/25">
+      <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-tile/15 text-base">
         {game.emoji}
       </span>
       <span className="min-w-0">

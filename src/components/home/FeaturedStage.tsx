@@ -19,7 +19,6 @@ function hasSave(key: string | undefined): boolean {
   catch { return false; }
 }
 
-type Variant = 'lead' | 'wide' | 'small';
 interface Card { entry: StageEntry; game: GameDef }
 
 export function FeaturedStage() {
@@ -44,23 +43,22 @@ export function FeaturedStage() {
         })}
       </nav>
       <div className={styles.games}>
-        {cards.map((card, index) => <StageCard key={card.game.path} card={card} variant={index === 0 ? 'lead' : index === 1 ? 'wide' : 'small'} />)}
+        {cards.map((card, index) => <StageCard key={card.game.path} card={card} lead={index === 0} />)}
       </div>
     </section>
   );
 }
 
-function StageCard({ card, variant }: { card: Card; variant: Variant }) {
+function StageCard({ card, lead }: { card: Card; lead: boolean }) {
   const { entry, game } = card;
   const sport = sportOf(game.path);
   const [saved] = useState(() => hasSave(entry.saveKey));
   const resuming = saved && !!entry.continueCta;
   const cta = resuming ? entry.continueCta : entry.cta;
-  const lead = variant === 'lead';
 
   return (
     <Link to={game.path} style={sportStyle(sport)} data-stage-card={game.path}
-      className={cn(styles.game, styles[variant])}>
+      className={cn(styles.game, lead && styles.lead)}>
       <span aria-hidden="true" className={styles.art}>
         <Suspense fallback={null}><HomeArt art={entry.art} /></Suspense>
       </span>
@@ -72,18 +70,10 @@ function StageCard({ card, variant }: { card: Card; variant: Variant }) {
         </span>
         <h3 className={cn('font-display', styles.title)}>{game.label}</h3>
         {lead && <p className={styles.description}>{game.description}</p>}
-        {variant === 'wide' && <p className={styles.secondaryDescription}>{leadIn(game.description)}</p>}
         <span className={cn(styles.cta, lead && styles.primaryCta)}>
           <span>{cta}</span><ArrowRight aria-hidden="true" />
         </span>
-        {lead && <span className={styles.saveNote}>Saves in this browser. No account needed.</span>}
       </div>
     </Link>
   );
-}
-
-/** A complete opening clause keeps the smaller management panel readable. */
-function leadIn(description: string): string {
-  const cut = description.search(/[:.!?](\s|$)/);
-  return cut === -1 ? description : description.slice(0, cut);
 }

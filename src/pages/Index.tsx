@@ -232,35 +232,28 @@ export default function Index() {
 
   // A search hides the catalogue without rebuilding its cards on each key.
   const catalogue = useMemo(() => (
-    <div className="space-y-10">
-      <div className="space-y-4">
-        {/* ─── MAIN EVENT ───
-            Round 658: the four flagships on the first screen, Soccer
-            Career on the big stage. It is the first thing on the page
-            to play: a 390 by 844 phone sees it at about y=250, where
-            the Round 283 fence allows 430. */}
-        <FeaturedStage />
-        {/* Round 717: every long form game this browser has a save
-            for, straight under the stage. Nothing at all for a
-            visitor with no saves, so a first visit's screen is
-            unchanged; playHomeFold section 6 plants saves and holds
-            the first tile where it was. */}
-        <ContinueRow />
-        <GamePicksRow paths={gamePicks} onToggle={toggleGamePick} onEmpty={() => dailyGamesRef.current?.querySelector<HTMLAnchorElement>('a')?.focus({ preventScroll: true })} />
+    <div className="space-y-8 lg:space-y-10">
+      <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        <div className="min-w-0 space-y-4">
+          <FeaturedStage />
+          <ContinueRow />
+          <GamePicksRow paths={gamePicks} onToggle={toggleGamePick} onEmpty={() => dailyGamesRef.current?.querySelector<HTMLAnchorElement>('a')?.focus({ preventScroll: true })} />
+        </div>
+        <div ref={dailyGamesRef} className="min-w-0">
+          <DailyRail />
+        </div>
       </div>
 
-      {/* ─── DAILY PUZZLES ───
-          Round 659: every daily on the site in one rail, led by
-          Today's puzzle, which the date picks for everyone. A plain
-          rail, never a checklist: Round 293 put a personal dailies
-          checklist here and Round 297 removed it on the owner's
-          direct instruction in the 2026-08-26 tweaks document ("The
-          your dailies I would say get rid of it"). Nothing on the
-          rail reads a visitor's record, and simHomeFront renders it
-          with and without one to prove it. */}
-      <div ref={dailyGamesRef} className="space-y-4">
-        <DailyRail />
+      <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="scroll-mt-36 border-y border-border py-3 sm:scroll-mt-28 sm:py-4">
+        <h2 id="browse-sports-heading" className="font-display text-lg font-bold">Browse sports</h2>
+        <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} />
+        <p className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">
+          <Pin aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
+          Pin a game to keep it in Your picks on Home.
+        </p>
+      </section>
 
+      <div className="space-y-4">
         {/* A line, not a gate. Everything on this site plays signed
             out, so the account is an upsell and belongs where an
             upsell goes: after the games, not in front of them. The nav
@@ -334,15 +327,6 @@ export default function Index() {
             <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
           ))}
         </div>
-      </section>
-
-      <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="scroll-mt-36 rounded-2xl border border-border bg-surface-1 p-3 sm:scroll-mt-28 sm:p-4">
-        <h2 id="browse-sports-heading" className="font-display text-lg font-bold">Browse sports</h2>
-        <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} />
-        <p className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">
-          <Pin aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
-          Pin a game to keep it in Your picks on Home.
-        </p>
       </section>
 
       {sportSections.map(cat => (
@@ -449,7 +433,7 @@ export default function Index() {
                     the About section below the tiles add detail. simHomeCopy
                     part 8 fails on any visually hidden text
                     in this file or that section. */}
-                <h1 className="font-display text-2xl font-bold leading-none tracking-tight text-primary md:text-[40px]">
+                <h1 className="font-display text-[26px] font-bold leading-none tracking-tight text-foreground md:text-[40px]">
                   Free sports games
                 </h1>
                 {/* Stats: PERSONAL stats, signed-in only (owner 2026-08-05).
