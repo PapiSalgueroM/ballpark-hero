@@ -7416,6 +7416,13 @@ export function stopRetraining(career: CareerState, playerId: string): CareerSta
   };
 }
 
+function compareFullbackFit(a: CMPlayer, b: CMPlayer, slot: FormationSlot): number {
+  const side: Position[] = slot.label === 'RB' ? ['RB', 'RWB'] : slot.label === 'LB' ? ['LB', 'LWB'] : [];
+  if (!side.length) return 0;
+  const holdsSide = (p: CMPlayer) => heldPositions(p).some(pos => side.includes(pos));
+  return Number(holdsSide(b)) - Number(holdsSide(a));
+}
+
 export function autoPickXI(squad: CMPlayer[], formation: Formation, fresh = false): (string | null)[] {
   const used = new Set<string>();
   const xi: (string | null)[] = [];
@@ -7425,7 +7432,8 @@ export function autoPickXI(squad: CMPlayer[], formation: Formation, fresh = fals
     /* Round 505: a position he has retrained into is his too. */
     const fits = squad
       .filter(p => isAvailable(p) && !used.has(p.id) && heldPositions(p).some(pos => slot.allowed.includes(pos)))
-      .sort(order);
+      // A centre-back can cover either side when a specialist is unavailable.
+      .sort((a, b) => compareFullbackFit(a, b, slot) || order(a, b));
     let chosen: CMPlayer | null = fits[0] ?? null;
     if (!chosen) {
       const any = squad
@@ -16101,15 +16109,19 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
     const id = state.xiIds[i];
     let p = id ? state.squad.find(x => x.id === id) : undefined;
     if (!p || !isAvailable(p) || used.has(p.id)) {
-      /* Round 505: the best available man for the slot as the match will
-         read him, his rating less the price he pays there (a natural fit
-         pays nothing, so he still comes first at equal rating), and a
-         position he has retrained into counts as natural. */
+      /* Use the match's fit-adjusted rating after preferring a fullback
+         specialist. Keep later manual assignments when covering a fullback. */
+      const fullback = slot.label === 'RB' || slot.label === 'LB';
+      const assigned = fullback ? new Set(state.xiIds.slice(i + 1, formation.slots.length)) : null;
       const worth = (x: CMPlayer) => x.rating - fitPenalty(x, slot);
-      const best = (pool: CMPlayer[]) => pool
-        .sort((a, b) => worth(b) - worth(a) || b.rating - a.rating)[0];
       const open = state.squad.filter(x => isAvailable(x) && !used.has(x.id));
-      p = best(open.filter(x => !resting.has(x.id))) ?? best(open);
+      const free = assigned ? open.filter(x => !assigned.has(x.id)) : open;
+      // With no bench cover, keep the established short-XI slot order.
+      const hasFreeCover = free.length > 0;
+      const pool = hasFreeCover ? free : open;
+      const best = (candidates: CMPlayer[]) => candidates
+        .sort((a, b) => (hasFreeCover ? compareFullbackFit(a, b, slot) : 0) || worth(b) - worth(a) || b.rating - a.rating)[0];
+      p = best(pool.filter(x => !resting.has(x.id))) ?? best(pool);
     }
     if (p) {
       used.add(p.id);

@@ -91,6 +91,58 @@ async function mountTactics(c: CareerState, E: Engine) {
 }
 
 describe('Club Manager fresh XI', () => {
+  it('prefers available same-side fullbacks to centre-backs at right-back and left-back', async () => {
+    const { E, player, formation } = await fixture();
+    const backs = { ...formation, slots: formation.slots.slice(1, 5) };
+    const bestCB = player('best-cb', 'CB', 95);
+    const otherCB = player('other-cb', 'CB', 92);
+    const emergencyCB = player('emergency-cb', 'CB', 88);
+    const right = player('right', 'RB', 84, 78);
+    const rightWingBack = player('right-wing-back', 'RWB', 81);
+    const left = { ...player('learned-left', 'CM', 72), secondaryPositions: ['LB' as const] };
+    const injured = { ...player('injured-right', 'RB', 99), injuryWeeks: 1 };
+    const banned = { ...player('banned-left', 'LB', 99), suspendedMatches: 1 };
+    const squad = [bestCB, otherCB, emergencyCB, right, rightWingBack, left, injured, banned];
+
+    expect(E.autoPickXI(squad, backs)).toEqual(['right', 'best-cb', 'other-cb', 'learned-left']);
+    expect(pickFresh(E, squad, backs)).toEqual(['right-wing-back', 'best-cb', 'other-cb', 'learned-left']);
+    expect(E.autoPickXI([bestCB, injured], { ...formation, slots: [backs.slots[0]] })).toEqual(['best-cb']);
+  });
+
+  it('uses a specialist for an unavailable fullback and honors an intentional fit centre-back selection', async () => {
+    const { E, c, player, formation } = await fixture();
+    c.squad[1].injuryWeeks = 1;
+    c.squad.push(player('cover-cb', 'CB', 99));
+    const rightBack = formation.slots[1];
+    const effectiveRight = () => E.effectiveXIWithSlots(c).find(row => row.slot === rightBack)?.p.id;
+
+    expect(effectiveRight()).toBe('fresh-rb');
+    expect(c.xiIds[1]).toBe('starter-rb');
+    c.xiIds[1] = 'cover-cb';
+    expect(effectiveRight()).toBe('cover-cb');
+  });
+
+  it('keeps an available specialist in a later manual slot when covering an injured fullback', async () => {
+    const { E, c, player, formation } = await fixture();
+    c.squad[1].injuryWeeks = 1;
+    c.squad.push(player('cover-cb', 'CB', 99));
+    c.xiIds[2] = 'fresh-rb';
+
+    const effective = E.effectiveXIWithSlots(c);
+    expect(effective.find(row => row.slot === formation.slots[1])?.p.id).toBe('cover-cb');
+    expect(effective.find(row => row.slot === formation.slots[2])?.p.id).toBe('fresh-rb');
+  });
+
+  it('keeps the on-pitch slots contiguous if every available player is already assigned', async () => {
+    const { E, c, formation } = await fixture();
+    c.squad[1].injuryWeeks = 1;
+    c.squad = c.squad.filter(p => c.xiIds.includes(p.id));
+
+    const effective = E.effectiveXIWithSlots(c);
+    expect(effective.map(row => row.slot)).toEqual(formation.slots.slice(0, 10));
+    expect(new Set(effective.map(row => row.p.id)).size).toBe(10);
+  });
+
   it('prioritizes eighty-fit eligible players without crossing availability or position rules', async () => {
     const { E, player, formation } = await fixture();
     const one = { ...formation, slots: [formation.slots[1]] };
