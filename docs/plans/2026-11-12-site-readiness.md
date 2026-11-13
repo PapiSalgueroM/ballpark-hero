@@ -1,6 +1,8 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 11:28 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 11:34 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+NRL Team Manager has an optional 2027 Perth Bears start with 27 club-confirmed signings and three generated depth players. Age, ratings, contracts, positions in the selected lineup and the draw are modeled. The original generated 2027 start remains available, and the 2026 season and separate World Cup remain as before. All 294 NRL tests, 396 paired save checkpoints and 12 production browser cases passed. The roster data loads only on opting in. Both hosts and 173 sitemap URLs passed, and IndexNow accepted the updated guide. [PR #812](https://github.com/PapiSalgueroM/ballpark-hero/pull/812). [Perth Bears squad](https://www.perthbears.com.au/team/) and [NRL Travel](https://travel.nrl.com/blog/nrl-2027-magic-round).
 
 Fantasy Draft now brings in its notification code on first visit and retains an open toast across navigation. Initial app JavaScript fell by 6,031 compressed bytes in the exact local pair. Four published cases covered the full draft, simulated error, in-app navigation and dismissal, and 173 sitemap URLs passed. The broad branch removed its separate route-local notification host to retain one accessible notification region. [PR #811](https://github.com/PapiSalgueroM/ballpark-hero/pull/811).
 
