@@ -774,13 +774,26 @@ function PlayerHistory({ career }: { career: NrlCareerState }) {
       },
     ];
   }, [career, open]);
-  const players = new Map<string, string>();
-  for (const year of years) {
-    for (const [id, name] of year.scoring ?? []) players.set(id, name);
-    for (const [id, name] of year.playerSeasons ?? []) players.set(id, name);
-  }
-  const choices = [...players].sort((a, b) => a[1].localeCompare(b[1]) || a[0].localeCompare(b[0]));
-  const selected = players.has(playerId) ? playerId : choices[0]?.[0];
+  const choices = useMemo(() => {
+    const players = new Map<string, { name: string; year: number; clubId: string }>();
+    for (const { scoring, playerSeasons, year, clubId } of years) {
+      for (const [id, name] of scoring ?? []) players.set(id, { name, year, clubId });
+      for (const [id, name] of playerSeasons ?? []) players.set(id, { name, year, clubId });
+    }
+    const names = new Map<string, number>();
+    for (const { name } of players.values()) names.set(name, (names.get(name) ?? 0) + 1);
+    const labels = new Map<string, number>();
+    const rows = [...players].map(([id, { name, year, clubId }]) => {
+      const qualifier = names.get(name) === 1 ? '' : labelForClub(year, clubId) + ', ' + year;
+      const label = qualifier ? name + ' (' + qualifier + ')' : name;
+      labels.set(label, (labels.get(label) ?? 0) + 1);
+      return { id, name, qualifier, label };
+    });
+    return rows.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id)).map(({ id, name, qualifier, label }) => ({
+      id, label: qualifier && (labels.get(label) ?? 0) > 1 ? name + ' (' + qualifier + ', ' + id + ')' : label,
+    }));
+  }, [years]);
+  const selected = choices.some(choice => choice.id === playerId) ? playerId : choices[0]?.id;
   let previous: { year: number; rating: number } | undefined;
   const rows = years.flatMap(year => {
     const row = year.playerSeasons?.find(entry => entry[0] === selected);
@@ -806,7 +819,7 @@ function PlayerHistory({ career }: { career: NrlCareerState }) {
           <div>
             <label htmlFor="nrl-history-player" className="block text-sm font-semibold">Player</label>
             <select id="nrl-history-player" className={control + ' mt-1 sm:max-w-xs'} value={selected} onChange={event => setPlayerId(event.target.value)}>
-              {choices.map(([id, name]) => <option key={id} value={id}>{name}</option>)}
+              {choices.map(({ id, label }) => <option key={id} value={id}>{label}</option>)}
             </select>
           </div>
         ) : <p className="text-sm text-muted-foreground">No player records have been saved yet.</p>}

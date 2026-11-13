@@ -18,6 +18,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'In Contracts, arrange an offseason move for an eligible player. They stay this season, and the receiving club pays their salary for the remaining term.',
       'Set Standard, Value or Premium ticket prices in Finance before your first paid home match. That choice applies to home gates for the rest of the season.',
       'Open Season review for your final ladder, finances, recorded scoring and finals scores. Stay with your club, move to a new club, or retire and keep your career record.',
+      'In Season review, open Player history and choose a player to see recorded regular-season and finals appearances, scoring and rating changes.',
     ],
     rules: [
       'The 2026 regular season spans 27 rounds, with 24 matches and three byes for each club. The game generates its own fixture list for each year.',

@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
@@ -186,6 +186,47 @@ describe('NRL archived club scoring', () => {
     expect(screen.queryByLabelText('Player')).not.toBeInTheDocument();
     expect(raw()).toBe(v1);
     expect(reduceNrlCareer(finish(readNrlCareerSave(v1)!), { type: 'startNextSeason' }).history[0]).not.toHaveProperty('playerSeasons');
+  });
+
+  it('distinguishes separate player IDs with matching names and keeps unique labels plain', async () => {
+    const first = finish(createNrlCareer('storm', 4));
+    const second = finish(reduceNrlCareer(first, { type: 'startNextSeason', move: { fromYear: 2026, clubId: 'bears' } }));
+    const next = reduceNrlCareer(second, { type: 'startNextSeason' });
+    const withOldRecords = next.history.map(({ playerSeasons: _playerSeasons, ...row }, index) => ({
+      ...row,
+      scoring: [
+        ['history-1', 'Shared Name', index + 1, 0, 0, 0, 0],
+        ...(index ? [
+          ['history-2', 'Shared Name', 3, 0, 0, 0, 0],
+          ['history-3', 'Unique Name', 1, 0, 0, 0, 0],
+        ] : [
+          ['history-4', 'Shared Name', 5, 0, 0, 0, 0],
+        ]),
+      ],
+    }));
+    const original = bytes({ ...next, history: withOldRecords });
+    expect(bytes(readNrlCareerSave(original))).toBe(original);
+    open(original);
+    click('Club office');
+    click('Season review');
+    fireEvent.click(screen.getByText('Player history', { exact: true }));
+    const select = await screen.findByLabelText('Player');
+    expect(within(select).getAllByRole('option').map(option => option.textContent)).toEqual([
+      'Shared Name (Bears, 2027, history-1)', 'Shared Name (Bears, 2027, history-2)',
+      'Shared Name (Storm, 2026)', 'Unique Name',
+    ]);
+    fireEvent.change(select, { target: { value: 'history-4' } });
+    expect(screen.getByText(/5 tries · 20 points/)).toBeVisible();
+    expect(screen.queryByText(/3 tries · 12 points/)).not.toBeInTheDocument();
+    fireEvent.change(select, { target: { value: 'history-2' } });
+    expect(screen.getByText(/3 tries · 12 points/)).toBeVisible();
+    expect(screen.queryByText(/5 tries · 20 points/)).not.toBeInTheDocument();
+    fireEvent.click(screen.getByText('Player history', { exact: true }));
+    await waitFor(() => expect(screen.queryByLabelText('Player')).not.toBeInTheDocument());
+    fireEvent.click(screen.getByText('Player history', { exact: true }));
+    expect(await screen.findByLabelText('Player')).toHaveValue('history-2');
+    expect(raw()).toBe(original);
+    expect(localStorage.getItem(fence)).toBe('4');
   });
 
   it('shows every recorded scorer before and after actual rollover without changing storage', () => {
