@@ -64,8 +64,8 @@ const QLD_ORIGIN_IDS = new Set([
 const CLUB_PLAYER_ID = /^nrl-(?:(academy|prospect)-)?([a-z-]+)-(\d{4})-(0|[1-9]\d?)$/;
 const OPENING_PLAYER_ID = /^([a-z-]+)-(?:[1-9]|1[0-3])-[01]$/;
 const MARKET_PLAYER_ID = /^nrl-market-(\d{4})-(?:[0-9]|1[0-2])-[0-2]$/;
-const MAX_POOL = 39;
 const MATCHDAY_SIZE = NRL_ROLES.length + NRL_BENCH_SIZE;
+const MAX_POOL = Math.max(39, MATCHDAY_SIZE + Math.max(NSW_ORIGIN_IDS.size, QLD_ORIGIN_IDS.size));
 const isYear = (year: number) => Number.isInteger(year) && year >= 2026 && year <= NRL_LAST_YEAR;
 const isSide = (side: NrlOriginSide) => NRL_ORIGIN_SIDES.includes(side);
 const isGeneratedClub = (clubId: string, year: number) => nrlSeasonPlan(Math.min(year, 2028)).clubs.some(club => club.id === clubId);
@@ -136,6 +136,7 @@ function originPool(players: readonly NrlPlayer[], side: NrlOriginSide): OriginP
   const selection = originSelection(eligible);
   if (!selection) return [];
   const keep = new Set([...Object.values(selection.starters), ...selection.bench]);
+  for (const player of eligible) if (player.id.startsWith('nrl-real-')) keep.add(player.id);
   for (const role of NRL_ROLES) {
     for (const player of eligible.filter(player => player.role === role).slice(0, 2)) {
       if (keep.size === MAX_POOL) break;

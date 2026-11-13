@@ -60,7 +60,7 @@ describe('NRL State of Origin', () => {
           for (const side of ['nsw', 'qld'] as const) {
             const series = createNrlOriginSeries(activePlayers(career), year, side)!;
             expect(series, `${id} ${year} ${career.openingRoster ?? 'fictional'} ${side}`).not.toBeNull();
-            expect(series.pools[side].length).toBeLessThanOrEqual(39);
+            expect(series.pools[side].length).toBeLessThanOrEqual(41);
             expect(series.selection.bench).toHaveLength(6);
             expect(new Set([...Object.values(series.selection.starters), ...series.selection.bench]).size).toBe(19);
             for (const role of NRL_ROLES) {
@@ -71,6 +71,18 @@ describe('NRL State of Origin', () => {
           }
         }
       }
+    }
+  });
+
+  it('keeps every verified eligible player selectable in a named 2026 career', () => {
+    for (const seed of [0, 16, 37]) {
+      const { career, series } = setup(seed);
+      for (const side of ['nsw', 'qld'] as const) {
+        const known = activePlayers(career).filter(player => player.id.startsWith('nrl-real-') && nrlOriginEligibility(player.id) === side);
+        expect(series.pools[side].map(player => player.id)).toEqual(expect.arrayContaining(known.map(player => player.id)));
+      }
+      expect(series.pools.qld.find(player => player.name === 'Kalyn Ponga')).toBeDefined();
+      expect(series.pools.nsw.find(player => player.name === 'Nathan Cleary')).toBeDefined();
     }
   });
 
