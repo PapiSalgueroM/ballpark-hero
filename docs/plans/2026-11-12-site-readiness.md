@@ -1,6 +1,8 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 10:44 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 10:49 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+Soccer Career now opens the creator before the simulation. Existing saves open the full game, and the saved loading frame reserves a viewport. Thirty-four published browser cases passed. Fresh and saved visits recorded zero CLS at all five tested widths. Two 412px lab runs reduced initial encoded JavaScript from 812,567 to 297,560 bytes, and the same heading painted at 5.804 and 5.148 seconds, down from 10.152 and 8.164. The mobile target remains open and PageSpeed Insights returned HTTP 429. All 173 live sitemap URLs passed. [PR #805](https://github.com/PapiSalgueroM/ballpark-hero/pull/805).
 
 Home and the game header now count games by the same Eastern day as the leaderboard. Before the fix, the compiled fixture showed two of three games after UTC midnight. Eight published replays showed all three until midnight Eastern and one afterward. Both hosts and all 173 sitemap URLs passed. The query uses the existing player and UTC-date index with exact Eastern timestamp bounds. The preceding 45 days had zero timestamp/date mismatches across 2,245,506 rows. No database migration or score change was needed. [PR #804](https://github.com/PapiSalgueroM/ballpark-hero/pull/804).
 
