@@ -1,6 +1,6 @@
 import { CONTINUE_SAVES, continueSaveEntries, type ContinueSave } from '@/data/continueSaves';
 import { backupKeysOf, browserStorage, copyAside, pruneBackups } from '@/lib/brokenSaveRecovery';
-import { readNrlCareerSave, type NrlCareerState } from '@/lib/nrlCareer';
+import { NRL_SAVE_MAX_CHARS, readNrlCareerSave, type NrlCareerState } from '@/lib/nrlCareer';
 import { saveFence, type FenceWrite } from '@/lib/saveFence';
 
 export const NRL_SAVE_ENTRY = CONTINUE_SAVES.find(entry => entry.path === '/nrl-team-manager')!;
@@ -22,6 +22,7 @@ export function writeNrlSaveSlot(key: string, expected: string | null, next: str
   } catch {
     return 'failed';
   }
+  if (next !== null && next.length > NRL_SAVE_MAX_CHARS) return saveFence.moved(key) ? 'moved' : 'failed';
   return saveFence.write(key, () => {
     if (next === null) localStorage.removeItem(key);
     else localStorage.setItem(key, next);

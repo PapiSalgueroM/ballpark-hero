@@ -71,6 +71,22 @@ async function play(page, count) {
   return (await career(page)).season;
 }
 
+function checkRolloverHistory(actual, prior) {
+  assert.deepEqual(actual.slice(0, -1), prior.history.slice(0, -1));
+  const { finals, playerSeasons, ...unchanged } = actual.at(-1);
+  assert.deepEqual(unchanged, prior.history.at(-1));
+  const { clubId, results } = prior.season;
+  const own = results.filter(match => match.homeId === clubId || match.awayId === clubId);
+  const phase = finals => own.filter(match => Boolean(match.finalsRound) === finals);
+  assert.deepEqual(finals.scores, results.filter(match => match.finalsRound).map(match => [match.homeScore, match.awayScore]));
+  assert.equal(finals.seeds.length, 8);
+  for (const [matches, offset] of [[phase(false), 3], [phase(true), 5]]) {
+    assert.equal(playerSeasons.reduce((sum, player) => sum + player[offset], 0), matches.length * 13);
+    assert.equal(playerSeasons.reduce((sum, player) => sum + player[offset + 1], 0),
+      matches.reduce((sum, match) => sum + (match.benchUsed?.length ?? 0), 0));
+  }
+}
+
 async function setDevelopment(page, focus) {
   assert.equal(await development(page).inputValue(), 'balanced');
   await development(page).selectOption(focus);
@@ -641,7 +657,7 @@ try {
   assert.equal(changed.season.clubId, 'bears');
   assert.equal(changed.season.year, 2027);
   assert.equal(changed.season.round, 1);
-  assert.deepEqual(changed.history, offseason.history);
+  checkRolloverHistory(changed.history, offseason);
   assert.equal(changed.finance.openingCash, 2_500_000);
   const movedBytes = await save(chosen);
   assert.equal(Number(await fence(chosen)), generation + 1);
@@ -720,7 +736,7 @@ try {
   const newJob = await career(warned);
   assert.equal(newJob.season.clubId, 'chiefs');
   assert.equal(newJob.boardChallenge, true);
-  assert.deepEqual(newJob.history, secondMiss.history);
+  checkRolloverHistory(newJob.history, secondMiss);
   assert.equal(newJob.finance.openingCash, 2_500_000);
   assert.equal(await warned.locator('[data-nrl-board-challenge]').count(), 0);
   assert.deepEqual(challengeErrors, []);

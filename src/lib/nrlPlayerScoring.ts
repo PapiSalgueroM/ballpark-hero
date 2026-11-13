@@ -6,6 +6,12 @@ export interface NrlScoringLeader extends NrlPlayerScoring { name: string; point
 export type NrlSeasonScoringTotal = [
   playerId: string, name: string, tries: number, conversions: number, penalties: number, fieldGoals: number, longFieldGoals: number,
 ];
+type NrlFinalsScoring = [tries: number, conversions: number, penalties: number, fieldGoals: number, longFieldGoals: number];
+type NrlSeasonPlayerRow = [
+  id: string, name: string, rating: number, regularStarts: number, regularBench: number,
+  finalsStarts: number, finalsBench: number, finalsScoring?: NrlFinalsScoring,
+];
+export type NrlSeasonPlayerArchive = NrlSeasonPlayerRow[];
 
 const scoringFields = ['tries', 'conversions', 'penalties', 'fieldGoals', 'longFieldGoals'] as const;
 const emptyScoring = (): NrlScoring => ({ tries: 0, conversions: 0, penalties: 0, fieldGoals: 0, longFieldGoals: 0 });
@@ -147,7 +153,7 @@ export type NrlSquadStatsScope = 'all' | 'regular' | 'finals';
 
 export function nrlSquadSeasonStats({ clubId, results, squad }: Pick<NrlManagerState, 'clubId' | 'results' | 'squad'>,
   scope: NrlSquadStatsScope) {
-  const players = new Map(squad.map(({ id, name }) => [id, { id, name, starts: 0, bench: 0, tries: 0, points: 0 }]));
+  const players = new Map(squad.map(({ id, name, rating }) => [id, { id, name, rating, starts: 0, bench: 0, ...emptyScoring() }]));
   let played = 0;
   let tracked = 0;
   for (const match of results) {
@@ -161,13 +167,75 @@ export function nrlSquadSeasonStats({ clubId, results, squad }: Pick<NrlManagerS
     for (const id of match.benchUsed ?? []) players.get(id)!.bench++;
     for (const line of report.lines) {
       const player = players.get(line.playerId)!;
-      player.tries += line.tries;
-      player.points += nrlScorePoints(line);
+      for (const field of scoringFields) player[field] += line[field];
     }
   }
-  const rows = [...players.values()].map(player => ({ ...player, apps: player.starts + player.bench }))
+  const rows = [...players.values()].map(player => ({ ...player, apps: player.starts + player.bench, points: nrlScorePoints(player) }))
     .sort((a, b) => b.apps - a.apps || b.points - a.points || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
   return { played, tracked, rows };
+}
+
+export function archiveNrlPlayerSeasons(season: Pick<NrlManagerState, 'clubId' | 'results' | 'squad'>): NrlSeasonPlayerArchive | undefined {
+  const regular = nrlSquadSeasonStats(season, 'regular');
+  const finals = nrlSquadSeasonStats(season, 'finals');
+  if (!regular.tracked || regular.played !== regular.tracked || finals.played !== finals.tracked) return;
+  const finalsById = new Map(finals.rows.map(player => [player.id, player]));
+  return regular.rows.flatMap(player => {
+    const final = finalsById.get(player.id)!;
+    if (!player.apps && !final.apps) return [];
+    const row: NrlSeasonPlayerRow = [player.id, player.name, player.rating, player.starts, player.bench, final.starts, final.bench];
+    if (final.points > 0) row.push([final.tries, final.conversions, final.penalties, final.fieldGoals, final.longFieldGoals]);
+    return [row];
+  });
+}
+
+export function nrlArchivedPlayerSeason(row: NrlSeasonPlayerRow, total: NrlSeasonScoringTotal | undefined) {
+  const [, , rating, regularStarts, regularBench, finalsStarts, finalsBench, finalsScoring] = row;
+  const [, , tries, conversions, penalties, fieldGoals, longFieldGoals] = total ?? ['', '', 0, 0, 0, 0, 0];
+  const [ft, fc, fp, ff, fl] = finalsScoring ?? [0, 0, 0, 0, 0];
+  const regular = { tries: tries - ft, conversions: conversions - fc, penalties: penalties - fp, fieldGoals: fieldGoals - ff, longFieldGoals: longFieldGoals - fl };
+  const finals = { tries: ft, conversions: fc, penalties: fp, fieldGoals: ff, longFieldGoals: fl };
+  return {
+    rating,
+    regular: { ...regular, starts: regularStarts, bench: regularBench, apps: regularStarts + regularBench, points: nrlScorePoints(regular) },
+    finals: { ...finals, starts: finalsStarts, bench: finalsBench, apps: finalsStarts + finalsBench, points: nrlScorePoints(finals) },
+  };
+}
+
+export function validNrlPlayerSeasonArchive(value: unknown, scoring: NrlSeasonScoringTotal[], finalMatches: number, finalPoints: number):
+  value is NrlSeasonPlayerArchive {
+  if (!Array.isArray(value) || value.length < 13 || value.length > 30) return false;
+  const scoringById = new Map(scoring.map(row => [row[0], row]));
+  const ids = new Set<string>();
+  let regularStarts = 0, regularBench = 0, finalsStarts = 0, finalsBench = 0, finalsPoints = 0;
+  let finalsTries = 0, finalsConversions = 0;
+  for (const row of value) {
+    if (!Array.isArray(row) || (row.length !== 7 && row.length !== 8)) return false;
+    const [id, name, rating, rs, rb, fs, fb, goals] = row;
+    if (typeof id !== 'string' || !id || typeof name !== 'string' || !name || ids.has(id)
+      || !countIn(rating, 98) || rating < 40 || !countIn(rs, 24) || !countIn(rb, 24) || rs + rb > 24
+      || !countIn(fs, finalMatches) || !countIn(fb, finalMatches) || fs + fb > finalMatches || rs + rb + fs + fb === 0) return false;
+    const total = scoringById.get(id);
+    if (total && total[1] !== name) return false;
+    if (goals !== undefined && (!Array.isArray(goals) || goals.length !== scoringFields.length || !total || fs + fb === 0
+      || !goals.every((count, index) => countIn(count, total[index + 2] as number)) || !goals.some(Boolean))) return false;
+    const split = nrlArchivedPlayerSeason(row as NrlSeasonPlayerRow, total);
+    if (split.regular.points && rs + rb === 0) return false;
+    regularStarts += rs;
+    regularBench += rb;
+    finalsStarts += fs;
+    finalsBench += fb;
+    finalsPoints += split.finals.points;
+    finalsTries += split.finals.tries;
+    finalsConversions += split.finals.conversions;
+    ids.add(id);
+  }
+  const tries = scoring.reduce((sum, row) => sum + row[2], 0);
+  const conversions = scoring.reduce((sum, row) => sum + row[3], 0);
+  return regularStarts === 13 * 24 && regularBench <= 4 * 24 && finalsStarts === 13 * finalMatches
+    && finalsBench <= 4 * finalMatches && finalsPoints === finalPoints
+    && finalsConversions <= finalsTries && conversions - finalsConversions <= tries - finalsTries
+    && scoring.every(row => ids.has(row[0]));
 }
 
 export function archiveNrlScoring(state: Pick<NrlManagerState, 'results' | 'squad'>): NrlSeasonScoringTotal[] {

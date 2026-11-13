@@ -13,7 +13,10 @@ import {
   type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { nrlArchivedFinals, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_ROLES, type NrlCoachRole, type NrlRole } from '@/lib/nrlManager';
-import { nrlArchivedScoringLeaders, nrlTryLeaders, type NrlScoringLeader } from '@/lib/nrlPlayerScoring';
+import {
+  archiveNrlPlayerSeasons, archiveNrlScoring, nrlArchivedPlayerSeason, nrlArchivedScoringLeaders,
+  nrlScorePoints, nrlTryLeaders, type NrlScoringLeader,
+} from '@/lib/nrlPlayerScoring';
 import { nrlBoardBenchmark, nrlBoardChallengeStatus, nrlBoardTarget } from '@/lib/nrlBoardTarget';
 
 const currency = new Intl.NumberFormat('en-AU', {
@@ -757,6 +760,101 @@ function ScoringHistory({ year, leaders }: { year: number; leaders: NrlScoringLe
   );
 }
 
+function PlayerHistory({ career }: { career: NrlCareerState }) {
+  const [open, setOpen] = useState(false);
+  const [playerId, setPlayerId] = useState('');
+  const years = useMemo(() => {
+    if (!open) return [];
+    const { season, history } = career;
+    return [
+      ...history.filter(row => row.year !== season.year),
+      {
+        year: season.year, clubId: season.clubId, playerSeasons: archiveNrlPlayerSeasons(season),
+        scoring: season.kickerId ? archiveNrlScoring(season) : undefined,
+      },
+    ];
+  }, [career, open]);
+  const players = new Map<string, string>();
+  for (const year of years) {
+    for (const [id, name] of year.scoring ?? []) players.set(id, name);
+    for (const [id, name] of year.playerSeasons ?? []) players.set(id, name);
+  }
+  const choices = [...players].sort((a, b) => a[1].localeCompare(b[1]) || a[0].localeCompare(b[0]));
+  const selected = players.has(playerId) ? playerId : choices[0]?.[0];
+  let previous: { year: number; rating: number } | undefined;
+  const rows = years.flatMap(year => {
+    const row = year.playerSeasons?.find(entry => entry[0] === selected);
+    const total = year.scoring?.find(entry => entry[0] === selected);
+    if (!row && !total) return [];
+    const stats = row ? nrlArchivedPlayerSeason(row, total) : undefined;
+    const change = stats && previous?.year === year.year - 1 ? stats.rating - previous.rating : undefined;
+    if (stats) previous = { year: year.year, rating: stats.rating };
+    return [{ year: year.year, clubId: year.clubId, stats, total, change }];
+  }).reverse();
+  return (
+    <details className="group mt-3 rounded-lg border border-border" onToggle={event => setOpen(event.currentTarget.open)}>
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 rounded-lg px-3 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Player history<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      {open && <div className="space-y-3 border-t border-border p-3">
+        <p className="text-xs text-muted-foreground">Records cover matches at clubs you managed. A season appears here when a player has a saved appearance or scoring record.</p>
+        {years.some(year => !year.playerSeasons && year.year < career.season.year) && (
+          <p className="text-xs text-muted-foreground">Some older seasons have only scoring totals or no player records.</p>
+        )}
+        {!career.season.kickerId && <p className="text-xs text-muted-foreground">Player match records are unavailable for this saved season. Tracking starts next season.</p>}
+        {choices.length > 0 ? (
+          <div>
+            <label htmlFor="nrl-history-player" className="block text-sm font-semibold">Player</label>
+            <select id="nrl-history-player" className={control + ' mt-1 sm:max-w-xs'} value={selected} onChange={event => setPlayerId(event.target.value)}>
+              {choices.map(([id, name]) => <option key={id} value={id}>{name}</option>)}
+            </select>
+          </div>
+        ) : <p className="text-sm text-muted-foreground">No player records have been saved yet.</p>}
+        {rows.map(({ year, clubId, stats, total, change }) => {
+          const label = year + ' ' + labelForClub(year, clubId);
+          return (
+            <div key={year} className="space-y-1 border-t border-border pt-2">
+              <h4 className="text-sm font-bold">{label}</h4>
+              {stats ? <>
+                <p className="text-xs text-muted-foreground">
+                  {year === career.season.year && career.season.phase !== 'complete' ? 'Current rating' : 'Rating'} {stats.rating} OVR
+                  {change !== undefined && ' (' + (change > 0 ? '+' : '') + change + ' from prior recorded season)'}
+                </p>
+                <table className="w-full text-left text-xs">
+                  <caption className="sr-only">{label} player history</caption>
+                  <thead><tr>
+                    <th scope="col">Match scope</th>
+                    <th scope="col" aria-label="Appearances" className="px-1 text-right">Apps</th>
+                    <th scope="col" className="px-1 text-right">Starts</th>
+                    <th scope="col" aria-label="Bench appearances" className="px-1 text-right">Bench</th>
+                    <th scope="col" className="px-1 text-right">Tries</th>
+                    <th scope="col" aria-label="Points" className="text-right">Pts</th>
+                  </tr></thead>
+                  <tbody>{([['Regular season', stats.regular], ['Finals', stats.finals]] as const).map(([scope, line]) => (
+                    <tr key={scope} className="border-t border-border tabular-nums">
+                      <th scope="row" className="py-1 pr-1 font-medium">{scope}</th>
+                      <td className="px-1 text-right">{line.apps}</td>
+                      <td className="px-1 text-right">{line.starts}</td>
+                      <td className="px-1 text-right">{line.bench}</td>
+                      <td className="px-1 text-right">{line.tries}</td>
+                      <td className="text-right">{line.points}</td>
+                    </tr>
+                  ))}</tbody>
+                </table>
+              </> : total && (
+                <p className="text-xs text-muted-foreground">
+                  {total[2]} tries · {nrlScorePoints({ tries: total[2], conversions: total[3], penalties: total[4], fieldGoals: total[5], longFieldGoals: total[6] })} points.
+                  Appearances, match split and rating are unavailable.
+                </p>
+              )}
+            </div>
+          );
+        })}
+      </div>}
+    </details>
+  );
+}
+
 function FinalsHistory({ record, season }: { record: NrlCareerState['history'][number]; season: NrlCareerState['season'] }) {
   const { year, finals } = record;
   const matches = year === season.year ? season.results.filter(match => match.finalsRound !== undefined)
@@ -850,6 +948,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           onRetire={() => onAction({ type: 'retireCareer', year, clubId })} />
       )}
       <CareerRecord history={career.history} />
+      <PlayerHistory career={career} />
       {career.history.length > 0 ? (
         <ul className="mt-3 divide-y divide-border">
           {[...career.history].reverse().map(record => {

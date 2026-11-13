@@ -5,8 +5,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ContinueRow } from '@/components/home/ContinueRow';
 import { savedGames } from '@/data/continueSaves';
 import { BROKEN_SAVE_MARK, heldSaveEntry, routeSaveEntry } from '@/lib/brokenSaveRecovery';
-import { createNrlCareer, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
+import { createNrlCareer, NRL_SAVE_MAX_CHARS, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
 import { createNrlSeason, NRL_SAVE_KEY } from '@/lib/nrlManager';
+import { writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
 import { createSaveFence, fenceKeyOf, saveFence } from '@/lib/saveFence';
 import { applyPending, keepUpdateCopies, PENDING_RESTORE_KEY, stageRestore } from '@/lib/saveKeeper';
 import NrlTeamManager from '@/pages/NrlTeamManager';
@@ -47,6 +48,57 @@ afterEach(() => {
 });
 
 describe('NRL career slots', () => {
+  it('shares the reader size boundary and leaves every save and fence intact when a write exceeds it', () => {
+    const original = JSON.stringify(storm());
+    const nearLimit = original.padEnd(NRL_SAVE_MAX_CHARS, ' ');
+    const tooLarge = nearLimit + ' ';
+    expect(readNrlCareerSave(nearLimit)).toEqual(storm());
+    expect(readNrlCareerSave(tooLarge)).toBeNull();
+    expect(writeNrlSaveSlot(NRL_SAVE_KEY, null, original)).toBe('written');
+    expect(writeNrlSaveSlot(secondKey, null, nearLimit)).toBe('written');
+    saveFence.adopt(secondKey);
+    const firstFence = raw(fenceKeyOf(NRL_SAVE_KEY));
+    const secondFence = raw(fenceKeyOf(secondKey));
+    const setItem = vi.spyOn(Storage.prototype, 'setItem');
+    expect(writeNrlSaveSlot(secondKey, nearLimit, tooLarge)).toBe('failed');
+    expect(setItem).not.toHaveBeenCalled();
+    expect(raw(NRL_SAVE_KEY)).toBe(original);
+    expect(raw(secondKey)).toBe(nearLimit);
+    expect(raw(fenceKeyOf(NRL_SAVE_KEY))).toBe(firstFence);
+    expect(raw(fenceKeyOf(secondKey))).toBe(secondFence);
+
+    const external = createSaveFence(localStorage);
+    external.adopt(secondKey);
+    expect(external.write(secondKey, () => true)).toBe('written');
+    const newerFence = raw(fenceKeyOf(secondKey));
+    expect(newerFence).not.toBe(secondFence);
+    setItem.mockClear();
+    expect(writeNrlSaveSlot(secondKey, nearLimit, tooLarge)).toBe('moved');
+    expect(setItem).not.toHaveBeenCalled();
+    expect(raw(secondKey)).toBe(nearLimit);
+    expect(raw(fenceKeyOf(secondKey))).toBe(newerFence);
+  });
+
+  it('refuses progress above the save limit and keeps the last readable season open', () => {
+    const career = storm();
+    const next = reduceNrlCareer(career, { type: 'advance' });
+    const payload = 'x'.repeat(NRL_SAVE_MAX_CHARS - JSON.stringify({ ...career, padding: '' }).length);
+    const atLimit = JSON.stringify({ ...career, padding: payload });
+    expect(atLimit).toHaveLength(NRL_SAVE_MAX_CHARS);
+    expect(JSON.stringify({ ...next, padding: payload }).length).toBeGreaterThan(NRL_SAVE_MAX_CHARS);
+    expect(readNrlCareerSave(atLimit)).not.toBeNull();
+    localStorage.setItem(NRL_SAVE_KEY, atLimit);
+    localStorage.setItem(fenceKeyOf(NRL_SAVE_KEY), '4');
+    open();
+    click('Quick Sim');
+    expect(screen.getByRole('status')).toHaveTextContent('This career reached the save size limit.');
+    expect(screen.queryByRole('button', { name: 'Retry save' })).not.toBeInTheDocument();
+    expect(raw(NRL_SAVE_KEY)).toBe(atLimit);
+    expect(raw(fenceKeyOf(NRL_SAVE_KEY))).toBe('4');
+    click('Career saves');
+    expect(screen.getByRole('region', { name: 'Career saves' })).toBeVisible();
+  });
+
   it('opens the old v1 save in slot 1 without a write, creates Perth in slot 2, and resumes both years', () => {
     const legacy = JSON.stringify(createNrlSeason('storm', 17));
     localStorage.setItem(NRL_SAVE_KEY, legacy);

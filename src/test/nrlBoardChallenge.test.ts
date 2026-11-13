@@ -78,7 +78,10 @@ describe('NRL Manager Board challenge', () => {
     expect(changed.season.clubId).toBe('chiefs');
     expect(changed.boardChallenge).toBe(true);
     expect(status(changed)).toBeNull();
-    expect(changed.history).toEqual([
+    expect(changed.history.slice(0, 1)).toEqual(completed.history.slice(0, 1));
+    const { playerSeasons, ...secondArchived } = changed.history[1];
+    expect(playerSeasons?.length).toBeGreaterThanOrEqual(13);
+    expect([changed.history[0], secondArchived]).toEqual([
       completed.history[0],
       {
         ...completed.history[1],

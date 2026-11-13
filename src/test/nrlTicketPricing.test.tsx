@@ -110,7 +110,10 @@ describe('NRL home ticket pricing', () => {
     const back = reduceNrlCareer(finish(choose(perth, 'premium')), { type: 'startNextSeason', move: { fromYear: 2027, clubId: 'storm' } });
     expect(tierOf(back)).toBeUndefined();
     expect(back.finance.openingCash).toBe(nrlCareerFinance(value).cash);
-    expect(back.history[0]).toEqual({
+    expect(back.history[0]).toEqual(stayed.history[0]);
+    const { playerSeasons, ...returned } = back.history[0];
+    expect(playerSeasons?.length).toBeGreaterThanOrEqual(13);
+    expect(returned).toEqual({
       ...value.history[0],
       finals: {
         seeds: ['broncos', 'bulldogs', 'storm', 'raiders', 'panthers', 'warriors', 'sea-eagles', 'roosters'],

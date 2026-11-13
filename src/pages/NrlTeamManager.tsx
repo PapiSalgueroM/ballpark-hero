@@ -25,7 +25,7 @@ import {
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, isNrlOpeningMatchdayPlayer, loadNrlOpeningMatchdayCareer, nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining, nrlPositionTrainingCandidates, nrlRivalSquad,
-  NRL_POSITION_TRAINING_ROUNDS, reduceNrlCareer, type NrlCareerAction, type NrlCareerState,
+  NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, type NrlCareerAction, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
 import { NRL_SAVE_ENTRY, nrlSeasonCanCredit, readNrlReplayCutoff, readNrlSaveSlot, writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
@@ -1026,6 +1026,7 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
   const [office, setOffice] = useState<OfficeScreen>(retired ? 'history' : 'contracts');
   const [showLiveResult, setShowLiveResult] = useState(false);
   const [saveFailed, setSaveFailed] = useState(false);
+  const [saveTooLarge, setSaveTooLarge] = useState(false);
   const [changed, setChanged] = useState(false);
   const [loadingNames, setLoadingNames] = useState(false);
   const [namesFailed, setNamesFailed] = useState(false);
@@ -1046,6 +1047,11 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
       setChanged(true);
       return outcome;
     }
+    if (outcome === 'failed' && raw.length > NRL_SAVE_MAX_CHARS) {
+      setSaveTooLarge(true);
+      return 'too-large';
+    }
+    setSaveTooLarge(false);
     if (outcome === 'written') committed.current = raw;
     setSaveFailed(outcome === 'failed');
     current.current = next;
@@ -1093,7 +1099,9 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
     const before = current.current;
     if (!before) return false;
     const next = reduceNrlCareer(before, action);
-    if (next === before || persist(next) === 'moved') return false;
+    if (next === before) return false;
+    const result = persist(next);
+    if (result === 'moved' || result === 'too-large') return false;
     if (action.type === 'finishLive') setShowLiveResult(true);
     if (action.type === 'advance' || action.type === 'startNextSeason') setShowLiveResult(false);
     if (action.type === 'startNextSeason') setPanel('match');
@@ -1137,6 +1145,9 @@ function NrlManagerScreen({ entry, showSlots }: { entry: ContinueSave; showSlots
         {!showSlots && moved && <div className="rounded-xl border border-amber-500/50 bg-card p-3 text-sm" role="status">
           This season changed in another tab. <button type="button" className="min-h-11 font-bold underline" onClick={() => window.location.reload()}>Reload your season</button>
         </div>}
+        {!moved && saveTooLarge && <p className="rounded-xl border border-amber-500/50 bg-card p-3 text-sm" role="status">
+          This career reached the save size limit. Your last saved progress is still in this slot.
+        </p>}
         {!moved && saveFailed && <div className="rounded-xl border border-amber-500/50 bg-card p-3 text-sm" role="status">
           This browser could not save your progress. {retired ? 'Retry to save your retirement.' : 'You can keep playing in this tab.'}{' '}
           <button type="button" className="min-h-11 font-bold underline" onClick={() => current.current && persist(current.current)}>Retry save</button>
