@@ -110,10 +110,19 @@ export const HOME_COPY: HomeCopy = {
           [a('/soccer-grid', 'Soccer Grid'), ', a three by three of clubs and countries'],
           [a('/college-grid', 'College Grid'), ', the same idea for college football'],
           [a('/transfer-path', 'Transfer Path'), ', get from one player to another through real moves'],
-          [a('/minefield', 'Minefield'), ', name as many as you dare before you hit a wrong one'],
+          [a('/minefield', 'Minefield'), ', pick the answers that fit the category and dodge the mines'],
           [a('/silverware-sort', 'Silverware Sort'), ', stack five teams by titles won'],
           [a('/champ-or-not', 'Champ or Not'), ' and ', a('/whod-they-beat', "Who'd They Beat?")],
         ),
+      ],
+    },
+    {
+      heading: 'Pick a game for the time you have',
+      blocks: [
+        p('Start with ', a('/nba-grid', 'NBA Franchise Grid'), ' if you remember who played where. Before filling an easy square, look for a name that could fit more than one crossing. A player can only go on the board once. Put that name where your choices are tightest and save the obvious answer for a square with more options.'),
+        p('Try ', a('/minefield', 'Minefield'), ' when you want a different kind of pressure. Tap tiles that belong to the category and leave the others alone. You get two lives per board. Start with the picks you know, then look for the one detail that separates the close calls before you spend a life.'),
+        p('For a longer save, decide which decisions you want to make. In ', a('/soccer-career', 'Soccer Career'), ', an offer can change where one player gets his minutes. In ', a('/club-manager', 'Club Manager'), ', a transfer changes your depth for the next run of fixtures. In ', a('/nba-my-career', 'NBA My Career'), ', check where your prospect fits in the rotation before chasing a move to the strongest team.'),
+        p('If a rule trips you up, open the question mark on the game page. The guide gives you a worked example, so you can see what the game accepts before you commit another guess.'),
       ],
     },
     {

@@ -7,8 +7,8 @@ import type { SeoMeta } from '../seoMeta';
 
 export const SEO_META_PART: Record<string, SeoMeta> = {
   "/club-manager": {
-    title: "Club Manager: Free Football Management Game",
-    description: "Manage a club across current and historical leagues. Transfers, tactics, the board and the sack race. Free soccer management sim.",
+    title: "Club Manager: Football Tactics and Transfers",
+    description: "Take over a real club in a current or historical season. Set tactics, negotiate transfers and meet the board’s targets in a free football management sim.",
   },
   "/rarity-round": {
     title: "Rarity Round: Rarest Answer Wins Soccer Quiz",
