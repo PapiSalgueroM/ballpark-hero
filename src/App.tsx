@@ -1,7 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { CookieConsent } from "@/components/CookieConsent";
 import { StorageNotice, isGameRoute } from "@/components/StorageNotice";
 import { lazy, Suspense, useEffect, useRef } from "react";
@@ -183,8 +182,6 @@ const GuessTheGolfer = lazy(() => import("./pages/GuessTheGolfer"));
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const WhatsNew = lazy(() => import("./pages/WhatsNew"));
-
-const queryClient = new QueryClient();
 
 const HEADER_PATHS = ['/', '/leaderboard', '/profile'];
 
@@ -589,18 +586,16 @@ const AppContent = () => {
 };
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <UpdateNudge />
-        <BrowserRouter>
-          <AppContent />
-        </BrowserRouter>
-      </TooltipProvider>
-    </AuthProvider>
-  </QueryClientProvider>
+  <AuthProvider>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <UpdateNudge />
+      <BrowserRouter>
+        <AppContent />
+      </BrowserRouter>
+    </TooltipProvider>
+  </AuthProvider>
 );
 
 export default App;
