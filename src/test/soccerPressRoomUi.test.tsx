@@ -29,10 +29,11 @@ describe('Soccer Career press room', () => {
     expect(document.querySelector('[data-press-answer]')).toBeNull();
     expect(saved()).toEqual(original);
     start();
-    expect(document.querySelectorAll('[data-press-answer]')).toHaveLength(3);
+    expect(Array.from(document.querySelectorAll('[data-press-answer]'), node => node.getAttribute('data-press-answer')))
+      .toEqual(['calm', 'accountable', 'ambitious', 'league-title']);
     expect(saved()).toEqual(original);
   });
-  it.each(['calm', 'accountable', 'ambitious'] as const)('writes the actual %s choice and its receipt once', choice => {
+  it.each(['calm', 'accountable', 'ambitious', 'league-title'] as const)('writes the actual %s choice and its receipt once', choice => {
     const original = career(); render(<Harness initial={original} />); start();
     fireEvent.click(document.querySelector(`[data-press-answer="${choice}"]`)!);
     expect(saved()).toEqual(answerSoccerPress(original, choice));
@@ -50,6 +51,13 @@ describe('Soccer Career press room', () => {
     expect(screen.getByText('Promise kept')).toBeInTheDocument();
     expect(document.querySelector('[data-press-promise="met"]')?.textContent).toContain('At least 15 goals');
     expect(screen.getByText(/Recorded: 16/)).toBeInTheDocument();
+    expect(saved()).toEqual(c);
+  });
+  it.each([[true, 'met', 'league champions'], [false, 'missed', 'league title missed']] as const)('shows the saved league result %s in words', (leagueTitle, outcome, result) => {
+    const c = answerSoccerPress(career(), 'league-title');
+    const next = row({ year: 2031, leagueTitle }); c.seasons.push(next); settleSoccerPress(c, next);
+    render(<Harness initial={c} />); start(); fireEvent.click(screen.getByRole('button', { name: 'Your past answers' })); fireEvent.click(document.querySelector('[data-press-history="0"]')!);
+    expect(document.querySelector(`[data-press-promise="${outcome}"]`)).toHaveTextContent('Recorded: ' + result);
     expect(saved()).toEqual(c);
   });
   it('uses keeper clean sheets in the question and promise', () => {

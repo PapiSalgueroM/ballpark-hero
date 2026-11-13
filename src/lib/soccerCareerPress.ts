@@ -1,13 +1,13 @@
 import type { CareerState, SeasonRecord } from './soccerCareerEngine';
 
-export type SoccerPressChoice = 'calm' | 'accountable' | 'ambitious';
+export type SoccerPressChoice = 'calm' | 'accountable' | 'ambitious' | 'league-title';
 export type SoccerPressTopic = 'league_champion' | 'injury' | 'benched' | 'move' | 'strong_form' | 'discipline' | 'contract' | 'normal';
 export interface SoccerPressSource {
   index: number; year: number; club: string; position: string; statLine: string;
   apps: number; goals: number | null; assists: number | null; cleanSheets: number | null; rating: number | null;
 }
 export interface SoccerPressPromise {
-  club: string; label: string; metric: 'apps' | 'goals' | 'assists' | 'cleanSheets'; target: number; ratingFloor?: 7;
+  club: string; label: string; metric: 'apps' | 'goals' | 'assists' | 'cleanSheets' | 'leagueTitle'; target: number; ratingFloor?: 7;
   outcome: 'pending' | 'met' | 'missed' | 'moved' | 'excused';
   actual?: number; actualRating?: number; settledYear?: number; settledIndex?: number;
 }
@@ -28,7 +28,7 @@ export interface PressRoomView {
 const POSITIONS = ['GK', 'CB', 'LB', 'RB', 'LWB', 'RWB', 'CDM', 'CM', 'CAM', 'LM', 'RM', 'LW', 'RW', 'ST', 'CF'];
 const BACKS = ['CB', 'LB', 'RB', 'LWB', 'RWB'];
 const CREATORS = ['CDM', 'CM', 'CAM', 'LM', 'RM'];
-const CHOICES: SoccerPressChoice[] = ['calm', 'accountable', 'ambitious'];
+const CHOICES: SoccerPressChoice[] = ['calm', 'accountable', 'ambitious', 'league-title'];
 const TOPICS: SoccerPressTopic[] = ['league_champion', 'injury', 'benched', 'move', 'strong_form', 'discipline', 'contract', 'normal'];
 const OUT_CLUBS = ['BANNED', 'BANNED (PED)', 'PRISON', 'CONVICTED'];
 const count = (v: unknown): v is number => typeof v === 'number' && Number.isSafeInteger(v) && v >= 0;
@@ -39,8 +39,11 @@ const clamp = (v: number) => Math.max(0, Math.min(100, v));
 const recorded = (v: unknown) => count(v) ? v : null;
 const copyHistory = (row: SoccerPressHistory): SoccerPressHistory => ({ ...row, source: { ...row.source }, ...(row.promise ? { promise: { ...row.promise } } : {}) });
 
-function promiseFor(source: SoccerPressSource, club: string): SoccerPressPromise | null {
+function promiseFor(source: SoccerPressSource, club: string, choice: 'ambitious' | 'league-title'): SoccerPressPromise | null {
   if (!text(club) || OUT_CLUBS.includes(club)) return null;
+  if (choice === 'league-title') {
+    return { club, label: `Win the league in your next played year at ${club}.`, metric: 'leagueTitle', target: 1, outcome: 'pending' };
+  }
   let metric: SoccerPressPromise['metric'], target: number, label: string;
   if (source.position === 'GK') {
     if (source.cleanSheets === null) return null;
@@ -59,8 +62,13 @@ function promiseFor(source: SoccerPressSource, club: string): SoccerPressPromise
     ...(BACKS.includes(source.position) ? { ratingFloor: 7 as const } : {}), outcome: 'pending' };
 }
 
+function actualFor(row: SeasonRecord, metric: SoccerPressPromise['metric']): number | null {
+  if (metric === 'leagueTitle') return typeof row.leagueTitle === 'boolean' ? Number(row.leagueTitle) : null;
+  return recorded(row[metric]);
+}
+
 function outcomeFor(promise: SoccerPressPromise, row: SeasonRecord): SoccerPressPromise['outcome'] {
-  const actual = recorded(row[promise.metric]);
+  const actual = actualFor(row, promise.metric);
   if (!count(row.apps) || row.apps === 0 || row.injurySevere === true || OUT_CLUBS.includes(row.club)) return 'excused';
   if (row.club !== promise.club) return 'moved';
   if (actual === null || promise.ratingFloor !== undefined && !rating(row.rating)) return 'excused';
@@ -83,8 +91,8 @@ function stateOf(career: CareerState): SoccerPressState | null {
   for (const row of state.history) {
     if (!row || !validSource(row.source, career) || !TOPICS.includes(row.topic) || !text(row.question) || !text(row.answer) || !CHOICES.includes(row.choice) || identities.has(row.source.index)) return null;
     identities.add(row.source.index);
-    if (row.choice === 'ambitious') {
-      const p = row.promise, target = p ? promiseFor(row.source, p.club) : null;
+    if (row.choice === 'ambitious' || row.choice === 'league-title') {
+      const p = row.promise, target = p ? promiseFor(row.source, p.club, row.choice) : null;
       if (!p || !target || p.label !== target.label || p.metric !== target.metric || p.target !== target.target || p.ratingFloor !== target.ratingFloor || !['pending', 'met', 'missed', 'moved', 'excused'].includes(p.outcome)) return null;
       if (p.actual !== undefined && !count(p.actual) || p.actualRating !== undefined && !rating(p.actualRating)) return null;
       if (p.outcome === 'pending') {
@@ -93,7 +101,7 @@ function stateOf(career: CareerState): SoccerPressState | null {
       } else {
         const settled = count(p.settledIndex) ? career.seasons[p.settledIndex] : null;
         if (!settled || settled.type !== 'playing' || settled.year !== p.settledYear || settled.year <= row.source.year || p.settledIndex! <= row.source.index) return null;
-        if (p.outcome !== outcomeFor(p, settled) || p.actual !== (recorded(settled[p.metric]) ?? undefined) || p.actualRating !== (rating(settled.rating) ? settled.rating : undefined)) return null;
+        if (p.outcome !== outcomeFor(p, settled) || p.actual !== (actualFor(settled, p.metric) ?? undefined) || p.actualRating !== (rating(settled.rating) ? settled.rating : undefined)) return null;
       }
     } else if (row.promise !== undefined) return null;
   }
@@ -152,13 +160,20 @@ export function pressRoomView(career: CareerState): PressRoomView {
   const reason = career.retired || career.phase !== 'playing' ? 'Answer on the playing screen between seasons.'
     : !source ? 'A recorded senior club season with appearances is needed.' : !meter(career.popularity) || !meter(career.morale) ? 'The saved popularity or morale could not be verified.'
     : state?.history.some(h => h.source.index === source.index) ? 'You already answered for this saved season.' : null;
-  const target = source ? promiseFor(source, career.currentClub) : null, pending = history.some(h => h.promise?.outcome === 'pending');
+  const target = source ? promiseFor(source, career.currentClub, 'ambitious') : null;
+  const title = source ? promiseFor(source, career.currentClub, 'league-title') : null;
+  const pending = history.some(h => h.promise?.outcome === 'pending');
+  const pendingReason = 'An earlier public promise is still waiting for a recorded year.';
+  const promiseTradeoff = 'Morale -4 now. Met: popularity +6, morale +3, credibility +8. Missed: popularity -6, morale -3, credibility -8. A move or an interrupted year ends it without a verdict.';
   const options: SoccerPressOption[] = [
     { id: 'calm', label: 'Keep it calm', effect: 'Morale +3.', tradeoff: 'Popularity -2.', eligible: !reason },
     { id: 'accountable', label: 'Own your season', effect: 'Popularity +3, media credibility +2.', tradeoff: 'Morale -3.', eligible: !reason },
     { id: 'ambitious', label: 'Make a public promise', effect: target?.label ?? 'The required saved performance figure is missing.',
-      tradeoff: 'Morale -4 now. Met: popularity +6, morale +3, credibility +8. Missed: popularity -6, morale -3, credibility -8. A move or an interrupted year ends it without a verdict.',
-      eligible: !reason && !!target && !pending, ...(!target || pending ? { reason: pending ? 'An earlier public promise is still waiting for a recorded year.' : 'The position-specific saved figure is missing.' } : {}) },
+      tradeoff: promiseTradeoff,
+      eligible: !reason && !!target && !pending, ...(!target || pending ? { reason: pending ? pendingReason : 'The position-specific saved figure is missing.' } : {}) },
+    { id: 'league-title', label: 'Promise the league title', effect: title?.label ?? 'The current club could not be verified.',
+      tradeoff: promiseTradeoff,
+      eligible: !reason && !!title && !pending, ...(!title || pending ? { reason: pending ? pendingReason : 'The current club could not be verified.' } : {}) },
   ];
   return { eligible: !reason, reason, source, topic, question, options, history, credibility: state?.credibility ?? 50, promise: history.find(h => h.promise)?.promise ?? null };
 }
@@ -167,7 +182,9 @@ export function answerSoccerPress(prev: CareerState, choiceId: string): CareerSt
   const view = pressRoomView(prev), option = view.options.find(o => o.id === choiceId);
   if (!view.eligible || !option?.eligible || !view.source || !view.topic) return prev;
   const state = stateOf(prev), row: SoccerPressHistory = { source: { ...view.source }, topic: view.topic, question: view.question, answer: option.label, choice: option.id };
-  if (option.id === 'ambitious') row.promise = promiseFor(view.source, prev.currentClub)!;
+  if (option.id === 'ambitious' || option.id === 'league-title') {
+    row.promise = promiseFor(view.source, prev.currentClub, option.id)!;
+  }
   return { ...prev, popularity: clamp(prev.popularity + (option.id === 'calm' ? -2 : option.id === 'accountable' ? 3 : 0)),
     morale: clamp(prev.morale + (option.id === 'calm' ? 3 : option.id === 'accountable' ? -3 : -4)),
     pressRoom: { version: 1, credibility: clamp((state?.credibility ?? 50) + (option.id === 'accountable' ? 2 : 0)), history: [...(state?.history ?? []), row] } };
@@ -179,7 +196,7 @@ export function settleSoccerPress(career: CareerState, row: SeasonRecord): void 
   if (!state || index < 0 || row.type !== 'playing' || !count(row.year) || !meter(career.popularity) || !meter(career.morale)) return;
   const at = state.history.findIndex(h => h.promise?.outcome === 'pending' && index > h.source.index && row.year > h.source.year);
   if (at < 0) return;
-  const held = state.history[at], promise = { ...held.promise! }, actual = recorded(row[promise.metric]);
+  const held = state.history[at], promise = { ...held.promise! }, actual = actualFor(row, promise.metric);
   promise.outcome = outcomeFor(promise, row);
   if (actual !== null) promise.actual = actual;
   if (rating(row.rating)) promise.actualRating = row.rating;
