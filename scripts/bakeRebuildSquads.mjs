@@ -21,11 +21,11 @@ import { fileURLToPath } from 'node:url';
 import { createClient } from '@supabase/supabase-js';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const clientTs = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8');
+const clientTs = fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8');
 const urlMatch = clientTs.match(/https:\/\/[a-z0-9]+\.supabase\.co/);
 const keyMatch = clientTs.match(/eyJ[A-Za-z0-9._-]+/);
 if (!urlMatch || !keyMatch) {
-  console.error('could not read the Supabase url and key out of client.ts');
+  console.error('could not read the Supabase url and key out of config.ts');
   process.exit(1);
 }
 const supabase = createClient(urlMatch[0], keyMatch[0], { auth: { persistSession: false } });

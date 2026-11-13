@@ -110,15 +110,16 @@ describe('the Supabase client when the browser blocks storage', () => {
   });
 });
 
-describe('the client file itself', () => {
+describe('the client and its public config', () => {
   it('still pins the URL and key as literals and never reads an env var', async () => {
     const fs = await import('node:fs');
     const path = await import('node:path');
     const text = fs.readFileSync(path.resolve(process.cwd(), 'src/integrations/supabase/client.ts'), 'utf8');
+    const config = fs.readFileSync(path.resolve(process.cwd(), 'src/integrations/supabase/config.ts'), 'utf8');
     const code = text.split(/\r?\n/).filter(line => !line.trim().startsWith('//')).join('\n');
-    expect(code).toContain(`export const SUPABASE_URL = "${PINNED_URL}";`);
-    expect(code).toMatch(/export const SUPABASE_PUBLISHABLE_KEY = "[^"]{208}";/);
-    expect(code).not.toMatch(/import\.meta\.env|process\.env|VITE_SUPABASE/);
+    expect(config).toContain(`export const SUPABASE_URL = "${PINNED_URL}";`);
+    expect(config).toMatch(/export const SUPABASE_PUBLISHABLE_KEY = "[^"]{208}";/);
+    expect(code + config).not.toMatch(/import\.meta\.env|process\.env|VITE_SUPABASE/);
     expect(code).toContain('storage: safeLocalStorage,');
     expect(code).not.toMatch(/storage:\s*(window\.)?localStorage\b/);
   });

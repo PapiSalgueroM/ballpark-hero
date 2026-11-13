@@ -15,7 +15,7 @@ const HISTORY = 'n:player_name,c:club,a:age,y:year,k:person_key';
 const ORDER = 'market_value_usd.desc,player_name.asc,id.asc';
 const sourceFiles = ['src/data/players.ts', 'scripts/bakePlayers.mjs', 'src/lib/squadDeal.ts', 'src/lib/whoAmI.ts', 'src/lib/dartDraft.ts', 'src/lib/dartMap.ts', 'src/data/worldMapGeo.ts', 'src/components/FlagImg.tsx', 'src/lib/liveScores.ts', 'src/lib/completions.ts', 'src/integrations/supabase/client.ts', 'scripts/simRevealScroll.mjs', 'scripts/lib/offlineTransport.cjs', 'scripts/qa/revealScrollOffline1089.cjs', '.github/workflows/soccer-hub-grid.yml'];
 const sourceHashes = () => Object.fromEntries(sourceFiles.map(file => [file, fileSha(path.join(ROOT, file))]));
-const origin = () => new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/client.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
+const origin = () => new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
 function keys(u, expected) { assert.deepEqual([...u.searchParams.keys()].sort(), [...expected].sort(), 'Exact query keys, including duplicate count'); }
 function list(value) {
   assert(value?.startsWith('in.(') && value.endsWith(')'), 'Exact membership filter');

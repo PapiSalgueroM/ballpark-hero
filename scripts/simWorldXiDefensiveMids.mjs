@@ -608,7 +608,7 @@ console.log('1) the record and the migration');
 }
 
 /* ---- the pool, fetched by the game's own code ---- */
-const client = readText(path.join(ROOT, 'src/integrations/supabase/client.ts'));
+const client = readText(path.join(ROOT, 'src/integrations/supabase/config.ts'));
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
 const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
 const realFetch = globalThis.fetch;

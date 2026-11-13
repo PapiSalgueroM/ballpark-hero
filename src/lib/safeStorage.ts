@@ -297,6 +297,11 @@ export function getStorageTrouble(): StorageTrouble | null {
 }
 
 let probedWrites = false;
+
+/** Whether a normal write probe has confirmed this browser keeps its local storage. */
+export function hasVerifiedLocalStorageWrites(): boolean {
+  return probedWrites && getStorageTrouble() === null;
+}
 /**
  * Finds out whether this browser takes a write at all: one write and one
  * remove of a key nothing else uses, at most once a visit. NOT run as this

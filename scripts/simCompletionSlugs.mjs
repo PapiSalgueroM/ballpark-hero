@@ -139,7 +139,7 @@ const written = new Map();
 
 console.log('2) every slug in the live table resolves, or is a declared retirement');
 {
-  const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+  const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
   const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
   const KEY = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
   /* PAGED, because PostgREST caps every select at 1,000 rows whatever the

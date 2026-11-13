@@ -279,7 +279,7 @@ start(7, 'the live table is the state read or the verified end state');
 {
   let live = null;
   try {
-    const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+    const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
     const url = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
     const key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
     const res = await fetch(`${url}/rest/v1/nascar_champions?select=year,${FIELDS.join(',')}&order=year&limit=1000`, { headers: { apikey: key, Authorization: `Bearer ${key}` }, signal: AbortSignal.timeout(20000) });

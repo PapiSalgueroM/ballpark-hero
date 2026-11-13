@@ -115,7 +115,7 @@ function selftest() {
 
 /** The table's rows in pages of 1,000 ordered on id (lifted from simCollegeGridKey section 8b). */
 async function readTable() {
-  const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
+  const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'config.ts'), 'utf8');
   const url = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
   const key = client.match(/SUPABASE_PUBLISHABLE_KEY\s*=\s*["']([^"']+)["']/)[1];
   const headers = { apikey: key, authorization: `Bearer ${key}` };

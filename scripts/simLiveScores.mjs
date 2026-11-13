@@ -157,7 +157,8 @@ console.log('2) the feed stays server side');
     fail(`espn.com is named outside a cited source url in the browser bundle: ${looseOffenders.join(', ')}`);
   }
   const client = fs.readFileSync(path.join(ROOT, 'src/lib/liveScores.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, ' ');
-  if (!/from '@\/integrations\/supabase\/client'/.test(client)) fail('liveScores.ts does not read the project URL and key from the one file that knows them');
+  if (!/import \{ SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY \} from '@\/integrations\/supabase\/config'/.test(client)) fail('liveScores.ts does not read the public project URL and key from their config');
+  if (/from ['"]@\/integrations\/supabase\/client['"]/.test(client)) fail('liveScores.ts loads the Supabase SDK client for the ticker');
   if (/VITE_SUPABASE/.test(client)) fail('liveScores.ts reads VITE_SUPABASE_*, which points at a deleted project (see CLAUDE.md)');
   const fn = fs.readFileSync(path.join(ROOT, 'supabase/functions/scores-poll/index.ts'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, ' ');
   if (!/rpc\("app_secret"/.test(fn)) fail('the poller does not read its secrets through app_secret(), so where does the key come from');
