@@ -2,13 +2,17 @@
    edit this folder: edit src/data/seoMeta.ts. Every vite build rewrites what
    has fallen behind, and simSeoTitles section 6 fails if the committed copy
    is not what the source makes. */
-/* Part 25 of 32: 4 entries. */
+/* Part 25 of 32: 5 entries. */
 import type { SeoMeta } from '../seoMeta';
 
 export const SEO_META_PART: Record<string, SeoMeta> = {
   "/rebuild": {
     title: "Rebuild Challenge: Soccer Club Management Game",
     description: "Take over a real club, spin the wheel for each shirt, keep the player or sell him and answer to the board. Free soccer rebuild game for up to four players.",
+  },
+  "/soccer-perfect-season": {
+    title: "Soccer Perfect Season: 38 Win Draft Game",
+    description: "Draft a soccer XI from 11 random real clubs, use two rerolls and chase 38 wins in 38 games. Play the free Daily or start a fresh Unlimited season.",
   },
   "/search-and-discard": {
     title: "Search and Discard: Soccer Squad Duel Game",
