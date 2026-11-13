@@ -1,4 +1,4 @@
-/* Native review and retry on the built app. Accepted fixtures isolate game data; exact read-only font requests may load. */
+/* Native review and retry on the built app. Accepted fixtures isolate game data; bundled fonts load from the owned server. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -6,15 +6,12 @@ import { createServer } from 'node:net';
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { chromium } from '../lib/playwrightLoader.mjs';
+import { readBuiltFonts, loadActualFonts } from '../lib/builtFonts.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
-const fontLinks = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(match => new URL(match[1]).href);
-assert.equal(fontLinks.length, 1, 'Native fonts bind the actual template stylesheet');
-const isFontStylesheet = request => request.method() === 'GET' && fontLinks.includes(new URL(request.url()).href);
-const isFontRead = (request, assets) => {
-  const url = new URL(request.url());
-  return isFontStylesheet(request) || (request.method() === 'GET' && request.resourceType() === 'font' && assets.has(url.href));
-};
+const bundledFonts = readBuiltFonts(ROOT);
+const fontPaths = new Set(Object.keys(bundledFonts.files)
+  .filter(file => file.startsWith('dist/') && file.endsWith('.woff2')).map(file => file.slice('dist'.length)));
 const OUT = path.join(ROOT, 'rugby-league-review-artifacts/native');
 const records = JSON.parse(fs.readFileSync(path.join(ROOT, 'src/test/fixtures/rugbyLeagueRecords.json'), 'utf8'));
 const DATE = '2026-10-03', DAILY = `champ-or-not-daily-${DATE}`;
@@ -32,7 +29,7 @@ const profiles = [
 ];
 fs.mkdirSync(OUT, { recursive: true });
 assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Build before native verification');
-const report = { started: new Date().toISOString(), cases: [] };
+const report = { started: new Date().toISOString(), bundledFonts, cases: [] };
 const save = () => fs.writeFileSync(path.join(OUT, 'report.json'), JSON.stringify(report, null, 2));
 const port = await new Promise((resolve, reject) => {
   const probe = createServer(); probe.once('error', reject);
@@ -53,17 +50,7 @@ async function settle(page) {
   await page.waitForTimeout(400);
 }
 async function loadedFonts(page) {
-  const loaded = await page.evaluate(async () => {
-    await document.fonts.ready;
-    const faces = [];
-    for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 500, 600, 700]) {
-      const matches = await document.fonts.load(`${weight} 16px "${family}"`, 'Career season');
-      faces.push({ family, weight, faces: matches.length, loaded: matches.length > 0 && matches.every(face => face.status === 'loaded') });
-    }
-    return faces;
-  });
-  assert(loaded.every(font => font.loaded), 'Actual Inter and Space Grotesk faces load before native geometry');
-  return loaded;
+  return loadActualFonts(page, 'Rugby league review');
 }
 async function activate(locator, input) {
   const box = await locator.boundingBox();
@@ -113,7 +100,7 @@ try {
     const { width, height, input, theme, reduced } = profile;
     const id = `${width}-${input}-${theme}${reduced ? '-reduced' : ''}`;
     const result = { id, ...profile, screenshots: [], layouts: [], visibility: [], guardControls: [], claims: [], retries: [], pageErrors: [], consoleErrors: [], assetFailures: [], fontFailures: [], fontRequests: [], fontAssets: [], interceptedRequests: [], scoreWrites: [], storageWrites: [] };
-    const fontAssets = new Set();
+    result.fontAssets = [...fontPaths];
     report.cases.push(result);
     const context = await browser.newContext({ viewport: { width, height }, isMobile: input === 'touch', hasTouch: input === 'touch', deviceScaleFactor: 1,
       reducedMotion: reduced ? 'reduce' : 'no-preference', colorScheme: theme, serviceWorkers: 'block',
@@ -125,38 +112,19 @@ try {
     await context.routeWebSocket('**/*', socket => socket.close());
     await context.route('**/*', async route => {
       const request = route.request(), url = new URL(request.url());
-      if (url.origin === BASE) return route.continue();
-      result.interceptedRequests.push({ method: request.method(), path: url.pathname });
-      if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method()) && /\/(game_completions|user_game_scores|daily_completions|user_best_scores|user_scores|record_auth_completion)$/.test(url.pathname)) result.scoreWrites.push(`${request.method()} ${url.pathname}`);
-      if (isFontRead(request, fontAssets)) {
-        result.fontRequests.push(request.url());
-        try {
-          const response = await route.fetch({ maxRedirects: 0 });
-          assert(response.status() >= 200 && response.status() < 300, 'Actual font requests must succeed without redirects');
-          if (isFontStylesheet(request)) {
-            const css = await response.text();
-            const declared = [...css.replace(/\/\*[\s\S]*?\*\//g, '').matchAll(/url\(\s*(['"]?)(https:\/\/[^)'"\s]+)\1\s*\)/g)].map(match => new URL(match[2]));
-            assert(declared.length > 0, 'The actual template stylesheet declares font assets');
-            for (const asset of declared) {
-              assert.equal(asset.origin, 'https://fonts.gstatic.com', 'Only the actual stylesheet font host is allowed');
-              fontAssets.add(asset.href);
-            }
-            result.fontAssets = [...fontAssets];
-            return route.fulfill({ response, body: css });
-          }
-          return route.fulfill({ response });
-        } catch (error) {
-          result.fontFailures.push(`${request.url()}: ${error.message}`);
+      if (request.resourceType() === 'font') {
+        result.fontRequests.push(url.href);
+        if (request.method() !== 'GET' || url.origin !== BASE || !fontPaths.has(url.pathname)) {
+          result.fontFailures.push('Font URL is not declared by the built stylesheet: ' + url.href);
           return route.abort('blockedbyclient');
         }
       }
+      if (url.origin === BASE) { assert(['GET', 'HEAD'].includes(request.method()), 'No local write transport'); return route.continue(); }
+      result.interceptedRequests.push({ method: request.method(), path: url.pathname });
+      if (!['GET', 'HEAD', 'OPTIONS'].includes(request.method()) && /\/(game_completions|user_game_scores|daily_completions|user_best_scores|user_scores|record_auth_completion)$/.test(url.pathname)) result.scoreWrites.push(`${request.method()} ${url.pathname}`);
       const table = url.pathname.match(/^\/rest\/v1\/([^/]+)$/)?.[1];
       if (table && Object.hasOwn(tables, table)) return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(tables[table]) });
       const type = request.resourceType();
-      if (type === 'font') {
-        result.fontFailures.push(`Font URL is not declared by the actual template stylesheet: ${request.url()}`);
-        return route.abort('blockedbyclient');
-      }
       return route.fulfill({ status: 200, contentType: type === 'stylesheet' ? 'text/css' : type === 'script' ? 'application/javascript' : 'application/json', body: ['stylesheet', 'script'].includes(type) ? '' : '[]' });
     });
     const page = await context.newPage(); page.setDefaultTimeout(12000);
@@ -176,11 +144,11 @@ try {
     page.on('console', message => { if (message.type() === 'error') result.consoleErrors.push(message.text()); });
     page.on('requestfailed', request => {
       if (request.url().startsWith(BASE)) result.assetFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
-      if (request.resourceType() === 'font' || isFontStylesheet(request)) result.fontFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
+      if (request.resourceType() === 'font') result.fontFailures.push(`${request.url()}: ${request.failure()?.errorText}`);
     });
     page.on('response', response => {
       if (response.url().startsWith(BASE) && response.status() >= 400) result.assetFailures.push(`${response.url()}: ${response.status()}`);
-      if ((response.request().resourceType() === 'font' || isFontStylesheet(response.request())) && response.status() >= 400) result.fontFailures.push(`${response.status()} ${response.url()}`);
+      if (response.request().resourceType() === 'font' && response.status() >= 400) result.fontFailures.push(`${response.status()} ${response.url()}`);
     });
     const panel = page.locator('[data-rugby-challenge]');
     const button = name => panel.getByRole('button', { name, exact: true });
@@ -241,6 +209,7 @@ try {
     try {
       await page.goto(`${BASE}/champ-or-not`, { waitUntil: 'domcontentloaded' });
       await page.getByText(/Claim:/).first().waitFor(); result.fonts = await loadedFonts(page); await settle(page);
+      assert(result.fontRequests.length > 0, 'Native geometry uses actual bundled font requests');
       assert.deepEqual(result.fontFailures, []);
       assert.equal(await page.locator('html').evaluate(el => el.classList.contains('light')), theme === 'light', 'The saved theme is active');
       assert.equal(await page.evaluate(key => localStorage.getItem(key), DAILY), dailyBytes);
