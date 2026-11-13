@@ -69,8 +69,8 @@
  *      reason. src/pages/Index.tsx and src/components/home/HomeAbout.tsx, read
  *      as code with comments stripped, may carry no visually hidden class or
  *      style at all, except the one screen reader label that was there before
- *      this round (the signed in stat chip's "Days in a row: "), held as a
- *      ratchet: it may go, nothing may join it.
+ *      this round (the signed in stat chip's "Days in a row: ") and the
+ *      two views that swap when a visitor types a search.
  * Controls. Each must turn its own part(s) red and nothing else:
  *   moduledrift    one sentence of the module changes (part 6)
  *   templatedrift  the same sentence changes in the template only (part 6)
@@ -81,6 +81,7 @@
  *   srabout        a screen reader only line goes into the About section (7, 8)
  *   srsource       a screen reader only line goes into the hero, outside the
  *                  h1 and the section, so only the source scan can see it (8)
+ *   hiddenbrowse   the catalogue stays hidden without any search input (8)
  *   retiredlink    one link goes to a retired route (a Navigate in App.tsx)
  *                  in the module and the template alike (part 3, which since
  *                  Round 840 refuses a link to a route that only redirects)
@@ -103,7 +104,7 @@ const CONTROL = process.env.HOME_COPY_CONTROL || '';
 const HOME_CONTROLS = {
   descdrift: '4b', commentapp: '4b', commenttpl: '4b',
   moduledrift: '6', templatedrift: '6', nosection: '9', staticimport: '9',
-  hiddenh1: ['7', '8'], srabout: ['7', '8'], srsource: '8', retiredlink: '3',
+  hiddenh1: ['7', '8'], srabout: ['7', '8'], srsource: '8', hiddenbrowse: '8', retiredlink: '3',
 };
 if (CONTROL && !(CONTROL in HOME_CONTROLS)) {
   console.error(`HOME_COPY_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(HOME_CONTROLS).join(', ')})`);
@@ -148,15 +149,16 @@ let indexBundled = readFileSync(path.join(ROOT, 'src/pages/Index.tsx'), 'utf8');
 indexBundled = controlled('nosection', indexBundled, '<HomeAbout />', '');
 /* the first draft's h1, word for word: the name on screen and the rest of the
    sentence in a one pixel clipped box, there for a renderer and not a person */
-indexBundled = controlledRe('hiddenh1', indexBundled, /DoUKnowBall(\s*<\/h1>)/,
-  'DoUKnowBall<span className="-mr-px inline-block h-px w-px overflow-hidden whitespace-nowrap [clip-path:inset(50%)]">: free daily sports trivia, puzzles and career sims</span>$1');
+indexBundled = controlledRe('hiddenh1', indexBundled, /Free sports games(\s*<\/h1>)/,
+  'Free sports games<span className="-mr-px inline-block h-px w-px overflow-hidden whitespace-nowrap [clip-path:inset(50%)]">: free daily sports trivia, puzzles and career sims</span>$1');
+indexBundled = controlled('hiddenbrowse', indexBundled, 'const isSearching = searchQuery.trim().length > 0;', 'const isSearching = true;');
 /* staticimport: the copy module comes back into the entry, used for real (an
    unused import would be dropped by the compiler and prove nothing): the h1
    reads it again, as the first draft did. The page renders the same words,
    so only the import graph in part 9 can object. */
 indexBundled = controlled('staticimport', indexBundled, "import { FavouriteSport } from '@/components/home/FavouriteSport';",
   "import { FavouriteSport } from '@/components/home/FavouriteSport';\nimport { HOME_COPY } from '@/data/homeCopy';");
-indexBundled = controlledRe('staticimport', indexBundled, />(\s*)DoUKnowBall(\s*<\/h1>)/, '>$1{HOME_COPY.h1}$2');
+indexBundled = controlledRe('staticimport', indexBundled, />(\s*)Free sports games(\s*<\/h1>)/, '>$1{HOME_COPY.h1}$2');
 indexBundled = controlledRe('srsource', indexBundled, /<\/h1>/,
   '</h1><span className="sr-only"> Free sports trivia, quizzes and career sims.</span>');
 let homeAboutSrc = readFileSync(path.join(ROOT, 'src/components/home/HomeAbout.tsx'), 'utf8');
@@ -241,7 +243,7 @@ const fail = m => { failures += 1; failedParts.add(part); console.error('  FAIL:
 /* the hidden text checks by name, so a control can prove the check it plants
    for fired, and not merely some other check in the same part */
 const firedChecks = new Set();
-const CONTROL_CHECKS = { hiddenh1: ['h1hidden', 'sourceHidden'], srabout: ['aboutHidden', 'sourceHidden'], srsource: ['sourceHidden'] };
+const CONTROL_CHECKS = { hiddenh1: ['h1hidden', 'sourceHidden'], srabout: ['aboutHidden', 'sourceHidden'], srsource: ['sourceHidden'], hiddenbrowse: ['sourceHidden'] };
 
 /* Visually hidden, as a class list or a style can say it. A guard for a shape,
    not a word list for one offender: screen reader only and invisible classes,
@@ -668,6 +670,7 @@ console.log('7) the home page as React renders it: one h1, the template\'s, all 
 rmSync(temp, { recursive: true, force: true });
 
 /* ── 8: no hidden text in the home page's source ──────────────────────── */
+const CATALOGUE_MOUNT = '<div hidden={isSearching}>{catalogue}</div>';
 part = '8';
 console.log('8) no visually hidden text in src/pages/Index.tsx or src/components/home/HomeAbout.tsx');
 {
@@ -680,6 +683,11 @@ console.log('8) no visually hidden text in src/pages/Index.tsx or src/components
   const scan = (name, src, baseline) => {
     let c = code(src);
     if (baseline && c.includes(baseline)) c = c.replace(baseline, ' ');
+    if (name === 'src/pages/Index.tsx' && c.includes("const [searchQuery, setSearchQuery] = useState('');")
+      && c.includes('const isSearching = searchQuery.trim().length > 0;')) {
+      const results = '<div hidden={!isSearching} aria-busy={(isSearching && !searchFailed && searchQuery !== deferredQuery) || undefined}>';
+      c = c.replace(results, '<div>').replace(CATALOGUE_MOUNT, '<div>{catalogue}</div>');
+    }
     const found = [];
     /* class lists: plain attributes, and every string literal inside a
        className expression (cn, template literals, conditionals) */
@@ -700,7 +708,7 @@ console.log('8) no visually hidden text in src/pages/Index.tsx or src/components
      class in the file, so with it left in, the scan has to find it */
   const probe = scan('probe', indexBundled, null);
   if (indexBundled.includes(BASELINE) && !probe.some(f => f.includes('sr-only'))) fail('the scan cannot see the sr-only label it is told to allow, so it proves nothing');
-  if (!failedParts.has('8')) console.log(`   none: every class list and style in both files is visible text (the stat chip's screen reader label ${indexBundled.includes(BASELINE) ? 'is the one allowed exception' : 'is gone'})`);
+  if (!failedParts.has('8')) console.log('   no hidden copy outside the visitor-controlled search views or the existing screen reader label');
 }
 
 /* ── 9: the copy is its own chunk, and every visitor still gets it ────── */
@@ -743,9 +751,11 @@ console.log('9) the About section is a lazy chunk, mounted for every visitor, an
       for (const ch of between) { if (ch === '{') depth += 1; else if (ch === '}') depth -= 1; }
       if (depth !== 0) fail(`the About mount sits inside ${depth} open expression container(s) in the page's JSX, so a condition or a flag decides whether it renders`);
       const lastTiles = code.lastIndexOf('sportSections.map(', at);
-      if (lastTiles < retAt) fail('the About mount does not come after the sport sections in the page, so it is not below every tile');
+      const catalogueAt = code.lastIndexOf('const catalogue = useMemo(() => (', retAt);
+      const mountedCatalogue = catalogueAt > fnAt && lastTiles > catalogueAt && lastTiles < retAt && between.includes(CATALOGUE_MOUNT);
+      if (lastTiles < retAt && !mountedCatalogue) fail('the About mount does not come after the sport sections in the page, so it is not below every tile');
       const rest = code.slice(at + wrapped[0].length, code.indexOf('\n}\n', at));
-      if (/<(section|RevealSection|GameCard)\b/.test(rest)) fail('something with tiles is mounted after the About section, which belongs below every tile');
+      if (/<(section|RevealSection|GameCard)\b/.test(rest) || rest.includes(CATALOGUE_MOUNT)) fail('something with tiles is mounted after the About section, which belongs below every tile');
     }
   }
 

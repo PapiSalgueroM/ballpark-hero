@@ -504,6 +504,31 @@ console.log('6) a returning player: saves bring a Continue row under the stage, 
     `[6g] tapping Golf moves golf first (${tapped.firstSport}), remembers it (${c?.stored}), and the page does not move (scroll ${c?.before.y} to ${c?.after.y}, chips at ${Math.round(c?.before.top ?? -1)} to ${Math.round(c?.after.top ?? -1)})`);
 }
 
+console.log('7) a direct Browse sports link reaches the catalogue after Home loads');
+for (const width of [320, 390, 1440]) {
+  const ctx = await browser.newContext({ viewport: { width, height: width < 768 ? 844 : 900 } });
+  try {
+    const page = await ctx.newPage();
+    await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
+    await page.addInitScript(() => localStorage.setItem('cookie-consent', 'essential'));
+    await page.goto(BASE + '/#browse-sports', { waitUntil: 'domcontentloaded' });
+    const target = page.locator('#browse-sports');
+    await target.waitFor();
+    const atBrowse = () => {
+      const section = document.getElementById('browse-sports');
+      return section && Math.abs(section.getBoundingClientRect().top - parseFloat(getComputedStyle(section).scrollMarginTop)) <= 3;
+    };
+    const reached = await page.waitForFunction(atBrowse, null, { timeout: 2500 }).then(() => true, () => false);
+    const position = await target.evaluate(section => ({
+      top: Math.round(section.getBoundingClientRect().top),
+      focus: document.activeElement === document.body,
+    }));
+    say(reached && position.focus, width + 'px direct link reaches Browse sports at y=' + position.top + ' with no focus change');
+  } finally {
+    await ctx.close();
+  }
+}
+
 await browser.close();
 
 console.log('');

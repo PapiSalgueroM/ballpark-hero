@@ -21,36 +21,34 @@ export function FavouriteSport({ sports, value, onPick }: {
   onPick: (sport: SportKey | null) => void;
 }) {
   return (
-    <section aria-labelledby="home-your-sport" data-home-fav-sport="">
-      <h2 id="home-your-sport" className="text-sm font-display font-bold text-foreground">Your sport</h2>
-      <p className="mt-0.5 text-xs text-muted-foreground">Pick one and its games go to the top of the list. Tap it again to undo.</p>
-      <div className="-mx-4 mt-2 overflow-x-auto overscroll-x-contain px-4 pb-1 [scrollbar-width:thin] sm:mx-0 sm:px-0">
-        <ul className="flex w-max gap-2 sm:w-auto sm:flex-wrap">
-          {sports.map(sport => {
-            const on = value === sport;
-            return (
-              <li key={sport}>
-                <button
-                  type="button"
-                  aria-pressed={on}
-                  data-fav-sport={sport}
-                  onClick={() => onPick(on ? null : sport)}
-                  style={sportStyle(sport)}
-                  className={cn(
-                    'inline-flex h-9 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-xs font-semibold transition-colors',
-                    on
-                      ? 'border-tile bg-tile/15 text-foreground'
-                      : 'border-border/80 bg-surface-1 text-muted-foreground hover:border-tile/50 hover:text-foreground',
-                  )}
-                >
-                  <SportGlyph sport={sport} className="h-3.5 w-3.5 text-tile" />
-                  {chipName(sport)}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+    <section aria-labelledby="home-your-sport" data-home-fav-sport="" className="mt-2">
+      <h3 id="home-your-sport" className="font-display text-sm font-bold text-foreground">Your sport</h3>
+      <p className="mt-0.5 text-xs text-muted-foreground">Pick a sport to show its games first. Pick it again to reset.</p>
+      <ul className="mt-2 flex flex-wrap gap-2">
+        {sports.map(sport => {
+          const on = value === sport;
+          return (
+            <li key={sport}>
+              <button
+                type="button"
+                aria-pressed={on}
+                data-fav-sport={sport}
+                onClick={() => onPick(on ? null : sport)}
+                style={sportStyle(sport)}
+                className={cn(
+                  'inline-flex min-h-11 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-xs font-semibold transition-colors focus-visible:outline-primary',
+                  on
+                    ? 'border-tile bg-tile/15 text-foreground'
+                    : 'border-border/80 bg-surface-1 text-muted-foreground hover:border-tile/50 hover:text-foreground',
+                )}
+              >
+                <SportGlyph sport={sport} className="h-3.5 w-3.5 text-tile" />
+                {chipName(sport)}
+              </button>
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 }

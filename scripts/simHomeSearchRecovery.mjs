@@ -44,12 +44,12 @@ const boundary = {
 };
 const controls = [
   ['busy', PAGE, '<div aria-busy="true" className="min-h-[120px]" />', '<div aria-busy="false" className="min-h-[120px]" />', PENDING],
-  ['prematureEmpty', PAGE, ') : !engine ? (', ') : false ? (', PENDING],
+  ['prematureEmpty', PAGE, ') : !engine || !hasDeferredQuery ? (', ') : false ? (', PENDING],
   ['failureState', PAGE, 'setSearchFailed(true);', 'setSearchFailed(false);', FAILURE],
   ['failureBranch', PAGE, 'searchFailed ? (', 'false ? (', FAILURE],
   ['terminal', PAGE, 'if (engine || searchFailed) return;', 'if (engine) return;', TERMINAL],
   ['resolvedEngine', PAGE, '.then(setEngine)', '.then(() => undefined)', SUCCESS],
-  ['currentQuery', PAGE, 'engine.searchSite(searchQuery)', "engine.searchSite('soccer')", SUCCESS],
+  ['currentQuery', PAGE, 'engine.searchSite(deferredQuery)', "engine.searchSite('soccer')", SUCCESS],
   ['backQuery', PAGE, "setSearchQuery(''); searchInputRef.current", "setSearchQuery(searchQuery); searchInputRef.current", BACK],
   ['backFocus', PAGE, 'searchInputRef.current?.focus({ preventScroll: true });', 'void searchInputRef.current;', BACK],
   ['preventScroll', PAGE, 'searchInputRef.current?.focus({ preventScroll: true });', 'searchInputRef.current?.focus({ preventScroll: false });', BACK],
