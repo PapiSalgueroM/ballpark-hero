@@ -312,7 +312,7 @@ export default function Index() {
 
       {/* Dynasty & Career Sims showcase (2026-08-05): the deep games, front and center */}
       <section>
-        <h2 className="flex items-center gap-2.5 text-lg font-display font-bold text-foreground mb-1">
+        <h2 className="mb-1 flex flex-wrap items-center gap-2.5 font-display text-lg font-bold text-foreground">
           <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold/15 text-base ring-1 ring-inset ring-gold/30">👑</span>
           Dynasty & Career Sims
           <span className="text-xs font-normal text-muted-foreground ml-1">
@@ -334,7 +334,7 @@ export default function Index() {
           {/* Round 658: the sport's drawn glyph in its own ink leads
               every section, so the colour on the cards below always
               has a shape and a name beside it. */}
-          <h2 id={`sport-${CATEGORY_SPORT[cat.title]}`} tabIndex={-1} className="mb-4 flex scroll-mt-36 items-center gap-2.5 text-lg font-display font-bold text-foreground focus-visible:outline-primary sm:scroll-mt-28" style={sportStyle(CATEGORY_SPORT[cat.title])}>
+          <h2 id={`sport-${CATEGORY_SPORT[cat.title]}`} tabIndex={-1} className="mb-4 flex scroll-mt-36 flex-wrap items-center gap-2.5 text-lg font-display font-bold text-foreground focus-visible:outline-primary sm:scroll-mt-28" style={sportStyle(CATEGORY_SPORT[cat.title])}>
             <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-tile/15 text-tile ring-1 ring-inset ring-tile/30">
               <SportGlyph sport={CATEGORY_SPORT[cat.title]} className="h-[18px] w-[18px]" />
             </span>
@@ -727,7 +727,7 @@ function HomeTileStyles() {
         [data-catalog-card] :is(.home-tile-accent, .home-tile-summary) { display: none; }
         [data-catalog-card] .home-tile-icon { width: 24px; height: 24px; margin-top: 0; border-radius: 8px; font-size: 1rem; }
         [data-catalog-card] h3 { width: 100%; font-size: .875rem; line-height: 1.2; overflow-wrap: anywhere; }
-        [data-catalog-card] > [data-game-pick] { position: static; }
+        [data-catalog-card] > [data-game-pick] { position: static; width: 44px; height: 44px; }
       }
       @media (max-width: 479px) {
         [data-home-catalogue] {
