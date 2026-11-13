@@ -70,6 +70,28 @@ afterEach(() => {
 });
 
 describe('NRL season review for expiring deals', () => {
+  it('previews the league recruitment deals without saving and records only an explicit selection', async () => {
+    const view = open(completed);
+    const details = screen.getByText('League recruitment').closest('details')!;
+    const withinDesk = within(details);
+    const previous = raw();
+    fireEvent.click(withinDesk.getByText('League recruitment'));
+    const rows = await withinDesk.findByRole('list', { name: 'Projected rival deals' });
+    expect(within(rows).getAllByRole('listitem').length).toBeGreaterThan(0);
+    expect(raw()).toBe(previous);
+    const choice = withinDesk.getByRole('checkbox', { name: 'Allow two-year deals at rival clubs' });
+    fireEvent.click(choice);
+    expect(choice).toBeChecked();
+    const opted = raw()!;
+    expect(JSON.parse(opted).leagueRecruitment).toBe(true);
+    view.unmount();
+    open(opted);
+    click('Start 2027');
+    const rolled = readNrlCareerSave(raw());
+    expect(rolled?.leagueRecruitment).toBeUndefined();
+    expect(rolled?.history[0].leagueRecruitment?.length).toBeGreaterThan(0);
+  });
+
   it('shows a read-only external position brief and uses the existing shortlist', () => {
     const career = createNrlCareer('storm', 17);
     open(career);

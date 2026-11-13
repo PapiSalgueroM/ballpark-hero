@@ -27,6 +27,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Set Standard, Value or Premium ticket prices in Finance before your first paid home match. That choice applies to home gates for the rest of the season.',
       'Hire a development assistant in Finances to help up to three young players who are signed to return. Each needs eight regular-season appearances from the hire onward to gain a rating point next season.',
       'Open Season review for your final ladder, finances, recorded scoring and finals scores. Stay with your club, move to a new club, or retire and keep your career record.',
+      'After the Grand Final, open League recruitment in Season review to preview two-year deals at rival clubs. Enable it for that offseason if you want rivals to keep one eligible free-agent signing for a second year. Your current club and any club you join are excluded.',
       'Before playing Round 1, accept the optional Board pathways objective in Season review. Give three players aged 23 or under four regular-season appearances each to earn a club cash bonus.',
       'Open Change clubs in Season review to see simulated openings and their board targets. You can apply to one club after the season or use the club picker for a direct move.',
       'From Round 14, check Summer job applications in Season review to apply early for a projected opening. The window closes for the last five regular-season rounds. Keep coaching your club while you wait for an answer after the Grand Final.',
