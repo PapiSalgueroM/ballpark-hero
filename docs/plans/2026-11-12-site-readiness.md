@@ -1,6 +1,20 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 04:29 UTC on November 13, 2026. The 24-hour task remains active. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). Three narrow releases are published: WebKit selection #566, Puck roster explanation #771 and Football Grid career correction #772. Mobile Core Web Vitals, complete NRL feature parity and the broad release are still unfinished.
+Checkpoint at 05:25 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+The trust pages and ads.txt placeholder are live in [PR #773](https://github.com/PapiSalgueroM/ballpark-hero/pull/773). The Privacy Policy names GDPR and CCPA, the seller placeholder is plain text, 15 mounted page checks and all 172 published routes passed, and IndexNow accepted the four changed routes. The broad build's policies separately describe its locally hosted font files.
+
+NBA Grid's Andre Drummond correction and refreshed archive are live in [PR #774](https://github.com/PapiSalgueroM/ballpark-hero/pull/774). The guarded data update added the Knicks to one row and the other 3,226 full rows held. Published checks covered the corrected answer after reload and all 783 NBA archive cells. Forty eligibility counts rose by one. Board dates, layouts and displayed rarest answers held. IndexNow accepted the archive URL. Both verified grid reports, including the earlier Peterson correction in #772, now have Fixed status and their published PR references. The 05:19 read confirmed 157 active reports, including 22 new, 107 investigating and 28 confirmed. The private active ledger SHA-256 is `9bc829c21d7950c138d1e86ac26d444fb5a21566bc6d10a63de17d8cff807fd0`.
+
+The mobile cookie banner release is live in [PR #775](https://github.com/PapiSalgueroM/ballpark-hero/pull/775). It puts choices in the page flow on games and Home, using the first-visit game rules panel where applicable. A scoped removal of the unused React Query provider brings the final build within all 16 download budgets. The local build passed 79 consent tests and 58 phone route checks. Six published browser scenarios confirmed reachable footer links, persisted rejection, focus restoration and the absence of ad requests or write attempts in the replay. All 172 published routes passed.
+
+The NRL player history change is composed locally through `ff116a54e`. It saves actual regular and finals appearances and scoring, includes scoreless participants, distinguishes repeated names by the most recent recorded club and year, and shows rating changes between consecutive observed seasons. Older saves display available records. The long-career replay found that the previous writer could create a save beyond the reader's limit. The new shared 1,000,000-character limit rejects an oversized write before it can replace the last readable save. A new save was readable through 301 elapsed seasons in the measured replay. The NRL-only release is being qualified separately from the broad draft. The six priority guide copy changes and the Home layout are being prepared as separate releases.
+
+Six alternating mobile lab traces of the isolated ticker prototype reduced Home JavaScript transfer by about 20 KB and simulated median LCP from 3.982 to 3.846 seconds. Script evaluation increased in all three pairs and the observed median paint was slower. The prototype remains outside the product. Mobile LCP, field INP and full Club Manager parity remain open. The current broad build also retains unresolved hosted checks.
+
+## 24-hour checkpoint
+
+At 04:29 UTC three narrow fixes had published: WebKit selection #566, Puck roster explanation #771 and Football Grid career correction #772.
 
 ## Current integration
 
