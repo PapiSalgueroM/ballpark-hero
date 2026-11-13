@@ -1,3 +1,11 @@
+## 2026-11-12 Puck Detective roster clue wording
+
+Puck Detective now explains in the game, Help and guide that its team and jersey clues use a stored roster snapshot. The Hockey hub describes the same source. This release keeps the existing roster rows, Daily draw, scoring and save format.
+
+The normal grid archive refresh preserved all 348 published boards through November 11 Eastern byte for byte. A scoped SEO build refreshed only Hockey and Puck Detective and their sitemap dates. App types, 13 focused tests, 17 output checks, the browser boot check, and all 16 existing route-size caps passed. Six paired 320px and 390px browser checks against the prior main build kept both archive clue cards and exact active and finished save bytes across reload. The new note fit on both screens, with no page errors or score writes.
+
+Awaiting hosted qualification and publication.
+
 ## 2026-11-13: NRL halftime reserve and roster-copy verification
 
 The d99c031af combined build passes application TypeScript, Vite, 23 static readers, native snapshot boot and redirects, and all 16 download caps with 400 isolation probes. NRL's optional held reserve passes 209 tests and three final browser journeys with exact reload and stale-tab checks. Its default modes retain 1,149 baseline states. Puck Detective's stored-roster explanation passes 13 tests and six paired phone journeys, preserving clues and saved games. See the [readiness record](plans/2026-11-12-site-readiness.md) for exact artifacts and remaining limits.
