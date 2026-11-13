@@ -17,7 +17,7 @@ import {
   type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
 } from '@/lib/nrlManager';
 import {
-  createNrlOriginSeries, isNrlOriginSeries, nrlOriginComplete, playNrlOriginMatch, selectNrlOriginReserve, selectNrlOriginStarter,
+  createNrlOriginSeries, isNrlOriginSeries, nrlOriginComplete, nrlOriginEligibility, playNrlOriginMatch, selectNrlOriginReserve, selectNrlOriginStarter,
   setNrlOriginTactic, type NrlOriginSeries, type NrlOriginSide,
 } from '@/lib/nrlOrigin';
 
@@ -149,7 +149,7 @@ type OriginMatchAction = { year: number; side: NrlOriginSide; game: number } & (
 );
 
 export type NrlCareerAction = NrlAction
-  | { type: 'startOrigin'; year: number; side: NrlOriginSide }
+  | { type: 'startOrigin'; year: number; side: NrlOriginSide; nominationId?: string }
   | OriginMatchAction
   | { type: 'setAttackPlan'; attackPlan: NrlAttackPlan; year: number; clubId: string; round: number }
   | { type: 'offerContract'; playerId: string; salary: number; years: number }
@@ -1122,7 +1122,11 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       const { origin, season } = state;
       if (action.year !== season.year || (origin && (origin.year >= action.year || !nrlOriginComplete(origin)))) return state;
       const players = state.players.filter(player => contractIn(player, season.year));
-      const next = createNrlOriginSeries(players, season.year, action.side);
+      const { nominationId } = action;
+      if (nominationId !== undefined && (nrlOriginEligibility(nominationId) !== action.side || !players.some(player =>
+        player.id === nominationId && contractIn(player, season.year)?.clubId === season.clubId))) return state;
+      const next = createNrlOriginSeries(players, season.year, action.side,
+        nominationId === undefined ? undefined : { clubId: season.clubId, playerId: nominationId });
       return next ? { ...state, origin: next } : state;
     }
     case 'selectOriginStarter':
@@ -1655,6 +1659,12 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
       && training.startedRound + NRL_POSITION_TRAINING_ROUNDS > spell.startedRound) return false;
   }
   if (!validWorld(state) || !validCareerBooks(state) || !validAcademy(state) || !validShortlist(state)) return false;
+  if (state.origin?.nomination) {
+    const { year: originYear, nomination } = state.origin;
+    if (originYear === year) {
+      if (nomination.clubId !== state.season.clubId || !state.season.squad.some(player => player.id === nomination.playerId)) return false;
+    } else if (state.history.find(receipt => receipt.year === originYear)?.clubId !== nomination.clubId) return false;
+  }
   if (value.offseasonApplication !== undefined
     && (typeof value.offseasonApplication !== 'string' || !nrlOffseasonApplication(state))) return false;
   if (!state.season.live && !state.season.attackPlan) return true;

@@ -73,4 +73,28 @@ describe('State of Origin in the Club office', () => {
     expect(button('Simulate Origin Game 1')).toBeDisabled();
     expect(save().origin?.matches).toHaveLength(0);
   });
+
+  it('nominates an eligible club player for the same state, lets you select them and remembers the nomination', () => {
+    const initial = createNrlCareer('broncos', 16);
+    localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(initial));
+    const view = open();
+    click('Club office');
+    click('State of Origin');
+    const select = screen.getByRole('combobox', { name: 'Nominate a club player' });
+    const group = within(select).getByRole('group', { name: 'Queensland Maroons' });
+    const player = within(group).getAllByRole('option')[0] as HTMLOptionElement;
+    fireEvent.change(select, { target: { value: player.value } });
+    expect(button('Coach New South Wales Blues')).toBeDisabled();
+    expect(raw()).toBe(JSON.stringify(initial));
+    click('Coach Queensland Maroons');
+    expect(save().origin?.nomination?.playerId).toBe(player.value);
+    expect(screen.getByText(/Club nomination/)).toBeVisible();
+    expect(save().origin?.pools.qld.some(candidate => candidate.id === player.value)).toBe(true);
+    const saved = raw();
+    view.unmount();
+    open();
+    click('Club office');
+    expect(screen.getByText(/Club nomination/)).toBeVisible();
+    expect(raw()).toBe(saved);
+  });
 });
