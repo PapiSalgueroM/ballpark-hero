@@ -37,6 +37,7 @@ vi.mock('@/lib/safeStorage', async (importOriginal) => {
 import { CONTINUE_SAVES } from '@/data/continueSaves';
 import { BROKEN_SAVE_MARK, SET_ASIDE_SEEN_KEY, backupKeysOf, offeredBackup, type ListableStorage } from '@/lib/brokenSaveRecovery';
 import { holdPendingSave } from '@/lib/safeStorage';
+import { createSaveFence, fenceKeyOf } from '@/lib/saveFence';
 import {
   PENDING_RESTORE_KEY, SAVE_VERSIONS, STAGED_FOR_MS, applyPending, keepUpdateCopies, reopenGame, restoreNow, runSaveKeeper,
   stageRestore, sumOf, takeCopyTrouble, takeOutcome, versionIn,
@@ -336,6 +337,108 @@ describe('the crash loop: the store dies at every storage call in turn (Round 12
       expect(refusedYetLanded).toEqual([3]);
     });
   }
+});
+
+describe('Club Manager restore generation', () => {
+  const key = cm.saveKey;
+  const fenceKey = fenceKeyOf(key);
+  const backupKey = bk(key, '2026-10-04T09-00-00');
+  const earlier = '{"saveVersion":3,"clubName":"Everton","season":1}';
+  const laterCareer = '{"saveVersion":3,"clubName":"Everton","season":2}';
+  const seed = { [key]: laterCareer, [backupKey]: earlier, [fenceKey]: '7' };
+
+  function staged() {
+    const state = store(seed);
+    expect(stageRestore(cm, backupKey, state.api, T0)).toEqual({ ok: true });
+    return state;
+  }
+
+  it('claims the real career generation before changing bytes', () => {
+    const { api, m } = staged();
+    const oldTab = createSaveFence(api);
+    oldTab.adopt(key);
+    expect(applyPending(api, later(1000))).toMatchObject({ ok: true, kept: true });
+    expect(m.get(key)).toBe(earlier);
+    expect(m.get(fenceKey)).toBe('8');
+    expect(oldTab.moved(key)).toBe(true);
+    expect(oldTab.write(key, () => { api.setItem(key, laterCareer); return true; })).toBe('moved');
+    expect(m.get(key)).toBe(earlier);
+    expect(backups(m, key).filter(copy => m.get(copy) === laterCareer)).toHaveLength(1);
+  });
+
+  it.each([key, fenceKey])('leaves the prior bytes and generation when %s refuses a write', refused => {
+    const { api, m, s } = staged();
+    s.refuse = name => name === refused;
+    expect(applyPending(api, later(1000))).toEqual({ path: cm.path, ok: false, why: 'no-room' });
+    expect(m.get(key)).toBe(laterCareer);
+    expect(m.get(fenceKey)).toBe('7');
+    expect(m.has(PENDING_RESTORE_KEY)).toBe(false);
+    expect(backups(m, key)).toEqual([backupKey]);
+  });
+
+  it('refuses an unreadable generation without replacing the active career', () => {
+    const { api, m } = staged();
+    const read = api.getItem;
+    api.getItem = name => {
+      if (name === fenceKey) throw new Error('generation read refused');
+      return read(name);
+    };
+    expect(applyPending(api, later(1000))).toEqual({ path: cm.path, ok: false, why: 'no-room' });
+    expect(m.get(key)).toBe(laterCareer);
+    expect(m.get(fenceKey)).toBe('7');
+    expect(backups(m, key)).toEqual([backupKey]);
+  });
+
+  it('does not rewind a generation another tab advanced during a refused write', () => {
+    const { api, m } = staged();
+    const write = api.setItem;
+    api.setItem = (name, value) => {
+      if (name === key) {
+        expect(m.get(fenceKey)).toBe('8');
+        write(fenceKey, '9');
+        throw new Error('restore write refused');
+      }
+      write(name, value);
+    };
+    expect(applyPending(api, later(1000))).toEqual({ path: cm.path, ok: false, why: 'no-room' });
+    expect(m.get(key)).toBe(laterCareer);
+    expect(m.get(fenceKey)).toBe('9');
+  });
+
+  it('keeps the new generation when reading back the restored bytes is interrupted', () => {
+    const { api, m } = staged();
+    const oldTab = createSaveFence(api);
+    oldTab.adopt(key);
+    const original = api.getItem;
+    api.getItem = name => {
+      if (name === key && m.get(key) === earlier) throw new Error('restore readback interrupted');
+      return original(name);
+    };
+    expect(applyPending(api, later(1000))).toMatchObject({ ok: false, why: 'no-room' });
+    expect(m.get(key)).toBe(earlier);
+    expect(m.get(fenceKey)).toBe('8');
+    expect(oldTab.moved(key)).toBe(true);
+    expect(backups(m, key).filter(copy => m.get(copy) === laterCareer)).toHaveLength(1);
+  });
+
+  it('finishes each interrupted restore with a generation old tabs cannot write through', () => {
+    const whole = staged();
+    expect(applyPending(whole.api, later(1000))).toMatchObject({ ok: true });
+    expect(whole.s.calls).toBeGreaterThan(8);
+    for (let call = 1; call <= whole.s.calls + 1; call++) {
+      const dying = staged();
+      const oldTab = createSaveFence(dying.api);
+      oldTab.adopt(key);
+      dying.s.dieAt = dying.s.calls + call;
+      applyPending(dying.api, later(1000));
+      const healthy = store({}, dying.m);
+      applyPending(healthy.api, later(2000));
+      expect(dying.m.get(key), 'crash at ' + call).toBe(earlier);
+      expect(Number(dying.m.get(fenceKey)), 'crash at ' + call).toBeGreaterThan(7);
+      expect(dying.m.has(PENDING_RESTORE_KEY), 'crash at ' + call).toBe(false);
+      expect(backups(dying.m, key).filter(copy => dying.m.get(copy) === laterCareer)).toHaveLength(1);
+    }
+  });
 });
 
 describe('the copy before a version step (Round 1219)', () => {

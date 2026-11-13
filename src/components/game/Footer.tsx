@@ -6,12 +6,23 @@ import { HUB_NAV } from '@/lib/sportHubNav';
 import { openConsentChoices } from '@/lib/consentPreferences';
 
 /* Opening preferences preserves the current choice until the visitor saves. */
-export function Footer() {
+export function Footer({ soccerControls = false }: { soccerControls?: boolean } = {}) {
   /* data-site-chrome: this is on every page, so the prerenderer keeps it out
      of the text the sitemap dates a page by (Round 286). A footer change is
      not a reason for Google to recrawl 126 pages. */
   return (
     <footer data-site-chrome="" className="mt-12 pb-8 text-center text-xs text-muted-foreground space-y-3">
+      {soccerControls && (
+        <a href="#dukb-main" data-soccer-control-return="" data-no-prerender=""
+          className="mx-auto inline-flex min-h-11 items-center rounded-md border border-border px-3 font-semibold text-foreground hover:bg-muted focus-visible:outline-ring"
+          onClick={event => {
+            const main = document.getElementById('dukb-main');
+            if (!main) return;
+            event.preventDefault();
+            window.scrollTo(0, 0);
+            main.focus({ preventScroll: true });
+          }}>Back to career controls</a>
+      )}
       <p className="max-w-lg mx-auto leading-relaxed">
         All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall
       </p>

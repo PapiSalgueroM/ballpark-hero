@@ -25,7 +25,7 @@
  *   moves and nothing is checked. That is a handover from another game (Hot
  *   Seat's carry on), and every sim or test that saves without a page. A claim
  *   does not start holding: only adopt does.
- * - The fence write never stops the save. If the browser refuses it, the save
+ * - Ordinary fence writes never stop the save. If the browser refuses it, the save
  *   is still attempted and this page keeps its old generation, which is still
  *   the stored one. If the fence write lands and the save is then refused,
  *   the fence is put back as it was, so a refused write changes no byte; if
@@ -64,13 +64,19 @@ export interface SaveFence {
   release(saveKey: string): void;
   /** True when this page holds a generation and another tab has written since. */
   moved(saveKey: string): boolean;
-  /** Runs `doWrite` (true when the save landed) unless the page is stale. */
-  write(saveKey: string, doWrite: () => boolean): FenceWrite;
+  /** Runs `doWrite` unless the page is stale. A strict claim also requires a writable generation. */
+  write(saveKey: string, doWrite: () => boolean, requireGeneration?: boolean): FenceWrite;
 }
 
 /** Never starts with any game's save key, so no game and no backup list reads it. */
 export const FENCE_PREFIX = 'dukb-fence:';
 export const fenceKeyOf = (saveKey: string): string => FENCE_PREFIX + saveKey;
+
+const generationOf = (raw: string | null | undefined): number | null => {
+  if (!raw?.trim()) return null;
+  const n = Number(raw);
+  return Number.isSafeInteger(n) && n >= 0 ? n : null;
+};
 
 export function createSaveFence(source: FenceStore | (() => FenceStore | null | undefined)): SaveFence {
   const held = new Map<string, number>();
@@ -84,10 +90,7 @@ export function createSaveFence(source: FenceStore | (() => FenceStore | null | 
   /** The stored generation, or null when absent, unreadable or unreachable. */
   const stored = (saveKey: string): number | null => {
     try {
-      const raw = store()?.getItem(fenceKeyOf(saveKey));
-      if (raw === null || raw === undefined || raw.trim() === '') return null;
-      const n = Number(raw);
-      return Number.isSafeInteger(n) && n >= 0 ? n : null;
+      return generationOf(store()?.getItem(fenceKeyOf(saveKey)));
     } catch {
       return null;
     }
@@ -106,22 +109,27 @@ export function createSaveFence(source: FenceStore | (() => FenceStore | null | 
       held.delete(saveKey);
     },
     moved,
-    write(saveKey, doWrite) {
+    write(saveKey, doWrite, requireGeneration = false) {
       if (moved(saveKey)) return 'moved';
       const mine = held.get(saveKey);
-      const next = Math.max(mine ?? 0, stored(saveKey) ?? 0) + 1;
+      let next = requireGeneration ? 0 : Math.max(mine ?? 0, stored(saveKey) ?? 0) + 1;
       const s = store();
       let before: string | null = null;
       let fenced = false;
       try {
         if (s) {
           before = s.getItem(fenceKeyOf(saveKey));
+          if (requireGeneration) {
+            next = Math.max(mine ?? 0, generationOf(before) ?? 0) + 1;
+            if (!Number.isSafeInteger(next)) return 'failed';
+          }
           s.setItem(fenceKeyOf(saveKey), String(next));
           fenced = true;
         }
       } catch {
-        /* refused: the career matters more, so the save is still attempted */
+        /* Ordinary saves still write when the fence is unavailable. */
       }
+      if (requireGeneration && !fenced) return 'failed';
       let ok = false;
       try {
         ok = doWrite() === true;
@@ -134,6 +142,7 @@ export function createSaveFence(source: FenceStore | (() => FenceStore | null | 
       let at = fenced ? next : mine;
       if (fenced && !ok && s) {
         try {
+          if (requireGeneration && s.getItem(fenceKeyOf(saveKey)) !== String(next)) return 'failed';
           if (before === null) s.removeItem(fenceKeyOf(saveKey));
           else s.setItem(fenceKeyOf(saveKey), before);
           at = mine;

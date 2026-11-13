@@ -4,7 +4,7 @@ import { SAVE_KEY, adoptSoccerCareerSave } from "@/lib/soccerCareerSaveEntry";
 import { SoccerCareerCreator, POSITIONS, FAMILY_COLORS, getPositionStatBars, StatBarGame, type CareerCreationSupport, type SoccerCareerDraft } from "@/components/soccer-career/SoccerCareerCreator";
 import { acknowledgeChanceWheel, validChanceWheel } from '@/lib/careerChanceWheel';
 import { soccerEventChoiceConsequence } from '@/lib/soccerCareerContracts';
-import { Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useLayoutEffect, useMemo, type ComponentType, type ComponentProps, type ReactNode, type CSSProperties } from "react";
+import { Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useLayoutEffect, useMemo, type ComponentType, type ComponentProps, type ReactNode, type RefObject } from "react";
 import { formatNumber } from '@/lib/formatNumber';
 import { completedRecordCandidate, readCompletedRecords, retainCompletedRecord, recordRetentionStatus, type CompletedRecordCandidate, type RetainResult } from '@/lib/soccerCareerCompletedRecords';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
@@ -125,7 +125,7 @@ import { heatLabel } from "@/lib/soccerCareerCorruption";
 import ShareButtons from "@/components/game/ShareButtons";
 import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
 import { shareResult } from "@/lib/share";
-import { useRevealScroll } from "@/hooks/useRevealScroll";
+import { topInset, useRevealScroll } from "@/hooks/useRevealScroll";
 import { saveFence } from '@/lib/saveFence';
 import { holdPendingSave } from '@/lib/safeStorage';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
@@ -657,78 +657,55 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
   );
 }
 
-/* ─── Round 129: how far to lift anything welded to the bottom of the screen ───
-
-   The action bar stays at the bottom edge. Desktop also docks the training
-   and phone buttons there; on a phone those utilities are now in the page.
-   All three used to keep sitting there once you reached the site footer, on top
-   of the About, Contact, Privacy and Terms links, which is the exact thing
-   Round 86 was complaining about when it un-stuck the action bar.
-
-   So instead of any of them being switched off, they all move. This returns how
-   many pixels the footer has climbed into the bottom of the window, and every
-   pinned control translates up by that much, coming to rest directly on top of
-   the footer rather than over it. Nobody loses a control and nobody loses a
-   link.
-
-   Measured live rather than derived from a class name, for the same reason
-   useRevealScroll measures its insets: the footer is App.tsx's, it is shared by
-   all 118 routes, and its height changes with the width of the screen because
-   the legal paragraph rewraps. 323px tall at 320 wide, less further up.
-
-   It reads on scroll behind a requestAnimationFrame, which is the whole cost:
-   one getBoundingClientRect per painted frame while the page is moving, and
-   nothing at all when it is still. It never writes to layout, only to a
-   transform, so it cannot feed back into what it just measured. That matters:
-   the version of this that toggled position instead of translating handed 60px
-   of height back to the document every time it fired, which moved the footer,
-   which un-fired it, which moved the footer back. */
-function useFooterLift(enabled: boolean): number {
-  const [lift, setLift] = useState(0);
-
-  useEffect(() => {
-    if (!enabled) { setLift(0); return; }
+/** Lift fixed career controls above the footer, clearing controls that would
+ * otherwise pass behind the top navigation on a short or enlarged viewport. */
+function useCareerDock(mainRef: RefObject<HTMLElement>, active: boolean, phase?: CareerState["phase"]) {
+  useLayoutEffect(() => {
+    const main = mainRef.current;
+    const footer = document.querySelector('footer[data-site-chrome]');
+    if (!main || !footer || !active) return;
+    const returnLink = footer.querySelector<HTMLAnchorElement>('[data-soccer-control-return]');
     let raf = 0;
+    let lastLift = -1;
     const measure = () => {
       raf = 0;
-      const foot = document.querySelector('footer');
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-      if (!foot) { setLift(0); return; }
-      /* Clamped at six tenths of the window so a page that is somehow almost
-         all footer cannot throw the controls off the top of the screen. It was
-         half until Round 286: the footer grew a row of sport hubs, and at 320
-         wide on an 844 tall screen it stands about 440px, so the half clamp
-         left the bar parked 17px into the footer at the very bottom of the
-         page. simMobileChrome measures exactly that. Round 1605 review:
-         while the cookie choices are unanswered the controls already stand
-         on the banner (its height is on the body), and the banner covers the
-         footer, so only footer above the banner counts and the clamp counts
-         the banner too. The two lifts used to add up and throw the bar off
-         the top of a 320 by 640 screen at the page end. */
-      const pending = document.body.dataset.consentPending != null;
-      const height = document.body.style.getPropertyValue('--dukb-consent-height');
-      const banner = pending ? (height ? parseFloat(height) || 0 : 230) : 0;
-      const next = Math.max(0, Math.min(Math.round(vh - foot.getBoundingClientRect().top - banner), Math.round(vh * 0.6 - banner)));
-      setLift((prev) => (prev === next ? prev : next));
+      const vh = window.innerHeight;
+      const footerTop = footer.getBoundingClientRect().top;
+      const offset = footerTop < vh ? topInset() : 0;
+      const controls = [...main.querySelectorAll<HTMLElement>('[data-career-action-bar], [data-career-utility]')];
+      const edges = footerTop < vh ? controls.map(control => {
+        const style = getComputedStyle(control);
+        return style.position === 'fixed' ? vh - (parseFloat(style.bottom) || 0) : 0;
+      }) : [];
+      const lift = Math.max(0, Math.ceil(Math.max(0, ...edges) - Math.max(0, footerTop)));
+      if (lift !== lastLift) {
+        main.style.setProperty('--career-footer-lift', `${-lift}px`);
+        lastLift = lift;
+      }
+      for (const [index, control] of controls.entries()) {
+        const edge = edges[index];
+        const pastTop = edge > 0 && footerTop < vh && (footerTop <= 0 || (lift > 0 && edge - lift - control.offsetHeight < offset));
+        if (pastTop && control.contains(document.activeElement)) returnLink?.focus();
+        control.toggleAttribute('data-career-dock-parked', pastTop);
+      }
     };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(measure); };
+    const schedule = () => { if (!raf) raf = requestAnimationFrame(measure); };
     measure();
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll);
-    /* the answer (or a new banner height) changes the lift without a scroll */
-    const consent = typeof MutationObserver !== 'undefined' ? new MutationObserver(onScroll) : null;
-    consent?.observe(document.body, { attributes: true, attributeFilter: ['data-consent-pending', 'style'] });
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    const size = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(schedule);
+    [main, footer, ...main.querySelectorAll('[data-career-action-bar], [data-career-utility]')].forEach(el => size?.observe(el));
+    const consent = new MutationObserver(schedule);
+    consent.observe(document.body, { attributes: true, attributeFilter: ['data-consent-pending', 'style'] });
     return () => {
-      if (raf) cancelAnimationFrame(raf);
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onScroll);
-      consent?.disconnect();
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', schedule);
+      window.removeEventListener('resize', schedule);
+      size?.disconnect();
+      consent.disconnect();
     };
-  }, [enabled]);
-
-  return lift;
+  }, [mainRef, active, phase]);
 }
-
 /* ─── Main Component ─── */
 type CareerSaveAcknowledgement = { career: CareerState; raw: string; candidate: CompletedRecordCandidate | null };
 /* Round 1330: the page's own toasts sit at the top centre, clear of the bar,
@@ -822,13 +799,12 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
      out of the academy byte for byte the save it always was. */
   const [academyReport, setAcademyReport] = useState<AcademyReport | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLElement>(null);
+  useCareerDock(mainRef, !!career, career?.phase);
   const internationalReturnAttempt = useRef<CareerState | null>(null);
   const farewellAnnouncement = useRef<CareerState | null>(null);
   const farewellAdvance = useRef<CareerState | null>(null);
   const transferRequestInFlight = useRef<CareerState | null>(null);
-  /* Round 1188: desktop keeps its dock and footer lift. On a phone these
-     controls live in the page, leaving the season buttons clear. */
-  const floatingButtonLift = useFooterLift(!!career);
 
   /* Score tracking on retirement. Round 644: the record is the legacy score
      the retirement screen and the share card show, out of 100. It used to be
@@ -1501,7 +1477,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
             },
           }}
       >
-        <main id="dukb-main" tabIndex={-1} className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
+        <main ref={mainRef} id="dukb-main" tabIndex={-1} className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
           {saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
           {career && saveFailed && (
             <div role="alert" data-soccer-save-status="failed" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm sm:flex sm:items-center sm:gap-4">
@@ -1523,21 +1499,20 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
             </div>
           )}
           {career && (
-            <div data-career-utilities className="mb-3 flex gap-2 sm:contents"
-              style={{ "--career-utility-lift": `${-floatingButtonLift}px` } as CSSProperties}>
+            <div data-career-utilities className="mb-3 flex gap-2 min-[1200px]:contents">
               {!career.retired && (
                 <button type="button" ref={trainingTriggerRef} data-career-utility="training"
                   onClick={() => setTrainingOpen(true)} aria-label="Open the training ground"
-                  className="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-[5.5rem] sm:[body[data-consent-pending]_&]:bottom-[calc(var(--dukb-consent-height,230px)_+_5.5rem)] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700">
-                  <span aria-hidden="true">🏋️</span><span className="sm:hidden">Training</span>
+                  className="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white min-[1200px]:fixed min-[1200px]:bottom-[5.5rem] min-[1200px]:[body[data-consent-pending]_&]:bottom-[calc(var(--dukb-consent-height,230px)_+_5.5rem)] min-[1200px]:right-4 min-[1200px]:z-40 min-[1200px]:w-14 min-[1200px]:h-14 min-[1200px]:flex-none min-[1200px]:px-0 min-[1200px]:text-2xl min-[1200px]:shadow-xl min-[1200px]:[translate:0_var(--career-footer-lift,0px)] data-[career-dock-parked]:invisible hover:bg-zinc-800 active:bg-zinc-700">
+                  <span aria-hidden="true">🏋️</span><span className="min-[1200px]:hidden">Training</span>
                   {trainingAvailable(career) && (
                     <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-zinc-900"><span className="sr-only">Drill ready</span></span>
                   )}
                 </button>
               )}
               <button type="button" data-career-utility="phone" onClick={() => setPhoneOpen(true)} aria-label="Open your phone"
-                className="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white sm:fixed sm:bottom-5 sm:[body[data-consent-pending]_&]:bottom-[calc(var(--dukb-consent-height,230px)_+_1.25rem)] sm:right-4 sm:z-40 sm:w-14 sm:h-14 sm:flex-none sm:px-0 sm:text-2xl sm:shadow-xl sm:[translate:0_var(--career-utility-lift)] hover:bg-zinc-800 active:bg-zinc-700">
-                <span aria-hidden="true">📱</span><span className="sm:hidden">Phone</span>
+                className="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white min-[1200px]:fixed min-[1200px]:bottom-5 min-[1200px]:[body[data-consent-pending]_&]:bottom-[calc(var(--dukb-consent-height,230px)_+_1.25rem)] min-[1200px]:right-4 min-[1200px]:z-40 min-[1200px]:w-14 min-[1200px]:h-14 min-[1200px]:flex-none min-[1200px]:px-0 min-[1200px]:text-2xl min-[1200px]:shadow-xl min-[1200px]:[translate:0_var(--career-footer-lift,0px)] data-[career-dock-parked]:invisible hover:bg-zinc-800 active:bg-zinc-700">
+                <span aria-hidden="true">📱</span><span className="min-[1200px]:hidden">Phone</span>
                 {unreadPhoneCount(career) > 0 && (
                   <span className="min-w-5 h-5 px-1 rounded-full bg-red-500 text-[11px] font-black text-black flex items-center justify-center sm:absolute sm:-top-1.5 sm:-right-1.5">
                     {unreadPhoneCount(career)}<span className="sr-only"> unread</span>
@@ -3304,83 +3279,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
      only youth and playing years, so in a pundit season it was a green button that did nothing (the
      10-28 reports). The three pundit actions in the panel are what move his year on. */
   const showActionButton = career.phase === "youth" || career.phase === "playing" || career.phase === "manager_season" || career.phase === "owner_season";
-  /* ─── Round 129: the controls that walked off when he scrolled ───
-
-     His report: "if I'm just on my screen and don't touch anything then I can
-     see the phone and next year and retire and what not. But if I scroll down
-     then it disappears."
-
-     MEASURED FIRST, on the built site at 390x844 with a real mid career save,
-     before anything was changed. The page is 8500px tall on an 844px screen.
-     The bar sat pinned to the bottom from scrollY 0 to about 2300, let go
-     somewhere before 2400, and from 3050 all the way to the end of the document
-     at 7656 there were no controls on the screen at all. That is 4600px, sixty
-     percent of everything he can scroll, with no Next Season and no Retire
-     anywhere. The site footer does not even begin until document y 8312, so for
-     nearly all of that dead zone he was still inside the game reading its own
-     How To Play and FAQ.
-
-     ROUND 86 WAS NOT WRONG, IT PICKED THE WRONG LANDMARK. Its rule was: float
-     the bar only while the bar's own natural position is still below the fold,
-     so that once you have scrolled past it the bar stops floating and can never
-     sit over the Privacy links as an invisible full width click shield. That
-     concern is real and it is still satisfied below. The flaw is where this
-     bar's natural position happens to be. It lives at the end of the career
-     panel, document y 3050 of 8500, so "you have scrolled past the bar" fires
-     at 36 percent of the page and the remaining 64 percent is game content, not
-     footer. The release was tied to the bar's own address instead of to the
-     thing it was supposed to keep clear of.
-
-     SO IT NOW WATCHES THE FOOTER ITSELF, the single global <footer> App.tsx
-     renders on every route. The bar rides the bottom of the screen for the
-     whole page, and the moment the footer climbs into the bottom of the window
-     the bar is lifted so it comes to rest directly on top of it. Lifted, not
-     hidden. The controls are reachable at every single scroll position on the
-     page, and the footer links are never underneath them, which is strictly
-     better than either of the two states we have shipped before.
-
-     THINGS TRIED AND THROWN AWAY, with the numbers that killed them.
-
-     One, keep the fixed/inline switch and just move the trigger to the footer.
-     It oscillates, and this is the whole reason the answer is a transform.
-     Going from fixed back into the flow hands 60px of measured height back to
-     the document, which pushes the footer 60px further down, which un-triggers
-     the observer, which re-pins, which pulls the footer back up. A bar
-     flickering through a 60px band of scroll. Two observers 200px apart would
-     have given enough hysteresis to cover a 60px shift, but that is two
-     observers plus a magic gap that has to stay bigger than a height nobody
-     will remember to re-measure.
-
-     Two, hide it (translate it off the bottom) once the footer shows. No
-     oscillation, because a transform costs the layout nothing, but the controls
-     still vanish at the end of the page. That is his exact complaint moved 5000
-     pixels further down rather than fixed.
-
-     Three, delete the JS and use position: sticky; bottom: 0. This is the right
-     shape, and it is why what follows behaves like sticky. It cannot work here:
-     a sticky box is clamped to its containing block, this bar's containing
-     block is the career panel, and the panel ends at 3135. Sticky would have
-     released at the same place the old code did, give or take 85px. Making it
-     work means lifting the bar out of the dashboard and rendering it as a
-     sibling of the SEO block, which is a large refactor of a 3100 line file to
-     solve a 30 line problem.
-
-     What is left is this: measure where the footer's top edge is on each scroll
-     frame and translate the bar up by however much of it is in the way. It
-     never touches layout, so nothing it does can feed back into what it
-     measures, so it cannot oscillate. If the footer ever disappears the lift is
-     zero and the bar simply stays pinned at the bottom, which is the safe
-     failure.
-
-     ONE AGREEMENT TO KEEP. useRevealScroll subtracts pinned bottom bars from
-     the readable window before deciding whether newly revealed content needs
-     scrolling to, and Round 128 measured this bar at 85px at 390 wide. A
-     transform leaves position: fixed and the height alone, so that reading is
-     unchanged while the bar is down at the bottom, and once it has been lifted
-     clear of the bottom edge the hook stops counting it, which is right,
-     because at that point it is not covering anything down there. */
   const actionBarFloats = showActionButton || career.phase === "retired";
-  const footerLift = useFooterLift(actionBarFloats);
   // Coming back out of the attributes screen lands at the top of the career page.
   const screenRef = useRevealScroll<HTMLDivElement>(attrsOpen ? "attrs" : "career");
   /* Round 1330: Begin Career lands on the player card, once, before the first paint. */
@@ -4152,21 +4051,9 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           narrower, the gaps, the side padding and the labels step down one
           size and the decorative chevron goes. No label is cut or shortened
           and none changes its name, and the bar stays one row. */}
-      {/* Round 86: the bar only floats when it actually has buttons to offer.
-          In button-less phases it stays inline, so no orphan AGE tile ever
-          hovers over the page blocking clicks. That rule is untouched.
-          Round 129: when it does float it now floats for the whole page and
-          steps up onto the footer instead of vanishing. The old 1px sentinel
-          and its IntersectionObserver are gone with it. The measurements are in
-          the long note above actionBarFloats, and the lift itself is in
-          useFooterLift near the top of this file, shared with the training and
-          phone buttons because they were parked on the footer too.
-          Release BS fix: while the cookie choices are unanswered the floating bar sits on top of them
-          (the banner sets data-consent-pending and its height on the body), so Next is never hidden. */}
       <div
         data-career-action-bar={actionBarFloats ? 'floating' : 'inline'}
-        className={`flex items-center gap-3 max-[399px]:gap-2 ${actionBarFloats ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 max-[399px]:px-2 sm:px-4 py-3 max-w-5xl mx-auto [body[data-consent-pending]_&]:bottom-[var(--dukb-consent-height,230px)]' : ''}`}
-        style={actionBarFloats && footerLift ? { transform: `translateY(-${footerLift}px)` } : undefined}
+        className={`flex items-center gap-3 max-[399px]:gap-2 ${actionBarFloats ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 max-[399px]:px-2 sm:px-4 py-3 max-w-5xl mx-auto [translate:0_var(--career-footer-lift,0px)] data-[career-dock-parked]:invisible [body[data-consent-pending]_&]:bottom-[var(--dukb-consent-height,230px)]' : ''}`}
       >
         {career.phase === "retired" ? (
           <div className="flex-1 min-w-0 flex gap-2">

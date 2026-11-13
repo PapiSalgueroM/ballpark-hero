@@ -6,7 +6,7 @@ import { GameAdInventory } from './GameAdInventory';
 
 it('mounts the empty inventory after the game footer and excludes site pages', () => {
   const app = readFileSync('src/App.tsx', 'utf8');
-  const placedAfterFooter = /<Footer \/>\s*\{gameRoute && <GameAdInventory \/>\}/.test(app);
+  const placedAfterFooter = /\{normalizeRoutePath\(pathname\) === "\/soccer-career" \? <Footer soccerControls \/> : <Footer \/>\}\s*\{gameRoute && <GameAdInventory \/>\}/.test(app);
   expect(placedAfterFooter).toBe(true);
   expect(['/club-manager', '/nba-my-career', '/nrl-team-manager', '/nrl-team-manager/'].every(isGameRoute)).toBe(true);
   expect(['/', '/soccer', '/pro-basketball', '/about', '/contact', '/privacy', '/terms'].some(isGameRoute)).toBe(false);
