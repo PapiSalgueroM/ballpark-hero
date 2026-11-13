@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
 import {
-  createNrlCareer, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerSquad, nrlContractOffer,
+  createNrlCareer, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerSquad, nrlContractCounteroffer, nrlContractOffer,
   readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { createNrlSeason, nrlLadder, NRL_ROLES, reduceNrlSeason } from '@/lib/nrlManager';
@@ -115,6 +115,75 @@ describe('NRL Manager career', () => {
     const older = { ...state, players: state.players.map(player => player.id === veteran.id ? veteran : player) };
     expect(nrlCareerMarket(older).some(item => item.player.id === veteran.id)).toBe(false);
     expect(nrlContractOffer(older, veteran.id, entry.askingSalary, 2)).toMatchObject({ ok: false });
+  });
+
+  it.each([
+    ['storm-2-0', 610_000, 579_500, 2029, 'renewal'],
+    ['nrl-broncos-2026-0', 585_000, 555_750, 2027, 'rival'],
+    ['nrl-market-2026-0-0', 255_000, 242_250, 2027, 'freeAgent'],
+  ] as const)('reserves future cap when %s accepts an exact three-season counteroffer', (playerId, ask, salary, startYear, kind) => {
+    const state = createNrlCareer('storm', 17);
+    const market = nrlCareerMarket(state).find(entry => entry.player.id === playerId)!;
+    expect(market).toMatchObject({ askingSalary: ask, kind });
+    const listed = kind === 'renewal' ? state : reduceNrlCareer(state, { type: 'setShortlist', playerId, year: 2026, saved: true });
+    const raw = JSON.stringify(listed);
+    const contract = { clubId: 'storm', startYear, endYear: startYear + 2, salary };
+    const bid = ask - 50_000;
+    expect(nrlContractOffer(listed, playerId, salary, 3)).toMatchObject({ ok: false });
+    expect(reduceNrlCareer(listed, { type: 'offerContract', playerId, salary, years: 3 })).toBe(listed);
+    expect(nrlContractCounteroffer(listed, playerId, bid)).toEqual({ ok: true, contract });
+    expect(JSON.stringify(listed)).toBe(raw);
+
+    const accept = { type: 'acceptCounteroffer', playerId, year: 2026, offeredSalary: bid, contract } as const;
+    expect(reduceNrlCareer(listed, { ...accept, contract: { ...contract, salary: salary - 1 } })).toBe(listed);
+    expect(reduceNrlCareer(listed, { ...accept, contract: { ...contract, endYear: startYear + 1 } })).toBe(listed);
+    expect(reduceNrlCareer(listed, { ...accept, contract: { ...contract, clubId: 'broncos' } })).toBe(listed);
+    expect(reduceNrlCareer(listed, { ...accept, offeredSalary: ask })).toBe(listed);
+    expect(reduceNrlCareer(listed, { ...accept, year: 2027 })).toBe(listed);
+
+    const signed = reduceNrlCareer(listed, accept);
+    expect(signed.players.find(player => player.id === playerId)).toMatchObject({ contract: market.player.contract, futureContract: contract });
+    expect(signed.shortlist).toBeUndefined();
+    expect(signed.season).toBe(listed.season);
+    expect(signed.finance).toBe(listed.finance);
+    for (let year = startYear; year <= startYear + 2; year++) {
+      expect(nrlCareerCap(signed, year).committed - nrlCareerCap(listed, year).committed).toBe(salary);
+    }
+    expect(readNrlCareerSave(JSON.stringify(signed))).toEqual(signed);
+    expect(reduceNrlCareer(signed, accept)).toBe(signed);
+    if (startYear === 2027) expect(nrlCareerSquad(next(finish(signed))).find(player => player.id === playerId)?.contract).toEqual(contract);
+  });
+
+  it('refuses counteroffers below the modeled minimum, without a genuine discount, or after a competing cap commitment', () => {
+    const state = createNrlCareer('storm', 17);
+    const playerId = 'nrl-broncos-2026-0';
+    const offeredSalary = 535_000;
+    const contract = { clubId: 'storm', startYear: 2027, endYear: 2029, salary: 555_750 };
+    const accept = { type: 'acceptCounteroffer', playerId, year: 2026, offeredSalary, contract } as const;
+    const cap = nrlCareerCap(state, 2027);
+    const committed = reduceNrlCareer(state, { type: 'offerContract', playerId: 'nrl-market-2026-0-0', salary: cap.available + cap.minimumSalary, years: 1 });
+    expect(committed).not.toBe(state);
+    expect(nrlContractCounteroffer(state, playerId, cap.minimumSalary - 1)).toMatchObject({ ok: false });
+    expect(nrlContractCounteroffer(state, 'nrl-market-2026-11-1', cap.minimumSalary)).toMatchObject({ ok: false });
+    expect(nrlContractCounteroffer(state, playerId, 580_000)).toEqual({ ok: true, contract: { ...contract, salary: 580_000 } });
+    const cappedLater = reduceNrlCareer(state, {
+      type: 'offerContract', playerId: 'storm-2-0', salary: nrlCareerCap(state, 2029).available + cap.minimumSalary, years: 1,
+    });
+    expect(cappedLater).not.toBe(state);
+    expect(nrlContractCounteroffer(cappedLater, playerId, offeredSalary)).toEqual({ ok: false, reason: 'This offer exceeds the 2029 salary cap.' });
+    expect(reduceNrlCareer(cappedLater, accept)).toBe(cappedLater);
+    expect(nrlContractCounteroffer(committed, playerId, offeredSalary)).toEqual({ ok: false, reason: 'This offer exceeds the 2027 salary cap.' });
+    expect(reduceNrlCareer(committed, accept)).toBe(committed);
+    const live = reduceNrlCareer(state, { type: 'startLive' });
+    expect(live.season.live).toBeDefined();
+    expect(nrlContractCounteroffer(live, playerId, offeredSalary)).toMatchObject({ ok: false });
+    expect(reduceNrlCareer(live, accept)).toBe(live);
+    const retired = { ...finish(state), retired: true } as const;
+    expect(nrlContractCounteroffer(retired, playerId, offeredSalary)).toMatchObject({ ok: false });
+    expect(reduceNrlCareer(retired, accept)).toBe(retired);
+    const imported = readNrlCareerSave(JSON.stringify(createNrlSeason('storm', 17)))!;
+    expect(nrlContractCounteroffer(imported, playerId, offeredSalary)).toMatchObject({ ok: false });
+    expect(reduceNrlCareer(imported, accept)).toBe(imported);
   });
 
   it('reconciles yearly cash and rejects corrupted roster, fixture and ledger data', () => {

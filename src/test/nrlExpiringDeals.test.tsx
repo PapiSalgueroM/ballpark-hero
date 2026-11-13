@@ -69,6 +69,67 @@ afterEach(() => {
 });
 
 describe('NRL season review for expiring deals', () => {
+  const requestCounteroffer = (editor: ReturnType<typeof within>) => {
+    fireEvent.change(editor.getByRole('spinbutton', { name: 'Annual salary (AUD)' }), { target: { value: String(renewal.askingSalary - 50_000) } });
+    expect(editor.getByRole('button', { name: 'Agree contract' })).toBeDisabled();
+    fireEvent.click(editor.getByRole('button', { name: 'Request counteroffer' }));
+    return editor.getByRole('button', { name: 'Accept counteroffer' });
+  };
+
+  it('shows the three-season trade before writing and saves only an accepted counteroffer', () => {
+    open(withMove);
+    const editor = editRenewal();
+    const ask = renewal.askingSalary;
+    const before = raw();
+    const proposal = () => {
+      const accept = requestCounteroffer(editor);
+      expect(editor.getByText(/lower annual salary.*three seasons/i)).toBeVisible();
+      expect(raw()).toBe(before);
+      expect(localStorage.getItem(fence)).toBe('4');
+      return accept;
+    };
+    proposal();
+    fireEvent.click(editor.getByRole('button', { name: 'Decline counteroffer' }));
+    expect(editor.queryByRole('button', { name: 'Accept counteroffer' })).toBeNull();
+    expect(raw()).toBe(before);
+    fireEvent.click(proposal());
+    expect(editor.getByText('Renewed')).toBeVisible();
+    expect(localStorage.getItem(fence)).toBe('5');
+    const agreed = readNrlCareerSave(raw()!)!.players.find(player => player.id === renewal.player.id)!.futureContract;
+    expect(agreed).toEqual({ clubId: 'storm', startYear: 2027, endYear: 2029, salary: Math.ceil(ask * 95 / 100) });
+    click('Start 2027');
+    expect(nrlCareerSquad(readNrlCareerSave(raw()!)!).find(player => player.id === renewal.player.id)?.contract).toEqual(agreed);
+    expect(localStorage.getItem(fence)).toBe('6');
+  });
+
+  it('keeps a competing save and recovers a quota-refused counteroffer through the existing retry', () => {
+    const first = open(withMove);
+    const accept = requestCounteroffer(editRenewal());
+    const newer = JSON.stringify(stay(withMove));
+    localStorage.setItem(NRL_SAVE_KEY, newer);
+    fireEvent.click(accept);
+    expect(raw()).toBe(newer);
+    expect(localStorage.getItem(fence)).toBe('4');
+    expect(button('Reload your season')).toBeVisible();
+    first.unmount();
+
+    open(withMove);
+    const pending = requestCounteroffer(editRenewal());
+    const setItem = Storage.prototype.setItem;
+    const quota = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key === NRL_SAVE_KEY) throw new DOMException('Quota full', 'QuotaExceededError');
+      setItem.call(this, key, value);
+    });
+    fireEvent.click(pending);
+    expect(raw()).toBe(JSON.stringify(withMove));
+    expect(localStorage.getItem(fence)).toBe('4');
+    quota.mockRestore();
+    click('Retry save');
+    expect(localStorage.getItem(fence)).toBe('5');
+    expect(readNrlCareerSave(raw()!)!.players.find(player => player.id === renewal.player.id)!.futureContract)
+      .toEqual({ clubId: 'storm', startYear: 2027, endYear: 2029, salary: Math.ceil(renewal.askingSalary * 95 / 100) });
+  });
+
   it('shows only current expiries and reuses the exact capped offer and rollover', () => {
     const unsigned = nrlCareerSquad(withMove).filter(player => player.contract?.endYear === 2026 && !player.futureContract);
     open(withMove);
