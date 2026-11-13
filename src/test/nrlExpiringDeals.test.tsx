@@ -70,6 +70,33 @@ afterEach(() => {
 });
 
 describe('NRL season review for expiring deals', () => {
+  it('previews a paid coaching course without saving and resumes the confirmed plan', () => {
+    const hired = reduceNrlCareer(createNrlCareer('storm', 4), { type: 'hireCoach', role: 'attack', year: 2026, round: 1 });
+    const view = open(hired);
+    const staff = () => {
+      click('Finances');
+      screen.getByText('Coaching staff').closest('details')!.open = true;
+    };
+    staff();
+    const before = raw();
+    click('Review coaching course');
+    expect(screen.getByText(/four regular rounds/i)).toBeVisible();
+    expect(screen.getByText(/if you retain the assistant and stay/i)).toBeVisible();
+    expect(raw()).toBe(before);
+    click('Cancel course preview');
+    expect(raw()).toBe(before);
+    click('Review coaching course');
+    click('Confirm coaching course');
+    const paid = raw()!;
+    expect(readNrlCareerSave(paid)?.finance.coachCourseRound).toBe(1);
+    expect(screen.getByText(/4 regular rounds left/i)).toBeVisible();
+    view.unmount();
+    open(paid);
+    staff();
+    expect(screen.getByText(/4 regular rounds left/i)).toBeVisible();
+    expect(raw()).toBe(paid);
+  });
+
   it('previews, confirms and cancels staff retention before moving clubs', () => {
     const hired = reduceNrlCareer(createNrlCareer('storm', 4), { type: 'hireCoach', role: 'attack', year: 2026, round: 1 });
     const closed = finish(hired);

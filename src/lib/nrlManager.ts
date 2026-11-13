@@ -20,6 +20,7 @@ export const NRL_RESERVE_GRADE_ROUNDS = 4;
 export const NRL_MAX_BENCH_USED = 4;
 export const NRL_FINALS_SPOTS = 8;
 export const NRL_COACHING_BONUS = 2;
+export const NRL_QUALIFIED_COACHING_BONUS = 3;
 const MAX_INJURY_ROUNDS = 4;
 const UTILITY_RATING_COST = 12;
 const GOLDEN_POINT_SCORE_CHANCE = 0.78;
@@ -39,6 +40,7 @@ type NrlPreparationAction =
 interface NrlRoundOptions {
   medicalReduction?: number;
   coachRole?: NrlCoachRole;
+  coachBonus?: number;
   planRivalRatings?: ReadonlyMap<NrlRole, number>;
 }
 
@@ -504,15 +506,15 @@ export function nrlPlanAdjustments(state: NrlManagerState, rival: ReadonlyMap<Nr
 }
 
 function teamRatings(state: NrlManagerState, clubId: string, opponentStrength: ReadonlyMap<string, number> | undefined,
-  rotation: ReadonlyMap<string, NrlPlayer>, { coachRole, planRivalRatings }: NrlRoundOptions) {
+  rotation: ReadonlyMap<string, NrlPlayer>, { coachRole, coachBonus = NRL_COACHING_BONUS, planRivalRatings }: NrlRoundOptions) {
   if (clubId !== state.clubId) {
     const strength = opponentStrength?.get(clubId) ?? clubFor(state.year, clubId)!.strength;
     return { attack: strength, defense: strength };
   }
   const base = matchdayBase(state, rotation);
   const { attack, defense } = TACTIC_EFFECT[state.tactic];
-  const attackCoaching = coachRole === 'attack' && state.tactic === 'attack' ? NRL_COACHING_BONUS : 0;
-  const defenseCoaching = coachRole === 'defense' && state.tactic === 'defense' ? NRL_COACHING_BONUS : 0;
+  const attackCoaching = coachRole === 'attack' && state.tactic === 'attack' ? coachBonus : 0;
+  const defenseCoaching = coachRole === 'defense' && state.tactic === 'defense' ? coachBonus : 0;
   const ordinary = {
     attack: base + attack + (state.preparation === 'train' ? 7 : 0) + attackCoaching,
     defense: base + defense + (state.preparation === 'defensiveDrills' ? 7 : 0) + defenseCoaching,

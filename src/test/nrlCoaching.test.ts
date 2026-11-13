@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   createNrlCareer, nrlCareerCap, nrlCareerFinance, nrlCoachQuote, nrlMedicalUpgradeQuote, nrlOppositionReport, readNrlCareerSave,
-  nrlCoachRetentionQuote, nrlCoachSpend, nrlMutualReleaseQuote, nrlCareerSquad, reduceNrlCareer, type NrlCareerState,
+  nrlCoachCourseQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlMutualReleaseQuote, nrlCareerSquad, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { createNrlSeason, nrlNextRound, type NrlCoachRole } from '@/lib/nrlManager';
 
@@ -17,8 +17,93 @@ function finish(career: NrlCareerState) {
   while (career.season.phase !== 'complete') career = advance(career);
   return career;
 }
+const enrol = (career: NrlCareerState) => reduceNrlCareer(career, {
+  type: 'startCoachCourse', year: career.season.year, clubId: career.season.clubId, round: career.season.round,
+});
 
 describe('NRL assistant coaching', () => {
+  it.each([[2026, 'storm', 'attack', 5], [2027, 'bears', 'defense', 14]] as const)(
+    'funds the %i assistant course and applies the earned rating only to the retained assistant and tactic',
+    (year, club, role, seed) => {
+      const initial = createNrlCareer(club, seed, year);
+      expect(enrol(initial)).toBe(initial);
+      const hired = hire(initial, role);
+      const plainCourse = nrlCoachCourseQuote(hired);
+      expect(plainCourse).toMatchObject({ reason: null, remaining: 4 });
+      expect(plainCourse.fee).toBeGreaterThan(0);
+      const started = enrol(hired);
+      expect(started.season).toBe(hired.season);
+      expect(nrlCareerFinance(started).cash).toBe(nrlCareerFinance(hired).cash - plainCourse.fee);
+      expect(enrol(started)).toBe(started);
+      expect(readNrlCareerSave(raw(started))).toEqual(started);
+      let chosen = started, control = hired;
+      for (let remaining = 3; remaining >= 0; remaining--) {
+        chosen = advance(chosen); control = advance(control);
+        expect(chosen.season).toEqual(control.season);
+        expect(nrlCoachCourseQuote(chosen).remaining).toBe(remaining);
+      }
+      const complete = finish(chosen), ordinary = finish(control);
+      expect(complete.season).toEqual(ordinary.season);
+      const plain = reduceNrlCareer(retain(ordinary), { type: 'startNextSeason' });
+      const trained = reduceNrlCareer(retain(complete), { type: 'startNextSeason' });
+      expect(trained.finance.coachHire).toEqual({ role, round: 1, paidRounds: 0, retained: true, qualified: true });
+      expect(trained.history.at(-1)?.finance?.coachCourseRound).toBe(1);
+      expect(nrlCoachQuote(trained).current).toEqual(nrlCoachQuote(complete).current);
+      expect(nrlCoachSpend(trained.finance)).toEqual(nrlCoachSpend(plain.finance));
+      const roleEdge = role === 'attack' ? 'attackEdge' : 'defenseEdge';
+      const apply = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'setTactic', tactic: role });
+      expect(nrlOppositionReport(trained)).toEqual(nrlOppositionReport(plain));
+      expect(nrlOppositionReport(apply(trained))![roleEdge] - nrlOppositionReport(apply(plain))![roleEdge]).toBeCloseTo(1);
+      const live = reduceNrlCareer(apply(trained), { type: 'startLive' });
+      const ordinaryLive = reduceNrlCareer(apply(plain), { type: 'startLive' });
+      expect(live.season.live).toBeDefined();
+      expect(readNrlCareerSave(raw(live))).toEqual(live);
+      expect(live.season.live).not.toEqual(ordinaryLive.season.live);
+      expect(readNrlCareerSave(raw({ ...live, season: { ...live.season, live: ordinaryLive.season.live } }))).toBeNull();
+      const quick = advance(apply(trained));
+      const ordinaryQuick = advance(apply(plain));
+      const isManaged = (result: typeof quick.season.results[number]) => result.homeId === club || result.awayId === club;
+      expect(quick.season.results.find(isManaged)).not.toEqual(ordinaryQuick.season.results.find(isManaged));
+      expect(quick.season.results.filter(result => !isManaged(result))).toEqual(ordinaryQuick.season.results.filter(result => !isManaged(result)));
+      expect(reduceNrlCareer(live, { type: 'finishLive', year: year + 1, round: 1, tactic: role })).toEqual(quick);
+      const moved = reduceNrlCareer(retain(complete), { type: 'startNextSeason', move: { fromYear: year, clubId: year === 2026 ? 'bears' : 'chiefs' } });
+      expect(moved.finance.coachHire).toBeUndefined();
+      expect(moved.history.at(-1)?.finance?.coachCourseRound).toBe(1);
+      expect(readNrlCareerSave(raw(moved))).toEqual(moved);
+      expect(reduceNrlCareer(complete, { type: 'startNextSeason' }).finance.coachHire).toBeUndefined();
+      expect(readNrlCareerSave(raw(trained))).toEqual(trained);
+      expect(nrlCoachCourseQuote(trained).reason).toMatch(/cannot carry/);
+      expect(enrol(trained)).toBe(trained);
+      const forged = { ...plain, finance: { ...plain.finance, coachHire: { ...plain.finance.coachHire!, qualified: true } } };
+      expect(readNrlCareerSave(JSON.stringify(forged))).toBeNull();
+    },
+  );
+
+  it('protects reserved wages and needs four regular rounds, with live and stale decisions refused', () => {
+    const initial = createNrlCareer('storm', 5, 2026);
+    const development = reduceNrlCareer(initial, { type: 'hireCoach', role: 'development', year: 2026, clubId: 'storm', round: 1 });
+    expect(enrol(development)).toBe(development);
+    const hired = hire(initial, 'attack');
+    const { fee } = nrlCoachCourseQuote(hired);
+    const short = { ...hired, finance: { ...hired.finance, openingCash: hired.finance.openingCash + fee - nrlCareerFinance(hired).cash } };
+    expect(nrlCareerFinance(short).cash).toBe(fee);
+    expect(nrlCoachCourseQuote(short).reason).toMatch(/assistant.*wages/i);
+    expect(enrol(short)).toBe(short);
+    const live = reduceNrlCareer(hired, { type: 'startLive' });
+    expect(live.season.live).toBeDefined();
+    expect(enrol(live)).toBe(live);
+    expect(reduceNrlCareer(hired, { type: 'startCoachCourse', year: 2026, clubId: 'storm', round: 2 })).toBe(hired);
+    let late = hired;
+    while (late.season.round < 24) late = advance(late);
+    expect(nrlCoachCourseQuote(late).reason).toBeNull();
+    const enrolled = enrol(late);
+    expect(readNrlCareerSave(raw(enrolled))).toEqual(enrolled);
+    late = advance(late);
+    expect(nrlCoachCourseQuote(late).reason).toMatch(/four regular-season rounds/);
+    expect(enrol(late)).toBe(late);
+    expect(nrlCoachCourseQuote(finish(enrolled)).remaining).toBe(0);
+  });
+
   it.each([[2026, 'storm'], [2027, 'bears']] as const)(
     'keeps the %i assistant for one extra year without a fresh hire fee',
     (year, club) => {

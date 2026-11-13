@@ -23,12 +23,12 @@ import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlLadder, nrlMatchdaySelection, nrlNextRound,
   nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
-  NRL_BENCH_SIZE, NRL_COACHING_BONUS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
+  NRL_BENCH_SIZE, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer, nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining,
-  nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad, nrlTacticalAssistant, nrlWorldCupAppointmentAvailable,
+  nrlCoachTactics, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad, nrlWorldCupAppointmentAvailable,
   NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, type NrlCareerAction, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
@@ -69,8 +69,8 @@ const attackPlanChoices: readonly { id: NrlAttackPlan; label: string }[] = [
   { id: 'wide', label: 'Shift wide' },
 ];
 const attackPlanLabel = (plan: NrlAttackPlan) => attackPlanChoices.find(choice => choice.id === plan)?.label ?? 'Standard';
-const coachTacticNote = (role: NrlCoachRole | undefined, tactic: NrlTactic) => role === tactic
-  ? ` Your assistant adds +${NRL_COACHING_BONUS} ${role === 'attack' ? 'attack' : 'defence'} rating.` : '';
+const coachTacticNote = (role: NrlCoachRole | undefined, bonus: number, tactic: NrlTactic) => role === tactic
+  ? ` Your assistant adds +${bonus} ${role === 'attack' ? 'attack' : 'defence'} rating.` : '';
 
 function shortName(year: number, id: string) {
   return nrlSeasonPlan(year).clubs.find(club => club.id === id)?.shortName ?? id;
@@ -152,9 +152,9 @@ function scoreLine(result: NrlMatchResult, year: number) {
   return `${shortName(year, result.homeId)} ${result.homeScore}–${result.awayScore} ${shortName(year, result.awayId)}`;
 }
 
-function LiveHalftime({ live, season, title, onAction, disabled, coachRole }: {
+function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coachBonus }: {
   live: NrlLiveHalf; season: NrlManagerState; title: string;
-  onAction: (action: NrlAction) => void; disabled: boolean; coachRole?: NrlCoachRole;
+  onAction: (action: NrlAction) => void; disabled: boolean; coachRole?: NrlCoachRole; coachBonus: number;
 }) {
   const { year, tactic: openingTactic, squad } = season;
   const [tactic, setTactic] = useState(openingTactic);
@@ -194,7 +194,7 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole }: {
             </Button>
           ))}
         </div>
-        <p className="mt-2 text-sm text-muted-foreground">{tactics.find(option => option.id === tactic)?.description}{coachTacticNote(coachRole, tactic)}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{tactics.find(option => option.id === tactic)?.description}{coachTacticNote(coachRole, coachBonus, tactic)}</p>
         {season.attackPlan && <p className="mt-2 text-sm">Attack plan: {attackPlanLabel(season.attackPlan)}. Locked for this match.</p>}
         {season.preparation === 'defensiveDrills' && <p className="mt-2 text-sm">Defensive drills apply through the second half.</p>}
       </div>
@@ -392,10 +392,10 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
   const { season } = career;
   const next = nrlNextRound(season);
   const { clubId, year, phase, championId } = season;
-  const coachRole = nrlTacticalAssistant(career.finance);
+  const { coachRole, coachBonus } = nrlCoachTactics(career.finance);
   const [hold, setHold] = useState<{ year: number; round: number; reserveId: string }>();
   if (season.live) {
-    return <LiveHalftime live={season.live} season={season} title={next.title} onAction={onAction} disabled={disabled} coachRole={coachRole} />;
+    return <LiveHalftime live={season.live} season={season} title={next.title} onAction={onAction} disabled={disabled} coachRole={coachRole} coachBonus={coachBonus} />;
   }
   const club = shortName(year, clubId);
   const match = next.clubMatch;
@@ -513,7 +513,7 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
                   aria-pressed={season.tactic === tactic.id} onClick={() => onAction({ type: 'setTactic', tactic: tactic.id })}>{tactic.label}</Button>
               ))}
             </div>
-            <p className="mt-2 text-sm text-muted-foreground">{tactics.find(tactic => tactic.id === season.tactic)?.description}{coachTacticNote(coachRole, season.tactic)}</p>
+            <p className="mt-2 text-sm text-muted-foreground">{tactics.find(tactic => tactic.id === season.tactic)?.description}{coachTacticNote(coachRole, coachBonus, season.tactic)}</p>
             <AttackPlan key={`${year}:${next.round}`} career={career} onAction={onAction} disabled={disabled} />
           </div>
           <div className="rounded-xl border border-border bg-card p-4">
