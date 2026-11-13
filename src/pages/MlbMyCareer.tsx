@@ -21,7 +21,7 @@ const MlbMyCareer = () => {
       <div className="min-h-screen bg-background text-foreground">
         <GameNavbar />
         <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp firstVisit extraRules={[...mlbHallHelpRules(), US_BANK_HELP_RULE, US_COACH_RETIRE_HELP_RULE, US_DIRTY_MONEY_HELP_RULE, US_SHOP_HELP_RULE]} className="inline-flex min-h-11 min-w-11 items-center justify-center" /></div>
-        <main id="dukb-main" className="container max-w-2xl mx-auto px-4 py-6 pb-20">
+        <main id="dukb-main" tabIndex={-1} className="container max-w-2xl mx-auto px-4 py-6 pb-20">
           <div className="text-center mb-4">
             <h1 className="text-2xl font-display font-bold text-primary">MLB My Career</h1>
             <p className="text-xs text-muted-foreground mt-1">

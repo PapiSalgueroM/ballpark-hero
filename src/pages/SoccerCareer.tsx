@@ -1501,7 +1501,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
             },
           }}
       >
-        <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
+        <main id="dukb-main" tabIndex={-1} className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
           {saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
           {career && saveFailed && (
             <div role="alert" data-soccer-save-status="failed" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm sm:flex sm:items-center sm:gap-4">

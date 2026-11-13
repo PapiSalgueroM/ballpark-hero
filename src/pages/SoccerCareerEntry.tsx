@@ -35,7 +35,7 @@ function FreshSoccerCareer({ onBegin }: { onBegin: (draft: SoccerCareerDraft) =>
         phase: "creation", age: null, position: null, overall: null, derivedOverall: null, skills: null,
         seasonCount: 0, lastSeason: null, saveFailed: false, saveMoved, saveError: false,
       } }}>
-        <main id="dukb-main" className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
+        <main id="dukb-main" tabIndex={-1} className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
           {saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
           <Button ref={pastCareersTrigger} variant="outline" className="mb-3 min-h-11 w-full whitespace-normal" onClick={openPastCareers}>Past careers</Button>
           <SoccerCareerCreator initialSupport={loaded?.getCreationSupport()} loadSupport={loadCreationSupport} onBegin={onBegin} />
@@ -52,7 +52,7 @@ export default function SoccerCareerEntry() {
   const starting = useRef(false);
 
   if (saved !== null) return (
-    <Suspense fallback={<main id="dukb-main" role="status" className="mx-auto min-h-svh p-4 text-sm text-muted-foreground">Opening your career...</main>}>
+    <Suspense fallback={<main id="dukb-main" tabIndex={-1} role="status" className="mx-auto min-h-svh p-4 text-sm text-muted-foreground">Opening your career...</main>}>
       <SavedSoccerCareer entry={{ saved }} />
     </Suspense>
   );

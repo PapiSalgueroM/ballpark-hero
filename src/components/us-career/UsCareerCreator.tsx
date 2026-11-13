@@ -65,7 +65,7 @@ export default function UsCareerCreator({ sport, create, draft, setDraft, onBegi
               key={e.id}
               onClick={() => patchDraft({ eraId: e.id })}
               className={cn(
-                'rounded-xl border-2 px-3 py-2 text-left',
+                'rounded-xl border-2 px-3 py-2 text-left [overflow-wrap:anywhere]',
                 eraId === e.id ? 'border-gold bg-gold/10' : 'border-border bg-card hover:border-primary/50',
               )}
             >
