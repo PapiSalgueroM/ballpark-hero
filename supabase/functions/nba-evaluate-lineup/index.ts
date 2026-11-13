@@ -47,8 +47,6 @@ setInterval(() => {
   }
 }, 300_000);
 
-const SAFE_TEXT = /^[\p{L}\p{N} .,'&()+\/%:-]{1,60}$/u;
-
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
 
@@ -70,10 +68,7 @@ serve(async (req) => {
     const { players, challenge } = body;
 
     // Input validation
-    if (!challenge || typeof challenge !== "object" || !challenge.stat || !challenge.direction ||
-      typeof challenge.stat !== "string" || !SAFE_TEXT.test(challenge.stat) ||
-      (challenge.unit != null && (typeof challenge.unit !== "string" || (challenge.unit !== "" && !SAFE_TEXT.test(challenge.unit)))) ||
-      (challenge.direction !== "highest" && challenge.direction !== "lowest")) {
+    if (!challenge || typeof challenge !== "object" || !challenge.stat || !challenge.direction) {
       return new Response(JSON.stringify({ error: "Invalid challenge" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -88,8 +83,7 @@ serve(async (req) => {
     for (const p of players) {
       if (
         typeof p !== "object" || !p ||
-        typeof p.label !== "string" || p.label.length > 10 || !SAFE_TEXT.test(p.label) ||
-        !SAFE_TEXT.test(p.playerName) || !SAFE_TEXT.test(p.assignedTeam) ||
+        typeof p.label !== "string" || p.label.length > 10 ||
         typeof p.playerName !== "string" || p.playerName.length > 100 ||
         typeof p.assignedTeam !== "string" || p.assignedTeam.length > 100
       ) {
