@@ -142,7 +142,7 @@ function WorldEditorTile({ movedCount, onOpen }: { movedCount: number; onOpen: (
 
 function ScreenLoading({ children, compact = false, setup = false, hub = false }: { children: ReactNode; compact?: boolean; setup?: boolean; hub?: boolean }) {
   return (
-    <Suspense fallback={compact ? <span role="status" className="text-xs text-muted-foreground">Loading...</span> : <div role="status" data-cm-hub-loading={hub || undefined} className={cn("min-h-48 py-12 text-center text-sm text-muted-foreground", setup && "max-sm:min-h-[max(12rem,65svh)]")}>Loading screen...</div>}>
+    <Suspense fallback={compact ? <span role="status" className="text-xs text-muted-foreground">Loading...</span> : <div role="status" data-cm-hub-loading={hub || undefined} className={cn("py-12 text-center text-sm text-muted-foreground", setup ? "min-h-[max(12rem,65svh)]" : "min-h-48")}>Loading screen...</div>}>
       {children}
     </Suspense>
   );
