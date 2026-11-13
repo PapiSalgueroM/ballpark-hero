@@ -75,7 +75,7 @@ const inlineSnapshotAssets = (root: string): Plugin => {
     for (const { source, paths } of routes) {
       // Vite can combine the dynamic entry with shared code in a chunk with no façade.
       const page = Object.values(bundle).find(chunk => chunk.type === "chunk" &&
-        chunk.moduleIds.some(id => id.replaceAll("\\", "/").endsWith(source)));
+        chunk.moduleIds.some(id => id.replace(/\\/g, "/").endsWith(source)));
       if (!page) continue;
 
       // Static imports only. The App module has its own script tag.
@@ -84,7 +84,7 @@ const inlineSnapshotAssets = (root: string): Plugin => {
         const chunk = bundle[file];
         if (!chunk || chunk.type !== "chunk" || chunk.isEntry || files.has(file) || !file.startsWith("assets/")) return;
         const includesDeferredModule = chunk.moduleIds.some(id => {
-          const module = id.replaceAll("\\", "/");
+          const module = id.replace(/\\/g, "/");
           return deferredModules.some(deferred => deferred !== source && module.endsWith(deferred));
         });
         if (includesDeferredModule) throw new Error(`The preload graph for ${paths.join(", ")} contains gameplay or the live ticker`);
