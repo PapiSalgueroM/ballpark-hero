@@ -8,7 +8,7 @@ import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   createNrlCareer, nrlCareerMarket, nrlCareerSquad, nrlContractOffer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
-import { NRL_SAVE_KEY } from '@/lib/nrlManager';
+import { createNrlSeason, NRL_SAVE_KEY, reduceNrlSeason } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
 
@@ -42,8 +42,8 @@ const renewal = nrlCareerMarket(withMove).find(entry => entry.kind === 'renewal'
 const offer = { type: 'offerContract', playerId: renewal.player.id, salary: renewal.askingSalary, years: 2 } as const;
 const signed = reduceNrlCareer(withMove, offer);
 
-function open(career: NrlCareerState) {
-  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(career));
+function open(career: NrlCareerState | string) {
+  localStorage.setItem(NRL_SAVE_KEY, typeof career === 'string' ? career : JSON.stringify(career));
   localStorage.setItem(fence, '4');
   const view = render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
   click('Club office');
@@ -138,6 +138,36 @@ describe('NRL season review for expiring deals', () => {
       screen="history" disabled={false} onAction={() => false} />);
     expect(screen.queryByText('Deals ending this season')).toBeNull();
     expect(screen.queryByRole('button', { name: 'Start 10000' })).toBeNull();
+  });
+
+  it('uses the same extension and expiry rules after a completed v1 season', () => {
+    let season = createNrlSeason('storm', 4);
+    while (season.phase !== 'complete') season = reduceNrlSeason(season, { type: 'advance' });
+    const original = JSON.stringify(season);
+    const imported = readNrlCareerSave(original)!;
+    expect(imported.legacySeason).toBe(true);
+    const eligible = nrlCareerMarket(imported).filter(entry => entry.kind === 'renewal' && entry.startYear === 2027
+      && nrlContractOffer(imported, entry.player.id, entry.askingSalary, 2).ok);
+    expect(eligible.length).toBeGreaterThan(1);
+    const [renew, expire] = eligible;
+    open(original);
+    expand();
+    expect(row(renew.player.name).getByText('Unsigned', { exact: true })).toBeVisible();
+    expect(raw()).toBe(original);
+    fireEvent.click(row(renew.player.name).getByRole('button', { name: 'Extend for ' + renew.player.name }));
+    fireEvent.click(row(renew.player.name).getByRole('button', { name: 'Agree contract' }));
+    const signed = reduceNrlCareer(imported, { type: 'offerContract', playerId: renew.player.id, salary: renew.askingSalary, years: 2 });
+    expect(raw()).toBe(JSON.stringify(signed));
+    click('Start 2027');
+    const next = readNrlCareerSave(raw())!;
+    const squad = nrlCareerSquad(next);
+    expect(raw()).toBe(JSON.stringify(stay(signed)));
+    expect(next.legacySeason).toBe(false);
+    expect(squad).toHaveLength(30);
+    expect(squad.find(player => player.id === renew.player.id)?.contract).toEqual({
+      clubId: 'storm', startYear: 2027, endYear: 2028, salary: renew.askingSalary,
+    });
+    expect(squad.some(player => player.id === expire.player.id)).toBe(false);
   });
 
   it('refuses stale renewal writes and retries a quota failure through the existing save', () => {
