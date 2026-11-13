@@ -199,4 +199,72 @@ describe('NRL position training', () => {
     expect(within(completedSummary.closest('details')!).getByText(trainee.name + ' · Halfback')).toBeVisible();
     expect(raw()).toBe(bytes(done));
   });
+
+  it('starts and recalls one reserve-grade spell from Squad without writing on preview', () => {
+    const initial = createNrlCareer('bears', 14, 2027);
+    const playerId = 'bears-8-1';
+    const view = open(bytes(initial));
+    click('Squad');
+    const summary = screen.getByText('Reserve-grade development', { exact: true });
+    fireEvent.click(summary);
+    const desk = within(summary.closest('details')!);
+    fireEvent.change(desk.getByLabelText('Player for reserve grade'), { target: { value: playerId } });
+    expect(raw()).toBe(bytes(initial));
+    expect(localStorage.getItem(fence)).toBe('4');
+    fireEvent.click(desk.getByRole('button', { name: 'Start reserve-grade spell' }));
+    expect(desk.getByText(/Beau Forde.*4 rounds left/i)).toBeVisible();
+    expect(desk.getByText(/4 rounds left/i)).toHaveAttribute('role', 'status');
+    expect(localStorage.getItem(fence)).toBe('5');
+    const signed = raw();
+    expect(readNrlCareerSave(signed)?.season.reserveGrade?.playerId).toBe(playerId);
+    view.unmount();
+    saveFence.release(NRL_SAVE_KEY);
+    render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+    click('Squad');
+    const reloaded = screen.getByText('Reserve-grade development', { exact: true });
+    fireEvent.click(reloaded);
+    const liveDesk = within(reloaded.closest('details')!);
+    expect(liveDesk.getByText(/Beau Forde.*4 rounds left/i)).toBeVisible();
+    expect(raw()).toBe(signed);
+    fireEvent.click(liveDesk.getByRole('button', { name: 'Recall player' }));
+    expect(liveDesk.getByText(/Beau Forde.*recalled early/i)).toBeVisible();
+    expect(localStorage.getItem(fence)).toBe('6');
+    expect(liveDesk.queryByRole('button', { name: 'Start reserve-grade spell' })).toBeNull();
+  });
+
+  it('protects another tab’s reserve-grade decision and retries a failed write', () => {
+    const initial = createNrlCareer('bears', 14, 2027);
+    const playerId = 'bears-8-1';
+    const view = open(bytes(initial));
+    click('Squad');
+    const summary = screen.getByText('Reserve-grade development', { exact: true });
+    fireEvent.click(summary);
+    const desk = within(summary.closest('details')!);
+    fireEvent.change(desk.getByLabelText('Player for reserve grade'), { target: { value: playerId } });
+    const storage = vi.spyOn(Storage.prototype, 'setItem');
+    const actualSetItem = storage.getMockImplementation()!;
+    try {
+      storage.mockImplementation(function (this: Storage, key, value) {
+        if (key === NRL_SAVE_KEY) throw new DOMException('Quota exceeded', 'QuotaExceededError');
+        return actualSetItem.call(this, key, value);
+      });
+      fireEvent.click(desk.getByRole('button', { name: 'Start reserve-grade spell' }));
+      expect(screen.getByText(/could not save your progress/i)).toBeVisible();
+      expect(raw()).toBe(bytes(initial));
+      expect(localStorage.getItem(fence)).toBe('4');
+    } finally {
+      storage.mockRestore();
+    }
+    click('Retry save');
+    const committed = raw();
+    expect(readNrlCareerSave(committed)?.season.reserveGrade?.playerId).toBe(playerId);
+    expect(localStorage.getItem(fence)).toBe('5');
+    const newer = advance(readNrlCareerSave(committed)!);
+    localStorage.setItem(NRL_SAVE_KEY, bytes(newer));
+    localStorage.setItem(fence, '6');
+    fireEvent.click(desk.getByRole('button', { name: 'Recall player' }));
+    expect(raw()).toBe(bytes(newer));
+    expect(localStorage.getItem(fence)).toBe('6');
+    view.unmount();
+  });
 });
