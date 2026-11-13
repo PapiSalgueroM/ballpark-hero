@@ -1,5 +1,10 @@
 ## 2026-11-13: Home consent flow and current verification
 
+## November 13, 04:29 UTC: 24-hour checkpoint and Home fragment fix
+
+Broad source6f3141c13 includes the final direct Home Browse fragment repair. It differs from qualified9e397f522 only in two docs. All14 targeted native cases, Home26 assertions, full app types, ordinary build,23 readers, boot and16 caps/400 probes pass. Artifact922 files/24,747,124bytes, SHA35e305fc5325cc872c2a65c7ecf0a909075779b0fbd95029c09481341d960985, retained in nov13-home-browse-hash/ballpark-hero/dist on4818. Source remains draft #770; three independent targeted fixes (#566,#771,#772) are live. Mobile LCP, current field INP, broad release failures and full NRL parity remain open. Latest admin poll04:26 unchanged159. See the readiness report for the concrete remaining work and exact publication/data receipts.
+
+
 ## November 13, 04:20 UTC: Football Grid correction published
 
 PR #772 is merged as 2f231c83a and published with deployment 45f0ca9e-7001-4930-ada4-342905200333. Compatibility shipped before the exact guarded Peterson DML at 04:07 UTC. Public data now includes NO/SEA/TEN and 2007-2021. The other 22,007 full rows and Bears namesake held; 12 pinned public-code phone cases passed with captured public player rows, and all 172 live routes passed. Draft #550 is superseded and closed. No other SQL, Edge function, admin status or reporter message changed; the migration ledger was not modified.
