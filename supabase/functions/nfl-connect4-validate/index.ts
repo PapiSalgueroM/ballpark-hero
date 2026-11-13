@@ -186,8 +186,6 @@ setInterval(() => {
   }
 }, 300_000);
 
-const SAFE_ATTR = /^[\p{Sc}\p{L}\p{N} .,'\u2019&()+\/#%:!?-]{1,120}$/u;
-
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
 
@@ -211,8 +209,7 @@ serve(async (req) => {
     if (
       !playerName || typeof playerName !== "string" || playerName.length > 100 ||
       !columnAttribute || typeof columnAttribute !== "string" || columnAttribute.length > 200 ||
-      !rowAttribute || typeof rowAttribute !== "string" || rowAttribute.length > 200 ||
-      !SAFE_ATTR.test(columnAttribute) || !SAFE_ATTR.test(rowAttribute)
+      !rowAttribute || typeof rowAttribute !== "string" || rowAttribute.length > 200
     ) {
       return new Response(JSON.stringify({ valid: false, reason: "Invalid input" }), {
         status: 400,
