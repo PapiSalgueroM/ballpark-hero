@@ -1,6 +1,8 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 10:34 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 10:44 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+Home and the game header now count games by the same Eastern day as the leaderboard. Before the fix, the compiled fixture showed two of three games after UTC midnight. Eight published replays showed all three until midnight Eastern and one afterward. Both hosts and all 173 sitemap URLs passed. The query uses the existing player and UTC-date index with exact Eastern timestamp bounds. The preceding 45 days had zero timestamp/date mismatches across 2,245,506 rows. No database migration or score change was needed. [PR #804](https://github.com/PapiSalgueroM/ballpark-hero/pull/804).
 
 Rarity Round now explains the limits of its market-value archive when showing the prompt or an empty player search. The Dutch market-value pool still excludes both spellings of Johan Cruyff, while Ballon d’Or accepts him in both modes. The published build passed 16 browser replays and all 173 sitemap URLs. IndexNow accepted the guide. The eligibility report stays open. Hockey Grid accepted a known valid answer by mouse and keyboard. Removing the published touch guard reproduced a lost tap, while the reported desktop Safari path passed with and without the guard. That report stays open. There are 150 active reports and no new arrival since the preceding poll. [PR #803](https://github.com/PapiSalgueroM/ballpark-hero/pull/803).
 
