@@ -136,8 +136,8 @@ console.log(`   ${stubs.length} signposts, ${stubTags} touched`);
 /* Round 448: the dim was not enough. He filmed the dimmed wall again coming
    back from Google sign in ("the balck screen and all that text"), so the
    moment before React now shows a full cover with the mark (#dukb-boot)
-   inside #root, and the copy sits under it, capped. The noscript rule hides
-   the cover and lifts the cap. Three parts now, all required, on every
+   inside #root, and the copy stays out of layout. The noscript rule hides
+   the cover and restores the full copy. Three parts now, all required, on every
    built page and on the home template. The control strips the COVER, which
    is the part whose absence he would film. */
 console.log('6) the calm boot: the mark on a cover before React, the whole page without JS');
@@ -146,8 +146,8 @@ console.log('6) the calm boot: the mark on a cover before React, the whole page 
   if (CONTROL && CONTROL !== 'flash') { console.error(`SNAP_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
   const coverRe = /<div id="dukb-boot" aria-hidden="true"><img src="\/logo-mark\.svg"[^>]*><\/div>/;
   const coverCssRe = /#dukb-boot\{position:fixed;inset:0;[^}]*\}/;
-  const capRe = /#dukb-snapshot\{max-height:100vh;overflow:hidden\}/;
-  const liftRe = /<noscript><style>#dukb-boot\{display:none\}#dukb-snapshot\{max-height:none;overflow:visible\}<\/style><\/noscript>/;
+  const hiddenRe = /#dukb-snapshot\{display:none\}/;
+  const liftRe = /<noscript><style>#dukb-boot\{display:none\}#dukb-snapshot\{display:block;max-height:none;overflow:visible\}<\/style><\/noscript>/;
   const dimRe = /#dukb-snapshot\{max-height:100vh;overflow:hidden;opacity:\.45\}/;
   let calm = 0;
   let controlArmed = false;
@@ -160,11 +160,11 @@ console.log('6) the calm boot: the mark on a cover before React, the whole page 
       console.log(`   NEGATIVE CONTROL ON: the cover stripped from /${route} in memory, this section must go red`);
     }
     const hasCover = coverRe.test(html) && coverCssRe.test(html);
-    const hasCap = capRe.test(html);
+    const hiddenDuringBoot = hiddenRe.test(html);
     const hasLift = liftRe.test(html);
-    if (hasCover && hasCap && hasLift) { calm += 1; continue; }
+    if (hasCover && hiddenDuringBoot && hasLift) { calm += 1; continue; }
     if (!hasCover) fail(`/${route} ships without the boot cover, so the wall of text is back on it${dimRe.test(html) ? ' (it still carries the Round 314 dim, which he filmed)' : ''}`);
-    else if (!hasCap) fail(`/${route} has the cover but lost the cap, so the document scrolls under it`);
+    else if (!hiddenDuringBoot) fail(`/${route} keeps the covered text in layout, so loading CSS can shift it`);
     else fail(`/${route} has the cover but lost the noscript rule, hiding the whole page from no-JS readers`);
   }
   const home = readFileSync(path.join(DIST, 'index.html'), 'utf8');
