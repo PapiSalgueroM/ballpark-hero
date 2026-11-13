@@ -36,7 +36,7 @@ async function mount() {
 }
 const input = () => screen.getByRole('textbox', { name: 'Search games' }) as HTMLInputElement;
 const type = (query: string) => fireEvent.change(input(), { target: { value: query } });
-const cards = () => [...document.querySelectorAll('[data-home-game-card]')].map(node => ({
+const cards = () => [...document.querySelectorAll('[data-home-game-card]')].filter(node => !node.closest('[hidden]')).map(node => ({
   path: node.querySelector('a')?.getAttribute('href'), label: node.querySelector('h3')?.textContent,
 }));
 const results = (query: string) => engine.searchSite(query).map(row => ({ path: row.game.path, label: row.game.label }));
@@ -102,12 +102,17 @@ harnessCase('pending import keeps honest busy state without false empty results 
 });
 
 harnessCase('resolved import renders the latest query in unchanged engine rank order', async () => {
-  await mount(); const held = environment(); type('soccer'); type('NBA My Career'); await succeed();
+  await mount(); const held = environment();
+  const catalogue = screen.getByRole('heading', { name: 'Main event' });
+  type('soccer'); type('NBA My Career'); await succeed();
+  check('catalogue stays mounted but inaccessible during search', { mounted: catalogue.isConnected, hidden: !!catalogue.closest('[hidden]') }, { mounted: true, hidden: true });
   const expected = results('NBA My Career');
   check('latest actual ranked tiles', cards(), expected, { query: input().value, fullEngineResults: engine.searchSite(input().value) });
   check('resolved actual page', state(), { query: 'NBA My Career', busy: false, failure: false, heading: false, noResults: false, main: false, reloads: 0 });
   const calls = loadCalls; fireEvent.focus(input()); fireEvent.pointerEnter(input());
   check('loaded engine is reused', { loadCalls, importCalls }, { loadCalls: calls, importCalls: 1 });
+  fireEvent.click(screen.getByRole('button', { name: 'Clear search' }));
+  check('clearing returns to the same catalogue', screen.getByRole('heading', { name: 'Main event' }) === catalogue, true);
   check('successful search is read only', environment(), held);
 });
 
