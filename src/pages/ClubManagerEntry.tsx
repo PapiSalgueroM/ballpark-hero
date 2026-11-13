@@ -35,7 +35,7 @@ export default function ClubManagerEntry() {
     )}>
       {openCareer ? (
         <Suspense fallback={direct
-          ? <ClubManagerStartup className="min-h-48 py-12 text-sm">Loading Club Manager...</ClubManagerStartup>
+          ? <ClubManagerStartup>Loading Club Manager...</ClubManagerStartup>
           : picker}>
           <ClubManagerContents initialEra={pickedEra?.id} />
         </Suspense>

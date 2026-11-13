@@ -362,14 +362,14 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
         </div>,
       );
     }
-    return shell(<ClubManagerStartup className="py-24 animate-pulse">Loading…</ClubManagerStartup>);
+    return shell(<ClubManagerStartup className="animate-pulse">Loading…</ClubManagerStartup>);
   }
 
   /* ================= MANAGER SLOTS (Round 928, where the resume prompt was) ================= */
   if (g.phase === 'resume') {
     const c = g.career;
     return shell(
-      <Suspense fallback={<ClubManagerStartup className="min-h-48 py-12 text-sm">Loading screen...</ClubManagerStartup>}>
+      <Suspense fallback={<ClubManagerStartup>Loading screen...</ClubManagerStartup>}>
         <ManagerSlotsScreen
           slots={g.slots}
           activeDetail={c && !c.retired ? `Week ${Math.min(tickingWeeksDone(c.calendar, c.week) + 1, tickingWeeksIn(c.calendar))} of ${tickingWeeksIn(c.calendar)} · Board ${Math.round(c.boardConfidence)}/100` : null}
