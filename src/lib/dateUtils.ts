@@ -21,6 +21,21 @@ export function getTodayET(): string {
   }).format(new Date()); // e.g. "2026-05-25"
 }
 
+/** UTC bounds for the given Eastern calendar day, with an exclusive end. */
+export function getEasternDayRange(day: string): { start: string; end: string } {
+  const easternHour = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    hour: '2-digit',
+    hourCycle: 'h23',
+  });
+  // At 05:00 UTC New York is at 00:00 or 01:00, before any DST change.
+  // Resolve each midnight separately because the offset can change between them.
+  const midnight = (probe: number) =>
+    new Date(probe - Number(easternHour.format(probe)) * 3_600_000).toISOString();
+  const probe = Date.parse(`${day}T05:00:00.000Z`);
+  return { start: midnight(probe), end: midnight(probe + 86_400_000) };
+}
+
 /**
  * Poll-of-the-day rollover: polls flip at NOON Eastern, not midnight (owner
  * request: the day's polls should rotate in at 12pm ET). Read the clock once

@@ -16,7 +16,7 @@
  *               each a live registry game, and the rendered band shows those
  *               four links in that order with the registry's own labels.
  *   2 savekey   Each Continue key in src/data/homeFront.ts equals the SAVE_KEY
- *               the game really writes (src/pages/SoccerCareer.tsx and
+ *               the game really writes (src/lib/soccerCareerSaveEntry.ts and
  *               src/lib/clubManager.ts, read from code with comments
  *               stripped), and a render with that exact key planted shows the
  *               Continue words while a render without it does not. The stage
@@ -347,7 +347,7 @@ console.log('2) the Continue buttons look for the keys the games really save und
     const m = /const SAVE_KEY\s*=\s*(['"])([^'"]+)\1/.exec(stripComments(read(rel)));
     return m ? m[2] : null;
   };
-  const REAL = { '/soccer-career': saveKeyIn('src/pages/SoccerCareer.tsx'), '/club-manager': saveKeyIn('src/lib/clubManager.ts') };
+  const REAL = { '/soccer-career': saveKeyIn('src/lib/soccerCareerSaveEntry.ts'), '/club-manager': saveKeyIn('src/lib/clubManager.ts') };
   for (const [p, key] of Object.entries(REAL)) {
     if (!key) { fail(2, `could not read SAVE_KEY for ${p} from its source, so nothing was compared`); continue; }
     const entry = HOME_STAGE.find(e => e.path === p);
@@ -539,7 +539,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   /* The file that declares each game's SAVE_KEY, then the files that declare
      the shape of what it saves. Typed here, apart from the list it checks. */
   const WHERE = {
-    '/soccer-career': ['src/pages/SoccerCareer.tsx', 'src/lib/soccerCareerEngine.ts'],
+    '/soccer-career': ['src/lib/soccerCareerSaveEntry.ts', 'src/pages/SoccerCareer.tsx', 'src/lib/soccerCareerEngine.ts'],
     '/club-manager': ['src/lib/clubManager.ts'],
     '/stadium-tycoon': ['src/lib/stadiumTycoon.ts'],
     '/wonderkid-factory': ['src/lib/wonderkidFactory.ts'],

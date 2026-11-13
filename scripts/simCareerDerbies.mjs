@@ -140,7 +140,7 @@ if (CONTROL === 'cadence1') mainDerby = edit(mainDerby, 'return w.meetings;', 'r
 if (CONTROL === 'noalias') mainDerby = edit(mainDerby, 'return SC_CLUB_CANON[scName] ?? scName;', 'return scName;', CONTROL);
 if (CONTROL === 'uncapped') {
   mainDerby = edit(mainDerby, 'pop = clampN(pop, DERBY_POP_MIN, DERBY_POP_MAX);', 'pop = clampN(pop, DERBY_POP_MIN, 1000);', CONTROL);
-  mainDerby = edit(mainDerby, 'export const DERBY_WIN_POP = 2;', 'export const DERBY_WIN_POP = 10;', CONTROL);
+  overrideFile(path.join(ROOT, 'src/lib/soccerCareerDerbyHelp.ts'), 'export const DERBY_WIN_POP = 2;', 'export const DERBY_WIN_POP = 10;');
 }
 if (CONTROL === 'homealt') mainDerby = edit(mainDerby, 'const home = (i % 2 === 0) === homeFirst;', 'const home = homeFirst;', CONTROL);
 /* Round 1037: a past Liga MX season has no derby at all now (the league

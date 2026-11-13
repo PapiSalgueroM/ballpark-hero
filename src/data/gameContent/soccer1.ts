@@ -1188,7 +1188,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Typing a valid answer for each prompt",
         items: [
-          "Read the prompt, type 2 or more letters and pick a valid answer. Names that do not fit the category cannot be submitted at all.",
+          "Read the prompt, type 2 or more letters and choose a name from the search results. Club, country, position and price rounds use our market-value archive, which is missing some historical players. Ballon d'Or rounds use the winners list.",
         ],
         subsections: [
           {
