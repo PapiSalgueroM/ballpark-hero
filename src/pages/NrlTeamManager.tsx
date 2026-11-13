@@ -194,6 +194,7 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole }: {
         </div>
         <p className="mt-2 text-sm text-muted-foreground">{tactics.find(option => option.id === tactic)?.description}{coachTacticNote(coachRole, tactic)}</p>
         {season.attackPlan && <p className="mt-2 text-sm">Attack plan: {attackPlanLabel(season.attackPlan)}. Locked for this match.</p>}
+        {season.preparation === 'defensiveDrills' && <p className="mt-2 text-sm">Defensive drills apply through the second half.</p>}
       </div>
       {options.length > 0 ? (
         <details className="group rounded-xl border border-border bg-card px-4">
@@ -524,12 +525,27 @@ function MatchCentre({ career, onAction, onReview, disabled, showLiveResult }: {
                 aria-pressed={season.preparation === 'recover'} disabled={disabled} onClick={() => onAction({ type: 'prepare', choice: 'recover' })}>
                 <BedDouble aria-hidden="true" /> Recover
               </Button>
+              {!career.legacySeason && season.kickerId && (
+                <Button type="button" size="lg" className="px-3" variant={season.preparation === 'defensiveDrills' ? 'default' : 'outline'}
+                  aria-pressed={season.preparation === 'defensiveDrills'} disabled={disabled}
+                  onClick={() => onAction({ type: 'prepare', choice: 'defensiveDrills', year, clubId, round: season.round })}>
+                  Defensive drills
+                </Button>
+              )}
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
               {season.preparation === 'train' ? 'Boost attack this round and spend some fitness.'
                 : season.preparation === 'recover' ? 'Rest your starters and restore more fitness.'
-                  : 'Train for extra attack or recover to protect fitness.'}
+                  : season.preparation === 'defensiveDrills' ? 'Boost defence this round with the same fitness cost and injury risk as Train.'
+                    : career.legacySeason || !season.kickerId ? 'Train for extra attack or recover to protect fitness.'
+                      : 'Train for extra attack, drill your defence or recover to protect fitness.'}
             </p>
+            {!career.legacySeason && season.kickerId && season.preparation !== null && (
+              <Button type="button" size="lg" variant="ghost" className="mt-2 px-3" disabled={disabled}
+                onClick={() => onAction({ type: 'prepare', choice: null, year, clubId, round: season.round })}>
+                Clear preparation
+              </Button>
+            )}
           </div>
         </div>
       )}
