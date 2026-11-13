@@ -218,13 +218,13 @@ export function useTransferPath(): TransferPathState {
 
   /* The everyday graph, kept beside the rule graph so a refusal can say why:
      a name the rule removed, or a link the rule does not allow. */
-  const everydayClubSeasons = useMemo(() => clubSeasonsOf(playerPool, true), [playerPool]);
+  const everydayClubSeasons = useMemo(() => clubSeasonsOf(playerPool, 'classic'), [playerPool]);
   const activeNames = useMemo(
     () => new Set(playerPool.filter(isActivePlayer).map(p => p.name)),
     [playerPool],
   );
 
-  const playerToClubSeasons = useMemo(() => activeRule === 'classic' ? everydayClubSeasons : clubSeasonsOf(rulePlayers),
+  const playerToClubSeasons = useMemo(() => activeRule === 'classic' ? everydayClubSeasons : clubSeasonsOf(rulePlayers, activeRule),
     [activeRule, everydayClubSeasons, rulePlayers]);
 
   const playersShareClub = useMemo(

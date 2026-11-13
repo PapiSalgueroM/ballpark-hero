@@ -1,5 +1,5 @@
 import type { CareerPlayer } from '@/types/career';
-import { seasonSpan } from '@/lib/transferPathModes';
+import { seasonSpan, type TransferPathRule } from '@/lib/transferPathModes';
 
 /* Round 475: the link rule, in one place the page can be read from.
    -------------------------------------------------------------------------
@@ -58,36 +58,56 @@ function addSpell(keys: ClubSeasonKeys, club: string, season: string): void {
   for (let year = span[0]; year <= span[1]; year += 1) keys.span.add(`${club}::${year}`);
 }
 
-function lampardWithChelseaCareer<T extends {
+type StintPlayer = {
   name: string; career: ReadonlyArray<Pick<CareerPlayer['career'][number], 'club' | 'season'>>;
-}>(players: readonly T[]): T | undefined {
-  const matches = players.filter(player => player.name === 'Frank Lampard');
-  const lampard = matches.length === 1 ? matches[0] : undefined;
-  return lampard?.career.some(stint => stint.club === 'Chelsea' && stint.season === '2013-2014') ? lampard : undefined;
+};
+
+function playerWithAnchor<T extends StintPlayer>(players: readonly T[], name: string, club: string, season: string): T | undefined {
+  const matches = players.filter(player => player.name === name);
+  const player = matches.length === 1 ? matches[0] : undefined;
+  return player?.career.some(stint => stint.club === club && stint.season === season) ? player : undefined;
 }
 
 // Both club match reports verify the 2015 teammates. Keep this evidence in the
-// Transfer Path graph so career-clue rows and saved reveal counts stay intact.
+// Transfer Path graph so career-clue rows stay intact.
 // https://www.newyorkcityfc.com/news/new-york-city-fc-dc-united-recap
 // https://www.dcunited.com/news/dc-united-clinches-berth-audi-2015-mls-cup-playoffs
-export function verifiedClassicStint(
-  identities: readonly CareerPlayer[], pool: Parameters<typeof lampardWithChelseaCareer>[0] = identities,
+// Isak and Van Dijk both started the 2025-26 match against Atletico Madrid.
+// https://www.liverpoolfc.com/news/confirmed-liverpool-line-v-atletico-madrid-1
+// https://www.uefa.com/newsfiles/UCL/2026/2045911_FR.pdf
+const verifiedSpells = [
+  { name: 'Frank Lampard', nationality: 'England', position: 'CM', anchor: ['Chelsea', '2013-2014'], club: 'New York City FC', season: '2015' },
+  { name: 'Alexander Isak', nationality: 'Sweden', position: 'ST', anchor: ['Newcastle', '2024-2025'], club: 'Liverpool', season: '2025-2026' },
+  { name: 'Virgil van Dijk', nationality: 'Netherlands', position: 'CB', anchor: ['Liverpool', '2024-2025'], club: 'Liverpool', season: '2025-2026' },
+] as const;
+
+export function verifiedTransferPathStints(
+  identities: readonly CareerPlayer[], rule: TransferPathRule, pool: readonly StintPlayer[] = identities,
 ) {
-  const lampard = lampardWithChelseaCareer(identities);
-  if (lampard?.nationality !== 'England' || lampard.position !== 'CM') return undefined;
-  const player = pool === identities ? lampard : lampardWithChelseaCareer(pool);
-  if (player) return { player: player.name, club: 'New York City FC', season: '2015' };
+  // Liverpool's Active minima need a coordinated update before adding these links to that mode.
+  if (rule === 'active') return [];
+  return verifiedSpells.flatMap(({ name, nationality, position, anchor, club, season }) => {
+    if (rule === 'europe' && club === 'New York City FC') return [];
+    const [priorClub, priorSeason] = anchor;
+    const identity = playerWithAnchor(identities, name, priorClub, priorSeason);
+    if (identity?.nationality !== nationality || identity.position !== position) return [];
+    if (pool !== identities && !playerWithAnchor(pool, name, priorClub, priorSeason)) return [];
+    return [{ player: name, club, season }];
+  });
 }
 
 /** name -> the keys the link rule is judged on */
-export function clubSeasonsOf(players: CareerPlayer[], includeVerifiedStints = false): Map<string, ClubSeasonKeys> {
+export function clubSeasonsOf(players: CareerPlayer[], rule?: TransferPathRule): Map<string, ClubSeasonKeys> {
   const map = new Map<string, ClubSeasonKeys>();
-  const verified = includeVerifiedStints ? verifiedClassicStint(players) : undefined;
   for (const p of players) {
     const keys: ClubSeasonKeys = { exact: new Set(), calendar: new Set(), span: new Set() };
     for (const s of p.career) addSpell(keys, s.club, s.season);
-    if (verified?.player === p.name) addSpell(keys, verified.club, verified.season);
     map.set(p.name, keys);
+  }
+  if (rule) {
+    for (const { player, club, season } of verifiedTransferPathStints(players, rule)) {
+      addSpell(map.get(player)!, club, season);
+    }
   }
   return map;
 }
