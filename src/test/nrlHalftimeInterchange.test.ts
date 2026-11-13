@@ -13,6 +13,74 @@ const choice = { starterId: 'broncos-3-0', reserveId: 'nrl-broncos-2026-28' };
 const hold = { year: 2026, round: 1, reserveId: choice.reserveId };
 
 describe('NRL reserve held for halftime', () => {
+  it.each([[2026, 'broncos', 76], [2027, 'bears', 7]] as const)('settles two different positions under the same %s first half', (year, clubId, seed) => {
+    const kickoff = createNrlCareer(clubId, seed, year);
+    const held = nrlHoldableReserves(kickoff.season)[0];
+    const pending = reduceNrlCareer(kickoff, { type: 'startLive', hold: { year, round: 1, reserveId: held.id } });
+    const restored = readNrlCareerSave(raw(pending))!;
+    expect(raw(restored)).toBe(raw(pending));
+    const choices = nrlHalftimeInterchanges(restored.season);
+    const entering = choices.find(option => option.enteredAtHalf)!;
+    const rotating = choices.find(option => !option.enteredAtHalf)!;
+    expect(rotating).toBeDefined();
+    const action = { type: 'finishLive', year, round: 1, tactic: 'balanced' } as const;
+    expect(reduceNrlCareer(restored, { ...action, secondInterchange: entering })).toBe(restored);
+    expect(reduceNrlCareer(restored, { ...action, interchange: rotating, secondInterchange: rotating })).toBe(restored);
+    const one = reduceNrlCareer(restored, { ...action, interchange: rotating });
+    const two = reduceNrlCareer(restored, { ...action, interchange: rotating, secondInterchange: entering });
+    const managed = (career: NrlCareerState) => career.season.results.find(match => match.homeId === clubId || match.awayId === clubId)!;
+    const match = managed(two);
+    expect(managed(one)).not.toHaveProperty('secondHalftimeInterchange');
+    expect(match.secondHalftimeInterchange).toMatchObject({ reserveId: held.id, enteredAtHalf: true });
+    expect(match.halftimeInterchange?.reserveId).toBe(rotating.reserveId);
+    expect(match.benchUsed).toHaveLength(4);
+    expect(new Set(match.benchUsed).size).toBe(4);
+    expect(match.benchUsed?.at(-1)).toBe(held.id);
+    const points = match.homeId === clubId ? match.homeScore : match.awayScore;
+    expect(match.playerScoring?.lines.reduce((sum, line) => sum + nrlScorePoints(line), 0)).toBe(points);
+    const appearances = [...match.playerScoring!.starters, ...match.benchUsed!];
+    for (const id of [entering.reserveId, entering.starterId, rotating.reserveId, rotating.starterId]) {
+      expect(appearances.filter(playerId => id === playerId)).toHaveLength(1);
+    }
+    const level = (career: NrlCareerState, id: string) => career.players.find(player => player.id === id)!.fitness;
+    expect(level(two, entering.starterId)).toBe(level(one, entering.starterId) + 7);
+    expect(level(two, held.id)).toBe(level(one, held.id) - 8);
+    expect(raw(readNrlCareerSave(raw(two))!)).toBe(raw(two));
+    const forged = (changed: typeof match) => readNrlCareerSave(raw({
+      ...two, season: { ...two.season, results: two.season.results.map(item => item === match ? changed : item) },
+    }));
+    expect(forged({ ...match, secondHalftimeInterchange: match.halftimeInterchange })).toBeNull();
+    expect(forged({ ...match, halftimeInterchange: undefined })).toBeNull();
+    expect(forged({ ...match, secondHalftimeInterchange: { ...match.secondHalftimeInterchange!, starterId: restored.season.kickerId! } })).toBeNull();
+    const reversed = reduceNrlCareer(restored, { ...action, interchange: entering, secondInterchange: rotating });
+    expect(managed(reversed).playerScoring).toEqual(match.playerScoring);
+    expect(managed(reversed).benchUsed).toEqual(match.benchUsed);
+  });
+
+  it('can keep two rotating reserves on in a final without adding any bench appearances', () => {
+    let kickoff = createNrlCareer('storm', 4);
+    while (!nrlNextRound(kickoff.season).clubMatch?.finalsRound) kickoff = reduceNrlCareer(kickoff, { type: 'advance' });
+    const pending = start(kickoff);
+    const { year, round } = pending.season;
+    const [first, second] = nrlHalftimeInterchanges(pending.season);
+    expect(second).toBeDefined();
+    expect([first, second].every(option => option.enteredAtHalf === undefined)).toBe(true);
+    const action = { type: 'finishLive', year, round, tactic: 'attack' } as const;
+    const auto = reduceNrlCareer(pending, action);
+    const two = reduceNrlCareer(pending, { ...action, interchange: first, secondInterchange: second });
+    const managed = (career: NrlCareerState) => career.season.results.find(match =>
+      match.round === round && (match.homeId === 'storm' || match.awayId === 'storm'))!;
+    const match = managed(two);
+    expect(match.benchUsed).toEqual(managed(auto).benchUsed);
+    expect(match.secondHalftimeInterchange).toEqual({ starterId: second.starterId, reserveId: second.reserveId });
+    const fitness = (career: NrlCareerState, id: string) => career.players.find(player => player.id === id)!.fitness;
+    for (const change of [first, second]) {
+      expect(fitness(two, change.starterId)).toBe(fitness(auto, change.starterId) + 5);
+      expect(fitness(two, change.reserveId)).toBe(fitness(auto, change.reserveId) - 5);
+    }
+    expect(raw(readNrlCareerSave(raw(two))!)).toBe(raw(two));
+  });
+
   it('restores the exact halftime and only counts the held reserve if brought on', () => {
     const kickoff = createNrlCareer('broncos', 76);
     const action = { type: 'startLive', hold } as const;

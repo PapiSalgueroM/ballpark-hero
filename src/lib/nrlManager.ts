@@ -76,7 +76,7 @@ export interface NrlLiveHalf { fixture: NrlFixture; homeScoring: NrlScoring; awa
 export interface NrlHalftimeInterchange { starterId: string; reserveId: string }
 interface NrlHalftimeReceipt extends NrlHalftimeInterchange { enteredAtHalf?: true }
 interface NrlHalftimeOption extends NrlHalftimeReceipt { role: NrlRole }
-interface NrlHalftimeDecision { live: NrlLiveHalf; tactic: NrlTactic; interchange?: NrlHalftimeOption; talk?: NrlHalftimeTalk }
+interface NrlHalftimeDecision { live: NrlLiveHalf; tactic: NrlTactic; interchanges: NrlHalftimeOption[]; talk?: NrlHalftimeTalk }
 export interface NrlInjury { playerId: string; rounds: number }
 type NrlGoldenScore = keyof typeof GOLDEN_POINT_VALUES;
 type NrlGoldenPoint = 'draw' | { period: 1 | 2; score: NrlGoldenScore };
@@ -91,6 +91,7 @@ export interface NrlMatchResult extends NrlFixture {
   injury?: NrlInjury;
   playerScoring?: NrlMatchScoringReport;
   halftimeInterchange?: NrlHalftimeReceipt;
+  secondHalftimeInterchange?: NrlHalftimeReceipt;
   halftimeTalk?: NrlHalftimeTalk;
 }
 export interface NrlFinalsArchive {
@@ -144,7 +145,8 @@ export type NrlAction =
   | { type: 'setTactic'; tactic: NrlTactic }
   | NrlPreparationAction
   | { type: 'startLive'; hold?: { year: number; round: number; reserveId: string } }
-  | { type: 'finishLive'; year: number; round: number; tactic: NrlTactic; interchange?: NrlHalftimeInterchange; talk?: NrlHalftimeTalk }
+  | { type: 'finishLive'; year: number; round: number; tactic: NrlTactic; interchange?: NrlHalftimeInterchange;
+      secondInterchange?: NrlHalftimeInterchange; talk?: NrlHalftimeTalk }
   | { type: 'advance' };
 
 const lastRound = (year: number) => nrlRegularRounds(year) + 4;
@@ -698,25 +700,26 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
   const starters = new Set(Object.values(state.lineup));
   const rotation = played ? nrlBenchRotation(state, halftime?.live.heldReserveId) : new Map<string, NrlPlayer>();
   const used = new Set([...rotation.values()].map(player => player.id));
-  const interchange = halftime?.interchange;
-  const entering = interchange?.enteredAtHalf ? interchange : undefined;
+  const interchanges = halftime?.interchanges ?? [];
+  const entering = interchanges.find(change => change.enteredAtHalf);
   if (entering) used.add(entering.reserveId);
-  const closingState = halftime && (interchange || halftime.talk || halftime.tactic !== state.tactic) ? {
+  const closingState = halftime && (interchanges.length || halftime.talk || halftime.tactic !== state.tactic) ? {
     ...state,
     tactic: halftime.tactic,
-    lineup: interchange ? { ...state.lineup, [interchange.role]: interchange.reserveId } : state.lineup,
+    lineup: interchanges.length ? { ...state.lineup, ...Object.fromEntries(interchanges.map(change => [change.role, change.reserveId])) } : state.lineup,
   } : undefined;
-  const closingRotation = interchange ? new Map(rotation) : rotation;
-  if (interchange) closingRotation.delete(interchange.starterId);
+  const closingRotation = interchanges.length ? new Map(rotation) : rotation;
+  for (const { starterId } of interchanges) closingRotation.delete(starterId);
   const closing = closingState && { state: closingState, rotation: closingRotation, talk: halftime?.talk };
   const squad = state.squad.map(player => {
     const before = readyFitness(player.fitness, state.preparation, played);
     const starterFatigue = played && starters.has(player.id) ? 15 : 0;
     const relief = rotation.has(player.id) ? 4 : 0;
     const reserveFatigue = used.has(player.id) ? 8 : 0;
-    // An unused reserve shares the full match equally. A rotating reserve extends their original spell.
-    const extraRest = player.id === interchange?.starterId ? (entering ? 7 : 5) : 0;
-    const extraWork = !entering && player.id === interchange?.reserveId ? 5 : 0;
+    // A previously unused reserve shares the full match equally. A rotating reserve extends their original spell.
+    const outgoing = interchanges.find(change => player.id === change.starterId);
+    const extraRest = outgoing ? (outgoing.enteredAtHalf ? 7 : 5) : 0;
+    const extraWork = interchanges.some(change => !change.enteredAtHalf && player.id === change.reserveId) ? 5 : 0;
     return { ...player, fitness: Math.max(0, before - starterFatigue + relief - reserveFatigue + extraRest - extraWork) };
   });
   const injury = played && state.injuryTracking ? matchInjury(state, used, medicalReduction) : undefined;
@@ -729,14 +732,17 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
     const totals = result.homeId === state.clubId ? result.homeScoring : result.awayScoring;
     const starting = NRL_ROLES.map(role => ({ role, id: state.lineup[role] }));
     const attribution = rngFrom(hashLabel(`${state.seed}|${state.year}|${state.round}|${state.clubId}|scorers`));
-    if (interchange && halftime && closingState) {
+    if (interchanges.length && halftime && closingState) {
       const first = result.homeId === state.clubId ? halftime.live.homeScoring : halftime.live.awayScoring;
       const closingStarting = NRL_ROLES.map(role => ({ role, id: closingState.lineup[role] }));
       const playerScoring = makeNrlInterchangeScoringReport(totals, first, { starting, rotation },
         { starting: closingStarting, rotation: closingRotation }, state.kickerId, attribution);
-      const { starterId, reserveId } = interchange;
+      const [halftimeInterchange, secondHalftimeInterchange] = interchanges.map(({ starterId, reserveId, enteredAtHalf }) => ({
+        starterId, reserveId, ...(enteredAtHalf && { enteredAtHalf }),
+      }));
       return {
-        ...withInjury, playerScoring, halftimeInterchange: { starterId, reserveId, ...(entering && { enteredAtHalf: true as const }) },
+        ...withInjury, playerScoring, halftimeInterchange,
+        ...(secondHalftimeInterchange && { secondHalftimeInterchange }),
         ...(entering && { benchUsed: [...used] }),
       };
     }
@@ -807,11 +813,18 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
       const { live, ...matchday } = state;
       if (!live || action.year !== state.year || action.round !== state.round || !NRL_TACTICS.includes(action.tactic)) return state;
       if (action.talk !== undefined && !isNrlHalftimeTalk(action.talk)) return state;
-      const requested = action.interchange;
-      const interchange = requested && nrlHalftimeInterchanges(state).find(option =>
-        option.starterId === requested.starterId && option.reserveId === requested.reserveId);
-      if (requested !== undefined && !interchange) return state;
-      return advanceRound(matchday, opponentStrength, options, { live, tactic: action.tactic, interchange, talk: action.talk });
+      const { interchange, secondInterchange } = action;
+      if (secondInterchange !== undefined && interchange === undefined) return state;
+      const changes = nrlHalftimeInterchanges(state);
+      const chosen: NrlHalftimeOption[] = [];
+      for (const requested of [interchange, secondInterchange]) {
+        if (requested === undefined) continue;
+        const choice = requested && changes.find(option =>
+          option.starterId === requested.starterId && option.reserveId === requested.reserveId);
+        if (!choice || chosen.some(first => first.starterId === choice.starterId || first.reserveId === choice.reserveId)) return state;
+        chosen.push(choice);
+      }
+      return advanceRound(matchday, opponentStrength, options, { live, tactic: action.tactic, interchanges: chosen, talk: action.talk });
     }
     case 'advance':
       return advanceRound(state, opponentStrength, options);
@@ -880,13 +893,21 @@ function validBenchUse(value: unknown, managed: boolean, byId: Map<string, NrlPl
 }
 
 function validHalftimeInterchange(value: unknown, scoring: NrlMatchScoringReport | undefined,
-  benchUsed: string[] | undefined, byId: ReadonlyMap<string, NrlPlayer>): boolean {
-  if (value === undefined) return true;
+  benchUsed: string[] | undefined, byId: ReadonlyMap<string, NrlPlayer>): value is NrlHalftimeReceipt {
   if (!scoring || !record(value) || typeof value.starterId !== 'string' || typeof value.reserveId !== 'string'
     || value.starterId === scoring.kickerId || !benchUsed?.includes(value.reserveId)
     || (value.enteredAtHalf !== undefined && (value.enteredAtHalf !== true || benchUsed.at(-1) !== value.reserveId))) return false;
   const role = NRL_ROLES[scoring.starters.indexOf(value.starterId)];
   return !!role && byId.get(value.reserveId)?.role === role;
+}
+
+function validHalftimeInterchanges(first: unknown, second: unknown, scoring: NrlMatchScoringReport | undefined,
+  benchUsed: string[] | undefined, byId: ReadonlyMap<string, NrlPlayer>): boolean {
+  if (first === undefined) return second === undefined;
+  if (!validHalftimeInterchange(first, scoring, benchUsed, byId)) return false;
+  return second === undefined || (validHalftimeInterchange(second, scoring, benchUsed, byId)
+    && first.starterId !== second.starterId && first.reserveId !== second.reserveId
+    && !(first.enteredAtHalf && second.enteredAtHalf));
 }
 
 function validGoldenPoint(value: unknown, home: NrlScoring, away: NrlScoring): boolean {
@@ -915,7 +936,7 @@ function validResult(value: unknown, expected: NrlFixture, clubId: string, byId:
     && (value.playerScoring === undefined || (managed && validNrlScoringReport(value.playerScoring,
       expected.homeId === clubId ? value.homeScoring : value.awayScoring, (value.benchUsed as string[] | undefined) ?? [],
       byId, NRL_ROLES.length)))
-    && validHalftimeInterchange(value.halftimeInterchange, value.playerScoring as NrlMatchScoringReport | undefined,
+    && validHalftimeInterchanges(value.halftimeInterchange, value.secondHalftimeInterchange, value.playerScoring as NrlMatchScoringReport | undefined,
       value.benchUsed as string[] | undefined, byId);
 }
 
