@@ -342,7 +342,7 @@ const AppContent = () => {
       <SiteMenu />
       <LiveTickerRail home={pathname === "/"} />
       {shouldShowHeader(pathname) && <Header />}
-      {!gameRoute && <CookieConsent compactInitial={pathname === "/"} />}
+      {!gameRoute && <CookieConsent inline={pathname === "/"} compactInitial={pathname === "/"} />}
       {/* Round 1142: one line, game routes only, and only in a browser that
           will not keep anything. Renders nothing for everybody else. */}
       <StorageNotice />
