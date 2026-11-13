@@ -321,7 +321,7 @@ const FantasyDraft = () => {
                     <h2 className="text-sm font-bold uppercase tracking-widest text-primary">Today's Criteria</h2>
                   </div>
                   {loadingCriteria ? (
-                    <p role="status" className="text-sm text-muted-foreground">Loading today's criteria…</p>
+                    <p role="status" data-no-prerender className="text-sm text-muted-foreground">Loading today's criteria…</p>
                   ) : criteria ? (
                     <p className="text-base sm:text-lg font-semibold text-foreground leading-snug">{criteria}</p>
                   ) : (
