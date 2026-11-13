@@ -1,6 +1,10 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 11:05 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 11:16 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+Squad Deal and Soccer Higher or Lower flag images have explicit dimensions and keep the same rendered size and lazy loading. Stadium Tycoon's keyboard skip link now lands in the main game content. The full 105-opening and 31-entry graph checks passed locally. Twenty-four published browser checks and all 173 sitemap URLs passed. The Lovable mirror redirected to the verified custom-domain bytes. [PR #809](https://github.com/PapiSalgueroM/ballpark-hero/pull/809).
+
+The exact broad build through #807 passed TypeScript, 23 readers, native snapshot boot, 16 route budgets, 400 isolation probes and the 105-opening sweep. It has 923 files totaling 24,838,605 bytes with manifest SHA-256 `28cc4c50662affec84b6e7b7b58115cef5b7e9436b1f45d115d3846215753743`. The separate published #808 and #809 changes are now in the broad source, and the hosted checks remain queued.
 
 Offseason job applications are live in NRL Team Manager. After either starting season, managers can apply to one simulated opening. Existing board results, premierships and expansion openings determine the offer. Accepted jobs use the usual club move and appear in career history. The existing club picker remains available. All 298 composed focused cases and six published replays passed. Twelve paired comparisons covered the Development assistant and application receipts together. Both hosts and all 173 sitemap routes passed. IndexNow accepted the updated guide after a transient connection failure. [PR #808](https://github.com/PapiSalgueroM/ballpark-hero/pull/808).
 
