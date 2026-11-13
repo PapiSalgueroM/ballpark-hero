@@ -1,4 +1,10 @@
-## 2026-11-13: WebKit input fix published and combined review updated
+## 2026-11-13: NRL halftime reserve and roster-copy verification
+
+The d99c031af combined build passes application TypeScript, Vite, 23 static readers, native snapshot boot and redirects, and all 16 download caps with 400 isolation probes. NRL's optional held reserve passes 209 tests and three final browser journeys with exact reload and stale-tab checks. Its default modes retain 1,149 baseline states. Puck Detective's stored-roster explanation passes 13 tests and six paired phone journeys, preserving clues and saved games. See the [readiness record](plans/2026-11-12-site-readiness.md) for exact artifacts and remaining limits.
+
+The latest read-only admin poll has 159 active reports and preserves every prior status. The new narrow-phone Build Your XI report predates the published input fix; its exact layout passes the pinned published WebKit check and the no-guard control reproduces the miss. A separate Puck explanation release is in preparation. No new backend or admin write has occurred. A confirmed cross-sport generated-name collision is held because the simple name exclusion changes Club Manager's saved identity and later simulation.
+
+## 2026-11-13 02:09 UTC: WebKit input fix published and combined review updated
 
 The latest `b93bb7d8f` compiled product passes application TypeScript, Vite, all 22 static readers, native snapshot boot and redirects, all 16 unchanged download caps with 400 isolation probes, 105 route entries and 64 phone consent checks. NRL expiring-deal review, Footle first-clue visibility, post-bank Practice focus, verified Transfer Path memberships and MLB-only playoff replay loading retain their affected compiled journeys. Fantasy Draft's fresh crawler capture now excludes the temporary waiting status while preserving live loading. The [readiness record](plans/2026-11-12-site-readiness.md) identifies exact artifacts, retained baselines and limits.
 
