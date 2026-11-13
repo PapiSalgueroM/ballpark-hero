@@ -7,6 +7,7 @@ import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   isNrlOpeningMatchdayPlayer,
   nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyReports,
+  nrlBoardPathwaysIncome, nrlBoardPathwaysQuote,
   nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractCounteroffer, nrlContractOffer,
   nrlCoachQuote, nrlCoachSpend, nrlDevelopmentPreview, nrlFinanceForecast, nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonClubs, nrlOffseasonOpportunities,
@@ -20,7 +21,7 @@ import {
   archiveNrlPlayerSeasons, archiveNrlScoring, nrlArchivedPlayerSeason, nrlArchivedScoringLeaders,
   nrlScorePoints, nrlTryLeaders, type NrlScoringLeader,
 } from '@/lib/nrlPlayerScoring';
-import { nrlBoardBenchmark, nrlBoardChallengeStatus, nrlBoardTarget } from '@/lib/nrlBoardTarget';
+import { NRL_BOARD_PATHWAYS, nrlBoardBenchmark, nrlBoardChallengeStatus, nrlBoardTarget } from '@/lib/nrlBoardTarget';
 
 const currency = new Intl.NumberFormat('en-AU', {
   style: 'currency', currency: 'AUD', maximumFractionDigits: 0,
@@ -641,6 +642,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
   const cash = nrlCareerFinance(career);
   const medicalSpend = nrlMedicalSpend(cash);
   const academySpend = nrlAcademyFacilitySpend(cash);
+  const pathwaysIncome = nrlBoardPathwaysIncome(cash);
   const coachSpend = nrlCoachSpend(cash);
   const hasAccounts = cash.fromRound <= nrlSeasonPlan(year).draw.length + 4;
   return (
@@ -666,6 +668,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
                 ['Opening cash', cash.openingCash], ['Central funding', cash.centralFunding],
                 ['Gate receipts', cash.gateReceipts],
                 ...(cash.sponsor ? [['Sponsor income', nrlSponsorIncome(cash)] as const] : []),
+                ...(pathwaysIncome ? [['Board pathways bonus', pathwaysIncome] as const] : []),
                 ['Wages paid', cash.wagesPaid],
                 ['Operating costs', cash.operatingCosts],
                 ...(medicalSpend ? [['Medical upgrades', medicalSpend] as [string, number]] : []),
@@ -937,6 +940,53 @@ function FinalsHistory({ record, season }: { record: NrlCareerState['history'][n
   );
 }
 
+function BoardPathways({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const { year, clubId, phase } = career.season;
+  const { accepted, progress, reason, bonus } = nrlBoardPathwaysQuote(career);
+  if (!accepted && (phase !== 'regular' || career.season.round !== 1 || career.legacySeason)) return null;
+  const { maxAge, players, appearances } = NRL_BOARD_PATHWAYS;
+  const qualified = progress.filter(player => player.apps >= appearances).length;
+  const paid = nrlBoardPathwaysIncome(career.finance);
+  return (
+    <section className="mt-4 rounded-xl border border-border bg-background p-3" aria-labelledby="nrl-board-pathways">
+      <h3 id="nrl-board-pathways" className="text-sm font-bold">Board pathways</h3>
+      <p className="mt-1 text-sm text-muted-foreground">
+        Give {players} players aged {maxAge} or under at least {appearances} first-grade appearances each in the regular season.
+        Starts and reserves who take the field count. The board pays {money(bonus)} in club cash after the regular season if you meet the target.
+      </p>
+      {accepted ? (
+        <>
+          <p className="mt-2 text-sm font-semibold" role="status">
+            {phase === 'regular' ? `${Math.min(qualified, players)} of ${players} players reached the target.`
+              : paid ? `Target met. ${money(paid)} paid into club cash.` : 'Target missed. No bonus was paid.'}
+          </p>
+          {phase === 'regular' && (
+            <details className="mt-2 rounded-lg border border-border px-2">
+              <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                Eligible players
+              </summary>
+              <ul aria-label="Board pathways appearances" className="divide-y divide-border pb-2 text-sm">
+                {progress.map(player => (
+                  <li key={player.id} className="flex flex-wrap justify-between gap-x-3 py-1.5">
+                    <span>{player.name} · age {player.age}</span>
+                    <span>{player.apps} {player.apps === 1 ? 'appearance' : 'appearances'}</span>
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
+        </>
+      ) : (
+        <>
+          <Button type="button" size="lg" className="mt-2 w-full sm:w-auto" disabled={disabled || reason !== null}
+            onClick={() => onAction({ type: 'acceptBoardPathways', year, clubId })}>Accept pathways objective</Button>
+          <p className="mt-1 text-xs text-muted-foreground">{reason ?? 'Optional. Accept before playing Round 1.'}</p>
+        </>
+      )}
+    </section>
+  );
+}
+
 function History({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { year, phase, clubId } = career.season;
   const finished = phase === 'complete';
@@ -972,6 +1022,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
         </section>
       )}
       {!retired && challengeStatus && <div className="mt-3"><NrlBoardChallengeNotice season={career.season} status={challengeStatus} /></div>}
+      {!retired && <BoardPathways career={career} onAction={onAction} disabled={disabled} />}
       {!retired && !career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
       {finished && !retired && year < NRL_LAST_YEAR && <ExpiringDeals career={career} onAction={onAction} disabled={disabled} />}
       {finished && !retired && year < NRL_LAST_YEAR && !mustMove && (
@@ -1043,6 +1094,11 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
                 {record.finance?.ticketTier && <p className="text-sm text-muted-foreground">Home ticket pricing {ticketLabels[record.finance.ticketTier]}</p>}
                 {record.finance?.sponsor && <p className="text-sm text-muted-foreground">Sponsor income {money(nrlSponsorIncome(record.finance))}</p>}
+                {(record.year !== year || retired) && record.finance?.pathways && (
+                  <p className="text-sm text-muted-foreground">
+                    Board pathways · {record.finance.pathways.earnedBy ? `Target met · ${money(nrlBoardPathwaysIncome(record.finance))} bonus` : 'Target missed'}
+                  </p>
+                )}
                 {record.finance?.academyUpgradeRound && <p className="text-sm text-muted-foreground">Academy facilities {money(nrlAcademyFacilitySpend(record.finance))}</p>}
                 {benchmark && <p className="text-sm text-muted-foreground" data-nrl-board-benchmark>
                   Board benchmark · {benchmark.label} · {record.rank <= benchmark.targetRank ? 'Met' : 'Missed'}

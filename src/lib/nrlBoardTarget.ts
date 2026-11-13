@@ -1,6 +1,22 @@
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
-import type { NrlCareerState } from '@/lib/nrlCareer';
-import { nrlLadder } from '@/lib/nrlManager';
+import type { NrlCareerPlayer, NrlCareerState } from '@/lib/nrlCareer';
+import { nrlLadder, type NrlManagerState } from '@/lib/nrlManager';
+import { nrlSquadSeasonStats } from '@/lib/nrlPlayerScoring';
+
+export const NRL_BOARD_PATHWAYS = { maxAge: 23, players: 3, appearances: 4, bonus: 200_000 } as const;
+
+export function nrlBoardPathwaysEligible(season: NrlManagerState, players: NrlCareerPlayer[]) {
+  const squadIds = new Set(season.squad.map(player => player.id));
+  return players.filter(player => player.age <= NRL_BOARD_PATHWAYS.maxAge && squadIds.has(player.id));
+}
+
+export function nrlBoardPathwaysProgress(season: NrlManagerState, players: NrlCareerPlayer[]) {
+  const ages = new Map(nrlBoardPathwaysEligible(season, players).map(player => [player.id, player.age]));
+  return nrlSquadSeasonStats(season, 'regular').rows.flatMap(({ id, name, apps }) => {
+    const age = ages.get(id);
+    return age === undefined ? [] : [{ id, name, apps, age }];
+  });
+}
 
 export function nrlBoardBenchmark(year: number, clubId: string, previousPlace?: number) {
   const { clubs } = nrlSeasonPlan(year);
