@@ -18,6 +18,8 @@ import {
   WorldXiData,
   TimerMode,
   TIMER_MODES,
+  PARAGUAY,
+  fetchParaguayArchive,
   fetchWorldXiPool,
   drawCountries,
   suggestCountryPlayers,
@@ -38,6 +40,7 @@ import { SlotReel } from '@/components/world-xi/SlotReel';
 import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
 
 type Phase = 'boot' | 'error' | 'setup' | 'playing' | 'won' | 'lost';
+type ParaguayArchive = { status: 'loading' | 'unavailable' } | { status: 'loaded'; players: WxPlayer[] };
 
 // Slot-machine reel durations. The reel decelerates like a real machine, so it
 // needs enough runway to read as a spin; timed modes get a shorter one so the
@@ -67,6 +70,7 @@ const WorldXi = () => {
   const [reelGlimpse, setReelGlimpse] = useState<string>(''); // country under the payline mid-spin
   const [seasonReport, setSeasonReport] = useState<SeasonReport | null>(null);
   const [showClubChemistry, setShowClubChemistry] = useState(false);
+  const [paraguayArchive, setParaguayArchive] = useState<ParaguayArchive | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const prevStepRef = useRef<number>(-1);
   const reducedMotionRef = useRef<boolean>(
@@ -93,6 +97,15 @@ const WorldXi = () => {
   useEffect(() => {
     boot();
   }, [boot]);
+
+  const hasParaguay = countries.includes(PARAGUAY);
+  useEffect(() => {
+    if (!hasParaguay || paraguayArchive) return;
+    setParaguayArchive({ status: 'loading' });
+    void fetchParaguayArchive().then(players => setParaguayArchive(
+      players ? { status: 'loaded', players } : { status: 'unavailable' },
+    ));
+  }, [hasParaguay, paraguayArchive]);
 
   const start = useCallback(() => {
     if (!data) return;
@@ -158,10 +171,25 @@ const WorldXi = () => {
     () => new Set(filled.filter((p): p is WxPlayer => p !== null).map(p => p.name)),
     [filled],
   );
+  const archivedPlayers = paraguayArchive?.status === 'loaded' ? paraguayArchive.players : undefined;
+  const suggestionData = useMemo(() => {
+    if (!data || !archivedPlayers?.length) return data;
+    // The extra choices never feed the draw or respin eligibility.
+    const current = data.byCountry.get(PARAGUAY) ?? [];
+    const currentNames = new Set(current.map(player => player.name));
+    const byCountry = new Map(data.byCountry);
+    byCountry.set(PARAGUAY, [...current, ...archivedPlayers.filter(player => !currentNames.has(player.name))]
+      .sort((a, b) => b.value - a.value));
+    return { ...data, byCountry };
+  }, [data, archivedPlayers]);
   const suggestions = useMemo(
-    () => (data && slot && country ? suggestCountryPlayers(data, country, query, usedNames) : []),
-    [data, slot, country, query, usedNames],
+    () => (suggestionData && slot && country
+      ? suggestCountryPlayers(suggestionData, country, query, usedNames)
+      : []),
+    [suggestionData, slot, country, query, usedNames],
   );
+  const searchingArchive = country === PARAGUAY && paraguayArchive?.status === 'loading';
+  const archiveUnavailable = country === PARAGUAY && paraguayArchive?.status === 'unavailable';
 
   const filledCount = filled.filter(Boolean).length;
   const timedOut = timerMode.seconds > 0 && timeLeft <= 0;
@@ -511,7 +539,9 @@ const WorldXi = () => {
                         >
                           {p.position}
                         </span>
-                        <span className="font-semibold text-sm text-foreground truncate min-w-0 flex-1">{p.name}</span>
+                          <span className="font-semibold text-sm text-foreground truncate min-w-0 flex-1">
+                            {p.name}{p.archiveYear && <span className="text-xs font-normal text-muted-foreground"> ({p.archiveYear})</span>}
+                          </span>
                         <span className="text-xs text-muted-foreground truncate shrink-0 max-w-[35%] ml-auto">{p.club}</span>
                       </button>
                     );
@@ -521,9 +551,12 @@ const WorldXi = () => {
 
               {feedback && <p className="text-destructive text-sm mt-2">{feedback}</p>}
               {!feedback && query.trim().length >= 2 && suggestions.length === 0 && (
-                <p className="text-muted-foreground text-sm mt-2">
-                  Nobody from {displayCountry(country)} matches that. Only players from {displayCountry(country)} can
-                  fill this slot, so try another name.
+                  <p className="text-muted-foreground text-sm mt-2" role={searchingArchive ? 'status' : undefined}>
+                    {searchingArchive
+                      ? 'Checking more Paraguay players…'
+                      : archiveUnavailable
+                        ? 'Extra Paraguay records are unavailable. Try another name.'
+                        : `Nobody from ${displayCountry(country)} matches that. Only players from ${displayCountry(country)} can fill this slot, so try another name.`}
                 </p>
               )}
               {!feedback && query.trim().length < 2 && (
@@ -599,7 +632,9 @@ const WorldXi = () => {
                       <>
                         <span className="min-w-0 flex-1">
                           <span className="block font-semibold text-foreground break-words">{p.name}</span>
-                          <span className="block text-xs text-muted-foreground break-words">{p.club}</span>
+                          <span className="block text-xs text-muted-foreground break-words">
+                            {p.club}{p.archiveYear && ` (${p.archiveYear})`}
+                          </span>
                         </span>
                         {seasonReport && (
                           <span aria-label={`Overall for ${p.name}`} className="text-[11px] font-bold text-gold shrink-0 tabular-nums whitespace-nowrap">
