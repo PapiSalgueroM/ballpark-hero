@@ -31,7 +31,7 @@ const { cm } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason,
   REAL_LEAGUES, leagueOf, sortedTable, leagueRounds,
-  projectedUclBracket, EURO_CLUBS, LEAGUE_NATIONS, ERA_LEAGUES,
+  projectedUclBracket, EURO_CLUBS, LEAGUE_NATIONS, ERA_LEAGUES, CLUB_MANAGER_START_LEAGUES,
 } = cm;
 
 let failures = 0;
@@ -432,15 +432,14 @@ console.log('8) All eight UCL groups play, and the bracket is earned');
   }
 
   // The flag map covers every league id, with no strays.
-  for (const lg of REAL_LEAGUES) {
-    if (!LEAGUE_NATIONS[lg.id]) fail(`league ${lg.id} has no nation flag mapping`);
-  }
-  // Round 312: era league ids are in the map too, so the era world picker
-  // carries flags; a stray id still fails.
+  // Include scoped starts from the picker as well as historic leagues.
   const knownIds = new Set([
-    ...REAL_LEAGUES.map(lg => lg.id),
+    ...CLUB_MANAGER_START_LEAGUES.map(lg => lg.id),
     ...Object.values(ERA_LEAGUES).flat().map(lg => lg.id),
   ]);
+  for (const id of knownIds) {
+    if (!LEAGUE_NATIONS[id]) fail(`league ${id} has no nation flag mapping`);
+  }
   for (const id of Object.keys(LEAGUE_NATIONS)) {
     if (!knownIds.has(id)) fail(`LEAGUE_NATIONS names an unknown league id: ${id}`);
   }
