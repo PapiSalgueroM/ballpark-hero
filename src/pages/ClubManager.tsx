@@ -137,9 +137,9 @@ function WorldEditorTile({ movedCount, onOpen }: { movedCount: number; onOpen: (
   );
 }
 
-function ScreenLoading({ children, compact = false }: { children: ReactNode; compact?: boolean }) {
+function ScreenLoading({ children, compact = false, setup = false }: { children: ReactNode; compact?: boolean; setup?: boolean }) {
   return (
-    <Suspense fallback={compact ? <span role="status" className="text-xs text-muted-foreground">Loading...</span> : <div role="status" className="min-h-48 py-12 text-center text-sm text-muted-foreground">Loading screen...</div>}>
+    <Suspense fallback={compact ? <span role="status" className="text-xs text-muted-foreground">Loading...</span> : <div role="status" className={cn("min-h-48 py-12 text-center text-sm text-muted-foreground", setup && "max-sm:min-h-[max(12rem,65svh)]")}>Loading screen...</div>}>
       {children}
     </Suspense>
   );
@@ -603,7 +603,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
                 };
               });
               return (
-                <ScreenLoading><ClubManagerTeamPicker
+                <ScreenLoading setup><ClubManagerTeamPicker
                   rows={rows}
                   editing={editing}
                   historicalEra={historicPick ? era : undefined}
@@ -657,7 +657,7 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
 
         {/* -------- Step 5 (Round 303): who is in the dugout -------- */}
         {pickStep === 'manager' && !waitingForEra && (
-          <ScreenLoading><ManagerForm
+          <ScreenLoading setup><ManagerForm
             clubName={pendingCustomSpec?.name || g.pendingClub || 'Back'}
             defaultNation={pickNation?.name ?? 'England'}
             onBack={() => {
