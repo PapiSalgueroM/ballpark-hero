@@ -1,5 +1,12 @@
 ## 2026-11-13: Home consent flow and current verification
 
+## November 13, 04:20 UTC: Football Grid correction published
+
+PR #772 is merged as 2f231c83a and published with deployment 45f0ca9e-7001-4930-ada4-342905200333. Compatibility shipped before the exact guarded Peterson DML at 04:07 UTC. Public data now includes NO/SEA/TEN and 2007-2021. The other 22,007 full rows and Bears namesake held; 12 pinned public-code phone cases passed with captured public player rows, and all 172 live routes passed. Draft #550 is superseded and closed. No other SQL, Edge function, admin status or reporter message changed; the migration ledger was not modified.
+
+Broad integration 8caaf042267009eedd571056f5e32f6cd422c0da preserves Football Grid ownership controls: 13 focused cases and full app types pass; fresh frozen build and 23 readers pass. Final combined output passes separate boot, all 16 caps/400 probes, four Home consent and six Football Grid native cases. Its 922-file manifest is 98083db78010bfe755d2c00e3aa6ea0707ea517e3f521778d20039dacbfd85aa. QA-only badges scanner now resolves actual immutable slug constants; NRL completion and All Rounder behavior already work and remain unchanged. The older 845 offline audit is terminal (585 pass,210 fail,33 skip,17 empty), not a current all-suite result. Broad #770 remains draft. See docs/plans/2026-11-12-site-readiness.md for exact limits, receipts and the prior qualified artifact.
+
+
 The b94dd2a43 review source has the same complete build inputs as compiled 918fdab2f; their only file difference is this state record. Actual application types, the ordinary build, all 23 page readers, separate snapshot boots and redirects, all 16 download caps and 400 isolation probes pass. Home cookie choices now occupy document flow after the header, leaving Daily links unobscured. Thirty-seven consent tests and four phone/desktop journeys pass. Game consent behavior and ad rules are unchanged.
 
 The 494dedb hosted batch has 15 successes, 32 failures, one timed-out cancellation and one active run at 03:33 UTC. Career save recovery now passes all 33 normal cases and 23 copied faults locally; Academy/Stadium loads pass all 13 normal cases, eight copied controls and three corpus controls. Only their stale test hooks changed. The older 845-harness audit still waits for its Summer balance children. See the [readiness record](plans/2026-11-12-site-readiness.md) for exact artifacts, live releases and unresolved work.
