@@ -1,6 +1,10 @@
 # DoUKnowBall site readiness and game work
 
-Checkpoint at 10:52 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+Checkpoint at 11:02 UTC on November 13, 2026. The broad update remains draft [PR #770](https://github.com/PapiSalgueroM/ballpark-hero/pull/770). The work continued after the 24-hour report below.
+
+Transfer Path Classic accepts the verified 2015 Lampard to Villa link at New York City FC. The reported two-step chain then reaches Messi at Barcelona and scores 1,000. Twelve published browser checks passed, including reload, the reveal and the Europe-only Deco route. The exact admin report was marked Fixed after live verification, leaving 149 open reports. All 173 public sitemap URLs passed. [PR #807](https://github.com/PapiSalgueroM/ballpark-hero/pull/807). [NYCFC match report](https://www.newyorkcityfc.com/news/villa-lampard-and-pirlo-score-nycfc-defeat-union).
+
+The #807 standalone sweep found missing flag image dimensions on Squad Deal and Soccer Higher or Lower, and a missing main landmark on Stadium Tycoon. The broader tree already carries those fixes. Its exact refreshed build `144c01c057308d90025446761146481fe91c6c5e` passes TypeScript, the 31-route static graph and 105 browser openings across three widths, including all 93 ranked entries. The runs reported no unsized images, foreign ranked game bundles, overflow or page errors. Standalone publication checks for the two fixes remain in progress.
 
 The NRL Development assistant is live for the 2026 and 2027 starts. Up to three returning players aged 24 or under can gain one rating point, capped by their potential, after eight regular-season appearances from the hire. A reserve must take the field to count. The assistant uses the same staff slot and cost, gives no match-day boost and shares the existing youth-development limit. All 287 focused tests and six published browser cases passed. The updated guide was accepted by IndexNow. [PR #806](https://github.com/PapiSalgueroM/ballpark-hero/pull/806).
 
