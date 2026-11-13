@@ -125,6 +125,7 @@ import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
 import { shareResult } from "@/lib/share";
 import { useRevealScroll } from "@/hooks/useRevealScroll";
 import { saveFence } from '@/lib/saveFence';
+import { holdPendingSave } from '@/lib/safeStorage';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { useArrivalTop } from '@/hooks/useArrivalTop';
 import { TournamentCard, InternationalHistoryTile } from "@/components/soccer-career/InternationalPanel";
@@ -900,6 +901,11 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
     return ack;
   }, [career, sourceIsCurrent]);
   useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);
+  useEffect(() => {
+    if (career && saveFailed && !saveMoved) {
+      return holdPendingSave(() => saveCurrentCareer() !== null);
+    }
+  }, [career, saveCurrentCareer, saveFailed, saveMoved]);
 
   const retryRecord = () => {
     discardRecordAcknowledgement.current = null;
