@@ -12,6 +12,7 @@ import { SiteMenu } from "@/components/layout/SiteMenu";
 import { SiteMenuProvider } from "@/components/layout/SiteMenuHost";
 import { UpdateNudge } from "@/components/layout/UpdateNudge";
 import { Footer } from "@/components/game/Footer";
+import { normalizeRoutePath } from "@/lib/routePath";
 const LiveTicker = lazy(() => import("@/components/layout/LiveTicker").catch(() => ({ default: () => null })));
 const Index = lazy(() => import("./pages/Index"));
 const Footle = lazy(() => import("./pages/Footle"));
@@ -363,6 +364,7 @@ const AppContent = () => {
   const { pathname, search } = useLocation();
   const gameRoute = isGameRoute(pathname);
   const opensCareerRules = /^\/(?:nba|nfl|mlb|nhl)-my-career\/?$/.test(pathname);
+  const nrlOwnsConsent = normalizeRoutePath(pathname) === "/nrl-team-manager";
   return (
     <SiteMenuProvider>
       {/* Round 215: the first tab stop on every page jumps a keyboard player
@@ -379,7 +381,7 @@ const AppContent = () => {
           will not keep anything. Renders nothing for everybody else. */}
       <StorageNotice />
       <Suspense fallback={<RouteLoader />}>
-      {gameRoute && !opensCareerRules && <CookieConsent inline />}
+      {gameRoute && !opensCareerRules && !nrlOwnsConsent && <CookieConsent inline />}
       {/* Round 544: around the routes, inside Suspense. A render throw in one
           game now costs that game and nothing else: the header above and the
           global footer below both survive, and the footer is where the report a

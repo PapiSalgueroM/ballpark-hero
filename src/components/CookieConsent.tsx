@@ -10,7 +10,9 @@ import {
 } from '@/lib/consentPreferences';
 import { safeLocalStorage } from '@/lib/safeStorage';
 
-export function CookieConsent({ inline = false, compactInitial = false }: { inline?: boolean; compactInitial?: boolean }) {
+export function CookieConsent({ inline = false, compactInitial = false, waitForRulesHost = false }: {
+  inline?: boolean; compactInitial?: boolean; waitForRulesHost?: boolean;
+}) {
   const [preferences, setPreferences] = useState(readConsentPreferences);
   const [visible, setVisible] = useState(() => inline && !preferences && safeLocalStorage.getItem('cookie-consent') !== 'essential');
   const [showDetails, setShowDetails] = useState(false);
@@ -135,6 +137,7 @@ export function CookieConsent({ inline = false, compactInitial = false }: { inli
   }, [visible]);
   const insideHelp = !!helpTarget?.isConnected;
   const inlineNotice = inline && !insideHelp;
+  const waitingForRules = waitForRulesHost && !insideHelp;
 
   useEffect(() => {
     if (!visible || insideHelp || inlineNotice) return;
@@ -152,7 +155,7 @@ export function CookieConsent({ inline = false, compactInitial = false }: { inli
   }, [visible, insideHelp, inlineNotice]);
 
   useEffect(() => {
-    if (!visible) return;
+    if (!visible || waitingForRules) return;
     const el = ref.current;
     if (!el) return;
     const unhide = () => { if (el.getAttribute('aria-hidden') !== null) el.removeAttribute('aria-hidden'); };
@@ -160,7 +163,7 @@ export function CookieConsent({ inline = false, compactInitial = false }: { inli
     const observer = new MutationObserver(unhide);
     observer.observe(el, { attributes: true, attributeFilter: ['aria-hidden'] });
     return () => observer.disconnect();
-  }, [visible, helpTarget]);
+  }, [visible, helpTarget, waitingForRules]);
 
   const save = (choice: ConsentPurposes) => {
     explicitlyOpen.current = false;
@@ -175,7 +178,7 @@ export function CookieConsent({ inline = false, compactInitial = false }: { inli
     setVisible(false);
     opener.current?.focus({ preventScroll: !inlineNotice });
   };
-  if (!visible) return null;
+  if (!visible || waitingForRules) return null;
 
   const compact = compactInitial && !showDetails && !insideHelp && !pendingReload;
   const buttonPadding = inlineNotice || compact ? 'px-2 sm:px-4' : 'px-4';
