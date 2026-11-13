@@ -18,13 +18,14 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
-  nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlInjuries, nrlLadder, nrlMatchdaySelection, nrlNextRound,
-  nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, NRL_BENCH_SIZE, NRL_COACHING_BONUS,
-  NRL_MAX_BENCH_USED, NRL_ROLES,
+  nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlLadder, nrlMatchdaySelection, nrlNextRound,
+  nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
+  NRL_BENCH_SIZE, NRL_COACHING_BONUS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
-  createNrlCareer, isNrlOpeningMatchdayPlayer, loadNrlOpeningMatchdayCareer, nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining, nrlPositionTrainingCandidates, nrlRivalSquad,
+  createNrlCareer, isNrlOpeningMatchdayPlayer, loadNrlOpeningMatchdayCareer, nrlAttackPlanPreview, nrlOppositionReport, nrlPositionTraining,
+  nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
   NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, type NrlCareerAction, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
@@ -766,17 +767,68 @@ function PositionTraining({ career, onAction, disabled }: {
   );
 }
 
+function ReserveGradeDevelopment({ career, onAction, disabled }: {
+  career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
+}) {
+  const summary = useRef<HTMLElement>(null);
+  const [playerId, setPlayerId] = useState('');
+  const { season } = career;
+  const { year, clubId, round, reserveGrade } = season;
+  if (career.legacySeason || career.retired || season.phase !== 'regular') return null;
+  const candidates = nrlReserveGradeCandidates(career);
+  const selected = candidates.find(player => player.id === playerId);
+  const assigned = reserveGrade && season.squad.find(player => player.id === reserveGrade.playerId);
+  const remaining = nrlReserveGradeRemaining(season);
+  if (!assigned && !candidates.length) return null;
+  return (
+    <details className="group mt-3 rounded-lg border border-border bg-background px-3">
+      <summary ref={summary} className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Reserve-grade development<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-3 pb-3 text-sm">
+        <p className="text-muted-foreground">Send one eligible young player each season for {NRL_RESERVE_GRADE_ROUNDS} regular rounds, including byes. He stays contracted and counts against your cap. He returns with one rating point if he completes the spell.</p>
+        {assigned ? <>
+          <p role="status" className="font-semibold">{remaining
+            ? `${assigned.name} is in reserve grade. ${remaining} ${remaining === 1 ? 'round' : 'rounds'} left.`
+            : reserveGrade?.recalledRound !== undefined ? `${assigned.name} was recalled early. No rating gain.`
+              : `${assigned.name} completed the spell and gained one rating point.`}</p>
+          {remaining > 0 && <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled} onClick={() => {
+            if (onAction({ type: 'recallReserveGrade', year, clubId, round, playerId: assigned.id })) summary.current?.focus();
+          }}>Recall player</Button>}
+        </> : <>
+          <label className="block font-semibold">
+            Player for reserve grade
+            <select className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2" disabled={disabled}
+              value={selected?.id ?? ''} onChange={event => setPlayerId(event.target.value)}>
+              <option value="">Choose a player</option>
+              {candidates.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role}</option>)}
+            </select>
+          </label>
+          {selected && <p className="text-muted-foreground">Unavailable for your first-grade lineup and bench during the spell. Recall early to bring him back without a rating gain.</p>}
+          <Button type="button" size="lg" className="px-3" disabled={disabled || !selected} onClick={() => {
+            if (selected && onAction({ type: 'startReserveGrade', year, clubId, round, playerId: selected.id })) {
+              setPlayerId('');
+              summary.current?.focus();
+            }
+          }}>Start reserve-grade spell</Button>
+        </>}
+      </div>
+    </details>
+  );
+}
+
 function Squad({ career, onAction, disabled }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
 }) {
   const { season } = career;
   const bench = nrlBench(season);
-  const injuries = nrlInjuries(season);
   const starters = new Set(Object.values(season.lineup));
+  const availability = nrlUnavailable(season);
+  const reserveGradeId = nrlReserveGradeRemaining(season) ? season.reserveGrade?.playerId : undefined;
   const leaders = nrlScoringLeaders(season);
   const tryLeaders = nrlTryLeaders(leaders);
-  const unavailable = season.squad.filter(player => injuries.has(player.id));
-  const reserves = season.squad.filter(player => !starters.has(player.id) && !injuries.has(player.id));
+  const unavailable = season.squad.filter(player => availability.has(player.id));
+  const reserves = season.squad.filter(player => !starters.has(player.id) && !availability.has(player.id));
   const proposal = disabled ? null : nrlFitLineup(season);
   const nameOf = (id: string) => season.squad.find(player => player.id === id)?.name;
   const squadName = (id: string, name: string) =>
@@ -818,6 +870,7 @@ function Squad({ career, onAction, disabled }: {
       )}
       <SavedLineup career={career} onAction={onAction} disabled={disabled} />
       <PositionTraining career={career} onAction={onAction} disabled={disabled} />
+      <ReserveGradeDevelopment career={career} onAction={onAction} disabled={disabled} />
       {season.injuryTracking ? (
         <section className="mt-4 rounded-lg border border-border bg-background p-3" aria-labelledby="nrl-availability" data-nrl-availability>
           <h3 id="nrl-availability" className="text-sm font-semibold">Availability</h3>
@@ -825,10 +878,11 @@ function Squad({ career, onAction, disabled }: {
             <>
               <ul className="mt-1 divide-y divide-border text-sm">
                 {unavailable.map(player => {
-                  const remaining = injuries.get(player.id)!;
+                  const remaining = availability.get(player.id)!;
                   return <li key={player.id} className="flex flex-wrap justify-between gap-x-3 py-1">
                     <span>{player.name} · {player.role}</span>
-                    <span className="text-muted-foreground">Out for {remaining} {remaining === 1 ? 'round' : 'rounds'}</span>
+                    <span className="text-muted-foreground">{player.id === reserveGradeId ? 'On reserve-grade development'
+                      : `Out for ${remaining} ${remaining === 1 ? 'round' : 'rounds'}`}</span>
                   </li>;
                 })}
               </ul>
