@@ -1,16 +1,17 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useSiteBack } from '@/hooks/useSiteBack';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
 import { OAUTH_PROVIDERS } from '@/lib/authProviders';
 
 const TermsOfService = () => {
-  const navigate = useNavigate();
+  const goBack = useSiteBack();
 
   return (
-    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
+    <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo title="Terms of Service - DoUKnowBall" description="Terms of service for DoUKnowBall sports trivia games." path="/terms" />
       <button
-        onClick={() => navigate(-1)}
+        onClick={goBack}
         className="mb-6 inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft className="w-4 h-4" />
@@ -18,7 +19,7 @@ const TermsOfService = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Terms of Service</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: October 21, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: November 11, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -47,7 +48,7 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">5. Advertising</h2>
-          <p>Advertising can help cover hosting costs and keep the Site free. The Site is set up to request Google AdSense ads in non-personalized mode. Google's advertising script loads only when you turn on Advertising in Cookie choices. Analytics is a separate purpose but is currently paused. Advertising stays off if your browser sends a Global Privacy Control signal. You can leave optional purposes off and still play. See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> for the full advertising disclosure and how to change your choices.</p>
+          <p>Advertising can help cover hosting costs and keep the Site free. The Site is set up to request Google AdSense ads in non-personalized mode. Google's advertising script loads on pages with an ad slot when you turn on Advertising in Cookie choices. Analytics is a separate purpose and is currently paused. Advertising stays off if your browser exposes a Global Privacy Control signal to the site. You can leave optional purposes off and still play. See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> for the full advertising disclosure and how to change your choices.</p>
         </div>
 
         <div>
@@ -113,7 +114,7 @@ const TermsOfService = () => {
           <p>If you have any questions about these Terms of Service or need to reach us for legal inquiries, please contact us at <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a>.</p>
         </div>
       </section>
-    </div>
+    </main>
   );
 };
 

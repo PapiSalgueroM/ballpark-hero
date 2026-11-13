@@ -1,16 +1,17 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useSiteBack } from '@/hooks/useSiteBack';
 import { ArrowLeft } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
 import { OAUTH_PROVIDERS } from '@/lib/authProviders';
 
 const PrivacyPolicy = () => {
-  const navigate = useNavigate();
+  const goBack = useSiteBack();
 
   return (
-    <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
+    <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo title="Privacy Policy - DoUKnowBall" description="Privacy policy for DoUKnowBall sports trivia games." path="/privacy" />
       <button
-        onClick={() => navigate(-1)}
+        onClick={goBack}
         className="mb-6 inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
       >
         <ArrowLeft className="w-4 h-4" />
@@ -18,7 +19,7 @@ const PrivacyPolicy = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: October 22, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: November 11, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -36,7 +37,7 @@ const PrivacyPolicy = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">2. Cookies &amp; Local Storage</h2>
           <p>This site uses browser local storage to save your game progress, best scores, preferences, and UI state, and to remember your optional cookie choices. Local storage data stays on your device and is not transmitted to our servers except as described in Section 1.</p>
-          <p className="mt-2">Advertising and Analytics are separate optional purposes, and both start off. Analytics is currently paused, and the banner explains why. <strong>Accept all</strong> enables the optional purposes currently available, <strong>Reject all</strong> keeps them off, and <strong>Save choices</strong> applies your available selections. If your browser sends a <strong>Global Privacy Control</strong> signal, Advertising stays off. You can play the games with optional purposes off. We ask you to choose again after 180 days.</p>
+          <p className="mt-2">Advertising and Analytics are separate optional purposes, and both start off. Analytics is currently paused, and the banner explains why. <strong>Accept all</strong> enables the optional purposes currently available, <strong>Reject all</strong> keeps them off, and <strong>Save choices</strong> applies your available selections. If your browser exposes a <strong>Global Privacy Control</strong> signal to the site, Advertising stays off even if you previously enabled it. You can play the games with optional purposes off. We ask you to choose again after 180 days.</p>
           <p className="mt-2">The <strong>Cookie choices</strong> link in the footer opens your current settings. You can turn Advertising off and choose <strong>Save choices</strong>. Analytics stays off while it is paused. Saving a withdrawal clears the relevant optional cookies our code can access on this site. We normally reload to stop scripts that are already loaded. If your choice cannot be saved or a game has unsaved progress, optional loading stays paused and a notice asks you to refresh when it is safe. This does not erase information already received by a provider or remove cookies controlled by another site or inaccessible to our code. You can also manage cookies and clear stored site data in your browser settings. For requests concerning data already collected, see Section 6.</p>
           <p className="mt-2">Read our <Link to="/cookie-policy" className="underline hover:text-foreground transition-colors">Cookie Policy</Link> for a focused guide to browser storage and changing your choices.</p>
           <p className="mt-2">Third-party services (such as Google AdSense) use cookies and similar technologies to serve ads. If ads are served on this site, we request non-personalized ads. Those cookies are governed by the third party's own privacy policy, and Section 5 explains what they do.</p>
@@ -88,7 +89,7 @@ const PrivacyPolicy = () => {
             <li>Other third party vendors and ad networks may also serve ads on this site. You can opt out of some of these vendors' use of cookies for personalized advertising by visiting <a href="https://www.aboutads.info/choices" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">www.aboutads.info/choices</a>, and in the European Union at <a href="https://www.youronlinechoices.eu" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">www.youronlinechoices.eu</a>.</li>
             <li>Google explains how it uses information from sites that use its services at <a href="https://policies.google.com/technologies/partner-sites" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">policies.google.com/technologies/partner-sites</a>.</li>
           </ul>
-          <p className="mt-2">When Advertising is off, this site does not load Google's advertising code. Analytics is currently paused. Advertising also stays off when your browser sends Global Privacy Control. Turning on Advertising lets us request non-personalized ads, which can still use cookies and identifiers as described above; it does not mean anonymous advertising. You can change the available Advertising setting through Cookie choices in the footer. Analytics remains paused.</p>
+          <p className="mt-2">When Advertising is off, this site does not load Google's advertising code. Analytics is currently paused. Advertising also stays off when your browser exposes Global Privacy Control to the site. Non-personalized ad requests can still use cookies and identifiers as described above. You can change your Advertising setting through Cookie choices in the footer.</p>
         </div>
 
         <div>
@@ -107,8 +108,9 @@ const PrivacyPolicy = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">8. Your Rights</h2>
           <p>Wherever you live, you can ask us what data we hold about you, ask us to correct it, or ask us to delete it, by emailing <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a>. We answer within 30 days and we do not charge for it.</p>
-          <p className="mt-2"><strong>Where the data protection laws of the European Economic Area, the United Kingdom or Switzerland apply,</strong> you may also have rights to restrict or object to processing, receive a portable copy of your data, withdraw consent and complain to your local data protection authority, subject to the conditions and exceptions in those laws. Use Cookie choices in the footer to withdraw advertising consent. Analytics remains paused. Where these laws apply, our bases are consent for optional advertising technologies, performance of a contract for account services where applicable, and legitimate interests in operating and securing the Site where that basis is available and appropriate.</p>
-          <p className="mt-2"><strong>Where applicable California privacy law gives you these rights,</strong> you can request information about collection and use, deletion or correction, and exercise your rights without unlawful discrimination. You can also use the request process above wherever you live. We do not sell personal information. We request non-personalized ads, as described in Section 5. You can turn Advertising off in Cookie choices; Reject all keeps both advertising and analytics off.</p>
+          <p className="mt-2"><strong>Where the EU General Data Protection Regulation (GDPR), the UK GDPR or Swiss data protection law applies,</strong> you may also have rights to restrict or object to processing, receive a portable copy of your data, withdraw consent and complain to your local data protection authority. You can withdraw advertising consent at any time in Cookie choices. Where these laws apply, we rely on consent for optional advertising technologies, performance of a contract for account services where applicable, and legitimate interests in operating and securing the site where that basis is appropriate. For details on EU rights, see the <a href="https://commission.europa.eu/law/law-topic/data-protection/information-individuals_en" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">European Commission guide to GDPR rights</a>.</p>
+          <p className="mt-2"><strong>California residents:</strong> Where the California Consumer Privacy Act (CCPA) applies, you can ask to know what personal information is collected, used, disclosed, sold or shared, ask to correct or delete it, and exercise your rights without unlawful discrimination. Where applicable, you can also opt out of sale or sharing for cross-context behavioral advertising and limit certain uses of sensitive personal information. To submit a request, email the address above.</p>
+          <p className="mt-2">We do not sell personal information. We request non-personalized ads, as described in Section 5. To turn off optional advertising, select <strong>Reject all</strong> or turn off Advertising and select <strong>Save choices</strong> in Cookie choices. If your browser exposes a Global Privacy Control signal to the site, we honor it by keeping Advertising off. Learn more from the <a href="https://www.cppa.ca.gov/faq.html" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">California Privacy Protection Agency guide</a>.</p>
         </div>
 
         <div>
@@ -132,7 +134,7 @@ const PrivacyPolicy = () => {
           <p>DoUKnowBall is operated by Anthony Salguero, an individual. If you have any questions about this privacy policy, want to request access to or deletion of your data, or have a general concern, please contact us at <a href="mailto:douknowball1@gmail.com" className="underline hover:text-foreground transition-colors">douknowball1@gmail.com</a>. For issues with a specific question or answer in a game, you can also use the "Report" button on that game.</p>
         </div>
       </section>
-    </div>
+    </main>
   );
 };
 
