@@ -1768,9 +1768,9 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       if (action.year !== year || action.clubId !== clubId || action.round !== round) return state;
       if (action.type === 'startReserveGrade') {
         const player = nrlReserveGradeCandidates(state).find(candidate => candidate.id === action.playerId);
-        return player ? { ...state, season: { ...season, reserveGrade: {
-          playerId: player.id, startedRound: round, startingRating: player.rating,
-        } } } : state;
+        if (!player) return state;
+        const next = { ...season, reserveGrade: { playerId: player.id, startedRound: round, startingRating: player.rating } };
+        return { ...state, season: season.individualRecoveryId === player.id ? repairMatchday(next) : next };
       }
       if (!reserveGrade || reserveGrade.playerId !== action.playerId || !nrlReserveGradeRemaining(season)) return state;
       return { ...state, season: repairMatchday({ ...season, reserveGrade: { ...reserveGrade, recalledRound: round } }) };
