@@ -377,7 +377,17 @@ function digestExpansionControl(inputDirectory) {
   const measuredHarness = harnessSource(inputSource.ref, 'simClubManagerSlots.mjs');
   const inputHarnessContract = historicalHarnessContract('simClubManagerSlots.mjs', measuredHarness);
   assert.equal(inputSource.harness.normalizedOriginalSha256, sha(measuredHarness), 'The measured harness matches its actual Git source');
-  assert.equal(inputSource.sourceManifest['scripts/simClubManagerSlots.mjs'], sha(measuredHarness), 'The archived harness source is exact');
+  const archivedHarnessSha = inputSource.sourceManifest['scripts/simClubManagerSlots.mjs'];
+  if (archivedHarnessSha !== sha(measuredHarness)) {
+    const archive = inputSource.sourceArchive;
+    assert.equal(path.basename(archive.file), archive.file);
+    const archivePath = path.resolve(inputDirectory, '..', '..', archive.file);
+    assert.equal(sha(fs.readFileSync(archivePath)), archive.sha256, 'The recorded source archive is exact');
+    const archivedHarness = execFileSync('tar', ['-xOf', archivePath, 'scripts/simClubManagerSlots.mjs']);
+    assert.equal(sha(archivedHarness), archivedHarnessSha, 'The raw archived harness matches its manifest');
+    assert.equal(archivedHarness.toString('utf8').replaceAll('\r\n', '\n'), measuredHarness,
+      'Only archive line endings can differ from the exact Git source');
+  }
   if (inputSource.harness.measuredFile !== undefined) {
     assert.equal(path.basename(inputSource.harness.measuredFile), inputSource.harness.measuredFile);
     assert.equal(fs.readFileSync(path.join(inputDirectory, inputSource.harness.measuredFile), 'utf8').replaceAll('\r\n', '\n'), measuredHarness,
@@ -505,7 +515,7 @@ try {
     const paths = git(['ls-tree', '--name-only', ref]).split('\n').filter(name => selected.has(name));
     assert(paths.includes('src') && paths.includes('scripts') && paths.includes('vitest.config.ts'));
     const archive = path.join(OUT, `${arm}-source.tar.gz`);
-    execFileSync('git', ['archive','--format=tar.gz',`--output=${archive}`,ref,...paths], {cwd:ROOT});
+    execFileSync('git', ['-c','core.autocrlf=false','archive','--format=tar.gz',`--output=${archive}`,ref,...paths], {cwd:ROOT});
     execFileSync('tar', ['-xzf',archive,'-C',directory], {cwd:ROOT});
     const sourceManifest = {};
     for (const relative of ['src/lib/clubManager.ts','src/lib/clubManagerEras.ts','src/lib/clubManagerCalendar.ts',
