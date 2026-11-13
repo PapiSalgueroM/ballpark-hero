@@ -10,10 +10,22 @@ if(mode==='units'){
  for(const file of files){const suite=report.testResults.find(v=>v.name.replaceAll('\\','/').endsWith('/'+file));assert(suite,'Expected actual unit file '+file);assert(suite.assertionResults.length>0,'Nonempty actual file '+file);assert(suite.assertionResults.every(v=>v.status==='passed'));observed.push({file,passed:suite.assertionResults.length});}
  assert.equal(report.numPassedTests,report.testResults.flatMap(v=>v.assertionResults).filter(v=>v.status==='passed').length);fs.writeFileSync(path.join(OUT,'units-receipt.json'),JSON.stringify({observed,passed:report.numPassedTests,failed:0},null,2));console.log('Units: '+report.numPassedTests+' actual passed assertions in all4 required files,0 skipped.');
 }else if(mode==='outcomes'){
- const report=read('outcomes.json');assert.equal(report.groups.length,9);assert(report.groups.every(v=>v.ok));assert.equal(report.neutral.length,60);assert(report.neutral.every(v=>v.drawCount>0));assert.equal(report.controls.length,8);assert.equal(report.fixtures.length,9);assert.deepEqual(report.sourceAfter,report.sourceBefore);
+ const report=read('outcomes.json');assert.equal(report.groups.length,9);assert(report.groups.every(v=>v.ok));assert.equal(report.neutral.length,60);assert.equal(report.controls.length,8);assert.equal(report.fixtures.length,9);assert.deepEqual(report.sourceAfter,report.sourceBefore);
  for(const c of report.controls){assert.equal(c.faults.length,1);assert.notEqual(c.faults[0].before,c.faults[0].after);assert.deepEqual(c.groups.filter(v=>!v.ok).map(v=>v.name),c.expectedFailures);assert(c.groups.filter(v=>!v.ok).every(v=>v.assertion));assert.equal(c.groups.filter(v=>v.ok).length,9-c.expectedFailures.length);assert(c.loaded.length>0);assert(c.loaded.some(v=>v.instrumentation&&v.instrumentation.sha256));}
- for(const pair of report.neutral){const v=read(pair.file);assert.deepEqual(v.current,v.original,'Complete original state and draw pair '+pair.file);}
- console.log('Outcomes:9 healthy groups,60 entire original/current state+RNG pairs,8 independently compiled effective exact faults,9 native fixture branches.');
+ const kinds=['season','absent','stale','malformed'];
+ for(const kind of kinds) assert.equal(report.neutral.filter(pair=>pair.kind===kind).length,15,'Expected 15 '+kind+' receipts');
+ assert.equal(new Set(report.neutral.map(pair=>pair.file)).size,60,'All outcome receipts must have distinct files');
+ for(const pair of report.neutral){
+  const v=read(pair.file);
+  assert.equal(pair.drawCount,v.current.draws.length,'Draw receipt count '+pair.file);
+  if(pair.kind==='season'||pair.kind==='absent'){
+   assert(pair.drawCount>0,'Original behavior must consume draws '+pair.file);
+   assert.deepEqual(v.current,v.original,'Complete original state and draw pair '+pair.file);
+  }else{
+   assert.deepEqual(v.current,{value:v.input,draws:[]},'Complete invalid brief refusal '+pair.file);
+  }
+ }
+ console.log('Outcomes: 9 healthy groups, 30 complete original/current state and RNG pairs, 30 exact invalid-brief refusals with no draws, 8 effective copied source controls, 9 native fixture branches.');
 }else if(mode==='page-control'){
  const report=read('page-control-receipt.json');assert.equal(report.anchorCount,1);assert.notEqual(report.sourceHash,report.faultHash);assert.equal(report.baseline.passed,6);assert.equal(report.baseline.exit,0);assert.equal(report.fault.exit,1);assert.deepEqual(report.fault.failed.map(v=>v.title),report.expectedFailures);assert.equal(report.fault.unrelatedPassed,4);assert.deepEqual(report.sourceAfter,report.sourceBefore);console.log('Page source control:2 intended actual equality failures,4 unrelated page cases passed,6-case untouched copied baseline passed.');
 }else if(mode==='native'){
