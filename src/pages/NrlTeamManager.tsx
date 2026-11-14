@@ -773,8 +773,13 @@ function SeasonFixtures({ season, next, initialClub }: { season: NrlManagerState
   const byes = regular ? clubs.filter(club => !regular.some(pair => pair.includes(club.id))) : [];
   const finals = new Set(results.filter(match => match.finalsRound !== undefined).map(match => match.round));
   if (next.finalsRound !== null && next.fixtures.length) finals.add(next.round);
-  const rivalFinals = rival ? [...results.filter(match => match.finalsRound !== undefined),
-    ...(next.finalsRound === null ? [] : next.fixtures)].filter(match => match.homeId === rival.id || match.awayId === rival.id) : [];
+  const rivalFinals = rival ? [
+    ...results.filter(match => match.finalsRound !== undefined && (match.homeId === rival.id || match.awayId === rival.id))
+      .map(match => ({ round: match.round, label: scoreLine(match, year, shortName) })),
+    ...(next.finalsRound === null ? [] : next.fixtures)
+      .filter(match => match.homeId === rival.id || match.awayId === rival.id)
+      .map(match => ({ round: match.round, label: shortName(year, match.homeId) + ' vs ' + shortName(year, match.awayId) })),
+  ] : [];
 
   return (
     <details className="rounded-xl border border-border bg-card px-4">
@@ -836,7 +841,7 @@ function SeasonFixtures({ season, next, initialClub }: { season: NrlManagerState
           {rivalFinals.map(match => (
             <li key={match.round} className="flex flex-wrap justify-between gap-x-2 py-2">
               <span className="text-muted-foreground">{roundLabel(match.round, draw.length)}</span>
-              <span>{'homeScore' in match ? scoreLine(match, year, shortName) : shortName(year, match.homeId) + ' vs ' + shortName(year, match.awayId)}</span>
+              <span>{match.label}</span>
             </li>
           ))}
         </ol>
