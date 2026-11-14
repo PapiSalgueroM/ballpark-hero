@@ -9,6 +9,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
     howToPlay: [
       'Choose your season and club, then open Squad. Pick a fit starting 13 and six reserves. Save two lineups, First choice and Rotation, for this season. Preview any fitness or availability replacements before applying either one.',
       'Availability in Squad shows the first regular-season match an injured player can return for. Byes count toward recovery.',
+      'In Squad, you can pay once per season for physio to shorten an injury by one round. The player still sits out the current round.',
       'After regular-season club matches, player ratings can rise or fall one point at a time. Check Rating changes in Squad. Existing players carry their ratings into the new season.',
       'Use Create a club when starting either season to name a fictional team, its home ground and its colour. The club takes an existing league slot and uses that slot’s simulated fixtures, starting strength and salary cap.',
       'In Squad, choose a club captain from your starting 13. They give the team one extra defence point when they lead the side at kickoff or after half time.',

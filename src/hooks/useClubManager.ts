@@ -118,6 +118,7 @@ type StartHold = { key: string; begin: () => void; settle: () => void; over: boo
 import { saveFence, fenceKeyOf } from '@/lib/saveFence';
 import { setNationalXI, type NationalXI } from '@/lib/clubManagerNationalXI';
 import { playNationalQualifier } from '@/lib/clubManagerNationalQualifiers';
+import { playNationalFinal } from '@/lib/clubManagerNationalFinals';
 import { SAVE_KEY } from '@/lib/clubManager';
 import { setAsideSave, browserStorage, SET_ASIDE_SLOT_KEY } from '@/lib/brokenSaveRecovery';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
@@ -1071,6 +1072,16 @@ export function useClubManager() {
     return true;
   }, [phase, holdsActiveSlot, persist]);
 
+  const playNextNationalFinal = useCallback((fixtureId: string, mentality: Mentality): boolean => {
+    const now = careerRef.current;
+    if (phase !== 'seasonEnd' || !holdsActiveSlot() || !now) return false;
+    const next = playNationalFinal(now, fixtureId, mentality);
+    if (!next || !persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    return true;
+  }, [phase, holdsActiveSlot, persist]);
+
   /* ---------- transfers ---------- */
   /* Round 634 review: read off the career the player is looking at (the last
      commit), which is the one his press was made against. */
@@ -1509,7 +1520,7 @@ export function useClubManager() {
     setCustomShape, setFormationIndex, setMentality, setTeamInstructions, setXiSlot, swapXiSlots, autoPick, setShirtNumber,
     saveMatchPlan, applyMatchPlan, deleteMatchPlan,
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
-    play, quickPlay, continueFromReport, nextSeason, playNextNationalQualifier,
+    play, quickPlay, continueFromReport, nextSeason, playNextNationalQualifier, playNextNationalFinal,
     buy,
     negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, addWageRoom, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, setNationalTactics, saveNationalXI, dismissNegotiation, clause, loan,
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,

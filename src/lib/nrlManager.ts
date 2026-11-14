@@ -95,6 +95,7 @@ interface NrlHalftimeDecision {
   fieldGoalPlan?: true;
 }
 export interface NrlInjury { playerId: string; rounds: number }
+export interface NrlPhysioTreatment { playerId: string; injuryRound: number; round: number }
 type NrlGoldenScore = keyof typeof GOLDEN_POINT_VALUES;
 type NrlGoldenPoint = 'draw' | { period: 1 | 2; score: NrlGoldenScore };
 type NrlScorePair = [home: number, away: number];
@@ -163,6 +164,7 @@ export interface NrlManagerState {
   lineup: Record<NrlRole, string>;
   bench?: string[];
   injuryTracking?: true;
+  physio?: NrlPhysioTreatment;
   kickerId?: string;
   backupKickerId?: string;
   captainId?: string;
@@ -374,18 +376,24 @@ export function nrlNextRound(state: NrlManagerState): NrlNextRound {
   return { round, finalsRound, title: NRL_FINALS_ROUND_TITLES[finalsRound - 1], fixtures, clubMatch, clubStatus };
 }
 
-type NrlInjuryClock = Pick<NrlManagerState, 'round' | 'phase' | 'results' | 'injuryTracking'>;
+type NrlInjuryClock = Pick<NrlManagerState, 'round' | 'phase' | 'results' | 'injuryTracking' | 'physio'>;
 
-export function nrlInjuries(state: NrlInjuryClock): Map<string, number> {
+export function nrlInjuries(state: NrlInjuryClock, asOf = state.round + Number(state.phase === 'complete')): Map<string, number> {
   const injuries = new Map<string, number>();
   if (!state.injuryTracking) return injuries;
-  const upcoming = state.round + Number(state.phase === 'complete');
   for (const result of state.results) {
-    if (!result.injury) continue;
-    const remaining = result.round + result.injury.rounds + 1 - upcoming;
+    if (!result.injury || result.round >= asOf) continue;
+    const adjusted = state.physio && state.physio.round <= asOf && state.physio.injuryRound === result.round
+      && state.physio.playerId === result.injury.playerId;
+    const remaining = result.round + result.injury.rounds + 1 - asOf - Number(Boolean(adjusted));
     if (remaining > 0) injuries.set(result.injury.playerId, remaining);
   }
   return injuries;
+}
+
+export function isNrlPhysioTreatment(value: unknown, roundLimit: number): value is NrlPhysioTreatment {
+  return record(value) && Object.keys(value).length === 3 && typeof value.playerId === 'string' && Boolean(value.playerId)
+    && integerIn(value.round, 2, roundLimit) && integerIn(value.injuryRound, 1, value.round - 1);
 }
 
 type NrlAvailability = NrlInjuryClock & Pick<NrlManagerState, 'reserveGrade' | 'judiciary' | 'year' | 'clubId' | 'seed'>;
@@ -1338,6 +1346,8 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
   const { year, clubId, seed, round, phase, preparation, squad, lineup, bench, results, injuryTracking, kickerId, reserveGrade } = value;
   const judiciary = isNrlJudiciary(value.judiciary) ? value.judiciary : undefined;
   const regularRounds = nrlRegularRounds(year);
+  const physio = isNrlPhysioTreatment(value.physio, Math.min(round, regularRounds)) ? value.physio : undefined;
+  if (value.physio !== undefined && (!physio || !injuryTracking || !kickerId)) return false;
   const expectedPhase = phase === 'complete' && round === lastRound(year) ? 'complete'
     : round > regularRounds ? 'finals' : 'regular';
   if (phase !== expectedPhase || (phase === 'complete' && preparation !== null)) return false;
@@ -1362,9 +1372,18 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
   const completed = phase === 'complete' ? round : round - 1;
   const verified: NrlMatchResult[] = [];
   const injuredThrough = new Map<string, number>();
+  const applyPhysio = (beforeRound: number) => {
+    if (!physio || beforeRound !== physio.round) return true;
+    const injury = verified.find(match => match.round === physio.injuryRound && match.injury?.playerId === physio.playerId)?.injury;
+    const through = injuredThrough.get(physio.playerId);
+    if (!injury || through !== physio.injuryRound + injury.rounds || through <= beforeRound) return false;
+    injuredThrough.set(physio.playerId, through - 1);
+    return true;
+  };
   const spellEnd = reserveGrade && (reserveGrade.recalledRound ?? reserveGrade.startedRound + NRL_RESERVE_GRADE_ROUNDS);
   const identity = { year, seed, clubId };
   for (let playedRound = 1; playedRound <= completed; playedRound++) {
+    if (!applyPhysio(playedRound)) return false;
     if (reserveGrade?.startedRound === playedRound && (injuredThrough.get(reserveGrade.playerId) ?? 0) >= playedRound) return false;
     const fixtures = nrlRoundFixtures({
       year, round: playedRound, phase: playedRound <= regularRounds ? 'regular' : 'finals', results: verified,
@@ -1388,6 +1407,7 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
       verified.push(match);
     }
   }
+  if (phase !== 'complete' && !applyPhysio(round)) return false;
   if (reserveGrade?.startedRound === round && (injuredThrough.get(reserveGrade.playerId) ?? 0) >= round) return false;
   const judiciarySeason = { year, clubId, seed, round, results: verified, judiciary };
   if (judiciary && (!validNrlJudiciary({ ...judiciarySeason, phase: expectedPhase }) || (value.live !== undefined && judiciaryNeedsResponse(judiciarySeason))
@@ -1395,7 +1415,7 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
     || verified.some(match => match.individualRecoveryId
       && nrlJudiciaryBannedBefore(judiciarySeason, match.individualRecoveryId, match.round)))) return false;
   const unavailable = nrlUnavailable({ ...judiciarySeason, phase: expectedPhase,
-    injuryTracking: injuryTracking === true ? true : undefined, reserveGrade });
+    injuryTracking: injuryTracking === true ? true : undefined, reserveGrade, physio });
   const trainedStarts = new Set(NRL_ROLES.filter(role => byId.get(lineup[role] as string)?.secondaryRole === role).map(role => lineup[role]));
   const naturalRoles = new Set([...byId.values()].filter(player => !unavailable.has(player.id) && !trainedStarts.has(player.id)).map(player => player.role));
   if (!NRL_ROLES.every(role => {

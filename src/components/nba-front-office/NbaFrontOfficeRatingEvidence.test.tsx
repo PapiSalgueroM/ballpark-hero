@@ -123,6 +123,38 @@ describe('NBA actual opening ratings and readable saved evidence', () => {
     expect(localStorage.getItem(SENTINEL)).toBe('exact unrelated payload');
   });
 
+  it('restores the latest round result and the same injury and development lines without replaying a round', () => {
+    const league = engine.initNbaLeague(rng(90));
+    league.round = 2;
+    league.inSeasonRatings = true;
+    league.teams.DEN.players.forEach((player, index) => Object.assign(player, {
+      name: 'Simulated player ' + index, age: index % 2 ? 35 : 20, ovr: 78, pot: 89,
+    }));
+    seed(league);
+    const first = render(<NbaFrontOfficeBoard />);
+    expect(screen.queryByText(/^Round 2: you went/)).toBeNull();
+    fireEvent.click(screen.getByText('Play'));
+    fireEvent.click(screen.getByRole('button', { name: 'Play Round 2' }));
+    const result = screen.getByText(/^Round 2: you went/);
+    const report = result.parentElement?.textContent;
+    expect(report).toContain('Round 2: you went');
+    expect(report).toMatch(/is out|OVR/);
+    const exact = localStorage.getItem(KEY);
+    expect(saved().league.round).toBe(3);
+    first.unmount();
+    const second = render(<NbaFrontOfficeBoard />);
+    expect(screen.getByText(/^Round 2: you went/).parentElement?.textContent).toBe(report);
+    expect(localStorage.getItem(KEY)).toBe(exact);
+    second.unmount();
+    const stale = JSON.parse(exact!);
+    stale.lastRound.season -= 1;
+    const staleBytes = JSON.stringify(stale);
+    localStorage.setItem(KEY, staleBytes);
+    render(<NbaFrontOfficeBoard />);
+    expect(screen.queryByText(/^Round 2: you went/)).toBeNull();
+    expect(localStorage.getItem(KEY)).toBe(staleBytes);
+  });
+
   it('keeps opening estimates separate from developed grades after a real saved trade', () => {
     const league = engine.initNbaLeague(rng(83), NBA_OPENING_RATINGS);
     const player = league.teams.DEN.players[0], partner = league.teams.BOS.players[0];

@@ -33,7 +33,7 @@ import {
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
   nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlOppositionReport, nrlPositionTraining,
-  nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
+  nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlSelectionPromise, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
   NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SELECTION_PROMISE, reduceNrlCareer, runNrlFastForward,
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
@@ -374,6 +374,7 @@ function LiveMinute60({ live, season, onAction, disabled }: {
 }
 
 const edgeNumber = new Intl.NumberFormat('en-AU', { maximumFractionDigits: 1, signDisplay: 'exceptZero' });
+const aud = new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 });
 const formLabels = { W: 'Win', D: 'Draw', L: 'Loss' };
 
 function AttackPlan({ career, onAction, disabled }: {
@@ -1416,6 +1417,15 @@ function ReserveGradeDevelopment({ career, onAction, disabled }: {
   );
 }
 
+function nextRegularClubFixture(season: NrlManagerState, fromRound: number) {
+  const { year, clubId } = season;
+  const { draw } = nrlSeasonPlan(year);
+  for (let round = fromRound; round <= draw.length; round++) {
+    const opponent = draw[round - 1].find(pair => pair.includes(clubId))?.find(id => id !== clubId);
+    if (opponent) return { round, opponent };
+  }
+}
+
 function Squad({ career, onAction, disabled }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
 }) {
@@ -1503,16 +1513,17 @@ function Squad({ career, onAction, disabled }: {
                   const ban = bans?.get(player.id);
                   const injuryRounds = injuries.get(player.id);
                   let forecast: string | undefined;
-                  if (season.phase === 'regular' && injuryRounds && !ban && player.id !== pendingCase && player.id !== reserveGradeId) {
-                    const { year, clubId, round } = season;
-                    const { draw } = nrlSeasonPlan(year);
-                    const first = draw.findIndex((fixtures, index) => index + 1 >= round + injuryRounds
-                      && fixtures.some(pair => pair.includes(clubId)));
-                    const opponent = draw[first]?.find(pair => pair.includes(clubId))?.find(team => team !== clubId);
-                    forecast = opponent
-                      ? `Can return: Round ${first + 1} vs ${shortName(year, opponent)}`
+                  const { year, clubId, round } = season;
+                  const canForecast = season.phase === 'regular' && !ban && player.id !== pendingCase && player.id !== reserveGradeId;
+                  if (injuryRounds && canForecast) {
+                    const first = nextRegularClubFixture(season, round + injuryRounds);
+                    forecast = first
+                      ? `Can return: Round ${first.round} vs ${shortName(year, first.opponent)}`
                       : 'No regular-season fixture left after recovery.';
                   }
+                  const physio = injuryRounds && injuryRounds >= 2 && !season.physio && season.phase === 'regular'
+                    && !career.legacySeason && nrlPhysioQuote(career, player.id);
+                  const treated = physio && physio.ok && canForecast ? nextRegularClubFixture(season, round + physio.after) : undefined;
                   return <li key={player.id} className="py-1">
                     <div className="flex flex-wrap justify-between gap-x-3">
                       <span>{player.name} · {player.role}</span>
@@ -1521,12 +1532,29 @@ function Squad({ career, onAction, disabled }: {
                         : `Out for ${remaining} ${remaining === 1 ? 'round' : 'rounds'}`}</span>
                     </div>
                     {forecast && <p className="mt-0.5 text-xs text-muted-foreground" data-nrl-injury-return={player.id}>{forecast}</p>}
+                    {physio && <details className="mt-1 rounded-md border border-border px-2" data-nrl-physio-choice>
+                      <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold">Physio session for {player.name}</summary>
+                      <div className="space-y-2 border-t border-border pb-2 pt-2 text-sm">
+                        {physio.ok === false ? <p className="text-muted-foreground">{physio.reason}</p> : <>
+                          <p className="text-muted-foreground">Recovery would take {physio.after} {physio.after === 1 ? 'round' : 'rounds'} instead of {physio.before}.</p>
+                          {treated && <p>Can return after physio: Round {treated.round} vs {shortName(year, treated.opponent)}</p>}
+                          <p className="text-xs text-muted-foreground">One session per season. The player still sits out this round.</p>
+                          <Button type="button" size="lg" variant="outline" className="max-w-full whitespace-normal px-2"
+                            disabled={disabled} onClick={() => onAction({ type: 'bookPhysio', year, clubId, round, playerId: player.id })}>
+                            Book physio for {aud.format(physio.cost)}
+                          </Button>
+                        </>}
+                      </div>
+                    </details>}
                   </li>;
                 })}
               </ul>
               <p className="mt-1 text-xs text-muted-foreground">Byes count toward recovery. Utility cover plays below their usual rating.</p>
             </>
           )}
+          {season.physio && <p className="mt-2 text-xs text-muted-foreground" data-nrl-physio-receipt>
+            Physio booked for {nameOf(season.physio.playerId)} in Round {season.physio.round}.
+          </p>}
         </section>
       ) : <p className="mt-2 text-sm text-muted-foreground">Availability tracking starts next season for this save.</p>}
       <SquadSeasonStats season={season} />
@@ -1998,6 +2026,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Choose 2026 or 2027, then pick a club. You can use opening matchday names in 2026 or confirmed Perth Bears signings when starting with Perth in 2027. Ratings, contracts, fixtures and results are simulated.</li>
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
               <li>A match knock can put a player out for up to four rounds. Availability in Squad shows the first regular-season match an injured player can return for. The recovery countdown includes byes, and an available player fills the vacant spot.</li>
+              <li>In Squad, you can pay once per season for physio to shorten an injury by one round. The player still sits out the current round.</li>
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>
               <li>Sign one fictional assistant in Finances. Tactical assistants help when you use their tactic. A development assistant can give an eligible young player 1 OVR after eight regular-season appearances from the hire onward.</li>
               <li>Choose a goal kicker and a backup in Squad. The backup takes over if your kicker leaves the starting 13. The halfback covers when neither is available. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>

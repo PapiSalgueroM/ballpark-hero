@@ -136,6 +136,25 @@ type TaxClose = {
   trustDelta: number; payers: number; biggest: { team: string; bill: number } | null;
 };
 type Postseason = { series: SeriesResult[]; champion: string; gradeLine: string | null; tax?: TaxClose | null };
+type LastRound = { team: string; season: number; round: number; wins: number; losses: number; notes: string[] };
+
+function readLastRound(value: unknown, league: NbaLeague, team: string): LastRound | null {
+  if (!value || typeof value !== 'object') return null;
+  const result = value as Partial<LastRound>;
+  const club = league.teams[team];
+  const finished = league.champions.some(row => row.season === league.season);
+  if (!club || result.team !== team || result.season !== league.season || typeof result.round !== 'number'
+    || result.round < 1 || result.round !== league.round - (finished ? 0 : 1)
+    || typeof result.wins !== 'number' || !Number.isInteger(result.wins) || result.wins < 0 || result.wins > club.wins
+    || typeof result.losses !== 'number' || !Number.isInteger(result.losses) || result.losses < 0 || result.losses > club.losses
+    || !Array.isArray(result.notes) || result.notes.length > 4
+    || result.notes.some(line => typeof line !== 'string' || line.length > 640)) return null;
+  return { team, season: league.season, round: result.round, wins: result.wins, losses: result.losses, notes: result.notes };
+}
+
+function roundHeadlines(result: LastRound): string[] {
+  return [`Round ${result.round}: you went ${result.wins}-${result.losses}.`, ...result.notes];
+}
 
 interface SaveShape {
   league: NbaLeague; myTeam: string; phase: Phase; titles: number; seasonsPlayed: number;
@@ -149,6 +168,7 @@ interface SaveShape {
   /* Round 431. Present on a save written from the recap screen, so the recap
      can be drawn again after a reload. Absent on older saves. */
   postseason?: Postseason | null;
+  lastRound?: LastRound;
   /* Round 1018: the GM desk (src/lib/gmDesk.ts). Absent on every save written
      before it, and on those the board plays exactly as it did until the GM
      opens a desk box. Each block inside is validated alone. */
@@ -178,6 +198,7 @@ export default function NbaFrontOfficeBoard() {
   const rotationOpener = useRef<HTMLButtonElement>(null);
   const rotationReturn = useRef(false);
   const [feed, setFeed] = useState<string[]>([]);
+  const lastRound = useRef<LastRound | null>(null);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
      moment anything else is prepended it reads as an ordinary row. Transient
@@ -278,6 +299,8 @@ export default function NbaFrontOfficeBoard() {
          anything reads the league, so its next save writes the new shape. */
       nbaCleanStats(s.league);
       setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
+      lastRound.current = readLastRound(s.lastRound, s.league, s.myTeam);
+      if (lastRound.current) setFeed(roundHeadlines(lastRound.current));
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
       setDraftAiBatchesLeft(s.draftAiBatchesLeft ?? null);
@@ -329,11 +352,13 @@ export default function NbaFrontOfficeBoard() {
 
   const persist = useCallback((patch: Partial<SaveShape>, lg: NbaLeague | null, team: string) => {
     if (!lg) return;
+    const result = lastRound.current;
     pendingSave.current = JSON.stringify({
       league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
       ...(draftAiBatchesLeft == null ? {} : { draftAiBatchesLeft }),
       mandate, trust, fired, pressTilt, seasonTradeLine,
       postseason: champion ? { series, champion, gradeLine, tax: taxClose } : null,
+      ...(result?.team === team && result.season === lg.season ? { lastRound: result } : {}),
       ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch,
     } satisfies SaveShape);
     retrySave();
@@ -372,6 +397,7 @@ export default function NbaFrontOfficeBoard() {
     if (!alive.current) return;
     const lg = initNbaLeague(Math.random, NBA_OPENING_RATINGS);
     lg.inSeasonRatings = true;
+    lastRound.current = null;
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
     setFeed([
@@ -483,6 +509,12 @@ export default function NbaFrontOfficeBoard() {
       ...deskLines,
       ...report.notes,
     ];
+    const keepRound = () => {
+      lastRound.current = {
+        team: myTeam, season: lg.season, round: league.round, wins: report.myWins, losses: report.myLosses,
+        notes: newFeed.slice(1, 5).map(line => line.slice(0, 640)),
+      };
+    };
     if (nextGm !== gm) setGm(nextGm);
     if (lg.round >= NBA_ROUNDS) {
       const { series: sr, champion: champ } = runNbaPlayoffs(lg, Math.random, nextGm ? nbaDeskEdges(nextGm, lg, myTeam) : undefined);
@@ -540,12 +572,14 @@ export default function NbaFrontOfficeBoard() {
       setPhase('recap');
       setLeague(lg);
       setFeed(newFeed); setFeedSlam(null);
+      keepRound();
       persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict, tax } }, lg, myTeam);
       return;
     }
     lg.round += 1;
     /* Round 1018: the round the deadline shuts says so in the feed. */
     if (nextGm && nbaTradeWindow(league).open && !nbaTradeWindow(lg).open) newFeed.splice(1, 0, '🔒 The trade deadline has passed. Deals open again once the season is over.');
+    keepRound();
     setLeague(lg);
     setFeed(newFeed); setFeedSlam(null);
     persist({}, lg, myTeam);
@@ -607,6 +641,7 @@ export default function NbaFrontOfficeBoard() {
       notes = [...summer.lines, ...summer.notes];
       setGm(summer.desk);
     } else notes = nbaOffseason(lg, Math.random, myTeam);
+    lastRound.current = null;
     /* Round 180: ownership re-reads the roster and sets next season's ask. */
     /* Round 192: what you said at the podium tilts the ask, then the
        tilt is spent. */
@@ -878,6 +913,7 @@ export default function NbaFrontOfficeBoard() {
     }
     setResetFailed(false);
     pendingSave.current = null;
+    lastRound.current = null;
     setSaveWriteFailed(false);
     setRotationOpen(false); rotationReturn.current = false;
     setDraftClass(null); setDraftNight(null); setPicksLeft(0); setDraftAiBatchesLeft(null); setDraftError(''); draftPending.current = false;
@@ -1121,6 +1157,11 @@ export default function NbaFrontOfficeBoard() {
             </div>
           )}
         </div>
+        {lastRound.current && (
+          <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
+            {roundHeadlines(lastRound.current).map((line, index) => <p key={index}>{line}</p>)}
+          </div>
+        )}
         {/* Round 824: the season in numbers, one box with three tabs. A save
             from before the round has no lines for this season and says so. */}
         {leaders ? (

@@ -15,6 +15,8 @@ import type { useClubManager } from '@/hooks/useClubManager';
 import { SavePointsDoor } from '@/components/club-manager/SavePointsDoor';
 import { ClubWorldCupCard } from '@/components/club-manager/ClubWorldCupCard';
 import { nationalQualifierView } from '@/lib/clubManagerNationalQualifiers';
+import { nationalFinalsView } from '@/lib/clubManagerNationalFinals';
+import { type NationalMentality } from '@/lib/soccerInternational';
 
 /* Round 633: the five terms, in the order they are worth. Kept beside the
    screen that prints them rather than in the engine, because the wording is
@@ -38,7 +40,7 @@ const FATE_WORD: Record<SeasonFate, string> = { up: 'promoted', down: 'relegated
 export default function ClubManagerSeasonSummary({ sm, c, g }: {
   sm: SeasonSummary;
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot' | 'renew' | 'playNextNationalQualifier'>>;
+  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot' | 'renew' | 'playNextNationalQualifier' | 'playNextNationalFinal'>>;
 }) {
   const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
   /* Optional: a summary stored before Round 633 carries no breakdown, and the
@@ -91,6 +93,10 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
   const qualifier = g.playNextNationalQualifier ? nationalQualifierView(c) : null;
   const needsQualifier = !!(qualifier?.played.length && qualifier.next);
   const [qualifierNotice, setQualifierNotice] = useState('');
+  const finals = g.playNextNationalFinal ? nationalFinalsView(c) : null;
+  const needsFinal = !!(finals?.played.length && finals.next);
+  const [finalsTactics, setFinalsTactics] = useState<NationalMentality>(c.nationJob?.mentality ?? 'balanced');
+  const [finalsNotice, setFinalsNotice] = useState('');
   const mineInTeam = awards?.xi ? awards.xi.filter(m => (m[3] & 2) !== 0).length : 0;
   const winner = (m: AwardMan) => (
     <><span className={cn('font-bold', (m[3] & 2) !== 0 && 'text-primary')}>{m[0]}</span>{(m[3] & 1) !== 0 && <MadeUpTag className="ml-1" />} ({m[1]}, {m[2]})</>
@@ -114,10 +120,11 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
             gamePath: '/club-manager',
           }}
           onPlayAgain={() => g.nextSeason()}
-          playAgainDisabled={openDeals > 0 || needsQualifier}
+          playAgainDisabled={openDeals > 0 || needsQualifier || needsFinal}
           playAgainLabel={openDeals > 0 ? `Answer ${openDeals} deal${openDeals === 1 ? '' : 's'} first`
             : needsQualifier ? 'Finish national qualifying first'
-              : summerMove ? `Start Season ${sm.season + 1} at ${summerMove.club}` : `Continue to Season ${sm.season + 1}`}
+              : needsFinal ? 'Finish the national finals first'
+                : summerMove ? `Start Season ${sm.season + 1} at ${summerMove.club}` : `Continue to Season ${sm.season + 1}`}
           playNext={
             <div className="space-y-3">
               {qualifier && <details data-cm-national-qualifiers open={qualifier.played.length > 0 || undefined}
@@ -138,10 +145,41 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
                     onClick={() => setQualifierNotice(g.playNextNationalQualifier?.(qualifier.next!.id) ? '' : 'The fixture could not be saved.')}>
                     Play qualifier {qualifier.played.length + 1} of {qualifier.fixtureCount}. {qualifier.next.home} vs {qualifier.next.away}
                   </button>}
-                  {!qualifier.next && <p role="status">{qualifier.table.qualified ? 'Qualified. The finals simulate when you continue.' : 'Did not qualify.'}</p>}
+                  {!qualifier.next && <p role="status">{qualifier.table.qualified ? 'Qualified for the finals.' : 'Did not qualify.'}</p>}
                   {qualifierNotice && <p role="status">{qualifierNotice}</p>}
                   {qualifier.played.length > 0 && <ol className="space-y-1">
                     {qualifier.played.map(match => <li key={match.home + match.away}>{match.home} {match.homeGoals}-{match.awayGoals} {match.away}</li>)}
+                  </ol>}
+                </div>
+              </details>}
+              {finals && <details data-cm-national-finals open={finals.played.length > 0 || undefined}
+                className="rounded-xl border border-border bg-card px-3 text-left text-xs">
+                <summary className="min-h-11 cursor-pointer py-3 font-bold">{finals.year} {finals.tournament} finals</summary>
+                <div className="space-y-2 pb-3">
+                  <p>Pick tactics for each match. Continue before the first match to simulate the finals in one go.</p>
+                  {finals.next && <>
+                    <label className="flex items-center gap-2">
+                      Match tactics
+                      <select className="min-h-11 rounded-lg border border-border bg-background px-2"
+                        value={finalsTactics} onChange={e => setFinalsTactics(e.target.value as NationalMentality)}>
+                        <option value="defensive">Defensive</option>
+                        <option value="balanced">Balanced</option>
+                        <option value="attacking">Attacking</option>
+                      </select>
+                    </label>
+                    <button type="button" className="min-h-11 rounded-lg bg-primary px-3 font-semibold text-primary-foreground"
+                      onClick={() => setFinalsNotice(g.playNextNationalFinal?.(finals.next!.id, finalsTactics) ? '' : 'The fixture could not be saved.')}>
+                      Play {finals.next.round}. {finals.next.home} vs {finals.next.away}
+                    </button>
+                  </>}
+                  {finals.result && <p role="status">{finals.result}</p>}
+                  {finalsNotice && <p role="status">{finalsNotice}</p>}
+                  {finals.played.length > 0 && <ol className="space-y-1">
+                    {finals.played.map((match, i) => <li key={i}>
+                      {match.round} · {match.home} {match.homeGoals}-{match.awayGoals} {match.away}
+                      {match.mentality && <span className="capitalize"> · {match.mentality}</span>}
+                      {match.pens && match.winner && ` · ${match.winner} won on penalties`}
+                    </li>)}
                   </ol>}
                 </div>
               </details>}
@@ -164,10 +202,11 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
                         <button
                           ref={takeRef}
                           data-cm-offer-take
+                          disabled={needsQualifier || needsFinal}
                           onClick={() => g.nextSeason(askingOffer.club)}
-                          className="min-h-[44px] flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground hover:bg-primary/90 transition-colors"
+                          className="min-h-[44px] flex-1 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground hover:bg-primary/90 transition-colors disabled:opacity-50"
                         >
-                          Take the job
+                          {needsQualifier ? 'Finish qualifying first' : needsFinal ? 'Finish the finals first' : 'Take the job'}
                         </button>
                         <button
                           data-cm-offer-back

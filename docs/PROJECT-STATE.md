@@ -1,4 +1,12 @@
+## 2026-11-14: Club Manager national finals, NRL physio and NBA round reports
+
+- Club Manager can play national finals one match at a time from the season review. The game uses the qualifying table or automatic entry, lets managers pick tactics for each final-stage match and records the exact scores after rollover.
+- NRL Team Manager can pay for one physio session per season. It shortens an existing injury by one round, shows when the player can return and leaves a receipt in the club books.
+- NBA Front Office keeps the latest round record and development headlines with the save through reload.
+
 ## 2026-11-14: Club Manager qualifying, career setup recovery and NRL free agents
+
+[PR #924](https://github.com/PapiSalgueroM/ballpark-hero/pull/924) published exact main `115fbf75c71a28c24e91290d1a52c67d44179896`, deployment `e2c743c1-bba8-4a57-80d3-4ba370c8c813`. Thirteen live browser journeys and all 174 sitemap routes passed. IndexNow accepted the four changed guides.
 
 - Club Manager can play national qualifiers one at a time from the club season review. Each result is saved with the club season held in review. The resulting group determines qualification when continuing to the simulated finals. Continuing before the first qualifier runs the usual full simulation.
 - MLB and NHL My Career keep an unfinished player before the draft. The draft is scoped to its sport and clears after a real prospect or career starts or the player chooses Start Over.

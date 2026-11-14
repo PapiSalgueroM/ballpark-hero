@@ -18,6 +18,7 @@ import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/ma
 import { runManagerSummer, NATION_CONFED, type IntlTournament, type ManagerSummerMatch } from '@/lib/soccerInternational';
 import { selectedNationalXI, type NationalXI } from '@/lib/clubManagerNationalXI';
 import { nationalQualifierView, type NationalQualifiers } from '@/lib/clubManagerNationalQualifiers';
+import { nationalFinalsView, type NationalFinals } from '@/lib/clubManagerNationalFinals';
 /* Round 965: the manager's face reads Soccer Career's look tables, never a
    copy of them. That module imports nothing from here. */
 import { SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR } from '@/lib/soccerCareerAppearance';
@@ -2513,6 +2514,7 @@ export interface NationJob {
   mentality?: Exclude<Mentality, 'balanced'>;
   xi?: NationalXI;
   qualifiers?: NationalQualifiers;
+  finals?: NationalFinals;
 }
 
 type NationCampaign = Pick<IntlTournament, 'nation' | 'name' | 'year' | 'qualifying' | 'groupLabel' | 'groupTable'>
@@ -24056,6 +24058,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   if (career.frenchPlayoffs && !career.frenchPlayoffs.barrage?.winner) return career;
   const playedQualifiers = career.nationJob?.qualifiers ? nationalQualifierView(career) : null;
   if (playedQualifiers?.played.length && playedQualifiers.next) return career;
+  const playedFinals = career.nationJob?.finals ? nationalFinalsView(career) : null;
+  if (playedFinals?.played.length && playedFinals.next) return career;
   const requestedClub = career.jobHunt?.summerMove?.club ?? acceptOfferClub;
   if (requestedClub && requestedClub !== career.clubName && !clubAvailableInCareer(career, requestedClub)) return career;
   const kLeagueActive = careerHasKLeagueWorld(career);
@@ -24789,7 +24793,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     const mentality = job.mentality ?? 'balanced';
     const xi = selectedNationalXI(career, summer);
     const qualifiers = playedQualifiers?.year === summer && !playedQualifiers.next && playedQualifiers.played.length ? playedQualifiers : null;
-    const t = runManagerSummer(job.nation, summer, nationLift(career), mentality, xi?.adjustment, qualifiers?.table);
+    const t = playedFinals?.completed ?? runManagerSummer(job.nation, summer, nationLift(career), mentality, xi?.adjustment, qualifiers?.table);
     if (t) {
       const won = t.champion === job.nation;
       const missed = t.myResult === 'Did Not Qualify';
@@ -24809,6 +24813,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       };
       delete state.nationJob.xi;
       delete state.nationJob.qualifiers;
+      delete state.nationJob.finals;
       if (won) {
         state.trophies = [...state.trophies, { season: state.season, name: t.name, emoji: '\u{1F310}' }];
       }
