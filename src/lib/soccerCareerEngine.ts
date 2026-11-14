@@ -2697,6 +2697,13 @@ export function calcOverall(s: { pace: number; shooting: number; passing: number
 }
 
 /* ─── Prime window helpers ─── */
+export const SOCCER_PRIME_WINDOWS: Record<PrimeType, { name: string; start: number; end: number }> = {
+  early: { name: 'Early prime', start: 22, end: 26 },
+  normal: { name: 'Typical prime', start: 24, end: 28 },
+  late: { name: 'Late bloomer', start: 27, end: 31 },
+  extended: { name: 'Extended prime', start: 23, end: 32 },
+};
+
 function rollPrimeType(): PrimeType {
   const r = Math.random();
   if (r < 0.25) return "early";
@@ -2706,21 +2713,12 @@ function rollPrimeType(): PrimeType {
 }
 
 function isInPrime(age: number, primeType: PrimeType): boolean {
-  switch (primeType) {
-    case "early": return age >= 22 && age <= 26;
-    case "normal": return age >= 24 && age <= 28;
-    case "late": return age >= 27 && age <= 31;
-    case "extended": return age >= 23 && age <= 32;
-  }
+  const prime = SOCCER_PRIME_WINDOWS[primeType];
+  return age >= prime.start && age <= prime.end;
 }
 
 function isPastPrime(age: number, primeType: PrimeType): boolean {
-  switch (primeType) {
-    case "early": return age > 26;
-    case "normal": return age > 28;
-    case "late": return age > 31;
-    case "extended": return age > 32;
-  }
+  return age > SOCCER_PRIME_WINDOWS[primeType].end;
 }
 
 /* ─── Stat progression with prime system ───
@@ -2896,7 +2894,7 @@ export function repairCareer<T extends CareerState>(state: T): T {
   reconcileRetirement(s);
   // No rehab card can render without the saved choice. Use the same fallback as dismissing it.
   if (s.phase === "rehab_choice" && s.pendingRehab == null) s.phase = applyRehabChoice(s, 1).phase;
-  if (!s.primeType) s.primeType = rollPrimeType();
+  if (!Object.prototype.hasOwnProperty.call(SOCCER_PRIME_WINDOWS, s.primeType)) s.primeType = rollPrimeType();
   if (s.loyaltyContracts !== undefined) {
     const fixed = repairLoyalty(s);
     if (fixed.loyaltyContracts === undefined) delete s.loyaltyContracts;
@@ -3072,7 +3070,7 @@ function growStat(current: number, age: number, isYouth: boolean, isPace: boolea
     } else if (age >= 32) {
       growth = rand(-3, -1); // Natural decline begins 32-34
     } else {
-      const primeEnd = primeType === "early" ? 26 : primeType === "normal" ? 28 : primeType === "late" ? 31 : 32;
+      const primeEnd = SOCCER_PRIME_WINDOWS[primeType].end;
       const yearsPost = age - primeEnd;
       if (yearsPost <= 2) {
         growth = rand(-2, 0); // Gentle decline
