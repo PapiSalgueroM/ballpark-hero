@@ -2033,6 +2033,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Drafting snake style against the AI",
         items: [
           "Draft snake style: 22 alternating picks, with a coin flip deciding who starts.",
+          "Use Next in the Player Pool to browse every available player. Search and filters work across the same pool.",
         ],
       },
       {

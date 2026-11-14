@@ -21,6 +21,31 @@ function until(state: NrlCareerState, done: (state: NrlCareerState) => boolean) 
 const last = (state: NrlCareerState) => until(state, ({ season }) => season.round === nrlRegularRounds(season.year));
 
 describe('NRL Board recruitment brief', () => {
+  it.each([[2026, 'storm'], [2027, 'bears']] as const)('selects an alternate %i position and pays only that real signing', (year, clubId) => {
+    const initial = createNrlCareer(clubId, 39, year);
+    const brief = quote(initial);
+    expect((brief.options ?? []).length).toBeGreaterThan(1);
+    const alternative = brief.options[1];
+    expect(alternative.role).not.toBe(brief.role);
+    expect(alternative.count).toBeLessThanOrEqual(1);
+    expect(alternative.targets.length).toBeGreaterThanOrEqual(2);
+    const ineligible = NRL_ROLES.find(role => !brief.options.some(option => option.role === role))!;
+    expect(accept(initial, ineligible)).toBe(initial);
+    const chosen = accept(initial, alternative.role);
+    expect(reload(chosen)?.finance.boardRecruitment).toEqual({ role: alternative.role });
+    expect(accept(chosen, brief.role!)).toBe(chosen);
+    const ordinary = brief.targets[0];
+    const untouched = sign(chosen, ordinary.player.id, ordinary.askingSalary);
+    expect(untouched.finance.boardRecruitment).toEqual({ role: alternative.role });
+    const target = alternative.targets.find(entry => nrlContractOffer(untouched, entry.player.id, entry.askingSalary, 1).ok)!;
+    const signed = sign(untouched, target.player.id, target.askingSalary);
+    expect(signed.finance.boardRecruitment?.signed?.id).toBe(target.player.id);
+    expect(nrlBoardRecruitmentIncome(signed.finance)).toBe(0);
+    const paid = advance(last(signed));
+    expect(nrlCareerFinance(paid).cash - nrlCareerFinance(advance(last(untouched))).cash).toBe(100_000);
+    expect(reload(paid)).toEqual(paid);
+  });
+
   it.each([[2026, 'storm'], [2027, 'bears']] as const)('offers a real cap-legal role and pays the %s club once at regular-season close', (year, club) => {
     const initial = createNrlCareer(club, 39, year);
     const { role, targets, bonus, reason } = quote(initial);

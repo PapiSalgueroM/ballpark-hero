@@ -122,6 +122,26 @@ describe('Budget Builder signing decisions', () => {
     expect(boundary.state!.remaining).toBe(0); expect(boundary.state!.filled).toBe(1);
   });
 
+  it('prices the cheapest legal remaining XI before confirming a signing', async () => {
+    const view = await start(); open(view);
+    preview(view, xi[0]);
+    expect(field(view, 'Minimum to fill 10 open slots')).toHaveTextContent('$400M');
+    expect(view.getByText('$560M left after the cheapest completion.')).toBeVisible();
+    preview(view, replacement);
+    expect(field(view, 'Minimum to fill 10 open slots')).toHaveTextContent('$400M');
+    expect(view.getByText('$400M short of the cheapest completion.')).toBeVisible();
+    expect(view.getByRole('button', { name: 'Confirm signing' })).toBeEnabled();
+    expect(boundary.signs).not.toHaveBeenCalled();
+  });
+
+  it('separates a market with too few distinct players from a budget shortfall', async () => {
+    pool = [xi[0], ...xi.slice(2)];
+    const view = await start(); open(view); preview(view, xi[0]);
+    expect(view.getByText('This market cannot fill the 10 open slots with different players.')).toBeVisible();
+    expect(view.queryByText(/short of the cheapest completion/)).toBeNull();
+    expect(view.getByRole('button', { name: 'Confirm signing' })).toBeEnabled();
+  });
+
   it('keeps refused sign and release callbacks open and quiet, without crediting a later unrelated state change', async () => {
     const view = await start(); open(view); preview(view, xi[0]); boundary.refuse = true; confirm(view);
     expect(view.getByRole('region', { name: 'Signing shortlist' })).toBeVisible();

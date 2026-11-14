@@ -131,6 +131,7 @@
         "Choose one of 9 formations. In the Today market you can also narrow the pool, say Premier League only.",
         "Tap a slot to shop that position. Only players you can currently afford are listed.",
         "Use Next in the signing shortlist to browse the whole eligible market, or search by player name or club.",
+        "Before you confirm a signing, check the minimum cost to fill the rest of your XI with different players from that market. The preview shows any shortfall and lets you decide whether to sign anyway.",
         "Sign someone and their value leaves your budget. Release anyone for a full refund.",
         "Fill all eleven for your team rating, then play the Money XI final."
       ],
@@ -922,6 +923,7 @@
       "howToPlay": [
         "Read today's criteria first. It shapes the whole draft.",
         "Draft snake style: 22 alternating picks, with a coin flip deciding who starts.",
+        "Use Next in the Player Pool to browse every available player. Search and filters work across the same pool.",
         "Both sides need 1 goalkeeper, 4 defenders, 3 midfielders and 3 forwards.",
         "At 11 apiece, the 38-game table names the winner. Ask for the season story afterwards.",
         "Read the analysis and cast a separate community vote."

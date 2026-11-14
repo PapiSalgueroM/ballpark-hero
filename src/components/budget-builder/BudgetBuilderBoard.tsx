@@ -3,6 +3,7 @@ import { Check, Copy, RotateCcw, Swords, X } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, TOPICS, playerRating } from '@/lib/squadDeal';
+import { minimumCompletionCost } from '@/lib/budgetCompletion';
 import { BB_ERAS, useBudgetBuilder } from '@/hooks/useBudgetBuilder';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import type { Player } from '@/types/game';
@@ -12,7 +13,7 @@ const MARKET_PAGE_SIZE = 60;
 
 export function BudgetBuilderBoard() {
   const {
-    loading, formation, setFormation, topic, setTopic,
+    loading, pool, formation, setFormation, topic, setTopic,
     era, setEra, budget,
     squad, activeSlot, setActiveSlot, candidates, search, setSearch,
     spent, remaining, filled, complete, teamRating,
@@ -158,10 +159,12 @@ export function BudgetBuilderBoard() {
   const pct = Math.max(0, Math.min(100, (spent / Math.max(1, budget)) * 100));
   const current = activeSlot === null ? undefined : squad[activeSlot];
   const afterRemaining = remaining + (current?.marketValue ?? 0) - (choice?.marketValue ?? 0);
-  const afterSquad = activeSlot === null || !choice ? [] :
-    Object.values({ ...squad, [activeSlot]: choice }).filter(Boolean) as Player[];
+  const proposedSquad = activeSlot === null || !choice ? null : { ...squad, [activeSlot]: choice };
+  const afterSquad = proposedSquad ? Object.values(proposedSquad).filter(Boolean) as Player[] : [];
   const afterRating = afterSquad.length ? Math.round(afterSquad.reduce((sum, player) => sum + playerRating(player), 0) / afterSquad.length) : 0;
   const afterCondition = choice ? criterion.check(afterSquad, budget, afterRemaining) : false;
+  const openSlots = proposedSquad ? formation.slots.filter((_, index) => !proposedSquad[index]) : [];
+  const minimum = openSlots.length ? minimumCompletionCost(openSlots, pool, new Set(afterSquad.map(player => player.name))) : null;
 
   return (
     <div className={`${styles.board} mx-auto max-w-3xl px-4 py-6`} data-budget-builder>
@@ -336,7 +339,16 @@ export function BudgetBuilderBoard() {
               <div><dt className="text-muted-foreground">XI rating after signing</dt><dd>{afterRating}</dd></div>
               <div><dt className="text-muted-foreground">Signed after this choice</dt><dd>{afterSquad.length}/{formation.slots.length}</dd></div>
               <div><dt className="text-muted-foreground">Demand condition after signing</dt><dd>{afterCondition ? 'Met so far' : 'Not met yet'}</dd></div>
+              {openSlots.length > 0 && minimum !== null && <div>
+                <dt className="text-muted-foreground">Minimum to fill {openSlots.length} open {openSlots.length === 1 ? 'slot' : 'slots'}</dt>
+                <dd>${minimum}M</dd>
+              </div>}
             </dl>
+            {openSlots.length > 0 && <p className="mt-2 text-xs text-muted-foreground">
+              {minimum === null ? `This market cannot fill the ${openSlots.length} open ${openSlots.length === 1 ? 'slot' : 'slots'} with different players.`
+                : afterRemaining < minimum ? `$${minimum - afterRemaining}M short of the cheapest completion.`
+                : `$${afterRemaining - minimum}M left after the cheapest completion.`}
+            </p>}
             <p className="mt-2 text-xs text-muted-foreground">The board demand bonus is checked on your completed XI. This preview does not sign anyone.</p>
             <div className="mt-3 flex flex-wrap gap-2">
               <button onClick={confirmSigning} disabled={!candidates.includes(choice) || current === choice}

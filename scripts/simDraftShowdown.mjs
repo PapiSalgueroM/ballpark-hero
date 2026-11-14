@@ -44,13 +44,13 @@ if (CONTROL !== 'flatmap') {
     console.log('   settleSeason on draft completion, a scored recordCompletion, and the verdict card all present in code');
   }
 
-  console.log('2) the scroll is gone: the pool shows a shortlist');
+  console.log('2) the scroll is gone: the pool shows one page at a time');
   {
     const src = strip(fs.readFileSync(`${ROOT}/src/components/fantasy-draft/PlayerPool.tsx`, 'utf8'));
     if (/max-h-\[4\d\dpx\]/.test(src)) fail('the 400+px pool scroll is back');
-    if (!/\.slice\(0, search\.length >= 2 \? 20 : 10\)/.test(src)) fail('the pool no longer caps its visible list to a shortlist');
+    if (!/const pageSize = searching \? 20 : 10;/.test(src) || !/matching\.slice\(first, first \+ pageSize\)/.test(src)) fail('the pool no longer caps the visible page to ten or twenty rows');
     if (!/draftRating\(b\) - draftRating\(a\)/.test(src)) fail('the pool no longer sorts best available first');
-    console.log('   no oversize scroll, top ten by rating with search reaching everyone');
+    console.log('   no oversize scroll, ten browse rows or twenty search rows per page, best by rating first');
   }
 }
 

@@ -1345,8 +1345,11 @@ export function nrlBoardRecruitmentQuote(state: NrlCareerState) {
     role, count: nextSquad.filter(player => player.role === role).length,
   })).filter(({ role, count }) => count <= 1 && !nextSquad.some(player =>
     player.role === role && player.contract?.clubId !== clubId)).sort((a, b) => a.count - b.count) : [];
-  const role = objective?.role ?? roles.find(entry => market.filter(candidate => candidate.player.role === entry.role).length >= 2)?.role;
-  return { role, targets: market.filter(entry => entry.player.role === role), objective, closed, bonus: BOARD_RECRUITMENT_BONUS,
+  const options = roles.map(entry => ({ ...entry, targets: market.filter(candidate => candidate.player.role === entry.role) }))
+    .filter(entry => entry.targets.length >= 2);
+  const role = objective?.role ?? options[0]?.role;
+  return { role, options, targets: objective ? market.filter(entry => entry.player.role === role) : options[0]?.targets ?? [],
+    objective, closed, bonus: BOARD_RECRUITMENT_BONUS,
     reason: objective ? 'The board objective is already agreed.' : unavailable ?? (role ? null : 'No position has two affordable external options.') };
 }
 
@@ -2358,9 +2361,8 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     case 'acceptBoardRecruitment': {
       const { year, clubId } = state.season;
       if (action.year !== year || action.clubId !== clubId) return state;
-      const { role, reason } = nrlBoardRecruitmentQuote(state);
-      if (reason !== null || role === undefined || role !== action.role) return state;
-      return { ...state, finance: { ...state.finance, boardRecruitment: { role } } };
+      if (!nrlBoardRecruitmentQuote(state).options.some(option => option.role === action.role)) return state;
+      return { ...state, finance: { ...state.finance, boardRecruitment: { role: action.role } } };
     }
     case 'setDevelopmentFocus': {
       if (state.legacySeason || state.season.phase !== 'regular' || state.season.year === NRL_LAST_YEAR

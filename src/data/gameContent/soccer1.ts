@@ -102,6 +102,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         items: [
           "Tap a slot to shop that position. Only players you can currently afford are listed.",
           "Use Next in the signing shortlist to browse the whole eligible market, or search by player name or club.",
+          "Before you confirm a signing, check the minimum cost to fill the rest of your XI with different players from that market. The preview shows any shortfall and lets you decide whether to sign anyway.",
         ],
         subsections: [
           {

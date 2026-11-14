@@ -1,4 +1,12 @@
+## 2026-11-14: Fantasy Draft browsing, budget projection and NRL board briefs
+
+- Fantasy Draft keeps its ten-player opening shortlist and lets you page through all remaining eligible picks. Searching uses pages of twenty, keeps the original position and daily-rule guard, and explains picks that are blocked or already taken.
+- Budget Builder previews the cheapest combination of distinct players that can fill the remaining positions in the same eligible market. The signing preview shows how much would be left, the shortfall, or which situation has no complete lineup. You can still confirm the original signing.
+- NRL Team Manager lets you choose an eligible position for the board recruitment brief before Round 1. You can preview cap-eligible named offers for each position. A matching external signing earns the $100,000 bonus at the end of the regular season.
+
 ## 2026-11-14: Budget Builder market pages, NRL scouting and NHL goalie workload
+
+[PR #945](https://github.com/PapiSalgueroM/ballpark-hero/pull/945) published exact main `207c7469654b378013b9a21174d7421d00daef8c`, deployment `a709bf72-5f47-4d34-b968-ea41ff5d52a9`. Seven live browser journeys, three raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted the three guides.
 
 - Budget Builder sorts every eligible player in the selected market into pages of 60. Search filters the same pool, and a player reached past the first page can be previewed and signed normally.
 - NRL Team Manager can spend $60,000 of club cash once per season to scout another position while the free academy report is pending. Both reports arrive on the usual schedule. Promotions still follow the squad and salary-cap rules.
