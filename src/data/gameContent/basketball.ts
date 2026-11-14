@@ -1830,6 +1830,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         heading: "Working the roster with waivers and trades",
         items: [
           "Work the roster. Waive contracts, sign free agents with your cap room, and propose trades.",
+          "If a Trade desk package falls short on value, add the lowest-valued available future pick that would get it accepted. The suggestion stays in the builder for review until you make the trade. If no one pick meets all the trade rules, there is no suggestion.",
         ],
       },
       {
