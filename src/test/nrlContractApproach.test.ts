@@ -112,4 +112,30 @@ describe('NRL rival contract approaches', () => {
     expect(player(finals, playerId).contract).toEqual(player(state, playerId).contract);
     expect(raw(readNrlCareerSave(raw(finals)))).toBe(raw(finals));
   });
+
+  it.each([
+    [2026, 'storm', 'storm-2-0', 'nrl-storm-2026-27', 410000, 'dragons', 256034],
+    [2027, 'bears', 'bears-2-0', 'nrl-bears-2027-27', 356127, 'tigers', 259124],
+  ] as const)('protects the only returning winger, then accepts a real approach after renewing cover in %i', (
+    year, clubId, id, coverId, salary, buyer, capGain,
+  ) => {
+    const initial = createNrlCareer(clubId, 1, year);
+    const outgoing = player(initial, id);
+    expect(nrlCareerSquad(initial, year + 1).filter(row => row.role === outgoing.role)).toEqual([outgoing]);
+    expect(listing(initial, id)).toBe(initial);
+    expect(initial.contractApproach).toBeUndefined();
+    const historical = { ...initial, contractApproach: { playerId: id, listedRound: 1, endYear: outgoing.contract!.endYear } };
+    expect(nrlContractApproach(readNrlCareerSave(raw(historical))!)?.status).toBe('waiting');
+    const oldNoOffer = advance(historical);
+    expect(nrlContractApproach(readNrlCareerSave(raw(oldNoOffer))!)?.status).toBe('no-offer');
+    const renewed = reduceNrlCareer(initial, { type: 'offerContract', playerId: coverId, years: 1, salary });
+    expect(renewed).not.toBe(initial);
+    const offered = advance(listing(renewed, id));
+    expect(nrlContractApproach(offered)).toMatchObject({ status: 'offered', destinationId: buyer });
+    const accepted = respond(offered, 'accept');
+    expect(nrlContractApproach(accepted)?.status).toBe('accepted');
+    expect(nrlCareerCap(accepted, year + 1).available - nrlCareerCap(offered, year + 1).available).toBe(capGain);
+    expect(nrlCareerSquad(accepted, year + 1).filter(row => row.role === outgoing.role).map(row => row.id)).toEqual([coverId]);
+    expect(raw(readNrlCareerSave(raw(accepted)))).toBe(raw(accepted));
+  });
 });

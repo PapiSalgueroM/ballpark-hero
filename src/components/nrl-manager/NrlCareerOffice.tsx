@@ -12,7 +12,7 @@ import {
   nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyReports,
   nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
   nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
-  nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer, nrlContractTermLimit,
+  nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractApproachPreview, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer, nrlContractTermLimit,
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
   nrlConcessionsQuote, nrlConcessionsSpend,
   nrlDevelopmentAffected, nrlDevelopmentAssistantProgress, nrlFinanceForecast,
@@ -335,6 +335,7 @@ function ContractApproaches({ career, onAction, disabled }: { career: NrlCareerS
   if (career.legacySeason || career.retired || year === NRL_LAST_YEAR) return null;
   const lastRound = nrlContractApproachLastRound(year);
   const candidates = nrlContractApproachCandidates(career);
+  const preview = playerId ? nrlContractApproachPreview(career, playerId) : null;
   const answer = (decision: 'accept' | 'decline') => {
     if (reply?.destinationId && onAction({ type: 'answerContractApproach', year, clubId, playerId: reply.playerId,
       listedRound: reply.listedRound, destinationId: reply.destinationId, decision })) summary.current?.focus();
@@ -375,13 +376,20 @@ function ContractApproaches({ career, onAction, disabled }: { career: NrlCareerS
                 {candidates.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role}</option>)}
               </select>
             </label>
-            {playerId && <>
+            {preview && <>
+              <div className="space-y-1 text-muted-foreground" aria-live="polite" data-nrl-approach-preview>
+                {preview.reason ? <p>{preview.reason}</p> : <>
+                  <p>{preview.potentialClubs === 0 ? 'No rival club fits this deal right now.'
+                    : `${preview.potentialClubs} rival ${preview.potentialClubs === 1 ? 'club' : 'clubs'} could take over the deal right now.`}</p>
+                  <p>A move would leave ${money(Math.abs(preview.capGain))} {preview.capGain < 0 ? 'less' : 'more'} cap room in {preview.nextYear} after reserving a squad place.</p>
+                </>}
+              </div>
               <label className="flex min-h-11 items-start gap-2">
-                <input type="checkbox" className="mt-1 accent-primary" checked={permission} disabled={disabled}
+                <input type="checkbox" className="mt-1 accent-primary" checked={permission} disabled={disabled || Boolean(preview.reason)}
                   onChange={event => setPermission(event.target.checked)} />
                 <span>The player and club agree to simulated written permission to speak to rival clubs.</span>
               </label>
-              <Button type="button" size="lg" disabled={disabled || !permission} onClick={() => {
+              <Button type="button" size="lg" disabled={disabled || !permission || Boolean(preview.reason)} onClick={() => {
                 if (onAction({ type: 'inviteContractApproach', year, clubId, round, playerId, permission })) summary.current?.focus();
               }}>Confirm permission</Button>
             </>}
