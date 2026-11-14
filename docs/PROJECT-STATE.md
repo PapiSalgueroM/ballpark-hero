@@ -6,6 +6,8 @@
 
 ## 2026-11-14: Club Manager world ratings during the season
 
+[PR #903](https://github.com/PapiSalgueroM/ballpark-hero/pull/903) published exact main `47a883366e02f3c81474c595d22349b1aedaaa81`, deployment `95b48a8a-03ee-4879-89fb-fc442baf3af5`. Seven browser journeys and all 174 sitemap routes passed live. IndexNow accepted the Club Manager guide.
+
 - Rivals and free agents can gain or lose OVR as league matches settle. The transfer market, opponent squads and match engine use the same rating. January signings keep their current OVR, and returning players carry their closing OVR into the next season.
 - Existing careers start world rating updates when opening their next season. Fresh current and historical careers start with the new timing. The in-game help and public guide explain both paths.
 
