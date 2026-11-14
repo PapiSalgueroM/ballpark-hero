@@ -12,6 +12,7 @@ const NhlFrontOffice = () => {
      the NHL's word for the books. Built inside the component, never at module scope. */
   const rules = [
     ...hostCareerRules('nhl'),
+    'The draft board shows every available prospect. Filter by position and keep up to three on your shortlist without spending a pick.',
     'In Roster, choose whose ratings feed the simulation. If a saved pick gets hurt, a healthy player fills in and your pick returns when healthy. For example, your backup covers in goal until your chosen goalie is fit.',
   ];
   return (

@@ -1094,6 +1094,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
           "Staff: a head coach, a special teams assistant, a goalie coach, a scouting director and a head athletic therapist, each rated 1 to 10. Hire off a shortlist, pay off the man you do not want, and match or let go when another club comes in for a good one.",
           "Re-sign desk: every player whose deal runs out this summer gets a tile. Keep him at his ask, push once with your own number, or let him go. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip.",
           "Trade desk: build a package of up to five pieces a side, players and picks, and keep paying part of a salary to make the money work. It shuts at the deadline.",
+          "Browse every remaining prospect at the draft. Filter by position or save up to three to your shortlist. Saving a prospect uses no picks, and the shortlist survives a reload while its prospects are still available.",
         ],
       },
       {

@@ -138,9 +138,20 @@ function roundNotes(notes: string[]): string[] {
   return rating ? [...visible.slice(0, 3), rating] : visible;
 }
 
+const DRAFT_PAGE_SIZE = 12;
+const DRAFT_SHORTLIST_LIMIT = 3;
+type DraftFilter = 'all' | 'shortlist' | NhlProspect['pos'];
+
+function validDraftShortlist(value: unknown, prospects: NhlProspect[] | null): string[] {
+  if (!Array.isArray(value) || !prospects) return [];
+  const ids = new Set(prospects.map(player => player.id));
+  return [...new Set(value.filter((id): id is string => typeof id === 'string' && ids.has(id)))].slice(0, DRAFT_SHORTLIST_LIMIT);
+}
+
 interface SaveShape {
   league: NhlLeague; myTeam: string; phase: Phase; titles: number; seasonsPlayed: number;
   draftClass: NhlProspect[] | null; picksLeft: number;
+  draftShortlist?: string[];
   draftBatchesLeft?: number;
   /* Round 180. Optional so pre-180 saves keep loading; repaired on load. */
   mandate?: OwnerMandate | null; trust?: number; fired?: boolean;
@@ -283,6 +294,12 @@ export default function NhlFrontOfficeBoard() {
   const [series, setSeries] = useState<NhlSeriesResult[]>([]);
   const [champion, setChampion] = useState('');
   const [draftClass, setDraftClass] = useState<NhlProspect[] | null>(null);
+  const [draftFilter, setDraftFilter] = useState<DraftFilter>('all');
+  const [draftPage, setDraftPage] = useState(0);
+  const [draftShortlist, setDraftShortlist] = useState<string[]>([]);
+  const [shortlistSaveFailed, setShortlistSaveFailed] = useState(false);
+  const draftList = useRef<HTMLDivElement>(null);
+  const shortlistReturn = useRef<HTMLSelectElement>(null);
   /* Round 515: draft night. Transient on the board and never persisted,
      the Round 186 rule for reveals. */
   const [draftNight, setDraftNight] = useState<DraftNight | null>(null);
@@ -390,6 +407,8 @@ export default function NhlFrontOfficeBoard() {
       if (lastRound.current) setFeed(roundHeadlines(lastRound.current));
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
+      setDraftShortlist(s.phase === 'draft' && s.picksLeft > 0 && capital > 0 && !s.fired
+        ? validDraftShortlist(s.draftShortlist, s.draftClass) : []);
       setDraftBatchesLeft(s.draftBatchesLeft ?? null);
       /* Round 180, repair-on-load: a pre-180 save gets an owner today. */
       setMandate(s.mandate ?? mandateFor(s.league, s.myTeam, false));
@@ -420,17 +439,21 @@ export default function NhlFrontOfficeBoard() {
 
   const persist = useCallback((patch: Partial<SaveShape>, lg: NhlLeague | null, team: string) => {
     try {
-      if (!lg) return;
+      if (!lg) return false;
       const result = readLastRound(lastRound.current, lg, team);
+      const canPin = (patch.phase ?? phase) === 'draft' && (patch.picksLeft ?? picksLeft) > 0;
+      const shortlist = canPin ? validDraftShortlist(patch.draftShortlist ?? draftShortlist, patch.draftClass === undefined ? draftClass : patch.draftClass) : [];
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
         ...(draftBatchesLeft !== null ? { draftBatchesLeft } : {}),
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { series, champion, gradeLine } : null,
         ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch, lastRound: result ?? undefined,
+        draftShortlist: shortlist.length ? shortlist : undefined,
       } satisfies SaveShape));
-    } catch { /* full */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
+      return true;
+    } catch { return false; }
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, draftShortlist]);
 
   const label = (abbr: string) => {
     const t = NHL_TEAM_MAP.get(abbr);
@@ -637,12 +660,25 @@ export default function NhlFrontOfficeBoard() {
        roster or in the market. */
     nhlDraftClass(Math.random, Math.max(24, count + 10), leagueNames(lg));
     setDraftClass(cls); setPicksLeft(count); setDraftBatchesLeft(2); setDraftNight(null); setPhase('draft');
-    persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: count, draftBatchesLeft: 2 }, lg, team);
+    setDraftFilter('all'); setDraftPage(0); setDraftShortlist([]); setShortlistSaveFailed(false);
+    persist({ ...patch, phase: 'draft', draftClass: cls, picksLeft: count, draftBatchesLeft: 2, draftShortlist: [] }, lg, team);
   };
 
   const startDraft = () => {
     if (!league) return;
     openDraft(league, myTeam);
+  };
+
+  const toggleDraftShortlist = (id: string) => {
+    if (draftAction.current || !league || !draftClass?.some(player => player.id === id) || picksLeft <= 0) return;
+    const next = draftShortlist.includes(id) ? draftShortlist.filter(held => held !== id) : [...draftShortlist, id];
+    if (next.length > DRAFT_SHORTLIST_LIMIT) return;
+    const ok = persist({ draftShortlist: next }, league, myTeam);
+    setShortlistSaveFailed(!ok);
+    if (ok) {
+      setDraftShortlist(next);
+      if (draftFilter === 'shortlist' && !next.includes(id)) shortlistReturn.current?.focus({ preventScroll: true });
+    }
   };
 
   const draftPick = (id: string) => {
@@ -691,6 +727,8 @@ export default function NhlFrontOfficeBoard() {
       { team: myTeam, playerName: pr.name, pos: String(pr.pos), grade: gradeOf(pr) },
       rivalPicks,
     ));
+    const shortlist = validDraftShortlist(draftShortlist, nextClass);
+    setDraftShortlist(shortlist);
     setDraftClass(nextClass); setPicksLeft(nextPicks); setDraftBatchesLeft(beforeBatches - batchCount);
     setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${gradeOf(pr)}.`, ...f].slice(0, 6));
     if (nextPicks <= 0) {
@@ -698,7 +736,7 @@ export default function NhlFrontOfficeBoard() {
       return;
     }
     setLeague(lg);
-    persist({ draftClass: nextClass, picksLeft: nextPicks, draftBatchesLeft: beforeBatches - batchCount }, lg, myTeam);
+    persist({ draftClass: nextClass, picksLeft: nextPicks, draftBatchesLeft: beforeBatches - batchCount, draftShortlist: shortlist }, lg, myTeam);
   };
 
   const finishDraft = (lg: NhlLeague, deskNow: GmDesk | null = gm) => {
@@ -736,7 +774,7 @@ export default function NhlFrontOfficeBoard() {
          reload skips the reveal and opens where it opened before. */
       setFeedSlam(null); setTab(null);
       setLeague(lg);
-      setPicksLeft(0); setDraftBatchesLeft(0);
+      setPicksLeft(0); setDraftBatchesLeft(0); setDraftShortlist([]);
       persist({ phase: 'hub', draftClass: null, picksLeft: 0, draftBatchesLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null }, lg, myTeam);
   };
 
@@ -768,7 +806,8 @@ export default function NhlFrontOfficeBoard() {
     if (!league || !draftClass || draftClass.length > 0 || picksLeft <= 0 || draftAction.current) return;
     draftAction.current = true;
     const cls = nhlDraftClass(Math.random, Math.max(24, picksLeft + 10), leagueNames(league));
-    setDraftClass(cls); persist({ draftClass: cls }, league, myTeam);
+    setDraftClass(cls); setDraftFilter('all'); setDraftPage(0); setDraftShortlist([]);
+    persist({ draftClass: cls, draftShortlist: [] }, league, myTeam);
   };
 
   /* Round 530: the Continue button under the final pick's card. Nothing to
@@ -1278,6 +1317,12 @@ export default function NhlFrontOfficeBoard() {
        one on from it, and the board is put away: no picks, no grid, just the
        card and its Continue button. */
     const draftDone = picksLeft <= 0 && (draftBatchesLeft === 0 || (draftBatchesLeft === null && league.round === 1));
+    const visible = draftClass
+      .filter(player => draftFilter === 'all' || (draftFilter === 'shortlist' ? draftShortlist.includes(player.id) : player.pos === draftFilter))
+      .map(player => ({ player, grade: gradeOf(player) }));
+    if (gm) visible.sort((a, b) => b.grade - a.grade || a.player.id.localeCompare(b.player.id));
+    const pages = Math.max(1, Math.ceil(visible.length / DRAFT_PAGE_SIZE));
+    const page = Math.min(draftPage, pages - 1);
     const availablePicks = Math.min(picksLeft, my.picks.length);
     const noCapital = availablePicks <= 0;
     return (
@@ -1299,18 +1344,58 @@ export default function NhlFrontOfficeBoard() {
         {draftDone && !draftNight?.picks.length && <button onClick={leaveDraft} className="min-h-11 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground">Continue to the hub</button>}
         {!draftDone && noCapital && <button onClick={draftWithoutPicks} className="min-h-11 w-full rounded-full bg-primary px-4 py-2.5 text-sm font-bold text-primary-foreground">Finish the draft and offseason</button>}
         {!draftDone && !noCapital && draftClass.length === 0 && <div className="rounded-xl border border-border bg-card p-3 text-xs text-muted-foreground"><p>No prospects remain on this saved board. Generate another board to use your remaining picks.</p><button onClick={replaceDraftBoard} className="mt-2 min-h-11 w-full rounded-full bg-primary px-4 py-2.5 font-bold text-primary-foreground">Generate remaining prospects</button></div>}
-        {!draftDone && !noCapital && <div className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
-          {/* Round 987: with the desk on, the board is your scout's, in his order. */}
-          {(gm ? [...draftClass].sort((a, b) => gradeOf(b) - gradeOf(a) || a.id.localeCompare(b.id)) : draftClass).slice(0, 14).map(pr => (
-            <button key={pr.id} onClick={() => draftPick(pr.id)} className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2 text-left hover:border-primary/60">
-              <span>
-                <span className="block text-sm font-bold text-foreground">{pr.name}</span>
-                <span className="block text-[10px] text-muted-foreground">{pr.pos} · age {pr.age}</span>
-              </span>
-              <span className="rounded-full bg-primary/15 px-2.5 py-1 text-sm font-black text-primary">{gradeOf(pr)}</span>
-            </button>
-          ))}
-        </div>}
+        {!draftDone && !noCapital && draftClass.length > 0 && (
+          <section aria-label="Draft prospects" className="space-y-2 rounded-xl border border-border bg-card p-3">
+            <label className="block text-xs font-semibold">
+              Filter prospects
+              <select aria-label="Filter prospects" className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm"
+                ref={shortlistReturn} value={draftFilter} onChange={event => {
+                  setDraftFilter(event.target.value as DraftFilter); setDraftPage(0);
+                  if (draftList.current) draftList.current.scrollTop = 0;
+                }}>
+                <option value="all">All positions</option>
+                <option value="shortlist">Shortlist ({draftShortlist.length}/{DRAFT_SHORTLIST_LIMIT})</option>
+                <option value="C">Center</option>
+                <option value="W">Wing</option>
+                <option value="D">Defense</option>
+                <option value="G">Goalie</option>
+              </select>
+            </label>
+            <p role="status" className="text-xs text-muted-foreground">
+              {visible.length ? `${page * DRAFT_PAGE_SIZE + 1} to ${Math.min((page + 1) * DRAFT_PAGE_SIZE, visible.length)} of ${visible.length} prospects`
+                : draftFilter === 'shortlist' ? 'Your shortlist is empty.' : 'No available prospects at this position.'}
+            </p>
+            {shortlistSaveFailed && <p role="alert" className="text-xs text-destructive">Could not save the shortlist. Try again.</p>}
+            <div ref={draftList} className="grid max-h-96 grid-cols-1 gap-1.5 overflow-y-auto sm:grid-cols-2">
+              {visible.slice(page * DRAFT_PAGE_SIZE, (page + 1) * DRAFT_PAGE_SIZE).map(({ player, grade }) => {
+                const pinned = draftShortlist.includes(player.id);
+                return (
+                  <div key={player.id} className="flex items-stretch gap-1.5 rounded-lg border border-border bg-background p-1">
+                    <button onClick={() => draftPick(player.id)} className="flex min-h-11 min-w-0 flex-1 items-center justify-between gap-1 rounded-lg px-2 text-left hover:bg-primary/10">
+                      <span className="min-w-0">
+                        <span className="block break-words text-sm font-bold">{player.name}</span>
+                        <span className="block text-[10px] text-muted-foreground">{player.pos} · age {player.age}</span>
+                      </span>
+                      <span className="rounded-full bg-primary/15 px-2 py-1 text-sm font-black text-primary">{grade}</span>
+                    </button>
+                    <button type="button" aria-pressed={pinned} aria-label={'Shortlist ' + player.name}
+                      disabled={!pinned && draftShortlist.length >= DRAFT_SHORTLIST_LIMIT} onClick={() => toggleDraftShortlist(player.id)}
+                      className="min-h-11 min-w-11 rounded-lg border border-border px-1 text-xs font-semibold disabled:opacity-40">{pinned ? 'Saved' : 'Save'}</button>
+                  </div>
+                );
+              })}
+            </div>
+            {pages > 1 && (
+              <nav aria-label="Draft pages" className="flex items-center justify-between gap-2 text-xs">
+                <button type="button" className="min-h-11 rounded-lg border border-border px-2 disabled:opacity-40" disabled={page === 0}
+                  onClick={() => { setDraftPage(page - 1); if (draftList.current) draftList.current.scrollTop = 0; }}>Previous page</button>
+                <span>Page {page + 1} of {pages}</span>
+                <button type="button" className="min-h-11 rounded-lg border border-border px-2 disabled:opacity-40" disabled={page + 1 >= pages}
+                  onClick={() => { setDraftPage(page + 1); if (draftList.current) draftList.current.scrollTop = 0; }}>Next page</button>
+              </nav>
+            )}
+          </section>
+        )}
         {feed.length > 0 && (
           <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
             {/* Keyed on the pick count so each pick's news ticks in, and on the
