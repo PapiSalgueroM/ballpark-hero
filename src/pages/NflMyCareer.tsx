@@ -36,6 +36,7 @@ const NflMyCareer = () => {
             howToPlay={[
               'Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K) and an archetype, then get drafted by a real team. A rookie signs for four years and is paid by his draft slot: the first pick makes 14.3M a year in 2026 money, the last pick about 1.1M. In this game a kicker goes in round four or later.',
               'Pick your league first: today\'s NFL, or the 2005 throwback with the Raiders in Oakland, the Chargers in San Diego and the Rams in St. Louis. Throwback seasons are 16 games, the way the league played them until 2021, and contracts pay 2005 money.',
+              'Your setup stays in this browser if you leave before starting the draft.',
               'Play each season for a realistic stat line driven by your rating, your health and your team.',
               'Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show how your rating changed.',
               'Between seasons, up to three decisions land, one card at a time: contracts, trade requests, surgeries, podcasts, training focus. A card you just saw rests for a while (press moments follow your season, so those can come right back).',

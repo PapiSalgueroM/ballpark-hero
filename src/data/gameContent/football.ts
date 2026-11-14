@@ -325,6 +325,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         heading: "Creating your player",
         items: [
           "Create your player: name, one of 8 positions (QB, RB, WR, TE, LB, CB, EDGE, K), and an archetype like Cannon Arm, Island Corner, Speed Bender or Ice in December that sets ceiling and durability.",
+          "Your setup stays in this browser if you leave before starting the draft.",
         ],
         subsections: [
           {
