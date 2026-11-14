@@ -2,6 +2,7 @@ import type { CareerState, SeasonRecord, UCLResult } from './soccerCareerEngine'
 import { readCupRun } from './soccerCareerCup';
 import { isFirstStageResult } from './soccerCareerContinental';
 import { readCommunityShield, communityShieldPlayerSide, readGermanSupercup, germanSupercupPlayerSide } from './soccerCareerExtraCups';
+import { readClubWorldCup } from './soccerClubWorldCup';
 
 export interface SavedCompetitionMatch {
   round: string;
@@ -16,11 +17,12 @@ export interface SavedCompetitionMatch {
 }
 
 export interface SavedSeasonCompetition {
-  id: 'domestic' | 'club' | 'shield' | 'german-supercup';
+  id: 'domestic' | 'club' | 'shield' | 'german-supercup' | 'club-world-cup';
   name: string;
   result: string;
   matches: SavedCompetitionMatch[];
   note?: string;
+  group?: { label: string; rows: { club: string; played: number; points: number; gf: number; ga: number }[] };
 }
 
 /** An unanchored latest result cannot establish which season it belongs to. */
@@ -131,6 +133,22 @@ export function savedSeasonCompetitions(career: Pick<CareerState, 'lastUCLResult
     competitions.push({ id: 'club', name: run.competition ?? 'European club cup', result: run.result, matches, note: run.simplified });
   } else if (row.championsLeague || row.clubCupTitle) {
     competitions.push({ id: 'club', name: row.clubCupTitle ?? 'European club cup', result: 'Winners', matches: [], note: 'The match details for this season were not kept in this save.' });
+  }
+  const worldCup = readClubWorldCup(row);
+  if (worldCup) {
+    const matches = worldCup.matches.map(match => {
+      const home = match.home === worldCup.club;
+      const homeScore = match.homeGoals + (match.extraTime?.homeGoals ?? 0);
+      const awayScore = match.awayGoals + (match.extraTime?.awayGoals ?? 0);
+      const note = [match.extraTime ? 'After extra time.' : '', match.penalties ? `${match.penalties} won on penalties.` : '',
+        match.player ? `You played. ${match.player.assists} assists and ${match.player.rating.toFixed(1)} rating.` : 'You did not play.'].filter(Boolean).join(' ');
+      return { opponent: home ? match.away : match.home, round: match.stage === 'Group' ? `Group ${worldCup.group}` : match.stage,
+        goalsFor: home ? homeScore : awayScore, goalsAgainst: home ? awayScore : homeScore, neutral: true,
+        ...(match.player ? { playerGoals: match.player.goals } : {}), note };
+    });
+    competitions.push({ id: 'club-world-cup', name: '2025 Club World Cup', result: worldCup.result, matches,
+      note: `Simulated champion: ${worldCup.champion}. Your campaign: ${worldCup.apps} apps, ${worldCup.goals} goals and ${worldCup.assists} assists.`,
+      group: { label: `Group ${worldCup.group}`, rows: worldCup.table } });
   }
   return competitions;
 }

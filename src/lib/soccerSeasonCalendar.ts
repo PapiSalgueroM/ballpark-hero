@@ -22,7 +22,9 @@ export function cupCalendar(competitions: readonly SavedSeasonCompetition[], lea
   if (!number(leagueGames) || leagueGames < 1) return [];
   const calendar: CalendarCupGame[] = [];
   for (const competition of competitions) {
-    if (!['domestic', 'club', 'shield', 'german-supercup'].includes(competition.id) || !Array.isArray(competition.matches) || !competition.matches.every(recordedMatch)) continue;
+    // The 2025 Club World Cup follows the league season and has its own report.
+    if (competition.id === 'club-world-cup' || !['domestic', 'club', 'shield', 'german-supercup'].includes(competition.id)
+      || !Array.isArray(competition.matches) || !competition.matches.every(recordedMatch)) continue;
     if (competition.id === 'shield') {
       if (competition.matches.length !== 1 || competition.matches[0].neutral !== true) continue;
       calendar.push({ id: 'shield:0', competition: 'shield', name: competition.name, matchIndex: 0, afterLeague: 0, previous: null, match: { ...competition.matches[0] } });

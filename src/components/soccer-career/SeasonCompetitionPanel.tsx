@@ -7,7 +7,7 @@ import { useBodyLock } from '@/components/season-centre/useBodyLock';
 import { squadNow } from '@/lib/soccerClubSquad';
 import { SquadTile } from './SquadTile';
 
-export type CentreScreen = 'league' | 'domestic' | 'club' | 'shield' | 'german-supercup' | 'squad';
+export type CentreScreen = 'league' | SavedSeasonCompetition['id'] | 'squad';
 export function CompetitionNavigation({ league, competitions, screen, onSelect }: {
   league: string; competitions: SavedSeasonCompetition[]; screen: CentreScreen; onSelect: (screen: CentreScreen) => void;
 }) {
@@ -105,6 +105,15 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
           <h3 ref={heading} tabIndex={-1} className="text-sm font-bold outline-none">{competition.result}</h3>
           <p className="text-xs text-muted-foreground">Scores are from {row.club}'s side. Your season totals include all competitions.</p>
           {competition.note && <p className="text-xs text-muted-foreground">{competition.note}</p>}
+          {competition.group && <div className="overflow-x-auto rounded-lg border border-border p-2">
+            <table className="w-full table-auto text-left text-xs tabular-nums">
+              <caption className="pb-2 text-left font-bold">{competition.group.label}</caption>
+              <thead><tr><th scope="col">Club</th><th scope="col" className="px-1">P</th><th scope="col" className="px-1">GD</th><th scope="col" className="px-1">Pts</th></tr></thead>
+              <tbody>{competition.group.rows.map(team => <tr key={team.club}>
+                <th scope="row" className="break-words py-1 font-medium">{team.club}</th><td className="px-1">{team.played}</td><td className="px-1">{team.gf - team.ga}</td><td className="px-1">{team.points}</td>
+              </tr>)}</tbody>
+            </table>
+          </div>}
           {stages.map((stage, stageIndex) => <section key={stageIndex} className="space-y-2 rounded-xl border border-border p-2" data-centre-cup-table={stageIndex}>
             <h4 className="text-xs font-bold">{stage.label}: {stage.position} of {stage.of}</h4>
             {!stage.table && <p className="text-xs text-muted-foreground">Only your club's row was kept.</p>}

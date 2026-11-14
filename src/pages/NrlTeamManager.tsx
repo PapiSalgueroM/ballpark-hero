@@ -788,6 +788,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
   const canPlayLive = Boolean(match && season.kickerId && season.bench);
   const goalKicker = match && season.backupKickerId && season.squad.find(player => player.id === season.kickerId)?.name;
   const holdable = canPlayLive ? nrlHoldableReserves(season) : [];
+  const namedReserves = canPlayLive ? nrlBench(season) : [];
   const heldReserve = hold?.year === year && hold.round === season.round ? holdable.find(player => player.id === hold.reserveId) : undefined;
   const selectedHold = heldReserve ? hold : undefined;
   const opponent = match ? shortName(year, match.homeId === clubId ? match.awayId : match.homeId) : null;
@@ -918,6 +919,20 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
                   <option value="">Automatic rotation</option>
                   {holdable.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role}</option>)}
                 </select>
+              </>
+            )}
+            {namedReserves.length > 1 && (
+              <>
+                <label htmlFor="nrl-first-reserve" className="mt-3 block text-sm font-semibold">First reserve</label>
+                <select id="nrl-first-reserve" value={namedReserves[0]} aria-describedby="nrl-first-reserve-help" disabled={disabled}
+                  className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  onChange={event => onAction({ type: 'selectBench', slot: 0, playerId: event.target.value })}>
+                  {namedReserves.map(id => {
+                    const player = season.squad.find(reserve => reserve.id === id)!;
+                    return <option key={id} value={id}>{player.name} · {player.role}</option>;
+                  })}
+                </select>
+                <p id="nrl-first-reserve-help" className="mt-1 text-xs text-muted-foreground">This swaps the selected reserve with the first one on your bench.</p>
               </>
             )}
             <p className="mt-2 text-sm text-muted-foreground" aria-live="polite">
@@ -1812,6 +1827,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Sign one fictional assistant in Finances. Tactical assistants help when you use their tactic. A development assistant can give an eligible young player 1 OVR after eight regular-season appearances from the hire onward.</li>
               <li>Choose a goal kicker and a backup in Squad. The backup takes over if your kicker leaves the starting 13. The halfback covers when neither is available. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>
               <li>Before kick-off, open Hold one reserve for later to see the Quick Sim rotation and compare it with the Live rotation when you hold someone.</li>
+              <li>Use First reserve in the rotation preview to change who gets first priority. It swaps two places on your named bench.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. Choose Play to 60 minutes to bring on a held reserve who is still on the bench. Quick Sim settles the round in one action.</li>
               <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>

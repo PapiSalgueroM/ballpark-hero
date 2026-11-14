@@ -9,12 +9,13 @@ import { useBodyLock } from '@/components/season-centre/useBodyLock';
 import { SeasonCupWinBlock } from './CupRunLines';
 import { readNationsLeagueCampaign, wonNationsLeague } from '@/lib/soccerNationsLeague';
 import { NationsLeagueRun } from './NationsLeagueCampaign';
+import { wonClubWorldCup } from '@/lib/soccerClubWorldCup';
 
-export type TrophyCategory = 'league' | 'domestic' | 'ucl' | 'club' | 'world' | 'continental' | 'ballon' | 'shield' | 'german-supercup' | 'nations-league';
+export type TrophyCategory = 'league' | 'domestic' | 'ucl' | 'club' | 'world' | 'continental' | 'ballon' | 'shield' | 'german-supercup' | 'nations-league' | 'club-world-cup';
 
 export const TROPHY_LABELS: Record<TrophyCategory, string> = {
   league: 'League titles', domestic: 'Domestic cups', ucl: 'European club titles',
-  club: 'Club cups', world: 'World Cups', continental: 'Continental titles', ballon: "Ballon d'Or", shield: 'Community Shield', 'german-supercup': 'German Supercup', 'nations-league': 'Nations League',
+  club: 'Club cups', world: 'World Cups', continental: 'Continental titles', ballon: "Ballon d'Or", shield: 'Community Shield', 'german-supercup': 'German Supercup', 'nations-league': 'Nations League', 'club-world-cup': 'Club World Cup',
 };
 
 const TROPHY_FIELDS = {
@@ -25,6 +26,7 @@ const TROPHY_FIELDS = {
 /** One win per recorded season, just like the career's cabinet counts. */
 export function trophyWins(career: Pick<CareerState, 'seasons'>, category: TrophyCategory): SeasonRecord[] {
   if (category === 'nations-league') return (career.seasons ?? []).filter(wonNationsLeague).sort((a, b) => b.year - a.year);
+  if (category === 'club-world-cup') return (career.seasons ?? []).filter(wonClubWorldCup).slice(0, 1);
   if (category === 'german-supercup') return germanSupercupWinningSeasons(career.seasons ?? []).slice().sort((a, b) => b.year - a.year);
   if (category === 'shield') {
     const years = new Set(communityShieldWinningSeasons(career.seasons ?? []).map(row => row.year));
@@ -37,6 +39,7 @@ export function trophyWins(career: Pick<CareerState, 'seasons'>, category: Troph
 }
 
 function trophyName(row: SeasonRecord, category: TrophyCategory): string {
+  if (category === 'club-world-cup') return '2025 Club World Cup';
   if (category === 'nations-league') return 'Nations League';
   if (category === 'german-supercup') return 'German Supercup';
   if (category === 'shield') return 'Community Shield';
@@ -144,6 +147,7 @@ export default function TrophyCabinet({ career, category, onClose }: {
   const returnFocus = useRef(document.activeElement instanceof HTMLElement ? document.activeElement : null);
   const wins = trophyWins(career, category);
   const nationsLeague = category === 'nations-league' && picked ? readNationsLeagueCampaign(picked) : undefined;
+  const clubWorldCup = category === 'club-world-cup' && picked ? savedSeasonCompetitions(career, picked).find(item => item.id === 'club-world-cup') : undefined;
   useBodyLock();
   useEffect(() => () => { returnFocus.current?.focus({ preventScroll: true }); }, []);
   useEffect(() => {
@@ -206,6 +210,14 @@ export default function TrophyCabinet({ career, category, onClose }: {
               </div>
               {(category === 'world' || category === 'continental') && <SeasonTotals row={picked} international />}
               {nationsLeague && <NationsLeagueRun campaign={nationsLeague} />}
+              {clubWorldCup && <section aria-label="Saved 2025 Club World Cup campaign" className="space-y-1 text-xs">
+                <h4 className="font-bold">Club World Cup campaign</h4>
+                <p>{clubWorldCup.note}</p>
+                <ol className="space-y-1">{clubWorldCup.matches.map((match, index) => <li key={index} className="rounded-lg bg-muted/20 p-2">
+                  <p className="font-bold">{match.round} · {match.opponent} · {match.goalsFor}-{match.goalsAgainst}</p>
+                  <p className="text-muted-foreground">{match.note}</p>
+                </li>)}</ol>
+              </section>}
               <SeasonTotals row={picked} />
               <p className="text-[10px] text-muted-foreground">These are the saved season totals, across all competitions.</p>
               {category === 'shield' && <TrophyShieldMatch career={career} row={picked} />}

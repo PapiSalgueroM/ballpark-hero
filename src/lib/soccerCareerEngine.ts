@@ -181,6 +181,7 @@ import type {
    only this game downloads them. */
 import { pickSquad, runInternationalSummer } from "./soccerInternationalSquads";
 import { nationsLeagueCampaign, wonNationsLeague, type NationsLeagueCampaign } from "./soccerNationsLeague";
+import { clubWorldCup2025Campaign, clubWorldCupSeasonStats, wonClubWorldCup, type ClubWorldCupCampaign } from './soccerClubWorldCup';
 
 export type {
   IntlTournament, IntlHistoryEntry, IntlTie, IntlTableRow, IntlMatch,
@@ -287,6 +288,7 @@ export interface SeasonRecord {
       from worldCup so the cabinet does not pretend a Euros is a World Cup. */
   continentalCup?: boolean;
   nationsLeague?: NationsLeagueCampaign;
+  clubWorldCup?: ClubWorldCupCampaign;
   /** Round 972: the continental CLUB cup won outside UEFA, by its name that
       season ("Copa Libertadores"). championsLeague stays the UEFA cup alone,
       so a Libertadores is never counted as a Champions League. */
@@ -5863,6 +5865,15 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   // International season stats
   const lastYear = s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year : season.year - 1;
   const thisYear = lastYear + 1;
+  // The 2025 event opens after the 2024/25 club season from June to July.
+  const clubWorldCup = thisYear === 2024 ? clubWorldCup2025Campaign(season.club,
+    `${s.playerName}|${s.era}|${s.seasons[0]?.year ?? thisYear}`,
+    name => (worldClubs.find(club => clubKeyOf(club.name) === clubKeyOf(name)) ?? FALLBACK_CLUBS.find(club => clubKeyOf(club.name) === clubKeyOf(name)))?.tier ?? 4,
+    season.apps > 0 ? playerFormOf(s) : null, Math.min(0.98, season.apps / 42)) : undefined;
+  if (clubWorldCup) {
+    season.clubWorldCup = clubWorldCup;
+    if (wonClubWorldCup(season)) s.events.push(`🏆 Won the Club World Cup with ${season.club}!`);
+  }
   const nationsLeague = nationsLeagueForSeason(s, thisYear);
   const intSeason = generateIntSeasonStats(s, Boolean(nationsLeague));
   if (nationsLeague) {
@@ -6118,8 +6129,8 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   const totalGoals = s.seasons.reduce((sum, ss) => sum + ss.goals, 0) + season.goals;
   const totalApps = s.seasons.reduce((sum, ss) => sum + ss.apps, 0) + season.apps;
   const openingPlayer = germanMatch?.player ?? shieldMatch?.player;
-  const recordedGoals = totalGoals + (openingPlayer?.goals ?? 0);
-  const recordedApps = totalApps + (openingPlayer?.apps ?? 0);
+  const recordedGoals = totalGoals + (openingPlayer?.goals ?? 0) + (clubWorldCup?.goals ?? 0);
+  const recordedApps = totalApps + (openingPlayer?.apps ?? 0) + (clubWorldCup?.apps ?? 0);
   if (recordedGoals >= 100 && totalGoals - season.goals < 100) s.events.push("💯 Reached 100 career goals!");
   if (recordedGoals >= 200 && totalGoals - season.goals < 200) s.events.push("🔥 Reached 200 career goals!");
   if (recordedGoals >= 500 && totalGoals - season.goals < 500) s.events.push("👑 Reached 500 career goals!");
@@ -6157,7 +6168,9 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   // Generate newspaper articles
   const annualNews = generateNewsArticles(s, season, totalGoals, totalApps);
   // Keep the newspaper draw tied to the regular season. Use the complete tally for the milestone edit.
-  const newsRow = openingPlayer?.goals ? { ...season, goals: season.goals + openingPlayer.goals, apps: season.apps + openingPlayer.apps } : season;
+  const extraGoals = (openingPlayer?.goals ?? 0) + (clubWorldCup?.goals ?? 0);
+  const extraApps = (openingPlayer?.apps ?? 0) + (clubWorldCup?.apps ?? 0);
+  const newsRow = extraGoals ? { ...season, goals: season.goals + extraGoals, apps: season.apps + extraApps } : season;
   const newsCareer = newsRow === season ? s : { ...s, seasons: [...s.seasons.slice(0, -1), newsRow] };
   const news = personalGoalMilestoneNews(annualNews, newsCareer, newsRow, NEWSPAPERS[0], totalGoals);
   s.pendingNews = news;
@@ -6321,6 +6334,10 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   }
   if (shieldMatch?.player.apps === 1) shieldMatch.annualRating = season.apps > 0 ? season.rating : 0;
   Object.assign(season, communityShieldSeasonStats(season, shieldMatch));
+  if (clubWorldCup?.apps) {
+    clubWorldCup.annualRating = season.rating;
+    Object.assign(season, clubWorldCupSeasonStats(season, clubWorldCup));
+  }
   return s;
 }
 
@@ -8825,7 +8842,7 @@ export function getCareerTotals(seasons: SeasonRecord[]) {
     // Round 972: a continental club cup outside UEFA, never a Champions League.
     clubCups: t.clubCups + (s.clubCupTitle ? 1 : 0),
   }), { apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, leagueTitles: 0, domesticCups: 0, championsLeagues: 0, worldCups: 0, ballonDors: 0, continentalCups: 0, clubCups: 0, nationsLeagues: 0 });
-  return { ...totals, communityShields: countCommunityShields(seasons), germanSupercups: countGermanSupercups(seasons) };
+  return { ...totals, communityShields: countCommunityShields(seasons), germanSupercups: countGermanSupercups(seasons), clubWorldCups: Number(seasons.some(wonClubWorldCup)) };
 }
 
 /* ─── Legacy Calculation ─── */
@@ -9632,6 +9649,6 @@ export function endOwnerCareer(prev: CareerState): CareerState {
 export function generateShareText(state: CareerState): string {
   const totals = getCareerTotals(state.seasons);
   const tier = state.legacy?.tier || "JOURNEYMAN";
-  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.nationsLeagues + totals.clubCups + totals.communityShields + totals.germanSupercups;
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.nationsLeagues + totals.clubCups + totals.clubWorldCups + totals.communityShields + totals.germanSupercups;
   return `I finished my Soccer Career as a ${tier}: ${totals.goals} goals, ${totalTrophies} trophies, ${totals.ballonDors} Ballon d'Ors. Can you beat me? douknowball.com/soccer-career`;
 }
