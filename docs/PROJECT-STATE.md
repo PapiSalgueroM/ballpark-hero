@@ -1,4 +1,11 @@
+## 2026-11-14: NRL ladder form and Budget Builder historical markets
+
+- NRL Ladder can show each club's last five completed regular-season results, plus home and away records. Form uses the same ladder order. Byes and finals stay out of these records.
+- Budget Builder keeps the 2007 and 2015 markets tied to the selected year. When the dated pool is unavailable, choose Try again or switch eras. The current-year market still has its local fallback.
+
 ## 2026-11-14: NRL lineup presets and Soccer Career academy report
+
+[PR #901](https://github.com/PapiSalgueroM/ballpark-hero/pull/901) published exact main `63f074aee489d5c63fc2dde654731ced27bf2d8c`, deployment `1f1f7a63-b556-4724-b23f-483a8bed2326`. All eight browser journeys and 174 sitemap routes passed live. IndexNow accepted the NRL guide.
 
 - NRL Squad can save separate First choice and Rotation lineups. Both remember starters, reserve order and goal kicker. Preview uses current availability, and each season starts with empty slots.
 - Soccer Career keeps its Academy Report on reload while the first senior contract offers are still open. The report reads the completed youth season and its stored development inputs.
