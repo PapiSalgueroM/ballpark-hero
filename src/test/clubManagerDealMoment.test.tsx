@@ -1,9 +1,10 @@
-import { cleanup, render } from '@testing-library/react';
+import type { ComponentProps } from 'react';
+import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TransferScreen } from '@/components/club-manager/TransferScreen';
 import {
-  buildMarket, makeOffer, moneyIn, offerTerms, startCareer, startNegotiation,
-  type CareerState, type MarketPlayer, type Negotiation,
+  buildMarket, canLeaveSquad, makeOffer, moneyIn, offerTerms, sellValue, startCareer, startNegotiation,
+  type CareerState, type DealExtras, type MarketPlayer, type Negotiation,
 } from '@/lib/clubManager';
 
 /* Round 927: the deal moment. A negotiation leaving 'open' lands (or stings)
@@ -12,14 +13,21 @@ import {
    is the engine's own open state with the status the engine would write. No
    player, club or figure is made up here. */
 
+type TransferScreenProps = ComponentProps<typeof TransferScreen>;
+
 const noop = () => {};
-function Screen({ career, market }: { career: CareerState; market: MarketPlayer[] }) {
+function Screen({ career, market, onOffer = noop, onProposeTerms = noop }: {
+  career: CareerState;
+  market: MarketPlayer[];
+  onOffer?: (amount: number, extras?: DealExtras) => void;
+  onProposeTerms?: TransferScreenProps['onProposeTerms'];
+}) {
   return (
     <TransferScreen
       career={career} market={market}
-      onNegotiate={noop} onOffer={noop} onWalk={noop} onDismissNegotiation={noop}
+      onNegotiate={noop} onOffer={onOffer} onWalk={noop} onDismissNegotiation={noop}
       onClause={noop} onLoan={noop} onAcceptBid={noop} onRejectBid={noop}
-      onSetStatus={noop} onLoanOut={noop} onProposeTerms={noop} onBuyLoanee={noop}
+      onSetStatus={noop} onLoanOut={noop} onProposeTerms={onProposeTerms} onBuyLoanee={noop}
       onEndLoanEarly={noop} onRecallLoanee={noop}
     />
   );
@@ -73,6 +81,36 @@ beforeEach(() => seedRandom(927));
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 describe('Club Manager: the deal moment', () => {
+  it('offers the full eligible squad and completes a deal with a reserve', () => {
+    const { market, open } = playDeal();
+    const owned = open.squad.filter(player => canLeaveSquad(open, player))
+      .sort((a, b) => sellValue(b) - sellValue(a));
+    const reserve = owned.slice(11).find(player => !open.xiIds?.includes(player.id))!;
+    expect(reserve).toBeDefined();
+
+    let career = open;
+    const onOffer = (amount: number, extras?: DealExtras) => {
+      career = makeOffer(career, amount, extras)!;
+    };
+    const onProposeTerms: TransferScreenProps['onProposeTerms'] = terms => {
+      career = offerTerms(career, terms)!;
+    };
+    const props = { market, onOffer, onProposeTerms };
+    const view = render(<Screen career={career} {...props} />);
+    const picker = screen.getByRole<HTMLSelectElement>('combobox', { name: 'Part exchange player' });
+    expect(Array.from(picker.options, option => option.value)).toEqual(['', ...owned.map(player => player.id)]);
+
+    fireEvent.change(picker, { target: { value: reserve.id } });
+    fireEvent.click(screen.getByRole('button', { name: /^(Meet ask|Beat rival)/ }));
+    expect(career.negotiation).toMatchObject({ phase: 'terms', agreedExtras: { swapId: reserve.id } });
+    view.rerender(<Screen career={career} {...props} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Give him what he wants' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Put it to him' }));
+    expect(career.negotiation?.status).toBe('agreed');
+    expect(career.squad.some(player => player.id === reserve.id)).toBe(false);
+    expect(career.goneNames).toContain(reserve.name);
+  });
+
   it('slams DEAL DONE only after the flip, with the fee the save holds', () => {
     const { market, open, agreed } = playDeal();
     const neg = agreed.negotiation!;
