@@ -106,11 +106,16 @@ try {
     assert.match(page.url(), /\/soccer-career$/, 'Keyboard activation reaches the flagship');
     if (!baseline) {
       await page.goBack();
+      await launch.waitFor();
       await launch.focus();
       await launch.press('Enter');
       await page.waitForURL('**/nrl-team-manager');
+      const rules = page.getByRole('dialog', { name: 'How to play NRL Team Manager' });
+      await rules.getByRole('button', { name: "Let's Play!", exact: true }).click();
       await page.getByRole('heading', { name: 'NRL Team Manager', level: 1 }).waitFor();
-      await page.goBack();
+      const back = page.getByRole('button', { name: 'Go back', exact: true });
+      await back.focus();
+      await back.press('Enter');
       await launch.waitFor();
       await page.waitForFunction(() => document.activeElement?.hasAttribute('data-home-nrl-launch'));
     }
