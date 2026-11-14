@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
+import { nrlClubName } from '@/lib/nrlClubIdentity';
+import { NrlCustomBadge } from '@/components/nrl-manager/NrlClubIdentity';
 import { BACKUPS_KEPT } from '@/lib/brokenSaveRecovery';
 import {
   NRL_SAVE_SLOTS, nrlCheckpointKey, readNrlSaveSlot, restoreNrlCheckpoint, sameNrlCareer, saveNrlCheckpoint, writeNrlSaveSlot,
@@ -80,16 +81,20 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
           const entry = NRL_SAVE_SLOTS[index];
           const number = index + 1;
           const season = career?.season;
-          const club = season ? nrlSeasonPlan(season.year).clubs.find(team => team.id === season.clubId)?.name : undefined;
+          const club = season ? nrlClubName(season.year, season.clubId, career?.customClub, 'full') : undefined;
+          const custom = career?.customClub?.slotId === season?.clubId ? career?.customClub : undefined;
           const savedSeason = checkpoint.career?.season;
-          const savedClub = savedSeason && nrlSeasonPlan(savedSeason.year).clubs.find(team => team.id === savedSeason.clubId)?.shortName;
+          const savedClub = savedSeason && nrlClubName(savedSeason.year, savedSeason.clubId, checkpoint.career?.customClub);
           const ownCheckpoint = career && checkpoint.career && sameNrlCareer(career, checkpoint.career);
           const checkpointRaw = checkpoint.raw;
           const pending = confirm?.index === index ? confirm : null;
           return (
             <li key={entry.saveKey} className="flex min-w-0 flex-col rounded-xl border border-border bg-card p-3">
               <h3 className="text-sm font-semibold">Slot {number}</h3>
-              <p className="mt-1 break-words font-bold">{club ?? (raw !== null ? 'Unreadable career' : available ? 'Empty slot' : 'Storage unavailable')}</p>
+              <div className="mt-1 flex items-center gap-2">
+                {custom && <NrlCustomBadge {...custom} />}
+                <p className="min-w-0 break-words font-bold">{club ?? (raw !== null ? 'Unreadable career' : available ? 'Empty slot' : 'Storage unavailable')}</p>
+              </div>
               {career && <p className="text-sm text-muted-foreground">
                 Started in {career.openingYear} · {career.season.year} season{career.retired ? ' · Retired' : season.live ? ' · Match at half time' : season.phase === 'complete' ? ' · Season complete' : ''}
                 {career.openingRoster && ' · Opening matchday names'}

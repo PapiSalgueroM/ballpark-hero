@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import RetireDoor from '@/components/club-manager/RetireDoor';
 import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeNotice';
 import NrlJudiciaryReview from '@/components/nrl-manager/NrlJudiciaryReview';
+import { useNrlClubName } from '@/components/nrl-manager/NrlClubIdentity';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   isNrlNamedPlayer,
@@ -39,7 +40,6 @@ const currency = new Intl.NumberFormat('en-AU', {
 });
 const money = (amount: number) => currency.format(amount);
 const moneyRange = (low: number, high: number) => low === high ? money(low) : `${money(low)} to ${money(high)}`;
-const labelForClub = (year: number, id: string) => nrlSeasonPlan(year).clubs.find(club => club.id === id)?.shortName ?? id;
 
 type OfficeScreen = 'contracts' | 'recruitment' | 'academy' | 'finances' | 'history';
 type MarketEntry = ReturnType<typeof nrlCareerMarket>[number];
@@ -125,6 +125,7 @@ function PlayerRow({ player, entry, career, onAction, disabled, onShortlist, exp
   onShortlist?: (saved: boolean) => void;
   expiryStatus?: string;
 }) {
+  const labelForClub = useNrlClubName();
   const [editing, setEditing] = useState(false);
   const [agreed, setAgreed] = useState(false);
   const { contract, futureContract } = player;
@@ -182,6 +183,7 @@ function PlayerRow({ player, entry, career, onAction, disabled, onShortlist, exp
 }
 
 function ContractTakeover({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const labelForClub = useNrlClubName();
   const [playerId, setPlayerId] = useState('');
   const [destinationId, setDestinationId] = useState('');
   const summary = useRef<HTMLElement>(null);
@@ -294,6 +296,7 @@ function MutualRelease({ career, onAction, disabled }: { career: NrlCareerState;
 }
 
 function ContractApproaches({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const labelForClub = useNrlClubName();
   const { year, clubId, round, phase } = career.season;
   const [playerId, setPlayerId] = useState('');
   const [permission, setPermission] = useState(false);
@@ -482,6 +485,7 @@ function BoardRecruitment({ career, onAction, disabled, onFilter }: {
 }
 
 function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const labelForClub = useNrlClubName();
   const [role, setRole] = useState<NrlRole | ''>('');
   const [shortlistedOnly, setShortlistedOnly] = useState(false);
   const [visible, setVisible] = useState(12);
@@ -1140,6 +1144,7 @@ function DevelopmentFocus({ career, onAction, disabled }: { career: NrlCareerSta
 }
 
 function CareerRecord({ history }: { history: NrlCareerState['history'] }) {
+  const labelForClub = useNrlClubName();
   const record = nrlCareerRecord(history);
   if (!record) return null;
   const { bestFinish } = record;
@@ -1230,6 +1235,7 @@ function ScoringHistory({ year, leaders }: { year: number; leaders: NrlScoringLe
 }
 
 function PlayerHistory({ career }: { career: NrlCareerState }) {
+  const labelForClub = useNrlClubName();
   const [open, setOpen] = useState(false);
   const [playerId, setPlayerId] = useState('');
   const years = useMemo(() => {
@@ -1261,7 +1267,7 @@ function PlayerHistory({ career }: { career: NrlCareerState }) {
     return rows.sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id)).map(({ id, name, qualifier, label }) => ({
       id, label: qualifier && (labels.get(label) ?? 0) > 1 ? name + ' (' + qualifier + ', ' + id + ')' : label,
     }));
-  }, [years]);
+  }, [years, labelForClub]);
   const selected = choices.some(choice => choice.id === playerId) ? playerId : choices[0]?.id;
   let previous: { year: number; rating: number } | undefined;
   const rows = years.flatMap(year => {
@@ -1338,6 +1344,7 @@ function PlayerHistory({ career }: { career: NrlCareerState }) {
 }
 
 function FinalsHistory({ record, season }: { record: NrlCareerState['history'][number]; season: NrlCareerState['season'] }) {
+  const labelForClub = useNrlClubName();
   const { year, finals } = record;
   const matches = year === season.year ? season.results.filter(match => match.finalsRound !== undefined)
     : nrlArchivedFinals(finals, year)?.matches;
@@ -1413,6 +1420,7 @@ function BoardPathways({ career, onAction, disabled }: { career: NrlCareerState;
 }
 
 function SummerApplications({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const clubName = useNrlClubName('full');
   const { year, clubId, round } = career.season;
   const summary = useRef<HTMLElement>(null);
   const application = nrlSummerApplication(career);
@@ -1427,7 +1435,7 @@ function SummerApplications({ career, onAction, disabled }: { career: NrlCareerS
       </summary>
       <div className="space-y-2 pb-3 text-sm">
         {pending ? <p role="status" className="text-muted-foreground">
-          Application sent to {clubs.find(club => club.id === pending.clubId)?.name} in Round {pending.round}. You’ll get an answer after the Grand Final.
+          Application sent to {clubName(year + 1, pending.clubId)} in Round {pending.round}. You’ll get an answer after the Grand Final.
         </p> : <>
           <p className="text-muted-foreground">Apply for one simulated opening for {year + 1} by Round {nrlSummerLastRound(year)}. An opening can disappear before the season ends. Keep coaching your club while you wait for an answer after the Grand Final.</p>
           <ul className="divide-y divide-border">
@@ -1436,11 +1444,11 @@ function SummerApplications({ career, onAction, disabled }: { career: NrlCareerS
               const club = clubs.find(candidate => candidate.id === destinationId)!;
               return <li key={destinationId} className="flex flex-wrap items-center justify-between gap-2 py-2">
                 <div>
-                  <p className="font-semibold">{club.name}</p>
+                  <p className="font-semibold">{clubName(year + 1, club.id)}</p>
                   <p className="text-muted-foreground">{opening.reason === 'expansion' ? `Joins the league in ${year + 1}` : `Projected opening · Current ladder place ${opening.rank}`}</p>
                 </div>
                 <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled}
-                  aria-label={`Apply to ${club.name} for ${year + 1}`}
+                  aria-label={`Apply to ${clubName(year + 1, club.id)} for ${year + 1}`}
                   onClick={() => {
                     if (onAction({ type: 'applyForSummerJob', year, clubId, round, destinationId })) summary.current?.focus();
                   }}>Apply</Button>
@@ -1456,6 +1464,7 @@ function SummerApplications({ career, onAction, disabled }: { career: NrlCareerS
 function LeagueRecruitment({ career, onAction, disabled, nextClubId }: {
   career: NrlCareerState; onAction: Dispatch; disabled: boolean; nextClubId?: string;
 }) {
+  const labelForClub = useNrlClubName();
   const [open, setOpen] = useState(false);
   const { year, clubId, phase, kickerId } = career.season;
   const deals = useMemo(() => open ? nrlLeagueRecruitmentPreview(career, nextClubId) : null, [career, nextClubId, open]);
@@ -1490,6 +1499,8 @@ function LeagueRecruitment({ career, onAction, disabled, nextClubId }: {
 }
 
 function History({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const labelForClub = useNrlClubName();
+  const clubName = useNrlClubName('full');
   const { year, phase, clubId } = career.season;
   const finished = phase === 'complete';
   const retired = career.retired === true;
@@ -1587,19 +1598,19 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                   const club = clubs.find(candidate => candidate.id === opening.clubId)!;
                   return <li key={club.id} className="flex flex-wrap items-center justify-between gap-2 py-2">
                     <div>
-                      <p className="font-semibold">{club.name}</p>
+                      <p className="font-semibold">{clubName(year + 1, club.id)}</p>
                       <p className="text-muted-foreground">{opening.reason === 'expansion' ? `Enters the league in ${year + 1}`
                         : `Ladder place ${opening.rank}. Missed its modeled target by ${opening.missedBy} ${opening.missedBy === 1 ? 'place' : 'places'}.`}</p>
                       <p className="text-muted-foreground">{year + 1} board target · {opening.nextTarget}</p>
                     </div>
                     <div className="flex flex-wrap gap-2">
-                      <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled} aria-label={`Consider ${club.name}`} onClick={() => {
+                      <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled} aria-label={`Consider ${clubName(year + 1, club.id)}`} onClick={() => {
                         setNextClubId(club.id);
                         clubSelect.current?.focus();
                       }}>Consider</Button>
                       {!career.legacySeason && !application && (
                         <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled}
-                          aria-label={`Apply to ${club.name}`}
+                          aria-label={`Apply to ${clubName(year + 1, club.id)}`}
                           onClick={() => onAction({ type: 'applyForOffseasonJob', year, clubId, destinationId: club.id })}>Apply</Button>
                       )}
                     </div>
@@ -1611,7 +1622,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
             <label className="block font-semibold" htmlFor="nrl-next-club">Club to manage</label>
             <select ref={clubSelect} id="nrl-next-club" className={control} value={nextClubId} disabled={disabled} onChange={event => setNextClubId(event.target.value)}>
               <option value="">Choose a club</option>
-              {clubs.map(club => <option key={club.id} value={club.id}>{club.name}</option>)}
+              {clubs.map(club => <option key={club.id} value={club.id}>{clubName(year + 1, club.id)}</option>)}
             </select>
             {nextClub && <Button type="button" size="lg" variant="outline" className="w-full px-2" disabled={disabled || needsJudiciary}
               onClick={() => onAction({ type: 'startNextSeason', move: { fromYear: year, clubId: nextClub.id } })}>

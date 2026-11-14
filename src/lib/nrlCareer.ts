@@ -1,6 +1,7 @@
 import { isNrlOpeningYear, nrlSeasonPlan, NRL_LAST_YEAR, type NrlClub } from '@/data/nrlManagerSeasons';
 import { clampi, hashLabel, rngFrom } from '@/lib/careerEngine';
 import { uniqueName } from '@/lib/foNames';
+import { isNrlCustomClub, type NrlCustomClub } from '@/lib/nrlClubIdentity';
 import {
   NRL_BOARD_PATHWAYS, nrlBoardBenchmark, nrlBoardChallengeStatus, nrlBoardPathwaysEligible, nrlBoardPathwaysProgress, nrlBoardTarget,
 } from '@/lib/nrlBoardTarget';
@@ -164,6 +165,7 @@ export interface NrlCareerState {
   version: 2;
   openingYear: NrlYear;
   openingRoster?: 'matchday-2026' | 'perth-signings-2027';
+  customClub?: NrlCustomClub;
   season: NrlManagerState;
   players: NrlCareerPlayer[];
   history: NrlCareerHistoryRow[];
@@ -988,6 +990,14 @@ export function createNrlCareer(clubId: string, seed: number, openingYear: NrlYe
   const career = careerFrom(createNrlSeason(clubId, seed, openingYear), openingYear, false);
   if (judiciaryChallenge) career.season.judiciary = {};
   return boardChallenge ? { ...career, boardChallenge: true } : career;
+}
+
+export function createNrlCustomCareer(slotId: string, seed: number, year: NrlYear, identity: Omit<NrlCustomClub, 'slotId'>,
+  boardChallenge = false, judiciaryChallenge = false): NrlCareerState | null {
+  if (!isNrlOpeningYear(year) || !nrlSeasonPlan(year).clubs.some(club => club.id === slotId)) return null;
+  const customClub = { name: identity.name.trim(), ground: identity.ground.trim(), colour: identity.colour, slotId };
+  if (!isNrlCustomClub(customClub)) return null;
+  return { ...createNrlCareer(slotId, seed, year, boardChallenge, judiciaryChallenge), customClub };
 }
 
 export function createNrlOpeningMatchdayCareer(clubId: string, seed: number, roster: NrlOpeningMatchdayRoster, boardChallenge = false): NrlCareerState {
@@ -2591,6 +2601,9 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
   const { year } = value.season;
   if (!value.players.every(player => validPlayer(player, year) && (!value.legacySeason || !player.secondaryRole))) return false;
   const state = value as unknown as NrlCareerState;
+  if (value.customClub !== undefined && (!isNrlCustomClub(value.customClub) || state.legacySeason || state.openingRoster
+    || !nrlSeasonPlan(state.openingYear).clubs.some(club => club.id === state.customClub!.slotId)
+    || (state.history[0]?.clubId ?? state.season.clubId) !== state.customClub!.slotId)) return false;
   if (state.season.judiciary && (state.openingRoster || state.legacySeason || (state.retired && judiciaryNeedsResponse(state.season)))) return false;
   if (state.coachRetention !== undefined && (state.coachRetention !== true || nrlCoachRetentionQuote(state).reason !== null)) return false;
   if (state.leagueRecruitment !== undefined && (state.leagueRecruitment !== true || !leagueRecruitmentAvailable(state))) return false;
