@@ -6302,6 +6302,33 @@ export interface CustomClubSpec {
   identity?: ClubIdentity;
   /** Round 160: how many the ground holds. Display and future finance. */
   capacity?: number;
+  /** Optional edits keyed by the generated founding squad's fixed slot. */
+  founders?: Record<number, CustomFounderEdit>;
+}
+
+export interface CustomFounderEdit {
+  name?: string;
+  age?: number;
+  secondary?: Position;
+}
+
+export function validCustomFounderName(value: string): boolean {
+  return /^[\p{L}\p{M}][\p{L}\p{M} .’'-]{1,31}$/u.test(value.trim());
+}
+
+const CUSTOM_FOUNDER_REAL_NAMES = new WeakMap<Record<string, BakedPlayer[]>, Set<string>>();
+
+export function customFounderNameTaken(value: string, eraId?: string): boolean {
+  const key = slug(value.trim());
+  const matches = (rosters: Record<string, BakedPlayer[]>) => {
+    let names = CUSTOM_FOUNDER_REAL_NAMES.get(rosters);
+    if (!names) {
+      names = new Set(Object.values(rosters).flatMap(roster => roster.map(p => slug(p.n))));
+      CUSTOM_FOUNDER_REAL_NAMES.set(rosters, names);
+    }
+    return names.has(key);
+  };
+  return matches(CM_ROSTERS) || (isHistoricEra(eraId) && eraRostersLoaded(eraId) && matches(eraRostersRaw(eraId)));
 }
 
 export type ClubIdentity = 'gegenpress' | 'tikitaka' | 'lowblock' | 'counter' | 'balanced'
@@ -6836,7 +6863,7 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
   /* Round 567: the generated names are already deduped through `used`, so this
      is the belt to that brace: two different generated names that slug to one
      string still leave two players with two ids. */
-  return withUniqueIds(CUSTOM_SLOTS.map((slot, i) => {
+  const founders = withUniqueIds(CUSTOM_SLOTS.map((slot, i) => {
     const seed = `custom|${spec.name}|${i}|${slot.pos}`;
     let name = makeGeneratedName(seed);
     for (let k = 1; used.has(name) && k < 25; k++) name = makeGeneratedName(`${seed}|${k}`);
@@ -6848,7 +6875,10 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
     const ceilingRating = clamp(ceiling + slot.off + wobble, 48, 93);
     // Starters arrive in their prime, rotation a little younger, depth are
     // kids. Same intake logic a real newly assembled squad would show.
-    const age = slot.off >= 2 ? cInt(`${seed}|a`, 24, 30)
+    const edit = spec.founders?.[i];
+    const editedAge = edit?.age;
+    const age = typeof editedAge === 'number' && Number.isInteger(editedAge) && editedAge >= 18 && editedAge <= 35
+      ? editedAge : slot.off >= 2 ? cInt(`${seed}|a`, 24, 30)
       : slot.off >= -3 ? cInt(`${seed}|a`, 21, 28)
       : cInt(`${seed}|a`, 18, 21);
     const founder: CMPlayer = {
@@ -6870,8 +6900,23 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
     /* Round 1600: the same man at the ceiling is the same age, so his price there reads the same age too. */
     const saleRatio = customFounderSaleRatio(founder.value as number, customFounderValue(ceilingRating, eraId, age));
     if (aboveCeiling && saleRatio < 1) founder.founderSaleRatio = saleRatio;
+    const secondary = edit?.secondary;
+    if (secondary && slot.pos !== 'GK' && secondary !== 'GK' && secondary !== slot.pos && ALL_POSITIONS.includes(secondary)) {
+      founder.secondaryPositions = [secondary];
+    }
     return founder;
   }));
+  const names = new Set(founders.map(p => slug(p.name)));
+  founders.forEach((player, index) => {
+    const requested = spec.founders?.[index]?.name;
+    if (typeof requested !== 'string') return;
+    const name = requested.trim().replace(/ +/g, ' ');
+    const key = slug(name);
+    if (!validCustomFounderName(name) || names.has(key) || customFounderNameTaken(name, eraId)) return;
+    names.add(key);
+    player.name = name;
+  });
+  return founders;
 }
 
 /** Round 640: a founder's sale ratio, his value in the squad the money could

@@ -4,8 +4,10 @@ import { ChevronLeft, Sparkles } from 'lucide-react';
 import {
   CREST_SHAPES, CREST_PATTERNS, CUSTOM_TIERS, CLUB_IDENTITIES, CUSTOM_STADIUMS, crestSvg,
   validateCustomClubName, sanitizeCrestInitials, customBoardPreview, customQualityCap, money,
+  buildCustomSquad, customFounderNameTaken, validCustomFounderName,
 } from '@/lib/clubManager';
-import type { CrestSpec, CustomClubSpec, CustomBudgetTier, ClubIdentity } from '@/lib/clubManager';
+import type { CrestSpec, CustomClubSpec, CustomBudgetTier, ClubIdentity, CustomFounderEdit } from '@/lib/clubManager';
+import { ALL_POSITIONS } from '@/lib/positionFit';
 
 /**
  * Round 154, his ask verbatim: "create a create my team for the manger game
@@ -51,6 +53,8 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
   const [initialsRaw, setInitialsRaw] = useState('');
   const [tier, setTier] = useState<CustomBudgetTier>('mid');
   const [triedSubmit, setTriedSubmit] = useState(false);
+  const [founderSlot, setFounderSlot] = useState<number | null>(null);
+  const [founders, setFounders] = useState<Record<number, CustomFounderEdit>>({});
   /* Round 160: how good the squad starts (decoupled from the money), the
      club's football identity, and the size of the ground. */
   const [quality, setQuality] = useState(66);
@@ -74,13 +78,28 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
   );
 
   const nameError = useMemo(() => validateCustomClubName(name), [name]);
+  const editingFounders = founderSlot !== null;
   /* The quality slider feeds the SAME preview the live board reads, so
      dragging it visibly moves the demand: a division-topping squad gets told
      to win the thing, honestly, before you commit. */
-  const preview = useMemo(
-    () => customBoardPreview({ name: name || 'Your Club', stadium, crest, budgetTier: tier, leagueId, quality, identity, capacity }, eraId),
-    [name, stadium, crest, tier, leagueId, eraId, quality, identity, capacity],
-  );
+  const spec = useMemo(() => ({ name: name.trim() || 'Your Club', stadium, crest, budgetTier: tier, leagueId, quality, identity, capacity }),
+    [name, stadium, crest, tier, leagueId, quality, identity, capacity]);
+  const preview = useMemo(() => customBoardPreview(spec, eraId), [spec, eraId]);
+  const startingSquad = useMemo(() => !editingFounders ? [] : buildCustomSquad({
+    ...spec, replacedClub: preview.replaced ?? '', founders,
+  }, eraId), [editingFounders, spec, preview.replaced, founders, eraId]);
+  const founder = founderSlot === null ? undefined : startingSquad[founderSlot];
+  const edit = founderSlot === null ? undefined : founders[founderSlot];
+  function changeFounder(change: CustomFounderEdit) {
+    if (founderSlot === null) return;
+    setFounders(current => {
+      const next = { ...current };
+      const edited = { ...current[founderSlot], ...change };
+      if (edited.name || edited.age || edited.secondary) next[founderSlot] = edited;
+      else delete next[founderSlot];
+      return next;
+    });
+  }
 
   const submit = () => {
     setTriedSubmit(true);
@@ -95,6 +114,7 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
       quality,
       identity,
       capacity,
+      ...(Object.keys(founders).length ? { founders } : {}),
     });
   };
 
@@ -255,6 +275,49 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
             <p className="text-[9px] text-gold mt-1">
               {money(CUSTOM_TIERS[tier].budget)} buys a squad of about {ceiling}. Everything above that is on the house, so these made up players sell on at ~{ceiling} squad prices, and still go up in step as they improve.
             </p>
+          )}
+        </div>
+
+        <div className="bg-card border border-border rounded-2xl p-3">
+          <button type="button" aria-expanded={editingFounders} onClick={() => setFounderSlot(editingFounders ? null : 0)}
+            className="font-semibold text-sm text-foreground">Edit starting squad</button>
+          {founderSlot !== null && founder && (
+            <div className="grid gap-3 mt-2 text-sm">
+              <label className="grid gap-1">Founding player
+                <select className="bg-secondary border border-border rounded-lg p-2" value={founderSlot} onChange={e => setFounderSlot(Number(e.target.value))}>
+                  {startingSquad.map((p, i) => <option key={p.id} value={i}>{p.position} · {p.name} · {p.rating} OVR</option>)}
+                </select>
+              </label>
+              <label className="grid gap-1">Player name
+                <input className="bg-secondary border border-border rounded-lg p-2" maxLength={32} placeholder={founder.name}
+                  value={edit?.name ?? ''} onChange={e => changeFounder({ name: e.target.value || undefined })} />
+              </label>
+              {edit?.name && founder.name !== edit.name.trim().replace(/ +/g, ' ') && (
+                <p role="status" className="text-xs text-muted-foreground">{!validCustomFounderName(edit.name)
+                  ? 'Enter 2 to 32 letters with normal name punctuation.' : customFounderNameTaken(edit.name, eraId)
+                    ? 'That name belongs to a player in the game. Choose a fictional name.' : 'That name is already used in your squad.'} The generated name is used until then.</p>
+              )}
+              <div className="grid grid-cols-2 gap-2">
+                <label className="grid gap-1">Starting age
+                  <select className="bg-secondary border border-border rounded-lg p-2" value={edit?.age ?? ''} onChange={e => changeFounder({ age: e.target.value ? Number(e.target.value) : undefined })}>
+                    <option value="">Generated{edit?.age === undefined ? ` (${founder.age})` : ''}</option>
+                    {Array.from({ length: 18 }, (_, i) => <option key={i + 18}>{i + 18}</option>)}
+                  </select>
+                </label>
+                {founder.position !== 'GK' && <label className="grid gap-1">Secondary position
+                  <select className="bg-secondary border border-border rounded-lg p-2" value={edit?.secondary ?? ''}
+                    onChange={e => changeFounder({ secondary: ALL_POSITIONS.find(p => p === e.target.value) })}>
+                    <option value="">None</option>
+                    {ALL_POSITIONS.filter(p => p !== 'GK' && p !== founder.position).map(p => <option key={p}>{p}</option>)}
+                  </select>
+                </label>}
+              </div>
+              <button type="button" className="w-fit text-xs text-primary" onClick={() => {
+                const edited = { ...founders };
+                delete edited[founderSlot];
+                setFounders(edited);
+              }}>Reset this player</button>
+            </div>
           )}
         </div>
 
