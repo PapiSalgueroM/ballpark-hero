@@ -1,3 +1,9 @@
+## 2026-11-14: NFL spin recovery, NHL draft access and NRL position cover
+
+- NFL Perfect Season keeps the current lineup when a team spin fails. Retry the same spin from the board. A reroll counts only after a team arrives.
+- NHL Front Office opens the full available draft class. Filter by position, page through the board or save up to three prospects. Shortlisting leaves picks available until the player is drafted.
+- At 60 minutes in an NRL Live Match, an eligible unused reserve can cover their trained second position when the slot is open. The match report shows who came on and where they played.
+
 ## 2026-11-14: Home recommendations, NRL match ratings and Gauntlet redraw
 
 - Home shows Games to try while the public ranking loads or fewer than three games qualify. Once the ranking has three games, Most played today shows the actual order.
