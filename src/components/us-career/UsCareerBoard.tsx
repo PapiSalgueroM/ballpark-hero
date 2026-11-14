@@ -77,7 +77,7 @@ import { keyedRng } from '@/lib/keyedRng';
 import { bankTrainingRating, trainingBankNote, trainingScore, trainingSessionOpen } from '@/lib/careerTraining';
 import { buildCareerDecisionOutcome, type CareerDecisionOutcomeData } from '@/lib/usCareerDecisionOutcome';
 import CareerDecisionOutcome from '@/components/us-career/CareerDecisionOutcome';
-import { answerSummerCard, newSummerSalt, repairSummerOnLoad, seekSummerCard, startSummer, summerOn, summerPlace } from '@/lib/usCareerSummer';
+import { answerSummerCard, newSummerSalt, repairSummerOnLoad, seekSummerCard, startSummer, summerCareerKey, summerOn, summerPlace } from '@/lib/usCareerSummer';
 import { answerTalk, endsAfterSeason, manualRetire, pendingTalk, repairHallOnLoad, talkDeckFilter } from '@/lib/usCareerRetirementFlow';
 import { stampOnRetirement } from '@/lib/usCareerRetirementFlow';
 import { isFarewellSeason, type RetirementChoiceId } from '@/lib/careerRetirement';
@@ -153,6 +153,8 @@ export interface UsCareerStart {
 
 export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: { sport: UsCareerSport; entry?: UsCareerStart; inSeasonRating?: boolean }) {
   const pendingSave = useRef<{ key: string; value: string | null } | null>(null);
+  const savedBytes = useRef<string | null>(null);
+  const [tradeSaveMoved, setTradeSaveMoved] = useState(false);
   const onEntrySaved = useRef(entry?.onSaved);
   const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);
   const saveFailed = saveFailure !== null;
@@ -468,6 +470,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     decisionReturn.current = false;
     let raw: string | null = null;
     try { raw = localStorage.getItem(sport.saveKey); } catch { /* The game can still play without saving. */ }
+    savedBytes.current = raw;
+    setTradeSaveMoved(false);
     if (!raw) {
       if (entry && !consumedEntry.current) {
         consumedEntry.current = true;
@@ -559,6 +563,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     try {
       if (pending.value === null) localStorage.removeItem(pending.key);
       else localStorage.setItem(pending.key, pending.value);
+      savedBytes.current = pending.value;
       pendingSave.current = null;
       setSaveFailure(null);
     } catch {
@@ -712,9 +717,28 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
      banned year). */
   const playedRef = useRef<CareerState | null>(null);
 
+  const tradeSaveChanged = (requesting: boolean) => {
+    const trade = sport.tradeRequest;
+    if (!career || !trade || pendingSave.current) return false;
+    try {
+      const raw = localStorage.getItem(sport.saveKey);
+      if (raw === savedBytes.current) return false;
+      const stored = raw ? JSON.parse(raw) as SaveShape : null;
+      if (stored?.phase === 'season' && stored.c && stored.teamQuality != null && trade.receipt(stored.c)
+        && stored.c.year === career.year && summerCareerKey(stored.c) === summerCareerKey(career)) {
+        savedBytes.current = raw;
+        setCareer(stored.c);
+        setTeamQuality(stored.teamQuality);
+        return true;
+      }
+    } catch { /* An unreadable career cannot safely accept a request. */ }
+    if (requesting) setTradeSaveMoved(true);
+    return requesting;
+  };
+
   const playSeason = () => {
     playedRef.current = null;
-    if (!career || teamQuality == null || practiceOpen) return;
+    if (!career || teamQuality == null || practiceOpen || tradeSaveMoved || tradeSaveChanged(false)) return;
     /* Round 195: a played season counts as playing TODAY, the Round 159
        soccer rule reaching the American careers. Unscored on purpose: the
        scored completion stays the retirement legacy. */
@@ -951,6 +975,20 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       setPhase(stored.kind === 'freeagency' ? 'freeagency' : stored.declined ? 'season' : 'extension');
       return true;
     } catch { return false; }
+  };
+
+  const requestTrade = () => {
+    const trade = sport.tradeRequest;
+    if (!career || !trade || phase !== 'season' || teamQuality == null || practiceOpen || pendingSave.current
+      || marketRef.current || !trade.available(career) || trade.receipt(career) || tradeSaveChanged(true)) return;
+    const next: CareerState = JSON.parse(JSON.stringify(career));
+    const { teamQuality: incoming, note } = trade.settle(next);
+    const quality = incoming ?? teamQuality;
+    next.headlines = pushHeadlines(next.headlines, [note]);
+    setCareer(next);
+    setTeamQuality(quality);
+    setFeed(f => [note, ...f].slice(0, 6));
+    persist(next, 'season', quality);
   };
 
   const signExt = () => {
@@ -1765,6 +1803,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   /* Round 1038: where the event card stands in its summer, counted over the
      cards you actually get (a skipped card is never shown). */
   const place = career.summer ? summerPlace(career.summer) : null;
+  const trade = sport.tradeRequest;
+  const tradeReceipt = trade?.receipt(career);
 
   /* ------------------------------ season hub ------------------------------ */
   return withSaveStatus(
@@ -1893,14 +1933,23 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
           <button
             ref={careerEntryButton}
             onClick={playSeason}
+            disabled={tradeSaveMoved}
             className="inline-flex min-h-11 items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90"
           >
             <Dumbbell className="h-4 w-4" /> Play the {career.year} season
           </button>
-          <UsSeasonCentreEntry sport={sport} career={career} busy={practiceOpen} onPlay={playSeason} played={() => playedRef.current} />
+          <UsSeasonCentreEntry sport={sport} career={career} busy={practiceOpen || tradeSaveMoved} onPlay={playSeason} played={() => playedRef.current} />
           <p className="mt-2 text-xs text-muted-foreground">
             Career so far: {sport.careerSoFar(career)}
           </p>
+          {(tradeReceipt || trade?.available(career)) && <div className="mt-2">
+            <USCareerActionConfirm action="tradeRequest" sport={sport.label} onConfirm={requestTrade}>
+              <button type="button" disabled={!!tradeReceipt || !!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
+                className="min-h-11 rounded-lg border border-border px-3 text-xs font-semibold disabled:opacity-50">Request a trade</button>
+            </USCareerActionConfirm>
+            {tradeReceipt && <p className="mt-1 text-xs font-semibold" role="status">{tradeReceipt}</p>}
+            {tradeSaveMoved && <p className="mt-1 text-xs text-muted-foreground" role="status">Your career changed in another tab. Reopen it before sending a trade request.</p>}
+          </div>}
           <UsCareerProgramme career={career} sport={sport.slug} onChange={next => {
             if (next === career || phase !== 'season') return;
             setCareer(next);

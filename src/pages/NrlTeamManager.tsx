@@ -2151,7 +2151,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>After the Grand Final, release one unsigned academy prospect into next season’s free-agent market or promote him to your own Top 30.</li>
               <li>If you accepted Board pathways, check Pathways run-in in Season review with four regular-season club matches left. It shows who can still reach four appearances.</li>
               <li>Change clubs between seasons from Season review.</li>
-              <li>When staying at your club, check Fill open squad places in Season review to preview affordable one-season free-agent deals before starting the next season.</li>
+              <li>When staying at your club, check Fill open squad places in Season review to preview affordable one-season free-agent deals. Your preference saves until you make a decision about next season.</li>
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>
               <li>Availability shows the first regular club match after a confirmed suspension and any injury. Byes advance injury recovery, while suspensions count club matches.</li>
               <li>Choose Rugby League World Cup beside Career saves to coach a national team. In Set matchday lineup, you can swap any of the six reserves with a starter. Out-of-position starts carry a rating penalty.</li>

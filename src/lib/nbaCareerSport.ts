@@ -31,6 +31,7 @@ import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { NBA_CAREER_HALL } from '@/lib/nbaCareerHall';
 import { NBA_CAREER_INTL_LAZY } from '@/lib/nbaCareerIntlGate';
 import { nbaSeasonReview } from '@/lib/usCareerSeasonReview';
+import { nbaTradeRequestAvailable, nbaTradeRequestReceipt, settleNbaTradeRequest } from '@/lib/nbaCareerLifeC';
 import { usSeasonHeldLine } from '@/data/usSeasonLengths';
 
 /* The key this career saves under. It stays a named constant so the home
@@ -74,6 +75,7 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = wi
   /* Round 182: the rotation is set the night you arrive. */
   assignRole: nbaAssignRole,
   campBattle: nbaCampBattle,
+  tradeRequest: { available: nbaTradeRequestAvailable, receipt: nbaTradeRequestReceipt, settle: settleNbaTradeRequest },
   simSeason: simNbaSeason,
   progress: nbaProgress,
   drawEvent: drawNbaEvent,

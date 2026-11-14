@@ -1814,15 +1814,17 @@ function OffseasonFreeAgents({ career, checked, onChange, disabled }: {
       <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
         Fill open squad places<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
       </summary>
-      {preview && <div className="space-y-2 border-t border-border pb-3 pt-2 text-sm">
+      {open && <div className="space-y-2 border-t border-border pb-3 pt-2 text-sm">
         <p className="text-muted-foreground">Your open Top 30 places usually go to academy players. If you stay at this club, you can give affordable free agents one-season deals before turning to the academy. Clubs draw from the same free-agent pool.</p>
-        {preview.signings.length > 0 ? (
+        {(checked || Boolean(preview?.signings.length)) && (
+          <label className="flex min-h-11 items-center gap-2 font-semibold">
+            <input type="checkbox" className="h-5 w-5 shrink-0 accent-primary" checked={checked} disabled={disabled}
+              onChange={event => onChange(event.target.checked)} />
+            Prefer free agents when starting {year}
+          </label>
+        )}
+        {preview && preview.signings.length > 0 ? (
           <>
-            <label className="flex min-h-11 items-center gap-2 font-semibold">
-              <input type="checkbox" className="h-5 w-5 shrink-0 accent-primary" checked={checked} disabled={disabled}
-                onChange={event => onChange(event.target.checked)} />
-              Prefer free agents when starting {year}
-            </label>
             <ul aria-label="Projected free-agent signings" className="divide-y divide-border">
               {preview.signings.map(signing => (
                 <li key={signing.playerId} className="break-words py-1" data-nrl-fill-player={signing.playerId}>
@@ -1832,7 +1834,7 @@ function OffseasonFreeAgents({ career, checked, onChange, disabled }: {
             </ul>
             <p className="text-xs text-muted-foreground">{preview.academy} from the academy · {money(preview.available)} cap room after filling the squad.</p>
           </>
-        ) : <p className="text-muted-foreground">Your remaining places go to academy players in this preview.</p>}
+        ) : <p className="text-muted-foreground">{preview ? 'Your remaining places go to academy players in this preview.' : 'All Top 30 places are signed for next season.'}</p>}
       </div>}
     </details>
   );
@@ -1853,10 +1855,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const mustMove = challengeStatus === 'must-move';
   const pastPlaces = new Map(career.history.map(record => [`${record.clubId}:${record.year}`, record.rank]));
   const [nextClubId, setNextClubId] = useState('');
-  const [freeAgentChoice, setFreeAgentChoice] = useState<{ year: number; clubId: string; seed: number }>();
   const canChooseFreeAgents = nrlOffseasonFreeAgentsAvailable(career);
-  const preferFreeAgents = canChooseFreeAgents && freeAgentChoice?.year === year
-    && freeAgentChoice.clubId === clubId && freeAgentChoice.seed === career.season.seed;
+  const preferFreeAgents = career.preferFreeAgents === true;
   const clubSelect = useRef<HTMLSelectElement>(null);
   const clubs = nrlOffseasonClubs(career);
   const nextClub = clubs.find(club => club.id === nextClubId);
@@ -1956,11 +1956,11 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       {!outOfWork && <AssistantExtension career={career} onAction={onAction} disabled={disabled} />}
       {!outOfWork && <LeagueRecruitment career={career} onAction={onAction} disabled={disabled}
         preferFreeAgents={preferFreeAgents} nextClubId={nextClub?.id ?? (application?.response === 'offered' ? application.clubId : undefined)} />}
-      {canChooseFreeAgents && <OffseasonFreeAgents career={career} checked={preferFreeAgents} disabled={disabled}
-        onChange={checked => setFreeAgentChoice(checked ? { year, clubId, seed: career.season.seed } : undefined)} />}
+      {(canChooseFreeAgents || preferFreeAgents) && <OffseasonFreeAgents career={career} checked={preferFreeAgents} disabled={disabled}
+        onChange={enabled => onAction({ type: 'setOffseasonFreeAgents', year, clubId, enabled })} />}
       {finished && employed && year < NRL_LAST_YEAR && !mustMove && (
         <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled || needsJudiciary}
-          onClick={() => onAction({ type: 'startNextSeason', ...(preferFreeAgents && { freeAgents: { fromYear: year, clubId } }) })}>
+          onClick={() => onAction({ type: 'startNextSeason' })}>
           Start {year + 1}<ArrowRight aria-hidden="true" />
         </Button>
       )}

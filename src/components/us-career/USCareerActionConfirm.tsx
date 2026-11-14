@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/alert-dialog';
 
 type Sport = 'NFL' | 'NBA' | 'MLB' | 'NHL';
-type Action = 'retire' | 'restart' | 'retireCoach';
+type Action = 'retire' | 'restart' | 'retireCoach' | 'tradeRequest';
 
 interface Props {
   action: Action;
@@ -47,6 +47,12 @@ const COPY: Record<Action, (sport: Sport, hallCard: boolean, hallKept: boolean) 
     description: 'Your coaching record and log stay saved. You cannot coach another season with this career.',
     cancel: 'Keep coaching',
     confirm: 'Retire from coaching',
+  }),
+  tradeRequest: () => ({
+    title: 'Request a trade?',
+    description: 'You have a 50% chance of a trade this season. A deal keeps your salary and contract years. If the team declines, morale drops by up to 4 points. You get one request this season.',
+    cancel: 'Keep playing',
+    confirm: 'Send request',
   }),
 };
 
