@@ -86,6 +86,7 @@ export const SENIOR_YEAR_SEC = 900;
 export const FIRST_TEAM_SLOTS = 5;
 export const PROMOTE_AGE = 18;
 export const RETIRE_AGE = 34;
+const SENIOR_DECLINE_AGE = 29;
 export const SENIOR_DECLINE = 1.2;
 
 export const SHOWCASE_COOLDOWN = 150;
@@ -397,10 +398,16 @@ export function salePrice(s: FactoryState, p: Prospect | Senior): number {
   return Math.round(basePrice(p.rating, p.potential, p.age, p.pos) * priceMult(s));
 }
 
-/** The next birthday without further training or a change in sale bonuses. */
+function seniorRatingAfterWatchedTime(p: Senior, seconds: number): number {
+  return p.age >= SENIOR_DECLINE_AGE
+    ? Math.max(30, p.rating - SENIOR_DECLINE * seconds / SENIOR_YEAR_SEC)
+    : p.rating;
+}
+
+/** The next birthday with only the remaining age decline and the current sale bonuses. */
 export function seniorBirthdayPreview(s: FactoryState, p: Senior): { age: number; rating: number; price: number; retiring: boolean } {
   const age = p.age + 1;
-  const rating = age >= 30 ? Math.max(30, p.rating - SENIOR_DECLINE) : p.rating;
+  const rating = seniorRatingAfterWatchedTime(p, SENIOR_YEAR_SEC - p.ageClock);
   const retiring = age >= RETIRE_AGE;
   return { age, rating, price: retiring ? 0 : salePrice(s, { ...p, age, rating }), retiring };
 }
@@ -653,9 +660,8 @@ export function tick(s: FactoryState, dt: number, opts?: { offline?: boolean }):
     }
   }
 
-  /* Seniors use the same academy session, with half the growth rate. Split at
-     birthdays so a long watched tick cannot train through a holding year or
-     miss one of the later declines. Away sessions never move this calendar. */
+  /* Split at birthdays so training and decline only use time at eligible ages.
+     Away sessions train but never tick the age clock or cause decline. */
   for (const p of s.firstTeam ?? []) {
     let left = dt;
     while (left > 0 && p.age < RETIRE_AGE) {
@@ -666,11 +672,11 @@ export function tick(s: FactoryState, dt: number, opts?: { offline?: boolean }):
       }
       left -= seconds;
       if (offline) break;
+      p.rating = seniorRatingAfterWatchedTime(p, seconds);
       p.ageClock += seconds;
       if (p.ageClock >= SENIOR_YEAR_SEC) {
         p.ageClock = 0;
         p.age += 1;
-        if (p.age >= 30) p.rating = Math.max(30, p.rating - SENIOR_DECLINE);
       }
     }
   }

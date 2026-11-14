@@ -68,13 +68,13 @@ export const ACADEMY_MANAGEMENT_CONTENT: GameContentMap = {
       {
         heading: 'How a senior trains, ages and eventually retires',
         items: [
-          'A senior trains at half the academy rate through age 27, holds his rating at 28 and 29, then loses 1.2 rating at each birthday from 30. A senior year lasts fifteen watched academy minutes. He retires at 34 for no fee, and nobody ages while you are away.',
+          'A senior trains at half the academy rate through age 27 and holds steady at 28. From 29 he loses 1.2 rating over each fifteen watched academy minutes. Age and decline pause while you are away. He retires at 34 for no fee.',
         ],
         subsections: [
           {
             heading: 'Working out a senior\'s transfer fee',
             items: [
-              'Senior fees use the same rating, potential, position and academy bonuses as youth fees. The age multiplier stays at one through 27, then falls to 0.90 at 28, 0.78 at 29, 0.64 at 30, 0.50 at 31, 0.36 at 32 and 0.22 at 33. The next-birthday quote assumes no further training and keeps today\'s fee multiplier, so a later Deadline Day can change the actual offer.',
+              'Senior fees use the same rating, potential, position and academy bonuses as youth fees. The age multiplier stays at one through 27, then falls to 0.90 at 28, 0.78 at 29, 0.64 at 30, 0.50 at 31, 0.36 at 32 and 0.22 at 33. The next-birthday quote includes the remaining decline, assumes no further training and keeps today\'s fee multiplier, so a later Deadline Day can change the actual offer.',
             ],
           },
         ],
@@ -124,6 +124,7 @@ export const ACADEMY_MANAGEMENT_CONTENT: GameContentMap = {
         heading: 'Weighing a bigger fee against your defensive edge',
         paragraphs: [
           'For a first-team decision, picture five graduates rated 80. Their combined edge cuts the opponent\'s scoring chance by twenty percent before the match minimum. Selling one funds facilities but drops that edge to sixteen percent. A player nearing 28 may still help win a title even as his resale multiplier begins to fall, so the bigger fee and the stronger team are different rewards.',
+          'A graduate starts age 29 at 80.0 OVR. After seven minutes and thirty seconds of watched play he is at 79.4. His next-birthday quote uses 78.8 OVR, including the remaining decline.',
         ],
       },
     ],

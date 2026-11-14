@@ -471,7 +471,7 @@ const CLAIMS = [
     },
   },
   {
-    where: 'stadium', phrase: 'First-team players train at half the academy rate through age 27. Their years take fifteen watched academy minutes, compared with five minutes for academy kids. They hold their rating at 28 and 29, lose 1.2 rating at each birthday from 30, and retire at 34 without a fee',
+    where: 'stadium', phrase: 'First-team players train at half the academy rate through age 27 and hold steady at 28. From 29 they lose 1.2 rating over each fifteen watched academy minutes. Age and decline pause while you are away. They retire at 34 without a fee.',
     check: (T, m, W) => {
       const player = age => ({ id: 'sr-help', name: 'Help Graduate', nation: 'England', pos: 'MF', age, ageClock: 0, rating: 80, potential: 90 });
       const s = W.newFactory(0, 7);
@@ -486,12 +486,24 @@ const CLAIMS = [
         return a;
       };
       const growing = at(27), holding = at(28), declining = at(29), retiring = at(33);
+      const fullYear = W.newFactory(0, 7);
+      const senior = player(29);
+      fullYear.firstTeam = [senior];
+      W.tick(fullYear, 450);
+      const forecast = W.seniorBirthdayPreview(fullYear, senior);
+      const gradual = senior.age === 29 && near(senior.rating, 79.4) && near(forecast.rating, 78.8);
+      W.tick(fullYear, 450, { offline: true });
       return halfRate && W.SENIOR_YEAR_SEC === 900 && W.YEAR_SEC === 300
         && growing.firstTeam[0].age === 28 && growing.firstTeam[0].rating > 80
-        && holding.firstTeam[0].rating === 80 && near(declining.firstTeam[0].rating, 78.8)
+        && holding.firstTeam[0].rating === 80 && near(declining.firstTeam[0].rating, 80 - 1.2 * 0.5 / 900)
+        && gradual && senior.age === 29 && senior.ageClock === 450 && near(senior.rating, 79.4)
         && retiring.firstTeam.length === 0 && retiring.retired === 1 && retiring.cash === 0
         ? '' : 'senior training, birthdays or retirement no longer match the guide';
     },
+  },
+  {
+    where: 'stadium', phrase: "A graduate starts age 29 at 80.0 OVR. After seven minutes and thirty seconds of watched play, he is at 79.4 and the next-birthday quote uses 78.8. His current rating feeds into the first team's defensive edge.",
+    check: (T, m, W) => seniorRatingExample(W),
   },
   { where: 'stadium', phrase: 'ninety loyal fans', check: (T, m) => (m.fresh.fanbase === 90 && T.attendance(m.fresh) === 90 ? '' : `a new club has ${m.fresh.fanbase} fans`) },
   { where: 'stadium', phrase: 'at half speed for up to eight hours', check: (T, m) => (T.offlineRateOf(m.fresh) === 0.5 && T.offlineCapHoursOf(m.fresh) === 8 ? '' : `away pays ${T.offlineRateOf(m.fresh)} for ${T.offlineCapHoursOf(m.fresh)} hours`) },
@@ -766,6 +778,10 @@ const CLAIMS = [
 
   /* ---- the two academy lines this round corrected (589 claims the rest) ---- */
   {
+    where: 'academy', phrase: 'A graduate starts age 29 at 80.0 OVR. After seven minutes and thirty seconds of watched play he is at 79.4. His next-birthday quote uses 78.8 OVR, including the remaining decline.',
+    check: (T, m, W) => seniorRatingExample(W),
+  },
+  {
     where: 'academy', phrase: 'about a quarter more than the day one fee: the rating grew, but the promise premium shrank with his age',
     check: (T, m, W) => {
       const ratios = [72, 73, 74, 75].map(ceiling => W.basePrice(71, ceiling, 19) / W.basePrice(58, ceiling, 17));
@@ -786,6 +802,17 @@ const CLAIMS = [
     },
   },
 ];
+
+function seniorRatingExample(W) {
+  const academy = W.newFactory(0, 7);
+  const senior = { id: 'sr-help', name: 'Help Graduate', nation: 'England', pos: 'MF', age: 29, ageClock: 0, rating: 80, potential: 90 };
+  academy.firstTeam = [senior];
+  const edge = W.squadEdge(academy);
+  W.tick(academy, 450);
+  const forecast = W.seniorBirthdayPreview(academy, senior);
+  return near(senior.rating, 79.4) && near(forecast.rating, 78.8) && W.squadEdge(academy) < edge
+    ? '' : 'watched decline, birthday rating or defensive edge no longer match the example';
+}
 
 /** A perk that promises a step per level: each of its first two levels must add it. */
 function perLevel(T, m, id, measureOf, step) {

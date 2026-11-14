@@ -146,7 +146,8 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
           {
             heading: "Training and ageing after the academy",
             items: [
-              "First-team players train at half the academy rate through age 27. Their years take fifteen watched academy minutes, compared with five minutes for academy kids. They hold their rating at 28 and 29, lose 1.2 rating at each birthday from 30, and retire at 34 without a fee. Away time trains them without ageing them.",
+              "First-team players train at half the academy rate through age 27 and hold steady at 28. From 29 they lose 1.2 rating over each fifteen watched academy minutes. Age and decline pause while you are away. They retire at 34 without a fee.",
+              "A graduate starts age 29 at 80.0 OVR. After seven minutes and thirty seconds of watched play, he is at 79.4 and the next-birthday quote uses 78.8. His current rating feeds into the first team's defensive edge.",
             ],
           },
         ],
