@@ -117,6 +117,18 @@ function SquadPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
   const rest = club.players.filter(p => !state.starters.includes(p.id) && !state.bench.includes(p.id)).sort((a, b) => ROLES.indexOf(a.role) - ROLES.indexOf(b.role) || b.skill - a.skill);
   return <div className={styles.card}><h3>Starting 18, interchange five, and the rest of the list</h3>
     <p className={styles.muted}>{editable ? 'Tap a starter or an interchange player to change that spot before preparation.' : 'Selection opens again before the next match.'}</p>
+    <details className={styles.events}>
+      <summary>Skill changes</summary>
+      <p className={styles.muted}>Skills can rise or fall by one point at a time during the regular season. They carry into the next season.</p>
+      {state.ratingReview && <>
+        <h4>Round {state.ratingReview.round + 1} review</h4>
+        <ul aria-label="Recent skill changes" className={own.list}>
+          {state.ratingReview.changes.map(([id, change]) => <li key={id}>
+            {club.players.find(player => player.id === id)?.name} · {change > 0 ? '+' : ''}{change} skill
+          </li>)}
+        </ul>
+      </>}
+    </details>
     <div className={styles.players}>
       {[...state.starters, ...state.bench].map((id, index) => editable
         ? <button key={id} className={styles.player} data-arl-slot={index} onClick={() => setSlot({ bench: index >= 18, index: index >= 18 ? index - 18 : index })}>{line(id)}<span>{index >= 18 ? 'Interchange' : 'Starter'}</span></button>
@@ -209,7 +221,7 @@ function StatusCard({ state, act }: { state: LeagueState; act: (action: LeagueAc
   if (state.phase === 'summer') {
     const out = retirees(state);
     const mine = clubOf(state, state.myClub)!.players.filter(p => out.has(p.id));
-    return <div className={styles.card} data-arl-summer><h3>Summer</h3><p>Everyone is a year older. Young players grew toward their ceilings and the veterans slowed down.</p>
+    return <div className={styles.card} data-arl-summer><h3>Summer</h3><p>Everyone is a year older and keeps the skill rating they finished on.</p>
       <p className={styles.muted}>{mine.length ? `Retiring from your list: ${mine.map(p => `${p.name} (${p.age})`).join(', ')}.` : 'Nobody on your list is retiring.'} {out.size} players retire across the league.</p>
       <button className={styles.action} data-arl-next onClick={() => act({ type: 'next' })}>Open the draft</button></div>;
   }

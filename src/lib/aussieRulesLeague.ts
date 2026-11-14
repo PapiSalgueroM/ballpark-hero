@@ -72,6 +72,7 @@ export type LeagueStage = 'homeAway' | 'finals';
 export interface FinalsTieRecord { id: string; week: number; homeId: string; awayId: string; result?: { home: Score; away: Score; extraTime: boolean } }
 export interface Prospect { id: string; name: string; role: Role; age: number; skill: number; potential: number }
 export interface DraftState { order: string[]; pool: Prospect[]; made: { clubId: string; prospectId: string }[]; at: number }
+interface RatingReview { round: number; changes: [playerId: string, change: -1 | 1][] }
 export interface HistoryRow {
   season: number; place: number; w: number; d: number; l: number; pf: number; pa: number; exit: FinalsExit;
   premier: string; runnerUp: string; gf: { home: string; away: string; homeScore: Score; awayScore: Score };
@@ -84,6 +85,7 @@ export interface LeagueState {
   clubs: LeagueClub[]; starters: string[]; bench: string[]; preparation: Preparation | null; swapsThisBreak: number;
   match: Match | null; results: Match[]; goals: Record<string, number>;
   finals: { ties: FinalsTieRecord[] } | null; draft: DraftState | null; nextId: number; history: HistoryRow[];
+  ratingReview?: RatingReview;
 }
 export type LeagueAction =
   | { type: 'lineup'; starters: string[]; bench: string[] }
@@ -349,7 +351,7 @@ function finishMine(state: LeagueState, played: { clubs: LeagueClub[]; match: Ma
       const other = simulateOtherMatch({ clubs, seed, round: state.round }, fixture.homeId, fixture.awayId);
       clubs = other.clubs; tally(goals, other.match); results.push(strip(other.match));
     }
-    return { ...state, clubs, results, goals, match: played.match, phase: 'report', swapsThisBreak: 0 };
+    return reviewRatings({ ...state, clubs, results, goals, match: played.match, phase: 'report', swapsThisBreak: 0 });
   }
   const settled = settleLevelFinal(clubs, played.match, seed, (list, match) => {
     const ownHome = match.homeId === state.myClub;
@@ -424,7 +426,10 @@ function advance(state: LeagueState): LeagueState {
     return state.week < lastWeek(state.format) ? openWeek({ ...state, clubs }, state.week + 1) : closeSeason(state);
   }
   if (state.phase === 'seasonOver') return runSummer(state);
-  if (state.phase === 'summer') return openDraft(state);
+  if (state.phase === 'summer') {
+    const { ratingReview: _review, ...career } = state;
+    return openDraft(career);
+  }
   if (state.phase === 'draft' && state.draft && state.draft.at >= state.draft.order.length) return freshSeason({ ...state, draft: null }, state.season + 1);
   return state;
 }
@@ -462,20 +467,39 @@ function closeSeason(state: LeagueState): LeagueState {
   return { ...state, phase: 'seasonOver', match: null, preparation: null, swapsThisBreak: 0, history: [...state.history, history] };
 }
 
-/** Summer growth by age, a game rule: under 22 +2 to +5, 22 to 25 0 to +3, 26 to 29 -1 to +1, 30 and over -1 to -4. */
+/** Annual skill budget by age, spent over the home-and-away season. */
 export function growthFor(rng: () => number, age: number): number {
   if (age < 22) return 2 + Math.floor(rng() * 4);
   if (age <= 25) return Math.floor(rng() * 4);
   if (age <= 29) return -1 + Math.floor(rng() * 3);
   return -(1 + Math.floor(rng() * 4));
 }
-function runSummer(state: LeagueState): LeagueState {
+function reviewRatings(state: LeagueState): LeagueState {
+  // Recreate the old summer draw schedule independently of the match RNG.
   const rng = rngFrom(hashLabel(`${state.seed}|${state.season}|summer`));
-  const clubs = state.clubs.map(club => ({ ...club, players: club.players.map(player => {
-    const change = growthFor(rng, player.age);
-    const skill = change >= 0 ? raiseWithinPotential(player.skill, player.potential, change) : clamp(player.skill + change, 20, 99);
-    return { ...player, age: player.age + 1, skill, fatigue: 0, prep: 0 };
-  }) }));
+  const ownChanges: RatingReview['changes'] = [];
+  const clubs = state.clubs.map(club => {
+    const players = club.players.map(player => {
+      const budget = growthFor(rng, player.age);
+      const count = Math.abs(budget);
+      if (!count) return player;
+      const offset = hashLabel(`${state.seed}|${state.season}|review|${player.id}`) % 4;
+      // At most five spaced reviews, from the first third to the closing rounds.
+      const reviews = Array.from({ length: count }, (_, i) => 3 + offset + Math.floor((i + 1) * 16 / count));
+      if (!reviews.includes(state.round)) return player;
+      const step = budget > 0 ? 1 : -1;
+      const skill = step > 0 ? raiseWithinPotential(player.skill, player.potential, 1) : Math.max(20, player.skill - 1);
+      if (skill === player.skill) return player;
+      if (club.id === state.myClub) ownChanges.push([player.id, step]);
+      return { ...player, skill };
+    });
+    return players.some((player, index) => player !== club.players[index]) ? { ...club, players } : club;
+  });
+  return { ...state, clubs, ...(ownChanges.length && { ratingReview: { round: state.round, changes: ownChanges } }) };
+}
+
+function runSummer(state: LeagueState): LeagueState {
+  const clubs = state.clubs.map(club => ({ ...club, players: club.players.map(player => ({ ...player, age: player.age + 1, fatigue: 0, prep: 0 })) }));
   return { ...state, clubs, phase: 'summer' };
 }
 /** Retirement odds by age after the summer birthday: none before 31, certain at 35. Game rule. */
@@ -728,7 +752,8 @@ function fieldsMatchday(club: LeagueClub, squad: string[]): boolean {
 export function validLeagueState(value: unknown): value is LeagueState {
   // Round 1572: no clubSet key is the invented league; the one other way to write a set is exactly 'afl2026'.
   const named = !!value && typeof value === 'object' && !Array.isArray(value) && (value as Record<string, unknown>).clubSet !== undefined;
-  const keys = !named ? TOP_KEYS : (value as Record<string, unknown>).clubSet === 'afl2026' ? [...TOP_KEYS, 'clubSet'] : null;
+  const keys = !named ? [...TOP_KEYS] : (value as Record<string, unknown>).clubSet === 'afl2026' ? [...TOP_KEYS, 'clubSet'] : null;
+  if (keys && value && Object.prototype.hasOwnProperty.call(value, 'ratingReview')) keys.push('ratingReview');
   if (!keys || !exactKeys(value, keys) || value.version !== 2 || !validSeed(value.seed) || !isClubId(value.myClub) || value.clubName !== clubFull(value, value.myClub as string)) return false;
   if (!int(value.season, 1, 10000) || !(value.format === 'final8' || value.format === 'wildcard') || !PHASES.includes(value.phase as LeaguePhase)) return false;
   if (!(value.stage === 'homeAway' || value.stage === 'finals') || !int(value.round, 0, ROUNDS - 1) || !int(value.week, 0, 8) || !int(value.nextId, CLUB_COUNT * LIST_SIZE, 999999)) return false;
@@ -739,6 +764,14 @@ export function validLeagueState(value: unknown): value is LeagueState {
   if (!Array.isArray(s.history) || !s.history.every(validHistory) || s.history.length !== s.season - (closed ? 0 : 1)) return false;
   if (!int(s.swapsThisBreak, 0, 5) || (s.phase !== 'break' && s.swapsThisBreak !== 0) || !(s.preparation === null || s.preparation === 'train' || s.preparation === 'rest')) return false;
   const played = s.stage === 'finals' ? ROUNDS : s.round + (s.phase === 'report' ? 1 : 0);
+  if (s.ratingReview !== undefined) {
+    const review = s.ratingReview;
+    if (s.phase === 'draft' || !exactKeys(review, ['round', 'changes']) || !int(review.round, 0, played - 1)
+      || !Array.isArray(review.changes) || !review.changes.length || review.changes.length > LIST_SIZE) return false;
+    const squad = new Set(clubOf(s, s.myClub)!.players.map(player => player.id));
+    if (!review.changes.every(row => Array.isArray(row) && row.length === 2 && squad.has(row[0]) && (row[1] === -1 || row[1] === 1))
+      || new Set(review.changes.map(([id]) => id)).size !== review.changes.length) return false;
+  }
   if (!Array.isArray(s.results) || s.results.length !== played * (CLUB_COUNT / 2)) return false;
   for (let round = 0; round < played; round += 1) {
     const fixtures = fixturesFor(s.seed, s.season, round);
