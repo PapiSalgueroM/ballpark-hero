@@ -1,3 +1,8 @@
+## 2026-11-14: Club Manager world ratings during the season
+
+- Rivals and free agents can gain or lose OVR as league matches settle. The transfer market, opponent squads and match engine use the same rating. January signings keep their current OVR, and returning players carry their closing OVR into the next season.
+- Existing careers start world rating updates when opening their next season. Fresh current and historical careers start with the new timing. The in-game help and public guide explain both paths.
+
 ## 2026-11-14: NRL ladder form and Budget Builder historical markets
 
 - NRL Ladder can show each club's last five completed regular-season results, plus home and away records. Form uses the same ladder order. Byes and finals stay out of these records.
