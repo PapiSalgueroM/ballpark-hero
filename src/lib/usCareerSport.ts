@@ -326,6 +326,12 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
     current(c: C): boolean;
     set(c: C, enabled: boolean): C;
   };
+  passingDownRole?: {
+    available(c: C): boolean;
+    current(c: C): boolean;
+    completed(c: C, year: number, team: string): boolean;
+    set(c: C, enabled: boolean): C;
+  };
 
   /* Contracts. */
   tradeRequest?: {

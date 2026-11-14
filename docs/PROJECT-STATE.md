@@ -1,4 +1,12 @@
+## 2026-11-14: Historical Daily recovery, NRL match ratings and NFL backfield roles
+
+- Manager Hot Seat and Deadline Day restore the original setup and action playback for affected older Dailies. Hot Seat uses the matching lineup policy for its pre-match read. The November 13 release split the Eastern day, so its older action-only saves cannot distinguish the two lineup policies. November 14 onward uses the current selection policy.
+- The latest NRL regular-season match report lists any OVR changes from that match review. Both Quick Sim and Live Match use the same saved round, and the report says when the review produced no changes.
+- Signed NFL My Career starting running backs can choose more passing downs after playing a season. The plan shifts some rushing production into receiving work, expires after the season and goes into Career Log when used. Camp still decides who starts.
+
 ## 2026-11-14: Deadline Day replay and live NRL attack ratings
+
+[PR #949](https://github.com/PapiSalgueroM/ballpark-hero/pull/949) published exact main `95fd316e24e9f5027dbb834c3df8c04a2d88b09e`, deployment `0d8b8b15-2284-4383-a909-11255257ac5d`. Five browser journeys, both raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted both guides.
 
 - Deadline Day free play can replay a completed window and compare the new result with the prior grade, needs filled and cash. Opening needs, players, offers and budget must match for the comparison. An active free run still takes priority when you return.
 - NRL Team Manager previews how attack and defence ratings would change at halftime or 60 minutes, using pending choices and the actual lineup in that phase. The preview appears when opponent positional ratings are available.

@@ -8,7 +8,7 @@ import { markRestoredFinish } from '@/lib/restoredFinish';
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 import { getTodayET } from '@/lib/dateUtils';
 import { cn } from '@/lib/utils';
-import { FORMATIONS, MENTALITIES, TALK_TONES, effectiveXIWithSlots, fitPenalty, preMatchRead, type Mentality, type TalkTone } from '@/lib/clubManager';
+import { FORMATIONS, MENTALITIES, TALK_TONES, effectiveXIWithSlots, fitPenalty, type Mentality, type TalkTone } from '@/lib/clubManager';
 import type { Meter } from '@/lib/clubManagerMeters';
 import {
   HOT_SEAT_BOARD_START,
@@ -22,6 +22,7 @@ import {
   hotSeatLineup,
   hotSeatMeters,
   hotSeatPool,
+  hotSeatPreMatchRead,
   ordinal,
   pendingPress,
   playHotSeatMatch,
@@ -416,7 +417,7 @@ export default function ManagerHotSeatBoard() {
                 <div>
                   <div className="text-xs text-muted-foreground">{fx.compLabel}{fx.counts ? '' : ', does not count toward the target'}</div>
                   <div className="text-lg font-bold">{fx.home === true ? 'Home to' : fx.home === false ? 'Away at' : 'Neutral ground against'} {fx.opponent}</div>
-                  <p className="mt-1 text-sm text-muted-foreground">{preMatchRead(lineup) ?? ''}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{hotSeatPreMatchRead(run, lineup) ?? ''}</p>
                 </div>
                 {q && (
                   <div className="rounded-md bg-muted p-3" data-testid="hot-seat-press">

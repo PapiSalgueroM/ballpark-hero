@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { FORMATIONS, effectiveXIWithSlots, isAvailable, matchEdge } from '@/lib/clubManager';
-import { dailyHotSeat, hotSeatLineup, hotSeatPool, playHotSeatMatch, replayHotSeat, startHotSeat, type HotSeatRun } from '@/lib/managerHotSeat';
+import { FORMATIONS, effectiveXIWithSlots, isAvailable, matchEdge, preMatchRead } from '@/lib/clubManager';
+import { dailyHotSeat, hotSeatLineup, hotSeatPool, hotSeatPreMatchRead, playHotSeatMatch, replayHotSeat, startHotSeat, type HotSeatRun } from '@/lib/managerHotSeat';
 
 let free: HotSeatRun;
 let nextFormation: number;
@@ -51,5 +51,19 @@ describe('Manager Hot Seat free play formations', () => {
     expect(attempted.actions).toEqual(original.actions);
     expect(attempted.log).toEqual(original.log);
     expect(attempted.state.formationIndex).toBe(original.state.formationIndex);
+  }, 120000);
+
+  it('reads a vacant fullback slot under the same policy as the archived Daily kickoff', () => {
+    const daily = startHotSeat(dailyHotSeat('2026-10-10'));
+    const { state } = daily;
+    const xiIds = state.xiIds.map((id, i) => ['RB', 'LB'].includes(FORMATIONS[state.formationIndex].slots[i].label) ? null : id);
+    const clubStrengths = Object.fromEntries(Object.entries(state.clubStrengths).map(([club, strength]) =>
+      [club, club === state.clubName ? strength : strength - 3]));
+    const lineup = { ...state, xiIds, clubStrengths };
+    const current = 'Two defeats in three, against a side you are better than. They know it and so do you.';
+    expect(preMatchRead(lineup)).toBe(current);
+    expect(hotSeatPreMatchRead(daily, lineup)).toBe('Nothing between the sides. This is a game about who wants it more.');
+    expect(hotSeatPreMatchRead({ ...daily, setup: { ...daily.setup, daily: '2026-11-14' } }, lineup)).toBe(current);
+    expect(hotSeatPreMatchRead(free, lineup)).toBe(current);
   }, 120000);
 });

@@ -11,14 +11,15 @@
  * WHAT IT HOLDS, for a fixed window of dates that CONTAINS Premier League days (the next 17 days from
  * 2026-10-10 hold none, so a window of "the next fortnight" is green with the defect in place):
  *   1. no daily state carries the fixture key (realLeagueFixtures);
- *   2. each date's deal is the deal Release AS dealt. The deal is what a player is handed and what
+ *   2. each past date matches its published world. The deal is what a player is handed and what
  *      happens when the day is played one fixed way: Hot Seat = the club, the seed, the takeover, the
  *      board's target, the next fixture, the table, then every result of the run played balanced with no
  *      talk and the first press answer, the verdict and the share text; Deadline Day = the club, the
  *      seed, the needs, the targets, the sales, the budget, the ticker and the grade of a day ended at
  *      once. Whole engine states are left out on purpose: they move with any new save field.
- * BASELINE below was recorded from the source of 54e3820a itself (this file run with --root on a worktree
- * of that commit, remote check named in the commit that recorded it), never from this tree.
+ * BASELINE below comes from 54e3820a and the published releases named beside later rows.
+ * Three scheduled 2027 Hot Seat examples still test the old lineup policy as archived fixtures.
+ * Their actual dates now use the new policy and have never been played.
  *   3. Release AZ, the lead's ruling Y3: no daily state carries a world seed or a ledger (worldSeed,
  *      worldRoster: Round 1250 gives every new career a seed, and a career with a seed writes a ledger on its
  *      first deal), the Hot Seat's career handed over (handoverState) included; and a SCRIPTED Deadline Day on
@@ -55,6 +56,9 @@
  *                                     on "the state carries a watched Champions League", and nothing else
  *   DAILY_DEALS_CONTROL=worlddeadline Round 1502: the same for Deadline Day's strip: exactly its watching dates,
  *                                     plain and scripted, go red, and nothing else
+ *   DAILY_DEALS_CONTROL=kleagueall     turns on the K League before it was published
+ *   DAILY_DEALS_CONTROL=specialistsall uses specialist fullbacks for old daily deals and replays
+ *   DAILY_DEALS_CONTROL=salekey        stores an empty league departure field on each scripted sale
  *
  * Round 1502 (the world's Champions League, watched by a club that is not in it): startCareer opens a slice for
  * such a club, and both dailies take it off with the seed. It draws nothing, so no deal can move under either
@@ -75,6 +79,7 @@
  *
  *   node scripts/simDailyDeals.mjs                        the gate
  *   node scripts/simDailyDeals.mjs --root <tree> --print  print the digests of another tree's source
+ *   Add --verify --pre-k-fixtures to check the older pre-launch Hot Seat references.
  */
 import { build } from 'esbuild';
 import { createRequire } from 'node:module';
@@ -90,21 +95,29 @@ const ROOT = path.resolve(arg('--root') || HERE);
 const PRINT = process.argv.includes('--print');
 const CONTROL = process.env.DAILY_DEALS_CONTROL || '';
 const cannot = why => { console.error(`simDailyDeals: cannot run: ${why}`); process.exit(2); };
-if (CONTROL && !['bind', 'binddeadline', 'seed', 'seeddeadline', 'ledger', 'ledgerdeadline', 'rulesall', 'rulesstale', 'world', 'worlddeadline'].includes(CONTROL)) cannot(`unknown control ${CONTROL}`);
+if (CONTROL && !['bind', 'binddeadline', 'seed', 'seeddeadline', 'ledger', 'ledgerdeadline', 'rulesall', 'rulesstale', 'world', 'worlddeadline', 'kleagueall', 'specialistsall', 'salekey'].includes(CONTROL)) cannot(`unknown control ${CONTROL}`);
 /* Round 1331: the day the round's base commit (dec9075b, the Release BC record) was made. */
 const BASE_COMMIT_DATE = '2026-10-13';
 
 /* The window. The five Hot Seat dates marked PL are its first five Premier League days from 2026-10-10. */
 const HOT = [
   ['2026-10-10'], ['2026-10-11'], ['2026-10-12'], ['2026-10-13'], ['2026-10-14'], ['2026-10-15'], ['2026-10-16'],
-  ['2026-10-27', 'Nottingham Forest'], ['2026-11-14', 'Sunderland'], ['2027-01-19', 'Fulham'], ['2027-01-30', 'Everton'], ['2027-02-06', 'Bournemouth'],
+  ['2026-10-27', 'Nottingham Forest'], ['2026-11-14', 'Sunderland'],
 ];
+const SCHEDULED_HOT = [['2027-01-19', 'Fulham'], ['2027-01-30', 'Everton'], ['2027-02-06', 'Bournemouth']];
+const HOT_FIXTURES = [...HOT, ...SCHEDULED_HOT];
+const PRE_K_SCHEDULED_HOT = {
+  '2026-11-14': '67cb2096bdc45751340e',
+  '2027-01-19': '0f5c7f4df3f4b53c5531',
+  '2027-01-30': 'a065461da7accfc4228e',
+  '2027-02-06': '7dc686ab3b392aa070ca',
+};
 const DEADLINE = [
   ['2026-10-10'], ['2026-10-11'], ['2026-10-12'],
   ['2026-10-18', 'Nottingham Forest'], ['2026-11-01', 'Manchester United'], ['2026-11-09', 'Sunderland'],
 ];
 
-/* Recorded from 54e3820a (Release AS). Do not retake from this tree: a deal that moved is the defect. */
+/* Recorded from 54e3820a (Release AS) and the documented exceptions below. */
 const BASELINE = {
   hot: {
     '2026-10-10': '34412a45b0e5bb50c77c',
@@ -124,17 +137,12 @@ const BASELINE = {
        tree deals exactly the recording on all 12 dates (exit 0); with the values put back and the rules left as
        they are, it does not (exit 1); and the head as committed deals exactly this recording (retake identical). */
     '2026-10-27': '0400c7b1a2d756911454',
-    '2026-11-14': '67cb2096bdc45751340e',
-    /* Round 1600: the three dates from CM_DAILY_NEW_NUMBERS_FROM (2026-11-16) on deal on the age read by design
-       (Club Manager's 2026 world reads each man's age; every earlier date deals on the curve 1 view and keeps its
-       recording above, 2026-11-14 included). Recorded again from the Round 1600 tree with --print (remote check
-       r1600-s8, line dailyDeals-print, head 604fbbe64). Round 1331's tree dealt b33b5b04, 9b645173 and 75a43fcb.
-       The one input proof (Round 1600's fixer, 2026-10-30, remote check r1600-rr on head 178a1fd8c): with
-       CM_DAILY_NEW_NUMBERS_FROM moved to 2027-03-01 and these three put back to Round 1331's values the tree replays
-       green (line rr2-proof, exit 0), and the head as committed prints these three again (line rr2-retake). */
-    '2027-01-19': '0f5c7f4df3f4b53c5531',
-    '2027-01-30': 'a065461da7accfc4228e',
-    '2027-02-06': '7dc686ab3b392aa070ca',
+    /* K League launched November 6 ET (15652350f, deployment 979de67b).
+       be7ac6315 checked these four hashes against the published source and 56d8708c7. */
+    '2026-11-14': '9cb75d62e4f0c62e72fa',
+    '2027-01-19': '128358b04bc6d1f156c5',
+    '2027-01-30': 'c390e7775f17aa335c48',
+    '2027-02-06': 'bd19dbb98ac4ac7b9fc0',
   },
   deadline: {
     '2026-10-10': 'e57fbb3c1e90b2d46068',
@@ -165,10 +173,13 @@ const STRIPS = {
   ledgerdeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldRoster;' },
   /* Round 1509 (ruling 1l): the dailies start with DAILY_START and open nothing, so the strip is the shape guard
      behind it: each world control takes both off, the option and the strip, and the day keeps what it opened. */
-  world: { file: 'managerHotSeat.ts', line: '  delete s.worldComps;', also: [['startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START)', 'startCareer(setup.club)']] },
-  worlddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldComps;', also: [['startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START)', 'startCareer(setup.club)']] },
+  world: { file: 'managerHotSeat.ts', line: '  delete s.worldComps;', also: [['dailyStartOptions(setup.daily)', '{ ...dailyStartOptions(setup.daily), noWorldComps: false }']] },
+  worlddeadline: { file: 'deadlineDay.ts', line: '    delete state0.worldComps;', also: [['dailyStartOptions(setup.daily)', '{ ...dailyStartOptions(setup.daily), noWorldComps: false }']] },
   rulesall: { file: 'managerHotSeat.ts', line: "  if (setup.daily) return setup.daily < HOT_SEAT_RULES_FROM ? 'base' : undefined;", to: '  if (setup.daily) return undefined;' },
   rulesstale: { file: 'managerHotSeat.ts', line: "export const HOT_SEAT_RULES_FROM = '", to: "export const HOT_SEAT_RULES_FROM = '2026-10-01'; const HOT_SEAT_RULES_WAS = '" },
+  kleagueall: { file: 'managerHotSeat.ts', line: "  return daily && daily < '2026-11-06' ? { ...DAILY_START, kLeagueActive: false } : DAILY_START;", to: '  return DAILY_START;' },
+  specialistsall: { file: 'managerHotSeat.ts', line: '  if (daily !== undefined && daily < CM_DAILY_SPECIALIST_FULLBACKS_FROM) {', to: '  if (false) {' },
+  salekey: { file: 'clubManager.ts', line: '    ...(departureLines === undefined ? {} : { departedLeagueLines: departureLines }),', to: '    departedLeagueLines: departureLines,' },
 };
 const SEEDED = 'the state carries a world seed or a ledger';
 const seeded = st => !!st && ('worldSeed' in st || 'worldRoster' in st);
@@ -205,8 +216,12 @@ const req = createRequire(import.meta.url);
 const fresh = () => { delete req.cache[req.resolve(bundle)]; store.clear(); return req(bundle); };
 const sha = v => createHash('sha256').update(JSON.stringify(v)).digest('hex').slice(0, 20);
 
-function hotSeat(date) {
-  const { hs } = fresh();
+function hotSeat(date, archived = false) {
+  const { cm, hs } = fresh();
+  const play = () => playHotSeat(hs, date);
+  return archived && cm.withLegacyFullbackSelection ? cm.withLegacyFullbackSelection(play) : play();
+}
+function playHotSeat(hs, date) {
   const setup = hs.dailyHotSeat(date);
   let run = hs.startHotSeat({ club: setup.club, seed: setup.seed, daily: date });
   const keyed = 'realLeagueFixtures' in run.state;
@@ -289,14 +304,15 @@ const watching = { hot: [], deadline: [], scripted: [] };
 const europa = new Map();
 const followsEuropa = club => { if (!europa.has(club)) { const st = fresh().cm.startCareer(club); europa.set(club, !!st.worldComps?.uel); } return europa.get(club); };
 const following = { hot: [], deadline: [], scripted: [] };
-for (const [kind, rows, deal] of [['hot', HOT, hotSeat], ['deadline', DEADLINE, deadline]]) {
+for (const [kind, rows, deal] of [['hot', HOT_FIXTURES, hotSeat], ['deadline', DEADLINE, deadline]]) {
   for (const [date, club] of rows) {
-    const got = deal(date);
+    const archived = kind === 'hot' && SCHEDULED_HOT.some(row => row[0] === date);
+    const got = deal(date, archived);
     if (club && got.club !== club) cannot(`${kind} ${date} deals ${got.club}, the window expects ${club}: the window no longer holds this Premier League day`);
     out[kind][date] = got.digest;
     if (got.watches) watching[kind].push(date);
     if (got.watches || followsEuropa(got.club)) following[kind].push(date);
-    console.log(`  ${kind.padEnd(8)} ${date} ${club ? 'PL ' : '   '}${got.digest} ${got.line}${got.watches ? '; watches' : ''}`);
+    console.log(`  ${kind.padEnd(8)} ${date} ${club ? 'PL ' : '   '}${got.digest} ${got.line}${got.watches ? '; watches' : ''}${archived ? '; archived lineup policy' : ''}`);
     if (PRINT) continue;
     const why = [];
     if (got.keyed) why.push('the state carries the real fixture key');
@@ -311,6 +327,14 @@ for (const [kind, rows, deal] of [['hot', HOT, hotSeat], ['deadline', DEADLINE, 
     else if (BASELINE[kind][date] !== got.digest) why.push(`the deal moved: recorded ${BASELINE[kind][date]}, dealt ${got.digest}`);
     if (why.length) { fails[kind].push(date); reasons[`${kind} ${date}`] = why; console.log(`FAIL ${kind} ${date} (${got.club}): ${why.join('; ')}`); }
   }
+}
+/* Check the scheduled production dates on their current policy as well. */
+if (!PRINT && !CONTROL && fresh().hs.CM_DAILY_SPECIALIST_FULLBACKS_FROM !== undefined) {
+  const changed = SCHEDULED_HOT.filter(([date]) => hotSeat(date).digest !== out.hot[date]);
+  if (changed.length !== SCHEDULED_HOT.length) {
+    fails.hot.push('scheduled lineup policy');
+    console.log(`FAIL scheduled Hot Seat: only ${changed.length} of ${SCHEDULED_HOT.length} actual dates use the current lineup policy`);
+  } else console.log(`  scheduled Hot Seat: all ${changed.length} actual dates use the current lineup policy`);
 }
 /* Section 3 (Release AZ): the scripted Deadline Day on each date, and its replay. */
 const scriptedOut = {};
@@ -347,9 +371,10 @@ if (PRINT) {
   /* --verify: is the recorded BASELINE really the deals of the tree at --root? This is how the recording is
      proven to be Release AS's own, on a worktree of 54e3820a. */
   if (!process.argv.includes('--verify')) process.exit(0);
-  const same = JSON.stringify(out) === JSON.stringify({ hot: BASELINE.hot, deadline: BASELINE.deadline });
+  const hot = process.argv.includes('--pre-k-fixtures') ? { ...BASELINE.hot, ...PRE_K_SCHEDULED_HOT } : BASELINE.hot;
+  const same = JSON.stringify(out) === JSON.stringify({ hot, deadline: BASELINE.deadline });
   console.log(same
-    ? `simDailyDeals: the recorded deals ARE the deals of the source at ${ROOT} (${HOT.length} Hot Seat dates, ${DEADLINE.length} Deadline Day dates)`
+    ? `simDailyDeals: the recorded deals ARE the deals of the source at ${ROOT} (${HOT_FIXTURES.length} Hot Seat fixtures, ${DEADLINE.length} Deadline Day dates)`
     : `simDailyDeals: the recorded deals are NOT the deals of the source at ${ROOT}`);
   process.exit(same ? 0 : 1);
 }
@@ -363,6 +388,19 @@ if (!PRINT && !(typeof RULES_FROM === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(RUL
 }
 const pl = rows => rows.filter(r => r[1]).map(r => r[0]);
 const total = fails.hot.length + fails.deadline.length;
+if (['kleagueall', 'specialistsall', 'salekey'].includes(CONTROL)) {
+  const scripted = fails.deadline.filter(date => date.startsWith('scripted '));
+  const allFailed = [...fails.hot, ...fails.deadline].map(date => date.replace('scripted ', ''));
+  const fired = CONTROL === 'kleagueall'
+    ? fails.hot.length === 8 && fails.deadline.length === 4 && allFailed.every(date => date < '2026-11-06')
+    : CONTROL === 'specialistsall'
+      ? fails.hot.length === 4 && fails.deadline.length === 10 && scripted.length === 5 &&
+        allFailed.every(date => date < '2026-11-14')
+      : fails.hot.length === 0 && fails.deadline.length === DEADLINE.length && scripted.length === DEADLINE.length &&
+        scripted.every(date => reasons[date]?.length === 1 && reasons[date][0].startsWith('the scripted day moved'));
+  console.log(`simDailyDeals: CONTROL ${CONTROL} ${fired ? 'FIRED' : 'DID NOT FIRE'}: Hot Seat [${fails.hot.join(', ')}], Deadline Day [${fails.deadline.join(', ')}]`);
+  process.exit(fired ? 1 : 3);
+}
 if (CONTROL === 'rulesall' || CONTROL === 'rulesstale') {
   /* Round 1331: rulesall turns every date before the cutover red and nothing else; rulesstale turns the cutover check red. */
   const before = HOT.map(r => r[0]).filter(d => RULES_FROM !== undefined && d < RULES_FROM);
@@ -374,8 +412,8 @@ if (CONTROL === 'rulesall' || CONTROL === 'rulesstale') {
     : `simDailyDeals: CONTROL ${CONTROL} DID NOT FIRE as it must: Hot Seat red on [${fails.hot.join(', ')}], Deadline Day on [${fails.deadline.join(', ')}]`);
   process.exit(fired ? 1 : 3);
 }
-console.log(`  watching dates (Round 1502): Hot Seat ${watching.hot.length} of ${HOT.length}, Deadline Day ${watching.deadline.length} of ${DEADLINE.length}, scripted ${watching.scripted.length}`);
-console.log(`  following dates (Round 1509, the Champions League watched or the Europa League): Hot Seat ${following.hot.length} of ${HOT.length}, Deadline Day ${following.deadline.length} of ${DEADLINE.length}, scripted ${following.scripted.length}`);
+console.log(`  watching fixtures (Round 1502): Hot Seat ${watching.hot.length} of ${HOT_FIXTURES.length}, Deadline Day ${watching.deadline.length} of ${DEADLINE.length}, scripted ${watching.scripted.length}`);
+console.log(`  following fixtures (Round 1509, the Champions League watched or the Europa League): Hot Seat ${following.hot.length} of ${HOT_FIXTURES.length}, Deadline Day ${following.deadline.length} of ${DEADLINE.length}, scripted ${following.scripted.length}`);
 if (CONTROL === 'world' || CONTROL === 'worlddeadline') {
   /* Round 1502: red on exactly the watching dates of its own game (the scripted days too, for Deadline Day), each
      on the watched sentence, and on no other date of either game. */
@@ -395,7 +433,7 @@ if (CONTROL === 'seed' || CONTROL === 'seeddeadline') {
   /* Red on its own sentence: every date of its own game (the scripted days too, for Deadline Day) carries the
      seed, and no date of the other game is red at all. */
   const hot = CONTROL === 'seed';
-  const want = hot ? HOT.map(r => `hot ${r[0]}`) : [...DEADLINE.map(r => `deadline ${r[0]}`), ...DEADLINE.map(r => `scripted ${r[0]}`)];
+  const want = hot ? HOT_FIXTURES.map(r => `hot ${r[0]}`) : [...DEADLINE.map(r => `deadline ${r[0]}`), ...DEADLINE.map(r => `scripted ${r[0]}`)];
   const mine = want.filter(k => reasons[k]?.includes(SEEDED));
   const other = hot ? fails.deadline : fails.hot;
   const fired = mine.length === want.length && other.length === 0;
@@ -408,7 +446,7 @@ if (CONTROL === 'ledger' || CONTROL === 'ledgerdeadline') {
   /* Round 1344: a day carries a ledger only when its opening window recorded a deal, so not every date need go red
      (the critic's correction 14): at least one date of its own game, and no date of the other game. */
   const hot = CONTROL === 'ledger';
-  const want = hot ? HOT.map(r => `hot ${r[0]}`) : [...DEADLINE.map(r => `deadline ${r[0]}`), ...DEADLINE.map(r => `scripted ${r[0]}`)];
+  const want = hot ? HOT_FIXTURES.map(r => `hot ${r[0]}`) : [...DEADLINE.map(r => `deadline ${r[0]}`), ...DEADLINE.map(r => `scripted ${r[0]}`)];
   const mine = want.filter(k => reasons[k]?.includes(SEEDED));
   const other = hot ? fails.deadline : fails.hot;
   const fired = mine.length > 0 && other.length === 0;
@@ -422,7 +460,7 @@ if (CONTROL) {
      binddeadline they may go red there too and nowhere else; the plain dates are judged as before. */
   const plain = list => list.filter(d => !d.startsWith('scripted '));
   const scriptedRed = fails.deadline.filter(d => d.startsWith('scripted ')).map(d => d.slice(9));
-  const [mine, other, want] = CONTROL === 'bind' ? [fails.hot, fails.deadline, pl(HOT)] : [plain(fails.deadline), fails.hot, pl(DEADLINE)];
+  const [mine, other, want] = CONTROL === 'bind' ? [fails.hot, fails.deadline, pl(HOT_FIXTURES)] : [plain(fails.deadline), fails.hot, pl(DEADLINE)];
   const fired = JSON.stringify(mine) === JSON.stringify(want) && other.length === 0 && scriptedRed.every(d => want.includes(d));
   console.log(fired
     ? `simDailyDeals: CONTROL ${CONTROL} FIRED: its ${want.length} Premier League dates went red (${want.join(', ')}) and no other date moved`
@@ -430,6 +468,6 @@ if (CONTROL) {
   process.exit(fired ? 1 : 3);
 }
 console.log(total === 0
-  ? `simDailyDeals: green. ${HOT.length} Hot Seat dates (${pl(HOT).length} Premier League) and ${DEADLINE.length} Deadline Day dates (${pl(DEADLINE).length} Premier League) deal what Release AS dealt, no daily carries the real fixture key, a world seed, a ledger or a watched Champions League, and the ${DEADLINE.length} scripted Deadline Days (a signing and a sale each) play and replay as on b6eb78e7.`
+  ? `simDailyDeals: green. ${HOT.length} Hot Seat dates, ${SCHEDULED_HOT.length} archived lineup fixtures and ${DEADLINE.length} Deadline Day dates match their verified source. No daily carries a fixture key, world seed, roster ledger or watched Champions League. All ${DEADLINE.length} scripted Deadline Days play and replay as on b6eb78e7.`
   : `simDailyDeals: ${total} FAILURE(S): Hot Seat [${fails.hot.join(', ')}], Deadline Day [${fails.deadline.join(', ')}]`);
 process.exit(total === 0 ? 0 : 1);

@@ -74,11 +74,13 @@ import {
   openObjectives,
   playNextEntry,
   playableClubs,
+  preMatchRead,
   registerCustomClub,
   registerLeagueOverrides,
   resolveXI,
   restoreEngineRegistrations,
   startCareer,
+  withLegacyFullbackSelection,
   /* Round 1509 (ruling 1l): the dailies start a career that follows no competition from outside. */
   DAILY_START,
   uclProgressRank,
@@ -184,6 +186,10 @@ export function withSeed<T>(seed: number, fn: () => T): T {
  * curve 1 view of the world as well (onCurve1View), so a day once dealt stays dealt.
  */
 export function onStaticWorld<T>(fn: () => T, daily?: string): T {
+  if (daily !== undefined && daily < CM_DAILY_SPECIALIST_FULLBACKS_FROM) {
+    const play = fn;
+    fn = () => withLegacyFullbackSelection(play);
+  }
   if (daily !== undefined && daily < CM_DAILY_NEW_NUMBERS_FROM) return onCurve1View(CM_CURVE1_VIEW, () => onStaticWorld(fn));
   const had = engineRegistrations();
   const swap = had.custom !== null || had.overrides !== null;
@@ -338,6 +344,14 @@ export const HOT_SEAT_RULES_FROM = '2026-10-24';
  * second Eastern day after the release is live, never earlier. Free play has no date and plays the live world.
  * scripts/simCmDailyView.mjs proves every earlier date deals what the base dealt. */
 export const CM_DAILY_NEW_NUMBERS_FROM = '2026-11-16';
+
+/** The first complete Eastern day after the specialist fullback release. */
+export const CM_DAILY_SPECIALIST_FULLBACKS_FROM = '2026-11-14';
+
+/** Keep the original world for Dailies that opened before the K League's November 6 launch. */
+export function dailyStartOptions(daily?: string) {
+  return daily && daily < '2026-11-06' ? { ...DAILY_START, kLeagueActive: false } : DAILY_START;
+}
 
 /** Round 1331: the match rules a run plays: 'base' for a daily dated before HOT_SEAT_RULES_FROM or a free
  *  run without the 1331 stamp, undefined (the current rules) otherwise. */
@@ -541,7 +555,7 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
   /* startCareer itself registers the static world for a real club; the
      onStaticWorld wrapper is what hands a Club Manager save's registrations
      back once this returns. */
-  let s = withSeed(mixSeed(setup.seed, 0), () => startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START));
+  let s = withSeed(mixSeed(setup.seed, 0), () => startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, dailyStartOptions(setup.daily)));
   /* Round 1335: and the board the previous manager had. startCareer opens a new appointment at BOARD_FRESH
      since the round; the weeks below are the previous manager's search for the crisis, and they read the
      board (the press question below 32, the desk below 35, the floor reset), so they open where they always
@@ -730,6 +744,13 @@ export function hotSeatLineup(run: HotSeatRun, formationIndex?: number): CareerS
     xiIds: autoPickXI(run.state.squad, formation, true),
     xiDuties: formation.slots.map(() => null),
   };
+}
+
+export function hotSeatPreMatchRead(run: HotSeatRun, lineup: CareerState): string | null {
+  const date = run.setup.daily;
+  return date && date < CM_DAILY_SPECIALIST_FULLBACKS_FROM
+    ? onStaticWorld(() => preMatchRead(lineup), date)
+    : preMatchRead(lineup);
 }
 
 /**

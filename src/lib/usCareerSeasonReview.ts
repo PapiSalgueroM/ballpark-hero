@@ -33,6 +33,7 @@ export function nflSeasonReview(s: SeasonLine, pos: CareerPos): CareerReviewStat
     case 'K': regular = [number('Field goals made', s.fgMade), number('Field goals attempted', s.fgAtt), number('Longest field goal', s.longFg)]; break;
     default: regular = [text('Performance', undefined)];
   }
+  if (pos === 'RB' && s.passingDownRole === true) regular.push(text('Backfield role', 'Passing downs'));
   return stats(s.teamResult, regular, [number('Games', s.poGames), text('Performance', s.poLine)]);
 }
 
