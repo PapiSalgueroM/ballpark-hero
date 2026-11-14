@@ -38,35 +38,36 @@ interface CupTableRow {
   conceded: number;
 }
 
-export function nrlWorldCupMatchday(nation: NrlWorldCupNation, { swap, firstReserve }: NrlWorldCupLineup = {}) {
+export function nrlWorldCupMatchday(nation: NrlWorldCupNation, { swap, target, firstReserve }: NrlWorldCupLineup = {}) {
   const sheet = NRL_WORLD_CUP_2026_OPENING_SQUADS[nation];
   const starters = sheet.slice(0, NRL_ROLES.length);
   const bench = sheet.slice(NRL_ROLES.length);
-  const swaps = bench.flatMap((reserve, index) => {
-    const starter = starters.find(player => nrlCanPlayRole(reserve, player.role));
-    return starter ? [{ index, reserve, starter }] : [];
-  });
-  const chosen = swaps.find(candidate => candidate.index === swap);
-  if (chosen) {
-    starters[starters.indexOf(chosen.starter)] = chosen.reserve;
-    bench[chosen.index] = chosen.starter;
+  const reserve = swap === undefined ? undefined : bench[swap];
+  const starter = target === undefined
+    ? reserve && starters.find(player => nrlCanPlayRole(reserve, player.role))
+    : starters[target];
+  const change = swap !== undefined && reserve && starter ? { reserve, starter } : undefined;
+  if (change && swap !== undefined) {
+    starters[starters.indexOf(change.starter)] = change.reserve;
+    bench[swap] = change.starter;
   }
   if (firstReserve !== undefined && firstReserve > 0 && firstReserve < bench.length) {
     bench.unshift(...bench.splice(firstReserve, 1));
   }
-  return { starters, bench, swaps };
+  return { starters, bench, change };
 }
 
 function tournamentTeam(nation: NrlWorldCupNation, tactic: NrlTactic, change?: NrlWorldCupLineup) {
   // Reuse the opening selections as a fixed game roster in later rounds. Ratings are simulated.
-  const squad = NRL_WORLD_CUP_2026_OPENING_SQUADS[nation].map(({ id, name, role }, index) => ({
+  const opening = NRL_WORLD_CUP_2026_OPENING_SQUADS[nation];
+  const squad = opening.map(({ id, name, role }, index) => ({
     id, name, role,
     rating: GAME_RATINGS[nation] - (index < NRL_ROLES.length ? 0 : 4), fitness: 100,
   }));
   const { starters, bench } = nrlWorldCupMatchday(nation, change);
   return {
     squad,
-    lineup: Object.fromEntries(starters.map(({ role, id }) => [role, id])) as Record<NrlRole, string>,
+    lineup: Object.fromEntries(starters.map(({ id }, index) => [opening[index].role, id])) as Record<NrlRole, string>,
     bench: bench.map(({ id }) => id),
     preparation: null,
     tactic,
@@ -182,7 +183,7 @@ export function nrlWorldCupCanPickLineup(run: NrlWorldCupRun, step = run.tactics
 
 function validLineup(nation: NrlWorldCupNation, value: unknown): value is NrlWorldCupLineup {
   return isNrlWorldCupLineup(value)
-    && (value.swap === undefined || nrlWorldCupMatchday(nation).swaps.some(option => option.index === value.swap));
+    && (value.swap === undefined || nrlWorldCupMatchday(nation, value).change !== undefined);
 }
 
 export function advanceNrlWorldCup(run: NrlWorldCupRun, step: number, tactic: NrlTactic, lineup?: NrlWorldCupLineup): NrlWorldCupRun {

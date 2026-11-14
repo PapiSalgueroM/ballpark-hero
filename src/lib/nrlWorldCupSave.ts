@@ -1,4 +1,4 @@
-import { NRL_BENCH_SIZE, NRL_TACTICS, type NrlTactic } from '@/lib/nrlManager';
+import { NRL_BENCH_SIZE, NRL_ROLES, NRL_TACTICS, type NrlTactic } from '@/lib/nrlManager';
 
 export const NRL_WORLD_CUP_2026_POOLS = {
   A: ['australia', 'new-zealand', 'fiji', 'cook-islands'],
@@ -11,6 +11,7 @@ export const NRL_WORLD_CUP_SAVE_MAX_CHARS = 512;
 
 export interface NrlWorldCupLineup {
   swap?: number; // Index in the published opening bench.
+  target?: number; // Opening starter index. Older changes use the reserve's position.
   firstReserve?: number; // Index in the bench after the swap.
 }
 
@@ -33,10 +34,11 @@ export function createNrlWorldCup(seed: number, nation: NrlWorldCupNation): NrlW
 
 export function isNrlWorldCupLineup(value: unknown): value is NrlWorldCupLineup {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
-  const { swap, firstReserve } = value as NrlWorldCupLineup;
-  const fields = Number(swap !== undefined) + Number(firstReserve !== undefined);
+  const { swap, target, firstReserve } = value as NrlWorldCupLineup;
+  const fields = Number(swap !== undefined) + Number(target !== undefined) + Number(firstReserve !== undefined);
   return fields > 0 && Object.keys(value).length === fields
     && (swap === undefined || (Number.isInteger(swap) && swap >= 0 && swap < NRL_BENCH_SIZE))
+    && (target === undefined || (swap !== undefined && Number.isInteger(target) && target >= 0 && target < NRL_ROLES.length))
     && (firstReserve === undefined || (Number.isInteger(firstReserve) && firstReserve > 0 && firstReserve < NRL_BENCH_SIZE));
 }
 

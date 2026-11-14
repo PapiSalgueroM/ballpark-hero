@@ -2059,7 +2059,8 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         || next.tactics.length !== previous.tactics.length + 1
         || !previous.tactics.every((tactic, index) => {
           const before = previous.lineups?.[index + 1], after = next.lineups?.[index + 1];
-          return tactic === next.tactics[index] && before?.swap === after?.swap && before?.firstReserve === after?.firstReserve;
+          return tactic === next.tactics[index] && before?.swap === after?.swap
+            && before?.target === after?.target && before?.firstReserve === after?.firstReserve;
         })) return state;
       return { ...state, worldCup: next };
     }
