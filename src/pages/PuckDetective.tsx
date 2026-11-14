@@ -12,7 +12,7 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
-import { NHL_PLAYER_SOURCE, normalizeName, type PlayerEntity } from '@/lib/playerSearch';
+import { NHL_PLAYER_SOURCE, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import styles from './PuckDetective.module.css';
@@ -219,6 +219,17 @@ const PuckDetective = () => {
     (pool ?? []).forEach((p) => m.set(p.playerId, p));
     return m;
   }, [pool]);
+  const guessSource = useMemo<PlayerSourceConfig>(() => {
+    const rows = (pool ?? []).map(({ playerId, name, team, position }) => ({
+      player_id: playerId, full_name: name, team, position,
+    }));
+    return {
+      ...NHL_PLAYER_SOURCE,
+      identity: { personKeyColumn: 'player_id' },
+      metaColumns: { ...NHL_PLAYER_SOURCE.metaColumns, playerId: 'player_id' },
+      local: () => rows,
+    };
+  }, [pool]);
 
   const guesses: PuckGuess[] = useMemo(() => {
     if (!mystery) return [];
@@ -234,6 +245,7 @@ const PuckDetective = () => {
 
   const won = gameStatus === 'won';
   const guessedIds = useMemo(() => new Set(storedGuesses.map((g) => g.playerId)), [storedGuesses]);
+  const excludedPlayers = useMemo(() => new Set([...guessedIds].map(id => `pk:${id}`)), [guessedIds]);
   const pendingGuessRef = useRef<{ mode: Mode; mysteryId: number; playerId: number; ids: number[] } | null>(null);
   const [guessCue, setGuessCue] = useState<{ mode: Mode; mysteryId: number; playerId: number; count: number } | null>(null);
   const previousRoundRef = useRef({ mode, mysteryId: mystery?.playerId, count: storedGuesses.length });
@@ -270,11 +282,7 @@ const PuckDetective = () => {
 
   const submitGuess = useCallback((entity: PlayerEntity) => {
     if (gameStatus !== 'playing' || !mystery) return;
-    // NHL_PLAYER_SOURCE doesn't carry player_id in metaColumns, so match by
-    // normalized full name against the deduped pool instead. Every pool
-    // entry's `name` came from the same full_name column NHL_PLAYER_SOURCE
-    // reads, so an exact (case-sensitive, already-trimmed) match is reliable.
-    const match = (pool ?? []).find((p) => p.name === entity.rawName || p.name === entity.name);
+    const match = byId.get(Number(entity.meta.playerId));
     if (!match) return;
     if (guessedIds.has(match.playerId)) { setQuery(''); return; }
 
@@ -293,7 +301,7 @@ const PuckDetective = () => {
         setUnlimitedStatus('lost');
       }
     }
-  }, [gameStatus, mystery, pool, guessedIds, mode, addDailyStored, unlimitedGuesses, storedGuesses]);
+  }, [gameStatus, mystery, byId, guessedIds, mode, addDailyStored, unlimitedGuesses, storedGuesses]);
 
   // Unlimited streak tracking: bump on win, reset on loss, only when the
   // round just resolved (guards against re-firing on every render).
@@ -455,8 +463,8 @@ const PuckDetective = () => {
                   onChange={setQuery}
                   onSelect={submitGuess}
                   searchOptions={{
-                    source: NHL_PLAYER_SOURCE,
-                    exclude: new Set(guesses.map((g) => normalizeName(g.player.name))),
+                    source: guessSource,
+                    exclude: excludedPlayers,
                   }}
                   placeholder="Guess an NHL player..."
                   validateOnly

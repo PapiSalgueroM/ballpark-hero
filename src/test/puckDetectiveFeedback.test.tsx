@@ -24,11 +24,13 @@ vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: async () => [] }));
 vi.mock('@/lib/puckDetective', async original => ({ ...await original<typeof import('@/lib/puckDetective')>(), fetchPuckDetectivePool: vi.fn(async () => pool) }));
 vi.mock('@/lib/playerSearch', async original => {
   const actual = await original<typeof import('@/lib/playerSearch')>();
-  return { ...actual, searchPlayers: vi.fn(async (options: SearchPlayersOptions) => ({ error: null, results:
-    options.query === 'unknown' ? [entity({ ...pool[0], name: 'Fixture Unknown' })] :
-    options.query === 'duplicate' ? [entity(misses[0])] :
-    pool.filter(p => actual.normalizeName(p.name).includes(actual.normalizeName(options.query)) && !options.exclude?.has(actual.normalizeName(p.name))).map(entity),
-  })) };
+  return { ...actual, searchPlayers: vi.fn(async (options: SearchPlayersOptions) => {
+    if (options.query === 'unknown') return { error: null, results: [entity({ ...pool[0], playerId: -1, name: 'Fixture Unknown' })] };
+    if (options.query === 'duplicate') return { error: null, results: [entity(misses[0])] };
+    if (options.source.local) return actual.searchPlayers(options);
+    const rows = pool.map(p => ({ full_name: p.name, player_id: p.playerId, team: p.team, position: p.position }));
+    return { error: null, results: actual.dedupeAndRank([rows], options.source, actual.normalizeName(options.query), { exclude: options.exclude, limit: 8 }) };
+  }) };
 });
 vi.mock('@/lib/completions', async original => {
   const actual = await original<typeof import('@/lib/completions')>();
@@ -43,7 +45,7 @@ let pool: PuckDetectivePlayer[];
 let secret: PuckDetectivePlayer;
 let misses: PuckDetectivePlayer[];
 const entity = (p: PuckDetectivePlayer): PlayerEntity => ({ key: normalizeName(p.name), name: p.name, rawName: p.name,
-  meta: { position: p.position, team: p.team }, matchRank: 0, prominence: p.playerId });
+  personKey: `pk:${p.playerId}`, meta: { playerId: p.playerId, position: p.position, team: p.team }, matchRank: 0, prominence: p.playerId });
 const clipboard = vi.fn(async (_text: string) => {});
 const element = () => <MemoryRouter initialEntries={['/puck-detective']}><HelmetProvider><PuckDetective /></HelmetProvider></MemoryRouter>;
 const start = async () => {
@@ -84,6 +86,36 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.useRealTimers(); });
 
 describe('Puck Detective committed guess feedback', () => {
+  it('lets a Daily player guess both namesakes by ID and restores the right clues after reload', async () => {
+    const center = misses[0];
+    const defender = misses[1];
+    Object.assign(center, { name: 'Elias Pettersson', team: 'VAN', position: 'C', jerseyNumber: 40 });
+    Object.assign(defender, { name: 'Elias Pettersson', team: 'VAN', position: 'D', jerseyNumber: 25 });
+    const view = await start();
+    const typeNamesakes = async (game: ReturnType<typeof render>) => {
+      const input = game.getByRole('combobox');
+      act(() => input.focus());
+      fireEvent.change(input, { target: { value: 'Elias Pettersson' } });
+      await act(async () => { vi.advanceTimersByTime(210); });
+    };
+    await typeNamesakes(view);
+    expect(view.getAllByRole('option')).toHaveLength(2);
+    fireEvent.pointerDown(view.getByRole('option', { name: /Elias Pettersson.*VAN · D/ }));
+    expect(card(view, defender)).toHaveTextContent('#25');
+    expect(card(view, center)).toBeNull();
+    await typeNamesakes(view);
+    expect(view.getAllByRole('option')).toHaveLength(1);
+    fireEvent.pointerDown(view.getByRole('option', { name: /Elias Pettersson/ }));
+    expect(card(view, center)).toHaveTextContent('#40');
+    const bytes = localStorage.getItem(saveKey);
+    expect(JSON.parse(bytes!)).toMatchObject({ guesses: [{ playerId: defender.playerId }, { playerId: center.playerId }] });
+    view.unmount();
+    const reloaded = await start();
+    expect(card(reloaded, defender)).toHaveTextContent('#25');
+    expect(card(reloaded, center)).toHaveTextContent('#40');
+    expect(localStorage.getItem(saveKey)).toBe(bytes);
+  });
+
   it('keeps the puzzle date from opening the page when the roster loads after Eastern midnight', async () => {
     vi.setSystemTime(new Date('2026-10-02T03:59:59Z'));
     const beforeMidnight = pickDailyMystery(pool);
