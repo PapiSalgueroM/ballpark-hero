@@ -955,9 +955,9 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         ],
       },
       {
-        heading: "Chasing your best streak of the session",
+        heading: "Chasing your best streak",
         items: [
-          "Your best streak of the session stays on screen. Chase it while the pool is fresh in your head.",
+          "Your best streak is saved on this device. For example, a new run of two leaves your saved best of five in place.",
         ],
       },
     ],
@@ -972,7 +972,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "What is the score?",
-        a: "The streak itself: 1 per correct pick, with your session best shown as the target to beat.",
+        a: "The streak itself: 1 per correct pick. Your saved best is the target to beat.",
       },
     ],
   },

@@ -3,6 +3,7 @@ import { HigherLowerPlayer, HigherLowerStatKey } from '@/types/higherLower';
 import { higherLowerPlayers, hlNoteFor } from '@/data/higherLowerPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { makeFirstDraw } from '@/lib/firstDraw';
+import { safeSetItem } from '@/lib/safeStorage';
 
 type StatKey = HigherLowerStatKey;
 
@@ -11,6 +12,15 @@ const STAT_LABELS: Record<StatKey, string> = {
   goals: 'Goals',
   internationalCaps: 'Int\'l Caps',
 };
+
+const BEST_STREAK_KEY = 'higher-lower-best-streak-v1';
+
+function readBestStreak(): number {
+  try {
+    const value = Number(localStorage.getItem(BEST_STREAK_KEY));
+    return Number.isSafeInteger(value) && value > 0 ? value : 0;
+  } catch { return 0; }
+}
 
 /** What the card says under a stat, or nothing. Round 535: the pool says out
  *  loud which of its numbers one publisher stands behind rather than two,
@@ -111,7 +121,7 @@ export function useHigherLower() {
      from the first render attempt to the commit that used it. */
   useEffect(firstPair.release, []);
   const [streak, setStreak] = useState(0);
-  const [bestStreak, setBestStreak] = useState(0);
+  const [bestStreak, setBestStreak] = useState(readBestStreak);
   const [gameStatus, setGameStatus] = useState<'playing' | 'lost'>('playing');
   const [lastChoice, setLastChoice] = useState<{ stat: StatKey; correct: boolean } | null>(null);
   const [revealedStats, setRevealedStats] = useState(false);
@@ -144,7 +154,10 @@ export function useHigherLower() {
         revealTimer.current = null;
         const newStreak = streak + 1;
         setStreak(newStreak);
-        if (newStreak > bestStreak) setBestStreak(newStreak);
+        const savedBest = readBestStreak();
+        const best = Math.max(bestStreak, savedBest, newStreak);
+        if (best > savedBest) safeSetItem(BEST_STREAK_KEY, String(best));
+        setBestStreak(best);
         // Shift: next becomes current, pick new next
         const usedNames = [nextPlayer.name];
         const newNext = getRandomPlayer(usedNames, nextPlayer);
