@@ -1371,7 +1371,7 @@ function Ladder({ career }: { career: NrlCareerState }) {
         Form and venue records
       </button>
       <p id="nrl-ladder-guide" className="mt-2 text-sm text-muted-foreground">
-        {showForm ? 'Regular season only. Last five matches, oldest first. Home and away show wins, draws and losses.'
+        {showForm ? 'Regular season only. Last five matches, oldest first. W is a win, D a draw, L a loss.'
           : 'The top eight make the finals. Diff is points scored minus points conceded.'}
       </p>
       <table aria-describedby="nrl-ladder-guide" className="mt-3 w-full table-fixed text-left text-xs sm:text-sm">
