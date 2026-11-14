@@ -576,8 +576,8 @@ for (const width of [320, 390, 1440]) {
 }
 
 console.log('9) the Home header offers a sport before leaving the first screen');
-for (const width of [320, 390, 1440]) {
-  const ctx = await browser.newContext({ viewport: { width, height: 844 }, reducedMotion: 'reduce', hasTouch: width < 768 });
+for (const width of [320, 390, 430, 1440]) {
+  const ctx = await browser.newContext({ viewport: { width, height: width === 320 ? 568 : 844 }, reducedMotion: 'reduce', hasTouch: width < 768 });
   try {
     const page = await ctx.newPage();
     await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());

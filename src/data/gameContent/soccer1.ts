@@ -399,7 +399,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     headings: {
       howToPlay: "How to play Dart Draft, a free online football dart throwing game",
       rules: "Dart Draft rules: throws, accuracy points and the map zones",
-      example: "Dart Draft walkthrough: a safe striker and a legend gamble",
+      example: "Dart Draft walkthrough: a safe striker and a shark re-throw",
       tips: "Dart Draft tips for picking countries and positions",
       faq: "Dart Draft FAQ: nations, positions and The Machine",
     },
@@ -459,7 +459,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Falling back on the trialist and your one retry",
         items: [
-          "Ocean throws and wasted darts hand you a 40 rated trialist, unless you spend the one lifeboat re-throw per game.",
+          "Use your one lifeboat re-throw on a shark, open water or a non-qualifying country in World Cup mode. The re-throw keeps the same position.",
         ],
       },
       {
@@ -477,9 +477,9 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         ],
       },
       {
-        heading: "Gambling on a legend ring and paying for it",
+        heading: "Deciding when to spend the lifeboat",
         paragraphs: [
-          "Later you aim greedily at the tiny LEGEND ring over the Atlantic and it lands: an all time keeper joins. Your last dart splashes into open water, lifeboat already spent, and the trialist at left back suffers all series.",
+          "Later you hit a shark while throwing for left back. Take the 40-rated trialist to save your lifeboat, or spend it to throw again for left back. If a later dart lands in open water after you spend it, take the trialist.",
         ],
       },
     ],

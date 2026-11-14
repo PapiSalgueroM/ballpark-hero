@@ -84,6 +84,7 @@ const DartDraft = () => {
   const rafRef = useRef<number | null>(null);
   const dirRef = useRef(1);
   const sweepRef = useRef(0);
+  const withdrawnLanding = useRef<MapHit | null>(null);
 
   const throwIndex = useMemo(() => xi.filter(Boolean).length, [xi]);
   const view = ROUND_VIEWS[Math.min(throwIndex, ROUND_VIEWS.length - 1)];
@@ -102,6 +103,8 @@ const DartDraft = () => {
     [series, points, userRating],
   );
   useGameCompletion('dart-draft', phase === 'done' && series !== null, total, sharpHits);
+  const sharkLanding = hit?.kind === 'zone' && hit.zone.kind === 'shark';
+  const canRethrow = phase === 'draft' && !!hit && !lifeboatUsed && (sharkLanding || hit.kind === 'ocean' || blocked);
 
   /* ---------------- sweep animation ---------------- */
   const stopSweep = useCallback(() => {
@@ -175,6 +178,7 @@ const DartDraft = () => {
   const resolveLanding = useCallback(async (x: number, y: number) => {
     const zonesNow = zones;
     const landed = resolveMapThrow(x, y, zonesNow);
+    withdrawnLanding.current = null;
     setDart({ x, y });
     setStage('landed');
     setHit(landed);
@@ -242,7 +246,7 @@ const DartDraft = () => {
   }, [lockIn]);
 
   const pickPlayer = (choice: DraftChoice) => {
-    if (slotIdx === null) return;
+    if (slotIdx === null || hit === withdrawnLanding.current) return;
     const nextXi = [...xi];
     nextXi[slotIdx] = choice.player;
     const nextOop = [...oop];
@@ -255,7 +259,7 @@ const DartDraft = () => {
   };
 
   const takeTrialist = () => {
-    if (slotIdx === null) return;
+    if (slotIdx === null || hit === withdrawnLanding.current) return;
     const t = oceanTrialist(DART_SLOTS[slotIdx], blocked ? 'blocked' : 'ocean');
     const nextXi = [...xi];
     nextXi[slotIdx] = t;
@@ -264,8 +268,10 @@ const DartDraft = () => {
   };
 
   const useLifeboat = () => {
+    if (!canRethrow || slotIdx === null || hit === withdrawnLanding.current) return;
+    withdrawnLanding.current = hit;
     setLifeboatUsed(true);
-    if (slotIdx !== null) beginThrow(slotIdx);
+    beginThrow(slotIdx);
   };
 
   const finishRound = (nextXi: (Player | null)[], nextOop: boolean[]) => {
@@ -413,7 +419,7 @@ const DartDraft = () => {
                 <div className="text-xs text-muted-foreground max-w-md mx-auto space-y-1">
                   <p>Gold rings pay out: 👑 legends, 💎 wonderkids, 🃏 free pick, 🎁 mystery gamble.</p>
                   <p>Red rings punish: 🦈 shark eats your dart, 🌪️ storm blows you into the bargain bin.</p>
-                  <p>Ocean throws hand you a 40-rated trialist. One lifeboat re-throw per game.</p>
+                  <p>Ocean and shark throws hand you a 40-rated trialist. You have one lifeboat re-throw for the whole game.</p>
                   <p>Every nation fields a full squad. No pro at your position? Their academy kid steps up.</p>
                 </div>
               </>
@@ -522,7 +528,7 @@ const DartDraft = () => {
                     {choicesLoading && <Loader2 className="w-6 h-6 animate-spin text-muted-foreground mx-auto" />}
 
                     {!choicesLoading && choices && (
-                      <div ref={revealRef} className="grid sm:grid-cols-2 gap-2 max-w-xl mx-auto">
+                      <div ref={revealRef} role="group" aria-label="Draft offers" className="grid sm:grid-cols-2 gap-2 max-w-xl mx-auto">
                         {choices.map(({ player: p, outOfPosition }) => (
                           <button
                             key={p.name}
@@ -549,6 +555,15 @@ const DartDraft = () => {
                       </div>
                     )}
 
+                    {sharkLanding && canRethrow && (
+                      <div className="space-y-1">
+                        <Button onClick={useLifeboat} className="font-bold">
+                          <LifeBuoy className="w-4 h-4 mr-2" /> Lifeboat re-throw
+                        </Button>
+                        <p className="text-[11px] text-muted-foreground">Re-throw for this slot, or take the trialist and save your lifeboat.</p>
+                      </div>
+                    )}
+
                     {!choicesLoading && !choices && (
                       <div className="space-y-3">
                         <p className="text-sm text-muted-foreground max-w-md mx-auto">
@@ -557,7 +572,7 @@ const DartDraft = () => {
                             : 'Straight into the water. The fish cannot play.'}
                         </p>
                         <div className="flex gap-3 justify-center">
-                          {!lifeboatUsed && (
+                          {canRethrow && (
                             <Button onClick={useLifeboat} className="font-bold">
                               <LifeBuoy className="w-4 h-4 mr-2" /> Lifeboat re-throw
                             </Button>
@@ -638,7 +653,7 @@ const DartDraft = () => {
             'Hit a country and pick from its real players at your position. No pro there? You get their academy kid.',
             'Gold zones pay legends, wonderkids, free picks and mystery gambles. Red zones are sharks and storms.',
             'A legend, wonderkid or free pick zone shows eight tiles: the three best at your position are always there, and the other five are drawn from everyone else who fits, best first, so they change from dart to dart.',
-            'Ocean throws hand you a 40-rated trialist, with one lifeboat re-throw per game.',
+            'Use your one lifeboat re-throw on a shark, open water or a non-qualifying country in World Cup mode.',
             'Fill all 11 slots, then your XI plays The Machine in a 3 match series.',
           ]}
         />
