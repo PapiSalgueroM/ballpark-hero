@@ -6039,10 +6039,13 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
 
   const totalGoals = s.seasons.reduce((sum, ss) => sum + ss.goals, 0) + season.goals;
   const totalApps = s.seasons.reduce((sum, ss) => sum + ss.apps, 0) + season.apps;
-  if (totalGoals >= 100 && totalGoals - season.goals < 100) s.events.push("💯 Reached 100 career goals!");
-  if (totalGoals >= 200 && totalGoals - season.goals < 200) s.events.push("🔥 Reached 200 career goals!");
-  if (totalGoals >= 500 && totalGoals - season.goals < 500) s.events.push("👑 Reached 500 career goals!");
-  if (totalApps >= 500 && totalApps - season.apps < 500) s.events.push("🎖️ Made 500th career appearance!");
+  const openingPlayer = germanMatch?.player ?? shieldMatch?.player;
+  const recordedGoals = totalGoals + (openingPlayer?.goals ?? 0);
+  const recordedApps = totalApps + (openingPlayer?.apps ?? 0);
+  if (recordedGoals >= 100 && totalGoals - season.goals < 100) s.events.push("💯 Reached 100 career goals!");
+  if (recordedGoals >= 200 && totalGoals - season.goals < 200) s.events.push("🔥 Reached 200 career goals!");
+  if (recordedGoals >= 500 && totalGoals - season.goals < 500) s.events.push("👑 Reached 500 career goals!");
+  if (recordedApps >= 500 && totalApps - season.apps < 500) s.events.push("🎖️ Made 500th career appearance!");
   /* Round 217: a loan season carries its parent on the record forever */
   if (s.loan) season.onLoanFrom = s.loan.parentClub;
   /* Round 244: a full season worn is a season counted; a club change that
@@ -6074,7 +6077,11 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   settleSoccerPress(s, season);
   s.pendingSummary = season;
   // Generate newspaper articles
-  const news = generateNewsArticles(s, season, totalGoals, totalApps);
+  const annualNews = generateNewsArticles(s, season, totalGoals, totalApps);
+  // Keep the newspaper draw tied to the regular season. Use the complete tally for the milestone edit.
+  const newsRow = openingPlayer?.goals ? { ...season, goals: season.goals + openingPlayer.goals, apps: season.apps + openingPlayer.apps } : season;
+  const newsCareer = newsRow === season ? s : { ...s, seasons: [...s.seasons.slice(0, -1), newsRow] };
+  const news = personalGoalMilestoneNews(annualNews, newsCareer, newsRow, NEWSPAPERS[0], totalGoals);
   s.pendingNews = news;
   s.phase = news.length > 0 ? "newspaper" : "season_summary";
   // Financial simulation
@@ -6548,7 +6555,7 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
   }
 
   const eligible = templates.filter(t => t.check());
-  if (eligible.length === 0) return personalGoalMilestoneNews(out, s, season, NEWSPAPERS[0]);
+  if (eligible.length === 0) return out;
 
   /* Round 1327: the stories are drawn by weight, without replacement, from a stream keyed to this career and this
      season, so a weight is a chance and not a rank. Before, the shuffle was sorted by weight: a story under weight 1
@@ -6563,7 +6570,7 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
     for (let i = 0; i < pool.length; i += 1) { if (r < pool[i].weight) { at = i; break; } r -= pool[i].weight; }
     out.push(pool.splice(at, 1)[0].gen());
   }
-  return personalGoalMilestoneNews(out, s, season, NEWSPAPERS[0]);
+  return out;
 }
 
 /* ─── Dismiss newspaper ─── */

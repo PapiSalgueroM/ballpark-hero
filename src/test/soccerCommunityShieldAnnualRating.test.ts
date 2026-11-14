@@ -113,6 +113,27 @@ function verifyLateMerge(row: SeasonRecord, annualRow: SeasonRecord) {
 }
 
 describe('Soccer Career Community Shield annual rating capture', () => {
+  it('records a career goal milestone reached with the opener contribution', () => {
+    const opening = openingFixture();
+    const before = run(opening, state => E.advanceProSeason(state, E.FALLBACK_CLUBS)).after;
+    const row = before.seasons[before.seasons.length - 1]!;
+    const cupGoals = row.extraCups?.[0]?.player.goals ?? 0;
+    expect(cupGoals).toBeGreaterThan(0);
+    const careerGoals = E.getCareerTotals(before.seasons).goals;
+    const mark = [100, 200, 500].find(candidate => candidate >= careerGoals)!;
+    expect(mark).toBeDefined();
+    const earlier = opening.seasons.find(season => season.type === 'playing' && season.apps > 0)!;
+    earlier.goals += mark - careerGoals;
+    const annualOnly = copy(opening);
+    delete annualOnly.extraCupQualification;
+    const without = run(annualOnly, state => E.advanceProSeason(state, E.FALLBACK_CLUBS));
+    const withCup = run(opening, state => E.advanceProSeason(state, E.FALLBACK_CLUBS));
+    expect(E.getCareerTotals(without.after.seasons).goals).toBe(mark - cupGoals);
+    expect(E.getCareerTotals(withCup.after.seasons).goals).toBe(mark);
+    expect(withCup.draws).toEqual(without.draws);
+    expect(withCup.after.events.filter(event => event.includes(`Reached ${mark} career goals!`))).toHaveLength(1);
+  });
+
   it('SC_SHIELD_ANNUAL_RATING_NORMAL: records the exact annual grade before the normal opening merge', () => {
     const { row, annualRow } = pair(false);
     expect(row.extraCups![0].annualRating, 'SC_SHIELD_ANNUAL_RATING_NORMAL_MISSING: capture the pre-merge annual grade').toBe(annualRow.rating);
