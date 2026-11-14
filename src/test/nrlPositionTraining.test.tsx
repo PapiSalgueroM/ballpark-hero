@@ -39,6 +39,33 @@ afterEach(() => {
   localStorage.clear();
 });
 
+it('shows the one-round reserve-coach acceleration, charges it once and restores it after reload', () => {
+  const initial = createNrlCareer('panthers', 16, 2026);
+  const playerId = 'panthers-6-1';
+  const began = reduceNrlCareer(initial, { type: 'startReserveGrade', year: 2026, clubId: 'panthers', round: 1, playerId });
+  const first = open(bytes(began));
+  const drill = () => {
+    click('Squad');
+    const label = screen.getByText('Reserve-grade development', { exact: true });
+    fireEvent.click(label);
+    return within(label.closest('details')!);
+  };
+  const panel = drill();
+  expect(panel.getByText(/Round 5 to Round 4/)).toBeVisible();
+  expect(raw()).toBe(bytes(began));
+  fireEvent.click(panel.getByRole('button', { name: 'Book reserve coach for $90,000' }));
+  const purchased = reduceNrlCareer(began, { type: 'bookReserveCoach', year: 2026, clubId: 'panthers', round: 1, playerId });
+  expect(raw()).toBe(bytes(purchased));
+  expect(localStorage.getItem(fence)).toBe('5');
+  first.unmount();
+  render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const restored = drill();
+  expect(restored.getByText(/Reserve coaching booked in Round 1/)).toBeVisible();
+  expect(restored.queryByRole('button', { name: /^Book reserve coach/ })).toBeNull();
+  expect(raw()).toBe(bytes(purchased));
+  expect(localStorage.getItem(fence)).toBe('5');
+});
+
 describe('NRL position training', () => {
   it.each([
     ['panthers', 16, 2026, 1, 'panthers-6-1'],

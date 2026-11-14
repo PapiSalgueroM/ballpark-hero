@@ -12,7 +12,7 @@ import {
 import {
   archiveNrlFinals, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
   isNrlPhysioTreatment, nrlByeTrainingPreview, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
-  nrlPlanAdjustments, nrlPlanMatchups, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
+  nrlPlanAdjustments, nrlPlanMatchups, nrlReserveGradeEnd, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlLivePlanChoice, type NrlManagerState, type NrlMatchResult,
   type NrlPhysioTreatment, type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
@@ -42,6 +42,7 @@ const MEDICAL_UPGRADE_COST = { 2: 800_000, 3: 2_600_000 } as const;
 const NRL_PHYSIO_COST = 60_000;
 const AWAY_RECOVERY_COST = 120_000;
 const AWAY_RECOVERY_FITNESS = 8;
+const RESERVE_COACH_COST = 90_000;
 const ACADEMY_UPGRADE_COST = 600_000;
 const ACADEMY_PARALLEL_COST = 60_000;
 const ACADEMY_UPGRADE_POTENTIAL = 3;
@@ -109,6 +110,7 @@ export interface NrlCareerBook {
   medicalUpgrades?: NrlMedicalUpgrade[];
   physio?: NrlPhysioTreatment;
   awayRecoveryRound?: number;
+  reserveCoachRound?: number;
   academyUpgradeRound?: number;
   academyParallelRound?: number;
   concessionsUpgradeRound?: number;
@@ -255,7 +257,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'startPositionTraining'; year: number; clubId: string; round: number; playerId: string; role: NrlRole }
   | { type: 'cancelPositionTraining'; year: number; clubId: string; playerId: string; role: NrlRole; startedRound: number }
   | { type: 'runIntensiveBye'; year: number; clubId: string; round: number; playerId: string; startedRound: number }
-  | { type: 'startReserveGrade' | 'recallReserveGrade'; year: number; clubId: string; round: number; playerId: string }
+  | { type: 'startReserveGrade' | 'recallReserveGrade' | 'bookReserveCoach'; year: number; clubId: string; round: number; playerId: string }
   | { type: 'setShortlist'; playerId: string; saved: boolean; year: number }
   | { type: 'scoutAcademy'; role: NrlRole; priority?: NrlAcademyPriority }
   | { type: 'scoutAcademyParallel'; year: number; clubId: string; round: number; role: NrlRole; priority?: NrlAcademyPriority }
@@ -435,7 +437,7 @@ export function nrlSelectionPromiseCandidates(state: NrlCareerState): NrlCareerP
 function unavailableForPromise(season: NrlManagerState, playerId: string, round: number) {
   const spell = season.reserveGrade;
   if (spell?.playerId === playerId && spell.startedRound <= round
-    && round < (spell.recalledRound ?? spell.startedRound + NRL_RESERVE_GRADE_ROUNDS)) return true;
+    && round < nrlReserveGradeEnd(spell)) return true;
   if (nrlInjuries(season, round).has(playerId)) return true;
   return Boolean(season.judiciary && nrlJudiciaryBannedBefore(season, playerId, round));
 }
@@ -950,7 +952,7 @@ export function nrlCareerFinance(state: Pick<NrlCareerState, 'finance'>): NrlCar
     + (state.finance.concessionReceipts ?? 0) - nrlConcessionsSpend(state.finance)
     - wagesPaid - operatingCosts - nrlMedicalSpend(state.finance) - nrlAcademyFacilitySpend(state.finance) - nrlAcademyParallelSpend(state.finance)
     - nrlMutualReleaseSpend(state.finance) - signingFee - wages - nrlCoachCourseSpend(state.finance) - nrlPhysioSpend(state.finance)
-    - nrlAwayRecoverySpend(state.finance);
+    - nrlAwayRecoverySpend(state.finance) - nrlReserveCoachSpend(state.finance);
   return { ...state.finance, cash: openingCash + profit, profit };
 }
 
@@ -1053,6 +1055,20 @@ export function nrlAwayRecoverySpend({ awayRecoveryRound }: NrlCareerBook) {
   return awayRecoveryRound === undefined ? 0 : AWAY_RECOVERY_COST;
 }
 
+export function nrlReserveCoachSpend({ reserveCoachRound }: NrlCareerBook) {
+  return reserveCoachRound === undefined ? 0 : RESERVE_COACH_COST;
+}
+
+export function nrlReserveCoachQuote(state: NrlCareerState) {
+  const { finance, season } = state;
+  const { reserveGrade: spell, year } = season;
+  if (!spell || state.legacySeason || state.retired || season.live || season.phase !== 'regular'
+    || nrlReserveGradeRemaining(season) < 2 || spell.acceleratedRound !== undefined) return null;
+  const currentReturn = nrlReserveGradeEnd(spell);
+  const fasterReturn = nrlReserveGradeEnd({ ...spell, acceleratedRound: season.round });
+  return { cost: RESERVE_COACH_COST, currentReturn, fasterReturn, reason: facilityPurchaseRefusal(finance, lastRound(year), RESERVE_COACH_COST) };
+}
+
 export function nrlAwayRecoveryBonus({ finance, season }: Pick<NrlCareerState, 'finance' | 'season'>) {
   return finance.awayRecoveryRound === season.round ? AWAY_RECOVERY_FITNESS : 0;
 }
@@ -1139,7 +1155,7 @@ function seasonReceipt(state: NrlCareerState): NrlCareerHistoryRow {
     ...(season.kickerId ? { scoring: archiveNrlScoring(season) } : {}),
     ...(spell && trainee ? { reserveGrade: {
       playerId: trainee.id, playerName: trainee.name,
-      rounds: spell.recalledRound === undefined ? NRL_RESERVE_GRADE_ROUNDS : spell.recalledRound - spell.startedRound,
+      rounds: nrlReserveGradeEnd(spell) - spell.startedRound,
       ratingGain: spell.recalledRound === undefined ? 1 : 0,
     } } : {}),
   };
@@ -2504,6 +2520,7 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         { type: 'advance' }, positionTraining.playerId);
     }
     case 'startReserveGrade':
+    case 'bookReserveCoach':
     case 'recallReserveGrade': {
       const { season } = state;
       const { year, clubId, round, reserveGrade } = season;
@@ -2513,6 +2530,11 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         if (!player) return state;
         const next = { ...season, reserveGrade: { playerId: player.id, startedRound: round, startingRating: player.rating } };
         return { ...state, season: season.individualRecoveryId === player.id ? repairMatchday(next) : next };
+      }
+      if (action.type === 'bookReserveCoach') {
+        if (!reserveGrade || reserveGrade.playerId !== action.playerId || nrlReserveCoachQuote(state)?.reason !== null) return state;
+        return { ...state, season: { ...season, reserveGrade: { ...reserveGrade, acceleratedRound: round } },
+          finance: { ...state.finance, reserveCoachRound: round } };
       }
       if (!reserveGrade || reserveGrade.playerId !== action.playerId || !nrlReserveGradeRemaining(season)) return state;
       return { ...state, season: repairMatchday({ ...season, reserveGrade: { ...reserveGrade, recalledRound: round } }) };
@@ -2682,6 +2704,7 @@ function validBook(value: unknown, roundLimit: number): value is NrlCareerBook {
     && validMedicalUpgrades(value.medicalUpgrades, value.fromRound, roundLimit)
     && (value.physio === undefined || (value.fromRound === 1 && isNrlPhysioTreatment(value.physio, roundLimit)))
     && (value.awayRecoveryRound === undefined || (value.fromRound === 1 && intIn(value.awayRecoveryRound, 1, roundLimit)))
+    && (value.reserveCoachRound === undefined || (value.fromRound === 1 && intIn(value.reserveCoachRound, 1, roundLimit)))
     && (value.mutualRelease === undefined || (record(value.mutualRelease) && Object.keys(value.mutualRelease).length === 3
       && typeof value.mutualRelease.playerId === 'string' && Boolean(value.mutualRelease.playerId)
       && typeof value.mutualRelease.playerName === 'string' && Boolean(value.mutualRelease.playerName)
@@ -2739,8 +2762,10 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
   if (value.judiciaryCarry !== undefined && (judiciary === undefined || !isNrlJudiciary({ carried: value.judiciaryCarry }))) return false;
   if (value.reserveGrade !== undefined) {
     const spell = value.reserveGrade;
+    const coached = record(value.finance) && value.finance.reserveCoachRound !== undefined;
+    const duration = NRL_RESERVE_GRADE_ROUNDS - Number(coached);
     if (!record(spell) || Object.keys(spell).length !== 4 || typeof spell.playerId !== 'string' || typeof spell.playerName !== 'string'
-      || !intIn(spell.rounds, 0, NRL_RESERVE_GRADE_ROUNDS) || spell.ratingGain !== Number(spell.rounds === NRL_RESERVE_GRADE_ROUNDS)) return false;
+      || !intIn(spell.rounds, 0, duration) || spell.ratingGain !== Number(spell.rounds === duration)) return false;
   }
   if (value.development !== undefined && (!record(value.development) || !activeDevelopmentFocus(value.development.focus)
     || !intIn(value.development.affected, 0, SQUAD_SIZE))) return false;
@@ -2816,6 +2841,8 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
   const finance = nrlCareerFinance({ finance: value.finance });
   if (finance.physio && (!scoring || finance.physio.round > nrlRegularRounds(year))) return false;
   if (finance.awayRecoveryRound !== undefined && (!scoring || !isAwayRound(year, value.clubId, finance.awayRecoveryRound))) return false;
+  if (finance.reserveCoachRound !== undefined && (!scoring || value.reserveGrade === undefined
+    || finance.reserveCoachRound > nrlRegularRounds(year) - 1)) return false;
   if (value.attendanceForm !== undefined
     && (!finance.supporterAttendance || typeof value.attendanceForm !== 'string' || !/^[WDL]{24}$/.test(value.attendanceForm) || !value.finals)) return false;
   if (finance.supporterAttendance && value.scoring === undefined) return false;
@@ -2863,6 +2890,7 @@ function booksMatch(a: NrlCareerBook, b: NrlCareerBook): boolean {
     && a.wagesPaid === b.wagesPaid && a.operatingCosts === b.operatingCosts
     && a.physio?.playerId === b.physio?.playerId && a.physio?.injuryRound === b.physio?.injuryRound && a.physio?.round === b.physio?.round
     && a.awayRecoveryRound === b.awayRecoveryRound
+    && a.reserveCoachRound === b.reserveCoachRound
     && a.academyUpgradeRound === b.academyUpgradeRound
     && a.academyParallelRound === b.academyParallelRound
     && a.concessionsUpgradeRound === b.concessionsUpgradeRound && a.concessionReceipts === b.concessionReceipts
@@ -2965,6 +2993,7 @@ function validCareerBooks(state: NrlCareerState): boolean {
   const coach = finance.coachHire;
   const release = finance.mutualRelease;
   const physio = finance.physio;
+  if (finance.reserveCoachRound !== season.reserveGrade?.acceleratedRound) return false;
   if (finance.awayRecoveryRound !== undefined && (!season.kickerId || finance.awayRecoveryRound > season.round
     || !isAwayRound(season.year, season.clubId, finance.awayRecoveryRound))) return false;
   if ((legacySeason && physio) || physio?.playerId !== season.physio?.playerId
@@ -3205,6 +3234,10 @@ function validCareerBooks(state: NrlCareerState): boolean {
       if (facilityPurchaseRefusal(expected, finalRound, AWAY_RECOVERY_COST)) return false;
       expected = { ...expected, awayRecoveryRound: round };
     }
+    if (finance.reserveCoachRound === round) {
+      if (facilityPurchaseRefusal(expected, finalRound, RESERVE_COACH_COST)) return false;
+      expected = { ...expected, reserveCoachRound: round };
+    }
     if (round <= played) {
       expected = tickBooks(expected, season, round, season.results.filter(result => result.round === round), cap, currentClub.concessionsInstalled);
       expected = settlePathways(expected, season, round, state.players);
@@ -3393,7 +3426,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     const player = state.players.find(candidate => candidate.id === spell.playerId);
     if (!player || !intIn(player.age, 18, 23) || spell.startingRating >= player.potential) return false;
     const training = state.positionTraining;
-    const spellEnd = spell.recalledRound ?? spell.startedRound + NRL_RESERVE_GRADE_ROUNDS;
+    const spellEnd = nrlReserveGradeEnd(spell);
     if (training?.playerId === spell.playerId && training.startedRound < spellEnd
       && training.startedRound + NRL_POSITION_TRAINING_ROUNDS - Number(training.intensiveBye !== undefined) > spell.startedRound) return false;
   }

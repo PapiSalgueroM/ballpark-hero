@@ -61,7 +61,7 @@ interface NrlRoundOptions {
 }
 
 export interface NrlPlayer { id: string; name: string; role: NrlRole; rating: number; fitness: number; secondaryRole?: NrlRole }
-interface NrlReserveGradeSpell { playerId: string; startedRound: number; startingRating: number; recalledRound?: number }
+interface NrlReserveGradeSpell { playerId: string; startedRound: number; startingRating: number; recalledRound?: number; acceleratedRound?: number }
 
 const RETRAINING_ROLES: Partial<Record<NrlRole, readonly NrlRole[]>> = {
   Fullback: ['Left Wing', 'Right Wing'],
@@ -421,9 +421,12 @@ export function isNrlPhysioTreatment(value: unknown, roundLimit: number): value 
 
 type NrlAvailability = NrlInjuryClock & Pick<NrlManagerState, 'reserveGrade' | 'judiciary' | 'year' | 'clubId' | 'seed'>;
 
+export function nrlReserveGradeEnd({ startedRound, recalledRound, acceleratedRound }: Pick<NrlReserveGradeSpell, 'startedRound' | 'recalledRound' | 'acceleratedRound'>) {
+  return recalledRound ?? (startedRound + NRL_RESERVE_GRADE_ROUNDS - Number(acceleratedRound !== undefined));
+}
+
 export function nrlReserveGradeRemaining({ reserveGrade, round }: Pick<NrlManagerState, 'reserveGrade' | 'round'>): number {
-  return reserveGrade && reserveGrade.recalledRound === undefined
-    ? Math.max(0, reserveGrade.startedRound + NRL_RESERVE_GRADE_ROUNDS - round) : 0;
+  return reserveGrade ? Math.max(0, nrlReserveGradeEnd(reserveGrade) - round) : 0;
 }
 
 export function nrlUnavailable(state: NrlAvailability): Map<string, number> {
@@ -1606,7 +1609,7 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
     injuredThrough.set(physio.playerId, through - 1);
     return true;
   };
-  const spellEnd = reserveGrade && (reserveGrade.recalledRound ?? reserveGrade.startedRound + NRL_RESERVE_GRADE_ROUNDS);
+  const spellEnd = reserveGrade && nrlReserveGradeEnd(reserveGrade);
   const identity = { year, seed, clubId };
   for (let playedRound = 1; playedRound <= completed; playedRound++) {
     if (!applyPhysio(playedRound)) return false;
@@ -1671,10 +1674,13 @@ function validReserveGrade(value: unknown, round: number, regularRounds: number,
   if (!enabled || !record(value) || typeof value.playerId !== 'string'
     || !integerIn(value.startedRound, 1, Math.min(round, regularRounds - NRL_RESERVE_GRADE_ROUNDS + 1))
     || !integerIn(value.startingRating, 40, 97)) return false;
-  const { playerId, startedRound, startingRating, recalledRound } = value;
-  if (recalledRound !== undefined && !integerIn(recalledRound, startedRound, Math.min(round, startedRound + NRL_RESERVE_GRADE_ROUNDS - 1))) return false;
-  const gained = recalledRound === undefined && round >= startedRound + NRL_RESERVE_GRADE_ROUNDS;
-  return Object.keys(value).length === (recalledRound === undefined ? 3 : 4)
+  const { playerId, startedRound, startingRating, recalledRound, acceleratedRound } = value;
+  if (acceleratedRound !== undefined && !integerIn(acceleratedRound, startedRound, Math.min(round, startedRound + NRL_RESERVE_GRADE_ROUNDS - 2))) return false;
+  const paidRound = typeof acceleratedRound === 'number' ? acceleratedRound : undefined;
+  const completed = nrlReserveGradeEnd({ startedRound, acceleratedRound: paidRound });
+  if (recalledRound !== undefined && !integerIn(recalledRound, paidRound ?? startedRound, Math.min(round, completed - 1))) return false;
+  const gained = recalledRound === undefined && round >= completed;
+  return Object.keys(value).length === 3 + Number(recalledRound !== undefined) + Number(acceleratedRound !== undefined)
     && players.get(playerId)?.rating === startingRating + Number(gained);
 }
 
