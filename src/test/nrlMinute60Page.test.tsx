@@ -65,6 +65,36 @@ it('previews the closing attack plan without writing and records it in the settl
   expect(screen.getByText('60-minute attack plan change: Through the middle.')).toBeVisible();
 });
 
+it('starts the closing picker on the confirmed half-time plan after a reload and reports both changes', () => {
+  const half = reduceNrlCareer(createNrlCareer('broncos', 1), { type: 'startLive' });
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(half));
+  localStorage.setItem(fence, '4');
+  const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const view = show();
+  const attack = screen.getByRole('combobox', { name: 'Second-half attack plan' });
+  expect(attack).toHaveValue('standard');
+  const firstHalf = screen.getByRole('list', { name: 'First-half score' }).textContent;
+  fireEvent.change(attack, { target: { value: 'wide' } });
+  expect(screen.getByRole('list', { name: 'First-half score' }).textContent).toBe(firstHalf);
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(half));
+  fireEvent.click(screen.getByRole('button', { name: 'Play to 60 minutes' }));
+  const score = screen.getByRole('list', { name: 'Score after 60 minutes' }).textContent;
+  expect(localStorage.getItem(fence)).toBe('5');
+  view.unmount();
+  show();
+  const closing = screen.getByRole('combobox', { name: 'Closing attack plan' });
+  expect(closing).toHaveValue('wide');
+  fireEvent.change(closing, { target: { value: 'standard' } });
+  expect(screen.getByRole('list', { name: 'Score after 60 minutes' }).textContent).toBe(score);
+  expect(localStorage.getItem(fence)).toBe('5');
+  fireEvent.click(screen.getByRole('button', { name: 'Play final 20 minutes' }));
+  const report = within(screen.getByRole('region', { name: 'Full time' }));
+  expect(report.getByText('Half-time attack plan change: Shift wide.')).toBeVisible();
+  expect(report.getByText('60-minute attack plan change: Standard.')).toBeVisible();
+  expect(localStorage.getItem(fence)).toBe('6');
+});
+
 it('lists unused reserves at unrotated positions when the fourth bench place is open', () => {
   const kickoff = createNrlCareer('broncos', 1);
   const held = nrlHoldableReserves(kickoff.season)[0];

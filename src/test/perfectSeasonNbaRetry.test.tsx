@@ -63,6 +63,8 @@ const expectError = () => {
 };
 const finish = async (slots = NBA_SLOTS.map(slot => slot.key)) => {
   for (const slot of slots) { if (screen.queryByRole('button', { name: /^(Spin the wheel|Next spin)$/ })) await spin(); await pick(slot); }
+  const review = screen.queryByRole('button', { name: 'Simulate season' });
+  if (review) { fireEvent.click(review); await tick(); }
   expect(screen.getByRole('button', { name: 'Skip to result' })).toBeTruthy();
   fireEvent.click(screen.getByRole('button', { name: 'Skip to result' })); await tick(); snap('result');
   const result = evidence.simulations.at(-1)!.result;
