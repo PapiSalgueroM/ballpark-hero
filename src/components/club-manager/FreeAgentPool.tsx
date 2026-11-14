@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { freeAgentBlock, freeAgentTerms, moneyIn } from '@/lib/clubManager';
+import { freeAgentBlock, freeAgentTerms, freeAgentsAtCurrentRatings, moneyIn } from '@/lib/clubManager';
 import type { CareerState, FreeAgent, FreeAgentBlock } from '@/lib/clubManager';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 
@@ -29,7 +29,7 @@ interface FreeAgentPoolProps {
 export function FreeAgentPool({ career, onSignFreeAgent }: FreeAgentPoolProps) {
   if (!onSignFreeAgent) return null;
   const money = moneyIn(career);
-  const pool = career.freeAgents ?? [];
+  const pool = freeAgentsAtCurrentRatings(career);
   return (
     <section aria-label="Free agents" className="mt-3 pt-2 border-t border-border/40">
       <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">

@@ -66,7 +66,11 @@ export function phaseFor(c: CareerState): CMPhase {
 }
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
 
-const CAREER_RULES = { championshipPlayoffs: true, bundesligaPlayoff: true, frenchPlayoffs: true, inSeasonRatings: true } as const;
+const CAREER_RULES = { championshipPlayoffs: true, bundesligaPlayoff: true, frenchPlayoffs: true, inSeasonRatings: true, worldRatingTiming: true } as const;
+
+function beginClubManagerSeason(state: CareerState): CareerState {
+  return beginLeagueCoachSeason({ ...state, worldRatingSeason: state.season });
+}
 
 /**
  * Round 505: a new shape keeps the eleven you picked. Until this round a
@@ -1037,7 +1041,7 @@ export function useClubManager() {
     if (!career) return;
     const s = startNextSeason(career, acceptOfferClub);
     if (s === career) return;
-    setCareer(beginLeagueCoachSeason(s));
+    setCareer(beginClubManagerSeason(s));
     setSummary(null);
     setReport(null);
     setActiveTab('overview');
@@ -1196,7 +1200,7 @@ export function useClubManager() {
       const next = acceptWildernessJob(prev, club);
       if (!next) return prev;
       setPhase('hub');
-      return beginLeagueCoachSeason(next);
+      return beginClubManagerSeason(next);
     });
   }, []);
 

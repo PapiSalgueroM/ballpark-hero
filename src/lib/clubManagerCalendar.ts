@@ -38,7 +38,7 @@ import {
   /* Round 1510: the domestic super cup across a move. */
   carryOneOffs, oneOffEntryLabel, oneOffPotential,
   /* Round 1597: the free agent list across a move. */
-  freeAgencyCarry,
+  freeAgencyCarry, worldRatingHandover, snapshotRatingDeparture,
 } from '@/lib/clubManager';
 import type { WorldCompKey } from '@/lib/worldCompetition';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
@@ -47,7 +47,7 @@ import { applyNewJobDials } from '@/lib/clubManagerDifficulty';
 import type { CmVarAsk } from '@/lib/clubManagerVar';
 import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';
 import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobHunt';
-import { plainCopy, snapshotWorldRosterClub, worldRosterView } from '@/lib/clubManagerWorldRoster';
+import { plainCopy, worldRosterView } from '@/lib/clubManagerWorldRoster';
 
 /* ================================================================== */
 /* Dates                                                              */
@@ -876,7 +876,7 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
   if (!total) return career;
   /* Never the very end: a takeover with nothing left to play is not a game. */
   const target = Math.max(1, Math.min(total - 3, Math.round(total * MIDSEASON_ENTRY[entry].fraction)));
-  const s = playRunIn(career, target);
+  const s = inheritedRunIn(career, target);
   /* The handover. Everything cleared here belonged to the manager before you. */
   return {
     ...s,
@@ -941,6 +941,13 @@ function playRunIn(career: CareerState, target: number): CareerState {
   return s;
 }
 
+function inheritedRunIn(career: CareerState, target: number, previous?: CareerState): CareerState {
+  if (career.worldRatingSeason !== career.season || !career.inSeasonRatings) return playRunIn(career, target);
+  const played = playRunIn({ ...career, worldRatingRunIn: true }, target);
+  delete played.worldRatingRunIn;
+  return worldRatingHandover(played, previous);
+}
+
 /* Round 1344 review (both reviews' second major; the other lane's PR295 found it too): what a seeded career carries
    across a mid season job move so a man another club bought this season is still not for sale after it (the brief's
    decision 3). The gone names alone hid him from buildMarket, but the screen lists him at his buyer and every door
@@ -995,7 +1002,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
   const club = open.club;
   if (!clubAvailableInCareer(career, club)) return null;
   const from = career.clubName;
-  const departed = refreshWorldRoster(snapshotWorldRosterClub(career, from));
+  const departed = refreshWorldRoster(snapshotRatingDeparture(career));
   const eraId = career.eraId ?? DEFAULT_ERA_ID;
   const historic = isHistoricEra(eraId);
   const eraBase = historic ? eraById(eraId).startYear : CM_BASE_YEAR;
@@ -1019,6 +1026,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
   }
   if (fresh.clubName !== club) return null;
   if (career.inSeasonRatings) fresh.inSeasonRatings = true;
+  if (career.worldRatingSeason === career.season) fresh.worldRatingSeason = fresh.season;
   /* Round 1021 review: fresh is a season one save, so in the 2020-21 era it
      is dealt that season's late summer window whatever year the career is
      in. Every later season opened in August with the usual four matches,
@@ -1035,7 +1043,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
   const ticks = tickingWeeksIn(career.calendar);
   const frac = ticks ? tickingWeeksDone(career.calendar, career.week) / ticks : 0;
   const target = Math.max(1, Math.min(total - 3, Math.round(total * frac)));
-  const s = playRunIn(fresh, target);
+  const s = inheritedRunIn(fresh, target, career);
   const interim = interimManagerName(from, career.season, career.week);
   const reaction: PlayerMessage = {
     id: `msg-${career.season}-${s.week}-join783`,
