@@ -1135,6 +1135,22 @@ export interface BallonDorCandidate {
   evidence: BallonDorEvidence[];
 }
 
+export type ClubSeasonEvidence =
+  | { kind: 'league-winner'; league: string; points: number }
+  | { kind: 'played-ucl' | 'watched-ucl'; stage: 'winner' | 'finalist' | 'semi-finalist'; points: number };
+
+export interface ClubSeasonCandidate {
+  club: string;
+  points: number;
+  evidence: ClubSeasonEvidence[];
+}
+
+export interface ClubSeasonAward {
+  leagues: number;
+  winner: ClubSeasonCandidate;
+  runnersUp?: ClubSeasonCandidate[];
+}
+
 type CoachSeasonRow = [name: string, appointment: number, won: number, drawn: number, lost: number, gf: number, ga: number];
 interface LeagueCoachBook {
   season: number;
@@ -2334,6 +2350,7 @@ export interface SeasonRecord {
   ballonDor?: NonNullable<SeasonSummary['ballonDor']>;
   ballonDorShortlist?: BallonDorCandidate[];
   leagueCoachAward?: LeagueCoachAward;
+  clubSeasonAward?: ClubSeasonAward;
   /** Round 1335: the summer move the season earned, written only on a season the club really went up or
    *  down or stayed up against the odds (seasonFate). An older record, and every other season, has none. */
   fate?: SeasonFate;
@@ -2985,6 +3002,7 @@ export interface SeasonSummary {
   ballonDor?: { name: string; club: string } | null;
   ballonDorShortlist?: BallonDorCandidate[];
   leagueCoachAward?: LeagueCoachAward;
+  clubSeasonAward?: ClubSeasonAward;
   /** Round 1311: the same awards the season's record keeps, on a season the league book decided. */
   awards?: SeasonAwards;
   /** Round 1335: the same fate the season's record keeps, only on a season that has one. */
@@ -22897,6 +22915,77 @@ export function joinClubInSummer(career: CareerState): CareerState | null {
   return state;
 }
 
+function rankClubsOfSeason(state: CareerState): ClubSeasonAward | undefined {
+  if (!state.calendar.length || state.week < state.calendar.length) return undefined;
+  const era = state.eraId ?? DEFAULT_ERA_ID;
+  const historic = isHistoricEra(era);
+  // Read this save's memberships even when another career or the rollover registered a new world.
+  const baseLeagues = historic ? ERA_LEAGUES[era] ?? []
+    : startLeaguesFor(careerScopedLeagueId(state)).filter(league => league.id !== K_LEAGUE_2026.id || careerHasKLeagueWorld(state));
+  const definitions = historic ? baseLeagues
+    : baseLeagues.map(league => ({ ...league, clubs: state.leagueOverrides?.[league.id] ?? league.clubs }));
+  const ownLeague = definitions.find(league => state.customClub?.name === state.clubName
+    ? league.id === state.customClub.leagueId : league.clubs.includes(state.clubName));
+  const known = new Set([
+    ...baseLeagues.flatMap(league => league.clubs),
+    ...(historic ? (ERA_UCL_FIELDS[era] ?? []).map(club => club.name) : [...EURO_CLUBS, ...CLUBS.map(club => club.name)]),
+  ]);
+  const candidates = new Map<string, ClubSeasonCandidate>();
+  const add = (name: string, evidence: ClubSeasonEvidence) => {
+    const club = eraEuroName(era, name);
+    if (club === state.customClub?.name || !known.has(club)) return;
+    const row = candidates.get(club) ?? { club, points: 0, evidence: [] };
+    if (row.evidence.some(item => item.kind === evidence.kind)) return;
+    row.points += evidence.points;
+    row.evidence.push(evidence);
+    candidates.set(club, row);
+  };
+  let leagues = 0;
+  const validClub = (name: string) => name === state.customClub?.name || known.has(eraEuroName(era, name));
+  const leagueWinner = (league: LeagueDef, rows: TableRow[], clubs: string[]) => {
+    if (leagueRulesOf(league.id).ladder !== 'top' || rows.length < 2 || rows.length !== clubs.length) return;
+    const entered = new Set(clubs);
+    const rounds = leagueRounds(rows.length);
+    if (new Set(rows.map(row => row.club)).size !== rows.length
+      || !rows.every(row => entered.has(row.club) && validClub(row.club) && row.w + row.d + row.l === rounds)) return;
+    leagues += 1;
+    add(rows[0].club, { kind: 'league-winner', league: league.name, points: 4 });
+  };
+  if (ownLeague) leagueWinner(ownLeague, sortedWorldTable(state, ownLeague.id, state.table), state.leagueClubs);
+  for (const league of definitions) {
+    if (league.id === ownLeague?.id) continue;
+    const world = state.world?.[league.id];
+    if (!world || world.round !== leagueRounds(league.clubs.length)) continue;
+    leagueWinner(league, sortedWorldTable(state, league.id, world.table), league.clubs);
+  }
+
+  const played = state.uclBracket?.filter(tie => tie.homeGoals != null && tie.awayGoals != null);
+  const playedFinal = played?.find(tie => tie.round === 'F' && tie.winner);
+  const watched = !playedFinal && worldUclWinner(state) ? evalWorldUcl(state, Infinity) : null;
+  const ties = playedFinal ? played : watched?.done ? watched.ties.filter(tie => tie.agg) : [];
+  const settled = ties?.filter(tie => (tie.winner === tie.home || tie.winner === tie.away)
+    && validClub(tie.home) && validClub(tie.away) && eraEuroName(era, tie.home) !== eraEuroName(era, tie.away));
+  const final = settled?.find(tie => tie.round === 'F');
+  if (final?.winner) {
+    const kind = playedFinal ? 'played-ucl' : 'watched-ucl';
+    const winner = eraEuroName(era, final.winner);
+    const runner = eraEuroName(era, final.home === final.winner ? final.away : final.home);
+    add(winner, { kind, stage: 'winner', points: 8 });
+    add(runner, { kind, stage: 'finalist', points: 5 });
+    for (const tie of settled ?? []) {
+      if (tie.round !== 'SF' || !tie.winner) continue;
+      const advanced = eraEuroName(era, tie.winner);
+      const lost = eraEuroName(era, tie.home === tie.winner ? tie.away : tie.home);
+      if ((advanced === winner || advanced === runner) && lost !== winner && lost !== runner) add(lost, { kind, stage: 'semi-finalist', points: 2 });
+    }
+  }
+
+  const [winner, ...runnersUp] = [...candidates.values()]
+    .sort((a, b) => b.points - a.points || (a.club < b.club ? -1 : a.club > b.club ? 1 : 0))
+    .slice(0, 5);
+  return winner ? { leagues, winner, ...(runnersUp.length ? { runnersUp } : {}) } : undefined;
+}
+
 function rankBallonDor(state: CareerState, table: TableRow[], boards: LeagueBoards | null): BallonDorCandidate[] {
   if (state.week < state.calendar.length) return [];
   const final = state.uclBracket?.find(tie => tie.round === 'F' && tie.winner);
@@ -23149,6 +23238,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   const best = shortlist[0];
   const ballonDor = best ? { name: best.name, club: best.club } : null;
   const leagueCoachAward = leagueCoachWinner(state, table);
+  const clubSeasonAward = rankClubsOfSeason(state);
   /* Round 1311: the top scorer, most assists and most clean sheets of the league, from the book. Only on
      a season the book decides; any other season writes nothing new, so its summary and its record are
      exactly what they were before the book was read. */
@@ -23188,21 +23278,32 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     ballonDor,
     ...(shortlist.length ? { ballonDorShortlist: shortlist } : {}),
     ...(leagueCoachAward ? { leagueCoachAward } : {}),
+    ...(clubSeasonAward ? { clubSeasonAward } : {}),
     ...(awards ? { awards } : {}),
     ...(fate ? { fate } : {}),
   };
 
   state.history = [
     ...state.history.filter(h => h.season !== state.season).map(row => {
-      if (!row.ballonDorShortlist || row.season > state.season - TEAMS_KEPT) return row;
+      if (row.season > state.season - TEAMS_KEPT || !(row.ballonDorShortlist || row.clubSeasonAward?.runnersUp || row.awards?.gloveShortlist)) return row;
       const { ballonDorShortlist: discarded, ...record } = row;
       void discarded;
+      if (record.clubSeasonAward?.runnersUp) {
+        const { leagues, winner } = record.clubSeasonAward;
+        record.clubSeasonAward = { leagues, winner };
+      }
+      if (record.awards?.gloveShortlist) {
+        const { gloveShortlist, ...awardsWithoutList } = record.awards;
+        void gloveShortlist;
+        record.awards = awardsWithoutList;
+      }
       return record;
     }),
     { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies,
       leagueId: careerLeagueOf(state).id, leagueSize: table.length,
       ...(ballonDor ? { ballonDor, ballonDorShortlist: shortlist } : {}),
       ...(leagueCoachAward ? { leagueCoachAward } : {}),
+      ...(clubSeasonAward ? { clubSeasonAward } : {}),
       ...(awards ? { awards } : {}), ...(fate ? { fate } : {}) },
   ];
   state.history = keepTeams(state.history);

@@ -184,7 +184,7 @@ export type TeamMan = [name: string, club: string, pos: Position, flags: number]
 /** A season's awards from the book. `cov` is the share on record when the season closed. A board with
  *  nobody on it gives no winner (the field is left out). `xi` is the team of the season, kept on the
  *  newest TEAMS_KEPT records only. */
-export interface SeasonAwards { cov: number; boot?: AwardMan; ast?: AwardMan; glove?: AwardMan; xi?: TeamMan[] }
+export interface SeasonAwards { cov: number; boot?: AwardMan; ast?: AwardMan; glove?: AwardMan; gloveShortlist?: AwardMan[]; xi?: TeamMan[] }
 
 /** The team of the season's lines, a 4-4-2: the shape every full eleven of the league is picked in. */
 export const TEAM_LINES = { DEF: 4, MID: 4, ATT: 2 } as const;
@@ -246,10 +246,18 @@ export function seasonAwards(input: BoardInput): SeasonAwards | null {
   const out: SeasonAwards = { cov: bookShare(input.book, input.clubs).share };
   const [boot] = leaders(input, 'goals', 1);
   const [ast] = leaders(input, 'assists', 1);
-  const [glove] = leaders(input, 'sheets', 1);
+  const gloveShortlist: AwardMan[] = [];
+  for (const keeper of ordered(input, 'sheets')) {
+    if (gloveShortlist.some(([name, club]) => name === keeper.name && club === keeper.club)) continue;
+    gloveShortlist.push(awardMan(boardMan(keeper, 'sheets')));
+    if (gloveShortlist.length === 5) break;
+  }
   if (boot) out.boot = awardMan(boot);
   if (ast) out.ast = awardMan(ast);
-  if (glove) out.glove = awardMan(glove);
+  if (gloveShortlist.length) {
+    out.glove = gloveShortlist[0];
+    out.gloveShortlist = gloveShortlist;
+  }
   const xi = teamOfSeason(input);
   if (xi) out.xi = xi;
   return out;

@@ -8,7 +8,7 @@
 import { cn } from '@/lib/utils';
 import type { AwardMan, SeasonAwards, TeamMan } from '@/lib/clubManagerLeagueBoards';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
-import type { LeagueCoachAward } from '@/lib/clubManager';
+import type { ClubSeasonAward, LeagueCoachAward } from '@/lib/clubManager';
 
 const isMine = (flags: number) => (flags & 2) !== 0;
 const madeUp = (flags: number) => (flags & 1) !== 0;
@@ -67,6 +67,7 @@ export function SeasonHonoursCard({ awards, recent }: { awards: SeasonAwards; re
       {awards.boot && <WinnerLine label="Top scorer" icon="⚽" m={awards.boot} />}
       {awards.ast && <WinnerLine label="Most assists" icon="🅰️" m={awards.ast} />}
       {awards.glove && <WinnerLine label="Most clean sheets" icon="🧤" m={awards.glove} />}
+      <LeagueKeeperShortlist awards={awards} />
       {awards.xi
         ? <div className="pt-1"><div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-0.5">Team of the season</div><TeamLines xi={awards.xi} /></div>
         : <p data-cm-team-gone className="text-[10px] text-muted-foreground">{recent
@@ -77,6 +78,49 @@ export function SeasonHonoursCard({ awards, recent }: { awards: SeasonAwards; re
 }
 
 export default SeasonHonoursCard;
+
+export function LeagueKeeperShortlist({ awards }: { awards: SeasonAwards }) {
+  const rows = awards.gloveShortlist;
+  if (!rows?.length) return null;
+  return (
+    <details className="rounded-xl border border-border bg-card p-3 text-left" data-cm-league-keepers>
+      <summary className="min-h-11 cursor-pointer py-3 text-sm font-bold">League clean-sheet ranking ({rows.length})</summary>
+      <p className="mt-2 text-xs text-muted-foreground">Counts clean sheets for keepers recorded in this league. Ties go to the club that finished higher, then by name. The season book identified a scorer or an own goal for {awards.cov}% of rival league goals. Rankings stay in history for five seasons.</p>
+      <ol className="mt-2 list-decimal space-y-2 pl-6 text-sm">
+        {rows.map(([name, club, sheets, flags]) => (
+          <li key={JSON.stringify([club, name])} className="break-words">
+            <Name name={name} flags={flags} /> · {club} · {sheets} clean {sheets === 1 ? 'sheet' : 'sheets'}
+          </li>
+        ))}
+      </ol>
+    </details>
+  );
+}
+
+export function ClubSeasonHonour({ award }: { award: ClubSeasonAward }) {
+  const rows = [award.winner, ...(award.runnersUp ?? [])];
+  return (
+    <details className="rounded-xl border border-border bg-card p-3 text-left" data-cm-club-season-award>
+      <summary className="min-h-11 cursor-pointer py-3 text-sm font-bold">Club of the Season · {award.winner.club}</summary>
+      <p className="mt-2 text-xs text-muted-foreground">
+        This simulated ranking uses {award.leagues} completed top-flight {award.leagues === 1 ? 'league' : 'leagues'} and the Champions League when its final is recorded. Points come from titles and Champions League progress, with club name breaking ties. Up to five ranked clubs stay in history for five seasons.
+      </p>
+      <ol className="mt-2 list-decimal space-y-2 pl-6 text-sm">
+        {rows.map(row => (
+          <li key={row.club} className="break-words">
+            <span className="font-bold">{row.club}</span> · {row.points} points
+            <div className="text-xs text-muted-foreground">
+              {row.evidence.map(item => item.kind === 'league-winner'
+                ? `${item.league} champion +${item.points}`
+                : `Champions League ${item.stage} (${item.kind === 'played-ucl' ? 'played campaign' : 'watched campaign'}) +${item.points}`).join(' · ')}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </details>
+  );
+}
+
 export function LeagueCoachHonour({ award }: { award: LeagueCoachAward }) {
   return (
     <div className="rounded-xl border border-border bg-card p-3 text-left" data-cm-league-coach-award>

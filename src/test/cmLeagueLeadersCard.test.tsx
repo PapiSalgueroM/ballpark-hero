@@ -224,6 +224,15 @@ describe('the season review', () => {
     expect(shortlist.textContent).toContain('Game ratings help choose contenders where individual stats are missing');
     const past = draw(state, 'past');
     expect(past.q('[data-cm-ballon-dor-shortlist]')?.textContent).toBe(shortlist.textContent);
+    const club = a.container.querySelector('[data-cm-club-season-award]')!;
+    expect(club.querySelector('summary')?.textContent).toContain(summary.clubSeasonAward!.winner.club);
+    expect(club.querySelectorAll('li')).toHaveLength(5);
+    expect(club.textContent).toContain('completed top-flight leagues');
+    expect(past.q('[data-cm-club-season-award]')?.textContent).toBe(club.textContent);
+    const keepers = a.container.querySelector('[data-cm-league-keepers]')!;
+    expect(keepers.textContent).toContain('Counts clean sheets for keepers recorded in this league');
+    expect(keepers.querySelector('li')?.textContent).toContain(`${glove.name} · ${glove.club} · ${glove.n} clean sheets`);
+    expect(past.q('[data-cm-league-keepers]')?.textContent).toBe(keepers.textContent);
     const olderState = { ...state, history: state.history.map(record => ({ ...record, ballonDorShortlist: undefined })) };
     const olderPast = draw(olderState, 'past');
     expect(olderPast.q('[data-cm-ballon-dor-shortlist]')).toBeNull();

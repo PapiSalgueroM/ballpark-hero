@@ -19,7 +19,7 @@ import { AWARD_FLOOR, BOOK_FULL_SHARE, TEAMS_KEPT, bestOfMine, leaders, type Boa
 import { dealShares, type BookMan } from '@/lib/clubManagerLeagueBook';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { CmCardLink, mineCard } from '@/components/club-manager/CmCardLink';
-import { LeagueCoachHonour, SeasonHonoursCard } from '@/components/club-manager/SeasonHonoursCard';
+import { ClubSeasonHonour, LeagueCoachHonour, SeasonHonoursCard } from '@/components/club-manager/SeasonHonoursCard';
 import { BallonDorShortlist } from '@/components/club-manager/BallonDorShortlist';
 
 /** A board of the card: one of the three, or the past winners. */
@@ -94,7 +94,7 @@ const stepButton = 'inline-flex items-center justify-center gap-1 min-h-[44px] m
 
 /** Round 1311: the past winners, one season at a time, newest first, read from the save's own records. */
 function PastWinners({ career, onBack }: { career: CareerState; onBack: () => void }) {
-  const seasons = useMemo(() => career.history.filter(h => h.awards || h.ballonDor || h.leagueCoachAward).sort((a, b) => b.season - a.season), [career.history]);
+  const seasons = useMemo(() => career.history.filter(h => h.awards || h.ballonDor || h.leagueCoachAward || h.clubSeasonAward).sort((a, b) => b.season - a.season), [career.history]);
   const [at, setAt] = useState(0);
   const i = Math.min(at, Math.max(0, seasons.length - 1));
   const rec = seasons[i];
@@ -122,6 +122,7 @@ function PastWinners({ career, onBack }: { career: CareerState; onBack: () => vo
               <p className="text-xs text-muted-foreground">Shortlists are kept for the five most recent seasons.</p>
             )}
             {rec.leagueCoachAward && <LeagueCoachHonour award={rec.leagueCoachAward} />}
+            {rec.clubSeasonAward && <ClubSeasonHonour key={`club-${rec.season}`} award={rec.clubSeasonAward} />}
           </div>
         )}
       {seasons.length > 1 && (
