@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { NATIONS_LEAGUE_2026_GROUPS, nationsLeague2026Fixtures, nationsLeague2026NextLeagues,
   nationsLeague2026GroupTables, simulateNationsLeague2026Groups, simulateNationsLeague2026,
-  simulateNationsLeague2028 } from './soccerNationsLeague';
+  simulateNationsLeague2028, nationsLeagueCampaign } from './soccerNationsLeague';
 
 describe('Soccer Career 2026/27 Nations League transition', () => {
   it('creates a full home and away group schedule for the 54 nations', () => {
@@ -166,6 +166,39 @@ describe('Soccer Career 2028/29 Nations League format', () => {
       expect(nextLeagues.A).toEqual(expect.arrayContaining([...ab.map(tie => tie.winner), ...rankings.B.slice(0, 3)]));
       expect(nextLeagues.B).toEqual(expect.arrayContaining([...bc.map(tie => tie.winner), ...rankings.A.slice(15), ...rankings.C.slice(0, 3)]));
       expect(nextLeagues.C).toEqual(expect.arrayContaining(rankings.B.slice(15)));
+    }
+  });
+});
+
+describe('Nations League career receipts', () => {
+  it('holds the same results for selected, unavailable and retired players', () => {
+    const form = { overall: 97, lastRating: 8, lastGoals: 28, position: 'ST', age: 26, isCaptain: false };
+    const random = vi.spyOn(Math, 'random');
+    try {
+      for (const year of [2026, 2028, 2030]) {
+        const player = nationsLeagueCampaign(year, 'career record', 'France', form)!;
+        const absent = nationsLeagueCampaign(year, 'career record', 'France', null)!;
+        const decoded = JSON.parse(JSON.stringify(player));
+        expect(decoded).toEqual(player);
+        expect(player.selected).toBe(true);
+        expect(absent.selected).toBe(false);
+        expect([absent.apps, absent.goals, absent.assists, absent.rating]).toEqual([0, 0, 0, 0]);
+        expect(player.matches.map(({ player: _line, ...match }) => match)).toEqual(absent.matches);
+        expect([player.group, player.result, player.champion, player.nextLeague]).toEqual([absent.group, absent.result, absent.champion, absent.nextLeague]);
+        expect(player.apps).toBe(player.matches.filter(match => match.player).length);
+        expect(player.goals).toBe(player.matches.reduce((sum, match) => sum + (match.player?.goals ?? 0), 0));
+        expect(player.assists).toBe(player.matches.reduce((sum, match) => sum + (match.player?.assists ?? 0), 0));
+        for (const match of player.matches) {
+          const goals = match.home === player.nation ? match.homeGoals + (match.extraTime?.homeGoals ?? 0) : match.awayGoals + (match.extraTime?.awayGoals ?? 0);
+          expect((match.player?.goals ?? 0) + (match.player?.assists ?? 0)).toBeLessThanOrEqual(goals);
+        }
+      }
+      expect(nationsLeagueCampaign(2027, 'career record', 'France', form)).toBeUndefined();
+      expect(nationsLeagueCampaign(2028, 'career record', 'Argentina', form)).toBeUndefined();
+      expect(nationsLeagueCampaign(2024, 'career record', 'France', form)).toBeUndefined();
+      expect(random).not.toHaveBeenCalled();
+    } finally {
+      random.mockRestore();
     }
   });
 });

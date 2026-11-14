@@ -667,7 +667,7 @@ export const SQUAD_PLACES: Record<'GK' | 'DEF' | 'MID' | 'ATT', number> = {
 };
 
 /** What the player does in one international match. */
-function playerMatchStats(form: PlayerForm, teamGoals: number): { goals: number; assists: number; rating: number } {
+export function playerMatchStats(form: PlayerForm, teamGoals: number, random = Math.random, boundContributions = false): { goals: number; assists: number; rating: number } {
   const grp = positionGroup(form.position);
   const quality = clamp((form.overall - 68) / 28, 0, 1.2);
   // The international simulation already raises the nation's goal rate for elite players.
@@ -675,16 +675,16 @@ function playerMatchStats(form: PlayerForm, teamGoals: number): { goals: number;
   const legacyShare = (grp === 'ATT' ? 0.55 : grp === 'MID' ? 0.25 : grp === 'DEF' ? 0.12 : 0) * (0.6 + quality * 0.6);
   let goals = 0, legacyGoals = 0;
   for (let i = 0; i < teamGoals; i++) {
-    const roll = Math.random();
+    const roll = random();
     if (roll < share) goals++;
     if (roll < legacyShare) legacyGoals++;
   }
   // Keep the assist draws in place so the next team score uses the same RNG.
   let assists = 0;
   const aShare = grp === 'ATT' ? 0.2 : grp === 'MID' ? 0.3 : grp === 'DEF' ? 0.12 : 0.02;
-  for (let i = 0; i < teamGoals - legacyGoals; i++) if (Math.random() < aShare * (0.6 + quality * 0.6)) assists++;
+  for (let i = 0; i < teamGoals - (boundContributions ? goals : legacyGoals); i++) if (random() < aShare * (0.6 + quality * 0.6)) assists++;
   const rating = clamp(
-    6.2 + quality * 0.9 + goals * 0.55 + assists * 0.3 + (Math.random() - 0.45) * 1.1,
+    6.2 + quality * 0.9 + goals * 0.55 + assists * 0.3 + (random() - 0.45) * 1.1,
     4.0, 10.0,
   );
   return { goals, assists, rating: Math.round(rating * 10) / 10 };

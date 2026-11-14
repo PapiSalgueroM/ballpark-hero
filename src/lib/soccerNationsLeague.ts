@@ -1,6 +1,7 @@
 import { keyedRng } from './keyedRng';
 import { shuffled } from './keyedShuffle';
-import { internationalShootout, nationStrength, simInternationalMatch, type IntlTableRow } from './soccerInternational';
+import { internationalShootout, nationStrength, playerMatchStats, simInternationalMatch, type IntlTableRow, type PlayerForm } from './soccerInternational';
+import { pickSquad } from './soccerInternationalSquads';
 
 // The 2026/27 draw is cross-checked against the published competition tables.
 // https://www.uefa.com/uefanationsleague/news/02a2-1fe8e0405d9d-cc8f1ee7068b-1000--draw-for-the-league-phase-of-the-2026-27-uefa-nations-league/
@@ -242,6 +243,47 @@ type FutureLeague = Exclude<League, 'D'>;
 type FutureGroup = `${FutureLeague}${1 | 2 | 3}`;
 type FutureLeagues = Record<FutureLeague, readonly string[]>;
 
+export type NationsLeagueMatch = KnockoutMatch & {
+  stage: 'Group' | 'Quarterfinal' | 'Promotion playoff' | 'Semifinal' | 'Third place' | 'Final';
+  venue: 'Home' | 'Away' | 'Neutral';
+  leg?: 1 | 2;
+  player?: ReturnType<typeof playerMatchStats>;
+};
+
+export interface NationsLeagueCampaign {
+  year: number;
+  nation: string;
+  group: Group;
+  table: IntlTableRow[];
+  result: 'Winner' | 'Runner-up' | 'Third place' | 'Fourth place' | 'Quarterfinal' | 'Group stage';
+  champion: string;
+  nextLeague: FutureLeague;
+  matches: NationsLeagueMatch[];
+  apps: number;
+  goals: number;
+  assists: number;
+  rating: number;
+  selected: boolean;
+}
+
+export function readNationsLeagueCampaign(row: { year: number; nationsLeague?: NationsLeagueCampaign }) {
+  const campaign = row.nationsLeague;
+  if (campaign?.year !== row.year || !ACCESS_ORDER.has(campaign.nation) || !ACCESS_ORDER.has(campaign.champion)
+    || !Array.isArray(campaign.table) || !Array.isArray(campaign.matches)) return;
+  if (!campaign.table.some(team => team?.nation === campaign.nation)
+    || campaign.table.some(team => !team || !ACCESS_ORDER.has(team.nation))
+    || campaign.matches.some(match => !match || !ACCESS_ORDER.has(match.home) || !ACCESS_ORDER.has(match.away)
+      || (match.home !== campaign.nation && match.away !== campaign.nation)
+      || (match.player && !Number.isFinite(match.player.rating)))) return;
+  return campaign;
+}
+
+export function wonNationsLeague(row: { year: number; nationsLeague?: NationsLeagueCampaign }) {
+  const campaign = readNationsLeagueCampaign(row);
+  return campaign?.result === 'Winner' && campaign.champion === campaign.nation
+    && campaign.matches.some(match => match.player) && campaign.matches.some(match => match.stage === 'Final');
+}
+
 // UEFA's 2028/29 format uses three pots per tier. See slides four and five.
 // https://editorial.uefa.com/resources/02a5-20ab6d2f8514-897923904829-1000/ntc_review._compilation_of_slides_for_media.pdf
 export function simulateNationsLeague2028(seed: string, year = 2028, previous = simulateNationsLeague2026(seed).nextLeagues as FutureLeagues) {
@@ -289,6 +331,69 @@ export function simulateNationsLeague2028(seed: string, year = 2028, previous = 
     C: [...rankings.B.slice(15), ...bc.map(loser), ...rankings.C.slice(9)],
   };
   return { matches, tables, rankings, quarterfinals, ab, bc, ...finals, nextLeagues };
+}
+
+function editionFor(year: number, seed: string) {
+  const firstEdition = simulateNationsLeague2026(seed);
+  if (year === 2026) return firstEdition;
+  let nextLeagues = firstEdition.nextLeagues;
+  for (let edition = 2028; edition <= year; edition += 2) {
+    const result = simulateNationsLeague2028(seed, edition, nextLeagues);
+    if (edition === year) return result;
+    nextLeagues = result.nextLeagues;
+  }
+  return firstEdition;
+}
+
+/** World results draw independently of player selection, so the same save has one qualification path. */
+export function nationsLeagueCampaign(year: number, seed: string, nation: string, form: PlayerForm | null): NationsLeagueCampaign | undefined {
+  if (year < 2026 || year % 2 || !ACCESS_ORDER.has(nation)) return;
+  const edition = editionFor(year, seed);
+  const group = (Object.keys(edition.tables) as Group[]).find(key => {
+    const groups: Partial<Record<Group, GroupRow[]>> = edition.tables;
+    return groups[key]?.some(row => row.nation === nation);
+  })!;
+  const groups: Partial<Record<Group, GroupRow[]>> = edition.tables;
+  const table = groups[group]!.map(({ awayGoals: _awayGoals, awayWins: _awayWins, ...row }) => row);
+  const involved = (match: KnockoutMatch) => match.home === nation || match.away === nation;
+  const knockout = (ties: TwoLegTie[], stage: 'Quarterfinal' | 'Promotion playoff') => ties.filter(involved).flatMap(tie =>
+    tie.legs.map((match, i) => ({ ...match, stage, leg: (i + 1) as 1 | 2 })));
+  const regular: (KnockoutMatch & { stage: NationsLeagueMatch['stage']; leg?: 1 | 2 })[] = [
+    ...edition.matches.filter(involved).map(({ group: _group, ...match }) => ({ ...match, stage: 'Group' as const })),
+    ...knockout(edition.quarterfinals, 'Quarterfinal'),
+    ...knockout([...edition.ab, ...edition.bc], 'Promotion playoff'),
+  ];
+  const finals = [
+    ...edition.semifinals.map(match => ({ match, stage: 'Semifinal' as const })),
+    { match: edition.thirdPlace, stage: 'Third place' as const },
+    { match: edition.final, stage: 'Final' as const },
+  ];
+  const matches: NationsLeagueMatch[] = regular.map(match => ({ ...match, venue: match.home === nation ? 'Home' : 'Away' }));
+  for (const { match, stage } of finals) {
+    if (involved(match)) matches.push({ ...match, stage, venue: 'Neutral' });
+  }
+  const random = keyedRng(`nations-league|${year}|${seed}|${nation}|player`);
+  const squad = form ? pickSquad(nation, form, year, random) : null;
+  const selected = squad?.called === true;
+  let apps = 0, goals = 0, assists = 0, ratings = 0;
+  if (selected && form) {
+    for (const match of matches) {
+      if (squad.role === 'Squad player' && random() >= 0.5) continue;
+      const home = match.home === nation;
+      const teamGoals = home ? match.homeGoals + (match.extraTime?.homeGoals ?? 0) : match.awayGoals + (match.extraTime?.awayGoals ?? 0);
+      match.player = playerMatchStats(form, teamGoals, random, true);
+      apps++;
+      goals += match.player.goals;
+      assists += match.player.assists;
+      ratings += match.player.rating;
+    }
+  }
+  const result = involved(edition.final) ? edition.final.winner === nation ? 'Winner' : 'Runner-up'
+    : involved(edition.thirdPlace) ? edition.thirdPlace.winner === nation ? 'Third place' : 'Fourth place'
+    : edition.quarterfinals.some(involved) ? 'Quarterfinal' : 'Group stage';
+  const nextLeague = (['A', 'B', 'C'] as const).find(league => edition.nextLeagues[league].includes(nation))!;
+  return { year, nation, group, table, result, champion: edition.final.winner, nextLeague, matches,
+    selected, apps, goals, assists, rating: apps ? Math.round(ratings * 10 / apps) / 10 : 0 };
 }
 
 /** Article 19 of the September 2026 regulations governs the move from four to three leagues.
