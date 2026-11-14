@@ -69,24 +69,30 @@ const DAILY_COLLEGES = colleges.filter((c) => c.conferenceType === 'power4');
 type GCAction =
   | { t: 'guess'; name: string }
   | { t: 'skip' }
-  | { t: 'won' }
+  | { t: 'won'; name?: string }
   | { t: 'give' };
 
-function replayCollegeGame(actions: GCAction[]): {
-  revealedClues: number;
-  gameOver: boolean;
-  won: boolean;
-  guessHistory: string[];
-  score: number;
-} {
+type RecapEntry =
+  | { clue: number; action: 'skip' }
+  | { clue: number; action: 'give' }
+  | { clue: number; action: 'miss'; name: string }
+  | { clue: number; action: 'solve'; name: string };
+
+function replayCollegeGame(actions: GCAction[], answer = '') {
   let revealedClues = 1;
   let gameOver = false;
   let won = false;
   const guessHistory: string[] = [];
+  const recap: RecapEntry[] = [];
+  let solvedClue: number | null = null;
   let score = 0;
 
   for (const action of actions) {
     if (action.t === 'won') {
+      const name = action.name || answer;
+      recap.push({ clue: revealedClues, action: 'solve', name });
+      guessHistory.push(name);
+      solvedClue = revealedClues;
       score = SCORE_MAP[revealedClues] || 0;
       won = true;
       gameOver = true;
@@ -94,11 +100,13 @@ function replayCollegeGame(actions: GCAction[]): {
       break;
     }
     if (action.t === 'give') {
+      recap.push({ clue: revealedClues, action: 'give' });
       gameOver = true;
       revealedClues = 12;
       break;
     }
     if (action.t === 'guess') {
+      recap.push({ clue: revealedClues, action: 'miss', name: action.name });
       guessHistory.push(action.name);
       if (revealedClues >= 11) {
         gameOver = true;
@@ -108,6 +116,7 @@ function replayCollegeGame(actions: GCAction[]): {
       revealedClues++;
     }
     if (action.t === 'skip') {
+      recap.push({ clue: revealedClues, action: 'skip' });
       if (revealedClues >= 11) {
         gameOver = true;
         revealedClues = 12;
@@ -117,7 +126,15 @@ function replayCollegeGame(actions: GCAction[]): {
     }
   }
 
-  return { revealedClues, gameOver, won, guessHistory, score };
+  return { revealedClues, gameOver, won, guessHistory, score, recap, solvedClue };
+}
+
+function isCollegeActionLog(actions: GCAction[]): boolean {
+  return actions.length <= 11 && actions.every(action => {
+    if (action.t === 'guess') return typeof action.name === 'string';
+    if (action.t === 'won') return action.name === undefined || typeof action.name === 'string';
+    return action.t === 'skip' || action.t === 'give';
+  });
 }
 
 export function useGuessTheCollege() {
@@ -139,17 +156,15 @@ export function useGuessTheCollege() {
     isWon: (g) => g.some((a) => a.t === 'won'),
     isLost: (g) => { const s = replayCollegeGame(g); return s.gameOver && !s.won; },
     deserializeGuesses: (raw) => raw as GCAction[],
+    isValidGuesses: isCollegeActionLog,
   });
 
-  const dailyGameState = useMemo(() => replayCollegeGame(dailyActions), [dailyActions]);
+  const dailyGameState = useMemo(() => replayCollegeGame(dailyActions, dailyPuzzle?.name), [dailyActions, dailyPuzzle]);
 
   // Unlimited / conference local state (original logic unchanged)
   const [unlimitedCollege, setUnlimitedCollege] = useState<College | null>(null);
-  const [unlimitedRevealedClues, setUnlimitedRevealedClues] = useState(1);
-  const [unlimitedGameOver, setUnlimitedGameOver] = useState(false);
-  const [unlimitedWon, setUnlimitedWon] = useState(false);
-  const [unlimitedScore, setUnlimitedScore] = useState(0);
-  const [unlimitedGuessHistory, setUnlimitedGuessHistory] = useState<string[]>([]);
+  const [unlimitedActions, setUnlimitedActions] = useState<GCAction[]>([]);
+  const unlimitedGameState = useMemo(() => replayCollegeGame(unlimitedActions, unlimitedCollege?.name), [unlimitedActions, unlimitedCollege]);
   const [streak, setStreak] = useState(0);
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -175,22 +190,14 @@ export function useGuessTheCollege() {
   const initUnlimitedGame = useCallback((diff: CollegeDifficulty, conf: string | null) => {
     const college = pickCollege('unlimited', diff, conf);
     setUnlimitedCollege(college);
-    setUnlimitedRevealedClues(1);
-    setUnlimitedGameOver(false);
-    setUnlimitedWon(false);
-    setUnlimitedScore(0);
-    setUnlimitedGuessHistory([]);
+    setUnlimitedActions([]);
     setSearchQuery('');
   }, [pickCollege]);
 
   const initConferenceGame = useCallback((diff: CollegeDifficulty, conf: string | null) => {
     const college = pickCollege('conference', diff, conf);
     setUnlimitedCollege(college);
-    setUnlimitedRevealedClues(1);
-    setUnlimitedGameOver(false);
-    setUnlimitedWon(false);
-    setUnlimitedScore(0);
-    setUnlimitedGuessHistory([]);
+    setUnlimitedActions([]);
     setSearchQuery('');
   }, [pickCollege]);
 
@@ -201,11 +208,7 @@ export function useGuessTheCollege() {
 
   // Active values based on mode
   const currentCollege = mode === 'daily' ? dailyPuzzle : unlimitedCollege;
-  const revealedClues = mode === 'daily' ? dailyGameState.revealedClues : unlimitedRevealedClues;
-  const gameOver = mode === 'daily' ? dailyGameState.gameOver : unlimitedGameOver;
-  const won = mode === 'daily' ? dailyGameState.won : unlimitedWon;
-  const score = mode === 'daily' ? dailyGameState.score : unlimitedScore;
-  const guessHistory = mode === 'daily' ? dailyGameState.guessHistory : unlimitedGuessHistory;
+  const { revealedClues, gameOver, won, score, guessHistory, recap, solvedClue } = mode === 'daily' ? dailyGameState : unlimitedGameState;
   const dailyCompleted = mode === 'daily' && dailyGameState.gameOver;
   const isLoading = mode === 'daily' && dailyLoading;
 
@@ -238,54 +241,27 @@ export function useGuessTheCollege() {
 
     setSearchQuery('');
 
-    if (mode === 'daily') {
+    const action: GCAction = isCorrect ? { t: 'won', name: collegeName } : { t: 'guess', name: collegeName };
+    if (mode === 'daily') addDailyAction(action);
+    else {
+      setUnlimitedActions([...unlimitedActions, action]);
       if (isCorrect) {
-        addDailyAction({ t: 'won' });
-      } else {
-        addDailyAction({ t: 'guess', name: collegeName });
-      }
-    } else {
-      const newHistory = [...unlimitedGuessHistory, collegeName];
-      setUnlimitedGuessHistory(newHistory);
-      if (isCorrect) {
-        const earnedScore = SCORE_MAP[unlimitedRevealedClues] || 0;
-        setUnlimitedScore(earnedScore);
-        setUnlimitedWon(true);
-        setUnlimitedGameOver(true);
-        setUnlimitedRevealedClues(12);
         setStreak((s) => s + 1);
-      } else if (unlimitedRevealedClues >= 11) {
-        setUnlimitedGameOver(true);
-        setUnlimitedWon(false);
-        setUnlimitedScore(0);
-        setUnlimitedRevealedClues(12);
+      } else if (revealedClues >= 11) {
         setStreak(0);
-      } else {
-        setUnlimitedRevealedClues((prev) => prev + 1);
       }
     }
-  }, [currentCollege, gameOver, mode, addDailyAction, unlimitedGuessHistory, unlimitedRevealedClues]);
+  }, [currentCollege, gameOver, mode, addDailyAction, unlimitedActions, revealedClues]);
 
   const skipClue = useCallback(() => {
     if (gameOver) return;
-    if (mode === 'daily') {
-      if (dailyGameState.revealedClues >= 11) {
-        addDailyAction({ t: 'give' });
-      } else {
-        addDailyAction({ t: 'skip' });
-      }
-    } else {
-      if (unlimitedRevealedClues >= 11) {
-        setUnlimitedGameOver(true);
-        setUnlimitedWon(false);
-        setUnlimitedScore(0);
-        setUnlimitedRevealedClues(12);
-        setStreak(0);
-      } else {
-        setUnlimitedRevealedClues((prev) => prev + 1);
-      }
+    const action: GCAction = revealedClues >= 11 ? { t: 'give' } : { t: 'skip' };
+    if (mode === 'daily') addDailyAction(action);
+    else {
+      setUnlimitedActions([...unlimitedActions, action]);
+      if (action.t === 'give') setStreak(0);
     }
-  }, [gameOver, mode, addDailyAction, dailyGameState.revealedClues, unlimitedRevealedClues]);
+  }, [gameOver, mode, addDailyAction, revealedClues, unlimitedActions]);
 
   const playAgain = useCallback(() => {
     if (mode === 'unlimited') initUnlimitedGame(difficulty, selectedConference);
@@ -302,19 +278,13 @@ export function useGuessTheCollege() {
     return '';
   }, [streak]);
 
-  const getShareText = useCallback(() => {
-    if (!currentCollege) return '';
-    const clueCount = won ? guessHistory.length : 'X';
-    return `I guessed today's college in ${clueCount} ${won && guessHistory.length === 1 ? 'try' : 'tries'} on DoUKnowBall! Score: ${score} 🎓 Can you beat me? douknowball.com/guess-the-college`;
-  }, [currentCollege, won, guessHistory, score]);
-
-  useGameCompletion('guess-the-college', rawDailyStatus !== 'playing', score);
+  useGameCompletion('guess-the-college', rawDailyStatus !== 'playing', dailyGameState.score);
 
   return {
     mode, setMode, difficulty, setDifficulty, selectedConference, setSelectedConference,
-    currentCollege, revealedClues, clues, gameOver, won, score, streak, guessHistory,
+    currentCollege, revealedClues, clues, gameOver, won, score, streak, guessHistory, recap, solvedClue,
     searchQuery, setSearchQuery, suggestions, pointsAvailable, conferences,
-    submitGuess, skipClue, playAgain, getStreakBadge, getShareText, dailyCompleted,
+    submitGuess, skipClue, playAgain, getStreakBadge, dailyCompleted,
     isLoading,
   };
 }

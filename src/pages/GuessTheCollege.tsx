@@ -34,6 +34,8 @@ const GuessTheCollege = () => {
     score,
     streak,
     guessHistory,
+    recap,
+    solvedClue,
     searchQuery, setSearchQuery,
     suggestions,
     pointsAvailable,
@@ -42,7 +44,6 @@ const GuessTheCollege = () => {
     skipClue,
     playAgain,
     getStreakBadge,
-    getShareText,
     dailyCompleted,
     isLoading,
   } = useGuessTheCollege();
@@ -298,7 +299,7 @@ const GuessTheCollege = () => {
                 statLine={
                   won ? (
                     <>
-                      {score} points. Guessed in {guessHistory.length} {guessHistory.length === 1 ? 'try' : 'tries'}
+                      {score} points. Solved on clue {solvedClue} in {guessHistory.length} {guessHistory.length === 1 ? 'try' : 'tries'}.
                     </>
                   ) : (
                     <>The answer was: <span className="font-bold text-primary">{currentCollege?.name}</span></>
@@ -309,9 +310,9 @@ const GuessTheCollege = () => {
                     score >= 1200 ? '🏆 Legendary!' : score >= 700 ? '🎯 Great job!' : undefined
                   ) : undefined
                 }
-                emojiGrid={guessHistory.map((g, i) => (i === guessHistory.length - 1 && won) ? '🟩' : '🟥').join('') || (won ? '🟩' : '🟥')}
+                emojiGrid={recap.map(step => step.action === 'solve' ? '🟩' : step.action === 'skip' ? '⬜' : '🟥').join('')}
                 share={{
-                  score: `${score}`,
+                  score: won ? `${score} points, solved on clue ${solvedClue}` : `${score} points`,
                   gameName: 'Guess The College',
                   gamePath: '/guess-the-college',
                 }}
@@ -327,29 +328,18 @@ const GuessTheCollege = () => {
                   ) : undefined
                 }
               >
-                {guessHistory.length > 0 && (
-                  <div className="mb-2">
-                    <p className="text-xs text-muted-foreground mb-1">Your guesses:</p>
-                    <div className="flex flex-wrap justify-center gap-1.5">
-                      {guessHistory.map((g, i) => {
-                        const isLast = i === guessHistory.length - 1;
-                        const isCorrectGuess = isLast && won;
-                        return (
-                          <Badge
-                            key={i}
-                            variant="outline"
-                            className={cn(
-                              "text-xs",
-                              isCorrectGuess ? "text-green-500 border-green-500/30" : "text-destructive border-destructive/30"
-                            )}
-                          >
-                            {isCorrectGuess ? '✓' : '✗'} {g}
-                          </Badge>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
+                <details className="mb-2 rounded-lg border border-border text-left">
+                  <summary className="cursor-pointer px-3 py-3 text-sm font-semibold">Clue-by-clue recap</summary>
+                  <ol aria-label="Clue-by-clue recap" className="space-y-1 px-3 pb-3 text-xs">
+                    {recap.map(step => (
+                      <li key={step.clue}>
+                        Clue {step.clue}, {clues[step.clue - 1]?.label}.{' '}
+                        {step.action === 'skip' ? 'Skipped' : step.action === 'give' ? 'Gave up'
+                          : step.action === 'solve' ? `Correct: ${step.name}` : `Miss: ${step.name}`}
+                      </li>
+                    ))}
+                  </ol>
+                </details>
               </ResultScreen>
             </div>
           )}

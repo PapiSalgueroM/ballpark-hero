@@ -409,6 +409,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "Five hundred points for a clean save",
         paragraphs: [
           "The card flips: 500 points for solving on clue 7, plus a fun fact about the school. Not the hero guess, but a clean save.",
+          "Open the clue-by-clue recap after the result to see which clues you skipped, missed or solved. In that LSU run, Georgia was your first try and LSU was your second. Daily results keep the recap when you reload.",
         ],
       },
     ],
