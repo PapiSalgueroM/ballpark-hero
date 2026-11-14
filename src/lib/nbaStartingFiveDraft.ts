@@ -47,8 +47,8 @@ function decodeDraft(value: unknown): Draft | null {
       statValue: pick.value,
     });
   }
-  const selectedPosition = value.selectedPosition;
-  if (selectedPosition !== null && (!positionIndex(selectedPosition) || filledSlots.has(selectedPosition))) return null;
+  const selectedPosition = positionIndex(value.selectedPosition) ? value.selectedPosition : null;
+  if ((selectedPosition === null && value.selectedPosition !== null) || (selectedPosition !== null && filledSlots.has(selectedPosition))) return null;
   const { stat, emoji, unit } = def;
   return { challenge: { stat, emoji, unit, direction: value.direction }, teamAssignments, filledSlots, selectedPosition };
 }
