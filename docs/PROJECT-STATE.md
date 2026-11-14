@@ -1,3 +1,9 @@
+## 2026-11-14: Home recommendations, NRL match ratings and Gauntlet redraw
+
+- Home shows Games to try while the public ranking loads or fewer than three games qualify. Once the ranking has three games, Most played today shows the actual order.
+- New regular-season NRL match reports record the exact player rating changes after Quick Sim and Live Match. Reopening a saved result continues to show its own changes as the season moves forward.
+- Unlimited Soccer Gauntlet Draft gives one redraw for the five offers at the active position. The rest of the draft stays as dealt, and the Daily uses its original deck.
+
 ## 2026-11-14: Full-time ratings, NRL interchanges and MLB postseason rotation
 
 - Aussie Rules Manager shows who gained or lost skill in the full-time report for the round. Reopen the match after a reload to see the same before-and-after ratings. Squad still keeps the latest review, and the finals use their existing match reports.
