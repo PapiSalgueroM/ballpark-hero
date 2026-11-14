@@ -1,5 +1,6 @@
 import { keyedRng } from './keyedRng';
-import { fifaRankOf, nationStrength, simInternationalMatch, type IntlTableRow } from './soccerInternational';
+import { shuffled } from './keyedShuffle';
+import { internationalShootout, nationStrength, simInternationalMatch, type IntlTableRow } from './soccerInternational';
 
 // The 2026/27 draw is cross-checked against the published competition tables.
 // https://www.uefa.com/uefanationsleague/news/02a2-1fe8e0405d9d-cc8f1ee7068b-1000--draw-for-the-league-phase-of-the-2026-27-uefa-nations-league/
@@ -30,7 +31,19 @@ type GroupMatch = { group: Group; home: string; away: string; homeGoals: number;
 type GroupRow = IntlTableRow & { awayGoals: number; awayWins: number };
 const GROUP_KEYS = Object.keys(NATIONS_LEAGUE_2026_GROUPS) as Group[];
 
-/** Complete pairing set for the simulation. The group draw gives the venues; the simulated season assigns dates. */
+// Annex C access list, with the March playoff results resolved in the September regulations.
+// https://documents.uefa.com/r/Regulations-of-the-UEFA-Nations-League-2026/27/Annex-C-2026/27-Final-UEFA-Nations-League-Access-List-and-Overall-Rankings-Online
+const ACCESS_ORDER = new Map([
+  'Portugal', 'Spain', 'France', 'Germany', 'Italy', 'Netherlands', 'Denmark', 'Croatia',
+  'Serbia', 'Belgium', 'England', 'Norway', 'Wales', 'Czech Republic', 'Greece', 'Turkey',
+  'Scotland', 'Hungary', 'Poland', 'Israel', 'Switzerland', 'Bosnia & Herzegovina', 'Austria', 'Ukraine',
+  'Slovenia', 'Georgia', 'Ireland', 'Romania', 'Sweden', 'North Macedonia', 'Northern Ireland', 'Kosovo',
+  'Iceland', 'Albania', 'Montenegro', 'Kazakhstan', 'Finland', 'Slovakia', 'Bulgaria', 'Armenia',
+  'Belarus', 'Faroe Islands', 'Cyprus', 'Estonia', 'Latvia', 'Luxembourg', 'Moldova', 'San Marino',
+  'Azerbaijan', 'Lithuania', 'Gibraltar', 'Malta', 'Liechtenstein', 'Andorra',
+].map((nation, index) => [nation, index]));
+
+/** Each drawn group plays home and away within its league phase. */
 export function nationsLeague2026Fixtures() {
   const fixtures: { group: Group; home: string; away: string }[] = [];
   for (const group of GROUP_KEYS) {
@@ -82,10 +95,10 @@ const goalDifference = (a: GroupRow, b: GroupRow) => (b.gf - b.ga) - (a.gf - a.g
 const miniOrder = (a: GroupRow, b: GroupRow) => b.points - a.points || goalDifference(a, b) || b.gf - a.gf;
 const groupFallback = (a: GroupRow, b: GroupRow) => goalDifference(a, b) || b.gf - a.gf
   || b.awayGoals - a.awayGoals || b.won - a.won || b.awayWins - a.awayWins
-  || fifaRankOf(a.nation) - fifaRankOf(b.nation) || a.nation.localeCompare(b.nation);
+  || ACCESS_ORDER.get(a.nation)! - ACCESS_ORDER.get(b.nation)!;
 
 // UEFA article 15 reapplies the head-to-head criteria to any smaller tied subset.
-// The simulation does not track discipline; its final fallback uses the existing nation rank.
+// After scored match criteria, the simulation uses the official access list. It omits disciplinary points.
 // https://documents.uefa.com/r/Regulations-of-the-UEFA-Nations-League-2026/27/Article-15-Equality-of-points-league-phase-Online
 function orderTied(rows: GroupRow[], matches: readonly GroupMatch[]): GroupRow[] {
   if (rows.length < 2) return rows;
@@ -118,10 +131,96 @@ export function nationsLeague2026GroupTables(matches: readonly GroupMatch[]) {
 export function simulateNationsLeague2026Groups(seed: string) {
   const matches = nationsLeague2026Fixtures().map(fixture => {
     const random = keyedRng(`nations-league|2026|${seed}|${fixture.home}|${fixture.away}`);
-    const { a, b } = simInternationalMatch(nationStrength(fixture.home), nationStrength(fixture.away), false, 0, 0, random);
-    return { ...fixture, homeGoals: a, awayGoals: b };
+    return { ...fixture, ...matchScore(fixture.home, fixture.away, random, false) };
   });
   return { matches, tables: nationsLeague2026GroupTables(matches) };
+}
+
+type Goals = { homeGoals: number; awayGoals: number };
+type KnockoutMatch = Goals & { home: string; away: string; extraTime?: Goals; penalties?: string };
+type TwoLegTie = PlayOff & { legs: [KnockoutMatch, KnockoutMatch] };
+type SingleLegTie = KnockoutMatch & { winner: string };
+
+function matchScore(home: string, away: string, random: () => number, neutral: boolean, minutes = 90): Goals {
+  const { a, b } = simInternationalMatch(nationStrength(home), nationStrength(away), false,
+    neutral ? 0 : 0.20, neutral ? 0 : -0.08, random, minutes);
+  return { homeGoals: a, awayGoals: b };
+}
+
+// Article 18 settles ties on the combined score. Third place skips extra time.
+// https://documents.uefa.com/r/Regulations-of-the-UEFA-Nations-League-2026/27/Article-18-Extra-time-and-penalty-shoot-outs-Online
+function settleMatch(match: KnockoutMatch, firstLegMargin: number, random: () => number, neutral: boolean, extraTime = true) {
+  let margin = firstLegMargin + match.homeGoals - match.awayGoals;
+  if (margin === 0 && extraTime) {
+    match.extraTime = matchScore(match.home, match.away, random, neutral, 30);
+    margin = match.extraTime.homeGoals - match.extraTime.awayGoals;
+  }
+  if (margin !== 0) return margin > 0 ? match.home : match.away;
+  match.penalties = internationalShootout(nationStrength(match.home), nationStrength(match.away), random) ? match.home : match.away;
+  return match.penalties;
+}
+
+function twoLegs(home: string, away: string, random: () => number): TwoLegTie {
+  const first = { home, away, ...matchScore(home, away, random, false) };
+  const second = { home: away, away: home, ...matchScore(away, home, random, false) };
+  const winner = settleMatch(second, first.awayGoals - first.homeGoals, random, false);
+  return { home, away, winner, legs: [first, second] };
+}
+
+function singleLeg(home: string, away: string, random: () => number, extraTime = true): SingleLegTie {
+  const match = { home, away, ...matchScore(home, away, random, true) };
+  const winner = settleMatch(match, 0, random, true, extraTime);
+  return { ...match, winner };
+}
+
+function rankLeague(tables: GroupRow[][]): string[] {
+  return Array.from({ length: tables[0].length }, (_, place) => tables.map(rows => rows[place])
+    .sort((a, b) => b.points - a.points || groupFallback(a, b)).map(row => row.nation)).flat();
+}
+
+const loser = (match: PlayOff) => match.winner === match.home ? match.away : match.home;
+
+// Articles 16 and 17 give the higher seed the second leg at home.
+export function simulateNationsLeague2026(seed: string) {
+  const { matches, tables } = simulateNationsLeague2026Groups(seed);
+  const rankings: RankedLeagues = {
+    A: rankLeague([tables.A1, tables.A2, tables.A3, tables.A4]),
+    B: rankLeague([tables.B1, tables.B2, tables.B3, tables.B4]),
+    C: rankLeague([tables.C1, tables.C2, tables.C3, tables.C4]),
+    D: rankLeague([tables.D1, tables.D2]),
+  };
+  const random = keyedRng(`nations-league|2026|${seed}|knockout`);
+  const groupOf = new Map(GROUP_KEYS.flatMap(group => NATIONS_LEAGUE_2026_GROUPS[group].map(nation => [nation, group] as const)));
+  const winners = rankings.A.slice(0, 4);
+  const runnersUp = rankings.A.slice(4, 8);
+  const draw = (teams: string[], chosen: string[]): string[] | undefined => {
+    if (!teams.length) return chosen;
+    for (const nation of shuffled(teams, random)) {
+      if (groupOf.get(nation) === groupOf.get(winners[chosen.length])) continue;
+      const rest = draw(teams.filter(other => other !== nation), [...chosen, nation]);
+      if (rest) return rest;
+    }
+  };
+  const quarterfinals = draw(runnersUp, [])!.map((runner, i) => twoLegs(runner, winners[i], random));
+  const ab = shuffled(rankings.B.slice(4, 8), random).map((lower, i) => twoLegs(lower, rankings.A[10 + i], random));
+  const bc = shuffled(rankings.C.slice(4, 8), random).map((lower, i) => twoLegs(lower, rankings.B[12 + i], random));
+
+  const [one, two, three, four] = shuffled(quarterfinals.map(tie => tie.winner), random);
+  const semifinals = [singleLeg(one, two, random), singleLeg(three, four, random)];
+  const final = singleLeg(semifinals[0].winner, semifinals[1].winner, random);
+  const thirdPlace = singleLeg(loser(semifinals[0]), loser(semifinals[1]), random, false);
+
+  const leagues = nationsLeague2026NextLeagues(rankings, ab, bc)!;
+  const interimOrder = [...rankings.A, ...rankings.B, ...rankings.C, ...rankings.D];
+  const interim = (nation: string) => interimOrder.indexOf(nation);
+  const finalFour = [final.winner, loser(final), thirdPlace.winner, loser(thirdPlace)];
+  const nextLeagues = {
+    A: [...finalFour, ...leagues.A.filter(nation => !finalFour.includes(nation)).sort((a, b) => interim(a) - interim(b))],
+    B: [...leagues.B.slice(0, 6).sort((a, b) => interim(a) - interim(b)), ...leagues.B.slice(6, 10),
+      ...leagues.B.slice(10).sort((a, b) => interim(a) - interim(b))],
+    C: [...leagues.C.slice(0, 4).sort((a, b) => interim(a) - interim(b)), ...leagues.C.slice(4)],
+  };
+  return { matches, tables, rankings, quarterfinals, ab, bc, semifinals, final, thirdPlace, nextLeagues };
 }
 
 /** Article 19 of the September 2026 regulations governs the move from four to three leagues.

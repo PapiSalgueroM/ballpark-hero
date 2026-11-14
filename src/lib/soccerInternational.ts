@@ -598,7 +598,7 @@ export function toHistoryEntry(t: IntlTournament, eligible = true): IntlHistoryE
     my nation's expected goals, and is zero for every match I am not in. */
 export function simInternationalMatch(
   strA: number, strB: number, knockout: boolean, bonusA = 0, bonusB = 0,
-  random = Math.random,
+  random = Math.random, minutes = 90,
 ): { a: number; b: number; pens: boolean; aWins: boolean } {
   // Expected goals scale MULTIPLICATIVELY with the gap, not additively. An
   // even game is 1.35 each; ten points of ranking strength turns that into
@@ -606,8 +606,8 @@ export function simInternationalMatch(
   // is what a top nation actually does to a minnow. An additive model made
   // every game a coin flip and left Japan missing World Cups.
   const d = (strA - strB) / 10;
-  const a = poisson(Math.max(0.2, 1.35 * Math.exp(0.26 * d) + bonusA), random);
-  const b = poisson(Math.max(0.2, 1.35 * Math.exp(-0.26 * d) + bonusB), random);
+  const a = poisson(Math.max(0.2, 1.35 * Math.exp(0.26 * d) + bonusA) * (minutes / 90), random);
+  const b = poisson(Math.max(0.2, 1.35 * Math.exp(-0.26 * d) + bonusB) * (minutes / 90), random);
   if (knockout && a === b) {
     /* Knockout football always produces a winner, and level means penalties.
        The stronger side is only slightly favoured, the way a shootout is.
@@ -616,10 +616,14 @@ export function simInternationalMatch(
        goal tally by one, which meant a shootout was stored as a 2-1 and the
        bracket read as if somebody had won it in normal time. The Round 124
        harness caught that on its first run. */
-    const diff = (strA - strB) / 100;
-    return { a, b, pens: true, aWins: random() < 0.5 + clamp(diff, -0.25, 0.25) * 0.4 };
+    return { a, b, pens: true, aWins: internationalShootout(strA, strB, random) };
   }
   return { a, b, pens: false, aWins: a > b };
+}
+
+export function internationalShootout(strA: number, strB: number, random: () => number): boolean {
+  const diff = (strA - strB) / 100;
+  return random() < 0.5 + clamp(diff, -0.25, 0.25) * 0.4;
 }
 
 const simMatch = simInternationalMatch;

@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { NATIONS_LEAGUE_2026_GROUPS, nationsLeague2026Fixtures, nationsLeague2026NextLeagues,
-  nationsLeague2026GroupTables, simulateNationsLeague2026Groups } from './soccerNationsLeague';
+  nationsLeague2026GroupTables, simulateNationsLeague2026Groups, simulateNationsLeague2026 } from './soccerNationsLeague';
 
 describe('Soccer Career 2026/27 Nations League transition', () => {
   it('creates a full home and away group schedule for the 54 nations', () => {
@@ -93,5 +93,37 @@ describe('Soccer Career 2026/27 Nations League transition', () => {
     } finally {
       random.mockRestore();
     }
+  });
+
+  it('plays the correct home legs, playoffs and final four and seeds the next edition', () => {
+    const seasons = Array.from({ length: 24 }, (_, i) => simulateNationsLeague2026(`knockouts ${i}`));
+    for (const season of seasons) {
+      const { tables, rankings, quarterfinals, ab, bc, semifinals, final, thirdPlace, nextLeagues } = season;
+      const groupOf = (nation: string) => Object.entries(tables).find(([, rows]) => rows.some(row => row.nation === nation))?.[0];
+      expect(quarterfinals.map(tie => tie.away)).toEqual(rankings.A.slice(0, 4));
+      expect([...quarterfinals.map(tie => tie.home)].sort()).toEqual(rankings.A.slice(4, 8).sort());
+      expect(ab.map(tie => tie.away)).toEqual(rankings.A.slice(10, 14));
+      expect(bc.map(tie => tie.away)).toEqual(rankings.B.slice(12));
+      expect(quarterfinals.every(tie => groupOf(tie.home) !== groupOf(tie.away))).toBe(true);
+      for (const tie of [...quarterfinals, ...ab, ...bc]) {
+        const [first, second] = tie.legs;
+        expect([first.home, first.away, second.home, second.away]).toEqual([tie.home, tie.away, tie.away, tie.home]);
+        const margin = first.homeGoals + second.awayGoals - first.awayGoals - second.homeGoals;
+        expect(Boolean(second.extraTime)).toBe(margin === 0);
+        const resolved = margin + (second.extraTime?.awayGoals ?? 0) - (second.extraTime?.homeGoals ?? 0);
+        expect(Boolean(second.penalties)).toBe(resolved === 0);
+        if (resolved !== 0) expect(tie.winner).toBe(resolved > 0 ? tie.home : tie.away);
+      }
+      const finalists = semifinals.map(match => match.winner);
+      expect([final.home, final.away]).toEqual(finalists);
+      expect([thirdPlace.home, thirdPlace.away]).toEqual(semifinals.map(match => match.winner === match.home ? match.away : match.home));
+      expect(thirdPlace.extraTime).toBeUndefined();
+      expect(Boolean(thirdPlace.penalties)).toBe(thirdPlace.homeGoals === thirdPlace.awayGoals);
+      expect(nextLeagues.A.slice(0, 4)).toEqual([final.winner, finalists.find(nation => nation !== final.winner), thirdPlace.winner, thirdPlace.winner === thirdPlace.home ? thirdPlace.away : thirdPlace.home]);
+      expect(Object.values(nextLeagues).map(league => league.length)).toEqual([18, 18, 18]);
+      expect(new Set(Object.values(nextLeagues).flat()).size).toBe(54);
+    }
+    expect(seasons.some(season => season.quarterfinals.some(tie => tie.legs[1].penalties))).toBe(true);
+    expect(seasons.some(season => season.thirdPlace.penalties)).toBe(true);
   });
 });
