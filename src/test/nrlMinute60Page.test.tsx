@@ -46,6 +46,25 @@ it('resumes the 60-minute score unchanged and records only a confirmed late tact
   expect(screen.getByText('60-minute tactic change: Defence.')).toBeVisible();
 });
 
+it('previews the closing attack plan without writing and records it in the settled match', () => {
+  const half = reduceNrlCareer(createNrlCareer('broncos', 1), { type: 'startLive' });
+  const mid = reduceNrlCareer(half, { type: 'reachMinute60', year: 2026, round: 1, tactic: 'balanced' });
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(mid));
+  localStorage.setItem(fence, '4');
+  render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const attack = screen.getByRole('combobox', { name: 'Closing attack plan' });
+  expect(attack).toHaveValue('standard');
+  fireEvent.change(attack, { target: { value: 'middle' } });
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(mid));
+  expect(localStorage.getItem(fence)).toBe('4');
+  fireEvent.click(screen.getByRole('button', { name: 'Play final 20 minutes' }));
+  const expected = reduceNrlCareer(mid, { type: 'finishMinute60', year: 2026, round: 1, tactic: 'balanced', attackPlan: 'middle' });
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(expected));
+  expect(localStorage.getItem(fence)).toBe('5');
+  expect(screen.getByText('60-minute attack plan change: Through the middle.')).toBeVisible();
+});
+
 it('reopens a 60-minute save and uses the pending reserve only when play resumes', () => {
   const start = createNrlCareer('broncos', 1, 2026);
   const reserve = nrlHoldableReserves(start.season)[0];

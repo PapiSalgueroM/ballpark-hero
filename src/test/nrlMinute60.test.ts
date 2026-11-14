@@ -64,6 +64,42 @@ describe('NRL 60-minute tactical check', () => {
     expect(readNrlCareerSave(raw(forged))).toBeNull();
   });
 
+  it.each([
+    [2026, 'broncos', 1, 'standard', 'balanced', 'middle', [10, 6], [22, 8], [16, 8]],
+    [2027, 'bears', 16, 'counter', 'defense', 'wide', [18, 16], [24, 26], [24, 22]],
+    [2026, 'broncos', 1, 'wide', 'balanced', 'standard', [10, 6], [28, 8], [22, 8]],
+    [2027, 'bears', 2, 'standard', 'attack', 'counter', [12, 16], [16, 22], [16, 17]],
+  ] as const)('holds the %i opening score and applies only the requested closing plan', (
+    year, clubId, seed, opening, tactic, attackPlan, at60, original, changed,
+  ) => {
+    const before = createNrlCareer(clubId, seed, year);
+    const kickoff = finish(before, { type: 'setAttackPlan', year, clubId, round: 1, attackPlan: opening });
+    const half = start(kickoff);
+    const mid = finish(half, { type: 'reachMinute60', year, round: 1, tactic: 'balanced' });
+    const ordinary = { type: 'finishMinute60', year, round: 1, tactic } as const;
+    const control = finish(mid, ordinary);
+    const switched = finish(mid, { ...ordinary, attackPlan });
+    const own = (career: NrlCareerState) => career.season.results.find(match => match.homeId === clubId || match.awayId === clubId)!;
+    const oldMatch = own(control), newMatch = own(switched);
+    expect([oldMatch.homeScore, oldMatch.awayScore]).toEqual(original);
+    expect([newMatch.homeScore, newMatch.awayScore]).toEqual(changed);
+    expect(newMatch.minute60AttackPlan).toBe(attackPlan);
+    expect(newMatch.minute60Tactic).toBe(tactic === 'balanced' ? undefined : tactic);
+    expect(newMatch.scorePeriods?.halfTime).toEqual(oldMatch.scorePeriods?.halfTime);
+    expect(newMatch.scorePeriods?.at60).toEqual(at60);
+    expect(oldMatch.scorePeriods?.at60).toEqual(at60);
+    expect(switched.season.results.filter(match => match !== newMatch)).toEqual(control.season.results.filter(match => match !== oldMatch));
+    expect(finish(mid, { ...ordinary, attackPlan: opening })).toEqual(control);
+    expect(finish(half, { ...ordinary, attackPlan })).toBe(half);
+    expect(finish(mid, { ...ordinary, attackPlan, round: 2 })).toBe(mid);
+    expect(finish(mid, { ...ordinary, attackPlan: 'invalid' as never })).toBe(mid);
+    expect(readNrlCareerSave(raw(switched))).toEqual(switched);
+    const forged = { ...switched, season: { ...switched.season, results: switched.season.results.map(match =>
+      match === newMatch ? { ...match, scorePeriods: undefined } : match) } };
+    expect(readNrlCareerSave(raw(forged))).toBeNull();
+    if (attackPlan === 'counter') expect(newMatch.goldenPoint).toEqual({ period: 1, score: 'fieldGoals' });
+  });
+
   it('uses the selected closing tactic after 60 minutes when a regular match reaches golden point', () => {
     const state = createNrlCareer('bears', 53, 2027);
     const half = start(state);

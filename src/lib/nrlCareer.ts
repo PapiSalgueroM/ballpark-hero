@@ -1431,7 +1431,7 @@ function planRivalRatings(season: NrlManagerState, ratings: ReturnType<typeof op
   return rival?.size === NRL_ROLES.length ? rival : undefined;
 }
 
-function careerMatchday(state: NrlCareerState) {
+function careerMatchday(state: NrlCareerState, latePlan?: NrlAttackPlan) {
   // The imported season uses the original lineups and opponent ratings.
   if (state.legacySeason) return { matchday: { ...state.season, bench: undefined } };
   const ratings = opponentRatings(state);
@@ -1440,8 +1440,15 @@ function careerMatchday(state: NrlCareerState) {
     matchday: state.season,
     opponentStrength,
     ratings,
-    planRatings: state.season.attackPlan && state.season.attackPlan !== 'counter' ? planRivalRatings(state.season, ratings) : undefined,
+    planRatings: latePlan === 'middle' || latePlan === 'wide' || (state.season.attackPlan && state.season.attackPlan !== 'counter')
+      ? planRivalRatings(state.season, ratings) : undefined,
   };
+}
+
+export function nrlMinute60AttackPlans(state: NrlCareerState): readonly NrlAttackPlan[] {
+  const { season } = state;
+  if (state.legacySeason || state.retired || !season.live?.minute60 || !season.kickerId || !season.bench) return [];
+  return planRivalRatings(season, opponentRatings(state)) ? ['standard', ...NRL_ATTACK_PLANS] : ['standard', 'counter'];
 }
 
 export function nrlAttackPlanPreview(state: NrlCareerState) {
@@ -1521,7 +1528,8 @@ function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type:
   intensiveByePlayerId?: string): NrlCareerState {
   const previous = state.season;
   if (judiciaryNeedsResponse(previous) && nrlNextRound(previous).clubMatch) return state;
-  const { matchday, opponentStrength, planRatings } = careerMatchday(state);
+  const { matchday, opponentStrength, planRatings } = careerMatchday(state,
+    action.type === 'finishMinute60' ? action.attackPlan : undefined);
   const played = reduceNrlSeason(matchday, action, opponentStrength, {
     medicalReduction: nrlMedicalLevel(state) - 1, ...nrlCoachTactics(state.finance), planRivalRatings: planRatings, intensiveByePlayerId,
   });
