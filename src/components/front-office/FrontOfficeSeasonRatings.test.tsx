@@ -6,6 +6,7 @@ import { aiWeeklyMoves, initLeague, injuryPass, reviewNflWeekRatings, runOffseas
 import { nflAwayHost } from '@/lib/nflGmCareer';
 import { keyedRng } from '@/lib/keyedRng';
 import { isFrontOfficeSave } from '@/lib/frontOfficeSave';
+import { openNflDesk } from '@/lib/nflGmDesk';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
@@ -71,18 +72,19 @@ it('updates all three personnel pools in an away season and carries those rating
   Object.assign(practice, { age: 23, ovr: 68, pot: 72 });
   Object.assign(market, { age: 30, ovr: 89, salary: 999 });
   const away = nflAwayHost('NONE');
+  const desk = openNflDesk(league, 'SEA');
   const rng = keyedRng('NFL year away');
   const firstWeek: LeagueState = JSON.parse(JSON.stringify(league));
   const firstRng = keyedRng('NFL year away');
   injuryPass(firstWeek.teams, firstRng);
   aiWeeklyMoves(firstWeek, '', firstRng);
   for (const fixture of firstWeek.schedule[0]) simGame(fixture, firstWeek.teams, firstRng);
-  away.playRound(league, rng);
+  away.playRound(league, rng, desk);
   expect(ratings(league)).toEqual(ratings(firstWeek));
   expect(rng()).toBe(firstRng());
   for (let week = 2; week <= 17; week++) {
     const previous = ratings(league);
-    away.playRound(league, rng);
+    away.playRound(league, rng, desk);
     for (const [id, ovr] of ratings(league)) expect(Math.abs(ovr - previous.get(id)!)).toBeLessThanOrEqual(1);
   }
   expect(young.ovr).toBe(79);
