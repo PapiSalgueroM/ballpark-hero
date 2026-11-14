@@ -2,8 +2,11 @@
 
 - NRL Squad can save separate First choice and Rotation lineups. Both remember starters, reserve order and goal kicker. Preview uses current availability, and each season starts with empty slots.
 - Soccer Career keeps its Academy Report on reload while the first senior contract offers are still open. The report reads the completed youth season and its stored development inputs.
+- Home search announces the settled result count or an empty result to screen readers and keeps focus on the search input.
 
 ## 2026-11-14: Fight guides and resume, NRL return matches
+
+[PR #900](https://github.com/PapiSalgueroM/ballpark-hero/pull/900) published exact main `c5413a04d2a207ac60fa184f527eba21e8bf2ed5`, deployment `354ea56b-8eaf-4289-9765-a470658f8a9c`. Both NRL starts and both Fight Promoter modes passed live, along with all four guides and 174 sitemap routes. IndexNow accepted the four guides.
 
 - Fight Career and Fight Gym explain how training can improve a fighter and how aging and permanent damage can lower the effective rating between bouts. Fight Promoter explains the equivalent boxing effects and distinguishes MMA match ratings from recovery and ranking points.
 - NRL Opposition report shows earlier meetings with the next opponent from your club's point of view, using settled matches in the current season.
