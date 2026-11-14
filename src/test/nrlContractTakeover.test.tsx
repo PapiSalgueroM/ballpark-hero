@@ -49,6 +49,46 @@ function selectMove() {
   return desk;
 }
 
+it('shows the squad cover refusal before permission and accepts after an actual renewal', () => {
+  const start = createNrlCareer('storm', 1);
+  const target = 'storm-2-0';
+  const before = bytes(start);
+  const view = open(before);
+  const openApproaches = () => {
+    const summary = screen.getByText('Invite rival approaches', { exact: true });
+    fireEvent.click(summary);
+    return within(summary.closest('details')!);
+  };
+  let desk = openApproaches();
+  fireEvent.change(desk.getByLabelText('Player to invite approaches for'), { target: { value: target } });
+  expect(desk.getByText('Keep another Left Wing signed for 2027 before inviting approaches.')).toBeVisible();
+  expect(desk.getByRole('button', { name: 'Confirm permission' })).toBeDisabled();
+  expect(raw()).toBe(before);
+  expect(localStorage.getItem(fence)).toBe('4');
+  fireEvent.click(screen.getByRole('button', { name: 'Extend for Malachi Frost' }));
+  fireEvent.change(screen.getByLabelText('Term'), { target: { value: '1' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Agree contract' }));
+  expect(desk.getByText('16 rival clubs could take over the deal right now.')).toBeVisible();
+  expect(desk.getByText('A move would leave $256,034 more cap room in 2027 after reserving a squad place.')).toBeVisible();
+  expect(desk.getByRole('button', { name: 'Confirm permission' })).toBeDisabled();
+  fireEvent.click(desk.getByRole('checkbox', { name: /player and club agree/ }));
+  fireEvent.click(desk.getByRole('button', { name: 'Confirm permission' }));
+  expect(desk.getByText('Jalen Merritt · A reply is due after this round.')).toBeVisible();
+  fireEvent.click(screen.getByRole('button', { name: 'Match centre' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Quick Sim' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Review rival offer' }));
+  expect(screen.getByText(/Dragons offered to take over Jalen Merritt/)).toBeVisible();
+  fireEvent.click(screen.getByRole('button', { name: 'Accept offseason move' }));
+  const agreed = raw()!;
+  expect(readNrlCareerSave(agreed)?.contractApproach?.outcome).toBe('accepted');
+  expect(localStorage.getItem(fence)).toBe('8');
+  view.unmount();
+  open(agreed);
+  desk = within(screen.getByText('Invite rival approaches', { exact: true }).closest('details')!);
+  expect(desk.getByText(/Rival offer accepted/)).toBeVisible();
+  expect(raw()).toBe(agreed);
+});
+
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();

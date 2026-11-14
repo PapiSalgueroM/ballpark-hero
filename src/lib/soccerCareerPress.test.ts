@@ -108,6 +108,35 @@ describe('Soccer Press answers and recorded context', () => {
     expect([state.morale, state.popularity, state.pressRoom?.credibility]).toEqual([46, 50, 50]);
   });
 
+  it.each([
+    ['Winner', true, 'met'], ['Group Stage', false, 'missed'], [null, false, 'excused'],
+  ] as const)('settles Champions League target from the exact entered competition %s', (result, championsLeague, outcome) => {
+    const state = answerSoccerPress(career('ST', { currentClubTier: 2 }), 'champions-league');
+    expect(state.pressRoom?.history[0].promise?.metric).toBe('championsLeague');
+    const row = record(state, { championsLeague, ...(result ? {
+      clubCupRun: { qualified: true, matches: [], result, cup: 'ucl', seasonYear: 2029, club: 'Twente', playerGoals: 0, isTopScorer: false },
+    } : {}) });
+    settleSoccerPress(state, row);
+    expect(pressRoomView(JSON.parse(JSON.stringify(state))).promise).toMatchObject({ outcome });
+    const nonEuropean = career('ST', { currentClubTier: 1, currentClubCountry: 'Brazil' });
+    expect(answerSoccerPress(nonEuropean, 'champions-league')).toBe(nonEuropean);
+  });
+
+  it.each([
+    ['Winner', 5, 'met'], ['Runner-up', 5, 'missed'], ['Not Selected', 0, 'excused'],
+  ] as const)('settles a national promise after the actual tournament record is available (%s)', (result, apps, outcome) => {
+    const state = answerSoccerPress(career('ST', {
+      seasons: [savedRow({ year: 2027 })], nationality: 'England', internationalCareer: true,
+    }), 'national-trophy');
+    expect(state.pressRoom?.history[0].promise?.metric).toBe('nationalTrophy');
+    const row = record(state, { club: 'PSV', tournament: 'Euro 2028', tournamentResult: result, continentalCup: result === 'Winner' });
+    settleSoccerPress(state, row, false);
+    expect(state.pressRoom?.history[0].promise?.outcome).toBe('pending');
+    state.intlHistory = [{ year: row.year, nation: 'England', short: 'Euro', champion: result === 'Winner' ? 'England' : 'France', myResult: result, apps, goals: 0 }];
+    settleSoccerPress(state, row, true);
+    expect(pressRoomView(JSON.parse(JSON.stringify(state))).promise).toMatchObject({ outcome });
+  });
+
   it('keeps duplicate year and club records distinct by their original index', () => {
     const state = answerSoccerPress(career(), 'calm');
     state.seasons = [...state.seasons, savedRow({ onLoanFrom: 'PSV' })];

@@ -1,4 +1,12 @@
+## 2026-11-14: International trophy promises, NRL contract cover and Missing XI saves
+
+- Soccer Career adds Champions League promises for eligible clubs and national tournament promises for active internationals. The Champions League promise uses the recorded cup run. A national promise follows the player through a club move and settles after the summer tournament from their saved result and appearances.
+- NRL shows signed cover, interested clubs and the cap change before a player is made available for a rival contract approach. A known coverage block keeps the request available for a later round.
+- Missing XI Unlimited remembers the current lineup and accepted misses on this device. The Daily game retains its separate date-keyed save.
+
 ## 2026-11-14: Club Manager national XI, NRL scouting and Home return focus
+
+[PR #922](https://github.com/PapiSalgueroM/ballpark-hero/pull/922) published exact main `0585818093d7d41d2bb26876fb6446a5af1fb03e`, deployment `7216cedb-f2ed-4db2-9825-d8e7303babf7`. Twenty-two live native journeys passed, covering the selected national XI through rollover, NRL scouting and Home focus at three widths. All 174 sitemap routes passed. IndexNow accepted both changed guides.
 
 - Current-era Club Manager coaches can save a formation and starting XI from their career's eligible national pool before a tournament summer. The lineup's ratings and positional fit adjust the existing summer simulation. The report keeps the lineup used, or says when an unavailable player led to automatic selection. The summer still runs in one simulation.
 - NRL academy scouts can look for a player who is ready sooner or has a higher ceiling. The role, prospect identity, deadline and contract remain tied to the same scouting process.

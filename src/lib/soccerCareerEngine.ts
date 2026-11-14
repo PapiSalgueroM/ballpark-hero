@@ -6163,7 +6163,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       s.events.push(`🧊 A season in the cold at ${s.currentClub} is over. You are back in the group and back in the reckoning.`);
     }
   }
-  settleSoccerPress(s, season);
+  settleSoccerPress(s, season, false);
   s.pendingSummary = season;
   // Generate newspaper articles
   const annualNews = generateNewsArticles(s, season, totalGoals, totalApps);
@@ -6185,6 +6185,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      World Cup and the continental championships crown a winner across a whole
      career even if you never get a cap. */
   runTournamentSummer(s, season, thisYear);
+  settleSoccerPress(s, season, true);
   /* Round 1022: the scoring record is checked after the summer, so goals at a
      World Cup or a continental final count the season they are scored (a man
      who passes it at his last tournament still gets it) and the line's total

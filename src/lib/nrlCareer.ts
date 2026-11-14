@@ -630,7 +630,7 @@ export function nrlContractApproachCandidates(state: NrlCareerState): NrlCareerP
     ? nrlTakeoverPlayers(state) : [];
 }
 
-function contractApproachCoverRefusal(state: NrlCareerState, player: NrlCareerPlayer, endYear: number): string | null {
+function contractApproachCoverRefusal(state: NrlCareerState, player: NrlCareerPlayer, endYear: number, inviting = false): string | null {
   const { year, clubId } = state.season;
   const remaining = state.players.filter(candidate => candidate !== player);
   for (let next = year + 1; next <= endYear; next++) {
@@ -638,10 +638,23 @@ function contractApproachCoverRefusal(state: NrlCareerState, player: NrlCareerPl
     const cap = capFor(remaining, clubId, next);
     if (cap.available < 0 || missingRoles(stillSigned).length > cap.openSlots) return `Keep enough ${next} cap room and squad places to fill every position.`;
     if (next === year + 1 && !stillSigned.some(teammate => teammate.role === player.role)) {
-      return `Keep another ${player.role} signed for ${next} before accepting.`;
+      return `Keep another ${player.role} signed for ${next} before ${inviting ? 'inviting approaches' : 'accepting'}.`;
     }
   }
   return null;
+}
+
+export function nrlContractApproachPreview(state: NrlCareerState, playerId: string) {
+  const player = nrlContractApproachCandidates(state).find(candidate => candidate.id === playerId);
+  if (!player?.contract) return null;
+  const reason = contractApproachCoverRefusal(state, player, player.contract.endYear, true);
+  const nextYear = state.season.year + 1;
+  return {
+    reason,
+    potentialClubs: reason ? 0 : nrlTakeoverOffers(state, playerId).length,
+    nextYear,
+    capGain: player.contract.salary - nrlCareerCap(state, nextYear).minimumSalary,
+  };
 }
 
 function contractApproachOffers(state: NrlCareerState, listing: NrlContractApproach) {
@@ -2179,7 +2192,8 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       const { year, clubId, round } = state.season;
       if (action.year !== year || action.clubId !== clubId || action.round !== round || action.permission !== true) return state;
       const player = nrlContractApproachCandidates(state).find(candidate => candidate.id === action.playerId);
-      return player ? { ...state, contractApproach: { playerId: player.id, listedRound: round, endYear: player.contract!.endYear } } : state;
+      if (!player?.contract || contractApproachCoverRefusal(state, player, player.contract.endYear)) return state;
+      return { ...state, contractApproach: { playerId: player.id, listedRound: round, endYear: player.contract.endYear } };
     }
     case 'answerContractApproach': {
       const { year, clubId } = state.season;
