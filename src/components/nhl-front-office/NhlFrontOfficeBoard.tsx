@@ -110,6 +110,33 @@ function ratingMarker(p: NhlGmPlayer) {
 const NHL_WORDS: FoSportWords = { title: 'the Stanley Cup', playoffs: 'the playoffs', round: 'a series', games: 80 };
 
 type Postseason = { series: NhlSeriesResult[]; champion: string; gradeLine: string | null };
+type LastRound = { team: string; season: number; round: number; wins: number; losses: number; otLosses: number; notes: string[] };
+
+function readLastRound(value: unknown, league: NhlLeague, team: string): LastRound | null {
+  if (!value || typeof value !== 'object') return null;
+  const row = value as Partial<LastRound>;
+  const club = league.teams[team];
+  const closed = league.champions.some(champion => champion.season === league.season);
+  if (!club || row.team !== team || row.season !== league.season || typeof row.round !== 'number'
+    || !Number.isInteger(row.round) || row.round < 1 || row.round !== league.round - (closed ? 0 : 1)
+    || typeof row.wins !== 'number' || !Number.isInteger(row.wins) || row.wins < 0 || row.wins > club.wins
+    || typeof row.losses !== 'number' || !Number.isInteger(row.losses) || row.losses < 0 || row.losses > club.losses
+    || typeof row.otLosses !== 'number' || !Number.isInteger(row.otLosses) || row.otLosses < 0 || row.otLosses > club.otLosses
+    || !Array.isArray(row.notes) || row.notes.length > 4
+    || row.notes.some(line => typeof line !== 'string' || line.length > 640)) return null;
+  return { team, season: league.season, round: row.round, wins: row.wins, losses: row.losses, otLosses: row.otLosses, notes: row.notes };
+}
+
+function roundHeadlines(row: LastRound): string[] {
+  return [`Round ${row.round}: you went ${row.wins}-${row.losses}-${row.otLosses}.`, ...row.notes];
+}
+
+function roundNotes(notes: string[]): string[] {
+  const visible = notes.slice(0, 4);
+  if (visible.some(note => / OVR [+-]1 to \d+\.$/.test(note))) return visible;
+  const rating = notes.find(note => / OVR [+-]1 to \d+\.$/.test(note));
+  return rating ? [...visible.slice(0, 3), rating] : visible;
+}
 
 interface SaveShape {
   league: NhlLeague; myTeam: string; phase: Phase; titles: number; seasonsPlayed: number;
@@ -124,6 +151,7 @@ interface SaveShape {
   /* Round 431. Present on a save written from the recap screen, so the recap
      can be drawn again after a reload. Absent on older saves. */
   postseason?: Postseason | null;
+  lastRound?: LastRound;
   /* Round 987: the GM desk (src/lib/gmDesk.ts). Absent on every save written
      before it, and on those the board plays exactly as it did until the GM
      opens a desk box. Each block inside is validated alone. */
@@ -246,6 +274,7 @@ export default function NhlFrontOfficeBoard() {
     if (!contributorsOpen && contributorReturn.current) { contributorReturn.current = false; contributorsOpener.current?.focus({ preventScroll: true }); }
   }, [contributorsOpen]);
   const [feed, setFeed] = useState<string[]>([]);
+  const lastRound = useRef<LastRound | null>(null);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
      moment anything else is prepended it reads as an ordinary row. Transient
@@ -357,6 +386,8 @@ export default function NhlFrontOfficeBoard() {
       ensureNhlLeagueIds(s.league, s.draftClass);
       if (s.league.teams[s.myTeam]) repairNhlContributors(s.league.teams[s.myTeam]);
       setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
+      lastRound.current = readLastRound(s.lastRound, s.league, s.myTeam);
+      if (lastRound.current) setFeed(roundHeadlines(lastRound.current));
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
       setDraftBatchesLeft(s.draftBatchesLeft ?? null);
@@ -390,12 +421,13 @@ export default function NhlFrontOfficeBoard() {
   const persist = useCallback((patch: Partial<SaveShape>, lg: NhlLeague | null, team: string) => {
     try {
       if (!lg) return;
+      const result = readLastRound(lastRound.current, lg, team);
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
         ...(draftBatchesLeft !== null ? { draftBatchesLeft } : {}),
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { series, champion, gradeLine } : null,
-        ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch,
+        ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch, lastRound: result ?? undefined,
       } satisfies SaveShape));
     } catch { /* full */ }
   }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
@@ -420,6 +452,7 @@ export default function NhlFrontOfficeBoard() {
     setSaveError(false);
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
+    lastRound.current = null;
     setWaiverReceipt(null);
     setFeed([
       `Welcome to the ${label(abbr)} front office. The ${lg.season}-${(lg.season + 1) % 100} season drops the puck now.`,
@@ -527,11 +560,9 @@ export default function NhlFrontOfficeBoard() {
       nextGm = tick.desk;
       if (tick.line) deskLines.push(tick.line);
     }
-    const newFeed = [
-      `Round ${lg.round}: you went ${report.myWins}-${report.myLosses}-${report.myOtLosses}.`,
-      ...deskLines,
-      ...report.notes,
-    ];
+    const news = [...deskLines, ...report.notes];
+    const result: LastRound = { team: myTeam, season: lg.season, round: lg.round, wins: report.myWins,
+      losses: report.myLosses, otLosses: report.myOtLosses, notes: roundNotes(news) };
     if (nextGm !== gm) setGm(nextGm);
     if (lg.round >= NHL_FO_ROUNDS) {
       const { series: sr, champion: champ } = runNhlFoPlayoffs(lg, Math.random, nextGm ? nhlDeskEdges(nextGm, lg, myTeam) : undefined);
@@ -575,15 +606,19 @@ export default function NhlFrontOfficeBoard() {
       }));
       setPhase('recap');
       setLeague(lg);
-      setFeed(newFeed); setFeedSlam(null);
+      lastRound.current = result;
+      setFeed(roundHeadlines(result)); setFeedSlam(null);
       persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
       return;
     }
     lg.round += 1;
     /* Round 987: the round the deadline shuts says so in the feed. */
-    if (nextGm && nhlTradeWindow(league).open && !nhlTradeWindow(lg).open) newFeed.splice(1, 0, '🔒 The trade deadline has passed. Deals open again once the season is over.');
+    if (nextGm && nhlTradeWindow(league).open && !nhlTradeWindow(lg).open) {
+      result.notes = roundNotes(['🔒 The trade deadline has passed. Deals open again once the season is over.', ...news]);
+    }
+    lastRound.current = result;
     setLeague(lg);
-    setFeed(newFeed); setFeedSlam(null);
+    setFeed(roundHeadlines(result)); setFeedSlam(null);
     persist({}, lg, myTeam);
   };
 
@@ -694,6 +729,7 @@ export default function NhlFrontOfficeBoard() {
         ...notes,
       ].slice(0, 6));
       setPressTilt(0); setSeasonTradeLine(null);
+      lastRound.current = null;
       setSeries([]); setChampion(''); setWonNow(false);
       /* Round 530: the phase stays 'draft' so the last pick's card is seen;
          leaveDraft moves it on. The save says 'hub' as it always did, so a
@@ -889,6 +925,7 @@ export default function NhlFrontOfficeBoard() {
 
   const reset = () => {
     localStorage.removeItem(SAVE_KEY);
+    lastRound.current = null;
     setWaiverReceipt(null);
     setPhase('pick'); setLeague(null); setMyTeam('');
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
@@ -942,6 +979,7 @@ export default function NhlFrontOfficeBoard() {
     if (!r) { setFeed(f => [hostOfferGoneLine(), ...f].slice(0, 6)); return; }
     const next = r.save;
     setLeague(lg);
+    lastRound.current = null;
     setGm(r.desk);
     setMyTeam(next.myTeam);
     setTrust(next.trust ?? FO_TRUST_START);
@@ -985,6 +1023,7 @@ export default function NhlFrontOfficeBoard() {
     const r = hostSeasonAway({ host: nhlDeskHost, away: nhlAwayHost(myTeam), league: lg, desk, legacy, rng: Math.random });
     if (r.ok === false) { const why = hostAwayRefusalLine(nhlDeskHost.pack, r.reason); setFeed(f => [why, ...f].slice(0, 6)); return; }
     setLeague(lg);
+    lastRound.current = null;
     setGm(r.desk);
     setChampion(r.report.champion);
     setSeries([]);
@@ -1221,6 +1260,11 @@ export default function NhlFrontOfficeBoard() {
             </div>
           )}
         </div>
+        {lastRound.current && (
+          <div aria-label="Last round" className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
+            {roundHeadlines(lastRound.current).map((line, index) => <p key={index}>{line}</p>)}
+          </div>
+        )}
         {gm && recapDesk && (
           <GmDeskMount sport="nhl" desk={gm} facts={recapDesk} panels={NHL_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
         )}
