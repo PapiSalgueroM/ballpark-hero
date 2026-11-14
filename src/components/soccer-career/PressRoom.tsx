@@ -12,7 +12,7 @@ const promiseWords: Record<SoccerPressPromise['outcome'], string> = {
 
 function PromiseLine({ promise }: { promise: SoccerPressPromise }) {
   const trophy = promise.metric === 'leagueTitle' ? 'League title' : promise.metric === 'domesticCup' ? 'Domestic cup'
-    : promise.metric === 'championsLeague' ? 'Champions League' : null;
+    : promise.metric === 'championsLeague' ? 'Champions League' : promise.metric === 'nationalTrophy' ? 'National trophy' : null;
   return <div data-press-promise={promise.outcome} className="space-y-1 rounded-xl border border-border bg-secondary/50 p-3 text-sm">
     <p className="font-bold">{promiseWords[promise.outcome]}</p>
     <p>{promise.label}</p>
@@ -72,6 +72,7 @@ export default function PressRoom({ career, onCareer, onClose }: {
           <p className="text-sm">Opening cup stats count in your season total. They do not change a recorded press promise. For example, 38 total appearances can include one opening cup game while the promise records 37.</p>
           <p className="text-sm">Keep it calm: morale +3, popularity -2. Own your season: popularity +3, morale -3 and credibility +2. Make a public promise: morale -4 now, with a target for your next season at your current club. The promise names that club even if you just moved.</p>
           <p className="text-sm">You can also promise a league title, an available domestic cup, or a Champions League win at an eligible European club. If the club misses Champions League qualification, that promise closes without a penalty. The personal target follows your position when you answered.</p>
+          <p className="text-sm">If your country has a tournament coming up and you are still an international player, you can promise a national trophy. A club move keeps that promise open. Missing the tournament closes it without a penalty.</p>
           <p className="text-sm">Keep the promise: popularity +6, morale +3 and credibility +8. Miss it: popularity -6, morale -3 and credibility -8. A club move, a severe injury or a year you could not play closes it without those rewards or penalties.</p>
           <div className="rounded-xl bg-secondary p-3 text-sm"><strong>Example:</strong> Your striker scored 12. Promise 15 next season at the same club. A recorded 16 keeps it. A recorded 13 misses it. Move clubs and it closes with no performance penalty.</div>
           <p className="text-xs text-muted-foreground">Career choices can change your future season. This room never changes a season already played or reveals the pending award ballot. Promises left at retirement stay unresolved if you play no following season.</p>

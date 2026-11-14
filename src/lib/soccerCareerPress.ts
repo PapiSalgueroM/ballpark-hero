@@ -2,15 +2,16 @@ import type { CareerState, SeasonRecord } from './soccerCareerEngine';
 import { readCommunityShield, communityShieldSeasonStats, careerOpeningAnnualStats } from './soccerCareerExtraCups';
 import { cupAssociation, cupFor } from './soccerCareerCup';
 import { clubCupFor } from './soccerCareerContinental';
+import { tournamentForYear } from './soccerInternational';
 
-export type SoccerPressChoice = 'calm' | 'accountable' | 'ambitious' | 'league-title' | 'domestic-cup' | 'champions-league';
+export type SoccerPressChoice = 'calm' | 'accountable' | 'ambitious' | 'league-title' | 'domestic-cup' | 'champions-league' | 'national-trophy';
 export type SoccerPressTopic = 'league_champion' | 'injury' | 'benched' | 'move' | 'strong_form' | 'discipline' | 'contract' | 'normal';
 export interface SoccerPressSource {
   index: number; year: number; club: string; position: string; statLine: string;
   apps: number; goals: number | null; assists: number | null; cleanSheets: number | null; rating: number | null;
 }
 export interface SoccerPressPromise {
-  club: string; label: string; metric: 'apps' | 'goals' | 'assists' | 'cleanSheets' | 'leagueTitle' | 'domesticCup' | 'championsLeague'; target: number; ratingFloor?: 7;
+  club: string; label: string; metric: 'apps' | 'goals' | 'assists' | 'cleanSheets' | 'leagueTitle' | 'domesticCup' | 'championsLeague' | 'nationalTrophy'; target: number; ratingFloor?: 7;
   outcome: 'pending' | 'met' | 'missed' | 'moved' | 'excused';
   actual?: number; actualRating?: number; settledYear?: number; settledIndex?: number;
 }
@@ -35,10 +36,11 @@ const TROPHY_PROMISES = {
   'league-title': { title: 'the league', metric: 'leagueTitle' },
   'domestic-cup': { title: 'the domestic cup', metric: 'domesticCup' },
   'champions-league': { title: 'the Champions League', metric: 'championsLeague' },
+  'national-trophy': { title: 'the next national tournament', metric: 'nationalTrophy' },
 } as const;
 type TrophyChoice = keyof typeof TROPHY_PROMISES;
 const isTrophyChoice = (choice: SoccerPressChoice): choice is TrophyChoice => Object.prototype.hasOwnProperty.call(TROPHY_PROMISES, choice);
-const CHOICES: SoccerPressChoice[] = ['calm', 'accountable', 'ambitious', 'league-title', 'domestic-cup', 'champions-league'];
+const CHOICES: SoccerPressChoice[] = ['calm', 'accountable', 'ambitious', 'league-title', 'domestic-cup', 'champions-league', 'national-trophy'];
 const TOPICS: SoccerPressTopic[] = ['league_champion', 'injury', 'benched', 'move', 'strong_form', 'discipline', 'contract', 'normal'];
 const OUT_CLUBS = ['BANNED', 'BANNED (PED)', 'PRISON', 'CONVICTED'];
 const count = (v: unknown): v is number => typeof v === 'number' && Number.isSafeInteger(v) && v >= 0;
@@ -53,7 +55,9 @@ function promiseFor(source: SoccerPressSource, club: string, choice: SoccerPress
   if (!text(club) || OUT_CLUBS.includes(club)) return null;
   if (isTrophyChoice(choice)) {
     const { metric, title } = TROPHY_PROMISES[choice];
-    return { club, metric, target: 1, label: `Win ${title} in your next played year at ${club}.`, outcome: 'pending' };
+    const label = metric === 'nationalTrophy' ? `Win ${title} with your country next season.`
+      : `Win ${title} in your next played year at ${club}.`;
+    return { club, metric, target: 1, label, outcome: 'pending' };
   }
   let metric: SoccerPressPromise['metric'], target: number, label: string;
   if (source.position === 'GK') {
@@ -73,7 +77,12 @@ function promiseFor(source: SoccerPressSource, club: string, choice: SoccerPress
     ...(BACKS.includes(source.position) ? { ratingFloor: 7 as const } : {}), outcome: 'pending' };
 }
 
-function promiseActual(promise: SoccerPressPromise, row: SeasonRecord): number | null {
+function promiseActual(promise: SoccerPressPromise, row: SeasonRecord, career: CareerState): number | null {
+  if (promise.metric === 'nationalTrophy') {
+    const result = career.intlHistory?.find(entry => entry.year === row.year && entry.nation === career.nationality);
+    if (!result || result.apps < 1 || !row.tournament || result.myResult !== row.tournamentResult) return null;
+    return Number(result.myResult === 'Winner' && result.champion === career.nationality && (row.worldCup || row.continentalCup));
+  }
   if (promise.metric === 'championsLeague' && (!row.clubCupRun?.qualified
     || (row.clubCupRun.cup ?? 'ucl') !== 'ucl'
     || row.clubCupRun.seasonYear !== row.year || row.clubCupRun.club !== row.club
@@ -84,10 +93,10 @@ function promiseActual(promise: SoccerPressPromise, row: SeasonRecord): number |
     : recorded(value);
 }
 
-function outcomeFor(promise: SoccerPressPromise, row: SeasonRecord): SoccerPressPromise['outcome'] {
-  const actual = promiseActual(promise, row);
+function outcomeFor(promise: SoccerPressPromise, row: SeasonRecord, career: CareerState): SoccerPressPromise['outcome'] {
+  const actual = promiseActual(promise, row, career);
   if (!count(row.apps) || row.apps === 0 || row.injurySevere === true || OUT_CLUBS.includes(row.club)) return 'excused';
-  if (row.club !== promise.club) return 'moved';
+  if (row.club !== promise.club && promise.metric !== 'nationalTrophy') return 'moved';
   if (actual === null || promise.ratingFloor !== undefined && !rating(row.rating)) return 'excused';
   return actual >= promise.target && (promise.ratingFloor === undefined || row.rating >= promise.ratingFloor) ? 'met' : 'missed';
 }
@@ -133,7 +142,7 @@ function stateOf(career: CareerState): SoccerPressState | null {
             assists: settled.assists - part.assists, cleanSheets: settled.cleanSheets - part.cleanSheets, rating: p.actualRating };
           if (communityShieldSeasonStats(annual, shield).rating !== settled.rating) return null;
         }
-        if (p.outcome !== outcomeFor(p, annual) || p.actual !== (promiseActual(p, annual) ?? undefined) || p.actualRating !== (rating(annual.rating) ? annual.rating : undefined)) return null;
+        if (p.outcome !== outcomeFor(p, annual, career) || p.actual !== (promiseActual(p, annual, career) ?? undefined) || p.actualRating !== (rating(annual.rating) ? annual.rating : undefined)) return null;
       }
     } else if (row.promise !== undefined) return null;
   }
@@ -216,6 +225,9 @@ export function pressRoomView(career: CareerState): PressRoomView {
     add('league-title', 'Promise a league title');
     if (domesticCup) add('domestic-cup', 'Promise a domestic cup win');
     if (championsLeague) add('champions-league', 'Promise a Champions League win');
+    const national = career.internationalCareer && !career.intStats?.isRetired
+      ? tournamentForYear(career.nationality, nextYear) : null;
+    if (national) add('national-trophy', `Promise a ${national.name} win`);
   }
   return { eligible: !reason, reason, source, topic, question, options, history, credibility: state?.credibility ?? 50, promise: history.find(h => h.promise)?.promise ?? null };
 }
@@ -231,13 +243,15 @@ export function answerSoccerPress(prev: CareerState, choiceId: string): CareerSt
 }
 
 /** Called only after the engine has placed the actual row in seasons. */
-export function settleSoccerPress(career: CareerState, row: SeasonRecord): void {
+export function settleSoccerPress(career: CareerState, row: SeasonRecord, nationalOnly?: boolean): void {
   const state = stateOf(career), index = career.seasons.indexOf(row);
   if (!state || index < 0 || row.type !== 'playing' || !count(row.year) || !meter(career.popularity) || !meter(career.morale)) return;
   const at = state.history.findIndex(h => h.promise?.outcome === 'pending' && index > h.source.index && row.year > h.source.year);
   if (at < 0) return;
-  const held = state.history[at], promise = { ...held.promise! }, actual = promiseActual(promise, row);
-  promise.outcome = outcomeFor(promise, row);
+  const held = state.history[at], promise = { ...held.promise! };
+  if (nationalOnly !== undefined && (promise.metric === 'nationalTrophy') !== nationalOnly) return;
+  const actual = promiseActual(promise, row, career);
+  promise.outcome = outcomeFor(promise, row, career);
   if (actual !== null) promise.actual = actual;
   if (rating(row.rating)) promise.actualRating = row.rating;
   promise.settledYear = row.year; promise.settledIndex = index;
