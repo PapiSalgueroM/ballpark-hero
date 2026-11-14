@@ -1662,11 +1662,15 @@ function ReserveGradeDevelopment({ career, onAction, disabled }: {
 }) {
   const summary = useRef<HTMLElement>(null);
   const [playerId, setPlayerId] = useState('');
+  const [training, setTraining] = useState('');
   const { season } = career;
   const { year, clubId, round, reserveGrade } = season;
   if (career.legacySeason || career.retired || season.phase !== 'regular') return null;
   const candidates = nrlReserveGradeCandidates(career);
   const selected = candidates.find(player => player.id === playerId);
+  const roles = selected && !selected.secondaryRole ? nrlRetrainingRoles(selected.role) : [];
+  const role = roles.find(option => option === training);
+  const learnedRole = reserveGrade?.role;
   const assigned = reserveGrade && season.squad.find(player => player.id === reserveGrade.playerId);
   const remaining = nrlReserveGradeRemaining(season);
   const coach = nrlReserveCoachQuote(career);
@@ -1677,20 +1681,21 @@ function ReserveGradeDevelopment({ career, onAction, disabled }: {
         Reserve-grade development<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
       </summary>
       <div className="space-y-3 pb-3 text-sm">
-        <p className="text-muted-foreground">Send one eligible young player each season for {NRL_RESERVE_GRADE_ROUNDS} regular rounds, including byes. He stays contracted and counts against your cap. He returns with one rating point if he completes the spell.</p>
+        <p className="text-muted-foreground">Send one eligible young player each season for {NRL_RESERVE_GRADE_ROUNDS} regular rounds, including byes. They stay contracted and count against your cap. Choose a rating point or an available second position.</p>
         {assigned ? <>
           <p role="status" className="font-semibold">{remaining
-            ? `${assigned.name} is in reserve grade. ${remaining} ${remaining === 1 ? 'round' : 'rounds'} left.`
-            : reserveGrade?.recalledRound !== undefined ? `${assigned.name} was recalled early. No rating gain.`
-              : `${assigned.name} completed the spell and gained one rating point.`}</p>
+            ? `${assigned.name} is in reserve grade${learnedRole ? ` to learn ${learnedRole}` : ''}. ${remaining} ${remaining === 1 ? 'round' : 'rounds'} left.`
+            : reserveGrade?.recalledRound !== undefined ? `${assigned.name} was recalled early. ${learnedRole ? 'Course unfinished.' : 'No rating gain.'}`
+              : learnedRole ? `${assigned.name} completed the spell and learned ${learnedRole}.`
+                : `${assigned.name} completed the spell and gained one rating point.`}</p>
           {coach && <div className="space-y-2">
-            <p className="text-muted-foreground">Book extra coaching to move selection and the rating award from Round {coach.currentReturn} to Round {coach.fasterReturn}.</p>
+            <p className="text-muted-foreground">Book extra coaching to move selection and {learnedRole ? 'the qualification' : 'the rating award'} from Round {coach.currentReturn} to Round {coach.fasterReturn}.</p>
             {coach.reason ? <p className="text-muted-foreground">{coach.reason}</p>
               : <Button type="button" size="lg" className="px-3" disabled={disabled} onClick={() => {
                 if (onAction({ type: 'bookReserveCoach', year, clubId, round, playerId: assigned.id })) summary.current?.focus();
               }}>Book reserve coach for {aud.format(coach.cost)}</Button>}
           </div>}
-          {reserveGrade?.acceleratedRound !== undefined && <p className="text-muted-foreground">Reserve coaching booked in Round {reserveGrade.acceleratedRound}. Early recall still gives up the rating point.</p>}
+          {reserveGrade?.acceleratedRound !== undefined && <p className="text-muted-foreground">Reserve coaching booked in Round {reserveGrade.acceleratedRound}. Early recall still gives up {learnedRole ? 'the qualification' : 'the rating point'}.</p>}
           {remaining > 0 && <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled} onClick={() => {
             if (onAction({ type: 'recallReserveGrade', year, clubId, round, playerId: assigned.id })) summary.current?.focus();
           }}>Recall player</Button>}
@@ -1698,15 +1703,24 @@ function ReserveGradeDevelopment({ career, onAction, disabled }: {
           <label className="block font-semibold">
             Player for reserve grade
             <select className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2" disabled={disabled}
-              value={selected?.id ?? ''} onChange={event => setPlayerId(event.target.value)}>
+              value={selected?.id ?? ''} onChange={event => { setPlayerId(event.target.value); setTraining(''); }}>
               <option value="">Choose a player</option>
               {candidates.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role}</option>)}
             </select>
           </label>
-          {selected && <p className="text-muted-foreground">Unavailable for your first-grade lineup and bench during the spell. Recall early to bring him back without a rating gain.</p>}
+          {roles.length > 0 && <label className="block font-semibold">
+            Reserve-grade plan
+            <select className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2" disabled={disabled}
+              value={role ?? ''} onChange={event => setTraining(event.target.value)}>
+              <option value="">Gain 1 OVR</option>
+              {roles.map(option => <option key={option} value={option}>Learn {option}</option>)}
+            </select>
+          </label>}
+          {selected && <p className="text-muted-foreground">Unavailable for first grade during the spell. An early recall gives up {role ? 'the new position' : 'the rating point'}.</p>}
           <Button type="button" size="lg" className="px-3" disabled={disabled || !selected} onClick={() => {
-            if (selected && onAction({ type: 'startReserveGrade', year, clubId, round, playerId: selected.id })) {
+            if (selected && onAction({ type: 'startReserveGrade', year, clubId, round, playerId: selected.id, role })) {
               setPlayerId('');
+              setTraining('');
               summary.current?.focus();
             }
           }}>Start reserve-grade spell</Button>
@@ -2448,7 +2462,8 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Choose Ready sooner for higher starting OVR or Higher ceiling for more potential when assigning an academy scout. Balanced uses the standard profile.</li>
               <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check the latest match result or open Rating changes in Squad. Existing ratings carry into the next season.</li>
               <li>Open a regular-season match report in Season fixtures to see the rating changes saved for that match.</li>
-              <li>While a reserve-grade spell has at least two rounds left, book reserve coaching from Squad for $90,000. The prospect returns one round sooner with the same rating gain on completion.</li>
+              <li>In Squad, a young player can learn a second position in reserve grade while another player trains with the first team. The reserve course replaces the one-point rating gain.</li>
+              <li>While a reserve-grade spell has at least two rounds left, book reserve coaching from Squad for $90,000. The prospect returns one round sooner with their rating gain or new position.</li>
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
               <li>Before Round 1, choose an eligible position in the Board recruitment brief. Use Recruitment during the season to sign an external player for that position next year and earn a club cash bonus.</li>

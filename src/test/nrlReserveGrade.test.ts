@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import {
-  createNrlCareer, nrlCareerCap, nrlCareerFinance, nrlReserveCoachQuote, nrlReserveGradeCandidates, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
+  createNrlCareer, nrlCareerCap, nrlCareerFinance, nrlReserveCoachQuote, nrlReserveGradeCandidates, nrlPositionTrainingCandidates, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
-import { createNrlSeason, nrlBench, nrlFitLineup, nrlNextRound, nrlStarterOptions, nrlRegularRounds, nrlSavedLineupPreview } from '@/lib/nrlManager';
+import { createNrlSeason, nrlBench, nrlFitLineup, nrlNextRound, nrlStarterOptions, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview } from '@/lib/nrlManager';
 
 const advance = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'advance' });
 const player = (state: NrlCareerState, id: string) => state.players.find(candidate => candidate.id === id)!;
@@ -196,3 +196,55 @@ describe('NRL reserve-grade development', () => {
     expect(start(live, id)).toBe(live);
   });
 });
+
+it.each([[2026, 'panthers', 16, 'panthers-6-1'], [2027, 'bears', 14, 'bears-8-1']] as const)(
+  'uses the %i reserve spell to qualify a second player without granting the point',
+  (year, clubId, seed, id) => {
+    const original = createNrlCareer(clubId, seed, year);
+    expect(nrlReserveGradeCandidates(original).some(row => row.id === id)).toBe(true);
+    const prospect = player(original, id);
+    const role = nrlRetrainingRoles(prospect.role)[0];
+    expect(role).toBeDefined();
+    const active = nrlPositionTrainingCandidates(original).find(row => row.id !== id)!;
+    const regularRole = nrlRetrainingRoles(active.role)[0];
+    const busy = reduceNrlCareer(original, { type: 'startPositionTraining', year, clubId, round: 1, playerId: active.id, role: regularRole });
+    expect(busy.positionTraining?.role).toBe(regularRole);
+    const action = { type: 'startReserveGrade', year, clubId, round: 1, playerId: id, role } as const;
+    expect(reduceNrlCareer(busy, { ...action, role: prospect.role })).toBe(busy);
+    const route = reduceNrlCareer(busy, action);
+    expect(route.season.reserveGrade?.role).toBe(role);
+    expect(route.positionTraining).toEqual(busy.positionTraining);
+    expect(reduceNrlCareer(route, { type: 'selectStarter', role, playerId: id })).toBe(route);
+    expect(nrlCareerCap(route)).toEqual(nrlCareerCap(busy));
+    exact(route);
+    const promoteEarly = <P extends { id: string }>(row: P) => row.id === id ? { ...row, secondaryRole: role } : row;
+    expect(readNrlCareerSave(save({ ...route, players: route.players.map(promoteEarly),
+      season: { ...route.season, squad: route.season.squad.map(promoteEarly) } }))).toBeNull();
+    const sped = reduceNrlCareer(route, { type: 'bookReserveCoach', year, clubId, round: 1, playerId: id });
+    expect(nrlCareerFinance(route).cash - nrlCareerFinance(sped).cash).toBe(90_000);
+    const fast = [1, 2, 3].reduce(advance, sped);
+    const slow = [1, 2, 3].reduce(advance, route);
+    expect(player(fast, id)).toMatchObject({ secondaryRole: role, rating: prospect.rating });
+    const addPoint = <P extends { id: string; rating: number }>(row: P) => row.id === id ? { ...row, rating: row.rating + 1 } : row;
+    expect(readNrlCareerSave(save({ ...fast, players: fast.players.map(addPoint),
+      season: { ...fast.season, squad: fast.season.squad.map(addPoint) } }))).toBeNull();
+    expect(player(slow, id).secondaryRole).toBeUndefined();
+    expect(player(fast, active.id).secondaryRole).toBeUndefined();
+    expect(nrlStarterOptions(fast.season, role).some(row => row.id === id)).toBe(true);
+    const matchday = reduceNrlCareer(fast, { type: 'selectStarter', role, playerId: id });
+    expect(matchday.season.lineup[role]).toBe(id);
+    const played = advance(matchday);
+    expect(played.season.results.find(row => row.round === fast.season.round && row.playerScoring)?.playerScoring?.starters).toContain(id);
+    expect(player(played, active.id).secondaryRole).toBe(regularRole);
+    for (const state of [fast, slow, played]) exact(state);
+    const recalled = recall(advance(route), id);
+    expect(player(recalled, id).secondaryRole).toBeUndefined();
+    expect(player(recalled, id).rating).toBe(prospect.rating);
+    exact(recalled);
+    let ended = played;
+    while (ended.season.phase !== 'complete') ended = advance(ended);
+    expect(ended.history.at(-1)?.reserveGrade).toMatchObject({ playerId: id, rounds: 3, ratingGain: 0, role });
+    exact(ended);
+    exact(reduceNrlCareer(ended, { type: 'startNextSeason' }));
+  },
+);
