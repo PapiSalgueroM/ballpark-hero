@@ -2020,6 +2020,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Check your regular-season board target in Season review.</li>
               <li>If you accepted Board pathways, check Pathways run-in in Season review with four regular-season club matches left. It shows who can still reach four appearances.</li>
               <li>Change clubs between seasons from Season review.</li>
+              <li>When staying at your club, check Fill open squad places in Season review to preview affordable one-season free-agent deals before starting the next season.</li>
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>
               <li>Choose Rugby League World Cup beside Career saves to coach a national team through a separate 2026 tournament.</li>
               <li>After finishing a 2026 club season, take a national appointment from the Club office before starting 2027. It saves inside your career.</li>

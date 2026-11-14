@@ -60,6 +60,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'After the Grand Final, review an assistant extension in Season review or Finances. You can reserve next season’s wages to keep the same assistant for one extra year at your club, with no new signing fee.',
       'During the regular season, set a development focus in Season review. Youth development can add a rating point at your 21st club match. Veteran conditioning can prevent one scheduled rating drop. Both apply to eligible players signed to return.',
       'Open Season review for your final ladder, finances, recorded scoring and finals scores. Stay with your club, move to a new club, or retire and keep your career record.',
+      'If you stay at your club, open Fill open squad places in Season review to preview one-season free-agent deals under the cap before academy players fill the remaining places.',
       'After the Grand Final, open League recruitment in Season review to preview two-year deals at rival clubs. Enable it for that offseason if you want rivals to keep one eligible free-agent signing for a second year. Your current club and any club you join are excluded.',
       'Before playing Round 1, accept the optional Board pathways objective in Season review. Give three players aged 23 or under four regular-season appearances each to earn a club cash bonus.',
       'With four regular-season club matches left, check Pathways run-in in Season review to see who can still reach four appearances. Byes do not count.',

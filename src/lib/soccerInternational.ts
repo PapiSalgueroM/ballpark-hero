@@ -416,10 +416,10 @@ const WC_PLAYOFF_SLOTS = 2;
 /* ─── Small helpers ──────────────────────────────────────────────────────── */
 
 const rnd = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
-const shuffle = <T,>(arr: T[]): T[] => {
+const shuffle = <T,>(arr: T[], random = Math.random): T[] => {
   const a = [...arr];
   for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
+    const j = Math.floor(random() * (i + 1));
     [a[i], a[j]] = [a[j], a[i]];
   }
   return a;
@@ -737,7 +737,7 @@ function finalistsFor(fmt: TournamentFormat, conf: Confederation): number {
     the confederation by strength, cut it into six pots, take one from each.
     My nation goes in and displaces whoever came out of its own pot, so a top
     seed always faces weaker pots and a minnow always faces a giant. */
-function drawQualifyingGroup(nation: string, conf: Confederation): string[] {
+function drawQualifyingGroup(nation: string, conf: Confederation, random = Math.random): string[] {
   const pool = nationsIn(conf).filter(n => n !== nation);
   const ranked = [...pool].sort((a, b) => fifaRankOf(a) - fifaRankOf(b));
   const potSize = Math.max(1, Math.ceil(ranked.length / 6));
@@ -749,11 +749,11 @@ function drawQualifyingGroup(nation: string, conf: Confederation): string[] {
     if (pot === myPot) continue;
     const slice = ranked.slice(pot * potSize, (pot + 1) * potSize).filter(n => !group.includes(n));
     if (!slice.length) continue;
-    group.push(slice[Math.floor(Math.random() * slice.length)]);
+    group.push(slice[Math.floor(random() * slice.length)]);
   }
   // Thin confederations (CONMEBOL has ten members, OFC eleven) can come up
   // short. Fill from whoever is left rather than hand back a small group.
-  const rest = shuffle(pool.filter(n => !group.includes(n)));
+  const rest = shuffle(pool.filter(n => !group.includes(n)), random);
   while (group.length < 6 && rest.length) group.push(rest.pop() as string);
   return group;
 }
@@ -1094,6 +1094,28 @@ export function managerFormatYear(year: number): number {
   return 2025 + ((((year - 2025) % 4) + 4) % 4);
 }
 
+export function managerQualifierDraw(nation: string, year: number, random: () => number) {
+  const fmt = tournamentForYear(nation, managerFormatYear(year));
+  const conf = NATION_CONFED[nation];
+  if (!fmt || !conf || (fmt.kind === 'Continental' && fmt.finalists >= CONFED_MEMBERS[conf])) return null;
+  return { group: drawQualifyingGroup(nation, conf, random), through: throughPerGroup(conf, finalistsFor(fmt, conf)), name: fmt.name };
+}
+
+export function managerQualifierTable(nation: string, group: string[], through: number, fixtures: readonly ManagerSummerMatch[]): QualifyingCampaign {
+  const table = blankTable(group);
+  for (const fixture of fixtures) applyResult(table, fixture.home, fixture.away, fixture.homeGoals, fixture.awayGoals);
+  const sorted = sortTable(table);
+  const myPosition = sorted.findIndex(row => row.nation === nation) + 1;
+  return { confederation: confederationOf(nation), table: sorted, myPosition, through, qualified: myPosition > 0 && myPosition <= through, automatic: false };
+}
+
+export function managerQualifierScore(home: string, away: string, nation: string, adjustment: number, mentality: NationalMentality, random: () => number): ManagerSummerMatch {
+  const tempo = matchTempo(nation, home, away, NATIONAL_TEMPO[mentality] ?? 0);
+  const strength = (team: string) => nationStrength(team) + (team === nation ? adjustment : 0);
+  const { a, b } = simInternationalMatch(strength(home) + 3, strength(away), false, tempo, tempo, random);
+  return { round: 'Qualifying', home, away, homeGoals: a, awayGoals: b, pens: false };
+}
+
 /**
  * Round 202: the same summer, run for a MANAGER rather than a player.
  *
@@ -1107,6 +1129,7 @@ export function managerFormatYear(year: number): number {
  */
 export function runManagerSummer(
   nation: string, year: number, lift: number, mentality: NationalMentality = 'balanced', xiAdjustment = 0,
+  playedQualifying?: QualifyingCampaign,
 ): (IntlTournament & { managerFixtures: ManagerSummerMatch[] }) | null {
   const fmt = tournamentForYear(nation, managerFormatYear(year));
   if (!fmt) return null;
@@ -1118,7 +1141,7 @@ export function runManagerSummer(
   const restore = overrideNationStrength(nation, nationStrength(nation) + bump + clamp(xiAdjustment, -8, 8));
   try {
     const tempo = NATIONAL_TEMPO[mentality] ?? 0;
-    const qualifying = runQualifying(nation, fmt, null, tempo);
+    const qualifying = playedQualifying ?? runQualifying(nation, fmt, null, tempo);
     const managerFixtures: ManagerSummerMatch[] = [];
     return { ...simulateTournament(nation, fmt, year, qualifying, null, null, managerFixtures, tempo), managerFixtures };
   } finally {

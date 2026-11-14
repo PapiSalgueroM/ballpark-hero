@@ -149,8 +149,8 @@ const CONTROLS = {
   manager: {
     file: 'src/lib/soccerInternational.ts',
     edits: [
-      ["const fmt = tournamentForYear(nation, managerFormatYear(year));",
-       "const fmt = tournamentForYear(nation, year);"],
+      ["  const fmt = tournamentForYear(nation, managerFormatYear(year));\n  if (!fmt) return null;",
+       "  const fmt = tournamentForYear(nation, year);\n  if (!fmt) return null;"],
     ],
   },
   share: {
@@ -208,8 +208,8 @@ const MAIN_EDITS = [
   ["nationsIn(fmt.guestsFrom ?? 'CONCACAF')", "nationsIn('CONCACAF')"],
   ["const first = fmt.firstRound ?? firstRoundFor(koField.length);",
    "const first = firstRoundFor(koField.length);"],
-  ["const fmt = tournamentForYear(nation, managerFormatYear(year));",
-   "const fmt = tournamentForYear(nation, year);"],
+  ["  const fmt = tournamentForYear(nation, managerFormatYear(year));\n  if (!fmt) return null;",
+   "  const fmt = tournamentForYear(nation, year);\n  if (!fmt) return null;"],
 ];
 let section = 0;
 const failedSections = new Set();

@@ -857,6 +857,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Create your player",
         items: [
           "Create your player: name, one of 5 positions (C, LW, RW, D, G), and one of 17 archetypes, from Generational Talent to The Agitator to The Workhorse in net.",
+          "Your setup stays in this browser if you leave before starting the draft.",
         ],
         subsections: [
           {

@@ -1,6 +1,8 @@
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
+import MlbMyCareerBoard from '@/components/mlb-my-career/MlbMyCareerBoard';
+import NhlMyCareerBoard from '@/components/nhl-my-career/NhlMyCareerBoard';
 
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: vi.fn() }) }));
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), getCurrentPlayerName: () => null }));
@@ -83,4 +85,59 @@ it('keeps the saved prospect recoverable until returning setup can be written', 
   expect(name()).toHaveValue('Fixture Receiver');
   expect(localStorage.getItem(careerKey)).toBeNull();
   expect(JSON.parse(localStorage.getItem(draftKey)!)).toMatchObject({ nameInput: 'Fixture Receiver' });
+});
+
+it.each([
+  { sport: 'mlb', Board: MlbMyCareerBoard, era: /2004 throwback/, eraId: 'y2004', pos: 'SS',
+    archetype: /Slugging Shortstop/, archetypeId: 'slugging' },
+  { sport: 'nhl', Board: NhlMyCareerBoard, era: /2006-07 throwback/, eraId: 'y2006', pos: 'D',
+    archetype: /Complete Defenseman/, archetypeId: 'complete' },
+])('keeps $sport setup through reload and the prospect handoff without touching other sport drafts', ({
+  sport, Board, era, eraId, pos, archetype, archetypeId,
+}) => {
+  const activeKey = sport + '-my-career-save-v1';
+  const setupKey = 'dukb-' + sport + '-career-creator-v1';
+  const elsewhere = ['nba', 'nfl', sport === 'mlb' ? 'nhl' : 'mlb'].map(other => 'dukb-' + other + '-career-creator-v1');
+  elsewhere.forEach(key => localStorage.setItem(key, 'held'));
+  const first = render(<Board />);
+  fireEvent.change(name(), { target: { value: 'Fixture Player' } });
+  fireEvent.click(button(era));
+  fireEvent.click(button(new RegExp('^' + pos + '$')));
+  fireEvent.click(button(archetype));
+  const appearance = within(first.container.querySelector<HTMLElement>(`[data-career-appearance="${sport}"]`)!);
+  fireEvent.click(appearance.getByRole('button', { name: /Hair/ }));
+  fireEvent.click(appearance.getByRole('button', { name: 'Curls' }));
+  expect(localStorage.getItem(activeKey)).toBeNull();
+  first.unmount();
+
+  const second = render(<Board />);
+  const setup = { nameInput: 'Fixture Player', pos, eraId, archetypeId, appearance: { hairstyle: 'curls' } };
+  expect(name()).toHaveValue(setup.nameInput);
+  expect(JSON.parse(localStorage.getItem(setupKey)!)).toMatchObject(setup);
+  fireEvent.click(button('Play your road to the draft'));
+  const prospect = localStorage.getItem(activeKey);
+  expect(JSON.parse(prospect!)).toMatchObject({ phase: 'prospect', prospect: {
+    name: setup.nameInput, pos, eraId, archetypeId, appearance: { hairstyle: 'curls' },
+  } });
+  expect(localStorage.getItem(setupKey)).toBeNull();
+  second.unmount();
+
+  const spy = vi.spyOn(Storage.prototype, 'setItem');
+  const third = render(<Board />);
+  expect(button('Back to player')).toBeInTheDocument();
+  expect(spy.mock.calls.filter(([key]) => key === activeKey || key === setupKey)).toEqual([]);
+  expect(localStorage.getItem(activeKey)).toBe(prospect);
+  fireEvent.click(button('Back to player'));
+  expect(localStorage.getItem(activeKey)).toBeNull();
+  expect(JSON.parse(localStorage.getItem(setupKey)!)).toMatchObject(setup);
+  third.unmount();
+
+  render(<Board />);
+  expect(name()).toHaveValue(setup.nameInput);
+  fireEvent.click(button('Enter the draft'));
+  expect(JSON.parse(localStorage.getItem(activeKey)!)).toMatchObject({ phase: 'season', c: {
+    name: setup.nameInput, pos, eraId, archetype: { id: archetypeId }, appearance: { hairstyle: 'curls' },
+  } });
+  expect(localStorage.getItem(setupKey)).toBeNull();
+  expect(elsewhere.map(key => localStorage.getItem(key))).toEqual(['held', 'held', 'held']);
 });

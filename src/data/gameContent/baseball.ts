@@ -854,6 +854,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
         heading: "Creating your player and picking an archetype",
         items: [
           "Create your player: name, one of 11 positions (SP, RP, C, 1B, 2B, 3B, SS, LF, CF, RF, DH), and one of 33 archetypes, from Flamethrower to The Framer to Pure Masher.",
+          "Your setup stays in this browser if you leave before starting the draft.",
         ],
       },
       {

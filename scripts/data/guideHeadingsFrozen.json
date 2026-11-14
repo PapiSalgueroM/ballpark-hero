@@ -425,6 +425,7 @@
         "If you earn a national team job, open the Manager tile after a tournament summer to see the latest qualifying table, group table and finals results. If your team misses the tournament and the federation lets you go, you can still read the qualifying report.",
         "Set National tactics in the Manager tile before that summer. Defensive reduces scoring for both sides. Attacking opens up the games and chances for both teams. The report remembers the tactics used.",
         "With a national job in the current era, open Manager to pick your starting XI for the coming tournament summer. Choose any eligible player for each slot. The lineup's ratings and positional fit affect the simulated campaign, and the report keeps the team you used.",
+        "Open national qualifying in your club's season review to play each qualifier with your saved XI and tactics. Finish the qualifying group, then continue to simulate the finals. If you skip the first qualifier, you can still simulate the whole campaign at once.",
         "Finish 2024/25 with a club from the verified 2025 Club World Cup field to get a simulated summer campaign. Open your season review to see the group table and results, then find the saved report under Cups.",
         "In 2025/26, open Cups to follow the 2025 Intercontinental Cup. PSG enters in the final, and the five simulated results appear as your club calendar advances past their dates. A title goes in your cabinet if you manage the winner when the final is played.",
         "Rivals and free agents also gain or lose OVR during league play. The transfer market and opponent squads show their current ratings. An older career starts these world rating updates when you open its next season.",
@@ -1944,6 +1945,7 @@
     "/mlb-my-career": {
       "howToPlay": [
         "Create your player: name, one of 11 positions (SP, RP, C, 1B, 2B, 3B, SS, LF, CF, RF, DH), and one of 33 archetypes, from Flamethrower to The Framer to Pure Masher.",
+        "Your setup stays in this browser if you leave before starting the draft.",
         "Pick your league: today's MLB, or the 2004 throwback with the Expos in Montreal, the Anaheim Angels, the Florida Marlins and the Devil Rays.",
         "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
         "During a playing season, open Deal with it under the heat meter when you're holding dirty money. Choose Come clean, Give it away, Keep it quiet or Wash it after reading the cost and any catch risk.",
@@ -2655,6 +2657,7 @@
     "/nhl-my-career": {
       "howToPlay": [
         "Create your player: name, one of 5 positions (C, LW, RW, D, G), and one of 17 archetypes, from Generational Talent to The Agitator to The Workhorse in net.",
+        "Your setup stays in this browser if you leave before starting the draft.",
         "Pick your league: today's NHL, or the 2006-07 throwback with the Thrashers in Atlanta and the Coyotes in Phoenix, before Vegas or Seattle existed.",
         "Build your look, then spend the money in 7 aisles including a shady one that only appears once you have something to hide.",
         "During a playing season, open Deal with it under the heat meter when you're holding dirty money. Choose Come clean, Give it away, Keep it quiet or Wash it after reading the cost and any catch risk.",
