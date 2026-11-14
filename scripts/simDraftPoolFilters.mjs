@@ -45,7 +45,7 @@ try {
   } else {
     assert.equal(run.status, 0, diagnostic);
     assert.match(output, /Tests\s+7 passed/, diagnostic);
-    console.log('simDraftPoolFilters: seven rendered checks pass for country/foot/position/name targeting, counts/reset, original10/20 policy, exact identity and disabled choices.');
+    console.log('simDraftPoolFilters: seven rendered checks pass for country/foot/position/name targeting, counts/reset, 10/20-row pages, exact identity and disabled choices.');
   }
   assert.equal(await readFile(sourcePath, 'utf8'), source, 'Production component must remain unchanged');
   console.log('simDraftPoolFilters: no filtering selections, save writes, random draws or input mutation; production source unchanged.');

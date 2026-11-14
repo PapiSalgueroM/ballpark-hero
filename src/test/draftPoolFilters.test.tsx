@@ -18,16 +18,24 @@ const target = (container: HTMLElement, label: string, value: string) => fireEve
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 describe('Fantasy Draft pool targeting', () => {
-  it('preserves the original default best ten and two-character twenty-match search policy', () => {
+  it('opens with the best ten and pages all available picks, with twenty results per search page', () => {
     const players = fixture();
     const sorted = ranked(players);
     const draftedIds = new Set([sorted[0].id]);
     const isEligible = (player: DraftPlayer) => player.id !== sorted[1].id;
-    const view = render(<PlayerPool players={players} draftedIds={draftedIds} isEligible={isEligible} onSelect={vi.fn()} />);
+    const onSelect = vi.fn();
+    const view = render(<PlayerPool players={players} draftedIds={draftedIds} isEligible={isEligible} onSelect={onSelect} />);
     const expected = sorted.filter(player => !draftedIds.has(player.id) && isEligible(player));
     count(view.container, 10, 46);
     expect(names(view.container)).toEqual(expected.slice(0, 10).map(player => player.name));
     expect(names(view.container)).toEqual(poolShortlist(players, draftedIds, isEligible, 'All', '').map(player => player.name));
+    const next = view.getByRole('button', { name: 'Next' });
+    for (let page = 0; page < 4; page++) fireEvent.click(next);
+    expect(view.getByRole('status')).toHaveTextContent('Showing 41 to 46 of 46 available players.');
+    expect(names(view.container)).toEqual(expected.slice(40).map(player => player.name));
+    fireEvent.click(rows(view.container).at(-1)!);
+    expect(onSelect).toHaveBeenCalledExactlyOnceWith(expected.at(-1));
+    expect(next).toBeDisabled();
     const search = view.getByRole('textbox', { name: 'Search players' });
     fireEvent.change(search, { target: { value: 'F' } });
     count(view.container, 10, 46);
@@ -37,7 +45,10 @@ describe('Fantasy Draft pool targeting', () => {
     expect(names(view.container)).toEqual(sorted.slice(0, 20).map(player => player.name));
     expect(rows(view.container)[0]).toBeDisabled();
     expect(rows(view.container)[1]).toBeDisabled();
-    expect(view.getByText('Best 10 available • search shows up to 20 matches • 1 drafted')).toBeVisible();
+    expect(view.getByText('1 drafted', { exact: true })).toBeVisible();
+    fireEvent.click(next);
+    expect(view.getByRole('status')).toHaveTextContent('Showing 21 to 40 of 48 matching players.');
+    expect(names(view.container)).toEqual(sorted.slice(20, 40).map(player => player.name));
   });
 
   it('combines country, foot, position and name before the shortlist and resets every selector', () => {
