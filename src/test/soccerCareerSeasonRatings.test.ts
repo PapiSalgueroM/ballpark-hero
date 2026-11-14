@@ -2,9 +2,17 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { advanceProSeason, advanceYouthYear, calcOverall, FALLBACK_CLUBS, type CareerState } from '@/lib/soccerCareerEngine';
 import { buildAcademyReport } from '@/lib/soccerCareerAcademy';
+import { seasonOverallAtRound } from '@/lib/careerSeasonRatings';
 
 describe('Soccer Career in-season ratings', () => {
   afterEach(() => vi.restoreAllMocks());
+
+  it('uses the surrounding saved checkpoints to place league matchdays', () => {
+    const path = [70, 74, 78, 74, 72] as const;
+    const ratings = Array.from({ length: 9 }, (_, index) => seasonOverallAtRound([...path], index + 1, 9));
+    expect(ratings).toEqual([70, 72, 74, 76, 78, 76, 74, 73, 72]);
+    expect(seasonOverallAtRound([...path], 1, 1)).toBe(70);
+  });
 
   it.each([[19, 1], [34, -1]])('carries the age-%i season path forward exactly once', (age, direction) => {
     const data = JSON.parse(readFileSync('scripts/data/careerLeagueWorldSaves1100.json', 'utf8'));
