@@ -1026,7 +1026,7 @@ export const NFL_SPEND_ITEMS: NflSpendItem[] = [
   // ── Body ──
   { id: 'private_chef', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.12, desc: 'Every meal built for the season, 120k a year', oneTime: true, effect: 'Health +4 a year' },
   { id: 'recovery_suite', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 1.5, yearly: 0.1, desc: 'Cryo, hyperbaric, the whole circus, 1.5M. Injuries can still happen.', oneTime: true, minNetWorth: 2, effect: '25% lower simulated injury risk' },
-  { id: 'speed_coach', name: 'Private Speed Coach', emoji: '⚡', category: 'body', cost: 0, yearly: 0.15, desc: 'The guy who fixes everyone, 150k a year', oneTime: true, effect: 'Rating +1 each offseason through age 26, up to your ceiling' },
+  { id: 'speed_coach', name: 'Private Speed Coach', emoji: '⚡', category: 'body', cost: 0, yearly: 0.15, desc: 'The guy who fixes everyone, 150k a year', oneTime: true, effect: 'Up to +1 rating during each season through age 26' },
   { id: 'sleep_lab', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.6, desc: 'Turns out most of it is sleep, 600k', oneTime: true, effect: 'Health +8' },
   { id: 'sports_psych', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.1, desc: 'The part nobody used to talk about, 100k a year', oneTime: true, effect: 'Morale +8 on hire' },
   { id: 'vision_training', name: 'Vision Training', emoji: '👁️', category: 'body', cost: 0.8, desc: 'Read the field a quarter second sooner, 800k', oneTime: true, effect: 'Rating +2, up to your ceiling' },
