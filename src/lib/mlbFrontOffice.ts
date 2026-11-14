@@ -88,6 +88,7 @@ export interface MlbLeague {
   freeAgents: MlbGmPlayer[];
   round: number; // 1..MLB_ROUNDS
   champions: { season: number; team: string }[];
+  rotationPlan?: { team: string; season: number; round: number };
   /** Round 851: this season's fixtures, "HOME-AWAY" per round (foSchedule.ts).
       Optional: a league saved before the round finishes that season the old
       way and is booked at its next summer. */
@@ -219,10 +220,10 @@ export function mlbCapRoom(t: MlbGmTeam, cap: number): number {
     starters, 2 relievers. Lifted out of mlbStrength unchanged so the roster
     screen and the opening payroll read the same men the sim does. A bench
     man counts only when he is better than a starter or a starter is hurt. */
-export function mlbStrengthUnits<T extends { pos: string; ovr: number; out: number }>(t: { players: T[] }): { bats: T[]; rot: T[]; pen: T[] } {
+export function mlbStrengthUnits<T extends { pos: string; ovr: number; out: number }>(t: { players: T[] }, rotationSize = 3): { bats: T[]; rot: T[]; pen: T[] } {
   const healthy = t.players.filter(p => p.out === 0);
   const bats = healthy.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, 8);
-  const rot = healthy.filter(p => p.pos === 'SP').sort((a, b) => b.ovr - a.ovr).slice(0, 3);
+  const rot = healthy.filter(p => p.pos === 'SP').sort((a, b) => b.ovr - a.ovr).slice(0, rotationSize);
   const pen = healthy.filter(p => p.pos === 'RP' || p.pos === 'CL').sort((a, b) => b.ovr - a.ovr).slice(0, 2);
   return { bats, rot, pen };
 }
@@ -234,11 +235,40 @@ export function mlbSimReads(t: { players: MlbGmPlayer[] }): string[] {
 }
 
 /** Strength: lineup 55%, rotation 33%, bullpen 12%; IL players excluded. */
-export function mlbStrength(t: MlbGmTeam): number {
-  const { bats, rot, pen } = mlbStrengthUnits(t);
+export function mlbStrength(t: MlbGmTeam, rotationSize = 3): number {
+  const { bats, rot, pen } = mlbStrengthUnits(t, rotationSize);
   const avg = (xs: MlbGmPlayer[], fallback: number) =>
     xs.length ? xs.reduce((s, p) => s + p.ovr, 0) / xs.length : fallback;
   return avg(bats, 62) * 0.55 + avg(rot, 62) * 0.33 + avg(pen, 62) * 0.12;
+}
+
+export const MLB_PROTECTED_STARTERS = 5;
+const DEFAULT_INJURY_RISK = 0.025;
+export const MLB_ROTATION_RISK_REDUCTION = 40;
+const PROTECTED_INJURY_RISK = DEFAULT_INJURY_RISK * (1 - MLB_ROTATION_RISK_REDUCTION / 100);
+
+export function mlbRotationChoices(league: MlbLeague, team: string) {
+  const club = league.teams[team];
+  if (!club?.depth || league.champions.some(row => row.season === league.season)
+    || mlbStrengthUnits(club, MLB_PROTECTED_STARTERS).rot.length < MLB_PROTECTED_STARTERS) return null;
+  return { usual: mlbStrength(club), protected: mlbStrength(club, MLB_PROTECTED_STARTERS) };
+}
+
+export function mlbRotationPlanned(league: MlbLeague, team: string): boolean {
+  const plan = league.rotationPlan;
+  return plan?.team === team && plan.season === league.season && plan.round === league.round;
+}
+
+export function setMlbRotationPlan(league: MlbLeague, team: string, protect: boolean): MlbLeague {
+  if (protect === mlbRotationPlanned(league, team) || (protect && !mlbRotationChoices(league, team))) return league;
+  const next = { ...league };
+  if (protect) next.rotationPlan = { team, season: league.season, round: league.round };
+  else delete next.rotationPlan;
+  return next;
+}
+
+function mlbWinProbFromStrength(a: number, b: number): number {
+  return 1 / (1 + Math.pow(10, -(a - b) / 25));
 }
 
 /** Baseball is the high-variance sport: even great teams sit near .600.
@@ -246,14 +276,16 @@ export function mlbStrength(t: MlbGmTeam): number {
     bounded edge, src/lib/mlbGmDesk.ts). Both default to nothing, so every
     caller that passes none plays exactly as before. */
 export function mlbWinProb(a: MlbGmTeam, b: MlbGmTeam, edgeA = 0, edgeB = 0): number {
-  const gap = (mlbStrength(a) + edgeA) - (mlbStrength(b) + edgeB);
-  return 1 / (1 + Math.pow(10, -gap / 25));
+  return mlbWinProbFromStrength(mlbStrength(a) + edgeA, mlbStrength(b) + edgeB);
 }
+
+export type MlbRotationReceipt = { available: number } | { unavailable: true };
 
 export interface MlbRoundReport {
   myWins: number;
   myLosses: number;
   notes: string[];
+  rotation?: MlbRotationReceipt;
 }
 
 /** Round 1020: what a GM desk may hand a round. Absent, the round plays exactly as it always has. */
@@ -292,12 +324,13 @@ function unitHash(seed: number, key: string, salt: number): number {
    man's roll comes from that draw and his own name. Same odds as before
    (2.5 percent a round, out 1 to 4 rounds). Saves from before this round
    keep the old pass, so they play exactly as they did. */
-function rollDepthInjuries(league: MlbLeague, myTeam: string, rng: () => number, notes: string[], opts?: MlbRoundOptions): void {
+function rollDepthInjuries(league: MlbLeague, myTeam: string, rng: () => number, notes: string[], opts?: MlbRoundOptions, protectedIds?: Set<string>): void {
   const roundSeed = Math.floor(rng() * 4294967296);
   for (const t of Object.values(league.teams)) {
     for (const p of t.players) {
       if (p.out > 0) { p.out -= 1; continue; }
-      if (unitHash(roundSeed, p.name, 1) < 0.025) {
+      const risk = t.abbr === myTeam && protectedIds?.has(p.id) ? PROTECTED_INJURY_RISK : DEFAULT_INJURY_RISK;
+      if (unitHash(roundSeed, p.name, 1) < risk) {
         p.out = 1 + Math.floor(unitHash(roundSeed, p.name, 2) * 4);
         if (opts?.injuryRounds) p.out = opts.injuryRounds(t.abbr, p, p.out);
         if (t.abbr === myTeam) notes.push(`🚑 ${p.name} hits the IL for ${p.out} round${p.out === 1 ? '' : 's'}.`);
@@ -311,12 +344,16 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
   const notes: string[] = [];
   let myW = 0, myL = 0;
   const deep = Object.values(league.teams).some(t => !!t.depth);
-  if (deep) rollDepthInjuries(league, myTeam, rng, notes, opts);
+  const planned = mlbRotationPlanned(league, myTeam);
+  const protect = planned && mlbRotationChoices(league, myTeam);
+  const protectedIds = protect ? new Set(mlbStrengthUnits(league.teams[myTeam], MLB_PROTECTED_STARTERS).rot.map(p => p.id)) : undefined;
+  if (league.rotationPlan) delete league.rotationPlan;
+  if (deep) rollDepthInjuries(league, myTeam, rng, notes, opts, protectedIds);
   else {
     for (const t of Object.values(league.teams)) {
       for (const p of t.players) {
         if (p.out > 0) p.out -= 1;
-        else if (rng() < 0.025) {
+        else if (rng() < DEFAULT_INJURY_RISK) {
           p.out = 1 + Math.floor(rng() * 4);
           if (opts?.injuryRounds) p.out = opts.injuryRounds(t.abbr, p, p.out);
           if (t.abbr === myTeam) notes.push(`🚑 ${p.name} hits the IL for ${p.out} round${p.out === 1 ? '' : 's'}.`);
@@ -324,12 +361,17 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
       }
     }
   }
+  const protectedStrength = protectedIds ? mlbStrength(league.teams[myTeam], MLB_PROTECTED_STARTERS) : undefined;
+  const roundStrength = (team: MlbGmTeam) => team.abbr === myTeam && protectedStrength !== undefined ? protectedStrength : mlbStrength(team);
   /* Round 851: the round's booked games (foSchedule.ts); a league saved mid
      season before the round finishes that season the old way. */
   foPlayRound(league, abbrs, MLB_GAMES_PER_ROUND, rng, (abbr, opp) => {
     const me = league.teams[abbr];
     const them = league.teams[opp];
-    const p = opts?.edges ? mlbWinProb(me, them, opts.edges[abbr] ?? 0, opts.edges[opp] ?? 0) : mlbWinProb(me, them);
+    const p = mlbWinProbFromStrength(
+      roundStrength(me) + (opts?.edges?.[abbr] ?? 0),
+      roundStrength(them) + (opts?.edges?.[opp] ?? 0),
+    );
     if (rng() < p) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
     else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
   }, () => mlbBookSeason(league, rng));
@@ -337,7 +379,10 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
     sport: 'mlb', rounds: MLB_ROUNDS, youngThrough: 25, declineFrom: 33,
     acceleratedFrom: 37, marketDeclineFrom: 33, floor: 63,
   }, myTeam, notes, opts?.growth);
-  return { myWins: myW, myLosses: myL, notes };
+  const rotation: MlbRotationReceipt | undefined = protectedIds ? {
+    available: league.teams[myTeam].players.filter(p => protectedIds.has(p.id) && p.out === 0).length,
+  } : planned ? { unavailable: true } : undefined;
+  return { myWins: myW, myLosses: myL, notes, ...(rotation ? { rotation } : {}) };
 }
 
 export function mlbStandings(league: MlbLeague, group?: string[]): MlbGmTeam[] {

@@ -9,8 +9,8 @@ import {
   initMlbLeague, simMlbRound, mlbStandings, runMlbPlayoffs, mlbOffseason,
   mlbDraftClass, mlbProspectToPlayer, mlbStrength, mlbCapUsed, mlbCapRoom,
   mlbRelease, mlbSign, mlbTrade, mlbTradeValue, mlbAiMoves, AL, NL, MLB_DIVISIONS,
-  MLB_ROUNDS,
-  type MlbLeague, type MlbProspect, type MlbSeriesResult, mlbExecuteTalksTrade,
+  MLB_ROUNDS, MLB_PROTECTED_STARTERS, MLB_ROTATION_RISK_REDUCTION, mlbRotationChoices, mlbRotationPlanned, setMlbRotationPlan,
+  type MlbLeague, type MlbProspect, type MlbSeriesResult, type MlbRotationReceipt, mlbExecuteTalksTrade,
   ensureMlbLeagueIds, mlbRosterMin, mlbRosterMax, mlbSimReads, isPitcher, mlbOverLimit, mlbSalaryFor,
   type MlbGmPlayer,
   mlbDraftCapital, mlbConsumeDraftPick, mlbAiDraftPicks,
@@ -72,7 +72,7 @@ const CUT_SAID = 'You designated him for assignment this season.';
 const MLB_WORDS: FoSportWords = { title: 'the World Series', playoffs: 'October', round: 'a series', games: 162 };
 
 type Postseason = { series: MlbSeriesResult[]; champion: string; gradeLine: string | null };
-type LastRound = { team: string; season: number; round: number; wins: number; losses: number; notes: string[] };
+type LastRound = { team: string; season: number; round: number; wins: number; losses: number; notes: string[]; rotation?: MlbRotationReceipt };
 
 function readLastRound(value: unknown, league: MlbLeague, team: string): LastRound | null {
   if (!value || typeof value !== 'object') return null;
@@ -85,11 +85,23 @@ function readLastRound(value: unknown, league: MlbLeague, team: string): LastRou
     || typeof row.losses !== 'number' || !Number.isInteger(row.losses) || row.losses < 0 || row.losses > club.losses
     || !Array.isArray(row.notes) || row.notes.length > 4
     || row.notes.some(line => typeof line !== 'string' || line.length > 640)) return null;
-  return { team, season: league.season, round: row.round, wins: row.wins, losses: row.losses, notes: row.notes };
+  const receipt = row.rotation;
+  let rotation: MlbRotationReceipt | undefined;
+  if (receipt && typeof receipt === 'object') {
+    if ('unavailable' in receipt && receipt.unavailable === true) rotation = { unavailable: true };
+    else if ('available' in receipt && Number.isInteger(receipt.available)
+      && receipt.available >= 0 && receipt.available <= MLB_PROTECTED_STARTERS) rotation = { available: receipt.available };
+  }
+  return { team, season: league.season, round: row.round, wins: row.wins, losses: row.losses, notes: row.notes, ...(rotation ? { rotation } : {}) };
+}
+
+function rotationHeadline(row: MlbRotationReceipt): string {
+  return 'unavailable' in row ? 'Usual rotation played. Five healthy starters were needed to protect it.'
+    : `Protected rotation: ${row.available} of ${MLB_PROTECTED_STARTERS} planned starters stayed available.`;
 }
 
 function roundHeadlines(result: LastRound): string[] {
-  return [`Round ${result.round}: you went ${result.wins}-${result.losses}.`, ...result.notes];
+  return [`Round ${result.round}: you went ${result.wins}-${result.losses}.`, ...(result.rotation ? [rotationHeadline(result.rotation)] : []), ...result.notes];
 }
 
 interface SaveShape {
@@ -121,6 +133,7 @@ export default function MlbFrontOfficeBoard() {
   const [tab, setTab] = useState<Tab | null>(null);
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<MlbLeague | null>(null);
+  const [rotationSaveError, setRotationSaveError] = useState(false);
   const [feed, setFeed] = useState<string[]>([]);
   const lastRound = useRef<LastRound | null>(null);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
@@ -202,6 +215,7 @@ export default function MlbFrontOfficeBoard() {
          id fix can hold two men under one. The draft class is passed too: it
          is minted from the same counter, so it shares the id space. */
       ensureMlbLeagueIds(s.league, s.draftClass);
+      if (!mlbRotationPlanned(s.league, s.myTeam)) delete s.league.rotationPlan;
       setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
       lastRound.current = readLastRound(s.lastRound, s.league, s.myTeam);
       if (lastRound.current) setFeed(roundHeadlines(lastRound.current));
@@ -238,7 +252,7 @@ export default function MlbFrontOfficeBoard() {
 
   const persist = useCallback((patch: Partial<SaveShape>, lg: MlbLeague | null, team: string) => {
     try {
-      if (!lg) return;
+      if (!lg) return false;
       const result = lastRound.current;
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft: draftBatchesLeft ?? undefined,
@@ -247,7 +261,8 @@ export default function MlbFrontOfficeBoard() {
         ...(result?.team === team && result.season === lg.season ? { lastRound: result } : {}),
         ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch,
       } satisfies SaveShape));
-    } catch { /* full */ }
+      return true;
+    } catch { return false; }
   }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
 
   const label = (abbr: string) => {
@@ -338,6 +353,7 @@ export default function MlbFrontOfficeBoard() {
     /* Round 829 review: a full roster club the draft took past 28 DFAs down
        before it plays, through the same two tap DFA as any other cut. */
     if (mlbOverLimit(my) > 0) return;
+    setRotationSaveError(false);
     const lg: MlbLeague = JSON.parse(JSON.stringify(league));
     /* Round 1020: with the desk on, the staff's edge and the trainer ride on
        the round; with it off the round is called exactly as before. */
@@ -350,8 +366,9 @@ export default function MlbFrontOfficeBoard() {
       nextGm = tick.desk;
       if (tick.line) deskLines.push(tick.line);
     }
-    const newFeed = [`Round ${lg.round}: you went ${report.myWins}-${report.myLosses}.`, ...deskLines, ...report.notes];
-    const result = { team: myTeam, season: lg.season, round: lg.round, wins: report.myWins, losses: report.myLosses };
+    const result = { team: myTeam, season: lg.season, round: lg.round, wins: report.myWins, losses: report.myLosses,
+      notes: [...deskLines, ...report.notes].slice(0, 4), ...(report.rotation ? { rotation: report.rotation } : {}) };
+    const newFeed = roundHeadlines(result);
     if (nextGm !== gm) setGm(nextGm);
     if (lg.round >= MLB_ROUNDS) {
       const { series: sr, champion: champ } = runMlbPlayoffs(lg, Math.random, nextGm ? mlbDeskEdges(nextGm, lg, myTeam) : undefined);
@@ -385,17 +402,19 @@ export default function MlbFrontOfficeBoard() {
       }));
       setPhase('recap');
       setLeague(lg);
-      lastRound.current = { ...result, notes: newFeed.slice(1, 5) };
+      lastRound.current = result;
       setFeed(newFeed); setFeedSlam(null);
       persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
       return;
     }
     lg.round += 1;
     /* Round 1020: the round the deadline shuts says so in the feed. */
-    if (nextGm && mlbTradeWindow(league).open && !mlbTradeWindow(lg).open) newFeed.splice(1, 0, '🔒 The trade deadline has passed. Deals open again once the season is over.');
-    lastRound.current = { ...result, notes: newFeed.slice(1, 5) };
+    if (nextGm && mlbTradeWindow(league).open && !mlbTradeWindow(lg).open) {
+      result.notes = ['🔒 The trade deadline has passed. Deals open again once the season is over.', ...result.notes].slice(0, 4);
+    }
+    lastRound.current = result;
     setLeague(lg);
-    setFeed(newFeed); setFeedSlam(null);
+    setFeed(roundHeadlines(result)); setFeedSlam(null);
     persist({}, lg, myTeam);
   };
 
@@ -726,6 +745,7 @@ export default function MlbFrontOfficeBoard() {
 
   const room = mlbCapRoom(my, league.cap);
   const strength = Math.round(mlbStrength(my));
+  const rotation = tab === 'round' ? mlbRotationChoices(league, myTeam) : null;
 
   /* ---------------- Round 180: the reload path after a firing ---------------- */
   if (phase === 'fired') {
@@ -1026,7 +1046,7 @@ export default function MlbFrontOfficeBoard() {
           {/* Round 829: who the sim plays is a fact the engine decides, so the
               screen reads it from the engine rather than guessing. */}
           <p className="mb-2 text-center text-[10px] text-muted-foreground" data-roster-count>
-            {my.players.length} on the roster. The sim plays your best healthy 8 bats, 3 starters and 2 relievers.
+            {my.players.length} on the roster. The usual sim picks are your best healthy 8 bats, 3 starters and 2 relievers.
           </p>
           {/* Round 829 review: real men on made up money, said where the money
               is shown, and the re-sign jump said before it lands. */}
@@ -1239,6 +1259,29 @@ export default function MlbFrontOfficeBoard() {
       {tab === 'round' && (
         <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
           <p className="mb-2 text-sm text-foreground">Each round simulates a week and a half of baseball across the league.</p>
+          {(rotation || mlbRotationPlanned(league, myTeam)) && <div className="mx-auto mb-3 max-w-sm text-left">
+            <label className="block text-xs font-semibold">
+              Pitching plan for Round {league.round}
+              <select
+                value={mlbRotationPlanned(league, myTeam) ? 'protect' : 'usual'}
+                onChange={event => {
+                  const next = setMlbRotationPlan(league, myTeam, event.target.value === 'protect');
+                  if (next === league) return;
+                  if (!persist({}, next, myTeam)) { setRotationSaveError(true); return; }
+                  setRotationSaveError(false);
+                  setLeague(next);
+                }}
+                className="mt-1 min-h-11 w-full rounded-lg border border-border bg-background px-3 text-sm"
+              >
+                <option value="usual">Usual rotation</option>
+                <option value="protect" disabled={!rotation}>Protect the rotation</option>
+              </select>
+            </label>
+            <p className="mt-1 text-xs text-muted-foreground">Use five healthy starters in this round&apos;s pitching rating instead of three. Those five have a {MLB_ROTATION_RISK_REDUCTION}% lower chance of a new simulated injury this round. A healthy backup can cover an injury.</p>
+            {rotation ? <p className="mt-1 text-xs text-muted-foreground">Current team strength {rotation.usual.toFixed(1)} usual · {rotation.protected.toFixed(1)} protected.</p>
+              : <p className="mt-1 text-xs text-muted-foreground">Five healthy starters are needed. The usual rotation will play if the plan is unavailable.</p>}
+            {rotationSaveError && <p role="alert" className="mt-1 text-xs text-destructive">Could not save the pitching plan. Choose it again to retry.</p>}
+          </div>}
           {overLimit > 0 && (
             <p data-over-limit className="mb-2 text-xs text-destructive">
               You are carrying {my.players.length}, {overLimit} over the limit of {mlbRosterMax(my)}. DFA {overLimit === 1 ? 'one man' : `${overLimit} men`} on the roster box before you play.

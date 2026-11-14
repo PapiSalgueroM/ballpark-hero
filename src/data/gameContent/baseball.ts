@@ -1088,7 +1088,8 @@ export const BASEBALL_CONTENT: GameContentMap = {
         heading: "Inheriting a franchise's lineup and bullpen",
         items: [
           "Choose a franchise and inherit its real 26: the lineup and bench, a five man rotation and the bullpen, as the club stood on the last day of the 2026 regular season.",
-          "The roster box shows who the sim plays: your best healthy 8 bats, 3 starters and 2 relievers. Everyone else is depth, and depth is who plays the day a starter hits the IL.",
+          "The roster box shows the usual sim picks: your best healthy 8 bats, 3 starters and 2 relievers. Everyone else is depth, and depth is who plays the day a starter hits the IL.",
+          "Protect the rotation before a round to spread the workload across five healthy starters. Those five face a lower simulated injury risk, while weaker fourth and fifth starters can lower your team strength. The round report shows how many stayed available.",
         ],
       },
       {

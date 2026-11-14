@@ -520,9 +520,13 @@ export function worstAffordableXI(campaign: Campaign): StockCard[] {
 }
 
 export function scoreCampaign(campaign: Campaign, picks: StockCard[]): CampaignResult {
+  return scoreAgainstBestXI(campaign, picks, bestAffordableXI(campaign));
+}
+
+function scoreAgainstBestXI(campaign: Campaign, picks: StockCard[], best: StockCard[]): CampaignResult {
   const spend = picks.reduce((s, c) => s + c.price, 0);
   const finalValue = picks.reduce((s, c) => s + c.final, 0);
-  const bestValue = bestAffordableXI(campaign).reduce((s, c) => s + c.final, 0);
+  const bestValue = best.reduce((s, c) => s + c.final, 0);
   const worstValue = worstAffordableXI(campaign).reduce((s, c) => s + c.final, 0);
   const growth = campaign.budget > 0 ? finalValue / campaign.budget : 0;
   const score = bestValue === worstValue
@@ -540,14 +544,36 @@ export interface StockFinish extends CampaignResult {
   finalYear: number;
   budget: number;
   holdings: Holding[];
+  bestXI?: Pick<Holding, 'position' | 'name' | 'price' | 'final'>[];
 }
 
 export function finishCampaign(campaign: Campaign, picks: StockCard[], holdings: Holding[]): StockFinish {
-  return { ...scoreCampaign(campaign, picks), startYear: campaign.startYear, finalYear: campaign.finalYear, budget: campaign.budget, holdings };
+  const best = bestAffordableXI(campaign);
+  const score = scoreAgainstBestXI(campaign, picks, best);
+  const bestXI = best.map(card => ({ position: card.position, name: identityOf(campaign, card), price: card.price, final: card.final }));
+  return { ...score, startYear: campaign.startYear, finalYear: campaign.finalYear, budget: campaign.budget, holdings, bestXI };
 }
 
 const num = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v);
 const str = (v: unknown): v is string => typeof v === 'string';
+
+function validBestXI(rows: unknown, budget: number, bestValue: number): rows is NonNullable<StockFinish['bestXI']> {
+  if (!Array.isArray(rows) || rows.length !== STOCK_FORMATION.slots.length) return false;
+  const names = new Set<string>();
+  let spend = 0;
+  let value = 0;
+  for (const [i, row] of rows.entries()) {
+    if (!row || typeof row !== 'object') return false;
+    const { position, name, price, final } = row;
+    if (!str(name) || !name.trim() || name.length > 200 || names.has(name)
+      || !str(position) || !(STOCK_FORMATION.slots[i].allowed as string[]).includes(position)
+      || !num(price) || price <= 0 || !num(final) || final <= 0) return false;
+    names.add(name);
+    spend += price;
+    value += final;
+  }
+  return spend <= budget && value === bestValue;
+}
 
 function validateFinish(fields: Record<string, unknown>): StockFinish | null {
   const f = fields as Partial<StockFinish>;
@@ -563,7 +589,12 @@ function validateFinish(fields: Record<string, unknown>): StockFinish | null {
     if (!num(x.price) || !num(x.final) || !(x.age === null || num(x.age))) return null;
     if (!Array.isArray(x.series) || x.series.length !== span || !x.series.every(v => v === null || num(v))) return null;
   }
-  return f as StockFinish;
+  const finish = f as StockFinish;
+  if (finish.bestXI !== undefined && !validBestXI(finish.bestXI, finish.budget, finish.bestValue)) {
+    const { bestXI: _invalidBestXI, ...legacy } = finish;
+    return legacy;
+  }
+  return finish;
 }
 
 export function loadDailyResult(date: string): StockFinish | null {

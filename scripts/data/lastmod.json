@@ -65,7 +65,7 @@
     "date": "2026-11-06"
   },
   "/cbb-dynasty": {
-    "hash": "f2a1fa4b9f78059a",
+    "hash": "e8c2882f53bdac19",
     "date": "2026-11-14"
   },
   "/cbb-grid": {
@@ -77,7 +77,7 @@
     "date": "2026-11-13"
   },
   "/cfb-dynasty": {
-    "hash": "29e7b21347519136",
+    "hash": "3d269485542a7fa8",
     "date": "2026-11-14"
   },
   "/cfb-higher-lower": {
@@ -313,7 +313,7 @@
     "date": "2026-09-30"
   },
   "/mlb-front-office": {
-    "hash": "c605023aa43d23a1",
+    "hash": "f5c4a312c3a7fbb9",
     "date": "2026-11-14"
   },
   "/mlb-gauntlet-draft": {
@@ -493,8 +493,8 @@
     "date": "2026-10-30"
   },
   "/player-stock-market": {
-    "hash": "fed7d018989b1f49",
-    "date": "2026-10-13"
+    "hash": "b62c3cfb93a79d2b",
+    "date": "2026-11-14"
   },
   "/privacy": {
     "hash": "e032966dd32ce30a",
