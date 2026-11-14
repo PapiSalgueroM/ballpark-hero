@@ -41,6 +41,16 @@ const close = (dialog: HTMLElement) => fireEvent.click(dialog.querySelector('[da
 afterEach(() => { cleanup(); document.body.style.overflow = ''; });
 
 describe('Soccer Career season history UI', () => {
+  it.each([
+    ['early', 'Early prime · Ages 22 to 26'],
+    ['normal', 'Typical prime · Ages 24 to 28'],
+    ['late', 'Late bloomer · Ages 27 to 31'],
+    ['extended', 'Extended prime · Ages 23 to 32'],
+  ] as const)('reads the saved %s career prime even before a senior season', async (primeType, text) => {
+    const { dialog } = await open({ ...source([row({ type: 'youth' })]), primeType });
+    expect(dialog.querySelector('[data-career-prime]')).toHaveTextContent(text);
+  });
+
   it('reopens the exact in-season overall checkpoints after the summary is gone', async () => {
     await open(source([
       row({ year: 2025, ovr: 93 }),

@@ -13,14 +13,14 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { defaultSeasonComparison, seasonHistoryRows } from "@/lib/soccerCareerSeasonHistory";
 import SoccerSeasonHistory from "./SoccerSeasonHistory";
-import type { CareerState } from "@/lib/soccerCareerEngine";
+import { SOCCER_PRIME_WINDOWS, type CareerState } from "@/lib/soccerCareerEngine";
 import {
   soccerRatingRows, ratingSeries, careerAverageRating, ovrTrackedFrom, ovrNotYetTracked, readSeasonRatingPath, ratingBand,
 } from "@/lib/careerSeasonRatings";
 import Sparkline from "@/components/career/Sparkline";
 import { BAND_CLASS } from "@/lib/careerRatingBand";
 
-type RatingsSource = Pick<CareerState, "seasons" | "position" | "overall" | "retired">;
+type RatingsSource = Pick<CareerState, "seasons" | "position" | "overall" | "retired"> & Partial<Pick<CareerState, "primeType">>;
 
 /* Round 1045: the band colours moved to a module of their own, so the page
    can read them without loading this dialog. */
@@ -156,6 +156,8 @@ export default function SeasonRatings({ career, onClose }: { career: RatingsSour
   const recorded = [...developmentRows].reverse().find(row => row.path);
   const [developmentIndex, setDevelopmentIndex] = useState(recorded?.index ?? -1);
   const development = developmentRows.find(row => row.index === developmentIndex) ?? recorded;
+  const prime = career.primeType && Object.prototype.hasOwnProperty.call(SOCCER_PRIME_WINDOWS, career.primeType)
+    ? SOCCER_PRIME_WINDOWS[career.primeType] : undefined;
   const opener = useRef<HTMLElement | null>(typeof document === "undefined" ? null : document.activeElement as HTMLElement);
   const scroll = useRef<HTMLDivElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
@@ -207,6 +209,10 @@ export default function SeasonRatings({ career, onClose }: { career: RatingsSour
             <button ref={availabilityButton} type="button" data-season-history-open="availability" className={control} onClick={() => changeMode("availability")}>Availability</button>
           </div>
           {rows.length < 2 && <p className="mb-3 text-xs text-muted-foreground">Two saved senior seasons unlock comparison.</p>}
+          {prime && <p className="mb-3 rounded-xl border border-border p-3 text-xs" data-career-prime>
+            <strong>{prime.name}</strong> · Ages {prime.start} to {prime.end}<br />
+            <span className="text-muted-foreground">This is your faster growth window. Form, injuries and your ceiling still shape your overall.</span>
+          </p>}
           {recorded && <section className="mb-3 space-y-2 rounded-xl border border-border p-3">
             <label className="block text-xs font-bold">Season development
               <select value={development?.index ?? -1} onChange={event => setDevelopmentIndex(Number(event.target.value))}
@@ -232,6 +238,7 @@ export default function SeasonRatings({ career, onClose }: { career: RatingsSour
           <p>Comparison shows the second season minus the first. Season OVR is the overall you played at, not your current overall. Apps and position stats cover all club competitions. Missing numbers stay not recorded; they never become zero.</p>
           <p>Example: 12 goals in the first season and 15 in the second gives a change of +3. If the first season never kept OVR, its OVR and the change both say not recorded.</p>
           <p>Season development shows the five saved overall checkpoints from the start to the end of a season. Pick an academy or senior year to see when the rating rose or fell.</p>
+          <p>Careers can have an early, typical, late or extended prime. For example, a late bloomer enters their faster growth years from 27 to 31, with changes still depending on season performance and potential.</p>
           <p>Availability only shows injuries, weeks, severity and club matches missed through suspension that the save kept. Weeks are not converted to matches. A recorded injury does not prove why you missed every game.</p>
           <p>Example: a saved 4-week injury and 2 club matches missed through suspension stay separate. An older season without a saved suspension count says not recorded.</p>
         </div> : <div className="space-y-3">

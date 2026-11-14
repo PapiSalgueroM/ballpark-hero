@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import { createNrlCareer, nrlCareerFinance, readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
 import { nrlJudiciaryBans } from '@/lib/nrlJudiciary';
-import { createNrlSeason, nrlInjuries, nrlNextRound, nrlStarterOptions, NRL_SAVE_KEY } from '@/lib/nrlManager';
+import { createNrlSeason, nrlInjuries, nrlNextRound, nrlRegularReturnFixture, nrlStarterOptions, nrlUnavailable, NRL_SAVE_KEY } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
 
@@ -95,7 +95,7 @@ it('shows the regular-season boundary without forecasting unknown finals opponen
   expect(raw()).toBe(bytes);
 });
 
-it('withholds an injury return forecast for an unresolved charge or an active ban', () => {
+it('waits for the hearing and then forecasts the later of the ban and injury clocks', () => {
   const initial = advance(createNrlCareer('broncos', 36, 2026, false, true));
   const review = initial.season.judiciary!.case!;
   expect(review.playerId).toBe('broncos-5-0');
@@ -109,8 +109,56 @@ it('withholds an injury return forecast for an unresolved charge or an active ba
   open(bytes);
   const row = injuryRow('Niko Nairn');
   expect(row.getByText('Suspended for 1 club match')).toBeVisible();
-  expect(row.queryByText(/Can return/)).not.toBeInTheDocument();
+  expect(row.getByText('Out for 2 rounds')).toBeVisible();
+  expect(row.getByText('Can return: Round 4 vs Raiders')).toBeVisible();
   expect(raw()).toBe(bytes);
+});
+
+it.each([
+  [2026, 'broncos', 228, 5, 'contest', 'Jalen Merritt', 'broncos-1-0', 2, 3, 8, 'Warriors'],
+  [2027, 'bears', 33, 22, 'plea', 'Luca Preece', 'bears-13-0', 1, 0, 24, 'Sea Eagles'],
+] as const)('forecasts a real suspension around a bye in %i', (
+  year, clubId, seed, firstRound, decision, name, id, ban, injury, returnRound, opponent,
+) => {
+  const charged = through(createNrlCareer(clubId, seed, year, false, true), firstRound);
+  const review = charged.season.judiciary?.case;
+  expect(review?.playerId).toBe(id);
+  expect(nrlNextRound(charged.season).clubStatus).toBe('bye');
+  const resolved = reduceNrlCareer(charged, { type: 'resolveJudiciary', year, clubId, caseRound: review!.round, decision });
+  expect(nrlJudiciaryBans(resolved.season).get(id)).toBe(ban);
+  expect(nrlInjuries(resolved.season).get(id) ?? 0).toBe(injury);
+  const bytes = JSON.stringify(resolved);
+  const page = open(bytes);
+  const forecast = 'Can return: Round ' + returnRound + ' vs ' + opponent;
+  expect(injuryRow(name).getByText(forecast)).toBeVisible();
+  expect(raw()).toBe(bytes);
+  expect(localStorage.getItem(fence)).toBe('4');
+  page.unmount();
+  show();
+  click('Squad');
+  expect(injuryRow(name).getByText(forecast)).toBeVisible();
+  click('Match centre');
+  expect(within(screen.getByRole('region', { name: 'Judiciary review' })).getByText(forecast)).toBeVisible();
+
+  for (let round: number = firstRound; round < returnRound; round++) {
+    const current = readNrlCareerSave(raw())!.season;
+    expect(current.round).toBe(round);
+    expect(nrlUnavailable(current).has(id)).toBe(true);
+    click(nrlNextRound(current).clubMatch ? 'Quick Sim' : 'Simulate bye round');
+  }
+  const returned = readNrlCareerSave(raw())!.season;
+  expect(returned.round).toBe(returnRound);
+  expect(nrlUnavailable(returned).has(id)).toBe(false);
+  const role = returned.squad.find(player => player.id === id)!.role;
+  expect(nrlStarterOptions(returned, role).some(option => option.id === id)).toBe(true);
+  click('Squad');
+  expect(availability().queryByText(new RegExp('^' + name))).not.toBeInTheDocument();
+});
+
+it('shows no return match when the remaining suspension carries past the regular draw', () => {
+  const season = createNrlCareer('bears', 33, 2027).season;
+  expect(nrlRegularReturnFixture({ ...season, round: 26 }, 0, 1)).toBeUndefined();
+  expect(nrlRegularReturnFixture({ ...season, round: 28, phase: 'finals' }, 0, 1)).toBeUndefined();
 });
 
 it('leaves legacy injury tracking and saves alone', () => {
