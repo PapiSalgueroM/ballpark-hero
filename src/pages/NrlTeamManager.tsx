@@ -1937,7 +1937,8 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>
               <li>Choose Rugby League World Cup beside Career saves to coach a national team through a separate 2026 tournament.</li>
               <li>After finishing a 2026 club season, take a national appointment from the Club office before starting 2027. It saves inside your career.</li>
-              <li>Review each season, manage contracts and recruit for the next year. Career saves lets you keep up to three careers in this browser.</li>
+              <li>Review each season, manage contracts and recruit for the next year. An offer or counteroffer shows the change in cap room and open squad places for each year of the deal.</li>
+              <li>Career saves lets you keep up to three careers in this browser.</li>
             </ul>
           </RulesGate>
         </header>

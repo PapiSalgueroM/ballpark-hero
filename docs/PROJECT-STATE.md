@@ -1,4 +1,11 @@
+## 2026-11-14: NRL offer cap preview and Home catalogue focus
+
+- NRL recruitment shows how an offered salary and term, including a counteroffer, would change cap room and open squad places for each year of the deal. It uses the same contract and cap ledger as the accepted offer.
+- Returning from a game launched in the Home catalogue gives focus back to the source card at the same scroll position. Search results retain their existing return behavior.
+
 ## 2026-11-14: NRL injury returns, Home search and national tactics
+
+[PR #914](https://github.com/PapiSalgueroM/ballpark-hero/pull/914) published exact main `a64068e5ae87f22bcdf1c39a0d8f696322232b9c`, deployment `42691111-40b1-48fc-900e-56d4fe7d6fad`. NRL played and recovered through both starts, Home restored search on all three widths, and Club Manager saved and applied the chosen national tactics. All 174 sitemap routes passed and IndexNow accepted the two updated guides.
 
 - NRL Squad Availability shows the first regular fixture an injured player can return for. Byes count toward recovery. A player waiting on a suspension or plea keeps the separate judiciary information, and finals depend on qualification.
 - Opening a Home search result and going back from the game brings back that search and returns keyboard focus to the opened result. An explicit Home visit opens fresh.

@@ -33,6 +33,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Enable Judiciary challenge when you start a generated-squad career. If a fictional player is charged after a club match, take a one-match early plea or contest the charge at a simulated hearing. Byes do not count toward a ban.',
       'Finish in the top eight to reach the finals. Follow the bracket and try to win the Grand Final.',
       'Open the club office to extend contracts and approach eligible recruits. Check how much cap room you have in the season the deal starts.',
+      'When you make an offer or request a counteroffer, check how its salary and term would change your cap room and open squad places in every year of the deal.',
       'In Recruitment, choose a position to see who is signed for next year, any ready academy prospect and up to three external targets. The brief checks whether a one-season offer at each player’s asking salary fits your squad and cap.',
       'Shortlist two players in Recruitment, then open Compare shortlisted players to check their asking salaries, cap fit and who is already signed at their positions for the year they could join.',
       'In Recruitment, open Plan future salary cap to check how up to three shortlisted players or renewals at their asking salaries would fit together across seasons before making offers.',

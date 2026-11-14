@@ -670,7 +670,7 @@ console.log('7) the home page as React renders it: one h1, the template\'s, all 
 rmSync(temp, { recursive: true, force: true });
 
 /* ── 8: no hidden text in the home page's source ──────────────────────── */
-const CATALOGUE_MOUNT = '<div hidden={isSearching}>{catalogue}</div>';
+const CATALOGUE_MOUNT = '<div ref={catalogueRef} onClickCapture={rememberGameLink} hidden={isSearching}>{catalogue}</div>';
 part = '8';
 console.log('8) no visually hidden text in src/pages/Index.tsx or src/components/home/HomeAbout.tsx');
 {
@@ -684,7 +684,7 @@ console.log('8) no visually hidden text in src/pages/Index.tsx or src/components
     let c = code(src);
     if (baseline && c.includes(baseline)) c = c.replace(baseline, ' ');
     if (name === 'src/pages/Index.tsx' && c.includes('const isSearching = searchQuery.trim().length > 0;')) {
-      const results = '<div ref={searchResultsRef} onClickCapture={rememberSearchResult} hidden={!isSearching} aria-busy={(isSearching && !searchFailed && searchQuery !== deferredQuery) || undefined}>';
+      const results = '<div ref={searchResultsRef} onClickCapture={rememberGameLink} hidden={!isSearching} aria-busy={(isSearching && !searchFailed && searchQuery !== deferredQuery) || undefined}>';
       c = c.replace(results, '<div>').replace(CATALOGUE_MOUNT, '<div>{catalogue}</div>');
     }
     const found = [];

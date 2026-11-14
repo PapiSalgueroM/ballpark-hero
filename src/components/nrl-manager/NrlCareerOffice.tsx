@@ -12,7 +12,7 @@ import {
   nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyReports,
   nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
   nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
-  nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractCounteroffer, nrlContractOffer, nrlContractTermLimit,
+  nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer, nrlContractTermLimit,
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
   nrlConcessionsQuote, nrlConcessionsSpend,
   nrlDevelopmentAffected, nrlDevelopmentAssistantProgress, nrlFinanceForecast,
@@ -77,6 +77,8 @@ function OfferForm({ career, entry, onAction, onClose, disabled }: {
   const canRequest = !career.legacySeason && !entry.promiseDiscount && Number.isSafeInteger(annualSalary)
     && annualSalary >= nrlSeasonPlan(entry.startYear).minimumSalary && annualSalary < entry.askingSalary;
   const counter = requested ? nrlContractCounteroffer(career, entry.player.id, annualSalary) : null;
+  const quotedTerms = counter ?? preview;
+  const capImpact = quotedTerms.ok ? nrlContractCapImpact(career, entry.player.id, quotedTerms.contract) : [];
   return (
     <form className="mt-3 rounded-xl border border-border bg-background p-3" onSubmit={event => {
       event.preventDefault();
@@ -108,6 +110,33 @@ function OfferForm({ career, entry, onAction, onClose, disabled }: {
           : canRequest ? 'Request a simulated three-season deal or raise your offer to the asking salary.'
           : preview.ok === true ? `${money(preview.contract.salary)} per season through ${preview.contract.endYear}.` : preview.reason}
       </p>
+      {capImpact.length > 0 && (
+        <table className="mt-3 w-full table-fixed text-left text-xs sm:text-sm" data-nrl-contract-cap-impact>
+          <caption className="pb-1 text-left font-semibold">Cap room and squad places</caption>
+          <thead className="text-muted-foreground">
+            <tr>
+              <th scope="col" className="w-12 py-1 pr-1 font-medium sm:w-20">Season</th>
+              <th scope="col" className="py-1 pr-1 font-medium">Cap room</th>
+              <th scope="col" className="w-16 py-1 text-right font-medium sm:w-28">Open places</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {capImpact.map(({ before, after }) => (
+              <tr key={before.year}>
+                <th scope="row" className="py-1 pr-1 font-semibold tabular-nums">{before.year}</th>
+                <td className="py-1 pr-1 tabular-nums">
+                  <span className="text-muted-foreground">{money(before.available)} → </span>
+                  <strong className="inline-block">{money(after.available)}</strong>
+                </td>
+                <td className="whitespace-nowrap py-1 text-right tabular-nums">
+                  <span className="text-muted-foreground">{before.openSlots} → </span>
+                  <strong>{after.openSlots}</strong>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
       <div className="mt-3 flex flex-wrap gap-2">
         <Button type="button" size="lg" variant="outline" className="px-4" onClick={onClose}>Cancel</Button>
         {canRequest && <Button type="button" size="lg" variant="outline" className="px-4" disabled={disabled}

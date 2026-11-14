@@ -62,7 +62,7 @@ import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
 /** Shown in the "no results" state so a dead-end search still has a next step. */
 const POPULAR_FALLBACK_PATHS = ['/soccer-grid', '/footle', '/squad-deal'];
 const EMPTY_BEST_SCORES: Readonly<Record<string, number>> = {};
-const searchReturns = new Map<string, { query: string; path: string }>();
+const gameReturns = new Map<string, { query: string; path: string }>();
 
 function getPopularFallbackGames(): GameDef[] {
   const all = VISIBLE_CATEGORIES.flatMap(c => c.games);
@@ -89,14 +89,15 @@ export default function Index() {
   const canReadPersonal = !!accountId && profile?.user_id === accountId;
   const { key: homeEntry } = useLocation();
   const navigationType = useNavigationType();
-  const [searchReturn] = useState(() => navigationType === 'POP' ? searchReturns.get(homeEntry) : undefined);
-  const [searchQuery, setSearchQuery] = useState(searchReturn?.query ?? '');
+  const [gameReturn] = useState(() => navigationType === 'POP' ? gameReturns.get(homeEntry) : undefined);
+  const [searchQuery, setSearchQuery] = useState(gameReturn?.query ?? '');
   const deferredQuery = useDeferredValue(searchQuery);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
-  const returnFocusPath = useRef(searchReturn?.path);
+  const catalogueRef = useRef<HTMLDivElement>(null);
+  const returnFocusPath = useRef(gameReturn?.path);
   const updateSearch = (query: string) => {
-    searchReturns.delete(homeEntry);
+    gameReturns.delete(homeEntry);
     returnFocusPath.current = undefined;
     setSearchQuery(query);
   };
@@ -149,7 +150,7 @@ export default function Index() {
     if (engine || searchFailed) return;
     loadSearchEngine().then(setEngine).catch(() => { setSearchFailed(true); });
   }, [engine, searchFailed]);
-  useEffect(() => { if (searchReturn) warmSearch(); }, [searchReturn, warmSearch]);
+  useEffect(() => { if (gameReturn?.query) warmSearch(); }, [gameReturn, warmSearch]);
   const hasDeferredQuery = deferredQuery.trim().length > 0;
   // Keep the previous results' height while ranking catches up, with no stale targets to activate.
   const pendingResultStyle = searchQuery !== deferredQuery ? { visibility: 'hidden' as const } : undefined;
@@ -162,25 +163,28 @@ export default function Index() {
   const searchStatus = querySettled
     ? `${resultCount === 0 ? 'No games found' : resultCount === 1 ? '1 game found' : `${resultCount} games found`} for ${deferredQuery.trim()}`
     : '';
-  const rememberSearchResult = (event: MouseEvent<HTMLDivElement>) => {
-    if (!querySettled || event.defaultPrevented || event.button !== 0
+  const rememberGameLink = (event: MouseEvent<HTMLDivElement>) => {
+    const fromSearch = event.currentTarget === searchResultsRef.current;
+    if ((fromSearch && !querySettled) || event.defaultPrevented || event.button !== 0
       || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || !(event.target instanceof Element)) return;
-    const path = event.target.closest('[data-home-game-card] a[href]')?.getAttribute('href');
+    const path = event.target.closest(fromSearch ? '[data-home-game-card] a[href]' : '[data-catalog-card] a[href]')?.getAttribute('href');
     if (!path) return;
-    searchReturns.delete(homeEntry);
-    searchReturns.set(homeEntry, { query: searchQuery, path });
+    gameReturns.delete(homeEntry);
+    gameReturns.set(homeEntry, { query: fromSearch ? searchQuery : '', path });
     // Keep the tab's recent history without putting search text into storage or the URL.
-    if (searchReturns.size > 20) searchReturns.delete(searchReturns.keys().next().value);
+    if (gameReturns.size > 20) gameReturns.delete(gameReturns.keys().next().value);
   };
   useLayoutEffect(() => {
     const path = returnFocusPath.current;
-    if (!path || (!querySettled && !searchFailed)) return;
+    if (!path || (isSearching && !querySettled && !searchFailed)) return;
     returnFocusPath.current = undefined;
     if (document.activeElement !== document.body) return;
-    const result = Array.from(searchResultsRef.current?.querySelectorAll<HTMLAnchorElement>('a[href]') ?? [])
+    const scope = isSearching ? searchResultsRef.current : catalogueRef.current;
+    const selector = isSearching ? 'a[href]' : '[data-catalog-card] a[href]';
+    const result = Array.from(scope?.querySelectorAll<HTMLAnchorElement>(selector) ?? [])
       .find(link => link.getAttribute('href') === path);
-    (result ?? searchInputRef.current)?.focus({ preventScroll: true });
-  }, [querySettled, searchFailed]);
+    (result ?? (isSearching ? searchInputRef.current : null))?.focus({ preventScroll: true });
+  }, [isSearching, querySettled, searchFailed]);
 
   // Personal values only load for this visible account. Public popularity
   // stays independent, so guests can still discover what people are playing.
@@ -533,7 +537,7 @@ export default function Index() {
 
           {/* Defer ranking and rendering while the search field updates. */}
           {(isSearching || hasDeferredQuery) && (
-            <div ref={searchResultsRef} onClickCapture={rememberSearchResult} hidden={!isSearching} aria-busy={(isSearching && !searchFailed && searchQuery !== deferredQuery) || undefined}>
+            <div ref={searchResultsRef} onClickCapture={rememberGameLink} hidden={!isSearching} aria-busy={(isSearching && !searchFailed && searchQuery !== deferredQuery) || undefined}>
               {searchFailed ? (
                 <HomeSearchUnavailable onBack={clearSearch} />
               ) : !engine || !hasDeferredQuery ? (
@@ -558,7 +562,7 @@ export default function Index() {
               )}
             </div>
           )}
-          <div hidden={isSearching}>{catalogue}</div>
+          <div ref={catalogueRef} onClickCapture={rememberGameLink} hidden={isSearching}>{catalogue}</div>
 
           {/* Round 840: the words, below every tile and above the footer, for
               every visitor and outside every condition (a search result list
