@@ -8,6 +8,7 @@
 import { cn } from '@/lib/utils';
 import type { AwardMan, SeasonAwards, TeamMan } from '@/lib/clubManagerLeagueBoards';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
+import type { LeagueCoachAward } from '@/lib/clubManager';
 
 const isMine = (flags: number) => (flags & 2) !== 0;
 const madeUp = (flags: number) => (flags & 1) !== 0;
@@ -76,3 +77,19 @@ export function SeasonHonoursCard({ awards, recent }: { awards: SeasonAwards; re
 }
 
 export default SeasonHonoursCard;
+export function LeagueCoachHonour({ award }: { award: LeagueCoachAward }) {
+  return (
+    <div className="rounded-xl border border-border bg-card p-3 text-left" data-cm-league-coach-award>
+      <p className="text-sm font-bold">League Coach of the Season</p>
+      <p className="text-sm">
+        {award.name} · {award.club}{!award.mine && <MadeUpTag className="ml-1" />}
+      </p>
+      <p className="text-xs text-muted-foreground">
+        {award.league} finish #{award.position} · {award.points} points · {award.matches} matches
+      </p>
+      <p className="text-xs text-muted-foreground">
+        This simulated award goes to the highest league finisher among coaches with a complete season of recorded results.
+      </p>
+    </div>
+  );
+}

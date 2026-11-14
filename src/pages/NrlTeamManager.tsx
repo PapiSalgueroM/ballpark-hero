@@ -10,6 +10,8 @@ import NrlCareerOffice from '@/components/nrl-manager/NrlCareerOffice';
 import NrlOriginOffice from '@/components/nrl-manager/NrlOriginOffice';
 import NrlJudiciaryReview from '@/components/nrl-manager/NrlJudiciaryReview';
 import NrlCareerSlots from '@/components/nrl-manager/NrlCareerSlots';
+import { NrlClubIdentity, NrlCustomBadge, useNrlClubName } from '@/components/nrl-manager/NrlClubIdentity';
+import NrlCustomClubForm from '@/components/nrl-manager/NrlCustomClubForm';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import PageSeo from '@/components/seo/PageSeo';
 import { Button } from '@/components/ui/button';
@@ -29,7 +31,7 @@ import {
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
-  createNrlCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
+  createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
   nrlAttackPlanPreview, nrlCounterPlanPreview, nrlOppositionReport, nrlPositionTraining,
   nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
@@ -43,6 +45,7 @@ import { saveFence } from '@/lib/saveFence';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { holdPendingSave } from '@/lib/safeStorage';
 import { NRL_WORLD_CUP_STAGES } from '@/lib/nrlWorldCupSave';
+import { nrlClubName, type NrlCustomClub } from '@/lib/nrlClubIdentity';
 
 const SLUG = 'nrl-team-manager';
 const loadWorldCup = () => import('@/components/nrl-manager/NrlWorldCup');
@@ -87,13 +90,9 @@ const counterPlanResult = { middle: 'Shifted wide against middle pressure.', edg
 const coachTacticNote = (role: NrlCoachRole | undefined, bonus: number, tactic: NrlTactic) => role === tactic
   ? ` Your assistant adds +${bonus} ${role === 'attack' ? 'attack' : 'defence'} rating.` : '';
 
-function shortName(year: number, id: string) {
-  return nrlSeasonPlan(year).clubs.find(club => club.id === id)?.shortName ?? id;
-}
-
 function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
   year: NrlYear; onYear: (year: NrlYear) => void;
-  onStart: (clubId: string, boardChallenge: boolean, openingNames: boolean, judiciary: boolean) => void;
+  onStart: (clubId: string, boardChallenge: boolean, openingNames: boolean, judiciary: boolean, custom?: NrlCustomClub) => void;
   disabled: boolean; loading: boolean; loadFailed: boolean;
 }) {
   const [boardChallenge, setBoardChallenge] = useState(false);
@@ -146,6 +145,8 @@ function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
           </span>
         </label>
       </div>
+      <NrlCustomClubForm year={year} disabled={disabled}
+        onStart={club => onStart(club.slotId, boardChallenge, false, judiciary, club)} />
       <div className="flex flex-wrap items-baseline justify-between gap-1">
         <h2 id="nrl-choose-club" className="text-xl font-display font-bold">Choose your club</h2>
         <p className="text-sm text-muted-foreground">{competition.clubs.length} clubs · {competition.draw.length} rounds</p>
@@ -175,7 +176,7 @@ function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
   );
 }
 
-function scoreLine(result: NrlMatchResult, year: number) {
+function scoreLine(result: NrlMatchResult, year: number, shortName: ReturnType<typeof useNrlClubName>) {
   return `${shortName(year, result.homeId)} ${result.homeScore}–${result.awayScore} ${shortName(year, result.awayId)}`;
 }
 
@@ -183,6 +184,7 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
   live: NrlLiveHalf; season: NrlManagerState; title: string;
   onAction: (action: NrlAction) => void; disabled: boolean; coachRole?: NrlCoachRole; coachBonus: number;
 }) {
+  const shortName = useNrlClubName();
   const { year, tactic: openingTactic, squad } = season;
   const [tactic, setTactic] = useState(openingTactic);
   const [reserveId, setReserveId] = useState('');
@@ -305,6 +307,7 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
 function LiveMinute60({ live, year, counter, onAction, disabled }: {
   live: NrlLiveHalf; year: number; counter: boolean; onAction: (action: NrlAction) => void; disabled: boolean;
 }) {
+  const shortName = useNrlClubName();
   const stage = live.minute60!;
   const [tactic, setTactic] = useState(stage.tactic);
   const { fixture } = live;
@@ -390,6 +393,7 @@ function AttackPlan({ career, onAction, disabled }: {
 }
 
 function OppositionReport({ career }: { career: NrlCareerState }) {
+  const shortName = useNrlClubName();
   const [expanded, setExpanded] = useState(false);
   const report = expanded ? nrlOppositionReport(career) : null;
   const { year } = career.season;
@@ -434,6 +438,7 @@ function OppositionReport({ career }: { career: NrlCareerState }) {
 }
 
 function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNextRound }) {
+  const shortName = useNrlClubName();
   const { year, clubId, results } = season;
   const { draw, clubs } = nrlSeasonPlan(year);
   const [view, setView] = useState('');
@@ -443,7 +448,7 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
   const upcoming = regular?.map(([homeId, awayId]) => ({ homeId, awayId }))
     ?? (next.finalsRound !== null && next.round === round ? next.fixtures : []);
   const matches = settled.length
-    ? settled.map(match => ({ homeId: match.homeId, label: scoreLine(match, year) }))
+    ? settled.map(match => ({ homeId: match.homeId, label: scoreLine(match, year, shortName) }))
     : upcoming.map(match => ({ homeId: match.homeId, label: `${shortName(year, match.homeId)} vs ${shortName(year, match.awayId)}` }));
   const byes = regular ? clubs.filter(club => !regular.some(pair => pair.includes(club.id))) : [];
   const finals = new Set(results.filter(match => match.finalsRound !== undefined).map(match => match.round));
@@ -478,7 +483,7 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
             </li>)}
           </ol>
           {byes.length > 0 && <p className="border-t border-border pt-2 text-muted-foreground">
-            {byes.length === 1 ? 'Bye' : 'Byes'} · {byes.map(club => club.shortName).join(', ')}
+            {byes.length === 1 ? 'Bye' : 'Byes'} · {byes.map(club => shortName(year, club.id)).join(', ')}
           </p>}
         </div>
       ) : (
@@ -489,7 +494,7 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
             return (
               <li key={index} className="flex flex-wrap justify-between gap-x-2 py-2">
                 <span className="text-muted-foreground">Round {index + 1}</span>
-                <span>{result ? scoreLine(result, year) : fixture ? `${shortName(year, fixture[0])} vs ${shortName(year, fixture[1])}` : 'Bye'}</span>
+                <span>{result ? scoreLine(result, year, shortName) : fixture ? `${shortName(year, fixture[0])} vs ${shortName(year, fixture[1])}` : 'Bye'}</span>
               </li>
             );
           })}
@@ -514,6 +519,7 @@ type FastForwardResult = { rounds: number; stop: NrlFastForwardStop | null };
 function FastForward({ career, onRun, disabled }: {
   career: NrlCareerState; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null; disabled: boolean;
 }) {
+  const shortName = useNrlClubName();
   const { year, round, clubId, phase } = career.season;
   const [expanded, setExpanded] = useState(false);
   const [target, setTarget] = useState<{ round: number; through: number }>();
@@ -568,6 +574,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null;
   onReview: () => void; onContracts: () => void; disabled: boolean; showLiveResult: boolean;
 }) {
+  const shortName = useNrlClubName();
   const { season } = career;
   const next = nrlNextRound(season);
   const { clubId, year, phase, championId } = season;
@@ -608,7 +615,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
     <section className="rounded-xl border border-border bg-card p-4" aria-labelledby="nrl-results">
       <ReportHeading id="nrl-results" className="font-bold">{showLiveResult ? 'Full time' : latest[0].tieId === 'GF' ? 'Grand Final result' : latest[0].finalsRound ? 'Latest finals results' : `Round ${latestRound} results`}</ReportHeading>
       <p className="mt-1 text-sm text-muted-foreground" role="status" data-nrl-result>
-        {lastMatch ? `${scoreLine(lastMatch, year)}${lastMatch.extraTime ? ' after extra time' : ''}` : 'Your club did not play this round.'}
+        {lastMatch ? `${scoreLine(lastMatch, year, shortName)}${lastMatch.extraTime ? ' after extra time' : ''}` : 'Your club did not play this round.'}
       </p>
       {lastMatch?.halftimeTalk && <p className="mt-2 text-sm text-muted-foreground" data-nrl-halftime-talk>
         Half-time talk: {halftimeTalkLabels[lastMatch.halftimeTalk]}.
@@ -697,7 +704,9 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
         <h2 className="mt-2 break-words font-display text-2xl font-black leading-tight sm:text-3xl">{title}</h2>
         {phase !== 'complete' && (
           <p className="mt-2 text-sm text-emerald-100">
-            {match ? match.tieId === 'GF' ? 'Neutral ground' : match.homeId === clubId ? 'Home match' : 'Away match'
+            {match ? match.tieId === 'GF' ? 'Neutral ground'
+              : career.customClub?.slotId === match.homeId ? `${match.homeId === clubId ? 'Home' : 'Away'} match · ${career.customClub.ground}`
+              : match.homeId === clubId ? 'Home match' : 'Away match'
               : next.clubStatus === 'eliminated' ? 'You can finish the finals and see who wins.' : phase === 'regular' ? 'Your club gets two ladder points this round.' : 'Your club has advanced and rests this week.'}
           </p>
         )}
@@ -798,7 +807,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
             {season.results.filter(result => result.finalsRound).map(result => (
               <li key={result.tieId} className="flex flex-wrap justify-between gap-x-2 py-2">
                 <span className="text-muted-foreground">{result.tieId === 'GF' ? 'Grand Final' : `Week ${result.finalsRound}`}</span>
-                <strong>{scoreLine(result, year)}</strong>
+                <strong>{scoreLine(result, year, shortName)}</strong>
               </li>
             ))}
             {next.fixtures.map(fixture => (
@@ -1246,6 +1255,8 @@ function Squad({ career, onAction, disabled }: {
 }
 
 function Ladder({ career }: { career: NrlCareerState }) {
+  const shortName = useNrlClubName();
+  const fullName = useNrlClubName('full');
   const { season } = career;
   const [scoutOpen, setScoutOpen] = useState(false);
   const [scoutClubId, setScoutClubId] = useState('');
@@ -1253,6 +1264,7 @@ function Ladder({ career }: { career: NrlCareerState }) {
   const clubs = nrlSeasonPlan(season.year).clubs;
   const rivals = clubs.filter(club => club.id !== season.clubId);
   const rival = scoutOpen ? rivals.find(club => club.id === scoutClubId) : undefined;
+  const rivalName = rival && fullName(season.year, rival.id);
   const rank = rows.findIndex(row => row.clubId === rival?.id && row.played > 0) + 1;
   const rivalSquad = rival ? nrlRivalSquad(career, rival.id) : [];
   return (
@@ -1299,18 +1311,18 @@ function Ladder({ career }: { career: NrlCareerState }) {
             <select value={scoutClubId} onChange={event => setScoutClubId(event.target.value)}
               className="min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
               <option value="">Choose a rival club</option>
-              {rivals.map(club => <option key={club.id} value={club.id}>{club.name}</option>)}
+              {rivals.map(club => <option key={club.id} value={club.id}>{fullName(season.year, club.id)}</option>)}
             </select>
           </label>
           {rival && (
             <div>
-              <h3 className="break-words text-sm font-bold">{rival.name} squad{rank > 0 && ` · Ladder ${rank}`}</h3>
+              <h3 className="break-words text-sm font-bold">{rivalName} squad{rank > 0 && ` · Ladder ${rank}`}</h3>
               <p className="mt-1 text-xs text-muted-foreground">{career.openingRoster
                 && rivalSquad.some(({ player }) => isNrlNamedPlayer(player.id))
                 ? `Includes players from the ${career.openingRoster === 'matchday-2026' ? '2026 opening' : '2027 Perth signings'} snapshot. Squad development is simulated.`
                 : 'Generated squad for this career.'}</p>
               {career.legacySeason && <p className="mt-1 text-xs text-muted-foreground">This imported season uses its original opponent ratings for matches.</p>}
-              <div tabIndex={0} role="region" aria-label={`${rival.name} squad`}
+              <div tabIndex={0} role="region" aria-label={`${rivalName} squad`}
                 className="mt-2 max-h-80 overflow-y-auto rounded-md border border-border px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <ul className="divide-y divide-border text-sm">
                   {rivalSquad.map(({ player, contractEnd, marketYear }) => {
@@ -1323,7 +1335,7 @@ function Ladder({ career }: { career: NrlCareerState }) {
                         <p className="text-xs text-muted-foreground">
                           Signed through {contractEnd}
                           {future && (future.clubId === rival.id ? ` · Extended through ${future.endYear}`
-                            : ` · Joins ${destination?.shortName ?? 'another club'} in ${future.startYear}`)}
+                            : ` · Joins ${destination ? shortName(season.year, destination.id) : 'another club'} in ${future.startYear}`)}
                           {marketYear !== null && ` · On the ${marketYear} market`}
                         </p>
                       </li>
@@ -1366,6 +1378,8 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
   });
   const [career, setCareer] = useState(initial?.career ?? null);
   const season = career?.season ?? null;
+  const custom = career?.customClub;
+  const customManaged = custom && custom.slotId === season?.clubId ? custom : undefined;
   const retired = career?.retired === true;
   const current = useRef(career);
   const committed = useRef(initial?.raw ?? null);
@@ -1456,7 +1470,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     setCupMode(null);
   }
 
-  async function start(clubId: string, boardChallenge: boolean, openingNames: boolean, judiciary: boolean) {
+  async function start(clubId: string, boardChallenge: boolean, openingNames: boolean, judiciary: boolean, customClub?: NrlCustomClub) {
     if (moved || startRequest.current || current.current || committed.current !== null) return;
     const seed = Math.floor(Math.random() * 0x1_0000_0000);
     if (openingNames) {
@@ -1478,7 +1492,11 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
           setLoadingNames(false);
         }
       }
-    } else if (persist(createNrlCareer(clubId, seed, year, boardChallenge, judiciary)) === 'moved') return;
+    } else {
+      const next = customClub ? createNrlCustomCareer(clubId, seed, year, customClub, boardChallenge, judiciary)
+        : createNrlCareer(clubId, seed, year, boardChallenge, judiciary);
+      if (!next || persist(next) === 'moved') return;
+    }
     setPanel('match');
     setShowLiveResult(false);
   }
@@ -1510,7 +1528,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
   }
 
   return (
-    <>
+    <NrlClubIdentity.Provider value={custom}>
       <PageSeo title="NRL Team Manager: Rugby League Sim | DoUKnowBall"
         description="Free rugby league manager. Start in 2026 or 2027, pick your starting 13 and manage contracts and club finances. Manage Perth from its 2027 debut."
         path="/nrl-team-manager" />
@@ -1519,7 +1537,14 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
         <header className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h1 ref={arrival} className="font-display text-2xl font-black sm:text-3xl">NRL Team Manager</h1>
-            <p className="mt-1 text-sm text-muted-foreground">{season ? `${shortName(season.year, season.clubId)} · ${season.year} season${retired ? ' · Retired' : ''}` : 'Take charge of a rugby league club across seasons.'}</p>
+            {customManaged && season ? (
+              <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
+                <NrlCustomBadge {...customManaged} />
+                <p className="min-w-0 break-words">{customManaged.name} · {season.year} season{retired ? ' · Retired' : ''}
+                  <span className="block text-xs">Fictional club · {customManaged.ground}</span>
+                </p>
+              </div>
+            ) : <p className="mt-1 text-sm text-muted-foreground">{season ? `${nrlClubName(season.year, season.clubId)} · ${season.year} season${retired ? ' · Retired' : ''}` : 'Take charge of a rugby league club across seasons.'}</p>}
             {career?.openingRoster === 'matchday-2026' && <p className="mt-1 text-xs text-muted-foreground">2026 opening matchday snapshot. Ratings, contracts, wages and later squads are simulated.</p>}
             {career?.openingRoster === 'perth-signings-2027' && <p className="mt-1 text-xs text-muted-foreground">2027 Perth Bears signings snapshot. The lineup, ages, ratings, contracts and later squads are simulated.</p>}
             {!showSlots && !cupOpen && <div className="mt-1 flex flex-wrap gap-x-2">
@@ -1628,6 +1653,6 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
           reportGameContext={season ? { year: season.year, club: season.clubId, round: season.round } : { year }} />
         <GameNav />
       </main>
-    </>
+    </NrlClubIdentity.Provider>
   );
 }

@@ -3,7 +3,7 @@ import { recordCompletion, recordActivity, recordStreakDay } from '@/lib/complet
 import { saveMatchPlan as savePlan, applyMatchPlan as applyPlan, deleteMatchPlan as deletePlan } from '@/lib/clubManagerMatchPlansCore';
 import {
   CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
-  FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason,
+  FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason, beginLeagueCoachSeason,
   marketForScreen, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer, savedCareerEraId, savedCareerFixtureKey, leagueOf,
   startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, recallLoanedPlayer, walkAway, respondApproach, expandGround,
@@ -679,7 +679,7 @@ export function useClubManager() {
       const fresh = startCareer(club, era, undefined, manager, undefined, edit, PROMOTION_PLAYOFFS);
       /* Round 549: a mid season takeover plays the run-in first, under the
          manager before you, and hands the club over where it stands. */
-      const s = setUpCareer(entry ? startMidSeason(fresh, entry) : fresh, setup, rebuildBoardAsks);
+      const s = setUpCareer(entry ? startMidSeason(fresh, entry) : beginLeagueCoachSeason(fresh), setup, rebuildBoardAsks);
       clearSlotPoints(activeSlot());
       setCareer(s);
       setActiveTab('overview');
@@ -750,7 +750,7 @@ export function useClubManager() {
      the create form is its own confirmation. */
   const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec, entry?: MidSeasonEntry, setup?: CareerSetup) => {
     const fresh = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager, undefined, undefined, PROMOTION_PLAYOFFS);
-    const s = setUpCareer(entry ? startMidSeason(fresh, entry) : fresh, setup, rebuildBoardAsks);
+    const s = setUpCareer(entry ? startMidSeason(fresh, entry) : beginLeagueCoachSeason(fresh), setup, rebuildBoardAsks);
     clearSlotPoints(activeSlot());
     setCareer(s);
     setPendingClub(null);
@@ -1036,7 +1036,7 @@ export function useClubManager() {
     if (!career) return;
     const s = startNextSeason(career, acceptOfferClub);
     if (s === career) return;
-    setCareer(s);
+    setCareer(beginLeagueCoachSeason(s));
     setSummary(null);
     setReport(null);
     setActiveTab('overview');
@@ -1192,7 +1192,7 @@ export function useClubManager() {
       const next = acceptWildernessJob(prev, club);
       if (!next) return prev;
       setPhase('hub');
-      return next;
+      return beginLeagueCoachSeason(next);
     });
   }, []);
 
