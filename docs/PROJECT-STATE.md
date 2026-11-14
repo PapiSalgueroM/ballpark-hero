@@ -1,4 +1,12 @@
+## 2026-11-14: Game search, Squad Deal chemistry and NRL player retention
+
+- Home and the full search page recognize phrases such as "manage an NFL team", "build a stadium" and "career mode". Searches that name a sport point to that sport, and every original game title still ranks first on its own name.
+- Once per Squad Deal draft, replace a visible Banker offer with an eligible player who improves the current XI's club and nationality chemistry. The original offer is withdrawn. The new offer can still be declined, and the hidden cases stay in place.
+- NRL managers who stay at the same club can select one expiring player for a one-year extension at their asking salary. Season review previews the cap impact, warns if the deal stops fitting and signs the player before the remaining squad places are filled.
+
 ## 2026-11-14: Stadium sponsorship, Contract Chaos role counters and NRL away recovery
+
+[PR #951](https://github.com/PapiSalgueroM/ballpark-hero/pull/951) published exact main `fd38811f9e7cfaeb24240cf5147208a492e73c21`, deployment `244f07f3-735f-44fe-83e3-a4bab40a1cd5`. Eight live browser journeys, all three raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted all three guides.
 
 - Stadium Tycoon managers can take a fixed sponsorship fee or a larger payout if enough league matches draw the signed crowd target. Both options pay in game cash at season end. The saved Latest season report retains the result across promotion.
 - Contract Chaos Free Play offers one counter per deal. Take a lower wage for one step up in promised playing time, or use that counter to ask for more money. The preview shows the total wage cost, and the role promise lasts while the manager does.
