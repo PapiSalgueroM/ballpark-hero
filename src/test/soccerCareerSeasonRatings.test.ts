@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { readFileSync } from 'node:fs';
-import { advanceProSeason, FALLBACK_CLUBS, type CareerState } from '@/lib/soccerCareerEngine';
+import { advanceProSeason, advanceYouthYear, calcOverall, FALLBACK_CLUBS, type CareerState } from '@/lib/soccerCareerEngine';
+import { buildAcademyReport } from '@/lib/soccerCareerAcademy';
 
 describe('Soccer Career in-season ratings', () => {
   afterEach(() => vi.restoreAllMocks());
@@ -26,5 +27,26 @@ describe('Soccer Career in-season ratings', () => {
     const legacy = advanceProSeason(state, FALLBACK_CLUBS);
     expect(legacy.seasons.at(-1)?.ratingPath).toBeUndefined();
     expect(legacy.seasons.at(-1)?.ovr).toBe(state.overall);
+  });
+
+  it('records the academy rating at different points of the year and passes it into the report', () => {
+    const data = JSON.parse(readFileSync('scripts/data/careerLeagueWorldSaves1100.json', 'utf8'));
+    const state: CareerState = structuredClone(data.saves.find((save: { id: string }) => save.id === 'ere').state);
+    Object.assign(state, { age: 16, overall: 56, potential: 90, phase: 'youth', pace: 59,
+      shooting: 58, passing: 55, dribbling: 53, defending: 55, physical: 58, reflexes: 51 });
+    vi.spyOn(Math, 'random').mockReturnValue(0.62);
+    const next = advanceYouthYear(state, FALLBACK_CLUBS, true);
+    const row = next.seasons.at(-1)!;
+    expect(row.type).toBe('youth');
+    expect(row.ratingPath).toHaveLength(5);
+    const [opening, , middle, , closing] = row.ratingPath!;
+    expect(opening).toBe(calcOverall(state, state.position));
+    expect(middle).toBeGreaterThan(opening);
+    expect(closing).toBeGreaterThan(middle);
+    expect(closing).toBe(next.overall);
+    expect(buildAcademyReport(state, next, 90)?.ratingPath).toEqual(row.ratingPath);
+    const legacy = advanceYouthYear(state, FALLBACK_CLUBS);
+    expect(legacy.seasons.at(-1)?.ratingPath).toBeUndefined();
+    expect(legacy.overall).toBe(closing);
   });
 });

@@ -105,6 +105,7 @@ export interface AcademyReport {
   year: number; age: number; club: string;
   lines: AcademyReportLine[];
   overallBefore: number; overallAfter: number;
+  ratingPath?: readonly number[];
   /** The focus and what it really added, or null when none was picked. */
   focus: { key: AcademyFocus; label: string; added: number; maxed: boolean } | null;
   /** The youth season row the engine wrote. */
@@ -136,7 +137,7 @@ export function academyHash(text: string): number {
 
 type ReportSave = StatBlock & AcademyFields & {
   position: string; overall: number; playerName: string; age: number; currentClub: string;
-  seasons: { year: number; apps: number; goals: number; assists: number; cleanSheets: number; type?: string }[];
+  seasons: { year: number; apps: number; goals: number; assists: number; cleanSheets: number; type?: string; ratingPath?: readonly number[] }[];
 };
 
 /* The verdict's cut points, in normal growth per skill over the year. On real
@@ -207,6 +208,9 @@ export function buildAcademyReport(before: ReportSave, after: ReportSave, potent
      skills. Reading the start off the skills keeps the year's gain to what
      the year did; the end is the overall the year itself saved. */
   const overallBefore = allocOverall(before, before.position);
+  const path = row.ratingPath;
+  const ratingPath = Array.isArray(path) && path.length === 5 && path[0] === overallBefore && path[4] === after.overall
+    && path.every(value => Number.isInteger(value) && value >= 1 && value <= 99) ? path : undefined;
   /* The coach's verdict reads the year's normal growth per skill, so a keeper's
      seven weigh the same as an outfielder's six and a focus never changes it
      (the focus has its own line). The cut points come from real careers made
@@ -223,6 +227,7 @@ export function buildAcademyReport(before: ReportSave, after: ReportSave, potent
   return {
     year: row.year, age: after.age, club: after.currentClub, lines,
     overallBefore, overallAfter: after.overall, focus,
+    ...(ratingPath ? { ratingPath } : {}),
     apps: row.apps, goals: row.goals, assists: row.assists, cleanSheets: row.cleanSheets,
     keeper: after.position === "GK",
     cupStage, cupLine: ACADEMY_CUP_STAGES[cupStage],

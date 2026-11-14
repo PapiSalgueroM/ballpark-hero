@@ -4320,8 +4320,7 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[], rateSeason?:
   const ratingPath = rateSeason && !injurySevere ? rateSeason(apps, rating) : undefined;
   let effectiveOvr = overall;
   if (ratingPath) {
-    const [opening, early, middle, late, closing] = ratingPath;
-    effectiveOvr = Math.round((opening + 2 * (early + middle + late) + closing) / 8);
+    effectiveOvr = seasonAverageOvr(ratingPath);
     goals = calcGoals(position, apps, effectiveOvr, goalMult, goalRoll) + goalBonus;
     assists = calcAssists(position, apps, effectiveOvr, assistMult, assistRoll);
     rating = ratingAt(effectiveOvr, goals, assists);
@@ -5079,7 +5078,7 @@ export function initCareer(
 }
 
 /* ─── Advance youth year ─── */
-export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerState {
+export function advanceYouthYear(prev: CareerState, clubs: ClubData[], inSeasonRatings = false): CareerState {
   const s = repairCareer({ ...prev }); s.age += 1; s.story = archiveSeasonStory(s); s.events = [];
   receivePhoneTexts(s, "youth");
   // Round 78: legacy saves get a generous default so mid-career players are
@@ -5099,9 +5098,13 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
      exactly what it would have been, and with no focus it writes nothing. */
   if (applyAcademyFocus(s, pot) > 0) s.overall = calcOverall(s, s.position);
   const lastYear = s.seasons[s.seasons.length - 1].year;
+  const path = inSeasonRatings ? seasonRatingPath(prev, s, calcOverall(prev, s.position)) : undefined;
+  const development = path ? seasonAverageOvr(path) - path[0] : 0;
+  const apps = Math.min(25, rand(10, 25) + Math.max(0, Math.floor(development / 2)));
   s.seasons = [...s.seasons, {
     year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
-    apps: rand(10, 25), goals: s.position === "GK" ? 0 : rand(0, 8), assists: rand(0, 5),
+    apps, goals: s.position === "GK" ? 0 : rand(0, 8), assists: rand(0, 5),
+    ...(path ? { ratingPath: path } : {}),
     cleanSheets: (s.position === "GK" || s.position === "CB" || s.position === "LB" || s.position === "RB") ? rand(2, 8) : 0, yellowCards: rand(0, 4), redCards: 0, rating: 0,
     leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "youth",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
@@ -5663,6 +5666,22 @@ export function awardAllTimeTopScorer(s: CareerState, thisYear: number): void {
    finished six years behind its own calendar (audit QA847-14). */
 const DEVELOPMENT_STATS = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes'] as const;
 
+function seasonRatingPath(opening: CareerState, closing: CareerState, openingOvr = opening.overall): NonNullable<SeasonRecord['ratingPath']> {
+  const overallAt = (fraction: number) => {
+    const stats = { ...opening };
+    for (const key of DEVELOPMENT_STATS) {
+      const change = closing[key] - opening[key];
+      stats[key] = opening[key] + Math.sign(change) * Math.round(Math.abs(change) * fraction);
+    }
+    return calcOverall(stats, closing.position);
+  };
+  return [openingOvr, overallAt(0.25), overallAt(0.5), overallAt(0.75), closing.overall];
+}
+
+function seasonAverageOvr([opening, early, middle, late, closing]: NonNullable<SeasonRecord['ratingPath']>): number {
+  return Math.round((opening + 2 * (early + middle + late) + closing) / 8);
+}
+
 function growProAttributes(s: CareerState, dev: number, random = Math.random): void {
   for (const key of DEVELOPMENT_STATS) {
     if (key in s.statBoostNextSeason) s[key] = clamp(s[key] + (s.statBoostNextSeason[key] || 0), 20, 99);
@@ -5724,16 +5743,9 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     growProAttributes(s, dev, random);
     const developmentRow: Parameters<typeof applyCareerPreparation>[1] = { year: shieldYear, club: s.currentClub, type: 'playing', apps };
     applyCareerPreparation(s, developmentRow);
-    const overallAt = (fraction: number) => {
-      const stats = { ...opening };
-      for (const key of DEVELOPMENT_STATS) {
-        stats[key] = opening[key] + Math.sign(s[key] - opening[key]) * Math.round(Math.abs(s[key] - opening[key]) * fraction);
-      }
-      return calcOverall(stats, s.position);
-    };
-    s.overall = overallAt(1);
+    s.overall = calcOverall(s, s.position);
     preparation = developmentRow.preparation;
-    return [opening.overall, overallAt(0.25), overallAt(0.5), overallAt(0.75), s.overall];
+    return seasonRatingPath(opening, s);
   } : undefined);
   if (preparation) season.preparation = preparation;
   if (shieldMatch) season.extraCups = [shieldMatch];

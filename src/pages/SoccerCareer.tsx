@@ -1017,7 +1017,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
       farewellAdvance.current = career;
     }
     if (career.phase === "youth") {
-      const next = advanceYouthYear(career, clubs);
+      const next = advanceYouthYear(career, clubs, true);
       setAcademyReport(buildAcademyReport(career, next, effectivePotential(career)));
       setCareer(next);
     } else if (career.phase === "playing") {
