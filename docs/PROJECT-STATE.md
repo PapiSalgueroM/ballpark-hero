@@ -1,6 +1,7 @@
 ## 2026-11-14: Fight game rating guides
 
 - Fight Career and Fight Gym explain how training can improve a fighter and how aging and permanent damage can lower the effective rating between bouts. Fight Promoter explains the equivalent boxing effects and distinguishes MMA match ratings from recovery and ranking points.
+- NRL Opposition report shows earlier meetings with the next opponent from your club's point of view, using settled matches in the current season.
 
 ## 2026-11-14: Front Office and academy rating timing
 
