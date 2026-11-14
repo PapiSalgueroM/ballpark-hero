@@ -13,7 +13,7 @@ import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers,
 import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/managerJobMarket';
 /* Round 202: the national team job runs on the international engine Soccer
    Career has used since Round 124, rather than a second thinner one. */
-import { runManagerSummer, NATION_CONFED } from '@/lib/soccerInternational';
+import { runManagerSummer, NATION_CONFED, type IntlTournament, type ManagerSummerMatch } from '@/lib/soccerInternational';
 /* Round 965: the manager's face reads Soccer Career's look tables, never a
    copy of them. That module imports nothing from here. */
 import { SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR } from '@/lib/soccerCareerAppearance';
@@ -2508,6 +2508,9 @@ export interface NationJob {
   won: number;
 }
 
+type NationCampaign = Pick<IntlTournament, 'nation' | 'name' | 'year' | 'qualifying' | 'groupLabel' | 'groupTable'>
+  & { result: string; matches: ManagerSummerMatch[]; lostJob: boolean };
+
 /** An open international post, offered at a season end. */
 export interface NationOffer {
   nation: string;
@@ -2559,7 +2562,7 @@ export function nationOfferFor(career: CareerState): NationOffer | null {
   if (!nation || !NATION_CONFED[nation]) return null;
   return {
     nation,
-    blurb: `${nation} want you for the national team alongside the ${career.clubName} job. Tournament summers only: club football stays exactly as it is.`,
+    blurb: `${nation} want you to coach their tournament campaigns alongside your job at ${career.clubName}.`,
   };
 }
 
@@ -3268,6 +3271,7 @@ export interface CareerState {
   wilderness?: WildernessState | null;
   /** Round 202: the national team post, held alongside the club job. */
   nationJob?: NationJob | null;
+  nationCampaign?: NationCampaign;
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
   /** Round 1035: a cup field short of sixteen clubs (a one league nation:
@@ -24715,10 +24719,16 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      country: federations do not care who pays your club wages. */
   if (career.nationJob) {
     const job = career.nationJob;
-    const t = runManagerSummer(job.nation, state.season, nationLift(career));
+    const summer = career.startYear === undefined ? state.season : worldYearOf(state);
+    const t = runManagerSummer(job.nation, summer, nationLift(career));
     if (t) {
       const won = t.champion === job.nation;
       const missed = t.myResult === 'Did Not Qualify';
+      state.nationCampaign = {
+        nation: job.nation, name: t.name, year: t.year, result: t.myResult,
+        qualifying: t.qualifying, groupLabel: t.groupLabel, groupTable: t.groupTable,
+        matches: t.managerFixtures, lostJob: missed,
+      };
       state.nationJob = {
         ...job,
         played: job.played + 1,
