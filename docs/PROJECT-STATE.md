@@ -1,4 +1,12 @@
+## 2026-11-14: Club Manager qualifying, career setup recovery and NRL free agents
+
+- Club Manager can play national qualifiers one at a time from the club season review. Each result is saved with the club season held in review. The resulting group determines qualification when continuing to the simulated finals. Continuing before the first qualifier runs the usual full simulation.
+- MLB and NHL My Career keep an unfinished player before the draft. The draft is scoped to its sport and clears after a real prospect or career starts or the player chooses Start Over.
+- NRL Team Manager can preview and sign one-season free-agent deals to fill squad openings when staying at the club. The preview includes rival renewals and the cap cost. The season review records players who signed.
+
 ## 2026-11-14: International trophy promises, NRL contract cover and Missing XI saves
+
+[PR #923](https://github.com/PapiSalgueroM/ballpark-hero/pull/923) published exact main `0ab3a83b6293562e1c088f7a29e389c86cbe0f8a`, deployment `38c01599-94c8-4d18-a1e5-c58ca6de1008`. Seven live browser journeys, all 174 sitemap routes and all three raw guides passed. IndexNow accepted the guides.
 
 - Soccer Career adds Champions League promises for eligible clubs and national tournament promises for active internationals. The Champions League promise uses the recorded cup run. A national promise follows the player through a club move and settles after the summer tournament from their saved result and appearances.
 - NRL shows signed cover, interested clubs and the cap change before a player is made available for a rival contract approach. A known coverage block keeps the request available for a later round.
