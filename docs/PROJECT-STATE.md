@@ -1,4 +1,12 @@
+## 2026-11-14: NRL conversion drills, Daily Rarity saves and Club Manager slots
+
+- NRL Team Manager can choose goal-kicking drills for one match. The plan adds eight percentage points to conversion chances and uses the existing training fitness and injury cost. The saved match report records when the manager used it.
+- Rarity Round and Crowd Says save the current Daily independently, including the last accepted result and its original points. Reload and switching modes restore the latest progress without repeating votes or completions.
+- Home offers a separate Continue playing card for each valid Club Manager career. Each card opens its own slot, and failed slot links fall back to the save chooser.
+
 ## 2026-11-14: NRL starter swaps, NHL round reports and Transfer Path saves
+
+[PR #956](https://github.com/PapiSalgueroM/ballpark-hero/pull/956) published exact main `0a528485e815e130dbe075886152ba9fefc19586`, deployment `91b7af85-72c3-472c-a912-15e040cf279d`. Eight live browser journeys, all three raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted all three game guides.
 
 - NRL Team Manager swaps two available starters in one move when each can play the other's position. Bench order, captaincy and kicking duties keep their saved players. The actual Quick Sim and Live Match team sheets use the exchange.
 - NHL Front Office saves the latest regular round's wins, losses, overtime losses and actual headlines, including an OVR change when the engine reports one. The closing round remains available after reload in the playoffs.
