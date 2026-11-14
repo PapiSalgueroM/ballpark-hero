@@ -1,4 +1,12 @@
+## 2026-11-14: NFL weekly rating history and full MLB and NRL free agency
+
+- NFL Front Office records the managed team's actual OVR changes beside each completed regular-season matchup. Pick a played week to see its saved score and rating changes. Older results show when a review wasn't recorded.
+- MLB Front Office opens the full free-agent market. Search by name or filter by position while the existing salary and roster rules decide who can sign.
+- NRL Team Manager can sign one affordable player from the full offseason free-agent pool for one year. This uses a planned academy place after other deals are settled and keeps the existing cap and squad rules.
+
 ## 2026-11-14: NFL spin recovery, NHL draft access and NRL position cover
+
+[PR #963](https://github.com/PapiSalgueroM/ballpark-hero/pull/963) published exact main `bfaf8e02ba915835e358bc28663b0e8c3513cab6`, deployment `1696bdef-fdcc-4a20-9d57-9b369fa85e3f`. Seven live browser journeys, all three raw game guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted all three game guides.
 
 - NFL Perfect Season keeps the current lineup when a team spin fails. Retry the same spin from the board. A reroll counts only after a team arrives.
 - NHL Front Office opens the full available draft class. Filter by position, page through the board or save up to three prospects. Shortlisting leaves picks available until the player is drafted.
