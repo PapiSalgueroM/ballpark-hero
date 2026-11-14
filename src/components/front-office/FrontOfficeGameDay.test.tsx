@@ -246,10 +246,17 @@ describe('NFL front office: a press tells his game and keeps it', () => {
     render(<Board />);
     openWeek();
     expect(grid()).toEqual(secondResults.map(rowOf));
+    const picker = document.querySelector<HTMLSelectElement>('[data-week-box] select')!;
+    fireEvent.change(picker, { target: { value: '1' } });
+    expect(grid()).toEqual(firstResults.map(rowOf));
+    expect(document.querySelector('[data-nfl-week-ratings]')?.textContent).toContain('No rating changes this week.');
     expect(localStorage.getItem(SAVE_KEY)).toBe(raw);
     expect(seen.games).toEqual([]);
     expect(seen.told).toEqual([]);
-    expect(read().league.schedule).toEqual([firstResults, secondResults, ...league.schedule.slice(2)]);
+    const withReview = (games: typeof firstResults) => games.map(game => game.home === team || game.away === team
+      ? { ...game, ratingChanges: { team, changes: [] } }
+      : game);
+    expect(read().league.schedule).toEqual([withReview(firstResults), withReview(secondResults), ...league.schedule.slice(2)]);
   });
 
   it('a save from before the round adopts the log at the week it is first played here: it starts at week 9 and is not his record', () => {

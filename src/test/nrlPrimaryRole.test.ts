@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  createNrlCareer, nrlBoardRecruitmentQuote, nrlCareerCap, nrlCareerMarket, nrlLeagueRecruitmentPreview, nrlOffseasonFreeAgentPreview,
+  createNrlCareer, nrlBoardRecruitmentQuote, nrlCareerCap, nrlCareerMarket, nrlLeagueRecruitmentPreview, nrlOffseasonFreeAgentPreview, nrlOffseasonFreeAgentTargets,
   nrlPrimaryRoleOptions, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { nrlStarterOptions, NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
@@ -64,6 +64,13 @@ describe('NRL primary role changes', () => {
       expect(settled.history.at(-1)?.freeAgentFill ?? []).toEqual(planned.signings);
       expect(settled.history.at(-1)?.leagueRecruitment).toEqual(rivals);
       expect(read(settled)).toEqual(settled);
+      const [target] = nrlOffseasonFreeAgentTargets(withRecruitment, selected.choice);
+      const combined = reduceNrlCareer(withRecruitment, { type: 'startNextSeason', primaryRole: selected.choice,
+        freeAgentTarget: { fromYear: year, clubId, playerId: target.player.id } });
+      expect(combined.players.find(player => player.id === playerId)).toEqual(after);
+      expect(combined.players.find(player => player.id === target.player.id)?.contract).toEqual(target.contract);
+      expect(combined.history.at(-1)?.leagueRecruitment).toEqual(nrlLeagueRecruitmentPreview(state, clubId, false, selected.choice));
+      expect(read(combined)).toEqual(combined);
       expect(read(converted)).toEqual(converted);
       expect(reduceNrlCareer(converted, { type: 'startNextSeason', primaryRole: selected.choice })).toBe(converted);
     });

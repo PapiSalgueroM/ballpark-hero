@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
-import { createNrlCareer, nrlOffseasonFreeAgentPreview, nrlRetentionPriority, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
+import { createNrlCareer, nrlOffseasonFreeAgentPreview, nrlOffseasonFreeAgentTargets, nrlRetentionPriority, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
 import { NRL_SAVE_KEY, nrlSavedLineupPreview, nrlStarterOptions } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
@@ -171,4 +171,37 @@ it('previews lineup carryover without writing, then restores separate presets ne
   click('Apply saved lineup');
   expect(readNrlCareerSave(raw())?.season.lineup.Fullback).toBe(reserve.id);
   expect(localStorage.getItem(fence)).toBe('6');
+});
+
+it('lists every eligible free-agent target and commits the chosen player only when the season starts', () => {
+  const year = 2026, clubId = 'storm';
+  let career = createNrlCareer(clubId, 4, year);
+  while (career.season.phase !== 'complete') career = reduceNrlCareer(career, { type: 'advance' });
+  const ordinary = reduceNrlCareer(career, { type: 'startNextSeason' });
+  const targets = nrlOffseasonFreeAgentTargets(career);
+  const target = targets.find(({ player }) => !ordinary.players.some(row => row.id === player.id))!;
+  const bytes = JSON.stringify(career);
+  localStorage.setItem(NRL_SAVE_KEY, bytes);
+  localStorage.setItem(fence, '4');
+  const mounted = show();
+  review();
+  const summary = screen.getByText('Fill open squad places', { exact: true });
+  fireEvent.click(summary);
+  fireEvent(summary.closest('details')!, new Event('toggle'));
+  const picker = screen.getByRole('combobox', { name: 'Free agent to sign' });
+  expect(within(picker).getAllByRole('option')).toHaveLength(targets.length + 1);
+  fireEvent.change(picker, { target: { value: target.player.id } });
+  expect(screen.getByText(new RegExp(target.player.name + ' will sign'))).toBeVisible();
+  expect(raw()).toBe(bytes);
+  expect(localStorage.getItem(fence)).toBe('4');
+  click('Start 2027');
+  const expected = reduceNrlCareer(career, { type: 'startNextSeason', freeAgentTarget: { fromYear: year, clubId, playerId: target.player.id } });
+  expect(readNrlCareerSave(raw())).toEqual(expected);
+  expect(localStorage.getItem(fence)).toBe('5');
+  mounted.unmount();
+  show();
+  review();
+  fireEvent.click(screen.getByText('Free agents signed for 2027 · 1', { exact: true }));
+  expect(within(screen.getByRole('list', { name: 'Recorded free-agent signings' })).getByRole('listitem')).toHaveTextContent(target.player.name);
+  expect(raw()).toBe(JSON.stringify(expected));
 });

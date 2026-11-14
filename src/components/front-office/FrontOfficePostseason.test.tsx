@@ -706,6 +706,10 @@ describe('NFL front office: Watch in the playoffs', () => {
     expect(textOf('[data-week-chip]')).toContain('Playoffs');
     expect(face()).toBe('game');
     expect(q('div.grid.max-h-56'), 'no league grid in the bracket, Week 17 played or not').toBeNull();
+    expect(q('[aria-label="Week 17 regular-season result"] [data-nfl-week-ratings]')).not.toBeNull();
+    const { league: written, myTeam } = read();
+    const myWeek17 = written.schedule[16].find((game: { home: string; away: string }) => game.home === myTeam || game.away === myTeam)!;
+    expect(myWeek17.ratingChanges).toEqual({ team: myTeam, changes: written.ratingReview?.changes });
     fireEvent.click(btn('[data-bracket-back]'));
     await waitFor(() => expect(q('[data-bracket]')).not.toBeNull());
     expect(localStorage.getItem(SAVE_KEY), 'full time and the chip saved nothing').toBe(played);

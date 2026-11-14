@@ -204,6 +204,7 @@ const T = {
 };
 
 const TELL_WEEK = 'const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));';
+const SAVE_WEEK = 'lg.schedule[lg.week - 1] = settleNflWeekResults(lg, told.map(t => t.game), myTeam);';
 const TELL_ROUND = 'told: r.games.map(g => nflTell(g, lg.teams, lg.season, r.name, playoffEdges))';
 const READ_LOG = 'setGameLog(readGmGameLog(s.gameLog, id => Object.prototype.hasOwnProperty.call(s.league.teams, id), s.league.season, s.myTeam));';
 
@@ -217,8 +218,9 @@ const CONTROLS = {
     [[READ_LOG, '{ const l = readGmGameLog(s.gameLog, id => Object.prototype.hasOwnProperty.call(s.league.teams, id), s.league.season, s.myTeam); if (s.gameLog !== undefined && !l) { setSaveError(true); return; } setGameLog(l); }']], [T.damaged], [T.week]],
   trustlog: ['a log that does not read is kept as it is', [[READ_LOG, 'setGameLog((s.gameLog ?? null) as GmGameLog | null);']], [T.damaged], [T.week]],
   rawback: ['a log that did not read goes back to storage as it was typed', [['if (!gameLogLive.current) delete base.gameLog;', '']], [T.older], [T.week, T.damaged]],
-  weekengine: ["the week's grid shows the engine's own scores", [['lg.schedule[lg.week - 1] = told.map(t => t.game);', 'lg.schedule[lg.week - 1] = games;']], [T.week, T.leagueScores], [T.remount]],
-  noleaguescores: ['the league calendar loses the completed scores', [['lg.schedule[lg.week - 1] = told.map(t => t.game);', '']], [T.leagueScores, T.week], [T.remount]],
+  weekengine: ["the week's grid shows the engine's own scores", [[TELL_WEEK, "const told = games.map(g => ({ ...nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges), game: g }));"]], [T.week, T.leagueScores], [T.remount]],
+  noleaguescores: ['the league calendar loses the completed scores', [[SAVE_WEEK, '']], [T.leagueScores, T.week], [T.remount]],
+  noratingreceipt: ['the calendar saves the score without the rating changes', [[SAVE_WEEK, 'lg.schedule[lg.week - 1] = told.map(t => t.game);']], [T.leagueScores, T.ordinary], [T.week]],
   enginescores: ["the one press postseason keeps the engine's own scores in the save", [['closeSeason(lg, toldRounds, champ);', 'closeSeason(lg, rounds, champ);']], [T.pressOff, T.pressOn], [T.week]],
   keyseason: ["the week's games are keyed to another season", [[TELL_WEEK, TELL_WEEK.replace('lg.season,', 'lg.season + 1,')]], [T.week, T.deskWeek], []],
   tellnoedges: ["the week's games are told without the edges they were played with", [[TELL_WEEK, TELL_WEEK.replace(', deskWeek?.edges)', ')')]], [T.deskWeek, T.pressOn], [T.week, T.pressOff]],
@@ -231,7 +233,7 @@ const CONTROLS = {
   titles: ['a title counts double', [['const newTitles = titles + (won ? 1 : 0);', 'const newTitles = titles + (won ? 2 : 0);']], [T.title], [T.ordinary, T.week]],
   /* Round 1307, the tile and Watch (FrontOfficeTile.test.tsx) */
   recordspoils: ['while a game is watched the page shows the league AFTER the press (the hold is not read)', [['const seen = hold ?? league;', 'const seen = league;']], [T.watch], [T.tile, T.week]],
-  gridspoils: ['the league grid is drawn while a game is watched', [['{weekResults.length > 0 && !hold && (', '{weekResults.length > 0 && (']], [T.watch], [T.tile, T.week]],
+  gridspoils: ['the league grid is drawn while a game is watched', [['{!hold && <NflWeekResults', '{<NflWeekResults']], [T.watch], [T.tile, T.week]],
   holdkept: ['the hold is not let go when he leaves the week box', [["if (held && (tab !== 'week' || !league || league === held)) setHeld(null);", 'if (held && (!league || league === held)) setHeld(null);']], [T.leave], [T.tile, T.watch]],
   tilenolog: ['the tile is handed no log', [['log={gameLogNow?.games ?? []}', 'log={[]}']], [T.tile, T.adopt], [T.week]],
   /* Round 1307, the fix pass: two ruled readers that nothing held (the review's mutants `pace` and `seedoff`, each green on every test and on the walk before these) */
@@ -255,7 +257,7 @@ const CONTROLS = {
   roundspoils: ['while he watches a playoff game the page reads the bracket AFTER the press', [['const seenPlayoffs = hold ? heldBracket : playoffs;', 'const seenPlayoffs = playoffs;']], [T.psWatchRound], [T.psKeep, T.psFaces]],
   holdround: ['a playoff press is never held (the hold asks only for the next week)', [['(league.week === held.week + 1 || held.week > REGULAR_WEEKS)', 'league.week === held.week + 1']], [T.psWatchRound, T.psTitleWatch], [T.psWatch17]],
   recapnow: ['the recap is drawn while he watches the title game', [["if (phase === 'recap' && !hold) {", "if (phase === 'recap') {"]], [T.psTitleWatch], [T.psWatchRound]],
-  bracketgrid: ['the league grid is drawn in the bracket', [['(!bracketRow) && (', '(']], [T.psWatch17], [T.psFaces]],
+  bracketgrid: ['the league grid is drawn in the bracket', [['compact={bracketRow}', 'compact={false}']], [T.psWatch17], [T.psFaces]],
   tiegame: ['"Your game" opens his last game and not the game of that tie', [['const gameLogNow = logOpen ?? gameLogLive.current;', 'const gameLogNow = gameLogLive.current;']], [T.psFaces], [T.psBye, T.psWatchRound]],
   /* Round 1309, the fix pass: the three things the season close sets at the title game's press, each read after the press while he watches */
   trustspoils: ["the owner card shows the trust the title game's press graded while he watches it", [['const seenTrust = roomHeld ? roomHeld.trust : trust;', 'const seenTrust = trust;']], [T.psTitleRoom], [T.psTitleWatch, T.psWatchRound]],

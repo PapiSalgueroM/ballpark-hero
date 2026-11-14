@@ -2408,6 +2408,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Goal-kicking drills add eight percentage points to your conversion chance for one match. They carry the same fitness cost and injury risk as Train.</li>
               <li>In Squad, use Swap starters when two available starters can cover each other’s position. The same players keep the kicking and captaincy duties.</li>
               <li>In Season review, a returning player with eight league starts in a trained position can make it their primary position when you stay.</li>
+              <li>In Season review, pick one affordable free agent from the full unsigned pool for a one-season deal in place of an academy player when you stay.</li>
               <li>A match knock can put a player out for up to four rounds. Availability in Squad shows the first regular-season match an injured player can return for. The recovery countdown includes byes, and an available player fills the vacant spot.</li>
               <li>In Squad, you can pay once per season for physio to shorten an injury by one round. The player still sits out the current round.</li>
               <li>During a regular-season bye, intensive position training can finish an active course one round sooner. The player ends the bye four fitness points below their usual recovery.</li>
@@ -2442,7 +2443,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>While a reserve-grade spell has at least two rounds left, book reserve coaching from Squad for $90,000. The prospect returns one round sooner with the same rating gain on completion.</li>
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
-              <li>Before Round 1, choose an eligible position in the Board recruitment brief. Sign an external player for that position next season to earn a club cash bonus.</li>
+              <li>Before Round 1, choose an eligible position in the Board recruitment brief. Use Recruitment during the season to sign an external player for that position next year and earn a club cash bonus.</li>
               <li>In Ladder, open Scout a club to shortlist eligible rivals and take them straight to Recruitment.</li>
               <li>Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.</li>
               <li>Before arranging an offseason move, keep another player signed at the same position for next season.</li>
