@@ -108,6 +108,20 @@ describe('Soccer Press answers and recorded context', () => {
     expect([state.morale, state.popularity, state.pressRoom?.credibility]).toEqual([46, 50, 50]);
   });
 
+  it.each([
+    ['Winner', true, 'met'], ['Group Stage', false, 'missed'], [null, false, 'excused'],
+  ] as const)('settles Champions League target from the exact entered competition %s', (result, championsLeague, outcome) => {
+    const state = answerSoccerPress(career('ST', { currentClubTier: 2 }), 'champions-league');
+    expect(state.pressRoom?.history[0].promise?.metric).toBe('championsLeague');
+    const row = record(state, { championsLeague, ...(result ? {
+      clubCupRun: { qualified: true, matches: [], result, cup: 'ucl', seasonYear: 2029, club: 'Twente', playerGoals: 0, isTopScorer: false },
+    } : {}) });
+    settleSoccerPress(state, row);
+    expect(pressRoomView(JSON.parse(JSON.stringify(state))).promise).toMatchObject({ outcome });
+    const nonEuropean = career('ST', { currentClubTier: 1, currentClubCountry: 'Brazil' });
+    expect(answerSoccerPress(nonEuropean, 'champions-league')).toBe(nonEuropean);
+  });
+
   it('keeps duplicate year and club records distinct by their original index', () => {
     const state = answerSoccerPress(career(), 'calm');
     state.seasons = [...state.seasons, savedRow({ onLoanFrom: 'PSV' })];

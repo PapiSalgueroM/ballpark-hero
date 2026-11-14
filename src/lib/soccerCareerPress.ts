@@ -1,15 +1,16 @@
 import type { CareerState, SeasonRecord } from './soccerCareerEngine';
 import { readCommunityShield, communityShieldSeasonStats, careerOpeningAnnualStats } from './soccerCareerExtraCups';
 import { cupAssociation, cupFor } from './soccerCareerCup';
+import { clubCupFor } from './soccerCareerContinental';
 
-export type SoccerPressChoice = 'calm' | 'accountable' | 'ambitious' | 'league-title' | 'domestic-cup';
+export type SoccerPressChoice = 'calm' | 'accountable' | 'ambitious' | 'league-title' | 'domestic-cup' | 'champions-league';
 export type SoccerPressTopic = 'league_champion' | 'injury' | 'benched' | 'move' | 'strong_form' | 'discipline' | 'contract' | 'normal';
 export interface SoccerPressSource {
   index: number; year: number; club: string; position: string; statLine: string;
   apps: number; goals: number | null; assists: number | null; cleanSheets: number | null; rating: number | null;
 }
 export interface SoccerPressPromise {
-  club: string; label: string; metric: 'apps' | 'goals' | 'assists' | 'cleanSheets' | 'leagueTitle' | 'domesticCup'; target: number; ratingFloor?: 7;
+  club: string; label: string; metric: 'apps' | 'goals' | 'assists' | 'cleanSheets' | 'leagueTitle' | 'domesticCup' | 'championsLeague'; target: number; ratingFloor?: 7;
   outcome: 'pending' | 'met' | 'missed' | 'moved' | 'excused';
   actual?: number; actualRating?: number; settledYear?: number; settledIndex?: number;
 }
@@ -30,7 +31,14 @@ export interface PressRoomView {
 const POSITIONS = ['GK', 'CB', 'LB', 'RB', 'LWB', 'RWB', 'CDM', 'CM', 'CAM', 'LM', 'RM', 'LW', 'RW', 'ST', 'CF'];
 const BACKS = ['CB', 'LB', 'RB', 'LWB', 'RWB'];
 const CREATORS = ['CDM', 'CM', 'CAM', 'LM', 'RM'];
-const CHOICES: SoccerPressChoice[] = ['calm', 'accountable', 'ambitious', 'league-title', 'domestic-cup'];
+const TROPHY_PROMISES = {
+  'league-title': { title: 'the league', metric: 'leagueTitle' },
+  'domestic-cup': { title: 'the domestic cup', metric: 'domesticCup' },
+  'champions-league': { title: 'the Champions League', metric: 'championsLeague' },
+} as const;
+type TrophyChoice = keyof typeof TROPHY_PROMISES;
+const isTrophyChoice = (choice: SoccerPressChoice): choice is TrophyChoice => Object.prototype.hasOwnProperty.call(TROPHY_PROMISES, choice);
+const CHOICES: SoccerPressChoice[] = ['calm', 'accountable', 'ambitious', 'league-title', 'domestic-cup', 'champions-league'];
 const TOPICS: SoccerPressTopic[] = ['league_champion', 'injury', 'benched', 'move', 'strong_form', 'discipline', 'contract', 'normal'];
 const OUT_CLUBS = ['BANNED', 'BANNED (PED)', 'PRISON', 'CONVICTED'];
 const count = (v: unknown): v is number => typeof v === 'number' && Number.isSafeInteger(v) && v >= 0;
@@ -43,9 +51,8 @@ const copyHistory = (row: SoccerPressHistory): SoccerPressHistory => ({ ...row, 
 
 function promiseFor(source: SoccerPressSource, club: string, choice: SoccerPressChoice = 'ambitious'): SoccerPressPromise | null {
   if (!text(club) || OUT_CLUBS.includes(club)) return null;
-  if (choice === 'league-title' || choice === 'domestic-cup') {
-    const metric = choice === 'league-title' ? 'leagueTitle' : 'domesticCup';
-    const title = metric === 'leagueTitle' ? 'the league' : 'the domestic cup';
+  if (isTrophyChoice(choice)) {
+    const { metric, title } = TROPHY_PROMISES[choice];
     return { club, metric, target: 1, label: `Win ${title} in your next played year at ${club}.`, outcome: 'pending' };
   }
   let metric: SoccerPressPromise['metric'], target: number, label: string;
@@ -67,8 +74,12 @@ function promiseFor(source: SoccerPressSource, club: string, choice: SoccerPress
 }
 
 function promiseActual(promise: SoccerPressPromise, row: SeasonRecord): number | null {
+  if (promise.metric === 'championsLeague' && (!row.clubCupRun?.qualified
+    || (row.clubCupRun.cup ?? 'ucl') !== 'ucl'
+    || row.clubCupRun.seasonYear !== row.year || row.clubCupRun.club !== row.club
+    || row.championsLeague !== (row.clubCupRun.result === 'Winner'))) return null;
   const value = row[promise.metric];
-  return promise.metric === 'leagueTitle' || promise.metric === 'domesticCup'
+  return promise.metric === 'leagueTitle' || promise.metric === 'domesticCup' || promise.metric === 'championsLeague'
     ? typeof value === 'boolean' ? Number(value) : null
     : recorded(value);
 }
@@ -97,7 +108,7 @@ function stateOf(career: CareerState): SoccerPressState | null {
   for (const row of state.history) {
     if (!row || !validSource(row.source, career) || !TOPICS.includes(row.topic) || !text(row.question) || !text(row.answer) || !CHOICES.includes(row.choice) || identities.has(row.source.index)) return null;
     identities.add(row.source.index);
-    if (row.choice === 'ambitious' || row.choice === 'league-title' || row.choice === 'domestic-cup') {
+    if (row.choice === 'ambitious' || isTrophyChoice(row.choice)) {
       const p = row.promise, target = p ? promiseFor(row.source, p.club, row.choice) : null;
       if (!p || !target || p.label !== target.label || p.metric !== target.metric || p.target !== target.target || p.ratingFloor !== target.ratingFloor || !['pending', 'met', 'missed', 'moved', 'excused'].includes(p.outcome)) return null;
       if (p.actual !== undefined && !count(p.actual) || p.actualRating !== undefined && !rating(p.actualRating)) return null;
@@ -193,8 +204,9 @@ export function pressRoomView(career: CareerState): PressRoomView {
   const nextYear = (career.seasons.at(-1)?.year ?? 0) + 1;
   const domesticCup = text(career.currentClubCountry) && text(career.currentLeague)
     && cupFor(cupAssociation(career.currentClubCountry, career.currentLeague, nextYear), nextYear).kind === 'NAMED';
+  const championsLeague = career.currentClubTier <= 2 && clubCupFor(career.currentClubCountry ?? '', nextYear)?.cup === 'ucl';
   if (source && text(career.currentLeague)) {
-    const add = (choice: 'league-title' | 'domestic-cup', label: string) => {
+    const add = (choice: TrophyChoice, label: string) => {
       const promise = promiseFor(source, career.currentClub, choice);
       if (promise) options.push({
         id: choice, label, effect: promise.label, tradeoff, eligible: !reason && !pending,
@@ -203,6 +215,7 @@ export function pressRoomView(career: CareerState): PressRoomView {
     };
     add('league-title', 'Promise a league title');
     if (domesticCup) add('domestic-cup', 'Promise a domestic cup win');
+    if (championsLeague) add('champions-league', 'Promise a Champions League win');
   }
   return { eligible: !reason, reason, source, topic, question, options, history, credibility: state?.credibility ?? 50, promise: history.find(h => h.promise)?.promise ?? null };
 }
