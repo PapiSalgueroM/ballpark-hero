@@ -15,7 +15,7 @@ vi.mock('@/components/auth/AuthModal', () => ({ AuthModal: () => null }));
 vi.mock('@/components/game/StreakReminder', () => ({ StreakReminder: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
 
-afterEach(() => { cleanup(); state.heldQuery = undefined; vi.unstubAllGlobals(); });
+afterEach(() => { cleanup(); localStorage.clear(); state.heldQuery = undefined; vi.unstubAllGlobals(); });
 
 function home() {
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
@@ -66,4 +66,25 @@ it('hides stale empty wording and clears immediately while ranking is held', asy
   expect(within(main).getByRole('heading', { name: 'Main event' })).toBeInTheDocument();
   release();
   expect(empty).not.toBeInTheDocument();
+});
+
+it('puts active saves and picks before discovery in keyboard order and restores both shelves after search', async () => {
+  const saved = '{"season":{"year":2027}}';
+  localStorage.setItem('nrl-manager-save-v1-slot-2', saved);
+  localStorage.setItem('dukb-game-picks-v1', JSON.stringify(['/soccer-grid']));
+  const { main, change, field } = home();
+  const continueShelf = within(main).getByRole('region', { name: 'Continue playing' });
+  const featuredShelf = within(main).getByRole('region', { name: 'Main event' });
+  expect(continueShelf.compareDocumentPosition(featuredShelf) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(within(continueShelf).getByRole('link', { name: /NRL Team Manager/ })).toHaveAttribute('href', '/nrl-team-manager?slot=2');
+  const pickShelf = within(main).getByRole('region', { name: 'Your picks' });
+  expect(pickShelf.compareDocumentPosition(featuredShelf) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  change('Soccer Career');
+  await act(async () => { await vi.dynamicImportSettled(); });
+  expect(continueShelf).not.toBeVisible();
+  expect(pickShelf).not.toBeVisible();
+  fireEvent.keyDown(field, { key: 'Escape' });
+  expect(continueShelf).toBeVisible();
+  expect(pickShelf).toBeVisible();
+  expect(localStorage.getItem('nrl-manager-save-v1-slot-2')).toBe(saved);
 });
