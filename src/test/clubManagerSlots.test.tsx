@@ -8,8 +8,10 @@
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, act, waitFor } from '@testing-library/react';
-import { SAVE_KEY } from '@/lib/clubManager';
-import { parkedKey, readSlots, activeSlot } from '@/lib/clubManagerSlots';
+import { SAVE_KEY, leanCareer, startCareer } from '@/lib/clubManager';
+import { parkedKey, readSlots, activeSlot, SLOTS_INDEX_KEY } from '@/lib/clubManagerSlots';
+import { clubManagerRequestedSlot } from '@/lib/clubManagerSaveKeys';
+import { savedGames } from '@/data/continueSaves';
 
 vi.mock('@/lib/completions', () => ({
   recordCompletion: vi.fn(),
@@ -21,8 +23,8 @@ const { useClubManager } = await import('@/hooks/useClubManager');
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 let api: any = null;
-function Harness() {
-  api = useClubManager();
+function Harness({ requestedSlot }: { requestedSlot?: number | null } = {}) {
+  api = useClubManager(requestedSlot);
   return null;
 }
 const clubAt = (key: string): string | null => {
@@ -312,4 +314,92 @@ describe('Club Manager slots: a parked era career', () => {
     expect(clubAt(parkedKey(1))).toBe('Everton');
     r.unmount();
   }, 30000);
+});
+
+describe('Club Manager slots from the Home Continue row', () => {
+  const storageBytes = () => Object.fromEntries(Object.keys(localStorage).sort().map(key => [key, localStorage.getItem(key)]));
+  const cards = () => savedGames(localStorage, true).filter(({ game }) => game.path === '/club-manager');
+  const hold = (club: string) => JSON.stringify(leanCareer(startCareer(club)));
+
+  it('lists active slot 2 and parked slots in order, reading without writes', () => {
+    localStorage.setItem(SLOTS_INDEX_KEY, '{"v":1,"active":2}');
+    localStorage.setItem(SAVE_KEY, hold('Everton'));
+    localStorage.setItem(parkedKey(1), hold('Lincoln City'));
+    localStorage.setItem(parkedKey(2), hold('Millwall'));
+    localStorage.setItem(parkedKey(3), '{truncated save');
+    const before = storageBytes();
+
+    expect(cards().map(({ entry, description }) => [entry.path, description])).toEqual([
+      ['/club-manager?slot=1', 'Lincoln City, season 1'],
+      ['/club-manager?slot=2', 'Everton, season 1'],
+    ]);
+    expect(storageBytes()).toEqual(before);
+    localStorage.removeItem(SAVE_KEY);
+    expect(cards().map(({ entry }) => entry.path)).toEqual(['/club-manager?slot=1']);
+  });
+
+  it.each([1, 2, 3])('opens slot %s directly while preserving each other manager', async slot => {
+    const names = ['Everton', 'Lincoln City', 'Millwall'];
+    const saves = names.map(hold);
+    localStorage.setItem(SLOTS_INDEX_KEY, '{"v":1,"active":2}');
+    localStorage.setItem(SAVE_KEY, saves[1]);
+    localStorage.setItem(parkedKey(1), saves[0]);
+    localStorage.setItem(parkedKey(3), saves[2]);
+
+    const r = render(<Harness requestedSlot={clubManagerRequestedSlot('?slot=' + slot)} />);
+    await waitFor(() => expect(api.phase).toBe('hub'));
+    expect(api.career.clubName).toBe(names[slot - 1]);
+    expect(activeSlot()).toBe(slot);
+    expect(readSlots().map(v => v.summary?.clubName)).toEqual(names);
+    expect(localStorage.getItem(parkedKey(slot))).toBeNull();
+    for (const other of [1, 2, 3].filter(n => n !== slot)) {
+      expect(localStorage.getItem(parkedKey(other))).toBe(saves[other - 1]);
+    }
+    act(() => api.showSlots());
+    r.rerender(<Harness requestedSlot={slot} />);
+    expect(api.phase).toBe('resume');
+  });
+
+  it('opens the parked career if the active slot is empty', async () => {
+    localStorage.setItem(SLOTS_INDEX_KEY, '{"v":1,"active":2}');
+    localStorage.setItem(parkedKey(3), hold('Lincoln City'));
+    render(<Harness requestedSlot={3} />);
+    await waitFor(() => expect(api.phase).toBe('hub'));
+    expect(api.career.clubName).toBe('Lincoln City');
+    expect(activeSlot()).toBe(3);
+    expect(readSlots().map(v => v.summary?.clubName ?? null)).toEqual([null, null, 'Lincoln City']);
+  });
+
+  it.each(['?slot=2', '?slot=3', '?slot=7', '?slot=1&slot=2', '?slot=02', '?slot='])(
+    'puts an unavailable or ambiguous %s link in the chooser without writes',
+    async search => {
+      localStorage.setItem(SAVE_KEY, hold('Everton'));
+      localStorage.setItem(parkedKey(3), '{unreadable');
+      const before = storageBytes();
+      render(<Harness requestedSlot={clubManagerRequestedSlot(search)} />);
+      await waitFor(() => expect(api.phase).toBe('resume'));
+      expect(api.career).toBeNull();
+      expect(api.slotNote).toContain('could not be opened');
+      expect(storageBytes()).toEqual(before);
+    },
+  );
+
+  it('leaves the active career and a deeply damaged destination in place', async () => {
+    localStorage.setItem(SAVE_KEY, hold('Everton'));
+    const damaged = JSON.parse(hold('Lincoln City'));
+    damaged.squad = [null];
+    localStorage.setItem(parkedKey(2), JSON.stringify(damaged));
+    const before = storageBytes();
+    render(<Harness requestedSlot={2} />);
+    await waitFor(() => expect(api.phase).toBe('resume'));
+    expect(api.career).toBeNull();
+    expect(storageBytes()).toEqual(before);
+  });
+
+  it('opens the chooser for a missing direct link in a new browser', async () => {
+    render(<Harness requestedSlot={2} />);
+    await waitFor(() => expect(api.phase).toBe('resume'));
+    expect(api.slots).toHaveLength(3);
+    expect(storageBytes()).toEqual({});
+  });
 });
