@@ -17,6 +17,8 @@
 
 The retired world-oracle suite has two historical comparison failures. All eleven scenario archives were byte-identical on #902 and #903. The independent era-world suite and all four negative controls passed. The hosted Quick Sim workflow failed in its font setup before exercising Quick Sim. The same setup fails on #902, and all three public Quick Sim checks passed.
 
+The historical save-size workflow stopped at its Round 1344 code anchor before measuring storage. Its original storage budgets therefore remain unverified by that workflow.
+
 - Rivals and free agents can gain or lose OVR as league matches settle. The transfer market, opponent squads and match engine use the same rating. January signings keep their current OVR, and returning players carry their closing OVR into the next season.
 - Existing careers start world rating updates when opening their next season. Fresh current and historical careers start with the new timing. The in-game help and public guide explain both paths.
 
