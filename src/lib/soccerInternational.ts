@@ -428,7 +428,7 @@ export const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.mi
 
 /** Knuth's Poisson. Football scores are Poisson shaped, and rolling one gives
     0-0 and 4-1 at roughly the rates real football produces them. */
-function poisson(mean: number, random: () => number): number {
+export function poissonGoals(mean: number, random: () => number): number {
   const l = Math.exp(-Math.max(0.05, mean));
   let k = 0, p = 1;
   do { k++; p *= random(); } while (p > l && k < 12);
@@ -616,8 +616,8 @@ export function simInternationalMatch(
   // is what a top nation actually does to a minnow. An additive model made
   // every game a coin flip and left Japan missing World Cups.
   const d = (strA - strB) / 10;
-  const a = poisson(Math.max(0.2, 1.35 * Math.exp(0.26 * d) + bonusA) * (minutes / 90), random);
-  const b = poisson(Math.max(0.2, 1.35 * Math.exp(-0.26 * d) + bonusB) * (minutes / 90), random);
+  const a = poissonGoals(Math.max(0.2, 1.35 * Math.exp(0.26 * d) + bonusA) * (minutes / 90), random);
+  const b = poissonGoals(Math.max(0.2, 1.35 * Math.exp(-0.26 * d) + bonusB) * (minutes / 90), random);
   if (knockout && a === b) {
     /* Knockout football always produces a winner, and level means penalties.
        The stronger side is only slightly favoured, the way a shootout is.

@@ -9,6 +9,7 @@ import { uclGroupFootnote } from '@/lib/clubManagerUclGroups';
 import { leaguePhaseFootnote } from '@/lib/uclLeaguePhase';
 import type { WorldCompKey, WorldKoRound } from '@/lib/worldCompetition';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { ClubWorldCupCard } from '@/components/club-manager/ClubWorldCupCard';
 import {
   clubRun, firstStageNights, nextNight, nightLabel, ordinal, realFifthNation, roundPlural, routeWords, worldCompView, worldUclStatus, worldUelStatus,
   superCupStatus, superCupView, type SuperCupView,
@@ -32,7 +33,7 @@ import {
  */
 
 type Tab = 'table' | 'matchdays' | 'knockouts' | 'final';
-interface Nav { at: 'tiles' | 'cup' | 'ucl' | 'uel' | 'dsc' | 'usc'; tab: Tab | null; run: string | null; night: number | null; ko: WorldKoRound | null; group: string | null }
+interface Nav { at: 'tiles' | 'cup' | 'ucl' | 'uel' | 'dsc' | 'usc' | 'cwc'; tab: Tab | null; run: string | null; night: number | null; ko: WorldKoRound | null; group: string | null }
 const HOME: Nav = { at: 'tiles', tab: null, run: null, night: null, ko: null, group: null };
 /** Round 1509: the competitions this screen shows, by key. */
 const COMP_NAME: Record<WorldCompKey, string> = { ucl: 'Champions League', uel: 'Europa League' };
@@ -727,6 +728,13 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
         <SuperCupCard view={uscView} myClub={career.clubName} onClub={clubPage} />
       </div>
     );
+  } else if (nav.at === 'cwc' && career.clubWorldCup2025) {
+    body = (
+      <div className="space-y-2" data-cm-cups-view="cwc">
+        <Back label="Cups" onClick={() => go(HOME)} />
+        <ClubWorldCupCard cup={career.clubWorldCup2025} />
+      </div>
+    );
   } else if (nav.at === 'uel') {
     body = (
       <div className="space-y-2" data-cm-cups-view="uel">
@@ -748,6 +756,7 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
           {uelOn && <Tile icon="🌍" title="Europa League" value={uelStatus.value} sub={uelStatus.sub} testId="uel" onClick={() => go({ ...HOME, at: 'uel' })} />}
           <Tile icon="🛡️" title="Super cup" value={dscStatus.value} sub={dscStatus.sub} testId="dsc" onClick={() => go({ ...HOME, at: 'dsc' })} />
           {uscStatus && <Tile icon="🏆" title="UEFA Super Cup" value={uscStatus.value} sub={uscStatus.sub} testId="usc" onClick={() => go({ ...HOME, at: 'usc' })} />}
+          {career.clubWorldCup2025 && <Tile icon="🌐" title="2025 Club World Cup" value={career.clubWorldCup2025.club} sub={career.clubWorldCup2025.result} testId="cwc" onClick={() => go({ ...HOME, at: 'cwc' })} />}
         </div>
       </div>
     );

@@ -1,6 +1,7 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
+import { clubWorldCup2025TeamCampaign } from '@/lib/soccerClubWorldCup';
 import { noteHighestScoring } from '@/lib/clubManagerRecords';
 import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGoalLift, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';
 /* Round 201: the wilderness reuses the manager job market the retired
@@ -90,7 +91,7 @@ import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL, cmWorld
 import { CM_FINAL_TABLES_2025_26, CM_FINAL_TABLES_PARTIAL } from '@/data/clubManagerFinalTables2025_26';
 /* Round 1012: the real rivals table moved to a shared leaf module so Soccer
    Career reads the same data. Imported back under its old name, unchanged. */
-import { PRIMARY_RIVAL as RIVALS } from '@/data/clubRivalries';
+import { PRIMARY_RIVAL as RIVALS, clubKeyOf } from '@/data/clubRivalries';
 /* Round 1606: the real opening day dugouts. The data file imports only a type and the module imports nothing,
    so there is no cycle; both are read at the call, never at module scope. */
 import { CM_DUGOUTS, CM_DUGOUTS_PARTIAL } from '@/data/clubManagerDugouts';
@@ -3283,6 +3284,7 @@ export interface CareerState {
   /** Round 202: the national team post, held alongside the club job. */
   nationJob?: NationJob | null;
   nationCampaign?: NationCampaign;
+  clubWorldCup2025?: NonNullable<ReturnType<typeof clubWorldCup2025TeamCampaign>>;
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
   /** Round 1035: a cup field short of sixteen clubs (a one league nation:
@@ -23369,6 +23371,19 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     throw new Error('The season has fixtures still to play.');
   }
   const state: CareerState = JSON.parse(JSON.stringify(career));
+  // The fixed historical field plays after the last club fixture. Keep this cup out of board and reward calculations.
+  if (!state.clubWorldCup2025 && worldYear(state) === 2024 && state.week >= state.calendar.length && !state.sacked
+    && state.customClub?.name !== state.clubName) {
+    const aliases = new Map(Object.keys(state.clubStrengths).map(name => [clubKeyOf(name), name]));
+    const cup = clubWorldCup2025TeamCampaign(state.clubName, String(worldSeedOf(state) ?? state.clubName),
+      name => eraClubDefFor(aliases.get(clubKeyOf(name)) ?? name, state.eraId, state).tier);
+    if (cup) {
+      state.clubWorldCup2025 = cup;
+      if (cup.result === 'Winner' && !state.trophies.some(trophy => trophy.name === 'Club World Cup' && trophy.season === state.season)) {
+        state.trophies.push({ name: 'Club World Cup', emoji: '🌐', season: state.season, minor: true });
+      }
+    }
+  }
   // Round 146: a historic save grades against its era's stature ladder.
   const club = state.eraId && isHistoricEra(state.eraId)
     ? eraClubDefFor(state.clubName, state.eraId)

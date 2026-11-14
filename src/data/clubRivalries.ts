@@ -152,6 +152,11 @@ export const SC_CLUB_CANON: Record<string, string> = {
   'Brondby IF': 'Brøndby IF', 'FC Nordsjaelland': 'FC Nordsjælland', 'SonderjyskE': 'SønderjyskE',
 };
 
+/** Canonical club spelling, with accents and case folded. */
+export function clubKeyOf(name: string): string {
+  return (SC_CLUB_CANON[name] ?? name).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
 /* Sourced pairs, all read on 2026-10-05. A pair whose clubs are not both in
    the same Soccer Career league today is kept anyway when both clubs exist in
    at least one of the two games: it stays dormant until a later round adds
