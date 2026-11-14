@@ -104,7 +104,7 @@ describe('NRL historical finals results', () => {
   it('preserves old archived years without reconstructing missing scores', () => {
     const first = finish(createNrlCareer('storm', 4));
     const next = reduceNrlCareer(first, { type: 'startNextSeason' });
-    const { finals: _finals, playerSeasons: _playerSeasons, ...legacyHistory } = next.history[0];
+    const { finals: _finals, leagueLadder: _leagueLadder, playerSeasons: _playerSeasons, ...legacyHistory } = next.history[0];
     const older = { ...next, history: [legacyHistory] };
     const oldBytes = bytes(older);
     expect(bytes(readNrlCareerSave(oldBytes))).toBe(oldBytes);
