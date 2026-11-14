@@ -9,7 +9,7 @@ vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile
 vi.mock('sonner', () => ({ toast: { success: () => undefined } }));
 
 import CareerSeasonReview from '@/components/us-career/CareerSeasonReview';
-import { UsSeasonCentreOpen } from '@/components/us-career/season/UsSeasonCentreHost';
+import { UsSeasonCentreHost, UsSeasonCentreOpen } from '@/components/us-career/season/UsSeasonCentreHost';
 import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
 import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
 import MlbMyCareerBoard from '@/components/mlb-my-career/MlbMyCareerBoard';
@@ -105,6 +105,23 @@ describe('saved career season review', () => {
     expect(screen.getByText('No games were recorded for this season.')).toBeVisible();
     expect(screen.queryByRole('button', { name: 'Watch reconstructed games' })).toBeNull();
     expect(centre.ready).not.toHaveBeenCalled();
+  });
+
+  it('returns an unavailable NBA historical view to its Career Log opener', async () => {
+    const career = makeReviewCareer(reviewFixtures.find(row => row.slug === 'nba')!);
+    const sport = { ...reviewSports.nba, loadSeasonCentre: async () => { throw new Error('Archive chunk unavailable'); } };
+    const bytes = reviewSave(career);
+    localStorage.setItem(sport.saveKey, bytes);
+    render(<UsSeasonCentreHost sport={sport}><CareerSeasonReview career={career} sport={sport} onBack={() => {}} backLabel="Back to career" /></UsSeasonCentreHost>);
+    choose(0);
+    click('Regular season');
+    const opener = screen.getByRole('button', { name: 'Watch reconstructed games' });
+    await act(async () => fireEvent.click(opener));
+    expect(screen.getByRole('dialog', { name: 'Season Center' })).toHaveTextContent(/Reload.*Career Log/);
+    click('Back to Career Log');
+    expect(document.activeElement).toBe(opener);
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+    expect(recordCompletion).not.toHaveBeenCalled();
   });
 
   it('finds saved season highs from the correct positive field for every position', () => {

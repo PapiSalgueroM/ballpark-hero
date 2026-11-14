@@ -47,7 +47,7 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
     if (!centre || !season || loadingReplay) return;
     const from = event.currentTarget;
     setLoadingReplay(true);
-    const ready = await centre.ready(from);
+    const ready = await centre.ready(from, true);
     setLoadingReplay(false);
     if (ready && from.isConnected) centre.open(playoffsOnly
       ? { career, row: season, playoffsOnly: true, from }

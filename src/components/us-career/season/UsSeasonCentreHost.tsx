@@ -40,7 +40,7 @@ export interface UsSeasonCentreApi {
    *  and `open` will show a season at once. False: they could not be loaded
    *  (the host says so itself) or the page is reloading for a new build;
    *  either way the caller must not play a season for the viewer's sake. */
-  ready(from?: HTMLElement | null): Promise<boolean>;
+  ready(from?: HTMLElement | null, fromCareerLog?: boolean): Promise<boolean>;
   /** Shows a season. Only after `ready` answered true; otherwise it does nothing. */
   open(r: UsSeasonCentreRequest): void;
 }
@@ -75,14 +75,19 @@ export function UsSeasonCentreHost({ sport, children }: { sport: UsCareerSport; 
   const [request, setRequest] = useState<UsSeasonCentreRequest | null>(null);
   const [failed, setFailed] = useState(false);
   const from = useRef<HTMLElement | null>(null);
+  const failedFromCareerLog = useRef(false);
   const closed = useRef(false);
   const alive = useRef(true);
   useEffect(() => { alive.current = true; return () => { alive.current = false; }; }, []);
   const api = useMemo<UsSeasonCentreApi>(() => ({
-    ready: async asker => {
+    ready: async (asker, fromCareerLog = false) => {
       const got = await loadAll(sport);
       if (got === 'ok') return true;
-      if (got === 'failed' && alive.current) { from.current = asker ?? null; setFailed(true); }
+      if (got === 'failed' && alive.current) {
+        from.current = asker ?? null;
+        failedFromCareerLog.current = fromCareerLog;
+        setFailed(true);
+      }
       return false;
     },
     open: r => {
@@ -112,7 +117,7 @@ export function UsSeasonCentreHost({ sport, children }: { sport: UsCareerSport; 
     if (reloadToRetryChunk()) return;
     const asker = from.current;
     setFailed(false);
-    void api.ready(asker);
+    void api.ready(asker, failedFromCareerLog.current);
   }, [api]);
   /* focus goes back to the curtain's Continue when the curtain is there,
      otherwise to whatever opened the overlay */
@@ -148,13 +153,15 @@ export function UsSeasonCentreHost({ sport, children }: { sport: UsCareerSport; 
               <p role="status" data-season-centre-held-reload className="text-sm text-muted-foreground">Your latest progress has not been saved yet, so the page was not reloaded: a reload would lose it. Go back to your season and use Retry save first.</p>
             ) : hasPendingSaves() ? (
               /* the same truth before Reload is pressed: he played, the save was refused, and then he opened the viewer */
-              <p role="status" data-season-centre-save-waiting className="text-sm text-muted-foreground">The game by game view could not be loaded, so your season has not been played. Your latest progress has not been saved yet, and a reload would lose it: go back to your season and use Retry save first.</p>
+              <p role="status" data-season-centre-save-waiting className="text-sm text-muted-foreground">{failedFromCareerLog.current ? 'The saved season view could not be loaded.' : 'The game by game view could not be loaded, so your season has not been played.'} Your latest progress has not been saved yet, and a reload would lose it: go back to your season and use Retry save first.</p>
             ) : (
-              <p className="text-sm text-muted-foreground">The game by game view could not be loaded, so your season has not been played. Your career is safe. Reload the page and press Week by week again, or go back and press Play.</p>
+              <p className="text-sm text-muted-foreground">{failedFromCareerLog.current
+                ? 'The saved season view could not be loaded. Reload and reopen this year in Career Log to try again.'
+                : 'The game by game view could not be loaded, so your season has not been played. Your career is safe. Reload the page and press Week by week again, or go back and press Play.'}</p>
             )}
             <div className="flex gap-2">
               <button type="button" onClick={retry} className="h-11 flex-1 rounded-lg border border-border text-sm font-semibold">↻ Reload</button>
-              <button type="button" onClick={close} className="h-11 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">Back to your season</button>
+              <button type="button" onClick={close} className="h-11 flex-1 rounded-lg bg-primary text-sm font-bold text-primary-foreground">{failedFromCareerLog.current ? 'Back to Career Log' : 'Back to your season'}</button>
             </div>
           </div>
         </div>
