@@ -159,6 +159,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
             heading: "Playing weeks with a live pace read",
             items: [
               "Play week by week as scores, injuries, and rival moves roll in, with a live read on whether you are on pace for the mandate.",
+              "League scores from your completed week stay with the saved season. Open This week to see them again.",
             ],
           },
         ],

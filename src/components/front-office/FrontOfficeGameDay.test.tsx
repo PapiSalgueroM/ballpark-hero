@@ -228,6 +228,30 @@ describe('NFL front office: a press tells his game and keeps it', () => {
     expect(new Set(three.games.map(g => g.key)).size).toBe(3);
   });
 
+  it('reopens the exact league scores from each completed week without playing another game', () => {
+    const { league, team } = leagueAt(1);
+    save(shape(league, team));
+    const screen = render(<Board />);
+    openWeek();
+    expect(grid()).toEqual([]);
+    const first = pressed('Play Week 1');
+    const firstResults = first.told.map(t => t.out.game);
+    const second = pressed('Play Week 2');
+    const secondResults = second.told.map(t => t.out.game);
+    expect(grid()).toEqual(secondResults.map(rowOf));
+    const raw = localStorage.getItem(SAVE_KEY);
+    screen.unmount();
+    seen.games.length = 0;
+    seen.told.length = 0;
+    render(<Board />);
+    openWeek();
+    expect(grid()).toEqual(secondResults.map(rowOf));
+    expect(localStorage.getItem(SAVE_KEY)).toBe(raw);
+    expect(seen.games).toEqual([]);
+    expect(seen.told).toEqual([]);
+    expect(read().league.schedule).toEqual([firstResults, secondResults, ...league.schedule.slice(2)]);
+  });
+
   it('a save from before the round adopts the log at the week it is first played here: it starts at week 9 and is not his record', () => {
     const { league, team } = leagueAt(9);
     save(shape(league, team));

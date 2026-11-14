@@ -126,6 +126,7 @@ const BOARDS = {
 const T = {
   week: [GD, 'his game of the week is in the save'],
   remount: [GD, 'a remount keeps the log'],
+  leagueScores: [GD, 'reopens the exact league scores from each completed week'],
   damaged: [GD, 'a damaged log, a log of another season'],
   abandon: [GD, 'abandon in the middle of a season and start again'],
   older: [GD, 'an older recap save opens on the draft and its first save holds the log the reader read'],
@@ -216,7 +217,8 @@ const CONTROLS = {
     [[READ_LOG, '{ const l = readGmGameLog(s.gameLog, id => Object.prototype.hasOwnProperty.call(s.league.teams, id), s.league.season, s.myTeam); if (s.gameLog !== undefined && !l) { setSaveError(true); return; } setGameLog(l); }']], [T.damaged], [T.week]],
   trustlog: ['a log that does not read is kept as it is', [[READ_LOG, 'setGameLog((s.gameLog ?? null) as GmGameLog | null);']], [T.damaged], [T.week]],
   rawback: ['a log that did not read goes back to storage as it was typed', [['if (!gameLogLive.current) delete base.gameLog;', '']], [T.older], [T.week, T.damaged]],
-  weekengine: ["the week's grid shows the engine's own scores", [['setWeekResults(told.map(t => t.game));', 'setWeekResults(games);']], [T.week], [T.remount]],
+  weekengine: ["the week's grid shows the engine's own scores", [['lg.schedule[lg.week - 1] = told.map(t => t.game);', 'lg.schedule[lg.week - 1] = games;']], [T.week, T.leagueScores], [T.remount]],
+  noleaguescores: ['the league calendar loses the completed scores', [['lg.schedule[lg.week - 1] = told.map(t => t.game);', '']], [T.leagueScores, T.week], [T.remount]],
   enginescores: ["the one press postseason keeps the engine's own scores in the save", [['closeSeason(lg, toldRounds, champ);', 'closeSeason(lg, rounds, champ);']], [T.pressOff, T.pressOn], [T.week]],
   keyseason: ["the week's games are keyed to another season", [[TELL_WEEK, TELL_WEEK.replace('lg.season,', 'lg.season + 1,')]], [T.week, T.deskWeek], []],
   tellnoedges: ["the week's games are told without the edges they were played with", [[TELL_WEEK, TELL_WEEK.replace(', deskWeek?.edges)', ')')]], [T.deskWeek, T.pressOn], [T.week, T.pressOff]],
