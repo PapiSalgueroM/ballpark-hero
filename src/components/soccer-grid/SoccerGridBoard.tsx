@@ -53,6 +53,9 @@ export function SoccerGridBoard({ puzzle, cells, activeCell, onCellClick }: Prop
               const cellIndex = rowIdx * 3 + colIdx;
               const cell = cells[cellIndex];
               const isActive = activeCell === cellIndex;
+              const clues = `${row.label} and ${puzzle.cols[colIdx].label}`;
+              const cellLabel = cell.status === 'correct' ? `Correct for ${clues}.`
+                : cell.status === 'wrong' ? `Try again for ${clues}` : `Answer for ${clues}`;
 
               return (
                 <button
@@ -73,6 +76,7 @@ export function SoccerGridBoard({ puzzle, cells, activeCell, onCellClick }: Prop
                           : 'bg-card border-border cursor-pointer hover:border-[hsl(var(--sg-accent))/0.5]'
                   )}
                 >
+                  <span className="sr-only">{cellLabel}</span>
                   {cell.status === 'correct' && cell.playerName ? (
                     <div className={cn('flex flex-col items-center gap-0.5', motion.correctContent, layout.content)}>
                       <span title={cell.playerName} className={cn('text-[11px] md:text-xs font-bold text-foreground leading-tight', layout.name)}>
@@ -88,9 +92,9 @@ export function SoccerGridBoard({ puzzle, cells, activeCell, onCellClick }: Prop
                       )}
                     </div>
                   ) : cell.status === 'wrong' ? (
-                    <span className={cn('text-xs text-destructive font-semibold', motion.wrongContent)}>✗</span>
+                    <span aria-hidden="true" className={cn('text-xs text-destructive font-semibold', motion.wrongContent)}>✗</span>
                   ) : (
-                    <span className="text-lg text-muted-foreground/30">+</span>
+                    <span aria-hidden="true" className="text-lg text-muted-foreground/30">+</span>
                   )}
                 </button>
               );
