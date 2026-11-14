@@ -6,6 +6,7 @@ import {
   liveStatsAt, myOnPitchAt, oppOnPitchAt, benchFor, changeRoom, liveGoneIds,
 } from '@/lib/clubManager';
 import { liveFeed, liveShapeAt, squadNumbers } from '@/lib/clubManagerLivePresentation';
+import { validShirtNumber } from '@/lib/clubManagerShirtNumbers';
 import type {
   CareerState, CMPlayer, LiveMatch, MatchWeekReport, MatchStats, Mentality, TalkTone,
   LiveChange, LiveFeedEvent, FormationSlot,
@@ -103,6 +104,7 @@ interface Man {
   label: string;
   name?: string;
   number: number;
+  assignedNumber?: number;
   /** Mine only. */
   id?: string;
   side: Side;
@@ -308,7 +310,8 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
       const slot = myFormation.slots[i];
       if (!slot || goneIds.has(id)) return;
       const p = career.squad.find(q => q.id === id);
-      mine.push({ key: `m${i}`, slot, ...(customShape ? { base: customShape.points[i] } : {}), label: p ? pitchName(p.name) : slot.label, name: p?.name, number: numbers.get(id) ?? i + 1, id, side: 'me' });
+      const number = numbers.get(id) ?? i + 1;
+      mine.push({ key: `m${i}`, slot, ...(customShape ? { base: customShape.points[i] } : {}), label: p ? pitchName(p.name) : slot.label, name: p?.name, number, assignedNumber: p?.shirtNumber === number ? number : undefined, id, side: 'me' });
     });
     const oppFormation = FORMATIONS[live.oppFormationIndex ?? DEFAULT_OPP_FORMATION] ?? FORMATIONS[DEFAULT_OPP_FORMATION];
     if (live.oppXi) {
@@ -513,7 +516,7 @@ function LiveMatchHelp({ onClose, kinds = [] }: { onClose: () => void; kinds?: r
         <li>Every goal, shot, save, corner, throw in, foul and card is the real one, at its real minute. The passing and running in between is drawn to fit them.</li>
         <li>{penalties ? 'The score changes when the ball is in the net, not before. A penalty a review gives waits for the review first.' : 'The score changes when the ball is in the net, not before.'}</li>
         <li>The home side is named first, on the left of the score, the way a football scoreboard does it, so away from home your club is on the right. Your club's name is the one in green, on either side, and the stats follow the same order.</li>
-        <li>On the pitch each man wears his surname, or his initials when players bunch up at a wall or a corner. No side in the game carries real shirt numbers, so the pitch shows none, and a side the game has no names for shows each man's position instead (CB, ST).</li>
+        <li>On the pitch each man wears his surname, or his initials when players bunch up. Your players also show the numbers you assigned in Squad. A side the game has no names for shows its positions (CB, ST).</li>
         <li>The players are drawn as made up figures, not likenesses of the real players. Each of your players looks the same every match; the other side's are drawn by their place on that night's teamsheet.</li>
         <li>A foul is shown where it happens: the man who fouled gets to the player on the ball, the whistle goes and the free kick is taken from that spot while he stands by it. A card shows on the foul it was given for. When a chance, a kick off or another dead ball keeps the pitch busy all through that minute, the foul is not drawn, but it is still in the list of what happened (beside the pitch on a wide screen, the latest line under the stats on a phone) and in the stats.</li>
         <li>Short passes roll along the grass. Long balls, crosses, throw ins, goal kicks and shots go up in the air, and the shadow under the ball shows how high.</li>
@@ -1836,7 +1839,8 @@ export function LiveSimScreen({
                         data-cm-stage-x={inputSlot?.x}
                         data-cm-stage-y={inputSlot?.y}
                         data-cm-captain={captain ? '1' : undefined}
-                        aria-label={`${m.name ?? m.label}${captain ? ', captain' : ''}. Tap to bring somebody on or change the shape.`}
+                        data-cm-live-shirt={m.assignedNumber}
+                        aria-label={`${m.name ?? m.label}${captain ? ', captain' : ''}${m.assignedNumber ? `, number ${m.assignedNumber}` : ''}. Tap to bring somebody on or change the shape.`}
                         disabled={!canChange || !m.id}
                         onClick={() => { if (m.id) openSheet(m.id); }}
                         className={cn(
@@ -1848,6 +1852,7 @@ export function LiveSimScreen({
                       >
                         <LivePitchPlayer color={clubColor} keeper={d.keeper} pose={motion.poses[d.key]} selected={picking === m.id} look={looks.get(d.key)} />
                         <span className={cn('cm-dot-label text-[9px] text-white/90 leading-none truncate tabular-nums', up ? 'mb-0.5' : 'mt-0.5')}>
+                          {m.assignedNumber ? `${m.assignedNumber} ` : ''}
                           {short.has(d.key) && m.name ? pitchInitials(m.name) || m.label : m.label}
                           {captain && (
                             <span className="ml-0.5 inline-block px-[2px] rounded-sm bg-yellow-400 text-black font-black leading-[9px] align-middle">C</span>
@@ -2136,7 +2141,7 @@ export function LiveSimScreen({
                       {picked.position}
                     </span>
                     <span className="flex-1 min-w-0">
-                      <span className="block text-xs text-foreground truncate">{picked.name}</span>
+                      <span className="block text-xs text-foreground truncate">{validShirtNumber(picked.shirtNumber) ? `#${picked.shirtNumber} ` : ''}{picked.name}</span>
                       <span className="block text-[11px] text-muted-foreground">
                         {picked.rating} rated {'·'} <span className={fitnessTone(picked.fitness)}>{Math.round(picked.fitness)} fit</span>
                       </span>
@@ -2199,7 +2204,7 @@ export function LiveSimScreen({
                             {b.position}
                           </span>
                           <span className="flex-1 min-w-0">
-                            <span className="block text-xs text-foreground truncate">{b.name}</span>
+                            <span className="block text-xs text-foreground truncate">{validShirtNumber(b.shirtNumber) ? `#${b.shirtNumber} ` : ''}{b.name}</span>
                             <span className="block text-[11px] text-muted-foreground">
                               {b.rating} rated {'·'} <span className={fitnessTone(b.fitness)}>{Math.round(b.fitness)} fit</span>
                             </span>

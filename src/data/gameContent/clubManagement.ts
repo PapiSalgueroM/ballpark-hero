@@ -43,6 +43,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "Match days: team sheet, Play Live or Quick Sim",
         items: [
           "Before each match set formation, mentality and your starting XI, or use auto pick, and give a team talk when it matters.",
+          "Open a player in Squad to set an in-game shirt number from 1 to 99. If a teammate wears it, Swap numbers shows what each player will get. Your assignments stay with the players at this club and appear in Play Live.",
           "Play the match one of two ways: Play Live puts it on the pitch with the dressing room at the break, and Quick Sim goes straight to the report with the coach making your subs. Then read the report, answer the press, and manage the dressing room between games.",
           "A live match moves: both teams hold their shape around the ball, and goals play out on the pitch before the score changes. Pause it, change the speed or skip to the whistle, and tap one of your players at any minute to make a sub or change shape.",
           "Squad OVR can rise or fall during the season. A young player with regular minutes can improve and a veteran can lose a point after a league match. Check the match report for changes. Players carry those ratings into next season.",
