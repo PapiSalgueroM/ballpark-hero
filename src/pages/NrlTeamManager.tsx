@@ -26,7 +26,7 @@ import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlBenchRotation, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
   nrlActingCaptainPhases, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchange, nrlNextRound, nrlOnFieldCaptain,
-  nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
+  nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
@@ -1503,15 +1503,6 @@ function ReserveGradeDevelopment({ career, onAction, disabled }: {
   );
 }
 
-function nextRegularClubFixture(season: NrlManagerState, fromRound: number) {
-  const { year, clubId } = season;
-  const { draw } = nrlSeasonPlan(year);
-  for (let round = fromRound; round <= draw.length; round++) {
-    const opponent = draw[round - 1].find(pair => pair.includes(clubId))?.find(id => id !== clubId);
-    if (opponent) return { round, opponent };
-  }
-}
-
 function Squad({ career, onAction, disabled }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
 }) {
@@ -1601,16 +1592,17 @@ function Squad({ career, onAction, disabled }: {
                   const injuryRounds = injuries.get(player.id);
                   let forecast: string | undefined;
                   const { year, clubId, round } = season;
-                  const canForecast = season.phase === 'regular' && !ban && player.id !== pendingCase && player.id !== reserveGradeId;
-                  if (injuryRounds && canForecast) {
-                    const first = nextRegularClubFixture(season, round + injuryRounds);
+                  const canForecast = season.phase === 'regular' && player.id !== pendingCase && player.id !== reserveGradeId;
+                  if ((injuryRounds || ban) && canForecast) {
+                    const first = nrlRegularReturnFixture(season, injuryRounds ?? 0, ban ?? 0);
                     forecast = first
                       ? `Can return: Round ${first.round} vs ${shortName(year, first.opponent)}`
-                      : 'No regular-season fixture left after recovery.';
+                      : ban ? 'No regular-season fixture left after the suspension and any recovery.'
+                        : 'No regular-season fixture left after recovery.';
                   }
                   const physio = injuryRounds && injuryRounds >= 2 && !season.physio && season.phase === 'regular'
                     && !career.legacySeason && nrlPhysioQuote(career, player.id);
-                  const treated = physio && physio.ok && canForecast ? nextRegularClubFixture(season, round + physio.after) : undefined;
+                  const treated = physio && physio.ok && canForecast ? nrlRegularReturnFixture(season, physio.after, ban ?? 0) : undefined;
                   return <li key={player.id} className="py-1">
                     <div className="flex flex-wrap justify-between gap-x-3">
                       <span>{player.name} · {player.role}</span>
@@ -1618,6 +1610,7 @@ function Squad({ career, onAction, disabled }: {
                         : ban ? `Suspended for ${ban} club ${ban === 1 ? 'match' : 'matches'}`
                         : `Out for ${remaining} ${remaining === 1 ? 'round' : 'rounds'}`}</span>
                     </div>
+                    {ban && injuryRounds && <p className="text-xs text-muted-foreground">Out for {injuryRounds} {injuryRounds === 1 ? 'round' : 'rounds'}</p>}
                     {forecast && <p className="mt-0.5 text-xs text-muted-foreground" data-nrl-injury-return={player.id}>{forecast}</p>}
                     {physio && <details className="mt-1 rounded-md border border-border px-2" data-nrl-physio-choice>
                       <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold">Physio session for {player.name}</summary>
@@ -2160,6 +2153,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Change clubs between seasons from Season review.</li>
               <li>When staying at your club, check Fill open squad places in Season review to preview affordable one-season free-agent deals before starting the next season.</li>
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>
+              <li>Availability shows the first regular club match after a confirmed suspension and any injury. Byes advance injury recovery, while suspensions count club matches.</li>
               <li>Choose Rugby League World Cup beside Career saves to coach a national team. In Set matchday lineup, you can swap any of the six reserves with a starter. Out-of-position starts carry a rating penalty.</li>
               <li>After finishing a 2026 club season, take a national appointment from the Club office before starting 2027. It saves inside your career.</li>
               <li>Review each season, manage contracts and recruit for the next year. An offer or counteroffer shows the change in cap room and open squad places for each year of the deal.</li>

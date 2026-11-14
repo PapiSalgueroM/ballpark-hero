@@ -380,6 +380,18 @@ export function nrlNextRound(state: NrlManagerState): NrlNextRound {
   return { round, finalsRound, title: NRL_FINALS_ROUND_TITLES[finalsRound - 1], fixtures, clubMatch, clubStatus };
 }
 
+export function nrlRegularReturnFixture({ year, clubId, round, phase }: Pick<NrlManagerState, 'year' | 'clubId' | 'round' | 'phase'>,
+  injuryRounds: number, bannedMatches: number) {
+  if (phase !== 'regular') return undefined;
+  const { draw } = nrlSeasonPlan(year);
+  for (let next = round; next <= draw.length; next++) {
+    const opponent = draw[next - 1].find(pair => pair.includes(clubId))?.find(id => id !== clubId);
+    if (!opponent) continue;
+    if (bannedMatches > 0) bannedMatches--;
+    else if (next >= round + injuryRounds) return { round: next, opponent };
+  }
+}
+
 type NrlInjuryClock = Pick<NrlManagerState, 'round' | 'phase' | 'results' | 'injuryTracking' | 'physio'>;
 
 export function nrlInjuries(state: NrlInjuryClock, asOf = state.round + Number(state.phase === 'complete')): Map<string, number> {

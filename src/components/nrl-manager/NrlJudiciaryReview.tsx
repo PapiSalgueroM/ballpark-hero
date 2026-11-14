@@ -2,13 +2,16 @@ import { useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import type { NrlCareerAction } from '@/lib/nrlCareer';
 import { NRL_JUDICIARY_CLEAR_CHANCE, nrlJudiciaryBans, nrlJudiciaryCase, nrlJudiciaryPenalty, type NrlJudiciaryDecision } from '@/lib/nrlJudiciary';
-import type { NrlManagerState } from '@/lib/nrlManager';
+import { nrlInjuries, nrlRegularReturnFixture, nrlReserveGradeRemaining, type NrlManagerState } from '@/lib/nrlManager';
+import { useNrlClubName } from './NrlClubIdentity';
 
 export default function NrlJudiciaryReview({ season, onAction, disabled }: {
   season: NrlManagerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
 }) {
+  const shortName = useNrlClubName();
   const review = nrlJudiciaryCase(season);
   const bans = nrlJudiciaryBans(season);
+  const injuries = bans.size ? nrlInjuries(season) : null;
   const result = useRef<HTMLDivElement>(null);
   const followDecision = useRef(false);
   useEffect(() => {
@@ -39,9 +42,14 @@ export default function NrlJudiciaryReview({ season, onAction, disabled }: {
       </> : <div ref={result} tabIndex={-1} role="status" className="text-muted-foreground">
         {review?.decision && <p>{review.decision === 'plea' ? 'Early plea accepted. One-match suspension.'
           : penalty ? 'Hearing decision. Two-match suspension.' : 'Cleared at the hearing.'}</p>}
-        {[...bans].map(([id, matches]) => <p key={id}>
-          {season.squad.find(candidate => candidate.id === id)?.name} · {matches} club {matches === 1 ? 'match' : 'matches'} left. Byes do not count.
-        </p>)}
+        {[...bans].map(([id, matches]) => {
+          const reserveGrade = season.reserveGrade?.playerId === id && nrlReserveGradeRemaining(season);
+          const fixture = reserveGrade ? undefined : nrlRegularReturnFixture(season, injuries?.get(id) ?? 0, matches);
+          return <div key={id}>
+            <p>{season.squad.find(candidate => candidate.id === id)?.name} · {matches} club {matches === 1 ? 'match' : 'matches'} left. Byes do not count.</p>
+            {fixture && <p>Can return: Round {fixture.round} vs {shortName(year, fixture.opponent)}</p>}
+          </div>;
+        })}
       </div>}
     </section>
   );
