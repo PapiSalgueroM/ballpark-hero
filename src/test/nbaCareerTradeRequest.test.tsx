@@ -274,4 +274,19 @@ describe('standing NBA trade request', () => {
     expect(released.contractTalk.window.offers[0].quality).toBe(78);
     expect(released.teamQuality).toBe(78);
   });
+
+  it('removes the old club’s boost when a summer event changes teams before the annual quality draw', () => {
+    const c = makeCareer('y2004');
+    expect(requestNbaRosterPriority(c, 78)).toBe(81);
+    sport.simSeason(c, 81, () => 0.51, true);
+    c.year++;
+    const old = c.team;
+    const card = sport.eventDeck(c, () => 0.51).find(event => event.id === 'nbaA_deadline_day')!;
+    card.options[0].apply(c, () => 0.51);
+    expect(c.team).not.toBe(old);
+    expect(c.seasons.at(-1)?.team).toBe(old);
+    expect(nbaRollTeamQuality(81, () => 0.75, c)).toBe(nbaRollTeamQuality(78, () => 0.75));
+    expect(c.rosterPriority).toBeUndefined();
+    expect(nbaRosterPriorityBoost(c, 81)).toBe(0);
+  });
 });
