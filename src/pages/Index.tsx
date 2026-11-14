@@ -577,12 +577,12 @@ export default function Index() {
                     sideOffset={8}
                     collisionPadding={12}
                     aria-label="Browse sports"
-                    className="max-h-[var(--radix-popover-content-available-height)] w-[19rem] max-w-[calc(100vw-1.5rem)] overflow-auto rounded-xl p-2"
+                    className="max-h-[var(--radix-popover-content-available-height)] w-[19rem] max-w-[calc(100vw-1.5rem)] overflow-auto rounded-xl px-2 py-1"
                     onCloseAutoFocus={event => {
                       if (document.activeElement?.id.startsWith('sport-')) event.preventDefault();
                     }}
                   >
-                    <ul className="grid grid-cols-2 gap-1">
+                    <ul className="grid grid-cols-2 gap-x-1">
                       {sportSections.map(category => {
                         const sport = CATEGORY_SPORT[category.title];
                         return (

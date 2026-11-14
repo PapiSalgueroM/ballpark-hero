@@ -581,7 +581,10 @@ for (const width of [320, 390, 430, 1440]) {
   try {
     const page = await ctx.newPage();
     await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
-    await page.addInitScript(() => localStorage.setItem('cookie-consent', 'essential'));
+    await page.addInitScript(light => {
+      localStorage.setItem('cookie-consent', 'essential');
+      if (light) localStorage.setItem('dukb-theme', 'light');
+    }, width === 320 || width === 430);
     await page.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
     const trigger = page.getByRole('button', { name: 'Browse sports', exact: true });
     const ready = await trigger.waitFor({ timeout: 5000 }).then(() => true, () => false);

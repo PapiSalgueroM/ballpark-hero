@@ -1,3 +1,10 @@
+## 2026-11-14: Home sport picker, NHL round history, NRL interchanges and Dart Draft
+
+- Browse sports opens every sport beside Home search. Tap a sport or choose it with the keyboard to jump straight to its games. Favourite sport keeps its existing setting.
+- NHL Front Office keeps each played regular-season round's wins, losses, overtime losses and the rating changes actually recorded. You can reopen rounds after reload and in the playoffs. Older rounds show when no review was saved.
+- Open interchange in an NRL Live Match can bring on an eligible unused reserve at halftime or keep the slot for 60 minutes. The match checks the player's positions and records the time they came on.
+- Dart Draft's single lifeboat can also rethrow a shark landing. Take the 40-rated trialist if you want to keep the lifeboat for another slot.
+
 ## 2026-11-14: NBA round reports, NRL kicking duties and Soccer Higher or Lower
 
 [PR #965](https://github.com/PapiSalgueroM/ballpark-hero/pull/965) published exact main `e60090dd4d881579f4b9f0d410632fdeefc60cfc`, deployment `d90fdf0b-3481-4b43-a147-d4518623a0ed`. Seven live browser journeys, all three raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted all three game guides. The final application type check and all 23 focused integrated tests passed.
