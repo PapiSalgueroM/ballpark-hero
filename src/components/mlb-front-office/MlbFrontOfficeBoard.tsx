@@ -11,6 +11,8 @@ import {
   mlbRelease, mlbSign, mlbTrade, mlbTradeValue, mlbAiMoves, AL, NL, MLB_DIVISIONS,
   MLB_ROUNDS, MLB_PROTECTED_STARTERS, MLB_ROTATION_RISK_REDUCTION, mlbRotationChoices, mlbRotationPlanned, setMlbRotationPlan,
   mlbOctoberRotationPlanned, mlbStrengthUnits, readMlbOctoberReceipt, setMlbOctoberRotation,
+  mlbDevelopmentChoices, mlbDevelopmentPlan, mlbDevelopmentPreview, mlbDevelopmentUsed, readMlbDevelopmentReceipt, setMlbDevelopmentStart,
+  type MlbDevelopmentReceipt,
   type MlbLeague, type MlbProspect, type MlbSeriesResult, type MlbRotationReceipt, mlbExecuteTalksTrade,
   ensureMlbLeagueIds, mlbRosterMin, mlbRosterMax, mlbSimReads, isPitcher, mlbOverLimit, mlbSalaryFor,
   type MlbGmPlayer,
@@ -75,7 +77,10 @@ const CUT_SAID = 'You designated him for assignment this season.';
 const MLB_WORDS: FoSportWords = { title: 'the World Series', playoffs: 'October', round: 'a series', games: 162 };
 
 type Postseason = { series: MlbSeriesResult[]; champion: string; gradeLine: string | null; octoberUnavailable?: true };
-type LastRound = { team: string; season: number; round: number; wins: number; losses: number; notes: string[]; rotation?: MlbRotationReceipt };
+type LastRound = {
+  team: string; season: number; round: number; wins: number; losses: number; notes: string[];
+  rotation?: MlbRotationReceipt; development?: MlbDevelopmentReceipt;
+};
 
 function readLastRound(value: unknown, league: MlbLeague, team: string): LastRound | null {
   if (!value || typeof value !== 'object') return null;
@@ -95,7 +100,9 @@ function readLastRound(value: unknown, league: MlbLeague, team: string): LastRou
     else if ('available' in receipt && Number.isInteger(receipt.available)
       && receipt.available >= 0 && receipt.available <= MLB_PROTECTED_STARTERS) rotation = { available: receipt.available };
   }
-  return { team, season: league.season, round: row.round, wins: row.wins, losses: row.losses, notes: row.notes, ...(rotation ? { rotation } : {}) };
+  const development = readMlbDevelopmentReceipt(row.development);
+  return { team, season: league.season, round: row.round, wins: row.wins, losses: row.losses, notes: row.notes,
+    ...(rotation ? { rotation } : {}), ...(development ? { development } : {}) };
 }
 
 function rotationHeadline(row: MlbRotationReceipt): string {
@@ -104,7 +111,11 @@ function rotationHeadline(row: MlbRotationReceipt): string {
 }
 
 function roundHeadlines(result: LastRound): string[] {
-  return [`Round ${result.round}: you went ${result.wins}-${result.losses}.`, ...(result.rotation ? [rotationHeadline(result.rotation)] : []), ...result.notes];
+  const development = result.development;
+  const lineup = development && ('unavailable' in development ? 'The development start did not count. It is still available this season.'
+    : `${development.player} played in place of ${development.replaced} and gained 1 OVR (${development.before} to ${development.after}).`);
+  return [`Round ${result.round}: you went ${result.wins}-${result.losses}.`,
+    ...(lineup ? [lineup] : []), ...(result.rotation ? [rotationHeadline(result.rotation)] : []), ...result.notes];
 }
 
 function OctoberRecap({ rows, team, unavailable, label }: {
@@ -167,6 +178,7 @@ export default function MlbFrontOfficeBoard() {
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<MlbLeague | null>(null);
   const [rotationSaveError, setRotationSaveError] = useState(false);
+  const [developmentSaveError, setDevelopmentSaveError] = useState(false);
   const [octoberSaveError, setOctoberSaveError] = useState(false);
   const [octoberUnavailable, setOctoberUnavailable] = useState(false);
   const [feed, setFeed] = useState<string[]>([]);
@@ -255,6 +267,8 @@ export default function MlbFrontOfficeBoard() {
       ensureMlbLeagueIds(s.league, s.draftClass);
       if (!mlbRotationPlanned(s.league, s.myTeam)) delete s.league.rotationPlan;
       if (!mlbOctoberRotationPlanned(s.league, s.myTeam)) delete s.league.octoberRotation;
+      if (!mlbDevelopmentPlan(s.league, s.myTeam)) delete s.league.developmentStart;
+      if (!mlbDevelopmentUsed(s.league, s.myTeam)) delete s.league.developmentStartUsed;
       setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
       lastRound.current = readLastRound(s.lastRound, s.league, s.myTeam);
       if (lastRound.current) setFeed(roundHeadlines(lastRound.current));
@@ -396,6 +410,7 @@ export default function MlbFrontOfficeBoard() {
        before it plays, through the same two tap DFA as any other cut. */
     if (mlbOverLimit(my) > 0) return;
     setRotationSaveError(false);
+    setDevelopmentSaveError(false);
     setOctoberSaveError(false);
     const lg: MlbLeague = JSON.parse(JSON.stringify(league));
     /* Round 1020: with the desk on, the staff's edge and the trainer ride on
@@ -409,8 +424,9 @@ export default function MlbFrontOfficeBoard() {
       nextGm = tick.desk;
       if (tick.line) deskLines.push(tick.line);
     }
-    const result = { team: myTeam, season: lg.season, round: lg.round, wins: report.myWins, losses: report.myLosses,
-      notes: [...deskLines, ...report.notes].slice(0, 4), ...(report.rotation ? { rotation: report.rotation } : {}) };
+    const result: LastRound = { team: myTeam, season: lg.season, round: lg.round, wins: report.myWins, losses: report.myLosses,
+      notes: [...deskLines, ...report.notes].slice(0, 4), ...(report.rotation ? { rotation: report.rotation } : {}),
+      ...(report.development ? { development: report.development } : {}) };
     const newFeed = roundHeadlines(result);
     if (nextGm !== gm) setGm(nextGm);
     if (lg.round >= MLB_ROUNDS) {
@@ -721,6 +737,7 @@ export default function MlbFrontOfficeBoard() {
   };
 
   const reset = () => {
+    setDevelopmentSaveError(false);
     localStorage.removeItem(SAVE_KEY);
     lastRound.current = null;
     setPhase('pick'); setLeague(null); setMyTeam('');
@@ -792,6 +809,10 @@ export default function MlbFrontOfficeBoard() {
   const room = mlbCapRoom(my, league.cap);
   const strength = Math.round(mlbStrength(my));
   const rotation = tab === 'round' ? mlbRotationChoices(league, myTeam) : null;
+  const development = tab === 'round' ? mlbDevelopmentChoices(league, myTeam) : null;
+  const developmentPlan = tab === 'round' ? mlbDevelopmentPlan(league, myTeam) : null;
+  const developmentPreview = developmentPlan ? mlbDevelopmentPreview(league, myTeam) : null;
+  const developmentRotation = rotation && mlbRotationPlanned(league, myTeam) ? MLB_PROTECTED_STARTERS : 3;
   const showOctoberChoice = tab === 'round' && league.round === MLB_ROUNDS && !!my.depth;
   const octoberStarters = showOctoberChoice ? mlbStrengthUnits(my).rot : [];
   const octoberBooked = showOctoberChoice && mlbOctoberRotationPlanned(league, myTeam);
@@ -1342,6 +1363,33 @@ export default function MlbFrontOfficeBoard() {
       {tab === 'round' && (
         <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
           <p className="mb-2 text-sm text-foreground">Each round simulates a week and a half of baseball across the league.</p>
+          {(development?.eligible.length > 0 || developmentPlan) && (
+            <div className="mx-auto mb-3 max-w-sm text-left">
+              <label className="block text-xs font-semibold">
+                Development start
+                <select className="mt-1 min-h-11 w-full rounded-lg border border-border bg-background px-3 text-sm"
+                  value={developmentPlan?.playerId ?? ''} onChange={event => {
+                    const next = setMlbDevelopmentStart(league, myTeam, event.target.value);
+                    if (next === league) return;
+                    if (!persist({}, next, myTeam)) { setDevelopmentSaveError(true); return; }
+                    setDevelopmentSaveError(false);
+                    setLeague(next);
+                  }}>
+                  <option value="">Usual batting lineup</option>
+                  {developmentPlan && !development?.eligible.some(player => player.id === developmentPlan.playerId) && (
+                    <option value={developmentPlan.playerId} disabled>Saved choice unavailable</option>
+                  )}
+                  {development?.eligible.map(player => <option key={player.id} value={player.id}>{player.name} · {player.ovr} OVR</option>)}
+                </select>
+              </label>
+              <p className="mt-1 text-xs text-muted-foreground">Once per season, give a healthy bench hitter aged 24 or under a full round and up to one OVR point toward their potential.</p>
+              {developmentPreview ? <p className="mt-1 text-xs text-muted-foreground" data-development-preview>
+                {developmentPreview.player.name} replaces {developmentPreview.replaced.name}. Current team strength {mlbStrength(my, developmentRotation).toFixed(2)} usual · {mlbStrength(my, developmentRotation, undefined, developmentPreview.bats).toFixed(2)} with the change.
+              </p> : developmentPlan && <p className="mt-1 text-xs text-muted-foreground">The saved swap is unavailable. The usual lineup will play unless the planned pair is available at the start of the round.</p>}
+              {developmentSaveError && <p role="alert" className="mt-1 text-xs text-destructive">Could not save the development start. Choose it again to retry.</p>}
+            </div>
+          )}
+          {mlbDevelopmentUsed(league, myTeam) && <p className="mx-auto mb-3 max-w-sm text-left text-xs text-muted-foreground">Development start used this season.</p>}
           {(rotation || mlbRotationPlanned(league, myTeam)) && <div className="mx-auto mb-3 max-w-sm text-left">
             <label className="block text-xs font-semibold">
               Pitching plan for Round {league.round}
