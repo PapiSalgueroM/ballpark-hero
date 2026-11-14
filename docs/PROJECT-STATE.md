@@ -1,4 +1,11 @@
+## 2026-11-14: NFL practice squad elevations and NRL development priority
+
+- In NFL Front Office, elevate up to two practice-squad players for a regular-season game, with three uses per player. The team reserves one week's share of each fictional salary. The player is available for the game and returns to practice afterward. Permanent promotions still use a full roster spot and salary. [NFL elevation rules](https://operations.nfl.com/calendar-events/nfl-free-agency/contract-language)
+- In NRL Team Manager, a development assistant can reserve one of their three rating awards for an eligible young player. The player still needs eight regular-season appearances from the hire onward. Clearing the priority frees the place for another eligible player.
+
 ## 2026-11-14: NRL season continuity and Manager Hot Seat formations
+
+[PR #943](https://github.com/PapiSalgueroM/ballpark-hero/pull/943) published exact main `54310eb4c01018f7fbc2cd1487be82d63e0d1b6b`, deployment `428681d6-ce6d-42e8-9807-8dc3fb07b212`. Six live browser journeys, both raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted both changed guides.
 
 - NRL managers staying at the same club can keep their first-choice and rotation presets. Season review previews which places will be repaired from the new squad. The active Round 1 team remains independent until the manager applies a preset.
 - Manager Hot Seat free play lets you select a formation and preview the available starting XI and its fit before kickoff. The choice is recorded when the match plays and replays with the save. The shared Daily uses its existing lineup rules.
