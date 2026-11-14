@@ -20,20 +20,19 @@ const continueKeys = new Set([
 /**
  * Round 717: Continue playing, under the Main Event band.
  *
- * One card for every long form game this browser holds a save for, linking
- * straight back into it. A visitor with no saves gets nothing at all, not an
- * empty box, so the first screen of a new visitor is exactly what it was.
+ * One card for each save destination, including separately saved careers.
+ * A visitor with no saves gets no shelf.
  *
  * The first render reads only which saves exist. After mount, a change to
  * one of those keys or a return to the page refreshes the links and labels.
- * The label fits a line that already holds its height.
+ * The card holds its height as details load.
  */
 export function ContinueRow() {
   const [{ saved, lines }, setResume] = useState<{ saved: SavedGame[]; lines: Record<string, string> }>(
-    () => ({ saved: savedGames(homeSaveStorage()), lines: {} }),
+    () => ({ saved: savedGames(homeSaveStorage(), true), lines: {} }),
   );
   const refresh = useCallback((storage: Storage | null) => {
-    const current = savedGames(storage);
+    const current = savedGames(storage, true);
     const descriptions: Record<string, string> = {};
     for (const { entry } of current) {
       let raw: string | null = null;
@@ -57,10 +56,12 @@ export function ContinueRow() {
       </h2>
       <div className={styles.continueRail}>
         <ul className={styles.continueList}>
-          {saved.map(({ entry, game }) => {
+          {saved.map(({ entry, game, slot }) => {
             const sport = sportOf(game.path);
+            const line = lines[entry.path];
+            const description = slot === undefined ? line ?? SAVED_FALLBACK : [`Slot ${slot}`, line].filter(Boolean).join(' · ');
             return (
-              <li key={game.path}>
+              <li key={entry.path}>
                 <Link
                   to={entry.path}
                   style={sportStyle(sport)}
@@ -76,7 +77,7 @@ export function ContinueRow() {
                       {game.label}
                     </span>
                     <span data-continue-line="" className={styles.continueLine}>
-                      {lines[entry.path] ?? SAVED_FALLBACK}
+                      {description}
                     </span>
                   </span>
                   <ArrowRight aria-hidden="true" className={styles.continueArrow} />

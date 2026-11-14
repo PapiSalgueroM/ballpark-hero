@@ -25,7 +25,7 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlBenchRotation, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview,
-  nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60Interchange, nrlNextRound,
+  nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60Interchange, nrlNextRound,
   nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
@@ -1415,6 +1415,8 @@ function Squad({ career, onAction, disabled }: {
   );
 }
 
+const finalsRaceLabels = { secured: 'Secured', open: 'Still open', out: 'Out of reach' } as const;
+
 function Ladder({ career }: { career: NrlCareerState }) {
   const shortName = useNrlClubName();
   const fullName = useNrlClubName('full');
@@ -1423,6 +1425,7 @@ function Ladder({ career }: { career: NrlCareerState }) {
   const [scoutOpen, setScoutOpen] = useState(false);
   const [scoutClubId, setScoutClubId] = useState('');
   const rows = nrlLadder(season);
+  const race = nrlFinalsRace(season, rows);
   const form = showForm ? nrlLeagueForm(season) : null;
   const clubs = nrlSeasonPlan(season.year).clubs;
   const rivals = clubs.filter(club => club.id !== season.clubId);
@@ -1433,6 +1436,39 @@ function Ladder({ career }: { career: NrlCareerState }) {
   return (
     <section className="rounded-xl border border-border bg-card p-3 sm:p-4" aria-labelledby="nrl-ladder">
       <h2 id="nrl-ladder" className="font-display text-lg font-bold">{season.year} ladder</h2>
+      {race && (
+        <details className="mt-2 rounded-lg border border-border bg-background px-3" data-nrl-finals-race>
+          <summary className="flex min-h-11 cursor-pointer items-center rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            Finals race
+          </summary>
+          <div className="space-y-2 pb-3 text-sm">
+            <dl className="grid grid-cols-2 gap-2">
+              <div>
+                <dt className="text-muted-foreground">Top eight</dt>
+                <dd className="font-semibold">{finalsRaceLabels[race.topEight]}</dd>
+              </div>
+              <div>
+                <dt className="text-muted-foreground">Top four</dt>
+                <dd className="font-semibold">{finalsRaceLabels[race.topFour]}</dd>
+              </div>
+            </dl>
+            <p>Final ladder points: <strong className="tabular-nums">{race.minimum === race.maximum
+              ? race.minimum : `${race.minimum} to ${race.maximum}`}</strong></p>
+            <p className="text-xs text-muted-foreground">The range includes two points per remaining bye. Ties on points can leave the race open.</p>
+            <ul aria-label="Remaining club rounds" className="divide-y divide-border">
+              {race.remaining.map(({ round, opponentId, home, nearCut }) => (
+                <li key={round} className="flex flex-wrap justify-between gap-x-2 py-1" data-nrl-finals-race-round={round}>
+                  <span className="text-muted-foreground">Round {round}</span>
+                  <strong className="break-words">{opponentId
+                    ? `${home ? 'Home vs' : 'Away at'} ${shortName(season.year, opponentId)}` : 'Bye · 2 points'}
+                    {nearCut && <span className="block text-xs font-normal text-muted-foreground sm:inline"> · Near the top-eight cut</span>}
+                  </strong>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </details>
+      )}
       <button type="button" aria-pressed={showForm} onClick={() => setShowForm(value => !value)}
         className="mt-2 min-h-11 rounded-lg border border-border px-3 text-sm font-semibold hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-pressed:bg-primary/10">
         Form and venue records
@@ -1758,6 +1794,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
+              <li>Open Finals race in Ladder during the last four regular rounds to check your remaining opponents, possible ladder points and whether your club has secured a place.</li>
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>
               <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check Rating changes in Squad. Existing ratings carry into the next season.</li>
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>

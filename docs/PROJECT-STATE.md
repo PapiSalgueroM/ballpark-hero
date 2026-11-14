@@ -1,4 +1,11 @@
+## 2026-11-14: NRL finals race and Home campaign saves
+
+- In the last four regular rounds, NRL Ladder shows the remaining opponents, possible points and whether a top-four or top-eight finish is secured, open or out of reach. The possible points include guaranteed bye points. Tight positions stay open while the scores or points difference can still change them.
+- Each saved NRL club career has its own Home Continue playing card. The card names the slot and season and resumes that exact career.
+
 ## 2026-11-14: NRL matchday rotation and Soccer Career fixture reports
+
+[PR #906](https://github.com/PapiSalgueroM/ballpark-hero/pull/906) published exact main `3f87beede9b9846f1d35cff5b2158ca0742b441c`, deployment `398db76c-9a95-4d6a-bcd7-2120761c6d37`. Nine browser journeys and all 174 sitemap routes passed live. IndexNow accepted both game guides. The NRL browser fixture isolated the host analytics script after it delayed page startup.
 
 - The NRL Match centre previews which reserves come on in Quick Sim and how holding a reserve changes the Live rotation. Confirmed halftime and 60-minute changes can still affect who plays.
 - Soccer Career opens a completed fixture's score, match events and player line from the season viewer when the game's match details are available.

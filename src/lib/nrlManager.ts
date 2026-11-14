@@ -266,6 +266,40 @@ export function nrlLadder(state: Pick<NrlManagerState, 'year' | 'round' | 'resul
     || a.clubId.localeCompare(b.clubId));
 }
 
+export function nrlFinalsRace(state: Pick<NrlManagerState, 'year' | 'round' | 'phase' | 'clubId' | 'results'>, ladder?: NrlLadderRow[]) {
+  const { draw } = nrlSeasonPlan(state.year);
+  if (state.phase !== 'regular' || state.round <= draw.length - 4 || state.round > draw.length) return null;
+  const rows = ladder ?? nrlLadder(state);
+  const rounds = draw.slice(state.round - 1);
+  const points = rows.map(row => ({
+    clubId: row.clubId,
+    minimum: row.points + 2 * rounds.filter(fixtures => !fixtures.some(pair => pair.includes(row.clubId))).length,
+    maximum: row.points + 2 * rounds.length,
+  }));
+  const club = points.find(row => row.clubId === state.clubId);
+  if (!club) return null;
+  const rivals = points.filter(row => row.clubId !== state.clubId);
+  const status = (places: number) => {
+    // Equal points may still be decided by differential and the other ladder tie-breaks.
+    if (rivals.filter(row => row.maximum >= club.minimum).length < places) return 'secured';
+    if (rivals.filter(row => row.minimum > club.maximum).length >= places) return 'out';
+    return 'open';
+  };
+  return {
+    minimum: club.minimum,
+    maximum: club.maximum,
+    topFour: status(4),
+    topEight: status(NRL_FINALS_SPOTS),
+    remaining: rounds.map((fixtures, index) => {
+      const fixture = fixtures.find(pair => pair.includes(state.clubId));
+      const opponentId = fixture ? fixture[fixture[0] === state.clubId ? 1 : 0] : null;
+      const rank = rows.findIndex(row => row.clubId === opponentId) + 1;
+      return { round: state.round + index, opponentId, home: fixture ? fixture[0] === state.clubId : null,
+        nearCut: rank >= NRL_FINALS_SPOTS - 1 && rank <= NRL_FINALS_SPOTS + 2 };
+    }),
+  };
+}
+
 export function nrlLeagueForm({ year, results }: Pick<NrlManagerState, 'year' | 'results'>) {
   const { clubs, draw } = nrlSeasonPlan(year);
   const form = new Map<string, NrlClubForm>(clubs.map(({ id }) => [id, {

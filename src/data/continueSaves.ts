@@ -116,6 +116,7 @@ const COUNT_MAX = 99999;
 export interface SavedGame {
   entry: ContinueSave;
   game: GameDef;
+  slot?: number;
 }
 
 /**
@@ -123,7 +124,7 @@ export interface SavedGame {
  * nothing is read or parsed here, so this is cheap enough for a first render
  * and the row's size is known before any save is opened.
  */
-export function savedGames(storage: Pick<Storage, 'getItem'> | null | undefined): SavedGame[] {
+export function savedGames(storage: Pick<Storage, 'getItem'> | null | undefined, includeSlots = false): SavedGame[] {
   if (!storage) return [];
   const out: SavedGame[] = [];
   for (const entry of CONTINUE_SAVES) {
@@ -133,12 +134,19 @@ export function savedGames(storage: Pick<Storage, 'getItem'> | null | undefined)
         if (fightPromoterMode(storage.getItem(FIGHT_PROMOTER_MODE_KEY)) === 'mma') candidates.reverse();
       } catch { /* Read either save if the preference is unavailable. */ }
     }
-    const held = candidates.find(save => {
-      try { return storage.getItem(save.saveKey) !== null; } catch { return false; }
-    });
-    if (!held) continue;
-    const game = ALL_GAMES.find(g => g.path === entry.path);
-    if (game) out.push({ entry: held, game });
+    for (const [index, save] of candidates.entries()) {
+      let held = false;
+      try { held = storage.getItem(save.saveKey) !== null; } catch { /* Keep reading the other save keys. */ }
+      if (!held) continue;
+      const game = ALL_GAMES.find(g => g.path === entry.path);
+      if (!game) break;
+      if (includeSlots && entry.alternateSaveKeys) {
+        out.push({ entry: save, game, slot: index + 1 });
+      } else {
+        out.push({ entry: save, game });
+        break;
+      }
+    }
   }
   return out;
 }

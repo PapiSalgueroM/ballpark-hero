@@ -62,4 +62,24 @@ describe('Home career resume links', () => {
     announce(null);
     expect(screen.queryByRole('heading', { name: 'Continue playing' })).not.toBeInTheDocument();
   });
+
+  it('shows separate NRL careers and keeps the surviving card focused after one is removed', () => {
+    const firstKey = 'nrl-manager-save-v1';
+    const first = '{"year":2026}';
+    const second = '{"season":{"year":2027}}';
+    localStorage.setItem(firstKey, first);
+    localStorage.setItem(nrl, second);
+    mount();
+    const oldCareer = screen.getByRole('link', { name: /NRL Team Manager.*Slot 1.*2026 season/ });
+    const otherCareer = screen.getByRole('link', { name: /NRL Team Manager.*Slot 2.*2027 season/ });
+    expect(oldCareer).toHaveAttribute('href', '/nrl-team-manager');
+    expect(otherCareer).toHaveAttribute('href', '/nrl-team-manager?slot=2');
+    expect(localStorage.getItem(firstKey)).toBe(first);
+    otherCareer.focus();
+    localStorage.removeItem(firstKey);
+    announce(firstKey);
+    expect(oldCareer).not.toBeInTheDocument();
+    expect(otherCareer).toHaveFocus();
+    expect(localStorage.getItem(nrl)).toBe(second);
+  });
 });
