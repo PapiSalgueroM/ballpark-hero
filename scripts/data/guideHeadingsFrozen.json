@@ -423,6 +423,7 @@
         "Play the match one of two ways: Play Live puts it on the pitch with the dressing room at the break, and Quick Sim goes straight to the report with the coach making your subs. Then read the report, answer the press, and manage the dressing room between games.",
         "A live match moves: both teams hold their shape around the ball, and goals play out on the pitch before the score changes. Pause it, change the speed or skip to the whistle, and tap one of your players at any minute to make a sub or change shape.",
         "Squad OVR can rise or fall during the season. A young player with regular minutes can improve and a veteran can lose a point after a league match. Check the match report for changes. Players carry those ratings into next season.",
+        "Rare ACL tears and Achilles ruptures in your simulated matches have an expected return date in the match report, Squad and the treatment room. For example, an ACL tear in April can keep a player out into the next season.",
         "If you earn a national team job, open the Manager tile after a tournament summer to see the latest qualifying table, group table and finals results. If your team misses the tournament and the federation lets you go, you can still read the qualifying report.",
         "Set National tactics in the Manager tile before that summer. Defensive reduces scoring for both sides. Attacking opens up the games and chances for both teams. The report remembers the tactics used.",
         "With a national job in the current era, open Manager to pick your starting XI for the coming tournament summer. Choose any eligible player for each slot. The lineup's ratings and positional fit affect the simulated campaign, and the report keeps the team you used.",
@@ -2282,6 +2283,7 @@
         "Handle the summer, up to three cards one at a time. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
         "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
         "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
+        "In a supported year, open Regular season and choose Watch reconstructed games. Season Center recreates the games from your saved season totals, with estimated scores and quarters.",
         "When the contract runs out, work a real free agency window: competing offers from named franchises with their own money, length and roster quality, and one push for more on any of them.",
         "From 31, a falling rating brings the retirement talk: stop now, one more year, or a farewell season that ends the career after it. Then face the legacy verdict and the Hall of Fame wait."
       ],

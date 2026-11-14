@@ -1,5 +1,6 @@
 import { ShieldAlert } from 'lucide-react';
 import type { CareerState } from '@/lib/clubManager';
+import { majorInjuryLabel } from '@/lib/clubManagerInjuries';
 
 export default function ClubManagerTreatmentPanel({ unavailable }: {
   unavailable: CareerState['squad'];
@@ -13,7 +14,7 @@ export default function ClubManagerTreatmentPanel({ unavailable }: {
                   <div className="flex flex-wrap gap-1.5">
                     {unavailable.map(p => (
                       <span key={p.id} className="text-[10px] bg-secondary rounded-full px-2 py-1 text-foreground">
-                        {p.injuryWeeks > 0 ? `🩹 ${p.name} (${p.injuryWeeks}w)` : `🟥 ${p.name} (${p.suspendedMatches})`}
+                        {p.injuryWeeks > 0 ? `🩹 ${p.name} (${majorInjuryLabel(p.majorInjury) ?? `${p.injuryWeeks}w`})` : `🟥 ${p.name} (${p.suspendedMatches})`}
                       </span>
                     ))}
                   </div>

@@ -5,7 +5,7 @@ import type { NrlCareerAction, NrlCareerState } from '@/lib/nrlCareer';
 import { NRL_ROLES, type NrlTactic } from '@/lib/nrlManager';
 import {
   nrlOriginComplete, nrlOriginEligibility, nrlOriginFixtures, nrlOriginResult, nrlOriginStarterOptions, NRL_ORIGIN_SIDES, NRL_ORIGIN_TEAM_NAMES,
-  type NrlOriginSeries,
+  type NrlOriginHistory, type NrlOriginSeries,
 } from '@/lib/nrlOrigin';
 
 type Dispatch = (action: NrlCareerAction) => boolean;
@@ -13,7 +13,7 @@ const selectClass = 'min-h-11 w-full min-w-0 rounded-md border border-input bg-b
 const originDate = new Intl.DateTimeFormat('en-AU', { day: 'numeric', month: 'long', timeZone: 'UTC' });
 const tacticLabels: Record<NrlTactic, string> = { balanced: 'Balanced', attack: 'Attack', defense: 'Defence' };
 
-function OriginSchedule({ year, series }: { year: number; series?: NrlOriginSeries }) {
+function OriginSchedule({ year, series }: { year: number; series?: Pick<NrlOriginSeries | NrlOriginHistory, 'matches'> }) {
   return (
     <ol aria-label={`${year} State of Origin games`} className="divide-y divide-border border-y border-border">
       {nrlOriginFixtures(year).map(({ game, date, venue, home, away, neutral }) => {
@@ -163,7 +163,7 @@ function StartOrigin({ career, disabled, onAction }: { career: NrlCareerState; d
 export default function NrlOriginOffice({ career, disabled, onAction }: {
   career: NrlCareerState; disabled: boolean; onAction: Dispatch;
 }) {
-  const { origin, season, retired } = career;
+  const { origin, originHistory, season, retired } = career;
   const [open, setOpen] = useState(Boolean(origin));
   if (retired && !origin) return null;
   const canStart = !retired && (!origin || (nrlOriginComplete(origin) && origin.year < season.year));
@@ -185,6 +185,20 @@ export default function NrlOriginOffice({ career, disabled, onAction }: {
             <ActiveOrigin key={origin.year} series={origin} disabled={disabled} onAction={onAction} />
           </>}
           {canStart && <StartOrigin key={season.year} career={career} disabled={disabled} onAction={onAction} />}
+          {originHistory && (
+            <details className="rounded-md border border-border bg-background px-3">
+              <summary className="min-h-11 cursor-pointer py-2.5 font-semibold">Past Origin series</summary>
+              <div className="space-y-2 pb-3">
+                {originHistory.slice().reverse().map(archive => (
+                  <details key={archive.year} className="border-t border-border" data-nrl-origin-history={archive.year}>
+                    <summary className="min-h-11 cursor-pointer py-2.5 text-sm font-semibold">{archive.year} · {NRL_ORIGIN_TEAM_NAMES[archive.winner]} won</summary>
+                    <p className="mb-2 text-sm text-muted-foreground">You coached {NRL_ORIGIN_TEAM_NAMES[archive.side]}.</p>
+                    <OriginSchedule year={archive.year} series={archive} />
+                  </details>
+                ))}
+              </div>
+            </details>
+          )}
         </div>}
       </div>
     </section>

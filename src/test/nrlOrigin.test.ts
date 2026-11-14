@@ -200,6 +200,41 @@ describe('Origin career saves', () => {
     expect(JSON.stringify(readNrlCareerSave(JSON.stringify(live)))).toBe(JSON.stringify(live));
   });
 
+  it('archives the exact previous series only when a new one starts and rejects fabricated history', () => {
+    let career = createNrlCareer('broncos', 16);
+    const finish = (state: NrlCareerState) => {
+      while (state.season.phase !== 'complete') state = advance(state);
+      return reduceNrlCareer(state, { type: 'startNextSeason' });
+    };
+    const recorded = [];
+    for (const side of ['qld', 'nsw'] as const) {
+      const appointment = reduceNrlCareer(career, { type: 'startOrigin', side, year: career.season.year });
+      expect(appointment.originHistory ?? []).toEqual(recorded);
+      const done = play(play(play(appointment, 1), 2), 3);
+      const archive = { year: done.origin!.year, side, winner: nrlOriginResult(done.origin!).winner,
+        matches: done.origin!.matches.map(({ homeScore, awayScore, goldenPoint }) => ({ homeScore, awayScore, goldenPoint })) };
+      expect(done.originHistory ?? []).toEqual(recorded);
+      expect(start(done)).toBe(done);
+      career = finish(done);
+      expect(career.originHistory ?? []).toEqual(recorded);
+      const old = career.origin;
+      expect(reduceNrlCareer(career, { type: 'startOrigin', side, year: career.season.year, nominationId: 'none' }).origin).toBe(old);
+      recorded.push(archive);
+    }
+    const active = start(career);
+    expect(active.origin?.year).toBe(2028);
+    expect(active.originHistory).toEqual(recorded);
+    expect(readNrlCareerSave(JSON.stringify(active))).toEqual(active);
+    for (const originHistory of [
+      [...recorded].reverse(),
+      [...recorded, recorded[1]],
+      [{ ...recorded[0], winner: recorded[0].winner === 'qld' ? 'nsw' : 'qld' }, recorded[1]],
+      [{ ...recorded[0], matches: [{ homeScore: 8, awayScore: 8, goldenPoint: false }, ...recorded[0].matches.slice(1)] }, recorded[1]],
+    ]) expect(readNrlCareerSave(JSON.stringify({ ...active, originHistory }))).toBeNull();
+    const { originHistory: _omit, ...oldSave } = active;
+    expect(readNrlCareerSave(JSON.stringify(oldSave))).toEqual(oldSave);
+  });
+
   it('lets a club coach add one eligible omitted player to the Origin pool and field them', () => {
     const initial = createNrlCareer('broncos', 16);
     const base = start(initial);

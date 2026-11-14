@@ -1,4 +1,12 @@
+## 2026-11-14: Club Manager long-term injuries, NBA replay and State of Origin history
+
+- Rare ACL tears and Achilles ruptures in Club Manager's simulated fixtures use an estimated return date. The match report and squad show it, and the injury stays on the player after summer if the date has yet to pass. Duration bands draw on published men's professional football cohorts. [ACL layoff study](https://bjsm.bmj.com/content/bjsports/50/12/744.full.pdf) and [Achilles match return study](https://pubmed.ncbi.nlm.nih.gov/34558318/).
+- NBA My Career's Career Log opens reconstructed games for supported older regular seasons, with a label explaining how the scores were generated.
+- NRL Team Manager keeps completed State of Origin winners and game scores when the coach opens another series. Earlier results are available alongside the current series.
+
 ## 2026-11-14: Stadium Tycoon match results, Build Your XI corrections and NRL vice-captains
+
+[PR #930](https://github.com/PapiSalgueroM/ballpark-hero/pull/930) published exact main `cb151904ac9897e365c5b6944d9764496498a66c`, deployment `64342dd7-56ba-499f-baa5-2e30b0db93b9`. Nine live browser journeys, all 174 sitemap routes and three raw guides passed. IndexNow accepted the guides.
 
 - Stadium Tycoon's Latest Season report keeps the actual scores and opponents for recorded matchdays. Older saves start recording at their next league match.
 - Build Your XI can undo the last accepted player while keeping the same club or nation assignment, rerolls and earlier players.

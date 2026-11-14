@@ -43,14 +43,22 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
   const season = selected === null ? undefined : career.seasons[selected];
   const previous = selected !== null && selected > 0 ? career.seasons[selected - 1] : undefined;
   const detail = season ? sport.reviewStats(season, career.pos) : null;
-  const openPlayoffs = async (event: MouseEvent<HTMLButtonElement>) => {
+  const openSeason = async (event: MouseEvent<HTMLButtonElement>, playoffsOnly = false) => {
     if (!centre || !season || loadingReplay) return;
     const from = event.currentTarget;
     setLoadingReplay(true);
-    const ready = await centre.ready(from);
+    const ready = await centre.ready(from, true);
     setLoadingReplay(false);
-    if (ready && from.isConnected) centre.open({ career, row: season, playoffsOnly: true, from });
+    if (ready && from.isConnected) centre.open(playoffsOnly
+      ? { career, row: season, playoffsOnly: true, from }
+      : { career, row: season, from });
   };
+  const showNbaReplay = sport.slug === 'nba' && !!(centre && sport.loadSeasonCentre && season);
+  const nbaReplayReason = showNbaReplay && season
+    ? !finite(season.games) || season.games <= 0 || season.teamResult === 'SUSPENDED'
+      ? 'No games were recorded for this season.'
+      : sport.seasonCentreHeld?.(season.year, career.eraId, { pos: career.pos, team: season.team })
+    : null;
 
   useEffect(() => {
     if (comparing || highs) return;
@@ -120,8 +128,16 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
             </div>)}
           </dl>
           <p className="text-xs text-muted-foreground">These are the numbers kept in your save. Older saves may not have every field.</p>
+          {tab === 'Regular season' && showNbaReplay && (
+            nbaReplayReason ? <p className="text-xs text-muted-foreground">{nbaReplayReason}</p> : <div className="space-y-2">
+              <p id="nba-season-replay-details" className="text-xs text-muted-foreground">Games are recreated from your saved season totals. Individual scores and quarters are estimates.</p>
+              <button type="button" className={control} aria-describedby="nba-season-replay-details" aria-busy={loadingReplay || undefined} onClick={event => void openSeason(event)}>
+                {loadingReplay ? 'Loading Season Center...' : 'Watch reconstructed games'}
+              </button>
+            </div>
+          )}
           {tab === 'Postseason' && centre && sport.canReplayPlayoffs?.(career, season) && (
-            <button type="button" className={control} aria-busy={loadingReplay || undefined} onClick={openPlayoffs}>
+            <button type="button" className={control} aria-busy={loadingReplay || undefined} onClick={event => void openSeason(event, true)}>
               {loadingReplay ? 'Loading playoff replay...' : 'Replay team playoffs'}
             </button>
           )}

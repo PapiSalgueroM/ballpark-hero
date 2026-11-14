@@ -18,6 +18,7 @@ import type { IntlCallUp } from '@/lib/clubManagerInternationals';
 import { ALL_POSITIONS } from '@/lib/positionFit';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { validShirtNumber } from '@/lib/clubManagerShirtNumbers';
+import { majorInjuryLabel } from '@/lib/clubManagerInjuries';
 
 /**
  * Round 132: the one label this round is really about.
@@ -311,7 +312,7 @@ export function SquadRowDetail({ p, career, scoutLevel, money }: { p: CMPlayer; 
   const next = p.onLoan ? null : renewalTerms(p);
   const isBack = p.position === 'GK' || ['CB', 'LB', 'RB', 'LWB', 'RWB'].includes(p.position);
   const availability = p.injuryWeeks > 0
-    ? `Injured, ${p.injuryWeeks} week${p.injuryWeeks === 1 ? '' : 's'}`
+    ? majorInjuryLabel(p.majorInjury) ?? `Injured, ${p.injuryWeeks} week${p.injuryWeeks === 1 ? '' : 's'}`
     : p.suspendedMatches > 0
       ? `Banned, ${p.suspendedMatches} match${p.suspendedMatches === 1 ? '' : 'es'}`
       : 'Available';
