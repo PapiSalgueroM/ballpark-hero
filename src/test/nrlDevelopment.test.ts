@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  createNrlCareer, nrlCareerCap, nrlCareerMarket, nrlContractOffer, nrlDevelopmentPreview, readNrlCareerSave, reduceNrlCareer,
+  createNrlCareer, nrlCareerCap, nrlCareerMarket, nrlContractOffer, nrlDevelopmentAffected, readNrlCareerSave, reduceNrlCareer,
   type NrlCareerState, type NrlDevelopmentFocus,
 } from '@/lib/nrlCareer';
 import { createNrlSeason } from '@/lib/nrlManager';
@@ -39,38 +39,35 @@ describe('NRL development focus', () => {
     const signing = nrlCareerMarket(opened).find(entry => entry.kind === 'rival' && entry.player.age <= 23
       && nrlContractOffer(opened, entry.player.id, entry.askingSalary, 1).ok)!;
     const recruited = reduceNrlCareer(opened, { type: 'offerContract', playerId: signing.player.id, salary: signing.askingSalary, years: 1 });
-    const complete = finish(recruited);
-    const standard = next(complete);
-    const chosen = focus(complete, option);
-    expect(chosen?.developmentFocus).toBe(option);
-    const trained = next(save(chosen)!);
-    const oldPlayers = new Map(complete.players.map(player => [player.id, player]));
-    const standardPlayers = new Map(standard.players.map(player => [player.id, player]));
-    const affected = standard.players.filter(player => {
-      const prior = oldPlayers.get(player.id);
-      return prior?.contract?.clubId === 'panthers' && player.contract?.clubId === 'panthers'
-        && (option === 'youth' ? player.age <= 24 && player.rating < player.potential : player.age >= 30 && player.rating < prior.rating);
-    });
-    expect(affected.length).toBeGreaterThan(0);
-    if (option === 'youth') {
-      expect(affected.some(player => player.rating === oldPlayers.get(player.id)!.rating)).toBe(true);
+    let chosen = focus(recruited, option);
+    let normal = recruited;
+    const ownMatches = (career: NrlCareerState) => career.season.results.filter(match => !match.finalsRound
+      && (match.homeId === 'panthers' || match.awayId === 'panthers')).length;
+    while (!nrlDevelopmentAffected(chosen) && chosen.season.phase === 'regular') {
+      chosen = reduceNrlCareer(chosen, { type: 'advance' });
+      normal = reduceNrlCareer(normal, { type: 'advance' });
     }
-    const ids = new Set(affected.map(player => player.id));
-    expect(trained.players).toEqual(standard.players.map(player => ids.has(player.id) ? { ...player, rating: player.rating + 1 } : player));
-    expect(trained.players.find(player => player.id === signing.player.id)).toEqual(standardPlayers.get(signing.player.id));
-    const departed = complete.players.find(player => player.contract?.clubId === 'panthers' && player.age <= 23
-      && standardPlayers.has(player.id) && standardPlayers.get(player.id)!.contract?.clubId !== 'panthers')!;
-    expect(departed).toBeDefined();
-    expect(trained.players.find(player => player.id === departed.id)).toEqual(standardPlayers.get(departed.id));
-    const steadyVeteran = complete.players.find(player => player.contract?.clubId === 'panthers' && player.age >= 29
-      && standardPlayers.get(player.id)?.contract?.clubId === 'panthers' && standardPlayers.get(player.id)?.rating === player.rating)!;
-    expect(steadyVeteran).toBeDefined();
-    expect(trained.players.find(player => player.id === steadyVeteran.id)).toEqual(standardPlayers.get(steadyVeteran.id));
-    expect(nrlDevelopmentPreview(chosen)).toBe(affected.length);
-    expect(trained.history[0].development).toEqual({ focus: option, affected: affected.length });
+    const affected = chosen.ratingReview?.focus ?? [];
+    expect(affected.length).toBeGreaterThan(0);
+    expect(affected).not.toContain(signing.player.id);
+    if (option === 'youth') expect(ownMatches(chosen)).toBe(21);
+    for (const id of affected) {
+      const player = chosen.players.find(row => row.id === id)!;
+      const standard = normal.players.find(row => row.id === id)!;
+      expect(player.contract?.clubId).toBe('panthers');
+      expect(player.futureContract?.clubId === 'panthers' || player.contract!.endYear >= 2027).toBe(true);
+      expect(option === 'youth' ? player.age <= 23 : player.age >= 29).toBe(true);
+      expect(player.rating).toBe(standard.rating + 1);
+    }
+    expect(focus(chosen, 'balanced')).toBe(chosen);
+    expect(save(chosen)).toEqual(chosen);
+    const complete = finish(chosen);
+    const trained = next(save(complete)!);
+    const oldRatings = new Map(complete.players.map(player => [player.id, player.rating]));
+    expect(trained.players.every(player => !oldRatings.has(player.id) || oldRatings.get(player.id) === player.rating)).toBe(true);
+    expect(trained.history[0].development).toEqual({ focus: option, affected: nrlDevelopmentAffected(complete) });
     expect(trained.developmentFocus).toBeUndefined();
-    expect(nrlCareerCap(trained)).toEqual(nrlCareerCap(standard));
-    expect(trained.finance).toEqual(standard.finance);
+    expect(trained.ratingReview).toBeUndefined();
     expect(next(trained)).toBe(trained);
     expect(JSON.stringify(save(trained))).toBe(JSON.stringify(trained));
     expect(next(finish(trained)).history.map(row => row.development)).toEqual([trained.history[0].development, undefined]);
@@ -83,12 +80,13 @@ describe('NRL development focus', () => {
       players: state.players.map(player => player.contract?.clubId === 'panthers' && player.age <= 23
         ? { ...player, potential: player.rating } : player),
     };
-    const complete = finish(capped);
-    const chosen = focus(complete, 'youth');
-    expect(chosen?.developmentFocus).toBe('youth');
-    expect(nrlDevelopmentPreview(chosen)).toBe(0);
-    const trained = next(chosen);
-    expect(trained.players).toEqual(next(complete).players);
+    const chosen = focus(capped, 'youth');
+    const complete = finish(chosen);
+    expect(complete.developmentFocus).toBe('youth');
+    expect(nrlDevelopmentAffected(complete)).toBe(0);
+    const trained = next(complete);
+    expect(nrlCareerCap(trained)).toEqual(nrlCareerCap(next(finish(capped))));
+    expect(trained.players).toEqual(next(finish(capped)).players);
     expect(trained.history[0].development).toEqual({ focus: 'youth', affected: 0 });
   });
 

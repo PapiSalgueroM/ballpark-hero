@@ -116,8 +116,8 @@ describe('NRL home ticket pricing', () => {
     expect(returned).toEqual({
       ...value.history[0],
       finals: {
-        seeds: ['broncos', 'bulldogs', 'storm', 'raiders', 'panthers', 'warriors', 'sea-eagles', 'roosters'],
-        scores: [[24, 28], [22, 24], [14, 24], [6, 20], [28, 12], [16, 24], [30, 28], [22, 2], [16, 12]],
+        seeds: ['broncos', 'bulldogs', 'storm', 'raiders', 'panthers', 'sea-eagles', 'roosters', 'warriors'],
+        scores: [[18, 28], [22, 24], [12, 13], [4, 10], [22, 12], [24, 16], [4, 16], [22, 2], [10, 28]],
       },
     });
     expect(raw(readNrlCareerSave(raw(back))!)).toBe(raw(back));

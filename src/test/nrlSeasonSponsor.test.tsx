@@ -87,7 +87,7 @@ describe('NRL season sponsor', () => {
     }))).toBeNull();
   });
 
-  it.each([[4, 8, 310_000], [1, 10, 110_000]] as const)('settles final-round byes from the actual ladder (seed %i, rank %i)', (seed, rank, total) => {
+  it.each([[4, 8, 310_000], [1, 9, 110_000]] as const)('settles final-round byes from the actual ladder (seed %i, rank %i)', (seed, rank, total) => {
     const start = createNrlCareer('dolphins', seed, 2027);
     const signed = sign(start, 'finals');
     expect(cash(signed) - cash(start)).toBe(110_000);

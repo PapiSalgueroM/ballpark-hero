@@ -151,7 +151,7 @@ describe('NRL 60-minute tactical check', () => {
   });
 
   it('leaves standings and finance unmodified until a staged finals match settles', () => {
-    let before = createNrlCareer('broncos', 78);
+    let before = createNrlCareer('broncos', 95);
     while (!nrlNextRound(before.season).clubMatch?.finalsRound) before = finish(before, { type: 'advance' });
     const half = start(before);
     const { year, round } = half.season;
@@ -163,7 +163,7 @@ describe('NRL 60-minute tactical check', () => {
     expect(result?.finalsRound).toBe(1);
     expect(result?.minute60Tactic).toBe('attack');
     expect(result?.extraTime).toBe(true);
-    expect([result?.homeScore, result?.awayScore]).toEqual([32, 34]);
+    expect([result?.homeScore, result?.awayScore]).toEqual([22, 16]);
     expect(full.finance.centralFunding).toBeGreaterThan(before.finance.centralFunding);
     expect(finish(full, { type: 'finishMinute60', year, round, tactic: 'attack' })).toBe(full);
   });

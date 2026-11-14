@@ -90,16 +90,27 @@ describe('NRL development assistant', () => {
     expect(progress(usedAndUnused).some(row => nrlBench(initial.season).includes(row.id) && !first.benchUsed?.includes(row.id) && row.apps === 0)).toBe(true);
   });
 
-  it('gives up to three returning players exactly one point within potential on rollover', () => {
+  it('gives the first three eligible returning players one point after eight appearances and carries their ratings into rollover', () => {
     const original = createNrlCareer('storm', 5);
-    const finished = finish(hire(original));
-    const normal = next(finish(original));
+    let hired = hire(original);
+    while ((hired.ratingReview?.assistant?.length ?? 0) < 3 && hired.season.phase === 'regular') {
+      const previous = hired;
+      hired = advance(hired);
+      for (const id of hired.ratingReview?.assistant ?? []) {
+        if (previous.ratingReview?.assistant?.includes(id)) continue;
+        const prior = previous.players.find(player => player.id === id)!;
+        expect(hired.players.find(player => player.id === id)?.rating).toBe(prior.rating + 1);
+        expect(progress(hired).find(player => player.id === id)?.apps).toBeGreaterThanOrEqual(8);
+      }
+    }
+    const earned = hired.ratingReview?.assistant ?? [];
+    expect(earned).toHaveLength(3);
+    expect(hired.season.phase).toBe('regular');
+    const finished = finish(hired);
     const boosted = next(read(finished)!);
-    const candidates = progress(finished).filter(row => row.apps >= 8);
-    expect(candidates.length).toBeGreaterThan(3);
-    const earned = candidates.slice(0, 3).map(row => row.id);
     expect(boosted.history[0].coachDevelopment).toEqual(earned);
-    expect(boosted.players).toEqual(normal.players.map(player => earned.includes(player.id) ? { ...player, rating: player.rating + 1 } : player));
+    const finalRatings = new Map(finished.players.map(player => [player.id, player.rating]));
+    expect(boosted.players.every(player => !finalRatings.has(player.id) || player.rating === finalRatings.get(player.id))).toBe(true);
     expect(boosted.players.every(player => player.rating <= player.potential)).toBe(true);
     expect(boosted.finance.coachHire).toBeUndefined();
     expect(next(boosted)).toBe(boosted);
@@ -117,15 +128,16 @@ describe('NRL development assistant', () => {
   it('shares the youth focus ceiling and preserves the existing focus receipt', () => {
     const initial = createNrlCareer('storm', 39);
     const focus = (career: NrlCareerState) => reduceNrlCareer(career, { type: 'setDevelopmentFocus', focus: 'youth' });
-    const normal = next(focus(finish(initial)));
-    const trained = next(focus(finish(hire(initial))));
+    const normal = next(finish(focus(initial)));
+    const trained = next(finish(focus(hire(initial))));
     expect(trained.players).toEqual(normal.players);
     expect(trained.history[0].development).toEqual(normal.history[0].development);
     expect(trained.history[0].coachDevelopment).toEqual([]);
     expect(read(trained)).toEqual(trained);
     const earned = next(finish(hire(initial))).history[0].coachDevelopment!;
     expect(earned.length).toBeGreaterThan(0);
-    expect(read({ ...trained, history: [{ ...trained.history[0], coachDevelopment: earned }] })).toBeNull();
+    const forged = { ...trained, history: [{ ...trained.history[0], coachDevelopment: ['unknown-player'] }] };
+    expect(read(forged)).toBeNull();
   });
 
   it('allows exactly eight remaining own regular fixtures and refuses an invalid late, live or imported hire', () => {
