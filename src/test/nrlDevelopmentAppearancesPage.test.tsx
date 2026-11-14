@@ -28,7 +28,7 @@ it.each([false, true])('shows exact match rating changes and keeps them on reloa
   localStorage.setItem(fence, '4');
   const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
   const view = show();
-  const click = (name: string) => fireEvent.click(screen.getByRole('button', { name, exact: true }));
+  const click = (name: string) => fireEvent.click(screen.getByRole('button', { name }));
   if (live) {
     click('Play Live');
     expect(screen.queryByText('Match rating changes')).toBeNull();
