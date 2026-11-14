@@ -743,14 +743,16 @@ export function nrlAcademyOffer(state: NrlCareerState, playerId: string): NrlCon
 export function nrlRecruitmentBrief(state: NrlCareerState, role: NrlRole) {
   const year = state.season.year + 1;
   if (year > NRL_LAST_YEAR || state.retired) return null;
-  const signed = nrlCareerSquad(state, year).filter(player => player.role === role).sort(byRating);
+  const squad = nrlCareerSquad(state, year);
+  const signed = squad.filter(player => player.role === role).sort(byRating);
+  const cover = squad.filter(player => player.secondaryRole === role).sort(byRating);
   const prospect = nrlAcademyReports(state).find(report => report.role === role && report.status === 'ready')?.player;
   const academy = prospect ? { player: prospect, quote: nrlAcademyOffer(state, prospect.id) } : null;
   const targets = nrlCareerMarket(state)
     .filter(entry => entry.kind !== 'renewal' && entry.startYear === year && entry.player.role === role)
     .map(entry => ({ entry, quote: checkContractOffer(state, entry, entry.askingSalary, 1) }))
     .sort((a, b) => Number(b.quote.ok) - Number(a.quote.ok)).slice(0, 3);
-  return { year, signed, academy, targets };
+  return { year, signed, cover, academy, targets };
 }
 
 export function nrlPositionTraining(state: NrlCareerState) {
