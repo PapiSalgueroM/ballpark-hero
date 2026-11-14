@@ -13,6 +13,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
 import { supabase } from '@/integrations/supabase/client';
+import { readRarityDaily, writeRarityDaily, type RarityDailyProgress } from '@/lib/rarityDailySave';
 import {
   CATEGORIES,
   pickDailyCategories,
@@ -51,6 +52,7 @@ const RarityRound = () => {
   const [playMode, setPlayMode] = useState<PlayMode>('daily');
   // Rarity Round / Crowd Says toggle, the game's own mirror-mode axis.
   const [rarityMode, setRarityMode] = useState<RarityMode>('rarity');
+  const [dailyDate] = useState(getTodayET);
 
   const [phase, setPhase] = useState<Phase>('boot');
   const [rounds, setRounds] = useState<RarityCategory[]>([]);
@@ -62,6 +64,7 @@ const RarityRound = () => {
   const [selectedEntity, setSelectedEntity] = useState<PlayerEntity | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
   const [lastResult, setLastResult] = useState<RoundResult | null>(null);
+  const [restoredFinish, setRestoredFinish] = useState(false);
 
   // Owner 2026-08-05: after each round show what everyone ELSE picked (the
   // most said answers, real crowd data), and end the run with your rank
@@ -69,6 +72,7 @@ const RarityRound = () => {
   const [crowdPicks, setCrowdPicks] = useState<{ answer: string; n: number }[] | null>(null);
   const crowdRevealRef = useRef<symbol | null>(null);
   const [todayStanding, setTodayStanding] = useState<{ rank: number; total: number } | null>(null);
+  const submittedRound = useRef(false);
 
   const currentCategory = rounds[roundIndex];
   const usesMarketValues = currentCategory?.sourceConfig.table === 'player_market_values';
@@ -77,24 +81,34 @@ const RarityRound = () => {
   // the site's React error #310 rule (hooks must never sit below an early
   // return). The loading/error UI is decided entirely in the JSX below.
 
-  const startRun = useCallback((nextPlayMode: PlayMode, nextRarityMode: RarityMode) => {
+  const showProgress = useCallback((progress: RarityDailyProgress | null) => {
     crowdRevealRef.current = null;
+    submittedRound.current = progress?.phase === 'revealed' || progress?.phase === 'done';
+    setCrowdPicks(null);
+    setPool([]);
+    setInputValue('');
+    setSelectedEntity(null);
+    setErrorMsg('');
+    const played = progress?.results ?? [];
+    const isReveal = progress?.phase === 'revealed';
+    setResults(played);
+    setRoundIndex(isReveal ? played.length - 1 : played.length);
+    setLastResult(isReveal ? played[played.length - 1] : null);
+    setRestoredFinish(progress?.phase === 'done');
+    setPhase(progress?.phase === 'done' ? 'done' : isReveal ? 'revealed' : 'loading-round');
+  }, []);
+
+  const startRun = useCallback((nextPlayMode: PlayMode, nextRarityMode: RarityMode) => {
     setPlayMode(nextPlayMode);
     setRarityMode(nextRarityMode);
-    const categories = nextPlayMode === 'daily' ? pickDailyCategories(CATEGORIES) : pickRandomCategories(CATEGORIES);
+    const categories = nextPlayMode === 'daily' ? pickDailyCategories(CATEGORIES, dailyDate) : pickRandomCategories(CATEGORIES);
     if (!categories || categories.length === 0) {
       setPhase('error');
       return;
     }
     setRounds(categories);
-    setRoundIndex(0);
-    setResults([]);
-    setInputValue('');
-    setSelectedEntity(null);
-    setErrorMsg('');
-    setLastResult(null);
-    setPhase('loading-round');
-  }, []);
+    showProgress(nextPlayMode === 'daily' ? readRarityDaily(dailyDate, nextRarityMode, categories) : null);
+  }, [dailyDate, showProgress]);
 
   // Boot the first run on mount (daily mode by default).
   useEffect(() => {
@@ -132,10 +146,16 @@ const RarityRound = () => {
 
   const switchRarityMode = (m: RarityMode) => {
     if (m === rarityMode) return;
-    // Changing the scoring mode mid-run would retroactively change the
-    // meaning of already-scored rounds, so a mode switch always starts a
-    // fresh run, mirroring how Footle's daily/unlimited toggle also resets.
     startRun(playMode, m);
+  };
+
+  const takeNewerDaily = () => {
+    if (playMode !== 'daily') return false;
+    const saved = readRarityDaily(dailyDate, rarityMode, rounds);
+    if (!saved || saved.results.length < results.length) return false;
+    if (saved.results.length === results.length && (saved.phase === 'revealed' || phase !== 'revealed')) return false;
+    showProgress(saved);
+    return true;
   };
 
   const handleSelect = (entity: PlayerEntity) => {
@@ -145,7 +165,7 @@ const RarityRound = () => {
   };
 
   const submitGuess = () => {
-    if (!selectedEntity || !currentCategory || pool.length === 0) return;
+    if (phase !== 'playing' || submittedRound.current || !selectedEntity || !currentCategory || pool.length === 0 || takeNewerDaily()) return;
     const key = normalizeName(selectedEntity.name);
     const match = pool.find(p => p.key === key);
     if (!match) {
@@ -168,8 +188,11 @@ const RarityRound = () => {
       poolSize: pool.length,
       points,
     };
+    submittedRound.current = true;
+    const nextResults = [...results, result];
+    if (playMode === 'daily') writeRarityDaily(dailyDate, rarityMode, rounds, { phase: 'revealed', results: nextResults });
     setLastResult(result);
-    setResults(r => [...r, result]);
+    setResults(nextResults);
     setPhase('revealed');
 
     // Log the pick (fire and forget) then pull the crowd's most-said answers
@@ -220,12 +243,16 @@ const RarityRound = () => {
   };
 
   const nextRound = () => {
+    if (phase !== 'revealed' || takeNewerDaily()) return;
     crowdRevealRef.current = null;
     const nextIndex = roundIndex + 1;
-    if (nextIndex >= rounds.length) {
+    const done = nextIndex >= rounds.length;
+    if (playMode === 'daily') writeRarityDaily(dailyDate, rarityMode, rounds, { phase: done ? 'done' : 'next', results });
+    if (done) {
       setPhase('done');
       return;
     }
+    submittedRound.current = false;
     setRoundIndex(nextIndex);
     setInputValue('');
     setSelectedEntity(null);
@@ -285,7 +312,7 @@ const RarityRound = () => {
     return () => { cancelled = true; };
   }, [isComplete, rankedRun, recordedScore]);
 
-  useGameCompletion('rarity-round', isComplete, rankedRun ? recordedScore : undefined, results.length);
+  useGameCompletion('rarity-round', isComplete && !restoredFinish, rankedRun ? recordedScore : undefined, results.length);
 
   const emojiGrid = useMemo(() => buildEmojiGrid(results, rarityMode), [results, rarityMode]);
 
@@ -401,7 +428,7 @@ const RarityRound = () => {
                 <h3 className="font-bold text-foreground mb-2">📅 Daily vs Unlimited</h3>
                 <p className="text-muted-foreground">
                   Daily gives everyone the same 5 categories each day. Unlimited shuffles a fresh set of
-                  5 every time you play.
+                  5 every time you play. Daily saves your progress in Rarity Round and Crowd Says separately.
                 </p>
               </section>
             </HowToPlayPopover>
@@ -441,7 +468,7 @@ const RarityRound = () => {
             </div>
 
             {playMode === 'daily' && (
-              <p className="text-xs text-muted-foreground mt-3">Today's categories, {getTodayET()}. Same 5 for everyone.</p>
+              <p className="text-xs text-muted-foreground mt-3" data-no-prerender>Today's categories, {dailyDate}. Same 5 for everyone.</p>
             )}
           </>
         }

@@ -4,6 +4,7 @@ import { ArrowRight, History } from 'lucide-react';
 import { CONTINUE_SAVES, continueSaveEntries, describeSave, savedGames, type SavedGame } from '@/data/continueSaves';
 import { sportOf } from '@/data/homeFront';
 import { FIGHT_PROMOTER_MODE_KEY } from '@/lib/fightPromoterRoutes';
+import { parkedKey, SLOT_COUNT, SLOTS_INDEX_KEY } from '@/lib/clubManagerSaveKeys';
 import { homeSaveStorage, useHomeSaveRefresh } from './homeSaveRefresh';
 import { SportGlyph, sportStyle } from './SportGlyph';
 import styles from './HomeLaunchDeck.module.css';
@@ -15,6 +16,8 @@ export const SAVED_FALLBACK = 'Saved in this browser';
 const continueKeys = new Set([
   ...CONTINUE_SAVES.flatMap(entry => continueSaveEntries(entry).map(save => save.saveKey)),
   FIGHT_PROMOTER_MODE_KEY,
+  SLOTS_INDEX_KEY,
+  ...Array.from({ length: SLOT_COUNT }, (_, index) => parkedKey(index + 1)),
 ]);
 
 /**
@@ -23,7 +26,7 @@ const continueKeys = new Set([
  * One card for each save destination, including separately saved careers.
  * A visitor with no saves gets no shelf.
  *
- * The first render reads only which saves exist. After mount, a change to
+ * The first render reads which saves exist and checks Club Manager slots. A change to
  * one of those keys or a return to the page refreshes the links and labels.
  * The card holds its height as details load.
  */
@@ -34,7 +37,11 @@ export function ContinueRow() {
   const refresh = useCallback((storage: Storage | null) => {
     const current = savedGames(storage, true);
     const descriptions: Record<string, string> = {};
-    for (const { entry } of current) {
+    for (const { entry, description } of current) {
+      if (description !== undefined) {
+        if (description) descriptions[entry.path] = description;
+        continue;
+      }
       let raw: string | null = null;
       try { raw = storage?.getItem(entry.saveKey) ?? null; } catch { /* show the browser fallback */ }
       const line = describeSave(entry, raw);
@@ -56,9 +63,9 @@ export function ContinueRow() {
       </h2>
       <div data-home-shelf-rail="" className={styles.continueRail}>
         <ul className={styles.continueList}>
-          {saved.map(({ entry, game, slot }) => {
+          {saved.map(({ entry, game, slot, description: savedDescription }) => {
             const sport = sportOf(game.path);
-            const line = lines[entry.path];
+            const line = savedDescription ?? lines[entry.path];
             const description = slot === undefined ? line ?? SAVED_FALLBACK : [`Slot ${slot}`, line].filter(Boolean).join(' · ');
             return (
               <li key={entry.path}>

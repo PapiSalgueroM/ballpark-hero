@@ -396,10 +396,13 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
     .replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(^|[^:'"`])\/\/[^\n]*/g, '$1');
   const SAVES = [...listSrc.matchAll(/\{\s*path:\s*'([^']+)',\s*saveKey:\s*'([^']+)'/g)].map(m => ({ path: m[1], key: m[2] }));
   const SHAPED = {
-    'dukb-club-manager-save': { clubName: 'Planted FC', season: 3, sacked: false },
+    'dukb-club-manager-save': {
+      saveVersion: 3, clubName: 'Planted FC', season: 3, week: 0, leagueClubs: ['Planted FC'],
+      sacked: false, squad: [], calendar: [], xiIds: [], table: [],
+    },
     soccerCareerSave: { currentClub: 'Planted Town', age: 24, retired: false },
   };
-  const WANT_LINES = { '/club-manager': 'Planted FC, season 3', '/soccer-career': 'Planted Town, age 24' };
+  const WANT_LINES = { '/club-manager?slot=1': 'Slot 1 · Planted FC, season 3', '/soccer-career': 'Planted Town, age 24' };
 
   const visit = async ({ saves = false, fav = null, click = null }) => {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
@@ -489,7 +492,7 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
     `[6a] both first playable tiles are above y=${FOLD_CEILING} and the returning player's tile is in Continue (fresh y=${Math.round(fresh.first?.top ?? -1)}, ${SAVES.length} planted saves y=${Math.round(planted.first?.top ?? -1)})`);
   say(fresh.rowTop === null, '[6b] a visitor with no saves gets no Continue row at all');
   say(planted.rowBottom !== null && planted.stageTop !== null && planted.rowBottom <= planted.stageTop + 1
-      && JSON.stringify(planted.cards.map(c => c.p)) === JSON.stringify(SAVES.map(s => s.path)),
+      && JSON.stringify(planted.cards.map(c => c.p)) === JSON.stringify(SAVES.map(s => s.path === '/club-manager' ? s.path + '?slot=1' : s.path)),
     `[6b] the row sits before the stage (stage starts y=${Math.round(planted.stageTop ?? -1)}, row ends y=${Math.round(planted.rowBottom ?? -1)}) with ${planted.cards.length} of ${SAVES.length} cards in list order`);
   const lines = Object.entries(WANT_LINES).map(([p, want]) => ({ p, want, got: planted.cards.find(c => c.p === p)?.line ?? null }));
   say(lines.every(l => l.got === l.want), `[6c] the cards read the saves: ${lines.map(l => `${l.p} "${l.got}"`).join(', ')}`);

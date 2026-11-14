@@ -3,6 +3,7 @@ import {
   FIGHT_PROMOTER_PATH, FIGHT_PROMOTER_MODE_KEY, BOXING_SAVE_KEY, MMA_SAVE_KEY,
   fightPromoterMode, fightPromoterModeFromSearch, type FightPromoterMode,
 } from '@/lib/fightPromoterRoutes';
+import { parkedKey, readClubManagerActiveSlot, readableClubManagerSave, SLOT_COUNT } from '@/lib/clubManagerSaveKeys';
 
 /**
  * Round 717: the Continue playing row on the home page (master spec sections
@@ -117,17 +118,37 @@ export interface SavedGame {
   entry: ContinueSave;
   game: GameDef;
   slot?: number;
+  description?: string | null;
 }
 
 /**
- * The games this browser holds a save for, in list order. Existence only:
- * nothing is read or parsed here, so this is cheap enough for a first render
- * and the row's size is known before any save is opened.
+ * The games this browser holds a save for, in list order. Club Manager slot
+ * cards check their save header because they open a specific career.
  */
 export function savedGames(storage: Pick<Storage, 'getItem'> | null | undefined, includeSlots = false): SavedGame[] {
   if (!storage) return [];
   const out: SavedGame[] = [];
   for (const entry of CONTINUE_SAVES) {
+    if (includeSlots && entry.slots) {
+      const game = ALL_GAMES.find(g => g.path === entry.path);
+      if (!game) continue;
+      let active = 1;
+      try { active = readClubManagerActiveSlot(storage.getItem(entry.slots)); } catch { /* Fall back to slot one. */ }
+      for (let slot = 1; slot <= SLOT_COUNT; slot++) {
+        const saveKey = slot === active ? entry.saveKey : parkedKey(slot);
+        try {
+          const raw = storage.getItem(saveKey);
+          if (!raw) continue;
+          const save: unknown = JSON.parse(raw);
+          if (!readableClubManagerSave(save)) continue;
+          out.push({
+            entry: { ...entry, path: entry.path + '?slot=' + slot, saveKey },
+            game, slot, description: describeParsedSave(entry, save),
+          });
+        } catch { /* A broken slot stays in the manager chooser. */ }
+      }
+      continue;
+    }
     const candidates = continueSaveEntries(entry);
     if (entry.path === FIGHT_PROMOTER_PATH) {
       try {
@@ -186,6 +207,10 @@ export function describeSave(entry: ContinueSave, raw: string | null): string | 
   if (raw === null) return null;
   let save: unknown;
   try { save = JSON.parse(raw); } catch { return null; }
+  return describeParsedSave(entry, save);
+}
+
+function describeParsedSave(entry: ContinueSave, save: unknown): string | null {
   if (save === null || typeof save !== 'object' || Array.isArray(save)) return null;
   const parts: string[] = [];
   const name = entry.name ? cleanName(walk(save, entry.name)) : null;

@@ -18,13 +18,13 @@
  * never cost a career.
  */
 import { leanCareer, worldSeasonLabel, type CareerState } from './clubManager';
-import { SAVE_KEY, SLOT_COUNT, SLOTS_INDEX_KEY, parkedKey } from './clubManagerSaveKeys';
+import { SAVE_KEY, SLOT_COUNT, SLOTS_INDEX_KEY, parkedKey, readClubManagerActiveSlot, readableClubManagerSave } from './clubManagerSaveKeys';
 import { eraById, isHistoricEra } from './clubManagerEras';
 import { levelFrom, noSackFrom } from '@/lib/clubManagerStart';
 import type { DifficultyLevel } from '@/lib/managerDifficulty';
 import { saveFence } from '@/lib/saveFence';
 
-export { SLOT_COUNT, SLOTS_INDEX_KEY, parkedKey } from './clubManagerSaveKeys';
+export { SLOT_COUNT, SLOTS_INDEX_KEY, parkedKey, READABLE_SAVE_VERSION } from './clubManagerSaveKeys';
 
 export interface SlotSummary {
   managerName: string | null;
@@ -64,14 +64,7 @@ function get(key: string): string | null {
 /** The slot the career at SAVE_KEY belongs to. Slot 1 when there is no
  *  index, or nothing readable in it. */
 export function activeSlot(): number {
-  const raw = get(SLOTS_INDEX_KEY);
-  if (!raw) return 1;
-  try {
-    const parsed = JSON.parse(raw) as { active?: unknown } | null;
-    return parsed && isSlot(parsed.active) ? parsed.active : 1;
-  } catch {
-    return 1;
-  }
+  return readClubManagerActiveSlot(get(SLOTS_INDEX_KEY));
 }
 
 /** Where a slot's career is stored right now. */
@@ -79,24 +72,20 @@ export function slotStorageKey(slot: number): string {
   return slot === activeSlot() ? SAVE_KEY : parkedKey(slot);
 }
 
-/** The engine's SAVE_VERSION (clubManager.ts keeps it private). Round 928
- *  review: clubManagerSlots.test.ts fails the day the two part. */
-export const READABLE_SAVE_VERSION = 3;
+export function readSlotSave(slot: number): string | null {
+  return isSlot(slot) ? get(slotStorageKey(slot)) : null;
+}
 
 /** The summary of a stored career, read with JSON.parse alone: no repair,
  *  no registration, nothing loadCareer does. Null when it is not a career.
- *  Review: held to the same shape test loadCareer applies before it opens a
+ *  Checks the same save header Home uses before it offers to resume a
  *  save, so a tile never offers Resume Career on a save that will not open
  *  (it shows as unreadable instead, with Clear it behind a confirm). */
 export function summarize(raw: string | null): SlotSummary | null {
   if (!raw) return null;
   try {
     const c = JSON.parse(raw) as Partial<CareerState> | null;
-    if (!c || typeof c !== 'object' || typeof c.clubName !== 'string' || typeof c.season !== 'number') return null;
-    if (
-      c.saveVersion !== READABLE_SAVE_VERSION ||
-      !Array.isArray(c.squad) || !Array.isArray(c.calendar) || !Array.isArray(c.xiIds) || !Array.isArray(c.table)
-    ) return null;
+    if (!c || !readableClubManagerSave(c)) return null;
     const eraId = typeof c.eraId === 'string' ? c.eraId : null;
     const era = eraById(eraId ?? undefined);
     const name = c.manager && typeof c.manager.name === 'string' && c.manager.name.trim() ? c.manager.name.trim() : null;

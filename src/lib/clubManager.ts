@@ -25156,9 +25156,9 @@ import { saveFence } from '@/lib/saveFence';
  * the page can fetch that era's squads before loadCareer repairs anything
  * with them. Null when there is no save, or nothing readable in it.
  */
-export function savedCareerEraId(): string | null {
+export function savedCareerEraId(slotSave?: string): string | null {
   try {
-    const raw = localStorage.getItem(SAVE_KEY);
+    const raw = slotSave ?? localStorage.getItem(SAVE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as { eraId?: unknown } | null;
     return parsed && typeof parsed.eraId === 'string' ? parsed.eraId : null;
@@ -25172,9 +25172,9 @@ export function savedCareerEraId(): string | null {
  * read without opening it, so the page can fetch that list before anything
  * reads a fixture off the save. Null when there is no save or it holds no key.
  */
-export function savedCareerFixtureKey(): string | null {
+export function savedCareerFixtureKey(slotSave?: string): string | null {
   try {
-    const raw = localStorage.getItem(SAVE_KEY);
+    const raw = slotSave ?? localStorage.getItem(SAVE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as { realLeagueFixtures?: unknown } | null;
     return parsed && typeof parsed.realLeagueFixtures === 'string' ? parsed.realLeagueFixtures : null;
@@ -25183,9 +25183,9 @@ export function savedCareerFixtureKey(): string | null {
   }
 }
 
-export function loadCareer(): CareerState | null {
+export function loadCareer(slotSave?: string): CareerState | null {
   try {
-    const raw = localStorage.getItem(SAVE_KEY);
+    const raw = slotSave ?? localStorage.getItem(SAVE_KEY);
     if (!raw) return null;
     /* Round 634: held to SAVE_CAPS on the way in, so a save written oversized
        by an older build shrinks the first time it opens and is written back

@@ -20,7 +20,7 @@ import {
   releasePlayer, signFreeAgent,
   doorRefusal, loanOutRefusal,
   applyForJob, joinClubInSummer,
-  editManager,
+  editManager, engineRegistrations, restoreEngineRegistrations,
 } from '@/lib/clubManager';
 import type { MarketDoor } from '@/lib/clubManager';
 import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation } from '@/lib/clubManager';
@@ -37,7 +37,7 @@ import { eraById, eraRostersLoaded, ensureEraRosters, isHistoricEra } from '@/li
 import { ensureRealLeagueFixtures, realLeagueFixturesLoaded, realLeagueFixtureKeyFor } from '@/lib/clubManagerFixtures';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { kLeagueMember } from '@/data/kLeague2026';
-import { readSlots, switchSlot, deleteSlot, activeSlot, type SlotView } from '@/lib/clubManagerSlots';
+import { readSlotSave, readSlots, summarize as summarizeSlotSave, switchSlot, deleteSlot, activeSlot, type SlotView } from '@/lib/clubManagerSlots';
 import { clearSlotPoints, noteSeasonCredited, seasonPosts } from '@/lib/cmSavePointsStore';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
@@ -143,7 +143,7 @@ function creditSeason(s: CareerState): void {
   noteSeasonCredited(activeSlot(), s.season);
 }
 
-export function useClubManager() {
+export function useClubManager(requestedSlot?: number | null) {
   const [phase, setPhase] = useState<CMPhase>('boot');
   const [career, setCareer] = useState<CareerState | null>(null);
   const [report, setReport] = useState<MatchWeekReport | null>(null);
@@ -175,6 +175,7 @@ export function useClubManager() {
   const [slotNote, setSlotNote] = useState<string | null>(null);
   const [slotEpoch, setSlotEpoch] = useState(0);
   const goStraightIn = useRef(false);
+  const incomingSlot = useRef(requestedSlot);
   /* Round 928 review: the slot whose career this page holds. Another tab can
      switch managers under it, and then the index names another slot and
      SAVE_KEY holds that slot's career, whose parked copy the swap has already
@@ -199,14 +200,59 @@ export function useClubManager() {
   // Boot: look for a saved career and offer to resume it.
   useEffect(() => {
     let alive = true;
-    const open = () => {
+    const requested = incomingSlot.current;
+    const showUnavailableSlot = (message: string) => {
+      incomingSlot.current = undefined;
       ownSlot.current = activeSlot();
-      /* Round 1323: BEFORE the save is read, so a write that lands between
-         the two reads leaves this page stale, never the other tab. */
+      setSaveMoved(false);
+      setSlots(readSlots());
+      setSlotNote(message);
+      setPhase('resume');
+    };
+    const unavailableSlot = 'That manager slot could not be opened. Choose one of your saved managers.';
+    /* Adopt before reading the destination so a save written while its data
+       loads cannot be overwritten by this visit. */
+    if (requested !== undefined) {
+      takeLandOnHub();
       saveFence.adopt(SAVE_KEY);
-      /* Round 1323: Hot Seat's carry on opens its career on the hub. */
-      if (takeLandOnHub()) goStraightIn.current = true;
-      const saved = loadCareer();
+    }
+    const target = typeof requested === 'number' ? readSlotSave(requested) : null;
+    if (requested !== undefined && (!target || !summarizeSlotSave(target))) {
+      showUnavailableSlot(unavailableSlot);
+      return;
+    }
+    const open = () => {
+      let saved: CareerState | null;
+      if (typeof requested === 'number' && target) {
+        if (saveFence.moved(SAVE_KEY) || readSlotSave(requested) !== target) {
+          saveFence.adopt(SAVE_KEY);
+          showUnavailableSlot(unavailableSlot);
+          return;
+        }
+        const registrations = engineRegistrations();
+        saved = loadCareer(target);
+        if (!saved) {
+          restoreEngineRegistrations(registrations);
+          showUnavailableSlot(unavailableSlot);
+          return;
+        }
+        if (!switchSlot(requested)) {
+          restoreEngineRegistrations(registrations);
+          showUnavailableSlot('This browser would not save the switch, so nothing moved. Choose a manager to try again.');
+          return;
+        }
+        incomingSlot.current = undefined;
+        dispatchEvent(new Event(SET_ASIDE_SLOT_KEY));
+        goStraightIn.current = true;
+      } else {
+        /* Round 1323: adopt before reading, so a write between the two reads
+           leaves this page stale, never the other tab. */
+        saveFence.adopt(SAVE_KEY);
+        /* Hot Seat's carry on opens its career on the hub. */
+        if (takeLandOnHub()) goStraightIn.current = true;
+        saved = loadCareer();
+      }
+      ownSlot.current = activeSlot();
       const views = readSlots();
       setSlots(views);
       if (saved) {
@@ -238,11 +284,11 @@ export function useClubManager() {
     };
     /* Round 832: an era save fetches its era's squads first. Today's world
        and an era already here open exactly as before, in this same pass. */
-    const eraId = savedCareerEraId() ?? undefined;
+    const eraId = savedCareerEraId(target ?? undefined) ?? undefined;
     /* Round 1225: and a save whose first season plays a real fixture list
        fetches that list first, in the same wait. The Premier League's list
        rides with the engine, so nothing changes for it. */
-    const fixtureKey = savedCareerFixtureKey();
+    const fixtureKey = savedCareerFixtureKey(target ?? undefined);
     if (eraRostersLoaded(eraId) && realLeagueFixturesLoaded(fixtureKey)) {
       open();
       return;
@@ -612,6 +658,7 @@ export function useClubManager() {
   /** Back to the slots screen from inside a career, or from an era whose
    *  squads would not load (review: that screen had no way back). */
   const showSlots = useCallback(() => {
+    incomingSlot.current = undefined;
     if (careerRef.current && holdsActiveSlot() && !saveCareer(careerRef.current)) movedOn();
     letGoIfStale();
     setBootError(null);

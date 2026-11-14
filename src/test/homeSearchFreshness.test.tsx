@@ -221,6 +221,7 @@ it('opens the settled best match with Enter and reaches it with ArrowDown', asyn
 it.each([
   ['pin shelf', '[data-home-picks] [data-game-pick-link]', '/hockey-higher-lower'],
   ['first NRL save', '[data-home-continue] a', '/nrl-team-manager'],
+  ['parked Club Manager save', '[data-home-continue] a', '/club-manager?slot=3'],
   ['second NRL save', '[data-home-continue] a', '/nrl-team-manager?slot=2'],
   ['Main event', 'a[data-stage-card]', '/soccer-career'],
   ['NRL launch on the featured deck', 'a[data-home-nrl-launch]', '/nrl-team-manager'],
@@ -231,6 +232,11 @@ it.each([
   localStorage.setItem('dukb-game-picks-v1', '["/hockey-higher-lower"]');
   localStorage.setItem('nrl-manager-save-v1', '{"season":{"year":2026}}');
   localStorage.setItem('nrl-manager-save-v1-slot-2', '{"season":{"year":2027}}');
+  localStorage.setItem('dukb-cm-slots', '{"active":2}');
+  localStorage.setItem('dukb-cm-slot-3', JSON.stringify({
+    saveVersion: 3, clubName: 'Parked FC', season: 3, week: 0, leagueClubs: ['Parked FC'],
+    squad: [], calendar: [], xiIds: [], table: [],
+  }));
   function Game() {
     const navigate = useNavigate();
     const location = useLocation();

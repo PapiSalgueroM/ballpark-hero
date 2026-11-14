@@ -27,7 +27,7 @@ import {
   nrlBench, nrlBenchRotation, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
   nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlNextRound, nrlOnFieldCaptain,
   nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
-  NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
+  NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
@@ -275,6 +275,7 @@ function LiveHalftime({ live, career, title, onAction, disabled, coachRole, coac
         <LiveAttackPlanPicker id="nrl-halftime-attack-plan" label="Second-half attack plan" plans={plans}
           value={attackPlan} onChange={setAttackPlan} disabled={disabled} preview={preview} />
         {season.preparation === 'defensiveDrills' && <p className="mt-2 text-sm">Defensive drills apply through the second half.</p>}
+        {season.preparation === 'goalKickingDrills' && <p className="mt-2 text-sm">Goal-kicking drills apply through the second half.</p>}
       </div>
       {options.length > 0 ? (
         <details className="group rounded-xl border border-border bg-card px-4">
@@ -395,6 +396,7 @@ function LiveMinute60({ live, career, onAction, disabled }: {
         </div>
         <LiveAttackPlanPicker id="nrl-closing-attack-plan" label="Closing attack plan" plans={plans}
           value={attackPlan} onChange={setAttackPlan} disabled={disabled} preview={preview} />
+        {season.preparation === 'goalKickingDrills' && <p className="mt-2 text-sm">Goal-kicking drills still apply.</p>}
       </fieldset>
       {lateOptions.length > 0 && (
         <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-3">
@@ -723,6 +725,7 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
       </p>}
       {kickerName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-match-kicker>{lateKickerName ? 'Opening goal kicker' : 'Match goal kicker'}: {kickerName}.</p>}
       {lateKickerName && <p className="mt-1 text-sm text-muted-foreground" data-nrl-kicker-handoff>Goal kicker after half time: {lateKickerName}.</p>}
+      {match.goalKickingDrills && <p className="mt-2 text-sm text-muted-foreground">Goal-kicking drills were used for this match.</p>}
       {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
         {recoveredName} took individual recovery before this match.
       </p>}
@@ -1269,13 +1272,22 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
                   Defensive drills
                 </Button>
               )}
+              {!career.legacySeason && season.kickerId && season.bench && (
+                <Button type="button" size="lg" className="px-3" variant={season.preparation === 'goalKickingDrills' ? 'default' : 'outline'}
+                  aria-pressed={season.preparation === 'goalKickingDrills'} disabled={disabled}
+                  onClick={() => onAction({ type: 'prepare', choice: 'goalKickingDrills', year, clubId, round: season.round })}>
+                  Goal-kicking drills
+                </Button>
+              )}
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
               {season.preparation === 'train' ? 'Boost attack this round and spend some fitness.'
                 : season.preparation === 'recover' ? 'Rest your starters and restore more fitness.'
                   : season.preparation === 'defensiveDrills' ? 'Boost defence this round with the same fitness cost and injury risk as Train.'
-                    : career.legacySeason || !season.kickerId ? 'Train for extra attack or recover to protect fitness.'
-                      : 'Train for extra attack, drill your defence or recover to protect fitness.'}
+                    : season.preparation === 'goalKickingDrills' ? `Add ${NRL_CONVERSION_DRILLS_BOOST} percentage points to your conversion chance. Same fitness cost and injury risk as Train.`
+                      : career.legacySeason || !season.kickerId ? 'Train for extra attack or recover to protect fitness.'
+                        : season.bench ? 'Train your attack, defence or goal kicking, or recover to protect fitness.'
+                          : 'Train for extra attack, drill your defence or recover to protect fitness.'}
             </p>
             {!career.legacySeason && season.kickerId && season.preparation !== null && (
               <Button type="button" size="lg" variant="ghost" className="mt-2 px-3" disabled={disabled}
@@ -1395,7 +1407,8 @@ function IndividualRecovery({ season, awayRecovery, onAction, disabled }: {
   const players = nrlIndividualRecoveryOptions(season);
   const selected = players.find(player => player.id === individualRecoveryId);
   const preview = selected && nrlIndividualRecoveryPreview(selected, preparation, awayRecovery);
-  const usualPreparation = preparation === 'train' ? 'team training' : preparation === 'defensiveDrills' ? 'defensive drills' : 'normal preparation';
+  const usualPreparation = preparation === 'train' ? 'team training' : preparation === 'defensiveDrills' ? 'defensive drills'
+    : preparation === 'goalKickingDrills' ? 'goal-kicking drills' : 'normal preparation';
   return (
     <details className="group mt-2 border-t border-border">
       <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 rounded-md text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -2329,6 +2342,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
             <ul className="list-disc space-y-2 pl-5">
               <li>Choose 2026 or 2027, then pick a club. You can use opening matchday names in 2026 or confirmed Perth Bears signings when starting with Perth in 2027. Ratings, contracts, fixtures and results are simulated.</li>
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
+              <li>Goal-kicking drills add eight percentage points to your conversion chance for one match. They carry the same fitness cost and injury risk as Train.</li>
               <li>In Squad, use Swap starters when two available starters can cover each other’s position. The same players keep the kicking and captaincy duties.</li>
               <li>A match knock can put a player out for up to four rounds. Availability in Squad shows the first regular-season match an injured player can return for. The recovery countdown includes byes, and an available player fills the vacant spot.</li>
               <li>In Squad, you can pay once per season for physio to shorten an injury by one round. The player still sits out the current round.</li>

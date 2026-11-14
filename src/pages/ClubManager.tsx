@@ -178,8 +178,8 @@ function EraLoadFailed({ label, noun = 'squads', onRetry, onBack, backLabel = 'P
 
 type HubPanel = 'board' | 'inbox' | 'calendar' | 'manager' | 'treatment' | 'cups' | 'trophies' | 'academy' | 'training' | 'roles' | 'press' | 'matchCentre' | 'stats' | 'finance' | 'facilities' | 'staff' | 'xp' | 'options' | 'points';
 
-const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
-  const g = useClubManager();
+const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null; requestedSlot?: number | null }) => {
+  const g = useClubManager(requestedSlot);
   // Round 65: the owner's no scroll rule. Full time and season end screens are
   // what you were waiting for after pressing Play, so they pull themselves into
   // view rather than rendering below where your thumb just was.
@@ -1394,8 +1394,8 @@ const ClubManager = ({ initialEra }: { initialEra?: string | null }) => {
 };
 
 /* Round 1601: the page always mounts the stack of cards, so the two page tests that import this get it too. */
-export function ClubManagerContents({ initialEra }: { initialEra?: string | null }) {
-  return <CmCardsProvider><ClubManager initialEra={initialEra} /></CmCardsProvider>;
+export function ClubManagerContents({ initialEra, requestedSlot }: { initialEra?: string | null; requestedSlot?: number | null }) {
+  return <CmCardsProvider><ClubManager initialEra={initialEra} requestedSlot={requestedSlot} /></CmCardsProvider>;
 }
 
 export default function ClubManagerWithCards() {

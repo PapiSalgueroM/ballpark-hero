@@ -23,6 +23,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Try Reserve-grade development in Squad to give an eligible young player four rounds away from the first team for one rating point. He keeps his contract and cap place, and you can recall him early without the gain.',
       'Courses cover the back three, wing and centre on the same side, the halves, the two props, and the second rows and lock. A player can learn one extra role.',
       'Check the next opponent and pick a tactic. Open Attack plan to compare projected attack and defence changes for playing through the middle or shifting wide. A plan lasts one match unless you change it at half time or 60 minutes in Play Live. In Preparation, Train boosts attack, Defensive drills boosts defence at the same workload, and Recover helps tired players. Clear preparation to return to normal before kickoff.',
+      'Goal-kicking drills add eight percentage points to your conversion chance for one match. They carry the same fitness cost and injury risk as Train.',
       'Open Opposition report before a return match to see your earlier scores against that club this season, from your team’s point of view.',
       'Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation.',
       'Open Positional matchups in the Opposition report to see the ratings behind the middle and wide attack plans.',

@@ -1259,6 +1259,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Choosing Daily or Unlimited categories",
         items: [
           "Choose Daily for the 5 categories everyone shares today, or Unlimited for a random 5.",
+          "Rarity Round and Crowd Says each save their own Daily progress on this device. For example, if you lock in your answer to round two and reload, you return to that answer and its earned points.",
         ],
       },
       {

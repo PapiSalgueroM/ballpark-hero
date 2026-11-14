@@ -203,6 +203,7 @@ await build({
       export { CONTINUE_SAVES, continueSaveEntries, describeSave, savedGames, SAVE_NAME_MAX } from './src/data/continueSaves';
       export { FIGHT_PROMOTER_MODE_KEY } from './src/lib/fightPromoterRoutes';
       export { SAVED_FALLBACK } from './src/components/home/ContinueRow';
+      export { SLOTS_INDEX_KEY, SLOT_COUNT, parkedKey, READABLE_SAVE_VERSION } from './src/lib/clubManagerSaveKeys';
       export { VISIBLE_CATEGORIES } from './src/data/gameRegistry';
       export { favouriteFirst, readFavouriteSport, FAVOURITE_SPORT_KEY } from './src/data/homeFront';
       export const renderContinue = () => wrap(React.createElement(ContinueRow));
@@ -756,15 +757,20 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   const cold = withWindow(() => front.renderContinue());
   if (cold !== '') fail(7, `with no save in the browser the row renders ${cold.length} characters instead of nothing`);
   if (savedGames(globalThis.localStorage).length !== 0) fail(7, 'savedGames finds a save in an empty browser');
-  const allowedReads = [...allKeys, FIGHT_PROMOTER_MODE_KEY];
+  const { SLOTS_INDEX_KEY, SLOT_COUNT, parkedKey, READABLE_SAVE_VERSION } = front;
+  const clubSave = JSON.stringify({ saveVersion: READABLE_SAVE_VERSION, clubName: 'Planted FC', season: 3, week: 0,
+    leagueClubs: ['Planted FC'], squad: [], calendar: [], xiIds: [], table: [] });
+  const defaultTarget = entry => entry.slots ? entry.path + '?slot=1' : continueSaveEntries(entry)[0].path;
+  const allowedReads = [...allKeys, FIGHT_PROMOTER_MODE_KEY, SLOTS_INDEX_KEY,
+    ...Array.from({ length: SLOT_COUNT }, (_, i) => parkedKey(i + 1))];
   if (reads.some(k => !allowedReads.includes(k))) fail(7, `the row asks storage for an unregistered key: ${reads.filter(k => !allowedReads.includes(k)).join(', ')}`);
   for (const e of CONTINUE_SAVES) {
     store.clear();
-    store.set(e.saveKey, '{}');
+    store.set(e.saveKey, e.slots ? clubSave : '{}');
     const got = cards(withWindow(() => front.renderContinue()));
     const g = gameByPath.get(e.path);
-    const target = continueSaveEntries(e)[0].path;
-    const label = e.alternateSaveKeys ? 'Slot 1' : SAVED_FALLBACK;
+    const target = defaultTarget(e);
+    const label = e.slots || e.alternateSaveKeys ? 'Slot 1' : SAVED_FALLBACK;
     if (got.length !== 1 || got[0].href !== target) fail(7, `a save under ${JSON.stringify(e.saveKey)} renders ${JSON.stringify(got.map(c => c.href))}, not one card for ${target}`);
     else if (g && !(got[0].inner.includes(g.label) && got[0].inner.includes(label))) fail(7, `the ${e.path} card reads ${JSON.stringify(got[0].inner)}`);
   }
@@ -801,10 +807,10 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     if (store.get(nrl.saveKey) !== nrlRaw) fail(7, 'Continue changed the serialized NRL save bytes');
   }
   store.clear();
-  for (const e of CONTINUE_SAVES) store.set(e.saveKey, '{}');
+  for (const e of CONTINUE_SAVES) store.set(e.saveKey, e.slots ? clubSave : '{}');
   const all = cards(withWindow(() => front.renderContinue())).map(c => c.href);
   store.clear();
-  const targets = CONTINUE_SAVES.map(e => continueSaveEntries(e)[0].path);
+  const targets = CONTINUE_SAVES.map(defaultTarget);
   if (JSON.stringify(all) !== JSON.stringify(targets)) fail(7, `with every save planted the row shows ${all.length} cards, not the ${paths.length} on the list in order`);
   if (!failedSections.has(7)) {
     console.log(`   ${CONTINUE_SAVES.length} games, every key the game's own, ${found.size} save keys in src all accounted for (${Object.keys(EXCUSED).length} excused), ${fieldsChecked} fields declared by the games`);

@@ -834,11 +834,11 @@ function seededShuffle<T>(arr: T[], seed: number): T[] {
  * convention in src/lib/dateUtils.ts. When categories.length <= ROUNDS_PER_RUN
  * every category is used (shuffled for order only).
  */
-export function pickDailyCategories(categories: RarityCategory[] = CATEGORIES): RarityCategory[] {
+export function pickDailyCategories(categories: RarityCategory[] = CATEGORIES, day = getTodayET()): RarityCategory[] {
   /* Round 212: the HASHED date, not the raw one. A raw date seed makes a
      Lehmer generator's first draw a straight line in the date, which froze
      this puzzle for months at a time. See dailyPrngSeed in dateUtils. */
-  const seed = dailyPrngSeed(getTodayET());
+  const seed = dailyPrngSeed(day);
   const shuffled = seededShuffle(categories, seed);
   return shuffled.slice(0, Math.min(ROUNDS_PER_RUN, shuffled.length));
 }

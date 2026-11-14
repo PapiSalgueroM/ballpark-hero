@@ -1,19 +1,24 @@
 import { lazy, Suspense, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { ClubManagerEraPicker, ClubManagerPickerHeading } from '@/components/club-manager/ClubManagerEraPicker';
 import { ClubManagerFrame, ClubManagerStartup } from '@/components/club-manager/ClubManagerFrame';
 import { hasClubManagerBootData } from '@/lib/clubManagerOpening';
+import { clubManagerRequestedSlot } from '@/lib/clubManagerSaveKeys';
 
 const ClubManagerContents = lazy(() => import('./ClubManager').then(m => ({ default: m.ClubManagerContents })));
 const ClubManagerClubList = lazy(() => import('@/components/club-manager/ClubManagerClubList').then(m => ({ default: m.ClubManagerClubList })));
 
 export default function ClubManagerEntry() {
+  const { search } = useLocation();
+  const requestedSlot = clubManagerRequestedSlot(search);
   const [direct] = useState(() => {
     const prerender = typeof window !== 'undefined' && (window as Window & { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__;
     return prerender || hasClubManagerBootData();
   });
   const [pickedEra, setPickedEra] = useState<{ id: string; wasFocused: boolean } | null>(null);
   const [readCatalogue, setReadCatalogue] = useState(false);
-  const openCareer = direct || pickedEra !== null;
+  const openDirect = direct || requestedSlot !== undefined;
+  const openCareer = openDirect || pickedEra !== null;
   const picker = <>
     <ClubManagerPickerHeading step="era" />
     <ClubManagerEraPicker
@@ -34,10 +39,10 @@ export default function ClubManagerEntry() {
       </button>
     )}>
       {openCareer ? (
-        <Suspense fallback={direct
+        <Suspense fallback={openDirect
           ? <ClubManagerStartup>Loading Club Manager...</ClubManagerStartup>
           : picker}>
-          <ClubManagerContents initialEra={pickedEra?.id} />
+          <ClubManagerContents key={requestedSlot === null ? 'chooser' : requestedSlot ?? 'default'} initialEra={pickedEra?.id} requestedSlot={requestedSlot} />
         </Suspense>
       ) : picker}
     </ClubManagerFrame>
