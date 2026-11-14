@@ -59,7 +59,7 @@ import LineupBuilder from '@/pages/LineupBuilder';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
 import { displayName } from '@/lib/playerSearch';
-import { clubTableNames, clubs, clubEraClubs, clubYearClubs, CLUB_YEAR_WITHHELD } from '@/data/lineupTeams';
+import { clubTableNames, clubs, clubEraClubs, clubYearClubs, CLUB_YEAR_WITHHELD, nations } from '@/data/lineupTeams';
 
 type DraftHook = Omit<ReturnType<typeof useLineupBuilder>, 'selectFormation'> & {
   selectFormation: (formation: Formation, choice?: DraftChoice) => void;
@@ -549,6 +549,116 @@ describe('Build Your XI unfinished draft', () => {
     expect(api(fresh).verdict).toBeNull();
     legacyQuiet();
   });
+
+  it('replaces an early starter under the original draw without losing the other ten picks', async () => {
+    const view = await startHook(2010);
+    await fillHook(view, 2010);
+    const original = api(view).filledSlots.get(0)!;
+    const old = JSON.parse(localStorage.getItem(draftKey)!);
+    act(() => { expect(api(view).replacePick(0)).toBe(true); });
+    expect(api(view).currentTeam).toEqual({ name: original.assignedTeam, isNation: false });
+    expect(api(view).filledCount).toBe(11);
+    act(() => api(view).completeRecordedYearDraft!(VERDICT));
+    expect(api(view).phase).toBe('reviewing');
+    const candidate = 'Fixture replacement keeper';
+    await act(async () => api(view).submitPlayer(candidate, meta(original.assignedTeam, 2009, 'GK', candidate)));
+    expect(api(view).validationError).toContain('2010');
+    expect(api(view).filledSlots.get(0)).toEqual(original);
+    const duplicate = api(view).filledSlots.get(8)!.playerName;
+    await act(async () => api(view).submitPlayer(duplicate, meta(original.assignedTeam, 2010, 'GK', duplicate)));
+    expect(api(view).validationError).toContain('already in your lineup');
+    expect(JSON.parse(localStorage.getItem(draftKey)!)).toEqual(old);
+    await act(async () => api(view).submitPlayer(candidate, meta(original.assignedTeam, 2010, 'GK', candidate)));
+    const edited = JSON.parse(localStorage.getItem(draftKey)!);
+    expect(edited.slots[0][0]).toBe(0);
+    expect(edited.slots[0][1].playerName).toBe(candidate);
+    expect(edited.slots.slice(1)).toEqual(old.slots.slice(1));
+    expect(edited.teamAssignments).toEqual(old.teamAssignments);
+    expect(api(view).replacingSlot).toBeUndefined();
+    expect(api(view).phase).toBe('reviewing');
+    view.unmount();
+    const reopened = renderHook(() => useLineupBuilder());
+    expect(api(reopened).filledSlots.get(0)?.playerName).toBe(candidate);
+    expect(api(reopened).filledCount).toBe(11);
+    act(() => api(reopened).completeRecordedYearDraft!(VERDICT));
+    expect(api(reopened).phase).toBe('result');
+    expect(localStorage.getItem(draftKey)).toBeNull();
+    legacyQuiet();
+  });
+
+  it('does not overwrite the selected starter when validation is canceled or another tab changes the draft', async () => {
+    const view = await startHook(2010);
+    await fillHook(view, 2010);
+    const old = localStorage.getItem(draftKey);
+    const starter = api(view).filledSlots.get(1)!;
+    io.historyHeld = true;
+    const name = 'Fixture replacement wingback';
+    const row = meta(starter.assignedTeam, 2010, 'RWB', name);
+    const tryReplace = async () => {
+      act(() => { api(view).replacePick(1); });
+      let pending: Promise<void> | undefined;
+      await act(async () => { pending = api(view).submitPlayer(name, row); });
+      return { pending: pending! };
+    };
+    let { pending } = await tryReplace();
+    expect(io.histories).toHaveLength(1);
+    act(() => api(view).cancelReplacement());
+    await act(async () => { io.histories[0].release(); await pending; });
+    expect(api(view).filledSlots.get(1)).toBe(starter);
+    expect(localStorage.getItem(draftKey)).toBe(old);
+    ({ pending } = await tryReplace());
+    const newer = JSON.stringify({ ...JSON.parse(old!), extra: true });
+    localStorage.setItem(draftKey, newer);
+    await act(async () => { io.histories[1].release(); await pending; });
+    expect(api(view).filledSlots.get(1)).toBe(starter);
+    expect(api(view).validationError).toContain('changed in another tab');
+    expect(localStorage.getItem(draftKey)).toBe(newer);
+  });
+
+  it('verifies a Mixed replacement against the original nation before committing', async () => {
+    const positions = FORMATIONS['4-4-2'];
+    const teamAssignments = [{ name: nations[0], isNation: true }, ...clubs.slice(0, 10).map(name => ({ name, isNation: false }))];
+    localStorage.setItem(draftKey, JSON.stringify({
+      formation: '4-4-2', draftChoice: { mode: 'mixed' }, teamAssignments,
+      slots: positions.map((slot, i) => [i, { ...slot, playerName: 'Mixed Fixture ' + i, assignedTeam: teamAssignments[i].name, isNation: teamAssignments[i].isNation }]),
+    }));
+    const view = renderHook(() => useLineupBuilder());
+    const expectedBody = { playerName: 'Mixed New Keeper', teamName: nations[0], isNation: true, position: 'GK' };
+    const original = api(view).filledSlots.get(0);
+    const validator = vi.mocked(fetch);
+    validator.mockRejectedValueOnce(new Error('fixture offline'));
+    act(() => { expect(api(view).replacePick(0)).toBe(true); });
+    await act(async () => api(view).submitPlayer(expectedBody.playerName, { rawPosition: 'Goalkeeper' }));
+    expect(api(view).filledSlots.get(0)).toBe(original);
+    expect(api(view).filledCount).toBe(11);
+    validator.mockResolvedValueOnce(new Response(JSON.stringify({ valid: true, fullName: expectedBody.playerName }), { status: 200 }));
+    await act(async () => api(view).submitPlayer(expectedBody.playerName, { rawPosition: 'Goalkeeper' }));
+    expect(JSON.parse(String(validator.mock.calls.at(-1)?.[1]?.body))).toEqual(expectedBody);
+    expect(api(view).filledSlots.get(0)).toMatchObject({ playerName: expectedBody.playerName, assignedTeam: nations[0], isNation: true });
+    expect(api(view).filledCount).toBe(11);
+  });
+
+  it('replaces an era starter using a different season inside the same five-year range', async () => {
+    const positions = FORMATIONS['4-4-2'];
+    const teamAssignments = clubEraClubs.slice(0, 11).map(name => ({ name, isNation: false }));
+    localStorage.setItem(draftKey, JSON.stringify({
+      formation: '4-4-2', draftChoice: { mode: 'club-era', year: 2008 }, teamAssignments,
+      slots: positions.map((slot, i) => {
+        const name = 'Era Fixture ' + i;
+        return [i, { ...slot, playerName: name, assignedTeam: teamAssignments[i].name, isNation: false, pick: meta(teamAssignments[i].name, 2009, slot.role, name) }];
+      }),
+    }));
+    const view = renderHook(() => useLineupBuilder());
+    const original = api(view).filledSlots.get(0);
+    act(() => { expect(api(view).replacePick(0)).toBe(true); });
+    const name = 'Era New Keeper';
+    await act(async () => api(view).submitPlayer(name, meta(teamAssignments[0].name, 2013, 'GK', name)));
+    expect(api(view).filledSlots.get(0)).toBe(original);
+    await act(async () => api(view).submitPlayer(name, meta(teamAssignments[0].name, 2012, 'GK', name)));
+    expect(api(view).filledSlots.get(0)).toMatchObject({ playerName: name, pick: { year: 2012 } });
+    expect(api(view).filledCount).toBe(11);
+    legacyQuiet();
+  });
 });
 
 describe('Build Your XI Club year Browse on the real page', () => {
@@ -606,6 +716,46 @@ describe('Build Your XI Club year Browse on the real page', () => {
     expect(screen.getByRole('heading', { name: 'Choose Your Formation' })).toBeVisible();
     expect(screen.queryByText('Season Report', { exact: true })).toBeNull();
   }, 15000);
+
+  it('uses the same recorded player picker to replace a starter and refresh the settled XI', async () => {
+    io.pool = 'complete'; await openPage(2026); await fillPage();
+    const before = io.simulate.mock.calls[0][0] as { name: string; value: number }[];
+    const originalName = before[0].name;
+    const oldQuery = io.rest!;
+    io.rest = async query => {
+      const response = await oldQuery(query) as { data: Record<string, unknown>[] | null; error: unknown };
+      if (!response.data) return response;
+      const aliases = operation(query, 'in', 'club') as string[];
+      const typed = operation(query, 'ilike', 'name_folded');
+      return { ...response, data: [
+        ...response.data,
+        ...(typed === undefined || String(typed).toLowerCase().includes('target') ? [{
+          club: aliases[0], nationality: 'Fixture Nation', year: 2026, age: 25,
+          position: 'Goalkeeper', market_value_usd: 125_000_000, name_folded: 'fixture target keeper', player_name: 'Fixture Target Keeper',
+        }] : []),
+      ] };
+    };
+    fireEvent.click(screen.getByRole('button', { name: 'Replace ' + originalName + ' at GK' })); await flush();
+    const edit = screen.getByRole('region', { name: 'Replace a starter' });
+    expect(within(edit).getByRole('combobox')).toHaveFocus();
+    expect(screen.getByRole('button', { name: 'Submit Team' })).toBeDisabled();
+    fireEvent.change(within(edit).getByRole('combobox'), { target: { value: 'Target' } });
+    await advance(220); await flush();
+    const offered = screen.getAllByRole('option');
+    const target = offered.find(node => node.textContent?.includes('Target Keeper'));
+    expect(target, offered.map(node => node.textContent).join(' | ')).toBeDefined();
+    fireEvent.click(target!); await flush();
+    expect(screen.queryByRole('region', { name: 'Replace a starter' })).toBeNull();
+    expect(io.simulate).toHaveBeenCalledTimes(2);
+    const after = io.simulate.mock.calls[1][0] as { name: string; value: number }[];
+    expect(after[0]).toMatchObject({ name: 'Fixture Target Keeper', value: 125_000_000 });
+    expect(after.slice(1)).toEqual(before.slice(1));
+    expect(io.simulate.mock.results[1].value.squadRating).toBeGreaterThan(io.simulate.mock.results[0].value.squadRating);
+    fireEvent.click(screen.getByRole('button', { name: 'Submit Team' })); await flush();
+    expect(screen.getByRole('button', { name: /Play Again/i })).toBeVisible();
+    expect(io.simulate).toHaveBeenCalledTimes(2);
+    legacyQuiet();
+  }, 30000);
 
   it('shows an unrated completed draft when the selected rows lack numeric inputs', async () => {
     for (const missing of ['age', 'value', 'both'] as const) {
