@@ -367,7 +367,7 @@ function LiveMinute60({ live, career, onAction, disabled }: {
   const closeChoice = {
     type: 'finishMinute60', year, round: fixture.round, tactic, reserveId: reserveId || undefined,
     ...(plans.includes(attackPlan) && attackPlan !== currentPlan && { attackPlan }),
-    ...(canSetUpKick && fieldGoal && { fieldGoalPlan: true }),
+    ...(canSetUpKick && fieldGoal && { fieldGoalPlan: true as const }),
   } as const;
   const preview = nrlLivePlanPreview(career, closeChoice);
   return (
