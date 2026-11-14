@@ -168,6 +168,47 @@ export interface GauntletDraftResult<P> {
   picks: DraftPick<P>[];
 }
 
+function uniqueDraftPool<P>(config: GauntletConfig<P>): P[] {
+  const seen = new Set<string>();
+  return config.pool.filter(p => {
+    const name = config.nameOf(p);
+    if (seen.has(name)) return false;
+    seen.add(name);
+    return true;
+  });
+}
+
+function dealSlot<P>(config: GauntletConfig<P>, fits: P[], used: Set<string>, rng: () => number): P[] {
+  const grab = (lo: number, hi: number): P => {
+    const a = Math.floor(lo * fits.length);
+    const b = Math.max(a + 1, Math.floor(hi * fits.length));
+    const band = fits.slice(a, b).filter(p => !used.has(config.nameOf(p)));
+    const src = band.length ? band : fits.filter(p => !used.has(config.nameOf(p)));
+    return src[Math.floor(rng() * src.length)];
+  };
+  const choices: P[] = [];
+  const choiceNames = new Set<string>();
+  for (const [lo, hi] of [[0, 0.12], [0.15, 0.4], [0.3, 0.6], [0.5, 0.8], [0.8, 1]] as const) {
+    let c = grab(lo, hi);
+    let hops = 0;
+    while (choiceNames.has(config.nameOf(c)) && hops < 10) { c = grab(lo, hi); hops += 1; }
+    if (!choiceNames.has(config.nameOf(c))) { choices.push(c); choiceNames.add(config.nameOf(c)); used.add(config.nameOf(c)); }
+  }
+  return choices;
+}
+
+export function redrawDraftPick<P>(config: GauntletConfig<P>, draft: GauntletDraftResult<P>, index: number, seed: number): P[] | null {
+  const pick = draft.picks[index];
+  if (!pick) return null;
+  const used = new Set(draft.picks.flatMap(row => row.choices.map(config.nameOf)));
+  const fits = uniqueDraftPool(config)
+    .filter(p => config.fitsSlot(p, pick.slot) && !used.has(config.nameOf(p)))
+    .sort((a, b) => config.ratingOf(b) - config.ratingOf(a));
+  if (fits.length < PICK_SIZE) return null;
+  const choices = dealSlot(config, fits, used, gRng(seed));
+  return choices.length === PICK_SIZE ? choices : null;
+}
+
 /**
  * Builds the whole draft: a formation off the seed and, for each slot in
  * order, five fitting entries spread across the pool's value range (one
@@ -178,13 +219,7 @@ export interface GauntletDraftResult<P> {
  */
 export function buildDraft<P>(config: GauntletConfig<P>, seed: number): GauntletDraftResult<P> {
   const rng = gRng(seed);
-  const seen = new Set<string>();
-  const deduped = config.pool.filter(p => {
-    const name = config.nameOf(p);
-    if (seen.has(name)) return false;
-    seen.add(name);
-    return true;
-  });
+  const deduped = uniqueDraftPool(config);
   const formation = config.formations[Math.floor(rng() * config.formations.length)];
   const used = new Set<string>();
 
@@ -197,22 +232,7 @@ export function buildDraft<P>(config: GauntletConfig<P>, seed: number): Gauntlet
     const fits = deduped
       .filter(p => config.fitsSlot(p, slot) && !used.has(config.nameOf(p)))
       .sort((a, b) => config.ratingOf(b) - config.ratingOf(a));
-    const grab = (lo: number, hi: number): P => {
-      const a = Math.floor(lo * fits.length);
-      const b = Math.max(a + 1, Math.floor(hi * fits.length));
-      const band = fits.slice(a, b).filter(p => !used.has(config.nameOf(p)));
-      const src = band.length ? band : fits.filter(p => !used.has(config.nameOf(p)));
-      return src[Math.floor(rng() * src.length)];
-    };
-    const choices: P[] = [];
-    const choiceNames = new Set<string>();
-    for (const [lo, hi] of [[0, 0.12], [0.15, 0.4], [0.3, 0.6], [0.5, 0.8], [0.8, 1]] as const) {
-      let c = grab(lo, hi);
-      let hops = 0;
-      while (choiceNames.has(config.nameOf(c)) && hops < 10) { c = grab(lo, hi); hops += 1; }
-      if (!choiceNames.has(config.nameOf(c))) { choices.push(c); choiceNames.add(config.nameOf(c)); used.add(config.nameOf(c)); }
-    }
-    picksByIndex[index] = { slot, choices };
+    picksByIndex[index] = { slot, choices: dealSlot(config, fits, used, rng) };
   }
   return { formation, picks: picksByIndex };
 }

@@ -511,6 +511,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Drafting one card per slot",
         items: [
           "For each slot, read the five cards, star to bargain, and tap the one you keep. Position families apply, so a winger card can cover either flank.",
+          "In Unlimited Soccer Gauntlet, redraw one slot per draft. A successful redraw withdraws all five current cards. If five new players cannot fill the slot, keep the current offer and try the redraw in another slot.",
         ],
       },
       {
@@ -565,6 +566,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "A striker slot with five cards to choose",
         paragraphs: [
           "The draw hands you a 4-3-3 and the striker slot deals a 91 rated superstar next to an 84, a 79, a 74 and a 68. You pay nothing for any of them, so the 91 is the pick unless you are chasing a story.",
+          "In Unlimited, you could take the 91 now or redraw the striker slot if you still have your redraw. Take the new offer and the 91 leaves the draft with the other four cards.",
         ],
       },
       {
