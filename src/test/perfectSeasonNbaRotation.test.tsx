@@ -44,7 +44,7 @@ async function finishDraft(mode: 'Classic' | 'Hard' | 'Daily') {
     fireEvent.click(screen.getByRole('button', { name: /^(Spin the wheel|Next spin)$/ }));
     await tick(1600);
     fireEvent.click(screen.getByRole('button', { name: new RegExp(p.name) }));
-    const option = screen.queryByRole('button', { name: p.slot, exact: true });
+    const option = screen.queryByRole('button', { name: p.slot });
     if (option) fireEvent.click(option);
     await tick();
   }
