@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { SeasonCentre, type CentreModel } from '@/components/season-centre/SeasonCentre';
@@ -26,6 +26,36 @@ function modelWithCups(onCompetition = vi.fn()) {
   const competitions = savedSeasonCompetitions(competitionCareer, cupSeason).filter(cup => cup.id === 'domestic');
   return { ...model, calendar: { games: cupCalendar(competitions, season.games.length), note: CUP_CALENDAR_NOTE, onCompetition } };
 }
+it('reads a completed fixture without moving the replay or exposing the next one', async () => {
+  const model = soccerShapedModel(TABLE_ROW, toySeason(TABLE_ROW));
+  const before = JSON.stringify(model.season);
+  const onProgress = vi.fn();
+  const onClose = vi.fn();
+  const { container } = render(<MemoryRouter><SeasonCentre model={model} exitLabel="Back to your career"
+    onClose={onClose} onProgress={onProgress} resume={{ md: 5, speed: 'results' }} fixtureReports /></MemoryRouter>);
+  const gotIt = screen.queryByRole('button', { name: /Got it/ });
+  if (gotIt) fireEvent.click(gotIt);
+  expect(container.querySelector('[data-fixture-row="6"] button')).toBeNull();
+  const opener = within(container.querySelector<HTMLElement>('[data-fixture-row="5"]')!).getByRole('button');
+  const game = model.season.games[4];
+  onProgress.mockClear();
+  opener.focus();
+  fireEvent.click(opener);
+  const dialog = await screen.findByRole('dialog', { name: 'Match report' });
+  expect(dialog.querySelector('[data-fixture-report-score]')?.textContent).toBe(game.home ? `${game.us}-${game.them}` : `${game.them}-${game.us}`);
+  expect(dialog.querySelector('[data-his-line]')?.textContent).toBeTruthy();
+  expect(Array.from(dialog.querySelectorAll('[data-fixture-report-events] li'), item => item.textContent)).toEqual(
+    game.events.map(event => model.sport.clock.label(event.min) + model.sport.clock.words(event, model.header.club, model.names[game.opp])),
+  );
+  fireEvent.keyDown(dialog, { key: 'Escape' });
+  await waitFor(() => expect(document.activeElement).toBe(opener));
+  expect(screen.queryByRole('dialog', { name: 'Match report' })).toBeNull();
+  expect(screen.getByRole('button', { name: /▶ Matchday 6/ })).toBeInTheDocument();
+  expect(onProgress).not.toHaveBeenCalled();
+  expect(onClose).not.toHaveBeenCalled();
+  expect(JSON.stringify(model.season)).toBe(before);
+});
+
 describe('cup nights in the actual Season Centre', () => {
   it('opens the saved domestic cup after league game five and keeps the next opponent hidden until its result', () => {
     const model = modelWithCups(), before = structuredClone(model.season);

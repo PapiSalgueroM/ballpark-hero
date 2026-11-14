@@ -1,4 +1,12 @@
+## 2026-11-14: NRL matchday rotation and Soccer Career fixture reports
+
+- The NRL Match centre previews which reserves come on in Quick Sim and how holding a reserve changes the Live rotation. Confirmed halftime and 60-minute changes can still affect who plays.
+- Soccer Career opens a completed fixture's score, match events and player line from the season viewer when the game's match details are available.
+- Home shows the settled search count on screen and announces it to screen readers.
+
 ## 2026-11-14: NRL scoring periods and Soccer Career offer comparison
+
+[PR #905](https://github.com/PapiSalgueroM/ballpark-hero/pull/905) published exact main `a89d8953962d0bb087239537f3c411d803b16ebb`, deployment `5dd994d8-f5e6-463f-b702-d85cfc9ce554`. Five browser journeys and all 174 sitemap routes passed live. IndexNow accepted both game guides.
 
 - NRL match reports break down points scored by period. If you played to the 60-minute pause, the report separates the two parts of the second half. Extra time gets its own row where played.
 - When two clubs bid for your player in Soccer Career, compare the proposed weekly pay, contract length and estimated league games before opening either contract review.

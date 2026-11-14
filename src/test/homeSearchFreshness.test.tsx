@@ -54,10 +54,11 @@ it('hides stale empty wording and clears immediately while ranking is held', asy
   const { main, field, change, release } = home();
   change('*(');
   await act(async () => { await vi.dynamicImportSettled(); });
-  const empty = screen.getByText('No games found for "*("');
+  const status = screen.getByRole('status', { name: 'Search results' });
+  expect(screen.getAllByText('No games found for *(')).toEqual([status]);
   state.heldQuery = '*(';
   change('NBA My Career');
-  expect(empty).not.toBeVisible();
+  expect(status).toBeEmptyDOMElement();
   expect(within(main).queryByRole('button', { name: 'Pin Soccer Grid' })).toBeNull();
   field.focus();
   fireEvent.keyDown(field, { key: 'Escape' });
@@ -65,7 +66,7 @@ it('hides stale empty wording and clears immediately while ranking is held', asy
   expect(field).toHaveFocus();
   expect(within(main).getByRole('heading', { name: 'Main event' })).toBeInTheDocument();
   release();
-  expect(empty).not.toBeInTheDocument();
+  expect(status).toBeEmptyDOMElement();
 });
 
 it('announces only settled matches and keeps focus when the search clears', async () => {
@@ -76,6 +77,7 @@ it('announces only settled matches and keeps focus when the search clears', asyn
   change('Soccer Career');
   await act(async () => { await vi.dynamicImportSettled(); });
   expect(status).toHaveTextContent(/\d+ (game found|games found) for Soccer Career/);
+  expect(status).not.toHaveClass('sr-only');
   state.heldQuery = 'Soccer Career';
   change('*(');
   expect(status).toBeEmptyDOMElement();

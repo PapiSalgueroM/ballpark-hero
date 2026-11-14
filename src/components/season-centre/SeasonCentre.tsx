@@ -19,6 +19,7 @@ import { Fragment, useCallback, useEffect, useMemo, useRef, useState, type CSSPr
 import { soFar, tableAt, type DerivedGame, type DerivedSeason, type SeasonWords } from '@/lib/season/core';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import { RankShiftTable } from '@/components/motion/RankShiftTable';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { CelebrationStyles } from '@/components/club-manager/CelebrationStyles';
 import { revealDelay } from '@/components/club-manager/Celebration';
 import { Confetti } from '@/components/soccer-career/CareerFx';
@@ -190,7 +191,7 @@ function useReducedMotion(): boolean {
   return reduced;
 }
 
-function FixtureList({ model, played, current, short, cupSeen = new Set<string>(), cupCurrent = null }: { model: CentreModel; played: number; current: number | null; short?: (name: string) => string; cupSeen?: ReadonlySet<string>; cupCurrent?: string | null }) {
+function FixtureList({ model, played, current, short, cupSeen = new Set<string>(), cupCurrent = null, onReport }: { model: CentreModel; played: number; current: number | null; short?: (name: string) => string; cupSeen?: ReadonlySet<string>; cupCurrent?: string | null; onReport?: (game: DerivedGame, opener: HTMLButtonElement) => void }) {
   const { season: s, names, words } = model;
   const copy = copyOf(model);
   const yours = new Set((model.moments?.list ?? []).map(m => m.md));
@@ -208,8 +209,9 @@ function FixtureList({ model, played, current, short, cupSeen = new Set<string>(
         const done = g.md <= played;
         const r = resultOf(g);
         const on = current === g.md;
-        return (
-          <Fragment key={g.md}><li className={`flex flex-wrap items-center gap-x-1.5 gap-y-0.5 rounded-lg px-2 py-1 text-xs ${on ? 'bg-primary/15 ring-1 ring-primary/40' : ''}`} aria-current={on ? 'true' : undefined} data-fixture-row={g.md}>
+        const openReport = done ? onReport : undefined;
+        const rowClass = 'flex flex-wrap items-center gap-x-1.5 gap-y-0.5 px-2 py-1 text-xs';
+        const content = <>
             <span className="w-6 shrink-0 tabular-nums text-muted-foreground">{g.md}</span>
             <span className="w-4 shrink-0 text-xs text-muted-foreground">{g.home ? 'H' : 'A'}</span>
             <span className={`min-w-[4.5rem] flex-1 truncate ${done ? '' : 'text-muted-foreground'} ${names[g.opp] === words.unnamed ? 'italic' : ''}`} data-fixture-name>{short ? short(names[g.opp]) : names[g.opp]}</span>
@@ -217,6 +219,11 @@ function FixtureList({ model, played, current, short, cupSeen = new Set<string>(
             {yours.has(g.md) && <span className="shrink-0 text-xs" title="One of your moments" data-fixture-moment>🎯</span>}
             {g.md === s.games.length && <span className="shrink-0 rounded bg-sky-500/20 px-1 text-xs font-bold text-sky-400">{copy.lastBadge}</span>}
             {done && <span className={`ml-auto shrink-0 rounded px-1.5 text-xs font-bold tabular-nums ${PILL[r]}`}>{r === 'D' ? copy.tie : r} {g.us}-{g.them}</span>}
+        </>;
+        return (
+          <Fragment key={g.md}><li className={`rounded-lg ${openReport ? '' : rowClass} ${on ? 'bg-primary/15 ring-1 ring-primary/40' : ''}`} aria-current={on ? 'true' : undefined} data-fixture-row={g.md}>
+            {openReport ? <button type="button" className={`${rowClass} min-h-11 w-full rounded-lg border border-border text-left hover:bg-muted/40 focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary`}
+              aria-label={`Match report: ${s.mode === 'results' ? 'League game' : words.round} ${g.md}, ${names[g.opp]}`} onClick={event => openReport(g, event.currentTarget)}>{content}</button> : content}
           </li>{visibleCupGames(model.calendar?.games ?? [], cupSeen).filter(cup => cup.afterLeague === g.md).map(cup => <li key={cup.id} data-fixture-cup={cup.id} data-cup-after-league={cup.afterLeague} aria-current={cupCurrent === cup.id ? 'true' : undefined} className={`rounded-lg border border-sky-500/30 px-2 py-1 text-xs ${cupCurrent === cup.id ? 'bg-primary/15 ring-1 ring-primary/40' : ''}`}>
             <button type="button" className="min-h-11 w-full min-w-0 text-left" onClick={() => model.calendar?.onCompetition(cup.competition)}>
               <span className="block font-bold text-sky-400">{cup.name} · {cup.match.round}</span>
@@ -519,9 +526,11 @@ interface SeasonCentreProps {
   navigation?: ReactNode;
   /** Keep the league's state while another competition has the stage. */
   active?: boolean;
+  /** Soccer's read-only replay can open already revealed fixture reports. */
+  fixtureReports?: boolean;
 }
 
-export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, navigation, active = true }: SeasonCentreProps) {
+export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, navigation, active = true, fixtureReports = false }: SeasonCentreProps) {
   const s = model.season;
   const M = s.games.length;
   const start = resume && Number.isInteger(resume.md) && resume.md >= 1 && resume.md <= M - 1 ? resume : null;
@@ -534,6 +543,9 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
   const [paused, setPaused] = useState(false);
   const [ft, setFt] = useState(false);
   const [fixturesOpen, setFixturesOpen] = useState(false);
+  const [reportRound, setReportRound] = useState<number | null>(null);
+  const reportOpener = useRef<HTMLButtonElement>(null);
+  const report = reportRound === null ? null : s.games[reportRound - 1];
   const [helpOpen, setHelpOpen] = useHelpOnce(model.helpKey);
   const copy = copyOf(model);
   const [postersSeen] = useState(() => new Set<number>());
@@ -550,6 +562,10 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
   const dialogRef = useRef<HTMLDivElement | null>(null);
   const setDialog = useCallback((el: HTMLDivElement | null) => { dialogRef.current = el; focusDialogOnMount(el); }, []);
   const closeHelp = useCallback(() => { setHelpOpen(false); dialogRef.current?.focus(); }, [setHelpOpen]);
+  const openReport = fixtureReports && hosting === null ? (game: DerivedGame, opener: HTMLButtonElement) => {
+    reportOpener.current = opener;
+    setReportRound(game.md);
+  } : undefined;
 
   const go = useCallback((md: number) => {
     setFt(false);
@@ -641,7 +657,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
           {roundWord} {stage.md}{s.mode === 'table' ? ` of ${M}` : ''} · {g.home ? 'Home' : 'Away'}{g.fixedKey ? ` · ${model.occasion[g.fixedKey] ?? model.sport.fixed.poster}` : ''}
         </div>
         <div className={host ? 'hidden' : undefined}>
-          <MatchClock key={`clock-${stage.md}`} game={g} clock={model.sport.clock} usName={model.header.club} themName={model.names[g.opp]} speed={speed} paused={paused || !active} reduced={reduced} onFullTime={onFullTime} active={active}
+          <MatchClock key={`clock-${stage.md}`} game={g} clock={model.sport.clock} usName={model.header.club} themName={model.names[g.opp]} speed={speed} paused={paused || !active || !!report || (fixtureReports && fixturesShown)} reduced={reduced} onFullTime={onFullTime} active={active}
             holdAt={host ? host.minute : pending ? pending.minute : null} onHold={() => { if (pending) setHosting(momentKeyOf(pending)); }}
             stage={model.sport.pitch ? at => model.sport.pitch!(g, at) : undefined} />
         </div>
@@ -677,15 +693,16 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
         {active && hosting === null && navigation}
         <div className="grid min-h-0 flex-1 grid-cols-1 md:grid-cols-[260px_1fr_380px]">
           <aside className="hidden min-h-0 overflow-y-auto border-r border-border p-2 md:block" aria-label={copy.list}>
-            <FixtureList model={model} played={played} current={current} short={model.sport.clock.short} cupSeen={cupSeen} cupCurrent={stage.kind === 'cup' ? stage.id : null} />
+            <FixtureList model={model} played={played} current={current} short={model.sport.clock.short} cupSeen={cupSeen} cupCurrent={stage.kind === 'cup' ? stage.id : null} onReport={openReport} />
           </aside>
           <main ref={stageRef} className="min-h-0 overflow-y-auto p-3 md:p-4" data-centre-stage>
-            {fixturesShown ? (
+            {fixturesShown && (
               <div className="space-y-2">
                 <button type="button" onClick={() => setFixturesOpen(false)} className="h-11 rounded-lg border border-border px-3 text-xs font-semibold">← Back</button>
-                <FixtureList model={model} played={played} current={current} cupSeen={cupSeen} cupCurrent={stage.kind === 'cup' ? stage.id : null} />
+                <FixtureList model={model} played={played} current={current} cupSeen={cupSeen} cupCurrent={stage.kind === 'cup' ? stage.id : null} onReport={openReport} />
               </div>
-            ) : stageBody}
+            )}
+            {fixtureReports ? <div className={fixturesShown ? 'hidden' : 'contents'}>{stageBody}</div> : !fixturesShown && stageBody}
             {!fixturesShown && (
               <div className="mt-3 space-y-3 md:hidden">
                 {!wide && <TablePanel model={model} played={played} compact />}
@@ -737,6 +754,27 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
         </div>)}
         {helpOpen && <SeasonCentreHelp words={model.help} onClose={closeHelp} />}
       </div>
+      {fixtureReports && <Dialog open={!!report} onOpenChange={open => { if (!open) setReportRound(null); }}>
+        <DialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100vw-2rem)] overflow-y-auto rounded-xl p-4"
+          onCloseAutoFocus={event => { event.preventDefault(); reportOpener.current?.focus({ preventScroll: true }); }}>
+          <DialogTitle className="pr-8">Match report</DialogTitle>
+            <DialogDescription>{report && `${roundWord} ${report.md} · ${report.home ? 'Home' : 'Away'} · Full time`}</DialogDescription>
+          {report && <div className="space-y-3" data-fixture-report={report.md}>
+            <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 rounded-lg bg-muted/30 p-3 text-xs font-bold [overflow-wrap:anywhere]">
+              <span>{report.home ? model.header.club : model.names[report.opp]}</span>
+              <span className="tabular-nums" data-fixture-report-score>{report.home ? report.us : report.them}-{report.home ? report.them : report.us}</span>
+              <span className="text-right">{report.home ? model.names[report.opp] : model.header.club}</span>
+            </div>
+            <HisLine g={report} sport={model.sport} />
+            {report.events.length > 0 && <ol aria-label="Match events" className="space-y-1 text-xs" data-fixture-report-events>
+              {report.events.map((event, index) => <li key={index} className="flex gap-2">
+                <span className="w-8 shrink-0 tabular-nums text-muted-foreground">{model.sport.clock.label(event.min)}</span>
+                <span>{model.sport.clock.words(event, model.header.club, model.names[report.opp])}</span>
+              </li>)}
+            </ol>}
+          </div>}
+        </DialogContent>
+      </Dialog>}
     </div>
   );
 }

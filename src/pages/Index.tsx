@@ -498,7 +498,7 @@ export default function Index() {
           </div>
 
           {picksStorageFailed && <div className="mb-4"><GamePicksWarning /></div>}
-          <p className="sr-only" role="status" aria-label="Search results">{searchStatus}</p>
+          <p className="break-words text-sm text-muted-foreground [&:not(:empty)]:mb-3" role="status" aria-label="Search results">{searchStatus}</p>
 
           {/* Defer ranking and rendering while the search field updates. */}
           {(isSearching || hasDeferredQuery) && (
@@ -515,9 +515,6 @@ export default function Index() {
                 </div>
               ) : (
                 <div style={pendingResultStyle} className="rounded-xl border border-dashed border-border bg-card/50 p-8 text-center">
-                  <p className="text-sm text-muted-foreground mb-4">
-                    No games found for "{deferredQuery}"
-                  </p>
                   <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
                     Try one of these instead
                   </p>
