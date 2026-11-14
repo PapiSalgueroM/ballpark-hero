@@ -197,6 +197,26 @@ export function useCollegeGrid() {
     [puzzle],
   );
 
+  const missedExamples = useMemo(() => {
+    if (isLoading || rawDailyStatus !== 'lost' || guessesLeft !== 0 || correctCount >= 9 || !gridData) return [];
+    const used = new Set(correctActions.map(action => normalizeGridName(action.playerName)));
+    const filled = new Set(correctActions.map(action => action.cellIndex));
+    return Array.from({ length: 9 }, (_, index) => index).filter(index => !filled.has(index)).map(index => {
+      const { rowAttr, colAttr } = getRowCol(index);
+      const seen = new Set(used);
+      const names: string[] = [];
+      for (const player of gridData.players) {
+        if (judgeCollegeCell(player, rowAttr, colAttr) !== 'yes') continue;
+        const name = normalizeGridName(player.name);
+        if (seen.has(name)) continue;
+        seen.add(name);
+        names.push(player.name);
+        if (names.length === 3) break;
+      }
+      return { index, school: rowAttr.label, criterion: colAttr.label, names };
+    });
+  }, [correctActions, correctCount, getRowCol, gridData, guessesLeft, isLoading, rawDailyStatus]);
+
   const fetchRarity = useCallback(
     async (puzzleId: string, cellIndex: number, playerName: string): Promise<number> => {
       try {
@@ -327,7 +347,7 @@ export function useCollegeGrid() {
 
   return {
     puzzle, cells, activeCell, setActiveCell, submitGuess,
-    validating, gameStatus, guessesLeft, correctCount, rarityScore, getRowCol, isLoading,
+    validating, gameStatus, guessesLeft, correctCount, rarityScore, getRowCol, isLoading, missedExamples,
     /* Round 1105: the board never waits for the key, so there is no error card
        to show. The page still reads this, so it stays, always false. */
     dataError: false,

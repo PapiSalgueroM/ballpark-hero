@@ -1,5 +1,6 @@
 import type { CareerState, LiveMatch, Duty, LiveFeedEvent } from '@/lib/clubManager';
 import { clockOrder } from '@/lib/clubManagerClock';
+import { validShirtNumber } from '@/lib/clubManagerShirtNumbers';
 
 /** Round 1522: the shape in force at a minute (myOnPitchAt's order reads in it): the last reshape before the
  *  minute, or the kick off's. */
@@ -11,17 +12,29 @@ export function liveShapeAt(live: LiveMatch, minute: number): { formationIndex: 
 }
 
 /**
- * Squad numbers for the day. No roster the game holds carries a real shirt
- * number and a real player's number is a checkable fact, so these are the
- * classic 1 to 11 by slot (the keeper 1) and 12 onward for the bench in
- * squad order, and the help copy says exactly that. Deterministic, so the
- * same save prints the same numbers every time.
+ * Take the manager's assignments first, then give the other players the
+ * match's usual 1 to 11 by slot and 12 onward in squad order when free.
  */
 export function squadNumbers(career: CareerState, live: LiveMatch): Map<string, number> {
   const map = new Map<string, number>();
-  live.startXi.forEach((id, i) => map.set(id, i + 1));
-  let n = 12;
-  for (const p of career.squad) if (!map.has(p.id)) map.set(p.id, n++);
+  const used = new Set<number>();
+  for (const p of career.squad) {
+    const number = p.shirtNumber;
+    if (!validShirtNumber(number) || used.has(number)) continue;
+    map.set(p.id, number);
+    used.add(number);
+  }
+  const fill = (id: string, preferred: number) => {
+    if (map.has(id)) return;
+    let number = preferred;
+    while (used.has(number)) number++;
+    map.set(id, number);
+    used.add(number);
+  };
+  live.startXi.forEach((id, i) => fill(id, i + 1));
+  const starters = new Set(live.startXi);
+  let bench = 12;
+  for (const p of career.squad) if (!starters.has(p.id)) fill(p.id, bench++);
   return map;
 }
 

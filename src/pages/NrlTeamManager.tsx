@@ -465,6 +465,48 @@ function OppositionReport({ career }: { career: NrlCareerState }) {
   );
 }
 
+function NrlMatchdayTeamSheet({ match, squad }: { match: NrlMatchResult; squad: NrlManagerState['squad'] }) {
+  const [expanded, setExpanded] = useState(false);
+  const scoring = match.playerScoring;
+  if (!scoring) return null;
+  const players = new Map(squad.map(player => [player.id, player.name]));
+  const points = new Map(scoring.lines.map(line => [line.playerId, nrlScorePoints(line)]));
+  const groups = [
+    { label: 'Starting 13', rows: scoring.starters.map((id, index) => ({ id, role: NRL_ROLES[index] })) },
+    { label: 'Reserves used', rows: (match.benchUsed ?? []).map(id => ({ id, role: undefined })) },
+  ];
+  return (
+    <details className="group mt-3 rounded-lg border border-border bg-background px-3" data-nrl-matchday-team-sheet
+      onToggle={event => setExpanded(event.currentTarget.open)}>
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Matchday team sheet <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      {expanded && <div className="grid gap-3 border-t border-border py-2 text-sm sm:grid-cols-2">
+        {groups.map(({ label, rows }) => (
+          <div key={label} className="min-w-0">
+            <p className="font-semibold">{label}</p>
+            {rows.length === 0 ? <p className="mt-1 text-xs text-muted-foreground">No reserves played.</p> : (
+              <ol role="list" aria-label={label} className="mt-1 divide-y divide-border">
+                {rows.map(({ id, role }) => (
+                  <li key={id} data-nrl-team-sheet-player={id} className="flex items-start justify-between gap-2 py-1.5">
+                    <div className="min-w-0 break-words">
+                      <span className="block font-medium">{players.get(id)}</span>
+                      {role && <span className="block text-xs text-muted-foreground">
+                        {role}{id === scoring.kickerId && <> · <span>Goal kicker</span></>}
+                      </span>}
+                    </div>
+                    <span className="shrink-0 tabular-nums">{points.get(id) ?? 0} pts</span>
+                  </li>
+                ))}
+              </ol>
+            )}
+          </div>
+        ))}
+      </div>}
+    </details>
+  );
+}
+
 function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: NrlManagerState }) {
   const shortName = useNrlClubName();
   const { year } = season;
@@ -574,6 +616,7 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
           </ul>
         </div>
       )}
+      <NrlMatchdayTeamSheet key={`${year}:${match.round}`} match={match} squad={season.squad} />
       {injury && injuredName && (
         <p className="mt-3 text-sm text-muted-foreground" data-nrl-match-injury>
           {injuredName} picked up a knock and will miss {injury.rounds} {injury.rounds === 1 ? 'round' : 'rounds'}.
@@ -1864,6 +1907,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. Choose Play to 60 minutes to bring on a held reserve who is still on the bench. Quick Sim settles the round in one action.</li>
               <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>
+              <li>Open Matchday team sheet in a report with a player record to see the starting 13, the reserves who played and how many points each player scored.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
               <li>Open Finals race in Ladder during the last four regular rounds to check your remaining opponents, possible ladder points and whether your club has secured a place.</li>

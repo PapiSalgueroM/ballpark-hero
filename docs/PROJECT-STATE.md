@@ -1,4 +1,12 @@
+## 2026-11-14: Club Manager shirt numbers, NRL team sheets and College Grid reviews
+
+- Open any active player in Club Manager's Squad to assign an in-game shirt number from 1 to 99 or confirm a swap. Assigned numbers follow the club's players into live matches, and outgoing loans reserve their numbers until they return or leave.
+- NRL's latest and saved match reports can show the starting 13, reserves who actually played, players' points and the kicker. Older reports keep the information originally recorded.
+- College Football Grid can show up to three verified examples per blank cell after a loss. Review keeps the completed grid and its score intact.
+
 ## 2026-11-14: Build Your XI draft saves and NRL development preview
+
+[PR #911](https://github.com/PapiSalgueroM/ballpark-hero/pull/911) published exact main `0654285ccc0deaa94c7331192b978ba0c1141c99`, deployment `065eba3b-be5a-4679-b7a9-b3cc8331af7f`. Six browser journeys and all 174 sitemap routes passed live. IndexNow accepted both guides.
 
 - Build Your XI keeps the current unfinished draft on this device in all three modes. Accepted picks, rerolled slots and a full XI waiting for review survive leaving or refreshing. Start over clears the draft, and a completed review closes it.
 - With a development assistant hired, NRL Match centre shows eligible players one appearance away from the eight-game milestone. The preview compares the Quick and Live rotations, including a held reserve, against each player's existing appearance count.

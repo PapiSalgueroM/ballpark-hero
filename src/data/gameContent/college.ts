@@ -186,6 +186,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "What a green or red pick means",
         items: [
           "A pick that fits locks in green with a rarity percentage. A pick the records say doesn't fit flashes red and costs a guess.",
+          "After the last guess, open Review missed cells to see verified examples for any open spots.",
         ],
       },
       {

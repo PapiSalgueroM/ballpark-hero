@@ -17,6 +17,7 @@ import { backFromDuty, restingIds } from '@/lib/clubManagerInternationals';
 import type { IntlCallUp } from '@/lib/clubManagerInternationals';
 import { ALL_POSITIONS } from '@/lib/positionFit';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { validShirtNumber } from '@/lib/clubManagerShirtNumbers';
 
 /**
  * Round 132: the one label this round is really about.
@@ -398,11 +399,61 @@ interface SquadRowProps {
   sortKey: SquadSortKey;
   scoutLevel: number;
   money: Money;
+  onShirtNumber: SquadScreenProps['onShirtNumber'];
   /* Round 978: back from international duty for the next match, and whether you rested him for it. */
   duty?: { call: IntlCallUp; resting: boolean } | null;
 }
 
-function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey, scoutLevel, money, duty = null }: SquadRowProps) {
+function ShirtNumberEditor({ player, career, onChange }: { player: CMPlayer; career: CareerState; onChange: NonNullable<SquadScreenProps['onShirtNumber']> }) {
+  const current = validShirtNumber(player.shirtNumber) ? player.shirtNumber : null;
+  const [draft, setDraft] = useState<number | null>();
+  const selection = draft === undefined ? current : draft;
+  const [message, setMessage] = useState('');
+  const holders = new Map(career.squad.filter(p => p.id !== player.id && validShirtNumber(p.shirtNumber)).map(p => [p.shirtNumber, p]));
+  const away = new Set((career.loanedOut ?? []).map(loan => loan.player.shirtNumber));
+  const holder = selection === null ? undefined : holders.get(selection);
+  return (
+    <form
+      className="mb-2 rounded-xl border border-border p-2"
+      onSubmit={event => {
+        event.preventDefault();
+        const saved = onChange(player.id, selection, holder?.id);
+        if (saved) setDraft(undefined);
+        setMessage(saved ? 'Shirt number saved.' : 'Could not save the number. Try again.');
+      }}
+    >
+      <div className="flex flex-wrap items-center gap-2">
+        <label className="text-xs font-semibold" htmlFor={`cm-shirt-number-${player.id}`}>Shirt number</label>
+        <select
+          id={`cm-shirt-number-${player.id}`}
+          aria-label={`Shirt number for ${player.name}`}
+          value={selection ?? ''}
+          onChange={event => {
+            setDraft(event.target.value ? Number(event.target.value) : null);
+            setMessage('');
+          }}
+          className="h-11 w-40 max-w-full rounded-lg border border-border bg-secondary px-2 text-xs text-foreground"
+        >
+          <option value="">Automatic</option>
+          {Array.from({ length: 99 }, (_, index) => {
+            const number = index + 1;
+            const taken = holders.get(number);
+            return <option key={number} value={number} disabled={away.has(number)}>
+              {number}{taken ? ` · ${taken.name}` : away.has(number) ? ' · Away on loan' : ''}
+            </option>;
+          })}
+        </select>
+        <button type="submit" disabled={selection === current} className="min-h-11 rounded-lg border border-primary/50 px-3 text-xs font-bold text-primary disabled:opacity-50">
+          {holder ? 'Swap numbers' : 'Save number'}
+        </button>
+      </div>
+      {holder && <p className="mt-1 text-xs text-muted-foreground">{holder.name} gets {current === null ? 'an automatic number' : `number ${current}`}.</p>}
+      {message && <p role="status" className="mt-1 text-xs text-muted-foreground">{message}</p>}
+    </form>
+  );
+}
+
+function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey, scoutLevel, money, onShirtNumber, duty = null }: SquadRowProps) {
   /* The no scroll rule: rows open independently, so opening one never closes
      another above it and pulls the one you tapped out from under your thumb.
      If the row sits so low that its detail would open below the fold, the
@@ -438,6 +489,7 @@ function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey
               <span title={p.name} className={cn('text-xs min-w-0 whitespace-normal break-words md:truncate', p.isYouth ? 'text-muted-foreground italic' : 'text-foreground')}>{p.name}</span>
             </span>
             <span className="flex flex-wrap items-center gap-1.5 empty:hidden md:contents">
+            {validShirtNumber(p.shirtNumber) && <span data-cm-shirt-number={p.shirtNumber} className={cn(badge, 'text-muted-foreground border-border')}>#{p.shirtNumber}</span>}
             {(p.generated || (p.isYouth && kLeagueMember(career.clubName) && careerHasKLeagueWorld(career))) && <MadeUpTag className="text-[9px]" title={kLeagueMember(career.clubName) && careerHasKLeagueWorld(career) ? 'Not a real player. This club has no verified opening roster here, so its starting squad is generated.' : undefined} />}
             {inXI && <span className={cn(badge, 'text-primary border-primary/50')}>XI</span>}
             {/* Round 505: the armband, and any position he has learned in this save. */}
@@ -499,7 +551,12 @@ function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey
           className={cn('w-3.5 h-3.5 shrink-0 text-muted-foreground', isOpen && 'rotate-180')}
         />
       </button>
-      {isOpen && <SquadRowDetail p={p} career={career} scoutLevel={scoutLevel} money={money} />}
+      {isOpen && (
+        <>
+          <SquadRowDetail p={p} career={career} scoutLevel={scoutLevel} money={money} />
+          {!career.live && onShirtNumber && <ShirtNumberEditor player={p} career={career} onChange={onShirtNumber} />}
+        </>
+      )}
     </div>
   );
 }
@@ -514,6 +571,7 @@ interface SquadScreenProps {
   /* Round 715: the save, for the money symbol, the lead scout, the bids on
      the table and where each man ranks in the dressing room. */
   career: CareerState;
+  onShirtNumber?: (playerId: string, number: number | null, swapWith?: string) => boolean;
 }
 
 /**
@@ -524,7 +582,7 @@ interface SquadScreenProps {
  * column sorts, and a tap on a row opens the whole picture on him in small
  * tiles, so the phone list stays one short line a man.
  */
-export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: SquadScreenProps) {
+export function SquadScreen({ squad, xiIds, eraId, captainId = null, career, onShirtNumber }: SquadScreenProps) {
   const inXI = new Set(xiIds.filter((id): id is string => !!id));
   const [sort, setSort] = useState<{ key: SquadSortKey; dir: SortDir }>(() => resumeFor(career)?.sort ?? { key: 'ovr', dir: 'desc' });
   const [openIds, setOpenIds] = useState<ReadonlySet<string>>(() => new Set(resumeFor(career)?.openIds ?? []));
@@ -635,6 +693,7 @@ export function SquadScreen({ squad, xiIds, eraId, captainId = null, career }: S
           sortKey={sort.key}
           scoutLevel={scoutLevel}
           money={money}
+          onShirtNumber={onShirtNumber}
           duty={dutyById.has(p.id) ? { call: dutyById.get(p.id)!, resting: restingNow(p.id) } : null}
         />
       ))}

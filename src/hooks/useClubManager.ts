@@ -56,6 +56,7 @@ import { buildBoardAsks, isBoardAsk } from '@/lib/clubManagerBoardAsks';
 import { validWorldEdit } from '@/lib/clubManagerWorldEdit';
 import type { CareerSetup, CurrencyCode } from '@/lib/clubManagerStart';
 import type { SkillTree } from '@/lib/clubManagerXp';
+import { assignShirtNumber } from '@/lib/clubManagerShirtNumbers';
 
 export type CMPhase = 'boot' | 'resume' | 'clubSelect' | 'hub' | 'halftime' | 'matchResult' | 'seasonEnd' | 'sacked' | 'retired';
 
@@ -858,6 +859,16 @@ export function useClubManager() {
     setCareer(prev => (prev ? autoSetPieces(prev) : prev));
   }, []);
 
+  const setShirtNumber = useCallback((playerId: string, number: number | null, swapWith?: string): boolean => {
+    const now = careerRef.current;
+    if (phase !== 'hub' || !holdsActiveSlot() || !now) return false;
+    const next = assignShirtNumber(now, playerId, number, swapWith);
+    if (!next || !persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    return true;
+  }, [phase, holdsActiveSlot, persist]);
+
   /** Round 782: the shootout order, player ids in kicking order; an empty list clears it. A bad id leaves the save alone. */
   const setShootoutOrderIds = useCallback((ids: string[]) => {
     setCareer(prev => (prev ? setShootoutOrder(prev, ids) ?? prev : prev));
@@ -1463,7 +1474,7 @@ export function useClubManager() {
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, retire, chooseClub, confirmClub, confirmCustomClub,
-    setCustomShape, setFormationIndex, setMentality, setTeamInstructions, setXiSlot, swapXiSlots, autoPick,
+    setCustomShape, setFormationIndex, setMentality, setTeamInstructions, setXiSlot, swapXiSlots, autoPick, setShirtNumber,
     saveMatchPlan, applyMatchPlan, deleteMatchPlan,
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason,

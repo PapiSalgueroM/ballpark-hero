@@ -1398,6 +1398,8 @@ export interface CMPlayer {
   lv?: number;
   id: string;
   name: string;
+  /** Optional shirt number chosen by the manager for this club. */
+  shirtNumber?: number;
   position: Position;
   rating: number;
   age: number;
