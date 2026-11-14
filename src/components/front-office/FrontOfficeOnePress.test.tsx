@@ -170,8 +170,11 @@ function onePressDigest(raw: string): string {
   if (s.league) {
     delete s.league.stats;
     delete s.league.awards;
-    // The calendar keeps the exact scores from the settled week. Fixtures and standings still count toward the digest.
-    for (const week of s.league.schedule ?? []) for (const g of week) { g.homeScore = 0; g.awayScore = 0; g.winner = ''; }
+    // Final scores and the rating receipt are checked separately. Fixtures and standings still count toward the digest.
+    for (const week of s.league.schedule ?? []) for (const g of week) {
+      g.homeScore = 0; g.awayScore = 0; g.winner = '';
+      delete g.ratingChanges;
+    }
     const teams = Object.values((s.league.teams ?? {}) as Record<string, any>);
     for (const p of [...teams.flatMap(t => [...(t.players ?? []), ...(t.practice ?? [])]), ...(s.league.freeAgents ?? [])]) { delete p.awards; delete p.rookieSeason; }
   }
@@ -286,6 +289,12 @@ for (const kind of KINDS) {
           const his = recap.postseason.rounds.flatMap((r: any) => r.games.map((g: any) => ({ round: r.name, g }))).filter((x: any) => x.g.home === team || x.g.away === team);
           expect(log!.games.map(g => g.where)).toEqual(['w17', ...his.map((x: any) => x.round)]);
           expect(log!.games[0].winner === team ? 1 : 0, 'Week 17 in the log is the result the league took').toBe(recap.league.teams[team].wins - winsBefore);
+          const ratings = recap.league.schedule.flat().filter((g: any) => g.ratingChanges);
+          expect(ratings).toHaveLength(1);
+          expect(ratings[0]).toMatchObject({
+            week: 17, home: log!.games[0].home, away: log!.games[0].away,
+            ratingChanges: { team, changes: recap.league.ratingReview.changes },
+          });
           his.forEach((x: any, k: number) => {
             const e = log!.games[k + 1];
             expect([e.home, e.away, e.homeScore, e.awayScore, e.winner]).toEqual([x.g.home, x.g.away, x.g.homeScore, x.g.awayScore, x.g.winner]);
@@ -303,6 +312,7 @@ for (const kind of KINDS) {
           expect(read().phase).toBe('draft');
           hold(`${id}|draft`, onePressDigest(raw()));
           expect(read().gameLog, 'the finished season rides into the draft with its log').toEqual(recap.gameLog);
+          expect(read().league.schedule[16]).toEqual(recap.league.schedule[16]);
 
           /* point three: his picks (the first prospect on the screen each time), the rivals', and the summer */
           let presses = 0;
@@ -317,6 +327,7 @@ for (const kind of KINDS) {
           expect(hub.league.week).toBe(1);
           hold(`${id}|hub`, onePressDigest(raw()));
           expect('gameLog' in hub, 'the summer ends the log: the new season holds no key').toBe(false);
+          expect(hub.league.schedule.flat().some((g: any) => g.ratingChanges)).toBe(false);
         });
       }
     });
