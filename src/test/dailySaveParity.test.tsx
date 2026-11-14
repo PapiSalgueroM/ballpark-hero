@@ -116,10 +116,10 @@ vi.mock('@/hooks/useDailyPuzzle', async (importOriginal) => {
           ...state,
           takeNewerSave: () => false,
           gameStatus: givenUp ? 'lost' : state.gameStatus,
-          // Footle wrote this receipt itself before the shared hook gained forfeit.
+          // These games wrote this receipt before the shared hook gained forfeit.
           forfeit: () => {
-            if (options.gameSlug !== 'footle') throw new Error('Unexpected historical forfeit');
-            localStorage.setItem(keyOf('footle'), JSON.stringify({
+            if (options.gameSlug !== 'footle' && options.gameSlug !== 'ufc') throw new Error('Unexpected historical forfeit');
+            localStorage.setItem(keyOf(options.storageSlug ?? options.gameSlug), JSON.stringify({
               v: 1, date: state.todayStr, puzzleIndex: state.puzzleIndex, guesses: state.guesses, gameStatus: 'lost',
             }));
             setGivenUp(true);

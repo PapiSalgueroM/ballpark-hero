@@ -29,15 +29,14 @@ export function useUfcGame() {
 
   // ---- DAILY ---------------------------------------------------------------
   const todayStr = useRef(getTodayET()).current;
-  const [forfeited, setForfeited] = useState(false);
 
   const {
     puzzle: dailyFighter,
     guesses: dailyGuesses,
     addGuess: addDailyGuess,
-    gameStatus: rawDailyStatus,
+    gameStatus: dailyStatus,
+    forfeit: forfeitDaily,
     isLoading,
-    puzzleIndex: dailyPuzzleIndex,
     reset: resetDailyHook,
   } = useDailyPuzzle<UfcFighter, UfcGuessResult>({
     gameSlug: 'ufc',
@@ -49,8 +48,6 @@ export function useUfcGame() {
     isValidGuesses: (g) => isUfcLog(g, MAX_GUESSES),
   });
 
-  const effectiveDailyStatus: 'playing' | 'won' | 'lost' = forfeited ? 'lost' : rawDailyStatus;
-
   // ---- UNLIMITED -----------------------------------------------------------
   const [unlimitedFighter, setUnlimitedFighter] = useState<UfcFighter>(firstFighter.get);
   useEffect(firstFighter.release, []);
@@ -60,7 +57,7 @@ export function useUfcGame() {
   // ---- ACTIVE VALUES -------------------------------------------------------
   const targetFighter = mode === 'daily' ? dailyFighter : unlimitedFighter;
   const guesses      = mode === 'daily' ? dailyGuesses  : unlimitedGuesses;
-  const gameStatus   = mode === 'daily' ? effectiveDailyStatus : unlimitedStatus;
+  const gameStatus   = mode === 'daily' ? dailyStatus : unlimitedStatus;
 
   // ---- CALLBACKS -----------------------------------------------------------
   const switchMode = useCallback((newMode: UfcGameMode) => setMode(newMode), []);
@@ -84,21 +81,14 @@ export function useUfcGame() {
   const giveUp = useCallback(() => {
     if (gameStatus !== 'playing') return;
     if (mode === 'daily') {
-      try {
-        localStorage.setItem(`ufc-game-daily-${todayStr}`, JSON.stringify({
-          v: 1, date: todayStr, puzzleIndex: dailyPuzzleIndex,
-          guesses: dailyGuesses, gameStatus: 'lost',
-        }));
-      } catch { /* quota / private browsing */ }
-      setForfeited(true);
+      forfeitDaily();
     } else {
       setUnlimitedStatus('lost');
     }
-  }, [mode, gameStatus, todayStr, dailyPuzzleIndex, dailyGuesses]);
+  }, [mode, gameStatus, forfeitDaily]);
 
   const resetGame = useCallback(() => {
     if (mode === 'daily') {
-      setForfeited(false);
       resetDailyHook();
     } else {
       setUnlimitedFighter(selectRandomFighter());
@@ -117,10 +107,10 @@ export function useUfcGame() {
   }, [mode, dailyFighter, unlimitedFighter]);
 
   // ---- COMPLETION ----------------------------------------------------------
-  const dailyScore = effectiveDailyStatus === 'won'
+  const dailyScore = dailyStatus === 'won'
     ? Math.max(100, (MAX_GUESSES - dailyGuesses.length) * 100)
     : 0;
-  useGameCompletion('ufc', effectiveDailyStatus !== 'playing', dailyScore);
+  useGameCompletion('ufc', dailyStatus !== 'playing', dailyScore);
 
   return {
     mode,

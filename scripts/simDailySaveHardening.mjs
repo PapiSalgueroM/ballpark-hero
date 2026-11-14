@@ -304,7 +304,7 @@ try {
        layer stands, so only stale (both removed) turns them. */
     const guardRows = /a tab behind the stored log takes it over|a finish taken over from another tab|1b\) a handler whose first answer is dropped|Shirt Number: a stale tab cannot drop|7\) .*(Transfer Path|Footle).*its own next click/;
     const hlRows = /: the stale tab cannot drop a decided round|7\) .*Higher or Lower: taken over through its own next click/;
-    const verdictRows = /2b\) a dropped answer shows no verdict|Footle Daily give-up confirmation/;
+    const verdictRows = /2b\) a dropped answer shows no verdict|Daily give-up confirmation/;
     /* Round 1003 (758c1b72) gave NBA Connections the second layer: its
        submit asks takeNewerSave before its own click. Its click row of
        section 7 was a guard row until then (nine of them) and holds on
@@ -322,7 +322,7 @@ try {
       finished: (t) => /7b\) /.test(t),
       decided: (t) => /8\) .*a finished tab is never sent back to playing/.test(t),
     }[CONTROL];
-    const expected = { stale: 32, guard: 8, turn: 3, verdict: 14, event: 18, mark: 13, finished: 2, decided: 1 }[CONTROL];
+    const expected = { stale: 34, guard: 8, turn: 3, verdict: 16, event: 18, mark: 14, finished: 2, decided: 1 }[CONTROL];
     const failed = run.rows.filter((r) => r.status === 'failed');
     const intended = run.rows.filter((r) => want(r.title));
     assert.equal(intended.length, expected, `the control's ${expected} target rows exist`);
