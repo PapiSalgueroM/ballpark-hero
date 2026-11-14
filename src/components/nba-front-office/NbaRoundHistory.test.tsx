@@ -14,7 +14,7 @@ const team = 'DEN';
 const parse = () => JSON.parse(localStorage.getItem(key)!);
 const region = () => within(screen.getByRole('region', { name: 'Round results' }));
 const openPlay = () => fireEvent.click(screen.getByText('Play', { exact: true }));
-const play = (round: number) => fireEvent.click(screen.getByRole('button', { name: `Play Round ${round}`, exact: true }));
+const play = (round: number) => fireEvent.click(screen.getByRole('button', { name: `Play Round ${round}` }));
 const fixture = () => {
   const league = initNbaLeague(keyedRng('NBA history fixture'));
   league.inSeasonRatings = true;
