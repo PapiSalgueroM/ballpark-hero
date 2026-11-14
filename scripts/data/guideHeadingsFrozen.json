@@ -1963,6 +1963,7 @@
         "Some seasons your rival puts a decision on your plate instead of a story: benches clearing that you can answer or calm down, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
         "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
         "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
+        "After playing a season, relievers can choose their bullpen role for the next signed year. Setup pitchers work for holds. Choose Close for saves at 80 overall or with the Closer build. The role stays with that club and season.",
         "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         "Check the lineup card. Top ten picks play from Opening Day; everyone else fights the veteran in spring, with bench bats and long-relief arms waiting on spot starts until the job flips. Relievers climb their own bullpen ladder instead.",
         "Handle the winter, up to three decisions one card at a time: winter training, surgery calls, trade rumors. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
@@ -3470,6 +3471,7 @@
         "Open a penalty or free-kick offer during a watched match. You have twelve seconds to open it, then choose your aim, power and curve while the match clock keeps running. Opening uses that match's one attempt, even if you leave or reload.",
         "When lifetime earnings fill the yellow bar, sell up and move grounds: the club resets, but Reputation stars (plus 50 percent income each, forever), your badges and your club records all survive.",
         "Open the Academy tab to run your youth academy beside the stadium.",
+        "Open Coaching to focus on one prospect. Up to 15 percent of the other prospects' training gains go to him, and any gain he cannot use stays with the others. For example, two one-point gains can each become 0.85, giving the focus prospect an extra 0.30. Balanced training restores the usual shares.",
         "Promote academy players aged 18 to 23 into five first-team places. A graduate frees his bed, keeps developing and helps reduce the opposition's scoring chances. Open First team in the Academy to compare his current fee with the fee at his next birthday.",
         "League titles earn fictional boots and kit upgrades. Open First team, then Boot room, to equip a graduate or improve a pair. Boots add to match rating for defense while leaving every transfer fee unchanged. Move a pair to another player whenever you like; it stays with the club when its wearer leaves."
       ],
@@ -3741,6 +3743,7 @@
         "From age 18 to 23, you can promote a kid into one of five first-team places instead. Promotion frees his bed without paying a fee. Open First team to select a graduate, see his next birthday and decide when to sell him.",
         "Titles at Stadium Tycoon earn fictional boots and kit upgrades. Open the Boot room from First team to choose a wearer, move a pair or improve its level. Boots add to match rating for the defensive edge, without changing the player's transfer fee. Your collection survives sales, retirement and moving either ground.",
         "Spend the cash on Scouting, Coaching, Dorms and the Agent office. Costs climb with every level.",
+        "Open Coaching to focus on one prospect. Up to 15 percent of the other prospects' training gains go to him on this device, including when the academy trains away. For example, if two other prospects would gain a point each, they gain 0.85 each and he gets an extra 0.30 if his ceiling allows it. Balanced training restores the usual shares.",
         "Press Showcase Day when it charges: training runs x3 for 25 seconds.",
         "Hold your best kids for Deadline Day, which arrives every few minutes and pays x1.5 on every fee for 50 seconds.",
         "Earn the region target, then move the academy up in the Reputation box: kids, cash and facilities stay behind, the star is forever."
