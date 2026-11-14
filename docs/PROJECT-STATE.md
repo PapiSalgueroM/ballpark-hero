@@ -1,3 +1,8 @@
+## 2026-11-14: NRL scoring periods and Soccer Career offer comparison
+
+- NRL match reports break down points scored by period. If you played to the 60-minute pause, the report separates the two parts of the second half. Extra time gets its own row where played.
+- When two clubs bid for your player in Soccer Career, compare the proposed weekly pay, contract length and estimated league games before opening either contract review.
+
 ## 2026-11-14: NRL returning cover and Home keyboard navigation
 
 [PR #904](https://github.com/PapiSalgueroM/ballpark-hero/pull/904) published exact main `f3445e07e3abb34b597c8f86858f3edf0813cbf8`, deployment `7333af7b-1d05-41c3-b443-5b773cd93660`. Eleven browser journeys and all 174 sitemap routes passed live. IndexNow accepted the NRL guide.
