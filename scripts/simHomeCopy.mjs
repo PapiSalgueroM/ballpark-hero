@@ -683,9 +683,8 @@ console.log('8) no visually hidden text in src/pages/Index.tsx or src/components
   const scan = (name, src, baseline) => {
     let c = code(src);
     if (baseline && c.includes(baseline)) c = c.replace(baseline, ' ');
-    if (name === 'src/pages/Index.tsx' && c.includes("const [searchQuery, setSearchQuery] = useState('');")
-      && c.includes('const isSearching = searchQuery.trim().length > 0;')) {
-      const results = '<div hidden={!isSearching} aria-busy={(isSearching && !searchFailed && searchQuery !== deferredQuery) || undefined}>';
+    if (name === 'src/pages/Index.tsx' && c.includes('const isSearching = searchQuery.trim().length > 0;')) {
+      const results = '<div ref={searchResultsRef} onClickCapture={rememberSearchResult} hidden={!isSearching} aria-busy={(isSearching && !searchFailed && searchQuery !== deferredQuery) || undefined}>';
       c = c.replace(results, '<div>').replace(CATALOGUE_MOUNT, '<div>{catalogue}</div>');
     }
     const found = [];
