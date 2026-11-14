@@ -40,14 +40,14 @@ describe.each(SPORTS)('$label roster rating reviews', ({ word, second, final, Bo
   const press = (round: number) => fireEvent.click(screen.getByRole('button', { name: `Play ${word} ${round}` }));
   const openPlay = () => fireEvent.click(screen.getByRole('button', { name: 'Play' }));
 
-  it('shows the current group of settled games with the exact rating receipt and omits stale reviews from later results', () => {
+  it('reopens a past group of settled games with its exact rating receipt after new games', () => {
     vi.spyOn(Math, 'random').mockImplementation(keyedRng('current college match ratings'));
     const st = init();
     const view = load(st);
     openPlay();
     press(1);
     press(2);
-    expect(screen.queryByRole('region', { name: `${word} 2 results` })).toBeNull();
+    expect(screen.getByRole('region', { name: `${word} 2 results` })).toHaveTextContent(`No player rating changes in this ${word.toLowerCase()}.`);
     press(3);
     const after = read();
     const rows = after.ratingReview!.changes;
@@ -77,6 +77,11 @@ describe.each(SPORTS)('$label roster rating reviews', ({ word, second, final, Bo
     expect(screen.queryByRole('region', { name: `${word} 3 results` })).toBeNull();
     expect(screen.queryByText(/Ratings review/)).toBeNull();
     expect(read().ratingReview?.round).toBe(3);
+    const played = () => screen.getByRole('combobox', { name: `Played ${word.toLowerCase()}` });
+    const advanced = localStorage.getItem(key);
+    fireEvent.change(played(), { target: { value: '3' } });
+    inspect();
+    expect(localStorage.getItem(key)).toBe(advanced);
   });
 
   it('reviews both leagues after games, feeds the next game, and survives reload', () => {
@@ -125,6 +130,10 @@ describe.each(SPORTS)('$label roster rating reviews', ({ word, second, final, Bo
     expect(after.ratingReview?.round).toBe(second);
     expect(after.mySlate?.slice(0, st.mySlate!.length)).toEqual(st.mySlate);
     expect(roster(after).every((p, i) => Math.abs(p.ovr - before[i]) <= 2)).toBe(true);
+    fireEvent.change(screen.getByRole('combobox', { name: `Played ${word.toLowerCase()}` }), { target: { value: '3' } });
+    const earlier = screen.getByRole('region', { name: `${word} 3 results` });
+    expect(earlier).toHaveTextContent(`Rating changes are unavailable for this ${word.toLowerCase()}.`);
+    expect(within(earlier).getByRole('list', { name: 'Your results' })).toBeInTheDocument();
   });
 
   it('keeps the actual final regular-season results and their review in the saved recap', () => {
@@ -156,6 +165,7 @@ describe.each(SPORTS)('$label roster rating reviews', ({ word, second, final, Bo
   it('keeps surviving players at their current ratings when closing old recruiting saves', () => {
     vi.spyOn(Math, 'random').mockImplementation(keyedRng('offseason'));
     const st = init();
+    st.ratingHistory = [{ round: final, teamId: st.myTeam, changes: [] }];
     roster(st).forEach(p => { p.cls = 'SO'; p.ovr = 74; p.pot = 90; });
     const ids = new Set(roster(st).map(p => p.id));
     load(st, 'recruit');
@@ -163,6 +173,7 @@ describe.each(SPORTS)('$label roster rating reviews', ({ word, second, final, Bo
     const after = read();
     expect(after.season).toBe(st.season + 1);
     expect(after.round).toBe(1);
+    expect(after.ratingHistory).toBeUndefined();
     expect(roster(after).filter(p => ids.has(p.id)).map(p => [p.cls, p.ovr])).toEqual([...ids].map(() => ['JR', 74]));
   });
 });

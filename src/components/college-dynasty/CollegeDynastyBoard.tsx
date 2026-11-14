@@ -25,7 +25,7 @@ import {
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
-import type { CollegeRatingReview } from '@/lib/collegeSeasonRating';
+import type { CollegeRatingReview, CollegeRoundRating } from '@/lib/collegeSeasonRating';
 /* Round 1320: the athletic director. Every write into the state is the glue's
    (src/lib/collegeSeatBind.ts), every word the seat's (src/lib/collegeSeat.ts),
    and every node it draws carries data-college-seat. */
@@ -55,6 +55,7 @@ export interface CollegeState<T extends CollegeTeam> {
   /** Round 1554: set once a season starts under the sport's real format (seasonRivalries). */
   format?: number;
   ratingReview?: CollegeRatingReview;
+  ratingHistory?: CollegeRoundRating[];
 }
 export interface CollegeGame { home: string; away: string; hs: number; as: number; winner: string }
 export interface CollegeRecruit { id: string; name: string; pos: string; stars: number; grade: number; nilAsk: number }
@@ -226,6 +227,7 @@ export default function CollegeDynastyBoard<
      final frame instead of replaying every time a line lands above them. */
   const feedSeq = useRef(0);
   const [lastGames, setLastGames] = useState<G[]>([]);
+  const [pickedRound, setPickedRound] = useState<{ season: number; latest: number; round: number } | null>(null);
   const [seasonEntry, setSeasonEntry] = useState(0);
   const seasonEntryRef = useRevealScroll<HTMLDivElement>(seasonEntry, { enabled: seasonEntry > 0, skipFirst: false });
   // Round 66: the owner's no scroll rule. You press Play at the top and
@@ -524,16 +526,36 @@ export default function CollegeDynastyBoard<
   const ratingsDown = (ratingReview?.changes.length ?? 0) - ratingsUp;
   const ratingSummary = ratingReview && `Ratings review · ${w.roundWord} ${ratingReview.round} · ${ratingsUp} up, ${ratingsDown} down`;
   const lastRound = phase === 'recap' ? st.round : st.round - 1;
-  const reviewedGames = ratingReview?.round === lastRound ? st.mySlate?.filter(game => game.round === lastRound) : undefined;
+  const playedRounds = [...new Set(st.mySlate?.filter(game => game.round <= lastRound).map(game => game.round))]
+    .sort((a, b) => b - a);
+  const reportRound = pickedRound?.season === st.season && pickedRound.latest === lastRound && playedRounds.includes(pickedRound.round)
+    ? pickedRound.round : playedRounds[0];
+  const reviewedGames = st.mySlate?.filter(game => game.round === reportRound);
+  const reportReview = (Array.isArray(st.ratingHistory) ? st.ratingHistory.find(row => row && row.round === reportRound
+    && row.teamId === st.myTeam && Array.isArray(row.changes)) : undefined)
+    ?? (ratingReview?.round === reportRound ? ratingReview : undefined);
   const playersById = new Map(my.players.map(player => [player.id, player.name]));
-  const reviewedPlayers = [...ratingChanges].flatMap(([id, delta]) => {
-    const name = playersById.get(id);
-    return name ? [{ id, name, delta }] : [];
-  });
+  const reviewedPlayers = reportReview?.changes.flatMap(change => {
+    const name = 'name' in change && typeof change.name === 'string' ? change.name : playersById.get(change.id);
+    return name ? [{ id: change.id, name, delta: Number((change.to - change.from).toFixed(1)) }] : [];
+  }) ?? [];
+  const reportUp = reviewedPlayers.filter(change => change.delta > 0).length;
+  const roundWord = w.roundWord.toLowerCase();
   const roundReview = reviewedGames?.length ? (
-    <section key={`${st.season}:${lastRound}`} aria-label={`${w.roundWord} ${lastRound} results`}
+    <section aria-label={`${w.roundWord} ${reportRound} results`}
       className="rounded-xl border border-border bg-card p-3 text-left text-sm">
-      <h3 className="font-semibold">{w.roundWord} {lastRound} results</h3>
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <h3 className="font-semibold">{w.roundWord} {reportRound} results</h3>
+        {playedRounds.length > 1 && (
+          <label className="flex items-center gap-2 text-xs text-muted-foreground">
+            Played {roundWord}
+            <select value={reportRound} onChange={event => setPickedRound({ season: st.season, latest: lastRound, round: Number(event.target.value) })}
+              className="min-h-11 rounded-lg border border-border bg-background px-2 text-foreground">
+              {playedRounds.map(round => <option key={round} value={round}>{w.roundWord} {round}</option>)}
+            </select>
+          </label>
+        )}
+      </div>
       <ul aria-label="Your results" className="mt-1 divide-y divide-border">
         {reviewedGames.map((game, index) => <li key={`${game.opp}:${index}`} className="flex flex-wrap justify-between gap-x-2 py-1">
           <span>{game.home ? 'vs' : 'at'} {label(game.opp)}</span>
@@ -541,15 +563,19 @@ export default function CollegeDynastyBoard<
         </li>)}
       </ul>
       {reviewedPlayers.length > 0 ? (
-        <details className="border-t border-border">
-          <summary className="min-h-11 cursor-pointer py-3 font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{ratingSummary}</summary>
+        <details key={reportRound} className="border-t border-border">
+          <summary className="min-h-11 cursor-pointer py-3 font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            Ratings review · {w.roundWord} {reportRound} · {reportUp} up, {reviewedPlayers.length - reportUp} down
+          </summary>
           <ul aria-label="Player rating changes" className="divide-y divide-border">
             {reviewedPlayers.map(({ id, name, delta }) => <li key={id} className="flex flex-wrap justify-between gap-x-2 py-1">
-              <span>{name}</span><strong className="tabular-nums">{delta} OVR</strong>
+              <span>{name}</span><strong className="tabular-nums">{delta > 0 ? '+' : ''}{delta} OVR</strong>
             </li>)}
           </ul>
         </details>
-      ) : <p className="mt-1 text-muted-foreground">No player rating changes in this review.</p>}
+      ) : <p className="mt-1 text-muted-foreground">
+        {reportReview ? `No player rating changes in this ${roundWord}.` : `Rating changes are unavailable for this ${roundWord}.`}
+      </p>}
     </section>
   ) : null;
   const myRank = sport.rankings(st).findIndex(t => t.id === st.myTeam) + 1;
