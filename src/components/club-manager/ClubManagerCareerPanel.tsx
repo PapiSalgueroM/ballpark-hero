@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { formatNumber } from '@/lib/formatNumber';
 import { Pencil, UserPlus } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
@@ -13,6 +13,9 @@ import { BACKGROUND_TREE, TREE_INFO } from '@/lib/clubManagerXp';
 import { highestScoringOf, scoringOutcome } from '@/lib/clubManagerRecords';
 import CmRetireDoor from '@/components/club-manager/CmRetireDoor';
 import type { IntlTableRow } from '@/lib/soccerInternational';
+import { nationalSummerOf } from '@/lib/clubManagerNationalXI';
+
+const NationalLineup = lazy(() => import('@/components/club-manager/ClubManagerNationalLineup').then(module => ({ default: module.ClubManagerNationalLineup })));
 
 function CampaignTable({ label, rows, nation }: { label: string; rows: IntlTableRow[]; nation: string }) {
   return (
@@ -52,13 +55,14 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
   c: CareerState;
   /* Round 1343: retire is optional, and the door is drawn only when it is passed. */
   g: Pick<ReturnType<typeof useClubManager>, 'resignNation' | 'acceptNation' | 'answerApproach' | 'applyJob' | 'joinNow' | 'joinSummer' | 'updateManager'>
-    & Partial<Pick<ReturnType<typeof useClubManager>, 'retire' | 'setNationalTactics'>>;
+    & Partial<Pick<ReturnType<typeof useClubManager>, 'retire' | 'setNationalTactics' | 'saveNationalXI'>>;
   nationOffer: ReturnType<typeof nationOfferFor>;
   onRetireOpen?: () => void;
 }) {
   /* Round 965: the Edit manager sheet, and for a Skip career the way to name
      the man in the dugout after all. */
   const [editing, setEditing] = useState(false);
+  const [showNationalXI, setShowNationalXI] = useState(false);
   const look = managerLookOf(c.manager?.appearance);
   const bg = c.manager ? MANAGER_BACKGROUNDS[c.manager.background] : undefined;
   /* The +1 line reads the XP block's own record of the point, not the
@@ -66,6 +70,14 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
   const bgTree = c.manager && c.managerXp?.gift && BACKGROUND_TREE[c.manager.background] === c.managerXp.gift ? c.managerXp.gift : undefined;
   const campaign = c.nationCampaign;
   const mentality = c.nationJob?.mentality ?? 'balanced';
+  const summer = nationalSummerOf(c);
+  const onSave = g.saveNationalXI;
+  if (showNationalXI && summer && onSave) {
+    const onBack = () => setShowNationalXI(false);
+    return <Suspense fallback={<button type="button" className="min-h-11" onClick={onBack}>← Manager</button>}>
+      <NationalLineup career={c} year={summer.year} name={summer.name} onSave={onSave} onBack={onBack} />
+    </Suspense>;
+  }
   return (
                 <>
                 {/* Round 202: the international job. Club football is
@@ -86,6 +98,12 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
                     <p className="text-[10px] text-muted-foreground mt-1">
                       Tournaments run between club seasons. Miss one your country should have reached and the federation will not wait around.
                     </p>
+                    {summer && onSave && (
+                      <button type="button" onClick={() => setShowNationalXI(true)}
+                        className="mt-2 w-full min-h-11 rounded-lg border border-border px-2 text-xs font-bold">
+                        {c.nationJob.xi?.year === summer.year ? 'Edit national starting XI' : 'Pick national starting XI'}
+                      </button>
+                    )}
                     {g.setNationalTactics && (
                       <fieldset className="my-2">
                         <legend className="text-xs font-semibold">National tactics</legend>
@@ -134,6 +152,15 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
                     </summary>
                     <div className="space-y-3 pb-3">
                       {campaign.mentality && <p className="text-xs text-muted-foreground">Campaign tactics: {MENTALITIES.find(option => option.id === campaign.mentality)?.label}</p>}
+                      {campaign.xi && (
+                        <details>
+                          <summary className="min-h-11 cursor-pointer py-3 text-xs font-semibold">Starting XI · {campaign.xi.formation}</summary>
+                          <ol className="grid grid-cols-1 gap-1 text-xs sm:grid-cols-2">
+                            {campaign.xi.players.map((player, i) => <li key={i}>{i + 1}. {player.name} · {player.position} · {player.rating}</li>)}
+                          </ol>
+                        </details>
+                      )}
+                      {campaign.xiUnavailable && <p className="text-xs text-muted-foreground">The saved XI included an unavailable player. The campaign used automatic selection.</p>}
                       {campaign.lostJob && <p className="text-xs text-muted-foreground">The federation ended your contract after qualifying.</p>}
                       {campaign.qualifying.automatic
                         ? <p className="text-xs text-muted-foreground">Automatic entry to the tournament.</p>

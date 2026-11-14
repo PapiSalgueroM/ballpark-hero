@@ -129,4 +129,56 @@ describe('NRL Manager Academy', () => {
     const player = { ...report.player, futureContract: { clubId: 'panthers', startYear: 2027, endYear: 2027, salary: 145_000 } };
     expect(readNrlCareerSave(JSON.stringify({ ...pending, players: [...pending.players, player] }))).toBeNull();
   });
+
+  it.each([[2026, 'panthers'], [2027, 'bears']] as const)('applies two alternate scouting briefs and preserves a promotion in %i', (year, clubId) => {
+    const initial = createNrlCareer(clubId, 41, year);
+    const defaultAssignment = scout(initial);
+    const ready = reduceNrlCareer(initial, { type: 'scoutAcademy', role: 'Hooker', priority: 'ready' });
+    const ceiling = reduceNrlCareer(initial, { type: 'scoutAcademy', role: 'Hooker', priority: 'ceiling' });
+    const base = defaultAssignment.academy![0];
+    expect(base).not.toHaveProperty('priority');
+    for (const [state, priority, rating, potential] of [
+      [ready, 'ready', base.player.rating + 2, base.player.potential - 2],
+      [ceiling, 'ceiling', base.player.rating - 2, Math.min(90, base.player.potential + 2)],
+    ] as const) {
+      expect(state.season).toBe(initial.season);
+      expect(state.players).toBe(initial.players);
+      expect(state.finance).toBe(initial.finance);
+      expect(state.academy?.[0]).toEqual({ startedRound: 1, priority, player: { ...base.player, rating, potential } });
+      expect(nrlAcademyReports(state)[0]).toMatchObject({ status: 'scouting', priority, player: null });
+      expect(readNrlCareerSave(JSON.stringify(state))).toEqual(state);
+      expect(reduceNrlCareer(state, { type: 'scoutAcademy', role: 'Fullback', priority })).toBe(state);
+      const reportReady = advance(state);
+      expect(nrlAcademyReports(reportReady)[0]).toMatchObject({ status: 'ready', priority, player: { rating, potential } });
+      expect(reduceNrlCareer(reportReady, { type: 'scoutAcademy', role: 'Hooker', priority })).toBe(reportReady);
+      expect(reportReady.season).toEqual(advance(defaultAssignment).season);
+      const playerId = base.player.id;
+      const promoted = reduceNrlCareer(reportReady, { type: 'promoteAcademy', playerId });
+      expect(nrlAcademyReports(promoted)[0].status).toBe('signed');
+      expect(readNrlCareerSave(JSON.stringify(promoted))).toEqual(promoted);
+      const next = reduceNrlCareer(finish(promoted), { type: 'startNextSeason' });
+      expect(nrlCareerSquad(next).find(row => row.id === playerId)).toMatchObject({
+        name: base.player.name, rating, potential, contract: { startYear: year + 1, endYear: year + 1, salary: nrlSeasonPlan(year + 1).minimumSalary },
+      });
+      expect(readNrlCareerSave(JSON.stringify(next))).toEqual(next);
+    }
+  });
+
+  it('rejects false assignment priorities and inconsistent deterministic rating or potential figures', () => {
+    const initial = createNrlCareer('panthers', 41);
+    const assigned = reduceNrlCareer(initial, { type: 'scoutAcademy', role: 'Hooker', priority: 'ready' });
+    const report = assigned.academy![0];
+    expect(readNrlCareerSave(JSON.stringify({ ...assigned, academy: [{ ...report, priority: 'ceiling' }] }))).toBeNull();
+    expect(readNrlCareerSave(JSON.stringify({ ...assigned, academy: [{ ...report, priority: 'invalid' }] }))).toBeNull();
+    expect(readNrlCareerSave(JSON.stringify({ ...assigned, academy: [{ ...report, player: { ...report.player, potential: report.player.potential + 1 } }] }))).toBeNull();
+  });
+
+  it('replays prepared reports when an earlier prospect signs after a later scout assignment', () => {
+    const initial = createNrlCareer('panthers', 41);
+    const first = advance(scout(initial));
+    const second = advance(reduceNrlCareer(first, { type: 'scoutAcademy', role: 'Fullback', priority: 'ceiling' }));
+    const firstId = nrlAcademyReports(second)[0].player!.id;
+    const signed = reduceNrlCareer(second, { type: 'promoteAcademy', playerId: firstId });
+    expect(readNrlCareerSave(JSON.stringify(signed))).toEqual(signed);
+  });
 });

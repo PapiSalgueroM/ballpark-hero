@@ -62,7 +62,13 @@ import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
 /** Shown in the "no results" state so a dead-end search still has a next step. */
 const POPULAR_FALLBACK_PATHS = ['/soccer-grid', '/footle', '/squad-deal'];
 const EMPTY_BEST_SCORES: Readonly<Record<string, number>> = {};
-const gameReturns = new Map<string, { query: string; path: string }>();
+const SEARCH_GAME_LINK = '[data-home-game-card] a[href]';
+const CATALOGUE_GAME_LINK = '[data-catalog-card] a[href]';
+const CONTINUE_GAME_LINK = 'a[data-continue-card]';
+const PICK_GAME_LINK = 'a[data-game-pick-link]';
+const BROWSE_GAME_LINK = [CATALOGUE_GAME_LINK, CONTINUE_GAME_LINK, PICK_GAME_LINK].join(', ');
+type GameReturn = { query: string; path: string; selector: string; shelfScroll?: number };
+const gameReturns = new Map<string, GameReturn>();
 
 function getPopularFallbackGames(): GameDef[] {
   const all = VISIBLE_CATEGORIES.flatMap(c => c.games);
@@ -95,10 +101,10 @@ export default function Index() {
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
   const catalogueRef = useRef<HTMLDivElement>(null);
-  const returnFocusPath = useRef(gameReturn?.path);
+  const pendingGameReturn = useRef(gameReturn);
   const updateSearch = (query: string) => {
     gameReturns.delete(homeEntry);
-    returnFocusPath.current = undefined;
+    pendingGameReturn.current = undefined;
     setSearchQuery(query);
   };
   const clearSearch = () => { updateSearch(''); searchInputRef.current?.focus({ preventScroll: true }); };
@@ -167,22 +173,34 @@ export default function Index() {
     const fromSearch = event.currentTarget === searchResultsRef.current;
     if ((fromSearch && !querySettled) || event.defaultPrevented || event.button !== 0
       || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || !(event.target instanceof Element)) return;
-    const path = event.target.closest(fromSearch ? '[data-home-game-card] a[href]' : '[data-catalog-card] a[href]')?.getAttribute('href');
+    const link = event.target.closest(fromSearch ? SEARCH_GAME_LINK : BROWSE_GAME_LINK);
+    if (!link) return;
+    const path = link.getAttribute('href');
     if (!path) return;
+    const shelf = link.closest<HTMLElement>('[data-home-shelf-rail]');
+    const selector = fromSearch ? SEARCH_GAME_LINK : link.matches(CONTINUE_GAME_LINK) ? CONTINUE_GAME_LINK
+      : link.matches(PICK_GAME_LINK) ? PICK_GAME_LINK : CATALOGUE_GAME_LINK;
     gameReturns.delete(homeEntry);
-    gameReturns.set(homeEntry, { query: fromSearch ? searchQuery : '', path });
+    gameReturns.set(homeEntry, { query: fromSearch ? searchQuery : '', path, selector, shelfScroll: shelf?.scrollLeft });
     // Keep the tab's recent history without putting search text into storage or the URL.
     if (gameReturns.size > 20) gameReturns.delete(gameReturns.keys().next().value);
   };
   useLayoutEffect(() => {
-    const path = returnFocusPath.current;
-    if (!path || (isSearching && !querySettled && !searchFailed)) return;
-    returnFocusPath.current = undefined;
+    const opener = pendingGameReturn.current;
+    if (!opener || (isSearching && !querySettled && !searchFailed)) return;
+    pendingGameReturn.current = undefined;
     if (document.activeElement !== document.body) return;
     const scope = isSearching ? searchResultsRef.current : catalogueRef.current;
-    const selector = isSearching ? 'a[href]' : '[data-catalog-card] a[href]';
-    const result = Array.from(scope?.querySelectorAll<HTMLAnchorElement>(selector) ?? [])
-      .find(link => link.getAttribute('href') === path);
+    const result = Array.from(scope?.querySelectorAll<HTMLAnchorElement>(opener.selector) ?? [])
+      .find(link => link.getAttribute('href') === opener.path);
+    const shelf = result?.closest<HTMLElement>('[data-home-shelf-rail]');
+    if (shelf && result && opener.shelfScroll !== undefined) {
+      shelf.scrollLeft = opener.shelfScroll;
+      const card = result.getBoundingClientRect();
+      const rail = shelf.getBoundingClientRect();
+      if (card.left < rail.left) shelf.scrollLeft += card.left - rail.left;
+      else if (card.right > rail.right) shelf.scrollLeft += card.right - rail.right;
+    }
     (result ?? (isSearching ? searchInputRef.current : null))?.focus({ preventScroll: true });
   }, [isSearching, querySettled, searchFailed]);
 

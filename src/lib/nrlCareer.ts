@@ -144,15 +144,22 @@ export interface NrlCareerHistoryRow {
   judiciaryCarry?: NrlJudiciaryCarry;
   attendanceForm?: string;
 }
+export type NrlAcademyPriority = 'ready' | 'ceiling';
+export const NRL_ACADEMY_PRIORITIES = {
+  ready: { label: 'Ready sooner', rating: 2, potential: -2 },
+  ceiling: { label: 'Higher ceiling', rating: -2, potential: 2 },
+} as const;
 interface NrlAcademyAssignment {
   player: NrlCareerPlayer;
   startedRound: number;
+  priority?: NrlAcademyPriority;
 }
 export interface NrlAcademyReport {
   role: NrlRole;
   startedRound: number;
   status: 'scouting' | 'ready' | 'signed';
   player: NrlCareerPlayer | null;
+  priority?: NrlAcademyPriority;
 }
 interface NrlPositionCourse { playerId: string; role: NrlRole; startedRound: number }
 interface NrlContractApproach {
@@ -233,7 +240,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'cancelPositionTraining'; year: number; clubId: string; playerId: string; role: NrlRole; startedRound: number }
   | { type: 'startReserveGrade' | 'recallReserveGrade'; year: number; clubId: string; round: number; playerId: string }
   | { type: 'setShortlist'; playerId: string; saved: boolean; year: number }
-  | { type: 'scoutAcademy'; role: NrlRole }
+  | { type: 'scoutAcademy'; role: NrlRole; priority?: NrlAcademyPriority }
   | { type: 'promoteAcademy'; playerId: string }
   | { type: 'setDevelopmentFocus'; focus: NrlDevelopmentFocus }
   | { type: 'upgradeMedical'; level: MedicalUpgradeLevel }
@@ -716,10 +723,10 @@ function academyFacilitiesActive(state: NrlCareerState, round = state.season.rou
 
 export function nrlAcademyReports(state: NrlCareerState): NrlAcademyReport[] {
   return (state.academy ?? []).map(assignment => {
-    const { player, startedRound } = assignment;
+    const { player, startedRound, priority } = assignment;
     const ready = reportReady(state.season, assignment);
     const status = !ready ? 'scouting' : state.players.some(member => member.id === player.id) ? 'signed' : 'ready';
-    return { role: player.role, startedRound, status, player: ready ? player : null };
+    return { role: player.role, startedRound, status, player: ready ? player : null, ...(priority && { priority }) };
   });
 }
 
@@ -731,17 +738,27 @@ export function nrlAcademyAvailableRoles(state: NrlCareerState): NrlRole[] {
   return NRL_ROLES.filter(role => !scouted.has(role));
 }
 
-function scoutAcademy(state: NrlCareerState, role: NrlRole): NrlCareerState {
-  if (!nrlAcademyAvailableRoles(state).includes(role)) return state;
-  const { season } = state;
-  const reports = state.academy ?? [];
-  const names = new Set([...state.players.map(player => player.name), ...reports.map(report => report.player.name)]);
+function academyProspect(season: NrlManagerState, role: NrlRole, names: Set<string>, upgraded: boolean,
+  priority?: NrlAcademyPriority): NrlCareerPlayer {
   const id = academyId(season, role);
   const rng = rngFor(season.seed, id);
   const player = makePlayer(id, role, 49 + Math.floor(rng() * 18), rng, names, true);
-  const bonus = academyFacilitiesActive(state) ? ACADEMY_UPGRADE_POTENTIAL : 0;
+  const bonus = upgraded ? ACADEMY_UPGRADE_POTENTIAL : 0;
   const potential = clampi(player.rating + 8 + rng() * 14 + bonus, player.rating, 90);
-  return { ...state, academy: [...reports, { startedRound: season.round, player: { ...player, potential } }] };
+  if (!priority) return { ...player, potential };
+  const offset = NRL_ACADEMY_PRIORITIES[priority];
+  const rating = player.rating + offset.rating;
+  return { ...player, rating, potential: clampi(potential + offset.potential, rating, 90) };
+}
+
+function scoutAcademy(state: NrlCareerState, role: NrlRole, priority?: NrlAcademyPriority): NrlCareerState {
+  if (!nrlAcademyAvailableRoles(state).includes(role)
+    || (priority !== undefined && (state.legacySeason || (priority !== 'ready' && priority !== 'ceiling')))) return state;
+  const { season } = state;
+  const reports = state.academy ?? [];
+  const names = new Set([...state.players.map(player => player.name), ...reports.map(report => report.player.name)]);
+  const player = academyProspect(season, role, names, academyFacilitiesActive(state), priority);
+  return { ...state, academy: [...reports, { startedRound: season.round, player, ...(priority && { priority }) }] };
 }
 
 export function nrlAcademyOffer(state: NrlCareerState, playerId: string): NrlContractQuote {
@@ -2215,7 +2232,7 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       return { ...state, selectionPromise: { playerId: action.playerId, startedRound: round } };
     }
     case 'scoutAcademy':
-      return scoutAcademy(state, action.role);
+      return scoutAcademy(state, action.role, action.priority);
     case 'promoteAcademy': {
       const quote = nrlAcademyOffer(state, action.playerId);
       if (!quote.ok) return state;
@@ -2754,16 +2771,25 @@ function validAcademy(state: NrlCareerState): boolean {
   if (season.year === NRL_LAST_YEAR || !Array.isArray(academy) || academy.length > NRL_ROLES.length) return false;
   const activePlayers = new Map(players.map(player => [player.id, player]));
   const activeNames = new Set(players.map(player => player.name));
+  const scoutNames = new Set(players.filter(player => !player.id.startsWith(prefix)).map(player => player.name));
   const knownIds = new Set<string>();
   const names = new Set<string>();
   let lastAssignment = 0;
   for (const report of academy) {
     if (!record(report) || !intIn(report.startedRound, lastAssignment + 1, season.round) || !validPlayer(report.player, season.year)) return false;
-    const { player } = report;
+    const { player, priority } = report;
     if (player.id !== academyId(season, player.role) || knownIds.has(player.id) || names.has(player.name)
-      || player.contract || player.futureContract || player.secondaryRole || player.fitness !== 100 || !intIn(player.age, 18, 21)
-      || !intIn(player.rating, 49, 66) || !intIn(player.potential,
-        player.rating + 8 + (academyFacilitiesActive(state, report.startedRound) ? ACADEMY_UPGRADE_POTENTIAL : 0), 90)) return false;
+      || player.contract || player.futureContract || player.secondaryRole || player.fitness !== 100 || !intIn(player.age, 18, 21)) return false;
+    const upgraded = academyFacilitiesActive(state, report.startedRound);
+    if (priority === undefined) {
+      if (!intIn(player.rating, 49, 66) || !intIn(player.potential, player.rating + 8 + (upgraded ? ACADEMY_UPGRADE_POTENTIAL : 0), 90)) return false;
+    } else {
+      if (state.legacySeason || (priority !== 'ready' && priority !== 'ceiling')) return false;
+      const expected = academyProspect(season, player.role, scoutNames, upgraded, priority);
+      if (expected.name !== player.name || expected.age !== player.age || expected.rating !== player.rating
+        || expected.potential !== player.potential) return false;
+    }
+    scoutNames.add(player.name);
     lastAssignment = report.startedRound;
     knownIds.add(player.id);
     names.add(player.name);

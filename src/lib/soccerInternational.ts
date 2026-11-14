@@ -1106,7 +1106,7 @@ export function managerFormatYear(year: number): number {
  * whoever is holding the clipboard. simNationJob pins the size of it.
  */
 export function runManagerSummer(
-  nation: string, year: number, lift: number, mentality: NationalMentality = 'balanced',
+  nation: string, year: number, lift: number, mentality: NationalMentality = 'balanced', xiAdjustment = 0,
 ): (IntlTournament & { managerFixtures: ManagerSummerMatch[] }) | null {
   const fmt = tournamentForYear(nation, managerFormatYear(year));
   if (!fmt) return null;
@@ -1115,7 +1115,7 @@ export function runManagerSummer(
      one. Everything downstream (qualifying, the draw, the bracket) then
      treats it consistently, which is why it is done here and not injected
      match by match. */
-  const restore = overrideNationStrength(nation, nationStrength(nation) + bump);
+  const restore = overrideNationStrength(nation, nationStrength(nation) + bump + clamp(xiAdjustment, -8, 8));
   try {
     const tempo = NATIONAL_TEMPO[mentality] ?? 0;
     const qualifying = runQualifying(nation, fmt, null, tempo);

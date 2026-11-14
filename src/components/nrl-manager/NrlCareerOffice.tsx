@@ -25,8 +25,8 @@ import {
   type NrlCareerAction, type NrlCareerState,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverOffers, nrlTakeoverPlayers, nrlTicketPricingRefusal,
   nrlSupporterAttendance,
-  NRL_DEVELOPMENT_ASSISTANT, NRL_RECRUITMENT_PLAN_LIMIT, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
-  type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlRecruitmentPick, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
+  NRL_ACADEMY_PRIORITIES, NRL_DEVELOPMENT_ASSISTANT, NRL_RECRUITMENT_PLAN_LIMIT, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
+  type NrlAcademyPriority, type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlRecruitmentPick, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryPenalty } from '@/lib/nrlJudiciary';
 import { nrlArchivedFinals, nrlUnavailable, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_QUALIFIED_COACHING_BONUS, NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
@@ -822,6 +822,8 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
 
 function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const [position, setPosition] = useState<NrlRole>('Fullback');
+  const [priorityChoice, setPriorityChoice] = useState<NrlAcademyPriority | ''>('');
+  const priority = career.legacySeason ? '' : priorityChoice;
   const reports = nrlAcademyReports(career);
   const available = nrlAcademyAvailableRoles(career);
   const scouting = reports.find(report => report.status === 'scouting');
@@ -834,17 +836,35 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
       <p className="mt-1 text-sm text-muted-foreground">Scout a position and choose who earns a place in next season’s Top 30.</p>
       {scouting ? (
         <p className="mt-3 rounded-lg border border-border bg-background px-3 py-2 text-sm" role="status" data-nrl-scouting>
-          Scouting {scouting.role}. Advance a round for the report. Byes count.
+          Scouting {scouting.role}{scouting.priority && ` with ${NRL_ACADEMY_PRIORITIES[scouting.priority].label.toLowerCase()} priority`}. Advance a round for the report. Byes count.
         </p>
       ) : role ? (
-        <div className="mt-3 flex flex-wrap items-end gap-2">
-          <label className="min-w-0 flex-1 space-y-1 text-sm font-semibold sm:max-w-xs">
-            <span>Position to scout</span>
-            <select className={control} value={role} disabled={disabled} onChange={event => setPosition(event.target.value as NrlRole)}>
-              {available.map(option => <option key={option}>{option}</option>)}
-            </select>
-          </label>
-          <Button type="button" size="lg" disabled={disabled} onClick={() => onAction({ type: 'scoutAcademy', role })}>Assign scout</Button>
+        <div className="mt-3 space-y-2">
+          <div className="grid gap-2 sm:grid-cols-2">
+            <label className="min-w-0 space-y-1 text-sm font-semibold">
+              <span>Position to scout</span>
+              <select className={control} value={role} disabled={disabled} onChange={event => setPosition(event.target.value as NrlRole)}>
+                {available.map(option => <option key={option}>{option}</option>)}
+              </select>
+            </label>
+            {!career.legacySeason && <label className="min-w-0 space-y-1 text-sm font-semibold">
+              <span>Scouting priority</span>
+              <select className={control} value={priority} aria-describedby="nrl-academy-priority-help" disabled={disabled}
+                onChange={event => setPriorityChoice(event.target.value as NrlAcademyPriority | '')}>
+                <option value="">Balanced</option>
+                <option value="ready">{NRL_ACADEMY_PRIORITIES.ready.label}</option>
+                <option value="ceiling">{NRL_ACADEMY_PRIORITIES.ceiling.label}</option>
+              </select>
+            </label>}
+          </div>
+          {!career.legacySeason && <p id="nrl-academy-priority-help" className="text-xs text-muted-foreground">
+            {priority === 'ready' ? 'Gain 2 starting OVR and give up 2 potential compared with a balanced report.'
+              : priority === 'ceiling' ? 'Give up 2 starting OVR for up to 2 extra potential compared with a balanced report.'
+              : 'Use the standard scouting profile.'}
+          </p>}
+          <Button type="button" size="lg" disabled={disabled} onClick={() => onAction({
+            type: 'scoutAcademy', role, ...(priority && { priority }),
+          })}>Assign scout</Button>
         </div>
       ) : <p className="mt-3 text-sm text-muted-foreground">Scouting is closed for this season.</p>}
       {reports.some(report => report.player) && (
@@ -857,6 +877,7 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
               <li key={player.id} className="py-3" data-nrl-academy-report={player.id}>
                 <h3 className="break-words font-semibold">{player.name}</h3>
                 <p className="text-sm text-muted-foreground">{player.role} · age {player.age} · {player.rating} OVR · {player.potential} potential</p>
+                {report.priority && <p className="mt-1 text-xs text-muted-foreground">Scouting priority {NRL_ACADEMY_PRIORITIES[report.priority].label}</p>}
                 {offer === null ? <p className="mt-1 text-sm font-semibold">Signed for {year + 1}</p>
                   : offer.ok === false ? <p className="mt-1 text-sm text-muted-foreground">{offer.reason}</p>
                   : (

@@ -54,7 +54,7 @@ export function ContinueRow() {
         <History aria-hidden="true" />
         Continue playing
       </h2>
-      <div className={styles.continueRail}>
+      <div data-home-shelf-rail="" className={styles.continueRail}>
         <ul className={styles.continueList}>
           {saved.map(({ entry, game, slot }) => {
             const sport = sportOf(game.path);
