@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import MlbFrontOfficeBoard from '@/components/mlb-front-office/MlbFrontOfficeBoard';
 import { keyedRng } from '@/lib/keyedRng';
 import {
-  initMlbLeague, mlbRotationChoices, MLB_ROUNDS, setMlbRotationPlan, simMlbRound,
+  initMlbLeague, mlbRotationChoices, mlbStrength, mlbStrengthUnits, MLB_ROUNDS, setMlbRotationPlan, simMlbRound,
   type MlbGmPlayer, type MlbLeague,
 } from '@/lib/mlbFrontOffice';
 
@@ -86,6 +86,30 @@ describe('MLB rotation workload', () => {
     const b = simMlbRound(signed, team, keyedRng('unsupported rotation'));
     expect(b).toEqual({ ...a, rotation: { unavailable: true } });
     expect(signed).toEqual(usual);
+  });
+
+  it('allows the sixth starter to cover an IL slot without giving him the injury discount', () => {
+    const start = smallLeague([92, 92, 92, 68, 65, 62]);
+    let sawCover = false;
+    for (let i = 0; i < 800; i++) {
+      const played = plan(structuredClone(start));
+      const usual = structuredClone(start);
+      const seed = keyedRng('rotation depth control:' + i)();
+      const draw = () => seed;
+      const p = simMlbRound(played, team, draw);
+      simMlbRound(usual, team, draw);
+      const sixth = played.teams[team].players[13];
+      expect(sixth.out).toBe(usual.teams[team].players[13].out);
+      if (p.rotation && 'available' in p.rotation && p.rotation.available === 4 && sixth.out === 0) {
+        const starters = mlbStrengthUnits(played.teams[team], 5).rot;
+        expect(starters).toHaveLength(5);
+        expect(starters.at(-1)?.id).toBe(sixth.id);
+        const win = draw() < 1 / (1 + Math.pow(10, -(mlbStrength(played.teams[team], 5) - mlbStrength(played.teams.BOS)) / 25));
+        expect(p.myWins).toBe(win ? 6 : 0);
+        sawCover = true;
+      }
+    }
+    expect(sawCover).toBe(true);
   });
 
   it.each([1, MLB_ROUNDS])('persists and consumes the choice, then restores the actual Round %d receipt', round => {

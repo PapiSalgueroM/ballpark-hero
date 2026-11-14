@@ -1277,7 +1277,7 @@ export default function MlbFrontOfficeBoard() {
                 <option value="protect" disabled={!rotation}>Protect the rotation</option>
               </select>
             </label>
-            <p className="mt-1 text-xs text-muted-foreground">Use five healthy starters in this round&apos;s pitching rating instead of three. Those five have a {MLB_ROTATION_RISK_REDUCTION}% lower chance of a new simulated injury this round.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Use five healthy starters in this round&apos;s pitching rating instead of three. Those five have a {MLB_ROTATION_RISK_REDUCTION}% lower chance of a new simulated injury this round. A healthy backup can cover an injury.</p>
             {rotation ? <p className="mt-1 text-xs text-muted-foreground">Current team strength {rotation.usual.toFixed(1)} usual · {rotation.protected.toFixed(1)} protected.</p>
               : <p className="mt-1 text-xs text-muted-foreground">Five healthy starters are needed. The usual rotation will play if the plan is unavailable.</p>}
             {rotationSaveError && <p role="alert" className="mt-1 text-xs text-destructive">Could not save the pitching plan. Choose it again to retry.</p>}
