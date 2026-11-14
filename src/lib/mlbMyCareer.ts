@@ -1261,7 +1261,7 @@ export const MLB_SPEND_ITEMS: MlbSpendItem[] = [
   // Body
   { id: 'chef_mlb', name: 'Private Chef', emoji: '👨‍🍳', category: 'body', cost: 0, yearly: 0.15, desc: 'Every meal built for a baseball season, 150k a year', oneTime: true, effect: 'Health +4 a year' },
   { id: 'recovery_mlb', name: 'Recovery Suite', emoji: '🧊', category: 'body', cost: 2, yearly: 0.12, desc: 'Cryo, compression, the whole circus, 2M. Injuries can still happen.', oneTime: true, minNetWorth: 3, effect: '25% lower simulated injury risk' },
-  { id: 'shot_doctor', name: 'Private Hitting Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three batting titles, 200k a year', oneTime: true, effect: 'Rating +1 each offseason through age 26, up to your ceiling' },
+  { id: 'shot_doctor', name: 'Private Hitting Coach', emoji: '🎯', category: 'body', cost: 0, yearly: 0.2, desc: 'The guy who rebuilt three batting titles, 200k a year', oneTime: true, effect: 'Up to +1 rating during each season through age 26' },
   { id: 'sleep_mlb', name: 'Sleep Program', emoji: '😴', category: 'body', cost: 0.7, desc: 'Turns out most of it is sleep, 700k', oneTime: true, effect: 'Health +8' },
   { id: 'psych_mlb', name: 'Sports Psychologist', emoji: '🧠', category: 'body', cost: 0, yearly: 0.12, desc: 'The part nobody used to talk about, 120k a year', oneTime: true, effect: 'Morale +8 on hire' },
   { id: 'biomech_mlb', name: 'Biomechanics Team', emoji: '🔬', category: 'body', cost: 1.2, desc: 'They rebuilt your landing mechanics, 1.2M', oneTime: true, effect: 'Rating +2, up to your ceiling' },
@@ -1289,7 +1289,7 @@ export const MLB_SPEND_ITEMS: MlbSpendItem[] = [
   { id: 'mshady_offshore', name: 'Offshore Account', emoji: '🏝️', category: 'shady', cost: 0.5, desc: 'An island, a bank, a form nobody files, 500k', oneTime: true, requiresDirty: true, effect: 'Heat +6' },
   // Round 58 second wave
   { id: 'barber_chair', name: 'A Barber On Retainer', emoji: '💇', category: 'body', cost: 0, yearly: 0.06, desc: 'Flies to every road city. The line has to be right, 60k a year', oneTime: true, effect: 'Morale +4 a year' },
-  { id: 'film_room', name: 'Personal Film Analyst', emoji: '🎞️', category: 'body', cost: 0, yearly: 0.14, desc: 'Cuts your plate appearances and pitching outings by 6am, 140k a year', oneTime: true, effect: 'Rating +1 a year' },
+  { id: 'film_room', name: 'Personal Film Analyst', emoji: '🎞️', category: 'body', cost: 0, yearly: 0.14, desc: 'Cuts your plate appearances and pitching outings by 6am, 140k a year', oneTime: true, effect: 'Up to +1 rating during each season' },
   { id: 'sneaker_vault', name: 'The Cleat And Glove Vault', emoji: '👟', category: 'flex', cost: 0.9, desc: 'Climate controlled, 400 gloves, 900k', oneTime: true, minFanbase: 50 },
   { id: 'courtside_seats', name: 'Season Seats Behind The Dugout For Your Block', emoji: '🎟️', category: 'family', cost: 0, yearly: 0.25, desc: 'Twelve seats behind the dugout, every home game, 250k a year', oneTime: true, effect: 'Fanbase +6 a year' },
   { id: 'barbershop_legit', name: 'A Real Barbershop', emoji: '✂️', category: 'invest', cost: 0.4, desc: 'An actual business with actual customers, 400k', oneTime: true },

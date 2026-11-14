@@ -79,8 +79,9 @@ describe('966 MLB real draft-capital consequences', () => {
     expect(lg).toEqual(state); expect(draw.count()).toBe(count);
   });
 
-  it('ordinary two choices keep the original two five-rival batches full offseason salaries and RNG', () => {
+  it('ordinary two choices keep two five-rival batches with the current offseason salaries and RNG', () => {
     const lg = league(), cls = draft(lg), reference = clone(lg), old = [...clone(cls)], draw = rng(966);
+    reference.inSeasonRatings = true;
     for (let choice = 0; choice < 2; choice++) {
       reference.teams.ARI.players.push(engine.mlbProspectToPlayer(old.shift()!, draw.draw));
       const order = engine.mlbStandings(reference).map(t => t.abbr).reverse().filter(t => t !== 'ARI');
@@ -123,6 +124,7 @@ describe('966 MLB real draft-capital consequences', () => {
     const lg = traded().zero; seed(lg, 'ARI', { phase: 'recap', draftClass: null, picksLeft: 0, draftBatchesLeft: undefined }); render(<MlbFrontOfficeBoard />);
     const cls = saved().draftClass as MlbProspect[], names = new Set(lg.teams.ARI.players.map(p => p.name)); expect(saved().league.season).toBe(2026);
     const reference = clone(saved().league) as MlbLeague, old = clone(cls), draw = rng(966);
+    reference.inSeasonRatings = true;
     for (let i = 0; i < random.mock.calls.length; i++) draw.draw();
     for (let batch = 0; batch < 2; batch++) { const order = engine.mlbStandings(reference).map(t => t.abbr).reverse().filter(t => t !== 'ARI');
       old.splice(0, 5).forEach((p, i) => reference.teams[order[i]].players.push(engine.mlbProspectToPlayer(p, draw.draw)));
@@ -147,6 +149,7 @@ describe('966 MLB real draft-capital consequences', () => {
   it('legacy two-left with one actual right closes and drains the ordinary CPU quota after that choice', () => {
     const lg = traded().one, cls = draft(lg), raw = seed(lg, 'ARI', { draftClass: cls, picksLeft: 2, draftBatchesLeft: undefined }); render(<MlbFrontOfficeBoard />);
     const reference = clone(lg), old = clone(cls), draw = rng(966); reference.teams.ARI.players.push(engine.mlbProspectToPlayer(old.shift()!, draw.draw));
+    reference.inSeasonRatings = true;
     for (let batch = 0; batch < 2; batch++) { const order = engine.mlbStandings(reference).map(t => t.abbr).reverse().filter(t => t !== 'ARI');
       old.splice(0, 5).forEach((p, i) => reference.teams[order[i]].players.push(engine.mlbProspectToPlayer(p, draw.draw)));
     }
@@ -173,7 +176,7 @@ describe('966 MLB real draft-capital consequences', () => {
     const lg = league(), playoff = engine.runMlbPlayoffs(lg, rng(63).draw); lg.champions.push({ season: lg.season, team: playoff.champion }); engine.mlbOffseason(lg, rng(64).draw, 'ARI');
     const raw = seed(lg, 'ARI', { picksLeft: 0, draftBatchesLeft: undefined }); render(<MlbFrontOfficeBoard />); expect(localStorage.getItem(KEY)).toBe(raw);
     expect(screen.queryByRole('button', { name: 'Finish draft and run offseason' })).toBeNull(); fireEvent.click(screen.getByRole('button', { name: 'Continue to the hub' }));
-    expect(saved().phase).toBe('hub'); expect(saved().league).toEqual(lg); expect(random).not.toHaveBeenCalled();
+    expect(saved().phase).toBe('hub'); expect(saved().league).toEqual({ ...lg, inSeasonRatings: true }); expect(random).not.toHaveBeenCalled();
   });
 
   it('an exhausted legacy prospect board can be replaced without losing earlier players or rights', () => {

@@ -277,7 +277,7 @@ export default function NbaFrontOfficeBoard() {
       /* Round 1566: the season's lines in the shared save shape; a save of named rows is turned into it here, before
          anything reads the league, so its next save writes the new shape. */
       nbaCleanStats(s.league);
-      setLeague(s.league); setMyTeam(s.myTeam);
+      setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
       setDraftAiBatchesLeft(s.draftAiBatchesLeft ?? null);
@@ -371,6 +371,7 @@ export default function NbaFrontOfficeBoard() {
     const { NBA_OPENING_RATINGS } = await import('@/data/nbaOpeningRatings');
     if (!alive.current) return;
     const lg = initNbaLeague(Math.random, NBA_OPENING_RATINGS);
+    lg.inSeasonRatings = true;
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
     setFeed([

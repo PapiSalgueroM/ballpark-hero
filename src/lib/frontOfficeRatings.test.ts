@@ -16,6 +16,7 @@ import { FO_DEPTH, FO_OPENING_RATING_BASE, FO_OPENING_RATING_VERSION, FO_OPENING
 import { FO_TEAMS } from '@/data/frontOfficePlayers';
 import { buildFullRatings, openingRatingEvidence, OFFENSE_LAYER } from '../../scripts/lib/nflFoRatingModel.mjs';
 import { bakeFromRecord, readTeamMeta, readOffenseLayer } from '../../scripts/genFrontOfficeRoster.mjs';
+import { alignArchivedNflWinter } from '../../scripts/lib/nflOffseasonReference.mjs';
 
 const root = process.cwd();
 const norm = (text: string) => text.replace(/\r\n/g, '\n');
@@ -109,8 +110,10 @@ beforeAll(() => {
     const source = file.includes('/lib/') ? norm(shown.stdout.toString()).replace(/(from\s+['"])\.\/([^'"]+)(['"])/g, '$1@/lib/$2$3') : shown.stdout.toString();
     writeFileSync(target, source); heldBaseline.push([target, readFileSync(target)]);
   }
+  const archivedEngine = readFileSync(path.join(folder, 'frontOffice.ts'), 'utf8');
+  writeFileSync(path.join(folder, 'baselineEngine.ts'), alignArchivedNflWinter(archivedEngine));
   const output = path.join(folder, 'baseline.cjs');
-  const result = build({ stdin: { contents: "export * as engine from './frontOffice.ts'; export {FO_DEPTH} from './frontOfficeDepth.ts';", resolveDir: folder }, outfile: output, bundle: true, platform: 'node', format: 'cjs', metafile: true, logLevel: 'silent', alias: { '@/data/frontOfficePlayers': path.join(folder, 'frontOfficePlayers.ts'), '@': path.join(root, 'src') } });
+  const result = build({ stdin: { contents: "export * as engine from './baselineEngine.ts'; export {FO_DEPTH} from './frontOfficeDepth.ts';", resolveDir: folder }, outfile: output, bundle: true, platform: 'node', format: 'cjs', metafile: true, logLevel: 'silent', alias: { '@/data/frontOfficePlayers': path.join(folder, 'frontOfficePlayers.ts'), '@': path.join(root, 'src') } });
   expect(Object.keys(result.metafile!.inputs).some(file => /supabase|fetchPlayers|useAuth/.test(file))).toBe(false);
   baseline = createRequire(import.meta.url)(output);
   const swapped = JSON.parse(process.env.NO_DOUBLE_SWAP || '{}')['@/lib/frontOffice'];
@@ -142,7 +145,8 @@ const outcome = (fixture: any) => buildFullRatings(fixture)[0];
 describe('NFL opening rating checkpoint', () => {
   it('preserves the physical56356be9 no-depth league and draw sequence as an independent baseline', () => {
     /* Round 1130: today's engine against the old engine on the SAME physical 56356be9 starters file (todayOnOld).
-       The committed starters file carries the opening estimate now, so it is no longer the old league's data. */
+       Both winters age contract departures once and keep the final ratings. Weekly reviews are covered in the
+       full-season test below. The starters file now carries the opening estimate, changing the old league data. */
     const now = todayOnOld.engine;
     const a = seeded(889), b = seeded(889), old = baseline.engine.initLeague(a.draw), next = now.initLeague(b.draw);
     expect(canonical(next)).toEqual(canonical(old)); expect(b.count()).toBe(a.count());
@@ -362,6 +366,7 @@ describe('NFL opening rating checkpoint', () => {
       for (let week = 1; week <= 17; week++) {
         engine.injuryPass(lg.teams, rng.draw); engine.aiWeeklyMoves(lg, 'CLE', rng.draw);
         for (const g of lg.schedule[week - 1]) { const r = engine.simGame(g, lg.teams, rng.draw); expect([g.home, g.away]).toContain(r.winner); games++; }
+        engine.reviewNflWeekRatings(lg, 'CLE');
         checkState();
         if (week < 17) { lg.week++; if (week === 9) resume('hub'); }
       }

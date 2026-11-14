@@ -61,8 +61,11 @@
  *   nocapguard   the trade finder's accept skips the dead money cap check    (3)
  *   reliefnodead the package cap check forgets the dead money a leaver keeps (6)
  *   staletiles   an old save's Staff box claims an edge no game applies      (7)
+ *   doubleage    a contract departure ages again on the market              (1)
+ *   noreview     skips the regular-season rating review                     (1)
  * Recording the fixture: SIM_NFL_GM_DESK_RECORD=<git ref of the engine before
  * this round> rewrites scripts/data/nflGmDeskFixture.json from that engine.
+ * Use working-tree to record a deliberate engine change before committing.
  *
  * MEASURED 2026-10-06 (remeasured after the review fixes: buyers became the
  * seed holders, which moved the prices and so the deals) on three seed sets
@@ -118,7 +121,7 @@ const CONTROLS = {
   coinflip: '2', shortrookie: '2', latetrade: '3', noguard: '3', droppick: '4',
   flatstaff: '5', flatstep: '5', onepost: '5', nodefault: '1', nodead: '6',
   boardsummer: '2', boarddraftee: '2', boardedges: '5', stancespots: '3', stanceswap: '3', nocapguard: '3', reliefnodead: '6',
-  staletiles: '7',
+  staletiles: '7', doubleage: '1', noreview: '1',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SIM_NFL_GM_DESK_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -165,6 +168,8 @@ const FILES = {
   board: path.join(ROOT, 'src', 'components', 'front-office', 'FrontOfficeBoard.tsx'),
 };
 const EDITS = {
+  doubleage: ['engine', '    if (!openingMarket.has(fa)) continue;', ''],
+  noreview: ['engine', '  if (week < 1 || week > REGULAR_WEEKS || (ratingReview && ratingReview.week >= week)) return;', '  return;'],
   coinflip: ['desk', '  const run = runDeskOffseason(nflContractHost, league, ledger, rng);',
     '  const run = { ok: true as const, engine: nflContractHost.runOffseason(league, rng, team), applied: [] as GmDecision[], picksAdded: [] as number[] };'],
   shortrookie: ['desk', '  p.years = NFL_ROOKIE_DEAL_YEARS + 1;', '  p.years = NFL_ROOKIE_DEAL_YEARS;'],
@@ -206,7 +211,7 @@ if (CONTROL) {
   overrides.set(path.resolve(FILES[which]).toLowerCase(), out);
   console.log(`NEGATIVE CONTROL ON: ${CONTROL}; check ${CONTROLS[CONTROL]} must go red`);
 }
-if (RECORD) {
+if (RECORD && RECORD !== 'working-tree') {
   const old = execFileSync('git', ['show', `${RECORD}:src/lib/frontOffice.ts`], { cwd: ROOT, encoding: 'utf8', maxBuffer: 1 << 26 });
   overrides.set(path.resolve(FILES.engine).toLowerCase(), old);
   console.log(`RECORDING the fixture from the engine at ${RECORD}`);
@@ -347,6 +352,7 @@ function seasonOff(lg, team, rng) {
     E.aiWeeklyMoves(lg, team, rng);
     /* The board keeps the results for the screen and never writes them back to the schedule. */
     lg.schedule[lg.week - 1].map(g => E.simGame(g, lg.teams, rng));
+    E.reviewNflWeekRatings?.(lg, team);
     if (lg.week >= E.REGULAR_WEEKS) break;
     lg.week += 1;
   }
@@ -358,7 +364,7 @@ function seasonOff(lg, team, rng) {
 }
 
 /* ================================================================== */
-begin('1', 'a save from before the desk plays exactly as the engine did before this round');
+begin('1', 'a save without the desk plays a repeatable season with the current rating and aging rules');
 /* First, before anything else mints an id, so the recorder and the replay
    walk the same id stream. */
 const ID_SEEDS = [11, 22, 33];
@@ -372,7 +378,8 @@ for (const seed of ID_SEEDS) {
 }
 if (RECORD) {
   fs.mkdirSync(path.dirname(FIXTURE), { recursive: true });
-  fs.writeFileSync(FIXTURE, `${J({ recordedFrom: RECORD, team: TEAM, seasons: ID_SEASONS, hashes: played }, null, 2)}\n`);
+  const recordedFrom = RECORD === 'working-tree' ? 'weekly rating reviews and single offseason aging' : RECORD;
+  fs.writeFileSync(FIXTURE, `${J({ recordedFrom, team: TEAM, seasons: ID_SEASONS, hashes: played })}\n`);
   console.log(`wrote ${path.relative(ROOT, FIXTURE)} from ${RECORD}: ${ID_SEEDS.length} seeds x ${ID_SEASONS} seasons`);
   process.exit(0);
 }
@@ -492,6 +499,7 @@ function seasonDesk(lg, team, desk, rng, s, where) {
     E.injuryPass(lg.teams, rng, opts.weeksFor);
     E.aiWeeklyMoves(lg, team, rng);
     lg.schedule[lg.week - 1].map(g => E.simGame(g, lg.teams, rng, opts.edges));
+    E.reviewNflWeekRatings(lg, team);
     desk = D.nflDeskAfterWeek(desk, lg, team).desk;
     if (lg.week === D.nflTradeWindow(lg).deadlineAfter) {
       const stances = D.nflStances(lg);

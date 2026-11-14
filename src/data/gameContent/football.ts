@@ -194,9 +194,9 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "Running the offseason between titles",
+        heading: "Reading player ratings and running the offseason",
         items: [
-          "Run the offseason, where young players grow and veterans fade, then chase the next title. Seasons are unlimited, as long as ownership keeps you.",
+          "After regular-season weeks, ratings can rise or fall one point at a time. Check Rating changes in Roster. Young players can improve toward their potential, and veterans can decline. Players carry their ratings into next season. The offseason handles birthdays, retirements, expiring deals and the cap.",
         ],
       },
     ],

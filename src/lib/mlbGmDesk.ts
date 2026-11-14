@@ -214,6 +214,7 @@ export function mlbDeskRoundOptions(desk: GmDesk, league: MlbLeague, team: strin
   return {
     edges: { [team]: mlbStaffEdge(staff) },
     injuryRounds: (abbr, p, rounds) => abbr === team ? mlbInjuryRounds(staff, team, league.season, league.round, p.id, rounds) : rounds,
+    growth: (abbr, p, points) => abbr === team ? mlbFarmGain(staff, team, league.season, p.id, points) : points,
   };
 }
 

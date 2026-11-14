@@ -81,6 +81,16 @@ export function AcademyReportCard({ report }: { report: AcademyReport }) {
           <div className="text-[10px] text-muted-foreground">Overall {signed(gained)}</div>
         </div>
       </div>
+      {report.ratingPath && (
+        <div data-academy-rating-path className="rounded-lg bg-muted/20 p-2">
+          <p className="mb-1 text-xs font-semibold">OVR through the academy year</p>
+          <dl className="grid grid-cols-5 gap-1 text-center text-[10px]">
+            {['Start', 'Early', 'Mid', 'Late', 'Finish'].map((label, index) => (
+              <div key={label}><dt className="text-muted-foreground">{label}</dt><dd className="text-sm font-bold tabular-nums">{report.ratingPath?.[index]}</dd></div>
+            ))}
+          </dl>
+        </div>
+      )}
       <div className="grid grid-cols-3 gap-2">
         {report.lines.map(l => (
           <div

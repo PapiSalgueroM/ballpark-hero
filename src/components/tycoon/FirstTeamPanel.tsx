@@ -83,7 +83,7 @@ export default function FirstTeamPanel({ state: s, ledger, onSell, onEquip, onUp
               <p className="mt-1 text-xs text-muted-foreground">{selected.nation} · {selected.pos} · age {selected.age}</p>
             </div>
             <div className="shrink-0 text-right">
-              <p className="font-display text-2xl font-bold tabular-nums text-primary">{Math.floor(selected.rating)}</p>
+              <p className="font-display text-2xl font-bold tabular-nums text-primary">{selected.rating.toFixed(1)}</p>
               <p className="text-[10px] text-muted-foreground">ceiling {read?.kind === 'exact' ? read.lo : read?.kind === 'range' ? `${read.lo} to ${read.hi}` : '?'}</p>
             </div>
           </div>
@@ -100,7 +100,7 @@ export default function FirstTeamPanel({ state: s, ledger, onSell, onEquip, onUp
           <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
             {birthday.retiring
               ? `At ${RETIRE_AGE} he retires without a fee.`
-              : `At age ${birthday.age}: ${fmtCash(birthday.price)} without more training, using today's fee multiplier.`}
+              : `At age ${birthday.age}: ${fmtCash(birthday.price)} at ${birthday.rating.toFixed(1)} OVR, using today's fee multiplier and assuming no more training.`}
           </p>
           <button type="button" onClick={() => onSell(selected.id)} className="mt-3 min-h-[44px] w-full rounded-xl bg-primary px-3 py-2 text-sm font-bold text-primary-foreground hover:brightness-110">
             Sell {selected.name} for {fmtCash(salePrice(s, selected))}

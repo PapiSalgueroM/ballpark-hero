@@ -7,6 +7,7 @@ import { NHL_UPPER_LIMIT_2026_27 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /* Round 851: a booked, balanced schedule, shared with the NBA and MLB. */
 import { type FoSchedule, buildFoSchedule, foPlayRound } from './foSchedule';
+import { reviewFoRoundRatings, type FoGrowth } from './foRoundRating';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
 import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal, tradeRefusal } from './frontOfficeCuts';
 
@@ -81,6 +82,7 @@ export interface NhlGmTeam extends CutLedger {
 }
 
 export interface NhlLeague {
+  inSeasonRatings?: true;
   ratingModelVersion?: string;
   draftAffordabilityVersion?: string;
   season: number;
@@ -349,6 +351,7 @@ export interface NhlRoundReport {
 
 /** Round 987: what a GM desk may hand a round. Absent, the round plays exactly as it always has. */
 export interface NhlRoundOptions {
+  growth?: FoGrowth<NhlGmPlayer>;
   /** Strength points added to a club, by abbreviation. */
   edges?: Record<string, number>;
   /** The rounds a man is really out, given the rounds the engine drew. Draws nothing from rng. */
@@ -388,6 +391,10 @@ export function simNhlRound(league: NhlLeague, myTeam: string, rng: () => number
       loseGame(me, abbr === myTeam);
     }
   }, () => nhlBookSeason(league, rng));
+  if (league.inSeasonRatings) reviewFoRoundRatings(league, {
+    sport: 'nhl', rounds: NHL_FO_ROUNDS, youngThrough: 23, declineFrom: p => p.pos === 'G' ? 34 : 31,
+    acceleratedFrom: 37, marketDeclineFrom: 32, floor: 63,
+  }, myTeam, notes, opts?.growth);
   return { myWins: myW, myLosses: myL, myOtLosses: myOtl, notes };
 }
 
@@ -620,6 +627,7 @@ export interface NhlOffseasonOptions {
 }
 
 export function nhlOffseason(league: NhlLeague, rng: () => number, userTeam?: string, opts?: NhlOffseasonOptions): string[] {
+  const openingMarket = league.inSeasonRatings ? new Set(league.freeAgents) : null;
   const notes: string[] = [];
   /* Round 1559: read at the top, so the cut block reads it wherever the summer's steps sit (simNhlCpuRosters earlyAge moves it). */
   const noUserClub = opts?.noUserClub === true;
@@ -631,8 +639,13 @@ export function nhlOffseason(league: NhlLeague, rng: () => number, userTeam?: st
       p.age += 1;
       p.out = 0;
       const declineAge = p.pos === 'G' ? 34 : 31;
-      if (p.age <= 23 && p.ovr < p.pot) p.ovr = Math.min(p.pot, p.ovr + 1 + Math.floor(rng() * 3));
-      else if (p.age >= declineAge) p.ovr = Math.max(63, p.ovr - (1 + Math.floor(rng() * 2) + (p.age >= 37 ? 2 : 0)));
+      if (p.age <= 23 && p.ovr < p.pot) {
+        const gain = 1 + Math.floor(rng() * 3);
+        if (!league.inSeasonRatings) p.ovr = Math.min(p.pot, p.ovr + gain);
+      } else if (p.age >= declineAge) {
+        const drop = 1 + Math.floor(rng() * 2) + (p.age >= 37 ? 2 : 0);
+        if (!league.inSeasonRatings) p.ovr = Math.max(63, p.ovr - drop);
+      }
       if (p.age >= 38 && (p.ovr <= 74 || rng() < 0.38)) { notes.push(`👋 ${p.name} retires.`); continue; }
       p.years -= 1;
       if (p.years <= 0) {
@@ -649,7 +662,11 @@ export function nhlOffseason(league: NhlLeague, rng: () => number, userTeam?: st
     repairNhlContributors(t);
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
-  for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 32) fa.ovr = Math.max(63, fa.ovr - 1); if (league.ratingModelVersion === NHL_RATING_MODEL_VERSION) fa.salary = nhlSalaryFor(fa.ovr, league.ratingModelVersion); }
+  for (const fa of league.freeAgents) {
+    if (!openingMarket || openingMarket.has(fa)) fa.age += 1;
+    if (!league.inSeasonRatings && fa.age >= 32) fa.ovr = Math.max(63, fa.ovr - 1);
+    if (league.ratingModelVersion === NHL_RATING_MODEL_VERSION) fa.salary = nhlSalaryFor(fa.ovr, league.ratingModelVersion);
+  }
   if (noUserClub || (typeof userTeam === 'string' && Object.prototype.hasOwnProperty.call(league.teams, userTeam))) {
     let released = false;
     for (const t of Object.values(league.teams)) {

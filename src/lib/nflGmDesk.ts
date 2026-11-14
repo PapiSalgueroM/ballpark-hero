@@ -496,7 +496,7 @@ export function nflDeskAfterWeek(desk: GmDesk, league: LeagueState, team: string
 export interface NflDeskSummer {
   ok: boolean;
   desk: GmDesk;
-  /** The engine's own offseason news (retirements, tags, development), untouched. Null when the summer did not run. */
+  /** The engine's own offseason news (retirements and tags), untouched. Null when the summer did not run. */
   news: OffseasonNews | null;
   /** What the desk did, for the feed. */
   lines: string[];

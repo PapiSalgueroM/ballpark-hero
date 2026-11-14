@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,6 +284,8 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>NHL Front Office</h1>
@@ -279,6 +313,7 @@
 <li>Stage your changes, then Apply contributors to save them. Use automatic goes back to the highest rated healthy players. These groups feed the rating model; they are not full lines, defensive pairs or ice time.</li>
 <h3>Sim the season and watch your pace</h3>
 <li>Sim the season in 20 rounds of roughly four games each, with a live read on whether you are on pace.</li>
+<li>OVR can rise or fall a point at a time after regular-season rounds. For example, a young winger can gain a point toward their potential while a veteran skater can lose one. Check the round news. Players keep their closing OVR going into next season.</li>
 <h3>Qualify, then win the Stanley Cup</h3>
 <li>Qualify for the playoffs: top three per division plus two wild cards per conference.</li>
 <li>Win four best-of-7 rounds to lift the Stanley Cup, then draft and go again, as long as ownership keeps you.</li>
@@ -318,7 +353,7 @@
 <li>Strength math: your selected forwards carry half your rating, your defensemen 30 percent and your goalie 20 percent. Automatic selection uses the top six healthy forwards, top four healthy defensemen and best healthy goalie. An empty group uses a rating of 62 in this game's model.</li>
 <li>If a selected player is injured or leaves your roster, the game keeps your other valid choices and fills the gap with the highest rated healthy option. A player who recovers needs to be selected again if you want him back in the group.</li>
 <h3>Hoard players who still have upside</h3>
-<li>Players 23 and under develop toward their potential every offseason. Hoard them.</li>
+<li>Young players who have room under their potential can develop during the season.</li>
 <h2>NHL Front Office FAQ: trades, firing and how long a save lasts</h2>
 <h3>Why does the AI keep rejecting my trades?</h3>
 <p>It wants a premium. Centers cost the most, age tanks value fast, and adding a pick often flips a no into a yes.</p>
@@ -356,8 +391,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>

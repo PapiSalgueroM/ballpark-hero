@@ -20,6 +20,7 @@ import { type NbaSeasonAwards, nbaBoxScore, nbaRecordBox, nbaLiveStats } from '.
 import { nbaRotationSlots, nbaReconcileRotation } from './nbaRotation';
 /* Round 851: a booked, balanced schedule, shared with MLB and the NHL. */
 import { type FoSchedule, buildFoSchedule, foPlayRound } from './foSchedule';
+import { reviewFoRoundRatings, type FoGrowth } from './foRoundRating';
 
 /**
  * NBA Front Office engine (2026-08-05). Basketball sibling of
@@ -78,6 +79,7 @@ export interface NbaGmTeam extends CutLedger {
 }
 
 export interface NbaLeague {
+  inSeasonRatings?: true;
   season: number;
   cap: number;
   teams: Record<string, NbaGmTeam>;
@@ -376,6 +378,7 @@ export interface RoundReport {
 
 /** Round 1018: what a GM desk may hand a round. Absent, the round plays exactly as it always has. */
 export interface NbaRoundOptions {
+  growth?: FoGrowth<NbaGmPlayer>;
   /** Strength points added to a club, by abbreviation. */
   edges?: Record<string, number>;
   /** The rounds a man is really out, given the rounds the engine drew. Draws nothing from rng. */
@@ -415,6 +418,10 @@ export function simRound(league: NbaLeague, myTeam: string, rng: () => number, o
     else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
     if (stats) nbaRecordBox(stats, nbaBoxScore(me, them, homeWon, draw, p, league.round * 1000 + k, league.season));
   }, () => nbaBookSeason(league, rng));
+  if (league.inSeasonRatings) reviewFoRoundRatings(league, {
+    sport: 'nba', rounds: NBA_ROUNDS, youngThrough: 24, declineFrom: 32,
+    acceleratedFrom: 36, marketDeclineFrom: 32, floor: 64,
+  }, myTeam, notes, opts?.growth);
   return { myWins: myW, myLosses: myL, notes };
 }
 
@@ -777,6 +784,7 @@ export interface NbaOffseasonOptions {
 }
 
 export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: string, opts?: NbaOffseasonOptions): string[] {
+  const openingMarket = league.inSeasonRatings ? new Set(league.freeAgents) : null;
   const notes: string[] = [];
   /* Round 211: one name book for the whole offseason, so the men who
      arrive to fill rosters cannot duplicate each other or anybody left. */
@@ -800,8 +808,11 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
       if (p.age <= 24 && p.ovr < p.pot) {
         /* Round 1018: the same one draw; a desk's development coach may stretch the step, never past his ceiling. */
         const step = 1 + Math.floor(rng() * 3);
-        p.ovr = Math.min(p.pot, p.ovr + (opts?.growth ? opts.growth(t.abbr, p, step) : step));
-      } else if (p.age >= 32) p.ovr = Math.max(64, p.ovr - (1 + Math.floor(rng() * 2) + (p.age >= 36 ? 2 : 0)));
+        if (!league.inSeasonRatings) p.ovr = Math.min(p.pot, p.ovr + (opts?.growth ? opts.growth(t.abbr, p, step) : step));
+      } else if (p.age >= 32) {
+        const drop = 1 + Math.floor(rng() * 2) + (p.age >= 36 ? 2 : 0);
+        if (!league.inSeasonRatings) p.ovr = Math.max(64, p.ovr - drop);
+      }
       if (p.age >= 36 && (p.ovr <= 74 || rng() < 0.35)) { notes.push(`👋 ${p.name} retires.`); continue; }
       p.years -= 1;
       if (p.years <= 0) {
@@ -837,7 +848,11 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
   /* Round 824: a free agent's ask is a deal he has not signed yet, so each
      summer it is set again for his rating in next season's money. Without
      this the pool kept asking opening season prices while the cap rose. */
-  for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 32) fa.ovr = Math.max(64, fa.ovr - 1); fa.salary = nbaSalaryFor(fa.ovr, nextCap); }
+  for (const fa of league.freeAgents) {
+    if (!openingMarket || openingMarket.has(fa)) fa.age += 1;
+    if (!league.inSeasonRatings && fa.age >= 32) fa.ovr = Math.max(64, fa.ovr - 1);
+    fa.salary = nbaSalaryFor(fa.ovr, nextCap);
+  }
   league.cap = nextCap;
   league.season += 1;
   league.round = 1;

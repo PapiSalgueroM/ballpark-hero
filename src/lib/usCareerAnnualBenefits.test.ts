@@ -128,7 +128,9 @@ describe('905 actual US career yearly support and liquidation', () => {
       expect(c.ovr - bare.ovr).toBe(age === k.young ? 1 : 0);
       expect(notes.filter(n => n.startsWith('Yearly support:'))).toEqual(age === k.young ? ['Yearly support: rating +1.'] : []);
     }
-    expect(k.items.find(i => i.id === k.coach)!.effect).toBe(`Rating +1 each offseason through age ${k.young}, up to your ceiling`);
+    expect(k.items.find(i => i.id === k.coach)!.effect).toBe(`Up to +1 rating during each season through age ${k.young}`);
+    const analyst = k.items.find(i => i.id === 'film_room');
+    if (analyst) expect(analyst.effect).toBe('Up to +1 rating during each season');
   });
 
   it.each(cases)('$sport clamps actual support at potential and 100 and reports only the earned amounts', k => {

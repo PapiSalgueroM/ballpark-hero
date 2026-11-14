@@ -9,6 +9,7 @@ import { MLB_CBT_THRESHOLD_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /* Round 851: a booked, balanced schedule, shared with the NBA and the NHL. */
 import { type FoSchedule, buildFoSchedule, foPlayRound } from './foSchedule';
+import { reviewFoRoundRatings, type FoGrowth } from './foRoundRating';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
 import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal, tradeRefusal } from './frontOfficeCuts';
 
@@ -80,6 +81,7 @@ export interface MlbGmTeam extends CutLedger {
 }
 
 export interface MlbLeague {
+  inSeasonRatings?: true;
   season: number;
   cap: number; // luxury tax line
   teams: Record<string, MlbGmTeam>;
@@ -256,6 +258,7 @@ export interface MlbRoundReport {
 
 /** Round 1020: what a GM desk may hand a round. Absent, the round plays exactly as it always has. */
 export interface MlbRoundOptions {
+  growth?: FoGrowth<MlbGmPlayer>;
   /** Strength points added to a club, by abbreviation. */
   edges?: Record<string, number>;
   /** The rounds a man is really out, given the rounds the engine drew. Draws nothing from rng. */
@@ -330,6 +333,10 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
     if (rng() < p) { me.wins += 1; them.losses += 1; if (abbr === myTeam) myW += 1; if (opp === myTeam) myL += 1; }
     else { me.losses += 1; them.wins += 1; if (abbr === myTeam) myL += 1; if (opp === myTeam) myW += 1; }
   }, () => mlbBookSeason(league, rng));
+  if (league.inSeasonRatings) reviewFoRoundRatings(league, {
+    sport: 'mlb', rounds: MLB_ROUNDS, youngThrough: 25, declineFrom: 33,
+    acceleratedFrom: 37, marketDeclineFrom: 33, floor: 63,
+  }, myTeam, notes, opts?.growth);
   return { myWins: myW, myLosses: myL, notes };
 }
 
@@ -574,6 +581,7 @@ export function mlbOverLimit(t: MlbGmTeam): number {
    It reads the points the engine drew and draws nothing itself, so without
    it, or with it, the stream of draws is the same. */
 export function mlbOffseason(league: MlbLeague, rng: () => number, userTeam?: string, opts?: MlbOffseasonOptions): string[] {
+  const openingMarket = league.inSeasonRatings ? new Set(league.freeAgents) : null;
   const notes: string[] = [];
   /* Round 211: one name book for the whole offseason, so the men who
      arrive to fill rosters cannot duplicate each other or anybody left. */
@@ -585,8 +593,11 @@ export function mlbOffseason(league: MlbLeague, rng: () => number, userTeam?: st
       p.out = 0;
       if (p.age <= 25 && p.ovr < p.pot) {
         const gain = 1 + Math.floor(rng() * 3);
-        p.ovr = Math.min(p.pot, p.ovr + (opts?.growth ? opts.growth(t.abbr, p, gain) : gain));
-      } else if (p.age >= 33) p.ovr = Math.max(63, p.ovr - (1 + Math.floor(rng() * 2) + (p.age >= 37 ? 2 : 0)));
+        if (!league.inSeasonRatings) p.ovr = Math.min(p.pot, p.ovr + (opts?.growth ? opts.growth(t.abbr, p, gain) : gain));
+      } else if (p.age >= 33) {
+        const drop = 1 + Math.floor(rng() * 2) + (p.age >= 37 ? 2 : 0);
+        if (!league.inSeasonRatings) p.ovr = Math.max(63, p.ovr - drop);
+      }
       if (p.age >= 38 && (p.ovr <= 74 || rng() < 0.4)) { notes.push(`👋 ${p.name} retires.`); continue; }
       p.years -= 1;
       if (p.years <= 0) {
@@ -606,7 +617,10 @@ export function mlbOffseason(league: MlbLeague, rng: () => number, userTeam?: st
      so the men cut compete for its 30 places like everybody else. */
   for (const t of Object.values(league.teams)) if (t.abbr !== userTeam) mlbCutDownToMax(t, league.freeAgents);
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
-  for (const fa of league.freeAgents) { fa.age += 1; if (fa.age >= 33) fa.ovr = Math.max(63, fa.ovr - 1); }
+  for (const fa of league.freeAgents) {
+    if (!openingMarket || openingMarket.has(fa)) fa.age += 1;
+    if (!league.inSeasonRatings && fa.age >= 33) fa.ovr = Math.max(63, fa.ovr - 1);
+  }
   league.cap = Math.round(league.cap * 1.03);
   league.season += 1;
   league.round = 1;

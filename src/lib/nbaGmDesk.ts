@@ -215,6 +215,7 @@ export function nbaDeskRoundOptions(desk: GmDesk, league: NbaLeague, team: strin
   return {
     edges: { [team]: nbaStaffEdge(staff) },
     injuryRounds: (abbr, p, rounds) => abbr === team ? nbaInjuryRounds(staff, team, league.season, league.round, p.id, rounds) : rounds,
+    growth: (abbr, p, points) => abbr === team ? nbaGrowthStep(staff, team, league.season, p.id, points) : points,
   };
 }
 

@@ -262,6 +262,7 @@
       "howToPlay": [
         "Pick one of 40 programs. Prestige sets your pipeline and NIL power.",
         "Play 10 rounds of two games each, one league matchup and one cross-country test.",
+        "After rounds 3, 5, 8 and 10, players can improve toward their potential or lose a rating point if form dips. Check Roster for the latest changes. The new ratings count from the next game, including March.",
         "Round 10's league night is rivalry night, and every program plays its rival, even one from another league. Your rival is your real rivalry series when both schools are on the board (Duke and North Carolina, Kentucky and Louisville, Indiana and Purdue), otherwise a school from your own state, otherwise a pairing the game made, and the game tells you which. UConn has no series or state on file here, so its rival is a pairing the game made.",
         "The rivalry winner carries 0.5 to 1.5 points of extra strength into the conference tournament and March, the loser drops the same, and a margin of 25 or more swings the full 1.5.",
         "Finish top four in your league table, which goes by league record, for the conference tournament; win it and you dance automatically.",
@@ -324,6 +325,7 @@
       "howToPlay": [
         "Pick a program. Its prestige rating drives your talent pipeline and NIL budget.",
         "Play one week at a time: 12 games, all set before kickoff and never the same opponent twice. Weeks 1 to 4 are out of conference, weeks 5 to 11 are conference play with a non-conference date or two mixed in, and week 12 is rivalry week. Notre Dame and the Group of Five schools have no conference games.",
+        "After weeks 3, 6, 9 and 12, players can improve toward their potential or lose a rating point if form dips. Check Roster for the latest changes. The new ratings count from the next game, including the Playoff.",
         "Week 12 is rivalry week, and every program plays its rival, even one from another conference. Your rival is your real rivalry series when both schools are on the board (Ohio State and Michigan, Alabama and Auburn, Florida and Florida State), otherwise a school from your own state, otherwise a pairing the game made, and the game tells you which.",
         "The rivalry winner carries 0.5 to 1.5 points of extra strength into the title games and the Playoff, the loser drops the same, and a margin of 21 or more swings the full 1.5.",
         "Finish top two in your conference to reach its title game; win it for an automatic Playoff bid.",
@@ -417,6 +419,7 @@
         "Before each match set formation, mentality and your starting XI, or use auto pick, and give a team talk when it matters.",
         "Play the match one of two ways: Play Live puts it on the pitch with the dressing room at the break, and Quick Sim goes straight to the report with the coach making your subs. Then read the report, answer the press, and manage the dressing room between games.",
         "A live match moves: both teams hold their shape around the ball, and goals play out on the pitch before the score changes. Pause it, change the speed or skip to the whistle, and tap one of your players at any minute to make a sub or change shape.",
+        "Squad OVR can rise or fall during the season. A young player with regular minutes can improve and a veteran can lose a point after a league match. Check the match report for changes. Players carry those ratings into next season.",
         "Or open the calendar, tap any day and sim to it: every match up to that day plays in one go, and the run stops early only for a transfer window opening, the season review, the sack or a club's approach. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day.",
         "Buy and sell in the summer and January windows: negotiate fees, pay release clauses, take loans, and field bids for your own stars before rival clubs close your targets.",
         "New Manager careers remember other clubs' transfers too. Older careers, including Hot Seat jobs carried on here, join at their next summer and keep their existing world. Missing earlier deals between other clubs aren't rebuilt. If that era's squads aren't ready, joining waits for a later summer.",
@@ -1160,7 +1163,7 @@
         "After the Super Bowl, use the draft picks your team still owns. Trading a pick away costs a selection in your next draft. If you traded them all away, decide the franchise tag, then run the league draft and offseason. Scout grades can lie. Defensive picks join your roster like every other selection.",
         "On the draft screen, before your last pick opens free agency, tag one man whose deal is up. The card shows every expiring contract with its tag price, and the button says why when a tag is refused.",
         "Under the hub's own boxes sit four more: Staff, Re-sign desk, Draft picks and Trade desk. A new franchise opens with them on, and an older save plays on as it did until you open one. Say you hire a level 7 offensive coordinator off the Staff shortlist: his points land on the offense, which is 72 percent of how this game rates a team, so the club gets a little stronger every week. The computer clubs have no staff edge, so even the staff you start with is a step up on them. Your first round pick's rookie deal runs out this spring, so the Re-sign desk offers his fifth year option: one guaranteed season, priced off his rating. Pick it up, or keep him at his ask, push once with your own number, or let him go. At Week 8 you call a club that is well out of the playoff places, which makes it a seller: it marks its veterans down and wants picks and young players. So you send a young depth receiver and a third rounder for its veteran corner. Where you sit in the standings changes nothing in the price, only where they sit does. The receiver's contract goes with him, and 15 percent of his salary for every season he had left stays on your cap this year as dead money, never more than cutting him would have left. Wait until Week 10 is played and the deadline has shut every deal until the season is over. The money is this game's own, never a real contract.",
-        "Run the offseason, where young players grow and veterans fade, then chase the next title. Seasons are unlimited, as long as ownership keeps you."
+        "After regular-season weeks, ratings can rise or fall one point at a time. Check Rating changes in Roster. Young players can improve toward their potential, and veterans can decline. Players carry their ratings into next season. The offseason handles birthdays, retirements, expiring deals and the cap."
       ],
       "rules": [
         "The season runs 17 weeks: home and away against your division rivals plus 11 crossover games.",
@@ -1824,6 +1827,7 @@
         "Read the ownership mandate: a stacked roster is told to win the World Series, a mid one to make October, a thin one to hit an honest win number. It resets every offseason.",
         "Work the roster: DFA dead weight, sign free agents, and take trades to the phone, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.",
         "Play the 162 in stretches: each round simulates about a week and a half of baseball, 27 rounds total, with a live read on whether you are on pace.",
+        "Player OVR can rise or fall one point at a time after regular-season rounds. A young shortstop can improve toward their potential, while an older pitcher can lose a point. The round news shows your club's changes, and closing ratings carry forward.",
         "Make October. Division winners seed 1 to 3, three wild cards follow, and the top two seeds skip the Wild Card round."
       ],
       "rules": [
@@ -1936,6 +1940,7 @@
         "Answer your phone. Texts from your agent, the manager, the GM, a teammate or your mom land on the beats of the baseball year: draft day, spring training, the All-Star break, the trade deadline, September, October if you get there, the offseason, an arbitration winter and the winter you hit free agency. Every text says which beat and which year it came in on, and how you answer moves your karma, morale, fanbase or bank.",
         "Some seasons your rival puts a decision on your plate instead of a story: benches clearing that you can answer or calm down, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
         "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
+        "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
         "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         "Check the lineup card. Top ten picks play from Opening Day; everyone else fights the veteran in spring, with bench bats and long-relief arms waiting on spot starts until the job flips. Relievers climb their own bullpen ladder instead.",
         "Handle the winter, up to three decisions one card at a time: winter training, surgery calls, trade rumors. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
@@ -2146,7 +2151,7 @@
         "Trades are a negotiation now: open talks and the other GM answers with a handshake, a pick demand, a lesser man, or the dial tone. You can stand firm exactly once per call, and it genuinely gambles: they blink and the price drops, or they dig in and it rises.",
         "The play-in covers seeds 7 through 10, with one last game deciding the 8 seed.",
         "Each club starts with 2 simulation picks. Trades can leave you with fewer or more choices, and each selection spends one owned pick. With none left, finish the draft and offseason. The pool has at least 24 prospects. Draft night runs in the order your record earns: the 14 clubs that missed the playoffs go into a lottery for the top four picks, on the odds the league used for its 2019 to 2026 drafts, then every club picks in its place over two rounds, and your staff can make your picks for you. A save that never opened the GM desk keeps the old short draft, where you pick first and the rivals follow. Scouting grades can miss the truth by a few points either way.",
-        "Everyone ages each summer: young players develop toward potential, decline starts at 32, veterans retire.",
+        "OVR can rise or fall one point at a time after regular-season rounds. For example, a young guard can improve toward their potential while an older player can decline. Check the round news. Players age in summer and carry their ratings into next season.",
         "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a banner fixes almost anything, and at zero you are fired and the save ends.",
         "Waiving a man is not free. Half his salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason."
       ],
@@ -2251,6 +2256,7 @@
         "Get drafted by a real NBA team. Stronger prospects go higher and earn more.",
         "Check the rotation. Top five picks open in the starting five; everyone else fights for the spot in camp every fall, and second-unit seasons come in bench minutes until you crack the five.",
         "Sim each season for a full line: games, minutes, points, rebounds, assists, steals, blocks, awards, team result.",
+        "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
         "Press 📺 Week by week instead of Play the season to watch that season one game at a time, with your stat line and your team's record after every game. It is the same season either way.",
         "Throwback careers play against unnamed teams, and the real seasons that were not a full 82 games (2011-12, 2012-13, 2019-20 and 2020-21) have no game by game view. The game tells you before you press.",
         "Handle the summer, up to three cards one at a time. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
@@ -2463,6 +2469,7 @@
         "Enter the draft. Your hidden rating decides the slot, and a real team calls your name.",
         "Check the depth chart. Top twelve picks open as starters; everyone else fights the incumbent in camp, every single summer, and backup seasons are spot duty until you take the job.",
         "Play each season with one tap: yards, touchdowns, awards, how far the team went.",
+        "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
         "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         "When the deal expires, work a real free agency window: competing offers from named teams with their own money, length and roster quality, and one push for more on any of them.",
         "Make up to three offseason calls, one card at a time: train skills or body, fix the knee or play through it, take the envelope or report it. Only the first card of a summer can move your rating, and a card you just saw rests for a while before it comes back (press moments follow your season, so those can come right back).",
@@ -2569,6 +2576,7 @@
         "Open Roster and choose your simulation contributors: six healthy forwards, four healthy defensemen and one healthy goalie. If a group has fewer available players, use all of them. Uncheck a selected forward or defenseman before choosing his replacement.",
         "Stage your changes, then Apply contributors to save them. Use automatic goes back to the highest rated healthy players. These groups feed the rating model; they are not full lines, defensive pairs or ice time.",
         "Sim the season in 20 rounds of roughly four games each, with a live read on whether you are on pace.",
+        "OVR can rise or fall a point at a time after regular-season rounds. For example, a young winger can gain a point toward their potential while a veteran skater can lose one. Check the round news. Players keep their closing OVR going into next season.",
         "Qualify for the playoffs: top three per division plus two wild cards per conference.",
         "Win four best-of-7 rounds to lift the Stanley Cup, then draft and go again, as long as ownership keeps you."
       ],
@@ -2597,7 +2605,7 @@
         "Overtime loser points decide races. A team hovering around .500 can still make the bracket on them.",
         "Strength math: your selected forwards carry half your rating, your defensemen 30 percent and your goalie 20 percent. Automatic selection uses the top six healthy forwards, top four healthy defensemen and best healthy goalie. An empty group uses a rating of 62 in this game's model.",
         "If a selected player is injured or leaves your roster, the game keeps your other valid choices and fills the gap with the highest rated healthy option. A player who recovers needs to be selected again if you want him back in the group.",
-        "Players 23 and under develop toward their potential every offseason. Hoard them."
+        "Young players who have room under their potential can develop during the season."
       ]
     },
     "/nhl-gauntlet-draft": {
@@ -2642,6 +2650,7 @@
         "Get drafted by a real club; your slot reflects your starting ability.",
         "Check the lineup. Top ten skaters step straight in; everyone else fights the incumbent in camp every fall. Goalies always apprentice first, because no rookie walks into a number one crease.",
         "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
+        "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
         "Face up to three offseason decisions each year, one card at a time: training, trade requests, media noise. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
         "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
         "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
@@ -3187,6 +3196,8 @@
         "Eight clubs are added from the 2026 starting year. The four Korean club identities already in the game keep their older history, tiers and colours. Club membership does not promise a verified current squad, real ratings or a complete Korean season format.",
         "Korean domestic cup results remain a generic simulation where the real season record is not verified. No Korea Cup entry list, calendar or final format is promised by that result.",
         "Advance season by season through simulated stats, newspaper headlines, random events, and decisions.",
+        "In the academy, the report shows how your OVR improved during the year. Improving sooner can help you earn more youth appearances.",
+        "In senior seasons, OVR can rise or fall as the season plays out. For example, a young starter can improve by midseason, and an older player can lose pace later in the year. Next Season simulates the year in one go. Season Summary shows the OVR at each checkpoint, and the final OVR carries forward.",
         "Most summers open with one card about your position or your career, before the rest of the news between seasons. Training can trade one skill for another next season, with gains stopping at your ceiling.",
         "Want to see it happen? The 📺 Week by week button plays the same season match by match, with your rating every game and the league table after every matchday, then hands you back to the newspaper. Its ? button has the rules and worked examples.",
         "Up to three times a season the clock stops and the moment is yours to play on your training ground board (look for 🎯 on the fixtures): a YOUR CALL decides how that match went, with the return game taking the other side so your final table and season totals never move, and a RECREATE replays what the record says you did, for stars that bank into next season's growth.",
@@ -3200,7 +3211,7 @@
         "If you previously retired from internationals, an eligible National-team comeback lets you make yourself available again after a settled season."
       ],
       "rules": [
-        "Stats grow slowly and honestly: 1 to 3 points a year through the academy and your prime, less once you pass 86, and barely at all above 90. Reaching world class is a decade of work, not three good seasons.",
+        "Attributes usually grow by a few points across a season in your academy years and prime. Growth slows past 86 and is rare above 90. After your prime, some attributes can fall during a season.",
         "Growth fades once your hidden prime type (early, normal, late, or extended) ends, with decline turning brutal from 38.",
         "The club that raised you always offers you a first team deal when you turn pro, so you can spend a whole career at your boyhood club, and it can call you home again from 27.",
         "Retirement is suggested from age 30 once you drop 10 off your peak or hit 75 overall, forced below 50 overall at 33 or older, and automatic at 45.",
@@ -3429,7 +3440,8 @@
         "Gems are earned only by results: three for a watched win, one for a watched draw, one for a win played while you were away, twenty for a league title and six for second place. They open packs of generated kids in the Academy tab, every pack prints its odds before you open it, and gems can never be bought.",
         "Your first team helps in watched and away matches. Each rating point above 60 adds to its defensive edge. With five players rated 80, opponents get twenty percent fewer chances. This changes the odds, not a match's guaranteed result.",
         "A scored set piece before full time adds one goal and the usual goal bonus. A miss, save or block costs nothing. A saved shot result cannot pay twice, and a kick left open past full time cannot change the next match. Away matches have no kick offers; these kicks have no daily record or direct gem reward.",
-        "First-team players train at half the academy rate through age 27. Their years take fifteen watched academy minutes, compared with five minutes for academy kids. They hold their rating at 28 and 29, lose 1.2 rating at each birthday from 30, and retire at 34 without a fee. Away time trains them without ageing them.",
+        "First-team players train at half the academy rate through age 27 and hold steady at 28. From 29 they lose 1.2 rating over each fifteen watched academy minutes. Age and decline pause while you are away. They retire at 34 without a fee.",
+        "A graduate starts age 29 at 80.0 OVR. After seven minutes and thirty seconds of watched play, he is at 79.4 and the next-birthday quote uses 78.8. His current rating feeds into the first team's defensive edge.",
         "Progress saves on this device automatically. Selling up resets the ground while Reputation, badges, club records and lifetime totals survive. Your academy save, including its first team, stays with you."
       ],
       "example": [
@@ -3689,8 +3701,8 @@
       "rules": [
         "Every kid has a fixed ceiling, hidden until your scouts or his pack tier tell you where it sits. Training slows as he approaches it and can never pass it.",
         "The promise premium fades from age 21 and is gone at 23. At 24 a kid still in the academy leaves on a free. Promoted players follow the longer first-team career.",
-        "A senior trains at half the academy rate through age 27, holds his rating at 28 and 29, then loses 1.2 rating at each birthday from 30. A senior year lasts fifteen watched academy minutes. He retires at 34 for no fee, and nobody ages while you are away.",
-        "Senior fees use the same rating, potential, position and academy bonuses as youth fees. The age multiplier stays at one through 27, then falls to 0.90 at 28, 0.78 at 29, 0.64 at 30, 0.50 at 31, 0.36 at 32 and 0.22 at 33. The next-birthday quote assumes no further training and keeps today's fee multiplier, so a later Deadline Day can change the actual offer.",
+        "A senior trains at half the academy rate through age 27 and holds steady at 28. From 29 he loses 1.2 rating over each fifteen watched academy minutes. Age and decline pause while you are away. He retires at 34 for no fee.",
+        "Senior fees use the same rating, potential, position and academy bonuses as youth fees. The age multiplier stays at one through 27, then falls to 0.90 at 28, 0.78 at 29, 0.64 at 30, 0.50 at 31, 0.36 at 32 and 0.22 at 33. The next-birthday quote includes the remaining decline, assumes no further training and keeps today's fee multiplier, so a later Deadline Day can change the actual offer.",
         "The first team reduces opponents' scoring chances in Stadium Tycoon. Each rating point above 60 helps, across up to five players. Selling a senior funds academy upgrades but removes his contribution immediately. The first team travels with you when you move the academy up or sell the ground.",
         "A full academy stops scouting: beds come from the Dorms.",
         "Reputation stars pay +15% training speed and +10% on every fee, each, forever.",
@@ -3702,7 +3714,8 @@
         "Say the scouts drop off a 17 year old midfielder rated 58, and your level 3 scouts read his ceiling as somewhere between 68 and 75. Selling on the spot pays a modest fee: decent rating, healthy promise premium.",
         "You leave him with the coaches while you upgrade the Agent office. By the time he is 19 he is rated 71 and the growth has visibly slowed, which tells you the ceiling is close. His card now quotes about a quarter more than the day one fee: the rating grew, but the promise premium shrank with his age.",
         "Deadline Day lights up. You press Sell inside the window and the fee pays half as much again. That one sale funds two Scouting levels, and the next kid through the door is found faster and read more precisely.",
-        "For a first-team decision, picture five graduates rated 80. Their combined edge cuts the opponent's scoring chance by twenty percent before the match minimum. Selling one funds facilities but drops that edge to sixteen percent. A player nearing 28 may still help win a title even as his resale multiplier begins to fall, so the bigger fee and the stronger team are different rewards."
+        "For a first-team decision, picture five graduates rated 80. Their combined edge cuts the opponent's scoring chance by twenty percent before the match minimum. Selling one funds facilities but drops that edge to sixteen percent. A player nearing 28 may still help win a title even as his resale multiplier begins to fall, so the bigger fee and the stronger team are different rewards.",
+        "A graduate starts age 29 at 80.0 OVR. After seven minutes and thirty seconds of watched play he is at 79.4. His next-birthday quote uses 78.8 OVR, including the remaining decline."
       ],
       "tips": [
         "Early on, sell quickly and often: volume beats patience until Coaching has some levels.",

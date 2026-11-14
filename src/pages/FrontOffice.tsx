@@ -16,6 +16,7 @@ import { nflStatsHelp } from '@/lib/nflSeasonStats';
 const FRONT_OFFICE_RATING_RULES = [
   'New opening ratings read a quarterback, back, receiver or tight end on three things: how well he played, how much of the work he carried and what he produced a game in 2025. A back who carried the full load all year gets credit for it that a backup who looked sharp on sixty carries does not.',
   'A fullback is not rated as a ball carrier, so he sits low on the running back shelf with the e for limited evidence.',
+  'After regular-season weeks, ratings can rise or fall one point at a time. Check Rating changes in Roster. Players carry their ratings into next season.',
 ] as const;
 
 /* Round 1533: the career rules (fired is a chapter, not the end), beside the rating rules in the ? panel. Built inside
@@ -62,7 +63,7 @@ const FrontOffice = () => {
               'Play each week: results, injuries and rival moves roll in; division standings decide the real 14-team playoff bracket.',
               'Set the depth chart from the Roster box: tap two men to swap them, and the sim reads who starts off your order. Injured men are skipped and the next man steps up, so your backups finally matter.',
               'After the Super Bowl, draft with the picks you still own. Trading one away costs a selection. Scout grades carry error. Before finishing the draft, decide the franchise tag on one expiring man: one guaranteed year at the top five average at his position or 120 percent of his old deal, whichever is more. With no picks left, run the league draft and offseason from that screen.',
-              'Every offseason your young players develop, veterans decline, contracts expire and the cap rises. Dynasties are built, not bought.',
+              'After regular-season weeks, ratings can rise or fall one point at a time. Check Rating changes in Roster. Players carry their ratings into next season. In the offseason, contracts expire and the cap rises.',
               'Face the room: the podium, the accountability scrum and the trade question move your trust upstairs, and what you promise can raise or soften next season\'s mandate.',
             ]}
             examples={[

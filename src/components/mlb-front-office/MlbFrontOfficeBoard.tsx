@@ -181,7 +181,7 @@ export default function MlbFrontOfficeBoard() {
          id fix can hold two men under one. The draft class is passed too: it
          is minted from the same counter, so it shares the id space. */
       ensureMlbLeagueIds(s.league, s.draftClass);
-      setLeague(s.league); setMyTeam(s.myTeam);
+      setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? (s.phase === 'draft' ? [] : null)); setPicksLeft(s.picksLeft ?? 0);
       setDraftBatchesLeft(s.draftBatchesLeft ?? null);
@@ -232,6 +232,7 @@ export default function MlbFrontOfficeBoard() {
 
   const start = (abbr: string) => {
     const lg = initMlbLeague();
+    lg.inSeasonRatings = true;
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
     setFeed([

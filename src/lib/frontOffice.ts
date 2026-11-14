@@ -7,6 +7,7 @@ import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
 import { NFL_SALARY_CAP_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+import { keyedRng } from './keyedRng';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
 import { type CutLedger, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal, tradeRefusal, rosterFullRefusal } from './frontOfficeCuts';
 /* Round 1542: the season's lines and awards are the board's (src/lib/nflSeasonStats.ts); the engine carries their
@@ -120,6 +121,7 @@ export interface LeagueState {
   schedule: GmGame[][]; // week -> games
   week: number; // 1..17, 18 = playoffs
   champions: { season: number; team: string }[];
+  ratingReview?: { week: number; team?: string; changes: [name: string, delta: 1 | -1][] };
   /** Round 828: present on a league started with full rosters. Absent on every older save. */
   rosterDepth?: 2;
   /* Round 1542. Both absent on every older save (src/lib/nflSeasonStats.ts). */
@@ -1247,7 +1249,6 @@ export function cpuFranchiseTags(league: LeagueState, userTeam?: string): { team
 export interface OffseasonNews {
   retired: { team: string; player: string }[];
   expired: { team: string; player: string }[];
-  developed: { team: string; player: string; from: number; to: number }[];
   /** Round 723: the CPU clubs' franchise tags this offseason. */
   tagged: { team: string; player: string; salary: number }[];
   /** Round 828, full rosters only: called up off the practice squad to refill a group. */
@@ -1256,17 +1257,41 @@ export interface OffseasonNews {
   cutDown?: { team: string; player: string; pos: string }[];
 }
 
-/* Round 828: A DECLINE NEVER RAISES A MAN. The floor of 62 below was written
-   when nobody on a roster sat under it, so "at least 62" only ever stopped a
-   veteran falling too far. A real backup can sit at 61, and the same floor
-   would have lifted him a point for getting older. Every man at 62 or above
-   reads exactly as before. */
-const declined = (ovr: number, by: number): number => Math.max(Math.min(62, ovr), ovr - by);
+/** Apply the age curve after a regular-season week has settled, without spending match draws. */
+export function reviewNflWeekRatings(league: LeagueState, ownTeam?: string): void {
+  const { season, week, ratingReview } = league;
+  if (week < 1 || week > REGULAR_WEEKS || (ratingReview && ratingReview.week >= week)) return;
+  const changes: [string, 1 | -1][] = [];
+  const review = (p: GmPlayer, team?: string) => {
+    const age = p.age + 1; // Use the same age bands as the old offseason curve.
+    if (age < 31 && (!team || age > 25 || p.ovr + 1 > p.pot)) return;
+    if (age >= 31 && p.ovr - 1 < 62) return;
+    // Names and positions survive transfers and are stable across independent seeded replays.
+    const roll = keyedRng(`nfl-rating|${season}|${p.name}|${p.pos}`);
+    const base = 1 + Math.floor(roll() * 2);
+    const points = !team ? 1 : base + (age >= 34 ? 1 : 0);
+    for (let i = 0; i < points; i++) {
+      const reviewWeek = 4 + i * 5 + Math.floor(roll() * 4);
+      if (week !== reviewWeek) continue;
+      const delta = age >= 31 ? -1 : 1;
+      p.ovr += delta;
+      if (team && team === ownTeam) changes.push([p.name, delta]);
+      break;
+    }
+  };
+  for (const team of Object.values(league.teams)) {
+    for (const player of team.players) review(player, team.abbr);
+    for (const player of team.practice ?? []) review(player, team.abbr);
+  }
+  for (const player of league.freeAgents) review(player);
+  league.ratingReview = { week, ...(ownTeam ? { team: ownTeam } : {}), changes };
+}
 
 /* Round 723: userTeam is the club whose tag decision is the GM's own, so the
    CPU policy skips it. Callers without one (the harnesses) run it everywhere. */
 export function runOffseason(league: LeagueState, rng: () => number, userTeam?: string): OffseasonNews {
-  const news: OffseasonNews = { retired: [], expired: [], developed: [], tagged: [] };
+  const openingMarket = new Set(league.freeAgents);
+  const news: OffseasonNews = { retired: [], expired: [], tagged: [] };
   /* Round 723: the tags go on before free agency opens, which is this loop. */
   news.tagged = cpuFranchiseTags(league, userTeam);
   for (const t of Object.values(league.teams)) {
@@ -1274,14 +1299,6 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
     for (const p of t.players) {
       p.age += 1;
       p.out = 0;
-      // development and decline
-      if (p.age <= 25 && p.ovr < p.pot) {
-        const from = p.ovr;
-        p.ovr = Math.min(p.pot, p.ovr + 1 + Math.floor(rng() * 2));
-        if (p.ovr - from >= 2) news.developed.push({ team: t.abbr, player: p.name, from, to: p.ovr });
-      } else if (p.age >= 31) {
-        p.ovr = declined(p.ovr, 1 + Math.floor(rng() * 2) + (p.age >= 34 ? 1 : 0));
-      }
       // retirement
       if (p.age >= 34 && (p.ovr <= 70 || rng() < 0.3 || p.age >= 40)) {
         news.retired.push({ team: t.abbr, player: p.name });
@@ -1312,7 +1329,7 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
       keep.push(p);
     }
     t.players = keep;
-    /* Round 828: the practice squad ages, grows and retires by the same
+    /* Round 828: the practice squad ages and retires by the same
        rules. Its deals do not run out yet: the squad's own contract rules
        are the development tier round's. */
     if (t.practice) {
@@ -1320,8 +1337,6 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
       for (const p of t.practice) {
         p.age += 1;
         p.out = 0;
-        if (p.age <= 25 && p.ovr < p.pot) p.ovr = Math.min(p.pot, p.ovr + 1 + Math.floor(rng() * 2));
-        else if (p.age >= 31) p.ovr = declined(p.ovr, 1 + Math.floor(rng() * 2) + (p.age >= 34 ? 1 : 0));
         if (p.age >= 34 && (p.ovr <= 70 || rng() < 0.3 || p.age >= 40)) {
           news.retired.push({ team: t.abbr, player: p.name });
           continue;
@@ -1356,7 +1371,11 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
   }
   // trim the FA pool to the useful part
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 40);
-  for (const fa of league.freeAgents) { fa.age += 1; fa.ovr = fa.age >= 31 ? declined(fa.ovr, 1) : fa.ovr; }
+  for (const fa of league.freeAgents) {
+    // Expiring players already aged on their team's roster.
+    if (!openingMarket.has(fa)) continue;
+    fa.age += 1;
+  }
   /* Round 828: a full club refills from its own practice squad first and cuts
      down to 53 last. A fifteen man club goes through the old pass untouched.
      Round 828 follow up: the computer clubs cut themselves; the GM's own club
@@ -1377,6 +1396,7 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
   league.cap = Math.round(league.cap * 1.05);
   league.season += 1;
   league.week = 1;
+  delete league.ratingReview;
   league.schedule = buildSchedule(rng);
   return news;
 }

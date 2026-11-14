@@ -14,7 +14,7 @@
  * hands them the NFL's four facts through nflCareer() and keeps both names and signatures.
  */
 import {
-  DEPTH_GROUPS, REGULAR_WEEKS, aiWeeklyMoves, generateDraftClass, injuryPass, nflAiDraftPicks, resetDepth, runOffseason, runPlayoffs, simGame,
+  DEPTH_GROUPS, REGULAR_WEEKS, aiWeeklyMoves, generateDraftClass, injuryPass, nflAiDraftPicks, resetDepth, reviewNflWeekRatings, runOffseason, runPlayoffs, simGame,
   type LeagueState, type PlayoffRound,
 } from './frontOffice';
 import { withGmBlock, type GmDesk } from './gmDesk';
@@ -108,7 +108,7 @@ export function nflDeskBlockRules(): HostBlockRule<LeagueState>[] {
  *   rolled and every engine list rebuilt from it. The re-sign ledger and the
  *   staff are the old club's and stay as they are: taking a seat opens both
  *   again for the club he joins.
- * - A week: playWeek's order (injuries, the rivals' moves, every game), the
+ * - A week: playWeek's order (injuries, the rivals' moves, every game, then ratings), the
  *   week moved on below the last one as playWeek moves it.
  * - The playoffs: the bracket runPlayoffs plays, the champion recorded as
  *   closeSeason records it.
@@ -138,6 +138,7 @@ export function nflAwayHost(oldTeam: string): GmAwayHost<LeagueState> {
       injuryPass(league.teams, rng);
       aiWeeklyMoves(league, '', rng);
       for (const g of league.schedule[league.week - 1]) simGame(g, league.teams, rng);
+      reviewNflWeekRatings(league);
       if (league.week < REGULAR_WEEKS) league.week += 1;
     },
     playoffs(league, rng) {
