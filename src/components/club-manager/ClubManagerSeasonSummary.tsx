@@ -8,6 +8,7 @@ import { bookAwardsState, evalWorldUcl, expiringDeals, money } from '@/lib/clubM
 import { BOOK_FULL_SHARE, type AwardMan } from '@/lib/clubManagerLeagueBoards';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { TeamLines } from '@/components/club-manager/SeasonHonoursCard';
+import { BallonDorShortlist } from '@/components/club-manager/BallonDorShortlist';
 import type { CareerState, SeasonSummary } from '@/lib/clubManager';
 import type { SeasonFate } from '@/lib/clubManagerBoardVerdict';
 import type { useClubManager } from '@/hooks/useClubManager';
@@ -269,6 +270,9 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
                 <span className="shrink-0">🌍</span>Ballon d'Or: <span className="font-bold">{sm.ballonDor.name}</span> ({sm.ballonDor.club})
               </p>
+            )}
+            {!!sm.ballonDorShortlist?.length && (
+              <BallonDorShortlist rows={sm.ballonDorShortlist} />
             )}
             {/* Round 1593: the Europa League season my club played, one line. */}
             {sm.uelRun && (

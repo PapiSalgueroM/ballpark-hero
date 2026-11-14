@@ -1121,6 +1121,20 @@ export interface BallonWatchLine {
   gen?: boolean;
 }
 
+export type BallonDorEvidence =
+  | { kind: 'played-ucl' | 'watched-ucl'; stage: 'winner' | 'finalist' | 'semi-finalist' }
+  | { kind: 'league-winner'; league: string }
+  | { kind: 'league-goals'; goals: number; estimated?: true };
+
+export interface BallonDorCandidate {
+  name: string;
+  club: string;
+  score: number;
+  rating?: number;
+  generated?: true;
+  evidence: BallonDorEvidence[];
+}
+
 /**
  * The world's individual award conversation, era aware because every name
  * comes from the save's own projected rosters and simulated tables: the
@@ -2299,6 +2313,8 @@ export interface SeasonRecord {
    *  season the book decided. Kept on the record, so a manager who moves club takes his past winners
    *  with him (joinClubNow copies the history). An older record has none. */
   awards?: SeasonAwards;
+  ballonDor?: NonNullable<SeasonSummary['ballonDor']>;
+  ballonDorShortlist?: BallonDorCandidate[];
   /** Round 1335: the summer move the season earned, written only on a season the club really went up or
    *  down or stayed up against the odds (seasonFate). An older record, and every other season, has none. */
   fate?: SeasonFate;
@@ -2948,6 +2964,7 @@ export interface SeasonSummary {
   goldenBoot?: { name: string; club: string; goals: number } | null;
   playerOfSeason?: { name: string; club: string } | null;
   ballonDor?: { name: string; club: string } | null;
+  ballonDorShortlist?: BallonDorCandidate[];
   /** Round 1311: the same awards the season's record keeps, on a season the league book decided. */
   awards?: SeasonAwards;
   /** Round 1335: the same fate the season's record keeps, only on a season that has one. */
@@ -22795,6 +22812,83 @@ export function joinClubInSummer(career: CareerState): CareerState | null {
   return state;
 }
 
+function rankBallonDor(state: CareerState, table: TableRow[], boards: LeagueBoards | null): BallonDorCandidate[] {
+  if (state.week < state.calendar.length) return [];
+  const final = state.uclBracket?.find(tie => tie.round === 'F' && tie.winner);
+  const watched = !final && uclHolderOf(state) ? evalWorldUcl(state, Infinity) : null;
+  const watchedFinal = watched?.done ? watched.ties.find(tie => tie.round === 'F' && tie.winner) : undefined;
+  const europeanFinal = final ?? watchedFinal;
+  const europeanTies = final ? state.uclBracket : watched?.ties;
+  const europeanKind = final ? 'played-ucl' : 'watched-ucl';
+  const compare = (a: string, b: string) => a < b ? -1 : a > b ? 1 : 0;
+  const rosterCache = new Map<string, ProjectedPlayer[]>();
+  const rivals = (club: string) => {
+    const cached = rosterCache.get(club);
+    if (cached) return cached;
+    const roster = oppRosterFor(state, club);
+    rosterCache.set(club, roster);
+    return roster;
+  };
+  const candidates = new Map<string, BallonDorCandidate>();
+  const add = (name: string, club: string, rating: number | undefined, generated: boolean | undefined,
+    evidence: BallonDorEvidence, bonus: number) => {
+    // The scorer book does not link identities across clubs.
+    const key = JSON.stringify([club, name]);
+    const row = candidates.get(key) ?? {
+      name, club, score: rating ?? 0, ...(rating !== undefined ? { rating } : {}),
+      ...(generated ? { generated: true as const } : {}), evidence: [],
+    };
+    row.score += bonus;
+    row.evidence.push(evidence);
+    candidates.set(key, row);
+  };
+  const star = (club: string, evidence: BallonDorEvidence, bonus: number) => {
+    if (club === state.clubName) {
+      const p = [...state.squad].sort((a, b) => b.rating - a.rating || compare(a.name, b.name))[0];
+      if (p) add(p.name, club, p.rating, madeUp(p), evidence, bonus);
+    } else {
+      const p = [...rivals(club)].sort((a, b) => b.r - a.r || compare(a.n, b.n))[0];
+      if (p) add(p.n, club, p.r, p.g, evidence, bonus);
+    }
+  };
+  if (europeanFinal?.winner) {
+    const winner = europeanFinal.winner;
+    const runnerUp = europeanFinal.home === winner ? europeanFinal.away : europeanFinal.home;
+    star(winner, { kind: europeanKind, stage: 'winner' }, 6);
+    star(runnerUp, { kind: europeanKind, stage: 'finalist' }, 3);
+    for (const tie of europeanTies ?? []) {
+      if (tie.round !== 'SF' || !tie.winner) continue;
+      const loser = tie.home === tie.winner ? tie.away : tie.home;
+      if (loser !== winner && loser !== runnerUp) star(loser, { kind: europeanKind, stage: 'semi-finalist' }, 1.5);
+    }
+  }
+  const league = careerLeagueOf(state);
+  if (table[0] && table.length > 1 && table.every(row => row.w + row.d + row.l === 2 * (table.length - 1))) {
+    star(table[0].club, { kind: 'league-winner', league: league.name }, 3);
+  }
+  for (const other of worldLeagueDefs(state)) {
+    if (!other.euro || other.id === league.id) continue;
+    const world = state.world?.[other.id];
+    if (!world || world.table.length < 2 || world.round !== leagueRounds(world.table.length)
+      || !world.table.every(row => row.w + row.d + row.l === 2 * (world.table.length - 1))) continue;
+    const leader = sortedWorldTable(state, other.id, world.table)[0];
+    star(leader.club, { kind: 'league-winner', league: other.name }, 1.5);
+  }
+  const leaders = goldenBootTable(state, 10, boards).filter(p => p.goals > 0);
+  const byBook = !!boards && bookDecides(boards.input);
+  for (const [index, p] of leaders.entries()) {
+    const rating = p.club === state.clubName
+      ? state.squad.find(player => player.name === p.name)?.rating
+      : rivals(p.club).find(player => player.n === p.name)?.r;
+    const estimated = !p.mine && !byBook;
+    add(p.name, p.club, rating, p.gen, { kind: 'league-goals', goals: p.goals, ...(estimated ? { estimated: true } : {}) },
+      index === 0 ? 2 + p.goals * 0.15 : Math.min(1, p.goals * 0.05));
+  }
+  return [...candidates.values()].map(row => ({ ...row, score: Math.round(row.score * 100) / 100 }))
+    .sort((a, b) => b.score - a.score || compare(a.name, b.name) || compare(a.club, b.club))
+    .slice(0, 10);
+}
+
 /**
  * Wraps up the season: final standings, league title check, verdict, awards,
  * job offers, history entry. Stores the summary on state.pendingSummary so a
@@ -22966,41 +23060,9 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   const playerOfSeason = potyTop && potyTop.goals > 0
     ? { name: potyTop.name, club: potyTop.club }
     : null;
-  /* The world award: Europe's crown weighs most, then league titles, then
-     the boot. Every candidate is the settled best of something, so the
-     winner always has a sentence-long case. */
-  const ballonDor = (() => {
-    const cands: { name: string; club: string; score: number }[] = [];
-    const add = (name: string | undefined, club: string, bonus: number): void => {
-      if (!name) return;
-      const existing = cands.find(c => c.name === name);
-      if (existing) { existing.score += bonus; return; }
-      // The candidate's own rating anchors the case, wherever he plays.
-      const rating = club === state.clubName
-        ? state.squad.find(p => p.name === name)?.rating ?? 70
-        : oppRosterFor(state, club).find(p => p.n === name)?.r ?? 70;
-      cands.push({ name, club, score: rating + bonus });
-    };
-    // Round 742: another club's star is read minus the men in my squad, so a
-    // man I signed mid season is never the case for the club he left.
-    const uclWinner = uclHolderOf(state);
-    if (uclWinner) {
-      const star = uclWinner === state.clubName
-        ? [...state.squad].sort((a, b) => b.rating - a.rating)[0]?.name
-        : [...oppRosterFor(state, uclWinner)].sort((a, b) => b.r - a.r)[0]?.n;
-      add(star, uclWinner, 6);
-    }
-    if (table[0]) {
-      const champStar = table[0].club === state.clubName
-        ? [...state.squad].sort((a, b) => b.rating - a.rating)[0]?.name
-        : [...oppRosterFor(state, table[0].club)].sort((a, b) => b.r - a.r)[0]?.n;
-      add(champStar, table[0].club, 3);
-    }
-    if (goldenBoot) add(goldenBoot.name, goldenBoot.club, 2 + goldenBoot.goals * 0.15);
-    if (!cands.length) return null;
-    const best = cands.sort((a, b) => b.score - a.score)[0];
-    return { name: best.name, club: best.club };
-  })();
+  const shortlist = rankBallonDor(state, table, bookBoards);
+  const best = shortlist[0];
+  const ballonDor = best ? { name: best.name, club: best.club } : null;
   /* Round 1311: the top scorer, most assists and most clean sheets of the league, from the book. Only on
      a season the book decides; any other season writes nothing new, so its summary and its record are
      exactly what they were before the book was read. */
@@ -23038,13 +23100,22 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     goldenBoot,
     playerOfSeason,
     ballonDor,
+    ...(shortlist.length ? { ballonDorShortlist: shortlist } : {}),
     ...(awards ? { awards } : {}),
     ...(fate ? { fate } : {}),
   };
 
   state.history = [
-    ...state.history.filter(h => h.season !== state.season),
-    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies, leagueId: careerLeagueOf(state).id, leagueSize: table.length, ...(awards ? { awards } : {}), ...(fate ? { fate } : {}) },
+    ...state.history.filter(h => h.season !== state.season).map(row => {
+      if (!row.ballonDorShortlist || row.season > state.season - TEAMS_KEPT) return row;
+      const { ballonDorShortlist: discarded, ...record } = row;
+      void discarded;
+      return record;
+    }),
+    { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies,
+      leagueId: careerLeagueOf(state).id, leagueSize: table.length,
+      ...(ballonDor ? { ballonDor, ballonDorShortlist: shortlist } : {}),
+      ...(awards ? { awards } : {}), ...(fate ? { fate } : {}) },
   ];
   state.history = keepTeams(state.history);
   /* Round 1601: write down the season every man of mine played, after everything above; it draws nothing. */

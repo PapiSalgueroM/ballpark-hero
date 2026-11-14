@@ -50,6 +50,11 @@ export const NRL_TICKET_GATE_CHANGES = {
   standard: { regularNonWin: 0, regularWin: 0, homeFinal: 0 },
   premium: { regularNonWin: -24_000, regularWin: 18_000, homeFinal: 36_000 },
 } as const;
+const SUPPORTER_FORM_MATCHES = 4;
+const SUPPORTER_FORM_STEP = 6_000;
+const SUPPORTER_FORM_LIMIT = SUPPORTER_FORM_MATCHES * SUPPORTER_FORM_STEP;
+const SUPPORTER_PRICE_ADJUSTMENT = { value: 6_000, standard: 0, premium: -6_000 } as const;
+type NrlSupporterForm = 'W' | 'D' | 'L';
 
 export const NRL_SPONSOR_OFFERS = {
   fixed: { upfront: 200_000, bonus: 0 },
@@ -103,6 +108,7 @@ export interface NrlCareerBook {
   coachCourseRound?: number;
   mutualRelease?: NrlMutualRelease;
   ticketTier?: ActiveTicketTier;
+  supporterAttendance?: true;
   sponsor?: { offer: NrlSponsorOffer; bonusPaid?: true };
   pathways?: { earnedBy?: string[] };
   boardRecruitment?: NrlBoardRecruitment;
@@ -131,6 +137,7 @@ export interface NrlCareerHistoryRow {
   coachRetained?: true;
   judiciary?: { case: NrlJudiciaryCase; matchesAfter: number };
   judiciaryCarry?: NrlJudiciaryCarry;
+  attendanceForm?: string;
 }
 interface NrlAcademyAssignment {
   player: NrlCareerPlayer;
@@ -219,6 +226,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'hireCoach'; role: NrlCoachRole; year: number; round: number }
   | { type: 'hireCoach'; role: 'development'; year: number; clubId: string; round: number }
   | { type: 'setTicketTier'; tier: NrlTicketTier; year: number; round: number }
+  | { type: 'setSupporterAttendance'; year: number; clubId: string; enabled: boolean }
   | { type: 'signSponsor'; offer: NrlSponsorOffer; year: number; clubId: string }
   | { type: 'acceptBoardPathways'; year: number; clubId: string }
   | { type: 'acceptBoardRecruitment'; year: number; clubId: string; role: NrlRole }
@@ -1053,6 +1061,35 @@ function homeGateReceipt(fixture: NrlFixture, homeWin: boolean, tier: NrlTicketT
     + changes[fixture.finalsRound ? 'homeFinal' : homeWin ? 'regularWin' : 'regularNonWin'];
 }
 
+function clubResult(match: Pick<NrlMatchResult, 'homeId' | 'homeScore' | 'awayScore'>, clubId: string): NrlSupporterForm {
+  if (match.homeScore === match.awayScore) return 'D';
+  return (match.homeScore > match.awayScore) === (match.homeId === clubId) ? 'W' : 'L';
+}
+
+function supporterAdjustment(form: readonly string[], tier: NrlTicketTier) {
+  return SUPPORTER_PRICE_ADJUSTMENT[tier] + SUPPORTER_FORM_STEP * form.slice(-SUPPORTER_FORM_MATCHES)
+    .reduce((sum, result) => sum + (result === 'W' ? 1 : result === 'L' ? -1 : 0), 0);
+}
+
+function recentSupporterForm({ results, clubId }: NrlManagerState, before: number) {
+  return results.filter(match => match.round < before && (match.homeId === clubId || match.awayId === clubId))
+    .slice(-SUPPORTER_FORM_MATCHES).map(match => clubResult(match, clubId));
+}
+
+export function nrlSupporterAttendance({ season, finance, legacySeason, retired }: NrlCareerState) {
+  const { clubId, round } = season;
+  const tier = finance.ticketTier ?? 'standard';
+  const form = recentSupporterForm(season, round + Number(season.phase === 'complete'));
+  const nextHome = scheduledClubFixtures(season).find(match => hasHomeGate(match, clubId));
+  const available = !legacySeason && !retired && Boolean(season.kickerId);
+  return {
+    form, adjustment: supporterAdjustment(form, tier), nextHome,
+    available, enabled: Boolean(finance.supporterAttendance),
+    locked: season.phase !== 'regular' || round !== 1 || Boolean(season.live),
+    priceAdjustment: SUPPORTER_PRICE_ADJUSTMENT[tier], perResult: SUPPORTER_FORM_STEP,
+  };
+}
+
 function payThroughRound(annual: number, round: number, ticks: number) {
   return Math.floor(annual * round / ticks);
 }
@@ -1133,7 +1170,9 @@ function tickBooks(finance: NrlCareerBook, season: NrlManagerState, round: numbe
   const installment = (annual: number) => payThroughRound(annual, round, ticks) - payThroughRound(annual, round - 1, ticks);
   const fixture = results.find(result => result.homeId === season.clubId || result.awayId === season.clubId);
   const home = fixture && hasHomeGate(fixture, season.clubId);
-  const gate = home ? homeGateReceipt(fixture, fixture.homeScore > fixture.awayScore, finance.ticketTier ?? 'standard') : 0;
+  const tier = finance.ticketTier ?? 'standard';
+  const gate = home ? homeGateReceipt(fixture, fixture.homeScore > fixture.awayScore, tier)
+    + (finance.supporterAttendance ? supporterAdjustment(recentSupporterForm(season, round), tier) : 0) : 0;
   const concessions = home && concessionsActive(finance, round, inheritedConcessions);
   const earnsSponsorBonus = finance.sponsor?.offer === 'finals' && round === nrlRegularRounds(season.year)
     && nrlLadder(season).slice(0, NRL_FINALS_SPOTS).some(row => row.clubId === season.clubId);
@@ -1169,6 +1208,17 @@ export function nrlFinanceForecast(state: NrlCareerState) {
       const nonWin = homeGateReceipt(clubMatch, false, tier);
       gateLow += Math.min(win, nonWin);
       gateHigh += Math.max(win, nonWin);
+      if (finance.supporterAttendance) {
+        if (clubMatch.round === round) {
+          const adjustment = supporterAdjustment(recentSupporterForm(season, round), tier);
+          gateLow += adjustment;
+          gateHigh += adjustment;
+        } else {
+          const price = SUPPORTER_PRICE_ADJUSTMENT[tier];
+          gateLow += price - SUPPORTER_FORM_LIMIT;
+          gateHigh += price + SUPPORTER_FORM_LIMIT;
+        }
+      }
       if (concessionsActive(finance, clubMatch.round, inherited)) projectedConcessions += CONCESSIONS_HOME_INCOME;
     } else trips++;
   }
@@ -1613,6 +1663,8 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
       ...(state.finance.coachCourseRound !== undefined && { qualified: true as const }) } : undefined;
   const history = state.history.map(row => row.year === season.year ? {
     ...row, finals: archiveNrlFinals(season),
+    ...(state.finance.supporterAttendance && { attendanceForm: season.results.filter(match => !match.finalsRound
+      && (match.homeId === season.clubId || match.awayId === season.clubId)).map(match => clubResult(match, season.clubId)).join('') }),
     ...(playerSeasons && { playerSeasons }),
     ...(developmentFocus ? { development: { focus: developmentFocus, affected: focusGains.size } } : {}),
     ...(coachDevelopment ? { coachDevelopment } : {}),
@@ -1783,6 +1835,14 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         return { ...state, finance: { ...state.finance, ticketTier: action.tier } };
       }
       return action.tier === 'standard' && ticketTier ? { ...state, finance } : state;
+    }
+    case 'setSupporterAttendance': {
+      const { year, clubId, round, phase } = state.season;
+      if (action.year !== year || action.clubId !== clubId || round !== 1 || phase !== 'regular'
+        || state.legacySeason || !state.season.kickerId || typeof action.enabled !== 'boolean') return state;
+      const { supporterAttendance, ...standard } = state.finance;
+      if (Boolean(supporterAttendance) === action.enabled) return state;
+      return { ...state, finance: action.enabled ? { ...state.finance, supporterAttendance: true } : standard };
     }
     case 'signSponsor': {
       if (action.year !== state.season.year || action.clubId !== state.season.clubId
@@ -1996,6 +2056,7 @@ function validBook(value: unknown, roundLimit: number): value is NrlCareerBook {
         && value.pathways.earnedBy.every((id, index, ids) => typeof id === 'string' && Boolean(id) && (!index || ids[index - 1] < id))))))
     && (value.boardRecruitment === undefined || (value.fromRound === 1 && validBoardRecruitment(value.boardRecruitment, roundLimit)))
     && (value.ticketTier === undefined || (value.fromRound === 1 && activeTicketTier(value.ticketTier)))
+    && (value.supporterAttendance === undefined || (value.fromRound === 1 && value.supporterAttendance === true))
     && (value.sponsor === undefined || (value.fromRound === 1 && record(value.sponsor)
       && isSponsorOffer(value.sponsor.offer)
       && Object.keys(value.sponsor).length === (value.sponsor.bonusPaid === undefined ? 1 : 2)
@@ -2074,9 +2135,12 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
   } else if (value.playerSeasons !== undefined) {
     return false;
   }
-  if (value.finance === null) return value.coachDevelopment === undefined;
+  if (value.finance === null) return value.coachDevelopment === undefined && value.attendanceForm === undefined;
   if (!record(value.finance) || !validBook(value.finance, lastRound(year))) return false;
   const finance = nrlCareerFinance({ finance: value.finance });
+  if (value.attendanceForm !== undefined
+    && (!finance.supporterAttendance || typeof value.attendanceForm !== 'string' || !/^[WDL]{24}$/.test(value.attendanceForm) || !value.finals)) return false;
+  if (finance.supporterAttendance && value.scoring === undefined) return false;
   if (!validCoachCourse(finance, year, lastRound(year)) || (finance.coachCourseRound !== undefined && value.scoring === undefined)) return false;
   if (finance.coachHire?.role === 'development'
     && (value.scoring === undefined || !canHireDevelopmentAssistant(year, value.clubId, finance.coachHire.round))) return false;
@@ -2127,6 +2191,7 @@ function booksMatch(a: NrlCareerBook, b: NrlCareerBook): boolean {
     && a.mutualRelease?.playerId === b.mutualRelease?.playerId && a.mutualRelease?.playerName === b.mutualRelease?.playerName
     && a.mutualRelease?.annualSalary === b.mutualRelease?.annualSalary
     && a.ticketTier === b.ticketTier
+    && a.supporterAttendance === b.supporterAttendance
     && a.sponsor?.offer === b.sponsor?.offer && a.sponsor?.bonusPaid === b.sponsor?.bonusPaid
     && JSON.stringify(a.pathways) === JSON.stringify(b.pathways)
     && a.boardRecruitment?.role === b.boardRecruitment?.role && a.boardRecruitment?.paid === b.boardRecruitment?.paid
@@ -2143,6 +2208,35 @@ function validCoachCourse(book: NrlCareerBook, year: number, through: number): b
   return coachCourseRound === undefined || (year < NRL_LAST_YEAR && Boolean(coachHire && !coachHire.retained
     && coachHire.role !== 'development' && coachCourseRound >= coachHire.round && coachCourseRound <= through
     && coachCourseRound + COACH_COURSE_ROUNDS - 1 <= nrlRegularRounds(year)));
+}
+
+function validArchivedAttendance({ year, clubId, finance, attendanceForm, finals, wins, draws }: NrlCareerHistoryRow): boolean {
+  if (!finance?.supporterAttendance) return attendanceForm === undefined;
+  if (!attendanceForm || !finals) return false;
+  const regular = [...attendanceForm] as NrlSupporterForm[];
+  const archived = nrlArchivedFinals(finals, year);
+  if (!archived || regular.filter(result => result === 'W').length !== wins || regular.filter(result => result === 'D').length !== draws) return false;
+  const tier = finance.ticketTier ?? 'standard';
+  const form: NrlSupporterForm[] = [];
+  let gate = 0;
+  const append = (fixture: NrlFixture, result: NrlSupporterForm) => {
+    if (hasHomeGate(fixture, clubId)) {
+      gate += homeGateReceipt(fixture, result === 'W', tier) + supporterAdjustment(form, tier);
+    }
+    form.push(result);
+  };
+  const { draw } = nrlSeasonPlan(year);
+  for (const [index, fixtures] of draw.entries()) {
+    const found = fixtures.find(pair => pair.includes(clubId));
+    if (found) {
+      const [homeId, awayId] = found;
+      append({ homeId, awayId, round: index + 1 }, regular[form.length]);
+    }
+  }
+  for (const match of archived.matches) {
+    if (match.homeId === clubId || match.awayId === clubId) append(match, clubResult(match, clubId));
+  }
+  return gate === finance.gateReceipts;
 }
 
 function validWorld(state: NrlCareerState): boolean {
@@ -2185,7 +2279,8 @@ function validCareerBooks(state: NrlCareerState): boolean {
   const finalRound = lastRound(season.year);
   if (finance.fromRound > played + 1 || (finance.fromRound !== 1 && !legacySeason)
     || (legacySeason && (finance.ticketTier !== undefined || finance.sponsor !== undefined
-      || finance.concessionsUpgradeRound !== undefined || finance.concessionReceipts !== undefined || finance.boardRecruitment !== undefined))) return false;
+      || finance.concessionsUpgradeRound !== undefined || finance.concessionReceipts !== undefined || finance.boardRecruitment !== undefined
+      || finance.supporterAttendance !== undefined))) return false;
   const coach = finance.coachHire;
   const release = finance.mutualRelease;
   if (!validCoachCourse(finance, season.year, season.round)
@@ -2278,11 +2373,13 @@ function validCareerBooks(state: NrlCareerState): boolean {
       if (receipt.clubId !== expected.clubId || receipt.rank !== expected.rank || receipt.wins !== expected.wins
         || receipt.draws !== expected.draws || receipt.losses !== expected.losses || receipt.championId !== expected.championId
         || receipt.development !== undefined || receipt.coachDevelopment !== undefined || receipt.finals !== undefined || receipt.playerSeasons !== undefined
+        || receipt.attendanceForm !== undefined
         || JSON.stringify(receipt.scoring) !== JSON.stringify(expected.scoring)
         || JSON.stringify(receipt.reserveGrade) !== JSON.stringify(expected.reserveGrade)
         || (receipt.finance === null) !== (expected.finance === null)
         || (receipt.finance && expected.finance && !booksMatch(receipt.finance, expected.finance))) return false;
     } else if (receipt.finance) {
+      if (!validArchivedAttendance(receipt)) return false;
       const recruitment = receipt.finance.boardRecruitment;
       if (recruitment?.signed && year + 1 === season.year) {
         const signed = recruitment.signed;
@@ -2323,6 +2420,7 @@ function validCareerBooks(state: NrlCareerState): boolean {
   if (coach?.retained && !history[season.year - openingYear - 1]?.coachRetained) return false;
   let expected = bookFrom(currentClub.cash, finance.fromRound);
   if (finance.ticketTier) expected.ticketTier = finance.ticketTier;
+  if (finance.supporterAttendance) expected.supporterAttendance = true;
   if (finance.sponsor) expected.sponsor = { offer: finance.sponsor.offer };
   if (finance.pathways) {
     if (legacySeason || !season.kickerId

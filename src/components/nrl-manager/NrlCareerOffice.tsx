@@ -22,6 +22,7 @@ import {
   nrlProjectedSummerOpenings, nrlSummerApplication, nrlSummerLastRound,
   type NrlCareerAction, type NrlCareerState,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverOffers, nrlTakeoverPlayers, nrlTicketPricingRefusal,
+  nrlSupporterAttendance,
   NRL_DEVELOPMENT_ASSISTANT, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
   type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
 } from '@/lib/nrlCareer';
@@ -887,6 +888,32 @@ function TicketPricing({ career, onAction, disabled }: { career: NrlCareerState;
   );
 }
 
+function SupporterAttendance({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const { year, clubId } = career.season;
+  const { adjustment, enabled, available, locked, form, nextHome, perResult, priceAdjustment } = nrlSupporterAttendance(career);
+  if (!available && !enabled) return null;
+  const signed = (amount: number) => (amount > 0 ? '+' : '') + money(amount);
+  const labels = { W: 'Win', D: 'Draw', L: 'Loss' };
+  return (
+    <details className="group mt-4 rounded-xl border border-border bg-background px-3">
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <span>Supporter attendance</span><ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-2 pb-3 text-sm">
+        <p className="text-muted-foreground">An optional simulated gate adjustment. Each win in your last four club matches adds {money(perResult)}, each loss takes away {money(perResult)}, and a draw has no effect.</p>
+        <p className="text-muted-foreground">{form.length ? `Recent form, oldest first: ${form.map(result => labels[result]).join(', ')}.` : 'No club matches played yet.'} Ticket price adjustment: {signed(priceAdjustment)}.</p>
+        {nextHome && <p>Round {nextHome.round} home gate would change by {signed(adjustment)} at today’s form. Playing another match before then may change it.</p>}
+        <p className="text-muted-foreground" role="status">{enabled ? 'Supporter attendance is on.' : 'Supporter attendance is off.'} {locked ? 'Locked for this season.' : 'Choose before Round 1 starts.'}</p>
+        <Button type="button" size="lg" variant="outline" className="h-auto min-h-11 whitespace-normal px-3 py-2 text-left"
+          disabled={disabled || locked} aria-pressed={enabled}
+          onClick={() => onAction({ type: 'setSupporterAttendance', year, clubId, enabled: !enabled })}>
+          {enabled ? 'Disable supporter attendance' : 'Enable supporter attendance'}
+        </Button>
+      </div>
+    </details>
+  );
+}
+
 const sponsorLabels: Record<NrlSponsorOffer, string> = { fixed: 'Fixed offer', finals: 'Finals offer' };
 
 function SeasonSponsor({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
@@ -1079,6 +1106,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
       <CashForecast career={career} hasAccounts={hasAccounts} />
       <SeasonSponsor career={career} onAction={onAction} disabled={disabled} />
       <TicketPricing career={career} onAction={onAction} disabled={disabled} />
+      <SupporterAttendance career={career} onAction={onAction} disabled={disabled} />
       <Concessions key={`${year}/${career.season.clubId}/${career.season.round}`} career={career} onAction={onAction} disabled={disabled} />
       <MedicalFacilities career={career} onAction={onAction} disabled={disabled} />
       <CoachingStaff career={career} onAction={onAction} disabled={disabled} />

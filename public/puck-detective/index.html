@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,7 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script>document.documentElement.classList.add('dukb-js')</script>
   <noscript></noscript>
   
   
@@ -258,7 +270,7 @@
 <p>Guess the mystery NHL player in 8 tries. Every guess reveals attribute clues.</p>
 <h2>Puck Detective: Guess the NHL Player Game</h2>
 <p>Guess the mystery NHL player in 8 tries. Every guess compares team, position, nationality, age and jersey number against the secret player, with directional arrows on the numeric clues. Play the daily challenge or unlimited mode.</p>
-<p>You get 8 guesses to name a mystery NHL player from the game's roster snapshot. Team and jersey clues use that snapshot, so players may have since moved or become free agents.</p>
+<p>You get 8 guesses to name a mystery NHL player. Daily uses its original roster snapshot. Unlimited uses NHL team rosters from November 13, 2026. Team and jersey clues come from the roster for that mode.</p>
 <p>Every guess is a real player, and every guess talks back: five chips compare team, position, nationality, age and jersey number against the secret answer. Solve the shared daily puzzle, or grind win streaks in unlimited mode.</p>
 <h2>How to play Puck Detective, a free NHL mystery player guessing game</h2>
 <h3>Type a player and read the five chips</h3>

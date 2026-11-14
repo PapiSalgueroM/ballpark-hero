@@ -231,9 +231,10 @@ vi.mock('@/lib/cbbGrid', async (importOriginal) => ({
    (empty) grid data matches, which a grid scores as a wrong guess, or the
    name a row put in F.STUB.pick. */
 vi.mock('@/components/game/PlayerAutocomplete', () => ({
-  PlayerAutocomplete: ({ onSelect }: { onSelect: (e: { name: string; rawName: string }) => void }) => {
+  PlayerAutocomplete: ({ onSelect }: { onSelect: (e: { name: string; rawName: string; meta: { playerId?: number } }) => void }) => {
     const name = F.STUB.pick || 'Nobody Real';
-    return <button type="button" onClick={() => onSelect({ name, rawName: name })}>stub guess</button>;
+    const playerId = F.PUCK_POOL.find(player => player.name === name)?.playerId;
+    return <button type="button" onClick={() => onSelect({ name, rawName: name, meta: { playerId } })}>stub guess</button>;
   },
 }));
 

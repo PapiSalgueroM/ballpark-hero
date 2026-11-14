@@ -42,7 +42,7 @@ export interface PuckDetectivePlayer {
   country: string;
   /** Broad position group used for the "close" (yellow-ish) position feedback tier. */
   group: 'forward' | 'defense' | 'goalie';
-  /** Career points from nhl_player_stats (name-matched), or null if unmatched (see #40 note). */
+  /** NHL regular-season career points, or null when no skater record is available. */
   careerPoints: number | null;
 }
 
@@ -173,7 +173,8 @@ const TEAM_NAME: Record<string, string> = {
   WPG: 'Winnipeg Jets',
 };
 
-export function teamLabel(abbr: string): string {
+export function teamLabel(abbr: string, unlimited = false): string {
+  if (unlimited && abbr === 'UTA') return 'Utah Mammoth';
   return TEAM_NAME[abbr] ?? abbr;
 }
 
@@ -300,6 +301,24 @@ export async function fetchPuckDetectivePool(): Promise<PuckDetectivePlayer[] | 
 
     const pool = [...byId.values()];
     return pool.length >= MIN_POOL_SIZE ? pool : null;
+  } catch {
+    return null;
+  }
+}
+
+export const PUCK_UNLIMITED_ROSTER_DATE = 'Nov 13, 2026';
+
+type PuckRosterRow = [number, string, NhlPosition, string, number, string, string, number | null];
+
+export async function fetchUnlimitedPuckPool(): Promise<PuckDetectivePlayer[] | null> {
+  try {
+    const { default: rows } = await import('@/data/puckNhlRoster20261113.json');
+    const asOf = new Date();
+    return (rows as PuckRosterRow[]).map(([playerId, name, position, team, jerseyNumber, birthDate, country, careerPoints]) => ({
+      playerId, name, position, team, jerseyNumber, country, careerPoints,
+      age: computeAge(birthDate, asOf),
+      group: POSITION_GROUP[position],
+    }));
   } catch {
     return null;
   }

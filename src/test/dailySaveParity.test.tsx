@@ -182,8 +182,12 @@ vi.mock('@/lib/collegeGrid', async (importOriginal) => {
 });
 vi.mock('@/components/game/PlayerAutocomplete', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/components/game/PlayerAutocomplete')>()),
-  PlayerAutocomplete: ({ onSelect }: { onSelect: (e: { name: string; rawName: string }) => void }) => {
-    const pick = () => { const name = F.STUB.pick || 'Nobody Real'; onSelect({ name, rawName: name }); };
+  PlayerAutocomplete: ({ onSelect }: { onSelect: (e: { name: string; rawName: string; meta: { playerId?: number } }) => void }) => {
+    const pick = () => {
+      const name = F.STUB.pick || 'Nobody Real';
+      const playerId = F.PUCK_POOL.find(player => player.name === name)?.playerId;
+      onSelect({ name, rawName: name, meta: { playerId } });
+    };
     return <button type="button" onClick={pick}>stub guess</button>;
   },
 }));
