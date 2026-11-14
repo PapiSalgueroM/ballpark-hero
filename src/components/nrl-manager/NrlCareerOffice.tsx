@@ -16,7 +16,7 @@ import {
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
   nrlConcessionsQuote, nrlConcessionsSpend,
   nrlDevelopmentAffected, nrlDevelopmentAssistantProgress, nrlFinanceForecast,
-  nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
+  nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities, nrlPhysioSpend,
   nrlLeagueRecruitmentPreview,
   nrlOffseasonFreeAgentPreview, nrlOffseasonFreeAgentsAvailable,
   nrlRecruitmentBrief, nrlRecruitmentPlan,
@@ -1337,6 +1337,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
                 ['Wages paid', cash.wagesPaid],
                 ['Operating costs', cash.operatingCosts],
                 ...(medicalSpend ? [['Medical upgrades', medicalSpend] as [string, number]] : []),
+                ...(cash.physio ? [['Physio session', nrlPhysioSpend(cash)] as const] : []),
                 ...(academySpend ? [['Academy facilities', academySpend] as const] : []),
                 ...(concessionsSpend ? [['Concessions upgrade', concessionsSpend] as const] : []),
                 ...(cash.mutualRelease ? [['Contract settlement', nrlMutualReleaseSpend(cash)] as const] : []),
@@ -2067,6 +2068,9 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                   </details>
                 )}
                 <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
+                {record.finance?.physio && <p className="text-sm text-muted-foreground">
+                  Physio session in Round {record.finance.physio.round} · {money(nrlPhysioSpend(record.finance))}
+                </p>}
                 {record.finance?.ticketTier && <p className="text-sm text-muted-foreground">Home ticket pricing {ticketLabels[record.finance.ticketTier]}</p>}
                 {record.finance?.sponsor && <p className="text-sm text-muted-foreground">Sponsor income {money(nrlSponsorIncome(record.finance))}</p>}
                 {(record.year !== year || retired) && record.finance?.pathways && (

@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
-import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
+import { createNrlCareer, nrlCareerFinance, readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
 import { nrlJudiciaryBans } from '@/lib/nrlJudiciary';
 import { createNrlSeason, nrlInjuries, nrlNextRound, nrlStarterOptions, NRL_SAVE_KEY } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
@@ -120,4 +120,32 @@ it('leaves legacy injury tracking and saves alone', () => {
   expect(screen.queryByText(/Can return/)).not.toBeInTheDocument();
   expect(raw()).toBe(bytes);
   expect(localStorage.getItem(fence)).toBe('4');
+});
+
+it('quotes the earlier Titans match, confirms one charge and reloads the shorter recovery', () => {
+  const career = through(createNrlCareer('broncos', 2), 12);
+  const bytes = JSON.stringify(career);
+  const page = open(bytes);
+  const row = injuryRow('Tane Rourke');
+  expect(row.getByText('Can return: Round 17 vs Dolphins')).toBeVisible();
+  const summary = row.getByText('Physio session for Tane Rourke');
+  fireEvent.click(summary);
+  expect(row.getByText('Recovery would take 3 rounds instead of 4.')).toBeVisible();
+  expect(row.getByText('Can return after physio: Round 15 vs Titans')).toBeVisible();
+  expect(raw()).toBe(bytes);
+  expect(localStorage.getItem(fence)).toBe('4');
+  fireEvent.click(row.getByRole('button', { name: 'Book physio for $60,000' }));
+  const paid = readNrlCareerSave(raw())!;
+  expect(nrlCareerFinance(career).cash - nrlCareerFinance(paid).cash).toBe(60000);
+  expect(row.getByText('Can return: Round 15 vs Titans')).toBeVisible();
+  expect(availability().getByText('Physio booked for Tane Rourke in Round 12.')).toBeVisible();
+  expect(localStorage.getItem(fence)).toBe('5');
+  page.unmount();
+  show();
+  click('Squad');
+  expect(injuryRow('Tane Rourke').getByText('Out for 3 rounds')).toBeVisible();
+  expect(injuryRow('Tane Rourke').getByText('Can return: Round 15 vs Titans')).toBeVisible();
+  expect(injuryRow('Tane Rourke').queryByText('Physio session for Tane Rourke')).not.toBeInTheDocument();
+  expect(raw()).toBe(JSON.stringify(paid));
+  expect(localStorage.getItem(fence)).toBe('5');
 });

@@ -11,11 +11,11 @@ import {
 } from '@/lib/nrlPlayerScoring';
 import {
   archiveNrlFinals, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
-  nrlInjuries, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
+  isNrlPhysioTreatment, nrlInjuries, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
   nrlPlanAdjustments, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlManagerState, type NrlMatchResult,
-  type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
+  type NrlPhysioTreatment, type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
 } from '@/lib/nrlManager';
 import {
   createNrlOriginSeries, isNrlOriginSeries, nrlOriginComplete, nrlOriginEligibility, playNrlOriginMatch, selectNrlOriginReserve, selectNrlOriginStarter,
@@ -39,6 +39,7 @@ export const NRL_SHORTLIST_LIMIT = 12;
 export const NRL_RECRUITMENT_PLAN_LIMIT = 3;
 const RETIREMENT_AGE = 36;
 const MEDICAL_UPGRADE_COST = { 2: 800_000, 3: 2_600_000 } as const;
+const NRL_PHYSIO_COST = 60_000;
 const ACADEMY_UPGRADE_COST = 600_000;
 const ACADEMY_UPGRADE_POTENTIAL = 3;
 const CONCESSIONS_UPGRADE_COST = 250_000;
@@ -103,6 +104,7 @@ export interface NrlCareerBook {
   wagesPaid: number;
   operatingCosts: number;
   medicalUpgrades?: NrlMedicalUpgrade[];
+  physio?: NrlPhysioTreatment;
   academyUpgradeRound?: number;
   concessionsUpgradeRound?: number;
   concessionReceipts?: number;
@@ -223,6 +225,7 @@ type OriginMatchAction = { year: number; side: NrlOriginSide; game: number } & (
 );
 
 export type NrlCareerAction = NrlAction
+  | { type: 'bookPhysio'; year: number; clubId: string; round: number; playerId: string }
   | { type: 'startOrigin'; year: number; side: NrlOriginSide; nominationId?: string }
   | OriginMatchAction
   | { type: 'startWorldCupAppointment'; nation: NrlWorldCupNation }
@@ -413,8 +416,7 @@ function unavailableForPromise(season: NrlManagerState, playerId: string, round:
   const spell = season.reserveGrade;
   if (spell?.playerId === playerId && spell.startedRound <= round
     && round < (spell.recalledRound ?? spell.startedRound + NRL_RESERVE_GRADE_ROUNDS)) return true;
-  if (season.results.some(match => match.round < round && match.injury?.playerId === playerId
-    && match.round + match.injury.rounds >= round)) return true;
+  if (nrlInjuries(season, round).has(playerId)) return true;
   return Boolean(season.judiciary && nrlJudiciaryBannedBefore(season, playerId, round));
 }
 
@@ -837,6 +839,10 @@ export function nrlMedicalSpend(book: NrlCareerBook): number {
   return book.medicalUpgrades?.reduce((total, upgrade) => total + MEDICAL_UPGRADE_COST[upgrade.level], 0) ?? 0;
 }
 
+export function nrlPhysioSpend(book: NrlCareerBook): number {
+  return book.physio ? NRL_PHYSIO_COST : 0;
+}
+
 export function nrlAcademyFacilitySpend(book: NrlCareerBook): number {
   return book.academyUpgradeRound === undefined ? 0 : ACADEMY_UPGRADE_COST;
 }
@@ -883,7 +889,7 @@ export function nrlCareerFinance(state: Pick<NrlCareerState, 'finance'>): NrlCar
     + nrlBoardRecruitmentIncome(state.finance)
     + (state.finance.concessionReceipts ?? 0) - nrlConcessionsSpend(state.finance)
     - wagesPaid - operatingCosts - nrlMedicalSpend(state.finance) - nrlAcademyFacilitySpend(state.finance)
-    - nrlMutualReleaseSpend(state.finance) - signingFee - wages - nrlCoachCourseSpend(state.finance);
+    - nrlMutualReleaseSpend(state.finance) - signingFee - wages - nrlCoachCourseSpend(state.finance) - nrlPhysioSpend(state.finance);
   return { ...state.finance, cash: openingCash + profit, profit };
 }
 
@@ -1005,6 +1011,25 @@ export function nrlMedicalUpgradeQuote(state: NrlCareerState) {
         : state.season.live ? 'Finish the live match first.'
           : facilityPurchaseRefusal(state.finance, lastRound(state.season.year), cost);
   return { level, nextLevel, cost, reason };
+}
+
+export function nrlPhysioQuote(state: NrlCareerState, playerId: string):
+  { ok: true; treatment: NrlPhysioTreatment; before: number; after: number; cost: number } | { ok: false; reason: string } {
+  const { season, finance } = state;
+  if (state.retired || state.outOfWork || state.legacySeason || season.phase !== 'regular' || !season.injuryTracking
+    || !season.kickerId || season.live || season.physio) return { ok: false, reason: 'The physio session is unavailable.' };
+  let injured: NrlMatchResult | undefined;
+  for (const match of season.results) {
+    if (match.injury?.playerId === playerId) injured = match;
+  }
+  const before = nrlInjuries(season).get(playerId) ?? 0;
+  if (!injured || before < 2) return { ok: false, reason: 'Choose a player with at least two rounds left to recover.' };
+  const cost = NRL_PHYSIO_COST;
+  if (nrlCareerFinance(state).cash < cost) return { ok: false, reason: 'The club needs more cash for the session.' };
+  if (facilityPurchaseRefusal(finance, lastRound(season.year), cost)) {
+    return { ok: false, reason: 'Club cash is reserved for the assistant’s wages.' };
+  }
+  return { ok: true, treatment: { playerId, injuryRound: injured.round, round: season.round }, before, after: before - 1, cost };
 }
 
 function addMedicalUpgrade(book: NrlCareerBook, upgrade: NrlMedicalUpgrade): NrlCareerBook {
@@ -1908,7 +1933,7 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
       lineup[role] = squad.find(player => player.role === role)!.id;
     }
   }
-  const { reserveGrade, judiciary, captainId, backupKickerId, ...lastSeason } = season;
+  const { reserveGrade, judiciary, captainId, backupKickerId, physio: _physio, ...lastSeason } = season;
   const returningBackup = !move && backupKickerId && squad.some(player => player.id === backupKickerId) ? backupKickerId : undefined;
   const returningKicker = !move && [season.kickerId, returningBackup]
     .find(id => id !== undefined && Object.values(lineup).includes(id));
@@ -2103,6 +2128,13 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       const { nextLevel, reason } = nrlMedicalUpgradeQuote(state);
       if (nextLevel === null || action.level !== nextLevel || reason !== null) return state;
       return { ...state, finance: addMedicalUpgrade(state.finance, { level: nextLevel, round: state.season.round }) };
+    }
+    case 'bookPhysio': {
+      const { year, clubId, round } = state.season;
+      if (action.year !== year || action.clubId !== clubId || action.round !== round) return state;
+      const quote = nrlPhysioQuote(state, action.playerId);
+      return quote.ok ? { ...state, season: { ...state.season, physio: quote.treatment },
+        finance: { ...state.finance, physio: quote.treatment } } : state;
     }
     case 'upgradeAcademy': {
       const { year, clubId, round } = state.season;
@@ -2337,6 +2369,7 @@ function validBook(value: unknown, roundLimit: number): value is NrlCareerBook {
     && [value.centralFunding, value.gateReceipts, value.wagesPaid, value.operatingCosts]
       .every(amount => intIn(amount, 0, Number.MAX_SAFE_INTEGER))
     && validMedicalUpgrades(value.medicalUpgrades, value.fromRound, roundLimit)
+    && (value.physio === undefined || (value.fromRound === 1 && isNrlPhysioTreatment(value.physio, roundLimit)))
     && (value.mutualRelease === undefined || (record(value.mutualRelease) && Object.keys(value.mutualRelease).length === 3
       && typeof value.mutualRelease.playerId === 'string' && Boolean(value.mutualRelease.playerId)
       && typeof value.mutualRelease.playerName === 'string' && Boolean(value.mutualRelease.playerName)
@@ -2459,6 +2492,7 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
   if (value.finance === null) return value.coachDevelopment === undefined && value.attendanceForm === undefined;
   if (!record(value.finance) || !validBook(value.finance, lastRound(year))) return false;
   const finance = nrlCareerFinance({ finance: value.finance });
+  if (finance.physio && (!scoring || finance.physio.round > nrlRegularRounds(year))) return false;
   if (value.attendanceForm !== undefined
     && (!finance.supporterAttendance || typeof value.attendanceForm !== 'string' || !/^[WDL]{24}$/.test(value.attendanceForm) || !value.finals)) return false;
   if (finance.supporterAttendance && value.scoring === undefined) return false;
@@ -2503,6 +2537,7 @@ function booksMatch(a: NrlCareerBook, b: NrlCareerBook): boolean {
   return a.fromRound === b.fromRound && a.openingCash === b.openingCash
     && a.centralFunding === b.centralFunding && a.gateReceipts === b.gateReceipts
     && a.wagesPaid === b.wagesPaid && a.operatingCosts === b.operatingCosts
+    && a.physio?.playerId === b.physio?.playerId && a.physio?.injuryRound === b.physio?.injuryRound && a.physio?.round === b.physio?.round
     && a.academyUpgradeRound === b.academyUpgradeRound
     && a.concessionsUpgradeRound === b.concessionsUpgradeRound && a.concessionReceipts === b.concessionReceipts
     && a.coachHire?.role === b.coachHire?.role && a.coachHire?.round === b.coachHire?.round
@@ -2603,6 +2638,9 @@ function validCareerBooks(state: NrlCareerState): boolean {
       || finance.supporterAttendance !== undefined))) return false;
   const coach = finance.coachHire;
   const release = finance.mutualRelease;
+  const physio = finance.physio;
+  if ((legacySeason && physio) || physio?.playerId !== season.physio?.playerId
+    || physio?.injuryRound !== season.physio?.injuryRound || physio?.round !== season.physio?.round) return false;
   if (!validCoachCourse(finance, season.year, season.round)
     || (finance.coachCourseRound !== undefined && (legacySeason || !season.kickerId))) return false;
   if (release) {
@@ -2815,6 +2853,10 @@ function validCareerBooks(state: NrlCareerState): boolean {
     if (finance.concessionsUpgradeRound === round) {
       if (facilityPurchaseRefusal(expected, finalRound, CONCESSIONS_UPGRADE_COST)) return false;
       expected = { ...expected, concessionsUpgradeRound: round };
+    }
+    if (physio?.round === round) {
+      if (facilityPurchaseRefusal(expected, finalRound, NRL_PHYSIO_COST)) return false;
+      expected = { ...expected, physio };
     }
     if (round <= played) {
       expected = tickBooks(expected, season, round, season.results.filter(result => result.round === round), cap, currentClub.concessionsInstalled);
