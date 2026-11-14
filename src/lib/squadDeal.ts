@@ -408,8 +408,9 @@ export interface SquadResult { rating: number; chemistry: number; grade: string;
  * cutoffs (which made a mid-table XI a "B" and near-full Legends an "A+" no
  * matter how the draft or extras went, while "D" needed active sabotage).
  */
-export function simulateSquad(picks: Player[], extras: ExtraOption[] = [], era: Era = 'current'): SquadResult {
-  if (!picks.length) return { rating: 0, chemistry: 0, grade: 'D', facts: [] };
+/** The rating and chemistry used by the result and offer comparisons. */
+export function squadDealScore(picks: Player[], extras: ExtraOption[] = [], era: Era = 'current'): Pick<SquadResult, 'rating' | 'chemistry'> {
+  if (!picks.length) return { rating: 0, chemistry: 0 };
   const ratings = picks.map(p => ratingFor(p, era));
   const avg = ratings.reduce((a, b) => a + b, 0) / ratings.length;
   let chemPts = 0;
@@ -423,6 +424,37 @@ export function simulateSquad(picks: Player[], extras: ExtraOption[] = [], era: 
   const extraChem = extras.reduce((s2, e) => s2 + e.chemMod, 0);
   const chemistry = Math.max(0, Math.min(100, Math.round((chemPts / (picks.length * accessors.length)) * 100) + extraChem));
   const rating = Math.max(1, Math.min(100, Math.round(avg * 0.82 + chemistry * 0.18) + extraRating));
+  return { rating, chemistry };
+}
+
+/** Use the finish formula to look for a different offer in the same slot. */
+export function bankerChemistryCounter(
+  pool: Player[], slot: FormationSlot, squad: Player[], offer: Player, excluded: ReadonlySet<string>, era: Era,
+): Player | null {
+  const offerRating = ratingFor(offer, era);
+  const onSquad = new Set(squad.map(p => p.name));
+  const previous = squadDealScore([...squad, offer], [], era);
+  let best: Player | null = null;
+  let bestChemistry = previous.chemistry;
+  let bestRating = 0;
+  for (const player of pool) {
+    if (player.name === offer.name || excluded.has(player.name) || onSquad.has(player.name) || !slot.allowed.includes(player.position)) continue;
+    const rating = ratingFor(player, era);
+    if (rating < offerRating - 5 || rating > offerRating) continue;
+    const score = squadDealScore([...squad, player], [], era);
+    if (score.chemistry <= previous.chemistry) continue;
+    if (score.chemistry > bestChemistry || (score.chemistry === bestChemistry && score.rating > bestRating)) {
+      best = player;
+      bestChemistry = score.chemistry;
+      bestRating = score.rating;
+    }
+  }
+  return best;
+}
+
+export function simulateSquad(picks: Player[], extras: ExtraOption[] = [], era: Era = 'current'): SquadResult {
+  if (!picks.length) return { rating: 0, chemistry: 0, grade: 'D', facts: [] };
+  const { rating, chemistry } = squadDealScore(picks, extras, era);
   const grade = rating >= 84 ? 'A+' : rating >= 76 ? 'A' : rating >= 66 ? 'B' : rating >= 55 ? 'C' : 'D';
 
   const topScorer = [...picks].sort((a, b) => b.goals - a.goals)[0];

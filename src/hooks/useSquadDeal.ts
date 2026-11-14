@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { Player } from '@/types/game';
 import {
   Formation, FORMATIONS, Era, MEMES, EXTRA_DEALS, ExtraOption,
-  fetchSquadPool, buildCandidates, bankerOffer, simulateSquad, SquadResult,
+  fetchSquadPool, buildCandidates, bankerOffer, bankerChemistryCounter, squadDealScore, simulateSquad, SquadResult,
   loadLeaderboard, saveScore, LeaderEntry, Topic, TOPICS, filterByTopic, topicCanFill, ratingFor,
 } from '@/lib/squadDeal';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -36,6 +36,7 @@ export function useSquadDeal() {
   const [slotPhase, setSlotPhase] = useState<SlotPhase>('pickBox');
   const [roundIdx, setRoundIdx] = useState(0);
   const [offer, setOffer] = useState<Player | null>(null);
+  const [withdrawnOffer, setWithdrawnOffer] = useState<Player | null>(null);
   const [bankerCalling, setBankerCalling] = useState(false);
 
   const [extrasChosen, setExtrasChosen] = useState<Record<string, ExtraOption>>({});
@@ -44,6 +45,7 @@ export function useSquadDeal() {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   // Names the banker has already offered for the active slot, so it never re-offers the same player.
   const offeredRef = useRef<Set<string>>(new Set());
+  const counterUsed = useRef(false);
 
   useEffect(() => {
     setLeaderboard(loadLeaderboard());
@@ -65,6 +67,8 @@ export function useSquadDeal() {
     setPool(p);
     setSquad(f.slots.map(() => null));
     setActiveSlot(null);
+    counterUsed.current = false;
+    setWithdrawnOffer(null);
     setExtrasChosen({});
     setResult(null);
     setPhase('draft');
@@ -102,7 +106,7 @@ export function useSquadDeal() {
     if (phase !== 'draft' || activeSlot !== null || squad[idx]) return;
     const used = new Set(squad.filter((p): p is Player => !!p).map(p => p.name));
     setCandidates(buildCandidates(pool, formation.slots[idx], used, memesPool));
-    setKeptIdx(null); setEliminated([]); setSelected([]); setRoundIdx(0); setOffer(null);
+    setKeptIdx(null); setEliminated([]); setSelected([]); setRoundIdx(0); setOffer(null); setWithdrawnOffer(null);
     offeredRef.current = new Set();
     setSlotPhase('pickBox');
     setActiveSlot(idx);
@@ -151,9 +155,22 @@ export function useSquadDeal() {
     timer.current = setTimeout(() => { setOffer(o); setBankerCalling(false); }, 1100);
   };
   const acceptDeal = () => { if (slotPhase === 'offer' && offer) assignPlayer(offer); };
+  const picked = squad.filter((p): p is Player => !!p);
+  const counter = activeSlot !== null && slotPhase === 'offer' && offer && !counterUsed.current ? bankerChemistryCounter(
+    pool, formation.slots[activeSlot], picked, offer,
+    new Set([...candidates.map(p => p.name), ...offeredRef.current]), era,
+  ) : null;
+  const counterForChemistry = () => {
+    if (!counter || !offer || counterUsed.current) return;
+    counterUsed.current = true;
+    offeredRef.current.add(counter.name);
+    setWithdrawnOffer(offer);
+    setOffer(counter);
+  };
   const rejectDeal = () => {
     if (slotPhase !== 'offer') return;
     setOffer(null);
+    setWithdrawnOffer(null);
     const nr = roundIdx + 1;
     if (nr < scheduleFor(candidates.length).length) { setRoundIdx(nr); setSelected([]); setSlotPhase('selecting'); }
     else setSlotPhase('final');
@@ -231,7 +248,13 @@ export function useSquadDeal() {
     startDraft, pool, squad, activeSlot, selectSlot,
     currentSlot: activeSlot !== null ? formation.slots[activeSlot] : null,
     candidates, keptIdx, eliminated, selected, slotPhase, opensThisRound, offer, bankerCalling, finalIndices,
-    pickBox, toggleSelect, reveal, requestOffer, acceptDeal, rejectDeal, pickFinal,
+    pickBox, toggleSelect, reveal, requestOffer, acceptDeal, rejectDeal, pickFinal, counterForChemistry,
+    canCounterForChemistry: !!counter,
+    counterChemistry: withdrawnOffer && offer ? {
+      withdrawnName: withdrawnOffer.name,
+      before: squadDealScore([...picked, withdrawnOffer], [], era).chemistry,
+      after: squadDealScore([...picked, offer], [], era).chemistry,
+    } : null,
     allFilled, goToExtras, extrasChosen, allExtrasChosen, simulate,
     topic, setTopic, era2Rating: (p: Player) => ratingFor(p, era),
     extraCat, extraStage, extraKept, extraElim, extraOffer, currentExtraCat,

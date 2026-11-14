@@ -13,7 +13,6 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { computeChemistry, formatChemistry } from '@/lib/chemistry';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 // Thresholds track playerRating's 2026-07-03 rescale (curve now spans ~41-85
@@ -71,13 +70,6 @@ const SquadDeal = () => {
     () => g.candidates.map((p, i) => ({ p, i, r: g.era2Rating(p) })).sort((a, b) => b.r - a.r),
     [g.candidates],
   );
-  const chemistry = useMemo(
-    () =>
-      computeChemistry(
-        g.squad.filter((p): p is Player => !!p).map((p) => ({ name: p.name, club: p.club, league: p.league, nationality: p.nationality })),
-      ),
-    [g.squad],
-  );
 
   const shell = (inner: ReactNode) => (
     <>
@@ -98,6 +90,7 @@ const SquadDeal = () => {
             'Pick a formation and an era (current or all-time legends).',
             'Tap any position on the pitch to draft it.',
             'Keep one case, eliminate the rest in rounds, hit Reveal, then take the Banker offer (Deal) or gamble (No Deal).',
+            'Once per draft, you can ask the Banker for a player who improves your chemistry. That replaces the original offer and can cost up to 5 player rating points.',
             'Fill all 11, pick your manager / stadium / fans / budget, then Simulate for a rating and grade.',
           ]} />
         <GameNav />
@@ -270,13 +263,6 @@ const SquadDeal = () => {
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">YOUR SQUAD</h1>
         <p className="text-muted-foreground text-sm mb-5">{g.formation.name} · {g.era === 'legends' ? 'All-Time Legends' : 'Current Era'}{g.memesOn ? ' · Memes' : ''}</p>
         <Pitch formation={g.formation} squad={g.squad} activeIndex={-1} />
-        {chemistry.totalBonus > 0 && (
-          <div className="mt-4 flex justify-center">
-            <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
-              {formatChemistry(chemistry)}
-            </span>
-          </div>
-        )}
         <div className="mt-6">
           <ResultScreen
             outcomeEmoji="🏟️"
@@ -284,7 +270,7 @@ const SquadDeal = () => {
             statRow={[
               { label: 'Rating', value: r.rating },
               { label: 'Grade', value: r.grade },
-              ...(chemistry.totalBonus > 0 ? [{ label: 'Chem. Bonus', value: `+${chemistry.totalBonus}` }] : []),
+              { label: 'Chemistry', value: `${r.chemistry}%` },
             ]}
             emojiGrid={'🏟️ ' + g.formation.name + ' · ' + r.grade}
             share={{
@@ -408,18 +394,26 @@ const SquadDeal = () => {
       </div>
 
       {g.slotPhase === 'offer' && g.offer && (
-        <div ref={revealRef} className="mt-6 bg-card border border-primary/40 rounded-2xl p-6 max-w-sm mx-auto text-center shadow-xl">
-          <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">The Banker offers</div>
+        <div ref={revealRef} role="region" aria-label="Banker offer" className="mt-6 bg-card border border-primary/40 rounded-2xl p-6 max-w-sm mx-auto text-center shadow-xl">
+          <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">{g.counterChemistry ? 'Chemistry counter' : 'The Banker offers'}</div>
           <div className="text-2xl font-bold text-foreground flex items-center justify-center gap-2">
             <FlagImg name={g.offer.nationality} size={18} />
             {g.offer.name}
           </div>
           <div className="text-sm text-muted-foreground mb-1">{g.offer.position} · {g.offer.club}</div>
           <div className={cn('text-3xl font-bold font-display mb-4', tierColor(g.era2Rating(g.offer)))}>{g.era2Rating(g.offer)}</div>
+          {g.counterChemistry && <div role="status" className="mb-3 space-y-1 text-sm">
+            <p>{g.counterChemistry.withdrawnName} is off the table.</p>
+            <p>Drafted squad chemistry {g.counterChemistry.before}% to {g.counterChemistry.after}%.</p>
+          </div>}
           <div className="flex gap-3">
             <button onClick={g.acceptDeal} className="flex-1 px-5 py-3 bg-primary text-primary-foreground rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:opacity-90"><Check className="w-5 h-5" /> DEAL</button>
             <button onClick={g.rejectDeal} className="flex-1 px-5 py-3 bg-secondary text-foreground rounded-xl font-bold inline-flex items-center justify-center gap-2 hover:bg-secondary/70"><X className="w-5 h-5" /> NO DEAL</button>
           </div>
+          {g.canCounterForChemistry && <div className="mt-3 space-y-2">
+            <p className="text-xs text-muted-foreground">One counter per draft. The original offer is withdrawn, and the new player may be rated up to 5 points lower.</p>
+            <button type="button" onClick={g.counterForChemistry} className="min-h-11 w-full rounded-lg border border-primary px-3 text-sm font-semibold text-primary">Counter for chemistry</button>
+          </div>}
         </div>
       )}
     </div>
