@@ -51,7 +51,9 @@ export function mlbSeasonReview(s: MlbSeasonLine, pos: MlbCareerPos): CareerRevi
       : [number('Batting average', s.avg, 3), number('Home runs', s.hr), number('Runs batted in', s.rbi), number('Stolen bases', s.sb), number('On base percentage', s.obp, 3), number('Doubles', s.doubles)];
   const bullpenRole = pos === 'RP' && (s.bullpenRole === 'closer' || s.bullpenRole === 'setup')
     ? [text('Bullpen role', s.bullpenRole === 'closer' ? 'Closer' : 'Setup')] : [];
-  return { ...stats(s.teamResult, [...regular, ...bullpenRole], [number('Team postseason games', s.poGames), text('Performance', s.poLine)]), gamesLabel: pos === 'SP' ? 'Starts' : pos === 'RP' ? 'Appearances' : 'Games' };
+  const battingApproach = pos !== 'SP' && pos !== 'RP' && s.contactApproach === true
+    ? [text('Batting approach', 'Shorter swing'), number('Hits', s.hits), number('At-bats', s.ab)] : [];
+  return { ...stats(s.teamResult, [...regular, ...bullpenRole, ...battingApproach], [number('Team postseason games', s.poGames), text('Performance', s.poLine)]), gamesLabel: pos === 'SP' ? 'Starts' : pos === 'RP' ? 'Appearances' : 'Games' };
 }
 
 export function nhlSeasonReview(s: NhlSeasonLine, pos: NhlCareerPos): CareerReviewStats {

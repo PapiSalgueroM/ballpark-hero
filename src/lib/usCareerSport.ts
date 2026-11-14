@@ -332,6 +332,12 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
     completed(c: C, year: number, team: string): boolean;
     set(c: C, enabled: boolean): C;
   };
+  battingApproach?: {
+    available(c: C): boolean;
+    current(c: C): boolean;
+    completed(c: C, year: number, team: string): boolean;
+    set(c: C, enabled: boolean): C;
+  };
 
   /* Contracts. */
   tradeRequest?: {

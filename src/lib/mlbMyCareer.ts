@@ -12,6 +12,8 @@ import { MLB_TEAMS } from '@/data/conquestDataMlb';
 import { seasonSwing, swingNote, playoffDepthOf, clutchSwing, clutchNote } from './careerVariance';
 import { US_ENGINE_SEASON, seasonLength, toSlate, fullSeasonOf, postseasonRounds, postseasonRung, playoffRunGames } from './usSeasonShape';
 import { mlbSeasonScore, wonAward } from './careerAwards';
+import { mlbHitterTotals, mlbThousandths } from './mlbHitterTotals';
+import { keyedRng } from './keyedRng';
 import { draftRival, judgeRivalSeason, rivalSeasonStream, rivalSeasonDraws, rivalKindOf } from './careerRival';
 import type { CareerRival, RivalSeasonPlay } from './careerRival';
 
@@ -161,6 +163,9 @@ export interface MlbSeasonLine {
    *  read the season ledger, and such a line was played on the engine's own. */
   slate?: number;
   // hitters
+  contactApproach?: true;
+  ab?: number;
+  hits?: number;
   avg?: number; hr?: number; rbi?: number; sb?: number;
   // pitchers
   wins?: number; lossesP?: number; era?: number; so?: number;
@@ -219,6 +224,7 @@ export interface MlbCareerState {
       'starter' here; their actual role is decided in the bullpen. */
   role?: 'starter' | 'backup';
   bullpenAssignment?: { year: number; team: string; role: MlbBullpenRole };
+  contactPlan?: { year: number; team: string };
   /** Round 470: the savings account, the market and the statement, on the
       same engine as Soccer Career's. Absent on a pre-470 save and repaired
       lazily by ensureMlbMoney, so an old save opens on every screen with its
@@ -480,6 +486,50 @@ export function setMlbBullpenAssignment(c: MlbCareerState, role: MlbBullpenChoic
   return { ...c, bullpenAssignment: { year: c.year, team: c.team, role } };
 }
 
+export function mlbContactAvailable(c: MlbCareerState): boolean {
+  return !MLB_PITCHERS.includes(c.pos) && c.role !== 'backup' && !c.retired && (c.suspendedSeasons ?? 0) <= 0
+    && c.contractYears > 0 && c.seasons.some(season => season.games > 0);
+}
+
+export function mlbContactActive(c: MlbCareerState): boolean {
+  return mlbContactAvailable(c) && c.contactPlan?.year === c.year && c.contactPlan.team === c.team;
+}
+
+export function setMlbContactPlan(c: MlbCareerState, enabled: boolean): MlbCareerState {
+  if (!mlbContactAvailable(c) || enabled === mlbContactActive(c)) return c;
+  if (enabled) return { ...c, contactPlan: { year: c.year, team: c.team } };
+  const next = { ...c };
+  delete next.contactPlan;
+  return next;
+}
+
+function shortenMlbSwing(line: MlbSeasonLine, full: MlbSeasonLine, work: number): void {
+  const avg = line.avg ?? 0;
+  if (avg <= 0 || line.obp === undefined || line.hr === undefined || full.hr === undefined) return;
+  const baseline = mlbHitterTotals(line.games, avg, line.hr + (line.doubles ?? 0), Math.round(line.games * 3.75));
+  if (!baseline) return;
+  const { ab, h } = baseline;
+  const homeRuns = Math.min(line.hr, Math.round(5 * line.games / US_ENGINE_SEASON.mlb));
+  const extra = Math.max(0, Math.min(homeRuns * 2, Math.floor(ab * 0.365) - h));
+  const contactAverage = mlbThousandths((h + extra) / ab) / 1000;
+  if (extra === 0 || contactAverage <= avg) return;
+  const fewerHomeRuns = Math.min(homeRuns, Math.ceil(extra / 2));
+  const fullFewer = Math.min(full.hr, Math.round(fewerHomeRuns * US_ENGINE_SEASON.mlb / work));
+  Object.assign(line, {
+    contactApproach: true,
+    ab,
+    hits: h + extra,
+    hr: line.hr - fewerHomeRuns,
+    avg: contactAverage,
+    obp: mlbThousandths(line.obp + contactAverage - avg) / 1000,
+  });
+  line.rbi = Math.max(line.hr ?? 0, (line.rbi ?? 0) - fewerHomeRuns);
+  if (line !== full) {
+    Object.assign(full, { hr: full.hr - fullFewer, avg: line.avg, obp: line.obp });
+    full.rbi = Math.max(full.hr ?? 0, (full.rbi ?? 0) - fullFewer);
+  }
+}
+
 export function mlbMarketSalary(c: MlbCareerState): number {
   // Round 58: position matters. Aces and shortstops get paid, relievers and
   // designated hitters do not, which is exactly how the market works.
@@ -546,6 +596,11 @@ export function simMlbSeason(
   c: MlbCareerState, teamQuality: number, rng: () => number, inSeasonRating = false,
 ): { line: MlbSeasonLine; notes: string[] } {
   const notes: string[] = [];
+  const contact = mlbContactActive(c);
+  if (!contact && c.contactPlan?.year === c.year && c.contactPlan.team === c.team && c.role === 'backup') {
+    notes.push('Camp put you on the bench, so the shorter-swing plan did not apply.');
+  }
+  if (c.contactPlan) delete c.contactPlan;
   /* Round 1226: how many games his club's season holds comes from the sourced
      ledger (src/data/usSeasonLedgerMlb.ts) by year and club, never from a
      number typed here: 60 in 2020, and 161, 163 or 58 for the clubs that did
@@ -601,6 +656,12 @@ export function simMlbSeason(
     notes.push(bullpenRole === 'closer' ? 'Bullpen role: closer, pitching for saves.' : 'Bullpen role: setup, pitching for holds.');
   }
   const line = mlbLineOnSlate(full, work);
+  const usualBatting = contact ? { avg: full.avg, hr: full.hr } : null;
+  if (contact) {
+    shortenMlbSwing(line, full, work);
+    notes.push(line.contactApproach ? 'Shorter swing: more hits and fewer home runs in the regular season.'
+      : 'Shorter swing: your season line left no room for a power trade-off.');
+  }
   if (seasonRating) line.seasonRating = seasonRating;
 
   const strength = teamQuality + (seasonOverall - 76) * 0.35;
@@ -693,13 +754,22 @@ export function simMlbSeason(
   if (!isPitcher && c.pos !== 'DH' && fullGames >= 130 && wonAward(rng, 'mlb', 'goldGlove', c.pos, statScore)) {
     line.awards.push('Gold Glove'); notes.push('🧤 Gold Glove.');
   }
-  if (!isPitcher && (full.hr ?? 0) >= 28 && fullGames >= 130 && wonAward(rng, 'mlb', 'silverSlugger', c.pos, statScore)) {
+  const usualHr = usualBatting?.hr ?? full.hr ?? 0;
+  const usualAvg = usualBatting?.avg ?? full.avg ?? 0;
+  /** Keep the original award draw in the season stream even if the new line
+   *  loses its eligibility. A newly reached threshold gets its own ballot. */
+  const contactAward = (eligible: boolean, usual: boolean, award: 'silverSlugger' | 'battingTitle' | 'hrCrown') => {
+    if (!eligible && !usual) return false;
+    const awardRng = usual ? rng : keyedRng(`mlb-contact:${c.name}:${c.team}:${c.year}:${award}`);
+    return wonAward(awardRng, 'mlb', award, c.pos, statScore) && eligible;
+  };
+  if (!isPitcher && fullGames >= 130 && contactAward((full.hr ?? 0) >= 28, usualHr >= 28, 'silverSlugger')) {
     line.awards.push('Silver Slugger'); notes.push('🥈 Silver Slugger.');
   }
-  if (!isPitcher && (full.avg ?? 0) >= 0.335 && fullGames >= 130 && wonAward(rng, 'mlb', 'battingTitle', c.pos, statScore)) {
+  if (!isPitcher && fullGames >= 130 && contactAward((full.avg ?? 0) >= 0.335, usualAvg >= 0.335, 'battingTitle')) {
     line.awards.push('Batting Title'); notes.push('🏅 Batting title.');
   }
-  if (!isPitcher && (full.hr ?? 0) >= 45 && fullGames >= 130 && wonAward(rng, 'mlb', 'hrCrown', c.pos, statScore)) {
+  if (!isPitcher && fullGames >= 130 && contactAward((full.hr ?? 0) >= 45, usualHr >= 45, 'hrCrown')) {
     line.awards.push('Home Run Champion'); notes.push('💣 Led the league in home runs.');
   }
   if (c.pos === 'SP' && (full.era ?? 9) <= 2.6 && fullGames >= 28 && wonAward(rng, 'mlb', 'eraTitle', c.pos, statScore)) {

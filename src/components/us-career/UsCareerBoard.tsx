@@ -723,22 +723,25 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     const bullpen = sport.bullpenRole;
     const tandem = sport.goalieTandem;
     const passingDown = sport.passingDownRole;
-    if (!career || (!trade && !priority && !bullpen && !tandem && !passingDown) || pendingSave.current) return false;
+    const batting = sport.battingApproach;
+    if (!career || (!trade && !priority && !bullpen && !tandem && !passingDown && !batting) || pendingSave.current) return false;
     const currentBullpen = bullpen?.current(career);
     const currentTandem = tandem?.current(career);
     const currentPassingDown = passingDown?.current(career);
+    const currentBatting = batting?.current(career);
     try {
       const raw = localStorage.getItem(sport.saveKey);
       if (raw === savedBytes.current) return false;
       const stored = raw ? JSON.parse(raw) as SaveShape : null;
-      if (stored?.c && passingDown?.completed(stored.c, career.year, career.team)
+      if (stored?.c && (passingDown?.completed(stored.c, career.year, career.team) || batting?.completed(stored.c, career.year, career.team))
         && summerCareerKey(stored.c) === summerCareerKey(career)) {
         setTradeSaveMoved(true);
         return true;
       }
       if (stored && (stored.phase === 'season' || stored.phase === 'freeagency') && stored.c && stored.teamQuality != null
         && (trade?.receipt(stored.c) || priority?.receipt(stored.c) || bullpen?.current(stored.c) || currentBullpen
-          || tandem?.current(stored.c) || currentTandem || passingDown?.current(stored.c) || currentPassingDown)
+          || tandem?.current(stored.c) || currentTandem || passingDown?.current(stored.c) || currentPassingDown
+          || batting?.current(stored.c) || currentBatting)
         && stored.c.year === career.year && summerCareerKey(stored.c) === summerCareerKey(career)) {
         const held = restoreMarketTalk(stored.contractTalk, stored.c, sport.slug, sport.freeAgencyContact?.teams(stored.c).map(t => t.id));
         if (stored.phase === 'season' || held?.kind === 'freeagency') {
@@ -751,8 +754,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
         }
       }
     } catch { /* An unreadable career cannot safely accept a request. */ }
-    if (requesting || currentBullpen || currentTandem || currentPassingDown) setTradeSaveMoved(true);
-    return requesting || Boolean(currentBullpen || currentTandem || currentPassingDown);
+    if (requesting || currentBullpen || currentTandem || currentPassingDown || currentBatting) setTradeSaveMoved(true);
+    return requesting || Boolean(currentBullpen || currentTandem || currentPassingDown || currentBatting);
   };
 
   const playSeason = () => {
@@ -1865,6 +1868,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   const bullpenOptions = bullpen?.options(career) ?? [];
   const goalieTandem = sport.goalieTandem;
   const passingDownRole = sport.passingDownRole;
+  const battingApproach = sport.battingApproach;
 
   /* ------------------------------ season hub ------------------------------ */
   return withSaveStatus(
@@ -2078,6 +2082,22 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
               <option value="passing">Take more passing downs</option>
             </select>
             <span className="mt-1 block font-normal text-muted-foreground">Trade some regular-season rushing yards and touchdown chances for more catches and receiving yards. Camp still decides your role.</span>
+          </label>}
+          {battingApproach?.available(career) && <label className="mt-3 block text-left text-xs font-semibold">
+            Batting approach for this season
+            <select className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm"
+              disabled={!!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
+              value={battingApproach.current(career) ? 'contact' : 'usual'} onChange={event => {
+                if (pendingSave.current || marketRef.current || teamPlanSaveChanged(true)) return;
+                const next = battingApproach.set(career, event.target.value === 'contact');
+                if (next === career) return;
+                setCareer(next);
+                persist(next, 'season', teamQuality);
+              }}>
+              <option value="usual">Usual swing</option>
+              <option value="contact">Shorten your swing</option>
+            </select>
+            <span className="mt-1 block font-normal text-muted-foreground">Trade up to five regular-season home runs and some RBI for more hits at the same number of at-bats. Shorter seasons trade fewer. Camp still decides your role.</span>
           </label>}
           <UsCareerProgramme career={career} sport={sport.slug} onChange={next => {
             if (next === career || phase !== 'season') return;

@@ -178,7 +178,10 @@ export function useLineupBuilder() {
   const positions = useMemo(() => (formation ? FORMATIONS[formation] : []), [formation]);
 
   const filledCount = filledSlots.size;
-  const currentTeam = useMemo(() => teamAssignments[filledCount] ?? null, [teamAssignments, filledCount]);
+  const replacingSlot = phase === 'reviewing' && selectedPositionIndex !== null ? filledSlots.get(selectedPositionIndex) : undefined;
+  const currentTeam = useMemo(() => replacingSlot
+    ? { name: replacingSlot.assignedTeam, isNation: replacingSlot.isNation }
+    : teamAssignments[filledCount] ?? null, [replacingSlot, teamAssignments, filledCount]);
 
   const selectFormation = useCallback((f: Formation, choice: DraftChoice = { mode: 'mixed' }) => {
     if (choice.mode !== 'mixed' && (!Number.isInteger(choice.year) || choice.year < 2004 || lastRecordedYear(choice) > 2026)) return;
@@ -198,10 +201,29 @@ export function useLineupBuilder() {
   }, [cancelValidation, cancelEvaluation]);
 
   const selectPosition = useCallback((index: number) => {
-    if (filledSlots.has(index)) return;
+    if (phase !== 'building' || filledSlots.has(index)) return;
     setSelectedPositionIndex(index);
     setValidationError(null);
-  }, [filledSlots]);
+  }, [filledSlots, phase]);
+
+  const replacePick = useCallback((index: number) => {
+    if (phase !== 'reviewing' || !filledSlots.has(index)) return false;
+    cancelValidation();
+    cancelEvaluation();
+    if (!isCurrentBuildXiDraft(storedDraft.current)) {
+      setValidationError('Your lineup changed in another tab. Reload to continue that draft.');
+      return false;
+    }
+    setSelectedPositionIndex(index);
+    setValidationError(null);
+    return true;
+  }, [phase, filledSlots, cancelValidation, cancelEvaluation]);
+
+  const cancelReplacement = useCallback(() => {
+    cancelValidation();
+    setSelectedPositionIndex(null);
+    setValidationError(null);
+  }, [cancelValidation]);
 
   const startSpin = useCallback(() => {
     setIsSpinning(true);
@@ -213,6 +235,7 @@ export function useLineupBuilder() {
   }, []);
 
   const rerollTeam = useCallback(() => {
+    if (phase !== 'building') return;
     cancelValidation();
     setTeamAssignments((prev) => {
       const usedNames = new Set(prev.filter((_, i) => i !== filledCount).map((t) => t.name));
@@ -233,7 +256,7 @@ export function useLineupBuilder() {
     setSelectedPositionIndex(null);
     setValidationError(null);
     startSpin();
-  }, [filledCount, startSpin, cancelValidation, draftChoice]);
+  }, [phase, filledCount, startSpin, cancelValidation, draftChoice]);
 
   const undoLastPick = useCallback(() => {
     if (filledCount === 0 || (phase !== 'building' && phase !== 'reviewing')) return false;
@@ -257,8 +280,13 @@ export function useLineupBuilder() {
   const submitPlayer = useCallback(
     async (inputName: string, pickMeta?: PickMeta) => {
       let playerName = inputName;
-      const run = pickRun.current; // Round 1138: which pick this is, see cancelValidation
       if (selectedPositionIndex === null || !currentTeam) return;
+      if (replacingSlot) cancelValidation();
+      const run = pickRun.current; // Round 1138: which pick this is, see cancelValidation
+      if (replacingSlot && !isCurrentBuildXiDraft(storedDraft.current)) {
+        setValidationError('Your lineup changed in another tab. Reload to continue that draft.');
+        return;
+      }
       const position = positions[selectedPositionIndex];
       if (!position) return;
       if (draftChoice.mode !== 'mixed'
@@ -384,6 +412,12 @@ export function useLineupBuilder() {
         return;
       }
 
+      if (replacingSlot && !isCurrentBuildXiDraft(storedDraft.current)) {
+        setIsValidating(false);
+        setValidationError('Your lineup changed in another tab. Reload to continue that draft.');
+        return;
+      }
+
       const slot: FilledSlot = {
         ...position,
         playerName: playerName.trim(),
@@ -404,13 +438,14 @@ export function useLineupBuilder() {
       setSelectedPositionIndex(null);
       setIsValidating(false);
 
+      if (replacingSlot) return;
       if (filledCount + 1 >= 11) {
         setPhase('reviewing');
       } else {
         startSpin();
       }
     },
-    [selectedPositionIndex, currentTeam, positions, filledSlots, filledCount, startSpin, draftChoice]
+    [selectedPositionIndex, currentTeam, positions, filledSlots, filledCount, startSpin, draftChoice, replacingSlot, cancelValidation]
   );
 
   const filledSlotsArray = useMemo(() => {
@@ -420,7 +455,7 @@ export function useLineupBuilder() {
   }, [filledSlots]);
 
   const completeRecordedYearDraft = useCallback((nextVerdict: AIVerdict) => {
-    if (draftChoice.mode === 'mixed' || phase !== 'reviewing' || filledSlotsArray.length !== 11
+    if (draftChoice.mode === 'mixed' || phase !== 'reviewing' || replacingSlot || filledSlotsArray.length !== 11
       || new Set(filledSlotsArray.map(slot => slot.playerName.trim().toLowerCase())).size !== 11
       || filledSlotsArray.some(slot => !recordedPickVerifies(
         { name: slot.assignedTeam, isNation: slot.isNation }, slot.role, slot.pick, draftChoice,
@@ -428,10 +463,10 @@ export function useLineupBuilder() {
     cancelEvaluation();
     setVerdict(nextVerdict);
     setPhase('result');
-  }, [draftChoice, phase, filledSlotsArray, cancelEvaluation]);
+  }, [draftChoice, phase, replacingSlot, filledSlotsArray, cancelEvaluation]);
 
   const evaluateTeam = useCallback(async () => {
-    if (draftChoice.mode !== 'mixed') return;
+    if (draftChoice.mode !== 'mixed' || phase !== 'reviewing' || replacingSlot) return;
     if (filledSlotsArray.length !== 11) return;
     const run = ++evaluationRun.current;
     setIsEvaluating(true);
@@ -485,7 +520,7 @@ export function useLineupBuilder() {
     } finally {
       if (run === evaluationRun.current) setIsEvaluating(false);
     }
-  }, [filledSlotsArray, formation, draftChoice]);
+  }, [filledSlotsArray, formation, draftChoice, phase, replacingSlot]);
 
   const resetGame = useCallback(() => {
     cancelValidation();
@@ -513,6 +548,7 @@ export function useLineupBuilder() {
        deletes both of those and then this line. */
     checkingDown: false,
     selectFormation, selectPosition, submitPlayer, evaluateTeam, completeRecordedYearDraft, resetGame, undoLastPick,
+    replacingSlot, replacePick, cancelReplacement,
     startSpin, finishSpin, rerollTeam, teamAssignments, cancelValidation,
   };
 }

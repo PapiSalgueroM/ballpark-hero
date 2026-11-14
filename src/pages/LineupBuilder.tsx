@@ -52,6 +52,9 @@ const LineupBuilder = () => {
     completeRecordedYearDraft,
     resetGame,
     undoLastPick,
+    replacingSlot,
+    replacePick,
+    cancelReplacement,
     finishSpin,
     rerollTeam,
     teamAssignments,
@@ -66,7 +69,7 @@ const LineupBuilder = () => {
   const [browsingPlayers, setBrowsingPlayers] = useState(false);
   const [browseActivation, setBrowseActivation] = useState(0);
   const inputOwner = useRef<HTMLDivElement>(null);
-  const focusUndoInput = useRef(false);
+  const focusPickInput = useRef(false);
   const isClubYear = draftChoice.mode !== 'mixed';
   const recordedYear = isClubYear ? draftChoice.year : null;
   const lastYear = isClubYear ? lastRecordedYear(draftChoice) : null;
@@ -84,8 +87,8 @@ const LineupBuilder = () => {
   }, [browseActivation]);
 
   useLayoutEffect(() => {
-    if (!focusUndoInput.current || phase !== 'building' || selectedPositionIndex === null) return;
-    focusUndoInput.current = false;
+    if (!focusPickInput.current || selectedPositionIndex === null) return;
+    focusPickInput.current = false;
     inputOwner.current?.querySelector('input')?.focus();
   }, [phase, selectedPositionIndex, filledCount]);
 
@@ -94,7 +97,23 @@ const LineupBuilder = () => {
     inputRevision.current += 1;
     setPlayerInput('');
     setBrowsingPlayers(false);
-    focusUndoInput.current = true;
+    focusPickInput.current = true;
+  };
+
+  const openReplacement = (index: number) => {
+    if (!replacePick(index)) return;
+    inputRevision.current += 1;
+    setPlayerInput('');
+    setBrowsingPlayers(false);
+    focusPickInput.current = true;
+  };
+
+  const closeReplacement = () => {
+    inputRevision.current += 1;
+    setPlayerInput('');
+    setBrowsingPlayers(false);
+    focusPickInput.current = false;
+    cancelReplacement();
   };
 
   useEffect(() => {
@@ -199,6 +218,47 @@ const LineupBuilder = () => {
     });
     if (inputRevision.current === revision) setPlayerInput('');
   };
+
+  const pickSearch = (
+    <>
+      {(isClubYear || replacingSlot) && (
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <p className="text-xs text-muted-foreground">{isClubYear ? `Matching records, ${recordedPeriod}` : `Players for ${currentTeam?.name}`}</p>
+          <button type="button" disabled={searchDisabled} className="min-h-11 rounded-xl bg-secondary px-3 py-2 text-sm font-semibold text-secondary-foreground disabled:opacity-50"
+            onClick={() => {
+              inputRevision.current += 1;
+              setPlayerInput('');
+              setBrowsingPlayers(true);
+              setBrowseActivation(value => value + 1);
+            }}>
+            Browse players
+          </button>
+        </div>
+      )}
+      <div className="flex items-start gap-2">
+        <div className="flex-1" ref={inputOwner}>
+          <PlayerAutocomplete
+            key={replacingSlot ? `${selectedPositionIndex}:${browseActivation}` : browseActivation}
+            value={playerInput}
+            onChange={value => { inputRevision.current += 1; setBrowsingPlayers(false); setPlayerInput(value); }}
+            onSelect={handleSelectPlayer}
+            searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers, boostNames: cappedNames, ...(browsingPlayers ? { minChars: 0, limit: 50 } : {}) }}
+            placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
+            disabled={searchDisabled}
+            autoFocus={!isClubYear}
+            showRecordedYear={draftChoice.mode === 'club-era'}
+            emptyText={replacingSlot ? 'No matching records. Try another name or keep your current pick.' : isClubYear ? 'No matching records. Try another name or reroll the club.' : undefined}
+            validateOnly
+          />
+        </div>
+        {isValidating && (
+          <div className="rounded-xl px-5 py-3 bg-secondary text-muted-foreground inline-flex items-center">
+            <Loader2 className="w-4 h-4 animate-spin" />
+          </div>
+        )}
+      </div>
+    </>
+  );
 
   /* Round 825: role fit, chemistry and balance, slot by slot, off the rows
      the picks came from. The season sim reads these three numbers, and the
@@ -438,42 +498,7 @@ const LineupBuilder = () => {
                     {selectedPositionIndex === null ? 'Select a position on the pitch' : <>Filling: <span className="font-bold text-primary">{positions[selectedPositionIndex]?.label}</span></>}
                   </p>
 
-                  {isClubYear && (
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <p className="text-xs text-muted-foreground">Matching records, {recordedPeriod}</p>
-                      <button type="button" disabled={searchDisabled} className="min-h-11 rounded-xl bg-secondary px-3 py-2 text-sm font-semibold text-secondary-foreground disabled:opacity-50"
-                        onClick={() => {
-                          inputRevision.current += 1;
-                          setPlayerInput('');
-                          setBrowsingPlayers(true);
-                          setBrowseActivation(value => value + 1);
-                        }}>
-                        Browse players
-                      </button>
-                    </div>
-                  )}
-                  <div className="flex items-start gap-2">
-                    <div className="flex-1" ref={inputOwner}>
-                      <PlayerAutocomplete
-                        key={browseActivation}
-                        value={playerInput}
-                        onChange={value => { inputRevision.current += 1; setBrowsingPlayers(false); setPlayerInput(value); }}
-                        onSelect={handleSelectPlayer}
-                        searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers, boostNames: cappedNames, ...(isClubYear && browsingPlayers ? { minChars: 0, limit: 50 } : {}) }}
-                        placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
-                        disabled={searchDisabled}
-                        autoFocus={!isClubYear}
-                        showRecordedYear={draftChoice.mode === 'club-era'}
-                        emptyText={isClubYear ? 'No matching records. Try another name or reroll the club.' : undefined}
-                        validateOnly
-                      />
-                    </div>
-                    {isValidating && (
-                      <div className="rounded-xl px-5 py-3 bg-secondary text-muted-foreground inline-flex items-center">
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      </div>
-                    )}
-                  </div>
+                  {pickSearch}
 
                   {validationError && (
                     <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
@@ -528,14 +553,22 @@ const LineupBuilder = () => {
                 Your {formation} Starting XI
               </h2>
               <p className="text-center text-sm text-muted-foreground mb-4">{isClubYear ? `${draftLabel}, ${recordedPeriod}` : 'Review your team before submitting'}</p>
+              {replacingSlot && <section aria-label="Replace a starter" className="mb-4 space-y-2 rounded-lg border border-border p-3">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <p className="text-sm font-semibold">Replace {replacingSlot.playerName} at {replacingSlot.label}</p>
+                  <button type="button" onClick={closeReplacement} className="min-h-11 px-2 text-sm font-semibold text-muted-foreground hover:text-foreground">Keep current pick</button>
+                </div>
+                {pickSearch}
+              </section>}
               <div className="space-y-2">
                 {filledSlotsArray.map((slot, i) => (
-                  <div key={i} className="flex items-center gap-3 bg-secondary/30 rounded-lg px-4 py-2.5">
+                  <div key={i} className="flex items-center gap-2 rounded-lg bg-secondary/30 px-2 py-1 sm:gap-3 sm:px-4">
                     <span className="text-xs font-bold text-primary w-10 shrink-0">{slot.label}</span>
                     <span className="font-semibold text-foreground flex-1 min-w-0 truncate">{slot.playerName}</span>
                     <span className="text-xs text-muted-foreground shrink-0 max-w-[35%] truncate">
                       {slot.isNation ? <FlagImg name={slot.assignedTeam} size={16} showLabel /> : <>🏟️ {slot.assignedTeam}</>}
                     </span>
+                    <button type="button" onClick={() => openReplacement(i)} aria-label={`Replace ${slot.playerName} at ${slot.label}`} className="min-h-11 shrink-0 px-2 text-xs font-semibold text-primary hover:underline">Replace</button>
                   </div>
                 ))}
               </div>
@@ -560,7 +593,7 @@ const LineupBuilder = () => {
                     if (recordedYearVerdict) completeRecordedYearDraft(recordedYearVerdict);
                   } else void evaluateTeam();
                 }}
-                disabled={isEvaluating}
+                disabled={isEvaluating || !!replacingSlot}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
               >
                 {isEvaluating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
@@ -691,6 +724,7 @@ const LineupBuilder = () => {
             "Pick a matching player who fits the position. Club drafts require a club record within your chosen years",
             "Use Browse players in either club draft to see the records available for that club and period",
             "Check the role fit, chemistry and balance tiles under the pitch: the season sim plays all three",
+            "In review, replace any starter with another eligible player from the same draw before you submit",
             "Submit your full XI. Mixed uses its scouting evaluation. Club drafts use your selected records for a fictional season report",
           ]}
           examples={[

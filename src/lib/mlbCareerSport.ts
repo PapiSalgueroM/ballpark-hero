@@ -14,6 +14,7 @@ import {
   mlbShouldRetire, mlbLegacyOf, mlbCareerTotals, mlbRollTeamQuality, mlbTeamLabelOf,
   buildMlbFaWindow, mlbFaPushArgs, buildMlbExtension, mlbExtPushArgs,
   mlbAssignRole, mlbCampBattle, mlbWorkSlate, mlbBullpenChoices, mlbBullpenAssignment, setMlbBullpenAssignment,
+  mlbContactAvailable, mlbContactActive, setMlbContactPlan,
   type MlbCareerPos, type MlbCareerState, type MlbSeasonLine,
 } from '@/lib/mlbMyCareer';
 import { countOf, mlbCareerSoFar, mlbMajorAward, mlbStatLine } from '@/lib/usCareerStatLine';
@@ -83,6 +84,12 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = wi
   assignRole: mlbAssignRole,
   campBattle: mlbCampBattle,
   bullpenRole: { options: mlbBullpenChoices, current: mlbBullpenAssignment, set: setMlbBullpenAssignment },
+  battingApproach: {
+    available: mlbContactAvailable,
+    current: mlbContactActive,
+    completed: (c, year, team) => c.seasons.some(s => s.year === year && s.team === team && s.contactApproach === true),
+    set: setMlbContactPlan,
+  },
   simSeason: simMlbSeason,
   progress: mlbProgress,
   drawEvent: drawMlbEvent,

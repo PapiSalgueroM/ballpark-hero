@@ -861,6 +861,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
         heading: "Choosing today's league or the 2004 throwback",
         items: [
           "Pick your league: today's MLB, or the 2004 throwback with the Expos in Montreal, the Anaheim Angels, the Florida Marlins and the Devil Rays.",
+          "After a played season, signed starting hitters can shorten their swing from the season screen. The regular-season plan trades up to five home runs for more hits at the same number of at-bats. A short season has a smaller trade-off. See the actual approach and hits in the Career Log.",
         ],
         subsections: [
           {

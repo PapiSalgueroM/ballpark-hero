@@ -1,4 +1,12 @@
+## 2026-11-14: Starter swaps, batting approach and reserve coaching
+
+- Build Your XI lets players replace any of the eleven starters during review. The replacement keeps the slot's original club or nation draw and selected year or era. A rejected or unavailable answer leaves the existing starter in place.
+- MLB My Career lets an established signed starting hitter shorten their swing for a season. The sim trades some home runs for more hits in the same at-bats, and Career Log keeps the approach used.
+- NRL clubs can pay $90,000 for reserve coaching while a development spell has at least two rounds left. A completed paid spell ends one round earlier with the existing one-point gain. An early recall costs the fee and forgoes the gain.
+
 ## 2026-11-14: Baseball workloads, Stock Market review and college match ratings
+
+[PR #953](https://github.com/PapiSalgueroM/ballpark-hero/pull/953) published exact main `64bd8c0c7296fb893e220f97a59fff1a3a4af27a`, deployment `4a484ab6-c23a-42f1-8610-52a08c383d2b`. Seven live browser journeys, all four raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted all four game guides.
 
 - MLB Front Office lets managers use five healthy starters for one regular-season round. The plan lowers simulated injury risk for the five pitchers and may give up team strength at a top-heavy club. Last round records the decision that was used. A healthy backup can cover an injured starter at the backup's rating.
 - Player Stock Market shows the actual best affordable XI after settlement. It compares the opening price and final value in each slot. New Daily results save the comparison, and older results still open with their original numbers.

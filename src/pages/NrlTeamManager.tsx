@@ -33,7 +33,7 @@ import {
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
   nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport, nrlPositionTraining,
-  nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
+  nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveCoachQuote, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlSelectionPromise, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
   NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, reduceNrlCareer, runNrlFastForward,
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
@@ -1621,6 +1621,7 @@ function ReserveGradeDevelopment({ career, onAction, disabled }: {
   const selected = candidates.find(player => player.id === playerId);
   const assigned = reserveGrade && season.squad.find(player => player.id === reserveGrade.playerId);
   const remaining = nrlReserveGradeRemaining(season);
+  const coach = nrlReserveCoachQuote(career);
   if (!assigned && !candidates.length) return null;
   return (
     <details className="group mt-3 rounded-lg border border-border bg-background px-3">
@@ -1634,6 +1635,14 @@ function ReserveGradeDevelopment({ career, onAction, disabled }: {
             ? `${assigned.name} is in reserve grade. ${remaining} ${remaining === 1 ? 'round' : 'rounds'} left.`
             : reserveGrade?.recalledRound !== undefined ? `${assigned.name} was recalled early. No rating gain.`
               : `${assigned.name} completed the spell and gained one rating point.`}</p>
+          {coach && <div className="space-y-2">
+            <p className="text-muted-foreground">Book extra coaching to move selection and the rating award from Round {coach.currentReturn} to Round {coach.fasterReturn}.</p>
+            {coach.reason ? <p className="text-muted-foreground">{coach.reason}</p>
+              : <Button type="button" size="lg" className="px-3" disabled={disabled} onClick={() => {
+                if (onAction({ type: 'bookReserveCoach', year, clubId, round, playerId: assigned.id })) summary.current?.focus();
+              }}>Book reserve coach for {aud.format(coach.cost)}</Button>}
+          </div>}
+          {reserveGrade?.acceleratedRound !== undefined && <p className="text-muted-foreground">Reserve coaching booked in Round {reserveGrade.acceleratedRound}. Early recall still gives up the rating point.</p>}
           {remaining > 0 && <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled} onClick={() => {
             if (onAction({ type: 'recallReserveGrade', year, clubId, round, playerId: assigned.id })) summary.current?.focus();
           }}>Recall player</Button>}
@@ -2326,6 +2335,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Once per season, use club cash to assign a second academy scout while a report is pending. Both reports arrive next round.</li>
               <li>Choose Ready sooner for higher starting OVR or Higher ceiling for more potential when assigning an academy scout. Balanced uses the standard profile.</li>
               <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check the latest match result or open Rating changes in Squad. Existing ratings carry into the next season.</li>
+              <li>While a reserve-grade spell has at least two rounds left, book reserve coaching from Squad for $90,000. The prospect returns one round sooner with the same rating gain on completion.</li>
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
               <li>Before Round 1, choose an eligible position in the Board recruitment brief. Sign an external player for that position next season to earn a club cash bonus.</li>

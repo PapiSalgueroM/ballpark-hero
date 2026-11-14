@@ -1172,6 +1172,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "No duplicate players in your lineup",
         items: [
           "No duplicate players across your XI.",
+          "In review, replace any starter from the original club or nation draw. The same position and recorded dates apply, and your first pick stays until the new one is verified.",
         ],
       },
       {

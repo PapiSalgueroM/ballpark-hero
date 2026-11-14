@@ -28,6 +28,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Choose Counter opponent in Attack plan to respond to the rival’s simulated style. Shift wide against middle pressure, or protect the edges at the cost of some attack. Check the ratings before choosing.',
       'Use Individual recovery in Preparation to give one available player lighter training before a match. Compare their kickoff fitness while the rest of the squad keeps its plan.',
       'Before a regular-season away match, book one recovery session per season from Preparation. It costs $120,000 from club cash and adds up to eight fitness points at kickoff.',
+      'While a reserve-grade spell has at least two rounds left, book reserve coaching from Squad for $90,000. A completed spell returns the prospect one round sooner with the same one-point rating gain.',
       'Before Play Live, you can hold one named reserve for later. At the break, choose up to two changes at different positions. Bring on the held reserve, keep a rotating reserve on, or use automatic rotation.',
       'Before kick-off, open Hold one reserve for later in Match centre to see which starters the Quick Sim reserves cover. Select a held reserve to compare the opening Live rotation.',
       'Use First reserve in the rotation preview to move a named reserve to the front of the bench and compare the updated plans before kick-off.',
