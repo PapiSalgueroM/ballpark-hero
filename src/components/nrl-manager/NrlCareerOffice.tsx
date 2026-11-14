@@ -381,7 +381,7 @@ function ContractApproaches({ career, onAction, disabled }: { career: NrlCareerS
                 {preview.reason ? <p>{preview.reason}</p> : <>
                   <p>{preview.potentialClubs === 0 ? 'No rival club fits this deal right now.'
                     : `${preview.potentialClubs} rival ${preview.potentialClubs === 1 ? 'club' : 'clubs'} could take over the deal right now.`}</p>
-                  <p>A move would leave ${money(Math.abs(preview.capGain))} {preview.capGain < 0 ? 'less' : 'more'} cap room in {preview.nextYear} after reserving a squad place.</p>
+                  <p>A move would leave {money(Math.abs(preview.capGain))} {preview.capGain < 0 ? 'less' : 'more'} cap room in {preview.nextYear} after reserving a squad place.</p>
                 </>}
               </div>
               <label className="flex min-h-11 items-start gap-2">

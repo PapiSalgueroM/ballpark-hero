@@ -69,7 +69,7 @@ it('shows the squad cover refusal before permission and accepts after an actual 
   fireEvent.change(screen.getByLabelText('Term'), { target: { value: '1' } });
   fireEvent.click(screen.getByRole('button', { name: 'Agree contract' }));
   expect(desk.getByText('16 rival clubs could take over the deal right now.')).toBeVisible();
-  expect(desk.getByText(/\$256,034 more cap room/)).toBeVisible();
+  expect(desk.getByText('A move would leave $256,034 more cap room in 2027 after reserving a squad place.')).toBeVisible();
   expect(desk.getByRole('button', { name: 'Confirm permission' })).toBeDisabled();
   fireEvent.click(desk.getByRole('checkbox', { name: /player and club agree/ }));
   fireEvent.click(desk.getByRole('button', { name: 'Confirm permission' }));
