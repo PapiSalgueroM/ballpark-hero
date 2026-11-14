@@ -1,4 +1,12 @@
+## 2026-11-14: Soccer growth curves, NBA free-agent outreach and NRL opponent scouting
+
+- In Soccer Career, early-prime players can grow faster in their young senior seasons, late bloomers grow more slowly early and get a lift in their prime, and an extended prime slows decline at ages 33 and 34. These changes are visible in saved season checkpoints.
+- NBA free agents can ask their agent to contact any franchise active in that year. A club can make one extra offer or decline. The original offers and saved negotiations stay available.
+- NRL managers can shortlist recruitment-eligible players while scouting a club from Ladder and open those targets in Recruitment.
+
 ## 2026-11-14: Soccer rehab ratings, NBA release requests and trained NRL starters
+
+[PR #938](https://github.com/PapiSalgueroM/ballpark-hero/pull/938) published exact main `e378923b502655be9ae9a12462e17ee7b5208157`, deployment `50e0c162-57b8-4c62-9000-4d9e07ee5d5e`. Eight live browser journeys, all 174 sitemap routes and the three raw guides passed. IndexNow accepted all three changed guides.
 
 - Soccer Career applies the actual pace and physical loss from serious injury rehab to the current overall. Season Ratings keeps the overall before rehab and on return for that saved injury year.
 - NBA My Career players can ask their agent for a release. A granted release ends the existing deal without a payout and opens the regular free-agent market. Already earned salary stays in the save. Trade and release share one preseason request.
