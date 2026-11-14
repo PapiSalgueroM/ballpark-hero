@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { formatNumber } from '@/lib/formatNumber';
 import { Pencil, UserPlus } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
-import { MANAGER_BACKGROUNDS, CLUB_IDENTITIES, MANAGER_AGE_BANDS, money, managerLookOf } from '@/lib/clubManager';
+import { MANAGER_BACKGROUNDS, CLUB_IDENTITIES, MANAGER_AGE_BANDS, MENTALITIES, money, managerLookOf } from '@/lib/clubManager';
 import type { CareerState, nationOfferFor } from '@/lib/clubManager';
 import type { useClubManager } from '@/hooks/useClubManager';
 import JobHuntCard from '@/components/club-manager/JobHuntCard';
@@ -52,7 +52,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
   c: CareerState;
   /* Round 1343: retire is optional, and the door is drawn only when it is passed. */
   g: Pick<ReturnType<typeof useClubManager>, 'resignNation' | 'acceptNation' | 'answerApproach' | 'applyJob' | 'joinNow' | 'joinSummer' | 'updateManager'>
-    & Partial<Pick<ReturnType<typeof useClubManager>, 'retire'>>;
+    & Partial<Pick<ReturnType<typeof useClubManager>, 'retire' | 'setNationalTactics'>>;
   nationOffer: ReturnType<typeof nationOfferFor>;
   onRetireOpen?: () => void;
 }) {
@@ -65,6 +65,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
      background table, so it only shows once the point has been handed over. */
   const bgTree = c.manager && c.managerXp?.gift && BACKGROUND_TREE[c.manager.background] === c.managerXp.gift ? c.managerXp.gift : undefined;
   const campaign = c.nationCampaign;
+  const mentality = c.nationJob?.mentality ?? 'balanced';
   return (
                 <>
                 {/* Round 202: the international job. Club football is
@@ -85,6 +86,27 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
                     <p className="text-[10px] text-muted-foreground mt-1">
                       Tournaments run between club seasons. Miss one your country should have reached and the federation will not wait around.
                     </p>
+                    {g.setNationalTactics && (
+                      <fieldset className="my-2">
+                        <legend className="text-xs font-semibold">National tactics</legend>
+                        <p className="my-1 text-xs text-muted-foreground">Defensive games tend to have fewer goals for both sides. Attacking games tend to have more.</p>
+                        <div className="grid grid-cols-3 gap-1">
+                          {MENTALITIES.map(option => (
+                            <button
+                              key={option.id}
+                              type="button"
+                              aria-pressed={option.id === mentality}
+                              onClick={() => g.setNationalTactics?.(option.id)}
+                              className={option.id === mentality
+                                ? 'min-h-11 rounded-lg border border-primary bg-primary/10 px-1 text-xs font-bold text-primary'
+                                : 'min-h-11 rounded-lg border border-border px-1 text-xs'}
+                            >
+                              {option.label}
+                            </button>
+                          ))}
+                        </div>
+                      </fieldset>
+                    )}
                     <button
                       onClick={g.resignNation}
                       className="mt-2 w-full min-h-11 py-2 rounded-lg bg-secondary text-foreground text-xs font-bold hover:opacity-90 transition-opacity"
@@ -111,6 +133,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
                       {campaign.nation} · {campaign.name}{campaign.year >= 1900 ? ` ${campaign.year}` : ''} · {campaign.result}
                     </summary>
                     <div className="space-y-3 pb-3">
+                      {campaign.mentality && <p className="text-xs text-muted-foreground">Campaign tactics: {MENTALITIES.find(option => option.id === campaign.mentality)?.label}</p>}
                       {campaign.lostJob && <p className="text-xs text-muted-foreground">The federation ended your contract after qualifying.</p>}
                       {campaign.qualifying.automatic
                         ? <p className="text-xs text-muted-foreground">Automatic entry to the tournament.</p>

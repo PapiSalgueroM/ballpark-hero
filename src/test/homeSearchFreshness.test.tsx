@@ -1,5 +1,5 @@
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { Link, MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import Index from '@/pages/Index';
 
@@ -112,3 +112,42 @@ it('puts active saves and picks before discovery in keyboard order and restores 
   expect(pickShelf).toBeVisible();
   expect(localStorage.getItem('nrl-manager-save-v1-slot-2')).toBe(saved);
 });
+
+it('restores the exact result and keyboard focus when a game navigates back to a Home search', async () => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  function Game() {
+    const navigate = useNavigate();
+    return <><button onClick={() => navigate(-1)}>Go back</button><Link to="/">Home</Link></>;
+  }
+  function Home() {
+    const location = useLocation();
+    return <><output aria-label="Location">{location.search}</output><Index /></>;
+  }
+  const view = render(<MemoryRouter initialEntries={['/?kept=1']}><Routes>
+    <Route path="/" element={<Home />} />
+    <Route path="/build-your-xi" element={<Game />} />
+  </Routes></MemoryRouter>);
+  const field = () => screen.getByRole('textbox', { name: 'Search games' });
+  const result = () => view.container.querySelector<HTMLAnchorElement>('[data-home-game-card]:not([data-catalog-card]) a[href="/build-your-xi"]')!;
+  fireEvent.change(field(), { target: { value: 'Build Your XI' } });
+  await act(async () => { await vi.dynamicImportSettled(); });
+  result().focus();
+  fireEvent.click(result());
+  expect(screen.queryByRole('textbox', { name: 'Search games' })).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
+  expect(field()).toHaveValue('Build Your XI');
+  await act(async () => { await vi.dynamicImportSettled(); });
+  expect(result()).toHaveFocus();
+  expect(screen.getByRole('status', { name: 'Search results' })).toHaveTextContent('for Build Your XI');
+  expect(screen.getByLabelText('Location')).toHaveTextContent('?kept=1');
+  field().focus();
+  fireEvent.keyDown(field(), { key: 'Escape' });
+  expect(field()).toHaveValue('');
+  expect(field()).toHaveFocus();
+  fireEvent.change(field(), { target: { value: 'Build Your XI' } });
+  fireEvent.click(result());
+  fireEvent.click(screen.getByRole('link', { name: 'Home' }));
+  expect(field()).toHaveValue('');
+  expect(screen.getByRole('status', { name: 'Search results' })).toBeEmptyDOMElement();
+  view.unmount();
+}, 15000);

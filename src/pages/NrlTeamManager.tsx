@@ -24,7 +24,7 @@ import { useRulesGateState } from '@/hooks/useRulesGateState';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
-  nrlBench, nrlBenchRotation, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview,
+  nrlBench, nrlBenchRotation, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
   nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60Interchange, nrlNextRound,
   nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
@@ -38,7 +38,7 @@ import {
   NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, runNrlFastForward,
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
 } from '@/lib/nrlCareer';
-import { judiciaryNeedsResponse, nrlJudiciaryBans } from '@/lib/nrlJudiciary';
+import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryCase } from '@/lib/nrlJudiciary';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
 import { NRL_SAVE_ENTRY, nrlSeasonCanCredit, readNrlReplayCutoff, readNrlSaveSlot, writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
 import { saveFence } from '@/lib/saveFence';
@@ -1338,11 +1338,14 @@ function ReserveGradeDevelopment({ career, onAction, disabled }: {
 function Squad({ career, onAction, disabled }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
 }) {
+  const shortName = useNrlClubName();
   const { season } = career;
   const bench = nrlBench(season);
   const starters = new Set(Object.values(season.lineup));
   const availability = nrlUnavailable(season);
+  const injuries = nrlInjuries(season);
   const bans = season.judiciary && nrlJudiciaryBans(season);
+  const pendingCase = judiciaryNeedsResponse(season) ? nrlJudiciaryCase(season)?.playerId : undefined;
   const reserveGradeId = nrlReserveGradeRemaining(season) ? season.reserveGrade?.playerId : undefined;
   const leaders = nrlScoringLeaders(season);
   const tryLeaders = nrlTryLeaders(leaders);
@@ -1417,11 +1420,26 @@ function Squad({ career, onAction, disabled }: {
                 {unavailable.map(player => {
                   const remaining = availability.get(player.id)!;
                   const ban = bans?.get(player.id);
-                  return <li key={player.id} className="flex flex-wrap justify-between gap-x-3 py-1">
-                    <span>{player.name} · {player.role}</span>
-                    <span className="text-muted-foreground">{player.id === reserveGradeId ? 'On reserve-grade development'
-                      : ban ? `Suspended for ${ban} club ${ban === 1 ? 'match' : 'matches'}`
-                      : `Out for ${remaining} ${remaining === 1 ? 'round' : 'rounds'}`}</span>
+                  const injuryRounds = injuries.get(player.id);
+                  let forecast: string | undefined;
+                  if (season.phase === 'regular' && injuryRounds && !ban && player.id !== pendingCase && player.id !== reserveGradeId) {
+                    const { year, clubId, round } = season;
+                    const { draw } = nrlSeasonPlan(year);
+                    const first = draw.findIndex((fixtures, index) => index + 1 >= round + injuryRounds
+                      && fixtures.some(pair => pair.includes(clubId)));
+                    const opponent = draw[first]?.find(pair => pair.includes(clubId))?.find(team => team !== clubId);
+                    forecast = opponent
+                      ? `Can return: Round ${first + 1} vs ${shortName(year, opponent)}`
+                      : 'No regular-season fixture left after recovery.';
+                  }
+                  return <li key={player.id} className="py-1">
+                    <div className="flex flex-wrap justify-between gap-x-3">
+                      <span>{player.name} · {player.role}</span>
+                      <span className="text-muted-foreground">{player.id === reserveGradeId ? 'On reserve-grade development'
+                        : ban ? `Suspended for ${ban} club ${ban === 1 ? 'match' : 'matches'}`
+                        : `Out for ${remaining} ${remaining === 1 ? 'round' : 'rounds'}`}</span>
+                    </div>
+                    {forecast && <p className="mt-0.5 text-xs text-muted-foreground" data-nrl-injury-return={player.id}>{forecast}</p>}
                   </li>;
                 })}
               </ul>
@@ -1898,7 +1916,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
             <ul className="list-disc space-y-2 pl-5">
               <li>Choose 2026 or 2027, then pick a club. You can use opening matchday names in 2026 or confirmed Perth Bears signings when starting with Perth in 2027. Ratings, contracts, fixtures and results are simulated.</li>
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
-              <li>A match knock can put a player out for up to four rounds. Check Availability in Squad. The countdown includes byes, and an available player fills the vacant spot.</li>
+              <li>A match knock can put a player out for up to four rounds. Availability in Squad shows the first regular-season match an injured player can return for. The recovery countdown includes byes, and an available player fills the vacant spot.</li>
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>
               <li>Sign one fictional assistant in Finances. Tactical assistants help when you use their tactic. A development assistant can give an eligible young player 1 OVR after eight regular-season appearances from the hire onward.</li>
               <li>Choose a goal kicker and a backup in Squad. The backup takes over if your kicker leaves the starting 13. The halfback covers when neither is available. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>

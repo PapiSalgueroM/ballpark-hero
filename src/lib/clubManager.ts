@@ -2506,10 +2506,11 @@ export interface NationJob {
   lastYear: number | null;
   /** Tournaments won. */
   won: number;
+  mentality?: Exclude<Mentality, 'balanced'>;
 }
 
 type NationCampaign = Pick<IntlTournament, 'nation' | 'name' | 'year' | 'qualifying' | 'groupLabel' | 'groupTable'>
-  & { result: string; matches: ManagerSummerMatch[]; lostJob: boolean };
+  & { result: string; matches: ManagerSummerMatch[]; lostJob: boolean; mentality?: Mentality };
 
 /** An open international post, offered at a season end. */
 export interface NationOffer {
@@ -2591,6 +2592,16 @@ export function leaveNationJob(career: CareerState): CareerState {
       ...career.aiHeadlines,
     ].slice(0, 8),
   };
+}
+
+export function setNationMentality(career: CareerState, mentality: Mentality): CareerState | null {
+  const job = career.nationJob;
+  if (!job || career.live || career.retired || career.sacked || career.wilderness || (job.mentality ?? 'balanced') === mentality) return null;
+  if (!MENTALITIES.some(option => option.id === mentality)) return null;
+  const updated = { ...job };
+  if (mentality === 'balanced') delete updated.mentality;
+  else updated.mentality = mentality;
+  return { ...career, nationJob: updated };
 }
 
 /** The lift a manager gives his country, 0 to 6 points of strength. */
@@ -24720,14 +24731,15 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   if (career.nationJob) {
     const job = career.nationJob;
     const summer = career.startYear === undefined ? state.season : worldYearOf(state);
-    const t = runManagerSummer(job.nation, summer, nationLift(career));
+    const mentality = job.mentality ?? 'balanced';
+    const t = runManagerSummer(job.nation, summer, nationLift(career), mentality);
     if (t) {
       const won = t.champion === job.nation;
       const missed = t.myResult === 'Did Not Qualify';
       state.nationCampaign = {
         nation: job.nation, name: t.name, year: t.year, result: t.myResult,
         qualifying: t.qualifying, groupLabel: t.groupLabel, groupTable: t.groupTable,
-        matches: t.managerFixtures, lostJob: missed,
+        matches: t.managerFixtures, lostJob: missed, mentality,
       };
       state.nationJob = {
         ...job,
