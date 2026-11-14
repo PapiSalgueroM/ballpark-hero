@@ -1887,9 +1887,9 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "How aging and decline work each summer",
+        heading: "How player ratings change",
         items: [
-          "Everyone ages each summer: young players develop toward potential, decline starts at 32, veterans retire.",
+          "OVR can rise or fall one point at a time after regular-season rounds. For example, a young guard can improve toward their potential while an older player can decline. Check the round news. Players age in summer and carry their ratings into next season.",
         ],
         subsections: [
           {

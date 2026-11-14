@@ -340,7 +340,7 @@ export default function NhlFrontOfficeBoard() {
          is minted from the same counter, so it shares the id space. */
       ensureNhlLeagueIds(s.league, s.draftClass);
       if (s.league.teams[s.myTeam]) repairNhlContributors(s.league.teams[s.myTeam]);
-      setLeague(s.league); setMyTeam(s.myTeam);
+      setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
       setDraftBatchesLeft(s.draftBatchesLeft ?? null);
@@ -400,6 +400,7 @@ export default function NhlFrontOfficeBoard() {
     careerKit.arrived(k);
     const { hostNewSeat, hostSeatTeams, leagueTiers, nhlDeskHost } = k;
     const lg = initNhlLeague(Math.random, NHL_OPENING_RATINGS);
+    lg.inSeasonRatings = true;
     setSaveError(false);
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);

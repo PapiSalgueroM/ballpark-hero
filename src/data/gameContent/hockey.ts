@@ -1102,6 +1102,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Sim the season and watch your pace",
         items: [
           "Sim the season in 20 rounds of roughly four games each, with a live read on whether you are on pace.",
+          "OVR can rise or fall a point at a time after regular-season rounds. For example, a young winger can gain a point toward their potential while a veteran skater can lose one. Check the round news. Players keep their closing OVR going into next season.",
         ],
       },
       {
@@ -1200,7 +1201,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       {
         heading: "Hoard players who still have upside",
         items: [
-          "Players 23 and under develop toward their potential every offseason. Hoard them.",
+          "Young players who have room under their potential can develop during the season.",
         ],
       },
     ],
