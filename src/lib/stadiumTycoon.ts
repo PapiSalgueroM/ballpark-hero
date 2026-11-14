@@ -477,6 +477,7 @@ export function startingMoneyOf(s: TycoonState): number {
 
 export interface TycoonState {
   v: number;
+  matchPlan?: MatchPlan & { match: number };
   /** Absence is the original Standard offer. A new ground starts Standard. */
   ticketPolicy?: 'community' | 'premium';
   money: number;
@@ -706,7 +707,7 @@ export interface TycoonLeague {
   baseMatchNo?: number;
   /** Index 0 is you. */
   clubs: LeagueClub[];
-  results?: { day: number; gf: number; ga: number }[];
+  results?: { day: number; gf: number; ga: number; plan?: MatchPlan }[];
   /** An older save's match in progress when it first loaded: played to full
    *  time against this name, outside the table, before matchday 1. */
   carryover?: string;
@@ -930,7 +931,9 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
     recordResult(clubs[a], ag, hg);
   }
   const matchday = lg.matchday + 1;
-  const played: TycoonLeague = { ...lg, clubs, matchday, results: [...(lg.results ?? []), { day: matchday, gf, ga }] };
+  const plan = st.matchPlan;
+  const result = { day: matchday, gf, ga, ...(plan ? { plan: { minute: plan.minute, kind: plan.kind } } : {}) };
+  const played: TycoonLeague = { ...lg, clubs, matchday, results: [...(lg.results ?? []), result] };
   if (played.matchday < leagueShape(lg.division).matchdays) return played;
 
   st.lastCompletedLeague = played;
@@ -1142,6 +1145,37 @@ export function ticketEconomy(s: TycoonState) {
 /** Chance our team scores in one match minute. Round 1532: the shared law's
  *  expected goals for you at your ground (every watched match is at home,
  *  contract section 8), over ninety one roll minutes. */
+export const MATCH_PLANS = {
+  protect: { label: 'Protect', pace: 0.8 },
+  push: { label: 'Push', pace: 1.2 },
+} as const;
+export const MATCH_PLAN_START = 45;
+export const MATCH_PLAN_END = 75;
+export type MatchPlanKind = keyof typeof MATCH_PLANS;
+export type MatchPlan = { kind: MatchPlanKind; minute: number };
+
+function validMatchPlan(plan: unknown): plan is MatchPlan {
+  if (!plan || typeof plan !== 'object') return false;
+  const p = plan as Partial<MatchPlan>;
+  return (p.kind === 'protect' || p.kind === 'push') && typeof p.minute === 'number' && Number.isInteger(p.minute)
+    && p.minute >= MATCH_PLAN_START && p.minute < MATCH_PLAN_END;
+}
+
+export function canSetMatchPlan(s: TycoonState): boolean {
+  return !!s.league && !s.league.carryover && !s.matchPlan && s.minute >= MATCH_PLAN_START && s.minute < MATCH_PLAN_END;
+}
+
+export function setMatchPlan(s: TycoonState, match: number, kind: MatchPlanKind): TycoonState {
+  if (match !== s.matchNo || !canSetMatchPlan(s)) return s;
+  return { ...s, matchPlan: { match, kind, minute: s.minute } };
+}
+
+export function matchPlanForecast(s: TycoonState, edge: number, kind?: MatchPlanKind) {
+  const pace = kind ? MATCH_PLANS[kind].pace : 1;
+  const minutes = 90 - s.minute;
+  return { goalsFor: goalChancePerMin(s) * pace * minutes, goalsAgainst: oppChancePerMin(s, edge) * pace * minutes };
+}
+
 export function goalChancePerMin(s: TycoonState): number {
   return goalLambda(matchGap(s), LAW.home) / 90;
 }
@@ -1306,7 +1340,8 @@ export interface TickEvent {
 export function playMinute(st: TycoonState, roll: () => number, events: TickEvent[], opts: { pay: boolean }, edge = 0): void {
   st.minute += 1;
   if (st.minute <= 90) {
-    if (roll() < goalChancePerMin(st)) {
+    const pace = st.matchPlan ? MATCH_PLANS[st.matchPlan.kind].pace : 1;
+    if (roll() < goalChancePerMin(st) * pace) {
       st.goalsFor += 1;
       st.totalGoals += 1;
       if (opts.pay) {
@@ -1318,7 +1353,7 @@ export function playMinute(st: TycoonState, roll: () => number, events: TickEven
         events.push({ kind: 'goal', minute: st.minute });
       }
     }
-    if (roll() < oppChancePerMin(st, edge)) {
+    if (roll() < oppChancePerMin(st, edge) * pace) {
       st.goalsAgainst += 1;
       events.push({ kind: 'conceded', minute: st.minute });
     }
@@ -1357,6 +1392,7 @@ export function playMinute(st: TycoonState, roll: () => number, events: TickEven
       }
     }
     st.matchNo += 1;
+    delete st.matchPlan;
     st.totalMatches = (st.totalMatches ?? 0) + 1;
     st.minute = 0;
     st.goalsFor = 0;
@@ -1650,7 +1686,9 @@ function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: n
       recordResult(tally, result.gf, result.ga);
       return true;
     }) && (['w', 'd', 'l', 'gf', 'ga'] as const).every(key => first === 1 ? tally[key] === own[key] : tally[key] <= own[key])) {
-      out.results = r.results.map(({ day, gf, ga }) => ({ day, gf, ga }));
+      out.results = r.results.map(({ day, gf, ga, plan }) => ({
+        day, gf, ga, ...(validMatchPlan(plan) ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
+      }));
     }
   }
   return out;
@@ -1780,6 +1818,8 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
        drops a division, and the match it was in the middle of finishes against
        the opponent it was already playing, outside the table. */
     const rawLeague = (p as { league?: unknown }).league;
+    const plan = s.matchPlan;
+    delete s.matchPlan;
     delete s.lastCompletedLeague;
     if (rawLeague === undefined) {
       const division = legacyDivisionIndex(s.groundWins ?? 0);
@@ -1808,6 +1848,9 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
       if (completed && activeLeague && completed.season + 1 === activeLeague.season
         && activeLeague.division - completed.division === Number(completed.division < DIVISIONS.length - 1 && leaguePosition(completed) === 1)) {
         s.lastCompletedLeague = completed;
+      }
+      if (activeLeague && !activeLeague.carryover && validMatchPlan(plan) && plan.match === s.matchNo && plan.minute <= s.minute) {
+        s.matchPlan = { match: plan.match, minute: plan.minute, kind: plan.kind };
       }
     }
     return s;

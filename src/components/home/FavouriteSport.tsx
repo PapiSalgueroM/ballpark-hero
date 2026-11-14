@@ -20,7 +20,7 @@ export function FavouriteSport({ sports, value, onPick }: {
   return (
     <nav aria-labelledby="browse-sports-heading" data-home-fav-sport="" className="mt-2">
       <p className="text-xs text-muted-foreground">Jump to a sport or star one to show it first.</p>
-      <ul className="mt-2 grid grid-cols-2 gap-x-2 min-[480px]:gap-x-4 sm:grid-cols-3 lg:grid-cols-4">
+      <ul className="mt-2 grid grid-cols-2 gap-x-2 min-[480px]:gap-x-4 sm:grid-cols-3 lg:grid-cols-1">
         {sports.map(sport => {
           const on = value === sport;
           const name = chipName(sport);

@@ -32,7 +32,7 @@ afterEach(() => {
   localStorage.clear();
 });
 
-it('shows both signed tradeoffs, persists a match choice and locks it during a reloaded halftime', () => {
+it('shows both signed tradeoffs and preserves a match choice at a reloaded halftime', () => {
   const baseline = JSON.stringify(createNrlCareer('broncos', 16));
   localStorage.setItem(NRL_SAVE_KEY, baseline);
   localStorage.setItem(fence, '6');
@@ -52,18 +52,18 @@ it('shows both signed tradeoffs, persists a match choice and locks it during a r
   expect(raw()).toBe(baseline);
   click(/Shift wide/);
   click('Play Live');
-  expect(screen.getByText('Attack plan: Shift wide. Locked for this match.')).toBeTruthy();
+  expect(screen.getByText('Attack plan: Shift wide. You can change it at 60 minutes.')).toBeTruthy();
   const pending = raw();
   mounted.unmount();
   page();
   expect(raw()).toBe(pending);
-  expect(screen.getByText('Attack plan: Shift wide. Locked for this match.')).toBeTruthy();
+  expect(screen.getByText('Attack plan: Shift wide. You can change it at 60 minutes.')).toBeTruthy();
   expect(screen.queryByRole('button', { name: /Through the middle/ })).toBeNull();
   click('Play second half');
   expect(readNrlCareerSave(raw())!.season).not.toHaveProperty('attackPlan');
 });
 
-it('shows the simulated read, locks a counter plan at both live pauses and records it at full time', () => {
+it('shows the simulated read, carries the counter plan forward when the closing selection stays the same and records it at full time', () => {
   const baseline = JSON.stringify(createNrlCareer('broncos', 1));
   localStorage.setItem(NRL_SAVE_KEY, baseline);
   localStorage.setItem(fence, '6');
@@ -77,14 +77,14 @@ it('shows the simulated read, locks a counter plan at both live pauses and recor
   fireEvent.click(counter);
   expect(readNrlCareerSave(raw())!.season.attackPlan).toBe('counter');
   click('Play Live');
-  expect(screen.getByText('Attack plan: Counter opponent. Locked for this match.')).toBeVisible();
+  expect(screen.getByText('Attack plan: Counter opponent. You can change it at 60 minutes.')).toBeVisible();
   click('Play to 60 minutes');
-  expect(screen.getByText('Attack plan: Counter opponent. Locked for this match.')).toBeVisible();
+  expect(screen.getByRole('combobox', { name: 'Closing attack plan' })).toHaveValue('counter');
   const saved = raw();
   first.unmount();
   page();
   expect(raw()).toBe(saved);
-  expect(screen.getByText('Attack plan: Counter opponent. Locked for this match.')).toBeVisible();
+  expect(screen.getByRole('combobox', { name: 'Closing attack plan' })).toHaveValue('counter');
   click('Play final 20 minutes');
   expect(screen.getByText(/Counter plan: Protected the edges/)).toBeVisible();
   expect(readNrlCareerSave(raw())!.season.attackPlan).toBeUndefined();

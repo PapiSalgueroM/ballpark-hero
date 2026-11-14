@@ -25,14 +25,14 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlBenchRotation, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
-  nrlActingCaptainPhases, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchange, nrlNextRound, nrlOnFieldCaptain,
+  nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchange, nrlNextRound, nrlOnFieldCaptain,
   nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
-  nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlOppositionReport, nrlPositionTraining,
+  nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlMinute60AttackPlans, nrlOppositionReport, nrlPositionTraining,
   nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlSelectionPromise, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
   NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, reduceNrlCareer, runNrlFastForward,
@@ -236,7 +236,7 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
           ))}
         </div>
         <p className="mt-2 text-sm text-muted-foreground">{tactics.find(option => option.id === tactic)?.description}{coachTacticNote(coachRole, coachBonus, tactic)}</p>
-        {season.attackPlan && <p className="mt-2 text-sm">Attack plan: {attackPlanLabel(season.attackPlan)}. Locked for this match.</p>}
+        {season.attackPlan && <p className="mt-2 text-sm">Attack plan: {attackPlanLabel(season.attackPlan)}. You can change it at 60 minutes.</p>}
         {season.preparation === 'defensiveDrills' && <p className="mt-2 text-sm">Defensive drills apply through the second half.</p>}
       </div>
       {options.length > 0 ? (
@@ -308,14 +308,18 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
   );
 }
 
-function LiveMinute60({ live, season, onAction, disabled }: {
-  live: NrlLiveHalf; season: NrlManagerState; onAction: (action: NrlAction) => void; disabled: boolean;
+function LiveMinute60({ live, career, onAction, disabled }: {
+  live: NrlLiveHalf; career: NrlCareerState; onAction: (action: NrlAction) => void; disabled: boolean;
 }) {
+  const { season } = career;
   const shortName = useNrlClubName();
   const stage = live.minute60!;
   const [tactic, setTactic] = useState(stage.tactic);
   const [bringOn, setBringOn] = useState(false);
   const [fieldGoal, setFieldGoal] = useState(false);
+  const currentPlan = season.attackPlan ?? 'standard';
+  const [attackPlan, setAttackPlan] = useState<NrlAttackPlan>(currentPlan);
+  const plans = nrlMinute60AttackPlans(career);
   const { year, squad } = season;
   const canSetUpKick = nrlMinute60FieldGoalAvailable(season);
   const late = nrlMinute60Interchange(season);
@@ -339,7 +343,6 @@ function LiveMinute60({ live, season, onAction, disabled }: {
       <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-4">
         <legend className="px-1 font-bold">Closing tactic</legend>
         <p className="mt-2 text-sm text-muted-foreground">Keep your plan or change it for the final 20 minutes and any extra time.</p>
-        {season.attackPlan === 'counter' && <p className="mt-2 text-sm">Attack plan: Counter opponent. Locked for this match.</p>}
         <div className="mt-2 flex flex-wrap gap-2">
           {tactics.map(option => (
             <Button key={option.id} type="button" size="lg" className="px-3" disabled={disabled}
@@ -347,6 +350,19 @@ function LiveMinute60({ live, season, onAction, disabled }: {
               onClick={() => setTactic(option.id)}>{option.label}</Button>
           ))}
         </div>
+        {plans.length > 0 && (
+          <div className="mt-3 max-w-xs space-y-1 text-sm">
+            <label htmlFor="nrl-closing-attack-plan" className="block font-semibold">Closing attack plan</label>
+            <select id="nrl-closing-attack-plan" value={attackPlan} aria-describedby="nrl-closing-plan-help"
+              onChange={event => setAttackPlan(event.target.value as NrlAttackPlan)} disabled={disabled}
+              className="min-h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+              {attackPlanChoices.filter(choice => plans.includes(choice.id)).map(choice => (
+                <option key={choice.id} value={choice.id}>{choice.label}</option>
+              ))}
+            </select>
+            <p id="nrl-closing-plan-help" className="text-muted-foreground">Middle and wide plans focus play in one area and leave more space in defence.</p>
+          </div>
+        )}
       </fieldset>
       {reserve && starter && (
         <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-3">
@@ -370,6 +386,7 @@ function LiveMinute60({ live, season, onAction, disabled }: {
       )}
       <Button type="button" size="lg" className="w-full" disabled={disabled}
         onClick={() => onAction({ type: 'finishMinute60', year, round: fixture.round, tactic, reserveId: bringOn ? reserve?.id : undefined,
+          ...(plans.includes(attackPlan) && attackPlan !== currentPlan && { attackPlan }),
           ...(canSetUpKick && fieldGoal && { fieldGoalPlan: true }) })}>
         Play final 20 minutes <ArrowRight aria-hidden="true" />
       </Button>
@@ -640,6 +657,10 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
       {match.halftimeTalk && <p className="mt-2 text-sm text-muted-foreground" data-nrl-halftime-talk>
         Half-time talk: {halftimeTalkLabels[match.halftimeTalk]}.
       </p>}
+      {match.minute60AttackPlan && <p className="mt-2 text-sm text-muted-foreground" data-nrl-minute60-attack-plan>
+        60-minute attack plan change: {attackPlanLabel(match.minute60AttackPlan)}.
+        {match.minute60AttackPlan === 'counter' && ' ' + counterPlanResult[nrlCounterPlan(season, match).style]}
+      </p>}
       {match.minute60Tactic && <p className="mt-2 text-sm text-muted-foreground" data-nrl-minute60-tactic>
         60-minute tactic change: {tactics.find(option => option.id === match.minute60Tactic)?.label}.
       </p>}
@@ -648,7 +669,7 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
           : `Field-goal setup produced a ${match.minute60FieldGoal === 1 ? 'one-point' : 'two-point'} kick in regulation.`}
       </p>}
       {match.counterStyle && <p className="mt-2 text-sm text-muted-foreground" data-nrl-counter-plan>
-        Counter plan: {counterPlanResult[match.counterStyle]}
+        {match.minute60AttackPlan ? 'Opening counter plan' : 'Counter plan'}: {counterPlanResult[match.counterStyle]}
       </p>}
       {kickerName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-match-kicker>{lateKickerName ? 'Opening goal kicker' : 'Match goal kicker'}: {kickerName}.</p>}
       {lateKickerName && <p className="mt-1 text-sm text-muted-foreground" data-nrl-kicker-handoff>Goal kicker after half time: {lateKickerName}.</p>}
@@ -1025,7 +1046,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
   const [hold, setHold] = useState<{ year: number; round: number; reserveId: string }>();
   if (season.live) {
     return season.live.minute60
-      ? <LiveMinute60 live={season.live} season={season} onAction={onAction} disabled={disabled} />
+      ? <LiveMinute60 live={season.live} career={career} onAction={onAction} disabled={disabled} />
       : <LiveHalftime live={season.live} season={season} title={next.title} onAction={onAction} disabled={disabled} coachRole={coachRole} coachBonus={coachBonus} />;
   }
   const club = shortName(year, clubId);
@@ -2189,6 +2210,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
               <li>Check a late Selection promise in the rotation preview before kick-off. An eligible match counts toward the promise window if the player stays off.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. Choose Play to 60 minutes to bring on a held reserve who is still on the bench. Quick Sim settles the round in one action.</li>
+              <li>At 60 minutes, Closing attack plan lets you change where your side attacks for the rest of the match.</li>
               <li>If you are level or two points down at 60 minutes, you can set up a field goal. This trades some late try threat for a better field-goal chance in regulation.</li>
               <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>
               <li>Open Matchday team sheet in a report with a player record to see the starting 13, the reserves who played and how many points each player scored.</li>

@@ -528,6 +528,16 @@ for (const width of [320, 390, 1440]) {
       focus: document.activeElement === document.body,
     }));
     say(reached && position.focus, width + 'px direct link reaches Browse sports at y=' + position.top + ' with no focus change');
+    const catalogue = await page.evaluate(() => {
+      const index = document.getElementById('browse-sports');
+      const firstGame = document.querySelector('section[data-sport] [data-catalog-card] a[href]');
+      const card = firstGame?.getBoundingClientRect();
+      const indexBox = index?.firstElementChild?.getBoundingClientRect();
+      return card && indexBox ? { cardTop: Math.round(card.top), beside: card.left >= indexBox.right, indexTop: Math.round(indexBox.top) } : null;
+    });
+    say(Boolean(catalogue && catalogue.cardTop < (width < 768 ? 844 : 900)
+      && (width < 768 ? !catalogue.beside : catalogue.beside && catalogue.cardTop - catalogue.indexTop < 100)),
+    width + 'px Browse sports shows its first catalogue game on screen at y=' + (catalogue?.cardTop ?? 'missing'));
   } finally {
     await ctx.close();
   }

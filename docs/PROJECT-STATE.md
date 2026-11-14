@@ -1,4 +1,13 @@
+## 2026-11-14: Home catalogue, Stadium Tycoon and late NRL tactics
+
+- Home places the sport index directly before its games on phones and beside them on desktop. The index and game list are visible together after opening Browse sports.
+- NRL managers can choose a new attack plan for the final 20 minutes without changing the opening 60 minutes. The settled match report records the late plan separately from the team’s closing tactic.
+- Stadium Tycoon lets you Protect or Push from halftime until minute 75 of a watched league match. The choice changes both teams’ chances for the minutes left. The last season’s actual match report keeps the choice and when it was made.
+- The latest full 30 UTC days in Lovable, October 15 to November 14, show 58,487 Soccer Career pageviews, 26,834 for Home and 19,083 for Club Manager. Australia is second in the country breakdown. The matching activity-date handle ranking still has Stadium Tycoon fifth, followed by MLB My Career, NFL Front Office and Wonderkid Factory. Game handles measure recorded activity and may overlap across games.
+
 ## 2026-11-14: Soccer matchday overall, NBA roster investment and NRL rival fixtures
+
+[PR #940](https://github.com/PapiSalgueroM/ballpark-hero/pull/940) published exact main `57c690685da8e6c43cac9ebd0a98f663c085ad55`, deployment `d2bcbb61-a2d8-4bfe-88d9-e5893ed6167e`. Eight live browser journeys, all 174 sitemap routes and the three raw guides passed. IndexNow accepted all three changed guides. Club Manager and Rugby League World Cup full swap journeys also passed on the published build.
 
 - Soccer Career shows the season's overall on each league matchday in Week by week and in completed match reports. The displayed rating follows the five saved development checkpoints.
 - NBA My Career players who stay with the same franchise can bring forward up to three roster quality points before a season. The next offseason with that team accounts for the investment through the ordinary roster update.

@@ -43,6 +43,7 @@ import {
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
   totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC, yourOpponentIndex, type TycoonLeague,
   GOAL_BONUS_SEC, WIN_BONUS_SEC, PROMOTION_BONUS_SEC, scoringFacts,
+  canSetMatchPlan, MATCH_PLANS, MATCH_PLAN_END,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
@@ -339,8 +340,11 @@ export function LatestSeasonReview({ last }: { last: TycoonLeague }) {
             <summary className="min-h-11 cursor-pointer py-3 font-bold">Match results</summary>
             {snapshot.results.length < snapshot.matchday && <p className="pb-2 text-muted-foreground">Earlier scores were not recorded.</p>}
             <ol className="space-y-2 pb-3">
-              {snapshot.results.map(({ day, gf, ga }) => <li key={day} className="flex items-baseline justify-between gap-2">
-                <span>Matchday {day} · {snapshot.clubs[yourOpponentIndex(snapshot, day - 1)].name}</span>
+              {snapshot.results.map(({ day, gf, ga, plan }) => <li key={day} className="flex items-baseline justify-between gap-2">
+                <div>
+                  <span>Matchday {day} · {snapshot.clubs[yourOpponentIndex(snapshot, day - 1)].name}</span>
+                  {plan && <span className="block text-muted-foreground">{MATCH_PLANS[plan.kind].label} from {plan.minute}′</span>}
+                </div>
                 <span className="shrink-0 font-bold tabular-nums">{gf}-{ga}</span>
               </li>)}
             </ol>
@@ -726,6 +730,32 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           </TycoonPitch>
         </div>
 
+        {(canSetMatchPlan(s) || s.matchPlan) && (
+          <section className="mb-3 rounded-xl border border-border bg-card p-3 text-xs" aria-label="Second-half match plan" data-no-prerender>
+            {s.matchPlan ? (
+              <p role="status"><strong>{MATCH_PLANS[s.matchPlan.kind].label}</strong> from {s.matchPlan.minute}′ for the rest of this match.</p>
+            ) : (
+              <>
+                <p className="mb-2 font-semibold">Second-half match plan</p>
+                <p className="text-muted-foreground">Choose once before {MATCH_PLAN_END}′. Expected goals left, your club / opponent.</p>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  {(['protect', 'push'] as const).map(kind => {
+                    const forecast = g.matchPlanForecast(kind);
+                    return <button key={kind} type="button" onClick={() => g.doSetMatchPlan(s.matchNo, kind)}
+                      className="min-h-11 rounded-lg border border-border px-2 hover:border-primary">
+                      <strong className="block">{MATCH_PLANS[kind].label}</strong>
+                      <span className="block text-muted-foreground">{Math.round(Math.abs(1 - MATCH_PLANS[kind].pace) * 100)}% {kind === 'protect' ? 'fewer' : 'more'} chances for both</span>
+                      <span className="text-muted-foreground">{forecast.goalsFor.toFixed(2)} / {forecast.goalsAgainst.toFixed(2)}</span>
+                    </button>;
+                  })}
+                </div>
+                <p className="mt-2 text-muted-foreground">Keep playing to stay balanced.</p>
+                {g.matchPlanSaveFailed && <p role="alert" className="mt-1 text-destructive">Your plan could not be saved. Pick again before {MATCH_PLAN_END}′.</p>}
+              </>
+            )}
+          </section>
+        )}
+
         {/* Prestige bar */}
         <div className="mb-3">
           {canPrestige(s) ? (
@@ -1015,6 +1045,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>The payroll hires {h.staff} staff, from a {h.firstStaff} to a {h.lastStaff}. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
               <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about {h.catchSec} seconds to catch it, for one of {h.prizes} prizes: {GOLDEN_INFO.frenzy.label} ({GOLDEN_INFO.frenzy.blurb} for {GOLDEN_INFO.frenzy.duration} seconds), {GOLDEN_INFO.tapRush.label} ({GOLDEN_INFO.tapRush.blurb} for {GOLDEN_INFO.tapRush.duration} seconds), {GOLDEN_INFO.windfall.label} ({h.windfallMin} minutes of income, instantly), {GOLDEN_INFO.fanWave.label} ({GOLDEN_INFO.fanWave.blurb}) or {GOLDEN_INFO.freeLevel.label} ({GOLDEN_INFO.freeLevel.blurb}).</p>
               <p>A penalty or free-kick offer appears once per watched match. You have {SET_PIECE_WINDOW_SEC} seconds to open it. Pick your aim, power and curve for one shot while the match clock keeps running. Opening uses that match's attempt, including if you leave or reload. A goal before full time adds one goal and the usual goal bonus; a miss costs nothing. Away matches have no kick offers, and kicks have no daily score or direct gem reward.</p>
+              <p>From halftime until 75 minutes in a watched league match, you can pick one plan. Protect lowers both clubs' scoring chances by 20 percent for the rest of the game. Push raises both by 20 percent. For example, protect a one-goal lead to reduce the risk of an equalizer while also making your second goal less likely. Keep playing to stay balanced.</p>
               <p>Milestones pay once each for the club's firsts, like {h.milestoneExamples}. {h.milestones} in all, and they stay earned even after you sell up.</p>
               <p>Badges are the long game: {h.badges} of them, from {h.firstBadge} to {h.lastBadge}, and each one earned is +{h.badgePct}% income forever. Check them on the Badges tile, and your career numbers on Records.</p>
               <p>When lifetime earnings hit the bar, sell up: fans, ground, staff and division reset, but you keep a permanent Reputation star worth +{h.starPct}% income each, every badge, and your club records. The ladder is faster every run.</p>
