@@ -1091,6 +1091,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
           "Choose a franchise and inherit its real 26: the lineup and bench, a five man rotation and the bullpen, as the club stood on the last day of the 2026 regular season.",
           "The roster box shows the usual sim picks: your best healthy 8 bats, 3 starters and 2 relievers. Everyone else is depth, and depth is who plays the day a starter hits the IL.",
           "Protect the rotation before a round to spread the workload across five healthy starters. Those five face a lower simulated injury risk, while weaker fourth and fifth starters can lower your team strength. The round report shows how many stayed available.",
+          "Before the final stretch, choose Start the ace first to use three individual starters in each playoff series. A 96, 84 and 72 rotation uses 96 in Game 1, 84 in Game 2 and 72 in Game 3, then repeats. The usual rotation averages all three. The season recap shows each actual starter and result.",
         ],
       },
       {

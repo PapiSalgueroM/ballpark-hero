@@ -17,7 +17,7 @@ export const AUSSIE_RULES_MANAGEMENT_CONTENT: GameContentMap = {
     howToPlay: [
       'Choose a club from the menu. The clubs are grouped by where they finished the 2026 ladder, so you can pick an easy start at the top or a long rebuild near the bottom. Every club has thirty-six generated players with a skill, a ceiling, an age and a fitness level.',
       'Before each match your list manager picks the best eighteen starters and five interchange players on current form: skill, less what fatigue takes off. You can change any spot in Squad, then choose to train or rest. Training adds eight preparation and eight fatigue to every player; rest takes thirty fatigue off.',
-      'After regular-season matches, skill can rise or fall one point at a time. Check Skill changes in Squad. Existing players carry their skill into the new season.',
+      'After regular-season matches, skill can rise or fall one point at a time. Open Skill changes this round at full time to see who moved and by how much. Squad keeps the latest review. Existing players carry their skill into the new season.',
       'Pick a tactic and play one quarter at a time, or play the whole match in one tap with the same tactic. At each quarter break you can make up to five same-role changes from the bench.',
       'After the match you see the round\'s other results. The hub boxes show your next match, your ladder spot with points and percentage, your squad, your honour board, and the finals bracket once September comes round.',
       'Finish in the top ten to play the finals. Win the Grand Final for the flag. Then the summer ages everyone a year, some veterans retire, and on draft night you pick young players to fill your list back to thirty-six before the next season starts.',

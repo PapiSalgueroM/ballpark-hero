@@ -1,4 +1,12 @@
+## 2026-11-14: Full-time ratings, NRL interchanges and MLB postseason rotation
+
+- Aussie Rules Manager shows who gained or lost skill in the full-time report for the round. Reopen the match after a reload to see the same before-and-after ratings. Squad still keeps the latest review, and the finals use their existing match reports.
+- NRL Team Manager can leave the fourth automatic interchange open. Quick Sim uses the first three reserves. Live Match can use that open place at 60 minutes under the usual eligibility and interchange limits.
+- MLB Front Office can send its ace out first in the postseason and rotate through three available starters. Each pitcher's rating affects the game they start. The postseason recap records the actual order and results. A short rotation falls back to the usual team approach.
+
 ## 2026-11-14: State of Origin selections, Fantasy Draft saves and NFL packages
+
+[PR #960](https://github.com/PapiSalgueroM/ballpark-hero/pull/960) published exact main `e86c82293614b219809816690f24cd7a268cfa60`, deployment `73a3244a-04f7-4fb3-968b-ddd04ddcdc10`. Eight live browser journeys, all three raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted all three game guides. The Fantasy Draft two-tab fixture queued both real browser locks and recorded one completion.
 
 - New State of Origin appointments can open the full list of signed players eligible for the state you coach. Search by name before assigning a matchday spot. The opening team remains available, and an older series keeps its saved player list.
 - Fantasy Draft resumes an unfinished draft on the same device and Eastern date. It restores the original rule, first pick and every accepted player. A completed draft keeps its normal score and clears the unfinished draft.

@@ -24,7 +24,7 @@ import { useRulesGateState } from '@/hooks/useRulesGateState';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
-  nrlBench, nrlBenchRotation, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
+  nrlBench, nrlBenchRotation, nrlCanOpenInterchange, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
   nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlNextRound, nrlOnFieldCaptain,
   nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
@@ -726,6 +726,7 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
       {kickerName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-match-kicker>{lateKickerName ? 'Opening goal kicker' : 'Match goal kicker'}: {kickerName}.</p>}
       {lateKickerName && <p className="mt-1 text-sm text-muted-foreground" data-nrl-kicker-handoff>Goal kicker after half time: {lateKickerName}.</p>}
       {match.goalKickingDrills && <p className="mt-2 text-sm text-muted-foreground">Goal-kicking drills were used for this match.</p>}
+      {match.openInterchange && <p className="mt-2 text-sm text-muted-foreground">You left the fourth automatic interchange open.</p>}
       {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
         {recoveredName} took individual recovery before this match.
       </p>}
@@ -1330,6 +1331,22 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
                   })}
                 </select>
                 <p id="nrl-first-reserve-help" className="mt-1 text-xs text-muted-foreground">This swaps the selected reserve with the first one on your bench.</p>
+              </>
+            )}
+            {(season.openInterchange || nrlCanOpenInterchange(season)) && (
+              <>
+                <label className="mt-2 flex min-h-11 items-center gap-2 text-sm font-semibold">
+                  <input type="checkbox" checked={Boolean(season.openInterchange)} disabled={disabled}
+                    aria-describedby="nrl-open-interchange-help"
+                    onChange={event => onAction({ type: 'setOpenInterchange', enabled: event.target.checked, year, clubId, round: season.round })} />
+                  Leave the fourth interchange open
+                </label>
+                <p id="nrl-open-interchange-help" className="text-xs text-muted-foreground">
+                  {nrlCanOpenInterchange(season)
+                    ? 'Quick Sim uses three reserves. The unused reserve stays fresher and their starter gets less rest.'
+                    : 'This bench would already use three or fewer automatic reserves.'}
+                  {' In Live, choose an eligible reserve at 60 minutes if there is a place open.'}
+                </p>
               </>
             )}
             <p className="mt-2 text-sm text-muted-foreground" aria-live="polite">
@@ -2388,6 +2405,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Before kick-off, open Hold one reserve for later to see the Quick Sim rotation and compare it with the Live rotation when you hold someone.</li>
               <li>Before a regular-season away match, book one recovery session per season from Preparation. It costs $120,000 from club cash and adds up to eight fitness points at kickoff.</li>
               <li>Use First reserve in the rotation preview to change who gets first priority. It swaps two places on your named bench.</li>
+              <li>Leave the fourth interchange open to use only three reserves in Quick Sim or choose a fourth at 60 minutes in Live.</li>
               <li>Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation. Positional matchups shows the ratings behind the middle and wide plans.</li>
               <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
               <li>In Finances, use Development priority to reserve one assistant rating award for an eligible player. They still need eight appearances.</li>

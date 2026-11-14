@@ -10,6 +10,7 @@ import {
   mlbDraftClass, mlbProspectToPlayer, mlbStrength, mlbCapUsed, mlbCapRoom,
   mlbRelease, mlbSign, mlbTrade, mlbTradeValue, mlbAiMoves, AL, NL, MLB_DIVISIONS,
   MLB_ROUNDS, MLB_PROTECTED_STARTERS, MLB_ROTATION_RISK_REDUCTION, mlbRotationChoices, mlbRotationPlanned, setMlbRotationPlan,
+  mlbOctoberRotationPlanned, mlbStrengthUnits, readMlbOctoberReceipt, setMlbOctoberRotation,
   type MlbLeague, type MlbProspect, type MlbSeriesResult, type MlbRotationReceipt, mlbExecuteTalksTrade,
   ensureMlbLeagueIds, mlbRosterMin, mlbRosterMax, mlbSimReads, isPitcher, mlbOverLimit, mlbSalaryFor,
   type MlbGmPlayer,
@@ -71,7 +72,7 @@ const CUT_SAID = 'You designated him for assignment this season.';
 
 const MLB_WORDS: FoSportWords = { title: 'the World Series', playoffs: 'October', round: 'a series', games: 162 };
 
-type Postseason = { series: MlbSeriesResult[]; champion: string; gradeLine: string | null };
+type Postseason = { series: MlbSeriesResult[]; champion: string; gradeLine: string | null; octoberUnavailable?: true };
 type LastRound = { team: string; season: number; round: number; wins: number; losses: number; notes: string[]; rotation?: MlbRotationReceipt };
 
 function readLastRound(value: unknown, league: MlbLeague, team: string): LastRound | null {
@@ -104,6 +105,36 @@ function roundHeadlines(result: LastRound): string[] {
   return [`Round ${result.round}: you went ${result.wins}-${result.losses}.`, ...(result.rotation ? [rotationHeadline(result.rotation)] : []), ...result.notes];
 }
 
+function OctoberRecap({ rows, team, unavailable, label }: {
+  rows: MlbSeriesResult[];
+  team: string;
+  unavailable: boolean;
+  label: (team: string) => string;
+}) {
+  const october = rows.flatMap(row => {
+    const receipt = readMlbOctoberReceipt(row, team);
+    return receipt ? [{ name: row.name, opponent: row.home === team ? row.away : row.home, games: receipt.games }] : [];
+  });
+  return (
+    <>
+      {unavailable && <p className="rounded-xl border border-border bg-card p-3 text-xs text-muted-foreground" data-october-fallback>Usual rotation played in October. Three healthy starters were needed for the ace-first plan.</p>}
+      {october.length > 0 && (
+        <section aria-label="October starters" className="rounded-2xl border border-border bg-card p-3 text-xs">
+          <h2 className="font-semibold">October starters</h2>
+          {october.map(({ name, opponent, games }) => (
+            <details key={opponent} className="mt-2 rounded-lg border border-border px-2">
+              <summary className="flex min-h-11 cursor-pointer items-center font-semibold">{name} vs {label(opponent)}</summary>
+              <ol className="space-y-1 pb-2 text-muted-foreground">
+                {games.map((game, index) => <li key={index}>Game {index + 1} · {game.pitcher} · {game.rating} OVR · {game.won ? 'Win' : 'Loss'}</li>)}
+              </ol>
+            </details>
+          ))}
+        </section>
+      )}
+    </>
+  );
+}
+
 interface SaveShape {
   league: MlbLeague; myTeam: string; phase: Phase; titles: number; seasonsPlayed: number;
   draftClass: MlbProspect[] | null; picksLeft: number;
@@ -134,6 +165,8 @@ export default function MlbFrontOfficeBoard() {
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<MlbLeague | null>(null);
   const [rotationSaveError, setRotationSaveError] = useState(false);
+  const [octoberSaveError, setOctoberSaveError] = useState(false);
+  const [octoberUnavailable, setOctoberUnavailable] = useState(false);
   const [feed, setFeed] = useState<string[]>([]);
   const lastRound = useRef<LastRound | null>(null);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
@@ -216,6 +249,7 @@ export default function MlbFrontOfficeBoard() {
          is minted from the same counter, so it shares the id space. */
       ensureMlbLeagueIds(s.league, s.draftClass);
       if (!mlbRotationPlanned(s.league, s.myTeam)) delete s.league.rotationPlan;
+      if (!mlbOctoberRotationPlanned(s.league, s.myTeam)) delete s.league.octoberRotation;
       setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
       lastRound.current = readLastRound(s.lastRound, s.league, s.myTeam);
       if (lastRound.current) setFeed(roundHeadlines(lastRound.current));
@@ -241,7 +275,10 @@ export default function MlbFrontOfficeBoard() {
          now carries the postseason, so the recap is simply drawn again. A
          save from before this round has nothing to draw, so it opens on the
          draft, which is where the recap's only button leads. */
-      if (s.postseason) { setSeries(s.postseason.series); setChampion(s.postseason.champion); setGradeLine(s.postseason.gradeLine ?? null); }
+      if (s.postseason) {
+        setSeries(s.postseason.series); setChampion(s.postseason.champion); setGradeLine(s.postseason.gradeLine ?? null);
+        setOctoberUnavailable(s.postseason.octoberUnavailable === true);
+      }
       if (s.fired) setPhase('fired');
       else if (s.phase !== 'recap') setPhase(s.phase);
       else if (s.postseason) setPhase('recap');
@@ -257,13 +294,13 @@ export default function MlbFrontOfficeBoard() {
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft: draftBatchesLeft ?? undefined,
         mandate, trust, fired, pressTilt, seasonTradeLine,
-        postseason: champion ? { series, champion, gradeLine } : null,
+        postseason: champion ? { series, champion, gradeLine, ...(octoberUnavailable ? { octoberUnavailable: true } : {}) } : null,
         ...(result?.team === team && result.season === lg.season ? { lastRound: result } : {}),
         ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch,
       } satisfies SaveShape));
       return true;
     } catch { return false; }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, octoberUnavailable]);
 
   const label = (abbr: string) => {
     const t = MLB_TEAM_MAP.get(abbr);
@@ -280,7 +317,7 @@ export default function MlbFrontOfficeBoard() {
       `Welcome to the ${label(abbr)} front office. Opening Day of the ${lg.season} season is here.`,
       `🏛️ The ownership mandate: ${m.text}`,
     ]);
-    setChampion(''); setSeries([]); setTitles(0); setSeasonsPlayed(0);
+    setChampion(''); setOctoberUnavailable(false); setSeries([]); setTitles(0); setSeasonsPlayed(0);
     setMandate(m); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
     /* Round 192: the introduction presser. First day, full room. */
     setPresser(buildGmPresser(MLB_WORDS, {
@@ -354,6 +391,7 @@ export default function MlbFrontOfficeBoard() {
        before it plays, through the same two tap DFA as any other cut. */
     if (mlbOverLimit(my) > 0) return;
     setRotationSaveError(false);
+    setOctoberSaveError(false);
     const lg: MlbLeague = JSON.parse(JSON.stringify(league));
     /* Round 1020: with the desk on, the staff's edge and the trainer ride on
        the round; with it off the round is called exactly as before. */
@@ -371,7 +409,10 @@ export default function MlbFrontOfficeBoard() {
     const newFeed = roundHeadlines(result);
     if (nextGm !== gm) setGm(nextGm);
     if (lg.round >= MLB_ROUNDS) {
-      const { series: sr, champion: champ } = runMlbPlayoffs(lg, Math.random, nextGm ? mlbDeskEdges(nextGm, lg, myTeam) : undefined);
+      const unavailable = mlbOctoberRotationPlanned(lg, myTeam) && mlbStrengthUnits(lg.teams[myTeam]).rot.length !== 3;
+      const { series: sr, champion: champ } = runMlbPlayoffs(lg, Math.random, nextGm ? mlbDeskEdges(nextGm, lg, myTeam) : undefined, myTeam);
+      const octoberFallback = unavailable && sr.some(row => row.home === myTeam || row.away === myTeam);
+      setOctoberUnavailable(octoberFallback);
       lg.champions.push({ season: lg.season, team: champ });
       setSeries(sr);
       setChampion(champ);
@@ -404,7 +445,7 @@ export default function MlbFrontOfficeBoard() {
       setLeague(lg);
       lastRound.current = result;
       setFeed(newFeed); setFeedSlam(null);
-      persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
+      persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict, ...(octoberFallback ? { octoberUnavailable: true } : {}) } }, lg, myTeam);
       return;
     }
     lg.round += 1;
@@ -520,7 +561,7 @@ export default function MlbFrontOfficeBoard() {
         ...notes,
       ].slice(0, 6));
       setPressTilt(0); setSeasonTradeLine(null);
-      setSeries([]); setChampion(''); setWonNow(false);
+      setSeries([]); setChampion(''); setOctoberUnavailable(false); setWonNow(false);
       /* Round 530: the phase stays 'draft' so the last pick's card is seen;
          leaveDraft moves it on. The save says 'hub' as it always did, so a
          reload skips the reveal and opens where it opened before. */
@@ -746,6 +787,9 @@ export default function MlbFrontOfficeBoard() {
   const room = mlbCapRoom(my, league.cap);
   const strength = Math.round(mlbStrength(my));
   const rotation = tab === 'round' ? mlbRotationChoices(league, myTeam) : null;
+  const showOctoberChoice = tab === 'round' && league.round === MLB_ROUNDS && !!my.depth;
+  const octoberStarters = showOctoberChoice ? mlbStrengthUnits(my).rot : [];
+  const octoberBooked = showOctoberChoice && mlbOctoberRotationPlanned(league, myTeam);
 
   /* ---------------- Round 180: the reload path after a firing ---------------- */
   if (phase === 'fired') {
@@ -761,6 +805,7 @@ export default function MlbFrontOfficeBoard() {
             <RotateCcw className="h-4 w-4" /> Take another front office
           </button>
         </div>
+        <OctoberRecap rows={series} team={myTeam} unavailable={octoberUnavailable} label={label} />
       </div>
     );
   }
@@ -888,6 +933,7 @@ export default function MlbFrontOfficeBoard() {
             </div>
           )}
         </div>
+        <OctoberRecap rows={series} team={myTeam} unavailable={octoberUnavailable} label={label} />
         {lastRound.current && (
           <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
             {roundHeadlines(lastRound.current).map((line, index) => <p key={index}>{line}</p>)}
@@ -1286,6 +1332,33 @@ export default function MlbFrontOfficeBoard() {
             <p data-over-limit className="mb-2 text-xs text-destructive">
               You are carrying {my.players.length}, {overLimit} over the limit of {mlbRosterMax(my)}. DFA {overLimit === 1 ? 'one man' : `${overLimit} men`} on the roster box before you play.
             </p>
+          )}
+          {showOctoberChoice && (octoberStarters.length === 3 || octoberBooked) && (
+            <div className="mx-auto mb-3 max-w-sm text-left">
+              <label className="block text-xs font-semibold">
+                October rotation
+                <select className="mt-1 min-h-11 w-full rounded-lg border border-border bg-background px-3 text-sm"
+                  value={octoberBooked ? 'ace' : 'usual'} onChange={event => {
+                    const choice = event.target.value;
+                    if (choice !== 'ace' && choice !== 'usual') return;
+                    const next = setMlbOctoberRotation(league, myTeam, choice === 'ace');
+                    if (next === league) return;
+                    if (!persist({}, next, myTeam)) { setOctoberSaveError(true); return; }
+                    setOctoberSaveError(false);
+                    setLeague(next);
+                  }}>
+                  <option value="usual">Usual rotation</option>
+                  <option value="ace" disabled={octoberStarters.length !== 3}>Start the ace first</option>
+                </select>
+              </label>
+              <p className="mt-1 text-xs text-muted-foreground">Your three best healthy starters pitch in rating order at the start of each playoff series. Each game uses its starter&apos;s rating. The usual rotation averages all three.</p>
+              {octoberBooked && <p className="mt-1 text-xs text-muted-foreground" data-october-preview>
+                {octoberStarters.length === 3
+                  ? octoberStarters.map(player => player.name + ' ' + player.ovr).join(' · ')
+                  : 'The usual rotation will play if you are short of three healthy starters when October begins.'}
+              </p>}
+              {octoberSaveError && <p role="alert" className="mt-1 text-xs text-destructive">Could not save the October rotation. Choose it again to retry.</p>}
+            </div>
           )}
           <button onClick={playRound} disabled={overLimit > 0} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">
             <ShieldHalf className="h-4 w-4" /> {league.round >= MLB_ROUNDS ? 'Final stretch + October' : `Play Round ${league.round}`}
