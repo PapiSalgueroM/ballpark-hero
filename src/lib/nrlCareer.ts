@@ -11,7 +11,7 @@ import {
 } from '@/lib/nrlPlayerScoring';
 import {
   archiveNrlFinals, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
-  isNrlPhysioTreatment, nrlInjuries, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
+  isNrlPhysioTreatment, nrlByeTrainingPreview, nrlInjuries, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
   nrlPlanAdjustments, nrlPlanMatchups, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlManagerState, type NrlMatchResult,
@@ -164,7 +164,7 @@ export interface NrlAcademyReport {
   player: NrlCareerPlayer | null;
   priority?: NrlAcademyPriority;
 }
-interface NrlPositionCourse { playerId: string; role: NrlRole; startedRound: number }
+interface NrlPositionCourse { playerId: string; role: NrlRole; startedRound: number; intensiveBye?: number }
 interface NrlContractApproach {
   playerId: string;
   listedRound: number;
@@ -242,6 +242,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'applySavedLineup'; previewKey: string; slot?: 'rotation' }
   | { type: 'startPositionTraining'; year: number; clubId: string; round: number; playerId: string; role: NrlRole }
   | { type: 'cancelPositionTraining'; year: number; clubId: string; playerId: string; role: NrlRole; startedRound: number }
+  | { type: 'runIntensiveBye'; year: number; clubId: string; round: number; playerId: string; startedRound: number }
   | { type: 'startReserveGrade' | 'recallReserveGrade'; year: number; clubId: string; round: number; playerId: string }
   | { type: 'setShortlist'; playerId: string; saved: boolean; year: number }
   | { type: 'scoutAcademy'; role: NrlRole; priority?: NrlAcademyPriority }
@@ -805,7 +806,17 @@ export function nrlPositionTraining(state: NrlCareerState) {
   const course = state.positionTraining;
   if (!course) return null;
   const player = state.season.squad.find(candidate => candidate.id === course.playerId);
-  return player ? { ...course, player, remaining: course.startedRound + NRL_POSITION_TRAINING_ROUNDS - state.season.round } : null;
+  return player ? { ...course, player, remaining: course.startedRound + NRL_POSITION_TRAINING_ROUNDS
+    - state.season.round - Number(course.intensiveBye !== undefined) } : null;
+}
+
+export function nrlIntensiveBye(state: NrlCareerState) {
+  const { season } = state;
+  const course = nrlPositionTraining(state);
+  if (state.legacySeason || state.retired || state.outOfWork || season.live || !course || course.intensiveBye !== undefined || course.remaining < 2
+    || season.phase !== 'regular' || nrlNextRound(season).clubStatus !== 'bye' || nrlUnavailable(season).has(course.playerId)
+    || (judiciaryNeedsResponse(season) && season.judiciary?.case?.playerId === course.playerId)) return null;
+  return { ...course, ...nrlByeTrainingPreview(course.player, season.preparation) };
 }
 
 export function nrlPositionTrainingCandidates(state: NrlCareerState): NrlPlayer[] {
@@ -1484,12 +1495,13 @@ export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport 
   };
 }
 
-function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type: 'advance' | 'finishLive' | 'finishMinute60' }>): NrlCareerState {
+function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type: 'advance' | 'finishLive' | 'finishMinute60' }>,
+  intensiveByePlayerId?: string): NrlCareerState {
   const previous = state.season;
   if (judiciaryNeedsResponse(previous) && nrlNextRound(previous).clubMatch) return state;
   const { matchday, opponentStrength, planRatings } = careerMatchday(state);
   const played = reduceNrlSeason(matchday, action, opponentStrength, {
-    medicalReduction: nrlMedicalLevel(state) - 1, ...nrlCoachTactics(state.finance), planRivalRatings: planRatings,
+    medicalReduction: nrlMedicalLevel(state) - 1, ...nrlCoachTactics(state.finance), planRivalRatings: planRatings, intensiveByePlayerId,
   });
   if (played === matchday) return state;
   const newResults = played.results.slice(previous.results.length);
@@ -2221,6 +2233,13 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         && action.playerId === positionTraining.playerId && action.role === positionTraining.role
         && action.startedRound === positionTraining.startedRound ? next : state;
     }
+    case 'runIntensiveBye': {
+      const { season, positionTraining } = state;
+      if (!positionTraining || action.year !== season.year || action.clubId !== season.clubId || action.round !== season.round
+        || action.playerId !== positionTraining.playerId || action.startedRound !== positionTraining.startedRound || !nrlIntensiveBye(state)) return state;
+      return advanceCareer({ ...state, positionTraining: { ...positionTraining, intensiveBye: season.round } },
+        { type: 'advance' }, positionTraining.playerId);
+    }
     case 'startReserveGrade':
     case 'recallReserveGrade': {
       const { season } = state;
@@ -2940,11 +2959,22 @@ function validSavedLineup(value: unknown, season: NrlManagerState): boolean {
 
 function validPositionTraining(value: unknown, season: NrlManagerState, legacySeason: boolean): boolean {
   if (value === undefined) return true;
-  if (legacySeason || !season.injuryTracking || !season.kickerId || season.phase !== 'regular' || !record(value) || Object.keys(value).length !== 3
+  if (legacySeason || !season.injuryTracking || !season.kickerId || season.phase !== 'regular' || !record(value)
+    || Object.keys(value).length !== 3 + Number(value.intensiveBye !== undefined)
     || !intIn(value.startedRound, Math.max(1, season.round - NRL_POSITION_TRAINING_ROUNDS + 1),
       Math.min(season.round, nrlRegularRounds(season.year) - NRL_POSITION_TRAINING_ROUNDS + 1))) return false;
   const player = season.squad.find(candidate => candidate.id === value.playerId);
   if (!player || player.secondaryRole || !nrlRetrainingRoles(player.role).includes(value.role as NrlRole)) return false;
+  const bye = value.intensiveBye;
+  if (bye !== undefined) {
+    if (!intIn(bye, value.startedRound, Math.min(season.round - 1, value.startedRound + NRL_POSITION_TRAINING_ROUNDS - 2))
+      || season.round >= value.startedRound + NRL_POSITION_TRAINING_ROUNDS - 1
+      || nrlSeasonPlan(season.year).draw[bye - 1].some(match => match.includes(season.clubId))
+      || nrlInjuries(season, bye).has(player.id)
+      || (season.judiciary && nrlJudiciaryBannedBefore(season, player.id, bye))) return false;
+    const review = season.judiciary?.case;
+    if (review?.playerId === player.id && review.round < bye && (review.decidedRound === undefined || review.decidedRound > bye)) return false;
+  }
   const priorResults = season.results.filter(result => result.round < (value.startedRound as number));
   return !nrlInjuries({ ...season, round: value.startedRound, results: priorResults }).has(player.id)
     && (!season.judiciary || !nrlJudiciaryBannedBefore(season, player.id, value.startedRound));
@@ -3026,7 +3056,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     const training = state.positionTraining;
     const spellEnd = spell.recalledRound ?? spell.startedRound + NRL_RESERVE_GRADE_ROUNDS;
     if (training?.playerId === spell.playerId && training.startedRound < spellEnd
-      && training.startedRound + NRL_POSITION_TRAINING_ROUNDS > spell.startedRound) return false;
+      && training.startedRound + NRL_POSITION_TRAINING_ROUNDS - Number(training.intensiveBye !== undefined) > spell.startedRound) return false;
   }
   if (!validWorld(state) || !validRatingReview(state) || !validCareerBooks(state) || !validAcademy(state)
     || !validShortlist(state) || !validContractApproach(state)) return false;

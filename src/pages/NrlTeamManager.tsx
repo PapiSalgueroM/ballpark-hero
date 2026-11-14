@@ -33,7 +33,7 @@ import {
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
   nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlOppositionReport, nrlPositionTraining,
-  nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
+  nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlSelectionPromise, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
   NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SELECTION_PROMISE, reduceNrlCareer, runNrlFastForward,
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
@@ -973,6 +973,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
   }
   const club = shortName(year, clubId);
   const match = next.clubMatch;
+  const intensiveBye = next.clubStatus === 'bye' && nrlIntensiveBye(career);
   const needsJudiciary = judiciaryNeedsResponse(season);
   const approach = nrlContractApproach(career);
   const canPlayLive = Boolean(match && season.kickerId && season.bench);
@@ -1150,6 +1151,18 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
             {!canPlayLive && <ArrowRight aria-hidden="true" />}
           </Button>
         </div>
+      )}
+      {intensiveBye && (
+        <details className="rounded-xl border border-border bg-card px-4" data-nrl-intensive-bye>
+          <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold">Intensive position training</summary>
+          <div className="space-y-2 pb-3 text-sm">
+            <p>{intensiveBye.player.name} can finish learning {intensiveBye.role} one round sooner.</p>
+            <p className="text-muted-foreground">After the bye they will be {intensiveBye.intensive}% fit instead of {intensiveBye.normal}%. The rest of the squad keeps its usual recovery.</p>
+            <Button type="button" size="lg" variant="outline" disabled={disabled} onClick={() => onAction({
+              type: 'runIntensiveBye', year, clubId, round: season.round, playerId: intensiveBye.playerId, startedRound: intensiveBye.startedRound,
+            })}>Run intensive bye</Button>
+          </div>
+        </details>
       )}
 
       <FastForward key={`fast-forward-${year}`} career={career} onRun={onRun} disabled={disabled} />
@@ -1350,10 +1363,11 @@ function PositionTraining({ career, onAction, disabled }: {
         Position training<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
       </summary>
       <div className="space-y-3 pb-3 text-sm">
-        <p className="text-muted-foreground">Train one player at a time. In this game a course takes {NRL_POSITION_TRAINING_ROUNDS} rounds, including byes, and adds one position you can select in the starting 13.</p>
+        <p className="text-muted-foreground">Train one player at a time. A course normally takes {NRL_POSITION_TRAINING_ROUNDS} rounds, including byes, and adds one position you can select in the starting 13.</p>
         {course ? (
           <div className="space-y-2">
             <p role="status" className="font-semibold">{course.player.name} is learning {course.role}. {course.remaining} {course.remaining === 1 ? 'round' : 'rounds'} left.</p>
+            {course.intensiveBye && <p className="text-muted-foreground">Intensive training completed in Round {course.intensiveBye}.</p>}
             <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled} onClick={() => {
               if (onAction({ type: 'cancelPositionTraining', year: season.year, clubId: season.clubId, playerId: course.playerId, role: course.role, startedRound: course.startedRound })) summary.current?.focus();
             }}>Cancel training</Button>
@@ -2061,6 +2075,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
               <li>A match knock can put a player out for up to four rounds. Availability in Squad shows the first regular-season match an injured player can return for. The recovery countdown includes byes, and an available player fills the vacant spot.</li>
               <li>In Squad, you can pay once per season for physio to shorten an injury by one round. The player still sits out the current round.</li>
+              <li>During a regular-season bye, intensive position training can finish an active course one round sooner. The player ends the bye four fitness points below their usual recovery.</li>
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>
               <li>Sign one fictional assistant in Finances. Tactical assistants help when you use their tactic. A development assistant can give an eligible young player 1 OVR after eight regular-season appearances from the hire onward.</li>
               <li>Choose a goal kicker and a backup in Squad. The backup takes over if your kicker leaves the starting 13. The halfback covers when neither is available. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>

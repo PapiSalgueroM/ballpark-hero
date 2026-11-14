@@ -52,6 +52,7 @@ type NrlPreparationAction =
   | { type: 'prepare'; choice: 'defensiveDrills' | null; year: number; clubId: string; round: number };
 interface NrlRoundOptions {
   medicalReduction?: number;
+  intensiveByePlayerId?: string;
   coachRole?: NrlCoachRole;
   coachBonus?: number;
   planRivalRatings?: ReadonlyMap<NrlRole, number>;
@@ -615,6 +616,13 @@ function readyFitness(fitness: number, preparation: NrlPreparation | null, playi
   return clamp(fitness + routineRecovery + PREPARATION_FITNESS[preparation ?? 'normal'] + (playing ? 0 : 12), 0, 100);
 }
 
+const intensiveByeFitness = (recovered: number) => clamp(recovered + PREPARATION_FITNESS.train, 0, 100);
+
+export function nrlByeTrainingPreview(player: NrlPlayer, preparation: NrlPreparation | null) {
+  const normal = readyFitness(player.fitness, preparation, false);
+  return { normal, intensive: intensiveByeFitness(normal) };
+}
+
 const playerPreparation = (state: NrlRoundPreparation, id: string): NrlPreparation | null =>
   state.individualRecoveryId === id ? 'recover' : state.preparation;
 
@@ -975,7 +983,8 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
   const closing = halftime && (interchanges.length || halftime.talk || halftime.lateTactic || lateInterchange || halftime.fieldGoalPlan || halftime.tactic !== state.tactic)
     ? closingSelection(state, rotation, halftime) : undefined;
   const squad = state.squad.map(player => {
-    const before = readyFitness(player.fitness, playerPreparation(state, player.id), played);
+    const recovered = readyFitness(player.fitness, playerPreparation(state, player.id), played);
+    const before = !played && player.id === options.intensiveByePlayerId ? intensiveByeFitness(recovered) : recovered;
     const starterFatigue = played && starters.has(player.id) ? 15 : 0;
     const relief = rotation.has(player.id) ? 4 : 0;
     const reserveFatigue = used.has(player.id) ? (player.id === lateInterchange?.reserveId ? 4 : 8) : 0;
