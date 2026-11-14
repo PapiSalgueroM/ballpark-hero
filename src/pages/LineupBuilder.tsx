@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
-import { FORMATIONS, type Formation, type DraftChoice, type AIVerdict } from '@/types/lineupBuilder';
+import { FORMATIONS, lastRecordedYear, recordedYearsLabel, type Formation, type DraftChoice, type AIVerdict } from '@/types/lineupBuilder';
 import { GameNav } from '@/components/game/GameNav';
 import { FlagImg } from '@/components/FlagImg';
 import { GameShell } from '@/components/game/GameShell';
@@ -61,11 +61,16 @@ const LineupBuilder = () => {
   const [showRules, setShowRules] = useState(false);
   const [setupMode, setSetupMode] = useState<DraftChoice['mode']>('mixed');
   const [setupYear, setSetupYear] = useState(2026);
+  const [setupEra, setSetupEra] = useState(2022);
   const [browsingPlayers, setBrowsingPlayers] = useState(false);
   const [browseActivation, setBrowseActivation] = useState(0);
   const inputOwner = useRef<HTMLDivElement>(null);
-  const isClubYear = draftChoice.mode === 'club-year';
-  const recordedYear = draftChoice.mode === 'club-year' ? draftChoice.year : null;
+  const isClubYear = draftChoice.mode !== 'mixed';
+  const recordedYear = isClubYear ? draftChoice.year : null;
+  const lastYear = isClubYear ? lastRecordedYear(draftChoice) : null;
+  const draftLabel = draftChoice.mode === 'club-era' ? 'Club era draft' : 'Club year draft';
+  const yearsLabel = isClubYear ? recordedYearsLabel(draftChoice) : '';
+  const recordedPeriod = `${draftChoice.mode === 'club-era' ? 'recorded years' : 'recorded year'} ${yearsLabel}`;
   const searchDisabled = isValidating || selectedPositionIndex === null || !currentTeam || isSpinning || checkingDown;
 
   useEffect(() => {
@@ -150,10 +155,14 @@ const LineupBuilder = () => {
         ? [{ column: 'nationality', op: 'eq', value: nationSearchTerm(currentTeam.name) }]
         : [{ column: 'club', op: 'in', value: clubTableNames(currentTeam.name) }],
     };
-    return recordedYear === null ? source : {
-      ...source, filters: [...(source.filters ?? []), { column: 'year', op: 'eq', value: recordedYear }],
+    if (recordedYear === null || lastYear === null) return source;
+    const years = Array.from({ length: lastYear - recordedYear + 1 }, (_, offset) => recordedYear + offset);
+    return {
+      ...source, filters: [...(source.filters ?? []), years.length === 1
+        ? { column: 'year', op: 'eq', value: recordedYear }
+        : { column: 'year', op: 'in', value: years }],
     };
-  }, [currentTeam, recordedYear]);
+  }, [currentTeam, recordedYear, lastYear]);
 
   /* Round 442: the whole dropdown row rides along to the hook now. It is what
      the position gate reads, and it is what the season report is built from,
@@ -230,16 +239,16 @@ const LineupBuilder = () => {
 
   const recordedYearVerdict = useMemo<AIVerdict | null>(() => {
     if (recordedYear === null) return null;
-    const headline = `Club year draft: recorded year ${recordedYear}`;
+    const headline = `${draftLabel}: ${recordedPeriod}`;
     if (!seasonReport) return {
       rating: 'Unrated recorded draft', headline,
       analysis: 'Draft complete. Some selected records are missing a value or age, so we cannot rate the full XI.',
     };
     return {
       rating: `${seasonReport.squadRating}/100`, headline,
-      analysis: `Your XI finished ${ordinal(seasonReport.tablePosition)} with ${seasonReport.points} points in this simulated season. Ratings use your selected ${recordedYear} records, plus role fit, chemistry and balance.`,
+      analysis: `Your XI finished ${ordinal(seasonReport.tablePosition)} with ${seasonReport.points} points in this simulated season. Ratings use your selected records from ${yearsLabel}, plus role fit, chemistry and balance.`,
     };
-  }, [recordedYear, seasonReport]);
+  }, [recordedYear, draftLabel, recordedPeriod, yearsLabel, seasonReport]);
 
   /* Which third of the pitch this XI is actually built on, averaged from the
      same card ratings. Slots are bucketed by the slot the player filled, not by
@@ -280,7 +289,9 @@ const LineupBuilder = () => {
         width="wide"
         title="BUILD YOUR XI"
         subtitle={isClubYear && phase !== 'formation'
-          ? `Fill each position with a ${recordedYear} record from the club you are given`
+          ? (draftChoice.mode === 'club-era'
+            ? `Fill each position with a record from ${yearsLabel} for the club you are given`
+            : `Fill each position with a ${recordedYear} record from the club you are given`)
           : 'Pick a formation, fill each position with a player from the given club or nation'}
         headerExtra={
           <div className="flex justify-center">
@@ -299,7 +310,7 @@ const LineupBuilder = () => {
           <div className="max-w-lg mx-auto">
             <fieldset className="mb-5 space-y-3">
               <legend className="text-center text-sm font-semibold text-foreground mb-2">Choose your draft</legend>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-1 gap-2 min-[360px]:grid-cols-3">
                 <button type="button" aria-pressed={setupMode === 'mixed'} onClick={() => setSetupMode('mixed')}
                   className={cn('min-h-11 rounded-xl border px-3 py-2 text-sm font-semibold', setupMode === 'mixed' ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-card text-foreground')}>
                   Mixed
@@ -307,6 +318,10 @@ const LineupBuilder = () => {
                 <button type="button" aria-pressed={setupMode === 'club-year'} onClick={() => setSetupMode('club-year')}
                   className={cn('min-h-11 rounded-xl border px-3 py-2 text-sm font-semibold', setupMode === 'club-year' ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-card text-foreground')}>
                   Club year draft
+                </button>
+                <button type="button" aria-pressed={setupMode === 'club-era'} onClick={() => setSetupMode('club-era')}
+                  className={cn('min-h-11 rounded-xl border px-3 py-2 text-sm font-semibold', setupMode === 'club-era' ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-card text-foreground')}>
+                  Club era draft
                 </button>
               </div>
               {setupMode === 'club-year' && (
@@ -319,13 +334,25 @@ const LineupBuilder = () => {
                   <p className="text-xs text-muted-foreground">Draft from our club records for that year. Some players may be missing.</p>
                 </div>
               )}
+              {setupMode === 'club-era' && (
+                <div className="space-y-2">
+                  <label htmlFor="lineup-recorded-era" className="block text-sm font-semibold text-foreground">Five-year era</label>
+                  <select id="lineup-recorded-era" value={setupEra} onChange={event => setSetupEra(Number(event.target.value))}
+                    className="min-h-11 w-full rounded-xl border border-border bg-card px-3 text-foreground">
+                    {Array.from({ length: 19 }, (_, index) => 2022 - index).map(year => (
+                      <option key={year} value={year}>{recordedYearsLabel({ mode: 'club-era', year })}</option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-muted-foreground">Use any recorded year in the range. The club pool includes Boca Juniors, River Plate, Flamengo, Grêmio and Santos.</p>
+                </div>
+              )}
             </fieldset>
             <h2 className="text-center text-lg font-semibold text-foreground mb-4">Choose Your Formation</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {formationOptions.map((f) => (
                 <button
                   key={f}
-                  onClick={() => setupMode === 'mixed' ? selectFormation(f) : selectFormation(f, { mode: 'club-year', year: setupYear })}
+                  onClick={() => setupMode === 'mixed' ? selectFormation(f) : selectFormation(f, { mode: setupMode, year: setupMode === 'club-era' ? setupEra : setupYear })}
                   className="rounded-xl border border-border bg-card hover:bg-primary hover:text-primary-foreground transition-all p-6 text-center group"
                 >
                   <span className="text-2xl font-bold font-display group-hover:scale-110 transition-transform inline-block">
@@ -366,7 +393,7 @@ const LineupBuilder = () => {
                   targetIndex={filledCount}
                   isSpinning={isSpinning}
                   onFinish={finishSpin}
-                  recordedYear={recordedYear ?? undefined}
+                  recordedYears={yearsLabel || undefined}
                 />
                 {!isSpinning && currentTeam && (
                   <button
@@ -397,7 +424,7 @@ const LineupBuilder = () => {
 
                   {isClubYear && (
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <p className="text-xs text-muted-foreground">Matching records, recorded year {recordedYear}</p>
+                      <p className="text-xs text-muted-foreground">Matching records, {recordedPeriod}</p>
                       <button type="button" disabled={searchDisabled} className="min-h-11 rounded-xl bg-secondary px-3 py-2 text-sm font-semibold text-secondary-foreground disabled:opacity-50"
                         onClick={() => {
                           inputRevision.current += 1;
@@ -420,6 +447,7 @@ const LineupBuilder = () => {
                         placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
                         disabled={searchDisabled}
                         autoFocus={!isClubYear}
+                        showRecordedYear={draftChoice.mode === 'club-era'}
                         emptyText={isClubYear ? 'No matching records. Try another name or reroll the club.' : undefined}
                         validateOnly
                       />
@@ -473,7 +501,7 @@ const LineupBuilder = () => {
               <h2 className="text-center text-xl font-bold text-foreground font-display mb-1">
                 Your {formation} Starting XI
               </h2>
-              <p className="text-center text-sm text-muted-foreground mb-4">{isClubYear ? `Club year draft, recorded year ${recordedYear}` : 'Review your team before submitting'}</p>
+              <p className="text-center text-sm text-muted-foreground mb-4">{isClubYear ? `${draftLabel}, ${recordedPeriod}` : 'Review your team before submitting'}</p>
               <div className="space-y-2">
                 {filledSlotsArray.map((slot, i) => (
                   <div key={i} className="flex items-center gap-3 bg-secondary/30 rounded-lg px-4 py-2.5">
@@ -523,16 +551,16 @@ const LineupBuilder = () => {
               emojiGrid={
                 seasonReport
                   ? [
-                      `Build Your XI: ${formation} rated ${verdict.rating}${isClubYear ? ` (recorded year ${recordedYear})` : ''}`,
+                      `Build Your XI: ${formation} rated ${verdict.rating}${isClubYear ? ` (${recordedPeriod})` : ''}`,
                       `Season sim: ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)} with ${seasonReport.points} points`,
                       ...(seasonReport.topScorer ? [`Top scorer: ${seasonReport.topScorer.name} (${seasonReport.topScorer.goals})`] : []),
                       ...(seasonReport.playerOfSeason ? [`Player of the season: ${seasonReport.playerOfSeason.name}`] : []),
                     ].join('\n')
-                  : `Build Your XI: ${formation} rated ${verdict.rating}${isClubYear ? ` (recorded year ${recordedYear})` : ''}`
+                  : `Build Your XI: ${formation} rated ${verdict.rating}${isClubYear ? ` (${recordedPeriod})` : ''}`
               }
               share={{
-                score: isClubYear ? `${recordedYear}: ${verdict.rating}` : seasonReport ? `${verdict.rating}, ${seasonReport.squadRating}/100` : verdict.rating,
-                gameName: isClubYear ? 'Build Your XI Club year draft' : 'Build Your XI',
+                score: isClubYear ? `${yearsLabel}: ${verdict.rating}` : seasonReport ? `${verdict.rating}, ${seasonReport.squadRating}/100` : verdict.rating,
+                gameName: isClubYear ? `Build Your XI ${draftLabel}` : 'Build Your XI',
                 gamePath: '/build-your-xi',
               }}
               onPlayAgain={resetGame}
@@ -573,7 +601,7 @@ const LineupBuilder = () => {
                   <div className="text-center mb-3">
                     <div className="text-2xl mb-1">📋</div>
                     <h3 className="text-base font-bold text-primary font-display">Season Report</h3>
-                    <p className="text-xs text-muted-foreground">{isClubYear ? `A fictional season from your selected ${recordedYear} records` : 'One season with this XI, every player at his peak'}</p>
+                    <p className="text-xs text-muted-foreground">{isClubYear ? `A fictional season from your selected ${yearsLabel} records` : 'One season with this XI, every player at his peak'}</p>
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
@@ -628,12 +656,12 @@ const LineupBuilder = () => {
           title="Build Your XI | DoUKnowBall"
           description="Build your ultimate starting eleven from players who match specific criteria. Test your football knowledge across positions, teams and eras."
           howToPlay={[
-            "Choose Mixed clubs and nations, or Club year draft with one recorded year, then a formation",
+            "Choose Mixed clubs and nations, Club year draft with one year, or Club era draft with five recorded years, then a formation",
             "Spin to get a random team assignment for each position",
-            "Pick a matching player who fits the position; Club year draft requires that club record from your chosen year",
-            "Use Browse players in Club year draft for matching records, not a complete squad; missing data can be retried or rerolled",
+            "Pick a matching player who fits the position. Club drafts require a club record within your chosen years",
+            "Use Browse players in either club draft to see the records available for that club and period",
             "Check the role fit, chemistry and balance tiles under the pitch: the season sim plays all three",
-            "Submit your full XI: Mixed uses the existing evaluation; Club year draft uses its selected records for a fictional season report",
+            "Submit your full XI. Mixed uses its scouting evaluation. Club drafts use your selected records for a fictional season report",
           ]}
           examples={[
             "GK from Real Madrid: Thibaut Courtois",

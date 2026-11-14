@@ -7,7 +7,7 @@ import { dealAnswers, ExpiringDealsCheckpoint } from '@/components/club-manager/
 import { bookAwardsState, evalWorldUcl, expiringDeals, money } from '@/lib/clubManager';
 import { BOOK_FULL_SHARE, type AwardMan } from '@/lib/clubManagerLeagueBoards';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
-import { LeagueCoachHonour, TeamLines } from '@/components/club-manager/SeasonHonoursCard';
+import { ClubSeasonHonour, LeagueCoachHonour, LeagueKeeperShortlist, TeamLines } from '@/components/club-manager/SeasonHonoursCard';
 import { BallonDorShortlist } from '@/components/club-manager/BallonDorShortlist';
 import type { CareerState, SeasonSummary } from '@/lib/clubManager';
 import type { SeasonFate } from '@/lib/clubManagerBoardVerdict';
@@ -275,6 +275,8 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
               <BallonDorShortlist rows={sm.ballonDorShortlist} />
             )}
             {sm.leagueCoachAward && <LeagueCoachHonour award={sm.leagueCoachAward} />}
+            {sm.clubSeasonAward && <ClubSeasonHonour award={sm.clubSeasonAward} />}
+            {awards && <LeagueKeeperShortlist awards={awards} />}
             {/* Round 1593: the Europa League season my club played, one line. */}
             {sm.uelRun && (
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()} data-cm-review-uel="1">

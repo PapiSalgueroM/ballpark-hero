@@ -10,7 +10,7 @@ import {
   isNrlNamedPlayer,
   nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyReports,
   nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
-  nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
+  nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractCounteroffer, nrlContractOffer,
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
   nrlConcessionsQuote, nrlConcessionsSpend,
@@ -1504,6 +1504,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const { year, phase, clubId } = career.season;
   const finished = phase === 'complete';
   const retired = career.retired === true;
+  const outOfWork = career.outOfWork === true;
+  const employed = !retired && !outOfWork;
   const needsJudiciary = judiciaryNeedsResponse(career.season);
   const outstandingJudiciary = finished && career.season.judiciary && nrlJudiciaryBans(career.season).size > 0;
   const target = nrlBoardTarget(career);
@@ -1536,18 +1538,39 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   );
   return (
     <>
-      <h2 className="font-display text-xl font-bold">Season review</h2>
+      <h2 className="font-display text-xl font-bold">{outOfWork && !retired ? 'Out of work' : 'Season review'}</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         {retired ? `Retired after the ${year} season.`
+          : outOfWork ? `Your last club was ${clubName(year, clubId)}. Take a vacancy to start ${year + 1} in the same league.`
           : finished ? 'Review the year and settle your squad before the new season.' : 'Completed seasons stay here as your career moves on.'}
       </p>
-      {finished && career.season.judiciary?.case && <div className="mt-3">
+      {outOfWork && !retired && <section aria-labelledby="nrl-job-market" className="mt-3 rounded-xl border border-border bg-background p-3">
+        <h3 id="nrl-job-market" className="font-bold">Job market</h3>
+        <p className="text-sm text-muted-foreground">These vacancies are simulated. Take over the club’s settled squad, contracts and finances.</p>
+        <ul className="mt-1 divide-y divide-border">
+          {openings.map(job => (
+            <li key={job.clubId} className="flex flex-wrap items-center justify-between gap-2 py-2">
+              <div className="min-w-0">
+                <p className="break-words text-sm font-semibold">{clubName(year + 1, job.clubId)}</p>
+                <p className="text-sm text-muted-foreground">{job.reason === 'expansion' ? 'New club in this league' : `Finished ${job.rank} and missed its target`}</p>
+                <p className="text-sm text-muted-foreground">Next board target · {job.nextTarget}</p>
+              </div>
+              <Button type="button" size="lg" className="h-auto min-h-11 max-w-full whitespace-normal px-3 py-2"
+                disabled={disabled} aria-label={`Take job at ${clubName(year + 1, job.clubId)}`}
+                onClick={() => onAction({ type: 'acceptVacancy', year, clubId, destinationId: job.clubId })}>
+                Take job
+              </Button>
+            </li>
+          ))}
+        </ul>
+      </section>}
+      {finished && !outOfWork && career.season.judiciary?.case && <div className="mt-3">
         <NrlJudiciaryReview season={career.season} onAction={onAction} disabled={disabled} />
       </div>}
-      {outstandingJudiciary && !retired && year < NRL_LAST_YEAR && <p className="mt-2 text-sm text-muted-foreground">
+      {outstandingJudiciary && employed && year < NRL_LAST_YEAR && <p className="mt-2 text-sm text-muted-foreground">
         A remaining suspension carries into the next season if you stay and the player is still signed to this club.
       </p>}
-      {target && (
+      {target && !outOfWork && (
         <section className="mt-4 rounded-xl border border-border bg-background p-3" aria-labelledby="nrl-board-target">
           <h3 id="nrl-board-target" className="text-sm font-bold">Board target</h3>
           <p className="mt-1 text-sm font-semibold">{target.label}</p>
@@ -1561,21 +1584,21 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           </p>
         </section>
       )}
-      {!retired && challengeStatus && <div className="mt-3"><NrlBoardChallengeNotice season={career.season} status={challengeStatus} /></div>}
-      {!finished && !retired && <SummerApplications career={career} onAction={onAction} disabled={disabled} />}
-      {summer && finished && !retired && <div className="mt-3">{applicationCard}</div>}
-      {!retired && <BoardPathways career={career} onAction={onAction} disabled={disabled} />}
-      {!retired && !career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
-      {finished && !retired && year < NRL_LAST_YEAR && <ExpiringDeals career={career} onAction={onAction} disabled={disabled} />}
-      <AssistantExtension career={career} onAction={onAction} disabled={disabled} />
-      <LeagueRecruitment career={career} onAction={onAction} disabled={disabled}
-        nextClubId={nextClub?.id ?? (application?.response === 'offered' ? application.clubId : undefined)} />
-      {finished && !retired && year < NRL_LAST_YEAR && !mustMove && (
+      {employed && challengeStatus && <div className="mt-3"><NrlBoardChallengeNotice season={career.season} status={challengeStatus} /></div>}
+      {!finished && employed && <SummerApplications career={career} onAction={onAction} disabled={disabled} />}
+      {summer && finished && employed && <div className="mt-3">{applicationCard}</div>}
+      {employed && <BoardPathways career={career} onAction={onAction} disabled={disabled} />}
+      {employed && !career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
+      {finished && employed && year < NRL_LAST_YEAR && <ExpiringDeals career={career} onAction={onAction} disabled={disabled} />}
+      {!outOfWork && <AssistantExtension career={career} onAction={onAction} disabled={disabled} />}
+      {!outOfWork && <LeagueRecruitment career={career} onAction={onAction} disabled={disabled}
+        nextClubId={nextClub?.id ?? (application?.response === 'offered' ? application.clubId : undefined)} />}
+      {finished && employed && year < NRL_LAST_YEAR && !mustMove && (
         <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled || needsJudiciary} onClick={() => onAction({ type: 'startNextSeason' })}>
           Start {year + 1}<ArrowRight aria-hidden="true" />
         </Button>
       )}
-      {clubs.length > 0 && (
+      {!outOfWork && clubs.length > 0 && (
         <details className="group mt-3 rounded-xl border border-border bg-background px-3" open={mustMove || undefined}>
           <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             {mustMove ? 'Choose a new club for' : 'Change clubs for'} {year + 1}<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
@@ -1631,6 +1654,15 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           </div>
         </details>
       )}
+      {employed && !disabled && nrlCanLeaveClub(career, openings) && (
+        <RetireDoor className="mt-3" door="Leave club" title={`Leave ${clubName(year, clubId)} after ${year}?`}
+          lines={[`You’ll be out of work. To return for ${year + 1}, choose one of the ${openings.length} simulated vacancies. This saves your completed season.`,
+            ...(application ? ['Your existing application or offer closes.'] : []),
+            ...(career.coachRetention ? ['Leaving cancels the assistant extension.'] : []),
+            ...(career.worldCup ? ['You can resume your World Cup appointment after taking a new club job.'] : [])]}
+          keep="Stay at club" confirm="Yes, leave club"
+          onRetire={() => onAction({ type: 'leaveClub', year, clubId })} />
+      )}
       {finished && !retired && !disabled && !needsJudiciary && (
         <RetireDoor className="mt-3" door="Retire from management" title={`Retire after the ${year} season?`}
           lines={['Your career record stays in this save slot.', ...(career.coachRetention ? ['Retiring cancels the assistant extension.'] : [])]}
@@ -1658,7 +1690,10 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 {record.appointment && (
                   <p className="text-sm text-muted-foreground">Accepted the {labelForClub(record.year + 1, record.appointment.clubId)} job for {record.year + 1}</p>
                 )}
-                {record.summerApplication && !record.appointment && (record.year !== year || retired) && (
+                {record.rejoinedClubId && (
+                  <p className="text-sm text-muted-foreground">Left the club and joined {clubName(record.year + 1, record.rejoinedClubId)} through the job market for {record.year + 1}.</p>
+                )}
+                {record.summerApplication && !record.appointment && (record.year !== year || retired || outOfWork) && (
                   <p className="text-sm text-muted-foreground">
                     Applied to {labelForClub(record.year + 1, record.summerApplication.clubId)} in Round {record.summerApplication.round} · {
                       record.summerApplication.response === 'offered' ? 'Offer passed over'
@@ -1742,7 +1777,7 @@ export default function NrlCareerOffice({ career, screen, onAction, disabled }: 
   career: NrlCareerState; screen: OfficeScreen; onAction: Dispatch; disabled: boolean;
 }) {
   return (
-    <section className="rounded-xl border border-border bg-card p-4 sm:p-5" aria-label="Club office">
+    <section className="rounded-xl border border-border bg-card p-4 sm:p-5" aria-label={career.outOfWork ? 'Career review' : 'Club office'}>
       {screen === 'contracts' && <Contracts career={career} onAction={onAction} disabled={disabled} />}
       {screen === 'recruitment' && <Recruitment career={career} onAction={onAction} disabled={disabled} />}
       {screen === 'academy' && <Academy career={career} onAction={onAction} disabled={disabled} />}

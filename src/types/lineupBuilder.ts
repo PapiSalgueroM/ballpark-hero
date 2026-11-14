@@ -50,7 +50,17 @@ export interface TeamAssignment {
   isNation: boolean;
 }
 
-export type DraftChoice = { mode: 'mixed' } | { mode: 'club-year'; year: number };
+export type DraftChoice = { mode: 'mixed' } | RecordedClubDraft;
+export type RecordedClubDraft = { mode: 'club-year' | 'club-era'; year: number };
+
+export function lastRecordedYear(draft: RecordedClubDraft) {
+  return draft.year + (draft.mode === 'club-era' ? 4 : 0);
+}
+
+export function recordedYearsLabel(draft: RecordedClubDraft) {
+  const end = lastRecordedYear(draft);
+  return end === draft.year ? String(draft.year) : `${draft.year} to ${end}`;
+}
 
 export type GamePhase = 'formation' | 'building' | 'reviewing' | 'result';
 

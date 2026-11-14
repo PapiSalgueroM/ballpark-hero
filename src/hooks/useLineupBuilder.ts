@@ -1,10 +1,10 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
-import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS, CLUB_TABLE_NAMES, clubYearClubs } from '@/data/lineupTeams';
+import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS, CLUB_TABLE_NAMES, clubEraAdditionalNames, clubEraClubs, clubYearClubs } from '@/data/lineupTeams';
 import { askValidator, type ValidatorAnswer } from '@/lib/validatorClient';
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/client';
-import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment, DraftChoice } from '@/types/lineupBuilder';
-import { FORMATIONS } from '@/types/lineupBuilder';
+import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment, DraftChoice, RecordedClubDraft } from '@/types/lineupBuilder';
+import { FORMATIONS, lastRecordedYear, recordedYearsLabel } from '@/types/lineupBuilder';
 import { checkLineupPick, gradeFit, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionFit';
 import type { Position } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
@@ -93,13 +93,14 @@ export function clubPickVerifies(team: TeamAssignment, slotRole: Position, pick:
   if (team.isNation || !pick?.club || !pick.rawPosition) return false;
   if (!SLOT_ALLOWED_BY_ROLE[slotRole]) return false;
   if (!normalizePosition(pick.rawPosition.trim())) return false;
-  const stored = CLUB_TABLE_NAMES[team.name];
+  const stored = CLUB_TABLE_NAMES[team.name] ?? clubEraAdditionalNames[team.name];
   if (!stored) return false;
   return pick.club.split(' / ').map((part) => part.trim()).some((part) => stored.includes(part));
 }
 
-function recordedYearPickVerifies(team: TeamAssignment, role: Position, pick: PickMeta | undefined, year: number): boolean {
-  return Number.isInteger(year) && pick?.year === year
+function recordedPickVerifies(team: TeamAssignment, role: Position, pick: PickMeta | undefined, draft: RecordedClubDraft): boolean {
+  return typeof pick?.year === 'number' && Number.isInteger(pick.year)
+    && pick.year >= draft.year && pick.year <= lastRecordedYear(draft)
     && typeof pick?.rawName === 'string' && Boolean(pick.rawName.trim())
     && typeof pick.club === 'string' && typeof pick.rawPosition === 'string'
     && clubPickVerifies(team, role, pick);
@@ -160,15 +161,15 @@ export function useLineupBuilder() {
   const currentTeam = useMemo(() => teamAssignments[filledCount] ?? null, [teamAssignments, filledCount]);
 
   const selectFormation = useCallback((f: Formation, choice: DraftChoice = { mode: 'mixed' }) => {
-    if (choice.mode === 'club-year' && !Number.isInteger(choice.year)) return;
+    if (choice.mode !== 'mixed' && (!Number.isInteger(choice.year) || choice.year < 2004 || lastRecordedYear(choice) > 2026)) return;
     cancelValidation();
     cancelEvaluation();
-    const selectedDraft: DraftChoice = choice.mode === 'club-year'
-      ? { mode: 'club-year', year: choice.year } : { mode: 'mixed' };
+    const selectedDraft: DraftChoice = choice.mode === 'mixed' ? { mode: 'mixed' } : { mode: choice.mode, year: choice.year };
     setDraftChoice(selectedDraft);
     setFormation(f);
     setTeamAssignments(selectedDraft.mode === 'mixed' ? getRandomTeamAssignments(11)
-      : [...clubYearClubs].sort(() => Math.random() - 0.5).slice(0, 11).map(name => ({ name, isNation: false })));
+      : [...(selectedDraft.mode === 'club-era' ? clubEraClubs : clubYearClubs)]
+        .sort(() => Math.random() - 0.5).slice(0, 11).map(name => ({ name, isNation: false })));
     setPhase('building');
     setSelectedPositionIndex(null);
     setFilledSlots(new Map());
@@ -195,14 +196,14 @@ export function useLineupBuilder() {
     cancelValidation();
     setTeamAssignments((prev) => {
       const usedNames = new Set(prev.filter((_, i) => i !== filledCount).map((t) => t.name));
-      const all = draftChoice.mode === 'club-year'
-        ? clubYearClubs.map((name) => ({ name, isNation: false }))
+      const all = draftChoice.mode !== 'mixed'
+        ? (draftChoice.mode === 'club-era' ? clubEraClubs : clubYearClubs).map((name) => ({ name, isNation: false }))
         : [
         ...ALL_CLUBS.map((name) => ({ name, isNation: false })),
         ...ALL_NATIONS.map((name) => ({ name, isNation: true })),
       ];
       const available = all.filter((t) => !usedNames.has(t.name)
-        && (draftChoice.mode !== 'club-year' || t.name !== prev[filledCount]?.name));
+        && (draftChoice.mode === 'mixed' || t.name !== prev[filledCount]?.name));
       const pick = available[Math.floor(Math.random() * available.length)];
       if (!pick) return prev;
       const next = [...prev];
@@ -221,9 +222,9 @@ export function useLineupBuilder() {
       if (selectedPositionIndex === null || !currentTeam) return;
       const position = positions[selectedPositionIndex];
       if (!position) return;
-      if (draftChoice.mode === 'club-year'
-        && !recordedYearPickVerifies(currentTeam, position.role, pickMeta, draftChoice.year)) {
-        setValidationError(`Choose a matching ${currentTeam.name} record from ${draftChoice.year} with a known position.`);
+      if (draftChoice.mode !== 'mixed'
+        && !recordedPickVerifies(currentTeam, position.role, pickMeta, draftChoice)) {
+        setValidationError(`Choose a matching ${currentTeam.name} record from ${recordedYearsLabel(draftChoice)} with a known position.`);
         return;
       }
 
@@ -376,10 +377,10 @@ export function useLineupBuilder() {
   }, [filledSlots]);
 
   const completeRecordedYearDraft = useCallback((nextVerdict: AIVerdict) => {
-    if (draftChoice.mode !== 'club-year' || phase !== 'reviewing' || filledSlotsArray.length !== 11
+    if (draftChoice.mode === 'mixed' || phase !== 'reviewing' || filledSlotsArray.length !== 11
       || new Set(filledSlotsArray.map(slot => slot.playerName.trim().toLowerCase())).size !== 11
-      || filledSlotsArray.some(slot => !recordedYearPickVerifies(
-        { name: slot.assignedTeam, isNation: slot.isNation }, slot.role, slot.pick, draftChoice.year,
+      || filledSlotsArray.some(slot => !recordedPickVerifies(
+        { name: slot.assignedTeam, isNation: slot.isNation }, slot.role, slot.pick, draftChoice,
       ))) return;
     cancelEvaluation();
     setVerdict(nextVerdict);
@@ -387,7 +388,7 @@ export function useLineupBuilder() {
   }, [draftChoice, phase, filledSlotsArray, cancelEvaluation]);
 
   const evaluateTeam = useCallback(async () => {
-    if (draftChoice.mode === 'club-year') return;
+    if (draftChoice.mode !== 'mixed') return;
     if (filledSlotsArray.length !== 11) return;
     const run = ++evaluationRun.current;
     setIsEvaluating(true);

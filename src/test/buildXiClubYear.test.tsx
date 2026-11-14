@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, fireEvent, render, renderHook, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import type { ReactNode } from 'react';
-import type { AIVerdict, Formation, PickMeta, PositionRole } from '@/types/lineupBuilder';
+import type { AIVerdict, DraftChoice, Formation, PickMeta, PositionRole } from '@/types/lineupBuilder';
 
 /* Real page, hook, picker, search ranking, pitch, fit and season engine.
  * Fictional rows replace transport only. No real roster or native-input claim. */
@@ -59,12 +59,11 @@ import LineupBuilder from '@/pages/LineupBuilder';
 import { useLineupBuilder } from '@/hooks/useLineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
 import { displayName } from '@/lib/playerSearch';
-import { clubTableNames, clubs, clubYearClubs, CLUB_YEAR_WITHHELD } from '@/data/lineupTeams';
+import { clubTableNames, clubs, clubEraClubs, clubYearClubs, CLUB_YEAR_WITHHELD } from '@/data/lineupTeams';
 
-type Choice = { mode: 'mixed' } | { mode: 'club-year'; year: number };
 type DraftHook = Omit<ReturnType<typeof useLineupBuilder>, 'selectFormation'> & {
-  selectFormation: (formation: Formation, choice?: Choice) => void;
-  draftChoice?: Choice;
+  selectFormation: (formation: Formation, choice?: DraftChoice) => void;
+  draftChoice?: DraftChoice;
   completeRecordedYearDraft?: (verdict: AIVerdict) => void;
 };
 const RAW: Record<PositionRole, string> = {
@@ -185,7 +184,8 @@ beforeEach(async () => {
     const aliases = operation(query, 'in', 'club');
     const club = Array.isArray(aliases) ? String(aliases[0]) : 'Fixture Unscoped';
     const requested = operation(query, 'eq', 'year');
-    const years = typeof requested === 'number' ? [requested] : [2010, 2026];
+    const era = operation(query, 'in', 'year');
+    const years = typeof requested === 'number' ? [requested] : Array.isArray(era) ? era.map(Number) : [2010, 2026];
     let result = years.flatMap(year => rows(club, year));
     const needle = operation(query, 'ilike', 'name_folded');
     if (typeof needle === 'string') result = result.filter(row =>
@@ -274,6 +274,66 @@ describe('Build Your XI draws under a seeded generator', () => {
 });
 
 describe('Build Your XI recorded year admissions', () => {
+  it('deals the expanded era pool, validates each source year and completes a mixed-year XI', async () => {
+    const era = { mode: 'club-era', year: 2010 } as const;
+    const reached = new Set<string>();
+    for (let seed = 1; seed <= 20; seed++) {
+      vi.mocked(Math.random).mockImplementation(mulberry32(seed));
+      const view = renderHook(useLineupBuilder);
+      act(() => api(view).selectFormation('4-4-2', era));
+      const teams = api(view).teamAssignments;
+      expect(new Set(teams.map(team => team.name)).size).toBe(11);
+      expect(teams.every(team => !team.isNation && clubEraClubs.includes(team.name))).toBe(true);
+      teams.forEach(team => reached.add(team.name));
+      const initial = api(view).currentTeam;
+      act(() => api(view).rerollTeam());
+      expect(api(view).currentTeam?.name).not.toBe(initial?.name);
+      expect(api(view).draftChoice).toEqual(era);
+      view.unmount();
+    }
+    for (const club of ['Boca Juniors', 'River Plate', 'Flamengo', 'Grêmio', 'Santos']) expect(reached).toContain(club);
+    const view = renderHook(useLineupBuilder);
+    act(() => api(view).selectFormation('4-4-2', era));
+    act(() => api(view).selectPosition(0));
+    const club = api(view).currentTeam!.name;
+    await act(async () => { await api(view).submitPlayer('Earlier', meta(club, 2009, 'GK', 'Earlier')); });
+    await act(async () => { await api(view).submitPlayer('Later', meta(club, 2015, 'GK', 'Later')); });
+    expect(api(view).filledCount).toBe(0);
+    for (let i = 0; i < 11; i++) {
+      const current = api(view);
+      act(() => { current.finishSpin(); current.selectPosition(i); });
+      const name = 'Era pick ' + i;
+      await act(async () => { await api(view).submitPlayer(name, meta(current.currentTeam!.name, 2010 + i % 5, current.positions[i].role, name)); });
+    }
+    act(() => api(view).completeRecordedYearDraft?.(VERDICT));
+    expect(api(view).phase).toBe('result');
+    expect(api(view).filledSlotsArray.map(slot => slot.pick?.year)).toEqual(Array.from({ length: 11 }, (_, i) => 2010 + i % 5));
+    legacyQuiet();
+  });
+
+  it('sends the exact five-year filter to name search and Browse players', async () => {
+    render(<MemoryRouter><LineupBuilder /></MemoryRouter>);
+    fireEvent.click(screen.getByRole('button', { name: 'Club era draft' }));
+    fireEvent.change(screen.getByRole('combobox', { name: 'Five-year era' }), { target: { value: '2010' } });
+    fireEvent.click(screen.getByRole('button', { name: /^4-4-2\s*11 players$/ }));
+    await chooseSlot('GK');
+    await browse();
+    fireEvent.change(field(), { target: { value: 'Fixture Keeper' } });
+    await advance(230); await flush();
+    expect(io.queries.length).toBeGreaterThanOrEqual(2);
+    for (const query of io.queries) {
+      expect(operation(query, 'in', 'year')).toEqual([2010, 2011, 2012, 2013, 2014]);
+      expect(operation(query, 'in', 'club')).toEqual(['Real Madrid']);
+      expect(operation(query, 'eq', 'year')).toBeUndefined();
+    }
+    const target = screen.getAllByRole('option').find(node => within(node).queryByText(/Record: 2014$/));
+    expect(target).toBeDefined();
+    expect(target).toHaveTextContent('Record: 2014');
+    fireEvent.click(target!);
+    await flush();
+    expect(screen.getByText('1/11', { exact: true })).toBeVisible();
+    legacyQuiet();
+  });
   it('keeps club-only assignments and rerolls on the chosen recorded year', async () => {
     const view = await startHook(2010);
     const initial = api(view).teamAssignments;

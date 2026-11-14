@@ -133,6 +133,7 @@ export interface NrlCareerHistoryRow {
   coachDevelopment?: string[];
   reserveGrade?: { playerId: string; playerName: string; rounds: number; ratingGain: 0 | 1 };
   appointment?: NrlOffseasonAppointment;
+  rejoinedClubId?: string;
   summerApplication?: NrlSummerApplicationReceipt;
   leagueRecruitment?: NrlLeagueRecruitmentDeal[];
   coachRetained?: true;
@@ -173,6 +174,7 @@ export interface NrlCareerState {
   legacySeason: boolean;
   boardChallenge?: true;
   retired?: true;
+  outOfWork?: true;
   academy?: NrlAcademyAssignment[];
   developmentFocus?: ActiveDevelopmentFocus;
   shortlist?: string[];
@@ -234,6 +236,8 @@ export type NrlCareerAction = NrlAction
   | { type: 'acceptBoardRecruitment'; year: number; clubId: string; role: NrlRole }
   | { type: 'startNextSeason'; move?: { fromYear: number; clubId: string } }
   | { type: 'applyForOffseasonJob' | 'acceptOffseasonJob'; year: number; clubId: string; destinationId: string }
+  | { type: 'leaveClub'; year: number; clubId: string }
+  | { type: 'acceptVacancy'; year: number; clubId: string; destinationId: string }
   | { type: 'applyForSummerJob'; year: number; clubId: string; round: number; destinationId: string }
   | { type: 'setLeagueRecruitment'; year: number; clubId: string; enabled: boolean }
   | { type: 'setCoachRetention'; year: number; clubId: string; enabled: boolean }
@@ -1473,6 +1477,12 @@ export function nrlOffseasonOpportunities(state: NrlCareerState): NrlOffseasonOp
   return nrlJobOpenings(state, clubs, fullDraw);
 }
 
+export function nrlCanLeaveClub(state: NrlCareerState, openings = nrlOffseasonOpportunities(state)): boolean {
+  return !state.retired && !state.legacySeason && state.season.phase === 'complete'
+    && Boolean(state.season.kickerId) && !judiciaryNeedsResponse(state.season)
+    && openings.length > 0;
+}
+
 function nrlJobOpenings({ season, history }: Pick<NrlCareerState, 'season' | 'history'>, clubs: readonly NrlClub[], includeRivals: boolean): NrlOffseasonOpportunity[] {
   const { year } = season;
   const current = nrlSeasonPlan(year).clubs;
@@ -1631,7 +1641,7 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
   if (season.phase !== 'complete' || season.year === NRL_LAST_YEAR || judiciaryNeedsResponse(season)) return state;
   if (!move && nrlBoardChallengeStatus(state) === 'must-move') return state;
   if (move && (move.fromYear !== season.year || !nrlOffseasonClubs(state).some(club => club.id === move.clubId))) return state;
-  const { developmentFocus, shortlist, savedLineup, positionTraining, offseasonApplication, leagueRecruitment, coachRetention, contractApproach, selectionPromise, ...career } = state;
+  const { developmentFocus, shortlist, savedLineup, positionTraining, offseasonApplication, leagueRecruitment, coachRetention, contractApproach, selectionPromise, outOfWork, ...career } = state;
   const year = season.year + 1;
   const clubId = move?.clubId ?? season.clubId;
   const { settled, focusGains, coachDevelopment } = offseasonSquads(state);
@@ -1679,6 +1689,7 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
     ...(developmentFocus ? { development: { focus: developmentFocus, affected: focusGains.size } } : {}),
     ...(coachDevelopment ? { coachDevelopment } : {}),
     ...(appointment ? { appointment } : {}),
+    ...(outOfWork && move ? { rejoinedClubId: clubId } : {}),
     ...(deals && { leagueRecruitment: deals }),
     ...(coachHire && { coachRetained: true as const }),
     ...(review && { judiciary: { case: review, matchesAfter: nrlJudiciaryMatchesAfter(season, review.round) } }),
@@ -1698,12 +1709,13 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
 
 const worldCupAppointmentSeed = (seed: number) => hashLabel(`nrl-world-cup-appointment-v1|${seed}`);
 
-export function nrlWorldCupAppointmentAvailable({ retired, legacySeason, worldCup, season }: NrlCareerState): boolean {
-  return !retired && !legacySeason && !worldCup && season.year === 2026 && season.phase === 'complete';
+export function nrlWorldCupAppointmentAvailable({ retired, outOfWork, legacySeason, worldCup, season }: NrlCareerState): boolean {
+  return !retired && !outOfWork && !legacySeason && !worldCup && season.year === 2026 && season.phase === 'complete';
 }
 
 export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction): NrlCareerState {
   if (state.retired || (state.season.live && action.type !== 'finishLive' && action.type !== 'reachMinute60' && action.type !== 'finishMinute60')) return state;
+  if (state.outOfWork && action.type !== 'acceptVacancy' && action.type !== 'retireCareer') return state;
   switch (action.type) {
     case 'resolveJudiciary': {
       const { season } = state;
@@ -1764,6 +1776,18 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       if (action.attackPlan === season.attackPlan || !NRL_ATTACK_PLANS.includes(action.attackPlan) || state.legacySeason) return state;
       if (action.attackPlan === 'counter' ? !nrlCounterPlanPreview(state) : !planRivalRatings(season, opponentRatings(state))) return state;
       return { ...state, season: { ...season, attackPlan: action.attackPlan } };
+    }
+    case 'leaveClub': {
+      const { year, clubId } = state.season;
+      if (action.year !== year || action.clubId !== clubId || !nrlCanLeaveClub(state)) return state;
+      const { coachRetention, offseasonApplication, ...career } = state;
+      return { ...career, outOfWork: true };
+    }
+    case 'acceptVacancy': {
+      const { year, clubId } = state.season;
+      if (!state.outOfWork || action.year !== year || action.clubId !== clubId
+        || !nrlOffseasonOpportunities(state).some(job => job.clubId === action.destinationId)) return state;
+      return rolloverCareer(state, { fromYear: year, clubId: action.destinationId });
     }
     case 'retireCareer': {
       const { phase, year, clubId } = state.season;
@@ -2116,6 +2140,9 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
       || year === NRL_LAST_YEAR || !nrlSeasonPlan(year + 1).clubs.some(club => club.id === job.clubId)
       || job.clubId === value.clubId || job.reason !== (clubs.some(club => club.id === job.clubId) ? 'missed' : 'expansion')) return false;
   }
+  if (value.rejoinedClubId !== undefined && (value.appointment !== undefined || value.finance === null || value.scoring === undefined
+    || year === NRL_LAST_YEAR || value.rejoinedClubId === value.clubId || value.rejoinedClubId === value.championId
+    || !nrlSeasonPlan(year + 1).clubs.some(club => club.id === value.rejoinedClubId))) return false;
   if (value.summerApplication !== undefined) {
     const application = value.summerApplication;
     if (!validSummerApplication(application, year, value.clubId) || Object.keys(application).length !== 3
@@ -2315,6 +2342,8 @@ function validCareerBooks(state: NrlCareerState): boolean {
   for (const [index, receipt] of history.entries()) {
     const year = openingYear + index;
     if (!validReceipt(receipt, year) || (receipt.finance === null && index !== 0)) return false;
+    if (receipt.rejoinedClubId !== undefined && (year === season.year || receipt.coachRetained
+      || receipt.rejoinedClubId !== (history[index + 1]?.clubId ?? season.clubId))) return false;
     const previous = clubs.get(receipt.clubId) ?? firstBook;
     if (receipt.finance && receipt.finance.openingCash !== previous.cash) return false;
     if (receipt.coachRetained) {
@@ -2620,6 +2649,8 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
       && training.startedRound + NRL_POSITION_TRAINING_ROUNDS > spell.startedRound) return false;
   }
   if (!validWorld(state) || !validCareerBooks(state) || !validAcademy(state) || !validShortlist(state) || !validContractApproach(state)) return false;
+  if (value.outOfWork !== undefined && (value.outOfWork !== true || state.coachRetention || state.offseasonApplication
+    || !nrlCanLeaveClub({ ...state, retired: undefined }))) return false;
   if (value.selectionPromise !== undefined) {
     const { season, legacySeason } = state;
     if (legacySeason || !season.kickerId || season.year === NRL_LAST_YEAR || !record(value.selectionPromise)

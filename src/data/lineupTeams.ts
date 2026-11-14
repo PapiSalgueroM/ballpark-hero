@@ -111,9 +111,20 @@ export const CLUB_YEAR_WITHHELD: ReadonlySet<string> = new Set(['Arsenal']);
 /** The clubs a Club year draft deals from. */
 export const clubYearClubs: string[] = clubs.filter((name) => !CLUB_YEAR_WITHHELD.has(name));
 
+/** Every five-year window from 2004 to 2026 has position records for these clubs. */
+export const clubEraAdditionalNames: Record<string, string[]> = {
+  'Boca Juniors': ['CA Boca Juniors'],
+  'River Plate': ['CA River Plate'],
+  Flamengo: ['CR Flamengo'],
+  Grêmio: ['Grêmio Foot-Ball Porto Alegrense'],
+  Santos: ['Santos FC'],
+};
+
+export const clubEraClubs = [...clubYearClubs, ...Object.keys(clubEraAdditionalNames)];
+
 /** The exact stored club names for a club label, for an `in` filter. */
 export function clubTableNames(clubName: string): string[] {
-  return CLUB_TABLE_NAMES[clubName] ?? [clubName];
+  return CLUB_TABLE_NAMES[clubName] ?? clubEraAdditionalNames[clubName] ?? [clubName];
 }
 
 /**

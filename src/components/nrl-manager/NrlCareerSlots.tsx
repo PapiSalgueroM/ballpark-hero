@@ -96,12 +96,12 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
                 <p className="min-w-0 break-words font-bold">{club ?? (raw !== null ? 'Unreadable career' : available ? 'Empty slot' : 'Storage unavailable')}</p>
               </div>
               {career && <p className="text-sm text-muted-foreground">
-                Started in {career.openingYear} · {career.season.year} season{career.retired ? ' · Retired' : season.live ? ' · Match at half time' : season.phase === 'complete' ? ' · Season complete' : ''}
+                Started in {career.openingYear} · {career.season.year} season{career.retired ? ' · Retired' : career.outOfWork ? ' · Out of work' : season.live ? ' · Match at half time' : season.phase === 'complete' ? ' · Season complete' : ''}
                 {career.openingRoster && ' · Opening matchday names'}
               </p>}
               {savedSeason && <p className="mt-2 break-words text-sm text-muted-foreground">
                 Checkpoint · {savedClub} · {savedSeason.year} · Round {savedSeason.round}
-                {checkpoint.career?.retired ? ' · Retired' : savedSeason.live ? ' · Match at half time' : savedSeason.phase === 'complete' ? ' · Season complete' : ''}
+                {checkpoint.career?.retired ? ' · Retired' : checkpoint.career?.outOfWork ? ' · Out of work' : savedSeason.live ? ' · Match at half time' : savedSeason.phase === 'complete' ? ' · Season complete' : ''}
               </p>}
               {checkpoint.raw !== null && !savedSeason && <p className="mt-2 text-sm text-muted-foreground">Unreadable checkpoint</p>}
               {savedSeason && !ownCheckpoint && <p className="text-sm text-muted-foreground">Checkpoint belongs to another career.</p>}

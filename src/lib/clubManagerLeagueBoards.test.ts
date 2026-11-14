@@ -230,4 +230,13 @@ describe('the team of the season', () => {
     expect(TEAM_LINES).toEqual({ DEF: 4, MID: 4, ATT: 2 });
     expect(TEAMS_KEPT).toBe(5);
   });
+
+  it('keeps only recorded goalkeeper leaders in the clean-sheet shortlist', () => {
+    const input = teamInput();
+    const awards = seasonAwards(input)!;
+    expect(awards.gloveShortlist?.map(row => row.slice(0, 3))).toEqual(leaders(input, 'sheets', 5).map(row => [row.name, row.club, row.n]));
+    expect(awards.gloveShortlist?.[0]).toEqual(awards.glove);
+    expect(awards.gloveShortlist?.length).toBeLessThan(5);
+    expect(seasonAwards({ ...input, book: { ...input.book, r0: 1 } })).toBeNull();
+  });
 });
