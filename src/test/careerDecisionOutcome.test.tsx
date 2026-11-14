@@ -73,6 +73,21 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('ordinary career decision outcomes', () => {
+  it('opens NFL News during an offseason decision and returns to the same unconsumed choice', () => {
+    const mounted = mountEvent('nfl');
+    const saved = localStorage.getItem(mounted.sport.saveKey);
+    const decision = document.querySelector('[data-career-decision-event]')?.getAttribute('data-career-decision-event');
+    click(/News/);
+    expect(screen.queryByText('This week')).not.toBeNull();
+    expect(document.querySelector('[data-career-decision-event]')).toBeNull();
+    click('Hub');
+    expect(screen.getByRole('button', { name: /News/ })).toHaveFocus();
+    expect(document.querySelector('[data-career-decision-event]')?.getAttribute('data-career-decision-event')).toBe(decision);
+    expect(option(0)).toBeEnabled();
+    expect(mounted.apply[0]).not.toHaveBeenCalled();
+    expect(localStorage.getItem(mounted.sport.saveKey)).toBe(saved);
+  });
+
   it('applies the real third-season NBA trade once before its quality draw and keeps the full save on return', () => {
     const fixture = nativeTradeDecisionFixture(), sport = decisionSports.nba;
     expect(fixture.initial.seasons).toHaveLength(2); expect(fixture.before.seasons).toHaveLength(3);

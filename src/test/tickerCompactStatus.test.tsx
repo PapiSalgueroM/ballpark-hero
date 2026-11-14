@@ -6,7 +6,7 @@ import type { LiveScoreRow } from '@/lib/liveScores';
 
 const checkedAt = Date.parse('2026-11-13T18:00:00Z');
 const match: LiveScoreRow = {
-  id: 'match', sport: 'soccer', league: 'FIFA',
+  id: 'match', sport: 'soccer', league: 'Premier League',
   home: 'Arsenal', away: 'Chelsea', home_score: 12, away_score: 10,
   status_short: '', status_long: 'Live', live: true, finished: false,
   start_at: new Date(checkedAt - 3600_000).toISOString(), updated_at: new Date(checkedAt).toISOString(),

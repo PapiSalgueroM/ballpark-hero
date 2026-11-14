@@ -74,9 +74,24 @@ describe('browser-local game picks', () => {
     expect(shelf(view)).toHaveAttribute('data-no-prerender');
     expect(within(shelf(view)).getByRole('heading', { name: 'Your picks' })).toBeInTheDocument();
     expect(shelfLinks(view).map(link => link.path)).toEqual(['/footle']);
-    expect(shelfLinks(view)[0].name).toContain('Footle');
+    expect(within(shelf(view)).getByRole('link', { name: 'Footle' })).toHaveAttribute('href', '/footle');
     for (const button of view.getAllByRole('button', { name: 'Unpin Footle' })) expect(button).toHaveAttribute('aria-pressed', 'true');
     expect(protectedBytes()).toEqual(before);
+  });
+
+  it('gives every sport in the Home catalogue a return link to Browse sports', async () => {
+    const view = await mount();
+    const browse = view.getByRole('region', { name: 'Browse sports' });
+    expect(browse).toHaveAttribute('id', 'browse-sports');
+    expect(browse).toHaveAttribute('tabindex', '-1');
+    const sports = within(browse).getAllByRole('link');
+    expect(sports.length).toBeGreaterThan(0);
+    for (const sport of sports) {
+      const id = sport.getAttribute('href')!.slice(1);
+      const section = view.container.querySelector<HTMLElement>(`section[data-sport="${id.slice(6)}"]`)!;
+      expect(section.querySelector(`[id="${id}"]`)).toBeInTheDocument();
+      expect(within(section).getByRole('link', { name: 'All sports' })).toHaveAttribute('href', '#browse-sports');
+    }
   });
 
   it('pins NHL Connections from Search and restores both exact Home destinations after remount', async () => {

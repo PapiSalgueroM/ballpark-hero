@@ -190,7 +190,7 @@ export default function UsCareerBoard({ sport, entry }: { sport: UsCareerSport; 
   const draftClassOpener = useRef<HTMLButtonElement>(null);
   const DraftClassPanel = sport.historicalDraft?.Panel;
   const [retiredReview, setRetiredReview] = useState(false);
-  const reviewReturn = useRef<'log' | 'retired' | 'wallCreate' | 'wallRetired' | null>(null);
+  const reviewReturn = useRef<'log' | 'news' | 'retired' | 'wallCreate' | 'wallRetired' | null>(null);
   const reviewHubIndex = useRef(0);
   const hubButtons = useRef<HTMLDivElement>(null);
   const retiredReviewButton = useRef<HTMLButtonElement>(null);
@@ -1506,7 +1506,7 @@ export default function UsCareerBoard({ sport, entry }: { sport: UsCareerSport; 
   /* ---------------- Round 85: tile drill-in screens (the tile rule) ----------------
      Round 179: freeagency joins event in the guard, so an open panel can
      never hide the market screen. */
-  if (panel !== 'none' && phase !== 'event' && phase !== 'freeagency') {
+  if (phase !== 'freeagency' && (panel === 'news' || (panel !== 'none' && phase !== 'event'))) {
     /* Round 796: karma joins the meters. The inbox has moved it since Round 521
        and the rival choice buttons now print it, so it has to be somewhere the
        player can see it move. A save that never answered a text reads 50. */
@@ -1515,7 +1515,10 @@ export default function UsCareerBoard({ sport, entry }: { sport: UsCareerSport; 
       <div ref={panelRef} className="space-y-3">
         <HubPanelHeader
           title={panel === 'bank' ? '\u{1F4B0} The Bank' : panel === 'stats' ? '\u{1F4CA} My Player' : panel === 'log' ? '\u{1F4DC} Career Log' : panel === 'trophies' ? '\u{1F3C6} Trophy Case' : panel === 'inbox' ? '\u{1F4F1} Inbox' : panel === 'dirty' ? '\u{1F4BC} Dirty money' : '\u{1F4F0} News Feed'}
-          onBack={() => setPanel('none')}
+          onBack={() => {
+            if (panel === 'news') reviewReturn.current = 'news';
+            setPanel('none');
+          }}
         />
         {panel === 'bank' && (
           /* Round 469: the money app. Savings, the market, the statement and
@@ -1887,7 +1890,7 @@ export default function UsCareerBoard({ sport, entry }: { sport: UsCareerSport; 
       {/* Round 208: the same boxes the rest of the site opens on, and every
           one of them now carries the fact you used to have to tap for. */}
       <div ref={hubButtons} data-career-hub-buttons=""><HubTiles tiles={hubTilesWithInbox} onOpen={k => {
-        if (k === 'log') reviewHubIndex.current = hubTilesWithInbox.findIndex(tile => tile.key === 'log');
+        if (k === 'log' || k === 'news') reviewHubIndex.current = hubTilesWithInbox.findIndex(tile => tile.key === k);
         setPanel(k as typeof panel);
       }} /></div>
 

@@ -1,3 +1,20 @@
+## Current candidate: NRL match reports, Home shortcuts and NFL News
+
+- NRL's Season fixtures opens saved reports for your completed club matches, including available finals in the fixture selector. Verified earlier scorers and exact saves after reload in 2026 and 2027 at 320, 390 and 1440 pixels.
+- Home shortens pinned games and adds an All sports return link to each sport section. At 390 pixels, the one-save and one-pin fixture brings the feature and Daily sections 48 pixels higher. The sport links pass touch, keyboard and 200% text-size checks.
+- NFL News could accept a tap during an active offseason decision while the feed stayed hidden. The fix lets News open and return to the same decision bytes and News tile. Compiled Chromium and Firefox pass at 328 × 515 with cookie choices pending or rejected. The original iPhone remains untested.
+
+## 2026-11-13: Soccer Career supercups, Club Manager wage room and NRL seasons out live
+
+[PR #890](https://github.com/PapiSalgueroM/ballpark-hero/pull/890) is published from main `11804db579af094639c0f62bd67a0acd0f3f0f59`, tree `87ed7c3224c58065190f4fd334b930a73882737e`, deployment `d95993ad-fefc-4279-8368-3abf50f553c4`. The canonical site's entry is `/assets/index-rQsussje.js`.
+
+- Both Soccer Career supercups played and replayed with saved results and separate shootout kicks at 320, 390 and 1440 pixels.
+- Club Manager's transfer allocation bought 10,000 weekly wage room for 520,000 at 390 and 1440 pixels. The ledger and wage room survived reload, and the formerly blocked 20,000-per-week free agent could sign.
+- NRL's resignation, season away, vacancy and retirement journeys passed three hosted captures and three offline replays across both starts with exact save bytes.
+- All 174 sitemap routes passed the live audit. The four policy pages and all three text endpoints passed. IndexNow accepted the three game guides with HTTP 200.
+
+The direct wage request is Fixed. The board negotiation and additional Soccer Career trophies remain Investigating. The queue read 116 open with zero New after these updates. Club World Cup needs prospective qualification evidence. A Nations League edition for the regular modern start needs the League A transition and new format.
+
 ## 2026-11-12 Puck Detective roster clue wording
 
 Puck Detective now explains in the game, Help and guide that its team and jersey clues use a stored roster snapshot. The Hockey hub describes the same source. This release keeps the existing roster rows, Daily draw, scoring and save format.

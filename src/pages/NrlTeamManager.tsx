@@ -437,6 +437,101 @@ function OppositionReport({ career }: { career: NrlCareerState }) {
   );
 }
 
+function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: NrlManagerState }) {
+  const shortName = useNrlClubName();
+  const { year } = season;
+  const goldenPoint = match.goldenPoint;
+  const usedReserves = match.benchUsed?.map(id => season.squad.find(player => player.id === id)?.name).filter(Boolean) ?? [];
+  const scorers = match.playerScoring?.lines ?? [];
+  const injury = match.injury;
+  const injuredName = injury && season.squad.find(player => player.id === injury.playerId)?.name;
+  const recoveredName = match.individualRecoveryId && season.squad.find(player => player.id === match.individualRecoveryId)?.name;
+  const captainName = match.captainId && season.squad.find(player => player.id === match.captainId)?.name;
+  const interchanges = [match.halftimeInterchange, match.secondHalftimeInterchange];
+  return (
+    <>
+      {match.halftimeTalk && <p className="mt-2 text-sm text-muted-foreground" data-nrl-halftime-talk>
+        Half-time talk: {halftimeTalkLabels[match.halftimeTalk]}.
+      </p>}
+      {match.minute60Tactic && <p className="mt-2 text-sm text-muted-foreground" data-nrl-minute60-tactic>
+        60-minute tactic change: {tactics.find(option => option.id === match.minute60Tactic)?.label}.
+      </p>}
+      {match.counterStyle && <p className="mt-2 text-sm text-muted-foreground" data-nrl-counter-plan>
+        Counter plan: {counterPlanResult[match.counterStyle]}
+      </p>}
+      {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
+        {recoveredName} took individual recovery before this match.
+      </p>}
+      {captainName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-match-captain>Club captain: {captainName}.</p>}
+      {goldenPoint && (
+        <p className="mt-2 text-sm text-muted-foreground" data-nrl-golden-point>
+          {goldenPoint === 'draw' ? 'Golden point ended scoreless after two five-minute periods.'
+            : `${shortName(year, match.homeScore > match.awayScore ? match.homeId : match.awayId)} won with ${goldenPointMethods[goldenPoint.score]} in the ${goldenPoint.period === 1 ? 'first' : 'second'} five-minute period of golden point.`}
+        </p>
+      )}
+      {usedReserves.length > 0 && <div className="mt-3 text-sm" data-nrl-interchange>
+        <h4 className="font-semibold">Interchange used</h4>
+        <p className="text-muted-foreground">{usedReserves.join(", ")}</p>
+        {interchanges.map(change => {
+          if (!change) return null;
+          const reserve = season.squad.find(player => player.id === change.reserveId)?.name;
+          const starter = season.squad.find(player => player.id === change.starterId)?.name;
+          return reserve && starter && <p key={change.reserveId} className="mt-1 text-muted-foreground" data-nrl-halftime-interchange>
+            {change.enteredAtHalf
+              ? `${reserve} came on for ${starter} at half time. Each played about 40 minutes in regulation.`
+              : `${reserve} finished the match. In regulation, they played about 53 minutes. ${starter} stayed off after half time and played about 27 minutes.`}
+          </p>;
+        })}
+      </div>}
+      {scorers.length > 0 && (
+        <div className="mt-3 text-sm" data-nrl-scorers>
+          <h4 className="font-semibold">Your scorers</h4>
+          <ul className="mt-1 space-y-1 text-muted-foreground">
+            {scorers.map(line => {
+              const goals = line.conversions + line.penalties;
+              const fieldGoals = line.fieldGoals + line.longFieldGoals;
+              const detail = [
+                `${nrlScorePoints(line)} pts`,
+                line.tries > 0 && `${line.tries} ${line.tries === 1 ? 'try' : 'tries'}`,
+                goals > 0 && `${goals} ${goals === 1 ? 'goal' : 'goals'}`,
+                fieldGoals > 0 && `${fieldGoals} ${fieldGoals === 1 ? 'field goal' : 'field goals'}`,
+              ].filter(Boolean).join(' · ');
+              return (
+                <li key={line.playerId} className="flex flex-wrap justify-between gap-x-3">
+                  <span>{season.squad.find(player => player.id === line.playerId)?.name}</span>
+                  <span>{detail}</span>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
+      {injury && injuredName && (
+        <p className="mt-3 text-sm text-muted-foreground" data-nrl-match-injury>
+          {injuredName} picked up a knock and will miss {injury.rounds} {injury.rounds === 1 ? 'round' : 'rounds'}.
+        </p>
+      )}
+    </>
+  );
+}
+
+function SavedMatchReport({ label, match, season }: { label: string; match: NrlMatchResult; season: NrlManagerState }) {
+  const shortName = useNrlClubName();
+  const [expanded, setExpanded] = useState(false);
+  return (
+    <details className="mt-1 rounded-lg border border-border bg-background px-3"
+      onToggle={event => setExpanded(event.currentTarget.open)}>
+      <summary className="min-h-11 cursor-pointer py-3 font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        {label} match report
+      </summary>
+      {expanded && <div className="border-t border-border pb-3 pt-2">
+        <p className="text-sm font-semibold">{scoreLine(match, season.year, shortName)}{match.extraTime ? ' after extra time' : ''}</p>
+        <NrlMatchDetails match={match} season={season} />
+      </div>}
+    </details>
+  );
+}
+
 function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNextRound }) {
   const shortName = useNrlClubName();
   const { year, clubId, results } = season;
@@ -445,6 +540,9 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
   const round = Number(view);
   const regular = draw[round - 1];
   const settled = results.filter(match => match.round === round);
+  const managedResult = settled.find(match => match.homeId === clubId || match.awayId === clubId);
+  const roundLabel = (number: number) => number <= draw.length ? 'Round ' + number
+    : number === draw.length + 4 ? 'Grand final' : 'Finals week ' + (number - draw.length);
   const upcoming = regular?.map(([homeId, awayId]) => ({ homeId, awayId }))
     ?? (next.finalsRound !== null && next.round === round ? next.fixtures : []);
   const matches = settled.length
@@ -468,7 +566,7 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
           {finals.size > 0 && (
             <optgroup label="Finals">
               {[...finals].map(number => <option key={number} value={number}>
-                {number === draw.length + 4 ? 'Grand final' : `Finals week ${number - draw.length}`}
+                {roundLabel(number)}
               </option>)}
             </optgroup>
           )}
@@ -482,6 +580,7 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
               {match.label}
             </li>)}
           </ol>
+          {managedResult && <SavedMatchReport key={round} label={roundLabel(round)} match={managedResult} season={season} />}
           {byes.length > 0 && <p className="border-t border-border pt-2 text-muted-foreground">
             {byes.length === 1 ? 'Bye' : 'Byes'} · {byes.map(club => shortName(year, club.id)).join(', ')}
           </p>}
@@ -492,9 +591,12 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
             const fixture = round.find(([home, away]) => home === clubId || away === clubId);
             const result = results.find(row => row.round === index + 1 && (row.homeId === clubId || row.awayId === clubId));
             return (
-              <li key={index} className="flex flex-wrap justify-between gap-x-2 py-2">
-                <span className="text-muted-foreground">Round {index + 1}</span>
-                <span>{result ? scoreLine(result, year, shortName) : fixture ? `${shortName(year, fixture[0])} vs ${shortName(year, fixture[1])}` : 'Bye'}</span>
+              <li key={index} className="py-2">
+                <div className="flex flex-wrap justify-between gap-x-2">
+                  <span className="text-muted-foreground">Round {index + 1}</span>
+                  <span>{result ? scoreLine(result, year, shortName) : fixture ? `${shortName(year, fixture[0])} vs ${shortName(year, fixture[1])}` : 'Bye'}</span>
+                </div>
+                {result && <SavedMatchReport label={roundLabel(index + 1)} match={result} season={season} />}
               </li>
             );
           })}
@@ -596,14 +698,6 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
   const latestRound = season.results.at(-1)?.round;
   const latest = latestRound === undefined ? [] : season.results.filter(result => result.round === latestRound);
   const lastMatch = latest.find(result => result.homeId === clubId || result.awayId === clubId);
-  const goldenPoint = lastMatch?.goldenPoint;
-  const usedReserves = lastMatch?.benchUsed?.map(id => season.squad.find(player => player.id === id)?.name).filter(Boolean) ?? [];
-  const latestScorers = lastMatch?.playerScoring?.lines ?? [];
-  const latestInjury = lastMatch?.injury;
-  const injuredName = latestInjury && season.squad.find(player => player.id === latestInjury.playerId)?.name;
-  const recoveredName = lastMatch?.individualRecoveryId && season.squad.find(player => player.id === lastMatch.individualRecoveryId)?.name;
-  const captainName = lastMatch?.captainId && season.squad.find(player => player.id === lastMatch.captainId)?.name;
-  const interchanges = [lastMatch?.halftimeInterchange, lastMatch?.secondHalftimeInterchange];
   const starterIds = new Set(Object.values(season.lineup));
   const fitness = Math.round(season.squad.reduce((sum, player) => sum + (starterIds.has(player.id) ? player.fitness : 0), 0) / NRL_ROLES.length);
   const title = phase === 'complete'
@@ -617,67 +711,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
       <p className="mt-1 text-sm text-muted-foreground" role="status" data-nrl-result>
         {lastMatch ? `${scoreLine(lastMatch, year, shortName)}${lastMatch.extraTime ? ' after extra time' : ''}` : 'Your club did not play this round.'}
       </p>
-      {lastMatch?.halftimeTalk && <p className="mt-2 text-sm text-muted-foreground" data-nrl-halftime-talk>
-        Half-time talk: {halftimeTalkLabels[lastMatch.halftimeTalk]}.
-      </p>}
-      {lastMatch?.minute60Tactic && <p className="mt-2 text-sm text-muted-foreground" data-nrl-minute60-tactic>
-        60-minute tactic change: {tactics.find(option => option.id === lastMatch.minute60Tactic)?.label}.
-      </p>}
-      {lastMatch?.counterStyle && <p className="mt-2 text-sm text-muted-foreground" data-nrl-counter-plan>
-        Counter plan: {counterPlanResult[lastMatch.counterStyle]}
-      </p>}
-      {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
-        {recoveredName} took individual recovery before this match.
-      </p>}
-      {captainName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-match-captain>Club captain: {captainName}.</p>}
-      {goldenPoint && (
-        <p className="mt-2 text-sm text-muted-foreground" data-nrl-golden-point>
-          {goldenPoint === 'draw' ? 'Golden point ended scoreless after two five-minute periods.'
-            : `${shortName(year, lastMatch.homeScore > lastMatch.awayScore ? lastMatch.homeId : lastMatch.awayId)} won with ${goldenPointMethods[goldenPoint.score]} in the ${goldenPoint.period === 1 ? 'first' : 'second'} five-minute period of golden point.`}
-        </p>
-      )}
-      {usedReserves.length > 0 && <div className="mt-3 text-sm" data-nrl-interchange>
-        <h4 className="font-semibold">Interchange used</h4>
-        <p className="text-muted-foreground">{usedReserves.join(", ")}</p>
-        {interchanges.map(change => {
-          if (!change) return null;
-          const reserve = season.squad.find(player => player.id === change.reserveId)?.name;
-          const starter = season.squad.find(player => player.id === change.starterId)?.name;
-          return reserve && starter && <p key={change.reserveId} className="mt-1 text-muted-foreground" data-nrl-halftime-interchange>
-            {change.enteredAtHalf
-              ? `${reserve} came on for ${starter} at half time. Each played about 40 minutes in regulation.`
-              : `${reserve} finished the match. In regulation, they played about 53 minutes. ${starter} stayed off after half time and played about 27 minutes.`}
-          </p>;
-        })}
-      </div>}
-      {latestScorers.length > 0 && (
-        <div className="mt-3 text-sm" data-nrl-scorers>
-          <h4 className="font-semibold">Your scorers</h4>
-          <ul className="mt-1 space-y-1 text-muted-foreground">
-            {latestScorers.map(line => {
-              const goals = line.conversions + line.penalties;
-              const fieldGoals = line.fieldGoals + line.longFieldGoals;
-              const detail = [
-                `${nrlScorePoints(line)} pts`,
-                line.tries > 0 && `${line.tries} ${line.tries === 1 ? 'try' : 'tries'}`,
-                goals > 0 && `${goals} ${goals === 1 ? 'goal' : 'goals'}`,
-                fieldGoals > 0 && `${fieldGoals} ${fieldGoals === 1 ? 'field goal' : 'field goals'}`,
-              ].filter(Boolean).join(' · ');
-              return (
-                <li key={line.playerId} className="flex flex-wrap justify-between gap-x-3">
-                  <span>{season.squad.find(player => player.id === line.playerId)?.name}</span>
-                  <span>{detail}</span>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      )}
-      {latestInjury && injuredName && (
-        <p className="mt-3 text-sm text-muted-foreground" data-nrl-match-injury>
-          {injuredName} picked up a knock and will miss {latestInjury.rounds} {latestInjury.rounds === 1 ? 'round' : 'rounds'}.
-        </p>
-      )}
+      {lastMatch && <NrlMatchDetails match={lastMatch} season={season} />}
       <ul className="mt-2 divide-y divide-border text-sm">
         {latest.map(result => (
           <li key={`${result.homeId}-${result.awayId}`} className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 py-2">
@@ -1563,7 +1597,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>A match knock can put a player out for up to four rounds. Check Availability in Squad. The countdown includes byes, and an available player fills the vacant spot.</li>
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>
               <li>Sign one fictional assistant in Finances. Tactical assistants help when you use their tactic. A development assistant helps eligible young players improve next season.</li>
-              <li>Choose your goal kicker in Squad to credit conversions and penalty goals. Match centre shows your scorers.</li>
+              <li>Choose your goal kicker in Squad to credit conversions and penalty goals. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a reserve you held back, or keep a rotating reserve on. Quick Sim settles the round in one action.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
