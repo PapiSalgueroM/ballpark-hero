@@ -219,6 +219,9 @@ function ScoreCard({ row, hub, stale, follow }: { row: LiveScoreRow; hub: string
   const stateOnPhone = liveNow && state.length > 12
     ? phase?.replace(/^first\b/i, '1st').replace(/^second\b/i, '2nd') ?? 'Live'
     : state;
+  const compactState = liveNow ? ({
+    'first half': '1H', 'second half': '2H', halftime: 'HT', 'extra time': 'ET', penalties: 'PENS',
+  } as Record<string, string>)[phase?.toLowerCase().replace(/^half[ -]?time$/, 'halftime') ?? ''] ?? 'Live' : null;
   return (
     <span data-no-prerender="true" className="inline-flex items-center h-full max-w-[100cqw] shrink-0 border-l border-border/60 md:max-w-none">
       <Link
@@ -242,10 +245,11 @@ function ScoreCard({ row, hub, stale, follow }: { row: LiveScoreRow; hub: string
           </span>
           {second[1] != null && <span className="shrink-0 tabular-nums font-bold text-foreground">{second[1]}</span>}
         </span>
-        <span className={`inline-flex min-w-0 max-w-[40%] items-center gap-1 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap md:max-w-none md:shrink-0 ${stale ? 'text-[hsl(var(--ticker-late))]' : liveNow ? 'text-destructive' : row.finished ? 'text-muted-foreground' : 'text-primary'}`}>
+        <span className={`inline-flex min-w-0 max-w-[40%] items-center gap-1 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap md:max-w-none md:shrink-0 ${compactState ? 'max-[359px]:shrink-0 max-[359px]:tracking-normal' : ''} ${stale ? 'text-[hsl(var(--ticker-late))]' : liveNow ? 'text-destructive' : row.finished ? 'text-muted-foreground' : 'text-primary'}`}>
           {liveNow && <span className="hidden w-1.5 h-1.5 shrink-0 rounded-full bg-red-500 animate-pulse min-[480px]:inline-block" aria-hidden="true" />}
           <span className="truncate md:overflow-visible">
-            <span className="min-[480px]:hidden">{stateOnPhone}</span>
+            {compactState && <span className="min-[360px]:hidden" data-ticker-compact-status="">{compactState}</span>}
+            <span className={compactState ? 'hidden min-[360px]:inline min-[480px]:hidden' : 'min-[480px]:hidden'}>{stateOnPhone}</span>
             <span className="hidden min-[480px]:inline">{state}</span>
           </span>
         </span>
