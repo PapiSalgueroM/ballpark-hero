@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { TICKET_TIERS, WAGE_ROOM_STEP, canBuyWageRoom, gatePricePerFan, legacySeason, money, moneyIn, wageCapOf } from '@/lib/clubManager';
+import { TICKET_TIERS, WAGE_ROOM_STEP, canBuyWageRoom, gatePricePerFan, legacySeason, money, moneyIn, wageCapOf, wageRoomQuote } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import {
   CONCESSION_TIERS, booksOf, concessionPerFan, concessionReaction, projectFinances,
@@ -29,7 +30,7 @@ interface FinancesScreenProps {
   career: CareerState;
   onTickets: (tier: 0 | 1 | 2) => void;
   onConcessions: (tier: ConcessionTier) => void;
-  onBuyWageRoom: () => void;
+  onBuyWageRoom: (steps: number, budget: number, cap: number) => boolean | void;
   onSponsor: (offerId: string) => void;
   onPush: (offerId: string) => void;
 }
@@ -77,6 +78,12 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onBuyWageR
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(c);
+  const [wageSteps, setWageSteps] = useState('1');
+  const [adjustmentOpen, setAdjustmentOpen] = useState(false);
+  const [wageError, setWageError] = useState(false);
+  const quote = wageRoomQuote(c, Number(wageSteps));
+  const wageCap = wageCapOf(c);
+  const fmtWageAmount = (amount: number) => `${currencySymbol(c)}${formatNumber(Math.round(amount * 1_000_000))}`;
   const books = booksOf(c);
   const shirts = readShirtSales(books.season.shirts);
   const lastShirts = books.lastSeason ? readShirtSales(books.lastSeason.shirts) : null;
@@ -150,16 +157,44 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onBuyWageR
 
       <section aria-labelledby="transfer-wage-room" className="bg-card border border-border rounded-xl p-3 space-y-2">
         <h3 id="transfer-wage-room" className="text-sm font-bold text-foreground">Transfer budget to wages</h3>
-        <p className="text-xs text-muted-foreground">Spend {money(WAGE_ROOM_STEP.cost)} from your transfer budget to raise this club's wage ceiling by {money(WAGE_ROOM_STEP.weekly / 1000)} a week until the season ends.</p>
-        <p aria-live="polite" className="text-xs text-muted-foreground">{money(c.budget)} in the transfer budget. Wage ceiling of {currencySymbol(c)}{formatNumber(wageCapOf(c))}k a week.</p>
+        <p className="text-xs text-muted-foreground">The board offers {money(WAGE_ROOM_STEP.weekly / 1000)} more per week for every {money(WAGE_ROOM_STEP.cost)} you move from your transfer budget. The higher ceiling lasts until the season ends.</p>
+        <p aria-live="polite" className="text-xs text-muted-foreground">{fmtWageAmount(c.budget)} in the transfer budget. Wage ceiling of {currencySymbol(c)}{formatNumber(wageCap)}k a week.</p>
         <button
           type="button"
+          aria-expanded={adjustmentOpen}
+          aria-controls="wage-room-quote"
           disabled={!canBuyWageRoom(c)}
-          onClick={onBuyWageRoom}
+          onClick={() => { setAdjustmentOpen(!adjustmentOpen); setWageError(false); }}
           className="min-h-11 rounded-lg border border-border px-3 text-sm font-bold hover:border-primary disabled:opacity-50"
         >
-          Move {money(WAGE_ROOM_STEP.cost)} to wages
+          Adjust wage budget
         </button>
+        <div id="wage-room-quote" hidden={!adjustmentOpen} className="space-y-2">
+          <label className="flex flex-wrap items-center gap-2 text-xs">
+            Additional wage room in {money(WAGE_ROOM_STEP.weekly / 1000)} steps
+            <input type="number" min={1} step={1} value={wageSteps}
+              onChange={event => { setWageSteps(event.target.value); setWageError(false); }}
+              className="min-h-11 w-24 rounded-lg border border-border bg-background px-2 text-sm tabular-nums" />
+          </label>
+          <p role="status" className="text-xs">
+            {quote
+              ? `Move ${fmtWageAmount(quote.cost)}. Keep ${fmtWageAmount(quote.budget)} for transfers. New ceiling ${currencySymbol(c)}${formatNumber(quote.wageCap)}k a week.`
+              : 'Enter a whole number of steps within your available transfer budget.'}
+          </p>
+          {wageError && <p role="status" className="text-xs text-amber-400">The adjustment could not be saved. Check the current budget and try again.</p>}
+          <button type="button" disabled={!quote}
+            onClick={() => {
+              if (onBuyWageRoom(Number(wageSteps), c.budget, wageCap) === false) {
+                setWageError(true);
+                return;
+              }
+              setWageSteps('1');
+              setAdjustmentOpen(false);
+            }}
+            className="min-h-11 rounded-lg bg-primary px-3 text-sm font-bold text-primary-foreground disabled:opacity-50">
+            Confirm wage adjustment
+          </button>
+        </div>
       </section>
 
       <div data-shirt-sales className="bg-card border border-border rounded-xl p-3 space-y-1.5">
