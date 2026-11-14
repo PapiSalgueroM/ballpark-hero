@@ -107,6 +107,8 @@ function observe(name: string, value: unknown) {
 }
 function signJourney(id: string, desk: boolean, rotation: boolean) {
   const f = fixture('plain', desk, rotation), reference = structuredClone(f.frame), referenceAt = draws.length;
+  // The board enables in-season ratings when an older save opens.
+  reference.league.inSeasonRatings = true;
   const accepted = nbaSign(reference.league.teams[TEAM], reference.league.freeAgents, id, reference.league.cap);
   if (accepted && reference.gm) reference.gm = nbaNoteArrivals(reference.gm, reference.league, TEAM, [id], 'signing');
   const referenceDraws = draws.slice(referenceAt), referenceBytes = JSON.stringify(reference);
