@@ -2,6 +2,7 @@ import type { SeasonRecord } from './soccerCareerEngine';
 import { clubKeyOf } from './soccerCareerLeagueWorld';
 import { keyedRng } from './keyedRng';
 import { poissonGoals } from './soccerCareerContinental';
+import { clubWorldCupAnnualStats } from './soccerClubWorldCup';
 
 export interface CommunityShieldEntrant {
   club: string;
@@ -415,6 +416,7 @@ export function germanSupercupSeasonStats(annual: CommunityShieldStats, result: 
   return communityShieldSeasonStats(annual, result as unknown as CommunityShieldResult | null);
 }
 export function careerOpeningAnnualStats(row: SeasonRecord): CommunityShieldStats | null {
+  if (row.clubWorldCup !== undefined) return clubWorldCupAnnualStats(row);
   if (!Object.prototype.hasOwnProperty.call(row, 'germanSupercup')) return communityShieldAnnualStats(row);
   const result = readGermanSupercup(row);
   if (!result) return null;

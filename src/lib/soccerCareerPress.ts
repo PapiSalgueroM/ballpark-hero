@@ -97,7 +97,7 @@ function stateOf(career: CareerState): SoccerPressState | null {
         let annual = settled;
         const german = Object.prototype.hasOwnProperty.call(settled, 'germanSupercup');
         const shield = german ? null : readCommunityShield(settled);
-        if (german || shield?.annualRating !== undefined) {
+        if (settled.clubWorldCup !== undefined || german || shield?.annualRating !== undefined) {
           const projected = careerOpeningAnnualStats(settled);
           if (!projected) return null;
           annual = { ...settled, ...projected };

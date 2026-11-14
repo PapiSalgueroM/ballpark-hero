@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
-import { CLUB_WORLD_CUP_2025_GROUPS, simulateClubWorldCup2025 } from './soccerClubWorldCup';
+import { describe, expect, it, vi } from 'vitest';
+import { CLUB_WORLD_CUP_2025_GROUPS, clubWorldCup2025Campaign, clubWorldCupAnnualStats, clubWorldCupSeasonStats, simulateClubWorldCup2025 } from './soccerClubWorldCup';
 
 describe('Soccer Career 2025 Club World Cup', () => {
   it('holds the verified 32 clubs and completes the correct 63-match bracket', () => {
@@ -30,6 +30,34 @@ describe('Soccer Career 2025 Club World Cup', () => {
       expect([match.home, match.away]).toContain(match.winner);
       expect(Boolean(match.extraTime)).toBe(match.homeGoals === match.awayGoals);
       expect(Boolean(match.penalties)).toBe(match.homeGoals + (match.extraTime?.homeGoals ?? 0) === match.awayGoals + (match.extraTime?.awayGoals ?? 0));
+    }
+  });
+
+  it('keeps the same neutral results independently of player availability and credits goals once', () => {
+    const tier = () => 3;
+    const seed = 'club campaign';
+    const forma = { overall: 94, lastRating: 8, lastGoals: 30, position: 'ST', age: 26, isCaptain: false };
+    const globalRandom = vi.spyOn(Math, 'random');
+    try {
+      const played = clubWorldCup2025Campaign('Chelsea', seed, tier, forma, 1)!;
+      const absent = clubWorldCup2025Campaign('Chelsea', seed, tier, null, 1)!;
+      expect(played.apps).toBe(played.matches.length);
+      expect(absent.apps).toBe(0);
+      expect(played.matches.map(({ player: _line, ...match }) => match)).toEqual(absent.matches);
+      expect(played.goals).toBe(played.matches.reduce((sum, match) => sum + (match.player?.goals ?? 0), 0));
+      for (const match of played.matches) {
+        const goals = match.home === played.club ? match.homeGoals + (match.extraTime?.homeGoals ?? 0) : match.awayGoals + (match.extraTime?.awayGoals ?? 0);
+        expect(match.player!.goals + match.player!.assists).toBeLessThanOrEqual(goals);
+      }
+      expect(clubWorldCup2025Campaign('Auckland FC', seed, tier, forma, 1)).toBeUndefined();
+      const clubSeason = { apps: 40, goals: 30, assists: 8, cleanSheets: 0, rating: 7.5 };
+      const closing = { year: 2024, club: 'Chelsea', ...clubWorldCupSeasonStats(clubSeason, played), clubWorldCup: { ...played, annualRating: clubSeason.rating } };
+      expect(clubWorldCupAnnualStats(JSON.parse(JSON.stringify(closing)))).toEqual(clubSeason);
+      expect(clubWorldCupAnnualStats({ ...closing, year: 2028 })).toBeNull();
+      expect(clubWorldCupAnnualStats({ ...closing, clubWorldCup: { ...closing.clubWorldCup, goals: played.goals + 1 } })).toBeNull();
+      expect(globalRandom).not.toHaveBeenCalled();
+    } finally {
+      globalRandom.mockRestore();
     }
   });
 });

@@ -1,3 +1,8 @@
+## 2026-11-14: Soccer Career 2025 Club World Cup and NRL reserve priority
+
+- The 2024/25 Soccer Career season can end with the 2025 Club World Cup for one of the event's 32 verified clubs. The season viewer has the group table and your club's simulated path through the official bracket, with penalty winners separate from match scores. Winning requires a personal appearance for the trophy cabinet. Club goals, assists, appearances and clean sheets count once in the annual totals, while the league replay reads its own totals.
+- The historical entry field is fixed. Match outcomes are simulated and the simulation uses lots when the scored group criteria stay tied. The 2029 edition still needs the full published participant and qualification rules. [2025 groups and format](https://www.fifa.com/en/tournaments/mens/club-world-cup/usa-2025/articles/teams-dates-venue-groups-draw-matches-tickets) [2025 final bracket](https://www.fifa.com/en/tournaments/mens/club-world-cup/usa-2025/articles/knockout-stage-bracket-play-offs-match-schedule) [Concacaf's 2029 eligibility](https://www.concacaf.com/competitions/champions-cup/news/2027-concacaf-champions-cup-qualified-clubs)
+
 ## 2026-11-14: NRL backup kicker and Stadium Tycoon latest season
 
 - NRL Squad lets you nominate a backup kicker from the starting 13. If the primary leaves the lineup, Match centre names the available backup on duty. The automatic halfback takes over when both are out. Conversions and penalty goals go to the kicker who actually plays.

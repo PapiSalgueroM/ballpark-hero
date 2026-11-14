@@ -58,6 +58,7 @@ import { loadOwnerTail } from "@/lib/soccerOwnerGate";
 import { careerBeforeBallonDorReveal, revealBallonDorResult, ballonDorAwaitingReveal } from "@/lib/soccerAwardReveal";
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
 import { readNationsLeagueCampaign, wonNationsLeague } from "@/lib/soccerNationsLeague";
+import { wonClubWorldCup } from "@/lib/soccerClubWorldCup";
 import { NationsLeagueHistory } from "@/components/soccer-career/NationsLeagueCampaign";
 import { readCommunityShield, communityShieldWinningSeasons, communityShieldPlayerSide, readGermanSupercup, germanSupercupWinningSeasons, germanSupercupPlayerSide } from '@/lib/soccerCareerExtraCups';
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
@@ -238,7 +239,7 @@ function clubCupTileLabel(seasons: SeasonRecord[]): string {
 
 /* ─── Position-specific career stats display ─── */
 function getPositionCareerStats(pos: string, totals: ReturnType<typeof getCareerTotals>, seasons: SeasonRecord[]): { l: string; v: number | null }[] {
-  const trophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.nationsLeagues + totals.clubCups + totals.communityShields + totals.germanSupercups;
+  const trophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.nationsLeagues + totals.clubCups + totals.clubWorldCups + totals.communityShields + totals.germanSupercups;
   const backLine = ["CB", "LB", "RB"].includes(pos);
   const missingSheets = backLine && soccerRatingRows(seasons, pos).some(row => row.stats.some(stat => stat.short === "CS" && stat.value === null));
 
@@ -348,7 +349,7 @@ const cupResultLabel = (result: string): string =>
 /* ─── Timeline Entry ─── */
 function TimelineEntry({ season, position, isCurrent, isLast, shieldWin = false, germanSupercupWin = false }: { season: SeasonRecord; position: string; isCurrent: boolean; isLast: boolean; shieldWin?: boolean; germanSupercupWin?: boolean }) {
   const label = season.type === "youth" ? "A" : season.type === "retired" ? "R" : null;
-  const trophies = [season.leagueTitle && "🏆", season.domesticCup && "🏆", season.championsLeague && "⭐", season.clubCupTitle && "⭐", season.worldCup && "🌍", season.continentalCup && "🌐", shieldWin && "🛡️", germanSupercupWin && "🛡️", season.ballonDor && "🏅"].filter(Boolean);
+  const trophies = [season.leagueTitle && "🏆", season.domesticCup && "🏆", season.championsLeague && "⭐", season.clubCupTitle && "⭐", season.worldCup && "🌍", season.continentalCup && "🌐", wonNationsLeague(season) && "🏆", wonClubWorldCup(season) && "🏆", shieldWin && "🛡️", germanSupercupWin && "🛡️", season.ballonDor && "🏅"].filter(Boolean);
   const finish = season.type === "playing" ? readLeagueFinish(season) : null;
   /* Round 1011: the season's match rating and the overall it was played at,
      read through the same rules as the Ratings screen. A season nobody played
@@ -557,7 +558,7 @@ function SeasonSummaryCard({ season, position, onContinue, continueRef, appearan
   const league = playedWorld?.league ?? leagueOf?.key;
   const leagueName = playedWorld?.league ?? leagueOf?.name;
   const isGK = position === "GK";
-  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && `🏆 ${cupChipLabel(season)}`, season.championsLeague && "⭐ UCL", season.clubCupTitle && `⭐ ${season.clubCupTitle}`, season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", wonNationsLeague(season) && "🏆 Nations League", shieldWin && "🛡️ Community Shield", germanSupercupWin && "🛡️ German Supercup", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
+  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && `🏆 ${cupChipLabel(season)}`, season.championsLeague && "⭐ UCL", season.clubCupTitle && `⭐ ${season.clubCupTitle}`, season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", wonNationsLeague(season) && "🏆 Nations League", wonClubWorldCup(season) && "🏆 Club World Cup", shieldWin && "🛡️ Community Shield", germanSupercupWin && "🛡️ German Supercup", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
   /* Round 929: the champion is the one the phone's world already crowned for
      this season, so the card and the feed can never name two winners. */
   const finish = readLeagueFinish(season);
@@ -926,7 +927,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
       const totals = getCareerTotals(career.seasons);
       ack.candidate = completedRecordCandidate(career, {
         goals: totals.goals,
-        trophies: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.nationsLeagues + totals.clubCups + totals.communityShields + totals.germanSupercups,
+        trophies: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.nationsLeagues + totals.clubCups + totals.clubWorldCups + totals.communityShields + totals.germanSupercups,
         ballonDors: totals.ballonDors,
         caps: career.intStats.caps,
       });
@@ -2608,7 +2609,7 @@ function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement, onCoa
       <div className="grid grid-cols-3 gap-2 text-center">
         {[
           { l: "Apps", v: totals.apps }, { l: "Goals", v: totals.goals }, { l: "Assists", v: totals.assists },
-          { l: "Trophies", v: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.nationsLeagues + totals.clubCups + totals.communityShields + totals.germanSupercups },
+          { l: "Trophies", v: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.nationsLeagues + totals.clubCups + totals.clubWorldCups + totals.communityShields + totals.germanSupercups },
           { l: "Ballon d'Or", v: totals.ballonDors }, { l: "Int'l Caps", v: career.intStats.caps },
         ].map((s, i) => (
           <div key={s.l} className="cm-tick-in bg-muted/20 rounded-lg p-2" style={{ animationDelay: at(i) }}>
@@ -2838,7 +2839,7 @@ export function LegacyCard({ career, totals, onShare }: { career: CareerState; t
   const tierEmoji: Record<LegacyTier, string> = { "GOAT": "🐐", "LEGEND": "🏛️", "GREAT": "⭐", "SOLID PRO": "💪", "JOURNEYMAN": "🎒" };
   const tierBorder: Record<LegacyTier, string> = { "GOAT": "border-amber-400/50", "LEGEND": "border-purple-400/40", "GREAT": "border-emerald-400/40", "SOLID PRO": "border-blue-400/30", "JOURNEYMAN": "border-border" };
 
-  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.nationsLeagues + totals.clubCups + totals.communityShields + totals.germanSupercups;
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.nationsLeagues + totals.clubCups + totals.clubWorldCups + totals.communityShields + totals.germanSupercups;
   const rows = legacy.breakdown.filter(b => b.points > 0);
   const tiles: { value: number; label: string }[] = [
     { value: totals.goals, label: "Goals" },
@@ -3875,6 +3876,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 // Round 124: continental championships are a trophy too.
                 { emoji: "🌐", l: "Continental", v: totals.continentalCups, category: "continental" as const },
                 ...(totals.nationsLeagues > 0 ? [{ emoji: "🏆", l: "Nations League", v: totals.nationsLeagues, category: "nations-league" as const }] : []),
+                ...(totals.clubWorldCups > 0 ? [{ emoji: "🏆", l: "Club World Cup", v: totals.clubWorldCups, category: "club-world-cup" as const }] : []),
                 { emoji: "🏅", l: "Ballon d'Or", v: totals.ballonDors, category: "ballon" as const },
               ].map(t => (
                 <button key={t.l} type="button" data-trophy-category={t.category} onClick={() => setTrophyCategory(t.category)} aria-label={`${t.l}: ${t.v}. View winning seasons`} className={`min-h-11 text-center rounded-lg p-2 hover:bg-amber-500/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring ${t.v > 0 ? 'bg-amber-500/10 border border-amber-500/20' : 'bg-muted/20 opacity-40'}`}>

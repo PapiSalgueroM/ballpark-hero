@@ -101,7 +101,7 @@ describe('recorded Soccer career stats', () => {
   it('retains the independent saved totals and unknown season baseline without the career card', () => {
     const career = restore('CB'), before = JSON.stringify(career);
     expect(getCareerTotals(career.seasons)).toEqual({ apps: 62, goals: 31, assists: 19, cleanSheets: 17, yellowCards: 9, redCards: 1,
-      leagueTitles: 1, domesticCups: 1, championsLeagues: 1, worldCups: 1, ballonDors: 1, continentalCups: 1, clubCups: 1, communityShields: 0, germanSupercups: 0, nationsLeagues: 0 });
+      leagueTitles: 1, domesticCups: 1, championsLeagues: 1, worldCups: 1, ballonDors: 1, continentalCups: 1, clubCups: 1, communityShields: 0, germanSupercups: 0, nationsLeagues: 0, clubWorldCups: 0 });
     const legacy = restore('CB', [season(2027, { ovr: undefined, cleanSheets: 0 }), season(2028)]);
     expect(soccerRatingRows(legacy.seasons, 'CB').map(row => row.stats.find(stat => stat.short === 'CS')?.value)).toEqual([null, 5]);
     expect(JSON.stringify(career)).toBe(before); expect(Math.random).not.toHaveBeenCalled(); expect(Storage.prototype.setItem).not.toHaveBeenCalled();

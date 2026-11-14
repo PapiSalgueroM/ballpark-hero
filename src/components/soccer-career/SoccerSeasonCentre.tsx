@@ -34,6 +34,7 @@ import { useSoccerMoments } from './useSoccerMoments';
 import SeasonCompetitionPanel, { CompetitionNavigation, type CentreScreen } from './SeasonCompetitionPanel';
 import { savedSeasonCompetitions } from '@/lib/soccerSeasonCompetitions';
 import { wonNationsLeague } from '@/lib/soccerNationsLeague';
+import { wonClubWorldCup } from '@/lib/soccerClubWorldCup';
 import { readCommunityShield, communityShieldWinningSeasons, readGermanSupercup, germanSupercupWinningSeasons } from '@/lib/soccerCareerExtraCups';
 import { cupCalendar, CUP_CALENDAR_NOTE } from '@/lib/soccerSeasonCalendar';
 import { ballonDorSeasonForDisplay } from '@/lib/soccerAwardReveal';
@@ -194,7 +195,7 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
       ? `Champions${leagueName ? ` of ${leagueWithArticle(leagueName)}` : ''}${finish.size ? `, top of ${finish.size}` : ''}${pts !== null ? ` · ${pts} pts` : ''}`
       : `Finished ${ordinal(finish.finish)}${finish.size ? ` of ${finish.size}` : ''}${leagueName ? ` in ${leagueWithArticle(leagueName)}` : ''}${pts !== null ? ` · ${pts} pts` : ''}`
     : row.injurySevere ? 'Your season ended early with an injury.' : null;
-  const trophies = [row.leagueTitle && '🏆 League', row.domesticCup && '🏆 Cup', row.championsLeague && '⭐ UCL', row.clubCupTitle && `⭐ ${row.clubCupTitle}`, row.worldCup && '🌍 World Cup', row.continentalCup && '🌐 Continental', wonNationsLeague(row) && '🏆 Nations League', shieldWin && '🛡️ Community Shield', germanSupercupWin && '🛡️ German Supercup', row.ballonDor && "🏅 Ballon d'Or"].filter((t): t is string => !!t);
+  const trophies = [row.leagueTitle && '🏆 League', row.domesticCup && '🏆 Cup', row.championsLeague && '⭐ UCL', row.clubCupTitle && `⭐ ${row.clubCupTitle}`, row.worldCup && '🌍 World Cup', row.continentalCup && '🌐 Continental', wonNationsLeague(row) && '🏆 Nations League', wonClubWorldCup(row) && '🏆 Club World Cup', shieldWin && '🛡️ Community Shield', germanSupercupWin && '🛡️ German Supercup', row.ballonDor && "🏅 Ballon d'Or"].filter((t): t is string => !!t);
   const notes: string[] = [];
   if (historical && s.mode === 'table') notes.push(historical.note);
   const world = readLeagueWorldSeason(row);
