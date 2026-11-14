@@ -2132,7 +2132,7 @@
         "Every puzzle is exactly 4 groups of 5 players, 20 names total.",
         "You have 4 lives, and every wrong submission costs one.",
         "Each player belongs to exactly one group in the puzzle. No name ever fits two answers.",
-        "The daily puzzle is identical for everyone, progress saves, and a fresh one lands every day at midnight Eastern. Unlimited deals random boards from the pool."
+        "The daily puzzle is identical for everyone, progress saves, and a fresh one lands every day at midnight Eastern. Unlimited keeps your solved groups, remaining lives and draft notes when you return in this browser. Choose New puzzle to start over."
       ],
       "example": [
         "Say the board includes Dwyane Wade, Alonzo Mourning, Udonis Haslem, Chris Bosh and Tim Hardaway. Heat, obviously. Except Hardaway was a point guard with big assist numbers, and you suspect an assists group too. That collision is the whole puzzle.",
