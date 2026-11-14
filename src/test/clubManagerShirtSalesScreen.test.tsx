@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, fireEvent, render } from '@testing-library/react';
 import { FinancesScreen } from '@/components/club-manager/FinancesScreen';
-import { engineRegistrations, restoreEngineRegistrations, startCareer } from '@/lib/clubManager';
+import { buyWageRoom, engineRegistrations, restoreEngineRegistrations, startCareer, wageCapOf } from '@/lib/clubManager';
 import { booksOf } from '@/lib/clubManagerFinances';
 
 describe('the actual Club Manager shirt sales explanation', () => {
@@ -30,7 +30,7 @@ describe('the actual Club Manager shirt sales explanation', () => {
     try {
       const { container } = render(<FinancesScreen
         career={state} onTickets={() => {}} onConcessions={() => {}}
-        onSponsor={() => {}} onPush={() => {}}
+        onSponsor={() => {}} onPush={() => {}} onBuyWageRoom={() => {}}
       />);
       expect(container.querySelector('[data-finance-projection] table')).toBeInTheDocument();
       expect(container.querySelector('[data-sponsor-desk]')).toHaveTextContent('Shirt sponsor');
@@ -64,10 +64,27 @@ function financeFixture() {
   }
 }
 
-function renderFinances(state: ReturnType<typeof startCareer>) {
+function renderFinances(state: ReturnType<typeof startCareer>, onBuyWageRoom = () => {}) {
   return render(<FinancesScreen career={state} onTickets={() => {}} onConcessions={() => {}}
-    onSponsor={() => {}} onPush={() => {}} />);
+    onSponsor={() => {}} onPush={() => {}} onBuyWageRoom={onBuyWageRoom} />);
 }
+
+it('offers the priced, season-only wage allocation and displays the debit and new ceiling', () => {
+  const original = { ...financeFixture(), budget: 0.52 };
+  let career = original;
+  const { container } = renderFinances(career, () => { career = buyWageRoom(career) ?? career; });
+  const section = container.querySelector('[aria-labelledby="transfer-wage-room"]')!;
+  const move = section.querySelector('button')!;
+  expect(move).toBeEnabled();
+  expect(move).toHaveTextContent('Move £520k to wages');
+  expect(section).toHaveTextContent('until the season ends');
+  fireEvent.click(move);
+  expect(wageCapOf(career)).toBe(wageCapOf(original) + 10);
+  cleanup();
+  const adjusted = renderFinances(career);
+  expect(adjusted.container.querySelector('[aria-labelledby="transfer-wage-room"] button')).toBeDisabled();
+  expect(adjusted.container.querySelector('[data-projection-line="wageRoom"]')).toHaveTextContent('£520k');
+});
 
 describe('shirt sales figures on the actual finance desk', () => {
   it.each([
@@ -92,7 +109,7 @@ describe('shirt sales figures on the actual finance desk', () => {
       expect(container.querySelector('[data-projection-line="shirtSales"]')?.querySelectorAll('td')[1]?.textContent).toBe(`${symbol}10k`);
       expect(container.querySelector('[data-shirt-sales]')).toHaveTextContent(`2 weeks earns ${symbol}12,000.00`);
       rerender(<FinancesScreen career={state} onTickets={() => {}} onConcessions={() => {}}
-        onSponsor={() => {}} onPush={() => {}} />);
+        onSponsor={() => {}} onPush={() => {}} onBuyWageRoom={() => {}} />);
       expect(JSON.stringify(state)).toBe(saved);
     } finally { cleanup(); }
   });
