@@ -19,6 +19,8 @@ import {
   expiringPlayers, tagRefusal, applyFranchiseTag, franchiseTagSalary,
   /* Round 828: full rosters, the 53 limit and the practice squad. */
   deepRosterRefusal, promoteFromPractice, practicePromotionRefusal, DEEP_ROSTER_MAX, STARTER_SLOTS, tradeProbeCopy, type GmPlayer,
+  cleanPracticeElevations, NFL_ELEVATIONS_PER_GAME, NFL_ELEVATIONS_PER_PLAYER,
+  practiceElevationCost, practiceElevationRefusal, setPracticeElevation, withPracticeElevations,
   /* Round 828 follow up: men to cut before Play, the MLB and NHL shape. */
   deepOverLimit,
 } from '@/lib/frontOffice';
@@ -420,6 +422,7 @@ export default function FrontOfficeBoard() {
          deleted from the stored league ITSELF, here, before any restore path below hands the stored save back to
          persist (openDraft's restore and a rebuilt bracket both do): the save then loads as it would without it. */
       nflCleanSave(s.league);
+      cleanPracticeElevations(s.league);
       /* Round 1309: a save in the playoffs (a hub save at Week 18 with no
          champion for its season) plays on the bracket it holds, or on one
          started again unplayed when it does not read (the feed says so).
@@ -794,17 +797,16 @@ export default function FrontOfficeBoard() {
     /* Round 1019: with the desk on, the staff's edge and the trainer ride on
        the week; with it off the week is called exactly as before. */
     const deskWeek = gm ? nflDeskWeekOptions(gm, lg, myTeam) : null;
-    const injuries = deskWeek ? injuryPass(lg.teams, Math.random, deskWeek.weeksFor) : injuryPass(lg.teams, Math.random);
-    const aiLog = aiWeeklyMoves(lg, myTeam, Math.random);
-    const games = lg.schedule[lg.week - 1].map(g => (deskWeek ? simGame(g, lg.teams, Math.random, deskWeek.edges) : simGame(g, lg.teams, Math.random)));
-    /* Round 1305: the engine has decided every game. The football law now
-       tells each of them a score for that same winner, at the chance and
-       with the edges it was played with, and his own game goes into the
-       season's log. Nothing is drawn here and no record moves. */
-    const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));
-    /* Round 1542: who scored, read off the rosters the week was played with (before the desk's tick). Week 1 opens
-       the season's lines; a save from before season lines keeps none until then. Nothing is drawn. */
-    nflRecordWeek(lg, told.flatMap(t => (t.last ? [t.last] : [])), myTeam);
+    const scheduled = lg.teams[myTeam].practiceElevations?.filter(entry => entry.week === lg.week && !entry.played) ?? [];
+    const { injuries, aiLog, told } = withPracticeElevations(lg, myTeam, () => {
+      const injuries = deskWeek ? injuryPass(lg.teams, Math.random, deskWeek.weeksFor) : injuryPass(lg.teams, Math.random);
+      const aiLog = aiWeeklyMoves(lg, myTeam, Math.random);
+      const games = lg.schedule[lg.week - 1].map(g => (deskWeek ? simGame(g, lg.teams, Math.random, deskWeek.edges) : simGame(g, lg.teams, Math.random)));
+      /* The actual game and the scoring credits use the same active players. */
+      const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));
+      nflRecordWeek(lg, told.flatMap(t => (t.last ? [t.last] : [])), myTeam);
+      return { injuries, aiLog, told };
+    });
     reviewNflWeekRatings(lg, myTeam);
     const mine = told.find(t => t.game.home === myTeam || t.game.away === myTeam);
     let log = addToGmGameLog(gameLogLive.current, lg.season, mine?.last ? [mine.last] : []);
@@ -821,6 +823,10 @@ export default function FrontOfficeBoard() {
     }
     if (nextGm !== gm) setGm(nextGm);
     const feed: string[] = [...deskLines];
+    const returned = lg.teams[myTeam].practiceElevations?.filter(entry => entry.week === lg.week && entry.played) ?? [];
+    if (returned.length) feed.push(`${returned.map(entry => entry.name).join(', ')} back on the practice squad after Week ${lg.week}.`);
+    const stayed = scheduled.filter(entry => !returned.some(row => row.playerId === entry.playerId));
+    if (stayed.length) feed.push(`Week ${lg.week} elevations canceled for ${stayed.map(entry => entry.name).join(', ')}. Check cap room and player availability.`);
     /* Round 1309, the fix pass: "Play Week 17" opens a bracket where nobody heals, so a man hurt this week is out
        for the playoffs whatever his count of weeks (the roster says the same); the old button's line is as it was */
     const outForPlayoffs = lg.week >= REGULAR_WEEKS && asked === 'bracket';
@@ -1922,6 +1928,17 @@ export default function FrontOfficeBoard() {
       persist({}, lg, myTeam);
     }
   };
+  const doElevate = (pid: string, planned: boolean) => {
+    const lg: LeagueState = JSON.parse(JSON.stringify(league));
+    if (!setPracticeElevation(lg, myTeam, pid, planned)) return;
+    setLeague(lg);
+    persist({}, lg, myTeam);
+  };
+  const elevations = my.practiceElevations ?? [];
+  const pendingElevations = elevations.filter(entry => !entry.played && entry.week === league.week);
+  const paidElevations = elevations.filter(entry => entry.played);
+  const paidForElevations = Math.round(paidElevations.reduce((sum, entry) => sum + entry.amount, 0) * 10) / 10;
+  const canScheduleElevation = league.week <= REGULAR_WEEKS && !!myGameThisWeek && !myGameThisWeek.winner;
   /* Round 631: dead money on the cap line, only when there is any. */
   const dead = deadCapUsed(my);
   /* Round 631: at the roster floor the engine refuses every cut, so every Cut says why and waits. */
@@ -2284,7 +2301,7 @@ export default function FrontOfficeBoard() {
                   className="rounded-lg border border-gold/40 bg-background px-2 py-1.5 text-left hover:border-gold"
                 >
                   <span className="block text-xs font-bold text-foreground">Practice squad <span className="font-normal text-muted-foreground">· {practice.length}</span></span>
-                  <span className="block truncate text-[10px] text-muted-foreground">Off the roster, off the cap</span>
+                  <span className="block truncate text-[10px] text-muted-foreground">{pendingElevations.length ? `${pendingElevations.length} elevated for Week ${league.week}` : 'Elevations and permanent call-ups'}</span>
                 </button>
               </div>
             </div>
@@ -2302,22 +2319,43 @@ export default function FrontOfficeBoard() {
               {rosterGroup === 'practice' ? (
                 <>
                   <p className="text-center text-[10px] text-muted-foreground">
-                    Real men who practise with the club. They do not play and do not count against the cap. Call one up when you have a spot on the {DEEP_ROSTER_MAX} and cap room for his salary.
+                    Elevate up to {NFL_ELEVATIONS_PER_GAME} players for a regular-season game. Each returns to practice afterward. A player can be elevated {NFL_ELEVATIONS_PER_PLAYER} times per season.
+                    The game charges one week's share of his fictional salary against this season's cap. A permanent call-up needs a spot on the {DEEP_ROSTER_MAX} and room for his full salary.
                   </p>
+                  {paidElevations.length > 0 && <p className="text-center text-[10px] text-muted-foreground">Elevation pay this season: ${paidForElevations}M toward the cap.</p>}
                   {fullBlock && <p data-practice-full className="text-center text-[10px] text-destructive">{fullBlock}</p>}
                   <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
                     {practice.length === 0 && <p className="text-center text-[10px] text-muted-foreground">Nobody left on the practice squad.</p>}
                     {[...practice].sort((a, b) => b.ovr - a.ovr).map(p => {
                       const refusal = practicePromotionRefusal(my, p.id, league.cap);
+                      const pending = pendingElevations.find(entry => entry.playerId === p.id);
+                      const prior = paidElevations.filter(entry => entry.playerId === p.id);
+                      const last = prior[prior.length - 1];
+                      const elevationRefusal = pending || !canScheduleElevation ? null : practiceElevationRefusal(league, my, p);
+                      const weeklyCost = Number.isFinite(p.salary) && p.salary >= 0 ? practiceElevationCost(p) : null;
                       return (
-                      <div key={p.id} data-practice-row={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
-                        <span className="min-w-0">
-                          <span className="block truncate font-bold text-foreground">{p.name}</span>
-                          <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · {Number.isFinite(p.salary) && p.salary >= 0 ? `$${p.salary}M` : 'Salary unavailable'}{noTape(p)}</span>
-                          {refusal && !fullBlock && <span data-practice-refusal className="block text-[10px] text-destructive">{refusal}</span>}
-                        </span>
-                        <span className="ml-2 flex shrink-0 items-center gap-1.5">
+                      <div key={p.id} data-practice-row={p.id} className="rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+                        <div className="flex justify-between gap-2">
+                          <span className="min-w-0">
+                            <span className="block truncate font-bold text-foreground">{p.name}</span>
+                            <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · {Number.isFinite(p.salary) && p.salary >= 0 ? `$${p.salary}M` : 'Salary unavailable'}{noTape(p)}</span>
+                          </span>
                           <b className="text-primary">{p.ovr}{draftMark(p)}</b>
+                        </div>
+                        <p className="mt-1 text-[10px] text-muted-foreground" data-elevation-state>
+                          {pending ? `Elevated for Week ${pending.week} · $${pending.amount}M reserved` : last ? `Returned after Week ${last.week} · ${prior.length}/${NFL_ELEVATIONS_PER_PLAYER} used` : `0/${NFL_ELEVATIONS_PER_PLAYER} elevations used`}
+                        </p>
+                        {!pending && canScheduleElevation && weeklyCost !== null && <p className="text-[10px] text-muted-foreground">One-week pay: ${weeklyCost}M</p>}
+                        {elevationRefusal && <span className="block text-[10px] text-muted-foreground">{elevationRefusal}</span>}
+                        {refusal && !fullBlock && <span data-practice-refusal className="block text-[10px] text-destructive">{refusal}</span>}
+                        <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                          {canScheduleElevation && <button
+                            onClick={() => doElevate(p.id, !pending)}
+                            disabled={!!elevationRefusal}
+                            className="min-h-11 rounded-full border border-primary px-2.5 py-0.5 text-[10px] font-bold text-primary disabled:opacity-40"
+                          >
+                            {pending ? 'Cancel elevation' : `Elevate for Week ${league.week}`}
+                          </button>}
                           <button
                             onClick={() => doPromote(p.id)}
                             disabled={!!refusal}
@@ -2326,7 +2364,7 @@ export default function FrontOfficeBoard() {
                           >
                             Call up
                           </button>
-                        </span>
+                        </div>
                       </div>
                       );
                     })}
@@ -2505,6 +2543,11 @@ export default function FrontOfficeBoard() {
           {overLimit > 0 && (
             <p data-over-limit className="text-xs text-destructive">
               {overLimitLine(my.players.length, overLimit, 'before you play')}
+            </p>
+          )}
+          {!hold && pendingElevations.length > 0 && (
+            <p className="text-xs text-muted-foreground" data-week-elevations>
+              Week {league.week} elevations: {pendingElevations.map(entry => entry.name).join(', ')}. They return to practice after the game.
             </p>
           )}
           {/* Round 1307: Play plays the week exactly as it always did. Watch is

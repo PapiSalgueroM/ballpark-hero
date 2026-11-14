@@ -14,7 +14,7 @@
  * under a seeded rng, the real board rendered on it, the save read back.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, cleanup, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup, waitFor, within } from '@testing-library/react';
 import FrontOfficeBoard from '@/components/front-office/FrontOfficeBoard';
 import { FO_DEPTH } from '@/data/frontOfficeDepth';
 import { initLeague, promoteFromPractice, DEEP_ROSTER_MAX, DEPTH_GROUPS, type LeagueState } from '@/lib/frontOffice';
@@ -74,7 +74,7 @@ describe('NFL Front Office: a full roster on the board', () => {
     fireEvent.click(el('[data-roster-group="practice"]'));
     const first = all('[data-practice-row]')[0];
     const id = first.getAttribute('data-practice-row')!;
-    fireEvent.click(first.querySelector('button')!);
+    fireEvent.click(within(first).getByRole('button', { name: 'Call up' }));
     const after = read().league.teams.KC;
     expect(after.players.some((p: any) => p.id === id)).toBe(true);
     expect(after.practice.some((p: any) => p.id === id)).toBe(false);
@@ -89,7 +89,7 @@ describe('NFL Front Office: a full roster on the board', () => {
     fireEvent.click(screen.getByText('Roster'));
     fireEvent.click(el('[data-roster-group="practice"]'));
     expect(el('[data-practice-full]').textContent).toContain(`${DEEP_ROSTER_MAX}`);
-    expect(all('[data-practice-row] button').every(b => (b as HTMLButtonElement).disabled)).toBe(true);
+    expect(all('[data-practice-row]').every(row => (within(row).getByRole('button', { name: 'Call up' }) as HTMLButtonElement).disabled)).toBe(true);
     fireEvent.click(screen.getByText('Hub'));
     fireEvent.click(screen.getByText('Free agency'));
     expect(el('[data-market-full]')).toBeTruthy();

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
 import {
   createNrlCareer, nrlCareerCap, nrlCareerFinance, nrlCoachQuote, nrlDevelopmentAssistantProgress, nrlOppositionReport,
-  readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
+  nrlTakeoverOffers, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { createNrlSeason, nrlBench } from '@/lib/nrlManager';
 
@@ -138,6 +138,66 @@ describe('NRL development assistant', () => {
     expect(earned.length).toBeGreaterThan(0);
     const forged = { ...trained, history: [{ ...trained.history[0], coachDevelopment: ['unknown-player'] }] };
     expect(read(forged)).toBeNull();
+  });
+
+  it.each([
+    [2026, 'storm', 1, 'storm-3-0'],
+    [2027, 'bears', 6, 'bears-9-1'],
+  ] as const)('gives one paid assistant place to the nominated prospect in %i', (year, clubId, seed, playerId) => {
+    const ready = until(hire(createNrlCareer(clubId, seed, year)), ({ season }) => season.round === 8);
+    expect(progress(ready).find(player => player.id === playerId)?.apps).toBe(7);
+    const action = { type: 'setDevelopmentPriority', year, clubId, round: 8, playerId } as const;
+    const nominated = reduceNrlCareer(ready, action);
+    expect(nominated.developmentPriorityId).toBe(playerId);
+    expect(nominated.season).toBe(ready.season);
+    expect(nominated.finance).toBe(ready.finance);
+    expect(read(nominated)).toEqual(nominated);
+    expect(reduceNrlCareer(nominated, action)).toBe(nominated);
+    expect(reduceNrlCareer(ready, { ...action, round: 7 })).toBe(ready);
+    expect(reduceNrlCareer(ready, { ...action, playerId: 'unknown' })).toBe(ready);
+    expect(reduceNrlCareer(nominated, { ...action, playerId: null })).toEqual(ready);
+    expect(reduceNrlCareer(nominated, { type: 'setDevelopmentFocus', focus: 'youth' }).developmentPriorityId).toBeUndefined();
+    expect(read({ ...nominated, developmentPriorityId: 'unknown' })).toBeNull();
+
+    const normal = advance(ready);
+    const focused = advance(read(nominated)!);
+    expect(focused.season.results).toEqual(normal.season.results);
+    expect(focused.finance).toEqual(normal.finance);
+    const normalAwards = normal.ratingReview?.assistant ?? [];
+    const focusedAwards = focused.ratingReview?.assistant ?? [];
+    expect(normalAwards).toHaveLength(3);
+    expect(normalAwards).not.toContain(playerId);
+    expect(focusedAwards).toEqual([playerId, ...normalAwards.slice(0, 2)]);
+    expect(focused.developmentPriorityId).toBeUndefined();
+    expect(progress(focused).find(player => player.id === playerId)?.apps).toBe(8);
+    expect(focused.players.find(player => player.id === playerId)!.rating)
+      .toBe(normal.players.find(player => player.id === playerId)!.rating + 1);
+    expect(reduceNrlCareer(focused, { ...action, round: 9 })).toBe(focused);
+    expect(read(focused)).toEqual(focused);
+    expect(next(finish(focused)).history[0].coachDevelopment).toEqual(focusedAwards);
+  });
+
+  it('holds the third place until the player qualifies, priority clears, or the player signs elsewhere', () => {
+    const year = 2026, clubId = 'storm', round = 8, playerId = 'nrl-storm-2026-28';
+    const ready = until(hire(createNrlCareer(clubId, 1, year)), ({ season }) => season.round === round);
+    expect(progress(ready).find(player => player.id === playerId)?.apps).toBe(0);
+    const choose = { type: 'setDevelopmentPriority', year, clubId, round, playerId } as const;
+    const reserved = advance(reduceNrlCareer(ready, choose));
+    const normal = advance(ready);
+    expect(reserved.developmentPriorityId).toBe(playerId);
+    expect(reserved.ratingReview?.assistant).toEqual(normal.ratingReview?.assistant?.slice(0, 2));
+    expect(read(reserved)).toEqual(reserved);
+    const cleared = reduceNrlCareer(reserved, { ...choose, round: reserved.season.round, playerId: null });
+    expect(cleared.developmentPriorityId).toBeUndefined();
+    expect(advance(cleared).ratingReview?.assistant).toEqual(normal.ratingReview?.assistant);
+
+    const offer = nrlTakeoverOffers(reserved, playerId)[0];
+    const leaving = reduceNrlCareer(reserved, { type: 'arrangeTakeover', year, clubId, playerId, destinationId: offer.clubId });
+    expect(leaving.developmentPriorityId).toBeUndefined();
+    expect(leaving.players.find(player => player.id === playerId)?.futureContract).toEqual(offer);
+    expect(read(leaving)).toEqual(leaving);
+    expect(advance(leaving).ratingReview?.assistant).toEqual(normal.ratingReview?.assistant);
+    expect(finish(reserved).developmentPriorityId).toBeUndefined();
   });
 
   it('allows exactly eight remaining own regular fixtures and refuses an invalid late, live or imported hire', () => {

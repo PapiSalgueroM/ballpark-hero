@@ -58,7 +58,7 @@ const FrontOffice = () => {
             description="Take over an NFL franchise using a 2026 roster snapshot. New franchises use original simulation ratings from 2023 to 2025 performance, playing time and draft priors, with limited evidence marked. Manage fictional contracts under the salary cap, negotiate trades, handle injuries, scout the draft and build a saved dynasty."
             howToPlay={[
               'Pick a franchise: its 2026 roster snapshot and practice squad. New opening ratings use 2023 to 2025 evidence across the whole roster, with no separate backup ceiling. A quarterback, back, receiver or tight end is read on three things: how well he played, how much of the work he carried and what he produced a game in 2025. So a back who carried the full load all year gets credit for it that a backup who looked sharp on sixty carries does not (a veteran who carried a full load a year or two back keeps credit for it). A fullback is not rated as a ball carrier, so he sits low on the running back shelf with the e. Linemen use playing time and draft priors because the inputs cannot measure blocking. Limited evidence is marked with e. Kickers, punters and long snappers sit out for now.',
-              'Work the roster: cut contracts to open cap room, sign free agents, propose trades the AI evaluates on age, position and rating. The roster holds 53, and the practice squad sits off the cap until you call a man up. Go over 53 (your picks can do it, and the Giants start at 54) and Play waits until you cut down.',
+              'Work the roster: cut contracts to open cap room, sign free agents or propose trades. Permanent practice squad call-ups need one of the 53 roster spots and room for the full salary. Under Roster, open Practice squad to elevate up to two players for one regular-season game. Each player can do it three times per season. They return to practice after the game and one week of fictional pay counts against the season cap. Go over 53 (your picks can do it, and the Giants start at 54) and Play waits until you cut down.',
               'Run the GM desk: hire a head coach, two coordinators, a scouting director and a trainer, settle every expiring deal on the re-sign desk (a first rounder\'s rookie deal carries the fifth year option), and build packages of players and picks before the trade deadline after Week 9. A traded man\'s contract goes with him, and you keep some dead money.',
               'Play each week: results, injuries and rival moves roll in; division standings decide the real 14-team playoff bracket.',
               'Set the depth chart from the Roster box: tap two men to swap them, and the sim reads who starts off your order. Injured men are skipped and the next man steps up, so your backups finally matter.',
@@ -70,7 +70,7 @@ const FrontOffice = () => {
               'Trade a fading star for a young receiver before the deadline',
               'Cut a bloated contract to chase the top free agent QB',
               'Draft a 90-grade tackle who turns out to be an 84',
-              'Survive a December where both your running backs are hurt by calling a back up off the practice squad',
+              'If both running backs are hurt and the roster is full, elevate a practice squad back for the next regular-season game. He returns to practice afterwards.',
               'Win back-to-back titles and start a threepeat conversation',
             ]}
           />

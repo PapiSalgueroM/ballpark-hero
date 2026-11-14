@@ -68,3 +68,39 @@ it.each([[2026, 'broncos', 9], [2027, 'bears', 8]] as const)(
     expect(settled.players.find(candidate => candidate.id === id)?.rating).toBe(player.rating + 1);
   },
 );
+
+it('saves one priority player in Coaching staff and awards the eighth appearance after reopening', () => {
+  const year = 2026, clubId = 'storm', round = 8, playerId = 'storm-3-0';
+  let before = reduceNrlCareer(createNrlCareer(clubId, 1, year), { type: 'hireCoach', role: 'development', year, clubId, round: 1 });
+  while (before.season.round < round) before = reduceNrlCareer(before, { type: 'advance' });
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(before));
+  localStorage.setItem(fence, '4');
+  const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const office = () => {
+    fireEvent.click(screen.getByRole('button', { name: 'Club office' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Finances' }));
+    fireEvent.click(screen.getByText('Coaching staff', { exact: true }));
+    return screen.getByRole('combobox', { name: 'Development priority' });
+  };
+  const page = show();
+  const select = office();
+  expect(select).toHaveValue('');
+  expect(localStorage.getItem(fence)).toBe('4');
+  fireEvent.change(select, { target: { value: playerId } });
+  expect(select).toHaveValue(playerId);
+  expect(localStorage.getItem(fence)).toBe('5');
+  page.unmount();
+  show();
+  expect(office()).toHaveValue(playerId);
+  fireEvent.click(screen.getByRole('button', { name: 'Match centre' }));
+  const rotation = screen.getByText('Hold one reserve for later').closest('details')!;
+  rotation.open = true;
+  const player = rotation.querySelector(`[data-nrl-development-player="${playerId}"]`)!;
+  expect(player).toHaveTextContent('7 of 8 appearances · Priority');
+  fireEvent.click(screen.getByRole('button', { name: 'Quick Sim' }));
+  const settled = readNrlCareerSave(localStorage.getItem(NRL_SAVE_KEY))!;
+  expect(settled.ratingReview?.assistant?.[0]).toBe(playerId);
+  expect(settled.developmentPriorityId).toBeUndefined();
+  expect(localStorage.getItem(fence)).toBe('6');
+});

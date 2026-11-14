@@ -92,6 +92,15 @@ export interface GmTeamState extends CutLedger {
   rosterDepth?: 2;
   /** The practice squad: real men off the active roster, off the cap. */
   practice?: GmPlayer[];
+  practiceElevations?: NflPracticeElevation[];
+}
+
+interface NflPracticeElevation {
+  week: number;
+  playerId: string;
+  name: string;
+  amount: number;
+  played: boolean;
 }
 
 export interface GmGame {
@@ -276,9 +285,12 @@ export function salaryFor(pos: GmPlayer['pos'], ovr: number): number {
   return Math.round(Math.max(1.0, (ovr - 66) * 1.15 - 12) * 10) / 10;
 }
 
-/** The roster's salaries plus this season's dead money (Round 631). */
+/** Active salaries, dead money and this season's paid or reserved elevation pay. */
 export function capUsed(team: GmTeamState): number {
-  return payrollWithDeadCap(team.players, team);
+  const payroll = payrollWithDeadCap(team.players, team);
+  if (!team.practiceElevations?.length) return payroll;
+  const elevations = team.practiceElevations.reduce((sum, entry) => sum + entry.amount, 0);
+  return Math.round((payroll + elevations) * 10) / 10;
 }
 
 export function capRoom(team: GmTeamState, cap: number): number {
@@ -747,6 +759,8 @@ export function injuryPass(
 ): { team: string; player: string; weeks: number }[] {
   const news: { team: string; player: string; weeks: number }[] = [];
   for (const t of Object.values(teams)) {
+    // A player injured while elevated continues to heal after returning to practice.
+    for (const p of t.practice ?? []) if (p.out > 0) p.out -= 1;
     for (const p of t.players) {
       if (p.out > 0) { p.out -= 1; continue; }
       if (rng() < 0.012) {
@@ -900,6 +914,9 @@ export function practicePromotionRefusal(team: GmTeamState, playerId: string, ca
   if (team.rosterDepth !== 2 || !team.practice) return 'This team does not have a practice squad.';
   const p = team.practice.find(p => p.id === playerId);
   if (!p) return 'He is not on your practice squad.';
+  if (team.practiceElevations?.some(entry => entry.playerId === playerId && !entry.played)) {
+    return 'Cancel his one-week elevation before calling him up permanently.';
+  }
   if (!Number.isFinite(p.salary) || p.salary < 0) return 'His call-up salary is unavailable.';
   const full = deepRosterRefusal(team);
   if (full) return full;
@@ -914,6 +931,111 @@ export function promoteFromPractice(team: GmTeamState, playerId: string, cap: nu
   const [p] = team.practice!.splice(idx, 1);
   team.players.push(p);
   return true;
+}
+
+export const NFL_ELEVATIONS_PER_GAME = 2;
+export const NFL_ELEVATIONS_PER_PLAYER = 3;
+
+/** The sim uses one game-week's share of its fictional salary at cap-sheet precision. */
+export function practiceElevationCost(player: GmPlayer): number {
+  return Math.round(player.salary * 10 / REGULAR_WEEKS) / 10;
+}
+
+function hasUnplayedRegularGame(league: LeagueState, abbr: string): boolean {
+  return league.week <= REGULAR_WEEKS && !league.champions.some(c => c.season === league.season)
+    && !!league.schedule[league.week - 1]?.some(g => !g.winner && (g.home === abbr || g.away === abbr));
+}
+
+export function practiceElevationRefusal(league: LeagueState, team: GmTeamState, player: GmPlayer): string | null {
+  if (!hasUnplayedRegularGame(league, team.abbr)) return 'Available for unplayed regular-season games.';
+  if (deepOverLimit(team) > 0) return 'Cut to 53 before using an elevation.';
+  if (player.out > 0) return 'He is injured.';
+  if (!Number.isFinite(player.salary) || player.salary < 0) return 'His elevation salary is unavailable.';
+  const entries = team.practiceElevations ?? [];
+  if (entries.some(entry => entry.playerId === player.id && !entry.played)) return 'Already elevated for this week.';
+  if (entries.filter(entry => entry.playerId === player.id && entry.played).length >= NFL_ELEVATIONS_PER_PLAYER) {
+    return 'All three elevations used this season.';
+  }
+  if (entries.filter(entry => entry.week === league.week).length >= NFL_ELEVATIONS_PER_GAME) return 'Both elevations filled this week.';
+  const shortfall = Math.round((practiceElevationCost(player) - capRoom(team, league.cap)) * 10) / 10;
+  if (shortfall > 0) return `Need $${shortfall}M more cap room to elevate him.`;
+  return null;
+}
+
+export function setPracticeElevation(league: LeagueState, abbr: string, id: string, planned: boolean): boolean {
+  const team = league.teams[abbr];
+  if (team?.rosterDepth !== 2 || !hasUnplayedRegularGame(league, abbr)) return false;
+  const entries = team.practiceElevations ?? [];
+  if (!planned) {
+    const remaining = entries.filter(entry => entry.week !== league.week || entry.playerId !== id || entry.played);
+    if (remaining.length === entries.length) return false;
+    if (remaining.length) team.practiceElevations = remaining;
+    else delete team.practiceElevations;
+    return true;
+  }
+  const player = team.practice?.find(p => p.id === id);
+  if (!player || practiceElevationRefusal(league, team, player)) return false;
+  team.practiceElevations = [...entries, {
+    week: league.week, playerId: id, name: player.name, amount: practiceElevationCost(player), played: false,
+  }];
+  return true;
+}
+
+/** Keep the game, scoring credits and cap settlement in a single week operation. */
+export function withPracticeElevations<T>(league: LeagueState, abbr: string, play: () => T): T {
+  const team = league.teams[abbr];
+  if (!team?.practice || !team.practiceElevations) return play();
+  const squad = team.practice;
+  const roster = team.players;
+  const pending = team.practiceElevations.filter(entry => entry.week === league.week && !entry.played);
+  if (!pending.length) return play();
+  const active: GmPlayer[] = [];
+  const settled = team.practiceElevations.filter(entry => entry.played);
+  let remaining = Math.round((league.cap - payrollWithDeadCap(roster, team) - settled.reduce((sum, entry) => sum + entry.amount, 0)) * 10);
+  if (team.rosterDepth === 2 && roster.length <= DEEP_ROSTER_MAX && hasUnplayedRegularGame(league, abbr)) {
+    for (const entry of pending) {
+      const player = squad.find(p => p.id === entry.playerId && p.out === 0);
+      const charge = Math.round(entry.amount * 10);
+      if (player && charge <= remaining) {
+        active.push(player);
+        remaining -= charge;
+        settled.push({ ...entry, played: true });
+      }
+    }
+  }
+  team.practice = squad.filter(p => !active.includes(p));
+  team.players = [...roster, ...active];
+  try {
+    const result = play();
+    if (settled.length) team.practiceElevations = settled;
+    else delete team.practiceElevations;
+    return result;
+  } finally {
+    team.practice = squad;
+    team.players = roster;
+  }
+}
+
+/** An invalid optional ledger cannot invalidate a legacy league. */
+export function cleanPracticeElevations(league: LeagueState): void {
+  for (const team of Object.values(league.teams)) {
+    const entries = team.practiceElevations;
+    if (entries === undefined) continue;
+    const maxRows = REGULAR_WEEKS * NFL_ELEVATIONS_PER_GAME;
+    if (team.rosterDepth !== 2 || !Array.isArray(entries) || entries.length > maxRows
+      || !entries.every(entry => entry && Number.isInteger(entry.week) && entry.week >= 1 && entry.week <= REGULAR_WEEKS
+        && typeof entry.playerId === 'string' && typeof entry.name === 'string' && Number.isFinite(entry.amount)
+        && entry.amount >= 0 && typeof entry.played === 'boolean'
+        && (entry.played ? entry.week <= league.week
+          && !!league.schedule[entry.week - 1]?.some(g => !!g.winner && (g.home === team.abbr || g.away === team.abbr))
+          : entry.week === league.week && hasUnplayedRegularGame(league, team.abbr)
+          && team.practice?.some(p => p.id === entry.playerId && entry.name === p.name && entry.amount === practiceElevationCost(p)))
+        && entries.filter(row => row?.week === entry.week).length <= NFL_ELEVATIONS_PER_GAME
+        && entries.filter(row => row?.playerId === entry.playerId).length <= NFL_ELEVATIONS_PER_PLAYER
+        && entries.filter(row => row?.week === entry.week && row?.playerId === entry.playerId).length === 1)) {
+      delete team.practiceElevations;
+    }
+  }
 }
 
 /* Round 828: the copy the Trade Finder probes on. proposeTrade only ever
@@ -1295,6 +1417,7 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
   /* Round 723: the tags go on before free agency opens, which is this loop. */
   news.tagged = cpuFranchiseTags(league, userTeam);
   for (const t of Object.values(league.teams)) {
+    if (t.practiceElevations) delete t.practiceElevations;
     const keep: GmPlayer[] = [];
     for (const p of t.players) {
       p.age += 1;
