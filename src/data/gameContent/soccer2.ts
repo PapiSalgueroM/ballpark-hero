@@ -2201,6 +2201,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         items: [
           "Invalid names cost nothing. No attempt limit, no timer.",
           "One shared daily puzzle, plus unlimited practice puzzles.",
+          "In Unlimited, use Backtrack to remove your last link and try another teammate. For example, if your third name leads to a dead end, go back to your second name. Your score counts the path that reaches the target.",
         ],
       },
       {

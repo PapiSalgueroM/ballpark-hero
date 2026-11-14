@@ -21,7 +21,7 @@ export function TransferPathBoard() {
   const {
     puzzle, chain, connections, status, score, mode, unlimitedIndex,
     rule, activeRule, setRule, ruleLocked, dailyRuleBlocked, ruleAvailability, optimal, hint, stranded, moreHelp,
-    addPlayer, giveUp, revealPath, switchToUnlimited, nextPuzzle,
+    addPlayer, giveUp, revealPath, canBacktrack, backtrack, switchToUnlimited, nextPuzzle,
     getAllPlayerNames, getPlayerNationality,
     isLoadingPool, isLoading,
   } = useTransferPath();
@@ -134,6 +134,7 @@ export function TransferPathBoard() {
                 <p>🔎 Still stuck? More help counts your options and never names who to play: how many pool players shared a season with the last name you played, at which clubs, and how many of them are on a shortest route.</p>
                 <p>🗂️ Only players in our Transfer Path pool can be named. If a name doesn't come up as you type, try the start of his surname or the name he plays under. If that finds nobody either, he's not in the pool yet.</p>
                 <p>📅 One daily puzzle for everyone, plus unlimited practice puzzles.</p>
+                <p>In Unlimited, Backtrack removes your last link so you can try a different teammate. Your score uses the path that reaches the target.</p>
                 <p>🧭 <span className="font-semibold text-foreground">Special rules</span>: Active players only means every name in the chain, both ends included, is in our verified {ACTIVE_YEAR} active-player records. Europe only means every club a link goes through is a European club. Each rule has its own optimal, worked out on the players it leaves in play.</p>
                 <p>🔒 A rule reaches the daily only when today's pair has a route under it, and the daily score still counts against the everyday optimal. Unlimited takes any rule and scores against that rule's own optimal.</p>
                 <p>Your first accepted name or surrender locks the rule for today, even after a reload.</p>
@@ -324,6 +325,13 @@ export function TransferPathBoard() {
                 </div>
               )
             )}
+            {canBacktrack && <button
+              type="button"
+              onClick={() => { backtrack(); setInput(''); setError(''); setShowHint(false); setShowMoreHelp(false); setLastNoMatch(null); setLastRejected(null); }}
+              className="flex w-full min-h-11 items-center justify-center gap-1.5 rounded-lg border border-border px-4 text-xs font-semibold text-foreground hover:bg-muted/50"
+            >
+              <RotateCcw className="w-3.5 h-3.5" /> Backtrack
+            </button>}
             <GiveUpButton onGiveUp={giveUp} label="Give up and see a path" />
           </div>
         )}

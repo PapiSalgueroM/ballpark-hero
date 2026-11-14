@@ -87,6 +87,8 @@ export interface TransferPathState {
   /** Shortest valid path A -> B through the temporal-teammate graph, computed
    *  on surrender. Null while playing or if no path exists in the pool. */
   revealPath: RevealStep[] | null;
+  canBacktrack: boolean;
+  backtrack: () => void;
   switchToUnlimited: () => void;
   nextPuzzle: () => void;
   getAllPlayerNames: () => string[];
@@ -317,6 +319,13 @@ export function useTransferPath(): TransferPathState {
   const connections = mode === 'daily' ? dailyConnections : unlimitedConnections;
   const status = mode === 'daily' ? dailyStatus : unlimitedStatus;
   const score = mode === 'daily' ? dailyScore : unlimitedScore;
+  const canBacktrack = mode === 'unlimited' && status === 'building' && chain.length > 1;
+
+  const backtrack = useCallback(() => {
+    if (!canBacktrack) return;
+    setUnlimitedChain(current => current.length > 1 ? current.slice(0, -1) : current);
+    setUnlimitedConnections(current => current.length > 1 ? current.slice(0, -1) : current);
+  }, [canBacktrack]);
 
   /* The minimum and hint under the rule in force. On the daily the everyday
      pair is the fallback (the rule is blocked or classic); in unlimited the
@@ -528,6 +537,8 @@ export function useTransferPath(): TransferPathState {
     addPlayer,
     giveUp,
     revealPath,
+    canBacktrack,
+    backtrack,
     switchToUnlimited,
     nextPuzzle,
     getAllPlayerNames,

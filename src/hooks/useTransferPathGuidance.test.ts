@@ -230,4 +230,49 @@ describe('useTransferPath guidance follows the chain', () => {
     expect(rendered.result.current.status).toBe('won');
     say('AUTO_WIN_CHAIN', rendered.result.current.chain);
   });
+
+  it('backtracks from a dead end and scores only the final Unlimited chain', async () => {
+    const { result } = await startedUnlimited();
+    const initialHelp = result.current.moreHelp;
+    const stored = { ...localStorage };
+    expect(result.current.canBacktrack).toBe(false);
+    act(() => result.current.backtrack());
+    expect(result.current.chain).toEqual(['Alpha']);
+    act(() => result.current.addPlayer('Wall'));
+    expect(result.current.stranded).toBe(true);
+    expect(result.current.canBacktrack).toBe(true);
+    act(() => result.current.backtrack());
+    expect(result.current).toMatchObject({ chain: ['Alpha'], connections: [null], status: 'building', score: 0,
+      hint: STORED_HINT, moreHelp: initialHelp, stranded: false, canBacktrack: false });
+    act(() => result.current.addPlayer('Wall'));
+    expect(result.current.chain).toEqual(['Alpha', 'Wall']);
+    act(() => result.current.backtrack());
+    act(() => result.current.addPlayer('Quick'));
+    expect(result.current).toMatchObject({ chain: ['Alpha', 'Quick', 'Target'], connections: [null, 'Club A', 'Club E'],
+      status: 'won', score: 1000, canBacktrack: false });
+    act(() => result.current.backtrack());
+    expect(result.current.chain).toEqual(['Alpha', 'Quick', 'Target']);
+    expect({ ...localStorage }).toEqual(stored);
+  });
+
+  it('refuses to rewind a Daily move or an Unlimited surrender', async () => {
+    const daily = renderHook(() => useTransferPath());
+    await waitFor(() => expect(daily.result.current.isLoadingPool || daily.result.current.isLoading).toBe(false));
+    act(() => daily.result.current.addPlayer('Wall'));
+    const stored = { ...localStorage };
+    expect(daily.result.current.canBacktrack).toBe(false);
+    act(() => daily.result.current.backtrack());
+    expect(daily.result.current.chain).toEqual(['Alpha', 'Wall']);
+    expect({ ...localStorage }).toEqual(stored);
+    daily.unmount();
+
+    const { result } = await startedUnlimited();
+    act(() => result.current.addPlayer('Wall'));
+    act(() => result.current.giveUp());
+    expect(result.current.canBacktrack).toBe(false);
+    const reveal = result.current.revealPath;
+    act(() => result.current.backtrack());
+    expect(result.current).toMatchObject({ status: 'gaveup', chain: ['Alpha', 'Wall'], revealPath: reveal });
+    expect({ ...localStorage }).toEqual(stored);
+  });
 });
