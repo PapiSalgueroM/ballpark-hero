@@ -6,7 +6,7 @@ import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard'
 import { buildDraftNight } from '@/lib/draftNight';
 import type { DraftNight } from '@/lib/draftNight';
 import {
-  initLeague, simGame, injuryPass, standings, runPlayoffs, runOffseason,
+  initLeague, simGame, injuryPass, standings, runPlayoffs, runOffseason, reviewNflWeekRatings,
   generateDraftClass, prospectToPlayer, consumeDraftPick, nflAiDraftPicks, teamStrength, capUsed, capRoom,
   releasePlayer, signPlayer, proposeTrade, tradeValue, aiWeeklyMoves, divisionOf,
   defenceRating,
@@ -802,6 +802,7 @@ export default function FrontOfficeBoard() {
     /* Round 1542: who scored, read off the rosters the week was played with (before the desk's tick). Week 1 opens
        the season's lines; a save from before season lines keeps none until then. Nothing is drawn. */
     nflRecordWeek(lg, told.flatMap(t => (t.last ? [t.last] : [])), myTeam);
+    reviewNflWeekRatings(lg, myTeam);
     const mine = told.find(t => t.game.home === myTeam || t.game.away === myTeam);
     let log = addToGmGameLog(gameLogLive.current, lg.season, mine?.last ? [mine.last] : []);
     let nextGm = gm;
@@ -1004,7 +1005,6 @@ export default function FrontOfficeBoard() {
         ...news.expired.filter(r => r.team === myTeam).map(r => `🚪 ${r.player} walks in free agency.`),
         ...(myTagged ? [`🏷️ ${myTagged.name} plays the season on the tag, $${myTagged.salary}M guaranteed.`] : []),
         ...(news.tagged.length > 0 ? [`🏷️ ${news.tagged.length} rival club${news.tagged.length === 1 ? '' : 's'} used the franchise tag.`] : []),
-        ...news.developed.filter(r => r.team === myTeam).map(r => `📈 ${r.player} develops ${r.from} to ${r.to}.`),
         /* Round 828: a full roster refills off its own practice squad. The cut
            to 53 is the computer clubs' alone, so it never names yours. */
         ...(() => {
@@ -2124,6 +2124,25 @@ export default function FrontOfficeBoard() {
             {dead > 0 && <> · dead money <b className="text-destructive">${dead}M</b></>}
           </p>
           <p className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}</p>
+          {depthView === null && rosterGroup === null && (
+            <details className="mb-2 rounded-xl border border-border/60 bg-background px-3 py-2 text-xs">
+              <summary className="cursor-pointer font-semibold">Rating changes</summary>
+              <p className="mt-1 text-muted-foreground">Ratings can rise or fall by 1 OVR after regular-season weeks. Players carry their ratings into next season.</p>
+              {league.ratingReview?.team === myTeam && (
+                <>
+                  <p className="mt-2 font-semibold">Week {league.ratingReview.week} review</p>
+                  {league.ratingReview.changes.length === 0 ? <p className="text-muted-foreground">No rating changes this week.</p> : <ul aria-label="Recent rating changes" className="mt-1 divide-y divide-border">
+                    {league.ratingReview.changes.map(([name, delta], index) => (
+                      <li key={`${name}-${index}`} className="flex justify-between gap-2 py-1">
+                        <span className="min-w-0 break-words">{name}</span>
+                        <span className={cn('shrink-0 font-semibold', delta > 0 ? 'text-emerald-500' : 'text-destructive')}>{delta > 0 ? '+' : ''}{delta} OVR</span>
+                      </li>
+                    ))}
+                  </ul>}
+                </>
+              )}
+            </details>
+          )}
           {/* Round 723: the depth chart, small tiles and a back button at each level. */}
           {depthView === null && (
             <div className="mb-2 text-center">

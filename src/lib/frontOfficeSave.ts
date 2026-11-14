@@ -37,6 +37,13 @@ export function isFrontOfficeSave(value: unknown, sport: 'NFL' | 'NHL', regularP
     if (!count(lg.week) || lg.week < 1 || lg.week > lastPeriod
       || !Array.isArray(lg.schedule) || lg.schedule.length !== regularPeriods
       || !lg.schedule.every(week => list(week, game))) return false;
+    if (lg.ratingReview != null) {
+      const review = lg.ratingReview;
+      if (!record(review) || !count(review.week) || review.week < 1 || review.week > regularPeriods || review.week > lg.week
+        || !optional(review.team, teamId) || !Array.isArray(review.changes) || review.changes.length > 128
+        || !review.changes.every(row => Array.isArray(row) && row.length === 2 && text(row[0]) && row[0].length > 0
+          && row[0].length <= 160 && (row[1] === 1 || row[1] === -1))) return false;
+    }
   } else if (!count(lg.round) || lg.round < 1 || lg.round > regularPeriods) return false;
   if (!['pick', 'hub', 'draft', 'recap', 'fired'].includes(s.phase as string)
     || !optional(s.titles, count) || !optional(s.seasonsPlayed, count) || !optional(s.picksLeft, count)

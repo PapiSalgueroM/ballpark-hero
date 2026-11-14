@@ -59,8 +59,8 @@
      7) AN OLD SAVE LOADS AND PLAYS AS IT DID. A fifteen man league is played
         for three seasons, the board's way, by this engine and by the engine
         as it stood before this round (read from git at BASE), from one seed.
-        Every league state after every week and offseason is identical, and
-        the old save never grows a bench: it is not topped up.
+        With weekly reviews disabled for this comparison and current winter rules in both
+        engines, every league state is identical. The old save never grows a bench.
      8) THE BOARD, under vitest (src/components/front-office/
         FrontOfficeFullRoster.test.tsx): a full roster's Roster box opens on
         group tiles, a practice squad man is called up while there is a spot,
@@ -128,6 +128,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { alignArchivedNflWinter } from './lib/nflOffseasonReference.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENGINE = path.join(ROOT, 'src', 'lib', 'frontOffice.ts');
@@ -675,11 +676,12 @@ console.log('4) the bench moves no result');
   ok(4, 'every game of a season scores the same with the bench as without it', gameBad.length === 0, `${gameBad.length} of ${games}: ${gameBad.slice(0, 2).join(' | ')}`);
 }
 
-/* The board's week: injuries, the CPU's signings, then the games. */
+/* The board's week: injuries, the CPU's signings, games, then rating changes. */
 const playWeek = (lg, myTeam, rng) => {
   engine.injuryPass(lg.teams, rng);
   engine.aiWeeklyMoves(lg, myTeam, rng);
   for (const g of lg.schedule[lg.week - 1]) engine.simGame(g, lg.teams, rng);
+  engine.reviewNflWeekRatings(lg, myTeam);
   lg.week += 1;
 };
 
@@ -837,8 +839,9 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
     ok(6, 'the cheap probe copy finds exactly the deep copy\'s offers', differ.length === 0 && probes > 0, differ.slice(0, 3).join(', '));
   }
 
-  const stats = { seasons: 0, cuts: 0, deadOk: 0, signs: 0, fullRefused: 0, tags: 0, drafted: 0, cutDowns: 0, promoted: 0, invented: 0, maxSave: 0, maxPs: 0, maxCapShare: 0, realLeft: [], draftCut: 0, owedSeasons: 0, userCutDown: 0, lockedWeeks: 0 };
-  const bad = { size: [], groups: [], dead: [], tagPool: [], drafted: [], invent: [], ids: [], cap: [], full: [], enter: [], autocut: [] };
+  const stats = { seasons: 0, cuts: 0, deadOk: 0, signs: 0, fullRefused: 0, tags: 0, drafted: 0, cutDowns: 0, promoted: 0, invented: 0, maxSave: 0, maxPs: 0, maxCapShare: 0, realLeft: [], draftCut: 0, owedSeasons: 0, userCutDown: 0, lockedWeeks: 0, ratingsUp: 0, ratingsDown: 0 };
+  const bad = { size: [], groups: [], dead: [], tagPool: [], drafted: [], invent: [], ids: [], cap: [], full: [], enter: [], autocut: [], ratings: [] };
+  const allPlayers = lg => [...Object.values(lg.teams).flatMap(t => [...t.players, ...t.practice]), ...lg.freeAgents];
   for (let f = 0; f < 10; f += 1) {
     const seed = 8280 + f;
     const rng = lcg(seed);
@@ -876,7 +879,14 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
         if (t.players.length > engine.DEEP_ROSTER_MAX) bad.enter.push(`${seed} season ${s} ${t.abbr} enters at ${t.players.length}`);
       }
       for (let w = 0; w < engine.REGULAR_WEEKS; w += 1) {
+        const before = new Map(allPlayers(lg).map(p => [p.id, p.ovr]));
         playWeek(lg, my, rng);
+        for (const p of allPlayers(lg)) {
+          const delta = p.ovr - before.get(p.id);
+          if (delta > 0) stats.ratingsUp += 1;
+          if (delta < 0) stats.ratingsDown += 1;
+          if (Math.abs(delta) > 1) bad.ratings.push(`${seed} week ${w + 1}: ${p.name} ${delta}`);
+        }
         if (w === 4) {
           /* a cut: his lowest rated bench man */
           const starting = engine.starterIds(me());
@@ -927,7 +937,9 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
       stats.drafted += draftedIds.length;
       const idsBefore = new Set([...Object.values(lg.teams).flatMap(t => [...t.players, ...t.practice]), ...lg.freeAgents].map(p => p.id));
       const tagged = me().players.find(p => p.tagSeason === lg.season + 1);
+      const ratings = new Map(allPlayers(lg).map(p => [p.id, p.ovr]));
       const news = engine.runOffseason(lg, rng, my);
+      for (const p of allPlayers(lg)) if (ratings.has(p.id) && ratings.get(p.id) !== p.ovr) bad.ratings.push(`${seed} winter: ${p.name}`);
       stats.cutDowns += news.cutDown.length;
       stats.promoted += news.promoted.length;
       /* every club at or under 53, every group able to start */
@@ -984,6 +996,8 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
   ok(6, 'ids stay unique across rosters, squads and the pool', bad.ids.length === 0, bad.ids.slice(0, 2).join(' | '));
   ok(6, 'every club fits under the cap, at the start and after every offseason', bad.cap.length === 0, bad.cap.slice(0, 3).join(' | '));
   ok(6, 'the save stays inside its budget', stats.maxSave <= 700 * 1024, `${(stats.maxSave / 1024).toFixed(0)}K`);
+  ok(6, 'both directions occur a point at a time with zero winter rating moves', stats.ratingsUp > 0 && stats.ratingsDown > 0 && bad.ratings.length === 0,
+    `${stats.ratingsUp} increases, ${stats.ratingsDown} decreases, ${bad.ratings.length} violations: ${bad.ratings.slice(0, 3).join(' | ')}`);
 }
 
 /* ======================================================================= 7 */
@@ -999,7 +1013,7 @@ engine = shippedEngine;
     fs.mkdirSync(dir, { recursive: true });
     for (const f of ['frontOffice.ts', 'foNames.ts', 'leagueCaps.ts', 'entityIds.ts', 'frontOfficeCuts.ts']) {
       const text = execSync(`git show ${BASE}:src/lib/${f}`, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
-      fs.writeFileSync(path.join(dir, f), text);
+      fs.writeFileSync(path.join(dir, f), f === 'frontOffice.ts' ? alignArchivedNflWinter(text) : text);
     }
     base = await bundle(`export * from ${JSON.stringify(fwd(path.join(dir, 'frontOffice.ts')))};`, 'base');
     ready = typeof base.initLeague === 'function';
@@ -1063,7 +1077,7 @@ engine = shippedEngine;
         grew.slice(0, 3).map(t => `${t.abbr} ${t.players.length}`).join(', '));
     }
     console.log(`   ${states} league states compared over three seeds and three seasons each`);
-    ok(7, 'a fifteen man league plays exactly as it did before this round', diverged.length === 0, diverged.join(', '));
+    ok(7, 'a fifteen man league matches the archived engine when both use the same winter rules and hold ratings steady', diverged.length === 0, diverged.join(', '));
   }
 }
 
