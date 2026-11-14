@@ -2375,7 +2375,7 @@
       "rules": [
         "There are 6 clues and 6 guesses, one wrong answer per clue.",
         "Scoring runs from 6 points for a first clue solve down to 1 on the last.",
-        "Daily serves everyone the same mystery player, fresh every day. Unlimited deals random players back to back.",
+        "Daily serves everyone the same mystery player, fresh at midnight Eastern. Your Daily guesses stay in this browser so you can finish later. Unlimited deals random players back to back.",
         "Hard mode hides the earliest clues once new ones arrive, so you cannot lean on the whole stack."
       ],
       "example": [

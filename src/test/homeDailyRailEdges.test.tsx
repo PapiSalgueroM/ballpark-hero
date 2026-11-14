@@ -1,5 +1,5 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useNavigate } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { DailyRail } from '@/components/home/DailyRail';
 import { dailyGames, sportOf, todaysPuzzle } from '@/data/homeFront';
@@ -7,6 +7,31 @@ import { dailyGames, sportOf, todaysPuzzle } from '@/data/homeFront';
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
 describe('Home Daily puzzle rail edges', () => {
+  it('restores the daily filter, rail position and exact card after a game route has replaced Home', () => {
+    const day = '2026-11-13';
+    function Game() {
+      const navigate = useNavigate();
+      return <button onClick={() => navigate(-1)}>Back to Home</button>;
+    }
+    const { container } = render(<MemoryRouter><Routes>
+      <Route path="/" element={<DailyRail today={day} />} />
+      <Route path="*" element={<Game />} />
+    </Routes></MemoryRouter>);
+    const filter = () => screen.getByRole<HTMLSelectElement>('combobox', { name: 'Filter daily puzzles by sport' });
+    fireEvent.change(filter(), { target: { value: 'basketball' } });
+    const card = container.querySelector<HTMLAnchorElement>('a[data-daily-chip]')!;
+    const path = card.getAttribute('href')!;
+    const rail = container.querySelector('ul')!.parentElement!;
+    rail.scrollLeft = 325;
+    rail.scrollTop = 95;
+    fireEvent.click(card);
+    expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Back to Home' }));
+    expect(filter()).toHaveValue('basketball');
+    expect(container.querySelector(`a[data-daily-chip="${path}"]`)).toHaveFocus();
+    expect(container.querySelector('ul')!.parentElement?.scrollLeft).toBe(325);
+    expect(container.querySelector('ul')!.parentElement?.scrollTop).toBe(95);
+  });
   it('filters to the selected sport and restores the same daily spotlight', () => {
     const day = '2026-11-13';
     const daily = dailyGames();

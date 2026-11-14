@@ -22,6 +22,8 @@ const NFLCareer = () => {
     score,
     gameStatus,
     guessHistory,
+    saveWarning,
+    retrySave,
     excludedNames,
     playerNames,
     makeGuess,
@@ -138,6 +140,12 @@ const NFLCareer = () => {
                 </span>
               ))}
             </div>
+          </div>
+        )}
+        {saveWarning && (
+          <div role="alert" className="mb-4 flex items-center justify-between gap-2 rounded-lg border border-border px-3 text-sm">
+            Keep this tab open. Daily progress could not be saved.
+            <button type="button" onClick={retrySave} className="min-h-[44px] shrink-0 px-1 font-semibold text-primary">Retry save</button>
           </div>
         )}
 

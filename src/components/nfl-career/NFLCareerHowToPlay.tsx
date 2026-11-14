@@ -25,7 +25,7 @@ export function NFLCareerHowToPlay({ open, onOpenChange }: Props) {
             <li>Clues: Draft, College, First Team, Stats, Teams, Jersey Number</li>
             <li>Guess early for more points: 6 max, 1 min</li>
           </ol>
-          <p className="text-xs">New daily challenge at midnight.</p>
+          <p className="text-xs">New daily challenge at midnight Eastern. Your Daily guesses stay in this browser so you can finish later.</p>
         </div>
       </DialogContent>
     </Dialog>

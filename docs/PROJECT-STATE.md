@@ -1,4 +1,12 @@
+## 2026-11-14: Home daily returns, NFL Career Path and NRL club decisions
+
+- Home returns to the same Daily Puzzles sport filter, rail position and card after playing a daily puzzle and going Back.
+- NFL Career Path remembers each accepted Daily guess when players reload or switch modes. It reads the latest saved turn before another tab can submit against an older clue.
+- NRL Match Centre links pending rival decisions and ready Academy signings. Fast-forward stops before the last round to answer a rival offer.
+
 ## 2026-11-14: National call-ups, NBA Connections practice and NRL bye training
+
+[PR #927](https://github.com/PapiSalgueroM/ballpark-hero/pull/927) published exact main `c54ae41cd96163cf4ef984b35a39862b4a1cf716`, deployment `8358420f-c40d-48dd-af6e-282c15dd7270`. Nine live browser journeys, all 174 sitemap routes and all three raw guides passed. IndexNow accepted the guides.
 
 - Club Manager supports a 26-player national squad chosen from the existing eligible pool. The starting XI draws from that squad and the campaign report keeps the actual call-ups.
 - NBA Connections Unlimited remembers sorted groups, spent lives and the last submitted group on the same puzzle. New Puzzle clears the practice state.

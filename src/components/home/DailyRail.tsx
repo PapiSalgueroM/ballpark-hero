@@ -1,10 +1,13 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
+import { Link, useLocation, useNavigationType } from 'react-router-dom';
 import { CalendarDays, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { getTodayET } from '@/lib/dateUtils';
 import { dailyGames, dealtBySport, todaysPuzzle, sportOf, SPORT_NAME, type SportKey } from '@/data/homeFront';
 import type { GameDef } from '@/data/gameRegistry';
 import { SportGlyph, sportStyle } from './SportGlyph';
+
+type DailyRailReturn = { sport: SportKey | ''; path: string; left: number; top: number };
+const railReturns = new Map<string, DailyRailReturn>();
 
 function railPosition(rail: HTMLDivElement) {
   const vertical = rail.scrollHeight > rail.clientHeight && rail.scrollWidth <= rail.clientWidth;
@@ -31,13 +34,18 @@ function railPosition(rail: HTMLDivElement) {
  */
 export function DailyRail({ today }: { today?: string }) {
   const day = useRef(today ?? getTodayET()).current;
+  const { key: entry } = useLocation();
+  const navigation = useNavigationType();
+  const [returned] = useState(() => navigation === 'POP' ? railReturns.get(entry) : undefined);
+  const awaitingReturn = useRef(returned);
+  const filterRef = useRef<HTMLSelectElement>(null);
   const { spotlight, rest, sports } = useMemo(() => {
     const all = dailyGames();
     const pick = todaysPuzzle(day);
     const sports = [...new Set(all.map(game => sportOf(game.path)))];
     return { spotlight: pick, rest: dealtBySport(all.filter(g => g !== pick)), sports };
   }, [day]);
-  const [sport, setSport] = useState<SportKey | ''>('');
+  const [sport, setSport] = useState<SportKey | ''>(returned?.sport ?? '');
   const featured = spotlight && (!sport || sportOf(spotlight.path) === sport) ? spotlight : null;
   const games = sport ? rest.filter(game => sportOf(game.path) === sport) : rest;
   const shown = games.length + Number(Boolean(featured));
@@ -65,10 +73,30 @@ export function DailyRail({ today }: { today?: string }) {
   useLayoutEffect(() => {
     const rail = railRef.current;
     if (!rail) return;
-    rail.scrollLeft = 0;
-    rail.scrollTop = 0;
+    const held = awaitingReturn.current;
+    awaitingReturn.current = undefined;
+    if (held && railReturns.get(entry) === held) railReturns.delete(entry);
+    rail.scrollLeft = held?.left ?? 0;
+    rail.scrollTop = held?.top ?? 0;
+    if (held && document.activeElement === document.body) {
+      const link = [...rail.querySelectorAll<HTMLAnchorElement>('a[data-daily-spotlight], a[data-daily-chip]')]
+        .find(card => card.getAttribute('href') === held.path);
+      (link ?? filterRef.current)?.focus({ preventScroll: true });
+    }
     updateEdges(rail);
-  }, [sport]);
+  }, [entry, sport]);
+
+  const rememberCard = (event: MouseEvent<HTMLDivElement>) => {
+    if (event.defaultPrevented || event.button !== 0 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey
+      || !(event.target instanceof Element)) return;
+    const link = event.target.closest<HTMLAnchorElement>('a[data-daily-spotlight], a[data-daily-chip]');
+    const path = link?.getAttribute('href');
+    if (!path) return;
+    const { scrollLeft: left, scrollTop: top } = event.currentTarget;
+    railReturns.delete(entry);
+    railReturns.set(entry, { sport, path, left, top });
+    if (railReturns.size > 20) railReturns.delete(railReturns.keys().next().value);
+  };
 
   const nudge = (dir: 1 | -1) => {
     const el = railRef.current;
@@ -97,7 +125,7 @@ export function DailyRail({ today }: { today?: string }) {
           </p>
         </div>
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <select value={sport} onChange={event => setSport(event.target.value as SportKey | '')}
+          <select ref={filterRef} value={sport} onChange={event => setSport(event.target.value as SportKey | '')}
             aria-label="Filter daily puzzles by sport"
             className="min-h-11 min-w-0 flex-1 rounded-lg border border-border bg-background px-2.5 text-sm font-semibold text-foreground focus-visible:outline-primary">
             <option value="">All sports</option>
@@ -115,7 +143,7 @@ export function DailyRail({ today }: { today?: string }) {
       </div>
 
       {/* Leave the next card in view so touch users can see that the list scrolls. */}
-      <div ref={railRef} onScroll={event => updateEdges(event.currentTarget)} className="-mx-4 snap-x overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-2 [scrollbar-width:thin] sm:mx-0 sm:scroll-px-0 sm:px-0 lg:max-h-[17.5rem] lg:snap-y lg:overflow-x-hidden lg:overflow-y-auto">
+      <div ref={railRef} onClickCapture={rememberCard} onScroll={event => updateEdges(event.currentTarget)} className="-mx-4 snap-x overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-2 [scrollbar-width:thin] sm:mx-0 sm:scroll-px-0 sm:px-0 lg:max-h-[17.5rem] lg:snap-y lg:overflow-x-hidden lg:overflow-y-auto">
         {/* The whole rail is dated, not just the spotlight. `rest` drops the
             game the date picked, so the set of chips is different every day:
             today the rail has no CBB Program chip because it is the

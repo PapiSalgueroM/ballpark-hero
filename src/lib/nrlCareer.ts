@@ -1744,7 +1744,8 @@ export function nrlProjectedSummerOpenings({ season, history, retired, legacySea
 
 export const NRL_FAST_FORWARD_ROUNDS = 4;
 export type NrlFastForwardRequest = { year: number; clubId: string; round: number; through: number };
-export type NrlFastForwardStop = 'injury' | 'lineup' | 'academy' | 'development' | 'applications' | 'finals' | 'judiciary' | 'contract-approach';
+export type NrlFastForwardStop = 'injury' | 'lineup' | 'academy' | 'development' | 'applications' | 'finals' | 'judiciary'
+  | 'contract-approach' | 'contract-deadline';
 
 export function runNrlFastForward(initial: NrlCareerState, request: NrlFastForwardRequest): {
   state: NrlCareerState; stop: NrlFastForwardStop | null;
@@ -1758,6 +1759,10 @@ export function runNrlFastForward(initial: NrlCareerState, request: NrlFastForwa
   while (state.season.round <= request.through) {
     const { season } = state;
     if (judiciaryNeedsResponse(season)) return { state, stop: 'judiciary' };
+    const listing = state.contractApproach;
+    if (listing?.destinationId && !listing.outcome && season.round === listing.listedRound + CONTRACT_APPROACH_ROUNDS) {
+      return { state, stop: 'contract-deadline' };
+    }
     if (!state.summerApplication && (season.round === nrlSummerLastRound(year)
       || (state !== initial && season.round === NRL_SUMMER_FIRST_ROUND)) && nrlProjectedSummerOpenings(state).length) {
       return { state, stop: 'applications' };
