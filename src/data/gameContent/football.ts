@@ -200,7 +200,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Reading player ratings and running the offseason",
         items: [
-          "After regular-season weeks, ratings can rise or fall one point at a time. Check Rating changes in Roster. Young players can improve toward their potential, and veterans can decline. Players carry their ratings into next season. The offseason handles birthdays, retirements, expiring deals and the cap.",
+          "After regular-season weeks, ratings can rise or fall one point at a time. Check your club's changes with the league scores. Pick a played week to see its score and rating changes. Older saves may only have the score. Young players can improve toward their potential, and veterans can decline. Players carry their ratings into next season. The offseason handles birthdays, retirements, expiring deals and the cap.",
         ],
       },
     ],

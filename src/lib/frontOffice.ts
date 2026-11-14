@@ -112,7 +112,11 @@ export interface GmGame {
   winner: string;
   /** A one-game plan for the user's club. The result records what actually played. */
   personnel?: NflGamePersonnel;
+  /** Optional on legacy saves. Only the user's settled regular-season matchup gets a review. */
+  ratingChanges?: { team: string; changes: NflRatingChange[] };
 }
+
+type NflRatingChange = [name: string, delta: 1 | -1];
 
 type NflGamePersonnel = {
   team: string;
@@ -137,7 +141,7 @@ export interface LeagueState {
   schedule: GmGame[][]; // week -> games
   week: number; // 1..17, 18 = playoffs
   champions: { season: number; team: string }[];
-  ratingReview?: { week: number; team?: string; changes: [name: string, delta: 1 | -1][] };
+  ratingReview?: { week: number; team?: string; changes: NflRatingChange[] };
   /** Round 828: present on a league started with full rosters. Absent on every older save. */
   rosterDepth?: 2;
   /* Round 1542. Both absent on every older save (src/lib/nflSeasonStats.ts). */
@@ -1437,7 +1441,7 @@ export interface OffseasonNews {
 export function reviewNflWeekRatings(league: LeagueState, ownTeam?: string): void {
   const { season, week, ratingReview } = league;
   if (week < 1 || week > REGULAR_WEEKS || (ratingReview && ratingReview.week >= week)) return;
-  const changes: [string, 1 | -1][] = [];
+  const changes: NflRatingChange[] = [];
   const review = (p: GmPlayer, team?: string) => {
     const age = p.age + 1; // Use the same age bands as the old offseason curve.
     if (age < 31 && (!team || age > 25 || p.ovr + 1 > p.pot)) return;
@@ -1461,6 +1465,36 @@ export function reviewNflWeekRatings(league: LeagueState, ownTeam?: string): voi
   }
   for (const player of league.freeAgents) review(player);
   league.ratingReview = { week, ...(ownTeam ? { team: ownTeam } : {}), changes };
+}
+
+function settledNflGame(game: GmGame, week: number): boolean {
+  return game.week === week && week >= 1 && week <= REGULAR_WEEKS
+    && Number.isInteger(game.homeScore) && Number.isInteger(game.awayScore)
+    && Math.min(game.homeScore, game.awayScore) >= 0 && game.homeScore !== game.awayScore
+    && game.winner === (game.homeScore > game.awayScore ? game.home : game.away);
+}
+
+export function readNflSettledWeek(league: LeagueState, week: number): GmGame[] {
+  const games = week <= league.week ? league.schedule[week - 1] : undefined;
+  return games?.length && games.every(game => settledNflGame(game, week)) ? games : [];
+}
+
+export function settleNflWeekResults(league: LeagueState, games: GmGame[], team: string): GmGame[] {
+  const review = league.ratingReview;
+  if (review?.week !== league.week || review.team !== team) return games;
+  return games.map(game => (game.home === team || game.away === team) && settledNflGame(game, league.week)
+    ? { ...game, ratingChanges: { team, changes: review.changes } }
+    : game);
+}
+
+/** Read an optional result independently so a bad review cannot hide a valid legacy score. */
+export function readNflGameRatings(game: GmGame, team: string): readonly NflRatingChange[] | null {
+  const review = game.ratingChanges;
+  if (!settledNflGame(game, game.week) || (game.home !== team && game.away !== team)
+    || review?.team !== team || !Array.isArray(review.changes) || review.changes.length > 128
+    || !review.changes.every(row => Array.isArray(row) && row.length === 2 && typeof row[0] === 'string'
+      && row[0].length > 0 && row[0].length <= 160 && (row[1] === 1 || row[1] === -1))) return null;
+  return review.changes;
 }
 
 /* Round 723: userTeam is the club whose tag decision is the GM's own, so the

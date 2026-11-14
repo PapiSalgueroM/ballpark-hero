@@ -11,7 +11,7 @@ import {
   releasePlayer, signPlayer, proposeTrade, tradeValue, aiWeeklyMoves, divisionOf,
   defenceRating,
   conferenceOf, conferenceSeeds, executeTalksTrade,
-  REGULAR_WEEKS, cleanNflGamePersonnel, setTwoTightEndPlan, twoTightEndSkill,
+  REGULAR_WEEKS, cleanNflGamePersonnel, setTwoTightEndPlan, twoTightEndSkill, readNflSettledWeek, settleNflWeekResults,
   type LeagueState, type Prospect, type PlayoffRound,
   ensureFoLeagueIds, NFL_ROSTER_MIN,
   /* Round 723: the depth chart the sim reads, and the franchise tag. */
@@ -24,6 +24,7 @@ import {
   /* Round 828 follow up: men to cut before Play, the MLB and NHL shape. */
   deepOverLimit,
 } from '@/lib/frontOffice';
+import { NflWeekResults } from '@/components/front-office/NflWeekResults';
 /* Round 631: a cut costs dead money and the man cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
 /* Round 531: the cap on screen says which day its figure was read. */
@@ -205,12 +206,7 @@ export default function FrontOfficeBoard() {
   const [tab, setTab] = useState<Tab | null>(null);
   const [myTeam, setMyTeam] = useState<string>('');
   const [league, setLeague] = useState<LeagueState | null>(null);
-  const completedWeek = league?.schedule[league.week - 2];
-  const weekResults = completedWeek?.length && completedWeek.every(game =>
-    Number.isInteger(game.homeScore) && Number.isInteger(game.awayScore)
-    && Math.min(game.homeScore, game.awayScore) >= 0 && game.homeScore !== game.awayScore
-    && game.winner === (game.homeScore > game.awayScore ? game.home : game.away)
-  ) ? completedWeek : [];
+  const weekResults = league ? readNflSettledWeek(league, league.week - 1) : [];
   const [newsFeed, setNewsFeed] = useState<string[]>([]);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
@@ -835,7 +831,7 @@ export default function FrontOfficeBoard() {
       feed.push(outForPlayoffs ? `🚑 ${inj.player} is out for the playoffs.` : `🚑 ${inj.player} is out ${inj.weeks} week${inj.weeks === 1 ? '' : 's'}.`);
     }
     feed.push(...aiLog.slice(0, 2).map(l => `📰 ${l}`));
-    lg.schedule[lg.week - 1] = told.map(t => t.game);
+    lg.schedule[lg.week - 1] = settleNflWeekResults(lg, told.map(t => t.game), myTeam);
     setNewsFeed(feed);
     setFeedSlam(null);
 
@@ -1677,6 +1673,12 @@ export default function FrontOfficeBoard() {
         {/* Round 1542: the season in numbers, the season he ran (not on the day he takes another club's seat: the
             season on this screen was not his, and Standings carries it) */}
         {!arriving && <NflSeasonCard league={league} myTeam={myTeam} label={label} mode="close" />}
+        {!arriving && readNflSettledWeek(league, REGULAR_WEEKS).length > 0 && (
+          <details className="space-y-2 rounded-2xl border border-border bg-card p-3">
+            <summary className="cursor-pointer py-2 text-sm font-semibold">Regular-season results</summary>
+            <NflWeekResults league={league} team={myTeam} />
+          </details>
+        )}
         {gm && recapDesk && (
           <GmDeskMount sport="nfl" desk={gm} facts={recapDesk} panels={NFL_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
         )}
@@ -2011,7 +2013,6 @@ export default function FrontOfficeBoard() {
   const seenGame = hold ? hold.schedule[hold.week - 1]?.find(g => g.home === myTeam || g.away === myTeam) : myGameThisWeek;
   const twoTeSkill = tab === 'week' && seenGame && !seenGame.winner ? twoTightEndSkill(seenMy) : null;
   const twoTePlanned = seenGame?.personnel?.team === myTeam;
-  const playedPersonnel = weekResults.find(game => game.personnel?.team === myTeam)?.personnel?.result;
   /* Round 1309, the fix pass: the owner's trust and the press room as they stood before a watched playoff press (see `heldRoom`) */
   const seenTrust = roomHeld ? roomHeld.trust : trust;
   const seenPresser = roomHeld ? roomHeld.presser : presser;
@@ -2709,26 +2710,7 @@ export default function FrontOfficeBoard() {
               )}
             </div>
             {wideAtLoad && bracketBackRow}
-          {weekResults.length > 0 && !hold && (!bracketRow) && (
-            <section aria-label={`Week ${league.week - 1} league scores`} className="space-y-1">
-              <h3 className="text-left text-xs font-semibold">Week {league.week - 1} league scores</h3>
-              {playedPersonnel && <p className="text-left text-xs text-muted-foreground" data-two-te-result>
-                {playedPersonnel === 'used' ? 'Your club played with two tight ends.' : 'Your club used the usual lineup because the two-tight-end group was short at kickoff.'}
-              </p>}
-              <div className="grid max-h-56 grid-cols-1 gap-1 overflow-y-auto text-left sm:grid-cols-2">
-                {weekResults.map((g, i) => {
-                  const involved = g.home === myTeam || g.away === myTeam;
-                  return (
-                    <div key={i} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', involved ? 'border-gold/60 bg-gold/5' : 'border-border/60 bg-background')}>
-                      <span className={cn('truncate', g.winner === g.home ? 'font-bold text-foreground' : 'text-muted-foreground')}>{g.home} {g.homeScore}</span>
-                      <span className="px-1 text-muted-foreground/60">·</span>
-                      <span className={cn('truncate', g.winner === g.away ? 'font-bold text-foreground' : 'text-muted-foreground')}>{g.awayScore} {g.away}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          )}
+          {!hold && <NflWeekResults league={league} team={myTeam} />}
           </div>
           <div ref={setHelpHost} style={{ margin: 0 }} data-gameday-help-host />
         </div>
