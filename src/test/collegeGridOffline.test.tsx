@@ -229,6 +229,48 @@ async function play(board: GridPuzzle, moves: { cell: number; name: string }[]) 
   return out;
 }
 
+describe('College Grid missed cells', () => {
+  it('reveals only unused verified examples after the last guess', async () => {
+    const board = boards[0];
+    localStorage.clear();
+    state.boards.length = 0;
+    state.boards.push(board);
+    const game = renderHook(() => useCollegeGrid());
+    await waitFor(() => expect(game.result.current.keyReady).toBe(true));
+    expect(game.result.current.missedExamples).toEqual([]);
+
+    const answer = winningNames(board)![0];
+    act(() => game.result.current.setActiveCell(0));
+    await act(async () => { await game.result.current.submitGuess(answer); });
+    expect(game.result.current.correctCount).toBe(1);
+    vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    const misses = losingMoves(board)!.filter(move => move.cell !== 0).slice(0, 13);
+    for (const move of [...misses, misses[0]]) {
+      act(() => game.result.current.setActiveCell(move.cell));
+      await act(async () => { await game.result.current.submitGuess(move.name); });
+    }
+    expect(game.result.current.gameStatus).toBe('complete');
+    expect(game.result.current.guessesLeft).toBe(0);
+    const rows = game.result.current.missedExamples;
+    expect(rows.map(row => row.index)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
+    for (const row of rows) {
+      expect(row.names).not.toContain(answer);
+      expect(row.names.length).toBeGreaterThan(0);
+      expect(row.names.length).toBeLessThanOrEqual(3);
+      const [school, criterion] = cellAttrs(board, row.index);
+      for (const name of row.names) {
+        expect(entries.some(entry => entry.name === name && real.judgeCollegeCell(entry, school, criterion) === 'yes')).toBe(true);
+      }
+    }
+    await act(async () => { await vi.runOnlyPendingTimersAsync(); });
+    const expected = structuredClone(rows);
+    game.unmount();
+    vi.useRealTimers();
+    const reopened = renderHook(() => useCollegeGrid());
+    await waitFor(() => expect(reopened.result.current.missedExamples).toEqual(expected));
+  });
+});
+
 describe('College Grid offline', () => {
   it('(4a) a win bot fills 9 of 9 in 9 counted guesses on every board', async () => {
     expect(boards.length).toBe(75);

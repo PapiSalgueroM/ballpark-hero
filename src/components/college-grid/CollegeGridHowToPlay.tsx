@@ -31,6 +31,7 @@ export function CollegeGridHowToPlay({ open, onOpenChange }: Props) {
             <li>If the records can't settle it, it's free, and you'll see what they do have on him</li>
             <li>Each player goes on the board once</li>
             <li>You get 15 guesses, and correct answers use one too</li>
+            <li>After the last guess, open Review missed cells to see examples for any open spots</li>
           </ul>
           <div className="pt-2 border-t border-border">
             <p className="font-semibold text-foreground mb-1">Example</p>

@@ -30,6 +30,7 @@ const CollegeGrid = () => {
     rarityScore,
     isLoading,
     dataError,
+    missedExamples,
   } = useCollegeGrid();
 
   const [showRules, setShowRules] = useState(false);
@@ -107,7 +108,7 @@ const CollegeGrid = () => {
             )}
 
             {gameStatus === 'complete' && (
-              <div className="mt-8 flex justify-center">
+              <div className="mt-8 flex flex-col items-center gap-3">
                 <ResultScreen
                   won={correctCount === 9}
                   outcomeEmoji={correctCount === 9 ? '🏆' : '⏱️'}
@@ -129,6 +130,24 @@ const CollegeGrid = () => {
                   }}
                   playNext={<p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>}
                 />
+                {missedExamples.length > 0 && (
+                  <details key={puzzle.id} data-no-prerender="" className="w-full max-w-sm rounded-xl border border-border bg-card px-3">
+                    <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 rounded-sm text-sm font-semibold text-foreground focus-visible:outline-primary [&::-webkit-details-marker]:hidden">
+                      Review missed cells
+                      <span aria-hidden="true" className="text-muted-foreground">{missedExamples.length}</span>
+                    </summary>
+                    <dl className="divide-y divide-border pb-2">
+                      {missedExamples.map(({ index, school, criterion, names }) => (
+                        <div key={index} className="py-2">
+                          <dt className="text-sm font-semibold text-foreground">{school} + {criterion}</dt>
+                          <dd className="mt-1 text-xs leading-5 text-muted-foreground">
+                            {names.length ? names.join(', ') : 'No unused example on record.'}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </details>
+                )}
               </div>
             )}
           </>
