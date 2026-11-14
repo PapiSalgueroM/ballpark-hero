@@ -29,6 +29,9 @@ const playerAt = (state: NrlCareerState, id = playerId) => state.players.find(pl
 const asClub = (state: NrlCareerState, clubId: string) => ({ ...state, season: { ...state.season, clubId } });
 const advance = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'advance' });
 const makeCareer = () => createNrlCareer(clubId, 4);
+const withSignedWingCover = () => reduceNrlCareer(makeCareer(), {
+  type: 'offerContract', playerId: 'nrl-storm-2026-27', salary: 325000, years: 1,
+});
 
 function open(save: string) {
   localStorage.setItem(NRL_SAVE_KEY, save);
@@ -48,6 +51,45 @@ function selectMove() {
   fireEvent.change(desk.getByLabelText('Receiving club'), { target: { value: destinationId } });
   return desk;
 }
+
+it.each([
+  [2026, 'storm', 'storm-2-0', 'nrl-storm-2026-27', 410000],
+  [2027, 'bears', 'bears-2-0', 'nrl-bears-2027-27', 356127],
+] as const)('guards the direct %i move until another player is signed and keeps existing moves readable', (year, clubId, playerId, cover, salary) => {
+  const initial = createNrlCareer(clubId, 1, year);
+  const player = playerAt(initial, playerId);
+  const action = { type: 'arrangeTakeover', year, clubId, playerId, destinationId: 'broncos' } as const;
+  expect(nrlCareerSquad(initial, year + 1).filter(member => member.role === player.role)).toEqual([player]);
+  expect(reduceNrlCareer(initial, action)).toBe(initial);
+  expect(nrlTakeoverOffers(initial, playerId)).toEqual([]);
+  const legacy = { ...initial, players: initial.players.map(member => member.id === playerId ? { ...member,
+    contract: { ...player.contract!, endYear: year }, futureContract: { ...player.contract!, clubId: 'broncos', startYear: year + 1 },
+  } : member) };
+  expect(readNrlCareerSave(bytes(legacy))).toEqual(legacy);
+
+  const view = open(bytes(initial));
+  const summary = screen.getByText('Arrange an offseason move', { exact: true });
+  fireEvent.click(summary);
+  const desk = within(summary.closest('details')!);
+  fireEvent.change(desk.getByLabelText('Player to move'), { target: { value: playerId } });
+  expect(desk.getByText(`Keep another Left Wing signed for ${year + 1} before arranging a move.`)).toBeVisible();
+  expect(desk.queryByLabelText('Receiving club')).not.toBeInTheDocument();
+  expect(raw()).toBe(bytes(initial));
+  const coverName = playerAt(initial, cover).name;
+  fireEvent.click(screen.getByRole('button', { name: 'Extend for ' + coverName }));
+  fireEvent.change(screen.getByLabelText('Term'), { target: { value: '1' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Agree contract' }));
+  const renewed = reduceNrlCareer(initial, { type: 'offerContract', playerId: cover, salary, years: 1 });
+  expect(raw()).toBe(bytes(renewed));
+  fireEvent.change(desk.getByLabelText('Receiving club'), { target: { value: 'broncos' } });
+  fireEvent.click(desk.getByRole('button', { name: 'Confirm offseason move' }));
+  const agreed = reduceNrlCareer(renewed, action);
+  expect(raw()).toBe(bytes(agreed));
+  expect(nrlCareerSquad(agreed, year + 1).filter(member => member.role === player.role).map(member => member.id)).toEqual([cover]);
+  expect(nrlCareerCap(agreed, year + 1).available - nrlCareerCap(renewed, year + 1).available).toBe(salary === 410000 ? 256034 : 259124);
+  view.unmount();
+  expect(readNrlCareerSave(raw())).toEqual(agreed);
+});
 
 it('shows the squad cover refusal before permission and accepts after an actual renewal', () => {
   const start = createNrlCareer('storm', 1);
@@ -170,7 +212,7 @@ describe('NRL offseason contract takeover', () => {
   });
 
   it('keeps the current season exact and transfers both guaranteed years to the rival at rollover', () => {
-    const start = makeCareer();
+    const start = withSignedWingCover();
     const original = playerAt(start).contract!;
     expect(original.endYear).toBe(2028);
     let booked = reduceNrlCareer(start, action);
@@ -216,7 +258,7 @@ describe('NRL offseason contract takeover', () => {
   });
 
   it('re-quotes beyond the next season and rejects ineligible clubs, deals and career states', () => {
-    const start = makeCareer();
+    const start = withSignedWingCover();
     const currentOffer = nrlTakeoverOffers(start, playerId).find(offer => offer.clubId === destinationId)!;
     const cap = nrlCareerCap(asClub(start, destinationId), 2028);
     const incumbent = start.players.find(player => player.contract?.clubId === destinationId && player.contract.endYear === 2027)!;
@@ -253,7 +295,7 @@ describe('NRL offseason contract takeover', () => {
   });
 
   it('preserves the last open place for its missing role and refuses a full receiving squad', () => {
-    const start = makeCareer();
+    const start = withSignedWingCover();
     const target = 'titans';
     const outgoing = playerAt(start);
     const knownHooker = nrlCareerSquad(asClub(start, target), 2027).filter(player => player.role === 'Hooker');
@@ -285,7 +327,7 @@ describe('NRL offseason contract takeover', () => {
   });
 
   it('shows exact simulated terms, supports cancel and persists the destination once confirmed', () => {
-    const start = makeCareer();
+    const start = withSignedWingCover();
     const save = bytes(start);
     const view = open(save);
     const desk = selectMove();
@@ -313,7 +355,7 @@ describe('NRL offseason contract takeover', () => {
   });
 
   it('rejects a stale same-slot quote and retries a quota failure without duplicating the deal', () => {
-    const start = makeCareer();
+    const start = withSignedWingCover();
     const save = bytes(start);
     const view = open(save);
     const stale = selectMove();
