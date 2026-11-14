@@ -217,6 +217,18 @@ describe('the season review', () => {
     expect(a.container.querySelector('[data-cm-award="glove"]')?.textContent).toContain(`${glove.name} (${glove.club}, ${glove.n})`);
     expect(a.container.textContent).toContain(`Golden boot: ${summary.goldenBoot!.name}`);
     expect(a.container.querySelector('[data-cm-award-withheld]')).toBeNull();
+    const shortlist = a.container.querySelector('[data-cm-ballon-dor-shortlist]')!;
+    expect(shortlist.querySelector('summary')?.textContent).toContain('Ballon d\'Or shortlist (10)');
+    expect(shortlist.querySelectorAll('li')).toHaveLength(10);
+    expect(shortlist.querySelector('li')?.textContent).toContain(summary.ballonDor!.name);
+    expect(shortlist.textContent).toContain('Game ratings help choose contenders where individual stats are missing');
+    const past = draw(state, 'past');
+    expect(past.q('[data-cm-ballon-dor-shortlist]')?.textContent).toBe(shortlist.textContent);
+    const olderState = { ...state, history: state.history.map(record => ({ ...record, ballonDorShortlist: undefined })) };
+    const olderPast = draw(olderState, 'past');
+    expect(olderPast.q('[data-cm-ballon-dor-shortlist]')).toBeNull();
+    expect(olderPast.container.textContent).toContain(`Ballon d'Or: ${summary.ballonDor!.name}`);
+    expect(olderPast.container.textContent).toContain('Shortlists are kept for the five most recent seasons.');
     /* Step 5: one tile for the team of the season, opened in place and closed again. */
     const xi = summary.awards!.xi!;
     expect(xi).toHaveLength(11);
