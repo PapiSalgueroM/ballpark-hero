@@ -3,8 +3,9 @@ import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
+import type { UsCareerSport } from '@/lib/usCareerSport';
 
-const sports = [NBA_CAREER_SPORT, NFL_CAREER_SPORT, MLB_CAREER_SPORT, NHL_CAREER_SPORT];
+const sports: UsCareerSport[] = [NBA_CAREER_SPORT, NFL_CAREER_SPORT, MLB_CAREER_SPORT, NHL_CAREER_SPORT];
 
 describe.each(sports)('$label season rating', sport => {
   const career = (age: number, ovr: number, pot: number) => {
