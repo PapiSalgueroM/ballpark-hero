@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
+import { useState, useMemo, useCallback, useEffect, useLayoutEffect, useRef } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { hockeyHLPlayers, HockeyHLPlayer } from '@/data/hockeyHLPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -6,6 +6,8 @@ import { higherLowerScore } from '@/lib/higherLowerScore';
 import { isHigherLowerDailyLog } from '@/lib/dailySaveShapes';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
+import { keyedRng } from '@/lib/keyedRng';
+import { safeLocalStorage } from '@/lib/safeStorage';
 
 function seededShuffle<T>(arr: T[], seed: number): T[] {
   const a = [...arr];
@@ -30,6 +32,28 @@ interface RoundResult {
 type HLAction = { t: 'result'; correct: boolean };
 
 const ROUNDS = 10;
+const PRACTICE_KEY = 'dukb-hockey-hl-unlimited-v1';
+type Practice = { seed: number; hard: boolean; answers: boolean[] };
+
+// A changed pool invalidates old pair seeds because it can change the matchups.
+const poolRevision = keyedRng(JSON.stringify(hockeyHLPlayers))();
+function loadPractice(): { raw: string | null; practice: Practice | null; active: boolean } {
+  const raw = safeLocalStorage.getItem(PRACTICE_KEY);
+  try {
+    const value = raw ? JSON.parse(raw) : null;
+    if (value && value.pool === poolRevision && typeof value.active === 'boolean'
+      && Number.isInteger(value.seed) && value.seed >= 0 && value.seed < 100000
+      && typeof value.hard === 'boolean' && Array.isArray(value.answers) && value.answers.length < ROUNDS
+      && value.answers.every((answer: unknown) => typeof answer === 'boolean')) {
+      return { raw, active: value.active, practice: { seed: value.seed, hard: value.hard, answers: value.answers } };
+    }
+  } catch { /* Start on Daily when the practice draft is unreadable. */ }
+  return { raw, practice: null, active: false };
+}
+
+const encodePractice = (practice: Practice, active: boolean) =>
+  JSON.stringify({ pool: poolRevision, seed: practice.seed, hard: practice.hard, answers: practice.answers, active });
+
 // Sentinel puzzle array, useDailyPuzzle needs at least one element.
 // The hook ignores the puzzle data and uses todayStr for seeding instead.
 const SENTINEL_PUZZLES = [{ id: 'hkhl-daily' }];
@@ -44,8 +68,7 @@ function getDailyPairs(todayStr: string): [HockeyHLPlayer, HockeyHLPlayer][] {
   return result;
 }
 
-function getRandomPairs(hard = false): [HockeyHLPlayer, HockeyHLPlayer][] {
-  const seed = Math.floor(Math.random() * 100000);
+function getPracticePairs(seed: number, hard = false): [HockeyHLPlayer, HockeyHLPlayer][] {
   const shuffled = seededShuffle(hockeyHLPlayers, seed);
   if (!hard) {
     const result: [HockeyHLPlayer, HockeyHLPlayer][] = [];
@@ -75,11 +98,14 @@ function getRandomPairs(hard = false): [HockeyHLPlayer, HockeyHLPlayer][] {
    render that drew again shifted the prerenderer's seeded generator and
    changed the pick, which made the snapshot disagree with itself. The
    measurement and the reasoning live in src/lib/firstDraw.ts. */
-const firstUnlimited = makeFirstDraw(getRandomPairs);
+const drawSeed = () => Math.floor(Math.random() * 100000);
+const firstUnlimited = makeFirstDraw(drawSeed);
 
 export function useHockeyHL() {
-  const [mode, setMode] = useState<HockeyHLMode>('daily');
-  const [hard, setHard] = useState(false);
+  const [saved] = useState(loadPractice);
+  const [mode, setMode] = useState<HockeyHLMode>(saved.active ? 'unlimited' : 'daily');
+  const [practice, setPractice] = useState(() => saved.practice ?? null);
+  const hard = practice?.hard ?? false;
 
   // Daily persistence, sentinel puzzle, we only use todayStr + guesses
   const {
@@ -114,11 +140,27 @@ export function useHockeyHL() {
   }, []);
   useEffect(() => cancelReveal, [cancelReveal]);
 
-  // Unlimited local state
-  const [unlimitedPairs, setUnlimitedPairs] = useState<[HockeyHLPlayer, HockeyHLPlayer][]>(firstUnlimited.get);
+  const [initialSeed] = useState(firstUnlimited.get);
   useEffect(firstUnlimited.release, []);
-  const [unlimitedResults, setUnlimitedResults] = useState<RoundResult[]>([]);
-  const [unlimitedRound, setUnlimitedRound] = useState(0);
+  const unlimitedSeed = practice?.seed ?? initialSeed;
+  const unlimitedPairs = useMemo(() => getPracticePairs(unlimitedSeed, hard), [unlimitedSeed, hard]);
+  const unlimitedResults = useMemo<RoundResult[]>(() => practice?.answers.map((correct, i) => ({
+    player1: unlimitedPairs[i][0], player2: unlimitedPairs[i][1], correct,
+  })) ?? [], [practice, unlimitedPairs]);
+  const revealingUnlimited = mode === 'unlimited' && showingResult && currentResult !== null;
+  // Keep the accepted guess in the save while the reveal keeps it out of the displayed score.
+  const unlimitedRound = unlimitedResults.length - (revealingUnlimited ? 1 : 0);
+  const storedPractice = useRef(saved.raw);
+  const previousPractice = useRef(saved.practice ? encodePractice(saved.practice, saved.active) : null);
+  useLayoutEffect(() => {
+    const next = practice && practice.answers.length < ROUNDS ? encodePractice(practice, mode === 'unlimited') : null;
+    if (next === previousPractice.current) return;
+    previousPractice.current = next;
+    if (safeLocalStorage.getItem(PRACTICE_KEY) !== storedPractice.current) return;
+    if (next === null) safeLocalStorage.removeItem(PRACTICE_KEY);
+    else safeLocalStorage.setItem(PRACTICE_KEY, next);
+    storedPractice.current = next;
+  }, [practice, mode]);
 
   // Derived daily state
   /* Round 643 review: a daily round is saved the moment it is decided, not
@@ -142,7 +184,8 @@ export function useHockeyHL() {
   // Active values, append currentResult during reveal window so page UI is consistent
   const pairs = mode === 'daily' ? dailyPairs : unlimitedPairs;
   const currentRound = mode === 'daily' ? dailyCurrentRound : unlimitedRound;
-  const baseResults = mode === 'daily' ? (revealingDaily ? dailyResults.slice(0, -1) : dailyResults) : unlimitedResults;
+  const baseResults = mode === 'daily' ? (revealingDaily ? dailyResults.slice(0, -1) : dailyResults)
+    : (revealingUnlimited ? unlimitedResults.slice(0, -1) : unlimitedResults);
   const results: RoundResult[] = useMemo(
     () => (currentResult ? [...baseResults, currentResult] : baseResults),
     [baseResults, currentResult],
@@ -189,16 +232,13 @@ export function useHockeyHL() {
       setShowingResult(true);
 
       if (mode === 'daily') addDailyAction({ t: 'result', correct });
+      else setPractice(previous => previous && { ...previous, answers: [...previous.answers, correct] });
 
       cancelReveal();
       const version = revealVersion.current;
       revealTimer.current = setTimeout(() => {
         if (version !== revealVersion.current) return;
         revealTimer.current = null;
-        if (mode !== 'daily') {
-          setUnlimitedResults((prev) => [...prev, { player1: p1, player2: p2, correct }]);
-          setUnlimitedRound((prev) => prev + 1);
-        }
         setCurrentResult(null);
         setShowingResult(false);
       }, 2000);
@@ -206,38 +246,33 @@ export function useHockeyHL() {
     [currentPair, showingResult, gameStatus, mode, addDailyAction, takeNewerDailySave, cancelReveal],
   );
 
-  const switchMode = useCallback((m: HockeyHLMode) => {
+  const clearReveal = useCallback(() => {
     cancelReveal();
-    if (m === 'unlimited') {
-      setUnlimitedPairs(getRandomPairs(hard));
-      setUnlimitedResults([]);
-      setUnlimitedRound(0);
-    }
-    setMode(m);
     setCurrentResult(null);
     setShowingResult(false);
-  }, [hard, cancelReveal]);
-
-  const toggleHard = useCallback(() => {
-    cancelReveal();
-    setHard((prev) => {
-      const next = !prev;
-      // Hard pairs are an unlimited-mode feature, switching keeps the
-      // daily's canonical pair list untouched.
-      setMode('unlimited');
-      setUnlimitedPairs(getRandomPairs(next));
-      setUnlimitedResults([]);
-      setUnlimitedRound(0);
-      setCurrentResult(null);
-      setShowingResult(false);
-      return next;
-    });
   }, [cancelReveal]);
+
+  const startUnlimited = useCallback((nextHard = hard) => {
+    clearReveal();
+    setPractice({ seed: drawSeed(), hard: nextHard, answers: [] });
+    setMode('unlimited');
+  }, [hard, clearReveal]);
+
+  const switchMode = useCallback((m: HockeyHLMode) => {
+    if (m === 'unlimited' && (!practice || practice.answers.length === ROUNDS || mode === 'unlimited')) {
+      startUnlimited();
+      return;
+    }
+    clearReveal();
+    setMode(m);
+  }, [practice, mode, startUnlimited, clearReveal]);
+
+  const toggleHard = () => startUnlimited(!hard);
 
   useGameCompletion('hockey-higher-lower', rawDailyStatus !== 'playing', dailyScore);
 
   return {
-    mode, switchMode, hard, toggleHard, currentPair, currentRound, results, showingResult, streak,
+    mode, switchMode, restartUnlimited: () => startUnlimited(), hard, toggleHard, currentPair, currentRound, results, showingResult, streak,
     gameStatus, correctCount, totalScore, makeGuess, totalRounds: ROUNDS, isLoading,
   };
 }

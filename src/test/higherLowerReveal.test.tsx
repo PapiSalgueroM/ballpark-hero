@@ -106,12 +106,15 @@ for (const row of cases) describe(row.name + ' Higher or Lower reveal ownership'
     expect(vi.mocked(Math.random)).toHaveBeenCalledTimes(2); expect(localStorage.getItem(key)).toBeNull(); expect(fixture.record).not.toHaveBeenCalled();
   });
 
-  it('cancels abandoned mode reveal without scoring or skipping a fresh run', () => {
+  it('cancels the mode reveal and keeps the accepted guess only in resumable practice', () => {
     const timers = trackReveals(), view = draw(); act(() => view.result.current.switchMode('unlimited'));
     act(() => view.result.current.makeGuess(choose(view.result.current))); expect(timers.live.size).toBe(1);
     act(() => view.result.current.switchMode('daily')); act(() => view.result.current.switchMode('unlimited'));
     const pair = view.result.current.currentPair!; expect(timers.live.size).toBe(0); act(() => vi.advanceTimersByTime(2000));
-    expect(view.result.current.currentRound).toBe(0); expect(view.result.current.totalScore).toBe(0); expect(view.result.current.results).toEqual([]);
+    const resumed = row.name === 'Hockey';
+    expect(view.result.current.currentRound).toBe(resumed ? 1 : 0);
+    expect(view.result.current.totalScore).toBe(resumed ? 10 : 0);
+    expect(view.result.current.results).toHaveLength(resumed ? 1 : 0);
     expect(view.result.current.currentPair![0]).toBe(pair[0]); expect(view.result.current.currentPair![1]).toBe(pair[1]);
     expect(timers.fired()).toBe(0); expect(localStorage.getItem(key)).toBeNull(); expect(fixture.record).not.toHaveBeenCalled();
   });
@@ -164,7 +167,12 @@ for (const row of cases) describe(row.name + ' Higher or Lower reveal ownership'
     const timers = trackReveals(), view = draw(); act(() => view.result.current.makeGuess(choose(view.result.current)));
     const raw = localStorage.getItem(key)!; expect(JSON.parse(raw).guesses).toEqual([{ t: 'result', correct: true }]);
     act(() => view.result.current.switchMode('unlimited')); expect(timers.live.size).toBe(0); view.unmount();
-    const restored = draw(); expect(restored.result.current.mode).toBe('daily'); expect(restored.result.current.currentRound).toBe(1);
+    const restored = draw();
+    if (row.name === 'Hockey') {
+      expect(restored.result.current.mode).toBe('unlimited');
+      act(() => restored.result.current.switchMode('daily'));
+    }
+    expect(restored.result.current.mode).toBe('daily'); expect(restored.result.current.currentRound).toBe(1);
     expect(restored.result.current.totalScore).toBe(10); expect(restored.result.current.showingResult).toBe(false);
     expect(localStorage.getItem(key)).toBe(raw); expect(timers.live.size).toBe(0); expect(fixture.record).not.toHaveBeenCalled();
   });

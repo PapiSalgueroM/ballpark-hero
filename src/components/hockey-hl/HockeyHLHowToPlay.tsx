@@ -35,6 +35,7 @@ export function HockeyHLHowToPlay({ open, onOpenChange }: Props) {
           <div className="space-y-2">
             <p className="font-semibold text-[hsl(var(--hk-silver))]">Modes</p>
             <p className="text-muted-foreground"><strong>Daily:</strong> same matchups for everyone. <strong>Unlimited:</strong> random matchups, play again anytime.</p>
+            <p className="text-muted-foreground">Your unfinished Unlimited run stays in this browser. Choose New run for fresh matchups.</p>
           </div>
         </div>
       </DialogContent>

@@ -538,6 +538,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         items: [
           "Dead ties count as correct no matter which side you pick.",
           "Daily serves the same 10 matchups to everyone until midnight Eastern; Hard mode, unlimited only, builds close-gap pairs.",
+          "Your unfinished Unlimited run stays in this browser. Choose New run for fresh matchups.",
         ],
       },
     ],
