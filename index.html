@@ -255,8 +255,29 @@
     @media (prefers-reduced-motion:reduce){#dukb-boot img{animation:none}}
     #dukb-home-copy{max-height:100vh;overflow:hidden}
     .dukb-js #dukb-home-copy,.dukb-js #dukb-home-copy :is(h1,h2){font-family:system-ui,sans-serif}
+    .dukb-home-boot-failed #dukb-boot{display:none}.dukb-home-boot-failed #dukb-home-copy{max-height:none;overflow:visible}
   </style>
-  <script>document.documentElement.classList.add('dukb-js')</script>
+  <script data-dukb-home-boot>
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript><style>#dukb-boot{display:none}#dukb-home-copy{max-height:none;overflow:visible}</style></noscript>
 </head>
   <body>
