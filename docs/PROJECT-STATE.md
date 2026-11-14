@@ -1,4 +1,12 @@
+## 2026-11-14: NRL injury returns, Home search and national tactics
+
+- NRL Squad Availability shows the first regular fixture an injured player can return for. Byes count toward recovery. A player waiting on a suspension or plea keeps the separate judiciary information, and finals depend on qualification.
+- Opening a Home search result and going back from the game brings back that search and returns keyboard focus to the opened result. An explicit Home visit opens fresh.
+- Club Manager national jobs let the coach choose Defensive, Balanced or Attacking. Defensive lowers scoring for both sides and Attacking raises it. The national campaign records the choice used, while the club keeps its own instructions.
+
 ## 2026-11-14: Club Manager national campaigns and Hockey matchup review
+
+[PR #913](https://github.com/PapiSalgueroM/ballpark-hero/pull/913) published exact main `9459b0b046fb33266c0ed0007be3239c5f0137cf`, deployment `b30cc5d5-8761-421e-a6d6-7e5552b7fc2a`. Six native browser journeys and all 174 sitemap routes passed live. IndexNow accepted both guides.
 
 - Club Manager keeps the latest national job's simulated qualifying table, tournament group and match results in Manager. The last campaign stays available after dismissal. Modern careers use the summer on their calendar. Old results with the player-only "Not Selected" status are left out of the panel until a new result is available.
 - Hockey Higher or Lower shows all ten completed matchups, each player's career points and coverage season, and which guesses hit. The Daily recap can be reopened after a refresh.

@@ -67,7 +67,7 @@ it.each([
   click('Squad');
   expect(injuryRow(name).getByText(forecast, { exact: true })).toBeVisible();
 
-  for (let round = injuryRound; round <= bye; round++) {
+  for (let round: number = injuryRound; round <= bye; round++) {
     const next = readNrlCareerSave(raw())!.season;
     expect(next.round).toBe(round);
     click('Match centre');
