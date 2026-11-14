@@ -316,21 +316,14 @@ export default function Index() {
           put it here and that was his idea at the time; changing his mind
           about his own voice on his own site is his call. */}
 
-      {/* Dynasty & Career Sims showcase (2026-08-05): the deep games, front and center */}
-      <section>
-        <h2 className="mb-1 flex flex-wrap items-center gap-2.5 font-display text-lg font-bold text-foreground">
-          <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold/15 text-base ring-1 ring-inset ring-gold/30">👑</span>
+      <section aria-labelledby="home-career-sims">
+        <h2 id="home-career-sims" className="mb-3 flex items-center gap-2 font-display text-lg font-bold text-foreground">
+          <Trophy aria-hidden="true" className="h-4 w-4 shrink-0 text-gold" />
           Dynasty & Career Sims
-          <span className="text-xs font-normal text-muted-foreground ml-1">
-            ({FEATURED_GAMES.length} worlds)
-          </span>
         </h2>
-        <p className="text-xs text-muted-foreground mb-4 md:pl-[42px]">
-          Not quizzes. Whole universes: run a franchise, live a career, build a dynasty. Every one saves your progress.
-        </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+        <div className="grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4" data-home-catalogue="">
           {FEATURED_GAMES.map(game => (
-            <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
+            <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
           ))}
         </div>
       </section>

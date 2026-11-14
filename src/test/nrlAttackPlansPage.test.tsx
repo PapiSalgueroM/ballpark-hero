@@ -96,7 +96,7 @@ it('holds a reserve only on Play Live, restores halftime and makes a stale tab r
   localStorage.setItem(NRL_SAVE_KEY, baseline);
   localStorage.setItem(fence, '6');
   const first = page();
-  const summary = screen.getByText('Hold one reserve for halftime');
+  const summary = screen.getByText('Hold one reserve for later');
   const desk = summary.closest('details')!;
   expect(desk.open).toBe(false);
   desk.open = true;

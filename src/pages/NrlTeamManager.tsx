@@ -25,7 +25,7 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview,
-  nrlLadder, nrlMatchdaySelection, nrlNextRound,
+  nrlLadder, nrlMatchdaySelection, nrlMinute60Interchange, nrlNextRound,
   nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
@@ -251,11 +251,11 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
                 setReserveId(id);
                 if (!id || id === secondReserveId) setSecondReserveId('');
               }}>
-              <option value="">{heldName ? 'Leave held reserve unused' : 'Automatic rotation'}</option>
+              <option value="">{heldName ? 'Keep held reserve on the bench' : 'Automatic rotation'}</option>
               {options.map(option => <option key={option.reserveId} value={option.reserveId}>{option.enteredAtHalf && 'Bring on '}{name(option.reserveId)} · {option.role}</option>)}
             </select>
             <p className="mt-2 text-sm text-muted-foreground">{heldName
-              ? `${heldName} sat out the first half. Bring them on now, keep a rotating reserve on, or do both at different positions.`
+              ? `${heldName} sat out the first half. Bring them on now or keep them for the 60-minute pause. You can also keep a rotating reserve on at another position.`
               : 'Choose up to two reserves already in the rotation to finish. Their starters stay off.'}</p>
             {secondOptions.length > 0 && (
               <label className="mt-3 block text-sm font-semibold" htmlFor="nrl-half-second-reserve">
@@ -304,12 +304,17 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
   );
 }
 
-function LiveMinute60({ live, year, counter, onAction, disabled }: {
-  live: NrlLiveHalf; year: number; counter: boolean; onAction: (action: NrlAction) => void; disabled: boolean;
+function LiveMinute60({ live, season, onAction, disabled }: {
+  live: NrlLiveHalf; season: NrlManagerState; onAction: (action: NrlAction) => void; disabled: boolean;
 }) {
   const shortName = useNrlClubName();
   const stage = live.minute60!;
   const [tactic, setTactic] = useState(stage.tactic);
+  const [bringOn, setBringOn] = useState(false);
+  const { year, squad } = season;
+  const late = nrlMinute60Interchange(season);
+  const reserve = late && squad.find(player => player.id === late.reserveId);
+  const starter = late && squad.find(player => player.id === late.starterId);
   const { fixture } = live;
   const sides = [[fixture.homeId, stage.homeScoring], [fixture.awayId, stage.awayScoring]] as const;
   return (
@@ -328,7 +333,7 @@ function LiveMinute60({ live, year, counter, onAction, disabled }: {
       <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-4">
         <legend className="px-1 font-bold">Closing tactic</legend>
         <p className="mt-2 text-sm text-muted-foreground">Keep your plan or change it for the final 20 minutes and any extra time.</p>
-        {counter && <p className="mt-2 text-sm">Attack plan: Counter opponent. Locked for this match.</p>}
+        {season.attackPlan === 'counter' && <p className="mt-2 text-sm">Attack plan: Counter opponent. Locked for this match.</p>}
         <div className="mt-2 flex flex-wrap gap-2">
           {tactics.map(option => (
             <Button key={option.id} type="button" size="lg" className="px-3" disabled={disabled}
@@ -337,8 +342,18 @@ function LiveMinute60({ live, year, counter, onAction, disabled }: {
           ))}
         </div>
       </fieldset>
+      {reserve && starter && (
+        <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-3">
+          <legend className="px-1 font-bold">Late interchange</legend>
+          <label className="flex min-h-11 items-center gap-2 text-sm font-semibold">
+            <input type="checkbox" checked={bringOn} disabled={disabled} onChange={event => setBringOn(event.target.checked)} />
+            Bring on {reserve.name}
+          </label>
+          <p className="text-sm text-muted-foreground">{reserve.name} can replace {starter.name} at {late.role} for the rest of the match.</p>
+        </fieldset>
+      )}
       <Button type="button" size="lg" className="w-full" disabled={disabled}
-        onClick={() => onAction({ type: 'finishMinute60', year, round: fixture.round, tactic })}>
+        onClick={() => onAction({ type: 'finishMinute60', year, round: fixture.round, tactic, reserveId: bringOn ? reserve?.id : undefined })}>
         Play final 20 minutes <ArrowRight aria-hidden="true" />
       </Button>
     </section>
@@ -448,6 +463,9 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
   const recoveredName = match.individualRecoveryId && season.squad.find(player => player.id === match.individualRecoveryId)?.name;
   const captainName = match.captainId && season.squad.find(player => player.id === match.captainId)?.name;
   const interchanges = [match.halftimeInterchange, match.secondHalftimeInterchange];
+  const late = match.minute60Interchange;
+  const lateReserve = late && season.squad.find(player => player.id === late.reserveId);
+  const lateStarter = late && season.squad.find(player => player.id === late.starterId);
   return (
     <>
       {match.halftimeTalk && <p className="mt-2 text-sm text-muted-foreground" data-nrl-halftime-talk>
@@ -482,6 +500,9 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
               : `${reserve} finished the match. In regulation, they played about 53 minutes. ${starter} stayed off after half time and played about 27 minutes.`}
           </p>;
         })}
+        {lateReserve && lateStarter && <p className="mt-1 text-muted-foreground" data-nrl-minute60-interchange>
+          {lateReserve.name} came on for {lateStarter.name} after 60 minutes.
+        </p>}
       </div>}
       {scorers.length > 0 && (
         <div className="mt-3 text-sm" data-nrl-scorers>
@@ -684,7 +705,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
   const [hold, setHold] = useState<{ year: number; round: number; reserveId: string }>();
   if (season.live) {
     return season.live.minute60
-      ? <LiveMinute60 live={season.live} year={year} counter={season.attackPlan === 'counter'} onAction={onAction} disabled={disabled} />
+      ? <LiveMinute60 live={season.live} season={season} onAction={onAction} disabled={disabled} />
       : <LiveHalftime live={season.live} season={season} title={next.title} onAction={onAction} disabled={disabled} coachRole={coachRole} coachBonus={coachBonus} />;
   }
   const club = shortName(year, clubId);
@@ -805,7 +826,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
       {holdable.length > 0 && (
         <details className="group rounded-xl border border-border bg-card px-4">
           <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-            <span>Hold one reserve for halftime</span><ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+            <span>Hold one reserve for later</span><ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
           </summary>
           <div className="pb-4">
             <label htmlFor="nrl-hold-reserve" className="text-sm font-semibold">Opening rotation</label>
@@ -815,7 +836,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
               <option value="">Automatic rotation</option>
               {holdable.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role}</option>)}
             </select>
-            <p className="mt-2 text-sm text-muted-foreground">Play Live uses at most three reserves in the first half and keeps this position free for a halftime change. Quick Sim uses the usual rotation.</p>
+            <p className="mt-2 text-sm text-muted-foreground">Play Live keeps this reserve free for half time or 60 minutes. Quick Sim uses the usual rotation.</p>
           </div>
         </details>
       )}
@@ -1598,7 +1619,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>
               <li>Sign one fictional assistant in Finances. Tactical assistants help when you use their tactic. A development assistant helps eligible young players improve next season.</li>
               <li>Choose your goal kicker in Squad to credit conversions and penalty goals. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>
-              <li>Play Live shows the first half. At half time, change tactics, bring on a reserve you held back, or keep a rotating reserve on. Quick Sim settles the round in one action.</li>
+              <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. Choose Play to 60 minutes to bring on a held reserve who is still on the bench. Quick Sim settles the round in one action.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>

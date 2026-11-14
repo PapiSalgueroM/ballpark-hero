@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
-import { nrlHalftimeInterchanges, nrlNextRound } from '@/lib/nrlManager';
+import { nrlHalftimeInterchanges, nrlHoldableReserves, nrlNextRound } from '@/lib/nrlManager';
 import { nrlScorePoints } from '@/lib/nrlPlayerScoring';
 
 const start = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'startLive' });
@@ -73,6 +73,81 @@ describe('NRL 60-minute tactical check', () => {
     expect([match.homeScore, match.awayScore]).toEqual([32, 33]);
     expect(match.goldenPoint).toEqual({ period: 1, score: 'fieldGoals' });
     expect(readNrlCareerSave(raw(adjusted))).toEqual(adjusted);
+  });
+
+  it.each([
+    [2026, 'broncos', 1, [10, 6], [22, 8], [28, 8]],
+    [2027, 'bears', 17, [24, 20], [38, 30], [38, 30]],
+  ] as const)('settles a still-held reserve only after the %s score at 60', (year, club, seed, at60, skippedScore, lateScore) => {
+    const before = createNrlCareer(club, seed, year);
+    const held = nrlHoldableReserves(before.season)[0];
+    const early = finish(before, { type: 'startLive', hold: { year, round: 1, reserveId: held.id } });
+    const rotations = nrlHalftimeInterchanges(early.season);
+    const [rotating, secondRotating] = rotations;
+    const watch = { type: 'reachMinute60', year, round: 1, tactic: 'balanced' } as const;
+    const late = { type: 'finishMinute60', year, round: 1, tactic: 'balanced', reserveId: held.id } as const;
+    const mid = finish(early, watch);
+    const live = mid.season.live!.minute60!;
+    expect([nrlScorePoints(live.homeScoring), nrlScorePoints(live.awayScoring)]).toEqual(at60);
+    const { reserveId: _omitted, ...keep } = late;
+    const skipped = finish(mid, keep);
+    const matchFor = (s: NrlCareerState) => s.season.results.find(result => result.homeId === club || result.awayId === club)!;
+    const otherMatches = (s: NrlCareerState) => s.season.results.filter(result => result !== matchFor(s));
+    expect([matchFor(skipped).homeScore, matchFor(skipped).awayScore]).toEqual(skippedScore);
+    expect(matchFor(skipped).benchUsed).not.toContain(held.id);
+    expect(finish(mid, { ...late, reserveId: rotating.reserveId })).toBe(mid);
+    const starterId = before.season.lineup[held.role];
+    const alreadyUsed = finish(early, { ...watch, interchange: { starterId, reserveId: held.id } });
+    expect(finish(alreadyUsed, late)).toBe(alreadyUsed);
+    const alreadySecond = finish(early, { ...watch, interchange: rotating, secondInterchange: { starterId, reserveId: held.id } });
+    expect(finish(alreadySecond, late)).toBe(alreadySecond);
+    const noHold = finish(start(before), watch);
+    expect(finish(noHold, late)).toBe(noHold);
+
+    const after = finish(readNrlCareerSave(raw(mid))!, late);
+    const match = matchFor(after);
+    expect([match.homeScore, match.awayScore]).toEqual(lateScore);
+    expect(match.minute60Interchange).toEqual({ starterId, reserveId: held.id });
+    expect(match.benchUsed).toEqual([...matchFor(skipped).benchUsed!, held.id]);
+    expect(match.playerScoring?.starters).toContain(starterId);
+    expect(match.homeScoring.tries).toBeGreaterThanOrEqual(live.homeScoring.tries);
+    expect(match.awayScoring.tries).toBeGreaterThanOrEqual(live.awayScoring.tries);
+    expect(after.season.round).toBe(2);
+    const fitness = (s: NrlCareerState, id: string) => s.season.squad.find(player => player.id === id)!.fitness;
+    expect(fitness(after, held.id)).toBe(fitness(skipped, held.id) - 4);
+    expect(fitness(after, starterId)).toBe(fitness(skipped, starterId) + 4);
+    expect(raw(readNrlCareerSave(raw(after)))).toBe(raw(after));
+    expect(finish(after, late)).toBe(after);
+    expect(otherMatches(after)).toEqual(otherMatches(skipped));
+
+    const twoAtHalf = finish(early, { ...watch, interchange: rotating, secondInterchange: secondRotating });
+    const afterThree = finish(twoAtHalf, late);
+    const afterThreeMatch = matchFor(afterThree);
+    expect(afterThreeMatch.halftimeInterchange).toMatchObject({ reserveId: rotating.reserveId });
+    expect(afterThreeMatch.secondHalftimeInterchange).toMatchObject({ reserveId: secondRotating.reserveId });
+    expect(afterThreeMatch.minute60Interchange).toEqual({ starterId, reserveId: held.id });
+    expect(afterThreeMatch.benchUsed).toHaveLength(4);
+    expect(new Set(afterThreeMatch.benchUsed).size).toBe(4);
+    expect(raw(readNrlCareerSave(raw(afterThree)))).toBe(raw(afterThree));
+  });
+
+  it('credits the late reserve with the final try in the Bears golden-point fixture', () => {
+    const year = 2027;
+    const before = createNrlCareer('bears', 38, year);
+    const reserve = nrlHoldableReserves(before.season)[0];
+    const half = finish(before, { type: 'startLive', hold: { year, round: 1, reserveId: reserve.id } });
+    const mid = finish(half, { type: 'reachMinute60', year, round: 1, tactic: 'balanced' });
+    const lastScore = mid.season.live!.minute60!.awayScoring;
+    expect(nrlScorePoints(lastScore)).toBe(20);
+    const after = finish(mid, { type: 'finishMinute60', year, round: 1, tactic: 'balanced', reserveId: reserve.id });
+    const match = after.season.results.find(result => result.awayId === 'bears')!;
+    expect(match.awayScoring.tries - lastScore.tries).toBe(1);
+    expect(match.playerScoring?.lines.find(line => line.playerId === reserve.id)).toMatchObject({ tries: 1 });
+    expect(match.goldenPoint).toEqual({ period: 1, score: 'fieldGoals' });
+    expect(readNrlCareerSave(raw(after))).toEqual(after);
+    const wrongReserve = { ...match, minute60Interchange: { ...match.minute60Interchange, reserveId: match.playerScoring!.kickerId } };
+    const bad = { ...after, season: { ...after.season, results: after.season.results.map(result => result === match ? wrongReserve : result) } };
+    expect(readNrlCareerSave(raw(bad))).toBeNull();
   });
 
   it('leaves standings and finance unmodified until a staged finals match settles', () => {
