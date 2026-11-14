@@ -2241,6 +2241,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check Rating changes in Squad. Existing ratings carry into the next season.</li>
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
+              <li>Before Round 1, choose an eligible position in the Board recruitment brief. Sign an external player for that position next season to earn a club cash bonus.</li>
               <li>In Ladder, open Scout a club to shortlist eligible rivals and take them straight to Recruitment.</li>
               <li>Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.</li>
               <li>Before arranging an offseason move, keep another player signed at the same position for next season.</li>

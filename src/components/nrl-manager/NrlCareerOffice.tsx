@@ -509,11 +509,25 @@ function BoardRecruitment({ career, onAction, disabled, onFilter }: {
   career: NrlCareerState; onAction: Dispatch; disabled: boolean; onFilter: (role: NrlRole) => void;
 }) {
   const { year, clubId } = career.season;
-  const { role, targets, objective, closed, reason, bonus } = useMemo(() => nrlBoardRecruitmentQuote(career), [career]);
+  const [selectedRole, setSelectedRole] = useState<NrlRole>();
+  const quote = useMemo(() => nrlBoardRecruitmentQuote(career), [career]);
+  const { options, objective, closed, reason, bonus } = quote;
+  const option = options.find(candidate => candidate.role === selectedRole) ?? options[0];
+  const role = option?.role ?? quote.role;
+  const targets = option?.targets ?? quote.targets;
   if (!objective && career.season.round !== 1) return null;
   return (
     <section className="mt-3 space-y-2 rounded-lg border border-border bg-background p-3 text-sm" aria-labelledby="nrl-board-recruitment">
       <h3 id="nrl-board-recruitment" className="font-bold">Board recruitment brief</h3>
+      {options.length > 1 && <label className="block text-sm font-semibold">
+        Recruitment objective position
+        <select className={`${control} mt-1 sm:max-w-xs`} disabled={disabled} value={role}
+          onChange={event => setSelectedRole(event.target.value as NrlRole)}>
+          {options.map(candidate => <option key={candidate.role} value={candidate.role}>
+            {candidate.role} · {candidate.count} signed for {year + 1}
+          </option>)}
+        </select>
+      </label>}
       {role ? <p>Sign an external {role} for {year + 1} by the end of the regular season. Reward {money(bonus)} in club cash.</p>
         : <p className="text-muted-foreground">{reason}</p>}
       {objective && (
@@ -528,6 +542,12 @@ function BoardRecruitment({ career, onAction, disabled, onFilter }: {
             {targets.length ? `${targets.length} ${targets.length === 1 ? 'player fits' : 'players fit'} your cap and squad today.`
               : 'No affordable external players at this position right now.'}
           </p>
+          {targets.length > 0 && <details>
+            <summary className="flex min-h-11 cursor-pointer items-center font-semibold">See eligible recruits</summary>
+            <ul className="max-h-48 space-y-1 overflow-y-auto pl-2 text-muted-foreground" aria-label="Eligible recruits">
+              {targets.map(({ player, askingSalary }) => <li key={player.id}>{player.name} · {money(askingSalary)} per year</li>)}
+            </ul>
+          </details>}
           <div className="flex flex-wrap gap-2">
             <Button type="button" size="lg" variant="outline" className="max-w-full px-3" onClick={() => onFilter(role)}>View {role} market</Button>
             {!objective && !reason && <Button type="button" size="lg" className="max-w-full px-3" disabled={disabled}
@@ -748,7 +768,7 @@ function Recruitment({ career, onAction, disabled, openShortlist }: {
       <h2 className="font-display text-xl font-bold">Recruitment</h2>
       <p className="mt-1 text-sm text-muted-foreground">Agree future deals with eligible players. Check next season’s cap before filling the squad.</p>
       {nextYear <= NRL_LAST_YEAR && <RecruitmentPlan career={career} targets={targets} renewals={renewals} />}
-      <BoardRecruitment career={career} onAction={onAction} disabled={disabled} onFilter={position => {
+      <BoardRecruitment key={`${career.season.year}:${career.season.clubId}`} career={career} onAction={onAction} disabled={disabled} onFilter={position => {
         selectRole(position);
         setShortlistedOnly(false);
       }} />
