@@ -125,17 +125,16 @@
  *     115,876 characters); the park cuts 1 / 2 / 2 of them, so the lean cut
  *     is exercised on every stream, and every other field comes back equal.
  *
- * The digest renames the ids the engine builds from a module counter or the
- * clock (see digest below). Those differ between any two runs of one career,
- * slots or no slots, and the first draft of this file read them as a leak.
+ * Academy IDs can seed match outcomes, so both arms generate the
+ * same IDs before play. The test bundle pins ID sources to each career
+ * and season. The digest still renames display IDs from other counters.
  *
- * Nothing here reads dist or the network; the clock reaches only the generated
- * ids, which the digest renames.
  * Run: node scripts/simClubManagerSlots.mjs
  */
 import './lib/seedRandom.mjs';
 import { expandPackedWorldRosterState } from './qa/managerWorldRosterDigest.cjs';
-import { execSync, spawnSync } from 'node:child_process';
+import { spawnSync } from 'node:child_process';
+import { build } from 'esbuild';
 import { createHash } from 'node:crypto';
 import os from 'node:os';
 import fs from 'node:fs';
@@ -223,21 +222,8 @@ const swap = (src, from, to, where) => {
   return src.replace(from, () => to);
 };
 
-function findUp(rel) {
-  let dir = ROOT;
-  for (let i = 0; i < 6; i++) {
-    const p = path.join(dir, rel);
-    if (fs.existsSync(p) || fs.existsSync(p + '.cmd')) return p;
-    const up = path.dirname(dir);
-    if (up === dir) break;
-    dir = up;
-  }
-  return abort(`could not find ${rel} above ${ROOT}`);
-}
-const ESBUILD = findUp(path.join('node_modules', '.bin', 'esbuild'));
-
 /* ---------- the slots module, with a control's rewrite where asked ---------- */
-let slotsPath = `${ROOT_URL}/src/lib/clubManagerSlots.ts`;
+let slotControl;
 const SLOT_SWAPS = {
   nopark: [
     '    if (park !== null) localStorage.setItem(parkedKey(from), park);\n    else localStorage.removeItem(parkedKey(from));\n',
@@ -271,14 +257,13 @@ const SLOT_SWAPS = {
   ],
 };
 if (CONTROL) {
-  let src = readLF(`${ROOT}/src/lib/clubManagerSlots.ts`);
-  const original = src;
+  const slots = 'clubManagerSlots.ts';
+  const keys = 'clubManagerSaveKeys.ts';
   const [from, to, where] = SLOT_SWAPS[CONTROL];
-  src = swap(src, from, to, `clubManagerSlots.ts (${where})`);
-  src = swap(src, "from './clubManager';", `from '${ROOT_URL}/src/lib/clubManager.ts';`, 'the engine import');
-  src = swap(src, "from './clubManagerEras';", `from '${ROOT_URL}/src/lib/clubManagerEras.ts';`, 'the eras import');
-  slotsPath = `${TMP}/clubManagerSlots.control.ts`;
-  fs.writeFileSync(slotsPath, src);
+  const file = CONTROL === 'oldversion' && readLF(`${ROOT}/src/lib/${keys}`).includes(from) ? keys : slots;
+  const original = readLF(`${ROOT}/src/lib/${file}`);
+  const src = swap(original, from, to, `${file} (${where})`);
+  slotControl = { file, src };
   if (CONTROL === 'decisioncontent') {
     mutation = { file: 'src/lib/clubManagerSlots.ts', anchor: from, replacement: to,
       anchorCount: original.split(from).length - 1, original: sha(original), changed: sha(src) };
@@ -311,12 +296,34 @@ globalThis.localStorage = {
 };
 export const cm = await import('${ROOT_URL}/src/lib/clubManager.ts');
 export const eras = await import('${ROOT_URL}/src/lib/clubManagerEras.ts');
-export const slots = await import('${slotsPath}');
+export const slots = await import('${ROOT_URL}/src/lib/clubManagerSlots.ts');
 `);
-execSync(
-  `"${ESBUILD}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`,
-  { stdio: 'inherit' },
-);
+let generatedTime = 1791547200000;
+let youthSequence = 0;
+globalThis.__cmSlotsGeneratedTime = () => generatedTime;
+globalThis.__cmSlotsYouthSequence = () => ++youthSequence;
+
+await build({
+  entryPoints: [ENTRY], outfile: BUNDLE, bundle: true, format: 'esm', platform: 'node', logLevel: 'error',
+  alias: { '@': path.join(ROOT, 'src') },
+  plugins: [{
+    name: 'manager-slots-test-inputs',
+    setup(plugin) {
+      plugin.onLoad({ filter: /clubManager(?:Slots|SaveKeys)?\.ts$/ }, ({ path: file }) => {
+        const name = path.basename(file);
+        if (name === slotControl?.file) return { contents: slotControl.src, loader: 'ts', resolveDir: path.dirname(file) };
+        if (name !== 'clubManager.ts') return;
+        let contents = readLF(file);
+        contents = swap(contents, '  youthSeq += 1;', '  youthSeq = globalThis.__cmSlotsYouthSequence();', 'youth ID sequence');
+        for (const prefix of ['youth', 'sc', 'pr']) {
+          const clock = prefix + '-${Date.now().toString(36)}';
+          contents = swap(contents, clock, prefix + '-${globalThis.__cmSlotsGeneratedTime().toString(36)}', prefix + ' ID clock');
+        }
+        return { contents, loader: 'ts', resolveDir: path.dirname(file) };
+      });
+    },
+  }],
+});
 const { cm, eras, slots } = await import(pathToFileURL(BUNDLE).href);
 const { startCareer, playNextEntry, finishSeason, startNextSeason, saveCareer, loadCareer, savedCareerEraId, clearCareer } = cm;
 const { ensureEraRosters } = eras;
@@ -340,8 +347,12 @@ const CAREERS = [
   { label: 'Barcelona (2010-11 era)', club: 'Barcelona', era: 'era2010' },
 ];
 
-/** The stream from scripts/lib/seedRandom.mjs, rooted per career and season,
-    so a career's season draws the same numbers whatever ran before it. */
+/* Distinct ID ranges for start, load repairs, and season play. */
+function pinGeneratedIds(career, season, phase) {
+  generatedTime = 1791547200000 + (career * 1000 + season * 4 + phase) * 1000;
+  youthSequence = 0;
+}
+/** Same random stream for a career and season in either arm. */
 function reseed(career, season) {
   let a = (BASE_SEED + career * 7919 + season * 104729) >>> 0;
   Math.random = () => {
@@ -369,14 +380,10 @@ function playOne(s) {
   return { fin: r.state, sum: r.summary, next: startNextSeason(r.state) };
 }
 
-/** The whole career but h2h, the one ledger the lean park cuts. The ids the
-    engine builds from a module counter or the clock (inbox msg-, press pq-,
-    youth-, scout sc-, prospect pr-) are renamed in order of first appearance:
-    the counters are shared by every career a page has played since it loaded
-    and the clock never repeats, so the same career run twice carries
-    different labels on the same messages and players. Renaming keeps every
-    message, player and reference; it drops only the label's number. */
-const GENERATED_ID = /"(desk-\d+-\d+-appeal-)?((?:youth|sc|pr|pq|msg)-[a-z0-9-]+)"/g;
+/** The whole career except h2h, the ledger the lean park cuts. Inbox and
+    press use display IDs from module counters. Generated player and scout
+    identities are compared as written because the test bundle pins them. */
+const GENERATED_ID = /"(desk-\d+-\d+-appeal-)?((?:pq|msg)-[a-z0-9-]+)"/g;
 const digest = s => {
   const { h2h, ...rest } = expandPackedWorldRosterState(s);
   const seen = new Map();
@@ -415,12 +422,15 @@ async function aloneRun(i, seasons) {
   clearCareer();
   const C = CAREERS[i];
   await ensureEraRosters(C.era);
+  pinGeneratedIds(i, 0, 0);
   reseed(i, 0);
   saveCareer(startCareer(C.club, C.era, undefined, C.manager));
   const out = [];
   for (let season = 1; season <= seasons; season++) {
+    pinGeneratedIds(i, season, 1);
     const s = await openActive();
     if (!s) { fail(`${C.label} alone: the save would not open before season ${season}`); break; }
+    pinGeneratedIds(i, season, 2);
     reseed(i, season);
     const { fin, sum, next } = playOne(s);
     out.push({ d: digest(fin), line: line(sum) });
@@ -451,6 +461,7 @@ for (let i = 0; i < 3; i++) {
   const C = CAREERS[i];
   if (i + 1 !== activeSlot() && !switchSlot(i + 1, mem)) { fail(`could not open empty slot ${i + 1} for ${C.label}`); lapOk = false; break; }
   await ensureEraRosters(C.era);
+  pinGeneratedIds(i, 0, 0);
   reseed(i, 0);
   mem = startCareer(C.club, C.era, undefined, C.manager);
   if (i === 0) {
@@ -473,6 +484,7 @@ async function switchAndPlay(target, record, keepFinished = false) {
   const i = target - 1;
   if (!switchSlot(target, mem)) { fail(`switch to slot ${target} was refused on a roomy store`); return false; }
   mem = null;
+  pinGeneratedIds(i, played[i] + 1, 1);
   const s = await openActive();
   if (!s || s.clubName !== CAREERS[i].club) {
     fail(`slot ${target} opened ${s ? s.clubName : 'nothing'}, not ${CAREERS[i].label}`);
@@ -480,6 +492,7 @@ async function switchAndPlay(target, record, keepFinished = false) {
   }
   if (s.season !== played[i] + 1) fail(`${CAREERS[i].label} opened in season ${s.season}, expected ${played[i] + 1}`);
   played[i] += 1;
+  pinGeneratedIds(i, played[i], 2);
   reseed(i, played[i]);
   const { fin, sum, next } = playOne(s);
   if (record) switched[i].push({ d: digest(fin), line: line(sum) });
@@ -608,11 +621,17 @@ clearCareer();
    matches of Everton with real meetings in its h2h, written by the engine's own
    saveCareer (the branch's engine differs from main's by one export keyword,
    so these are the bytes main writes for the same play). */
+pinGeneratedIds(0, 99, 0);
 reseed(0, 99);
 let lived = startCareer('Everton');
 // This is the measured generated old-save fixture, before the optional real-first-season binding.
 delete lived.realLeagueFixtures;
-for (let k = 0; k < 4; k++) { reseed(0, 99 + k); lived = playOne(lived).next; }
+for (let k = 0; k < 4; k++) {
+  pinGeneratedIds(0, 99 + k, 2);
+  reseed(0, 99 + k);
+  lived = playOne(lived).next;
+}
+pinGeneratedIds(0, 103, 2);
 reseed(0, 103);
 for (let i = 0; i < 15; i++) lived = playNextEntry(lived, { skipHalftime: true }).state;
 saveCareer(lived);
@@ -630,6 +649,7 @@ const oldOpened = loadCareer();
 if (!oldOpened || oldOpened.clubName !== 'Everton' || oldOpened.season !== 5) fail('loadCareer does not open the old save', 'slot1');
 else {
   const ok1 = switchSlot(2, oldOpened);
+  pinGeneratedIds(1, 99, 0);
   saveCareer(startCareer('Lincoln City'));
   const ok2 = switchSlot(1);
   const back = loadCareer();
