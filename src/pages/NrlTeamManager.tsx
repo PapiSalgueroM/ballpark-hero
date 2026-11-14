@@ -26,7 +26,7 @@ import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlBenchRotation, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
   nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlNextRound, nrlOnFieldCaptain,
-  nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
+  nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
@@ -1672,6 +1672,7 @@ function Squad({ career, onAction, disabled }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
 }) {
   const shortName = useNrlClubName();
+  const swapSummary = useRef<HTMLElement>(null);
   const { season } = career;
   const bench = nrlBench(season);
   const starters = new Set(Object.values(season.lineup));
@@ -1685,6 +1686,7 @@ function Squad({ career, onAction, disabled }: {
   const unavailable = season.squad.filter(player => availability.has(player.id));
   const reserves = season.squad.filter(player => !starters.has(player.id) && !availability.has(player.id));
   const proposal = disabled ? null : nrlFitLineup(season);
+  const starterSwaps = disabled ? [] : nrlStarterSwaps(season);
   const nameOf = (id: string) => season.squad.find(player => player.id === id)?.name;
   const captainOutsideStartingSide = season.captainId && !starters.has(season.captainId);
   const viceOutsideStartingSide = season.viceCaptainId && !starters.has(season.viceCaptainId);
@@ -1817,6 +1819,25 @@ function Squad({ career, onAction, disabled }: {
           </div>
         ))}
       </div>
+      {starterSwaps.length > 0 && (
+        <details className="group mt-4 rounded-lg border border-border px-3">
+          <summary ref={swapSummary} className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            Swap starters <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+          </summary>
+          <div className="mb-3 grid gap-2 sm:grid-cols-2">
+            {starterSwaps.map(swap => (
+              <Button key={swap.fromRole + ':' + swap.toRole} type="button" variant="outline" className="h-auto min-h-11 justify-start whitespace-normal py-2 text-left"
+                onClick={event => {
+                  if (!onAction(swap)) return;
+                  event.currentTarget.closest('details')?.removeAttribute('open');
+                  swapSummary.current?.focus();
+                }}>
+                Swap {nameOf(swap.fromPlayerId)} ({swap.fromRole}) and {nameOf(swap.toPlayerId)} ({swap.toRole})
+              </Button>
+            ))}
+          </div>
+        </details>
+      )}
       {season.kickerId ? (
         <div className="mt-5 border-t border-border pt-4">
           <label htmlFor="nrl-goal-kicker" className="block text-sm font-semibold">Goal kicker</label>
@@ -2308,6 +2329,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
             <ul className="list-disc space-y-2 pl-5">
               <li>Choose 2026 or 2027, then pick a club. You can use opening matchday names in 2026 or confirmed Perth Bears signings when starting with Perth in 2027. Ratings, contracts, fixtures and results are simulated.</li>
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
+              <li>In Squad, use Swap starters when two available starters can cover each other’s position. The same players keep the kicking and captaincy duties.</li>
               <li>A match knock can put a player out for up to four rounds. Availability in Squad shows the first regular-season match an injured player can return for. The recovery countdown includes byes, and an available player fills the vacant spot.</li>
               <li>In Squad, you can pay once per season for physio to shorten an injury by one round. The player still sits out the current round.</li>
               <li>During a regular-season bye, intensive position training can finish an active course one round sooner. The player ends the bye four fitness points below their usual recovery.</li>

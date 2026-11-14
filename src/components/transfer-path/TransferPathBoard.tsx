@@ -136,6 +136,7 @@ export function TransferPathBoard() {
                 <p>📅 One daily puzzle for everyone, plus unlimited practice puzzles.</p>
                 <p>🧭 <span className="font-semibold text-foreground">Special rules</span>: Active players only means every name in the chain, both ends included, is in our verified {ACTIVE_YEAR} active-player records. Europe only means every club a link goes through is a European club. Each rule has its own optimal, worked out on the players it leaves in play.</p>
                 <p>🔒 A rule reaches the daily only when today's pair has a route under it, and the daily score still counts against the everyday optimal. Unlimited takes any rule and scores against that rule's own optimal.</p>
+                <p>Your first accepted name or surrender locks the rule for today, even after a reload.</p>
               </div>
             </HowToPlayPopover>
           </div>
@@ -166,7 +167,7 @@ export function TransferPathBoard() {
           {/* The blurb used to live only in the buttons' title attribute, which a phone never shows. */}
           <p className="text-[10px] text-muted-foreground">{RULE_BLURB[rule]}</p>
           {ruleLocked && (
-            <p className="text-[10px] text-muted-foreground">Special rules lock once today's chain has started. Unlimited takes any rule.</p>
+            <p className="text-[10px] text-muted-foreground">{RULE_LABEL[activeRule]} is locked for this Daily. Unlimited takes any rule.</p>
           )}
           {dailyRuleBlocked && (
             <div className="rounded-xl border border-dashed border-border bg-card px-3 py-2 text-xs text-muted-foreground space-y-1.5">

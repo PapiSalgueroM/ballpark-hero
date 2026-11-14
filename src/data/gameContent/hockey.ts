@@ -1108,6 +1108,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Sim the season and watch your pace",
         items: [
           "Sim the season in 20 rounds of roughly four games each, with a live read on whether you are on pace.",
+          "Your latest round keeps its win, loss and overtime loss record and headlines after you reload, including the round before the playoffs.",
           "OVR can rise or fall a point at a time after regular-season rounds. For example, a young winger can gain a point toward their potential while a veteran skater can lose one. Check the round news. Players keep their closing OVR going into next season.",
         ],
       },

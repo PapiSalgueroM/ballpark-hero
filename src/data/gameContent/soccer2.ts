@@ -2213,6 +2213,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
             heading: "When the harder rule reaches the daily puzzle",
             items: [
               "A special rule reaches the daily only when today's pair has a route under it; otherwise the daily plays the everyday rule and the rule waits for you in unlimited. The daily score still counts steps against the everyday optimal, so a rule is a harder road to the same finish line. Unlimited scores against the rule's own optimal.",
+              "Transfer Path remembers your daily rule after the first accepted name or surrender, even if you reload. For example, Europe only still needs a European teammate link when you come back.",
             ],
           },
         ],

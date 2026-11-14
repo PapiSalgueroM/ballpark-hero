@@ -25,6 +25,7 @@ import {
   playersUnderRule,
   puzzleUnderRule,
   type TransferPathRule,
+  type TransferPathSpecialRule,
 } from '@/lib/transferPathModes';
 
 export type TransferPathMode = 'daily' | 'unlimited';
@@ -35,10 +36,11 @@ export type { TransferPathRule };
  *  the two never shared a club in the same season. */
 export type TransferPathRefusal = 'duplicate' | 'unverified-active' | 'outside-europe';
 
+type TransferStep = { t: 'step'; player: string; club: string; rule?: TransferPathSpecialRule };
 type TransferAction =
-  | { t: 'step'; player: string; club: string }
+  | TransferStep
   | { t: 'won' }
-  | { t: 'give' };
+  | { t: 'give'; rule?: TransferPathSpecialRule };
 
 export interface RevealStep {
   player: string;
@@ -62,8 +64,7 @@ export interface TransferPathState {
   rule: TransferPathRule;
   activeRule: TransferPathRule;
   setRule: (rule: TransferPathRule) => void;
-  /** The daily's rule is fixed once its chain has started, so a reload (which
-   *  forgets the rule) can never show a chain the rule on screen would refuse. */
+  /** The first daily action locks the rule for the day, including on reload. */
   ruleLocked: boolean;
   /** True when the picked rule cannot reach the daily; the board offers unlimited under it. */
   dailyRuleBlocked: boolean;
@@ -116,10 +117,8 @@ export function useTransferPath(): TransferPathState {
      is the pool whose hints and minimums match the live career graph the game
      validates against. Same date seed formula as every other daily on the site
      (see dateUtils), and the same shape useSoccerGrid uses. */
-  const todaysPuzzle = useMemo(() => {
-    const seed = dateSeed(getTodayET());
-    return puzzlePool.length > 0 ? puzzlePool[seed % puzzlePool.length] : null;
-  }, [puzzlePool]);
+  const [dailySeed] = useState(() => dateSeed(getTodayET()));
+  const todaysPuzzle = useMemo(() => puzzlePool[dailySeed % puzzlePool.length] ?? null, [dailySeed, puzzlePool]);
 
   // ── Mode state ─────────────────────────────────────────────────────────────
   const [mode, setMode] = useState<TransferPathMode>('daily');
@@ -166,7 +165,7 @@ export function useTransferPath(): TransferPathState {
 
   // Derive chain / connections / status / score from stored actions
   const dailySteps = useMemo(
-    () => dailyActions.filter((a): a is { t: 'step'; player: string; club: string } => a.t === 'step'),
+    () => dailyActions.filter((a): a is TransferStep => a.t === 'step'),
     [dailyActions],
   );
   const dailyChain = useMemo(
@@ -189,12 +188,17 @@ export function useTransferPath(): TransferPathState {
 
   // ── Rule state (Round 460) ─────────────────────────────────────────────────
   // A special rule is a filter on the graph, never a change to the link rule.
-  // The daily record shape is untouched: the rule is not stored, so the
-  // daily's rule locks once its chain has started, and the daily score keeps
+  // The first action records a special rule. An older log uses Classic, and the daily score keeps
   // counting steps against the everyday minimum (the shared leaderboard
   // compares everyone on the same puzzle). Unlimited scores against the
   // rule's own minimum.
-  const [rule, setRuleState] = useState<TransferPathRule>('classic');
+  const [selectedRule, setRuleState] = useState<TransferPathRule>('classic');
+  const ruleLocked = mode === 'daily' && dailyActions.length > 0;
+  const firstDailyAction = dailyActions[0];
+  const savedRule = firstDailyAction && firstDailyAction.t !== 'won' ? firstDailyAction.rule : undefined;
+  const restoredRule = savedRule && dailyPuzzle && puzzleUnderRule(dailyPuzzle, savedRule) ? savedRule : undefined;
+  const selectionBlocked = mode === 'daily' && selectedRule !== 'classic' && !!dailyPuzzle && !puzzleUnderRule(dailyPuzzle, selectedRule);
+  const rule = ruleLocked ? restoredRule ?? (selectionBlocked ? selectedRule : 'classic') : selectedRule;
 
   const ruleAvailability = useMemo(() => {
     const counts = { classic: 0, active: 0, europe: 0 } as Record<TransferPathRule, number>;
@@ -208,7 +212,7 @@ export function useTransferPath(): TransferPathState {
   );
   const dailyRuleBlocked = mode === 'daily' && rule !== 'classic' && dailyRuleHint === null;
   const activeRule: TransferPathRule = dailyRuleBlocked ? 'classic' : rule;
-  const ruleLocked = mode === 'daily' && dailyActions.length > 0;
+  const openingSpecialRule = !ruleLocked && activeRule !== 'classic' ? activeRule : undefined;
 
   // ── Career graph, memoized over the pool the rule leaves in play ──────────
   // TEMPORAL teammates only (owner 2026-07-10: "Ronaldo never played with
@@ -401,9 +405,9 @@ export function useTransferPath(): TransferPathState {
   // ── giveUp + reveal ────────────────────────────────────────────────────────
   const giveUp = useCallback(() => {
     if (status !== 'building') return;
-    if (mode === 'daily') addDailyAction({ t: 'give' });
+    if (mode === 'daily') addDailyAction(openingSpecialRule ? { t: 'give', rule: openingSpecialRule } : { t: 'give' });
     else setUnlimitedStatus('gaveup');
-  }, [status, mode, addDailyAction]);
+  }, [status, mode, addDailyAction, openingSpecialRule]);
 
   const revealPath = useMemo(
     () => (status === 'gaveup' ? findPath(puzzle.playerA, puzzle.playerB) : null),
@@ -431,7 +435,7 @@ export function useTransferPath(): TransferPathState {
     }
 
     if (mode === 'daily') {
-      addDailyAction({ t: 'step', player: name, club: sharedClub });
+      addDailyAction({ t: 'step', player: name, club: sharedClub, ...(openingSpecialRule ? { rule: openingSpecialRule } : {}) });
       if (name === puzzle.playerB) {
         addDailyAction({ t: 'won' });
       } else {
@@ -465,7 +469,7 @@ export function useTransferPath(): TransferPathState {
     }
 
     return { ok: true, club: sharedClub };
-  }, [mode, status, chain, connections, puzzle, optimal, activeRule, playersShareClub, everydayClubSeasons, activeNames, addDailyAction]);
+  }, [mode, status, chain, connections, puzzle, optimal, activeRule, playersShareClub, everydayClubSeasons, activeNames, addDailyAction, openingSpecialRule]);
 
   // ── unlimited resets ───────────────────────────────────────────────────────
   const startUnlimited = useCallback((index: number, pool: TransferPathPuzzle[]) => {
@@ -480,9 +484,10 @@ export function useTransferPath(): TransferPathState {
 
   // ── switchToUnlimited ──────────────────────────────────────────────────────
   const switchToUnlimited = useCallback(() => {
+    setRuleState(rule);
     setMode('unlimited');
     startUnlimited(0, rulePool);
-  }, [rulePool, startUnlimited]);
+  }, [rule, rulePool, startUnlimited]);
 
   // ── nextPuzzle ─────────────────────────────────────────────────────────────
   const nextPuzzle = useCallback(() => {
