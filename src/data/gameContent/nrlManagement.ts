@@ -43,6 +43,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Open Matchday team sheet in a report with a player record to see the starting 13, the reserves who played and how many points each player scored.',
       'In Ladder, open Form and venue records to compare each club’s last five completed league matches and its home and away win, draw and loss records.',
       'In the last four regular rounds, open Finals race in Ladder to check your remaining opponents, your possible ladder points and whether a top-eight or top-four finish is secured, still open or out of reach.',
+      'In Ladder, choose a past season to see the final standings saved in your career.',
       'Open Fast-forward rounds in Match centre to simulate up to four regular rounds with your current tactic. The run can stop for a new injury, a club decision or the start of finals.',
       'Enable Judiciary challenge when you start a generated-squad career. If a fictional player is charged after a club match, take a one-match early plea or contest the charge at a simulated hearing. Byes do not count toward a ban.',
       'Finish in the top eight to reach the finals. Follow the bracket and try to win the Grand Final.',

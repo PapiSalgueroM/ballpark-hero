@@ -34,7 +34,7 @@ import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
   nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport, nrlPositionTraining,
   nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveCoachQuote, nrlReserveGradeCandidates, nrlRivalSquad,
-  nrlSelectionPromise, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
+  nrlPastLadders, nrlSelectionPromise, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
   NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, reduceNrlCareer, runNrlFastForward,
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
 } from '@/lib/nrlCareer';
@@ -1960,20 +1960,47 @@ function Ladder({ career, onAction, onOpenShortlist, onFollowClub, disabled }: {
   const [showForm, setShowForm] = useState(false);
   const [scoutOpen, setScoutOpen] = useState(false);
   const [scoutClubId, setScoutClubId] = useState('');
-  const rows = nrlLadder(season);
-  const race = nrlFinalsRace(season, rows);
-  const form = showForm ? nrlLeagueForm(season) : null;
+  const [ladderYear, setLadderYear] = useState(season.year);
+  const pastLadders = nrlPastLadders(career);
+  const past = pastLadders.find(row => row.year === ladderYear);
+  const liveRows = past ? [] : nrlLadder(season);
+  const rows = past && 'rows' in past ? past.rows : liveRows;
+  const race = past ? null : nrlFinalsRace(season, liveRows);
+  const form = !past && showForm ? nrlLeagueForm(season) : null;
   const clubs = nrlSeasonPlan(season.year).clubs;
   const rivals = clubs.filter(club => club.id !== season.clubId);
-  const rival = scoutOpen ? rivals.find(club => club.id === scoutClubId) : undefined;
+  const rival = !past && scoutOpen ? rivals.find(club => club.id === scoutClubId) : undefined;
   const rivalName = rival && fullName(season.year, rival.id);
   const rank = rows.findIndex(row => row.clubId === rival?.id && row.played > 0) + 1;
   const rivalSquad = rival ? nrlRivalSquad(career, rival.id) : [];
   const shortlist = career.shortlist ?? [];
+  const yearPicker = pastLadders.length > 0 && (
+    <div className="mt-2">
+      <label htmlFor="nrl-ladder-year" className="mr-3 text-sm font-semibold">Ladder season</label>
+      <select id="nrl-ladder-year" value={past?.year ?? season.year} onChange={event => setLadderYear(Number(event.target.value))}
+        className="min-h-11 max-w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <option value={season.year}>{season.year} current season</option>
+        {pastLadders.map(({ year }) => <option key={year} value={year}>{year}</option>)}
+      </select>
+    </div>
+  );
   return (
     <section className="rounded-xl border border-border bg-card p-3 sm:p-4" aria-labelledby="nrl-ladder">
-      <h2 id="nrl-ladder" className="font-display text-lg font-bold">{season.year} ladder</h2>
-      {race && (
+      <h2 id="nrl-ladder" className="font-display text-lg font-bold">{past?.year ?? season.year} ladder</h2>
+      {yearPicker}
+      {past && 'ranked' in past ? (
+        <>
+          <p className="mt-2 text-sm text-muted-foreground">This save only recorded these finishing places.</p>
+          <ol aria-label={`${past.year} saved ladder places`} className="mt-2 divide-y divide-border">
+            {past.ranked.map(({ clubId, rank }) => <li key={clubId} className="flex gap-3 py-2 text-sm">
+              <span className="w-7 shrink-0 tabular-nums">{rank}</span>
+              <span>{fullName(past.year, clubId)}{clubId === past.managedClubId && ' · Managed club'}</span>
+            </li>)}
+          </ol>
+        </>
+      ) : (
+      <>
+      {!past && race && (
         <details className="mt-2 rounded-lg border border-border bg-background px-3" data-nrl-finals-race>
           <summary className="flex min-h-11 cursor-pointer items-center rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
             Finals race
@@ -2010,20 +2037,21 @@ function Ladder({ career, onAction, onOpenShortlist, onFollowClub, disabled }: {
           </div>
         </details>
       )}
-      <button type="button" aria-pressed={showForm} onClick={() => setShowForm(value => !value)}
+      {!past && <button type="button" aria-pressed={showForm} onClick={() => setShowForm(value => !value)}
         className="mt-2 min-h-11 rounded-lg border border-border px-3 text-sm font-semibold hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-pressed:bg-primary/10">
         Form and venue records
-      </button>
+      </button>}
       <p id="nrl-ladder-guide" className="mt-2 text-sm text-muted-foreground">
-        {showForm ? 'Regular season only. Last five matches, oldest first. W is a win, D a draw, L a loss.'
+        {!past && showForm ? 'Regular season only. Last five matches, oldest first. W is a win, D a draw, L a loss.'
           : 'The top eight make the finals. Diff is points scored minus points conceded.'}
       </p>
-      <table aria-describedby="nrl-ladder-guide" className="mt-3 w-full table-fixed text-left text-xs sm:text-sm">
+      <table aria-label={past ? `${past.year} regular-season ladder` : undefined} aria-describedby="nrl-ladder-guide"
+        className="mt-3 w-full table-fixed text-left text-xs sm:text-sm">
         <thead className="text-muted-foreground">
           <tr>
             <th scope="col" className="w-7 py-2"><span className="sr-only">Rank</span>#</th>
             <th scope="col">Club</th>
-            {showForm ? <>
+            {!past && showForm ? <>
               <th scope="col" className="w-24 text-right">Last 5</th>
               <th scope="col" className="w-14 text-right sm:w-20">Home</th>
               <th scope="col" className="w-14 text-right sm:w-20">Away</th>
@@ -2039,12 +2067,16 @@ function Ladder({ career, onAction, onOpenShortlist, onFollowClub, disabled }: {
         </thead>
         <tbody>
           {rows.map((row, index) => {
-            const record = form?.get(row.clubId);
+            const record = past ? null : form?.get(row.clubId);
+            const managedClubId = past ? past.managedClubId : season.clubId;
             return (
               <tr key={row.clubId} data-nrl-ladder={row.clubId}
-                className={`border-t border-border tabular-nums ${row.clubId === season.clubId ? 'bg-primary/10 font-bold' : ''} ${index === 8 ? 'border-t-2 border-t-primary/60' : ''}`}>
+                className={`border-t border-border tabular-nums ${row.clubId === managedClubId ? 'bg-primary/10 font-bold' : ''} ${index === 8 ? 'border-t-2 border-t-primary/60' : ''}`}>
                 <td className="py-2">{index + 1}</td>
-                <th scope="row" className="break-words pr-1 font-medium">{shortName(season.year, row.clubId)}</th>
+                <th scope="row" className="break-words pr-1 font-medium">
+                  {shortName(past?.year ?? season.year, row.clubId)}
+                  {past && <span className="block text-xs text-muted-foreground sm:hidden">{row.wins}W {row.draws}D {row.losses}L</span>}
+                </th>
                 {record ? <>
                   <td className="text-right">{record.recent.join(' ') || 'None'}</td>
                   {[record.home, record.away].map(({ W, D, L }, venue) => (
@@ -2066,7 +2098,7 @@ function Ladder({ career, onAction, onOpenShortlist, onFollowClub, disabled }: {
           })}
         </tbody>
       </table>
-      <details className="mt-3 rounded-lg border border-border bg-background px-3"
+      {!past && <details className="mt-3 rounded-lg border border-border bg-background px-3"
         onToggle={event => setScoutOpen(event.currentTarget.open)}>
         <summary className="flex min-h-11 cursor-pointer items-center rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           Scout a club
@@ -2126,7 +2158,9 @@ function Ladder({ career, onAction, onOpenShortlist, onFollowClub, disabled }: {
             </div>
           )}
         </div>
-      </details>
+      </details>}
+      </>
+      )}
     </section>
   );
 }
@@ -2364,6 +2398,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>
               <li>Open Matchday team sheet in a report with a player record to see the starting 13, the reserves who played and how many points each player scored.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
+              <li>In Ladder, choose a past season to see the final standings saved in your career.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
               <li>In Season fixtures, choose a rival under Follow a club to view their draw, scores and known finals fixtures.</li>
               <li>Open Finals race in Ladder during the last four regular rounds to check your remaining opponents, possible ladder points and whether your club has secured a place.</li>

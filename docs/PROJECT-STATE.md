@@ -1,4 +1,11 @@
+## 2026-11-14: Historical NRL ladders and Transfer Path backtracking
+
+- NRL Team Manager saves the full ladder after a completed season. Open Ladder and pick a past year to see the clubs' actual points, records and differentials. Older careers show the saved positions where the full ladder was never recorded.
+- Unlimited Transfer Path lets you remove the last link before finishing. Hints and the remaining route reuse the shortened chain. The final score uses the links that remain.
+
 ## 2026-11-14: NRL conversion drills, Daily Rarity saves and Club Manager slots
+
+[PR #957](https://github.com/PapiSalgueroM/ballpark-hero/pull/957) published exact main `0b8010d96c8332664d68f197340cb9829d24ec31`, deployment `ca0458dc-ca4e-4c3d-ad64-7a69acdcbe8b`. Eight live browser journeys, both raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted both game guides. The supplemental long-run Club Manager slot harness had inconsistent generated injury IDs in its paired runs and both release trees exceeded its 603,000-character save budget. The browser slot and failed-load recovery journeys passed with exact saved bytes.
 
 - NRL Team Manager can choose goal-kicking drills for one match. The plan adds eight percentage points to conversion chances and uses the existing training fitness and injury cost. The saved match report records when the manager used it.
 - Rarity Round and Crowd Says save the current Daily independently, including the last accepted result and its original points. Reload and switching modes restore the latest progress without repeating votes or completions.

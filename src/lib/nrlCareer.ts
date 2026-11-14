@@ -11,11 +11,11 @@ import {
   type NrlSeasonPlayerArchive, type NrlSeasonScoringTotal,
 } from '@/lib/nrlPlayerScoring';
 import {
-  archiveNrlFinals, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
+  archiveNrlFinals, archiveNrlLadder, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlArchivedLadder, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
   isNrlPhysioTreatment, nrlByeTrainingPreview, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
   nrlPlanAdjustments, nrlPlanMatchups, nrlReserveGradeEnd, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore,
-  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlLivePlanChoice, type NrlManagerState, type NrlMatchResult,
+  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlLeagueLadderArchive, type NrlLivePlanChoice, type NrlManagerState, type NrlMatchResult,
   type NrlPhysioTreatment, type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
 } from '@/lib/nrlManager';
 import {
@@ -129,7 +129,7 @@ export interface NrlCareerBook {
 export interface NrlCareerFinance extends NrlCareerBook { cash: number; profit: number }
 export type NrlDevelopmentFocus = 'balanced' | 'youth' | 'veterans';
 type ActiveDevelopmentFocus = Exclude<NrlDevelopmentFocus, 'balanced'>;
-interface NrlSeasonOutArchive { ladder: string[]; finals: NrlFinalsArchive }
+interface NrlSeasonOutArchive { ladder: string[]; finals: NrlFinalsArchive; leagueLadder?: NrlLeagueLadderArchive }
 export interface NrlCareerHistoryRow {
   year: number;
   clubId: string;
@@ -141,6 +141,7 @@ export interface NrlCareerHistoryRow {
   finance: NrlCareerFinance | null;
   scoring?: NrlSeasonScoringTotal[];
   finals?: NrlFinalsArchive;
+  leagueLadder?: NrlLeagueLadderArchive;
   playerSeasons?: NrlSeasonPlayerArchive;
   development?: { focus: ActiveDevelopmentFocus; affected: number };
   coachDevelopment?: string[];
@@ -1195,6 +1196,31 @@ export function nrlCareerRecord(history: readonly NrlCareerRecordYear[]) {
   };
 }
 
+type NrlPastLadder = { year: number; managedClubId?: string } & (
+  { rows: NonNullable<ReturnType<typeof nrlArchivedLadder>> } | { ranked: { clubId: string; rank: number }[] }
+);
+
+export function nrlPastLadders({ season, history }: NrlCareerState): NrlPastLadder[] {
+  const past: NrlPastLadder[] = [];
+  for (const receipt of history) {
+    const { year, clubId: managedClubId, rank, seasonOut } = receipt;
+    if (year >= season.year) break;
+    const rows = nrlArchivedLadder(receipt.leagueLadder, year);
+    if (rows) past.push({ year, managedClubId, rows });
+    else {
+      const ranked = (receipt.finals?.seeds ?? []).map((clubId, index) => ({ clubId, rank: index + 1 }));
+      if (!ranked.some(row => row.clubId === managedClubId)) ranked.push({ clubId: managedClubId, rank });
+      past.push({ year, managedClubId, ranked });
+    }
+    if (seasonOut) {
+      const rows = nrlArchivedLadder(seasonOut.leagueLadder, year + 1);
+      past.push(rows ? { year: year + 1, rows } : { year: year + 1,
+        ranked: seasonOut.ladder.map((clubId, index) => ({ clubId, rank: index + 1 })) });
+    }
+  }
+  return past.reverse();
+}
+
 function careerFrom(season: NrlManagerState, openingYear: NrlYear, legacySeason: boolean,
   openingRoster?: { kind: NonNullable<NrlCareerState['openingRoster']>; teams: Readonly<Record<string, readonly NrlOpeningRosterPlayer[]>> }): NrlCareerState {
   const { year, clubId, squad, seed } = season;
@@ -2128,7 +2154,8 @@ function deriveSeasonOut(state: NrlCareerState) {
     }
     return strengths;
   });
-  const archive = { ladder: nrlLadder(skipped).map(row => row.clubId), finals: archiveNrlFinals(skipped) };
+  const leagueLadder = archiveNrlLadder(skipped);
+  const archive = { ladder: leagueLadder.map(([clubId]) => clubId), finals: archiveNrlFinals(skipped), leagueLadder };
   return { opening, skipped, players, archive };
 }
 
@@ -2197,7 +2224,7 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
     ? { role: state.finance.coachHire.role, round: 1, paidRounds: 0, retained: true as const,
       ...(state.finance.coachCourseRound !== undefined && { qualified: true as const }) } : undefined;
   const history = state.history.map(row => row.year === season.year ? {
-    ...row, finals: archiveNrlFinals(season),
+    ...row, finals: archiveNrlFinals(season), leagueLadder: archiveNrlLadder(season),
     ...(state.finance.supporterAttendance && { attendanceForm: season.results.filter(match => !match.finalsRound
       && (match.homeId === season.clubId || match.awayId === season.clubId)).map(match => clubResult(match, season.clubId)).join('') }),
     ...(playerSeasons && { playerSeasons }),
@@ -2790,13 +2817,17 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
   }
   const seasonOut = value.seasonOut;
   if (seasonOut !== undefined) {
-    if (!record(seasonOut) || Object.keys(seasonOut).length !== 2 || typeof value.rejoinedClubId !== 'string'
+    if (!record(seasonOut) || Object.keys(seasonOut).length !== (seasonOut.leagueLadder === undefined ? 2 : 3) || typeof value.rejoinedClubId !== 'string'
       || year + 2 > NRL_LAST_YEAR || !Array.isArray(seasonOut.ladder)) return false;
     const awayClubs = nrlSeasonPlan(year + 1).clubs;
     const finals = nrlArchivedFinals(seasonOut.finals, year + 1);
     if (seasonOut.ladder.length !== awayClubs.length || new Set(seasonOut.ladder).size !== awayClubs.length
       || !seasonOut.ladder.every(id => awayClubs.some(club => club.id === id))
       || !finals?.seeds.every((id, index) => id === (seasonOut.ladder as string[])[index])) return false;
+    if (seasonOut.leagueLadder !== undefined) {
+      const rows = nrlArchivedLadder(seasonOut.leagueLadder, year + 1);
+      if (!rows?.every(({ clubId }, index) => clubId === (seasonOut.ladder as string[])[index])) return false;
+    }
   }
   if (value.rejoinedClubId !== undefined && (value.appointment !== undefined || value.finance === null || value.scoring === undefined
     || year === NRL_LAST_YEAR || (!seasonOut && (value.rejoinedClubId === value.clubId || value.rejoinedClubId === value.championId))
@@ -2841,6 +2872,12 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
     const finals = nrlArchivedFinals(value.finals, year);
     if (!finals || finals.championId !== value.championId
       || finals.seeds.findIndex(id => id === value.clubId) !== (value.rank <= NRL_FINALS_SPOTS ? value.rank - 1 : -1)) return false;
+    if (value.leagueLadder !== undefined) {
+      const rows = nrlArchivedLadder(value.leagueLadder, year);
+      const own = rows?.[value.rank - 1];
+      if (!own || own.clubId !== value.clubId || own.wins !== value.wins || own.draws !== value.draws || own.losses !== value.losses
+        || !finals.seeds.every((id, index) => id === rows[index].clubId)) return false;
+    }
     if (value.playerSeasons !== undefined) {
       const matches = finals.matches.filter(match => match.homeId === value.clubId || match.awayId === value.clubId);
       const points = matches.reduce((sum, match) => sum + (match.homeId === value.clubId ? match.homeScore : match.awayScore), 0);
@@ -2849,6 +2886,7 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
   } else if (value.playerSeasons !== undefined) {
     return false;
   }
+  if (value.leagueLadder !== undefined && value.finals === undefined) return false;
   if (value.finance === null) return value.coachDevelopment === undefined && value.attendanceForm === undefined;
   if (!record(value.finance) || !validBook(value.finance, lastRound(year))) return false;
   const finance = nrlCareerFinance({ finance: value.finance });

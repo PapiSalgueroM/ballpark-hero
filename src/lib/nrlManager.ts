@@ -158,6 +158,15 @@ export interface NrlLadderRow {
   pointsAgainst: number;
   differential: number;
 }
+export type NrlLeagueLadderArchive = [clubId: string, wins: number, draws: number, pointsFor: number, pointsAgainst: number][];
+type NrlLadderOrder = Pick<NrlLadderRow, 'points' | 'differential' | 'pointsFor' | 'pointsAgainst'>;
+
+function compareNrlLadder(a: NrlLadderOrder, b: NrlLadderOrder) {
+  // After points and differential the NRL uses the ratio of points for to points against.
+  // https://www.nrl.com/news/2014/09/03/finals-hopes-down-to-the-toss-of-a-coin/
+  const ratio = (row: NrlLadderOrder) => row.pointsAgainst ? row.pointsFor / row.pointsAgainst : row.pointsFor ? Infinity : 1;
+  return b.points - a.points || b.differential - a.differential || ratio(b) - ratio(a);
+}
 type NrlFormResult = 'W' | 'D' | 'L';
 interface NrlClubForm {
   recent: NrlFormResult[];
@@ -285,12 +294,47 @@ export function nrlLadder(state: Pick<NrlManagerState, 'year' | 'round' | 'resul
     row.points = 2 * (row.wins + row.byes) + row.draws;
     row.differential = row.pointsFor - row.pointsAgainst;
   }
-  // After points and differential the NRL uses the ratio of points for to points against.
-  // https://www.nrl.com/news/2014/09/03/finals-hopes-down-to-the-toss-of-a-coin/
-  const ratio = (row: NrlLadderRow) => row.pointsAgainst ? row.pointsFor / row.pointsAgainst : row.pointsFor ? Infinity : 1;
-  return rows.sort((a, b) => b.points - a.points || b.differential - a.differential
-    || ratio(b) - ratio(a) || b.tries - a.tries || b.goals - a.goals || b.fieldGoals - a.fieldGoals
+  return rows.sort((a, b) => compareNrlLadder(a, b) || b.tries - a.tries || b.goals - a.goals || b.fieldGoals - a.fieldGoals
     || a.clubId.localeCompare(b.clubId));
+}
+
+export function archiveNrlLadder(season: NrlManagerState): NrlLeagueLadderArchive {
+  return nrlLadder(season).map(({ clubId, wins, draws, pointsFor, pointsAgainst }) => [clubId, wins, draws, pointsFor, pointsAgainst]);
+}
+
+export function nrlArchivedLadder(value: unknown, year: number) {
+  const { clubs, draw } = nrlSeasonPlan(year);
+  if (!Array.isArray(value) || value.length !== clubs.length) return null;
+  const games = new Map(clubs.map(({ id }) => [id, 0]));
+  for (const fixtures of draw) for (const [home, away] of fixtures) {
+    games.set(home, games.get(home)! + 1);
+    games.set(away, games.get(away)! + 1);
+  }
+  const seen = new Set<string>();
+  let totalWins = 0, totalLosses = 0, totalDraws = 0, totalDifferential = 0;
+  let previous: NrlLadderOrder | undefined;
+  const rows: Array<Pick<NrlLadderRow, 'clubId' | 'played' | 'wins' | 'draws' | 'losses' | 'points' | 'differential'>> = [];
+  for (const entry of value) {
+    if (!Array.isArray(entry) || entry.length !== 5) return null;
+    const [clubId, wins, draws, pointsFor, pointsAgainst] = entry;
+    const played = games.get(clubId);
+    // A settled regular-season result allows at most 112 in regulation and four in golden point.
+    if (played === undefined || seen.has(clubId) || !integerIn(wins, 0, played) || !integerIn(draws, 0, played - wins)
+      || !integerIn(pointsFor, 0, played * 116) || !integerIn(pointsAgainst, 0, played * 116)) return null;
+    seen.add(clubId);
+    const losses = played - wins - draws;
+    const points = 2 * (wins + draw.length - played) + draws;
+    const differential = pointsFor - pointsAgainst;
+    const order = { points, differential, pointsFor, pointsAgainst };
+    if (previous && compareNrlLadder(previous, order) > 0) return null;
+    previous = order;
+    rows.push({ clubId, played, wins, draws, losses, points, differential });
+    totalWins += wins;
+    totalDraws += draws;
+    totalLosses += losses;
+    totalDifferential += differential;
+  }
+  return totalWins === totalLosses && totalDraws % 2 === 0 && totalDifferential === 0 ? rows : null;
 }
 
 export function nrlFinalsRace(state: Pick<NrlManagerState, 'year' | 'round' | 'phase' | 'clubId' | 'results'>, ladder?: NrlLadderRow[]) {
