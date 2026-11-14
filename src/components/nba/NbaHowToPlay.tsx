@@ -37,6 +37,7 @@ export function NbaHowToPlay({ open, onOpenChange }: NbaHowToPlayProps) {
               <li>• You can only name players who <span className="text-foreground font-semibold">played for that team</span></li>
               <li>• Players must match the <span className="text-primary font-semibold">position you picked</span>, no out-of-position subs</li>
               <li>• Each player and position gets used <span className="text-foreground font-semibold">once</span></li>
+              <li>• Your unfinished lineup stays in this browser. Choose Start Over to roll a new challenge.</li>
             </ul>
           </section>
 

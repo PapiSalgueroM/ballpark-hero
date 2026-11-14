@@ -509,6 +509,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         heading: "Filling all five slots and tracking your total",
         items: [
           "Repeat until all five slots are filled, watching your running stat total.",
+          "Your unfinished lineup stays in this browser. Choose Start Over to roll a new challenge.",
         ],
       },
       {

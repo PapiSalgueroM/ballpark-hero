@@ -1,10 +1,11 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useLayoutEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { getRandomNbaTeams, NBA_TEAMS, type NbaTeam } from '@/data/nbaTeams';
 import { getRandomStatChallenge } from '@/data/nbaStats';
 import type { NbaFilledSlot, NbaGamePhase, StatChallenge } from '@/types/nba';
 import { NBA_POSITIONS } from '@/types/nba';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { encodeNbaStartingFiveDraft, loadNbaStartingFiveDraft, writeNbaStartingFiveDraft } from '@/lib/nbaStartingFiveDraft';
 import { NBA_PLAYER_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
 import {
   NBA_FIVE_FRANCHISE_CODES, NBA_FIVE_HIT_SCORE, buildTeamPool, challengeByStat, findPoolEntry, isPositionEligibleForSlot,
@@ -175,18 +176,37 @@ export function alreadyPicked(slots: Iterable<NbaFilledSlot>, name: string): boo
 }
 
 export function useNbaLineup() {
-  const [phase, setPhase] = useState<NbaGamePhase>('challenge');
-  const [challenge, setChallenge] = useState<StatChallenge | null>(null);
-  const [filledSlots, setFilledSlots] = useState<Map<number, NbaFilledSlot>>(new Map());
-  const [teamAssignments, setTeamAssignments] = useState<NbaTeam[]>([]);
+  const [saved] = useState(loadNbaStartingFiveDraft);
+  const [phase, setPhase] = useState<NbaGamePhase>(() => {
+    if (!saved.draft) return 'challenge';
+    return saved.draft.filledSlots.size === NBA_POSITIONS.length ? 'reviewing' : 'building';
+  });
+  const [challenge, setChallenge] = useState<StatChallenge | null>(saved.draft?.challenge ?? null);
+  const [filledSlots, setFilledSlots] = useState(() => saved.draft?.filledSlots ?? new Map<number, NbaFilledSlot>());
+  const [teamAssignments, setTeamAssignments] = useState<NbaTeam[]>(saved.draft?.teamAssignments ?? []);
   const [result, setResult] = useState<NbaFiveScore | null>(null);
-  const [selectedPosition, setSelectedPosition] = useState<number | null>(null);
+  const [selectedPosition, setSelectedPosition] = useState<number | null>(saved.draft?.selectedPosition ?? null);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [evaluationError, setEvaluationError] = useState<string | null>(null);
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isStatSpinning, setIsStatSpinning] = useState(false);
   const [isTeamSpinning, setIsTeamSpinning] = useState(false);
+
+  const storedDraft = useRef(saved.raw);
+  const previousDraft = useRef(saved.draft ? encodeNbaStartingFiveDraft(saved.draft) : null);
+  const mounted = useRef(false);
+  useLayoutEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; };
+  }, []);
+  useLayoutEffect(() => {
+    const draft = challenge && (phase === 'building' || phase === 'reviewing')
+      ? encodeNbaStartingFiveDraft({ challenge, teamAssignments, filledSlots, selectedPosition }) : null;
+    if (draft === previousDraft.current) return;
+    previousDraft.current = draft;
+    if (writeNbaStartingFiveDraft(storedDraft.current, draft)) storedDraft.current = draft;
+  }, [challenge, phase, teamAssignments, filledSlots, selectedPosition]);
 
   const filledCount = filledSlots.size;
   const currentTeam = useMemo(() => teamAssignments[filledCount] ?? null, [teamAssignments, filledCount]);
@@ -387,14 +407,22 @@ export function useNbaLineup() {
     setEvaluationError(null);
     try {
       const scored = await scoreNbaLineup(filledSlotsArray, challenge);
+      if (!mounted.current) return;
       if (!scored) throw new Error('five could not be scored');
+      if (storedDraft.current === null || !writeNbaStartingFiveDraft(storedDraft.current, null)) {
+        setEvaluationError('This lineup changed in another tab. Reopen the game to see the latest lineup.');
+        return;
+      }
+      storedDraft.current = null;
+      previousDraft.current = null;
       setResult(scored);
       setPhase('result');
     } catch (err) {
+      if (!mounted.current) return;
       console.error('Evaluation error:', err);
       setEvaluationError("Couldn't score your five right now. Your picks are saved, try Submit again in a second.");
     } finally {
-      setIsEvaluating(false);
+      if (mounted.current) setIsEvaluating(false);
     }
   }, [filledSlotsArray, challenge]);
 
