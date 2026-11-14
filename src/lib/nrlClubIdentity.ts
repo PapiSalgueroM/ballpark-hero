@@ -19,7 +19,7 @@ export function nrlCustomClubIssue({ name, ground, colour }: Pick<NrlCustomClub,
   if (nrlSeasonPlan(2027).clubs.some(club => [identityKey(club.name), identityKey(club.shortName)].includes(key))
     || key === 'pngchiefs' || key === 'chiefs') return 'Choose a fictional name distinct from the clubs already in the competition.';
   if (ground.length < 3 || ground.length > 40 || !clubText.test(ground)) return 'Enter a home ground name with 3 to 40 characters.';
-  if (!Object.hasOwn(NRL_CLUB_COLOURS, colour)) return 'Choose one of the listed club colours.';
+  if (!Object.prototype.hasOwnProperty.call(NRL_CLUB_COLOURS, colour)) return 'Choose one of the listed club colours.';
   return null;
 }
 

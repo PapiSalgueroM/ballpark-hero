@@ -183,7 +183,7 @@ function computeAge(birthDate: string, asOf: Date): number {
 // ---------------------------------------------------------------------------
 
 interface RawNhlPlayerRow {
-  player_id: number;
+  player_id: number | null;
   full_name: string | null;
   position: string | null;
   team: string | null;
@@ -203,7 +203,7 @@ export async function fetchPuckDetectivePool(): Promise<PuckDetectivePlayer[] | 
     // Fetch every page before picking a date's answer. Changing the number of
     // players changes the whole rotation, even when the first page looks full.
     const { data, error } = await fetchAllRows<RawNhlPlayerRow>((from, to) => supabase
-      .from('nhl_players' as any)
+      .from('nhl_players')
       .select('player_id, full_name, position, team, jersey_number, birth_date, birth_country')
       .order('player_id', { ascending: true })
       .range(from, to));
@@ -213,8 +213,8 @@ export async function fetchPuckDetectivePool(): Promise<PuckDetectivePlayer[] | 
     const byId = new Map<number, PuckDetectivePlayer>();
 
     for (const raw of data) {
-      const id = Number(raw.player_id);
-      if (!Number.isFinite(id) || byId.has(id)) continue;
+      const id = raw.player_id;
+      if (id == null || !Number.isFinite(id) || byId.has(id)) continue;
 
       const name = String(raw.full_name ?? '').trim();
       const pos = String(raw.position ?? '').trim().toUpperCase() as NhlPosition;
