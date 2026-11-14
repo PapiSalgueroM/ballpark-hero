@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
-import { careerRecordBook } from '@/lib/soccerCareerRecords';
+import { careerCompetitionRecords, careerRecordBook } from '@/lib/soccerCareerRecords';
 import { formatNumber } from '@/lib/formatNumber';
 
 const yearLabel = (year: number) => `${year}/${String((year + 1) % 100).padStart(2, '0')}`;
@@ -16,10 +16,11 @@ function SeasonLine({ season }: { season: SeasonRecord }) {
 }
 
 export default function CareerRecordsSheet({ career, onClose }: { career: CareerState; onClose: () => void }) {
-  const [screen, setScreen] = useState<'records' | 'clubs' | 'help'>('records');
+  const [screen, setScreen] = useState<'records' | 'clubs' | 'competitions' | 'help'>('records');
   const [selected, setSelected] = useState<number | null>(null);
   const panel = useRef<HTMLDivElement>(null);
   const book = careerRecordBook(career);
+  const competitionBook = screen === 'competitions' ? careerCompetitionRecords(career) : null;
   useEffect(() => {
     const before = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -50,6 +51,7 @@ export default function CareerRecordsSheet({ career, onClose }: { career: Career
           <p className="text-sm">This is your simulated career, read from saved senior club seasons. Academy years and jobs after retirement stay out.</p>
           <p className="text-sm">Best rating needs at least 10 appearances. Ties keep the earliest season. Returning to a club starts another spell, and loans name the parent club.</p>
           <p className="text-sm">Example: 12 goals in one season and 15 the next gives a best of 15, with 27 goals across that club spell.</p>
+          <p className="text-sm">Competitions adds up the campaign totals kept in this save. Older records can leave details blank. A campaign with 5 saved goals and no recorded assists shows 5 goals and leaves assists blank.</p>
           <p className="text-sm">Goals and appearances can keep growing. Season rating stops at 10.0 and player overall stops at 99.</p>
         </> : screen === 'records' ? <>
           <div className="grid grid-cols-3 gap-2 text-center text-sm" data-record-totals>
@@ -60,6 +62,18 @@ export default function CareerRecordsSheet({ career, onClose }: { career: Career
             <span className="flex justify-between gap-3"><span>{best.label}</span><span>{best.label === 'Best season rating' ? best.value.toFixed(1) : formatNumber(best.value)}</span></span>
             <span className="block text-xs font-normal text-muted-foreground">{yearLabel(best.season.year)} · {best.season.club}{best.ties > 1 ? ` · tied in ${best.ties} seasons` : ''}</span>
           </button>) : <p className="text-sm">Your first senior appearances will start your records.</p>}
+        </> : competitionBook ? <>
+          <p className="text-xs text-muted-foreground">Totals from the recorded campaigns. Older saves can be missing campaigns or stats.</p>
+          {([['Club competitions', competitionBook.club], ['International tournaments', competitionBook.international]] as const).map(([heading, entries]) => (
+            <section key={heading} className="space-y-2">
+              <h3 className="text-sm font-bold">{heading}</h3>
+              {entries.length ? <ul className="space-y-2">{entries.map(row => <li key={row.name} className="rounded-xl border border-border p-3 text-sm">
+                <p className="font-semibold">{row.name}</p>
+                <p className="text-xs mt-1">{row.campaigns} {row.campaigns === 1 ? 'campaign' : 'campaigns'} · {row.apps !== null && `${formatNumber(row.apps)} apps · `}{formatNumber(row.goals)} goals</p>
+                <p className="text-xs text-muted-foreground mt-1">{row.assists === null ? 'Assists not recorded' : `${formatNumber(row.assists)} assists${row.campaignsWithAssists < row.campaigns ? ` in ${row.campaignsWithAssists} of ${row.campaigns} campaigns` : ''}`}</p>
+              </li>)}</ul> : <p className="text-xs text-muted-foreground">No campaign stats saved yet.</p>}
+            </section>
+          ))}
         </> : <>
           <p className="text-xs text-muted-foreground">Oldest to newest. Each spell keeps the seasons played there.</p>
           {book.stints.map((stint, index) => <button key={index} type="button" data-record-stint={index} className={`${button} w-full text-left`} onClick={() => setSelected(index)}>
@@ -73,6 +87,7 @@ export default function CareerRecordsSheet({ career, onClose }: { career: Career
         {selected !== null ? <button type="button" className={button} onClick={back}>← Back</button> : <>
           <button type="button" className={`${button} ${screen === 'records' ? 'border-primary bg-primary/15 text-primary' : ''}`} aria-pressed={screen === 'records'} onClick={() => setScreen('records')}>Personal bests</button>
           <button type="button" className={`${button} ${screen === 'clubs' ? 'border-primary bg-primary/15 text-primary' : ''}`} aria-pressed={screen === 'clubs'} onClick={() => setScreen('clubs')}>Club history</button>
+          <button type="button" className={`${button} ${screen === 'competitions' ? 'border-primary bg-primary/15 text-primary' : ''}`} aria-pressed={screen === 'competitions'} onClick={() => setScreen('competitions')}>Competitions</button>
         </>}
         <button type="button" className={`${button} ml-auto`} onClick={onClose}>Close</button>
       </div>

@@ -605,6 +605,7 @@ export interface IntlHistoryEntry {
   myResult: string;
   apps: number;
   goals: number;
+  assists?: number;
 }
 
 /** `eligible` is false for a player with no international career at all. His
@@ -613,7 +614,7 @@ export interface IntlHistoryEntry {
 export function toHistoryEntry(t: IntlTournament, eligible = true): IntlHistoryEntry {
   return {
     year: t.year, short: t.short, nation: t.nation, champion: t.champion,
-    myResult: eligible ? t.myResult : '', apps: t.playerApps, goals: t.playerGoals,
+    myResult: eligible ? t.myResult : '', apps: t.playerApps, goals: t.playerGoals, assists: t.playerAssists,
   };
 }
 
@@ -684,6 +685,14 @@ export function tournamentGoalShare(position: string, overall: number): number {
   return role * (0.35 + 0.65 * clamp((overall - 65) / 35, 0, 1));
 }
 
+/** A player's chance of assisting a teammate's goal in a cup match. */
+export function tournamentAssistShare(position: string, overall: number): number {
+  const group = positionGroup(position);
+  const quality = clamp((overall - 68) / 28, 0, 1.2);
+  const role = group === 'ATT' ? 0.2 : group === 'MID' ? 0.3 : group === 'DEF' ? 0.12 : 0.02;
+  return role * (0.6 + quality * 0.6);
+}
+
 /* A 26 player squad, which is what the last two World Cups have used, split
    the way a manager actually splits one: three keepers, then defenders,
    midfielders and forwards. */
@@ -706,8 +715,8 @@ export function playerMatchStats(form: PlayerForm, teamGoals: number, random = M
   }
   // Keep the assist draws in place so the next team score uses the same RNG.
   let assists = 0;
-  const aShare = grp === 'ATT' ? 0.2 : grp === 'MID' ? 0.3 : grp === 'DEF' ? 0.12 : 0.02;
-  for (let i = 0; i < teamGoals - (boundContributions ? goals : legacyGoals); i++) if (random() < aShare * (0.6 + quality * 0.6)) assists++;
+  const assistShare = tournamentAssistShare(form.position, form.overall);
+  for (let i = 0; i < teamGoals - (boundContributions ? goals : legacyGoals); i++) if (random() < assistShare) assists++;
   const rating = clamp(
     6.2 + quality * 0.9 + goals * 0.55 + assists * 0.3 + (random() - 0.45) * 1.1,
     4.0, 10.0,

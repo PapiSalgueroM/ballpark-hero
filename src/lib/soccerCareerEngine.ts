@@ -171,7 +171,7 @@ import { academyReportReceipt, applyAcademyFocus, type AcademyReportReceipt } fr
    nothing, so this is a one way edge too. */
 import { readSeasonMoments, type SeasonMomentsSave } from "./season/momentsSave";
 import {
-  tournamentForYear, offYearCaps, toHistoryEntry, tournamentGoalShare,
+  tournamentForYear, offYearCaps, toHistoryEntry, tournamentGoalShare, tournamentAssistShare,
   nationStrength as intlNationStrength, confederationOf,
 } from "./soccerInternational";
 import type {
@@ -474,6 +474,7 @@ export interface UCLResult {
   result: string;
   /** Every goal of the campaign, first stage included. */
   playerGoals: number;
+  playerAssists?: number;
   isTopScorer: boolean;
   /** Round 972: the competition's name that season ("Champions League",
    *  "European Cup", "Copa Libertadores"...). Absent on results from before,
@@ -7396,6 +7397,20 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
      from the measured pass curve so it gets through at passTarget. */
   let firstStage: FirstStageResult | undefined;
   let stageGames = 0;
+  const campaignAssists = () => {
+    const random = keyedRng(`career-club-cup-assists|${state.playerName}|${season.year}|${season.club}|${cupFor.cup}`);
+    const chance = tournamentAssistShare(state.position, season.ovr ?? state.overall);
+    const annualAssists = Math.max(0, season.assists || 0);
+    let total = 0;
+    const games = [...(firstStage?.stages ?? []).flatMap(stage => stage.games), ...matches];
+    for (const game of games) {
+      for (let goal = game.playerGoals; goal < game.goalsFor; goal++) {
+        if (random() < chance) total++;
+        if (total >= annualAssists) return annualAssists;
+      }
+    }
+    return total;
+  };
   if (hasFirstStage && shape) {
     const named: string[] = [];
     for (let i = 0; i < firstStageOpponentCount(shape); i++) {
@@ -7412,7 +7427,7 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
     if (!firstStage.through && !firstStage.playoff) {
       return {
         qualified: true, matches, result: shape.kind === "leaguePhase" ? "League Phase" : "Group Stage",
-        playerGoals: totalPlayerGoals, isTopScorer: false, competition, cup: cupFor.cup, firstStage,
+        playerGoals: totalPlayerGoals, playerAssists: campaignAssists(), isTopScorer: false, competition, cup: cupFor.cup, firstStage,
       };
     }
     /* Ninth to 24th: a two legged play-off for the round of 16 (the format
@@ -7541,7 +7556,7 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
   const isTopScorer = totalPlayerGoals >= topScorerBar && awardRoll < 0.25;
 
   return {
-    qualified: true, matches, result, playerGoals: totalPlayerGoals, isTopScorer, competition, cup: cupFor.cup,
+    qualified: true, matches, result, playerGoals: totalPlayerGoals, playerAssists: campaignAssists(), isTopScorer, competition, cup: cupFor.cup,
     ...(firstStage ? { firstStage } : {}),
     ...(isUcl ? {} : { simplified: CONTINENTAL_SIMPLIFIED }),
   };

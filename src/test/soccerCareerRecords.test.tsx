@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
-import { careerRecordBook } from '@/lib/soccerCareerRecords';
+import { careerCompetitionRecords, careerRecordBook } from '@/lib/soccerCareerRecords';
 import CareerRecordsSheet from '@/components/soccer-career/CareerRecordsSheet';
 
 function row(extra: Partial<SeasonRecord> = {}): SeasonRecord {
@@ -87,5 +87,27 @@ describe('Soccer Career record book', () => {
     shown.unmount();
     expect(document.body.style.overflow).toBe('scroll');
     document.body.style.overflow = '';
+  });
+  it('groups exact recorded goals and assists, keeps missing totals separate and leaves the save alone', () => {
+    const first = row({ club: 'Chelsea', year: 2025, clubCupRun: {
+      qualified: true, seasonYear: 2025, club: 'Chelsea', result: 'Final', competition: 'Champions League', playerGoals: 2, isTopScorer: false,
+      matches: [{ opponent: 'Arsenal', round: 'Final', leg: 1, home: false, goalsFor: 3, goalsAgainst: 4, playerGoals: 2, won: false }],
+    } });
+    const second = row({ club: 'Chelsea', year: 2026, clubCupRun: { ...first.clubCupRun!, seasonYear: 2026, playerAssists: 1 } });
+    const damaged = row({ club: 'Chelsea', year: 2027, clubCupRun: { ...first.clubCupRun!, seasonYear: 2027, playerGoals: 25 } });
+    const c: CareerState = { ...career([first, second, damaged]), intlHistory: [
+      { year: 2026, short: 'World Cup', nation: 'England', champion: 'France', myResult: 'Quarter-final', apps: 5, goals: 4 },
+      { year: 2030, short: 'World Cup', nation: 'England', champion: 'England', myResult: 'Winner', apps: 7, goals: 6, assists: 3 },
+      { year: 2034, short: 'World Cup', nation: 'England', champion: 'England', myResult: '', apps: 0, goals: 0, assists: 0 },
+    ] };
+    const before = JSON.stringify(c);
+    const ledger = careerCompetitionRecords(c);
+    expect(ledger.club).toEqual([{ name: 'Champions League', campaigns: 2, goals: 4, apps: null, assists: 1, campaignsWithAssists: 1 }]);
+    expect(ledger.international).toEqual([{ name: 'World Cup', campaigns: 2, goals: 10, apps: 12, assists: 3, campaignsWithAssists: 1 }]);
+    render(<CareerRecordsSheet career={c} onClose={() => {}} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Competitions' }));
+    expect(screen.getByText('2 campaigns · 4 goals')).toBeVisible();
+    expect(screen.getByText('3 assists in 1 of 2 campaigns')).toBeVisible();
+    expect(JSON.stringify(c)).toBe(before);
   });
 });
