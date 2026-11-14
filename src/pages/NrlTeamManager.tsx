@@ -2378,6 +2378,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
               <li>Goal-kicking drills add eight percentage points to your conversion chance for one match. They carry the same fitness cost and injury risk as Train.</li>
               <li>In Squad, use Swap starters when two available starters can cover each other’s position. The same players keep the kicking and captaincy duties.</li>
+              <li>In Season review, a returning player with eight league starts in a trained position can make it their primary position when you stay.</li>
               <li>A match knock can put a player out for up to four rounds. Availability in Squad shows the first regular-season match an injured player can return for. The recovery countdown includes byes, and an available player fills the vacant spot.</li>
               <li>In Squad, you can pay once per season for physio to shorten an injury by one round. The player still sits out the current round.</li>
               <li>During a regular-season bye, intensive position training can finish an active course one round sooner. The player ends the bye four fitness points below their usual recovery.</li>

@@ -1,4 +1,12 @@
+## 2026-11-14: NRL primary positions, College recap and parked careers
+
+- NRL Team Manager can change one returning player's primary position at season review when they made eight regular-season starts in that trained position. The old position becomes their secondary position. The saved-lineup and recruitment previews use the proposed position before you start the next season.
+- Guess the College counts the correct guess and shows a clue-by-clue recap after the result. Daily, Unlimited and Conference play each show their own guesses. Older Daily results keep their original scores.
+- Club Manager packs match scores in parked careers and restores every score when you reopen or export one. The paired 15-season save test shrank from 638,029 to 555,497 characters, inside the 603,000-character budget. The active save and exported career still use the existing format.
+
 ## 2026-11-14: Historical NRL ladders and Transfer Path backtracking
+
+[PR #958](https://github.com/PapiSalgueroM/ballpark-hero/pull/958) published exact main `32ea976020c7155b29f7b8d5f0c2144d36403ee3`, deployment `930b489c-03d5-4088-b6a1-b1981d4d31fd`. Five live browser journeys, both raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted both game guides.
 
 - NRL Team Manager saves the full ladder after a completed season. Open Ladder and pick a past year to see the clubs' actual points, records and differentials. Older careers show the saved positions where the full ladder was never recorded.
 - Unlimited Transfer Path lets you remove the last link before finishing. Hints and the remaining route reuse the shortened chain. The final score uses the links that remain.

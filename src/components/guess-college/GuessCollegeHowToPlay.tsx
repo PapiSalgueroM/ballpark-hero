@@ -53,6 +53,7 @@ const GuessCollegeHowToPlay = () => {
               <li>Clues 3 to 11: drops from 900 to 100 pts</li>
               <li>All clues shown: 0 pts</li>
             </ul>
+            <p className="mt-2">After the result, open the clue-by-clue recap. A skipped clue drops the available points without counting as a guess.</p>
           </div>
 
           <div>

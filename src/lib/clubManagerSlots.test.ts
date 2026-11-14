@@ -4,8 +4,12 @@
  * file holds the storage rules one at a time.
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { SAVE_KEY, startCareer, leanCareer, trimCareer, worldSeasonLabel } from '@/lib/clubManager';
+import { SAVE_KEY, startCareer, leanCareer, trimCareer, worldSeasonLabel, loadCareer, sortedWorldTable } from '@/lib/clubManager';
 import { fenceKeyOf } from '@/lib/saveFence';
+import { compressToUTF16 } from 'lz-string';
+import { PARKED_PAIR_SAVE_VERSION, pairLedgerSignature, readableClubManagerSave } from '@/lib/clubManagerSaveKeys';
+import { serializeParkedCareer, unpackParkedCareer } from '@/lib/clubManagerParkedSave';
+import { savedGames } from '@/data/continueSaves';
 import { LAND_ON_HUB_KEY, markLandOnHub, takeLandOnHub } from '@/lib/clubManagerLanding';
 import {
   SLOTS_INDEX_KEY, parkedKey, activeSlot, readSlots, switchSlot, deleteSlot, slotEraId, summarize,
@@ -66,6 +70,63 @@ describe('switching', () => {
     expect(switchSlot(2)).toBe(true);
     expect(localStorage.getItem(parkedKey(1))).toBe('{not json');
     expect(readSlots()[0].damaged).toBe(true);
+  });
+});
+
+
+describe('lossless pair storage for parked careers', () => {
+  const fullLedger = () => {
+    const c = career('Everton');
+    const pairs: Record<string, [number, number]> = {};
+    for (const home of c.leagueClubs) {
+      for (const away of c.leagueClubs.filter(away => away !== home)) pairs[home + '|' + away] = [2, 1];
+    }
+    c.pairResults = { premier: pairs, ucl: { 'A|B': [0, 2] } };
+    return c;
+  };
+
+  it('packs only parked ledgers, keeps all directed results and restores exact plain bytes', () => {
+    const original = fullLedger();
+    const plain = JSON.stringify(leanCareer(original));
+    localStorage.setItem(SAVE_KEY, plain);
+    const table = sortedWorldTable(original, 'premier', original.table);
+
+    expect(switchSlot(2)).toBe(true);
+    const raw = localStorage.getItem(parkedKey(1))!;
+    const packed = JSON.parse(raw);
+    expect(packed.saveVersion).toBe(PARKED_PAIR_SAVE_VERSION);
+    expect(readableClubManagerSave(packed)).toBe(false);
+    expect(typeof packed.pairResults).toBe('string');
+    expect(plain.length - raw.length).toBeGreaterThan(5_000);
+    expect(unpackParkedCareer(raw)).toBe(plain);
+    expect(savedGames(localStorage, true).map(({ entry }) => entry.path)).toContain('/club-manager?slot=1');
+    expect(loadCareer(raw)?.pairResults).toEqual(original.pairResults);
+
+    expect(switchSlot(1)).toBe(true);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(plain);
+    expect(sortedWorldTable(loadCareer()!, 'premier', original.table)).toEqual(table);
+  });
+
+  it('keeps small saves plain and leaves old pre-codec parked bytes unchanged when opened', () => {
+    const old = JSON.stringify(leanCareer(career('Lincoln City')));
+    expect(serializeParkedCareer(JSON.parse(old))).toBe(old);
+    localStorage.setItem(parkedKey(3), old);
+    expect(switchSlot(3)).toBe(true);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(old);
+  });
+
+  it('never exposes a bad packed ledger as a playable manager or loses its recovery bytes', () => {
+    const packed = JSON.parse(serializeParkedCareer(fullLedger()));
+    const truncated = JSON.stringify({ ...packed, pairResults: packed.pairResults.slice(0, -4) });
+    localStorage.setItem(parkedKey(2), truncated);
+    expect(savedGames(localStorage, true).map(({ entry }) => entry.path)).not.toContain('/club-manager?slot=2');
+    const wrongShape = compressToUTF16('{"wrong":{"A|B":[3,-1]}}');
+    for (const damaged of [truncated, JSON.stringify({ ...packed, pairResults: wrongShape, pairSignature: pairLedgerSignature(wrongShape) })]) {
+      localStorage.setItem(parkedKey(2), damaged);
+      expect(loadCareer(damaged)).toBeNull();
+      expect(readSlots()[1]).toMatchObject({ summary: null, damaged: true });
+      expect(localStorage.getItem(parkedKey(2))).toBe(damaged);
+    }
   });
 });
 

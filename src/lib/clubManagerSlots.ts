@@ -4,8 +4,8 @@
  * The engine keeps exactly one career under SAVE_KEY and nothing here changes
  * that: the career being played always lives at SAVE_KEY, so the engine, the
  * home page's continue row and every harness that reads that key see what
- * they always saw. The other two careers are parked, in the engine's own
- * lean shape, under keys of their own. A small index says which slot number
+ * they always saw. The other two careers use the engine's lean save shape
+ * with a compact pair ledger when it saves room, under keys of their own. A small index says which slot number
  * the career at SAVE_KEY belongs to. No index means slot 1, so a player with
  * one career today finds it in slot 1 without a single byte of it moved.
  *
@@ -23,6 +23,7 @@ import { eraById, isHistoricEra } from './clubManagerEras';
 import { levelFrom, noSackFrom } from '@/lib/clubManagerStart';
 import type { DifficultyLevel } from '@/lib/managerDifficulty';
 import { saveFence } from '@/lib/saveFence';
+import { isPackedParkedCareer, restoreParkedCareer, serializeParkedCareer, unpackParkedCareer } from './clubManagerParkedSave';
 
 export { SLOT_COUNT, SLOTS_INDEX_KEY, parkedKey, READABLE_SAVE_VERSION } from './clubManagerSaveKeys';
 
@@ -84,7 +85,8 @@ export function readSlotSave(slot: number): string | null {
 export function summarize(raw: string | null): SlotSummary | null {
   if (!raw) return null;
   try {
-    const c = JSON.parse(raw) as Partial<CareerState> | null;
+    const disk: unknown = JSON.parse(raw);
+    const c = isPackedParkedCareer(disk) ? restoreParkedCareer(disk) : disk as Partial<CareerState> | null;
     if (!c || !readableClubManagerSave(c)) return null;
     const eraId = typeof c.eraId === 'string' ? c.eraId : null;
     const era = eraById(eraId ?? undefined);
@@ -133,12 +135,12 @@ export function slotEraId(slot: number): string | null {
  *  A stored value that is not a career is parked exactly as it is, so even an
  *  unreadable save is never thrown away by a swap. Null when SAVE_KEY is empty. */
 function parkedBytes(outgoing: CareerState | null | undefined): string | null {
-  if (outgoing) return JSON.stringify(leanCareer(outgoing));
+  if (outgoing) return serializeParkedCareer(leanCareer(outgoing));
   const raw = get(SAVE_KEY);
   if (!raw) return null;
   try {
     const parsed = JSON.parse(raw) as CareerState | null;
-    if (parsed && typeof parsed === 'object' && typeof parsed.clubName === 'string') return JSON.stringify(leanCareer(parsed));
+    if (readableClubManagerSave(parsed)) return serializeParkedCareer(leanCareer(parsed));
   } catch {
     /* not JSON: parked as is */
   }
@@ -165,7 +167,9 @@ export function switchSlot(slot: number, outgoing?: CareerState | null): boolean
   /* Round 1323: a page whose career another tab has played on since touches
      nothing, not even the parked key (src/lib/saveFence.ts). */
   if (saveFence.moved(SAVE_KEY)) return false;
-  const target = get(parkedKey(slot));
+  const parked = get(parkedKey(slot));
+  // A damaged save follows the existing copy-before-clear path when explicitly selected.
+  const target = parked === null ? null : unpackParkedCareer(parked) ?? parked;
   const park = parkedBytes(outgoing);
   /* 1. Park the outgoing career. Nothing has been removed yet. */
   try {
