@@ -707,18 +707,29 @@ export function nrlHoldableReserves(state: NrlManagerState): NrlPlayer[] {
 export function nrlHalftimeInterchanges(state: NrlManagerState): NrlHalftimeOption[] {
   if (!state.live || !state.kickerId) return [];
   const { heldReserveId } = state.live;
+  const unavailable = nrlUnavailable(state);
   const backup = state.backupKickerId && state.backupKickerId !== state.kickerId
-    && Object.values(state.lineup).includes(state.backupKickerId) && !nrlUnavailable(state).has(state.backupKickerId);
-  const options: NrlHalftimeOption[] = [...nrlBenchRotation(state, heldReserveId)].filter(([starterId]) => starterId !== state.kickerId || backup)
+    && Object.values(state.lineup).includes(state.backupKickerId) && !unavailable.has(state.backupKickerId);
+  const rotation = nrlBenchRotation(state, heldReserveId);
+  const options: NrlHalftimeOption[] = [...rotation].filter(([starterId]) => starterId !== state.kickerId || backup)
     .map(([starterId, reserve]) => ({ starterId, reserveId: reserve.id, role: reserve.role }));
   const held = heldReserveId && nrlHoldableReserves(state).find(player => player.id === heldReserveId);
   if (held) options.push({ starterId: state.lineup[held.role], reserveId: held.id, role: held.role, enteredAtHalf: true });
+  if (state.openInterchange && !heldReserveId) {
+    for (const reserveId of state.bench ?? []) {
+      const reserve = state.squad.find(player => player.id === reserveId);
+      if (!reserve || unavailable.has(reserveId)) continue;
+      const starterId = state.lineup[reserve.role];
+      if (rotation.has(starterId) || (starterId === state.kickerId && !backup)) continue;
+      options.push({ starterId, reserveId, role: reserve.role, enteredAtHalf: true });
+    }
+  }
   return options;
 }
 
 export function nrlCanPairHalftimeInterchanges(state: Pick<NrlManagerState, 'kickerId' | 'backupKickerId'>,
-  first: { starterId: string }, second: { starterId: string }) {
-  return first.starterId !== second.starterId
+  first: Pick<NrlHalftimeReceipt, 'starterId' | 'enteredAtHalf'>, second: Pick<NrlHalftimeReceipt, 'starterId' | 'enteredAtHalf'>) {
+  return first.starterId !== second.starterId && !(first.enteredAtHalf && second.enteredAtHalf)
     && !(first.starterId === state.kickerId && second.starterId === state.backupKickerId)
     && !(second.starterId === state.kickerId && first.starterId === state.backupKickerId);
 }
@@ -741,7 +752,8 @@ export function nrlMinute60Interchanges(state: NrlManagerState) {
   const held = nrlMinute60Interchange(state);
   const rotation = nrlBenchRotation(state, live.heldReserveId);
   const halfway = [live.minute60.interchange, live.minute60.secondInterchange];
-  const entered = halfway.some(change => change && change.reserveId === live.heldReserveId);
+  const entered = halfway.some(change => change && rotation.get(change.starterId)?.id !== change.reserveId);
+  if (entered && !live.heldReserveId) return [];
   const kept = halfway.filter(change => change && rotation.get(change.starterId)?.id === change.reserveId).length;
   const entrants = Number(entered);
   // A rotating reserve normally comes on and then leaves. A half-time keep skips the return.
@@ -1589,7 +1601,8 @@ function validKickerHandoff(match: Record<string, unknown>, managedHome: boolean
   const periods = match.scorePeriods as NrlScorePeriods | undefined;
   const before = (at60 ? periods?.at60 : periods?.halfTime)?.[managedHome ? 0 : 1];
   if (before === undefined
-    || (!at60 && !changes.some(change => change.starterId === scoring.kickerId && change.enteredAtHalf === undefined))
+    || (!at60 && !changes.some(change => change.starterId === scoring.kickerId
+      && (change.enteredAtHalf === undefined || match.openInterchange === true)))
     || changes.some(change => change.starterId === handoff.playerId)) return false;
   const goals = handoff.openingConversions + handoff.openingPenalties;
   const tries = (before - goals * 2) / 4;

@@ -44,6 +44,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Open a regular-season match report in Season fixtures to see the rating changes saved for that match.',
       'Leave the fourth interchange open to use only three reserves in Quick Sim or choose a fourth at 60 minutes in Live.',
       'At 60 minutes in Live, an unused reserve can cover their trained position if the slot is open.',
+      'With Open interchange on, bring on one eligible unused reserve at half time or save the place for 60 minutes.',
       'At half time or 60 minutes in Live, an eligible reserve can replace your goal kicker if the named backup stays on to take the remaining place kicks.',
       'In Season fixtures, choose a rival under Follow a club to view their draw, scores and known finals fixtures. In Finals race, use View fixtures beside an opponent to open that club’s draw.',
       'Open Matchday team sheet in a report with a player record to see the starting 13, the reserves who played and how many points each player scored.',

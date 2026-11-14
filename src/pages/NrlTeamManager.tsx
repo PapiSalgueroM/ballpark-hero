@@ -233,6 +233,7 @@ function LiveHalftime({ live, career, title, onAction, disabled, coachRole, coac
   const secondOptions = chosen ? options.filter(option => nrlCanPairHalftimeInterchanges(season, chosen, option)) : [];
   const second = secondOptions.find(option => option.reserveId === secondReserveId);
   const heldName = live.heldReserveId && squad.find(player => player.id === live.heldReserveId)?.name;
+  const flexible = season.openInterchange && !heldName && options.some(option => option.enteredAtHalf);
   const name = (id: string) => squad.find(player => player.id === id)?.name;
   const halfChoices = {
     year, round: fixture.round, tactic, talk,
@@ -280,7 +281,7 @@ function LiveHalftime({ live, career, title, onAction, disabled, coachRole, coac
       {options.length > 0 ? (
         <details className="group rounded-xl border border-border bg-card px-4">
           <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-            <span>{chosen ? `${name(chosen.reserveId)} ${chosen.enteredAtHalf ? 'comes on' : 'stays on'}` : heldName ? 'Halftime interchange' : 'Keep a reserve on'}</span>
+            <span>{chosen ? `${name(chosen.reserveId)} ${chosen.enteredAtHalf ? 'comes on' : 'stays on'}` : heldName || flexible ? 'Halftime interchange' : 'Keep a reserve on'}</span>
             <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
           </summary>
           <div className="pb-4">
@@ -292,12 +293,13 @@ function LiveHalftime({ live, career, title, onAction, disabled, coachRole, coac
                 const next = options.find(option => option.reserveId === id);
                 if (!next || (second && !nrlCanPairHalftimeInterchanges(season, next, second))) setSecondReserveId('');
               }}>
-              <option value="">{heldName ? 'Keep held reserve on the bench' : 'Automatic rotation'}</option>
+              <option value="">{heldName ? 'Keep held reserve on the bench' : flexible ? 'Leave the open place unused' : 'Automatic rotation'}</option>
               {options.map(option => <option key={option.reserveId} value={option.reserveId}>{option.enteredAtHalf && 'Bring on '}{name(option.reserveId)} · {option.role}</option>)}
             </select>
             <p className="mt-2 text-sm text-muted-foreground">{heldName
               ? `${heldName} sat out the first half. Bring them on now or keep them for the 60-minute pause. You can also keep a rotating reserve on at another position.`
-              : 'Choose up to two reserves already in the rotation to finish. Their starters stay off.'}</p>
+              : flexible ? 'Bring on one unused reserve now or save the place for 60 minutes. You can also keep a rotating reserve on.'
+                : 'Choose up to two reserves already in the rotation to finish. Their starters stay off.'}</p>
             {secondOptions.length > 0 && (
               <label className="mt-3 block text-sm font-semibold" htmlFor="nrl-half-second-reserve">
                 Second reserve to finish the match
@@ -1361,7 +1363,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
                   {nrlCanOpenInterchange(season)
                     ? 'Quick Sim uses three reserves. The unused reserve stays fresher and their starter gets less rest.'
                     : 'This bench would already use three or fewer automatic reserves.'}
-                  {' In Live, choose an eligible reserve at 60 minutes if there is a place open.'}
+                  {' In Live, bring on one eligible unused reserve at half time or keep the place for 60 minutes.'}
                 </p>
               </>
             )}
@@ -2454,6 +2456,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>You can end a pending selection promise in Contracts. This gives up its renewal discount and uses your one promise for that season.</li>
               <li>Choose a vice-captain in Squad to keep the one-point defence bonus when the club captain is off the field and the vice-captain is on.</li>
               <li>When you start a new State of Origin series, Past Origin series keeps the previous winner and all three scores.</li>
+              <li>With Open interchange on, bring on one eligible unused reserve at half time or save the place for 60 minutes.</li>
               <li>At half time or 60 minutes in Live, an eligible reserve can replace your goal kicker if the named backup stays on to take the remaining place kicks.</li>
               <li>After the Grand Final, release one unsigned academy prospect into next season’s free-agent market or promote him to your own Top 30.</li>
               <li>Choose a Board pathways objective before Round 1. Three young players need four appearances each for $200,000, or two need six each for $225,000. Pathways run-in shows who can reach your target.</li>
