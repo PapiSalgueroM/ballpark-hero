@@ -190,6 +190,7 @@ export interface NrlCareerState {
   ratingReview?: NrlRatingReview;
   shortlist?: string[];
   savedLineup?: NrlSavedLineup;
+  savedRotationLineup?: NrlSavedLineup;
   positionTraining?: NrlPositionCourse;
   origin?: NrlOriginSeries;
   worldCup?: NrlWorldCupRun;
@@ -226,8 +227,8 @@ export type NrlCareerAction = NrlAction
   | { type: 'inviteContractApproach'; year: number; clubId: string; round: number; playerId: string; permission: boolean }
   | { type: 'answerContractApproach'; year: number; clubId: string; listedRound: number; playerId: string; destinationId: string; decision: 'accept' | 'decline' }
   | { type: 'agreeMutualRelease'; year: number; clubId: string; playerId: string }
-  | { type: 'saveLineup'; year: number; clubId: string }
-  | { type: 'applySavedLineup'; previewKey: string }
+  | { type: 'saveLineup'; year: number; clubId: string; slot?: 'rotation' }
+  | { type: 'applySavedLineup'; previewKey: string; slot?: 'rotation' }
   | { type: 'startPositionTraining'; year: number; clubId: string; round: number; playerId: string; role: NrlRole }
   | { type: 'cancelPositionTraining'; year: number; clubId: string; playerId: string; role: NrlRole; startedRound: number }
   | { type: 'startReserveGrade' | 'recallReserveGrade'; year: number; clubId: string; round: number; playerId: string }
@@ -1804,7 +1805,7 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
   if (season.phase !== 'complete' || season.year === NRL_LAST_YEAR || judiciaryNeedsResponse(season)) return state;
   if (!move && nrlBoardChallengeStatus(state) === 'must-move') return state;
   if (move && (move.fromYear !== season.year || (!seasonOut && !nrlOffseasonClubs(state).some(club => club.id === move.clubId)))) return state;
-  const { developmentFocus, ratingReview: _oldRatingReview, shortlist, savedLineup, positionTraining, offseasonApplication, leagueRecruitment, coachRetention, contractApproach,
+  const { developmentFocus, ratingReview: _oldRatingReview, shortlist, savedLineup, savedRotationLineup, positionTraining, offseasonApplication, leagueRecruitment, coachRetention, contractApproach,
     selectionPromise, outOfWork, satOutSeason, ...career } = state;
   const year = season.year + (seasonOut ? 2 : 1);
   const clubId = move?.clubId ?? season.clubId;
@@ -2107,11 +2108,13 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       const { season } = state;
       if (state.legacySeason || action.year !== season.year || action.clubId !== season.clubId) return state;
       const savedLineup = nrlMatchdaySelection(season);
-      return savedLineup && JSON.stringify(savedLineup) !== JSON.stringify(state.savedLineup) ? { ...state, savedLineup } : state;
+      const field = action.slot === 'rotation' ? 'savedRotationLineup' : 'savedLineup';
+      return savedLineup && JSON.stringify(savedLineup) !== JSON.stringify(state[field]) ? { ...state, [field]: savedLineup } : state;
     }
     case 'applySavedLineup': {
-      if (state.legacySeason || !state.savedLineup) return state;
-      const preview = nrlSavedLineupPreview(state.season, state.savedLineup);
+      const savedLineup = action.slot === 'rotation' ? state.savedRotationLineup : state.savedLineup;
+      if (state.legacySeason || !savedLineup) return state;
+      const preview = nrlSavedLineupPreview(state.season, savedLineup);
       return preview?.changed && preview.key === action.previewKey ? { ...state, season: preview.next } : state;
     }
     case 'arrangeTakeover': {
@@ -2830,6 +2833,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
       || value.legacySeason || value.season.year === NRL_LAST_YEAR))
     || (value.legacySeason && (value.season.year !== value.openingYear || value.season.kickerId || value.season.injuryTracking || value.season.results.some(match => match.benchUsed !== undefined)))
     || !validSavedLineup(value.savedLineup, value.season)
+    || !validSavedLineup(value.savedRotationLineup, value.season)
     || !validPositionTraining(value.positionTraining, value.season, value.legacySeason)
     || !Array.isArray(value.players) || value.players.length > 650
     || !Array.isArray(value.history) || !validBook(value.finance, value.season.round + 1)) return false;
