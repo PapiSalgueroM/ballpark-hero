@@ -22,7 +22,7 @@ function fixture(): NhlLeague {
     player('g0', 'G', 91), player('g1', 'G', 60), player('hurt', 'W', 98, 2),
   ];
   const team = (abbr: string, roster: NhlGmPlayer[]): NhlGmTeam => ({ abbr, players: roster, wins: 3, losses: 2, otLosses: 1, picks: [1, 2] });
-  return { season: 2026, cap: 104, round: 4, champions: [], freeAgents: [], teams: { BOS: team('BOS', players), BUF: team('BUF', players.map(p => ({ ...p, id: `other-${p.id}` }))) } };
+  return { season: 2026, cap: 104, round: 4, inSeasonRatings: true, champions: [], freeAgents: [], teams: { BOS: team('BOS', players), BUF: team('BUF', players.map(p => ({ ...p, id: `other-${p.id}` }))) } };
 }
 const saved = (league: NhlLeague) => ({ league, myTeam: 'BOS', phase: 'hub', titles: 2, seasonsPlayed: 3, draftClass: null, picksLeft: 0, mandate: null, trust: 60, fired: false, pressTilt: 0, seasonTradeLine: null, postseason: null });
 const read = () => JSON.parse(localStorage.getItem(KEY)!) as ReturnType<typeof saved>;
@@ -103,6 +103,21 @@ describe('actual NHL contributor decisions', () => {
     expect(status(view)).toHaveTextContent('Automatic contributors restored.'); noBooking();
   });
 
+  it('names the injured preferred goalie and the healthy cover without replacing the saved choice', async () => {
+    const league = fixture(), team = league.teams.BOS;
+    expect(nhlSetContributors(team, { ...nhlContributors(team), goalie: 'g1' })).toBe(true);
+    team.players.find(p => p.id === 'g1')!.out = 2;
+    const { view, writes, raw } = await open(league);
+    expect(view.getByText('Fixture Caldermere g1 Full Name is out. Fixture Caldermere g0 Full Name is filling in at goalie.')).toBeVisible();
+    expect(input(view, 'g1')).toBeNull(); expect(input(view, 'g0')).toBeChecked();
+    expect(writes).not.toHaveBeenCalled(); expect(localStorage.getItem(KEY)).toBe(raw);
+    replace(view);
+    fireEvent.click(apply(view));
+    expect(read().league.teams.BOS.contributors?.goalie).toBe('g1');
+    expect(read().league.teams.BOS.contributors?.forwards).toContain('f6');
+    noBooking();
+  });
+
   it('shows thin and empty groups truthfully with the original empty-group rating', async () => {
     const league = fixture(); league.teams.BOS.players = league.teams.BOS.players.filter(p => ['f0', 'f1', 'f2', 'd0', 'd1'].includes(p.id));
     const { view, writes } = await open(league);
@@ -127,7 +142,11 @@ describe('actual NHL contributor decisions', () => {
     expect(chosen).toHaveLength(6); expect(chosen.map(node => node.dataset.nhlContributor)).not.toContain('other-f0');
     expect(chosen.map(node => node.dataset.nhlContributor)).toContain('f1');
     expect(observed.length).toBeGreaterThan(0);
-    for (const team of observed) expect(team.contributors).toEqual(nhlContributors(team));
+    expect(observed.some(team => team.contributors?.forwards.includes('hurt'))).toBe(true);
+    for (const team of observed) {
+      expect(team.contributors?.forwards).not.toContain('departed');
+      expect(nhlContributors(team).forwards).not.toContain('hurt');
+    }
     expect(status(view)).toBeEmptyDOMElement(); expect(writes).not.toHaveBeenCalled(); expect(localStorage.getItem(KEY)).toBe(raw);
     fireEvent.click(auto(view)); expect(writes).toHaveBeenCalledTimes(1);
     expect(read().league.teams.BUF).not.toHaveProperty('contributors'); expect(read().league.teams.BOS).not.toHaveProperty('contributors'); noBooking();

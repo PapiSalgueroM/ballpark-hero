@@ -21,6 +21,7 @@ const controls = {
   back: { test: 'stages replacements without saving', edits: [['contributorsOpener.current?.focus({ preventScroll: true });', 'void contributorsOpener;']] },
   duplicate: { test: 'refuses same-frame duplicate Apply', edits: [[' || contributorCommit.current === league', '']] },
   restore: { test: 'repairs existing restored overrides', edits: [['if (s.league.teams[s.myTeam]) repairNhlContributors(s.league.teams[s.myTeam]);', 'void s.myTeam;']] },
+  cover: { test: 'names the injured preferred goalie', edits: [['covers.length > 0 && <div', 'false && <div']] },
 };
 assert.ok(!control || Object.hasOwn(controls, control), 'Unknown NHL contributors Board control');
 const boardPath = path.join(root, 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx');
@@ -55,13 +56,13 @@ try {
   assert.doesNotMatch(output, /Failed to resolve import|Cannot find module|Failed to load url|No test files found|Unhandled Errors|Test timed out|RPC timeout/, 'Collection, resolver and timeout failures earn no credit');
   if (control) {
     assert.notEqual(run.status, 0, 'Copied defect must fail its intended outcome');
-    assert.match(output, /Tests\s+1 failed.*1 passed.*7 skipped/);
+    assert.match(output, /Tests\s+1 failed.*1 passed.*8 skipped/);
     assert.match(output, new RegExp('FAIL[^\\n]*' + controls[control].test));
-    assert.match(output, /AssertionError|expected .* to|Expected element with focus:|expect\(element\)\.to(?:BeDisabled|BeEmptyDOMElement|HaveFocus|HaveClass|HaveTextContent)\(/i);
+    assert.match(output, /AssertionError|expected .* to|Unable to find an element with the text|Expected element with focus:|expect\(element\)\.to(?:BeDisabled|BeEmptyDOMElement|HaveFocus|HaveClass|HaveTextContent)\(/i);
     console.log('simNhlContributorsBoard ' + control + ': changed unique copied binding, one intended assertion failed and one independent baseline passed.');
   } else {
-    assert.equal(run.status, 0, output.slice(-6000)); assert.match(output, /9 passed/);
-    console.log('simNhlContributorsBoard: nine actual Board and original helper outcomes passed.');
+    assert.equal(run.status, 0, output.slice(-6000)); assert.match(output, /10 passed/);
+    console.log('simNhlContributorsBoard: ten actual Board and original helper outcomes passed.');
   }
   console.log('simNhlContributorsBoard: staged IDs, exact strength, save/Auto, quiet restores, duplicate suppression and original waive/dead-cap behavior exercised.');
   console.log('simNhlContributorsBoard: stable nodes, finite cue binding and focus are unit checked; native pixel/reduced-motion and full-season engine acceptance are separate.');

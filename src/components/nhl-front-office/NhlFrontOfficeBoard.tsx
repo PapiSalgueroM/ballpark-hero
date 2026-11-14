@@ -154,6 +154,14 @@ function ContributorPicker({ team, onApply, onAuto, onBack }: {
     { key: 'goalie' as const, label: 'Goalie', weight: '20%', players: healthy.filter(p => p.pos === 'G'), cap: 1 },
   ];
   const ids = (value: NhlContributors, key: typeof groups[number]['key']) => key === 'goalie' ? value.goalie === null ? [] : [value.goalie] : value[key];
+  const saved = team.contributors;
+  const covers = saved ? groups.flatMap(group => {
+    const preferred = ids(saved, group.key);
+    const injured = team.players.filter(p => p.out > 0 && preferred.includes(p.id));
+    if (!injured.length) return [];
+    const healthyCover = group.players.filter(p => ids(effective, group.key).includes(p.id) && !preferred.includes(p.id));
+    return [{ key: group.key, injured, healthyCover }];
+  }) : [];
   const complete = groups.every(group => {
     const chosen = ids(draft, group.key);
     return chosen.length === Math.min(group.cap, group.players.length) && new Set(chosen).size === chosen.length && chosen.every(id => group.players.some(p => p.id === id));
@@ -182,6 +190,14 @@ function ContributorPicker({ team, onApply, onAuto, onBack }: {
       <h3 className="mt-3 font-bold text-foreground">Simulation contributors</h3>
       <p className="mt-1 text-xs text-muted-foreground">Choose whose ratings feed the simulation. This does not set lines or ice time. Only healthy players can contribute.</p>
       <p className="mt-2 text-xs text-muted-foreground">Select six forwards, four defensemen and one goalie, or every healthy player when a group is thin. Uncheck a selected forward or defenseman before choosing a replacement. An empty group uses rating 62.</p>
+      {covers.length > 0 && <div className="mt-2 space-y-1 text-xs text-muted-foreground">
+        {covers.map(({ key, injured, healthyCover }) => (
+          <p key={key}>{injured.map(p => p.name).join(', ')} {injured.length === 1 ? 'is' : 'are'} out.
+            {healthyCover.length > 0 && ` ${healthyCover.map(p => p.name).join(', ')} ${healthyCover.length === 1 ? 'is' : 'are'} filling in ${key === 'goalie' ? 'at goalie' : key === 'defense' ? 'on defense' : 'at forward'}.`}
+          </p>
+        ))}
+        <p>Saved choices return when healthy. Applying a new selection for a group replaces that group's saved choices.</p>
+      </div>}
       <div className="mt-3 grid gap-3 sm:grid-cols-3">
         {groups.map(group => {
           const selected = ids(draft, group.key), required = Math.min(group.cap, group.players.length);

@@ -154,7 +154,10 @@ describe('NHL simulation contributor outcomes', () => {
     expect(ids(effective)).not.toContain(unavailable); expect(ids(effective)).not.toContain('foreign'); expect(new Set(ids(effective)).size).toBe(11);
     expect(ids(effective).every(id => team.players.some(player => player.id === id && player.out === 0))).toBe(true);
     expect(JSON.stringify(team)).toBe(before); expect(random).not.toHaveBeenCalled();
-    expect(engine.repairNhlContributors(team)).toBe(true); expect(team.contributors).toEqual(effective);
+    expect(engine.repairNhlContributors(team)).toBe(true);
+    expect(team.contributors!.forwards).toContain(unavailable);
+    expect(team.contributors!.forwards).not.toContain('foreign');
+    expect(new Set(team.contributors!.forwards).size).toBe(team.contributors!.forwards.length);
     expect(engine.repairNhlContributors(team)).toBe(false); expect(random).not.toHaveBeenCalled();
     raw(team, { ...effective, extra: true }); expect(engine.repairNhlContributors(team)).toBe(true); expect(team).not.toHaveProperty('contributors');
     expect(random).not.toHaveBeenCalled(); random.mockRestore();
@@ -203,14 +206,29 @@ describe('NHL simulation contributor outcomes', () => {
     }
   });
 
-  it('repairs an actual injury tick and requires explicit reselection after recovery', () => {
+  it('keeps the preferred goalie through an actual injury tick and restores him on recovery', () => {
     const league = fixtureLeague(), team = league.teams.FIX; engine.nhlSetContributors(team, lowest(team));
-    const selected = team.contributors!.goalie!; team.players.find(player => player.id === selected)!.out = 2;
+    const preferred = clone(team.contributors!), selected = preferred.goalie!;
+    team.players.find(player => player.id === selected)!.out = 2;
     engine.simNhlRound(league, 'FIX', () => 0.99);
-    expect(team.players.find(player => player.id === selected)!.out).toBe(1); expect(team.contributors!.goalie).toBe('FIX-12');
-    engine.simNhlRound(league, 'FIX', () => 0.99);
-    expect(team.players.find(player => player.id === selected)!.out).toBe(0); expect(team.contributors!.goalie).toBe('FIX-12');
-    expect(engine.nhlSetContributors(team, { ...team.contributors!, goalie: selected })).toBe(true); expect(team.contributors!.goalie).toBe(selected);
+    expect(team.players.find(player => player.id === selected)!.out).toBe(1);
+    expect(team.contributors).toEqual(preferred);
+    const covering = { ...preferred, goalie: 'FIX-12' };
+    expect(engine.nhlContributors(team)).toEqual(covering);
+    expect(engine.nhlStrength(team)).toBe(weighted(team, covering));
+
+    const restored = clone(league), restoredTeam = restored.teams.FIX;
+    expect(engine.repairNhlContributors(restoredTeam)).toBe(false);
+    const forwards = covering.forwards.slice(0, 5).concat('FIX-5');
+    expect(engine.nhlSetContributors(restoredTeam, { ...covering, forwards })).toBe(true);
+    expect(restoredTeam.contributors).toEqual({ ...preferred, forwards });
+
+    engine.simNhlRound(restored, 'FIX', () => 0.99);
+    expect(restoredTeam.players.find(player => player.id === selected)!.out).toBe(0);
+    expect(engine.nhlContributors(restoredTeam)).toEqual({ ...preferred, forwards });
+    expect(engine.nhlRelease(restoredTeam, restored.freeAgents, selected)).toBe(true);
+    expect(restoredTeam.contributors!.goalie).toBe('FIX-12');
+    expect(engine.nhlContributors(restoredTeam).goalie).toBe('FIX-12');
   });
 
   it('repairs retired and departed offseason contributors after actual roster replenishment', () => {

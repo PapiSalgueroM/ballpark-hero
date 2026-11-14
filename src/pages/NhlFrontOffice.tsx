@@ -10,7 +10,10 @@ import { hostCareerRules } from '@/lib/gmCareerFace'; /* Round 1561: the help's 
 const NhlFrontOffice = () => {
   /* Round 1561: the career rules (fired is a chapter, not the end) in the ? panel, the NFL page's five sentences with
      the NHL's word for the books. Built inside the component, never at module scope. */
-  const rules = hostCareerRules('nhl');
+  const rules = [
+    ...hostCareerRules('nhl'),
+    'In Roster, choose whose ratings feed the simulation. If a saved pick gets hurt, a healthy player fills in and your pick returns when healthy. For example, your backup covers in goal until your chosen goalie is fit.',
+  ];
   return (
     <>
       <PageSeo

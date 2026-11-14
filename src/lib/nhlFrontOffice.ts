@@ -259,16 +259,16 @@ function contributorsShape(value: unknown): value is NhlContributors {
     && (record.goalie === null || typeof record.goalie === 'string');
 }
 
+function sameContributorIds(a: string[], b: string[]): boolean {
+  return a.length === b.length && a.every(id => b.includes(id)) && b.every(id => a.includes(id));
+}
+
 function sameContributors(a: NhlContributors, b: NhlContributors): boolean {
-  return a.goalie === b.goalie && a.forwards.length === b.forwards.length && a.defense.length === b.defense.length
-    && a.forwards.every(id => b.forwards.includes(id)) && b.forwards.every(id => a.forwards.includes(id))
-    && a.defense.every(id => b.defense.includes(id)) && b.defense.every(id => a.defense.includes(id));
+  return a.goalie === b.goalie && sameContributorIds(a.forwards, b.forwards) && sameContributorIds(a.defense, b.defense);
 }
 
 /** Keep valid preferences, then fill unavailable slots by the original rating order. */
-export function nhlContributors(t: NhlGmTeam): NhlContributors {
-  const healthy = t.players.filter(p => p.out === 0);
-  const preference = contributorsShape(t.contributors) ? t.contributors : null;
+function resolveNhlContributors(preference: NhlContributors | null, roster: NhlGmPlayer[]): NhlContributors {
   const select = (ids: string[], players: NhlGmPlayer[], count: number): string[] => {
     const selected: string[] = [];
     const available = Math.min(count, players.length);
@@ -278,15 +278,19 @@ export function nhlContributors(t: NhlGmTeam): NhlContributors {
     }
     for (const p of [...players].sort((a, b) => b.ovr - a.ovr)) {
       if (selected.length >= available) break;
-      if (!selected.includes(p.id)) selected.push(p.id);
+      if (p.out === 0 && !selected.includes(p.id)) selected.push(p.id);
     }
     return selected;
   };
   return {
-    forwards: select(preference?.forwards ?? [], healthy.filter(p => p.pos === 'C' || p.pos === 'W'), 6),
-    defense: select(preference?.defense ?? [], healthy.filter(p => p.pos === 'D'), 4),
-    goalie: select(preference?.goalie ? [preference.goalie] : [], healthy.filter(p => p.pos === 'G'), 1)[0] ?? null,
+    forwards: select(preference?.forwards ?? [], roster.filter(p => p.pos === 'C' || p.pos === 'W'), 6),
+    defense: select(preference?.defense ?? [], roster.filter(p => p.pos === 'D'), 4),
+    goalie: select(preference?.goalie ? [preference.goalie] : [], roster.filter(p => p.pos === 'G'), 1)[0] ?? null,
   };
+}
+
+export function nhlContributors(t: NhlGmTeam): NhlContributors {
+  return resolveNhlContributors(contributorsShape(t.contributors) ? t.contributors : null, t.players.filter(p => p.out === 0));
 }
 
 /** Invalid or unchanged choices leave this team and its saved state untouched. */
@@ -301,8 +305,14 @@ export function nhlSetContributors(t: NhlGmTeam, value: unknown): boolean {
   if (!value.forwards.every(id => healthy.some(p => p.id === id && (p.pos === 'C' || p.pos === 'W')))
     || !value.defense.every(id => healthy.some(p => p.id === id && p.pos === 'D'))
     || (value.goalie !== null && !healthy.some(p => p.id === value.goalie && p.pos === 'G'))) return false;
-  if (sameContributors(value, nhlContributors(t))) return false;
-  t.contributors = { forwards: [...value.forwards], defense: [...value.defense], goalie: value.goalie };
+  const effective = nhlContributors(t);
+  if (sameContributors(value, effective)) return false;
+  const previous = contributorsShape(t.contributors) ? t.contributors : null;
+  t.contributors = {
+    forwards: [...(previous && sameContributorIds(value.forwards, effective.forwards) ? previous.forwards : value.forwards)],
+    defense: [...(previous && sameContributorIds(value.defense, effective.defense) ? previous.defense : value.defense)],
+    goalie: previous && value.goalie === effective.goalie ? previous.goalie : value.goalie,
+  };
   return true;
 }
 
@@ -312,13 +322,13 @@ export function nhlResetContributors(t: NhlGmTeam): boolean {
   return true;
 }
 
-/** Legacy and automatic teams never acquire an override through repair. */
+/** Remove departed or invalid picks while keeping injured players on the same roster. */
 export function repairNhlContributors(t: NhlGmTeam): boolean {
   if (!Object.prototype.hasOwnProperty.call(t, 'contributors')) return false;
   if (!contributorsShape(t.contributors)) return nhlResetContributors(t);
-  const effective = nhlContributors(t);
-  if (sameContributors(t.contributors, effective)) return false;
-  t.contributors = effective;
+  const preferred = resolveNhlContributors(t.contributors, t.players);
+  if (sameContributors(t.contributors, preferred)) return false;
+  t.contributors = preferred;
   return true;
 }
 
