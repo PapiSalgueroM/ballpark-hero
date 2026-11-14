@@ -1,4 +1,8 @@
 import { ALL_GAMES, type GameDef } from './gameRegistry';
+import {
+  FIGHT_PROMOTER_PATH, FIGHT_PROMOTER_MODE_KEY, BOXING_SAVE_KEY, MMA_SAVE_KEY,
+  fightPromoterMode, fightPromoterModeFromSearch, type FightPromoterMode,
+} from '@/lib/fightPromoterRoutes';
 
 /**
  * Round 717: the Continue playing row on the home page (master spec sections
@@ -65,14 +69,31 @@ export const CONTINUE_SAVES: readonly ContinueSave[] = [
   { path: '/aussie-rules-manager', saveKey: 'aussie-rules-manager-save-v2', name: ['clubName'], count: { at: ['season'], say: 'season {n}' } },
   { path: '/nrl-team-manager', saveKey: 'nrl-manager-save-v1', alternateSaveKeys: ['nrl-manager-save-v1-slot-2', 'nrl-manager-save-v1-slot-3'], count: { at: ['season', 'year'], previousAt: ['year'], say: '{n} season' }, ended: { at: ['retired'], say: 'retired' } },
   { path: '/fight-career', saveKey: 'fight-career-save-v1', name: ['st', 'fighter', 'name'], count: { at: ['st', 'fightNo'], say: '{n} fights', one: '1 fight' }, ended: { at: ['st', 'retired'], say: 'retired' } },
-  { path: '/fight-promoter', saveKey: 'fight-promoter-save-v1', name: ['st', 'name'], count: { at: ['st', 'show'], say: 'show {n}' }, ended: { at: ['st', 'closed'], say: 'closed' } },
+  { path: FIGHT_PROMOTER_PATH, saveKey: BOXING_SAVE_KEY, name: ['st', 'name'], count: { at: ['st', 'show'], say: 'show {n}' }, ended: { at: ['st', 'closed'], say: 'closed' } },
   { path: '/fight-gym', saveKey: 'fight-gym-save-v1', name: ['g', 'name'], count: { at: ['g', 'week'], say: 'week {n}' }, ended: { at: ['g', 'closed'], say: 'closed' } },
   { path: '/hall-of-champions', saveKey: 'hallOfChampionsV1', count: { at: ['openWings'], say: '{n} wings open', one: '1 wing open' } },
   { path: '/idle-arena', saveKey: 'dukb-idle-arena-v1', count: { at: ['trophies'], say: '{n} trophies', one: '1 trophy' } },
 ];
 
-/** Resolves a slot only from the keys registered for this game. */
+const mmaContinueSave: ContinueSave = {
+  path: FIGHT_PROMOTER_PATH + '?mode=mma',
+  saveKey: MMA_SAVE_KEY,
+  name: ['state', 'name'],
+  count: { at: ['state', 'event'], say: 'event {n}' },
+  ended: { at: ['state', 'closed'], say: 'closed' },
+};
+
+function promoterSave(entry: ContinueSave, mode: FightPromoterMode): ContinueSave {
+  return mode === 'mma' ? mmaContinueSave : { ...entry, path: FIGHT_PROMOTER_PATH + '?mode=boxing' };
+}
+
+/** Resolves a slot or mode only from the keys registered for this game. */
 export function resolveContinueSave(entry: ContinueSave, search: string): ContinueSave | null {
+  if (entry.path === FIGHT_PROMOTER_PATH) {
+    const params = new URLSearchParams(search);
+    const mode = fightPromoterModeFromSearch(params);
+    return mode ? promoterSave(entry, mode) : params.has('mode') ? null : entry;
+  }
   if (!entry.alternateSaveKeys) return entry;
   const slots = new URLSearchParams(search).getAll('slot');
   if (slots.length === 0 || (slots.length === 1 && slots[0] === '1')) return entry;
@@ -83,6 +104,7 @@ export function resolveContinueSave(entry: ContinueSave, search: string): Contin
 }
 
 export function continueSaveEntries(entry: ContinueSave): ContinueSave[] {
+  if (entry.path === FIGHT_PROMOTER_PATH) return [promoterSave(entry, 'boxing'), mmaContinueSave];
   return [entry, ...(entry.alternateSaveKeys ?? []).map((_, index) => resolveContinueSave(entry, 'slot=' + (index + 2))!)];
 }
 
@@ -105,7 +127,13 @@ export function savedGames(storage: Pick<Storage, 'getItem'> | null | undefined)
   if (!storage) return [];
   const out: SavedGame[] = [];
   for (const entry of CONTINUE_SAVES) {
-    const held = continueSaveEntries(entry).find(save => {
+    const candidates = continueSaveEntries(entry);
+    if (entry.path === FIGHT_PROMOTER_PATH) {
+      try {
+        if (fightPromoterMode(storage.getItem(FIGHT_PROMOTER_MODE_KEY)) === 'mma') candidates.reverse();
+      } catch { /* Read either save if the preference is unavailable. */ }
+    }
+    const held = candidates.find(save => {
       try { return storage.getItem(save.saveKey) !== null; } catch { return false; }
     });
     if (!held) continue;

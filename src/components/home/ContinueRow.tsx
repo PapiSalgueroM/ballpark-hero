@@ -1,8 +1,9 @@
 import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, History } from 'lucide-react';
-import { CONTINUE_SAVES, describeSave, savedGames, type SavedGame } from '@/data/continueSaves';
+import { CONTINUE_SAVES, continueSaveEntries, describeSave, savedGames, type SavedGame } from '@/data/continueSaves';
 import { sportOf } from '@/data/homeFront';
+import { FIGHT_PROMOTER_MODE_KEY } from '@/lib/fightPromoterRoutes';
 import { homeSaveStorage, useHomeSaveRefresh } from './homeSaveRefresh';
 import { SportGlyph, sportStyle } from './SportGlyph';
 import styles from './HomeLaunchDeck.module.css';
@@ -11,7 +12,10 @@ import styles from './HomeLaunchDeck.module.css';
     has nothing on it that reads cleanly. */
 export const SAVED_FALLBACK = 'Saved in this browser';
 
-const continueKeys = new Set(CONTINUE_SAVES.flatMap(entry => [entry.saveKey, ...(entry.alternateSaveKeys ?? [])]));
+const continueKeys = new Set([
+  ...CONTINUE_SAVES.flatMap(entry => continueSaveEntries(entry).map(save => save.saveKey)),
+  FIGHT_PROMOTER_MODE_KEY,
+]);
 
 /**
  * Round 717: Continue playing, under the Main Event band.

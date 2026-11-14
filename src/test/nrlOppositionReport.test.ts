@@ -28,6 +28,32 @@ describe('NRL opposition report', () => {
     }));
   });
 
+  it.each([['storm', 2026], ['bears', 2027]] as const)('shows only completed head-to-head results for %s', (clubId, year) => {
+    let career = createNrlCareer(clubId, 4, year);
+    const start = nrlOppositionReport(career);
+    if (start) expect(start.meetings).toEqual([]);
+    for (let i = 0; i < 27; i++) {
+      const report = nrlOppositionReport(career);
+      const rows = report ? career.season.results.filter(match =>
+        (match.homeId === clubId && match.awayId === report.opponentId)
+        || (match.awayId === clubId && match.homeId === report.opponentId)) : [];
+      if (report && rows.length) {
+        const before = JSON.stringify(career);
+        const expected = [...rows].reverse().map(match => ({
+          round: match.round,
+          scored: match.homeId === clubId ? match.homeScore : match.awayScore,
+          conceded: match.homeId === clubId ? match.awayScore : match.homeScore,
+        }));
+        expect(report.meetings).toEqual(expected);
+        expect(nrlOppositionReport(readNrlCareerSave(before)!)?.meetings).toEqual(expected);
+        expect(JSON.stringify(career)).toBe(before);
+        return;
+      }
+      career = reduceNrlCareer(career, { type: 'advance' });
+    }
+    throw new Error('Fixture needs a return match against a previous opponent');
+  });
+
   it('updates both model edges when the tactic, preparation or selected starter changes', () => {
     const career = createNrlCareer('broncos', 16);
     const base = nrlOppositionReport?.(career);

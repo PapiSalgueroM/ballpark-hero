@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,6 +284,8 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>Fight Gym</h1>
@@ -266,7 +300,7 @@
 <h3>Naming your gym</h3>
 <li>Name the gym. You start with 0.6m, two fighters and a name worth 8 out of 100.</li>
 <h3>Signing, training or booking each week</h3>
-<li>Each week you can sign somebody, put a fighter through a training block for 0.035m, or find one of them a fight.</li>
+<li>Each week you can sign somebody, put a fighter through a training block for 0.035m, or find one of them a fight. Training can raise a fighter's rating as soon as he finishes the block.</li>
 <h3>Picking three offers and three looks</h3>
 <li>A fight comes with three offers. Pick the night, then pick three looks the same way you would in a career.</li>
 <h4>Taking your cut of every purse</h4>
@@ -286,7 +320,7 @@
 <h3>The cost of letting a wrecked man go</h3>
 <li>Letting a wrecked man go costs you too. There is no clean exit from a fighter you ruined.</li>
 <h3>Damage that never heals</h3>
-<li>Damage never heals, and it takes a fighter's chin down fastest.</li>
+<li>Age and permanent damage can lower a fighter's rating between bouts. Damage takes his chin down fastest.</li>
 <li>A fighter is finished at 39, or at 34 if he is already carrying 58 damage, or at 82 damage whatever his age.</li>
 <h3>A faded name, a roster cap and no betting</h3>
 <li>A fighter's purse reflects his record as well as his current form, so a faded name keeps earning long after he should have stopped. That is the trap the whole game is built around.</li>
@@ -349,8 +383,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>

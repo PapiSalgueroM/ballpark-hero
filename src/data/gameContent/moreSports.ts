@@ -1624,6 +1624,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
           "MMA regular bouts run up to three rounds, and title bouts up to five. Striking and grappling produce knockouts, submissions or decisions in the seeded fight engine.",
           "MMA: A title fight needs two of your signed division's top four. An existing champion must participate; a champion whose contract expires leaves a vacant belt.",
           "MMA: Fighting uses one contract appearance and adds recovery time. Resting a month advances recovery and costs $2,000. You can rotate fighters while the last card recovers.",
+          "MMA: Bouts change ranking points and recovery time. Skill ratings stay fixed throughout the promotion.",
           "MMA: The promotion finishes after twelve events. Your score out of 100 combines reputation (50 points), profitable events (30) and held belts (20). You can also close after an event and take the score you have earned.",
         ],
       },
@@ -1658,6 +1659,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
         heading: "Retirement, going broke and no betting",
         items: [
           "Boxing: Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.",
+          "Boxing: Fighters age and carry lasting damage out of every bout. Their rating can fall between cards even while their name still sells tickets.",
           "Boxing: Go below zero after a show and you are out of the business.",
           "There is no betting anywhere in this game.",
         ],
@@ -1736,7 +1738,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
       {
         heading: "Signing, training or booking each week",
-        items: ["Each week you can sign somebody, put a fighter through a training block for 0.035m, or find one of them a fight."],
+        items: ["Each week you can sign somebody, put a fighter through a training block for 0.035m, or find one of them a fight. Training can raise a fighter's rating as soon as he finishes the block."],
       },
       {
         heading: "Picking three offers and three looks",
@@ -1782,7 +1784,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       {
         heading: "Damage that never heals",
         items: [
-          "Damage never heals, and it takes a fighter's chin down fastest.",
+          "Age and permanent damage can lower a fighter's rating between bouts. Damage takes his chin down fastest.",
           "A fighter is finished at 39, or at 34 if he is already carrying 58 damage, or at 82 damage whatever his age.",
         ],
       },
@@ -1879,7 +1881,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
       {
         heading: "Spending six weeks of camp",
-        items: ["Spend 6 weeks of camp across conditioning, power, defence and speed before every fight."],
+        items: ["Spend 6 weeks of camp across conditioning, power, defence and speed before every fight. Camp can improve your rating for the next bout, with smaller gains near your ceiling."],
       },
       {
         heading: "Picking three looks for fight night",
@@ -1908,7 +1910,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       {
         heading: "Damage that never heals",
         items: [
-          "Damage is permanent and cumulative. It never heals, it takes your chin down fastest, and at 82 you are done whatever your age says.",
+          "Age and permanent damage can lower your rating after each fight. Damage takes your chin down fastest, and at 82 you are done whatever your age says.",
           "You are also finished at 41, or at 35 if you are already carrying 58 damage, or after three straight defeats once you have dropped out of the top 12.",
         ],
       },

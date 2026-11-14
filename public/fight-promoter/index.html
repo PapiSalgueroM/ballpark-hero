@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,6 +284,8 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>Fight Promoter</h1>
@@ -286,6 +320,7 @@
 <li>MMA regular bouts run up to three rounds, and title bouts up to five. Striking and grappling produce knockouts, submissions or decisions in the seeded fight engine.</li>
 <li>MMA: A title fight needs two of your signed division's top four. An existing champion must participate; a champion whose contract expires leaves a vacant belt.</li>
 <li>MMA: Fighting uses one contract appearance and adds recovery time. Resting a month advances recovery and costs $2,000. You can rotate fighters while the last card recovers.</li>
+<li>MMA: Bouts change ranking points and recovery time. Skill ratings stay fixed throughout the promotion.</li>
 <li>MMA: The promotion finishes after twelve events. Your score out of 100 combines reputation (50 points), profitable events (30) and held belts (20). You can also close after an event and take the score you have earned.</li>
 <h3>Paying purses and covering the room</h3>
 <li>Boxing: Fighters take the greater of their guarantee or 58 percent of the door, so a big night is never a windfall and a room that does not fill still owes the guarantee.</li>
@@ -300,6 +335,7 @@
 <li>Boxing: Fighters leave a promotion nobody rates, and they take the top of your card with them. A promotion people want to be on replaces its weakest name with somebody better.</li>
 <h3>Retirement, going broke and no betting</h3>
 <li>Boxing: Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.</li>
+<li>Boxing: Fighters age and carry lasting damage out of every bout. Their rating can fall between cards even while their name still sells tickets.</li>
 <li>Boxing: Go below zero after a show and you are out of the business.</li>
 <li>There is no betting anywhere in this game.</li>
 <h2>Fight Promoter walkthroughs for MMA and boxing events</h2>
@@ -365,8 +401,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>

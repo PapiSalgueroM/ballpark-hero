@@ -1354,6 +1354,7 @@ export interface NrlOppositionReport {
   opponentId: string;
   ladderRank: number | null;
   recent: { round: number; rivalId: string; scored: number; conceded: number; outcome: 'W' | 'D' | 'L' }[];
+  meetings: { round: number; scored: number; conceded: number }[];
   attackEdge: number;
   defenseEdge: number;
   style?: ReturnType<typeof nrlCounterPlan>['style'];
@@ -1379,8 +1380,15 @@ export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport 
       };
     });
   const { matchday, opponentStrength, planRatings } = careerMatchday(state);
+  const meetings = season.results.filter(match =>
+    (match.homeId === season.clubId && match.awayId === opponentId)
+    || (match.awayId === season.clubId && match.homeId === opponentId)).reverse().map(match => ({
+    round: match.round,
+    scored: match.homeId === season.clubId ? match.homeScore : match.awayScore,
+    conceded: match.homeId === season.clubId ? match.awayScore : match.homeScore,
+  }));
   const style = nrlCounterPlanPreview(state)?.style;
-  return { opponentId, ladderRank, recent, ...(style && { style }), ...nrlMatchupEdges(matchday, clubMatch, opponentStrength, {
+  return { opponentId, ladderRank, recent, meetings, ...(style && { style }), ...nrlMatchupEdges(matchday, clubMatch, opponentStrength, {
     ...nrlCoachTactics(state.finance), planRivalRatings: planRatings,
   }) };
 }

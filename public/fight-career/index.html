@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,6 +284,8 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>Fight Career</h1>
@@ -278,7 +312,7 @@
 <h3>Using the five tiles on the hub</h3>
 <li>Use the five tiles above the offers whenever you like: Inbox for texts from your corner and your family, Rival for his record and the feud, Bank and shop for camp upgrades, Corner for your trainer, manager, morale and fans, and Badges.</li>
 <h3>Spending six weeks of camp</h3>
-<li>Spend 6 weeks of camp across conditioning, power, defence and speed before every fight.</li>
+<li>Spend 6 weeks of camp across conditioning, power, defence and speed before every fight. Camp can improve your rating for the next bout, with smaller gains near your ceiling.</li>
 <h3>Picking three looks for fight night</h3>
 <li>Pick three looks for the night. They cycle through the rounds, so three different ones is a plan and one repeated is a gift.</li>
 <h3>Watching the ring before the final verdict</h3>
@@ -292,7 +326,7 @@
 <h3>An opponent who adjusts to your looks</h3>
 <li>Your opponent does not stand still. A fighter with real ring IQ will switch into whatever punishes the look you used last round, so repeating yourself is the worst thing you can do.</li>
 <h3>Damage that never heals</h3>
-<li>Damage is permanent and cumulative. It never heals, it takes your chin down fastest, and at 82 you are done whatever your age says.</li>
+<li>Age and permanent damage can lower your rating after each fight. Damage takes your chin down fastest, and at 82 you are done whatever your age says.</li>
 <li>You are also finished at 41, or at 35 if you are already carrying 58 damage, or after three straight defeats once you have dropped out of the top 12.</li>
 <h3>Camp growth against a hidden ceiling</h3>
 <li>Camp growth runs against a hidden ceiling. Every fighter has one, camp moves you toward it and never past it, and the closer you get the less each camp is worth.</li>
@@ -377,8 +411,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>

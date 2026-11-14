@@ -1,4 +1,12 @@
+## 2026-11-14: Fight guides and resume, NRL return matches
+
+- Fight Career and Fight Gym explain how training can improve a fighter and how aging and permanent damage can lower the effective rating between bouts. Fight Promoter explains the equivalent boxing effects and distinguishes MMA match ratings from recovery and ranking points.
+- NRL Opposition report shows earlier meetings with the next opponent from your club's point of view, using settled matches in the current season.
+- Home resumes the saved Fight Promoter mode. With both boxing and MMA saves, it uses the chosen mode and passes that choice to the game. Switching modes keeps both promotions.
+
 ## 2026-11-14: Front Office and academy rating timing
+
+[PR #899](https://github.com/PapiSalgueroM/ballpark-hero/pull/899) published exact main `59a40e6780d8ef0c22633d11fe4c5e5e3e30bc7f`, deployment `f06fdde9-c403-4f8e-95c2-b401cfa4fcbb`. All seven guides, affected browser journeys and 174 sitemap routes passed live. IndexNow accepted the seven guides.
 
 - NFL, NBA, MLB and NHL Front Office move OVR one point at a time during regular-season play. Young players can improve toward potential, veterans can decline, and closing ratings carry through the draft and summer. NFL, NBA, MLB and NHL also age returning players once per offseason.
 - Soccer Career's Academy Report shows the OVR through the simulated youth year. The average development during that year can earn additional youth appearances.

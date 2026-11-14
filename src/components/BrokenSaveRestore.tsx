@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ContinueSave } from '@/data/continueSaves';
 import {
-  BACKUPS_KEPT, backupDate, backupKeysOf, browserStorage, deleteBackup, dismissBackup, offeredBackup, routeSaveEntry,
+  BACKUPS_KEPT, backupDate, backupKeysOf, browserStorage, deleteBackup, dismissBackup, fightPromoterSaveAddress, offeredBackup, routeSaveEntry,
   SET_ASIDE_SLOT_KEY,
 } from '@/lib/brokenSaveRecovery';
 import { reopenGame, restoreNow, takeCopyTrouble, takeOutcome, type KeeperOutcome } from '@/lib/saveKeeper';
@@ -84,13 +84,14 @@ export function BrokenSaveRestore({ pathname }: { pathname: string }) {
     const ask = () => {
       setFailed(null);
       setConfirming(false);
-      const entry = routeSaveEntry(pathname);
-      /* Asked once per load: what a staged put back did on the way in. */
-      const told = takeOutcome(pathname);
-      setOutcome(prev => told ?? (prev && entry && prev.path === entry.path ? prev : null));
-      const noCopy = takeCopyTrouble(pathname);
-      setUncopied(prev => (entry && (noCopy || prev === entry.path) ? entry.path : null));
       const storage = browserStorage();
+      const saveAddress = fightPromoterSaveAddress(pathname, storage);
+      const entry = routeSaveEntry(saveAddress);
+      /* Asked once per load: what a staged put back did on the way in. */
+      const told = takeOutcome(saveAddress);
+      setOutcome(prev => told ?? (prev && entry && prev.path === entry.path ? prev : null));
+      const noCopy = takeCopyTrouble(saveAddress);
+      setUncopied(prev => (entry && (noCopy || prev === entry.path) ? entry.path : null));
       /* The newest kept aside save he has not answered and is not playing right now. */
       const backupKey = entry ? offeredBackup(entry, storage) : null;
       if (!entry || !storage || !backupKey || hidden.current.has(backupKey)) { setOffer(null); return; }

@@ -434,6 +434,19 @@ function OppositionReport({ career }: { career: NrlCareerState }) {
             </div>
           </dl>
           <p className="mt-2 text-xs text-muted-foreground">Positive edges favour your club. The model uses your lineup, preparation, tactic and venue.</p>
+          {report.meetings.length > 0 && (
+            <div className="mt-4" data-nrl-opposition-meetings>
+              <h3 className="text-sm font-semibold">Head-to-head this season</h3>
+              <ol aria-label="Results against this opponent" className="mt-1 divide-y divide-border text-sm">
+                {report.meetings.map(match => (
+                  <li key={match.round} className="flex flex-wrap justify-between gap-x-2 py-2">
+                    <span className="text-muted-foreground">{roundLabel(match.round, nrlRegularRounds(year))}</span>
+                    <strong className="tabular-nums">{shortName(year, career.season.clubId)} {match.scored} to {match.conceded} {shortName(year, report.opponentId)}</strong>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          )}
           <h3 className="mt-4 text-sm font-semibold">Recent form</h3>
           {report.recent.length ? (
             <ol className="mt-1 divide-y divide-border text-sm" data-nrl-opposition-form>
@@ -553,6 +566,11 @@ function SavedMatchReport({ label, match, season }: { label: string; match: NrlM
   );
 }
 
+function roundLabel(round: number, regularRounds: number) {
+  return round <= regularRounds ? 'Round ' + round
+    : round === regularRounds + 4 ? 'Grand final' : 'Finals week ' + (round - regularRounds);
+}
+
 function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNextRound }) {
   const shortName = useNrlClubName();
   const { year, clubId, results } = season;
@@ -562,8 +580,6 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
   const regular = draw[round - 1];
   const settled = results.filter(match => match.round === round);
   const managedResult = settled.find(match => match.homeId === clubId || match.awayId === clubId);
-  const roundLabel = (number: number) => number <= draw.length ? 'Round ' + number
-    : number === draw.length + 4 ? 'Grand final' : 'Finals week ' + (number - draw.length);
   const upcoming = regular?.map(([homeId, awayId]) => ({ homeId, awayId }))
     ?? (next.finalsRound !== null && next.round === round ? next.fixtures : []);
   const matches = settled.length
@@ -587,7 +603,7 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
           {finals.size > 0 && (
             <optgroup label="Finals">
               {[...finals].map(number => <option key={number} value={number}>
-                {roundLabel(number)}
+                {roundLabel(number, draw.length)}
               </option>)}
             </optgroup>
           )}
@@ -601,7 +617,7 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
               {match.label}
             </li>)}
           </ol>
-          {managedResult && <SavedMatchReport key={round} label={roundLabel(round)} match={managedResult} season={season} />}
+          {managedResult && <SavedMatchReport key={round} label={roundLabel(round, draw.length)} match={managedResult} season={season} />}
           {byes.length > 0 && <p className="border-t border-border pt-2 text-muted-foreground">
             {byes.length === 1 ? 'Bye' : 'Byes'} · {byes.map(club => shortName(year, club.id)).join(', ')}
           </p>}
@@ -617,7 +633,7 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
                   <span className="text-muted-foreground">Round {index + 1}</span>
                   <span>{result ? scoreLine(result, year, shortName) : fixture ? `${shortName(year, fixture[0])} vs ${shortName(year, fixture[1])}` : 'Bye'}</span>
                 </div>
-                {result && <SavedMatchReport label={roundLabel(index + 1)} match={result} season={season} />}
+                {result && <SavedMatchReport label={roundLabel(index + 1, draw.length)} match={result} season={season} />}
               </li>
             );
           })}
