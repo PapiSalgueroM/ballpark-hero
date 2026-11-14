@@ -32,7 +32,7 @@ try {
       localStorage.setItem('cookie-consent', 'essential');
       localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() }));
     });
-    const response = await page.goto(base);
+    const response = await page.goto(base, { waitUntil: 'domcontentloaded' });
     if (process.env.HOME_LAUNCH_DEPLOYMENT) {
       assert.ok(response?.headers()['x-deployment-id']?.includes(process.env.HOME_LAUNCH_DEPLOYMENT), 'Expected deployment answered');
     }
@@ -116,7 +116,7 @@ try {
     }
     assert.deepEqual(errors, [], 'No page exceptions');
     rows.push({ width, height, motion, scale, firstGameTop: box.y, dailyTop: daily.y, launchRowHeight: finalRow?.height });
-    console.log(`Home ${width}px at ${scale * 100}%: first Daily card y=${Math.round(daily.y)}, last launch row ${Math.round(finalRow?.height ?? 0)}px, keyboard navigation passed.`);
+    console.log(`Home ${width}px${scale === 2 ? ' (200% desktop reflow)' : ''}: first Daily card y=${Math.round(daily.y)}, last launch row ${Math.round(finalRow?.height ?? 0)}px, keyboard navigation passed.`);
     } catch (error) {
       failures.push({ width, message: error.message });
       console.error(`Home ${width}px failed: ${error.message}`);
