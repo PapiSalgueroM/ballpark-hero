@@ -25,6 +25,11 @@ const titles = [
   ...['null', 'negative', 'string', 'NaN', 'infinity'].map(value => `refuses invalid practice salary ${value} before mutation`),
   'refuses an unpriced practice player from an actual restored save',
   'keeps a valid zero-cost call-up exact instead of inventing a price',
+  'plays a full-roster elevation for one week and keeps just the weekly charge',
+  'limits two players per game and three games per player, and resets in the offseason',
+  'releases a canceled reservation and preserves a permanent promotion',
+  'refuses unaffordable or injured players and cancels an elevation if cap room is spent before kickoff',
+  'holds an older save byte for byte and drops a mismatched reservation safely',
 ];
 const controls = {
   capContext: [engine, "  if (!Number.isFinite(cap) || cap <= 0) return 'The current cap is unavailable.';", '  void cap;', [2, 4, 5, 9, 10]],
@@ -34,6 +39,7 @@ const controls = {
   caller: [board, 'man && promoteFromPractice(t, pid, lg.cap)', 'man && promoteFromPractice(t, pid)', [16, 17]],
   price: [board, " · {Number.isFinite(p.salary) && p.salary >= 0 ? `$${p.salary}M` : 'Salary unavailable'}", '', [15, 16, 24]],
   reason: [board, '{refusal && !fullBlock && <span data-practice-refusal className="block text-[10px] text-destructive">{refusal}</span>}', '', [15, 17, 18, 24]],
+  seasonLimit: [engine, '>= NFL_ELEVATIONS_PER_PLAYER) {', '> NFL_ELEVATIONS_PER_PLAYER) {', [27]],
 };
 const control = process.env.NFL_PRACTICE_CONTROL || '';
 assert.ok(!control || control in controls, 'Known practice promotion control');
@@ -68,22 +74,22 @@ try {
   assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|Timeout calling|STACK_TRACE_ERROR|\bRPC\b|Failed to (?:resolve import|load)|Cannot find module|SyntaxError|Transform failed|SIM_OFFLINE_BLOCK/);
   const report = JSON.parse(await readFile(reportFile, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0); assert.equal(report.numPendingTests, 0);
-  const rows = report.testResults.flatMap(file => file.assertionResults); assert.equal(rows.length, 26);
+  const rows = report.testResults.flatMap(file => file.assertionResults); assert.equal(rows.length, titles.length);
   assert.deepEqual(rows.map(row => row.title), titles, 'All actual outcomes execute without filters');
   assert.ok(rows.every(row => row.status === 'failed' || row.status === 'passed'), 'No skipped or pending cases');
   if (control) {
     const indices = controls[control][3], failed = rows.filter(row => row.status === 'failed');
     console.log('NFL_PRACTICE_MEASURE: ' + JSON.stringify({ control, passed: report.numPassedTests, failed: failed.map(row => row.title) }));
-    assert.equal(run.status, 1); assert.equal(report.numFailedTests, indices.length); assert.equal(report.numPassedTests, 26 - indices.length);
+    assert.equal(run.status, 1); assert.equal(report.numFailedTests, indices.length); assert.equal(report.numPassedTests, titles.length - indices.length);
     assert.deepEqual(failed.map(row => row.title).sort(), indices.map(i => titles[i]).sort());
     for (const row of failed) assert.match(row.failureMessages.join('\n'), /AssertionError:|TestingLibraryElementError: Unable to find an element with the text:|Error: expect\(element\).toBeDisabled\(\)/);
     for (const index of [0, 1, 13, 14, 25]) assert.equal(rows[index].status, 'passed', 'Independent admission, refusal and exact accepted identity outcomes held');
-    console.log(`NFL practice promotion ${control}: ${indices.length} exact intended failures, ${26 - indices.length} independent passes; all26 execute.`);
+    console.log(`NFL practice promotion ${control}: ${indices.length} exact intended failures, ${titles.length - indices.length} independent passes; all ${titles.length} execute.`);
     console.log('NFL_PRACTICE_CONTROL: ' + JSON.stringify({ control, failed: failed.map(row => ({ title: row.title, messages: row.failureMessages })) }));
   } else {
     if (run.status !== 0) process.stdout.write(output);
-    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 26); assert.equal(report.numFailedTests, 0);
-    console.log('NFL practice promotion:26/26 actual engine and saved Board outcomes pass, no skipped cases.');
+    assert.equal(run.status, 0); assert.equal(report.numPassedTests, titles.length); assert.equal(report.numFailedTests, 0);
+    console.log(`NFL practice promotion: ${titles.length}/${titles.length} actual engine and saved Board outcomes pass, no skipped cases.`);
     console.log('NFL practice promotion: cap context, selected salary, dead money, exact cap equality and repeated promotion refuse or commit the measured state correctly.');
     console.log('NFL practice promotion: actual Board displays salary and refusal, holds rejected save bytes, persists accepted player identity and depth, restores once and reevaluates remaining cap.');
   }
