@@ -15,7 +15,7 @@ vi.mock('@/hooks/useMostPlayed', () => ({ useMostPlayed: () => ({ entries: [], l
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
 vi.mock('@/components/auth/AuthModal', () => ({ AuthModal: () => null }));
 vi.mock('@/components/game/StreakReminder', () => ({ StreakReminder: () => null }));
-vi.mock('@/components/home/FeaturedStage', () => ({ FeaturedStage: () => null }));
+vi.mock('@/components/home/art/HomeArt', () => ({ default: () => null }));
 vi.mock('@/components/home/ContinueRow', () => ({ ContinueRow: () => null }));
 vi.mock('@/components/home/DailyRail', () => ({ DailyRail: () => <a href="/daily-fixture">Daily fixture</a> }));
 vi.mock('@/components/home/JustShipped', () => ({ JustShipped: () => null }));
@@ -234,9 +234,12 @@ describe('browser-local game picks', () => {
     first.focus(); fireEvent.click(first);
     const last = within(shelf(view)).getByRole('button', { name: 'Unpin NHL Connections' });
     expect(document.activeElement, 'Removing a focused pick keeps the next pick reachable').toBe(last);
+    const featured = within(view.getByRole('region', { name: 'Main event' })).getAllByRole('link')[0];
+    const focus = vi.spyOn(featured, 'focus');
     fireEvent.click(last);
     expect(shelf(view)).toBeNull();
-    expect(document.activeElement, 'Removing the last pick focuses the next existing game link').toBe(view.getByRole('link', { name: 'Daily fixture' }));
+    expect(document.activeElement, 'Removing the last pick focuses the next featured game').toBe(featured);
+    expect(focus).toHaveBeenCalledWith({ preventScroll: true });
     expect(saved()).toEqual([]);
   });
 

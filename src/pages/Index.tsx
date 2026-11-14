@@ -93,7 +93,7 @@ export default function Index() {
   const [bestScores, setBestScores] = useState(EMPTY_BEST_SCORES);
   const isSearching = searchQuery.trim().length > 0;
   const { paths: gamePicks, toggle: changeGamePick, storageFailed: picksStorageFailed } = useGamePicks();
-  const dailyGamesRef = useRef<HTMLDivElement>(null);
+  const launchGamesRef = useRef<HTMLDivElement>(null);
   const pickAnchor = useRef<{ node: HTMLElement; top: number } | null>(null);
   const picksAtCommit = useRef(gamePicks);
   const toggleGamePick = useCallback((path: string, node?: HTMLElement) => {
@@ -245,12 +245,12 @@ export default function Index() {
   const catalogue = useMemo(() => (
     <div className="space-y-8 lg:space-y-10">
       <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <div className="min-w-0 space-y-4">
+        <div ref={launchGamesRef} className="min-w-0 space-y-4">
           <ContinueRow />
-          <GamePicksRow paths={gamePicks} onToggle={toggleGamePick} onEmpty={() => dailyGamesRef.current?.querySelector<HTMLAnchorElement>('a')?.focus({ preventScroll: true })} />
+          <GamePicksRow paths={gamePicks} onToggle={toggleGamePick} onEmpty={() => launchGamesRef.current?.querySelector<HTMLAnchorElement>('[data-stage-card]')?.focus({ preventScroll: true })} />
           <FeaturedStage />
         </div>
-        <div ref={dailyGamesRef} className="min-w-0">
+        <div className="min-w-0">
           <DailyRail />
         </div>
       </div>
