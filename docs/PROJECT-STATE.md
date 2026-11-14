@@ -1,4 +1,10 @@
+## 2026-11-14: Accessible clues in three Grids
+
+- College Football, Football and Soccer Grid cells announce both clues and whether a square is empty, incorrect or correct. A correct square also retains the confirmed player name and rarity when available. Keyboard activation opens the existing guess entry for the named clue pair.
+
 ## 2026-11-14: Club Manager Intercontinental Cup and NRL attack plan comparison
+
+[PR #919](https://github.com/PapiSalgueroM/ballpark-hero/pull/919) published exact main `ab6157229f6ae696958e59050ef62b8346b5ba9e`, deployment `7ae1b773-85d9-47a5-81a7-35e794951220`.
 
 - In a Club Manager save’s 2025/26 season, Cups follows the six real entrants across five scheduled matches in Cairo, Jeddah and Al Rayyan. Results simulate as the club calendar passes each date and stay attached to the save. Draws get extra time then penalties. The current manager earns the final trophy only if their real club wins while they are in the job. The edition is a followed competition with simulated scores. [Official bracket regulations](https://digitalhub.fifa.com/m/41ca9a261eb3f7d8/original/FIC2025_regulations_EN.pdf) [Official schedule](https://digitalhub.fifa.com/m/18d32b5e71e584f0/original/FIFA-Intercontinental-Cup-Qatar-2025-Match-Schedule.pdf) [Qatar organising committee schedule](https://pra.roadtoqatar.qa/wp-content/uploads/2025/12/fic2025_match_schedule_v4_05122025.pdf)
 - NRL Opposition report compares the attack and defence edges for every available attack plan with automatic rotation, using the current lineup, preparation and venue. Choose and save the tactic in the existing Attack plan control.
