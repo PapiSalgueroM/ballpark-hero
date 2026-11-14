@@ -14,6 +14,7 @@ const NhlFrontOffice = () => {
     ...hostCareerRules('nhl'),
     'The draft board shows every available prospect. Filter by position and keep up to three on your shortlist without spending a pick.',
     'In Roster, choose whose ratings feed the simulation. If a saved pick gets hurt, a healthy player fills in and your pick returns when healthy. For example, your backup covers in goal until your chosen goalie is fit.',
+    'Open Round results to revisit a played round’s wins, losses, overtime losses and rating changes.',
   ];
   return (
     <>
@@ -42,6 +43,7 @@ const NhlFrontOffice = () => {
               'Work the cap: waive contracts, sign free agents, swing trades with pick sweeteners.',
               'Run the GM desk: hire your staff, settle every expiring deal on the re-sign desk, and build packages of players and picks until the trade deadline: deals shut once round 16 is played.',
               'Play the season in stretches; wins are two points, OT losses one.',
+              'Open Round results to revisit a played round’s wins, losses, overtime losses and rating changes. Older rounds can have missing results or ratings.',
               'Finish top three in the division or grab a wild card to make the bracket.',
               'Win four best-of-7 rounds for the Cup, then draft, develop and go again.',
               'Face the room: the podium, the accountability scrum and the trade question move your trust upstairs, and what you promise can raise or soften next season\'s mandate.',

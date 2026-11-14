@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import NbaFrontOfficeBoard from '@/components/nba-front-office/NbaFrontOfficeBoard';
 import { initNbaLeague, simRound, type NbaLeague } from '@/lib/nbaFrontOffice';
-import type { NbaRoundChange, NbaRoundResult } from '@/lib/nbaRoundHistory';
+import type { FoRoundChange, FoRoundRecord } from '@/lib/foRoundHistory';
 import { keyedRng } from '@/lib/keyedRng';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
@@ -42,11 +42,11 @@ describe('NBA Front Office round results', () => {
     const compare = keyedRng('NBA history paired draws');
     boardDraws = 0;
     let engineDraws = 0;
-    const expected: Array<Omit<NbaRoundResult, 'changes'> & { changes: NbaRoundChange[] }> = [];
+    const expected: Array<FoRoundRecord & { changes: FoRoundChange[] }> = [];
     for (let round = 2; round <= 5; round += 1) {
       const before = paired.teams[team].players.map(player => player.ovr);
       const report = simRound(paired, team, () => { engineDraws++; return compare(); });
-      const changes = paired.teams[team].players.flatMap<NbaRoundChange>((player, i) => player.ovr === before[i] ? []
+      const changes = paired.teams[team].players.flatMap<FoRoundChange>((player, i) => player.ovr === before[i] ? []
         : [[player.name, player.ovr - before[i], player.ovr]]);
       expected.push({ round, wins: report.myWins, losses: report.myLosses, changes });
       paired.round += 1;
