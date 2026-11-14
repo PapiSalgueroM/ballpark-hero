@@ -28,8 +28,11 @@ import { getNbaLifeEventsB } from './nbaCareerLifeB';
 import { getNbaLifeEventsC } from './nbaCareerLifeC';
 import { getNbaCorruptionEvents } from './nbaCareerCorruption';
 // Round 179: the shared free agency engine, one implementation for all four sports.
-import { buildFaWindow } from './usCareerFreeAgency';
-import type { FaWindow, FaPushArgs } from './usCareerFreeAgency';
+import { buildFaWindow, contactFaTeam } from './usCareerFreeAgency';
+import type { FaBuildArgs, FaWindow, FaPushArgs } from './usCareerFreeAgency';
+import { keyedRng } from './keyedRng';
+import { summerCareerKey } from './usCareerSummer';
+import { isFarewellSeason } from './careerRetirement';
 import { buildExtension, type ExtensionTalk, type ExtPushArgs } from './usCareerExtension';
 // Round 184: the shared press room, same one-engine pattern.
 import { buildPressMoment, pressFactsFrom, applyPressChoice } from './usCareerPress';
@@ -1014,11 +1017,15 @@ export function nbaProgress(c: NbaCareerState, rng: () => number, seasonRating?:
 /* Round 179: the real free agency window. Replaces the old two-button
    'contract' card in the event deck; the board now guarantees this screen
    before any season starts with no deal. */
-export function buildNbaFaWindow(c: NbaCareerState, incumbentQuality: number, rng: () => number = Math.random): FaWindow {
-  return buildFaWindow({
+export function nbaFreeAgencyTeams(c: NbaCareerState) {
+  return nbaEraTeamIds(c.eraId).map(id => ({ id, label: nbaTeamLabelOf(id, c.eraId) }));
+}
+
+function nbaFaBuildArgs(c: NbaCareerState, incumbentQuality: number, rng: () => number): FaBuildArgs {
+  return {
     sport: 'nba',
     currentTeam: c.team,
-    pool: nbaEraTeamIds(c.eraId).map(id => ({ id, label: nbaTeamLabelOf(id, c.eraId) })),
+    pool: nbaFreeAgencyTeams(c),
     market: nbaMarketSalary(c),
     discount: 0.9,
     minSalary: 0.8,
@@ -1028,7 +1035,19 @@ export function buildNbaFaWindow(c: NbaCareerState, incumbentQuality: number, rn
     cliffAge: NBA_POS_CLIFF_AGE[c.pos] ?? 32,
     incumbentQuality,
     rng,
-  });
+  };
+}
+
+export function buildNbaFaWindow(c: NbaCareerState, incumbentQuality: number, rng: () => number = Math.random): FaWindow {
+  return buildFaWindow(nbaFaBuildArgs(c, incumbentQuality, rng));
+}
+
+export function contactNbaFreeAgencyTeam(c: NbaCareerState, w: FaWindow, id: string, incumbentQuality: number): FaWindow {
+  const rng = keyedRng(`nba-free-agent-contact:${summerCareerKey(c)}:${c.year}:${id}`);
+  const next = contactFaTeam(w, id, nbaFaBuildArgs(c, incumbentQuality, rng));
+  const offer = next.contact?.offered && next.offers.at(-1);
+  if (next !== w && offer && isFarewellSeason(c.retirement, c.year)) offer.years = 1;
+  return next;
 }
 
 export function nbaFaPushArgs(c: NbaCareerState, rng: () => number = Math.random): FaPushArgs {

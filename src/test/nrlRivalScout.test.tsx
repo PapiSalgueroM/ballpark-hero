@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
 import {
-  createNrlCareer, nrlCareerMarket, nrlContractOffer, nrlRivalSquad, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
+  createNrlCareer, nrlCareerMarket, nrlContractOffer, NRL_SHORTLIST_LIMIT, nrlRivalSquad, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { createNrlSeason, NRL_SAVE_KEY, reduceNrlSeason } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
@@ -102,6 +102,67 @@ describe('NRL rival club scouting', () => {
     await waitFor(() => expect(screen.queryByRole('region', { name: 'Brisbane Broncos squad' })).not.toBeInTheDocument());
     expect(raw()).toBe(bytes);
     expect(localStorage.getItem(fenceKey)).toBe(fence);
+  });
+
+  it('saves an eligible player once, opens their existing recruitment offer, and removes them when signed', async () => {
+    const career = createNrlCareer('storm', 17);
+    const target = nrlCareerMarket(career).find(entry => entry.kind === 'rival'
+      && nrlContractOffer(career, entry.player.id, entry.askingSalary, 1).ok)!;
+    const { id, name, contract } = target.player;
+    const source = nrlSeasonPlan(2026).clubs.find(club => club.id === contract!.clubId)!;
+    const bytes = JSON.stringify(career);
+    openLadder(bytes);
+    const { squad } = await scout(source.id, source.name);
+    const row = within(squad.getByText(name).closest('li')!);
+    const picking = row.getByRole('button', { name: 'Shortlist ' + name });
+    expect(picking).toHaveAttribute('aria-pressed', 'false');
+    expect(raw()).toBe(bytes);
+    fireEvent.click(picking);
+    expect(picking).toHaveAttribute('aria-pressed', 'true');
+    expect(readNrlCareerSave(raw())?.shortlist).toEqual([id]);
+    const fence = localStorage.getItem(fenceKey);
+    fireEvent.click(picking);
+    expect(raw()).toBe(bytes);
+    expect(localStorage.getItem(fenceKey)).not.toBe(fence);
+    fireEvent.click(picking);
+    expect(readNrlCareerSave(raw())?.shortlist).toEqual([id]);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Open recruitment shortlist' }));
+    expect(screen.getByRole('button', { name: 'Shortlisted only' })).toHaveAttribute('aria-pressed', 'true');
+    fireEvent.click(screen.getByRole('button', { name: 'Make offer for ' + name }));
+    fireEvent.change(screen.getByRole('combobox', { name: 'Term' }), { target: { value: '1' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Agree contract' }));
+    const signed = readNrlCareerSave(raw())!;
+    expect(signed.shortlist).toBeUndefined();
+    expect(signed.players.find(row => row.id === id)?.futureContract).toMatchObject({ clubId: 'storm', salary: target.askingSalary });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Ladder' }));
+    const rescanned = await scout(source.id, source.name);
+    expect(within(rescanned.squad.getByText(name).closest('li')!).queryByRole('button', { name: 'Shortlist ' + name })).toBeNull();
+  });
+
+  it('uses the shared target limit and keeps ineligible rival players without shortlist buttons', async () => {
+    const career = createNrlCareer('bears', 17, 2027);
+    const market = nrlCareerMarket(career).filter(entry => entry.kind === 'rival');
+    const target = market[0];
+    const source = nrlSeasonPlan(2027).clubs.find(club => club.id === target.player.contract!.clubId)!;
+    const saved = market.find(entry => entry.player.id !== target.player.id && entry.player.contract?.clubId === source.id)!;
+    const full = [saved, ...market.filter(entry => ![target.player.id, saved.player.id].includes(entry.player.id))]
+      .slice(0, NRL_SHORTLIST_LIMIT).reduce((state, entry) => reduceNrlCareer(state, {
+        type: 'setShortlist', year: 2027, playerId: entry.player.id, saved: true,
+      }), career);
+    const ineligible = nrlRivalSquad(full, source.id).find(row => row.marketYear === null)!;
+    openLadder(JSON.stringify(full));
+    const { squad } = await scout(source.id, source.name);
+    expect(squad.queryByRole('button', { name: 'Shortlist ' + ineligible.player.name })).toBeNull();
+    const add = squad.getByRole('button', { name: 'Shortlist ' + target.player.name });
+    expect(add).toBeDisabled();
+    fireEvent.click(squad.getByRole('button', { name: 'Shortlist ' + saved.player.name }));
+    expect(add).toBeEnabled();
+    const removed = readNrlCareerSave(raw())!;
+    expect(removed.shortlist).toHaveLength(NRL_SHORTLIST_LIMIT - 1);
+    fireEvent.click(add);
+    expect(readNrlCareerSave(raw())?.shortlist).toEqual([...removed.shortlist!, target.player.id]);
   });
 
   it('keeps a pending signing at its source club until the agreed season begins', async () => {

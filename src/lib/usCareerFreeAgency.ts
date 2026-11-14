@@ -60,6 +60,7 @@ export interface FaWindow {
   offers: FaOffer[];
   /** One-line market read for the screen header. */
   note: string;
+  contact?: { team: string; offered: boolean };
 }
 
 export interface FaBuildArgs {
@@ -166,6 +167,32 @@ function tierOfQuality(q: number): FaTier {
     : q >= TIER_QUALITY.playoff[0] ? 'playoff' : 'rebuild';
 }
 
+function proveItOffer(team: { id: string; label: string }, a: FaBuildArgs): FaOffer {
+  return {
+    team: team.id, label: team.label,
+    salary: round1(Math.max(a.minSalary, a.market * 0.7)),
+    years: 1,
+    quality: Math.round(within(TIER_QUALITY.rebuild, a.rng)),
+    tier: 'rebuild',
+    pitch: 'One year to remind the league who you are.',
+    incumbent: false, pushed: false, gone: false,
+  };
+}
+
+/** An agent can make one call to a franchise that did not already make an offer. */
+export function contactFaTeam(w: FaWindow, id: string, a: FaBuildArgs): FaWindow {
+  if (w.contact || w.offers.some(o => o.team === id)) return w;
+  const target = a.pool.find(team => team.id === id && team.id !== a.currentTeam);
+  if (!target) return w;
+  const offered = a.rng() < faLeverage(a);
+  if (!offered) return { ...w, contact: { team: id, offered } };
+  const tiers: FaTier[] = a.ovr >= 84 ? ['contender', 'playoff', 'rebuild']
+    : a.ovr >= 76 ? ['contender', 'playoff', 'playoff', 'rebuild']
+    : ['playoff', 'rebuild'];
+  const offer = a.ovr < 70 ? proveItOffer(target, a) : outsideOffer(pick(tiers, a.rng), target, a);
+  return { ...w, offers: [...w.offers, offer], contact: { team: id, offered } };
+}
+
 /** Build the whole window. Deterministic given rng, pure otherwise. */
 export function buildFaWindow(a: FaBuildArgs): FaWindow {
   const others = a.pool.filter(t => t.id !== a.currentTeam);
@@ -190,15 +217,7 @@ export function buildFaWindow(a: FaBuildArgs): FaWindow {
   } else {
     /* The prove-it deal: one year, below market, a rebuild taking a flyer. */
     const team = bag[0];
-    const proveIt: FaOffer = {
-      team: team.id, label: team.label,
-      salary: round1(Math.max(a.minSalary, a.market * 0.7)),
-      years: 1,
-      quality: Math.round(within(TIER_QUALITY.rebuild, a.rng)),
-      tier: 'rebuild',
-      pitch: 'One year to remind the league who you are.',
-      incumbent: false, pushed: false, gone: false,
-    };
+    const proveIt = proveItOffer(team, a);
     const incumbentLow = incumbentOffer(a);
     return {
       offers: [incumbentLow, proveIt],

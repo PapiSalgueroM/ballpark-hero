@@ -6,7 +6,7 @@ import NrlCareerOffice from '@/components/nrl-manager/NrlCareerOffice';
 import { NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
-  createNrlCareer, nrlCareerMarket, nrlCareerSquad, nrlContractOffer, nrlMutualReleaseQuote, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
+  createNrlCareer, nrlCareerMarket, nrlCareerSquad, nrlContractOffer, nrlMutualReleaseQuote, nrlTakeoverOffers, nrlTakeoverPlayers, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { createNrlSeason, NRL_SAVE_KEY, reduceNrlSeason } from '@/lib/nrlManager';
 import { NRL_SAVE_ENTRY, nrlCheckpointKey, restoreNrlCheckpoint, saveNrlCheckpoint } from '@/lib/nrlSaveSlots';
@@ -34,10 +34,10 @@ const desk = () => screen.getByText('Deals ending this season', { exact: true })
 const row = (name: string) => within(within(desk()).getByText(name, { exact: true }).closest('li')!);
 
 const completed = finish(createNrlCareer('storm', 4));
-const outgoingId = 'storm-2-0';
-const withMove = finish(reduceNrlCareer(createNrlCareer('storm', 4), {
-  type: 'arrangeTakeover', year: 2026, clubId: 'storm', playerId: outgoingId, destinationId: 'raiders',
-}));
+const opening = createNrlCareer('storm', 4);
+const { outgoingId, destinationId } = nrlTakeoverPlayers(opening).flatMap(player =>
+  nrlTakeoverOffers(opening, player.id).slice(0, 1).map(offer => ({ outgoingId: player.id, destinationId: offer.clubId })))[0];
+const withMove = finish(reduceNrlCareer(opening, { type: 'arrangeTakeover', year: 2026, clubId: 'storm', playerId: outgoingId, destinationId }));
 const renewal = nrlCareerMarket(withMove).find(entry => entry.kind === 'renewal'
   && entry.startYear === 2027 && nrlContractOffer(withMove, entry.player.id, entry.askingSalary, 2).ok)!;
 const offer = { type: 'offerContract', playerId: renewal.player.id, salary: renewal.askingSalary, years: 2 } as const;

@@ -67,6 +67,21 @@ describe('saved US contract market', () => {
     expect(declineMarketExtension(saved)).toBe(saved);
     expect(restoreMarketTalk(saved, career({ year: 2027 }), 'nfl')).toBeNull();
   });
+  it('restores a contact offer in the fifth slot and its original signing or negotiation index', () => {
+    const c = career({ contractYears: 0 });
+    const base = windowOf();
+    base.offers.push(offer('DDD', 9, 3, 78), offer('EEE', 8, 2, 87));
+    const teams = ['AAA', 'BBB', 'CCC', 'DDD', 'EEE'];
+    const withoutContact = openMarketFreeAgency(c, 'nba', base);
+    expect(restoreMarketTalk(withoutContact, c, 'nba', teams)).toBeNull();
+    const held = openMarketFreeAgency(c, 'nba', { ...base, contact: { team: 'EEE', offered: true } });
+    expect(restoreMarketTalk(held, c, 'nba', teams)).toBe(held);
+    expect(restoreMarketTalk(held, c, 'nba', teams.slice(0, -1))).toBeNull();
+    const pushed = pushMarketFreeAgency(held, 4, pushArgs(95, tape([0.1, 0.5, 0.99]).rng));
+    expect(restoreMarketTalk(clone(pushed), c, 'nba', teams)?.wheel?.offerIndex).toBe(4);
+    expect(pushed.kind === 'freeagency' && pushed.window.offers.slice(0, 4)).toEqual(base.offers.slice(0, 4));
+    expect(restoreMarketTalk(openMarketFreeAgency(c, 'nfl', { ...base, contact: { team: 'EEE', offered: true } }), c, 'nfl', teams)).toBeNull();
+  });
   it('farewell rejects extension talks and longer market contracts', () => {
     const c = career({ retirement: { farewellYear: 2026 } });
     expect(restoreMarketTalk(openMarketExtension(c, 'nfl', extension()), c, 'nfl')).toBeNull();

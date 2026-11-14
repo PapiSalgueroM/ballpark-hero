@@ -325,6 +325,10 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   buildExtension(c: C, rng: () => number): ExtensionTalk;
   extPushArgs(c: C, rng: () => number): ExtPushArgs;
   buildFaWindow(c: C, incumbentQuality: number, rng: () => number): FaWindow;
+  freeAgencyContact?: {
+    teams(c: C): { id: string; label: string }[];
+    contact(c: C, w: FaWindow, team: string, incumbentQuality: number): FaWindow;
+  };
   faPushArgs(c: C, rng: () => number): FaPushArgs;
   /** "franchise", "club" or "team": what the market calls who is bidding. */
   faSportNoun: string;
