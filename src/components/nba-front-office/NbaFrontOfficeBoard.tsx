@@ -19,6 +19,8 @@ import {
   /* Round 824: new deals are priced in the money of the season they start in. */
   nbaMinContract, nbaDraftSigning, nbaDraftCapital, nbaConsumeDraftPick, nbaAiDraftPicks,
 } from '@/lib/nbaFrontOffice';
+import { nbaCompletedRounds, readNbaRoundHistory, type NbaRoundChange, type NbaRoundHistory, type NbaRoundResult } from '@/lib/nbaRoundHistory';
+import { NbaRoundResults } from '@/components/nba-front-office/NbaRoundResults';
 import { FoCapPanel } from '@/components/front-office-shared/FoCapPanel';
 import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';
 /* Round 824: the season's lines and awards, engine in nbaSeasonStats.ts, box shared. */
@@ -169,6 +171,7 @@ interface SaveShape {
      can be drawn again after a reload. Absent on older saves. */
   postseason?: Postseason | null;
   lastRound?: LastRound;
+  roundHistory?: NbaRoundHistory;
   /* Round 1018: the GM desk (src/lib/gmDesk.ts). Absent on every save written
      before it, and on those the board plays exactly as it did until the GM
      opens a desk box. Each block inside is validated alone. */
@@ -199,6 +202,7 @@ export default function NbaFrontOfficeBoard() {
   const rotationReturn = useRef(false);
   const [feed, setFeed] = useState<string[]>([]);
   const lastRound = useRef<LastRound | null>(null);
+  const roundHistory = useRef<NbaRoundHistory | null>(null);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
      moment anything else is prepended it reads as an ordinary row. Transient
@@ -300,6 +304,7 @@ export default function NbaFrontOfficeBoard() {
       nbaCleanStats(s.league);
       setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
       lastRound.current = readLastRound(s.lastRound, s.league, s.myTeam);
+      roundHistory.current = readNbaRoundHistory(s.roundHistory, s.league, s.myTeam);
       if (lastRound.current) setFeed(roundHeadlines(lastRound.current));
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
@@ -353,12 +358,14 @@ export default function NbaFrontOfficeBoard() {
   const persist = useCallback((patch: Partial<SaveShape>, lg: NbaLeague | null, team: string) => {
     if (!lg) return;
     const result = lastRound.current;
+    const history = roundHistory.current;
     pendingSave.current = JSON.stringify({
       league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
       ...(draftAiBatchesLeft == null ? {} : { draftAiBatchesLeft }),
       mandate, trust, fired, pressTilt, seasonTradeLine,
       postseason: champion ? { series, champion, gradeLine, tax: taxClose } : null,
       ...(result?.team === team && result.season === lg.season ? { lastRound: result } : {}),
+      ...(history?.team === team && history.season === lg.season ? { roundHistory: history } : {}),
       ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch,
     } satisfies SaveShape);
     retrySave();
@@ -398,6 +405,7 @@ export default function NbaFrontOfficeBoard() {
     const lg = initNbaLeague(Math.random, NBA_OPENING_RATINGS);
     lg.inSeasonRatings = true;
     lastRound.current = null;
+    roundHistory.current = null;
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
     setFeed([
@@ -495,7 +503,12 @@ export default function NbaFrontOfficeBoard() {
     }
     /* Round 1018: with the desk on, the staff's edge and the trainer ride on
        the round; with it off the round is called exactly as before. */
+    const openingRatings = new Map(lg.teams[myTeam].players.map(player => [player.id, player.ovr]));
     const report = simRound(lg, myTeam, Math.random, gm ? nbaDeskRoundOptions(gm, lg, myTeam) : undefined);
+    const changes = lg.teams[myTeam].players.flatMap<NbaRoundChange>(player => {
+      const before = openingRatings.get(player.id);
+      return before === undefined || before === player.ovr ? [] : [[player.name, player.ovr - before, player.ovr]];
+    });
     let nextGm = gm;
     const deskLines: string[] = [];
     if (gm) {
@@ -510,9 +523,19 @@ export default function NbaFrontOfficeBoard() {
       ...report.notes,
     ];
     const keepRound = () => {
+      const previous = lastRound.current;
+      const history = roundHistory.current?.rounds ?? [];
+      const older: NbaRoundResult[] = previous?.team === myTeam && previous.season === lg.season
+        && !history.some(row => row.round === previous.round)
+        ? [{ round: previous.round, wins: previous.wins, losses: previous.losses, changes: null }]
+        : [];
       lastRound.current = {
         team: myTeam, season: lg.season, round: league.round, wins: report.myWins, losses: report.myLosses,
         notes: newFeed.slice(1, 5).map(line => line.slice(0, 640)),
+      };
+      roundHistory.current = {
+        team: myTeam, season: lg.season,
+        rounds: [...history, ...older, { round: league.round, wins: report.myWins, losses: report.myLosses, changes }],
       };
     };
     if (nextGm !== gm) setGm(nextGm);
@@ -642,6 +665,7 @@ export default function NbaFrontOfficeBoard() {
       setGm(summer.desk);
     } else notes = nbaOffseason(lg, Math.random, myTeam);
     lastRound.current = null;
+    roundHistory.current = null;
     /* Round 180: ownership re-reads the roster and sets next season's ask. */
     /* Round 192: what you said at the podium tilts the ask, then the
        tilt is spent. */
@@ -914,6 +938,7 @@ export default function NbaFrontOfficeBoard() {
     setResetFailed(false);
     pendingSave.current = null;
     lastRound.current = null;
+    roundHistory.current = null;
     setSaveWriteFailed(false);
     setRotationOpen(false); rotationReturn.current = false;
     setDraftClass(null); setDraftNight(null); setPicksLeft(0); setDraftAiBatchesLeft(null); setDraftError(''); draftPending.current = false;
@@ -990,6 +1015,7 @@ export default function NbaFrontOfficeBoard() {
 
   const room = nbaCapRoom(my, league.cap);
   const strength = Math.round(nbaStrength(my));
+  const roundResults = <NbaRoundResults completed={nbaCompletedRounds(league)} history={roundHistory.current} lastRound={lastRound.current} />;
   /* Round 722: the tax as it stands today, shown all season as a projection. */
   const view = nbaTaxView(my, league);
 
@@ -1048,6 +1074,7 @@ export default function NbaFrontOfficeBoard() {
             <RotateCcw className="h-4 w-4" /> Take another front office
           </button>
         </div>
+        {roundResults}
       </div>
     );
   }
@@ -1162,6 +1189,7 @@ export default function NbaFrontOfficeBoard() {
             {roundHeadlines(lastRound.current).map((line, index) => <p key={index}>{line}</p>)}
           </div>
         )}
+        {roundResults}
         {/* Round 824: the season in numbers, one box with three tabs. A save
             from before the round has no lines for this season and says so. */}
         {leaders ? (
@@ -1569,7 +1597,8 @@ export default function NbaFrontOfficeBoard() {
       )}
 
       {tab === 'round' && (
-        <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
+        <>
+          <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
           <p className="mb-2 text-sm text-foreground">Each round simulates a stretch of games across the league.</p>
           {/* Round 722: tip off waits on a legal roster, and says what the league will do about a short one. */}
           {tipBlock && <p data-tipoff-block className="mb-2 text-[11px] text-destructive">{tipBlock}</p>}
@@ -1582,7 +1611,9 @@ export default function NbaFrontOfficeBoard() {
             <ShieldHalf className="h-4 w-4" /> {league.round >= NBA_ROUNDS ? 'Final stretch + playoffs' : `Play Round ${league.round}`}
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">The season ends with the play-in for seeds 7 to 10, then best-of-7 rounds to the Finals.</p>
-        </div>
+          </div>
+          {roundResults}
+        </>
       )}
 
       {tab === 'standings' && (
