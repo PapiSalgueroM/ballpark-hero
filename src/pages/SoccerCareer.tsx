@@ -1907,9 +1907,24 @@ function TransferWindowCard({ situation, career, clubs, onCareer, onAcceptOffer,
       {/* Situation: Bidding War */}
       {situation.type === "bidding_war" && (
         <div className="space-y-3">
-          <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 text-center">
-            <span className="text-sm font-bold">🔥 Bidding War! Two clubs competing for your signature</span>
-          </div>
+          <section aria-labelledby="bidding-war-comparison" className="space-y-2 rounded-xl border border-amber-500/20 bg-amber-500/10 p-3">
+            <h4 id="bidding-war-comparison" className="text-sm font-bold">Compare contract offers</h4>
+            <ul className="grid grid-cols-2 gap-2">
+              {[situation.offerA, situation.offerB].map(offer => {
+                const { signedWage, years, season } = buildSoccerOfferReview(career, offer);
+                const seasonsThere = career.seasons.filter(row => row.type === "playing" && row.club === offer.club.name).length;
+                const { min, max } = projectLeagueApps(career.overall, offer.club.tier, offer.club.name, seasonsThere, { league: offer.club.league, year: season });
+                return (
+                  <li key={offer.club.name} className="min-w-0 space-y-1 rounded-lg bg-background/70 p-2 text-xs [overflow-wrap:anywhere]">
+                    <h5 className="font-bold">{offer.club.name}</h5>
+                    <p>{moneyLine(`€${signedWage}/wk`)} · {years} {years === 1 ? "year" : "years"}</p>
+                    <p className="text-muted-foreground">{min} to {max} league games</p>
+                  </li>
+                );
+              })}
+            </ul>
+            <p className="text-xs text-muted-foreground">Estimated league games next season. {rateNote()}</p>
+          </section>
           <OfferCard offer={situation.offerA} onAccept={() => onAcceptOffer(situation.offerA)} career={career} />
           <OfferCard offer={situation.offerB} onAccept={() => onAcceptOffer(situation.offerB)} career={career} />
           <Button variant="outline" onClick={onStay} className="w-full h-9 text-sm">
