@@ -72,6 +72,7 @@ const RarityRound = () => {
   const [crowdPicks, setCrowdPicks] = useState<{ answer: string; n: number }[] | null>(null);
   const crowdRevealRef = useRef<symbol | null>(null);
   const [todayStanding, setTodayStanding] = useState<{ rank: number; total: number } | null>(null);
+  const submittedRound = useRef(false);
 
   const currentCategory = rounds[roundIndex];
   const usesMarketValues = currentCategory?.sourceConfig.table === 'player_market_values';
@@ -82,6 +83,7 @@ const RarityRound = () => {
 
   const showProgress = useCallback((progress: RarityDailyProgress | null) => {
     crowdRevealRef.current = null;
+    submittedRound.current = progress?.phase === 'revealed' || progress?.phase === 'done';
     setCrowdPicks(null);
     setPool([]);
     setInputValue('');
@@ -163,7 +165,7 @@ const RarityRound = () => {
   };
 
   const submitGuess = () => {
-    if (phase !== 'playing' || !selectedEntity || !currentCategory || pool.length === 0 || takeNewerDaily()) return;
+    if (phase !== 'playing' || submittedRound.current || !selectedEntity || !currentCategory || pool.length === 0 || takeNewerDaily()) return;
     const key = normalizeName(selectedEntity.name);
     const match = pool.find(p => p.key === key);
     if (!match) {
@@ -186,6 +188,7 @@ const RarityRound = () => {
       poolSize: pool.length,
       points,
     };
+    submittedRound.current = true;
     const nextResults = [...results, result];
     if (playMode === 'daily') writeRarityDaily(dailyDate, rarityMode, rounds, { phase: 'revealed', results: nextResults });
     setLastResult(result);
@@ -249,6 +252,7 @@ const RarityRound = () => {
       setPhase('done');
       return;
     }
+    submittedRound.current = false;
     setRoundIndex(nextIndex);
     setInputValue('');
     setSelectedEntity(null);

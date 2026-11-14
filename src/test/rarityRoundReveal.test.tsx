@@ -174,6 +174,38 @@ it('keeps a settled round when a second tab tries to vote on the old prompt', as
   expect(remote.inserts).toEqual([{ category_key: 'Daily first', answer: 'Fixture Famous' }]);
 });
 
+it('counts a single click batch with disabled storage', async () => {
+  render(<RarityRound />);
+  fireEvent.change(await screen.findByRole('combobox'), { target: { value: 'Fixture Rare' } });
+  fireEvent.click(await screen.findByRole('option', { name: 'Fixture Rare' }));
+  const lock = screen.getByRole('button', { name: 'Lock in answer' });
+  const write = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('storage disabled'); });
+  try {
+    act(() => { lock.click(); lock.click(); });
+    expect(remote.inserts).toEqual([{ category_key: 'Daily first', answer: 'Fixture Rare' }]);
+    expect(screen.getByText('Ranked 2 of 2 by fame in this category')).toBeVisible();
+  } finally {
+    write.mockRestore();
+  }
+});
+
+it('passes the usual completion signal for both fresh Daily modes and neither restored result', async () => {
+  remote.daily = [category('One round')];
+  render(<RarityRound />);
+  await answer('Fixture Rare');
+  fireEvent.click(screen.getByRole('button', { name: 'See final score' }));
+  expect(remote.completion).toHaveBeenLastCalledWith('rarity-round', true, 100, 1);
+  fireEvent.click(screen.getByRole('button', { name: /Crowd Says/ }));
+  await answer('Fixture Famous');
+  fireEvent.click(screen.getByRole('button', { name: 'See final score' }));
+  expect(remote.completion).toHaveBeenLastCalledWith('rarity-round', true, undefined, 1);
+  remote.completion.mockClear();
+  fireEvent.click(screen.getByRole('button', { name: /Rarity Round/ }));
+  fireEvent.click(screen.getByRole('button', { name: /Crowd Says/ }));
+  expect(remote.completion.mock.calls.every(([, done]) => !done)).toBe(true);
+  expect(remote.inserts).toHaveLength(2);
+});
+
 it('an open Daily stays on its Eastern date when another tab starts a different day', async () => {
   vi.useFakeTimers({ toFake: ['Date'] });
   try {
