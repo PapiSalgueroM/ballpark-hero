@@ -731,6 +731,11 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       const raw = localStorage.getItem(sport.saveKey);
       if (raw === savedBytes.current) return false;
       const stored = raw ? JSON.parse(raw) as SaveShape : null;
+      if (stored?.c && passingDown?.completed(stored.c, career.year, career.team)
+        && summerCareerKey(stored.c) === summerCareerKey(career)) {
+        setTradeSaveMoved(true);
+        return true;
+      }
       if (stored && (stored.phase === 'season' || stored.phase === 'freeagency') && stored.c && stored.teamQuality != null
         && (trade?.receipt(stored.c) || priority?.receipt(stored.c) || bullpen?.current(stored.c) || currentBullpen
           || tandem?.current(stored.c) || currentTandem || passingDown?.current(stored.c) || currentPassingDown)

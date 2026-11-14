@@ -85,7 +85,12 @@ export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = withBank
   teamLabelOf,
   statLine: (s, pos) => nflStatLine(s, pos as CareerPos),
   reviewStats: (s, pos) => nflSeasonReview(s, pos as CareerPos),
-  passingDownRole: { available: nflPassingDownAvailable, current: nflPassingDownActive, set: setNflPassingDown },
+  passingDownRole: {
+    available: nflPassingDownAvailable,
+    current: nflPassingDownActive,
+    completed: (c, year, team) => c.seasons.some(s => s.year === year && s.team === team && s.passingDownRole === true),
+    set: setNflPassingDown,
+  },
   suspendedLine: c => ({
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,
     awards: [], teamResult: 'SUSPENDED', salary: 0,

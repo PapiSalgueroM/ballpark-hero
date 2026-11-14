@@ -122,4 +122,21 @@ describe('NFL passing-down role', () => {
     expect(localStorage.getItem(sport.saveKey)).toBe(saved);
     expect(read().seasons).toHaveLength(c.seasons.length);
   });
+
+  it('protects a completed passing-down season from a stale tab', () => {
+    const c = career();
+    install(c);
+    const first = open(), stale = open();
+    fireEvent.change(selectRole(first), { target: { value: 'passing' } });
+    vi.spyOn(Math, 'random').mockReturnValue(0.8);
+    const play = 'Play the ' + c.year + ' season';
+    fireEvent.click(within(first.container).getByRole('button', { name: play }));
+    const finished = localStorage.getItem(sport.saveKey);
+    expect(read().seasons.at(-1)).toMatchObject({ year: c.year, passingDownRole: true });
+    expect(read().passingDownPlan).toBeUndefined();
+    fireEvent.click(within(stale.container).getByRole('button', { name: play }));
+    expect(within(stale.container).getByText(/Your career changed in another tab/)).toBeVisible();
+    expect(within(stale.container).getByRole('button', { name: play })).toBeDisabled();
+    expect(localStorage.getItem(sport.saveKey)).toBe(finished);
+  });
 });
