@@ -22,7 +22,7 @@ async function mount() {
 
 async function miss() {
   await typeInto(screen.getByRole('combobox'), 'Gianluigi Buffon');
-  fireEvent.pointerDown(await screen.findByRole('option', { name: 'Gianluigi Buffon', exact: true }));
+  fireEvent.pointerDown(await screen.findByRole('option', { name: 'Gianluigi Buffon' }));
   await click(screen.getByRole('button', { name: 'Lock in guess' }));
   expect(guess(2)).toBeInTheDocument();
   expect(screen.getByText(tried)).toBeInTheDocument();
