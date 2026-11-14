@@ -784,7 +784,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Daily puzzles versus unlimited mode",
         items: [
-          "Daily serves everyone the same mystery player, fresh every day. Unlimited deals random players back to back.",
+          "Daily serves everyone the same mystery player, fresh at midnight Eastern. Your Daily guesses stay in this browser so you can finish later. Unlimited deals random players back to back.",
         ],
         subsections: [
           {

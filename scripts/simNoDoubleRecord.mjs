@@ -203,8 +203,8 @@ const VITEST_CONTROLS = {
   nflstamp: {
     edits: [{
       file: 'src/hooks/useNFLCareer.ts',
-      from: '    persistDaily(dealtDay, status, clues, guesses);\n    setDailyFinish({ date: dealtDay, score: dailyScoreOf(status, clues) });\n',
-      to: '    persistDaily(getTodayET(), status, clues, guesses);\n    setDailyFinish({ date: getTodayET(), score: dailyScoreOf(status, clues) });\n',
+      from: '    saveRound(dailyRef.current.day, { status, cluesRevealed: clues, guesses });\n    setDailyFinish({ date: dealtDay, score: dailyScoreOf(status, clues) });\n',
+      to: '    saveRound(getTodayET(), { status, cluesRevealed: clues, guesses });\n    setDailyFinish({ date: getTodayET(), score: dailyScoreOf(status, clues) });\n',
     }],
     why: 'NFL Career Path stamps its finish with the clock again, so a daily dealt before midnight and solved after it lands on the next day',
     red: row => row.title === 'nfl-career: a daily dealt before midnight and solved after it',

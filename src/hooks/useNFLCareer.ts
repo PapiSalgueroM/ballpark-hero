@@ -1,10 +1,11 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useEffect, useMemo, useRef } from 'react';
 import { getTodayET } from '@/lib/dateUtils';
 import { nflCareerPlayers } from '@/data/nflCareerPlayers';
 import { NFLCareerPlayer } from '@/types/nflCareer';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { normalizeName } from '@/lib/playerSearch';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import { toast } from 'sonner';
 
 const TOTAL_CLUES = 6;
@@ -14,24 +15,41 @@ function getDailyIndex(day: string): number {
   return parseInt(day.replace(/-/g, ''), 10) % nflCareerPlayers.length;
 }
 
-/* Round 52: the daily locks once finished. Refreshing used to hand out the
-   same daily again with a clean slate. */
-interface NflDailySave { date: string; status: 'won' | 'lost'; cluesRevealed: number; guesses: string[] }
+type RoundStatus = 'playing' | 'won' | 'lost';
+interface NflRound { status: RoundStatus; cluesRevealed: number; guesses: string[] }
+type NflDailySave = (NflRound & { date: string }) & (
+  { status: 'playing'; player: string } | { status: 'won' | 'lost' }
+);
 const DAILY_KEY = 'nfl-career-daily';
+const freshRound: NflRound = { status: 'playing', cluesRevealed: 1, guesses: [] };
 
-function loadDailySave(day: string): NflDailySave | null {
+function parseDailySave(raw: string | null): NflDailySave | null {
   try {
-    const raw = localStorage.getItem(DAILY_KEY);
-    if (!raw) return null;
-    const s = JSON.parse(raw) as NflDailySave;
-    return s.date === day ? s : null;
+    if (!raw || raw.length > 4096) return null;
+    const s = JSON.parse(raw);
+    if (!s || typeof s.date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(s.date)
+      || !Number.isInteger(s.cluesRevealed) || s.cluesRevealed < 1 || s.cluesRevealed > TOTAL_CLUES
+      || !Array.isArray(s.guesses) || s.guesses.length > TOTAL_CLUES
+      || !s.guesses.every((name: unknown) => typeof name === 'string' && name.trim().length > 0)) return null;
+    if (s.status === 'won' || s.status === 'lost') return s;
+    if (s.status !== 'playing' || s.guesses.length !== s.cluesRevealed - 1) return null;
+    const player = nflCareerPlayers[getDailyIndex(s.date)];
+    const guesses = s.guesses.map(normalizeName);
+    return player?.name === s.player && !guesses.includes(normalizeName(player.name))
+      && new Set(guesses).size === guesses.length ? s : null;
   } catch { return null; }
 }
 
-function persistDaily(date: string, status: 'won' | 'lost', cluesRevealed: number, guesses: string[]) {
-  try {
-    localStorage.setItem(DAILY_KEY, JSON.stringify({ date, status, cluesRevealed, guesses } satisfies NflDailySave));
-  } catch { /* private mode: daily just won't lock */ }
+function loadDailyBytes(): string | null {
+  try { return localStorage.getItem(DAILY_KEY); }
+  catch { return null; }
+}
+
+function persistDaily(date: string, status: RoundStatus, cluesRevealed: number, guesses: string[]): string | null {
+  const save = { date, status, cluesRevealed, guesses };
+  const raw = JSON.stringify(status === 'playing' ? { ...save, player: nflCareerPlayers[getDailyIndex(date)].name } : save);
+  try { localStorage.setItem(DAILY_KEY, raw); return raw; }
+  catch { return null; }
 }
 
 /* Round 643 review: what a finished daily records. A win scores by the clues
@@ -57,10 +75,17 @@ export function useNFLCareer() {
      midnight and solved after was saved as the next day's, and the next
      day's real daily then loaded as already solved with the wrong guesses. */
   const [dealtDay, setDealtDay] = useState<string>(getTodayET);
+  const [initialBytes] = useState(loadDailyBytes);
+  const [initialRound] = useState(() => {
+    const saved = parseDailySave(initialBytes);
+    return saved?.date === dealtDay ? saved : freshRound;
+  });
+  const dailyRef = useRef({ day: dealtDay, round: initialRound, bytes: initialBytes });
   const [targetPlayer, setTargetPlayer] = useState<NFLCareerPlayer>(() => nflCareerPlayers[getDailyIndex(dealtDay)]);
-  const [cluesRevealed, setCluesRevealed] = useState(() => loadDailySave(dealtDay)?.cluesRevealed ?? 1); // start with 1 clue
-  const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>(() => loadDailySave(dealtDay)?.status ?? 'playing');
-  const [guessHistory, setGuessHistory] = useState<string[]>(() => loadDailySave(dealtDay)?.guesses ?? []);
+  const [round, setRound] = useState(initialRound);
+  const roundRef = useRef<NflRound>(initialRound);
+  const droppingDailyAction = useRef(false);
+  const { status: gameStatus, cluesRevealed, guesses: guessHistory } = round;
   const [hard, setHard] = useState(false);
   /* Round 643: the daily's finish, on its own, whatever mode is on screen.
      The completion hook used to read the shared gameStatus behind a mode
@@ -71,21 +96,73 @@ export function useNFLCareer() {
      dealt in the same tab records its own daily, and the score is the daily's
      own, never the clue count of whatever is on screen. */
   const [dailyFinish, setDailyFinish] = useState<{ date: string; score: number } | null>(() => {
-    const s = loadDailySave(dealtDay);
-    return s ? { date: s.date, score: dailyScoreOf(s.status, s.cluesRevealed) } : null;
+    return initialRound.status === 'playing' ? null : {
+      date: dealtDay, score: dailyScoreOf(initialRound.status, initialRound.cluesRevealed),
+    };
   });
+  const applyRound = useCallback((next: NflRound) => {
+    roundRef.current = next;
+    setRound(next);
+  }, []);
+  const [saveWarning, setSaveWarning] = useState(false);
+  const saveRound = useCallback((day: string, next: NflRound) => {
+    const raw = persistDaily(day, next.status, next.cluesRevealed, next.guesses);
+    dailyRef.current = { day, round: next, bytes: raw ?? dailyRef.current.bytes };
+    setSaveWarning(raw === null);
+  }, []);
   const finishDaily = useCallback((status: 'won' | 'lost', clues: number, guesses: string[]) => {
-    persistDaily(dealtDay, status, clues, guesses);
+    saveRound(dailyRef.current.day, { status, cluesRevealed: clues, guesses });
     setDailyFinish({ date: dealtDay, score: dailyScoreOf(status, clues) });
-  }, [dealtDay]);
+  }, [dealtDay, saveRound]);
   const dailyDone = dailyFinish !== null && dailyFinish.date === dealtDay;
+
+  const openDaily = useCallback((day: string, next: NflRound, bytes: string | null) => {
+    if (next.status !== 'playing' && dailyRef.current.round.status === 'playing') {
+      markRestoredFinish('nfl-career');
+    }
+    dailyRef.current = { day, round: next, bytes };
+    setDailyFinish(next.status === 'playing' ? null : { date: day, score: dailyScoreOf(next.status, next.cluesRevealed) });
+    setDealtDay(day);
+    setTargetPlayer(nflCareerPlayers[getDailyIndex(day)]);
+    applyRound(next);
+  }, [applyRound]);
+
+  const takeNewerDaily = useCallback(() => {
+    if (droppingDailyAction.current) return true;
+    const raw = loadDailyBytes();
+    const current = dailyRef.current;
+    if (raw === current.bytes) return false;
+    const saved = parseDailySave(raw);
+    if (!saved || saved.date < current.day || saved.date > getTodayET()) return false;
+    if (saved.date === current.day && saved.status === 'playing'
+      && (current.round.status !== 'playing' || saved.guesses.length < current.round.guesses.length)) return false;
+    openDaily(saved.date, saved, raw);
+    droppingDailyAction.current = true;
+    setSaveWarning(false);
+    return true;
+  }, [openDaily]);
+
+  useEffect(() => { droppingDailyAction.current = false; }, [round]);
+
+  const retrySave = useCallback(() => {
+    if (!saveWarning || mode !== 'daily' || takeNewerDaily()) return;
+    const { day, round } = dailyRef.current;
+    saveRound(day, round);
+  }, [saveWarning, mode, takeNewerDaily, saveRound]);
+
+  useEffect(() => {
+    if (mode !== 'daily') return;
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === DAILY_KEY) takeNewerDaily();
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [mode, takeNewerDaily]);
 
   const dealRound = useCallback((player: NFLCareerPlayer) => {
     setTargetPlayer(player);
-    setCluesRevealed(1);
-    setGameStatus('playing');
-    setGuessHistory([]);
-  }, []);
+    applyRound(freshRound);
+  }, [applyRound]);
 
   const randomPlayer = useCallback((excludeName?: string): NFLCareerPlayer => {
     const pool = nflCareerPlayers.filter(p => p.name !== excludeName);
@@ -96,16 +173,17 @@ export function useNFLCareer() {
     setMode(m);
     if (m === 'daily') {
       const day = getTodayET();
-      const saved = loadDailySave(day);
-      setDealtDay(day);
-      setTargetPlayer(nflCareerPlayers[getDailyIndex(day)]);
-      setCluesRevealed(saved?.cluesRevealed ?? 1);
-      setGameStatus(saved?.status ?? 'playing');
-      setGuessHistory(saved?.guesses ?? []);
+      const raw = loadDailyBytes();
+      const saved = parseDailySave(raw);
+      const current = dailyRef.current;
+      const keepCurrent = current.day === day && (raw === current.bytes || saved?.date !== day
+        || (saved.status === 'playing' && (current.round.status !== 'playing' || saved.guesses.length < current.round.guesses.length)));
+      openDaily(day, keepCurrent ? current.round : saved?.date === day ? saved : freshRound, raw);
+      if (!keepCurrent) setSaveWarning(false);
     } else {
       dealRound(randomPlayer());
     }
-  }, [dealRound, randomPlayer]);
+  }, [dealRound, randomPlayer, openDaily]);
 
   /* Round 643: from the daily this is the result screen's "Play Unlimited",
      and it used to deal a random player while staying in daily mode, so
@@ -133,35 +211,41 @@ export function useNFLCareer() {
   }, [targetPlayer, cluesRevealed, hard]);
 
   const makeGuess = useCallback((name: string) => {
-    if (gameStatus !== 'playing') return;
+    if (mode === 'daily' && takeNewerDaily()) return;
+    const current = roundRef.current;
+    if (current.status !== 'playing') return;
     const trimmed = name.trim();
-    if (!trimmed) return;
-
-    setGuessHistory(prev => [...prev, trimmed]);
-
-    if (trimmed.toLowerCase() === targetPlayer.name.toLowerCase()) {
-      setGameStatus('won');
-      if (mode === 'daily') finishDaily('won', cluesRevealed, [...guessHistory, trimmed]);
-      toast.success(`🎉 Correct! You scored ${Math.max(1, TOTAL_CLUES + 1 - cluesRevealed)} points!`);
+    const normalized = normalizeName(trimmed);
+    if (!normalized || current.guesses.some(guess => normalizeName(guess) === normalized)) return;
+    const guesses = [...current.guesses, trimmed];
+    const clues = current.cluesRevealed;
+    if (normalized === normalizeName(targetPlayer.name)) {
+      applyRound({ status: 'won', cluesRevealed: clues, guesses });
+      if (mode === 'daily') finishDaily('won', clues, guesses);
+      toast.success(`🎉 Correct! You scored ${dailyScoreOf('won', clues)} points!`);
       return;
     }
 
     toast.error(`❌ Not ${trimmed}`);
 
-    if (cluesRevealed >= TOTAL_CLUES) {
-      setGameStatus('lost');
-      if (mode === 'daily') finishDaily('lost', cluesRevealed, [...guessHistory, trimmed]);
+    if (clues >= TOTAL_CLUES) {
+      applyRound({ status: 'lost', cluesRevealed: clues, guesses });
+      if (mode === 'daily') finishDaily('lost', clues, guesses);
       toast.error(`The player was ${targetPlayer.name}`);
     } else {
-      setCluesRevealed(prev => prev + 1);
+      const next: NflRound = { status: 'playing', cluesRevealed: clues + 1, guesses };
+      applyRound(next);
+      if (mode === 'daily') saveRound(dailyRef.current.day, next);
     }
-  }, [gameStatus, targetPlayer, cluesRevealed, mode, guessHistory, finishDaily]);
+  }, [targetPlayer, mode, applyRound, finishDaily, saveRound, takeNewerDaily]);
 
   const giveUp = useCallback(() => {
-    if (gameStatus !== 'playing') return;
-    setGameStatus('lost');
-    if (mode === 'daily') finishDaily('lost', cluesRevealed, guessHistory);
-  }, [gameStatus, mode, cluesRevealed, guessHistory, finishDaily]);
+    if (mode === 'daily' && takeNewerDaily()) return;
+    const current = roundRef.current;
+    if (current.status !== 'playing') return;
+    applyRound({ ...current, status: 'lost' });
+    if (mode === 'daily') finishDaily('lost', current.cluesRevealed, current.guesses);
+  }, [mode, applyRound, finishDaily, takeNewerDaily]);
 
   const resetGame = useCallback(() => {
     // In unlimited: deal the next random player in place. From the daily:
@@ -204,6 +288,8 @@ export function useNFLCareer() {
     score,
     gameStatus,
     guessHistory,
+    saveWarning: mode === 'daily' && saveWarning,
+    retrySave,
     excludedNames,
     makeGuess,
     giveUp,
