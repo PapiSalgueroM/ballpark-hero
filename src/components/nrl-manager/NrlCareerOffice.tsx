@@ -9,7 +9,7 @@ import { useNrlClubName } from '@/components/nrl-manager/NrlClubIdentity';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   isNrlNamedPlayer,
-  nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyReleaseAvailable, nrlAcademyReports,
+  nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyParallelQuote, nrlAcademyParallelSpend, nrlAcademyReleaseAvailable, nrlAcademyReports,
   nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
   nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractApproachPreview, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer, nrlContractTermLimit,
@@ -855,8 +855,9 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const [priorityChoice, setPriorityChoice] = useState<NrlAcademyPriority | ''>('');
   const priority = career.legacySeason ? '' : priorityChoice;
   const reports = nrlAcademyReports(career);
-  const available = nrlAcademyAvailableRoles(career);
-  const scouting = reports.find(report => report.status === 'scouting');
+  const scouting = reports.filter(report => report.status === 'scouting');
+  const parallel = nrlAcademyParallelQuote(career);
+  const available = scouting.length ? parallel.roles : nrlAcademyAvailableRoles(career);
   const role = available.includes(position) ? position : available[0];
   const { year, clubId, round } = career.season;
   const facilities = nrlAcademyFacilityQuote(career);
@@ -865,12 +866,16 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
     <>
       <h2 className="font-display text-xl font-bold">Academy</h2>
       <p className="mt-1 text-sm text-muted-foreground">Scout a position and choose who earns a place in next season’s Top 30.</p>
-      {scouting ? (
-        <p className="mt-3 rounded-lg border border-border bg-background px-3 py-2 text-sm" role="status" data-nrl-scouting>
-          Scouting {scouting.role}{scouting.priority && ` with ${NRL_ACADEMY_PRIORITIES[scouting.priority].label.toLowerCase()} priority`}. Advance a round for the report. Byes count.
+      {scouting.map(report => (
+        <p key={report.role} className="mt-3 rounded-lg border border-border bg-background px-3 py-2 text-sm" role="status" data-nrl-scouting>
+          Scouting {report.role}{report.priority && ` with ${NRL_ACADEMY_PRIORITIES[report.priority].label.toLowerCase()} priority`}. Advance a round for the report. Byes count.
         </p>
-      ) : role ? (
+      ))}
+      {role ? (
         <div className="mt-3 space-y-2">
+          {scouting.length > 0 && <p className="text-sm text-muted-foreground">
+            Hire a second scout once per season using club cash. Both reports will arrive next round.
+          </p>}
           <div className="grid gap-2 sm:grid-cols-2">
             <label className="min-w-0 space-y-1 text-sm font-semibold">
               <span>Position to scout</span>
@@ -893,11 +898,15 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
               : priority === 'ceiling' ? 'Give up 2 starting OVR for up to 2 extra potential compared with a balanced report.'
               : 'Use the standard scouting profile.'}
           </p>}
-          <Button type="button" size="lg" disabled={disabled} onClick={() => onAction({
-            type: 'scoutAcademy', role, ...(priority && { priority }),
-          })}>Assign scout</Button>
+          <Button type="button" size="lg" disabled={disabled || parallel.reason !== null}
+            onClick={() => onAction(scouting.length
+              ? { type: 'scoutAcademyParallel', year, clubId, round, role, ...(priority && { priority }) }
+              : { type: 'scoutAcademy', role, ...(priority && { priority }) })}>
+            {scouting.length ? `Assign second scout for ${money(parallel.cost)}` : 'Assign scout'}
+          </Button>
+          {parallel.reason && <p className="text-sm text-muted-foreground">{parallel.reason}</p>}
         </div>
-      ) : <p className="mt-3 text-sm text-muted-foreground">Scouting is closed for this season.</p>}
+      ) : scouting.length === 0 && <p className="mt-3 text-sm text-muted-foreground">Scouting is closed for this season.</p>}
       {reports.some(report => report.player) && (
         <ul className="mt-4 divide-y divide-border" aria-label="Academy reports">
           {reports.flatMap(report => {
@@ -1350,6 +1359,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
   const cash = nrlCareerFinance(career);
   const medicalSpend = nrlMedicalSpend(cash);
   const academySpend = nrlAcademyFacilitySpend(cash);
+  const academyScoutSpend = nrlAcademyParallelSpend(cash);
   const concessionsSpend = nrlConcessionsSpend(cash);
   const pathwaysIncome = nrlBoardPathwaysIncome(cash);
   const coachSpend = nrlCoachSpend(cash);
@@ -1386,6 +1396,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
                 ...(medicalSpend ? [['Medical upgrades', medicalSpend] as [string, number]] : []),
                 ...(cash.physio ? [['Physio session', nrlPhysioSpend(cash)] as const] : []),
                 ...(academySpend ? [['Academy facilities', academySpend] as const] : []),
+                ...(academyScoutSpend ? [['Second academy scout', academyScoutSpend] as const] : []),
                 ...(concessionsSpend ? [['Concessions upgrade', concessionsSpend] as const] : []),
                 ...(cash.mutualRelease ? [['Contract settlement', nrlMutualReleaseSpend(cash)] as const] : []),
                 ...(cash.coachHire ? [['Coach signing fee', coachSpend.signingFee], ['Coach wages paid', coachSpend.wages]] as [string, number][] : []),
@@ -2156,6 +2167,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                   </p>
                 )}
                 {record.finance?.academyUpgradeRound && <p className="text-sm text-muted-foreground">Academy facilities {money(nrlAcademyFacilitySpend(record.finance))}</p>}
+                {record.finance?.academyParallelRound && <p className="text-sm text-muted-foreground">Second academy scout {money(nrlAcademyParallelSpend(record.finance))}</p>}
                 {record.finance?.mutualRelease && (
                   <p className="text-sm text-muted-foreground">
                     Mutual release · {record.finance.mutualRelease.playerName} · {money(nrlMutualReleaseSpend(record.finance))} settlement

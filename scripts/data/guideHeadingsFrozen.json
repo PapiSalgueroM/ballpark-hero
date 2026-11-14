@@ -130,6 +130,7 @@
         "Pick a market: Today's 2026 values, or the 2015 or 2007 market where the money and names change completely.",
         "Choose one of 9 formations. In the Today market you can also narrow the pool, say Premier League only.",
         "Tap a slot to shop that position. Only players you can currently afford are listed.",
+        "Use Next in the signing shortlist to browse the whole eligible market, or search by player name or club.",
         "Sign someone and their value leaves your budget. Release anyone for a full refund.",
         "Fill all eleven for your team rating, then play the Money XI final."
       ],
@@ -2686,6 +2687,7 @@
         "Get drafted by a real club; your slot reflects your starting ability.",
         "Check the lineup. Top ten skaters step straight in; everyone else fights the incumbent in camp every fall. Goalies always apprentice first, because no rookie walks into a number one crease.",
         "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
+        "Starting goalies can choose Share the crease before playing a season. Camp still decides who starts. Sharing gives about 20% fewer planned starts and a 20% lower simulated injury chance. For example, the usual draw of 60 starts becomes 48 before injuries. Career Log keeps the plan and actual starts for that year.",
         "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
         "Face up to three offseason decisions each year, one card at a time: training, trade requests, media noise. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
         "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",

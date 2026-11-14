@@ -101,6 +101,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Shopping each position you can afford",
         items: [
           "Tap a slot to shop that position. Only players you can currently afford are listed.",
+          "Use Next in the signing shortlist to browse the whole eligible market, or search by player name or club.",
         ],
         subsections: [
           {

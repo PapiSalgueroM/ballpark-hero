@@ -721,14 +721,17 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     const trade = sport.tradeRequest;
     const priority = sport.rosterPriority;
     const bullpen = sport.bullpenRole;
-    if (!career || (!trade && !priority && !bullpen) || pendingSave.current) return false;
+    const tandem = sport.goalieTandem;
+    if (!career || (!trade && !priority && !bullpen && !tandem) || pendingSave.current) return false;
     const currentBullpen = bullpen?.current(career);
+    const currentTandem = tandem?.current(career);
     try {
       const raw = localStorage.getItem(sport.saveKey);
       if (raw === savedBytes.current) return false;
       const stored = raw ? JSON.parse(raw) as SaveShape : null;
       if (stored && (stored.phase === 'season' || stored.phase === 'freeagency') && stored.c && stored.teamQuality != null
-        && (trade?.receipt(stored.c) || priority?.receipt(stored.c) || bullpen?.current(stored.c) || currentBullpen)
+        && (trade?.receipt(stored.c) || priority?.receipt(stored.c) || bullpen?.current(stored.c) || currentBullpen
+          || tandem?.current(stored.c) || currentTandem)
         && stored.c.year === career.year && summerCareerKey(stored.c) === summerCareerKey(career)) {
         const held = restoreMarketTalk(stored.contractTalk, stored.c, sport.slug, sport.freeAgencyContact?.teams(stored.c).map(t => t.id));
         if (stored.phase === 'season' || held?.kind === 'freeagency') {
@@ -741,8 +744,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
         }
       }
     } catch { /* An unreadable career cannot safely accept a request. */ }
-    if (requesting || currentBullpen) setTradeSaveMoved(true);
-    return requesting || Boolean(currentBullpen);
+    if (requesting || currentBullpen || currentTandem) setTradeSaveMoved(true);
+    return requesting || Boolean(currentBullpen || currentTandem);
   };
 
   const playSeason = () => {
@@ -1853,6 +1856,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   const rosterBoost = teamQuality == null ? 0 : priority?.boost(career, teamQuality) ?? 0;
   const bullpen = sport.bullpenRole;
   const bullpenOptions = bullpen?.options(career) ?? [];
+  const goalieTandem = sport.goalieTandem;
 
   /* ------------------------------ season hub ------------------------------ */
   return withSaveStatus(
@@ -2034,6 +2038,22 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
               {bullpenOptions.includes('closer') && <option value="closer">Close for saves</option>}
             </select>
             <span className="mt-1 block font-normal text-muted-foreground">Setup relievers pitch for holds. Closing opens at 80 OVR or with the Closer build.</span>
+          </label>}
+          {goalieTandem?.available(career) && <label className="mt-3 block text-left text-xs font-semibold">
+            Goalie workload for this season
+            <select className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm"
+              disabled={!!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
+              value={goalieTandem.current(career) ? 'tandem' : 'normal'} onChange={event => {
+                if (pendingSave.current || marketRef.current || teamPlanSaveChanged(true)) return;
+                const next = goalieTandem.set(career, event.target.value === 'tandem');
+                if (next === career) return;
+                setCareer(next);
+                persist(next, 'season', teamQuality);
+              }}>
+              <option value="normal">Normal starts</option>
+              <option value="tandem">Share the crease</option>
+            </select>
+            <span className="mt-1 block font-normal text-muted-foreground">Sharing means about 20% fewer planned starts and a 20% lower simulated injury chance. Camp still decides your role. Season Plan targets stay the same.</span>
           </label>}
           <UsCareerProgramme career={career} sport={sport.slug} onChange={next => {
             if (next === career || phase !== 'season') return;

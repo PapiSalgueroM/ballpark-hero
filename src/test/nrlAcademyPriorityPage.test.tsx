@@ -85,6 +85,41 @@ it('keeps default scouting on a legacy save without forcing a profile', () => {
   expect(raw()).toBe(bytes);
 });
 
+it('confirms the cost of a second scout and reveals both exact reports after reopening', () => {
+  const year = 2026, clubId = 'panthers', round = 1;
+  const initial = createNrlCareer(clubId, 41, year);
+  const view = open(JSON.stringify(initial));
+  fireEvent.change(screen.getByLabelText('Position to scout'), { target: { value: 'Hooker' } });
+  click('Assign scout');
+  const first = reduceNrlCareer(initial, { type: 'scoutAcademy', role: 'Hooker' });
+  expect(raw()).toBe(JSON.stringify(first));
+  expect(screen.getByText('Scouting Hooker. Advance a round for the report. Byes count.')).toBeVisible();
+  expect(screen.getByText(/Both reports will arrive/)).toBeVisible();
+  fireEvent.change(screen.getByLabelText('Position to scout'), { target: { value: 'Fullback' } });
+  fireEvent.change(screen.getByLabelText('Scouting priority'), { target: { value: 'ceiling' } });
+  expect(localStorage.getItem(fence)).toBe('5');
+  click('Assign second scout for $60,000');
+  const parallel = reduceNrlCareer(first, { type: 'scoutAcademyParallel', year, clubId, round, role: 'Fullback', priority: 'ceiling' });
+  expect(raw()).toBe(JSON.stringify(parallel));
+  expect(localStorage.getItem(fence)).toBe('6');
+  view.unmount();
+  renderPage();
+  goAcademy();
+  expect(screen.getByText(/Scouting Fullback with higher ceiling priority/)).toBeVisible();
+  expect(screen.queryByRole('button', { name: /Assign second scout/ })).not.toBeInTheDocument();
+  click('Match centre');
+  click('Simulate bye round');
+  const revealed = reduceNrlCareer(parallel, { type: 'advance' });
+  expect(raw()).toBe(JSON.stringify(revealed));
+  goAcademy();
+  const players = nrlAcademyReports(revealed).map(report => report.player!);
+  const list = within(screen.getByRole('list', { name: 'Academy reports' }));
+  for (const player of players) expect(list.getByText(player.name)).toBeVisible();
+  click('Promote ' + players[1].name);
+  expect(readNrlCareerSave(raw())).toEqual(reduceNrlCareer(revealed, { type: 'promoteAcademy', playerId: players[1].id }));
+  expect(localStorage.getItem(fence)).toBe('8');
+});
+
 it('opens a ready academy report from a fast-forward stop and clears the shortcut after the prospect signs', () => {
   const initial = createNrlCareer('panthers', 41);
   const view = open(JSON.stringify(initial));

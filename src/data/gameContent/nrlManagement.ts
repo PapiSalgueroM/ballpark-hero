@@ -48,6 +48,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'In Recruitment, open Plan future salary cap to check how up to three shortlisted players or renewals at their asking salaries would fit together across seasons before making offers.',
       'In Academy, you can pay once from simulated club cash to improve the potential of newly scouted prospects from the next round. The facilities stay with that club if you move.',
       'Before assigning an academy scout, choose Balanced, Ready sooner for higher starting OVR, or Higher ceiling for more potential. Each report takes one round.',
+      'Once per season, pay $60,000 in club cash to scout a second position while your first report is pending. Both reports arrive after you advance one round. Your salary cap stays the same.',
       'After the Grand Final, release one unsigned academy prospect into next season’s free-agent market or promote him to your own Top 30.',
       'Open State of Origin in the club office to coach New South Wales or Queensland through three games. You can nominate one eligible player from your club before starting, then pick your 13 starters, six reserves and tactic. The 2026 series uses the official dates and venues. Later schedules and all results are simulated.',
       'When you start a new State of Origin series, Past Origin series keeps the previous winner and all three scores.',

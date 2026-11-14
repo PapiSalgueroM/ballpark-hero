@@ -89,7 +89,7 @@ export function nhlHeadlinesFor(c: NhlCareerState, line: NhlSeasonLine): string[
      on (its own `slate`), so an 84 game season and a saved 82 game one each
      read true beside the same paper. */
   const held = nhlWorkSlate(c.pos, slateOf('nhl', line));
-  const slate = c.pos === 'G' ? toSlate('nhl', 58, held) : held;
+  const slate = c.pos === 'G' ? line.tandemStarts ?? toSlate('nhl', 58, held) : held;
   return nhlSeasonHeadlines({
     name: c.name,
     team: nhlTeamLabelOf(line.team, c.eraId),

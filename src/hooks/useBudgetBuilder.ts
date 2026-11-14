@@ -230,8 +230,7 @@ export function useBudgetBuilder(): BudgetBuilderState {
       .filter(p => !usedNames.has(p.name) || squad[activeSlot]?.name === p.name)
       .filter(p => p.marketValue <= budgetForSlot)
       .filter(p => (q ? p.name.toLowerCase().includes(q) || p.club.toLowerCase().includes(q) : true))
-      .sort((a, b) => b.marketValue - a.marketValue)
-      .slice(0, 60);
+      .sort((a, b) => b.marketValue - a.marketValue);
   }, [activeSlot, formation, topicPool, usedNames, squad, remaining, search]);
 
   const finalScore = useMemo(() => {
