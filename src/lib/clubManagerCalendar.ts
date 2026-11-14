@@ -1018,6 +1018,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
     return null;
   }
   if (fresh.clubName !== club) return null;
+  if (career.inSeasonRatings) fresh.inSeasonRatings = true;
   /* Round 1021 review: fresh is a season one save, so in the 2020-21 era it
      is dealt that season's late summer window whatever year the career is
      in. Every later season opened in August with the usual four matches,

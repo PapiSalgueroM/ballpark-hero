@@ -1299,6 +1299,7 @@ export interface CupTie {
 /** Round 95: one of my players out on loan, home at the end of the season. */
 export interface LoanOut {
   player: CMPlayer;
+  ratingGains?: number;
   /** Where he is playing. */
   club: string;
   /** Loan fee banked when he left. */
@@ -1333,6 +1334,7 @@ export interface CMPlayer {
   position: Position;
   rating: number;
   age: number;
+  seasonRatingCredit?: [season: number, credit: number];
   /** 0-100, drops when the player starts, recovers on weeks off. */
   fitness: number;
   /** 0-100, swings with results. */
@@ -3013,6 +3015,7 @@ export interface CareerState {
   saveVersion: number;
   clubName: string;
   season: number;
+  inSeasonRatings?: true;
   /** Index into calendar of the next entry to play. */
   week: number;
   budget: number;
@@ -12268,12 +12271,12 @@ function returnLoanedPlayers(career: CareerState): {
       p.age <= 24 ? ri(1, 3) :
       p.age <= 28 ? ri(0, 1) : 0;
     let value = p.value;
-    if (value !== undefined && bump > 0) {
+    if (!career.inSeasonRatings && value !== undefined && bump > 0) {
       value = Math.max(0.2, Math.round(value * Math.pow(1.2, bump) * 10) / 10);
     }
     const grown: CMPlayer = {
       ...p,
-      rating: clamp(p.rating + bump, 40, 95),
+      rating: career.inSeasonRatings ? p.rating : clamp(p.rating + bump, 40, 95),
       value,
       morale: 76,
       transferStatus: undefined,
@@ -12294,7 +12297,7 @@ function returnLoanedPlayers(career: CareerState): {
        first and foremost a development tool in this game, and losing the boy
        has to be the exception that makes the option interesting rather than the
        default outcome that makes loaning out a bad idea. */
-    if (l.optionFee !== undefined && (bump >= 3 || grown.rating >= 80) && Math.random() < 0.25) {
+    if (l.optionFee !== undefined && ((career.inSeasonRatings ? l.ratingGains ?? 0 : bump) >= 3 || grown.rating >= 80) && Math.random() < 0.25) {
       bought.push({ name: p.name, club: l.club, fee: l.optionFee, player: grown });
       continue;
     }
@@ -14443,7 +14446,7 @@ function worldUelField(state: CareerState, tables: { league: Pick<LeagueDef, 'id
  * stripped of worldComps anyway; this skips opening them, which cost a daily start a median of 55 ms a date on a
  * runner (simWorldEuro section 6). Opening draws nothing, so no deal moves either way.
  */
-export interface StartCareerOptions { noWorldComps?: boolean; championshipPlayoffs?: true; bundesligaPlayoff?: true; frenchPlayoffs?: true }
+export interface StartCareerOptions { noWorldComps?: boolean; championshipPlayoffs?: true; bundesligaPlayoff?: true; frenchPlayoffs?: true; inSeasonRatings?: true }
 /** The options both dailies start a career with. */
 export const DAILY_START: StartCareerOptions = { noWorldComps: true };
 /* The states a start was asked to open nothing on, read by openWorldUclOnStart (a set of objects, never saved). */
@@ -20398,6 +20401,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const tacticsDay = logEverSet(live.instrLog) ? tacticsImpl()?.day(state, fx, live, second, lastMinute) ?? null : null;
   if (entry.night) nightSquadTick(state, new Set(xi.map(p => p.id)));
   else tickWeek(state, new Set(xi.map(p => p.id)));
+  if (state.inSeasonRatings && entry.type === 'league') {
+    applyLeagueRatingChanges(state, events);
+  }
   if (tacticsDay && tacticsDay.stats.legs !== 0) {
     const played = new Set(xi.map(p => p.id));
     state.squad = state.squad.map(p => (played.has(p.id) ? { ...p, fitness: clamp(p.fitness - tacticsDay.stats.legs, 20, 100) } : p));
@@ -21084,6 +21090,44 @@ export function recordedTraining(p: CMPlayer, career: CareerState): { weeks: num
   return { weeks, rate: total / weeks };
 }
 
+/** Bank a fraction of the age curve after each league match, with the training when it was earned. */
+function applyLeagueRatingChanges(state: CareerState, events: string[]): void {
+  const rounds = leagueRounds(state.leagueClubs.length);
+  if (rounds < 1) return;
+  const changes: string[] = [];
+  const develop = (p: CMPlayer, onLoan: boolean): CMPlayer => {
+    const rng = keyedRng(`cm-rating|${worldSeedOf(state) ?? state.eraId}|${state.season}|${p.id}`);
+    const [lo, hi] = ageDriftBand(p.age + 1);
+    let drift = lo + Math.floor(rng() * (hi - lo + 1));
+    if (drift < 0) drift = Math.round(drift * declineScale(p.position));
+    if (onLoan && p.age <= 28) drift += p.age <= 21 ? 3 : p.age <= 24 ? 2 : 0.5;
+    if (drift === 0) return p;
+    const initialCredit = rng() * Math.sign(drift);
+    const [season, savedCredit] = p.seasonRatingCredit ?? [];
+    const credit = (season === state.season && typeof savedCredit === 'number' && Math.abs(savedCredit) <= 1 ? savedCredit : initialCredit)
+      + drift * (drift > 0 && !onLoan ? recordedTraining(p, state).rate : 1) / rounds;
+    const potential = p.potential ?? rollPotential(ceilingBase(p), p.age, rng);
+    const step = credit >= 1 && p.rating < Math.min(95, potential) ? 1 : credit <= -1 && p.rating > 40 ? -1 : 0;
+    if (step) changes.push(`${p.name} ${step > 0 ? '+1' : '-1'}${onLoan ? ' (on loan)' : ''}`);
+    return {
+      ...p,
+      potential,
+      rating: p.rating + step,
+      value: p.value === undefined || step === 0 ? p.value : Math.max(0.2, Math.round(p.value * 1.2 ** step * 10) / 10),
+      seasonRatingCredit: [state.season, clamp(credit - step, -1, 1)],
+    };
+  };
+  state.squad = state.squad.map(p => develop(p, false));
+  if (state.loanedOut?.length) {
+    state.loanedOut = state.loanedOut.map(loan => {
+      const player = develop(loan.player, true);
+      const gain = player.rating - loan.player.rating;
+      return { ...loan, player, ...(gain > 0 ? { ratingGains: (loan.ratingGains ?? 0) + gain } : {}) };
+    });
+  }
+  if (changes.length) events.push(`Squad OVR: ${changes.join(', ')}.`);
+}
+
 /**
  * Round 963: the players a growth lift would be cut short for, because
  * developmentRate would sit at its ceiling for them. Every lift sits inside
@@ -21229,6 +21273,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     saveVersion: SAVE_VERSION,
     clubName: club.name,
     season: 1,
+    ...(opts?.inSeasonRatings ? { inSeasonRatings: true } : {}),
     week: 0,
     startYear: era.startYear,
     eraId: era.id,
@@ -23350,7 +23395,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
  * the player's ceiling. Decline is untouched: no amount of coaching keeps a
  * thirty four year old from slowing down.
  */
-function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMPlayer {
+function agePlayer(p: CMPlayer, career: CareerState, random?: () => number, preserveRating = false): CMPlayer {
   const age = p.age + 1;
   /* Round 132: the same single curve the projected world runs on, so my squad
      and every AI squad in the game age on identical rules. That symmetry is
@@ -23367,6 +23412,7 @@ function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMP
      ever stopped playing. */
   const [lo, hi] = ageDriftBand(age);
   let drift = random ? lo + Math.floor(random() * (hi - lo + 1)) : ri(lo, hi);
+  if (preserveRating) drift = 0;
   if (drift < 0) drift = Math.round(drift * declineScale(p.position));
   const potential = p.potential ?? rollPotential(ceilingBase(p), p.age, random);
   if (drift > 0) {
@@ -23381,7 +23427,7 @@ function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMP
     value = Math.max(0.2, Math.round(value * 10) / 10);
   }
   const ceiling = worldRosterView(career) || worldSeedOf(career) !== undefined ? Math.max(95, Math.min(99, p.rating)) : 95;
-  const rating = clamp(p.rating + drift, 40, ceiling);
+  const rating = preserveRating ? p.rating : clamp(p.rating + drift, 40, ceiling);
   const out: CMPlayer = {
     ...p,
     age,
@@ -23416,6 +23462,7 @@ function agePlayer(p: CMPlayer, career: CareerState, random?: () => number): CMP
   };
   const h = readTrainingExposure(p.trainingExposure);
   if (h && h.club === career.clubName && h.season === career.season) delete out.trainingExposure;
+  delete out.seasonRatingCredit;
   return out;
 }
 
@@ -23898,7 +23945,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   } else {
     // Round 105: deals run down over the summer and the expired walk for
     // nothing. This is the price of never sitting down with your own players.
-    const aged = [...afterLoans, ...homeFromLoan].map(p => agePlayer(p, career));
+    const aged = [...afterLoans, ...homeFromLoan].map(p => agePlayer(p, career, undefined, career.inSeasonRatings));
     /* Round 132: and some of them stop playing altogether. Before this the
        ONLY way a player ever left on age was the line below, "age < 38 or
        rated 70 plus", which meant a good veteran simply never went: measured

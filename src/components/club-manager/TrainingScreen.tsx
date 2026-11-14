@@ -65,7 +65,7 @@ function PlayerRow({ p, career }: { p: CMPlayer; career: CareerState }) {
           {p.rating} now · {head >= 12 ? 'lots of room left' : head >= 6 ? 'plenty of room left' : 'a little room left'} · {apps} app{apps === 1 ? '' : 's'} this season
         </div>
         <div className="text-[10px] text-muted-foreground" data-cm-training-record={p.id}>
-          {recorded.weeks ? `${recorded.weeks} recorded week${recorded.weeks === 1 ? '' : 's'} · summer mix ${recorded.rate.toFixed(2)}x` : 'No recorded weeks. Current plan used.'}
+          {recorded.weeks ? `${recorded.weeks} recorded week${recorded.weeks === 1 ? '' : 's'} · training mix ${recorded.rate.toFixed(2)}x` : 'No recorded weeks. Current plan used.'}
         </div>
       </div>
       <span className={cn('shrink-0 text-[9px] font-bold', lab.cls)}>{lab.text}</span>
@@ -313,7 +313,7 @@ export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: 
       <div className="bg-card border border-border rounded-xl p-3">
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">One player's recovery week</div>
         <p className="text-[10px] text-muted-foreground mb-2">
-          Give one player Light training for the next paid week. Everyone else keeps your plan. Light training trades some summer growth for fresher legs, your picked XI stays unchanged, and injuries still count down normally. Midweek nights do not use this order.
+          Give one player Light training for the next paid week. Everyone else keeps your plan. Light training can slow development and keep legs fresher. Midweek nights do not use this order.
         </p>
         {recoveryBlocked ? (
           <p className="text-[10px] text-amber-400">This recovery order uses a different format. It is kept unchanged; recovery edits are unavailable.</p>
@@ -359,7 +359,7 @@ export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: 
           </p>
         )}
         <p className="text-[10px] text-muted-foreground mb-1.5">
-          Summer growth uses each player's recorded mix. Earlier weeks are not reconstructed. With no record, the current plan is used. The status at right previews the current plan, not a promised OVR gain.
+          Squad OVR can rise or fall after league matches. Training and playing time help young players improve, and older players can lose a point along the way. Check the match report for changes.
         </p>
         {growing.map(p => <PlayerRow key={p.id} p={p} career={career} />)}
         {growing.length > 0 && (
