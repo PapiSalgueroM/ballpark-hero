@@ -32,6 +32,33 @@ const open = () => fireEvent.click(document.querySelector('[data-last-season]') 
 afterEach(cleanup);
 
 describe('Stadium Tycoon: the Latest season review', () => {
+  it('keeps exact league results across promotion and reload and drops a forged result', () => {
+    const now = 1794085200000;
+    let state = newTycoon(now);
+    for (let i = 0; i < leagueShape(0).matchdays; i += 1) {
+      state = tick({ ...state, minute: 89, goalsFor: 10 + i, goalsAgainst: i }, 1.5, () => 1).state;
+      state = deserializeTycoon(serializeTycoon(state, now), now)!;
+    }
+    const last = state.lastCompletedLeague!;
+    expect(last.results?.map(({ gf, ga }) => [gf, ga])).toEqual([[10, 0], [11, 1], [12, 2], [13, 3], [14, 4]]);
+    expect(state.league?.results).toBeUndefined();
+    render(<LatestSeasonReview last={last} />);
+    open();
+    expect(text('[data-latest-season-results]')).toMatch(/10-0.*11-1.*12-2.*13-3.*14-4/);
+
+    const forged = { ...state, lastCompletedLeague: { ...last, results: [{ day: 5, gf: 99, ga: 0 }] } };
+    expect(deserializeTycoon(serializeTycoon(forged, now), now)?.lastCompletedLeague?.results).toBeUndefined();
+  });
+
+  it('starts recording from the next matchday of an older save', () => {
+    const now = 1794085200000;
+    const base = newTycoon(now);
+    const finish = (state: typeof base) => tick({ ...state, minute: 89, goalsFor: 3, goalsAgainst: 0 }, 1.5, () => 1).state;
+    const old = finish(finish(base));
+    delete old.league!.results;
+    const next = finish(deserializeTycoon(serializeTycoon(old, now), now)!);
+    expect(deserializeTycoon(serializeTycoon(next, now), now)?.league?.results).toEqual([{ day: 3, gf: 3, ga: 0 }]);
+  });
   it('offers the review on a button that says where you finished', () => {
     render(<LatestSeasonReview last={last} />);
     expect(text('[data-last-season]')).toBe("Latest seasonSeason 3 · 2nd of 4");

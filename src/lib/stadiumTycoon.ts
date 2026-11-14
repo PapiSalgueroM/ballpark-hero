@@ -706,6 +706,7 @@ export interface TycoonLeague {
   baseMatchNo?: number;
   /** Index 0 is you. */
   clubs: LeagueClub[];
+  results?: { day: number; gf: number; ga: number }[];
   /** An older save's match in progress when it first loaded: played to full
    *  time against this name, outside the table, before matchday 1. */
   carryover?: string;
@@ -796,15 +797,15 @@ function nextSeason(lg: TycoonLeague): TycoonLeague {
 }
 
 /** This matchday's fixtures, as pairs of club indexes. */
-export function matchdayFixtures(lg: TycoonLeague): [number, number][] {
+export function matchdayFixtures(lg: TycoonLeague, matchday = lg.matchday): [number, number][] {
   const { perMatchday } = leagueShape(lg.division);
   const calendar = roundRobinCalendar(lg.clubs.length);
-  return calendar.slice(lg.matchday * perMatchday, (lg.matchday + 1) * perMatchday);
+  return calendar.slice(matchday * perMatchday, (matchday + 1) * perMatchday);
 }
 
 /** The index of the club you meet on this matchday. */
-export function yourOpponentIndex(lg: TycoonLeague): number {
-  const f = matchdayFixtures(lg).find(([h, a]) => h === 0 || a === 0);
+export function yourOpponentIndex(lg: TycoonLeague, matchday = lg.matchday): number {
+  const f = matchdayFixtures(lg, matchday).find(([h, a]) => h === 0 || a === 0);
   return f ? (f[0] === 0 ? f[1] : f[0]) : 1;
 }
 
@@ -928,7 +929,8 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
     recordResult(clubs[h], hg, ag);
     recordResult(clubs[a], ag, hg);
   }
-  const played: TycoonLeague = { ...lg, clubs, matchday: lg.matchday + 1 };
+  const matchday = lg.matchday + 1;
+  const played: TycoonLeague = { ...lg, clubs, matchday, results: [...(lg.results ?? []), { day: matchday, gf, ga }] };
   if (played.matchday < leagueShape(lg.division).matchdays) return played;
 
   st.lastCompletedLeague = played;
@@ -1638,6 +1640,19 @@ function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: n
   const base = Number.isInteger(r.baseMatchNo) && (r.baseMatchNo as number) >= 0 && (r.baseMatchNo as number) <= matchNo ? (r.baseMatchNo as number) : matchNo;
   const out: TycoonLeague = { division: division as number, season: r.season as number, matchday: r.matchday as number, seed: (r.seed as number) >>> 0, baseMatchNo: base, clubs };
   if (typeof r.carryover === 'string' && allOpponentNames().includes(r.carryover)) out.carryover = r.carryover;
+  if (Array.isArray(r.results) && r.results.length > 0 && r.results.length <= out.matchday) {
+    const first = out.matchday - r.results.length + 1;
+    const own = clubs[0];
+    const tally = blankClub(own.name, 0);
+    if (r.results.every((result, index) => {
+      if (!result || result.day !== first + index || !Number.isSafeInteger(result.gf) || result.gf < 0
+        || !Number.isSafeInteger(result.ga) || result.ga < 0) return false;
+      recordResult(tally, result.gf, result.ga);
+      return true;
+    }) && (['w', 'd', 'l', 'gf', 'ga'] as const).every(key => first === 1 ? tally[key] === own[key] : tally[key] <= own[key])) {
+      out.results = r.results.map(({ day, gf, ga }) => ({ day, gf, ga }));
+    }
+  }
   return out;
 }
 

@@ -36,7 +36,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
         items: [
           "Follow the match at the top of the pitch. Goals and wins pay bonuses counted in seconds of your own income, wins extend your streak, and the streak multiplies income and pulls in new fans.",
           "Win your league to climb the divisions. Each division is a small league of named rival clubs with a table on the League tab, and only the champion goes up. Every division multiplies all income up to five and a half times, each promotion pays a bonus on the spot, and higher divisions send tougher opponents.",
-          "Open Latest season in the League tab to see your final table and record after reload. If you win the Muddy Meadows League, for example, you can reopen its table while playing in Gravel Lane. A newer final table replaces it, and selling up clears it with the rest of the ground's league.",
+          "Open Latest season in the League tab to see your final table and recorded match scores after reload. If you win the Muddy Meadows League, for example, you can reopen its table while playing in Gravel Lane. The next completed season replaces it, and selling up clears it with the rest of the ground's league.",
         ],
       },
       {
