@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { NBA_DESK_PANELS, type NbaDeskFacts } from '@/components/nba-front-office/NbaGmDesk';
 import { withGmBlock } from '@/lib/gmDesk';
@@ -88,7 +88,7 @@ describe('NBA Trade Desk future pick counter', () => {
     expect(next?.key).not.toBe(used.key);
   });
 
-  it('adds the pick for review before the user makes the actual deal', () => {
+  it('adds the pick for review before the user makes the actual deal', async () => {
     const { league, desk, pkg } = fixture();
     const quoted = nbaFuturePickCounter(pkg, nbaPackageContext(league, desk, team, partner))!;
     const commit = vi.fn();
@@ -114,6 +114,7 @@ describe('NBA Trade Desk future pick counter', () => {
     expect(make).toBeEnabled();
     const pick = document.querySelector(`[data-gm-tile="${assetKey(quoted)}"]`)!;
     expect(pick).toHaveAttribute('aria-pressed', 'true');
+    await waitFor(() => expect(pick).toHaveFocus());
     fireEvent.click(pick);
     expect(make).toBeDisabled();
     fireEvent.click(screen.getByRole('button', { name: /pick to review/ }));
