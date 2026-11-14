@@ -17,6 +17,13 @@ interface OriginMatch {
   awayScore: number;
   goldenPoint: boolean;
 }
+type NrlOriginScore = Pick<OriginMatch, 'homeScore' | 'awayScore' | 'goldenPoint'>;
+export interface NrlOriginHistory {
+  year: number;
+  side: NrlOriginSide;
+  winner: NrlOriginSide;
+  matches: NrlOriginScore[];
+}
 export interface NrlOriginSeries {
   version: 1;
   year: number;
@@ -176,6 +183,7 @@ export function createNrlOriginSeries(players: readonly NrlPlayer[], year: numbe
 }
 
 const SERIES_GAMES = ORIGIN_FIXTURES_2026.length;
+const MAX_ORIGIN_SCORE = 18 * 6 + 2 + 1; // A converted try per chance, one penalty goal and one golden point.
 export const nrlOriginComplete = ({ matches }: NrlOriginSeries) => matches.length >= SERIES_GAMES;
 
 export function nrlOriginStarterOptions(series: NrlOriginSeries, role: NrlRole): OriginPlayer[] {
@@ -236,7 +244,7 @@ export function playNrlOriginMatch(series: NrlOriginSeries, seed: number, game: 
   return { ...series, matches: [...series.matches, match] };
 }
 
-export function nrlOriginResult(series: NrlOriginSeries) {
+export function nrlOriginResult(series: { year: number; matches: readonly NrlOriginScore[] }) {
   const wins = { nsw: 0, qld: 0 };
   const fixtures = nrlOriginFixtures(series.year);
   series.matches.forEach(({ homeScore, awayScore }, index) => {
@@ -244,6 +252,32 @@ export function nrlOriginResult(series: NrlOriginSeries) {
     wins[homeScore > awayScore ? home : away]++;
   });
   return { wins, winner: NRL_ORIGIN_SIDES.find(side => wins[side] >= 2) };
+}
+
+export function archiveNrlOrigin(series: NrlOriginSeries): NrlOriginHistory | null {
+  const { winner } = nrlOriginResult(series);
+  if (!nrlOriginComplete(series) || !winner) return null;
+  const matches = series.matches.map(({ homeScore, awayScore, goldenPoint }) => ({ homeScore, awayScore, goldenPoint }));
+  return { year: series.year, side: series.side, winner, matches };
+}
+
+export function validNrlOriginHistory(value: unknown, openingYear: number, activeYear: number): value is NrlOriginHistory[] {
+  if (!Array.isArray(value) || value.length === 0 || value.length > activeYear - openingYear) return false;
+  let nextYear = openingYear;
+  const validScore = (score: unknown) => typeof score === 'number' && Number.isInteger(score) && score >= 0 && score <= MAX_ORIGIN_SCORE;
+  for (const record of value as NrlOriginHistory[]) {
+    if (!record || typeof record !== 'object' || Object.keys(record).length !== 4 || !isYear(record.year)
+      || record.year < nextYear || record.year >= activeYear || !isSide(record.side) || !isSide(record.winner)
+      || !Array.isArray(record.matches) || record.matches.length !== SERIES_GAMES
+      || !record.matches.every(match => match && typeof match === 'object' && Object.keys(match).length === 3
+        && validScore(match.homeScore) && validScore(match.awayScore) && match.homeScore !== match.awayScore
+        && typeof match.goldenPoint === 'boolean' && (match.goldenPoint
+          ? Math.abs(match.homeScore - match.awayScore) === 1 && Math.min(match.homeScore, match.awayScore) % 2 === 0
+          : match.homeScore % 2 === 0 && match.awayScore % 2 === 0))
+      || nrlOriginResult(record).winner !== record.winner) return false;
+    nextYear = record.year + 1;
+  }
+  return true;
 }
 
 function isOriginSelection(value: unknown, pool: OriginPlayer[]): value is OriginSelection {

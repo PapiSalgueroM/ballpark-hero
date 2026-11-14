@@ -18,8 +18,8 @@ import {
   type NrlPhysioTreatment, type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
 } from '@/lib/nrlManager';
 import {
-  createNrlOriginSeries, isNrlOriginSeries, nrlOriginComplete, nrlOriginEligibility, playNrlOriginMatch, selectNrlOriginReserve, selectNrlOriginStarter,
-  setNrlOriginTactic, type NrlOriginSeries, type NrlOriginSide,
+  archiveNrlOrigin, createNrlOriginSeries, isNrlOriginSeries, nrlOriginComplete, nrlOriginEligibility, playNrlOriginMatch, selectNrlOriginReserve, selectNrlOriginStarter,
+  setNrlOriginTactic, validNrlOriginHistory, type NrlOriginHistory, type NrlOriginSeries, type NrlOriginSide,
 } from '@/lib/nrlOrigin';
 import {
   isNrlJudiciary, judiciaryNeedsResponse, nrlJudiciaryBannedBefore, nrlJudiciaryBans, nrlJudiciaryCase, nrlJudiciaryMatchesAfter,
@@ -204,6 +204,7 @@ export interface NrlCareerState {
   savedRotationLineup?: NrlSavedLineup;
   positionTraining?: NrlPositionCourse;
   origin?: NrlOriginSeries;
+  originHistory?: NrlOriginHistory[];
   worldCup?: NrlWorldCupRun;
   offseasonApplication?: string;
   summerApplication?: NrlSummerApplication;
@@ -2059,7 +2060,9 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         player.id === nominationId && contractIn(player, season.year)?.clubId === season.clubId))) return state;
       const next = createNrlOriginSeries(players, season.year, action.side,
         nominationId === undefined ? undefined : { clubId: season.clubId, playerId: nominationId });
-      return next ? { ...state, origin: next } : state;
+      if (!next) return state;
+      const archived = origin && archiveNrlOrigin(origin);
+      return archived ? { ...state, origin: next, originHistory: [...(state.originHistory ?? []), archived] } : { ...state, origin: next };
     }
     case 'selectOriginStarter':
     case 'selectOriginReserve':
@@ -3079,6 +3082,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
   if (state.origin !== undefined && (!isNrlOriginSeries(state.origin, state.season.seed)
     || state.origin.year < state.openingYear || state.origin.year > year
     || (!state.openingRoster && Object.values(state.origin.pools).some(pool => pool.some(player => isNrlNamedPlayer(player.id)))))) return false;
+  if (value.originHistory !== undefined && (!state.origin || !validNrlOriginHistory(value.originHistory, state.openingYear, state.origin.year))) return false;
   const spell = state.season.reserveGrade;
   if (spell) {
     const player = state.players.find(candidate => candidate.id === spell.playerId);

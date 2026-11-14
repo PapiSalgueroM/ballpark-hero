@@ -2,8 +2,9 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { createNrlCareer, readNrlCareerSave } from '@/lib/nrlCareer';
+import { createNrlCareer, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
 import { NRL_SAVE_KEY } from '@/lib/nrlManager';
+import { nrlOriginFixtures, nrlOriginResult, NRL_ORIGIN_TEAM_NAMES } from '@/lib/nrlOrigin';
 import { saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
 
@@ -26,6 +27,35 @@ beforeEach(() => localStorage.clear());
 afterEach(() => { cleanup(); saveFence.release(NRL_SAVE_KEY); });
 
 describe('State of Origin in the Club office', () => {
+  it('reopens all three settled scores after accepting the next Origin series', () => {
+    let career = createNrlCareer('broncos', 16);
+    career = reduceNrlCareer(career, { type: 'startOrigin', year: 2026, side: 'qld' });
+    for (const game of [1, 2, 3]) career = reduceNrlCareer(career, { type: 'playOriginMatch', year: 2026, side: 'qld', game });
+    const old = career.origin!;
+    const winner = nrlOriginResult(old).winner!;
+    while (career.season.phase !== 'complete') career = reduceNrlCareer(career, { type: 'advance' });
+    career = reduceNrlCareer(career, { type: 'startNextSeason' });
+    localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(career));
+    const page = open();
+    click('Club office');
+    expect(screen.queryByText('Past Origin series')).not.toBeInTheDocument();
+    click('Coach New South Wales Blues');
+    expect(save().origin?.year).toBe(2027);
+    const saved = raw();
+    page.unmount();
+    open();
+    click('Club office');
+    fireEvent.click(screen.getByText('Past Origin series'));
+    fireEvent.click(screen.getByText(`2026 · ${NRL_ORIGIN_TEAM_NAMES[winner]} won`));
+    expect(screen.getByText('You coached Queensland Maroons.')).toBeVisible();
+    const list = within(screen.getByRole('list', { name: '2026 State of Origin games' }));
+    nrlOriginFixtures(2026).forEach(({ game, home, away }, index) => {
+      const { homeScore, awayScore } = old.matches[index];
+      expect(list.getAllByRole('listitem')[game - 1]).toHaveTextContent(`${home.toUpperCase()} ${homeScore}–${awayScore} ${away.toUpperCase()}`);
+    });
+    expect(raw()).toBe(saved);
+  });
+
   it('starts on demand, saves selections and scores, and resumes without advancing the club', () => {
     const initial = createNrlCareer('broncos', 16);
     localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(initial));
