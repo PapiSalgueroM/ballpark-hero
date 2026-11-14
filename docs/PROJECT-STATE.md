@@ -1,3 +1,7 @@
+## Club Manager transfer swap availability
+
+The part exchange picker shows every eligible player in the manager's current squad, including starters, bench players and reserves. It still sorts by sale value. The loan ownership, minimum squad and last-keeper rules still apply. A mounted negotiation showed all 24 eligible squad players and completed a deal with a reserve below the former cutoff.
+
 ## Current candidate: Soccer Career European final winner
 
 Newly closed seasons use the saved European final to name the champion in SportsFeed and the Ballon d'Or. The phone consumes the same draw, and the simulated pick still applies when the player's club missed the final. Four focused checks cover a shootout loss, an awards shortlist, a win and an earlier exit. Compiled comparisons at 390 and 1440 pixels reproduce the same Chelsea shootout win on both builds and show Chelsea instead of PSG in the new feed.

@@ -371,10 +371,9 @@ export function TransferScreen({
   );
 
   const swapPool = useMemo(
-    () => [...career.squad]
+    () => career.squad
       .filter(p => canLeaveSquad(career, p))
-      .sort((a, b) => sellValue(b) - sellValue(a))
-      .slice(0, 10),
+      .sort((a, b) => sellValue(b) - sellValue(a)),
     [career],
   );
 
