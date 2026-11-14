@@ -3,7 +3,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import MlbFrontOfficeBoard from '@/components/mlb-front-office/MlbFrontOfficeBoard';
 import { keyedRng } from '@/lib/keyedRng';
 import {
-  initMlbLeague, mlbRotationChoices, mlbStrength, mlbStrengthUnits, MLB_ROUNDS, setMlbRotationPlan, simMlbRound,
+  initMlbLeague, mlbLeagueSeeds, mlbRotationChoices, mlbStrength, mlbStrengthUnits, MLB_ROUNDS, setMlbRotationPlan, simMlbRound,
+  runMlbPlayoffs, setMlbOctoberRotation, readMlbOctoberReceipt,
   type MlbGmPlayer, type MlbLeague,
 } from '@/lib/mlbFrontOffice';
 
@@ -139,6 +140,109 @@ describe('MLB rotation workload', () => {
     view.unmount();
     render(<MlbFrontOfficeBoard />);
     expect(screen.getAllByText(receipt).length).toBeGreaterThan(0);
+    expect(read()).toEqual(result);
+  });
+});
+
+describe('MLB October starters', () => {
+  const october = () => screen.getByRole('combobox', { name: 'October rotation' });
+  const rates = [96, 84, 72];
+  const contenders = (host: boolean, ratings = rates) => {
+    const l = initMlbLeague(keyedRng('October ratings fixture'));
+    l.round = MLB_ROUNDS;
+    for (const [abbr, old] of Object.entries(l.teams)) {
+      l.teams[abbr] = { ...controlledRoster(abbr, abbr === team ? ratings : [84, 84, 84]),
+        wins: abbr === 'BOS' ? 97 : abbr === 'CLE' ? 92 : abbr === 'HOU' ? 91 : 10, losses: 0, picks: old.picks };
+    }
+    l.teams[team].wins = host ? 89 : 80;
+    l.schedule![MLB_ROUNDS - 1] = Array(6).fill('NYY-BOS');
+    l.teams.BAL.wins = host ? 80 : 89;
+    l.teams.TBR.wins = host ? 76 : 86;
+    return l;
+  };
+
+  it.each([true, false])('changes played games both ways using the same draws (home=%s)', host => {
+    const start = contenders(host);
+    const seeds = mlbLeagueSeeds(start, true);
+    expect(seeds.indexOf(team)).toBe(host ? 3 : 5);
+    const plain = structuredClone(start);
+    const booked = setMlbOctoberRotation(start, team, true);
+    expect(booked.octoberRotation).toEqual({ team, season: start.season });
+    const queue = host ? [0.1, 0.1, 0.55, 0.1, 0.45, 0.9] : [0.45, 0.9, 0.46, 0.4];
+    const play = (league: MlbLeague) => {
+      let draw = 0;
+      return runMlbPlayoffs(league, () => queue[draw++] ?? 0.1, undefined, team);
+    };
+    const usual = play(plain);
+    const applied = play(booked);
+    const row = applied.series.find(s => s.home === team || s.away === team)!;
+    const baseline = usual.series.find(s => s.home === team || s.away === team)!;
+    expect(row.name).toEqual(baseline.name);
+    expect(row.home === team).toBe(host);
+    expect(row.october?.games.map(g => [g.rating, g.won])).toEqual([[96, true], [84, true]]);
+    expect([baseline.homeWins, baseline.awayWins]).toEqual([2, 1]);
+    expect(baseline.winner).toBe(host ? team : baseline.home);
+    expect(row.winner).toBe(team);
+    expect(readMlbOctoberReceipt(row, team)).toEqual(row.october);
+    expect(booked.octoberRotation).toBeUndefined();
+    const receipt = row.october!;
+    expect(readMlbOctoberReceipt({ ...row, october: { ...receipt, games: [{ ...receipt.games[0], won: false }, receipt.games[1]] } }, team)).toBeNull();
+  });
+
+  it('shows the exact loss tradeoff at the weaker third starter after the ace wins', () => {
+    const fixture = contenders(true);
+    const usual = structuredClone(fixture);
+    const ace = setMlbOctoberRotation(fixture, team, true);
+    const play = (league: MlbLeague) => {
+      let i = 0;
+      const rolls = [0.1, 0.1, 0.3, 0.8, 0.45, 0.9];
+      return runMlbPlayoffs(league, () => rolls[i++] ?? 0.1, undefined, team).series.find(r => r.home === team || r.away === team)!;
+    };
+    const baseline = play(usual);
+    const actual = play(ace);
+    expect(actual.october?.games.map(g => [g.rating, g.won])).toEqual([[96, true], [84, false], [72, false]]);
+    expect(actual.winner).not.toBe(team);
+    expect(baseline.winner).toBe(team);
+    expect(baseline.homeWins).toBe(2);
+    expect(actual.homeWins).toBe(1);
+  });
+
+  it('emits only the normal playoff bytes if post-round injuries remove the third starter', () => {
+    const booked = setMlbOctoberRotation(contenders(true), team, true);
+    booked.teams[team].players.find(p => p.ovr === 72)!.out = 3;
+    const plain = structuredClone(booked);
+    delete plain.octoberRotation;
+    const run = (lg: MlbLeague) => {
+      let calls = 0;
+      const r = keyedRng('October fallback proof');
+      return { result: runMlbPlayoffs(lg, () => { calls++; return r(); }, undefined, team), calls };
+    };
+    expect(JSON.stringify(run(booked))).toBe(JSON.stringify(run(plain)));
+    expect(booked.octoberRotation).toBeUndefined();
+    expect(setMlbOctoberRotation({ ...plain, round: MLB_ROUNDS - 1 }, team, true).octoberRotation).toBeUndefined();
+  });
+
+  it('saves the October choice, then reloads actual starter names and results in the recap', () => {
+    const league = contenders(true);
+    localStorage.setItem(key, JSON.stringify({ league, myTeam: team, phase: 'hub', titles: 0, seasonsPlayed: 0, picksLeft: 0, draftClass: null }));
+    let mounted = render(<MlbFrontOfficeBoard />);
+    openRound();
+    fireEvent.change(october(), { target: { value: 'ace' } });
+    expect(read().league.octoberRotation).toEqual({ team, season: league.season });
+    mounted.unmount();
+    mounted = render(<MlbFrontOfficeBoard />);
+    openRound();
+    expect(october()).toHaveValue('ace');
+    vi.spyOn(Math, 'random').mockReturnValue(0.6);
+    fireEvent.click(screen.getByRole('button', { name: /Final stretch/ }));
+    const result = read();
+    const first = result.postseason.series.find((row: { october?: unknown }) => row.october);
+    expect(first.october.games[0]).toEqual({ pitcher: 'NYY fixture 8', rating: 96, won: expect.any(Boolean) });
+    expect(result.league.octoberRotation).toBeUndefined();
+    expect(screen.getByRole('region', { name: 'October starters' })).toHaveTextContent('NYY fixture 8');
+    mounted.unmount();
+    render(<MlbFrontOfficeBoard />);
+    expect(screen.getByRole('region', { name: 'October starters' })).toHaveTextContent('NYY fixture 8');
     expect(read()).toEqual(result);
   });
 });

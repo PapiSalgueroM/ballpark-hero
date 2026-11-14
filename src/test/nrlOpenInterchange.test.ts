@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
-import { nrlBenchRotation, nrlMinute60Interchanges, nrlNextRound } from '@/lib/nrlManager';
+import { nrlBenchRotation, nrlCanOpenInterchange, nrlMinute60Interchanges, nrlNextRound, NRL_ROLES, reduceNrlSeason } from '@/lib/nrlManager';
 
 const tick = ({ season }: NrlCareerState) => ({ year: season.year, clubId: season.clubId, round: season.round });
 const open = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'setOpenInterchange', ...tick(state), enabled: true });
@@ -91,5 +91,36 @@ describe('NRL open interchange', () => {
     expect([idle.homeScore, idle.awayScore]).toEqual([36, 6]);
     expect([changed.homeScore, changed.awayScore]).toEqual([30, 6]);
     expect(changed.scorePeriods?.at60).toEqual(idle.scorePeriods?.at60);
+  });
+
+  it('refuses either toggle in a restored live phase at both reducer entry points', () => {
+    const original = createNrlCareer('broncos', 16);
+    const { year, round, tactic } = original.season;
+    const start = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'startLive' });
+    const midway = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'reachMinute60', year, round, tactic });
+    for (const first of [start(original), start(open(original))]) {
+      for (const phase of [first, midway(first)]) {
+        const locked = restored(phase)!;
+        for (const enabled of [true, false]) {
+          const action = { type: 'setOpenInterchange', ...tick(original), enabled } as const;
+          expect(reduceNrlCareer(locked, action)).toBe(locked);
+          expect(reduceNrlSeason(locked.season, action)).toBe(locked.season);
+        }
+      }
+    }
+  });
+
+  it('continues to allow clearing after a bench change makes the plan redundant', () => {
+    const planned = open(createNrlCareer('broncos', 16));
+    const starters = new Set(Object.values(planned.season.lineup));
+    const wellCovered = NRL_ROLES.filter(role => planned.season.squad.filter(player => !starters.has(player.id) && player.role === role).length > 1).slice(0, 3);
+    const bench = planned.season.squad.filter(player => !starters.has(player.id) && wellCovered.includes(player.role)).slice(0, 6);
+    expect(bench).toHaveLength(6);
+    const reduced = bench.reduce((state, player, slot) => reduceNrlCareer(state, { type: 'selectBench', slot, playerId: player.id }), planned);
+    expect(nrlCanOpenInterchange(reduced.season)).toBe(false);
+    expect(restored(reduced)).toEqual(reduced);
+    const unset = reduceNrlCareer(reduced, { type: 'setOpenInterchange', ...tick(planned), enabled: false });
+    expect(unset.season.openInterchange).toBeUndefined();
+    expect(nrlBenchRotation(unset.season)).toEqual(nrlBenchRotation(reduced.season));
   });
 });

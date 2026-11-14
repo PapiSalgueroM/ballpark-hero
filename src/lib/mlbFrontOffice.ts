@@ -89,6 +89,7 @@ export interface MlbLeague {
   round: number; // 1..MLB_ROUNDS
   champions: { season: number; team: string }[];
   rotationPlan?: { team: string; season: number; round: number };
+  octoberRotation?: { team: string; season: number };
   /** Round 851: this season's fixtures, "HOME-AWAY" per round (foSchedule.ts).
       Optional: a league saved before the round finishes that season the old
       way and is booked at its next summer. */
@@ -235,11 +236,11 @@ export function mlbSimReads(t: { players: MlbGmPlayer[] }): string[] {
 }
 
 /** Strength: lineup 55%, rotation 33%, bullpen 12%; IL players excluded. */
-export function mlbStrength(t: MlbGmTeam, rotationSize = 3): number {
+export function mlbStrength(t: MlbGmTeam, rotationSize = 3, starter?: MlbGmPlayer): number {
   const { bats, rot, pen } = mlbStrengthUnits(t, rotationSize);
   const avg = (xs: MlbGmPlayer[], fallback: number) =>
     xs.length ? xs.reduce((s, p) => s + p.ovr, 0) / xs.length : fallback;
-  return avg(bats, 62) * 0.55 + avg(rot, 62) * 0.33 + avg(pen, 62) * 0.12;
+  return avg(bats, 62) * 0.55 + (starter?.ovr ?? avg(rot, 62)) * 0.33 + avg(pen, 62) * 0.12;
 }
 
 export const MLB_PROTECTED_STARTERS = 5;
@@ -403,37 +404,108 @@ export function mlbLeagueSeeds(league: MlbLeague, al: boolean): string[] {
   return [...winners, ...wildcards].map(t => t.abbr);
 }
 
-export interface MlbSeriesResult { name: string; home: string; away: string; homeWins: number; awayWins: number; winner: string }
+export function mlbOctoberRotationPlanned(league: MlbLeague, team: string): boolean {
+  const plan = league.octoberRotation;
+  return plan?.team === team && plan.season === league.season && league.round === MLB_ROUNDS
+    && Boolean(league.teams[team]?.depth) && !league.champions.some(row => row.season === league.season);
+}
 
-function playMlbSeries(name: string, home: MlbGmTeam, away: MlbGmTeam, rng: () => number, toWins: number, edges?: Record<string, number>): MlbSeriesResult {
-  const p = edges ? mlbWinProb(home, away, edges[home.abbr] ?? 0, edges[away.abbr] ?? 0) : mlbWinProb(home, away);
+export function setMlbOctoberRotation(league: MlbLeague, team: string, enabled: boolean): MlbLeague {
+  if (enabled === mlbOctoberRotationPlanned(league, team)) return league;
+  const next = { ...league };
+  if (enabled) {
+    const club = league.teams[team];
+    if (!club?.depth || league.round !== MLB_ROUNDS || league.champions.some(row => row.season === league.season)
+      || mlbStrengthUnits(club).rot.length !== 3) return league;
+    next.octoberRotation = { team, season: league.season };
+  } else delete next.octoberRotation;
+  return next;
+}
+
+type OctoberGame = { pitcher: string; rating: number; won: boolean };
+export type MlbOctoberReceipt = { team: string; games: OctoberGame[] };
+
+export interface MlbSeriesResult {
+  name: string;
+  home: string;
+  away: string;
+  homeWins: number;
+  awayWins: number;
+  winner: string;
+  october?: MlbOctoberReceipt;
+}
+
+export function readMlbOctoberReceipt(series: MlbSeriesResult, team: string): MlbOctoberReceipt | null {
+  const receipt = series.october;
+  if (!receipt || receipt.team !== team || (series.home !== team && series.away !== team)
+    || !Array.isArray(receipt.games) || receipt.games.length < 2 || receipt.games.length > 7
+    || receipt.games.length !== series.homeWins + series.awayWins) return null;
+  if (!receipt.games.every(row => row && typeof row.pitcher === 'string' && row.pitcher.trim().length > 0
+    && row.pitcher.length <= 120 && Number.isInteger(row.rating) && row.rating >= 1 && row.rating <= 99
+    && typeof row.won === 'boolean')) return null;
+  const wins = receipt.games.filter(row => row.won).length;
+  return wins === (series.home === team ? series.homeWins : series.awayWins) ? receipt : null;
+}
+
+type OctoberRotation = {
+  team: string;
+  starters: MlbGmPlayer[];
+  strengths: number[];
+};
+
+function playMlbSeries(
+  name: string, home: MlbGmTeam, away: MlbGmTeam, rng: () => number, toWins: number,
+  edges?: Record<string, number>, rotation?: OctoberRotation,
+): MlbSeriesResult {
+  const homeEdge = edges?.[home.abbr] ?? 0, awayEdge = edges?.[away.abbr] ?? 0;
+  const myHome = rotation?.team === home.abbr;
+  const active = rotation && (myHome || rotation.team === away.abbr) ? rotation : undefined;
+  const other = active ? mlbStrength(myHome ? away : home) : 0;
+  const chances = active ? active.strengths.map(strength => myHome
+    ? mlbWinProbFromStrength(strength + homeEdge, other + awayEdge)
+    : mlbWinProbFromStrength(other + homeEdge, strength + awayEdge))
+    : [mlbWinProb(home, away, homeEdge, awayEdge)];
+  const games: OctoberGame[] = [];
   let hw = 0, aw = 0;
   while (hw < toWins && aw < toWins) {
-    if (rng() < p) hw += 1; else aw += 1;
+    const index = (hw + aw) % chances.length;
+    const homeWon = rng() < chances[index];
+    if (homeWon) hw += 1; else aw += 1;
+    if (active) {
+      const pitcher = active.starters[index];
+      games.push({ pitcher: pitcher.name, rating: pitcher.ovr, won: myHome ? homeWon : !homeWon });
+    }
   }
-  return { name, home: home.abbr, away: away.abbr, homeWins: hw, awayWins: aw, winner: hw === toWins ? home.abbr : away.abbr };
+  return {
+    name, home: home.abbr, away: away.abbr, homeWins: hw, awayWins: aw, winner: hw === toWins ? home.abbr : away.abbr,
+    ...(active ? { october: { team: active.team, games } } : {}),
+  };
 }
 
 /** Wild Card (Bo3) with byes for 1-2, LDS (Bo5), LCS (Bo7), World Series (Bo7).
     Round 1020: `edges` as simMlbRound's; absent, every series plays as before. */
-export function runMlbPlayoffs(league: MlbLeague, rng: () => number, edges?: Record<string, number>): { series: MlbSeriesResult[]; champion: string } {
+export function runMlbPlayoffs(league: MlbLeague, rng: () => number, edges?: Record<string, number>, myTeam?: string): { series: MlbSeriesResult[]; champion: string } {
   const series: MlbSeriesResult[] = [];
   const pennants: string[] = [];
+  const club = myTeam && mlbOctoberRotationPlanned(league, myTeam) ? league.teams[myTeam] : null;
+  const starters = club ? mlbStrengthUnits(club).rot : [];
+  const rotation = club && starters.length === 3 ? { team: club.abbr, starters, strengths: starters.map(p => mlbStrength(club, 3, p)) } : undefined;
+  if (league.octoberRotation) delete league.octoberRotation;
   for (const al of [true, false]) {
     const tag = al ? 'AL' : 'NL';
     const s = mlbLeagueSeeds(league, al);
     const T = (i: number) => league.teams[s[i]];
-    const wc1 = playMlbSeries(`${tag} Wild Card 3v6`, T(2), T(5), rng, 2, edges);
-    const wc2 = playMlbSeries(`${tag} Wild Card 4v5`, T(3), T(4), rng, 2, edges);
+    const wc1 = playMlbSeries(`${tag} Wild Card 3v6`, T(2), T(5), rng, 2, edges, rotation);
+    const wc2 = playMlbSeries(`${tag} Wild Card 4v5`, T(3), T(4), rng, 2, edges, rotation);
     series.push(wc1, wc2);
-    const lds1 = playMlbSeries(`${tag}DS`, T(0), league.teams[wc2.winner], rng, 3, edges);
-    const lds2 = playMlbSeries(`${tag}DS`, T(1), league.teams[wc1.winner], rng, 3, edges);
+    const lds1 = playMlbSeries(`${tag}DS`, T(0), league.teams[wc2.winner], rng, 3, edges, rotation);
+    const lds2 = playMlbSeries(`${tag}DS`, T(1), league.teams[wc1.winner], rng, 3, edges, rotation);
     series.push(lds1, lds2);
-    const lcs = playMlbSeries(`${tag}CS`, league.teams[lds1.winner], league.teams[lds2.winner], rng, 4, edges);
+    const lcs = playMlbSeries(`${tag}CS`, league.teams[lds1.winner], league.teams[lds2.winner], rng, 4, edges, rotation);
     series.push(lcs);
     pennants.push(lcs.winner);
   }
-  const ws = playMlbSeries('World Series', league.teams[pennants[0]], league.teams[pennants[1]], rng, 4, edges);
+  const ws = playMlbSeries('World Series', league.teams[pennants[0]], league.teams[pennants[1]], rng, 4, edges, rotation);
   series.push(ws);
   return { series, champion: ws.winner };
 }

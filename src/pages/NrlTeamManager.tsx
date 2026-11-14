@@ -1342,7 +1342,10 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
                   Leave the fourth interchange open
                 </label>
                 <p id="nrl-open-interchange-help" className="text-xs text-muted-foreground">
-                  Quick Sim stops after three reserves. The unused reserve stays fresher and their starter gets less rest. In Live, choose an eligible reserve at 60 minutes if the place is open.
+                  {nrlCanOpenInterchange(season)
+                    ? 'Quick Sim uses three reserves. The unused reserve stays fresher and their starter gets less rest.'
+                    : 'This bench would already use three or fewer automatic reserves.'}
+                  {' In Live, choose an eligible reserve at 60 minutes if there is a place open.'}
                 </p>
               </>
             )}
