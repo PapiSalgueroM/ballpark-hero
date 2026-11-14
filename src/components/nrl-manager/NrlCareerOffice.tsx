@@ -12,21 +12,21 @@ import {
   nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyReports,
   nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
   nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
-  nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractCounteroffer, nrlContractOffer,
+  nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractCounteroffer, nrlContractOffer, nrlContractTermLimit,
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
   nrlConcessionsQuote, nrlConcessionsSpend,
   nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
   nrlLeagueRecruitmentPreview,
-  nrlRecruitmentBrief,
+  nrlRecruitmentBrief, nrlRecruitmentPlan,
   nrlSeasonOut, nrlSelectionPromise, nrlSelectionPromiseCandidates,
   nrlMutualReleaseQuote, nrlMutualReleaseSpend,
   nrlProjectedSummerOpenings, nrlSummerApplication, nrlSummerLastRound,
   type NrlCareerAction, type NrlCareerState,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverOffers, nrlTakeoverPlayers, nrlTicketPricingRefusal,
   nrlSupporterAttendance,
-  NRL_DEVELOPMENT_ASSISTANT, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
-  type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
+  NRL_DEVELOPMENT_ASSISTANT, NRL_RECRUITMENT_PLAN_LIMIT, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
+  type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlRecruitmentPick, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryPenalty } from '@/lib/nrlJudiciary';
 import { nrlArchivedFinals, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_QUALIFIED_COACHING_BONUS, NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
@@ -557,6 +557,87 @@ function RecruitmentComparison({ career, targets, onBack }: {
   );
 }
 
+function RecruitmentPlan({ career, targets, renewals }: { career: NrlCareerState; targets: MarketEntry[]; renewals: MarketEntry[] }) {
+  const [expanded, setExpanded] = useState(false);
+  const [picks, setPicks] = useState<NrlRecruitmentPick[]>([]);
+  const candidates = [...targets, ...renewals];
+  const byId = new Map(candidates.map(entry => [entry.player.id, entry]));
+  const plan = expanded ? nrlRecruitmentPlan(career, picks.filter(pick => pick.playerId)) : null;
+  const rowCount = Math.min(picks.length + 1, NRL_RECRUITMENT_PLAN_LIMIT);
+  const updatePick = (index: number, pick: NrlRecruitmentPick) => setPicks(previous => {
+    const next = [...previous];
+    next[index] = pick;
+    while (next.length && !next.at(-1)?.playerId) next.pop();
+    return next;
+  });
+  return (
+    <details className="group mt-3 rounded-lg border border-border bg-background px-3" onToggle={event => setExpanded(event.currentTarget.open)}>
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Plan future salary cap<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      {plan && <div className="space-y-3 pb-3 text-sm">
+        <p className="text-muted-foreground">Try up to three shortlisted players or renewals at their asking salaries. Each fitting deal takes cap space before the next is checked. This preview makes no offers and saves nothing.</p>
+        {!candidates.length && <p className="text-muted-foreground">Shortlist a player in Recruitment to add them here.</p>}
+        {candidates.length > 0 && ['First', 'Second', 'Third'].slice(0, rowCount).map((order, index) => {
+          const pick = picks[index] ?? { playerId: '', years: 1 };
+          const entry = byId.get(pick.playerId);
+          const offer = plan.offers.find(({ playerId }) => playerId === pick.playerId);
+          const limit = entry ? nrlContractTermLimit(entry.startYear) : 0;
+          const groupOptions = (entries: MarketEntry[]) => entries
+            .filter(candidate => !picks.some((earlier, position) => position !== index && earlier.playerId === candidate.player.id))
+            .map(({ player }) => <option key={player.id} value={player.id}>{player.name} ({player.role})</option>);
+          return (
+            <div key={order} className="space-y-2 rounded-lg border border-border p-2.5">
+              <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_8rem]">
+                <label className="min-w-0 space-y-1 font-semibold">
+                  <span>{order} planned player</span>
+                  <select className={control} value={entry?.player.id ?? ''}
+                    onChange={event => updatePick(index, { playerId: event.target.value, years: 1 })}>
+                    <option value="">Choose a player</option>
+                    {targets.length > 0 && <optgroup label="Shortlisted players">{groupOptions(targets)}</optgroup>}
+                    {renewals.length > 0 && <optgroup label="Club renewals">{groupOptions(renewals)}</optgroup>}
+                  </select>
+                </label>
+                {entry && <label className="space-y-1 font-semibold">
+                  <span>{order} deal length</span>
+                  <select className={control} value={pick.years} onChange={event => updatePick(index, { ...pick, years: Number(event.target.value) })}>
+                    {Array.from({ length: limit }, (_, term) => <option key={term + 1} value={term + 1}>{term + 1} {term ? 'seasons' : 'season'}</option>)}
+                  </select>
+                </label>}
+              </div>
+              {entry && offer && <p role="status" className="break-words text-muted-foreground">
+                {offer.quote.ok === true ? <>
+                  <span className="font-semibold text-foreground">Fits the cap and squad.</span>{' '}
+                  {money(offer.quote.contract.salary)} a season, {offer.quote.contract.startYear} to {offer.quote.contract.endYear}.
+                </> : offer.quote.reason}
+              </p>}
+            </div>
+          );
+        })}
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">Cap room includes minimum salaries reserved for open Top 30 places. Player counts include existing contracts and fitting deals.</p>
+          <table aria-label="Projected salary cap" className="w-full border-collapse text-left text-xs sm:text-sm">
+            <thead className="border-b border-border">
+              <tr><th scope="col" className="px-1 py-1.5">Season</th><th scope="col" className="px-1 py-1.5">Room now</th>
+                <th scope="col" className="px-1 py-1.5">Room with plan</th></tr>
+            </thead>
+            <tbody className="divide-y divide-border tabular-nums">
+              {plan.seasons.map(({ before, after }) => <tr key={after.year}>
+                <th scope="row" className="px-1 py-1.5 font-semibold">{after.year}</th>
+                <td className="px-1 py-1.5"><span className="whitespace-nowrap">{money(before.available)}</span></td>
+                <td className="px-1 py-1.5">
+                  <span className="whitespace-nowrap font-semibold">{money(after.available)}</span>
+                  <span className="block whitespace-nowrap text-muted-foreground">{after.slots}/30 players</span>
+                </td>
+              </tr>)}
+            </tbody>
+          </table>
+        </div>
+      </div>}
+    </details>
+  );
+}
+
 function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const labelForClub = useNrlClubName();
   const [role, setRole] = useState<NrlRole | ''>('');
@@ -578,7 +659,10 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
   const depth = NRL_ROLES.map(position => ({
     position, count: signed.filter(player => player.role === position).length,
   })).sort((a, b) => a.count - b.count);
-  const market = useMemo(() => nrlCareerMarket(career).filter(entry => entry.kind !== 'renewal'), [career]);
+  const { market, renewals } = useMemo(() => {
+    const entries = nrlCareerMarket(career);
+    return { market: entries.filter(entry => entry.kind !== 'renewal'), renewals: entries.filter(entry => entry.kind === 'renewal') };
+  }, [career]);
   const shortlist = career.shortlist ?? [];
   const targets = shortlist.flatMap(id => {
     const entry = market.find(item => item.player.id === id);
@@ -603,6 +687,7 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
     <>
       <h2 className="font-display text-xl font-bold">Recruitment</h2>
       <p className="mt-1 text-sm text-muted-foreground">Agree future deals with eligible players. Check next season’s cap before filling the squad.</p>
+      {nextYear <= NRL_LAST_YEAR && <RecruitmentPlan career={career} targets={targets} renewals={renewals} />}
       <BoardRecruitment career={career} onAction={onAction} disabled={disabled} onFilter={position => {
         selectRole(position);
         setShortlistedOnly(false);

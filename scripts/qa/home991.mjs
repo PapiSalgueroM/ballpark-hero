@@ -68,12 +68,18 @@ try {
     const box = await first.boundingBox();
     assert.ok(box && box.y <= 430 && box.height >= 44, 'A playable game is in the first screen');
     assert.equal(await stage.locator('[data-stage-card]').count(), 4, 'All four flagships remain playable');
+    const shortcuts = stage.getByRole('navigation', { name: 'Sports shortcuts' });
+    const row = await shortcuts.boundingBox();
+    assert.ok(row && row.y >= box.y + box.height, 'Sport links follow the featured games');
+    assert.equal(await shortcuts.evaluate(nav => nav.scrollWidth > nav.clientWidth), false, 'Sport links fit without horizontal scrolling');
     const hubs = ['/soccer', '/pro-basketball', '/hockey', '/pro-football', '/baseball', '/college'];
-    for (const href of hubs) {
-      const link = stage.locator(`a[href="${href}"]`);
+    const destinations = ['#sport-rugby', ...hubs];
+    for (const href of destinations) {
+      const link = shortcuts.locator(`a[href="${href}"]`);
       assert.equal(await link.count(), 1, 'One direct sport destination: ' + href);
       const target = await link.boundingBox();
       assert.ok(target && target.height >= 44, 'Sport has a usable touch target: ' + href);
+      assert.ok(target.x >= row.x - 1 && target.x + target.width <= row.x + row.width + 1, 'Sport link is fully inside the row: ' + href);
     }
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'No page-level horizontal overflow');
     await first.focus();
@@ -81,8 +87,8 @@ try {
     await page.waitForURL('**/soccer-career');
     assert.match(page.url(), /\/soccer-career$/, 'Keyboard activation reaches the flagship');
     assert.deepEqual(errors, [], 'No page exceptions');
-    rows.push({ width, height, motion, firstGameTop: box.y, directSports: hubs.length, keyboardRoute: '/soccer-career' });
-    console.log(`Home ${width}px: four games, six sport links, visible first game and keyboard navigation pass.`);
+    rows.push({ width, height, motion, firstGameTop: box.y, directSports: destinations.length, keyboardRoute: '/soccer-career' });
+    console.log(`Home ${width}px: four games, seven visible sport links and keyboard navigation pass.`);
     } catch (error) {
       failures.push({ width, message: error.message });
       console.error(`Home ${width}px failed: ${error.message}`);

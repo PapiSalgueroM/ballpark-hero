@@ -36,6 +36,7 @@ const COUNTEROFFER_YEARS = 3;
 const OPENING_CASH = 2_500_000;
 const MARKET_PER_ROLE = 4;
 export const NRL_SHORTLIST_LIMIT = 12;
+export const NRL_RECRUITMENT_PLAN_LIMIT = 3;
 const RETIREMENT_AGE = 36;
 const MEDICAL_UPGRADE_COST = { 2: 800_000, 3: 2_600_000 } as const;
 const ACADEMY_UPGRADE_COST = 600_000;
@@ -472,6 +473,46 @@ export function nrlContractOffer(state: NrlCareerState, playerId: string, salary
   return entry ? checkContractOffer(state, entry, salary, years) : { ok: false, reason: 'This player is unavailable.' };
 }
 
+export function nrlContractTermLimit(startYear: number) {
+  return Math.min(MAX_CONTRACT_YEARS, NRL_LAST_YEAR - startYear + 1);
+}
+
+export interface NrlRecruitmentPick { playerId: string; years: number }
+
+export function nrlRecruitmentPlan(career: NrlCareerState, picks: readonly NrlRecruitmentPick[]) {
+  let preview = career;
+  const seen = new Set<string>();
+  const nextYear = career.season.year + 1;
+  let lastYear = nextYear;
+  const offers = picks.slice(0, NRL_RECRUITMENT_PLAN_LIMIT).map(({ playerId, years }) => {
+    const player = career.players.find(candidate => candidate.id === playerId);
+    const entry = player && marketEntry(career, player);
+    let quote: NrlContractQuote;
+    if (!entry || (entry.kind !== 'renewal' && !career.shortlist?.includes(playerId))) {
+      quote = { ok: false, reason: 'Choose an eligible renewal or shortlisted player.' };
+    } else if (seen.has(playerId)) {
+      quote = { ok: false, reason: 'Choose this player only once.' };
+    } else {
+      seen.add(playerId);
+      quote = nrlContractOffer(preview, playerId, entry.askingSalary, years);
+      if (intIn(years, 1, nrlContractTermLimit(entry.startYear))) {
+        lastYear = Math.max(lastYear, entry.startYear + years - 1);
+      }
+      if (quote.ok) {
+        const agreed = reduceNrlCareer(preview, { type: 'offerContract', playerId, salary: entry.askingSalary, years });
+        if (agreed === preview) quote = { ok: false, reason: 'Contract offers are unavailable right now.' };
+        else preview = agreed;
+      }
+    }
+    return { playerId, quote };
+  });
+  const seasons = [];
+  for (let year = nextYear; year <= Math.min(NRL_LAST_YEAR, lastYear); year++) {
+    seasons.push({ before: nrlCareerCap(career, year), after: nrlCareerCap(preview, year) });
+  }
+  return { offers, seasons };
+}
+
 export function nrlContractCounteroffer(state: NrlCareerState, playerId: string, offeredSalary: number): NrlContractQuote {
   if (state.legacySeason) return { ok: false, reason: 'Counteroffers open next season for this imported career.' };
   const player = state.players.find(candidate => candidate.id === playerId);
@@ -494,7 +535,7 @@ export function nrlContractCounteroffer(state: NrlCareerState, playerId: string,
 function checkContractOffer(
   state: NrlCareerState, entry: Pick<NrlCareerMarketEntry, 'startYear' | 'askingSalary' | 'player'>, salary: number, years: number,
 ): NrlContractQuote {
-  if (!intIn(years, 1, MAX_CONTRACT_YEARS) || entry.startYear + years - 1 > NRL_LAST_YEAR) {
+  if (!intIn(years, 1, nrlContractTermLimit(entry.startYear))) {
     return { ok: false, reason: 'Choose a contract from one to four years.' };
   }
   if (!intIn(salary, entry.askingSalary, Number.MAX_SAFE_INTEGER)) {
