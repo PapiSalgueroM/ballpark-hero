@@ -1,4 +1,11 @@
+## 2026-11-14: NBA rotation review and NRL halftime attack plans
+
+- Before simulating Classic or Hard, review the complete rotation and swap the sixth man with an eligible starter. The lineup you confirm drives the season and playoffs. Hard keeps ratings hidden and the Daily keeps its existing automatic flow.
+- NRL managers can change the team's attack plan at halftime for the second half, then adjust it again at 60 minutes. The match report records both choices and the first half keeps its original result.
+
 ## 2026-11-14: Direct NRL access from Home and clearer board decisions
+
+[PR #947](https://github.com/PapiSalgueroM/ballpark-hero/pull/947) published exact main `648673cf7da96b39ba731aaefe357b7fa766d744`, deployment `f61e847f-c08a-48ae-aabb-e57ed30a86c5`. Six live Home viewports, three NRL browser journeys, the raw NRL guide, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted the NRL guide.
 
 - Home offers a direct NRL Team Manager launch below the featured games and preserves focus when you return. The sports catalogue carries the complete sport index and links to the six hubs.
 - Under NRL Board challenge, Season review compares both missed targets with the saved ladder finishes, puts an open club offer first, and shows which actual vacancies you can pursue.

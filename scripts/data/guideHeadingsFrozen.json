@@ -2856,6 +2856,7 @@
         "Choose a mode. Classic shows player ratings, Hard hides them until the sim ends, and Daily gives everyone the same wheel with one attempt per day.",
         "Spin, then draft one player from the team season you land on. Ratings run 40 to 99 and come from the player's actual stats that year.",
         "Repeat until all six slots are filled: PG, SG, SF, PF, C and a sixth man who can be anyone.",
+        "In Classic or Hard, review your rotation before the season. Swap the sixth man with a starter if he can play that position. For example, a point guard you drafted on the bench can start instead. Starters carry more weight in the sim, and Hard keeps ratings hidden until the result. The shared Daily starts the sim as soon as all six slots are filled.",
         "Watch the season play out, or skip straight to the final record."
       ],
       "rules": [
