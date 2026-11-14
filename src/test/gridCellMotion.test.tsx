@@ -28,7 +28,10 @@ describe.each([
     const view = render(<Board puzzle={puzzle} cells={cells} activeCell={4} onCellClick={onCellClick} />);
     const buttons = view.getAllByRole('button');
     expect(buttons).toHaveLength(9);
-    buttons.forEach(button => {
+    buttons.forEach((button, index) => {
+      const row = puzzle.rows[Math.floor(index / 3)].label;
+      const column = puzzle.cols[index % 3].label;
+      expect(button).toHaveAccessibleName(`Answer for ${row} and ${column}`);
       expect(button).toBeEnabled();
       expect(button).toHaveAttribute('data-grid-cell-status', 'empty');
       expect(button).not.toHaveClass(motion.correct);
@@ -50,12 +53,15 @@ describe.each([
     target.focus();
     expect(document.activeElement).toBe(target);
 
-    const wrong = cells.map(cell => cell.index === 4 ? { ...cell, status: 'wrong' as const } : cell);
+    const wrong = cells.map(cell => cell.index === 4 ? {
+      ...cell, status: 'wrong' as const, playerName: 'Incorrect Guess',
+    } : cell);
     view.rerender(<Board puzzle={puzzle} cells={wrong} activeCell={4} onCellClick={onCellClick} />);
     expect(view.getAllByRole('button')[4]).toBe(target);
     expect(document.activeElement).toBe(target);
     expect(target).toBeEnabled();
     expect(target).toHaveAttribute('data-grid-cell-status', 'wrong');
+    expect(target).toHaveAccessibleName('Try again for Second row and Second column');
     expect(target).toHaveClass('bg-destructive/20', 'border-destructive');
     expect(within(target).getByText('✗')).toHaveClass(motion.wrongContent);
     expect(target).not.toHaveClass(motion.correct);
@@ -66,6 +72,7 @@ describe.each([
     expect(view.getAllByRole('button')[4]).toBe(target);
     expect(document.activeElement).toBe(target);
     expect(target).toHaveAttribute('data-grid-cell-status', 'empty');
+    expect(target).toHaveAccessibleName('Answer for Second row and Second column');
     expect(within(target).getByText('+')).toBeVisible();
     expect(target.querySelector(`.${motion.correctContent}, .${motion.wrongContent}`)).toBeNull();
 
@@ -76,6 +83,7 @@ describe.each([
     expect(view.getAllByRole('button')[4]).toBe(target);
     expect(target).toBeDisabled();
     expect(target).toHaveAttribute('data-grid-cell-status', 'correct');
+    expect(target).toHaveAccessibleName('Correct for Second row and Second column. Answer Player 3% picked this 💎 Diamond');
     expect(target).toHaveClass(motion.correct, 'bg-correct/20', 'border-correct');
     expect(within(target).getByText('Answer Player').parentElement).toHaveClass(motion.correctContent);
     expect(within(target).getByText('3% picked this')).toBeVisible();
