@@ -31,6 +31,7 @@ const CfbDynasty = () => {
             howToPlay={[
               'Pick a real program; its prestige sets your talent pipeline and NIL power.',
               'Play the 12-week season: four non-conference games, then the conference race.',
+              'Check Roster after weeks 3, 6, 9 and 12. Player ratings can rise with development or fall if form dips, and the new ratings carry into the next game.',
               'Finish top two in the conference to reach the title game and lock a Playoff bid.',
               'Survive the 12-team bracket: first round on campus, quarters, semis, the natty.',
               'Recruit every offseason: high school stars carry scouting error, portal players do not.',

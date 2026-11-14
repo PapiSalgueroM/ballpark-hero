@@ -171,7 +171,7 @@ function cbbSport(): CollegeSport<CbbTeam, CbbState, CbbGame, CbbRecruit, Recap>
     init: (id, rng, opts) => initCbb(id, rng, opts),
     ensureIds: (st, recruits, portal) => { ensureCbbIds(st, recruits, portal); },
     playRound: (state, rng, { label }) => {
-      const { games, myGames } = simCbbRound(state, rng);
+      const { games, myGames } = simCbbRound(state, rng, true);
       const lines: string[] = [];
       for (const g of myGames) {
         const won = g.winner === state.myTeam;
@@ -202,7 +202,7 @@ function cbbSport(): CollegeSport<CbbTeam, CbbState, CbbGame, CbbRecruit, Recap>
     signRecruit: (st, r, cls, rng) => cbbSignRecruit(st, r, cls, rng),
     hireCoordinator: (st, id) => cbbHireCoordinator(st, id),
     fireCoordinator: (st, role) => cbbFireCoordinator(st, role),
-    offseason: (st, rng) => cbbOffseason(st, rng),
+    offseason: (st, rng) => cbbOffseason(st, rng, true),
     enableDepth: (st, rng) => cbbEnableDepth(st, rng),
     strength: t => cbbStrength(t),
     units: t => cbbUnits(t),

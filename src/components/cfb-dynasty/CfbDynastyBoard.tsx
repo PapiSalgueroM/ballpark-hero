@@ -186,7 +186,7 @@ function cfbSport(): CollegeSport<CfbTeam, CfbState, CfbGame, CfbRecruit, Postse
     ensureIds: (st, recruits, portal) => { ensureCfbIds(st, recruits, portal); ensureCfbSlate(st); },
     fixtures: st => cfbFixtures(st),
     playRound: (state, rng, { label }) => {
-      const { games, myGame } = simCfbRound(state, rng);
+      const { games, myGame } = simCfbRound(state, rng, true);
       const lines: string[] = [];
       if (myGame) {
         const won = myGame.winner === state.myTeam;
@@ -232,7 +232,7 @@ function cfbSport(): CollegeSport<CfbTeam, CfbState, CfbGame, CfbRecruit, Postse
     signRecruit: (st, r, cls, rng) => signRecruit(st, r, cls, rng),
     hireCoordinator: (st, id) => cfbHireCoordinator(st, id),
     fireCoordinator: (st, role) => cfbFireCoordinator(st, role),
-    offseason: (st, rng) => cfbOffseason(st, rng),
+    offseason: (st, rng) => cfbOffseason(st, rng, true),
     enableDepth: (st, rng) => cfbEnableDepth(st, rng),
     strength: t => cfbStrength(t),
     units: t => cfbUnits(t),

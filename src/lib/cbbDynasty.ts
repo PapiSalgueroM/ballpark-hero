@@ -6,6 +6,7 @@ import {
   type SlateGame, type StaffRole, type StaffWindow,
 } from './collegeProgram';
 import { CBB_RIVALRY_SERIES } from '@/data/collegeRivalries';
+import { reviewCollegeRatings, type CollegeRatingReview } from './collegeSeasonRating';
 /**
  * CBB Dynasty engine (2026-08-05). College basketball sibling of
  * cfbDynasty.ts. Real programs, fully fictional generated players (class
@@ -202,6 +203,7 @@ export interface CbbState {
   myTitles: number;
   seasonsPlayed: number;
   poyWinners: string[];
+  ratingReview?: CollegeRatingReview;
   /** Round 823: present once the program layer (staff, rivalry night,
    *  strength of schedule) is on. Absent means the pre-823 game, untouched. */
   depth?: number;
@@ -381,7 +383,7 @@ function playGame(aId: string, bId: string, st: CbbState, rng: () => number, rec
 
 /** One round: every program plays two games, one in-conference, one cross.
  *  Round 823: with the program layer on, the last round is rivalry night. */
-export function simCbbRound(st: CbbState, rng: () => number): { games: CbbGame[]; myGames: CbbGame[] } {
+export function simCbbRound(st: CbbState, rng: () => number, inSeasonRatings = false): { games: CbbGame[]; myGames: CbbGame[] } {
   ensureCbbFormat(st);
   const games: CbbGame[] = [];
   if (st.depth && st.round === CBB_RIVALRY_ROUND) {
@@ -404,6 +406,7 @@ export function simCbbRound(st: CbbState, rng: () => number): { games: CbbGame[]
   }
   /* Round 823: the season log and the rivalry swing, the shared copy. */
   if (st.depth) recordProgramRound(st, games, CBB_PROGRAM);
+  if (inSeasonRatings) reviewCollegeRatings(st, CBB_ROUNDS, { FR: [3, 6], SO: [2, 4], JR: [2, 4] });
   return { games, myGames: games.filter(g => g.home === st.myTeam || g.away === st.myTeam) };
 }
 
@@ -663,7 +666,7 @@ export function cbbPayroll(st: CbbState): number {
 }
 
 /** Offseason: one-and-dones leave, seniors graduate, classes advance, AI reloads. */
-export function cbbOffseason(st: CbbState, rng: () => number): string[] {
+export function cbbOffseason(st: CbbState, rng: () => number, inSeasonRatings = false): string[] {
   const notes: string[] = [];
   for (const t of Object.values(st.teams)) {
     const prestige = CBB_SCHOOL_MAP.get(t.id)!.prestige;
@@ -681,8 +684,10 @@ export function cbbOffseason(st: CbbState, rng: () => number): string[] {
         if (t.id === st.myTeam) notes.push(`🏀 ${p.name} (${p.pos}, ${p.ovr}) declares for the draft.`);
         continue;
       }
-      const grow = p.cls === 'FR' ? 3 + Math.floor(rng() * 4) : 2 + Math.floor(rng() * 3);
-      p.ovr = clampi(Math.min(p.pot, p.ovr + grow), 55, 99);
+      if (!inSeasonRatings) {
+        const grow = p.cls === 'FR' ? 3 + Math.floor(rng() * 4) : 2 + Math.floor(rng() * 3);
+        p.ovr = clampi(Math.min(p.pot, p.ovr + grow), 55, 99);
+      }
       p.cls = p.cls === 'FR' ? 'SO' : p.cls === 'SO' ? 'JR' : 'SR';
       keep.push(p);
     }
@@ -718,6 +723,7 @@ export function cbbOffseason(st: CbbState, rng: () => number): string[] {
   if (st.depth) st.mySlate = [];
   st.season += 1;
   st.round = 1;
+  delete st.ratingReview;
   ensureCbbFormat(st);
   return notes;
 }

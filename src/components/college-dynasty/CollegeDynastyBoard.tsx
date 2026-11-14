@@ -25,6 +25,7 @@ import {
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import type { CollegeRatingReview } from '@/lib/collegeSeasonRating';
 /* Round 1320: the athletic director. Every write into the state is the glue's
    (src/lib/collegeSeatBind.ts), every word the seat's (src/lib/collegeSeat.ts),
    and every node it draws carries data-college-seat. */
@@ -53,6 +54,7 @@ export interface CollegeState<T extends CollegeTeam> {
   seat?: CollegeSeatBlock;
   /** Round 1554: set once a season starts under the sport's real format (seasonRivalries). */
   format?: number;
+  ratingReview?: CollegeRatingReview;
 }
 export interface CollegeGame { home: string; away: string; hs: number; as: number; winner: string }
 export interface CollegeRecruit { id: string; name: string; pos: string; stars: number; grade: number; nilAsk: number }
@@ -513,6 +515,14 @@ export default function CollegeDynastyBoard<
 
   const school = sport.schoolMap.get(st.myTeam)!;
   const strength = Math.round(sport.strength(my));
+  const ratingReview = st.ratingReview?.teamId === st.myTeam ? st.ratingReview : undefined;
+  const ratingChanges = new Map(ratingReview?.changes.map(({ id, from, to }) => {
+    const delta = Number((to - from).toFixed(1));
+    return [id, `${delta > 0 ? '+' : ''}${delta}`] as const;
+  }));
+  const ratingsUp = ratingReview?.changes.filter(change => change.to > change.from).length ?? 0;
+  const ratingsDown = (ratingReview?.changes.length ?? 0) - ratingsUp;
+  const ratingSummary = ratingReview && `Ratings review · ${w.roundWord} ${ratingReview.round} · ${ratingsUp} up, ${ratingsDown} down`;
   const myRank = sport.rankings(st).findIndex(t => t.id === st.myTeam) + 1;
 
   if (phase === 'recap' && recap && sport.recapDrawable(recap)) {
@@ -535,6 +545,7 @@ export default function CollegeDynastyBoard<
           {isChamp && <ConfettiBurst seed={st.season} count={34} />}
           <Crown className="cm-slam mx-auto h-10 w-10 text-gold" />
           <RecapBody st={st} my={my} recap={recap} isChamp={isChamp} label={label} signed={signed} />
+          {ratingSummary && <p className="mt-2 text-xs text-muted-foreground">{ratingSummary}</p>}
           {seatRecap && (seatRecap.fired
             ? <SeatFiredRecap verdict={seatRecap.verdict} line={collegeMarket(st.seat!, recapView!)?.line ?? ''} />
             : <SeatRecapLine verdict={seatRecap.verdict} trust={seatRecap.trust} hot={seatRecap.hot} />)}
@@ -755,6 +766,10 @@ export default function CollegeDynastyBoard<
         </div>
       )}
 
+      {ratingSummary && !seatCard && (tab === 'team' || tab === 'play') && (
+        <p className="text-center text-xs text-muted-foreground">{ratingSummary}</p>
+      )}
+
       {seatCard && <SeatCard block={st.seat!} view={seatView!} onBack={() => setSeatOpen(false)} />}
 
       {!seatCard && tab === 'team' && (
@@ -786,7 +801,14 @@ export default function CollegeDynastyBoard<
                   <span className="block truncate font-bold text-foreground">{p.name}</span>
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.cls} · {'⭐'.repeat(p.stars)}</span>
                 </span>
-                <b className="ml-2 shrink-0 text-primary">{p.ovr}</b>
+                <b className="ml-2 shrink-0 text-primary">
+                  {p.ovr}
+                  {ratingChanges.has(p.id) && (
+                    <span className="ml-1 text-[10px] font-semibold text-muted-foreground">
+                      ({ratingChanges.get(p.id)})
+                    </span>
+                  )}
+                </b>
               </div>
             ))}
           </div>
