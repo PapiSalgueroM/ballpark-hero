@@ -515,6 +515,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Finish ten rounds and share your score",
         items: [
           "Ten rounds, then share your score.",
+          "After round 10, open Review matchups to see the pairs, their career point totals and the rounds you missed.",
         ],
       },
     ],
