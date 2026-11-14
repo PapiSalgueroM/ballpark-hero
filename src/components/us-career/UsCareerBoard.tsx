@@ -1851,6 +1851,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   const priority = sport.rosterPriority;
   const priorityReceipt = priority?.receipt(career);
   const rosterBoost = teamQuality == null ? 0 : priority?.boost(career, teamQuality) ?? 0;
+  const bullpen = sport.bullpenRole;
+  const bullpenOptions = bullpen?.options(career) ?? [];
 
   /* ------------------------------ season hub ------------------------------ */
   return withSaveStatus(
@@ -2014,22 +2016,22 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
             Roster quality rose from {priorityReceipt.before} to {priorityReceipt.before + priorityReceipt.boost}. Up to {priorityReceipt.boost} points less next offseason with this team.
           </p>}
           {tradeSaveMoved && <p className="mt-1 text-xs text-muted-foreground" role="status">Your career changed in another tab. Reopen it before making this decision.</p>}
-          {sport.bullpenRole && sport.bullpenRole.options(career).length > 0 && <label className="mt-3 block text-left text-xs font-semibold">
+          {bullpen && bullpenOptions.length > 0 && <label className="mt-3 block text-left text-xs font-semibold">
             Bullpen role for this season
             <select className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm"
               disabled={!!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
-              value={sport.bullpenRole.current(career) ?? 'usual'} onChange={event => {
+              value={bullpen.current(career) ?? 'usual'} onChange={event => {
                 const role = event.target.value;
                 if (role !== 'usual' && role !== 'setup' && role !== 'closer') return;
                 if (pendingSave.current || marketRef.current || teamPlanSaveChanged(true)) return;
-                const next = sport.bullpenRole?.set(career, role);
-                if (!next || next === career) return;
+                const next = bullpen.set(career, role);
+                if (next === career) return;
                 setCareer(next);
                 persist(next, 'season', teamQuality);
               }}>
-              <option value="usual">Usual role</option>
-              <option value="setup">Setup for holds</option>
-              {sport.bullpenRole.options(career).includes('closer') && <option value="closer">Close for saves</option>}
+              <option value="usual">{bullpenOptions.includes('setup') ? 'Usual role (closer)' : 'Usual role (setup)'}</option>
+              {bullpenOptions.includes('setup') && <option value="setup">Setup for holds</option>}
+              {bullpenOptions.includes('closer') && <option value="closer">Close for saves</option>}
             </select>
             <span className="mt-1 block font-normal text-muted-foreground">Setup relievers pitch for holds. Closing opens at 80 OVR or with the Closer build.</span>
           </label>}

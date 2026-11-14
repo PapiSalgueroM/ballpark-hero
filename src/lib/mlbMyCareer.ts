@@ -216,7 +216,7 @@ export interface MlbCareerState {
   eraId?: string;
   /** Round 183: the lineup card. Absent (pre-183 saves, harness careers)
       means everyday, byte for byte unchanged. Relievers are always
-      'starter' by design; the bullpen hierarchy lives in the archetype. */
+      'starter' here; their actual role is decided in the bullpen. */
   role?: 'starter' | 'backup';
   bullpenAssignment?: { year: number; team: string; role: MlbBullpenRole };
   /** Round 470: the savings account, the market and the statement, on the
@@ -404,11 +404,8 @@ export function mlbRollTeamQuality(prev: number | null, rng: () => number): numb
    The depth chart the other careers got, in baseball's shape: position
    players are everyday men or bench bats, starting pitchers are in the
    rotation or stretched out for spot starts. RELIEVERS ARE EXEMPT on
-   purpose: the bullpen already carries its own hierarchy through the
-   closer archetype (saves) versus everyone else (holds), and a "backup
-   reliever" is not a thing a stat line can say that holds do not already
-   say. An absent role (pre-183 saves, harness careers) means everyday,
-   byte for byte. */
+   purpose: the bullpen uses its own closer and setup roles. An absent
+   lineup role (pre-183 saves, harness careers) means everyday. */
 
 function mlbIncumbentOvr(teamQuality: number, rng: () => number): number {
   return Math.round(teamQuality - 7 + rng() * 8);
@@ -461,23 +458,19 @@ export function mlbCampBattle(c: MlbCareerState, teamQuality: number, rng: () =>
 export function mlbBullpenChoices(c: MlbCareerState): readonly MlbBullpenChoice[] {
   if (c.pos !== 'RP' || c.retired || (c.suspendedSeasons ?? 0) > 0 || c.contractYears <= 0
     || !c.seasons.some(season => season.games > 0)) return [];
-  return c.ovr >= MLB_CLOSER_MIN_OVR || c.archetype.id === 'closer'
-    ? ['usual', 'setup', 'closer'] : ['usual', 'setup'];
+  if (c.archetype.id === 'closer') return ['usual', 'setup'];
+  return c.ovr >= MLB_CLOSER_MIN_OVR ? ['usual', 'closer'] : [];
 }
 
 export function mlbBullpenAssignment(c: MlbCareerState): MlbBullpenRole | null {
   const plan = c.bullpenAssignment;
-  return plan?.year === c.year && plan.team === c.team && plan.role !== mlbUsualBullpenRole(c)
-    && mlbBullpenChoices(c).includes(plan.role) && (plan.role === 'closer' || plan.role === 'setup') ? plan.role : null;
-}
-
-function mlbUsualBullpenRole(c: MlbCareerState): MlbBullpenRole {
-  return c.archetype.id === 'closer' ? 'closer' : 'setup';
+  return plan?.year === c.year && plan.team === c.team && (plan.role === 'closer' || plan.role === 'setup')
+    && mlbBullpenChoices(c).includes(plan.role) ? plan.role : null;
 }
 
 export function setMlbBullpenAssignment(c: MlbCareerState, role: MlbBullpenChoice): MlbCareerState {
   if (!mlbBullpenChoices(c).includes(role)) return c;
-  if (role === 'usual' || role === mlbUsualBullpenRole(c)) {
+  if (role === 'usual') {
     if (!c.bullpenAssignment) return c;
     const next = { ...c };
     delete next.bullpenAssignment;
