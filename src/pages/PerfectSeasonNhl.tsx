@@ -28,12 +28,14 @@ import { perfectSeasonTagline } from '@/lib/perfectSeasonOdds';
 import { usePerfectSeasonBest } from '@/hooks/usePerfectSeasonBest';
 import { BestSoFar, SeasonOddsLines } from '@/components/perfect-season/SeasonOdds';
 import { SeasonVerdict } from '@/components/perfect-season/SeasonVerdict';
+import {
+  decodeNhlDailyDraft, nhlDailyDraftKey, nhlDailyWheelIdentity, readNhlDailyDraft, writeNhlDailyDraft,
+  NHL_DAILY_REROLLS, NHL_DAILY_SPIN_TRIES, type NhlPerfectSeasonDraft,
+} from '@/lib/nhlPerfectSeasonDraft';
 
 const SPORT_KEY = 'nhl';
 
 type Phase = 'mode-select' | 'daily-locked' | 'boot' | 'error' | 'spin' | 'spinning' | 'draft' | 'sim' | 'done';
-
-const MAX_REROLLS = 2;
 
 const TIER_CLASSES: Record<string, string> = {
   elite: 'bg-correct/20 text-correct border-correct/40',
@@ -65,7 +67,7 @@ const PerfectSeasonNhl = () => {
   );
   const [usedNames, setUsedNames] = useState<Set<string>>(new Set());
   const [selected, setSelected] = useState<DraftablePlayer | null>(null);
-  const [rerolls, setRerolls] = useState(MAX_REROLLS);
+  const [rerolls, setRerolls] = useState(NHL_DAILY_REROLLS);
   const [spins, setSpins] = useState(0);
   const [teamNames, setTeamNames] = useState<string[]>([]);
   const [sim, setSim] = useState<SimResult | null>(null);
@@ -79,6 +81,15 @@ const PerfectSeasonNhl = () => {
   const simTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const dailyPicker = useRef<((len: number) => number) | null>(null);
+  const dailyDraws = useRef(0);
+  const heldDraft = useRef<string | null>(null);
+  const lastDraft = useRef<NhlPerfectSeasonDraft | null>(null);
+  const wheelIdentity = useRef('');
+  const spinning = useRef(false);
+  const [draftConflict, setDraftConflict] = useState(false);
+  const [dailySaveWarning, setDailySaveWarning] = useState(false);
+  const [settleRetry, setSettleRetry] = useState(0);
+  const terminalHeld = useRef(false);
 
   const openSlots = useMemo(
     () => NHL_SLOTS.filter(s => !picks[s.key]).map(s => s.key),
@@ -102,20 +113,85 @@ const PerfectSeasonNhl = () => {
   }, [mode, phase]);
 
   const pickIndex = useCallback((len: number) => {
-    if (mode === 'daily' && dailyPicker.current) return dailyPicker.current(len);
+    if (mode === 'daily' && dailyPicker.current) {
+      dailyDraws.current++;
+      return dailyPicker.current(len);
+    }
     return Math.floor(Math.random() * len);
   }, [mode]);
 
+  const reopenResult = useCallback((attempt: DailyAttemptRecord) => {
+    setLockedAttempt(attempt);
+    setDailySaveWarning(false);
+    setPhase('daily-locked');
+  }, []);
+
+  const restoreDraft = useCallback((raw: string | null, wheel: TeamEraIndexEntry[]) => {
+    const picker = makeDailyPicker(SPORT_KEY, todayStr);
+    const draft = raw === null ? null : decodeNhlDailyDraft(raw, wheelIdentity.current, wheel, picker);
+    if (raw !== null && !draft) {
+      setDraftConflict(true);
+      setPhase('error');
+      return;
+    }
+    heldDraft.current = raw;
+    lastDraft.current = draft;
+    dailyPicker.current = picker;
+    dailyDraws.current = draft?.draws ?? 0;
+    setSim(null);
+    setRevealed(0);
+    if (draft) {
+      setPicks(draft.picks);
+      setUsedNames(new Set(Object.values(draft.picks).flatMap(p => p ? [p.name] : [])));
+      setRerolls(draft.rerolls);
+      setSpins(draft.teamNames.length);
+      setTeamNames(draft.teamNames);
+      setWheelText(draft.teamNames[draft.teamNames.length - 1]);
+      setSquad(draft.squad);
+      setSelected(null);
+    }
+    setDailySaveWarning(false);
+    setPhase(draft?.squad ? 'draft' : 'spin');
+  }, [todayStr]);
+
+  const takeNewerDaily = useCallback(() => {
+    if (mode !== 'daily') return false;
+    const attempt = loadDailyAttempt(SPORT_KEY, todayStr);
+    if (attempt) {
+      reopenResult(attempt);
+      return true;
+    }
+    const raw = readNhlDailyDraft(todayStr);
+    if (raw === null || raw === heldDraft.current) return false;
+    restoreDraft(raw, index);
+    return true;
+  }, [mode, todayStr, index, restoreDraft, reopenResult]);
+
+  useEffect(() => {
+    if (mode !== 'daily' || (phase !== 'spin' && phase !== 'draft') || index.length === 0) return;
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === nhlDailyDraftKey(todayStr) || event.key === `perfect-season-nhl-daily-${todayStr}`) takeNewerDaily();
+    };
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, [mode, phase, index.length, todayStr, takeNewerDaily]);
+
+  const storeDraft = useCallback((draft: NhlPerfectSeasonDraft) => {
+    lastDraft.current = draft;
+    const raw = writeNhlDailyDraft(todayStr, wheelIdentity.current, draft);
+    if (raw !== null) heldDraft.current = raw;
+    setDailySaveWarning(raw === null);
+  }, [todayStr]);
+
   const chooseMode = (m: GameMode) => {
     setMode(m);
+    setDraftConflict(false);
     if (m === 'daily') {
       const existing = loadDailyAttempt(SPORT_KEY, todayStr);
       if (existing) {
-        setLockedAttempt(existing);
-        setPhase('daily-locked');
+        reopenResult(existing);
         return;
       }
-      dailyPicker.current = makeDailyPicker(SPORT_KEY, todayStr);
     }
     setPhase('boot');
   };
@@ -129,13 +205,21 @@ const PerfectSeasonNhl = () => {
       if (!alive) return;
       if (idx) {
         if (mode === 'daily') {
+          const attempt = loadDailyAttempt(SPORT_KEY, todayStr);
+          if (attempt) {
+            reopenResult(attempt);
+            return;
+          }
           const theme = getDailyTheme(SPORT_KEY, todayStr, idx);
+          const wheel = applyTheme(idx, theme);
+          wheelIdentity.current = nhlDailyWheelIdentity(wheel, theme?.id);
           setDailyTheme(theme);
-          setIndex(applyTheme(idx, theme));
+          setIndex(wheel);
+          restoreDraft(readNhlDailyDraft(todayStr), wheel);
         } else {
           setIndex(idx);
+          setPhase('spin');
         }
-        setPhase('spin');
       } else {
         setPhase('error');
       }
@@ -145,14 +229,13 @@ const PerfectSeasonNhl = () => {
       if (wheelTimer.current) clearInterval(wheelTimer.current);
       if (simTimer.current) clearInterval(simTimer.current);
     };
-  }, [phase, mode]);
+  }, [phase, mode, todayStr, restoreDraft, reopenResult]);
 
   const spin = useCallback(async (isReroll: boolean) => {
-    if (index.length === 0) return;
-    if (isReroll) {
-      if (rerolls <= 0) return;
-      setRerolls(r => r - 1);
-    }
+    if (index.length === 0 || spinning.current || (isReroll && rerolls <= 0) || takeNewerDaily()) return;
+    spinning.current = true;
+    const nextRerolls = rerolls - Number(isReroll);
+    if (mode !== 'daily') setRerolls(nextRerolls);
     setPhase('spinning');
     setSelected(null);
     setSquad(null);
@@ -165,7 +248,7 @@ const PerfectSeasonNhl = () => {
     }, 70);
 
     let found: { entry: TeamEraIndexEntry; squad: SpinSquad } | null = null;
-    for (let attempt = 0; attempt < 6 && !found; attempt++) {
+    for (let attempt = 0; attempt < NHL_DAILY_SPIN_TRIES && !found; attempt++) {
       const entry = index[pickIndex(index.length)];
       const sq = await fetchSquad(entry);
       if (sq && squadFillsAny(sq, NHL_SLOTS.filter(s => !picks[s.key]).map(s => s.key), usedNames)) {
@@ -174,16 +257,21 @@ const PerfectSeasonNhl = () => {
     }
 
     if (wheelTimer.current) clearInterval(wheelTimer.current);
+    spinning.current = false;
+    if (takeNewerDaily()) return;
     if (!found) {
       setPhase('error');
       return;
     }
+    if (mode === 'daily') setRerolls(nextRerolls);
+    const nextTeams = [...teamNames, found.squad.teamName];
+    if (mode === 'daily') storeDraft({ picks, squad: found.squad, rerolls: nextRerolls, teamNames: nextTeams, draws: dailyDraws.current });
     setWheelText(found.squad.teamName);
     setSquad(found.squad);
     setSpins(s => s + 1);
-    setTeamNames(t => [...t, found!.squad.teamName]);
+    setTeamNames(nextTeams);
     setPhase('draft');
-  }, [index, picks, usedNames, rerolls, pickIndex]);
+  }, [index, picks, usedNames, rerolls, pickIndex, mode, teamNames, takeNewerDaily, storeDraft]);
 
   const canDraft = useCallback(
     (p: DraftablePlayer) => !usedNames.has(p.name) && p.eligible.some(e => openSlots.includes(e)),
@@ -191,8 +279,11 @@ const PerfectSeasonNhl = () => {
   );
 
   const assign = (p: DraftablePlayer, slotKey: string) => {
-    if (!openSlots.includes(slotKey) || !p.eligible.includes(slotKey)) return;
-    setPicks(prev => ({ ...prev, [slotKey]: p }));
+    if (spinning.current || (mode === 'daily' && lastDraft.current?.squad === null)
+      || !openSlots.includes(slotKey) || !p.eligible.includes(slotKey) || takeNewerDaily()) return;
+    const nextPicks = { ...picks, [slotKey]: p };
+    if (mode === 'daily') storeDraft({ picks: nextPicks, squad: null, rerolls, teamNames, draws: dailyDraws.current });
+    setPicks(nextPicks);
     setUsedNames(prev => new Set(prev).add(p.name));
     setSelected(null);
     setSquad(null);
@@ -240,12 +331,17 @@ const PerfectSeasonNhl = () => {
   const readyToRecord = phase === 'done' || (mode === 'daily' && phase === 'sim');
   useEffect(() => {
     if (!readyToRecord || !sim || completionSaved.current) return;
-    completionSaved.current = true;
     if (mode === 'daily') {
+      if (terminalHeld.current) return;
       const existing = loadDailyAttempt(SPORT_KEY, todayStr);
       if (existing) {
-        setLockedAttempt(existing);
-        setPhase('daily-locked');
+        completionSaved.current = true;
+        reopenResult(existing);
+        return;
+      }
+      if (takeNewerDaily()) {
+        setSim(null);
+        setRevealed(0);
         return;
       }
       saveDailyAttempt(SPORT_KEY, {
@@ -256,16 +352,35 @@ const PerfectSeasonNhl = () => {
         teamNames,
         themeId: dailyTheme?.id,
       });
+      if (!loadDailyAttempt(SPORT_KEY, todayStr)) {
+        terminalHeld.current = true;
+        setDailySaveWarning(true);
+        return;
+      }
+      try { localStorage.removeItem(nhlDailyDraftKey(todayStr)); } catch { /* The final result takes precedence. */ }
+      setDailySaveWarning(false);
     }
+    completionSaved.current = true;
     recordCompletion('/perfect-season-nhl', sim.wins, getCurrentPlayerName());
     // Round 820: every finished run, in any mode, is weighed against the best.
     recordBest({ wins: sim.wins, losses: sim.losses, overall: Math.round(overall), date: todayStr, mode });
-  }, [readyToRecord, sim, overall, mode, todayStr, spins, teamNames, dailyTheme, recordBest]);
+  }, [readyToRecord, sim, overall, mode, todayStr, spins, teamNames, dailyTheme, recordBest, reopenResult, takeNewerDaily, settleRetry]);
+
+  const retryDailySave = () => {
+    if (takeNewerDaily()) return;
+    if (sim) {
+      terminalHeld.current = false;
+      setSettleRetry(value => value + 1);
+    }
+    else if (lastDraft.current) storeDraft(lastDraft.current);
+  };
 
   const skipSim = () => setRevealed(NHL_GAMES);
 
   const restart = () => {
     completionSaved.current = false;
+    terminalHeld.current = false;
+    setDailySaveWarning(false);
     resetBest();
     setPicks(Object.fromEntries(NHL_SLOTS.map(s => [s.key, null])));
     setUsedNames(new Set());
@@ -273,7 +388,7 @@ const PerfectSeasonNhl = () => {
     setSquad(null);
     setSim(null);
     setRevealed(0);
-    setRerolls(MAX_REROLLS);
+    setRerolls(NHL_DAILY_REROLLS);
     setSpins(0);
     setTeamNames([]);
     setPhase('spin');
@@ -364,7 +479,7 @@ const PerfectSeasonNhl = () => {
                 >
                   <Icon className="w-6 h-6 text-primary mb-2" />
                   <div className="font-bold text-foreground mb-1">{GAME_MODE_LABELS[m]}</div>
-                  <p className="text-xs text-muted-foreground">{GAME_MODE_BLURBS[m]}</p>
+                  <p className="text-xs text-muted-foreground">{GAME_MODE_BLURBS[m]} {m === 'daily' && 'Return to Daily to continue your draft in this browser.'}</p>
                 </button>
               );
             })}
@@ -419,10 +534,17 @@ const PerfectSeasonNhl = () => {
 
         {phase === 'error' && (
           <div className="text-center py-12">
-            <p className="text-destructive font-semibold mb-3">Couldn't reach the hockey archives.</p>
+            <p className="text-destructive font-semibold mb-3">{draftConflict ? "Couldn't reopen the saved Daily draft. Your draft is still saved in this browser." : "Couldn't reach the hockey archives."}</p>
             <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
               Try again
             </button>
+          </div>
+        )}
+
+        {mode === 'daily' && dailySaveWarning && (
+          <div role="alert" className="mb-4 flex items-center justify-between gap-2 rounded-lg border border-border px-3 text-sm">
+            Keep this tab open. Daily progress could not be saved.
+            <button type="button" onClick={retryDailySave} className="min-h-[44px] shrink-0 px-1 font-semibold text-primary">Retry save</button>
           </div>
         )}
 

@@ -67,6 +67,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         items: [
           "The season is 82 simulated games; a higher overall wins more, but perfection also needs luck.",
           "Daily mode allows one attempt per day with a rotating theme and resets at midnight Eastern.",
+          "Return to Daily to continue your draft in this browser with the same lineup, squad and remaining rerolls.",
         ],
       },
     ],

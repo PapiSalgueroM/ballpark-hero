@@ -8,6 +8,7 @@ import PerfectSeasonMlb from '@/pages/PerfectSeasonMlb';
 import PerfectSeasonNhl from '@/pages/PerfectSeasonNhl';
 import { click, mountPage, type MountedPage } from './dailyReload/harness';
 import { recordCompletion, resetMocks } from './dailyReload/mocks';
+import { nhlDailyDraftKey } from '@/lib/nhlPerfectSeasonDraft';
 
 vi.mock('@/lib/perfectSeasonMlb', async original => {
   const real = await original<typeof import('@/lib/perfectSeasonMlb')>();
@@ -23,7 +24,7 @@ vi.mock('@/lib/perfectSeasonNhl', async original => {
   return {
     ...real,
     fetchTeamEraIndex: async () => [{ abbr: 'FXR', teamName: 'Fixture Club', draftMatch: 'Fixture', eraStart: 2000, eraEnd: 2009, eraLabel: '2000s' }],
-    fetchSquad: async () => fixtureSquad(real.NHL_SLOTS),
+    fetchSquad: async () => ({ ...fixtureSquad(real.NHL_SLOTS), squadId: 'FXR-2000', teamName: 'Fixture Club (2000s)', year: 2000 }),
   };
 });
 
@@ -47,6 +48,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   cleanup();
+  vi.restoreAllMocks();
   vi.useRealTimers();
   localStorage.clear();
 });
@@ -110,7 +112,7 @@ describe.each([
     const first = await chooseMode(mount());
     const second = await chooseMode(mount());
     await reachLastPick(first);
-    await reachLastPick(second);
+    if (sport === 'mlb') await reachLastPick(second);
     const key = `${path.slice(1)}-daily-${getDailyDateET()}`;
     const bestKey = `${path.slice(1)}-best`;
 
@@ -122,7 +124,8 @@ describe.each([
     expect(stored).not.toBeNull();
     expect(best).not.toBeNull();
 
-    await pick(second, lastPlayer.name);
+    if (sport === 'mlb') await pick(second, lastPlayer.name);
+    else await click(second.getByRole('button', { name: 'Spin the wheel' }));
     await tick(games * 30 + 100);
     expect(localStorage.getItem(key)).toBe(stored);
     expect(localStorage.getItem(bestKey)).toBe(best);
@@ -140,4 +143,96 @@ describe.each([
     expect(recordCompletion).toHaveBeenCalledTimes(1);
     expect(loadDailyAttempt(sport, getDailyDateET())).toBeNull();
   });
+});
+
+it('NHL resumes the exact Daily lineup, spent reroll and next random draw before scoring once', async () => {
+  const path = '/perfect-season-nhl';
+  const mount = () => mountPage(<PerfectSeasonNhl />, path);
+  const open = async (page: MountedPage) => {
+    const board = within(page.container);
+    await click(board.getByRole('button', { name: /^Daily\b/ }));
+    await tick(10);
+    return board;
+  };
+  const date = getDailyDateET();
+  let page = mount();
+  let board = await open(page);
+  await click(board.getByRole('button', { name: 'Spin the wheel' }));
+  await click(board.getByRole('button', { name: 'Reroll (2 left)' }));
+  await click(board.getByRole('button', { name: /Fixture C\b/ }));
+  await click(board.getByRole('button', { name: 'Next spin' }));
+  expect(board.getByRole('button', { name: 'Reroll (1 left)' })).toBeVisible();
+  page.unmount();
+
+  page = mount(); board = await open(page);
+  expect(within(board.getByRole('complementary')).queryByText('Fixture C')).toBeVisible();
+  expect(board.getByRole('button', { name: 'Reroll (1 left)' })).toBeVisible();
+  expect(recordCompletion).not.toHaveBeenCalled();
+  for (const [index, { key }] of NHL_SLOTS.slice(1).entries()) {
+    if (index > 0) await click(board.getByRole('button', { name: 'Next spin' }));
+    await click(board.getByRole('button', { name: new RegExp(`Fixture ${key}\\b`) }));
+  }
+  const players = fixtureSquad(NHL_SLOTS).players.slice(0, NHL_SLOTS.length);
+  const overall = teamOverall(NHL_SLOTS, Object.fromEntries(players.map(p => [p.playerId, p])));
+  const picker = makeDailyPicker('nhl', date);
+  for (let i = 0; i < 7; i++) picker(1);
+  const expected = simulateSeason(overall, NHL_GAMES, picker(2 ** 31));
+  expect(loadDailyAttempt('nhl', date)).toMatchObject({ date, sim: expected, spins: 7 });
+  expect(recordCompletion).toHaveBeenCalledExactlyOnceWith(path, expected.wins, 'Tester');
+  page.unmount();
+  board = await open(mount());
+  expect(board.getByRole('heading', { name: "Today's daily is done" })).toBeVisible();
+  expect(recordCompletion).toHaveBeenCalledTimes(1);
+});
+
+it('NHL rejects mismatched Daily wheel bytes and always prefers a finished attempt', async () => {
+  const path = '/perfect-season-nhl', date = getDailyDateET(), key = nhlDailyDraftKey(date);
+  const open = async () => {
+    const board = within(mountPage(<PerfectSeasonNhl />, path).container);
+    await click(board.getByRole('button', { name: /^Daily\b/ }));
+    await tick(2);
+    return board;
+  };
+  const bytes = JSON.stringify({ v: 1, wheel: 'A different wheel' });
+  localStorage.setItem(key, bytes);
+  let board = await open();
+  expect(board.getByText(/Couldn't reopen the saved Daily draft/)).toBeVisible();
+  expect(board.queryByRole('button', { name: 'Spin the wheel' })).toBeNull();
+  expect(localStorage.getItem(key)).toBe(bytes);
+  expect(recordCompletion).not.toHaveBeenCalled();
+  cleanup();
+  const finalKey = `perfect-season-nhl-daily-${date}`;
+  const final = JSON.stringify({ v: 1, date, sim: simulateSeason(70, NHL_GAMES, 42), overall: 70, spins: 6, teamNames: [] });
+  localStorage.setItem(finalKey, final);
+  board = await open();
+  expect(board.getByRole('heading', { name: "Today's daily is done" })).toBeVisible();
+  expect(localStorage.getItem(finalKey)).toBe(final);
+  expect(recordCompletion).not.toHaveBeenCalled();
+});
+
+it('NHL holds a terminal result on a denied save and a retry records it only once', async () => {
+  const path = '/perfect-season-nhl', date = getDailyDateET();
+  const board = within(mountPage(<PerfectSeasonNhl />, path).container);
+  await click(board.getByRole('button', { name: /^Daily\b/ }));
+  await tick(2);
+  const set = Storage.prototype.setItem;
+  const fail = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function(key, value) {
+    if (key === `perfect-season-nhl-daily-${date}`) throw new Error('Terminal fixture');
+    set.call(this, key, value);
+  });
+  for (const [i, { key }] of NHL_SLOTS.entries()) {
+    await click(board.getByRole('button', { name: i ? 'Next spin' : 'Spin the wheel' }));
+    await click(board.getByRole('button', { name: new RegExp(`Fixture ${key}\\b`) }));
+  }
+  expect(loadDailyAttempt('nhl', date)).toBeNull();
+  expect(localStorage.getItem(nhlDailyDraftKey(date))).toBeTruthy();
+  expect(recordCompletion).not.toHaveBeenCalled();
+  fail.mockRestore();
+  await click(board.getByRole('button', { name: 'Skip to result' }));
+  await tick(2);
+  expect(loadDailyAttempt('nhl', date)).toBeNull();
+  await click(board.getByRole('button', { name: 'Retry save' }));
+  expect(loadDailyAttempt('nhl', date)).toBeTruthy();
+  expect(localStorage.getItem(nhlDailyDraftKey(date))).toBeNull();
+  expect(recordCompletion).toHaveBeenCalledTimes(1);
 });
