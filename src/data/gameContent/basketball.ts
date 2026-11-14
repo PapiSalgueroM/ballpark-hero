@@ -156,6 +156,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Playing out the season or skipping ahead",
         items: [
+          "In Classic or Hard, review your rotation before the season. Swap the sixth man with a starter if he can play that position. For example, a point guard you drafted on the bench can start instead. Starters carry more weight in the sim, and Hard keeps ratings hidden until the result. The shared Daily starts the sim as soon as all six slots are filled.",
           "Watch the season play out, or skip straight to the final record.",
         ],
       },

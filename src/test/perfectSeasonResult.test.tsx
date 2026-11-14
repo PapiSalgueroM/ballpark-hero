@@ -91,7 +91,7 @@ const press = (view: View, text: string | RegExp) => {
   fireEvent.click(node!);
 };
 
-async function playOneRun(view: View, fx: Fixture) {
+async function playOneRun(view: View, sport: PerfectSeasonSportKey, fx: Fixture) {
   press(view, 'Classic');
   await tick(10);
   for (let i = 0; i < fx.slots.length; i++) {
@@ -101,6 +101,7 @@ async function playOneRun(view: View, fx: Fixture) {
     await tick(10);
   }
   await tick(10);
+  if (sport === 'nba') { press(view, 'Simulate season'); await tick(10); }
   press(view, /Skip to result/);
   await tick(50);
 }
@@ -133,7 +134,7 @@ describe.each(['nba', 'nhl', 'mlb', 'nfl'] as PerfectSeasonSportKey[])('%s Perfe
   it('prints the odds for the raw overall the sim played, and a first run is a new best', async () => {
     const view = render(frame());
     expect(view.container.querySelector('[data-best-record]')).toBeNull();
-    await playOneRun(view, fx);
+    await playOneRun(view, sport, fx);
     const odds = view.container.querySelector('[data-perfect-odds]');
     expect(odds, 'the run went unbeaten or never finished, so the odds line never drew').not.toBeNull();
     expect(odds!.textContent).toBe(perfectOddsLine(sport, fx.raw));
@@ -150,7 +151,7 @@ describe.each(['nba', 'nhl', 'mlb', 'nfl'] as PerfectSeasonSportKey[])('%s Perfe
     localStorage.setItem(`perfect-season-${sport}-best`, JSON.stringify(best));
     const view = render(frame());
     expect(view.container.querySelector('[data-best-record]')?.textContent).toBe(`Your best so far: ${games - 1}-1 at 99 OVR.`);
-    await playOneRun(view, fx);
+    await playOneRun(view, sport, fx);
     expect(view.container.querySelector('[data-best-record]')?.textContent).toBe(`Your best: ${games - 1}-1 at 99 OVR.`);
     expect(JSON.parse(localStorage.getItem(`perfect-season-${sport}-best`)!)).toEqual(best);
   });

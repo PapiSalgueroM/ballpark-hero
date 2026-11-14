@@ -26,6 +26,7 @@ import {
 } from '@/lib/perfectSeasonExpansion';
 import { perfectSeasonTagline } from '@/lib/perfectSeasonOdds';
 import { usePerfectSeasonBest } from '@/hooks/usePerfectSeasonBest';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { BestSoFar, SeasonOddsLines } from '@/components/perfect-season/SeasonOdds';
 import { SeasonVerdict } from '@/components/perfect-season/SeasonVerdict';
 import {
@@ -35,7 +36,7 @@ import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 
 const SPORT_KEY = 'nba';
 
-type Phase = 'mode-select' | 'daily-locked' | 'boot' | 'error' | 'spin' | 'spinning' | 'draft' | 'sim' | 'done';
+type Phase = 'mode-select' | 'daily-locked' | 'boot' | 'error' | 'spin' | 'spinning' | 'draft' | 'review' | 'ready' | 'sim' | 'done';
 
 const MAX_REROLLS = 2;
 
@@ -56,6 +57,9 @@ const MODE_ICONS: Record<GameMode, typeof Dices> = {
   hard: EyeOff,
   daily: CalendarClock,
 };
+
+const canSwapWithSixthMan = (picks: Record<string, DraftablePlayer | null>, slot: string) =>
+  slot !== 'SIXTH' && !!picks[slot]?.eligible.includes('SIXTH') && !!picks.SIXTH?.eligible.includes(slot);
 
 const PerfectSeasonNba = () => {
   /* Round 428 part two: TODAY IS PINNED AT MOUNT and every call below uses it.
@@ -100,6 +104,7 @@ const PerfectSeasonNba = () => {
   const overall = useMemo(() => teamOverall(NBA_SLOTS, picks), [picks]);
   const draftDone = openSlots.length === 0;
   const ratingsHidden = isRatingHidden(mode, phase === 'done');
+  const reviewRef = useRevealScroll<HTMLElement>(phase === 'review');
 
   // Countdown ticks while the daily result (or lock screen) is showing.
   useEffect(() => {
@@ -223,7 +228,15 @@ const PerfectSeasonNba = () => {
     setUsedNames(prev => new Set(prev).add(p.name));
     setSelected(null);
     setSquad(null);
-    setPhase('spin');
+    setPhase(openSlots.length === 1 && mode !== 'daily' ? 'review' : 'spin');
+  };
+
+  const sixthMan = picks.SIXTH;
+  const swapWithSixthMan = (slot: string) => {
+    if (phase !== 'review') return;
+    setPicks(current => canSwapWithSixthMan(current, slot)
+      ? { ...current, [slot]: current.SIXTH, SIXTH: current[slot] }
+      : current);
   };
 
   const clickPlayer = (p: DraftablePlayer) => {
@@ -236,12 +249,13 @@ const PerfectSeasonNba = () => {
     }
   };
 
-  // Auto-start the sim once the lineup is complete. Records come from the
+  // Start the Daily as soon as the lineup is complete. Other modes wait for
+  // the rotation review to be confirmed. Records come from the
   // rebalanced expansion curve (overall -> expected wins), tuned so mid-80s
   // drafts land in the mid-50s-to-60s win range instead of the old sigmoid's
   // harsher output.
   useEffect(() => {
-    if (!draftDone || phase === 'sim' || phase === 'done' || sim) return;
+    if (!draftDone || phase === 'sim' || phase === 'done' || sim || (mode !== 'daily' && phase !== 'ready')) return;
     const seed = mode === 'daily' && dailyPicker.current
       ? Math.floor(dailyPicker.current(2 ** 31))
       : randomSeed();
@@ -684,6 +698,38 @@ const PerfectSeasonNba = () => {
               </p>
             </aside>
           </div>
+        )}
+
+        {phase === 'review' && sixthMan && (
+          <section ref={reviewRef} aria-labelledby="nba-rotation-heading" className="mx-auto max-w-lg rounded-2xl border border-border bg-card p-4 sm:p-5">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 id="nba-rotation-heading" className="font-display text-xl font-bold">Review rotation</h2>
+              {!ratingsHidden && <span className="text-sm font-bold text-primary">{Math.round(overall)} OVR</span>}
+            </div>
+            <p className="mt-1 text-xs text-muted-foreground">Each starter has more weight in the season sim. Swap the sixth man with a starter whose position he can play.</p>
+            <div className="my-3 grid gap-1.5">
+              <p className="flex items-center justify-between gap-2 rounded-lg bg-secondary px-3 py-2 text-sm">
+                <span><b>Sixth man</b> · {sixthMan.name}</span>
+                <b>{ratingsHidden ? HIDDEN_RATING_DISPLAY : sixthMan.rating}</b>
+              </p>
+              {NBA_SLOTS.filter(slot => slot.key !== 'SIXTH').map(slot => {
+                const starter = picks[slot.key];
+                if (!starter) return null;
+                const canSwap = canSwapWithSixthMan(picks, slot.key);
+                return <button key={slot.key} type="button" aria-label={`Swap with ${slot.label}, ${starter.name}`}
+                  disabled={!canSwap} onClick={() => swapWithSixthMan(slot.key)}
+                  className="flex min-h-11 items-center justify-between gap-2 rounded-lg border border-border px-3 py-1.5 text-left text-sm enabled:hover:border-primary focus-visible:outline-primary disabled:opacity-60">
+                  <span><b>{slot.key}</b> · {starter.name}</span>
+                  <span className="flex shrink-0 items-center gap-2">
+                    {canSwap && <span className="text-xs font-semibold text-primary">Swap</span>}
+                    <b>{ratingsHidden ? HIDDEN_RATING_DISPLAY : starter.rating}</b>
+                  </span>
+                </button>;
+              })}
+            </div>
+            <button type="button" onClick={() => setPhase('ready')}
+              className="min-h-11 w-full rounded-xl bg-primary px-4 py-2 text-sm font-bold text-primary-foreground hover:opacity-90">Simulate season</button>
+          </section>
         )}
 
         {(phase === 'sim' || phase === 'done') && sim && (
