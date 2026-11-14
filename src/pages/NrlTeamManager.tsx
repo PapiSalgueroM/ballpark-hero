@@ -2250,6 +2250,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>If you accepted Board pathways, check Pathways run-in in Season review with four regular-season club matches left. It shows who can still reach four appearances.</li>
               <li>When you stay at the club, a returning starter can keep a position they learned in training.</li>
               <li>Change clubs between seasons from Season review.</li>
+              <li>When staying at your club, select Keep saved lineups in Season review to carry your presets forward. Apply a saved lineup in Squad.</li>
               <li>When staying at your club, check Fill open squad places in Season review to preview affordable one-season free-agent deals. Your preference saves until you make a decision about next season.</li>
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>
               <li>Availability shows the first regular club match after a confirmed suspension and any injury. Byes advance injury recovery, while suspensions count club matches.</li>

@@ -19,6 +19,7 @@ import {
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities, nrlPhysioSpend,
   nrlLeagueRecruitmentPreview,
   nrlOffseasonFreeAgentPreview, nrlOffseasonFreeAgentsAvailable,
+  nrlOffseasonLineupPreview, nrlOffseasonLineupsAvailable,
   nrlRecruitmentBrief, nrlRecruitmentPlan,
   nrlSeasonOut, nrlSelectionPromise, nrlSelectionPromiseCandidates,
   nrlMutualReleaseQuote, nrlMutualReleaseSpend,
@@ -1860,6 +1861,11 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const mustMove = challengeStatus === 'must-move';
   const pastPlaces = new Map(career.history.map(record => [`${record.clubId}:${record.year}`, record.rank]));
   const [nextClubId, setNextClubId] = useState('');
+  const [keepLineups, setKeepLineups] = useState<string>();
+  const lineupChoice = `${year}:${clubId}`;
+  const showLineupChoice = nrlOffseasonLineupsAvailable(career);
+  const carryLineups = showLineupChoice && keepLineups === lineupChoice;
+  const lineupPreview = useMemo(() => carryLineups ? nrlOffseasonLineupPreview(career) : [], [career, carryLineups]);
   const canChooseFreeAgents = nrlOffseasonFreeAgentsAvailable(career);
   const preferFreeAgents = career.preferFreeAgents === true;
   const clubSelect = useRef<HTMLSelectElement>(null);
@@ -1963,9 +1969,27 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
         preferFreeAgents={preferFreeAgents} nextClubId={nextClub?.id ?? (application?.response === 'offered' ? application.clubId : undefined)} />}
       {(canChooseFreeAgents || preferFreeAgents) && <OffseasonFreeAgents career={career} checked={preferFreeAgents} disabled={disabled}
         onChange={enabled => onAction({ type: 'setOffseasonFreeAgents', year, clubId, enabled })} />}
+      {showLineupChoice && <div className="mt-3 rounded-xl border border-border bg-background px-3 pb-3 text-sm">
+        <label className="flex min-h-11 items-center gap-2 font-semibold">
+          <input type="checkbox" checked={carryLineups} disabled={disabled}
+            onChange={event => setKeepLineups(event.target.checked ? lineupChoice : undefined)} />
+          Keep saved lineups for {year + 1}
+        </label>
+        <p className="text-muted-foreground">Carry your presets if you stay here. Apply them in Squad when you’re ready.</p>
+        {lineupPreview.length > 0 && <ul className="mt-2 space-y-1" aria-label={`Saved lineup changes for ${year + 1}`}>
+          {lineupPreview.map(({ slot, starters, reserves, kickerChanged }) => (
+            <li key={slot}>
+              <strong>{slot === 'savedLineup' ? 'First choice' : 'Rotation'}:</strong>{' '}
+              {starters || reserves || kickerChanged
+                ? `${starters} starter ${starters === 1 ? 'change' : 'changes'}, ${reserves} bench ${reserves === 1 ? 'change' : 'changes'}${kickerChanged ? ', new goal kicker' : ''}`
+                : 'All picks carry over'}
+            </li>
+          ))}
+        </ul>}
+      </div>}
       {finished && employed && year < NRL_LAST_YEAR && !mustMove && (
         <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled || needsJudiciary}
-          onClick={() => onAction({ type: 'startNextSeason' })}>
+          onClick={() => onAction({ type: 'startNextSeason', ...(carryLineups && { carryLineups: { fromYear: year, clubId } }) })}>
           Start {year + 1}<ArrowRight aria-hidden="true" />
         </Button>
       )}

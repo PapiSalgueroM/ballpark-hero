@@ -36,4 +36,37 @@ describe('NRL lineup plans', () => {
     expect(next.savedLineup).toBeUndefined();
     expect(next.savedRotationLineup).toBeUndefined();
   });
+
+  it.each([['storm', 2026], ['bears', 2027]] as const)('can carry repaired lineup plans through a genuine %s rollover', (clubId, year) => {
+    let career = createNrlCareer(clubId, 4, year);
+    const choice = { year, clubId };
+    const original = career.season.lineup.Fullback;
+    const reserve = nrlStarterOptions(career.season, 'Fullback').find(player => player.id !== original)!;
+    const change = (action: Parameters<typeof reduceNrlCareer>[1]) => {
+      career = reduceNrlCareer(career, action);
+    };
+    change({ type: 'saveLineup', ...choice });
+    change({ type: 'selectStarter', role: 'Fullback', playerId: reserve.id });
+    change({ type: 'saveLineup', ...choice, slot: 'rotation' });
+    change({ type: 'applySavedLineup', previewKey: nrlSavedLineupPreview(career.season, career.savedLineup!)!.key });
+    while (career.season.phase !== 'complete') change({ type: 'advance' });
+    const defaultNext = reduceNrlCareer(career, { type: 'startNextSeason' });
+    const action = { type: 'startNextSeason', carryLineups: { fromYear: year, clubId } } as const;
+    const next = reduceNrlCareer(career, action);
+    expect(next.season).toEqual(defaultNext.season);
+    expect(next.players).toEqual(defaultNext.players);
+    expect(next.savedLineup?.year).toBe(year + 1);
+    expect(next.savedRotationLineup?.lineup.Fullback).toBe(reserve.id);
+    expect(next.savedLineup?.lineup.Fullback).not.toBe(original);
+    expect(defaultNext.season.squad.some(player => player.id === original)).toBe(false);
+    expect(defaultNext.savedRotationLineup).toBeUndefined();
+    expect(reduceNrlCareer(career, { ...action, carryLineups: { fromYear: year - 1, clubId } })).toBe(career);
+    expect(reduceNrlCareer(career, { ...action, move: { fromYear: year, clubId: 'broncos' } })).toBe(career);
+    const restored = readNrlCareerSave(JSON.stringify(next))!;
+    expect(restored).toEqual(next);
+    const preview = nrlSavedLineupPreview(restored.season, restored.savedRotationLineup!)!;
+    const applied = reduceNrlCareer(restored, { type: 'applySavedLineup', slot: 'rotation', previewKey: preview.key });
+    expect(applied.season.lineup.Fullback).toBe(reserve.id);
+    if (clubId === 'storm') expect(applied.season.lineup.Fullback).not.toBe(next.season.lineup.Fullback);
+  });
 });
