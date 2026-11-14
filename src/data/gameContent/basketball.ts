@@ -1835,6 +1835,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         heading: "Simming the season in 20 stretches",
         items: [
           "Sim the season in 20 short stretches, watching the conference standings tighten and the mandate's live pace read.",
+          "The latest round’s record and headlines stay with your saved season.",
         ],
       },
       {
