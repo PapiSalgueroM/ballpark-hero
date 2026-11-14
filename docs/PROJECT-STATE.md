@@ -1,4 +1,12 @@
+## 2026-11-14: NBA trade requests, NRL offseason preferences and Home discovery focus
+
+- NBA My Career lets a signed player ask their agent for a trade before a season, after finishing at least one year. The request and ruling are saved for the year. An accepted request moves the existing contract to a different franchise in that career era.
+- Browser Back restores the exact Home opener in Main event, Most played today and Just shipped, including a game that also appears in the sport catalogue.
+- NRL Team Manager remembers whether the manager wants to fill open squad places with free agents through reload and visits to Contracts. The preview still uses the current cap and signed squad.
+
 ## 2026-11-14: Soccer Career prime, NRL availability and UFC Daily saves
+
+[PR #936](https://github.com/PapiSalgueroM/ballpark-hero/pull/936) published exact main `1c8f3a37f80d1e1701a53d6fa239043bf1098242`, deployment `49d2bdb1-e167-4d2a-8dc8-a80c51ce48a4`. Eight live browser journeys, all 174 sitemap routes and the raw guides passed. IndexNow accepted the two changed guides.
 
 - Season Ratings shows the saved prime and age window that Soccer Career uses for development. The engine still has early, typical, late and extended paths.
 - NRL Team Manager shows the first regular club match after an injury and confirmed suspension both clear. Byes advance injury recovery and leave the ban's match count intact.
