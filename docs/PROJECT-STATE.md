@@ -1,4 +1,12 @@
+## 2026-11-14: State of Origin selections, Fantasy Draft saves and NFL packages
+
+- New State of Origin appointments can open the full list of signed players eligible for the state you coach. Search by name before assigning a matchday spot. The opening team remains available, and an older series keeps its saved player list.
+- Fantasy Draft resumes an unfinished draft on the same device and Eastern date. It restores the original rule, first pick and every accepted player. A completed draft keeps its normal score and clears the unfinished draft.
+- NFL Front Office can start two tight ends, two wide receivers and one running back for one game on a full roster. The preview uses the selected players and a small protection bonus. The week report records the package and the game returns to the usual lineup if a second healthy tight end is unavailable at kickoff.
+
 ## 2026-11-14: NRL primary positions, College recap and parked careers
+
+[PR #959](https://github.com/PapiSalgueroM/ballpark-hero/pull/959) published exact main `584c7b8a9998a9eb1b14052227b88a3c4cf3e0d6`, deployment `f2712cd5-672a-41ea-b1ee-d1c67a500e92`. Seven live browser journeys, both raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted both game guides. The separate repository-wide StorageWrites check reported the same findings on #958 and #959.
 
 - NRL Team Manager can change one returning player's primary position at season review when they made eight regular-season starts in that trained position. The old position becomes their secondary position. The saved-lineup and recruitment previews use the proposed position before you start the next season.
 - Guess the College counts the correct guess and shows a clue-by-clue recap after the result. Daily, Unlimited and Conference play each show their own guesses. Older Daily results keep their original scores.
