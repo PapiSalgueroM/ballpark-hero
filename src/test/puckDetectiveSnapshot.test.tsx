@@ -23,9 +23,10 @@ const players: PuckDetectivePlayer[] = [
 const mystery: PuckDetectivePlayer = { playerId: 9000000, name: 'Fixture mystery', team: 'DET', jerseyNumber: 21, position: 'L', age: 37, country: 'USA', group: 'forward', careerPoints: null };
 const saveKey = 'puck-detective-daily-2026-11-10';
 const notice = /Team and jersey clues use the game['’]s roster snapshot\. Players may have since moved or become free agents\./;
+const table = vi.hoisted(() => ({ from: vi.fn(), range: vi.fn() }));
 
 vi.mock('@/integrations/supabase/client', () => ({
-  supabase: { auth: { getSession: async () => ({ data: { session: null } }) } },
+  supabase: { from: table.from, auth: { getSession: async () => ({ data: { session: null } }) } },
 }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: () => {} }) }));
 vi.mock('@/lib/puckDetective', async original => ({
@@ -108,6 +109,30 @@ it('loads the dated roster on Unlimited, preserves Daily history and keeps both 
   expect(buildPuckPool('easy', roster)).toContain(namesakes[0]);
   expect(buildPuckPool('easy', roster)).not.toContain(namesakes[1]);
   expect(buildPuckPool('hard', roster)).toContain(namesakes[1]);
+});
+
+it('reads every Daily roster page without loading Unlimited career points', async () => {
+  const actual = await vi.importActual<typeof import('@/lib/puckDetective')>('@/lib/puckDetective');
+  const realRows = Array.from({ length: 510 }, (_, i) => ({
+    player_id: 8000000 + i, full_name: `Fixture NHL player ${i}`, team: 'DET',
+    position: 'L', jersey_number: 21, birth_date: '2000-11-13', birth_country: 'USA',
+  }));
+  const rows = realRows.flatMap(row => [row, row]);
+  table.from.mockImplementation((name: string) => {
+    if (name !== 'nhl_players') throw new Error(`Unexpected NHL table ${name}`);
+    return { select: () => ({ order: () => ({ range: table.range }) }) };
+  });
+  table.range.mockImplementation((from: number, to: number) => Promise.resolve({ data: rows.slice(from, to + 1), error: null }));
+
+  const pool = (await actual.fetchPuckDetectivePool())!;
+  expect(table.from.mock.calls).toEqual([['nhl_players'], ['nhl_players']]);
+  expect(table.range.mock.calls).toEqual([[0, 999], [1000, 1999]]);
+  expect(pool.map(player => player.playerId)).toEqual(realRows.map(row => row.player_id));
+  expect(pool.at(-1)).toMatchObject({ team: 'DET', jerseyNumber: 21, country: 'USA', careerPoints: null });
+  const expected = pool.map(player => ({ ...player, careerPoints: 300 }));
+  for (const day of ['2026-11-10', '2026-11-13']) {
+    expect(actual.pickDailyMystery(pool, day).playerId).toBe(actual.pickDailyMystery(expected, day).playerId);
+  }
 });
 
 it('avoids claiming that the puzzle snapshot is a current NHL roster', () => {

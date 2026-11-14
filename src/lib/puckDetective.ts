@@ -17,13 +17,8 @@ import { dailyIndex, getTodayET } from '@/lib/dateUtils';
  * building its pool so the mystery player and the guess pool never contain
  * an accidental phantom duplicate.
  *
- * nhl_players is a stored roster snapshot (birth_date range 1985-03-09 to
- * 2007-09-05 at that check). Team and jersey clues use that snapshot, and the game's
- * attributes are team / position / nationality / age / jersey number and NOT
- * career points: nhl_player_stats (the career-totals table) only exact-name
- * matches 1412 of nhl_players' 1752 raw rows, an unreliable join for a
- * pass/fail answer check. Every attribute here comes from nhl_players alone,
- * so there is no cross-table join and no join-miss risk.
+ * Daily uses this stored roster for all clues and picks. Career points are
+ * used for Unlimited difficulty only and arrive with that mode's roster.
  */
 
 // ---------------------------------------------------------------------------
@@ -46,17 +41,8 @@ export interface PuckDetectivePlayer {
   careerPoints: number | null;
 }
 
-// #40: prominence tiers for unlimited/practice play only. Daily mode always
-// draws from the full pool. Verified via read-only SQL against
-// nhl_players/nhl_player_stats on 2026-07-03: nhl_player_stats only
-// name-matches 706 of the 876 deduped nhl_players (the rest are mostly
-// goalies, who have no career "points" stat by definition, plus a handful of
-// recent debuts not yet in the career-totals table). Splitting the 706
-// matched players into thirds by career points gives 236/235/235. Easy pulls
-// the top third (points >= 250, high-profile scorers). Hard pulls the bottom
-// third (points < 75) PLUS all 170 unmatched players (405 total) since a
-// player with no career-points row is, by construction, not a "big name" for
-// a points-based tier. Normal is the untouched full 876-player pool.
+// Easy uses high-scoring skaters. Hard uses lower-scoring skaters and players
+// without skater points, including goalies. Normal uses the full Unlimited roster.
 export type PuckDifficulty = 'easy' | 'normal' | 'hard';
 const DIFFICULTY_STORAGE_KEY = 'puck-detective-difficulty';
 const EASY_POINTS_FLOOR = 250;
@@ -206,42 +192,6 @@ interface RawNhlPlayerRow {
   birth_country: string | null;
 }
 
-interface RawStatsPointsRow {
-  player_name: string | null;
-  points: number | null;
-}
-
-/**
- * Fetches career points from nhl_player_stats, keyed by exact player_name,
- * for use as the #40 difficulty-tier signal. Pages with .range() (ordered by
- * player_name) since PostgREST caps every response at 1000 rows regardless
- * of .limit() (6353 total rows here). Returns an empty map on any failure so
- * a tiering lookup miss just falls back to "unmatched" (Hard tier) rather
- * than breaking pool fetch entirely.
- */
-async function fetchCareerPointsByName(): Promise<Map<string, number>> {
-  const map = new Map<string, number>();
-  try {
-    const PAGE_SIZE = 1000;
-    for (let from = 0; ; from += PAGE_SIZE) {
-      const { data, error } = await supabase
-        .from('nhl_player_stats' as any)
-        .select('player_name, points')
-        .order('player_name', { ascending: true })
-        .range(from, from + PAGE_SIZE - 1);
-      if (error || !data) break;
-      for (const row of data as unknown as RawStatsPointsRow[]) {
-        const name = String(row.player_name ?? '').trim();
-        if (!name) continue;
-        const pts = Number(row.points);
-        if (Number.isFinite(pts)) map.set(name, pts);
-      }
-      if (data.length < PAGE_SIZE) break;
-    }
-  } catch { /* leave map as-is; tiering treats misses as unmatched */ }
-  return map;
-}
-
 /**
  * Fetches nhl_players, dedupes by player_id (see module docstring), and
  * normalizes into the mystery/guess pool shape. Returns null on any failure
@@ -250,30 +200,19 @@ async function fetchCareerPointsByName(): Promise<Map<string, number>> {
  */
 export async function fetchPuckDetectivePool(): Promise<PuckDetectivePlayer[] | null> {
   try {
-    const [{ data, error }, pointsByName] = await Promise.all([
-      /* ROUND 366: .limit(4000) returned 1,000 of 1,752 rows, because PostgREST
-         caps every select regardless of the limit asked for. The pool was
-         complete only by luck of physical layout: the duplicate copies of each
-         player_id happened to sit outside the window, so all 876 distinct ids
-         landed inside it. One UPDATE to any of the 752 dropped rows would move
-         its in-window copy to the heap tail, cut the divisor pickDailyMystery
-         uses from 876 to 875, and remap every date. MIN_POOL_SIZE is 200, far
-         below either number, so nothing would have noticed. Paged and ordered
-         on player_id, which is the key pickDailyMystery already sorts by, and
-         the sibling query in this same file already pages this way. */
-      fetchAllRows<any>((from, to) => supabase
-        .from('nhl_players' as any)
-        .select('player_id, full_name, position, team, jersey_number, birth_date, birth_country')
-        .order('player_id', { ascending: true })
-        .range(from, to)),
-      fetchCareerPointsByName(),
-    ]);
+    // Fetch every page before picking a date's answer. Changing the number of
+    // players changes the whole rotation, even when the first page looks full.
+    const { data, error } = await fetchAllRows<RawNhlPlayerRow>((from, to) => supabase
+      .from('nhl_players' as any)
+      .select('player_id, full_name, position, team, jersey_number, birth_date, birth_country')
+      .order('player_id', { ascending: true })
+      .range(from, to));
     if (error || !data) return null;
 
     const asOf = new Date();
     const byId = new Map<number, PuckDetectivePlayer>();
 
-    for (const raw of data as unknown as RawNhlPlayerRow[]) {
+    for (const raw of data) {
       const id = Number(raw.player_id);
       if (!Number.isFinite(id) || byId.has(id)) continue;
 
@@ -295,7 +234,7 @@ export async function fetchPuckDetectivePool(): Promise<PuckDetectivePlayer[] | 
         age: computeAge(birthDate, asOf),
         country,
         group: POSITION_GROUP[pos],
-        careerPoints: pointsByName.has(name) ? pointsByName.get(name)! : null,
+        careerPoints: null,
       });
     }
 
