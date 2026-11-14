@@ -56,6 +56,23 @@ it('does not automatically bring back a player after paying their mutual release
   expect(readNrlCareerSave(JSON.stringify(next))).toEqual(next);
 });
 
+it('fills the last affordable places from the academy when free agents would exceed the cap', () => {
+  const year = 2026, clubId = 'storm';
+  const end = finish(createNrlCareer(clubId, 4, year));
+  const cap = nrlCareerCap(end, year + 1);
+  const fullyBudgeted = reduceNrlCareer(end, {
+    type: 'offerContract', playerId: 'storm-1-0', years: 1, salary: cap.available + cap.minimumSalary,
+  });
+  expect(fullyBudgeted).not.toBe(end);
+  const preview = nrlOffseasonFreeAgentPreview(fullyBudgeted)!;
+  expect(preview).toMatchObject({ academy: 2, available: 0 });
+  expect(preview.signings).toHaveLength(7);
+  const next = reduceNrlCareer(fullyBudgeted, { type: 'startNextSeason', freeAgents: { fromYear: year, clubId } });
+  expect(nrlCareerCap(next)).toMatchObject({ slots: 30, available: 0 });
+  expect(nrlCareerSquad(next).filter(player => player.id.startsWith('nrl-academy-storm-2027-'))).toHaveLength(preview.academy);
+  expect(next.history.at(-1)?.freeAgentFill).toEqual(preview.signings);
+});
+
 it('keeps selected rival extensions in the same opt-in preview and preserves ordinary club moves', () => {
   const year = 2026, clubId = 'storm';
   const end = finish(createNrlCareer(clubId, 4, year));
