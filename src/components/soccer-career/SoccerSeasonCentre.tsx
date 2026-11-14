@@ -104,7 +104,7 @@ const HELP: HelpWords = {
     { head: 'An own goal', body: 'You turn the ball into your own net at 55 minutes. The opposition get the goal, marked (O.G), and your goals and assists stay the same. The final score and your season totals still match the season summary.' },
     { head: 'A YOUR CALL', body: 'Matchday 9, 1-1 in the 82nd minute, and on your season this chance was missed. You take it and score: the match ends 2-1 and you climb the table that week. In the return game on matchday 28, a 2-1 win on your season, your goal there is not scored and it ends 1-1. You gain two points on matchday 9 and give two back on matchday 28, they lose one and get it back: the final table and your goals for the season end exactly where they were.' },
     { head: 'A RECREATE', body: 'Derby day, and on the record you scored in the 74th minute. You play it again on the Wall Shot: through the gap and into the top corner is three stars, a miss is none. Either way the derby ends as it did. Three moments worth 3, 2 and 1 stars are 6 of 9, which is 67%: +1 next season.' },
-    { head: 'A matchday', body: 'Matchday 12: you win 2-1 at home and score in the 67th minute, rated 7.6. The table moves you from 6th to 4th (▲2), and it slides to show it: the two clubs you passed drop below you.' },
+    { head: 'A matchday', body: 'Matchday 12: you win 2-1 at home and score in the 67th minute, rated 7.6. The table moves you from 6th to 4th (▲2). In Season replays, open a finished fixture to read its full-time score, events and your rating. Jump straight to the final table or season review to reveal all fixtures. Closing a match report keeps your place.' },
     { head: 'Coming back', body: 'You watch to matchday 13 and close the tab. Next visit the chip reads 📺 Resume 2031/32, matchday 14. The Season Centre opens with 13 of 38 played, you 4th, and the next five games. Your place is kept in this browser only, never in your career save: clear your browser data and the season simply starts from kick off.' },
     { head: 'An injury', body: 'Out for five weeks with a hamstring in a 38 game season: five weeks out of a 46 week year is four matchdays, so the club plays matchdays 14 to 17 without you. Your games played do not move. The table does.' },
     { head: 'A whole league', body: 'Sign for Twente in 2027 and Week by week is the whole Eredivisie: 18 clubs, 34 matchdays, every club named. Sign for Hearts and you get your games with no table, because the Scottish Premiership splits in two late in the season and the game will not draw a table it cannot stand behind.' },
@@ -364,7 +364,7 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
     leagueUnavailable={leagueAvailable ? 'This season cannot be shown match by match.' : LOCKED_WORDS} />;
   const resume = stored && stored.key === key && stored.year === row.year ? stored : null;
   return <>
-    {model && <SeasonCentre model={model} exitLabel={exitLabel} onClose={onClose} resume={resume} onProgress={onProgress} navigation={navigation} active={screen === 'league'} />}
+    {model && <SeasonCentre model={model} exitLabel={exitLabel} onClose={onClose} resume={resume} onProgress={onProgress} navigation={navigation} active={screen === 'league'} fixtureReports={mode === 'watch' && !canPlay} />}
     {screen !== 'league' && <SeasonCompetitionPanel key={screen} career={career} row={row} competition={competitions.find(c => c.id === screen) ?? null} navigation={navigation} exitLabel={exitLabel} onClose={leave} />}
   </>;
 }
