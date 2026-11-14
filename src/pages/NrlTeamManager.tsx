@@ -1002,7 +1002,7 @@ function DevelopmentAppearances({ career, heldReserveId }: { career: NrlCareerSt
         {candidates.map(player => (
           <li key={player.id} className="break-words py-1" data-nrl-development-player={player.id}>
             <p className="font-medium">{player.name}</p>
-            <p className="text-xs text-muted-foreground">{player.apps} of {target} appearances</p>
+            <p className="text-xs text-muted-foreground">{player.apps} of {target} appearances{career.developmentPriorityId === player.id && ' · Priority'}</p>
             <p className="text-xs text-muted-foreground">Quick Sim: {selection(player.id, reserves)}{heldReserveId && (
               <> · Live: {player.id === heldReserveId ? 'Held for later' : selection(player.id, liveReserves)}</>
             )}</p>
@@ -2224,6 +2224,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Use First reserve in the rotation preview to change who gets first priority. It swaps two places on your named bench.</li>
               <li>Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation. Positional matchups shows the ratings behind the middle and wide plans.</li>
               <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
+              <li>In Finances, use Development priority to reserve one assistant rating award for an eligible player. They still need eight appearances.</li>
               <li>Check a late Selection promise in the rotation preview before kick-off. An eligible match counts toward the promise window if the player stays off.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. If you still have an open bench place at 60 minutes, choose the held player or another eligible unused reserve. Quick Sim settles the round in one action.</li>
               <li>At 60 minutes, Closing attack plan lets you change where your side attacks for the rest of the match.</li>

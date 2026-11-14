@@ -15,7 +15,7 @@ import {
   nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractApproachPreview, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer, nrlContractTermLimit,
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
   nrlConcessionsQuote, nrlConcessionsSpend,
-  nrlDevelopmentAffected, nrlDevelopmentAssistantProgress, nrlFinanceForecast,
+  nrlDevelopmentAffected, nrlDevelopmentAssistantProgress, nrlDevelopmentPriorityOptions, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities, nrlPhysioSpend,
   nrlLeagueRecruitmentPreview,
   nrlOffseasonFreeAgentPreview, nrlOffseasonFreeAgentsAvailable,
@@ -1063,6 +1063,7 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
   const { year, clubId, round } = career.season;
   const { candidates, current, fee, wagePerRound, remainingWages, reason, developmentReason } = nrlCoachQuote(career);
   const progress = nrlDevelopmentAssistantProgress(career);
+  const priorityOptions = nrlDevelopmentPriorityOptions(career, progress);
   return (
     <details className="group mt-5 rounded-xl border border-border bg-background px-3">
       <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -1079,13 +1080,26 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
               <>
                 <h3 className="mt-3 font-semibold">Development appearances</h3>
                 <p className="mt-1 text-muted-foreground">Returning players with room to grow, ordered by appearances since the hire. Starts and reserves who take the field count.</p>
+                {priorityOptions.length > 0 && <div className="mt-2">
+                  <label htmlFor="nrl-development-priority" className="block font-semibold">Development priority</label>
+                  <select id="nrl-development-priority" aria-describedby="nrl-development-priority-help" className={`${control} mt-1 sm:max-w-xs`}
+                    value={career.developmentPriorityId ?? ''} disabled={disabled}
+                    onChange={event => onAction({ type: 'setDevelopmentPriority', year, clubId, round, playerId: event.target.value || null })}>
+                    <option value="">No priority player</option>
+                    {priorityOptions.map(player => <option key={player.id} value={player.id}>
+                      {player.name} · {Math.min(player.apps, NRL_DEVELOPMENT_ASSISTANT.appearances)}/{NRL_DEVELOPMENT_ASSISTANT.appearances}
+                    </option>)}
+                  </select>
+                  <p id="nrl-development-priority-help" className="mt-1 text-xs text-muted-foreground">Reserve one of the assistant’s three rating awards. The player still needs eight appearances. Pick No priority player to free the place.</p>
+                </div>}
                 {progress.length ? (
                   <ul aria-label="Development appearances" className="mt-1 divide-y divide-border">
                     {progress.map(player => (
                       <li key={player.id} className="flex flex-wrap justify-between gap-x-3 py-1.5">
                         <span>{player.name}</span>
                         <span>{player.apps} {player.apps === 1 ? 'appearance' : 'appearances'}
-                          {career.ratingReview?.assistant?.includes(player.id) ? ' · +1 OVR earned' : ''}</span>
+                          {career.ratingReview?.assistant?.includes(player.id) ? ' · +1 OVR earned'
+                            : career.developmentPriorityId === player.id ? ' · Priority' : ''}</span>
                       </li>
                     ))}
                   </ul>

@@ -67,6 +67,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Before Round 1, enable Supporter attendance in Finances if you want simulated home gate receipts to respond to recent results and ticket prices. The preview uses your last four club matches.',
       'Review home-ground concessions in Finances. The club pays once and earns simulated concessions income from eligible home games starting next round. Check the cash forecast for payback.',
       'Hire a development assistant in Finances to help up to three young players who are signed to return. Each needs eight regular-season appearances from the hire onward to earn a rating point during the season.',
+      'In Finances, choose Development priority to reserve one of your assistant’s three rating awards for an eligible player. They still need eight appearances. You can clear the priority to free the place.',
       'With a development assistant hired, open Development appearances in the rotation preview to check which players are one match away from eight appearances and whether they are in the current plan.',
       'In Finances, review a coaching course for an attack or defence assistant. It takes four regular rounds. Retain the assistant and stay at the club to earn an extra point with their tactic next season.',
       'After the Grand Final, review an assistant extension in Season review or Finances. You can reserve next season’s wages to keep the same assistant for one extra year at your club, with no new signing fee.',
