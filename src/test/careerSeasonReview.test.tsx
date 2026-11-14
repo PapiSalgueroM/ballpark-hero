@@ -9,6 +9,7 @@ vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile
 vi.mock('sonner', () => ({ toast: { success: () => undefined } }));
 
 import CareerSeasonReview from '@/components/us-career/CareerSeasonReview';
+import { UsSeasonCentreOpen } from '@/components/us-career/season/UsSeasonCentreHost';
 import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
 import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
 import MlbMyCareerBoard from '@/components/mlb-my-career/MlbMyCareerBoard';
@@ -69,6 +70,43 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 describe('saved career season review', () => {
+  it('opens the selected earlier NBA season for reconstruction without saving or credit', async () => {
+    const fixture = reviewFixtures.find(row => row.slug === 'nba')!;
+    const sport = reviewSports.nba;
+    const career = makeReviewCareer(fixture);
+    const old = career.seasons[0];
+    const bytes = reviewSave(career);
+    localStorage.setItem(sport.saveKey, bytes);
+    const centre = { ready: vi.fn(async () => true), open: vi.fn() };
+    render(<UsSeasonCentreOpen.Provider value={centre}><CareerSeasonReview career={career} sport={sport} onBack={() => {}} backLabel="Back to career" /></UsSeasonCentreOpen.Provider>);
+    choose(0);
+    click('Regular season');
+    expect(screen.getByText(/recreated.*saved season totals/i)).toBeVisible();
+    const button = screen.getByRole('button', { name: 'Watch reconstructed games' });
+    await act(async () => fireEvent.click(button));
+    expect(centre.open).toHaveBeenCalledExactlyOnceWith({ career, row: old, from: button });
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
+  it('keeps archived short and unplayed NBA seasons outside the reconstruction', () => {
+    const fixture = reviewFixtures.find(row => row.slug === 'nba')!;
+    const sport = reviewSports.nba;
+    const career = makeReviewCareer(fixture);
+    career.seasons[0].year = 2011;
+    career.seasons[1].games = 0;
+    const centre = { ready: vi.fn(async () => true), open: vi.fn() };
+    render(<UsSeasonCentreOpen.Provider value={centre}><CareerSeasonReview career={career} sport={sport} onBack={() => {}} backLabel="Back to career" /></UsSeasonCentreOpen.Provider>);
+    choose(0); click('Regular season');
+    expect(screen.getByText(/2011-12 season had 66 games/)).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Watch reconstructed games' })).toBeNull();
+    click('Back to seasons');
+    choose(1); click('Regular season');
+    expect(screen.getByText('No games were recorded for this season.')).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Watch reconstructed games' })).toBeNull();
+    expect(centre.ready).not.toHaveBeenCalled();
+  });
+
   it('finds saved season highs from the correct positive field for every position', () => {
     const cases: [string, string[], string, string, number, string][] = [
       ['nba', ['PG', 'SG', 'SF', 'PF', 'C'], 'Points per game', 'ppg', 28.4, 'Games'],
