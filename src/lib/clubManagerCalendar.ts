@@ -1095,6 +1095,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
     manager: career.manager,
     managerXp: career.managerXp,
     nationJob: career.nationJob,
+    ...(career.nationCampaign ? { nationCampaign: career.nationCampaign } : {}),
     startOptions: career.startOptions,
     h2h: career.h2h,
     retiredNames: career.retiredNames,

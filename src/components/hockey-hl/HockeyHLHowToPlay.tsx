@@ -22,6 +22,7 @@ export function HockeyHLHowToPlay({ open, onOpenChange }: Props) {
               <li>Tap the one you think has MORE career points</li>
               <li>We reveal both totals right after your pick</li>
               <li>10 rounds per game</li>
+              <li>After round 10, open Review matchups to see the pairs, point totals and picks you missed</li>
             </ul>
           </div>
           <div className="space-y-2">

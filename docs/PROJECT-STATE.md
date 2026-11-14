@@ -1,4 +1,11 @@
+## 2026-11-14: Club Manager national campaigns and Hockey matchup review
+
+- Club Manager keeps the latest national job's simulated qualifying table, tournament group and match results in Manager. The last campaign stays available after dismissal. Modern careers use the summer on their calendar. Old results with the player-only "Not Selected" status are left out of the panel until a new result is available.
+- Hockey Higher or Lower shows all ten completed matchups, each player's career points and coverage season, and which guesses hit. The Daily recap can be reopened after a refresh.
+
 ## 2026-11-14: Club Manager shirt numbers, NRL team sheets and College Grid reviews
+
+[PR #912](https://github.com/PapiSalgueroM/ballpark-hero/pull/912) published exact main `eea20f2faabd15aab771f834c36ab2a0c0f99944`, deployment `b437f2c9-19d7-4cf4-b774-0f5169f3adf5`. Ten native browser journeys and all 174 sitemap routes passed live. IndexNow accepted all three guides.
 
 - Open any active player in Club Manager's Squad to assign an in-game shirt number from 1 to 99 or confirm a swap. Assigned numbers follow the club's players into live matches, and outgoing loans reserve their numbers until they return or leave.
 - NRL's latest and saved match reports can show the starting 13, reserves who actually played, players' points and the kicker. Older reports keep the information originally recorded.

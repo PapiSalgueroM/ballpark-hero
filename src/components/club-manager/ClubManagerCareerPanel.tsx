@@ -12,6 +12,28 @@ import { huntBusy } from '@/lib/clubManagerJobHunt';
 import { BACKGROUND_TREE, TREE_INFO } from '@/lib/clubManagerXp';
 import { highestScoringOf, scoringOutcome } from '@/lib/clubManagerRecords';
 import CmRetireDoor from '@/components/club-manager/CmRetireDoor';
+import type { IntlTableRow } from '@/lib/soccerInternational';
+
+function CampaignTable({ label, rows, nation }: { label: string; rows: IntlTableRow[]; nation: string }) {
+  return (
+    <table className="w-full text-left text-xs tabular-nums">
+      <caption className="pb-1 text-left font-semibold">{label}</caption>
+      <thead>
+        <tr><th scope="col">Team</th><th scope="col" className="text-right">Played</th><th scope="col" className="text-right"><abbr title="Goal difference">GD</abbr></th><th scope="col" className="text-right">Pts</th></tr>
+      </thead>
+      <tbody>
+        {rows.map(row => (
+          <tr key={row.nation} className={row.nation === nation ? 'text-primary font-bold' : 'text-muted-foreground'}>
+            <th scope="row" className="py-0.5 pr-1 font-medium">{row.nation}</th>
+            <td className="text-right">{row.played}</td>
+            <td className="text-right">{row.gf - row.ga}</td>
+            <td className="text-right">{row.points}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
 
 /* Round 1325: a score printed low number first. The save has kept the worst
    defeat as the other side's goals first since Round 71, so "3-0 vs Manchester
@@ -42,6 +64,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
   /* The +1 line reads the XP block's own record of the point, not the
      background table, so it only shows once the point has been handed over. */
   const bgTree = c.manager && c.managerXp?.gift && BACKGROUND_TREE[c.manager.background] === c.managerXp.gift ? c.managerXp.gift : undefined;
+  const campaign = c.nationCampaign;
   return (
                 <>
                 {/* Round 202: the international job. Club football is
@@ -54,9 +77,9 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
                         ? 'Your first tournament summer is still to come.'
                         : `${formatNumber(c.nationJob.played)} tournament${c.nationJob.played === 1 ? '' : 's'} taken charge of, ${formatNumber(c.nationJob.won)} won.`}
                     </p>
-                    {c.nationJob.lastResult && (
+                    {!campaign && c.nationJob.lastResult && c.nationJob.lastResult !== 'Not Selected' && (
                       <p className="text-[11px] text-muted-foreground mt-1">
-                        Last summer ({c.nationJob.lastYear}): {c.nationJob.lastResult}.
+                        Last summer{c.nationJob.lastYear && c.nationJob.lastYear >= 1900 ? ` (${c.nationJob.lastYear})` : ''}: {c.nationJob.lastResult}.
                       </p>
                     )}
                     <p className="text-[10px] text-muted-foreground mt-1">
@@ -82,6 +105,34 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
                     </button>
                   </div>
                 ) : null}
+                {campaign && (
+                  <details data-cm-nation-campaign className="mb-2 rounded-xl border border-border bg-card px-3">
+                    <summary className="min-h-11 cursor-pointer py-3 text-xs font-semibold">
+                      {campaign.nation} · {campaign.name}{campaign.year >= 1900 ? ` ${campaign.year}` : ''} · {campaign.result}
+                    </summary>
+                    <div className="space-y-3 pb-3">
+                      {campaign.lostJob && <p className="text-xs text-muted-foreground">The federation ended your contract after qualifying.</p>}
+                      {campaign.qualifying.automatic
+                        ? <p className="text-xs text-muted-foreground">Automatic entry to the tournament.</p>
+                        : <CampaignTable label="Simulated qualifying group" rows={campaign.qualifying.table} nation={campaign.nation} />}
+                      {campaign.groupTable.length > 0 && <CampaignTable label={campaign.groupLabel ?? 'Tournament group'} rows={campaign.groupTable} nation={campaign.nation} />}
+                      {campaign.matches.length > 0 && (
+                        <div>
+                          <h3 className="text-xs font-semibold">Tournament results</h3>
+                          <ol className="mt-1 space-y-1 text-xs">
+                            {campaign.matches.map((match, i) => (
+                              <li key={i} className="rounded-md bg-secondary/40 px-2 py-1.5">
+                                <span className="block text-muted-foreground">{match.round}</span>
+                                <span>{match.home} {match.homeGoals}-{match.awayGoals} {match.away}</span>
+                                {match.pens && match.winner && <span className="block text-muted-foreground">{match.winner} won on penalties.</span>}
+                              </li>
+                            ))}
+                          </ol>
+                        </div>
+                      )}
+                    </div>
+                  </details>
+                )}
                 {/* Round 168: mid-season approaches land here, his CM-10. */}
                 {c.approach && (
                   <div className="bg-card border border-primary/50 rounded-xl p-3 mb-2">

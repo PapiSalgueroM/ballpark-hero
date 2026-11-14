@@ -475,6 +475,9 @@ export interface IntlMatch {
   playerRating: number;
 }
 
+export type ManagerSummerMatch = Pick<IntlMatch, 'round' | 'home' | 'away' | 'homeGoals' | 'awayGoals' | 'pens'>
+  & { winner?: string };
+
 export interface QualifyingCampaign {
   confederation: Confederation;
   /** Nations in my qualifying group, results included. */
@@ -913,6 +916,7 @@ function firstRoundFor(n: number): IntlRound {
 export function simulateTournament(
   nation: string, fmt: TournamentFormat, year: number,
   qualifying: QualifyingCampaign, squad: SquadCall | null, form: PlayerForm | null,
+  managerFixtures?: ManagerSummerMatch[],
 ): IntlTournament {
   const qualified = qualifying.qualified;
   const inSquad = qualified && !!squad?.called;
@@ -947,6 +951,9 @@ export function simulateTournament(
           home === nation ? lift : 0, away === nation ? lift : 0,
         );
         applyResult(table, home, away, r.a, r.b);
+        if (managerFixtures && (home === nation || away === nation)) {
+          managerFixtures.push({ round: label, home, away, homeGoals: r.a, awayGoals: r.b, pens: false });
+        }
         if (inSquad && (home === nation || away === nation) && myForm) {
           const mine = home === nation ? r.a : r.b;
           const ps = playerMatchStats(myForm, mine);
@@ -1000,6 +1007,9 @@ export function simulateTournament(
         round, slot: i, home, away,
         homeGoals: r.a, awayGoals: r.b, pens: r.pens, winner, mine,
       });
+      if (managerFixtures && mine) {
+        managerFixtures.push({ round: round === 'F' ? 'Final' : EXIT_LABEL[round], home, away, homeGoals: r.a, awayGoals: r.b, pens: r.pens, winner });
+      }
       if (mine && inSquad && myForm) {
         const myGoals = home === nation ? r.a : r.b;
         const ps = playerMatchStats(myForm, myGoals);
@@ -1024,7 +1034,7 @@ export function simulateTournament(
   /* Where I finished. */
   let myResult: string;
   if (!qualified) myResult = 'Did Not Qualify';
-  else if (!inSquad) myResult = 'Not Selected';
+  else if (!inSquad && !managerFixtures) myResult = 'Not Selected';
   else if (champion === nation) myResult = 'Winner';
   else {
     const myTies = bracket.filter(t => t.mine);
@@ -1085,7 +1095,7 @@ export function managerFormatYear(year: number): number {
  */
 export function runManagerSummer(
   nation: string, year: number, lift: number,
-): IntlTournament | null {
+): (IntlTournament & { managerFixtures: ManagerSummerMatch[] }) | null {
   const fmt = tournamentForYear(nation, managerFormatYear(year));
   if (!fmt) return null;
   const bump = clamp(lift, 0, 6);
@@ -1096,7 +1106,8 @@ export function runManagerSummer(
   const restore = overrideNationStrength(nation, nationStrength(nation) + bump);
   try {
     const qualifying = runQualifying(nation, fmt, null);
-    return simulateTournament(nation, fmt, year, qualifying, null, null);
+    const managerFixtures: ManagerSummerMatch[] = [];
+    return { ...simulateTournament(nation, fmt, year, qualifying, null, null, managerFixtures), managerFixtures };
   } finally {
     restore();
   }

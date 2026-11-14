@@ -141,7 +141,7 @@ const HockeyHigherLower = () => {
 
         {/* Game complete */}
         {gameStatus === 'complete' && (
-          <div className="mt-4 flex justify-center">
+          <div className="mt-4 flex flex-col items-center gap-3">
             <ResultScreen
               won={correctCount >= 5}
               score={totalScore}
@@ -166,6 +166,33 @@ const HockeyHigherLower = () => {
                 isVisible={mode === 'daily'}
               />
             </ResultScreen>
+            <details data-no-prerender="" className="w-full max-w-sm rounded-xl border border-border bg-card px-3">
+              <summary className="min-h-11 cursor-pointer rounded-sm py-3 text-sm font-semibold text-foreground focus-visible:outline-primary">
+                Review matchups
+              </summary>
+              <ol role="list" className="divide-y divide-border pb-2">
+                {results.map(({ player1, player2, correct }, index) => (
+                  <li key={index} className="space-y-1.5 py-2">
+                    <p className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
+                      <span>Round {index + 1}</span>
+                      <span className={cn('font-semibold', correct ? 'text-correct' : 'text-destructive')}>{correct ? 'Correct' : 'Missed'}</span>
+                    </p>
+                    {[player1, player2].map(player => (
+                      <div key={player.name} className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-2">
+                        <span className={cn('break-words text-sm text-foreground',
+                          player.careerPoints >= Math.max(player1.careerPoints, player2.careerPoints) && 'font-bold')}>
+                          {player.name}
+                        </span>
+                        <span className="flex flex-col text-right">
+                          <span className="text-sm tabular-nums text-foreground">{player.careerPoints.toLocaleString('en-US')} pts</span>
+                          <HigherLowerThrough through={player.lastSeason} />
+                        </span>
+                      </div>
+                    ))}
+                  </li>
+                ))}
+              </ol>
+            </details>
           </div>
         )}
 
