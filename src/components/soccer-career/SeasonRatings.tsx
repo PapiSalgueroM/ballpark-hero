@@ -228,7 +228,7 @@ export default function SeasonRatings({ career, onClose }: { career: RatingsSour
         </> : mode === "help" ? <div className="space-y-3 text-sm" data-season-history-help-body>
           <button type="button" data-season-history-back="help" className={control} onClick={() => changeMode(helpFrom.current, "help")}>Back to {helpFrom.current === "ratings" ? "Ratings" : helpFrom.current === "compare" ? "comparison" : "Availability"}</button>
           <h3 ref={heading} tabIndex={-1} data-season-history-heading className="font-bold">Your season history</h3>
-          <p>This reads your saved simulated senior seasons. Academy years and jobs after retirement stay out. You can choose a season with no appearances, or two records from the same year.</p>
+          <p>Comparison and Availability read your saved senior seasons. You can choose a season with no appearances, or two records from the same year.</p>
           <p>Comparison shows the second season minus the first. Season OVR is the overall you played at, not your current overall. Apps and position stats cover all club competitions. Missing numbers stay not recorded; they never become zero.</p>
           <p>Example: 12 goals in the first season and 15 in the second gives a change of +3. If the first season never kept OVR, its OVR and the change both say not recorded.</p>
           <p>Season development shows the five saved overall checkpoints from the start to the end of a season. Pick an academy or senior year to see when the rating rose or fell.</p>

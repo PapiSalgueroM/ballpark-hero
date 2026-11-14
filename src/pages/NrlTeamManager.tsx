@@ -25,7 +25,7 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlBenchRotation, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
-  nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchange, nrlNextRound,
+  nrlActingCaptainPhases, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchange, nrlNextRound, nrlOnFieldCaptain,
   nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
@@ -648,7 +648,17 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
       {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
         {recoveredName} took individual recovery before this match.
       </p>}
-      {captainName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-match-captain>Club captain: {captainName}.</p>}
+      {match.actingCaptain ? (
+        <div className="mt-2 text-sm text-muted-foreground" data-nrl-match-captain>
+          <p className="font-semibold text-foreground">On-field captain</p>
+          <ul aria-label="Captain by match period">
+            {nrlActingCaptainPhases(match).map(({ period, playerId }) => <li key={period}>
+              {period} · {season.squad.find(player => player.id === playerId)?.name ?? 'No appointed captain'}
+              {playerId === match.actingCaptain?.viceCaptainId && ' (vice-captain)'}
+            </li>)}
+          </ul>
+        </div>
+      ) : captainName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-match-captain>Club captain: {captainName}.</p>}
       {goldenPoint && (
         <p className="mt-2 text-sm text-muted-foreground" data-nrl-golden-point>
           {goldenPoint === 'draw' ? 'Golden point ended scoreless after two five-minute periods.'
@@ -986,6 +996,8 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
     .flatMap(({ status, player }) => status === 'ready' && player && nrlAcademyOffer(career, player.id).ok ? [player] : []);
   const canPlayLive = Boolean(match && season.kickerId && season.bench);
   const goalKicker = match && season.backupKickerId && season.squad.find(player => player.id === season.kickerId)?.name;
+  const actingCaptain = match && season.viceCaptainId && nrlOnFieldCaptain(season) === season.viceCaptainId
+    ? season.squad.find(player => player.id === season.viceCaptainId)?.name : undefined;
   const holdable = canPlayLive ? nrlHoldableReserves(season) : [];
   const namedReserves = canPlayLive ? nrlBench(season) : [];
   const heldReserve = hold?.year === year && hold.round === season.round ? holdable.find(player => player.id === hold.reserveId) : undefined;
@@ -1055,6 +1067,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
             Goal kicker: {goalKicker}{season.kickerId === season.backupKickerId && ' · Backup on duty'}
           </p>
         )}
+        {actingCaptain && <p className="mt-2 break-words text-sm text-emerald-100" data-nrl-acting-captain>Acting captain · {actingCaptain}</p>}
         {phase === 'complete' && (
           <Button type="button" size="lg" className="mt-3 px-4" onClick={() => onOpenOffice('history')}><Trophy aria-hidden="true" /> Review this season</Button>
         )}
@@ -1511,6 +1524,7 @@ function Squad({ career, onAction, disabled }: {
   const proposal = disabled ? null : nrlFitLineup(season);
   const nameOf = (id: string) => season.squad.find(player => player.id === id)?.name;
   const captainOutsideStartingSide = season.captainId && !starters.has(season.captainId);
+  const viceOutsideStartingSide = season.viceCaptainId && !starters.has(season.viceCaptainId);
   const backupOutsideStartingSide = season.backupKickerId && !starters.has(season.backupKickerId);
   const squadName = (id: string, name: string) =>
     career.openingRoster && !isNrlNamedPlayer(id) ? name + ' (generated)' : name;
@@ -1679,6 +1693,20 @@ function Squad({ career, onAction, disabled }: {
           <p id="nrl-club-captain-help" className="mt-1 text-xs text-muted-foreground">
             Choose a starter. Your captain adds {NRL_CAPTAIN_DEFENCE} defence when they lead the starting 13 at kickoff or after half time.
           </p>
+          {season.captainId && <>
+            <label htmlFor="nrl-vice-captain" className="mt-3 block text-sm font-semibold">Vice-captain</label>
+            <select id="nrl-vice-captain" value={season.viceCaptainId ?? ''} aria-describedby="nrl-vice-captain-help"
+              disabled={disabled || season.phase === 'complete'}
+              className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60 sm:max-w-xs"
+              onChange={event => onAction({ type: 'setViceCaptain', playerId: event.target.value || null, year: season.year, clubId: season.clubId, round: season.round })}>
+              <option value="">No vice-captain selected</option>
+              {viceOutsideStartingSide && <option value={season.viceCaptainId}>{nameOf(season.viceCaptainId!)} · Outside starting 13</option>}
+              {season.squad.filter(player => starters.has(player.id) && player.id !== season.captainId).map(player => (
+                <option key={player.id} value={player.id}>{player.name}</option>
+              ))}
+            </select>
+            <p id="nrl-vice-captain-help" className="mt-1 text-xs text-muted-foreground">The vice-captain gives the same {NRL_CAPTAIN_DEFENCE} defence when they are on and the club captain is off.</p>
+          </>}
         </div>
       )}
       <div className="mt-5 border-t border-border pt-4">
@@ -2115,6 +2143,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
               <li>Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.</li>
+              <li>Choose a vice-captain in Squad to keep the one-point defence bonus when the club captain is off the field and the vice-captain is on.</li>
               <li>After the Grand Final, release one unsigned academy prospect into next season’s free-agent market or promote him to your own Top 30.</li>
               <li>If you accepted Board pathways, check Pathways run-in in Season review with four regular-season club matches left. It shows who can still reach four appearances.</li>
               <li>Change clubs between seasons from Season review.</li>

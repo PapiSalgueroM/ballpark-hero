@@ -41,7 +41,7 @@ import {
   STAFF, staffLevelOf, staffCostOf, canHire, payrollPurchase, totalStaffLevels,
   ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
-  totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC, type TycoonLeague,
+  totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC, yourOpponentIndex, type TycoonLeague,
   GOAL_BONUS_SEC, WIN_BONUS_SEC, PROMOTION_BONUS_SEC, scoringFacts,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
@@ -315,7 +315,7 @@ export function LatestSeasonReview({ last }: { last: TycoonLeague }) {
         onOpenAutoFocus={event => { event.preventDefault(); heading.current?.focus({ preventScroll: true }); }}
         onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}>
         <DialogTitle ref={heading} tabIndex={-1} className="pr-12 text-base">Latest season</DialogTitle>
-        <DialogDescription className="text-xs">The final table stays available until the next season ends or you sell up. The match keeps running while you read.</DialogDescription>
+        <DialogDescription className="text-xs">The final table and recorded match results stay available until the next season ends or you sell up. The match keeps running while you read.</DialogDescription>
         <div className="min-h-0 space-y-3 overflow-y-auto text-xs">
           <p data-season-headline className="break-words font-bold text-primary">Season {snapshot.season + 1} · {DIVISIONS[snapshot.division].name}{position === 1 ? ' champions' : ''}</p>
           <dl className="grid grid-cols-2 gap-3 rounded-lg border border-border p-3">
@@ -335,6 +335,16 @@ export function LatestSeasonReview({ last }: { last: TycoonLeague }) {
               </tr>
             ))}</tbody>
           </table>
+          {snapshot.results?.length ? <details data-latest-season-results className="rounded-lg border border-border px-3">
+            <summary className="min-h-11 cursor-pointer py-3 font-bold">Match results</summary>
+            {snapshot.results.length < snapshot.matchday && <p className="pb-2 text-muted-foreground">Earlier scores were not recorded.</p>}
+            <ol className="space-y-2 pb-3">
+              {snapshot.results.map(({ day, gf, ga }) => <li key={day} className="flex items-baseline justify-between gap-2">
+                <span>Matchday {day} · {snapshot.clubs[yourOpponentIndex(snapshot, day - 1)].name}</span>
+                <span className="shrink-0 font-bold tabular-nums">{gf}-{ga}</span>
+              </li>)}
+            </ol>
+          </details> : null}
         </div>
         <button type="button" onClick={() => changeOpen(false)} className="min-h-11 min-w-11 w-full shrink-0 rounded-lg border border-border px-3 text-xs font-bold hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Back</button>
       </DialogContent>
@@ -1001,7 +1011,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
               <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>
-              <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. In League, open Latest season to see the final table and your record. If your club wins Muddy Meadows, for example, you can reopen that final table while playing in Gravel Lane. The report survives reload until another season ends or you sell up.</p>
+              <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. In League, open Latest season to see the final table and your recorded match scores. If your club wins Muddy Meadows, for example, you can reopen its final table and scores while playing in Gravel Lane. The report survives reload until another season ends or you sell up.</p>
               <p>The payroll hires {h.staff} staff, from a {h.firstStaff} to a {h.lastStaff}. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
               <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about {h.catchSec} seconds to catch it, for one of {h.prizes} prizes: {GOLDEN_INFO.frenzy.label} ({GOLDEN_INFO.frenzy.blurb} for {GOLDEN_INFO.frenzy.duration} seconds), {GOLDEN_INFO.tapRush.label} ({GOLDEN_INFO.tapRush.blurb} for {GOLDEN_INFO.tapRush.duration} seconds), {GOLDEN_INFO.windfall.label} ({h.windfallMin} minutes of income, instantly), {GOLDEN_INFO.fanWave.label} ({GOLDEN_INFO.fanWave.blurb}) or {GOLDEN_INFO.freeLevel.label} ({GOLDEN_INFO.freeLevel.blurb}).</p>
               <p>A penalty or free-kick offer appears once per watched match. You have {SET_PIECE_WINDOW_SEC} seconds to open it. Pick your aim, power and curve for one shot while the match clock keeps running. Opening uses that match's attempt, including if you leave or reload. A goal before full time adds one goal and the usual goal bonus; a miss costs nothing. Away matches have no kick offers, and kicks have no daily score or direct gem reward.</p>

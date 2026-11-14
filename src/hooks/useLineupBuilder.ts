@@ -8,7 +8,8 @@ import { FORMATIONS, lastRecordedYear, recordedYearsLabel } from '@/types/lineup
 import { checkLineupPick, gradeFit, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionFit';
 import type { Position } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
-import { loadBuildXiDraft, writeBuildXiDraft } from '@/lib/buildXiDraft';
+import { isCurrentBuildXiDraft, loadBuildXiDraft, writeBuildXiDraft } from '@/lib/buildXiDraft';
+import { normalizeName } from '@/lib/playerSearch';
 
 /* The project URL and public key are hardcoded on purpose: CLAUDE.md records
    that Lovable injects VITE_SUPABASE_* pointing at a DELETED project, so these
@@ -234,6 +235,25 @@ export function useLineupBuilder() {
     startSpin();
   }, [filledCount, startSpin, cancelValidation, draftChoice]);
 
+  const undoLastPick = useCallback(() => {
+    if (filledCount === 0 || (phase !== 'building' && phase !== 'reviewing')) return false;
+    cancelValidation();
+    cancelEvaluation();
+    if (!isCurrentBuildXiDraft(storedDraft.current)) {
+      setValidationError('Your lineup changed in another tab. Reload to continue that draft.');
+      return false;
+    }
+    const remaining = new Map(filledSlots);
+    const lastSlotIndex = [...remaining.keys()][filledCount - 1];
+    remaining.delete(lastSlotIndex);
+    setFilledSlots(remaining);
+    setPhase('building');
+    setSelectedPositionIndex(lastSlotIndex);
+    setIsSpinning(false);
+    setValidationError(null);
+    return true;
+  }, [filledCount, phase, filledSlots, cancelValidation, cancelEvaluation]);
+
   const submitPlayer = useCallback(
     async (inputName: string, pickMeta?: PickMeta) => {
       let playerName = inputName;
@@ -247,11 +267,9 @@ export function useLineupBuilder() {
         return;
       }
 
-      const trimmedName = playerName.trim().toLowerCase();
-      const isDuplicate = Array.from(filledSlots.values()).some(
-        (slot) => slot.playerName.toLowerCase() === trimmedName
-      );
-      if (isDuplicate) {
+      const trimmedName = normalizeName(playerName);
+      const names = new Set(Array.from(filledSlots.values(), slot => normalizeName(slot.playerName)));
+      if (names.has(trimmedName)) {
         setValidationError(`${playerName.trim()} is already in your lineup!`);
         return;
       }
@@ -360,6 +378,12 @@ export function useLineupBuilder() {
         if (answer.fullName) playerName = answer.fullName;
       }
 
+      if (names.has(normalizeName(playerName))) {
+        setIsValidating(false);
+        setValidationError(`${playerName.trim()} is already in your lineup!`);
+        return;
+      }
+
       const slot: FilledSlot = {
         ...position,
         playerName: playerName.trim(),
@@ -386,7 +410,7 @@ export function useLineupBuilder() {
         startSpin();
       }
     },
-    [selectedPositionIndex, currentTeam, positions, filledCount, startSpin, draftChoice]
+    [selectedPositionIndex, currentTeam, positions, filledSlots, filledCount, startSpin, draftChoice]
   );
 
   const filledSlotsArray = useMemo(() => {
@@ -488,7 +512,7 @@ export function useLineupBuilder() {
        paragraph and the condition on the box); the Build Your XI screens pass
        deletes both of those and then this line. */
     checkingDown: false,
-    selectFormation, selectPosition, submitPlayer, evaluateTeam, completeRecordedYearDraft, resetGame,
+    selectFormation, selectPosition, submitPlayer, evaluateTeam, completeRecordedYearDraft, resetGame, undoLastPick,
     startSpin, finishSpin, rerollTeam, teamAssignments, cancelValidation,
   };
 }

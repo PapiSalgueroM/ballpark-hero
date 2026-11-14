@@ -51,6 +51,7 @@ const LineupBuilder = () => {
     evaluateTeam,
     completeRecordedYearDraft,
     resetGame,
+    undoLastPick,
     finishSpin,
     rerollTeam,
     teamAssignments,
@@ -65,6 +66,7 @@ const LineupBuilder = () => {
   const [browsingPlayers, setBrowsingPlayers] = useState(false);
   const [browseActivation, setBrowseActivation] = useState(0);
   const inputOwner = useRef<HTMLDivElement>(null);
+  const focusUndoInput = useRef(false);
   const isClubYear = draftChoice.mode !== 'mixed';
   const recordedYear = isClubYear ? draftChoice.year : null;
   const lastYear = isClubYear ? lastRecordedYear(draftChoice) : null;
@@ -80,6 +82,20 @@ const LineupBuilder = () => {
   useLayoutEffect(() => {
     if (browseActivation > 0) inputOwner.current?.querySelector('input')?.focus({ preventScroll: true });
   }, [browseActivation]);
+
+  useLayoutEffect(() => {
+    if (!focusUndoInput.current || phase !== 'building' || selectedPositionIndex === null) return;
+    focusUndoInput.current = false;
+    inputOwner.current?.querySelector('input')?.focus();
+  }, [phase, selectedPositionIndex, filledCount]);
+
+  const reopenLastPick = () => {
+    if (!undoLastPick()) return;
+    inputRevision.current += 1;
+    setPlayerInput('');
+    setBrowsingPlayers(false);
+    focusUndoInput.current = true;
+  };
 
   useEffect(() => {
     const seen = localStorage.getItem('lineup-rules-seen');
@@ -491,7 +507,12 @@ const LineupBuilder = () => {
             {/* Round 825: under the pitch, so it updates as you pick without
                 pushing the spinner or the search box anywhere. */}
             <XiFitBreakdown breakdown={fitBreakdown} slots={fitSlots} labels={slotLabels} className="max-w-lg mx-auto" />
-            <div className="text-center">
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {filledCount > 0 && (
+                <button type="button" onClick={reopenLastPick} className="min-h-11 rounded-full px-4 text-sm font-semibold text-foreground hover:bg-secondary">
+                  Undo last pick
+                </button>
+              )}
               <button type="button" onClick={resetGame} className="min-h-11 rounded-full px-4 text-sm font-semibold text-muted-foreground hover:text-foreground">
                 Start Over
               </button>
@@ -521,7 +542,11 @@ const LineupBuilder = () => {
               <XiFitBreakdown breakdown={fitBreakdown} slots={fitSlots} labels={slotLabels} className="mt-4" />
             </div>
 
+            {validationError && <p role="alert" className="text-center text-sm text-destructive">{validationError}</p>}
             <div className="flex flex-wrap items-center justify-center gap-3">
+              <button type="button" onClick={reopenLastPick} className="min-h-11 rounded-full px-4 text-sm font-semibold text-foreground hover:bg-secondary">
+                Undo last pick
+              </button>
               <button
                 onClick={resetGame}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"

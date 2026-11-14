@@ -431,6 +431,29 @@ describe('Build Your XI recorded year admissions', () => {
 describe('Build Your XI unfinished draft', () => {
   const draftKey = 'dukb-build-your-xi-draft-v1';
 
+  it('reopens only the last accepted club year pick from review with the same assigned club', async () => {
+    const view = await startHook(2010);
+    await fillHook(view, 2010);
+    const firstDraft = JSON.parse(localStorage.getItem(draftKey)!);
+    const [slotIndex, last] = firstDraft.slots.at(-1);
+    act(() => api(view).undoLastPick());
+    expect(api(view).phase).toBe('building');
+    expect(api(view).currentTeam?.name).toBe(last.assignedTeam);
+    expect(api(view).selectedPositionIndex).toBe(slotIndex);
+    expect(JSON.parse(localStorage.getItem(draftKey)!)).toEqual({ ...firstDraft, slots: firstDraft.slots.slice(0, 10) });
+    const existing = firstDraft.slots[8][1].playerName;
+    await act(async () => { await api(view).submitPlayer(existing, meta(last.assignedTeam, 2010, last.role, existing)); });
+    expect(api(view).filledCount).toBe(10);
+    const replacement = 'Fixture last replacement';
+    await act(async () => { await api(view).submitPlayer(replacement, meta(last.assignedTeam, 2010, last.role, replacement)); });
+    expect(api(view).phase).toBe('reviewing');
+    expect(api(view).filledSlots.get(slotIndex)?.playerName).toBe(replacement);
+    const edited = JSON.parse(localStorage.getItem(draftKey)!);
+    expect(edited.teamAssignments).toEqual(firstDraft.teamAssignments);
+    expect(edited.slots.slice(0, 10)).toEqual(firstDraft.slots.slice(0, 10));
+    legacyQuiet();
+  });
+
   it.each<DraftChoice>([
     { mode: 'mixed' }, { mode: 'club-year', year: 2010 }, { mode: 'club-era', year: 2008 },
   ])('restores the accepted pick and the rerolled teams in $mode', async choice => {
@@ -499,6 +522,11 @@ describe('Build Your XI unfinished draft', () => {
     act(() => api(first).selectFormation('3-5-2', { mode: 'club-era', year: 2020 }));
     const newer = localStorage.getItem(draftKey);
     expect(newer).toContain('"year":2020');
+    act(() => { expect(api(older).undoLastPick()).toBe(false); });
+    expect(api(older).filledCount).toBe(11);
+    expect(api(older).phase).toBe('reviewing');
+    expect(api(older).validationError).toContain('changed in another tab');
+    expect(localStorage.getItem(draftKey)).toBe(newer);
     act(() => api(older).resetGame());
     expect(localStorage.getItem(draftKey)).toBe(newer);
   });

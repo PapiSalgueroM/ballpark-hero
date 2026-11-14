@@ -1,4 +1,12 @@
+## 2026-11-14: Stadium Tycoon match results, Build Your XI corrections and NRL vice-captains
+
+- Stadium Tycoon's Latest Season report keeps the actual scores and opponents for recorded matchdays. Older saves start recording at their next league match.
+- Build Your XI can undo the last accepted player while keeping the same club or nation assignment, rerolls and earlier players.
+- NRL's vice-captain covers the existing one-point defence bonus while the primary captain is off. The match report follows the actual selection and interchanges.
+
 ## 2026-11-14: Soccer Career development history, NHL drafts and NRL academy releases
+
+[PR #929](https://github.com/PapiSalgueroM/ballpark-hero/pull/929) published exact main `9d154312766dbad360e2e32aa190c1c0cb7d72cc`, deployment `af65892f-31a8-40e4-b028-9c2e04af6864`. Ten live browser journeys, all 174 sitemap routes and three raw guides passed. IndexNow accepted the guides.
 
 - Soccer Career's Season Ratings window reopens the five overall checkpoints for a saved academy or senior season. The player can switch years to see an earlier rise or decline.
 - NHL Perfect Season keeps an unfinished Daily roster, its latest dealt team and spent rerolls on the same browser. Loading a finished draft returns its existing result.

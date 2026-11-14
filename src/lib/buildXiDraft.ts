@@ -78,8 +78,12 @@ export function loadBuildXiDraft(): { raw: string | null; draft: Draft | null } 
   }
 }
 
+export function isCurrentBuildXiDraft(previous: string | null): boolean {
+  return safeLocalStorage.getItem(DRAFT_KEY) === previous;
+}
+
 export function writeBuildXiDraft(previous: string | null, next: string | null): boolean {
-  if (safeLocalStorage.getItem(DRAFT_KEY) !== previous) return false;
+  if (!isCurrentBuildXiDraft(previous)) return false;
   if (next === null) safeLocalStorage.removeItem(DRAFT_KEY);
   else safeLocalStorage.setItem(DRAFT_KEY, next);
   return true;
