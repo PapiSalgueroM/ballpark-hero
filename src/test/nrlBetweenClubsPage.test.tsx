@@ -1,9 +1,10 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ARM_MS } from '@/components/club-manager/RetireDoor';
-import { createNrlCareer, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
+import * as nrlCareer from '@/lib/nrlCareer';
+import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
 import { NRL_SAVE_KEY } from '@/lib/nrlManager';
 import { NRL_SAVE_SLOTS } from '@/lib/nrlSaveSlots';
 import { saveFence } from '@/lib/saveFence';
@@ -24,14 +25,18 @@ const button = (name: string | RegExp) => screen.getByRole('button', { name });
 const click = (name: string | RegExp) => fireEvent.click(button(name));
 const arm = () => act(() => vi.advanceTimersByTime(ARM_MS));
 const open = (query = '') => render(<MemoryRouter initialEntries={['/nrl-team-manager' + query]}><NrlTeamManager /></MemoryRouter>);
+const finish = (initial: NrlCareerState) => {
+  let career = initial;
+  for (let round = 0; round < 35 && career.season.phase !== 'complete'; round++) career = reduceNrlCareer(career, { type: 'advance' });
+  expect(career.season.phase).toBe('complete');
+  return career;
+};
+const boardDecision = () => finish(reduceNrlCareer(finish(createNrlCareer('storm', 62, 2026, true)), { type: 'startNextSeason' }));
 
 beforeEach(() => {
   localStorage.clear();
   vi.useFakeTimers();
-  let career = createNrlCareer('storm', 4);
-  for (let round = 0; round < 35 && career.season.phase !== 'complete'; round++) career = reduceNrlCareer(career, { type: 'advance' });
-  expect(career.season.phase).toBe('complete');
-  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(career));
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(finish(createNrlCareer('storm', 4))));
 });
 afterEach(() => {
   cleanup();
@@ -52,6 +57,67 @@ function leave() {
 }
 
 describe('NRL between clubs in a saved career', () => {
+  it('explains the two board misses and takes the confirmed departure through the settled job market', () => {
+    const ended = boardDecision();
+    const before = JSON.stringify(ended);
+    localStorage.setItem(NRL_SAVE_KEY, before);
+    const view = open();
+    review();
+    const decision = within(screen.getByRole('region', { name: 'Board decision' }));
+    expect(decision.getByRole('list', { name: 'Missed board targets' })).toHaveTextContent('2026 · Ladder place 7 · Finish in the top four');
+    expect(decision.getByRole('list', { name: 'Missed board targets' })).toHaveTextContent('2027 · Ladder place 11 · Reach the finals');
+    const vacancies = decision.getByRole('list', { name: 'Simulated vacancies' });
+    expect(within(vacancies).getAllByRole('listitem').map(row => row.textContent))
+      .toEqual(['PNG Chiefs · New club', 'Newcastle Knights · Finished 18', 'South Sydney Rabbitohs · Finished 13']);
+    expect(screen.queryByRole('button', { name: 'Start 2028' })).toBeNull();
+    fireEvent.click(decision.getByRole('button', { name: 'Open job market' }));
+    click('Yes, open job market');
+    expect(raw()).toBe(before);
+    click('Back to season review');
+    expect(raw()).toBe(before);
+    fireEvent.click(decision.getByRole('button', { name: 'Open job market' }));
+    arm();
+    click('Yes, open job market');
+    const departed = reduceNrlCareer(ended, { type: 'leaveClub', year: 2027, clubId: 'storm' });
+    expect(saved()).toEqual(departed);
+    view.unmount();
+    open();
+    expect(saved()).toEqual(departed);
+    click('Take job at Newcastle Knights');
+    expect(saved()).toEqual(reduceNrlCareer(departed, { type: 'acceptVacancy', year: 2027, clubId: 'storm', destinationId: 'knights' }));
+  });
+
+  it('offers a settled club job above the market and records the existing appointment', () => {
+    const offered = reduceNrlCareer(boardDecision(), { type: 'applyForOffseasonJob', year: 2027, clubId: 'storm', destinationId: 'chiefs' });
+    localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(offered));
+    open();
+    review();
+    const decision = within(screen.getByRole('region', { name: 'Board decision' }));
+    const accept = decision.getByRole('button', { name: 'Accept offer and start 2028' });
+    const market = decision.getByRole('button', { name: 'Open job market' });
+    expect(accept.compareDocumentPosition(market) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(decision.getByText('Chiefs offered you the job.')).toBeVisible();
+    expect(screen.getAllByRole('button', { name: 'Accept offer and start 2028' })).toHaveLength(1);
+    fireEvent.click(market);
+    expect(decision.getByText('Your existing application or offer closes.')).toBeVisible();
+    click('Back to season review');
+    expect(saved()).toEqual(offered);
+    fireEvent.click(accept);
+    expect(saved()).toEqual(reduceNrlCareer(offered, { type: 'acceptOffseasonJob', year: 2027, clubId: 'storm', destinationId: 'chiefs' }));
+    expect(saved()?.history.at(-1)?.appointment).toEqual({ clubId: 'chiefs', reason: 'expansion' });
+  });
+
+  it('keeps the direct club picker available if the board has no simulated vacancies', () => {
+    localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(boardDecision()));
+    vi.spyOn(nrlCareer, 'nrlOffseasonOpportunities').mockReturnValue([]);
+    open();
+    review();
+    const decision = within(screen.getByRole('region', { name: 'Board decision' }));
+    expect(decision.getByText('No simulated vacancies. You can choose a club directly below.')).toBeVisible();
+    expect(decision.queryByRole('button', { name: 'Open job market' })).toBeNull();
+    expect(screen.getByRole('combobox', { name: 'Club to manage' })).toBeVisible();
+  });
+
   it('asks before leaving, reopens to the job market, and records a new job', () => {
     const before = raw();
     const first = open();
