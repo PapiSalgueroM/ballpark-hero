@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { createNrlCareer, nrlCareerCap, nrlCareerSquad, nrlLeagueRecruitmentPreview, nrlOffseasonFreeAgentPreview,
+import { createNrlCareer, nrlCareerCap, nrlCareerSquad, nrlCareerMarket, nrlLeagueRecruitmentPreview, nrlOffseasonFreeAgentPreview,
   readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
 import { createNrlSeason, NRL_ROLES } from '@/lib/nrlManager';
 
@@ -90,4 +90,42 @@ it('keeps selected rival extensions in the same opt-in preview and preserves ord
   const legacy = finish(readNrlCareerSave(JSON.stringify(createNrlSeason('storm', 4)))!);
   expect(nrlOffseasonFreeAgentPreview(legacy)).toBeNull();
   expect(reduceNrlCareer(legacy, { type: 'startNextSeason', freeAgents })).toBe(legacy);
+});
+
+it('stores and clears only a valid preference and uses the latest signed roster once', () => {
+  const clubId = 'storm', year = 2026;
+  const start = createNrlCareer(clubId, 4, year);
+  const ended = finish(start);
+  const optIn = { type: 'setOffseasonFreeAgents', year, clubId, enabled: true } as const;
+  expect(reduceNrlCareer(start, optIn)).toBe(start);
+  expect(reduceNrlCareer(ended, { ...optIn, year: year - 1 })).toBe(ended);
+  expect(reduceNrlCareer(ended, { ...optIn, clubId: 'bears' })).toBe(ended);
+  expect(readNrlCareerSave(JSON.stringify({ ...start, preferFreeAgents: true }))).toBeNull();
+  expect(readNrlCareerSave(JSON.stringify({ ...ended, preferFreeAgents: false }))).toBeNull();
+
+  const saved = reduceNrlCareer(ended, optIn);
+  expect(saved).toEqual({ ...ended, preferFreeAgents: true });
+  expect(reduceNrlCareer(saved, optIn)).toBe(saved);
+  expect(readNrlCareerSave(JSON.stringify(saved))).toEqual(saved);
+  const cleared = reduceNrlCareer(saved, { ...optIn, enabled: false });
+  expect(JSON.stringify(cleared)).toBe(JSON.stringify(ended));
+
+  const before = nrlOffseasonFreeAgentPreview(saved)!;
+  const candidate = nrlCareerMarket(saved).find(row => row.player.id === 'storm-1-0')!;
+  expect(candidate.kind).toBe('renewal');
+  const renewed = reduceNrlCareer(saved, { type: 'offerContract', playerId: candidate.player.id, salary: candidate.askingSalary, years: 1 });
+  expect(renewed).not.toBe(saved);
+  expect(renewed.preferFreeAgents).toBe(true);
+  const latest = nrlOffseasonFreeAgentPreview(renewed)!;
+  expect(latest.signings).not.toEqual(before.signings);
+  const next = reduceNrlCareer(renewed, { type: 'startNextSeason' });
+  expect(next.preferFreeAgents).toBeUndefined();
+  expect(next.history.at(-1)?.freeAgentFill).toEqual(latest.signings);
+  expect(new Set(latest.signings.map(signing => signing.playerId)).size).toBe(latest.signings.length);
+  expect(nrlCareerSquad(next).find(player => player.id === candidate.player.id)?.contract?.salary).toBe(candidate.askingSalary);
+  expect(readNrlCareerSave(JSON.stringify(next))).toEqual(next);
+  const moved = reduceNrlCareer(saved, { type: 'startNextSeason', move: { fromYear: year, clubId: 'bears' } });
+  expect(moved).toEqual(reduceNrlCareer(ended, { type: 'startNextSeason', move: { fromYear: year, clubId: 'bears' } }));
+  expect(reduceNrlCareer(saved, { type: 'leaveClub', year, clubId }).preferFreeAgents).toBeUndefined();
+  expect(reduceNrlCareer(saved, { type: 'retireCareer', year, clubId }).preferFreeAgents).toBeUndefined();
 });
