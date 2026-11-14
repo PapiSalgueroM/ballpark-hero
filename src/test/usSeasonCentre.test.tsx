@@ -5,7 +5,7 @@
    help sheet's "seen it" flag. */
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { act, cleanup, fireEvent, render, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import UsSeasonCentre, { buildUsModel } from '@/components/us-career/season/UsSeasonCentre';
 import { buildUsSeason, type UsRow } from '@/lib/season/us';
 import { deriveSeason } from '@/lib/season/core';
@@ -21,6 +21,7 @@ import { keyedRng } from '@/lib/keyedRng';
 import { usSeasonHeldLine } from '@/data/usSeasonLengths';
 import { resetCareerMomentsForTest } from '@/components/soccer-career/careerMoments';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
+import { stageUsSeasonRating } from '@/lib/usInSeasonRating';
 
 const WITH_LOADER: UsCareerSport = { ...NBA_CAREER_SPORT, loadSeasonCentre: () => Promise.resolve(NBA_SEASON) };
 
@@ -75,6 +76,7 @@ describe('the US Season Center, mounted by itself', () => {
     expect(clock.querySelectorAll('[data-clock-events] li')).toHaveLength(clock.textContent!.includes('take over') ? 9 : 8);
     expect(document.querySelector('[data-his-line]')!.textContent).toMatch(/\d+ PTS/);
     expect(document.querySelector('[data-full-time]')!.textContent).toBe('Final');
+    expect(document.querySelector('[data-match-development-overall]')).toBeNull();
     expect(document.querySelector('[data-record-panel]')).not.toBeNull();
     press('Sim the rest');
     const review = document.querySelector('[data-review]')!;
@@ -239,6 +241,63 @@ describe('the US Season Center with the NFL bound', () => {
     await waitFor(() => expect(document.querySelector('[data-centre-tile]')).not.toBeNull());
     expect(document.querySelector('[data-centre-tile]')!.textContent).toContain(usSeasonHeldLine('nfl', 2005)!);
     expect(document.querySelector('[data-kickoff]')).toBeNull();
+  });
+});
+
+describe('saved US season OVR in the game reports', () => {
+  it.each([
+    { sport: WITH_LOADER, slug: 'nba', career: () => playNba('centre-a', 2), games: 82, opening: 72, finish: 76 },
+    { sport: NFL_WITH_LOADER, slug: 'nfl', career: () => playNfl('QB', 'nfl-centre-QB'), games: 17, opening: 78, finish: 74 },
+    { sport: { ...MLB_CAREER_SPORT, loadSeasonCentre: () => Promise.resolve(MLB_SEASON) }, slug: 'mlb', career: () => openMlb('CF', 'mlb-centre-po'), games: 162, opening: 71, finish: 75 },
+  ] as const)('reads the complete $slug checkpoint path', async ({ sport, slug, career: make, games, opening, finish }) => {
+    const career = make();
+    const row = career.seasons.at(-1)!;
+    const rating = stageUsSeasonRating(slug, { ...career, ovr: opening }, games, () => finish);
+    row.seasonRating = rating;
+    const saved = JSON.stringify(career);
+    mount(sport, career);
+    await waitFor(() => expect(document.querySelector('[data-season-help]')).not.toBeNull());
+    press('Got it');
+    press(slug === 'nba' ? 'Tip off' : slug === 'mlb' ? 'Play ball' : 'Kick off');
+    const stage = document.querySelector('[data-matchday="1"]')!;
+    expect(stage.querySelector('[data-match-development-overall]')).toHaveTextContent(`Season OVR ${opening} · Opening matchday`);
+    press('Results');
+    await waitFor(() => expect(document.querySelector('[data-full-time]')).not.toBeNull());
+    const fixtures = document.querySelector<HTMLButtonElement>('[data-centre-fixtures]')!;
+    fireEvent.click(fixtures);
+    const activeLog = within(document.querySelector('[data-centre-stage] [data-fixtures]')!);
+    expect(activeLog.getAllByRole('button', { name: /Match report:/ })).toHaveLength(1);
+    press('← Back');
+    const [checkpoint, after] = rating.checkpoints[0];
+    const direction = finish > opening ? 'Up 1' : 'Down 1';
+    if (slug === 'nfl') {
+      for (let game = 2; game < checkpoint; game++) {
+        press(`Game ${game}`);
+        await waitFor(() => expect(document.querySelector(`[data-matchday="${game}"] [data-full-time]`)).not.toBeNull());
+      }
+      press('1x');
+      press(`Game ${checkpoint}`);
+      const prior = document.querySelector(`[data-matchday="${checkpoint}"]`)!;
+      expect(prior.querySelector('[data-match-development-overall]')).toHaveTextContent(`Season OVR ${opening} · No change`);
+      press('Results');
+      await waitFor(() => expect(prior.querySelector('[data-match-development-overall]')).toHaveTextContent(`Season OVR ${after} · ${direction}`));
+    }
+    press('Sim the rest');
+    const reportButtons = within(document.querySelector('[data-fixtures]')!).getAllByRole('button', { name: /Match report:/ });
+    expect(reportButtons).toHaveLength(games);
+    for (const [game, text] of [
+      [checkpoint - 1, `Season OVR ${opening} · No change`],
+      [checkpoint, `Season OVR ${after} · ${direction}`],
+      [checkpoint + 1, `Season OVR ${after} · No change`],
+      [games, `Season OVR ${finish} · ${direction}`],
+    ] as const) {
+      fireEvent.click(reportButtons[game - 1]);
+      const report = screen.getByRole('dialog', { name: 'Match report' });
+      expect(report.querySelector('[data-match-development-overall]')).toHaveTextContent(text);
+      fireEvent.keyDown(report, { key: 'Escape' });
+    }
+    expect(JSON.stringify(career)).toBe(saved);
+    expect(Object.keys(localStorage)).toEqual([`seasonCentre:help:${slug}`]);
   });
 });
 

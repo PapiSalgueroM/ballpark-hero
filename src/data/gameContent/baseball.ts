@@ -910,6 +910,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
         items: [
           "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
           "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
+          "For seasons supported by Week by week, Season Center shows your overall before and after each game if the season has saved rating checkpoints. Review its change by opening a finished game in the game log.",
           "After playing a season, relievers can choose their bullpen role for the next signed year. Setup pitchers work for holds. Choose Close for saves at 80 overall or with the Closer build. The role stays with that club and season.",
           "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         ],
@@ -1024,7 +1025,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       {
         heading: "Drafting a Slugging Shortstop at 12th overall",
         paragraphs: [
-          "You build a Slugging Shortstop who goes 12th overall. Year two brings the breakout, year five a ring. When control ends, the hometown club offers a discount while the market whispers bigger money elsewhere.",
+          "You build a Slugging Shortstop who goes 12th overall. If a saved checkpoint moves your overall from 72 to 73, Season Center shows 72 at first pitch and 73 when the game is final. Year two brings the breakout, year five a ring. When control ends, the hometown club offers a discount while the market whispers bigger money elsewhere.",
         ],
       },
       {

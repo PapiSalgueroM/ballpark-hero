@@ -22,6 +22,7 @@ import { CentreTile } from '@/components/season-centre/CentreTile';
 import { MiniBasketballCourt } from '@/components/us-career/season/MiniBasketballCourt';
 import MlbPlayoffReplay from '@/components/us-career/season/MlbPlayoffReplay';
 import { buildMlbPlayoffReplay } from '@/lib/season/mlbPlayoffReplay';
+import { readUsSeasonRating } from '@/lib/usInSeasonRating';
 import type { ClockStageAt } from '@/components/season-centre/MatchClock';
 
 export interface UsSeasonCentreProps {
@@ -65,6 +66,9 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
   const idOf = new Map<string, string>();
   if (named) ctx.order.forEach((id, slot) => idOf.set(s.labels[slot]?.name ?? id, id));
   const range = (n: number) => Array.from({ length: n }, (_, i) => i + 1);
+  const savedRating = readUsSeasonRating(row.seasonRating);
+  const development = savedRating?.checkpoints[3][0] === s.games.length ? savedRating : null;
+  const help = view.help(named, named ? ctx.names[1] : undefined);
   return {
     season: s,
     words: view.words,
@@ -105,13 +109,26 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
       soFar: so => view.soFar(so, pos),
       half: so => view.half(so, pos, row),
       bucket: () => '',
+      ...(development ? { developmentOverall: (round: number, settled: boolean) => {
+        const completed = settled ? round : round - 1;
+        let overall = development.opening;
+        for (const [game, ovr] of development.checkpoints) {
+          if (game > completed) break;
+          overall = ovr;
+        }
+        return overall;
+      } } : {}),
       ...(bind.slug === 'nba' ? { pitch: (g: DerivedGame, at: ClockStageAt) => <MiniBasketballCourt game={g} at={at} usName={ctx.teamLabel} themName={s.labels[g.opp]?.name ?? view.words.unnamed} /> } : {}),
     },
     copy: view.copy,
     helpKey: `seasonCentre:help:${bind.slug}`,
     groups: named ? [{ label: view.groupWords?.[0] ?? 'Division', slots: range(ctx.divSlots) }, { label: view.groupWords?.[1] ?? 'Conference', slots: range(ctx.confSlots) }] : undefined,
     /* the worked example names a team of THIS season that is not his (his first division rival), or nobody */
-    help: view.help(named, named ? ctx.names[1] : undefined),
+    help: development ? {
+      ...help,
+      intro: [...help.intro, 'Season OVR follows your saved development checkpoints. A change shows at full time and in that game’s report.'],
+      examples: [...help.examples, { head: 'Reading a change in OVR', body: 'If you start a game at 72 OVR and its saved checkpoint takes you to 73, the game shows 73 at full time and says you went up one.' }],
+    } : help,
     momentKey: `centre|${key}`,
   };
 }
@@ -181,7 +198,7 @@ function CentreBody({ sport, career, row, playoffsOnly, onClose }: UsSeasonCentr
   };
   return (
     <>
-      <SeasonCentre model={model} exitLabel={EXIT} onClose={onClose} active={part === 'regular'} navigation={replay ? (
+      <SeasonCentre model={model} exitLabel={EXIT} onClose={onClose} active={part === 'regular'} fixtureReports={!!model.sport.developmentOverall} navigation={replay ? (
         <div className="border-b border-border px-3 py-2">
           <button type="button" ref={replayOpener} onClick={() => setPart('playoffs')} className="min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-bold">Replay playoffs</button>
         </div>
