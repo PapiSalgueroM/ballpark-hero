@@ -4,6 +4,7 @@ import * as loop from '@/lib/rebuildLoop';
 import { policyMove, THINKING } from '@/lib/rebuildPolicy';
 import { applyMove, parseRebuildSave, restoreTable, toSave, type RebuildMove } from '@/lib/rebuildSave';
 import * as table from '@/lib/rebuildTable';
+import type { ClubTier, RebuildClub } from '@/lib/fetchRebuild';
 import type { RunState } from '@/lib/rebuildLoop';
 import { normalizePosition } from '@/lib/squadDeal';
 import { getEnrichment } from '@/data/footleEnrichment';
@@ -25,13 +26,13 @@ const toSquad = (rows: Row[]): Player[] => rows.flatMap(([name, rawPos, age, usd
   } as unknown as Player];
 });
 const ROWS = (marketFixture.rows as unknown[][]).map(([player_name, position, age, nationality, club, market_value_usd]) => ({ player_name, position, age, nationality, club, market_value_usd }));
-const CLUBS = squadsFixture.clubs.map(c => ({ club: c.club, tier: c.tier, squadSize: c.squad.length, squadValueM: 0 }));
+const CLUBS: RebuildClub[] = squadsFixture.clubs.map(c => ({ club: c.club, tier: c.tier as ClubTier, squadSize: c.squad.length, squadValueM: 0 }));
 const CLUB = CLUBS.find(c => c.tier === 'mid')!;
 const market = deck.buildMarket(ROWS as never, CLUB.club, (n, c) => getEnrichment(n, c).league);
 const squad = toSquad(squadsFixture.clubs.find(c => c.club === CLUB.club)!.squad as unknown as Row[]);
 
 const fresh = (seed: number, version: deck.DeckVersion = 2) =>
-  loop.createRun({ club: CLUB as never, clubs: CLUBS as never, squad, market, preset: 'none', seed, deck: version });
+  loop.createRun({ club: CLUB, clubs: CLUBS, squad, market, preset: 'none', seed, deck: version });
 /** Plays the thinking policy until `stop` says so (or the run ends). */
 function playUntil(s: RunState, stop: (s: RunState) => boolean): RunState {
   for (let i = 0; i < 800 && s.phase !== 'done' && !stop(s); i += 1) s = policyMove(s, THINKING).next;
