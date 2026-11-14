@@ -217,7 +217,7 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
   const ratingRange: [number, number] | null = rating && rating.kind === 'mean' ? [rating.min, rating.max] : null;
   const sport = soccerSport(ctx.keepsSheets, color, roleOf(ctx.position), ratingRange);
   const development = readSeasonRatingPath(row.ratingPath);
-  if (development) sport.developmentOverall = round => seasonOverallAtRound(development, round, s.games.length);
+  sport.developmentOverall = development ? round => seasonOverallAtRound(development, round, s.games.length) : null;
   return {
     season: historical ? { ...s, labels: historical.labels } : s,
     words: SOCCER.words,

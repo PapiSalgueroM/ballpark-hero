@@ -140,8 +140,8 @@ export interface CentreSport {
   markText?: (g: DerivedGame) => string;
   /** Round 1046: what that mark is called, printed in front of it on his line (soccer: "Rating"). Absent: the bare number. */
   markWord?: string;
-  /** The player's overall for a league round, when the save kept a development path. */
-  developmentOverall?: (round: number) => number;
+  /** Matchday overall estimate. A null value means this season has no saved ratings path. */
+  developmentOverall?: ((round: number) => number) | null;
   /** Round 1046: the review's strip of his mark in every game: its heading, what a screen reader is told, and the
    *  mark's own lowest and highest value (the sport's numbers, never the viewer's). Absent: no strip. */
   form?: { head: string; label: string; range: [number, number] };
@@ -240,9 +240,16 @@ function FixtureList({ model, played, current, short, cupSeen = new Set<string>(
 }
 
 function DevelopmentOverall({ sport, round }: { sport: CentreSport; round: number }) {
-  if (!sport.developmentOverall) return null;
-  return <p className="text-xs text-muted-foreground" data-match-development-overall>
-    Season OVR <strong className="tabular-nums text-foreground">{sport.developmentOverall(round)}</strong>
+  const overallAt = sport.developmentOverall;
+  if (overallAt === undefined) return null;
+  if (overallAt === null) return <p className="text-xs text-muted-foreground" data-match-development-overall>Season OVR unavailable for this season.</p>;
+  const overall = overallAt(round);
+  const difference = round > 1 ? overall - overallAt(round - 1) : 0;
+  const movement = round === 1 ? 'Opening matchday'
+    : difference > 0 ? `Up ${difference} from last matchday`
+      : difference < 0 ? `Down ${-difference} from last matchday` : 'No change from last matchday';
+  return <p className="text-xs text-muted-foreground" title="Estimated from saved development checkpoints" data-match-development-overall>
+    Season OVR <strong className="tabular-nums text-foreground">{overall}</strong> · {movement}
   </p>;
 }
 
