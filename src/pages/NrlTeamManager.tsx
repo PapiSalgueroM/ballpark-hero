@@ -2150,6 +2150,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>At half time, a rotating reserve can replace your starting goal kicker if the designated backup stays on to take the remaining place kicks.</li>
               <li>After the Grand Final, release one unsigned academy prospect into next season’s free-agent market or promote him to your own Top 30.</li>
               <li>If you accepted Board pathways, check Pathways run-in in Season review with four regular-season club matches left. It shows who can still reach four appearances.</li>
+              <li>When you stay at the club, a returning starter can keep a position they learned in training.</li>
               <li>Change clubs between seasons from Season review.</li>
               <li>When staying at your club, check Fill open squad places in Season review to preview affordable one-season free-agent deals. Your preference saves until you make a decision about next season.</li>
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>

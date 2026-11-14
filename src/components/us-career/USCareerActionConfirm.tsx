@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/alert-dialog';
 
 type Sport = 'NFL' | 'NBA' | 'MLB' | 'NHL';
-type Action = 'retire' | 'restart' | 'retireCoach' | 'tradeRequest';
+type Action = 'retire' | 'restart' | 'retireCoach' | 'tradeRequest' | 'releaseRequest';
 
 interface Props {
   action: Action;
@@ -50,7 +50,13 @@ const COPY: Record<Action, (sport: Sport, hallCard: boolean, hallKept: boolean) 
   }),
   tradeRequest: () => ({
     title: 'Request a trade?',
-    description: 'You have a 50% chance of a trade this season. A deal keeps your salary and contract years. If the team declines, morale drops by up to 4 points. You get one request this season.',
+    description: 'You have a 50% chance of a trade this season. A deal keeps your salary and contract years. If the team declines, morale drops by up to 4 points. You get one trade or release request this season.',
+    cancel: 'Keep playing',
+    confirm: 'Send request',
+  }),
+  releaseRequest: () => ({
+    title: 'Request a release?',
+    description: 'You have a 50% chance of a release. Keep salary you already earned. If released, the remaining years end without a payout and free agency opens. If the team declines, morale drops by up to 4 points. You get one trade or release request this season.',
     cancel: 'Keep playing',
     confirm: 'Send request',
   }),

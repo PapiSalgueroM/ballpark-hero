@@ -724,12 +724,17 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       const raw = localStorage.getItem(sport.saveKey);
       if (raw === savedBytes.current) return false;
       const stored = raw ? JSON.parse(raw) as SaveShape : null;
-      if (stored?.phase === 'season' && stored.c && stored.teamQuality != null && trade.receipt(stored.c)
+      if (stored && (stored.phase === 'season' || stored.phase === 'freeagency') && stored.c && stored.teamQuality != null && trade.receipt(stored.c)
         && stored.c.year === career.year && summerCareerKey(stored.c) === summerCareerKey(career)) {
-        savedBytes.current = raw;
-        setCareer(stored.c);
-        setTeamQuality(stored.teamQuality);
-        return true;
+        const held = restoreMarketTalk(stored.contractTalk, stored.c, sport.slug);
+        if (stored.phase === 'season' || held?.kind === 'freeagency') {
+          savedBytes.current = raw;
+          setCareer(stored.c);
+          setTeamQuality(stored.teamQuality);
+          setMarketTalk(held);
+          setPhase(stored.phase);
+          return true;
+        }
       }
     } catch { /* An unreadable career cannot safely accept a request. */ }
     if (requesting) setTradeSaveMoved(true);
@@ -977,18 +982,24 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     } catch { return false; }
   };
 
-  const requestTrade = () => {
+  const requestTrade = (kind: 'trade' | 'release') => {
     const trade = sport.tradeRequest;
     if (!career || !trade || phase !== 'season' || teamQuality == null || practiceOpen || pendingSave.current
       || marketRef.current || !trade.available(career) || trade.receipt(career) || tradeSaveChanged(true)) return;
     const next: CareerState = JSON.parse(JSON.stringify(career));
-    const { teamQuality: incoming, note } = trade.settle(next);
+    const { teamQuality: incoming, note, freeAgency } = trade.settle(next, kind);
     const quality = incoming ?? teamQuality;
     next.headlines = pushHeadlines(next.headlines, [note]);
     setCareer(next);
     setTeamQuality(quality);
     setFeed(f => [note, ...f].slice(0, 6));
-    persist(next, 'season', quality);
+    if (freeAgency) {
+      const rng = keyedRng(`release-market:${summerCareerKey(next)}:${next.year}`);
+      const window = sport.buildFaWindow(next, quality, rng);
+      setMarketTalk(openMarketFreeAgency(next, sport.slug, window));
+      setPhase('freeagency');
+    }
+    persist(next, freeAgency ? 'freeagency' : 'season', quality);
   };
 
   const signExt = () => {
@@ -1881,6 +1892,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
         </div>
       ) : phase === 'freeagency' && faWindow ? (
         <div ref={revealRef}>
+          {tradeReceipt && <p className="mb-2 rounded-lg border border-border px-3 py-2 text-sm" role="status">{tradeReceipt}</p>}
           <FreeAgencyPanel window={faWindow} sportNoun={sport.faSportNoun} talkLine={talkLine} onPush={pushFa} onSign={signFa} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} compare reviewSigning={sport.slug === 'nba' || sport.slug === 'nfl'} odds={faWindow.offers.map((_, index) => freeAgencyMarketProbabilities(faWindow, index, sport.faPushArgs(career, Math.random)))} />
           {!(marketTalk?.wheel && !marketTalk.wheel.seen) && retireFromMarket('Retire instead')}
         </div>
@@ -1943,10 +1955,16 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
             Career so far: {sport.careerSoFar(career)}
           </p>
           {(tradeReceipt || trade?.available(career)) && <div className="mt-2">
-            <USCareerActionConfirm action="tradeRequest" sport={sport.label} onConfirm={requestTrade}>
-              <button type="button" disabled={!!tradeReceipt || !!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
-                className="min-h-11 rounded-lg border border-border px-3 text-xs font-semibold disabled:opacity-50">Request a trade</button>
-            </USCareerActionConfirm>
+            <div className="flex flex-wrap justify-center gap-2">
+              <USCareerActionConfirm action="tradeRequest" sport={sport.label} onConfirm={() => requestTrade('trade')}>
+                <button type="button" disabled={!!tradeReceipt || !!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
+                  className="min-h-11 rounded-lg border border-border px-3 text-xs font-semibold disabled:opacity-50">Request a trade</button>
+              </USCareerActionConfirm>
+              <USCareerActionConfirm action="releaseRequest" sport={sport.label} onConfirm={() => requestTrade('release')}>
+                <button type="button" disabled={!!tradeReceipt || !!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
+                  className="min-h-11 rounded-lg border border-border px-3 text-xs font-semibold disabled:opacity-50">Request a release</button>
+              </USCareerActionConfirm>
+            </div>
             {tradeReceipt && <p className="mt-1 text-xs font-semibold" role="status">{tradeReceipt}</p>}
             {tradeSaveMoved && <p className="mt-1 text-xs text-muted-foreground" role="status">Your career changed in another tab. Reopen it before sending a trade request.</p>}
           </div>}

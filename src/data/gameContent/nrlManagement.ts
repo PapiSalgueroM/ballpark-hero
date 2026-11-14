@@ -16,7 +16,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Choose a vice-captain in Squad to keep the one-point defence bonus when the club captain is off the field and the vice-captain is on.',
       'In Squad, choose a goal kicker and a backup from the starting 13. The backup takes over if your kicker leaves the lineup and the backup still starts. Otherwise the halfback kicks. The match report credits the active kicker.',
       'At half time, a rotating reserve can replace your starting goal kicker if the designated backup stays on to take the remaining place kicks.',
-      'Open Position training in Squad to teach one fit player a second role. A course normally takes four regular-season rounds, including byes. Assign the learned role in your starting 13 when you want to use it.',
+      'Open Position training in Squad to teach one fit player a second role. A course normally takes four regular-season rounds, including byes. Assign the learned role in your starting 13. If you stay at the club and the player returns, they keep that starting spot next season when available.',
       'During a regular-season bye, intensive position training can finish an active course one round sooner. The player ends the bye four fitness points below their usual recovery.',
       'Try Reserve-grade development in Squad to give an eligible young player four rounds away from the first team for one rating point. He keeps his contract and cap place, and you can recall him early without the gain.',
       'Courses cover the back three, wing and centre on the same side, the halves, the two props, and the second rows and lock. A player can learn one extra role.',

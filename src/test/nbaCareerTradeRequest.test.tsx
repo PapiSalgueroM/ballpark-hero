@@ -36,6 +36,8 @@ const install = (c: NbaCareerState, teamQuality = 75) => {
 };
 const open = () => render(<MemoryRouter><NbaMyCareerBoard /></MemoryRouter>);
 const ask = (view: ReturnType<typeof open>) => within(view.container).getByRole('button', { name: 'Request a trade' });
+const releaseReceipt = (view: ReturnType<typeof open>) => [...view.container.querySelectorAll('[role="status"]')]
+  .find(node => /^Release (granted|declined)/.test(node.textContent ?? ''));
 const confirm = (view: ReturnType<typeof open>) => {
   fireEvent.click(ask(view));
   const dialog = within(view.getByRole('alertdialog', { name: 'Request a trade?' }));
@@ -103,5 +105,61 @@ describe('standing NBA trade request', () => {
     expect(localStorage.getItem(sport.saveKey)).toBe(saved);
     expect(within(stale.container).getByText(/Trade request granted/)).toBeVisible();
     expect(read().c.seasons).toHaveLength(1);
+  });
+
+  it('opens the existing free-agent market after release and pays the exact new deal after playing', () => {
+    const before = makeCareer();
+    const raw = install(before);
+    const view = open(), stale = open();
+    const withinView = within(view.container);
+    fireEvent.click(withinView.getByRole('button', { name: 'Request a release' }));
+    const dialog = within(view.getByRole('alertdialog', { name: 'Request a release?' }));
+    expect(dialog.getByText(/Keep salary you already earned/)).toBeVisible();
+    fireEvent.click(dialog.getByRole('button', { name: 'Keep playing' }));
+    expect(localStorage.getItem(sport.saveKey)).toBe(raw);
+
+    fireEvent.click(withinView.getByRole('button', { name: 'Request a release' }));
+    fireEvent.click(view.getByRole('button', { name: 'Send request' }));
+    const released = read();
+    expect(released.phase).toBe('freeagency');
+    expect(released.c).toMatchObject({ salary: 0, contractYears: 0, earnings: before.earnings, netWorth: before.netWorth, seasons: before.seasons, year: before.year });
+    expect(released.contractTalk).toMatchObject({ kind: 'freeagency', context: { year: before.year, contractYears: 0, salary: 0 } });
+    expect(releaseReceipt(view)).toHaveTextContent(/Release granted/);
+
+    const bytes = localStorage.getItem(sport.saveKey);
+    fireEvent.click(confirm(stale));
+    expect(releaseReceipt(stale)).toHaveTextContent(/Release granted/);
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+    stale.unmount();
+    view.unmount();
+    const restored = open();
+    expect(releaseReceipt(restored)).toHaveTextContent(/Release granted/);
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+    const offer = released.contractTalk.window.offers[1];
+    const offerButton = restored.container.querySelector<HTMLButtonElement>('[data-fa-sign="1"]')!;
+    expect(offerButton).toBeEnabled();
+    fireEvent.click(offerButton);
+    fireEvent.click(restored.getByRole('button', { name: 'Confirm signing' }));
+
+    expect(read().c).toMatchObject({ team: offer.team, salary: offer.salary, contractYears: offer.years, earnings: before.earnings });
+    expect(restored.getByRole('button', { name: 'Request a trade' })).toBeDisabled();
+    expect(restored.getByRole('button', { name: 'Request a release' })).toBeDisabled();
+    fireEvent.click(restored.getByRole('button', { name: `Play the ${before.year} season` }));
+    const played = read().c;
+    expect(played.seasons.at(-1)).toMatchObject({ team: offer.team, year: before.year, salary: offer.salary });
+    expect(played.earnings).toBeCloseTo(before.earnings + offer.salary, 10);
+  });
+
+  it('declines a release once and keeps the signed club and contract', () => {
+    const before = makeCareer('now', false);
+    install(before);
+    const view = open();
+    fireEvent.click(view.getByRole('button', { name: 'Request a release' }));
+    fireEvent.click(view.getByRole('button', { name: 'Send request' }));
+    expect(read()).toMatchObject({ phase: 'season', teamQuality: 75, c: {
+      team: before.team, salary: before.salary, contractYears: before.contractYears, earnings: before.earnings, morale: before.morale - 4,
+    } });
+    expect(releaseReceipt(view)).toHaveTextContent(/Release declined/);
+    expect(ask(view)).toBeDisabled();
   });
 });

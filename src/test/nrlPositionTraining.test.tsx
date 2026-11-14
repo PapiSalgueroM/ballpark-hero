@@ -184,13 +184,23 @@ describe('NRL position training', () => {
     expect(applied.season.lineup.Halfback).toBe(trainee.id);
 
     let completed = applied;
-    for (let i = 0; i < 40 && completed.season.phase !== 'complete'; i++) completed = advance(completed);
+    for (let i = 0; i < 40 && completed.season.phase !== 'complete'; i++) {
+      completed = reduceNrlCareer(completed, { type: 'selectStarter', role: 'Halfback', playerId: trainee.id });
+      completed = advance(completed);
+    }
     expect(completed.season.phase).toBe('complete');
+    expect(completed.season.lineup.Halfback).toBe(trainee.id);
     const next = reduceNrlCareer(completed, { type: 'startNextSeason' });
     expect(next.season.year).toBe(2027);
+    expect(next.season.lineup.Halfback).toBe(trainee.id);
+    expect(new Set([...Object.values(next.season.lineup), ...next.season.bench!]).size).toBe(19);
     expect(player(next, trainee.id).secondaryRole).toBe('Halfback');
     expect(nrlStarterOptions(next.season, 'Halfback').some(option => option.id === trainee.id)).toBe(true);
     expect(next.savedLineup).toBeUndefined();
+    expect(next.season.lineup['Five-eighth']).not.toBe(trainee.id);
+    const nextGame = advance(next);
+    const report = nextGame.season.results.find(row => row.playerScoring);
+    expect(report?.playerScoring?.starters).toContain(trainee.id);
     expect(bytes(readNrlCareerSave(bytes(next)))).toBe(bytes(next));
     const moved = reduceNrlCareer(completed, { type: 'startNextSeason', move: { fromYear: 2026, clubId: 'bears' } });
     expect(moved.players.find(member => member.id === trainee.id)?.secondaryRole).toBe('Halfback');

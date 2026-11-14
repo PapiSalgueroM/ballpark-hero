@@ -255,8 +255,15 @@ describe('Soccer Career farewell engine boundaries', () => {
     const row = clone(played!.seasons[played!.seasons.length - 1]);
     const ended = run(71, () => finish(played!)).value;
     expect(ended.retired).toBe(true); expect(ended.seasons).toHaveLength(state.seasons.length + 1);
-    expect(ended.seasons[ended.seasons.length - 1]).toEqual(row);
-    if (kind === 'severe injury') { expect(ended.seriousInjuries?.length).toBeGreaterThan(0); expect(ended.pendingRehab).toBeNull(); }
+    const { rehabOverall, ...endedRow } = ended.seasons.at(-1)!;
+    expect(endedRow).toEqual(row);
+    if (kind === 'severe injury') {
+      expect(ended.seriousInjuries?.length).toBeGreaterThan(0);
+      expect(ended.pendingRehab).toBeNull();
+      expect(rehabOverall?.[1]).toBe(ended.overall);
+    } else {
+      expect(rehabOverall).toBeUndefined();
+    }
   }, 30000);
 
   it.each(['rehab', 'conviction'] as const)('repairs a genuinely missing legacy %s row once before its final summary', kind => {

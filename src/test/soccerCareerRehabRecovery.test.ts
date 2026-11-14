@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
-  acceptOffer, advanceProSeason, advanceYouthYear, FALLBACK_CLUBS, initCareer, manualRetire, repairCareer,
+  acceptOffer, advanceProSeason, advanceYouthYear, applyRehabChoice, calcOverall, FALLBACK_CLUBS, initCareer, manualRetire, repairCareer,
   type CareerState,
 } from '@/lib/soccerCareerEngine';
 import { announceSoccerFarewell, farewellSeasonComplete } from '@/lib/soccerCareerFarewell';
@@ -46,6 +46,31 @@ describe('Soccer Career rehab save recovery', () => {
     expect(load(recovered)).toEqual(recovered);
     const next = seeded(166, () => advanceProSeason(recovered, FALLBACK_CLUBS));
     expect(next.seasons.length).toBe(recovered.seasons.length + 1);
+  });
+
+  it.each([
+    [0, 7, 5, 2, 'rushed'],
+    [0, 166, 2, 0, 'rushed'],
+    [1, 166, 2, 1, 'plan'],
+    [2, 166, 1, 0, 'specialist'],
+  ] as const)('carries the actual injury recovery into the save for choice %s and roll %s', (choice, seed, paceLoss, physicalLoss, path) => {
+    const injured = load(injuredCareer());
+    const before = { ...injured, netWorth: 2, pendingRehab: { ...injured.pendingRehab!, specialistCost: 0.8 } };
+    const season = before.seasons.at(-1)!;
+    const after = seeded(seed, () => applyRehabChoice(before, choice));
+
+    expect(after.seriousInjuries?.at(-1)?.path).toBe(path);
+    expect(after.pace).toBe(before.pace - paceLoss);
+    expect(after.physical).toBe(before.physical - physicalLoss);
+    expect(after.overall).toBe(calcOverall(after, after.position));
+    expect(after.seasons.at(-1)).toEqual({ ...season, rehabOverall: [before.overall, after.overall] });
+    expect(season.rehabOverall).toBeUndefined();
+    expect(after.seasons.slice(0, -1)).toEqual(before.seasons.slice(0, -1));
+    expect(load(after)).toEqual(after);
+
+    const next = seeded(166, () => advanceProSeason(load(after), FALLBACK_CLUBS, true));
+    expect(next.seasons.at(-1)?.ratingPath?.[0]).toBe(after.overall);
+    expect(next.seasons.at(-2)?.rehabOverall).toEqual([before.overall, after.overall]);
   });
 
   it('preserves a healthy pending choice and a finished career', () => {

@@ -1978,10 +1978,27 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
     : opening;
   const squad = squadAt(world, clubId, year).sort(byRating);
   const lineup = { ...season.lineup };
+  const byId = new Map(squad.map(player => [player.id, player]));
+  const trained = move ? [] : NRL_ROLES.filter(role => byId.get(lineup[role])?.secondaryRole === role);
+  const selected = new Set(trained.map(role => lineup[role]));
+  const uncovered: NrlRole[] = [];
   for (const role of NRL_ROLES) {
-    if (move || !squad.some(player => player.id === lineup[role] && player.role === role)) {
-      lineup[role] = squad.find(player => player.role === role)!.id;
+    if (trained.includes(role)) continue;
+    const incumbent = move ? undefined : byId.get(lineup[role]);
+    const natural = incumbent?.role === role && !selected.has(incumbent.id) ? incumbent
+      : squad.find(player => player.role === role && !selected.has(player.id));
+    if (!natural) {
+      uncovered.push(role);
+      continue;
     }
+    lineup[role] = natural.id;
+    selected.add(natural.id);
+  }
+  for (const role of uncovered) {
+    const cover = squad.find(player => player.secondaryRole === role && !selected.has(player.id))
+      ?? squad.find(player => !selected.has(player.id))!;
+    lineup[role] = cover.id;
+    selected.add(cover.id);
   }
   const { reserveGrade, judiciary, captainId, viceCaptainId, backupKickerId, physio: _physio, ...lastSeason } = season;
   const returningBackup = !move && backupKickerId && squad.some(player => player.id === backupKickerId) ? backupKickerId : undefined;

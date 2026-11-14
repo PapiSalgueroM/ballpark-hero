@@ -210,6 +210,7 @@ export interface ClubData {
 
 export interface SeasonRecord {
   ratingPath?: [opening: number, early: number, middle: number, late: number, closing: number];
+  rehabOverall?: [before: number, after: number];
   academyReport?: AcademyReportReceipt;
   extraCups?: CommunityShieldResult[];
   germanSupercup?: GermanSupercupResult;
@@ -1903,6 +1904,7 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
   }
 
   const history = [...(s.seriousInjuries ?? [])];
+  const beforeRehab = calcOverall(s, s.position);
 
   if (choiceIndex === 0) {
     const backIn = Math.max(2, Math.round(r.weeks * 0.6));
@@ -1934,6 +1936,11 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
     history.push({ year: r.year, name: r.name, weeks: r.weeks, path: "plan", setback: false });
   }
 
+  s.overall = calcOverall(s, s.position);
+  const injurySeason = s.seasons.at(-1);
+  if (injurySeason?.year === r.year && injurySeason.type === "playing" && injurySeason.injurySevere === true) {
+    s.seasons = [...s.seasons.slice(0, -1), { ...injurySeason, rehabOverall: [beforeRehab, s.overall] }];
+  }
   s.seriousInjuries = history;
   if (history.length >= 2) {
     s.events.push(`⭐ That is ${history.length} serious injuries you have come back from.`);
