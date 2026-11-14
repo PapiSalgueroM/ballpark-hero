@@ -721,7 +721,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "Playing one week of the season at a time",
         items: [
           "Play one week at a time: 12 games, all set before kickoff and never the same opponent twice. Weeks 1 to 4 are out of conference, weeks 5 to 11 are conference play with a non-conference date or two mixed in, and week 12 is rivalry week. Notre Dame and the Group of Five schools have no conference games.",
-          "After weeks 3, 6, 9 and 12, players can improve toward their potential or lose a rating point if form dips. Check Roster for the latest changes. The new ratings count from the next game, including the Playoff.",
+          "After weeks 3, 6, 9 and 12, players can improve toward their potential or lose a rating point if form dips. Check the latest results or Roster for rating changes. The new ratings count from the next game, including the Playoff.",
           "Week 12 is rivalry week, and every program plays its rival, even one from another conference. Your rival is your real rivalry series when both schools are on the board (Ohio State and Michigan, Alabama and Auburn, Florida and Florida State), otherwise a school from your own state, otherwise a pairing the game made, and the game tells you which.",
           "The rivalry winner carries 0.5 to 1.5 points of extra strength into the title games and the Playoff, the loser drops the same, and a margin of 21 or more swings the full 1.5.",
         ],
@@ -856,7 +856,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
         heading: "Playing two games in every round",
         items: [
           "Play 10 rounds of two games each, one league matchup and one cross-country test.",
-          "After rounds 3, 5, 8 and 10, players can improve toward their potential or lose a rating point if form dips. Check Roster for the latest changes. The new ratings count from the next game, including March.",
+          "After rounds 3, 5, 8 and 10, players can improve toward their potential or lose a rating point if form dips. Check the latest results or Roster for rating changes. The new ratings count from the next game, including March.",
           "Round 10's league night is rivalry night, and every program plays its rival, even one from another league. Your rival is your real rivalry series when both schools are on the board (Duke and North Carolina, Kentucky and Louisville, Indiana and Purdue), otherwise a school from your own state, otherwise a pairing the game made, and the game tells you which. UConn has no series or state on file here, so its rival is a pairing the game made.",
           "The rivalry winner carries 0.5 to 1.5 points of extra strength into the conference tournament and March, the loser drops the same, and a margin of 25 or more swings the full 1.5.",
         ],

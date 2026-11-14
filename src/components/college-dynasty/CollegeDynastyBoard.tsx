@@ -523,6 +523,35 @@ export default function CollegeDynastyBoard<
   const ratingsUp = ratingReview?.changes.filter(change => change.to > change.from).length ?? 0;
   const ratingsDown = (ratingReview?.changes.length ?? 0) - ratingsUp;
   const ratingSummary = ratingReview && `Ratings review · ${w.roundWord} ${ratingReview.round} · ${ratingsUp} up, ${ratingsDown} down`;
+  const lastRound = phase === 'recap' ? st.round : st.round - 1;
+  const reviewedGames = ratingReview?.round === lastRound ? st.mySlate?.filter(game => game.round === lastRound) : undefined;
+  const playersById = new Map(my.players.map(player => [player.id, player.name]));
+  const reviewedPlayers = [...ratingChanges].flatMap(([id, delta]) => {
+    const name = playersById.get(id);
+    return name ? [{ id, name, delta }] : [];
+  });
+  const roundReview = reviewedGames?.length ? (
+    <section key={`${st.season}:${lastRound}`} aria-label={`${w.roundWord} ${lastRound} results`}
+      className="rounded-xl border border-border bg-card p-3 text-left text-sm">
+      <h3 className="font-semibold">{w.roundWord} {lastRound} results</h3>
+      <ul aria-label="Your results" className="mt-1 divide-y divide-border">
+        {reviewedGames.map((game, index) => <li key={`${game.opp}:${index}`} className="flex flex-wrap justify-between gap-x-2 py-1">
+          <span>{game.home ? 'vs' : 'at'} {label(game.opp)}</span>
+          <strong className="tabular-nums">{game.won ? 'W' : 'L'} {game.us}-{game.them}</strong>
+        </li>)}
+      </ul>
+      {reviewedPlayers.length > 0 ? (
+        <details className="border-t border-border">
+          <summary className="min-h-11 cursor-pointer py-3 font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">{ratingSummary}</summary>
+          <ul aria-label="Player rating changes" className="divide-y divide-border">
+            {reviewedPlayers.map(({ id, name, delta }) => <li key={id} className="flex flex-wrap justify-between gap-x-2 py-1">
+              <span>{name}</span><strong className="tabular-nums">{delta} OVR</strong>
+            </li>)}
+          </ul>
+        </details>
+      ) : <p className="mt-1 text-muted-foreground">No player rating changes in this review.</p>}
+    </section>
+  ) : null;
   const myRank = sport.rankings(st).findIndex(t => t.id === st.myTeam) + 1;
 
   if (phase === 'recap' && recap && sport.recapDrawable(recap)) {
@@ -545,7 +574,7 @@ export default function CollegeDynastyBoard<
           {isChamp && <ConfettiBurst seed={st.season} count={34} />}
           <Crown className="cm-slam mx-auto h-10 w-10 text-gold" />
           <RecapBody st={st} my={my} recap={recap} isChamp={isChamp} label={label} signed={signed} />
-          {ratingSummary && <p className="mt-2 text-xs text-muted-foreground">{ratingSummary}</p>}
+          {ratingSummary && !roundReview && <p className="mt-2 text-xs text-muted-foreground">{ratingSummary}</p>}
           {seatRecap && (seatRecap.fired
             ? <SeatFiredRecap verdict={seatRecap.verdict} line={collegeMarket(st.seat!, recapView!)?.line ?? ''} />
             : <SeatRecapLine verdict={seatRecap.verdict} trust={seatRecap.trust} hot={seatRecap.hot} />)}
@@ -563,6 +592,7 @@ export default function CollegeDynastyBoard<
             <ShareButtons {...sport.share(st, isChamp, recap, label)} />
           </div>
         </div>
+        {roundReview}
       </div>
     );
   }
@@ -766,7 +796,7 @@ export default function CollegeDynastyBoard<
         </div>
       )}
 
-      {ratingSummary && !seatCard && (tab === 'team' || tab === 'play') && (
+      {ratingSummary && !seatCard && tab === 'team' && (
         <p className="text-center text-xs text-muted-foreground">{ratingSummary}</p>
       )}
 
@@ -838,6 +868,7 @@ export default function CollegeDynastyBoard<
             </button>
             <p className="mt-2 text-[10px] text-muted-foreground">{typeof w.playFootnote === 'function' ? w.playFootnote(st) : w.playFootnote}</p>
           </div>
+          {roundReview}
           {lastGames.length > 0 && (
             <div ref={revealRef} className="rounded-2xl border border-border bg-card p-3">
               <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Around the country</p>
