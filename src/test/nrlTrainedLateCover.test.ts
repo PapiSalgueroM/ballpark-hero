@@ -45,8 +45,19 @@ describe('NRL trained late cover', () => {
       const forged = { ...applied, season: { ...applied.season, results: applied.season.results.map(row =>
         row === match ? { ...match, minute60Interchange: { reserveId: playerId, starterId: paused.season.lineup.Hooker } } : row) } };
       expect(read(forged)).toBeNull();
+      const foreignId = 'foreign-reserve';
+      const unknown = { ...applied, season: { ...applied.season, results: applied.season.results.map(row => row === match ? {
+        ...match, benchUsed: match.benchUsed?.map(id => id === playerId ? foreignId : id),
+        minute60Interchange: { ...match.minute60Interchange!, reserveId: foreignId },
+      } : row) } };
+      expect(read(unknown)).toBeNull();
       expect(reduceNrlCareer(paused, { ...finish, reserveId: playerId, reserveRole: 'Hooker' })).toBe(paused);
       expect(reduceNrlCareer(paused, { ...finish, reserveRole: 'Fullback' })).toBe(paused);
+      const repeat = reduceNrlCareer(applied, { type: 'startPositionTraining', year, clubId, round: round + 1, playerId, role: 'Right Centre' });
+      expect(repeat).toBe(applied);
+      const later = reduceNrlCareer(repeat, { type: 'advance' });
+      expect(later.season.results.find(row => row.round === round && row.playerScoring)).toEqual(match);
+      expect(read(later)).toEqual(later);
     });
 
   it('will not substitute a kicker or add an appearance beyond the opening cap', () => {
