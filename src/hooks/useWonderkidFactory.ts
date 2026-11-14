@@ -12,7 +12,7 @@ import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import {
   FactoryState, FacilityId, SAVE_KEY,
   newFactory, deserialize, serialize, applyOffline, advanceClock,
-  buyFacility, sellProspect, startShowcase, moveUp,
+  buyFacility, sellProspect, startShowcase, moveUp, setCoachingFocus,
   bedFree, deliverPack, makeProspectInBand, promote, sellSenior, equipBoot,
 } from '@/lib/wonderkidFactory';
 import type { PackId } from '@/lib/wonderkidFactory';
@@ -79,7 +79,7 @@ export function useWonderkidFactory() {
       if (result === 'failed') setAcademySaveBlocked(true);
       return false;
     }
-    Object.assign(stateRef.current!, next);
+    stateRef.current = next;
     setAcademySaveBlocked(false);
     bump();
     return true;
@@ -193,6 +193,12 @@ export function useWonderkidFactory() {
     }
   }, [bump, checkMoved, markSessionPlay, pushFloater]);
 
+  const doSetCoachingFocus = useCallback((id: number | null) => {
+    if (checkMoved()) return;
+    const next = { ...stateRef.current! };
+    if (setCoachingFocus(next, id) && commitAcademy(next)) markSessionPlay();
+  }, [checkMoved, commitAcademy, markSessionPlay]);
+
   const doMoveUp = useCallback(() => {
     if (checkMoved()) return;
     const next = copyAcademy(stateRef.current!);
@@ -280,6 +286,7 @@ export function useWonderkidFactory() {
     state: stateRef.current,
     floaters,
     doBuy,
+    doSetCoachingFocus,
     doSell,
     doShowcase,
     doMoveUp,

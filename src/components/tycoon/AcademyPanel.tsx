@@ -53,7 +53,7 @@ const AcademyProspects = lazy(() => import('@/components/tycoon/AcademyProspects
 type Panel = 'scouting' | 'coaching' | 'dorms' | 'agents' | 'legacy' | 'packs' | 'firstTeam' | null;
 
 export default function AcademyPanel({ visible = true, stylesReady = false, onStatus, onSnapshot }: { visible?: boolean; stylesReady?: boolean; onStatus?: (s: AcademyStatus) => void; onSnapshot?: (s: FactoryState) => void }) {
-  const { state: s, saveMoved, floaters, doBuy, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked, doPromote, doSellSenior, academySaveBlocked, doEquipBoot, doUpgradeBoot, gearSaveBlocked } = useWonderkidFactory();
+  const { state: s, saveMoved, floaters, doBuy, doSetCoachingFocus, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked, doPromote, doSellSenior, academySaveBlocked, doEquipBoot, doUpgradeBoot, gearSaveBlocked } = useWonderkidFactory();
   /* Round 585: the gem ledger, shared with the stadium that earns it. */
   const ledger = useTycoonRewards();
   const [panel, setPanel] = useState<Panel>(null);
@@ -170,7 +170,7 @@ export default function AcademyPanel({ visible = true, stylesReady = false, onSt
 
   return (
     <div data-academy-panel>
-      {academySaveBlocked && <p role="alert" className="mb-2 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">The academy could not save that change. Free some browser storage, then try again. Your player stayed where he was.</p>}
+      {academySaveBlocked && <p role="alert" className="mb-2 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">The academy could not save that change. Free some browser storage, then try again. Your academy kept its previous settings and players.</p>}
       <div className="text-center mb-3">
         <div className="inline-flex items-center gap-1.5 mt-1 text-xs font-bold text-foreground bg-secondary rounded-full px-3 py-0.5">
           {region.emoji} {region.name}
@@ -311,7 +311,7 @@ export default function AcademyPanel({ visible = true, stylesReady = false, onSt
         <div className="space-y-2">
           <HubPanelHeader title={FACILITIES.find(f => f.id === panel)!.label} onBack={() => setPanel(null)} />
           <Suspense fallback={<p data-no-prerender role="status" className="min-h-48 p-3 text-sm text-muted-foreground">Opening facility...</p>}>
-            <AcademyFacilityPanel s={s} panel={panel} cap={cap} doBuy={doBuy} />
+            <AcademyFacilityPanel s={s} panel={panel} cap={cap} doBuy={doBuy} onFocus={doSetCoachingFocus} />
           </Suspense>
         </div>
       )}
@@ -348,6 +348,7 @@ export default function AcademyPanel({ visible = true, stylesReady = false, onSt
               <p>You run a youth academy. Scouts bring in kids, coaches make them better every second, and every kid has a hidden ceiling he will never grow past. Your whole job is deciding when to sell.</p>
               <p>A fee pays for the rating on the day PLUS a promise premium for the room still left to grow, and that premium is biggest while he is young. From 21 it fades, at 23 it is gone, and on his 24th birthday he walks out free. Patience pays right up until it does not.</p>
               <p>Four upgrades: the Scouting network finds kids faster (level 3 reads each ceiling as a range, level 6 reads it exactly), Coaching speeds all growth, Dorms add beds (a full academy stops scouting), and the Agent office fattens every fee.</p>
+              <p>Open Coaching to focus on one prospect. Up to 15 percent of the other prospects' training gains go to him, including when the academy trains away. For example, if two other prospects would each gain one point, he can gain an extra 0.30 and they each gain 0.85. Any gain that would exceed his ceiling stays with the others. Balanced training restores everyone's usual share.</p>
               <p>Showcase day is the button: press it and training runs x3 for 25 seconds. Deadline day arrives on its own every few minutes and pays x1.5 on every sale for 50 seconds, so hold your stars for it when you can.</p>
               <p>Earn the region's target and you can move the whole academy up in the world: cash, facilities and kids stay behind, the reputation star is forever (+15% training, +10% fees each) and the new region's kids have higher ceilings.</p>
               <p>Away from the game the scouts and coaches keep working at half speed for up to 8 hours, and the calendar waits for you: nobody ages while you are gone. Nothing sells itself either, the money moments are always yours.</p>

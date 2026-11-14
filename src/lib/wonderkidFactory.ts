@@ -207,6 +207,7 @@ export interface FactoryState {
   rep: number;
   levels: Record<FacilityId, number>;
   prospects: Prospect[];
+  coachingFocusId?: number;
   scoutProgress: number;
   showcaseCooldown: number;
   showcaseLeft: number;
@@ -496,11 +497,30 @@ export function buyFacility(s: FactoryState, id: FacilityId): boolean {
   return true;
 }
 
+export const COACHING_FOCUS_SHARE = 0.15;
+
+export function coachingFocus(s: FactoryState): Prospect | undefined {
+  return s.coachingFocusId === undefined ? undefined
+    : s.prospects.find(p => p.id === s.coachingFocusId && p.rating < p.potential);
+}
+
+export function setCoachingFocus(s: FactoryState, id: number | null): boolean {
+  if (id === null) {
+    if (s.coachingFocusId === undefined) return false;
+    delete s.coachingFocusId;
+    return true;
+  }
+  if (id === s.coachingFocusId || !s.prospects.some(p => p.id === id && p.rating < p.potential)) return false;
+  s.coachingFocusId = id;
+  return true;
+}
+
 export function sellProspect(s: FactoryState, id: number): number | null {
   const i = s.prospects.findIndex(p => p.id === id);
   if (i === -1) return null;
   const price = salePrice(s, s.prospects[i]);
   s.prospects.splice(i, 1);
+  if (s.coachingFocusId === id) delete s.coachingFocusId;
   s.cash += price;
   s.lifetime += price;
   s.careerEarned += price;
@@ -534,6 +554,7 @@ export function promote(s: FactoryState, id: number): boolean {
   });
   s.firstTeam = firstTeam;
   s.prospects.splice(i, 1);
+  if (s.coachingFocusId === id) delete s.coachingFocusId;
   return true;
 }
 
@@ -578,6 +599,7 @@ export function moveUp(s: FactoryState): boolean {
     retired: s.retired,
   };
   Object.assign(s, newFactory(now), carried);
+  delete s.coachingFocusId;
   if (carried.packsDelivered === undefined) delete s.packsDelivered;
   if (carried.firstTeam === undefined) delete s.firstTeam;
   if (carried.retired === undefined) delete s.retired;
@@ -631,11 +653,24 @@ export function tick(s: FactoryState, dt: number, opts?: { offline?: boolean }):
      WATCHED speed and the showcase never ran out: the stadium's Matchday Hype
      has had the same exclusion since Round 150. */
   const tm = offline && s.showcaseLeft > 0 ? trainMult(s) / SHOWCASE_MULT : trainMult(s);
+  const trained = (p: Prospect): number => {
+    const headroom = Math.max(0.12, (p.potential - p.rating) / Math.max(1, p.potential - 40));
+    return Math.min(p.potential, p.rating + TRAIN_BASE * tm * headroom * dt);
+  };
+  const focus = coachingFocus(s);
+  let transfer = 0;
+  let divertedShare = 0;
+  if (focus) {
+    const otherGain = s.prospects.reduce((total, p) => p === focus || p.rating >= p.potential ? total : total + (trained(p) - p.rating), 0);
+    transfer = Math.min(Math.max(0, focus.potential - trained(focus)), otherGain * COACHING_FOCUS_SHARE);
+    if (transfer > 0) divertedShare = transfer / otherGain;
+  }
   const leavers: number[] = [];
   for (const p of s.prospects) {
     if (p.rating < p.potential) {
-      const headroom = Math.max(0.12, (p.potential - p.rating) / Math.max(1, p.potential - 40));
-      p.rating = Math.min(p.potential, p.rating + TRAIN_BASE * tm * headroom * dt);
+      const next = trained(p);
+      p.rating = p === focus ? Math.min(p.potential, next + transfer)
+        : divertedShare > 0 ? next - (next - p.rating) * divertedShare : next;
     }
     /* the calendar only turns while someone is watching. An eight hour
        offline gap is 96 academy years, and coming back to an academy the
@@ -659,6 +694,7 @@ export function tick(s: FactoryState, dt: number, opts?: { offline?: boolean }):
       s.leftFree += 1;
     }
   }
+  if (s.coachingFocusId !== undefined && !coachingFocus(s)) delete s.coachingFocusId;
 
   /* Split at birthdays so training and decline only use time at eligible ages.
      Away sessions train but never tick the age clock or cause decline. */
@@ -837,6 +873,7 @@ export function deserialize(raw: string | null, now: number, gear: GearLevels = 
       if (clean.length >= cap) break;
     }
     s.prospects = clean;
+    if (s.coachingFocusId !== undefined && !coachingFocus(s)) delete s.coachingFocusId;
     if (p.firstTeam !== undefined) {
       const seniors: Senior[] = [];
       for (const player of Array.isArray(p.firstTeam) ? p.firstTeam : []) {

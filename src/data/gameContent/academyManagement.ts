@@ -41,6 +41,7 @@ export const ACADEMY_MANAGEMENT_CONTENT: GameContentMap = {
         items: [
           'Titles at Stadium Tycoon earn fictional boots and kit upgrades. Open the Boot room from First team to choose a wearer, move a pair or improve its level. Boots add to match rating for the defensive edge, without changing the player\'s transfer fee. Your collection survives sales, retirement and moving either ground.',
           'Spend the cash on Scouting, Coaching, Dorms and the Agent office. Costs climb with every level.',
+          'Open Coaching to focus on one prospect. Up to 15 percent of the other prospects\' training gains go to him on this device, including when the academy trains away. For example, if two other prospects would gain a point each, they gain 0.85 each and he gets an extra 0.30 if his ceiling allows it. Balanced training restores the usual shares.',
         ],
       },
       {
