@@ -64,7 +64,7 @@ function financeFixture() {
   }
 }
 
-function renderFinances(state: ReturnType<typeof startCareer>, onBuyWageRoom = () => {}) {
+function renderFinances(state: ReturnType<typeof startCareer>, onBuyWageRoom: (steps: number) => void = () => {}) {
   return render(<FinancesScreen career={state} onTickets={() => {}} onConcessions={() => {}}
     onSponsor={() => {}} onPush={() => {}} onBuyWageRoom={onBuyWageRoom} />);
 }
@@ -72,13 +72,18 @@ function renderFinances(state: ReturnType<typeof startCareer>, onBuyWageRoom = (
 it('offers the priced, season-only wage allocation and displays the debit and new ceiling', () => {
   const original = { ...financeFixture(), budget: 0.52 };
   let career = original;
-  const { container } = renderFinances(career, () => { career = buyWageRoom(career) ?? career; });
+  const { container } = renderFinances(career, (steps = 1) => { career = buyWageRoom(career, steps) ?? career; });
   const section = container.querySelector('[aria-labelledby="transfer-wage-room"]')!;
   const move = section.querySelector('button')!;
   expect(move).toBeEnabled();
-  expect(move).toHaveTextContent('Move £520k to wages');
+  expect(move).toHaveTextContent('Adjust wage budget');
   expect(section).toHaveTextContent('until the season ends');
   fireEvent.click(move);
+  expect(wageCapOf(career)).toBe(wageCapOf(original));
+  expect(section).toHaveTextContent('Move £520,000. Keep £0 for transfers.');
+  const confirm = section.querySelector('#wage-room-quote button')!;
+  expect(confirm).toHaveTextContent('Confirm wage adjustment');
+  fireEvent.click(confirm);
   expect(wageCapOf(career)).toBe(wageCapOf(original) + 10);
   cleanup();
   const adjusted = renderFinances(career);

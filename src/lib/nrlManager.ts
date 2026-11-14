@@ -656,14 +656,25 @@ function matchdayBase(state: NrlSelectedSquad, rotation: ReadonlyMap<string, Nrl
     addMatchdayRating(sum, player, starters.get(player.id) as NrlRole, state, rotation.get(player.id)), 0) / NRL_ROLES.length;
 }
 
-function planAdjustment(state: NrlManagerState, rotation: ReadonlyMap<string, NrlPlayer>, base: number,
-  plan: NrlSpecialistPlan, rival: ReadonlyMap<NrlRole, number>) {
+interface NrlPlanPosition { role: NrlRole; own: number; rival: number }
+
+function planLaneGap(state: NrlManagerState, rotation: ReadonlyMap<string, NrlPlayer>,
+  plan: NrlSpecialistPlan, rival: ReadonlyMap<NrlRole, number>, positions?: NrlPlanPosition[]) {
   const roles = PLAN_ROLES[plan];
   const players = new Map(state.squad.map(player => [player.id, player]));
-  const laneGap = roles.reduce((sum, role) => {
+  return roles.reduce((sum, role) => {
     const id = state.lineup[role];
-    return addMatchdayRating(sum, players.get(id)!, role, state, rotation.get(id)) - rival.get(role)!;
+    const starter = players.get(id)!;
+    const reserve = rotation.get(id);
+    const reference = rival.get(role)!;
+    if (positions) positions.push({ role, own: addMatchdayRating(0, starter, role, state, reserve), rival: reference });
+    return addMatchdayRating(sum, starter, role, state, reserve) - reference;
   }, 0) / roles.length;
+}
+
+function planAdjustment(state: NrlManagerState, rotation: ReadonlyMap<string, NrlPlayer>, base: number,
+  plan: NrlSpecialistPlan, rival: ReadonlyMap<NrlRole, number>) {
+  const laneGap = planLaneGap(state, rotation, plan, rival);
   const rivalBase = [...rival.values()].reduce((sum, rating) => sum + rating, 0) / NRL_ROLES.length;
   return { attack: clamp((laneGap - (base - rivalBase)) * 0.5, -4, 6), defense: -2 };
 }
@@ -672,6 +683,16 @@ export function nrlPlanAdjustments(state: NrlManagerState, rival: ReadonlyMap<Nr
   const rotation = nrlBenchRotation(state);
   const base = matchdayBase(state, rotation);
   return { middle: planAdjustment(state, rotation, base, 'middle', rival), wide: planAdjustment(state, rotation, base, 'wide', rival) };
+}
+
+export function nrlPlanMatchups(state: NrlManagerState, rival: ReadonlyMap<NrlRole, number>) {
+  const rotation = nrlBenchRotation(state);
+  const group = (plan: NrlSpecialistPlan) => {
+    const positions: NrlPlanPosition[] = [];
+    const gap = planLaneGap(state, rotation, plan, rival, positions);
+    return { gap, positions };
+  };
+  return { middle: group('middle'), wide: group('wide') };
 }
 
 export function nrlCounterPlan({ clubId, seed, year }: Pick<NrlManagerState, 'clubId' | 'seed' | 'year'>, fixture: NrlFixture) {

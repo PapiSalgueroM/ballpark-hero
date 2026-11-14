@@ -18,7 +18,7 @@ import { safeSetItem } from '@/lib/safeStorage';
 
 const HockeyHigherLower = () => {
   const {
-    mode, switchMode, currentPair, currentRound, results,
+    mode, switchMode, restartUnlimited, currentPair, currentRound, results,
     showingResult, streak, gameStatus, correctCount, totalScore,
     makeGuess, totalRounds,
     hard, toggleHard,
@@ -48,24 +48,33 @@ const HockeyHigherLower = () => {
             <div className="flex items-center justify-center gap-2 mt-3">
               <button
                 onClick={() => switchMode('daily')}
+                aria-pressed={mode === 'daily'}
                 className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
                   mode === 'daily' ? 'bg-[hsl(var(--hk-blue))] text-[hsl(var(--hk-silver))] border-[hsl(var(--hk-silver)/0.3)]' : 'bg-secondary text-muted-foreground border-border'
                 )}
               >Daily</button>
               <button
-                onClick={() => switchMode('unlimited')}
+                onClick={() => { if (mode !== 'unlimited') switchMode('unlimited'); }}
+                aria-pressed={mode === 'unlimited'}
                 className={cn('px-4 py-1.5 rounded-lg text-sm font-semibold border transition-all',
                   mode === 'unlimited' ? 'bg-[hsl(var(--hk-blue))] text-[hsl(var(--hk-silver))] border-[hsl(var(--hk-silver)/0.3)]' : 'bg-secondary text-muted-foreground border-border'
                 )}
               >Unlimited</button>
               <button
                 onClick={toggleHard}
+                aria-pressed={mode === 'unlimited' && hard}
                 title="Hard mode: close-gap pairs (unlimited only)"
                 className={cn('px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all',
-                  hard ? 'bg-destructive/15 text-destructive border-destructive/40' : 'bg-secondary text-muted-foreground border-border'
+                  mode === 'unlimited' && hard ? 'bg-destructive/15 text-destructive border-destructive/40' : 'bg-secondary text-muted-foreground border-border'
                 )}
               >😈 Hard</button>
             </div>
+            {mode === 'unlimited' && gameStatus === 'playing' && (
+              <button type="button" onClick={restartUnlimited}
+                className="mt-1 min-h-9 rounded-lg px-3 text-xs font-semibold text-muted-foreground hover:text-foreground">
+                New run
+              </button>
+            )}
 
             <div className="flex items-center justify-center gap-4 mt-3 text-sm">
               <span className="text-muted-foreground">Round: <span className="font-semibold text-foreground">{Math.min(currentRound + 1, totalRounds)}</span>/{totalRounds}</span>
@@ -156,7 +165,7 @@ const HockeyHigherLower = () => {
                 gameName: 'Hockey Higher or Lower',
                 gamePath: '/hockey-higher-lower',
               }}
-              onPlayAgain={mode === 'unlimited' ? () => switchMode('unlimited') : undefined}
+              onPlayAgain={mode === 'unlimited' ? restartUnlimited : undefined}
               playNext={mode !== 'unlimited' && <p className="text-sm text-muted-foreground">Come back tomorrow for a new challenge!</p>}
             >
               <PostGameStats

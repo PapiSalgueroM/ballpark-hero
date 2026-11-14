@@ -374,6 +374,7 @@ function LiveMinute60({ live, season, onAction, disabled }: {
 }
 
 const edgeNumber = new Intl.NumberFormat('en-AU', { maximumFractionDigits: 1, signDisplay: 'exceptZero' });
+const matchupRating = new Intl.NumberFormat('en-AU', { maximumFractionDigits: 1 });
 const aud = new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 });
 const formLabels = { W: 'Win', D: 'Draw', L: 'Loss' };
 
@@ -425,6 +426,7 @@ function OppositionReport({ career }: { career: NrlCareerState }) {
   const shortName = useNrlClubName();
   const [expanded, setExpanded] = useState(false);
   const report = expanded ? nrlOppositionReport(career) : null;
+  const matchups = report?.matchups;
   const { year, attackPlan } = career.season;
   return (
     <details className="group rounded-xl border border-border bg-card px-4" onToggle={event => setExpanded(event.currentTarget.open)}>
@@ -474,6 +476,38 @@ function OppositionReport({ career }: { career: NrlCareerState }) {
               </table>
               <p className="mt-1 text-xs text-muted-foreground">Uses automatic rotation. Choose your plan in Attack plan.</p>
             </>
+          )}
+          {matchups && (
+            <details className="mt-3 border-t border-border" data-nrl-positional-matchups>
+              <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold">Positional matchups</summary>
+              <p className="text-xs text-muted-foreground">Your rating includes fitness, position fit and automatic rotation. The rival rating is the highest signed OVR at that position.</p>
+              <div className="mt-2 grid gap-3 sm:grid-cols-2">
+                {(['middle', 'wide'] as const).map(plan => {
+                  const { positions, gap } = matchups[plan];
+                  return <table key={plan} className="w-full text-left text-xs sm:text-sm">
+                    <caption className="pb-1 text-left font-semibold">{plan === 'middle' ? 'Middle' : 'Edges'}</caption>
+                    <thead className="text-muted-foreground">
+                      <tr>
+                        <th scope="col" className="py-1 pr-2 font-medium">Position</th>
+                        <th scope="col" className="px-1 text-right font-medium">Your rating</th>
+                        <th scope="col" className="px-1 text-right font-medium">Rival OVR</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border">
+                      {positions.map(({ role, own, rival }) => <tr key={role}>
+                        <th scope="row" className="py-1 pr-2 font-medium">{role}</th>
+                        <td className="px-1 text-right tabular-nums">{matchupRating.format(own)}</td>
+                        <td className="px-1 text-right tabular-nums">{matchupRating.format(rival)}</td>
+                      </tr>)}
+                    </tbody>
+                    <tfoot className="border-t border-border">
+                      <tr><td colSpan={3} className="py-1 font-semibold">Average gap {edgeNumber.format(gap)}</td></tr>
+                    </tfoot>
+                  </table>;
+                })}
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">The game compares each group’s average gap with the full team’s gap to calculate the attack boost or drop.</p>
+            </details>
           )}
           {report.meetings.length > 0 && (
             <div className="mt-4" data-nrl-opposition-meetings>
@@ -2032,7 +2066,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Choose a goal kicker and a backup in Squad. The backup takes over if your kicker leaves the starting 13. The halfback covers when neither is available. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>
               <li>Before kick-off, open Hold one reserve for later to see the Quick Sim rotation and compare it with the Live rotation when you hold someone.</li>
               <li>Use First reserve in the rotation preview to change who gets first priority. It swaps two places on your named bench.</li>
-              <li>Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation.</li>
+              <li>Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation. Positional matchups shows the ratings behind the middle and wide plans.</li>
               <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
               <li>Check a late Selection promise in the rotation preview before kick-off. An eligible match counts toward the promise window if the player stays off.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. Choose Play to 60 minutes to bring on a held reserve who is still on the bench. Quick Sim settles the round in one action.</li>

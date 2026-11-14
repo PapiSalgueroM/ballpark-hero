@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { buyWageRoom, freeAgentBlock, freeAgentTerms, loadCareer, saveCareer, startCareer, startNextSeason, wageBill, wageCapOf, SAVE_KEY, type CareerState } from '@/lib/clubManager';
+import { buyWageRoom, freeAgentBlock, freeAgentTerms, loadCareer, saveCareer, startCareer, startNextSeason, wageBill, wageCapOf, wageRoomQuote, SAVE_KEY, type CareerState } from '@/lib/clubManager';
 import { closeLedger, projectFinances } from '@/lib/clubManagerFinances';
 import { saveFence } from '@/lib/saveFence';
 
@@ -10,6 +10,20 @@ afterEach(() => {
 });
 
 describe('Club Manager wage allocation', () => {
+  it('quotes and buys multiple wage increments in a single confirmed budget adjustment', () => {
+    const career: CareerState = { ...startCareer('Arsenal'), budget: 2.08, wageCap: 100 };
+    expect(wageRoomQuote(career, 3)).toEqual({ cost: 1.56, budget: 0.52, wageCap: 130 });
+    const bought = buyWageRoom(career, 3)!;
+    expect(bought.budget).toBe(0.52);
+    expect(wageCapOf(bought)).toBe(130);
+    expect(projectFinances(bought).spend.find(line => line.id === 'wageRoom')?.actual).toBe(1.56);
+    expect(buyWageRoom(career, 4)?.budget).toBe(0);
+    for (const requested of [0, -1, 1.5, NaN, Infinity, 5]) {
+      expect(wageRoomQuote(career, requested)).toBeNull();
+      expect(buyWageRoom(career, requested)).toBeNull();
+    }
+  });
+
   it('moves £520k once into £10k of weekly room with no change to the old career', () => {
     const career: CareerState = { ...startCareer('Arsenal'), budget: 1.04, wageCap: 100 };
     const first = buyWageRoom(career)!;

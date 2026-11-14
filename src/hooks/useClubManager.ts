@@ -6,7 +6,7 @@ import {
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason, beginLeagueCoachSeason,
   marketForScreen, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer, savedCareerEraId, savedCareerFixtureKey, leagueOf,
-  startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, recallLoanedPlayer, walkAway, respondApproach, expandGround, buyWageRoom,
+  startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, recallLoanedPlayer, walkAway, respondApproach, expandGround, buyWageRoom, wageCapOf,
   enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, setNationMentality, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract, renewContractWithClause,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
@@ -1147,9 +1147,15 @@ export function useClubManager() {
 
   /* Round 171: the finance desk. Round 467: a price change carries the fans'
      and the board's reaction with it, and food has a price of its own. */
-  const addWageRoom = useCallback(() => {
-    setCareer(prev => (prev ? buyWageRoom(prev) ?? prev : prev));
-  }, []);
+  const addWageRoom = useCallback((steps: number, listedBudget: number, listedWageCap: number) => {
+    const now = careerRef.current;
+    if (phase !== 'hub' || !holdsActiveSlot() || !now || now.budget !== listedBudget || wageCapOf(now) !== listedWageCap) return false;
+    const next = buyWageRoom(now, steps);
+    if (!next || !persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    return true;
+  }, [phase, holdsActiveSlot, persist]);
   const setTickets = useCallback((tier: 0 | 1 | 2) => {
     setCareer(prev => (prev ? setTicketPolicy(prev, tier) : prev));
   }, []);

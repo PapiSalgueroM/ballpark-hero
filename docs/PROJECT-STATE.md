@@ -1,4 +1,12 @@
+## 2026-11-14: Wage budget quotes, hockey practice saves and NRL opposition scouting
+
+- Club Manager lets managers choose how much of the transfer budget to offer for weekly wage room. The new balances appear before confirmation and the club books record the debit.
+- NHL Higher or Lower keeps an unfinished Unlimited run with its difficulty, matchups and answers. New run starts a fresh board. The daily save remains date-keyed.
+- NRL Team Manager's Opposition report shows the ratings behind the middle and wide attack plans. The breakdown reflects current squad preparation and availability.
+
 ## 2026-11-14: Club Manager national finals, NRL physio and NBA round reports
+
+[PR #925](https://github.com/PapiSalgueroM/ballpark-hero/pull/925) published exact main `5ba3494afbd388e26e8af1b96dba4ec11245feb0`, deployment `ce9e54ad-e182-4405-b867-7c40ede95aab`. Nine live browser journeys, all 174 sitemap routes and all three raw guides passed. IndexNow accepted the guides.
 
 - Club Manager can play national finals one match at a time from the season review. The game uses the qualifying table or automatic entry, lets managers pick tactics for each final-stage match and records the exact scores after rollover.
 - NRL Team Manager can pay for one physio session per season. It shortens an existing injury by one round, shows when the player can return and leaves a receipt in the club books.

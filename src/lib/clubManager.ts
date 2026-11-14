@@ -8961,12 +8961,20 @@ export function canBuyWageRoom(career: CareerState): boolean {
     && career.week < career.calendar.length && Number.isFinite(career.budget) && career.budget >= WAGE_ROOM_STEP.cost;
 }
 
-export function buyWageRoom(career: CareerState): CareerState | null {
-  if (!canBuyWageRoom(career)) return null;
+export function wageRoomQuote(career: CareerState, steps = 1) {
+  if (!canBuyWageRoom(career) || !Number.isSafeInteger(steps) || steps < 1) return null;
+  const cost = Math.round(WAGE_ROOM_STEP.cost * steps * 100) / 100;
+  if (cost > career.budget || !Number.isSafeInteger(steps * WAGE_ROOM_STEP.weekly + boughtWageRoomOf(career))) return null;
+  return { cost, budget: Math.round((career.budget - cost) * 100) / 100, wageCap: wageCapOf(career) + steps * WAGE_ROOM_STEP.weekly };
+}
+
+export function buyWageRoom(career: CareerState, steps = 1): CareerState | null {
+  const quote = wageRoomQuote(career, steps);
+  if (!quote) return null;
   return {
     ...career,
-    budget: Math.round((career.budget - WAGE_ROOM_STEP.cost) * 100) / 100,
-    purchasedWageRoom: boughtWageRoomOf(career) + WAGE_ROOM_STEP.weekly,
+    budget: quote.budget,
+    purchasedWageRoom: boughtWageRoomOf(career) + WAGE_ROOM_STEP.weekly * steps,
   };
 }
 

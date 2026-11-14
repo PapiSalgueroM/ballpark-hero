@@ -106,6 +106,7 @@ describe('NRL match attack plans', () => {
     expect(nrlOppositionReport(plan(state, 'middle'))!.defenseEdge - standard.defenseEdge).toBeCloseTo(-2);
     const incomplete = { ...state, players: state.players.filter(player => player.contract?.clubId !== opponent || player.role !== 'Hooker') };
     expect(nrlAttackPlanPreview(incomplete)).toBeNull();
+    expect(nrlOppositionReport(incomplete)?.matchups).toBeUndefined();
     expect(plan(incomplete, 'middle')).toBe(incomplete);
   });
 
