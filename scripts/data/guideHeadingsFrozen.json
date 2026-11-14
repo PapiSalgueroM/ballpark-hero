@@ -269,6 +269,7 @@
         "Pick one of 40 programs. Prestige sets your pipeline and NIL power.",
         "Play 10 rounds of two games each, one league matchup and one cross-country test.",
         "After rounds 3, 5, 8 and 10, players can improve toward their potential or lose a rating point if form dips. Check the latest results or Roster for rating changes. The new ratings count from the next game, including March.",
+        "Use Played round to reopen the scores and any recorded rating changes from this regular season.",
         "Round 10's league night is rivalry night, and every program plays its rival, even one from another league. Your rival is your real rivalry series when both schools are on the board (Duke and North Carolina, Kentucky and Louisville, Indiana and Purdue), otherwise a school from your own state, otherwise a pairing the game made, and the game tells you which. UConn has no series or state on file here, so its rival is a pairing the game made.",
         "The rivalry winner carries 0.5 to 1.5 points of extra strength into the conference tournament and March, the loser drops the same, and a margin of 25 or more swings the full 1.5.",
         "Finish top four in your league table, which goes by league record, for the conference tournament; win it and you dance automatically.",
@@ -332,6 +333,7 @@
         "Pick a program. Its prestige rating drives your talent pipeline and NIL budget.",
         "Play one week at a time: 12 games, all set before kickoff and never the same opponent twice. Weeks 1 to 4 are out of conference, weeks 5 to 11 are conference play with a non-conference date or two mixed in, and week 12 is rivalry week. Notre Dame and the Group of Five schools have no conference games.",
         "After weeks 3, 6, 9 and 12, players can improve toward their potential or lose a rating point if form dips. Check the latest results or Roster for rating changes. The new ratings count from the next game, including the Playoff.",
+        "Use Played week to reopen a score and any recorded rating changes from this regular season.",
         "Week 12 is rivalry week, and every program plays its rival, even one from another conference. Your rival is your real rivalry series when both schools are on the board (Ohio State and Michigan, Alabama and Auburn, Florida and Florida State), otherwise a school from your own state, otherwise a pairing the game made, and the game tells you which.",
         "The rivalry winner carries 0.5 to 1.5 points of extra strength into the title games and the Playoff, the loser drops the same, and a margin of 21 or more swings the full 1.5.",
         "Finish top two in your conference to reach its title game; win it for an automatic Playoff bid.",
@@ -1676,6 +1678,7 @@
         "Pick a starter to see every available reserve for that slot. You can replace one starter before kickoff. Goalkeepers stay in goal, and outfielders playing out of position show their rating penalty.",
         "Pick a team talk: calm them, fire them up, demand more, the hairdryer, or say nothing at all.",
         "Kick off. The result comes back with what it did to the board, the fans and the dressing room.",
+        "In new Free Play runs, player OVR can rise or fall after league matches during the season. Each match report lists the changes or confirms that OVR stayed the same.",
         "When the press have a question, answer it before the next match.",
         "Keep going until you hit the target, run out of league games, or the board run out of patience."
       ],
@@ -1695,7 +1698,7 @@
       ],
       "example": [
         "Say today's club is a mid table side that has taken two points from its last five. The job opens 15th after 11 games, the board expect 9th, and the target is 7 points from 5 league games.",
-        "Game one is at home to a weaker side. In Free Play, your left back is tired. Open Formation and XI, pick him under Replace one starter, and choose a fresher reserve. The new name appears in the XI and starts with the same ten teammates. The read says the dressing room is flat, so you go balanced and say nothing. A 2 to 0 win puts 3 on the board and lifts the fans.",
+        "Game one is at home to a weaker side. In Free Play, your left back is tired. Open Formation and XI, pick him under Replace one starter, and choose a fresher reserve. The new name appears in the XI and starts with the same ten teammates. The read says the dressing room is flat, so you go balanced and say nothing. A 2 to 0 win puts 3 on the board and lifts the fans. If his rating goes from 72 to 73 after a league match, the match report shows 72 to 73.",
         "Game two is away at a stronger side. You sit deep with a defensive shape and take a 1 to 1 draw. That is 4. The press ask about the board and you back yourself.",
         "A cup tie comes next. It does not count, but a bad defeat still costs board confidence, so you play it properly and go out on penalties.",
         "Game three is at home and you need 3 points from 3 games. Balanced with a fire them up talk, and a 2 to 1 win makes it 7. Target hit, job kept, two league games to spare."
@@ -1862,6 +1865,7 @@
         "The roster box shows the usual sim picks: your best healthy 8 bats, 3 starters and 2 relievers. Everyone else is depth, and depth is who plays the day a starter hits the IL.",
         "Protect the rotation before a round to spread the workload across five healthy starters. Those five face a lower simulated injury risk, while weaker fourth and fifth starters can lower your team strength. The round report shows how many stayed available.",
         "Give a young bench hitter a development start. Once per season, a healthy bench hitter aged 24 or under can take the lowest-rated spot in your batting lineup for one round and gain up to one overall point after play. You keep the opportunity if the planned swap cannot play.",
+        "Open Round results to revisit a played round’s record, rating changes and development starts. Earlier saves may have missing results or ratings.",
         "Before the final stretch, choose Start the ace first to use three individual starters in each playoff series. A 96, 84 and 72 rotation uses 96 in Game 1, 84 in Game 2 and 72 in Game 3, then repeats. The usual rotation averages all three. The season recap shows each actual starter and result.",
         "Read the ownership mandate: a stacked roster is told to win the World Series, a mid one to make October, a thin one to hit an honest win number. It resets every offseason.",
         "Work the roster: DFA dead weight, sign free agents, and take trades to the phone, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.",
