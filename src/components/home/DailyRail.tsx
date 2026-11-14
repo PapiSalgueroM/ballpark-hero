@@ -1,10 +1,18 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CalendarDays, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { getTodayET } from '@/lib/dateUtils';
 import { dailyGames, dealtBySport, todaysPuzzle, sportOf, SPORT_NAME } from '@/data/homeFront';
 import type { GameDef } from '@/data/gameRegistry';
 import { SportGlyph, sportStyle } from './SportGlyph';
+
+function railPosition(rail: HTMLDivElement) {
+  const vertical = rail.scrollHeight > rail.clientHeight && rail.scrollWidth <= rail.clientWidth;
+  const size = vertical ? rail.clientHeight : rail.clientWidth;
+  const offset = vertical ? rail.scrollTop : rail.scrollLeft;
+  const end = (vertical ? rail.scrollHeight : rail.scrollWidth) - size;
+  return { vertical, size, atStart: offset <= 1, atEnd: offset >= end - 1 };
+}
 
 /**
  * Round 659: the dailies rail. Every daily game on the site in one row that
@@ -29,19 +37,36 @@ export function DailyRail({ today }: { today?: string }) {
     return { spotlight: pick, rest: dealtBySport(all.filter(g => g !== pick)), total: all.length };
   }, [day]);
   const railRef = useRef<HTMLDivElement>(null);
-  const [atStart, setAtStart] = useState(true);
+  const [edges, setEdges] = useState({ atStart: true, atEnd: false });
+  const updateEdges = (rail: HTMLDivElement) => {
+    const { atStart, atEnd } = railPosition(rail);
+    setEdges(previous => previous.atStart === atStart && previous.atEnd === atEnd ? previous : { atStart, atEnd });
+  };
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    const measure = () => updateEdges(rail);
+    measure();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', measure);
+      return () => window.removeEventListener('resize', measure);
+    }
+    const observer = new ResizeObserver(measure);
+    observer.observe(rail);
+    if (rail.firstElementChild) observer.observe(rail.firstElementChild);
+    return () => observer.disconnect();
+  }, []);
 
   const nudge = (dir: 1 | -1) => {
     const el = railRef.current;
-    if (!el || (dir < 0 && atStart)) return;
+    if (!el) return;
+    const { vertical, size, atStart, atEnd } = railPosition(el);
+    if (dir < 0 ? atStart : atEnd) return;
     let reduce = false;
     try { reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch { /* old browser: animate */ }
     const behavior = reduce ? 'auto' : 'smooth';
-    if (el.scrollHeight > el.clientHeight && el.scrollWidth <= el.clientWidth) {
-      el.scrollBy({ top: dir * Math.round(el.clientHeight * 0.8), behavior });
-    } else {
-      el.scrollBy({ left: dir * Math.round(el.clientWidth * 0.8), behavior });
-    }
+    const distance = dir * Math.round(size * 0.8);
+    el.scrollBy(vertical ? { top: distance, behavior } : { left: distance, behavior });
   };
 
   if (total === 0) return null;
@@ -59,20 +84,17 @@ export function DailyRail({ today }: { today?: string }) {
           </p>
         </div>
         <div className="flex shrink-0 gap-1">
-          <button type="button" onClick={() => nudge(-1)} aria-label="Scroll the daily puzzles back" aria-disabled={atStart} className="grid h-11 w-11 place-items-center rounded-lg border border-border bg-surface-1 text-muted-foreground hover:border-primary/40 hover:text-foreground aria-disabled:opacity-50">
+          <button type="button" onClick={() => nudge(-1)} aria-label="Scroll the daily puzzles back" aria-disabled={edges.atStart} className="grid h-11 w-11 place-items-center rounded-lg border border-border bg-surface-1 text-muted-foreground hover:border-primary/40 hover:text-foreground aria-disabled:opacity-50">
             <ChevronLeft aria-hidden="true" className="h-4 w-4 lg:rotate-90" />
           </button>
-          <button type="button" onClick={() => nudge(1)} aria-label="Scroll the daily puzzles on" className="grid h-11 w-11 place-items-center rounded-lg border border-border bg-surface-1 text-muted-foreground hover:border-primary/40 hover:text-foreground">
+          <button type="button" onClick={() => nudge(1)} aria-label="Scroll the daily puzzles on" aria-disabled={edges.atEnd} className="grid h-11 w-11 place-items-center rounded-lg border border-border bg-surface-1 text-muted-foreground hover:border-primary/40 hover:text-foreground aria-disabled:opacity-50">
             <ChevronRight aria-hidden="true" className="h-4 w-4 lg:rotate-90" />
           </button>
         </div>
       </div>
 
       {/* Leave the next card in view so touch users can see that the list scrolls. */}
-      <div ref={railRef} onScroll={event => {
-        const { scrollLeft, scrollTop } = event.currentTarget;
-        setAtStart(scrollLeft === 0 && scrollTop === 0);
-      }} className="-mx-4 snap-x overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-2 [scrollbar-width:thin] sm:mx-0 sm:scroll-px-0 sm:px-0 lg:max-h-[17.5rem] lg:snap-y lg:overflow-x-hidden lg:overflow-y-auto">
+      <div ref={railRef} onScroll={event => updateEdges(event.currentTarget)} className="-mx-4 snap-x overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-2 [scrollbar-width:thin] sm:mx-0 sm:scroll-px-0 sm:px-0 lg:max-h-[17.5rem] lg:snap-y lg:overflow-x-hidden lg:overflow-y-auto">
         {/* The whole rail is dated, not just the spotlight. `rest` drops the
             game the date picked, so the set of chips is different every day:
             today the rail has no CBB Program chip because it is the
