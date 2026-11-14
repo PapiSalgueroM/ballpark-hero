@@ -1,4 +1,12 @@
+## 2026-11-14: Soccer Career competition totals, NFL league scores and NRL roster cover
+
+- Soccer Career's Record Book totals the saved goals and assists from continental club campaigns and national tournaments, including Club World Cup and Nations League. It identifies older campaigns where assists were never saved. New continental club campaigns allocate assists from the player's existing season total and the actual teammate goals in those matches.
+- NFL Front Office saves the scores of completed league weeks. The latest week stays visible after reopening a career, and older weeks with no stored scores remain blank.
+- NRL Team Manager requires a second signed player at the outgoing player's position before arranging a direct offseason move, using the same check as rival approaches.
+
 ## 2026-11-14: Club Manager founding squad, NRL kicking cover and MLB round reports
+
+[PR #932](https://github.com/PapiSalgueroM/ballpark-hero/pull/932) published exact main `c3521202d7779e3fa81b2f79026dfea8a17a9561`, deployment `0624fe6f-fa56-43e9-aeae-ba11008df3fc`. Seven live browser journeys, all 174 sitemap routes and three raw guides passed. IndexNow accepted the guides.
 
 - Club Manager's creation form lets the manager choose any of the 24 generated founders and adjust their fictional name, age and secondary position. The original primary roles, budget-based valuation and squad quality rules still apply.
 - NRL Team Manager lets a rotating reserve replace the starting goal kicker at halftime when the designated backup stays on. The report credits opening and closing place kicks to the actual kicker.

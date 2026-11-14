@@ -14,10 +14,12 @@ const career = {
 
 const season = {
   year: 2026,
+  club: 'Real Madrid',
   type: 'playing',
   ovr: 92,
   rating: 8.1,
   leagueApps: 34,
+  assists: 8,
 } as SeasonRecord;
 
 function run(player: CareerState, line: SeasonRecord, seed: number) {
@@ -67,6 +69,25 @@ describe('Soccer Career Champions League form', () => {
     const flamengo = { ...career, currentClub: 'Flamengo', currentClubCountry: 'Brazil' };
     for (const seed of [495127, 515880, 536633]) {
       expect(run(flamengo, season, seed)).toEqual(run(flamengo, { ...season, rating: 6.3 }, seed));
+    }
+  });
+
+  it('gives finished campaigns assists within their team goals and annual totals', () => {
+    for (const player of [career, { ...career, position: 'CM' }]) {
+      let assists = 0;
+      for (let i = 0; i < 100; i++) {
+        const seed = 495127 + i * 20753;
+        const cup = run(player, season, seed);
+        if (!cup.qualified) continue;
+        const games = [...(cup.firstStage?.stages ?? []).flatMap(stage => stage.games), ...cup.matches];
+        const remaining = games.reduce((sum, game) => sum + game.goalsFor - game.playerGoals, 0);
+        expect(cup.playerAssists).toBeGreaterThanOrEqual(0);
+        expect(cup.playerAssists).toBeLessThanOrEqual(Math.min(remaining, season.assists));
+        assists += cup.playerAssists!;
+        const { playerAssists, ...results } = cup;
+        expect(run(player, { ...season, assists: 0 }, seed)).toEqual({ ...results, playerAssists: 0 });
+      }
+      expect(assists).toBeGreaterThan(0);
     }
   });
 
