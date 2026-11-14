@@ -321,6 +321,11 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
     current(c: C): 'setup' | 'closer' | null;
     set(c: C, role: 'usual' | 'setup' | 'closer'): C;
   };
+  goalieTandem?: {
+    available(c: C): boolean;
+    current(c: C): boolean;
+    set(c: C, enabled: boolean): C;
+  };
 
   /* Contracts. */
   tradeRequest?: {

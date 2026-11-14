@@ -910,6 +910,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Play seasons, offseasons and free agency",
         items: [
           "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
+          "Starting goalies can choose Share the crease before playing a season. Camp still decides who starts. Sharing gives about 20% fewer planned starts and a 20% lower simulated injury chance. For example, the usual draw of 60 starts becomes 48 before injuries. Career Log keeps the plan and actual starts for that year.",
           "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
           "Face up to three offseason decisions each year, one card at a time: training, trade requests, media noise. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
           "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",

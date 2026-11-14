@@ -127,6 +127,8 @@ export interface NhlSeasonLine {
   slate?: number;
   goals?: number; assists?: number; points?: number;
   wins?: number; svpct?: number;
+  /** Planned starts on the actual slate before any injury, when the goalie shared the crease. */
+  tandemStarts?: number;
   /** Round 103: the run to the Cup, or the four games that ended it. */
   poGames?: number; poGoals?: number; poAssists?: number; poPoints?: number;
   poWins?: number; poSvpct?: number;
@@ -175,6 +177,7 @@ export interface NhlCareerState {
   /** Round 183: the lineup. Absent (pre-183 saves, harness careers) means
       first choice, byte for byte unchanged. */
   role?: 'starter' | 'backup';
+  goalieTandem?: { year: number; team: string };
   /** Round 470: the savings account, the market and the statement, on the
       same engine as Soccer Career's. Absent on a pre-470 save and repaired
       lazily by ensureNhlMoney, so an old save opens on every screen with its
@@ -434,14 +437,33 @@ export function nhlWorkSlate(pos: string, slate: number): number {
 /* The season's workload on the engine's OWN season: 58 to 67 starts, or all
    but zero to three of the games. simNhlSeason carries it, and every count
    drawn from it, to the season the ledger says his club played that year. */
-function gamesFor(c: NhlCareerState, rng: () => number): { games: number; note: string | null } {
+export function nhlTandemAvailable(c: NhlCareerState): boolean {
+  return c.pos === 'G' && c.role !== 'backup' && !c.retired && (c.suspendedSeasons ?? 0) <= 0 && c.contractYears > 0;
+}
+
+export function nhlTandemActive(c: NhlCareerState): boolean {
+  return nhlTandemAvailable(c) && c.goalieTandem?.year === c.year && c.goalieTandem.team === c.team;
+}
+
+export function setNhlTandem(c: NhlCareerState, enabled: boolean): NhlCareerState {
+  if (!nhlTandemAvailable(c) || enabled === nhlTandemActive(c)) return c;
+  if (enabled) return { ...c, goalieTandem: { year: c.year, team: c.team } };
+  const next = { ...c };
+  delete next.goalieTandem;
+  return next;
+}
+
+const NHL_TANDEM_SHARE = 0.8;
+
+function gamesFor(c: NhlCareerState, rng: () => number, tandem: boolean): { games: number; note: string | null; plannedStarts: number } {
   const risk = careerRecoveryRisk('nhl', c.purchased, (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 250);
-  const full = nhlFullWorkload(c.pos, rng);
-  if (rng() < risk) {
+  const normal = nhlFullWorkload(c.pos, rng);
+  const full = tandem ? Math.round(normal * NHL_TANDEM_SHARE) : normal;
+  if (rng() < (tandem ? risk * NHL_TANDEM_SHARE : risk)) {
     const frac = 0.45 + rng() * 0.35;
-    return { games: Math.max(20, Math.round(full * frac)), note: 'Injuries bit into the season.' };
+    return { games: Math.max(20, Math.round(full * frac)), note: 'Injuries bit into the season.', plannedStarts: full };
   }
-  return { games: full, note: null };
+  return { games: full, note: null, plannedStarts: full };
 }
 
 export function simNhlSeason(
@@ -465,7 +487,11 @@ export function simNhlSeason(
   const slate = seasonLength('nhl', c.year, c.team);
   const work = nhlWorkSlate(c.pos, slate);
   const cut = (n: number) => toSlate('nhl', n, work);
-  let { games: fullGames, note } = gamesFor(c, rng);
+  const tandem = nhlTandemActive(c);
+  const campRefusedTandem = c.pos === 'G' && c.role === 'backup' && c.goalieTandem?.year === c.year && c.goalieTandem.team === c.team;
+  if (c.goalieTandem) delete c.goalieTandem;
+  let { games: fullGames, note, plannedStarts } = gamesFor(c, rng, tandem);
+  if (tandem) notes.push(`Shared crease: ${cut(plannedStarts)} planned starts.`);
   if (note) { notes.push(`🚑 ${note}`); c.health -= 7; }
   /* Round 183: the lineup decides the workload. A backup goalie gets the
      twenty-odd starts the role really carries; a skater down the lineup
@@ -475,6 +501,7 @@ export function simNhlSeason(
   if (c.role === 'backup') {
     if (c.pos === 'G') {
       fullGames = Math.max(12, Math.round(fullGames * 0.35));
+      if (campRefusedTandem) notes.push('Camp put you in the backup role, so the shared crease plan did not apply.');
       notes.push(`🪑 The backup's crease: ${cut(fullGames)} starts behind the number one.`);
     } else {
       iceShare = 0.5 + rng() * 0.12;
@@ -497,6 +524,7 @@ export function simNhlSeason(
   if (slate !== US_ENGINE_SEASON.nhl) full.slate = slate;
   Object.assign(full, nhlStatLineFor({ form, pos: c.pos, scoringMult: c.archetype.scoringMult, games: fullGames, iceShare }, rng));
   const line = nhlLineOnSlate(full, work);
+  if (tandem) line.tandemStarts = cut(plannedStarts);
   if (seasonRating) line.seasonRating = seasonRating;
   // Round 123: computed up here rather than down with the rest of the awards
   // because the Conn Smythe is decided inside the playoff block below and it

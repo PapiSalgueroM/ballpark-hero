@@ -54,11 +54,14 @@ export function mlbSeasonReview(s: MlbSeasonLine, pos: MlbCareerPos): CareerRevi
 }
 
 export function nhlSeasonReview(s: NhlSeasonLine, pos: NhlCareerPos): CareerReviewStats {
-  return stats(s.teamResult,
-    pos === 'G' ? [number('Wins', s.wins), number('Save percentage', s.svpct, 3)]
+  const tandem = pos === 'G' && recorded(s.tandemStarts);
+  const detail = stats(s.teamResult,
+    pos === 'G' ? [number('Wins', s.wins), number('Save percentage', s.svpct, 3),
+      ...(tandem ? [text('Goalie workload', 'Shared crease'), number('Planned starts', s.tandemStarts)] : [])]
       : [number('Goals', s.goals), number('Assists', s.assists), number('Points', s.points)],
     pos === 'G' ? [number('Games', s.poGames), number('Wins', s.poWins), number('Save percentage', s.poSvpct, 3)]
       : [number('Games', s.poGames), number('Goals', s.poGoals), number('Assists', s.poAssists), number('Points', s.poPoints)]);
+  return tandem ? { ...detail, gamesLabel: 'Starts' } : detail;
 }
 
 export interface CareerSeasonHigh { label: string; value: string; indices: number[] }

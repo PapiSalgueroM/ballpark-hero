@@ -14,6 +14,7 @@ import {
   nhlShouldRetire, nhlLegacyOf, nhlCareerTotals, nhlRollTeamQuality, nhlTeamLabelOf,
   buildNhlFaWindow, nhlFaPushArgs, buildNhlExtension, nhlExtPushArgs,
   nhlAssignRole, nhlCampBattle, nhlWorkSlate,
+  nhlTandemAvailable, nhlTandemActive, setNhlTandem,
   type NhlCareerPos, type NhlCareerState, type NhlSeasonLine,
 } from '@/lib/nhlMyCareer';
 import { countOf, nhlMajorAward, nhlStatLine } from '@/lib/usCareerStatLine';
@@ -83,6 +84,7 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = wi
   assignRole: nhlAssignRole,
   campBattle: nhlCampBattle,
   simSeason: simNhlSeason,
+  goalieTandem: { available: nhlTandemAvailable, current: nhlTandemActive, set: setNhlTandem },
   progress: nhlProgress,
   drawEvent: drawNhlEvent,
   eventDeck: nhlEventDeck,
