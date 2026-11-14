@@ -2434,6 +2434,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
             heading: "Reaching the reveal and your final score",
             items: [
               "At the end the reveal names all eleven, prices the portfolio at the latest season's real values, and scores the run.",
+              "After the reveal, review the best affordable XI to see what the same cards could have bought. Compare each position's buy price and final value against your own pick.",
             ],
           },
         ],

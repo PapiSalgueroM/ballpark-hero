@@ -297,6 +297,7 @@ export default function PlayerStockMarket() {
                 Year by year: {finish.holdings[0].series.map((_, k) => `${finish.startYear + k} ${formatMoney(finish.holdings.reduce((s, h) => s + (h.series[k] ?? 0), 0))}`).join(' · ')}
               </p>
             </div>
+            {finish.bestXI && <BestXIReview finish={finish} rows={finish.bestXI} />}
           </ResultScreen>
         )}
 
@@ -311,4 +312,26 @@ export default function PlayerStockMarket() {
       </GameShell>
     </>
   );
+}
+
+function BestXIReview({ finish, rows }: { finish: StockFinish; rows: NonNullable<StockFinish['bestXI']> }) {
+  const bestSpend = rows.reduce((total, row) => total + row.price, 0);
+  return <details data-no-prerender className="my-4 rounded-xl border border-border/60 bg-surface-2 px-3 text-left">
+    <summary className="min-h-11 cursor-pointer py-3 text-sm font-bold">Review the best affordable XI</summary>
+    <p className="mb-2 text-xs text-muted-foreground">Spent {formatMoney(bestSpend)} of {formatMoney(finish.budget)}. Worth {formatMoney(finish.bestValue)} in {finish.finalYear}, compared with your {formatMoney(finish.finalValue)}.</p>
+    <ol className="divide-y divide-border/60">
+      {rows.map((row, i) => {
+        const bought = finish.holdings[i];
+        const difference = row.final - bought.final;
+        return <li key={row.name} className="space-y-1 py-2 text-xs">
+          <p className="font-semibold">{bought.slot}{difference !== 0 && <span className="ml-2 font-normal text-muted-foreground">{formatMoney(Math.abs(difference))} {difference > 0 ? 'more' : 'less'} at the end in this slot</span>}</p>
+          {row.name === bought.name ? <p><span className="text-muted-foreground">Same pick: </span>{row.name} <span className="tabular-nums">{formatMoney(row.price)} to {formatMoney(row.final)}</span></p>
+            : <div className="grid grid-cols-2 gap-2">
+            <p className="min-w-0 break-words"><span className="block text-muted-foreground">Your pick</span>{bought.name}<span className="block tabular-nums">{formatMoney(bought.price)} to {formatMoney(bought.final)}</span></p>
+            <p className="min-w-0 break-words"><span className="block text-muted-foreground">Best XI pick</span>{row.name}<span className="block tabular-nums">{formatMoney(row.price)} to {formatMoney(row.final)}</span></p>
+          </div>}
+        </li>;
+      })}
+    </ol>
+  </details>;
 }
