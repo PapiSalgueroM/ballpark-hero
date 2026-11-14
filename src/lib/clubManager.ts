@@ -16,6 +16,7 @@ import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/ma
 /* Round 202: the national team job runs on the international engine Soccer
    Career has used since Round 124, rather than a second thinner one. */
 import { runManagerSummer, NATION_CONFED, type IntlTournament, type ManagerSummerMatch } from '@/lib/soccerInternational';
+import { selectedNationalXI, type NationalXI } from '@/lib/clubManagerNationalXI';
 /* Round 965: the manager's face reads Soccer Career's look tables, never a
    copy of them. That module imports nothing from here. */
 import { SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR } from '@/lib/soccerCareerAppearance';
@@ -2509,10 +2510,13 @@ export interface NationJob {
   /** Tournaments won. */
   won: number;
   mentality?: Exclude<Mentality, 'balanced'>;
+  xi?: NationalXI;
 }
 
 type NationCampaign = Pick<IntlTournament, 'nation' | 'name' | 'year' | 'qualifying' | 'groupLabel' | 'groupTable'>
-  & { result: string; matches: ManagerSummerMatch[]; lostJob: boolean; mentality?: Mentality };
+  & { result: string; matches: ManagerSummerMatch[]; lostJob: boolean; mentality?: Mentality;
+    xi?: { formation: string; players: { name: string; position: Position; rating: number }[]; adjustment: number };
+    xiUnavailable?: true };
 
 /** An open international post, offered at a season end. */
 export interface NationOffer {
@@ -24779,7 +24783,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     const job = career.nationJob;
     const summer = career.startYear === undefined ? state.season : worldYearOf(state);
     const mentality = job.mentality ?? 'balanced';
-    const t = runManagerSummer(job.nation, summer, nationLift(career), mentality);
+    const xi = selectedNationalXI(career, summer);
+    const t = runManagerSummer(job.nation, summer, nationLift(career), mentality, xi?.adjustment);
     if (t) {
       const won = t.champion === job.nation;
       const missed = t.myResult === 'Did Not Qualify';
@@ -24787,6 +24792,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
         nation: job.nation, name: t.name, year: t.year, result: t.myResult,
         qualifying: t.qualifying, groupLabel: t.groupLabel, groupTable: t.groupTable,
         matches: t.managerFixtures, lostJob: missed, mentality,
+        ...(xi ? { xi: { formation: xi.formation, players: xi.xi.map(({ name, position, rating }) => ({ name, position, rating })), adjustment: xi.adjustment } }
+          : job.xi?.year === summer ? { xiUnavailable: true as const } : {}),
       };
       state.nationJob = {
         ...job,
@@ -24795,6 +24802,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
         lastYear: t.year,
         won: job.won + (won ? 1 : 0),
       };
+      delete state.nationJob.xi;
       if (won) {
         state.trophies = [...state.trophies, { season: state.season, name: t.name, emoji: '\u{1F310}' }];
       }

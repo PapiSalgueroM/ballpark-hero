@@ -116,6 +116,7 @@ type StartHold = { key: string; begin: () => void; settle: () => void; over: boo
 
 /* Round 1323: the save fence, imported here beside the hook that uses it. */
 import { saveFence, fenceKeyOf } from '@/lib/saveFence';
+import { setNationalXI, type NationalXI } from '@/lib/clubManagerNationalXI';
 import { SAVE_KEY } from '@/lib/clubManager';
 import { setAsideSave, browserStorage, SET_ASIDE_SLOT_KEY } from '@/lib/brokenSaveRecovery';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
@@ -1200,6 +1201,16 @@ export function useClubManager() {
     setCareer(prev => (prev ? leaveNationJob(prev) : prev));
   }, []);
 
+  const saveNationalXI = useCallback((plan: NationalXI | null): boolean => {
+    const now = careerRef.current;
+    if (phase !== 'hub' || !holdsActiveSlot() || !now) return false;
+    const next = setNationalXI(now, plan);
+    if (!next || !persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    return true;
+  }, [phase, holdsActiveSlot, persist]);
+
   const setNationalTactics = useCallback((mentality: Mentality): boolean => {
     const now = careerRef.current;
     if (phase !== 'hub' || !holdsActiveSlot() || !now) return false;
@@ -1489,7 +1500,7 @@ export function useClubManager() {
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
-    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, addWageRoom, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, setNationalTactics, dismissNegotiation, clause, loan,
+    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, addWageRoom, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, setNationalTactics, saveNationalXI, dismissNegotiation, clause, loan,
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
     setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
     acceptIncomingBid, rejectIncomingBid,
