@@ -92,6 +92,19 @@ it('announces only settled matches and keeps focus when the search clears', asyn
   expect(field).toHaveFocus();
 });
 
+it('finds the right game from a first-time visitor’s description', async () => {
+  const { main, field, change } = home();
+  const status = screen.getByRole('status', { name: 'Search results' });
+  change('manage an nfl team');
+  await act(async () => { await vi.dynamicImportSettled(); });
+  expect(status).toHaveTextContent('1 game found for manage an nfl team');
+  const results = [...main.querySelectorAll('[data-home-game-card] a')].filter(el => !el.closest('[hidden]'));
+  expect(results.map(el => el.getAttribute('href'))).toEqual(['/front-office']);
+  field.focus();
+  fireEvent.keyDown(field, { key: 'ArrowDown' });
+  expect(results[0]).toHaveFocus();
+});
+
 it('puts active saves and picks before discovery in keyboard order and restores both shelves after search', async () => {
   const saved = '{"season":{"year":2027}}';
   localStorage.setItem('nrl-manager-save-v1-slot-2', saved);

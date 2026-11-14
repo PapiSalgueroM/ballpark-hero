@@ -251,6 +251,7 @@ const REASON: Partial<Record<SearchResult['matchedOn'], string>> = {
   keyword: 'mentioned in the guide',
   description: 'in the description',
   fuzzy: 'closest spelling',
+  intent: 'related search',
 };
 
 /* The home page's tile, same border, same radius, same hover lift, same
