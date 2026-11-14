@@ -1,5 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import { NATIONS_LEAGUE_2026_GROUPS, nationsLeague2026Fixtures, nationsLeague2026NextLeagues } from './soccerNationsLeague';
+import { describe, expect, it, vi } from 'vitest';
+import { NATIONS_LEAGUE_2026_GROUPS, nationsLeague2026Fixtures, nationsLeague2026NextLeagues,
+  nationsLeague2026GroupTables, simulateNationsLeague2026Groups } from './soccerNationsLeague';
 
 describe('Soccer Career 2026/27 Nations League transition', () => {
   it('creates a full home and away group schedule for the 54 nations', () => {
@@ -54,5 +55,43 @@ describe('Soccer Career 2026/27 Nations League transition', () => {
     expect(nationsLeague2026NextLeagues({ ...ranked, D: [...d.slice(0, 5), 'Brazil'] }, ab, bc)).toBeNull();
     expect(nationsLeague2026NextLeagues(ranked, ab, [bc[0], bc[0], ...bc.slice(2)])).toBeNull();
     expect(nationsLeague2026NextLeagues(ranked, [{ ...ab[0], winner: ordered[0] }, ...ab.slice(1)], bc)).toBeNull();
+  });
+
+  it('ranks the level nations by their direct games before overall goal difference', () => {
+    const scores = new Map([
+      ['Spain|England', [0, 1]], ['England|Spain', [1, 0]],
+      ['Spain|Croatia', [9, 0]], ['Croatia|Spain', [0, 9]],
+      ['Spain|Czech Republic', [9, 0]], ['Czech Republic|Spain', [0, 9]],
+      ['England|Croatia', [1, 0]], ['Croatia|England', [1, 0]],
+      ['England|Czech Republic', [1, 0]], ['Czech Republic|England', [1, 0]],
+    ]);
+    const matches = nationsLeague2026Fixtures().map(fixture => {
+      const [homeGoals, awayGoals] = scores.get(fixture.home + '|' + fixture.away) ?? [0, 0];
+      return { ...fixture, homeGoals, awayGoals };
+    });
+    const a3 = nationsLeague2026GroupTables(matches).A3;
+    expect(a3.slice(0, 2).map(row => [row.nation, row.points])).toEqual([['England', 12], ['Spain', 12]]);
+    expect(a3[0].gf - a3[0].ga).toBeLessThan(a3[1].gf - a3[1].ga);
+  });
+
+  it('uses a local seed and reconciles every club tally to its fixtures', () => {
+    const random = vi.spyOn(Math, 'random');
+    try {
+      const result = simulateNationsLeague2026Groups('my career');
+      expect(simulateNationsLeague2026Groups('my career')).toEqual(result);
+      expect(simulateNationsLeague2026Groups('a different career')).not.toEqual(result);
+      expect(random).not.toHaveBeenCalled();
+      const rows = Object.values(result.tables).flat();
+      expect(rows).toHaveLength(54);
+      for (const row of rows) {
+        const games = result.matches.filter(match => match.home === row.nation || match.away === row.nation);
+        const own = games.reduce((sum, match) => sum + (match.home === row.nation ? match.homeGoals : match.awayGoals), 0);
+        expect(row.played).toBe(games.length);
+        expect(row.gf).toBe(own);
+        expect(row.points).toBe(3 * row.won + row.drawn);
+      }
+    } finally {
+      random.mockRestore();
+    }
   });
 });
