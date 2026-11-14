@@ -78,6 +78,36 @@ describe('Soccer Press answers and recorded context', () => {
     expect(state.pressRoom!.history[0].promise?.outcome).toBe('met');
   });
 
+  it.each([
+    ['league-title', 'leagueTitle', true, 'met', 58, 56, 49],
+    ['domestic-cup', 'domesticCup', false, 'missed', 42, 44, 43],
+  ] as const)('settles %s once from the earned trophy flag and reopens the receipt', (choice, metric, won, outcome, credibility, popularity, morale) => {
+    const input = career();
+    const state = answerSoccerPress(input, choice);
+    expect(state.pressRoom?.history[0].promise).toMatchObject({ club: 'Twente', metric, target: 1, outcome: 'pending' });
+    expect([state.popularity, state.morale]).toEqual([50, 46]);
+    const row = record(state, { [metric]: won });
+    settleSoccerPress(state, row);
+    const snapshot = JSON.stringify(state);
+    settleSoccerPress(state, row);
+    expect(JSON.stringify(state)).toBe(snapshot);
+    const restored = JSON.parse(snapshot) as CareerState;
+    const view = pressRoomView(restored);
+    expect(view.promise).toMatchObject({ metric, actual: Number(won), outcome, settledYear: 2029 });
+    expect([view.credibility, restored.popularity, restored.morale]).toEqual([credibility, popularity, morale]);
+  });
+
+  it('excludes an unavailable domestic cup and closes club changes without a penalty', () => {
+    const noCup = career('ST', { seasons: [savedRow({ year: 2018 })] });
+    expect(pressRoomView(noCup).options.map(option => option.id)).not.toContain('domestic-cup');
+    expect(answerSoccerPress(noCup, 'domestic-cup')).toBe(noCup);
+    const state = answerSoccerPress(career(), 'domestic-cup');
+    const row = record(state, { club: 'PSV', domesticCup: true });
+    settleSoccerPress(state, row);
+    expect(pressRoomView(state).promise?.outcome).toBe('moved');
+    expect([state.morale, state.popularity, state.pressRoom?.credibility]).toEqual([46, 50, 50]);
+  });
+
   it('keeps duplicate year and club records distinct by their original index', () => {
     const state = answerSoccerPress(career(), 'calm');
     state.seasons = [...state.seasons, savedRow({ onLoanFrom: 'PSV' })];
