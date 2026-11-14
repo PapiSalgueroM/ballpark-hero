@@ -13,6 +13,7 @@ import {
   NFL_SPEND_ITEMS, buyNflItem, getNflSpendItem,
   buildNflFaWindow, nflFaPushArgs, buildNflExtension, nflExtPushArgs,
   nflAssignRole, nflCampBattle,
+  nflPassingDownAvailable, nflPassingDownActive, setNflPassingDown,
   type CareerPos, type CareerState, type SeasonLine,
 } from '@/lib/nflMyCareer';
 import { countOf, nflCareerSoFar, nflMajorAward, nflStatLine } from '@/lib/usCareerStatLine';
@@ -84,6 +85,7 @@ export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = withBank
   teamLabelOf,
   statLine: (s, pos) => nflStatLine(s, pos as CareerPos),
   reviewStats: (s, pos) => nflSeasonReview(s, pos as CareerPos),
+  passingDownRole: { available: nflPassingDownAvailable, current: nflPassingDownActive, set: setNflPassingDown },
   suspendedLine: c => ({
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,
     awards: [], teamResult: 'SUSPENDED', salary: 0,

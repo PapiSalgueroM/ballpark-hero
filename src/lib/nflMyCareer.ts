@@ -217,6 +217,7 @@ export interface SeasonLine {
   passYds?: number; passTd?: number; ints?: number;
   // RB
   rushYds?: number; rushTd?: number;
+  passingDownRole?: true;
   // WR, TE (and RB receiving)
   rec?: number; recYds?: number; recTd?: number;
   // Round 56 defense: LB, CB, EDGE
@@ -270,6 +271,7 @@ export interface CareerState {
       means starter, so every old save and every existing sim path keeps
       its exact behavior. Kickers are always starters. */
   role?: 'starter' | 'backup';
+  passingDownPlan?: { year: number; team: string };
   /** Round 469: the savings account, the market and the statement, on the
       same engine as Soccer Career's. Absent on a pre-469 save and repaired
       lazily by ensureNflMoney, so an old save opens on every screen with its
@@ -528,10 +530,34 @@ export function nflAwardPaceLine(line: SeasonLine, len: number): SeasonLine {
 export const NFL_MISSED_PLAYOFFS = 'Missed the playoffs';
 export const NFL_PLAYOFF_RESULTS = ['Lost in the Wild Card round', 'Lost in the Divisional round', 'Lost the Conference Championship', 'Lost the Super Bowl', 'WON THE SUPER BOWL'] as const;
 
+export function nflPassingDownAvailable(c: CareerState): boolean {
+  return c.pos === 'RB' && c.role !== 'backup' && !c.retired && (c.suspendedSeasons ?? 0) <= 0
+    && c.contractYears > 0 && c.seasons.some(season => season.games > 0);
+}
+
+export function nflPassingDownActive(c: CareerState): boolean {
+  return nflPassingDownAvailable(c) && c.passingDownPlan?.year === c.year && c.passingDownPlan.team === c.team;
+}
+
+export function setNflPassingDown(c: CareerState, enabled: boolean): CareerState {
+  if (!nflPassingDownAvailable(c) || enabled === nflPassingDownActive(c)) return c;
+  if (enabled) return { ...c, passingDownPlan: { year: c.year, team: c.team } };
+  const next = { ...c };
+  delete next.passingDownPlan;
+  return next;
+}
+
 export function simSeason(
   c: CareerState, teamQuality: number, rng: () => number, inSeasonRating = false,
 ): { line: SeasonLine; notes: string[] } {
   const notes: string[] = [];
+  const passingDown = nflPassingDownActive(c);
+  if (c.passingDownPlan) {
+    if (c.pos === 'RB' && c.role === 'backup' && c.passingDownPlan.year === c.year && c.passingDownPlan.team === c.team) {
+      notes.push('Camp put you in the backup role, so the passing-down plan did not apply.');
+    }
+    delete c.passingDownPlan;
+  }
   let { games, injuryNote } = seasonGames(c, rng);
   if (injuryNote) { notes.push(`🚑 ${injuryNote}`); c.health -= 6; }
   /* Round 182: a backup's season is spot duty. Quarterbacks hold clipboards
@@ -555,7 +581,11 @@ export function simSeason(
     awards: [], teamResult: '', salary: c.salary,
   };
   if (seasonRating) line.seasonRating = seasonRating;
-  Object.assign(line, nflStatLineFor({ form, pos: c.pos, games }, rng));
+  Object.assign(line, nflStatLineFor({ form, pos: c.pos, games, passingDown }, rng));
+  if (passingDown) {
+    line.passingDownRole = true;
+    notes.push('Passing-down role: more of your regular-season work came as a receiver.');
+  }
 
   // team result
   const strength = teamQuality + (seasonOverall - 74) * (c.pos === 'QB' ? 0.55 : c.pos === 'K' ? 0.08 : DEFENSIVE_POS.includes(c.pos) ? 0.22 : 0.25);
@@ -711,7 +741,7 @@ export function simSeason(
    moves no draw, and moves a line only where it printed a number below zero. */
 
 /** What a stat line is made from: the form of the season, the position, and the games of real action. */
-export interface NflLineInput { form: number; pos: CareerPos; games: number }
+export interface NflLineInput { form: number; pos: CareerPos; games: number; passingDown?: boolean }
 /** The stats of one season line, without the season around them. */
 export type NflStatLine = Pick<SeasonLine, 'passYds' | 'passTd' | 'ints' | 'rushYds' | 'rushTd' | 'rec' | 'recYds' | 'recTd' | 'tackles' | 'sacks' | 'picks' | 'passDef' | 'forcedFum' | 'fgMade' | 'fgAtt' | 'longFg'>;
 
@@ -736,10 +766,17 @@ export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine 
        and never passes it. Without the cap a peak back cleared the record by
        one to twenty six yards in roughly three runs out of five, and
        simCareerRealism has been failing on it for a while. */
-    line.rushYds = Math.max(0, Math.min(2080, Math.round((260 + (form - 62) * 46 + rng() * 260) * g)));
-    line.rushTd = Math.max(0, Math.round((1 + (form - 62) * 0.42 + rng() * 3) * g));
-    line.rec = Math.max(0, Math.round((14 + (form - 62) * 1.1 + rng() * 12) * g));
-    line.recYds = Math.round((line.rec ?? 0) * (6.5 + rng() * 3));
+    const rushYds = Math.max(0, Math.min(2080, Math.round((260 + (form - 62) * 46 + rng() * 260) * g)));
+    const rushTd = Math.max(0, Math.round((1 + (form - 62) * 0.42 + rng() * 3) * g));
+    const catches = Math.max(0, Math.round((14 + (form - 62) * 1.1 + rng() * 12) * g));
+    const yardsPerCatch = 6.5 + rng() * 3;
+    const receivingYards = Math.round(catches * yardsPerCatch);
+    const extraCatches = x.passingDown ? Math.min(Math.floor(20 * g), Math.floor(rushYds * 0.2 / yardsPerCatch)) : 0;
+    const extraYards = extraCatches ? Math.round(extraCatches * yardsPerCatch) : 0;
+    line.rushYds = rushYds - extraYards;
+    line.rushTd = extraYards ? Math.round(rushTd * (line.rushYds / rushYds)) : rushTd;
+    line.rec = catches + extraCatches;
+    line.recYds = receivingYards + extraYards;
   } else if (pos === 'WR') {
     line.rec = Math.max(0, Math.min(NFL_WR_REC_CAP, Math.round((28 + (form - 62) * 2.5 + rng() * 14) * g)));
     line.recYds = Math.min(NFL_WR_YDS_CAP, Math.round((line.rec ?? 0) * (10.5 + rng() * 4)));
