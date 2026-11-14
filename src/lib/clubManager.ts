@@ -60,12 +60,12 @@ import { goalWeight, assistWeight, ASSIST_SHARE } from '@/lib/clubManagerGoalWei
 /* Round 1229: the league book, pure. It imports the keyed generator, the own goal rule and the weight table. */
 import {
   bookFits, bookSalt, creditAssist, creditCleanSheet, creditDeal, creditGoal, creditMine, creditOwnGoal, dealAssist, dealGoals,
-  liveBook, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
+  liveBook, mineSheets, openBook, openLateBook, partialEleven, readBook, type BookMan, type BookRules, type LeagueBook,
 } from '@/lib/clubManagerLeagueBook';
 /* Round 1601: the season archive, pure and import free. */
 import { archiveCareerSeason } from '@/lib/clubManagerCareerLines';
 /* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
-import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardInput, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
+import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardDeparted, type BoardInput, type BoardMine, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
 import { bornNear, compactWorldRoster, nearAges, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterOwner, worldRosterView } from '@/lib/clubManagerWorldRoster';
 import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';
 import { players as RAW_POOL } from '@/data/players';
@@ -813,6 +813,34 @@ export function leagueBookOf(state: CareerState): LeagueBook | null {
   return readBook(state.leagueBook, bookStampOf(state, careerLeagueOf(state).id));
 }
 
+interface DepartedLeagueLine extends BoardDeparted {
+  leagueId: string;
+  /** Null for a full book. Absent when no readable book was open. */
+  bookRound?: number | null;
+}
+
+function leagueLineOf(p: CMPlayer): BoardMine {
+  return {
+    id: p.id, name: p.name, pos: p.position, rating: p.rating, apps: p.comp?.league?.apps ?? 0,
+    goals: p.comp?.league?.goals ?? 0, assists: p.comp?.league?.assists ?? 0, ...(p.generated ? { gen: true } : {}),
+  };
+}
+
+function departedLeagueLines(state: CareerState): DepartedLeagueLine[] {
+  return Array.isArray(state.departedLeagueLines) ? state.departedLeagueLines : [];
+}
+
+function recordLeagueDeparture(state: CareerState, player: CMPlayer): DepartedLeagueLine[] | undefined {
+  const book = leagueBookOf(state);
+  const line = leagueLineOf(player);
+  const sheets = book ? mineSheets(book, player.id) : 0;
+  if (!line.apps && !line.goals && !line.assists && !sheets) return state.departedLeagueLines;
+  const club = state.clubName;
+  const leagueId = careerLeagueOf(state).id;
+  const remaining = departedLeagueLines(state).filter(p => p.id !== player.id || p.club !== club || p.leagueId !== leagueId);
+  return [...remaining, { ...line, club, leagueId, sheets, bookRound: book ? book.r0 ?? null : undefined }];
+}
+
 /** What the league leaders card and the awards read: the reader's input, how much of the league is on
  *  record, the round a late book counts from (null for a whole book) and the keepers on record. */
 export interface LeagueBoards {
@@ -849,13 +877,13 @@ export function leagueBoardsOf(state: CareerState): LeagueBoards | null {
     club, gf: goalsFor.get(club) ?? 0, place: place(club), keeperOnRecord: rosterOf(club).some(p => p.p === 'GK'),
   }));
   if (!bookFits(book, clubs)) return null;
+  const leagueId = careerLeagueOf(state).id;
+  const departed = departedLeagueLines(state).filter(p => p.leagueId === leagueId && p.bookRound === (book.r0 ?? null));
   const input: BoardInput = {
     book,
     clubs,
-    mine: state.squad.map(p => ({
-      id: p.id, name: p.name, pos: p.position, rating: p.rating, apps: p.comp?.league?.apps ?? 0,
-      goals: p.comp?.league?.goals ?? 0, assists: p.comp?.league?.assists ?? 0, ...(p.generated ? { gen: true } : {}),
-    })),
+    mine: state.squad.map(leagueLineOf),
+    ...(departed.length ? { departed } : {}),
     myClub: state.clubName,
     myPlace: place(state.clubName),
     ratingOf: (club, name, pos) => rosterOf(club).find(p => p.n === name && p.p === pos)?.r ?? 0,
@@ -1042,6 +1070,10 @@ export function goldenBootTable(state: CareerState, limit = 12, boards: LeagueBo
   for (const p of state.squad) {
     const lg = p.comp?.league?.goals ?? 0;
     if (lg > 0) rows.push({ name: p.name, club: state.clubName, goals: lg, mine: true, gen: p.generated ? true : undefined });
+  }
+  const leagueId = careerLeagueOf(state).id;
+  for (const p of departedLeagueLines(state)) {
+    if (p.leagueId === leagueId && p.goals > 0) rows.push({ name: p.name, club: p.club, goals: p.goals, gen: p.gen });
   }
   return rows
     .sort((a, b) => b.goals - a.goals || a.name.localeCompare(b.name))
@@ -3134,6 +3166,7 @@ export interface CareerState {
    *  which reads a damaged or stale book as none. Nothing reads it for a screen yet: the old race
    *  (scorerRace) is still what the board and the awards show. */
   leagueBook?: LeagueBook;
+  departedLeagueLines?: DepartedLeagueLine[];
   /** Round 73: player messages, newest first, capped at 8. */
   inbox?: PlayerMessage[];
   /** Round 979: the decisions desk (red card appeals and situations), newest
@@ -8424,6 +8457,7 @@ export function releasePlayer(career: CareerState, playerId: string): CareerStat
   const next: CareerState = {
     ...career,
     squad: remaining.map(x => ({ ...x, morale: clamp(x.morale - sting, 5, 99) })),
+    departedLeagueLines: recordLeagueDeparture(career, p),
     /* He leaves the way every other exit leaves (acceptBid, loanOutPlayer):
        out of the XI, off every set piece job, and every bid for him is gone.
        The first build left his bids behind, so a met release clause for a man
@@ -10669,6 +10703,7 @@ export function breakLoan(career: CareerState, playerId: string): CareerState | 
     ...career,
     budget: Math.round((career.budget - fee) * 10) / 10,
     squad: career.squad.filter(x => x.id !== playerId),
+    departedLeagueLines: recordLeagueDeparture(career, p),
     xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
     setPieces: setPiecesWithout(career.setPieces, playerId),
     transferLog: [...(career.transferLog ?? [])],
@@ -11727,6 +11762,7 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
     }
   }
   if (swap) {
+    signed.departedLeagueLines = recordLeagueDeparture(signed, swap);
     signed.squad = signed.squad.filter(p => p.id !== swap.id);
     signed.xiIds = signed.xiIds.map(id => (id === swap.id ? null : id));
     signed.setPieces = setPiecesWithout(signed.setPieces, swap.id);
@@ -11808,6 +11844,7 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
     ...career,
     budget: Math.round((career.budget + netFee) * 10) / 10,
     squad: career.squad.filter(x => x.id !== playerId),
+    departedLeagueLines: recordLeagueDeparture(career, p),
     xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
     /* Round 505: the armband and the set pieces never travel. */
     setPieces: setPiecesWithout(career.setPieces, playerId),
@@ -12040,6 +12077,7 @@ export function loanOutPlayer(
     ...career,
     budget: Math.round((career.budget + fee) * 10) / 10,
     squad: career.squad.filter(x => x.id !== playerId),
+    departedLeagueLines: recordLeagueDeparture(career, p),
     xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
     /* Round 505: the armband and the set pieces never travel. */
     setPieces: setPiecesWithout(career.setPieces, playerId),
@@ -12148,6 +12186,7 @@ export function recallLoanedPlayer(career: CareerState, playerId: string): Caree
     ...career,
     budget: Math.round((career.budget - entry.recallFee) * 10) / 10,
     squad: [...career.squad, back],
+    departedLeagueLines: career.departedLeagueLines && departedLeagueLines(career).filter(p => p.id !== playerId || p.club !== career.clubName),
     loanedOut: list.filter(l => l.player.id !== playerId),
     transferLog: [...(career.transferLog ?? [])],
   };
@@ -23835,6 +23874,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     // Round 132: anybody the club had to go and get is off the market now.
     goneNames: [...freeAgentsIn],
     seasonSignings: [],
+    departedLeagueLines: undefined,
     cupRound: league.cupName !== null ? 'R16' : 'out',
     cupDraw: {},
     uclField: nextUclField.length ? nextUclField : undefined,
