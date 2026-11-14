@@ -1,4 +1,12 @@
+## 2026-11-14: Soccer Career development history, NHL drafts and NRL academy releases
+
+- Soccer Career's Season Ratings window reopens the five overall checkpoints for a saved academy or senior season. The player can switch years to see an earlier rise or decline.
+- NHL Perfect Season keeps an unfinished Daily roster, its latest dealt team and spent rerolls on the same browser. Loading a finished draft returns its existing result.
+- NRL teams can release an eligible unsigned academy graduate to the offseason market. The same generated prospect can take an offer under the existing cap rules or stay on the free-agent list.
+
 ## 2026-11-14: Home daily returns, NFL Career Path and NRL club decisions
+
+[PR #928](https://github.com/PapiSalgueroM/ballpark-hero/pull/928) published exact main `8553478e17b6683ae4e6c745648b90b3da95342d`, deployment `07c35c61-d41f-4c4c-a1ad-45e8ccc21be6`. Nine live browser journeys, all 174 sitemap routes and both raw guides passed. IndexNow accepted both guides.
 
 - Home returns to the same Daily Puzzles sport filter, rail position and card after playing a daily puzzle and going Back.
 - NFL Career Path remembers each accepted Daily guess when players reload or switch modes. It reads the latest saved turn before another tab can submit against an older clue.

@@ -2115,6 +2115,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
               <li>Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.</li>
+              <li>After the Grand Final, release one unsigned academy prospect into next season’s free-agent market or promote him to your own Top 30.</li>
               <li>If you accepted Board pathways, check Pathways run-in in Season review with four regular-season club matches left. It shows who can still reach four appearances.</li>
               <li>Change clubs between seasons from Season review.</li>
               <li>When staying at your club, check Fill open squad places in Season review to preview affordable one-season free-agent deals before starting the next season.</li>

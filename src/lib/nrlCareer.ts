@@ -156,11 +156,12 @@ interface NrlAcademyAssignment {
   player: NrlCareerPlayer;
   startedRound: number;
   priority?: NrlAcademyPriority;
+  released?: true;
 }
 export interface NrlAcademyReport {
   role: NrlRole;
   startedRound: number;
-  status: 'scouting' | 'ready' | 'signed';
+  status: 'scouting' | 'ready' | 'signed' | 'released';
   player: NrlCareerPlayer | null;
   priority?: NrlAcademyPriority;
 }
@@ -247,6 +248,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'setShortlist'; playerId: string; saved: boolean; year: number }
   | { type: 'scoutAcademy'; role: NrlRole; priority?: NrlAcademyPriority }
   | { type: 'promoteAcademy'; playerId: string }
+  | { type: 'releaseAcademyProspect'; year: number; clubId: string; playerId: string }
   | { type: 'setDevelopmentFocus'; focus: NrlDevelopmentFocus }
   | { type: 'upgradeMedical'; level: MedicalUpgradeLevel }
   | { type: 'upgradeAcademy'; year: number; clubId: string; round: number }
@@ -740,9 +742,9 @@ function academyFacilitiesActive(state: NrlCareerState, round = state.season.rou
 
 export function nrlAcademyReports(state: NrlCareerState): NrlAcademyReport[] {
   return (state.academy ?? []).map(assignment => {
-    const { player, startedRound, priority } = assignment;
+    const { player, startedRound, priority, released } = assignment;
     const ready = reportReady(state.season, assignment);
-    const status = !ready ? 'scouting' : state.players.some(member => member.id === player.id) ? 'signed' : 'ready';
+    const status = !ready ? 'scouting' : released ? 'released' : state.players.some(member => member.id === player.id) ? 'signed' : 'ready';
     return { role: player.role, startedRound, status, player: ready ? player : null, ...(priority && { priority }) };
   });
 }
@@ -780,11 +782,16 @@ function scoutAcademy(state: NrlCareerState, role: NrlRole, priority?: NrlAcadem
 
 export function nrlAcademyOffer(state: NrlCareerState, playerId: string): NrlContractQuote {
   const report = state.academy?.find(candidate => candidate.player.id === playerId);
-  if (!report || !reportReady(state.season, report) || state.players.some(player => player.id === playerId)
+  if (!report || report.released || !reportReady(state.season, report) || state.players.some(player => player.id === playerId)
     || state.season.year === NRL_LAST_YEAR) return { ok: false, reason: 'This prospect is unavailable.' };
   const startYear = state.season.year + 1;
   const { minimumSalary } = nrlSeasonPlan(startYear);
   return checkContractOffer(state, { player: report.player, startYear, askingSalary: minimumSalary }, minimumSalary, 1);
+}
+
+export function nrlAcademyReleaseAvailable({ academy, legacySeason, retired, outOfWork, season }: NrlCareerState) {
+  return Boolean(academy?.length && !legacySeason && !retired && !outOfWork && season.kickerId && season.phase === 'complete'
+    && season.year < NRL_LAST_YEAR && !academy.some(report => report.released));
 }
 
 export function nrlRecruitmentBrief(state: NrlCareerState, role: NrlRole) {
@@ -1837,7 +1844,8 @@ function offseasonSquads(state: NrlCareerState, allCpu = false, preferFreeAgents
   const focusAffected = state.ratingReview?.focus?.length ?? 0;
   const coachDevelopment = state.finance.coachHire?.role === 'development'
     ? state.ratingReview?.assistant ?? [] : undefined;
-  const players = state.players.map(player => advancePlayer(player, year))
+  const release = state.academy?.find(report => report.released)?.player;
+  const players = (release ? [...state.players, release] : state.players).map(player => advancePlayer(player, year))
     .filter(player => player.contract || player.futureContract || player.age < RETIREMENT_AGE);
   const names = new Set(players.map(player => player.name));
   const priorClubs = new Set(nrlSeasonPlan(season.year).clubs.map(club => club.id));
@@ -1895,11 +1903,14 @@ function offseasonWorld(state: NrlCareerState, nextClubId: string, allCpu = fals
   const year = state.season.year + 1;
   const freeAgents = settled.filter(player => !player.contract && !player.futureContract).sort(byRating);
   const releasedId = state.finance.mutualRelease?.playerId;
+  const graduateId = state.academy?.find(report => report.released)?.player.id;
   const pool = NRL_ROLES.flatMap(role => {
     const available = freeAgents.filter(player => player.role === role);
     const top = available.slice(0, MARKET_PER_ROLE);
     const released = releasedId && available.find(player => player.id === releasedId);
-    return released && !top.includes(released) ? [...top.slice(0, MARKET_PER_ROLE - 1), released] : top;
+    const market = released && !top.includes(released) ? [...top.slice(0, MARKET_PER_ROLE - 1), released] : top;
+    const graduate = graduateId && available.find(player => player.id === graduateId);
+    return graduate && !market.includes(graduate) ? [...market, graduate] : market;
   });
   const deals = state.leagueRecruitment ? leagueRecruitmentDeals(state, settled, nextClubId) : null;
   const extensions = deals && new Set(deals.map(deal => deal.playerId));
@@ -2343,6 +2354,13 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       if (!quote.ok) return state;
       const report = state.academy!.find(candidate => candidate.player.id === action.playerId)!;
       return { ...state, players: [...state.players, { ...report.player, futureContract: quote.contract }] };
+    }
+    case 'releaseAcademyProspect': {
+      const { season, academy, players } = state;
+      if (!academy || action.year !== season.year || action.clubId !== season.clubId || !nrlAcademyReleaseAvailable(state)) return state;
+      const report = academy.find(entry => entry.player.id === action.playerId);
+      if (!report || !reportReady(season, report) || players.some(player => player.id === action.playerId)) return state;
+      return { ...state, academy: academy.map(entry => entry === report ? { ...entry, released: true } : entry) };
     }
     case 'advance':
     case 'finishLive':
@@ -2910,6 +2928,7 @@ function validAcademy(state: NrlCareerState): boolean {
   const knownIds = new Set<string>();
   const names = new Set<string>();
   let lastAssignment = 0;
+  let hasRelease = false;
   for (const report of academy) {
     if (!record(report) || !intIn(report.startedRound, lastAssignment + 1, season.round) || !validPlayer(report.player, season.year)) return false;
     const { player, priority } = report;
@@ -2930,6 +2949,10 @@ function validAcademy(state: NrlCareerState): boolean {
     names.add(player.name);
 
     const signed = activePlayers.get(player.id);
+    if (report.released !== undefined) {
+      if (report.released !== true || hasRelease || signed || state.legacySeason || !season.kickerId || season.phase !== 'complete') return false;
+      hasRelease = true;
+    }
     if (!signed) {
       if (activeNames.has(player.name)) return false;
       continue;
