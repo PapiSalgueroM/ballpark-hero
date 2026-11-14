@@ -31,7 +31,7 @@ it.each([[2026, 'broncos'], [2027, 'bears']] as const)(
     localStorage.setItem(NRL_SAVE_KEY, raw);
     localStorage.setItem(fence, '4');
     render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
-    fireEvent.click(screen.getByRole('button', { name: 'Ladder', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: 'Ladder' }));
     const summary = screen.getByText('Finals race', { exact: true });
     const details = summary.closest('details')!;
     expect(details.open).toBe(false);
