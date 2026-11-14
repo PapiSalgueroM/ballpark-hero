@@ -55,7 +55,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
   c: CareerState;
   /* Round 1343: retire is optional, and the door is drawn only when it is passed. */
   g: Pick<ReturnType<typeof useClubManager>, 'resignNation' | 'acceptNation' | 'answerApproach' | 'applyJob' | 'joinNow' | 'joinSummer' | 'updateManager'>
-    & Partial<Pick<ReturnType<typeof useClubManager>, 'retire' | 'setNationalTactics' | 'saveNationalXI'>>;
+    & Partial<Pick<ReturnType<typeof useClubManager>, 'retire' | 'setNationalTactics' | 'saveNationalXI' | 'saveNationalSquad'>>;
   nationOffer: ReturnType<typeof nationOfferFor>;
   onRetireOpen?: () => void;
 }) {
@@ -75,7 +75,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
   if (showNationalXI && summer && onSave) {
     const onBack = () => setShowNationalXI(false);
     return <Suspense fallback={<button type="button" className="min-h-11" onClick={onBack}>← Manager</button>}>
-      <NationalLineup career={c} year={summer.year} name={summer.name} onSave={onSave} onBack={onBack} />
+      <NationalLineup career={c} year={summer.year} name={summer.name} onSave={onSave} onSaveSquad={g.saveNationalSquad} onBack={onBack} />
     </Suspense>;
   }
   return (
@@ -161,6 +161,13 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
                         </details>
                       )}
                       {campaign.xiUnavailable && <p className="text-xs text-muted-foreground">The saved XI included an unavailable player. The campaign used automatic selection.</p>}
+                      {campaign.squad && <details data-cm-campaign-callups>
+                        <summary className="min-h-11 cursor-pointer py-3 text-xs font-semibold">National squad · {campaign.squad.length} called up</summary>
+                        <ul className="grid grid-cols-1 gap-1 text-xs sm:grid-cols-2">
+                          {campaign.squad.map((player, i) => <li key={i}>{player.name} · {player.position} · {player.rating}</li>)}
+                        </ul>
+                      </details>}
+                      {campaign.squadUnavailable && <p className="text-xs text-muted-foreground">A saved call-up was unavailable. The campaign used the full eligible pool.</p>}
                       {campaign.lostJob && <p className="text-xs text-muted-foreground">The federation ended your contract after qualifying.</p>}
                       {campaign.qualifying.automatic
                         ? <p className="text-xs text-muted-foreground">Automatic entry to the tournament.</p>
