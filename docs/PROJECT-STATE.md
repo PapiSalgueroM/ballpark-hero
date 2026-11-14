@@ -1,4 +1,11 @@
+## 2026-11-14: Club Manager Intercontinental Cup and NRL attack plan comparison
+
+- In a Club Manager save’s 2025/26 season, Cups follows the six real entrants across five scheduled matches in Cairo, Jeddah and Al Rayyan. Results simulate as the club calendar passes each date and stay attached to the save. Draws get extra time then penalties. The current manager earns the final trophy only if their real club wins while they are in the job. The edition is a followed competition with simulated scores. [Official bracket regulations](https://digitalhub.fifa.com/m/41ca9a261eb3f7d8/original/FIC2025_regulations_EN.pdf) [Official schedule](https://digitalhub.fifa.com/m/18d32b5e71e584f0/original/FIFA-Intercontinental-Cup-Qatar-2025-Match-Schedule.pdf) [Qatar organising committee schedule](https://pra.roadtoqatar.qa/wp-content/uploads/2025/12/fic2025_match_schedule_v4_05122025.pdf)
+- NRL Opposition report compares the attack and defence edges for every available attack plan with automatic rotation, using the current lineup, preparation and venue. Choose and save the tactic in the existing Attack plan control.
+
 ## 2026-11-14: NFL player setup and NRL late selection promises
+
+[PR #918](https://github.com/PapiSalgueroM/ballpark-hero/pull/918) published exact main `d5182ed6dd83c16385901edf528d11b47336575b`, deployment `118de414-df76-4690-a63f-21455eedc45f`. NFL and NRL guide text, eight native journeys and all 174 sitemap routes passed. IndexNow accepted both guides.
 
 - NFL My Career keeps edits to an unfinished setup in this browser, including when you return from an active prospect. The real prospect keeps precedence unless you choose Back to player. Setup clears after the next prospect or career is saved or when you choose Start Over.
 - NRL's pre-match rotation preview shows a late Selection promise and whether each player starts, opens in the rotation, is held for later, or sits out. Eligible fixtures can advance the window even without an appearance. The existing renewal discount still depends on actual appearances.
