@@ -72,6 +72,12 @@ export default function DeadlineDayBoard() {
                 Carry on at {freeSaved.setup.club}
               </button>
             )}
+            {!freeSaved && hook.lastFreeResult && (
+              <button type="button" data-no-prerender onClick={() => go(hook.replayFree)} className="mt-2 min-h-[44px] w-full rounded-md border border-primary px-3 py-2 text-sm font-semibold text-primary">
+                Replay the {hook.lastFreeResult.setup.club} window
+              </button>
+            )}
+            {notice && <p className="mt-2 text-xs text-muted-foreground" role="status">{notice}</p>}
           </div>
         </div>
       )}
@@ -121,7 +127,7 @@ export default function DeadlineDayBoard() {
           </>
         )}
 
-        {run && phase === 'done' && run.grade && <Result run={run} hook={{ ...hook, randomFree: () => go(hook.randomFree), backToMenu: () => go(hook.backToMenu) }} />}
+        {run && phase === 'done' && run.grade && <Result run={run} hook={{ ...hook, randomFree: () => go(hook.randomFree), replayFree: () => go(hook.replayFree), backToMenu: () => go(hook.backToMenu) }} />}
           </Suspense>
         </ViewBoundary>
       </div>

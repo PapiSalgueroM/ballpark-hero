@@ -211,6 +211,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Finishing the day",
         items: [
           "Keep going until every need is filled, or shut the window yourself when you are done.",
+          "After closing a free play window, replay it from the result or menu to try the same brief, targets and budget. Compare your score, needs filled and cash left with the previous run. For example, replay a window where you sold nobody and see whether an early sale helps you fund another signing.",
         ],
       },
     ],

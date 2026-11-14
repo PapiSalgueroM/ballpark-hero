@@ -435,6 +435,16 @@ export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
   });
 }
 
+/** Opening terms that must still match before two free windows can be compared. */
+export function deadlineOpening(run: DeadlineRun): string {
+  return JSON.stringify([
+    DEADLINE_HOURS, run.startBudget, run.needs,
+    run.targets.map(({ need, mp }) => [need, mp]),
+    run.sales.map(({ done, ...offer }) => offer),
+    rivalPool(run.state, run.setup.daily),
+  ]);
+}
+
 /* ---------------- reading the desk ---------------- */
 
 /** What your recruitment desk says he is worth: the engine's band, which always contains the truth. */

@@ -376,6 +376,7 @@ export function Sales({ run, hook, onBack }: { run: DeadlineRun; hook: Hook; onB
 export function Result({ run, hook }: { run: DeadlineRun; hook: Hook }) {
   const g = run.grade!;
   const outcome = g.score >= 65 ? 'win' : g.score >= 35 ? 'close' : 'loss';
+  const previous = run.setup.daily ? null : hook.freeComparison;
   return (
     <div data-testid="deadline-grade">
       <ResultScreen
@@ -399,9 +400,18 @@ export function Result({ run, hook }: { run: DeadlineRun; hook: Hook }) {
         }}
         onPlayAgain={hook.randomFree}
         playAgainLabel="New club"
-        playNext={<button type="button" onClick={hook.backToMenu} className="min-h-[32px] text-sm text-primary hover:underline">Back to the menu</button>}
+        playNext={<div className="flex flex-wrap justify-center gap-x-4">
+          {!run.setup.daily && !hook.freeSaved && hook.lastFreeResult && <button type="button" onClick={hook.replayFree} className="min-h-11 text-sm font-semibold text-primary hover:underline">Replay this window</button>}
+          <button type="button" onClick={hook.backToMenu} className="min-h-11 text-sm text-primary hover:underline">Back to the menu</button>
+        </div>}
       >
         <div className="mb-3 space-y-2 rounded-xl border border-border bg-card p-3 text-left">
+          {previous && <section className="space-y-1 rounded-md bg-muted p-2 text-xs" aria-label="Previous window comparison">
+            <p className="font-semibold">Previous run in this window</p>
+            <p>Score {previous.score} to {g.score} / 100</p>
+            <p>Needs filled {previous.filled} to {g.filled} of {g.needs}</p>
+            <p>Budget left {money(previous.budgetLeft)} to {money(g.budgetLeft)}</p>
+          </section>}
           <div className="space-y-1 text-sm">
             {run.needs.map((n, k) => (
               <div key={k} className="flex items-center justify-between gap-2">
