@@ -348,6 +348,29 @@ function rating98CostObservation(name: string, input: E.CareerState, after: E.Ca
 }
 
 describe('Soccer Career rating98 diagnostic', () => {
+  it('lets the creator set a ceiling and starts a save with the number shown', async () => {
+    const view = prepare();
+    roll(view); settle();
+    await import('@/components/soccer-career/SoccerCareerBuildEditor');
+    await act(async () => { fireEvent.click(view.getByRole('button', { name: /Customize your build/i })); });
+    const overall = view.getByRole('textbox', { name: /^Starting overall$/ });
+    fireEvent.change(overall, { target: { value: '72' } }); fireEvent.blur(overall);
+    const ceiling = view.getByRole('textbox', { name: /^Starting growth ceiling$/ });
+    fireEvent.change(ceiling, { target: { value: '45' } }); fireEvent.blur(ceiling);
+    expect(ceiling).toHaveValue('74');
+    fireEvent.change(ceiling, { target: { value: '88' } }); fireEvent.blur(ceiling);
+    expect(ceiling).toHaveValue('88');
+    expect(Number(view.getByText('Room to grow', { exact: true }).parentElement!.lastElementChild!.textContent)).toBe(16);
+    fireEvent.click(view.getByRole('button', { name: /Lock in build/i }));
+    const shown = preview(view, 'ST')!;
+    expect(shown.overall).toBe(72);
+    expect(view.getByText(/88 ceiling/)).toBeVisible();
+    fireEvent.click(begin(view));
+    const created = assertStarted(view, 'ST', shown);
+    expect(created.potential).toBe(88);
+    expect(rating98Roundtrip(created).potential).toBe(88);
+  });
+
   it.each(['ST', 'GK'])('rating98 diagnostic actual %s editor, save, neutral choice and first healthy year agree', async pos => {
     const view = prepare();
     if (pos !== 'ST') position(view, pos);

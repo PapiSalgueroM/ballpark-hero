@@ -1787,6 +1787,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         items: [
           "Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are free and there is no limit on them.",
           "Open Customize your build to set your starting overall anywhere from 40 to 99, move points between the six attribute families, shape the specifics under each family, and set your height and weight.",
+          "In Customize your build, set a starting growth ceiling or keep the scout's roll. For example, starting at 72 overall with an 88 ceiling leaves 16 points of room to grow.",
         ],
       },
       {

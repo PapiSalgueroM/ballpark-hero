@@ -327,22 +327,17 @@ export function SoccerCareerCreator({ onBegin, initialSupport, loadSupport }: {
   const rollPending = clubsLoading || isRolling;
   const reserveRollResults = rollPending || rolledOvr !== null;
 
-  const handleBuildConfirm = (stats: Stats, calcOvr: number) => {
+  const handleBuildConfirm = (stats: Stats, calcOvr: number, ceiling: number) => {
+    const overallChanged = rolledOvr !== calcOvr;
     setRolledOvr(calcOvr);
     setDisplayOvr(calcOvr);
-    /* Round 159: the ceiling can never sit below the player. He typed a 99
-       overall in the build editor and the scout projection still quoted the
-       ORIGINAL roll's 89 ceiling next to it, which reads as broken because it
-       is: a ceiling below the floor. The ceiling now rises with the build,
-       capped at 99 like everything else. */
-    const pot = Math.min(99, Math.max(rolledPot ?? calcOvr + 6, calcOvr));
-    setRolledPot(pot);
+    setRolledPot(ceiling);
     setPreviewStats(stats);
     setBuildOpen(false);
     /* Round 131: the academy that takes you depends on how good you are, and
        the build screen can now move that by fifty points, so the placement
        preview underneath has to be recalculated or it is quietly lying. */
-    if (support) placeAcademy(support, calcOvr, nationality, era);
+    if (support && overallChanged) placeAcademy(support, calcOvr, nationality, era);
   };
 
   /* Round 1604: a placement belongs to the nationality and era it was drawn

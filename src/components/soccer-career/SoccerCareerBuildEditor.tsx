@@ -125,7 +125,7 @@ export default function BuildEditor({ position, targetOvr, baseStats, rolledPot,
   onPhysique: (p: PlayerPhysique) => void;
   shape: AttrShape;
   onShape: (s: AttrShape) => void;
-  onConfirm: (stats: Stats, calcOvr: number) => void;
+  onConfirm: (stats: Stats, calcOvr: number, ceiling: number) => void;
   onCancel: () => void;
 }) {
   /* Round 131: the six rows are named off the attribute tree rather than off
@@ -143,6 +143,7 @@ export default function BuildEditor({ position, targetOvr, baseStats, rolledPot,
   const [target, setTarget] = useState(targetOvr);
   const [alloc, setAlloc] = useState<Stats>(startRef.current.stats);
   const [budget, setBudget] = useState(() => sumOf(startRef.current!.stats));
+  const [customCeiling, setCustomCeiling] = useState<number | null>(null);
   const [screen, setScreen] = useState<BuildScreen>({ kind: "root" });
   /* NO SCROLL RULE, and this one was found by driving it at 390 wide rather
      than by reading the code. The Customize your build button sits near the
@@ -165,7 +166,8 @@ export default function BuildEditor({ position, targetOvr, baseStats, rolledPot,
   const maxStat = allocMax(target);
   const liveOvr = allocOverall(alloc, position);
   const comp = playsLike(alloc, position);
-  const ceiling = Math.min(99, Math.max(rolledPot ?? liveOvr + 6, liveOvr + 2));
+  const minimumCeiling = Math.min(99, liveOvr + 2);
+  const ceiling = Math.min(99, Math.max(customCeiling ?? rolledPot ?? liveOvr + 6, minimumCeiling));
   const headroom = Math.max(0, ceiling - liveOvr);
   const fx = buildEffects(alloc, position, liveOvr, physique, shape);
   const fxLines = effectsSummary(fx, position);
@@ -307,6 +309,11 @@ export default function BuildEditor({ position, targetOvr, baseStats, rolledPot,
           </div>
         </div>
         <NumberStepper label="Starting overall" value={target} min={BUILD_OVR_MIN} max={BUILD_OVR_MAX} wide onChange={retarget} />
+        <div className="pt-2 border-t border-border space-y-1">
+          <div className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground">Starting growth ceiling</div>
+          <NumberStepper label="Starting growth ceiling" value={ceiling} min={minimumCeiling} max={BUILD_OVR_MAX} wide onChange={setCustomCeiling} />
+          <p className="text-[10px] text-muted-foreground">Choose from {minimumCeiling} to 99 at this overall. The rolled projection is used unless you change it.</p>
+        </div>
         <p className="text-[10px] text-muted-foreground leading-snug">
           {headroom <= 2
             ? `Start here and you are finished before you begin. Scouts have you at a ${ceiling} ceiling, so there is nothing left to train for and the whole development side of the game is switched off for you. Your legacy is judged on how far you climbed, and this is a climb of ${Math.max(0, ceiling - liveOvr)}.`
@@ -380,10 +387,10 @@ export default function BuildEditor({ position, targetOvr, baseStats, rolledPot,
       <div className="flex flex-col sm:flex-row gap-2">
         <Button variant="outline" className="w-full sm:flex-1 h-11 text-sm font-bold" onClick={() => {
           const s = startRef.current as { stats: Stats; ovr: number };
-          setTarget(s.ovr); setAlloc(s.stats); setBudget(sumOf(s.stats));
+          setTarget(s.ovr); setAlloc(s.stats); setBudget(sumOf(s.stats)); setCustomCeiling(null);
           onPhysique(defaultPhysique(position)); onShape({});
         }}>↩️ Reset to scout build</Button>
-        <Button className="w-full sm:flex-1 h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black disabled:opacity-40" disabled={pool !== 0} onClick={() => onConfirm(alloc, liveOvr)}>
+        <Button className="w-full sm:flex-1 h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black disabled:opacity-40" disabled={pool !== 0} onClick={() => onConfirm(alloc, liveOvr, ceiling)}>
           {pool !== 0 ? `Spend your ${pool} points first` : "✅ Lock in build"}
         </Button>
       </div>
