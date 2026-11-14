@@ -1791,6 +1791,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Starting in the academy and turning pro",
         items: [
           "Begin in an academy matched to your nationality and talent. Pro contract offers arrive from age 17.",
+          "When two clubs bid for you, compare their weekly pay, contract length and estimated league games before opening either contract review.",
         ],
       },
       {

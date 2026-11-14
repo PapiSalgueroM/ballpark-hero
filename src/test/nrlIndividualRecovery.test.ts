@@ -60,7 +60,7 @@ describe('NRL individual recovery', () => {
     expect(setRecovery(half, null)).toBe(half);
     expect(setRecovery(paused, paused.season.lineup.Hooker)).toBe(paused);
     const finished = reduceNrlCareer(read(paused)!, { type: 'finishMinute60', ...match });
-    expect(raw(finished)).toBe(raw(run(planned)));
+    expect(JSON.stringify(finished, (key, value) => key === 'at60' ? undefined : value)).toBe(raw(run(planned)));
     expect(reduceNrlCareer(finished, { type: 'finishMinute60', ...match })).toBe(finished);
   });
 

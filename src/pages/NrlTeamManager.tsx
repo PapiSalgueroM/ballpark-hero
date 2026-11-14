@@ -469,6 +469,7 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
   const shortName = useNrlClubName();
   const { year } = season;
   const goldenPoint = match.goldenPoint;
+  const periods = match.scorePeriods;
   const usedReserves = match.benchUsed?.map(id => season.squad.find(player => player.id === id)?.name).filter(Boolean) ?? [];
   const scorers = match.playerScoring?.lines ?? [];
   const injury = match.injury;
@@ -481,6 +482,36 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
   const lateStarter = late && season.squad.find(player => player.id === late.starterId);
   return (
     <>
+      {periods && (
+        <table className="mt-3 w-full text-left text-sm" data-nrl-score-periods>
+          <caption className="pb-1 text-left font-semibold">Score by period</caption>
+          <thead className="text-muted-foreground">
+            <tr>
+              <th scope="col" className="py-1 pr-2 font-medium">Period</th>
+              <th scope="col" className="px-1 text-center font-medium">{shortName(year, match.homeId)}</th>
+              <th scope="col" className="px-1 text-center font-medium">{shortName(year, match.awayId)}</th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {(periods.at60 ? [
+              { label: 'First half', start: [0, 0], end: periods.halfTime },
+              { label: '40 to 60 min', start: periods.halfTime, end: periods.at60 },
+              { label: '60 to 80 min', start: periods.at60, end: periods.regulation },
+            ] : [
+              { label: 'First half', start: [0, 0], end: periods.halfTime },
+              { label: 'Second half', start: periods.halfTime, end: periods.regulation },
+            ]).concat(match.extraTime ? [{
+              label: 'Extra time', start: periods.regulation, end: [match.homeScore, match.awayScore],
+            }] : []).map(({ label, start, end }) => (
+              <tr key={label}>
+                <th scope="row" className="py-1 pr-2 font-medium">{label}</th>
+                <td className="px-1 text-center tabular-nums">{end[0] - start[0]}</td>
+                <td className="px-1 text-center tabular-nums">{end[1] - start[1]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
       {match.halftimeTalk && <p className="mt-2 text-sm text-muted-foreground" data-nrl-halftime-talk>
         Half-time talk: {halftimeTalkLabels[match.halftimeTalk]}.
       </p>}
@@ -1684,9 +1715,10 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Name 13 starters and six reserves in Squad. Quick sim can use up to four of the reserves. Before a game, choose a tactic and train or recover.</li>
               <li>A match knock can put a player out for up to four rounds. Check Availability in Squad. The countdown includes byes, and an available player fills the vacant spot.</li>
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>
-              <li>Sign one fictional assistant in Finances. Tactical assistants help when you use their tactic. A development assistant helps eligible young players improve next season.</li>
+              <li>Sign one fictional assistant in Finances. Tactical assistants help when you use their tactic. A development assistant can give an eligible young player 1 OVR after eight regular-season appearances from the hire onward.</li>
               <li>Choose your goal kicker in Squad to credit conversions and penalty goals. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. Choose Play to 60 minutes to bring on a held reserve who is still on the bench. Quick Sim settles the round in one action.</li>
+              <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>

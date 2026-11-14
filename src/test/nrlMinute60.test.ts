@@ -29,7 +29,7 @@ describe('NRL 60-minute tactical check', () => {
     expect(finish(restored, { type: 'advance' })).toBe(restored);
     expect(finish(restored, { type: 'finishMinute60', year, round: 2, tactic: 'attack' })).toBe(restored);
     const kept = finish(restored, { type: 'finishMinute60', year, round: 1, tactic: 'attack' });
-    expect(raw(kept)).toBe(raw(direct));
+    expect(JSON.stringify(kept, (key, value) => key === 'at60' ? undefined : value)).toBe(raw(direct));
     expect(finish(kept, { type: 'finishMinute60', year, round: 1, tactic: 'defense' })).toBe(kept);
     const changed = finish(restored, { type: 'finishMinute60', year, round: 1, tactic: 'defense' });
     const result = changed.season.results.find(match => match.homeId === club || match.awayId === club)!;

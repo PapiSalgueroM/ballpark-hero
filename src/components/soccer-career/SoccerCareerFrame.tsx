@@ -45,6 +45,7 @@ export function SoccerCareerFrame({ active = false, children, reportGameContext 
             'Recent club form: last season at the same club needs 10 to 38 recorded league appearances. A rating of 7.6 or more adds two to next year\'s selection draw; 6.4 or less takes two away. Phone effects and frozen-out limits still apply. Example: a 24-game draw becomes 26 after a qualifying 7.8 season.',
             'Preseason plan: choose development (+1 position skill after growth, 3 percentage points more injury risk), recovery (-1 skill, 4 points less risk), or balanced. Example: 20% injury risk becomes 23% or 16%, within existing limits. A serious injury or no appearances interrupts development; a move cancels the plan.',
             'Academy mentoring: the Youth Mentor event starts one generated player. Ten senior appearances at your shared club adds one mentoring year. Example: 12 appearances moves 0/3 to 1/3; six appearances pauses it. Three qualifying years complete it, a move ends it, and its history stays in the mentor tile.',
+            'When two clubs bid for you, compare weekly pay, contract length and estimated league games before you review and sign an offer.',
             ...STORY_ROLE_HELP_RULES,
             ...SOCCER_DECK_HELP_RULES,
             'One tab at a time: the career plays in the newest tab you opened. An older tab asks you to reload. Example: open it in two tabs and play a season in the second; the first asks you to reload, and the reload shows that season.',

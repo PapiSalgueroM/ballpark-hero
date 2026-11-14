@@ -1,10 +1,23 @@
+## 2026-11-14: NRL scoring periods and Soccer Career offer comparison
+
+- NRL match reports break down points scored by period. If you played to the 60-minute pause, the report separates the two parts of the second half. Extra time gets its own row where played.
+- When two clubs bid for your player in Soccer Career, compare the proposed weekly pay, contract length and estimated league games before opening either contract review.
+
 ## 2026-11-14: NRL returning cover and Home keyboard navigation
+
+[PR #904](https://github.com/PapiSalgueroM/ballpark-hero/pull/904) published exact main `f3445e07e3abb34b597c8f86858f3edf0813cbf8`, deployment `7333af7b-1d05-41c3-b443-5b773cd93660`. Eleven browser journeys and all 174 sitemap routes passed live. IndexNow accepted the NRL guide.
 
 - NRL Recruitment shows which returning players finished training for a second position. The next-season depth tiles keep primary positions and trained cover separate. The position brief gives the names and primary positions.
 - Unpinning the last game in Home’s picks puts keyboard focus on the first Featured game. The next Tab reaches the second Featured game.
 - Home’s Continue playing cards fit two lines of save details, so longer club names can show the age or season within the same card size.
 
 ## 2026-11-14: Club Manager world ratings during the season
+
+[PR #903](https://github.com/PapiSalgueroM/ballpark-hero/pull/903) published exact main `47a883366e02f3c81474c595d22349b1aedaaa81`, deployment `95b48a8a-03ee-4879-89fb-fc442baf3af5`. Seven browser journeys and all 174 sitemap routes passed live. IndexNow accepted the Club Manager guide.
+
+The retired world-oracle suite has two historical comparison failures. All eleven scenario archives were byte-identical on #902 and #903. The independent era-world suite and all four negative controls passed. The hosted Quick Sim workflow failed in its font setup before exercising Quick Sim. The same setup fails on #902, and all three public Quick Sim checks passed.
+
+The historical save-size workflow stopped at its Round 1344 code anchor before measuring storage. A separate run through the real writer and reader covered 12 seasons and 541 dates with current Everton and historical Stoke and Bayern. The largest paired increase with timed ratings was 1,770 characters. The historical workflow's storage budgets remain unverified.
 
 - Rivals and free agents can gain or lose OVR as league matches settle. The transfer market, opponent squads and match engine use the same rating. January signings keep their current OVR, and returning players carry their closing OVR into the next season.
 - Existing careers start world rating updates when opening their next season. Fresh current and historical careers start with the new timing. The in-game help and public guide explain both paths.
@@ -106,6 +119,8 @@ The updated NRL guide now has a matching search index. The Home fold check asser
 - All 174 sitemap routes passed the live audit. The four policy pages and all three text endpoints passed. IndexNow accepted the three game guides with HTTP 200.
 
 The direct wage request is Fixed. The board negotiation and additional Soccer Career trophies remain Investigating. The queue read 116 open with zero New after these updates. Club World Cup needs prospective qualification evidence. A Nations League edition for the regular modern start needs the League A transition and new format.
+
+The 2026/27 Nations League schedule, groups and knockout rules have been checked against UEFA and the published competition tables. Use the September regulations for promotion and relegation. The March draw page predates the transition rules. The next edition's three leagues use six matches against five opponents, including home and away against the team from the same pot. Soccer Career currently has one international tournament per season and counts off-year appearances separately. Integrate the Nations League in its own saved competition record so its caps, news and trophy history can share the same results. The 2029 Club World Cup remains open pending the edition-specific qualification criteria. [UEFA groups and dates](https://www.uefa.com/uefanationsleague/news/02a2-1fe8e0405d9d-cc8f1ee7068b-1000--draw-for-the-league-phase-of-the-2026-27-uefa-nations-league/) [Published group tables](https://www.skysports.com/football/competitions/uefa-nations-league/table) [UEFA transition rules](https://documents.uefa.com/r/Regulations-of-the-UEFA-Nations-League-2026/27/Article-19-Individual-league-interim-overall-and-final-overall-rankings-Online?contentId=LUyRDKlp9n9YBqGezBhi4g) [UEFA next edition](https://www.uefa.com/uefanationsleague/news/02a5-20abaa999b8a-b0a852eae001-1000--new-concept-for-men-s-national-team-competitions-as-of-202/)
 
 ## 2026-11-12 Puck Detective roster clue wording
 

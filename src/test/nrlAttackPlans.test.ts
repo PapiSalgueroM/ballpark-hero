@@ -52,7 +52,7 @@ describe('NRL match attack plans', () => {
     const taken = reduceNrlCareer(readNrlCareerSave(bytes(stage))!, { ...choices, type: 'finishMinute60' });
     const direct = advance(pending);
     const control = advance(initial);
-    expect(bytes(taken)).toBe(bytes(direct));
+    expect(JSON.stringify(taken, (key, value) => key === 'at60' ? undefined : value)).toBe(bytes(direct));
     expect(direct.season.attackPlan).toBeUndefined();
     expect(managed(direct).counterStyle).toBe(style);
     expect([managed(control).homeScore, managed(control).awayScore]).toEqual(ordinaryScore);

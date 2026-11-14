@@ -93,6 +93,12 @@ interface NrlHalftimeDecision {
 export interface NrlInjury { playerId: string; rounds: number }
 type NrlGoldenScore = keyof typeof GOLDEN_POINT_VALUES;
 type NrlGoldenPoint = 'draw' | { period: 1 | 2; score: NrlGoldenScore };
+type NrlScorePair = [home: number, away: number];
+interface NrlScorePeriods {
+  halfTime: NrlScorePair;
+  at60?: NrlScorePair;
+  regulation: NrlScorePair;
+}
 export interface NrlMatchResult extends NrlFixture {
   homeScore: number;
   awayScore: number;
@@ -100,6 +106,7 @@ export interface NrlMatchResult extends NrlFixture {
   awayScoring: NrlScoring;
   extraTime: boolean;
   goldenPoint?: NrlGoldenPoint;
+  scorePeriods?: NrlScorePeriods;
   benchUsed?: string[];
   injury?: NrlInjury;
   playerScoring?: NrlMatchScoringReport;
@@ -692,7 +699,7 @@ function regulationStages(rng: () => number, opening: number, middle: number, la
   else if (penalty < 0.105 + 0.105 * 5 / 9) through60.penalties++;
   else if (penalty < 0.21) finish.penalties++;
   addScoring(through60, first);
-  return { through60, finish };
+  return { first, through60, finish };
 }
 
 function addScoring(total: NrlScoring, extra: NrlScoring) {
@@ -789,7 +796,7 @@ function minute60Scores(state: NrlManagerState, decision: NrlHalftimeDecision, o
 function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStrength: ReadonlyMap<string, number> | undefined,
   rotation: ReadonlyMap<string, NrlPlayer>,
   closing: ReturnType<typeof closingSelection> | undefined,
-  options: NrlRoundOptions): NrlMatchResult {
+  options: NrlRoundOptions, minute60?: NrlLiveMinute60): NrlMatchResult {
   const { homeId, awayId, finalsRound } = fixture;
   const managed = homeId === state.clubId || awayId === state.clubId;
   const rng = fixtureRng(state, fixture);
@@ -801,18 +808,20 @@ function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStreng
   const middle = regulationEdges(throughHalf, closing?.talk, homeId === state.clubId);
   const late = regulationEdges(extra, closing?.talk, homeId === state.clubId);
   const regulation = (openingEdge: number, closingEdge: number, lateEdge: number) => {
+    if (!managed) return { total: scoringChances(rng, openingEdge, 18), halfTime: 0 };
     if (closing?.lateState) {
-      const { through60, finish } = regulationStages(rng, openingEdge, closingEdge, lateEdge);
+      const { first, through60, finish } = regulationStages(rng, openingEdge, closingEdge, lateEdge);
       addScoring(through60, finish);
-      return through60;
+      return { total: through60, halfTime: scoreOf(first) };
     }
-    if (openingEdge === closingEdge) return scoringChances(rng, openingEdge, 18);
     const { first, second } = regulationHalves(rng, openingEdge, closingEdge);
+    const halfTime = scoreOf(first);
     addScoring(first, second);
-    return first;
+    return { total: first, halfTime };
   };
-  const homeScoring = regulation(opening.homeEdge, middle.homeEdge, late.homeEdge);
-  const awayScoring = regulation(opening.awayEdge, middle.awayEdge, late.awayEdge);
+  const home = regulation(opening.homeEdge, middle.homeEdge, late.homeEdge);
+  const away = regulation(opening.awayEdge, middle.awayEdge, late.awayEdge);
+  const homeScoring = home.total, awayScoring = away.total;
   const gap = scoreOf(homeScoring) - scoreOf(awayScoring);
   const homeKick = rng();
   const awayKick = rng();
@@ -826,7 +835,8 @@ function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStreng
   }
   // NRL finals play ten minutes before sudden death. A regular match can finish level.
   // https://www.nrl.com/siteassets/operations/the-game/nrl-international-rules-book-2023.pdf
-  const extraTime = scoreOf(homeScoring) === scoreOf(awayScoring);
+  const regulationScore: NrlScorePair = [scoreOf(homeScoring), scoreOf(awayScoring)];
+  const extraTime = regulationScore[0] === regulationScore[1];
   if (extraTime && finalsRound) {
     addScoring(homeScoring, scoringChances(rng, homeEdge, 2));
     addScoring(awayScoring, scoringChances(rng, awayEdge, 2));
@@ -845,9 +855,12 @@ function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStreng
     golden[score]++;
     if (recordGoldenPoint) goldenPoint = { period: regularRoll < FIRST_GOLDEN_POINT_SCORE_CHANCE ? 1 : 2, score };
   }
-  const result = {
+  const result: NrlMatchResult = {
     ...fixture, homeScoring, awayScoring, homeScore: scoreOf(homeScoring), awayScore: scoreOf(awayScoring), extraTime,
     ...(goldenPoint ? { goldenPoint } : {}),
+    ...(managed && { scorePeriods: { halfTime: [home.halfTime, away.halfTime],
+      ...(minute60 && { at60: [scoreOf(minute60.homeScoring), scoreOf(minute60.awayScoring)] }),
+      regulation: regulationScore } }),
     ...(closing?.talk ? { halftimeTalk: closing.talk } : {}),
     ...(closing?.lateTactic ? { minute60Tactic: closing.lateTactic } : {}),
   };
@@ -885,7 +898,8 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
   const injury = played && state.injuryTracking ? matchInjury(state, used, medicalReduction) : undefined;
   const results = [...state.results, ...fixtures.map(fixture => {
     const managed = fixture.homeId === state.clubId || fixture.awayId === state.clubId;
-    const result = playFixture(state, fixture, opponentStrength, rotation, managed ? closing : undefined, options);
+    const result = playFixture(state, fixture, opponentStrength, rotation, managed ? closing : undefined, options,
+      managed ? halftime?.live.minute60 : undefined);
     if (!managed) return result;
     const withInjury = injury ? { ...result, injury } : result;
     if (!state.kickerId) return withInjury;
@@ -1168,6 +1182,24 @@ function validGoldenPoint(value: unknown, home: NrlScoring, away: NrlScoring): b
   return GOLDEN_POINT_VALUES[score] === Math.abs(margin) && winner[score] > 0;
 }
 
+function validScorePeriods(value: unknown, home: NrlScoring, away: NrlScoring,
+  extraTime: boolean, finals: boolean, requires60: boolean): boolean {
+  const pair = (scores: unknown, max: number): scores is NrlScorePair =>
+    Array.isArray(scores) && scores.length === 2 && integerIn(scores[0], 0, max) && integerIn(scores[1], 0, max);
+  if (!record(value) || !pair(value.halfTime, 56) || !pair(value.regulation, 112)
+    || (value.at60 === undefined ? requires60 : !pair(value.at60, 86))) return false;
+  const halfTime = value.halfTime, regulation = value.regulation, at60 = value.at60 as NrlScorePair | undefined;
+  if (extraTime !== (regulation[0] === regulation[1])) return false;
+  const totals = [scoreOf(home), scoreOf(away)];
+  const added = totals.map((total, side) => total - regulation[side]);
+  return halfTime.every((half, side) => half % 2 === 0
+    && (at60
+      ? integerIn(at60[side] - half, 0, 32) && at60[side] % 2 === 0 && integerIn(regulation[side] - at60[side], 0, 28)
+      : integerIn(regulation[side] - half, 0, 58)))
+    && added.every(points => integerIn(points, 0, extraTime ? finals ? 18 : 4 : 0))
+    && (finals || [0, 1, 2, 4].includes(added[0] + added[1]) && (added[0] === 0 || added[1] === 0));
+}
+
 function validResult(value: unknown, expected: NrlFixture, state: Pick<NrlManagerState, 'clubId' | 'seed' | 'year'>,
   byId: Map<string, NrlPlayer>): value is NrlMatchResult {
   const { clubId } = state;
@@ -1177,6 +1209,9 @@ function validResult(value: unknown, expected: NrlFixture, state: Pick<NrlManage
     && validScoring(value.homeScoring) && value.homeScore === scoreOf(value.homeScoring)
     && validScoring(value.awayScoring) && value.awayScore === scoreOf(value.awayScoring)
     && typeof value.extraTime === 'boolean' && (value.homeScore !== value.awayScore || (!expected.tieId && value.extraTime))
+    && (value.scorePeriods === undefined || (managed && validScorePeriods(value.scorePeriods,
+      value.homeScoring, value.awayScoring, value.extraTime, Boolean(expected.finalsRound),
+      value.minute60Tactic !== undefined || value.minute60Interchange !== undefined)))
     && (value.goldenPoint === undefined || (managed && !expected.finalsRound && value.extraTime
       && value.playerScoring !== undefined && validGoldenPoint(value.goldenPoint, value.homeScoring, value.awayScoring)))
     && validBenchUse(value.benchUsed, managed, byId)
