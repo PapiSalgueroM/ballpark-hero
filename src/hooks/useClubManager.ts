@@ -658,6 +658,7 @@ export function useClubManager(requestedSlot?: number | null) {
   /** Back to the slots screen from inside a career, or from an era whose
    *  squads would not load (review: that screen had no way back). */
   const showSlots = useCallback(() => {
+    incomingSlot.current = undefined;
     if (careerRef.current && holdsActiveSlot() && !saveCareer(careerRef.current)) movedOn();
     letGoIfStale();
     setBootError(null);

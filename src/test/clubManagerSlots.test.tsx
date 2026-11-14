@@ -396,6 +396,31 @@ describe('Club Manager slots from the Home Continue row', () => {
     expect(storageBytes()).toEqual(before);
   });
 
+  it('lets another manager open after backing out of a failed era download', async () => {
+    const eras = await import('@/lib/clubManagerEras');
+    await eras.ensureEraRosters('era2020');
+    localStorage.setItem(SAVE_KEY, hold('Everton'));
+    localStorage.setItem(parkedKey(2), JSON.stringify(leanCareer(startCareer('Liverpool', 'era2020'))));
+    delete eras.HISTORIC_ROSTERS.era2020;
+    const load = vi.spyOn(eras, 'ensureEraRosters').mockRejectedValueOnce(new Error('Era unavailable'));
+    const before = storageBytes();
+    try {
+      render(<Harness requestedSlot={2} />);
+      await waitFor(() => expect(api.bootError).toBeTruthy());
+      expect(storageBytes()).toEqual(before);
+      act(() => api.showSlots());
+      expect(api.phase).toBe('resume');
+      act(() => api.openSlot(1));
+      await waitFor(() => expect(api.phase).toBe('hub'));
+      expect(api.career.clubName).toBe('Everton');
+      expect(activeSlot()).toBe(1);
+      expect(localStorage.getItem(parkedKey(2))).toBe(before[parkedKey(2)]);
+      expect(load).toHaveBeenCalledTimes(1);
+    } finally {
+      load.mockRestore();
+    }
+  });
+
   it('opens the chooser for a missing direct link in a new browser', async () => {
     render(<Harness requestedSlot={2} />);
     await waitFor(() => expect(api.phase).toBe('resume'));
