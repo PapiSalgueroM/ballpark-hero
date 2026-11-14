@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
-import { FORMATIONS, effectiveXIWithSlots, isAvailable, matchEdge, preMatchRead } from '@/lib/clubManager';
-import { dailyHotSeat, hotSeatLineup, hotSeatPool, hotSeatPreMatchRead, playHotSeatMatch, replayHotSeat, startHotSeat, type HotSeatRun } from '@/lib/managerHotSeat';
+import { FORMATIONS, effectiveXIWithSlots, fitGrade, isAvailable, matchEdge, preMatchRead } from '@/lib/clubManager';
+import { dailyHotSeat, hotSeatLineup, hotSeatPool, hotSeatPreMatchRead, hotSeatReplacementLineup, hotSeatReserves, playHotSeatMatch, replayHotSeat, startHotSeat, type HotSeatRun } from '@/lib/managerHotSeat';
 
 let free: HotSeatRun;
 let nextFormation: number;
@@ -42,11 +42,54 @@ describe('Manager Hot Seat free play formations', () => {
     }
   }, 120000);
 
+  it('offers every available outfield reserve and starts the selected one without moving the other ten', () => {
+    const original = hotSeatLineup(free, nextFormation);
+    const xi = effectiveXIWithSlots(original);
+    const slot = xi.findIndex(({ slot }) => slot?.label === 'CB');
+    const options = hotSeatReserves(original, slot);
+    const startingIds = xi.map(({ p }) => p.id);
+    const eligible = original.squad.filter(p => !startingIds.includes(p.id) && isAvailable(p) && p.position !== 'GK');
+    expect(options.map(p => p.id).sort()).toEqual(eligible.map(p => p.id).sort());
+    const reserve = [...options].filter(p => fitGrade(p, xi[slot].slot!) === 'wrong').sort((a, b) => a.rating - b.rating)[0];
+    expect(reserve).toBeDefined();
+    const replacement = { slot, outId: xi[slot].p.id, playerId: reserve.id };
+    const expectedIds = startingIds.map((id, index) => index === slot ? reserve.id : id);
+    expect(effectiveXIWithSlots(hotSeatReplacementLineup(original, replacement)!).map(({ p }) => p.id)).toEqual(expectedIds);
+
+    const played = playHotSeatMatch(free, 'balanced', null, nextFormation, replacement);
+    expect(played.actions).toEqual([{ t: 'match', m: 'balanced', talk: null, formation: nextFormation, replacement }]);
+    expect(played.state.xiIds).toEqual(expectedIds);
+    expect(played.state.squad.find(p => p.id === reserve.id)?.apps).toBe((reserve.apps ?? 0) + 1);
+    const replayed = replayHotSeat(played.setup, JSON.parse(JSON.stringify(played.actions)));
+    expect(replayed.log).toEqual(played.log);
+    expect(replayed.state.xiIds).toEqual(expectedIds);
+    expect(replayed.state.squad.find(p => p.id === reserve.id)?.apps).toBe((reserve.apps ?? 0) + 1);
+  }, 120000);
+
+  it('rejects unavailable players, starters, stale outgoing identities, and keeper swaps', () => {
+    const xi = effectiveXIWithSlots(free.state);
+    const slot = xi.findIndex(({ slot }) => slot?.label === 'CB');
+    const goalkeeperSlot = xi.findIndex(({ slot }) => slot?.label === 'GK');
+    const reserve = hotSeatReserves(free.state, slot)[0];
+    const replacement = { slot, outId: xi[slot].p.id, playerId: reserve.id };
+    const injured = { ...free.state, squad: free.state.squad.map(p => p.id === reserve.id ? { ...p, injuryWeeks: 2 } : p) };
+    expect(hotSeatReserves(injured, slot).some(p => p.id === reserve.id)).toBe(false);
+    expect(hotSeatReplacementLineup(injured, replacement)).toBeNull();
+    for (const bad of [
+      { ...replacement, outId: 'stale' },
+      { ...replacement, playerId: xi[goalkeeperSlot].p.id },
+      { ...replacement, slot: goalkeeperSlot, outId: xi[goalkeeperSlot].p.id },
+    ]) {
+      expect(playHotSeatMatch(free, 'balanced', null, undefined, bad)).toBe(free);
+    }
+    expect(replayHotSeat(free.setup, [{ t: 'match', m: 'balanced', talk: null, replacement: { ...replacement, outId: 'stale' } }]).actions).toEqual([]);
+  }, 120000);
+
   it('ignores attempted formation changes in the shared Daily', () => {
     const daily = startHotSeat(dailyHotSeat('2026-11-14'));
     const index = (daily.state.formationIndex + 1) % FORMATIONS.length;
     const original = playHotSeatMatch(daily, 'balanced', null);
-    const attempted = playHotSeatMatch(daily, 'balanced', null, index);
+    const attempted = playHotSeatMatch(daily, 'balanced', null, index, { slot: 1, outId: 'outgoing', playerId: 'reserve' });
     expect(hotSeatLineup(daily, index)).toBe(daily.state);
     expect(attempted.actions).toEqual(original.actions);
     expect(attempted.log).toEqual(original.log);

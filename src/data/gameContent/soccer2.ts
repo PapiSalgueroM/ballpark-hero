@@ -36,7 +36,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         subsections: [
           {
             heading: "Setting up your team",
-            items: ["Choose a defensive, balanced or attacking mentality.", "In free play, open Formation and XI to see who would start and how well they fit their positions. Pick a formation before kickoff and it carries into the next match."],
+            items: ["Choose a defensive, balanced or attacking mentality.", "In free play, open Formation and XI to see who would start and how well they fit their positions. Pick a formation before kickoff and it carries into the next match.", "Pick a starter to see every available reserve for that slot. You can replace one starter before kickoff. Goalkeepers stay in goal, and outfielders playing out of position show their rating penalty."],
           },
           {
             heading: "Picking a team talk",
@@ -104,7 +104,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "The first two league games",
         paragraphs: [
-          "Game one is at home to a weaker side. The read says the dressing room is flat, so you go balanced and say nothing. A 2 to 0 win puts 3 on the board and lifts the fans.",
+          "Game one is at home to a weaker side. In Free Play, your left back is tired. Open Formation and XI, pick him under Replace one starter, and choose a fresher reserve. The new name appears in the XI and starts with the same ten teammates. The read says the dressing room is flat, so you go balanced and say nothing. A 2 to 0 win puts 3 on the board and lifts the fans.",
           "Game two is away at a stronger side. You sit deep with a defensive shape and take a 1 to 1 draw. That is 4. The press ask about the board and you back yourself.",
         ],
       },
