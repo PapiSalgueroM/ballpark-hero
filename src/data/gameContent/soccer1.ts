@@ -399,7 +399,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     headings: {
       howToPlay: "How to play Dart Draft, a free online football dart throwing game",
       rules: "Dart Draft rules: throws, accuracy points and the map zones",
-      example: "Dart Draft walkthrough: a safe striker and a shark re-throw",
+      example: "Dart Draft walkthrough: a safe striker and the lifeboat",
       tips: "Dart Draft tips for picking countries and positions",
       faq: "Dart Draft FAQ: nations, positions and The Machine",
     },

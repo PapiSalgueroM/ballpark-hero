@@ -723,12 +723,12 @@
         "11 throws per game. The camera alternates between the world map and zoomed continent rounds, and the crosshair sweeps faster every throw.",
         "Accuracy points: 12 to 55 for a country, smaller ones paying more, 40 for a gold zone, 0 for water and red zones.",
         "Gold zones offer legends, under 21 wonderkids, a free pick or a mystery gamble. Red zone sharks and storms punish greed.",
-        "Ocean throws and wasted darts hand you a 40 rated trialist, unless you spend the one lifeboat re-throw per game.",
+        "Use your one lifeboat re-throw on a shark, open water or a non-qualifying country in World Cup mode. The re-throw keeps the same position.",
         "Final score is accuracy plus XI rating plus 120 for a series win or 60 for a draw. Grades run S at 85 down to F below 54."
       ],
       "example": [
         "First throw, striker slot, world map. You lock the vertical line late, stick France, and take a proven forward.",
-        "Later you aim greedily at the tiny LEGEND ring over the Atlantic and it lands: an all time keeper joins. Your last dart splashes into open water, lifeboat already spent, and the trialist at left back suffers all series."
+        "Later you hit a shark while throwing for left back. Take the 40-rated trialist to save your lifeboat, or spend it to throw again for left back. If a later dart lands in open water after you spend it, take the trialist."
       ],
       "tips": [
         "Big countries are safe darts, tiny ones pay more accuracy points.",
