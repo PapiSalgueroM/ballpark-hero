@@ -75,7 +75,7 @@
 .continueSport { position: absolute; right: -4px; bottom: -3px; width: 16px; height: 16px; padding: 2px; border-radius: 50%; background: hsl(var(--surface-1)); color: hsl(var(--tile)); }
 .continueText { min-width: 0; flex: 1; }
 .continueName { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: hsl(var(--foreground)); font-size: 13px; font-weight: 700; line-height: 20px; }
-.continueLine { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: hsl(var(--muted-foreground)); font-size: 12px; line-height: 16px; }
+.continueLine { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; color: hsl(var(--muted-foreground)); font-size: 12px; line-height: 16px; }
 .continueArrow { width: 15px; height: 15px; flex-shrink: 0; color: hsl(var(--primary)); }
 
 @media (min-width: 640px) {
