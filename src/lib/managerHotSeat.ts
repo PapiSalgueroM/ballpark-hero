@@ -59,9 +59,11 @@
 import {
   REAL_LEAGUES,
   answerPress,
+  autoPickXI,
   clubDefFor,
   cupProgressRank,
   engineRegistrations,
+  FORMATIONS,
   fixtureFor,
   isPartialClub,
   leaguePosition,
@@ -361,7 +363,7 @@ export function tieRulesOf(setup: HotSeatSetup): CareerState['tieRules'] {
 }
 
 export type HotSeatAction =
-  | { t: 'match'; m: Mentality; talk: TalkTone | null }
+  | { t: 'match'; m: Mentality; talk: TalkTone | null; formation?: number }
   | { t: 'press'; i: number };
 
 export interface HotSeatMatch {
@@ -718,22 +720,35 @@ function cloneRun(run: HotSeatRun): HotSeatRun {
   return { ...run, log: [...run.log], actions: [...run.actions], takeover: { ...run.takeover } };
 }
 
+export function hotSeatLineup(run: HotSeatRun, formationIndex?: number): CareerState {
+  if (run.setup.daily || formationIndex === undefined || !Number.isInteger(formationIndex)) return run.state;
+  const formation = FORMATIONS[formationIndex];
+  if (!formation || formationIndex === run.state.formationIndex) return run.state;
+  return {
+    ...run.state,
+    formationIndex,
+    xiIds: autoPickXI(run.state.squad, formation, true),
+    xiDuties: formation.slots.map(() => null),
+  };
+}
+
 /**
  * Plays your next match with the shape and the talk you picked, through the
  * engine's own playNextEntry, then walks past any window to the next match
  * and settles the verdict if the leash has run out. Never mutates the input.
  */
-export function playHotSeatMatch(prev: HotSeatRun, mentality: Mentality, talk: TalkTone | null): HotSeatRun {
+export function playHotSeatMatch(prev: HotSeatRun, mentality: Mentality, talk: TalkTone | null, formation?: number): HotSeatRun {
   if (prev.verdict) return prev;
-  return onStaticWorld(() => playOnStaticWorld(prev, mentality, talk), prev.setup.daily);
+  return onStaticWorld(() => playOnStaticWorld(prev, mentality, talk, formation), prev.setup.daily);
 }
 
-function playOnStaticWorld(prev: HotSeatRun, mentality: Mentality, talk: TalkTone | null): HotSeatRun {
+function playOnStaticWorld(prev: HotSeatRun, mentality: Mentality, talk: TalkTone | null, formation?: number): HotSeatRun {
   const run = cloneRun(prev);
-  run.actions.push({ t: 'match', m: mentality, talk });
   skipToMatch(run);
+  const lineup = hotSeatLineup(run, formation);
+  run.actions.push({ t: 'match', m: mentality, talk, ...(lineup !== run.state ? { formation } : {}) });
   const before = run.state.boardConfidence;
-  const ready: CareerState = { ...run.state, mentality, teamTalk: talk };
+  const ready: CareerState = { ...lineup, mentality, teamTalk: talk };
   /* The nth match of the job draws stream n, whatever was said in between. */
   const r = withSeed(mixSeed(run.setup.seed, 1000 + run.log.length), () => playNextEntry(ready, { skipHalftime: true, noCoach: true, noBook: true }));
   run.step += 1;
@@ -797,7 +812,7 @@ export function replayHotSeat(setup: HotSeatSetup, actions: HotSeatAction[]): Ho
   let run = startHotSeat(setup);
   for (const a of actions) {
     if (run.verdict) break;
-    if (a.t === 'match') run = playHotSeatMatch(run, a.m, a.talk);
+    if (a.t === 'match') run = playHotSeatMatch(run, a.m, a.talk, a.formation);
     else {
       const next = answerHotSeatPress(run, a.i);
       if (next === run) break;

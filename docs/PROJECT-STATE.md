@@ -1,4 +1,11 @@
+## 2026-11-14: NRL season continuity and Manager Hot Seat formations
+
+- NRL managers staying at the same club can keep their first-choice and rotation presets. Season review previews which places will be repaired from the new squad. The active Round 1 team remains independent until the manager applies a preset.
+- Manager Hot Seat free play lets you select a formation and preview the available starting XI and its fit before kickoff. The choice is recorded when the match plays and replays with the save. The shared Daily uses its existing lineup rules.
+
 ## 2026-11-14: MLB bullpen roles, academy coaching focus and NRL late reserves
+
+[PR #942](https://github.com/PapiSalgueroM/ballpark-hero/pull/942) published exact main `2a821a9d4c7d497397bacd1c72ecfac96c6d5be1`, deployment `acccf195-6b1a-40a6-952d-6ac11a910932`. Eight live browser journeys and four raw guides passed. All 174 sitemap routes and six policy and crawler endpoints answered cleanly. IndexNow accepted the four changed guides.
 
 - MLB My Career relievers can choose a role for their next signed season after playing a year. Setup prioritizes holds. An eligible closer gets the existing saves workload. The assignment sticks to its team and year and the Career Log saves the role actually played.
 - Wonderkid Factory and Stadium Tycoon's Academy let a coach focus training on one prospect. Some growth moves from other eligible prospects to the chosen player, up to their ceiling. Normal coaching is available any time.

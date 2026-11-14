@@ -27,7 +27,8 @@ const ManagerHotSeat = () => {
                 <ul className="list-disc pl-5 space-y-1">
                   <li>The season is played up to the worst run of form between league weeks {HOT_SEAT_TAKEOVER_MIN} and {HOT_SEAT_TAKEOVER_MAX}, and that is where you take over.</li>
                   <li>The board start on {HOT_SEAT_BOARD_START} out of 100. If that meter hits zero, you are sacked on the spot.</li>
-                  <li>Before every match pick a shape (defensive, balanced or attacking) and a team talk, or say nothing.</li>
+                  <li>Before every match pick a mentality (defensive, balanced or attacking) and a team talk, or say nothing.</li>
+                  <li>In free play, open Formation and XI before kickoff to change formation and preview the available starters. The chosen formation stays in place for later matches.</li>
                   <li>Cup and European games still get played and still move the meters, but only league points count toward the target.</li>
                   <li>Hit the target and you keep the job. Miss it by one point with the fans singing and they save you. Anything else is the sack.</li>
                   <li>The daily is the same club, the same week and the same target for everyone. Free play is any club you like.</li>

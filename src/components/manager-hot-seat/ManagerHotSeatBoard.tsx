@@ -8,7 +8,7 @@ import { markRestoredFinish } from '@/lib/restoredFinish';
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 import { getTodayET } from '@/lib/dateUtils';
 import { cn } from '@/lib/utils';
-import { MENTALITIES, TALK_TONES, preMatchRead, type Mentality, type TalkTone } from '@/lib/clubManager';
+import { FORMATIONS, MENTALITIES, TALK_TONES, effectiveXIWithSlots, fitPenalty, preMatchRead, type Mentality, type TalkTone } from '@/lib/clubManager';
 import type { Meter } from '@/lib/clubManagerMeters';
 import {
   HOT_SEAT_BOARD_START,
@@ -19,6 +19,7 @@ import {
   crisisLine,
   dailyHotSeat,
   hotSeatLeagues,
+  hotSeatLineup,
   hotSeatMeters,
   hotSeatPool,
   ordinal,
@@ -48,7 +49,8 @@ function isAction(a: unknown): a is HotSeatAction {
   if (x.t === 'press') return Number.isInteger(x.i) && (x.i as number) >= 0 && (x.i as number) < 10;
   if (x.t === 'match') {
     return ['defensive', 'balanced', 'attacking'].includes(x.m as string)
-      && (x.talk === null || ['calm', 'rally', 'demand', 'blast'].includes(x.talk as string));
+      && (x.talk === null || ['calm', 'rally', 'demand', 'blast'].includes(x.talk as string))
+      && (x.formation === undefined || (typeof x.formation === 'number' && Number.isInteger(x.formation) && !!FORMATIONS[x.formation]));
   }
   return false;
 }
@@ -109,6 +111,27 @@ function Progress({ run }: { run: HotSeatRun }) {
   );
 }
 
+function FormationPicker({ lineup, onChange }: { lineup: HotSeatRun['state']; onChange: (index: number) => void }) {
+  const xi = effectiveXIWithSlots(lineup);
+  const rating = Math.round(xi.reduce((total, { p, slot }) => total + p.rating - fitPenalty(p, slot), 0) / Math.max(1, xi.length));
+  return (
+    <details className="rounded-md border border-border bg-background px-3" data-testid="hot-seat-lineup">
+      <summary className="min-h-11 cursor-pointer py-3 text-sm font-semibold">
+        Formation and XI · {FORMATIONS[lineup.formationIndex]?.name} · {rating} fit-adjusted OVR
+      </summary>
+      <label className="text-xs font-semibold" htmlFor="hot-seat-formation">Formation</label>
+      <select id="hot-seat-formation" value={lineup.formationIndex} onChange={event => onChange(Number(event.target.value))}
+        className="mt-1 min-h-11 w-full rounded-md border border-border bg-card px-2 text-sm">
+        {FORMATIONS.map((formation, index) => <option key={formation.name} value={index}>{formation.name}</option>)}
+      </select>
+      <p className="mt-2 text-xs text-muted-foreground">Changing formation picks an available XI for the new positions. The formation carries over after kickoff.</p>
+      <ul className="my-3 grid grid-cols-2 gap-x-3 gap-y-1 text-xs" aria-label="Starting XI">
+        {xi.map(({ p, slot }) => <li key={p.id}><span className="font-semibold">{slot?.label}</span> {p.name}</li>)}
+      </ul>
+    </details>
+  );
+}
+
 export default function ManagerHotSeatBoard() {
   const today = useRef(getTodayET()).current;
   const daily = useMemo(() => dailyHotSeat(today), [today]);
@@ -124,6 +147,7 @@ export default function ManagerHotSeatBoard() {
   const [freeFinished, setFreeFinished] = useState<{ setup: HotSeatSetup; actions: HotSeatAction[] } | null>(null);
   const [league, setLeague] = useState<string>('premier');
   const [mentality, setMentality] = useState<Mentality>('balanced');
+  const [formation, setFormation] = useState<number>();
   const [talk, setTalk] = useState<TalkTone | null>(null);
   const [lastLine, setLastLine] = useState<string | null>(null);
 
@@ -204,6 +228,7 @@ export default function ManagerHotSeatBoard() {
       if (r.verdict) markRestoredFinish(SLUG);
       setRun(r);
       setMentality('balanced');
+      setFormation(undefined);
       setTalk(null);
       setPhase(r.verdict ? 'done' : actions.length ? 'match' : 'brief');
     }, 30);
@@ -230,10 +255,11 @@ export default function ManagerHotSeatBoard() {
 
   const play = () => {
     if (!run || run.verdict) return;
-    const next = playHotSeatMatch(run, mentality, talk);
+    const next = playHotSeatMatch(run, mentality, talk, formation);
     setRun(next);
     persist(next);
     setTalk(null);
+    setFormation(undefined);
     setLastLine(null);
     setPhase(next.verdict ? 'done' : 'after');
   };
@@ -254,6 +280,7 @@ export default function ManagerHotSeatBoard() {
   const leagues = useMemo(() => hotSeatLeagues(), []);
   const clubsInLeague = useMemo(() => hotSeatPool().filter(c => c.leagueId === league), [league]);
   const fx = run && !run.verdict ? upcoming(run) : null;
+  const lineup = run && phase === 'match' ? hotSeatLineup(run, formation) : null;
   const q = run ? pendingPress(run) : null;
   const last = run?.log[run.log.length - 1] ?? null;
 
@@ -384,12 +411,12 @@ export default function ManagerHotSeatBoard() {
               </div>
             )}
 
-            {phase === 'match' && fx && (
+            {phase === 'match' && fx && lineup && (
               <div className="space-y-3 rounded-lg border border-border bg-card p-4" data-testid="hot-seat-match">
                 <div>
                   <div className="text-xs text-muted-foreground">{fx.compLabel}{fx.counts ? '' : ', does not count toward the target'}</div>
                   <div className="text-lg font-bold">{fx.home === true ? 'Home to' : fx.home === false ? 'Away at' : 'Neutral ground against'} {fx.opponent}</div>
-                  <p className="mt-1 text-sm text-muted-foreground">{preMatchRead(run.state) ?? ''}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">{preMatchRead(lineup) ?? ''}</p>
                 </div>
                 {q && (
                   <div className="rounded-md bg-muted p-3" data-testid="hot-seat-press">
@@ -402,8 +429,9 @@ export default function ManagerHotSeatBoard() {
                     </div>
                   </div>
                 )}
+                {!run.setup.daily && <FormationPicker lineup={lineup} onChange={setFormation} />}
                 <div>
-                  <div className="mb-1 text-xs font-semibold text-muted-foreground">Shape</div>
+                  <div className="mb-1 text-xs font-semibold text-muted-foreground">{run.setup.daily ? 'Shape' : 'Mentality'}</div>
                   <div className="grid grid-cols-3 gap-2">
                     {MENTALITIES.map(m => (
                       <button key={m.id} type="button" aria-pressed={mentality === m.id} onClick={() => setMentality(m.id)}
