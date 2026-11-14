@@ -1,4 +1,12 @@
+## 2026-11-14: Club Manager founding squad, NRL kicking cover and MLB round reports
+
+- Club Manager's creation form lets the manager choose any of the 24 generated founders and adjust their fictional name, age and secondary position. The original primary roles, budget-based valuation and squad quality rules still apply.
+- NRL Team Manager lets a rotating reserve replace the starting goal kicker at halftime when the designated backup stays on. The report credits opening and closing place kicks to the actual kicker.
+- MLB Front Office keeps the latest completed round's record and headlines with the save, including the round that closes the regular season.
+
 ## 2026-11-14: Club Manager long-term injuries, NBA replay and State of Origin history
+
+[PR #931](https://github.com/PapiSalgueroM/ballpark-hero/pull/931) published exact main `62813293acdb6f2c9aacec952560f4d16356426a`, deployment `5178b671-f551-4641-b9b0-9d6d1c663a2e`. Seven live browser journeys, all 174 sitemap routes and three raw guides passed. IndexNow accepted the guides.
 
 - Rare ACL tears and Achilles ruptures in Club Manager's simulated fixtures use an estimated return date. The match report and squad show it, and the injury stays on the player after summer if the date has yet to pass. Duration bands draw on published men's professional football cohorts. [ACL layoff study](https://bjsm.bmj.com/content/bjsports/50/12/744.full.pdf) and [Achilles match return study](https://pubmed.ncbi.nlm.nih.gov/34558318/).
 - NBA My Career's Career Log opens reconstructed games for supported older regular seasons, with a label explaining how the scores were generated.
