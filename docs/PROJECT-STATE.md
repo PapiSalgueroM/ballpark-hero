@@ -1,4 +1,12 @@
+## 2026-11-14: Stadium sponsorship, Contract Chaos role counters and NRL away recovery
+
+- Stadium Tycoon managers can take a fixed sponsorship fee or a larger payout if enough league matches draw the signed crowd target. Both options pay in game cash at season end. The saved Latest season report retains the result across promotion.
+- Contract Chaos Free Play offers one counter per deal. Take a lower wage for one step up in promised playing time, or use that counter to ask for more money. The preview shows the total wage cost, and the role promise lasts while the manager does.
+- NRL clubs can buy one $120,000 away recovery session per season before a regular-season road game. It restores up to eight kickoff fitness points on top of the chosen preparation. The same paid booking drives both Quick Sim and Live Match.
+
 ## 2026-11-14: Historical Daily recovery, NRL match ratings and NFL backfield roles
+
+[PR #950](https://github.com/PapiSalgueroM/ballpark-hero/pull/950) published exact main `49f05162d139dae3ab296d936878afc726ffd3aa`, deployment `95165b08-0222-4290-a223-6106c9b6d860`. Seven live browser journeys, both raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted both guides. The default US career digest matched all 464 saved results.
 
 - Manager Hot Seat and Deadline Day restore the original setup and action playback for affected older Dailies. Hot Seat uses the matching lineup policy for its pre-match read. The November 13 release split the Eastern day, so its older action-only saves cannot distinguish the two lineup policies. November 14 onward uses the current selection policy.
 - The latest NRL regular-season match report lists any OVR changes from that match review. Both Quick Sim and Live Match use the same saved round, and the report says when the review produced no changes.

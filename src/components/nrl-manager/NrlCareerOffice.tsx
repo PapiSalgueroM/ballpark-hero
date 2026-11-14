@@ -10,7 +10,7 @@ import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   isNrlNamedPlayer,
   nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyParallelQuote, nrlAcademyParallelSpend, nrlAcademyReleaseAvailable, nrlAcademyReports,
-  nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
+  nrlAwayRecoverySpend, nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
   nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractApproachPreview, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer, nrlContractTermLimit,
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
@@ -1415,6 +1415,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
                 ['Operating costs', cash.operatingCosts],
                 ...(medicalSpend ? [['Medical upgrades', medicalSpend] as [string, number]] : []),
                 ...(cash.physio ? [['Physio session', nrlPhysioSpend(cash)] as const] : []),
+                ...(cash.awayRecoveryRound ? [['Away recovery session', nrlAwayRecoverySpend(cash)] as const] : []),
                 ...(academySpend ? [['Academy facilities', academySpend] as const] : []),
                 ...(academyScoutSpend ? [['Second academy scout', academyScoutSpend] as const] : []),
                 ...(concessionsSpend ? [['Concessions upgrade', concessionsSpend] as const] : []),
@@ -2210,6 +2211,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 )}
                 {record.finance?.academyUpgradeRound && <p className="text-sm text-muted-foreground">Academy facilities {money(nrlAcademyFacilitySpend(record.finance))}</p>}
                 {record.finance?.academyParallelRound && <p className="text-sm text-muted-foreground">Second academy scout {money(nrlAcademyParallelSpend(record.finance))}</p>}
+                {record.finance?.awayRecoveryRound && <p className="text-sm text-muted-foreground">Away recovery session · Round {record.finance.awayRecoveryRound} · {money(nrlAwayRecoverySpend(record.finance))}</p>}
                 {record.finance?.mutualRelease && (
                   <p className="text-sm text-muted-foreground">
                     Mutual release · {record.finance.mutualRelease.playerName} · {money(nrlMutualReleaseSpend(record.finance))} settlement

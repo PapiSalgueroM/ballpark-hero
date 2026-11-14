@@ -1,8 +1,8 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
-import { createNrlCareer, reduceNrlCareer } from '@/lib/nrlCareer';
+import { createNrlCareer, nrlAwayRecoveryQuote, reduceNrlCareer } from '@/lib/nrlCareer';
 import { NRL_SAVE_KEY } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
@@ -64,4 +64,29 @@ it('retains the other tab’s match when an old page tries to queue recovery', (
   expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(bytes);
   expect(localStorage.getItem(fence)).toBe('5');
   expect(screen.getByText(/this season changed in another tab/i)).toBeVisible();
+});
+
+it('quotes and saves one paid away recovery session before playing', () => {
+  let before = createNrlCareer('broncos', 1, 2026);
+  while (before.season.round < 4) before = reduceNrlCareer(before, { type: 'advance' });
+  const bytes = JSON.stringify(before);
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, bytes);
+  localStorage.setItem(fence, '4');
+  const draw = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const first = draw();
+  const panel = () => within(screen.getByRole('region', { name: 'Away recovery session' }));
+  const quote = nrlAwayRecoveryQuote(before)!;
+  expect(panel().getByText(`Average starter fitness at kickoff ${quote.normalFitness}% → ${quote.bookedFitness}%`)).toBeVisible();
+  fireEvent.click(panel().getByRole('button', { name: /Book for/ }));
+  const booked = reduceNrlCareer(before, { type: 'bookAwayRecovery', year: 2026, clubId: 'broncos', round: 4 });
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(booked));
+  expect(localStorage.getItem(fence)).toBe('5');
+  first.unmount();
+  draw();
+  expect(panel().getByText(/Booked for this match/)).toBeVisible();
+  expect(panel().queryByRole('button')).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: 'Quick Sim' }));
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(reduceNrlCareer(booked, { type: 'advance' })));
+  expect(localStorage.getItem(fence)).toBe('6');
 });

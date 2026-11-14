@@ -18,7 +18,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { useContractChaos } from '@/hooks/useContractChaos';
 import {
-  HORIZON, ROLE_WORD, SEAT_WORD, CITY_WORD, AMBITION_WORD, fmtM, totalValue, shareText,
+  HORIZON, ROLE_WORD, SEAT_WORD, CITY_WORD, AMBITION_WORD, fmtM, totalValue, shareText, roleCounterOffer,
   type CcOffer,
 } from '@/lib/contractChaos';
 
@@ -49,7 +49,7 @@ const ContractChaos = () => {
             <ul className="list-disc pl-5 space-y-1">
               <li>Every offer has a wage, a length, a promised role, the manager's job security, home or abroad, a signing bonus, a trophy bonus, maybe a release clause, and how ambitious the club is.</li>
               <li>Title chasers pay less and the bench is crowded. Rebuilds overpay and hand you the shirt. That is the trade.</li>
-              <li>You can push each offer for more money once. A star usually gets it. Push too hard and an outside club can walk, but your own club never does and the last offer standing never does.</li>
+              <li>You get one counter per offer. Push for more money and an outside club can walk. Your own club and the last offer stay on the table. In Free Play, you can use your counter to accept a lower wage for a stronger role instead.</li>
               <li>The promised role only lasts while that manager keeps his job. A hot seat manager can be gone by season two.</li>
               <li>A release clause lets a bigger club buy him out if he outgrows the place. No clause, no escape until the deal ends.</li>
               <li>Five seasons, whatever the length. If the deal ends early he finds a new club at whatever he is worth by then.</li>
@@ -59,6 +59,7 @@ const ContractChaos = () => {
             </ul>
             <p className="font-semibold text-foreground">Worked example:</p>
             <p>A 19 year old rated 74 with potential 88. The title chasers offer €1.3M a year as a rotation player; a rebuild offers €2.0M and the starting spot. The rebuild's minutes grow him to 86 and pay more, but the title chasers win the league twice. Growth and money against trophies: that is the call.</p>
+            <p>In Free Play, a €1.3M offer over two years could become €1.1M a year with a starting role. You give up €0.4M over the two years for the stronger promise.</p>
           </div>
         </RulesGate>
 
@@ -122,7 +123,7 @@ const ContractChaos = () => {
                         <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{o.fa.incumbent ? 'Your club' : AMBITION_WORD[o.fa.tier]}</div>
                         <div className="text-sm font-bold text-foreground leading-tight">{o.fa.label}</div>
                         <div className="text-xs text-foreground tabular-nums mt-1">{fmtM(o.fa.salary)} a year, {o.fa.years} {o.fa.years === 1 ? 'year' : 'years'}</div>
-                        <div className="text-[11px] text-muted-foreground">{ROLE_WORD[o.role]}{o.fa.gone ? ', walked away' : o.fa.pushed ? ', pushed' : ''}</div>
+                        <div className="text-[11px] text-muted-foreground">{ROLE_WORD[o.role]}{o.fa.gone ? ', walked away' : o.fa.pushed ? (g.mode === 'free' ? ', counter used' : ', pushed') : ''}</div>
                       </button>
                     ))}
                   </div>
@@ -136,6 +137,7 @@ const ContractChaos = () => {
                   line={g.talk[g.focus]}
                   onBack={g.back}
                   onPush={() => g.push(g.focus)}
+                  onCounterRole={g.mode === 'free' ? () => g.counterRole(g.focus) : undefined}
                   onSign={() => g.sign(g.focus)}
                 />
               )}
@@ -272,9 +274,10 @@ function PlayerCard({ deal }: { deal: NonNullable<ReturnType<typeof useContractC
   );
 }
 
-function OfferDetail({ offer: o, player, ovr, line, onBack, onPush, onSign }: {
-  offer: CcOffer; player: string; ovr: number; line?: string; onBack: () => void; onPush: () => void; onSign: () => void;
+function OfferDetail({ offer: o, player, ovr, line, onBack, onPush, onCounterRole, onSign }: {
+  offer: CcOffer; player: string; ovr: number; line?: string; onBack: () => void; onPush: () => void; onCounterRole?: () => void; onSign: () => void;
 }) {
+  const counter = onCounterRole ? roleCounterOffer(o) : null;
   const rows: [string, string][] = [
     ['Wage', `${fmtM(o.fa.salary)} a year`],
     ['Length', `${o.fa.years} ${o.fa.years === 1 ? 'year' : 'years'}`],
@@ -288,6 +291,7 @@ function OfferDetail({ offer: o, player, ovr, line, onBack, onPush, onSign }: {
     ['Squad strength', `${o.fa.quality} (he is ${ovr})`],
     ['Total value', `${fmtM(totalValue(o))} with the bonus`],
   ];
+  const pushLabel = o.fa.pushed ? (onCounterRole ? 'Counter used' : 'Already pushed') : 'Push for more';
   return (
     <div className="rounded-2xl border border-border bg-card p-4 space-y-3">
       <button onClick={onBack} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground min-h-[32px]">
@@ -307,7 +311,15 @@ function OfferDetail({ offer: o, player, ovr, line, onBack, onPush, onSign }: {
           </div>
         ))}
       </dl>
-      {line && <p className="text-sm font-semibold text-foreground">{line}</p>}
+      {line && <p className="text-sm font-semibold text-foreground" role="status">{line}</p>}
+      {counter && (
+        <section aria-label="Playing time counteroffer" className="space-y-2 rounded-xl border border-border bg-muted/30 p-3 text-sm">
+          <p className="font-semibold">{ROLE_WORD[o.role]} to {ROLE_WORD[counter.role]}</p>
+          <p>Wage falls from {fmtM(o.fa.salary)} to {fmtM(counter.fa.salary)} a year. That’s {fmtM(totalValue(o) - totalValue(counter))} less in guaranteed pay over the deal.</p>
+          <p className="text-xs text-muted-foreground">The promise lasts while this manager stays. This uses your one counter for this offer.</p>
+          <button type="button" onClick={onCounterRole} className="min-h-11 w-full rounded-lg border border-primary px-3 text-sm font-semibold text-primary">Counter for {counter.role === 'starter' ? 'a starting role' : 'a rotation role'}</button>
+        </section>
+      )}
       {o.fa.gone ? (
         <p className="text-sm text-muted-foreground">This offer is off the table.</p>
       ) : (
@@ -317,7 +329,7 @@ function OfferDetail({ offer: o, player, ovr, line, onBack, onPush, onSign }: {
             disabled={o.fa.pushed}
             className="rounded-xl py-3 min-h-[44px] border border-border bg-secondary text-foreground font-bold disabled:opacity-50 hover:bg-secondary/70 transition-colors"
           >
-            {o.fa.pushed ? 'Already pushed' : 'Push for more'}
+            {pushLabel}
           </button>
           <button
             onClick={onSign}

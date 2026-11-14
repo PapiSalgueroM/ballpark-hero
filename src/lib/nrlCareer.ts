@@ -11,7 +11,7 @@ import {
 } from '@/lib/nrlPlayerScoring';
 import {
   archiveNrlFinals, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
-  isNrlPhysioTreatment, nrlByeTrainingPreview, nrlInjuries, nrlLivePhasePreview, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
+  isNrlPhysioTreatment, nrlByeTrainingPreview, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
   nrlPlanAdjustments, nrlPlanMatchups, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlLivePlanChoice, type NrlManagerState, type NrlMatchResult,
@@ -40,6 +40,8 @@ export const NRL_RECRUITMENT_PLAN_LIMIT = 3;
 const RETIREMENT_AGE = 36;
 const MEDICAL_UPGRADE_COST = { 2: 800_000, 3: 2_600_000 } as const;
 const NRL_PHYSIO_COST = 60_000;
+const AWAY_RECOVERY_COST = 120_000;
+const AWAY_RECOVERY_FITNESS = 8;
 const ACADEMY_UPGRADE_COST = 600_000;
 const ACADEMY_PARALLEL_COST = 60_000;
 const ACADEMY_UPGRADE_POTENTIAL = 3;
@@ -106,6 +108,7 @@ export interface NrlCareerBook {
   operatingCosts: number;
   medicalUpgrades?: NrlMedicalUpgrade[];
   physio?: NrlPhysioTreatment;
+  awayRecoveryRound?: number;
   academyUpgradeRound?: number;
   academyParallelRound?: number;
   concessionsUpgradeRound?: number;
@@ -261,6 +264,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'upgradeMedical'; level: MedicalUpgradeLevel }
   | { type: 'upgradeAcademy'; year: number; clubId: string; round: number }
   | { type: 'upgradeConcessions'; year: number; clubId: string; round: number }
+  | { type: 'bookAwayRecovery'; year: number; clubId: string; round: number }
   | { type: 'hireCoach'; role: NrlCoachRole; year: number; round: number }
   | { type: 'hireCoach'; role: 'development'; year: number; clubId: string; round: number }
   | { type: 'setTicketTier'; tier: NrlTicketTier; year: number; round: number }
@@ -942,7 +946,8 @@ export function nrlCareerFinance(state: Pick<NrlCareerState, 'finance'>): NrlCar
     + nrlBoardRecruitmentIncome(state.finance)
     + (state.finance.concessionReceipts ?? 0) - nrlConcessionsSpend(state.finance)
     - wagesPaid - operatingCosts - nrlMedicalSpend(state.finance) - nrlAcademyFacilitySpend(state.finance) - nrlAcademyParallelSpend(state.finance)
-    - nrlMutualReleaseSpend(state.finance) - signingFee - wages - nrlCoachCourseSpend(state.finance) - nrlPhysioSpend(state.finance);
+    - nrlMutualReleaseSpend(state.finance) - signingFee - wages - nrlCoachCourseSpend(state.finance) - nrlPhysioSpend(state.finance)
+    - nrlAwayRecoverySpend(state.finance);
   return { ...state.finance, cash: openingCash + profit, profit };
 }
 
@@ -1039,6 +1044,35 @@ function facilityPurchaseRefusal(finance: NrlCareerBook, finalRound: number, cos
   const cash = nrlCareerFinance({ finance }).cash;
   if (cash < cost) return 'The club needs more cash for this upgrade.';
   return cash - coachWageReserve(finance, finalRound) < cost ? 'Club cash is reserved for the assistant’s wages.' : null;
+}
+
+export function nrlAwayRecoverySpend({ awayRecoveryRound }: NrlCareerBook) {
+  return awayRecoveryRound === undefined ? 0 : AWAY_RECOVERY_COST;
+}
+
+export function nrlAwayRecoveryBonus({ finance, season }: Pick<NrlCareerState, 'finance' | 'season'>) {
+  return finance.awayRecoveryRound === season.round ? AWAY_RECOVERY_FITNESS : 0;
+}
+
+function isAwayRound(year: number, clubId: string, round: number) {
+  return Boolean(nrlSeasonPlan(year).draw[round - 1]?.some(([, away]) => away === clubId));
+}
+
+export function nrlAwayRecoveryQuote(state: NrlCareerState) {
+  const { finance, season } = state;
+  const { year, round, clubId } = season;
+  if (state.legacySeason || state.retired || season.live || !season.kickerId
+    || season.phase !== 'regular' || !isAwayRound(year, clubId, round)) return null;
+  const starters = new Set(Object.values(season.lineup));
+  const kickoff = season.squad.filter(player => starters.has(player.id)).map(player => ({
+    normal: nrlMatchFitness(season, player), booked: nrlMatchFitness(season, player, AWAY_RECOVERY_FITNESS),
+  }));
+  const booked = finance.awayRecoveryRound === round;
+  const reason = finance.awayRecoveryRound !== undefined ? 'The club has used its away recovery session this season.'
+    : kickoff.every(player => player.normal === player.booked) ? 'Your starters are already fully fit for kickoff.'
+      : facilityPurchaseRefusal(finance, lastRound(year), AWAY_RECOVERY_COST);
+  const average = (key: 'normal' | 'booked') => Math.round(kickoff.reduce((sum, player) => sum + player[key], 0) / kickoff.length);
+  return { booked, reason, cost: AWAY_RECOVERY_COST, normalFitness: average('normal'), bookedFitness: average('booked') };
 }
 
 export function nrlAcademyFacilityQuote(state: NrlCareerState) {
@@ -1482,14 +1516,14 @@ export function nrlLivePlanPreview(state: NrlCareerState, choice: NrlLivePlanCho
   const planRival = planRivalRatings(state.season, ratings);
   if (!planRival) return null;
   return nrlLivePhasePreview(state.season, choice, averagesByClub(ratings), {
-    ...nrlCoachTactics(state.finance), planRivalRatings: planRival,
+    ...nrlCoachTactics(state.finance), planRivalRatings: planRival, awayRecovery: nrlAwayRecoveryBonus(state),
   });
 }
 
 export function nrlAttackPlanPreview(state: NrlCareerState) {
   if (state.legacySeason || state.retired || state.season.live) return null;
   const rival = planRivalRatings(state.season, opponentRatings(state));
-  return rival ? nrlPlanAdjustments(state.season, rival) : null;
+  return rival ? nrlPlanAdjustments(state.season, rival, nrlAwayRecoveryBonus(state)) : null;
 }
 
 export function nrlCounterPlanPreview({ season, legacySeason, retired }: NrlCareerState) {
@@ -1539,23 +1573,24 @@ export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport 
   }));
   const style = nrlCounterPlanPreview(state)?.style;
   const coaches = nrlCoachTactics(state.finance);
+  const awayRecovery = nrlAwayRecoveryBonus(state);
   let attackPlans: NrlOppositionReport['attackPlans'];
   let matchups: NrlOppositionReport['matchups'];
   if (style && ratings && !state.outOfWork) {
     const rival = planRatings ?? planRivalRatings(season, ratings);
-    if (rival) matchups = nrlPlanMatchups(matchday, rival);
+    if (rival) matchups = nrlPlanMatchups(matchday, rival, awayRecovery);
     const plans: NrlAttackPlan[] = ['standard', ...NRL_ATTACK_PLANS.filter(plan => plan === 'counter' || rival)];
     attackPlans = plans.map(plan => ({
       plan,
       ...nrlMatchupEdges({ ...matchday, attackPlan: plan === 'standard' ? undefined : plan }, clubMatch, opponentStrength, {
-        ...coaches, planRivalRatings: plan === 'standard' || plan === 'counter' ? undefined : rival,
+        ...coaches, awayRecovery, planRivalRatings: plan === 'standard' || plan === 'counter' ? undefined : rival,
       }),
     }));
   }
   return {
     opponentId, ladderRank, recent, meetings, ...(style && { style }), ...(attackPlans && { attackPlans }),
     ...(matchups && { matchups }),
-    ...nrlMatchupEdges(matchday, clubMatch, opponentStrength, { ...coaches, planRivalRatings: planRatings }),
+    ...nrlMatchupEdges(matchday, clubMatch, opponentStrength, { ...coaches, awayRecovery, planRivalRatings: planRatings }),
   };
 }
 
@@ -1566,6 +1601,7 @@ function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type:
   const { matchday, opponentStrength, planRatings } = careerMatchday(state, action.type === 'advance' ? undefined : action.attackPlan);
   const played = reduceNrlSeason(matchday, action, opponentStrength, {
     medicalReduction: nrlMedicalLevel(state) - 1, ...nrlCoachTactics(state.finance), planRivalRatings: planRatings, intensiveByePlayerId,
+    awayRecovery: nrlAwayRecoveryBonus(state),
   });
   if (played === matchday) return state;
   const newResults = played.results.slice(previous.results.length);
@@ -2335,6 +2371,11 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       if (action.year !== year || action.clubId !== clubId || action.round !== round || nrlConcessionsQuote(state).reason !== null) return state;
       return { ...state, finance: { ...state.finance, concessionsUpgradeRound: round } };
     }
+    case 'bookAwayRecovery': {
+      const { year, clubId, round } = state.season;
+      if (action.year !== year || action.clubId !== clubId || action.round !== round || nrlAwayRecoveryQuote(state)?.reason !== null) return state;
+      return { ...state, finance: { ...state.finance, awayRecoveryRound: round } };
+    }
     case 'hireCoach': {
       const { year, clubId, round } = state.season;
       if (action.year !== year || action.round !== round || !isCoachRole(action.role)
@@ -2551,7 +2592,7 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       const match = (action.type === 'startLive' || action.type === 'reachMinute60') && state.season.kickerId
         ? careerMatchday(state, action.type === 'reachMinute60' ? action.attackPlan : undefined) : null;
       const season = reduceNrlSeason(state.season, action, match?.opponentStrength, {
-        ...nrlCoachTactics(state.finance), planRivalRatings: match?.planRatings,
+        ...nrlCoachTactics(state.finance), planRivalRatings: match?.planRatings, awayRecovery: nrlAwayRecoveryBonus(state),
       });
       return season === state.season ? state : { ...state, season };
     }
@@ -2597,6 +2638,7 @@ function validBook(value: unknown, roundLimit: number): value is NrlCareerBook {
       .every(amount => intIn(amount, 0, Number.MAX_SAFE_INTEGER))
     && validMedicalUpgrades(value.medicalUpgrades, value.fromRound, roundLimit)
     && (value.physio === undefined || (value.fromRound === 1 && isNrlPhysioTreatment(value.physio, roundLimit)))
+    && (value.awayRecoveryRound === undefined || (value.fromRound === 1 && intIn(value.awayRecoveryRound, 1, roundLimit)))
     && (value.mutualRelease === undefined || (record(value.mutualRelease) && Object.keys(value.mutualRelease).length === 3
       && typeof value.mutualRelease.playerId === 'string' && Boolean(value.mutualRelease.playerId)
       && typeof value.mutualRelease.playerName === 'string' && Boolean(value.mutualRelease.playerName)
@@ -2721,6 +2763,7 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
   if (!record(value.finance) || !validBook(value.finance, lastRound(year))) return false;
   const finance = nrlCareerFinance({ finance: value.finance });
   if (finance.physio && (!scoring || finance.physio.round > nrlRegularRounds(year))) return false;
+  if (finance.awayRecoveryRound !== undefined && (!scoring || !isAwayRound(year, value.clubId, finance.awayRecoveryRound))) return false;
   if (value.attendanceForm !== undefined
     && (!finance.supporterAttendance || typeof value.attendanceForm !== 'string' || !/^[WDL]{24}$/.test(value.attendanceForm) || !value.finals)) return false;
   if (finance.supporterAttendance && value.scoring === undefined) return false;
@@ -2767,6 +2810,7 @@ function booksMatch(a: NrlCareerBook, b: NrlCareerBook): boolean {
     && a.centralFunding === b.centralFunding && a.gateReceipts === b.gateReceipts
     && a.wagesPaid === b.wagesPaid && a.operatingCosts === b.operatingCosts
     && a.physio?.playerId === b.physio?.playerId && a.physio?.injuryRound === b.physio?.injuryRound && a.physio?.round === b.physio?.round
+    && a.awayRecoveryRound === b.awayRecoveryRound
     && a.academyUpgradeRound === b.academyUpgradeRound
     && a.academyParallelRound === b.academyParallelRound
     && a.concessionsUpgradeRound === b.concessionsUpgradeRound && a.concessionReceipts === b.concessionReceipts
@@ -2865,10 +2909,12 @@ function validCareerBooks(state: NrlCareerState): boolean {
   if (finance.fromRound > played + 1 || (finance.fromRound !== 1 && !legacySeason)
     || (legacySeason && (finance.ticketTier !== undefined || finance.sponsor !== undefined
       || finance.concessionsUpgradeRound !== undefined || finance.concessionReceipts !== undefined || finance.boardRecruitment !== undefined
-      || finance.supporterAttendance !== undefined))) return false;
+      || finance.supporterAttendance !== undefined || finance.awayRecoveryRound !== undefined))) return false;
   const coach = finance.coachHire;
   const release = finance.mutualRelease;
   const physio = finance.physio;
+  if (finance.awayRecoveryRound !== undefined && (!season.kickerId || finance.awayRecoveryRound > season.round
+    || !isAwayRound(season.year, season.clubId, finance.awayRecoveryRound))) return false;
   if ((legacySeason && physio) || physio?.playerId !== season.physio?.playerId
     || physio?.injuryRound !== season.physio?.injuryRound || physio?.round !== season.physio?.round) return false;
   if (!validCoachCourse(finance, season.year, season.round)
@@ -3091,6 +3137,10 @@ function validCareerBooks(state: NrlCareerState): boolean {
     if (physio?.round === round) {
       if (facilityPurchaseRefusal(expected, finalRound, NRL_PHYSIO_COST)) return false;
       expected = { ...expected, physio };
+    }
+    if (finance.awayRecoveryRound === round) {
+      if (facilityPurchaseRefusal(expected, finalRound, AWAY_RECOVERY_COST)) return false;
+      expected = { ...expected, awayRecoveryRound: round };
     }
     if (round <= played) {
       expected = tickBooks(expected, season, round, season.results.filter(result => result.round === round), cap, currentClub.concessionsInstalled);
@@ -3325,7 +3375,9 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
   if (!state.season.live && !state.season.attackPlan) return true;
   const { opponentStrength, planRatings } = careerMatchday(state);
   return (!state.season.attackPlan || (state.season.attackPlan === 'counter' ? !state.legacySeason : Boolean(planRatings)))
-    && validNrlLiveScore(state.season, opponentStrength, { ...nrlCoachTactics(state.finance), planRivalRatings: planRatings });
+    && validNrlLiveScore(state.season, opponentStrength, {
+      ...nrlCoachTactics(state.finance), planRivalRatings: planRatings, awayRecovery: nrlAwayRecoveryBonus(state),
+    });
 }
 
 export function readNrlCareerSave(raw: string | null): NrlCareerState | null {

@@ -683,6 +683,7 @@
         "A rebuild always promises the starting spot, while a title chaser's bench is crowded.",
         "A push works more often for a highly rated player and less often for a veteran past his peak.",
         "A failed push can make an outside club walk away, but your own club never walks and the last offer on the table never walks.",
+        "In Free Play, you can trade wages for a stronger promised role. That takes your one counter for that offer, so you cannot push for more money on it as well.",
         "The promised role holds only while the manager who signed him keeps his job, and a hot seat manager is sacked half the time.",
         "Moving abroad costs a few games in the first season while he settles in.",
         "If he outgrows his club and his contract has a release clause, a title chaser can pay it and take him.",
@@ -696,6 +697,7 @@
       "example": [
         "Today's client is a 19 year old winger rated 74 with a potential of 88, worth about €1.6M a year.",
         "His club offers €1.4M for three years. A title chaser offers €1.3M for two years as a rotation player at a squad strength of 91. A rebuild offers €1.9M for four years, the starting spot and a €1.1M signing bonus.",
+        "In Free Play, you can take €1.1M a year from the title chaser for a starting role. That costs €0.4M over two years. Check how safe the manager is before you give up that money.",
         "You push the rebuild and they come up to €2.1M. You sign. He plays nearly every minute, climbs to 84 by his third season, and a title chaser pays his release clause to take him on a much bigger wage.",
         "Five seasons later he is rated 87 with a league title, about €26M earned and a score of 83, a Great call. The roads not taken show his old club would have scored far less."
       ],
@@ -3474,6 +3476,7 @@
         "Follow the match at the top of the pitch. Goals and wins pay bonuses counted in seconds of your own income, wins extend your streak, and the streak multiplies income and pulls in new fans.",
         "From halftime until 75 minutes in a watched league match, you can choose one second-half plan. Protect lowers both clubs' scoring chances by 20 percent for the rest of the match. Push raises both by 20 percent. Choose Protect to hold a one-goal lead or keep playing to stay balanced. Latest season keeps any plan you used alongside the recorded score.",
         "Win your league to climb the divisions. Each division is a small league of named rival clubs with a table on the League tab, and only the champion goes up. Every division multiplies all income up to five and a half times, each promotion pays a bonus on the spot, and higher divisions send tougher opponents.",
+        "Before your first league match finishes, open Season sponsorship in League. Pick the fixed fee or earn cash for each watched or away matchday that reaches the crowd target at full time. A small crowd makes the fixed fee safer, while regular sellouts can make the crowd deal pay more. Both pay when the season ends.",
         "Open Latest season in the League tab to see your final table and recorded match scores after reload. If you win the Muddy Meadows League, for example, you can reopen its table while playing in Gravel Lane. The next completed season replaces it, and selling up clears it with the rest of the ground's league.",
         "Hire from the payroll: eight staff from a Turnstile Steward to a Club Legend Ambassador, each level adding steady income of its own before the multipliers touch it.",
         "Catch the golden whistle when it drifts onto the pitch. You get about twelve seconds, and it carries one of five prizes, from seven times the income to fifteen minutes of income in one lump.",

@@ -54,6 +54,7 @@ type NrlPreparationAction =
 interface NrlRoundOptions {
   medicalReduction?: number;
   intensiveByePlayerId?: string;
+  awayRecovery?: number;
   coachRole?: NrlCoachRole;
   coachBonus?: number;
   planRivalRatings?: ReadonlyMap<NrlRole, number>;
@@ -692,9 +693,9 @@ const TACTIC_EFFECT: Record<NrlTactic, { attack: number; defense: number }> = {
 };
 const PREPARATION_FITNESS = { train: -4, defensiveDrills: -4, recover: 10, normal: 0 };
 const isTraining = (preparation: NrlPreparation | null) => preparation === 'train' || preparation === 'defensiveDrills';
-function readyFitness(fitness: number, preparation: NrlPreparation | null, playing: boolean): number {
+function readyFitness(fitness: number, preparation: NrlPreparation | null, playing: boolean, awayRecovery = 0): number {
   const routineRecovery = Math.ceil((100 - fitness) * 0.45);
-  return clamp(fitness + routineRecovery + PREPARATION_FITNESS[preparation ?? 'normal'] + (playing ? 0 : 12), 0, 100);
+  return clamp(fitness + routineRecovery + PREPARATION_FITNESS[preparation ?? 'normal'] + (playing ? awayRecovery : 12), 0, 100);
 }
 
 const intensiveByeFitness = (recovered: number) => clamp(recovered + PREPARATION_FITNESS.train, 0, 100);
@@ -707,18 +708,22 @@ export function nrlByeTrainingPreview(player: NrlPlayer, preparation: NrlPrepara
 const playerPreparation = (state: NrlRoundPreparation, id: string): NrlPreparation | null =>
   state.individualRecoveryId === id ? 'recover' : state.preparation;
 
-export function nrlIndividualRecoveryPreview(player: NrlPlayer, preparation: NrlPreparation | null) {
-  return { normal: readyFitness(player.fitness, preparation, true), recovery: readyFitness(player.fitness, 'recover', true) };
+export function nrlIndividualRecoveryPreview(player: NrlPlayer, preparation: NrlPreparation | null, awayRecovery = 0) {
+  return { normal: readyFitness(player.fitness, preparation, true, awayRecovery), recovery: readyFitness(player.fitness, 'recover', true, awayRecovery) };
 }
 
-function fitnessPenalty(player: NrlPlayer, preparation: NrlPreparation | null): number {
-  return (100 - readyFitness(player.fitness, preparation, true)) * 0.18;
+export function nrlMatchFitness(state: NrlRoundPreparation, player: NrlPlayer, awayRecovery = 0) {
+  return readyFitness(player.fitness, playerPreparation(state, player.id), true, awayRecovery);
 }
 
-function matchInjury(state: NrlManagerState, used: Set<string>, medicalReduction: number): NrlInjury | undefined {
+function fitnessPenalty(player: NrlPlayer, preparation: NrlPreparation | null, awayRecovery = 0): number {
+  return (100 - readyFitness(player.fitness, preparation, true, awayRecovery)) * 0.18;
+}
+
+function matchInjury(state: NrlManagerState, used: Set<string>, medicalReduction: number, awayRecovery: number): NrlInjury | undefined {
   const starters = new Set(Object.values(state.lineup));
   const played = state.squad.filter(player => starters.has(player.id) || used.has(player.id));
-  const ready = played.reduce((total, player) => total + readyFitness(player.fitness, state.preparation, true), 0) / played.length;
+  const ready = played.reduce((total, player) => total + readyFitness(player.fitness, state.preparation, true, awayRecovery), 0) / played.length;
   const risk = 0.12 + (100 - ready) / 260 + (isTraining(state.preparation) ? 0.04 : 0);
   const rng = rngFrom(hashLabel(`${state.seed}|${state.year}|${state.round}|${state.clubId}|injury`));
   if (rng() >= risk) return undefined;
@@ -730,25 +735,25 @@ const PLAN_ROLES: Record<NrlSpecialistPlan, readonly NrlRole[]> = {
   wide: ['Left Wing', 'Left Centre', 'Right Centre', 'Right Wing'],
 };
 
-function addMatchdayRating(sum: number, player: NrlPlayer, role: NrlRole, state: NrlRoundPreparation, reserve?: NrlPlayer): number {
+function addMatchdayRating(sum: number, player: NrlPlayer, role: NrlRole, state: NrlRoundPreparation, reserve?: NrlPlayer, awayRecovery = 0): number {
   const rating = nrlCanPlayRole(player, role) ? player.rating : player.rating - NRL_UTILITY_RATING_COST;
-  const penalty = fitnessPenalty(player, playerPreparation(state, player.id));
+  const penalty = fitnessPenalty(player, playerPreparation(state, player.id), awayRecovery);
   // Keep the original summation order for the ordinary ratings.
   if (!reserve) return sum + rating - penalty;
   return sum + (rating - penalty) * 0.68
-    + (reserve.rating - fitnessPenalty(reserve, playerPreparation(state, reserve.id))) * 0.32;
+    + (reserve.rating - fitnessPenalty(reserve, playerPreparation(state, reserve.id), awayRecovery)) * 0.32;
 }
 
-function matchdayBase(state: NrlSelectedSquad, rotation: ReadonlyMap<string, NrlPlayer>): number {
+function matchdayBase(state: NrlSelectedSquad, rotation: ReadonlyMap<string, NrlPlayer>, awayRecovery = 0): number {
   const starters = new Map(Object.entries(state.lineup).map(([role, id]) => [id, role]));
   return state.squad.filter(player => starters.has(player.id)).reduce((sum, player) =>
-    addMatchdayRating(sum, player, starters.get(player.id) as NrlRole, state, rotation.get(player.id)), 0) / NRL_ROLES.length;
+    addMatchdayRating(sum, player, starters.get(player.id) as NrlRole, state, rotation.get(player.id), awayRecovery), 0) / NRL_ROLES.length;
 }
 
 interface NrlPlanPosition { role: NrlRole; own: number; rival: number }
 
 function planLaneGap(state: NrlManagerState, rotation: ReadonlyMap<string, NrlPlayer>,
-  plan: NrlSpecialistPlan, rival: ReadonlyMap<NrlRole, number>, positions?: NrlPlanPosition[]) {
+  plan: NrlSpecialistPlan, rival: ReadonlyMap<NrlRole, number>, positions?: NrlPlanPosition[], awayRecovery = 0) {
   const roles = PLAN_ROLES[plan];
   const players = new Map(state.squad.map(player => [player.id, player]));
   return roles.reduce((sum, role) => {
@@ -756,29 +761,30 @@ function planLaneGap(state: NrlManagerState, rotation: ReadonlyMap<string, NrlPl
     const starter = players.get(id)!;
     const reserve = rotation.get(id);
     const reference = rival.get(role)!;
-    if (positions) positions.push({ role, own: addMatchdayRating(0, starter, role, state, reserve), rival: reference });
-    return addMatchdayRating(sum, starter, role, state, reserve) - reference;
+    if (positions) positions.push({ role, own: addMatchdayRating(0, starter, role, state, reserve, awayRecovery), rival: reference });
+    return addMatchdayRating(sum, starter, role, state, reserve, awayRecovery) - reference;
   }, 0) / roles.length;
 }
 
 function planAdjustment(state: NrlManagerState, rotation: ReadonlyMap<string, NrlPlayer>, base: number,
-  plan: NrlSpecialistPlan, rival: ReadonlyMap<NrlRole, number>) {
-  const laneGap = planLaneGap(state, rotation, plan, rival);
+  plan: NrlSpecialistPlan, rival: ReadonlyMap<NrlRole, number>, awayRecovery = 0) {
+  const laneGap = planLaneGap(state, rotation, plan, rival, undefined, awayRecovery);
   const rivalBase = [...rival.values()].reduce((sum, rating) => sum + rating, 0) / NRL_ROLES.length;
   return { attack: clamp((laneGap - (base - rivalBase)) * 0.5, -4, 6), defense: -2 };
 }
 
-export function nrlPlanAdjustments(state: NrlManagerState, rival: ReadonlyMap<NrlRole, number>) {
+export function nrlPlanAdjustments(state: NrlManagerState, rival: ReadonlyMap<NrlRole, number>, awayRecovery = 0) {
   const rotation = nrlBenchRotation(state);
-  const base = matchdayBase(state, rotation);
-  return { middle: planAdjustment(state, rotation, base, 'middle', rival), wide: planAdjustment(state, rotation, base, 'wide', rival) };
+  const base = matchdayBase(state, rotation, awayRecovery);
+  return { middle: planAdjustment(state, rotation, base, 'middle', rival, awayRecovery),
+    wide: planAdjustment(state, rotation, base, 'wide', rival, awayRecovery) };
 }
 
-export function nrlPlanMatchups(state: NrlManagerState, rival: ReadonlyMap<NrlRole, number>) {
+export function nrlPlanMatchups(state: NrlManagerState, rival: ReadonlyMap<NrlRole, number>, awayRecovery = 0) {
   const rotation = nrlBenchRotation(state);
   const group = (plan: NrlSpecialistPlan) => {
     const positions: NrlPlanPosition[] = [];
-    const gap = planLaneGap(state, rotation, plan, rival, positions);
+    const gap = planLaneGap(state, rotation, plan, rival, positions, awayRecovery);
     return { gap, positions };
   };
   return { middle: group('middle'), wide: group('wide') };
@@ -792,12 +798,12 @@ export function nrlCounterPlan({ clubId, seed, year }: Pick<NrlManagerState, 'cl
 }
 
 function teamRatings(state: NrlManagerState, clubId: string, opponentStrength: ReadonlyMap<string, number> | undefined,
-  rotation: ReadonlyMap<string, NrlPlayer>, { coachRole, coachBonus = NRL_COACHING_BONUS, planRivalRatings }: NrlRoundOptions) {
+  rotation: ReadonlyMap<string, NrlPlayer>, { coachRole, coachBonus = NRL_COACHING_BONUS, planRivalRatings, awayRecovery }: NrlRoundOptions) {
   if (clubId !== state.clubId) {
     const strength = opponentStrength?.get(clubId) ?? clubFor(state.year, clubId)!.strength;
     return { attack: strength, defense: strength };
   }
-  const base = matchdayBase(state, rotation);
+  const base = matchdayBase(state, rotation, awayRecovery);
   const { attack, defense } = TACTIC_EFFECT[state.tactic];
   const attackCoaching = coachRole === 'attack' && state.tactic === 'attack' ? coachBonus : 0;
   const defenseCoaching = coachRole === 'defense' && state.tactic === 'defense' ? coachBonus : 0;
@@ -807,7 +813,7 @@ function teamRatings(state: NrlManagerState, clubId: string, opponentStrength: R
   };
   if (nrlOnFieldCaptain(state)) ordinary.defense += NRL_CAPTAIN_DEFENCE;
   if (!state.attackPlan || state.attackPlan === 'counter' || !planRivalRatings) return ordinary;
-  const specialist = planAdjustment(state, rotation, base, state.attackPlan, planRivalRatings);
+  const specialist = planAdjustment(state, rotation, base, state.attackPlan, planRivalRatings, awayRecovery);
   return { attack: ordinary.attack + specialist.attack, defense: ordinary.defense + specialist.defense };
 }
 
@@ -1058,7 +1064,7 @@ function regulationFieldGoal(scoring: NrlScoring, gap: number, roll: number, cha
 
 function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<string, number> | undefined,
   options: NrlRoundOptions, halftime?: NrlHalftimeDecision): NrlManagerState {
-  const { medicalReduction = 0 } = options;
+  const { medicalReduction = 0, awayRecovery = 0 } = options;
   const fixtures = nrlRoundFixtures(state);
   const played = fixtures.some(match => match.homeId === state.clubId || match.awayId === state.clubId);
   const starters = new Set(Object.values(state.lineup));
@@ -1073,7 +1079,7 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
     || lateInterchange || halftime.fieldGoalPlan || halftime.tactic !== state.tactic)
     ? closingSelection(state, rotation, halftime) : undefined;
   const squad = state.squad.map(player => {
-    const recovered = readyFitness(player.fitness, playerPreparation(state, player.id), played);
+    const recovered = readyFitness(player.fitness, playerPreparation(state, player.id), played, awayRecovery);
     const before = !played && player.id === options.intensiveByePlayerId ? intensiveByeFitness(recovered) : recovered;
     const starterFatigue = played && starters.has(player.id) ? 15 : 0;
     const relief = rotation.has(player.id) ? 4 : 0;
@@ -1084,7 +1090,7 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
     const extraWork = interchanges.some(change => !change.enteredAtHalf && player.id === change.reserveId) ? 5 : 0;
     return { ...player, fitness: Math.max(0, before - starterFatigue + relief - reserveFatigue + extraRest - extraWork) };
   });
-  const injury = played && state.injuryTracking ? matchInjury(state, used, medicalReduction) : undefined;
+  const injury = played && state.injuryTracking ? matchInjury(state, used, medicalReduction, awayRecovery) : undefined;
   const results = [...state.results, ...fixtures.map(fixture => {
     const managed = fixture.homeId === state.clubId || fixture.awayId === state.clubId;
     const result = playFixture(state, fixture, opponentStrength, rotation, managed ? closing : undefined, options,

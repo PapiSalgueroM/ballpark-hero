@@ -44,6 +44,7 @@ import {
   totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC, yourOpponentIndex, type TycoonLeague,
   GOAL_BONUS_SEC, WIN_BONUS_SEC, PROMOTION_BONUS_SEC, scoringFacts,
   canSetMatchPlan, MATCH_PLANS, MATCH_PLAN_END,
+  STADIUM_SPONSORS, stadiumSponsorOffers, stadiumSponsorPayout,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
@@ -325,6 +326,10 @@ export function LatestSeasonReview({ last }: { last: TycoonLeague }) {
             <div><dt className="text-muted-foreground">Wins / draws / losses</dt><dd data-season-record className="break-words font-bold">{formatSeasonCount(own.w)} / {formatSeasonCount(own.d)} / {formatSeasonCount(own.l)}</dd></div>
             <div><dt className="text-muted-foreground">Goals for / against</dt><dd data-season-goals className="break-words font-bold">{formatSeasonCount(own.gf)} / {formatSeasonCount(own.ga)}</dd></div>
           </dl>
+          {snapshot.sponsor && <div data-season-sponsor className="rounded-xl border border-border p-2">
+            <p className="font-bold">{STADIUM_SPONSORS[snapshot.sponsor.kind]} paid {fmtMoney(stadiumSponsorPayout(snapshot))}</p>
+            {snapshot.sponsor.kind === 'attendance' && <p className="text-muted-foreground">{formatNumber(snapshot.sponsor.qualifying)} of {formatNumber(snapshot.matchday)} matchdays drew at least {formatNumber(snapshot.sponsor.target)} fans.</p>}
+          </div>}
           <table data-latest-season-table className="w-full table-fixed text-left text-xs">
             <caption className="pb-2 text-left font-bold">Final table</caption>
             <thead><tr className="border-b border-border text-muted-foreground"><th scope="col" className="w-1/2 pb-2 font-normal">Club</th><th scope="col" className="w-1/3 pb-2 font-normal">W / D / L</th><th scope="col" className="pb-2 text-right font-normal">Pts</th></tr></thead>
@@ -371,6 +376,8 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
   const options = s.clubName ? [] : clubNameOptions(s);
   const atSummit = lg.division >= DIVISIONS.length - 1;
   const last = s.lastCompletedLeague;
+  const sponsor = lg.sponsor;
+  const offers = !sponsor && preseason ? stadiumSponsorOffers(s, lg) : null;
   return (
     <div data-league-room className="space-y-3 mb-3">
       <div className="rounded-xl border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
@@ -385,6 +392,26 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
       </div>
       <LeagueTableCard rows={rows} myClub={lg.clubs[0].name} title={`Season ${lg.season + 1} at this ground`} preseason={preseason} zoneTop={1} />
       {last && <LatestSeasonReview last={last} />}
+      {sponsor && <div data-league-sponsor className="rounded-xl border border-border bg-card p-3 text-xs">
+        <p className="font-bold">{STADIUM_SPONSORS[sponsor.kind]} · {fmtMoney(stadiumSponsorPayout(lg))} {sponsor.kind === 'fixed' ? 'at season end' : 'earned so far'}</p>
+        {sponsor.kind === 'attendance' && <p className="mt-1 text-muted-foreground">{formatNumber(sponsor.qualifying)} of {formatNumber(lg.matchday)} completed matchdays drew at least {formatNumber(sponsor.target)} fans. {fmtMoney(sponsor.rate)} per qualifying matchday, paid at season end.</p>}
+      </div>}
+      {offers && <details data-league-sponsor-offers className="rounded-xl border border-border bg-card px-3 text-xs">
+        <summary className="min-h-11 cursor-pointer py-3 font-bold">Season sponsorship</summary>
+        <p className="pb-2 text-muted-foreground">Choose one fictional sponsor before the first league match finishes. Both deals pay in game cash when you complete the season.</p>
+        <p className="pb-2 text-muted-foreground">Current crowd {formatNumber(attendance(s))} · Target {formatNumber(offers.target)}</p>
+        {g.sponsorSaveFailed && <p role="alert" className="pb-2 text-destructive">Could not save the deal. Choose a sponsor again to retry.</p>}
+        <div className="grid gap-2 pb-3 sm:grid-cols-2">
+          <button type="button" className="min-h-11 min-w-0 rounded-lg border border-border bg-background px-3 py-2 text-left" onClick={() => g.doSignSponsor(s.rep, lg.season, 'fixed')}>
+            <span className="block font-bold">{STADIUM_SPONSORS.fixed}</span>
+            {fmtMoney(offers.fixed)} fixed fee
+          </button>
+          <button type="button" className="min-h-11 min-w-0 rounded-lg border border-border bg-background px-3 py-2 text-left" onClick={() => g.doSignSponsor(s.rep, lg.season, 'attendance')}>
+            <span className="block font-bold">{STADIUM_SPONSORS.attendance}</span>
+            {fmtMoney(offers.rate)} per matchday with at least {formatNumber(offers.target)} fans at full time, up to {fmtMoney(offers.rate * shape.matchdays)}
+          </button>
+        </div>
+      </details>}
       {options.length > 0 && (
         <div data-club-name-pick className="rounded-xl border border-border bg-card p-3">
           <div className="text-xs font-bold text-foreground mb-2">Name your club</div>
@@ -1042,6 +1069,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>
               <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. In League, open Latest season to see the final table and your recorded match scores. If your club wins Muddy Meadows, for example, you can reopen its final table and scores while playing in Gravel Lane. The report survives reload until another season ends or you sell up.</p>
+              <p>Before the first league match finishes, Season sponsorship offers a fixed fee or more cash for a strong crowd. In a five-matchday season the fixed deal pays the same as three qualifying crowds. The crowd deal beats it if four or five matchdays reach the target at full time, including games played away. Check the signed target and the final payment in League.</p>
               <p>The payroll hires {h.staff} staff, from a {h.firstStaff} to a {h.lastStaff}. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
               <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about {h.catchSec} seconds to catch it, for one of {h.prizes} prizes: {GOLDEN_INFO.frenzy.label} ({GOLDEN_INFO.frenzy.blurb} for {GOLDEN_INFO.frenzy.duration} seconds), {GOLDEN_INFO.tapRush.label} ({GOLDEN_INFO.tapRush.blurb} for {GOLDEN_INFO.tapRush.duration} seconds), {GOLDEN_INFO.windfall.label} ({h.windfallMin} minutes of income, instantly), {GOLDEN_INFO.fanWave.label} ({GOLDEN_INFO.fanWave.blurb}) or {GOLDEN_INFO.freeLevel.label} ({GOLDEN_INFO.freeLevel.blurb}).</p>
               <p>A penalty or free-kick offer appears once per watched match. You have {SET_PIECE_WINDOW_SEC} seconds to open it. Pick your aim, power and curve for one shot while the match clock keeps running. Opening uses that match's attempt, including if you leave or reload. A goal before full time adds one goal and the usual goal bonus; a miss costs nothing. Away matches have no kick offers, and kicks have no daily score or direct gem reward.</p>
