@@ -36,7 +36,7 @@ export function GamePicksRow({ paths, onToggle, onEmpty }: {
         <Pin aria-hidden="true" className="h-5 w-5 text-gold" />
         <h2 id="home-game-picks" className="font-display text-lg font-bold text-foreground">Your picks</h2>
       </div>
-      <ul ref={rowRef} className="flex gap-2.5 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:thin]">
+      <ul ref={rowRef} data-home-shelf-rail="" className="flex gap-2.5 overflow-x-auto overscroll-x-contain pb-1 [scrollbar-width:thin]">
         {games.map(game => {
           const sport = sportOf(game.path);
           return (

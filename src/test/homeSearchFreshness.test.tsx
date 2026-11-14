@@ -170,3 +170,31 @@ it('returns keyboard focus to the catalogue tile that opened a game', () => {
   expect(screen.getByRole('textbox', { name: 'Search games' })).toHaveValue('');
   expect(screen.getByRole('status', { name: 'Search results' })).toBeEmptyDOMElement();
 });
+
+it.each([
+  ['pin shelf', '[data-home-picks] [data-game-pick-link]', '/hockey-higher-lower'],
+  ['first NRL save', '[data-home-continue] a', '/nrl-team-manager'],
+  ['second NRL save', '[data-home-continue] a', '/nrl-team-manager?slot=2'],
+])('focuses the exact %s opener when navigating back to Home', (_label, selector, href) => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  localStorage.setItem('dukb-game-picks-v1', '["/hockey-higher-lower"]');
+  localStorage.setItem('nrl-manager-save-v1', '{"season":{"year":2026}}');
+  localStorage.setItem('nrl-manager-save-v1-slot-2', '{"season":{"year":2027}}');
+  function Game() {
+    const navigate = useNavigate();
+    const location = useLocation();
+    return <><output>{location.pathname + location.search}</output><button onClick={() => navigate(-1)}>Go back</button></>;
+  }
+  const { container } = render(<MemoryRouter><Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="*" element={<Game />} />
+  </Routes></MemoryRouter>);
+  const card = () => container.querySelector<HTMLAnchorElement>(selector + '[href="' + href + '"]')!;
+  expect(container.querySelector('[data-catalog-card] a[href="' + href.split('?')[0] + '"]')).toBeInTheDocument();
+  card().focus();
+  fireEvent.click(card());
+  expect(screen.getByRole('status')).toHaveTextContent(href);
+  fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
+  expect(card()).toHaveFocus();
+  expect(screen.getByRole('textbox', { name: 'Search games' })).toHaveValue('');
+});
