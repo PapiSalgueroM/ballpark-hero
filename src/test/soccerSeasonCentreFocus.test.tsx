@@ -128,6 +128,7 @@ describe('Soccer Career Season Centre return focus', () => {
     expect(opener.isConnected).toBe(false);
     await acknowledgeFirstHelp(view);
     const target = screen.getByRole('button', { name: action });
+    if (!(target instanceof HTMLButtonElement)) throw new Error('Expected the next action to be a button');
     await closeAndCheck(view, target, 'SC_CENTRE_LIVE_HANDOFF', vi.spyOn(HTMLElement.prototype, 'focus'));
   }, 20000);
 
