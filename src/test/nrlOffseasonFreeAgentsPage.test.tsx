@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
-import { createNrlCareer, nrlOffseasonFreeAgentPreview, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
+import { createNrlCareer, nrlOffseasonFreeAgentPreview, nrlRetentionPriority, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
 import { NRL_SAVE_KEY, nrlSavedLineupPreview, nrlStarterOptions } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
@@ -25,6 +25,40 @@ afterEach(() => {
   cleanup();
   saveFence.release(NRL_SAVE_KEY);
   localStorage.clear();
+});
+
+it('reserves an expiring player before the ordinary offseason fill and keeps the choice through reload', () => {
+  let career = createNrlCareer('storm', 4);
+  while (career.season.phase !== 'complete') career = reduceNrlCareer(career, { type: 'advance' });
+  const { year, clubId } = career.season;
+  const priority = nrlRetentionPriority(career)!;
+  const chosen = priority.options.find(option => option.quote.ok)!;
+  const baseline = JSON.stringify(career);
+  localStorage.setItem(NRL_SAVE_KEY, baseline);
+  localStorage.setItem(fence, '4');
+  const mounted = show();
+  review();
+  const option = () => screen.getByRole('combobox', { name: 'Player to retain' });
+  expect(within(option()).getAllByRole('option')).toHaveLength(priority.options.length + 1);
+  expect(raw()).toBe(baseline);
+  fireEvent.change(option(), { target: { value: chosen.player.id } });
+  const selected = reduceNrlCareer(career, { type: 'setRetentionPriority', year, clubId, playerId: chosen.player.id });
+  expect(raw()).toBe(JSON.stringify(selected));
+  expect(localStorage.getItem(fence)).toBe('5');
+  expect(selected.players).toBe(career.players);
+  mounted.unmount();
+  show();
+  review();
+  expect(option()).toHaveValue(chosen.player.id);
+  const normal = reduceNrlCareer(career, { type: 'startNextSeason' });
+  const settled = reduceNrlCareer(selected, { type: 'startNextSeason' });
+  expect(normal.season.squad.some(player => player.id === chosen.player.id)).toBe(false);
+  expect(settled.season.squad.some(player => player.id === chosen.player.id)).toBe(true);
+  click('Start 2027');
+  expect(readNrlCareerSave(raw())).toEqual(settled);
+  expect(localStorage.getItem(fence)).toBe('6');
+  review();
+  expect(screen.getByText(new RegExp('Retained ' + chosen.player.name))).toBeVisible();
 });
 
 it('saves the preference through Contracts and reload, then confirms the exact signings at rollover', () => {

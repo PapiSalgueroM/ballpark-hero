@@ -26,9 +26,9 @@
  * HOW THE RANKING IS MEANT TO READ. Explainable, in this order, always:
  * the whole query matching a label beats a label word, which beats the path
  * or the sport, which beats a generated keyword, which beats the one line
- * description, which beats a typo corrected match. Every result carries the
- * field it scored best on, so a result that looks odd can be explained
- * instead of argued about.
+ * description, which beats a typo corrected match. A few whole-query intents
+ * can also suggest matching games after the ordinary results. Every result
+ * carries its strongest match field.
  *
  * WHAT IT REFUSES TO DO. It never builds a RegExp out of anything a person
  * typed, so a query of "*(" or "\" is a query and not a crash, and the term
@@ -40,7 +40,7 @@ import { foldSpecialLatin } from '@/lib/nameFold';
 import KEYWORDS from '@/data/searchKeywords.json';
 
 /** Which field a result scored best on. Shown in the UI, asserted in the sim. */
-export type MatchField = 'browse' | 'label' | 'path' | 'sport' | 'keyword' | 'description' | 'fuzzy';
+export type MatchField = 'browse' | 'label' | 'path' | 'sport' | 'keyword' | 'description' | 'fuzzy' | 'intent';
 
 export interface SearchResult {
   game: GameDef;
@@ -72,6 +72,7 @@ const W = {
 /** An alias term scores at this share of the real thing, so a game that says
  *  the word outranks a game the alias table merely points at. */
 const ALIAS_DISCOUNT = 0.55;
+const INTENT_SCORE = 50;
 
 /* A pasted paragraph is not a search. Both caps are about keeping one
    keystroke cheap, and both are far above anything a person types. */
@@ -172,6 +173,22 @@ function aliasesFor(term: string): string[] {
   if (!ALIAS_MAP) ALIAS_MAP = new Map(Object.entries(SEARCH_ALIASES));
   return ALIAS_MAP.get(term) ?? [];
 }
+
+const playerCareers = ['/soccer-career', '/nba-my-career', '/nfl-my-career', '/mlb-my-career', '/nhl-my-career'];
+type SearchIntent = { category?: CategoryTitle; paths?: readonly string[] };
+const SEARCH_INTENTS = new Map<string, SearchIntent>([
+  ['american football', { category: 'Pro Football' }],
+  ['manage an nfl team', { category: 'Pro Football', paths: ['/front-office'] }],
+  ['nfl management', { category: 'Pro Football', paths: ['/front-office'] }],
+  ['manage an afl team', { category: 'Aussie Rules', paths: ['/aussie-rules-manager'] }],
+  ['manage a rugby league team', { category: 'Rugby League', paths: ['/nrl-team-manager'] }],
+  ['build a stadium', { paths: ['/stadium-tycoon'] }],
+  ['stadium builder', { paths: ['/stadium-tycoon'] }],
+  ['career mode', { paths: playerCareers }],
+  ['career sims', { paths: playerCareers }],
+  ['soccer career mode', { category: 'Soccer', paths: ['/soccer-career'] }],
+  ['basketball career mode', { category: 'Pro Basketball', paths: ['/nba-my-career'] }],
+]);
 
 interface Entry {
   game: GameDef;
@@ -420,6 +437,8 @@ export function searchSite(raw: string, options?: { limit?: number }): SearchRes
   }
 
   const whole = terms.join(' ');
+  const intent = terms.length < MAX_TERMS && raw.length <= MAX_QUERY_CHARS
+    ? SEARCH_INTENTS.get(whole) : undefined;
   const expanded = terms.map(t => {
     const aliases = aliasesFor(t).map(a => normalizeQuery(a)).filter(a => a && a !== t);
     return { term: t, aliases };
@@ -427,6 +446,8 @@ export function searchSite(raw: string, options?: { limit?: number }): SearchRes
 
   const out: SearchResult[] = [];
   for (const e of searchIndex()) {
+    const exact = e.labelKey === whole || e.pathKey === whole;
+    if (intent?.category && e.category !== intent.category && !exact) continue;
     let total = 0;
     let best: Hit = NONE;
     let missed = false;
@@ -448,7 +469,13 @@ export function searchSite(raw: string, options?: { limit?: number }): SearchRes
       total += hit.score;
       best = better(best, hit);
     }
-    if (missed || total === 0) continue;
+    if (missed || total === 0) {
+      const position = intent?.paths?.indexOf(e.game.path) ?? -1;
+      if (position >= 0 || (intent && !intent.paths && e.category === intent.category)) {
+        out.push({ game: e.game, category: e.category, score: INTENT_SCORE - Math.max(0, position), matchedOn: 'intent' });
+      }
+      continue;
+    }
 
     /* The promise at the top of this file: an exact label match wins, always.
        The bonus is larger than anything a pile of description hits can reach. */
@@ -459,10 +486,11 @@ export function searchSite(raw: string, options?: { limit?: number }): SearchRes
     out.push({ game: e.game, category: e.category, score: Math.round(total), matchedOn: best.field });
   }
 
-  /* Deterministic to the byte: score, then label, then path, and the path is
-     unique, so two runs can never disagree about the order. */
+  /* Intent suggestions follow ordinary matches. Then score, label and unique
+     path give a deterministic order. */
   out.sort((a, b) =>
-    b.score - a.score
+    Number(a.matchedOn === 'intent') - Number(b.matchedOn === 'intent')
+    || b.score - a.score
     || a.game.label.localeCompare(b.game.label, 'en')
     || a.game.path.localeCompare(b.game.path, 'en'));
 

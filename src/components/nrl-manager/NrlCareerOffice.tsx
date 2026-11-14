@@ -20,7 +20,7 @@ import {
   nrlLeagueRecruitmentPreview,
   nrlOffseasonFreeAgentPreview, nrlOffseasonFreeAgentsAvailable,
   nrlOffseasonLineupPreview, nrlOffseasonLineupsAvailable,
-  nrlRecruitmentBrief, nrlRecruitmentPlan,
+  nrlRecruitmentBrief, nrlRecruitmentPlan, nrlRetentionPriority,
   nrlSeasonOut, nrlSelectionPromise, nrlSelectionPromiseCandidates,
   nrlMutualReleaseQuote, nrlMutualReleaseSpend,
   nrlProjectedSummerOpenings, nrlSummerApplication, nrlSummerLastRound,
@@ -1886,7 +1886,8 @@ function OffseasonFreeAgents({ career, checked, onChange, disabled }: {
             </ul>
             <p className="text-xs text-muted-foreground">{preview.academy} from the academy · {money(preview.available)} cap room after filling the squad.</p>
           </>
-        ) : <p className="text-muted-foreground">{preview ? 'Your remaining places go to academy players in this preview.' : 'All Top 30 places are signed for next season.'}</p>}
+        ) : <p className="text-muted-foreground">{preview && preview.academy > 0 ? 'Your remaining places go to academy players in this preview.'
+          : !preview && career.retentionPriorityId ? 'Resolve the pending retention choice to see the remaining squad places.' : 'All Top 30 places will be filled next season.'}</p>}
       </div>}
     </details>
   );
@@ -1914,6 +1915,11 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const lineupPreview = useMemo(() => carryLineups ? nrlOffseasonLineupPreview(career) : [], [career, carryLineups]);
   const canChooseFreeAgents = nrlOffseasonFreeAgentsAvailable(career);
   const preferFreeAgents = career.preferFreeAgents === true;
+  const retention = useMemo(() => nrlRetentionPriority(career), [career]);
+  const retentionChoice = retention?.selected;
+  const retentionBlocked = Boolean(career.retentionPriorityId && !retentionChoice?.quote.ok);
+  const retentionImpact = retentionChoice?.quote.ok
+    ? nrlContractCapImpact(career, retentionChoice.player.id, retentionChoice.quote.contract)[0] : undefined;
   const clubSelect = useRef<HTMLSelectElement>(null);
   const clubs = nrlOffseasonClubs(career);
   const nextClub = clubs.find(club => club.id === nextClubId);
@@ -1928,6 +1934,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       lines={[`You’ll be out of work. To return for ${year + 1}, choose one of the ${openings.length} simulated vacancies. This saves your completed season.`,
         ...(application ? ['Your existing application or offer closes.'] : []),
         ...(career.coachRetention ? ['Leaving cancels the assistant extension.'] : []),
+        ...(retentionChoice ? ['Leaving clears the pending player retention choice.'] : []),
         ...(career.worldCup ? ['You can resume your World Cup appointment after taking a new club job.'] : [])]}
       keep={mustMove ? 'Back to season review' : 'Stay at club'} confirm={mustMove ? 'Yes, open job market' : 'Yes, leave club'}
       onRetire={() => onAction({ type: 'leaveClub', year, clubId })} />
@@ -1941,6 +1948,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       {application.response === 'offered' && (
         <>
           {career.coachRetention && <p className="text-sm text-muted-foreground">Accepting this job cancels the assistant extension.</p>}
+          {retentionChoice && <p className="text-sm text-muted-foreground">Taking this job clears the pending player retention choice.</p>}
           <Button type="button" size="lg" className="mt-2 w-full px-2 sm:w-auto" disabled={disabled || needsJudiciary}
             onClick={() => onAction({ type: 'acceptOffseasonJob', year, clubId, destinationId: application.clubId })}>
             Accept offer and start {year + 1}
@@ -2043,6 +2051,24 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       {!outOfWork && <AssistantExtension career={career} onAction={onAction} disabled={disabled} />}
       {!outOfWork && <LeagueRecruitment career={career} onAction={onAction} disabled={disabled}
         preferFreeAgents={preferFreeAgents} nextClubId={nextClub?.id ?? (application?.response === 'offered' ? application.clubId : undefined)} />}
+      {!!retention?.options.length && <section className="mt-3 space-y-2 rounded-xl border border-border bg-background p-3 text-sm" aria-labelledby="nrl-retention">
+        <h3 id="nrl-retention" className="font-bold">Retention priority</h3>
+        <label className="block space-y-1 font-semibold">
+          <span>Player to retain</span>
+          <select className="min-h-11 w-full rounded-lg border border-input bg-background px-2" disabled={disabled}
+            value={career.retentionPriorityId ?? ''} onChange={event => onAction({ type: 'setRetentionPriority', year, clubId, playerId: event.target.value || null })}>
+            <option value="">Keep the place open</option>
+            {retention.options.map(({ player, salary, quote }) => (
+              <option key={player.id} value={player.id} disabled={!quote.ok && player.id !== career.retentionPriorityId}>
+                {player.name} · {player.role} · {money(salary)}{!quote.ok && ' · Unavailable'}
+              </option>
+            ))}
+          </select>
+        </label>
+        <p className="text-muted-foreground">If you stay, the selected player signs for one year at their asking salary before the remaining places are filled.</p>
+        {retentionImpact && <p role="status" className="text-muted-foreground">{year + 1} cap room {money(retentionImpact.before.available)} → {money(retentionImpact.after.available)} · {retentionImpact.after.openSlots} open places.</p>}
+        {retentionChoice?.quote.ok === false && <p role="status" className="text-muted-foreground">{retentionChoice.quote.reason} Choose a different player or keep the place open.</p>}
+      </section>}
       {(canChooseFreeAgents || preferFreeAgents) && <OffseasonFreeAgents career={career} checked={preferFreeAgents} disabled={disabled}
         onChange={enabled => onAction({ type: 'setOffseasonFreeAgents', year, clubId, enabled })} />}
       {showLineupChoice && <div className="mt-3 rounded-xl border border-border bg-background px-3 pb-3 text-sm">
@@ -2064,7 +2090,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
         </ul>}
       </div>}
       {finished && employed && year < NRL_LAST_YEAR && !mustMove && (
-        <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled || needsJudiciary}
+        <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled || needsJudiciary || retentionBlocked}
           onClick={() => onAction({ type: 'startNextSeason', ...(carryLineups && { carryLineups: { fromYear: year, clubId } }) })}>
           Start {year + 1}<ArrowRight aria-hidden="true" />
         </Button>
@@ -2077,6 +2103,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           <div className="space-y-2 pb-3 text-sm">
             <p className="text-muted-foreground">Take over the new club’s squad and contracts. If you return to a club, you resume its last balance and medical facilities.</p>
             {career.coachRetention && <p className="text-muted-foreground">Moving clubs cancels the assistant extension.</p>}
+            {retentionChoice && <p className="text-muted-foreground">Moving clubs clears the pending player retention choice.</p>}
             {openings.length > 0 && <section className="rounded-lg border border-border p-2" aria-labelledby="nrl-openings-title">
               <h3 id="nrl-openings-title" className="font-bold">Suggested openings</h3>
               <p className="text-muted-foreground">
@@ -2128,7 +2155,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       {!mustMove && departure}
       {finished && !retired && !disabled && !needsJudiciary && (
         <RetireDoor className="mt-3" door="Retire from management" title={`Retire after the ${seasonOut?.year ?? year} season?`}
-          lines={['Your career record stays in this save slot.', ...(career.coachRetention ? ['Retiring cancels the assistant extension.'] : [])]}
+          lines={['Your career record stays in this save slot.', ...(career.coachRetention ? ['Retiring cancels the assistant extension.'] : []),
+            ...(retentionChoice ? ['Retiring clears the pending player retention choice.'] : [])]}
           keep="Keep managing" confirm="Yes, retire"
           onRetire={() => onAction({ type: 'retireCareer', year, clubId })} />
       )}
@@ -2191,6 +2219,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                     </ul>
                   </details>
                 )}
+                {record.retainedPlayer && <p className="text-sm text-muted-foreground">Retained {record.retainedPlayer.playerName} for {record.year + 1} · {money(record.retainedPlayer.annualSalary)}.</p>}
                 <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
                 {record.finance?.physio && <p className="text-sm text-muted-foreground">
                   Physio session in Round {record.finance.physio.round} · {money(nrlPhysioSpend(record.finance))}

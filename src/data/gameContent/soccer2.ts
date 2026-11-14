@@ -2322,6 +2322,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "How the banker sweetens later rounds",
         items: [
           "Offers strengthen in later rounds, roughly 1 in 4 is a sweetener near the best player left, and the banker never repeats an offer.",
+          "Once per draft, counter for chemistry to replace an offer with a player who improves the club or nationality links in your drafted squad. His rating can be up to five points lower. You can still turn down the replacement and keep opening cases.",
         ],
       },
       {
@@ -2344,6 +2345,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Declining the banker's mid 80s offer at striker",
         paragraphs: [
           "At striker you keep box 4. Two scrubs and a star flip out, the banker offers a solid mid 80s name, and you decline. Next round burns another elite option, and his follow up is weaker, because the field left in play got worse.",
+          "Later, suppose the banker offers an 80-rated centre back with no links. You counter for chemistry and get a 77-rated player who shares a club with your goalkeeper. The original offer is withdrawn and your unopened boxes are still in play.",
         ],
       },
       {

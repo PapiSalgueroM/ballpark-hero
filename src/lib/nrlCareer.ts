@@ -147,6 +147,7 @@ export interface NrlCareerHistoryRow {
   summerApplication?: NrlSummerApplicationReceipt;
   leagueRecruitment?: NrlLeagueRecruitmentDeal[];
   freeAgentFill?: NrlFreeAgentSigning[];
+  retainedPlayer?: NrlFreeAgentSigning;
   coachRetained?: true;
   judiciary?: { case: NrlJudiciaryCase; matchesAfter: number };
   judiciaryCarry?: NrlJudiciaryCarry;
@@ -217,6 +218,7 @@ export interface NrlCareerState {
   leagueRecruitment?: true;
   coachRetention?: true;
   preferFreeAgents?: true;
+  retentionPriorityId?: string;
   contractApproach?: NrlContractApproach;
   selectionPromise?: NrlSelectionPromise;
 }
@@ -280,6 +282,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'simulateSeasonOut'; year: number; clubId: string }
   | { type: 'applyForSummerJob'; year: number; clubId: string; round: number; destinationId: string }
   | { type: 'setOffseasonFreeAgents'; year: number; clubId: string; enabled: boolean }
+  | { type: 'setRetentionPriority'; year: number; clubId: string; playerId: string | null }
   | { type: 'setLeagueRecruitment'; year: number; clubId: string; enabled: boolean }
   | { type: 'setCoachRetention'; year: number; clubId: string; enabled: boolean }
   | { type: 'startCoachCourse'; year: number; clubId: string; round: number }
@@ -1991,6 +1994,28 @@ function canStayForNextSeason(state: NrlCareerState): boolean {
     && season.year < NRL_LAST_YEAR && !judiciaryNeedsResponse(season) && nrlBoardChallengeStatus(state) !== 'must-move';
 }
 
+export function nrlRetentionPriority(state: NrlCareerState) {
+  if (!canStayForNextSeason(state)) return null;
+  const nextYear = state.season.year + 1;
+  const options = nrlCareerSquad(state).slice().sort(byRating).flatMap(player => {
+    if (player.contract?.endYear !== state.season.year || player.futureContract) return [];
+    const entry = marketEntry(state, player);
+    if (!entry || entry.kind !== 'renewal' || entry.startYear !== nextYear) return [];
+    return [{ player, salary: entry.askingSalary, quote: checkContractOffer(state, entry, entry.askingSalary, 1) }];
+  });
+  const selected = options.find(row => row.player.id === state.retentionPriorityId);
+  return { options, selected };
+}
+
+function retentionPreparation(state: NrlCareerState) {
+  if (!state.retentionPriorityId) return { state, retained: undefined };
+  const selected = nrlRetentionPriority(state)?.selected;
+  if (!selected?.quote.ok) return null;
+  const { player, quote: { contract } } = selected;
+  const retained: NrlFreeAgentSigning = { playerId: player.id, playerName: player.name, role: player.role, annualSalary: contract.salary };
+  return { state: { ...state, players: playersWithContract(state.players, player.id, contract) }, retained };
+}
+
 export function nrlOffseasonFreeAgentsAvailable(state: NrlCareerState): boolean {
   return canStayForNextSeason(state) && nrlCareerCap(state, state.season.year + 1).openSlots > 0;
 }
@@ -2002,8 +2027,12 @@ export function nrlOffseasonLineupsAvailable(state: NrlCareerState): boolean {
 export function nrlOffseasonFreeAgentPreview(state: NrlCareerState) {
   if (!nrlOffseasonFreeAgentsAvailable(state)) return null;
   const { year, clubId } = state.season;
-  const { settled, signings } = offseasonSquads(state, false, true);
-  return { signings, academy: nrlCareerCap(state, year + 1).openSlots - signings.length,
+  const incoming = retentionPreparation(state);
+  if (!incoming) return null;
+  const room = nrlCareerCap(incoming.state, year + 1);
+  if (!room.openSlots) return { signings: [], academy: 0, available: room.available };
+  const { settled, signings } = offseasonSquads(incoming.state, false, true);
+  return { signings, academy: room.openSlots - signings.length,
     available: capFor(settled, clubId, year + 1).available };
 }
 
@@ -2028,7 +2057,8 @@ export function nrlLeagueRecruitmentPreview(state: NrlCareerState, destinationId
   if (!leagueRecruitmentAvailable(state) || (destinationId !== state.season.clubId
     && !nrlOffseasonClubs(state).some(club => club.id === destinationId))) return null;
   const freeAgents = preferFreeAgents && destinationId === state.season.clubId && nrlOffseasonFreeAgentsAvailable(state);
-  return leagueRecruitmentDeals(state, offseasonSquads(state, false, freeAgents).settled, destinationId);
+  const incoming = destinationId === state.season.clubId ? retentionPreparation(state) : { state };
+  return incoming ? leagueRecruitmentDeals(incoming.state, offseasonSquads(incoming.state, false, freeAgents).settled, destinationId) : [];
 }
 
 function offseasonWorld(state: NrlCareerState, nextClubId: string, allCpu = false, preferFreeAgents = false) {
@@ -2081,11 +2111,13 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
   if (season.phase !== 'complete' || season.year === NRL_LAST_YEAR || judiciaryNeedsResponse(season)) return state;
   if (!move && nrlBoardChallengeStatus(state) === 'must-move') return state;
   if (move && (move.fromYear !== season.year || (!seasonOut && !nrlOffseasonClubs(state).some(club => club.id === move.clubId)))) return state;
+  const incoming = move ? { state, retained: undefined } : retentionPreparation(state);
+  if (!incoming) return state;
   const { developmentFocus, ratingReview: _oldRatingReview, shortlist, savedLineup, savedRotationLineup, positionTraining, offseasonApplication, leagueRecruitment, coachRetention, contractApproach,
-    selectionPromise, outOfWork, satOutSeason, preferFreeAgents: _freeAgentChoice, ...career } = state;
+    selectionPromise, outOfWork, satOutSeason, preferFreeAgents: _freeAgentChoice, retentionPriorityId: _priority, ...career } = state;
   const year = season.year + (seasonOut ? 2 : 1);
   const clubId = move?.clubId ?? season.clubId;
-  const opening = seasonOut?.opening ?? offseasonWorld(state, clubId, false, preferFreeAgents);
+  const opening = seasonOut?.opening ?? offseasonWorld(incoming.state, clubId, false, preferFreeAgents);
   const { focusAffected, coachDevelopment, deals, signings } = opening;
   const { world } = seasonOut
     ? offseasonWorld({ ...state, season: seasonOut.skipped, players: seasonOut.players, finance: bookFrom(OPENING_CASH),
@@ -2149,6 +2181,7 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
     ...(seasonOut && { seasonOut: seasonOut.archive }),
     ...(deals && { leagueRecruitment: deals }),
     ...(signings.length > 0 && { freeAgentFill: signings }),
+    ...(incoming.retained && { retainedPlayer: incoming.retained }),
     ...(coachHire && { coachRetained: true as const }),
     ...(review && { judiciary: { case: review, matchesAfter: nrlJudiciaryMatchesAfter(season, review.round) } }),
     ...(carried && { judiciaryCarry: carried }),
@@ -2260,7 +2293,7 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     case 'leaveClub': {
       const { year, clubId } = state.season;
       if (action.year !== year || action.clubId !== clubId || !nrlCanLeaveClub(state)) return state;
-      const { coachRetention, offseasonApplication, preferFreeAgents, ...career } = state;
+      const { coachRetention, offseasonApplication, preferFreeAgents, retentionPriorityId, ...career } = state;
       return { ...career, outOfWork: true };
     }
     case 'acceptVacancy': {
@@ -2280,7 +2313,7 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     case 'retireCareer': {
       const { phase, year, clubId } = state.season;
       if (phase !== 'complete' || action.year !== year || action.clubId !== clubId || judiciaryNeedsResponse(state.season)) return state;
-      const { offseasonApplication, leagueRecruitment, coachRetention, contractApproach, preferFreeAgents, ...career } = state;
+      const { offseasonApplication, leagueRecruitment, coachRetention, contractApproach, preferFreeAgents, retentionPriorityId, ...career } = state;
       return { ...career, retired: true };
     }
     case 'setCoachRetention': {
@@ -2303,6 +2336,15 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       if (action.enabled) return nrlOffseasonFreeAgentsAvailable(state) ? { ...state, preferFreeAgents: true } : state;
       const { preferFreeAgents, ...career } = state;
       return career;
+    }
+    case 'setRetentionPriority': {
+      const { year, clubId } = state.season;
+      const { playerId } = action;
+      if (action.year !== year || action.clubId !== clubId || !canStayForNextSeason(state)) return state;
+      const { retentionPriorityId, ...career } = state;
+      if (playerId === null) return retentionPriorityId === undefined ? state : career;
+      if (playerId === retentionPriorityId || !nrlRetentionPriority(state)?.options.some(row => row.player.id === playerId && row.quote.ok)) return state;
+      return { ...state, retentionPriorityId: playerId };
     }
     case 'setLeagueRecruitment': {
       const { year, clubId } = state.season;
@@ -2541,7 +2583,8 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       const finance = player && objective ? {
         ...state.finance, boardRecruitment: { ...objective, signed: { id: player.id, name: player.name, round, salary: quote.contract.salary } },
       } : state.finance;
-      const next = { ...state, players, finance };
+      const { retentionPriorityId, ...career } = state;
+      const next = { ...(retentionPriorityId === action.playerId ? career : state), players, finance };
       return state.shortlist?.includes(action.playerId)
         ? withShortlist(next, state.shortlist.filter(id => id !== action.playerId))
         : next;
@@ -2746,6 +2789,15 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
     if (!signings.every(row => record(row) && Object.keys(row).length === 4
       && typeof row.playerId === 'string' && Boolean(row.playerId) && typeof row.playerName === 'string' && Boolean(row.playerName)
       && NRL_ROLES.includes(row.role as NrlRole) && intIn(row.annualSalary, next.minimumSalary, next.cap))) return false;
+  }
+  if (value.retainedPlayer !== undefined) {
+    const player = value.retainedPlayer;
+    if (year === NRL_LAST_YEAR || value.finance === null || !scoring || !record(player) || Object.keys(player).length !== 4
+      || typeof player.playerId !== 'string' || !player.playerId || typeof player.playerName !== 'string' || !player.playerName
+      || !NRL_ROLES.includes(player.role as NrlRole)) return false;
+    const next = nrlSeasonPlan(year + 1);
+    if (!intIn(player.annualSalary, next.minimumSalary, next.cap)
+      || (value.freeAgentFill as NrlFreeAgentSigning[] | undefined)?.some(signing => signing.playerId === player.playerId)) return false;
   }
   if (value.finals !== undefined) {
     const finals = nrlArchivedFinals(value.finals, year);
@@ -2998,6 +3050,17 @@ function validCareerBooks(state: NrlCareerState): boolean {
         return !player || player.name !== signing.playerName || player.role !== signing.role || contract?.clubId !== incoming
           || contract.startYear !== year + 1 || contract.endYear !== year + 1 || contract.salary !== signing.annualSalary;
       })) return false;
+    }
+    if (receipt.retainedPlayer) {
+      const incoming = history[index + 1]?.clubId ?? season.clubId;
+      if (year === season.year || receipt.seasonOut || incoming !== receipt.clubId) return false;
+      if (year === season.year - 1) {
+        const retained = receipt.retainedPlayer;
+        const player = state.players.find(candidate => candidate.id === retained.playerId);
+        const contract = player?.contract;
+        if (!player || player.name !== retained.playerName || player.role !== retained.role || contract?.clubId !== incoming
+          || contract.startYear !== year + 1 || contract.endYear !== year + 1 || contract.salary !== retained.annualSalary) return false;
+      }
     }
     if (receipt.appointment || receipt.summerApplication) {
       const prior = history[index - 1];
@@ -3317,6 +3380,8 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     || (state.history[0]?.clubId ?? state.season.clubId) !== state.customClub!.slotId)) return false;
   if (state.season.judiciary && (state.openingRoster || state.legacySeason || (state.retired && judiciaryNeedsResponse(state.season)))) return false;
   if (state.preferFreeAgents !== undefined && (state.preferFreeAgents !== true || !canStayForNextSeason(state))) return false;
+  if (state.retentionPriorityId !== undefined && (typeof state.retentionPriorityId !== 'string'
+    || !nrlRetentionPriority(state)?.selected)) return false;
   if (state.coachRetention !== undefined && (state.coachRetention !== true || nrlCoachRetentionQuote(state).reason !== null)) return false;
   if (state.leagueRecruitment !== undefined && (state.leagueRecruitment !== true || !leagueRecruitmentAvailable(state))) return false;
   if (state.origin !== undefined && (!isNrlOriginSeries(state.origin, state.season.seed)

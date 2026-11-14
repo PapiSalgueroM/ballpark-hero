@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { createNrlCareer, nrlCareerCap, nrlCareerSquad, nrlCareerMarket, nrlLeagueRecruitmentPreview, nrlOffseasonFreeAgentPreview,
+import { createNrlCareer, nrlCareerCap, nrlCareerSquad, nrlCareerMarket, nrlLeagueRecruitmentPreview, nrlOffseasonFreeAgentPreview, nrlRetentionPriority,
   readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
 import { createNrlSeason, NRL_ROLES } from '@/lib/nrlManager';
 
@@ -7,6 +7,48 @@ function finish(career: NrlCareerState) {
   while (career.season.phase !== 'complete') career = reduceNrlCareer(career, { type: 'advance' });
   return career;
 }
+
+it('reviews the cap again at rollover and lets a new manual contract or a cleared priority control', () => {
+  const clubId = 'storm', year = 2026;
+  const ended = finish(createNrlCareer(clubId, 4, year));
+  const playerId = 'storm-1-0';
+  const preference = { type: 'setRetentionPriority', year, clubId, playerId } as const;
+  const quote = nrlRetentionPriority(ended)?.options.find(row => row.player.id === playerId)!;
+  expect(quote.quote.ok).toBe(true);
+  const selected = reduceNrlCareer(ended, preference);
+  expect(reduceNrlCareer(selected, preference)).toBe(selected);
+  expect(reduceNrlCareer(selected, { ...preference, playerId: null })).toEqual(ended);
+  const keep = reduceNrlCareer(selected, { type: 'setOffseasonFreeAgents', year, clubId, enabled: true });
+  const preview = nrlOffseasonFreeAgentPreview(keep)!;
+  expect(preview.signings.length + preview.academy).toBe(nrlCareerCap(ended, year + 1).openSlots - 1);
+  expect(preview.signings.some(row => row.playerId === playerId)).toBe(false);
+  const retained = reduceNrlCareer(keep, { type: 'startNextSeason' });
+  expect(retained.history.at(-1)?.freeAgentFill).toEqual(preview.signings);
+  expect(retained.history.at(-1)?.retainedPlayer?.playerId).toBe(playerId);
+  expect(nrlCareerCap(retained).available).toBe(preview.available);
+
+  const ordinary = { type: 'offerContract', playerId, salary: quote.salary, years: 2 } as const;
+  const signed = reduceNrlCareer(selected, ordinary);
+  expect(signed).toEqual(reduceNrlCareer(ended, ordinary));
+  expect(signed.retentionPriorityId).toBeUndefined();
+  expect(reduceNrlCareer(selected, { type: 'leaveClub', year, clubId }).retentionPriorityId).toBeUndefined();
+  expect(reduceNrlCareer(selected, { type: 'retireCareer', year, clubId }).retentionPriorityId).toBeUndefined();
+  const move = { type: 'startNextSeason', move: { fromYear: year, clubId: 'bears' } } as const;
+  expect(reduceNrlCareer(selected, move)).toEqual(reduceNrlCareer(ended, move));
+
+  const cap = nrlCareerCap(selected, year + 1);
+  const blocked = nrlRetentionPriority(selected)!.options.flatMap(row => {
+    if (row.player.id === playerId) return [];
+    const filled = reduceNrlCareer(selected, { type: 'offerContract', playerId: row.player.id, salary: cap.available + cap.minimumSalary, years: 1 });
+    return nrlRetentionPriority(filled)?.selected?.quote.ok === false ? [filled] : [];
+  })[0];
+  expect(blocked).toBeDefined();
+  expect(nrlRetentionPriority(blocked)?.selected?.quote).toEqual({ ok: false, reason: 'This offer exceeds the 2027 salary cap.' });
+  expect(readNrlCareerSave(JSON.stringify(blocked))).toEqual(blocked);
+  expect(reduceNrlCareer(blocked, { type: 'startNextSeason' })).toBe(blocked);
+  const cleared = reduceNrlCareer(blocked, { ...preference, playerId: null });
+  expect(reduceNrlCareer(cleared, { type: 'startNextSeason' }).season.year).toBe(2027);
+});
 
 it.each([
   [2026, 'storm'],

@@ -2348,6 +2348,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>After finishing a 2026 club season, take a national appointment from the Club office before starting 2027. It saves inside your career.</li>
               <li>Review each season, manage contracts and recruit for the next year. An offer or counteroffer shows the change in cap room and open squad places for each year of the deal.</li>
               <li>Before inviting a rival approach in Contracts, check next season’s position cover and the current clubs that can take over the deal.</li>
+              <li>In Season review, choose one expiring player as your Retention priority. They sign for one year at their asking salary when you start next season at the same club, subject to the cap.</li>
               <li>Career saves lets you keep up to three careers in this browser.</li>
             </ul>
           </RulesGate>
