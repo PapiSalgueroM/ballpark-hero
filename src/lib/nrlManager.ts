@@ -133,6 +133,7 @@ export interface NrlMatchResult extends NrlFixture {
   individualRecoveryId?: string;
   goalKickingDrills?: true;
   openInterchange?: true;
+  ratingChanges?: [playerId: string, change: 1 | -1][];
   counterStyle?: NrlOpponentStyle;
   captainId?: string;
   actingCaptain?: { clubCaptainId: string; viceCaptainId: string };
@@ -1526,6 +1527,12 @@ function validBenchUse(value: unknown, managed: boolean, byId: Map<string, NrlPl
   return roles.every(Boolean) && new Set(roles).size === value.length;
 }
 
+export function validNrlRatingChanges(value: unknown, byId: ReadonlyMap<string, NrlPlayer>): boolean {
+  return Array.isArray(value) && value.length <= byId.size
+    && new Set(value.map(row => row?.[0])).size === value.length
+    && value.every(row => Array.isArray(row) && row.length === 2 && byId.has(row[0]) && (row[1] === 1 || row[1] === -1));
+}
+
 function validHalftimeInterchange(value: unknown, scoring: NrlMatchScoringReport | undefined,
   benchUsed: string[] | undefined, byId: ReadonlyMap<string, NrlPlayer>): value is NrlHalftimeReceipt {
   if (!scoring || !record(value) || typeof value.starterId !== 'string' || typeof value.reserveId !== 'string'
@@ -1631,6 +1638,8 @@ function validResult(value: unknown, expected: NrlFixture, state: Pick<NrlManage
     && (value.individualRecoveryId === undefined || (managed && typeof value.individualRecoveryId === 'string'
       && byId.has(value.individualRecoveryId) && value.playerScoring !== undefined))
     && (value.goalKickingDrills === undefined || (managed && value.goalKickingDrills === true && value.playerScoring !== undefined))
+    && (value.ratingChanges === undefined || (managed && !expected.finalsRound && value.playerScoring !== undefined
+      && validNrlRatingChanges(value.ratingChanges, byId)))
     && (value.openInterchange === undefined || (managed && value.openInterchange === true && value.playerScoring !== undefined
       && (!Array.isArray(value.benchUsed) || value.benchUsed.length < NRL_MAX_BENCH_USED
         || value.minute60Interchange !== undefined

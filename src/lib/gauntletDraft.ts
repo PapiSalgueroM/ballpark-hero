@@ -3,7 +3,7 @@ import { FORMATIONS, Formation, FormationSlot, playerRating } from '@/lib/squadD
 import { eligiblePositions } from '@/lib/worldXi';
 import {
   GauntletConfig, FormationSlotLike, PICK_SIZE as ENGINE_PICK_SIZE, gRng,
-  buildDraft as engineBuildDraft, dailySeedFor, squadRatingOf as engineSquadRatingOf,
+  buildDraft as engineBuildDraft, redrawDraftPick, dailySeedFor, squadRatingOf as engineSquadRatingOf,
   runGauntlet as engineRunGauntlet, loadDailyRun as engineLoadDailyRun,
   saveDailyRun as engineSaveDailyRun, GauntletRun, GauntletMatch, decidedNote,
 } from '@/lib/gauntletEngine';
@@ -149,6 +149,10 @@ export function buildDraft(pool: Player[], seed: number): GauntletDraft {
      changes. scripts/simGauntletEngine.mjs section 1 proves the output is
      byte identical to the pre-refactor implementation. */
   return engineBuildDraft(soccerConfig(pool), seed) as unknown as GauntletDraft;
+}
+
+export function redrawGauntletPick(pool: Player[], draft: GauntletDraft, index: number, seed: number): Player[] | null {
+  return redrawDraftPick(soccerConfig(pool), draft, index, seed);
 }
 
 export function dailyDraftSeed(dateStr: string): number {

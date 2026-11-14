@@ -14,7 +14,7 @@ import {
   archiveNrlFinals, archiveNrlLadder, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlArchivedLadder, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
   isNrlPhysioTreatment, nrlByeTrainingPreview, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
   nrlPlanAdjustments, nrlPlanMatchups, nrlReserveGradeEnd, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
-  NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore,
+  NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore, validNrlRatingChanges,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlLeagueLadderArchive, type NrlLivePlanChoice, type NrlManagerState, type NrlMatchResult,
   type NrlPhysioTreatment, type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
 } from '@/lib/nrlManager';
@@ -1776,12 +1776,16 @@ function reviewRatings(state: NrlCareerState, round: number, results: NrlMatchRe
   const ratingUpdate = ownMatch && (changes.length || focus.size !== (ratingReview?.focus?.length ?? 0))
     ? { ratingReview: { round, changes, ...(focus.size && { focus: [...focus] }), ...(assistant.size && { assistant: [...assistant] }) } }
     : {};
-  if (!rates.size && !ratingUpdate.ratingReview) return state;
+  const managedMatch = ownMatch ? results.find(match => match.playerScoring && (match.homeId === clubId || match.awayId === clubId)) : undefined;
+  if (!rates.size && !ratingUpdate.ratingReview && !managedMatch) return state;
   const update = <P extends NrlPlayer>(player: P): P => {
     const step = rates.get(player.id);
     return step ? { ...player, rating: player.rating + step } : player;
   };
-  return { ...state, ...ratingUpdate, players: state.players.map(update), season: { ...state.season, squad: state.season.squad.map(update) } };
+  const recorded = managedMatch ? state.season.results.map(match =>
+    match === managedMatch ? { ...match, ratingChanges: changes } : match) : state.season.results;
+  return { ...state, ...ratingUpdate, players: rates.size ? state.players.map(update) : state.players,
+    season: { ...state.season, results: recorded, squad: rates.size ? state.season.squad.map(update) : state.season.squad } };
 }
 
 export function nrlDevelopmentAffected(state: NrlCareerState): number {
@@ -3467,10 +3471,9 @@ function validRatingReview(state: NrlCareerState): boolean {
   if (legacySeason || !record(review) || !intIn(review.round, 1, Math.min(season.round - 1, nrlRegularRounds(season.year)))
     || !season.results.some(match => match.round === review.round && (match.homeId === season.clubId || match.awayId === season.clubId))) return false;
   const owned = new Map(nrlCareerSquad(state).map(player => [player.id, player]));
-  if (!Array.isArray(review.changes) || review.changes.length > SQUAD_SIZE
-    || new Set(review.changes.map(row => row?.[0])).size !== review.changes.length
-    || !review.changes.every(row => Array.isArray(row) && row.length === 2 && owned.has(row[0])
-      && (row[1] === 1 || row[1] === -1))) return false;
+  if (!validNrlRatingChanges(review.changes, owned)) return false;
+  const saved = season.results.find(match => match.round === review.round && match.ratingChanges !== undefined);
+  if (saved && JSON.stringify(saved.ratingChanges) !== JSON.stringify(review.changes)) return false;
   const validIds = (ids: unknown, max: number) => Array.isArray(ids) && ids.length > 0 && ids.length <= max
     && new Set(ids).size === ids.length && ids.every(id => typeof id === 'string' && owned.has(id));
   if (review.focus !== undefined && (!developmentFocus || !validIds(review.focus, SQUAD_SIZE)

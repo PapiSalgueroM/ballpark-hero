@@ -1218,6 +1218,7 @@
       "howToPlay": [
         "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
         "For each slot, read the five cards, star to bargain, and tap the one you keep. Position families apply, so a winger card can cover either flank.",
+        "In Unlimited Soccer Gauntlet, redraw one slot per draft. A successful redraw withdraws all five current cards. If five new players cannot fill the slot, keep the current offer and try the redraw in another slot.",
         "After pick eleven the knockout starts on its own: five rounds, one match each, revealed one at a time.",
         "Survive a round for 16 points; lift the trophy for exactly 100."
       ],
@@ -1230,6 +1231,7 @@
       ],
       "example": [
         "The draw hands you a 4-3-3 and the striker slot deals a 91 rated superstar next to an 84, a 79, a 74 and a 68. You pay nothing for any of them, so the 91 is the pick unless you are chasing a story.",
+        "In Unlimited, you could take the 91 now or redraw the striker slot if you still have your redraw. Take the new offer and the 91 leaves the draft with the other four cards.",
         "Your finished XI rates 84. The Qualifier ends 3-0, the Last Sixteen 2-1, the Quarter Final needs penalties, and the Semi Final ends the run 1-2. Four rounds survived, 64 points, and the draft you would redo is the 74 you took at left back."
       ],
       "tips": [

@@ -7,7 +7,7 @@ const advance = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'advan
 const open = (seed: number) => createNrlCareer('broncos', seed, 2026);
 const ownMatch = (state: NrlCareerState) => state.season.results.find(match => match.homeId === 'broncos' || match.awayId === 'broncos')!;
 const fields = ['tries', 'conversions', 'penalties', 'fieldGoals', 'longFieldGoals'] as const;
-const strip = ({ playerScoring, ...match }: NrlMatchResult) => match;
+const strip = ({ playerScoring, ratingChanges, ...match }: NrlMatchResult) => match;
 
 describe('NRL Manager player scoring', () => {
   it('credits all five scoring counters to actual match participants, including used reserves', () => {

@@ -16,7 +16,7 @@ import { FlagImg } from '@/components/FlagImg';
 import { Player } from '@/types/game';
 import {
   GAUNTLET_ROUNDS, GauntletDraft as DraftShape, GauntletRun,
-  buildDraft, dailyDraftSeed, loadDailyRun, matchLine, matchNote, runGauntlet, saveDailyRun, squadRatingOf,
+  buildDraft, dailyDraftSeed, loadDailyRun, matchLine, matchNote, redrawGauntletPick, runGauntlet, saveDailyRun, squadRatingOf,
 } from '@/lib/gauntletDraft';
 
 /**
@@ -56,6 +56,10 @@ export default function GauntletDraft() {
   const [squad, setSquad] = useState<(Player | null)[]>([]);
   const [run, setRun] = useState<GauntletRun | null>(null);
   const [shownMatches, setShownMatches] = useState(0);
+  const [redrawUsed, setRedrawUsed] = useState(false);
+  const [redrawUnavailable, setRedrawUnavailable] = useState(false);
+  const draftSeed = useRef(0);
+  const activeChoices = useRef<Player[] | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -89,17 +93,41 @@ export default function GauntletDraft() {
     }
     const seed = m === 'daily' ? dailyDraftSeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
     const d = buildDraft(pool, seed);
+    draftSeed.current = seed;
+    activeChoices.current = d.picks[0]?.choices ?? null;
     setMode(m);
     setDraft(d);
     setPickIndex(0);
     setSquad(new Array<Player | null>(d.formation.slots.length).fill(null));
     setRun(null);
     setShownMatches(0);
+    setRedrawUsed(false);
+    setRedrawUnavailable(false);
     setPhase('drafting');
   }, [pool]);
 
+  const redraw = () => {
+    if (mode !== 'unlimited' || phase !== 'drafting' || !draft || redrawUsed || redrawUnavailable
+      || activeChoices.current !== draft.picks[pickIndex].choices) return;
+    const choices = redrawGauntletPick(pool, draft, pickIndex, draftSeed.current);
+    if (!choices) {
+      setRedrawUnavailable(true);
+      return;
+    }
+    const picks = [...draft.picks];
+    picks[pickIndex] = { ...picks[pickIndex], choices };
+    activeChoices.current = choices;
+    setDraft({ ...draft, picks });
+    setRedrawUsed(true);
+  };
+
   const keep = (p: Player) => {
     if (!draft || phase !== 'drafting') return;
+    if (mode === 'unlimited') {
+      if (activeChoices.current !== draft.picks[pickIndex].choices || !activeChoices.current.includes(p)) return;
+      activeChoices.current = draft.picks[pickIndex + 1]?.choices ?? null;
+      setRedrawUnavailable(false);
+    }
     const next = [...squad];
     next[pickIndex] = p;
     setSquad(next);
@@ -163,6 +191,7 @@ export default function GauntletDraft() {
             <div className="rounded-xl border border-border bg-surface-1 p-4 text-sm text-muted-foreground space-y-1.5">
               <p className="font-bold text-foreground">How to play</p>
               <p>A formation is drawn. For each of its eleven slots you get five real players who fit it, spread from a star to a bargain, and you keep exactly one.</p>
+              <p>In Unlimited, redraw one slot per draft. All five current cards are withdrawn when five new players can fill that slot.</p>
               <p>Then your XI runs the gauntlet: five knockout rounds against opposition rated 70 up to 89. Level after ninety goes to extra time, then pens.</p>
               <p>The run is decided by the squad you drafted: the same XI always runs the same gauntlet. 16 points a round survived, the trophy lands exactly 100.</p>
             </div>
@@ -183,7 +212,7 @@ export default function GauntletDraft() {
               Pick {pickIndex + 1} of {draft.picks.length} · the {pick.slot.label} · {draft.formation.name}
             </p>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <div role="group" aria-label="Draft cards" className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {pick.choices.map(p => {
                 const r = playerRating(p);
                 return (
@@ -197,13 +226,28 @@ export default function GauntletDraft() {
                   >
                     <span className="block text-2xl font-black text-foreground">{r}</span>
                     <span className="block text-[8px] font-bold uppercase tracking-widest text-muted-foreground">{p.position}</span>
-                    <span className="block text-xs font-bold text-foreground leading-tight mt-1">{p.name}</span>
+                    <span data-gauntlet-player className="block text-xs font-bold text-foreground leading-tight mt-1">{p.name}</span>
                     <span className="block text-[9px] text-muted-foreground mt-0.5">{p.club}</span>
                     <span className="block text-[9px] text-muted-foreground"><FlagImg name={p.nationality} size={10} showLabel /> · {p.marketValue}M</span>
                   </button>
                 );
               })}
             </div>
+
+            {mode === 'unlimited' && (
+              <div className="text-center">
+                <button type="button" onClick={redraw} disabled={redrawUsed || redrawUnavailable}
+                  aria-describedby="gauntlet-redraw-rules"
+                  className="min-h-[44px] rounded-lg border border-border px-3 text-sm font-semibold hover:border-primary disabled:opacity-60">
+                  {redrawUsed ? 'Redraw used' : 'Redraw cards'}
+                </button>
+                <p id="gauntlet-redraw-rules" aria-live="polite" className="mt-1 text-xs text-muted-foreground">
+                  {redrawUsed ? 'Redraw spent. Your other slots keep their original offers.'
+                    : redrawUnavailable ? 'Too few new players fit this slot. You can still redraw another slot.'
+                    : 'Once per draft. A redraw withdraws all five cards in this slot.'}
+                </p>
+              </div>
+            )}
 
             <div className="rounded-xl border border-border bg-surface-1 p-3">
               <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground mb-1.5 text-center">

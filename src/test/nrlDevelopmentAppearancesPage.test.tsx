@@ -80,6 +80,54 @@ it('does not attach the last regular-season review to a settled finals match', (
   expect(report.queryByText('No OVR changes in this match review.')).toBeNull();
 });
 
+it('reopens the exact older match review after a later round has replaced the squad review', async () => {
+  let state = createNrlCareer('broncos', 1, 2026);
+  while (state.season.round < 12) state = reduceNrlCareer(state, { type: 'advance' });
+  expect(state.ratingReview?.round).toBe(10);
+  expect(state.season.results.find(match => match.round === 7 && match.playerScoring)?.ratingChanges).toHaveLength(2);
+  expect(state.season.results.find(match => match.round === 11 && match.playerScoring)?.ratingChanges).toEqual([]);
+  const old = { ...state, season: { ...state.season, results: state.season.results.map(({ ratingChanges, ...match }) => match) } };
+  expect(readNrlCareerSave(JSON.stringify(old))).toEqual(old);
+  const mutate = (ratings: unknown, round: number, managed: boolean) => readNrlCareerSave(JSON.stringify({
+    ...state, season: { ...state.season, results: state.season.results.map(match =>
+      match.round === round && Boolean(match.playerScoring) === managed ? { ...match, ratingChanges: ratings } : match) },
+  }));
+  const [playerId] = state.ratingReview!.changes[0];
+  expect(mutate([['foreign', 1]], 7, true)).toBeNull();
+  expect(mutate([[playerId, 2]], 7, true)).toBeNull();
+  expect(mutate([], 7, false)).toBeNull();
+  expect(mutate([], 10, true)).toBeNull();
+  const raw = JSON.stringify(state);
+  expect(readNrlCareerSave(raw)).toEqual(state);
+  localStorage.setItem(NRL_SAVE_KEY, raw);
+  render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  fireEvent.click(screen.getByText('Season fixtures', { exact: true }));
+  const report = screen.getByText('Round 7 match report', { exact: true });
+  fireEvent.click(report);
+  const contents = within(report.closest('details')!);
+  const rating = await contents.findByText('Match rating changes', { exact: true });
+  expect(rating.closest('summary')).toHaveTextContent('1 up · 1 down');
+  fireEvent.click(rating);
+  expect(within(contents.getByRole('list', { name: 'Player rating changes' })).getAllByRole('listitem').map(row => row.textContent))
+    .toEqual(['Koa Nairn+1 OVR', 'Teo Dawson-1 OVR']);
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(raw);
+});
+
+it('uses the exact latest older review and explains when a historical match has no record', async () => {
+  let state = createNrlCareer('broncos', 1, 2026);
+  while (state.season.round < 12) state = reduceNrlCareer(state, { type: 'advance' });
+  const old = { ...state, season: { ...state.season, results: state.season.results.map(({ ratingChanges, ...match }) => match) } };
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(old));
+  render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  fireEvent.click(screen.getByText('Season fixtures', { exact: true }));
+  const unrecorded = screen.getByText('Round 7 match report', { exact: true });
+  fireEvent.click(unrecorded);
+  expect(await within(unrecorded.closest('details')!).findByText('Rating changes weren’t recorded for this match.')).toBeVisible();
+  const known = screen.getByText('Round 10 match report', { exact: true });
+  fireEvent.click(known);
+  expect(await within(known.closest('details')!).findByText('Match rating changes', { exact: true })).toBeVisible();
+});
+
 it.each([[2026, 'broncos', 9], [2027, 'bears', 8]] as const)(
   'previews the %s eighth match and earns the existing assistant point only when the reserve plays',
   (year, clubId, round) => {
