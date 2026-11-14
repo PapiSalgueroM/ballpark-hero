@@ -1816,7 +1816,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
           "Open the Record Book and choose Competitions to see recorded club cup and national tournament totals. Older campaigns can have goals saved without assists, so the book shows which assists were recorded.",
           "Most summers open with one card about your position or your career, before the rest of the news between seasons. Training can trade one skill for another next season, with gains stopping at your ceiling.",
           "Want to see it happen? The 📺 Week by week button plays the same season match by match, with your rating every game and the league table after every matchday, then hands you back to the newspaper. Its ? button has the rules and worked examples.",
-          "In the season viewer, choose Fixtures and open a completed match to see its score, events and your match stats when available.",
+          "In the season viewer, choose Fixtures and open a completed match to see its score, events and your match stats when available. Season OVR on each league matchday follows your saved development checkpoints.",
           "After a senior season, use the Press room to promise a league title or an available domestic cup win. The next played season at that club decides whether you kept the promise.",
           "At an eligible European club you can also promise a Champions League win. If your club misses qualification, the promise closes without a penalty.",
           "An active international player can promise to win their country's next scheduled tournament. Even after a club move, an appearance and a national title keep that promise.",

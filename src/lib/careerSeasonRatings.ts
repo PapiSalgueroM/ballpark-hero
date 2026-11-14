@@ -25,6 +25,14 @@ export function readSeasonRatingPath(path: unknown): NonNullable<SeasonRecord["r
     ? path as NonNullable<SeasonRecord["ratingPath"]> : null;
 }
 
+/** Estimate the matchday overall between the five saved development checkpoints. */
+export function seasonOverallAtRound(path: NonNullable<SeasonRecord["ratingPath"]>, round: number, rounds: number): number {
+  const progress = rounds > 1 ? Math.max(0, Math.min(1, (round - 1) / (rounds - 1))) * 4 : 0;
+  const before = Math.floor(progress);
+  const after = Math.min(4, before + 1);
+  return Math.round(path[before] + (path[after] - path[before]) * (progress - before));
+}
+
 /** The season's match rating, only for a season that was actually played. */
 export function readMatchRating(row: Pick<Row, "type" | "apps" | "rating">): number | null {
   return row.type === "playing" && (row.apps ?? 0) > 0 && Number.isFinite(row.rating) && row.rating >= 3 && row.rating <= 10 ? row.rating : null;
