@@ -2036,6 +2036,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         items: [
           "Draft snake style: 22 alternating picks, with a coin flip deciding who starts.",
           "Use Next in the Player Pool to browse every available player. Search and filters work across the same pool.",
+          "Resume an unfinished Fantasy Draft on this device during the same Eastern day. For example, if you leave between the AI's two picks, Resume Draft brings back both XIs and lets the AI make its remaining pick under the original rule.",
         ],
       },
       {

@@ -5,6 +5,7 @@ import type { DraftPlayer } from '@/components/fantasy-draft/PlayerPool';
 import { supabase } from '@/integrations/supabase/client';
 import { settleSeason, type SdSeason } from '@/lib/searchDiscard';
 import { recordCompletion } from '@/lib/completions';
+import { getTodayET } from '@/lib/dateUtils';
 
 const remote = vi.hoisted(() => ({
   players: [] as DraftPlayer[],
@@ -114,6 +115,115 @@ afterEach(() => {
   vi.useRealTimers();
   vi.restoreAllMocks();
   localStorage.clear();
+});
+
+describe('Fantasy Draft unfinished receipt', () => {
+  const key = () => `fantasy-draft-in-progress-${getTodayET()}`;
+
+  it('restores the original rule, snake order and both sides mid-AI, then settles once', async () => {
+    const rule = 'Under 25s: Every player must be 25 or younger';
+    remote.criteria = rule;
+    const draft = await openDraft();
+    await pickPosition(draft, 'GK');
+    await act(async () => { vi.advanceTimersByTime(2000); });
+    const human = roster(draft, 'Your XI'), cpu = roster(draft, 'AI XI');
+    expect(human).toHaveLength(1);
+    expect(cpu).toHaveLength(1);
+    const receipt = localStorage.getItem(key());
+    expect(JSON.parse(receipt!)).toMatchObject({ date: getTodayET(), userFirst: true, criteria: rule,
+      picks: [human[0].id, cpu[0].id] });
+    draft.unmount();
+    remote.criteria = 'Bargain Hunt: Every player must cost £60M or less';
+    vi.spyOn(Math, 'random').mockReturnValue(0.9);
+    const w = render(<FantasyDraft />);
+    fireEvent.click(w.getByRole('button', { name: 'Resume Draft' }));
+    await act(async () => {});
+    expect(w.getByText(rule, { exact: true })).toBeVisible();
+    expect(roster(w, 'Your XI')).toEqual(human);
+    expect(roster(w, 'AI XI')).toEqual(cpu);
+    expect(localStorage.getItem(key())).toBe(receipt);
+    await userTurn(w);
+    expect(roster(w, 'AI XI')).toHaveLength(2);
+    for (const position of ['DEF', 'DEF', 'DEF', 'DEF', 'MID', 'MID', 'MID', 'FWD', 'FWD', 'FWD']) {
+      await pickPosition(w, position);
+    }
+    await finishAiTurn(w);
+    expect(settleSeason).toHaveBeenCalledTimes(1);
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+    expect(localStorage.getItem(key())).toBeNull();
+    w.unmount();
+    const again = render(<FantasyDraft />);
+    await act(async () => {});
+    expect(again.queryByRole('button', { name: 'Resume Draft' })).toBeNull();
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
+  it('refuses a saved player missing from the current pool and can start fresh', async () => {
+    localStorage.setItem(key(), JSON.stringify({ v: 1, date: getTodayET(), userFirst: true, criteria: null, picks: ['not-in-pool'] }));
+    const w = render(<FantasyDraft />);
+    fireEvent.click(w.getByRole('button', { name: 'Resume Draft' }));
+    await act(async () => {});
+    expect(w.getByText('That saved draft no longer matches the player pool.')).toBeVisible();
+    expect(recordCompletion).not.toHaveBeenCalled();
+    fireEvent.click(w.getByRole('button', { name: 'Start Draft' }));
+    await act(async () => {});
+    expect(roster(w, 'Your XI')).toEqual([]);
+    expect(roster(w, 'AI XI')).toEqual([]);
+  });
+
+  it('blocks stale same-day picks while preserving another tab’s receipt', async () => {
+    const container = () => document.body.appendChild(document.createElement('div'));
+    const a = render(<FantasyDraft />, { container: container() });
+    const b = render(<FantasyDraft />, { container: container() });
+    await act(async () => {});
+    await act(async () => {
+      for (const view of [a, b]) fireEvent.click(within(view.container).getByRole('button', { name: 'Start Draft' }));
+    });
+    const first = remote.players.find(player => player.position === 'GK')!;
+    const other = remote.players.find(player => player.position === 'DEF')!;
+    const pickIn = (view: RenderResult, player: DraftPlayer) => {
+      const scope = within(view.container);
+      fireEvent.change(scope.getByRole('textbox', { name: 'Search players' }), { target: { value: player.name } });
+      fireEvent.click(scope.getByText(player.name, { selector: 'p', exact: true }).closest('button')!);
+    };
+    pickIn(a, first);
+    const saved = localStorage.getItem(key());
+    pickIn(b, other);
+    expect(within(b.container).getByText(/Your saved draft changed in another tab/)).toBeVisible();
+    expect(within(b.container).getByRole('status', { name: 'Your formation' })).toHaveTextContent('GK 0/1');
+    expect(localStorage.getItem(key())).toBe(saved);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
+  it('retries a failed pool request while holding the original resume', async () => {
+    const original = JSON.stringify({ v: 1, date: getTodayET(), userFirst: true, criteria: null, picks: ['fixture-GK-0'] });
+    localStorage.setItem(key(), original);
+    remote.readPool.mockResolvedValueOnce({ data: [], error: null });
+    const w = render(<FantasyDraft />);
+    fireEvent.click(w.getByRole('button', { name: 'Resume Draft' }));
+    await act(async () => {});
+    expect(localStorage.getItem(key())).toBe(original);
+    fireEvent.click(w.getByRole('button', { name: 'Retry players' }));
+    await act(async () => {});
+    expect(roster(w, 'Your XI')).toMatchObject([{ id: 'fixture-GK-0' }]);
+    expect(w.getByText('AI is picking...', { exact: true })).toBeVisible();
+    expect(localStorage.getItem(key())).toBe(original);
+  });
+
+  it('does not offer a receipt from the previous Eastern day', async () => {
+    vi.setSystemTime(new Date('2026-11-14T04:59:50Z'));
+    const previous = key();
+    localStorage.setItem(previous, JSON.stringify({ v: 1, date: getTodayET(), userFirst: true, criteria: null, picks: ['fixture-GK-0'] }));
+    vi.setSystemTime(new Date('2026-11-14T05:00:10Z'));
+    expect(key()).not.toBe(previous);
+    const draft = render(<FantasyDraft />);
+    await act(async () => {});
+    expect(draft.queryByRole('button', { name: 'Resume Draft' })).toBeNull();
+    fireEvent.click(draft.getByRole('button', { name: 'Start Draft' }));
+    await act(async () => {});
+    expect(roster(draft, 'Your XI')).toEqual([]);
+    expect(roster(draft, 'AI XI')).toEqual([]);
+  });
 });
 
 describe('Fantasy Draft player pool recovery', () => {
