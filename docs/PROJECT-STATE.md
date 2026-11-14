@@ -6,6 +6,8 @@
 
 ## 2026-11-14: NRL finals race and Home campaign saves
 
+[PR #907](https://github.com/PapiSalgueroM/ballpark-hero/pull/907) published exact main `5677fda92e6236fa979a88be8c96cc5dffede56b`, deployment `1638da55-048e-4549-ad10-bb701016309f`. Five browser journeys and all 174 sitemap routes passed live. IndexNow accepted the NRL guide.
+
 - In the last four regular rounds, NRL Ladder shows the remaining opponents, possible points and whether a top-four or top-eight finish is secured, open or out of reach. The possible points include guaranteed bye points. Tight positions stay open while the scores or points difference can still change them.
 - Each saved NRL club career has its own Home Continue playing card. The card names the slot and season and resumes that exact career.
 
