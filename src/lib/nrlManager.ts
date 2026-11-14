@@ -997,6 +997,15 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
   }
 }
 
+export function simulateNrlSeasonWithoutManager(year: number, seed: number, strengths: ReadonlyMap<string, number>) {
+  // No club uses managed tactics, fatigue, injuries or player attribution.
+  let season: NrlManagerState = { ...createNrlSeason(nrlSeasonPlan(year).clubs[0].id, seed, year), clubId: '', squad: [] };
+  for (let round = 1; round <= lastRound(year); round++) {
+    season = advanceRound(season, strengths, {});
+  }
+  return season;
+}
+
 const integerIn = (value: unknown, low: number, high: number): value is number =>
   typeof value === 'number' && Number.isInteger(value) && value >= low && value <= high;
 const record = (value: unknown): value is Record<string, unknown> =>
