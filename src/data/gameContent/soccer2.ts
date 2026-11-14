@@ -48,6 +48,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "After the final whistle",
         items: [
           "Kick off. The result comes back with what it did to the board, the fans and the dressing room.",
+          "In new Free Play runs, player OVR can rise or fall after league matches during the season. Each match report lists the changes or confirms that OVR stayed the same.",
           "When the press have a question, answer it before the next match.",
           "Keep going until you hit the target, run out of league games, or the board run out of patience.",
         ],
@@ -104,7 +105,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "The first two league games",
         paragraphs: [
-          "Game one is at home to a weaker side. In Free Play, your left back is tired. Open Formation and XI, pick him under Replace one starter, and choose a fresher reserve. The new name appears in the XI and starts with the same ten teammates. The read says the dressing room is flat, so you go balanced and say nothing. A 2 to 0 win puts 3 on the board and lifts the fans.",
+          "Game one is at home to a weaker side. In Free Play, your left back is tired. Open Formation and XI, pick him under Replace one starter, and choose a fresher reserve. The new name appears in the XI and starts with the same ten teammates. The read says the dressing room is flat, so you go balanced and say nothing. A 2 to 0 win puts 3 on the board and lifts the fans. If his rating goes from 72 to 73 after a league match, the match report shows 72 to 73.",
           "Game two is away at a stronger side. You sit deep with a defensive shape and take a 1 to 1 draw. That is 4. The press ask about the board and you back yourself.",
         ],
       },

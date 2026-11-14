@@ -1,6 +1,6 @@
 import { beforeAll, describe, expect, it } from 'vitest';
 import { FORMATIONS, effectiveXIWithSlots, fitGrade, isAvailable, matchEdge, preMatchRead } from '@/lib/clubManager';
-import { dailyHotSeat, hotSeatLineup, hotSeatPool, hotSeatPreMatchRead, hotSeatReplacementLineup, hotSeatReserves, playHotSeatMatch, replayHotSeat, startHotSeat, type HotSeatRun } from '@/lib/managerHotSeat';
+import { answerHotSeatPress, dailyHotSeat, handoverState, hotSeatLineup, hotSeatPool, hotSeatPreMatchRead, hotSeatReplacementLineup, hotSeatReserves, pendingPress, playHotSeatMatch, replayHotSeat, startHotSeat, type HotSeatRun } from '@/lib/managerHotSeat';
 
 let free: HotSeatRun;
 let nextFormation: number;
@@ -94,6 +94,47 @@ describe('Manager Hot Seat free play formations', () => {
     expect(attempted.actions).toEqual(original.actions);
     expect(attempted.log).toEqual(original.log);
     expect(attempted.state.formationIndex).toBe(original.state.formationIndex);
+  }, 120000);
+
+  it('reports actual squad rating gains and losses from settled matches and replays them', () => {
+    let run = startHotSeat({ ...free.setup, club: 'Manchester City', inSeasonRatings: true });
+    expect(run.state.inSeasonRatings).toBe(true);
+    const moves: number[] = [];
+    let unchanged = 0;
+    for (let i = 0; i < 8 && !run.verdict; i++) {
+      if (pendingPress(run)) run = answerHotSeatPress(run, 0);
+      const before = new Map(run.state.squad.map(p => [p.id, p.rating]));
+      run = playHotSeatMatch(run, 'balanced', null);
+      const fixture = run.log.at(-1)!;
+      const expected = run.state.squad.flatMap(p => {
+        const start = before.get(p.id);
+        return start !== undefined && start !== p.rating ? [{ id: p.id, name: p.name, before: start, after: p.rating }] : [];
+      });
+      expect(fixture.ratingChanges?.filter(p => !p.onLoan)).toEqual(expected);
+      if (!fixture.counts) expect(fixture.ratingChanges).toEqual([]);
+      if (!fixture.ratingChanges?.length) unchanged += 1;
+      moves.push(...expected.map(p => p.after - p.before));
+    }
+    expect(moves).toContain(1);
+    expect(moves).toContain(-1);
+    expect(unchanged).toBeGreaterThan(0);
+    expect(run.verdict?.kind).toBe('survived');
+    expect(handoverState(run).inSeasonRatings).toBe(true);
+    expect(replayHotSeat(run.setup, JSON.parse(JSON.stringify(run.actions))).log).toEqual(run.log);
+  }, 120000);
+
+  it('leaves older Free Play and shared Daily on their original rating rules', () => {
+    const old = playHotSeatMatch(free, 'balanced', null);
+    expect(old.state.inSeasonRatings).toBeUndefined();
+    expect(old.log[0]).not.toHaveProperty('ratingChanges');
+    expect(replayHotSeat(old.setup, old.actions).log).toEqual(old.log);
+
+    const setup = dailyHotSeat('2026-10-10');
+    const current = playHotSeatMatch(startHotSeat(setup), 'balanced', null);
+    const injected = playHotSeatMatch(startHotSeat({ ...setup, inSeasonRatings: true }), 'balanced', null);
+    expect(injected.state.inSeasonRatings).toBeUndefined();
+    expect(injected.log).toEqual(current.log);
+    expect(injected.log[0]).not.toHaveProperty('ratingChanges');
   }, 120000);
 
   it('reads a vacant fullback slot under the same policy as the archived Daily kickoff', () => {

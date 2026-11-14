@@ -33,6 +33,7 @@ import {
   startHotSeat,
   upcoming,
   type HotSeatAction,
+  type HotSeatMatch,
   type HotSeatReplacement,
   type HotSeatRun,
   type HotSeatSetup,
@@ -121,6 +122,17 @@ function Progress({ run }: { run: HotSeatRun }) {
       <span><span className="font-bold tabular-nums">{run.points}</span> of <span className="font-bold tabular-nums">{run.target}</span> points</span>
       <span className="text-muted-foreground">{left} league game{left === 1 ? '' : 's'} left</span>
     </div>
+  );
+}
+
+function RatingReview({ match }: { match: HotSeatMatch }) {
+  if (!match.ratingChanges) return null;
+  const changes = match.ratingChanges.map(p => `${p.name} ${p.before} to ${p.after}${p.onLoan ? ' (on loan)' : ''}`);
+  return (
+    <p className="mt-1 text-xs text-muted-foreground" data-testid="hot-seat-ratings">
+      <span className="font-semibold text-foreground">Squad OVR</span>{' · '}
+      {changes.length ? changes.join(' · ') : 'No OVR changes this match.'}
+    </p>
   );
 }
 
@@ -235,7 +247,11 @@ export default function ManagerHotSeatBoard() {
         if (p.v === 1 && actions && hotSeatPool().some(c => c.club === club) && Number.isFinite(seed)) {
           /* Round 1331: the match rules stamp passes through; a run saved without it replays on the base rules. */
           /* Round 1603: and so does the tie stamp; a run saved without it replays the night's reading. */
-          const stamp: Pick<HotSeatSetup, 'rules' | 'tie'> = { ...(p.rules === 1331 ? { rules: 1331 as const } : {}), ...(p.tie === 1603 ? { tie: 1603 as const } : {}) };
+          const stamp: Pick<HotSeatSetup, 'rules' | 'tie' | 'inSeasonRatings'> = {
+            ...(p.rules === 1331 ? { rules: 1331 } : {}),
+            ...(p.tie === 1603 ? { tie: 1603 } : {}),
+            ...(p.inSeasonRatings === true ? { inSeasonRatings: true } : {}),
+          };
           if (p.done !== true) setFreeSaved({ setup: { club, seed: seed >>> 0, ...stamp }, actions });
           /* kind is new in Round 956 and optional: an older finished record has none and gets no offer. */
           else if (typeof p.kind === 'string' && keepsJob(p.kind as VerdictKind)) setFreeFinished({ setup: { club, seed: seed >>> 0, ...stamp }, actions });
@@ -264,7 +280,13 @@ export default function ManagerHotSeatBoard() {
       setDailySaved(r.verdict || !r.actions.length ? null : r.actions);
     } else {
       try {
-        localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, ...(r.setup.rules === 1331 ? { rules: 1331 } : {}), ...(r.setup.tie === 1603 ? { tie: 1603 } : {}), actions: r.actions, done: !!r.verdict, ...(r.verdict ? { kind: r.verdict.kind } : {}) }));
+        localStorage.setItem(FREE_KEY, JSON.stringify({
+          v: 1, club: r.setup.club, seed: r.setup.seed,
+          ...(r.setup.rules === 1331 ? { rules: 1331 } : {}),
+          ...(r.setup.tie === 1603 ? { tie: 1603 } : {}),
+          ...(r.setup.inSeasonRatings ? { inSeasonRatings: true } : {}),
+          actions: r.actions, done: !!r.verdict, ...(r.verdict ? { kind: r.verdict.kind } : {}),
+        }));
       } catch {
         /* storage full or blocked: the run still plays, it just will not survive a refresh */
       }
@@ -295,7 +317,7 @@ export default function ManagerHotSeatBoard() {
     setFreeSaved(null);
     /* Round 1331: every new free run plays the current match rules, and its save says so. */
     /* Round 1603: and judges a deciding second leg by the tie. */
-    open({ club, seed, rules: 1331, tie: 1603 });
+    open({ club, seed, rules: 1331, tie: 1603, inSeasonRatings: true });
   };
   const randomFree = () => {
     const pool = hotSeatPool();
@@ -452,6 +474,7 @@ export default function ManagerHotSeatBoard() {
                   </span>
                 </div>
                 <div className="mt-1 text-xs text-muted-foreground">Board {last.boardDelta >= 0 ? 'up' : 'down'} {Math.abs(Math.round(last.boardDelta * 10) / 10)}.</div>
+                <RatingReview match={last} />
 
                 {q ? (
                   <div className="mt-3 rounded-md bg-muted p-3" data-testid="hot-seat-press">
@@ -546,7 +569,10 @@ export default function ManagerHotSeatBoard() {
               <div><span className="font-bold tabular-nums">{run.points}</span> of <span className="font-bold tabular-nums">{run.target}</span> points from {run.leaguePlayed} league game{run.leaguePlayed === 1 ? '' : 's'} {dotsOf(run)}</div>
               <ul className="mt-2 space-y-1 text-xs text-muted-foreground">
                 {run.log.map((m, i) => (
-                  <li key={i}>{m.res} {m.myGoals} to {m.oppGoals} {m.home === true ? 'v' : m.home === false ? 'at' : 'v'} {m.opponent}{m.counts ? '' : ` (${m.compLabel})`}</li>
+                  <li key={i}>
+                    {m.res} {m.myGoals} to {m.oppGoals} {m.home === true ? 'v' : m.home === false ? 'at' : 'v'} {m.opponent}{m.counts ? '' : ` (${m.compLabel})`}
+                    <RatingReview match={m} />
+                  </li>
                 ))}
               </ul>
             </div>
