@@ -24,7 +24,7 @@ import { useRulesGateState } from '@/hooks/useRulesGateState';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
-  nrlBench, nrlBenchRotation, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
+  nrlBench, nrlBenchRotation, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
   nrlActingCaptainPhases, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchange, nrlNextRound, nrlOnFieldCaptain,
   nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
@@ -195,7 +195,8 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
   const sides = [[fixture.homeId, homeScoring], [fixture.awayId, awayScoring]] as const;
   const options = nrlHalftimeInterchanges(season);
   const chosen = options.find(option => option.reserveId === reserveId);
-  const secondOptions = chosen ? options.filter(option => option.starterId !== chosen.starterId) : [];
+  const { kickerId, backupKickerId } = season;
+  const secondOptions = chosen ? options.filter(option => nrlCanPairHalftimeInterchanges(season, chosen, option)) : [];
   const second = secondOptions.find(option => option.reserveId === secondReserveId);
   const heldName = live.heldReserveId && squad.find(player => player.id === live.heldReserveId)?.name;
   const name = (id: string) => squad.find(player => player.id === id)?.name;
@@ -204,6 +205,7 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
     interchange: chosen && { starterId: chosen.starterId, reserveId: chosen.reserveId },
     secondInterchange: second && { starterId: second.starterId, reserveId: second.reserveId },
   };
+  const kickerHandoff = backupKickerId && [chosen, second].some(option => option?.starterId === kickerId);
   return (
     <section className="space-y-4" aria-labelledby="nrl-halftime">
       <div className="rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
@@ -249,7 +251,8 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
               value={reserveId} disabled={disabled} onChange={event => {
                 const id = event.target.value;
                 setReserveId(id);
-                if (!id || id === secondReserveId) setSecondReserveId('');
+                const next = options.find(option => option.reserveId === id);
+                if (!next || (second && !nrlCanPairHalftimeInterchanges(season, next, second))) setSecondReserveId('');
               }}>
               <option value="">{heldName ? 'Keep held reserve on the bench' : 'Automatic rotation'}</option>
               {options.map(option => <option key={option.reserveId} value={option.reserveId}>{option.enteredAtHalf && 'Bring on '}{name(option.reserveId)} · {option.role}</option>)}
@@ -270,6 +273,7 @@ function LiveHalftime({ live, season, title, onAction, disabled, coachRole, coac
             {[chosen, second].map(change => change && <p key={change.reserveId} className="mt-1 text-sm" data-nrl-halftime-choice>
               {name(change.reserveId)} {change.enteredAtHalf ? 'comes on for the second half.' : 'finishes the match.'} {name(change.starterId)} stays off.
             </p>)}
+            {kickerHandoff && <p className="mt-1 text-sm font-semibold">{name(backupKickerId)} takes over the goal kicking.</p>}
           </div>
         </details>
       ) : (
@@ -591,6 +595,8 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
   const scorers = match.playerScoring?.lines ?? [];
   const kickerId = match.playerScoring?.kickerId;
   const kickerName = kickerId && season.squad.find(player => player.id === kickerId)?.name;
+  const lateKicker = match.playerScoring?.kickerHandoff?.playerId;
+  const lateKickerName = lateKicker && season.squad.find(player => player.id === lateKicker)?.name;
   const injury = match.injury;
   const injuredName = injury && season.squad.find(player => player.id === injury.playerId)?.name;
   const recoveredName = match.individualRecoveryId && season.squad.find(player => player.id === match.individualRecoveryId)?.name;
@@ -644,7 +650,8 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
       {match.counterStyle && <p className="mt-2 text-sm text-muted-foreground" data-nrl-counter-plan>
         Counter plan: {counterPlanResult[match.counterStyle]}
       </p>}
-      {kickerName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-match-kicker>Match goal kicker: {kickerName}.</p>}
+      {kickerName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-match-kicker>{lateKickerName ? 'Opening goal kicker' : 'Match goal kicker'}: {kickerName}.</p>}
+      {lateKickerName && <p className="mt-1 text-sm text-muted-foreground" data-nrl-kicker-handoff>Goal kicker after half time: {lateKickerName}.</p>}
       {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
         {recoveredName} took individual recovery before this match.
       </p>}
@@ -2145,6 +2152,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.</li>
               <li>Choose a vice-captain in Squad to keep the one-point defence bonus when the club captain is off the field and the vice-captain is on.</li>
               <li>When you start a new State of Origin series, Past Origin series keeps the previous winner and all three scores.</li>
+              <li>At half time, a rotating reserve can replace your starting goal kicker if the designated backup stays on to take the remaining place kicks.</li>
               <li>After the Grand Final, release one unsigned academy prospect into next season’s free-agent market or promote him to your own Top 30.</li>
               <li>If you accepted Board pathways, check Pathways run-in in Season review with four regular-season club matches left. It shows who can still reach four appearances.</li>
               <li>Change clubs between seasons from Season review.</li>
