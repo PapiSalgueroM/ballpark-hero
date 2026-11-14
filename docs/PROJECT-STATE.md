@@ -1,4 +1,12 @@
+## 2026-11-14: NBA round reports, NRL kicking duties and Soccer Higher or Lower
+
+- NBA Front Office remembers the actual record and OVR changes from each recorded batch in the current season. Open Round results to revisit a played round. Older results only show ratings when a review exists.
+- At 60 minutes in an NRL Live Match, an eligible reserve can replace the goal kicker if the named backup stays on. The report credits the opening kicker before the switch and the backup after it.
+- Soccer Higher or Lower remembers your best accepted streak on this device. A new visit starts a fresh streak and keeps the best score where browser storage is available.
+
 ## 2026-11-14: NFL weekly rating history and full MLB and NRL free agency
+
+[PR #964](https://github.com/PapiSalgueroM/ballpark-hero/pull/964) published exact main `63b0dd3df2e69e181c29eb4180cf38c2aec21850`, deployment `5ba724de-78e9-4e7d-a1b7-862c1c0533d3`. Seven live browser journeys, all three raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted all three game guides. All 79 focused integrated tests passed.
 
 - NFL Front Office records the managed team's actual OVR changes beside each completed regular-season matchup. Pick a played week to see its saved score and rating changes. Older results show when a review wasn't recorded.
 - MLB Front Office opens the full free-agent market. Search by name or filter by position while the existing salary and roster rules decide who can sign.
