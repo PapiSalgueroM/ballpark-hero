@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -268,8 +300,9 @@
 <li>The engine plays the season up to the day the job opens, then shows you the table place, the recent form and the board's target.</li>
 <h3>Before every match</h3>
 <li>Tap Take the job and the first match comes up with a read on the game from the dugout.</li>
-<h4>Picking a shape</h4>
-<li>Pick a shape: defensive, balanced or attacking.</li>
+<h4>Setting up your team</h4>
+<li>Choose a defensive, balanced or attacking mentality.</li>
+<li>In free play, open Formation and XI to see who would start and how well they fit their positions. Pick a formation before kickoff and it carries into the next match.</li>
 <h4>Picking a team talk</h4>
 <li>Pick a team talk: calm them, fire them up, demand more, the hairdryer, or say nothing at all.</li>
 <h3>After the final whistle</h3>
