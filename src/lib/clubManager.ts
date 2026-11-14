@@ -17,6 +17,7 @@ import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/ma
    Career has used since Round 124, rather than a second thinner one. */
 import { runManagerSummer, NATION_CONFED, type IntlTournament, type ManagerSummerMatch } from '@/lib/soccerInternational';
 import { selectedNationalXI, type NationalXI } from '@/lib/clubManagerNationalXI';
+import { nationalQualifierView, type NationalQualifiers } from '@/lib/clubManagerNationalQualifiers';
 /* Round 965: the manager's face reads Soccer Career's look tables, never a
    copy of them. That module imports nothing from here. */
 import { SKIN_TONES, HAIRSTYLES, HAIR_COLORS, FACIAL_HAIR } from '@/lib/soccerCareerAppearance';
@@ -2511,6 +2512,7 @@ export interface NationJob {
   won: number;
   mentality?: Exclude<Mentality, 'balanced'>;
   xi?: NationalXI;
+  qualifiers?: NationalQualifiers;
 }
 
 type NationCampaign = Pick<IntlTournament, 'nation' | 'name' | 'year' | 'qualifying' | 'groupLabel' | 'groupTable'>
@@ -24052,6 +24054,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   if (career.championshipPlayoffs && !promotionWinner(career.championshipPlayoffs)) return career;
   if (career.bundesligaPlayoff && !career.bundesligaPlayoff.tie.winner) return career;
   if (career.frenchPlayoffs && !career.frenchPlayoffs.barrage?.winner) return career;
+  const playedQualifiers = career.nationJob?.qualifiers ? nationalQualifierView(career) : null;
+  if (playedQualifiers?.played.length && playedQualifiers.next) return career;
   const requestedClub = career.jobHunt?.summerMove?.club ?? acceptOfferClub;
   if (requestedClub && requestedClub !== career.clubName && !clubAvailableInCareer(career, requestedClub)) return career;
   const kLeagueActive = careerHasKLeagueWorld(career);
@@ -24784,14 +24788,15 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     const summer = career.startYear === undefined ? state.season : worldYearOf(state);
     const mentality = job.mentality ?? 'balanced';
     const xi = selectedNationalXI(career, summer);
-    const t = runManagerSummer(job.nation, summer, nationLift(career), mentality, xi?.adjustment);
+    const qualifiers = playedQualifiers?.year === summer && !playedQualifiers.next && playedQualifiers.played.length ? playedQualifiers : null;
+    const t = runManagerSummer(job.nation, summer, nationLift(career), mentality, xi?.adjustment, qualifiers?.table);
     if (t) {
       const won = t.champion === job.nation;
       const missed = t.myResult === 'Did Not Qualify';
       state.nationCampaign = {
         nation: job.nation, name: t.name, year: t.year, result: t.myResult,
         qualifying: t.qualifying, groupLabel: t.groupLabel, groupTable: t.groupTable,
-        matches: t.managerFixtures, lostJob: missed, mentality,
+        matches: [...(qualifiers?.played ?? []), ...t.managerFixtures], lostJob: missed, mentality,
         ...(xi ? { xi: { formation: xi.formation, players: xi.xi.map(({ name, position, rating }) => ({ name, position, rating })), adjustment: xi.adjustment } }
           : job.xi?.year === summer ? { xiUnavailable: true as const } : {}),
       };
@@ -24803,6 +24808,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
         won: job.won + (won ? 1 : 0),
       };
       delete state.nationJob.xi;
+      delete state.nationJob.qualifiers;
       if (won) {
         state.trophies = [...state.trophies, { season: state.season, name: t.name, emoji: '\u{1F310}' }];
       }

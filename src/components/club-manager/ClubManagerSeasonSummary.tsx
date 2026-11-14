@@ -14,6 +14,7 @@ import type { SeasonFate } from '@/lib/clubManagerBoardVerdict';
 import type { useClubManager } from '@/hooks/useClubManager';
 import { SavePointsDoor } from '@/components/club-manager/SavePointsDoor';
 import { ClubWorldCupCard } from '@/components/club-manager/ClubWorldCupCard';
+import { nationalQualifierView } from '@/lib/clubManagerNationalQualifiers';
 
 /* Round 633: the five terms, in the order they are worth. Kept beside the
    screen that prints them rather than in the engine, because the wording is
@@ -37,7 +38,7 @@ const FATE_WORD: Record<SeasonFate, string> = { up: 'promoted', down: 'relegated
 export default function ClubManagerSeasonSummary({ sm, c, g }: {
   sm: SeasonSummary;
   c: CareerState;
-  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot' | 'renew'>>;
+  g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot' | 'renew' | 'playNextNationalQualifier'>>;
 }) {
   const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
   /* Optional: a summary stored before Round 633 carries no breakdown, and the
@@ -87,6 +88,9 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
   const [deals, setDeals] = useState(freshDeals);
   if (deals.season !== sm.season) setDeals(freshDeals());
   const openDeals = dealAnswers(c, deals.ids, deals.letGo).filter(r => r.answer === 'open').length;
+  const qualifier = g.playNextNationalQualifier ? nationalQualifierView(c) : null;
+  const needsQualifier = !!(qualifier?.played.length && qualifier.next);
+  const [qualifierNotice, setQualifierNotice] = useState('');
   const mineInTeam = awards?.xi ? awards.xi.filter(m => (m[3] & 2) !== 0).length : 0;
   const winner = (m: AwardMan) => (
     <><span className={cn('font-bold', (m[3] & 2) !== 0 && 'text-primary')}>{m[0]}</span>{(m[3] & 1) !== 0 && <MadeUpTag className="ml-1" />} ({m[1]}, {m[2]})</>
@@ -110,11 +114,37 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
             gamePath: '/club-manager',
           }}
           onPlayAgain={() => g.nextSeason()}
-          playAgainDisabled={openDeals > 0}
+          playAgainDisabled={openDeals > 0 || needsQualifier}
           playAgainLabel={openDeals > 0 ? `Answer ${openDeals} deal${openDeals === 1 ? '' : 's'} first`
-            : summerMove ? `Start Season ${sm.season + 1} at ${summerMove.club}` : `Continue to Season ${sm.season + 1}`}
+            : needsQualifier ? 'Finish national qualifying first'
+              : summerMove ? `Start Season ${sm.season + 1} at ${summerMove.club}` : `Continue to Season ${sm.season + 1}`}
           playNext={
             <div className="space-y-3">
+              {qualifier && <details data-cm-national-qualifiers open={qualifier.played.length > 0 || undefined}
+                className="rounded-xl border border-border bg-card px-3 text-left text-xs">
+                <summary className="min-h-11 cursor-pointer py-3 font-bold">{qualifier.year} {qualifier.tournament} qualifying</summary>
+                <div className="space-y-2 pb-3">
+                  <p>Play the qualifiers one at a time with your national XI and tactics. If you continue to next season before playing, the game simulates the full campaign.</p>
+                  <table className="w-full text-left tabular-nums">
+                    <caption className="text-left">Qualifying group · top {qualifier.through} advance</caption>
+                    <thead><tr><th scope="col">Nation</th><th scope="col" className="text-right">Played</th><th scope="col" className="text-right">GD</th><th scope="col" className="text-right">Pts</th></tr></thead>
+                    <tbody>{qualifier.table.table.map(row => <tr key={row.nation}>
+                      <th scope="row" className="font-medium">{row.nation}</th><td className="text-right">{row.played}</td>
+                      <td className="text-right">{row.gf - row.ga}</td><td className="text-right">{row.points}</td>
+                    </tr>)}</tbody>
+                  </table>
+                  {qualifier.next && <button type="button"
+                    className="min-h-11 rounded-lg bg-primary px-3 font-semibold text-primary-foreground"
+                    onClick={() => setQualifierNotice(g.playNextNationalQualifier?.(qualifier.next!.id) ? '' : 'The fixture could not be saved.')}>
+                    Play qualifier {qualifier.played.length + 1} of {qualifier.fixtureCount}. {qualifier.next.home} vs {qualifier.next.away}
+                  </button>}
+                  {!qualifier.next && <p role="status">{qualifier.table.qualified ? 'Qualified. The finals simulate when you continue.' : 'Did not qualify.'}</p>}
+                  {qualifierNotice && <p role="status">{qualifierNotice}</p>}
+                  {qualifier.played.length > 0 && <ol className="space-y-1">
+                    {qualifier.played.map(match => <li key={match.home + match.away}>{match.home} {match.homeGoals}-{match.awayGoals} {match.away}</li>)}
+                  </ol>}
+                </div>
+              </details>}
               {summerMove && (
                 <div data-summer-move className="text-left bg-surface-2 border border-gold/40 rounded-xl p-3">
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">🧳 Agreed during the season</div>

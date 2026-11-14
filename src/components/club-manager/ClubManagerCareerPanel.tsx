@@ -168,7 +168,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
                       {campaign.groupTable.length > 0 && <CampaignTable label={campaign.groupLabel ?? 'Tournament group'} rows={campaign.groupTable} nation={campaign.nation} />}
                       {campaign.matches.length > 0 && (
                         <div>
-                          <h3 className="text-xs font-semibold">Tournament results</h3>
+                          <h3 className="text-xs font-semibold">{campaign.matches.some(match => match.round === 'Qualifying') ? 'Campaign results' : 'Tournament results'}</h3>
                           <ol className="mt-1 space-y-1 text-xs">
                             {campaign.matches.map((match, i) => (
                               <li key={i} className="rounded-md bg-secondary/40 px-2 py-1.5">
