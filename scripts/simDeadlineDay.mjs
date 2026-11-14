@@ -54,8 +54,8 @@
         game, so the board caps both at his ask: on every terms table, no
         offer that trades the bonus for wage or length signs him, nothing over
         his ask is recorded, and exactly his ask still signs him.
-     9) the worked examples are the engine's (hard). Lorient on seed 1618079 in
-        the 2023-02-21 daily market is
+     9) the worked examples are the engine's (hard). Everton on seed 137 in
+        the 2026-11-14 daily market is
         played as the rules screen and the guide describe it, and every figure
         they quote, and the guide's grade arithmetic, is rebuilt from the
         engine and looked for in the copy.
@@ -814,12 +814,16 @@ console.log(`   ${exposed} hours a rival was in for a man left alone, ${closedOn
 /* Walking away with a rival circling: at the terms table the rival lives on
    the frame, and the review found walking there never lost him. Every terms
    table above gets a rival seated on the frame, then the walk. */
+const premierBuyers = playableClubs('premier');
 let walkTables = 0, walkLost = 0;
 for (const { run, i } of tablesOf) {
-  const seated = { ...run, targets: run.targets.map((t, k) => (k === i ? { ...t, rival: { club: 'Harness Rovers', offer: t.neg.agreedFee ?? 1 } } : t)) };
+  const { mp } = run.targets[i];
+  const buyer = premierBuyers.find(club => club.name !== mp.club && club.name !== run.state.clubName && club.budget >= mp.price);
+  if (!buyer) continue;
+  const seated = { ...run, targets: run.targets.map((t, k) => (k === i ? { ...t, rival: { club: buyer.name, offer: mp.price } } : t)) };
   const walked = walkFrom(seated, i);
   walkTables += 1;
-  if (walked.targets[i].status === 'gone' && walked.targets[i].lostTo === 'Harness Rovers') walkLost += 1;
+  if (walked.targets[i].status === 'gone' && walked.targets[i].lostTo === buyer.name) walkLost += 1;
 }
 const walkRate = walkTables ? walkLost / walkTables : NaN;
 console.log(`   walking away from ${walkTables} terms tables with a rival circling lost the man ${walkLost} times (${fmt(100 * walkRate, 1)} percent; the engine's walk away rule is 60)`);
@@ -829,6 +833,7 @@ const T7 = { exposedFloor: 1000, closeLo: 0.24, closeHi: 0.36, walkLo: 0.45, wal
 if (!(exposed >= T7.exposedFloor)) fail(`only ${exposed} rival hours were exposed (floor ${T7.exposedFloor}), so rivals barely move`);
 if (!(closeRate >= T7.closeLo && closeRate <= T7.closeHi)) fail(`a rival closed ${fmt(100 * closeRate, 1)} percent of the hours he was in for a man left alone (band ${100 * T7.closeLo} to ${100 * T7.closeHi}); the rules say ${fmt(100 * RIVAL_CLOSE, 0)}`);
 if (wrongClub) fail(`${wrongClub} players went to a club other than the rival who was in for them`);
+if (walkTables !== tablesOf.length) fail(`only ${walkTables} of ${tablesOf.length} terms tables had an eligible rival buyer`);
 if (!(walkRate >= T7.walkLo && walkRate <= T7.walkHi)) fail(`walking away with a rival circling lost the man ${fmt(100 * walkRate, 1)} percent of the time (band ${100 * T7.walkLo} to ${100 * T7.walkHi}); the guide says they usually take him`);
 const rivalLine = `there is a ${Math.round(100 * RIVAL_CLOSE)} percent chance they sign him`;
 if (!GUIDE.includes(rivalLine)) fail(`the guide does not say "${rivalLine}"`);
@@ -880,81 +885,54 @@ console.log('9) The worked example on the rules screen and in the guide is what 
    instead of leaving the copy wrong. The grade paragraph's arithmetic is the
    engine's too.
 
-   Round 1044: why Lorient on seed 390850. Round 721 wrote the copy from the
-   2026-10-01 daily, Lorient. Until Round 1044 the dailies dealt from a pool
-   worked out fresh on every load, so Release AF's re-bake re-dealt that day
-   (it became Birmingham City, a central midfielder first, and this section
-   went red on main), and the re-bake moved Lorient's budget on that seed too
-   (28m, not 29m), so no club plays the copy on 2026-10-01 any more. The copy
-   is a "say the board want" window, not a claim about one day, so the example
-   is pinned to an explicit setup: Lorient, whose squad still needs a keeper,
-   a central midfielder, a right winger and a striker; seed 390850; and the
-   market of a past daily, EX_DATE, which the dailies' ledger
-   (src/data/dailyClubPool.json) holds still, because a past day's pool is
-   lines nothing may move, so a league joining later cannot reach it. The seed
-   was found by playing the engine, not typed from the copy: no daily seed of
-   the 6152 days from 2010-01-01 to 2026-11-04 plays the whole window (three
-   play the haggle, none has the rival take the dearest keeper at noon and
-   sign him at 2pm), and of the first 3.1 million raw seeds five play every
-   figure, 390850 the first. Only an engine change or a roster re-bake can
-   move it now, and that is what this section exists to catch.
-
-   Round 1040: a roster re-bake did. Mapping the three second tiers sent
-   Julien Ponceau, Lorient's central midfielder on a 2025 fallback, to
-   Valladolid on the table's own 2026 row, so the central midfield line fell
-   from 72 to 71, the cheapest man over it became a 2.6m one instead of a
-   3.8m one, and seed 390850 opened on 26.5m rather than the copy's 29m,
-   every other figure unchanged. The copy names no club and no seed, so the
-   setup moved, not the copy: on the re-baked rosters no seed from 3000 to
-   963000 plays the whole window (three miss only the rival's 2pm), and
-   1618079 does, found when the same search went on from 963000. Lorient
-   is still the only club in the 2023-02-21 pool whose squad opens on a
-   keeper, a central midfielder, a right winger and a striker. */
-const EX_DATE = '2023-02-21', EX_CLUB = 'Lorient', EX_SEED = 1618079;
+   Hold the example to one dated market, club and seed. The 2026-11-14
+   Everton window on seed 137 gives a counter, a signing and a rival's move
+   on the dearest centre back while you deal for the cheapest. */
+const EX_DATE = '2026-11-14', EX_CLUB = 'Everton', EX_SEED = 137;
+const EX_FIRST_BID = 12.8, EX_SECOND_BID = 13.2;
 const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten', 'eleven', 'twelve'];
 const clockWord = h => (clockLabel(h) === '12pm' ? 'noon' : clockLabel(h));
 const exDay = { club: EX_CLUB, seed: EX_SEED, daily: EX_DATE };
 let ex = startDeadlineDay({ club: exDay.club, seed: exDay.seed, daily: exDay.daily });
 const exNeeds = ex.needs.map(n => `a ${slotWord(n.label)}`);
 const needsPhrase = exNeeds.length > 1 ? `${exNeeds.slice(0, -1).join(', ')} and ${exNeeds[exNeeds.length - 1]}` : exNeeds.join('');
-const keeperIdx = ex.targets.findIndex(t => t.need === 0);
-const keeper = ex.targets[keeperIdx];
-const keeperNeed = ex.needs[0];
+const targetIdx = ex.targets.findIndex(t => t.need === 0);
+const target = ex.targets[targetIdx];
+const role = slotWord(ex.needs[0]?.label);
 const pageWant = [], guideWant = [];
 let gradeLine = 'the grade paragraph was not reached';
-if (!keeper || keeperNeed.label !== 'GK') fail(`the example's first need is ${keeperNeed?.label}, not a goalkeeper`);
+if (!target || role !== 'centre back') fail(`the example's first need is ${role}, expected centre back`);
 else {
-  const desk = deskRead(ex, keeperIdx);
-  ex = openTalks(ex, keeperIdx);
-  const ask0 = ex.targets[keeperIdx].neg?.theirAsk;
-  ex = placeBid(ex, keeperIdx, 3.1);
-  const afterFirst = ex.targets[keeperIdx];
+  const desk = deskRead(ex, targetIdx);
+  ex = openTalks(ex, targetIdx);
+  const ask0 = ex.targets[targetIdx].neg?.theirAsk;
+  ex = placeBid(ex, targetIdx, EX_FIRST_BID);
+  const afterFirst = ex.targets[targetIdx];
   const ask1 = afterFirst.neg?.theirAsk;
   const hour1 = ex.hour;
-  ex = placeBid(ex, keeperIdx, 3.3);
-  if (ex.targets[keeperIdx].status !== 'terms') fail(`a bid of 3.3 left the keeper ${ex.targets[keeperIdx].status}, the example says the fee is agreed`);
-  const want = termsWanted(ex, keeperIdx);
-  if (want) ex = offerPersonalTerms(ex, keeperIdx, { wage: want.wage, years: want.years, bonus: want.bonus });
-  if (ex.targets[keeperIdx].status !== 'signed') fail(`the example's keeper is ${ex.targets[keeperIdx].status} after his ask, not signed`);
-  if (afterFirst.status !== 'talks' || !(ask1 < ask0)) fail(`a bid of 3.1 did not bring the ask down (${ask0} to ${ask1}, ${afterFirst.status})`);
+  ex = placeBid(ex, targetIdx, EX_SECOND_BID);
+  if (ex.targets[targetIdx].status !== 'terms') fail(`a bid of ${EX_SECOND_BID} left the target ${ex.targets[targetIdx].status}, the example says the fee is agreed`);
+  const want = termsWanted(ex, targetIdx);
+  if (want) ex = offerPersonalTerms(ex, targetIdx, want);
+  if (ex.targets[targetIdx].status !== 'signed') fail(`the example's target is ${ex.targets[targetIdx].status} after his ask, expected signed`);
+  if (afterFirst.status !== 'talks' || !(ask1 < ask0)) fail(`a bid of ${EX_FIRST_BID} did not bring the ask down (${ask0} to ${ask1}, ${afterFirst.status})`);
   const spent = hoursUsed(ex), left = hoursLeft(ex);
-  /* The dearest keeper the rival took while you were on the phone. */
+  /* The dearest player for the need while you were on the phone. */
   const dear = ex.targets.map((t, k) => ({ t, k })).filter(x => x.t.need === 0).sort((a, b) => b.t.mp.price - a.t.mp.price)[0];
   const moved = [...ex.ticker].reverse().find(l => l.text.includes(`move for ${dear.t.mp.name}`));
   const signedBy = [...ex.ticker].reverse().find(l => l.text.includes(`complete the signing of ${dear.t.mp.name}`));
-  if (dear.t.status !== 'gone' || !moved || !signedBy) fail(`the dearest keeper, ${dear.t.mp.name}, is ${dear.t.status} after the keeper is signed; the guide says a rival took him`);
+  if (dear.t.status !== 'gone' || !moved || !signedBy) fail(`the dearest ${role}, ${dear.t.mp.name}, is ${dear.t.status} after the target is signed; the guide says a rival took him`);
   pageWant.push(
     `Say the board want ${needsPhrase} and leave you ${money(ex.startBudget)}.`,
-    `a keeper listed at ${money(keeper.mp.price)} and his club want ${money(ask0)}`,
-    `worth ${money(desk.low)} to ${money(desk.high)}, so you bid ${money(3.1)}`,
+    `a ${role} listed at ${money(target.mp.price)} and his club want ${money(ask0)}`,
+    `worth ${money(desk.low)} to ${money(desk.high)}, so you bid ${money(EX_FIRST_BID)}`,
     `They come down to ${money(ask1)}`,
+    `You bid ${money(EX_SECOND_BID)}`,
     `His agent wants ${want?.years} years at ${want?.wage}k a week and a ${money(want?.bonus ?? 0)} signing bonus`,
     `That is ${WORDS[spent]} hours gone and ${money(ex.state.budget)} left, with ${WORDS[left]} hours to find the other ${WORDS[ex.needs.length - 1]}.`,
   );
-  /* The grade paragraph: the keeper's real value, his share of the value
-     points, and the rest as the paragraph assumes it (the other three at the
-     same share, 1m left). */
-  const fee = 3.3, value = keeper.mp.value ?? keeper.mp.price;
+  /* The guide grades all four signings at the same fee-to-value ratio. */
+  const fee = ex.targets[targetIdx].fee ?? EX_SECOND_BID, value = target.mp.value ?? target.mp.price;
   const share = valueShare(fee, value);
   const overPct = Math.round((fee / value - 1) * 100);
   const vp = VALUE_POINTS * share;
@@ -963,15 +941,15 @@ else {
   const letter = letterFor(total);
   const article = /^[AEF]/.test(letter) ? 'an' : 'a';
   /* The same window graded by gradeWindow itself rather than by the sum
-     above: the keeper as signed, the first man for every other need signed at
-     10 percent over his value, and 1m left. A grade formula that moved (the
+     above: the target as signed, the first man for every other need signed at
+     the same ratio, and 1m left. A grade formula that moved (the
      curve control bends the budget points) leaves the paragraph's sum and
      the engine's grade apart. */
   const assumed = {
     ...ex,
     state: { ...ex.state, budget: 1 },
     targets: ex.targets.map((t, k) => (t.need !== 0 && ex.targets.findIndex(x => x.need === t.need) === k
-      ? { ...t, status: 'signed', fee: (t.mp.value ?? t.mp.price) * 1.1 }
+      ? { ...t, status: 'signed', fee: (t.mp.value ?? t.mp.price) * fee / value }
       : t)),
   };
   const eg = gradeWindow(assumed);
@@ -981,11 +959,12 @@ else {
   }
   guideWant.push(
     `needs ${needsPhrase}, and the board have left you ${money(ex.startBudget)}.`,
-    `His club are asking ${money(ask0)}, your desk says he is worth ${money(desk.low)} to ${money(desk.high)}, and you bid ${money(3.1)}. That is a counter: they come down to ${money(ask1)} and one round of patience is gone. It is ${clockWord(hour1)}.`,
+    `His club are asking ${money(ask0)}, your desk says he is worth ${money(desk.low)} to ${money(desk.high)}, and you bid ${money(EX_FIRST_BID)}. They come down to ${money(ask1)} and one round of patience is gone. It is ${clockWord(hour1)}.`,
+    `You bid ${money(EX_SECOND_BID)}`,
     `His agent wants ${want?.years} years at ${want?.wage}k a week and a ${money(want?.bonus ?? 0)} bonus. You offer exactly that and he signs. It is ${clockWord(spent)} and you have ${money(ex.state.budget)} left.`,
-    `came in for the dearest keeper on your list at ${clockWord(moved?.hour ?? -1)} and signed him at ${clockWord(signedBy?.hour ?? -1)}.`,
-    `The keeper cost ${money(fee)} for a ${money(value)} player, ${overPct} percent over his real worth, which keeps ${Math.round(share * 100)} percent of his share of the value points`,
-    `That is ${NEEDS_POINTS} for needs, ${fmt(vp, 0)} for value and, with ${money(1)} of the ${money(ex.startBudget)} left, ${fmt(bp, 1)} for budget: ${total} out of 100, ${article} ${letter}.`,
+    `came in for the dearest ${role} on your list at ${clockWord(moved?.hour ?? -1)} and signed him at ${clockWord(signedBy?.hour ?? -1)}.`,
+    `The ${role} cost ${money(fee)} for a ${money(value)} player, about ${overPct} percent over his value, which keeps ${Math.round(share * 100)} percent of his share of the value points`,
+    `That is ${NEEDS_POINTS} for needs, ${fmt(vp, 1)} for value and, with ${money(1)} of the ${money(ex.startBudget)} left, ${fmt(bp, 1)} for budget: ${total} out of 100, ${article} ${letter}.`,
   );
 }
 const missingPage = pageWant.filter(s => !PAGE_SRC.includes(s));

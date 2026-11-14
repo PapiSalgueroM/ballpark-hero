@@ -280,32 +280,32 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "The board's shopping list",
         paragraphs: [
-          "Say today's club needs a goalkeeper, a central midfielder, a right winger and a striker, and the board have left you £29m.",
+          "Say your club needs a centre back, a goalkeeper, a right back and a left back, and the board have left you £100.5m.",
         ],
       },
       {
-        heading: "Haggling for the keeper",
+        heading: "Haggling for the centre back",
         paragraphs: [
-          "You start with the keeper. His club are asking £3.6m, your desk says he is worth £2.4m to £3.2m, and you bid £3.1m. That is a counter: they come down to £3.4m and one round of patience is gone. It is noon.",
-          "You bid £3.3m, inside 97 percent of their ask, and the fee is agreed. His agent wants 4 years at 10k a week and a £1.8m bonus. You offer exactly that and he signs. It is 2pm and you have £23.9m left.",
+          "You start with the centre back. His club are asking £14.1m, your desk says he is worth £9.5m to £10.1m, and you bid £12.8m. They come down to £13.6m and one round of patience is gone. It is noon.",
+          "You bid £13.2m, above 97 percent of their ask, and the fee is agreed. His agent wants 4 years at 22k a week and a £4m bonus. You offer exactly that and he signs. It is 2pm and you have £83.3m left.",
         ],
       },
       {
         heading: "A rival steals a target",
         paragraphs: [
-          "While you were on the phone, a rival came in for the dearest keeper on your list at noon and signed him at 2pm. It did not matter this time, but the same thing can happen to the striker you were saving for last.",
+          "While you were on the phone, a rival came in for the dearest centre back on your list at noon and signed him at 2pm. Check the rival offers on the targets you still need before picking up the phone again.",
         ],
       },
       {
-        heading: "The striker with an hour to spare",
+        heading: "Leaving time for the last deal",
         paragraphs: [
-          "By 8pm the midfielder and the winger are in, three hours each. The striker's club will not budge much and a rival is in for him, so you bid over the rival's number and inside 97 percent of the ask. Fee agreed at 9pm, terms signed at 10pm, an hour to spare.",
+          "If you still need a left back at 8pm, leave an hour to agree the fee and another to finish the terms. A bid above the rival's offer can help you get the fee agreed in one round if it also meets 97 percent of the ask.",
         ],
       },
       {
         heading: "Grading the window",
         paragraphs: [
-          "Four needs out of four. The keeper cost £3.3m for a £3m player, 10 percent over his real worth, which keeps 80 percent of his share of the value points, and say the other three went about 10 percent over too. That is 50 for needs, 24 for value and, with £1m of the £29m left, 0.7 for budget: 75 out of 100, a B.",
+          "Say you fill all four needs. The centre back cost £13.2m for a £9.8m player, about 35 percent over his value, which keeps 31 percent of his share of the value points. Say you paid the same percentage above value for the other three. That is 50 for needs, 9.2 for value and, with £1m of the £100.5m left, 0.2 for budget: 59 out of 100, a C.",
         ],
       },
     ],
