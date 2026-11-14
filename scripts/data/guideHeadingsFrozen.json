@@ -2624,6 +2624,7 @@
         "Staff: a head coach, a special teams assistant, a goalie coach, a scouting director and a head athletic therapist, each rated 1 to 10. Hire off a shortlist, pay off the man you do not want, and match or let go when another club comes in for a good one.",
         "Re-sign desk: every player whose deal runs out this summer gets a tile. Keep him at his ask, push once with your own number, or let him go. Anyone you leave open is settled by your staff's own rule when the summer starts, never by a coin flip.",
         "Trade desk: build a package of up to five pieces a side, players and picks, and keep paying part of a salary to make the money work. It shuts at the deadline.",
+        "Browse every remaining prospect at the draft. Filter by position or save up to three to your shortlist. Saving a prospect uses no picks, and the shortlist survives a reload while its prospects are still available.",
         "Open Roster and choose your simulation contributors: six healthy forwards, four healthy defensemen and one healthy goalie. If a group has fewer available players, use all of them. Uncheck a selected forward or defenseman before choosing his replacement.",
         "Stage your changes, then Apply contributors to save them. Use automatic goes back to the highest rated healthy players. These groups feed the rating model; they are not full lines, defensive pairs or ice time.",
         "A healthy player fills in during an injury and your saved choices return when they are healthy. For example, if your chosen goalie gets hurt, the backup covers until he returns. Applying a different selection for that group replaces those saved choices.",
@@ -2897,6 +2898,7 @@
         "Spin. The wheel stops on a real team season and lists that squad's draftable players.",
         "Draft one player into an open slot. You fill 8: QB, RB, two receivers, tight end, flex, defense unit, head coach.",
         "Repeat until the roster is full. No name repeats, and you get 2 rerolls per run for dud squads.",
+        "If the archives fail, Try again keeps your draft picks. A reroll is spent when a draftable team lands.",
         "Watch the 17 game sim reveal, then share the result or run it back."
       ],
       "rules": [
