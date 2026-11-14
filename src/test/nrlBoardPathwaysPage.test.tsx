@@ -45,6 +45,35 @@ afterEach(() => {
   localStorage.clear();
 });
 
+it('keeps the selected rotation target across reload and shows its exact award', () => {
+  const before = createNrlCareer('broncos', 2, 2026);
+  const first = open(before);
+  const choice = { type: 'acceptBoardPathways', year: 2026, clubId: 'broncos', brief: 'rotation' } as const;
+  expect(board().getByText(/3 players aged 23 or under · 4 appearances each · \$200,000/)).toBeVisible();
+  expect(board().getByText(/2 players aged 23 or under · 6 appearances each · \$225,000/)).toBeVisible();
+  click('Accept rotation objective');
+  const pending = reduceNrlCareer(before, choice);
+  expect(raw()).toBe(JSON.stringify(pending));
+  expect(localStorage.getItem(fenceKey)).toBe('5');
+  first.unmount();
+  show();
+  review();
+  expect(board().getByText(/Regular rotation · 2 players/)).toBeVisible();
+  expect(board().queryByRole('button', { name: 'Accept pathways objective' })).toBeNull();
+  expect(raw()).toBe(JSON.stringify(pending));
+  cleanup();
+  saveFence.release(NRL_SAVE_KEY);
+  const runIn = through(pending, 27);
+  open(runIn);
+  expect(summary().getByText('Target secured')).toBeVisible();
+  expect(nrlBoardPathwaysIncome(runIn.finance)).toBe(0);
+  click('Match centre');
+  click('Quick Sim');
+  review();
+  expect(board().getByRole('status')).toHaveTextContent('Target met. $225,000 paid into club cash.');
+  expect(raw()).toBe(JSON.stringify(advance(runIn)));
+});
+
 it.each([
   [2026, 'broncos', 246, 'broncos-11-0', 'Jesse Hewitt', 'Left Second Row', true],
   [2027, 'storm', 276, 'storm-3-1', 'Teo Vale', 'Left Centre', false],

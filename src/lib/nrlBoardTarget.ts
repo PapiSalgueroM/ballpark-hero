@@ -4,6 +4,12 @@ import { nrlLadder, type NrlManagerState } from '@/lib/nrlManager';
 import { nrlSquadSeasonStats } from '@/lib/nrlPlayerScoring';
 
 export const NRL_BOARD_PATHWAYS = { maxAge: 23, players: 3, appearances: 4, bonus: 200_000 } as const;
+export const NRL_BOARD_ROTATION = { players: 2, appearances: 6, bonus: 225_000 } as const;
+export type NrlPathwaysBrief = 'broader' | 'rotation';
+
+export function nrlPathwaysTerms(brief?: NrlPathwaysBrief) {
+  return brief === 'rotation' ? NRL_BOARD_ROTATION : NRL_BOARD_PATHWAYS;
+}
 
 export function nrlBoardPathwaysEligible(season: NrlManagerState, players: NrlCareerPlayer[]) {
   const squadIds = new Set(season.squad.map(player => player.id));

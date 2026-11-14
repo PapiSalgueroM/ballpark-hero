@@ -1699,9 +1699,10 @@ function FinalsHistory({ record, season }: { record: NrlCareerState['history'][n
 function BoardPathways({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { season } = career;
   const { year, clubId, round, phase } = season;
-  const { accepted, progress, reason, bonus } = nrlBoardPathwaysQuote(career);
+  const { accepted, progress, reason, brief, terms, options, bonus } = nrlBoardPathwaysQuote(career);
   if (!accepted && (phase !== 'regular' || career.season.round !== 1 || career.legacySeason)) return null;
-  const { maxAge, players, appearances } = NRL_BOARD_PATHWAYS;
+  const { maxAge } = NRL_BOARD_PATHWAYS;
+  const { players, appearances } = terms;
   const qualified = progress.filter(player => player.apps >= appearances).length;
   const paid = nrlBoardPathwaysIncome(career.finance);
   const remaining = accepted && phase === 'regular'
@@ -1715,12 +1716,12 @@ function BoardPathways({ career, onAction, disabled }: { career: NrlCareerState;
   return (
     <section className="mt-4 rounded-xl border border-border bg-background p-3" aria-labelledby="nrl-board-pathways">
       <h3 id="nrl-board-pathways" className="text-sm font-bold">Board pathways</h3>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Give {players} players aged {maxAge} or under at least {appearances} first-grade appearances each in the regular season.
-        Starts and reserves who take the field count. The board pays {money(bonus)} in club cash after the regular season if you meet the target.
-      </p>
+      <p className="mt-1 text-sm text-muted-foreground">Starts and reserves who take the field count. The board pays the bonus after the regular season.</p>
       {accepted ? (
         <>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {brief === 'rotation' ? 'Regular rotation' : 'Broader pathway'} · {players} players aged {maxAge} or under · {appearances} appearances each · {money(bonus)}
+          </p>
           <p className="mt-2 text-sm font-semibold" role="status">
             {phase === 'regular' ? `${Math.min(qualified, players)} of ${players} players reached the target.`
               : paid ? `Target met. ${money(paid)} paid into club cash.` : 'Target missed. No bonus was paid.'}
@@ -1732,7 +1733,7 @@ function BoardPathways({ career, onAction, disabled }: { career: NrlCareerState;
               <p className="mt-1 font-semibold">{targetStatus}</p>
               {qualified < players && candidates.length > 0 && (
                 <>
-                  <ul aria-label="Players who can reach four appearances" className="mt-1 divide-y divide-border">
+                  <ul aria-label={`Players who can reach ${appearances === 4 ? 'four' : 'six'} appearances`} className="mt-1 divide-y divide-border">
                     {candidates.map(player => (
                       <li key={player.id} className="break-words py-1">
                         <p className="font-medium">{player.name}{unavailable?.has(player.id) && (
@@ -1765,9 +1766,17 @@ function BoardPathways({ career, onAction, disabled }: { career: NrlCareerState;
         </>
       ) : (
         <>
-          <Button type="button" size="lg" className="mt-2 w-full sm:w-auto" disabled={disabled || reason !== null}
-            onClick={() => onAction({ type: 'acceptBoardPathways', year, clubId })}>Accept pathways objective</Button>
-          <p className="mt-1 text-xs text-muted-foreground">{reason ?? 'Optional. Accept before playing Round 1.'}</p>
+          <div className="mt-2 grid gap-2 sm:grid-cols-2">
+            {options.map(option => <div key={option.brief} className="space-y-1 rounded-lg border border-border p-2 text-sm">
+              <p className="font-semibold">{option.brief === 'rotation' ? 'Regular rotation' : 'Broader pathway'}</p>
+              <p className="text-muted-foreground">{option.players} players aged {maxAge} or under · {option.appearances} appearances each · {money(option.bonus)}</p>
+              <Button type="button" size="lg" className="w-full whitespace-normal px-2" disabled={disabled}
+                onClick={() => onAction({ type: 'acceptBoardPathways', year, clubId, brief: option.brief })}>
+                {option.brief === 'rotation' ? 'Accept rotation objective' : 'Accept pathways objective'}
+              </Button>
+            </div>)}
+          </div>
+          <p className="mt-1 text-xs text-muted-foreground">{options.length ? 'Optional. Choose one before playing Round 1.' : reason}</p>
         </>
       )}
     </section>
@@ -2229,7 +2238,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 {record.finance?.sponsor && <p className="text-sm text-muted-foreground">Sponsor income {money(nrlSponsorIncome(record.finance))}</p>}
                 {(record.year !== year || retired) && record.finance?.pathways && (
                   <p className="text-sm text-muted-foreground">
-                    Board pathways · {record.finance.pathways.earnedBy ? `Target met · ${money(nrlBoardPathwaysIncome(record.finance))} bonus` : 'Target missed'}
+                    Board pathways{record.finance.pathways.brief === 'rotation' && ' · Regular rotation'} · {record.finance.pathways.earnedBy ? `Target met · ${money(nrlBoardPathwaysIncome(record.finance))} bonus` : 'Target missed'}
                   </p>
                 )}
                 {record.finance?.boardRecruitment && (

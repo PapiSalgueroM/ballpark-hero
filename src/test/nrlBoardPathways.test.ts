@@ -25,6 +25,48 @@ function ageOnly(career: NrlCareerState, ids: string[]) {
 }
 
 describe('NRL board pathways', () => {
+  it.each([
+    ['storm', 26, 200_000, 0], ['broncos', 2, 0, 225_000], ['broncos', 1, 200_000, 225_000],
+  ] as const)('rewards the different actual appearance distributions for %s seed %s', (clubId, seed, broader, rotation) => {
+    const original = createNrlCareer(clubId, seed, 2026);
+    const prepare = (brief: 'broader' | 'rotation') => reduceNrlCareer(original, { type: 'acceptBoardPathways', year: 2026, clubId, brief });
+    const normal = advance(atLastRegular(prepare('broader')));
+    const alternate = advance(atLastRegular(prepare('rotation')));
+    const baseline = advance(atLastRegular(original));
+    expect(normal.season).toEqual(alternate.season);
+    expect(normal.season).toEqual(baseline.season);
+    expect(nrlCareerFinance(normal).cash - nrlCareerFinance(baseline).cash).toBe(broader);
+    expect(nrlCareerFinance(alternate).cash - nrlCareerFinance(baseline).cash).toBe(rotation);
+    expect(read(alternate)).toEqual(alternate);
+  });
+
+  it('offers a choice for two eligible prospects and pays the rotation brief for actual sixth appearances', () => {
+    const initial = createNrlCareer('storm', 39, 2026);
+    const { year, clubId } = initial.season;
+    const young = ageOnly(initial, Object.values(initial.season.lineup).slice(0, 2));
+    const choose = { type: 'acceptBoardPathways', year, clubId, brief: 'rotation' } as const;
+    expect(accept(young)).toBe(young);
+    expect(nrlBoardPathwaysQuote(young).options.map(option => option.brief)).toEqual(['rotation']);
+    const pending = reduceNrlCareer(young, choose);
+    expect(pending.finance.pathways).toEqual({ brief: 'rotation' });
+    expect(read(pending)).toEqual(pending);
+    expect(reduceNrlCareer(pending, choose)).toBe(pending);
+    const agreed = atLastRegular(pending);
+    expect(nrlBoardPathwaysProgress(agreed.season, agreed.players).filter(row => row.apps >= 6)).toHaveLength(2);
+    const baseline = advance(atLastRegular(young));
+    const won = advance(agreed);
+    expect(won.season).toEqual(baseline.season);
+    expect(won.finance.pathways?.earnedBy).toHaveLength(2);
+    expect(nrlCareerFinance(won).cash - nrlCareerFinance(baseline).cash).toBe(225_000);
+    expect(read(won)).toEqual(won);
+    const ended = finish(won);
+    expect(ended.history[0].finance?.pathways).toEqual(won.finance.pathways);
+    expect(nrlCareerFinance(ended).cash - nrlCareerFinance(finish(baseline)).cash).toBe(225_000);
+    expect(read(reduceNrlCareer(ended, { type: 'startNextSeason' }))).not.toBeNull();
+    const forged = { ...won, finance: { ...won.finance, pathways: { earnedBy: won.finance.pathways!.earnedBy } } };
+    expect(read(forged)).toBeNull();
+  });
+
   it.each([[2026, 'storm'], [2027, 'bears']] as const)('accepts only before round one is played in %s', (year, clubId) => {
     const original = createNrlCareer(clubId, 39, year);
     expect(JSON.stringify(read(original))).toBe(JSON.stringify(original));
