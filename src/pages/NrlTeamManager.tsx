@@ -25,7 +25,7 @@ import {
   nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview,
   nrlLadder, nrlMatchdaySelection, nrlNextRound,
   nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
-  NRL_BENCH_SIZE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
+  NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
@@ -595,6 +595,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
   const latestInjury = lastMatch?.injury;
   const injuredName = latestInjury && season.squad.find(player => player.id === latestInjury.playerId)?.name;
   const recoveredName = lastMatch?.individualRecoveryId && season.squad.find(player => player.id === lastMatch.individualRecoveryId)?.name;
+  const captainName = lastMatch?.captainId && season.squad.find(player => player.id === lastMatch.captainId)?.name;
   const interchanges = [lastMatch?.halftimeInterchange, lastMatch?.secondHalftimeInterchange];
   const starterIds = new Set(Object.values(season.lineup));
   const fitness = Math.round(season.squad.reduce((sum, player) => sum + (starterIds.has(player.id) ? player.fitness : 0), 0) / NRL_ROLES.length);
@@ -621,6 +622,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
       {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
         {recoveredName} took individual recovery before this match.
       </p>}
+      {captainName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-match-captain>Club captain: {captainName}.</p>}
       {goldenPoint && (
         <p className="mt-2 text-sm text-muted-foreground" data-nrl-golden-point>
           {goldenPoint === 'draw' ? 'Golden point ended scoreless after two five-minute periods.'
@@ -1094,6 +1096,7 @@ function Squad({ career, onAction, disabled }: {
   const reserves = season.squad.filter(player => !starters.has(player.id) && !availability.has(player.id));
   const proposal = disabled ? null : nrlFitLineup(season);
   const nameOf = (id: string) => season.squad.find(player => player.id === id)?.name;
+  const captainOutsideStartingSide = season.captainId && !starters.has(season.captainId);
   const squadName = (id: string, name: string) =>
     career.openingRoster && !isNrlNamedPlayer(id) ? name + ' (generated)' : name;
   return (
@@ -1184,6 +1187,24 @@ function Squad({ career, onAction, disabled }: {
           <p className="mt-1 text-xs text-muted-foreground">Your kicker gets credit for conversions and penalty goals. If they leave the starting lineup, the halfback takes over.</p>
         </div>
       ) : <p className="mt-3 text-sm text-muted-foreground">Player scoring starts next season for this save.</p>}
+      {season.kickerId && (
+        <div className="mt-5 border-t border-border pt-4">
+          <label htmlFor="nrl-club-captain" className="block text-sm font-semibold">Club captain</label>
+          <select id="nrl-club-captain" value={season.captainId ?? ''} aria-describedby="nrl-club-captain-help"
+            disabled={disabled || season.phase === 'complete'}
+            className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60 sm:max-w-xs"
+            onChange={event => onAction({ type: 'setCaptain', playerId: event.target.value || null, year: season.year, clubId: season.clubId, round: season.round })}>
+            <option value="">No captain selected</option>
+            {captainOutsideStartingSide && <option value={season.captainId}>{nameOf(season.captainId!)} · Outside starting 13</option>}
+            {season.squad.filter(player => starters.has(player.id)).map(player => (
+              <option key={player.id} value={player.id}>{player.name}</option>
+            ))}
+          </select>
+          <p id="nrl-club-captain-help" className="mt-1 text-xs text-muted-foreground">
+            Choose a starter. Your captain adds {NRL_CAPTAIN_DEFENCE} defence when they lead the starting 13 at kickoff or after half time.
+          </p>
+        </div>
+      )}
       <div className="mt-5 border-t border-border pt-4">
         <h3 className="font-display text-lg font-bold">Interchange bench</h3>
         <p className="mt-1 text-sm text-muted-foreground">Name six reserves. Quick sim uses up to {NRL_MAX_BENCH_USED} in order to cover different positions. Players who come on use fitness.</p>

@@ -8,6 +8,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
     ],
     howToPlay: [
       'Choose your season and club, then open Squad. Pick a fit starting 13 and six reserves. Save a lineup for this season and preview any replacements before applying it.',
+      'In Squad, choose a club captain from your starting 13. They give the team one extra defence point when they lead the side at kickoff or after half time.',
       'Open Position training in Squad to teach one fit player a second role. In this game, a course takes four regular-season rounds, including byes. Assign the learned role in your starting 13 when you want to use it.',
       'Try Reserve-grade development in Squad to give an eligible young player four rounds away from the first team for one rating point. He keeps his contract and cap place, and you can recall him early without the gain.',
       'Courses cover the back three, wing and centre on the same side, the halves, the two props, and the second rows and lock. A player can learn one extra role.',
