@@ -18,6 +18,8 @@ import {
   type MlbGmPlayer,
   mlbDraftCapital, mlbConsumeDraftPick, mlbAiDraftPicks,
 } from '@/lib/mlbFrontOffice';
+import { appendFoRoundHistory, foCompletedRounds, foRatingChanges, readFoRoundHistory, type FoRoundHistory } from '@/lib/foRoundHistory';
+import { FoRoundResults } from '@/components/front-office-shared/FoRoundResults';
 /* Round 631: a DFA costs dead money and the man cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, rosterFullRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
 /* Round 531: the tax line on screen says which day its figure was read. */
@@ -110,12 +112,15 @@ function rotationHeadline(row: MlbRotationReceipt): string {
     : `Protected rotation: ${row.available} of ${MLB_PROTECTED_STARTERS} planned starters stayed available.`;
 }
 
-function roundHeadlines(result: LastRound): string[] {
+function roundPlanReports(result: LastRound): string[] {
   const development = result.development;
   const lineup = development && ('unavailable' in development ? 'The development start did not count. It is still available this season.'
     : `${development.player} played in place of ${development.replaced} and gained 1 OVR (${development.before} to ${development.after}).`);
-  return [`Round ${result.round}: you went ${result.wins}-${result.losses}.`,
-    ...(lineup ? [lineup] : []), ...(result.rotation ? [rotationHeadline(result.rotation)] : []), ...result.notes];
+  return [...(lineup ? [lineup] : []), ...(result.rotation ? [rotationHeadline(result.rotation)] : [])];
+}
+
+function roundHeadlines(result: LastRound): string[] {
+  return [`Round ${result.round}: you went ${result.wins}-${result.losses}.`, ...roundPlanReports(result), ...result.notes];
 }
 
 function OctoberRecap({ rows, team, unavailable, label }: {
@@ -163,6 +168,7 @@ interface SaveShape {
      can be drawn again after a reload. Absent on older saves. */
   postseason?: Postseason | null;
   lastRound?: LastRound;
+  roundHistory?: FoRoundHistory;
   /* Round 1020: the GM desk (src/lib/gmDesk.ts). Absent on every save written
      before it, and on those the board plays exactly as it did until the GM
      opens a desk box. Each block inside is validated alone. */
@@ -183,6 +189,7 @@ export default function MlbFrontOfficeBoard() {
   const [octoberUnavailable, setOctoberUnavailable] = useState(false);
   const [feed, setFeed] = useState<string[]>([]);
   const lastRound = useRef<LastRound | null>(null);
+  const roundHistory = useRef<FoRoundHistory | null>(null);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
      moment anything else is prepended it reads as an ordinary row. Transient
@@ -271,6 +278,7 @@ export default function MlbFrontOfficeBoard() {
       if (!mlbDevelopmentUsed(s.league, s.myTeam)) delete s.league.developmentStartUsed;
       setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
       lastRound.current = readLastRound(s.lastRound, s.league, s.myTeam);
+      roundHistory.current = readFoRoundHistory(s.roundHistory, s.league, s.myTeam, MLB_ROUNDS);
       if (lastRound.current) setFeed(roundHeadlines(lastRound.current));
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? (s.phase === 'draft' ? [] : null)); setPicksLeft(s.picksLeft ?? 0);
@@ -310,12 +318,14 @@ export default function MlbFrontOfficeBoard() {
     try {
       if (!lg) return false;
       const result = lastRound.current;
+      const history = roundHistory.current;
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft: draftBatchesLeft ?? undefined,
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { series, champion, gradeLine, ...(octoberUnavailable ? { octoberUnavailable: true } : {}) } : null,
         ...(result?.team === team && result.season === lg.season ? { lastRound: result } : {}),
         ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch,
+        roundHistory: history?.team === team && history.season === lg.season ? history : undefined,
       } satisfies SaveShape));
       return true;
     } catch { return false; }
@@ -332,6 +342,7 @@ export default function MlbFrontOfficeBoard() {
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
     lastRound.current = null;
+    roundHistory.current = null;
     setFeed([
       `Welcome to the ${label(abbr)} front office. Opening Day of the ${lg.season} season is here.`,
       `🏛️ The ownership mandate: ${m.text}`,
@@ -415,7 +426,9 @@ export default function MlbFrontOfficeBoard() {
     const lg: MlbLeague = JSON.parse(JSON.stringify(league));
     /* Round 1020: with the desk on, the staff's edge and the trainer ride on
        the round; with it off the round is called exactly as before. */
+    const openingRatings = new Map(lg.teams[myTeam].players.map(player => [player.id, player.ovr]));
     const report = simMlbRound(lg, myTeam, Math.random, gm ? mlbDeskRoundOptions(gm, lg, myTeam) : undefined);
+    const changes = foRatingChanges(lg.teams[myTeam].players, openingRatings);
     mlbAiMoves(lg, myTeam, Math.random);
     let nextGm = gm;
     const deskLines: string[] = [];
@@ -427,6 +440,14 @@ export default function MlbFrontOfficeBoard() {
     const result: LastRound = { team: myTeam, season: lg.season, round: lg.round, wins: report.myWins, losses: report.myLosses,
       notes: [...deskLines, ...report.notes].slice(0, 4), ...(report.rotation ? { rotation: report.rotation } : {}),
       ...(report.development ? { development: report.development } : {}) };
+    const keepRound = () => {
+      const prior = lastRound.current;
+      roundHistory.current = appendFoRoundHistory(
+        roundHistory.current, prior ? { ...prior, reports: roundPlanReports(prior) } : null,
+        { ...result, reports: roundPlanReports(result) }, changes,
+      );
+      lastRound.current = result;
+    };
     const newFeed = roundHeadlines(result);
     if (nextGm !== gm) setGm(nextGm);
     if (lg.round >= MLB_ROUNDS) {
@@ -464,7 +485,7 @@ export default function MlbFrontOfficeBoard() {
       }));
       setPhase('recap');
       setLeague(lg);
-      lastRound.current = result;
+      keepRound();
       setFeed(newFeed); setFeedSlam(null);
       persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict, ...(octoberFallback ? { octoberUnavailable: true } : {}) } }, lg, myTeam);
       return;
@@ -474,7 +495,7 @@ export default function MlbFrontOfficeBoard() {
     if (nextGm && mlbTradeWindow(league).open && !mlbTradeWindow(lg).open) {
       result.notes = ['🔒 The trade deadline has passed. Deals open again once the season is over.', ...result.notes].slice(0, 4);
     }
-    lastRound.current = result;
+    keepRound();
     setLeague(lg);
     setFeed(roundHeadlines(result)); setFeedSlam(null);
     persist({}, lg, myTeam);
@@ -567,6 +588,7 @@ export default function MlbFrontOfficeBoard() {
         notes = [...summer.lines, ...summer.notes];
         setGm(summer.desk);
       } else notes = mlbOffseason(lg, Math.random, myTeam);
+      roundHistory.current = null;
       /* Round 180: ownership re-reads the roster and sets next season's ask. */
       /* Round 192: what you said at the podium tilts the ask, then the
          tilt is spent. */
@@ -740,6 +762,7 @@ export default function MlbFrontOfficeBoard() {
     setDevelopmentSaveError(false);
     localStorage.removeItem(SAVE_KEY);
     lastRound.current = null;
+    roundHistory.current = null;
     setPhase('pick'); setLeague(null); setMyTeam('');
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
     setPresser(null); setPressTilt(0); setSeasonTradeLine(null);
@@ -816,6 +839,9 @@ export default function MlbFrontOfficeBoard() {
   const showOctoberChoice = tab === 'round' && league.round === MLB_ROUNDS && !!my.depth;
   const octoberStarters = showOctoberChoice ? mlbStrengthUnits(my).rot : [];
   const octoberBooked = showOctoberChoice && mlbOctoberRotationPlanned(league, myTeam);
+  const last = lastRound.current;
+  const roundResults = <FoRoundResults completed={foCompletedRounds(league, MLB_ROUNDS)} history={roundHistory.current}
+    lastRound={last ? { ...last, reports: roundPlanReports(last) } : null} />;
 
   /* ---------------- Round 180: the reload path after a firing ---------------- */
   if (phase === 'fired') {
@@ -832,6 +858,7 @@ export default function MlbFrontOfficeBoard() {
           </button>
         </div>
         <OctoberRecap rows={series} team={myTeam} unavailable={octoberUnavailable} label={label} />
+        {(roundHistory.current || last) && roundResults}
       </div>
     );
   }
@@ -965,6 +992,7 @@ export default function MlbFrontOfficeBoard() {
             {roundHeadlines(lastRound.current).map((line, index) => <p key={index}>{line}</p>)}
           </div>
         )}
+        {roundResults}
         {gm && recapDesk && (
           <GmDeskMount sport="mlb" desk={gm} facts={recapDesk} panels={MLB_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
         )}
@@ -1361,6 +1389,7 @@ export default function MlbFrontOfficeBoard() {
       )}
 
       {tab === 'round' && (
+        <>
         <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
           <p className="mb-2 text-sm text-foreground">Each round simulates a week and a half of baseball across the league.</p>
           {(development?.eligible.length > 0 || developmentPlan) && (
@@ -1450,6 +1479,8 @@ export default function MlbFrontOfficeBoard() {
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">Division winners seed 1-3, wild cards 4-6. Top two seeds skip the best-of-3 Wild Card round.</p>
         </div>
+        {roundResults}
+        </>
       )}
 
       {tab === 'standings' && (

@@ -1092,6 +1092,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
           "The roster box shows the usual sim picks: your best healthy 8 bats, 3 starters and 2 relievers. Everyone else is depth, and depth is who plays the day a starter hits the IL.",
           "Protect the rotation before a round to spread the workload across five healthy starters. Those five face a lower simulated injury risk, while weaker fourth and fifth starters can lower your team strength. The round report shows how many stayed available.",
           "Give a young bench hitter a development start. Once per season, a healthy bench hitter aged 24 or under can take the lowest-rated spot in your batting lineup for one round and gain up to one overall point after play. You keep the opportunity if the planned swap cannot play.",
+          "Open Round results to revisit a played round’s record, rating changes and development starts. Earlier saves may have missing results or ratings.",
           "Before the final stretch, choose Start the ace first to use three individual starters in each playoff series. A 96, 84 and 72 rotation uses 96 in Game 1, 84 in Game 2 and 72 in Game 3, then repeats. The usual rotation averages all three. The season recap shows each actual starter and result.",
         ],
       },

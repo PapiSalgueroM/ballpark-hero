@@ -1,9 +1,9 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import MlbFrontOfficeBoard from '@/components/mlb-front-office/MlbFrontOfficeBoard';
 import { keyedRng } from '@/lib/keyedRng';
 import {
-  initMlbLeague, mlbDevelopmentChoices, mlbDevelopmentPlan, mlbDevelopmentPreview, mlbDevelopmentUsed, mlbStrength, setMlbDevelopmentStart, simMlbRound,
+  initMlbLeague, mlbAiMoves, mlbDevelopmentChoices, mlbDevelopmentPlan, mlbDevelopmentPreview, mlbDevelopmentUsed, mlbStrength, setMlbDevelopmentStart, simMlbRound,
   MLB_ROUNDS, type MlbLeague, type MlbGmPlayer,
 } from '@/lib/mlbFrontOffice';
 
@@ -14,6 +14,9 @@ vi.mock('@/hooks/useRevealScroll', () => ({ useRevealScroll: () => ({ current: n
 
 const key = 'mlb-front-office-save-v1', team = 'NYY', prospect = team + '9';
 const get = (league: MlbLeague, id = prospect) => league.teams[team].players.find(player => player.id === id)!;
+const history = () => within(screen.getByRole('region', { name: 'Round results' }));
+const pickRound = (round: number) => fireEvent.change(history().getByRole('combobox', { name: 'Played round' }), { target: { value: String(round) } });
+const open = () => fireEvent.click(screen.getByRole('button', { name: /^🏟️/ }));
 const play = (league: MlbLeague) => simMlbRound(league, team, () => 0.48);
 const fixture = (): MlbLeague => {
   const club = (abbr: string) => {
@@ -27,6 +30,11 @@ const fixture = (): MlbLeague => {
   };
   return { season: 2033, round: 1, cap: 244, teams: { NYY: club(team), BOS: club('BOS') }, champions: [], freeAgents: [],
     inSeasonRatings: true, schedule: Array.from({ length: MLB_ROUNDS }, () => Array(6).fill('NYY-BOS')) };
+};
+const mountedLeague = () => {
+  const league = fixture();
+  league.teams = { ...initMlbLeague(keyedRng('MLB development mounted league')).teams, ...league.teams };
+  return league;
 };
 afterEach(() => { cleanup(); localStorage.clear(); vi.restoreAllMocks(); });
 
@@ -108,11 +116,9 @@ describe('MLB bench development start', () => {
   });
 
   it('saves the selection, keeps the exact preview on reload, and reports the played result', () => {
-    const league = fixture();
-    league.teams = { ...initMlbLeague(keyedRng('MLB development mounted league')).teams, ...league.teams };
+    const league = mountedLeague();
     const initial = JSON.stringify({ league, myTeam: team, phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0 });
     localStorage.setItem(key, initial);
-    const open = () => fireEvent.click(screen.getByRole('button', { name: /^🏟️/ }));
     const picker = () => screen.getByRole('combobox', { name: 'Development start' });
     let view = render(<MlbFrontOfficeBoard />);
     open();
@@ -137,8 +143,56 @@ describe('MLB bench development start', () => {
     expect(saved.lastRound.wins).toBe(0);
     expect(saved.lastRound.development).toEqual({ player: 'NYY fixture 9', replaced: 'NYY fixture 7', before: 62, after: 63 });
     view.unmount();
-    render(<MlbFrontOfficeBoard />);
+    view = render(<MlbFrontOfficeBoard />);
     expect(screen.getByText(/NYY fixture 9 played in place of NYY fixture 7 and gained 1 OVR/)).toBeInTheDocument();
     expect(localStorage.getItem(key)).toBe(completed);
+    open();
+    const line = 'NYY fixture 9 played in place of NYY fixture 7 and gained 1 OVR (62 to 63).';
+    expect(saved.roundHistory.rounds[0]).toMatchObject({ round: 1, wins: 0, losses: 6, changes: expect.arrayContaining([['NYY fixture 9', 1, 63]]), reports: [line] });
+    expect(history().getByRole('listitem')).toHaveTextContent('NYY fixture 9 +1 OVR to 63');
+    fireEvent.click(screen.getByRole('button', { name: 'Play Round 2' }));
+    pickRound(1);
+    expect(history().getByText('Won 0 · Lost 6')).toBeInTheDocument();
+    expect(history().getByText(line)).toBeInTheDocument();
+    expect(history().getByRole('listitem')).toHaveTextContent('NYY fixture 9 +1 OVR to 63');
+    view.unmount();
+  });
+
+  it('keeps a legacy record and development line while marking complete ratings unknown, with exact new batch bytes', () => {
+    const league = mountedLeague();
+    league.round = 2;
+    const planned = setMlbDevelopmentStart(league, team, prospect);
+    const report = play(planned);
+    planned.round = 3;
+    localStorage.setItem(key, JSON.stringify({ league: planned, myTeam: team, phase: 'hub', titles: 0, seasonsPlayed: 0,
+      draftClass: null, picksLeft: 0, lastRound: { team, season: league.season, round: 2,
+        wins: report.myWins, losses: report.myLosses, development: report.development, notes: [] } }));
+    const control = structuredClone(planned);
+    let oldDraws = 0, newDraws = 0;
+    const draws = () => { oldDraws += 1; return 0.48; };
+    simMlbRound(control, team, draws);
+    mlbAiMoves(control, team, draws);
+    control.round += 1;
+    const view = render(<MlbFrontOfficeBoard />);
+    open();
+    expect(history().getByText('Rating changes are unavailable for this round.')).toBeInTheDocument();
+    vi.spyOn(Math, 'random').mockImplementation(() => { newDraws += 1; return 0.48; });
+    fireEvent.click(screen.getByRole('button', { name: 'Play Round 3' }));
+    const stored = localStorage.getItem(key);
+    const reloaded = JSON.parse(stored!);
+    expect(JSON.stringify(reloaded.league)).toBe(JSON.stringify(control));
+    expect(newDraws).toBe(oldDraws);
+    expect(reloaded.roundHistory.rounds[0]).toMatchObject({ round: 2, changes: null, reports: expect.any(Array) });
+    expect(reloaded.roundHistory.rounds[1]).toMatchObject({ round: 3, changes: [] });
+    expect(history().getByText('No rating changes this round.')).toBeInTheDocument();
+    pickRound(1);
+    expect(history().getByText('Results and rating changes are unavailable for this round.')).toBeInTheDocument();
+    view.unmount();
+    render(<MlbFrontOfficeBoard />);
+    open();
+    pickRound(2);
+    expect(history().getByText('Rating changes are unavailable for this round.')).toBeInTheDocument();
+    expect(history().getByText(/NYY fixture 9 played in place of NYY fixture 7/)).toBeInTheDocument();
+    expect(localStorage.getItem(key)).toBe(stored);
   });
 });
