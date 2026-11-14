@@ -312,15 +312,6 @@ export default function Index() {
         </div>
       </div>
 
-      <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="scroll-mt-36 border-y border-border py-3 focus-visible:outline-primary sm:scroll-mt-28 sm:py-4">
-        <h2 id="browse-sports-heading" className="font-display text-lg font-bold">Browse sports</h2>
-        <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} />
-        <p className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">
-          <Pin aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
-          Pin a game to keep it in Your picks on Home.
-        </p>
-      </section>
-
       <div className="space-y-4">
         {/* A line, not a gate. Everything on this site plays signed
             out, so the account is an upsell and belongs where an
@@ -390,45 +381,59 @@ export default function Index() {
         </div>
       </section>
 
-      {sportSections.map(cat => (
-        <section key={cat.title} data-sport={CATEGORY_SPORT[cat.title]}>
-          {/* Round 658: the sport's drawn glyph in its own ink leads
-              every section, so the colour on the cards below always
-              has a shape and a name beside it. */}
-          <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3">
-            <h2 id={`sport-${CATEGORY_SPORT[cat.title]}`} tabIndex={-1} className="flex min-w-0 scroll-mt-36 flex-wrap items-center gap-2.5 text-lg font-display font-bold text-foreground focus-visible:outline-primary sm:scroll-mt-28" style={sportStyle(CATEGORY_SPORT[cat.title])}>
-              <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-tile/15 text-tile ring-1 ring-inset ring-tile/30">
-                <SportGlyph sport={CATEGORY_SPORT[cat.title]} className="h-[18px] w-[18px]" />
-              </span>
-              {cat.title}
-              <span className="text-xs font-normal text-muted-foreground ml-1">
-                ({cat.games.length} {cat.games.length === 1 ? 'game' : 'games'})
-              </span>
-              {favSport === CATEGORY_SPORT[cat.title] && (
-                <span data-fav-tag="" className="shrink-0 rounded bg-tile/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground ring-1 ring-inset ring-tile/40">
-                  Your sport
-                </span>
-              )}
-            </h2>
-            <div className="ml-auto flex max-w-full flex-wrap items-center gap-x-1">
-              {/* Round 198: each sport hub is discoverable from its Home section. */}
-              {hubForCategory(cat.title) && (
-                <Link to={hubForCategory(cat.title)!.route} className="inline-flex min-h-11 items-center rounded-lg px-2.5 text-xs text-primary hover:underline focus-visible:outline-primary">
-                  Hub
-                </Link>
-              )}
-              <a href="#browse-sports" className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground hover:text-primary focus-visible:outline-primary">
-                All sports <ArrowUp aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
-              </a>
-            </div>
-          </div>
-          <div className="grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4" data-home-catalogue="">
-            {cat.games.map(game => (
-              <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
-            ))}
+      <div className="grid min-w-0 gap-6 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-8 xl:grid-cols-[14rem_minmax(0,1fr)]">
+        <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="scroll-mt-36 focus-visible:outline-primary sm:scroll-mt-28">
+          <div className="rounded-xl border border-border bg-surface-1 p-3 lg:sticky lg:top-28 lg:max-h-[calc(100dvh-8rem)] lg:overflow-y-auto xl:p-4">
+            <h2 id="browse-sports-heading" className="font-display text-lg font-bold">Browse sports</h2>
+            <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} />
+            <p className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">
+              <Pin aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
+              Pin a game to keep it in Your picks on Home.
+            </p>
           </div>
         </section>
-      ))}
+        <div data-home-sport-catalogue className="min-w-0 space-y-7 lg:space-y-9">
+          {sportSections.map(cat => (
+            <section key={cat.title} data-sport={CATEGORY_SPORT[cat.title]}>
+              {/* Round 658: the sport's drawn glyph in its own ink leads
+                  every section, so the colour on the cards below always
+                  has a shape and a name beside it. */}
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3">
+                <h2 id={`sport-${CATEGORY_SPORT[cat.title]}`} tabIndex={-1} className="flex min-w-0 scroll-mt-36 flex-wrap items-center gap-2.5 text-lg font-display font-bold text-foreground focus-visible:outline-primary sm:scroll-mt-28" style={sportStyle(CATEGORY_SPORT[cat.title])}>
+                  <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-tile/15 text-tile ring-1 ring-inset ring-tile/30">
+                    <SportGlyph sport={CATEGORY_SPORT[cat.title]} className="h-[18px] w-[18px]" />
+                  </span>
+                  {cat.title}
+                  <span className="text-xs font-normal text-muted-foreground ml-1">
+                    ({cat.games.length} {cat.games.length === 1 ? 'game' : 'games'})
+                  </span>
+                  {favSport === CATEGORY_SPORT[cat.title] && (
+                    <span data-fav-tag="" className="shrink-0 rounded bg-tile/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground ring-1 ring-inset ring-tile/40">
+                      Your sport
+                    </span>
+                  )}
+                </h2>
+                <div className="ml-auto flex max-w-full flex-wrap items-center gap-x-1">
+                  {/* Round 198: each sport hub is discoverable from its Home section. */}
+                  {hubForCategory(cat.title) && (
+                    <Link to={hubForCategory(cat.title)!.route} className="inline-flex min-h-11 items-center rounded-lg px-2.5 text-xs text-primary hover:underline focus-visible:outline-primary">
+                      Hub
+                    </Link>
+                  )}
+                  <a href="#browse-sports" className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground hover:text-primary focus-visible:outline-primary">
+                    All sports <ArrowUp aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
+                  </a>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3" data-home-catalogue="">
+                {cat.games.map(game => (
+                  <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
     </div>
   ), [badgeDate, bestScores, favSport, gamePicks, pickSport, pickableSports, sportSections, toggleGamePick, user]);
 
