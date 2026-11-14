@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { NBA_DESK_PANELS, type NbaDeskFacts } from '@/components/nba-front-office/NbaGmDesk';
 import { withGmBlock } from '@/lib/gmDesk';
+import { gmSport } from '@/lib/gmSport';
 import { movePicks, findPick, pickKey, picksHeldBy } from '@/lib/gmPicks';
 import { assetKey, evaluatePackage, type TradePackage } from '@/lib/gmTradePackage';
 import { keyedRng } from '@/lib/keyedRng';
@@ -92,10 +93,16 @@ describe('NBA Trade Desk future pick counter', () => {
     const quoted = nbaFuturePickCounter(pkg, nbaPackageContext(league, desk, team, partner))!;
     const commit = vi.fn();
     const facts: NbaDeskFacts = {
-      league, teamId: team, seasonOver: false, deskOn: true, clubName: abbr => abbr, say: vi.fn(), commit,
+      league, teamId: team, teamLabel: team, seasonsPlayed: 0, phase: 'hub',
+      seasonOver: false, deskOn: true, clubName: abbr => abbr, say: vi.fn(), commit,
+      hub: {
+        roster: [], freeAgents: [], capRoom: 0, wins: 0, losses: 0, period: 1, periods: NBA_ROUNDS, playWord: 'Play',
+        periodWord: 'round', hasFixtures: false, nextOpponent: null, lastResult: null, place: 1, cut: 10,
+        tableName: 'East', tradeLine: null, titles: 0,
+      },
     };
     const before = JSON.stringify(league);
-    render(<TradePanel desk={desk} facts={facts} onDesk={vi.fn()} />);
+    render(<TradePanel sport={gmSport('nba')} desk={desk} facts={facts} onDesk={vi.fn()} onBack={vi.fn()} />);
     fireEvent.click(screen.getByRole('button', { name: /Fixture Guard Out/ }));
     fireEvent.click(screen.getByRole('button', { name: /Fixture Guard In/ }));
     const suggest = screen.getByRole('button', { name: /pick to review/ });
