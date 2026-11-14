@@ -115,9 +115,13 @@ function orderTied(rows: GroupRow[], matches: readonly GroupMatch[]): GroupRow[]
 }
 
 export function nationsLeague2026GroupTables(matches: readonly GroupMatch[]) {
-  return Object.fromEntries(GROUP_KEYS.map(group => {
+  return leagueTables(NATIONS_LEAGUE_2026_GROUPS, matches);
+}
+
+function leagueTables<G extends Group>(groups: Record<G, readonly string[]>, matches: readonly GroupMatch[]) {
+  return Object.fromEntries((Object.keys(groups) as G[]).map(group => {
     const games = matches.filter(match => match.group === group);
-    const rows = [...tableFor(NATIONS_LEAGUE_2026_GROUPS[group], games).values()].sort((a, b) => b.points - a.points);
+    const rows = [...tableFor(groups[group], games).values()].sort((a, b) => b.points - a.points);
     const byPoints = new Map<number, GroupRow[]>();
     for (const row of rows) {
       const level = byPoints.get(row.points);
@@ -125,7 +129,7 @@ export function nationsLeague2026GroupTables(matches: readonly GroupMatch[]) {
       else byPoints.set(row.points, [row]);
     }
     return [group, [...byPoints.values()].flatMap(level => orderTied(level, games))];
-  })) as Record<Group, GroupRow[]>;
+  })) as Record<G, GroupRow[]>;
 }
 
 export function simulateNationsLeague2026Groups(seed: string) {
@@ -180,6 +184,31 @@ function rankLeague(tables: GroupRow[][]): string[] {
 
 const loser = (match: PlayOff) => match.winner === match.home ? match.away : match.home;
 
+function quarterfinalDraw(winners: readonly string[], runnersUp: string[], tables: Partial<Record<Group, GroupRow[]>>, random: () => number) {
+  const groupOf = new Map(Object.entries(tables).flatMap(([group, rows]) => rows.map(row => [row.nation, group] as const)));
+  const draw = (teams: string[], chosen: string[]): string[] | undefined => {
+    if (!teams.length) return chosen;
+    for (const nation of shuffled(teams, random)) {
+      if (groupOf.get(nation) === groupOf.get(winners[chosen.length])) continue;
+      const rest = draw(teams.filter(other => other !== nation), [...chosen, nation]);
+      if (rest) return rest;
+    }
+  };
+  return draw(runnersUp, [])!.map((runner, i) => twoLegs(runner, winners[i], random));
+}
+
+function finalFourFrom(quarterfinals: readonly TwoLegTie[], random: () => number) {
+  const [one, two, three, four] = shuffled(quarterfinals.map(tie => tie.winner), random);
+  const semifinals = [singleLeg(one, two, random), singleLeg(three, four, random)];
+  const final = singleLeg(semifinals[0].winner, semifinals[1].winner, random);
+  const thirdPlace = singleLeg(loser(semifinals[0]), loser(semifinals[1]), random, false);
+  return { semifinals, final, thirdPlace };
+}
+
+function leaguePlayoffs(higher: readonly string[], lower: readonly string[], random: () => number) {
+  return shuffled(lower, random).map((nation, i) => twoLegs(nation, higher[i], random));
+}
+
 // Articles 16 and 17 give the higher seed the second leg at home.
 export function simulateNationsLeague2026(seed: string) {
   const { matches, tables } = simulateNationsLeague2026Groups(seed);
@@ -190,25 +219,11 @@ export function simulateNationsLeague2026(seed: string) {
     D: rankLeague([tables.D1, tables.D2]),
   };
   const random = keyedRng(`nations-league|2026|${seed}|knockout`);
-  const groupOf = new Map(GROUP_KEYS.flatMap(group => NATIONS_LEAGUE_2026_GROUPS[group].map(nation => [nation, group] as const)));
-  const winners = rankings.A.slice(0, 4);
-  const runnersUp = rankings.A.slice(4, 8);
-  const draw = (teams: string[], chosen: string[]): string[] | undefined => {
-    if (!teams.length) return chosen;
-    for (const nation of shuffled(teams, random)) {
-      if (groupOf.get(nation) === groupOf.get(winners[chosen.length])) continue;
-      const rest = draw(teams.filter(other => other !== nation), [...chosen, nation]);
-      if (rest) return rest;
-    }
-  };
-  const quarterfinals = draw(runnersUp, [])!.map((runner, i) => twoLegs(runner, winners[i], random));
-  const ab = shuffled(rankings.B.slice(4, 8), random).map((lower, i) => twoLegs(lower, rankings.A[10 + i], random));
-  const bc = shuffled(rankings.C.slice(4, 8), random).map((lower, i) => twoLegs(lower, rankings.B[12 + i], random));
-
-  const [one, two, three, four] = shuffled(quarterfinals.map(tie => tie.winner), random);
-  const semifinals = [singleLeg(one, two, random), singleLeg(three, four, random)];
-  const final = singleLeg(semifinals[0].winner, semifinals[1].winner, random);
-  const thirdPlace = singleLeg(loser(semifinals[0]), loser(semifinals[1]), random, false);
+  const quarterfinals = quarterfinalDraw(rankings.A.slice(0, 4), rankings.A.slice(4, 8), tables, random);
+  const ab = leaguePlayoffs(rankings.A.slice(10, 14), rankings.B.slice(4, 8), random);
+  const bc = leaguePlayoffs(rankings.B.slice(12), rankings.C.slice(4, 8), random);
+  const finals = finalFourFrom(quarterfinals, random);
+  const { final, thirdPlace } = finals;
 
   const leagues = nationsLeague2026NextLeagues(rankings, ab, bc)!;
   const interimOrder = [...rankings.A, ...rankings.B, ...rankings.C, ...rankings.D];
@@ -220,7 +235,60 @@ export function simulateNationsLeague2026(seed: string) {
       ...leagues.B.slice(10).sort((a, b) => interim(a) - interim(b))],
     C: [...leagues.C.slice(0, 4).sort((a, b) => interim(a) - interim(b)), ...leagues.C.slice(4)],
   };
-  return { matches, tables, rankings, quarterfinals, ab, bc, semifinals, final, thirdPlace, nextLeagues };
+  return { matches, tables, rankings, quarterfinals, ab, bc, ...finals, nextLeagues };
+}
+
+type FutureLeague = Exclude<League, 'D'>;
+type FutureGroup = `${FutureLeague}${1 | 2 | 3}`;
+type FutureLeagues = Record<FutureLeague, readonly string[]>;
+
+// UEFA's 2028/29 format uses three pots per tier. See slides four and five.
+// https://editorial.uefa.com/resources/02a5-20ab6d2f8514-897923904829-1000/ntc_review._compilation_of_slides_for_media.pdf
+export function simulateNationsLeague2028(seed: string, year = 2028, previous = simulateNationsLeague2026(seed).nextLeagues as FutureLeagues) {
+  const drawRandom = keyedRng(`nations-league|${year}|${seed}|pots`);
+  const groups = {} as Record<FutureGroup, string[]>;
+  const matches: GroupMatch[] = [];
+  for (const league of ['A', 'B', 'C'] as const) {
+    const pots = [0, 6, 12].map(start => shuffled(previous[league].slice(start, start + 6), drawRandom));
+    for (const number of [1, 2, 3] as const) {
+      const group = `${league}${number}` as const;
+      const index = (number - 1) * 2;
+      const nations = pots.flatMap(pot => pot.slice(index, index + 2));
+      groups[group] = nations;
+      for (let i = 0; i < 6; i++) {
+        for (let j = 0; j < 6; j++) {
+          if (i === j) continue;
+          const samePot = Math.floor(i / 2) === Math.floor(j / 2);
+          // Across pots, matching pot slots host in one direction and crossed slots host in the other.
+          const hosts = ((i + j) % 2 === 0) === (i < j);
+          if (!samePot && !hosts) continue;
+          const home = nations[i], away = nations[j];
+          const random = keyedRng(`nations-league|${year}|${seed}|${home}|${away}`);
+          matches.push({ group, home, away, ...matchScore(home, away, random, false) });
+        }
+      }
+    }
+  }
+  const tables = leagueTables(groups, matches);
+  const rankings = {
+    A: rankLeague([tables.A1, tables.A2, tables.A3]),
+    B: rankLeague([tables.B1, tables.B2, tables.B3]),
+    C: rankLeague([tables.C1, tables.C2, tables.C3]),
+  };
+  const random = keyedRng(`nations-league|${year}|${seed}|knockout`);
+  // Keep different groups apart and host the return leg at the higher seed in the simulated draw.
+  const quarterfinals = quarterfinalDraw(rankings.A.slice(0, 4), rankings.A.slice(4, 8), tables, random);
+  const ab = leaguePlayoffs(rankings.A.slice(9, 15), rankings.B.slice(3, 9), random);
+  const bc = leaguePlayoffs(rankings.B.slice(9, 15), rankings.C.slice(3, 9), random);
+  const finals = finalFourFrom(quarterfinals, random);
+  const { final, thirdPlace } = finals;
+  const finalFour = [final.winner, loser(final), thirdPlace.winner, loser(thirdPlace)];
+  const nextLeagues = {
+    A: [...finalFour, ...rankings.A.slice(0, 9).filter(nation => !finalFour.includes(nation)), ...ab.map(tie => tie.winner), ...rankings.B.slice(0, 3)],
+    B: [...rankings.A.slice(15), ...ab.map(loser), ...bc.map(tie => tie.winner), ...rankings.C.slice(0, 3)],
+    C: [...rankings.B.slice(15), ...bc.map(loser), ...rankings.C.slice(9)],
+  };
+  return { matches, tables, rankings, quarterfinals, ab, bc, ...finals, nextLeagues };
 }
 
 /** Article 19 of the September 2026 regulations governs the move from four to three leagues.

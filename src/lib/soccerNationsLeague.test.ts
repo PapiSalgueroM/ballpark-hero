@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { NATIONS_LEAGUE_2026_GROUPS, nationsLeague2026Fixtures, nationsLeague2026NextLeagues,
-  nationsLeague2026GroupTables, simulateNationsLeague2026Groups, simulateNationsLeague2026 } from './soccerNationsLeague';
+  nationsLeague2026GroupTables, simulateNationsLeague2026Groups, simulateNationsLeague2026,
+  simulateNationsLeague2028 } from './soccerNationsLeague';
 
 describe('Soccer Career 2026/27 Nations League transition', () => {
   it('creates a full home and away group schedule for the 54 nations', () => {
@@ -125,5 +126,46 @@ describe('Soccer Career 2026/27 Nations League transition', () => {
     }
     expect(seasons.some(season => season.quarterfinals.some(tie => tie.legs[1].penalties))).toBe(true);
     expect(seasons.some(season => season.thirdPlace.penalties)).toBe(true);
+  });
+});
+
+describe('Soccer Career 2028/29 Nations League format', () => {
+  it('uses the previous finish to draw three pots and balances home and away against each pot', () => {
+    const seed = '2028 start';
+    const previous = simulateNationsLeague2026(seed);
+    const result = simulateNationsLeague2028(seed);
+    expect(result).toEqual(simulateNationsLeague2028(seed));
+    expect(result.matches).toHaveLength(162);
+    expect(Object.keys(result.tables)).toHaveLength(9);
+    for (const [group, table] of Object.entries(result.tables)) {
+      const league = group[0] as 'A' | 'B' | 'C';
+      const pot = (nation: string) => Math.floor(previous.nextLeagues[league].indexOf(nation) / 6);
+      const nations = table.map(row => row.nation);
+      expect(nations.map(pot).sort()).toEqual([0, 0, 1, 1, 2, 2]);
+      for (const row of table) {
+        const home = result.matches.filter(match => match.home === row.nation);
+        const away = result.matches.filter(match => match.away === row.nation);
+        expect(row.played).toBe(6);
+        expect(home.map(match => pot(match.away)).sort()).toEqual([0, 1, 2]);
+        expect(away.map(match => pot(match.home)).sort()).toEqual([0, 1, 2]);
+        const shared = home.filter(match => away.some(other => other.home === match.away)).map(match => match.away);
+        expect(shared).toEqual(nations.filter(nation => nation !== row.nation && pot(nation) === pot(row.nation)));
+      }
+    }
+  });
+
+  it('sends six first or second and two third-place teams to the quarterfinals, plus six ties at each league boundary', () => {
+    for (let i = 0; i < 18; i++) {
+      const { rankings, quarterfinals, ab, bc, nextLeagues } = simulateNationsLeague2028(`new format ${i}`);
+      const participants = (ties: typeof quarterfinals) => ties.flatMap(tie => [tie.home, tie.away]);
+      expect(participants(quarterfinals).sort()).toEqual([...rankings.A.slice(0, 8)].sort());
+      expect(participants(ab).sort()).toEqual([...rankings.A.slice(9, 15), ...rankings.B.slice(3, 9)].sort());
+      expect(participants(bc).sort()).toEqual([...rankings.B.slice(9, 15), ...rankings.C.slice(3, 9)].sort());
+      expect(Object.values(nextLeagues).map(league => league.length)).toEqual([18, 18, 18]);
+      expect(new Set(Object.values(nextLeagues).flat()).size).toBe(54);
+      expect(nextLeagues.A).toEqual(expect.arrayContaining([...ab.map(tie => tie.winner), ...rankings.B.slice(0, 3)]));
+      expect(nextLeagues.B).toEqual(expect.arrayContaining([...bc.map(tie => tie.winner), ...rankings.A.slice(15), ...rankings.C.slice(0, 3)]));
+      expect(nextLeagues.C).toEqual(expect.arrayContaining(rankings.B.slice(15)));
+    }
   });
 });
