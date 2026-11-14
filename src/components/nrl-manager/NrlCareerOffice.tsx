@@ -9,7 +9,7 @@ import { useNrlClubName } from '@/components/nrl-manager/NrlClubIdentity';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   isNrlNamedPlayer,
-  nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyReports,
+  nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyReleaseAvailable, nrlAcademyReports,
   nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
   nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractApproachPreview, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer, nrlContractTermLimit,
@@ -839,6 +839,7 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const role = available.includes(position) ? position : available[0];
   const { year, clubId, round } = career.season;
   const facilities = nrlAcademyFacilityQuote(career);
+  const canRelease = nrlAcademyReleaseAvailable(career);
   return (
     <>
       <h2 className="font-display text-xl font-bold">Academy</h2>
@@ -881,13 +882,14 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
           {reports.flatMap(report => {
             const { player } = report;
             if (!player) return [];
-            const offer = report.status === 'signed' ? null : nrlAcademyOffer(career, player.id);
+            const offer = report.status === 'ready' ? nrlAcademyOffer(career, player.id) : null;
             return [(
               <li key={player.id} className="py-3" data-nrl-academy-report={player.id}>
                 <h3 className="break-words font-semibold">{player.name}</h3>
                 <p className="text-sm text-muted-foreground">{player.role} · age {player.age} · {player.rating} OVR · {player.potential} potential</p>
                 {report.priority && <p className="mt-1 text-xs text-muted-foreground">Scouting priority {NRL_ACADEMY_PRIORITIES[report.priority].label}</p>}
-                {offer === null ? <p className="mt-1 text-sm font-semibold">Signed for {year + 1}</p>
+                {report.status === 'released' ? <p className="mt-1 text-sm font-semibold">Entering free agency in {year + 1}</p>
+                  : offer === null ? <p className="mt-1 text-sm font-semibold">Signed for {year + 1}</p>
                   : offer.ok === false ? <p className="mt-1 text-sm text-muted-foreground">{offer.reason}</p>
                   : (
                     <div className="mt-2 flex flex-wrap items-center gap-2">
@@ -896,6 +898,16 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
                       <span className="text-sm text-muted-foreground">1 year · {money(offer.contract.salary)}</span>
                     </div>
                   )}
+                {canRelease && report.status === 'ready' && (
+                  <details className="mt-2 border-t border-border">
+                    <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold">Release to free agency</summary>
+                    <p className="text-sm text-muted-foreground">{player.name} enters the open market next season. Releasing him ends your academy promotion offer.</p>
+                    <Button type="button" variant="outline" size="lg" className="mt-2" disabled={disabled}
+                      aria-label={`Confirm release of ${player.name}`} onClick={() => onAction({ type: 'releaseAcademyProspect', year, clubId, playerId: player.id })}>
+                      Confirm release
+                    </Button>
+                  </details>
+                )}
               </li>
             )];
           })}

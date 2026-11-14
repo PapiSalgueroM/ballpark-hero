@@ -15,6 +15,48 @@ const finish = (initial: NrlCareerState) => {
 };
 
 describe('NRL Manager Academy', () => {
+  it.each([[2026, 'panthers', 1, null], [2027, 'bears', 3, 'tigers']] as const)('makes a released %i academy prospect available to the existing next-year market', (year, clubId, seed, destination) => {
+    const initial = createNrlCareer(clubId, seed, year);
+    const assigned = reduceNrlCareer(initial, { type: 'scoutAcademy', role: 'Hooker', priority: 'ready' });
+    const { player } = assigned.academy![0];
+    const action = { type: 'releaseAcademyProspect', year, clubId, playerId: player.id } as const;
+    const regular = advance(assigned);
+    expect(reduceNrlCareer(regular, action)).toBe(regular);
+    const extra = reduceNrlCareer(regular, { type: 'scoutAcademy', role: 'Fullback' });
+    const completed = finish(extra);
+    const released = reduceNrlCareer(completed, action);
+    expect(released).toBeDefined();
+    expect(nrlAcademyReports(released)[0].status).toBe('released');
+    expect(released.players).toBe(completed.players);
+    expect(nrlCareerCap(released, year + 1)).toEqual(nrlCareerCap(completed, year + 1));
+    expect(nrlAcademyOffer(released, player.id).ok).toBe(false);
+    expect(reduceNrlCareer(released, action)).toBe(released);
+    expect(reduceNrlCareer(released, { ...action, playerId: extra.academy![1].player.id })).toBe(released);
+    const invalid = { ...released, academy: released.academy!.map(report => ({ ...report, released: true })) };
+    expect(readNrlCareerSave(JSON.stringify(invalid))).toBeNull();
+    expect(readNrlCareerSave(JSON.stringify({ ...regular, academy: released.academy!.slice(0, 1) }))).toBeNull();
+    const promoted = reduceNrlCareer(completed, { type: 'promoteAcademy', playerId: player.id });
+    expect(promoted).not.toBe(completed);
+    expect(reduceNrlCareer(promoted, action)).toBe(promoted);
+    expect(JSON.stringify(readNrlCareerSave(JSON.stringify(released)))).toBe(JSON.stringify(released));
+    const control = reduceNrlCareer(completed, { type: 'startNextSeason' });
+    expect(control.players.some(row => row.id === player.id)).toBe(false);
+    const next = reduceNrlCareer(released, { type: 'startNextSeason' });
+    const settled = next.players.find(row => row.id === player.id)!;
+    expect(settled).toMatchObject({ id: player.id, name: player.name, role: player.role, age: player.age + 1,
+      rating: player.rating, potential: player.potential });
+    expect(settled.contract?.clubId ?? null).toBe(destination);
+    const marketEntry = nrlCareerMarket(next).find(entry => entry.player.id === player.id);
+    expect(marketEntry?.kind).toBe(destination ? 'rival' : 'freeAgent');
+    if (destination) {
+      expect(settled.contract).toMatchObject({ startYear: year + 1, endYear: year + 1, salary: 180000 });
+      const rivalsCap = nrlCareerCap({ ...next, season: { ...next.season, clubId: destination } });
+      expect(rivalsCap.slots).toBe(30);
+      expect(rivalsCap.available).toBeGreaterThanOrEqual(0);
+    }
+    expect(readNrlCareerSave(JSON.stringify(next))).toEqual(next);
+  });
+
   it('saves one pending role and reveals its deterministic report after a bye without changing the match simulation', () => {
     const plan = nrlSeasonPlan(2026);
     const teams = new Set(plan.draw[0].flat());
