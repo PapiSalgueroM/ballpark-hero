@@ -428,6 +428,101 @@ describe('Build Your XI recorded year admissions', () => {
   });
 });
 
+describe('Build Your XI unfinished draft', () => {
+  const draftKey = 'dukb-build-your-xi-draft-v1';
+
+  it.each<DraftChoice>([
+    { mode: 'mixed' }, { mode: 'club-year', year: 2010 }, { mode: 'club-era', year: 2008 },
+  ])('restores the accepted pick and the rerolled teams in $mode', async choice => {
+    const view = renderHook(() => useLineupBuilder());
+    act(() => api(view).selectFormation('4-4-2', choice));
+    const club = api(view).currentTeam!.name;
+    act(() => api(view).selectPosition(0));
+    await act(async () => {
+      await api(view).submitPlayer('Fixture Keeper', meta(club, 2010));
+    });
+    expect(api(view).filledCount).toBe(1);
+    act(() => { api(view).finishSpin(); api(view).rerollTeam(); });
+    const teams = [...api(view).teamAssignments];
+    const slots = [...api(view).filledSlots];
+    const raw = localStorage.getItem(draftKey);
+    view.unmount();
+
+    const reopened = renderHook(() => useLineupBuilder());
+    expect(api(reopened).formation).toBe('4-4-2');
+    expect(api(reopened).phase).toBe('building');
+    expect(api(reopened).draftChoice).toEqual(choice);
+    expect(api(reopened).teamAssignments).toEqual(teams);
+    expect(api(reopened).filledCount).toBe(1);
+    expect([...api(reopened).filledSlots]).toEqual(slots);
+    expect(api(reopened).currentTeam).toEqual(teams[1]);
+    expect(api(reopened).isSpinning).toBe(false);
+    expect(api(reopened).isValidating).toBe(false);
+    expect(raw).not.toBeNull();
+    expect(localStorage.getItem(draftKey)).toBe(raw);
+    legacyQuiet();
+    act(() => api(reopened).resetGame());
+    reopened.unmount();
+    const fresh = renderHook(() => useLineupBuilder());
+    expect(api(fresh).phase).toBe('formation');
+    expect(api(fresh).filledCount).toBe(0);
+  });
+
+  it('ignores a damaged draft and replaces it after a real selection', () => {
+    localStorage.setItem(draftKey, '{"formation":"toString"}');
+    const fresh = renderHook(() => useLineupBuilder());
+    expect(api(fresh).phase).toBe('formation');
+    act(() => api(fresh).selectFormation('4-4-2'));
+    expect(api(fresh).phase).toBe('building');
+    expect(localStorage.getItem(draftKey)).toContain('"formation":"4-4-2"');
+  });
+
+  it('discards a recorded pick with a year outside its saved draft', async () => {
+    const view = await startHook(2010);
+    const club = api(view).currentTeam!.name;
+    act(() => api(view).selectPosition(0));
+    await act(async () => { await api(view).submitPlayer('Fixture Keeper', meta(club, 2010)); });
+    const draft = JSON.parse(localStorage.getItem(draftKey)!);
+    expect(draft.slots[0][1].pick.year).toBe(2010);
+    draft.slots[0][1].pick.year = 2009;
+    localStorage.setItem(draftKey, JSON.stringify(draft));
+    view.unmount();
+    const fresh = renderHook(() => useLineupBuilder());
+    expect(api(fresh).phase).toBe('formation');
+  });
+
+  it('does not overwrite progress saved by a second instance', async () => {
+    const first = await startHook(2010);
+    await fillHook(first, 2010);
+    const older = renderHook(() => useLineupBuilder());
+    act(() => api(first).completeRecordedYearDraft!(VERDICT));
+    act(() => api(first).selectFormation('3-5-2', { mode: 'club-era', year: 2020 }));
+    const newer = localStorage.getItem(draftKey);
+    expect(newer).toContain('"year":2020');
+    act(() => api(older).resetGame());
+    expect(localStorage.getItem(draftKey)).toBe(newer);
+  });
+
+  it('keeps the review ready for submission and clears it after a result', async () => {
+    const view = await startHook(2010);
+    await fillHook(view, 2010);
+    const slots = api(view).filledSlotsArray;
+    view.unmount();
+
+    const reopened = renderHook(() => useLineupBuilder());
+    expect(api(reopened).phase).toBe('reviewing');
+    expect(api(reopened).filledSlotsArray).toEqual(slots);
+    expect(api(reopened).verdict).toBeNull();
+    act(() => api(reopened).completeRecordedYearDraft!(VERDICT));
+    expect(api(reopened).phase).toBe('result');
+    reopened.unmount();
+    const fresh = renderHook(() => useLineupBuilder());
+    expect(api(fresh).phase).toBe('formation');
+    expect(api(fresh).verdict).toBeNull();
+    legacyQuiet();
+  });
+});
+
 describe('Build Your XI Club year Browse on the real page', () => {
   it('browses past eight records and reopens after Escape and outside focus', async () => {
     await openPage(2010); await chooseSlot('GK');

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { useState, useCallback, useMemo, useEffect, useLayoutEffect, useRef } from 'react';
 import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
 import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS, CLUB_TABLE_NAMES, clubEraAdditionalNames, clubEraClubs, clubYearClubs } from '@/data/lineupTeams';
 import { askValidator, type ValidatorAnswer } from '@/lib/validatorClient';
@@ -8,6 +8,7 @@ import { FORMATIONS, lastRecordedYear, recordedYearsLabel } from '@/types/lineup
 import { checkLineupPick, gradeFit, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionFit';
 import type { Position } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
+import { loadBuildXiDraft, writeBuildXiDraft } from '@/lib/buildXiDraft';
 
 /* The project URL and public key are hardcoded on purpose: CLAUDE.md records
    that Lovable injects VITE_SUPABASE_* pointing at a DELETED project, so these
@@ -106,9 +107,6 @@ function recordedPickVerifies(team: TeamAssignment, role: Position, pick: PickMe
     && clubPickVerifies(team, role, pick);
 }
 
-/* The one line a pick that could not be checked shows. Nothing here says
-   "saved" (this game saves nothing) and nothing says "hasn't played for":
-   that line is for a refusal the validator really made. */
 function unverifiedLine(answer: Extract<ValidatorAnswer, { kind: 'unverified' }>): string {
   if (answer.exhausted) {
     return 'Answer checking has used up its allowance for today, so this pick was not counted. Try another player or reroll the team.';
@@ -118,18 +116,39 @@ function unverifiedLine(answer: Extract<ValidatorAnswer, { kind: 'unverified' }>
 }
 
 export function useLineupBuilder() {
-  const [formation, setFormation] = useState<Formation | null>(null);
-  const [phase, setPhase] = useState<GamePhase>('formation');
-  const [draftChoice, setDraftChoice] = useState<DraftChoice>({ mode: 'mixed' });
+  const [saved] = useState(() => {
+    const saved = loadBuildXiDraft();
+    const draft = saved.draft;
+    if (!draft || draft.draftChoice.mode === 'mixed') return saved;
+    const choice = draft.draftChoice;
+    return draft.slots.every(([, slot]) => recordedPickVerifies(
+      { name: slot.assignedTeam, isNation: slot.isNation }, slot.role, slot.pick, choice,
+    )) ? saved : { ...saved, draft: null };
+  });
+  const [formation, setFormation] = useState<Formation | null>(saved.draft?.formation ?? null);
+  const [phase, setPhase] = useState<GamePhase>(() => {
+    if (!saved.draft) return 'formation';
+    return saved.draft.slots.length === 11 ? 'reviewing' : 'building';
+  });
+  const [draftChoice, setDraftChoice] = useState<DraftChoice>(saved.draft?.draftChoice ?? { mode: 'mixed' });
   const [selectedPositionIndex, setSelectedPositionIndex] = useState<number | null>(null);
-  const [filledSlots, setFilledSlots] = useState<Map<number, FilledSlot>>(new Map());
-  const [teamAssignments, setTeamAssignments] = useState<TeamAssignment[]>([]);
+  const [filledSlots, setFilledSlots] = useState(() => new Map<number, FilledSlot>(saved.draft?.slots));
+  const [teamAssignments, setTeamAssignments] = useState<TeamAssignment[]>(saved.draft?.teamAssignments ?? []);
   const [verdict, setVerdict] = useState<AIVerdict | null>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
   const [isSpinning, setIsSpinning] = useState(false);
   const [spinTeamIndex, setSpinTeamIndex] = useState(0);
+  const storedDraft = useRef(saved.raw);
+  const previousDraft = useRef(saved.draft ? JSON.stringify(saved.draft) : null);
+  useLayoutEffect(() => {
+    const draft = formation && (phase === 'building' || phase === 'reviewing')
+      ? JSON.stringify({ formation, draftChoice, teamAssignments, slots: [...filledSlots] }) : null;
+    if (draft === previousDraft.current) return;
+    previousDraft.current = draft;
+    if (writeBuildXiDraft(storedDraft.current, draft)) storedDraft.current = draft;
+  }, [formation, phase, draftChoice, teamAssignments, filledSlots]);
   /* Round 1138: the validator call in flight, so a reroll, a new formation, a
      reset, leaving the page or a Cancel button can give up on it. A cancelled
      call ends as unverified: nothing filled, no message, not busy. pickRun
@@ -297,7 +316,7 @@ export function useLineupBuilder() {
          it: a check that cannot be made is a pick that was not counted, never
          an accept. The old branch read `valid` by truthiness off whatever came
          back, had no time limit, and on a spent allowance took the search box
-         away for the session and said the lineup was saved, which nothing is.
+         away for the session.
          Now an exhausted allowance, a body that is not a verdict, a failed
          status, a timeout and a network error each leave this ONE pick
          uncounted: no slot filled, the same team, the same slot still open,

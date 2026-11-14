@@ -59,9 +59,9 @@ const LineupBuilder = () => {
   const [playerInput, setPlayerInput] = useState('');
   const inputRevision = useRef(0);
   const [showRules, setShowRules] = useState(false);
-  const [setupMode, setSetupMode] = useState<DraftChoice['mode']>('mixed');
-  const [setupYear, setSetupYear] = useState(2026);
-  const [setupEra, setSetupEra] = useState(2022);
+  const [setupMode, setSetupMode] = useState<DraftChoice['mode']>(draftChoice.mode);
+  const [setupYear, setSetupYear] = useState(draftChoice.mode === 'club-year' ? draftChoice.year : 2026);
+  const [setupEra, setSetupEra] = useState(draftChoice.mode === 'club-era' ? draftChoice.year : 2022);
   const [browsingPlayers, setBrowsingPlayers] = useState(false);
   const [browseActivation, setBrowseActivation] = useState(0);
   const inputOwner = useRef<HTMLDivElement>(null);
@@ -491,6 +491,11 @@ const LineupBuilder = () => {
             {/* Round 825: under the pitch, so it updates as you pick without
                 pushing the spinner or the search box anywhere. */}
             <XiFitBreakdown breakdown={fitBreakdown} slots={fitSlots} labels={slotLabels} className="max-w-lg mx-auto" />
+            <div className="text-center">
+              <button type="button" onClick={resetGame} className="min-h-11 rounded-full px-4 text-sm font-semibold text-muted-foreground hover:text-foreground">
+                Start Over
+              </button>
+            </div>
           </div>
         )}
 
