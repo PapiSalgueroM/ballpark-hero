@@ -2,7 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import FrontOfficeBoard from '@/components/front-office/FrontOfficeBoard';
 import { FO_DEPTH } from '@/data/frontOfficeDepth';
-import { capRoom, capUsed, DEEP_GROUP_TARGET, initLeague, promoteFromPractice, signPlayer, type GmPlayer, type GmTeamState, type LeagueState } from '@/lib/frontOffice';
+import { capRoom, capUsed, cleanPracticeElevations, DEEP_GROUP_TARGET, initLeague, promoteFromPractice, runOffseason, setPracticeElevation, signPlayer, starterIds, withPracticeElevations, type GmPlayer, type GmTeamState, type LeagueState } from '@/lib/frontOffice';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
@@ -21,7 +21,7 @@ function player(id: string, pos: GmPlayer['pos'], salary: number): GmPlayer {
 
 function fixture(room = 0.1, dead = 0, count = 52) {
   const lg = initLeague(seeded(892), { depth: FO_DEPTH, userTeam: 'KC' });
-  const positions = [...Object.entries(DEEP_GROUP_TARGET).flatMap(([pos, count]) => Array(count).fill(pos) as GmPlayer['pos'][]), 'QB' as const].slice(0, count);
+  const positions = [...Object.entries(DEEP_GROUP_TARGET).flatMap(([pos, count]) => Array(count).fill(pos) as GmPlayer['pos'][]), 'QB' as const, 'DB' as const].slice(0, count);
   const salary = Math.floor((lg.cap - room) / positions.length * 10) / 10;
   const players = positions.map((pos, i) => player(`promotion-KC-${i}`, pos, salary));
   players[players.length - 1].salary = Math.round((lg.cap - room - salary * (players.length - 1)) * 10) / 10;
@@ -151,5 +151,99 @@ describe('NFL practice promotion cap outcomes', () => {
     expect(promote(t, target.id, lg.cap)).toBe(true);
     expect(t).toEqual({ ...before, players: [...before.players, clone(target)], practice: before.practice!.slice(1) });
     expect(capRoom(t, lg.cap)).toBe(0.1); expect(t.players[t.players.length - 1]).toBe(target);
+  });
+
+  it('plays a full-roster elevation for one week and keeps just the weekly charge', () => {
+    const { lg, t } = fixture(20, 0, 53), target = t.practice![0];
+    openPractice(lg);
+    const item = row(target.id);
+    expect(within(item).getByRole('button', { name: 'Call up' })).toBeDisabled();
+    fireEvent.click(within(item).getByRole('button', { name: 'Elevate for Week 1' }));
+    expect(read().league.teams.KC.players).toHaveLength(53);
+    expect(capRoom(read().league.teams.KC, lg.cap)).toBe(18.9);
+    cleanup();
+    render(<FrontOfficeBoard />);
+    fireEvent.click(screen.getByText('Roster'));
+    fireEvent.click(document.querySelector('[data-roster-group="practice"]')!);
+    expect(within(row(target.id)).getByRole('button', { name: 'Cancel elevation' })).toBeEnabled();
+    fireEvent.click(screen.getByText('Hub'));
+    fireEvent.click(screen.getByText('This week'));
+    fireEvent.click(screen.getByRole('button', { name: 'Play Week 1' }));
+    const next = read().league;
+    expect(next.week).toBe(2);
+    expect(next.teams.KC.players).toHaveLength(53);
+    expect(next.teams.KC.practice?.find(p => p.id === target.id)).toMatchObject({ salary: 18, years: 3 });
+    expect(capRoom(next.teams.KC, next.cap)).toBe(18.9);
+    expect(next.stats?.lines.KC?.[target.id]?.[0]).toBe(target.name);
+    fireEvent.click(screen.getByRole('button', { name: 'Play Week 2' }));
+    expect(read().league.stats?.lines.KC?.[target.id]).toEqual(next.stats?.lines.KC?.[target.id]);
+    expect(capRoom(read().league.teams.KC, lg.cap)).toBe(18.9);
+  });
+
+  it('limits two players per game and three games per player, and resets in the offseason', () => {
+    const { lg, t } = fixture(40, 0, 53);
+    const [target, second] = t.practice!;
+    const third = player('promotion-practice-3', 'RB', 1.7);
+    t.practice!.push(third);
+    expect(setPracticeElevation(lg, 'KC', target.id, true)).toBe(true);
+    expect(setPracticeElevation(lg, 'KC', target.id, true)).toBe(false);
+    expect(setPracticeElevation(lg, 'KC', second.id, true)).toBe(true);
+    expect(setPracticeElevation(lg, 'KC', third.id, true)).toBe(false);
+    expect(setPracticeElevation(lg, 'KC', second.id, false)).toBe(true);
+    expect(setPracticeElevation(lg, 'KC', third.id, true)).toBe(true);
+    expect(starterIds(t).has(target.id)).toBe(false);
+    withPracticeElevations(lg, 'KC', () => {
+      expect(t.players).toHaveLength(55);
+      expect(starterIds(t).has(target.id)).toBe(true);
+    });
+    for (lg.week = 2; lg.week <= 3; lg.week++) {
+      expect(setPracticeElevation(lg, 'KC', target.id, true)).toBe(true);
+      withPracticeElevations(lg, 'KC', () => expect(t.players).toHaveLength(54));
+    }
+    expect(setPracticeElevation(lg, 'KC', target.id, true)).toBe(false);
+    expect(t.players).toHaveLength(53);
+    expect(capRoom(t, lg.cap)).toBe(36.6);
+    lg.week = 18;
+    expect(setPracticeElevation(lg, 'KC', second.id, true)).toBe(false);
+    runOffseason(lg, seeded(102), 'KC');
+    expect(t.practiceElevations).toBeUndefined();
+  });
+
+  it('releases a canceled reservation and preserves a permanent promotion', () => {
+    const { lg, t } = fixture(20, 0, 52), target = t.practice![0];
+    expect(setPracticeElevation(lg, 'KC', target.id, true)).toBe(true);
+    expect(promoteFromPractice(t, target.id, lg.cap)).toBe(false);
+    expect(setPracticeElevation(lg, 'KC', target.id, false)).toBe(true);
+    expect(capRoom(t, lg.cap)).toBe(20);
+    expect(t.practiceElevations).toBeUndefined();
+    expect(promoteFromPractice(t, target.id, lg.cap)).toBe(true);
+    expect(t.players).toContain(target);
+    expect(capRoom(t, lg.cap)).toBe(2);
+  });
+
+  it('refuses unaffordable or injured players and cancels an elevation if cap room is spent before kickoff', () => {
+    const { lg, t } = fixture(1.1, 0, 53), [target, second] = t.practice!;
+    second.out = 2;
+    expect(setPracticeElevation(lg, 'KC', second.id, true)).toBe(false);
+    expect(setPracticeElevation(lg, 'KC', target.id, true)).toBe(true);
+    second.out = 0;
+    expect(setPracticeElevation(lg, 'KC', second.id, true)).toBe(false);
+    t.players[0].salary += 0.1;
+    withPracticeElevations(lg, 'KC', () => expect(t.players).toHaveLength(53));
+    expect(t.practiceElevations).toBeUndefined();
+    expect(capRoom(t, lg.cap)).toBe(1);
+  });
+
+  it('holds an older save byte for byte and drops a mismatched reservation safely', () => {
+    const { lg, t } = fixture(20, 0, 53), target = t.practice![0];
+    const bytes = JSON.stringify(lg);
+    cleanPracticeElevations(lg);
+    expect(withPracticeElevations(lg, 'KC', () => t.players.length)).toBe(53);
+    expect(JSON.stringify(lg)).toBe(bytes);
+    expect(setPracticeElevation(lg, 'KC', target.id, true)).toBe(true);
+    lg.week += 1;
+    cleanPracticeElevations(lg);
+    expect(t.practiceElevations).toBeUndefined();
+    expect(capRoom(t, lg.cap)).toBe(20);
   });
 });

@@ -173,7 +173,8 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Working a 53 man roster and the practice squad",
         items: [
-          "The Roster box opens on one tile per position group plus one for the practice squad, so fifty men never turn into one long list. The men at the top of each group's depth chart start, the bench steps in when a starter gets hurt, and the practice squad sits off the cap until you call a man up. A call-up needs a roster spot and room for his displayed fictional salary, including dead money. The roster holds 53: at the limit you cut or trade before you can sign anybody.",
+          "Open Roster, then Practice squad. A permanent call-up needs a spot on the 53-player roster and room for his displayed fictional salary, including dead money. At the limit, cut or trade before signing anyone permanently.",
+          "Need cover for one regular-season game? Elevate up to two practice squad players, even with 53 on the roster. Each player can be elevated three times per season. For example, if your starting quarterback is hurt, elevate a backup, play the week, and he goes back to practice. The game counts one week's share of his displayed fictional salary against your season cap. Cancel before playing to free the reserved amount.",
         ],
       },
       {
