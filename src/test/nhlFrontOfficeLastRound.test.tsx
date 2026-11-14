@@ -118,7 +118,7 @@ describe('NHL Front Office last round', () => {
       paired.round += 1;
       fireEvent.click(screen.getByRole('button', { name: `Play Round ${round}` }));
       historical.push({ round, wins: batch.myWins, losses: batch.myLosses, otLosses: batch.myOtLosses, changes });
-      expect(read().league).toEqual(paired);
+      expect(JSON.stringify(read().league)).toBe(JSON.stringify(paired));
       expect(read().roundHistory).toEqual({ team, season: league.season, rounds: historical });
       if (!changes.length) expect(roundResults().getByText('No rating changes this round.')).toBeVisible();
       moved += changes.length;
