@@ -18,6 +18,7 @@ import {
   nrlDevelopmentAffected, nrlDevelopmentAssistantProgress, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
   nrlLeagueRecruitmentPreview,
+  nrlOffseasonFreeAgentPreview, nrlOffseasonFreeAgentsAvailable,
   nrlRecruitmentBrief, nrlRecruitmentPlan,
   nrlSeasonOut, nrlSelectionPromise, nrlSelectionPromiseCandidates,
   nrlMutualReleaseQuote, nrlMutualReleaseSpend,
@@ -1734,13 +1735,14 @@ function SummerApplications({ career, onAction, disabled }: { career: NrlCareerS
   );
 }
 
-function LeagueRecruitment({ career, onAction, disabled, nextClubId }: {
-  career: NrlCareerState; onAction: Dispatch; disabled: boolean; nextClubId?: string;
+function LeagueRecruitment({ career, onAction, disabled, nextClubId, preferFreeAgents }: {
+  career: NrlCareerState; onAction: Dispatch; disabled: boolean; nextClubId?: string; preferFreeAgents: boolean;
 }) {
   const labelForClub = useNrlClubName();
   const [open, setOpen] = useState(false);
   const { year, clubId, phase, kickerId } = career.season;
-  const deals = useMemo(() => open ? nrlLeagueRecruitmentPreview(career, nextClubId) : null, [career, nextClubId, open]);
+  const deals = useMemo(() => open ? nrlLeagueRecruitmentPreview(career, nextClubId, preferFreeAgents) : null,
+    [career, nextClubId, open, preferFreeAgents]);
   if (phase !== 'complete' || career.legacySeason || career.retired || !kickerId || year + 2 > NRL_LAST_YEAR) return null;
   return (
     <details className="group mt-3 rounded-xl border border-border bg-background px-3" onToggle={event => setOpen(event.currentTarget.open)}>
@@ -1758,7 +1760,8 @@ function LeagueRecruitment({ career, onAction, disabled, nextClubId }: {
         {deals && (deals.length ? <>
           <p className="text-muted-foreground">{nextClubId
             ? `Projected deals if you join ${labelForClub(year + 1, nextClubId)}.`
-            : 'Projected deals if you stay. Taking another job excludes that club.'}</p>
+            : preferFreeAgents ? 'Projected deals if you stay and fill places with free agents.'
+              : 'Projected deals if you stay. Taking another job excludes that club.'}</p>
           <ul aria-label="Projected rival deals" className="divide-y divide-border">
             {deals.map(deal => <li key={deal.clubId} className="break-words py-1.5">
               <span className="font-semibold">{labelForClub(year + 1, deal.clubId)} · {deal.playerName}</span>
@@ -1767,6 +1770,42 @@ function LeagueRecruitment({ career, onAction, disabled, nextClubId }: {
           </ul>
         </> : <p className="text-muted-foreground">No rival has room for a second year.</p>)}
       </div>
+    </details>
+  );
+}
+
+function OffseasonFreeAgents({ career, checked, onChange, disabled }: {
+  career: NrlCareerState; checked: boolean; onChange: (checked: boolean) => void; disabled: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const preview = useMemo(() => open ? nrlOffseasonFreeAgentPreview(career) : null, [career, open]);
+  const year = career.season.year + 1;
+  return (
+    <details className="group mt-3 rounded-xl border border-border bg-background px-3" data-nrl-offseason-free-agents
+      onToggle={event => setOpen(event.currentTarget.open)}>
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Fill open squad places<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      {preview && <div className="space-y-2 border-t border-border pb-3 pt-2 text-sm">
+        <p className="text-muted-foreground">Your open Top 30 places usually go to academy players. If you stay at this club, you can give affordable free agents one-season deals before turning to the academy. Clubs draw from the same free-agent pool.</p>
+        {preview.signings.length > 0 ? (
+          <>
+            <label className="flex min-h-11 items-center gap-2 font-semibold">
+              <input type="checkbox" className="h-5 w-5 shrink-0 accent-primary" checked={checked} disabled={disabled}
+                onChange={event => onChange(event.target.checked)} />
+              Prefer free agents when starting {year}
+            </label>
+            <ul aria-label="Projected free-agent signings" className="divide-y divide-border">
+              {preview.signings.map(signing => (
+                <li key={signing.playerId} className="break-words py-1" data-nrl-fill-player={signing.playerId}>
+                  <strong>{signing.playerName}</strong><span className="text-muted-foreground"> · {signing.role} · {money(signing.annualSalary)}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="text-xs text-muted-foreground">{preview.academy} from the academy · {money(preview.available)} cap room after filling the squad.</p>
+          </>
+        ) : <p className="text-muted-foreground">Your remaining places go to academy players in this preview.</p>}
+      </div>}
     </details>
   );
 }
@@ -1786,6 +1825,10 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const mustMove = challengeStatus === 'must-move';
   const pastPlaces = new Map(career.history.map(record => [`${record.clubId}:${record.year}`, record.rank]));
   const [nextClubId, setNextClubId] = useState('');
+  const [freeAgentChoice, setFreeAgentChoice] = useState<{ year: number; clubId: string; seed: number }>();
+  const canChooseFreeAgents = nrlOffseasonFreeAgentsAvailable(career);
+  const preferFreeAgents = canChooseFreeAgents && freeAgentChoice?.year === year
+    && freeAgentChoice.clubId === clubId && freeAgentChoice.seed === career.season.seed;
   const clubSelect = useRef<HTMLSelectElement>(null);
   const clubs = nrlOffseasonClubs(career);
   const nextClub = clubs.find(club => club.id === nextClubId);
@@ -1884,9 +1927,12 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       {finished && employed && year < NRL_LAST_YEAR && <ExpiringDeals career={career} onAction={onAction} disabled={disabled} />}
       {!outOfWork && <AssistantExtension career={career} onAction={onAction} disabled={disabled} />}
       {!outOfWork && <LeagueRecruitment career={career} onAction={onAction} disabled={disabled}
-        nextClubId={nextClub?.id ?? (application?.response === 'offered' ? application.clubId : undefined)} />}
+        preferFreeAgents={preferFreeAgents} nextClubId={nextClub?.id ?? (application?.response === 'offered' ? application.clubId : undefined)} />}
+      {canChooseFreeAgents && <OffseasonFreeAgents career={career} checked={preferFreeAgents} disabled={disabled}
+        onChange={checked => setFreeAgentChoice(checked ? { year, clubId, seed: career.season.seed } : undefined)} />}
       {finished && employed && year < NRL_LAST_YEAR && !mustMove && (
-        <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled || needsJudiciary} onClick={() => onAction({ type: 'startNextSeason' })}>
+        <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled || needsJudiciary}
+          onClick={() => onAction({ type: 'startNextSeason', ...(preferFreeAgents && { freeAgents: { fromYear: year, clubId } }) })}>
           Start {year + 1}<ArrowRight aria-hidden="true" />
         </Button>
       )}
@@ -2003,6 +2049,20 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                       {record.leagueRecruitment.map(deal => <li key={deal.clubId} className="break-words py-1">
                         {labelForClub(record.year + 1, deal.clubId)} · {deal.playerName} · {money(deal.annualSalary)} per season through {record.year + 2}
                       </li>)}
+                    </ul>
+                  </details>
+                )}
+                {record.freeAgentFill && (
+                  <details data-nrl-recorded-free-agent-fill>
+                    <summary className="min-h-11 cursor-pointer py-2 text-sm font-semibold">
+                      Free agents signed for {record.year + 1} · {record.freeAgentFill.length}
+                    </summary>
+                    <ul aria-label="Recorded free-agent signings" className="divide-y divide-border pb-2 text-sm text-muted-foreground">
+                      {record.freeAgentFill.map(signing => (
+                        <li key={signing.playerId} className="break-words py-1" data-nrl-fill-player={signing.playerId}>
+                          {signing.playerName} · {signing.role} · {money(signing.annualSalary)}
+                        </li>
+                      ))}
                     </ul>
                   </details>
                 )}
