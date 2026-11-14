@@ -29,11 +29,13 @@ import {
   countryLabel,
   evaluateGuess,
   fetchPuckDetectivePool,
+  fetchUnlimitedPuckPool,
   isCorrectGuess,
   loadPuckDifficulty,
   pickDailyMystery,
   pickRandomMystery,
   positionLabel,
+  PUCK_UNLIMITED_ROSTER_DATE,
   savePuckDifficulty,
   teamLabel,
 } from '@/lib/puckDetective';
@@ -49,6 +51,7 @@ type StoredGuess = { playerId: number };
 
 const BEST_KEY = 'puck-detective-best-v1';
 const ROSTER_NOTE = "Team and jersey clues use the game's roster snapshot. Players may have since moved or become free agents.";
+const UNLIMITED_ROSTER_NOTE = `Unlimited uses NHL team rosters from ${PUCK_UNLIMITED_ROSTER_DATE}.`;
 
 function loadBestStreak(): number {
   try { return Number(localStorage.getItem(BEST_KEY)) || 0; } catch { return 0; }
@@ -152,6 +155,14 @@ const PuckDetective = () => {
 
   // --- Unlimited mode: local state, fresh mystery per round ------------------
   const [unlimitedMystery, setUnlimitedMystery] = useState<PuckDetectivePlayer | null>(null);
+  const [unlimitedPool, setUnlimitedPool] = useState<PuckDetectivePlayer[] | null>(null);
+  const [unlimitedPhase, setUnlimitedPhase] = useState<'idle' | 'boot' | 'ready' | 'error'>('idle');
+  const loadUnlimited = useCallback(async () => {
+    setUnlimitedPhase('boot');
+    const next = await fetchUnlimitedPuckPool();
+    setUnlimitedPool(next);
+    setUnlimitedPhase(next ? 'ready' : 'error');
+  }, []);
   const [unlimitedGuesses, setUnlimitedGuesses] = useState<StoredGuess[]>([]);
   const [unlimitedStatus, setUnlimitedStatus] = useState<'playing' | 'won' | 'lost'>('playing');
   const [streak, setStreak] = useState(0);
@@ -162,42 +173,38 @@ const PuckDetective = () => {
   const [difficulty, setDifficulty] = useState<PuckDifficulty>(loadPuckDifficulty);
 
   const startUnlimitedRound = useCallback(() => {
-    if (!pool) return;
-    const source = buildPuckPool(difficulty, pool);
+    if (!unlimitedPool) return;
+    const source = buildPuckPool(difficulty, unlimitedPool);
     const next = pickRandomMystery(source, unlimitedMystery?.playerId);
     setUnlimitedMystery(next);
     setUnlimitedGuesses([]);
     setUnlimitedStatus('playing');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pool, difficulty]);
+  }, [unlimitedPool, difficulty, unlimitedMystery?.playerId]);
 
   useEffect(() => {
-    if (pool && mode === 'unlimited' && !unlimitedMystery) startUnlimitedRound();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pool, mode]);
+    if (mode === 'unlimited' && unlimitedPool && !unlimitedMystery) startUnlimitedRound();
+  }, [mode, unlimitedPool, unlimitedMystery, startUnlimitedRound]);
 
   const switchMode = useCallback((m: Mode) => {
     setMode(m);
-    if (m === 'unlimited' && pool && !unlimitedMystery) startUnlimitedRound();
-  }, [pool, unlimitedMystery, startUnlimitedRound]);
+    if (m === 'unlimited' && unlimitedPhase === 'idle') void loadUnlimited();
+  }, [unlimitedPhase, loadUnlimited]);
 
   // #40: changing tier only applies in unlimited mode and starts a fresh
   // round (mirrors Career Quiz's changeDifficulty convention).
   const changeDifficulty = useCallback((next: PuckDifficulty) => {
-    if (mode !== 'unlimited' || !pool) return;
-    setDifficulty((prev) => {
-      if (prev === next) return prev;
-      savePuckDifficulty(next);
-      const nextPool = buildPuckPool(next, pool);
-      setUnlimitedMystery(pickRandomMystery(nextPool));
-      setUnlimitedGuesses([]);
-      setUnlimitedStatus('playing');
-      return next;
-    });
-  }, [mode, pool]);
+    if (mode !== 'unlimited' || !unlimitedPool || difficulty === next) return;
+    setDifficulty(next);
+    savePuckDifficulty(next);
+    const nextPool = buildPuckPool(next, unlimitedPool);
+    setUnlimitedMystery(pickRandomMystery(nextPool));
+    setUnlimitedGuesses([]);
+    setUnlimitedStatus('playing');
+  }, [mode, unlimitedPool, difficulty]);
 
   // --- Derived active state ---------------------------------------------------
   const mystery = mode === 'daily' ? dailyMystery : unlimitedMystery;
+  const activePool = mode === 'daily' ? pool : unlimitedPool;
   const storedGuesses = mode === 'daily' ? dailyStored : unlimitedGuesses;
   const gameStatus = mode === 'daily'
     ? (dailyGaveUp ? 'lost' : rawDailyStatus === 'playing' ? 'playing' : rawDailyStatus)
@@ -216,11 +223,11 @@ const PuckDetective = () => {
 
   const byId = useMemo(() => {
     const m = new Map<number, PuckDetectivePlayer>();
-    (pool ?? []).forEach((p) => m.set(p.playerId, p));
+    (activePool ?? []).forEach((p) => m.set(p.playerId, p));
     return m;
-  }, [pool]);
+  }, [activePool]);
   const guessSource = useMemo<PlayerSourceConfig>(() => {
-    const rows = (pool ?? []).map(({ playerId, name, team, position }) => ({
+    const rows = (activePool ?? []).map(({ playerId, name, team, position }) => ({
       player_id: playerId, full_name: name, team, position,
     }));
     return {
@@ -229,7 +236,7 @@ const PuckDetective = () => {
       metaColumns: { ...NHL_PLAYER_SOURCE.metaColumns, playerId: 'player_id' },
       local: async () => rows,
     };
-  }, [pool]);
+  }, [activePool]);
 
   const guesses: PuckGuess[] = useMemo(() => {
     if (!mystery) return [];
@@ -336,7 +343,10 @@ const PuckDetective = () => {
      nothing. */
   useGameCompletion('puck-detective', dailyGaveUp || rawDailyStatus !== 'playing', won ? (GUESS_LIMIT - guesses.length + 1) * 10 : 0);
 
-  const isLoading = phase === 'boot' || (mode === 'daily' && dailyLoading);
+  const isLoading = mode === 'daily'
+    ? phase === 'boot' || dailyLoading
+    : !unlimitedMystery && unlimitedPhase !== 'error';
+  const hasError = mode === 'daily' ? phase === 'error' : unlimitedPhase === 'error';
   const emojiGrid = mystery ? buildShareGrid(guesses) : '';
 
   return (
@@ -363,6 +373,7 @@ const PuckDetective = () => {
                   <li>Type a player name and pick them from the list</li>
                   <li>Each guess shows how close you are on 5 attributes</li>
                   <li>{ROSTER_NOTE}</li>
+                  <li>{UNLIMITED_ROSTER_NOTE} Daily keeps its original roster.</li>
                   <li>You have 8 guesses to find the mystery player</li>
                 </ul>
               </section>
@@ -438,22 +449,22 @@ const PuckDetective = () => {
           <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
         )}
 
-        {phase === 'error' && (
+        {hasError && (
           <div className="text-center py-12">
             <p className="text-destructive font-semibold mb-3">Couldn't load the NHL roster right now.</p>
-            <button onClick={boot} className="min-h-[44px] px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+            <button onClick={mode === 'daily' ? boot : loadUnlimited} className="min-h-[44px] px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
               Try again
             </button>
           </div>
         )}
 
-        {!isLoading && phase === 'playing' && mystery && (
+        {!isLoading && !hasError && mystery && (
           <>
             <div className="text-center mb-4">
               <span className="text-xs text-muted-foreground">
                 Guesses <span className="text-primary font-bold">{guesses.length}</span>/{GUESS_LIMIT}
               </span>
-              <p data-puck-roster-note className="mt-2 text-xs text-muted-foreground">{ROSTER_NOTE}</p>
+              <p data-puck-roster-note className="mt-2 text-xs text-muted-foreground">{mode === 'daily' ? ROSTER_NOTE : UNLIMITED_ROSTER_NOTE}</p>
             </div>
 
             {gameStatus === 'playing' && (
@@ -494,8 +505,8 @@ const PuckDetective = () => {
                       <span className="text-[10px] text-muted-foreground shrink-0">#{guesses.length - i}</span>
                     </div>
                     <div className={cn('flex flex-wrap gap-1.5', activeCue?.playerId === g.player.playerId && styles.attributeCue)}>
-                      <span data-puck-attribute="team" aria-label={`Team: ${teamLabel(g.player.team)}, ${tierDescription(g.feedback.team)}`} className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', tierChipClasses(g.feedback.team))}>
-                        {tierIcon(g.feedback.team)} {teamLabel(g.player.team)}
+                      <span data-puck-attribute="team" aria-label={`Team: ${teamLabel(g.player.team, mode === 'unlimited')}, ${tierDescription(g.feedback.team)}`} className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', tierChipClasses(g.feedback.team))}>
+                        {tierIcon(g.feedback.team)} {teamLabel(g.player.team, mode === 'unlimited')}
                       </span>
                       <span data-puck-attribute="position" aria-label={`Position: ${positionLabel(g.player.position)}, ${tierDescription(g.feedback.position)}`} className={cn('inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-semibold border', tierChipClasses(g.feedback.position))}>
                         {tierIcon(g.feedback.position)} {positionLabel(g.player.position)}

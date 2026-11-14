@@ -5,7 +5,13 @@ import { HelmetProvider } from 'react-helmet-async';
 import PuckDetective from '@/pages/PuckDetective';
 import { HOCKEY_CONTENT } from '@/data/gameContent/hockey';
 import { hubFor } from '@/lib/sportHub';
-import { evaluateGuess, teamLabel, type PuckDetectivePlayer } from '@/lib/puckDetective';
+import {
+  buildPuckPool,
+  evaluateGuess,
+  fetchUnlimitedPuckPool,
+  teamLabel,
+  type PuckDetectivePlayer,
+} from '@/lib/puckDetective';
 import { recordCompletion } from '@/lib/completions';
 import { consumeRestoredFinish } from '@/lib/restoredFinish';
 
@@ -75,6 +81,33 @@ it('keeps the snapshot notice on a restored finished round', async () => {
   expect(view.getByText(notice)).toBeVisible();
   expect(localStorage.getItem(saveKey)).toBe(saved);
   expect(recordCompletion).not.toHaveBeenCalled();
+});
+
+it('loads the dated roster on Unlimited, preserves Daily history and keeps both Elias Pettersson IDs', async () => {
+  const saved = JSON.stringify({ v: 1, date: '2026-11-10', puzzleIndex: 0, guesses: [{ playerId: players[0].playerId }], gameStatus: 'playing' });
+  localStorage.setItem(saveKey, saved);
+  const view = await start();
+  await act(async () => { fireEvent.click(view.getByRole('button', { name: '∞ Unlimited' })); });
+  expect(await view.findByText('Unlimited uses NHL team rosters from Nov 13, 2026.')).toBeVisible();
+  expect(view.queryByText(players[0].name)).toBeNull();
+  fireEvent.click(view.getByRole('button', { name: '📅 Daily' }));
+  expect(view.getByText(players[0].name)).toBeVisible();
+  expect(localStorage.getItem(saveKey)).toBe(saved);
+  expect(recordCompletion).not.toHaveBeenCalled();
+
+  const roster = (await fetchUnlimitedPuckPool())!;
+  expect(roster).toHaveLength(794);
+  expect(new Set(roster.map(player => player.team)).size).toBe(32);
+  expect(new Set(roster.map(player => player.playerId)).size).toBe(roster.length);
+  expect(roster.find(player => player.playerId === 8474037)).toBeUndefined();
+  const namesakes = roster.filter(player => player.name === 'Elias Pettersson');
+  expect(namesakes).toEqual([
+    expect.objectContaining({ playerId: 8480012, jerseyNumber: 40, careerPoints: 528 }),
+    expect.objectContaining({ playerId: 8483678, jerseyNumber: 25, careerPoints: 17 }),
+  ]);
+  expect(buildPuckPool('easy', roster)).toContain(namesakes[0]);
+  expect(buildPuckPool('easy', roster)).not.toContain(namesakes[1]);
+  expect(buildPuckPool('hard', roster)).toContain(namesakes[1]);
 });
 
 it('avoids claiming that the puzzle snapshot is a current NHL roster', () => {

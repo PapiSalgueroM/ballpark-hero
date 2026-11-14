@@ -21,7 +21,11 @@ vi.mock('@/integrations/supabase/client', () => ({ supabase: fixtureClient() }))
 vi.mock('@/integrations/supabase/loadClient', () => ({ loadSupabase: async () => fixtureClient() }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: () => {} }) }));
 vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: async () => [] }));
-vi.mock('@/lib/puckDetective', async original => ({ ...await original<typeof import('@/lib/puckDetective')>(), fetchPuckDetectivePool: vi.fn(async () => pool) }));
+vi.mock('@/lib/puckDetective', async original => ({
+  ...await original<typeof import('@/lib/puckDetective')>(),
+  fetchPuckDetectivePool: vi.fn(() => Promise.resolve(pool)),
+  fetchUnlimitedPuckPool: vi.fn(() => Promise.resolve(pool)),
+}));
 vi.mock('@/lib/playerSearch', async original => {
   const actual = await original<typeof import('@/lib/playerSearch')>();
   return { ...actual, searchPlayers: vi.fn(async (options: SearchPlayersOptions) => {
@@ -188,7 +192,8 @@ describe('Puck Detective committed guess feedback', () => {
 
   it('keeps mode changes difficulty resets and new rounds quiet while preserving unlimited streak and best', async () => {
     const view = await start(); clock(); await guess(view, misses[0]);
-    fireEvent.click(view.getByRole('button', { name: '∞ Unlimited' })); expect(cues(view)).toHaveLength(0);
+    await act(async () => { fireEvent.click(view.getByRole('button', { name: '∞ Unlimited' })); });
+    expect(cues(view)).toHaveLength(0);
     fireEvent.click(view.getByRole('button', { name: '📅 Daily' })); expect(cues(view)).toHaveLength(0);
     fireEvent.click(view.getByRole('button', { name: '∞ Unlimited' }));
     await guess(view, pool[0]); expect(view.getByRole('heading', { name: 'Case closed!' })).toBeVisible();
@@ -211,7 +216,8 @@ describe('Puck Detective committed guess feedback', () => {
     expect(grid).toBe('🟥🟨🟥🟨🟨\n🟩🟥🟩🟨🟩\n🟩🟩🟩🟩🟩');
     await act(async () => fireEvent.click(view.getByRole('button', { name: '📋 Copy Score Card' })));
     expect(clipboard).toHaveBeenCalledTimes(1); expect(clipboard.mock.calls[0][0]).toContain(grid); expect(clipboard.mock.calls[0][0]).toContain('3/8');
-    fireEvent.click(view.getByRole('button', { name: '∞ Unlimited' })); fireEvent.click(view.getByRole('button', { name: '📅 Daily' }));
+    await act(async () => { fireEvent.click(view.getByRole('button', { name: '∞ Unlimited' })); });
+    fireEvent.click(view.getByRole('button', { name: '📅 Daily' }));
     expect(recordCompletion).toHaveBeenCalledTimes(1); expect(cues(view)).toHaveLength(0); const raw = localStorage.getItem(saveKey); view.unmount();
     const reload = render(element()); await act(async () => {}); reload.getByRole('heading', { name: 'Case closed!' });
     expect(recordCompletion).toHaveBeenCalledTimes(1); expect(localStorage.getItem(saveKey)).toBe(raw); expect(cues(reload)).toHaveLength(0);
@@ -231,7 +237,7 @@ describe('Puck Detective committed guess feedback', () => {
     const view = await start(); const row = await guess(view, misses[0]); const name = within(row).getByText(misses[0].name);
     expect(name).toHaveClass(styles.fullName); expect(name).not.toHaveClass('truncate');
     for (const label of ['📅 Daily', '∞ Unlimited']) expect(view.getByRole('button', { name: label })).toHaveClass('min-h-[44px]');
-    fireEvent.click(view.getByRole('button', { name: '∞ Unlimited' }));
+    await act(async () => { fireEvent.click(view.getByRole('button', { name: '∞ Unlimited' })); });
     for (const label of ['easy', 'normal', 'hard']) expect(view.getByRole('button', { name: label })).toHaveClass('min-h-[44px]');
   });
 
