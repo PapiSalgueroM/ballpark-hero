@@ -35,6 +35,22 @@ export function readFantasyDraft(key: string): string | null {
   catch { return null; }
 }
 
+export function withFantasyDraftLock(key: string, commit: () => void): void {
+  const locks = navigator.locks;
+  if (!locks) { commit(); return; }
+  let entered = false;
+  try {
+    void locks.request(key, () => {
+      entered = true;
+      commit();
+    }).catch(() => {
+      if (!entered) commit();
+    });
+  } catch {
+    if (!entered) commit();
+  }
+}
+
 export function restoreFantasyDraft(save: FantasyDraftSave, pool: DraftPlayer[]) {
   const rule = ruleForCriteria(save.criteria);
   const draftedIds = new Set<string>();

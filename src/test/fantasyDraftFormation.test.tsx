@@ -46,6 +46,17 @@ function fixture(): DraftPlayer[] {
       market_value_millions: value, age: 24,
     })));
 }
+function beforeFinalPick(userFirst: boolean) {
+  const positions = ['GK', 'DEF', 'DEF', 'DEF', 'DEF', 'MID', 'MID', 'MID', 'FWD', 'FWD', 'FWD'];
+  const used = new Map<string, number>();
+  const allPicks = positions.flatMap((position, index) => {
+    const offset = used.get(position) ?? 0;
+    used.set(position, offset + 1);
+    return [0, 1].map(seat => ['fixture', position, 2 * offset + (seat + index) % 2].join('-'));
+  });
+  return { receipt: { v: 1, date: getTodayET(), userFirst, criteria: null, picks: allPicks.slice(0, -1) },
+    final: remote.players.find(p => p.id === allPicks[allPicks.length - 1])! };
+}
 function roster(view: RenderResult, side: 'Your XI' | 'AI XI'): DraftPlayer[] {
   const column = view.getByText(side, { exact: true }).parentElement!.parentElement!;
   return [...column.querySelectorAll('[data-draft-slot]')].flatMap(slot => {
@@ -193,6 +204,77 @@ describe('Fantasy Draft unfinished receipt', () => {
     expect(within(b.container).getByRole('status', { name: 'Your formation' })).toHaveTextContent('GK 0/1');
     expect(localStorage.getItem(key())).toBe(saved);
     expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
+  it('accepts only one final pick when the same receipt is open in two views', async () => {
+    const { receipt, final } = beforeFinalPick(false);
+    localStorage.setItem(key(), JSON.stringify(receipt));
+    const renderDraft = () => render(<FantasyDraft />, { container: document.body.appendChild(document.createElement('div')) });
+    const a = renderDraft();
+    const b = renderDraft();
+    for (const view of [a, b]) fireEvent.click(within(view.container).getByRole('button', { name: 'Resume Draft' }));
+    await act(async () => {});
+    const finalButtons = [a, b].map(view => {
+      const scope = within(view.container);
+      expect(scope.getByText('Round 11 • Pick 22/22')).toBeVisible();
+      fireEvent.change(scope.getByRole('textbox', { name: 'Search players' }), { target: { value: final.name } });
+      const button = scope.getByText(final.name, { selector: 'p', exact: true }).closest('button')!;
+      expect(button).toBeEnabled();
+      return button;
+    });
+    await act(async () => { finalButtons.forEach(button => fireEvent.click(button)); });
+    expect(within(a.container).getByText('Draft Complete!', { exact: true })).toBeVisible();
+    expect(within(b.container).getByText(/Your saved draft changed in another tab/)).toBeVisible();
+    expect(within(b.container).queryByText('Draft Complete!', { exact: true })).toBeNull();
+    expect(settleSeason).toHaveBeenCalledTimes(1);
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+    expect(localStorage.getItem(key())).toBeNull();
+  });
+
+  it.each(['newer receipt', 'unmount', 'retry AI clear'] as const)('protects the queued final pick during %s', async scenario => {
+    const { receipt } = beforeFinalPick(true);
+    const original = JSON.stringify(receipt);
+    localStorage.setItem(key(), original);
+    const view = render(<FantasyDraft />);
+    fireEvent.click(view.getByRole('button', { name: 'Resume Draft' }));
+    await act(async () => {});
+    expect(view.getByText('Round 11 • Pick 22/22')).toBeVisible();
+    expect(view.getByText('AI is picking...', { exact: true })).toBeVisible();
+    let accept!: () => void;
+    const locks = Object.getOwnPropertyDescriptor(navigator, 'locks');
+    Object.defineProperty(navigator, 'locks', { configurable: true, value: {
+      request: (_name: string, run: () => void) => new Promise<void>(resolve => {
+        accept = () => { run(); resolve(); };
+      }),
+    } });
+    try {
+      await act(async () => { vi.advanceTimersByTime(2000); });
+      expect(accept).toEqual(expect.any(Function));
+      expect(localStorage.getItem(key())).toBe(original);
+      if (scenario === 'retry AI clear') {
+        const remove = vi.spyOn(Storage.prototype, 'removeItem').mockImplementationOnce(() => { throw new Error('Refused'); });
+        await act(async () => { accept(); });
+        expect(remove).toHaveBeenCalledWith(key());
+        expect(localStorage.getItem(key())).toBe(original);
+        expect(recordCompletion).not.toHaveBeenCalled();
+        fireEvent.click(view.getByRole('button', { name: 'Retry final pick' }));
+        await act(async () => { accept(); });
+        expect(view.getByText('Draft Complete!', { exact: true })).toBeVisible();
+        expect(recordCompletion).toHaveBeenCalledTimes(1);
+        expect(localStorage.getItem(key())).toBeNull();
+      } else {
+        const held = scenario === 'unmount' ? original : JSON.stringify({ ...receipt, userFirst: false, picks: receipt.picks.slice(0, 1) });
+        localStorage.setItem(key(), held);
+        if (scenario === 'unmount') view.unmount();
+        await act(async () => { accept(); });
+        expect(localStorage.getItem(key())).toBe(held);
+        expect(recordCompletion).not.toHaveBeenCalled();
+        if (scenario === 'newer receipt') expect(view.getByText(/Your saved draft changed in another tab/)).toBeVisible();
+      }
+    } finally {
+      if (locks) Object.defineProperty(navigator, 'locks', locks);
+      else Reflect.deleteProperty(navigator, 'locks');
+    }
   });
 
   it('retries a failed pool request while holding the original resume', async () => {
