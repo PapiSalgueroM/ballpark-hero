@@ -16,6 +16,7 @@ import {
 } from '@/lib/fightPromoter';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import BoxingShowForecast from '@/components/fight-promoter/BoxingShowForecast';
+import { BOXING_SAVE_KEY as SAVE_KEY } from '@/lib/fightPromoterRoutes';
 
 /* Round 955: the new ending, written down where the player can reopen it,
    because the page's guide lives in a file another lane is editing. */
@@ -45,7 +46,6 @@ function HandOverRules() {
 
 type Phase = 'setup' | 'hub' | 'result' | 'closed';
 
-const SAVE_KEY = 'fight-promoter-save-v1';
 
 export default function FightPromoterBoard() {
   const [phase, setPhase] = useState<Phase>('setup');

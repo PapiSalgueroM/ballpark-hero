@@ -1,27 +1,42 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import FightPromoterBoard from '@/components/fight-promoter/FightPromoterBoard';
 import MmaPromotionBoard from '@/components/fight-promoter/MmaPromotionBoard';
+import {
+  FIGHT_PROMOTER_MODE_KEY, fightPromoterModeFromSearch, savedFightPromoterMode, type FightPromoterMode,
+} from '@/lib/fightPromoterRoutes';
 
-type Mode = 'mma' | 'boxing' | null;
-const MODE_KEY = 'fight-promoter-mode-v1';
+type Mode = FightPromoterMode | null;
 
 function savedMode(): Mode {
+  try { return savedFightPromoterMode(localStorage); }
+  catch { return null; }
+}
+
+function rememberMode(mode: Mode): void {
   try {
-    const mode = localStorage.getItem(MODE_KEY);
-    if (mode === 'mma' || mode === 'boxing') return mode;
-    if (localStorage.getItem('fight-promoter-save-v1')) return 'boxing';
-  } catch { /* Mode selection works without storage. */ }
-  return null;
+    if (mode) localStorage.setItem(FIGHT_PROMOTER_MODE_KEY, mode);
+    else localStorage.removeItem(FIGHT_PROMOTER_MODE_KEY);
+  } catch { /* The promotion handles its own save notice. */ }
 }
 
 export default function FightPromoterModes() {
-  const [mode, setMode] = useState<Mode>(savedMode);
+  const [search, setSearch] = useSearchParams();
+  const requested = fightPromoterModeFromSearch(search);
+  const [preferred, setPreferred] = useState<Mode>(savedMode);
+  const mode = requested ?? preferred;
+  useEffect(() => {
+    if (!requested) return;
+    setPreferred(requested);
+    rememberMode(requested);
+  }, [requested]);
   const choose = (next: Mode) => {
-    setMode(next);
-    try {
-      if (next) localStorage.setItem(MODE_KEY, next);
-      else localStorage.removeItem(MODE_KEY);
-    } catch { /* The promotion handles its own save notice. */ }
+    setPreferred(next);
+    rememberMode(next);
+    const params = new URLSearchParams(search);
+    if (next) params.set('mode', next);
+    else params.delete('mode');
+    setSearch(params, { replace: true });
   };
   if (!mode) return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

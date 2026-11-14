@@ -200,7 +200,8 @@ await build({
       /* Round 717 */
       import { ContinueRow } from './src/components/home/ContinueRow';
       import { FavouriteSport } from './src/components/home/FavouriteSport';
-      export { CONTINUE_SAVES, describeSave, savedGames, SAVE_NAME_MAX } from './src/data/continueSaves';
+      export { CONTINUE_SAVES, continueSaveEntries, describeSave, savedGames, SAVE_NAME_MAX } from './src/data/continueSaves';
+      export { FIGHT_PROMOTER_MODE_KEY } from './src/lib/fightPromoterRoutes';
       export { SAVED_FALLBACK } from './src/components/home/ContinueRow';
       export { VISIBLE_CATEGORIES } from './src/data/gameRegistry';
       export { favouriteFirst, readFavouriteSport, FAVOURITE_SPORT_KEY } from './src/data/homeFront';
@@ -543,6 +544,7 @@ console.log('6) the rail is the same for everybody: no ticks, no counts, no read
 console.log('7) Continue playing: the right keys, real fields, hostile saves, one card per save');
 {
   const { CONTINUE_SAVES, describeSave, savedGames, SAVE_NAME_MAX, SAVED_FALLBACK } = front;
+  const { continueSaveEntries, FIGHT_PROMOTER_MODE_KEY } = front;
   /* The file that declares each game's SAVE_KEY, then the files that declare
      the shape of what it saves. Typed here, apart from the list it checks. */
   const WHERE = {
@@ -564,7 +566,8 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     '/aussie-rules-manager': ['src/lib/aussieRulesLeague.ts', 'src/lib/aussieRulesManager.ts'],
     '/nrl-team-manager': ['src/lib/nrlManager.ts', 'src/lib/nrlCareer.ts'],
     '/fight-career': ['src/components/fight-career/FightCareerBoard.tsx', 'src/lib/fightCareer.ts'],
-    '/fight-promoter': ['src/components/fight-promoter/FightPromoterBoard.tsx', 'src/lib/fightPromoter.ts'],
+    '/fight-promoter': ['src/lib/fightPromoterRoutes.ts', 'src/components/fight-promoter/FightPromoterBoard.tsx', 'src/lib/fightPromoter.ts'],
+    '/fight-promoter?mode=mma': ['src/lib/fightPromoterRoutes.ts', 'src/hooks/useMmaPromotion.ts', 'src/lib/mmaPromotion.ts'],
     '/fight-gym': ['src/components/fight-gym/FightGymBoard.tsx', 'src/lib/fightGym.ts'],
     '/hall-of-champions': ['src/lib/hallOfChampions.ts'],
     '/idle-arena': ['src/lib/idleArena.ts'],
@@ -584,7 +587,10 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
      declares its key (the first file listed for it above), and the shared
      board is the file that writes the save, so the wrapper check in d reads
      it there. Every other game writes its save from its first file. */
-  const WRITER = Object.fromEntries(US_CAREER_SPORTS.map(s => [s.route, US_CAREER_BOARD]));
+  const WRITER = {
+    ...Object.fromEntries(US_CAREER_SPORTS.map(s => [s.route, US_CAREER_BOARD])),
+    '/fight-promoter': 'src/components/fight-promoter/FightPromoterBoard.tsx',
+  };
   for (const why of allWrapperProblems(ROOT)) fail(7, why);
   for (const s of US_CAREER_SPORTS) {
     if (s.slug === 'nba' && !code(s.binding).includes("import { NBA_CAREER_CREATE, NBA_CAREER_SAVE_KEY } from './nbaCareerCreation';")) {
@@ -613,15 +619,18 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
 
   /* a: live games, one card each */
   const paths = CONTINUE_SAVES.map(e => e.path);
-  const keys = CONTINUE_SAVES.map(e => e.saveKey);
-  const allKeys = CONTINUE_SAVES.flatMap(e => [e.saveKey, ...(e.alternateSaveKeys ?? [])]);
+  const mma = continueSaveEntries(CONTINUE_SAVES.find(e => e.path === '/fight-promoter')).find(e => e.path.endsWith('mode=mma'));
+  if (!mma) throw new Error('Fight Promoter has no MMA Continue entry');
+  const checkedEntries = [...CONTINUE_SAVES, mma];
+  const keys = checkedEntries.map(e => e.saveKey);
+  const allKeys = CONTINUE_SAVES.flatMap(e => continueSaveEntries(e).map(save => save.saveKey));
   if (CONTINUE_SAVES.length < 15) fail(7, `the list holds only ${CONTINUE_SAVES.length} games, so this measured almost nothing`);
   for (const p of paths) if (!gameByPath.has(p)) fail(7, `${p} is on the Continue list and is not a live registry game`);
   if (new Set(paths).size !== paths.length) fail(7, 'a game is on the Continue list twice');
   if (new Set(allKeys).size !== allKeys.length) fail(7, 'two Continue entries share a save key');
 
   /* b: each key is the one its game declares */
-  for (const e of CONTINUE_SAVES) {
+  for (const e of checkedEntries) {
     const files = WHERE[e.path];
     if (!files) { fail(7, `${e.path} is on the list and this harness does not know where its save is declared`); continue; }
     const declared = [...code(files[0]).matchAll(SAVE_CONST)].map(m => m[2]);
@@ -653,7 +662,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
 
   /* d: every field a card reads is one the game's own code declares */
   let fieldsChecked = 0;
-  for (const e of CONTINUE_SAVES) {
+  for (const e of checkedEntries) {
     const files = WHERE[e.path];
     if (!files) continue;
     const src = files.map(code).join('\n');
@@ -747,13 +756,15 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   const cold = withWindow(() => front.renderContinue());
   if (cold !== '') fail(7, `with no save in the browser the row renders ${cold.length} characters instead of nothing`);
   if (savedGames(globalThis.localStorage).length !== 0) fail(7, 'savedGames finds a save in an empty browser');
-  if (reads.some(k => !allKeys.includes(k))) fail(7, `the row asks storage for ${reads.filter(k => !allKeys.includes(k)).join(', ')}, which is not a save key`);
+  const allowedReads = [...allKeys, FIGHT_PROMOTER_MODE_KEY];
+  if (reads.some(k => !allowedReads.includes(k))) fail(7, `the row asks storage for an unregistered key: ${reads.filter(k => !allowedReads.includes(k)).join(', ')}`);
   for (const e of CONTINUE_SAVES) {
     store.clear();
     store.set(e.saveKey, '{}');
     const got = cards(withWindow(() => front.renderContinue()));
     const g = gameByPath.get(e.path);
-    if (got.length !== 1 || got[0].href !== e.path) fail(7, `a save under ${JSON.stringify(e.saveKey)} renders ${JSON.stringify(got.map(c => c.href))}, not one card for ${e.path}`);
+    const target = continueSaveEntries(e)[0].path;
+    if (got.length !== 1 || got[0].href !== target) fail(7, `a save under ${JSON.stringify(e.saveKey)} renders ${JSON.stringify(got.map(c => c.href))}, not one card for ${target}`);
     else if (g && !(got[0].inner.includes(g.label) && got[0].inner.includes(SAVED_FALLBACK))) fail(7, `the ${e.path} card reads ${JSON.stringify(got[0].inner)}`);
   }
   /* Round 1014: the legacy ten round action log still resumes on its own page,
@@ -792,7 +803,8 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   for (const e of CONTINUE_SAVES) store.set(e.saveKey, '{}');
   const all = cards(withWindow(() => front.renderContinue())).map(c => c.href);
   store.clear();
-  if (JSON.stringify(all) !== JSON.stringify(paths)) fail(7, `with every save planted the row shows ${all.length} cards, not the ${paths.length} on the list in order`);
+  const targets = CONTINUE_SAVES.map(e => continueSaveEntries(e)[0].path);
+  if (JSON.stringify(all) !== JSON.stringify(targets)) fail(7, `with every save planted the row shows ${all.length} cards, not the ${paths.length} on the list in order`);
   if (!failedSections.has(7)) {
     console.log(`   ${CONTINUE_SAVES.length} games, every key the game's own, ${found.size} save keys in src all accounted for (${Object.keys(EXCUSED).length} excused), ${fieldsChecked} fields declared by the games`);
     console.log(`   ${Object.keys(engine).length} engine built saves and ${Object.values(SAMPLES).flat().length} shaped saves read right, ${hostileRuns} hostile saves survived, empty with none, one card per save`);

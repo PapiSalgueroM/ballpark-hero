@@ -1,11 +1,12 @@
 import { useCallback, useRef, useState } from 'react';
+import { MMA_SAVE_KEY as MMA_STORAGE_KEY } from '@/lib/fightPromoterRoutes';
 import {
   advanceMmaMonth, closeMmaPromotion, isMmaPlan, loadMmaPromotion, MMA_REST_COST, newMmaPromotion,
   runMmaEvent, signMmaFighter, validateMmaPlan,
   type MmaBooking, type MmaPlan, type MmaPromotion,
 } from '@/lib/mmaPromotion';
 
-export const MMA_STORAGE_KEY = 'dukb-mma-promoter-v1';
+export { MMA_SAVE_KEY as MMA_STORAGE_KEY } from '@/lib/fightPromoterRoutes';
 export type MmaView = 'dashboard' | 'result' | 'closed';
 interface MmaSession {
   state: MmaPromotion | null; plan: MmaPlan; view: MmaView; resultIndex: number | null; notice: string | null;

@@ -1,4 +1,5 @@
 import { CONTINUE_SAVES, resolveContinueSave, type ContinueSave } from '@/data/continueSaves';
+import { FIGHT_PROMOTER_PATH, savedFightPromoterMode } from '@/lib/fightPromoterRoutes';
 
 /**
  * Round 958: a broken save never traps a game.
@@ -72,13 +73,22 @@ export function routeSaveEntry(pathname: string): ContinueSave | null {
  * starting fresh would change nothing and the button would be a false promise.
  */
 export function heldSaveEntry(pathname: string, storage: SaveStorage | null): ContinueSave | null {
-  const entry = routeSaveEntry(pathname);
+  const entry = routeSaveEntry(fightPromoterSaveAddress(pathname, storage));
   if (!entry || !storage) return null;
   try {
     return storage.getItem(entry.saveKey) !== null ? entry : null;
   } catch {
     return null;
   }
+}
+
+/** Use the mode currently opened on the bare Fight Promoter route for save actions. */
+export function fightPromoterSaveAddress(address: string, storage: Pick<Storage, 'getItem'> | null): string {
+  if (routeOf(address) !== FIGHT_PROMOTER_PATH) return address;
+  const url = new URL(address, 'https://douknowball.com');
+  if (url.searchParams.has('mode')) return address;
+  const mode = savedFightPromoterMode(storage);
+  return mode === 'mma' ? FIGHT_PROMOTER_PATH + '?mode=mma' : address;
 }
 
 /** heldSaveEntry for the page the browser is on right now. Never throws. */
