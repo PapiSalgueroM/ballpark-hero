@@ -7748,6 +7748,19 @@ function compareFullbackFit(a: CMPlayer, b: CMPlayer, slot: FormationSlot): numb
   return Number(holdsSide(b)) - Number(holdsSide(a));
 }
 
+let legacyFullbackSelection = false;
+
+/** Apply the old selection policy during one synchronous replay. */
+export function withLegacyFullbackSelection<T>(fn: () => T): T {
+  const previous = legacyFullbackSelection;
+  legacyFullbackSelection = true;
+  try {
+    return fn();
+  } finally {
+    legacyFullbackSelection = previous;
+  }
+}
+
 export function autoPickXI(squad: CMPlayer[], formation: Formation, fresh = false): (string | null)[] {
   const used = new Set<string>();
   const xi: (string | null)[] = [];
@@ -7758,7 +7771,7 @@ export function autoPickXI(squad: CMPlayer[], formation: Formation, fresh = fals
     const fits = squad
       .filter(p => isAvailable(p) && !used.has(p.id) && heldPositions(p).some(pos => slot.allowed.includes(pos)))
       // A centre-back can cover either side when a specialist is unavailable.
-      .sort((a, b) => compareFullbackFit(a, b, slot) || order(a, b));
+      .sort(legacyFullbackSelection ? order : (a, b) => compareFullbackFit(a, b, slot) || order(a, b));
     let chosen: CMPlayer | null = fits[0] ?? null;
     if (!chosen) {
       const any = squad
@@ -12226,11 +12239,12 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
   const cutPct = p.sellOnOwed?.pct ?? 0;
   const cut = cutPct > 0 ? Math.round(bid.offer * (cutPct / 100) * 10) / 10 : 0;
   const netFee = Math.round((bid.offer - cut) * 10) / 10;
+  const departureLines = recordLeagueDeparture(career, p);
   const state: CareerState = {
     ...career,
     budget: Math.round((career.budget + netFee) * 10) / 10,
     squad: career.squad.filter(x => x.id !== playerId),
-    departedLeagueLines: recordLeagueDeparture(career, p),
+    ...(departureLines === undefined ? {} : { departedLeagueLines: departureLines }),
     xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
     /* Round 505: the armband and the set pieces never travel. */
     setPieces: setPiecesWithout(career.setPieces, playerId),
@@ -14754,7 +14768,7 @@ function worldUelField(state: CareerState, tables: { league: Pick<LeagueDef, 'id
  * stripped of worldComps anyway; this skips opening them, which cost a daily start a median of 55 ms a date on a
  * runner (simWorldEuro section 6). Opening draws nothing, so no deal moves either way.
  */
-export interface StartCareerOptions { noWorldComps?: boolean; championshipPlayoffs?: true; bundesligaPlayoff?: true; frenchPlayoffs?: true; inSeasonRatings?: true; worldRatingTiming?: true }
+export interface StartCareerOptions { noWorldComps?: boolean; kLeagueActive?: boolean; championshipPlayoffs?: true; bundesligaPlayoff?: true; frenchPlayoffs?: true; inSeasonRatings?: true; worldRatingTiming?: true }
 /** The options both dailies start a career with. */
 export const DAILY_START: StartCareerOptions = { noWorldComps: true };
 /* The states a start was asked to open nothing on, read by openWorldUclOnStart (a set of objects, never saved). */
@@ -16866,7 +16880,7 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
     if (!p || !isAvailable(p) || used.has(p.id)) {
       /* Use the match's fit-adjusted rating after preferring a fullback
          specialist. Keep later manual assignments when covering a fullback. */
-      const fullback = slot.label === 'RB' || slot.label === 'LB';
+      const fullback = !legacyFullbackSelection && (slot.label === 'RB' || slot.label === 'LB');
       const assigned = fullback ? new Set(state.xiIds.slice(i + 1, formation.slots.length)) : null;
       const worth = (x: CMPlayer) => x.rating - fitPenalty(x, slot);
       const open = state.squad.filter(x => isAvailable(x) && !used.has(x.id));
@@ -16875,7 +16889,7 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
       const hasFreeCover = free.length > 0;
       const pool = hasFreeCover ? free : open;
       const best = (candidates: CMPlayer[]) => candidates
-        .sort((a, b) => (hasFreeCover ? compareFullbackFit(a, b, slot) : 0) || worth(b) - worth(a) || b.rating - a.rating)[0];
+        .sort((a, b) => (fullback && hasFreeCover ? compareFullbackFit(a, b, slot) : 0) || worth(b) - worth(a) || b.rating - a.rating)[0];
       p = best(pool.filter(x => !resting.has(x.id))) ?? best(pool);
     }
     if (p) {
@@ -21542,7 +21556,7 @@ export interface SeasonWorld {
    and a custom club is placed against the real lineups. */
 export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, custom?: CustomClubSpec, manager?: ManagerSpec, world?: SeasonWorld, edit?: Record<string, string[]> | null, opts?: StartCareerOptions): CareerState {
   const kLeagueActive = world ? world.kLeagueActive ?? (world.rosterCareer ? careerHasKLeagueWorld(world.rosterCareer) : false)
-    : !(custom && kLeagueMember(custom.name));
+    : opts?.kLeagueActive ?? !(custom && kLeagueMember(custom.name));
   const requestedScope = scopedLeagueForClub(clubName)?.id;
   const scopedLeagueId = world ? world.scopedLeagueId ?? (world.rosterCareer && careerScopedLeagueId(world.rosterCareer))
     : !custom && eraId === DEFAULT_ERA_ID ? requestedScope : undefined;

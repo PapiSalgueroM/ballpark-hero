@@ -69,8 +69,6 @@ import {
   resolveXI,
   sellValue,
   startCareer,
-  /* Round 1509 (ruling 1l): the dailies start a career that follows no competition from outside. */
-  DAILY_START,
   startNegotiation,
   walkAway,
   type CareerState,
@@ -78,7 +76,7 @@ import {
   type Negotiation,
 } from '@/lib/clubManager';
 import { MIN_TERMS_YEARS, askingTerms, dealCloseness, offerVerdict, termsCloseness, valuationBand, type PersonalTerms, type ValuationRead } from '@/lib/clubManagerDeals';
-import { hotSeatPool, mixSeed, onStaticWorld, withSeed } from '@/lib/managerHotSeat';
+import { dailyStartOptions, hotSeatPool, mixSeed, onStaticWorld, withSeed } from '@/lib/managerHotSeat';
 import { cmWorldReadsAge } from '@/data/clubManagerWorldRosters';
 /* Round 1600: every engine stretch of a run is run on the world its date was dealt on (onStaticWorld's daily). */
 const onStaticWorldOn = <T>(daily: string | undefined, fn: () => T): T => onStaticWorld(fn, daily);
@@ -356,7 +354,7 @@ function stickerOf(mp: MarketPlayer): number {
  */
 export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
   return onStaticWorldOn(setup.daily, () => {
-    const state0 = withSeed(mixSeed(setup.seed, SEED_START), () => startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, DAILY_START));
+    const state0 = withSeed(mixSeed(setup.seed, SEED_START), () => startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, dailyStartOptions(setup.daily)));
     /* Release AT: a daily never carries the real fixture list (see startOnStaticWorld in
        managerHotSeat.ts). Deadline Day plays no match, so the key was inert here; it comes off so the
        day's state is the shape it was before Round 1184. scripts/simDailyDeals.mjs holds it. */
