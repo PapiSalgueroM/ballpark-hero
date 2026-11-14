@@ -30,7 +30,7 @@
  * nights before them, including going out in them. scripts/simSoccerCareerUcl.mjs
  * section 8 holds the title rate per tier against main's measured band.
  */
-import { confederationOf, type Confederation } from './soccerInternational';
+import { confederationOf, poissonGoals, type Confederation } from './soccerInternational';
 import { adjustClubsForYear } from './careerEras';
 import type { ClubData } from './soccerCareerEngine';
 import { periodFor } from './uclFormatHistory';
@@ -396,15 +396,7 @@ export const OPPONENT_SPREAD = 0.8;
 
 const clampTo = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
-/** One side's goals from its expectation (Knuth, capped at 11, the engine's
- *  own draw since Round 546). */
-export function poissonGoals(lambda: number, rng: Rng): number {
-  const L = Math.exp(-Math.max(0.05, lambda));
-  let k = 0;
-  let p = 1;
-  do { k += 1; p *= rng(); } while (p > L && k < 12);
-  return k - 1;
-}
+export { poissonGoals } from './soccerInternational';
 
 function gauss(rng: Rng): number {
   const u = 1 - rng();

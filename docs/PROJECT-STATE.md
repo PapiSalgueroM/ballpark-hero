@@ -1,4 +1,11 @@
+## 2026-11-14: Club Manager's 2025 Club World Cup
+
+- A career that finishes 2024/25 with a verified entrant gets the 2025 Club World Cup. The simulated results use the historical groups and bracket. The result appears in the season review and Cups, with a trophy for the winner. The cup does not affect board or financial calculations.
+- The existing domestic and European fixture calendar remains the route to the end of the club season. The Club World Cup runs as a simulated summer campaign. The 2026 Intercontinental Cup still awaits the last continental champion and the 2029 Club World Cup still needs its full field and format. [2025 Club World Cup groups](https://www.fifa.com/en/tournaments/mens/club-world-cup/usa-2025/articles/teams-dates-venue-groups-draw-matches-tickets) [2026 Intercontinental Cup fixtures](https://www.fifa.com/en/tournaments/mens/intercontinentalcup/2026/articles/qatar-appointed-host-final-three-matches)
+
 ## 2026-11-14: NRL offer cap preview and Home catalogue focus
+
+[PR #915](https://github.com/PapiSalgueroM/ballpark-hero/pull/915) published exact main `d038064d77c360155b48dda540efdccfa65b1c5a`, deployment `2ade5559-fd61-4f9b-a9e1-0af7fb25614a`. Nine native browser journeys and all 174 sitemap routes passed live. IndexNow accepted the NRL guide.
 
 - NRL recruitment shows how an offered salary and term, including a counteroffer, would change cap room and open squad places for each year of the deal. It uses the same contract and cap ledger as the accepted offer.
 - Returning from a game launched in the Home catalogue gives focus back to the source card at the same scroll position. Search results retain their existing return behavior.

@@ -4,7 +4,7 @@
 import type { CareerState, ClubData, SeasonRecord } from './soccerCareerEngine';
 import { CAREER_CLUB_POOL, CAREER_LEAGUE_LADDER } from '../data/soccerCareerClubPool';
 import { CAREER_LOWER_CLUBS } from '../data/soccerCareerLowerClubs';
-import { SC_CLUB_CANON } from '../data/clubRivalries';
+import { clubKeyOf as clubKey } from '../data/clubRivalries';
 import { keyedRng } from './keyedRng';
 
 export interface LeagueMovement { club: string; from: string; to: string; kind: 'promoted' | 'relegated' }
@@ -32,10 +32,8 @@ export const PYRAMIDS = [
   { upper: 'Serie A', lower: 'Serie B', count: 3 },
   { upper: 'La Liga', lower: 'Segunda Division', count: 3 },
 ];
-const clubKey = (name: string) => (SC_CLUB_CANON[name] ?? name).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
 const same = (a: string, b: string) => clubKey(a) === clubKey(b);
-/** The one spelling a club is compared by here (alias, accents and case gone). */
-export function clubKeyOf(name: string): string { return clubKey(name); }
+export { clubKeyOf } from '../data/clubRivalries';
 const initialMembers = (league: string) => [...(CAREER_LOWER_CLUBS[league] ?? CAREER_LEAGUE_LADDER[league]?.flat() ?? [])];
 const pyramidFor = (league: string) => PYRAMIDS.find(p => p.upper === league || p.lower === league);
 

@@ -50,7 +50,7 @@ const controls = [
   ['terminal', PAGE, 'if (engine || searchFailed) return;', 'if (engine) return;', TERMINAL],
   ['resolvedEngine', PAGE, '.then(setEngine)', '.then(() => undefined)', SUCCESS],
   ['currentQuery', PAGE, 'engine.searchSite(deferredQuery)', "engine.searchSite('soccer')", SUCCESS],
-  ['backQuery', PAGE, "setSearchQuery(''); searchInputRef.current", "setSearchQuery(searchQuery); searchInputRef.current", BACK],
+  ['backQuery', PAGE, "updateSearch(''); searchInputRef.current", "updateSearch(searchQuery); searchInputRef.current", BACK],
   ['backFocus', PAGE, 'searchInputRef.current?.focus({ preventScroll: true });', 'void searchInputRef.current;', BACK],
   ['preventScroll', PAGE, 'searchInputRef.current?.focus({ preventScroll: true });', 'searchInputRef.current?.focus({ preventScroll: false });', BACK],
   ['backAction', NOTICE, 'onClick={onBack}', 'onClick={() => undefined}', BACK],

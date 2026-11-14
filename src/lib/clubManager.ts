@@ -2,7 +2,6 @@ import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
 import { clubWorldCup2025TeamCampaign } from '@/lib/soccerClubWorldCup';
-import { clubKeyOf } from '@/lib/soccerCareerLeagueWorld';
 import { noteHighestScoring } from '@/lib/clubManagerRecords';
 import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGoalLift, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';
 /* Round 201: the wilderness reuses the manager job market the retired
@@ -92,7 +91,7 @@ import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL, cmWorld
 import { CM_FINAL_TABLES_2025_26, CM_FINAL_TABLES_PARTIAL } from '@/data/clubManagerFinalTables2025_26';
 /* Round 1012: the real rivals table moved to a shared leaf module so Soccer
    Career reads the same data. Imported back under its old name, unchanged. */
-import { PRIMARY_RIVAL as RIVALS } from '@/data/clubRivalries';
+import { PRIMARY_RIVAL as RIVALS, clubKeyOf } from '@/data/clubRivalries';
 /* Round 1606: the real opening day dugouts. The data file imports only a type and the module imports nothing,
    so there is no cycle; both are read at the call, never at module scope. */
 import { CM_DUGOUTS, CM_DUGOUTS_PARTIAL } from '@/data/clubManagerDugouts';

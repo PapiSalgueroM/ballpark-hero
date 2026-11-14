@@ -1,8 +1,7 @@
 import { keyedRng } from './keyedRng';
 import { shuffled } from './keyedShuffle';
-import { poissonGoals } from './soccerCareerContinental';
-import { playerMatchStats, type PlayerForm } from './soccerInternational';
-import { clubKeyOf } from './soccerCareerLeagueWorld';
+import { playerMatchStats, poissonGoals, type PlayerForm } from './soccerInternational';
+import { clubKeyOf } from '../data/clubRivalries';
 
 // The final draw includes LAFC after the qualification playoff. Auckland City and Auckland FC are separate clubs.
 // https://www.fifa.com/en/tournaments/mens/club-world-cup/usa-2025/articles/teams-dates-venue-groups-draw-matches-tickets
