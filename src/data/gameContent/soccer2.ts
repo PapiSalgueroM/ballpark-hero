@@ -35,8 +35,8 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         ],
         subsections: [
           {
-            heading: "Picking a shape",
-            items: ["Pick a shape: defensive, balanced or attacking."],
+            heading: "Setting up your team",
+            items: ["Choose a defensive, balanced or attacking mentality.", "In free play, open Formation and XI to see who would start and how well they fit their positions. Pick a formation before kickoff and it carries into the next match."],
           },
           {
             heading: "Picking a team talk",
