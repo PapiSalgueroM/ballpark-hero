@@ -102,6 +102,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         items: [
           "Tap a slot to shop that position. Only players you can currently afford are listed.",
           "Use Next in the signing shortlist to browse the whole eligible market, or search by player name or club.",
+          "Pick Lowest price in the signing shortlist to see the cheapest eligible players first. You can still search by name or club.",
           "Before you confirm a signing, check the minimum cost to fill the rest of your XI with different players from that market. The preview shows any shortfall and lets you decide whether to sign anyway.",
         ],
         subsections: [
@@ -150,7 +151,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Blowing half the cap on a Haaland front line",
         paragraphs: [
-          "You take the Today market in a 4-3-3 and blow half the cap on the front line, Haaland through the middle. The defense budget looks grim, so you release a winger and bargain hunt for fullbacks.",
+          "You take the Today market in a 4-3-3 and blow half the cap on the front line, Haaland through the middle. The defense budget looks grim, so you release a winger and sort the fullback shortlist by Lowest price.",
         ],
       },
       {

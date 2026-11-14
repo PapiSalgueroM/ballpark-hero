@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Check, Copy, RotateCcw, Swords, X } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
@@ -28,6 +28,7 @@ export function BudgetBuilderBoard() {
   const [copied, setCopied] = useState(false);
   const [choice, setChoice] = useState<Player | null>(null);
   const [marketPage, setMarketPage] = useState(0);
+  const [lowestPriceFirst, setLowestPriceFirst] = useState(false);
   const [request, setRequest] = useState<{
     slot: number; before: Player | undefined; after: Player | undefined;
     remaining: number; filled: number; formation: string; era: string; text: string;
@@ -50,10 +51,14 @@ export function BudgetBuilderBoard() {
   const page = Math.min(marketPage, Math.max(0, pageCount - 1));
   const firstResult = page * MARKET_PAGE_SIZE;
   const lastResult = Math.min(firstResult + MARKET_PAGE_SIZE, candidates.length);
+  const orderedCandidates = useMemo(
+    () => lowestPriceFirst ? [...candidates].sort((a, b) => a.marketValue - b.marketValue) : candidates,
+    [candidates, lowestPriceFirst],
+  );
 
   useLayoutEffect(() => {
     if (results.current) results.current.scrollTop = 0;
-  }, [page, search]);
+  }, [page, search, lowestPriceFirst]);
 
   useLayoutEffect(() => { setCue(null); }, [formation.name, era.id, topic]);
 
@@ -318,16 +323,24 @@ export function BudgetBuilderBoard() {
               <X className="h-4 w-4 text-muted-foreground" />
             </button>
           </div>
-          <input
-            ref={searchInput}
-            aria-label="Search eligible players by name or club"
-            value={search}
-            onChange={e => { setSearch(e.target.value); setMarketPage(0); }}
-            placeholder="Search name or club…"
-            className="mb-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground"
-          />
+          <div className="mb-3 grid grid-cols-[minmax(0,1fr)_auto] gap-2">
+            <input
+              ref={searchInput}
+              aria-label="Search eligible players by name or club"
+              value={search}
+              onChange={e => { setSearch(e.target.value); setMarketPage(0); }}
+              placeholder="Search name or club…"
+              className="min-w-0 rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground"
+            />
+            <select aria-label="Sort eligible players by price" value={lowestPriceFirst ? 'lowest' : 'highest'}
+              onChange={e => { setLowestPriceFirst(e.target.value === 'lowest'); setMarketPage(0); }}
+              className="max-w-full rounded-lg border border-border bg-background px-2 text-sm text-foreground">
+              <option value="highest">Highest price</option>
+              <option value="lowest">Lowest price</option>
+            </select>
+          </div>
           {candidates.length > 0 && (
-            <p className="mb-3 text-xs text-muted-foreground" role="status">Showing {firstResult + 1} to {lastResult} of {candidates.length} eligible players, highest value first.</p>
+            <p className="mb-3 text-xs text-muted-foreground" role="status">Showing {firstResult + 1} to {lastResult} of {candidates.length} eligible players, {lowestPriceFirst ? 'lowest price first' : 'highest value first'}.</p>
           )}
           {choice && <div className={`${styles.wrap} mb-3 rounded-xl border border-primary/40 bg-primary/5 p-3`} data-budget-preview>
             <p className="text-sm font-bold text-foreground">{choice.name}</p>
@@ -371,7 +384,7 @@ export function BudgetBuilderBoard() {
                 No eligible matches in this shortlist. Try another name or club, or release a player to free up budget.
               </p>
             )}
-            {candidates.slice(firstResult, lastResult).map(p => (
+            {orderedCandidates.slice(firstResult, lastResult).map(p => (
               <button
                 key={p.name}
                 onClick={event => { previewOpener.current = event.currentTarget; setChoice(p); }}
