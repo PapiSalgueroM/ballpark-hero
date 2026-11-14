@@ -57,12 +57,12 @@ it.each([[2026, 'broncos', 1, 'Quick Sim'], [2027, 'bears', 17, 'Play Live']] as
     expect(localStorage.getItem(fence)).toBe('4');
 
     const shown = ids(action === 'Quick Sim' ? 'Quick Sim rotation' : 'Live opening rotation');
-    fireEvent.click(screen.getByRole('button', { name: action, exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: action }));
     if (action === 'Play Live') {
       const paused = readNrlCareerSave(localStorage.getItem(NRL_SAVE_KEY))!;
       expect(paused.season.live?.heldReserveId).toBe(held.id);
       expect(screen.queryByText('Hold one reserve for later')).toBeNull();
-      fireEvent.click(screen.getByRole('button', { name: 'Play second half', exact: true }));
+      fireEvent.click(screen.getByRole('button', { name: 'Play second half' }));
     }
     const result = readNrlCareerSave(localStorage.getItem(NRL_SAVE_KEY))?.season.results
       .find(match => match.homeId === club || match.awayId === club);
