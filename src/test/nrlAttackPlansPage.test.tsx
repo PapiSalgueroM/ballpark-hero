@@ -52,12 +52,12 @@ it('shows both signed tradeoffs and preserves a match choice at a reloaded halft
   expect(raw()).toBe(baseline);
   click(/Shift wide/);
   click('Play Live');
-  expect(screen.getByText('Attack plan: Shift wide. You can change it at 60 minutes.')).toBeTruthy();
+  expect(screen.getByRole('combobox', { name: 'Second-half attack plan' })).toHaveValue('wide');
   const pending = raw();
   mounted.unmount();
   page();
   expect(raw()).toBe(pending);
-  expect(screen.getByText('Attack plan: Shift wide. You can change it at 60 minutes.')).toBeTruthy();
+  expect(screen.getByRole('combobox', { name: 'Second-half attack plan' })).toHaveValue('wide');
   expect(screen.queryByRole('button', { name: /Through the middle/ })).toBeNull();
   click('Play second half');
   expect(readNrlCareerSave(raw())!.season).not.toHaveProperty('attackPlan');
@@ -77,7 +77,7 @@ it('shows the simulated read, carries the counter plan forward when the closing 
   fireEvent.click(counter);
   expect(readNrlCareerSave(raw())!.season.attackPlan).toBe('counter');
   click('Play Live');
-  expect(screen.getByText('Attack plan: Counter opponent. You can change it at 60 minutes.')).toBeVisible();
+  expect(screen.getByRole('combobox', { name: 'Second-half attack plan' })).toHaveValue('counter');
   click('Play to 60 minutes');
   expect(screen.getByRole('combobox', { name: 'Closing attack plan' })).toHaveValue('counter');
   const saved = raw();

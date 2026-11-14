@@ -8,6 +8,50 @@ const finish = (state: NrlCareerState, action: NrlCareerAction) => reduceNrlCare
 const raw = JSON.stringify;
 
 describe('NRL 60-minute tactical check', () => {
+  it('carries a half-time attack plan from minutes 40 to 60 and allows a separate closing override', () => {
+    const clubId = 'broncos';
+    const choice = { year: 2026, round: 1, tactic: 'balanced' } as const;
+    const half = start(createNrlCareer(clubId, 61, choice.year));
+    const plain = finish(half, { type: 'reachMinute60', ...choice });
+    const watch = { type: 'reachMinute60', ...choice, attackPlan: 'wide' } as const;
+    const staged = finish(half, watch);
+    const stagedHalf = staged.season.live!;
+    const checkpoint = stagedHalf.minute60!;
+    expect(checkpoint.attackPlan).toBe('wide');
+    expect(stagedHalf.homeScoring).toEqual(half.season.live?.homeScoring);
+    expect(stagedHalf.awayScoring).toEqual(half.season.live?.awayScoring);
+    expect(staged.season.attackPlan).toBe(half.season.attackPlan);
+    expect(staged.season.results).toBe(half.season.results);
+    expect(staged.players).toBe(half.players);
+    expect(staged.finance).toBe(half.finance);
+    const restored = readNrlCareerSave(raw(staged))!;
+    expect(raw(restored)).toBe(raw(staged));
+    const closing = { type: 'finishMinute60', ...choice } as const;
+    const direct = finish(half, { ...watch, type: 'finishLive' });
+    const kept = finish(restored, closing);
+    const changed = finish(restored, { ...closing, attackPlan: 'middle' });
+    const own = (state: NrlCareerState) => state.season.results.find(match => match.homeId === clubId || match.awayId === clubId)!;
+    const original = own(finish(plain, closing));
+    const match = own(kept);
+    const adjusted = own(changed);
+    expect(JSON.stringify(kept, (key, value) => key === 'at60' ? undefined : value)).toBe(raw(direct));
+    expect(match.halftimeAttackPlan).toBe('wide');
+    expect(match.minute60AttackPlan).toBeUndefined();
+    expect(adjusted.halftimeAttackPlan).toBe('wide');
+    expect(adjusted.minute60AttackPlan).toBe('middle');
+    expect(original.scorePeriods).toEqual({ halfTime: [26, 8], at60: [26, 14], regulation: [38, 20] });
+    expect(match.scorePeriods).toEqual({ halfTime: [26, 8], at60: [26, 20], regulation: [38, 26] });
+    expect(adjusted.scorePeriods).toEqual({ halfTime: [26, 8], at60: [26, 20], regulation: [32, 26] });
+    expect(changed.season.results.filter(row => row !== adjusted)).toEqual(kept.season.results.filter(row => row !== match));
+    expect(readNrlCareerSave(raw(changed))).toEqual(changed);
+    expect(finish(half, { ...watch, attackPlan: 'standard' })).toEqual(plain);
+    expect(finish(restored, { ...closing, attackPlan: 'wide' })).toEqual(kept);
+    expect(finish(half, { ...watch, attackPlan: 'invalid' as never })).toBe(half);
+    expect(finish(restored, watch)).toBe(restored);
+    const forged = { ...staged, season: { ...staged.season, live: { ...stagedHalf, minute60: { ...checkpoint, attackPlan: 'standard' } } } };
+    expect(readNrlCareerSave(raw(forged))).toBeNull();
+  });
+
   it.each([[2026, 'broncos', 1], [2027, 'bears', 7]] as const)('keeps %s settlement exact if the half-time tactic is retained', (year, club, seed) => {
     const state = createNrlCareer(club, seed, year);
     const half = start(state);

@@ -1454,23 +1454,25 @@ function planRivalRatings(season: NrlManagerState, ratings: ReturnType<typeof op
   return rival?.size === NRL_ROLES.length ? rival : undefined;
 }
 
-function careerMatchday(state: NrlCareerState, latePlan?: NrlAttackPlan) {
+function careerMatchday(state: NrlCareerState, requestedPlan?: NrlAttackPlan) {
   // The imported season uses the original lineups and opponent ratings.
   if (state.legacySeason) return { matchday: { ...state.season, bench: undefined } };
   const ratings = opponentRatings(state);
   const opponentStrength = averagesByClub(ratings);
+  const { attackPlan, live } = state.season;
+  const usesPositionRatings = [attackPlan, live?.minute60?.attackPlan, requestedPlan]
+    .some(plan => plan === 'middle' || plan === 'wide');
   return {
     matchday: state.season,
     opponentStrength,
     ratings,
-    planRatings: latePlan === 'middle' || latePlan === 'wide' || (state.season.attackPlan && state.season.attackPlan !== 'counter')
-      ? planRivalRatings(state.season, ratings) : undefined,
+    planRatings: usesPositionRatings ? planRivalRatings(state.season, ratings) : undefined,
   };
 }
 
-export function nrlMinute60AttackPlans(state: NrlCareerState): readonly NrlAttackPlan[] {
+export function nrlLiveAttackPlans(state: NrlCareerState): readonly NrlAttackPlan[] {
   const { season } = state;
-  if (state.legacySeason || state.retired || !season.live?.minute60 || !season.kickerId || !season.bench) return [];
+  if (state.legacySeason || state.retired || !season.live || !season.kickerId || !season.bench) return [];
   return planRivalRatings(season, opponentRatings(state)) ? ['standard', ...NRL_ATTACK_PLANS] : ['standard', 'counter'];
 }
 
@@ -1551,8 +1553,7 @@ function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type:
   intensiveByePlayerId?: string): NrlCareerState {
   const previous = state.season;
   if (judiciaryNeedsResponse(previous) && nrlNextRound(previous).clubMatch) return state;
-  const { matchday, opponentStrength, planRatings } = careerMatchday(state,
-    action.type === 'finishMinute60' ? action.attackPlan : undefined);
+  const { matchday, opponentStrength, planRatings } = careerMatchday(state, action.type === 'advance' ? undefined : action.attackPlan);
   const played = reduceNrlSeason(matchday, action, opponentStrength, {
     medicalReduction: nrlMedicalLevel(state) - 1, ...nrlCoachTactics(state.finance), planRivalRatings: planRatings, intensiveByePlayerId,
   });
@@ -2537,7 +2538,8 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       return advanceCareer(state, action);
     default: {
       if (action.type === 'startLive' && judiciaryNeedsResponse(state.season)) return state;
-      const match = (action.type === 'startLive' || action.type === 'reachMinute60') && state.season.kickerId ? careerMatchday(state) : null;
+      const match = (action.type === 'startLive' || action.type === 'reachMinute60') && state.season.kickerId
+        ? careerMatchday(state, action.type === 'reachMinute60' ? action.attackPlan : undefined) : null;
       const season = reduceNrlSeason(state.season, action, match?.opponentStrength, {
         ...nrlCoachTactics(state.finance), planRivalRatings: match?.planRatings,
       });
