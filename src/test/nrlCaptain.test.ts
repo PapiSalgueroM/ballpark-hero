@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import {
   createNrlCareer, nrlOppositionReport, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState,
 } from '@/lib/nrlCareer';
-import { createNrlSeason, nrlHalftimeInterchanges } from '@/lib/nrlManager';
+import { createNrlSeason, nrlActingCaptainPhases, nrlHalftimeInterchanges, nrlMinute60Interchange } from '@/lib/nrlManager';
 
 const doAction = (state: NrlCareerState, action: NrlCareerAction) => reduceNrlCareer(state, action);
 const advance = (state: NrlCareerState) => doAction(state, { type: 'advance' });
@@ -12,10 +12,67 @@ const captain = (state: NrlCareerState, playerId: string | null) => {
   const { year, clubId, round } = state.season;
   return doAction(state, { type: 'setCaptain', year, clubId, round, playerId });
 };
+const viceCaptain = (state: NrlCareerState, playerId: string | null) => {
+  const { year, clubId, round } = state.season;
+  return doAction(state, { type: 'setViceCaptain', year, clubId, round, playerId });
+};
 const resultFor = (state: NrlCareerState, round: number) => state.season.results.find(match =>
   match.round === round && (match.homeId === state.season.clubId || match.awayId === state.season.clubId))!;
 
 describe('NRL match captain', () => {
+  it.each([[2026, 'broncos'], [2027, 'bears']] as const)('uses one defence bonus and lets the vice-captain cover an absent captain in %s', (year, clubId) => {
+    const original = createNrlCareer(clubId, 1, year);
+    const primary = original.season.lineup.Hooker;
+    const second = original.season.lineup.Lock;
+    const replacement = original.season.squad.find(player => player.role === 'Hooker' && player.id !== primary)!;
+    const captainOnly = captain(original, primary);
+    const leadership = viceCaptain(captainOnly, second);
+    expect(leadership.season.viceCaptainId).toBe(second);
+    expect(viceCaptain(original, second)).toBe(original);
+    expect(viceCaptain(leadership, primary)).toBe(leadership);
+    expect(viceCaptain(leadership, original.season.bench![0])).toBe(leadership);
+    expect(nrlOppositionReport(leadership)).toEqual(nrlOppositionReport(captainOnly));
+    const rotate = (state: NrlCareerState) => doAction(state, { type: 'selectStarter', role: 'Hooker', playerId: replacement.id });
+    const captainRested = rotate(leadership);
+    expect(captainRested.season.captainId).toBe(primary);
+    expect(nrlOppositionReport(captainRested)!.defenseEdge).toBeCloseTo(nrlOppositionReport(rotate(captainOnly))!.defenseEdge + 1);
+    const settled = advance(captainRested);
+    expect(resultFor(settled, 1)).toMatchObject({ actingCaptain: { clubCaptainId: primary, viceCaptainId: second } });
+    expect(raw(read(settled))).toBe(raw(settled));
+  });
+
+  it('records the vice-captain from kickoff and the club captain when he comes on later', () => {
+    const original = createNrlCareer('broncos', 11);
+    const primary = original.season.lineup.Hooker;
+    const second = original.season.lineup.Lock;
+    const replacement = original.season.squad.find(player => player.role === 'Hooker' && player.id !== primary)!;
+    const appointed = viceCaptain(captain(original, primary), second);
+    const managed = doAction(appointed, { type: 'selectStarter', role: 'Hooker', playerId: replacement.id });
+    const benched = doAction(managed, { type: 'selectBench', slot: 0, playerId: primary });
+    const half = doAction(benched, { type: 'startLive' });
+    const interchange = nrlHalftimeInterchanges(half.season).find(option => option.reserveId === primary)!;
+    expect(interchange).toBeDefined();
+    expect(viceCaptain(half, null)).toBe(half);
+    const mid = doAction(read(half)!, { type: 'reachMinute60', year: 2026, round: 1, tactic: 'balanced', interchange });
+    expect(raw(read(mid))).toBe(raw(mid));
+    const played = doAction(read(mid)!, { type: 'finishMinute60', year: 2026, round: 1, tactic: 'balanced' });
+    const result = resultFor(played, 1);
+    expect(result).toMatchObject({ captainId: primary, actingCaptain: { clubCaptainId: primary, viceCaptainId: second } });
+    expect(raw(read(played))).toBe(raw(played));
+    const forged = { ...played, season: { ...played.season, results: played.season.results.map(match => match === result
+      ? { ...match, actingCaptain: { clubCaptainId: replacement.id, viceCaptainId: second } } : match) } };
+    expect(read(forged)).toBeNull();
+
+    const held = doAction(benched, { type: 'startLive', hold: { year: 2026, round: 1, reserveId: primary } });
+    const at60 = doAction(held, { type: 'reachMinute60', year: 2026, round: 1, tactic: 'balanced' });
+    expect(nrlMinute60Interchange(at60.season)?.reserveId).toBe(primary);
+    const late = doAction(read(at60)!, { type: 'finishMinute60', year: 2026, round: 1, tactic: 'balanced', reserveId: primary });
+    expect(nrlActingCaptainPhases(resultFor(late, 1))).toEqual([
+      { period: 'Kickoff', playerId: second }, { period: 'Second half', playerId: second }, { period: 'Final 20 minutes', playerId: primary },
+    ]);
+    expect(raw(read(late))).toBe(raw(late));
+  });
+
   it.each([[2026, 'broncos'], [2027, 'bears']] as const)('adds one defence point with a selected starter in %s', (year, clubId) => {
     const original = createNrlCareer(clubId, 1, year);
     const playerId = original.season.lineup.Hooker;

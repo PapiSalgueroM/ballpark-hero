@@ -68,3 +68,26 @@ it('preserves another tab’s match instead of saving a stale captain choice', (
   expect(localStorage.getItem(fence)).toBe('5');
   expect(screen.getByText(/this season changed in another tab/i)).toBeVisible();
 });
+
+it('names the acting vice-captain at kickoff and in a reloaded match report', () => {
+  const { state, player, show } = setup();
+  const appointed = state.season.squad.find(candidate => candidate.id === state.season.lineup.Lock)!;
+  const replacement = state.season.squad.find(candidate => candidate.role === 'Hooker' && candidate.id !== player.id)!;
+  const view = show();
+  click('Squad');
+  fireEvent.change(playerPicker(), { target: { value: player.id } });
+  fireEvent.change(screen.getByRole('combobox', { name: 'Vice-captain' }), { target: { value: appointed.id } });
+  fireEvent.change(screen.getByLabelText('Hooker', { exact: true }), { target: { value: replacement.id } });
+  const chosen = readNrlCareerSave(raw())!;
+  expect(chosen.season.captainId).toBe(player.id);
+  expect(chosen.season.viceCaptainId).toBe(appointed.id);
+  click('Match centre');
+  expect(screen.getByText('Acting captain · ' + appointed.name)).toBeVisible();
+  click('Quick Sim');
+  expect(screen.getByText('Kickoff · ' + appointed.name + ' (vice-captain)')).toBeVisible();
+  const settled = raw();
+  view.unmount();
+  show();
+  expect(screen.getByText('Kickoff · ' + appointed.name + ' (vice-captain)')).toBeVisible();
+  expect(raw()).toBe(settled);
+});
