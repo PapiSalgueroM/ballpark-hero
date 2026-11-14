@@ -21,6 +21,7 @@ import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, rosterFullRefusal, 
 /* Round 531: the tax line on screen says which day its figure was read. */
 import { capNote } from '@/lib/leagueCaps';
 import { leagueNames } from '@/lib/foNames';
+import { foldName } from '@/lib/careerGuess';
 import { findTrades, type FinderOffer } from '@/lib/tradeFinder';
 /* Round 190: true negotiations, shared engine and shared card. The direct
    propose is a phone call now, not a coin flip. */
@@ -67,6 +68,7 @@ type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
 type Tab = 'team' | 'market' | 'trade' | 'round' | 'standings';
 
 const SAVE_KEY = 'mlb-front-office-save-v1';
+const FREE_AGENT_PAGE_SIZE = 20;
 /* Round 631: what the market and the trade screen say about a man you let go this season. */
 const CUT_SAID = 'You designated him for assignment this season.';
 
@@ -192,6 +194,9 @@ export default function MlbFrontOfficeBoard() {
   const [myTradePiece, setMyTradePiece] = useState('');
   const [tradeOwnVisible, setTradeOwnVisible] = useState(8);
   const [tradePartnerVisible, setTradePartnerVisible] = useState(8);
+  const [marketQuery, setMarketQuery] = useState('');
+  const [marketPosition, setMarketPosition] = useState('');
+  const [marketPage, setMarketPage] = useState(0);
   /* Round 631: the man whose DFA button has been tapped once. The second tap
      is only offered once the dead money is on screen. Transient. */
   const [cutArmed, setCutArmed] = useState<string | null>(null);
@@ -1021,6 +1026,15 @@ export default function MlbFrontOfficeBoard() {
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
   const tradeOwnPlayers = [...my.players].sort((a, b) => b.ovr - a.ovr);
   const tradePartnerPlayers = tradePartner ? [...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr) : [];
+  const marketPositions = tab === 'market' ? [...new Set(league.freeAgents.map(player => player.pos))].sort() : [];
+  const marketNeedle = foldName(marketQuery);
+  const marketMatches = tab === 'market' ? league.freeAgents
+    .filter(player => (!marketPosition || player.pos === marketPosition) && foldName(player.name).includes(marketNeedle))
+    .sort((a, b) => b.ovr - a.ovr) : [];
+  const lastMarketPage = Math.max(0, Math.ceil(marketMatches.length / FREE_AGENT_PAGE_SIZE) - 1);
+  const currentMarketPage = Math.min(marketPage, lastMarketPage);
+  const marketStart = currentMarketPage * FREE_AGENT_PAGE_SIZE;
+  const marketEnd = Math.min(marketStart + FREE_AGENT_PAGE_SIZE, marketMatches.length);
   const revealTradeRoster = (button: HTMLButtonElement, visible: number, reveal: () => void) => {
     const panel = button.closest('[data-mlb-trade-roster]');
     reveal();
@@ -1184,26 +1198,49 @@ export default function MlbFrontOfficeBoard() {
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-2 text-center text-xs text-muted-foreground">Free agents (tax room ${room}M). A man you designated for assignment waits until next season.</p>
           {fullBlock && <p data-sign-block className="mb-2 text-center text-[10px] text-destructive">{fullBlock}</p>}
-          <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
-            {[...league.freeAgents].sort((a, b) => b.ovr - a.ovr).slice(0, 20).map(p => {
+          <div className="mb-2 grid grid-cols-[minmax(0,1fr)_auto] gap-2">
+            <input type="search" aria-label="Search free agents" placeholder="Search names" value={marketQuery}
+              onChange={e => { setMarketQuery(e.target.value); setMarketPage(0); }}
+              className="min-h-11 min-w-0 rounded-lg border border-border bg-background px-2 text-base" />
+            <select aria-label="Free agent position" value={marketPosition} onChange={e => { setMarketPosition(e.target.value); setMarketPage(0); }}
+              className="min-h-11 max-w-full rounded-lg border border-border bg-background px-2 text-sm">
+              <option value="">All positions</option>
+              {marketPosition && !marketPositions.includes(marketPosition) && <option value={marketPosition}>{marketPosition}</option>}
+              {marketPositions.map(position => <option key={position} value={position}>{position}</option>)}
+            </select>
+          </div>
+          <p role="status" className="mb-2 text-center text-xs text-muted-foreground">
+            {marketMatches.length > 0 ? 'Showing ' + (marketStart + 1) + ' to ' + marketEnd + ' of ' + marketMatches.length + ' free agents'
+              : league.freeAgents.length ? 'No free agents match these filters.' : 'No free agents are available.'}
+          </p>
+          <div key={currentMarketPage} className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
+            {marketMatches.slice(marketStart, marketEnd).map(p => {
               /* Round 631: the engine's own refusal, so the button is never
                  live when pressing it would do nothing. */
               const refusal = signRefusal(my, p.id, CUT_SAID);
               return (
               <div key={p.id} data-fa-row={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
                 <span className="min-w-0">
-                  <span className="block truncate font-bold text-foreground">{p.name}</span>
+                  <span className="block break-words font-bold text-foreground">{p.name}</span>
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · wants ${p.salary}M</span>
                   {refusal && <span className="block text-[10px] text-destructive">{refusal}</span>}
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
                   <b className="text-primary">{p.ovr}</b>
-                  <button onClick={() => doSign(p.id)} disabled={p.salary > room || !!refusal || !!fullBlock} title={refusal ?? fullBlock ?? undefined} className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40">Sign</button>
+                  <button onClick={() => doSign(p.id)} disabled={p.salary > room || !!refusal || !!fullBlock} title={refusal ?? fullBlock ?? undefined} className="min-h-11 rounded-full bg-primary px-2.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40">Sign</button>
                 </span>
               </div>
               );
             })}
           </div>
+          {lastMarketPage > 0 && (
+            <div className="mt-2 flex justify-center gap-2">
+              <button type="button" disabled={currentMarketPage === 0} onClick={() => setMarketPage(currentMarketPage - 1)}
+                className="min-h-11 rounded-lg border border-border px-3 text-xs font-semibold disabled:opacity-50">Previous free agents</button>
+              <button type="button" disabled={currentMarketPage === lastMarketPage} onClick={() => setMarketPage(currentMarketPage + 1)}
+                className="min-h-11 rounded-lg border border-border px-3 text-xs font-semibold disabled:opacity-50">Next free agents</button>
+            </div>
+          )}
         </div>
       )}
 

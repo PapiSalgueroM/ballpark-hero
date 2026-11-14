@@ -1104,6 +1104,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
             heading: "Working trades, free agents and DFAs",
             items: [
               "Work the roster: DFA dead weight, sign free agents, and take trades to the phone, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.",
+              "Search all free agents by name or position, or page through them by overall. For example, pick SP to look for a starter within your tax room.",
             ],
           },
         ],
