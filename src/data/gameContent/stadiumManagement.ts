@@ -35,6 +35,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "Live matches and the league ladder",
         items: [
           "Follow the match at the top of the pitch. Goals and wins pay bonuses counted in seconds of your own income, wins extend your streak, and the streak multiplies income and pulls in new fans.",
+          "From halftime until 75 minutes in a watched league match, you can choose one second-half plan. Protect lowers both clubs' scoring chances by 20 percent for the rest of the match. Push raises both by 20 percent. Choose Protect to hold a one-goal lead or keep playing to stay balanced. Latest season keeps any plan you used alongside the recorded score.",
           "Win your league to climb the divisions. Each division is a small league of named rival clubs with a table on the League tab, and only the champion goes up. Every division multiplies all income up to five and a half times, each promotion pays a bonus on the spot, and higher divisions send tougher opponents.",
           "Open Latest season in the League tab to see your final table and recorded match scores after reload. If you win the Muddy Meadows League, for example, you can reopen its table while playing in Gravel Lane. The next completed season replaces it, and selling up clears it with the rest of the ground's league.",
         ],
