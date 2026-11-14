@@ -1,4 +1,12 @@
+## 2026-11-14: Soccer Career prime, NRL availability and UFC Daily saves
+
+- Season Ratings shows the saved prime and age window that Soccer Career uses for development. The engine still has early, typical, late and extended paths.
+- NRL Team Manager shows the first regular club match after an injury and confirmed suspension both clear. Byes advance injury recovery and leave the ban's match count intact.
+- UFC Daily checks for newer progress before confirming Give Up. A newer win or accepted guess from another tab is restored directly from the save.
+
 ## 2026-11-14: Soccer Career potential, Rugby League World Cup swaps and Footle saves
+
+[PR #935](https://github.com/PapiSalgueroM/ballpark-hero/pull/935) published exact main `812154551e8178566276d7d5ba508d60b50b3952`, deployment `220d92e4-b425-4041-a236-16556237c1b7`. Eight live browser journeys and all 174 sitemap routes passed. IndexNow accepted the two changed guides.
 
 - Soccer Career's build editor lets the player choose the starting growth ceiling, with the existing overall floor and maximum of 99. The creator preview and saved academy career use the same value.
 - Rugby League World Cup gives managers a choice of any of the six reserves and any starting slot. Out-of-position players use the existing rating penalty, and previous natural-role swaps still replay as saved.
