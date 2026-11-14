@@ -131,6 +131,7 @@
         "Choose one of 9 formations. In the Today market you can also narrow the pool, say Premier League only.",
         "Tap a slot to shop that position. Only players you can currently afford are listed.",
         "Use Next in the signing shortlist to browse the whole eligible market, or search by player name or club.",
+        "Pick Lowest price in the signing shortlist to see the cheapest eligible players first. You can still search by name or club.",
         "Before you confirm a signing, check the minimum cost to fill the rest of your XI with different players from that market. The preview shows any shortfall and lets you decide whether to sign anyway.",
         "Sign someone and their value leaves your budget. Release anyone for a full refund.",
         "Fill all eleven for your team rating, then play the Money XI final."
@@ -142,7 +143,7 @@
         "Final score is your team rating, plus 1 point for every full 200 million left unspent, plus 10 for meeting the board demand, plus 15 for a series win or 5 for a draw."
       ],
       "example": [
-        "You take the Today market in a 4-3-3 and blow half the cap on the front line, Haaland through the middle. The defense budget looks grim, so you release a winger and bargain hunt for fullbacks.",
+        "You take the Today market in a 4-3-3 and blow half the cap on the front line, Haaland through the middle. The defense budget looks grim, so you release a winger and sort the fullback shortlist by Lowest price.",
         "The XI rates 82, the daily demand wanted two players under 15 million, and your fullbacks tick it. You edge the Money XI 2 legs to 1 for the full haul."
       ],
       "tips": [
@@ -1859,6 +1860,7 @@
         "Choose a franchise and inherit its real 26: the lineup and bench, a five man rotation and the bullpen, as the club stood on the last day of the 2026 regular season.",
         "The roster box shows the usual sim picks: your best healthy 8 bats, 3 starters and 2 relievers. Everyone else is depth, and depth is who plays the day a starter hits the IL.",
         "Protect the rotation before a round to spread the workload across five healthy starters. Those five face a lower simulated injury risk, while weaker fourth and fifth starters can lower your team strength. The round report shows how many stayed available.",
+        "Give a young bench hitter a development start. Once per season, a healthy bench hitter aged 24 or under can take the lowest-rated spot in your batting lineup for one round and gain up to one overall point after play. You keep the opportunity if the planned swap cannot play.",
         "Before the final stretch, choose Start the ace first to use three individual starters in each playoff series. A 96, 84 and 72 rotation uses 96 in Game 1, 84 in Game 2 and 72 in Game 3, then repeats. The usual rotation averages all three. The season recap shows each actual starter and result.",
         "Read the ownership mandate: a stacked roster is told to win the World Series, a mid one to make October, a thin one to hit an honest win number. It resets every offseason.",
         "Work the roster: DFA dead weight, sign free agents, and take trades to the phone, where the other GM counters with pick demands and lesser returns instead of a flat yes or no.",
