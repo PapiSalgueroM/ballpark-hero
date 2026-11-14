@@ -531,7 +531,10 @@ export default function Index() {
                       if (!first) return;
                       e.preventDefault();
                       if (e.key === 'ArrowDown') first.focus();
-                      else if (!e.repeat) first.click();
+                      else if (!e.repeat) {
+                        first.focus({ preventScroll: true });
+                        first.click();
+                      }
                     }
                   }}
                   onPointerEnter={warmSearch}
