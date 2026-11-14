@@ -90,7 +90,11 @@ describe('Soccer Grid blur ownership', () => {
     advance(1, 'deadline'); expect(visibleNames()).toEqual([]); expect(input()).toHaveValue('Fixture'); expect(selected).not.toHaveBeenCalled();
   });
   it('keeps pointer selection canonical and exactly once', () => {
-    open(); act(() => { fireEvent.mouseDown(view!.getByText(names[0], { exact: true })); }); mark('pointer-selected');
+    open(); act(() => {
+      const option = view!.getByText(names[0], { exact: true });
+      fireEvent.mouseDown(option);
+      fireEvent.click(option);
+    }); mark('pointer-selected');
     expect(selected).toHaveBeenCalledExactlyOnceWith(names[0]); expect(input()).toHaveValue(''); expect(visibleNames()).toEqual([]);
   });
   it('keeps keyboard selection canonical and exactly once', () => {

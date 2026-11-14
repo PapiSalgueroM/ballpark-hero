@@ -130,7 +130,7 @@ describe('Soccer Grid search discovery', () => {
   it('selects canonical accented spelling and retains visible-menu Escape recovery', async () => {
     leaf(); query(names[0]); expect(visibleNames()).toEqual([names[0]]); fireEvent.keyDown(input(), { key: 'Escape' }); expect(visibleNames()).toEqual([]);
     act(() => { input().blur(); vi.advanceTimersByTime(150); input().focus(); }); expect(visibleNames()).toEqual([names[0]]);
-    await act(async () => { fireEvent.mouseDown(view!.getByText(names[0], { exact: true })); });
+    await act(async () => { fireEvent.click(view!.getByText(names[0], { exact: true })); });
     expect(io.select).toHaveBeenCalledExactlyOnceWith(names[0]); expect(input()).toHaveValue(''); expect(visibleNames()).toEqual([]);
   });
   it('keeps ordinary case-insensitive canonical selection', async () => {
@@ -140,6 +140,30 @@ describe('Soccer Grid search discovery', () => {
     const pool = Array.from({ length: 10 }, (_, i) => ({ ...players[2], name: 'Fixture Cap ' + i })); leaf(pool); query('Fixture Cap'); expect(visibleNames()).toEqual(pool.slice(0, 8).map(p => p.name));
     for (let i = 0; i < 10; i++) fireEvent.keyDown(input(), { key: 'ArrowDown' }); fireEvent.keyDown(input(), { key: 'ArrowUp' });
     await formSubmit(); expect(io.select).toHaveBeenCalledExactlyOnceWith('Fixture Cap 6');
+  });
+  it('chooses the available result if the player list shrinks under the highlight', async () => {
+    leaf(); query('Fixture'); fireEvent.keyDown(input(), { key: 'ArrowDown' });
+    rerender([players[0]]);
+    expect(view!.getByRole('option')).toHaveAttribute('aria-selected', 'true');
+    await formSubmit();
+    expect(io.select).toHaveBeenCalledExactlyOnceWith(names[0]);
+  });
+  it('commits only on option activation and accepts a click without a preceding press', () => {
+    leaf(); query('Fixture');
+    const option = view!.getByRole('option', { name: new RegExp(names[0]) });
+    fireEvent.mouseDown(option);
+    expect(io.select).not.toHaveBeenCalled();
+    fireEvent.click(option);
+    expect(io.select).toHaveBeenCalledExactlyOnceWith(names[0]);
+    query('Fixture');
+    fireEvent.click(view!.getByRole('option', { name: new RegExp(names[1]) }));
+    expect(io.select.mock.calls.map(call => call[0])).toEqual([names[0], names[1]]);
+  });
+  it('ignores a suggestion when validation starts before activation', () => {
+    leaf(); query('Fixture'); rerender(players, true);
+    fireEvent.click(view!.getByRole('option', { name: new RegExp(names[0]) }));
+    expect(io.select).not.toHaveBeenCalled();
+    expect(input()).toHaveValue('Fixture');
   });
   it('keeps trimmed title-cased manual entry when no suggestion exists', async () => {
     leaf(); query('  fixture missing entry  '); expect(visibleNames()).toEqual([]); expect(view!.getByRole('button', { name: 'Submit' })).toBeEnabled(); await formSubmit();
