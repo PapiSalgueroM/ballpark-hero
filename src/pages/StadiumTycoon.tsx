@@ -45,7 +45,6 @@ import {
   GOAL_BONUS_SEC, WIN_BONUS_SEC, PROMOTION_BONUS_SEC, scoringFacts,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
-import type { LastSeason } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 import VictoryMoment from '@/components/tycoon/TycoonVictoryMoment';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
@@ -291,35 +290,36 @@ function helpFacts() {
 
 /* Release AP: exported so src/test/tycoonLatestSeason.test.tsx can read the dialog's numbers on any tree
    (Round 1095's own driver only runs on its own branch). */
-export function LatestSeasonReview({ last, league }: { last: LastSeason; league: TycoonLeague }) {
+export function LatestSeasonReview({ last }: { last: TycoonLeague }) {
   const [open, setOpen] = useState(false);
   const [snapshot, setSnapshot] = useState(last);
   const trigger = useRef<HTMLButtonElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
   const changeOpen = (next: boolean) => {
-    if (next) setSnapshot({ ...last, table: last.table.map(club => ({ ...club })) });
+    if (next) setSnapshot(last);
     setOpen(next);
   };
   const formatSeasonCount = (value: number) => value.toLocaleString('en-US');
-  const own = snapshot.table[0];
-  const rows = leagueStandings({ ...league, clubs: snapshot.table });
+  const own = snapshot.clubs[0];
+  const rows = leagueStandings(snapshot);
+  const position = rows.indexOf(own) + 1;
   return (
     <Dialog open={open} onOpenChange={changeOpen}>
       <DialogTrigger asChild>
         <button ref={trigger} type="button" data-last-season className="min-h-11 min-w-11 w-full rounded-xl border border-border bg-card px-3 py-2 text-left text-xs hover:border-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">
           <span className="block font-bold">Latest season</span>
-          <span className="text-muted-foreground">{ordinal(last.position)} of {formatSeasonCount(last.table.length)} · Review this visit's result</span>
+          <span className="text-muted-foreground">Season {last.season + 1} · {ordinal(leaguePosition(last))} of {formatSeasonCount(last.clubs.length)}</span>
         </button>
       </DialogTrigger>
       <DialogContent data-latest-season-review className="flex max-h-[calc(100dvh_-_2rem)] w-[calc(100vw_-_2rem)] max-w-md flex-col gap-3 rounded-xl p-4 text-xs [&>button:last-child]:h-11 [&>button:last-child]:w-11"
         onOpenAutoFocus={event => { event.preventDefault(); heading.current?.focus({ preventScroll: true }); }}
         onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}>
         <DialogTitle ref={heading} tabIndex={-1} className="pr-12 text-base">Latest season</DialogTitle>
-        <DialogDescription className="text-xs">Available for this visit only. The match keeps running while you read.</DialogDescription>
+        <DialogDescription className="text-xs">The final table stays available until the next season ends or you sell up. The match keeps running while you read.</DialogDescription>
         <div className="min-h-0 space-y-3 overflow-y-auto text-xs">
-          <p data-season-headline className="break-words font-bold text-primary">{snapshot.label}</p>
+          <p data-season-headline className="break-words font-bold text-primary">Season {snapshot.season + 1} · {DIVISIONS[snapshot.division].name}{position === 1 ? ' champions' : ''}</p>
           <dl className="grid grid-cols-2 gap-3 rounded-lg border border-border p-3">
-            <div><dt className="text-muted-foreground">Finished</dt><dd data-season-position className="font-bold">{ordinal(snapshot.position)} of {formatSeasonCount(snapshot.table.length)}</dd></div>
+            <div><dt className="text-muted-foreground">Finished</dt><dd data-season-position className="font-bold">{ordinal(position)} of {formatSeasonCount(snapshot.clubs.length)}</dd></div>
             <div><dt className="text-muted-foreground">Points</dt><dd data-season-points className="break-words font-bold">{formatSeasonCount(own.pts)}</dd></div>
             <div><dt className="text-muted-foreground">Wins / draws / losses</dt><dd data-season-record className="break-words font-bold">{formatSeasonCount(own.w)} / {formatSeasonCount(own.d)} / {formatSeasonCount(own.l)}</dd></div>
             <div><dt className="text-muted-foreground">Goals for / against</dt><dd data-season-goals className="break-words font-bold">{formatSeasonCount(own.gf)} / {formatSeasonCount(own.ga)}</dd></div>
@@ -356,7 +356,7 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
   const preseason = lg.matchday === 0;
   const options = s.clubName ? [] : clubNameOptions(s);
   const atSummit = lg.division >= DIVISIONS.length - 1;
-  const last = g.lastSeason;
+  const last = s.lastCompletedLeague;
   return (
     <div data-league-room className="space-y-3 mb-3">
       <div className="rounded-xl border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
@@ -370,7 +370,7 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
         {(s.leagueTitles ?? 0) > 0 && <div className="mt-0.5 text-gold font-bold">🏆 {s.leagueTitles} league title{s.leagueTitles === 1 ? '' : 's'} in your career</div>}
       </div>
       <LeagueTableCard rows={rows} myClub={lg.clubs[0].name} title={`Season ${lg.season + 1} at this ground`} preseason={preseason} zoneTop={1} />
-      {last && <LatestSeasonReview last={last} league={lg} />}
+      {last && <LatestSeasonReview last={last} />}
       {options.length > 0 && (
         <div data-club-name-pick className="rounded-xl border border-border bg-card p-3">
           <div className="text-xs font-bold text-foreground mb-2">Name your club</div>
@@ -1001,7 +1001,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
               <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>
-              <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. The League tab shows the table, and when a season ends its Latest season button opens that season's final table and your own line of it while the next match runs. That review is for this visit only: reload and it is gone until your next season ends.</p>
+              <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. In League, open Latest season to see the final table and your record. If your club wins Muddy Meadows, for example, you can reopen that final table while playing in Gravel Lane. The report survives reload until another season ends or you sell up.</p>
               <p>The payroll hires {h.staff} staff, from a {h.firstStaff} to a {h.lastStaff}. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
               <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about {h.catchSec} seconds to catch it, for one of {h.prizes} prizes: {GOLDEN_INFO.frenzy.label} ({GOLDEN_INFO.frenzy.blurb} for {GOLDEN_INFO.frenzy.duration} seconds), {GOLDEN_INFO.tapRush.label} ({GOLDEN_INFO.tapRush.blurb} for {GOLDEN_INFO.tapRush.duration} seconds), {GOLDEN_INFO.windfall.label} ({h.windfallMin} minutes of income, instantly), {GOLDEN_INFO.fanWave.label} ({GOLDEN_INFO.fanWave.blurb}) or {GOLDEN_INFO.freeLevel.label} ({GOLDEN_INFO.freeLevel.blurb}).</p>
               <p>A penalty or free-kick offer appears once per watched match. You have {SET_PIECE_WINDOW_SEC} seconds to open it. Pick your aim, power and curve for one shot while the match clock keeps running. Opening uses that match's attempt, including if you leave or reload. A goal before full time adds one goal and the usual goal bonus; a miss costs nothing. Away matches have no kick offers, and kicks have no daily score or direct gem reward.</p>

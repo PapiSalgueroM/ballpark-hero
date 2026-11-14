@@ -13,7 +13,7 @@ import './dailyReload/mocks';
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render } from '@testing-library/react';
 import { LatestSeasonReview } from '@/pages/StadiumTycoon';
-import type { LeagueClub, TycoonLeague } from '@/lib/stadiumTycoon';
+import { deserializeTycoon, leagueShape, newTycoon, prestige, serializeTycoon, tick, type LeagueClub, type TycoonLeague } from '@/lib/stadiumTycoon';
 
 const club = (name: string, w: number, d: number, l: number, gf: number, ga: number): LeagueClub => ({ name, offset: 0, w, d, l, gf, ga, pts: w * 3 + d });
 /* index 0 is you (the engine's rule), second on points */
@@ -23,10 +23,8 @@ const TABLE: LeagueClub[] = [
   club('Birch Rovers', 5, 6, 1, 18, 17),
   club('Cedar United', 1, 0, 13, 8, 36),
 ];
-const LABEL = 'Season 3: second in the test division';
-const last = { label: LABEL, position: 2, table: TABLE };
-/* the league as it stands NOW: a new season, everybody back on nothing */
-const league: TycoonLeague = { division: 0, season: 3, matchday: 0, seed: 7, clubs: TABLE.map(c => ({ ...c, w: 0, d: 0, l: 0, gf: 0, ga: 0, pts: 0 })) };
+const LABEL = 'Season 3 · Muddy Meadows League';
+const last: TycoonLeague = { division: 0, season: 2, matchday: 14, seed: 7, clubs: TABLE };
 
 const text = (sel: string) => document.querySelector(sel)?.textContent ?? null;
 const open = () => fireEvent.click(document.querySelector('[data-last-season]') as HTMLElement);
@@ -35,13 +33,13 @@ afterEach(cleanup);
 
 describe('Stadium Tycoon: the Latest season review', () => {
   it('offers the review on a button that says where you finished', () => {
-    render(<LatestSeasonReview last={last} league={league} />);
-    expect(text('[data-last-season]')).toBe("Latest season2nd of 4 · Review this visit's result");
+    render(<LatestSeasonReview last={last} />);
+    expect(text('[data-last-season]')).toBe("Latest seasonSeason 3 · 2nd of 4");
     expect(document.querySelector('[data-latest-season-review]')).toBeNull();
   });
 
   it('prints your own line of the final table: place, points, record and goals', () => {
-    render(<LatestSeasonReview last={last} league={league} />);
+    render(<LatestSeasonReview last={last} />);
     open();
     expect(text('[data-season-headline]')).toBe(LABEL);
     expect(text('[data-season-position]')).toBe('2nd of 4');
@@ -51,7 +49,7 @@ describe('Stadium Tycoon: the Latest season review', () => {
   });
 
   it('draws the final table in table order, every club with its own numbers, yours marked', () => {
-    render(<LatestSeasonReview last={last} league={league} />);
+    render(<LatestSeasonReview last={last} />);
     open();
     const rows = [...document.querySelectorAll('[data-latest-season-table] tbody tr')];
     expect(rows.map(r => r.getAttribute('data-season-club'))).toEqual(['Alder Town', 'Your Ground FC', 'Birch Rovers', 'Cedar United']);
@@ -66,18 +64,42 @@ describe('Stadium Tycoon: the Latest season review', () => {
   });
 
   it('keeps the season it opened on while the match runs, and shows the newer one when opened again', () => {
-    const view = render(<LatestSeasonReview last={last} league={league} />);
+    const view = render(<LatestSeasonReview last={last} />);
     open();
-    const next = { label: 'Season 4: champions', position: 1, table: [club('Your Ground FC', 12, 1, 1, 40, 9), ...TABLE.slice(1)] };
-    view.rerender(<LatestSeasonReview last={next} league={league} />);
+    const next = { ...last, season: 3, clubs: [club('Your Ground FC', 12, 1, 1, 40, 9), ...TABLE.slice(1)] };
+    view.rerender(<LatestSeasonReview last={next} />);
     expect(text('[data-season-headline]')).toBe(LABEL);
     expect(text('[data-season-points]')).toBe('25');
     const back = [...document.querySelectorAll('[data-latest-season-review] button')].find(b => b.textContent === 'Back') as HTMLElement;
     fireEvent.click(back);
     expect(document.querySelector('[data-latest-season-review]')).toBeNull();
     open();
-    expect(text('[data-season-headline]')).toBe('Season 4: champions');
+    expect(text('[data-season-headline]')).toBe('Season 4 · Muddy Meadows League champions');
     expect(text('[data-season-points]')).toBe('37');
     expect(text('[data-season-position]')).toBe('1st of 4');
+  });
+
+  it.each([true, false])('retains the actual last table on reload after a season with winning=%s', winning => {
+    const now = 1794085200000;
+    let state = newTycoon(now);
+    for (let i = 0; i < leagueShape(0).matchdays; i += 1) {
+      state = tick({ ...state, minute: 89, goalsFor: winning ? 100 : 0, goalsAgainst: winning ? 0 : 100 }, 1.5, () => 1).state;
+    }
+    expect(state.league?.season).toBe(1);
+    expect(state.league?.division).toBe(winning ? 1 : 0);
+    expect(state.lastCompletedLeague?.season).toBe(0);
+    expect(state.lastCompletedLeague?.matchday).toBe(leagueShape(0).matchdays);
+    expect(state.lastCompletedLeague?.clubs[0][winning ? 'w' : 'l']).toBe(5);
+    const reloaded = deserializeTycoon(serializeTycoon(state, now), now)!;
+    expect(reloaded.lastCompletedLeague).toEqual(state.lastCompletedLeague);
+    expect(reloaded.league?.clubs[0].pts).toBe(0);
+    expect(prestige({ ...state, lifetime: 4_000_000 }, now).lastCompletedLeague).toBeUndefined();
+
+    const stale = { ...state, lastCompletedLeague: { ...state.lastCompletedLeague!, season: 1 } };
+    expect(deserializeTycoon(serializeTycoon(stale, now), now)?.lastCompletedLeague).toBeUndefined();
+    const incomplete = { ...state, lastCompletedLeague: { ...state.lastCompletedLeague!, matchday: 4 } };
+    expect(deserializeTycoon(serializeTycoon(incomplete, now), now)?.lastCompletedLeague).toBeUndefined();
+    delete state.lastCompletedLeague;
+    expect(deserializeTycoon(serializeTycoon(state, now), now)?.lastCompletedLeague).toBeUndefined();
   });
 });
