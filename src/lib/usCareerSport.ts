@@ -36,6 +36,7 @@ import type { RetirementBlock } from '@/lib/careerRetirement';
 import type { HallCalibration, HallSpeechBlock, LegacyRead, NumberRetiredBy, UsHallSport } from '@/lib/careerHallOfFame';
 import type { UsSeasonBind } from '@/lib/season/us';
 import type { CareerIntlBlock, IntlCall, IntlSummerEntry, IntlTournament } from '@/lib/careerIntl';
+import type { UsSeasonRating } from '@/lib/usInSeasonRating';
 
 export interface UsCareerPracticeResult extends TrainingBank {
   year: number;
@@ -54,6 +55,7 @@ export interface UsCareerSeason {
   awards: string[];
   teamResult: string;
   salary: number;
+  seasonRating?: UsSeasonRating;
 }
 
 /** The part of a career every sport keeps, which is all the board reads by name. */
@@ -295,8 +297,8 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   rollTeamQuality(prev: number | null, rng: () => number): number;
   assignRole(c: C, teamQuality: number, rng: () => number): string;
   campBattle(c: C, teamQuality: number, rng: () => number): string | null;
-  simSeason(c: C, teamQuality: number, rng: () => number): { line: L; notes: string[] };
-  progress(c: C, rng: () => number): string[];
+  simSeason(c: C, teamQuality: number, rng: () => number, inSeasonRating?: boolean): { line: L; notes: string[] };
+  progress(c: C, rng: () => number, seasonRating?: UsSeasonRating): string[];
   drawEvent(c: C, rng: () => number): UsCareerEvent<C>;
   /** Round 1038: every card drawEvent could have picked, built with the same
    *  draws, so a dealt card can be found again by id. */

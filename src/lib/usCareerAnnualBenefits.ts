@@ -10,14 +10,20 @@ type SupportedCareer = {
 };
 type SpendItem = { id: string; category: string; yearly?: number };
 
+export function annualUsRatingBoost(c: Pick<SupportedCareer, 'purchased'>, sport: Sport, seasonAge: number): number {
+  const nfl = sport === 'nfl';
+  const young = seasonAge <= (nfl || sport === 'mlb' ? 26 : 25);
+  return Number(young && c.purchased?.includes(nfl ? 'speed_coach' : 'shot_doctor') === true)
+    + Number(!nfl && c.purchased?.includes('film_room') === true);
+}
+
 /** The recurring support explicitly promised by each sport's shop. */
-export function applyUsCareerAnnualBenefits(c: SupportedCareer, sport: Sport, seasonAge: number): string | null {
+export function applyUsCareerAnnualBenefits(c: SupportedCareer, sport: Sport, seasonAge: number, bankedRating?: number): string | null {
   const owned = new Set(c.purchased ?? []);
   const nfl = sport === 'nfl';
   const has = (id: string) => owned.has(id) ? 1 : 0;
-  const young = seasonAge <= (nfl || sport === 'mlb' ? 26 : 25);
   const health = 6 * has(nfl ? 'private_gym' : 'home_court') + 4 * has(nfl ? 'private_chef' : `chef_${sport}`);
-  const rating = (young ? has(nfl ? 'speed_coach' : 'shot_doctor') : 0) + (nfl ? 0 : has('film_room'));
+  const rating = bankedRating ?? annualUsRatingBoost(c, sport, seasonAge);
   const morale = 6 * has(nfl ? 'family_thanksgiving' : 'road_family')
     + (nfl ? 0 : 4 * has('barber_chair')) + (sport === 'nhl' ? 4 * has('skate_sharpener') : 0);
   const fanbase = 10 * has(nfl ? 'foundation' : `foundation_${sport}`)
@@ -27,11 +33,11 @@ export function applyUsCareerAnnualBenefits(c: SupportedCareer, sport: Sport, se
 
   const before = { health: c.health, ovr: c.ovr, morale: c.morale, fanbase: c.fanbase };
   c.health = Math.max(c.health, Math.min(100, c.health + health));
-  c.ovr = raiseWithinPotential(c.ovr, c.pot, rating);
+  if (bankedRating === undefined) c.ovr = raiseWithinPotential(c.ovr, c.pot, rating);
   c.morale = Math.max(c.morale, Math.min(100, c.morale + morale));
   c.fanbase = Math.max(c.fanbase, Math.min(100, c.fanbase + fanbase));
   const gains = [
-    ['health', c.health - before.health], ['rating', c.ovr - before.ovr],
+    ['health', c.health - before.health], ['rating', bankedRating ?? c.ovr - before.ovr],
     ['morale', c.morale - before.morale], ['fanbase', c.fanbase - before.fanbase],
   ].filter(([, gain]) => Number(gain) > 0).map(([label, gain]) => `${label} +${gain}`);
   return gains.length ? `Yearly support: ${gains.join(', ')}.` : null;

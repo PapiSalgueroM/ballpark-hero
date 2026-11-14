@@ -18,5 +18,5 @@ import { UsSeasonCentreHost } from '@/components/us-career/season/UsSeasonCentre
 export const FIRST_ROUND_END = NFL_CAREER_SPORT.firstRoundEnd;
 
 export default function NflMyCareerBoard() {
-  return <UsSeasonCentreHost sport={NFL_CAREER_SPORT}><UsCareerBoard sport={NFL_CAREER_SPORT} /></UsSeasonCentreHost>;
+  return <UsSeasonCentreHost sport={NFL_CAREER_SPORT}><UsCareerBoard sport={NFL_CAREER_SPORT} inSeasonRating /></UsSeasonCentreHost>;
 }

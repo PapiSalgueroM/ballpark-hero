@@ -117,8 +117,8 @@ export function withBankFloor<C extends UsCareerCore & MoneyHost, L extends UsCa
   });
   return {
     ...sport,
-    progress: (c, rng) => {
-      const notes = sport.progress(c, rng);
+    progress: (c, rng, seasonRating) => {
+      const notes = sport.progress(c, rng, seasonRating);
       for (const line of settleBank(c, money)) notes.push(line);
       return notes;
     },

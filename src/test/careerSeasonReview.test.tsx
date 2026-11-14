@@ -429,6 +429,7 @@ describe('saved career season review', () => {
     render(<MemoryRouter><NbaMyCareerBoard /></MemoryRouter>);
     await screen.findByRole('button', { name: /Play the 2034 season/ });
     click(/Play the 2034 season/);
+    const resultRating = screen.getByRole('region', { name: 'Rating through the season' }).textContent;
     click('Continue');
     const event = document.querySelector('[data-career-event]');
     expect(event, 'An ordinary pending choice is available after the played season').not.toBeNull();
@@ -436,13 +437,18 @@ describe('saved career season review', () => {
     const bytes = localStorage.getItem(sport.saveKey)!;
     expect(JSON.parse(bytes).phase).toBe('event');
     expect(JSON.parse(bytes).c.seasons).toHaveLength(4);
+    expect(JSON.parse(bytes).c.seasons[3].seasonRating.checkpoints).toHaveLength(4);
     // React initializes its async act task queue with one random draw before the measured review.
     await act(async () => {});
     const writes = vi.spyOn(Storage.prototype, 'setItem');
     vi.mocked(Math.random).mockClear();
     await act(async () => { click(/Career Log/); });
     expect(document.querySelector('[data-career-season-review]'), 'Career Log opens while the ordinary choice stays pending').not.toBeNull();
+    choose(3);
+    expect(screen.getByRole('region', { name: 'Rating through the season' }).textContent).toBe(resultRating);
+    click('Back to seasons');
     choose(1);
+    expect(screen.queryByRole('region', { name: 'Rating through the season' })).toBeNull();
     expect(field('ovr')).toBe('84');
     click('Back to seasons');
     click('Back to career');

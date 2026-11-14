@@ -15,5 +15,5 @@ import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 export const FIRST_ROUND_END = NHL_CAREER_SPORT.firstRoundEnd;
 
 export default function NhlMyCareerBoard() {
-  return <UsCareerBoard sport={NHL_CAREER_SPORT} />;
+  return <UsCareerBoard sport={NHL_CAREER_SPORT} inSeasonRating />;
 }

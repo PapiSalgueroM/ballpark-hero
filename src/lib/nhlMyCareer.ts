@@ -52,6 +52,7 @@ import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
+import { stageUsSeasonRating, type UsSeasonRating } from './usInSeasonRating';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -114,6 +115,7 @@ export const NHL_ARCHETYPES: Record<NhlCareerPos, NhlArchetype[]> = {
 };
 
 export interface NhlSeasonLine {
+  seasonRating?: UsSeasonRating;
   year: number;
   team: string;
   age: number;
@@ -443,7 +445,7 @@ function gamesFor(c: NhlCareerState, rng: () => number): { games: number; note: 
 }
 
 export function simNhlSeason(
-  c: NhlCareerState, teamQuality: number, rng: () => number,
+  c: NhlCareerState, teamQuality: number, rng: () => number, inSeasonRating = false,
 ): { line: NhlSeasonLine; notes: string[] } {
   const notes: string[] = [];
   /* Round 1226: how many games his club's season holds comes from the sourced
@@ -480,7 +482,9 @@ export function simNhlSeason(
     }
   }
   const swing = seasonSwing(rng, c.age);
-  const form = c.ovr + moraleForm('nhl', c.morale) + (teamQuality - 78) / 9
+  const seasonRating = inSeasonRating ? stageUsSeasonRating('nhl', c, slate, nextNhlRating) : undefined;
+  const seasonOverall = seasonRating?.average ?? c.ovr;
+  const form = seasonOverall + moraleForm('nhl', c.morale) + (teamQuality - 78) / 9
     // Round 98: the season itself gets a say, so career years and lost
     // years both exist. Averages out to zero across a career.
     + swing;
@@ -493,12 +497,13 @@ export function simNhlSeason(
   if (slate !== US_ENGINE_SEASON.nhl) full.slate = slate;
   Object.assign(full, nhlStatLineFor({ form, pos: c.pos, scoringMult: c.archetype.scoringMult, games: fullGames, iceShare }, rng));
   const line = nhlLineOnSlate(full, work);
+  if (seasonRating) line.seasonRating = seasonRating;
   // Round 123: computed up here rather than down with the rest of the awards
   // because the Conn Smythe is decided inside the playoff block below and it
   // needs the same number everything else is judged on.
   const statScore = nhlSeasonScore(c.pos, full);
 
-  const strength = teamQuality + (c.ovr - 76) * 0.4;
+  const strength = teamQuality + (seasonOverall - 76) * 0.4;
   const playoffOdds = Math.max(0.05, Math.min(0.9, (strength - 66) / 28));
   let result = 'Missed the playoffs';
   let poStage = -1;
@@ -728,21 +733,27 @@ export function nhlRivalSeason(year: number, mine: { pos: NhlCareerPos; slate: n
   };
 }
 
-export function nhlProgress(c: NhlCareerState, rng: () => number): string[] {
-  const notes: string[] = [];
-  const before = c.ovr;
+function nextNhlRating(c: NhlCareerState, rng: () => number): number {
   // Round 59: progression slowed, with the fall starting at the age this
   // position actually falls off. Goalies last longest, as they do.
   if (c.age <= 25 && c.ovr < c.pot) {
     const drag = c.ovr >= 92 ? 0.25 : c.ovr >= 88 ? 0.5 : c.ovr >= 84 ? 0.75 : 1;
     const raw = 1 + Math.floor(rng() * 2);
-    c.ovr = Math.min(c.pot, c.ovr + Math.max(c.ovr >= 88 ? 0 : 1, Math.round(raw * drag)));
+    return Math.min(c.pot, c.ovr + Math.max(c.ovr >= 88 ? 0 : 1, Math.round(raw * drag)));
   } else if (c.age <= 28 && c.ovr < c.pot && rng() < 0.45) {
-    c.ovr = Math.min(c.pot, c.ovr + 1);
+    return Math.min(c.pot, c.ovr + 1);
   } else if (c.age >= ((NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).cliff)) {
     const wear = (100 - c.health) / 40;
-    c.ovr = Math.max(60, Math.round(c.ovr - (1 + rng() * 2 + wear) * (c.age >= 37 ? 1.5 : 1)));
+    return Math.max(60, Math.round(c.ovr - (1 + rng() * 2 + wear) * (c.age >= 37 ? 1.5 : 1)));
   }
+  return c.ovr;
+}
+
+export function nhlProgress(c: NhlCareerState, rng: () => number, seasonRating?: UsSeasonRating): string[] {
+  const notes: string[] = [];
+  const before = c.ovr;
+  const legacyRating = nextNhlRating(c, rng);
+  c.ovr = seasonRating?.finish ?? legacyRating;
   if (c.ovr - before >= 4) notes.push(`📈 The leap: ${before} to ${c.ovr}.`);
   if (before - c.ovr >= 3) notes.push(`📉 The legs go first: ${before} to ${c.ovr}.`);
   if (c.age >= 31) c.health = Math.max(30, c.health - 3);
@@ -808,7 +819,7 @@ export function nhlProgress(c: NhlCareerState, rng: () => number): string[] {
      and it is told whether the career goes on (the same nhlShouldRetire the
      board asks right after this returns), so a player who retires this
      summer is never sent a text about next season. */
-  const support = applyUsCareerAnnualBenefits(c, 'nhl', c.age - 1);
+  const support = applyUsCareerAnnualBenefits(c, 'nhl', c.age - 1, seasonRating?.support);
   if (support) notes.push(support);
   receiveNhlInboxTexts(c, !nhlShouldRetire(c));
   return notes;

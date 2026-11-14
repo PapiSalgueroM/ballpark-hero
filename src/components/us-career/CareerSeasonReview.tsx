@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { formatNumber } from '@/lib/formatNumber';
 import CareerSeasonComparison from '@/components/us-career/CareerSeasonComparison';
 import CareerSeasonHighs from '@/components/us-career/CareerSeasonHighs';
+import SeasonRating from '@/components/us-career/SeasonRating';
 import { UsSeasonCentreOpen } from '@/components/us-career/season/UsSeasonCentreHost';
 
 const finite = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
@@ -108,6 +109,7 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
             <div className="rounded-xl bg-secondary/50 p-3"><dt className="text-xs text-muted-foreground">Age that season</dt><dd data-season-age="" className="font-semibold">{recorded(season.age)}</dd></div>
             <div className="rounded-xl bg-secondary/50 p-3"><dt className="text-xs text-muted-foreground">Season salary</dt><dd data-season-pay="" className="break-words font-semibold">{finite(season.salary) ? `$${formatNumber(season.salary)}M` : 'Not recorded'}</dd></div>
           </dl>
+          <SeasonRating rating={season.seasonRating} />
           <div><h3 className="text-xs font-semibold text-muted-foreground">Team result</h3><p data-season-result="" className="mt-1 break-words text-sm font-semibold">{season.teamResult || 'Not recorded'}</p></div>
           <div><h3 className="text-xs font-semibold text-muted-foreground">Awards</h3><p data-season-awards="" className="mt-1 break-words text-sm">{Array.isArray(season.awards) ? season.awards.length ? season.awards.join(', ') : 'No awards that season' : 'Not recorded'}</p></div>
         </> : <>

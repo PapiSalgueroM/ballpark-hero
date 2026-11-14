@@ -18,5 +18,5 @@ import { UsSeasonCentreHost } from '@/components/us-career/season/UsSeasonCentre
 export const FIRST_ROUND_END = NBA_CAREER_SPORT.firstRoundEnd;
 
 export default function NbaMyCareerBoard({ entry }: { entry?: UsCareerStart } = {}) {
-  return <UsSeasonCentreHost sport={NBA_CAREER_SPORT}><UsCareerBoard sport={NBA_CAREER_SPORT} entry={entry} /></UsSeasonCentreHost>;
+  return <UsSeasonCentreHost sport={NBA_CAREER_SPORT}><UsCareerBoard sport={NBA_CAREER_SPORT} entry={entry} inSeasonRating /></UsSeasonCentreHost>;
 }
