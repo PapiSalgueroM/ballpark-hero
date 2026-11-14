@@ -73,7 +73,7 @@ function splitTies(rows: GroupRow[], compare: (a: GroupRow, b: GroupRow) => numb
   return ties;
 }
 
-// FIFA uses head-to-head again for any smaller tied subset. Fully level clubs draw lots here.
+// The rules repeat head-to-head for any smaller tied subset. Fully level clubs draw lots here.
 // https://www.fifa.com/en/articles/group-stage-who-will-qualify-permutations
 function rankGroup(clubs: readonly string[], matches: readonly Match[], seed: string) {
   const rankTied = (rows: GroupRow[]): GroupRow[] => {
