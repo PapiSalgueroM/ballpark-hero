@@ -1,4 +1,12 @@
+## 2026-11-14: Soccer rehab ratings, NBA release requests and trained NRL starters
+
+- Soccer Career applies the actual pace and physical loss from serious injury rehab to the current overall. Season Ratings keeps the overall before rehab and on return for that saved injury year.
+- NBA My Career players can ask their agent for a release. A granted release ends the existing deal without a payout and opens the regular free-agent market. Already earned salary stays in the save. Trade and release share one preseason request.
+- NRL managers who stay at their current club keep returning starters in their learned positions when available. The first selection fills the other places from players who have not already been picked.
+
 ## 2026-11-14: NBA trade requests, NRL offseason preferences and Home discovery focus
+
+[PR #937](https://github.com/PapiSalgueroM/ballpark-hero/pull/937) published exact main `70cd2cc99bf993848e2f7ac7b546d34bb86c956c`, deployment `a22af74a-14d2-4bd5-9ce5-236145f7e404`. Eight live browser journeys, all 174 sitemap routes and the raw guides passed. IndexNow accepted both changed guides.
 
 - NBA My Career lets a signed player ask their agent for a trade before a season, after finishing at least one year. The request and ruling are saved for the year. An accepted request moves the existing contract to a different franchise in that career era.
 - Browser Back restores the exact Home opener in Main event, Most played today and Just shipped, including a game that also appears in the sport catalogue.
