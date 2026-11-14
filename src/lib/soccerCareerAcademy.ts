@@ -46,6 +46,19 @@ export interface AcademyFields {
 type StatBlock = Record<AcademyFocus, number>;
 type AcademySave = StatBlock & AcademyFields & { position: string; overall: number };
 
+const REPORT_STATS = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes'] as const;
+type AcademyRatings = [number, number, number, number, number, number, number];
+export type AcademyReportReceipt = [
+  openingOverall: number, potential: number, focus: AcademyFocus | null, focusAdded: number,
+  opening: AcademyRatings, closing: AcademyRatings,
+];
+
+export function academyReportReceipt(before: AcademySave, after: AcademySave, potential: number): AcademyReportReceipt {
+  const ratings = (state: AcademySave) => REPORT_STATS.map(key => state[key]) as AcademyRatings;
+  const focus = academyFocusOf(before);
+  return [before.overall, potential, focus, focus ? after.academyFocusAdded ?? 0 : 0, ratings(before), ratings(after)];
+}
+
 export interface AcademyFocusOption { key: AcademyFocus; label: string }
 
 /** The families this position can focus on, in the order the page shows its bars. */
@@ -137,8 +150,38 @@ export function academyHash(text: string): number {
 
 type ReportSave = StatBlock & AcademyFields & {
   position: string; overall: number; playerName: string; age: number; currentClub: string;
-  seasons: { year: number; apps: number; goals: number; assists: number; cleanSheets: number; type?: string; ratingPath?: readonly number[] }[];
+  seasons: {
+    year: number; apps: number; goals: number; assists: number; cleanSheets: number; type?: string;
+    age?: number; club?: string; ratingPath?: readonly number[]; academyReport?: AcademyReportReceipt;
+  }[];
 };
+
+/** The latest settled youth year. Only the report's numbers are kept on disk. */
+export function savedAcademyReport(career: ReportSave): AcademyReport | null {
+  const row = career.seasons[career.seasons.length - 1];
+  const receipt = row?.academyReport;
+  if (row?.type !== 'youth' || !Array.isArray(receipt) || receipt.length !== 6 || !row.ratingPath || !row.club || row.age === undefined) return null;
+  const [overall, potential, focus, added, opening, closing] = receipt;
+  const rating = (value: number) => Number.isFinite(value) && value >= 1 && value <= 99;
+  const skills = (values: AcademyRatings) => Array.isArray(values) && values.length === REPORT_STATS.length && values.every(rating);
+  if (!rating(overall) || !rating(potential) || !skills(opening) || !skills(closing)
+      || !Number.isInteger(added) || added < 0 || added > ACADEMY_FOCUS_BONUS
+      || (focus !== null && !academyFocusOf({ position: career.position, academyFocus: focus }))
+      || (focus === null && added !== 0)) return null;
+  const stats = (values: AcademyRatings) => Object.fromEntries(REPORT_STATS.map((key, index) => [key, values[index]])) as StatBlock;
+  const start = stats(opening);
+  const finish = stats(closing);
+  const closingOvr = allocOverall(finish, career.position);
+  if (!Array.isArray(row.ratingPath) || row.ratingPath.length !== 5
+      || !row.ratingPath.every(value => Number.isInteger(value) && rating(value))
+      || row.ratingPath[0] !== allocOverall(start, career.position) || row.ratingPath[4] !== closingOvr) return null;
+  return buildAcademyReport({
+    ...career, ...start, overall, currentClub: row.club, academyFocus: focus ?? undefined,
+    seasons: career.seasons.slice(0, -1),
+  }, {
+    ...career, ...finish, overall: closingOvr, age: row.age, currentClub: row.club, academyFocusAdded: added,
+  }, potential);
+}
 
 /* The verdict's cut points, in normal growth per skill over the year. On real
    careers the year gives 3.7 a skill on average (2.8 at the 10th percentile,

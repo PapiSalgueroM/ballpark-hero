@@ -1,7 +1,8 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import {
   ACADEMY_FOCUS_BONUS, ACADEMY_FOCUS_NEAR, academyFocusOptions, academyFocusOf, academyFocusBonus,
-  withAcademyFocus, applyAcademyFocus, buildAcademyReport, academyFocusResultLine, ACADEMY_CUP_STAGES,
+  withAcademyFocus, applyAcademyFocus, buildAcademyReport, academyReportReceipt, savedAcademyReport,
+  academyFocusResultLine, ACADEMY_CUP_STAGES,
 } from "./soccerCareerAcademy";
 
 const STATS = { pace: 60, shooting: 55, passing: 58, dribbling: 61, defending: 40, physical: 57, reflexes: 30 };
@@ -109,6 +110,31 @@ describe("the report", () => {
   it("is the same every time and refuses a stale pair", () => {
     expect(buildAcademyReport(before, after, 80)).toEqual(buildAcademyReport(before, after, 80));
     expect(buildAcademyReport(after, after, 80)).toBeNull();
+  });
+
+  it("reads the same report from a restored career without changing stored offers or drawing again", () => {
+    const season = {
+      ...after.seasons.at(-1)!, age: after.age, club: after.currentClub, ratingPath: [55, 55, 56, 56, 57],
+      academyReport: academyReportReceipt(before, after, 80),
+    };
+    const played = { ...after, seasons: [...before.seasons, season], pendingOffers: [{ club: 'Example Town' }] };
+    const opening = JSON.stringify(played);
+    const restored = JSON.parse(opening);
+    const rng = vi.spyOn(Math, 'random');
+    const report = savedAcademyReport(restored);
+    expect(report).toEqual(buildAcademyReport(before, played, 80));
+    expect(report?.ratingPath).toEqual(season.ratingPath);
+    expect(JSON.stringify(restored)).toBe(opening);
+    expect(rng).not.toHaveBeenCalled();
+  });
+
+  it("keeps youth rows without a compatible receipt readable", () => {
+    expect(savedAcademyReport(after)).toBeNull();
+    const row = {
+      ...after.seasons.at(-1)!, age: after.age, club: after.currentClub, ratingPath: [40, 41, 42, 43, 57],
+      academyReport: academyReportReceipt(before, after, 80),
+    };
+    expect(savedAcademyReport({ ...after, seasons: [row] })).toBeNull();
   });
 
   it("prints what the focus really added", () => {
