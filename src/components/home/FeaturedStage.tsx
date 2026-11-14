@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ALL_GAMES, type GameDef } from '@/data/gameRegistry';
-import { CATEGORY_SPORT, HOME_STAGE, sportOf, type StageEntry } from '@/data/homeFront';
-import { HUB_NAV } from '@/lib/sportHubNav';
+import { HOME_STAGE, sportOf, type StageEntry } from '@/data/homeFront';
 import { homeSaveStorage, useHomeSaveRefresh } from './homeSaveRefresh';
 import { SportGlyph, sportStyle } from './SportGlyph';
 import styles from './HomeLaunchDeck.module.css';
@@ -30,6 +29,7 @@ export function FeaturedStage() {
     const game = ALL_GAMES.find(g => g.path === entry.path);
     return game ? [{ entry, game }] : [];
   }), []);
+  const rugbyManager = ALL_GAMES.find(game => game.path === '/nrl-team-manager');
   const [saved, setSaved] = useState(() => stageSaves(homeSaveStorage()));
   const refresh = useCallback((storage: Storage | null) => {
     const next = stageSaves(storage);
@@ -45,21 +45,13 @@ export function FeaturedStage() {
         {cards.map((card, index) => <StageCard key={card.game.path} card={card} lead={index === 0}
           saved={!!card.entry.saveKey && saved.includes(card.entry.saveKey)} />)}
       </div>
-      <nav aria-label="Sports shortcuts" className={styles.sports}>
-        <a href="#sport-rugby" style={sportStyle('rugby')} className={styles.sportLink}>
-          <SportGlyph sport="rugby" className={styles.sportGlyph} />
-          <span>Rugby League</span>
-        </a>
-        {HUB_NAV.map(hub => {
-          const sport = CATEGORY_SPORT[hub.titles[0]];
-          return (
-            <Link key={hub.route} to={hub.route} style={sportStyle(sport)} data-home-sport-hub={hub.route} className={styles.sportLink}>
-              <SportGlyph sport={sport} className={styles.sportGlyph} />
-              <span>{hub.navLabel}</span>
-            </Link>
-          );
-        })}
-      </nav>
+      {rugbyManager && (
+        <Link to={rugbyManager.path} style={sportStyle('rugby')} data-home-nrl-launch="" className={styles.rugbyLaunch}>
+          <SportGlyph sport="rugby" className={styles.rugbyGlyph} />
+          <span>{rugbyManager.label}</span>
+          <ArrowRight aria-hidden="true" className={styles.launchArrow} />
+        </Link>
+      )}
     </section>
   );
 }

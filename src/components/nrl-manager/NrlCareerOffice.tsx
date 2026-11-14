@@ -1921,6 +1921,16 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const jobYear = year + (seasonOut ? 2 : 1);
   const summer = nrlSummerApplication(career);
   const application = nrlOffseasonApplication(career) ?? (summer?.response !== 'pending' ? summer : null);
+  const departure = employed && !disabled && nrlCanLeaveClub(career, openings) && (
+    <RetireDoor className="mt-3" door={mustMove ? 'Open job market' : 'Leave club'}
+      title={mustMove ? `Open the ${jobYear} job market?` : `Leave ${clubName(year, clubId)} after ${year}?`}
+      lines={[`You’ll be out of work. To return for ${year + 1}, choose one of the ${openings.length} simulated vacancies. This saves your completed season.`,
+        ...(application ? ['Your existing application or offer closes.'] : []),
+        ...(career.coachRetention ? ['Leaving cancels the assistant extension.'] : []),
+        ...(career.worldCup ? ['You can resume your World Cup appointment after taking a new club job.'] : [])]}
+      keep={mustMove ? 'Back to season review' : 'Stay at club'} confirm={mustMove ? 'Yes, open job market' : 'Yes, leave club'}
+      onRetire={() => onAction({ type: 'leaveClub', year, clubId })} />
+  );
   const applicationCard = application && (
     <div className="rounded-lg border border-border p-2">
       <p className="text-sm font-semibold" role="status">
@@ -1989,7 +1999,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       {outstandingJudiciary && employed && year < NRL_LAST_YEAR && <p className="mt-2 text-sm text-muted-foreground">
         A remaining suspension carries into the next season if you stay and the player is still signed to this club.
       </p>}
-      {target && !outOfWork && (
+      {target && !outOfWork && !mustMove && (
         <section className="mt-4 rounded-xl border border-border bg-background p-3" aria-labelledby="nrl-board-target">
           <h3 id="nrl-board-target" className="text-sm font-bold">Board target</h3>
           <p className="mt-1 text-sm font-semibold">{target.label}</p>
@@ -2003,9 +2013,29 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           </p>
         </section>
       )}
-      {employed && challengeStatus && <div className="mt-3"><NrlBoardChallengeNotice season={career.season} status={challengeStatus} /></div>}
+      {employed && challengeStatus && (mustMove ? (
+        <section aria-label="Board decision" className="mt-3 space-y-3 rounded-xl border border-border bg-background p-3">
+          <NrlBoardChallengeNotice season={career.season} status={challengeStatus} />
+          <ul aria-label="Missed board targets" className="space-y-1 text-sm">
+            {career.history.filter(row => row.clubId === clubId && (row.year === year - 1 || row.year === year)).map(row => {
+              const benchmark = nrlBoardBenchmark(row.year, clubId, pastPlaces.get(`${clubId}:${row.year - 1}`));
+              return benchmark && <li key={row.year}><strong>{row.year}</strong> · Ladder place {row.rank} · {benchmark.label}</li>;
+            })}
+          </ul>
+          {applicationCard}
+          {openings.length ? (
+            <>
+              <p className="text-sm font-semibold">Simulated vacancies for {jobYear}</p>
+              <ul aria-label="Simulated vacancies" className="space-y-1 text-sm text-muted-foreground">
+                {openings.map(job => <li key={job.clubId}>{clubName(jobYear, job.clubId)} · {job.reason === 'expansion' ? 'New club' : `Finished ${job.rank}`}</li>)}
+              </ul>
+              {departure}
+            </>
+          ) : <p className="text-sm text-muted-foreground">No simulated vacancies. You can choose a club directly below.</p>}
+        </section>
+      ) : <div className="mt-3"><NrlBoardChallengeNotice season={career.season} status={challengeStatus} /></div>)}
       {!finished && employed && <SummerApplications career={career} onAction={onAction} disabled={disabled} />}
-      {summer && finished && employed && <div className="mt-3">{applicationCard}</div>}
+      {summer && finished && employed && !mustMove && <div className="mt-3">{applicationCard}</div>}
       {employed && <BoardPathways career={career} onAction={onAction} disabled={disabled} />}
       {employed && !career.legacySeason && year < NRL_LAST_YEAR && <DevelopmentFocus career={career} onAction={onAction} disabled={disabled} />}
       {finished && employed && year < NRL_LAST_YEAR && <ExpiringDeals career={career} onAction={onAction} disabled={disabled} />}
@@ -2081,7 +2111,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 })}
               </ul>
             </section>}
-            {!summer && applicationCard}
+            {!summer && !mustMove && applicationCard}
             <label className="block font-semibold" htmlFor="nrl-next-club">Club to manage</label>
             <select ref={clubSelect} id="nrl-next-club" className={control} value={nextClubId} disabled={disabled} onChange={event => setNextClubId(event.target.value)}>
               <option value="">Choose a club</option>
@@ -2094,15 +2124,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           </div>
         </details>
       )}
-      {employed && !disabled && nrlCanLeaveClub(career, openings) && (
-        <RetireDoor className="mt-3" door="Leave club" title={`Leave ${clubName(year, clubId)} after ${year}?`}
-          lines={[`You’ll be out of work. To return for ${year + 1}, choose one of the ${openings.length} simulated vacancies. This saves your completed season.`,
-            ...(application ? ['Your existing application or offer closes.'] : []),
-            ...(career.coachRetention ? ['Leaving cancels the assistant extension.'] : []),
-            ...(career.worldCup ? ['You can resume your World Cup appointment after taking a new club job.'] : [])]}
-          keep="Stay at club" confirm="Yes, leave club"
-          onRetire={() => onAction({ type: 'leaveClub', year, clubId })} />
-      )}
+      {!mustMove && departure}
       {finished && !retired && !disabled && !needsJudiciary && (
         <RetireDoor className="mt-3" door="Retire from management" title={`Retire after the ${seasonOut?.year ?? year} season?`}
           lines={['Your career record stays in this save slot.', ...(career.coachRetention ? ['Retiring cancels the assistant extension.'] : [])]}

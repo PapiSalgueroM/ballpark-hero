@@ -1,4 +1,11 @@
+## 2026-11-14: Direct NRL access from Home and clearer board decisions
+
+- Home offers a direct NRL Team Manager launch below the featured games and preserves focus when you return. The sports catalogue carries the complete sport index and links to the six hubs.
+- Under NRL Board challenge, Season review compares both missed targets with the saved ladder finishes, puts an open club offer first, and shows which actual vacancies you can pursue.
+
 ## 2026-11-14: Fantasy Draft browsing, budget projection and NRL board briefs
+
+[PR #946](https://github.com/PapiSalgueroM/ballpark-hero/pull/946) published exact main `6913be26a0a189f8124a284255c8ec97353d71a3`, deployment `261130a1-8221-4312-87c6-f0e3bd000162`. Seven live browser journeys, three raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted the three guides.
 
 - Fantasy Draft keeps its ten-player opening shortlist and lets you page through all remaining eligible picks. Searching uses pages of twenty, keeps the original position and daily-rule guard, and explains picks that are blocked or already taken.
 - Budget Builder previews the cheapest combination of distinct players that can fill the remaining positions in the same eligible market. The signing preview shows how much would be left, the shortfall, or which situation has no complete lineup. You can still confirm the original signing.
