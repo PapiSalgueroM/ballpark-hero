@@ -2160,7 +2160,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Change clubs between seasons from Season review.</li>
               <li>When staying at your club, check Fill open squad places in Season review to preview affordable one-season free-agent deals before starting the next season.</li>
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>
-              <li>Choose Rugby League World Cup beside Career saves to coach a national team through a separate 2026 tournament.</li>
+              <li>Choose Rugby League World Cup beside Career saves to coach a national team. In Set matchday lineup, you can swap any of the six reserves with a starter. Out-of-position starts carry a rating penalty.</li>
               <li>After finishing a 2026 club season, take a national appointment from the Club office before starting 2027. It saves inside your career.</li>
               <li>Review each season, manage contracts and recruit for the next year. An offer or counteroffer shows the change in cap room and open squad places for each year of the deal.</li>
               <li>Before inviting a rival approach in Contracts, check next season’s position cover and the current clubs that can take over the deal.</li>

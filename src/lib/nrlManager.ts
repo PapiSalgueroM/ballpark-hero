@@ -25,7 +25,7 @@ export const NRL_COACHING_BONUS = 2;
 export const NRL_QUALIFIED_COACHING_BONUS = 3;
 export const NRL_CAPTAIN_DEFENCE = 1;
 const MAX_INJURY_ROUNDS = 4;
-const UTILITY_RATING_COST = 12;
+export const NRL_UTILITY_RATING_COST = 12;
 const GOLDEN_POINT_SCORE_CHANCE = 0.78;
 const FIELD_GOAL_CHANCE = 0.14;
 const SET_FIELD_GOAL_CHANCE = 0.28;
@@ -690,7 +690,7 @@ const PLAN_ROLES: Record<NrlSpecialistPlan, readonly NrlRole[]> = {
 };
 
 function addMatchdayRating(sum: number, player: NrlPlayer, role: NrlRole, state: NrlRoundPreparation, reserve?: NrlPlayer): number {
-  const rating = nrlCanPlayRole(player, role) ? player.rating : player.rating - UTILITY_RATING_COST;
+  const rating = nrlCanPlayRole(player, role) ? player.rating : player.rating - NRL_UTILITY_RATING_COST;
   const penalty = fitnessPenalty(player, playerPreparation(state, player.id));
   // Keep the original summation order for the ordinary ratings.
   if (!reserve) return sum + rating - penalty;

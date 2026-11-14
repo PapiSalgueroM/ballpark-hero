@@ -701,6 +701,52 @@ describe('7b) a finish no longer than this tab still wins', () => {
   }
 });
 
+describe('Footle Daily give-up confirmation', () => {
+  const key = `footle-daily-${TODAY}`;
+
+  it('adopts another tab’s guess before allowing a fresh give up on that board', async () => {
+    const newer = renderHook(() => useGame());
+    const stale = renderHook(() => useGame());
+    await flush();
+    const target = newer.result.current.targetPlayer!;
+    const wrong = newer.result.current.availablePlayers.find(p => p.name !== target.name)!;
+    act(() => newer.result.current.makeGuess(wrong));
+    const saved = raw(key);
+    expect(stale.result.current.guesses).toHaveLength(0);
+
+    act(() => stale.result.current.giveUp());
+    expect(raw(key)).toBe(saved);
+    expect(stale.result.current.gameStatus).toBe('playing');
+    expect(stale.result.current.guesses.map(guess => guess.playerName)).toEqual([wrong.name]);
+    expect(recordCompletion).not.toHaveBeenCalled();
+
+    act(() => stale.result.current.giveUp());
+    expect(parsed(key)).toEqual({ ...JSON.parse(saved!), gameStatus: 'lost' });
+    expect(parsed(key).puzzleId).toBe(target.name);
+    expect(stale.result.current.gameStatus).toBe('lost');
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+    stale.unmount();
+    const restored = renderHook(() => useGame());
+    await flush();
+    expect(restored.result.current.gameStatus).toBe('lost');
+    expect(restored.result.current.guesses.map(guess => guess.playerName)).toEqual([wrong.name]);
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
+  it('preserves another tab’s win when a stale give up is confirmed', async () => {
+    const newer = renderHook(() => useGame());
+    const stale = renderHook(() => useGame());
+    await flush();
+    act(() => newer.result.current.makeGuess(newer.result.current.targetPlayer!));
+    expect(newer.result.current.gameStatus).toBe('won');
+    const saved = raw(key);
+    act(() => stale.result.current.giveUp());
+    expect(raw(key)).toBe(saved);
+    expect(stale.result.current.gameStatus).toBe('won');
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+});
+
 /* ------------------------------------------------------------------ 8 */
 
 /* Round 848 review: what the storage event may and may not do. Another tab

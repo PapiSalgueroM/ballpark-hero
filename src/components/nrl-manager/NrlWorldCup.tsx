@@ -5,7 +5,7 @@ import {
   type NrlWorldCupNation,
 } from '@/data/nrlWorldCup2026';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
-import { NRL_TACTICS, type NrlTactic } from '@/lib/nrlManager';
+import { nrlCanPlayRole, NRL_TACTICS, NRL_UTILITY_RATING_COST, type NrlTactic } from '@/lib/nrlManager';
 import {
   advanceNrlWorldCup, createNrlWorldCup, nrlWorldCupCanPickLineup, nrlWorldCupMatchday, nrlWorldCupResults, nrlWorldCupRotation, readNrlWorldCupSave,
   type NrlWorldCupLineup, type NrlWorldCupRun,
@@ -102,8 +102,7 @@ function stageSummary(run: NrlWorldCupRun, report: Report) {
 }
 
 function lineupSummary(nation: NrlWorldCupNation, choice: NrlWorldCupLineup) {
-  const { swaps, bench } = nrlWorldCupMatchday(nation, choice);
-  const change = swaps.find(option => option.index === choice.swap);
+  const { change, bench } = nrlWorldCupMatchday(nation, choice);
   return [
     change && `${change.reserve.name} starts at ${change.starter.role} and ${change.starter.name} moves to the bench.`,
     choice.firstReserve !== undefined && `${bench[0].name} has first interchange priority.`,
@@ -113,7 +112,8 @@ function lineupSummary(nation: NrlWorldCupNation, choice: NrlWorldCupLineup) {
 function MatchdayLineup({ nation, choice, disabled, onChange }: {
   nation: NrlWorldCupNation; choice: NrlWorldCupLineup; disabled: boolean; onChange: (choice: NrlWorldCupLineup) => void;
 }) {
-  const { swaps, bench } = nrlWorldCupMatchday(nation, { swap: choice.swap });
+  const opening = nrlWorldCupMatchday(nation);
+  const { change, bench } = nrlWorldCupMatchday(nation, { swap: choice.swap, target: choice.target });
   const summary = lineupSummary(nation, choice);
   const rotation = nrlWorldCupRotation(nation, choice);
   const rotationNames = rotation.map(player => player.name).join(', ');
@@ -123,7 +123,7 @@ function MatchdayLineup({ nation, choice, disabled, onChange }: {
         Set matchday lineup
       </summary>
       <div className="space-y-2 pb-3">
-        <p className="text-sm text-muted-foreground">Change one starter or give a reserve first priority in the rotation. Changes apply to this match.</p>
+        <p className="text-sm text-muted-foreground">Choose any reserve and the starter they replace. You can also set first interchange priority for this match.</p>
         <div className="grid gap-2 sm:grid-cols-2">
           <label className="min-w-0 space-y-1 text-sm font-semibold">
             <span>Starter and reserve swap</span>
@@ -131,11 +131,22 @@ function MatchdayLineup({ nation, choice, disabled, onChange }: {
               swap: event.target.value ? Number(event.target.value) : undefined,
             })}>
               <option value="">Keep opening starters</option>
-              {swaps.map(({ index, reserve, starter }) => <option key={reserve.id} value={index}>
-                {reserve.name} for {starter.name} · {starter.role}
+              {opening.bench.map(({ id, name, role }, index) => <option key={id} value={index}>
+                {name} · {role}
               </option>)}
             </select>
           </label>
+          {change && (
+            <label className="min-w-0 space-y-1 text-sm font-semibold">
+              <span>Starting player to replace</span>
+              <select className={selectClass} value={opening.starters.indexOf(change.starter)} disabled={disabled}
+                onChange={event => onChange({ swap: choice.swap, target: Number(event.target.value) })}>
+                {opening.starters.map(({ id, name, role }, index) => <option key={id} value={index}>
+                  {name} · {role}{nrlCanPlayRole(change.reserve, role) ? '' : ' (out of position)'}
+                </option>)}
+              </select>
+            </label>
+          )}
           <label className="min-w-0 space-y-1 text-sm font-semibold">
             <span>First interchange priority</span>
             <select className={selectClass} value={choice.firstReserve ?? ''} disabled={disabled} onChange={event => onChange({
@@ -146,7 +157,12 @@ function MatchdayLineup({ nation, choice, disabled, onChange }: {
             </select>
           </label>
         </div>
-        {summary && <p className="text-sm" aria-live="polite">{summary}</p>}
+        <div aria-live="polite">
+          {summary && <p className="text-sm">{summary}</p>}
+          {change && !nrlCanPlayRole(change.reserve, change.starter.role) && (
+            <p className="text-sm text-muted-foreground">Playing out of position lowers {change.reserve.name}’s effective rating by {NRL_UTILITY_RATING_COST} OVR.</p>
+          )}
+        </div>
         <p className="text-sm text-muted-foreground">Planned rotation: {rotationNames}.</p>
       </div>
     </details>

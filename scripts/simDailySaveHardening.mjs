@@ -304,7 +304,7 @@ try {
        layer stands, so only stale (both removed) turns them. */
     const guardRows = /a tab behind the stored log takes it over|a finish taken over from another tab|1b\) a handler whose first answer is dropped|Shirt Number: a stale tab cannot drop|7\) .*(Transfer Path|Footle).*its own next click/;
     const hlRows = /: the stale tab cannot drop a decided round|7\) .*Higher or Lower: taken over through its own next click/;
-    const verdictRows = /2b\) a dropped answer shows no verdict/;
+    const verdictRows = /2b\) a dropped answer shows no verdict|Footle Daily give-up confirmation/;
     /* Round 1003 (758c1b72) gave NBA Connections the second layer: its
        submit asks takeNewerSave before its own click. Its click row of
        section 7 was a guard row until then (nine of them) and holds on
@@ -318,11 +318,11 @@ try {
       turn: (t) => /1b\) a handler whose first answer is dropped/.test(t),
       verdict: (t) => verdictRows.test(t) || /7\) .*Higher or Lower: taken over through its own next click/.test(t),
       event: (t) => /an open tab follows another tab through the storage event|: an open tab moves to the saved round|7\) .*through the storage event|7b\) |9\) /.test(t),
-      mark: (t) => /a finish taken over from another tab|7\) a finish is recorded once|7b\) |9\) .*Hard run/.test(t),
+      mark: (t) => /a finish taken over from another tab|7\) a finish is recorded once|7b\) |9\) .*Hard run|preserves another tab’s win/.test(t),
       finished: (t) => /7b\) /.test(t),
       decided: (t) => /8\) .*a finished tab is never sent back to playing/.test(t),
     }[CONTROL];
-    const expected = { stale: 30, guard: 8, turn: 3, verdict: 12, event: 18, mark: 12, finished: 2, decided: 1 }[CONTROL];
+    const expected = { stale: 32, guard: 8, turn: 3, verdict: 14, event: 18, mark: 13, finished: 2, decided: 1 }[CONTROL];
     const failed = run.rows.filter((r) => r.status === 'failed');
     const intended = run.rows.filter((r) => want(r.title));
     assert.equal(intended.length, expected, `the control's ${expected} target rows exist`);

@@ -136,6 +136,13 @@ describe('World Cup club appointment', () => {
     expect(reduceNrlCareer(started, { type: 'playWorldCupAppointment', previous, next })).toBe(started);
     const tampered = { ...advanceNrlWorldCup(next, 2, 'attack'), lineups: { 1: { swap: 0 } } };
     expect(reduceNrlCareer(started, { type: 'playWorldCupAppointment', previous: next, next: tampered })).toBe(started);
+    const rewrittenSwap = { ...advanceNrlWorldCup(next, 2, 'attack'), lineups: { 1: { swap: 0, target: 0, firstReserve: 3 } } };
+    expect(reduceNrlCareer(started, { type: 'playWorldCupAppointment', previous: next, next: rewrittenSwap })).toBe(started);
+    const appointmentSwap = advanceNrlWorldCup(next, 2, 'attack', { swap: 5, target: 0 });
+    const withSwap = reduceNrlCareer(started, { type: 'playWorldCupAppointment', previous: next, next: appointmentSwap });
+    expect(withSwap.worldCup?.lineups?.[2]).toEqual({ swap: 5, target: 0 });
+    expect(stripCup(withSwap)).toEqual(complete);
+    expect(readNrlCareerSave(JSON.stringify(withSwap))).toEqual(withSwap);
     expect(readNrlCareerSave(JSON.stringify({ ...started, worldCup: { ...next, lineups: { 2: { firstReserve: 3 } } } }))).toBeNull();
     const move = { type: 'startNextSeason', move: { fromYear: 2026, clubId: 'bears' } } as const;
     let current = reduceNrlCareer(started, move);
@@ -316,6 +323,37 @@ describe('2026 men’s Rugby League World Cup simulation', () => {
     expect(nrlWorldCupResults(changed).poolMatches[0]).toMatchObject({ homeScore: 28, awayScore: 14 });
     expect(nrlWorldCupResults(reordered).poolMatches[0]).toMatchObject({ homeScore: 28, awayScore: 20 });
     expect(nrlWorldCupResults(reordered).poolMatches.slice(1)).toEqual(nrlWorldCupResults(changed).poolMatches.slice(1));
+  });
+
+  it('starts any registered reserve in the chosen opening slot and keeps the full matchday 19 unique', () => {
+    for (const nation of Object.keys(NRL_WORLD_CUP_2026_OPENING_SQUADS) as (keyof typeof NRL_WORLD_CUP_2026_OPENING_SQUADS)[]) {
+      const original = nrlWorldCupMatchday(nation);
+      for (const [swap, reserve] of original.bench.entries()) {
+        for (const [target, starter] of original.starters.entries()) {
+          const choice = { swap, target };
+          const sheet = nrlWorldCupMatchday(nation, choice);
+          expect(sheet.starters[target].id).toBe(reserve.id);
+          expect(sheet.bench[swap].id).toBe(starter.id);
+          expect(new Set([...sheet.starters, ...sheet.bench].map(player => player.id)).size).toBe(19);
+          const opening = createNrlWorldCup(42, nation);
+          const saved = advanceNrlWorldCup(opening, 1, 'balanced', choice);
+          expect(saved).not.toBe(opening);
+          expect(readNrlWorldCupSave(JSON.stringify(saved))).toEqual(saved);
+        }
+      }
+    }
+    const draw = createNrlWorldCup(3, 'australia');
+    const natural = nrlWorldCupResults(advanceNrlWorldCup(draw, 1, 'balanced', { swap: 5 })).poolMatches;
+    const outOfPosition = nrlWorldCupResults(advanceNrlWorldCup(draw, 1, 'balanced', { swap: 5, target: 0 })).poolMatches;
+    expect(natural[0]).toMatchObject({ homeScore: 30, awayScore: 12 });
+    expect(outOfPosition[0]).toMatchObject({ homeScore: 30, awayScore: 16 });
+    expect(outOfPosition.slice(1)).toEqual(natural.slice(1));
+
+    const opening = createNrlWorldCup(42, 'australia');
+    for (const forged of [{ target: 0 }, { swap: 5, target: 13 }, { swap: 5, target: -1 }]) {
+      expect(advanceNrlWorldCup(opening, 1, 'balanced', forged)).toBe(opening);
+      expect(readNrlWorldCupSave(JSON.stringify({ ...opening, tactics: ['balanced'], lineups: { 1: forged } }))).toBeNull();
+    }
   });
 
   it('rejects forged, stale and eliminated-team lineup choices', () => {

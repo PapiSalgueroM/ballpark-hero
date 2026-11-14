@@ -112,6 +112,31 @@ describe('Rugby League World Cup screen', () => {
     expect(localStorage.getItem(NRL_SAVE_KEY)).toBeNull();
   });
 
+  it('lists every reserve and starting slot and saves an out-of-position swap only after play', async () => {
+    const view = open();
+    await openCup();
+    click('Start World Cup');
+    const before = localStorage.getItem(cupKey);
+    fireEvent.click(screen.getByText('Set matchday lineup'));
+    const reserves = screen.getByRole('combobox', { name: 'Starter and reserve swap' }) as HTMLSelectElement;
+    expect(reserves.options).toHaveLength(7);
+    fireEvent.change(reserves, { target: { value: '5' } });
+    const starters = screen.getByRole('combobox', { name: 'Starting player to replace' }) as HTMLSelectElement;
+    expect(starters.options).toHaveLength(13);
+    fireEvent.change(starters, { target: { value: '0' } });
+    expect(screen.getByText(/Bradman Best starts at Fullback and Reece Walsh moves to the bench/)).toBeVisible();
+    expect(screen.getByText(/Playing out of position lowers Bradman Best/)).toBeVisible();
+    expect(localStorage.getItem(cupKey)).toBe(before);
+    click('Play pool round 1');
+    expect(cup()?.lineups).toEqual({ 1: { swap: 5, target: 0 } });
+    const after = localStorage.getItem(cupKey);
+    view.unmount();
+    open();
+    await openCup();
+    expect(localStorage.getItem(cupKey)).toBe(after);
+    expect(screen.getByText(/Bradman Best starts at Fullback and Reece Walsh moves to the bench/)).toBeVisible();
+  });
+
   it('keeps a refused tournament save until retry and allows leaving only after it is stored', async () => {
     const initial = JSON.stringify(createNrlWorldCup(16, 'tonga'));
     localStorage.setItem(cupKey, initial);

@@ -29,7 +29,7 @@
  * Without R848_PRE_HOOK the rows compare the hook in src with itself, which
  * proves nothing, so they are skipped and say so.
  */
-import type { ComponentType } from 'react';
+import { useState, type ComponentType } from 'react';
 import { act, cleanup, fireEvent, render, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
@@ -110,8 +110,21 @@ vi.mock('@/hooks/useDailyPuzzle', async (importOriginal) => {
       if (IMPL.which === 'old') {
         if (!pre) throw new Error('R848_PRE_HOOK is not set');
         IMPL.calls.old += 1;
-        /* The old hook has no takeNewerSave; a single tab never needs it. */
-        return { takeNewerSave: () => false, ...pre.useDailyPuzzle(options) };
+        const state = pre.useDailyPuzzle(options);
+        const [givenUp, setGivenUp] = useState(false);
+        return {
+          ...state,
+          takeNewerSave: () => false,
+          gameStatus: givenUp ? 'lost' : state.gameStatus,
+          // Footle wrote this receipt itself before the shared hook gained forfeit.
+          forfeit: () => {
+            if (options.gameSlug !== 'footle') throw new Error('Unexpected historical forfeit');
+            localStorage.setItem(keyOf('footle'), JSON.stringify({
+              v: 1, date: state.todayStr, puzzleIndex: state.puzzleIndex, guesses: state.guesses, gameStatus: 'lost',
+            }));
+            setGivenUp(true);
+          },
+        };
       }
       IMPL.calls.new += 1;
       return real.useDailyPuzzle(options);
@@ -831,7 +844,14 @@ describe('one tab plays and restores exactly as before Round 848', () => {
         steps += s.length;
         for (let i = 0; i < before.frames.length; i++) {
           const o = before.frames[i], n = after.frames[i];
-          if (o.bytes !== n.bytes) problems.push(`${name} after "${o.label}": stored bytes differ\n  old ${o.bytes}\n  new ${n.bytes}`);
+          let newBytes = n.bytes;
+          if (d.id === 'footle' && o.label.startsWith('give up') && o.bytes && n.bytes) {
+            const { puzzleId, ...receipt } = JSON.parse(n.bytes);
+            if (typeof puzzleId !== 'string' || !puzzleId) problems.push(`${name}: the forfeit did not save a puzzle ID`);
+            newBytes = JSON.stringify(receipt);
+            if (!saves.has(n.bytes)) saves.set(n.bytes, `${name} after "${n.label}" (with puzzle ID)`);
+          }
+          if (o.bytes !== newBytes) problems.push(`${name} after "${o.label}": stored bytes differ\n  old ${o.bytes}\n  new ${n.bytes}`);
           if (o.view !== n.view) problems.push(`${name} after "${o.label}": the game hands its page something different ${diffAt(o.view, n.view)}`);
           if (o.bytes !== null && !saves.has(o.bytes)) saves.set(o.bytes, `${name} after "${o.label}"`);
         }
