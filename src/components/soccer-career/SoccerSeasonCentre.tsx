@@ -47,6 +47,7 @@ import { leagueWithArticle, ordinal, readLeagueFinish } from '@/lib/soccerCareer
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { SeasonCentre, type CentreModel, type CentrePlace, type CentreSport } from '@/components/season-centre/SeasonCentre';
 import { minuteLabel } from '@/lib/clubManagerClock';
+import { readSeasonRatingPath, seasonOverallAtRound } from '@/lib/careerSeasonRatings';
 import { SOCCER_FULL_TIME, soccerOwnGoals } from '@/lib/season/soccerEvents';
 import type { HelpWords } from '@/components/season-centre/SeasonCentreHelp';
 import { SeasonPicker, type PickerRow } from '@/components/season-centre/SeasonPicker';
@@ -88,6 +89,7 @@ export interface SoccerSeasonCentreProps {
 const HELP: HelpWords = {
   title: 'How the Season Centre works',
   intro: [
+    'Season OVR on a matchday follows the five saved development checkpoints. The game estimates the rating between checkpoints. A match rating still shows your performance that day.',
     'Your season was played the moment you pressed Next Season or 📺 Week by week. Here you watch it one matchday at a time, and the final table and your season totals end where your season summary has them.',
     "Earlier seasons use the league's real clubs and competition rules where the game has them checked. From 2026-27, a season with a saved league world runs on your career's simulated clubs, with promotion and relegation between two divisions. Every score, every other club's result and every minute are your career's own.",
     'When the table changes, each club slides from where it was to where it is now. The little pitch shows who scored and when. The ring is you, whenever you are in the move: scoring it, setting it up, or up there with the attack if you play in midfield or up front, and at the back when one goes in past you as a keeper or a defender. ⚽ Yours or 🅰️ Your assist under the pitch tells you when the goal or the assist was yours. How the move looked is the game\'s own drawing.',
@@ -213,6 +215,9 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
   /* the match rating's own lowest and highest value: the two numbers the season was derived with, not a copy of them */
   const rating = SOCCER.totals(row, ctx).find(t => t.key === 'rating');
   const ratingRange: [number, number] | null = rating && rating.kind === 'mean' ? [rating.min, rating.max] : null;
+  const sport = soccerSport(ctx.keepsSheets, color, roleOf(ctx.position), ratingRange);
+  const development = readSeasonRatingPath(row.ratingPath);
+  if (development) sport.developmentOverall = round => seasonOverallAtRound(development, round, s.games.length);
   return {
     season: historical ? { ...s, labels: historical.labels } : s,
     words: SOCCER.words,
@@ -233,7 +238,7 @@ function buildModel(row: SeasonRecord, ctx: SoccerSeasonCtx, s: DerivedSeason, m
       finishLine, championLine: ctx.champion ? `${ctx.champion} won it` : null,
       trophies, title: !!row.leagueTitle && !row.injurySevere, notes,
     },
-    sport: soccerSport(ctx.keepsSheets, color, roleOf(ctx.position), ratingRange),
+    sport,
     help: HELP,
     momentKey: `centre|${s.key}`,
     moments,

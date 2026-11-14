@@ -222,6 +222,52 @@ describe('NRL league round fixtures', () => {
     expect(raw()).toBe(bytes);
   });
 
+  it('follows a rival through its played scores, scheduled matches, byes and known finals', () => {
+    const initial = createNrlCareer('storm', 4);
+    let career = initial;
+    while (career.season.phase === 'regular') career = advance(career);
+    const next = nrlNextRound(career.season);
+    const known = next.fixtures.find(match => match.homeId !== 'storm' && match.awayId !== 'storm')!;
+    const clubId = known.homeId;
+    const club = nrlSeasonPlan(2026).clubs.find(row => row.id === clubId)!;
+    const bytes = JSON.stringify(career);
+    const view = open(bytes);
+    let fixtures = openFixtures();
+    const pick = () => fireEvent.change(fixtures.getByRole('combobox', { name: 'Fixtures to show' }), { target: { value: 'club:' + clubId } });
+    pick();
+    const schedule = within(fixtures.getByRole('list', { name: club.name + ' season fixtures' }));
+    const earlier = career.season.results.filter(match => [match.homeId, match.awayId].includes(clubId));
+    expect(earlier).toHaveLength(24);
+    for (const match of earlier) expect(schedule.getByText(score(2026, match))).toBeVisible();
+    expect(schedule.getAllByText('Bye')).toHaveLength(3);
+    expect(fixtures.getByText(pairing(2026, known.homeId, known.awayId))).toBeVisible();
+    expect(fixtures.queryByText('Semi-finals')).not.toBeInTheDocument();
+    expect(fixtures.queryByText(/match report/)).not.toBeInTheDocument();
+    expect(raw()).toBe(bytes);
+    expect(localStorage.getItem(fenceKey)).toBe('4');
+    view.unmount();
+
+    const settled = advance(career);
+    const result = settled.season.results.find(match => match.round === known.round && match.homeId === known.homeId)!;
+    const progressed = open(JSON.stringify(settled));
+    fixtures = openFixtures();
+    pick();
+    const finals = within(fixtures.getByRole('list', { name: 'Known finals fixtures' }));
+    expect(finals.getByText(score(2026, result))).toBeVisible();
+    expect(finals.queryByText(pairing(2026, known.homeId, known.awayId))).not.toBeInTheDocument();
+    expect(raw()).toBe(JSON.stringify(settled));
+    progressed.unmount();
+
+    career = advance(initial);
+    open(JSON.stringify(career));
+    fixtures = openFixtures();
+    pick();
+    const fixture = nrlSeasonPlan(2026).draw[1].find(pair => pair.includes(clubId));
+    if (fixture) expect(fixtures.getByText(pairing(2026, ...fixture))).toBeVisible();
+    expect(fixtures.queryByRole('list', { name: 'Known finals fixtures' })).not.toBeInTheDocument();
+    expect(raw()).toBe(JSON.stringify(career));
+  });
+
   it('opens the new generated calendar after a real 2027 rollover', () => {
     const complete = finish(createNrlCareer('bears', 7, 2027));
     open(JSON.stringify(complete));
@@ -241,7 +287,7 @@ describe('NRL league round fixtures', () => {
     expect(round).toBeGreaterThan(0);
     chooseRound(fixtures, round);
     expect(matchLines(fixtures)).toEqual(plan.draw[round - 1].map(([home, away]) => pairing(2028, home, away)));
-    expect(fixtures.getByText(/Chiefs/)).toBeVisible();
+    expect(within(fixtures.getByRole('list', { name: 'League round matches' })).getByText(/Chiefs/)).toBeVisible();
     expect(raw()).toBe(bytes);
   });
 

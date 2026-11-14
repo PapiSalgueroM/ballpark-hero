@@ -1,4 +1,12 @@
+## 2026-11-14: Soccer matchday overall, NBA roster investment and NRL rival fixtures
+
+- Soccer Career shows the season's overall on each league matchday in Week by week and in completed match reports. The displayed rating follows the five saved development checkpoints.
+- NBA My Career players who stay with the same franchise can bring forward up to three roster quality points before a season. The next offseason with that team accounts for the investment through the ordinary roster update.
+- NRL Team Manager can follow a rival from Season fixtures or a Finals race card. It shows the club's regular draw, settled scores, byes and finals fixtures that the career has reached.
+
 ## 2026-11-14: Soccer growth curves, NBA free-agent outreach and NRL opponent scouting
+
+[PR #939](https://github.com/PapiSalgueroM/ballpark-hero/pull/939) published exact main `4c2f6fa5720412a5fee93060f707ce5e834edf5d`, deployment `6d8cf289-fbb9-43f2-ad22-515100d47375`. Nine live browser journeys, all 174 sitemap routes and the three raw guides passed. IndexNow accepted all three changed guides.
 
 - In Soccer Career, early-prime players can grow faster in their young senior seasons, late bloomers grow more slowly early and get a lift in their prime, and an extended prime slows decline at ages 33 and 34. These changes are visible in saved season checkpoints.
 - NBA free agents can ask their agent to contact any franchise active in that year. A club can make one extra offer or decline. The original offers and saved negotiations stay available.

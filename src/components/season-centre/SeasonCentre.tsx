@@ -140,6 +140,8 @@ export interface CentreSport {
   markText?: (g: DerivedGame) => string;
   /** Round 1046: what that mark is called, printed in front of it on his line (soccer: "Rating"). Absent: the bare number. */
   markWord?: string;
+  /** The player's overall for a league round, when the save kept a development path. */
+  developmentOverall?: (round: number) => number;
   /** Round 1046: the review's strip of his mark in every game: its heading, what a screen reader is told, and the
    *  mark's own lowest and highest value (the sport's numbers, never the viewer's). Absent: no strip. */
   form?: { head: string; label: string; range: [number, number] };
@@ -235,6 +237,13 @@ function FixtureList({ model, played, current, short, cupSeen = new Set<string>(
       })}
     </ol>
   );
+}
+
+function DevelopmentOverall({ sport, round }: { sport: CentreSport; round: number }) {
+  if (!sport.developmentOverall) return null;
+  return <p className="text-xs text-muted-foreground" data-match-development-overall>
+    Season OVR <strong className="tabular-nums text-foreground">{sport.developmentOverall(round)}</strong>
+  </p>;
 }
 
 /** His line in one game, after full time. */
@@ -656,6 +665,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
         <div className="text-xs text-muted-foreground">
           {roundWord} {stage.md}{s.mode === 'table' ? ` of ${M}` : ''} · {g.home ? 'Home' : 'Away'}{g.fixedKey ? ` · ${model.occasion[g.fixedKey] ?? model.sport.fixed.poster}` : ''}
         </div>
+        <DevelopmentOverall sport={model.sport} round={stage.md} />
         <div className={host ? 'hidden' : undefined}>
           <MatchClock key={`clock-${stage.md}`} game={g} clock={model.sport.clock} usName={model.header.club} themName={model.names[g.opp]} speed={speed} paused={paused || !active || !!report || (fixtureReports && fixturesShown)} reduced={reduced} onFullTime={onFullTime} active={active}
             holdAt={host ? host.minute : pending ? pending.minute : null} onHold={() => { if (pending) setHosting(momentKeyOf(pending)); }}
@@ -765,6 +775,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
               <span className="tabular-nums" data-fixture-report-score>{report.home ? report.us : report.them}-{report.home ? report.them : report.us}</span>
               <span className="text-right">{report.home ? model.names[report.opp] : model.header.club}</span>
             </div>
+            <DevelopmentOverall sport={model.sport} round={report.md} />
             <HisLine g={report} sport={model.sport} />
             {report.events.length > 0 && <ol aria-label="Match events" className="space-y-1 text-xs" data-fixture-report-events>
               {report.events.map((event, index) => <li key={index} className="flex gap-2">

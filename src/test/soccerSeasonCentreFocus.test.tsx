@@ -147,6 +147,35 @@ describe('Soccer Career Season Centre return focus', () => {
     await closeAndCheck(view, opener, 'SC_CENTRE_FOCUS_RESUME', focus);
   }, 20000);
 
+  it.each([true, false])('shows saved season OVR on the correct matchday when path is present (%s)', async withPath => {
+    const career = fixture(false);
+    const row = career.seasons[0];
+    if (withPath) row.ratingPath = [70, 74, 78, 82, 86];
+    const view = mount(career);
+    const opener = await screen.findByRole('button', { name: /Season replays/i });
+    fireEvent.click(opener);
+    const choice = await waitFor(() => {
+      const button = view.container.querySelector<HTMLButtonElement>('[data-replay-row="0"]');
+      expect(button).not.toBeNull();
+      return button!;
+    });
+    fireEvent.click(choice);
+    const end = await screen.findByRole('button', { name: /straight to the (final table|season review)/i });
+    await acknowledgeFirstHelp(view);
+    const saved = localStorage.getItem(SAVE_KEY);
+    fireEvent.click(end);
+    const reportButtons = screen.getAllByRole('button', { name: /match report:/i });
+    for (const [button, expected] of [[reportButtons[0], 70], [reportButtons.at(-1)!, 86]] as const) {
+      fireEvent.click(button);
+      const report = await screen.findByRole('dialog', { name: 'Match report' });
+      const line = report.querySelector('[data-match-development-overall]');
+      if (withPath) expect(line).toHaveTextContent('Season OVR ' + expected);
+      else expect(line).toBeNull();
+      fireEvent.keyDown(report, { key: 'Escape' });
+    }
+    expect(localStorage.getItem(SAVE_KEY)).toBe(saved);
+  });
+
   it('SC_CENTRE_FOCUS_ZERO_SHIELD: restores Season replays after a represented zero-app Shield result', async () => {
     const career = fixture(true), row: SeasonRecord = career.seasons[0], original = JSON.stringify(row);
     expect(row.apps).toBe(0); expect(soccerSeasonKey(career.playerName, row)).toBeNull();

@@ -294,7 +294,7 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
 
   /* The engine. */
   startCareer(name: string, pos: string, arch: UsCareerArchetype, rng: () => number, appearance: PlayerAppearance, eraId: string, entry?: CareerDraftEntry): C;
-  rollTeamQuality(prev: number | null, rng: () => number): number;
+  rollTeamQuality(prev: number | null, rng: () => number, career?: C): number;
   assignRole(c: C, teamQuality: number, rng: () => number): string;
   campBattle(c: C, teamQuality: number, rng: () => number): string | null;
   simSeason(c: C, teamQuality: number, rng: () => number, inSeasonRating?: boolean): { line: L; notes: string[] };
@@ -321,6 +321,12 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
     available(c: C): boolean;
     receipt(c: C): string | null;
     settle(c: C, kind: 'trade' | 'release'): { teamQuality: number | null; note: string; freeAgency: boolean };
+  };
+  rosterPriority?: {
+    boost(c: C, quality: number): number;
+    receipt(c: C): { before: number; boost: number } | null;
+    request(c: C, quality: number): number | null;
+    cancel(c: C, quality: number | null): number | null;
   };
   buildExtension(c: C, rng: () => number): ExtensionTalk;
   extPushArgs(c: C, rng: () => number): ExtPushArgs;
