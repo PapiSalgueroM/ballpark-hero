@@ -96,7 +96,7 @@ const AttributesScreen = lazy(() => import("@/components/soccer-career/CareerAtt
 const PhonePanel = lazy(() => import("@/components/soccer-career/PhonePanel"));
 const CareerStory = lazy(() => import("@/components/soccer-career/CareerStory").catch(() => new Promise<never>(() => undefined)));
 import { BAND_CLASS } from "@/lib/careerRatingBand";
-import { soccerRatingRows, readMatchRating, readOvr, ratingBand } from "@/lib/careerSeasonRatings";
+import { soccerRatingRows, readMatchRating, readOvr, readSeasonRatingPath, ratingBand } from "@/lib/careerSeasonRatings";
 import { applyDrillResult, type DrillKind } from "@/lib/careerDrills";
 import { isSoccerDeckId, loadSoccerDeck, soccerDeckReady } from "@/lib/soccerDeckGate";
 import { rollStartingOverall, rollPotential, potentialTier, adjustClubsForYear, allocOverall, normalizeAllocation, allocMax, ALLOC_MIN, playsLike, stepAllocation } from "@/lib/careerEras";
@@ -572,7 +572,7 @@ function SeasonSummaryCard({ season, position, onContinue, continueRef, appearan
   const familySummary = appearance?.celebration === "cradle" ? seasonFamilySummary(season, familyContext) : null;
   const summaryRating = readMatchRating(season);
   const summaryOvr = summaryRating !== null ? readOvr(season.ovr) : null;
-  const path = Array.isArray(season.ratingPath) && season.ratingPath.length === 5 && season.ratingPath.every(value => readOvr(value) !== null) ? season.ratingPath : null;
+  const path = readSeasonRatingPath(season.ratingPath);
 
   return (
     <div className="relative bg-card border-2 border-emerald-500/30 rounded-xl p-5 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">

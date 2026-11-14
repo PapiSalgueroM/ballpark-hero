@@ -20,6 +20,11 @@ export function readOvr(v: unknown): number | null {
   return typeof v === "number" && Number.isInteger(v) && v >= 1 && v <= 99 ? v : null;
 }
 
+export function readSeasonRatingPath(path: unknown): NonNullable<SeasonRecord["ratingPath"]> | null {
+  return Array.isArray(path) && path.length === 5 && Array.from(path).every(value => readOvr(value) !== null)
+    ? path as NonNullable<SeasonRecord["ratingPath"]> : null;
+}
+
 /** The season's match rating, only for a season that was actually played. */
 export function readMatchRating(row: Pick<Row, "type" | "apps" | "rating">): number | null {
   return row.type === "playing" && (row.apps ?? 0) > 0 && Number.isFinite(row.rating) && row.rating >= 3 && row.rating <= 10 ? row.rating : null;

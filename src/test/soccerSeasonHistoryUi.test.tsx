@@ -41,6 +41,22 @@ const close = (dialog: HTMLElement) => fireEvent.click(dialog.querySelector('[da
 afterEach(() => { cleanup(); document.body.style.overflow = ''; });
 
 describe('Soccer Career season history UI', () => {
+  it('reopens the exact in-season overall checkpoints after the summary is gone', async () => {
+    await open(source([
+      row({ year: 2025, ovr: 93 }),
+      row({ year: 2026, ovr: 92, ratingPath: [94, 93, 92, 91, 90] }),
+      row({ year: 2027, ovr: 91, ratingPath: [90, 90, 91, 92, 93] }),
+    ]));
+    const select = screen.getByRole('combobox', { name: 'Season development' });
+    expect(select).toHaveValue('2');
+    const values = () => [...document.querySelectorAll('[data-ovr-checkpoints] dd')].map(node => node.textContent);
+    expect(values()).toEqual(['90', '90', '91', '92', '93']);
+    choose('Season development', '1');
+    expect(values()).toEqual(['94', '93', '92', '91', '90']);
+    choose('Season development', '0');
+    expect(values()).toEqual([]);
+    expect(screen.getByText('This season has no saved development checkpoints.')).toBeVisible();
+  });
   it('keeps the existing Ratings table, average and unknown OVR caption', async () => {
     const older = row({ year: 2025, ovr: undefined, rating: 7 });
     const newer = row({ year: 2026, rating: 8 });

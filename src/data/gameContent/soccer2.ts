@@ -1809,6 +1809,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
           "Advance season by season through simulated stats, newspaper headlines, random events, and decisions.",
           "In the academy, the report shows how your OVR improved during the year. Improving sooner can help you earn more youth appearances.",
           "In senior seasons, OVR can rise or fall as the season plays out. For example, a young starter can improve by midseason, and an older player can lose pace later in the year. Next Season simulates the year in one go. Season Summary shows the OVR at each checkpoint, and the final OVR carries forward.",
+          "Reopen Season Ratings and choose a year under Season development to see the saved checkpoints for an academy or senior season.",
           "Most summers open with one card about your position or your career, before the rest of the news between seasons. Training can trade one skill for another next season, with gains stopping at your ceiling.",
           "Want to see it happen? The 📺 Week by week button plays the same season match by match, with your rating every game and the league table after every matchday, then hands you back to the newspaper. Its ? button has the rules and worked examples.",
           "In the season viewer, choose Fixtures and open a completed match to see its score, events and your match stats when available.",

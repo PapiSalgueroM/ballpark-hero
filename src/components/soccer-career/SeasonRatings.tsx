@@ -15,7 +15,7 @@ import { defaultSeasonComparison, seasonHistoryRows } from "@/lib/soccerCareerSe
 import SoccerSeasonHistory from "./SoccerSeasonHistory";
 import type { CareerState } from "@/lib/soccerCareerEngine";
 import {
-  soccerRatingRows, ratingSeries, careerAverageRating, ovrTrackedFrom, ovrNotYetTracked, ratingBand,
+  soccerRatingRows, ratingSeries, careerAverageRating, ovrTrackedFrom, ovrNotYetTracked, readSeasonRatingPath, ratingBand,
 } from "@/lib/careerSeasonRatings";
 import Sparkline from "@/components/career/Sparkline";
 import { BAND_CLASS } from "@/lib/careerRatingBand";
@@ -151,6 +151,11 @@ export default function SeasonRatings({ career, onClose }: { career: RatingsSour
   const [first, setFirst] = useState(defaults?.[0] ?? -1);
   const [second, setSecond] = useState(defaults?.[1] ?? -1);
   const [availability, setAvailability] = useState(rows[rows.length - 1]?.index ?? -1);
+  const developmentRows = career.seasons.flatMap((season, index) =>
+    season && (season.type === "playing" || season.type === "youth") ? [{ index, season, path: readSeasonRatingPath(season.ratingPath) }] : []);
+  const recorded = [...developmentRows].reverse().find(row => row.path);
+  const [developmentIndex, setDevelopmentIndex] = useState(recorded?.index ?? -1);
+  const development = developmentRows.find(row => row.index === developmentIndex) ?? recorded;
   const opener = useRef<HTMLElement | null>(typeof document === "undefined" ? null : document.activeElement as HTMLElement);
   const scroll = useRef<HTMLDivElement>(null);
   const title = useRef<HTMLHeadingElement>(null);
@@ -202,6 +207,23 @@ export default function SeasonRatings({ career, onClose }: { career: RatingsSour
             <button ref={availabilityButton} type="button" data-season-history-open="availability" className={control} onClick={() => changeMode("availability")}>Availability</button>
           </div>
           {rows.length < 2 && <p className="mb-3 text-xs text-muted-foreground">Two saved senior seasons unlock comparison.</p>}
+          {recorded && <section className="mb-3 space-y-2 rounded-xl border border-border p-3">
+            <label className="block text-xs font-bold">Season development
+              <select value={development?.index ?? -1} onChange={event => setDevelopmentIndex(Number(event.target.value))}
+                className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-background px-2 text-sm">
+                {[...developmentRows].reverse().map(({ index, season }) => <option key={index} value={index}>
+                  {season.year}/{String(season.year + 1).slice(-2)} · {season.club} · Age {season.age}
+                </option>)}
+              </select>
+            </label>
+            {development?.path
+              ? <dl aria-label="Overall through the season" data-ovr-checkpoints className="grid grid-cols-5 gap-1 text-center text-xs">
+                {["Start", "Early", "Mid", "Late", "Finish"].map((label, index) => <div key={label}>
+                  <dt className="text-muted-foreground">{label}</dt><dd className="font-bold tabular-nums">{development.path?.[index]}</dd>
+                </div>)}
+              </dl>
+              : <p className="text-xs text-muted-foreground">This season has no saved development checkpoints.</p>}
+          </section>}
           <RatingsBody career={career} />
         </> : mode === "help" ? <div className="space-y-3 text-sm" data-season-history-help-body>
           <button type="button" data-season-history-back="help" className={control} onClick={() => changeMode(helpFrom.current, "help")}>Back to {helpFrom.current === "ratings" ? "Ratings" : helpFrom.current === "compare" ? "comparison" : "Availability"}</button>
@@ -209,6 +231,7 @@ export default function SeasonRatings({ career, onClose }: { career: RatingsSour
           <p>This reads your saved simulated senior seasons. Academy years and jobs after retirement stay out. You can choose a season with no appearances, or two records from the same year.</p>
           <p>Comparison shows the second season minus the first. Season OVR is the overall you played at, not your current overall. Apps and position stats cover all club competitions. Missing numbers stay not recorded; they never become zero.</p>
           <p>Example: 12 goals in the first season and 15 in the second gives a change of +3. If the first season never kept OVR, its OVR and the change both say not recorded.</p>
+          <p>Season development shows the five saved overall checkpoints from the start to the end of a season. Pick an academy or senior year to see when the rating rose or fell.</p>
           <p>Availability only shows injuries, weeks, severity and club matches missed through suspension that the save kept. Weeks are not converted to matches. A recorded injury does not prove why you missed every game.</p>
           <p>Example: a saved 4-week injury and 2 club matches missed through suspension stay separate. An older season without a saved suspension count says not recorded.</p>
         </div> : <div className="space-y-3">
