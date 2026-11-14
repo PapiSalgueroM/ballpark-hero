@@ -425,6 +425,7 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
 
 function SelectionPromise({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const [picked, setPicked] = useState('');
+  const [confirmEnd, setConfirmEnd] = useState(false);
   const { year, clubId, round } = career.season;
   const progress = nrlSelectionPromise(career);
   const candidates = nrlSelectionPromiseCandidates(career);
@@ -446,6 +447,7 @@ function SelectionPromise({ career, onAction, disabled }: { career: NrlCareerSta
             {progress.status === 'kept' && (signed ? ' Promise kept. Renewal already signed.'
               : ` Promise kept. Their renewal asking salary is up to ${discount}% lower.`)}
             {progress.status === 'missed' && ' Promise missed. The normal asking salary applies.'}
+            {progress.status === 'ended' && ` Promise ended in Round ${progress.endedRound}. The normal asking salary applies.`}
           </p>
         ) : (
           <>
@@ -459,6 +461,19 @@ function SelectionPromise({ career, onAction, disabled }: { career: NrlCareerSta
               onClick={() => onAction({ type: 'makeSelectionPromise', year, clubId, round, playerId: picked })}>Confirm selection promise</Button>
           </>
         )}
+        {progress?.status === 'pending' && (confirmEnd ? (
+          <div className="space-y-2 rounded-lg border border-border p-2" aria-label="Confirm ending the promise">
+            <p>Ending this promise gives up its renewal discount and uses your one promise for this season.</p>
+            <div className="flex flex-wrap gap-2">
+              <Button type="button" size="lg" variant="outline" onClick={() => setConfirmEnd(false)}>Keep promise</Button>
+              <Button type="button" size="lg" variant="outline" disabled={disabled} onClick={() => {
+                if (onAction({ type: 'endSelectionPromise', year, clubId, round, playerId: progress.playerId, startedRound: progress.startedRound })) {
+                  setConfirmEnd(false);
+                }
+              }}>Confirm end</Button>
+            </div>
+          </div>
+        ) : <Button type="button" size="lg" variant="outline" disabled={disabled} onClick={() => setConfirmEnd(true)}>End selection promise</Button>)}
         <p className="text-xs text-muted-foreground">Starts and used reserves count. Byes and matches they miss through injury, suspension or reserve-grade development do not. The promise ends by the regular-season finish.</p>
       </div>
     </details>

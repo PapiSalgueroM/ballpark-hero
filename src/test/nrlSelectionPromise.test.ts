@@ -16,6 +16,36 @@ const price = (state: NrlCareerState, id: string) =>
   nrlCareerMarket(state).find(entry => entry.player.id === id)!.askingSalary;
 
 describe('NRL selection promises', () => {
+  it.each([[2026, 'broncos'], [2027, 'bears']] as const)('ends a pending %i promise without earning a later discount', (year, clubId) => {
+    const initial = createNrlCareer(clubId, 1, year);
+    const player = nrlSelectionPromiseCandidates(initial).find(candidate => Object.values(initial.season.lineup).includes(candidate.id))!;
+    let state = promise(initial, player.id);
+    while ((nrlSelectionPromise(state)?.appearances ?? 0) < 3) state = advance(state);
+    const { round } = state.season;
+    const action = { type: 'endSelectionPromise', year, clubId, round, playerId: player.id, startedRound: 1 } as const;
+    const ended = reduceNrlCareer(state, action);
+    expect(ended.season).toBe(state.season);
+    expect(nrlSelectionPromise(ended)).toMatchObject({ status: 'ended', endedRound: round, appearances: 3 });
+    expect(raw(save(ended))).toBe(raw(ended));
+    expect(reduceNrlCareer(ended, action)).toBe(ended);
+    expect(reduceNrlCareer(state, { ...action, round: round - 1 })).toBe(state);
+    expect(reduceNrlCareer(state, { ...action, startedRound: 2 })).toBe(state);
+    const earned = advance(state);
+    const played = advance(ended);
+    expect(played.season).toEqual(earned.season);
+    expect(nrlSelectionPromise(earned)?.status).toBe('kept');
+    expect(nrlSelectionPromise(played)).toMatchObject({ status: 'ended', appearances: 3 });
+    expect(price(played, player.id)).toBeGreaterThan(price(earned, player.id));
+    expect(nrlSelectionPromiseCandidates(played)).toEqual([]);
+    expect(reduceNrlCareer(earned, { ...action, round: earned.season.round })).toBe(earned);
+    expect(save({ ...played, selectionPromise: { ...ended.selectionPromise!, endedRound: earned.season.round } })).toBeNull();
+    expect(raw(save(played))).toBe(raw(played));
+    let finished = played;
+    while (finished.season.phase !== 'complete') finished = advance(finished);
+    expect(nrlSelectionPromise(save(finished)!)).toMatchObject({ status: 'ended', endedRound: round, appearances: 3 });
+    expect(reduceNrlCareer(finished, { type: 'startNextSeason' }).selectionPromise).toBeUndefined();
+  });
+
   it.each([[2026, 'broncos'], [2027, 'bears']] as const)('earns one capped renewal discount from actual starts in %s', (year, clubId) => {
     const initial = createNrlCareer(clubId, 1, year);
     const chosen = nrlSelectionPromiseCandidates(initial).find(player => Object.values(initial.season.lineup).includes(player.id))!;

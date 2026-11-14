@@ -2151,6 +2151,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Check your regular-season board target in Season review.</li>
               <li>Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.</li>
               <li>Before arranging an offseason move, keep another player signed at the same position for next season.</li>
+              <li>You can end a pending selection promise in Contracts. This gives up its renewal discount and uses your one promise for that season.</li>
               <li>Choose a vice-captain in Squad to keep the one-point defence bonus when the club captain is off the field and the vice-captain is on.</li>
               <li>When you start a new State of Origin series, Past Origin series keeps the previous winner and all three scores.</li>
               <li>At half time, a rotating reserve can replace your starting goal kicker if the designated backup stays on to take the remaining place kicks.</li>

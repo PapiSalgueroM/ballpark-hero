@@ -174,7 +174,7 @@ interface NrlContractApproach {
   outcome?: 'accepted' | 'declined';
 }
 
-interface NrlSelectionPromise { playerId: string; startedRound: number }
+interface NrlSelectionPromise { playerId: string; startedRound: number; endedRound?: number }
 interface NrlRatingReview {
   round: number;
   changes: [playerId: string, change: 1 | -1][];
@@ -235,6 +235,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'setAttackPlan'; attackPlan: NrlAttackPlan; year: number; clubId: string; round: number }
   | { type: 'offerContract'; playerId: string; salary: number; years: number }
   | { type: 'makeSelectionPromise'; year: number; clubId: string; round: number; playerId: string }
+  | { type: 'endSelectionPromise'; year: number; clubId: string; round: number; playerId: string; startedRound: number }
   | { type: 'acceptCounteroffer'; playerId: string; year: number; offeredSalary: number; contract: NrlContract }
   | { type: 'arrangeTakeover'; year: number; clubId: string; playerId: string; destinationId: string }
   | { type: 'inviteContractApproach'; year: number; clubId: string; round: number; playerId: string; permission: boolean }
@@ -424,21 +425,28 @@ function unavailableForPromise(season: NrlManagerState, playerId: string, round:
   return Boolean(season.judiciary && nrlJudiciaryBannedBefore(season, playerId, round));
 }
 
-export function nrlSelectionPromise({ season, selectionPromise }: NrlCareerState) {
-  if (!selectionPromise) return null;
+function selectionPromiseProgress(season: NrlManagerState, selectionPromise: NrlSelectionPromise) {
   const { playerId, startedRound } = selectionPromise;
   const { appearances: target, matches: limit } = NRL_SELECTION_PROMISE;
   let appearances = 0;
   let eligible = 0;
   for (const match of season.results) {
+    if (selectionPromise.endedRound !== undefined && match.round >= selectionPromise.endedRound) break;
     if (match.round < startedRound || match.finalsRound || (match.homeId !== season.clubId && match.awayId !== season.clubId)
       || !match.playerScoring || unavailableForPromise(season, playerId, match.round)) continue;
     eligible++;
     if (match.playerScoring.starters.includes(playerId) || match.benchUsed?.includes(playerId)) appearances++;
     if (appearances === target || eligible === limit) break;
   }
-  const status = appearances === target ? 'kept' : eligible === limit || season.phase !== 'regular' ? 'missed' : 'pending';
-  return { playerId, startedRound, appearances, eligible, status };
+  return { appearances, eligible };
+}
+
+export function nrlSelectionPromise({ season, selectionPromise }: NrlCareerState) {
+  if (!selectionPromise) return null;
+  const { appearances, eligible } = selectionPromiseProgress(season, selectionPromise);
+  const status = selectionPromise.endedRound !== undefined ? 'ended' : appearances === NRL_SELECTION_PROMISE.appearances ? 'kept'
+    : eligible === NRL_SELECTION_PROMISE.matches || season.phase !== 'regular' ? 'missed' : 'pending';
+  return { ...selectionPromise, appearances, eligible, status };
 }
 
 function marketEntry(state: NrlCareerState, player: NrlCareerPlayer): NrlCareerMarketEntry | null {
@@ -2356,6 +2364,14 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         || !nrlSelectionPromiseCandidates(state).some(player => player.id === action.playerId)) return state;
       return { ...state, selectionPromise: { playerId: action.playerId, startedRound: round } };
     }
+    case 'endSelectionPromise': {
+      const { season, selectionPromise } = state;
+      const { year, clubId, round } = season;
+      if (!selectionPromise || action.year !== year || action.clubId !== clubId || action.round !== round
+        || action.playerId !== selectionPromise.playerId || action.startedRound !== selectionPromise.startedRound
+        || nrlSelectionPromise(state)?.status !== 'pending') return state;
+      return { ...state, selectionPromise: { ...selectionPromise, endedRound: round } };
+    }
     case 'scoutAcademy':
       return scoutAcademy(state, action.role, action.priority);
     case 'promoteAcademy': {
@@ -3104,7 +3120,8 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
   if (value.selectionPromise !== undefined) {
     const { season, legacySeason } = state;
     if (legacySeason || !season.kickerId || season.year === NRL_LAST_YEAR || !record(value.selectionPromise)
-      || Object.keys(value.selectionPromise).length !== 2 || typeof value.selectionPromise.playerId !== 'string'
+      || Object.keys(value.selectionPromise).length !== 2 + Number(value.selectionPromise.endedRound !== undefined)
+      || typeof value.selectionPromise.playerId !== 'string'
       || !intIn(value.selectionPromise.startedRound, 1, Math.min(season.round, nrlRegularRounds(season.year)))) return false;
     const { playerId, startedRound } = value.selectionPromise;
     const player = state.players.find(candidate => candidate.id === playerId);
@@ -3112,6 +3129,12 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     const openingAvailability = season.reserveGrade?.startedRound === startedRound ? { ...season, reserveGrade: undefined } : season;
     if (!player || !promisedDeal(season, player) || !enoughPromiseFixtures(season, startedRound)
       || unavailableForPromise(openingAvailability, playerId, startedRound)) return false;
+    const endedRound = value.selectionPromise.endedRound;
+    if (endedRound !== undefined) {
+      if (!intIn(endedRound, startedRound, Math.min(season.round, nrlRegularRounds(season.year)))) return false;
+      const progress = selectionPromiseProgress(season, { playerId, startedRound, endedRound });
+      if (progress.appearances >= NRL_SELECTION_PROMISE.appearances || progress.eligible >= NRL_SELECTION_PROMISE.matches) return false;
+    }
   }
   if (state.worldCup !== undefined && (!isNrlWorldCupRun(state.worldCup) || state.openingYear !== 2026 || state.legacySeason
     || state.worldCup.seed !== worldCupAppointmentSeed(state.season.seed)

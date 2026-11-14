@@ -1,4 +1,12 @@
+## 2026-11-14: Home keyboard search and management lineup choices
+
+- In Home search, Enter opens the first settled result and Down Arrow moves focus to it. Browser Back restores the search and the game link's focus.
+- NRL managers can end a pending selection promise in Contracts. The saved receipt keeps progress at the decision and the manager gives up the current season's renewal discount and promise allowance.
+- NHL Front Office temporarily fills in for injured manual lineup choices and restores those players when healthy. Players traded away or waived leave the saved choices.
+
 ## 2026-11-14: Soccer Career competition totals, NFL league scores and NRL roster cover
+
+[PR #933](https://github.com/PapiSalgueroM/ballpark-hero/pull/933) published exact main `13fa50be7e27680fd53c7ec56432ae8b178228ed`, deployment `0f175d83-9953-47ab-9d69-e0fb0aa2576d`. Seven live browser journeys, all 174 sitemap routes and three raw guides passed. IndexNow accepted the guides.
 
 - Soccer Career's Record Book totals the saved goals and assists from continental club campaigns and national tournaments, including Club World Cup and Nations League. It identifies older campaigns where assists were never saved. New continental club campaigns allocate assists from the player's existing season total and the actual teammate goals in those matches.
 - NFL Front Office saves the scores of completed league weeks. The latest week stays visible after reopening a career, and older weeks with no stored scores remain blank.
