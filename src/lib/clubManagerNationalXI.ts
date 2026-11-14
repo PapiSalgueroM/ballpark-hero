@@ -6,7 +6,7 @@ import {
 import { eraRosters, isHistoricEra } from '@/lib/clubManagerEras';
 import { worldRosterView } from '@/lib/clubManagerWorldRoster';
 import { FIT_PENALTY, gradeFit } from '@/lib/positionFit';
-import { managerFormatYear, nationStrength, tournamentForYear } from '@/lib/soccerInternational';
+import { managerFormatYear, nationStrength, tournamentForYear, SQUAD_PLACES, positionGroup } from '@/lib/soccerInternational';
 
 export type NationalPlayer = Pick<CMPlayer, 'name' | 'position' | 'secondaryPositions' | 'rating' | 'age'> & {
   key: string;
@@ -17,6 +17,38 @@ export interface NationalXI {
   year: number;
   formation: number;
   keys: string[];
+}
+
+export interface NationalSquad {
+  year: number;
+  keys: string[];
+}
+
+export const NATIONAL_SQUAD_SIZE = Object.values(SQUAD_PLACES).reduce((sum, places) => sum + places, 0);
+export const NATIONAL_KEEPER_PLACES = SQUAD_PLACES.GK;
+
+export function resolveNationalSquad(plan: NationalSquad | undefined, pool: readonly NationalPlayer[]) {
+  if (!Array.isArray(plan?.keys) || plan.keys.length !== NATIONAL_SQUAD_SIZE || new Set(plan.keys).size !== plan.keys.length) return null;
+  const players = plan.keys.map(key => pool.find(player => player.key === key));
+  if (!players.every((player): player is NationalPlayer => !!player)) return null;
+  return players.filter(player => player.position === 'GK').length === NATIONAL_KEEPER_PLACES ? players : null;
+}
+
+export function defaultNationalSquad(pool: readonly NationalPlayer[], xi: readonly string[]): string[] {
+  const keys = new Set(xi.filter(key => pool.some(player => player.key === key)));
+  for (const [group, places] of Object.entries(SQUAD_PLACES)) {
+    const candidates = pool.filter(p => positionGroup(p.position) === group);
+    let held = candidates.filter(p => keys.has(p.key)).length;
+    for (const p of candidates) {
+      if (held >= places || keys.size >= NATIONAL_SQUAD_SIZE) break;
+      if (!keys.has(p.key)) { keys.add(p.key); held++; }
+    }
+  }
+  for (const p of pool) {
+    if (keys.size >= NATIONAL_SQUAD_SIZE) break;
+    if (p.position !== 'GK') keys.add(p.key);
+  }
+  return [...keys];
 }
 
 export function nationalSummerOf(career: CareerState) {
@@ -102,22 +134,48 @@ export function defaultNationalXI(formation: number, pool: readonly NationalPlay
 }
 
 export function selectedNationalXI(career: CareerState, summer: number) {
-  const plan = career.nationJob?.xi;
-  if (!plan || plan.year !== summer || !Number.isInteger(plan.formation) || !Array.isArray(plan.keys)) return null;
-  const result = resolveNationalXI(plan, nationalPool(career));
+  const job = career.nationJob;
+  const squadPlan = job?.squad?.year === summer ? job.squad : undefined;
+  const savedXI = job?.xi?.year === summer ? job.xi : undefined;
+  if (!job || (!savedXI && !squadPlan)) return null;
+  const eligible = nationalPool(career);
+  const squad = resolveNationalSquad(squadPlan, eligible);
+  const pool = squad ?? eligible;
+  const plan = savedXI ?? (squadPlan ? { year: summer, formation: 0, keys: defaultNationalXI(0, pool) } : null);
+  if (!plan || !Number.isInteger(plan.formation) || !Array.isArray(plan.keys)) return null;
+  const result = resolveNationalXI(plan, pool);
   if (!result) return null;
-  const nationalStrength = nationStrength(career.nationJob!.nation);
-  return { ...result, formation: FORMATIONS[plan.formation].name, adjustment: Math.max(-8, Math.min(8, result.strength - nationalStrength)) };
+  const nationalStrength = nationStrength(job.nation);
+  return { ...result, formation: FORMATIONS[plan.formation].name, squad, adjustment: Math.max(-8, Math.min(8, result.strength - nationalStrength)) };
 }
 
 export function setNationalXI(career: CareerState, plan: NationalXI | null): CareerState | null {
   const job = career.nationJob;
   const summer = nationalSummerOf(career);
   if (!job || !summer || career.live || career.retired || career.sacked || career.wilderness) return null;
-  if (plan && (plan.year !== summer.year || !Number.isInteger(plan.formation) || !Array.isArray(plan.keys)
-    || !resolveNationalXI(plan, nationalPool(career)))) return null;
+  if (plan) {
+    const pool = nationalPool(career);
+    const squad = job.squad?.year === summer.year ? resolveNationalSquad(job.squad, pool) : null;
+    if (plan.year !== summer.year || !Number.isInteger(plan.formation) || !Array.isArray(plan.keys)
+      || !resolveNationalXI(plan, squad ?? pool)) return null;
+  }
   const updated = { ...job };
   if (plan) updated.xi = { ...plan, keys: [...plan.keys] };
   else delete updated.xi;
+  return { ...career, nationJob: updated };
+}
+
+export function setNationalSquad(career: CareerState, plan: NationalSquad | null): CareerState | null {
+  const job = career.nationJob;
+  const summer = nationalSummerOf(career);
+  if (!job || !summer || career.pendingSummary || career.live || career.retired || career.sacked || career.wilderness) return null;
+  const updated = { ...job };
+  if (!plan) delete updated.squad;
+  else {
+    const players = plan.year === summer.year ? resolveNationalSquad(plan, nationalPool(career)) : null;
+    if (!players) return null;
+    updated.squad = { ...plan, keys: [...plan.keys] };
+    if (updated.xi?.year === summer.year && (!Array.isArray(updated.xi.keys) || !resolveNationalXI(updated.xi, players))) delete updated.xi;
+  }
   return { ...career, nationJob: updated };
 }

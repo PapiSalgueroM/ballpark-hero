@@ -116,7 +116,7 @@ type StartHold = { key: string; begin: () => void; settle: () => void; over: boo
 
 /* Round 1323: the save fence, imported here beside the hook that uses it. */
 import { saveFence, fenceKeyOf } from '@/lib/saveFence';
-import { setNationalXI, type NationalXI } from '@/lib/clubManagerNationalXI';
+import { setNationalSquad, setNationalXI, type NationalSquad, type NationalXI } from '@/lib/clubManagerNationalXI';
 import { playNationalQualifier } from '@/lib/clubManagerNationalQualifiers';
 import { playNationalFinal } from '@/lib/clubManagerNationalFinals';
 import { SAVE_KEY } from '@/lib/clubManager';
@@ -1239,6 +1239,16 @@ export function useClubManager() {
     return true;
   }, [phase, holdsActiveSlot, persist]);
 
+  const saveNationalSquad = useCallback((plan: NationalSquad | null): boolean => {
+    const now = careerRef.current;
+    if (phase !== 'hub' || !holdsActiveSlot() || !now) return false;
+    const next = setNationalSquad(now, plan);
+    if (!next || !persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    return true;
+  }, [phase, holdsActiveSlot, persist]);
+
   const setNationalTactics = useCallback((mentality: Mentality): boolean => {
     const now = careerRef.current;
     if (phase !== 'hub' || !holdsActiveSlot() || !now) return false;
@@ -1528,7 +1538,7 @@ export function useClubManager() {
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason, playNextNationalQualifier, playNextNationalFinal,
     buy,
-    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, addWageRoom, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, setNationalTactics, saveNationalXI, dismissNegotiation, clause, loan,
+    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, addWageRoom, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, setNationalTactics, saveNationalXI, saveNationalSquad, dismissNegotiation, clause, loan,
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
     setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
     acceptIncomingBid, rejectIncomingBid,

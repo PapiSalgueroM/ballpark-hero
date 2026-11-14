@@ -426,6 +426,7 @@
         "Set National tactics in the Manager tile before that summer. Defensive reduces scoring for both sides. Attacking opens up the games and chances for both teams. The report remembers the tactics used.",
         "With a national job in the current era, open Manager to pick your starting XI for the coming tournament summer. Choose any eligible player for each slot. The lineup's ratings and positional fit affect the simulated campaign, and the report keeps the team you used.",
         "Open national qualifying in your club's season review to play each qualifier with your saved XI and tactics. If you qualify or your nation gets automatic entry, open the finals and choose tactics for each match. Continue before playing the first match of a stage if you'd rather simulate it.",
+        "In Manager, open your national starting XI to pick the summer's call-ups. Choose 26 eligible players, including three goalkeepers, then select your XI from that squad.",
         "Finish 2024/25 with a club from the verified 2025 Club World Cup field to get a simulated summer campaign. Open your season review to see the group table and results, then find the saved report under Cups.",
         "In 2025/26, open Cups to follow the 2025 Intercontinental Cup. PSG enters in the final, and the five simulated results appear as your club calendar advances past their dates. A title goes in your cabinet if you manage the winner when the final is played.",
         "Rivals and free agents also gain or lose OVR during league play. The transfer market and opponent squads show their current ratings. An older career starts these world rating updates when you open its next season.",
@@ -2131,7 +2132,7 @@
         "Every puzzle is exactly 4 groups of 5 players, 20 names total.",
         "You have 4 lives, and every wrong submission costs one.",
         "Each player belongs to exactly one group in the puzzle. No name ever fits two answers.",
-        "The daily puzzle is identical for everyone, progress saves, and a fresh one lands every day at midnight Eastern. Unlimited deals random boards from the pool."
+        "The daily puzzle is identical for everyone, progress saves, and a fresh one lands every day at midnight Eastern. Unlimited keeps your solved groups, remaining lives and draft notes when you return in this browser. Choose New puzzle to start over."
       ],
       "example": [
         "Say the board includes Dwyane Wade, Alonzo Mourning, Udonis Haslem, Chris Bosh and Tim Hardaway. Heat, obviously. Except Hardaway was a point guard with big assist numbers, and you suspect an assists group too. That collision is the whole puzzle.",

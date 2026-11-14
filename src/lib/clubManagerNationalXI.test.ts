@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { loadCareer, saveCareer, SAVE_KEY, startCareer, startNextSeason } from '@/lib/clubManager';
-import { defaultNationalXI, nationalPool, nationalSummerOf, selectedNationalXI, setNationalXI } from '@/lib/clubManagerNationalXI';
+import { defaultNationalXI, defaultNationalSquad, nationalPool, nationalSummerOf, selectedNationalXI, setNationalSquad, setNationalXI } from '@/lib/clubManagerNationalXI';
 import { runManagerSummer } from '@/lib/soccerInternational';
 import { saveFence } from '@/lib/saveFence';
 
@@ -16,6 +16,31 @@ function england() {
 describe('Club Manager national starting XI', () => {
   beforeEach(() => { saveFence.release(SAVE_KEY); localStorage.clear(); });
   afterEach(() => { vi.restoreAllMocks(); saveFence.release(SAVE_KEY); });
+
+  it('keeps a distinctly selected call-up squad and limits a saved XI to those players', () => {
+    const before = england();
+    const pool = nationalPool(before);
+    const keys = defaultNationalSquad(pool, defaultNationalXI(0, pool));
+    expect(keys).toHaveLength(26);
+    expect(pool.filter(p => keys.includes(p.key) && p.position === 'GK')).toHaveLength(3);
+    const reserve = [...pool].reverse().find(p => p.position !== 'GK' && !keys.includes(p.key))!;
+    const index = keys.findIndex(key => pool.find(p => p.key === key)?.position !== 'GK');
+    keys[index] = reserve.key;
+    expect(setNationalSquad(before, { year: 2028, keys: [...keys.slice(0, 25), keys[0]] })).toBeNull();
+    const selected = setNationalSquad(before, { year: 2028, keys })!;
+    expect(saveCareer(selected)).toBe(true);
+    const loaded = loadCareer()!;
+    expect(loaded.nationJob?.squad?.keys).toEqual(keys);
+    const ongoing = selectedNationalXI(loaded, 2028)!;
+    expect(ongoing.xi.every(p => keys.includes(p.key))).toBe(true);
+    const xiKeys = ongoing.xi.map(p => p.key);
+    xiKeys[10] = pool.find(p => p.position !== 'GK' && !keys.includes(p.key))!.key;
+    expect(setNationalXI(loaded, { year: 2028, formation: 0, keys: xiKeys })).toBeNull();
+    const finished = startNextSeason(loaded);
+    expect(finished.nationCampaign?.squad?.map(p => p.name)).toContain(reserve.name);
+    expect(finished.nationCampaign?.squad).toHaveLength(26);
+    expect(finished.nationJob?.squad).toBeUndefined();
+  });
 
   it('saves the actual full-pool XI, keeps club tactics, and retains the report after rollover', () => {
     const before = england();
@@ -53,6 +78,20 @@ describe('Club Manager national starting XI', () => {
     expect(selectedNationalXI(injured, 2028)).toBeNull();
     expect(startNextSeason(injured).nationCampaign).toMatchObject({ xiUnavailable: true });
     expect(setNationalXI(next, null)?.nationJob?.xi).toBeUndefined();
+  });
+
+  it('retains the available draft choices when a called-up player becomes injured', () => {
+    const before = england();
+    const pool = nationalPool(before);
+    const own = pool.find(p => p.club === before.clubName && p.position !== 'GK')!;
+    const chosen = defaultNationalXI(0, pool);
+    chosen[10] = own.key;
+    const keys = defaultNationalSquad(pool, [...new Set(chosen)]);
+    const selected = setNationalSquad(before, { year: 2028, keys })!;
+    const injured = { ...selected, squad: selected.squad.map(p => p.name === own.name ? { ...p, injuryWeeks: 8 } : p) };
+    expect(injured.nationJob?.squad?.keys).toContain(own.key);
+    expect(selectedNationalXI(injured, 2028)?.xi.some(p => p.key === own.key)).toBe(false);
+    expect(startNextSeason(injured).nationCampaign).toMatchObject({ squadUnavailable: true });
   });
 
   it('uses the same draw with automatic selection and shifts scoring in the declared direction with an XI adjustment', () => {

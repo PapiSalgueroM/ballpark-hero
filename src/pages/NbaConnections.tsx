@@ -37,6 +37,7 @@ const NbaConnections = () => {
     selectDraft,
     notice,
     notesWarning,
+    unlimitedMoved,
     canSubmit,
     togglePlayer,
     submitSelection,
@@ -205,11 +206,18 @@ const NbaConnections = () => {
               Submit five
             </button>
           </div>
+          {mode === 'unlimited' && (
+            <button type="button"
+              onClick={() => { if (!showRules) resetGame(); }}
+              className="min-h-[44px] rounded-lg px-2 text-sm font-semibold text-muted-foreground hover:text-foreground"
+            >New puzzle</button>
+          )}
           </div>
           </div>
-          {notesWarning && <p role="alert" className="text-xs text-amber-600 dark:text-amber-400">Notes could not be saved in this browser. Keep this tab open to keep planning.</p>}
           </section>
         )}
+        {notesWarning && <p role="alert" className="mt-3 text-xs text-amber-600 dark:text-amber-400">{mode === 'daily' ? 'Notes could not be saved in this browser.' : 'Progress could not be saved in this browser.'} Keep this tab open to keep playing.</p>}
+        {unlimitedMoved && <p role="alert" className="mt-3 text-sm text-amber-600 dark:text-amber-400">Unlimited changed in another tab. Reload to pick up the saved puzzle.</p>}
 
         {/* Game complete */}
         {!isLoading && gameStatus === 'complete' && (
@@ -231,6 +239,7 @@ const NbaConnections = () => {
                 gamePath: '/nba-connections',
               }}
               onPlayAgain={mode === 'unlimited' ? resetGame : undefined}
+              playAgainLabel={mode === 'unlimited' ? 'New puzzle' : undefined}
               playNext={mode !== 'unlimited' && <p className="text-sm text-muted-foreground">Come back tomorrow for a new puzzle!</p>}
             />
           </div>

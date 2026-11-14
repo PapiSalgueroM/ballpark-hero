@@ -40,6 +40,61 @@ afterEach(() => {
 });
 
 describe('NRL position training', () => {
+  it.each([
+    ['panthers', 16, 2026, 1, 'panthers-6-1'],
+    ['dolphins', 4, 2027, 11, 'dolphins-6-1'],
+  ] as const)('trades four fitness points in a real bye to gain the trained position sooner at %s', (clubId, seed, year, bye, playerId) => {
+    let initial = createNrlCareer(clubId, seed, year);
+    while (initial.season.round < bye) initial = advance(initial);
+    expect(nrlNextRound(initial.season).clubStatus).toBe('bye');
+    const trained = startCourse(initial, playerId, 'Halfback');
+    const action = { type: 'runIntensiveBye', year, clubId, round: bye, playerId, startedRound: bye } as const;
+    const ordinary = advance(trained);
+    const intensive = reduceNrlCareer(trained, action);
+    expect(intensive.season.round).toBe(bye + 1);
+    expect(intensive.season.results).toEqual(ordinary.season.results);
+    expect(intensive.finance).toEqual(ordinary.finance);
+    expect(intensive.season.squad.filter(row => row.id !== playerId)).toEqual(ordinary.season.squad.filter(row => row.id !== playerId));
+    expect(player(ordinary, playerId).fitness - player(intensive, playerId).fitness).toBe(4);
+    expect(nrlPositionTraining(intensive)?.remaining).toBe(2);
+    expect(nrlPositionTraining(ordinary)?.remaining).toBe(3);
+    expect(bytes(readNrlCareerSave(bytes(intensive)))).toBe(bytes(intensive));
+    expect(reduceNrlCareer(intensive, action)).toBe(intensive);
+    expect(reduceNrlCareer(trained, { ...action, startedRound: bye + 1 })).toBe(trained);
+    expect(readNrlCareerSave(bytes({ ...intensive, positionTraining: { ...intensive.positionTraining, intensiveBye: bye + 1 } }))).toBeNull();
+    const matchRound = advance(ordinary);
+    expect(readNrlCareerSave(bytes({ ...matchRound, positionTraining: { ...matchRound.positionTraining, intensiveBye: bye + 1 } }))).toBeNull();
+    expect(reduceNrlCareer(ordinary, { ...action, round: bye + 1 })).toBe(ordinary);
+    const qualified = advance(advance(intensive));
+    expect(nrlStarterOptions(qualified.season, 'Halfback').some(row => row.id === playerId)).toBe(true);
+    expect(nrlStarterOptions(advance(advance(ordinary)).season, 'Halfback').some(row => row.id === playerId)).toBe(false);
+    expect(qualified.positionTraining).toBeUndefined();
+    const selected = reduceNrlCareer(qualified, { type: 'selectStarter', role: 'Halfback', playerId });
+    const played = advance(selected);
+    expect(played.season.results.find(row => row.round === bye + 3 && row.playerScoring)?.playerScoring?.starters).toContain(playerId);
+    expect(bytes(readNrlCareerSave(bytes(played)))).toBe(bytes(played));
+  });
+
+  it('shows the intensive bye tradeoff before spending a calendar round', () => {
+    const clubId = 'panthers';
+    const initial = startCourse(createNrlCareer(clubId, 16), 'panthers-6-1', 'Halfback');
+    open(bytes(initial));
+    const summary = screen.getByText('Intensive position training', { exact: true });
+    fireEvent.click(summary);
+    const panel = within(summary.closest('details')!);
+    expect(panel.getByText(/96% fit instead of 100%/)).toBeVisible();
+    expect(raw()).toBe(bytes(initial));
+    expect(localStorage.getItem(fence)).toBe('4');
+    fireEvent.click(panel.getByRole('button', { name: 'Run intensive bye' }));
+    const paid = readNrlCareerSave(raw())!;
+    expect(paid.season.round).toBe(2);
+    expect(paid.positionTraining?.intensiveBye).toBe(1);
+    expect(localStorage.getItem(fence)).toBe('5');
+    click('Squad');
+    fireEvent.click(screen.getByText('Position training', { exact: true }));
+    expect(screen.getByText(/2 rounds left/)).toBeVisible();
+  });
+
   it('counts four settled rounds including a bye and unlocks an optional position without changing play', () => {
     const initial = createNrlCareer('panthers', 16);
     const trainee = reserve(initial, 'Five-eighth');

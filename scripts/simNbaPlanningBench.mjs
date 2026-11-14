@@ -17,13 +17,16 @@ const titles = {
   rapid: 'charges one life for same-frame submissions and rejects solved-name reuse',
   ready: 'waits for the real loaded pool and restores mode notes with daily bytes held',
   reset: 'reopens the saved Unlimited puzzle despite a new random draw and resets to the new scope',
+  progress: 'restores accepted Unlimited groups and lives with the rejected draft still blocked',
+  partition: 'keeps the planning draft but rejects accepted progress for a changed same-roster partition',
+  stale: 'holds the newer Unlimited tab after a stale open board tries to submit or reset',
   roster: 'rejects a same-id changed roster and foreign saved names without overwriting during load',
   help: 'shows worked help and blocks background submission while its rules are open',
   warning: 'keeps live notes usable and warns when browser persistence fails',
   baseline: 'restores the original completed Daily payload quietly and keeps its exact bytes',
 };
 const controls = {
-  navigation: { file: hook, from: 'if (JSON.stringify(next.groups) !== JSON.stringify(draftsRef.current?.groups))', to: 'if (true)', test: titles.rapid },
+  navigation: { file: hook, from: 'if (changedGroups) submittedRef.current', to: 'if (true) submittedRef.current', test: titles.rapid },
   scope: { file: helper, from: 'value.scope !== scope', to: 'false', test: titles.model },
   roster: { file: helper, from: 'JSON.stringify([...value.roster].sort()) !== JSON.stringify([...roster].sort())', to: 'false', test: titles.model },
   duplicate: { file: helper, from: '|| seen.has(name)', to: '|| false', test: titles.model },
@@ -35,10 +38,13 @@ const controls = {
   ready: { file: hook, from: "const loadingGame = isLoadingPool || (mode === 'daily' && isLoading);", to: "const loadingGame = (mode === 'daily' && isLoading);", test: titles.ready },
   mode: { file: helper, from: '`nba-connections-notes-v1:${mode}`', to: "'nba-connections-notes-v1:daily'", test: titles.ready },
   sport: { file: helper, from: '`nba-connections-notes-v1:${mode}`', to: '`nhl-connections-notes-v1:${mode}`', test: titles.free },
-  restore: { file: hook, from: 'if (savedIndex >= 0) setUnlimitedIndex(savedIndex);', to: 'if (false) setUnlimitedIndex(savedIndex);', test: titles.reset },
+  restore: { file: hook, from: 'if (savedIndex >= 0) {', to: 'if (false) {', test: titles.reset },
+  progress: { file: hook, from: 'const progress = parseNbaUnlimitedProgress(raw, loadedPool[savedIndex]);', to: 'const progress = emptyNbaUnlimitedProgress;', test: titles.progress },
+  partition: { file: helper, from: 'if (!saved || saved.partition !== nbaUnlimitedPartition(puzzle))', to: 'if (!saved)', test: titles.partition },
+  stale: { file: hook, from: 'if (localStorage.getItem(key) !== heldUnlimitedBytes.current)', to: 'if (false)', test: titles.stale },
   reset: { file: hook, from: "emptyNbaDrafts(nbaDraftScope('unlimited', nextPuzzle.id, todayStr), nextPuzzle.groups.flatMap(group => group.players))", to: 'emptyNbaDrafts(scope, roster)', test: titles.reset },
   help: { file: page, from: 'onClick={() => { if (!showRules) submitSelection(); }}', to: 'onClick={() => { submitSelection(); }}', test: titles.help },
-  warning: { file: hook, from: 'catch { setNotesWarning(true); }\n  }, [mode]);', to: 'catch { setNotesWarning(false); }\n  }, [mode]);', test: titles.warning },
+  warning: { file: hook, from: 'catch { setNotesWarning(true); }\n    return true;', to: 'catch { setNotesWarning(false); }\n    return true;', test: titles.warning },
 };
 const control = process.env.NBA_PLANNING_CONTROL || '';
 assert(!control || control === 'all' || control in controls, 'Known planning control');
@@ -57,7 +63,7 @@ if (control === 'all') {
   }
   await writeFile(path.join(evidence, 'summary.json'), JSON.stringify(outcomes, null, 2));
   assert(outcomes.every(row => row.passed), 'All normal and control outcomes must pass; every mode was attempted');
-  console.log(`simNbaPlanningBench: 10 actual model/mounted cases and ${Object.keys(controls).length} effective controls passed.`);
+  console.log(`simNbaPlanningBench: ${Object.keys(titles).length} actual model/mounted cases and ${Object.keys(controls).length} effective controls passed.`);
   process.exit(0);
 }
 const held = [];
@@ -90,16 +96,16 @@ try {
   assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|No test files found|SyntaxError|Transform failed|Failed to (?:resolve import|load)|Cannot find module/, 'Runner failures do not earn control credit');
   const report = JSON.parse(await readFile(reportFile, 'utf8'));
   const rows = report.testResults.flatMap(result => result.assertionResults);
-  assert.equal(rows.length, 10); assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
+  assert.equal(rows.length, Object.keys(titles).length); assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
   const failed = rows.filter(row => row.status === 'failed'), passed = rows.filter(row => row.status === 'passed');
   if (control) {
     assert.equal(run.status, 1); assert.deepEqual(failed.map(row => row.title), [controls[control].test]);
     assert.deepEqual(passed.map(row => row.title), [titles.baseline]);
-    assert.equal(rows.filter(row => ['pending', 'skipped'].includes(row.status)).length, 8);
+    assert.equal(rows.filter(row => ['pending', 'skipped'].includes(row.status)).length, Object.keys(titles).length - 2);
     const failure = failed.flatMap(row => row.failureMessages).join('\n');
     assert.match(failure, /AssertionError/); assert.doesNotMatch(failure, /TypeError|ReferenceError|TestingLibraryElementError|Timed out/);
   } else {
-    assert.equal(run.status, 0); assert.equal(failed.length, 0); assert.equal(passed.length, 10);
+    assert.equal(run.status, 0); assert.equal(failed.length, 0); assert.equal(passed.length, Object.keys(titles).length);
     assert.deepEqual(new Set(passed.map(row => row.title)), new Set(Object.values(titles)));
   }
   console.log(`simNbaPlanningBench ${control || 'normal'}: exact expected assertions and independent Daily restore passed.`);

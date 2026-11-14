@@ -1,4 +1,12 @@
+## 2026-11-14: National call-ups, NBA Connections practice and NRL bye training
+
+- Club Manager supports a 26-player national squad chosen from the existing eligible pool. The starting XI draws from that squad and the campaign report keeps the actual call-ups.
+- NBA Connections Unlimited remembers sorted groups, spent lives and the last submitted group on the same puzzle. New Puzzle clears the practice state.
+- On a regular NRL bye, a manager can finish a position training course one round sooner at the cost of four fitness points for the trainee.
+
 ## 2026-11-14: Wage budget quotes, hockey practice saves and NRL opposition scouting
+
+[PR #926](https://github.com/PapiSalgueroM/ballpark-hero/pull/926) published exact main `10844e7c96a03c2599a65685c2e88acfcfb4ffed`, deployment `659c3872-1a44-4423-bed8-4745030f875d`. Eight browser journeys, all 174 sitemap routes and three live raw guides passed. IndexNow accepted the guides.
 
 - Club Manager lets managers choose how much of the transfer budget to offer for weekly wage room. The new balances appear before confirmation and the club books record the debit.
 - NHL Higher or Lower keeps an unfinished Unlimited run with its difficulty, matchups and answers. New run starts a fresh board. The daily save remains date-keyed.

@@ -1,9 +1,42 @@
+import type { NbaConnectionsPuzzle } from '@/data/nbaConnectionsPuzzles';
+
 export interface NbaConnectionDrafts {
   v: 1;
   scope: string;
   roster: string[];
   active: number;
   groups: string[][];
+}
+
+export interface NbaUnlimitedProgress {
+  found: number[];
+  lives: number;
+  rejected: string[] | null;
+}
+
+export const emptyNbaUnlimitedProgress: NbaUnlimitedProgress = { found: [], lives: 4, rejected: null };
+
+export function nbaUnlimitedPartition(puzzle: NbaConnectionsPuzzle): string {
+  return JSON.stringify(puzzle.groups.map(({ theme, difficulty, players }) => [theme, difficulty, [...players].sort()]));
+}
+
+export function parseNbaUnlimitedProgress(raw: string | null, puzzle: NbaConnectionsPuzzle): NbaUnlimitedProgress {
+  if (!raw || raw.length > 12000) return emptyNbaUnlimitedProgress;
+  try {
+    const saved = JSON.parse(raw)?.progress;
+    if (!saved || saved.partition !== nbaUnlimitedPartition(puzzle)) return emptyNbaUnlimitedProgress;
+    const { found, lives, rejected } = saved;
+    if (!Number.isInteger(lives) || lives < 0 || lives > 4 || !Array.isArray(found) || new Set(found).size !== found.length
+      || found.length > puzzle.groups.length || found.some(index => !Number.isInteger(index) || !puzzle.groups[index])
+      || (found.length === puzzle.groups.length && lives === 0)) return emptyNbaUnlimitedProgress;
+    if (rejected !== null) {
+      const available = puzzle.groups.filter((_, index) => !found.includes(index)).flatMap(group => group.players);
+      if (lives === 4 || !Array.isArray(rejected) || rejected.length !== 5 || new Set(rejected).size !== 5
+        || rejected.some(name => !available.includes(name))
+        || puzzle.groups.some(group => group.players.every(name => rejected.includes(name)))) return emptyNbaUnlimitedProgress;
+    }
+    return { found, lives, rejected };
+  } catch { return emptyNbaUnlimitedProgress; }
 }
 
 export const nbaDraftKey = (mode: 'daily' | 'unlimited') => `nba-connections-notes-v1:${mode}`;
