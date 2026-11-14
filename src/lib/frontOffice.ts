@@ -775,7 +775,7 @@ export function buildSchedule(rng: () => number): GmGame[][] {
 /* Round 1019: the two edges are strength points a GM desk adds (a staff's
    bounded edge, src/lib/nflGmDesk.ts). Both default to nothing, so every
    caller that passes none plays exactly as before. */
-export function winProb(home: GmTeamState, away: GmTeamState, edgeHome = 0, edgeAway = 0, game?: GmGame): number {
+export function winProb(home: GmTeamState, away: GmTeamState, edgeHome = 0, edgeAway = 0, game?: Pick<GmGame, 'personnel'>): number {
   const gap = (teamStrength(home, game ? nflGameOffense(game, home) : null) + edgeHome)
     - (teamStrength(away, game ? nflGameOffense(game, away) : null) + edgeAway) + 2;
   return 1 / (1 + Math.pow(10, -gap / 14));
