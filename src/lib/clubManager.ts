@@ -3199,6 +3199,8 @@ export interface CareerState {
   cupByes?: string[];
   /** Round 105: the weekly wage bill the board will tolerate, in thousands. */
   wageCap?: number;
+  /** Extra weekly wage room bought from this season's transfer kitty, in thousands. */
+  purchasedWageRoom?: number;
   /** Round 71: sellers who walked away from me this window. */
   coldNames?: string[];
   /** Round 71: the Latest Transfers feed, newest last, capped at 80. */
@@ -8711,9 +8713,9 @@ export function freeAgentBlock(career: CareerState, fa: FreeAgent): FreeAgentBlo
   if (fa.fromMyClub && fa.since === career.season && !(fa.reason === 'expired' && canonical)) return 'justLeft';
   if (!freeAgentInterest(career, fa)) return 'notInterested';
   if (career.squad.length >= 30) return 'squadFull';
-  const cap = career.wageCap ?? wageCapFrom(wageBill(career));
+  const bill = wageBill(career);
   const terms = freeAgentTerms(fa, career);
-  if (wageBill(career) + terms.wage > cap) return 'overCap';
+  if (bill + terms.wage > wageCapOf(career, bill)) return 'overCap';
   if (terms.fee > career.budget) return 'cantAfford';
   return null;
 }
@@ -8795,6 +8797,31 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
  */
 export function wageCapFrom(bill: number): number {
   return Math.max(60, Math.round(bill * 1.15));
+}
+
+export const WAGE_ROOM_STEP = { cost: 0.52, weekly: 10 };
+
+export function boughtWageRoomOf(career: Pick<CareerState, 'purchasedWageRoom'>): number {
+  const room = career.purchasedWageRoom;
+  return typeof room === 'number' && Number.isSafeInteger(room) && room > 0 && room % WAGE_ROOM_STEP.weekly === 0 ? room : 0;
+}
+
+export function wageCapOf(career: CareerState, bill = wageBill(career)): number {
+  return (career.wageCap ?? wageCapFrom(bill)) + boughtWageRoomOf(career);
+}
+
+export function canBuyWageRoom(career: CareerState): boolean {
+  return !career.sacked && !career.wilderness && !career.live && !career.pendingSummary && !career.retired
+    && career.week < career.calendar.length && Number.isFinite(career.budget) && career.budget >= WAGE_ROOM_STEP.cost;
+}
+
+export function buyWageRoom(career: CareerState): CareerState | null {
+  if (!canBuyWageRoom(career)) return null;
+  return {
+    ...career,
+    budget: Math.round((career.budget - WAGE_ROOM_STEP.cost) * 100) / 100,
+    purchasedWageRoom: boughtWageRoomOf(career) + WAGE_ROOM_STEP.weekly,
+  };
 }
 
 /**
@@ -20272,7 +20299,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   // Round 105: an overspent wage bill is a slow drip on the board's patience,
   // which is what stops you hoarding a squad of superstars you cannot pay.
   const bill = wageBill(state);
-  const cap = state.wageCap ?? wageCapFrom(bill);
+  const cap = wageCapOf(state, bill);
   if (bill > cap) {
     const over = (bill - cap) / cap;
     // A drip, not a guillotine. There are around fifty matches in a season,
@@ -24288,6 +24315,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     ? wageRoomFor(career, wageCapFrom(wageBill(state)))
     : nextWageCap(Math.max(60, (career.wageCap ?? wageCapFrom(wageBill(career))) - (career.founderWageRoom ?? 0)), club.expectation, prevPos, seasonTrophyCount) + roomNow;
   state.founderWageRoom = roomNow || undefined;
+  delete state.purchasedWageRoom;
   for (const name of freeAgentNews) {
     pushNews(state, { name, from: career.clubName, to: 'a free transfer', fee: 0 });
   }

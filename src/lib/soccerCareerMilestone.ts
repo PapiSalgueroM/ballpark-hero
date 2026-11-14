@@ -18,14 +18,15 @@ export function personalGoalMilestone(seasons: SeasonRecord[], row: SeasonRecord
 }
 
 /** After the old news draws, use its paper and space without displacing a key story. */
-export function personalGoalMilestoneNews(articles: NewsArticle[], career: CareerState, row: SeasonRecord, fallbackPaper: string): NewsArticle[] {
+export function personalGoalMilestoneNews(articles: NewsArticle[], career: CareerState, row: SeasonRecord, fallbackPaper: string, headlineGoalTotal?: number): NewsArticle[] {
   const milestone = personalGoalMilestone(career.seasons, row);
   if (!milestone) return articles;
+  const headlineTotal = headlineGoalTotal ?? career.seasons.reduce((sum, season) => sum + season.goals, 0);
   const performance = new Set([
     `${career.playerName} Silences Critics With Stunning Performance`,
     `Is ${career.playerName} The Best ${career.position} In The World Right Now?`,
-    `${career.playerName}'s Recorded Career Goal Tally Reaches ${career.seasons.reduce((sum, season) => sum + season.goals, 0)}`,
-    `${career.playerName}'s Saved Career Goal Total Reaches ${career.seasons.reduce((sum, season) => sum + season.goals, 0)}`,
+    `${career.playerName}'s Recorded Career Goal Tally Reaches ${headlineTotal}`,
+    `${career.playerName}'s Saved Career Goal Total Reaches ${headlineTotal}`,
   ]);
   const at = articles.findIndex(article => article.type === 'positive' && performance.has(article.headline));
   if (at < 0 && articles.length >= 2) return articles;

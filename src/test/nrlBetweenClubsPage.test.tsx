@@ -140,4 +140,30 @@ describe('NRL between clubs in a saved career', () => {
     open();
     expect(screen.getByText('Retired after the 2026 season.')).toBeInTheDocument();
   });
+
+  it('confirms a season away and reopens to the simulated ladder and later hiring window', () => {
+    const first = open();
+    review();
+    leave();
+    const before = raw();
+    click('Sit out 2027');
+    click('Yes, simulate 2027');
+    expect(raw()).toBe(before);
+    click('Keep current vacancies');
+    click('Sit out 2027');
+    arm();
+    click('Yes, simulate 2027');
+    expect(saved()?.satOutSeason).toBe(true);
+    expect(screen.getByText(/2027 was simulated while you were out of work/)).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Sit out 2028' })).not.toBeInTheDocument();
+    first.unmount();
+    open();
+    expect(screen.getByRole('heading', { name: '2028 job market' })).toBeInTheDocument();
+    click('Take job at PNG Chiefs');
+    expect(saved()?.season).toMatchObject({ year: 2028, clubId: 'chiefs', round: 1 });
+    expect(saved()?.history).toHaveLength(1);
+    review();
+    expect(screen.getByText(/Left the club and joined PNG Chiefs through the job market for 2028/)).toBeInTheDocument();
+    expect(screen.getByText(/2027 season out of work/)).toBeInTheDocument();
+  });
 });

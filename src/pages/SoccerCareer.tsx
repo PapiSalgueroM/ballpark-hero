@@ -57,6 +57,7 @@ import { DugoutTableBlock } from "@/components/soccer-career/DugoutTableBlock";
 import { loadOwnerTail } from "@/lib/soccerOwnerGate";
 import { careerBeforeBallonDorReveal, revealBallonDorResult, ballonDorAwaitingReveal } from "@/lib/soccerAwardReveal";
 import { readLeagueWorldSeason } from "@/lib/soccerCareerLeagueWorld";
+import { readCommunityShield, communityShieldWinningSeasons, communityShieldPlayerSide, readGermanSupercup, germanSupercupWinningSeasons, germanSupercupPlayerSide } from '@/lib/soccerCareerExtraCups';
 import { soccerExtensionQuote } from "@/lib/soccerCareerContracts";
 import { loyaltyUncutWage } from "@/lib/soccerCareerLoyalty";
 import { farewellEligibility, readSoccerFarewell } from "@/lib/soccerCareerFarewell";
@@ -216,6 +217,16 @@ function PhoneSurface(props: ComponentProps<typeof PhonePanel>) {
     </CentreMountBoundary>
   );
 }
+function hasRepresentedShield(row: SeasonRecord): boolean {
+  const match = readCommunityShield(row);
+  return match !== null && communityShieldPlayerSide(match) !== null;
+}
+
+function hasRepresentedGermanSupercup(row: SeasonRecord): boolean {
+  const match = readGermanSupercup(row);
+  return match !== null && germanSupercupPlayerSide(match) !== null;
+}
+
 /* Round 972: the cabinet tile for continental club cups won outside UEFA. One
    name when every win was the same cup, a plain label when the cup was renamed
    or the player won in two parts of the world. */
@@ -226,7 +237,7 @@ function clubCupTileLabel(seasons: SeasonRecord[]): string {
 
 /* ─── Position-specific career stats display ─── */
 function getPositionCareerStats(pos: string, totals: ReturnType<typeof getCareerTotals>, seasons: SeasonRecord[]): { l: string; v: number | null }[] {
-  const trophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups;
+  const trophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups + totals.communityShields + totals.germanSupercups;
   const backLine = ["CB", "LB", "RB"].includes(pos);
   const missingSheets = backLine && soccerRatingRows(seasons, pos).some(row => row.stats.some(stat => stat.short === "CS" && stat.value === null));
 
@@ -334,9 +345,9 @@ const cupResultLabel = (result: string): string =>
   result === "Play-off" ? "Out in the knockout play-off" : result;
 
 /* ─── Timeline Entry ─── */
-function TimelineEntry({ season, position, isCurrent, isLast }: { season: SeasonRecord; position: string; isCurrent: boolean; isLast: boolean }) {
+function TimelineEntry({ season, position, isCurrent, isLast, shieldWin = false, germanSupercupWin = false }: { season: SeasonRecord; position: string; isCurrent: boolean; isLast: boolean; shieldWin?: boolean; germanSupercupWin?: boolean }) {
   const label = season.type === "youth" ? "A" : season.type === "retired" ? "R" : null;
-  const trophies = [season.leagueTitle && "🏆", season.domesticCup && "🏆", season.championsLeague && "⭐", season.clubCupTitle && "⭐", season.worldCup && "🌍", season.continentalCup && "🌐", season.ballonDor && "🏅"].filter(Boolean);
+  const trophies = [season.leagueTitle && "🏆", season.domesticCup && "🏆", season.championsLeague && "⭐", season.clubCupTitle && "⭐", season.worldCup && "🌍", season.continentalCup && "🌐", shieldWin && "🛡️", germanSupercupWin && "🛡️", season.ballonDor && "🏅"].filter(Boolean);
   const finish = season.type === "playing" ? readLeagueFinish(season) : null;
   /* Round 1011: the season's match rating and the overall it was played at,
      read through the same rules as the Ratings screen. A season nobody played
@@ -476,7 +487,7 @@ function OfferCard({ offer, onAccept, career }: { offer: ContractOffer; onAccept
 }
 
 /* ─── Newspaper Card ─── */
-function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArticle[]; seasonKey: number; onContinue: () => void }) {
+function NewspaperCard({ articles, seasonKey, onContinue, continueRef }: { articles: NewsArticle[]; seasonKey: number; onContinue: () => void; continueRef: React.RefObject<HTMLButtonElement> }) {
   const typeColor = (t: string) => {
     switch (t) {
       case "positive": return "text-emerald-400";
@@ -530,7 +541,7 @@ function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArti
         </div>
         </div>
       ))}
-      <Button onClick={onContinue} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
+      <Button ref={continueRef} onClick={onContinue} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
         Continue to Season Summary →
       </Button>
     </div>
@@ -538,14 +549,14 @@ function NewspaperCard({ articles, seasonKey, onContinue }: { articles: NewsArti
 }
 
 /* ─── Season Summary Card ─── */
-function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf, world, familyContext, goalMilestone }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null; leagueOf?: { key: string; name: string } | null; world?: WorldSeason | null; familyContext?: SeasonFamilyContext; goalMilestone?: ReturnType<typeof personalGoalMilestone> }) {
+function SeasonSummaryCard({ season, position, onContinue, continueRef, appearance, leagueOf, world, familyContext, goalMilestone, shieldWin = false, germanSupercupWin = false }: { season: SeasonRecord; position: string; onContinue: () => void; continueRef: React.RefObject<HTMLButtonElement>; appearance?: PlayerAppearance | null; leagueOf?: { key: string; name: string } | null; world?: WorldSeason | null; familyContext?: SeasonFamilyContext; goalMilestone?: ReturnType<typeof personalGoalMilestone>; shieldWin?: boolean; germanSupercupWin?: boolean }) {
   /* Round 1037: the finish is printed in the league the club was in that
      season (finishLeague), the phone's world is read by its key */
   const playedWorld = readLeagueWorldSeason(season);
   const league = playedWorld?.league ?? leagueOf?.key;
   const leagueName = playedWorld?.league ?? leagueOf?.name;
   const isGK = position === "GK";
-  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && `🏆 ${cupChipLabel(season)}`, season.championsLeague && "⭐ UCL", season.clubCupTitle && `⭐ ${season.clubCupTitle}`, season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
+  const trophies = [season.leagueTitle && "🏆 League", season.domesticCup && `🏆 ${cupChipLabel(season)}`, season.championsLeague && "⭐ UCL", season.clubCupTitle && `⭐ ${season.clubCupTitle}`, season.worldCup && "🌍 World Cup", season.continentalCup && "🌐 Continental", shieldWin && "🛡️ Community Shield", germanSupercupWin && "🛡️ German Supercup", season.ballonDor && "🏅 Ballon d'Or"].filter(Boolean);
   /* Round 929: the champion is the one the phone's world already crowned for
      this season, so the card and the feed can never name two winners. */
   const finish = readLeagueFinish(season);
@@ -650,7 +661,7 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
         </div>
       )}
 
-      <Button onClick={onContinue} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
+      <Button ref={continueRef} onClick={onContinue} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
         Continue →
       </Button>
     </div>
@@ -909,7 +920,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
       const totals = getCareerTotals(career.seasons);
       ack.candidate = completedRecordCandidate(career, {
         goals: totals.goals,
-        trophies: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups,
+        trophies: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups + totals.communityShields + totals.germanSupercups,
         ballonDors: totals.ballonDors,
         caps: career.intStats.caps,
       });
@@ -2577,7 +2588,7 @@ function RetirementCeremonyCard({ career, clubs, totals, onPostRetirement, onCoa
       <div className="grid grid-cols-3 gap-2 text-center">
         {[
           { l: "Apps", v: totals.apps }, { l: "Goals", v: totals.goals }, { l: "Assists", v: totals.assists },
-          { l: "Trophies", v: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups },
+          { l: "Trophies", v: totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups + totals.communityShields + totals.germanSupercups },
           { l: "Ballon d'Or", v: totals.ballonDors }, { l: "Int'l Caps", v: career.intStats.caps },
         ].map((s, i) => (
           <div key={s.l} className="cm-tick-in bg-muted/20 rounded-lg p-2" style={{ animationDelay: at(i) }}>
@@ -2807,7 +2818,7 @@ export function LegacyCard({ career, totals, onShare }: { career: CareerState; t
   const tierEmoji: Record<LegacyTier, string> = { "GOAT": "🐐", "LEGEND": "🏛️", "GREAT": "⭐", "SOLID PRO": "💪", "JOURNEYMAN": "🎒" };
   const tierBorder: Record<LegacyTier, string> = { "GOAT": "border-amber-400/50", "LEGEND": "border-purple-400/40", "GREAT": "border-emerald-400/40", "SOLID PRO": "border-blue-400/30", "JOURNEYMAN": "border-border" };
 
-  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups;
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups + totals.communityShields + totals.germanSupercups;
   const rows = legacy.breakdown.filter(b => b.points > 0);
   const tiles: { value: number; label: string }[] = [
     { value: totals.goals, label: "Goals" },
@@ -3219,6 +3230,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 }) {
   const visibleCareer = careerBeforeBallonDorReveal(career);
   const totals = getCareerTotals(visibleCareer.seasons);
+  const shieldWinningYears = new Set(communityShieldWinningSeasons(visibleCareer.seasons).map(row => row.year));
+  const germanWinningYears = new Set(germanSupercupWinningSeasons(visibleCareer.seasons).map(row => row.year));
   // Round 61: the owner's no scroll rule. Every overlay (event, newspaper,
   // season summary, transfer window, ceremony) pulls itself into view when it
   // appears, instead of rendering below the fold on a phone.
@@ -3244,10 +3257,13 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const [watchRow, setWatchRow] = useState<SeasonRecord | null>(null);
   /* Round 1046: the list of seasons he can watch again, opened from Latest Events */
   const [replaysOpen, setReplaysOpen] = useState(false);
+  const centreOpener = useRef<HTMLElement | null>(null);
+  const centreReturnAction = useRef<HTMLButtonElement>(null);
+  const returnCentreFocus = useRef(false);
   const onWeekByWeek = () => { const at = career.seasons.length; onNextSeason(); setCentreFor(at); };
   /* Round 1046: where he stopped watching a season is kept in this browser only, never in the save. The Resume chip
      (and the rule for whose season a kept place is) loads only when a place is kept at all: one storage read here. */
-  const [Chip, setChip] = useState<ComponentType<{ career: CareerState; at: number; onOpen: (row: SeasonRecord) => void }> | null>(null);
+  const [Chip, setChip] = useState<ComponentType<{ career: CareerState; at: number; onOpen: (row: SeasonRecord, opener?: HTMLButtonElement) => void }> | null>(null);
   const [chipAt, setChipAt] = useState(0);
   const peekResume = () => {
     setChipAt(n => n + 1);
@@ -3257,16 +3273,22 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(peekResume, []);
-  const closeCentre = () => { setCentreFor(null); setWatchRow(null); setReplaysOpen(false); peekResume(); };
+  const closeCentre = () => { returnCentreFocus.current = true; setCentreFor(null); setWatchRow(null); setReplaysOpen(false); peekResume(); };
+  useLayoutEffect(() => {
+    if (!returnCentreFocus.current || centreFor !== null || watchRow !== null || replaysOpen) return;
+    returnCentreFocus.current = false;
+    const target = centreOpener.current?.isConnected ? centreOpener.current : centreReturnAction.current;
+    centreOpener.current = null;
+    if (target?.isConnected) target.focus({ preventScroll: true });
+  }, [centreFor, watchRow, replaysOpen]);
   useEffect(() => {
     /* a press that opened nothing (a ban year) is forgotten at the next
        season start, and a new career never inherits it */
     if (centreFor === null) return;
     const n = career.seasons.length;
     const added = n === centreFor + 1 ? career.seasons[centreFor] : null;
-    if (added && added.type === "playing" && added.apps === 0) {
-      /* the press drew a season he never played in (a ban year): say so
-         instead of opening nothing */
+    if (added && added.type === "playing" && added.apps === 0 && !hasRepresentedShield(added) && !hasRepresentedGermanSupercup(added)) {
+      /* Without an appearance or a saved opener for his club, there is nothing to watch. */
       setCentreFor(null);
       toast("📺 Nothing to watch week by week: you didn't play a game this season.", PAGE_TOAST);
       return;
@@ -3418,7 +3440,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
 
           <div ref={timelineRef} className="max-h-[280px] md:max-h-[480px] overflow-y-auto p-2 space-y-0.5 scrollbar-thin">
             {visibleCareer.seasons.map((s, i) => (
-              <TimelineEntry key={s.year + s.club} season={s} position={career.position} isCurrent={i === career.seasons.length - 1} isLast={i === career.seasons.length - 1} />
+              <TimelineEntry key={s.year + s.club} season={s} position={career.position} isCurrent={i === career.seasons.length - 1} isLast={i === career.seasons.length - 1} shieldWin={shieldWinningYears.has(s.year) && readCommunityShield(s)?.player.title === true} germanSupercupWin={germanWinningYears.has(s.year) && readGermanSupercup(s)?.player.title === true} />
             ))}
           </div>
         </div>
@@ -3434,20 +3456,20 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           )}
           {/* OVERLAY: Newspaper Articles */}
           {career.phase === "newspaper" && career.pendingNews.length > 0 && (
-            <NewspaperCard articles={visibleCareer.pendingNews} seasonKey={career.seasons.length} onContinue={onDismissNewspaper} />
+            <NewspaperCard articles={visibleCareer.pendingNews} seasonKey={career.seasons.length} onContinue={onDismissNewspaper} continueRef={centreReturnAction} />
           )}
 
           {/* OVERLAY: Season Summary */}
           {career.phase === "season_summary" && career.pendingSummary && (
-            <SeasonSummaryCard season={visibleCareer.pendingSummary!} position={career.position} onContinue={onDismissSummary} appearance={career.appearance}
+            <SeasonSummaryCard season={visibleCareer.pendingSummary!} position={career.position} onContinue={onDismissSummary} continueRef={centreReturnAction} appearance={career.appearance} shieldWin={shieldWinningYears.has(visibleCareer.pendingSummary!.year) && readCommunityShield(visibleCareer.pendingSummary)?.player.title === true} germanSupercupWin={germanWinningYears.has(visibleCareer.pendingSummary!.year) && readGermanSupercup(visibleCareer.pendingSummary)?.player.title === true}
               goalMilestone={personalGoalMilestone(career.seasons, career.seasons.find(row => row.year === career.pendingSummary!.year && row.club === career.pendingSummary!.club) ?? career.pendingSummary)}
               leagueOf={finishLeague({ name: career.pendingSummary.club, league: clubs.find(c => c.name === career.pendingSummary?.club)?.league ?? "" }, career.pendingSummary.year, readLeagueFinish(career.pendingSummary)?.size ?? null)} world={career.phone?.world} familyContext={career} />
           )}
 
           {/* Round 1045: the season just summed up, match by match. Only a
               season he played: a ban, prison or doping year has nothing to watch. */}
-          {career.phase === "season_summary" && career.pendingSummary && career.pendingSummary.type === "playing" && career.pendingSummary.apps > 0 && (
-            <Button variant="outline" onClick={() => setWatchRow(career.pendingSummary)} className="w-full h-10 text-sm font-semibold" data-watch-week-by-week>
+          {career.phase === "season_summary" && career.pendingSummary && career.pendingSummary.type === "playing" && (career.pendingSummary.apps > 0 || hasRepresentedShield(career.pendingSummary) || hasRepresentedGermanSupercup(career.pendingSummary)) && (
+            <Button variant="outline" onClick={event => { centreOpener.current = event.currentTarget; setWatchRow(career.pendingSummary); }} className="w-full h-10 text-sm font-semibold" data-watch-week-by-week>
               📺 Watch it week by week
             </Button>
           )}
@@ -3530,6 +3552,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               </div>
 
               <button
+                ref={centreReturnAction}
                 onClick={() => onRehabChoice(0)}
                 className="w-full text-left rounded-lg border border-amber-500/50 bg-amber-500/10 p-3 hover:bg-amber-500/20 transition-colors"
               >
@@ -3824,7 +3847,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           <div className="bg-card border border-border rounded-xl p-4">
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Trophy Cabinet</span>
             <p className="mt-1 text-[11px] text-muted-foreground">Tap a trophy to see the seasons behind it.</p>
-            <div className={`grid grid-cols-3 gap-2 mt-3 ${totals.clubCups > 0 ? "sm:grid-cols-7" : "sm:grid-cols-6"}`}>
+            <div className={`grid grid-cols-3 gap-2 mt-3 ${totals.clubCups > 0 ? "sm:grid-cols-8" : "sm:grid-cols-7"}`}>
               {[
                 { emoji: "🏆", l: "Leagues", v: totals.leagueTitles, category: "league" as const },
                 { emoji: "🏆", l: cupCabinetLabel(career.seasons), v: totals.domesticCups, category: "domestic" as const },
@@ -3832,6 +3855,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 // Round 972: a continental club cup won outside UEFA gets its
                 // own tile under its own name, never the UCL one.
                 ...(totals.clubCups > 0 ? [{ emoji: "⭐", l: clubCupTileLabel(career.seasons), v: totals.clubCups, category: "club" as const }] : []),
+                { emoji: "🛡️", l: "Community Shield", v: totals.communityShields, category: "shield" as const },
+                { emoji: "🛡️", l: "German Supercup", v: totals.germanSupercups, category: "german-supercup" as const },
                 { emoji: "🌍", l: "World Cup", v: totals.worldCups, category: "world" as const },
                 // Round 124: continental championships are a trophy too.
                 { emoji: "🌐", l: "Continental", v: totals.continentalCups, category: "continental" as const },
@@ -4005,11 +4030,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 className="text-[11px] font-bold text-emerald-400 px-2 py-1 rounded hover:bg-white/5 min-h-11">📈 Ratings</button>
               <button type="button" onClick={() => setStoryOpen(true)} data-open-career-story
                 className="min-h-11 text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5">📖 Career Story</button>
-              {career.seasons.some(r => r.type === "playing" && r.apps > 0) && <button type="button" onClick={() => setReplaysOpen(true)} data-open-season-replays
+              {career.seasons.some(r => r.type === "playing" && (r.apps > 0 || hasRepresentedShield(r) || hasRepresentedGermanSupercup(r))) && <button type="button" onClick={event => { centreOpener.current = event.currentTarget; setReplaysOpen(true); }} data-open-season-replays
                 className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5 min-h-11">📺 Season replays</button>}
             </div>
           </div>
-          {Chip && <Chip career={career} at={chipAt} onOpen={setWatchRow} />}
+          {Chip && <Chip career={career} at={chipAt} onOpen={(row, opener) => { centreOpener.current = opener ?? null; setWatchRow(row); }} />}
           <div className="mt-2 space-y-1">
             {visibleCareer.events.slice(-3).map((e, i) => (
               <div key={i} className="text-xs text-foreground/80 flex items-start gap-2">
@@ -4034,7 +4059,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
         const pressed = centreFor !== null && career.seasons.length === centreFor + 1 ? career.seasons[centreFor] : null;
         /* Round 1046: moments are offered only while the season's own screens are up; a way back in later is a way to watch */
         const offer = career.phase === "newspaper" || career.phase === "season_summary" || career.phase === "rehab_choice";
-        const live = pressed && pressed.type === "playing" && pressed.apps > 0 && offer ? pressed : null;
+        const live = pressed && pressed.type === "playing" && (pressed.apps > 0 || hasRepresentedShield(pressed) || hasRepresentedGermanSupercup(pressed)) && offer ? pressed : null;
         const row = watchRow ?? (replaysOpen ? null : live);
         if (!row && !replaysOpen) return null;
         return (
@@ -4109,7 +4134,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 match by match. Last in DOM order, so every test and walker that
                 presses the bar's first button still presses Next Season. */}
             {career.phase === "playing" && (
-              <Button onClick={onWeekByWeek} variant="outline" aria-label="Week by week: watch your season match by match" className="h-12 w-11 shrink-0 px-0 text-base font-bold sm:w-auto sm:px-3 sm:text-sm gap-1.5" data-week-by-week>
+              <Button onClick={event => { centreOpener.current = event.currentTarget; onWeekByWeek(); }} variant="outline" aria-label="Week by week: watch your season match by match" className="h-12 w-11 shrink-0 px-0 text-base font-bold sm:w-auto sm:px-3 sm:text-sm gap-1.5" data-week-by-week>
                 <span aria-hidden="true">📺</span>
                 <span className="hidden sm:inline">Week by week</span>
                 <span className="hidden sm:inline rounded bg-emerald-500/20 px-1 text-[9px] font-black text-emerald-400">NEW</span>

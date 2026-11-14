@@ -151,12 +151,12 @@
     },
     "/build-your-xi": {
       "howToPlay": [
-        "Choose a recorded year from 2004 to 2026 before the formation. It stays fixed for the draft.",
+        "Choose one recorded year or a five-year era before the formation. The archive runs from 2004 to 2026, and the period stays fixed for the draft.",
         "Choose one of 6 formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, 3-4-3, or 5-3-2.",
         "Tap any empty position on the pitch. Fill it with a player who matches the current team and fits that position.",
-        "Type a name and choose a suggestion that fits the slot. Club year picks must match both club and recorded year.",
-        "Tap Browse players to see matching Club year records, or type to narrow them. Records may be incomplete, not a full squad or proof of every appearance.",
-        "No matching record? Try another name or reroll. Club year rerolls change the club, keeping the year.",
+        "Type a name and choose a suggestion that fits the slot. Club drafts accept only a record from the assigned club and selected period.",
+        "Tap Browse players in either club draft, or type to narrow the list. The archive may have gaps.",
+        "No matching record? Try another name or reroll. Club draft rerolls keep the selected period.",
         "Choose 2010, tap GK and use Browse players. A goalkeeper record from the current club in 2010 can fill that slot; a record only from a different year cannot.",
         "Fill all 11 slots and check the role fit, chemistry and balance tiles under the pitch. Mixed uses its usual evaluation when you submit."
       ],
@@ -449,6 +449,7 @@
         "Players carry contracts, wages, form, fitness and opinions. They retire, walk on expired deals unless you re-sign them at the contracts desk, and your academy feeds the first team if you invest in it. A renewal can trade 12 percent of the wage for a release clause at 1.5 times his value that day: any club can pay it, it cannot be refused, and only a later full price renewal deletes it.",
         "The club has four facilities, stadium, training ground, medical and dressing room, each level 1 to 10 and each starting where the club's stature puts it: the giants on 8 to 10, most clubs on 1 or 2. Level 1 does nothing. Each level up is a small real lift (faster growth for players with room under their ceiling, shorter injury spells, quicker morale recovery, more food and drink money a head) paid from the transfer kitty at a price that climbs every level.",
         "The finances desk sets ticket and food prices the fans and the board react to, takes one of four shirt sponsors (three honest shapes marked local or global, or a bad brand that pays 1.35 times the safe cheque and takes 6 off the fan meter for as long as the shirt carries it), lets you push any offer for six percent more until the brand walks, and projects the season's books to the last day: tickets, food, paid net shirt sales, sponsor and player sales in, player wages, staff wages, travel, signings, facilities and staff fees out. Wages and travel are running costs the board covers and never leave the transfer kitty.",
+        "Need more wage room? In Finances, you can spend 520,000 of your transfer budget to add 10,000 to the weekly wage ceiling until the end of the season. The purchase appears in the ledger.",
         "Simulated shirt sales are separate from the sponsor. Club stature and your shown fan meter set the demand each club week. The desk shows gross sales, production cost, net earned, net paid and pending net, all to the smallest displayed money unit. Only net paid enters the kitty: 10,000 at a time (0.01m in your chosen display currency), with production already deducted. For example, two weeks earning 6,000 net each gives 10,000 paid and 2,000 pending. Pending carries into next season at the same club and stays behind if you leave. There is no extra midweek payment, no income just for opening or loading, and no backpay for older saves. Future shirt-sales estimates use today's demand and the club weeks left; missing or unavailable saved totals are labelled on the desk.",
         "The staff room holds four made up people: an attack coach, a defence coach, a goalkeeping coach and a lead scout, each with a level 1 to 10 and a ceiling he can still reach, each starting where the club's stature puts it. Level 1 does nothing at all and neither does an empty chair, so the desk can only ever add. The attack coach speeds up the forwards and the number ten, the defence coach the back line and the holding midfielder, the goalkeeping coach the keepers, and the two coaches split the middle of the park between them, with nobody ever growing past his own ceiling. The lead scout lifts what your scouts bring back from the road. Hiring costs a fee and paying somebody off costs severance, both from the transfer kitty, or you can promote from your own academy staff for nothing and grow him yourself. Rival clubs come in for the good ones, you can match two offers a season, and an approach you ignore for two weeks takes the man with it."
       ],
@@ -3223,7 +3224,8 @@
         "You play the derbies you are picked for, roughly in line with your league appearances. Each one you win adds 2 popularity and 2 morale, each one you lose takes 2 off both, a draw changes nothing, the swing is capped every season and your rating is never touched.",
         "Score the goal that puts you ahead for good in a derby win and the season counts as a Derby Hero season, worth 2 more popularity. Example: at Arsenal you beat Tottenham 2-1 at home with the winner and draw 1-1 away, so that is +4 popularity, +2 morale and a Derby Hero.",
         "A season can include a simulated domestic cup run, from the early rounds to the final, and the cup carries its real name (the FA Cup, the Copa del Rey, the DFB-Pokal) wherever two sources back it; a cup that was not played that season cannot be won.",
-        "Go out early and your season summary names the round and the club that knocked you out. Win it and the celebration walks you through the run, and your trophy chip names the cup."
+        "Go out early and your season summary names the round and the club that knocked you out. Win it and the celebration walks you through the run, and your trophy chip names the cup.",
+        "The Community Shield and German Supercup can open your next season once the game has recorded a qualifying league and cup finish. The league and cup winners meet, with the league runner-up taking the second spot after a double. Play for the winner to earn the trophy."
       ],
       "example": [
         "Take a Nigerian striker rolled at 63, a Gifted start. Two academy years push him past 70, and at 18 a bidding war breaks out. He takes minutes over money, bags 20 league goals, and the papers crown him the next superstar.",

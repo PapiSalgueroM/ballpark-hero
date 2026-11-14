@@ -14,7 +14,9 @@ import { canAcceptLoyaltyOffer, loyaltySigningWage, commitLoyaltySigning, settle
 import type { SoccerProgrammeState, SoccerProgrammeReceipt } from './soccerCareerProgramme';
 import { announceSoccerFarewell, farewellSeasonComplete, readSoccerFarewell, type SoccerFarewellPlan } from './soccerCareerFarewell';
 import { clearTransferBrief, previewTransferBrief, readTransferBrief, storeTransferBriefResult, transferBriefCandidates, type SoccerTransferBrief, type TransferBriefPreview, type TransferBriefMinimum } from './soccerCareerTransferBrief';
-import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, clubKeyOf, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
+import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, leagueWorldOrder, settledLeagueOrder, readLeagueWorldSeason, clubKeyOf, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
+import { captureCommunityShield, playCommunityShield, communityShieldSeasonStats, countCommunityShields, type ExtraCupQualification, type CommunityShieldResult } from './soccerCareerExtraCups';
+import { captureGermanSupercup, playGermanSupercup, germanSupercupSeasonStats, countGermanSupercups, type GermanSupercupQualification, type GermanSupercupResult } from './soccerCareerExtraCups';
 import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';
 import { recentClubForm } from './soccerCareerSelection';
 import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';
@@ -205,6 +207,8 @@ export interface ClubData {
 }
 
 export interface SeasonRecord {
+  extraCups?: CommunityShieldResult[];
+  germanSupercup?: GermanSupercupResult;
   /** Round 1180: the chosen personal target and its actual club season result. */
   ambition?: SeasonAmbitionResult;
   preparation?: PreparationResult;
@@ -927,6 +931,8 @@ export interface CareerStorySeason {
 
 export interface CareerState {
   historicalArrivals?: SoccerHistoricalArrivals;
+  extraCupQualification?: ExtraCupQualification;
+  germanSupercupQualification?: GermanSupercupQualification;
   /** Round 1180: one optional personal target for the next club season. */
   seasonAmbition?: CareerSeasonAmbition;
   seasonPreparation?: CareerPreparationPlan;
@@ -5637,7 +5643,47 @@ export function awardAllTimeTopScorer(s: CareerState, thisYear: number): void {
 function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   prepareSoccerProgramme(s);
   const worldClubs = prepareLeagueWorld(s, clubs, (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1);
+  const shieldYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1;
+  const shieldEntry = s.extraCupQualification;
+  const shieldEntrants = shieldEntry?.status === 'ready' && Array.isArray(shieldEntry.entrants) ? shieldEntry.entrants : [];
+  const shieldClubs = adjustClubsForYear(worldClubs, shieldYear);
+  const shieldValues = shieldEntrants.length === 2 && shieldEntrants.every(e => e && typeof e.club === 'string')
+    ? shieldEntrants.map(e => {
+      const c = shieldClubs.find(club => clubKeyOf(club.name) === clubKeyOf(e.club))
+        ?? (clubKeyOf(e.club) === clubKeyOf(s.currentClub) ? { name: s.currentClub, tier: s.currentClubTier } : undefined);
+      return c && Number.isFinite(c.tier) && c.tier > 0
+        ? 5 - c.tier + (eliteInYear(ELITE_CLUBS, c.name, shieldYear) ? 0.5 : 0) : null;
+    }) : [];
+  const shieldStrengths: [number, number] | null = shieldValues.length === 2 && typeof shieldValues[0] === 'number' && typeof shieldValues[1] === 'number'
+    ? [shieldValues[0], shieldValues[1]] : null;
+  const shieldBand = projectLeagueApps(s.overall, s.currentClubTier, s.currentClub, s.seasons.filter(row => row.club === s.currentClub && row.type === 'playing').length);
+  const shieldMatch = playCommunityShield({
+    qualification: shieldEntry, eventYear: shieldYear, playerName: s.playerName, club: s.currentClub,
+    position: s.position, overall: s.overall, selectionChance: Math.max(0, Math.min(1, (shieldBand.min + shieldBand.max) / 2 / 38)),
+    unavailableReason: s.pendingRehab ? 'unresolved-rehab' : (s.pendingSuspensionMatches ?? 0) > 0 ? 'pending-generic-suspension' : null,
+    teamStrengths: shieldStrengths,
+  });
+  const germanEntry = s.germanSupercupQualification;
+  const germanEntrants = germanEntry?.status === 'ready' && Array.isArray(germanEntry.entrants) ? germanEntry.entrants : [];
+  const germanValues = germanEntrants.length === 2 && germanEntrants.every(e => e && typeof e.club === 'string')
+    ? germanEntrants.map(e => {
+      const c = shieldClubs.find(club => clubKeyOf(club.name) === clubKeyOf(e.club))
+        ?? (clubKeyOf(e.club) === clubKeyOf(s.currentClub) ? { name: s.currentClub, tier: s.currentClubTier } : undefined);
+      return c && Number.isFinite(c.tier) && c.tier > 0
+        ? 5 - c.tier + (eliteInYear(ELITE_CLUBS, c.name, shieldYear) ? 0.5 : 0) : null;
+    }) : [];
+  const germanStrengths: [number, number] | null = germanValues.length === 2 && typeof germanValues[0] === 'number' && typeof germanValues[1] === 'number'
+    ? [germanValues[0], germanValues[1]] : null;
+  const germanMatch = playGermanSupercup({
+    qualification: germanEntry, eventYear: shieldYear, playerName: s.playerName, club: s.currentClub,
+    clubCountry: s.currentClubCountry, position: s.position, overall: s.overall,
+    selectionChance: Math.max(0, Math.min(1, (shieldBand.min + shieldBand.max) / 2 / 34)),
+    unavailableReason: s.pendingRehab ? 'unresolved-rehab' : (s.pendingSuspensionMatches ?? 0) > 0 ? 'pending-generic-suspension' : null,
+    teamStrengths: germanStrengths, englishOpening: shieldMatch,
+  });
   const season = generateSeasonStats(s, worldClubs);
+  if (shieldMatch) season.extraCups = [shieldMatch];
+  if (germanMatch) season.germanSupercup = germanMatch;
   recordLeagueWorldSeason(s, clubs, season);
   if (season.suspensionMatches) {
     const remaining = serveClubSuspension(season.suspensionMatches, 0, s.pendingSuspensionMatches).remaining;
@@ -5706,6 +5752,12 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
         if (movement) s.events.push(`${movement.kind === 'promoted' ? '⬆️' : '⬇️'} ${movement.club} ${movement.kind} to ${movement.to} in your simulated league world.`);
       }
       prepareLeagueWorld(s, clubs, injuryRow.year + 1);
+      if (germanMatch) {
+        if (germanMatch.player.apps === 1) germanMatch.annualRating = injuryRow.apps > 0 ? injuryRow.rating : 0;
+        Object.assign(injuryRow, germanSupercupSeasonStats(injuryRow, germanMatch));
+      }
+      if (shieldMatch?.player.apps === 1) shieldMatch.annualRating = injuryRow.apps > 0 ? injuryRow.rating : 0;
+      Object.assign(injuryRow, communityShieldSeasonStats(injuryRow, shieldMatch));
       return s;
     }
   }
@@ -5987,10 +6039,13 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
 
   const totalGoals = s.seasons.reduce((sum, ss) => sum + ss.goals, 0) + season.goals;
   const totalApps = s.seasons.reduce((sum, ss) => sum + ss.apps, 0) + season.apps;
-  if (totalGoals >= 100 && totalGoals - season.goals < 100) s.events.push("💯 Reached 100 career goals!");
-  if (totalGoals >= 200 && totalGoals - season.goals < 200) s.events.push("🔥 Reached 200 career goals!");
-  if (totalGoals >= 500 && totalGoals - season.goals < 500) s.events.push("👑 Reached 500 career goals!");
-  if (totalApps >= 500 && totalApps - season.apps < 500) s.events.push("🎖️ Made 500th career appearance!");
+  const openingPlayer = germanMatch?.player ?? shieldMatch?.player;
+  const recordedGoals = totalGoals + (openingPlayer?.goals ?? 0);
+  const recordedApps = totalApps + (openingPlayer?.apps ?? 0);
+  if (recordedGoals >= 100 && totalGoals - season.goals < 100) s.events.push("💯 Reached 100 career goals!");
+  if (recordedGoals >= 200 && totalGoals - season.goals < 200) s.events.push("🔥 Reached 200 career goals!");
+  if (recordedGoals >= 500 && totalGoals - season.goals < 500) s.events.push("👑 Reached 500 career goals!");
+  if (recordedApps >= 500 && totalApps - season.apps < 500) s.events.push("🎖️ Made 500th career appearance!");
   /* Round 217: a loan season carries its parent on the record forever */
   if (s.loan) season.onLoanFrom = s.loan.parentClub;
   /* Round 244: a full season worn is a season counted; a club change that
@@ -6022,7 +6077,11 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   settleSoccerPress(s, season);
   s.pendingSummary = season;
   // Generate newspaper articles
-  const news = generateNewsArticles(s, season, totalGoals, totalApps);
+  const annualNews = generateNewsArticles(s, season, totalGoals, totalApps);
+  // Keep the newspaper draw tied to the regular season. Use the complete tally for the milestone edit.
+  const newsRow = openingPlayer?.goals ? { ...season, goals: season.goals + openingPlayer.goals, apps: season.apps + openingPlayer.apps } : season;
+  const newsCareer = newsRow === season ? s : { ...s, seasons: [...s.seasons.slice(0, -1), newsRow] };
+  const news = personalGoalMilestoneNews(annualNews, newsCareer, newsRow, NEWSPAPERS[0], totalGoals);
   s.pendingNews = news;
   s.phase = news.length > 0 ? "newspaper" : "season_summary";
   // Financial simulation
@@ -6074,6 +6133,48 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       seedKey: `${s.playerName}|${season.club}|${season.year}|${season.apps}|${season.goals}|${season.assists}|${season.rating}`,
     });
     if (run) season.cupRun = run;
+  }
+  {
+    const closingWorld = s.leagueWorld;
+    const ownLeague = readLeagueWorldSeason(season);
+    let englishOrder: string[] | null = null;
+    if (closingWorld && closingWorld.year === thisYear) {
+      englishOrder = ownLeague?.league === 'Premier League'
+        ? settledLeagueOrder(closingWorld, 'Premier League', s.playerName, clubs, season)
+        : leagueWorldOrder(closingWorld, 'Premier League', s.playerName, clubs);
+    }
+    const ownFA = cupAssoc === 'England' && season.domesticCup && readCupRun(season)?.cup === 'FA Cup';
+    const recordedCupWinner = world.cups?.['Premier League'];
+    const cupWinner = ownFA && (!recordedCupWinner || clubKeyOf(recordedCupWinner) !== clubKeyOf(season.club)) ? undefined : recordedCupWinner;
+    const nextShield = captureCommunityShield({
+      qualifyingYear: thisYear, worldYear: world.year, seed: s.phone?.seed, englishOrder,
+      leagueWinner: world.leagues['Premier League'], cupWinner,
+      cupSource: ownFA ? 'validated-player-fa-cup' : 'phone-world',
+    });
+    if (nextShield) s.extraCupQualification = nextShield;
+    else delete s.extraCupQualification;
+  }
+  {
+    const closingWorld = s.leagueWorld;
+    const ownLeague = readLeagueWorldSeason(season);
+    let germanOrder: string[] | null = null;
+    if (closingWorld && closingWorld.year === thisYear) {
+      germanOrder = ownLeague?.league === 'Bundesliga'
+        ? settledLeagueOrder(closingWorld, 'Bundesliga', s.playerName, clubs, season)
+        : leagueWorldOrder(closingWorld, 'Bundesliga', s.playerName, clubs);
+    }
+    const ownGermanWin = cupAssoc === 'Germany' && season.domesticCup;
+    const ownDFB = ownGermanWin && readCupRun(season)?.cup === 'DFB-Pokal';
+    const recordedGermanCup = world.cups?.['Bundesliga'];
+    const germanCupWinner = ownGermanWin && (!ownDFB || !recordedGermanCup || clubKeyOf(recordedGermanCup) !== clubKeyOf(season.club))
+      ? undefined : recordedGermanCup;
+    const nextGerman = captureGermanSupercup({
+      qualifyingYear: thisYear, worldYear: world.year, seed: s.phone?.seed, germanOrder,
+      leagueWinner: world.leagues['Bundesliga'], cupWinner: germanCupWinner,
+      cupSource: ownDFB ? 'validated-player-dfb-pokal' : 'phone-world',
+    });
+    if (nextGerman) s.germanSupercupQualification = nextGerman;
+    else delete s.germanSupercupQualification;
   }
 
   // Ballon d'Or calculation. Round 834: what the night writes on the save (the
@@ -6130,6 +6231,12 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     }
   }
   prepareLeagueWorld(s, clubs, season.year + 1);
+  if (germanMatch) {
+    if (germanMatch.player.apps === 1) germanMatch.annualRating = season.apps > 0 ? season.rating : 0;
+    Object.assign(season, germanSupercupSeasonStats(season, germanMatch));
+  }
+  if (shieldMatch?.player.apps === 1) shieldMatch.annualRating = season.apps > 0 ? season.rating : 0;
+  Object.assign(season, communityShieldSeasonStats(season, shieldMatch));
   return s;
 }
 
@@ -6448,7 +6555,7 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
   }
 
   const eligible = templates.filter(t => t.check());
-  if (eligible.length === 0) return personalGoalMilestoneNews(out, s, season, NEWSPAPERS[0]);
+  if (eligible.length === 0) return out;
 
   /* Round 1327: the stories are drawn by weight, without replacement, from a stream keyed to this career and this
      season, so a weight is a chance and not a rank. Before, the shuffle was sorted by weight: a story under weight 1
@@ -6463,7 +6570,7 @@ function generateNewsArticles(s: CareerState, season: SeasonRecord, totalGoals: 
     for (let i = 0; i < pool.length; i += 1) { if (r < pool[i].weight) { at = i; break; } r -= pool[i].weight; }
     out.push(pool.splice(at, 1)[0].gen());
   }
-  return personalGoalMilestoneNews(out, s, season, NEWSPAPERS[0]);
+  return out;
 }
 
 /* ─── Dismiss newspaper ─── */
@@ -8621,7 +8728,7 @@ export function generateRivalrySummary(state: CareerState): RivalrySummary | nul
 
 /* ─── Totals ─── */
 export function getCareerTotals(seasons: SeasonRecord[]) {
-  return seasons.reduce((t, s) => ({
+  const totals = seasons.reduce((t, s) => ({
     apps: t.apps + s.apps, goals: t.goals + s.goals, assists: t.assists + s.assists,
     cleanSheets: t.cleanSheets + s.cleanSheets, yellowCards: t.yellowCards + s.yellowCards, redCards: t.redCards + s.redCards,
     leagueTitles: t.leagueTitles + (s.leagueTitle ? 1 : 0), domesticCups: t.domesticCups + (s.domesticCup ? 1 : 0),
@@ -8633,6 +8740,7 @@ export function getCareerTotals(seasons: SeasonRecord[]) {
     // Round 972: a continental club cup outside UEFA, never a Champions League.
     clubCups: t.clubCups + (s.clubCupTitle ? 1 : 0),
   }), { apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, leagueTitles: 0, domesticCups: 0, championsLeagues: 0, worldCups: 0, ballonDors: 0, continentalCups: 0, clubCups: 0 });
+  return { ...totals, communityShields: countCommunityShields(seasons), germanSupercups: countGermanSupercups(seasons) };
 }
 
 /* ─── Legacy Calculation ─── */
@@ -9439,6 +9547,6 @@ export function endOwnerCareer(prev: CareerState): CareerState {
 export function generateShareText(state: CareerState): string {
   const totals = getCareerTotals(state.seasons);
   const tier = state.legacy?.tier || "JOURNEYMAN";
-  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups;
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups + totals.communityShields + totals.germanSupercups;
   return `I finished my Soccer Career as a ${tier}: ${totals.goals} goals, ${totalTrophies} trophies, ${totals.ballonDors} Ballon d'Ors. Can you beat me? douknowball.com/soccer-career`;
 }

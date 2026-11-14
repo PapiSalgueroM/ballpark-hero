@@ -1909,6 +1909,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         items: [
           "A season can include a simulated domestic cup run, from the early rounds to the final, and the cup carries its real name (the FA Cup, the Copa del Rey, the DFB-Pokal) wherever two sources back it; a cup that was not played that season cannot be won.",
           "Go out early and your season summary names the round and the club that knocked you out. Win it and the celebration walks you through the run, and your trophy chip names the cup.",
+          "The Community Shield and German Supercup can open your next season once the game has recorded a qualifying league and cup finish. The league and cup winners meet, with the league runner-up taking the second spot after a double. Play for the winner to earn the trophy.",
         ],
       },
     ],

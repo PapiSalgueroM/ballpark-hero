@@ -18,7 +18,7 @@ import {
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
   nrlLeagueRecruitmentPreview,
   nrlRecruitmentBrief,
-  nrlSelectionPromise, nrlSelectionPromiseCandidates,
+  nrlSeasonOut, nrlSelectionPromise, nrlSelectionPromiseCandidates,
   nrlMutualReleaseQuote, nrlMutualReleaseSpend,
   nrlProjectedSummerOpenings, nrlSummerApplication, nrlSummerLastRound,
   type NrlCareerAction, type NrlCareerState,
@@ -1516,7 +1516,9 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const clubSelect = useRef<HTMLSelectElement>(null);
   const clubs = nrlOffseasonClubs(career);
   const nextClub = clubs.find(club => club.id === nextClubId);
-  const openings = nrlOffseasonOpportunities(career);
+  const seasonOut = useMemo(() => nrlSeasonOut(career), [career]);
+  const openings = seasonOut?.vacancies ?? nrlOffseasonOpportunities(career);
+  const jobYear = year + (seasonOut ? 2 : 1);
   const summer = nrlSummerApplication(career);
   const application = nrlOffseasonApplication(career) ?? (summer?.response !== 'pending' ? summer : null);
   const applicationCard = application && (
@@ -1540,29 +1542,46 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
     <>
       <h2 className="font-display text-xl font-bold">{outOfWork && !retired ? 'Out of work' : 'Season review'}</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        {retired ? `Retired after the ${year} season.`
-          : outOfWork ? `Your last club was ${clubName(year, clubId)}. Take a vacancy to start ${year + 1} in the same league.`
+        {retired ? `Retired after the ${seasonOut?.year ?? year} season.`
+          : outOfWork ? `Your last club was ${clubName(year, clubId)}. Take a vacancy to start ${jobYear} in the same league.`
           : finished ? 'Review the year and settle your squad before the new season.' : 'Completed seasons stay here as your career moves on.'}
       </p>
+      {seasonOut && <div className="mt-3 rounded-xl border border-border bg-background p-3 text-sm">
+        <p>{seasonOut.year} was simulated while you were out of work. {clubName(seasonOut.year, seasonOut.championId)} won the premiership.</p>
+        <details>
+          <summary className="min-h-11 cursor-pointer py-3 font-semibold">{seasonOut.year} ladder</summary>
+          <ol className="list-decimal space-y-1 pb-2 pl-6 text-muted-foreground">
+            {seasonOut.ladder.map(id => <li key={id}>{clubName(seasonOut.year, id)}</li>)}
+          </ol>
+        </details>
+      </div>}
       {outOfWork && !retired && <section aria-labelledby="nrl-job-market" className="mt-3 rounded-xl border border-border bg-background p-3">
-        <h3 id="nrl-job-market" className="font-bold">Job market</h3>
+        <h3 id="nrl-job-market" className="font-bold">{jobYear} job market</h3>
         <p className="text-sm text-muted-foreground">These vacancies are simulated. Take over the club’s settled squad, contracts and finances.</p>
+        {openings.length === 0 && <p className="mt-1 text-sm text-muted-foreground">No clubs have an opening this summer. You can retire and keep your career record.</p>}
         <ul className="mt-1 divide-y divide-border">
           {openings.map(job => (
             <li key={job.clubId} className="flex flex-wrap items-center justify-between gap-2 py-2">
               <div className="min-w-0">
-                <p className="break-words text-sm font-semibold">{clubName(year + 1, job.clubId)}</p>
+                <p className="break-words text-sm font-semibold">{clubName(jobYear, job.clubId)}</p>
                 <p className="text-sm text-muted-foreground">{job.reason === 'expansion' ? 'New club in this league' : `Finished ${job.rank} and missed its target`}</p>
                 <p className="text-sm text-muted-foreground">Next board target · {job.nextTarget}</p>
               </div>
               <Button type="button" size="lg" className="h-auto min-h-11 max-w-full whitespace-normal px-3 py-2"
-                disabled={disabled} aria-label={`Take job at ${clubName(year + 1, job.clubId)}`}
-                onClick={() => onAction({ type: 'acceptVacancy', year, clubId, destinationId: job.clubId })}>
+                disabled={disabled} aria-label={`Take job at ${clubName(jobYear, job.clubId)}`}
+                onClick={() => onAction({ type: 'acceptVacancy', year, clubId, destinationId: job.clubId, joinYear: seasonOut ? jobYear : undefined })}>
                 Take job
               </Button>
             </li>
           ))}
         </ul>
+        {!seasonOut && !disabled && year + 2 <= NRL_LAST_YEAR && (
+          <RetireDoor className="mt-3" door={`Sit out ${year + 1}`} title={`Simulate ${year + 1} without a club?`}
+            lines={['The league will play the full season under computer control. Your manager record stays as it is.',
+              `The current vacancies close. You can take a club job for ${year + 2} if one opens, or retire.`]}
+            keep="Keep current vacancies" confirm={`Yes, simulate ${year + 1}`}
+            onRetire={() => onAction({ type: 'simulateSeasonOut', year, clubId })} />
+        )}
       </section>}
       {finished && !outOfWork && career.season.judiciary?.case && <div className="mt-3">
         <NrlJudiciaryReview season={career.season} onAction={onAction} disabled={disabled} />
@@ -1664,7 +1683,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           onRetire={() => onAction({ type: 'leaveClub', year, clubId })} />
       )}
       {finished && !retired && !disabled && !needsJudiciary && (
-        <RetireDoor className="mt-3" door="Retire from management" title={`Retire after the ${year} season?`}
+        <RetireDoor className="mt-3" door="Retire from management" title={`Retire after the ${seasonOut?.year ?? year} season?`}
           lines={['Your career record stays in this save slot.', ...(career.coachRetention ? ['Retiring cancels the assistant extension.'] : [])]}
           keep="Keep managing" confirm="Yes, retire"
           onRetire={() => onAction({ type: 'retireCareer', year, clubId })} />
@@ -1683,6 +1702,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
             const sanction = judgement && nrlJudiciaryPenalty({ ...career.season, year: record.year, clubId: record.clubId }, judgement);
             const benchmark = record.year === year ? null
               : nrlBoardBenchmark(record.year, record.clubId, pastPlaces.get(`${record.clubId}:${record.year - 1}`));
+            const rejoinedYear = record.year + (record.seasonOut ? 2 : 1);
             return (
               <li key={record.year} className="space-y-1 py-3">
                 <p className="font-bold">{record.year} {labelForClub(record.year, record.clubId)}</p>
@@ -1691,8 +1711,11 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                   <p className="text-sm text-muted-foreground">Accepted the {labelForClub(record.year + 1, record.appointment.clubId)} job for {record.year + 1}</p>
                 )}
                 {record.rejoinedClubId && (
-                  <p className="text-sm text-muted-foreground">Left the club and joined {clubName(record.year + 1, record.rejoinedClubId)} through the job market for {record.year + 1}.</p>
+                  <p className="text-sm text-muted-foreground">Left the club and joined {clubName(rejoinedYear, record.rejoinedClubId)} through the job market for {rejoinedYear}.</p>
                 )}
+                {record.seasonOut && <p className="text-sm text-muted-foreground">{record.year + 1} season out of work · Premiers {
+                  labelForClub(record.year + 1, nrlArchivedFinals(record.seasonOut.finals, record.year + 1)!.championId)
+                }</p>}
                 {record.summerApplication && !record.appointment && (record.year !== year || retired || outOfWork) && (
                   <p className="text-sm text-muted-foreground">
                     Applied to {labelForClub(record.year + 1, record.summerApplication.clubId)} in Round {record.summerApplication.round} · {

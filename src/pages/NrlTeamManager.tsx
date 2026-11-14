@@ -1539,7 +1539,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
           <div className="min-w-0">
             <h1 ref={arrival} className="font-display text-2xl font-black sm:text-3xl">NRL Team Manager</h1>
             {outOfWork && season ? (
-              <p className="mt-1 text-sm text-muted-foreground">{retired ? 'Retired' : 'Between clubs'} · {season.year} season complete</p>
+              <p className="mt-1 text-sm text-muted-foreground">{retired ? 'Retired' : 'Between clubs'} · {season.year + Number(career?.satOutSeason === true)} season complete</p>
             ) : customManaged && season ? (
               <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
                 <NrlCustomBadge {...customManaged} />
@@ -1596,7 +1596,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
           This career reached the save size limit. Your last saved progress is still in this slot.
         </p>}
         {!moved && saveFailed && <div className="rounded-xl border border-amber-500/50 bg-card p-3 text-sm" role="status">
-          This browser could not save your progress. {retired ? 'Retry to save your retirement.' : outOfWork ? 'Retry to save your departure.' : 'You can keep playing in this tab.'}{' '}
+          This browser could not save your progress. {retired ? 'Retry to save your retirement.' : career?.satOutSeason ? 'Retry to save your season out.' : outOfWork ? 'Retry to save your departure.' : 'You can keep playing in this tab.'}{' '}
           <button type="button" className="min-h-11 font-bold underline" onClick={() => current.current && persist(current.current)}>Retry save</button>
         </div>}
         {showSlots ? (

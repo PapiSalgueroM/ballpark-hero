@@ -8,11 +8,10 @@
    he watched it: src/lib/season/resume.ts holds that one rule. A record for
    another career, an older build or a hand edited one is simply no chip.
 
-   It imports the record's read side and nothing else of the Season Centre,
-   so it stays a few hundred bytes. That is why the season's key is one
-   template line here and not an import: scripts/simSeasonCentreMotion.mjs
-   reads the line out of this file and holds it to soccerSeasonKey on every
-   season of the probe careers.
+   It reads the record and the strict annual projection of a saved opening,
+   without importing the Season Centre planner. The separate cup does not
+   change the league's place: scripts/simSeasonCentreMotion.mjs runs this
+   key callback and holds it to soccerSeasonKey on every probe season.
 
    The round is named in the word the Season Centre itself used for that
    season (the record keeps it: "matchday" where there is a table, "league
@@ -22,23 +21,29 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { readResume, resumeLabel, resumeRowIndex } from '@/lib/season/resume';
+import { careerOpeningAnnualStats } from '@/lib/soccerCareerExtraCups';
 
 interface Props {
   career: CareerState;
   /** Changes whenever the page wants the record read again (the Season Centre just closed). */
   at: number;
-  onOpen: (row: SeasonRecord) => void;
+  onOpen: (row: SeasonRecord, opener?: HTMLButtonElement) => void;
 }
 
 export default function SeasonResumeChip({ career, at, onOpen }: Props) {
   const [resume, setResume] = useState(() => readResume('soccer'));
   useEffect(() => { setResume(readResume('soccer')); }, [at]);
-  const row = career.seasons[resumeRowIndex(resume, career.seasons, r => `${career.playerName}|${r.club}|${r.year}|${r.apps}|${r.goals}|${r.assists}|${r.rating}|centre`, career.phone?.world?.year)];
+  const row = career.seasons[resumeRowIndex(resume, career.seasons, r => {
+    const annual = careerOpeningAnnualStats(r);
+    return r.type === 'playing' && annual && annual.apps > 0
+      ? `${career.playerName}|${r.club}|${r.year}|${annual.apps}|${annual.goals}|${annual.assists}|${annual.rating}|centre`
+      : null;
+  }, career.phone?.world?.year)];
   /* a year he did not play has no season to open (the Season Centre's own key is null for it) */
   if (!resume || !row || row.type !== 'playing' || !(row.apps > 0)) return null;
   return (
     <div className="mt-2">
-      <Button onClick={() => onOpen(row)} variant="outline" className="w-full h-11 text-sm font-bold" data-season-resume>
+      <Button onClick={event => onOpen(row, event.currentTarget)} variant="outline" className="w-full h-11 text-sm font-bold" data-season-resume>
         📺 {resumeLabel(resume, `${row.year}/${String(row.year + 1).slice(-2)}`, 'matchday')}
       </Button>
     </div>

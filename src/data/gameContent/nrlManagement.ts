@@ -45,7 +45,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Before playing Round 1, accept the optional Board pathways objective in Season review. Give three players aged 23 or under four regular-season appearances each to earn a club cash bonus.',
       'Before Round 1 starts, check the Board recruitment brief in Recruitment. Sign an external player for the requested position next season and the club earns a simulated cash bonus after the regular season.',
       'Open Change clubs in Season review to see simulated openings and their board targets. You can apply to one club after the season or use the club picker for a direct move.',
-      'After a completed season, use Leave club in Season review to go out of work when simulated jobs are available. Your career stays in the same league. Return through a vacancy for the next season or retire.',
+      'After a completed season, use Leave club in Season review to go out of work when simulated jobs are available. Take a vacancy, sit out one full season to see new openings, or retire. The league plays that season without adding matches to your manager record.',
       'From Round 14, check Summer job applications in Season review to apply early for a projected opening. The window closes for the last five regular-season rounds. Keep coaching your club while you wait for an answer after the Grand Final.',
       'In Season review, open Player history and choose a player to see recorded regular-season and finals appearances, scoring and rating changes.',
     ],

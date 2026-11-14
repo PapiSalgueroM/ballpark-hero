@@ -1,6 +1,7 @@
 import type { CareerState, SeasonRecord, UCLResult } from './soccerCareerEngine';
 import { readCupRun } from './soccerCareerCup';
 import { isFirstStageResult } from './soccerCareerContinental';
+import { readCommunityShield, communityShieldPlayerSide, readGermanSupercup, germanSupercupPlayerSide } from './soccerCareerExtraCups';
 
 export interface SavedCompetitionMatch {
   round: string;
@@ -8,13 +9,14 @@ export interface SavedCompetitionMatch {
   goalsFor: number | null;
   goalsAgainst: number | null;
   home?: boolean;
+  neutral?: boolean;
   playerGoals?: number;
   result?: string;
   note?: string;
 }
 
 export interface SavedSeasonCompetition {
-  id: 'domestic' | 'club';
+  id: 'domestic' | 'club' | 'shield' | 'german-supercup';
   name: string;
   result: string;
   matches: SavedCompetitionMatch[];
@@ -38,6 +40,48 @@ const roundName = (round: string) => ROUND_NAMES[round] ?? round;
 /** Every opponent and score is copied from the save, never generated for this screen. */
 export function savedSeasonCompetitions(career: Pick<CareerState, 'lastUCLResult'>, row: SeasonRecord): SavedSeasonCompetition[] {
   const competitions: SavedSeasonCompetition[] = [];
+  const shield = readCommunityShield(row);
+  const side = shield ? communityShieldPlayerSide(shield) : null;
+  if (shield && side !== null) {
+    const other = side === 0 ? 1 : 0;
+    const won = shield.decidedBy === 'penalties'
+      ? shield.penalties![side] > shield.penalties![other] : shield.score[side] > shield.score[other];
+    const availabilityReason = shield.player.reason === 'unresolved-rehab' ? 'Rehabilitation was still pending.'
+      : shield.player.reason === 'pending-generic-suspension' ? 'A suspension was pending; match eligibility was not confirmed.' : '';
+    const participation = shield.player.selected
+      ? `You played: ${shield.player.apps} app, ${shield.player.assists} assists, ${shield.player.cleanSheets} clean sheets, rating ${shield.player.rating!.toFixed(1)}. Already included in your season totals.`
+      : `${shield.player.availability === 'unknown' ? 'Your availability was not confirmed.' : shield.player.availability === 'unavailable' ? 'You were unavailable.' : 'You were not selected.'}${availabilityReason ? ` ${availabilityReason}` : ''} You did not play, so no appearance or personal Shield trophy is added.`;
+    const note = [
+      `Opening match in ${shield.eventYear}.`,
+      shield.decidedBy === 'penalties' ? `${shield.penalties![side]}-${shield.penalties![other]} on penalties. Shootout kicks are separate from the match score and player goals.` : null,
+      participation,
+    ].filter(Boolean).join(' ');
+    competitions.push({ id: 'shield', name: 'Community Shield', result: won ? 'Club won' : 'Club lost',
+      matches: [{ round: 'Opening match', opponent: shield.entrants[other].club, goalsFor: shield.score[side], goalsAgainst: shield.score[other],
+        neutral: true, ...(shield.player.selected ? { playerGoals: shield.player.goals } : {}), result: won ? 'Club won' : 'Club lost', note }],
+    });
+  }
+  const german = readGermanSupercup(row);
+  const germanSide = german ? germanSupercupPlayerSide(german) : null;
+  if (german && germanSide !== null) {
+    const other = germanSide === 0 ? 1 : 0;
+    const won = german.decidedBy === 'penalties'
+      ? german.penalties![germanSide] > german.penalties![other] : german.score[germanSide] > german.score[other];
+    const reason = german.player.reason === 'unresolved-rehab' ? ' Rehabilitation was still pending.'
+      : german.player.reason === 'pending-generic-suspension' ? ' A suspension was pending; match eligibility was not confirmed.' : '';
+    const participation = german.player.selected
+      ? `You played: ${german.player.apps} app, ${german.player.assists} assists, ${german.player.cleanSheets} clean sheets, rating ${german.player.rating!.toFixed(1)}. Already included in your season totals.`
+      : `${german.player.availability === 'unknown' ? 'Your availability was not confirmed.' : german.player.availability === 'unavailable' ? 'You were unavailable.' : 'You were not selected.'}${reason} You did not play, so no appearance or personal German Supercup trophy is added.`;
+    const note = [
+      `Opening match in ${german.eventYear}.`,
+      german.decidedBy === 'penalties' ? `${german.penalties![germanSide]}-${german.penalties![other]} on penalties. Shootout kicks are separate from the match score and player goals.` : null,
+      participation,
+    ].filter(Boolean).join(' ');
+    competitions.push({ id: 'german-supercup', name: 'German Supercup', result: won ? 'Club won' : 'Club lost',
+      matches: [{ round: 'Opening match', opponent: german.entrants[other].club, goalsFor: german.score[germanSide], goalsAgainst: german.score[other],
+        ...(german.player.selected ? { playerGoals: german.player.goals } : {}), result: won ? 'Club won' : 'Club lost', note }],
+    });
+  }
   const cup = readCupRun(row);
   if (cup) {
     const end = cup.stages[cup.stages.length - 1];
