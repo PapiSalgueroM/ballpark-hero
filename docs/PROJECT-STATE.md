@@ -1,4 +1,11 @@
+## 2026-11-14: NRL backup kicker and Stadium Tycoon latest season
+
+- NRL Squad lets you nominate a backup kicker from the starting 13. If the primary leaves the lineup, Match centre names the available backup on duty. The automatic halfback takes over when both are out. Conversions and penalty goals go to the kicker who actually plays.
+- Stadium Tycoon keeps its most recent completed standings and result in the existing save. Open Latest season in League after reload, including after promotion. Completing a newer season replaces it, and selling up clears it.
+
 ## 2026-11-14: Soccer Career Nations League
+
+[PR #908](https://github.com/PapiSalgueroM/ballpark-hero/pull/908) published exact main `585331ca59fd4232d616a446d3d2b9dbac25c1ef`, deployment `8fc4c631-cb09-4625-b588-db6f9af230ba`. Six browser journeys and all 174 sitemap routes passed live. IndexNow accepted the Soccer Career guide. The older career-squad harness has the same five failures on the quick baseline and candidate. The international format harness passed 461 checks.
 
 - International Career opens a saved Nations League group table and match record from 2026/27 onward. Group finishes feed qualification and promotion across editions. The 2028/29 draw places two teams from each of three pots in each group. Each side plays one home and one away match against each pot.
 - Each campaign records the selected player's actual simulated appearances, goals and assists, and counts the caps in the existing career totals. A campaign title goes in the trophy cabinet when the player made an appearance. World Cup and continental championship campaigns keep their own results. Existing careers start recording Nations League editions when simulating a new qualifying season.
