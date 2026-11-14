@@ -1013,7 +1013,7 @@ engine = shippedEngine;
     fs.mkdirSync(dir, { recursive: true });
     for (const f of ['frontOffice.ts', 'foNames.ts', 'leagueCaps.ts', 'entityIds.ts', 'frontOfficeCuts.ts']) {
       const text = execSync(`git show ${BASE}:src/lib/${f}`, { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
-      fs.writeFileSync(path.join(dir, f), f === 'frontOffice.ts' ? alignArchivedNflWinter(text) : text);
+      fs.writeFileSync(path.join(dir, f), f === 'frontOffice.ts' ? alignArchivedNflWinter(text, false) : text);
     }
     base = await bundle(`export * from ${JSON.stringify(fwd(path.join(dir, 'frontOffice.ts')))};`, 'base');
     ready = typeof base.initLeague === 'function';
