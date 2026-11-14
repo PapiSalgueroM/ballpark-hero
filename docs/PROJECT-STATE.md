@@ -1,5 +1,7 @@
 ## 2026-11-14: NBA round reports, NRL kicking duties and Soccer Higher or Lower
 
+[PR #965](https://github.com/PapiSalgueroM/ballpark-hero/pull/965) published exact main `e60090dd4d881579f4b9f0d410632fdeefc60cfc`, deployment `d90fdf0b-3481-4b43-a147-d4518623a0ed`. Seven live browser journeys, all three raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted all three game guides. The final application type check and all 23 focused integrated tests passed.
+
 - NBA Front Office remembers the actual record and OVR changes from each recorded batch in the current season. Open Round results to revisit a played round. Older results only show ratings when a review exists.
 - At 60 minutes in an NRL Live Match, an eligible reserve can replace the goal kicker if the named backup stays on. The report credits the opening kicker before the switch and the backup after it.
 - Soccer Higher or Lower remembers your best accepted streak on this device. A new visit starts a fresh streak and keeps the best score where browser storage is available.
