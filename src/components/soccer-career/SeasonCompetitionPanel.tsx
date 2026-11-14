@@ -7,7 +7,7 @@ import { useBodyLock } from '@/components/season-centre/useBodyLock';
 import { squadNow } from '@/lib/soccerClubSquad';
 import { SquadTile } from './SquadTile';
 
-export type CentreScreen = 'league' | 'domestic' | 'club' | 'squad';
+export type CentreScreen = 'league' | 'domestic' | 'club' | 'shield' | 'squad';
 export function CompetitionNavigation({ league, competitions, screen, onSelect }: {
   league: string; competitions: SavedSeasonCompetition[]; screen: CentreScreen; onSelect: (screen: CentreScreen) => void;
 }) {
@@ -76,6 +76,7 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
           <p>The bracket is your club's saved route. Other knockout ties were not kept. A recorded group table is shown whole; a league phase with only your club's row stays one row. Cup placement between league games is simulated, without invented calendar dates.</p>
           <p>Current squad opens the same eleven, bench and selection plan as the Squad tile on your career page. It is the current squad on our ratings, not a saved matchday lineup.</p>
           <p>Example: a saved first-leg win of 2-1 and second-leg draw of 1-1 stay separate games. The deciding leg shows 3-2 on aggregate when the save kept it.</p>
+          <p>The Community Shield is one saved neutral opening match. Your club can win while you do not play; that adds no personal Shield trophy. Example: 1-1 and 5-4 on penalties stays a 1-1 match. Shootout kicks never become player goals. Your recorded appearance and contribution are already in the season totals.</p>
           <button type="button" onClick={() => setHelp(false)} className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold">‹ Back</button>
         </div> : leagueUnavailable ? <div className="space-y-3" data-centre-league-unavailable>
           <h3 ref={heading} tabIndex={-1} className="text-sm font-bold outline-none">League replay unavailable</h3>
@@ -91,7 +92,7 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
           <div className="rounded-xl bg-muted/30 p-4 text-center">
             <p className="text-sm font-semibold">{row.club} vs {match.opponent ?? 'Opponent not recorded'}</p>
             <p className="my-2 text-3xl font-black tabular-nums" data-centre-cup-score>{match.goalsFor === null || match.goalsAgainst === null ? 'Score not recorded' : `${match.goalsFor}-${match.goalsAgainst}`}</p>
-            {match.home !== undefined && <p className="text-xs text-muted-foreground">{match.home ? 'Home' : 'Away'}</p>}
+            {match.neutral ? <p className="text-xs text-muted-foreground">Neutral ground</p> : match.home !== undefined && <p className="text-xs text-muted-foreground">{match.home ? 'Home' : 'Away'}</p>}
             {match.result && <p className="text-xs font-semibold">{match.result}</p>}
             {match.note && <p className="mt-1 text-xs text-muted-foreground">{match.note}</p>}
             {match.playerGoals !== undefined && <p className="mt-1 text-xs">You scored {match.playerGoals}</p>}
@@ -112,8 +113,8 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
             </tbody></table></div><p className="text-xs text-muted-foreground">{stage.footnote}</p>
           </section>)}
           {competition.matches.length === 0 ? <p className="text-sm" data-centre-cup-missing>No match details recorded.</p> : <div className="space-y-2" data-centre-cup-games data-centre-cup-bracket>
-            <h4 className="text-xs font-bold">Recorded bracket: your club's path</h4>
-            <p className="text-xs text-muted-foreground">Other knockout ties were not kept.</p>
+            <h4 className="text-xs font-bold">{competition.id === 'shield' ? 'Saved opening match' : "Recorded bracket: your club's path"}</h4>
+            <p className="text-xs text-muted-foreground">{competition.id === 'shield' ? 'This competition has one neutral match.' : 'Other knockout ties were not kept.'}</p>
             {rounds.map((round, roundIndex) => <section key={roundIndex} data-centre-cup-round={roundIndex} className="rounded-xl border border-border p-2">
               <h5 className="mb-2 text-xs font-bold">{roundIndex > 0 ? '↓ ' : ''}{round.name}</h5>
               <div className="grid grid-cols-2 gap-2">{round.games.map(({ game, index }) => <button key={index} type="button" onClick={() => setPicked(index)} data-centre-cup-open={index} className="min-h-20 min-w-0 rounded-xl border border-border bg-muted/20 p-3 text-left">

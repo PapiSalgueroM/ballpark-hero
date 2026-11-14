@@ -14,7 +14,8 @@ import { canAcceptLoyaltyOffer, loyaltySigningWage, commitLoyaltySigning, settle
 import type { SoccerProgrammeState, SoccerProgrammeReceipt } from './soccerCareerProgramme';
 import { announceSoccerFarewell, farewellSeasonComplete, readSoccerFarewell, type SoccerFarewellPlan } from './soccerCareerFarewell';
 import { clearTransferBrief, previewTransferBrief, readTransferBrief, storeTransferBriefResult, transferBriefCandidates, type SoccerTransferBrief, type TransferBriefPreview, type TransferBriefMinimum } from './soccerCareerTransferBrief';
-import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, clubKeyOf, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
+import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, leagueWorldOrder, settledLeagueOrder, readLeagueWorldSeason, clubKeyOf, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
+import { captureCommunityShield, playCommunityShield, communityShieldSeasonStats, countCommunityShields, type ExtraCupQualification, type CommunityShieldResult } from './soccerCareerExtraCups';
 import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';
 import { recentClubForm } from './soccerCareerSelection';
 import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';
@@ -205,6 +206,7 @@ export interface ClubData {
 }
 
 export interface SeasonRecord {
+  extraCups?: CommunityShieldResult[];
   /** Round 1180: the chosen personal target and its actual club season result. */
   ambition?: SeasonAmbitionResult;
   preparation?: PreparationResult;
@@ -927,6 +929,7 @@ export interface CareerStorySeason {
 
 export interface CareerState {
   historicalArrivals?: SoccerHistoricalArrivals;
+  extraCupQualification?: ExtraCupQualification;
   /** Round 1180: one optional personal target for the next club season. */
   seasonAmbition?: CareerSeasonAmbition;
   seasonPreparation?: CareerPreparationPlan;
@@ -5637,7 +5640,28 @@ export function awardAllTimeTopScorer(s: CareerState, thisYear: number): void {
 function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   prepareSoccerProgramme(s);
   const worldClubs = prepareLeagueWorld(s, clubs, (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1);
+  const shieldYear = (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1;
+  const shieldEntry = s.extraCupQualification;
+  const shieldEntrants = shieldEntry?.status === 'ready' && Array.isArray(shieldEntry.entrants) ? shieldEntry.entrants : [];
+  const shieldClubs = adjustClubsForYear(worldClubs, shieldYear);
+  const shieldValues = shieldEntrants.length === 2 && shieldEntrants.every(e => e && typeof e.club === 'string')
+    ? shieldEntrants.map(e => {
+      const c = shieldClubs.find(club => clubKeyOf(club.name) === clubKeyOf(e.club))
+        ?? (clubKeyOf(e.club) === clubKeyOf(s.currentClub) ? { name: s.currentClub, tier: s.currentClubTier } : undefined);
+      return c && Number.isFinite(c.tier) && c.tier > 0
+        ? 5 - c.tier + (eliteInYear(ELITE_CLUBS, c.name, shieldYear) ? 0.5 : 0) : null;
+    }) : [];
+  const shieldStrengths: [number, number] | null = shieldValues.length === 2 && typeof shieldValues[0] === 'number' && typeof shieldValues[1] === 'number'
+    ? [shieldValues[0], shieldValues[1]] : null;
+  const shieldBand = projectLeagueApps(s.overall, s.currentClubTier, s.currentClub, s.seasons.filter(row => row.club === s.currentClub && row.type === 'playing').length);
+  const shieldMatch = playCommunityShield({
+    qualification: shieldEntry, eventYear: shieldYear, playerName: s.playerName, club: s.currentClub,
+    position: s.position, overall: s.overall, selectionChance: Math.max(0, Math.min(1, (shieldBand.min + shieldBand.max) / 2 / 38)),
+    unavailableReason: s.pendingRehab ? 'unresolved-rehab' : (s.pendingSuspensionMatches ?? 0) > 0 ? 'pending-generic-suspension' : null,
+    teamStrengths: shieldStrengths,
+  });
   const season = generateSeasonStats(s, worldClubs);
+  if (shieldMatch) season.extraCups = [shieldMatch];
   recordLeagueWorldSeason(s, clubs, season);
   if (season.suspensionMatches) {
     const remaining = serveClubSuspension(season.suspensionMatches, 0, s.pendingSuspensionMatches).remaining;
@@ -5706,6 +5730,8 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
         if (movement) s.events.push(`${movement.kind === 'promoted' ? '⬆️' : '⬇️'} ${movement.club} ${movement.kind} to ${movement.to} in your simulated league world.`);
       }
       prepareLeagueWorld(s, clubs, injuryRow.year + 1);
+      if (shieldMatch?.player.apps === 1) shieldMatch.annualRating = injuryRow.apps > 0 ? injuryRow.rating : 0;
+      Object.assign(injuryRow, communityShieldSeasonStats(injuryRow, shieldMatch));
       return s;
     }
   }
@@ -6075,6 +6101,26 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     });
     if (run) season.cupRun = run;
   }
+  {
+    const closingWorld = s.leagueWorld;
+    const ownLeague = readLeagueWorldSeason(season);
+    let englishOrder: string[] | null = null;
+    if (closingWorld && closingWorld.year === thisYear) {
+      englishOrder = ownLeague?.league === 'Premier League'
+        ? settledLeagueOrder(closingWorld, 'Premier League', s.playerName, clubs, season)
+        : leagueWorldOrder(closingWorld, 'Premier League', s.playerName, clubs);
+    }
+    const ownFA = cupAssoc === 'England' && season.domesticCup && readCupRun(season)?.cup === 'FA Cup';
+    const recordedCupWinner = world.cups?.['Premier League'];
+    const cupWinner = ownFA && (!recordedCupWinner || clubKeyOf(recordedCupWinner) !== clubKeyOf(season.club)) ? undefined : recordedCupWinner;
+    const nextShield = captureCommunityShield({
+      qualifyingYear: thisYear, worldYear: world.year, seed: s.phone?.seed, englishOrder,
+      leagueWinner: world.leagues['Premier League'], cupWinner,
+      cupSource: ownFA ? 'validated-player-fa-cup' : 'phone-world',
+    });
+    if (nextShield) s.extraCupQualification = nextShield;
+    else delete s.extraCupQualification;
+  }
 
   // Ballon d'Or calculation. Round 834: what the night writes on the save (the
   // staged ceremony, the place on the season, the cabinet, the winner's and the
@@ -6130,6 +6176,8 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     }
   }
   prepareLeagueWorld(s, clubs, season.year + 1);
+  if (shieldMatch?.player.apps === 1) shieldMatch.annualRating = season.apps > 0 ? season.rating : 0;
+  Object.assign(season, communityShieldSeasonStats(season, shieldMatch));
   return s;
 }
 
@@ -8621,7 +8669,7 @@ export function generateRivalrySummary(state: CareerState): RivalrySummary | nul
 
 /* ─── Totals ─── */
 export function getCareerTotals(seasons: SeasonRecord[]) {
-  return seasons.reduce((t, s) => ({
+  const totals = seasons.reduce((t, s) => ({
     apps: t.apps + s.apps, goals: t.goals + s.goals, assists: t.assists + s.assists,
     cleanSheets: t.cleanSheets + s.cleanSheets, yellowCards: t.yellowCards + s.yellowCards, redCards: t.redCards + s.redCards,
     leagueTitles: t.leagueTitles + (s.leagueTitle ? 1 : 0), domesticCups: t.domesticCups + (s.domesticCup ? 1 : 0),
@@ -8633,6 +8681,7 @@ export function getCareerTotals(seasons: SeasonRecord[]) {
     // Round 972: a continental club cup outside UEFA, never a Champions League.
     clubCups: t.clubCups + (s.clubCupTitle ? 1 : 0),
   }), { apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, leagueTitles: 0, domesticCups: 0, championsLeagues: 0, worldCups: 0, ballonDors: 0, continentalCups: 0, clubCups: 0 });
+  return { ...totals, communityShields: countCommunityShields(seasons) };
 }
 
 /* ─── Legacy Calculation ─── */
@@ -9439,6 +9488,6 @@ export function endOwnerCareer(prev: CareerState): CareerState {
 export function generateShareText(state: CareerState): string {
   const totals = getCareerTotals(state.seasons);
   const tier = state.legacy?.tier || "JOURNEYMAN";
-  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups;
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups + totals.communityShields;
   return `I finished my Soccer Career as a ${tier}: ${totals.goals} goals, ${totalTrophies} trophies, ${totals.ballonDors} Ballon d'Ors. Can you beat me? douknowball.com/soccer-career`;
 }

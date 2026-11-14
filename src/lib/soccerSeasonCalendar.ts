@@ -2,26 +2,32 @@ import type { SavedCompetitionMatch, SavedSeasonCompetition } from './soccerSeas
 
 export interface CalendarCupGame {
   id: string;
-  competition: 'domestic' | 'club';
+  competition: 'domestic' | 'club' | 'shield';
   name: string;
   matchIndex: number;
   afterLeague: number;
   previous: string | null;
   match: SavedCompetitionMatch;
 }
-export const CUP_CALENDAR_NOTE = 'Cup nights are placed between league games by this simulation. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.';
+export const CUP_CALENDAR_NOTE = 'This simulation places saved opening matches before the league and later cup games between league games. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.';
 const number = (value: unknown): value is number => Number.isSafeInteger(value) && (value as number) >= 0;
 const recordedMatch = (match: SavedCompetitionMatch) => !!match && typeof match.round === 'string' && match.round.trim().length > 0
   && (match.opponent === null || typeof match.opponent === 'string' && match.opponent.trim().length > 0)
   && (match.goalsFor === null || number(match.goalsFor)) && (match.goalsAgainst === null || number(match.goalsAgainst))
-  && (match.home === undefined || typeof match.home === 'boolean') && (match.playerGoals === undefined || number(match.playerGoals));
+  && (match.home === undefined || typeof match.home === 'boolean') && (match.neutral === undefined || typeof match.neutral === 'boolean')
+  && (match.playerGoals === undefined || number(match.playerGoals));
 
 /** Only saved games enter the calendar. A deciding loss ends that club's route. */
 export function cupCalendar(competitions: readonly SavedSeasonCompetition[], leagueGames: number): CalendarCupGame[] {
   if (!number(leagueGames) || leagueGames < 1) return [];
   const calendar: CalendarCupGame[] = [];
   for (const competition of competitions) {
-    if (!['domestic', 'club'].includes(competition.id) || !Array.isArray(competition.matches) || !competition.matches.every(recordedMatch)) continue;
+    if (!['domestic', 'club', 'shield'].includes(competition.id) || !Array.isArray(competition.matches) || !competition.matches.every(recordedMatch)) continue;
+    if (competition.id === 'shield') {
+      if (competition.matches.length !== 1 || competition.matches[0].neutral !== true) continue;
+      calendar.push({ id: 'shield:0', competition: 'shield', name: competition.name, matchIndex: 0, afterLeague: 0, previous: null, match: { ...competition.matches[0] } });
+      continue;
+    }
     let previous: string | null = null;
     let after = 0;
     const firstStageGames = competition.matches.filter(match => /game \d+/i.test(match.round)).length;
