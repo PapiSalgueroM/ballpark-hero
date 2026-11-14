@@ -116,7 +116,8 @@ const CONTROLS = {
   accuracy: [V1, 'const goal = accuracy < clamp(0.42 + value * 0.002, 0.3, 0.7);', 'const goal = accuracy < clamp(0.52 + value * 0.002, 0.3, 0.7);', 5, 2],
   fatigue: [LEAGUE, 'fatigue: Math.max(0, player.fatigue - RECOVERY)', 'fatigue: player.fatigue', 5, 2],
   nostrength: [V1, 'return player.skill * (1 - player.fatigue * 0.0045) + player.prep;', 'return 60;', 6, 2],
-  growthcap: [LEAGUE, 'raiseWithinPotential(player.skill, player.potential, change)', 'Math.min(99, player.skill + change)', 7, 2],
+  growthcap: [LEAGUE, 'raiseWithinPotential(player.skill, player.potential, 1)', 'Math.min(99, player.skill + 1)', 7, 2],
+  ratingreview: [LEAGUE, "return reviewRatings({ ...state, clubs, results, goals, match: played.match, phase: 'report', swapsThisBreak: 0 });", "return { ...state, clubs, results, goals, match: played.match, phase: 'report', swapsThisBreak: 0 };", 7, 2],
   rolefloor: [LEAGUE, 'if (needed.length) return bestOf(needed);', 'if (false) return bestOf(needed);', 7, 2],
   listfill: [LEAGUE, 'LIST_SIZE - club.players.length]));', 'LIST_SIZE - 1 - club.players.length]));', 7, 2],
   trustlist: [LEAGUE, 'club.players.length === LIST_SIZE && ROLES.every(role => roleDeficits(club)[role] === 0)', 'club.players.length >= LIST_SIZE && ROLES.every(role => roleDeficits(club)[role] === 0)', 8, 2],
@@ -578,13 +579,14 @@ function ownDraftOrder(closed, vacancies) {
   return order;
 }
 if (RUN.has(7)) {
-  head(7, 'Summer and lists: ageing, growth inside potential, retirements, the draft refill');
+  head(7, 'Season development and summer list changes');
   const CAREERS = LONG ? 200 : 6, YEARS = LONG ? 3 : 2;
   const extra = [];
   for (let k = 0; k < CAREERS; k += 1) extra.push(runCareer(7000 + k, CLUB_IDS[k % 18], YEARS));
   const seasons = [...mainSeasons, ...extra.flatMap(r => r.seasons)];
   let starts = 0, startFaults = 0, floorFaults = 0, aboveCap = 0, ceilingGain = 0, ageFaults = 0, retireFaults = 0, draftAgeFaults = 0, nameFaults = 0, orderFaults = 0, pickFaults = 0;
-  const youngGain = [];
+  const youngGain = [], veteranLoss = [];
+  let summerRatingFaults = 0;
   let maxNames = 0, reached35 = 0, ownRetireFaults = 0;
   for (const x of seasons) {
     for (const st of [x.start]) {
@@ -595,13 +597,17 @@ if (RUN.has(7)) {
       if (names.some(n => !n || !n.trim()) || new Set(names).size !== names.length) nameFaults += 1;
       maxNames = Math.max(maxNames, names.length);
     }
+    const opening = new Map(x.start.clubs.flatMap(c => c.players.map(p => [p.id, p])));
     const pre = new Map(x.preSummer.clubs.flatMap(c => c.players.map(p => [p.id, p])));
     for (const c of x.postSummer.clubs) for (const p of c.players) {
       const before = pre.get(p.id);
+      const start = opening.get(p.id);
       if (p.skill > p.potential) aboveCap += 1;
-      if (before.skill >= Math.min(99, before.potential) && p.skill > before.skill) ceilingGain += 1;
+      if (start.skill >= Math.min(99, start.potential) && before.skill > start.skill) ceilingGain += 1;
       if (p.age !== before.age + 1) ageFaults += 1;
-      if (before.age < 22 && before.skill < before.potential) youngGain.push(p.skill - before.skill);
+      if (p.skill !== before.skill) summerRatingFaults += 1;
+      if (start.age < 22 && start.skill < start.potential) youngGain.push(before.skill - start.skill);
+      if (start.age >= 30 && start.skill > 20) veteranLoss.push(start.skill - before.skill);
     }
     const done = x.draftDone;
     const retired = L.retirees(x.postSummer);
@@ -623,11 +629,13 @@ if (RUN.has(7)) {
   noCrash();
   console.log(`  ${seasons.length} summers (${CAREERS} extra careers x ${YEARS} seasons plus the main runs), ${starts} season starts`);
   console.log(`  faults: list size ${startFaults}, floors ${floorFaults}, above potential ${aboveCap}, gain at ceiling ${ceilingGain}, ages ${ageFaults}, retirements ${retireFaults}, draftee ages ${draftAgeFaults}, names ${nameFaults}, draft order ${orderFaults}, picks vs vacancies ${pickFaults}`);
-  console.log(`  young players with headroom: ${youngGain.length}, mean gain ${mean(youngGain).toFixed(2)}; name bank load ${maxNames} of ${L.NAME_BANK_SIZE} (${(100 * maxNames / L.NAME_BANK_SIZE).toFixed(1)}%)`);
+  console.log(`  young players with headroom: ${youngGain.length}, mean gain ${mean(youngGain).toFixed(2)}; veterans above the floor: ${veteranLoss.length}, mean decline ${mean(veteranLoss).toFixed(2)}; summer skill changes ${summerRatingFaults}; name bank load ${maxNames} of ${L.NAME_BANK_SIZE} (${(100 * maxNames / L.NAME_BANK_SIZE).toFixed(1)}%)`);
   check(seasons.length > 0 && startFaults === 0, '36 players on every list at every season start');
   check(floorFaults === 0, 'every list keeps 7 defenders, 6 midfielders, 2 rucks and 7 forwards after every draft');
   check(aboveCap === 0 && ceilingGain === 0, 'nobody grows above potential, and players at their ceiling never gain');
-  check(youngGain.length > 0 && mean(youngGain) > 1, 'young players with headroom gain on average');
+  check(youngGain.length > 0 && mean(youngGain) > 1, 'young players with headroom gain on average across the season');
+  check(veteranLoss.length > 0 && mean(veteranLoss) > 1, 'veterans above the floor decline on average across the season');
+  check(summerRatingFaults === 0, 'no existing player changes skill at the summer birthday');
   check(ageFaults === 0 && retireFaults === 0 && draftAgeFaults === 0, 'everyone ages a year, retirees leave, draftees are 18');
   console.log(`  own retirement rule: ${reached35} players reached 35 after a summer birthday, ${ownRetireFaults} faults`);
   check(reached35 > 0 && ownRetireFaults === 0, 'nobody under 31 retires and nobody plays on past 35 (the guide\'s rule, checked without the engine)');

@@ -6,6 +6,7 @@ import {
   type SlateGame, type SlateSpec, type StaffRole, type StaffWindow,
 } from './collegeProgram';
 import { hash32, mulberry32 } from './leagueCore';
+import { reviewCollegeRatings, type CollegeRatingReview } from './collegeSeasonRating';
 import { CFB_RIVALRY_SERIES } from '@/data/collegeRivalries';
 /**
  * CFB Dynasty engine (2026-08-05). The college pillar of the sim suite.
@@ -249,6 +250,7 @@ export interface CfbState {
   format?: number;
   /** Round 1554: this season's whole schedule, built at kickoff. */
   slate?: CfbSlate | null;
+  ratingReview?: CollegeRatingReview;
 }
 
 /** Round 1554: a season's schedule. rounds[0] is week 1, each game home side first. */
@@ -497,7 +499,7 @@ function playCfbGame(st: CfbState, homeId: string, awayId: string, rng: () => nu
 /** One round: every school plays one game. Rounds 1-4 cross-conference, 5-12
  *  in-conference, except that with the program layer on, week 12 is rivalry
  *  week and every school plays its rival whatever conference he is in. */
-export function simCfbRound(st: CfbState, rng: () => number): { games: CfbGame[]; myGame: CfbGame | null } {
+export function simCfbRound(st: CfbState, rng: () => number, inSeasonRatings = false): { games: CfbGame[]; myGame: CfbGame | null } {
   const conference = st.round >= CONF_GAMES_START;
   const games: CfbGame[] = [];
   const pool = [...CFB_SCHOOLS];
@@ -544,6 +546,7 @@ export function simCfbRound(st: CfbState, rng: () => number): { games: CfbGame[]
   /* Round 728: the season log and the rivalry swing. Round 823: one copy in
      the shared module, which both dynasties call. */
   if (st.depth) recordProgramRound(st, games, CFB_PROGRAM);
+  if (inSeasonRatings) reviewCollegeRatings(st, CFB_ROUNDS, { FR: [3, 6], SO: [2, 4], JR: [1, 3] });
   const myGame = games.find(g => g.home === st.myTeam || g.away === st.myTeam) ?? null;
   return { games, myGame };
 }
@@ -767,8 +770,8 @@ export function cfbPayroll(st: CfbState): number {
   return staffPayroll(st.teams[st.myTeam]?.staff);
 }
 
-/** Offseason: classes advance, seniors graduate, elite juniors declare, everyone develops, AI reloads. */
-export function cfbOffseason(st: CfbState, rng: () => number): string[] {
+/** Offseason: classes advance, seniors graduate, elite juniors declare and AI reloads. */
+export function cfbOffseason(st: CfbState, rng: () => number, inSeasonRatings = false): string[] {
   const notes: string[] = [];
   for (const t of Object.values(st.teams)) {
     const prestige = CFB_SCHOOL_MAP.get(t.id)!.prestige;
@@ -782,8 +785,10 @@ export function cfbOffseason(st: CfbState, rng: () => number): string[] {
         if (t.id === st.myTeam) notes.push(`🏈 ${p.name} (${p.pos}, ${p.ovr}) declares for the draft.`);
         continue;
       }
-      const grow = p.cls === 'FR' ? 3 + Math.floor(rng() * 4) : p.cls === 'SO' ? 2 + Math.floor(rng() * 3) : 1 + Math.floor(rng() * 3);
-      p.ovr = clampi(Math.min(p.pot, p.ovr + grow), 55, 99);
+      if (!inSeasonRatings) {
+        const grow = p.cls === 'FR' ? 3 + Math.floor(rng() * 4) : p.cls === 'SO' ? 2 + Math.floor(rng() * 3) : 1 + Math.floor(rng() * 3);
+        p.ovr = clampi(Math.min(p.pot, p.ovr + grow), 55, 99);
+      }
       p.cls = p.cls === 'FR' ? 'SO' : p.cls === 'SO' ? 'JR' : 'SR';
       keep.push(p);
     }
@@ -823,6 +828,7 @@ export function cfbOffseason(st: CfbState, rng: () => number): string[] {
   if (st.depth) st.mySlate = [];
   st.season += 1;
   st.round = 1;
+  delete st.ratingReview;
   /* Round 1554: the new season's slate, set before its first kickoff. */
   ensureCfbSlate(st);
   return notes;

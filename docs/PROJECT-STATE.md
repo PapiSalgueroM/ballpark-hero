@@ -1,4 +1,11 @@
+## 2026-11-14: In-season development for AFL and college dynasties
+
+- Aussie Rules Manager spreads player skill changes across home-and-away matches, including AI clubs. Squad shows the latest changes, and the draft and season rollover keep existing players' ratings.
+- College Football Dynasty and College Basketball Dynasty review ratings four times during the regular season. Changes apply in the next games, and the Roster shows the latest review. Existing midseason saves pick up at their next scheduled review.
+
 ## 2026-11-14: OVR progression during the season
+
+[PR #897](https://github.com/PapiSalgueroM/ballpark-hero/pull/897) published exact main `e2ac07b0e0221c9f96945329c67e1906c6af9d3e`, deployment `5ea20c70-7289-4848-aed2-33e5d5be306f`. All seven game guides and browser journeys passed on the published site. The 174-route crawler audit passed and IndexNow accepted the seven guides.
 
 - Club Manager changes managed squad ratings in one-point steps after league matches. Training and minutes help younger players reach their potential, veterans can decline, and loaned-out players can develop before they come home. Match reports show the changes. Returning players keep their closing OVR.
 - NRL Team Manager reviews ratings during regular-season matches for both your squad and AI teams. Squad shows the latest changes. Youth, veteran and assistant development benefits land inside the season. The offseason keeps existing player ratings.

@@ -2,6 +2,7 @@ import { act, cleanup, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CLUBS, createLeague, LEGACY_SAVE_KEY, readLeagueSave, reduceLeague, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
 import { useAussieRulesLeague } from '@/hooks/useAussieRulesLeague';
+import { hashLabel, rngFrom } from '@/lib/careerEngine';
 
 const outward = vi.hoisted(() => ({ record: vi.fn(), refresh: vi.fn() }));
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: outward.refresh }) }));
@@ -44,6 +45,59 @@ describe('Aussie Rules Manager full season engine', () => {
     expect(readLeagueSave(JSON.stringify(forged))).toBeNull();
     expect(readLeagueSave(JSON.stringify({ ...state, version: 1 }))).toBeNull();
   }, 60000); // a whole season of save round trips took 8.2 s on a loaded machine, past the 5 s default
+
+  it('spends the old rating budget one point at a time before summer, through both play modes', () => {
+    const opening = createLeague(77, 'club-12', 'afl2026')!;
+    const ratings = (state: LeagueState) => state.clubs.flatMap(club => club.players.map(player => player.skill));
+    let quick = opening;
+    let stepwise = opening;
+    let up = 0;
+    let down = 0;
+    while (quick.stage === 'homeAway') {
+      const prepared = reduceLeague(quick, { type: 'prepare', choice: 'rest' });
+      const before = ratings(prepared);
+      stepwise = reduceLeague(stepwise, { type: 'prepare', choice: 'rest' });
+      for (let quarter = 0; quarter < 4; quarter++) {
+        stepwise = reduceLeague(stepwise, { type: 'play', tactic: 'control' });
+        if (quarter < 3) {
+          expect(ratings(stepwise)).toEqual(before);
+          stepwise = reduceLeague(stepwise, { type: 'next' });
+        }
+      }
+      const report = reduceLeague(prepared, { type: 'playMatch', tactic: 'control' });
+      expect(stepwise).toEqual(report);
+      ratings(report).forEach((skill, i) => {
+        const delta = skill - before[i];
+        expect(Math.abs(delta)).toBeLessThanOrEqual(1);
+        if (delta > 0) up++;
+        if (delta < 0) down++;
+      });
+      expect(readLeagueSave(JSON.stringify(report))).toEqual(report);
+      quick = reduceLeague(report, { type: 'next' });
+      stepwise = reduceLeague(stepwise, { type: 'next' });
+    }
+    expect(up).toBeGreaterThan(0);
+    expect(down).toBeGreaterThan(0);
+    const rng = rngFrom(hashLabel(`${opening.seed}|${opening.season}|summer`));
+    const oldBudget = opening.clubs.flatMap(club => club.players.map(player => {
+      const roll = rng();
+      const gain = player.age < 22 ? 2 + Math.floor(roll * 4) : player.age <= 25 ? Math.floor(roll * 4)
+        : player.age <= 29 ? -1 + Math.floor(roll * 3) : -(1 + Math.floor(roll * 4));
+      return Math.min(player.potential, Math.max(20, player.skill + gain));
+    }));
+    expect(ratings(quick)).toEqual(oldBudget);
+
+    const completed = until(quick, state => state.phase === 'seasonOver');
+    const summer = reduceLeague(completed, { type: 'next' });
+    expect(ratings(summer)).toEqual(ratings(quick));
+    expect(summer.clubs[0].players[0].age).toBe(completed.clubs[0].players[0].age + 1);
+    const second = until(summer, state => state.season === 2);
+    const existing = new Map(summer.clubs.flatMap(club => club.players.map(player => [player.id, player.skill])));
+    expect(second.clubs.every(club => club.players.every(player => !existing.has(player.id) || existing.get(player.id) === player.skill))).toBe(true);
+    expect(second.ratingReview).toBeUndefined();
+    const invalid = { ...quick, ratingReview: { round: 0, changes: [[opening.clubs[0].players[0].id, 1]] } };
+    expect(readLeagueSave(JSON.stringify(invalid))).toBeNull();
+  }, 60000);
 });
 
 describe('useAussieRulesLeague', () => {

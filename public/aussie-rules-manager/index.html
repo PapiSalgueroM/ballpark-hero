@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -266,11 +298,12 @@
 <h2>Aussie Rules Manager: Free Footy Season Game</h2>
 <p>Choose one of the 18 AFL clubs, pick your 23 from a made up list, play 23 rounds and the 2026 style finals, then age your list and draft into the next season.</p>
 <p>Aussie Rules Manager hands you one of the eighteen AFL clubs and as many seasons as you want to give it. Each season is 23 rounds, then the finals, a Grand Final, a summer of birthdays and retirements, and a national draft that fills your list back up for next year. Goals are worth six, behinds one, and the ladder runs on four points a win.</p>
-<p>The club names are the real 2026 AFL clubs, and their starting strength groups follow the 2026 ladder. The players, ratings and results are all made up. The shape of the competition is real where we could check it against two sources: the 2026 finals add a wildcard week, where 7th plays 10th and 8th plays 9th, before the final eight that has run since 2000. Playing 23 rounds with no byes, lists of 36 and the summer growth are this game's own rules, not the real AFL fixture or a prediction of anything. The draft order follows the real 2026 one.</p>
+<p>The club names are the real 2026 AFL clubs, and their starting strength groups follow the 2026 ladder. The players, ratings and results are all made up. The 2026 finals add a wildcard week, where 7th plays 10th and 8th plays 9th, before the final eight that has run since 2000. Playing 23 rounds with no byes, lists of 36 and player development rates are this game's own rules. The draft order follows the real 2026 one.</p>
 <p>You can play without an account. Your career is kept in this browser when storage is available, mid match included. Every season you finish records a play rather than adding ranked points. A season takes as long as you like: three taps a round if you let the list manager pick and play each match in one go, or a quarter at a time if you want to call it.</p>
 <h2>How to Play Aussie Rules Manager</h2>
 <li>Choose a club from the menu. The clubs are grouped by where they finished the 2026 ladder, so you can pick an easy start at the top or a long rebuild near the bottom. Every club has thirty-six generated players with a skill, a ceiling, an age and a fitness level.</li>
 <li>Before each match your list manager picks the best eighteen starters and five interchange players on current form: skill, less what fatigue takes off. You can change any spot in Squad, then choose to train or rest. Training adds eight preparation and eight fatigue to every player; rest takes thirty fatigue off.</li>
+<li>After regular-season matches, skill can rise or fall one point at a time. Check Skill changes in Squad. Existing players carry their skill into the new season.</li>
 <li>Pick a tactic and play one quarter at a time, or play the whole match in one tap with the same tactic. At each quarter break you can make up to five same-role changes from the bench.</li>
 <li>After the match you see the round's other results. The hub boxes show your next match, your ladder spot with points and percentage, your squad, your honour board, and the finals bracket once September comes round.</li>
 <li>Finish in the top ten to play the finals. Win the Grand Final for the flag. Then the summer ages everyone a year, some veterans retire, and on draft night you pick young players to fill your list back to thirty-six before the next season starts.</li>
@@ -282,7 +315,7 @@
 <li>The finals follow the 2026 system: a wildcard week where 7th hosts 10th and 8th hosts 9th, with the higher placed winner taking the 7th spot. Then qualifying finals 1st v 4th and 2nd v 3rd, where the winners rest a week and the losers drop to a semi final, and elimination finals 5th and 6th against the wildcard winners, where the losers go out. Preliminary finals and the Grand Final follow. A drawn final, the Grand Final included, plays two 3 minute periods of extra time, and two more until somebody leads, with no golden score. Real periods add time on; this game keeps them a flat 3 minutes.</li>
 <li>Our squad selection uses six backs, five midfielders, one ruck and six forwards, plus five bench players. Same-role swaps and the limit of five swaps per break are game constraints. They are not presented as official restrictions on all real-world positional changes.</li>
 <li>Bench changes are offered at quarter breaks. AFL Regulation 12.8 excludes changes during those intervals from the counted interchange limit. There is no pretend interchange counter for changes that do not count toward it.</li>
-<li>The summer is this game's rule. Players under 22 grow two to five points a year toward their ceiling, the mid twenties grow a little, the late twenties hold, and from thirty they slow down. Retirement starts at 31 and nobody plays past 35. The draft order is the real 2026 one: clubs that missed the finals first, worst first, then finalists by the week they went out, with the runner up and the premier last. Every list must keep seven backs, six midfielders, two rucks and seven forwards.</li>
+<li>During the regular season, players under 22 can gain two to five skill points up to their ceiling. Players in their mid twenties can gain a little, players in their late twenties can move one point either way, and players 30 and over can decline. Retirement starts at 31 and nobody plays past 35. The draft order is the real 2026 one: clubs that missed the finals first, worst first, then finalists by the week they went out, with the runner up and the premier last. Every list must keep seven backs, six midfielders, two rucks and seven forwards.</li>
 <li>Your local save belongs to this browser. Reloading a finished season does not earn another completion. Private browsing, denied storage or clearing site data can prevent a career from being kept, so the game does not promise a cloud save.</li>
 <h2>Aussie Rules Manager Worked Example</h2>
 <p>Imagine your club reaches half time on 6.8 (44), while the opponent has 7.2 (44). They have kicked one more goal, but the match is level on points. You use the break to bring a fresh midfielder on for a tired one.</p>
@@ -311,11 +344,11 @@
 <p>Yes. Aussie Rules Manager is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
 <h2>More games to play</h2>
 <a href="/afl-higher-lower">📊 AFL Higher or Lower Which legend kicked more career goals?</a>
-<a href="/guess-nascar-driver">🏁 Guess The Driver Guess the mystery NASCAR driver from clues</a>
-<a href="/nascar-chain">🔗 NASCAR Chain Build a chain of Cup champions</a>
+<a href="/nrl-team-manager">🏉 NRL Team Manager Manage an NRL club across seasons of Australian rugby league. Pick your starting 13, recruit players and stay under the salary cap</a>
 <a href="/conquest">🗺️ NFL Conquest The imperialism map: winners annex whole empires until one team rules America</a>
 <a href="/baseball-career">⚾ MLB Career Path Guess the baseball player</a>
 <a href="/free-kick">🥅 Free Kick Aim it, bend it, beat the wall and the keeper</a>
+<a href="/cage-clash">🥋 Cage Clash Pixel MMA action. Strike, clinch, take down and fight for a submission.</a>
 <div data-site-chrome>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
 <a href="/soccer">Soccer</a>
