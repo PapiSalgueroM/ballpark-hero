@@ -22,7 +22,7 @@ const boxing = JSON.stringify({ st: newPromoter('Ring Ledger', 'home-resume') })
 const card = () => screen.getByRole('link', { name: /Fight Promoter/ });
 
 function app(initial = '/') {
-  return render(<MemoryRouter initialEntries={[initial]} future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+  return render(<MemoryRouter initialEntries={[initial]}>
     <Routes>
       <Route path="/" element={<ContinueRow />} />
       <Route path="/fight-promoter" element={<><FightPromoterModes /><Link to="/">Go home</Link></>} />
