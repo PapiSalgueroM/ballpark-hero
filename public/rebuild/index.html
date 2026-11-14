@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,6 +284,8 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>Rebuild Challenge: Soccer Club Management Game</h1>
@@ -289,6 +323,7 @@
 <h3>Playing the eight power ups</h3>
 <li>A power up sits in your pocket until you play it, and each one is used up when you do. The finance envelope can hold one, and so can any envelope that lands as you go.</li>
 <li>Fresh list: ask the scouts for a new three, once, whenever their list is open (not during a part exchange). 20 percent off: your next signing costs a fifth under his value. No war: the rivals stay out of your next signing.</li>
+<li>Choose Look within budget to spend a Fresh List replacing the paid offers with up to three other players who fit the shirt and your current cash. Free bench options stay on the list. Rival bids can raise an asking price.</li>
 <li>Second spin: between spins, bring the wheel back to a shirt you already settled (not one you bought or borrowed). A man you kept is sold, a squad man you promoted goes back to the bench, and the scouts deal a new list for the shirt.</li>
 <li>Veto: at the whistle the board's punishment cards come up face first. Send one back and it is shuffled in with the cards the board has not dealt, and one comes out in its place. It can be the same card, so it is a gamble, and you can always take the cards as they fell instead. You hold one veto at a time, because the whistle only takes one.</li>
 <li>Part exchange: when the wheel lands on a man, see the scouts' three before you decide. Take one and your man goes the other way, with the new man 25 percent under his value. Call it off and he stays, but the exchange is gone.</li>
@@ -304,6 +339,7 @@
 <h3>Playing the power ups, worked through</h3>
 <p>Part exchange: the wheel lands on your 71 rated right back, worth 20 million. You play the exchange and the scouts show a 76 rated right back worth 40 million. Take him and he costs 30 million, your man's 20 goes the other way, so the swap costs you 10 million net for five points in the shirt.</p>
 <p>Loan: the scouts' three for a hole at centre back include an 80 rated man worth 50 million you could never buy. A loan puts him in the XI for 20 million. If the board wants three signings, though, he is not one of them.</p>
+<p>Budget scout: you have 15 million and the winger you want costs 25. Spend a Fresh List to bring in different options at 15 million or less. If a rival bids, decide whether to go higher or walk away.</p>
 <p>Second spin: you promoted a 66 rated squad man at left wing early, then an envelope brought 30 million. Play the second spin on that shirt, he goes back to the bench, and the new list has a 74 you can now afford.</p>
 <p>Veto: you missed two demands and drew The big sale and The clawback. Send The big sale back and it is shuffled in with itself and the three cards the board has not dealt (Somebody goes, The dressing room turns, The board lets it go). It is about a one in four chance it comes straight back and about one in four it is the safe card, while The dressing room turns costs two points of rating, so it is a real call.</p>
 <p>Sneak peek: you are about to go 40 million into the overdraft on a striker. Peek first: the next envelope is a 25 million sponsor scandal, so you take the cheaper option and finish out of debt.</p>
@@ -339,9 +375,9 @@
 <h3>Is Rebuild Challenge free to play?</h3>
 <p>Yes. Rebuild Challenge is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
 <h2>More games to play</h2>
+<a href="/soccer-perfect-season">🏆 Soccer Perfect Season Draft a real XI</a>
 <a href="/dart-draft">🎯 Dart Draft Throw timed darts at a real world map: hit a country, draft its players</a>
 <a href="/career-ladder">🪜 Career Ladder Guess the player, one career stop at a time</a>
-<a href="/who-am-i">🕵️ Who Am I? Hunt the secret player with similarity scores</a>
 <a href="/front-office">🏢 NFL Front Office Full GM sim with real rosters: cap, trades, drafts, dynasties</a>
 <a href="/sports-millionaire">💰 Sports Millionaire Climb a 15-question money ladder with lifelines</a>
 <a href="/score-predictor">📊 Score Predictor Predict the final score of famous matches</a>
@@ -363,8 +399,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>

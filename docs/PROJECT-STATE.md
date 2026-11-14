@@ -1,4 +1,12 @@
+## 2026-11-14: Budget scouting, NBA trade counters and NRL pathways
+
+- Rebuild spends one Fresh List on up to three new players within current cash for the open shirt. The free bench stays available, and any later rival bid goes through the usual negotiation. The replacement list survives reload.
+- NBA Front Office suggests the lowest-valued eligible future pick that gets a rejected Trade Desk package accepted under the existing rules. Adding it opens the package for review and leaves all assets in place until confirmation.
+- NRL Team Manager offers a second preseason youth brief. Choose three under-24 players with four appearances each for $200,000, or two with six each for $225,000. Only actual first-grade appearances count, and the chosen brief is recorded with the season.
+
 ## 2026-11-14: Starter swaps, batting approach and reserve coaching
+
+[PR #954](https://github.com/PapiSalgueroM/ballpark-hero/pull/954) published exact main `bf196143b40216bf8206ecc187e4f84fd81ad75a`, deployment `54fff67b-704c-49f8-9387-3136092613cf`. Seven live browser journeys, all three raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted all three game guides.
 
 - Build Your XI lets players replace any of the eleven starters during review. The replacement keeps the slot's original club or nation draw and selected year or era. A rejected or unavailable answer leaves the existing starter in place.
 - MLB My Career lets an established signed starting hitter shorten their swing for a season. The sim trades some home runs for more hits in the same at-bats, and Career Log keeps the approach used.
