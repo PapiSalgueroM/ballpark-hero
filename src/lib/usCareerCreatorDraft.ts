@@ -1,13 +1,13 @@
 import type { UsCareerDraft } from '@/components/us-career/UsCareerCreator';
 import { safeLocalStorage, safeSetItem } from '@/lib/safeStorage';
 import type { UsCareerCreate } from '@/lib/usCareerSport';
+import type { UsSport } from '@/lib/usCareerToCoach';
 import {
   ACCESSORIES, BOOTS, CELEBRATIONS, FACIAL_HAIR, HAIR_COLORS, HAIRSTYLES, SKIN_TONES,
   type PlayerAppearance,
 } from '@/lib/soccerCareerAppearance';
 
-type CreatorSport = 'nba' | 'nfl';
-const keyFor = (sport: CreatorSport) => `dukb-${sport}-career-creator-v1`;
+const keyFor = (sport: UsSport) => `dukb-${sport}-career-creator-v1`;
 const appearanceOptions = {
   skinTone: SKIN_TONES, hairstyle: HAIRSTYLES, hairColor: HAIR_COLORS, facialHair: FACIAL_HAIR,
   celebration: CELEBRATIONS, boots: BOOTS, accessory: ACCESSORIES,
@@ -28,7 +28,7 @@ function isCreatorDraft(draft: Partial<UsCareerDraft> | null, create: UsCareerCr
     && isAppearance(draft.appearance);
 }
 
-export function readUsCareerCreatorDraft(sport: CreatorSport, create: UsCareerCreate, careerKey: string) {
+export function readUsCareerCreatorDraft(sport: UsSport, create: UsCareerCreate, careerKey: string) {
   const raw = safeLocalStorage.getItem(keyFor(sport));
   if (raw === null || safeLocalStorage.getItem(careerKey)) return { raw, draft: null };
   try {
@@ -39,19 +39,19 @@ export function readUsCareerCreatorDraft(sport: CreatorSport, create: UsCareerCr
   }
 }
 
-export function keepUsCareerCreatorDraft(sport: CreatorSport, careerKey: string, previous: string | null, current: string): boolean {
+export function keepUsCareerCreatorDraft(sport: UsSport, careerKey: string, previous: string | null, current: string): boolean {
   const key = keyFor(sport);
   if (safeLocalStorage.getItem(careerKey) || safeLocalStorage.getItem(key) !== previous) return false;
   safeLocalStorage.setItem(key, current);
   return true;
 }
 
-export function clearUsCareerCreatorDraft(sport: CreatorSport, expected: string | null) {
+export function clearUsCareerCreatorDraft(sport: UsSport, expected: string | null) {
   const key = keyFor(sport);
   if (expected !== null && safeLocalStorage.getItem(key) === expected) safeLocalStorage.removeItem(key);
 }
 
-export function keepReturningCreatorDraft(sport: 'nfl', previous: string | null, current: string): boolean {
+export function keepReturningCreatorDraft(sport: Exclude<UsSport, 'nba'>, previous: string | null, current: string): boolean {
   const key = keyFor(sport);
   return safeLocalStorage.getItem(key) === previous && safeSetItem(key, current);
 }

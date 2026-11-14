@@ -241,19 +241,19 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   const practiceBankedRef = useRef(false);
   const practiceButtonRef = useRef<HTMLButtonElement>(null);
   const [teamQuality, setTeamQuality] = useState<number | null>(null);
-  const keepCreator = sport.slug === 'nfl';
-  const [restoredCreator] = useState(() => keepCreator ? readUsCareerCreatorDraft('nfl', sport.create, sport.saveKey) : undefined);
+  const creatorSport = sport.slug === 'nba' ? null : sport.slug;
+  const [restoredCreator] = useState(() => creatorSport ? readUsCareerCreatorDraft(creatorSport, sport.create, sport.saveKey) : undefined);
   const [draft, setDraft] = useState(() => entry?.draft ?? restoredCreator?.draft ?? emptyUsCareerDraft(sport.create));
   const initialCreator = useRef(draft);
   const storedCreator = useRef(restoredCreator?.raw ?? null);
   const [creatorReturnRefused, setCreatorReturnRefused] = useState(false);
   useLayoutEffect(() => {
-    if (!keepCreator || phase !== 'create' || draft === initialCreator.current || saveFailure === 'remove') return;
+    if (!creatorSport || phase !== 'create' || draft === initialCreator.current || saveFailure === 'remove') return;
     const bytes = JSON.stringify(draft);
-    if (bytes !== storedCreator.current && keepUsCareerCreatorDraft('nfl', sport.saveKey, storedCreator.current, bytes)) {
+    if (bytes !== storedCreator.current && keepUsCareerCreatorDraft(creatorSport, sport.saveKey, storedCreator.current, bytes)) {
       storedCreator.current = bytes;
     }
-  }, [draft, keepCreator, phase, saveFailure, sport.saveKey]);
+  }, [draft, creatorSport, phase, saveFailure, sport.saveKey]);
   const consumedEntry = useRef(false);
   const { nameInput, eraId, pos, archetypeId, appearance } = draft;
   const [feed, setFeed] = useState<string[]>([]);
@@ -565,8 +565,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       setSaveFailure(pending.value === null ? 'remove' : 'write');
       return;
     }
-    if (pending.value !== null && keepCreator) {
-      clearUsCareerCreatorDraft('nfl', storedCreator.current);
+    if (pending.value !== null && creatorSport) {
+      clearUsCareerCreatorDraft(creatorSport, storedCreator.current);
       storedCreator.current = null;
     }
     if (pending.value !== null && onEntrySaved.current) {
@@ -574,7 +574,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       onEntrySaved.current = undefined;
       onSaved();
     }
-  }, [sport.saveKey, keepCreator]);
+  }, [sport.saveKey, creatorSport]);
   /* Round 1144: while a save is refused the storage seam knows one is
      waiting here, so a reload the app makes on its own account (a new build,
      a stale chunk, the Season Center tile's Reload) retries it once first and
@@ -1148,8 +1148,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     setMarketTalk(null);
     extDeclinedRef.current = false;
     setCreatorReturnRefused(false);
-    if (keepCreator) {
-      clearUsCareerCreatorDraft('nfl', storedCreator.current);
+    if (creatorSport) {
+      clearUsCareerCreatorDraft(creatorSport, storedCreator.current);
       storedCreator.current = null;
       const next = emptyUsCareerDraft(sport.create);
       initialCreator.current = next;
@@ -1254,9 +1254,9 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       <ProspectJourney sport={sport} prospect={prospect} onChange={advanceProspect} onJoin={joinCareer} onBack={() => {
         if (prospect.state) return;
         const next = { nameInput: prospect.name, pos: prospect.pos, archetypeId: prospect.archetypeId, eraId: prospect.eraId, appearance: prospect.appearance };
-        if (keepCreator) {
+        if (creatorSport) {
           const bytes = JSON.stringify(next);
-          if (!keepReturningCreatorDraft('nfl', storedCreator.current, bytes)) {
+          if (!keepReturningCreatorDraft(creatorSport, storedCreator.current, bytes)) {
             setCreatorReturnRefused(true);
             return;
           }
@@ -1301,7 +1301,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
         onBeginProspect={beginProspect}
         onEnterDraft={create}
         prospectNotice={prospectNotice}
-        creatorSaveNote={keepCreator ? 'Your setup stays in this browser if you leave before starting.' : undefined}
+        creatorSaveNote={creatorSport ? 'Your setup stays in this browser if you leave before starting.' : undefined}
       >
         {/* Round 1570: below the last control on purpose. The wall is read after mount, so this row arrives
             one paint late, and below everything it moves nothing a player is reading. */}
