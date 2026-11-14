@@ -17,7 +17,7 @@ import type { IntlSummerEntry, IntlTournament } from '@/lib/careerIntl';
 import UsCareerProgramme from '@/components/us-career/UsCareerProgramme';
 import { expireUsCareerProgramme, prepareUsCareerProgramme, restoreUsCareerProgramme, settleUsCareerProgramme, type ProgrammeCareer } from '@/lib/usCareerProgramme';
 // Round 179: real free agency, shared engine and shared screen.
-import { applyFaSigning, oneYearWindow } from '@/lib/usCareerFreeAgency';
+import { applyFaSigning, faLeverage, oneYearWindow } from '@/lib/usCareerFreeAgency';
 import type { FaWindow } from '@/lib/usCareerFreeAgency';
 import FreeAgencyPanel from '@/components/us-career/FreeAgencyPanel';
 /* Round 207: the extension talk, shared engine and shared card. */
@@ -530,7 +530,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       setCoach(co);
       const restoredPhase: Phase = !s.c.retired ? 'season' : s.phase === 'coach' && co ? 'coach' : 'retired';
       if (restoredPhase !== 'season') markRestoredFinish(sport.gameSlug);
-      const heldTalk = restoreMarketTalk(s.contractTalk, loaded, sport.slug);
+      const heldTalk = restoreMarketTalk(s.contractTalk, loaded, sport.slug, sport.freeAgencyContact?.teams(loaded).map(t => t.id));
       setMarketTalk(heldTalk);
       extDeclinedRef.current = heldTalk?.kind === 'extension' && heldTalk.declined;
       if (heldTalk && !(heldTalk.kind === 'extension' && heldTalk.declined)) {
@@ -598,7 +598,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     if (sport.hall) stampOnRetirement(c, sport.saveKey); // Round 1051: the calibration stamp, on the write that retires a career
     /* Release AO: the stamp stays above the write. Round 1084's saveValue holds the write's try (and the retry
        of a refused one), so the stamped career is what gets serialised, first time and on every retry. */
-    const heldTalk = restoreMarketTalk(marketRef.current, c, sport.slug);
+    const heldTalk = restoreMarketTalk(marketRef.current, c, sport.slug, sport.freeAgencyContact?.teams(c).map(t => t.id));
     if (!heldTalk && marketRef.current) setMarketTalk(null);
     saveValue(JSON.stringify({ c, phase: ph, teamQuality: tq, coach: coachRef.current,
       ...(heldTalk ? { contractTalk: heldTalk } : {}) } satisfies SaveShape));
@@ -726,7 +726,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       const stored = raw ? JSON.parse(raw) as SaveShape : null;
       if (stored && (stored.phase === 'season' || stored.phase === 'freeagency') && stored.c && stored.teamQuality != null && trade.receipt(stored.c)
         && stored.c.year === career.year && summerCareerKey(stored.c) === summerCareerKey(career)) {
-        const held = restoreMarketTalk(stored.contractTalk, stored.c, sport.slug);
+        const held = restoreMarketTalk(stored.contractTalk, stored.c, sport.slug, sport.freeAgencyContact?.teams(stored.c).map(t => t.id));
         if (stored.phase === 'season' || held?.kind === 'freeagency') {
           savedBytes.current = raw;
           setCareer(stored.c);
@@ -791,7 +791,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
        the career, so the card's "play the year out and reach free agency" is
        false, and signing would pay the last year at a rate for years that
        never come (MLB's deck farewell leaves exactly one year on the deal). */
-    const existingTalk = restoreMarketTalk(marketRef.current, c, sport.slug);
+    const existingTalk = restoreMarketTalk(marketRef.current, c, sport.slug, sport.freeAgencyContact?.teams(c).map(t => t.id));
     if (existingTalk && !(existingTalk.kind === 'extension' && existingTalk.declined)) {
       setPhase(existingTalk.kind === 'extension' ? 'extension' : 'freeagency');
       return;
@@ -974,12 +974,27 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     if (!career || !held || pendingSave.current) return false;
     try {
       const raw = localStorage.getItem(sport.saveKey);
-      const stored = raw ? restoreMarketTalk((JSON.parse(raw) as SaveShape).contractTalk, career, sport.slug) : null;
+      const stored = raw ? restoreMarketTalk((JSON.parse(raw) as SaveShape).contractTalk, career, sport.slug, sport.freeAgencyContact?.teams(career).map(t => t.id)) : null;
       if (!stored || JSON.stringify(stored) === JSON.stringify(held)) return false;
       setMarketTalk(stored);
       setPhase(stored.kind === 'freeagency' ? 'freeagency' : stored.declined ? 'season' : 'extension');
       return true;
     } catch { return false; }
+  };
+
+  const contactFaTeam = (team: string) => {
+    if (talkMovedElsewhere()) return;
+    const held = marketRef.current;
+    const contact = sport.freeAgencyContact;
+    if (!career || !contact || teamQuality == null || pendingSave.current || held?.kind !== 'freeagency' || (held.wheel && !held.wheel.seen)) return;
+    // A completed signing in another tab is no longer a market to contact.
+    try {
+      if (localStorage.getItem(sport.saveKey) !== savedBytes.current) return;
+    } catch { return; }
+    const window = contact.contact(career, held.window, team, teamQuality);
+    if (window === held.window) return;
+    setMarketTalk({ ...held, window });
+    persist(career, 'freeagency', teamQuality);
   };
 
   const requestTrade = (kind: 'trade' | 'release') => {
@@ -1893,7 +1908,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       ) : phase === 'freeagency' && faWindow ? (
         <div ref={revealRef}>
           {tradeReceipt && <p className="mb-2 rounded-lg border border-border px-3 py-2 text-sm" role="status">{tradeReceipt}</p>}
-          <FreeAgencyPanel window={faWindow} sportNoun={sport.faSportNoun} talkLine={talkLine} onPush={pushFa} onSign={signFa} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} compare reviewSigning={sport.slug === 'nba' || sport.slug === 'nfl'} odds={faWindow.offers.map((_, index) => freeAgencyMarketProbabilities(faWindow, index, sport.faPushArgs(career, Math.random)))} />
+          <FreeAgencyPanel window={faWindow} sportNoun={sport.faSportNoun} talkLine={talkLine} onPush={pushFa} onSign={signFa} wheel={marketTalk?.wheel} onWheelContinue={acknowledgeMarket} compare reviewSigning={sport.slug === 'nba' || sport.slug === 'nfl'} odds={faWindow.offers.map((_, index) => freeAgencyMarketProbabilities(faWindow, index, sport.faPushArgs(career, Math.random)))}
+            contact={sport.freeAgencyContact ? { teams: sport.freeAgencyContact.teams(career), chance: faLeverage(sport.faPushArgs(career, Math.random)), onContact: contactFaTeam } : undefined} />
           {!(marketTalk?.wheel && !marketTalk.wheel.seen) && retireFromMarket('Retire instead')}
         </div>
       ) : phase === 'event' && pendingEvent ? (

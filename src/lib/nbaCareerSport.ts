@@ -14,7 +14,7 @@ import {
   nbaEventDeck,
   NBA_SPEND_ITEMS, buyNbaItem, getNbaSpendItem,
   nbaShouldRetire, nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaTeamLabelOf,
-  buildNbaFaWindow, nbaFaPushArgs, buildNbaExtension, nbaExtPushArgs,
+  buildNbaFaWindow, nbaFaPushArgs, buildNbaExtension, nbaExtPushArgs, nbaFreeAgencyTeams, contactNbaFreeAgencyTeam,
   nbaAssignRole, nbaCampBattle, enableNbaDraft2004, hasNbaDraft2004,
   type NbaCareerPos, type NbaCareerState, type NbaSeasonLine,
 } from '@/lib/nbaMyCareer';
@@ -96,6 +96,7 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = wi
   buildExtension: buildNbaExtension,
   extPushArgs: nbaExtPushArgs,
   buildFaWindow: buildNbaFaWindow,
+  freeAgencyContact: { teams: nbaFreeAgencyTeams, contact: contactNbaFreeAgencyTeam },
   faPushArgs: nbaFaPushArgs,
   faSportNoun: 'franchise',
   seasonWord: 'season',

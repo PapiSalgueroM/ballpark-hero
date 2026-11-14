@@ -47,6 +47,7 @@ interface Props {
   compare?: boolean;
   reviewSigning?: boolean;
   odds?: Record<MarketResult, number>[];
+  contact?: { teams: { id: string; label: string }[]; chance: number; onContact: (team: string) => void };
 }
 
 interface PushIntent {
@@ -63,10 +64,11 @@ interface SigningReview {
   offer: FaOffer;
 }
 
-export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush, onSign, wheel, onWheelContinue, compare = false, reviewSigning = false, odds }: Props) {
+export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush, onSign, wheel, onWheelContinue, compare = false, reviewSigning = false, odds, contact }: Props) {
   const [intent, setIntent] = useState<PushIntent | null>(null);
   const [comparing, setComparing] = useState(false);
   const [review, setReview] = useState<SigningReview | null>(null);
+  const [contactTeam, setContactTeam] = useState('');
   const signing = useRef<SigningReview | null>(null);
   const signingOpener = useRef<HTMLButtonElement | null>(null);
   const signingTitle = useRef<HTMLHeadingElement>(null);
@@ -207,6 +209,36 @@ export default function FreeAgencyPanel({ window: w, sportNoun, talkLine, onPush
         <p className="mt-1 text-[11px] font-semibold text-gold">{w.note}</p>
         {talkLine && <p key={talkLine} className="cm-rise mt-2 rounded-xl bg-secondary px-3 py-2 text-xs text-foreground">{talkLine}</p>}
       </div>
+
+      {contact && (
+        <section className="space-y-2 rounded-xl border border-border bg-card p-3" aria-label="Contact a franchise">
+          {w.contact ? (
+            <p role="status" className="text-sm">
+              {contact.teams.find(team => team.id === w.contact?.team)?.label} {w.contact.offered ? 'sent an offer. It is below your original deals.' : 'passed on making an offer.'}
+            </p>
+          ) : (
+            <>
+              <label className="block text-xs font-semibold">
+                Choose a franchise
+                <select value={contactTeam} onChange={event => setContactTeam(event.currentTarget.value)}
+                  className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-background px-2">
+                  <option value="">Select a franchise</option>
+                  {[...contact.teams].sort((a, b) => a.label.localeCompare(b.label)).map(team => {
+                    const listed = w.offers.find(offer => offer.team === team.id);
+                    return <option key={team.id} value={team.id} disabled={!!listed}>
+                      {team.label}{listed ? listed.gone ? ' (withdrawn)' : ' (offer already listed)' : ''}
+                    </option>;
+                  })}
+                </select>
+              </label>
+              <p className="text-xs text-muted-foreground">One call this market. {Math.round(contact.chance * 100)}% chance of an offer. Your current deals stay open.</p>
+              <button type="button" disabled={!contactTeam || w.offers.some(offer => offer.team === contactTeam)}
+                onClick={() => contact.onContact(contactTeam)}
+                className="min-h-11 rounded-lg border border-border px-3 text-xs font-semibold disabled:opacity-50">Contact franchise</button>
+            </>
+          )}
+        </section>
+      )}
 
       <div className="space-y-2">
         {w.offers.map((o, i) => (

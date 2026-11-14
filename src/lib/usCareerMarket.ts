@@ -44,8 +44,8 @@ function validExtension(v: unknown, team: string): v is ExtensionTalk {
   return !v.pulled && object(o) && years(o.years) && money(o.salary)
     && ['eager', 'fair', 'reluctant'].includes(o.mood as string) && text(o.line);
 }
-function validWindow(v: unknown, team: string, farewell: boolean): v is FaWindow {
-  if (!object(v) || !text(v.note) || !Array.isArray(v.offers) || v.offers.length < 1 || v.offers.length > 4) return false;
+function validWindow(v: unknown, team: string, farewell: boolean, contactTeams?: readonly string[]): v is FaWindow {
+  if (!object(v) || !text(v.note) || !Array.isArray(v.offers) || v.offers.length < 1 || v.offers.length > 5) return false;
   const seen = new Set<string>();
   let incumbent = 0;
   for (const o of v.offers) {
@@ -58,10 +58,19 @@ function validWindow(v: unknown, team: string, farewell: boolean): v is FaWindow
     if (o.incumbent) { incumbent++; if (o.team !== team || o.gone) return false; }
     else if (o.team === team) return false;
   }
+  const contact = v.contact;
+  if (contact === undefined) {
+    if (v.offers.length > 4) return false;
+  } else {
+    if (!object(contact) || !text(contact.team) || !contactTeams?.includes(contact.team) || contact.team === team
+      || typeof contact.offered !== 'boolean') return false;
+    if (contact.offered ? v.offers.length < 2 || v.offers.at(-1).team !== contact.team
+      : seen.has(contact.team) || v.offers.length > 4) return false;
+  }
   return incumbent === 1 && v.offers[0].incumbent === true && v.offers.some(o => !o.gone);
 }
 function validWheel(v: unknown): v is MarketWheel {
-  if (!object(v) || !text(v.label) || !(v.offerIndex === null || (Number.isSafeInteger(v.offerIndex) && (v.offerIndex as number) >= 0 && (v.offerIndex as number) <= 3)) || !object(v.probabilities) || !results.includes(v.result as MarketResult) || typeof v.seen !== 'boolean'
+  if (!object(v) || !text(v.label) || !(v.offerIndex === null || (Number.isSafeInteger(v.offerIndex) && (v.offerIndex as number) >= 0 && (v.offerIndex as number) <= 4)) || !object(v.probabilities) || !results.includes(v.result as MarketResult) || typeof v.seen !== 'boolean'
     || !Array.isArray(v.draws) || v.draws.length < 1 || v.draws.length > 3 || !v.draws.every(n => finite(n) && n >= 0 && n < 1)) return false;
   const p = v.probabilities;
   return results.every(k => finite(p[k]) && p[k] >= 0 && p[k] <= 1)
@@ -69,7 +78,7 @@ function validWheel(v: unknown): v is MarketWheel {
     && (p[v.result as MarketResult] as number) > 0;
 }
 /** Reads only a complete talk for this exact unplayed contract year. */
-export function restoreMarketTalk(value: unknown, c: UsCareerCore, sport: UsSport): UsCareerMarketTalk | null {
+export function restoreMarketTalk(value: unknown, c: UsCareerCore, sport: UsSport, contactTeams?: readonly string[]): UsCareerMarketTalk | null {
   if (!object(value) || !contextMatches(value.context, c, sport)
     || !(value.reply === null || typeof value.reply === 'string') || (value.wheel !== undefined && !validWheel(value.wheel))) return null;
   if (value.kind === 'extension') {
@@ -81,7 +90,7 @@ export function restoreMarketTalk(value: unknown, c: UsCareerCore, sport: UsSpor
         || (wheel.result === 'withdrawn') !== value.talk.pulled || (wheel.result !== 'withdrawn' && !value.talk.offer)) return null;
     }
   } else if (value.kind === 'freeagency') {
-    if (c.contractYears > 0 || !validWindow(value.window, c.team, isFarewellSeason(c.retirement, c.year))) return null;
+    if (c.contractYears > 0 || !validWindow(value.window, c.team, isFarewellSeason(c.retirement, c.year), sport === 'nba' ? contactTeams : undefined)) return null;
     if (value.wheel) {
       const wheel = value.wheel as MarketWheel;
       const target = wheel.offerIndex !== null ? value.window.offers[wheel.offerIndex] : null;

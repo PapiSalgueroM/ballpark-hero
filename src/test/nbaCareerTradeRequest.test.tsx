@@ -162,4 +162,49 @@ describe('standing NBA trade request', () => {
     expect(releaseReceipt(view)).toHaveTextContent(/Release declined/);
     expect(ask(view)).toBeDisabled();
   });
+
+  it.each([['now', true], ['y2004', false]] as const)('saves one real free agency contact in %s', (era, offered) => {
+    const before = makeCareer(era);
+    before.contractYears = 0;
+    before.ovr = 69;
+    install(before);
+    const market = open();
+    fireEvent.click(market.getByRole('button', { name: `Play the ${before.year} season` }));
+    const initial = read().contractTalk;
+    const stale = open();
+    const offeredTeams = new Set(initial.window.offers.map((offer: { team: string }) => offer.team));
+    const target = nbaEraTeamIds(era).find(team => {
+      const roll = keyedRng(`nba-free-agent-contact:${summerCareerKey(before)}:${before.year}:${team}`)();
+      return !offeredTeams.has(team) && (roll < 0.15) === offered;
+    })!;
+    expect(target).toBeTruthy();
+    const marketBox = within(market.container);
+    const selection = marketBox.getByRole('combobox', { name: 'Choose a franchise' });
+    expect(within(selection).getAllByRole('option').slice(1).map(option => (option as HTMLOptionElement).value).sort()).toEqual([...nbaEraTeamIds(era)].sort());
+    fireEvent.change(selection, { target: { value: target } });
+    fireEvent.click(marketBox.getByRole('button', { name: 'Contact franchise' }));
+    const after = read().contractTalk.window;
+    expect(after.offers.slice(0, initial.window.offers.length)).toEqual(initial.window.offers);
+    expect(after.contact).toEqual({ team: target, offered });
+    if (offered) expect(after.offers.at(-1)).toMatchObject({ team: target, incumbent: false, pushed: false, gone: false });
+    else expect(after.offers).toEqual(initial.window.offers);
+    const saved = localStorage.getItem(sport.saveKey);
+    const staleBox = within(stale.container);
+    const second = nbaEraTeamIds(era).find(team => team !== target && !offeredTeams.has(team));
+    fireEvent.change(staleBox.getByRole('combobox', { name: 'Choose a franchise' }), { target: { value: second } });
+    fireEvent.click(staleBox.getByRole('button', { name: 'Contact franchise' }));
+    expect(staleBox.getByText(offered ? /sent an offer/ : /passed on making an offer/)).toBeVisible();
+    expect(localStorage.getItem(sport.saveKey)).toBe(saved);
+    stale.unmount();
+    market.unmount();
+    const restored = open();
+    expect(restored.getByText(offered ? /sent an offer/ : /passed on making an offer/)).toBeVisible();
+    expect(restored.queryByRole('combobox', { name: 'Choose a franchise' })).toBeNull();
+    expect(localStorage.getItem(sport.saveKey)).toBe(saved);
+    if (offered) {
+      fireEvent.click(restored.container.querySelector<HTMLButtonElement>(`[data-fa-sign="${after.offers.length - 1}"]`)!);
+      fireEvent.click(restored.getByRole('button', { name: 'Confirm signing' }));
+      expect(read().c).toMatchObject({ team: target, salary: after.offers.at(-1).salary, contractYears: after.offers.at(-1).years });
+    }
+  });
 });
