@@ -1,4 +1,12 @@
+## 2026-11-14: Late NRL interchanges, Contract Chaos Daily and compact Home cards
+
+- NRL managers can use an unused held reserve at the 60-minute pause. The reserve plays the remainder of the match. The match report records the change and uses the lineup on the field for late scoring credit.
+- Contract Chaos keeps the Eastern date of the Daily deal from the moment it opens through signing and sharing. A tab with an older open deal preserves a result already saved for that date or a later date.
+- The Home Dynasty & Career Sims section uses the sports catalogue's compact cards and keeps all 13 game links and pin controls.
+
 ## 2026-11-14: Home daily puzzle filters, NRL shortlist comparison and NBA save recovery
+
+[PR #894](https://github.com/PapiSalgueroM/ballpark-hero/pull/894) published from main `f908b57f82747f930680889bb89ebb55f4da9754`, deployment `d6d1b948-ff73-44e5-805c-2d18160ebe2d`, entry `/assets/index-Ciho7jjd.js`. All three journeys passed on the public site. All 174 routes passed the crawler audit and IndexNow accepted the NRL guide.
 
 - Home filters Daily puzzles by sport and shows the number of matching boards. All sports keeps the original order and rotating spotlight.
 - NRL Team Manager compares two available shortlisted recruits using their asking salary, arrival year, one-season cap and squad check, and strongest signed player at the same position. The comparison uses the existing shortlist and does not write to the career save.

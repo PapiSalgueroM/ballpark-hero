@@ -81,16 +81,21 @@ interface NrlScoringMatchday {
   rotation: ReadonlyMap<string, NrlPlayer>;
 }
 
+function afterScore(total: NrlScoring, before: NrlScoring): NrlScoring {
+  const remaining = emptyScoring();
+  for (const field of scoringFields) remaining[field] = total[field] - before[field];
+  return remaining;
+}
+
 export function makeNrlInterchangeScoringReport(
   totals: NrlScoring, firstHalf: NrlScoring, opening: NrlScoringMatchday, closing: NrlScoringMatchday,
-  kickerId: string, rng: () => number,
+  kickerId: string, rng: () => number, late?: NrlScoringMatchday & { through60: NrlScoring },
 ): NrlMatchScoringReport {
   const first = makeNrlScoringReport(firstHalf, opening.starting, opening.rotation, kickerId, rng);
-  const remaining = emptyScoring();
-  for (const field of scoringFields) remaining[field] = totals[field] - firstHalf[field];
-  const second = makeNrlScoringReport(remaining, closing.starting, closing.rotation, kickerId, rng);
+  const second = makeNrlScoringReport(afterScore(late?.through60 ?? totals, firstHalf), closing.starting, closing.rotation, kickerId, rng);
+  const finish = late && makeNrlScoringReport(afterScore(totals, late.through60), late.starting, late.rotation, kickerId, rng);
   const lines = new Map(first.lines.map(line => [line.playerId, line]));
-  for (const line of second.lines) {
+  for (const line of [...second.lines, ...(finish?.lines ?? [])]) {
     const total = lines.get(line.playerId);
     if (total) {
       for (const field of scoringFields) total[field] += line[field];

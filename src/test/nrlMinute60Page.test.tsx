@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import { createNrlCareer, reduceNrlCareer } from '@/lib/nrlCareer';
-import { NRL_SAVE_KEY } from '@/lib/nrlManager';
+import { NRL_SAVE_KEY, nrlHoldableReserves } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
 
@@ -44,4 +44,28 @@ it('resumes the 60-minute score unchanged and records only a confirmed late tact
   expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(full));
   expect(localStorage.getItem(fence)).toBe('6');
   expect(screen.getByText('60-minute tactic change: Defence.')).toBeVisible();
+});
+
+it('reopens a 60-minute save and uses the pending reserve only when play resumes', () => {
+  const start = createNrlCareer('broncos', 1, 2026);
+  const reserve = nrlHoldableReserves(start.season)[0];
+  const starter = start.season.squad.find(player => player.id === start.season.lineup[reserve.role])!;
+  const half = reduceNrlCareer(start, { type: 'startLive', hold: { year: 2026, round: 1, reserveId: reserve.id } });
+  const mid = reduceNrlCareer(half, { type: 'reachMinute60', year: 2026, round: 1, tactic: 'balanced' });
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(mid));
+  localStorage.setItem(fence, '4');
+  render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+
+  const choice = screen.getByRole('checkbox', { name: `Bring on ${reserve.name}` });
+  expect(choice).not.toBeChecked();
+  fireEvent.click(choice);
+  expect(choice).toBeChecked();
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(mid));
+  expect(localStorage.getItem(fence)).toBe('4');
+  fireEvent.click(screen.getByRole('button', { name: 'Play final 20 minutes' }));
+  const settled = reduceNrlCareer(mid, { type: 'finishMinute60', year: 2026, round: 1, tactic: 'balanced', reserveId: reserve.id });
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(settled));
+  expect(localStorage.getItem(fence)).toBe('5');
+  expect(screen.getByText(`${reserve.name} came on for ${starter.name} after 60 minutes.`)).toBeVisible();
 });

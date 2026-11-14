@@ -189,13 +189,13 @@ const ContractChaos = () => {
                   score: `${mine.score}/100 on Contract Chaos`,
                   gameName: 'Contract Chaos',
                   gamePath: '/contract-chaos',
-                  customText: shareText(deal, g.signed, mine, g.mode === 'daily' ? g.today : null),
+                  customText: shareText(deal, g.signed, mine, g.dealDate),
                 }}
                 onPlayAgain={g.mode === 'free' ? () => g.start('free') : undefined}
                 playAgainLabel="Deal me another client"
                 playNext={
                   <div className="space-y-2">
-                    {g.mode === 'daily' && <p className="text-sm text-muted-foreground">A new player tomorrow.</p>}
+                    {g.dealDate === g.today && <p className="text-sm text-muted-foreground">A new player tomorrow.</p>}
                     <button onClick={g.toMenu} className="text-sm text-primary hover:underline min-h-[32px]">Back to the menu</button>
                   </div>
                 }
