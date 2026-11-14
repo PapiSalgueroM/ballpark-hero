@@ -1,4 +1,11 @@
+## 2026-11-14: Club Manager world ratings during the season
+
+- Rivals and free agents can gain or lose OVR as league matches settle. The transfer market, opponent squads and match engine use the same rating. January signings keep their current OVR, and returning players carry their closing OVR into the next season.
+- Existing careers start world rating updates when opening their next season. Fresh current and historical careers start with the new timing. The in-game help and public guide explain both paths.
+
 ## 2026-11-14: NRL ladder form and Budget Builder historical markets
+
+[PR #902](https://github.com/PapiSalgueroM/ballpark-hero/pull/902) published exact main `80d12bba9814b9867f0a4b0ecb9b57925630939a`, deployment `276f7796-d7a8-4358-adf9-6e2651ccdb66`. All five browser journeys and 174 sitemap routes passed live. IndexNow accepted the NRL guide.
 
 - NRL Ladder can show each club's last five completed regular-season results, plus home and away records. Form uses the same ladder order. Byes and finals stay out of these records.
 - Budget Builder keeps the 2007 and 2015 markets tied to the selected year. When the dated pool is unavailable, choose Try again or switch eras. The current-year market still has its local fallback.

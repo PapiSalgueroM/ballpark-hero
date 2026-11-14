@@ -437,6 +437,8 @@ export interface ProjectedPlayer {
   since: number;
   /** Save-scoped simulated development ceiling, absent on the original world. */
   potential?: number;
+  /** Remaining projection data carried only by a transfer out of the projected roster. */
+  ratingForecast?: ProjectedRatingForecast;
   /** Original source identity, carried unchanged when a player moves. */
   worldRosterKey?: string;
   /** Round 1600: the LEVEL his price gave him on his world's scale in its year 0, carried only where that world
@@ -882,6 +884,70 @@ function projectClub(club: string, baked: BakedPlayer[], y: number, seed: number
 /** The projected roster for one club, or an empty list if it is not in the data. */
 export function projectedRoster(club: string, yearsOn: number, eraId: string = 'now', worldSeed?: number): ProjectedPlayer[] {
   return projectedWorldFor(eraId, yearsOn, worldSeed)[club] ?? [];
+}
+
+function projectionIdentity(player: ProjectedPlayer, yearsOn: number): string {
+  return JSON.stringify([player.n, player.p, yearsOn - player.a, player.since]);
+}
+
+export interface ProjectedRatingForecast {
+  from: number;
+  to: number;
+  value: number;
+  phase: number;
+}
+
+export function projectedRatingAt(forecast: ProjectedRatingForecast, progress: number): number {
+  const delta = forecast.to - forecast.from;
+  return forecast.from + Math.sign(delta) * Math.floor(Math.abs(delta) * clamp(progress, 0, 1) + forecast.phase);
+}
+
+export function projectedRatingValue(forecast: ProjectedRatingForecast, rating: number): number {
+  return rating === forecast.from ? forecast.value : Math.max(0.2, Math.round(forecast.value * 1.2 ** (rating - forecast.from) * 10) / 10);
+}
+
+const SEASON_FORECASTS = new WeakMap<ProjectedPlayer[], { next: ProjectedPlayer[]; byPlayer: Map<ProjectedPlayer, ProjectedRatingForecast> }>();
+
+/** Spend the next projected rating change across this season while keeping today's squad and ages. */
+export function projectedRosterAtProgress(
+  club: string, yearsOn: number, eraId: string, worldSeed: number | undefined, progress: number, includeForecast = false,
+): ProjectedPlayer[] {
+  const opening = projectedRoster(club, yearsOn, eraId, worldSeed);
+  if (!Number.isFinite(progress) || progress <= 0 && !includeForecast || !opening.length) return opening;
+  const next = projectedRoster(club, yearsOn + 1, eraId, worldSeed);
+  let schedule = SEASON_FORECASTS.get(opening);
+  if (schedule?.next !== next) {
+    const counts = new Map<string, number>();
+    for (const p of opening) {
+      const id = projectionIdentity(p, yearsOn);
+      counts.set(id, (counts.get(id) ?? 0) + 1);
+    }
+    const survivors = new Map<string, ProjectedPlayer | null>();
+    for (const p of next) {
+      const id = projectionIdentity(p, yearsOn + 1);
+      survivors.set(id, survivors.has(id) ? null : p);
+    }
+    const byPlayer = new Map<ProjectedPlayer, ProjectedRatingForecast>();
+    for (const p of opening) {
+      const id = projectionIdentity(p, yearsOn);
+      const survivor = survivors.get(id);
+      if (counts.get(id) !== 1) continue;
+      const phase = rnd(`world-rating|${eraId}|${worldSeed ?? 'legacy'}|${yearsOn}|${club}|${id}`);
+      byPlayer.set(p, { from: p.r, to: survivor?.r ?? p.r, value: p.v, phase });
+    }
+    schedule = { next, byPlayer };
+    SEASON_FORECASTS.set(opening, schedule);
+  }
+  const fraction = Math.min(1, progress);
+  return opening.map(p => {
+    const forecast = schedule.byPlayer.get(p);
+    if (!forecast) return p;
+    const rating = projectedRatingAt(forecast, fraction);
+    if (rating === p.r && !includeForecast) return p;
+    const potential = p.potential === undefined ? undefined : Math.max(rating, p.potential);
+    return { ...p, r: rating, v: projectedRatingValue(forecast, rating), ratingForecast: forecast,
+      ...(potential === undefined ? {} : { potential }) };
+  });
 }
 
 /** Best XI average of a projected roster. Null when there is no data at all. */

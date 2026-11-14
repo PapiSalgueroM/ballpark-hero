@@ -37,7 +37,7 @@ export interface WorldRosterTransfer {
   player: WorldRosterPlayer;
   from: string | null;
   to: string | null;
-  kind: 'permanent' | 'loan' | 'loan-return' | 'release' | 'retire';
+  kind: 'permanent' | 'loan' | 'loan-return' | 'release' | 'retire' | 'snapshot';
   key?: string;
   since?: number;
   /** Original position certified by the actual projected source, before retraining. */
@@ -88,7 +88,19 @@ function validPlayer(value: unknown): value is WorldRosterPlayer {
     && count(value.injuryWeeks) && count(value.suspendedMatches) && typeof value.isYouth === 'boolean'
     && count(value.seasonGoals) && count(value.seasonAssists)
     && (value.onLoan === undefined || typeof value.onLoan === 'boolean')
-    && (value.worldRosterKey === undefined || text(value.worldRosterKey));
+    && (value.worldRosterKey === undefined || text(value.worldRosterKey))
+    && (value.worldRatingForecast === undefined || validRatingForecast(value.worldRatingForecast))
+    && (value.worldRatingStart === undefined || Array.isArray(value.worldRatingStart) && value.worldRatingStart.length === 2
+      && count(value.worldRatingStart[0]) && typeof value.worldRatingStart[1] === 'number'
+      && value.worldRatingStart[1] >= 0 && value.worldRatingStart[1] <= 1);
+}
+
+function validRatingForecast(value: unknown): boolean {
+  if (!object(value) || !count(value.year) || !object(value.ratings)) return false;
+  const { from, to, value: price, phase } = value.ratings;
+  return count(from) && from >= 40 && from <= 99 && count(to) && to >= 40 && to <= 99
+    && typeof price === 'number' && Number.isFinite(price) && price >= 0
+    && typeof phase === 'number' && phase >= 0 && phase < 1;
 }
 function keyOf(eraId: string, origin: WorldRosterOrigin): string {
   return JSON.stringify([eraId, origin.club, origin.name, origin.position, origin.birthYear, origin.since]);
@@ -278,8 +290,11 @@ export function recordWorldRosterTransfer(career: CareerState, transfer: WorldRo
   if (year === null || !validPlayer(transfer.player) || (transfer.from !== null && !text(transfer.from))
     || (transfer.originPosition !== undefined && !positions.has(transfer.originPosition))
     || transfer.player.onLoan === true || transfer.kind === 'loan' || transfer.kind === 'loan-return') return career;
-  if (transfer.kind !== 'permanent' && transfer.kind !== 'release' && transfer.kind !== 'retire') return career;
-  if (transfer.kind === 'permanent' ? !text(transfer.to) || transfer.to === transfer.from : transfer.to !== null) return career;
+  const snapshot = transfer.kind === 'snapshot';
+  const owned = transfer.kind === 'permanent' || snapshot;
+  if (!owned && transfer.kind !== 'release' && transfer.kind !== 'retire') return career;
+  if (snapshot ? transfer.from !== career.clubName || transfer.to !== transfer.from
+    : owned ? !text(transfer.to) || transfer.to === transfer.from : transfer.to !== null) return career;
   const matches = (held?.records ?? []).filter(record => samePlayer(transfer.player, record.origin, year));
   const carried = transfer.key ?? transfer.player.worldRosterKey;
   const previous = carried ? held?.records.find(record => record.key === carried) : matches.length === 1 ? matches[0] : undefined;
@@ -289,8 +304,8 @@ export function recordWorldRosterTransfer(career: CareerState, transfer: WorldRo
     since: transfer.since ?? null });
   if ((carried && !previous && carried !== freshKey) || (!carried && matches.length > 1)
     || (previous && !samePlayer(transfer.player, previous.origin, year))) return career;
-  const owner = transfer.kind === 'permanent' ? transfer.to : null;
-  const status = transfer.kind === 'permanent' ? 'owned' : transfer.kind === 'release' ? 'released' : 'retired';
+  const owner = owned ? transfer.to : null;
+  const status = owned ? 'owned' : transfer.kind === 'release' ? 'released' : 'retired';
   if (previous && (previous.owner !== transfer.from || previous.status === 'retired'
     || (previous.status === 'released' && transfer.kind !== 'permanent'))) return career;
   if (!previous && transfer.from === null) return career;
