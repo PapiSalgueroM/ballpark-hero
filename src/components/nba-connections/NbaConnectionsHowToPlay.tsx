@@ -41,7 +41,7 @@ export function NbaConnectionsHowToPlay({ open, onOpenChange }: Props) {
           <div className="space-y-2">
             <p className="font-semibold text-primary">Try this example</p>
             <p className="text-muted-foreground">Park four names in A while you think about the fifth. Keep another idea in B. When A has five, submit it. A wrong group costs one life and stays editable; B stays where you left it.</p>
-            <p className="text-xs text-muted-foreground">Notes are saved for each mode and puzzle. Daily progress also survives a refresh. Unlimited reopens the saved puzzle with your notes and four fresh lives.</p>
+            <p className="text-xs text-muted-foreground">Daily and Unlimited save your notes and progress in this browser. Return to Unlimited to pick up the same puzzle with your solved groups and remaining lives. Choose New puzzle to start over.</p>
           </div>
           <div className="space-y-2">
             <p className="font-semibold text-primary">Difficulty</p>

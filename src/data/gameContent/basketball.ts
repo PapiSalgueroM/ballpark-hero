@@ -1157,7 +1157,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Daily puzzle versus unlimited boards",
         items: [
-          "The daily puzzle is identical for everyone, progress saves, and a fresh one lands every day at midnight Eastern. Unlimited deals random boards from the pool.",
+          "The daily puzzle is identical for everyone, progress saves, and a fresh one lands every day at midnight Eastern. Unlimited keeps your solved groups, remaining lives and draft notes when you return in this browser. Choose New puzzle to start over.",
         ],
       },
     ],

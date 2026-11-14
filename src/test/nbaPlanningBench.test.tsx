@@ -184,6 +184,75 @@ describe('NBA planning bench', () => {
     expect(recordCompletion).not.toHaveBeenCalled();
   });
 
+  it('restores accepted Unlimited groups and lives with the rejected draft still blocked', async () => {
+    network.pool = [puzzle, nbaConnectionsPuzzles[1]];
+    let view = await page();
+    fireEvent.click(button(view, '∞ Unlimited'));
+    pick(view, puzzle.groups[1].players); submit(view);
+    tab(view, 'B'); pick(view, [...puzzle.groups[0].players.slice(0, 4), puzzle.groups[2].players[0]]);
+    submit(view);
+    expect(view.getByText(/^Groups found:/).textContent).toContain('1/4');
+    expect(view.getByLabelText('3 lives remaining')).toBeVisible();
+    expect(button(view, 'Submit five')).toBeDisabled();
+    const bytes = rawNotes('unlimited');
+    const daily = localStorage.getItem(dailyKey);
+    view.unmount(); vi.mocked(Math.random).mockReturnValue(0.9);
+
+    view = await page();
+    expect(button(view, '📅 Daily')).toHaveAttribute('aria-pressed', 'true');
+    fireEvent.click(button(view, '∞ Unlimited'));
+    expect(view.getByText(/^Groups found:/).textContent).toContain('1/4');
+    expect(view.getByLabelText('3 lives remaining')).toBeVisible();
+    expect(view.queryByRole('button', { name: puzzle.groups[1].players[0] })).toBeNull();
+    expect(button(view, 'Draft B')).toHaveAttribute('aria-pressed', 'true');
+    expect(button(view, 'Submit five')).toBeDisabled();
+    tab(view, 'A'); tab(view, 'B');
+    expect(button(view, 'Submit five')).toBeDisabled();
+    expect(rawNotes('unlimited'), 'Restore and draft focus preserve the accepted result').toEqual(bytes);
+    await act(async () => fireEvent.click(button(view, 'New puzzle')));
+    expect(view.getByText(/^Groups found:/)).toHaveTextContent('0/4');
+    expect(view.getByLabelText('4 lives remaining')).toBeVisible();
+    expect(button(view, 'Draft B')).toHaveTextContent('0/5');
+    expect(view.queryByRole('button', { name: 'Victor Wembanyama' })).toBeVisible();
+    expect(localStorage.getItem(dailyKey)).toBe(daily);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
+  it('keeps the planning draft but rejects accepted progress for a changed same-roster partition', async () => {
+    let view = await hook(); act(() => view.result.current.switchMode('unlimited'));
+    selectHook(view, puzzle.groups[0].players); act(() => view.result.current.submitSelection());
+    selectHook(view, puzzle.groups[3].players.slice(0, 2));
+    const bytes = rawNotes('unlimited');
+    view.unmount();
+    const [a, b, ...other] = puzzle.groups;
+    network.pool = [{ ...puzzle, groups: [
+      { ...a, players: [...a.players.slice(0, 4), b.players[4]] },
+      { ...b, players: [...b.players.slice(0, 4), a.players[4]] },
+      ...other,
+    ] }];
+    view = await hook(); act(() => view.result.current.switchMode('unlimited'));
+    expect(view.result.current.selected).toEqual(puzzle.groups[3].players.slice(0, 2));
+    expect(view.result.current.foundGroups).toBe(0);
+    expect(view.result.current.lives).toBe(4);
+    expect(rawNotes('unlimited')).toBe(bytes);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
+  it('holds the newer Unlimited tab after a stale open board tries to submit or reset', async () => {
+    const older = await hook(); act(() => older.result.current.switchMode('unlimited'));
+    selectHook(older, wrong);
+    const newer = await hook(); act(() => newer.result.current.switchMode('unlimited'));
+    act(() => newer.result.current.submitSelection());
+    expect(newer.result.current.lives).toBe(3);
+    const bytes = rawNotes('unlimited');
+    act(() => older.result.current.submitSelection());
+    expect(older.result.current.lives).toBe(4);
+    expect(older.result.current.unlimitedMoved).toBe(true);
+    act(() => older.result.current.resetGame());
+    expect(rawNotes('unlimited')).toBe(bytes);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
   it('rejects a same-id changed roster and foreign saved names without overwriting during load', async () => {
     const bytes = JSON.stringify({ ...emptyNbaDrafts(scope('daily'), names), groups: [[names[0]], [], [], []] });
     localStorage.setItem(nbaDraftKey('daily'), bytes);

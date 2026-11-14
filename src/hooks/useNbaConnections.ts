@@ -6,7 +6,11 @@ import { isSportConnectionsLog } from '@/lib/dailySaveShapes';
 import { isSameConnectionsGroup } from '@/lib/connectionsSolvedMatch';
 import { fetchNbaConnectionsPuzzles } from '@/lib/fetchNbaConnectionsPuzzles';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
-import { emptyNbaDrafts, nbaDraftKey, nbaDraftScope, parseNbaDrafts, toggleNbaDraft, type NbaConnectionDrafts } from '@/lib/nbaConnectionDrafts';
+import {
+  emptyNbaDrafts, emptyNbaUnlimitedProgress, nbaDraftKey, nbaDraftScope, nbaUnlimitedPartition,
+  parseNbaDrafts, parseNbaUnlimitedProgress, toggleNbaDraft,
+  type NbaConnectionDrafts, type NbaUnlimitedProgress,
+} from '@/lib/nbaConnectionDrafts';
 
 /**
  * NBA Connections, direct port of useBaseballConnections (task #26).
@@ -66,11 +70,17 @@ export function useNbaConnections() {
       const loadedPool = pool.length > 0 ? pool : fallbackNbaPuzzles;
       try {
         const raw = localStorage.getItem(nbaDraftKey('unlimited'));
+        heldUnlimitedBytes.current = raw;
         const savedIndex = loadedPool.findIndex(candidate => {
           const names = candidate.groups.flatMap(group => group.players);
           return parseNbaDrafts(raw, nbaDraftScope('unlimited', candidate.id, ''), names, names) !== null;
         });
-        if (savedIndex >= 0) setUnlimitedIndex(savedIndex);
+        if (savedIndex >= 0) {
+          setUnlimitedIndex(savedIndex);
+          const progress = parseNbaUnlimitedProgress(raw, loadedPool[savedIndex]);
+          unlimitedProgressRef.current = progress;
+          setUnlimitedProgress(progress);
+        }
       } catch { /* No valid notes: retain the ordinary random draw. */ }
       setIsLoadingPool(false);
     });
@@ -127,18 +137,16 @@ export function useNbaConnections() {
     () => Math.floor(Math.random() * fallbackNbaPuzzles.length)
   );
   const unlimitedPuzzle = puzzlePool[unlimitedIndex % puzzlePool.length];
-  const [unlimitedSolvedGroups, setUnlimitedSolvedGroups] = useState<SolvedGroup[]>([]);
-  const [unlimitedLives, setUnlimitedLives] = useState(4);
-  /* Round 425 part two: the groups the board REVEALS after an unlimited loss
-     are kept apart from the groups the player found, the way the daily side
-     keeps dailySolvedGroups apart from dailySolvedGroupsFinal. Padding the
-     found list itself is what made an unlimited loss read 4/4 on the counter,
-     the result line and the share card. */
-  const [unlimitedRevealed, setUnlimitedRevealed] = useState<SolvedGroup[]>([]);
-  const unlimitedSolvedGroupsFinal = useMemo(
-    () => (unlimitedRevealed.length ? [...unlimitedSolvedGroups, ...unlimitedRevealed] : unlimitedSolvedGroups),
-    [unlimitedSolvedGroups, unlimitedRevealed],
-  );
+  const [unlimitedProgress, setUnlimitedProgress] = useState(emptyNbaUnlimitedProgress);
+  const unlimitedProgressRef = useRef(unlimitedProgress);
+  const heldUnlimitedBytes = useRef<string | null>(null);
+  const [unlimitedMoved, setUnlimitedMoved] = useState(false);
+  const unlimitedLives = unlimitedProgress.lives;
+  const unlimitedSolvedGroupsFinal = useMemo(() => {
+    const found = unlimitedProgress.found.map(index => unlimitedPuzzle.groups[index]);
+    if (unlimitedProgress.lives > 0) return found;
+    return [...found, ...unlimitedPuzzle.groups.filter((_, index) => !unlimitedProgress.found.includes(index))];
+  }, [unlimitedProgress, unlimitedPuzzle]);
 
   // ---- ACTIVE VALUES -------------------------------------------------------
   const puzzle       = mode === 'daily' ? dailyPuzzle : unlimitedPuzzle;
@@ -148,11 +156,11 @@ export function useNbaConnections() {
      reveal them, which made every loss report 4/4 on screen and on the share
      card. Part two moved the unlimited padding into unlimitedRevealed, so
      this count is honest in both modes. */
-  const foundGroups = mode === 'daily' ? dailySolvedGroups.length : unlimitedSolvedGroups.length;
+  const foundGroups = mode === 'daily' ? dailySolvedGroups.length : unlimitedProgress.found.length;
   const lives        = mode === 'daily' ? dailyLives : unlimitedLives;
   const gameStatus: NbaConnStatus = mode === 'daily'
     ? (rawDailyStatus !== 'playing' ? 'complete' : 'playing')
-    : (unlimitedSolvedGroups.length === unlimitedPuzzle.groups.length || unlimitedLives <= 0 ? 'complete' : 'playing');
+    : (unlimitedProgress.found.length === unlimitedPuzzle.groups.length || unlimitedLives <= 0 ? 'complete' : 'playing');
 
   // ---- SHUFFLED PLAYERS (deterministic by puzzle.id) ----------------------
   const allPlayers = useMemo(() => {
@@ -200,7 +208,10 @@ export function useNbaConnections() {
       return;
     }
     let loaded: NbaConnectionDrafts | null = null;
-    try { loaded = parseNbaDrafts(localStorage.getItem(nbaDraftKey(mode)), scope, roster, remainingPlayers); }
+    try {
+      const raw = mode === 'unlimited' ? heldUnlimitedBytes.current : localStorage.getItem(nbaDraftKey(mode));
+      loaded = parseNbaDrafts(raw, scope, roster, remainingPlayers);
+    }
     catch { setNotesWarning(true); }
     const next = loaded ?? emptyNbaDrafts(scope, roster);
     draftsRef.current = next; setDrafts(next); submittedRef.current = '';
@@ -209,12 +220,33 @@ export function useNbaConnections() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loadingGame, scope, rosterSignature, remainingSignature]);
 
-  const writeDrafts = useCallback((next: NbaConnectionDrafts) => {
-    if (JSON.stringify(next.groups) !== JSON.stringify(draftsRef.current?.groups)) submittedRef.current = '';
+  const writeDrafts = useCallback((next: NbaConnectionDrafts, played?: { puzzle: Puzzle; progress: NbaUnlimitedProgress }) => {
+    const changedGroups = JSON.stringify(next.groups) !== JSON.stringify(draftsRef.current?.groups);
+    const key = nbaDraftKey(mode);
+    let save = JSON.stringify(next);
+    if (mode === 'unlimited') {
+      try {
+        if (localStorage.getItem(key) !== heldUnlimitedBytes.current) {
+          setUnlimitedMoved(true);
+          return false;
+        }
+      } catch { /* Keep playing in memory if browser storage is blocked. */ }
+      const previous = unlimitedProgressRef.current;
+      const progress = played?.progress ?? (changedGroups && previous.rejected ? { ...previous, rejected: null } : previous);
+      unlimitedProgressRef.current = progress;
+      setUnlimitedProgress(progress);
+      save = JSON.stringify({ ...next, progress: { ...progress, partition: nbaUnlimitedPartition(played?.puzzle ?? unlimitedPuzzle) } });
+    }
+    if (changedGroups) submittedRef.current = '';
     draftsRef.current = next; setDrafts(next);
-    try { localStorage.setItem(nbaDraftKey(mode), JSON.stringify(next)); setNotesWarning(false); }
+    try {
+      localStorage.setItem(key, save);
+      if (mode === 'unlimited') heldUnlimitedBytes.current = save;
+      setNotesWarning(false);
+    }
     catch { setNotesWarning(true); }
-  }, [mode]);
+    return true;
+  }, [mode, unlimitedPuzzle]);
 
   const selectDraft = useCallback((active: number) => {
     const current = draftsRef.current;
@@ -253,6 +285,8 @@ export function useNbaConnections() {
       || selected.some(name => !remainingPlayers.includes(name))) return;
     const submission = JSON.stringify([scope, [...selected].sort()]);
     if (submittedRef.current === submission) return;
+    const previous = unlimitedProgressRef.current;
+    if (mode === 'unlimited' && previous.rejected?.every(name => selected.includes(name))) return;
     if (mode === 'daily' && takeNewerSave()) return;
     submittedRef.current = submission;
 
@@ -264,23 +298,23 @@ export function useNbaConnections() {
     );
 
     if (match) {
+      const nextDrafts = { ...current, groups: current.groups.map(group => group.filter(name => !match.players.includes(name))) };
       if (mode === 'daily') {
         addDailyAction({ t: 'ok', theme: match.theme, players: match.players, diff: match.difficulty });
-      } else {
-        setUnlimitedSolvedGroups(prev => [...prev, { theme: match.theme, players: match.players, difficulty: match.difficulty }]);
+        writeDrafts(nextDrafts);
+      } else if (!writeDrafts(nextDrafts, { puzzle, progress: {
+          ...previous, found: [...previous.found, puzzle.groups.indexOf(match)], rejected: null,
+        } })) {
+        submittedRef.current = '';
+        return;
       }
-      writeDrafts({ ...current, groups: current.groups.map(group => group.filter(name => !match.players.includes(name))) });
       setNotice(previous => ({ id: previous.id + 1, text: `Locked: ${match.theme}. Those five are solved.` }));
     } else {
       if (mode === 'daily') {
         addDailyAction({ t: 'x' });
-      } else {
-        const newLives = unlimitedLives - 1;
-        setUnlimitedLives(newLives);
-        if (newLives <= 0) {
-          const remaining = puzzle.groups.filter(g => !unlimitedSolvedGroups.some(s => isSameConnectionsGroup(s, g)));
-          setUnlimitedRevealed(remaining.map(g => ({ theme: g.theme, players: g.players, difficulty: g.difficulty })));
-        }
+      } else if (!writeDrafts(current, { puzzle, progress: { ...previous, lives: previous.lives - 1, rejected: [...selected].sort() } })) {
+        submittedRef.current = '';
+        return;
       }
       setShakeWrong(true);
       setNotice(previous => ({ id: previous.id + 1, text: 'Not a group. One life used. Your draft stays here to revise.' }));
@@ -290,7 +324,7 @@ export function useNbaConnections() {
         setShakeWrong(false);
       }, 600);
     }
-  }, [mode, notesReady, scope, remainingPlayers, gameStatus, puzzle, solvedGroups, unlimitedLives, unlimitedSolvedGroups, addDailyAction, takeNewerSave, writeDrafts]);
+  }, [mode, notesReady, scope, remainingPlayers, gameStatus, puzzle, solvedGroups, addDailyAction, takeNewerSave, writeDrafts]);
 
   const deselectAll = useCallback(() => {
     const current = draftsRef.current;
@@ -304,16 +338,18 @@ export function useNbaConnections() {
       resetDailyHook();
       if (puzzle) writeDrafts(emptyNbaDrafts(scope, roster));
     } else {
-      const nextIndex = Math.floor(Math.random() * puzzlePool.length);
+      const currentIndex = unlimitedIndex % puzzlePool.length;
+      const offset = puzzlePool.length > 1 ? 1 + Math.floor(Math.random() * (puzzlePool.length - 1)) : 0;
+      const nextIndex = (currentIndex + offset) % puzzlePool.length;
       const nextPuzzle = puzzlePool[nextIndex];
+      if (!writeDrafts(
+        emptyNbaDrafts(nbaDraftScope('unlimited', nextPuzzle.id, todayStr), nextPuzzle.groups.flatMap(group => group.players)),
+        { puzzle: nextPuzzle, progress: emptyNbaUnlimitedProgress },
+      )) return;
       setUnlimitedIndex(nextIndex);
-      setUnlimitedSolvedGroups([]);
-      setUnlimitedRevealed([]);
-      setUnlimitedLives(4);
-      writeDrafts(emptyNbaDrafts(nbaDraftScope('unlimited', nextPuzzle.id, todayStr), nextPuzzle.groups.flatMap(group => group.players)));
     }
     setNotice(previous => ({ id: previous.id, text: '' }));
-  }, [mode, resetDailyHook, puzzlePool, puzzle, scope, roster, todayStr, writeDrafts]);
+  }, [mode, resetDailyHook, puzzlePool, unlimitedIndex, puzzle, scope, roster, todayStr, writeDrafts]);
 
   // ---- COMPLETION ----------------------------------------------------------
   const dailyWon = rawDailyStatus === 'won';
@@ -330,7 +366,9 @@ export function useNbaConnections() {
     selectDraft,
     notice,
     notesWarning,
-    canSubmit: notesReady && selected.length === 5 && submittedRef.current !== JSON.stringify([scope, [...selected].sort()]),
+    unlimitedMoved: mode === 'unlimited' && unlimitedMoved,
+    canSubmit: notesReady && selected.length === 5 && submittedRef.current !== JSON.stringify([scope, [...selected].sort()])
+      && (mode !== 'unlimited' || !unlimitedProgress.rejected?.every(name => selected.includes(name))),
     togglePlayer,
     submitSelection,
     deselectAll,
