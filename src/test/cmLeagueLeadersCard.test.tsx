@@ -250,6 +250,24 @@ describe('the season review', () => {
     expect(b.container.textContent).toContain(`Golden boot: ${summary.goldenBoot!.name}`);
   });
 
+  it('shows the recorded coach award in both the season review and Past winners', () => {
+    const end = toSeasonEnd(everton(), 13118);
+    const { state, summary } = finishSeason(end);
+    const leagueCoachAward = { name: 'Fixture Coach', club: 'Everton', league: 'Premier League',
+      position: 1, matches: 38, points: 90, goalDifference: 42 };
+    const saved = { ...state, history: state.history.map(row => ({ ...row, leagueCoachAward })) };
+    const g = { nextSeason: vi.fn(), startNew: vi.fn() };
+    const review = render(<ClubManagerSeasonSummary sm={{ ...summary, leagueCoachAward }} c={saved} g={g} />);
+    const actual = review.container.querySelector('[data-cm-league-coach-award]')!;
+    expect(actual.textContent).toContain('League Coach of the Season');
+    expect(actual.textContent).toContain('Fixture Coach · Everton');
+    expect(actual.textContent).toContain('90 points · 38 matches');
+    expect(actual.textContent).toContain('complete season of recorded results');
+    expect(draw(saved, 'past').q('[data-cm-league-coach-award]')?.textContent).toBe(actual.textContent);
+    expect(draw(state, 'past').q('[data-cm-league-coach-award]')).toBeNull();
+    vi.restoreAllMocks();
+  });
+
   it('withholds the new awards in a league whose data is too thin, and says why', () => {
     const end = toSeasonEnd(hertha(), 13112);
     const lb = leagueBoardsOf(end)!;

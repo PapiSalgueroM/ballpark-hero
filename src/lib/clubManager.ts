@@ -1135,6 +1135,24 @@ export interface BallonDorCandidate {
   evidence: BallonDorEvidence[];
 }
 
+type CoachSeasonRow = [name: string, appointment: number, won: number, drawn: number, lost: number, gf: number, ga: number];
+interface LeagueCoachBook {
+  season: number;
+  league: string;
+  rows: Record<string, CoachSeasonRow>;
+}
+
+export interface LeagueCoachAward {
+  name: string;
+  club: string;
+  league: string;
+  position: number;
+  matches: number;
+  points: number;
+  goalDifference: number;
+  mine?: true;
+}
+
 /**
  * The world's individual award conversation, era aware because every name
  * comes from the save's own projected rosters and simulated tables: the
@@ -2315,6 +2333,7 @@ export interface SeasonRecord {
   awards?: SeasonAwards;
   ballonDor?: NonNullable<SeasonSummary['ballonDor']>;
   ballonDorShortlist?: BallonDorCandidate[];
+  leagueCoachAward?: LeagueCoachAward;
   /** Round 1335: the summer move the season earned, written only on a season the club really went up or
    *  down or stayed up against the odds (seasonFate). An older record, and every other season, has none. */
   fate?: SeasonFate;
@@ -2965,6 +2984,7 @@ export interface SeasonSummary {
   playerOfSeason?: { name: string; club: string } | null;
   ballonDor?: { name: string; club: string } | null;
   ballonDorShortlist?: BallonDorCandidate[];
+  leagueCoachAward?: LeagueCoachAward;
   /** Round 1311: the same awards the season's record keeps, on a season the league book decided. */
   awards?: SeasonAwards;
   /** Round 1335: the same fate the season's record keeps, only on a season that has one. */
@@ -3309,6 +3329,7 @@ export interface CareerState {
    *  marks the made up man seated in such an opening day chair that the table
    *  could not two source; the first man the sim appoints there drops it. */
   managers?: Record<string, { name: string; since: number; real?: 1; appointed?: string; partial?: 1 }>;
+  leagueCoachBook?: LeagueCoachBook;
   /** Round 309: the chairs this summer will empty, decided at season end so
    *  the job offers and the merry-go-round agree on one list. Written by
    *  finishSeason, consumed and cleared by the rollover. */
@@ -9673,6 +9694,70 @@ export function dugoutOf(career: CareerState, club: string): DugoutView | null {
   if ((career.leagueClubs ?? []).includes(club)) return null;
   const real = openingDayDugout(career, club, yearsOn(career));
   return real ? { name: real.name, real: 1, ...(real.appointed ? { appointed: real.appointed } : {}) } : null;
+}
+
+/** Open the book only when the player starts a full league season. */
+export function beginLeagueCoachSeason(state: CareerState): CareerState {
+  if (state.week !== 0 || state.table.some(row => row.w + row.d + row.l !== 0)) return state;
+  const rows: LeagueCoachBook['rows'] = {};
+  for (const club of state.leagueClubs) {
+    if (club === state.clubName) {
+      rows[club] = ['Your manager', state.season, 0, 0, 0, 0, 0];
+      continue;
+    }
+    const chair = state.managers?.[club];
+    if (chair?.name && !chair.partial && !isRealChair(chair)) {
+      rows[club] = [chair.name, chair.since, 0, 0, 0, 0, 0];
+    }
+  }
+  return { ...state, leagueCoachBook: { season: state.season, league: careerLeagueOf(state).id, rows } };
+}
+
+function applyLeagueResult(state: CareerState, home: string, away: string, hg: number, ag: number): void {
+  applyResult(state.table, home, away, hg, ag);
+  const book = state.leagueCoachBook;
+  if (!book || book.season !== state.season) return;
+  const credit = (club: string, gf: number, ga: number) => {
+    const row = book.rows[club];
+    if (!row) return;
+    if (club !== state.clubName) {
+      const chair = state.managers?.[club];
+      if (!chair || chair.name !== row[0] || chair.since !== row[1] || chair.partial || isRealChair(chair)) {
+        delete book.rows[club];
+        return;
+      }
+    }
+    row[gf > ga ? 2 : gf === ga ? 3 : 4]++;
+    row[5] += gf;
+    row[6] += ga;
+  };
+  credit(home, hg, ag);
+  credit(away, ag, hg);
+}
+
+function leagueCoachWinner(state: CareerState, table: TableRow[]): LeagueCoachAward | undefined {
+  const book = state.leagueCoachBook;
+  const league = careerLeagueOf(state);
+  const expectedMatches = 2 * (table.length - 1);
+  if (!book || book.season !== state.season || book.league !== league.id || state.week < state.calendar.length
+    || expectedMatches < 2 || !table.every(row => row.w + row.d + row.l === expectedMatches)) return undefined;
+  let winner: LeagueCoachAward | undefined;
+  for (const [index, result] of table.entries()) {
+    const tracked = book.rows[result.club];
+    if (!tracked) continue;
+    const [name, appointment, won, drawn, lost, gf, ga] = tracked;
+    if (won !== result.w || drawn !== result.d || lost !== result.l || gf !== result.gf || ga !== result.ga) continue;
+    const mine = result.club === state.clubName;
+    const chair = state.managers?.[result.club];
+    if (!mine && (!chair || chair.name !== name || chair.since !== appointment || chair.partial || isRealChair(chair))) continue;
+    if (winner) return winner;
+    winner = {
+      name: mine ? state.manager?.name ?? name : name, club: result.club, league: league.name,
+      position: index + 1, matches: expectedMatches, points: result.pts, goalDifference: gf - ga,
+      ...(mine ? { mine: true } : {}),
+    };
+  }
+  return undefined;
 }
 
 /**
@@ -19624,13 +19709,13 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       if (h === state.clubName || a === state.clubName) {
         const hg = fx.home ? myGoals : oppGoals;
         const ag = fx.home ? oppGoals : myGoals;
-        applyResult(state.table, h, a, hg, ag);
+        applyLeagueResult(state, h, a, hg, ag);
         notePair(state, myLeagueId, h, a, hg, ag);
         noteBookMine(state, myLeagueId, entry.round, fx, live, xi, myGoals, oppGoals, oppScorers);
         /* My own form entry is written once, below, for every competition. */
       } else {
         const [hg, ag] = simAiMatch(state, h, a);
-        applyResult(state.table, h, a, hg, ag);
+        applyLeagueResult(state, h, a, hg, ag);
         notePair(state, myLeagueId, h, a, hg, ag);
         noteForm(state, h, a, hg, ag);
         creditRaceGoals(state, h, hg);
@@ -21397,7 +21482,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
         for (const [h, a] of pairs) {
           if (h === state.clubName || a === state.clubName) continue;
           const [hg, ag] = simAiMatch(state, h, a);
-          applyResult(state.table, h, a, hg, ag);
+          applyLeagueResult(state, h, a, hg, ag);
           notePair(state, myLeagueId, h, a, hg, ag);
           noteForm(state, h, a, hg, ag);
           creditRaceGoals(state, h, hg);
@@ -23063,6 +23148,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   const shortlist = rankBallonDor(state, table, bookBoards);
   const best = shortlist[0];
   const ballonDor = best ? { name: best.name, club: best.club } : null;
+  const leagueCoachAward = leagueCoachWinner(state, table);
   /* Round 1311: the top scorer, most assists and most clean sheets of the league, from the book. Only on
      a season the book decides; any other season writes nothing new, so its summary and its record are
      exactly what they were before the book was read. */
@@ -23101,6 +23187,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     playerOfSeason,
     ballonDor,
     ...(shortlist.length ? { ballonDorShortlist: shortlist } : {}),
+    ...(leagueCoachAward ? { leagueCoachAward } : {}),
     ...(awards ? { awards } : {}),
     ...(fate ? { fate } : {}),
   };
@@ -23115,6 +23202,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     { season: state.season, club: state.clubName, position, points: myRow.pts, trophies: seasonTrophies,
       leagueId: careerLeagueOf(state).id, leagueSize: table.length,
       ...(ballonDor ? { ballonDor, ballonDorShortlist: shortlist } : {}),
+      ...(leagueCoachAward ? { leagueCoachAward } : {}),
       ...(awards ? { awards } : {}), ...(fate ? { fate } : {}) },
   ];
   state.history = keepTeams(state.history);
@@ -23946,6 +24034,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     goneNames: [...freeAgentsIn],
     seasonSignings: [],
     departedLeagueLines: undefined,
+    leagueCoachBook: undefined,
     cupRound: league.cupName !== null ? 'R16' : 'out',
     cupDraw: {},
     uclField: nextUclField.length ? nextUclField : undefined,

@@ -899,6 +899,7 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
        break, so the break and any rest stay behind with it. */
     ...(s.intl ? { intl: { season: s.season, fired: [...s.intl.fired] } } : {}),
     midSeasonStart: entry,
+    leagueCoachBook: undefined,
     /* Round 1335: the card without what the last manager had already failed. */
     boardObjectives: legacySeason(career) ? s.boardObjectives : openObjectives(s),
     /* Round 633: what he had already banked, frozen here so the season score
@@ -1080,6 +1081,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
     eraId: career.eraId,
     trophies: career.trophies,
     history: career.history,
+    leagueCoachBook: undefined,
     careerStats: { ...career.careerStats, clubsManaged: [...managed] },
     manager: career.manager,
     managerXp: career.managerXp,
