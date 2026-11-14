@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,13 +284,15 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>Dart Draft</h1>
 <p>Call your position, then throw a timed dart at a real world map. Whatever country you stick, you draft one of its actual pros. 11 throws, one XI, no take-backs.</p>
 <p>Gold rings pay out: 👑 legends, 💎 wonderkids, 🃏 free pick, 🎁 mystery gamble.</p>
 <p>Red rings punish: 🦈 shark eats your dart, 🌪️ storm blows you into the bargain bin.</p>
-<p>Ocean throws hand you a 40-rated trialist. One lifeboat re-throw per game.</p>
+<p>Ocean and shark throws hand you a 40-rated trialist. You have one lifeboat re-throw for the whole game.</p>
 <p>Every nation fields a full squad. No pro at your position? Their academy kid steps up.</p>
 <h2>Dart Draft: Throw Darts, Draft a Soccer XI</h2>
 <p>A timed crosshair sweeps a real world map. Lock left to right, then top to bottom, and the dart lands with a wobble. Hit France and you choose from French players at the position you called before the throw: the best four are always on offer, and the other tiles change from dart to dart. Hit a tiny island and its academy kid steps up. Continent rounds zoom the map for precision throws, gold zones over the ocean pay out legends, wonderkids, free picks and mystery gambles, red zones bite back with sharks and storms, and after 11 throws your XI plays a three match series against The Machine. All-Time mode adds the legends of every nation to their squads.</p>
@@ -283,14 +317,14 @@
 <h4>Landing on gold zones, red zones and open water</h4>
 <li>Gold zones offer legends, under 21 wonderkids, a free pick or a mystery gamble. Red zone sharks and storms punish greed.</li>
 <h3>Falling back on the trialist and your one retry</h3>
-<li>Ocean throws and wasted darts hand you a 40 rated trialist, unless you spend the one lifeboat re-throw per game.</li>
+<li>Use your one lifeboat re-throw on a shark, open water or a non-qualifying country in World Cup mode. The re-throw keeps the same position.</li>
 <h3>Scoring the series and the letter grade bands</h3>
 <li>Final score is accuracy plus XI rating plus 120 for a series win or 60 for a draw. Grades run S at 85 down to F below 54.</li>
-<h2>Dart Draft walkthrough: a safe striker and a legend gamble</h2>
+<h2>Dart Draft walkthrough: a safe striker and the lifeboat</h2>
 <h3>Opening on the striker slot with a safe country</h3>
 <p>First throw, striker slot, world map. You lock the vertical line late, stick France, and take a proven forward.</p>
-<h3>Gambling on a legend ring and paying for it</h3>
-<p>Later you aim greedily at the tiny LEGEND ring over the Atlantic and it lands: an all time keeper joins. Your last dart splashes into open water, lifeboat already spent, and the trialist at left back suffers all series.</p>
+<h3>Deciding when to spend the lifeboat</h3>
+<p>Later you hit a shark while throwing for left back. Take the 40-rated trialist to save your lifeboat, or spend it to throw again for left back. If a later dart lands in open water after you spend it, take the trialist.</p>
 <h2>Dart Draft tips for picking countries and positions</h2>
 <h3>Weighing big countries against tiny ones</h3>
 <li>Big countries are safe darts, tiny ones pay more accuracy points.</li>
@@ -330,8 +364,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>

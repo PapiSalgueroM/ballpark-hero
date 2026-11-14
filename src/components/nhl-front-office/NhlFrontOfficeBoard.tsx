@@ -15,6 +15,8 @@ import {
   nhlContributors, nhlSetContributors, nhlResetContributors, repairNhlContributors,
   type NhlContributors, type NhlGmTeam, type NhlGmPlayer,
 } from '@/lib/nhlFrontOffice';
+import { appendFoRoundHistory, foCompletedRounds, foRatingChanges, readFoRoundHistory, type FoRoundHistory } from '@/lib/foRoundHistory';
+import { FoRoundResults } from '@/components/front-office-shared/FoRoundResults';
 /* Round 631: waiving a man costs dead money and he cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, rosterFullRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
 /* Round 531: the cap on screen says which day its figure was read. */
@@ -163,6 +165,7 @@ interface SaveShape {
      can be drawn again after a reload. Absent on older saves. */
   postseason?: Postseason | null;
   lastRound?: LastRound;
+  roundHistory?: FoRoundHistory;
   /* Round 987: the GM desk (src/lib/gmDesk.ts). Absent on every save written
      before it, and on those the board plays exactly as it did until the GM
      opens a desk box. Each block inside is validated alone. */
@@ -286,6 +289,7 @@ export default function NhlFrontOfficeBoard() {
   }, [contributorsOpen]);
   const [feed, setFeed] = useState<string[]>([]);
   const lastRound = useRef<LastRound | null>(null);
+  const roundHistory = useRef<FoRoundHistory | null>(null);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
      moment anything else is prepended it reads as an ordinary row. Transient
@@ -404,6 +408,7 @@ export default function NhlFrontOfficeBoard() {
       if (s.league.teams[s.myTeam]) repairNhlContributors(s.league.teams[s.myTeam]);
       setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
       lastRound.current = readLastRound(s.lastRound, s.league, s.myTeam);
+      roundHistory.current = readFoRoundHistory(s.roundHistory, s.league, s.myTeam, NHL_FO_ROUNDS);
       if (lastRound.current) setFeed(roundHeadlines(lastRound.current));
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
@@ -441,6 +446,7 @@ export default function NhlFrontOfficeBoard() {
     try {
       if (!lg) return false;
       const result = readLastRound(lastRound.current, lg, team);
+      const history = readFoRoundHistory(roundHistory.current, lg, team, NHL_FO_ROUNDS);
       const canPin = (patch.phase ?? phase) === 'draft' && (patch.picksLeft ?? picksLeft) > 0;
       const shortlist = canPin ? validDraftShortlist(patch.draftShortlist ?? draftShortlist, patch.draftClass === undefined ? draftClass : patch.draftClass) : [];
       localStorage.setItem(SAVE_KEY, JSON.stringify({
@@ -448,7 +454,7 @@ export default function NhlFrontOfficeBoard() {
         ...(draftBatchesLeft !== null ? { draftBatchesLeft } : {}),
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { series, champion, gradeLine } : null,
-        ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch, lastRound: result ?? undefined,
+        ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch, lastRound: result ?? undefined, roundHistory: history ?? undefined,
         draftShortlist: shortlist.length ? shortlist : undefined,
       } satisfies SaveShape));
       return true;
@@ -476,6 +482,7 @@ export default function NhlFrontOfficeBoard() {
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
     lastRound.current = null;
+    roundHistory.current = null;
     setWaiverReceipt(null);
     setFeed([
       `Welcome to the ${label(abbr)} front office. The ${lg.season}-${(lg.season + 1) % 100} season drops the puck now.`,
@@ -574,7 +581,9 @@ export default function NhlFrontOfficeBoard() {
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
     /* Round 987: with the desk on, the staff's edge and the trainer ride on
        the round; with it off the round is called exactly as before. */
+    const openingRatings = new Map(lg.teams[myTeam].players.map(player => [player.id, player.ovr]));
     const report = simNhlRound(lg, myTeam, Math.random, gm ? nhlDeskRoundOptions(gm, lg, myTeam) : undefined);
+    const changes = foRatingChanges(lg.teams[myTeam].players, openingRatings);
     nhlAiMoves(lg, myTeam, Math.random);
     let nextGm = gm;
     const deskLines: string[] = [];
@@ -586,6 +595,10 @@ export default function NhlFrontOfficeBoard() {
     const news = [...deskLines, ...report.notes];
     const result: LastRound = { team: myTeam, season: lg.season, round: lg.round, wins: report.myWins,
       losses: report.myLosses, otLosses: report.myOtLosses, notes: roundNotes(news) };
+    const keepRound = () => {
+      roundHistory.current = appendFoRoundHistory(roundHistory.current, lastRound.current, result, changes);
+      lastRound.current = result;
+    };
     if (nextGm !== gm) setGm(nextGm);
     if (lg.round >= NHL_FO_ROUNDS) {
       const { series: sr, champion: champ } = runNhlFoPlayoffs(lg, Math.random, nextGm ? nhlDeskEdges(nextGm, lg, myTeam) : undefined);
@@ -629,7 +642,7 @@ export default function NhlFrontOfficeBoard() {
       }));
       setPhase('recap');
       setLeague(lg);
-      lastRound.current = result;
+      keepRound();
       setFeed(roundHeadlines(result)); setFeedSlam(null);
       persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
       return;
@@ -639,7 +652,7 @@ export default function NhlFrontOfficeBoard() {
     if (nextGm && nhlTradeWindow(league).open && !nhlTradeWindow(lg).open) {
       result.notes = roundNotes(['🔒 The trade deadline has passed. Deals open again once the season is over.', ...news]);
     }
-    lastRound.current = result;
+    keepRound();
     setLeague(lg);
     setFeed(roundHeadlines(result)); setFeedSlam(null);
     persist({}, lg, myTeam);
@@ -768,6 +781,7 @@ export default function NhlFrontOfficeBoard() {
       ].slice(0, 6));
       setPressTilt(0); setSeasonTradeLine(null);
       lastRound.current = null;
+      roundHistory.current = null;
       setSeries([]); setChampion(''); setWonNow(false);
       /* Round 530: the phase stays 'draft' so the last pick's card is seen;
          leaveDraft moves it on. The save says 'hub' as it always did, so a
@@ -965,6 +979,7 @@ export default function NhlFrontOfficeBoard() {
   const reset = () => {
     localStorage.removeItem(SAVE_KEY);
     lastRound.current = null;
+    roundHistory.current = null;
     setWaiverReceipt(null);
     setPhase('pick'); setLeague(null); setMyTeam('');
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
@@ -1019,6 +1034,7 @@ export default function NhlFrontOfficeBoard() {
     const next = r.save;
     setLeague(lg);
     lastRound.current = null;
+    roundHistory.current = null;
     setGm(r.desk);
     setMyTeam(next.myTeam);
     setTrust(next.trust ?? FO_TRUST_START);
@@ -1063,6 +1079,7 @@ export default function NhlFrontOfficeBoard() {
     if (r.ok === false) { const why = hostAwayRefusalLine(nhlDeskHost.pack, r.reason); setFeed(f => [why, ...f].slice(0, 6)); return; }
     setLeague(lg);
     lastRound.current = null;
+    roundHistory.current = null;
     setGm(r.desk);
     setChampion(r.report.champion);
     setSeries([]);
@@ -1130,6 +1147,7 @@ export default function NhlFrontOfficeBoard() {
   }
 
   const room = nhlCapRoom(my, league.cap);
+  const roundResults = <FoRoundResults completed={foCompletedRounds(league, NHL_FO_ROUNDS)} history={roundHistory.current} lastRound={lastRound.current} />;
   const strength = Math.round(nhlStrength(my));
 
   /* Round 204: the facts each box carries, decided in src/lib/foHub.ts so
@@ -1174,7 +1192,7 @@ export default function NhlFrontOfficeBoard() {
     const outFacts = deskFacts(hubFacts)!; /* the league is set past the pick screen */
     const market = outFacts.career.market;
     return (
-      <div ref={careerRevealRef}>
+      <div ref={careerRevealRef} className="space-y-4">
         <GmOutOfWork<NhlDeskFacts>
           sport="nhl"
           card={market ? hostOutOfWorkCard(nhlDeskHost, league, outFacts.career.seat, market, label) : { title: `Let go by the ${label(myTeam)}`, lines: [] }}
@@ -1185,6 +1203,7 @@ export default function NhlFrontOfficeBoard() {
           onDesk={changeDesk}
           onNewFrontOffice={reset}
         />
+        {(roundHistory.current || lastRound.current) && roundResults}
       </div>
     );
   }
@@ -1304,6 +1323,7 @@ export default function NhlFrontOfficeBoard() {
             {roundHeadlines(lastRound.current).map((line, index) => <p key={index}>{line}</p>)}
           </div>
         )}
+        {!arriving && roundResults}
         {gm && recapDesk && (
           <GmDeskMount sport="nhl" desk={gm} facts={recapDesk} panels={NHL_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
         )}
@@ -1680,13 +1700,16 @@ export default function NhlFrontOfficeBoard() {
       )}
 
       {tab === 'round' && (
-        <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
-          <p className="mb-2 text-sm text-foreground">Each round simulates a stretch of games across the league. OT losses still earn a point.</p>
-          <button onClick={playRound} disabled={overLimit > 0 || closeWaits} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">
-            <ShieldHalf className="h-4 w-4" /> {league.round >= NHL_FO_ROUNDS ? 'Final stretch + playoffs' : `Play Round ${league.round}`}
-          </button>
-          <p className="mt-2 text-[10px] text-muted-foreground">Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7.</p>
-        </div>
+        <>
+          <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
+            <p className="mb-2 text-sm text-foreground">Each round simulates a stretch of games across the league. OT losses still earn a point.</p>
+            <button onClick={playRound} disabled={overLimit > 0 || closeWaits} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">
+              <ShieldHalf className="h-4 w-4" /> {league.round >= NHL_FO_ROUNDS ? 'Final stretch + playoffs' : `Play Round ${league.round}`}
+            </button>
+            <p className="mt-2 text-[10px] text-muted-foreground">Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7.</p>
+          </div>
+          {roundResults}
+        </>
       )}
 
       {tab === 'standings' && (

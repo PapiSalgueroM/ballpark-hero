@@ -1,8 +1,9 @@
 import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import NhlFrontOfficeBoard from '@/components/nhl-front-office/NhlFrontOfficeBoard';
-import { initNhlLeague, NHL_FO_ROUNDS, simNhlRound, type NhlLeague, type NhlProspect } from '@/lib/nhlFrontOffice';
+import { initNhlLeague, nhlAiMoves, NHL_FO_ROUNDS, simNhlRound, type NhlLeague, type NhlProspect } from '@/lib/nhlFrontOffice';
 import { keyedRng } from '@/lib/keyedRng';
+import type { FoRoundResult } from '@/lib/foRoundHistory';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
 vi.mock('@/lib/completions', () => ({ recordActivity: vi.fn() }));
@@ -13,6 +14,8 @@ const key = 'nhl-front-office-save-v1';
 const team = 'BOS';
 const read = () => JSON.parse(localStorage.getItem(key)!);
 const openRound = () => fireEvent.click(screen.getByText('Play', { exact: true }));
+const roundResults = () => within(screen.getByRole('region', { name: 'Round results' }));
+const ratingLines = (changes: [string, number, number][]) => changes.map(([name, delta, overall]) => `${name} ${delta > 0 ? '+' : ''}${delta} OVR to ${overall}`);
 
 function fixture(round: number) {
   const league = initNhlLeague(keyedRng('round history fixture'));
@@ -59,6 +62,10 @@ describe('NHL Front Office last round', () => {
     fireEvent.click(play);
     const saved = read(), receipt = saved.lastRound;
     expect(receipt).toMatchObject({ team, season: league.season, round, wins: report.myWins, losses: report.myLosses, otLosses: report.myOtLosses });
+    const archived = saved.roundHistory.rounds[0];
+    expect(archived).toMatchObject({ round, wins: report.myWins, losses: report.myLosses, otLosses: report.myOtLosses });
+    expect(archived.changes.length).toBeGreaterThan(0);
+    expect(roundResults().getAllByRole('listitem').map(row => row.textContent)).toEqual(ratingLines(archived.changes));
     const exact = `Round ${round}: you went ${report.myWins}-${report.myLosses}-${report.myOtLosses}.`;
     expect(screen.getByText(exact)).toBeInTheDocument();
     const headline = receipt.notes.find((note: string) => ratings.includes(note));
@@ -78,7 +85,59 @@ describe('NHL Front Office last round', () => {
       fireEvent.click(screen.getByRole('button', { name: /Play Round 4/ }));
       expect(read().lastRound.round).toBe(4);
       expect(screen.queryByText(exact)).toBeNull();
+    } else {
+      expect(roundResults().getByText(`Won ${report.myWins} · Lost ${report.myLosses} · OT losses ${report.myOtLosses}`)).toBeVisible();
     }
+  });
+
+  it('reopens a settled batch and legacy score without losing overtime, exact OVR or league fidelity', () => {
+    const league = fixture(1);
+    const earlier = simNhlRound(league, team, keyedRng('NHL legacy first round'));
+    league.round += 1;
+    const lastRound = { team, season: league.season, round: 1, wins: earlier.myWins, losses: earlier.myLosses, otLosses: earlier.myOtLosses, notes: [] };
+    const before = install(league, lastRound);
+    const view = render(<NhlFrontOfficeBoard />);
+    openRound();
+    expect(roundResults().getByText('Rating changes are unavailable for this round.')).toBeVisible();
+    expect(localStorage.getItem(key)).toBe(before);
+
+    const paired = structuredClone(league);
+    const keySeed = 'NHL paired round records';
+    const server = keyedRng(keySeed), ui = keyedRng(keySeed);
+    let serverDraws = 0, uiDraws = 0;
+    const draw = () => { serverDraws++; return server(); };
+    vi.spyOn(Math, 'random').mockImplementation(() => { uiDraws++; return ui(); });
+    const historical: FoRoundResult[] = [{ round: 1, wins: lastRound.wins, losses: lastRound.losses, otLosses: lastRound.otLosses, changes: null }];
+    let moved = 0, overtimeLosses = 0;
+    for (let round = 2; round <= 6; round += 1) {
+      const starting = paired.teams[team].players.map(player => player.ovr);
+      const batch = simNhlRound(paired, team, draw);
+      const changes = paired.teams[team].players.flatMap<[string, number, number]>((player, i) => player.ovr === starting[i]
+        ? [] : [[player.name, player.ovr - starting[i], player.ovr]]);
+      nhlAiMoves(paired, team, draw);
+      paired.round += 1;
+      fireEvent.click(screen.getByRole('button', { name: `Play Round ${round}` }));
+      historical.push({ round, wins: batch.myWins, losses: batch.myLosses, otLosses: batch.myOtLosses, changes });
+      expect(JSON.stringify(read().league)).toBe(JSON.stringify(paired));
+      expect(read().roundHistory).toEqual({ team, season: league.season, rounds: historical });
+      if (!changes.length) expect(roundResults().getByText('No rating changes this round.')).toBeVisible();
+      moved += changes.length;
+      overtimeLosses += batch.myOtLosses;
+    }
+    expect(uiDraws).toBe(serverDraws);
+    expect(moved).toBeGreaterThan(0);
+    expect(overtimeLosses).toBeGreaterThan(0);
+    const held = localStorage.getItem(key);
+    view.unmount();
+    render(<NhlFrontOfficeBoard />);
+    openRound();
+    fireEvent.change(roundResults().getByRole('combobox', { name: 'Played round' }), { target: { value: '1' } });
+    expect(roundResults().getByText('Rating changes are unavailable for this round.')).toBeVisible();
+    expect(roundResults().getByText(`Won ${lastRound.wins} · Lost ${lastRound.losses} · OT losses ${lastRound.otLosses}`)).toBeVisible();
+    const changed = historical.find(row => row.changes?.length)!;
+    fireEvent.change(roundResults().getByRole('combobox', { name: 'Played round' }), { target: { value: String(changed.round) } });
+    expect(roundResults().getAllByRole('listitem').map(row => row.textContent)).toEqual(ratingLines(changed.changes!));
+    expect(localStorage.getItem(key)).toBe(held);
   });
 
   it('ignores stale or malformed optional receipts while opening the old save', () => {
@@ -90,6 +149,27 @@ describe('NHL Front Office last round', () => {
       const view = render(<NhlFrontOfficeBoard />);
       expect(screen.getByText('Play', { exact: true })).toBeVisible();
       expect(screen.queryByText('Receipt fixture')).toBeNull();
+      expect(localStorage.getItem(key)).toBe(raw);
+      view.unmount();
+    }
+  });
+
+  it('rejects archive rows outside the current franchise season and keeps their original save bytes', () => {
+    const league = fixture(4);
+    const played = { round: 2, wins: 0, losses: 0, otLosses: 0, changes: [['Invalid fixture', 1, 70]] };
+    for (const roundHistory of [
+      { team: 'NYR', season: league.season, rounds: [played] },
+      { team, season: league.season - 1, rounds: [played] },
+      { team, season: league.season, rounds: [{ ...played, round: 4 }, { ...played, otLosses: -1 }] },
+      { team, season: league.season, rounds: [played, played] },
+    ]) {
+      const raw = JSON.stringify({ ...JSON.parse(install(league)), roundHistory });
+      localStorage.setItem(key, raw);
+      const view = render(<NhlFrontOfficeBoard />);
+      openRound();
+      fireEvent.change(roundResults().getByRole('combobox', { name: 'Played round' }), { target: { value: '2' } });
+      expect(roundResults().getByText('Results and rating changes are unavailable for this round.')).toBeVisible();
+      expect(roundResults().queryByText('Invalid fixture')).toBeNull();
       expect(localStorage.getItem(key)).toBe(raw);
       view.unmount();
     }

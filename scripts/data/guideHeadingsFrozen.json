@@ -723,12 +723,12 @@
         "11 throws per game. The camera alternates between the world map and zoomed continent rounds, and the crosshair sweeps faster every throw.",
         "Accuracy points: 12 to 55 for a country, smaller ones paying more, 40 for a gold zone, 0 for water and red zones.",
         "Gold zones offer legends, under 21 wonderkids, a free pick or a mystery gamble. Red zone sharks and storms punish greed.",
-        "Ocean throws and wasted darts hand you a 40 rated trialist, unless you spend the one lifeboat re-throw per game.",
+        "Use your one lifeboat re-throw on a shark, open water or a non-qualifying country in World Cup mode. The re-throw keeps the same position.",
         "Final score is accuracy plus XI rating plus 120 for a series win or 60 for a draw. Grades run S at 85 down to F below 54."
       ],
       "example": [
         "First throw, striker slot, world map. You lock the vertical line late, stick France, and take a proven forward.",
-        "Later you aim greedily at the tiny LEGEND ring over the Atlantic and it lands: an all time keeper joins. Your last dart splashes into open water, lifeboat already spent, and the trialist at left back suffers all series."
+        "Later you hit a shark while throwing for left back. Take the 40-rated trialist to save your lifeboat, or spend it to throw again for left back. If a later dart lands in open water after you spend it, take the trialist."
       ],
       "tips": [
         "Big countries are safe darts, tiny ones pay more accuracy points.",
@@ -2630,7 +2630,7 @@
         "Stage your changes, then Apply contributors to save them. Use automatic goes back to the highest rated healthy players. These groups feed the rating model; they are not full lines, defensive pairs or ice time.",
         "A healthy player fills in during an injury and your saved choices return when they are healthy. For example, if your chosen goalie gets hurt, the backup covers until he returns. Applying a different selection for that group replaces those saved choices.",
         "Sim the season in 20 rounds of roughly four games each, with a live read on whether you are on pace.",
-        "Your latest round keeps its win, loss and overtime loss record and headlines after you reload, including the round before the playoffs.",
+        "Open Round results to revisit a played round’s wins, losses, overtime losses and rating changes. The final regular-season round also appears in the season recap. Older rounds can have missing results or ratings.",
         "OVR can rise or fall a point at a time after regular-season rounds. For example, a young winger can gain a point toward their potential while a veteran skater can lose one. Check the round news. Players keep their closing OVR going into next season.",
         "Qualify for the playoffs: top three per division plus two wild cards per conference.",
         "Win four best-of-7 rounds to lift the Stanley Cup, then draft and go again, as long as ownership keeps you."

@@ -5,7 +5,7 @@ import { SportGlyph, sportStyle } from './SportGlyph';
 
 /** The chip's words. The world category holds the Olympics and the games that
     mix every sport, so "All sports" would say the wrong thing here. */
-const chipName = (sport: SportKey) => (sport === 'world' ? 'World & Olympic' : SPORT_NAME[sport]);
+export const browseSportName = (sport: SportKey) => (sport === 'world' ? 'World & Olympic' : SPORT_NAME[sport]);
 
 /**
  * Open a sport directly or use its star to change the saved catalogue order.
@@ -23,7 +23,7 @@ export function FavouriteSport({ sports, value, onPick }: {
       <ul className="mt-2 grid grid-cols-2 gap-x-2 min-[480px]:gap-x-4 sm:grid-cols-3 lg:grid-cols-1">
         {sports.map(sport => {
           const on = value === sport;
-          const name = chipName(sport);
+          const name = browseSportName(sport);
           return (
             <li key={sport} className="flex min-w-0 items-stretch border-b border-border">
               <a

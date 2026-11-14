@@ -1,12 +1,12 @@
 import { useState } from 'react';
-import type { NbaRoundHistory, NbaRoundResult } from '@/lib/nbaRoundHistory';
+import type { FoRoundHistory, FoRoundRecord } from '@/lib/foRoundHistory';
 
-export function NbaRoundResults({
+export function FoRoundResults({
   completed, history, lastRound,
 }: {
   completed: number;
-  history: NbaRoundHistory | null;
-  lastRound: Pick<NbaRoundResult, 'round' | 'wins' | 'losses'> | null;
+  history: FoRoundHistory | null;
+  lastRound: FoRoundRecord | null;
 }) {
   const [selected, setSelected] = useState<{ latest: number; round: number } | null>(null);
   if (completed === 0) return null;
@@ -30,7 +30,7 @@ export function NbaRoundResults({
       </div>
       {result ? (
         <>
-          <p className="font-medium">Won {result.wins} · Lost {result.losses}</p>
+          <p className="font-medium">Won {result.wins} · Lost {result.losses}{result.otLosses !== undefined && ` · OT losses ${result.otLosses}`}</p>
           <div className="rounded-lg border border-border/60 px-2 py-1.5">
             <h4 className="font-semibold">Rating changes</h4>
             {record?.changes?.length ? (

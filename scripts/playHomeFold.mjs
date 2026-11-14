@@ -575,6 +575,52 @@ for (const width of [320, 390, 1440]) {
   }
 }
 
+console.log('9) the Home header offers a sport before leaving the first screen');
+for (const width of [320, 390, 430, 1440]) {
+  const ctx = await browser.newContext({ viewport: { width, height: width === 320 ? 568 : 844 }, reducedMotion: 'reduce', hasTouch: width < 768 });
+  try {
+    const page = await ctx.newPage();
+    await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
+    await page.addInitScript(light => {
+      localStorage.setItem('cookie-consent', 'essential');
+      if (light) localStorage.setItem('dukb-theme', 'light');
+    }, width === 320 || width === 430);
+    await page.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
+    const trigger = page.getByRole('button', { name: 'Browse sports', exact: true });
+    const ready = await trigger.waitFor({ timeout: 5000 }).then(() => true, () => false);
+    if (!ready) {
+      say(false, width + 'px Home has a Browse sports button beside search');
+      continue;
+    }
+    await trigger.focus();
+    await trigger.press('Enter');
+    const quick = page.getByRole('dialog', { name: 'Browse sports' });
+    const links = await quick.getByRole('link').evaluateAll(items => items.map(link => ({
+      href: link.getAttribute('href'), height: link.getBoundingClientRect().height,
+    })));
+    const sections = await page.locator('section[data-sport] > div > h2').evaluateAll(headings => headings.map(h => '#' + h.id));
+    const stayedAtTop = await page.evaluate(() => scrollY === 0 && document.documentElement.scrollWidth <= innerWidth);
+    say(stayedAtTop && links.length === sections.length && links.every(link => sections.includes(link.href) && link.height >= 44),
+      width + 'px header opens every sport at the top with 44px targets');
+    await page.keyboard.press('Escape');
+    await quick.waitFor({ state: 'hidden' });
+    say(await trigger.evaluate(button => document.activeElement === button), width + 'px Escape returns focus to Browse sports');
+    await trigger.press('Enter');
+    const rugby = quick.getByRole('link', { name: 'Rugby League', exact: true });
+    if (width < 768) await rugby.tap();
+    else { await rugby.focus(); await rugby.press('Enter'); }
+    await quick.waitFor({ state: 'hidden' });
+    const target = page.locator('#sport-rugby');
+    const entered = await target.evaluate(heading => document.activeElement === heading
+      && location.hash === '#sport-rugby'
+      && Math.abs(heading.getBoundingClientRect().top - parseFloat(getComputedStyle(heading).scrollMarginTop)) <= 3
+      && localStorage.getItem('dukb-fav-sport') === null);
+    say(entered, width + 'px header selection focuses Rugby League and keeps the sport order');
+  } finally {
+    await ctx.close();
+  }
+}
+
 await browser.close();
 
 console.log('');

@@ -19,8 +19,8 @@ import {
   /* Round 824: new deals are priced in the money of the season they start in. */
   nbaMinContract, nbaDraftSigning, nbaDraftCapital, nbaConsumeDraftPick, nbaAiDraftPicks,
 } from '@/lib/nbaFrontOffice';
-import { nbaCompletedRounds, readNbaRoundHistory, type NbaRoundChange, type NbaRoundHistory, type NbaRoundResult } from '@/lib/nbaRoundHistory';
-import { NbaRoundResults } from '@/components/nba-front-office/NbaRoundResults';
+import { appendFoRoundHistory, foCompletedRounds, foRatingChanges, readFoRoundHistory, type FoRoundHistory } from '@/lib/foRoundHistory';
+import { FoRoundResults } from '@/components/front-office-shared/FoRoundResults';
 import { FoCapPanel } from '@/components/front-office-shared/FoCapPanel';
 import { FoAwardBadge } from '@/components/front-office-shared/FoAwardBadge';
 /* Round 824: the season's lines and awards, engine in nbaSeasonStats.ts, box shared. */
@@ -171,7 +171,7 @@ interface SaveShape {
      can be drawn again after a reload. Absent on older saves. */
   postseason?: Postseason | null;
   lastRound?: LastRound;
-  roundHistory?: NbaRoundHistory;
+  roundHistory?: FoRoundHistory;
   /* Round 1018: the GM desk (src/lib/gmDesk.ts). Absent on every save written
      before it, and on those the board plays exactly as it did until the GM
      opens a desk box. Each block inside is validated alone. */
@@ -202,7 +202,7 @@ export default function NbaFrontOfficeBoard() {
   const rotationReturn = useRef(false);
   const [feed, setFeed] = useState<string[]>([]);
   const lastRound = useRef<LastRound | null>(null);
-  const roundHistory = useRef<NbaRoundHistory | null>(null);
+  const roundHistory = useRef<FoRoundHistory | null>(null);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
      moment anything else is prepended it reads as an ordinary row. Transient
@@ -304,7 +304,7 @@ export default function NbaFrontOfficeBoard() {
       nbaCleanStats(s.league);
       setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
       lastRound.current = readLastRound(s.lastRound, s.league, s.myTeam);
-      roundHistory.current = readNbaRoundHistory(s.roundHistory, s.league, s.myTeam);
+      roundHistory.current = readFoRoundHistory(s.roundHistory, s.league, s.myTeam, NBA_ROUNDS);
       if (lastRound.current) setFeed(roundHeadlines(lastRound.current));
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
@@ -505,10 +505,7 @@ export default function NbaFrontOfficeBoard() {
        the round; with it off the round is called exactly as before. */
     const openingRatings = new Map(lg.teams[myTeam].players.map(player => [player.id, player.ovr]));
     const report = simRound(lg, myTeam, Math.random, gm ? nbaDeskRoundOptions(gm, lg, myTeam) : undefined);
-    const changes = lg.teams[myTeam].players.flatMap<NbaRoundChange>(player => {
-      const before = openingRatings.get(player.id);
-      return before === undefined || before === player.ovr ? [] : [[player.name, player.ovr - before, player.ovr]];
-    });
+    const changes = foRatingChanges(lg.teams[myTeam].players, openingRatings);
     let nextGm = gm;
     const deskLines: string[] = [];
     if (gm) {
@@ -523,20 +520,12 @@ export default function NbaFrontOfficeBoard() {
       ...report.notes,
     ];
     const keepRound = () => {
-      const previous = lastRound.current;
-      const history = roundHistory.current?.rounds ?? [];
-      const older: NbaRoundResult[] = previous?.team === myTeam && previous.season === lg.season
-        && !history.some(row => row.round === previous.round)
-        ? [{ round: previous.round, wins: previous.wins, losses: previous.losses, changes: null }]
-        : [];
-      lastRound.current = {
+      const result: LastRound = {
         team: myTeam, season: lg.season, round: league.round, wins: report.myWins, losses: report.myLosses,
         notes: newFeed.slice(1, 5).map(line => line.slice(0, 640)),
       };
-      roundHistory.current = {
-        team: myTeam, season: lg.season,
-        rounds: [...history, ...older, { round: league.round, wins: report.myWins, losses: report.myLosses, changes }],
-      };
+      roundHistory.current = appendFoRoundHistory(roundHistory.current, lastRound.current, result, changes);
+      lastRound.current = result;
     };
     if (nextGm !== gm) setGm(nextGm);
     if (lg.round >= NBA_ROUNDS) {
@@ -1015,7 +1004,7 @@ export default function NbaFrontOfficeBoard() {
 
   const room = nbaCapRoom(my, league.cap);
   const strength = Math.round(nbaStrength(my));
-  const roundResults = <NbaRoundResults completed={nbaCompletedRounds(league)} history={roundHistory.current} lastRound={lastRound.current} />;
+  const roundResults = <FoRoundResults completed={foCompletedRounds(league, NBA_ROUNDS)} history={roundHistory.current} lastRound={lastRound.current} />;
   /* Round 722: the tax as it stands today, shown all season as a projection. */
   const view = nbaTaxView(my, league);
 
