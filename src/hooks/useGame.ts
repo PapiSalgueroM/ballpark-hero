@@ -138,15 +138,13 @@ export function useGame() {
   // Always called unconditionally (React rules). Values are only used when
   // mode === 'daily'; unlimited mode reads its own separate state below.
 
-  const [forfeited, setForfeited] = useState(false);
-
   const {
     puzzle: dailyTarget,
     guesses: dailyGuesses,
     addGuess: addDailyGuess,
-    gameStatus: rawDailyStatus,
+    gameStatus: dailyStatus,
+    forfeit: forfeitDaily,
     isLoading,
-    puzzleIndex: dailyPuzzleIndex,
     reset: resetDailyHook,
   } = useDailyPuzzle<Player, GuessResult>({
     gameSlug: 'footle',
@@ -163,11 +161,6 @@ export function useGame() {
     isValidGuesses: (g) => isFootleLog(g, MAX_GUESSES),
   });
 
-  // Forfeit overrides the hook's status to 'lost' without needing useDailyPuzzle
-  // to know about it. The localStorage entry is written manually in giveUp() so
-  // that on refresh the hook restores the correct 'lost' state.
-  const effectiveDailyStatus: 'playing' | 'won' | 'lost' = forfeited ? 'lost' : rawDailyStatus;
-
   // Each Unlimited tier keeps its own frozen puzzle and answer deck.
   const difficulty = unlimitedSession.tier;
   const [practiceDifficulty, setPracticeDifficulty] = useState<Difficulty>(() => practiceRun?.tier ?? 'easy');
@@ -179,7 +172,7 @@ export function useGame() {
   }, [mode, isLoadingPool, playerPool, dailyTarget, saveUnlimited]);
   const unlimitedDeck = unlimitedSession.decks[difficulty];
   const savedUnlimitedTarget = unlimitedDeck?.pool.find(player => player.name === unlimitedDeck.current.target) ?? null;
-  const unlimitedPaused = !!savedUnlimitedTarget && effectiveDailyStatus === 'playing'
+  const unlimitedPaused = !!savedUnlimitedTarget && dailyStatus === 'playing'
     && !!dailyTarget && normalizeName(savedUnlimitedTarget.name) === normalizeName(dailyTarget.name);
   const unlimitedTarget = isLoadingPool || unlimitedPaused ? null : savedUnlimitedTarget;
   const unlimitedGuesses = useMemo(() => unlimitedDeck && unlimitedTarget
@@ -195,7 +188,7 @@ export function useGame() {
   // ---- ACTIVE VALUES (mode-switched) ---------------------------------------
   const targetPlayer = mode === 'practice' ? practiceTarget : mode === 'daily' ? dailyTarget : unlimitedTarget;
   const guesses      = mode === 'practice' ? practiceGuesses : mode === 'daily' ? dailyGuesses : unlimitedGuesses;
-  const gameStatus   = mode === 'practice' ? practiceRound?.status ?? 'playing' : mode === 'daily' ? effectiveDailyStatus : unlimitedStatus;
+  const gameStatus   = mode === 'practice' ? practiceRound?.status ?? 'playing' : mode === 'daily' ? dailyStatus : unlimitedStatus;
 
   // ---- CALLBACKS -----------------------------------------------------------
 
@@ -248,30 +241,15 @@ export function useGame() {
     if (gameStatus !== 'playing' || (mode === 'unlimited' && (!unlimitedTarget || isLoadingPool))) return;
 
     if (mode === 'daily') {
-      // Persist the forfeited state to localStorage using useDailyPuzzle's
-      // schema (v:1) so that on refresh the hook reads 'lost' and restores
-      // correctly. This is the only coupling point with useDailyPuzzle's
-      // internal storage format, if the schema version bumps, update here too.
-      try {
-        const storageKey = `footle-daily-${todayStr}`;
-        localStorage.setItem(storageKey, JSON.stringify({
-          v: 1,
-          date: todayStr,
-          puzzleIndex: dailyPuzzleIndex,
-          guesses: dailyGuesses,
-          gameStatus: 'lost',
-        }));
-      } catch { /* quota or private browsing, silently skip */ }
-      setForfeited(true);
+      forfeitDaily();
     } else {
       saveUnlimited(giveUpUnlimited(unlimitedRef.current));
     }
-  }, [mode, gameStatus, todayStr, dailyPuzzleIndex, dailyGuesses, savePractice, saveUnlimited, unlimitedTarget, isLoadingPool]);
+  }, [mode, gameStatus, forfeitDaily, savePractice, saveUnlimited, unlimitedTarget, isLoadingPool]);
 
   const resetGame = useCallback(() => {
     if (mode === 'practice' || isLoadingPool) return;
     if (mode === 'daily') {
-      setForfeited(false);
       resetDailyHook();
     } else {
       if (!dailyTarget || unlimitedPaused) return;
@@ -319,13 +297,13 @@ export function useGame() {
   // ---- COMPLETION ----------------------------------------------------------
 
   // Score for Supabase (daily mode only)
-  const dailyScore = footleScore(effectiveDailyStatus === 'won', dailyGuesses.length);
+  const dailyScore = footleScore(dailyStatus === 'won', dailyGuesses.length);
 
   // useGameCompletion is always called with daily state regardless of current
   // mode. This prevents its internal savedRef from resetting if the user
   // switches to unlimited mid-session after completing the daily puzzle.
   // Unlimited completions are intentionally not recorded.
-  useGameCompletion('footle', effectiveDailyStatus !== 'playing', dailyScore);
+  useGameCompletion('footle', dailyStatus !== 'playing', dailyScore);
 
   // ---- RETURN --------------------------------------------------------------
 

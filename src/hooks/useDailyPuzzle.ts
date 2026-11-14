@@ -150,6 +150,9 @@ export interface DailyPuzzleReturn<T, G> {
    */
   addGuess: (guess: G) => void;
 
+  /** End a current daily as lost without spending another guess. */
+  forfeit: () => void;
+
   /**
    * Round 848 review: when another tab has saved further on today's daily,
    * take that state now and return true; the caller then gives up the answer
@@ -572,6 +575,14 @@ export function useDailyPuzzle<T, G>(
     [puzzle, puzzleIndex, isWon, isLost, maxGuesses, storageKey, todayStr],
   );
 
+  const forfeit = useCallback(() => {
+    if (statusRef.current !== 'playing' || puzzle == null || loadedForKey.current !== loadKey
+      || droppingTurn.current || takeNewerSave()) return;
+    statusRef.current = 'lost';
+    setGameStatus('lost');
+    writePersistedState(storageKey, todayStr, puzzleIndex, puzzleIdRef.current, guessesRef.current, 'lost');
+  }, [loadKey, puzzle, puzzleIndex, storageKey, takeNewerSave, todayStr]);
+
   const reset = useCallback(() => {
     try {
       localStorage.removeItem(storageKey);
@@ -588,6 +599,7 @@ export function useDailyPuzzle<T, G>(
     puzzle,
     guesses,
     addGuess,
+    forfeit,
     takeNewerSave,
     gameStatus,
     isLoading,
