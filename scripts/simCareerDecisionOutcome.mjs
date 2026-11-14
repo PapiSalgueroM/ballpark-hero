@@ -9,6 +9,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), s
 const board = 'src/components/us-career/UsCareerBoard.tsx', helper = 'src/lib/usCareerDecisionOutcome.ts';
 const card = 'src/components/us-career/CareerDecisionOutcome.tsx', testFile = 'src/test/careerDecisionOutcome.test.tsx';
 const titles = {
+  news: 'opens NFL News during an offseason decision and returns to the same unconsumed choice',
   trade: 'applies the real third-season NBA trade once before its quality draw and keeps the full save on return',
   capped: 'shows each real sport choice as the actual capped change and saves it once',
   signs: 'reports negative effects and real endorsement earnings with the Cash a banked fee adds',
@@ -22,6 +23,7 @@ const titles = {
   baseline: 'preserves real ordinary engine choices and the existing rivalry receipt independently',
 };
 const controls = {
+  newsGuard: { file: board, from: "if (phase !== 'freeagency' && (panel === 'news' || (panel !== 'none' && phase !== 'event')))", to: "if (panel !== 'none' && phase !== 'event' && phase !== 'freeagency')", test: titles.news },
   delta: { file: helper, from: 'to - from : null', to: 'to - from + 1 : null', test: titles.capped },
   direction: { file: helper, from: "difference < 0 ? '-'", to: "difference < 0 ? '+'", test: titles.signs },
   snapshot: { file: board, from: 'before: career, after: c, teamLabel: sport.teamLabelOf,', to: 'before: c, after: c, teamLabel: sport.teamLabelOf,', test: titles.capped },

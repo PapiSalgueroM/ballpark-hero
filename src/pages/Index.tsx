@@ -1,7 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, useDeferredValue, lazy, memo, Suspense, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
-import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin } from 'lucide-react';
+import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin, ArrowUp } from 'lucide-react';
 import { loadSupabase } from '@/integrations/supabase/loadClient';
 import PageSeo from '@/components/seo/PageSeo';
 
@@ -250,7 +250,7 @@ export default function Index() {
         </div>
       </div>
 
-      <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="scroll-mt-36 border-y border-border py-3 sm:scroll-mt-28 sm:py-4">
+      <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="scroll-mt-36 border-y border-border py-3 focus-visible:outline-primary sm:scroll-mt-28 sm:py-4">
         <h2 id="browse-sports-heading" className="font-display text-lg font-bold">Browse sports</h2>
         <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} />
         <p className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">
@@ -340,38 +340,33 @@ export default function Index() {
           {/* Round 658: the sport's drawn glyph in its own ink leads
               every section, so the colour on the cards below always
               has a shape and a name beside it. */}
-          <h2 id={`sport-${CATEGORY_SPORT[cat.title]}`} tabIndex={-1} className="mb-4 flex scroll-mt-36 flex-wrap items-center gap-2.5 text-lg font-display font-bold text-foreground focus-visible:outline-primary sm:scroll-mt-28" style={sportStyle(CATEGORY_SPORT[cat.title])}>
-            <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-tile/15 text-tile ring-1 ring-inset ring-tile/30">
-              <SportGlyph sport={CATEGORY_SPORT[cat.title]} className="h-[18px] w-[18px]" />
-            </span>
-            {cat.title}
-            <span className="text-xs font-normal text-muted-foreground ml-1">
-              ({cat.games.length} {cat.games.length === 1 ? 'game' : 'games'})
-            </span>
-            {favSport === CATEGORY_SPORT[cat.title] && (
-              <span data-fav-tag="" className="shrink-0 rounded bg-tile/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground ring-1 ring-inset ring-tile/40">
-                Your sport
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-x-3">
+            <h2 id={`sport-${CATEGORY_SPORT[cat.title]}`} tabIndex={-1} className="flex min-w-0 scroll-mt-36 flex-wrap items-center gap-2.5 text-lg font-display font-bold text-foreground focus-visible:outline-primary sm:scroll-mt-28" style={sportStyle(CATEGORY_SPORT[cat.title])}>
+              <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-tile/15 text-tile ring-1 ring-inset ring-tile/30">
+                <SportGlyph sport={CATEGORY_SPORT[cat.title]} className="h-[18px] w-[18px]" />
               </span>
-            )}
-            {/* Round 198: the College hub existed with real copy and
-                links to every college game, but nothing on the site
-                pointed at it, so no crawler could reach it and no
-                person could find it. One link fixes both.
-                Round 270: five more sports got a hub, so the link is
-                driven off the hub list instead of one hand written
-                case, and a hub added there gets its link here free. */}
-            {hubForCategory(cat.title) && (
-              <Link
-                to={hubForCategory(cat.title)!.route}
-                /* Round 203: this link was 16px tall, which is half
-                   the height a thumb needs. Padded to a real tap
-                   target without changing where it sits. */
-                className="ml-auto inline-flex items-center rounded-lg px-2.5 py-2 text-xs font-normal leading-5 text-primary hover:underline max-sm:min-h-11"
-              >
-                Hub
-              </Link>
-            )}
-          </h2>
+              {cat.title}
+              <span className="text-xs font-normal text-muted-foreground ml-1">
+                ({cat.games.length} {cat.games.length === 1 ? 'game' : 'games'})
+              </span>
+              {favSport === CATEGORY_SPORT[cat.title] && (
+                <span data-fav-tag="" className="shrink-0 rounded bg-tile/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-foreground ring-1 ring-inset ring-tile/40">
+                  Your sport
+                </span>
+              )}
+            </h2>
+            <div className="ml-auto flex max-w-full flex-wrap items-center gap-x-1">
+              {/* Round 198: each sport hub is discoverable from its Home section. */}
+              {hubForCategory(cat.title) && (
+                <Link to={hubForCategory(cat.title)!.route} className="inline-flex min-h-11 items-center rounded-lg px-2.5 text-xs text-primary hover:underline focus-visible:outline-primary">
+                  Hub
+                </Link>
+              )}
+              <a href="#browse-sports" className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground hover:text-primary focus-visible:outline-primary">
+                All sports <ArrowUp aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
+              </a>
+            </div>
+          </div>
           <div className="grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4" data-home-catalogue="">
             {cat.games.map(game => (
               <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />

@@ -158,6 +158,36 @@ describe('NRL league round fixtures', () => {
     expect(localStorage.getItem(fenceKey)).toBe(afterAdvanceFence);
   });
 
+  it.each([[2026, 'storm'], [2027, 'bears']] as const)('opens a saved report for an earlier match in %i', async (year, clubId) => {
+    let career = createNrlCareer(clubId, 4, year);
+    const managed = () => career.season.results.filter(match => match.homeId === clubId || match.awayId === clubId);
+    for (let round = 0; round < 6 && managed().length < 2; round++) career = advance(career);
+    const [first, second] = managed();
+    expect(first?.playerScoring?.lines.length).toBeGreaterThan(0);
+    expect(second?.round).toBeGreaterThan(first.round);
+    const bytes = JSON.stringify(career);
+    const label = 'Round ' + first.round + ' match report';
+    const firstScorer = career.season.squad.find(player => player.id === first.playerScoring!.lines[0].playerId)!.name;
+
+    const page = open(bytes);
+    let fixtures = openFixtures();
+    expect(fixtures.queryByText('Round ' + career.season.round + ' match report', { exact: true })).not.toBeInTheDocument();
+    const summary = fixtures.getByText(label, { exact: true });
+    fireEvent.click(summary);
+    const report = within(summary.closest('details')!);
+    expect(await report.findByText(firstScorer, { exact: true })).toBeVisible();
+    expect(raw()).toBe(bytes);
+
+    page.unmount();
+    open(bytes);
+    fixtures = openFixtures();
+    chooseRound(fixtures, first.round);
+    const selected = fixtures.getByText(label, { exact: true });
+    fireEvent.click(selected);
+    expect(await within(selected.closest('details')!).findByText(firstScorer, { exact: true })).toBeVisible();
+    expect(raw()).toBe(bytes);
+  });
+
   it('shows the known finals draw for an eliminated club and preserves the settled bracket', () => {
     let career = createNrlCareer('titans', 1);
     while (career.season.phase === 'regular') career = advance(career);

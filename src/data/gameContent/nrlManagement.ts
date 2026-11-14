@@ -19,7 +19,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Before Play Live, you can hold one named reserve for halftime. At the break, choose up to two changes at different positions. Bring on the held reserve, keep a rotating reserve on, or use automatic rotation.',
       'At half time in a live club match, give a team talk if you want. Reinforce the basics to help your defence or lift the tempo to chase tries and leave more space. The talk only affects the second half of regulation.',
       'For a late coaching decision, choose Play to 60 minutes at half time. Check the score and keep or change your tactic for the final 20 minutes and any extra time. The game saves at the 60-minute pause.',
-      'Play the round and check the result against the ladder. A bye is a break in the fixture list, so check who you play after it.',
+      'Play the round and check the result against the ladder. In Match centre, use Season fixtures to reopen a completed club match and check its scorers and decisions. Choose a finals week in the fixture menu to see its report.',
       'Open Fast-forward rounds in Match centre to simulate up to four regular rounds with your current tactic. The run can stop for a new injury, a club decision or the start of finals.',
       'Enable Judiciary challenge when you start a generated-squad career. If a fictional player is charged after a club match, take a one-match early plea or contest the charge at a simulated hearing. Byes do not count toward a ban.',
       'Finish in the top eight to reach the finals. Follow the bracket and try to win the Grand Final.',
