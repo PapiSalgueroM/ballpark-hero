@@ -101,6 +101,7 @@ export default function Index() {
   const { key: homeEntry } = useLocation();
   const navigationType = useNavigationType();
   const [gameReturn] = useState(() => navigationType === 'POP' ? gameReturns.get(homeEntry) : undefined);
+  const popularReturnPath = gameReturn?.selector === POPULAR_GAME_LINK ? gameReturn.path : undefined;
   const [searchQuery, setSearchQuery] = useState(gameReturn?.query ?? '');
   const [sportsOpen, setSportsOpen] = useState(false);
   const deferredQuery = useDeferredValue(searchQuery);
@@ -196,7 +197,7 @@ export default function Index() {
     const opener = pendingGameReturn.current;
     if (!opener || (isSearching && !querySettled && !searchFailed)) return;
     pendingGameReturn.current = undefined;
-    if (document.activeElement !== document.body) return;
+    if (opener.selector === POPULAR_GAME_LINK || document.activeElement !== document.body) return;
     const scope = isSearching ? searchResultsRef.current : catalogueRef.current;
     const result = Array.from(scope?.querySelectorAll<HTMLAnchorElement>(opener.selector) ?? [])
       .find(link => link.getAttribute('href') === opener.path);
@@ -348,7 +349,7 @@ export default function Index() {
           widened the column to its full text and the whole phone
           page with it, measured at 915px with live data */}
       <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-8">
-        <MostPlayedToday />
+        <MostPlayedToday returnPath={popularReturnPath} />
         <JustShipped>
           {games => (
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -438,7 +439,7 @@ export default function Index() {
         </div>
       </div>
     </div>
-  ), [badgeDate, bestScores, favSport, gamePicks, pickSport, pickableSports, sportSections, toggleGamePick, user]);
+  ), [badgeDate, bestScores, favSport, gamePicks, pickSport, pickableSports, popularReturnPath, sportSections, toggleGamePick, user]);
 
   return (
     <>
@@ -714,8 +715,11 @@ function StatChip({ icon, label, value, unit }: { icon: ReactNode; label: string
  * always shows on mobile. The heading and ordered list describe live play
  * only after at least three games qualify. Until then, show three recommendations.
  */
-function MostPlayedToday() {
+function MostPlayedToday({ returnPath }: { returnPath?: string }) {
   const section = useRef<HTMLElement>(null);
+  const title = useRef<HTMLHeadingElement>(null);
+  const pendingPath = useRef(returnPath);
+  const restoredFocus = useRef<HTMLElement | null>(null);
   const [near, setNear] = useState(false);
   const { entries, loading } = useMostPlayed(near);
   useEffect(() => {
@@ -728,10 +732,28 @@ function MostPlayedToday() {
     return () => observer.disconnect();
   }, []);
 
+  useLayoutEffect(() => {
+    const path = pendingPath.current;
+    if (!path || !section.current) return;
+    const previous = restoredFocus.current;
+    // The ranked list can replace the fallback while a visitor is coming back.
+    // Follow that replacement only while focus still belongs to this return.
+    if (document.activeElement !== (previous?.isConnected ? previous : document.body)) {
+      pendingPath.current = undefined;
+      return;
+    }
+    const link = Array.from(section.current.querySelectorAll<HTMLAnchorElement>(POPULAR_GAME_LINK))
+      .find(candidate => candidate.getAttribute('href') === path);
+    const target = link ?? title.current;
+    target?.focus({ preventScroll: true });
+    restoredFocus.current = target;
+    if (!loading) pendingPath.current = undefined;
+  }, [entries, loading]);
+
   const ranked = entries.length > 0 && entries.every(entry => !entry.isFallback);
   const List = ranked ? 'ol' : 'ul';
   const heading = (
-    <h2 className="mb-3 flex items-center gap-2.5 text-lg font-display font-bold text-foreground">
+    <h2 ref={title} tabIndex={-1} className="mb-3 flex items-center gap-2.5 text-lg font-display font-bold text-foreground focus-visible:outline-primary">
       <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-warn/15 text-warn ring-1 ring-inset ring-warn/30">
         <Flame className="h-4 w-4" />
       </span>

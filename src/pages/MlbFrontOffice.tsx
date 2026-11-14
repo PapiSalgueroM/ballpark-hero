@@ -6,6 +6,8 @@ import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 
+const DEVELOPMENT_START_RULE = 'Give a young bench hitter a development start. Once per season, a healthy bench hitter aged 24 or under can take the lowest-rated spot in your batting lineup for one round and gain up to one overall point after play. You keep the opportunity if the planned swap cannot play.';
+
 const MlbFrontOffice = () => {
   return (
     <>
@@ -16,7 +18,7 @@ const MlbFrontOffice = () => {
       />
       <div className="min-h-screen bg-background text-foreground">
         <GameNavbar />
-        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={[DEVELOPMENT_START_RULE]} /></div>
         <main id="dukb-main" className="container max-w-2xl mx-auto px-4 py-6 pb-20">
           <div className="text-center mb-4">
             <h1 className="text-2xl font-display font-bold text-primary">MLB Front Office</h1>
@@ -33,6 +35,7 @@ const MlbFrontOffice = () => {
               'Pick a franchise and inherit its real 26: lineup, bench, a five man rotation and the bullpen.',
               'Work the payroll: DFA contracts, search all free agents by name or position, and swing trades.',
               'Play the season in stretches and watch six division races tighten.',
+              DEVELOPMENT_START_RULE,
               'Win the division for a top-3 seed; the top two skip the Wild Card round entirely.',
               'Survive three playoff rounds and the World Series, then draft and go again.',
               'Face the room: the podium, the accountability scrum and the trade question move your trust upstairs, and what you promise can raise or soften next season\'s mandate.',

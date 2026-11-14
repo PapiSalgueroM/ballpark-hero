@@ -1,9 +1,21 @@
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { useSyncExternalStore } from 'react';
 import { Link, MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import Index from '@/pages/Index';
+import { ALL_GAMES } from '@/data/gameRegistry';
+import type { useMostPlayed } from '@/hooks/useMostPlayed';
 
-const state = vi.hoisted(() => ({ heldQuery: undefined as string | undefined }));
+const state = vi.hoisted(() => ({
+  heldQuery: undefined as string | undefined,
+  popular: undefined as ReturnType<typeof useMostPlayed> | undefined,
+  popularListeners: new Set<() => void>(),
+}));
+const subscribePopular = (listener: () => void) => {
+  state.popularListeners.add(listener);
+  return () => { state.popularListeners.delete(listener); };
+};
+const readPopular = () => state.popular;
 vi.mock('react', async importOriginal => {
   const react = await importOriginal<typeof import('react')>();
   return { ...react, useDeferredValue: <T,>(value: T) => state.heldQuery ?? value };
@@ -11,11 +23,19 @@ vi.mock('react', async importOriginal => {
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null }) }));
 vi.mock('@/lib/completions', () => ({ getCurrentPlayerName: () => 'Search fixture', getLocalTodayCount: () => 0 }));
 vi.mock('@/hooks/useStreaks', () => ({ useStreaks: () => ({ globalCurrentStreak: 0 }) }));
+vi.mock('@/hooks/useMostPlayed', async importOriginal => {
+  const actual = await importOriginal<typeof import('@/hooks/useMostPlayed')>();
+  return { useMostPlayed: (enabled?: boolean) => {
+    const fixture = useSyncExternalStore(subscribePopular, readPopular);
+    const live = actual.useMostPlayed(fixture ? false : enabled);
+    return fixture ?? live;
+  } };
+});
 vi.mock('@/components/auth/AuthModal', () => ({ AuthModal: () => null }));
 vi.mock('@/components/game/StreakReminder', () => ({ StreakReminder: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
 
-afterEach(() => { cleanup(); localStorage.clear(); state.heldQuery = undefined; vi.unstubAllGlobals(); });
+afterEach(() => { cleanup(); localStorage.clear(); state.heldQuery = undefined; state.popular = undefined; vi.unstubAllGlobals(); });
 
 function home() {
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
@@ -254,4 +274,48 @@ it.each([
   fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
   expect(card()).toHaveFocus();
   expect(screen.getByRole('textbox', { name: 'Search games' })).toHaveValue('');
+});
+
+it.each(['same game', 'different games', 'focus moved'])('restores focus after Back when the ranking returns with %s', async scenario => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  const entry = (path: string, isFallback: boolean) => ({
+    game: ALL_GAMES.find(game => game.path === path)!, count: isFallback ? 0 : 9, isFallback,
+  });
+  const ranked = { loading: false, entries: ['/soccer-career', '/club-manager', '/nba-my-career'].map(path => entry(path, false)) };
+  const loading = { loading: true, entries: ['/soccer-grid', '/perfect-season-nba', '/transfer-path'].map(path => entry(path, true)) };
+  state.popular = ranked;
+  function Game() {
+    const navigate = useNavigate();
+    return <button onClick={() => navigate(-1)}>Go back</button>;
+  }
+  const tree = () => <MemoryRouter><Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="*" element={<Game />} />
+  </Routes></MemoryRouter>;
+  const view = render(tree());
+  const opener = () => view.container.querySelector('a[data-home-popular-game][href="/soccer-career"]')!;
+  fireEvent.click(opener());
+  state.popular = loading;
+  fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
+  expect(opener()).toBeNull();
+  const search = screen.getByRole('textbox', { name: 'Search games' });
+  if (scenario === 'focus moved') {
+    await act(async () => {
+      search.focus();
+      await vi.dynamicImportSettled();
+    });
+  }
+  act(() => {
+    state.popular = scenario === 'different games'
+      ? { ...ranked, entries: [entry('/higher-lower', false), ...ranked.entries.slice(1)] }
+      : ranked;
+    state.popularListeners.forEach(listener => listener());
+  });
+  if (scenario === 'different games') {
+    expect(opener()).toBeNull();
+    expect(screen.getByRole('heading', { name: 'Most played today' })).toHaveFocus();
+  } else {
+    expect(opener()).toBeInTheDocument();
+    expect(scenario === 'focus moved' ? search : opener()).toHaveFocus();
+  }
 });

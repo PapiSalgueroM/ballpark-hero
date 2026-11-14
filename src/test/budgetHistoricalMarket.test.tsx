@@ -86,3 +86,39 @@ it('can return to the cached Today market while the historic request is pending'
   expect(screen.queryByText("Couldn't load the 2007 market.")).toBeNull();
   expect(readMarket.mock.calls).toEqual([[2026], [2007]]);
 });
+
+it('starts the same eligible market at either price end and signs a bargain for its unchanged fee', async () => {
+  const keepers = Array.from({ length: 75 }, (_, index) => ({
+    ...archive[0], player_name: 'Budget fixture keeper ' + (index + 1),
+    position: 'GK', market_value_usd: (75 - index) * 1_000_000,
+  }));
+  readMarket.mockResolvedValue({ data: [...keepers, ...archive.filter(row => row.position !== 'GK')], error: null });
+  render(<BudgetBuilderBoard />);
+  fireEvent.click(await screen.findByRole('button', { name: 'GK slot 1: empty' }));
+  const offers = () => screen.getAllByRole('button', { name: /^Preview signing/ });
+  expect(offers()[0]).toHaveAccessibleName('Preview signing Budget fixture keeper 1 for $75M');
+  expect(screen.getByText(/Showing 1 to 60 of 75 eligible players/)).toBeVisible();
+  fireEvent.click(screen.getByRole('button', { name: 'Next' }));
+  expect(offers()).toHaveLength(15);
+  fireEvent.click(offers()[0]);
+  expect(screen.getByText('$985M', { exact: true })).toBeVisible();
+
+  const sort = screen.getByRole('combobox', { name: 'Sort eligible players by price' });
+  fireEvent.change(sort, { target: { value: 'lowest' } });
+  expect(screen.getByText(/Showing 1 to 60 of 75 eligible players, lowest price first/)).toBeVisible();
+  expect(offers()[0]).toHaveAccessibleName('Preview signing Budget fixture keeper 75 for $1M');
+  expect(screen.getByText('$985M', { exact: true })).toBeVisible();
+  expect(screen.getByRole('button', { name: 'Confirm signing' })).toBeEnabled();
+  expect(screen.getByRole('button', { name: 'GK slot 1: empty' })).toBeVisible();
+
+  fireEvent.change(screen.getByRole('textbox', { name: 'Search eligible players by name or club' }), { target: { value: 'keeper 7' } });
+  expect(offers()).toHaveLength(7);
+  expect(offers()[0]).toHaveAccessibleName('Preview signing Budget fixture keeper 75 for $1M');
+  fireEvent.click(offers()[0]);
+  expect(screen.getByText('$999M', { exact: true })).toBeVisible();
+  fireEvent.click(screen.getByRole('button', { name: 'Confirm signing' }));
+  expect(screen.getByRole('button', { name: 'GK slot 1: Budget fixture keeper 75' })).toBeVisible();
+  expect(screen.getByText('Budget fixture keeper 75 signed for $1M.')).toBeVisible();
+  expect(readMarket.mock.calls).toEqual([[2026]]);
+  expect(recordCompletion).not.toHaveBeenCalled();
+});

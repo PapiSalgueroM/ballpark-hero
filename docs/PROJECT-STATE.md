@@ -1,4 +1,13 @@
+## 2026-11-14: NRL assistant appointments, MLB development starts and Home returns
+
+- An earned NRL job offer can include your qualified tactical assistant when the new club can cover their season's wages. They bring their existing training for one term.
+- MLB Front Office can give one eligible young bench hitter a six-game development start per season. The preview names the starter giving up the spot and shows the change in batting strength. A completed start can raise the prospect's rating by one within their potential.
+- Budget Builder can sort the eligible market by lowest price for the active shirt. Search and selection remain available while checking cheaper players.
+- Returning from a game in Home's popularity shelf restores focus when the ranking finishes loading. If the game has left the ranking, focus stays in the shelf. A player who has moved on keeps their current focus.
+
 ## 2026-11-14: Home sport picker, NHL round history, NRL interchanges and Dart Draft
+
+[PR #966](https://github.com/PapiSalgueroM/ballpark-hero/pull/966) published exact main `e94e391f03cf5036a928d8ad3b12d5ce70118fac`, deployment `02d0df83-24f6-47f4-9d9e-89e5b436e22d`. Thirteen live browser journeys, three raw game guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted the three updated guides. The build, application types, 18 site checks and all 16 measured download budgets passed.
 
 - Browse sports opens every sport beside Home search. Tap a sport or choose it with the keyboard to jump straight to its games. Favourite sport keeps its existing setting.
 - NHL Front Office keeps each played regular-season round's wins, losses, overtime losses and the rating changes actually recorded. You can reopen rounds after reload and in the playoffs. Older rounds show when no review was saved.

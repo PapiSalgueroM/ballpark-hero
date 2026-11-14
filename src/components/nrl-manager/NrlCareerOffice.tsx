@@ -17,7 +17,7 @@ import {
   nrlConcessionsQuote, nrlConcessionsSpend,
   nrlDevelopmentAffected, nrlDevelopmentAssistantProgress, nrlDevelopmentPriorityOptions, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities, nrlPhysioSpend,
-  nrlLeagueRecruitmentPreview,
+  nrlLeagueRecruitmentPreview, nrlOfferAssistantQuote,
   nrlOffseasonFreeAgentPreview, nrlOffseasonFreeAgentTargets, nrlOffseasonFreeAgentsAvailable,
   nrlOffseasonLineupPreview, nrlOffseasonLineupsAvailable,
   nrlPrimaryRoleOptions, nrlRecruitmentBrief, nrlRecruitmentPlan, nrlReserveCoachSpend, nrlRetentionPriority,
@@ -1076,7 +1076,7 @@ function AssistantCourse({ career, role, onAction, disabled }: {
         : 'Qualification earned. The bonus applies next season if you retain the assistant and stay at this club.'}</p>
       : reason ? <p className="text-muted-foreground">{reason}</p> : preview ? <>
         <p className="text-muted-foreground">Pay {money(fee)} from club cash today for four regular rounds of training, including byes. The current season’s tactics stay the same.</p>
-        <p className="text-muted-foreground">If you retain the assistant and stay at this club, the qualification takes effect next season. {coachEffect(role, NRL_QUALIFIED_COACHING_BONUS)} The usual bonus is +{NRL_COACHING_BONUS}.</p>
+        <p className="text-muted-foreground">The qualification takes effect next season if the assistant re-signs or joins you on an earned club offer. {coachEffect(role, NRL_QUALIFIED_COACHING_BONUS)} The usual bonus is +{NRL_COACHING_BONUS}.</p>
         <div className="flex flex-wrap gap-2">
           <Button type="button" size="lg" variant="outline" onClick={() => showPreview(false)}>Cancel course preview</Button>
           <Button type="button" size="lg" disabled={disabled} onClick={() => {
@@ -1090,6 +1090,8 @@ function AssistantCourse({ career, role, onAction, disabled }: {
 
 function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { year, clubId, round } = career.season;
+  const clubName = useNrlClubName('full');
+  const source = career.history.find(row => row.year === year - 1 && row.coachRetained && row.appointment?.clubId === clubId);
   const { candidates, current, fee, wagePerRound, remainingWages, reason, developmentReason } = nrlCoachQuote(career);
   const progress = nrlDevelopmentAssistantProgress(career);
   const priorityOptions = nrlDevelopmentPriorityOptions(career, progress);
@@ -1104,7 +1106,9 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
             <p className="font-semibold" data-nrl-coach-current>{current.name} · {coachLabels[current.role]}</p>
             <p className="mt-1 text-muted-foreground">{coachEffect(current.role, nrlCoachTactics(career.finance).coachBonus)}</p>
             <p className="mt-2 text-muted-foreground">Signed through this season. Remaining wages {money(remainingWages)}.</p>
-            {career.finance.coachHire?.retained && <p className="mt-1 text-muted-foreground">Retained from {year - 1}. No new signing fee.</p>}
+            {career.finance.coachHire?.retained && <p className="mt-1 text-muted-foreground">
+              {source ? `Joined with you from ${clubName(source.year, source.clubId)}.` : `Retained from ${year - 1}.`} No new signing fee.
+            </p>}
             {current.role === 'development' && (
               <>
                 <h3 className="mt-3 font-semibold">Development appearances</h3>
@@ -1972,6 +1976,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const jobYear = year + (seasonOut ? 2 : 1);
   const summer = nrlSummerApplication(career);
   const application = nrlOffseasonApplication(career) ?? (summer?.response !== 'pending' ? summer : null);
+  const assistant = application?.response === 'offered' ? nrlOfferAssistantQuote(career, application.clubId) : null;
   const departure = employed && !disabled && nrlCanLeaveClub(career, openings) && (
     <RetireDoor className="mt-3" door={mustMove ? 'Open job market' : 'Leave club'}
       title={mustMove ? `Open the ${jobYear} job market?` : `Leave ${clubName(year, clubId)} after ${year}?`}
@@ -1991,12 +1996,22 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       </p>
       {application.response === 'offered' && (
         <>
-          {career.coachRetention && <p className="text-sm text-muted-foreground">Accepting this job cancels the assistant extension.</p>}
+          {career.coachRetention && <p className="text-sm text-muted-foreground">Moving clears the assistant extension at your current club.</p>}
           {retentionChoice && <p className="text-sm text-muted-foreground">Taking this job clears the pending player retention choice.</p>}
           <Button type="button" size="lg" className="mt-2 w-full px-2 sm:w-auto" disabled={disabled || needsJudiciary}
             onClick={() => onAction({ type: 'acceptOffseasonJob', year, clubId, destinationId: application.clubId })}>
             Accept offer and start {year + 1}
           </Button>
+          {assistant && <div className="mt-3 space-y-2 border-t border-border pt-2 text-sm">
+            <p><strong>{assistant.name}</strong> can join you as a qualified {coachLabels[assistant.role].toLowerCase()}.</p>
+            <p className="text-muted-foreground">{coachEffect(assistant.role, NRL_QUALIFIED_COACHING_BONUS)} {money(assistant.reservedWages)} in season wages. No new signing fee.</p>
+            {assistant.reason && <p className="text-muted-foreground">{assistant.reason}</p>}
+            <Button type="button" size="lg" variant="outline" className="min-h-11 w-full whitespace-normal sm:w-auto"
+              disabled={disabled || needsJudiciary || assistant.reason !== null}
+              onClick={() => onAction({ type: 'acceptOffseasonJob', year, clubId, destinationId: application.clubId, bringAssistant: true })}>
+              Accept with assistant
+            </Button>
+          </div>}
         </>
       )}
     </div>
@@ -2327,7 +2342,9 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 {coach && staffSpend && <p className="text-sm text-muted-foreground" data-nrl-coach-receipt>
                   {coachLabels[coach.role]} · {money(staffSpend.signingFee + staffSpend.wages)} total staff cost
                 </p>}
-                {record.coachRetained && <p className="text-sm text-muted-foreground">Assistant retained for {record.year + 1}.</p>}
+                {record.coachRetained && <p className="text-sm text-muted-foreground">{record.appointment
+                  ? `Qualified assistant joined ${clubName(record.year + 1, record.appointment.clubId)} for ${record.year + 1}.`
+                  : `Assistant retained for ${record.year + 1}.`}</p>}
                 {judgement && <p className="text-sm text-muted-foreground">
                   Judiciary · {judgement.decision === 'plea' ? 'Early plea' : sanction ? 'Hearing suspension' : 'Cleared at hearing'}
                   {sanction ? ` · ${sanction} ${sanction === 1 ? 'match' : 'matches'}` : ''}

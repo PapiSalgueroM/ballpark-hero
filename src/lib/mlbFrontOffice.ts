@@ -90,6 +90,8 @@ export interface MlbLeague {
   champions: { season: number; team: string }[];
   rotationPlan?: { team: string; season: number; round: number };
   octoberRotation?: { team: string; season: number };
+  developmentStart?: { team: string; season: number; round: number; playerId: string; replacedId: string };
+  developmentStartUsed?: { team: string; season: number };
   /** Round 851: this season's fixtures, "HOME-AWAY" per round (foSchedule.ts).
       Optional: a league saved before the round finishes that season the old
       way and is booked at its next summer. */
@@ -236,11 +238,58 @@ export function mlbSimReads(t: { players: MlbGmPlayer[] }): string[] {
 }
 
 /** Strength: lineup 55%, rotation 33%, bullpen 12%; IL players excluded. */
-export function mlbStrength(t: MlbGmTeam, rotationSize = 3, starter?: MlbGmPlayer): number {
+export function mlbStrength(t: MlbGmTeam, rotationSize = 3, starter?: MlbGmPlayer, battingOverride?: MlbGmPlayer[]): number {
   const { bats, rot, pen } = mlbStrengthUnits(t, rotationSize);
   const avg = (xs: MlbGmPlayer[], fallback: number) =>
     xs.length ? xs.reduce((s, p) => s + p.ovr, 0) / xs.length : fallback;
-  return avg(bats, 62) * 0.55 + (starter?.ovr ?? avg(rot, 62)) * 0.33 + avg(pen, 62) * 0.12;
+  return avg(battingOverride ?? bats, 62) * 0.55 + (starter?.ovr ?? avg(rot, 62)) * 0.33 + avg(pen, 62) * 0.12;
+}
+
+export function mlbDevelopmentUsed(league: MlbLeague, team: string): boolean {
+  return league.developmentStartUsed?.team === team && league.developmentStartUsed.season === league.season;
+}
+
+export function mlbDevelopmentPlan(league: MlbLeague, team: string) {
+  const plan = league.developmentStart;
+  return plan?.team === team && plan.season === league.season && plan.round === league.round
+    && !mlbDevelopmentUsed(league, team)
+    && typeof plan.playerId === 'string' && plan.playerId.length > 0 && plan.playerId.length <= 128
+    && typeof plan.replacedId === 'string' && plan.replacedId.length > 0 && plan.replacedId.length <= 128
+    && plan.playerId !== plan.replacedId ? plan : null;
+}
+
+export function mlbDevelopmentChoices(league: MlbLeague, team: string) {
+  const club = league.teams[team];
+  if (!club || !league.inSeasonRatings || mlbDevelopmentUsed(league, team)
+    || league.round < 1 || league.round > MLB_ROUNDS || league.champions.some(row => row.season === league.season)) return null;
+  const { bats } = mlbStrengthUnits(club);
+  if (bats.length < 8) return null;
+  const eligible = club.players.filter(player => player.out === 0 && player.age <= 24 && player.ovr < player.pot
+    && !isPitcher(player) && !bats.includes(player));
+  return { bats, replaced: bats[bats.length - 1], eligible };
+}
+
+export function setMlbDevelopmentStart(league: MlbLeague, team: string, playerId: string): MlbLeague {
+  const booked = mlbDevelopmentPlan(league, team);
+  if (!playerId) {
+    if (!booked) return league;
+    const next = { ...league };
+    delete next.developmentStart;
+    return next;
+  }
+  const choices = mlbDevelopmentChoices(league, team);
+  if (!choices?.eligible.some(player => player.id === playerId)
+    || (booked?.playerId === playerId && booked.replacedId === choices.replaced.id)) return league;
+  return { ...league, developmentStart: { team, season: league.season, round: league.round, playerId, replacedId: choices.replaced.id } };
+}
+
+export function mlbDevelopmentPreview(league: MlbLeague, team: string) {
+  const plan = mlbDevelopmentPlan(league, team);
+  if (!plan) return null;
+  const choices = mlbDevelopmentChoices(league, team);
+  if (!choices || choices.replaced.id !== plan.replacedId) return null;
+  const player = choices.eligible.find(row => row.id === plan.playerId);
+  return player ? { player, replaced: choices.replaced, bats: [...choices.bats.slice(0, -1), player] } : null;
 }
 
 export const MLB_PROTECTED_STARTERS = 5;
@@ -281,12 +330,26 @@ export function mlbWinProb(a: MlbGmTeam, b: MlbGmTeam, edgeA = 0, edgeB = 0): nu
 }
 
 export type MlbRotationReceipt = { available: number } | { unavailable: true };
+export type MlbDevelopmentReceipt = { player: string; replaced: string; before: number; after: number } | { unavailable: true };
+
+export function readMlbDevelopmentReceipt(value: unknown): MlbDevelopmentReceipt | undefined {
+  if (!value || typeof value !== 'object') return;
+  if ('unavailable' in value && value.unavailable === true) return { unavailable: true };
+  const result = value as Partial<Extract<MlbDevelopmentReceipt, { player: string }>>;
+  const { player, replaced, before, after } = result;
+  if (typeof player === 'string' && player.length > 0 && player.length <= 160
+    && typeof replaced === 'string' && replaced.length > 0 && replaced.length <= 160 && replaced !== player
+    && Number.isInteger(before) && Number.isInteger(after) && before >= 1 && after <= 99 && after === before + 1) {
+    return { player, replaced, before, after };
+  }
+}
 
 export interface MlbRoundReport {
   myWins: number;
   myLosses: number;
   notes: string[];
   rotation?: MlbRotationReceipt;
+  development?: MlbDevelopmentReceipt;
 }
 
 /** Round 1020: what a GM desk may hand a round. Absent, the round plays exactly as it always has. */
@@ -346,6 +409,7 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
   let myW = 0, myL = 0;
   const deep = Object.values(league.teams).some(t => !!t.depth);
   const planned = mlbRotationPlanned(league, myTeam);
+  const developmentPlan = mlbDevelopmentPlan(league, myTeam);
   const protect = planned && mlbRotationChoices(league, myTeam);
   const protectedIds = protect ? new Set(mlbStrengthUnits(league.teams[myTeam], MLB_PROTECTED_STARTERS).rot.map(p => p.id)) : undefined;
   if (league.rotationPlan) delete league.rotationPlan;
@@ -362,8 +426,13 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
       }
     }
   }
-  const protectedStrength = protectedIds ? mlbStrength(league.teams[myTeam], MLB_PROTECTED_STARTERS) : undefined;
-  const roundStrength = (team: MlbGmTeam) => team.abbr === myTeam && protectedStrength !== undefined ? protectedStrength : mlbStrength(team);
+  const batting = developmentPlan ? mlbDevelopmentPreview(league, myTeam) : null;
+  if (league.developmentStart) delete league.developmentStart;
+  const openingRating = batting?.player.ovr;
+  const plannedStrength = protectedIds || batting
+    ? mlbStrength(league.teams[myTeam], protectedIds ? MLB_PROTECTED_STARTERS : 3, undefined, batting?.bats)
+    : undefined;
+  const roundStrength = (team: MlbGmTeam) => team.abbr === myTeam && plannedStrength !== undefined ? plannedStrength : mlbStrength(team);
   /* Round 851: the round's booked games (foSchedule.ts); a league saved mid
      season before the round finishes that season the old way. */
   foPlayRound(league, abbrs, MLB_GAMES_PER_ROUND, rng, (abbr, opp) => {
@@ -380,10 +449,17 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
     sport: 'mlb', rounds: MLB_ROUNDS, youngThrough: 25, declineFrom: 33,
     acceleratedFrom: 37, marketDeclineFrom: 33, floor: 63,
   }, myTeam, notes, opts?.growth);
+  let development: MlbDevelopmentReceipt | undefined;
+  if (batting && openingRating !== undefined && myW + myL > 0) {
+    const { player, replaced } = batting;
+    if (player.ovr === openingRating) player.ovr = Math.min(player.pot, openingRating + 1);
+    league.developmentStartUsed = { team: myTeam, season: league.season };
+    development = { player: player.name, replaced: replaced.name, before: openingRating, after: player.ovr };
+  } else if (developmentPlan) development = { unavailable: true };
   const rotation: MlbRotationReceipt | undefined = protectedIds ? {
     available: league.teams[myTeam].players.filter(p => protectedIds.has(p.id) && p.out === 0).length,
   } : planned ? { unavailable: true } : undefined;
-  return { myWins: myW, myLosses: myL, notes, ...(rotation ? { rotation } : {}) };
+  return { myWins: myW, myLosses: myL, notes, ...(rotation ? { rotation } : {}), ...(development ? { development } : {}) };
 }
 
 export function mlbStandings(league: MlbLeague, group?: string[]): MlbGmTeam[] {
@@ -741,6 +817,8 @@ export function mlbOffseason(league: MlbLeague, rng: () => number, userTeam?: st
   league.cap = Math.round(league.cap * 1.03);
   league.season += 1;
   league.round = 1;
+  delete league.developmentStart;
+  delete league.developmentStartUsed;
   /* Round 851: the new season's fixtures, for an old save too. */
   league.schedule = mlbBookSeason(league, rng);
   return notes;
