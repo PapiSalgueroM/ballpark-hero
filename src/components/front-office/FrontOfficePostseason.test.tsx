@@ -435,7 +435,8 @@ describe('NFL front office: Week 18 reads as the playoffs', () => {
     const rng = lehmer(7);
     const league: any = initLeague(rng);
     for (let w = 1; w < REGULAR_WEEKS; w += 1) { league.schedule[w - 1].forEach((g: any) => simGame(g, league.teams, rng)); league.week += 1; }
-    const start = JSON.stringify(shape(league, Object.keys(league.teams)[0]));
+    const team = Object.keys(league.teams)[0];
+    const start = JSON.stringify(shape(league, team));
     const hurtLines = () => [...document.querySelectorAll('p')].map(p => p.textContent ?? '').filter(t => t.startsWith('🚑'));
     let lines: string[] = [];
     for (let k = 1; k <= 30 && lines.length === 0; k += 1) {
@@ -706,6 +707,9 @@ describe('NFL front office: Watch in the playoffs', () => {
     expect(textOf('[data-week-chip]')).toContain('Playoffs');
     expect(face()).toBe('game');
     expect(q('div.grid.max-h-56'), 'no league grid in the bracket, Week 17 played or not').toBeNull();
+    expect(q('[aria-label="Week 17 regular-season result"] [data-nfl-week-ratings]')).not.toBeNull();
+    const myWeek17 = read().league.schedule[16].find((game: { home: string; away: string }) => game.home === team || game.away === team)!;
+    expect(myWeek17.ratingChanges).toEqual({ team, changes: read().league.ratingReview?.changes });
     fireEvent.click(btn('[data-bracket-back]'));
     await waitFor(() => expect(q('[data-bracket]')).not.toBeNull());
     expect(localStorage.getItem(SAVE_KEY), 'full time and the chip saved nothing').toBe(played);

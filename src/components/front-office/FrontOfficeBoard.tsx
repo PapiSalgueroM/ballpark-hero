@@ -2710,7 +2710,7 @@ export default function FrontOfficeBoard() {
               )}
             </div>
             {wideAtLoad && bracketBackRow}
-          {!hold && <NflWeekResults league={league} team={myTeam} />}
+          {!hold && <NflWeekResults league={league} team={myTeam} compact={bracketRow} />}
           </div>
           <div ref={setHelpHost} style={{ margin: 0 }} data-gameday-help-host />
         </div>

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { readNflGameRatings, readNflSettledWeek, type LeagueState } from '@/lib/frontOffice';
 import { cn } from '@/lib/utils';
 
-export function NflWeekResults({ league, team }: { league: LeagueState; team: string }) {
+export function NflWeekResults({ league, team, compact = false }: { league: LeagueState; team: string; compact?: boolean }) {
   const weeks = league.schedule.flatMap((_, index) => {
     const games = readNflSettledWeek(league, index + 1);
     return games.length ? [{ week: index + 1, games }] : [];
@@ -17,11 +17,12 @@ export function NflWeekResults({ league, team }: { league: LeagueState; team: st
   const mine = games.find(game => game.home === team || game.away === team);
   const changes = mine ? readNflGameRatings(mine, team) : null;
   const personnel = mine?.personnel?.team === team ? mine.personnel.result : null;
+  const title = `Week ${week} ${compact ? 'regular-season result' : 'league scores'}`;
 
   return (
-    <section aria-label={`Week ${week} league scores`} className="space-y-1 text-left">
+    <section aria-label={title} className="space-y-1 text-left">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h3 className="text-xs font-semibold">Week {week} league scores</h3>
+        <h3 className="text-xs font-semibold">{title}</h3>
         {weeks.length > 1 && (
           <label className="flex items-center gap-2 text-xs text-muted-foreground">
             Played week
@@ -35,6 +36,9 @@ export function NflWeekResults({ league, team }: { league: LeagueState; team: st
           </label>
         )}
       </div>
+      {compact && mine && (
+        <p className="text-xs text-muted-foreground">{mine.home} {mine.homeScore} · {mine.awayScore} {mine.away}</p>
+      )}
       {mine && (
         <div className="rounded-lg border border-border/60 px-2 py-1.5 text-xs" data-nfl-week-ratings>
           <h4 className="font-semibold">{team} rating changes</h4>
@@ -52,7 +56,7 @@ export function NflWeekResults({ league, team }: { league: LeagueState; team: st
       {personnel && <p className="text-xs text-muted-foreground" data-two-te-result>
         {personnel === 'used' ? 'Your club played with two tight ends.' : 'Your club used the usual lineup because the two-tight-end group was short at kickoff.'}
       </p>}
-      <div className="grid max-h-56 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
+      {!compact && <div className="grid max-h-56 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
         {games.map(game => (
           <div key={game.home} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', game === mine ? 'border-gold/60 bg-gold/5' : 'border-border/60 bg-background')}>
             <span className={cn('truncate', game.winner === game.home ? 'font-bold text-foreground' : 'text-muted-foreground')}>{game.home} {game.homeScore}</span>
@@ -60,7 +64,7 @@ export function NflWeekResults({ league, team }: { league: LeagueState; team: st
             <span className={cn('truncate', game.winner === game.away ? 'font-bold text-foreground' : 'text-muted-foreground')}>{game.awayScore} {game.away}</span>
           </div>
         ))}
-      </div>
+      </div>}
     </section>
   );
 }
