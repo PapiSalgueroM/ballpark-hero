@@ -1,4 +1,12 @@
+## 2026-11-14: NRL starter swaps, NHL round reports and Transfer Path saves
+
+- NRL Team Manager swaps two available starters in one move when each can play the other's position. Bench order, captaincy and kicking duties keep their saved players. The actual Quick Sim and Live Match team sheets use the exchange.
+- NHL Front Office saves the latest regular round's wins, losses, overtime losses and actual headlines, including an OVR change when the engine reports one. The closing round remains available after reload in the playoffs.
+- Transfer Path saves the active Daily rule on the first accepted name or surrender. Europe and Verified Active continue under their saved filter after reload. Existing Daily scores still use the same common scoring baseline.
+
 ## 2026-11-14: Budget scouting, NBA trade counters and NRL pathways
+
+[PR #955](https://github.com/PapiSalgueroM/ballpark-hero/pull/955) published exact main `221f1b55d3e8b5945b463d8f0c19cedb138e2bd6`, deployment `f698da7f-493b-4e1a-afd1-7ab4a7178b11`. Eight live browser journeys, all three raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted all three game guides.
 
 - Rebuild spends one Fresh List on up to three new players within current cash for the open shirt. The free bench stays available, and any later rival bid goes through the usual negotiation. The replacement list survives reload.
 - NBA Front Office suggests the lowest-valued eligible future pick that gets a rejected Trade Desk package accepted under the existing rules. Adding it opens the package for review and leaves all assets in place until confirmation.
