@@ -935,7 +935,7 @@
         "After every fight, deal with what comes in before the next offers open: two cards, and sometimes a move by your rival. Every option says exactly what it does, and one on every card changes nothing that can reach a fight.",
         "Read the three offers. Each one names the opponent, his style, the purse and how far a win moves you up the rankings.",
         "Use the five tiles above the offers whenever you like: Inbox for texts from your corner and your family, Rival for his record and the feud, Bank and shop for camp upgrades, Corner for your trainer, manager, morale and fans, and Badges.",
-        "Spend 6 weeks of camp across conditioning, power, defence and speed before every fight.",
+        "Spend 6 weeks of camp across conditioning, power, defence and speed before every fight. Camp can improve your rating for the next bout, with smaller gains near your ceiling.",
         "Pick three looks for the night. They cycle through the rounds, so three different ones is a plan and one repeated is a gift.",
         "The ring shows the latest revealed round: both fighters' tactics, punches landed and condition. The figures illustrate each round, not every punch. A knockdown puts its actual victim down; a technical stoppage can leave the stopped fighter upright.",
         "A new round arrives every 3 seconds. Pause holds it, Next round pauses and reveals one more, and Play starts a fresh 3-second wait. Skip takes you to the verdict. Earlier scorecards open below the current round. You can also turn playback off before the fight to see the result straight away.",
@@ -944,7 +944,7 @@
       "rules": [
         "Pressure beats an out-boxer, boxing beats a swarmer, countering beats a slugger, and brawling beats a counter-puncher. It closes into a circle, so no look is simply the best one.",
         "Your opponent does not stand still. A fighter with real ring IQ will switch into whatever punishes the look you used last round, so repeating yourself is the worst thing you can do.",
-        "Damage is permanent and cumulative. It never heals, it takes your chin down fastest, and at 82 you are done whatever your age says.",
+        "Age and permanent damage can lower your rating after each fight. Damage takes your chin down fastest, and at 82 you are done whatever your age says.",
         "You are also finished at 41, or at 35 if you are already carrying 58 damage, or after three straight defeats once you have dropped out of the top 12.",
         "Camp growth runs against a hidden ceiling. Every fighter has one, camp moves you toward it and never past it, and the closer you get the less each camp is worth.",
         "Beating a man well below your level does not move you once you are inside the top 10. Padding a record stalls on purpose.",
@@ -976,7 +976,7 @@
     "/fight-gym": {
       "howToPlay": [
         "Name the gym. You start with 0.6m, two fighters and a name worth 8 out of 100.",
-        "Each week you can sign somebody, put a fighter through a training block for 0.035m, or find one of them a fight.",
+        "Each week you can sign somebody, put a fighter through a training block for 0.035m, or find one of them a fight. Training can raise a fighter's rating as soon as he finishes the block.",
         "A fight comes with three offers. Pick the night, then pick three looks the same way you would in a career.",
         "You take between 20 and 35 percent of every purse. The better your name, the bigger the cut.",
         "The bills arrive every week: 0.012m plus 0.009m for each fighter on the books.",
@@ -988,7 +988,7 @@
         "Reputation is hard to build and easy to lose. Gains shrink as you climb, losses do not.",
         "Putting a fighter in carrying 55 damage costs you reputation, and 70 costs you more, whatever the result. That is charged on the decision, not the outcome.",
         "Letting a wrecked man go costs you too. There is no clean exit from a fighter you ruined.",
-        "Damage never heals, and it takes a fighter's chin down fastest.",
+        "Age and permanent damage can lower a fighter's rating between bouts. Damage takes his chin down fastest.",
         "A fighter is finished at 39, or at 34 if he is already carrying 58 damage, or at 82 damage whatever his age.",
         "A fighter's purse reflects his record as well as his current form, so a faded name keeps earning long after he should have stopped. That is the trap the whole game is built around.",
         "You can carry at most six fighters.",
@@ -1025,6 +1025,7 @@
         "MMA regular bouts run up to three rounds, and title bouts up to five. Striking and grappling produce knockouts, submissions or decisions in the seeded fight engine.",
         "MMA: A title fight needs two of your signed division's top four. An existing champion must participate; a champion whose contract expires leaves a vacant belt.",
         "MMA: Fighting uses one contract appearance and adds recovery time. Resting a month advances recovery and costs $2,000. You can rotate fighters while the last card recovers.",
+        "MMA: Bouts change ranking points and recovery time. Skill ratings stay fixed throughout the promotion.",
         "MMA: The promotion finishes after twelve events. Your score out of 100 combines reputation (50 points), profitable events (30) and held belts (20). You can also close after an event and take the score you have earned.",
         "Boxing: Fighters take the greater of their guarantee or 58 percent of the door, so a big night is never a windfall and a room that does not fill still owes the guarantee.",
         "Boxing: The room costs its hire fee whether anybody turns up or not.",
@@ -1034,6 +1035,7 @@
         "Boxing: A loss costs a fighter far more drawing power than a win builds. That is why protecting a record is tempting.",
         "Boxing: Fighters leave a promotion nobody rates, and they take the top of your card with them. A promotion people want to be on replaces its weakest name with somebody better.",
         "Boxing: Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.",
+        "Boxing: Fighters age and carry lasting damage out of every bout. Their rating can fall between cards even while their name still sells tickets.",
         "Boxing: Go below zero after a show and you are out of the business.",
         "There is no betting anywhere in this game."
       ],
