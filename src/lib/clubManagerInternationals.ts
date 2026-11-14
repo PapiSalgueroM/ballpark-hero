@@ -92,6 +92,7 @@ import { eraRosters } from '@/lib/clubManagerEras';
 import { cmWorldTag } from '@/data/clubManagerWorldRosters';
 import { addDays, dateKey, dayOfWeek, entryDatesOf, shortDate, worldYearOf } from '@/lib/clubManagerCalendar';
 import type { CalDate } from '@/lib/clubManagerCalendar';
+import { readMajorInjury } from '@/lib/clubManagerInjuries';
 
 /* ================================================================== */
 /* Windows                                                            */
@@ -271,12 +272,13 @@ export interface IntlCallUp {
  * The men of a squad who would go in a window, best first. Pure: reads the
  * squad, the world's bars and the nationality map, and changes nothing.
  */
-export function callUpsFor(state: CareerState, window: Pick<IntlWindow, 'id' | 'matches'>): IntlCallUp[] {
+export function callUpsFor(state: CareerState, window: Pick<IntlWindow, 'id' | 'matches'> & { start?: CalDate }): IntlCallUp[] {
   const bars = nationBars(state.eraId);
   const home = clubConfed(state);
   const out: IntlCallUp[] = [];
   for (const p of state.squad) {
-    if (p.injuryWeeks > 0) continue;
+    const expected = window.start && readMajorInjury(p.majorInjury);
+    if (expected && window.start ? dateKey(expected) > dateKey(window.start) : p.injuryWeeks > 0) continue;
     const nation = nationalityOf(state.eraId, p.name);
     if (!nation) continue;
     const bar = bars.get(nation);
@@ -483,7 +485,12 @@ export function fireDueBreaks(state: CareerState): IntlMessage[] {
       const c = byId.get(p.id);
       if (!c) return p;
       const fitness = Math.max(20, Math.min(100, p.fitness - c.cost));
-      return { ...p, fitness, injuryWeeks: Math.max(p.injuryWeeks, c.injuredWeeks) };
+      const next = { ...p, fitness, injuryWeeks: Math.max(p.injuryWeeks, c.injuredWeeks) };
+      if (c.injuredWeeks > 0 && next.majorInjury) {
+        delete next.majorInjury;
+        next.injuryWeeks = c.injuredWeeks;
+      }
+      return next;
     });
     const fx = fixtureFor(state, state.calendar[backWeek]);
     const brk: IntlBreak = { windowId: w.id, atWeek: state.week, label: windowLabel(w), backWeek, backOpponent: fx ? fx.opponent : null, called };

@@ -55,7 +55,8 @@ import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 import { keyedRng } from '@/lib/keyedRng';
 /* Round 1510: the shared night of a participant and the one match cups. Pure modules: no cycle. */
 import { nightsDoneAt, placeNights, tickingWeeksDone, tickingWeeksIn } from '@/lib/worldNights';
-import { dateKey, type CalDate } from '@/lib/calDate';
+import { addDays, dateKey, daysBetween, isoDate, type CalDate } from '@/lib/calDate';
+import { majorInjuryLabel, readMajorInjury, type MajorInjury } from '@/lib/clubManagerInjuries';
 import type { NightRef, NightResult } from '@/lib/worldNights';
 import { entrantsFrom, evaluateOneOff, myOneOffFixture, oneOffNightsOf, oneOffPartial, oneOffPlayedIn, oneOffRowAt, oneOffRowFor } from '@/lib/worldOneOffs';
 import type { OneOffFixture, OneOffResult, OneOffRow, OneOffSkip, OneOffSlice, OneOffTables } from '@/lib/worldOneOffs';
@@ -171,7 +172,7 @@ import type { IntlDuty } from '@/lib/clubManagerInternationals';
 /* Round 1021: the late 2020-21 start's summer window. Called inside
    startCareer only, never at module scope: the calendar module imports this
    one, the same loop the internationals module already closes. */
-import { dateOfEntries, entryDatesOf, lateSummerWindowWeeks, seasonPlanOf, worldYearOf } from '@/lib/clubManagerCalendar';
+import { dateOfEntries, entryDatesOf, kickoffOf, lateSummerWindowWeeks, seasonPlanOf, worldYearOf } from '@/lib/clubManagerCalendar';
 /* Round 478: the Champions League orders a level group table by its own
    rule, not a league one. That module imports nothing but types from here,
    so there is no cycle at all. */
@@ -1415,6 +1416,7 @@ export interface CMPlayer {
   morale: number;
   /** Weeks (calendar entries) remaining out injured. */
   injuryWeeks: number;
+  majorInjury?: MajorInjury;
   /** Matches of ours remaining suspended. */
   suspendedMatches: number;
   isYouth: boolean;
@@ -2060,7 +2062,7 @@ export interface SubLine {
    *  written under a rule with no limit, so a three change match saves what it always did. */
   stop?: true;
 }
-export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; plus?: number; }
+export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; plus?: number; majorInjury?: MajorInjury; }
 
 export type PlayKind = 'shot' | 'corner' | 'throwin' | 'foul' | 'var';
 
@@ -3611,6 +3613,7 @@ export interface LiveMatch {
   oppFormationIndex?: number;
   /** The fictional manager's style at kick off. Older matches keep the original club style. */
   oppStyle?: AiStyleId;
+  majorInjuryRules?: true;
   /** The first half's play, cards, injury and share of the ball, decided at kick off. */
   h1Play?: PlayEvent[];
   h1Cards?: CardLine[];
@@ -12528,6 +12531,7 @@ export function recallLoanedPlayer(career: CareerState, playerId: string): Caree
     loanedOut: list.filter(l => l.player.id !== playerId),
     transferLog: [...(career.transferLog ?? [])],
   };
+  updateMajorInjuryClock(state);
   pushNews(state, { name: back.name, from: entry.club, to: state.clubName, fee: 0, loan: true });
   return state;
 }
@@ -17476,6 +17480,36 @@ function drawSegmentInjury(state: CareerState, onPitch: CMPlayer[], from: number
   return { name: victim.name, id: victim.id, minute: ri(from + 1, hi), weeks };
 }
 
+/** Classify an existing injury without drawing from the match's random stream. */
+function classifyMatchInjury(state: CareerState, live: LiveMatch, injury: InjuryLine, half: number): void {
+  if (!live.majorInjuryRules) return;
+  const random = keyedRng(`cm-injury|${worldSeedOf(state) ?? state.eraId}|${state.clubName}|${state.season}|${live.week}|${live.opponent}|${injury.id}|${half}`);
+  const roll = random();
+  if (roll >= 0.01) return;
+  const date = entryDatesOf(state)[live.week];
+  if (!date) return;
+  const kind = roll < 0.0065 ? 'acl' : 'achilles';
+  injury.weeks = (kind === 'acl' ? 28 : 33) + Math.floor(random() * 10);
+  injury.majorInjury = { kind, returnDate: isoDate(addDays(date, injury.weeks * 7)) };
+}
+
+function updateMajorInjuryClock(state: CareerState, date?: CalDate): void {
+  if (!state.squad.some(p => p.majorInjury)) return;
+  if (!date) {
+    const dates = entryDatesOf(state);
+    date = dates[state.week - 1] ?? kickoffOf(state);
+  }
+  state.squad = state.squad.map(p => {
+    if (!p.majorInjury) return p;
+    const expected = readMajorInjury(p.majorInjury);
+    const injuryWeeks = expected ? Math.max(0, Math.ceil(daysBetween(date, expected) / 7)) : p.injuryWeeks;
+    if (expected && injuryWeeks > 0) return { ...p, injuryWeeks };
+    const ready = { ...p, injuryWeeks };
+    delete ready.majorInjury;
+    return ready;
+  });
+}
+
 /**
  * Round 205's rule, applied where the exits are now drawn: nobody leaves the
  * pitch before his own last goal, and a sending off comes after any booking
@@ -18365,6 +18399,7 @@ function drawMySegment(
   /* The injury first, after his last goal, so the cards below can be drawn
      off whoever is still standing at the booking's minute. */
   const inj = drawSegmentInjury(state, xi.filter(p => !dismissed.has(p.id)), from, to, hi, knock);
+  if (inj) classifyMatchInjury(state, live, inj, Math.trunc(from / 45));
   const injuries = inj ? [inj] : [];
   fixExits([], injuries, goals, hi);
   const onPitchAt = (m: number): CMPlayer[] => xi.filter(p => !injuries.some(x => x.id === p.id && x.minute < m));
@@ -19186,7 +19221,7 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     const played = playedIds ? playedIds.has(p.id) : false;
     const recovering = p.id === restId;
     const fitness = fitnessAfterWeek(p.fitness, played, recovering ? light.recoveryMod : recoveryMod, recovering ? light.flat : flat);
-    let injuryWeeks = Math.max(0, p.injuryWeeks - 1);
+    let injuryWeeks = p.majorInjury ? p.injuryWeeks : Math.max(0, p.injuryWeeks - 1);
     if (!recovering && knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
     const out: CMPlayer = { ...p, fitness, injuryWeeks };
     const previous = readTrainingExposure(p.trainingExposure);
@@ -20455,7 +20490,11 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     const p = inj.id ? state.squad.find(x => x.id === inj.id) : state.squad.find(x => x.name === inj.name);
     if (!p) continue;
     p.injuryWeeks = inj.weeks;
-    events.push(`🩹 ${p.name} limped off, out for ~${p.injuryWeeks} week${p.injuryWeeks > 1 ? 's' : ''}.`);
+    const major = majorInjuryLabel(inj.majorInjury);
+    if (major) p.majorInjury = inj.majorInjury;
+    events.push(major
+      ? `🩹 ${p.name}: ${major}.`
+      : `🩹 ${p.name} limped off, out for ~${p.injuryWeeks} week${p.injuryWeeks > 1 ? 's' : ''}.`);
   }
 
   // Round 73: the season's fixture log feeds the calendar card.
@@ -21805,7 +21844,10 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
     /* Round 466: a sim to a day stops at the first entry the day does not
        cover. The entries before it have been played or skipped through this
        same loop, so a tap on a quiet Tuesday never plays the match after it. */
-    if (opts?.untilWeek !== undefined && state.week >= opts.untilWeek) return { state, kind: 'reached' };
+    if (opts?.untilWeek !== undefined && state.week >= opts.untilWeek) {
+      if (!state.live) updateMajorInjuryClock(state);
+      return { state, kind: 'reached' };
+    }
     /* Round 978: an international window my next match has reached is
        played before the next entry. The hook after my match below fires
        every break straight after the last match of mine before its window,
@@ -21831,6 +21873,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       // Round 135: a January window is exactly when somebody gets asked whether
       // his best player is going anywhere.
       maybeAskPress(state);
+      updateMajorInjuryClock(state);
       return { state, kind: 'window' };
     }
     if (!entryInvolvesMe(state, entry) || !fixtureFor(state, entry)) {
@@ -21903,6 +21946,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
        fixture on the same seed could end 2-1 one way and 0-0 the other and
        the game had two engines wearing one name. Everything kicks off here
        now; quick sims use the same legal changes to look after the team. */
+    if (state.squad.some(p => p.majorInjury)) updateMajorInjuryClock(state, entryDatesOf(state)[state.week]);
     const live = kickOff(state, entry, opts?.varReviews, !opts?.noBook);
     if (!opts?.skipHalftime) {
       state.live = live;
@@ -21911,6 +21955,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
     state.live = live;
     return resumeMatch(coached(state));
   }
+  updateMajorInjuryClock(state);
   return { state, kind: 'seasonOver' };
 }
 
@@ -21974,6 +22019,7 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
     h1Opp: [],
     ...(squad ? { oppXi: squad.xi, oppBench: squad.bench, oppFormationIndex: squad.formationIndex } : {}),
     ...(oppStyle ? { oppStyle } : {}),
+    ...(careerMatch && !state.worldRatingRunIn ? { majorInjuryRules: true as const } : {}),
     h1Play: [],
     h1Cards: [],
     h1OppCards: [],
@@ -22580,6 +22626,7 @@ export function resumeMatch(career: CareerState): PlayResult {
       report.events.push(`You qualified for the ${competition}. The fixtures are on your calendar.`);
     }
   }
+  updateMajorInjuryClock(state);
   /* Round 978: same hook as the quick sim's, see playNextEntry. */
   runIntlBreaks(state);
   advanceIntercontinentalCup(state, live.week);
@@ -23725,7 +23772,7 @@ function agePlayer(p: CMPlayer, career: CareerState, random?: () => number, pres
     value,
     fitness: 100,
     morale: 70,
-    injuryWeeks: 0,
+    injuryWeeks: p.majorInjury ? p.injuryWeeks : 0,
     suspendedMatches: 0,
     seasonGoals: 0,
     seasonAssists: 0,
@@ -24856,6 +24903,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     // Round 1035: last season's byes do not follow a manager into a cupless one.
     delete state.cupByes;
   }
+  updateMajorInjuryClock(state, kickoffOf(state));
   state.xiIds = autoPickXI(state.squad, FORMATIONS[state.formationIndex] ?? FORMATIONS[0]);
   /* Round 1510: the season's super cup, off the season just finished (read above, before the swap), after the cup
      bracket and before the windows. The literal copied last season's map, so this key is always replaced or taken

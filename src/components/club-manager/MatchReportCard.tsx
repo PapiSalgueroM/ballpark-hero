@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronRight, ChevronDown } from 'lucide-react';
 import { minuteLabel } from '@/lib/clubManager';
+import { majorInjuryLabel } from '@/lib/clubManagerInjuries';
 import { scorerLine } from '@/lib/clubManagerScorerLine';
 import type { MatchWeekReport, MatchStats } from '@/lib/clubManager';
 import { AI_STYLES, instructionsSummary, type TeamInstructions } from '@/lib/clubManagerTactics';
@@ -468,7 +469,7 @@ export function MatchReportCard({ report, clubName, onContinue, noSack = false }
             ))}
             {detail.injuries.map((inj, i) => (
               <span key={`i${i}`} style={chipIn()} className="cm-tick-in text-[10px] rounded-full px-2 py-0.5 border bg-secondary border-border text-foreground">
-                🩹 {inj.name} {minuteLabel(inj)} ({inj.weeks}w)
+                🩹 {inj.name} {minuteLabel(inj)} ({majorInjuryLabel(inj.majorInjury) ?? `${inj.weeks}w`})
               </span>
             ))}
             {detail.subs.map((s, i) => (
