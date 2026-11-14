@@ -16,6 +16,7 @@ import { nflStatsHelp } from '@/lib/nflSeasonStats';
 const FRONT_OFFICE_RATING_RULES = [
   'New opening ratings read a quarterback, back, receiver or tight end on three things: how well he played, how much of the work he carried and what he produced a game in 2025. A back who carried the full load all year gets credit for it that a backup who looked sharp on sixty carries does not.',
   'A fullback is not rated as a ball carrier, so he sits low on the running back shelf with the e for limited evidence.',
+  'On a full roster, choose Two tight ends for one regular-season game. One back, two receivers and two tight ends give a small simulated blocking boost, but can replace a stronger receiver or back. If you are short at kickoff the usual lineup plays.',
   'After regular-season weeks, ratings can rise or fall one point at a time. Check Rating changes in Roster. Players carry their ratings into next season.',
 ] as const;
 

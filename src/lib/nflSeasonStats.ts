@@ -48,8 +48,8 @@
  * names are the save's rosters: nothing built on these lines quotes anybody.
  * Every number of the rules below is THIS SIM'S OWN.
  */
-import type { GmPlayer, GmTeamState, LeagueState } from './frontOffice';
-import { DEF_POS, DEF_SLOTS, OL_SLOTS, REPLACEMENT_OVR, SKILL_POS, SKILL_SLOTS, unitStarters } from './frontOffice';
+import type { GmGame, GmPlayer, GmTeamState, LeagueState } from './frontOffice';
+import { DEF_POS, DEF_SLOTS, OL_SLOTS, REPLACEMENT_OVR, SKILL_POS, SKILL_SLOTS, nflGameOffense, twoTightEndProtection, unitStarters } from './frontOffice';
 import type { FoSeasonStats, FoStatLine } from './foSeasonStats';
 import {
   type FoExpandedStats, type FoSavedStats, type FoStatsCodec,
@@ -157,9 +157,9 @@ export const NFL_AWARD_RULE: Record<NflAwardKey, string> = {
 
 /** The men who can record anything in a game: QB1, the five skill starters, the six defensive starters. */
 export interface NflPool { qb: GmPlayer | null; skill: GmPlayer[]; def: GmPlayer[] }
-export function nflPool(team: GmTeamState): NflPool {
+export function nflPool(team: GmTeamState, plannedSkill: GmPlayer[] | null = null): NflPool {
   const [qb] = unitStarters(team, ['QB'], 1);
-  return { qb: qb ?? null, skill: unitStarters(team, SKILL_POS, SKILL_SLOTS), def: unitStarters(team, DEF_POS, DEF_SLOTS) };
+  return { qb: qb ?? null, skill: plannedSkill ?? unitStarters(team, SKILL_POS, SKILL_SLOTS), def: unitStarters(team, DEF_POS, DEF_SLOTS) };
 }
 export const nflPoolMen = (p: NflPool): GmPlayer[] => [...(p.qb ? [p.qb] : []), ...p.skill, ...p.def];
 
@@ -206,7 +206,7 @@ export interface NflSideCredit {
 export interface NflGameCredit { key: string; home: NflSideCredit; away: NflSideCredit }
 
 /** The fields of a told game the credit reads. */
-export type NflToldGame = Pick<ToldGame, 'key' | 'home' | 'away' | 'homeScore' | 'awayScore'>;
+export type NflToldGame = Pick<ToldGame, 'key' | 'home' | 'away' | 'homeScore' | 'awayScore'> & Pick<GmGame, 'personnel'>;
 
 const has = (o: object, k: string) => Object.prototype.hasOwnProperty.call(o, k);
 const mean = (xs: number[], none: number) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : none);
@@ -222,8 +222,9 @@ export function nflCreditGame(told: NflToldGame, teams: Record<string, GmTeamSta
   const pair = nflDrivePair(told.homeScore, told.awayScore, keyedRng(gmStoryKey(told)));
   if (!pair) return null;
   const rng = keyedRng(`${told.key}|credit`);
-  const sides = ([[told.home, pair[0]], [told.away, pair[1]]] as const).map(([team, d]): NflSideCredit => ({
-    team, pool: nflPool(teams[team]), tds: d.tds.length, fgs: d.fgs, safeties: d.safeties,
+  const plannedSkills = [told.home, told.away].map(team => nflGameOffense(told, teams[team]));
+  const sides = ([[told.home, pair[0]], [told.away, pair[1]]] as const).map(([team, d], index): NflSideCredit => ({
+    team, pool: nflPool(teams[team], plannedSkills[index]), tds: d.tds.length, fgs: d.fgs, safeties: d.safeties,
     credits: [], unclaimed: 0, sacks: {}, sackTries: 0,
   }));
   /* the touchdowns, home side first: two draws each, whoever takes it */
@@ -244,7 +245,8 @@ export function nflCreditGame(told: NflToldGame, teams: Record<string, GmTeamSta
   sides.forEach((s, i) => {
     const line = unitStarters(teams[sides[1 - i].team], ['OL'], OL_SLOTS);
     const rush = mean(s.pool.def.filter(m => m.pos === 'DL' || m.pos === 'LB').map(m => m.ovr), REPLACEMENT_OVR);
-    const chance = nflSackChance(rush, mean(line.map(m => m.ovr), NFL_BLOCK_FLOOR));
+    const protection = twoTightEndProtection(plannedSkills[1 - i]);
+    const chance = nflSackChance(rush, mean(line.map(m => m.ovr), NFL_BLOCK_FLOOR) + protection);
     for (let t = 0; t < NFL_SACK_TRIES; t += 1) if (rng() < chance) s.sackTries += 1;
     for (let k = 0; k < s.sackTries; k += 1) {
       const by = drawBy(s.pool.def, nflSackWeight, rng());

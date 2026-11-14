@@ -51,7 +51,7 @@ export function nflTell(
   let told: ToldGame | null = null;
   if (Object.prototype.hasOwnProperty.call(teams, g.home) && Object.prototype.hasOwnProperty.call(teams, g.away) && (g.winner === g.home || g.winner === g.away)) {
     const home = teams[g.home], away = teams[g.away];
-    const pHome = edges ? winProb(home, away, edges[g.home] ?? 0, edges[g.away] ?? 0) : winProb(home, away);
+    const pHome = winProb(home, away, edges?.[g.home], edges?.[g.away], g);
     told = quickGame(NFL_SCORE_LAW, { key, home: g.home, away: g.away, decided: { homeWon: g.winner === g.home, pHome } });
     /* the winner is the engine's or the law has refused */
     if (told && toldWinner(told) !== g.winner) told = null;

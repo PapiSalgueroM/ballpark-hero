@@ -3,7 +3,7 @@
    franchises are scripts/simNflSeasonStats.mjs's. */
 import { describe, expect, it } from 'vitest';
 import type { GmPlayer, GmTeamState, LeagueState } from '@/lib/frontOffice';
-import { unitStarters, SKILL_POS, SKILL_SLOTS, DEF_POS, DEF_SLOTS } from '@/lib/frontOffice';
+import { unitStarters, SKILL_POS, SKILL_SLOTS, DEF_POS, DEF_SLOTS, simGame, setTwoTightEndPlan, twoTightEndSkill, teamStrength, winProb, cleanNflGamePersonnel, setPracticeElevation, withPracticeElevations } from '@/lib/frontOffice';
 import { FO_HISTORY_CAP, foCloseOnce } from '@/lib/foSeasonClose';
 import { nflDrivePair } from '@/lib/gameLaws/nflDrives';
 import { keyedRng } from '@/lib/keyedRng';
@@ -66,6 +66,98 @@ describe('the pool and the credit', () => {
     expect(sum('ptd')).toBe(sum('ctd'));
     expect(sum('rtd')).toBeGreaterThan(0);
     expect(sum('sk')).toBeGreaterThan(0);
+  });
+});
+
+
+describe('two tight ends for one regular-season game', () => {
+  const matchup = (teOvr: number) => {
+    const other = fifteen('BBB');
+    const my = fifteen('AAA');
+    my.rosterDepth = 2;
+    my.players.push(P('TE', teOvr, { id: 'extra-TE' }));
+    const queued = { home: my.abbr, away: other.abbr, week: 1, winner: '', homeScore: 0, awayScore: 0 };
+    return league([my, other], { schedule: [[queued], [{ ...queued, week: 2 }]] });
+  };
+
+  it.each([72, 62])('tests the tradeoff against the usual five with a %d-rated second tight end', rate => {
+    const usual = matchup(rate);
+    const plan = structuredClone(usual);
+    expect(setTwoTightEndPlan(plan, 'AAA', true)).toBe(true);
+    const restored: LeagueState = JSON.parse(JSON.stringify(plan));
+    const my = restored.teams.AAA;
+    const lineup = twoTightEndSkill(my)!;
+    expect(lineup.map(p => p.pos)).toEqual(['RB', 'WR', 'WR', 'TE', 'TE']);
+    expect(lineup.map(p => p.id)).toContain('extra-TE');
+    const usualStrength = teamStrength(usual.teams.AAA);
+    expect(Math.sign(teamStrength(my, lineup) - usualStrength)).toBe(rate === 72 ? 1 : -1);
+    const base = winProb(usual.teams.AAA, usual.teams.BBB);
+    const planned = winProb(my, restored.teams.BBB, 0, 0, { personnel: { team: 'AAA', result: 'used' } });
+    expect(Math.sign(planned - base)).toBe(rate === 72 ? 1 : -1);
+    const tape = () => {
+      const numbers = [(base + planned) / 2, 0.5, 0.5];
+      return () => numbers.shift()!;
+    };
+    expect(simGame(usual.schedule[0][0], usual.teams, tape()).winner).toBe(rate === 72 ? 'BBB' : 'AAA');
+    const done = simGame(restored.schedule[0][0], restored.teams, tape());
+    expect(done.winner).toBe(rate === 72 ? 'AAA' : 'BBB');
+    expect(done.personnel).toEqual({ team: 'AAA', result: 'used' });
+    expect(restored.schedule[1][0].personnel).toBeUndefined();
+    const told = { ...done, key: '2027|w1|AAA|BBB|one-week-personnel' };
+    expect(nflRecordWeek(restored, [told], 'AAA')).toBe(1);
+    expect(restored.stats?.lines.AAA['extra-TE']?.[2]).toBe(1);
+    const thirdReceiver = my.players.filter(p => p.pos === 'WR').sort((a, b) => b.ovr - a.ovr)[2];
+    expect(restored.stats?.lines.AAA[thirdReceiver.id]).toBeUndefined();
+  });
+
+  it('returns to usual when either selected tight end is out and stores the fallback', () => {
+    const lg = matchup(72);
+    expect(setTwoTightEndPlan(lg, 'BBB', true)).toBe(false);
+    expect(setTwoTightEndPlan(lg, 'AAA', true)).toBe(true);
+    expect(setTwoTightEndPlan(lg, 'AAA', false)).toBe(true);
+    expect(lg.schedule[0][0].personnel).toBeUndefined();
+    expect(setTwoTightEndPlan(lg, 'AAA', true)).toBe(true);
+    lg.teams.AAA.players.find(p => p.id === 'extra-TE')!.out = 2;
+    const done = simGame(lg.schedule[0][0], lg.teams, keyedRng('fallback'));
+    expect(done.personnel?.result).toBe('unavailable');
+    expect(nflCreditGame({ ...done, key: '2027|w1|AAA|BBB|fallback' }, lg.teams)?.home.pool).toEqual(nflPool(lg.teams.AAA));
+  });
+
+  it('honors a legal elevated tight end only for the game, and keeps the receipt on reload', () => {
+    const lg = matchup(72);
+    const team = lg.teams.AAA;
+    team.practice = team.players.filter(player => player.id === 'extra-TE');
+    team.players = team.players.filter(player => player.id !== 'extra-TE');
+    expect(twoTightEndSkill(team)).toBeNull();
+    expect(setPracticeElevation(lg, 'AAA', 'extra-TE', true)).toBe(true);
+    expect(setTwoTightEndPlan(lg, 'AAA', true)).toBe(true);
+    const game = withPracticeElevations(lg, 'AAA', () => {
+      const done = simGame(lg.schedule[0][0], lg.teams, keyedRng('elevation'));
+      expect(nflCreditGame({ ...done, key: '2027|w1|AAA|BBB|elevation' }, lg.teams)?.home.pool.skill.map(p => p.id)).toContain('extra-TE');
+      return done;
+    });
+    expect(team.players.some(p => p.id === 'extra-TE')).toBe(false);
+    lg.schedule[0][0] = game;
+    lg.week = 2;
+    const loaded: LeagueState = JSON.parse(JSON.stringify(lg));
+    loaded.schedule[1][0].personnel = { team: 'BBB' };
+    cleanNflGamePersonnel(loaded, 'AAA');
+    expect(loaded.schedule[0][0].personnel).toEqual({ team: 'AAA', result: 'used' });
+    expect(loaded.schedule[1][0].personnel).toBeUndefined();
+  });
+
+  it('decreases simulated sacks with the same scores and credit draw', () => {
+    const lg = matchup(72);
+    let normal = 0, twoTe = 0;
+    for (const row of games('AAA', 'BBB', 700)) {
+      const without = nflCreditGame(row, lg.teams)!;
+      const withExtra = nflCreditGame({ ...row, personnel: { team: 'AAA', result: 'used' } }, lg.teams)!;
+      normal += without.away.sackTries;
+      twoTe += withExtra.away.sackTries;
+      expect(withExtra.away.sackTries).toBeLessThanOrEqual(without.away.sackTries);
+      expect(withExtra.home.sackTries).toBe(without.home.sackTries);
+    }
+    expect(normal - twoTe).toBeGreaterThan(90);
   });
 });
 
