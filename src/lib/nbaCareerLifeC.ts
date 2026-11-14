@@ -68,9 +68,12 @@
    file): the catalog below is functions, and they run at draw time.
 */
 import type { NbaCareerState, NbaCareerEvent } from './nbaMyCareer';
-import { nbaTeamLabelOf, nbaEraById, nbaEraTeamIds } from './nbaMyCareer';
-import { applyDeckCFx, buildDeckCCard, deckCChip, dealDeckC } from './usCareerDeckC';
+import { nbaTeamLabelOf, nbaEraById, nbaEraTeamIds, nbaRollTeamQuality } from './nbaMyCareer';
+import { applyDeckCFx, buildDeckCCard, deckCChip, dealDeckC, deckCOption } from './usCareerDeckC';
 import type { DeckCDef, DeckCFx, DeckCOptionDef, DeckCSport } from './usCareerDeckC';
+import { isFarewellSeason } from './careerRetirement';
+import { keyedRng } from './keyedRng';
+import { summerCareerKey } from './usCareerSummer';
 
 /* Round 988: the machinery (the clamps, the era money, the gamble, the
    trade, the words) is the shared engine in usCareerDeckC.ts. This file
@@ -97,6 +100,36 @@ const NBA_DECK_C: DeckCSport<NbaCareerState> = {
   teamIds: c => nbaEraTeamIds(c.eraId),
   teamLabel: (id, c) => nbaTeamLabelOf(id, c.eraId),
 };
+
+const tradeRequestOption: NbaLifeCOptionDef = {
+  label: 'Ask your agent to request a trade',
+  p: 0.5,
+  win: { say: 'The front office granted your trade request.', fx: {}, move: 'trade' },
+  lose: { say: 'The front office declined your request. You are staying with your team.', fx: { morale: -4 } },
+};
+
+export function nbaTradeRequestAvailable(c: NbaCareerState): boolean {
+  return c.seasons.length > 0 && c.contractYears > 1 && !c.retired && !(c.suspendedSeasons ?? 0)
+    && !isFarewellSeason(c.retirement, c.year) && nbaEraTeamIds(c.eraId).includes(c.team);
+}
+
+export function nbaTradeRequestReceipt(c: NbaCareerState): string | null {
+  const receipt = c.tradeRequest;
+  if (!receipt || receipt.year !== c.year) return null;
+  const teams = nbaEraTeamIds(c.eraId);
+  if (!teams.includes(receipt.from)) return null;
+  if (receipt.to === null) return `Trade request declined. You stayed with ${nbaTeamLabelOf(receipt.from, c.eraId)}.`;
+  if (!teams.includes(receipt.to) || receipt.to === receipt.from) return null;
+  return `Trade request granted. Traded to ${nbaTeamLabelOf(receipt.to, c.eraId)} on the same contract.`;
+}
+
+export function settleNbaTradeRequest(c: NbaCareerState) {
+  const rng = keyedRng(`nba-trade-request:${summerCareerKey(c)}:${c.year}`);
+  const from = c.team;
+  const note = deckCOption(NBA_DECK_C, tradeRequestOption, c).apply(c, rng);
+  c.tradeRequest = { year: c.year, from, to: c.team === from ? null : c.team };
+  return { teamQuality: c.team === from ? null : nbaRollTeamQuality(null, rng), note };
+}
 
 const isModern = (c: NbaCareerState): boolean => nbaEraById(c.eraId).id === 'now';
 const yrsOf = (c: NbaCareerState): number => c.seasons.length;

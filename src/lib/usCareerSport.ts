@@ -317,6 +317,11 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   suspendedNote: string;
 
   /* Contracts. */
+  tradeRequest?: {
+    available(c: C): boolean;
+    receipt(c: C): string | null;
+    settle(c: C): { teamQuality: number | null; note: string };
+  };
   buildExtension(c: C, rng: () => number): ExtensionTalk;
   extPushArgs(c: C, rng: () => number): ExtPushArgs;
   buildFaWindow(c: C, incumbentQuality: number, rng: () => number): FaWindow;

@@ -138,6 +138,7 @@ export interface NbaCareerState {
   health: number;
   salary: number;
   contractYears: number;
+  tradeRequest?: { year: number; from: string; to: string | null };
   seasons: NbaSeasonLine[];
   rings: number;
   mvps: number;
