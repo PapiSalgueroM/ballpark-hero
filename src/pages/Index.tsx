@@ -67,9 +67,10 @@ const CATALOGUE_GAME_LINK = '[data-catalog-card] a[href]';
 const CONTINUE_GAME_LINK = 'a[data-continue-card]';
 const PICK_GAME_LINK = 'a[data-game-pick-link]';
 const FEATURED_GAME_LINK = 'a[data-stage-card]';
+const NRL_GAME_LINK = 'a[data-home-nrl-launch]';
 const POPULAR_GAME_LINK = 'a[data-home-popular-game]';
 const RECENT_GAME_LINK = '[data-home-shipped] [data-home-game-card] a[href]';
-const HOME_GAME_SHELVES = [CATALOGUE_GAME_LINK, CONTINUE_GAME_LINK, PICK_GAME_LINK, FEATURED_GAME_LINK, POPULAR_GAME_LINK, RECENT_GAME_LINK];
+const HOME_GAME_SHELVES = [CATALOGUE_GAME_LINK, CONTINUE_GAME_LINK, PICK_GAME_LINK, FEATURED_GAME_LINK, NRL_GAME_LINK, POPULAR_GAME_LINK, RECENT_GAME_LINK];
 type GameReturn = { query: string; path: string; selector: string; shelfScroll?: number };
 const gameReturns = new Map<string, GameReturn>();
 

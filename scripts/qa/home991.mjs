@@ -5,8 +5,9 @@ import { setTimeout as pause } from 'node:timers/promises';
 import { chromium } from 'playwright';
 
 const output = 'home-launch-artifacts';
-const base = 'http://127.0.0.1:4189';
-const server = spawn(process.execPath, ['scripts/lib/hostLikeServer.mjs', 'dist', '4189'], { stdio: 'pipe' });
+const base = process.env.HOME_LAUNCH_BASE || 'http://127.0.0.1:4189';
+const baseline = process.env.HOME_LAUNCH_BASELINE === '1';
+const server = process.env.HOME_LAUNCH_BASE ? null : spawn(process.execPath, ['scripts/lib/hostLikeServer.mjs', 'dist', '4189'], { stdio: 'pipe' });
 let browser;
 const rows = [];
 const failures = [];
@@ -20,15 +21,21 @@ try {
   }
   assert.ok(ready, 'Built site server starts');
   browser = await chromium.launch();
-  for (const [width, height, motion] of [[320, 780, 'reduce'], [390, 844, 'no-preference'], [768, 1024, 'no-preference'], [1440, 960, 'reduce']]) {
-    const context = await browser.newContext({ viewport: { width, height }, reducedMotion: motion });
+  for (const [width, height, motion, scale] of [[320, 844, 'reduce', 1], [390, 844, 'no-preference', 1], [430, 844, 'reduce', 1], [768, 1024, 'no-preference', 1], [1440, 960, 'reduce', 1], [720, 480, 'reduce', 2]]) {
+    const context = await browser.newContext({ viewport: { width, height }, reducedMotion: motion, deviceScaleFactor: scale });
     try {
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await context.route('**/*', route => route.request().url().startsWith(base) ? route.continue() : route.abort());
-    await page.addInitScript(() => localStorage.setItem('cookie-consent', 'essential'));
-    await page.goto(base);
+    await page.addInitScript(() => {
+      localStorage.setItem('cookie-consent', 'essential');
+      localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() }));
+    });
+    const response = await page.goto(base);
+    if (process.env.HOME_LAUNCH_DEPLOYMENT) {
+      assert.ok(response?.headers()['x-deployment-id']?.includes(process.env.HOME_LAUNCH_DEPLOYMENT), 'Expected deployment answered');
+    }
     const stage = page.locator('[data-home-stage]');
     await stage.waitFor();
     await page.evaluate(() => document.fonts.ready);
@@ -68,27 +75,48 @@ try {
     const box = await first.boundingBox();
     assert.ok(box && box.y <= 430 && box.height >= 44, 'A playable game is in the first screen');
     assert.equal(await stage.locator('[data-stage-card]').count(), 4, 'All four flagships remain playable');
+    const daily = await page.locator('[data-daily-spotlight]').boundingBox();
+    assert.ok(daily, 'The first Daily is playable');
+    const launch = stage.locator('[data-home-nrl-launch]');
     const shortcuts = stage.getByRole('navigation', { name: 'Sports shortcuts' });
-    const row = await shortcuts.boundingBox();
-    assert.ok(row && row.y >= box.y + box.height, 'Sport links follow the featured games');
-    assert.equal(await shortcuts.evaluate(nav => nav.scrollWidth > nav.clientWidth), false, 'Sport links fit without horizontal scrolling');
+    let finalRow;
+    if (baseline) {
+      assert.equal(await launch.count(), 0, 'Baseline has no direct NRL launch in the deck');
+      assert.equal(await shortcuts.getByRole('link').count(), 7, 'Baseline renders seven shortcuts');
+      finalRow = await shortcuts.boundingBox();
+    } else {
+      assert.equal(await shortcuts.count(), 0, 'The duplicate shortcuts are gone');
+      assert.equal(await launch.getAttribute('href'), '/nrl-team-manager');
+      assert.equal(await launch.innerText(), 'NRL Team Manager');
+      finalRow = await launch.boundingBox();
+      const finalCard = await stage.locator('[data-stage-card]').last().boundingBox();
+      assert.ok(finalRow && finalCard && finalRow.height >= 44 && finalRow.y >= finalCard.y + finalCard.height - 1, 'Direct launch has a full tap target below the featured games');
+      assert.ok(finalRow.x >= 0 && finalRow.x + finalRow.width <= width, 'Direct launch fits the viewport');
+      assert.equal(await launch.evaluate(link => link.scrollWidth > link.clientWidth), false, 'The launch label fits');
+      if (width <= 430) assert.ok(daily.y + 60 <= height, 'Phone shows enough of the first Daily card to read and tap its title');
+    }
     const hubs = ['/soccer', '/pro-basketball', '/hockey', '/pro-football', '/baseball', '/college'];
-    const destinations = ['#sport-rugby', ...hubs];
-    for (const href of destinations) {
-      const link = shortcuts.locator(`a[href="${href}"]`);
-      assert.equal(await link.count(), 1, 'One direct sport destination: ' + href);
-      const target = await link.boundingBox();
-      assert.ok(target && target.height >= 44, 'Sport has a usable touch target: ' + href);
-      assert.ok(target.x >= row.x - 1 && target.x + target.width <= row.x + row.width + 1, 'Sport link is fully inside the row: ' + href);
+    for (const href of hubs) {
+      assert.equal(await page.locator(`[data-home-sport-catalogue] a[href="${href}"]`).count(), 1, 'The catalogue still links ' + href);
     }
     assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'No page-level horizontal overflow');
     await first.focus();
     await page.keyboard.press('Enter');
     await page.waitForURL('**/soccer-career');
     assert.match(page.url(), /\/soccer-career$/, 'Keyboard activation reaches the flagship');
+    if (!baseline) {
+      await page.goBack();
+      await launch.focus();
+      await launch.press('Enter');
+      await page.waitForURL('**/nrl-team-manager');
+      await page.getByRole('heading', { name: 'NRL Team Manager', level: 1 }).waitFor();
+      await page.goBack();
+      await launch.waitFor();
+      await page.waitForFunction(() => document.activeElement?.hasAttribute('data-home-nrl-launch'));
+    }
     assert.deepEqual(errors, [], 'No page exceptions');
-    rows.push({ width, height, motion, firstGameTop: box.y, directSports: destinations.length, keyboardRoute: '/soccer-career' });
-    console.log(`Home ${width}px: four games, seven visible sport links and keyboard navigation pass.`);
+    rows.push({ width, height, motion, scale, firstGameTop: box.y, dailyTop: daily.y, launchRowHeight: finalRow?.height });
+    console.log(`Home ${width}px at ${scale * 100}%: first Daily card y=${Math.round(daily.y)}, last launch row ${Math.round(finalRow?.height ?? 0)}px, keyboard navigation passed.`);
     } catch (error) {
       failures.push({ width, message: error.message });
       console.error(`Home ${width}px failed: ${error.message}`);
@@ -100,5 +128,5 @@ try {
   assert.deepEqual(failures, [], 'All home viewports pass');
 } finally {
   await browser?.close();
-  server.kill();
+  server?.kill();
 }
