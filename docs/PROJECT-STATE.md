@@ -1,4 +1,12 @@
+## 2026-11-14: Baseball workloads, Stock Market review and college match ratings
+
+- MLB Front Office lets managers use five healthy starters for one regular-season round. The plan lowers simulated injury risk for the five pitchers and may give up team strength at a top-heavy club. Last round records the decision that was used. A healthy backup can cover an injured starter at the backup's rating.
+- Player Stock Market shows the actual best affordable XI after settlement. It compares the opening price and final value in each slot. New Daily results save the comparison, and older results still open with their original numbers.
+- College Football Dynasty and College Basketball Dynasty show named OVR changes beside the saved results for the exact round that triggered the rating review. The final group also appears in the season recap when it has a saved review.
+
 ## 2026-11-14: Game search, Squad Deal chemistry and NRL player retention
+
+[PR #952](https://github.com/PapiSalgueroM/ballpark-hero/pull/952) published exact main `7c62f8d1e73c66412a5bf94acb90eb91abd59ae7`, deployment `47acb7f2-b8a8-4cd7-b6e3-6ddbe81c3adb`. Seven live browser journeys, both raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted both updated game guides.
 
 - Home and the full search page recognize phrases such as "manage an NFL team", "build a stadium" and "career mode". Searches that name a sport point to that sport, and every original game title still ranks first on its own name.
 - Once per Squad Deal draft, replace a visible Banker offer with an eligible player who improves the current XI's club and nationality chemistry. The original offer is withdrawn. The new offer can still be declined, and the hidden cases stay in place.
