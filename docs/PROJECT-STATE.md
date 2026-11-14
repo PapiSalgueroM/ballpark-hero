@@ -1,3 +1,9 @@
+## 2026-11-14: Home daily puzzle filters, NRL shortlist comparison and NBA save recovery
+
+- Home filters Daily puzzles by sport and shows the number of matching boards. All sports keeps the original order and rotating spotlight.
+- NRL Team Manager compares two available shortlisted recruits using their asking salary, arrival year, one-season cap and squad check, and strongest signed player at the same position. The comparison uses the existing shortlist and does not write to the career save.
+- NBA Front Office shows when this device refused a save. Retry save writes the latest pending progress from the open game. A refused reset keeps the current franchise and its pending progress.
+
 ## Club Manager transfer swap availability
 
 The part exchange picker shows every eligible player in the manager's current squad, including starters, bench players and reserves. It still sorts by sale value. The loan ownership, minimum squad and last-keeper rules still apply. A mounted negotiation showed all 24 eligible squad players and completed a deal with a reserve below the former cutoff.
