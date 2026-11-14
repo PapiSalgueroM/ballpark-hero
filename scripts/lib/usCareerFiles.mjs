@@ -70,7 +70,7 @@ export function wrapperProblems(root, s) {
     out.push(`${s.wrapper}: does not import its own binding`);
   }
   const boardOpen = `<UsCareerBoard sport={${s.constName}}`;
-  if (!code.includes(boardOpen + ' />') && !code.includes(boardOpen + ' entry={entry} />')) {
+  if (!code.includes(boardOpen + ' inSeasonRating />') && !code.includes(boardOpen + ' entry={entry} inSeasonRating />')) {
     out.push(`${s.wrapper}: does not render the shared board with its own binding`);
   }
   for (const other of US_CAREER_SPORTS) {
