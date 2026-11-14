@@ -16,6 +16,7 @@ import {
   nbaShouldRetire, nbaLegacyOf, nbaCareerTotals, nbaRollTeamQuality, nbaTeamLabelOf,
   buildNbaFaWindow, nbaFaPushArgs, buildNbaExtension, nbaExtPushArgs, nbaFreeAgencyTeams, contactNbaFreeAgencyTeam,
   nbaAssignRole, nbaCampBattle, enableNbaDraft2004, hasNbaDraft2004,
+  nbaRosterPriority, nbaRosterPriorityBoost, requestNbaRosterPriority, clearNbaRosterPriority,
   type NbaCareerPos, type NbaCareerState, type NbaSeasonLine,
 } from '@/lib/nbaMyCareer';
 import { countOf, nbaStatLine } from '@/lib/usCareerStatLine';
@@ -76,6 +77,7 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = wi
   assignRole: nbaAssignRole,
   campBattle: nbaCampBattle,
   tradeRequest: { available: nbaTradeRequestAvailable, receipt: nbaTradeRequestReceipt, settle: settleNbaTradeRequest },
+  rosterPriority: { boost: nbaRosterPriorityBoost, receipt: nbaRosterPriority, request: requestNbaRosterPriority, cancel: clearNbaRosterPriority },
   simSeason: simNbaSeason,
   progress: nbaProgress,
   drawEvent: drawNbaEvent,

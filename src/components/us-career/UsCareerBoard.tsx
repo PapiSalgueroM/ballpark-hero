@@ -549,7 +549,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
           setPhase('event');
           return;
         }
-        const tq = sport.rollTeamQuality(s.teamQuality, Math.random);
+        const tq = sport.rollTeamQuality(s.teamQuality, Math.random, loaded);
         setTeamQuality(tq);
         persist(loaded, 'season', tq);
       }
@@ -717,14 +717,16 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
      banned year). */
   const playedRef = useRef<CareerState | null>(null);
 
-  const tradeSaveChanged = (requesting: boolean) => {
+  const teamPlanSaveChanged = (requesting: boolean) => {
     const trade = sport.tradeRequest;
-    if (!career || !trade || pendingSave.current) return false;
+    const priority = sport.rosterPriority;
+    if (!career || (!trade && !priority) || pendingSave.current) return false;
     try {
       const raw = localStorage.getItem(sport.saveKey);
       if (raw === savedBytes.current) return false;
       const stored = raw ? JSON.parse(raw) as SaveShape : null;
-      if (stored && (stored.phase === 'season' || stored.phase === 'freeagency') && stored.c && stored.teamQuality != null && trade.receipt(stored.c)
+      if (stored && (stored.phase === 'season' || stored.phase === 'freeagency') && stored.c && stored.teamQuality != null
+        && (trade?.receipt(stored.c) || priority?.receipt(stored.c))
         && stored.c.year === career.year && summerCareerKey(stored.c) === summerCareerKey(career)) {
         const held = restoreMarketTalk(stored.contractTalk, stored.c, sport.slug, sport.freeAgencyContact?.teams(stored.c).map(t => t.id));
         if (stored.phase === 'season' || held?.kind === 'freeagency') {
@@ -743,7 +745,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
 
   const playSeason = () => {
     playedRef.current = null;
-    if (!career || teamQuality == null || practiceOpen || tradeSaveMoved || tradeSaveChanged(false)) return;
+    if (!career || teamQuality == null || practiceOpen || tradeSaveMoved || teamPlanSaveChanged(false)) return;
     /* Round 195: a played season counts as playing TODAY, the Round 159
        soccer rule reaching the American careers. Unscored on purpose: the
        scored completion stays the retirement legacy. */
@@ -860,7 +862,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     if (!ev) {
       /* Only a summer can deal nothing (every card it dealt has already moved
          past); the offseason then ends as an answered one does. */
-      const tq = sport.rollTeamQuality(teamQuality, Math.random);
+      const tq = sport.rollTeamQuality(teamQuality, Math.random, c);
       setTeamQuality(tq);
       setCareer(c);
       setFeed(newFeed);
@@ -906,7 +908,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     consumedEvent.current = pendingEvent;
     const c: CareerState = JSON.parse(JSON.stringify(career));
     const { line, next } = answerSummerCard(c, sport, pendingEvent, idx, Math.random, talkDeckFilter(c, sport.hall));
-    const tq = next ? teamQuality : sport.rollTeamQuality(teamQuality, Math.random);
+    const tq = next ? teamQuality : sport.rollTeamQuality(teamQuality, Math.random, c);
     setTeamQuality(tq);
     setCareer(c);
     setDecisionOutcome(buildCareerDecisionOutcome({
@@ -940,7 +942,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     consumedEvent.current = pendingEvent;
     const c: CareerState = JSON.parse(JSON.stringify(career));
     const outcome = pendingEvent.options[idx].apply(c, Math.random);
-    const tq = sport.rollTeamQuality(teamQuality, Math.random);
+    const tq = sport.rollTeamQuality(teamQuality, Math.random, c);
     setTeamQuality(tq);
     setCareer(c);
     setDecisionOutcome(buildCareerDecisionOutcome({
@@ -1000,10 +1002,11 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   const requestTrade = (kind: 'trade' | 'release') => {
     const trade = sport.tradeRequest;
     if (!career || !trade || phase !== 'season' || teamQuality == null || practiceOpen || pendingSave.current
-      || marketRef.current || !trade.available(career) || trade.receipt(career) || tradeSaveChanged(true)) return;
+      || marketRef.current || !trade.available(career) || trade.receipt(career) || teamPlanSaveChanged(true)) return;
     const next: CareerState = JSON.parse(JSON.stringify(career));
     const { teamQuality: incoming, note, freeAgency } = trade.settle(next, kind);
-    const quality = incoming ?? teamQuality;
+    const quality = incoming ?? (freeAgency ? sport.rosterPriority?.cancel(next, teamQuality) ?? teamQuality : teamQuality);
+    if (incoming !== null) sport.rosterPriority?.cancel(next, null);
     next.headlines = pushHeadlines(next.headlines, [note]);
     setCareer(next);
     setTeamQuality(quality);
@@ -1015,6 +1018,18 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       setPhase('freeagency');
     }
     persist(next, freeAgency ? 'freeagency' : 'season', quality);
+  };
+
+  const requestRosterInvestment = () => {
+    const plan = sport.rosterPriority;
+    if (!career || !plan || phase !== 'season' || teamQuality == null || practiceOpen || pendingSave.current
+      || marketRef.current || teamPlanSaveChanged(true)) return;
+    const next: CareerState = JSON.parse(JSON.stringify(career));
+    const quality = plan.request(next, teamQuality);
+    if (quality == null) return;
+    setCareer(next);
+    setTeamQuality(quality);
+    persist(next, 'season', quality);
   };
 
   const signExt = () => {
@@ -1831,6 +1846,9 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   const place = career.summer ? summerPlace(career.summer) : null;
   const trade = sport.tradeRequest;
   const tradeReceipt = trade?.receipt(career);
+  const priority = sport.rosterPriority;
+  const priorityReceipt = priority?.receipt(career);
+  const rosterBoost = teamQuality == null ? 0 : priority?.boost(career, teamQuality) ?? 0;
 
   /* ------------------------------ season hub ------------------------------ */
   return withSaveStatus(
@@ -1982,8 +2000,18 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
               </USCareerActionConfirm>
             </div>
             {tradeReceipt && <p className="mt-1 text-xs font-semibold" role="status">{tradeReceipt}</p>}
-            {tradeSaveMoved && <p className="mt-1 text-xs text-muted-foreground" role="status">Your career changed in another tab. Reopen it before sending a trade request.</p>}
           </div>}
+          {rosterBoost > 0 && teamQuality != null && <div className="mt-2">
+            <USCareerActionConfirm action="rosterPriority" sport={sport.label} onConfirm={requestRosterInvestment}
+              description={`Bring roster quality from ${teamQuality} to ${teamQuality + rosterBoost} for this season. If you stay with this team, roster quality will be up to ${rosterBoost} points lower than it would have been next offseason.`}>
+              <button type="button" disabled={!!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
+                className="min-h-11 rounded-lg border border-border px-3 text-xs font-semibold disabled:opacity-50">Request roster investment</button>
+            </USCareerActionConfirm>
+          </div>}
+          {priorityReceipt && <p className="mt-2 text-xs font-semibold" role="status">
+            Roster quality rose from {priorityReceipt.before} to {priorityReceipt.before + priorityReceipt.boost}. Up to {priorityReceipt.boost} points less next offseason with this team.
+          </p>}
+          {tradeSaveMoved && <p className="mt-1 text-xs text-muted-foreground" role="status">Your career changed in another tab. Reopen it before making this decision.</p>}
           <UsCareerProgramme career={career} sport={sport.slug} onChange={next => {
             if (next === career || phase !== 'season') return;
             setCareer(next);

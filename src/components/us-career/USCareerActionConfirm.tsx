@@ -12,13 +12,14 @@ import {
 } from '@/components/ui/alert-dialog';
 
 type Sport = 'NFL' | 'NBA' | 'MLB' | 'NHL';
-type Action = 'retire' | 'restart' | 'retireCoach' | 'tradeRequest' | 'releaseRequest';
+type Action = 'retire' | 'restart' | 'retireCoach' | 'tradeRequest' | 'releaseRequest' | 'rosterPriority';
 
 interface Props {
   action: Action;
   sport: Sport;
   onConfirm: () => void;
   children: ReactElement;
+  description?: string;
   /** Round 1569 (the lead's ruling R3): the career being cleared is retired and has a Hall of Fame card. The
       card is drawn from this one save, so a restart takes it too, and the prompt says so. */
   hallCard?: boolean;
@@ -60,9 +61,15 @@ const COPY: Record<Action, (sport: Sport, hallCard: boolean, hallKept: boolean) 
     cancel: 'Keep playing',
     confirm: 'Send request',
   }),
+  rosterPriority: () => ({
+    title: 'Bring roster investment forward?',
+    description: 'Move some of next offseason’s roster investment into this season.',
+    cancel: 'Keep current plan',
+    confirm: 'Bring investment forward',
+  }),
 };
 
-export default function USCareerActionConfirm({ action, sport, onConfirm, children, hallCard = false, hallKept = false }: Props) {
+export default function USCareerActionConfirm({ action, sport, onConfirm, children, description, hallCard = false, hallKept = false }: Props) {
   const [open, setOpen] = useState(false);
   const acceptedRef = useRef(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
@@ -91,7 +98,7 @@ export default function USCareerActionConfirm({ action, sport, onConfirm, childr
       >
         <AlertDialogHeader>
           <AlertDialogTitle>{copy.title}</AlertDialogTitle>
-          <AlertDialogDescription>{copy.description}</AlertDialogDescription>
+          <AlertDialogDescription>{description ?? copy.description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel className="min-h-11 min-w-11">

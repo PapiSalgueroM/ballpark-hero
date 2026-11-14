@@ -3,7 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
-import { nbaEraTeamIds, simNbaSeason, type NbaCareerState } from '@/lib/nbaMyCareer';
+import { nbaEraTeamIds, nbaRosterPriorityBoost, nbaRollTeamQuality, requestNbaRosterPriority, simNbaSeason, type NbaCareerState } from '@/lib/nbaMyCareer';
 import { keyedRng } from '@/lib/keyedRng';
 import { summerCareerKey } from '@/lib/usCareerSummer';
 import { defaultAppearance } from '@/lib/soccerCareerAppearance';
@@ -206,5 +206,72 @@ describe('standing NBA trade request', () => {
       fireEvent.click(restored.getByRole('button', { name: 'Confirm signing' }));
       expect(read().c).toMatchObject({ team: target, salary: after.offers.at(-1).salary, contractYears: after.offers.at(-1).years });
     }
+  });
+
+  it('banks one roster priority against the same club and feeds the actual next season', () => {
+    const c = makeCareer();
+    const raw = install(c, 78);
+    const view = open();
+    fireEvent.click(view.getByRole('button', { name: 'Request roster investment' }));
+    expect(view.getByText(/78 to 81/)).toBeVisible();
+    fireEvent.click(view.getByRole('button', { name: 'Keep current plan' }));
+    expect(localStorage.getItem(sport.saveKey)).toBe(raw);
+    fireEvent.click(view.getByRole('button', { name: 'Request roster investment' }));
+    fireEvent.click(view.getByRole('button', { name: 'Bring investment forward' }));
+    const saved = read();
+    expect(saved).toMatchObject({ teamQuality: 81, c: {
+      team: c.team, salary: c.salary, earnings: c.earnings, seasons: c.seasons,
+      rosterPriority: { year: c.year, team: c.team, before: 78, boost: 3 },
+    } });
+    view.unmount();
+    const restored = open();
+    expect(restored.getByText(/Roster quality rose from 78 to 81/)).toBeVisible();
+    expect(restored.queryByRole('button', { name: 'Request roster investment' })).toBeNull();
+    const next = structuredClone(saved.c);
+    sport.campBattle(next, 81, () => 0.51);
+    const simulated = sport.simSeason(next, 81, () => 0.51, true).line;
+    vi.spyOn(Math, 'random').mockReturnValue(0.51);
+    fireEvent.click(restored.getByRole('button', { name: `Play the ${c.year} season` }));
+    expect(read().c.seasons.at(-1)).toEqual(simulated);
+    const ordinary = structuredClone(c);
+    sport.campBattle(ordinary, 78, () => 0.51);
+    const originalLine = sport.simSeason(ordinary, 78, () => 0.51, true).line;
+    expect([simulated.clubWins, simulated.ppg]).not.toEqual([originalLine.clubWins, originalLine.ppg]);
+  });
+
+  it('undoes exactly one quality investment at the next same club reset without changing its draw', () => {
+    const c = makeCareer();
+    expect(requestNbaRosterPriority(c, 78)).toBe(81);
+    expect(requestNbaRosterPriority(c, 81)).toBeNull();
+    sport.simSeason(c, 81, () => 0.51, true);
+    c.year++;
+    const rng = vi.fn(() => 0.75);
+    expect(nbaRollTeamQuality(81, rng, c)).toBe(nbaRollTeamQuality(78, () => 0.75));
+    expect(rng).toHaveBeenCalledTimes(1);
+    expect(c.rosterPriority).toBeUndefined();
+    expect(nbaRollTeamQuality(81, () => 0.75, c)).toBe(84);
+
+    expect(nbaRosterPriorityBoost(c, 94)).toBe(1);
+    expect(nbaRosterPriorityBoost(c, 95)).toBe(0);
+    expect(requestNbaRosterPriority(c, 64)).toBe(67);
+    c.year++;
+    expect(nbaRollTeamQuality(67, () => 0, c)).toBe(64);
+    const other = nbaEraTeamIds(c.eraId).find(team => team !== c.team)!;
+    c.team = other;
+    expect(nbaRosterPriorityBoost(c, 78)).toBe(0);
+  });
+
+  it('removes a preseason roster investment from the old club if a release opens its market', () => {
+    const c = makeCareer();
+    install(c, 78);
+    const view = open();
+    fireEvent.click(view.getByRole('button', { name: 'Request roster investment' }));
+    fireEvent.click(view.getByRole('button', { name: 'Bring investment forward' }));
+    fireEvent.click(view.getByRole('button', { name: 'Request a release' }));
+    fireEvent.click(view.getByRole('button', { name: 'Send request' }));
+    const released = read();
+    expect(released.c.rosterPriority).toBeUndefined();
+    expect(released.contractTalk.window.offers[0].quality).toBe(78);
+    expect(released.teamQuality).toBe(78);
   });
 });

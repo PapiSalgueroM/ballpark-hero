@@ -145,6 +145,7 @@ export interface NbaCareerState {
   summerSalt?: string;
   retirement?: import('./careerRetirement').RetirementBlock;
   tradeRequest?: { year: number; from: string; to: string | null; release?: 'granted' | 'declined' };
+  rosterPriority?: { year: number; team: string; before: number; boost: number };
   seasons: NbaSeasonLine[];
   rings: number;
   mvps: number;
@@ -495,11 +496,41 @@ export function buyNbaItem(c: NbaCareerState, itemId: string): { state: NbaCaree
   return { state: s, log };
 }
 
-export function nbaRollTeamQuality(prev: number | null, rng: () => number): number {
+export function nbaRollTeamQuality(prev: number | null, rng: () => number, career?: NbaCareerState): number {
   if (prev == null) return 70 + Math.floor(rng() * 20);
-  return Math.max(64, Math.min(95, Math.round(prev + (rng() * 12 - 6))));
+  const rolled = Math.round(prev + (rng() * 12 - 6));
+  const priority = career && nbaRosterPriority(career, career.year - 1, career.seasons.at(-1)?.team ?? '');
+  if (career && priority && prev === priority.before + priority.boost) {
+    delete career.rosterPriority;
+    return Math.max(64, Math.min(95, rolled - priority.boost));
+  }
+  return Math.max(64, Math.min(95, rolled));
 }
 
+export function nbaRosterPriority(c: NbaCareerState, year = c.year, team = c.team) {
+  const p = c.rosterPriority;
+  return p && p.year === year && p.team === team && Number.isInteger(p.before) && p.before >= 64
+    && Number.isInteger(p.boost) && p.boost >= 1 && p.boost <= 3 && p.before + p.boost <= 95 ? p : null;
+}
+
+export function nbaRosterPriorityBoost(c: NbaCareerState, quality: number): number {
+  if (c.seasons.at(-1)?.team !== c.team || !nbaEraTeamIds(c.eraId).includes(c.team) || c.retired || (c.suspendedSeasons ?? 0) || c.contractYears < 2
+    || isFarewellSeason(c.retirement, c.year) || nbaRosterPriority(c) || !Number.isInteger(quality) || quality < 64 || quality >= 95) return 0;
+  return Math.min(3, 95 - quality);
+}
+
+export function requestNbaRosterPriority(c: NbaCareerState, quality: number): number | null {
+  const boost = nbaRosterPriorityBoost(c, quality);
+  if (!boost) return null;
+  c.rosterPriority = { year: c.year, team: c.team, before: quality, boost };
+  return quality + boost;
+}
+
+export function clearNbaRosterPriority(c: NbaCareerState, quality: number | null): number | null {
+  const priority = nbaRosterPriority(c);
+  delete c.rosterPriority;
+  return priority && quality === priority.before + priority.boost ? priority.before : quality;
+}
 /* ─── Round 182: the rotation ───
    Same depth chart the NFL career got, in basketball's shape: the man
    ahead of you is modeled off the roster's quality, top-five picks open
