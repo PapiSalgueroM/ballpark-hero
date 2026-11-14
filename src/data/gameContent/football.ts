@@ -37,6 +37,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
             heading: "Using your two rerolls on a dud squad",
             items: [
               "Repeat until the roster is full. No name repeats, and you get 2 rerolls per run for dud squads.",
+              "If the archives fail, Try again keeps your draft picks. A reroll is spent when a draftable team lands.",
             ],
           },
         ],
