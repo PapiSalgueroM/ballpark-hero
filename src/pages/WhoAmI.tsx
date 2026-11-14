@@ -126,17 +126,18 @@ const WhoAmI = () => {
   // this only widens what you're ALLOWED to guess, not what the answer can be.
   /* Round 443: the guessed player's current row is fetched when the guess is
      made instead of being downloaded for all 9,000 current players at boot.
-     The ref, not the state, guards a second submit, because setChecking does
-     not reach this closure. A lookup that fails costs the player nothing: the
-     guess is refused with a line to try again rather than scored against a
-     club and a value nobody fetched. */
-  const checkingRef = useRef(false);
+     The request ref guards a second submit and lets Give Up discard a lookup
+     that could otherwise finish after the round. A lookup that fails costs
+     the player nothing: the guess is refused with a line to try again rather
+     than scored against a club and a value nobody fetched. */
+  const checkingRequest = useRef<symbol | null>(null);
   const [checking, setChecking] = useState(false);
   const [lookupFailed, setLookupFailed] = useState(false);
   const submitGuess = async (entity: PlayerEntity) => {
-    if (phase !== 'playing' || !data || !secret || checkingRef.current) return;
+    if (phase !== 'playing' || !data || !secret || checkingRequest.current) return;
     if (guessedPeople.has(entity.personKey ?? whoAmIPersonKey(entity.rawName || entity.name))) return;
-    checkingRef.current = true;
+    const request = Symbol();
+    checkingRequest.current = request;
     setChecking(true);
     setLookupFailed(false);
     /* Cleared here, not after the lookup: PlayerAutocomplete sets the box to
@@ -145,7 +146,8 @@ const WhoAmI = () => {
        an await flashes the list back open under the player. */
     setGuessInput('');
     const p = await whoAmIPlayerFromEntity(entity);
-    checkingRef.current = false;
+    if (checkingRequest.current !== request) return;
+    checkingRequest.current = null;
     setChecking(false);
     if (!p) {
       setLookupFailed(true);
@@ -166,6 +168,8 @@ const WhoAmI = () => {
   // revealCard with the answer) rather than a separate code path.
   const giveUp = () => {
     if (phase !== 'playing') return;
+    checkingRequest.current = null;
+    setChecking(false);
     setPhase('lost');
   };
 
