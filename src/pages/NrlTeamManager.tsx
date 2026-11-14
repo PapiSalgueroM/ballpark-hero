@@ -1933,6 +1933,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check Rating changes in Squad. Existing ratings carry into the next season.</li>
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
+              <li>If you accepted Board pathways, check Pathways run-in in Season review with four regular-season club matches left. It shows who can still reach four appearances.</li>
               <li>Change clubs between seasons from Season review.</li>
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>
               <li>Choose Rugby League World Cup beside Career saves to coach a national team through a separate 2026 tournament.</li>

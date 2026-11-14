@@ -57,6 +57,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Open Season review for your final ladder, finances, recorded scoring and finals scores. Stay with your club, move to a new club, or retire and keep your career record.',
       'After the Grand Final, open League recruitment in Season review to preview two-year deals at rival clubs. Enable it for that offseason if you want rivals to keep one eligible free-agent signing for a second year. Your current club and any club you join are excluded.',
       'Before playing Round 1, accept the optional Board pathways objective in Season review. Give three players aged 23 or under four regular-season appearances each to earn a club cash bonus.',
+      'With four regular-season club matches left, check Pathways run-in in Season review to see who can still reach four appearances. Byes do not count.',
       'Before Round 1 starts, check the Board recruitment brief in Recruitment. Sign an external player for the requested position next season and the club earns a simulated cash bonus after the regular season.',
       'Open Next season’s position depth in Recruitment to see who is signed at each position and who has completed training as cover. Choose a position to see the names and filter the market.',
       'Open Change clubs in Season review to see simulated openings and their board targets. You can apply to one club after the season or use the club picker for a direct move.',
