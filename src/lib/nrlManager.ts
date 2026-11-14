@@ -189,8 +189,13 @@ export interface NrlManagerState {
   judiciary?: NrlJudiciary;
 }
 type NrlHalftimeAction<Type> = { type: Type; year: number; round: number } & NrlHalftimeChoice;
+type NrlStarterSwap = {
+  type: 'swapStarters'; year: number; clubId: string; round: number;
+  fromRole: NrlRole; toRole: NrlRole; fromPlayerId: string; toPlayerId: string;
+};
 export type NrlAction =
   | { type: 'selectStarter'; role: NrlRole; playerId: string }
+  | NrlStarterSwap
   | { type: 'selectBench'; slot: number; playerId: string }
   | { type: 'setKicker'; playerId: string }
   | { type: 'setBackupKicker'; playerId: string | null; year: number; clubId: string; round: number }
@@ -463,6 +468,24 @@ export function nrlStarterOptions(state: NrlManagerState, role: NrlRole): NrlPla
   if (!state.injuryTracking || eligible.some(player => player.role === role)) return qualified;
   const current = eligible.find(player => player.id === state.lineup[role]);
   return qualified.length ? [...qualified, ...(current && !nrlCanPlayRole(current, role) ? [current] : [])] : eligible;
+}
+
+export function nrlStarterSwaps(state: NrlManagerState): NrlStarterSwap[] {
+  if (state.live || state.phase === 'complete') return [];
+  const unavailable = nrlUnavailable(state);
+  const players = new Map(state.squad.filter(player => !unavailable.has(player.id)).map(player => [player.id, player]));
+  const { lineup, year, clubId, round } = state;
+  const swaps: NrlStarterSwap[] = [];
+  NRL_ROLES.forEach((fromRole, index) => {
+    const from = players.get(lineup[fromRole]);
+    if (!from) return;
+    for (const toRole of NRL_ROLES.slice(index + 1)) {
+      const to = players.get(lineup[toRole]);
+      if (!to || from.id === to.id || !nrlCanPlayRole(from, toRole) || !nrlCanPlayRole(to, fromRole)) continue;
+      swaps.push({ type: 'swapStarters', year, clubId, round, fromRole, toRole, fromPlayerId: from.id, toPlayerId: to.id });
+    }
+  });
+  return swaps;
 }
 
 function captainFor(starters: readonly string[], captainId?: string, viceCaptainId?: string) {
@@ -1235,6 +1258,13 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
       // Releasing a trained starter can make their native role eligible for repair.
       return state.squad.some(player => player.id === previous && player.secondaryRole === action.role)
         ? repairMatchday(selected) : selected;
+    }
+    case 'swapStarters': {
+      const { year, clubId, round, fromRole, toRole, fromPlayerId, toPlayerId } = action;
+      if (state.year !== year || state.clubId !== clubId || state.round !== round
+        || !nrlStarterSwaps(state).some(swap => swap.fromRole === fromRole && swap.toRole === toRole
+          && swap.fromPlayerId === fromPlayerId && swap.toPlayerId === toPlayerId)) return state;
+      return { ...state, lineup: { ...state.lineup, [fromRole]: toPlayerId, [toRole]: fromPlayerId } };
     }
     case 'selectBench': {
       if (!state.bench || !integerIn(action.slot, 0, NRL_BENCH_SIZE - 1) || state.bench[action.slot] === action.playerId
