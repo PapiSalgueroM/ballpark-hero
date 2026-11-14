@@ -1,4 +1,12 @@
+## 2026-11-14: Soccer Career potential, Rugby League World Cup swaps and Footle saves
+
+- Soccer Career's build editor lets the player choose the starting growth ceiling, with the existing overall floor and maximum of 99. The creator preview and saved academy career use the same value.
+- Rugby League World Cup gives managers a choice of any of the six reserves and any starting slot. Out-of-position players use the existing rating penalty, and previous natural-role swaps still replay as saved.
+- Footle Daily refreshes newer progress from another tab before acting on a stale Give Up confirmation. A newer win or accepted guess stays in the save.
+
 ## 2026-11-14: Home keyboard search and management lineup choices
+
+[PR #934](https://github.com/PapiSalgueroM/ballpark-hero/pull/934) published exact main `2f9cc5f0730cd18607d80d8e3b2c9b1dc939db99`, deployment `8dffbb78-ab23-44b7-8d10-182633d5d796`. Seven live browser journeys, all 174 sitemap routes and both raw guides passed. IndexNow accepted the guides.
 
 - In Home search, Enter opens the first settled result and Down Arrow moves focus to it. Browser Back restores the search and the game link's focus.
 - NRL managers can end a pending selection promise in Contracts. The saved receipt keeps progress at the decision and the manager gives up the current season's renewal discount and promise allowance.
