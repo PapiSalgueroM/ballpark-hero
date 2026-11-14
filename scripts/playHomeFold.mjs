@@ -60,7 +60,7 @@ const say = (ok, what) => {
 };
 
 const FOLD_CONTROL = process.env.HOMEFOLD_CONTROL || '';
-/* Round 717's three: continuepush puts a tall box above the stage when saves
+/* Round 717's three: continuepush puts a tall box above Continue when saves
    are planted (only 6a goes red), continuegone deletes the Continue row as it
    appears (the second 6b goes red, and 6c with it, since the cards it reads
    are gone), favignored wipes the stored sport before the app reads it (only
@@ -388,7 +388,7 @@ console.log('5) the maker note lives on the About page, not on the home page');
   await ctx.close();
 }
 
-console.log('6) a returning player: saves bring a Continue row under the stage, and a sport pick leads the list');
+console.log('6) a returning player: saves bring a Continue row before the stage, and a sport pick leads the list');
 {
   /* The list of games and keys is read from the file the row reads, code
      only, so this plants exactly what the page looks for. */
@@ -414,12 +414,12 @@ console.log('6) a returning player: saves bring a Continue row under the stage, 
       if ((control === 'continuepush' && saves) || control === 'continuegone') {
         const mo = new MutationObserver(() => {
           if (control === 'continuepush') {
-            const stage = document.querySelector('[data-home-stage]');
-            if (stage && !document.querySelector('[data-control-push]')) {
+            const row = document.querySelector('[data-home-continue]');
+            if (row && !document.querySelector('[data-control-push]')) {
               const box = document.createElement('div');
               box.setAttribute('data-control-push', '');
               box.style.height = '240px';
-              stage.parentElement.insertBefore(box, stage);
+              row.parentElement.insertBefore(box, row);
             }
           } else {
             document.querySelector('[data-home-continue]')?.remove();
@@ -466,8 +466,9 @@ console.log('6) a returning player: saves bring a Continue row under the stage, 
       });
       return {
         first,
-        stageBottom: stage ? stage.getBoundingClientRect().bottom + window.scrollY : null,
+        stageTop: stage ? stage.getBoundingClientRect().top + window.scrollY : null,
         rowTop: row ? row.getBoundingClientRect().top + window.scrollY : null,
+        rowBottom: row ? row.getBoundingClientRect().bottom + window.scrollY : null,
         cards,
         chips,
         firstSport: document.querySelector('section[data-sport]')?.getAttribute('data-sport') ?? null,
@@ -484,9 +485,9 @@ console.log('6) a returning player: saves bring a Continue row under the stage, 
   say(!!fresh.first && !!planted.first && Math.abs(planted.first.top - fresh.first.top) <= 2 && planted.first.top <= FOLD_CEILING,
     `[6a] ${SAVES.length} planted saves leave the first tile where it was (fresh y=${Math.round(fresh.first?.top ?? -1)}, planted y=${Math.round(planted.first?.top ?? -1)}, ceiling ${FOLD_CEILING})`);
   say(fresh.rowTop === null, '[6b] a visitor with no saves gets no Continue row at all');
-  say(planted.rowTop !== null && planted.stageBottom !== null && planted.rowTop >= planted.stageBottom - 1
+  say(planted.rowBottom !== null && planted.stageTop !== null && planted.rowBottom <= planted.stageTop + 1
       && JSON.stringify(planted.cards.map(c => c.p)) === JSON.stringify(SAVES.map(s => s.path)),
-    `[6b] the row sits under the stage (stage ends y=${Math.round(planted.stageBottom ?? -1)}, row starts y=${Math.round(planted.rowTop ?? -1)}) with ${planted.cards.length} of ${SAVES.length} cards in list order`);
+    `[6b] the row sits before the stage (stage starts y=${Math.round(planted.stageTop ?? -1)}, row ends y=${Math.round(planted.rowBottom ?? -1)}) with ${planted.cards.length} of ${SAVES.length} cards in list order`);
   const lines = Object.entries(WANT_LINES).map(([p, want]) => ({ p, want, got: planted.cards.find(c => c.p === p)?.line ?? null }));
   say(lines.every(l => l.got === l.want), `[6c] the cards read the saves: ${lines.map(l => `${l.p} "${l.got}"`).join(', ')}`);
   const small = [...planted.cards.map(c => ({ what: c.p, h: c.h, w: c.w })), ...planted.chips.map(c => ({ what: `chip ${c.s}`, h: c.h, w: c.w }))]
