@@ -1169,6 +1169,22 @@ function Squad({ career, onAction, disabled }: {
       <p className="mt-1 text-sm text-muted-foreground">{career.openingRoster
         ? 'Side assignments and prop slots are editable game assignments. Choose a fit starter for each position.'
         : 'Players and ratings are fictional. Choose a fit starter for each position.'}</p>
+      {!career.legacySeason && <details className="group mt-3 rounded-lg border border-border bg-background px-3">
+        <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          Rating changes<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+        </summary>
+        <div className="pb-3 text-sm">
+          <p className="text-muted-foreground">Player ratings can rise or fall by 1 OVR at a time during the regular season. New seasons begin with the ratings players finished on.</p>
+          {career.ratingReview && <p className="mt-2 font-semibold">Round {career.ratingReview.round} review</p>}
+          {career.ratingReview?.changes.length ? (
+            <ul aria-label="Recent rating changes" className="mt-1 divide-y divide-border">
+              {career.ratingReview.changes.map(([id, delta]) => <li key={id} className="flex flex-wrap justify-between gap-x-3 py-1">
+                <span>{nameOf(id)}</span><span className="font-semibold tabular-nums">{delta > 0 ? '+' : ''}{delta} OVR</span>
+              </li>)}
+            </ul>
+          ) : <p className="mt-1 text-muted-foreground">No rating changes to show for your club.</p>}
+        </div>
+      </details>}
       {proposal && (
         <details className="group mt-3 rounded-lg border border-border bg-background px-3" data-nrl-fit-lineup>
           <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -1623,7 +1639,8 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>
-              <li>Set a development focus in Season review. It applies to returning players when you start the next year.</li>
+              <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check Rating changes in Squad. Existing ratings carry into the next season.</li>
+              <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
               <li>Change clubs between seasons from Season review.</li>
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>

@@ -359,6 +359,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         heading: "Playing seasons one tap at a time",
         items: [
           "Play each season with one tap: yards, touchdowns, awards, how far the team went.",
+          "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
           "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         ],
         subsections: [

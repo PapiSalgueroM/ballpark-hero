@@ -77,6 +77,7 @@ const NbaMyCareer = () => {
               'Create your player: name, one of 5 positions (PG, SG, SF, PF, C) and archetype, from Point God to Paint Beast.',
               'Pick your league first: today\'s NBA, or the 2003-04 throwback with the SuperSonics in Seattle and no Charlotte yet.',
               'Play each season for a per-game stat line driven by your rating, role, health and team quality: points, rebounds and assists, with your minutes, steals and blocks on the season card.',
+              'Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show how your rating changed.',
               'Up to three cards land every summer, one at a time: contracts, trade demands, surgeries, brand building. A card you just saw rests for a while (press moments follow your season, so those can come right back). A big season in an Olympic or World Cup summer brings a call from the national team first.',
               'Open the Bank when you like: savings that pays 2.5% a season, a market of five moving prices, a statement, the card school on the team plane and the shop.',
               'The News box carries the paper, your SocialGram and your draft class rival\'s card. The Trophy Case holds 26 badges, lit off the facts of your career.',

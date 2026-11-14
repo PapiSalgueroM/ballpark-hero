@@ -15,7 +15,7 @@ import {
   nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractCounteroffer, nrlContractOffer, nrlContractTermLimit,
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
   nrlConcessionsQuote, nrlConcessionsSpend,
-  nrlDevelopmentAssistantProgress, nrlDevelopmentPreview, nrlFinanceForecast,
+  nrlDevelopmentAffected, nrlDevelopmentAssistantProgress, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
   nrlLeagueRecruitmentPreview,
   nrlRecruitmentBrief, nrlRecruitmentPlan,
@@ -54,16 +54,16 @@ const coachLabels = { attack: 'Attack assistant', defense: 'Defence assistant', 
 const ticketLabels = { value: 'Value', standard: 'Standard', premium: 'Premium' };
 const ticketTiers = ['value', 'standard', 'premium'] as const;
 function coachEffect(role: NrlStaffRole, bonus = NRL_COACHING_BONUS) {
-  if (role === 'development') return `Up to ${NRL_DEVELOPMENT_ASSISTANT.players} returning players aged ${NRL_DEVELOPMENT_ASSISTANT.nextAge} or under next season can gain 1 OVR, up to their potential. Each needs ${NRL_DEVELOPMENT_ASSISTANT.appearances} regular-season appearances from the hire onward. A player can gain one extra point in total from this and Youth development.`;
+  if (role === 'development') return `Up to ${NRL_DEVELOPMENT_ASSISTANT.players} young players signed to return can gain 1 OVR during the season, up to their potential. Each needs ${NRL_DEVELOPMENT_ASSISTANT.appearances} regular-season appearances from the hire onward. A player can gain one extra point in total from this and Youth development.`;
   return role === 'attack' ? `+${bonus} attack rating with the Attack tactic.` : `+${bonus} defence rating with the Defence tactic.`;
 }
 
-function developmentSummary(focus: Exclude<NrlDevelopmentFocus, 'balanced'>, affected: number, preview: boolean) {
-  if (!affected) return preview ? 'No returning players would get an extra point.' : 'No ratings changed from this focus.';
+function developmentSummary(focus: Exclude<NrlDevelopmentFocus, 'balanced'>, affected: number) {
+  if (!affected) return 'No rating effects recorded yet.';
   const players = `${affected} ${affected === 1 ? 'player' : 'players'}`;
   return focus === 'youth'
-    ? `${players} ${preview ? 'will gain' : 'gained'} 1 extra OVR.`
-    : `${players} ${preview ? 'will keep' : 'kept'} 1 OVR they would have lost.`;
+    ? `${players} gained 1 extra OVR.`
+    : `${players} kept 1 OVR they would have lost.`;
 }
 
 function OfferForm({ career, entry, onAction, onClose, disabled }: {
@@ -987,7 +987,8 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
                     {progress.map(player => (
                       <li key={player.id} className="flex flex-wrap justify-between gap-x-3 py-1.5">
                         <span>{player.name}</span>
-                        <span>{player.apps} {player.apps === 1 ? 'appearance' : 'appearances'}</span>
+                        <span>{player.apps} {player.apps === 1 ? 'appearance' : 'appearances'}
+                          {career.ratingReview?.assistant?.includes(player.id) ? ' · +1 OVR earned' : ''}</span>
                       </li>
                     ))}
                   </ul>
@@ -1296,23 +1297,25 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
 
 function DevelopmentFocus({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const focus = career.developmentFocus ?? 'balanced';
+  const adjusted = nrlDevelopmentAffected(career);
+  const locked = adjusted > 0 || career.season.phase !== 'regular';
   const effect = focus === 'balanced' ? 'Players develop at their usual age-based rate.'
-    : focus === 'youth' ? 'Players aged 24 or younger next year can gain 1 extra OVR up to their potential.'
-      : 'Players aged 30 or older next year can keep 1 OVR they would otherwise lose.';
+    : focus === 'youth' ? 'At your 21st club match, players aged 24 or younger next year can gain 1 extra OVR up to their potential.'
+      : 'Players aged 30 or older next year can avoid one scheduled 1 OVR drop during the season.';
   return (
     <div className="mt-4 rounded-xl border border-border bg-background p-3">
       <label htmlFor="nrl-development-focus" className="block text-sm font-bold">Development focus</label>
-      <select id="nrl-development-focus" className={`${control} mt-2 sm:max-w-xs`} value={focus} disabled={disabled}
+      <select id="nrl-development-focus" className={`${control} mt-2 sm:max-w-xs`} value={focus} disabled={disabled || locked}
         onChange={event => onAction({ type: 'setDevelopmentFocus', focus: event.target.value as NrlDevelopmentFocus })}>
         <option value="balanced">{developmentLabels.balanced}</option>
         <option value="youth">{developmentLabels.youth}</option>
         <option value="veterans">{developmentLabels.veterans}</option>
       </select>
-      <p className="mt-2 text-sm text-muted-foreground">Applies when next season starts, for current players signed to return.</p>
+      <p className="mt-2 text-sm text-muted-foreground">Applies during the regular season to current players signed to return. The choice locks once it affects a player.</p>
       <p className="mt-1 text-sm text-muted-foreground">{effect}</p>
       {focus !== 'balanced' && (
         <p className="mt-1 text-sm font-medium" role="status" data-nrl-development-preview>
-          {developmentSummary(focus, nrlDevelopmentPreview(career), true)}
+          {developmentSummary(focus, adjusted)}
         </p>
       )}
     </div>
@@ -1938,7 +1941,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 </p>}
                 <ScoringHistory year={record.year} leaders={leaders} />
                 {record.development && <p className="text-sm text-muted-foreground" data-nrl-development-receipt>
-                  {developmentLabels[record.development.focus]} · {developmentSummary(record.development.focus, record.development.affected, false)}
+                  {developmentLabels[record.development.focus]} · {developmentSummary(record.development.focus, record.development.affected)}
                 </p>}
                 {record.reserveGrade && <p className="text-sm text-muted-foreground">
                   Reserve-grade development · {record.reserveGrade.playerName} · {record.reserveGrade.ratingGain

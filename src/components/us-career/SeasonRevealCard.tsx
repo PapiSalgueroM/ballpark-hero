@@ -12,6 +12,7 @@
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
 import type { SeasonReveal } from '@/lib/usCareerReveal';
+import SeasonRating from '@/components/us-career/SeasonRating';
 import supportMotion from './CareerSupportMotion.module.css';
 
 export function SeasonRevealCard({ reveal, onContinue }: { reveal: SeasonReveal; onContinue: () => void }) {
@@ -49,6 +50,7 @@ export function SeasonRevealCard({ reveal, onContinue }: { reveal: SeasonReveal;
           {reveal.statLine}
         </p>
       )}
+      <SeasonRating rating={reveal.seasonRating} />
       {reveal.lines.length > 0 && (
         <div className="mt-3 space-y-1 text-left">
           {reveal.lines.map((l, i) => (

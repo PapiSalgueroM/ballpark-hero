@@ -57,6 +57,7 @@ import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, LEGACY_GAME_RULES, type LegacyRead, type LegacyStandout, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
+import { stageUsSeasonRating, type UsSeasonRating } from './usInSeasonRating';
 import { NBA_LEGACY_V2, NBA_LEGACY_WEIGHTS } from './nbaCareerHallRules';
 export { NBA_LEGACY_NEW_LINE_SCALE, NBA_LEGACY_WEIGHTS } from './nbaCareerHallRules';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
@@ -92,6 +93,7 @@ export const NBA_POS_CLIFF_AGE: Record<NbaCareerPos, number> = {
 };
 
 export interface NbaSeasonLine {
+  seasonRating?: UsSeasonRating;
   year: number;
   team: string;
   age: number;
@@ -741,7 +743,7 @@ export const NBA_RECORD_BANDS: Record<string, readonly [number, number]> = {
 };
 
 export function simNbaSeason(
-  c: NbaCareerState, teamQuality: number, rng: () => number,
+  c: NbaCareerState, teamQuality: number, rng: () => number, inSeasonRating = false,
 ): { line: NbaSeasonLine; notes: string[] } {
   const notes: string[] = [];
   /* Round 1103: the All-Star vote is in February, so it reads the fanbase he tipped off with, before a title's
@@ -750,7 +752,10 @@ export function simNbaSeason(
   const { games, note } = gamesFor(c, rng);
   if (note) { notes.push(`🚑 ${note}`); c.health -= 7; }
   const swing = seasonSwing(rng, c.age);
-  const form = c.ovr + moraleForm('nba', c.morale) + (teamQuality - 78) / 8
+  const L = nbaSeasonGames(c.year);
+  const seasonRating = inSeasonRating ? stageUsSeasonRating('nba', c, L, nextNbaRating) : undefined;
+  const seasonOverall = seasonRating?.average ?? c.ovr;
+  const form = seasonOverall + moraleForm('nba', c.morale) + (teamQuality - 78) / 8
     // Round 98: the season itself gets a say, so career years and lost
     // years both exist. Averages out to zero across a career.
     + swing;
@@ -769,7 +774,6 @@ export function simNbaSeason(
      league's level that year), and a season now records its minutes, steals and blocks too. */
   const role: 'starter' | 'backup' = c.role === 'backup' ? 'backup' : 'starter';
   const seasonsPlayed = c.seasons.length;
-  const L = nbaSeasonGames(c.year);
   const stat = nbaStatLineFor({ form, pos: c.pos, archetype: a, role, seasonsPlayed, year: c.year }, rng);
   const { ppg, rpg, apg } = stat;
   if (c.role === 'backup') notes.push('🪑 Second unit season: your numbers come in bench minutes.');
@@ -778,6 +782,7 @@ export function simNbaSeason(
     ppg, rpg, apg, awards: [], teamResult: '', salary: c.salary,
     mpg: stat.mpg, spg: stat.spg, bpg: stat.bpg,
   };
+  if (seasonRating) line.seasonRating = seasonRating;
   /* The season card's stat line stays three parts (the hub tile has room for three), so the rest is said here. */
   notes.push(`📊 ${stat.mpg.toFixed(1)} mpg, ${stat.spg.toFixed(1)} spg, ${stat.bpg.toFixed(1)} bpg.`);
   // Round 123: computed up here rather than down with the rest of the awards
@@ -787,7 +792,7 @@ export function simNbaSeason(
      season is measured against 2004's league. The saved and printed line stays raw. */
   const statScore = nbaSeasonScore(nbaEraNeutral(line, c.year));
 
-  const strength = teamQuality + (c.ovr - 78) * 0.5;
+  const strength = teamQuality + (seasonOverall - 78) * 0.5;
   const playoffOdds = Math.max(0.05, Math.min(0.92, (strength - 66) / 28));
   let result: string = NBA_MISSED_PLAYOFFS;
   let poStage = -1;
@@ -907,22 +912,28 @@ export function simNbaSeason(
   return { line, notes };
 }
 
-export function nbaProgress(c: NbaCareerState, rng: () => number): string[] {
-  const notes: string[] = [];
-  const before = c.ovr;
+function nextNbaRating(c: NbaCareerState, rng: () => number): number {
   // Round 57: progression slowed to match the owner's note that careers peak
   // far too fast. Growth is 1-2 a year, and the last points above 84 are the
   // hardest in the game. Late bloomers still exist, they just take longer.
   if (c.age <= 25 && c.ovr < c.pot) {
     const drag = c.ovr >= 92 ? 0.25 : c.ovr >= 88 ? 0.5 : c.ovr >= 84 ? 0.75 : 1;
     const raw = 1 + Math.floor(rng() * 2);
-    c.ovr = Math.min(c.pot, c.ovr + Math.max(c.ovr >= 88 ? 0 : 1, Math.round(raw * drag)));
+    return Math.min(c.pot, c.ovr + Math.max(c.ovr >= 88 ? 0 : 1, Math.round(raw * drag)));
   } else if (c.age <= 28 && c.ovr < c.pot && rng() < 0.45) {
-    c.ovr = Math.min(c.pot, c.ovr + 1);
+    return Math.min(c.pot, c.ovr + 1);
   } else if (c.age >= (NBA_POS_CLIFF_AGE[c.pos] ?? 32)) {
     const wear = (100 - c.health) / 40;
-    c.ovr = Math.max(62, Math.round(c.ovr - (1 + rng() * 2 + wear) * (c.age >= 36 ? 1.6 : 1)));
+    return Math.max(62, Math.round(c.ovr - (1 + rng() * 2 + wear) * (c.age >= 36 ? 1.6 : 1)));
   }
+  return c.ovr;
+}
+
+export function nbaProgress(c: NbaCareerState, rng: () => number, seasonRating?: UsSeasonRating): string[] {
+  const notes: string[] = [];
+  const before = c.ovr;
+  const legacyRating = nextNbaRating(c, rng);
+  c.ovr = seasonRating?.finish ?? legacyRating;
   if (c.ovr - before >= 4) notes.push(`📈 Leap season: ${before} to ${c.ovr}.`);
   if (before - c.ovr >= 3) notes.push(`📉 Father Time checks in: ${before} to ${c.ovr}.`);
   if (c.age >= 31) c.health = Math.max(30, c.health - 3);
@@ -990,7 +1001,7 @@ export function nbaProgress(c: NbaCareerState, rng: () => number): string[] {
      and it is told whether the career goes on (the same nbaShouldRetire the
      board asks right after this returns), so a player who retires this
      summer is never sent a text about next season. */
-  const support = applyUsCareerAnnualBenefits(c, 'nba', c.age - 1);
+  const support = applyUsCareerAnnualBenefits(c, 'nba', c.age - 1, seasonRating?.support);
   if (support) notes.push(support);
   receiveNbaInboxTexts(c, !nbaShouldRetire(c));
   return notes;

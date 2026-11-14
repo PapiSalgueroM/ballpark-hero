@@ -56,6 +56,7 @@ import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
+import { stageUsSeasonRating, type UsSeasonRating } from './usInSeasonRating';
 
 export type CareerPos = 'QB' | 'RB' | 'WR' | 'TE' | 'LB' | 'CB' | 'EDGE' | 'K';
 
@@ -206,6 +207,7 @@ export const POS_CLIFF_AGE: Record<CareerPos, number> = {
 };
 
 export interface SeasonLine {
+  seasonRating?: UsSeasonRating;
   year: number;
   team: string;
   age: number;
@@ -527,7 +529,7 @@ export const NFL_MISSED_PLAYOFFS = 'Missed the playoffs';
 export const NFL_PLAYOFF_RESULTS = ['Lost in the Wild Card round', 'Lost in the Divisional round', 'Lost the Conference Championship', 'Lost the Super Bowl', 'WON THE SUPER BOWL'] as const;
 
 export function simSeason(
-  c: CareerState, teamQuality: number, rng: () => number,
+  c: CareerState, teamQuality: number, rng: () => number, inSeasonRating = false,
 ): { line: SeasonLine; notes: string[] } {
   const notes: string[] = [];
   let { games, injuryNote } = seasonGames(c, rng);
@@ -542,7 +544,9 @@ export function simSeason(
     notes.push(`🪑 A backup season: ${games} game${games === 1 ? '' : 's'} of real action.`);
   }
   const swing = seasonSwing(rng, c.age);
-  const form = c.ovr + moraleForm('nfl', c.morale) + (teamQuality - 78) / 5
+  const seasonRating = inSeasonRating ? stageUsSeasonRating('nfl', c, nflSeasonLength(c.year), nextNflRating) : undefined;
+  const seasonOverall = seasonRating?.average ?? c.ovr;
+  const form = seasonOverall + moraleForm('nfl', c.morale) + (teamQuality - 78) / 5
     // Round 98: the season itself gets a say, so career years and lost
     // years both exist. Averages out to zero across a career.
     + swing;
@@ -550,10 +554,11 @@ export function simSeason(
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games,
     awards: [], teamResult: '', salary: c.salary,
   };
+  if (seasonRating) line.seasonRating = seasonRating;
   Object.assign(line, nflStatLineFor({ form, pos: c.pos, games }, rng));
 
   // team result
-  const strength = teamQuality + (c.ovr - 74) * (c.pos === 'QB' ? 0.55 : c.pos === 'K' ? 0.08 : DEFENSIVE_POS.includes(c.pos) ? 0.22 : 0.25);
+  const strength = teamQuality + (seasonOverall - 74) * (c.pos === 'QB' ? 0.55 : c.pos === 'K' ? 0.08 : DEFENSIVE_POS.includes(c.pos) ? 0.22 : 0.25);
   const playoffOdds = Math.max(0.04, Math.min(0.92, (strength - 66) / 26));
   let result: string = NFL_MISSED_PLAYOFFS;
   let poStage = -1;
@@ -873,10 +878,7 @@ export function nflRivalSeason(year: number, mine: { pos: CareerPos; firstTeam: 
   };
 }
 
-/** End-of-season progression: growth to potential, decline with age and wear. */
-export function progress(c: CareerState, rng: () => number): string[] {
-  const notes: string[] = [];
-  const before = c.ovr;
+function nextNflRating(c: CareerState, rng: () => number): number {
   // Round 56: progression slowed to match the owner's Soccer Career note
   // ("progression is way too quick"). Growth is 1-2 a year instead of 2-4, and
   // an elite ceiling means the last few rating points are the hardest to get.
@@ -884,15 +886,23 @@ export function progress(c: CareerState, rng: () => number): string[] {
     const ceilingDrag = c.ovr >= 92 ? 0.25 : c.ovr >= 88 ? 0.5 : c.ovr >= 84 ? 0.75 : 1;
     const raw = 1 + Math.floor(rng() * 2);
     const up = Math.max(c.ovr >= 88 ? 0 : 1, Math.round(raw * ceilingDrag));
-    c.ovr = Math.min(c.pot, c.ovr + up);
+    return Math.min(c.pot, c.ovr + up);
   } else if (c.age <= 29 && c.ovr < c.pot && rng() < 0.45) {
     // Late bloomers still exist, they just take longer to arrive.
-    c.ovr = Math.min(c.pot, c.ovr + 1);
+    return Math.min(c.pot, c.ovr + 1);
   } else if (c.age >= (POS_CLIFF_AGE[c.pos] ?? 31)) {
     const wear = (100 - c.health) / 40;
     const cliff = c.pos === 'RB' ? 1.6 : c.pos === 'K' ? 0.4 : 1;
-    c.ovr = Math.max(60, Math.round(c.ovr - (1 + rng() * 2 + wear) * cliff));
+    return Math.max(60, Math.round(c.ovr - (1 + rng() * 2 + wear) * cliff));
   }
+  return c.ovr;
+}
+
+export function progress(c: CareerState, rng: () => number, seasonRating?: UsSeasonRating): string[] {
+  const notes: string[] = [];
+  const before = c.ovr;
+  const legacyRating = nextNflRating(c, rng);
+  c.ovr = seasonRating?.finish ?? legacyRating;
   if (c.ovr - before >= 4) notes.push(`📈 Leap year: ${before} to ${c.ovr}.`);
   if (before - c.ovr >= 3) notes.push(`📉 The dropoff is real: ${before} to ${c.ovr}.`);
   if (c.age >= 30) c.health = Math.max(30, c.health - (c.pos === 'K' ? 1 : 3));
@@ -961,7 +971,7 @@ export function progress(c: CareerState, rng: () => number): string[] {
      stream, never this season's rng, and it is told whether the career goes
      on (the same shouldRetire the board asks right after this returns), so a
      player who retires this summer is never sent a text about next season. */
-  const support = applyUsCareerAnnualBenefits(c, 'nfl', c.age - 1);
+  const support = applyUsCareerAnnualBenefits(c, 'nfl', c.age - 1, seasonRating?.support);
   if (support) notes.push(support);
   receiveNflInboxTexts(c, !shouldRetire(c));
   return notes;

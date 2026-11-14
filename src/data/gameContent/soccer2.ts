@@ -1805,6 +1805,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Advancing seasons through the training ground",
         items: [
           "Advance season by season through simulated stats, newspaper headlines, random events, and decisions.",
+          "In senior seasons, OVR can rise or fall as the season plays out. For example, a young starter can improve by midseason, and an older player can lose pace later in the year. Next Season simulates the year in one go. Season Summary shows the OVR at each checkpoint, and the final OVR carries forward.",
           "Most summers open with one card about your position or your career, before the rest of the news between seasons. Training can trade one skill for another next season, with gains stopping at your ceiling.",
           "Want to see it happen? The 📺 Week by week button plays the same season match by match, with your rating every game and the league table after every matchday, then hands you back to the newspaper. Its ? button has the rules and worked examples.",
           "Up to three times a season the clock stops and the moment is yours to play on your training ground board (look for 🎯 on the fixtures): a YOUR CALL decides how that match went, with the return game taking the other side so your final table and season totals never move, and a RECREATE replays what the record says you did, for stars that bank into next season's growth.",
@@ -1835,7 +1836,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "How stats grow through your prime",
         items: [
-          "Stats grow slowly and honestly: 1 to 3 points a year through the academy and your prime, less once you pass 86, and barely at all above 90. Reaching world class is a decade of work, not three good seasons.",
+          "Attributes usually grow by a few points across a season in your academy years and prime. Growth slows past 86 and is rare above 90. After your prime, some attributes can fall during a season.",
           "Growth fades once your hidden prime type (early, normal, late, or extended) ends, with decline turning brutal from 38.",
         ],
       },

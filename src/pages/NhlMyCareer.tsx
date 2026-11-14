@@ -37,6 +37,7 @@ const NhlMyCareer = () => {
               'Create your player: name, one of 5 positions (C, LW, RW, D, G) and archetype.',
               'Pick your league first: today\'s NHL, or the 2006-07 throwback with the Thrashers in Atlanta and the Coyotes in Phoenix.',
               'Play each season for a realistic stat line driven by rating, health and team quality.',
+              'Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show how your rating changed.',
               'Up to three decisions land every offseason, one card at a time: contracts, trades, surgeries, fame. A card you just saw rests for a while (press moments follow your season, so those can come right back).',
               'Open the Bank when you like: savings that pays 2.5% a season, a market of five moving prices, a statement, the card school at the back of the plane and the shop.',
               'The News box carries the paper, your SocialGram and your draft class rival\'s card. The Trophy Case holds 23 badges, lit off the facts of your career.',

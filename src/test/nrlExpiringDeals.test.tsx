@@ -332,7 +332,7 @@ describe('NRL season review for expiring deals', () => {
       fireEvent.click(screen.getByText('Change clubs for 2027'));
       expect(chooser().getByRole('heading', { name: 'Suggested openings' })).toBeVisible();
       expect(chooser().getByText(/Simulated suggestions based on/)).toBeVisible();
-      expect(chooser().getByText(/Ladder place 8/)).toBeVisible();
+      expect(chooser().getByText(/Ladder place 7/)).toBeVisible();
       fireEvent.click(chooser().getByRole('button', { name: 'Consider Perth Bears' }));
       expect(chooser().getByLabelText('Club to manage')).toHaveValue('bears');
       expect(chooser().getByLabelText('Club to manage')).toHaveFocus();

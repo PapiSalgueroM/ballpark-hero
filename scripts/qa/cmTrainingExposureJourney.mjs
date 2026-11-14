@@ -4,7 +4,7 @@ const LIGHT = { intensity: 'light', focus: 'firstTeam' };
 const DOUBLE = { intensity: 'double', focus: 'youth' };
 const copy = value => JSON.parse(JSON.stringify(value));
 const countsOf = player => player.trainingExposure?.counts;
-const caption = (weeks, rate) => weeks + ' recorded week' + (weeks === 1 ? '' : 's') + ' · summer mix ' + rate.toFixed(2) + 'x';
+const caption = (weeks, rate) => weeks + ' recorded week' + (weeks === 1 ? '' : 's') + ' · training mix ' + rate.toFixed(2) + 'x';
 
 // Called by the shared producer after its real Node storage host and bundled engine are available.
 export function createCmTrainingFixture({ engine: cm, fence }) {
@@ -89,7 +89,7 @@ export async function runCmTraining({ page, width, base, fixture, photo, tap, go
   await page.waitForFunction(key => JSON.parse(localStorage.getItem(key)).training.focus === 'youth', key);
   const switched = await read();
   assert.deepEqual(switched.training, DOUBLE);
-  assert.deepEqual({ ...switched, training: before.training }, before, 'CM_TRAINING_APP_PLAN_DOES_NOT_REWRITE_HISTORY');
+  assert.deepEqual({ ...switched, training: before.training }, { ...before, inSeasonRatings: true }, 'CM_TRAINING_APP_PLAN_DOES_NOT_REWRITE_HISTORY');
   assert.equal(await waitCaption(expected.priorWeeks, oldRate), initialCaption);
   await tap(page.getByRole('button', { name: 'Club home', exact: true }));
   await tap(page.locator('[data-cm-way="quick"]'));

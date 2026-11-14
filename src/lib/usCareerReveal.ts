@@ -33,6 +33,8 @@
    persisted, so a reload mid-curtain simply lands on the same screens the
    save always had, the exact precedent the free agency window set. */
 
+import type { UsSeasonRating } from './usInSeasonRating';
+
 /** How the big result line should carry itself. */
 export type RevealResultTone = 'title' | 'out' | 'banned';
 
@@ -45,6 +47,7 @@ export interface RevealLine {
 }
 
 export interface SeasonReveal {
+  seasonRating?: UsSeasonRating;
   /** 'The 2029 season' */
   header: string;
   /** 'Dallas · age 24 · QB', built by the board from words it already shows */
@@ -80,6 +83,7 @@ export function toneOfLine(text: string): RevealLineTone {
 }
 
 export interface RevealBuildArgs {
+  seasonRating?: UsSeasonRating;
   year: number;
   /** e.g. 'Dallas · age 24 · QB' */
   subHeader: string;
@@ -144,6 +148,7 @@ export function buildSeasonReveal(a: RevealBuildArgs): SeasonReveal {
     ...a.progressNotes,
   ];
   return {
+    ...(a.seasonRating ? { seasonRating: a.seasonRating } : {}),
     header: `The ${a.year} season`,
     subHeader: a.subHeader,
     result: banned ? 'Season served on the suspended list' : a.teamResult,

@@ -1030,11 +1030,11 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
   }
 }
 
-export function simulateNrlSeasonWithoutManager(year: number, seed: number, strengths: ReadonlyMap<string, number>) {
+export function simulateNrlSeasonWithoutManager(year: number, seed: number, strengthsForRound: (round: number) => ReadonlyMap<string, number>) {
   // No club uses managed tactics, fatigue, injuries or player attribution.
   let season: NrlManagerState = { ...createNrlSeason(nrlSeasonPlan(year).clubs[0].id, seed, year), clubId: '', squad: [] };
   for (let round = 1; round <= lastRound(year); round++) {
-    season = advanceRound(season, strengths, {});
+    season = advanceRound(season, strengthsForRound(round), {});
   }
   return season;
 }

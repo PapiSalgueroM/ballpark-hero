@@ -16,5 +16,5 @@ import { UsSeasonCentreHost } from '@/components/us-career/season/UsSeasonCentre
 export const FIRST_ROUND_END = MLB_CAREER_SPORT.firstRoundEnd;
 
 export default function MlbMyCareerBoard() {
-  return <UsSeasonCentreHost sport={MLB_CAREER_SPORT}><UsCareerBoard sport={MLB_CAREER_SPORT} /></UsSeasonCentreHost>;
+  return <UsSeasonCentreHost sport={MLB_CAREER_SPORT}><UsCareerBoard sport={MLB_CAREER_SPORT} inSeasonRating /></UsSeasonCentreHost>;
 }

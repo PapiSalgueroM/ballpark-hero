@@ -149,7 +149,7 @@ export interface UsCareerStart {
   mode: 'prospect' | 'draft';
 }
 
-export default function UsCareerBoard({ sport, entry }: { sport: UsCareerSport; entry?: UsCareerStart }) {
+export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: { sport: UsCareerSport; entry?: UsCareerStart; inSeasonRating?: boolean }) {
   const pendingSave = useRef<{ key: string; value: string | null } | null>(null);
   const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);
   const saveFailed = saveFailure !== null;
@@ -763,10 +763,10 @@ export default function UsCareerBoard({ sport, entry }: { sport: UsCareerSport; 
     /* Round 182: every season starts with a camp, and camps have losers. */
     const campNote = sport.campBattle(c, teamQuality, Math.random);
     const programmePreparation = prepareUsCareerProgramme(c, sport.slug);
-    const { line, notes } = sport.simSeason(c, teamQuality, Math.random);
+    const { line, notes } = sport.simSeason(c, teamQuality, Math.random, inSeasonRating);
     playedRef.current = c;
     restoreUsCareerProgramme(c, programmePreparation);
-    const progressNotes = sport.progress(c, Math.random);
+    const progressNotes = sport.progress(c, Math.random, line.seasonRating);
     settleUsCareerProgramme(c, line, sport.slug, programmePreparation);
     /* Round 469: the paper writes the season up, position aware, and the
        lines stay on the save so the News screen survives a reload. */
@@ -781,6 +781,7 @@ export default function UsCareerBoard({ sport, entry }: { sport: UsCareerSport; 
       year: line.year,
       subHeader: `${sport.teamLabelOf(line.team, c.eraId)} · age ${line.age} · ${c.pos}`,
       teamResult: line.teamResult, statLine: statLine(line, c.pos),
+      seasonRating: line.seasonRating,
       /* Round 1039: the last season of an announced farewell says so. */
       campNote, notes: isFarewellSeason(c.retirement, line.year) ? ['Farewell season', ...notes] : notes,
       progressNotes: intlCurtain ? [...progressNotes, intlCurtain] : progressNotes,

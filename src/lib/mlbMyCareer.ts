@@ -51,6 +51,7 @@ import { bankUsCareerFee, usCareerSkillSummer } from './usCareerAnnualBenefits';
 import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
+import { stageUsSeasonRating, type UsSeasonRating } from './usInSeasonRating';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -149,6 +150,7 @@ export const MLB_ARCHETYPES: Record<MlbCareerPos, MlbArchetype[]> = {
 };
 
 export interface MlbSeasonLine {
+  seasonRating?: UsSeasonRating;
   year: number;
   team: string;
   age: number;
@@ -513,7 +515,7 @@ export function mlbPlayoffResults(year: number): string[] {
 }
 
 export function simMlbSeason(
-  c: MlbCareerState, teamQuality: number, rng: () => number,
+  c: MlbCareerState, teamQuality: number, rng: () => number, inSeasonRating = false,
 ): { line: MlbSeasonLine; notes: string[] } {
   const notes: string[] = [];
   /* Round 1226: how many games his club's season holds comes from the sourced
@@ -549,7 +551,9 @@ export function simMlbSeason(
     }
   }
   const swing = seasonSwing(rng, c.age);
-  const form = c.ovr + moraleForm('mlb', c.morale) + (teamQuality - 78) / 10
+  const seasonRating = inSeasonRating ? stageUsSeasonRating('mlb', c, slate, nextMlbRating) : undefined;
+  const seasonOverall = seasonRating?.average ?? c.ovr;
+  const form = seasonOverall + moraleForm('mlb', c.morale) + (teamQuality - 78) / 10
     // Round 98: the season itself gets a say, so career years and lost
     // years both exist. Averages out to zero across a career.
     + swing;
@@ -563,8 +567,9 @@ export function simMlbSeason(
   const prof = MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF;
   Object.assign(full, mlbStatLineFor({ form, pos: c.pos, kind: c.archetype.id, games: fullGames }, rng));
   const line = mlbLineOnSlate(full, work);
+  if (seasonRating) line.seasonRating = seasonRating;
 
-  const strength = teamQuality + (c.ovr - 76) * 0.35;
+  const strength = teamQuality + (seasonOverall - 76) * 0.35;
   const playoffOdds = Math.max(0.05, Math.min(0.85, (strength - 68) / 30));
   let result: string = MLB_MISSED_PLAYOFFS;
   let poStage = -1;
@@ -835,21 +840,27 @@ export function mlbRivalSeason(year: number, mine: { pos: MlbCareerPos; kind: st
   };
 }
 
-export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {
-  const notes: string[] = [];
-  const before = c.ovr;
+function nextMlbRating(c: MlbCareerState, rng: () => number): number {
   // Round 58: progression slowed, and the fall now starts at the age this
   // position actually falls apart. Catchers go early, designated hitters last.
   if (c.age <= 26 && c.ovr < c.pot) {
     const drag = c.ovr >= 92 ? 0.25 : c.ovr >= 88 ? 0.5 : c.ovr >= 84 ? 0.75 : 1;
     const raw = 1 + Math.floor(rng() * 2);
-    c.ovr = Math.min(c.pot, c.ovr + Math.max(c.ovr >= 88 ? 0 : 1, Math.round(raw * drag)));
+    return Math.min(c.pot, c.ovr + Math.max(c.ovr >= 88 ? 0 : 1, Math.round(raw * drag)));
   } else if (c.age <= 29 && c.ovr < c.pot && rng() < 0.45) {
-    c.ovr = Math.min(c.pot, c.ovr + 1);
+    return Math.min(c.pot, c.ovr + 1);
   } else if (c.age >= ((MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF).cliff)) {
     const wear = (100 - c.health) / 40;
-    c.ovr = Math.max(60, Math.round(c.ovr - (1 + rng() * 2 + wear) * (c.age >= 37 ? 1.5 : 1)));
+    return Math.max(60, Math.round(c.ovr - (1 + rng() * 2 + wear) * (c.age >= 37 ? 1.5 : 1)));
   }
+  return c.ovr;
+}
+
+export function mlbProgress(c: MlbCareerState, rng: () => number, seasonRating?: UsSeasonRating): string[] {
+  const notes: string[] = [];
+  const before = c.ovr;
+  const legacyRating = nextMlbRating(c, rng);
+  c.ovr = seasonRating?.finish ?? legacyRating;
   if (c.ovr - before >= 4) notes.push(`📈 The breakout: ${before} to ${c.ovr}.`);
   if (before - c.ovr >= 3) notes.push(`📉 The bat speed goes quietly: ${before} to ${c.ovr}.`);
   if (c.age >= 31) c.health = Math.max(30, c.health - 3);
@@ -915,7 +926,7 @@ export function mlbProgress(c: MlbCareerState, rng: () => number): string[] {
      season's rng, and it is told whether the career goes on (the same
      mlbShouldRetire the board asks right after this returns), so a player
      who retires this winter is never sent a text about next season. */
-  const support = applyUsCareerAnnualBenefits(c, 'mlb', c.age - 1);
+  const support = applyUsCareerAnnualBenefits(c, 'mlb', c.age - 1, seasonRating?.support);
   if (support) notes.push(support);
   receiveMlbInboxTexts(c, !mlbShouldRetire(c));
   return notes;

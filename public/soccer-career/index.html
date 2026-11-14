@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -253,7 +285,7 @@
 <div id="dukb-snapshot">
 <div data-site-chrome>
 <p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>⚽ Soccer Career</h1>
@@ -289,6 +321,7 @@
 <li>Korean domestic cup results remain a generic simulation where the real season record is not verified. No Korea Cup entry list, calendar or final format is promised by that result.</li>
 <h3>Advancing seasons through the training ground</h3>
 <li>Advance season by season through simulated stats, newspaper headlines, random events, and decisions.</li>
+<li>In senior seasons, OVR can rise or fall as the season plays out. For example, a young starter can improve by midseason, and an older player can lose pace later in the year. Next Season simulates the year in one go. Season Summary shows the OVR at each checkpoint, and the final OVR carries forward.</li>
 <li>Most summers open with one card about your position or your career, before the rest of the news between seasons. Training can trade one skill for another next season, with gains stopping at your ceiling.</li>
 <li>Want to see it happen? The 📺 Week by week button plays the same season match by match, with your rating every game and the league table after every matchday, then hands you back to the newspaper. Its ? button has the rules and worked examples.</li>
 <li>Up to three times a season the clock stops and the moment is yours to play on your training ground board (look for 🎯 on the fixtures): a YOUR CALL decides how that match went, with the return game taking the other side so your final table and season totals never move, and a RECREATE replays what the record says you did, for stars that bank into next season's growth.</li>
@@ -304,7 +337,7 @@
 <li>If you previously retired from internationals, an eligible National-team comeback lets you make yourself available again after a settled season.</li>
 <h2>Soccer Career rules: growth, legacy and the corruption meter</h2>
 <h3>How stats grow through your prime</h3>
-<li>Stats grow slowly and honestly: 1 to 3 points a year through the academy and your prime, less once you pass 86, and barely at all above 90. Reaching world class is a decade of work, not three good seasons.</li>
+<li>Attributes usually grow by a few points across a season in your academy years and prime. Growth slows past 86 and is rare above 90. After your prime, some attributes can fall during a season.</li>
 <li>Growth fades once your hidden prime type (early, normal, late, or extended) ends, with decline turning brutal from 38.</li>
 <h3>Your boyhood club and retirement age</h3>
 <li>The club that raised you always offers you a first team deal when you turn pro, so you can spend a whole career at your boyhood club, and it can call you home again from 27.</li>

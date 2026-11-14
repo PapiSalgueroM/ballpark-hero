@@ -26,7 +26,7 @@ describe('NRL Manager offseason club moves', () => {
     const raw = JSON.stringify(season2026);
     expect(nrlOffseasonOpportunities(season2026)).toEqual([
       { clubId: 'bears', nextTarget: 'Finish in the top twelve', reason: 'expansion' },
-      { clubId: 'roosters', nextTarget: 'Reach the finals', reason: 'missed', rank: 8, missedBy: 4 },
+      { clubId: 'roosters', nextTarget: 'Reach the finals', reason: 'missed', rank: 7, missedBy: 3 },
       { clubId: 'dolphins', nextTarget: 'Finish in the top four', reason: 'missed', rank: 10, missedBy: 2 },
     ]);
     expect(nrlOffseasonOpportunities(readNrlCareerSave(raw)!)).toEqual(nrlOffseasonOpportunities(season2026));
@@ -52,7 +52,7 @@ describe('NRL Manager offseason club moves', () => {
     expect(nrlOffseasonOpportunities(started)).toEqual([]);
     const finished = finish(started);
     expect(finished.season.championId).toBe('raiders');
-    expect(nrlOffseasonOpportunities(finished).map(row => row.clubId)).toEqual(['bears', 'knights', 'dragons']);
+    expect(nrlOffseasonOpportunities(finished).map(row => row.clubId)).toEqual(['bears', 'broncos', 'knights']);
     expect(nrlOffseasonOpportunities({ ...finished, retired: true })).toEqual([]);
     expect(nrlOffseasonOpportunities({ ...finished, season: { ...finished.season, year: NRL_LAST_YEAR } })).toEqual([]);
     const partial = { ...finished, season: { ...finished.season, results: finished.season.results.slice(1) } };
@@ -80,10 +80,11 @@ describe('NRL Manager offseason club moves', () => {
     const prospectId = nrlAcademyReports(scout)[0].player!.id;
     const promoted = reduceNrlCareer(scout, { type: 'promoteAcademy', playerId: prospectId });
     expect(promoted).not.toBe(scout);
-    const ended = finish(reduceNrlCareer(promoted, { type: 'setTactic', tactic: 'attack' }));
-    const focused = reduceNrlCareer(ended, { type: 'setDevelopmentFocus', focus: 'youth' });
-    const standard = stay(focused);
-    const moved = move(focused, 'bears');
+    const tactics = reduceNrlCareer(promoted, { type: 'setTactic', tactic: 'attack' });
+    const focused = reduceNrlCareer(tactics, { type: 'setDevelopmentFocus', focus: 'youth' });
+    const ended = finish(focused);
+    const standard = stay(ended);
+    const moved = move(ended, 'bears');
 
     expect(moved.season).toMatchObject({ clubId: 'bears', year: 2027, round: 1, phase: 'regular', tactic: 'balanced', preparation: null, results: [] });
     expect(moved.season.seed).toBe(ended.season.seed);

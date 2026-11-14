@@ -66,7 +66,7 @@ export function phaseFor(c: CareerState): CMPhase {
 }
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
 
-const PROMOTION_PLAYOFFS = { championshipPlayoffs: true, bundesligaPlayoff: true, frenchPlayoffs: true } as const;
+const CAREER_RULES = { championshipPlayoffs: true, bundesligaPlayoff: true, frenchPlayoffs: true, inSeasonRatings: true } as const;
 
 /**
  * Round 505: a new shape keeps the eleven you picked. Until this round a
@@ -202,6 +202,7 @@ export function useClubManager() {
       const views = readSlots();
       setSlots(views);
       if (saved) {
+        saved.inSeasonRatings = true;
         setCareer(saved);
         if (saved.pendingSummary) setSummary(saved.pendingSummary);
         if (goStraightIn.current) {
@@ -676,7 +677,7 @@ export function useClubManager() {
     if (!ordinaryClubAllowed(club) || (isHistoricEra(era) && kLeagueMember(club))) return;
     if (isScopedStarterClub(club) && (era !== DEFAULT_ERA_ID || edit)) return;
     const begin = () => {
-      const fresh = startCareer(club, era, undefined, manager, undefined, edit, PROMOTION_PLAYOFFS);
+      const fresh = startCareer(club, era, undefined, manager, undefined, edit, CAREER_RULES);
       /* Round 549: a mid season takeover plays the run-in first, under the
          manager before you, and hands the club over where it stands. */
       const s = setUpCareer(entry ? startMidSeason(fresh, entry) : beginLeagueCoachSeason(fresh), setup, rebuildBoardAsks);
@@ -749,7 +750,7 @@ export function useClubManager() {
   /* Round 154: founding your own club skips the pending-club dance, because
      the create form is its own confirmation. */
   const confirmCustomClub = useCallback((eraId: string | undefined, spec: CustomClubSpec, manager?: ManagerSpec, entry?: MidSeasonEntry, setup?: CareerSetup) => {
-    const fresh = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager, undefined, undefined, PROMOTION_PLAYOFFS);
+    const fresh = startCareer(spec.name, eraId ?? DEFAULT_ERA_ID, spec, manager, undefined, undefined, CAREER_RULES);
     const s = setUpCareer(entry ? startMidSeason(fresh, entry) : beginLeagueCoachSeason(fresh), setup, rebuildBoardAsks);
     clearSlotPoints(activeSlot());
     setCareer(s);

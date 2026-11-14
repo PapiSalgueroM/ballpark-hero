@@ -164,6 +164,12 @@ interface NrlContractApproach {
 }
 
 interface NrlSelectionPromise { playerId: string; startedRound: number }
+interface NrlRatingReview {
+  round: number;
+  changes: [playerId: string, change: 1 | -1][];
+  focus?: string[];
+  assistant?: string[];
+}
 
 export interface NrlCareerState {
   version: 2;
@@ -181,6 +187,7 @@ export interface NrlCareerState {
   satOutSeason?: true;
   academy?: NrlAcademyAssignment[];
   developmentFocus?: ActiveDevelopmentFocus;
+  ratingReview?: NrlRatingReview;
   shortlist?: string[];
   savedLineup?: NrlSavedLineup;
   positionTraining?: NrlPositionCourse;
@@ -1411,6 +1418,7 @@ function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type:
       player.id === playerId ? { ...player, rating: player.rating + 1 } : player;
     next = { ...next, players: next.players.map(develop), season: { ...next.season, squad: next.season.squad.map(develop) } };
   }
+  if (previous.phase === 'regular' && !state.legacySeason) next = reviewRatings(next, previous.round, newResults);
   next = settleContractApproach(next, previous.round);
   if (season.phase !== 'complete') return next;
   const receipt = seasonReceipt(next);
@@ -1420,47 +1428,96 @@ function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type:
   return { ...finished, history: [...finished.history, { ...receipt, summerApplication: application }] };
 }
 
-function agedRating(player: NrlCareerPlayer, year: number, seed: number): number {
+function scheduledRatingStep(player: NrlCareerPlayer, year: number, seed: number, matches: number): 0 | 1 | -1 {
   const age = player.age + 1;
-  const rng = rngFor(seed, `growth|${year}|${player.id}`);
-  const growth = age <= 24 ? Math.floor(rng() * 3) : age >= 30 ? -Math.floor(rng() * 3) : 0;
-  return clampi(player.rating + growth, 40, player.potential);
+  if (age > 24 && age < 30) return 0;
+  const growth = Math.floor(rngFor(seed, `growth|${year + 1}|${player.id}`)() * 3);
+  const timing = hashLabel(`${seed}|${year}|rating-review|${player.id}`);
+  // Spend the old annual growth budget in one-point steps over two match windows.
+  const first = 6 + timing % 5;
+  const second = 16 + timing % 5;
+  if (!(growth === 2 && matches === first) && !(growth > 0 && matches === second)) return 0;
+  const change = age <= 24 ? 1 : -1;
+  return clampi(player.rating + change, 40, player.potential) === player.rating ? 0 : change;
 }
 
-function developmentGains(state: NrlCareerState): Set<string> {
-  const gains = new Set<string>();
-  const { developmentFocus, season: { year, clubId, seed } } = state;
-  if (!developmentFocus || state.legacySeason || year >= NRL_LAST_YEAR) return gains;
-  for (const player of nrlCareerSquad(state)) {
-    if (contractIn(player, year + 1)?.clubId !== clubId) continue;
-    const age = player.age + 1;
-    const rating = agedRating(player, year + 1, seed);
-    if (developmentFocus === 'youth' ? age <= 24 && rating < player.potential : age >= 30 && rating < player.rating) {
-      gains.add(player.id);
+function scheduledClubMatchCounts(year: number, round: number) {
+  const appearances = new Map<string, number>();
+  for (const fixtures of nrlSeasonPlan(year).draw.slice(0, round)) {
+    for (const [home, away] of fixtures) {
+      appearances.set(home, (appearances.get(home) ?? 0) + 1);
+      appearances.set(away, (appearances.get(away) ?? 0) + 1);
     }
   }
-  return gains;
+  return appearances;
 }
 
-export function nrlDevelopmentPreview(state: NrlCareerState): number {
-  return developmentGains(state).size;
+function reviewRatings(state: NrlCareerState, round: number, results: NrlMatchResult[]): NrlCareerState {
+  const { developmentFocus, ratingReview, season: { year, clubId, seed, reserveGrade } } = state;
+  const played = new Set(results.flatMap(match => [match.homeId, match.awayId]));
+  const appearances = scheduledClubMatchCounts(year, round);
+  const ownMatch = played.has(clubId);
+  const focus = new Set(ratingReview?.focus);
+  const assistant = new Set(ratingReview?.assistant);
+  const rates = new Map<string, 1 | -1>();
+  const own = new Set(state.season.squad.map(player => player.id));
+  for (const player of state.players) {
+    const club = player.contract?.clubId;
+    if (!club || !played.has(club) || player.id === reserveGrade?.playerId) continue;
+    let step = scheduledRatingStep(player, year, seed, appearances.get(club) ?? 0);
+    if (club === clubId && year < NRL_LAST_YEAR && contractIn(player, year + 1)?.clubId === clubId && !focus.has(player.id)) {
+      if (developmentFocus === 'veterans' && step === -1) {
+        step = 0;
+        focus.add(player.id);
+      } else if (developmentFocus === 'youth' && appearances.get(clubId) === 21 && !assistant.has(player.id)
+        && player.age + 1 <= 24 && player.rating < player.potential) {
+        step = 1;
+        focus.add(player.id);
+      }
+    }
+    if (step) rates.set(player.id, step);
+  }
+  if (ownMatch && developmentFocus !== 'youth' && assistant.size < NRL_DEVELOPMENT_ASSISTANT.players) {
+    for (const row of nrlDevelopmentAssistantProgress(state)) {
+      if (row.apps < NRL_DEVELOPMENT_ASSISTANT.appearances || assistant.size === NRL_DEVELOPMENT_ASSISTANT.players) break;
+      if (rates.has(row.id) || assistant.has(row.id) || focus.has(row.id) || row.id === reserveGrade?.playerId) continue;
+      assistant.add(row.id);
+      rates.set(row.id, 1);
+    }
+  }
+  const changes = [...rates].filter(([id]) => own.has(id));
+  // Leave the last visible changes available until another review has something to report.
+  const ratingUpdate = ownMatch && (changes.length || focus.size !== (ratingReview?.focus?.length ?? 0))
+    ? { ratingReview: { round, changes, ...(focus.size && { focus: [...focus] }), ...(assistant.size && { assistant: [...assistant] }) } }
+    : {};
+  if (!rates.size && !ratingUpdate.ratingReview) return state;
+  const update = <P extends NrlPlayer>(player: P): P => {
+    const step = rates.get(player.id);
+    return step ? { ...player, rating: player.rating + step } : player;
+  };
+  return { ...state, ...ratingUpdate, players: state.players.map(update), season: { ...state.season, squad: state.season.squad.map(update) } };
+}
+
+export function nrlDevelopmentAffected(state: NrlCareerState): number {
+  return state.ratingReview?.focus?.length ?? 0;
 }
 
 export function nrlDevelopmentAssistantProgress(state: NrlCareerState) {
   const { season, finance: { coachHire } } = state;
   if (coachHire?.role !== 'development') return [];
-  const { year, clubId, seed } = season;
+  const { year, clubId } = season;
   const eligible = new Set(nrlCareerSquad(state).filter(player => player.age + 1 <= NRL_DEVELOPMENT_ASSISTANT.nextAge
-    && contractIn(player, year + 1)?.clubId === clubId && agedRating(player, year + 1, seed) < player.potential).map(player => player.id));
+    && (state.ratingReview?.assistant?.includes(player.id)
+      || (year < NRL_LAST_YEAR && contractIn(player, year + 1)?.clubId === clubId && player.rating < player.potential))).map(player => player.id));
   const { rows } = nrlSquadSeasonStats({ ...season, results: season.results.filter(match => match.round >= coachHire.round) }, 'regular');
   return rows.filter(row => eligible.has(row.id)).sort((a, b) => b.apps - a.apps || a.id.localeCompare(b.id));
 }
 
-function advancePlayer(player: NrlCareerPlayer, year: number, seed: number, extraPoint: boolean): NrlCareerPlayer {
+function advancePlayer(player: NrlCareerPlayer, year: number): NrlCareerPlayer {
   const active = contractIn(player, year);
   const next = active === player.futureContract ? null : player.futureContract;
   return {
-    ...player, age: player.age + 1, rating: agedRating(player, year, seed) + Number(extraPoint),
+    ...player, age: player.age + 1,
     fitness: 100, contract: active, futureContract: next,
   };
 }
@@ -1655,13 +1712,10 @@ export function nrlOffseasonApplication(state: NrlCareerState) {
 function offseasonSquads(state: NrlCareerState, allCpu = false) {
   const { season } = state;
   const year = season.year + 1;
-  const focusGains = developmentGains(state);
+  const focusAffected = state.ratingReview?.focus?.length ?? 0;
   const coachDevelopment = state.finance.coachHire?.role === 'development'
-    ? nrlDevelopmentAssistantProgress(state).filter(row => row.apps >= NRL_DEVELOPMENT_ASSISTANT.appearances && !focusGains.has(row.id))
-      .slice(0, NRL_DEVELOPMENT_ASSISTANT.players).map(row => row.id)
-    : undefined;
-  const gains = coachDevelopment?.length ? new Set([...focusGains, ...coachDevelopment]) : focusGains;
-  const players = state.players.map(player => advancePlayer(player, year, season.seed, gains.has(player.id)))
+    ? state.ratingReview?.assistant ?? [] : undefined;
+  const players = state.players.map(player => advancePlayer(player, year))
     .filter(player => player.contract || player.futureContract || player.age < RETIREMENT_AGE);
   const names = new Set(players.map(player => player.name));
   const priorClubs = new Set(nrlSeasonPlan(season.year).clubs.map(club => club.id));
@@ -1670,7 +1724,7 @@ function offseasonSquads(state: NrlCareerState, allCpu = false) {
   }
   players.push(...newMarket(season.seed, year, names));
   const settled = completeSquads(players, season.seed, allCpu ? '' : season.clubId, year, names);
-  return { settled, focusGains, coachDevelopment };
+  return { settled, focusAffected, coachDevelopment };
 }
 
 function leagueRecruitmentAvailable({ season, retired, legacySeason }: NrlCareerState): boolean {
@@ -1696,7 +1750,7 @@ export function nrlLeagueRecruitmentPreview(state: NrlCareerState, destinationId
 }
 
 function offseasonWorld(state: NrlCareerState, nextClubId: string, allCpu = false) {
-  const { settled, focusGains, coachDevelopment } = offseasonSquads(state, allCpu);
+  const { settled, focusAffected, coachDevelopment } = offseasonSquads(state, allCpu);
   const year = state.season.year + 1;
   const freeAgents = settled.filter(player => !player.contract && !player.futureContract).sort(byRating);
   const releasedId = state.finance.mutualRelease?.playerId;
@@ -1711,16 +1765,29 @@ function offseasonWorld(state: NrlCareerState, nextClubId: string, allCpu = fals
   const contracted = settled.filter(player => player.contract || player.futureContract);
   const world = [...(extensions ? contracted.map(player => extensions.has(player.id)
     ? { ...player, contract: { ...player.contract!, endYear: year + 1 } } : player) : contracted), ...pool];
-  return { world, focusGains, coachDevelopment, deals };
+  return { world, focusAffected, coachDevelopment, deals };
 }
 
 function deriveSeasonOut(state: NrlCareerState) {
   const opening = offseasonWorld(state, '', true);
   const season = { ...state.season, clubId: '', year: state.season.year + 1 };
-  const strengths = averagesByClub(opponentRatings({ season, players: opening.world }));
-  const skipped = simulateNrlSeasonWithoutManager(season.year, season.seed, strengths);
+  let players = opening.world;
+  const skipped = simulateNrlSeasonWithoutManager(season.year, season.seed, round => {
+    const strengths = averagesByClub(opponentRatings({ season, players }));
+    const fixtures = nrlSeasonPlan(season.year).draw[round - 1];
+    if (fixtures) {
+      const played = new Set(fixtures.flat());
+      const appearances = scheduledClubMatchCounts(season.year, round);
+      players = players.map(player => {
+        const club = player.contract?.clubId;
+        const step = club && played.has(club) ? scheduledRatingStep(player, season.year, season.seed, appearances.get(club) ?? 0) : 0;
+        return step ? { ...player, rating: player.rating + step } : player;
+      });
+    }
+    return strengths;
+  });
   const archive = { ladder: nrlLadder(skipped).map(row => row.clubId), finals: archiveNrlFinals(skipped) };
-  return { opening, skipped, archive };
+  return { opening, skipped, players, archive };
 }
 
 function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId: string }, appointment?: NrlOffseasonAppointment,
@@ -1729,15 +1796,15 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
   if (season.phase !== 'complete' || season.year === NRL_LAST_YEAR || judiciaryNeedsResponse(season)) return state;
   if (!move && nrlBoardChallengeStatus(state) === 'must-move') return state;
   if (move && (move.fromYear !== season.year || (!seasonOut && !nrlOffseasonClubs(state).some(club => club.id === move.clubId)))) return state;
-  const { developmentFocus, shortlist, savedLineup, positionTraining, offseasonApplication, leagueRecruitment, coachRetention, contractApproach,
+  const { developmentFocus, ratingReview: _oldRatingReview, shortlist, savedLineup, positionTraining, offseasonApplication, leagueRecruitment, coachRetention, contractApproach,
     selectionPromise, outOfWork, satOutSeason, ...career } = state;
   const year = season.year + (seasonOut ? 2 : 1);
   const clubId = move?.clubId ?? season.clubId;
   const opening = seasonOut?.opening ?? offseasonWorld(state, clubId);
-  const { focusGains, coachDevelopment, deals } = opening;
+  const { focusAffected, coachDevelopment, deals } = opening;
   const { world } = seasonOut
-    ? offseasonWorld({ ...state, season: seasonOut.skipped, players: opening.world, finance: bookFrom(OPENING_CASH),
-      developmentFocus: undefined, leagueRecruitment: undefined }, '', true)
+    ? offseasonWorld({ ...state, season: seasonOut.skipped, players: seasonOut.players, finance: bookFrom(OPENING_CASH),
+    developmentFocus: undefined, ratingReview: undefined, leagueRecruitment: undefined }, '', true)
     : opening;
   const squad = squadAt(world, clubId, year).sort(byRating);
   const lineup = { ...season.lineup };
@@ -1767,7 +1834,7 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
     ...(state.finance.supporterAttendance && { attendanceForm: season.results.filter(match => !match.finalsRound
       && (match.homeId === season.clubId || match.awayId === season.clubId)).map(match => clubResult(match, season.clubId)).join('') }),
     ...(playerSeasons && { playerSeasons }),
-    ...(developmentFocus ? { development: { focus: developmentFocus, affected: focusGains.size } } : {}),
+    ...(developmentFocus ? { development: { focus: developmentFocus, affected: focusAffected } } : {}),
     ...(coachDevelopment ? { coachDevelopment } : {}),
     ...(appointment ? { appointment } : {}),
     ...(outOfWork && move ? { rejoinedClubId: clubId } : {}),
@@ -1986,7 +2053,8 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       return { ...state, finance: { ...state.finance, boardRecruitment: { role } } };
     }
     case 'setDevelopmentFocus': {
-      if (state.legacySeason || state.season.year === NRL_LAST_YEAR || action.focus === state.developmentFocus) return state;
+      if (state.legacySeason || state.season.phase !== 'regular' || state.season.year === NRL_LAST_YEAR
+        || state.ratingReview?.focus?.length || action.focus === state.developmentFocus) return state;
       if (activeDevelopmentFocus(action.focus)) return { ...state, developmentFocus: action.focus };
       if (action.focus !== 'balanced' || !state.developmentFocus) return state;
       const { developmentFocus, ...balanced } = state;
@@ -2285,7 +2353,6 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
     const ids = value.coachDevelopment;
     const seasons = value.playerSeasons as NrlSeasonPlayerArchive | undefined;
     if (finance.coachHire?.role !== 'development' || !seasons || !Array.isArray(ids)
-      || (record(value.development) && value.development.focus === 'youth' && ids.length !== 0)
       || ids.length > NRL_DEVELOPMENT_ASSISTANT.players || new Set(ids).size !== ids.length
       || ids.some(id => typeof id !== 'string' || !seasons.some(row => row[0] === id
         && row[3] + row[4] >= NRL_DEVELOPMENT_ASSISTANT.appearances))) return false;
@@ -2724,6 +2791,26 @@ function validContractApproach(state: NrlCareerState): boolean {
       || (value.endYear === year + 1 && state.finance.mutualRelease?.playerId === player.id)));
 }
 
+function validRatingReview(state: NrlCareerState): boolean {
+  const { ratingReview: review, season, legacySeason, developmentFocus, finance } = state;
+  if (review === undefined) return true;
+  if (legacySeason || !record(review) || !intIn(review.round, 1, Math.min(season.round - 1, nrlRegularRounds(season.year)))
+    || !season.results.some(match => match.round === review.round && (match.homeId === season.clubId || match.awayId === season.clubId))) return false;
+  const owned = new Map(nrlCareerSquad(state).map(player => [player.id, player]));
+  if (!Array.isArray(review.changes) || review.changes.length > SQUAD_SIZE
+    || new Set(review.changes.map(row => row?.[0])).size !== review.changes.length
+    || !review.changes.every(row => Array.isArray(row) && row.length === 2 && owned.has(row[0])
+      && (row[1] === 1 || row[1] === -1))) return false;
+  const validIds = (ids: unknown, max: number) => Array.isArray(ids) && ids.length > 0 && ids.length <= max
+    && new Set(ids).size === ids.length && ids.every(id => typeof id === 'string' && owned.has(id));
+  if (review.focus !== undefined && (!developmentFocus || !validIds(review.focus, SQUAD_SIZE)
+    || !review.focus.every(id => developmentFocus === 'youth' ? owned.get(id)!.age + 1 <= 24 : owned.get(id)!.age + 1 >= 30))) return false;
+  if (review.assistant === undefined) return true;
+  if (finance.coachHire?.role !== 'development' || !validIds(review.assistant, NRL_DEVELOPMENT_ASSISTANT.players)) return false;
+  const earned = new Set(nrlDevelopmentAssistantProgress(state).filter(row => row.apps >= NRL_DEVELOPMENT_ASSISTANT.appearances).map(row => row.id));
+  return review.assistant.every(id => earned.has(id) && !review.focus?.includes(id));
+}
+
 export function isNrlCareerState(value: unknown): value is NrlCareerState {
   if (!record(value) || value.version !== 2 || !isNrlOpeningYear(value.openingYear)
     || !isNrlSeasonProgress(value.season) || value.season.year < value.openingYear
@@ -2759,7 +2846,8 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     if (training?.playerId === spell.playerId && training.startedRound < spellEnd
       && training.startedRound + NRL_POSITION_TRAINING_ROUNDS > spell.startedRound) return false;
   }
-  if (!validWorld(state) || !validCareerBooks(state) || !validAcademy(state) || !validShortlist(state) || !validContractApproach(state)) return false;
+  if (!validWorld(state) || !validRatingReview(state) || !validCareerBooks(state) || !validAcademy(state)
+    || !validShortlist(state) || !validContractApproach(state)) return false;
   if (value.outOfWork !== undefined && (value.outOfWork !== true || state.coachRetention || state.offseasonApplication
     || !nrlCanLeaveClub({ ...state, retired: undefined, satOutSeason: undefined }))) return false;
   if (value.satOutSeason !== undefined && (value.satOutSeason !== true || !state.outOfWork || year + 2 > NRL_LAST_YEAR)) return false;
