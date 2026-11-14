@@ -1,6 +1,7 @@
-import { useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowRight, Bookmark, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 import RetireDoor from '@/components/club-manager/RetireDoor';
 import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeNotice';
 import NrlJudiciaryReview from '@/components/nrl-manager/NrlJudiciaryReview';
@@ -484,12 +485,93 @@ function BoardRecruitment({ career, onAction, disabled, onFilter }: {
   );
 }
 
+function RecruitmentComparison({ career, targets, onBack }: {
+  career: NrlCareerState; targets: MarketEntry[]; onBack: () => void;
+}) {
+  const [firstId, setFirstId] = useState(targets[0]?.player.id);
+  const [secondId, setSecondId] = useState(targets[1]?.player.id);
+  const root = useRevealScroll<HTMLElement>('shortlist-comparison', { skipFirst: false });
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => { heading.current?.focus({ preventScroll: true }); }, []);
+
+  const first = targets.find(entry => entry.player.id === firstId) ?? targets[0];
+  const remaining = targets.filter(entry => entry.player.id !== first?.player.id);
+  const second = remaining.find(entry => entry.player.id === secondId) ?? remaining[0];
+  const summary = (entry: MarketEntry) => {
+    const { player, startYear, askingSalary } = entry;
+    const quote = nrlContractOffer(career, player.id, askingSalary, 1);
+    const peer = nrlCareerSquad(career, startYear).filter(p => p.role === player.role)
+      .sort((a, b) => b.rating - a.rating || a.id.localeCompare(b.id))[0];
+    return [
+      player.role, player.age, player.rating, player.potential, money(askingSalary), startYear,
+      quote.ok === true ? 'Fits the ' + startYear + ' cap and squad' : quote.reason,
+      peer ? peer.name + ' (' + peer.rating + ' OVR)' : 'No player signed at this position',
+    ];
+  };
+  const secondSummary = second ? summary(second) : [];
+  const labels = ['Primary position', 'Current age', 'Current rating', 'Potential', 'Annual asking salary',
+    'Available from', 'One-season offer', 'Highest-rated player signed'];
+  return (
+    <section ref={root} aria-labelledby="nrl-recruitment-comparison" className="min-w-0 space-y-3">
+      <Button type="button" size="lg" variant="outline" className="max-w-full px-3" onClick={onBack}>Back to recruitment</Button>
+      <h2 id="nrl-recruitment-comparison" ref={heading} tabIndex={-1} className="font-display text-xl font-bold">Compare shortlisted players</h2>
+      {first && second ? <>
+        <p className="text-sm text-muted-foreground">Ratings and potential are simulated. The cap check and signed player use the season each target can join.</p>
+        <div className="grid grid-cols-2 gap-2">
+          <label className="min-w-0 space-y-1 text-sm font-semibold">
+            <span>First target</span>
+            <select className={control} value={first.player.id} onChange={event => setFirstId(event.target.value)}>
+              {targets.filter(entry => entry.player.id !== second.player.id).map(({ player }) => (
+                <option key={player.id} value={player.id}>{player.name}</option>
+              ))}
+            </select>
+          </label>
+          <label className="min-w-0 space-y-1 text-sm font-semibold">
+            <span>Second target</span>
+            <select className={control} value={second.player.id} onChange={event => setSecondId(event.target.value)}>
+              {remaining.map(({ player }) => <option key={player.id} value={player.id}>{player.name}</option>)}
+            </select>
+          </label>
+        </div>
+        <table aria-label="Recruitment comparison" className="w-full table-fixed border-collapse text-left text-xs sm:text-sm">
+          <thead className="border-b border-border">
+            <tr>
+              <th scope="col" className="w-[31%] px-1 py-2 text-muted-foreground">Measure</th>
+              {[first, second].map(({ player }) => (
+                <th key={player.id} scope="col" className="break-words px-1 py-2">{player.name}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-border">
+            {summary(first).map((value, index) => (
+              <tr key={labels[index]}>
+                <th scope="row" className="break-words px-1 py-2 align-top font-medium text-muted-foreground">{labels[index]}</th>
+                <td className="break-words px-1 py-2 align-top">{value}</td>
+                <td className="break-words px-1 py-2 align-top">{secondSummary[index]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </> : <p className="text-sm text-muted-foreground">Shortlist at least two available players to compare them.</p>}
+    </section>
+  );
+}
+
 function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const labelForClub = useNrlClubName();
   const [role, setRole] = useState<NrlRole | ''>('');
   const [shortlistedOnly, setShortlistedOnly] = useState(false);
+  const [comparing, setComparing] = useState(false);
   const [visible, setVisible] = useState(12);
   const shortlistFilter = useRef<HTMLButtonElement>(null);
+  const shortlistControls = useRevealScroll<HTMLDivElement>(comparing, { enabled: !comparing });
+  const compareOpener = useRef<HTMLButtonElement>(null);
+  const returnFromComparison = useRef(false);
+  useEffect(() => {
+    if (comparing || !returnFromComparison.current) return;
+    returnFromComparison.current = false;
+    (compareOpener.current ?? shortlistFilter.current)?.focus({ preventScroll: true });
+  }, [comparing]);
   const selectRole = (position: NrlRole | '') => { setRole(position); setVisible(12); };
   const nextYear = career.season.year + 1;
   const signed = nextYear <= NRL_LAST_YEAR ? nrlCareerSquad(career, nextYear) : [];
@@ -498,6 +580,10 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
   })).sort((a, b) => a.count - b.count);
   const market = useMemo(() => nrlCareerMarket(career).filter(entry => entry.kind !== 'renewal'), [career]);
   const shortlist = career.shortlist ?? [];
+  const targets = shortlist.flatMap(id => {
+    const entry = market.find(item => item.player.id === id);
+    return entry ? [entry] : [];
+  });
   const brief = useMemo(() => role && nrlRecruitmentBrief(career, role), [career, role]);
   const filtered = market.filter(({ player }) => (!role || player.role === role) && (!shortlistedOnly || shortlist.includes(player.id)));
   const act: Dispatch = action => {
@@ -508,6 +594,9 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
     }
     return true;
   };
+  if (comparing) return <RecruitmentComparison career={career} targets={targets}
+    onBack={() => { returnFromComparison.current = true; setComparing(false); }} />;
+
   const arrivals = career.players.filter(player => player.futureContract?.clubId === career.season.clubId
     && player.contract?.clubId !== career.season.clubId);
   return (
@@ -591,9 +680,11 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
         </section>
       )}
       {(market.length > 0 || shortlistedOnly) && (
-        <div className="mt-3 flex flex-wrap items-center gap-2">
+        <div ref={shortlistControls} className="mt-3 flex flex-wrap items-center gap-2">
           <Button ref={shortlistFilter} type="button" size="lg" variant="outline" className="px-3" aria-pressed={shortlistedOnly}
             onClick={() => { setShortlistedOnly(value => !value); setVisible(12); }}>Shortlisted only</Button>
+          {targets.length >= 2 && <Button ref={compareOpener} type="button" size="lg" variant="outline"
+            className="h-auto min-h-11 max-w-full whitespace-normal px-3 py-2" onClick={() => setComparing(true)}>Compare shortlisted players</Button>}
           <p className="text-sm text-muted-foreground">{shortlist.length}/{NRL_SHORTLIST_LIMIT} saved</p>
         </div>
       )}

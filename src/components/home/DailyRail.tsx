@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CalendarDays, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { getTodayET } from '@/lib/dateUtils';
-import { dailyGames, dealtBySport, todaysPuzzle, sportOf, SPORT_NAME } from '@/data/homeFront';
+import { dailyGames, dealtBySport, todaysPuzzle, sportOf, SPORT_NAME, type SportKey } from '@/data/homeFront';
 import type { GameDef } from '@/data/gameRegistry';
 import { SportGlyph, sportStyle } from './SportGlyph';
 
@@ -31,11 +31,16 @@ function railPosition(rail: HTMLDivElement) {
  */
 export function DailyRail({ today }: { today?: string }) {
   const day = useRef(today ?? getTodayET()).current;
-  const { spotlight, rest, total } = useMemo(() => {
+  const { spotlight, rest, sports } = useMemo(() => {
     const all = dailyGames();
     const pick = todaysPuzzle(day);
-    return { spotlight: pick, rest: dealtBySport(all.filter(g => g !== pick)), total: all.length };
+    const sports = [...new Set(all.map(game => sportOf(game.path)))];
+    return { spotlight: pick, rest: dealtBySport(all.filter(g => g !== pick)), sports };
   }, [day]);
+  const [sport, setSport] = useState<SportKey | ''>('');
+  const featured = spotlight && (!sport || sportOf(spotlight.path) === sport) ? spotlight : null;
+  const games = sport ? rest.filter(game => sportOf(game.path) === sport) : rest;
+  const shown = games.length + Number(Boolean(featured));
   const railRef = useRef<HTMLDivElement>(null);
   const [edges, setEdges] = useState({ atStart: true, atEnd: false });
   const updateEdges = (rail: HTMLDivElement) => {
@@ -57,6 +62,14 @@ export function DailyRail({ today }: { today?: string }) {
     return () => observer.disconnect();
   }, []);
 
+  useLayoutEffect(() => {
+    const rail = railRef.current;
+    if (!rail) return;
+    rail.scrollLeft = 0;
+    rail.scrollTop = 0;
+    updateEdges(rail);
+  }, [sport]);
+
   const nudge = (dir: 1 | -1) => {
     const el = railRef.current;
     if (!el) return;
@@ -69,27 +82,35 @@ export function DailyRail({ today }: { today?: string }) {
     el.scrollBy(vertical ? { top: distance, behavior } : { left: distance, behavior });
   };
 
-  if (total === 0) return null;
+  if (sports.length === 0) return null;
 
   return (
     <section aria-labelledby="home-dailies" data-home-dailies="" className="lg:overflow-hidden lg:rounded-2xl lg:border lg:border-border lg:bg-surface-1 lg:px-3 lg:pb-3 lg:pt-2.5 xl:px-4">
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-1">
-        <div className="min-w-0 flex-1 basis-36">
+      <div className="mb-3 space-y-2">
+        <div>
           <h2 id="home-dailies" className="flex items-center gap-2 text-lg font-display font-bold text-foreground">
             <CalendarDays aria-hidden="true" className="h-4 w-4 shrink-0 text-primary" />
             Daily puzzles
           </h2>
           <p className="mt-1 text-xs text-muted-foreground">
-            {total} boards. New at midnight Eastern.
+            <span role="status">{shown} {shown === 1 ? 'board' : 'boards'}.</span> New at midnight Eastern.
           </p>
         </div>
-        <div className="flex shrink-0 gap-1">
-          <button type="button" onClick={() => nudge(-1)} aria-label="Scroll the daily puzzles back" aria-disabled={edges.atStart} className="grid h-11 w-11 place-items-center rounded-lg border border-border bg-surface-1 text-muted-foreground hover:border-primary/40 hover:text-foreground aria-disabled:opacity-50">
-            <ChevronLeft aria-hidden="true" className="h-4 w-4 lg:rotate-90" />
-          </button>
-          <button type="button" onClick={() => nudge(1)} aria-label="Scroll the daily puzzles on" aria-disabled={edges.atEnd} className="grid h-11 w-11 place-items-center rounded-lg border border-border bg-surface-1 text-muted-foreground hover:border-primary/40 hover:text-foreground aria-disabled:opacity-50">
-            <ChevronRight aria-hidden="true" className="h-4 w-4 lg:rotate-90" />
-          </button>
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <select value={sport} onChange={event => setSport(event.target.value as SportKey | '')}
+            aria-label="Filter daily puzzles by sport"
+            className="min-h-11 min-w-0 flex-1 rounded-lg border border-border bg-background px-2.5 text-sm font-semibold text-foreground focus-visible:outline-primary">
+            <option value="">All sports</option>
+            {sports.map(key => <option key={key} value={key}>{key === 'world' ? 'World & Olympic' : SPORT_NAME[key]}</option>)}
+          </select>
+          <div className="flex shrink-0 gap-1">
+            <button type="button" onClick={() => nudge(-1)} aria-label="Scroll the daily puzzles back" aria-disabled={edges.atStart} className="grid h-11 w-11 place-items-center rounded-lg border border-border bg-surface-1 text-muted-foreground hover:border-primary/40 hover:text-foreground aria-disabled:opacity-50">
+              <ChevronLeft aria-hidden="true" className="h-4 w-4 lg:rotate-90" />
+            </button>
+            <button type="button" onClick={() => nudge(1)} aria-label="Scroll the daily puzzles on" aria-disabled={edges.atEnd} className="grid h-11 w-11 place-items-center rounded-lg border border-border bg-surface-1 text-muted-foreground hover:border-primary/40 hover:text-foreground aria-disabled:opacity-50">
+              <ChevronRight aria-hidden="true" className="h-4 w-4 lg:rotate-90" />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -106,12 +127,12 @@ export function DailyRail({ today }: { today?: string }) {
             is the honest declaration rather than an exception. The visitor
             keeps the whole rail; only a photograph of the page loses it. */}
         <ul data-no-prerender="" className="grid w-max auto-cols-max grid-flow-col grid-rows-2 gap-2.5 lg:w-full lg:grid-flow-row lg:grid-cols-1 lg:grid-rows-none lg:pr-1">
-          {spotlight && (
+          {featured && (
             <li className="row-span-2 snap-start lg:row-span-1">
-              <Spotlight game={spotlight} />
+              <Spotlight game={featured} />
             </li>
           )}
-          {rest.map(game => (
+          {games.map(game => (
             <li key={game.path} className="snap-start">
               <DailyChip game={game} />
             </li>

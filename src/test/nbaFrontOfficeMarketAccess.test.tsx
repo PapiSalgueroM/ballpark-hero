@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -7,6 +7,7 @@ import NbaFrontOfficeBoard from '@/components/nba-front-office/NbaFrontOfficeBoa
 import { initNbaLeague, nbaSign, type NbaGmPlayer, type NbaLeague } from '@/lib/nbaFrontOffice';
 import { nbaContractsOf, nbaNoteArrivals, openNbaDesk } from '@/lib/nbaGmDesk';
 import type { GmDesk } from '@/lib/gmDesk';
+import { hasPendingSaves, settlePendingSaves } from '@/lib/safeStorage';
 
 // Capture the entity token's import draws separately from every player action.
 const moduleRandom = vi.hoisted(() => {
@@ -36,6 +37,7 @@ const orderedIds = Array.from({ length: 33 }, (_, i) => 'nba-market-access-fa-' 
 const preferredRotation = [8, 7, 6, 5, 4, 3, 2, 1].map(i => 'nba-market-access-roster-' + i);
 let draws: number[] = [];
 let writes: string[] = [];
+let refusing = false;
 
 interface Frame {
   league: NbaLeague;
@@ -152,12 +154,15 @@ function assertSigned(value: ReturnType<typeof signJourney>, id: string) {
 }
 
 beforeEach(() => {
-  localStorage.clear(); draws = []; writes = [];
+  localStorage.clear(); draws = []; writes = []; refusing = false;
   const random = seeded(103);
   vi.spyOn(Math, 'random').mockImplementation(() => { const value = random(); draws.push(value); return value; });
   const originalSet = Storage.prototype.setItem;
   vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key: string, value: string) {
-    if (this === localStorage && key === KEY) writes.push(String(value));
+    if (this === localStorage && key === KEY) {
+      writes.push(String(value));
+      if (refusing) throw new DOMException('QA storage quota exceeded', 'QuotaExceededError');
+    }
     originalSet.call(this, key, value);
   });
 });
@@ -225,5 +230,133 @@ describe('NBA Front Office complete free agent market', () => {
     }
     expect(refusals.find(row => row.kind === 'full')?.fullReason).toContain('Roster full at 15');
     expect(refusals.find(row => row.kind === 'released')?.title).toContain('You waived him this season');
+  });
+});
+
+describe('NBA Front Office save recovery', () => {
+  it('holds rejected progress for app refresh and retries the newest exact save', () => {
+    const f = fixture('plain', true);
+    observe('save-recovery-fixture', { raw: f.raw });
+    openMarket();
+    refusing = true;
+    fireEvent.click(faRow(TAIL)!.querySelector('button')!);
+    expect(faRow(TAIL)).toBeNull();
+    expect(localStorage.getItem(KEY)).toBe(f.raw);
+    expect(writes).toHaveLength(1);
+    const signed = writes[0];
+    expect(screen.queryByRole('alert')).toHaveTextContent('Franchise progress is not saved on this device.');
+    expect(hasPendingSaves()).toBe(true);
+
+    act(() => expect(settlePendingSaves()).toBe(false));
+    expect(writes).toEqual([signed, signed]);
+    expect(localStorage.getItem(KEY)).toBe(f.raw);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Hub' }));
+    fireEvent.click(screen.getByText('Roster'));
+    const waivedId = 'nba-market-access-roster-14';
+    const waivedRow = document.querySelector<HTMLElement>('[data-roster-row="' + waivedId + '"]')!;
+    fireEvent.click(within(waivedRow).getByRole('button', { name: /^Waive,/ }));
+    fireEvent.click(within(waivedRow).getByRole('button', { name: 'Waive him' }));
+    expect(writes).toHaveLength(3);
+    const latest = writes[2];
+    const saved = JSON.parse(latest) as Frame;
+    expect(saved.league.teams[TEAM].players.some(p => p.id === TAIL)).toBe(true);
+    expect(saved.league.teams[TEAM].players.some(p => p.id === waivedId)).toBe(false);
+    expect(saved.league.teams[TEAM].rotation).toEqual(preferredRotation);
+    expect(nbaContractsOf(saved.gm!, saved.league, TEAM).men[TAIL]?.how).toBe('signing');
+
+    refusing = false;
+    fireEvent.click(screen.getByRole('button', { name: 'Retry save' }));
+    expect(writes).toEqual([signed, signed, latest, latest]);
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(hasPendingSaves()).toBe(false);
+    expect(localStorage.getItem(KEY)).toBe(latest);
+    expect(localStorage.getItem(OTHER)).toBe('held');
+    expect(draws).toEqual([]);
+
+    cleanup();
+    openMarket();
+    expect(faRow(TAIL)).toBeNull();
+    expect(faRow(waivedId)).not.toBeNull();
+    expect(localStorage.getItem(KEY)).toBe(latest);
+    expect(writes).toHaveLength(4);
+  });
+
+  it('clears pending progress when the franchise is abandoned', () => {
+    fixture();
+    openMarket();
+    refusing = true;
+    fireEvent.click(faRow(HEAD)!.querySelector('button')!);
+    expect(writes).toHaveLength(1);
+    expect(hasPendingSaves()).toBe(true);
+    fireEvent.click(screen.getByRole('button', { name: 'Abandon franchise and restart' }));
+    expect(screen.getByText('Take over a front office')).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(localStorage.getItem(KEY)).toBeNull();
+    refusing = false;
+    act(() => expect(settlePendingSaves()).toBe(true));
+    expect(writes).toHaveLength(1);
+    expect(localStorage.getItem(KEY)).toBeNull();
+    expect(localStorage.getItem(OTHER)).toBe('held');
+  });
+
+  it('leaves the pending bytes and durable career alone when abandoning is denied', () => {
+    const f = fixture();
+    openMarket();
+    refusing = true;
+    fireEvent.click(faRow(HEAD)!.querySelector('button')!);
+    const pending = writes[0];
+    expect(pending).toBeDefined();
+    const removeItem = Storage.prototype.removeItem;
+    const remove = vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(function (this: Storage, key: string) {
+      if (this === localStorage && key === KEY) throw new DOMException('QA storage access denied', 'SecurityError');
+      return removeItem.call(this, key);
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: 'Abandon franchise and restart' }));
+    expect(screen.queryByRole('alert')).toHaveTextContent('Could not abandon the franchise on this device. Try again.');
+    expect(remove).toHaveBeenCalledWith(KEY);
+    expect(screen.queryByText('Take over a front office')).toBeNull();
+    expect(hasPendingSaves()).toBe(true);
+    expect(localStorage.getItem(KEY)).toBe(f.raw);
+    expect(writes).toEqual([pending]);
+
+    remove.mockRestore();
+    refusing = false;
+    fireEvent.click(screen.getByRole('button', { name: 'Retry save' }));
+    expect(writes).toEqual([pending, pending]);
+    expect(localStorage.getItem(KEY)).toBe(pending);
+    expect(screen.queryByRole('alert')).toBeNull();
+  });
+
+  it('releases the refresh guard when its board unmounts', () => {
+    const f = fixture();
+    openMarket();
+    refusing = true;
+    fireEvent.click(faRow(HEAD)!.querySelector('button')!);
+    expect(hasPendingSaves()).toBe(true);
+    cleanup();
+    refusing = false;
+    expect(hasPendingSaves()).toBe(false);
+    expect(settlePendingSaves()).toBe(true);
+    expect(writes).toHaveLength(1);
+    expect(localStorage.getItem(KEY)).toBe(f.raw);
+  });
+
+  it('keeps the held career untouched when opening storage is denied', () => {
+    const f = fixture();
+    const getItem = Storage.prototype.getItem;
+    const read = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(function (this: Storage, key: string) {
+      if (this === localStorage && key === KEY) throw new DOMException('QA storage access denied', 'SecurityError');
+      return getItem.call(this, key);
+    });
+    render(<NbaFrontOfficeBoard />);
+    expect(read).toHaveBeenCalledWith(KEY);
+    expect(screen.getByText('Take over a front office')).toBeInTheDocument();
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(hasPendingSaves()).toBe(false);
+    expect(writes).toEqual([]);
+    read.mockRestore();
+    expect(localStorage.getItem(KEY)).toBe(f.raw);
   });
 });

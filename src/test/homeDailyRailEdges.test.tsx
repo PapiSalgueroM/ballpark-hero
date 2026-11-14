@@ -2,10 +2,36 @@ import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { DailyRail } from '@/components/home/DailyRail';
+import { dailyGames, sportOf, todaysPuzzle } from '@/data/homeFront';
 
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); });
 
 describe('Home Daily puzzle rail edges', () => {
+  it('filters to the selected sport and restores the same daily spotlight', () => {
+    const day = '2026-11-13';
+    const daily = dailyGames();
+    const f1 = daily.filter(game => sportOf(game.path) === 'f1').map(game => game.path);
+    const { container } = render(<MemoryRouter><DailyRail today={day} /></MemoryRouter>);
+    const sport = screen.getByRole<HTMLSelectElement>('combobox', { name: 'Filter daily puzzles by sport' });
+    const links = () => [...container.querySelectorAll('ul a')].map(link => link.getAttribute('href')).sort();
+    const track = container.querySelector('ul')!.parentElement!;
+
+    expect(links()).toEqual(daily.map(game => game.path).sort());
+    sport.focus();
+    track.scrollLeft = 400;
+    track.scrollTop = 280;
+    fireEvent.change(sport, { target: { value: 'f1' } });
+    expect(links()).toEqual(f1.sort());
+    expect(track.scrollLeft).toBe(0);
+    expect(track.scrollTop).toBe(0);
+    expect(sport).toHaveFocus();
+    expect(screen.queryByRole('option', { name: 'Rugby League' })).not.toBeInTheDocument();
+
+    fireEvent.change(sport, { target: { value: '' } });
+    expect(links()).toEqual(daily.map(game => game.path).sort());
+    expect(container.querySelector('[data-daily-spotlight]')).toHaveAttribute('href', todaysPuzzle(day)?.path);
+  });
+
   it.each(['horizontal', 'vertical'] as const)('keeps the %s navigation honest at each edge', axis => {
     const horizontal = axis === 'horizontal';
     vi.stubGlobal('matchMedia', vi.fn(() => ({ matches: true })));

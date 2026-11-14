@@ -169,6 +169,59 @@ describe('NRL season review for expiring deals', () => {
     expect(JSON.parse(raw()!).season).toEqual(career.season);
   });
 
+  it.each([['storm', 2026], ['bears', 2027]] as const)('compares shortlisted recruits for %s in %i without writing', (clubId, year) => {
+    const initial = createNrlCareer(clubId, 17, year);
+    const targets = nrlCareerMarket(initial).filter(entry => entry.kind !== 'renewal').slice(0, 3);
+    expect(targets).toHaveLength(3);
+    const career = targets.reduce((state, { player }) => reduceNrlCareer(state, {
+      type: 'setShortlist', playerId: player.id, saved: true, year,
+    }), initial);
+    const view = open(career);
+    click('Recruitment');
+    const before = raw();
+    const beforeFence = localStorage.getItem(fence);
+    click('Compare shortlisted players');
+    const comparison = screen.getByRole('region', { name: 'Compare shortlisted players' });
+    const desk = within(comparison);
+    expect(desk.getByRole('heading', { name: 'Compare shortlisted players' })).toHaveFocus();
+    const first = desk.getByLabelText('First target');
+    const second = desk.getByLabelText('Second target');
+    expect(first).toHaveValue(targets[0].player.id);
+    expect(second).toHaveValue(targets[1].player.id);
+    expect(within(second).getAllByRole('option').map(option => option.getAttribute('value')))
+      .toEqual(targets.slice(1).map(({ player }) => player.id));
+
+    const [left, , right] = targets;
+    fireEvent.change(second, { target: { value: right.player.id } });
+    const table = within(desk.getByRole('table', { name: 'Recruitment comparison' }));
+    const row = (label: string) => within(table.getByRole('row', { name: new RegExp('^' + label) }));
+    const both = (label: string) => row(label).getAllByRole('cell').map(cell => cell.textContent);
+    const money = new Intl.NumberFormat('en-AU', { style: 'currency', currency: 'AUD', maximumFractionDigits: 0 });
+    expect(both('Annual asking salary')).toEqual([left, right].map(entry => money.format(entry.askingSalary)));
+    expect(both('Available from')).toEqual([String(year + 1), String(year + 1)]);
+    expect(both('Current rating')).toEqual([left, right].map(entry => String(entry.player.rating)));
+    expect(both('One-season offer')).toEqual([left, right].map(entry => {
+      const quote = nrlContractOffer(career, entry.player.id, entry.askingSalary, 1);
+      return quote.ok === true ? 'Fits the ' + entry.startYear + ' cap and squad' : quote.reason;
+    }));
+    expect(both('Highest-rated player signed')).toEqual([left, right].map(entry => {
+      const peer = nrlCareerSquad(career, entry.startYear).filter(p => p.role === entry.player.role)
+        .sort((a, b) => b.rating - a.rating || a.id.localeCompare(b.id))[0];
+      return peer ? peer.name + ' (' + peer.rating + ' OVR)' : 'No player signed at this position';
+    }));
+    expect(raw()).toBe(before);
+    expect(localStorage.getItem(fence)).toBe(beforeFence);
+    fireEvent.click(desk.getByRole('button', { name: 'Back to recruitment' }));
+    expect(button('Compare shortlisted players')).toHaveFocus();
+    view.unmount();
+
+    open(before!);
+    click('Recruitment');
+    click('Compare shortlisted players');
+    expect(screen.getByLabelText('First target')).toHaveValue(left.player.id);
+    expect(raw()).toBe(before);
+  });
+
   it('previews and confirms one simulated release from Contracts without writing on cancel', () => {
     const player = nrlCareerSquad(completed).find(row => nrlMutualReleaseQuote(completed, row.id).ok)!;
     const view = open(completed);

@@ -65,6 +65,7 @@ import { FoHubTiles, FoPanelHeader } from '@/components/front-office-shared/FoHu
 import { GmDeskMount } from '@/components/front-office-shared/GmDeskMount';
 import { type GmDesk, gmPanelFor, readGmDesk, withGmBlock } from '@/lib/gmDesk';
 import { gmStaffLevel } from '@/lib/gmStaff';
+import { holdPendingSave } from '@/lib/safeStorage';
 import {
   nbaDeadlineRefusal, nbaDeskAfterRound, nbaDeskEdges, nbaDeskOffseason, nbaDeskRoundOptions, nbaMirrorPickMove,
   nbaMirrorPickRefusal, nbaNoteArrivals, nbaPicksOf, nbaScoutRead, nbaSignDraftee, nbaStaffOf, nbaTradeWindow, openNbaDesk, syncNbaPicks, NBA_DESK_KEYS,
@@ -170,6 +171,9 @@ export default function NbaFrontOfficeBoard() {
   const [tab, setTab] = useState<Tab | null>(null);
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<NbaLeague | null>(null);
+  const pendingSave = useRef<string | null>(null);
+  const [saveWriteFailed, setSaveWriteFailed] = useState(false);
+  const [resetFailed, setResetFailed] = useState(false);
   const [rotationOpen, setRotationOpen] = useState(false);
   const rotationOpener = useRef<HTMLButtonElement>(null);
   const rotationReturn = useRef(false);
@@ -304,18 +308,36 @@ export default function NbaFrontOfficeBoard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const persist = useCallback((patch: Partial<SaveShape>, lg: NbaLeague | null, team: string) => {
+  const retrySave = useCallback(() => {
+    const bytes = pendingSave.current;
+    if (bytes === null) return true;
+    setResetFailed(false);
     try {
-      if (!lg) return;
-      localStorage.setItem(SAVE_KEY, JSON.stringify({
-        league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
-        ...(draftAiBatchesLeft == null ? {} : { draftAiBatchesLeft }),
-        mandate, trust, fired, pressTilt, seasonTradeLine,
-        postseason: champion ? { series, champion, gradeLine, tax: taxClose } : null,
-        ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch,
-      } satisfies SaveShape));
-    } catch { /* full */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftAiBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, taxClose]);
+      localStorage.setItem(SAVE_KEY, bytes);
+      pendingSave.current = null;
+      setSaveWriteFailed(false);
+      return true;
+    } catch {
+      setSaveWriteFailed(true);
+      return false;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (saveWriteFailed) return holdPendingSave(retrySave);
+  }, [saveWriteFailed, retrySave]);
+
+  const persist = useCallback((patch: Partial<SaveShape>, lg: NbaLeague | null, team: string) => {
+    if (!lg) return;
+    pendingSave.current = JSON.stringify({
+      league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
+      ...(draftAiBatchesLeft == null ? {} : { draftAiBatchesLeft }),
+      mandate, trust, fired, pressTilt, seasonTradeLine,
+      postseason: champion ? { series, champion, gradeLine, tax: taxClose } : null,
+      ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch,
+    } satisfies SaveShape);
+    retrySave();
+  }, [retrySave, phase, titles, seasonsPlayed, draftClass, picksLeft, draftAiBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, taxClose]);
 
   useEffect(() => {
     if (!rotationOpen && rotationReturn.current) {
@@ -847,7 +869,15 @@ export default function NbaFrontOfficeBoard() {
   };
 
   const reset = () => {
-    localStorage.removeItem(SAVE_KEY);
+    try {
+      localStorage.removeItem(SAVE_KEY);
+    } catch {
+      setResetFailed(true);
+      return;
+    }
+    setResetFailed(false);
+    pendingSave.current = null;
+    setSaveWriteFailed(false);
     setRotationOpen(false); rotationReturn.current = false;
     setDraftClass(null); setDraftNight(null); setPicksLeft(0); setDraftAiBatchesLeft(null); setDraftError(''); draftPending.current = false;
     earnedUi.clear();
@@ -884,9 +914,20 @@ export default function NbaFrontOfficeBoard() {
     },
   } : null;
 
+  const saveNotice = (saveWriteFailed || resetFailed) && (
+    <div role="alert" data-no-prerender className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
+      {resetFailed && <p>Could not abandon the franchise on this device. Try again.</p>}
+      {saveWriteFailed && <>
+        <p>Franchise progress is not saved on this device. Keep this page open and retry.</p>
+        <button type="button" onClick={retrySave} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
+      </>}
+    </div>
+  );
+
   if (phase === 'pick' || !league || !my) {
     return (
       <div className="space-y-4">
+        {saveNotice}
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Take over a front office</p>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -959,6 +1000,7 @@ export default function NbaFrontOfficeBoard() {
   if (phase === 'fired') {
     return (
       <div className="space-y-4">
+        {saveNotice}
         {/* Round 187: the door shuts with one honest shake, nothing more. */}
         <div className="cm-loss-shake rounded-2xl border border-destructive/50 bg-card p-5 text-center">
           <CelebrationStyles />
@@ -990,12 +1032,14 @@ export default function NbaFrontOfficeBoard() {
     if (gm && recapDesk && gmPanelFor(NBA_RECAP_PANELS, gmOpen)) {
       return (
         <div className="space-y-4">
+          {saveNotice}
           <GmDeskMount sport="nba" desk={gm} facts={recapDesk} panels={NBA_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
         </div>
       );
     }
     return (
       <div className="space-y-4">
+        {saveNotice}
         <div
           data-verdict-reveal
           className={cn(
@@ -1119,6 +1163,7 @@ export default function NbaFrontOfficeBoard() {
       const done = earnedUi.done;
       return (
         <div className="space-y-4">
+          {saveNotice}
           <CelebrationStyles />
           <GmEarnedDraftScreen
             year={earnedNight ? earnedNight.order.draftYear : done?.year ?? league.season}
@@ -1159,6 +1204,7 @@ export default function NbaFrontOfficeBoard() {
     const needsExit = !draftNight && (picksLeft <= 0 || noRights);
     return (
       <div className="space-y-4">
+        {saveNotice}
         <CelebrationStyles />
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">The {draftDone ? league.season : league.season + 1} Draft</p>
@@ -1228,6 +1274,7 @@ export default function NbaFrontOfficeBoard() {
 
   return (
     <div className="space-y-4">
+      {saveNotice}
       <CelebrationStyles />
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
         <span className="rounded-full px-3 py-1 font-bold text-white" style={{ background: t.color }}>{label(myTeam)}</span>
