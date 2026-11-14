@@ -96,4 +96,3 @@ describe('MLB bullpen assignments', () => {
     expect(localStorage.getItem(sport.saveKey)).toBe(held);
   });
 });
-
