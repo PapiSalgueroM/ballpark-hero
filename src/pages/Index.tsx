@@ -145,6 +145,11 @@ export default function Index() {
     () => (hasDeferredQuery && engine ? engine.searchSite(deferredQuery).map(r => r.game) : []),
     [hasDeferredQuery, deferredQuery, engine]
   );
+  const querySettled = isSearching && engine && !searchFailed && searchQuery === deferredQuery;
+  const resultCount = filteredGames.length;
+  const searchStatus = querySettled
+    ? `${resultCount === 0 ? 'No games found' : resultCount === 1 ? '1 game found' : `${resultCount} games found`} for ${deferredQuery.trim()}`
+    : '';
 
   // Personal values only load for this visible account. Public popularity
   // stays independent, so guests can still discover what people are playing.
@@ -493,6 +498,7 @@ export default function Index() {
           </div>
 
           {picksStorageFailed && <div className="mb-4"><GamePicksWarning /></div>}
+          <p className="sr-only" role="status" aria-label="Search results">{searchStatus}</p>
 
           {/* Defer ranking and rendering while the search field updates. */}
           {(isSearching || hasDeferredQuery) && (

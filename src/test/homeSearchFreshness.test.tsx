@@ -68,6 +68,28 @@ it('hides stale empty wording and clears immediately while ranking is held', asy
   expect(empty).not.toBeInTheDocument();
 });
 
+it('announces only settled matches and keeps focus when the search clears', async () => {
+  const { field, change, release } = home();
+  const status = screen.getByRole('status', { name: 'Search results' });
+  expect(status).toBeEmptyDOMElement();
+  field.focus();
+  change('Soccer Career');
+  await act(async () => { await vi.dynamicImportSettled(); });
+  expect(status).toHaveTextContent(/\d+ (game found|games found) for Soccer Career/);
+  state.heldQuery = 'Soccer Career';
+  change('*(');
+  expect(status).toBeEmptyDOMElement();
+  release();
+  expect(status).toHaveTextContent('No games found for *(');
+  state.heldQuery = '*(';
+  change('Club Manager');
+  expect(status).toBeEmptyDOMElement();
+  fireEvent.keyDown(field, { key: 'Escape' });
+  release();
+  expect(status).toBeEmptyDOMElement();
+  expect(field).toHaveFocus();
+});
+
 it('puts active saves and picks before discovery in keyboard order and restores both shelves after search', async () => {
   const saved = '{"season":{"year":2027}}';
   localStorage.setItem('nrl-manager-save-v1-slot-2', saved);

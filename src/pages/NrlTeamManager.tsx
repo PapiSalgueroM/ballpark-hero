@@ -997,13 +997,16 @@ function SavedLineup({ career, onAction, disabled }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
 }) {
   const summary = useRef<HTMLElement>(null);
-  const { season, savedLineup } = career;
+  const [active, setActive] = useState<'first' | 'rotation'>('first');
+  const { season } = career;
+  const savedLineup = active === 'first' ? career.savedLineup : career.savedRotationLineup;
+  const slot = active === 'rotation' ? 'rotation' : undefined;
   const selection = disabled || career.legacySeason ? null : nrlMatchdaySelection(season);
   if (!selection) return null;
   const preview = savedLineup ? nrlSavedLineupPreview(season, savedLineup) : null;
   const nameOf = (id: string) => season.squad.find(player => player.id === id)?.name;
   const save = () => {
-    if (onAction({ type: 'saveLineup', year: season.year, clubId: season.clubId })) summary.current?.focus();
+    if (onAction({ type: 'saveLineup', year: season.year, clubId: season.clubId, slot })) summary.current?.focus();
   };
   return (
     <details className="group mt-3 rounded-lg border border-border bg-background px-3">
@@ -1011,7 +1014,11 @@ function SavedLineup({ career, onAction, disabled }: {
         Saved lineup<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
       </summary>
       <div className="space-y-3 pb-3 text-sm">
-        <p className="text-muted-foreground">Keep one starting 13, bench order and goal kicker for this season.</p>
+        <p className="text-muted-foreground">Save a first-choice team and a rotation team for this season. Each keeps its starting 13, bench order and goal kicker.</p>
+        <div role="group" aria-label="Saved lineup slot" className="grid grid-cols-2 gap-2">
+          <Button type="button" size="lg" variant={active === 'first' ? 'secondary' : 'outline'} className="px-2" aria-pressed={active === 'first'} onClick={() => setActive('first')}>First choice</Button>
+          <Button type="button" size="lg" variant={active === 'rotation' ? 'secondary' : 'outline'} className="px-2" aria-pressed={active === 'rotation'} onClick={() => setActive('rotation')}>Rotation</Button>
+        </div>
         {preview && (
           <div className="space-y-2 text-muted-foreground" role="status">
             {preview.replacements > 0 && <p>Saved picks adjusted for this round: {preview.replacements}.</p>}
@@ -1033,7 +1040,7 @@ function SavedLineup({ career, onAction, disabled }: {
             {savedLineup ? 'Replace saved lineup' : 'Save this lineup'}
           </Button>
           {preview && <Button type="button" size="lg" className="px-3" disabled={!preview.changed} onClick={() => {
-            if (onAction({ type: 'applySavedLineup', previewKey: preview.key })) summary.current?.focus();
+            if (onAction({ type: 'applySavedLineup', previewKey: preview.key, slot })) summary.current?.focus();
           }}>Apply saved lineup</Button>}
         </div>
       </div>

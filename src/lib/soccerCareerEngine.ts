@@ -166,7 +166,7 @@ import { getCriticEvents, soccerCriticArticle, soccerCriticDisgraceArticle } fro
 import { getBootEvents } from "./soccerCareerBoot";
 /* Round 973: the academy focus. soccerCareerAcademy imports nothing from
    here, so this is a one way edge. */
-import { applyAcademyFocus } from "./soccerCareerAcademy";
+import { academyReportReceipt, applyAcademyFocus, type AcademyReportReceipt } from "./soccerCareerAcademy";
 /* Round 1047: the Season Centre's moments ledger. momentsSave imports
    nothing, so this is a one way edge too. */
 import { readSeasonMoments, type SeasonMomentsSave } from "./season/momentsSave";
@@ -208,6 +208,7 @@ export interface ClubData {
 
 export interface SeasonRecord {
   ratingPath?: [opening: number, early: number, middle: number, late: number, closing: number];
+  academyReport?: AcademyReportReceipt;
   extraCups?: CommunityShieldResult[];
   germanSupercup?: GermanSupercupResult;
   /** Round 1180: the chosen personal target and its actual club season result. */
@@ -5104,7 +5105,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[], inSeasonR
   s.seasons = [...s.seasons, {
     year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
     apps, goals: s.position === "GK" ? 0 : rand(0, 8), assists: rand(0, 5),
-    ...(path ? { ratingPath: path } : {}),
+    ...(path ? { ratingPath: path, academyReport: academyReportReceipt(prev, s, effectivePotential(prev)) } : {}),
     cleanSheets: (s.position === "GK" || s.position === "CB" || s.position === "LB" || s.position === "RB") ? rand(2, 8) : 0, yellowCards: rand(0, 4), redCards: 0, rating: 0,
     leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "youth",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,

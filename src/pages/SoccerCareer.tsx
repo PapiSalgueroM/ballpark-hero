@@ -47,7 +47,7 @@ import {
   FALLBACK_CLUBS,
   answerPhoneText, unreadPhoneCount,
   applyTrainingResult, trainingAvailable, type TrainingDrill,
-  repairCareer, effectivePotential,
+  repairCareer,
   applyMoneyAction,
   acceptLoan, projectLeagueApps,
   nextSeasonYear, managerNextSeasonYear,
@@ -120,8 +120,7 @@ import type { SignedNote } from "@/components/soccer-career/SignedSlip";
 import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";
 import { InternationalReturnCard } from "@/components/soccer-career/InternationalReturnCard";
 import { internationalReturnEligibility, makeInternationallyAvailable } from "@/lib/soccerInternationalReturn";
-import { buildAcademyReport, academyFocusOf, withAcademyFocus } from "@/lib/soccerCareerAcademy";
-import type { AcademyFocus, AcademyReport } from "@/lib/soccerCareerAcademy";
+import { savedAcademyReport, academyFocusOf, withAcademyFocus, type AcademyFocus } from "@/lib/soccerCareerAcademy";
 import { heatLabel } from "@/lib/soccerCareerCorruption";
 import ShareButtons from "@/components/game/ShareButtons";
 import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
@@ -814,12 +813,6 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
      game produces a new career object, so the next action of any kind
      dismisses it without anybody having to clear it. */
   const [signedNote, setSignedNote] = useState<SignedNote | null>(null);
-  /* Round 973: the academy year's report card. Built from the save before
-     the year and the save after it at the moment of the press, and held here
-     rather than in the save: a career's save is hashed step by step by the
-     awards night fixture, and a career that never picks a focus has to come
-     out of the academy byte for byte the save it always was. */
-  const [academyReport, setAcademyReport] = useState<AcademyReport | null>(null);
   const timelineRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
   useCareerDock(mainRef, !!career, career?.phase);
@@ -1017,9 +1010,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
       farewellAdvance.current = career;
     }
     if (career.phase === "youth") {
-      const next = advanceYouthYear(career, clubs, true);
-      setAcademyReport(buildAcademyReport(career, next, effectivePotential(career)));
-      setCareer(next);
+      setCareer(advanceYouthYear(career, clubs, true));
     } else if (career.phase === "playing") {
       stepWithMomentsBanked(c => advanceProSeason(c, clubs, true));
     }
@@ -1566,7 +1557,6 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
               clubs={clubs}
               arrival={arrivalCount > 0 ? `begin-${arrivalCount}` : null}
               signedNote={signedNote && signedNote.forCareer === career ? signedNote : null}
-              academyReport={academyReport}
               onAcademyFocus={handleAcademyFocus}
               onCareerPatch={handleCareerPatch}
               onCurrencyChange={() => setCurrencyTick(t => t + 1)}
@@ -3179,15 +3169,13 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onCoachingStart, onAdvanceManager, onManagerReviewModeChange, onManagerJobResolve, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, academyReport, onAcademyFocus, onCareerPatch, arrival }: {
+function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onCoachingStart, onAdvanceManager, onManagerReviewModeChange, onManagerJobResolve, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, onAcademyFocus, onCareerPatch, arrival }: {
   /** Round 1330: set once per Begin Career ("begin-" and a count), null otherwise; the hub lands on the player card when it changes. */
   arrival?: string | null;
   career: CareerState;
   clubs: ClubData[];
   /** Round 530: the deal slip under the toast, already scoped to this career object by the page. */
   signedNote?: SignedNote | null;
-  /* Round 973: the academy report and the focus picker. */
-  academyReport?: AcademyReport | null;
   onAcademyFocus?: (focus: AcademyFocus | null) => void;
   /** Round 1047: the Season Centre's moments write through this. */
   onCareerPatch?: (fn: (prev: CareerState) => CareerState) => void;
@@ -3250,6 +3238,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
     `${career.phase}:${career.pendingEvents[0]?.id ?? ''}:${career.seasons.length}`,
   );
   const currentSeason = visibleCareer.seasons[visibleCareer.seasons.length - 1];
+  const academyReport = career.phase === "contract_offer" ? savedAcademyReport(career) : null;
 
   const statBars = getPositionStatBars(career.position, career);
 
@@ -3488,12 +3477,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           {/* OVERLAY: Contract Offers (youth → pro) */}
           {career.phase === "contract_offer" && career.pendingOffers.length > 0 && (
             <div className="space-y-3">
-              {/* Round 973: the academy year that just ended, above the offers
-                  it earned. Only for the year it was built for; after a reload
-                  the page has no before picture, so the card simply is not there. */}
-              {academyReport && academyReport.year === currentSeason.year && academyReport.club === career.currentClub && (
-                <AcademyReportCard report={academyReport} />
-              )}
+              {academyReport && <AcademyReportCard report={academyReport} />}
               <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 text-center">
                 <h3 className="text-lg font-black">📩 Contract Offers</h3>
                 <p className="text-xs text-muted-foreground mt-1">Choose a club to start your professional career</p>

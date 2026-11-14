@@ -11,7 +11,7 @@ import {
    again clears it, which removes the field from the save altogether.
 
    The report sits above the contract offers once the year is done. Every
-   number on it is read off the report, which is read off the two saves, so it
+   number on it is read off the settled academy year and its saved ratings, so it
    can only say what really happened. */
 
 export function AcademyFocusPicker({ position, focus, onPick }: {
