@@ -41,6 +41,7 @@
  * own section red):
  *   SLOTS_CONTROL=nopark      the swap never parks the outgoing career.
  *                             Section 1 (careers lost on the first lap).
+ *   SLOTS_CONTROL=plainpairs keeps parked pair maps plain; the late-save budget fails.
  *   SLOTS_CONTROL=dupe        the incoming career's parked copy is never
  *                             dropped, so a whole career is stored twice.
  *                             Section 2.
@@ -156,7 +157,7 @@ const SAVE_KEY = 'dukb-club-manager-save';
 const BASE_SEED = ((Number(process.env.SIM_SEED) || 0) * 15485863 + 0x2f6b9) >>> 0;
 
 const CONTROL = process.env.SLOTS_CONTROL || '';
-const OWN = { nopark: 1, dupe: 2, norollback: 3, oldversion: 4, leanmore: 4, decisioncontent: 4 };
+const OWN = { nopark: 1, dupe: 2, norollback: 3, oldversion: 4, leanmore: 4, decisioncontent: 4, plainpairs: 2 };
 if (CONTROL && !(CONTROL in OWN)) {
   console.error(`SLOTS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(OWN).join(', ')})`);
   process.exit(1);
@@ -246,13 +247,18 @@ const SLOT_SWAPS = {
     'the save version the tiles accept',
   ],
   leanmore: [
-    '  if (outgoing) return JSON.stringify(leanCareer(outgoing));\n',
-    '  if (outgoing) return JSON.stringify({ ...leanCareer(outgoing), history: [] });\n',
+    '  if (outgoing) return serializeParkedCareer(leanCareer(outgoing));\n',
+    '  if (outgoing) return serializeParkedCareer({ ...leanCareer(outgoing), history: [] });\n',
     'the lean park of the career in memory',
   ],
+  plainpairs: [
+    "  if (outgoing) return serializeParkedCareer(leanCareer(outgoing));\n",
+    "  if (outgoing) return JSON.stringify(leanCareer(outgoing));\n",
+    'the outgoing career pair encoding',
+  ],
   decisioncontent: [
-    '  if (outgoing) return JSON.stringify(leanCareer(outgoing));\n',
-    "  if (outgoing) return JSON.stringify({ ...leanCareer(outgoing), decisions: outgoing.decisions?.map((d, i) => i === 0 ? { ...d, text: 'Wrong decision!!' + d.text.slice(16) } : d) });\n",
+    '  if (outgoing) return serializeParkedCareer(leanCareer(outgoing));\n',
+    "  if (outgoing) return serializeParkedCareer({ ...leanCareer(outgoing), decisions: outgoing.decisions?.map((d, i) => i === 0 ? { ...d, text: 'Wrong decision!!' + d.text.slice(16) } : d) });\n",
     'the preserved content of a parked decision',
   ],
 };
@@ -682,7 +688,7 @@ if (CONTROL) {
   const own = OWN[CONTROL];
   /* The check each control is there to prove, not a neighbour of it: the
      byte fence itself for dupe, a moved store for norollback. */
-  const needTag = { dupe: 'budget', norollback: 'moved', oldversion: 'slot1', leanmore: 'roundtrip', decisioncontent: 'roundtrip' }[CONTROL];
+  const needTag = { dupe: 'budget', plainpairs: 'budget', norollback: 'moved', oldversion: 'slot1', leanmore: 'roundtrip', decisioncontent: 'roundtrip' }[CONTROL];
   const firedOwn = red.includes(own) && (!needTag || tags[own]?.has(needTag));
   if (firedOwn) {
     console.log(`\nCONTROL FIRED: SLOTS_CONTROL=${CONTROL} turned section ${own} red${needTag ? ` through its ${needTag} check` : ''} (red sections: ${red.join(', ')}), as it must`);

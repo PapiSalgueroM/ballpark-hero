@@ -88,6 +88,7 @@ import { CM_REAL_FREE_AGENTS_CURVE } from '@/data/clubManagerFreeAgents2026';
 import { CM_AGE_CURVE, ageRead } from '@/lib/cmAgeRead';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 import { SAVE_KEY } from '@/lib/clubManagerSaveKeys';
+import { isPackedParkedCareer, restoreParkedCareer } from '@/lib/clubManagerParkedSave';
 // Round 1035: the modern squads are the baked file joined with the A-League
 // Men's generated one, in one place both engine files read.
 import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL, cmWorldReadsAge, cmWorldTag } from '@/data/clubManagerWorldRosters';
@@ -25190,7 +25191,10 @@ export function loadCareer(slotSave?: string): CareerState | null {
     /* Round 634: held to SAVE_CAPS on the way in, so a save written oversized
        by an older build shrinks the first time it opens and is written back
        trimmed by the next save. A no-op on anything this engine wrote. */
-    const parsed = trimCareer(JSON.parse(raw) as CareerState);
+    const disk: unknown = JSON.parse(raw);
+    const restored = isPackedParkedCareer(disk) ? restoreParkedCareer(disk) : disk as CareerState | null;
+    if (!restored) return null;
+    const parsed = trimCareer(restored);
     /* Round 617: the fixture rule flag is exactly true or absent. A hand
        edited or damaged value would otherwise read as balanced through the
        callers' !! and flip a season's venues, so it is dropped, which keeps

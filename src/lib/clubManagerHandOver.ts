@@ -25,6 +25,7 @@
  */
 import { SAVE_KEY, leanCareer, saveCareer, trimCareer, type CareerState } from '@/lib/clubManager';
 import { activeSlot, parkedKey, readSlots, switchSlot, type SlotView } from '@/lib/clubManagerSlots';
+import { serializeParkedCareer } from '@/lib/clubManagerParkedSave';
 import { saveFence } from '@/lib/saveFence';
 import { SET_ASIDE_SLOT_KEY, copyAside, type ListableStorage } from '@/lib/brokenSaveRecovery';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
@@ -51,13 +52,13 @@ function read(at: string): string | null {
 function writeParked(slot: number, career: CareerState): boolean {
   const full = trimCareer(career);
   try {
-    localStorage.setItem(parkedKey(slot), JSON.stringify(full));
+    localStorage.setItem(parkedKey(slot), serializeParkedCareer(full));
     return true;
   } catch {
     /* once more, lean */
   }
   try {
-    localStorage.setItem(parkedKey(slot), JSON.stringify(leanCareer(full)));
+    localStorage.setItem(parkedKey(slot), serializeParkedCareer(leanCareer(full)));
     return true;
   } catch {
     return false;

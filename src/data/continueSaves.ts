@@ -140,7 +140,7 @@ export function savedGames(storage: Pick<Storage, 'getItem'> | null | undefined,
           const raw = storage.getItem(saveKey);
           if (!raw) continue;
           const save: unknown = JSON.parse(raw);
-          if (!readableClubManagerSave(save)) continue;
+          if (!readableClubManagerSave(save, slot !== active)) continue;
           out.push({
             entry: { ...entry, path: entry.path + '?slot=' + slot, saveKey },
             game, slot, description: describeParsedSave(entry, save),
