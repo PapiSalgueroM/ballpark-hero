@@ -1381,11 +1381,12 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
   const custom = career?.customClub;
   const customManaged = custom && custom.slotId === season?.clubId ? custom : undefined;
   const retired = career?.retired === true;
+  const outOfWork = career?.outOfWork === true;
   const current = useRef(career);
   const committed = useRef(initial?.raw ?? null);
   const [year, setYear] = useState<NrlYear>(initial?.career?.openingYear ?? 2026);
   const invalid = initial?.raw != null && initial.career === null;
-  const arrival = useArrivalTop<HTMLHeadingElement>(showSlots ? 'slots' : !season ? 'choose' : `club-${season?.year}`);
+  const arrival = useArrivalTop<HTMLHeadingElement>(showSlots ? 'slots' : !season ? 'choose' : outOfWork ? 'job-market' : `club-${season.year}`);
   const [panel, setPanel] = useState<Panel>(retired ? 'office' : 'match');
   const [office, setOffice] = useState<OfficeScreen>(retired ? 'history' : 'contracts');
   const [WorldCup, setWorldCup] = useState<Awaited<ReturnType<typeof loadWorldCup>>['default'] | null>(null);
@@ -1537,7 +1538,9 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
         <header className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <h1 ref={arrival} className="font-display text-2xl font-black sm:text-3xl">NRL Team Manager</h1>
-            {customManaged && season ? (
+            {outOfWork && season ? (
+              <p className="mt-1 text-sm text-muted-foreground">{retired ? 'Retired' : 'Between clubs'} · {season.year} season complete</p>
+            ) : customManaged && season ? (
               <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
                 <NrlCustomBadge {...customManaged} />
                 <p className="min-w-0 break-words">{customManaged.name} · {season.year} season{retired ? ' · Retired' : ''}
@@ -1593,7 +1596,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
           This career reached the save size limit. Your last saved progress is still in this slot.
         </p>}
         {!moved && saveFailed && <div className="rounded-xl border border-amber-500/50 bg-card p-3 text-sm" role="status">
-          This browser could not save your progress. {retired ? 'Retry to save your retirement.' : 'You can keep playing in this tab.'}{' '}
+          This browser could not save your progress. {retired ? 'Retry to save your retirement.' : outOfWork ? 'Retry to save your departure.' : 'You can keep playing in this tab.'}{' '}
           <button type="button" className="min-h-11 font-bold underline" onClick={() => current.current && persist(current.current)}>Retry save</button>
         </div>}
         {showSlots ? (
@@ -1603,6 +1606,8 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
         ) : !career || !season ? (
           <ClubChooser year={year} disabled={moved || loadingNames} loading={loadingNames} loadFailed={namesFailed}
             onYear={setYear} onStart={start} />
+        ) : outOfWork ? (
+          <NrlCareerOffice career={career} screen="history" disabled={moved || saveFailed} onAction={dispatch} />
         ) : (
           <>
             <div className="grid grid-cols-4 gap-2" role="group" aria-label="Manager screens">

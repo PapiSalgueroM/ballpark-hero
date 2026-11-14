@@ -1,0 +1,143 @@
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import type { ReactNode } from 'react';
+import { MemoryRouter } from 'react-router-dom';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { ARM_MS } from '@/components/club-manager/RetireDoor';
+import { createNrlCareer, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
+import { NRL_SAVE_KEY } from '@/lib/nrlManager';
+import { NRL_SAVE_SLOTS } from '@/lib/nrlSaveSlots';
+import { saveFence } from '@/lib/saveFence';
+import NrlTeamManager from '@/pages/NrlTeamManager';
+
+vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null }) }));
+vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), getCurrentPlayerName: () => 'Guest' }));
+vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: async () => [] }));
+vi.mock('@/components/game/GameNav', () => ({ GameNav: () => null }));
+vi.mock('@/components/game/GameNavbar', () => ({ GameNavbar: () => null }));
+vi.mock('@/components/game/RulesGate', () => ({ RulesGate: ({ children }: { children: ReactNode }) => <>{children}</> }));
+vi.mock('@/components/seo/GameSeoContent', () => ({ default: () => null }));
+vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
+
+const raw = () => localStorage.getItem(NRL_SAVE_KEY);
+const saved = () => readNrlCareerSave(raw());
+const button = (name: string | RegExp) => screen.getByRole('button', { name });
+const click = (name: string | RegExp) => fireEvent.click(button(name));
+const arm = () => act(() => vi.advanceTimersByTime(ARM_MS));
+const open = (query = '') => render(<MemoryRouter initialEntries={['/nrl-team-manager' + query]}><NrlTeamManager /></MemoryRouter>);
+
+beforeEach(() => {
+  localStorage.clear();
+  vi.useFakeTimers();
+  let career = createNrlCareer('storm', 4);
+  for (let round = 0; round < 35 && career.season.phase !== 'complete'; round++) career = reduceNrlCareer(career, { type: 'advance' });
+  expect(career.season.phase).toBe('complete');
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(career));
+});
+afterEach(() => {
+  cleanup();
+  vi.useRealTimers();
+  vi.restoreAllMocks();
+  NRL_SAVE_SLOTS.forEach(entry => saveFence.release(entry.saveKey));
+});
+
+function review() {
+  click('Club office');
+  click('Season review');
+}
+
+function leave() {
+  click('Leave club');
+  arm();
+  click('Yes, leave club');
+}
+
+describe('NRL between clubs in a saved career', () => {
+  it('asks before leaving, reopens to the job market, and records a new job', () => {
+    const before = raw();
+    const first = open();
+    review();
+    click('Leave club');
+    click('Yes, leave club');
+    expect(raw()).toBe(before);
+    click('Stay at club');
+    expect(raw()).toBe(before);
+    leave();
+    expect(saved()?.outOfWork).toBe(true);
+    expect(screen.getByRole('heading', { name: 'Out of work' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Match centre' })).not.toBeInTheDocument();
+    const afterLeave = raw();
+    first.unmount();
+    const slots = open('?view=saves');
+    expect(screen.getByText('Started in 2026 · 2026 season · Out of work')).toBeInTheDocument();
+    slots.unmount();
+    open();
+    expect(raw()).toBe(afterLeave);
+    expect(screen.getByRole('heading', { name: 'Out of work' })).toBeInTheDocument();
+    click('Take job at Perth Bears');
+    expect(saved()?.season).toMatchObject({ year: 2027, clubId: 'bears', round: 1 });
+    expect(saved()?.history[0].rejoinedClubId).toBe('bears');
+    expect(screen.queryByRole('heading', { name: 'Out of work' })).not.toBeInTheDocument();
+    review();
+    expect(screen.getByText(/Left the club and joined Perth/)).toBeInTheDocument();
+  });
+
+  it('keeps the departure pending when storage is full, then persists it on retry', () => {
+    const before = raw();
+    open();
+    review();
+    const setItem = Storage.prototype.setItem;
+    const full = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key === NRL_SAVE_KEY) throw new DOMException('Storage full', 'QuotaExceededError');
+      setItem.call(this, key, value);
+    });
+    leave();
+    expect(screen.getByRole('heading', { name: 'Out of work' })).toBeInTheDocument();
+    expect(screen.getByText(/could not save your progress/i)).toBeInTheDocument();
+    expect(button('Take job at Perth Bears')).toBeDisabled();
+    expect(raw()).toBe(before);
+    full.mockRestore();
+    click('Retry save');
+    expect(saved()?.outOfWork).toBe(true);
+    expect(button('Take job at Perth Bears')).toBeEnabled();
+
+    const unemployed = raw();
+    const retryHire = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key === NRL_SAVE_KEY) throw new DOMException('Storage full', 'QuotaExceededError');
+      setItem.call(this, key, value);
+    });
+    click('Take job at Perth Bears');
+    expect(raw()).toBe(unemployed);
+    expect(button('Retry save')).toBeVisible();
+    retryHire.mockRestore();
+    click('Retry save');
+    expect(saved()?.season).toMatchObject({ year: 2027, clubId: 'bears', round: 1 });
+    expect(saved()?.history[0].rejoinedClubId).toBe('bears');
+  });
+
+  it('does not overwrite a newer slot when the job market is stale', () => {
+    open();
+    review();
+    const ended = saved()!;
+    leave();
+    const newer = JSON.stringify(reduceNrlCareer(ended, { type: 'startNextSeason' }));
+    localStorage.setItem(NRL_SAVE_KEY, newer);
+    click('Take job at Perth Bears');
+    expect(raw()).toBe(newer);
+    expect(button('Reload your season')).toBeVisible();
+  });
+
+  it('can retire from the saved job market and reopen the completed career', () => {
+    const first = open();
+    review();
+    leave();
+    click('Retire from management');
+    arm();
+    click('Yes, retire');
+    expect(saved()).toMatchObject({ outOfWork: true, retired: true });
+    expect(screen.queryByRole('button', { name: 'Take job at Perth Bears' })).not.toBeInTheDocument();
+    expect(screen.getByText('Retired after the 2026 season.')).toBeInTheDocument();
+    first.unmount();
+    open();
+    expect(screen.getByText('Retired after the 2026 season.')).toBeInTheDocument();
+  });
+});
