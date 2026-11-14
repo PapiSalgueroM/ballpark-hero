@@ -63,6 +63,11 @@
  * the board put back, CFB is green and CBB parts at its Leagues tab. Moved:
  * 27 CFB steps and 2 CBB steps, each on the markup, the text and at most the
  * head, never the save, the draws, the share, the completion or the reveal.
+ *
+ * RE-RECORDED when regular season ratings were added, from f451ab670.
+ * All 104 football and 100 basketball steps still run. Both first move on
+ * the third game press, in markup, text and save only. Later scores can
+ * reflect the current ratings, and rollover only advances class years.
  */
 import type { ComponentType } from 'react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
