@@ -125,6 +125,50 @@ it('finds the right game from a first-time visitor’s description', async () =>
   expect(results[0]).toHaveFocus();
 });
 
+it('narrows Home search by sport and restores that search after playing', async () => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  function Game() {
+    const navigate = useNavigate();
+    return <button onClick={() => navigate(-1)}>Go back</button>;
+  }
+  const view = render(<MemoryRouter><Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="/nfl-gauntlet-draft" element={<Game />} />
+  </Routes></MemoryRouter>);
+  const field = () => screen.getByRole('textbox', { name: 'Search games' });
+  const filter = () => screen.getByRole('combobox', { name: 'Filter by sport' });
+  const status = () => screen.getByRole('status', { name: 'Search results' });
+  const results = () => [...view.container.querySelectorAll<HTMLAnchorElement>('[data-home-game-card] a')]
+    .filter(link => !link.closest('[hidden]'));
+  fireEvent.change(field(), { target: { value: 'gauntlet' } });
+  await act(async () => { await vi.dynamicImportSettled(); });
+  expect(results().map(link => link.getAttribute('href'))).toContain('/nba-gauntlet-draft');
+  fireEvent.change(filter(), { target: { value: 'football' } });
+  expect(results().map(link => link.getAttribute('href'))).toEqual(['/nfl-gauntlet-draft']);
+  expect(status()).toHaveTextContent('1 game found for gauntlet in NFL');
+  field().focus();
+  fireEvent.keyDown(field(), { key: 'ArrowDown' });
+  expect(results()[0]).toHaveFocus();
+  fireEvent.click(results()[0]);
+  fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
+  await act(async () => { await vi.dynamicImportSettled(); });
+  expect(field()).toHaveValue('gauntlet');
+  expect(filter()).toHaveValue('football');
+  expect(results()[0]).toHaveFocus();
+  fireEvent.change(filter(), { target: { value: 'rugby' } });
+  expect(results()).toEqual([]);
+  expect(status()).toHaveTextContent('No games found for gauntlet in Rugby League');
+  fireEvent.click(screen.getByRole('button', { name: 'Show all sports' }));
+  expect(filter()).toHaveValue('');
+  expect(filter()).toHaveFocus();
+  expect(results().map(link => link.getAttribute('href'))).toContain('/nba-gauntlet-draft');
+  fireEvent.change(filter(), { target: { value: 'football' } });
+  fireEvent.keyDown(field(), { key: 'Escape' });
+  fireEvent.change(field(), { target: { value: 'gauntlet' } });
+  expect(filter()).toHaveValue('');
+  expect(localStorage.getItem('dukb-fav-sport')).toBeNull();
+});
+
 it('puts active saves and picks before discovery in keyboard order and restores both shelves after search', async () => {
   const saved = '{"season":{"year":2027}}';
   localStorage.setItem('nrl-manager-save-v1-slot-2', saved);
