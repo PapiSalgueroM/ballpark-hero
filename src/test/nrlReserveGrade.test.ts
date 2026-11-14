@@ -51,7 +51,7 @@ describe('NRL reserve-grade development', () => {
     const spell = advance(start(initial, id));
     const action = { type: 'bookReserveCoach', year: 2027, clubId: 'bears', round: 2, playerId: id } as const;
     expect(reduceNrlCareer(spell, { ...action, playerId: 'wrong' })).toBe(spell);
-    const staff = reduceNrlCareer(spell, { type: 'hireCoach', year: 2027, clubId: 'bears', round: 2, role: 'attack' });
+    const staff = reduceNrlCareer(spell, { type: 'hireCoach', year: 2027, round: 2, role: 'attack' });
     expect(staff.finance.coachHire).toBeDefined();
     const limited = { ...staff, finance: { ...staff.finance, openingCash: staff.finance.openingCash - nrlCareerFinance(staff).cash + 90_000 } };
     expect(nrlReserveCoachQuote(limited)?.reason).toMatch(/reserved/);

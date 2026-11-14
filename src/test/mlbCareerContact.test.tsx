@@ -76,7 +76,7 @@ describe('MLB My Career batting approach', () => {
     expect(line.contactApproach).toBe(true);
     const row = line as unknown as UsRow;
     const prep = buildUsSeason(MLB_SEASON, c, row, sport.teamLabelOf);
-    if (!prep.ok) throw new Error(prep.line);
+    if (prep.ok === false) throw new Error(prep.line);
     const rebuilt = deriveSeasonOrWhy(prep.sport, row, prep.ctx);
     if (typeof rebuilt === 'string') throw new Error(rebuilt);
     expect(disagreements(prep.sport, row, prep.ctx, rebuilt)).toEqual([]);
