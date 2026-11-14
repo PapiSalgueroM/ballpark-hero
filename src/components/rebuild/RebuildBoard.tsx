@@ -51,10 +51,10 @@ export function RebuildBoard() {
     run,
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason,
     startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
-    managerReading, offerPrice, canRedeal,
+    managerReading, offerPrice, canRedeal, canBudgetScout,
     canSecondSpin, swapCeiling, loanFee, peeked, verdictCards, secondSpin, partExchange, loanReplacement, sneakPeek, vetoCard, acceptVerdict,
     pickFinance, toManager, hireManager, keepManager, setFormation,
-    spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun,
+    spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun, scoutWithinBudget,
     thinking, raiseWar, walkAway,
     finish, rivals, rivalsLoading, season,
   } = useRebuild();
@@ -951,7 +951,7 @@ export function RebuildBoard() {
           {deal.offers.length > 0 && (
             <div className="mt-3 space-y-1.5">
               <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">
-                The scouts' three{swapOpen ? `, ${Math.round(SWAP_DISCOUNT * 100)}% off in the exchange` : perks.discount > 0 ? ', 20% off the one you take' : ''}
+                {deal.offers.length === 3 ? "The scouts' three" : "The scouts' offers"}{swapOpen ? `, ${Math.round(SWAP_DISCOUNT * 100)}% off in the exchange` : perks.discount > 0 ? ', 20% off the one you take' : ''}
               </p>
               {deal.offers.map(p => {
                 const price = offerPrice(p);
@@ -1026,12 +1026,24 @@ export function RebuildBoard() {
               <p className="text-xs text-muted-foreground">
                 {perks.rescout > 0 ? 'You have a fresh list in your pocket.' : 'Nobody on the list is gettable with the money left.'}
               </p>
-              <button
-                onClick={redealSpun}
-                className="mt-2 rounded-full border border-border px-5 py-2 text-sm font-semibold text-foreground hover:border-primary/50"
-              >
-                Ask the scouts for a new list
-              </button>
+              {canBudgetScout && <p className="mt-1 text-xs text-muted-foreground" id="rebuild-budget-scout-note">
+                Look within budget spends a Fresh List and replaces the paid offers. Asking prices fit your €{budget}M cash. Rival bids can raise the price.
+              </p>}
+              <div className="mt-2 flex flex-wrap justify-center gap-2">
+                <button
+                  onClick={redealSpun}
+                  className="min-h-11 rounded-full border border-border px-5 py-2 text-sm font-semibold text-foreground hover:border-primary/50"
+                >
+                  Ask the scouts for a new list
+                </button>
+                {canBudgetScout && <button
+                  onClick={scoutWithinBudget}
+                  aria-describedby="rebuild-budget-scout-note"
+                  className="min-h-11 rounded-full border border-primary/50 px-5 py-2 text-sm font-semibold text-primary hover:border-primary"
+                >
+                  Look within budget
+                </button>}
+              </div>
             </div>
           )}
           {swapOpen && incumbent ? (

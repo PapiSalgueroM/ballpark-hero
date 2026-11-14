@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 import * as deck from '@/lib/rebuildDeck';
 import * as loop from '@/lib/rebuildLoop';
 import { policyMove, THINKING } from '@/lib/rebuildPolicy';
+import { applyMove, parseRebuildSave, restoreTable, toSave, type RebuildMove } from '@/lib/rebuildSave';
+import * as table from '@/lib/rebuildTable';
 import type { RunState } from '@/lib/rebuildLoop';
 import { normalizePosition } from '@/lib/squadDeal';
 import { getEnrichment } from '@/data/footleEnrichment';
@@ -36,6 +38,99 @@ function playUntil(s: RunState, stop: (s: RunState) => boolean): RunState {
   return s;
 }
 const give = (s: RunState, p: deck.PerkKind, n = 1): RunState => ({ ...s, perks: { ...s.perks, [p]: n } });
+
+describe('Rebuild budget scout', () => {
+  it('spends a Fresh List for distinct same-shirt deals at the actual asking price and keeps the bench', () => {
+    const open = playUntil(fresh(23), r => !!r.deal && !r.war && r.deal.offers.length > 0);
+    const slot = open.formation.slots[open.spun!];
+    const player = open.deal!.offers[0];
+    const current = { ...player, name: 'Fixture Current', marketValue: 6 };
+    const bench = [{ ...player, name: 'Fixture Bench' }];
+    const affordable = { ...player, name: 'Fixture Affordable', marketValue: 12 };
+    const pool = [current, affordable, { ...affordable, nationality: 'Another' }, { ...player, name: 'Fixture Taken', marketValue: 7 },
+      { ...player, name: 'Fixture Too Expensive', marketValue: 14 }, { ...player, name: 'Fixture Wrong Position', marketValue: 4,
+        position: market.find(candidate => !slot.allowed.includes(candidate.position))!.position }];
+    const run = { ...give(give(give(open, 'rescout'), 'discount'), 'noWar'), market: pool, deal: { offers: [current], bench },
+      lost: { 'Fixture Taken': 0 }, extraFunds: open.extraFunds + 10 - loop.budgetOf(open), actions: 0 };
+
+    expect(loop.canBudgetScout(run)).toBe(true);
+    const next = loop.budgetScout(run);
+    expect(next.deal).toEqual({ offers: [affordable], bench });
+    expect(next.perks).toEqual({ ...run.perks, rescout: 0 });
+    expect(next.actions).toBe(run.actions);
+    expect(next.sold).toEqual(run.sold);
+    expect(next.signed).toEqual(run.signed);
+    expect(loop.budgetOf(next)).toBe(10);
+    expect(loop.takeOffer(next, current.name)).toBe(next);
+    const signed = loop.takeOffer(next, affordable.name);
+    expect(signed.decided[run.spun!]).toEqual(affordable);
+    expect(loop.budgetOf(signed)).toBe(0);
+    expect(loop.budgetScout(next)).toBe(next);
+
+    const noDiscount = give(run, 'discount', 0);
+    expect(loop.canBudgetScout(noDiscount)).toBe(false);
+    expect(loop.budgetScout(noDiscount)).toBe(noDiscount);
+    for (const refused of [{ ...run, phase: 'manager' as const }, { ...run, spun: null }, { ...run, swapOpen: true },
+      { ...run, extraFunds: run.extraFunds - 10 }, { ...run, war: { player, rivalIdx: 0, price: 10,
+        leader: 'rival' as const, cap: 12, log: [], outcome: 'live' as const } }]) {
+      expect(loop.canBudgetScout(refused)).toBe(false);
+      expect(loop.budgetScout(refused)).toBe(refused);
+    }
+  });
+
+  it('restores both the regular and budget scout after a genuine finance card opens the perk', () => {
+    const data: table.TableData = { squads: new Map([[CLUB.club, squad]]), markets: new Map([[CLUB.club, market]]), preset: 'none' };
+    let opened = table.pickClub(table.createTable(['human'], 23), CLUB, CLUBS);
+    opened = table.openWindow(opened, data, CLUBS);
+    const start = table.activeRun(opened)!;
+    const finance = start.financeDeck.findIndex(card => card.perk === 'rescout');
+    expect(finance).toBeGreaterThanOrEqual(0);
+    const setup: RebuildMove[] = [{ k: 'finance', i: finance }, { k: 'toManager' }, { k: 'manager', id: deck.KEEP_MANAGER.id }, { k: 'spin' }];
+    const play = (state: table.TableState, move: RebuildMove) => table.updateRun(state, run => applyMove(run, move));
+    opened = setup.reduce(play, opened);
+    if (!table.activeRun(opened)!.deal) {
+      const sale: RebuildMove = { k: 'sell' };
+      setup.push(sale);
+      opened = play(opened, sale);
+    }
+    expect(table.activeRun(opened)!.perks.rescout).toBe(1);
+    expect(table.activeRun(opened)!.deal).not.toBeNull();
+    const legacy = { k: 'redeal' } as const;
+    const budget = { k: 'budgetScout' } as const;
+    const before = table.activeRun(opened)!;
+    const outcomes = [legacy, budget].map(move => {
+      const after = play(opened, move);
+      const run = table.activeRun(after)!;
+      expect(after).not.toBe(opened);
+      const save = toSave({ table: after, moves: [[...setup, move]] }, 'none')!;
+      const parsed = parseRebuildSave(JSON.stringify(save));
+      expect(parsed).toEqual(save);
+      expect(restoreTable(parsed!, CLUBS, data)).toEqual({ table: after, moves: [[...setup, move]] });
+      return run;
+    });
+    expect(outcomes[0].deal).not.toEqual(outcomes[1].deal);
+    expect(outcomes[1].deal!.bench).toEqual(before.deal!.bench);
+    expect(outcomes[1].deal!.offers).toHaveLength(3);
+    expect(outcomes[1].deal!.offers.every(player => loop.offerPrice(before, player) <= loop.budgetOf(before))).toBe(true);
+  });
+
+  it('keeps rival bidding on a budget offer even when the opening bid exceeds the cash', () => {
+    const open = playUntil(fresh(23), r => !!r.deal && !r.war && r.deal.offers.length > 0);
+    const player = open.deal!.offers[0];
+    const prospect = Array.from({ length: 100 }, (_, i) => ({ ...player, name: `Fixture Rival Prospect ${i}`, marketValue: 40 }))
+      .find(candidate => deck.isContested(candidate, open.seed));
+    expect(prospect).toBeDefined();
+    const run = { ...give(give(give(open, 'rescout'), 'discount', 0), 'noWar', 0), market: [prospect!],
+      extraFunds: open.extraFunds + 40 - loop.budgetOf(open) };
+    const next = loop.budgetScout(run);
+    expect(next.deal!.offers).toEqual([prospect]);
+    expect(loop.offerPrice(next, prospect!)).toBe(loop.budgetOf(next));
+    const challenged = loop.takeOffer(next, prospect!.name);
+    expect(challenged.war?.player).toBe(prospect);
+    expect(challenged.war!.price).toBeGreaterThan(loop.budgetOf(challenged));
+    expect(challenged.signed).toEqual(next.signed);
+  });
+});
 
 describe('Rebuild power ups (Round 980)', () => {
   it('deck 1 never deals a new perk, deck 2 holds all five', () => {
