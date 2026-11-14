@@ -35,7 +35,7 @@ import {
   nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlOppositionReport, nrlPositionTraining,
   nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlSelectionPromise, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
-  NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SELECTION_PROMISE, reduceNrlCareer, runNrlFastForward,
+  NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, reduceNrlCareer, runNrlFastForward,
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
 } from '@/lib/nrlCareer';
 import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryCase } from '@/lib/nrlJudiciary';
@@ -1751,7 +1751,9 @@ function Squad({ career, onAction, disabled }: {
 
 const finalsRaceLabels = { secured: 'Secured', open: 'Still open', out: 'Out of reach' } as const;
 
-function Ladder({ career }: { career: NrlCareerState }) {
+function Ladder({ career, onAction, onOpenShortlist, disabled }: {
+  career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onOpenShortlist: () => void; disabled: boolean;
+}) {
   const shortName = useNrlClubName();
   const fullName = useNrlClubName('full');
   const { season } = career;
@@ -1767,6 +1769,7 @@ function Ladder({ career }: { career: NrlCareerState }) {
   const rivalName = rival && fullName(season.year, rival.id);
   const rank = rows.findIndex(row => row.clubId === rival?.id && row.played > 0) + 1;
   const rivalSquad = rival ? nrlRivalSquad(career, rival.id) : [];
+  const shortlist = career.shortlist ?? [];
   return (
     <section className="rounded-xl border border-border bg-card p-3 sm:p-4" aria-labelledby="nrl-ladder">
       <h2 id="nrl-ladder" className="font-display text-lg font-bold">{season.year} ladder</h2>
@@ -1881,11 +1884,18 @@ function Ladder({ career }: { career: NrlCareerState }) {
                 ? `Includes players from the ${career.openingRoster === 'matchday-2026' ? '2026 opening' : '2027 Perth signings'} snapshot. Squad development is simulated.`
                 : 'Generated squad for this career.'}</p>
               {career.legacySeason && <p className="mt-1 text-xs text-muted-foreground">This imported season uses its original opponent ratings for matches.</p>}
+              {(rivalSquad.some(row => row.marketYear !== null) || shortlist.length > 0) && (
+                <div className="mt-2 flex flex-wrap items-center gap-2 text-sm">
+                  <Button type="button" size="lg" variant="outline" onClick={onOpenShortlist}>Open recruitment shortlist</Button>
+                  <span aria-live="polite" className="text-muted-foreground">{shortlist.length}/{NRL_SHORTLIST_LIMIT} saved</span>
+                </div>
+              )}
               <div tabIndex={0} role="region" aria-label={`${rivalName} squad`}
                 className="mt-2 max-h-80 overflow-y-auto rounded-md border border-border px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <ul className="divide-y divide-border text-sm">
                   {rivalSquad.map(({ player, contractEnd, marketYear }) => {
                     const future = player.futureContract;
+                    const saved = shortlist.includes(player.id);
                     const destination = future && clubs.find(club => club.id === future.clubId);
                     return (
                       <li key={player.id} className="break-words py-2">
@@ -1897,6 +1907,13 @@ function Ladder({ career }: { career: NrlCareerState }) {
                             : ` · Joins ${destination ? shortName(season.year, destination.id) : 'another club'} in ${future.startYear}`)}
                           {marketYear !== null && ` · On the ${marketYear} market`}
                         </p>
+                        {marketYear !== null && (
+                          <Button type="button" size="lg" className="mt-1 px-3" variant="outline" aria-label={`Shortlist ${player.name}`}
+                            aria-pressed={saved} disabled={disabled || (!saved && shortlist.length >= NRL_SHORTLIST_LIMIT)}
+                            onClick={() => onAction({ type: 'setShortlist', year: season.year, playerId: player.id, saved: !saved })}>
+                            {saved ? 'Shortlisted' : 'Shortlist'}
+                          </Button>
+                        )}
                       </li>
                     );
                   })}
@@ -1948,6 +1965,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
   const arrival = useArrivalTop<HTMLHeadingElement>(showSlots ? 'slots' : !season ? 'choose' : outOfWork ? 'job-market' : `club-${season.year}`);
   const [panel, setPanel] = useState<Panel>(retired ? 'office' : 'match');
   const [office, setOffice] = useState<OfficeScreen>(retired ? 'history' : 'contracts');
+  const [openShortlist, setOpenShortlist] = useState(false);
   const [WorldCup, setWorldCup] = useState<Awaited<ReturnType<typeof loadWorldCup>>['default'] | null>(null);
   const [cupMode, setCupMode] = useState<'standalone' | 'appointment' | null>(null);
   const cupOpen = cupMode !== null;
@@ -2142,6 +2160,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check Rating changes in Squad. Existing ratings carry into the next season.</li>
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
+              <li>In Ladder, open Scout a club to shortlist eligible rivals and take them straight to Recruitment.</li>
               <li>Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.</li>
               <li>Before arranging an offseason move, keep another player signed at the same position for next season.</li>
               <li>You can end a pending selection promise in Contracts. This gives up its renewal discount and uses your one promise for that season.</li>
@@ -2205,18 +2224,19 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               ))}
             </div>
             {panel === 'match' && <MatchCentre career={career} onAction={dispatch} onRun={fastForward} disabled={moved || retired} showLiveResult={showLiveResult}
-              onOpenOffice={screen => { setOffice(screen); setPanel('office'); }} />}
+              onOpenOffice={screen => { setOpenShortlist(false); setOffice(screen); setPanel('office'); }} />}
             {live && (panel === 'squad' || panel === 'office') && (
               <p className="rounded-xl border border-border bg-card p-3 text-sm">Finish the live match in Match centre to make changes.</p>
             )}
             {panel === 'squad' && <Squad career={career} onAction={dispatch} disabled={rosterLocked} />}
-            {panel === 'ladder' && <Ladder career={career} />}
+            {panel === 'ladder' && <Ladder career={career} onAction={dispatch} disabled={rosterLocked}
+              onOpenShortlist={() => { setOpenShortlist(true); setOffice('recruitment'); setPanel('office'); }} />}
             {panel === 'office' && (
               <>
                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-5" role="group" aria-label="Club office screens">
                   {OFFICE_SCREENS.map(({ id, label }) => (
                     <Button key={id} type="button" size="lg" className="px-2 text-sm last:col-span-2 sm:last:col-span-1" variant={office === id ? 'default' : 'outline'}
-                      aria-pressed={office === id} onClick={() => setOffice(id)}>{label}</Button>
+                      aria-pressed={office === id} onClick={() => { setOpenShortlist(false); setOffice(id); }}>{label}</Button>
                   ))}
                 </div>
                 <NrlOriginOffice career={career} disabled={rosterLocked} onAction={dispatch} />
@@ -2231,7 +2251,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
                       : career.worldCup ? 'Resume 2026 World Cup appointment' : 'Take 2026 World Cup appointment'}
                   </Button>
                 </div>}
-                <NrlCareerOffice key={office} career={career} screen={office} disabled={rosterLocked} onAction={dispatch} />
+                <NrlCareerOffice key={office} career={career} screen={office} disabled={rosterLocked} onAction={dispatch} openShortlist={openShortlist} />
               </>
             )}
           </>

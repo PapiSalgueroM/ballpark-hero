@@ -480,7 +480,7 @@ export function nrlRivalSquad(state: NrlCareerState, clubId: string) {
   return squadAt(state.players, clubId, year).sort(byRating).map(player => ({
     player,
     contractEnd: contractIn(player, year)!.endYear,
-    marketYear: marketStartYear(state, player),
+    marketYear: marketEntry(state, player)?.startYear ?? null,
   }));
 }
 

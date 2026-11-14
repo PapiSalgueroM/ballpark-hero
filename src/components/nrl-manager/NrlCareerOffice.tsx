@@ -691,16 +691,21 @@ function RecruitmentPlan({ career, targets, renewals }: { career: NrlCareerState
   );
 }
 
-function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+function Recruitment({ career, onAction, disabled, openShortlist }: {
+  career: NrlCareerState; onAction: Dispatch; disabled: boolean; openShortlist: boolean;
+}) {
   const labelForClub = useNrlClubName();
   const [role, setRole] = useState<NrlRole | ''>('');
-  const [shortlistedOnly, setShortlistedOnly] = useState(false);
+  const [shortlistedOnly, setShortlistedOnly] = useState(openShortlist);
   const [comparing, setComparing] = useState(false);
   const [visible, setVisible] = useState(12);
   const shortlistFilter = useRef<HTMLButtonElement>(null);
   const shortlistControls = useRevealScroll<HTMLDivElement>(comparing, { enabled: !comparing });
   const compareOpener = useRef<HTMLButtonElement>(null);
   const returnFromComparison = useRef(false);
+  useEffect(() => {
+    if (openShortlist) shortlistFilter.current?.focus({ preventScroll: true });
+  }, [openShortlist]);
   useEffect(() => {
     if (comparing || !returnFromComparison.current) return;
     returnFromComparison.current = false;
@@ -2160,13 +2165,13 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   );
 }
 
-export default function NrlCareerOffice({ career, screen, onAction, disabled }: {
-  career: NrlCareerState; screen: OfficeScreen; onAction: Dispatch; disabled: boolean;
+export default function NrlCareerOffice({ career, screen, onAction, disabled, openShortlist = false }: {
+  career: NrlCareerState; screen: OfficeScreen; onAction: Dispatch; disabled: boolean; openShortlist?: boolean;
 }) {
   return (
     <section className="rounded-xl border border-border bg-card p-4 sm:p-5" aria-label={career.outOfWork ? 'Career review' : 'Club office'}>
       {screen === 'contracts' && <Contracts career={career} onAction={onAction} disabled={disabled} />}
-      {screen === 'recruitment' && <Recruitment career={career} onAction={onAction} disabled={disabled} />}
+      {screen === 'recruitment' && <Recruitment career={career} onAction={onAction} disabled={disabled} openShortlist={openShortlist} />}
       {screen === 'academy' && <Academy career={career} onAction={onAction} disabled={disabled} />}
       {screen === 'finances' && <Finances career={career} onAction={onAction} disabled={disabled} />}
       {screen === 'history' && <History career={career} onAction={onAction} disabled={disabled} />}
