@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,6 +284,8 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>⚔️Gauntlet Draft: Soccer</h1>
@@ -266,6 +300,7 @@
 <li>Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.</li>
 <h3>Drafting one card per slot</h3>
 <li>For each slot, read the five cards, star to bargain, and tap the one you keep. Position families apply, so a winger card can cover either flank.</li>
+<li>In Unlimited Soccer Gauntlet, redraw one slot per draft. A successful redraw withdraws all five current cards. If five new players cannot fill the slot, keep the current offer and try the redraw in another slot.</li>
 <h3>How the knockout starts on its own</h3>
 <li>After pick eleven the knockout starts on its own: five rounds, one match each, revealed one at a time.</li>
 <h3>Scoring survival points and the trophy</h3>
@@ -284,6 +319,7 @@
 <h2>Gauntlet Draft: Soccer walkthrough of a striker pick and a four round run</h2>
 <h3>A striker slot with five cards to choose</h3>
 <p>The draw hands you a 4-3-3 and the striker slot deals a 91 rated superstar next to an 84, a 79, a 74 and a 68. You pay nothing for any of them, so the 91 is the pick unless you are chasing a story.</p>
+<p>In Unlimited, you could take the 91 now or redraw the striker slot if you still have your redraw. Take the new offer and the 91 leaves the draft with the other four cards.</p>
 <h3>Four rounds survived and one regret</h3>
 <p>Your finished XI rates 84. The Qualifier ends 3-0, the Last Sixteen 2-1, the Quarter Final needs penalties, and the Semi Final ends the run 1-2. Four rounds survived, 64 points, and the draft you would redo is the 74 you took at left back.</p>
 <h2>Gauntlet Draft: Soccer tips for drafting a squad that lifts the trophy</h2>
@@ -327,8 +363,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>

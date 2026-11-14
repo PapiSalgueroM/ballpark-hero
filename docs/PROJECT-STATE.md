@@ -6,6 +6,8 @@
 
 ## 2026-11-14: Full-time ratings, NRL interchanges and MLB postseason rotation
 
+[PR #961](https://github.com/PapiSalgueroM/ballpark-hero/pull/961) published exact main `6d840c5b1ca27042534a115a54a018a0a5b480d2`, deployment `0fcae2bf-70eb-4f70-9177-5e9b516cdcdd`. Eight live browser journeys, all three raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted all three game guides.
+
 - Aussie Rules Manager shows who gained or lost skill in the full-time report for the round. Reopen the match after a reload to see the same before-and-after ratings. Squad still keeps the latest review, and the finals use their existing match reports.
 - NRL Team Manager can leave the fourth automatic interchange open. Quick Sim uses the first three reserves. Live Match can use that open place at 60 minutes under the usual eligibility and interchange limits.
 - MLB Front Office can send its ace out first in the postseason and rotate through three available starters. Each pitcher's rating affects the game they start. The postseason recap records the actual order and results. A short rotation falls back to the usual team approach.

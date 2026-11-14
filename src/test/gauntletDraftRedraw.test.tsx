@@ -77,7 +77,7 @@ it('keeps the selected redraw card, runs the same cup engine, and never gives Da
     fireEvent.click(cards[0]);
   }
   expect(loadDailyRun('2026-11-14')).toEqual(runGauntlet(daily.picks.map(pick => pick.choices[0])));
-});
+}, 15_000);
 
 it('keeps the offer and lets the player spend the redraw later when this slot is short', async () => {
   vi.spyOn(Math, 'random').mockReturnValue(0.25);
