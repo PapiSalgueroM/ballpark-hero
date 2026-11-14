@@ -69,6 +69,7 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
   const eligible = state.bench.map(id => leaguePlayer(state, id)!).filter(player => player.role === outgoing?.role);
   const selectedIn = eligible.some(player => player.id === inId) ? inId : eligible[0]?.id ?? '';
   const nextLabel = state.stage === 'homeAway' ? (state.round === ROUNDS - 1 ? 'On to the finals' : 'Next round') : state.week === lastWeek(state.format) ? 'Wrap up the season' : 'Next finals week';
+  const changes = state.ratingReview?.round === state.round ? state.ratingReview.changes : [];
   return <div className={styles.card} data-arl-match>
     {match && <div className={styles.score} data-arl-score><div><strong>{clubFull(state, match.homeId)}</strong><span>{score(match.homeScore)}</span></div><div><strong>{clubFull(state, match.awayId)}</strong><span>{score(match.awayScore)}</span></div></div>}
     {!match && state.phase === 'prepare' && <><h3>You are not playing this week</h3><p className={styles.muted}>Here is the week's draw. Play it out to see who goes through.</p><Results state={state} />
@@ -90,6 +91,15 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
     {state.phase === 'report' && <><h3>{match ? 'Full time' : 'The week is done'}</h3>
       {match && match.homeScore.total !== match.awayScore.total && <p data-arl-result>{(match.homeScore.total > match.awayScore.total) === (match.homeId === state.myClub) ? 'You won' : 'You lost'} by {Math.abs(match.homeScore.total - match.awayScore.total)}.</p>}
       {match && match.homeScore.total === match.awayScore.total && <p data-arl-result>A draw: two ladder points each.</p>}
+      {state.stage === 'homeAway' && <section aria-label="Skill changes this round">
+        {changes.length ? <details key={`${state.season}:${state.round}`} className={styles.events}>
+          <summary>Skill changes this round ({changes.length})</summary>
+          <ul className={own.list}>{changes.map(([id, change]) => {
+            const player = leaguePlayer(state, id)!;
+            return <li key={id}>{player.name} · {player.skill - change} → {player.skill} skill</li>;
+          })}</ul>
+        </details> : <p className={styles.muted}>No skill changes were recorded for this round.</p>}
+      </section>}
       <Results state={state} />
       <button className={styles.action} data-arl-next onClick={() => act({ type: 'next' })}>{nextLabel}</button></>}
     {match && match.events.length > 0 && <details className={styles.events}><summary>Scoring events ({match.events.length})</summary><ol>{match.events.map(event => <li key={event.id}>{event.quarter > 4 ? 'Extra time' : `Q${event.quarter}`}, {event.minute} min: {leaguePlayer(state, event.playerId)?.name}, {clubShort(state, event.clubId)}, {event.kind} ({event.points} {event.points === 1 ? 'point' : 'points'}).</li>)}</ol></details>}

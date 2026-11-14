@@ -57,6 +57,48 @@ describe('AussieRulesLeagueBoard', () => {
     expect(saved().phase).toBe('prepare');
   });
 
+  it('shows skill movement in the exact full-time report and after reload', () => {
+    const opening = createLeague(12, 'club-05')!;
+    const changed = until(opening, s => s.stage === 'homeAway' && s.phase === 'report' && s.ratingReview?.round === s.round);
+    expect(changed.ratingReview!.changes.length).toBeGreaterThan(0);
+    store(changed);
+    const bytes = localStorage.getItem(SAVE_KEY);
+    const view = draw();
+    tile(view, 'Next match');
+    const report = view.getByRole('region', { name: 'Skill changes this round' });
+    const players = clubOf(changed, changed.myClub)!.players;
+    expect(within(report).getAllByRole('listitem', { hidden: true }).map(row => row.textContent)).toEqual(
+      changed.ratingReview!.changes.map(([id, change]) => {
+        const player = players.find(p => p.id === id)!;
+        return `${player.name} · ${player.skill - change} → ${player.skill} skill`;
+      }),
+    );
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+    view.unmount();
+    const reopened = draw();
+    tile(reopened, 'Next match');
+    expect(reopened.getByRole('region', { name: 'Skill changes this round' }).textContent).toBe(report.textContent);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+  });
+
+  it('keeps an older skill review out of the current round and finals report', () => {
+    const opening = createLeague(12, 'club-05')!;
+    const later = until(opening, s => s.stage === 'homeAway' && s.phase === 'report'
+      && !!s.ratingReview && s.ratingReview.round < s.round);
+    expect(later.ratingReview!.round).toBeLessThan(later.round);
+    store(later);
+    const view = draw();
+    tile(view, 'Next match');
+    expect(within(view.getByRole('region', { name: 'Skill changes this round' })).getByText('No skill changes were recorded for this round.')).toBeTruthy();
+    view.unmount();
+    const finals = until(later, s => s.stage === 'finals' && s.phase === 'report');
+    expect(finals.ratingReview).toBeDefined();
+    store(finals);
+    const finalView = draw();
+    tile(finalView, 'Next match');
+    expect(finalView.queryByRole('region', { name: 'Skill changes this round' })).toBeNull();
+  });
+
   it('shows the read before a quarter and what the opponent really played after it', () => {
     const opponent = (s: LeagueState) => clubOf(s, s.match!.homeId === s.myClub ? s.match!.awayId : s.match!.homeId)!;
     const switched = (s: LeagueState) => opponentPlays(s.seed, s.season, s.match!, opponent(s).style) !== opponent(s).style;
