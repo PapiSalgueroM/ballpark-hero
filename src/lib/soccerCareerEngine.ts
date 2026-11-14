@@ -16,6 +16,7 @@ import { announceSoccerFarewell, farewellSeasonComplete, readSoccerFarewell, typ
 import { clearTransferBrief, previewTransferBrief, readTransferBrief, storeTransferBriefResult, transferBriefCandidates, type SoccerTransferBrief, type TransferBriefPreview, type TransferBriefMinimum } from './soccerCareerTransferBrief';
 import { prepareLeagueWorld, projectLeagueWorldClubs, recordLeagueWorldSeason, settleLeagueWorld, leagueWorldChampions, leagueWorldOrder, settledLeagueOrder, readLeagueWorldSeason, clubKeyOf, type CareerLeagueWorld, type LeagueWorldSeason } from './soccerCareerLeagueWorld';
 import { captureCommunityShield, playCommunityShield, communityShieldSeasonStats, countCommunityShields, type ExtraCupQualification, type CommunityShieldResult } from './soccerCareerExtraCups';
+import { captureGermanSupercup, playGermanSupercup, germanSupercupSeasonStats, countGermanSupercups, type GermanSupercupQualification, type GermanSupercupResult } from './soccerCareerExtraCups';
 import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';
 import { recentClubForm } from './soccerCareerSelection';
 import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';
@@ -207,6 +208,7 @@ export interface ClubData {
 
 export interface SeasonRecord {
   extraCups?: CommunityShieldResult[];
+  germanSupercup?: GermanSupercupResult;
   /** Round 1180: the chosen personal target and its actual club season result. */
   ambition?: SeasonAmbitionResult;
   preparation?: PreparationResult;
@@ -930,6 +932,7 @@ export interface CareerStorySeason {
 export interface CareerState {
   historicalArrivals?: SoccerHistoricalArrivals;
   extraCupQualification?: ExtraCupQualification;
+  germanSupercupQualification?: GermanSupercupQualification;
   /** Round 1180: one optional personal target for the next club season. */
   seasonAmbition?: CareerSeasonAmbition;
   seasonPreparation?: CareerPreparationPlan;
@@ -5660,8 +5663,27 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     unavailableReason: s.pendingRehab ? 'unresolved-rehab' : (s.pendingSuspensionMatches ?? 0) > 0 ? 'pending-generic-suspension' : null,
     teamStrengths: shieldStrengths,
   });
+  const germanEntry = s.germanSupercupQualification;
+  const germanEntrants = germanEntry?.status === 'ready' && Array.isArray(germanEntry.entrants) ? germanEntry.entrants : [];
+  const germanValues = germanEntrants.length === 2 && germanEntrants.every(e => e && typeof e.club === 'string')
+    ? germanEntrants.map(e => {
+      const c = shieldClubs.find(club => clubKeyOf(club.name) === clubKeyOf(e.club))
+        ?? (clubKeyOf(e.club) === clubKeyOf(s.currentClub) ? { name: s.currentClub, tier: s.currentClubTier } : undefined);
+      return c && Number.isFinite(c.tier) && c.tier > 0
+        ? 5 - c.tier + (eliteInYear(ELITE_CLUBS, c.name, shieldYear) ? 0.5 : 0) : null;
+    }) : [];
+  const germanStrengths: [number, number] | null = germanValues.length === 2 && typeof germanValues[0] === 'number' && typeof germanValues[1] === 'number'
+    ? [germanValues[0], germanValues[1]] : null;
+  const germanMatch = playGermanSupercup({
+    qualification: germanEntry, eventYear: shieldYear, playerName: s.playerName, club: s.currentClub,
+    clubCountry: s.currentClubCountry, position: s.position, overall: s.overall,
+    selectionChance: Math.max(0, Math.min(1, (shieldBand.min + shieldBand.max) / 2 / 34)),
+    unavailableReason: s.pendingRehab ? 'unresolved-rehab' : (s.pendingSuspensionMatches ?? 0) > 0 ? 'pending-generic-suspension' : null,
+    teamStrengths: germanStrengths, englishOpening: shieldMatch,
+  });
   const season = generateSeasonStats(s, worldClubs);
   if (shieldMatch) season.extraCups = [shieldMatch];
+  if (germanMatch) season.germanSupercup = germanMatch;
   recordLeagueWorldSeason(s, clubs, season);
   if (season.suspensionMatches) {
     const remaining = serveClubSuspension(season.suspensionMatches, 0, s.pendingSuspensionMatches).remaining;
@@ -5730,6 +5752,10 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
         if (movement) s.events.push(`${movement.kind === 'promoted' ? '⬆️' : '⬇️'} ${movement.club} ${movement.kind} to ${movement.to} in your simulated league world.`);
       }
       prepareLeagueWorld(s, clubs, injuryRow.year + 1);
+      if (germanMatch) {
+        if (germanMatch.player.apps === 1) germanMatch.annualRating = injuryRow.apps > 0 ? injuryRow.rating : 0;
+        Object.assign(injuryRow, germanSupercupSeasonStats(injuryRow, germanMatch));
+      }
       if (shieldMatch?.player.apps === 1) shieldMatch.annualRating = injuryRow.apps > 0 ? injuryRow.rating : 0;
       Object.assign(injuryRow, communityShieldSeasonStats(injuryRow, shieldMatch));
       return s;
@@ -6121,6 +6147,28 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     if (nextShield) s.extraCupQualification = nextShield;
     else delete s.extraCupQualification;
   }
+  {
+    const closingWorld = s.leagueWorld;
+    const ownLeague = readLeagueWorldSeason(season);
+    let germanOrder: string[] | null = null;
+    if (closingWorld && closingWorld.year === thisYear) {
+      germanOrder = ownLeague?.league === 'Bundesliga'
+        ? settledLeagueOrder(closingWorld, 'Bundesliga', s.playerName, clubs, season)
+        : leagueWorldOrder(closingWorld, 'Bundesliga', s.playerName, clubs);
+    }
+    const ownGermanWin = cupAssoc === 'Germany' && season.domesticCup;
+    const ownDFB = ownGermanWin && readCupRun(season)?.cup === 'DFB-Pokal';
+    const recordedGermanCup = world.cups?.['Bundesliga'];
+    const germanCupWinner = ownGermanWin && (!ownDFB || !recordedGermanCup || clubKeyOf(recordedGermanCup) !== clubKeyOf(season.club))
+      ? undefined : recordedGermanCup;
+    const nextGerman = captureGermanSupercup({
+      qualifyingYear: thisYear, worldYear: world.year, seed: s.phone?.seed, germanOrder,
+      leagueWinner: world.leagues['Bundesliga'], cupWinner: germanCupWinner,
+      cupSource: ownDFB ? 'validated-player-dfb-pokal' : 'phone-world',
+    });
+    if (nextGerman) s.germanSupercupQualification = nextGerman;
+    else delete s.germanSupercupQualification;
+  }
 
   // Ballon d'Or calculation. Round 834: what the night writes on the save (the
   // staged ceremony, the place on the season, the cabinet, the winner's and the
@@ -6176,6 +6224,10 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     }
   }
   prepareLeagueWorld(s, clubs, season.year + 1);
+  if (germanMatch) {
+    if (germanMatch.player.apps === 1) germanMatch.annualRating = season.apps > 0 ? season.rating : 0;
+    Object.assign(season, germanSupercupSeasonStats(season, germanMatch));
+  }
   if (shieldMatch?.player.apps === 1) shieldMatch.annualRating = season.apps > 0 ? season.rating : 0;
   Object.assign(season, communityShieldSeasonStats(season, shieldMatch));
   return s;
@@ -8681,7 +8733,7 @@ export function getCareerTotals(seasons: SeasonRecord[]) {
     // Round 972: a continental club cup outside UEFA, never a Champions League.
     clubCups: t.clubCups + (s.clubCupTitle ? 1 : 0),
   }), { apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, leagueTitles: 0, domesticCups: 0, championsLeagues: 0, worldCups: 0, ballonDors: 0, continentalCups: 0, clubCups: 0 });
-  return { ...totals, communityShields: countCommunityShields(seasons) };
+  return { ...totals, communityShields: countCommunityShields(seasons), germanSupercups: countGermanSupercups(seasons) };
 }
 
 /* ─── Legacy Calculation ─── */
@@ -9488,6 +9540,6 @@ export function endOwnerCareer(prev: CareerState): CareerState {
 export function generateShareText(state: CareerState): string {
   const totals = getCareerTotals(state.seasons);
   const tier = state.legacy?.tier || "JOURNEYMAN";
-  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups + totals.communityShields;
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups + totals.communityShields + totals.germanSupercups;
   return `I finished my Soccer Career as a ${tier}: ${totals.goals} goals, ${totalTrophies} trophies, ${totals.ballonDors} Ballon d'Ors. Can you beat me? douknowball.com/soccer-career`;
 }
