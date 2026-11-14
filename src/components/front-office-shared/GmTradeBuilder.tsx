@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { assetKey } from '@/lib/gmTradePackage';
 import type { PackageVerdict, TradeAsset } from '@/lib/gmTradePackage';
@@ -43,6 +43,7 @@ export interface GmTradeBuilderProps {
   /** The engine's answer to the deal as it stands, or null while it is empty. */
   verdict: PackageVerdict | null;
   window: TradeWindow;
+  counter?: ReactNode;
   onPropose: () => void;
 }
 
@@ -100,7 +101,7 @@ function Column({ title, side, tiles, selected, onToggle, full }: {
 }
 
 export function GmTradeBuilder(props: GmTradeBuilderProps) {
-  const { partnerName, mine, theirs, selected, onToggle, maxPerSide, verdict, window: win, onPropose } = props;
+  const { partnerName, mine, theirs, selected, onToggle, maxPerSide, verdict, window: win, counter, onPropose } = props;
   const count = (tiles: BuilderTile[]) => tiles.filter(t => selected.has(assetKey(t.asset))).length;
   const giving = count(mine);
   const getting = count(theirs);
@@ -125,6 +126,7 @@ export function GmTradeBuilder(props: GmTradeBuilderProps) {
       >
         {line}
       </p>
+      {counter}
       <button
         type="button"
         data-gm-propose

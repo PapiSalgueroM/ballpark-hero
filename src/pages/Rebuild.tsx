@@ -26,6 +26,7 @@ export default function Rebuild() {
           'You can spend up to €60M past zero. Finish in debt and shirts are force sold at random until the books balance.',
           'Miss a board demand and you draw a punishment card. One card in the five is safe.',
           'Envelopes can hold a power up instead of money: a fresh scouts\' list, 20 percent off, no bidding war, a second spin on a settled shirt, a veto on a punishment card, a part exchange at 25 percent off, a season loan at 40 percent of his value, or a sneak peek at the next envelope.',
+          'Spend a Fresh List on Look within budget to replace the paid offers with new players at asking prices you can cover in cash. Rivals can still bid higher.',
         ]}
         examples={[
           'The wheel lands on your striker. Keep the 84 you inherited, or cash €70M and gamble on the scouts?',
@@ -33,6 +34,7 @@ export default function Rebuild() {
           'Elite clubs need +2 with no headroom, modest clubs need +7 with no money',
           'The punishment card was the dressing room turning: the XI plays two ratings below itself',
           'Part exchange on a 20 million right back: the scouts\' 40 million man comes at 30, so the swap costs 10 net',
+          'With €15M in cash, Look within budget replaces the paid offers with new options at €15M or less. The free bench stays available.',
         ]}
       />
     </main>

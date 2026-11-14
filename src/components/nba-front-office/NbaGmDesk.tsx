@@ -10,7 +10,7 @@
    carry the league and the few board actions a panel needs (a deal changes
    the league, so the board has to save both at once). */
 
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { GmStaffPanel } from '@/components/front-office-shared/GmStaffPanel';
 import { GmResignDesk } from '@/components/front-office-shared/GmResignDesk';
 import { GmPicksCard } from '@/components/front-office-shared/GmPicksCard';
@@ -21,13 +21,13 @@ import {
   type DeskCase, type GmTerms, type Made, type PushResult,
 } from '@/lib/gmContracts';
 import { nbaContractHost } from '@/lib/gmContractsHostNba';
-import { pickKey, pickRefusal, picksHeldBy } from '@/lib/gmPicks';
+import { findPick, pickKey, pickRefusal, picksHeldBy } from '@/lib/gmPicks';
 import { assetKey, evaluatePackage, type TradeAsset, type TradePackage } from '@/lib/gmTradePackage';
 import { NBA_STAFF_PACK } from '@/data/gmStaff/packs';
 import { type NbaLeague, nbaTradeValue } from '@/lib/nbaFrontOffice';
 import {
   NBA_DESK_KEYS, NBA_END_WEIGHT, deskCopy, nbaContractsOf, nbaContractsTile, nbaDealsTile, nbaGamePickRules,
-  nbaPackageContext, nbaPicksOf, nbaPicksTile, nbaProposePackage, nbaStaffCtx, nbaStaffOf, nbaStaffTile, nbaStances,
+  nbaFuturePickCounter, nbaPackageContext, nbaPicksOf, nbaPicksTile, nbaProposePackage, nbaStaffCtx, nbaStaffOf, nbaStaffTile, nbaStances,
   nbaTradeWindow,
 } from '@/lib/nbaGmDesk';
 
@@ -145,6 +145,7 @@ function DealsPanel({ desk, facts }: Props) {
   const others = useMemo(() => Object.keys(league.teams).filter(k => k !== teamId).sort(), [league, teamId]);
   const [partner, setPartner] = useState(others[0] ?? '');
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const panel = useRef<HTMLDivElement>(null);
   const stances = nbaStances(league);
   const ledger = nbaPicksOf(desk, league);
   const rules = nbaGamePickRules();
@@ -168,7 +169,10 @@ function DealsPanel({ desk, facts }: Props) {
   const theirs = them ? [...playerTiles(partner), ...pickTiles(partner)] : [];
   const inDeal = (tiles: BuilderTile[]): TradeAsset[] => tiles.filter(t => selected.has(assetKey(t.asset))).map(t => t.asset);
   const pkg: TradePackage = { from: teamId, to: partner, give: inDeal(mine), get: inDeal(theirs) };
-  const verdict = pkg.give.length || pkg.get.length ? evaluatePackage(pkg, nbaPackageContext(league, desk, teamId, partner)) : null;
+  const context = pkg.give.length || pkg.get.length ? nbaPackageContext(league, desk, teamId, partner) : null;
+  const verdict = context ? evaluatePackage(pkg, context) : null;
+  const counter = context && verdict?.verdict === 'rejected' ? nbaFuturePickCounter(pkg, context) : null;
+  const counterPick = counter && findPick(ledger, counter.key);
 
   const toggle = (a: TradeAsset) => setSelected(s => {
     const n = new Set(s);
@@ -186,7 +190,7 @@ function DealsPanel({ desk, facts }: Props) {
   };
 
   return (
-    <div className="space-y-2" data-nba-desk-deals>
+    <div ref={panel} className="space-y-2" data-nba-desk-deals>
       <label className="flex items-center justify-center gap-2 text-xs">
         <span className="text-muted-foreground">Deal with</span>
         <select
@@ -209,6 +213,24 @@ function DealsPanel({ desk, facts }: Props) {
         maxPerSide={5}
         verdict={verdict}
         window={win}
+        counter={verdict?.verdict === 'rejected' && (counter && counterPick ? (
+          <button type="button" onClick={() => {
+            toggle(counter);
+            requestAnimationFrame(() => {
+              const pick = panel.current?.querySelector<HTMLButtonElement>(`[data-gm-tile="${assetKey(counter)}"]`);
+              if (!pick) return;
+              pick.focus({ preventScroll: true });
+              const rail = pick.closest('ul');
+              if (!rail) return;
+              const tile = pick.getBoundingClientRect(), list = rail.getBoundingClientRect();
+              if (tile.bottom > list.bottom) rail.scrollTop += tile.bottom - list.bottom;
+              else if (tile.top < list.top) rail.scrollTop += tile.top - list.top;
+            });
+          }} className="mt-2 min-h-11 w-full rounded-lg border border-border px-3 py-2 text-left text-xs font-semibold">
+            Add {counterPick.year} round {counterPick.round} pick to review
+            <span className="block font-normal text-muted-foreground">From {facts.clubName(counterPick.orig)}. The lowest-valued future pick that closes the offer. Review the package before you confirm.</span>
+          </button>
+        ) : <p className="mt-2 text-xs text-muted-foreground">No single available future pick closes this offer.</p>)}
         onPropose={propose}
       />
     </div>

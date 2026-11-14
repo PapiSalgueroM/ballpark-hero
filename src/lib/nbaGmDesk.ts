@@ -46,7 +46,7 @@ import {
 } from './gmDeadline';
 import {
   NBA_TRADE_RULES, type PackageContext, type PackageVerdict, type PickValueCurve, type TradeAsset, type TradePackage,
-  evaluatePackage, pickValueAt, proposePackage,
+  assetKey, evaluatePackage, pickValueAt, proposePackage,
 } from './gmTradePackage';
 import {
   type GmStaffBlock, type GmStaffCtx, gmDefaultStaff, gmHashFloat, gmInjuryWeeks, gmIsValidStaff, gmRolloverStaff,
@@ -404,6 +404,21 @@ export function nbaPackageContext(league: NbaLeague, desk: GmDesk, team: string,
     capCheck: pkg => nbaPackageCapCheck(league, pkg),
     premium: NBA_PACKAGE_PREMIUM,
   };
+}
+
+/** Lowest-valued future pick you actually hold that lets this package pass. */
+export function nbaFuturePickCounter(pkg: TradePackage, ctx: PackageContext): Extract<TradeAsset, { kind: 'pick' }> | null {
+  if (pkg.give.length >= ctx.tradeRules.maxAssetsPerSide || evaluatePackage(pkg, ctx).verdict !== 'rejected') return null;
+  const held = new Set(pkg.give.map(assetKey));
+  const candidates = picksHeldBy(ctx.ledger, pkg.from).flatMap(pick => {
+    if (pick.year <= ctx.season) return [];
+    const asset = { kind: 'pick' as const, key: pickKey(pick) };
+    return held.has(assetKey(asset)) ? [] : [{ asset, cost: ctx.valueOf(asset) }];
+  }).sort((a, b) => a.cost - b.cost || a.asset.key.localeCompare(b.asset.key));
+  for (const { asset } of candidates) {
+    if (evaluatePackage({ ...pkg, give: [...pkg.give, asset] }, ctx).verdict === 'accepted') return asset;
+  }
+  return null;
 }
 
 export interface NbaPackageResult {

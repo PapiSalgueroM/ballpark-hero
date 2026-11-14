@@ -96,6 +96,7 @@ export interface RebuildState {
   managerReading: (m: ManagerOption) => number;
   offerPrice: (p: Player) => number;
   canRedeal: boolean;
+  canBudgetScout: boolean;
   // Round 980: the five new power ups
   canSecondSpin: (slot: number) => boolean;
   /** What an open part exchange can reach, the man going the other way counted. */
@@ -127,6 +128,7 @@ export interface RebuildState {
   promoteBench: (p: Player) => void;
   takeForty: () => void;
   redealSpun: () => void;
+  scoutWithinBudget: () => void;
   // bidding wars
   thinking: boolean;
   raiseWar: () => void;
@@ -350,6 +352,7 @@ export function useRebuild(): RebuildState {
   const promoteBench = useCallback((p: Player) => act({ k: 'promote', name: p.name }, r => loop.promote(r, p.name)), [act]);
   const takeForty = useCallback(() => act({ k: 'forty' }, loop.takeForty), [act]);
   const redealSpun = useCallback(() => act({ k: 'redeal' }, loop.redeal), [act]);
+  const scoutWithinBudget = useCallback(() => act({ k: 'budgetScout' }, loop.budgetScout), [act]);
 
   const raiseWar = useCallback(() => {
     if (!run?.war || run.war.outcome !== 'live' || run.war.leader !== 'rival' || thinking) return;
@@ -466,6 +469,7 @@ export function useRebuild(): RebuildState {
   const managerReading = useCallback((m: ManagerOption) => (run ? loop.ratingOf(run, m) : 0), [run]);
   const offerPrice = useCallback((p: Player) => (run ? loop.offerPrice(run, p) : p.marketValue), [run]);
   const canRedeal = run ? loop.canRedeal(run) : false;
+  const canBudgetScout = useMemo(() => run ? loop.canBudgetScout(run) : false, [run]);
   const canSecondSpin = useCallback((slot: number) => (run ? loop.canSecondSpin(run, slot) : false), [run]);
   const swapCeiling = run ? loop.swapCeilingOf(run) : 0;
   const loanFee = useCallback((p: Player) => loop.loanFeeOf(p), []);
@@ -521,10 +525,10 @@ export function useRebuild(): RebuildState {
     run,
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason: tbl.season,
     startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
-    managerReading, offerPrice, canRedeal,
+    managerReading, offerPrice, canRedeal, canBudgetScout,
     canSecondSpin, swapCeiling, loanFee, peeked, verdictCards, secondSpin, partExchange, loanReplacement, sneakPeek, vetoCard, acceptVerdict,
     pickFinance, toManager, hireManager, keepManager: KEEP_MANAGER, setFormation,
-    spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun,
+    spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun, scoutWithinBudget,
     thinking, raiseWar, walkAway,
     finish, rivals, rivalsLoading, season,
   };

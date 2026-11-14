@@ -79,6 +79,7 @@ export type RebuildMove =
   | { k: 'promote'; name: string }
   | { k: 'forty' }
   | { k: 'redeal' }
+  | { k: 'budgetScout' } // 2026-11-14: a new move in the same replay format.
   | { k: 'raise' }
   | { k: 'reply' }
   | { k: 'walk' }
@@ -137,6 +138,7 @@ export function applyMove(r: RunState, m: RebuildMove): RunState {
     case 'promote': return loop.promote(r, m.name);
     case 'forty': return loop.takeForty(r);
     case 'redeal': return loop.redeal(r);
+    case 'budgetScout': return loop.budgetScout(r);
     case 'raise': return loop.raise(r);
     case 'reply': return loop.rivalReply(r);
     case 'walk': return loop.walk(r);
@@ -281,6 +283,7 @@ function isMove(m: unknown): m is RebuildMove {
     case 'sell':
     case 'forty':
     case 'redeal':
+    case 'budgetScout':
     case 'raise':
     case 'reply':
     case 'walk':

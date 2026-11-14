@@ -1,5 +1,6 @@
 import { Player } from '@/types/game';
 import { FORMATIONS, playerRating, type Formation } from '@/lib/squadDeal';
+import { shuffledRange } from '@/lib/dateUtils';
 import type { RebuildClub } from '@/lib/fetchRebuild';
 import {
   hashSeed, budgetFor, managerOptionsFor, KEEP_MANAGER, managerFits, boardEnvelopeFor, fortuneDeckFor,
@@ -572,6 +573,34 @@ export function redeal(s: RunState): RunState {
   if (!deadEnd) perks.rescout -= 1;
   const attempt = s.dealAttempt + 1;
   return { ...s, perks, dealAttempt: attempt, deal: makeDeal(s, s.spun, attempt) };
+}
+
+function budgetScoutOptions(s: RunState): Player[] {
+  if (s.phase !== 'spin' || s.spun === null || !s.deal || s.war || s.swapOpen || s.perks.rescout <= 0) return [];
+  const cash = budgetOf(s);
+  const allowed = s.formation.slots[s.spun].allowed;
+  const taken = takenNames(s);
+  for (const p of [...s.deal.offers, ...s.deal.bench]) taken.add(p.name);
+  return s.market.filter(p => {
+    if (!allowed.includes(p.position) || taken.has(p.name) || offerPrice(s, p) > cash) return false;
+    taken.add(p.name);
+    return true;
+  });
+}
+
+export function canBudgetScout(s: RunState): boolean {
+  return budgetScoutOptions(s).length > 0;
+}
+
+/** Spend a Fresh List to replace the paid offers with fits inside the current cash. */
+export function budgetScout(s: RunState): RunState {
+  const options = budgetScoutOptions(s);
+  if (!s.deal || options.length === 0) return s;
+  const attempt = s.dealAttempt + 1;
+  const offers = shuffledRange(options.length, `rebuild-budget:${s.seed}:${s.spun}:${attempt}`)
+    .slice(0, 3).map(index => options[index]).sort((a, b) => b.marketValue - a.marketValue);
+  const perks = { ...s.perks, rescout: s.perks.rescout - 1 };
+  return { ...s, perks, dealAttempt: attempt, deal: { ...s.deal, offers } };
 }
 
 /* ---------------- Round 980: the five new perks ---------------- */

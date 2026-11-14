@@ -977,7 +977,7 @@ function FastForward({ career, onRun, disabled, onOpenOffice }: {
   if (fixtures.length < 2 && !latest) return null;
   const closingChoices = expanded ? [
     ...(!nrlSponsorRefusal(career) ? ['season sponsor'] : []),
-    ...(!nrlBoardPathwaysQuote(career).reason ? ['board pathways objective'] : []),
+    ...(nrlBoardPathwaysQuote(career).options.length ? ['board pathways objective'] : []),
     ...(!nrlTicketPricingRefusal(career) && fixtures.slice(0, through - round + 1).some(roundFixtures =>
       roundFixtures.some(([home]) => home === clubId)) ? ['ticket prices'] : []),
   ] : [];
@@ -2347,7 +2347,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>When you start a new State of Origin series, Past Origin series keeps the previous winner and all three scores.</li>
               <li>At half time, a rotating reserve can replace your starting goal kicker if the designated backup stays on to take the remaining place kicks.</li>
               <li>After the Grand Final, release one unsigned academy prospect into next season’s free-agent market or promote him to your own Top 30.</li>
-              <li>If you accepted Board pathways, check Pathways run-in in Season review with four regular-season club matches left. It shows who can still reach four appearances.</li>
+              <li>Choose a Board pathways objective before Round 1. Three young players need four appearances each for $200,000, or two need six each for $225,000. Pathways run-in shows who can reach your target.</li>
               <li>When you stay at the club, a returning starter can keep a position they learned in training.</li>
               <li>Change clubs between seasons from Season review.</li>
               <li>When staying at your club, select Keep saved lineups in Season review to carry your presets forward. Apply a saved lineup in Squad.</li>
