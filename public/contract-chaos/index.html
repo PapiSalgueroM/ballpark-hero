@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -287,6 +319,7 @@
 <h3>Negotiation and walkouts</h3>
 <li>A push works more often for a highly rated player and less often for a veteran past his peak.</li>
 <li>A failed push can make an outside club walk away, but your own club never walks and the last offer on the table never walks.</li>
+<li>In Free Play, you can trade wages for a stronger promised role. That takes your one counter for that offer, so you cannot push for more money on it as well.</li>
 <h3>Promises, sackings and settling abroad</h3>
 <li>The promised role holds only while the manager who signed him keeps his job, and a hot seat manager is sacked half the time.</li>
 <li>Moving abroad costs a few games in the first season while he settles in.</li>
@@ -307,6 +340,7 @@
 <p>Today's client is a 19 year old winger rated 74 with a potential of 88, worth about €1.6M a year.</p>
 <h3>Three offers side by side</h3>
 <p>His club offers €1.4M for three years. A title chaser offers €1.3M for two years as a rotation player at a squad strength of 91. A rebuild offers €1.9M for four years, the starting spot and a €1.1M signing bonus.</p>
+<p>In Free Play, you can take €1.1M a year from the title chaser for a starting role. That costs €0.4M over two years. Check how safe the manager is before you give up that money.</p>
 <h3>The push and the release clause</h3>
 <p>You push the rebuild and they come up to €2.1M. You sign. He plays nearly every minute, climbs to 84 by his third season, and a title chaser pays his release clause to take him on a much bigger wage.</p>
 <h3>The verdict five seasons on</h3>
