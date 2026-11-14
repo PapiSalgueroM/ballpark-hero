@@ -73,9 +73,13 @@ it('starts the closing picker on the confirmed half-time plan after a reload and
   const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
   const view = show();
   const attack = screen.getByRole('combobox', { name: 'Second-half attack plan' });
+  const preview = screen.getByRole('status', { name: 'Second-half attack plan preview' });
   expect(attack).toHaveValue('standard');
+  const openingEdges = preview.textContent;
   const firstHalf = screen.getByRole('list', { name: 'First-half score' }).textContent;
   fireEvent.change(attack, { target: { value: 'wide' } });
+  expect(preview.textContent).not.toBe(openingEdges);
+  expect(preview).toHaveTextContent(/Defence .+\(-2\)/);
   expect(screen.getByRole('list', { name: 'First-half score' }).textContent).toBe(firstHalf);
   expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(half));
   fireEvent.click(screen.getByRole('button', { name: 'Play to 60 minutes' }));
@@ -84,8 +88,10 @@ it('starts the closing picker on the confirmed half-time plan after a reload and
   view.unmount();
   show();
   const closing = screen.getByRole('combobox', { name: 'Closing attack plan' });
+  const closingPreview = screen.getByRole('status', { name: 'Closing attack plan preview' });
   expect(closing).toHaveValue('wide');
   fireEvent.change(closing, { target: { value: 'standard' } });
+  expect(closingPreview).toHaveTextContent(/Defence .+\(\+2\)/);
   expect(screen.getByRole('list', { name: 'Score after 60 minutes' }).textContent).toBe(score);
   expect(localStorage.getItem(fence)).toBe('5');
   fireEvent.click(screen.getByRole('button', { name: 'Play final 20 minutes' }));

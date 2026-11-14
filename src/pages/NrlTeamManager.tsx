@@ -32,7 +32,7 @@ import {
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
-  nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlOppositionReport, nrlPositionTraining,
+  nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport, nrlPositionTraining,
   nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlSelectionPromise, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
   NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, reduceNrlCareer, runNrlFastForward,
@@ -180,9 +180,9 @@ function scoreLine(result: NrlMatchResult, year: number, shortName: ReturnType<t
   return `${shortName(year, result.homeId)} ${result.homeScore}–${result.awayScore} ${shortName(year, result.awayId)}`;
 }
 
-function LiveAttackPlanPicker({ id, label, plans, value, onChange, disabled }: {
+function LiveAttackPlanPicker({ id, label, plans, value, onChange, disabled, preview }: {
   id: string; label: string; plans: readonly NrlAttackPlan[]; value: NrlAttackPlan;
-  onChange: (plan: NrlAttackPlan) => void; disabled: boolean;
+  onChange: (plan: NrlAttackPlan) => void; disabled: boolean; preview: ReturnType<typeof nrlLivePlanPreview>;
 }) {
   if (plans.length === 0) return null;
   return (
@@ -195,7 +195,17 @@ function LiveAttackPlanPicker({ id, label, plans, value, onChange, disabled }: {
           <option key={choice.id} value={choice.id}>{choice.label}</option>
         ))}
       </select>
-      <p id={`${id}-help`} className="text-muted-foreground">Middle and wide plans focus play in one area and leave more space in defence.</p>
+      <div id={`${id}-help`} role="status" aria-label={`${label} preview`} className="text-muted-foreground">
+        {preview ? (
+          <>
+            <p className="flex flex-wrap gap-x-3 font-semibold tabular-nums">
+              <span>Attack {edgeNumber.format(preview.attackEdge)} ({edgeNumber.format(preview.attackChange)})</span>
+              <span>Defence {edgeNumber.format(preview.defenseEdge)} ({edgeNumber.format(preview.defenseChange)})</span>
+            </p>
+            <p className="text-xs">Regulation ratings. Changes in brackets compare with keeping your current setup.</p>
+          </>
+        ) : <p className="text-xs">The ratings preview needs opponent ratings for all starting positions.</p>}
+      </div>
     </div>
   );
 }
@@ -230,6 +240,7 @@ function LiveHalftime({ live, career, title, onAction, disabled, coachRole, coac
     interchange: chosen && { starterId: chosen.starterId, reserveId: chosen.reserveId },
     secondInterchange: second && { starterId: second.starterId, reserveId: second.reserveId },
   };
+  const preview = nrlLivePlanPreview(career, { type: 'finishLive', ...halfChoices });
   const kickerHandoff = backupKickerId && [chosen, second].some(option => option?.starterId === kickerId);
   return (
     <section className="space-y-4" aria-labelledby="nrl-halftime">
@@ -262,7 +273,7 @@ function LiveHalftime({ live, career, title, onAction, disabled, coachRole, coac
         </div>
         <p className="mt-2 text-sm text-muted-foreground">{tactics.find(option => option.id === tactic)?.description}{coachTacticNote(coachRole, coachBonus, tactic)}</p>
         <LiveAttackPlanPicker id="nrl-halftime-attack-plan" label="Second-half attack plan" plans={plans}
-          value={attackPlan} onChange={setAttackPlan} disabled={disabled} />
+          value={attackPlan} onChange={setAttackPlan} disabled={disabled} preview={preview} />
         {season.preparation === 'defensiveDrills' && <p className="mt-2 text-sm">Defensive drills apply through the second half.</p>}
       </div>
       {options.length > 0 ? (
@@ -353,6 +364,12 @@ function LiveMinute60({ live, career, onAction, disabled }: {
   const names = new Map(squad.map(player => [player.id, player.name]));
   const { fixture } = live;
   const sides = [[fixture.homeId, stage.homeScoring], [fixture.awayId, stage.awayScoring]] as const;
+  const closeChoice = {
+    type: 'finishMinute60', year, round: fixture.round, tactic, reserveId: reserveId || undefined,
+    ...(plans.includes(attackPlan) && attackPlan !== currentPlan && { attackPlan }),
+    ...(canSetUpKick && fieldGoal && { fieldGoalPlan: true }),
+  } as const;
+  const preview = nrlLivePlanPreview(career, closeChoice);
   return (
     <section className="space-y-4" aria-labelledby="nrl-minute60">
       <div className="rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
@@ -377,7 +394,7 @@ function LiveMinute60({ live, career, onAction, disabled }: {
           ))}
         </div>
         <LiveAttackPlanPicker id="nrl-closing-attack-plan" label="Closing attack plan" plans={plans}
-          value={attackPlan} onChange={setAttackPlan} disabled={disabled} />
+          value={attackPlan} onChange={setAttackPlan} disabled={disabled} preview={preview} />
       </fieldset>
       {lateOptions.length > 0 && (
         <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-3">
@@ -416,9 +433,7 @@ function LiveMinute60({ live, career, onAction, disabled }: {
         </fieldset>
       )}
       <Button type="button" size="lg" className="w-full" disabled={disabled}
-        onClick={() => onAction({ type: 'finishMinute60', year, round: fixture.round, tactic, reserveId: reserveId || undefined,
-          ...(plans.includes(attackPlan) && attackPlan !== currentPlan && { attackPlan }),
-          ...(canSetUpKick && fieldGoal && { fieldGoalPlan: true }) })}>
+        onClick={() => onAction(closeChoice)}>
         Play final 20 minutes <ArrowRight aria-hidden="true" />
       </Button>
     </section>
@@ -2247,6 +2262,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Check a late Selection promise in the rotation preview before kick-off. An eligible match counts toward the promise window if the player stays off.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. If you still have an open bench place at 60 minutes, choose the held player or another eligible unused reserve. Quick Sim settles the round in one action.</li>
               <li>At half time, choose a Second-half attack plan. If you pause at 60 minutes, Closing attack plan can change it again for the rest of the match.</li>
+              <li>Use the live ratings to compare your pending choices with keeping the current setup. The preview includes changes to your tactic and players for the next period of regulation.</li>
               <li>If you are level or two points down at 60 minutes, you can set up a field goal. This trades some late try threat for a better field-goal chance in regulation.</li>
               <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>
               <li>Open Matchday team sheet in a report with a player record to see the starting 13, the reserves who played and how many points each player scored.</li>
