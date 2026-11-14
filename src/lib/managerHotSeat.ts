@@ -74,6 +74,7 @@ import {
   openObjectives,
   playNextEntry,
   playableClubs,
+  preMatchRead,
   registerCustomClub,
   registerLeagueOverrides,
   resolveXI,
@@ -743,6 +744,13 @@ export function hotSeatLineup(run: HotSeatRun, formationIndex?: number): CareerS
     xiIds: autoPickXI(run.state.squad, formation, true),
     xiDuties: formation.slots.map(() => null),
   };
+}
+
+export function hotSeatPreMatchRead(run: HotSeatRun, lineup: CareerState): string | null {
+  const date = run.setup.daily;
+  return date && date < CM_DAILY_SPECIALIST_FULLBACKS_FROM
+    ? onStaticWorld(() => preMatchRead(lineup), date)
+    : preMatchRead(lineup);
 }
 
 /**
