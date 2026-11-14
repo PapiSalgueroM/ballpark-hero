@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
-import { createNrlCareer, readNrlCareerSave } from '@/lib/nrlCareer';
+import { createNrlCareer, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
 import { NRL_SAVE_KEY, nrlBenchRotation, nrlHoldableReserves } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
@@ -67,5 +67,60 @@ it.each([[2026, 'broncos', 1, 'Quick Sim'], [2027, 'bears', 17, 'Play Live']] as
     const result = readNrlCareerSave(localStorage.getItem(NRL_SAVE_KEY))?.season.results
       .find(match => match.homeId === club || match.awayId === club);
     expect(result?.benchUsed).toEqual(shown);
+  },
+);
+
+it.each([[2026, 'broncos', 1, 'Quick Sim'], [2027, 'bears', 17, 'Play Live']] as const)(
+  'moves a previously unused %s reserve into the rotation without replacing a named player',
+  (year, club, seed, action) => {
+    const career = createNrlCareer(club, seed, year);
+    const named = career.season.bench!;
+    const initial = [...nrlBenchRotation(career.season).values()].map(player => player.id);
+    const promoted = named.find(id => !initial.includes(id))!;
+    const first = named[0];
+    const held = nrlHoldableReserves(career.season).find(player => player.id !== promoted)!;
+    const fence = fenceKeyOf(NRL_SAVE_KEY);
+    localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(career));
+    localStorage.setItem(fence, '4');
+    const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+    const opening = show();
+    const details = screen.getByText('Hold one reserve for later').closest('details')!;
+    details.open = true;
+    const preview = within(details);
+    const picker = preview.getByLabelText('First reserve');
+    expect(Array.from((picker as HTMLSelectElement).options).map(option => option.value)).toEqual(named);
+    fireEvent.change(preview.getByLabelText('Opening rotation'), { target: { value: held.id } });
+    const select = (id: string) => fireEvent.change(picker, { target: { value: id } });
+    const saved = () => readNrlCareerSave(localStorage.getItem(NRL_SAVE_KEY))!;
+    const revised = reduceNrlCareer(career, { type: 'selectBench', slot: 0, playerId: promoted });
+    select(promoted);
+    expect(saved()).toEqual(revised);
+    expect(revised.season.bench).toHaveLength(6);
+    expect(new Set(revised.season.bench)).toEqual(new Set(named));
+    expect(revised.season.lineup).toEqual(career.season.lineup);
+    expect(preview.getByText('Held for later: ' + held.name)).toBeVisible();
+    select(first);
+    expect(saved()).toEqual(career);
+    select(promoted);
+    expect(localStorage.getItem(fence)).toBe('7');
+
+    opening.unmount();
+    show();
+    expect(saved()).toEqual(revised);
+    const reopened = screen.getByText('Hold one reserve for later').closest('details')!;
+    reopened.open = true;
+    const current = within(reopened);
+    expect(current.getByLabelText('First reserve')).toHaveValue(promoted);
+    fireEvent.change(current.getByLabelText('Opening rotation'), { target: { value: held.id } });
+    const list = current.getByRole('list', { name: action === 'Quick Sim' ? 'Quick Sim rotation' : 'Live opening rotation' });
+    const shown = within(list).getAllByRole('listitem').map(row => row.getAttribute('data-nrl-rotation-reserve'));
+    expect(shown[0]).toBe(promoted);
+    expect(shown.some(id => id !== null && !initial.includes(id))).toBe(true);
+    fireEvent.click(screen.getByRole('button', { name: action }));
+    if (action === 'Play Live') {
+      expect(saved().season.live?.heldReserveId).toBe(held.id);
+      fireEvent.click(screen.getByRole('button', { name: 'Play second half' }));
+    }
+    expect(saved().season.results.find(match => match.homeId === club || match.awayId === club)?.benchUsed).toEqual(shown);
   },
 );
