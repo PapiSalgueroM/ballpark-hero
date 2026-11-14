@@ -32,10 +32,10 @@ import {
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
-  nrlAttackPlanPreview, nrlCounterPlanPreview, nrlOppositionReport, nrlPositionTraining,
+  nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlOppositionReport, nrlPositionTraining,
   nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
-  NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, runNrlFastForward,
+  NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, reduceNrlCareer, runNrlFastForward,
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
 } from '@/lib/nrlCareer';
 import { judiciaryNeedsResponse, nrlJudiciaryBans } from '@/lib/nrlJudiciary';
@@ -766,6 +766,38 @@ function ReserveRotationList({ label, season, heldReserveId }: {
   );
 }
 
+function DevelopmentAppearances({ career, heldReserveId }: { career: NrlCareerState; heldReserveId?: string }) {
+  const { season, developmentFocus, ratingReview } = career;
+  const { appearances: target, players: limit } = NRL_DEVELOPMENT_ASSISTANT;
+  if (season.phase !== 'regular' || career.finance.coachHire?.role !== 'development'
+    || developmentFocus === 'youth' || (ratingReview?.assistant?.length ?? 0) >= limit) return null;
+  const candidates = nrlDevelopmentAssistantProgress(career).filter(player => player.apps === target - 1
+    && !ratingReview?.focus?.includes(player.id));
+  if (candidates.length === 0) return null;
+  const starters = new Set(Object.values(season.lineup));
+  const reserves = new Set([...nrlBenchRotation(season).values()].map(player => player.id));
+  const liveReserves = heldReserveId ? new Set([...nrlBenchRotation(season, heldReserveId).values()].map(player => player.id)) : reserves;
+  const selection = (id: string, rotation: ReadonlySet<string>) =>
+    starters.has(id) ? 'Starting' : rotation.has(id) ? 'In rotation' : 'Not in rotation';
+  return (
+    <section className="mt-3 border-t border-border pt-3 text-sm" aria-labelledby="nrl-development-appearances" data-nrl-development-appearances>
+      <h3 id="nrl-development-appearances" className="font-semibold">Development appearances</h3>
+      <ul className="mt-1 divide-y divide-border">
+        {candidates.map(player => (
+          <li key={player.id} className="break-words py-1" data-nrl-development-player={player.id}>
+            <p className="font-medium">{player.name}</p>
+            <p className="text-xs text-muted-foreground">{player.apps} of {target} appearances</p>
+            <p className="text-xs text-muted-foreground">Quick Sim: {selection(player.id, reserves)}{heldReserveId && (
+              <> · Live: {player.id === heldReserveId ? 'Held for later' : selection(player.id, liveReserves)}</>
+            )}</p>
+          </li>
+        ))}
+      </ul>
+      <p className="mt-1 text-xs text-muted-foreground">Starts and used reserves count. The opening Live plan can change during the match.</p>
+    </section>
+  );
+}
+
 function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled, showLiveResult }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null;
   onReview: () => void; onContracts: () => void; disabled: boolean; showLiveResult: boolean;
@@ -944,6 +976,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
               <ReserveRotationList label="Quick Sim rotation" season={season} />
               {heldReserve && <ReserveRotationList label="Live opening rotation" season={season} heldReserveId={heldReserve.id} />}
             </div>
+            <DevelopmentAppearances career={career} heldReserveId={heldReserve?.id} />
           </div>
         </details>
       )}
@@ -1828,6 +1861,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Choose a goal kicker and a backup in Squad. The backup takes over if your kicker leaves the starting 13. The halfback covers when neither is available. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>
               <li>Before kick-off, open Hold one reserve for later to see the Quick Sim rotation and compare it with the Live rotation when you hold someone.</li>
               <li>Use First reserve in the rotation preview to change who gets first priority. It swaps two places on your named bench.</li>
+              <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. Choose Play to 60 minutes to bring on a held reserve who is still on the bench. Quick Sim settles the round in one action.</li>
               <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
