@@ -60,6 +60,13 @@ describe('NRL Academy facilities', () => {
     const funded = nrlAcademyReports(improved)[0].player!;
     expect(base.potential).toBe(88);
     expect(funded).toEqual({ ...base, potential: 90 });
+    const withFacility = advance(install(state));
+    const ready = reduceNrlCareer(withFacility, { type: 'scoutAcademy', role: 'Right Wing', priority: 'ready' });
+    const ceiling = reduceNrlCareer(withFacility, { type: 'scoutAcademy', role: 'Right Wing', priority: 'ceiling' });
+    expect(ready.academy?.[0]?.player).toEqual({ ...funded, rating: funded.rating + 2, potential: 88 });
+    expect(ceiling.academy?.[0]?.player).toEqual({ ...funded, rating: funded.rating - 2, potential: 90 });
+    expect(saved(ready)).toEqual(ready);
+    expect(saved(ceiling)).toEqual(ceiling);
   });
 
   it('keeps the purchase with its club through rollover, a move and a return', () => {
