@@ -95,6 +95,49 @@ it('keeps legacy opposition edges without offering unsupported plans', () => {
   const report = openDetails(/^Opposition report$/);
   expect(report.getByText('Your attack edge')).toBeVisible();
   expect(report.queryByRole('table', { name: 'Attack plan comparison' })).not.toBeInTheDocument();
+  expect(report.queryByText('Positional matchups')).not.toBeInTheDocument();
   expect(raw()).toBe(bytes);
   expect(localStorage.getItem(fence)).toBe('6');
+});
+
+it.each([
+  ['broncos', 2026, 'Brodie Marlow'],
+  ['bears', 2027, 'Callum Vale'],
+] as const)('explains the current specialist plan and updates when %s rests a prop', (clubId, year, name) => {
+  const initial = reduceNrlCareer(createNrlCareer(clubId, 1, year), { type: 'advance' });
+  const playerId = initial.season.lineup['Prop 8'];
+  const { round } = initial.season;
+  const before = JSON.stringify(initial);
+  expect(initial.season.squad.find(player => player.id === playerId)?.name).toBe(name);
+  open(before);
+  const report = openDetails(/^Opposition report$/);
+  const positional = report.getByText('Positional matchups', { exact: true });
+  fireEvent.click(positional);
+  const middle = within(report.getByRole('table', { name: 'Middle' }));
+  const edges = within(report.getByRole('table', { name: 'Edges' }));
+  const headings = (table: ReturnType<typeof within>) => table.getAllByRole('rowheader').map(row => row.textContent);
+  expect(headings(middle)).toEqual(['Prop 8', 'Hooker', 'Prop 10', 'Lock']);
+  expect(headings(edges)).toEqual(['Left Wing', 'Left Centre', 'Right Centre', 'Right Wing']);
+  const [ownBefore, rivalBefore] = within(middle.getByRole('row', { name: /^Prop 8/ })).getAllByRole('cell').map(cell => cell.textContent);
+  const currentPlan = within(report.getByRole('table', { name: 'Attack plan comparison' }))
+    .getByRole('row', { name: /^Through the middle/ }).textContent;
+  expect(raw()).toBe(before);
+  expect(localStorage.getItem(fence)).toBe('6');
+
+  const recovery = openDetails(/^Individual recovery$/);
+  fireEvent.change(recovery.getByLabelText('Player on lighter training'), { target: { value: playerId } });
+  const adjusted = reduceNrlCareer(initial, { type: 'setIndividualRecovery', year, clubId, round, playerId });
+  const [ownAfter, rivalAfter] = within(middle.getByRole('row', { name: /^Prop 8/ })).getAllByRole('cell').map(cell => cell.textContent);
+  expect(Number(ownAfter)).toBeGreaterThan(Number(ownBefore));
+  expect(rivalAfter).toBe(rivalBefore);
+  expect(within(report.getByRole('table', { name: 'Attack plan comparison' }))
+    .getByRole('row', { name: /^Through the middle/ }).textContent).not.toBe(currentPlan);
+  expect(raw()).toBe(JSON.stringify(adjusted));
+  expect(localStorage.getItem(fence)).toBe('7');
+
+  fireEvent.click(openDetails(/^Attack plan$/).getByRole('button', { name: /Through the middle/ }));
+  const chosen = pick(adjusted, 'middle');
+  expect(raw()).toBe(JSON.stringify(chosen));
+  fireEvent.click(screen.getByRole('button', { name: 'Quick Sim' }));
+  expect(readNrlCareerSave(raw())).toEqual(reduceNrlCareer(chosen, { type: 'advance' }));
 });

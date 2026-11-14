@@ -12,7 +12,7 @@ import {
 import {
   archiveNrlFinals, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
   isNrlPhysioTreatment, nrlInjuries, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
-  nrlPlanAdjustments, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
+  nrlPlanAdjustments, nrlPlanMatchups, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlManagerState, type NrlMatchResult,
   type NrlPhysioTreatment, type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
@@ -1432,6 +1432,7 @@ export interface NrlOppositionReport {
   defenseEdge: number;
   style?: ReturnType<typeof nrlCounterPlan>['style'];
   attackPlans?: ({ plan: NrlAttackPlan } & ReturnType<typeof nrlMatchupEdges>)[];
+  matchups?: ReturnType<typeof nrlPlanMatchups>;
 }
 
 export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport | null {
@@ -1464,8 +1465,10 @@ export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport 
   const style = nrlCounterPlanPreview(state)?.style;
   const coaches = nrlCoachTactics(state.finance);
   let attackPlans: NrlOppositionReport['attackPlans'];
+  let matchups: NrlOppositionReport['matchups'];
   if (style && ratings && !state.outOfWork) {
     const rival = planRatings ?? planRivalRatings(season, ratings);
+    if (rival) matchups = nrlPlanMatchups(matchday, rival);
     const plans: NrlAttackPlan[] = ['standard', ...NRL_ATTACK_PLANS.filter(plan => plan === 'counter' || rival)];
     attackPlans = plans.map(plan => ({
       plan,
@@ -1476,6 +1479,7 @@ export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport 
   }
   return {
     opponentId, ladderRank, recent, meetings, ...(style && { style }), ...(attackPlans && { attackPlans }),
+    ...(matchups && { matchups }),
     ...nrlMatchupEdges(matchday, clubMatch, opponentStrength, { ...coaches, planRivalRatings: planRatings }),
   };
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
 import * as random from '@/lib/careerEngine';
-import { createNrlCareer, nrlOppositionReport, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
+import { createNrlCareer, nrlOppositionReport, nrlRivalSquad, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
 import { createNrlSeason, nrlLadder, nrlNextRound, nrlStarterOptions } from '@/lib/nrlManager';
 
 describe('NRL opposition report', () => {
@@ -86,6 +86,27 @@ describe('NRL opposition report', () => {
     expect(report!.defenseEdge).toBeCloseTo(edge);
     expect(report!.ladderRank).toBeNull();
     expect(report!.recent).toEqual([]);
+    expect(report!.matchups).toBeUndefined();
+  });
+
+  it('compares the adjusted lane ratings against the strongest signed player at each primary position', () => {
+    const career = reduceNrlCareer(createNrlCareer('bears', 1, 2027), { type: 'advance' });
+    const report = nrlOppositionReport(career)!;
+    const rival = nrlRivalSquad(career, report.opponentId);
+    const fixture = nrlNextRound(career.season).clubMatch!;
+    const venue = fixture.homeId === career.season.clubId ? 2 : -2;
+    const standard = report.attackPlans!.find(row => row.plan === 'standard')!;
+    for (const plan of ['middle', 'wide'] as const) {
+      const { positions, gap } = report.matchups![plan];
+      expect(positions).toHaveLength(4);
+      for (const position of positions) {
+        expect(position.rival).toBe(rival.find(({ player }) => player.role === position.role)?.player.rating);
+      }
+      expect(gap).toBeCloseTo(positions.reduce((sum, position) => sum + position.own - position.rival, 0) / positions.length, 10);
+      const adjustment = (gap - (standard.attackEdge - venue)) * 0.5;
+      expect(report.attackPlans!.find(row => row.plan === plan)!.attackEdge - standard.attackEdge)
+        .toBeCloseTo(Math.min(6, Math.max(-4, adjustment)), 10);
+    }
   });
 
   it('reads without consuming RNG or save state and skips byes and paused matches', () => {
