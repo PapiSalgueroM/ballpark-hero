@@ -174,8 +174,7 @@ async function look(width, height) {
        games, a repeated SUBTITLE is a constant standing in for a description.
        So it is scoped to the section the defect was in, and anything short
        enough to be a badge is ignored. */
-    const section = [...document.querySelectorAll('section')]
-      .find(el => /most played today/i.test((el.querySelector('p,h2,h3')?.innerText) || ''));
+    const section = document.querySelector('section[aria-label="Game picks"]');
     const subtitles = !section ? [] : [...section.querySelectorAll('a[href^="/"]')]
       .map(a => {
         const spans = [...a.querySelectorAll('span')].map(x => (x.innerText || '').trim()).filter(Boolean);
@@ -267,7 +266,7 @@ console.log('3) the tiles say what the games are');
   for (const s of subs) counts.set(s, (counts.get(s) || 0) + 1);
   const repeated = [...counts.entries()].filter(([, n]) => n >= Math.min(3, subs.length));
   if (!subs.length) {
-    say(false, 'no Most Played Today tile subtitles could be read, so this check proves nothing');
+    say(false, 'no game pick subtitles could be read');
   } else {
     say(repeated.length === 0,
       repeated.length

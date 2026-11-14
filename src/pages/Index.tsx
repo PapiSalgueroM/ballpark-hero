@@ -683,9 +683,8 @@ function StatChip({ icon, label, value, unit }: { icon: ReactNode; label: string
 /**
  * Wave 3 / item #11: wired to public.game_completions via useMostPlayed.
  * Renders unconditionally on every breakpoint (no md: hidden class) so it
- * always shows on mobile. While fewer than 3 games clear the 5-completions
- * threshold for today, useMostPlayed returns the curated flagship trio so
- * this section never renders empty or looks broken.
+ * always shows on mobile. The heading and ordered list describe live play
+ * only after at least three games qualify. Until then, show three recommendations.
  */
 function MostPlayedToday() {
   const section = useRef<HTMLElement>(null);
@@ -701,20 +700,20 @@ function MostPlayedToday() {
     return () => observer.disconnect();
   }, []);
 
-  /* Round 659: an h2 now, still the section's first heading, which is how
-     playHomeFold section 3 finds it. */
+  const ranked = entries.length > 0 && entries.every(entry => !entry.isFallback);
+  const List = ranked ? 'ol' : 'ul';
   const heading = (
     <h2 className="mb-3 flex items-center gap-2.5 text-lg font-display font-bold text-foreground">
       <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-warn/15 text-warn ring-1 ring-inset ring-warn/30">
         <Flame className="h-4 w-4" />
       </span>
-      Most played today
+      {ranked ? 'Most played today' : 'Games to try'}
     </h2>
   );
 
   if (loading && entries.length === 0) {
     return (
-      <section ref={section}>
+      <section ref={section} aria-label="Game picks">
         {heading}
         <div className="grid gap-2">
           {[1, 2, 3].map(i => (
@@ -728,9 +727,9 @@ function MostPlayedToday() {
   if (entries.length === 0) return null;
 
   return (
-    <section ref={section}>
+    <section ref={section} aria-label="Game picks">
       {heading}
-      <ol className="grid grid-cols-1 gap-2">
+      <List className="grid grid-cols-1 gap-2">
         {entries.map(({ game, isFallback }, rank) => {
           const sport = sportOf(game.path);
           return (
@@ -741,8 +740,7 @@ function MostPlayedToday() {
                 style={sportStyle(sport)}
                 className="group flex h-[68px] min-w-0 items-center gap-3 rounded-xl border border-border/80 bg-surface-1 px-3 transition-colors hover:border-tile/50 hover:bg-surface-2"
               >
-                {/* the rank, in the game's own sport ink */}
-                <span aria-hidden="true" className="w-6 shrink-0 text-center font-display text-2xl font-bold tabular-nums text-tile">{rank + 1}</span>
+                {ranked && <span aria-hidden="true" className="w-6 shrink-0 text-center font-display text-2xl font-bold tabular-nums text-tile">{rank + 1}</span>}
                 <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-tile/15 text-xl ring-1 ring-inset ring-tile/25">{game.emoji}</span>
                 <div className="min-w-0 flex-1">
                   <span className="flex items-center gap-2">
@@ -767,7 +765,7 @@ function MostPlayedToday() {
             </li>
           );
         })}
-      </ol>
+      </List>
     </section>
   );
 }

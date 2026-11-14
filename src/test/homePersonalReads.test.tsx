@@ -31,7 +31,7 @@ function showIntersection(node: Element, intersecting: boolean) {
 }
 
 function revealPopularity(view: ReturnType<typeof render>) {
-  const section = view.getByRole('heading', { name: 'Most played today' }).closest('section')!;
+  const section = view.getByRole('region', { name: 'Game picks' });
   return showIntersection(section, true);
 }
 
@@ -119,8 +119,9 @@ afterEach(() => { cleanup(); expect(globalThis.fetch).not.toHaveBeenCalled(); vi
 describe('homepage personal read ownership', () => {
   it('preserves useful public popularity for signed out visitors', async () => {
     const view = mount(); await flush();
-    expect(view.getByRole('heading', { name: 'Most played today' })).toBeInTheDocument();
+    expect(view.getByRole('heading', { name: 'Games to try' })).toBeInTheDocument();
     revealPopularity(view); await flush();
+    expect(view.getByRole('heading', { name: 'Most played today' })).toBeInTheDocument();
     expect(view.getAllByText('Trending')).toHaveLength(3);
     expect(requests.filter(r => r.table === 'most_played_today')).toHaveLength(1);
     expect(mock.rpc).toHaveBeenCalledWith('most_played_today', { p_min: 3, p_limit: 3 });
@@ -128,8 +129,8 @@ describe('homepage personal read ownership', () => {
 
   it('keeps below-fold popularity usable without loading the account client', async () => {
     const view = mount(); await flush();
-    const section = view.getByRole('heading', { name: 'Most played today' }).closest('section')!;
-    expect(section.querySelectorAll('ol a')).toHaveLength(3);
+    const section = view.getByRole('heading', { name: 'Games to try' }).closest('section')!;
+    expect(section.querySelectorAll('ul a')).toHaveLength(3);
     expect(view.queryAllByText('Trending')).toHaveLength(0);
     expect(mock.load).not.toHaveBeenCalled();
     expect(mock.rpc).not.toHaveBeenCalled();
@@ -138,6 +139,16 @@ describe('homepage personal read ownership', () => {
     expect(view.getAllByText('Trending')).toHaveLength(3);
     queuedIntersection(); await flush();
     expect(mock.rpc).toHaveBeenCalledOnce();
+  });
+
+  it('labels recommendations honestly when fewer than three games qualify', async () => {
+    mock.rpc.mockResolvedValueOnce({ data: [{ game: 'club-manager', plays: 4 }], error: null });
+    const view = mount();
+    revealPopularity(view); await flush();
+    expect(view.queryByRole('heading', { name: 'Most played today' })).toBeNull();
+    expect(view.getByRole('heading', { name: 'Games to try' })).toBeInTheDocument();
+    expect(view.getByRole('region', { name: 'Game picks' }).querySelectorAll('ul a')).toHaveLength(3);
+    expect(view.queryAllByText('Trending')).toHaveLength(0);
   });
 
   it('loads popularity without an IntersectionObserver implementation', async () => {
