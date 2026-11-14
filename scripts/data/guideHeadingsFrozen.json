@@ -151,12 +151,12 @@
     },
     "/build-your-xi": {
       "howToPlay": [
-        "Choose a recorded year from 2004 to 2026 before the formation. It stays fixed for the draft.",
+        "Choose one recorded year or a five-year era before the formation. The archive runs from 2004 to 2026, and the period stays fixed for the draft.",
         "Choose one of 6 formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, 3-4-3, or 5-3-2.",
         "Tap any empty position on the pitch. Fill it with a player who matches the current team and fits that position.",
-        "Type a name and choose a suggestion that fits the slot. Club year picks must match both club and recorded year.",
-        "Tap Browse players to see matching Club year records, or type to narrow them. Records may be incomplete, not a full squad or proof of every appearance.",
-        "No matching record? Try another name or reroll. Club year rerolls change the club, keeping the year.",
+        "Type a name and choose a suggestion that fits the slot. Club drafts accept only a record from the assigned club and selected period.",
+        "Tap Browse players in either club draft, or type to narrow the list. The archive may have gaps.",
+        "No matching record? Try another name or reroll. Club draft rerolls keep the selected period.",
         "Choose 2010, tap GK and use Browse players. A goalkeeper record from the current club in 2010 can fill that slot; a record only from a different year cannot.",
         "Fill all 11 slots and check the role fit, chemistry and balance tiles under the pitch. Mixed uses its usual evaluation when you submit."
       ],
