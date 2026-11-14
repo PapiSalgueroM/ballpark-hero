@@ -1123,6 +1123,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         items: [
           "Tap any empty position on the pitch. Fill it with a player who matches the current team and fits that position.",
           "Your unfinished draft stays in this browser. Reopen Build Your XI to continue, or choose Start Over to clear it.",
+          "Choose Undo last pick to reopen that position with the same club or nation. Earlier picks stay in place.",
         ],
       },
       {

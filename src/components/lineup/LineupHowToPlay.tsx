@@ -27,6 +27,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
               <li>• Each position gets a <span className="text-foreground font-semibold">club or nation</span> from the spinner</li>
               <li>• Type a player who plays or played for that team and submit</li>
               <li>• If your pick checks out, the slot fills</li>
+              <li>• Undo last pick reopens that position with the same club or nation. Earlier picks stay in place.</li>
               <li>• Your unfinished draft stays in this browser. Reopen Build Your XI to continue, or choose Start Over to clear it.</li>
             </ul>
           </section>
