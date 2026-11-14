@@ -24,7 +24,7 @@ import { useRulesGateState } from '@/hooks/useRulesGateState';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
-  nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview,
+  nrlBench, nrlBenchRotation, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview,
   nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60Interchange, nrlNextRound,
   nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
@@ -740,6 +740,29 @@ function FastForward({ career, onRun, disabled }: {
   );
 }
 
+function ReserveRotationList({ label, season, heldReserveId }: {
+  label: string; season: NrlManagerState; heldReserveId?: string;
+}) {
+  const rotation = nrlBenchRotation(season, heldReserveId);
+  return (
+    <div className="min-w-0">
+      <p className="mb-1 font-semibold">{label}</p>
+      {rotation.size > 0 ? (
+        <ul aria-label={label} className="divide-y divide-border">
+          {[...rotation].map(([starterId, reserve]) => (
+            <li key={reserve.id} data-nrl-rotation-reserve={reserve.id} className="break-words py-1">
+              <span className="font-medium">{reserve.name}</span>
+              <span className="block text-xs text-muted-foreground">
+                {reserve.role} · covers {season.squad.find(player => player.id === starterId)?.name}
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : <p className="text-muted-foreground">No automatic changes.</p>}
+    </div>
+  );
+}
+
 function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled, showLiveResult }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null;
   onReview: () => void; onContracts: () => void; disabled: boolean; showLiveResult: boolean;
@@ -761,7 +784,8 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
   const approach = nrlContractApproach(career);
   const canPlayLive = Boolean(match && season.kickerId && season.bench);
   const holdable = canPlayLive ? nrlHoldableReserves(season) : [];
-  const selectedHold = hold?.year === year && hold.round === season.round && holdable.some(player => player.id === hold.reserveId) ? hold : undefined;
+  const heldReserve = hold?.year === year && hold.round === season.round ? holdable.find(player => player.id === hold.reserveId) : undefined;
+  const selectedHold = heldReserve ? hold : undefined;
   const opponent = match ? shortName(year, match.homeId === clubId ? match.awayId : match.homeId) : null;
   const latestRound = season.results.at(-1)?.round;
   const latest = latestRound === undefined ? [] : season.results.filter(result => result.round === latestRound);
@@ -870,20 +894,32 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
         </div>
       )}
 
-      {holdable.length > 0 && (
-        <details className="group rounded-xl border border-border bg-card px-4">
+      {canPlayLive && (
+        <details className="group rounded-xl border border-border bg-card px-4" data-nrl-rotation-preview>
           <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-            <span>Hold one reserve for later</span><ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+            <span>{holdable.length > 0 ? 'Hold one reserve for later' : 'Reserve rotation'}</span><ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
           </summary>
           <div className="pb-4">
-            <label htmlFor="nrl-hold-reserve" className="text-sm font-semibold">Opening rotation</label>
-            <select id="nrl-hold-reserve" value={selectedHold?.reserveId ?? ''} disabled={disabled}
-              className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              onChange={event => setHold(event.target.value ? { year, round: season.round, reserveId: event.target.value } : undefined)}>
-              <option value="">Automatic rotation</option>
-              {holdable.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role}</option>)}
-            </select>
-            <p className="mt-2 text-sm text-muted-foreground">Play Live keeps this reserve free for half time or 60 minutes. Quick Sim uses the usual rotation.</p>
+            {holdable.length > 0 && (
+              <>
+                <label htmlFor="nrl-hold-reserve" className="text-sm font-semibold">Opening rotation</label>
+                <select id="nrl-hold-reserve" value={selectedHold?.reserveId ?? ''} disabled={disabled}
+                  className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  onChange={event => setHold(event.target.value ? { year, round: season.round, reserveId: event.target.value } : undefined)}>
+                  <option value="">Automatic rotation</option>
+                  {holdable.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role}</option>)}
+                </select>
+              </>
+            )}
+            <p className="mt-2 text-sm text-muted-foreground" aria-live="polite">
+              {heldReserve
+                ? <><span className="font-semibold">Held for later: {heldReserve.name}</span>. Bring them on at half time or after 60 minutes in Live.</>
+                : 'Quick Sim and Play Live use the same opening rotation.'}
+            </p>
+            <div className="mt-3 grid gap-3 text-sm sm:grid-cols-2">
+              <ReserveRotationList label="Quick Sim rotation" season={season} />
+              {heldReserve && <ReserveRotationList label="Live opening rotation" season={season} heldReserveId={heldReserve.id} />}
+            </div>
           </div>
         </details>
       )}
@@ -1717,6 +1753,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>
               <li>Sign one fictional assistant in Finances. Tactical assistants help when you use their tactic. A development assistant can give an eligible young player 1 OVR after eight regular-season appearances from the hire onward.</li>
               <li>Choose your goal kicker in Squad to credit conversions and penalty goals. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>
+              <li>Before kick-off, open Hold one reserve for later to see the Quick Sim rotation and compare it with the Live rotation when you hold someone.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. Choose Play to 60 minutes to bring on a held reserve who is still on the bench. Quick Sim settles the round in one action.</li>
               <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
