@@ -90,7 +90,8 @@ describe('browser-local game picks', () => {
       const id = sport.getAttribute('href')!.slice(1);
       const section = view.container.querySelector<HTMLElement>(`section[data-sport="${id.slice(6)}"]`)!;
       expect(section.querySelector(`[id="${id}"]`)).toBeInTheDocument();
-      expect(within(section).getByRole('link', { name: 'All sports' })).toHaveAttribute('href', '#browse-sports');
+      const back = within(section).queryByRole('link', { name: 'All sports' });
+      expect(back?.getAttribute('href')).toBe('#browse-sports');
     }
   });
 
