@@ -1,3 +1,8 @@
+## 2026-11-14: NRL lineup presets and Soccer Career academy report
+
+- NRL Squad can save separate First choice and Rotation lineups. Both remember starters, reserve order and goal kicker. Preview uses current availability, and each season starts with empty slots.
+- Soccer Career keeps its Academy Report on reload while the first senior contract offers are still open. The report reads the completed youth season and its stored development inputs.
+
 ## 2026-11-14: Fight guides and resume, NRL return matches
 
 - Fight Career and Fight Gym explain how training can improve a fighter and how aging and permanent damage can lower the effective rating between bouts. Fight Promoter explains the equivalent boxing effects and distinguishes MMA match ratings from recovery and ranking points.
