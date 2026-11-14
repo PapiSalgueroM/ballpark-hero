@@ -37,22 +37,34 @@ function OriginSchedule({ year, series }: { year: number; series?: Pick<NrlOrigi
 
 function OriginMatchday({ series, disabled, onAction }: { series: NrlOriginSeries; disabled: boolean; onAction: Dispatch }) {
   const { year, side, matches, selection } = series;
+  const [search, setSearch] = useState('');
   const matchAction = { year, side, game: matches.length + 1 };
   const pool = series.pools[side];
   const starters = new Set(Object.values(selection.starters));
   const reserves = pool.filter(player => !starters.has(player.id));
+  const query = search.trim().toLocaleLowerCase();
+  const matching = query ? new Set(pool.filter(player => player.name.toLocaleLowerCase().includes(query)).map(player => player.id)) : null;
   return (
     <details className="rounded-md border border-border bg-background px-3">
       <summary className="min-h-11 cursor-pointer py-2.5 font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Select your matchday 19</summary>
       <fieldset disabled={disabled} className="grid min-w-0 gap-3 pb-3 sm:grid-cols-2">
         <legend className="sr-only">Origin starters and reserves</legend>
+        {series.fullPool && <div className="space-y-1 sm:col-span-2">
+          <label htmlFor="nrl-origin-player-search" className="text-sm font-semibold">Find an eligible player</label>
+          <input id="nrl-origin-player-search" type="search" className={selectClass} value={search}
+            aria-describedby="nrl-origin-player-search-count" onChange={event => setSearch(event.target.value)} />
+          <p id="nrl-origin-player-search-count" className="text-xs text-muted-foreground">
+            {matching ? `${matching.size} matching ${matching.size === 1 ? 'player' : 'players'}. Current picks stay visible.` : `${pool.length} eligible players for your state.`}
+          </p>
+        </div>}
         {NRL_ROLES.map(role => (
           <label key={role} className="min-w-0 space-y-1 text-sm">
             <span className="font-semibold">{role}</span>
             <select className={selectClass} value={selection.starters[role]} onChange={event => onAction({
               type: 'selectOriginStarter', ...matchAction, role, playerId: event.target.value,
             })}>
-              {nrlOriginStarterOptions(series, role).map(player => <option key={player.id} value={player.id}>{player.name} ({player.rating})</option>)}
+              {nrlOriginStarterOptions(series, role).filter(player => !matching || matching.has(player.id) || player.id === selection.starters[role])
+                .map(player => <option key={player.id} value={player.id}>{player.name} ({player.rating})</option>)}
             </select>
           </label>
         ))}
@@ -62,7 +74,8 @@ function OriginMatchday({ series, disabled, onAction }: { series: NrlOriginSerie
             <select className={selectClass} value={playerId} onChange={event => onAction({
               type: 'selectOriginReserve', ...matchAction, slot, playerId: event.target.value,
             })}>
-              {reserves.map(player => <option key={player.id} value={player.id}>{player.name}, {player.role} ({player.rating})</option>)}
+              {reserves.filter(player => !matching || matching.has(player.id) || player.id === playerId)
+                .map(player => <option key={player.id} value={player.id}>{player.name}, {player.role} ({player.rating})</option>)}
             </select>
           </label>
         ))}
@@ -116,6 +129,7 @@ function StartOrigin({ career, disabled, onAction }: { career: NrlCareerState; d
   const { origin, season } = career;
   const [unavailable, setUnavailable] = useState(false);
   const [nominationId, setNominationId] = useState('');
+  const [fullPool, setFullPool] = useState(false);
   const eligible = NRL_ORIGIN_SIDES.map(side => ({
     side, players: season.squad.filter(player => nrlOriginEligibility(player.id) === side).sort((a, b) => a.name.localeCompare(b.name)),
   }));
@@ -127,6 +141,14 @@ function StartOrigin({ career, disabled, onAction }: { career: NrlCareerState; d
       <p className="text-sm text-muted-foreground">
         Named players use verified 2026 selections, and generated players have simulated eligibility.
         {origin && ' Starting this series replaces the previous series in this save.'}
+      </p>
+      <label className="flex min-h-11 items-center gap-2 text-sm font-semibold">
+        <input type="checkbox" checked={fullPool} disabled={disabled} aria-describedby="nrl-origin-full-pool-hint"
+          onChange={event => setFullPool(event.target.checked)} />
+        Include every eligible player for your state
+      </label>
+      <p id="nrl-origin-full-pool-hint" className="text-sm text-muted-foreground">
+        Search all signed league players eligible for the state you coach.
       </p>
       {eligible.some(group => group.players.length) && <>
         <label className="block min-w-0 space-y-1 text-sm font-semibold">
@@ -149,7 +171,7 @@ function StartOrigin({ career, disabled, onAction }: { career: NrlCareerState; d
       <div className="grid gap-2 sm:grid-cols-2">
         {NRL_ORIGIN_SIDES.map(side => <Button key={side} type="button" size="lg" variant="outline"
           disabled={disabled || Boolean(nomineeSide && nomineeSide !== side)}
-          onClick={() => setUnavailable(!onAction({ type: 'startOrigin', year: season.year, side, nominationId: nominationId || undefined }))}>
+          onClick={() => setUnavailable(!onAction({ type: 'startOrigin', year: season.year, side, nominationId: nominationId || undefined, ...(fullPool && { fullPool: true as const }) }))}>
           Coach {NRL_ORIGIN_TEAM_NAMES[side]}
         </Button>)}
       </div>

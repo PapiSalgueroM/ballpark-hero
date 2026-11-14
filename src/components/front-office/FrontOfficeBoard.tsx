@@ -11,7 +11,7 @@ import {
   releasePlayer, signPlayer, proposeTrade, tradeValue, aiWeeklyMoves, divisionOf,
   defenceRating,
   conferenceOf, conferenceSeeds, executeTalksTrade,
-  REGULAR_WEEKS,
+  REGULAR_WEEKS, cleanNflGamePersonnel, setTwoTightEndPlan, twoTightEndSkill,
   type LeagueState, type Prospect, type PlayoffRound,
   ensureFoLeagueIds, NFL_ROSTER_MIN,
   /* Round 723: the depth chart the sim reads, and the franchise tag. */
@@ -423,6 +423,7 @@ export default function FrontOfficeBoard() {
          persist (openDraft's restore and a rebuilt bracket both do): the save then loads as it would without it. */
       nflCleanSave(s.league);
       cleanPracticeElevations(s.league);
+      cleanNflGamePersonnel(s.league, s.myTeam);
       /* Round 1309: a save in the playoffs (a hub save at Week 18 with no
          champion for its season) plays on the bracket it holds, or on one
          started again unplayed when it does not read (the feed says so).
@@ -804,7 +805,7 @@ export default function FrontOfficeBoard() {
       const games = lg.schedule[lg.week - 1].map(g => (deskWeek ? simGame(g, lg.teams, Math.random, deskWeek.edges) : simGame(g, lg.teams, Math.random)));
       /* The actual game and the scoring credits use the same active players. */
       const told = games.map(g => nflTell(g, lg.teams, lg.season, nflWhere(lg.week), deskWeek?.edges));
-      nflRecordWeek(lg, told.flatMap(t => (t.last ? [t.last] : [])), myTeam);
+      nflRecordWeek(lg, told.flatMap(t => t.last ? [t.game.personnel ? { ...t.last, personnel: t.game.personnel } : t.last] : []), myTeam);
       return { injuries, aiLog, told };
     });
     reviewNflWeekRatings(lg, myTeam);
@@ -2008,6 +2009,9 @@ export default function FrontOfficeBoard() {
   const seen = hold ?? league;
   const seenMy = seen.teams[myTeam] ?? my;
   const seenGame = hold ? hold.schedule[hold.week - 1]?.find(g => g.home === myTeam || g.away === myTeam) : myGameThisWeek;
+  const twoTeSkill = tab === 'week' && seenGame && !seenGame.winner ? twoTightEndSkill(seenMy) : null;
+  const twoTePlanned = seenGame?.personnel?.team === myTeam;
+  const playedPersonnel = weekResults.find(game => game.personnel?.team === myTeam)?.personnel?.result;
   /* Round 1309, the fix pass: the owner's trust and the press room as they stood before a watched playoff press (see `heldRoom`) */
   const seenTrust = roomHeld ? roomHeld.trust : trust;
   const seenPresser = roomHeld ? roomHeld.presser : presser;
@@ -2545,6 +2549,29 @@ export default function FrontOfficeBoard() {
               {overLimitLine(my.players.length, overLimit, 'before you play')}
             </p>
           )}
+          {!hold && !bracketOpen && seenGame && !seenGame.winner && seenMy.rosterDepth === 2 && (
+            <label className="block text-left text-xs font-semibold">
+              Offensive personnel this week
+              <select className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm"
+                disabled={closeWaits || saveWriteFailed} value={twoTePlanned ? 'two-te' : 'usual'}
+                onChange={event => {
+                  const choice = event.target.value;
+                  if (choice !== 'two-te' && choice !== 'usual') return;
+                  const next: LeagueState = JSON.parse(JSON.stringify(league));
+                  if (!setTwoTightEndPlan(next, myTeam, choice === 'two-te')) return;
+                  setLeague(next);
+                  persist({}, next, myTeam);
+                }}>
+                <option value="usual">Usual lineup</option>
+                <option value="two-te">Two tight ends</option>
+              </select>
+              <span className="mt-1 block font-normal text-muted-foreground">One back, two receivers and two tight ends share the five skill spots. Extra blocking helps against sacks, but the personnel change can lower the offense.</span>
+              {twoTePlanned && <span className="mt-1 block font-normal" data-two-te-preview>
+                {twoTeSkill ? <>{twoTeSkill.map(player => player.name).join(', ')}. Current strength {teamStrength(seenMy, twoTeSkill).toFixed(1)} vs {teamStrength(seenMy).toFixed(1)} usual.</>
+                  : 'Two tight ends need one healthy back, two receivers and two tight ends. The usual lineup fills in if you are short at kickoff.'}
+              </span>}
+            </label>
+          )}
           {!hold && pendingElevations.length > 0 && (
             <p className="text-xs text-muted-foreground" data-week-elevations>
               Week {league.week} elevations: {pendingElevations.map(entry => entry.name).join(', ')}. They return to practice after the game.
@@ -2685,6 +2712,9 @@ export default function FrontOfficeBoard() {
           {weekResults.length > 0 && !hold && (!bracketRow) && (
             <section aria-label={`Week ${league.week - 1} league scores`} className="space-y-1">
               <h3 className="text-left text-xs font-semibold">Week {league.week - 1} league scores</h3>
+              {playedPersonnel && <p className="text-left text-xs text-muted-foreground" data-two-te-result>
+                {playedPersonnel === 'used' ? 'Your club played with two tight ends.' : 'Your club used the usual lineup because the two-tight-end group was short at kickoff.'}
+              </p>}
               <div className="grid max-h-56 grid-cols-1 gap-1 overflow-y-auto text-left sm:grid-cols-2">
                 {weekResults.map((g, i) => {
                   const involved = g.home === myTeam || g.away === myTeam;

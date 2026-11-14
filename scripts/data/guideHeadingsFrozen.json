@@ -928,6 +928,7 @@
         "Read today's criteria first. It shapes the whole draft.",
         "Draft snake style: 22 alternating picks, with a coin flip deciding who starts.",
         "Use Next in the Player Pool to browse every available player. Search and filters work across the same pool.",
+        "Resume an unfinished Fantasy Draft on this device during the same Eastern day. For example, if you leave between the AI's two picks, Resume Draft brings back both XIs and lets the AI make its remaining pick under the original rule.",
         "Both sides need 1 goalkeeper, 4 defenders, 3 midfielders and 3 forwards.",
         "At 11 apiece, the 38-game table names the winner. Ask for the season story afterwards.",
         "Read the analysis and cast a separate community vote."
@@ -1178,6 +1179,7 @@
     "/front-office": {
       "howToPlay": [
         "Pick a franchise and you get the whole club: every man on its real 53 (kickers, punters and long snappers sit out for now) plus its practice squad. Every player carries a fictional contract, and all 53 fit under a 301.2 million dollar cap that rises 5 percent each season.",
+        "On a full roster, choose Two tight ends in the week panel. One running back, two receivers and two tight ends get the five skill spots. For example, a strong second tight end can help protect a quarterback, while a weak one can drop your strength when he takes the spot of a stronger receiver. If the group is short at kickoff, the usual lineup plays.",
         "Read the ownership mandate. A loaded roster is told to win the Super Bowl, a mid one to make the playoffs, a bare one to hit an honest win number. It resets every offseason from where your roster really stands.",
         "Shape the roster: cut bloated deals, sign free agents, and take trades to the phone: the other GM counters like a person, asking for a pick, offering a lesser man, or hanging up.",
         "Play week by week as scores, injuries, and rival moves roll in, with a live read on whether you are on pace for the mandate.",

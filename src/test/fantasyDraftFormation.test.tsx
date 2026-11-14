@@ -5,6 +5,7 @@ import type { DraftPlayer } from '@/components/fantasy-draft/PlayerPool';
 import { supabase } from '@/integrations/supabase/client';
 import { settleSeason, type SdSeason } from '@/lib/searchDiscard';
 import { recordCompletion } from '@/lib/completions';
+import { getTodayET } from '@/lib/dateUtils';
 
 const remote = vi.hoisted(() => ({
   players: [] as DraftPlayer[],
@@ -44,6 +45,17 @@ function fixture(): DraftPlayer[] {
       position, nationality: 'Fixture Country', dominant_foot: 'Right',
       market_value_millions: value, age: 24,
     })));
+}
+function beforeFinalPick(userFirst: boolean) {
+  const positions = ['GK', 'DEF', 'DEF', 'DEF', 'DEF', 'MID', 'MID', 'MID', 'FWD', 'FWD', 'FWD'];
+  const used = new Map<string, number>();
+  const allPicks = positions.flatMap((position, index) => {
+    const offset = used.get(position) ?? 0;
+    used.set(position, offset + 1);
+    return [0, 1].map(seat => ['fixture', position, 2 * offset + (seat + index) % 2].join('-'));
+  });
+  return { receipt: { v: 1, date: getTodayET(), userFirst, criteria: null, picks: allPicks.slice(0, -1) },
+    final: remote.players.find(p => p.id === allPicks[allPicks.length - 1])! };
 }
 function roster(view: RenderResult, side: 'Your XI' | 'AI XI'): DraftPlayer[] {
   const column = view.getByText(side, { exact: true }).parentElement!.parentElement!;
@@ -114,6 +126,186 @@ afterEach(() => {
   vi.useRealTimers();
   vi.restoreAllMocks();
   localStorage.clear();
+});
+
+describe('Fantasy Draft unfinished receipt', () => {
+  const key = () => `fantasy-draft-in-progress-${getTodayET()}`;
+
+  it('restores the original rule, snake order and both sides mid-AI, then settles once', async () => {
+    const rule = 'Under 25s: Every player must be 25 or younger';
+    remote.criteria = rule;
+    const draft = await openDraft();
+    await pickPosition(draft, 'GK');
+    await act(async () => { vi.advanceTimersByTime(2000); });
+    const human = roster(draft, 'Your XI'), cpu = roster(draft, 'AI XI');
+    expect(human).toHaveLength(1);
+    expect(cpu).toHaveLength(1);
+    const receipt = localStorage.getItem(key());
+    expect(JSON.parse(receipt!)).toMatchObject({ date: getTodayET(), userFirst: true, criteria: rule,
+      picks: [human[0].id, cpu[0].id] });
+    draft.unmount();
+    remote.criteria = 'Bargain Hunt: Every player must cost £60M or less';
+    vi.spyOn(Math, 'random').mockReturnValue(0.9);
+    const w = render(<FantasyDraft />);
+    fireEvent.click(w.getByRole('button', { name: 'Resume Draft' }));
+    await act(async () => {});
+    expect(w.getByText(rule, { exact: true })).toBeVisible();
+    expect(roster(w, 'Your XI')).toEqual(human);
+    expect(roster(w, 'AI XI')).toEqual(cpu);
+    expect(localStorage.getItem(key())).toBe(receipt);
+    await userTurn(w);
+    expect(roster(w, 'AI XI')).toHaveLength(2);
+    for (const position of ['DEF', 'DEF', 'DEF', 'DEF', 'MID', 'MID', 'MID', 'FWD', 'FWD', 'FWD']) {
+      await pickPosition(w, position);
+    }
+    await finishAiTurn(w);
+    expect(settleSeason).toHaveBeenCalledTimes(1);
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+    expect(localStorage.getItem(key())).toBeNull();
+    w.unmount();
+    const again = render(<FantasyDraft />);
+    await act(async () => {});
+    expect(again.queryByRole('button', { name: 'Resume Draft' })).toBeNull();
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
+  it('refuses a saved player missing from the current pool and can start fresh', async () => {
+    localStorage.setItem(key(), JSON.stringify({ v: 1, date: getTodayET(), userFirst: true, criteria: null, picks: ['not-in-pool'] }));
+    const w = render(<FantasyDraft />);
+    fireEvent.click(w.getByRole('button', { name: 'Resume Draft' }));
+    await act(async () => {});
+    expect(w.getByText('That saved draft no longer matches the player pool.')).toBeVisible();
+    expect(recordCompletion).not.toHaveBeenCalled();
+    fireEvent.click(w.getByRole('button', { name: 'Start Draft' }));
+    await act(async () => {});
+    expect(roster(w, 'Your XI')).toEqual([]);
+    expect(roster(w, 'AI XI')).toEqual([]);
+  });
+
+  it('blocks stale same-day picks while preserving another tab’s receipt', async () => {
+    const container = () => document.body.appendChild(document.createElement('div'));
+    const a = render(<FantasyDraft />, { container: container() });
+    const b = render(<FantasyDraft />, { container: container() });
+    await act(async () => {});
+    await act(async () => {
+      for (const view of [a, b]) fireEvent.click(within(view.container).getByRole('button', { name: 'Start Draft' }));
+    });
+    const first = remote.players.find(player => player.position === 'GK')!;
+    const other = remote.players.find(player => player.position === 'DEF')!;
+    const pickIn = (view: RenderResult, player: DraftPlayer) => {
+      const scope = within(view.container);
+      fireEvent.change(scope.getByRole('textbox', { name: 'Search players' }), { target: { value: player.name } });
+      fireEvent.click(scope.getByText(player.name, { selector: 'p', exact: true }).closest('button')!);
+    };
+    pickIn(a, first);
+    const saved = localStorage.getItem(key());
+    pickIn(b, other);
+    expect(within(b.container).getByText(/Your saved draft changed in another tab/)).toBeVisible();
+    expect(within(b.container).getByRole('status', { name: 'Your formation' })).toHaveTextContent('GK 0/1');
+    expect(localStorage.getItem(key())).toBe(saved);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
+  it('accepts only one final pick when the same receipt is open in two views', async () => {
+    const { receipt, final } = beforeFinalPick(false);
+    localStorage.setItem(key(), JSON.stringify(receipt));
+    const renderDraft = () => render(<FantasyDraft />, { container: document.body.appendChild(document.createElement('div')) });
+    const a = renderDraft();
+    const b = renderDraft();
+    for (const view of [a, b]) fireEvent.click(within(view.container).getByRole('button', { name: 'Resume Draft' }));
+    await act(async () => {});
+    const finalButtons = [a, b].map(view => {
+      const scope = within(view.container);
+      expect(scope.getByText('Round 11 • Pick 22/22')).toBeVisible();
+      fireEvent.change(scope.getByRole('textbox', { name: 'Search players' }), { target: { value: final.name } });
+      const button = scope.getByText(final.name, { selector: 'p', exact: true }).closest('button')!;
+      expect(button).toBeEnabled();
+      return button;
+    });
+    await act(async () => { finalButtons.forEach(button => fireEvent.click(button)); });
+    expect(within(a.container).getByText('Draft Complete!', { exact: true })).toBeVisible();
+    expect(within(b.container).getByText(/Your saved draft changed in another tab/)).toBeVisible();
+    expect(within(b.container).queryByText('Draft Complete!', { exact: true })).toBeNull();
+    expect(settleSeason).toHaveBeenCalledTimes(1);
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+    expect(localStorage.getItem(key())).toBeNull();
+  });
+
+  it.each(['newer receipt', 'unmount', 'retry AI clear'] as const)('protects the queued final pick during %s', async scenario => {
+    const { receipt } = beforeFinalPick(true);
+    const original = JSON.stringify(receipt);
+    localStorage.setItem(key(), original);
+    const view = render(<FantasyDraft />);
+    fireEvent.click(view.getByRole('button', { name: 'Resume Draft' }));
+    await act(async () => {});
+    expect(view.getByText('Round 11 • Pick 22/22')).toBeVisible();
+    expect(view.getByText('AI is picking...', { exact: true })).toBeVisible();
+    let accept!: () => void;
+    const locks = Object.getOwnPropertyDescriptor(navigator, 'locks');
+    Object.defineProperty(navigator, 'locks', { configurable: true, value: {
+      request: (_name: string, run: () => void) => new Promise<void>(resolve => {
+        accept = () => { run(); resolve(); };
+      }),
+    } });
+    try {
+      await act(async () => { vi.advanceTimersByTime(2000); });
+      expect(accept).toEqual(expect.any(Function));
+      expect(localStorage.getItem(key())).toBe(original);
+      if (scenario === 'retry AI clear') {
+        const remove = vi.spyOn(Storage.prototype, 'removeItem').mockImplementationOnce(() => { throw new Error('Refused'); });
+        await act(async () => { accept(); });
+        expect(remove).toHaveBeenCalledWith(key());
+        expect(localStorage.getItem(key())).toBe(original);
+        expect(recordCompletion).not.toHaveBeenCalled();
+        fireEvent.click(view.getByRole('button', { name: 'Retry final pick' }));
+        await act(async () => { accept(); });
+        expect(view.getByText('Draft Complete!', { exact: true })).toBeVisible();
+        expect(recordCompletion).toHaveBeenCalledTimes(1);
+        expect(localStorage.getItem(key())).toBeNull();
+      } else {
+        const held = scenario === 'unmount' ? original : JSON.stringify({ ...receipt, userFirst: false, picks: receipt.picks.slice(0, 1) });
+        localStorage.setItem(key(), held);
+        if (scenario === 'unmount') view.unmount();
+        await act(async () => { accept(); });
+        expect(localStorage.getItem(key())).toBe(held);
+        expect(recordCompletion).not.toHaveBeenCalled();
+        if (scenario === 'newer receipt') expect(view.getByText(/Your saved draft changed in another tab/)).toBeVisible();
+      }
+    } finally {
+      if (locks) Object.defineProperty(navigator, 'locks', locks);
+      else Reflect.deleteProperty(navigator, 'locks');
+    }
+  });
+
+  it('retries a failed pool request while holding the original resume', async () => {
+    const original = JSON.stringify({ v: 1, date: getTodayET(), userFirst: true, criteria: null, picks: ['fixture-GK-0'] });
+    localStorage.setItem(key(), original);
+    remote.readPool.mockResolvedValueOnce({ data: [], error: null });
+    const w = render(<FantasyDraft />);
+    fireEvent.click(w.getByRole('button', { name: 'Resume Draft' }));
+    await act(async () => {});
+    expect(localStorage.getItem(key())).toBe(original);
+    fireEvent.click(w.getByRole('button', { name: 'Retry players' }));
+    await act(async () => {});
+    expect(roster(w, 'Your XI')).toMatchObject([{ id: 'fixture-GK-0' }]);
+    expect(w.getByText('AI is picking...', { exact: true })).toBeVisible();
+    expect(localStorage.getItem(key())).toBe(original);
+  });
+
+  it('does not offer a receipt from the previous Eastern day', async () => {
+    vi.setSystemTime(new Date('2026-11-14T04:59:50Z'));
+    const previous = key();
+    localStorage.setItem(previous, JSON.stringify({ v: 1, date: getTodayET(), userFirst: true, criteria: null, picks: ['fixture-GK-0'] }));
+    vi.setSystemTime(new Date('2026-11-14T05:00:10Z'));
+    expect(key()).not.toBe(previous);
+    const draft = render(<FantasyDraft />);
+    await act(async () => {});
+    expect(draft.queryByRole('button', { name: 'Resume Draft' })).toBeNull();
+    fireEvent.click(draft.getByRole('button', { name: 'Start Draft' }));
+    await act(async () => {});
+    expect(roster(draft, 'Your XI')).toEqual([]);
+    expect(roster(draft, 'AI XI')).toEqual([]);
+  });
 });
 
 describe('Fantasy Draft player pool recovery', () => {

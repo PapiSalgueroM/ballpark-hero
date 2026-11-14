@@ -147,6 +147,46 @@ describe('Origin career saves', () => {
     type: 'playOriginMatch', game, year: state.origin!.year, side: state.origin!.side,
   });
 
+  it.each([[2026, 'broncos', 'qld'], [2027, 'bears', 'nsw']] as const)(
+    'lets a full-pool appointment field an otherwise omitted eligible player from the %s league', (year, clubId, side) => {
+      const initial = createNrlCareer(clubId, 1, year);
+      const appointment = { type: 'startOrigin', year, side } as const;
+      const compact = reduceNrlCareer(initial, appointment);
+      const active = reduceNrlCareer(initial, { ...appointment, fullPool: true });
+      const opponent = side === 'qld' ? 'nsw' : 'qld';
+      const series = active.origin!;
+      expect(series.fullPool).toBe(true);
+      expect(series.selection).toEqual(compact.origin!.selection);
+      expect(series.pools[opponent]).toEqual(compact.origin!.pools[opponent]);
+      const expected = activePlayers(initial).filter(player => nrlOriginEligibility(player.id) === side).map(player => player.id);
+      expect(new Set(series.pools[side].map(player => player.id))).toEqual(new Set(expected));
+      expect(JSON.stringify(active).length - JSON.stringify(compact).length).toBeLessThan(30_000);
+      expect(readNrlCareerSave(JSON.stringify(active))).toEqual(active);
+      const allGames = (state: NrlCareerState) => [1, 2, 3].reduce(play, state).origin!.matches;
+      expect(allGames(active)).toEqual(allGames(compact));
+      const shortlist = new Set(compact.origin!.pools[side].map(player => player.id));
+      const original = play(active, 1);
+      let changed: { playerId: string; role: typeof NRL_ROLES[number]; selected: NrlCareerState; played: NrlCareerState } | undefined;
+      for (const player of series.pools[side]) {
+        if (shortlist.has(player.id)) continue;
+        const selected = reduceNrlCareer(active, { type: 'selectOriginStarter', year, side, game: 1, role: player.role, playerId: player.id });
+        const played = play(selected, 1);
+        const match = played.origin!.matches[0], baseline = original.origin!.matches[0];
+        if (match.homeScore === baseline.homeScore && match.awayScore === baseline.awayScore) continue;
+        changed = { playerId: player.id, role: player.role, selected, played };
+        break;
+      }
+      expect(changed).toBeDefined();
+      const played = changed!.played;
+      expect(changed!.selected.origin!.selection.starters[changed!.role]).toBe(changed!.playerId);
+      expect(played.origin!.matches[0].selection.starters[changed!.role]).toBe(changed!.playerId);
+      expect(readNrlCareerSave(JSON.stringify(played))).toEqual(played);
+      expect(played.season).toBe(initial.season);
+      const forged = JSON.parse(JSON.stringify(active));
+      forged.origin.fullPool = false;
+      expect(readNrlCareerSave(JSON.stringify(forged))).toBeNull();
+    });
+
   it('round-trips an optional series and leaves club progression byte-identical with or without it', () => {
     const initial = createNrlCareer('broncos', 16, 2026, true);
     expect(initial).not.toHaveProperty('origin');

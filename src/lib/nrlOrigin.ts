@@ -33,6 +33,7 @@ export interface NrlOriginSeries {
   tactic: NrlTactic;
   matches: OriginMatch[];
   nomination?: { clubId: string; playerId: string };
+  fullPool?: true;
 }
 interface OriginFixture {
   game: number;
@@ -138,9 +139,17 @@ function originSelection(players: OriginPlayer[]): OriginSelection | null {
   return { starters, bench };
 }
 
-function originPool(players: readonly NrlPlayer[], side: NrlOriginSide): OriginPlayer[] {
-  const eligible = players.filter(player => nrlOriginEligibility(player.id) === side)
+const originPlayer = ({ id, name, role, rating, secondaryRole }: NrlPlayer): OriginPlayer => ({
+  id, name, role, rating, ...(secondaryRole ? { secondaryRole } : {}),
+});
+
+function eligibleOriginPlayers(players: readonly NrlPlayer[], side: NrlOriginSide) {
+  return players.filter(player => nrlOriginEligibility(player.id) === side)
     .sort((a, b) => b.rating - a.rating || (a.id < b.id ? -1 : Number(a.id > b.id)));
+}
+
+function originPool(players: readonly NrlPlayer[], side: NrlOriginSide): OriginPlayer[] {
+  const eligible = eligibleOriginPlayers(players, side);
   const selection = originSelection(eligible);
   if (!selection) return [];
   const keep = new Set([...Object.values(selection.starters), ...selection.bench]);
@@ -155,18 +164,17 @@ function originPool(players: readonly NrlPlayer[], side: NrlOriginSide): OriginP
     if (keep.size === MAX_POOL) break;
     keep.add(player.id);
   }
-  return eligible.filter(player => keep.has(player.id)).map(({ id, name, role, rating, secondaryRole }) => ({
-    id, name, role, rating, ...(secondaryRole ? { secondaryRole } : {}),
-  }));
+  return eligible.filter(player => keep.has(player.id)).map(originPlayer);
 }
 
 export function createNrlOriginSeries(players: readonly NrlPlayer[], year: number, side: NrlOriginSide,
-  nomination?: NrlOriginSeries['nomination']): NrlOriginSeries | null {
+  nomination?: NrlOriginSeries['nomination'], fullPool?: true): NrlOriginSeries | null {
   if (!isYear(year) || !isSide(side)) return null;
   const pools = { nsw: originPool(players, 'nsw'), qld: originPool(players, 'qld') };
   if (!pools.nsw.length || !pools.qld.length) return null;
   const selection = originSelection(pools[side]);
   if (!selection) return null;
+  if (fullPool) pools[side] = eligibleOriginPlayers(players, side).map(originPlayer);
   if (nomination && !pools[side].some(player => player.id === nomination.playerId)) {
     const player = players.find(candidate => candidate.id === nomination.playerId && nrlOriginEligibility(candidate.id) === side);
     if (!player) return null;
@@ -176,10 +184,10 @@ export function createNrlOriginSeries(players: readonly NrlPlayer[], year: numbe
       if (!replaced) return null;
       pools[side].splice(pools[side].indexOf(replaced), 1);
     }
-    const { id, name, role, rating, secondaryRole } = player;
-    pools[side].push({ id, name, role, rating, ...(secondaryRole ? { secondaryRole } : {}) });
+    pools[side].push(originPlayer(player));
   }
-  return { version: 1, year, side, pools, selection, tactic: 'balanced', matches: [], ...(nomination ? { nomination } : {}) };
+  return { version: 1, year, side, pools, selection, tactic: 'balanced', matches: [],
+    ...(nomination ? { nomination } : {}), ...(fullPool ? { fullPool } : {}) };
 }
 
 const SERIES_GAMES = ORIGIN_FIXTURES_2026.length;
@@ -293,8 +301,8 @@ function isOriginSelection(value: unknown, pool: OriginPlayer[]): value is Origi
   return new Set([...Object.values(starters), ...bench]).size === MATCHDAY_SIZE;
 }
 
-function isOriginPool(value: unknown, side: NrlOriginSide): value is OriginPlayer[] {
-  if (!Array.isArray(value) || value.length < MATCHDAY_SIZE || value.length > MAX_POOL) return false;
+function isOriginPool(value: unknown, side: NrlOriginSide, limit = MAX_POOL): value is OriginPlayer[] {
+  if (!Array.isArray(value) || value.length < MATCHDAY_SIZE || value.length > limit) return false;
   const ids = new Set<string>();
   for (const player of value as OriginPlayer[]) {
     if (!player || typeof player !== 'object' || typeof player.id !== 'string' || player.id.length > 80
@@ -311,10 +319,13 @@ function isOriginPool(value: unknown, side: NrlOriginSide): value is OriginPlaye
 export function isNrlOriginSeries(value: unknown, seed: number): value is NrlOriginSeries {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const series = value as NrlOriginSeries;
-  if (Object.keys(series).length !== (series.nomination === undefined ? 7 : 8)
+  if ((series.fullPool !== undefined && series.fullPool !== true)
+    || Object.keys(series).length !== 7 + Number(series.nomination !== undefined) + Number(series.fullPool === true)
     || series.version !== 1 || !isYear(series.year) || !isSide(series.side)
-    || !series.pools || typeof series.pools !== 'object' || Object.keys(series.pools).length !== 2
-    || !isOriginPool(series.pools.nsw, 'nsw') || !isOriginPool(series.pools.qld, 'qld')
+    || !series.pools || typeof series.pools !== 'object' || Object.keys(series.pools).length !== 2) return false;
+  const limit = series.fullPool ? nrlSeasonPlan(series.year).clubs.length * 30 : MAX_POOL;
+  if (!isOriginPool(series.pools.nsw, 'nsw', series.side === 'nsw' ? limit : MAX_POOL)
+    || !isOriginPool(series.pools.qld, 'qld', series.side === 'qld' ? limit : MAX_POOL)
     || !NRL_TACTICS.includes(series.tactic) || !isOriginSelection(series.selection, series.pools[series.side])
     || !Array.isArray(series.matches) || series.matches.length > SERIES_GAMES) return false;
   const { nomination } = series;

@@ -110,7 +110,14 @@ export interface GmGame {
   homeScore: number;
   awayScore: number;
   winner: string;
+  /** A one-game plan for the user's club. The result records what actually played. */
+  personnel?: NflGamePersonnel;
 }
+
+type NflGamePersonnel = {
+  team: string;
+  result?: 'used' | 'unavailable';
+};
 
 export interface Prospect {
   id: string;
@@ -525,6 +532,47 @@ export function unitStarters(team: GmTeamState, groups: DepthPos[], slots: numbe
   return out;
 }
 
+const TWO_TE_EXTRA_PROTECTION = 3;
+
+/** Read the roster at kickoff, including available practice elevations. */
+export function twoTightEndSkill(team: GmTeamState): GmPlayer[] | null {
+  if (team.rosterDepth !== 2) return null;
+  const rb = depthOrder(team, 'RB').filter(player => player.out === 0).slice(0, 1);
+  const wr = depthOrder(team, 'WR').filter(player => player.out === 0).slice(0, 2);
+  const te = depthOrder(team, 'TE').filter(player => player.out === 0).slice(0, 2);
+  return rb.length === 1 && wr.length === 2 && te.length === 2 ? [...rb, ...wr, ...te] : null;
+}
+
+export function setTwoTightEndPlan(league: LeagueState, abbr: string, enabled: boolean): boolean {
+  if (!hasUnplayedRegularGame(league, abbr)) return false;
+  const game = league.schedule[league.week - 1]?.find(g => g.home === abbr || g.away === abbr);
+  if (!game || game.week !== league.week || game.winner || league.teams[abbr]?.rosterDepth !== 2
+    || (game.personnel?.team === abbr) === enabled) return false;
+  if (enabled) game.personnel = { team: abbr };
+  else delete game.personnel;
+  return true;
+}
+
+/** Keep a malformed optional plan from stopping a saved franchise. */
+export function cleanNflGamePersonnel(league: LeagueState, myTeam: string): void {
+  for (const game of league.schedule.flat()) {
+    if (game.personnel === undefined) continue;
+    const plan = game.personnel;
+    if (plan?.team !== myTeam || (game.home !== myTeam && game.away !== myTeam)
+      || league.teams[myTeam]?.rosterDepth !== 2 || game.week < 1 || game.week > REGULAR_WEEKS
+      || (game.winner ? plan.result !== 'used' && plan.result !== 'unavailable'
+        : game.week !== league.week || plan.result !== undefined)) delete game.personnel;
+  }
+}
+
+export function nflGameOffense(game: Pick<GmGame, 'personnel'>, team: GmTeamState): GmPlayer[] | null {
+  return game.personnel?.team === team.abbr && game.personnel.result === 'used' ? twoTightEndSkill(team) : null;
+}
+
+export function twoTightEndProtection(skill: GmPlayer[] | null): number {
+  return skill ? TWO_TE_EXTRA_PROTECTION : 0;
+}
+
 /** Every man the sim counts as a starter right now, for the chart screen's badges. */
 export function starterIds(team: GmTeamState): Set<string> {
   return new Set([
@@ -536,14 +584,14 @@ export function starterIds(team: GmTeamState): Set<string> {
 }
 
 /** Team strength: QB 30, skill 30, OL 12, DEF 28, read off the depth chart (injured players excluded). */
-export function teamStrength(team: GmTeamState): number {
+export function teamStrength(team: GmTeamState, plannedSkill: GmPlayer[] | null = null): number {
   const [qb1] = unitStarters(team, ['QB'], 1);
   const qb = Math.max(64, qb1 ? qb1.ovr : 0);
-  const skill = unitStarters(team, SKILL_POS, SKILL_SLOTS);
+  const skill = plannedSkill ?? unitStarters(team, SKILL_POS, SKILL_SLOTS);
   const skillAvg = skill.length ? skill.reduce((s, p) => s + p.ovr, 0) / skill.length : 64;
   const ol = unitStarters(team, ['OL'], OL_SLOTS);
   const olAvg = ol.length ? ol.reduce((s, p) => s + p.ovr, 0) / ol.length : 64;
-  return qb * 0.30 + skillAvg * 0.30 + olAvg * 0.12 + defenceRating(team) * 0.28;
+  return qb * 0.30 + skillAvg * 0.30 + (olAvg + twoTightEndProtection(plannedSkill)) * 0.12 + defenceRating(team) * 0.28;
 }
 
 // ---------------------------------------------------------------------------
@@ -727,15 +775,21 @@ export function buildSchedule(rng: () => number): GmGame[][] {
 /* Round 1019: the two edges are strength points a GM desk adds (a staff's
    bounded edge, src/lib/nflGmDesk.ts). Both default to nothing, so every
    caller that passes none plays exactly as before. */
-export function winProb(home: GmTeamState, away: GmTeamState, edgeHome = 0, edgeAway = 0): number {
-  const gap = (teamStrength(home) + edgeHome) - (teamStrength(away) + edgeAway) + 2;
+export function winProb(home: GmTeamState, away: GmTeamState, edgeHome = 0, edgeAway = 0, game?: Pick<GmGame, 'personnel'>): number {
+  const gap = (teamStrength(home, game ? nflGameOffense(game, home) : null) + edgeHome)
+    - (teamStrength(away, game ? nflGameOffense(game, away) : null) + edgeAway) + 2;
   return 1 / (1 + Math.pow(10, -gap / 14));
 }
 
 /** Round 1019: `edges` is strength points by club from a GM desk. Absent, the game plays exactly as it always has. */
 export function simGame(g: GmGame, teams: Record<string, GmTeamState>, rng: () => number, edges?: Record<string, number>): GmGame {
   const home = teams[g.home], away = teams[g.away];
-  const p = edges ? winProb(home, away, edges[g.home] ?? 0, edges[g.away] ?? 0) : winProb(home, away);
+  const planned = g.personnel;
+  if (planned && !planned.result && !g.winner && (planned.team === g.home || planned.team === g.away)
+    && g.week >= 1 && g.week <= REGULAR_WEEKS) {
+    g = { ...g, personnel: { team: planned.team, result: twoTightEndSkill(teams[planned.team]) ? 'used' : 'unavailable' } };
+  }
+  const p = winProb(home, away, edges?.[g.home], edges?.[g.away], g.personnel ? g : undefined);
   const homeWins = rng() < p;
   const base = 16 + Math.floor(rng() * 15);
   const margin = 1 + Math.floor(rng() * 17);

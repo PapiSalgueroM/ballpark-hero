@@ -141,6 +141,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         heading: "Picking a franchise under the salary cap",
         items: [
           "Pick a franchise and you get the whole club: every man on its real 53 (kickers, punters and long snappers sit out for now) plus its practice squad. Every player carries a fictional contract, and all 53 fit under a 301.2 million dollar cap that rises 5 percent each season.",
+          "On a full roster, choose Two tight ends in the week panel. One running back, two receivers and two tight ends get the five skill spots. For example, a strong second tight end can help protect a quarterback, while a weak one can drop your strength when he takes the spot of a stronger receiver. If the group is short at kickoff, the usual lineup plays.",
         ],
       },
       {

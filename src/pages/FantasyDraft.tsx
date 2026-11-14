@@ -20,14 +20,14 @@ import { FANTASY_FORMATION, fantasyDraftCandidates, fantasySlotOpen, fantasyXiCo
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import { settleSeason, type SdSeason } from '@/lib/searchDiscard';
 import type { Player } from '@/types/game';
+import { getTodayET } from '@/lib/dateUtils';
+import { FANTASY_TEAM_SIZE as TEAM_SIZE, FANTASY_TOTAL_PICKS as TOTAL_PICKS, getPickOwner,
+  parseFantasyDraft, readFantasyDraft, restoreFantasyDraft, withFantasyDraftLock, type FantasyDraftSave } from '@/lib/fantasyDraftSave';
 
 /** The settle engine reads marketValue, age and name; this table's rows map
  *  straight onto that. */
 const toSettlePlayer = (p: DraftPlayer): Player =>
   ({ name: p.name, marketValue: Math.max(1, p.market_value_millions), age: p.age ?? 27, position: p.position } as Player);
-
-const TEAM_SIZE = 11;
-const TOTAL_PICKS = TEAM_SIZE * 2;
 
 /* Round 644: the season score, your points as a share of the 114 a perfect
    38 game season earns, out of 100. The completion records it, and since this
@@ -50,14 +50,6 @@ function fantasyShareText(verdict: SdSeason | null): string {
   return `${result} ${line} ${tail}`;
 }
 
-function getPickOwner(pickIndex: number, userFirst: boolean): 'user' | 'ai' {
-  const round = Math.floor(pickIndex / 2);
-  const posInRound = pickIndex % 2;
-  const roundStarts = round % 2 === 0 ? (userFirst ? 'user' : 'ai') : (userFirst ? 'ai' : 'user');
-  if (posInRound === 0) return roundStarts;
-  return roundStarts === 'user' ? 'ai' : 'user';
-}
-
 interface AnalysisData {
   strengths: string[];
   weaknesses: string[];
@@ -72,6 +64,20 @@ const FantasyDraft = () => {
   const [players, setPlayers] = useState<DraftPlayer[]>([]);
   const [loadingPlayers, setLoadingPlayers] = useState(false);
   const [playersError, setPlayersError] = useState(false);
+  const [draftDate] = useState(getTodayET);
+  const saveKey = `fantasy-draft-in-progress-${draftDate}`;
+  const [resumeAvailable, setResumeAvailable] = useState(() => !!parseFantasyDraft(readFantasyDraft(saveKey), draftDate));
+  const [draftNotice, setDraftNotice] = useState('');
+  const [draftCriteria, setDraftCriteria] = useState<string | null>(null);
+  const [finalRetry, setFinalRetry] = useState<{ player: DraftPlayer; side: 'user' | 'ai' } | null>(null);
+  const pendingResume = useRef<FantasyDraftSave | null>(null);
+  const expectedSave = useRef<string | null>(null);
+  const committedPicks = useRef<string[]>([]);
+  const mounted = useRef(false);
+  useEffect(() => {
+    mounted.current = true;
+    return () => { mounted.current = false; };
+  }, []);
 
   // Draft state
   const [userFirst, setUserFirst] = useState(true);
@@ -125,7 +131,7 @@ const FantasyDraft = () => {
   // Owner 2026-08-05: the daily criteria is a real rule, not decoration.
   // Both sides keep the 4-3-3. Daily criteria relax only when no eligible
   // player fits an open position, never to overfill one.
-  const rule = ruleForCriteria(criteria);
+  const rule = ruleForCriteria(draftCriteria);
   const userOptions = fantasyDraftCandidates(rule, userTeam, players, draftedIds);
   const userPickIds = new Set(userOptions.players.map(p => p.id));
   const activeOptions = currentTurn === 'user' ? userOptions : fantasyDraftCandidates(rule, aiTeam, players, draftedIds);
@@ -151,28 +157,95 @@ const FantasyDraft = () => {
         .from('fantasy_draft_players')
         .select('id, name, position, nationality, market_value_millions, dominant_foot, age' as any)
         .order('name');
-      if (error || !data?.length) setPlayersError(true);
-      else setPlayers(data as unknown as DraftPlayer[]);
+      if (error || !data?.length) { setPlayersError(true); return; }
+      const pool = data as unknown as DraftPlayer[];
+      const saved = pendingResume.current;
+      if (saved) {
+        const restored = restoreFantasyDraft(saved, pool);
+        if (!restored) {
+          pendingResume.current = null;
+          setStarted(false);
+          setDraftNotice('That saved draft no longer matches the player pool.');
+          const invalidSave = expectedSave.current;
+          withFantasyDraftLock(saveKey, () => {
+            if (!mounted.current) return;
+            try {
+              if (readFantasyDraft(saveKey) === invalidSave) localStorage.removeItem(saveKey);
+            } catch { /* Optional save. */ }
+          });
+          setResumeAvailable(false);
+          return;
+        }
+        committedPicks.current = saved.picks;
+        setPickIndex(saved.picks.length);
+        setLastPickId(saved.picks[saved.picks.length - 1]);
+        setUserTeam(restored.userTeam);
+        setAiTeam(restored.aiTeam);
+        setDraftedIds(restored.draftedIds);
+        pendingResume.current = null;
+      }
+      setPlayers(pool);
     } catch {
       setPlayersError(true);
     } finally {
       setLoadingPlayers(false);
     }
-  }, []);
+  }, [saveKey]);
 
-  useEffect(() => {
-    if (!started) return;
-    setUserFirst(Math.random() < 0.5);
-    fetchPlayers();
-  }, [started, fetchPlayers]);
+  const startDraft = (resume: boolean) => {
+    const raw = readFantasyDraft(saveKey);
+    const save = resume ? parseFantasyDraft(raw, draftDate) : null;
+    if (resume && !save) {
+      setResumeAvailable(false);
+      setDraftNotice('That saved draft was changed in another tab.');
+      return;
+    }
+    expectedSave.current = raw;
+    pendingResume.current = save;
+    committedPicks.current = [];
+    setUserFirst(save?.userFirst ?? Math.random() < 0.5);
+    setDraftCriteria(save ? save.criteria : criteria);
+    setDraftNotice('');
+    setStarted(true);
+    void fetchPlayers();
+  };
 
   const draftPlayer = useCallback((player: DraftPlayer, side: 'user' | 'ai') => {
-    if (side === 'user') setUserTeam((prev) => [...prev, player]);
-    else setAiTeam((prev) => [...prev, player]);
-    setDraftedIds((prev) => new Set(prev).add(player.id));
-    setLastPickId(player.id);
-    setPickIndex((prev) => prev + 1);
-  }, []);
+    withFantasyDraftLock(saveKey, () => {
+      if (!mounted.current || committedPicks.current.length !== pickIndex || getPickOwner(pickIndex, userFirst) !== side) return;
+      if (readFantasyDraft(saveKey) !== expectedSave.current) {
+        setFinalRetry(null);
+        setDraftNotice('Your saved draft changed in another tab. Reload to resume its latest picks.');
+        return;
+      }
+      const picks = [...committedPicks.current, player.id];
+      try {
+        if (picks.length === TOTAL_PICKS) {
+          if (expectedSave.current !== null) localStorage.removeItem(saveKey);
+          expectedSave.current = null;
+          setFinalRetry(null);
+          setDraftNotice('');
+        } else {
+          const save: FantasyDraftSave = { v: 1, date: draftDate, userFirst, criteria: draftCriteria, picks };
+          const raw = JSON.stringify(save);
+          localStorage.setItem(saveKey, raw);
+          expectedSave.current = raw;
+        }
+      } catch {
+        if (picks.length === TOTAL_PICKS) {
+          setFinalRetry({ player, side });
+          setDraftNotice('Could not clear the saved draft.');
+          return;
+        }
+      }
+      committedPicks.current = picks;
+      if (side === 'user') setUserTeam((prev) => [...prev, player]);
+      else setAiTeam((prev) => [...prev, player]);
+      setDraftedIds((prev) => new Set(prev).add(player.id));
+      setLastPickId(player.id);
+      setPickIndex((prev) => prev + 1);
+    });
+  }, [draftCriteria, draftDate, pickIndex, saveKey, userFirst]);
 
   const handleUserPick = useCallback((player: DraftPlayer) => {
     if (currentTurn !== 'user' || draftComplete || draftedIds.has(player.id)) return;
@@ -326,21 +399,29 @@ const FantasyDraft = () => {
                     <p className="text-sm text-muted-foreground">Could not load today's criteria.</p>
                   )}
                 </div>
-                <Button
-                  size="lg"
-                  disabled={loadingCriteria}
-                  onClick={() => setStarted(true)}
-                  className="text-lg px-10 py-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 hover:scale-105"
-                >
-                  <Sparkles className="w-5 h-5 mr-2" />
-                  Start Draft
-                </Button>
+                {draftNotice && <p role="status" className="text-sm text-muted-foreground">{draftNotice}</p>}
+                <div className="flex flex-wrap items-center justify-center gap-3">
+                  {resumeAvailable && <Button type="button" onClick={() => startDraft(true)} className="min-h-11 px-6">Resume Draft</Button>}
+                  <Button
+                    size="lg"
+                    variant={resumeAvailable ? 'outline' : 'default'}
+                    disabled={loadingCriteria}
+                    onClick={() => startDraft(false)}
+                    className="text-lg px-10 py-6 rounded-xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all duration-300 hover:scale-105"
+                  >
+                    <Sparkles className="w-5 h-5 mr-2" />
+                    {resumeAvailable ? 'Start New Draft' : 'Start Draft'}
+                  </Button>
+                </div>
+                {resumeAvailable && <p className="text-sm text-muted-foreground">The first pick in a new draft replaces your saved progress.</p>}
               </>
             )}
 
             {/* Draft phase */}
             {started && (
               <>
+                {draftNotice && <p role="status" className="text-sm text-muted-foreground">{draftNotice}</p>}
+                {finalRetry && <Button variant="outline" onClick={() => draftPlayer(finalRetry.player, finalRetry.side)}>Retry final pick</Button>}
                 {!draftComplete ? (
                   <div className={cn(
                     'inline-flex items-center gap-2 px-5 py-2.5 rounded-full border text-sm font-bold uppercase tracking-wider animate-pulse',
@@ -361,10 +442,10 @@ const FantasyDraft = () => {
                   </div>
                 )}
 
-                {criteria && (
+                {draftCriteria && (
                   <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-card/60 border border-border">
                     <Target className="w-3.5 h-3.5 text-primary" />
-                    <span className="text-xs font-semibold text-muted-foreground">{criteria}</span>
+                    <span className="text-xs font-semibold text-muted-foreground">{draftCriteria}</span>
                     {rule && (
                       <span className="text-[10px] font-bold uppercase tracking-wide text-primary">{activeOptions.relaxed ? 'Relaxed for this pick' : 'Enforced'}</span>
                     )}
@@ -398,7 +479,7 @@ const FantasyDraft = () => {
                 ) : playersError ? (
                   <div role="alert" className="space-y-3 py-6 text-center">
                     <p className="text-sm text-muted-foreground">Couldn't load the players.</p>
-                    <Button onClick={fetchPlayers} className="min-h-[44px]">
+                    <Button onClick={() => void fetchPlayers()} className="min-h-[44px]">
                       Retry players
                     </Button>
                   </div>
