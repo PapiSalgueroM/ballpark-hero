@@ -15,7 +15,7 @@ import { defaultSeasonComparison, seasonHistoryRows } from "@/lib/soccerCareerSe
 import SoccerSeasonHistory from "./SoccerSeasonHistory";
 import { SOCCER_PRIME_WINDOWS, type CareerState } from "@/lib/soccerCareerEngine";
 import {
-  soccerRatingRows, ratingSeries, careerAverageRating, ovrTrackedFrom, ovrNotYetTracked, readSeasonRatingPath, ratingBand,
+  soccerRatingRows, ratingSeries, careerAverageRating, ovrTrackedFrom, ovrNotYetTracked, readOvr, readSeasonRatingPath, ratingBand,
 } from "@/lib/careerSeasonRatings";
 import Sparkline from "@/components/career/Sparkline";
 import { BAND_CLASS } from "@/lib/careerRatingBand";
@@ -151,9 +151,13 @@ export default function SeasonRatings({ career, onClose }: { career: RatingsSour
   const [first, setFirst] = useState(defaults?.[0] ?? -1);
   const [second, setSecond] = useState(defaults?.[1] ?? -1);
   const [availability, setAvailability] = useState(rows[rows.length - 1]?.index ?? -1);
-  const developmentRows = career.seasons.flatMap((season, index) =>
-    season && (season.type === "playing" || season.type === "youth") ? [{ index, season, path: readSeasonRatingPath(season.ratingPath) }] : []);
-  const recorded = [...developmentRows].reverse().find(row => row.path);
+  const developmentRows = career.seasons.flatMap((season, index) => {
+    if (!season || (season.type !== "playing" && season.type !== "youth")) return [];
+    const [before, after] = Array.isArray(season.rehabOverall) ? season.rehabOverall.map(readOvr) : [];
+    const rehab = season.injurySevere && before != null && after != null ? { before, after } : null;
+    return [{ index, season, path: readSeasonRatingPath(season.ratingPath), rehab }];
+  });
+  const recorded = [...developmentRows].reverse().find(row => row.path || row.rehab);
   const [developmentIndex, setDevelopmentIndex] = useState(recorded?.index ?? -1);
   const development = developmentRows.find(row => row.index === developmentIndex) ?? recorded;
   const prime = career.primeType && Object.prototype.hasOwnProperty.call(SOCCER_PRIME_WINDOWS, career.primeType)
@@ -228,7 +232,10 @@ export default function SeasonRatings({ career, onClose }: { career: RatingsSour
                   <dt className="text-muted-foreground">{label}</dt><dd className="font-bold tabular-nums">{development.path?.[index]}</dd>
                 </div>)}
               </dl>
-              : <p className="text-xs text-muted-foreground">This season has no saved development checkpoints.</p>}
+              : !development?.rehab && <p className="text-xs text-muted-foreground">This season has no saved development checkpoints.</p>}
+            {development?.rehab && <p className="text-xs text-muted-foreground" data-rehab-overall>
+              {development.season.injury ?? "Serious injury"} · OVR {development.rehab.before} before rehab, {development.rehab.after} on return.
+            </p>}
           </section>}
           <RatingsBody career={career} />
         </> : mode === "help" ? <div className="space-y-3 text-sm" data-season-history-help-body>
@@ -237,7 +244,7 @@ export default function SeasonRatings({ career, onClose }: { career: RatingsSour
           <p>Comparison and Availability read your saved senior seasons. You can choose a season with no appearances, or two records from the same year.</p>
           <p>Comparison shows the second season minus the first. Season OVR is the overall you played at, not your current overall. Apps and position stats cover all club competitions. Missing numbers stay not recorded; they never become zero.</p>
           <p>Example: 12 goals in the first season and 15 in the second gives a change of +3. If the first season never kept OVR, its OVR and the change both say not recorded.</p>
-          <p>Season development shows the five saved overall checkpoints from the start to the end of a season. Pick an academy or senior year to see when the rating rose or fell.</p>
+          <p>Season development shows the five saved overall checkpoints from the start to the end of a season. Pick an academy or senior year to see when the rating rose or fell. After serious injury rehab, it shows your overall before rehab and on return.</p>
           <p>Careers can have an early, typical, late or extended prime. For example, a late bloomer enters their faster growth years from 27 to 31, with changes still depending on season performance and potential.</p>
           <p>Availability only shows injuries, weeks, severity and club matches missed through suspension that the save kept. Weeks are not converted to matches. A recorded injury does not prove why you missed every game.</p>
           <p>Example: a saved 4-week injury and 2 club matches missed through suspension stay separate. An older season without a saved suspension count says not recorded.</p>
