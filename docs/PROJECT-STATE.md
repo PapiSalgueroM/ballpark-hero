@@ -1,3 +1,8 @@
+## 2026-11-14: NRL returning cover and Home keyboard navigation
+
+- NRL Recruitment shows which returning players finished training for a second position. The next-season depth tiles keep primary positions and trained cover separate. The position brief gives the names and primary positions.
+- Unpinning the last game in Home’s picks puts keyboard focus on the first Featured game. The next Tab reaches the second Featured game.
+
 ## 2026-11-14: Club Manager world ratings during the season
 
 - Rivals and free agents can gain or lose OVR as league matches settle. The transfer market, opponent squads and match engine use the same rating. January signings keep their current OVR, and returning players carry their closing OVR into the next season.
