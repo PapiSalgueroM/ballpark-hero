@@ -245,7 +245,7 @@ export default function SeasonRatings({ career, onClose }: { career: RatingsSour
           <p>Comparison shows the second season minus the first. Season OVR is the overall you played at, not your current overall. Apps and position stats cover all club competitions. Missing numbers stay not recorded; they never become zero.</p>
           <p>Example: 12 goals in the first season and 15 in the second gives a change of +3. If the first season never kept OVR, its OVR and the change both say not recorded.</p>
           <p>Season development shows the five saved overall checkpoints from the start to the end of a season. Pick an academy or senior year to see when the rating rose or fell. After serious injury rehab, it shows your overall before rehab and on return.</p>
-          <p>Careers can have an early, typical, late or extended prime. For example, a late bloomer enters their faster growth years from 27 to 31, with changes still depending on season performance and potential.</p>
+          <p>An early-prime player can grow faster before age 23. Late bloomers develop more slowly early on and get a lift from ages 27 to 31. An extended prime slows the first two seasons of decline. Playing time, form and potential still matter.</p>
           <p>Availability only shows injuries, weeks, severity and club matches missed through suspension that the save kept. Weeks are not converted to matches. A recorded injury does not prove why you missed every game.</p>
           <p>Example: a saved 4-week injury and 2 club matches missed through suspension stay separate. An older season without a saved suspension count says not recorded.</p>
         </div> : <div className="space-y-3">

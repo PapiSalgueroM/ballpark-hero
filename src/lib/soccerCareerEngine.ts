@@ -3056,7 +3056,7 @@ function developmentRate(s: CareerState, justPlayed?: Pick<SeasonRecord, 'type' 
   return clamp(headroom * form * tierF, 0.1, 2.6);
 }
 
-function growStat(current: number, age: number, isYouth: boolean, isPace: boolean, primeType: PrimeType, potential = 99, currentOverall = 0, dev = 1, random = Math.random): number {
+function growStat(current: number, age: number, isYouth: boolean, isPace: boolean, primeType: PrimeType, potential = 99, currentOverall = 0, dev = 1, random = Math.random, inSeason = false): number {
   const rand = (min: number, max: number) => Math.floor(random() * (max - min + 1)) + min;
   let growth: number;
   if (isYouth) {
@@ -3074,6 +3074,8 @@ function growStat(current: number, age: number, isYouth: boolean, isPace: boolea
       growth = rand(-6, -3); // Very sharp decline 38-39
     } else if (age >= 35) {
       growth = rand(-5, -2); // Accelerated decline 35-37
+    } else if (inSeason && primeType === "extended" && age <= 34) {
+      growth = rand(-2, 0);
     } else if (age >= 32) {
       growth = rand(-3, -1); // Natural decline begins 32-34
     } else {
@@ -3085,6 +3087,11 @@ function growStat(current: number, age: number, isYouth: boolean, isPace: boolea
         growth = rand(-3, -1); // Moderate decline
       }
     }
+  }
+  if (inSeason && !isYouth) {
+    if (primeType === "early" && age <= 22) dev *= 1.35;
+    else if (primeType === "late" && age < 24) dev *= 0.78;
+    else if (primeType === "late" && isInPrime(age, primeType)) dev *= 1.12;
   }
   // Round 96: the development rate scales real growth. Decline is left alone,
   // because no amount of good form stops a 37 year old losing a yard.
@@ -5715,7 +5722,7 @@ function growProAttributes(s: CareerState, dev: number, random = Math.random): v
   s.statBoostNextSeason = {};
   const pot = effectivePotential(s);
   for (const key of DEVELOPMENT_STATS) {
-    s[key] = growStat(s[key], s.age, false, key === 'pace', s.primeType, pot, s.overall, dev, random);
+    s[key] = growStat(s[key], s.age, false, key === 'pace', s.primeType, pot, s.overall, dev, random, s.inSeasonRatings);
     if (key === 'physical' && s.purchasedItems.includes('personal_trainer')) s.physical = clamp(s.physical + 1, 20, 99);
   }
 }
