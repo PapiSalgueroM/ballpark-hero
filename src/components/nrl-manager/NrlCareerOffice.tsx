@@ -658,6 +658,7 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
   const signed = nextYear <= NRL_LAST_YEAR ? nrlCareerSquad(career, nextYear) : [];
   const depth = NRL_ROLES.map(position => ({
     position, count: signed.filter(player => player.role === position).length,
+    cover: signed.filter(player => player.secondaryRole === position).length,
   })).sort((a, b) => a.count - b.count);
   const { market, renewals } = useMemo(() => {
     const entries = nrlCareerMarket(career);
@@ -709,12 +710,12 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
             <p className="text-muted-foreground">{signed.length} players signed for {nextYear}. The game fills open places at rollover.</p>
             <p className="mt-1 text-muted-foreground">Choose a position to filter the market.</p>
             <ul className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
-              {depth.map(({ position, count }) => (
+              {depth.map(({ position, count, cover }) => (
                 <li key={position} className="min-w-0">
                   <Button type="button" size="lg" variant={role === position ? 'default' : 'outline'} aria-pressed={role === position}
                     className="h-auto min-h-11 w-full flex-col items-start gap-0 whitespace-normal px-2 py-1 text-left text-xs"
                     onClick={() => selectRole(position)}>
-                    <span>{position}</span><span>{count} signed</span>
+                    <span>{position}</span><span>{count} signed{cover > 0 && ` · ${cover} trained cover`}</span>
                   </Button>
                 </li>
               ))}
@@ -734,6 +735,10 @@ function Recruitment({ career, onAction, disabled }: { career: NrlCareerState; o
           <h3 id="nrl-recruitment-brief" className="font-bold">{role} recruitment brief</h3>
           <p className="text-muted-foreground">{brief.signed.length ? `${brief.signed.length} signed for ${brief.year}. ${brief.signed.map(player => player.name).join(', ')}.`
             : `No player is signed at this position for ${brief.year}.`}</p>
+          {brief.cover.length > 0 && <p className="break-words text-muted-foreground">
+            <span className="font-semibold text-foreground">Trained cover</span>{' '}
+            {brief.cover.map(player => `${player.name} (${player.role})`).join(', ')}
+          </p>}
           {brief.academy && (
             <p className="text-muted-foreground"><span className="font-semibold text-foreground">Academy option</span>{' '}
               {brief.academy.player.name} · {brief.academy.player.rating} OVR · {brief.academy.player.potential} potential.{' '}

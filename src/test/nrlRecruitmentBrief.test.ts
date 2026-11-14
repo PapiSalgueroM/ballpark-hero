@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   createNrlCareer, nrlAcademyReports, nrlCareerCap, nrlCareerMarket, nrlCareerSquad, nrlContractOffer,
-  nrlRecruitmentBrief, reduceNrlCareer,
+  nrlRecruitmentBrief, readNrlCareerSave, reduceNrlCareer,
 } from '@/lib/nrlCareer';
 
 describe('NRL recruitment brief', () => {
@@ -60,5 +60,33 @@ describe('NRL recruitment brief', () => {
     expect(after.targets.some(({ quote }) => quote.ok === false && /salary cap/.test(quote.reason))).toBe(true);
     expect(nrlRecruitmentBrief({ ...state, season: { ...state.season, year: NRL_LAST_YEAR } }, 'Fullback')).toBeNull();
     expect(nrlRecruitmentBrief({ ...state, retired: true }, 'Fullback')).toBeNull();
+  });
+
+  it.each([['storm', 2026], ['bears', 2027]] as const)('shows trained cover for returning players at %s', (clubId, year) => {
+    let state = createNrlCareer(clubId, 17, year);
+    const signed = new Set(nrlCareerSquad(state, year + 1).map(player => player.id));
+    const candidates = state.season.squad.filter(player => player.role === 'Five-eighth');
+    const trainee = candidates.find(player => signed.has(player.id)) ?? candidates[0];
+    if (!signed.has(trainee.id)) {
+      const renewal = nrlCareerMarket(state).find(entry => entry.kind === 'renewal' && entry.player.id === trainee.id)!;
+      state = reduceNrlCareer(state, { type: 'offerContract', playerId: trainee.id, salary: renewal.askingSalary, years: 1 });
+    }
+    expect(nrlCareerSquad(state, year + 1).some(player => player.id === trainee.id)).toBe(true);
+    const role = 'Halfback';
+    const pending = reduceNrlCareer(state, { type: 'startPositionTraining', playerId: trainee.id, role, year, clubId, round: state.season.round });
+    expect(pending.positionTraining?.role).toBe(role);
+    expect(nrlRecruitmentBrief(pending, role)?.cover).toEqual([]);
+    let trained = pending;
+    for (let i = 0; i < 4; i++) trained = reduceNrlCareer(trained, { type: 'advance' });
+    const bytes = JSON.stringify(trained);
+    const brief = nrlRecruitmentBrief(trained, role)!;
+    expect(brief.cover.map(player => player.id)).toEqual([trainee.id]);
+    expect(nrlRecruitmentBrief(readNrlCareerSave(bytes)!, role)?.cover).toEqual(brief.cover);
+    expect(brief.signed.some(player => player.id === trainee.id)).toBe(false);
+    expect(brief.cover[0].secondaryRole).toBe(role);
+    const left = { ...trained, players: trained.players.map(player => player.id === trainee.id
+      ? { ...player, contract: { ...player.contract!, endYear: year }, futureContract: null } : player) };
+    expect(nrlRecruitmentBrief(left, role)?.cover).toEqual([]);
+    expect(JSON.stringify(trained)).toBe(bytes);
   });
 });
