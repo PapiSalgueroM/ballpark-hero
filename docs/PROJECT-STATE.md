@@ -1,4 +1,12 @@
+## 2026-11-14: Budget Builder market pages, NRL scouting and NHL goalie workload
+
+- Budget Builder sorts every eligible player in the selected market into pages of 60. Search filters the same pool, and a player reached past the first page can be previewed and signed normally.
+- NRL Team Manager can spend $60,000 of club cash once per season to scout another position while the free academy report is pending. Both reports arrive on the usual schedule. Promotions still follow the squad and salary-cap rules.
+- NHL My Career starting goalies can share the crease for a signed season. The simulated plan trims planned starts and injury risk by about one fifth. The Career Log records planned and actual starts. Camp still decides whether you hold the starting job.
+
 ## 2026-11-14: NFL practice squad elevations and NRL development priority
+
+[PR #944](https://github.com/PapiSalgueroM/ballpark-hero/pull/944) published exact main `0d2a89c2daa9cca3510642c2876adede777bb556`, deployment `d246216c-c64f-4889-9101-ac77338d2143`. Five live browser journeys, both raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted both guides.
 
 - In NFL Front Office, elevate up to two practice-squad players for a regular-season game, with three uses per player. The team reserves one week's share of each fictional salary. The player is available for the game and returns to practice afterward. Permanent promotions still use a full roster spot and salary. [NFL elevation rules](https://operations.nfl.com/calendar-events/nfl-free-agency/contract-language)
 - In NRL Team Manager, a development assistant can reserve one of their three rating awards for an eligible young player. The player still needs eight regular-season appearances from the hire onward. Clearing the priority frees the place for another eligible player.

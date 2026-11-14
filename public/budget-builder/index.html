@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,6 +284,8 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>$1B Budget Builder: Soccer Squad Building Game</h1>
@@ -265,6 +299,7 @@
 <li>Choose one of 9 formations. In the Today market you can also narrow the pool, say Premier League only.</li>
 <h3>Shopping each position you can afford</h3>
 <li>Tap a slot to shop that position. Only players you can currently afford are listed.</li>
+<li>Use Next in the signing shortlist to browse the whole eligible market, or search by player name or club.</li>
 <h4>Releasing a signing for a full refund</h4>
 <li>Sign someone and their value leaves your budget. Release anyone for a full refund.</li>
 <h3>Filling all eleven for the Money XI final</h3>
@@ -299,8 +334,8 @@
 <p>Yes. $1B Budget Builder is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
 <h2>More games to play</h2>
 <a href="/rebuild">🔧 Rebuild Challenge Inherit a real club. Open the envelopes, spin for a shirt, keep him or sell him, answer to the board</a>
+<a href="/soccer-perfect-season">🏆 Soccer Perfect Season Draft a real XI</a>
 <a href="/dart-draft">🎯 Dart Draft Throw timed darts at a real world map: hit a country, draft its players</a>
-<a href="/career-ladder">🪜 Career Ladder Guess the player, one career stop at a time</a>
 <a href="/perfect-season-nfl">🏆 17-0 NFL Perfect Season Draft an offense across eras, run the table</a>
 <a href="/rank-em">📊 Rank 'Em Put five players in order by a career stat, most to fewest</a>
 <a href="/guess-tennis-player">🎾 Guess The Player Guess the mystery tennis player from clues</a>
@@ -322,8 +357,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>
