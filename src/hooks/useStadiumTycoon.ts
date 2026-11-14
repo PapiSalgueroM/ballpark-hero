@@ -19,7 +19,7 @@ import {
   setPieceOffer, beginSetPiece, awardSetPieceGoal,
   setTicketPolicy,
 } from '@/lib/stadiumTycoon';
-import type { GoldenKind, LeagueClub, AwayMatch, SetPieceOffer, TicketPolicy } from '@/lib/stadiumTycoon';
+import type { GoldenKind, AwayMatch, SetPieceOffer, TicketPolicy } from '@/lib/stadiumTycoon';
 
 /** Round 162: a golden whistle drifting across the pitch, waiting to be
  *  caught. Purely presentational until the tap: the engine only hears about
@@ -55,9 +55,6 @@ const ANNOUNCE_Y = 30;
  *  and the bonus are the engine's own event fields, printed as they came. */
 export interface Promotion { label: string; amount: number; seq: number }
 export interface BadgeEarned { label: string; seq: number }
-/** Round 582 review: the season that just ended, so the League tab can show how
- *  it finished instead of silently wiping the table. This sitting only. */
-export interface LastSeason { label: string; position: number; table: LeagueClub[] }
 /** Round 583: one goal the pitch replays, straight off the engine's event: which
  *  end it went in and the minute the engine committed it. Never a second roll. */
 export interface Replay { id: number; side: 'for' | 'against'; minute: number }
@@ -98,7 +95,6 @@ export function useStadiumTycoon(getEdge?: () => number) {
      line. It used to hold one, so the last of a tick's badges wiped the rest. */
   const [badgeQueue, setBadgeQueue] = useState<BadgeEarned[]>([]);
   const badge = badgeQueue[0] ?? null;
-  const [lastSeason, setLastSeason] = useState<LastSeason | null>(null);
   /* Round 583: goals waiting for the pitch. Queued only while the pitch is on
      screen: a goal scored while you are in another room is on the scoreboard
      when you come back, and is never replayed late. */
@@ -258,10 +254,13 @@ export function useStadiumTycoon(getEdge?: () => number) {
         if (ft) {
           const season = events.find(e => (e.kind === 'title' || e.kind === 'seasonEnd') && e.position !== undefined);
           let allowGear = true;
-          if (season?.kind === 'title') {
-            // The completed stadium match is durable before its title can award gear.
-            try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); } catch { allowGear = false; }
-            setGearSaveBlocked(!allowGear);
+          if (season) {
+            // Save the final table before a title can award gear.
+            const saved = saveTicketState(next);
+            if (season.kind === 'title') {
+              allowGear = saved;
+              setGearSaveBlocked(!saved);
+            }
           }
           const gems = recordFullTimes([{
             totalMatches: next.totalMatches ?? 0, result: ft.kind as FullTime['result'], away: false,
@@ -294,9 +293,6 @@ export function useStadiumTycoon(getEdge?: () => number) {
       raf = requestAnimationFrame(step);
     };
     const reactToEvent = (e: TickEvent) => {
-      if ((e.kind === 'title' || e.kind === 'seasonEnd') && e.table && e.position !== undefined) {
-        setLastSeason({ label: e.label ?? 'Season over', position: e.position, table: e.table });
-      }
       if ((e.kind === 'goal' || e.kind === 'conceded') && e.minute !== undefined && replaysOnRef.current) {
         const replay: Replay = { id: floaterSeq++, side: e.kind === 'goal' ? 'for' : 'against', minute: e.minute };
         setReplays(q => [...q, replay]);
@@ -519,7 +515,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
     doSetTicketPolicy, ticketSaveFailed, retryTicketSave,
     doBuy, doTap, doPrestige, doBoost,
     golden, doCatchGolden, doHire, doLegacyPerk,
-    promotion, dismissPromotion, badge, dismissBadge, doSetClubName, lastSeason,
+    promotion, dismissPromotion, badge, dismissBadge, doSetClubName,
     replays, endReplay, watchReplays,
     setPiece: pendingSetPiece,
     activeSetPiece, setPieceError, doBeginSetPiece, doSetPieceResult, closeSetPiece,

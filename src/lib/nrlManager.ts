@@ -159,6 +159,7 @@ export interface NrlManagerState {
   bench?: string[];
   injuryTracking?: true;
   kickerId?: string;
+  backupKickerId?: string;
   captainId?: string;
   tactic: NrlTactic;
   attackPlan?: NrlActiveAttackPlan;
@@ -175,6 +176,7 @@ export type NrlAction =
   | { type: 'selectStarter'; role: NrlRole; playerId: string }
   | { type: 'selectBench'; slot: number; playerId: string }
   | { type: 'setKicker'; playerId: string }
+  | { type: 'setBackupKicker'; playerId: string | null; year: number; clubId: string; round: number }
   | { type: 'setCaptain'; playerId: string | null; year: number; clubId: string; round: number }
   | { type: 'applyFitLineup'; previewKey: string }
   | { type: 'setTactic'; tactic: NrlTactic }
@@ -452,9 +454,10 @@ export function nrlBench(state: NrlAvailability & Pick<NrlManagerState, 'squad' 
 }
 
 function withLineup(state: NrlManagerState, lineup: NrlManagerState['lineup']): NrlManagerState {
-  return state.kickerId && !Object.values(lineup).includes(state.kickerId)
-    ? { ...state, lineup, kickerId: lineup.Halfback }
-    : { ...state, lineup };
+  const starters = Object.values(lineup);
+  if (!state.kickerId || starters.includes(state.kickerId)) return { ...state, lineup };
+  const backup = state.backupKickerId;
+  return { ...state, lineup, kickerId: backup && starters.includes(backup) ? backup : lineup.Halfback };
 }
 
 export function repairMatchday(state: NrlManagerState, preferFit = false): NrlManagerState {
@@ -508,7 +511,8 @@ export function nrlFitLineup(state: NrlManagerState) {
   const changes = lineupChanges(state.lineup, next.lineup);
   const key = JSON.stringify([state.seed, state.clubId, state.year, state.round, state.preparation, state.lineup, state.bench, state.kickerId,
     ...(state.squad.some(player => player.secondaryRole) ? [next.lineup, next.bench, next.kickerId] : []),
-    ...(state.individualRecoveryId ? [state.individualRecoveryId] : [])]);
+    ...(state.individualRecoveryId ? [state.individualRecoveryId] : []),
+    ...(state.backupKickerId ? ['backup-kicker', state.backupKickerId] : [])]);
   return { next, changes, key };
 }
 
@@ -526,7 +530,8 @@ export function nrlSavedLineupPreview(state: NrlManagerState, saved: NrlSavedLin
   const benchChanged = current.bench.some((id, slot) => id !== next.bench![slot]);
   const kickerChanged = current.kickerId !== next.kickerId;
   const replacements = lineupChanges(lineup, next.lineup).length + bench.filter(id => !next.bench!.includes(id)).length;
-  const key = JSON.stringify([state.seed, state.clubId, state.round, current, saved, next.lineup, next.bench, next.kickerId]);
+  const key = JSON.stringify([state.seed, state.clubId, state.round, current, saved, next.lineup, next.bench, next.kickerId,
+    ...(state.backupKickerId ? [state.backupKickerId] : [])]);
   return { next, changes, benchChanged, kickerChanged, replacements, key, changed: Boolean(changes.length || benchChanged || kickerChanged) };
 }
 
@@ -1029,6 +1034,17 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
     case 'setKicker':
       if (!state.kickerId || state.kickerId === action.playerId || !Object.values(state.lineup).includes(action.playerId)) return state;
       return { ...state, kickerId: action.playerId };
+    case 'setBackupKicker': {
+      const { playerId, year, clubId, round } = action;
+      if (!state.kickerId || year !== state.year || clubId !== state.clubId || round !== state.round) return state;
+      if (playerId === null) {
+        if (!state.backupKickerId) return state;
+        const { backupKickerId: _removed, ...next } = state;
+        return next;
+      }
+      if (playerId === state.kickerId || playerId === state.backupKickerId || !Object.values(state.lineup).includes(playerId)) return state;
+      return { ...state, backupKickerId: playerId };
+    }
     case 'setCaptain': {
       const { year, clubId, round, playerId } = action;
       if (!state.kickerId || year !== state.year || clubId !== state.clubId || round !== state.round) return state;
@@ -1296,6 +1312,7 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
       && NRL_ROLES.includes(player.role as NrlRole) && integerIn(player.rating, 40, 98) && integerIn(player.fitness, 0, 100)
       && (player.secondaryRole === undefined || (injuryTracking && kickerId && nrlRetrainingRoles(player.role as NrlRole).includes(player.secondaryRole as NrlRole))))) return false;
   const byId = new Map<string, NrlPlayer>(squad.map(player => [player.id, player]));
+  if (value.backupKickerId !== undefined && (!kickerId || typeof value.backupKickerId !== 'string' || !byId.has(value.backupKickerId))) return false;
   if (value.captainId !== undefined && (!kickerId || typeof value.captainId !== 'string' || !byId.has(value.captainId))) return false;
   if (value.judiciary !== undefined && (!kickerId || !injuryTracking || !judiciary
     || (judiciary.carried && !byId.has(judiciary.carried.playerId)))) return false;

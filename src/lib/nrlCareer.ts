@@ -1824,14 +1824,18 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
       lineup[role] = squad.find(player => player.role === role)!.id;
     }
   }
-  const { reserveGrade, judiciary, captainId, ...lastSeason } = season;
+  const { reserveGrade, judiciary, captainId, backupKickerId, ...lastSeason } = season;
+  const returningBackup = !move && backupKickerId && squad.some(player => player.id === backupKickerId) ? backupKickerId : undefined;
+  const returningKicker = !move && [season.kickerId, returningBackup]
+    .find(id => id !== undefined && Object.values(lineup).includes(id));
   const outstanding = !move && judiciary ? [...nrlJudiciaryBans(season)].find(([id]) => squad.some(player => player.id === id)) : undefined;
   const carried = outstanding && { playerId: outstanding[0], matches: outstanding[1] };
   const nextSeason: NrlManagerState = {
     ...lastSeason, clubId, year, round: 1, phase: 'regular', championId: null,
     results: [], squad: squad.map(playerView), lineup, preparation: null, injuryTracking: true,
     ...(move ? { bench: undefined, tactic: 'balanced' } : {}),
-    kickerId: !move && season.kickerId && Object.values(lineup).includes(season.kickerId) ? season.kickerId : lineup.Halfback,
+    kickerId: returningKicker || lineup.Halfback,
+    ...(returningBackup && { backupKickerId: returningBackup }),
     ...(judiciary && { judiciary: carried ? { carried } : {} }),
     ...(!move && captainId && squad.some(player => player.id === captainId) && { captainId }),
   };

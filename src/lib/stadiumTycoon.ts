@@ -549,6 +549,8 @@ export interface TycoonState {
    *  the rivals. Optional so every older save loads; the loader seeds one from
    *  the old win count the first time. */
   league?: TycoonLeague;
+  /** The last final table at this ground, before the live league moves on. */
+  lastCompletedLeague?: TycoonLeague;
   /** Round 582: league titles won, career-wide. Survives selling up. */
   leagueTitles?: number;
   /** Round 582: the club name picked from the generated banks, career-wide.
@@ -929,6 +931,7 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
   const played: TycoonLeague = { ...lg, clubs, matchday: lg.matchday + 1 };
   if (played.matchday < leagueShape(lg.division).matchdays) return played;
 
+  st.lastCompletedLeague = played;
   const position = leaguePosition(played);
   const d = DIVISIONS[played.division];
   if (position !== 1) {
@@ -1597,7 +1600,7 @@ const MATCH_MINUTE_SEC = 1.4;
 
 /** Round 582: a stored league, kept only if every part of it is a league this
  *  engine could have produced. Null means rebuild it. */
-function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: number, matchNo: number): TycoonLeague | null {
+function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: number, matchNo: number, completed = false): TycoonLeague | null {
   if (!raw || typeof raw !== 'object') return null;
   const r = raw as Partial<TycoonLeague>;
   const division = r.division;
@@ -1606,7 +1609,8 @@ function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: n
      was the bottom league, and loaded there. */
   if ((division as number) > bestDivision) return null;
   const shape = leagueShape(division as number);
-  if (!Number.isInteger(r.matchday) || (r.matchday as number) < 0 || (r.matchday as number) >= shape.matchdays) return null;
+  if (!Number.isInteger(r.matchday) || (r.matchday as number) < 0
+    || (completed ? r.matchday !== shape.matchdays : (r.matchday as number) >= shape.matchdays)) return null;
   if (!Number.isInteger(r.season) || (r.season as number) < 0) return null;
   if (!Number.isFinite(r.seed)) return null;
   if (!Array.isArray(r.clubs) || r.clubs.length !== shape.clubs) return null;
@@ -1616,7 +1620,8 @@ function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: n
   for (let i = 0; i < r.clubs.length; i += 1) {
     const c = r.clubs[i] as Partial<LeagueClub>;
     if (!c || typeof c.name !== 'string' || names.has(c.name)) return null;
-    if (i === 0 ? c.name !== (clubName ?? YOUR_CLUB) : !bank.has(c.name)) return null;
+    const playerName = completed ? c.name === YOUR_CLUB || bank.has(c.name) : c.name === (clubName ?? YOUR_CLUB);
+    if (i === 0 ? !playerName : !bank.has(c.name)) return null;
     const offset = i === 0 ? 0 : c.offset;
     if (!Number.isFinite(offset) || Math.abs(offset as number) > OFFSET_SPREAD + 1e-9) return null;
     const whole = [c.w, c.d, c.l, c.gf, c.ga];
@@ -1760,6 +1765,7 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
        drops a division, and the match it was in the middle of finishes against
        the opponent it was already playing, outside the table. */
     const rawLeague = (p as { league?: unknown }).league;
+    delete s.lastCompletedLeague;
     if (rawLeague === undefined) {
       const division = legacyDivisionIndex(s.groundWins ?? 0);
       const seeded = newLeague(s.rep, division, 0, youName, s.matchNo);
@@ -1778,8 +1784,16 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
          name bank, would have dropped the club. */
       const best = s.bestDivision ?? 0;
       const claimed = (rawLeague as { division?: unknown }).division;
-      s.league = cleanLeague(rawLeague, youName, best, s.matchNo) ??
+      const activeLeague = cleanLeague(rawLeague, youName, best, s.matchNo);
+      s.league = activeLeague ??
         newLeague(s.rep, Number.isInteger(claimed) ? Math.min(Math.max(0, claimed as number), best) : Math.min(legacyDivisionIndex(s.groundWins ?? 0), best), 0, youName, s.matchNo);
+      const completed = p.lastCompletedLeague && activeLeague
+        ? cleanLeague(p.lastCompletedLeague, undefined, activeLeague.division, s.matchNo, true)
+        : null;
+      if (completed && activeLeague && completed.season + 1 === activeLeague.season
+        && activeLeague.division - completed.division === Number(completed.division < DIVISIONS.length - 1 && leaguePosition(completed) === 1)) {
+        s.lastCompletedLeague = completed;
+      }
     }
     return s;
   } catch {
