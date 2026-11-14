@@ -6,6 +6,8 @@
 
 ## 2026-11-14: NRL backup kicker and Stadium Tycoon latest season
 
+[PR #909](https://github.com/PapiSalgueroM/ballpark-hero/pull/909) published exact main `e7689d84e397412e277000c80c1540b373a5a646`, deployment `e9e3cd61-1eb9-454c-b9d5-5e1f8eff48df`. Seven browser journeys and all 174 sitemap routes passed live. IndexNow accepted both guides. All 481 NRL tests passed.
+
 - NRL Squad lets you nominate a backup kicker from the starting 13. If the primary leaves the lineup, Match centre names the available backup on duty. The automatic halfback takes over when both are out. Conversions and penalty goals go to the kicker who actually plays.
 - Stadium Tycoon keeps its most recent completed standings and result in the existing save. Open Latest season in League after reload, including after promotion. Completing a newer season replaces it, and selling up clears it.
 
