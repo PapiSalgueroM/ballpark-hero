@@ -744,11 +744,23 @@ function roundLabel(round: number, regularRounds: number) {
     : round === regularRounds + 4 ? 'Grand final' : 'Finals week ' + (round - regularRounds);
 }
 
-function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNextRound }) {
+function SeasonFixtures({ season, next, initialClub }: { season: NrlManagerState; next: NrlNextRound; initialClub?: string }) {
   const shortName = useNrlClubName();
+  const fullName = useNrlClubName('full');
   const { year, clubId, results } = season;
   const { draw, clubs } = nrlSeasonPlan(year);
-  const [view, setView] = useState('');
+  const selector = useRef<HTMLSelectElement>(null);
+  const [view, setView] = useState(initialClub ? 'club:' + initialClub : '');
+  useEffect(() => {
+    const dropdown = selector.current;
+    const drawer = dropdown?.closest('details');
+    if (initialClub && drawer) {
+      drawer.open = true;
+      dropdown.focus();
+    }
+  }, [initialClub]);
+  const rival = clubs.find(club => club.id !== clubId && view === 'club:' + club.id);
+  const selectedClub = rival?.id ?? clubId;
   const round = Number(view);
   const regular = draw[round - 1];
   const settled = results.filter(match => match.round === round);
@@ -761,15 +773,22 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
   const byes = regular ? clubs.filter(club => !regular.some(pair => pair.includes(club.id))) : [];
   const finals = new Set(results.filter(match => match.finalsRound !== undefined).map(match => match.round));
   if (next.finalsRound !== null && next.fixtures.length) finals.add(next.round);
+  const rivalFinals = rival ? [...results.filter(match => match.finalsRound !== undefined),
+    ...(next.finalsRound === null ? [] : next.fixtures)].filter(match => match.homeId === rival.id || match.awayId === rival.id) : [];
 
   return (
     <details className="rounded-xl border border-border bg-card px-4">
       <summary className="flex min-h-11 cursor-pointer items-center font-bold">Season fixtures</summary>
       <label className="mb-2 block max-w-xs space-y-1 text-sm font-semibold">
         <span>Fixtures to show</span>
-        <select value={view} onChange={event => setView(event.target.value)}
+        <select ref={selector} value={view} onChange={event => setView(event.target.value)}
           className="min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           <option value="">My club</option>
+          <optgroup label="Follow a club">
+            {clubs.filter(club => club.id !== clubId).map(club => (
+              <option key={club.id} value={'club:' + club.id}>{fullName(year, club.id)}</option>
+            ))}
+          </optgroup>
           <optgroup label="League rounds">
             {draw.map((_, index) => <option key={index + 1} value={index + 1}>Round {index + 1}</option>)}
           </optgroup>
@@ -782,7 +801,7 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
           )}
         </select>
       </label>
-      {view ? (
+      {view && !rival ? (
         <div className="pb-2 text-sm">
           <p className="text-xs text-muted-foreground">{settled.length ? 'Results from this career' : 'Upcoming in this career'}</p>
           <ol aria-label="League round matches" className="divide-y divide-border">
@@ -796,20 +815,30 @@ function SeasonFixtures({ season, next }: { season: NrlManagerState; next: NrlNe
           </p>}
         </div>
       ) : (
-        <ol aria-label="Club season fixtures" className="divide-y divide-border pb-2 text-sm">
+        <ol aria-label={rival ? fullName(year, rival.id) + ' season fixtures' : 'Club season fixtures'} className="divide-y divide-border pb-2 text-sm">
           {draw.map((round, index) => {
-            const fixture = round.find(([home, away]) => home === clubId || away === clubId);
-            const result = results.find(row => row.round === index + 1 && (row.homeId === clubId || row.awayId === clubId));
+            const fixture = round.find(([home, away]) => home === selectedClub || away === selectedClub);
+            const result = results.find(row => row.round === index + 1 && (row.homeId === selectedClub || row.awayId === selectedClub));
             return (
               <li key={index} className="py-2">
                 <div className="flex flex-wrap justify-between gap-x-2">
                   <span className="text-muted-foreground">Round {index + 1}</span>
                   <span>{result ? scoreLine(result, year, shortName) : fixture ? `${shortName(year, fixture[0])} vs ${shortName(year, fixture[1])}` : 'Bye'}</span>
                 </div>
-                {result && <SavedMatchReport label={roundLabel(index + 1, draw.length)} match={result} season={season} />}
+                {!rival && result && <SavedMatchReport label={roundLabel(index + 1, draw.length)} match={result} season={season} />}
               </li>
             );
           })}
+        </ol>
+      )}
+      {rivalFinals.length > 0 && (
+        <ol aria-label="Known finals fixtures" className="divide-y divide-border border-t border-border pb-2 text-sm">
+          {rivalFinals.map(match => (
+            <li key={match.round} className="flex flex-wrap justify-between gap-x-2 py-2">
+              <span className="text-muted-foreground">{roundLabel(match.round, draw.length)}</span>
+              <span>{'homeScore' in match ? scoreLine(match, year, shortName) : shortName(year, match.homeId) + ' vs ' + shortName(year, match.awayId)}</span>
+            </li>
+          ))}
         </ol>
       )}
     </details>
@@ -979,9 +1008,9 @@ function KickoffSelectionPromise({ career, heldReserveId }: { career: NrlCareerS
   );
 }
 
-function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLiveResult }: {
+function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLiveResult, initialFixtureClub }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null;
-  onOpenOffice: (screen: OfficeScreen) => void; disabled: boolean; showLiveResult: boolean;
+  onOpenOffice: (screen: OfficeScreen) => void; disabled: boolean; showLiveResult: boolean; initialFixtureClub?: string;
 }) {
   const shortName = useNrlClubName();
   const { season } = career;
@@ -1225,7 +1254,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
         </details>
       )}
 
-      <SeasonFixtures key={year} season={season} next={next} />
+      <SeasonFixtures key={year} season={season} next={next} initialClub={initialFixtureClub} />
 
       {!showLiveResult && report}
     </section>
@@ -1751,8 +1780,9 @@ function Squad({ career, onAction, disabled }: {
 
 const finalsRaceLabels = { secured: 'Secured', open: 'Still open', out: 'Out of reach' } as const;
 
-function Ladder({ career, onAction, onOpenShortlist, disabled }: {
-  career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onOpenShortlist: () => void; disabled: boolean;
+function Ladder({ career, onAction, onOpenShortlist, onFollowClub, disabled }: {
+  career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onOpenShortlist: () => void;
+  onFollowClub: (clubId: string) => void; disabled: boolean;
 }) {
   const shortName = useNrlClubName();
   const fullName = useNrlClubName('full');
@@ -1800,6 +1830,10 @@ function Ladder({ career, onAction, onOpenShortlist, disabled }: {
                     ? `${home ? 'Home vs' : 'Away at'} ${shortName(season.year, opponentId)}` : 'Bye · 2 points'}
                     {nearCut && <span className="block text-xs font-normal text-muted-foreground sm:inline"> · Near the top-eight cut</span>}
                   </strong>
+                  {opponentId && !season.live && <Button type="button" variant="link" size="lg" className="ml-auto h-11 px-1"
+                    aria-label={'View ' + fullName(season.year, opponentId) + ' fixtures'} onClick={() => onFollowClub(opponentId)}>
+                    View fixtures
+                  </Button>}
                 </li>
               ))}
             </ul>
@@ -1966,6 +2000,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
   const [panel, setPanel] = useState<Panel>(retired ? 'office' : 'match');
   const [office, setOffice] = useState<OfficeScreen>(retired ? 'history' : 'contracts');
   const [openShortlist, setOpenShortlist] = useState(false);
+  const [fixtureClub, setFixtureClub] = useState<{ year: number; clubId: string }>();
   const [WorldCup, setWorldCup] = useState<Awaited<ReturnType<typeof loadWorldCup>>['default'] | null>(null);
   const [cupMode, setCupMode] = useState<'standalone' | 'appointment' | null>(null);
   const cupOpen = cupMode !== null;
@@ -2154,6 +2189,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Open Matchday team sheet in a report with a player record to see the starting 13, the reserves who played and how many points each player scored.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
+              <li>In Season fixtures, choose a rival under Follow a club to view their draw, scores and known finals fixtures.</li>
               <li>Open Finals race in Ladder during the last four regular rounds to check your remaining opponents, possible ladder points and whether your club has secured a place.</li>
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>
               <li>Choose Ready sooner for higher starting OVR or Higher ceiling for more potential when assigning an academy scout. Balanced uses the standard profile.</li>
@@ -2218,18 +2254,20 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               {PANELS.map(({ id, label, Icon }) => (
                 <Button key={id} type="button" variant={panel === id ? 'default' : 'outline'} size="lg"
                   className="min-w-0 gap-1 whitespace-normal px-1 text-xs sm:gap-2 sm:text-sm"
-                  aria-pressed={panel === id} onClick={() => setPanel(id)}>
+                  aria-pressed={panel === id} onClick={() => { setFixtureClub(undefined); setPanel(id); }}>
                   <Icon aria-hidden="true" className="hidden sm:block" />{label}
                 </Button>
               ))}
             </div>
             {panel === 'match' && <MatchCentre career={career} onAction={dispatch} onRun={fastForward} disabled={moved || retired} showLiveResult={showLiveResult}
+              initialFixtureClub={fixtureClub?.year === season.year ? fixtureClub.clubId : undefined}
               onOpenOffice={screen => { setOpenShortlist(false); setOffice(screen); setPanel('office'); }} />}
             {live && (panel === 'squad' || panel === 'office') && (
               <p className="rounded-xl border border-border bg-card p-3 text-sm">Finish the live match in Match centre to make changes.</p>
             )}
             {panel === 'squad' && <Squad career={career} onAction={dispatch} disabled={rosterLocked} />}
             {panel === 'ladder' && <Ladder career={career} onAction={dispatch} disabled={rosterLocked}
+              onFollowClub={clubId => { setFixtureClub({ year: season.year, clubId }); setPanel('match'); }}
               onOpenShortlist={() => { setOpenShortlist(true); setOffice('recruitment'); setPanel('office'); }} />}
             {panel === 'office' && (
               <>

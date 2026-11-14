@@ -46,6 +46,13 @@ it.each([[2026, 'broncos'], [2027, 'bears']] as const)(
     expect(matches).toHaveLength(4);
     expect(matches.map(row => row.getAttribute('data-nrl-finals-race-round'))).toEqual(race.remaining.map(match => String(match.round)));
     expect(matches.filter(row => row.textContent?.includes('Bye'))).toHaveLength(race.remaining.filter(match => match.opponentId === null).length);
+    const opponent = race.remaining.find(match => match.opponentId)!;
+    const row = matches.find(match => match.getAttribute('data-nrl-finals-race-round') === String(opponent.round))!;
+    fireEvent.click(within(row).getByRole('button', { name: /View .+ fixtures/ }));
+    const selector = screen.getByRole('combobox', { name: 'Fixtures to show' });
+    expect(selector).toHaveValue('club:' + opponent.opponentId);
+    expect(selector).toHaveFocus();
+    expect(selector.closest('details')).toHaveAttribute('open');
     expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(raw);
     expect(localStorage.getItem(fence)).toBe('4');
   },
