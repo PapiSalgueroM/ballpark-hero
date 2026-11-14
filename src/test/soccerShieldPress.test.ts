@@ -69,6 +69,32 @@ describe('Shield contribution and strict annual Press promises', () => {
     expect(state.pressRoom!.history[0].promise!.outcome).toBe('missed');
   });
 
+  it('keeps an excused promise when the only appearance was a saved Shield match', () => {
+    const state = gradeLab(0), row = state.seasons[1];
+    row.extraCups![0].annualRating = 0;
+    expect(readCommunityShield(row)).not.toBeNull();
+    expect(row.apps).toBe(1);
+    const before = JSON.stringify(state);
+    const view = pressRoomView(state);
+    expect(view.history[0]?.promise).toMatchObject({ outcome: 'excused', actual: 0, actualRating: 0 });
+    expect(view.credibility).toBe(state.pressRoom!.credibility);
+    expect(JSON.stringify(state)).toBe(before);
+  });
+
+  it('uses the saved annual grade even when another grade rounds to the same combined result', () => {
+    const state = fixture(ACTUAL[3]), row = state.seasons[1];
+    const promise = state.pressRoom!.history[0].promise!;
+    row.extraCups![0].annualRating = 8.4;
+    row.extraCups![0].player.rating = 6.5;
+    row.rating = 8.4;
+    promise.actualRating = 8.4;
+    expect(readCommunityShield(row)).not.toBeNull();
+    expect(pressRoomView(state).history).toHaveLength(1);
+    promise.actualRating = 8.5;
+    expect(communityShieldSeasonStats({ ...row, apps: 37, rating: 8.5 }, row.extraCups![0]).rating).toBe(row.rating);
+    expect(pressRoomView(state).history).toEqual([]);
+  });
+
   it('SC_SHIELD_PRESS_REJECT: refuses wrong annual claims and unknown or invalid opening records', () => {
     const cases: [string, CareerState][] = [];
     const wrongMetric = fixture(ACTUAL[0]); wrongMetric.pressRoom!.history[0].promise!.actual! += 1;

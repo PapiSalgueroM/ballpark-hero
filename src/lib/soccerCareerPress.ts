@@ -96,13 +96,13 @@ function stateOf(career: CareerState): SoccerPressState | null {
         if (!settled || settled.type !== 'playing' || settled.year !== p.settledYear || settled.year <= row.source.year || p.settledIndex! <= row.source.index) return null;
         let annual = settled;
         const german = Object.prototype.hasOwnProperty.call(settled, 'germanSupercup');
-        if (german) {
+        const shield = german ? null : readCommunityShield(settled);
+        if (german || shield?.annualRating !== undefined) {
           const projected = careerOpeningAnnualStats(settled);
           if (!projected) return null;
           annual = { ...settled, ...projected };
-        }
-        const shield = german ? null : readCommunityShield(settled);
-        if (shield?.player.apps) {
+        } else if (shield?.player.apps) {
+          // Older Shield saves kept the annual grade in the promise only.
           const part = shield.player;
           if (settled.apps <= part.apps || !rating(p.actualRating)) return null;
           annual = { ...settled, apps: settled.apps - part.apps, goals: settled.goals - part.goals,

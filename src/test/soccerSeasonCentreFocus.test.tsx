@@ -30,6 +30,7 @@ vi.mock('@/integrations/supabase/client', () => {
 });
 
 import SoccerCareer from '@/pages/SoccerCareer';
+import * as engine from '@/lib/soccerCareerEngine';
 import { FALLBACK_CLUBS, initCareer, repairCareer, type CareerState, type SeasonRecord } from '@/lib/soccerCareerEngine';
 import { readCommunityShield, type CommunityShieldResult } from '@/lib/soccerCareerExtraCups';
 import { isSoccerCareerSave, serializeSoccerCareerSave } from '@/lib/soccerCareerSave';
@@ -104,6 +105,32 @@ async function closeAndCheck(view: ReturnType<typeof render>, opener: HTMLButton
 }
 
 describe('Soccer Career Season Centre return focus', () => {
+  it.each([
+    ['season_summary', /^Continue →$/],
+    ['rehab_choice', /Rush it back/],
+  ] as const)('lands on the real %s action when the live replay opener has been replaced', async (phase, action) => {
+    const career = fixture(false);
+    const played = fixture(phase === 'rehab_choice').seasons[0];
+    const prior = career.seasons[0];
+    prior.year -= 1;
+    delete prior.extraCups;
+    const advance = vi.spyOn(engine, 'advanceProSeason').mockImplementation(current => ({
+      ...current, phase, seasons: [...current.seasons, played],
+      pendingSummary: phase === 'season_summary' ? played : null,
+      ...(phase === 'rehab_choice' ? { pendingRehab: { name: 'ACL rupture', weeks: 20, year: played.year, specialistCost: null } } : {}),
+    }));
+    const view = mount(career);
+    const opener = await screen.findByRole('button', { name: /Week by week: watch/ });
+    opener.focus();
+    fireEvent.click(opener);
+    await waitFor(() => expect(view.container.querySelector('[data-season-centre]')).not.toBeNull());
+    expect(advance).toHaveBeenCalledTimes(1);
+    expect(opener.isConnected).toBe(false);
+    await acknowledgeFirstHelp(view);
+    const target = screen.getByRole('button', { name: action });
+    await closeAndCheck(view, target, 'SC_CENTRE_LIVE_HANDOFF', vi.spyOn(HTMLElement.prototype, 'focus'));
+  }, 20000);
+
   it('SC_CENTRE_FOCUS_RESUME: restores the connected Resume opener after a positive-app saved season', async () => {
     const career = fixture(false), row = career.seasons[0], key = soccerSeasonKey(career.playerName, row);
     expect(key, 'positive-app replay has the real saved-fields key').not.toBeNull();

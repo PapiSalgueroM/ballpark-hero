@@ -549,7 +549,7 @@ function NewspaperCard({ articles, seasonKey, onContinue, continueRef }: { artic
 }
 
 /* ─── Season Summary Card ─── */
-function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf, world, familyContext, goalMilestone, shieldWin = false, germanSupercupWin = false }: { season: SeasonRecord; position: string; onContinue: () => void; appearance?: PlayerAppearance | null; leagueOf?: { key: string; name: string } | null; world?: WorldSeason | null; familyContext?: SeasonFamilyContext; goalMilestone?: ReturnType<typeof personalGoalMilestone>; shieldWin?: boolean; germanSupercupWin?: boolean }) {
+function SeasonSummaryCard({ season, position, onContinue, continueRef, appearance, leagueOf, world, familyContext, goalMilestone, shieldWin = false, germanSupercupWin = false }: { season: SeasonRecord; position: string; onContinue: () => void; continueRef: React.RefObject<HTMLButtonElement>; appearance?: PlayerAppearance | null; leagueOf?: { key: string; name: string } | null; world?: WorldSeason | null; familyContext?: SeasonFamilyContext; goalMilestone?: ReturnType<typeof personalGoalMilestone>; shieldWin?: boolean; germanSupercupWin?: boolean }) {
   /* Round 1037: the finish is printed in the league the club was in that
      season (finishLeague), the phone's world is read by its key */
   const playedWorld = readLeagueWorldSeason(season);
@@ -661,7 +661,7 @@ function SeasonSummaryCard({ season, position, onContinue, appearance, leagueOf,
         </div>
       )}
 
-      <Button onClick={onContinue} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
+      <Button ref={continueRef} onClick={onContinue} className="w-full h-11 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
         Continue →
       </Button>
     </div>
@@ -3258,7 +3258,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   /* Round 1046: the list of seasons he can watch again, opened from Latest Events */
   const [replaysOpen, setReplaysOpen] = useState(false);
   const centreOpener = useRef<HTMLElement | null>(null);
-  const newspaperContinueRef = useRef<HTMLButtonElement>(null);
+  const centreReturnAction = useRef<HTMLButtonElement>(null);
   const returnCentreFocus = useRef(false);
   const onWeekByWeek = () => { const at = career.seasons.length; onNextSeason(); setCentreFor(at); };
   /* Round 1046: where he stopped watching a season is kept in this browser only, never in the save. The Resume chip
@@ -3277,7 +3277,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   useLayoutEffect(() => {
     if (!returnCentreFocus.current || centreFor !== null || watchRow !== null || replaysOpen) return;
     returnCentreFocus.current = false;
-    const target = centreOpener.current?.isConnected ? centreOpener.current : newspaperContinueRef.current;
+    const target = centreOpener.current?.isConnected ? centreOpener.current : centreReturnAction.current;
     centreOpener.current = null;
     if (target?.isConnected) target.focus({ preventScroll: true });
   }, [centreFor, watchRow, replaysOpen]);
@@ -3287,9 +3287,8 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
     if (centreFor === null) return;
     const n = career.seasons.length;
     const added = n === centreFor + 1 ? career.seasons[centreFor] : null;
-    if (added && added.type === "playing" && added.apps === 0) {
-      /* the press drew a season he never played in (a ban year): say so
-         instead of opening nothing */
+    if (added && added.type === "playing" && added.apps === 0 && !hasRepresentedShield(added) && !hasRepresentedGermanSupercup(added)) {
+      /* Without an appearance or a saved opener for his club, there is nothing to watch. */
       setCentreFor(null);
       toast("📺 Nothing to watch week by week: you didn't play a game this season.", PAGE_TOAST);
       return;
@@ -3457,12 +3456,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
           )}
           {/* OVERLAY: Newspaper Articles */}
           {career.phase === "newspaper" && career.pendingNews.length > 0 && (
-            <NewspaperCard articles={visibleCareer.pendingNews} seasonKey={career.seasons.length} onContinue={onDismissNewspaper} continueRef={newspaperContinueRef} />
+            <NewspaperCard articles={visibleCareer.pendingNews} seasonKey={career.seasons.length} onContinue={onDismissNewspaper} continueRef={centreReturnAction} />
           )}
 
           {/* OVERLAY: Season Summary */}
           {career.phase === "season_summary" && career.pendingSummary && (
-            <SeasonSummaryCard season={visibleCareer.pendingSummary!} position={career.position} onContinue={onDismissSummary} appearance={career.appearance} shieldWin={shieldWinningYears.has(visibleCareer.pendingSummary!.year) && readCommunityShield(visibleCareer.pendingSummary)?.player.title === true} germanSupercupWin={germanWinningYears.has(visibleCareer.pendingSummary!.year) && readGermanSupercup(visibleCareer.pendingSummary)?.player.title === true}
+            <SeasonSummaryCard season={visibleCareer.pendingSummary!} position={career.position} onContinue={onDismissSummary} continueRef={centreReturnAction} appearance={career.appearance} shieldWin={shieldWinningYears.has(visibleCareer.pendingSummary!.year) && readCommunityShield(visibleCareer.pendingSummary)?.player.title === true} germanSupercupWin={germanWinningYears.has(visibleCareer.pendingSummary!.year) && readGermanSupercup(visibleCareer.pendingSummary)?.player.title === true}
               goalMilestone={personalGoalMilestone(career.seasons, career.seasons.find(row => row.year === career.pendingSummary!.year && row.club === career.pendingSummary!.club) ?? career.pendingSummary)}
               leagueOf={finishLeague({ name: career.pendingSummary.club, league: clubs.find(c => c.name === career.pendingSummary?.club)?.league ?? "" }, career.pendingSummary.year, readLeagueFinish(career.pendingSummary)?.size ?? null)} world={career.phone?.world} familyContext={career} />
           )}
@@ -3553,6 +3552,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               </div>
 
               <button
+                ref={centreReturnAction}
                 onClick={() => onRehabChoice(0)}
                 className="w-full text-left rounded-lg border border-amber-500/50 bg-amber-500/10 p-3 hover:bg-amber-500/20 transition-colors"
               >
