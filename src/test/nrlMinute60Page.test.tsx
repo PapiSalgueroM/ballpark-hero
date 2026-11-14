@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import { createNrlCareer, reduceNrlCareer } from '@/lib/nrlCareer';
-import { NRL_SAVE_KEY, nrlHoldableReserves } from '@/lib/nrlManager';
+import { NRL_SAVE_KEY, nrlHalftimeInterchanges, nrlHoldableReserves } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
 
@@ -65,6 +65,27 @@ it('previews the closing attack plan without writing and records it in the settl
   expect(screen.getByText('60-minute attack plan change: Through the middle.')).toBeVisible();
 });
 
+it('lists unused reserves at unrotated positions when the fourth bench place is open', () => {
+  const kickoff = createNrlCareer('broncos', 1);
+  const held = nrlHoldableReserves(kickoff.season)[0];
+  const half = reduceNrlCareer(kickoff, { type: 'startLive', hold: { year: 2026, round: 1, reserveId: held.id } });
+  const interchange = nrlHalftimeInterchanges(half.season)[0];
+  const mid = reduceNrlCareer(half, { type: 'reachMinute60', year: 2026, round: 1, tactic: 'balanced', interchange });
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(mid));
+  localStorage.setItem(fence, '4');
+  render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const reserve = screen.getByRole('combobox', { name: 'Reserve to bring on' });
+  expect(within(reserve).getAllByRole('option').map(option => option.getAttribute('value')))
+    .toEqual(['', held.id, 'broncos-12-1', 'nrl-broncos-2026-28']);
+  fireEvent.change(reserve, { target: { value: 'broncos-12-1' } });
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(mid));
+  expect(localStorage.getItem(fence)).toBe('4');
+  fireEvent.click(screen.getByRole('button', { name: 'Play final 20 minutes' }));
+  expect(screen.getByText(/Jalen Hewitt came on for .+ after 60 minutes./)).toBeVisible();
+  expect(localStorage.getItem(fence)).toBe('5');
+});
+
 it('reopens a 60-minute save and uses the pending reserve only when play resumes', () => {
   const start = createNrlCareer('broncos', 1, 2026);
   const reserve = nrlHoldableReserves(start.season)[0];
@@ -76,10 +97,11 @@ it('reopens a 60-minute save and uses the pending reserve only when play resumes
   localStorage.setItem(fence, '4');
   render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
 
-  const choice = screen.getByRole('checkbox', { name: `Bring on ${reserve.name}` });
-  expect(choice).not.toBeChecked();
-  fireEvent.click(choice);
-  expect(choice).toBeChecked();
+  const choice = screen.getByRole('combobox', { name: 'Reserve to bring on' });
+  expect(choice).toHaveValue('');
+  expect(within(choice).getAllByRole('option')[1]).toHaveValue(reserve.id);
+  fireEvent.change(choice, { target: { value: reserve.id } });
+  expect(choice).toHaveValue(reserve.id);
   expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(mid));
   expect(localStorage.getItem(fence)).toBe('4');
   fireEvent.click(screen.getByRole('button', { name: 'Play final 20 minutes' }));

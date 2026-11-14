@@ -25,7 +25,7 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlBenchRotation, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
-  nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchange, nrlNextRound, nrlOnFieldCaptain,
+  nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlNextRound, nrlOnFieldCaptain,
   nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
@@ -315,16 +315,16 @@ function LiveMinute60({ live, career, onAction, disabled }: {
   const shortName = useNrlClubName();
   const stage = live.minute60!;
   const [tactic, setTactic] = useState(stage.tactic);
-  const [bringOn, setBringOn] = useState(false);
+  const [reserveId, setReserveId] = useState('');
   const [fieldGoal, setFieldGoal] = useState(false);
   const currentPlan = season.attackPlan ?? 'standard';
   const [attackPlan, setAttackPlan] = useState<NrlAttackPlan>(currentPlan);
   const plans = nrlMinute60AttackPlans(career);
   const { year, squad } = season;
   const canSetUpKick = nrlMinute60FieldGoalAvailable(season);
-  const late = nrlMinute60Interchange(season);
-  const reserve = late && squad.find(player => player.id === late.reserveId);
-  const starter = late && squad.find(player => player.id === late.starterId);
+  const lateOptions = nrlMinute60Interchanges(season);
+  const held = lateOptions.length === 1 && lateOptions[0].reserveId === live.heldReserveId ? lateOptions[0] : undefined;
+  const names = new Map(squad.map(player => [player.id, player.name]));
   const { fixture } = live;
   const sides = [[fixture.homeId, stage.homeScoring], [fixture.awayId, stage.awayScoring]] as const;
   return (
@@ -364,14 +364,30 @@ function LiveMinute60({ live, career, onAction, disabled }: {
           </div>
         )}
       </fieldset>
-      {reserve && starter && (
+      {lateOptions.length > 0 && (
         <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-3">
           <legend className="px-1 font-bold">Late interchange</legend>
-          <label className="flex min-h-11 items-center gap-2 text-sm font-semibold">
-            <input type="checkbox" checked={bringOn} disabled={disabled} onChange={event => setBringOn(event.target.checked)} />
-            Bring on {reserve.name}
-          </label>
-          <p className="text-sm text-muted-foreground">{reserve.name} can replace {starter.name} at {late.role} for the rest of the match.</p>
+          {held ? (
+            <>
+              <label className="flex min-h-11 items-center gap-2 text-sm font-semibold">
+                <input type="checkbox" checked={reserveId === held.reserveId} disabled={disabled}
+                  onChange={event => setReserveId(event.target.checked ? held.reserveId : '')} />
+                Bring on {names.get(held.reserveId)}
+              </label>
+              <p className="text-sm text-muted-foreground">{names.get(held.reserveId)} can replace {names.get(held.starterId)} at {held.role} for the rest of the match.</p>
+            </>
+          ) : (
+            <div className="mt-2 space-y-1 text-sm">
+              <label htmlFor="nrl-late-reserve" className="block font-semibold">Reserve to bring on</label>
+              <select id="nrl-late-reserve" value={reserveId} disabled={disabled} onChange={event => setReserveId(event.target.value)}
+                className="min-h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                <option value="">Keep the current side</option>
+                {lateOptions.map(({ starterId, reserveId: id, role }) => (
+                  <option key={id} value={id}>{names.get(id)} for {names.get(starterId)} ({role})</option>
+                ))}
+              </select>
+            </div>
+          )}
         </fieldset>
       )}
       {canSetUpKick && (
@@ -385,7 +401,7 @@ function LiveMinute60({ live, career, onAction, disabled }: {
         </fieldset>
       )}
       <Button type="button" size="lg" className="w-full" disabled={disabled}
-        onClick={() => onAction({ type: 'finishMinute60', year, round: fixture.round, tactic, reserveId: bringOn ? reserve?.id : undefined,
+        onClick={() => onAction({ type: 'finishMinute60', year, round: fixture.round, tactic, reserveId: reserveId || undefined,
           ...(plans.includes(attackPlan) && attackPlan !== currentPlan && { attackPlan }),
           ...(canSetUpKick && fieldGoal && { fieldGoalPlan: true }) })}>
         Play final 20 minutes <ArrowRight aria-hidden="true" />
@@ -2209,7 +2225,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation. Positional matchups shows the ratings behind the middle and wide plans.</li>
               <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
               <li>Check a late Selection promise in the rotation preview before kick-off. An eligible match counts toward the promise window if the player stays off.</li>
-              <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. Choose Play to 60 minutes to bring on a held reserve who is still on the bench. Quick Sim settles the round in one action.</li>
+              <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. If you still have an open bench place at 60 minutes, choose the held player or another eligible unused reserve. Quick Sim settles the round in one action.</li>
               <li>At 60 minutes, Closing attack plan lets you change where your side attacks for the rest of the match.</li>
               <li>If you are level or two points down at 60 minutes, you can set up a field goal. This trades some late try threat for a better field-goal chance in regulation.</li>
               <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>

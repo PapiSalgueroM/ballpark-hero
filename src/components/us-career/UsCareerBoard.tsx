@@ -720,13 +720,15 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   const teamPlanSaveChanged = (requesting: boolean) => {
     const trade = sport.tradeRequest;
     const priority = sport.rosterPriority;
-    if (!career || (!trade && !priority) || pendingSave.current) return false;
+    const bullpen = sport.bullpenRole;
+    if (!career || (!trade && !priority && !bullpen) || pendingSave.current) return false;
+    const currentBullpen = bullpen?.current(career);
     try {
       const raw = localStorage.getItem(sport.saveKey);
       if (raw === savedBytes.current) return false;
       const stored = raw ? JSON.parse(raw) as SaveShape : null;
       if (stored && (stored.phase === 'season' || stored.phase === 'freeagency') && stored.c && stored.teamQuality != null
-        && (trade?.receipt(stored.c) || priority?.receipt(stored.c))
+        && (trade?.receipt(stored.c) || priority?.receipt(stored.c) || bullpen?.current(stored.c) || currentBullpen)
         && stored.c.year === career.year && summerCareerKey(stored.c) === summerCareerKey(career)) {
         const held = restoreMarketTalk(stored.contractTalk, stored.c, sport.slug, sport.freeAgencyContact?.teams(stored.c).map(t => t.id));
         if (stored.phase === 'season' || held?.kind === 'freeagency') {
@@ -739,8 +741,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
         }
       }
     } catch { /* An unreadable career cannot safely accept a request. */ }
-    if (requesting) setTradeSaveMoved(true);
-    return requesting;
+    if (requesting || currentBullpen) setTradeSaveMoved(true);
+    return requesting || Boolean(currentBullpen);
   };
 
   const playSeason = () => {
@@ -1849,6 +1851,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   const priority = sport.rosterPriority;
   const priorityReceipt = priority?.receipt(career);
   const rosterBoost = teamQuality == null ? 0 : priority?.boost(career, teamQuality) ?? 0;
+  const bullpen = sport.bullpenRole;
+  const bullpenOptions = bullpen?.options(career) ?? [];
 
   /* ------------------------------ season hub ------------------------------ */
   return withSaveStatus(
@@ -2012,6 +2016,25 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
             Roster quality rose from {priorityReceipt.before} to {priorityReceipt.before + priorityReceipt.boost}. Up to {priorityReceipt.boost} points less next offseason with this team.
           </p>}
           {tradeSaveMoved && <p className="mt-1 text-xs text-muted-foreground" role="status">Your career changed in another tab. Reopen it before making this decision.</p>}
+          {bullpen && bullpenOptions.length > 0 && <label className="mt-3 block text-left text-xs font-semibold">
+            Bullpen role for this season
+            <select className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm"
+              disabled={!!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
+              value={bullpen.current(career) ?? 'usual'} onChange={event => {
+                const role = event.target.value;
+                if (role !== 'usual' && role !== 'setup' && role !== 'closer') return;
+                if (pendingSave.current || marketRef.current || teamPlanSaveChanged(true)) return;
+                const next = bullpen.set(career, role);
+                if (next === career) return;
+                setCareer(next);
+                persist(next, 'season', teamQuality);
+              }}>
+              <option value="usual">{bullpenOptions.includes('setup') ? 'Usual role (closer)' : 'Usual role (setup)'}</option>
+              {bullpenOptions.includes('setup') && <option value="setup">Setup for holds</option>}
+              {bullpenOptions.includes('closer') && <option value="closer">Close for saves</option>}
+            </select>
+            <span className="mt-1 block font-normal text-muted-foreground">Setup relievers pitch for holds. Closing opens at 80 OVR or with the Closer build.</span>
+          </label>}
           <UsCareerProgramme career={career} sport={sport.slug} onChange={next => {
             if (next === career || phase !== 'season') return;
             setCareer(next);

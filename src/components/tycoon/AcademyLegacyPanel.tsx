@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { REGIONS, canMoveUp, fmtCash, FACILITIES, facilityCost, findSec, trainMult, priceMult } from '@/lib/wonderkidFactory';
+import { REGIONS, canMoveUp, fmtCash, FACILITIES, facilityCost, findSec, trainMult, priceMult, coachingFocus, COACHING_FOCUS_SHARE } from '@/lib/wonderkidFactory';
 import type { FactoryState, FacilityId } from '@/lib/wonderkidFactory';
 
 export default function AcademyLegacyPanel({ s, region, goal, goalPct, doMoveUp }: {
@@ -44,12 +44,15 @@ export default function AcademyLegacyPanel({ s, region, goal, goalPct, doMoveUp 
   );
 }
 
-export function AcademyFacilityPanel({ s, panel, cap, doBuy }: {
+export function AcademyFacilityPanel({ s, panel, cap, doBuy, onFocus }: {
   s: FactoryState;
   panel: FacilityId;
   cap: number;
   doBuy: (id: FacilityId) => void;
+  onFocus?: (id: number | null) => void;
 }) {
+  const focused = coachingFocus(s);
+  const trainable = panel === 'coaching' ? s.prospects.filter(p => p.rating < p.potential) : [];
   return (
 (() => {
             const f = FACILITIES.find(x => x.id === panel)!;
@@ -81,6 +84,20 @@ export function AcademyFacilityPanel({ s, panel, cap, doBuy }: {
                 >
                   {maxed ? 'maxed out' : `Upgrade for ${fmtCash(cost)}`}
                 </button>
+                {panel === 'coaching' && onFocus && (
+                  <section aria-label="Coaching focus" className="space-y-2 border-t border-border pt-3 text-xs">
+                    <p className="text-muted-foreground">Shift up to {Math.round(COACHING_FOCUS_SHARE * 100)}% of other prospects’ training gains to one player. Any gain he cannot use stays with the others.</p>
+                    <label className="block font-semibold">
+                      Focus prospect
+                      <select value={focused?.id ?? ''} onChange={event => onFocus(event.currentTarget.value === '' ? null : Number(event.currentTarget.value))}
+                        className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-background px-2">
+                        <option value="">Balanced training</option>
+                        {trainable.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                      </select>
+                    </label>
+                    {focused && trainable.length === 1 && <p className="text-muted-foreground">Priority starts when another prospect can train.</p>}
+                  </section>
+                )}
               </div>
             );
           })()

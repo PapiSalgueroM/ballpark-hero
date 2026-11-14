@@ -1,4 +1,12 @@
+## 2026-11-14: MLB bullpen roles, academy coaching focus and NRL late reserves
+
+- MLB My Career relievers can choose a role for their next signed season after playing a year. Setup prioritizes holds. An eligible closer gets the existing saves workload. The assignment sticks to its team and year and the Career Log saves the role actually played.
+- Wonderkid Factory and Stadium Tycoon's Academy let a coach focus training on one prospect. Some growth moves from other eligible prospects to the chosen player, up to their ceiling. Normal coaching is available any time.
+- NRL managers with a 60-minute interchange still open can choose any unused named reserve who covers an eligible starter. The existing four-reserve and eight-interchange limits continue to apply. [2026 ARLC rule](https://www.nrl.com/news/2026/02/04/arlc-confirms-2026-on-field-rule-changes-following-extensive-consultation/)
+
 ## 2026-11-14: Home catalogue, Stadium Tycoon and late NRL tactics
+
+[PR #941](https://github.com/PapiSalgueroM/ballpark-hero/pull/941) published exact main `8e7188b7344ee52e7402fa20d3d3851e3dfa5bdb`, deployment `5fe4b34a-7285-42ea-b762-29c73ef9ee7f`. Nine live browser journeys, all 174 sitemap routes and both raw guides passed. IndexNow accepted both changed guides.
 
 - Home places the sport index directly before its games on phones and beside them on desktop. The index and game list are visible together after opening Browse sports.
 - NRL managers can choose a new attack plan for the final 20 minutes without changing the opening 60 minutes. The settled match report records the late plan separately from the team’s closing tactic.

@@ -166,12 +166,17 @@ export interface MlbSeasonLine {
   wins?: number; lossesP?: number; era?: number; so?: number;
   // Round 58: relievers and richer hitting lines
   saves?: number; holds?: number; obp?: number; doubles?: number;
+  bullpenRole?: MlbBullpenRole;
   /** Round 103: October, which is the only month anyone remembers. */
   poGames?: number; poLine?: string;
   awards: string[];
   teamResult: string;
   salary: number;
 }
+
+export type MlbBullpenRole = 'setup' | 'closer';
+export type MlbBullpenChoice = 'usual' | MlbBullpenRole;
+export const MLB_CLOSER_MIN_OVR = 80;
 
 export interface MlbCareerState {
   name: string;
@@ -211,8 +216,9 @@ export interface MlbCareerState {
   eraId?: string;
   /** Round 183: the lineup card. Absent (pre-183 saves, harness careers)
       means everyday, byte for byte unchanged. Relievers are always
-      'starter' by design; the bullpen hierarchy lives in the archetype. */
+      'starter' here; their actual role is decided in the bullpen. */
   role?: 'starter' | 'backup';
+  bullpenAssignment?: { year: number; team: string; role: MlbBullpenRole };
   /** Round 470: the savings account, the market and the statement, on the
       same engine as Soccer Career's. Absent on a pre-470 save and repaired
       lazily by ensureMlbMoney, so an old save opens on every screen with its
@@ -398,11 +404,8 @@ export function mlbRollTeamQuality(prev: number | null, rng: () => number): numb
    The depth chart the other careers got, in baseball's shape: position
    players are everyday men or bench bats, starting pitchers are in the
    rotation or stretched out for spot starts. RELIEVERS ARE EXEMPT on
-   purpose: the bullpen already carries its own hierarchy through the
-   closer archetype (saves) versus everyone else (holds), and a "backup
-   reliever" is not a thing a stat line can say that holds do not already
-   say. An absent role (pre-183 saves, harness careers) means everyday,
-   byte for byte. */
+   purpose: the bullpen uses its own closer and setup roles. An absent
+   lineup role (pre-183 saves, harness careers) means everyday. */
 
 function mlbIncumbentOvr(teamQuality: number, rng: () => number): number {
   return Math.round(teamQuality - 7 + rng() * 8);
@@ -450,6 +453,31 @@ export function mlbCampBattle(c: MlbCareerState, teamQuality: number, rng: () =>
       : '🚀 You hit your way onto the lineup card. Everyday job, yours.';
   }
   return '🪑 Another spring on the bench. The gap is closing.';
+}
+
+export function mlbBullpenChoices(c: MlbCareerState): readonly MlbBullpenChoice[] {
+  if (c.pos !== 'RP' || c.retired || (c.suspendedSeasons ?? 0) > 0 || c.contractYears <= 0
+    || !c.seasons.some(season => season.games > 0)) return [];
+  if (c.archetype.id === 'closer') return ['usual', 'setup'];
+  return c.ovr >= MLB_CLOSER_MIN_OVR ? ['usual', 'closer'] : [];
+}
+
+export function mlbBullpenAssignment(c: MlbCareerState): MlbBullpenRole | null {
+  const plan = c.bullpenAssignment;
+  return plan?.year === c.year && plan.team === c.team && (plan.role === 'closer' || plan.role === 'setup')
+    && mlbBullpenChoices(c).includes(plan.role) ? plan.role : null;
+}
+
+export function setMlbBullpenAssignment(c: MlbCareerState, role: MlbBullpenChoice): MlbCareerState {
+  if (!mlbBullpenChoices(c).includes(role)) return c;
+  if (role === 'usual') {
+    if (!c.bullpenAssignment) return c;
+    const next = { ...c };
+    delete next.bullpenAssignment;
+    return next;
+  }
+  if (mlbBullpenAssignment(c) === role) return c;
+  return { ...c, bullpenAssignment: { year: c.year, team: c.team, role } };
 }
 
 export function mlbMarketSalary(c: MlbCareerState): number {
@@ -565,7 +593,13 @@ export function simMlbSeason(
   };
   if (slate !== US_ENGINE_SEASON.mlb) full.slate = slate;
   const prof = MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF;
-  Object.assign(full, mlbStatLineFor({ form, pos: c.pos, kind: c.archetype.id, games: fullGames }, rng));
+  const bullpenRole = mlbBullpenAssignment(c);
+  if (c.bullpenAssignment) delete c.bullpenAssignment;
+  Object.assign(full, mlbStatLineFor({ form, pos: c.pos, kind: bullpenRole ?? c.archetype.id, games: fullGames }, rng));
+  if (bullpenRole) {
+    full.bullpenRole = bullpenRole;
+    notes.push(bullpenRole === 'closer' ? 'Bullpen role: closer, pitching for saves.' : 'Bullpen role: setup, pitching for holds.');
+  }
   const line = mlbLineOnSlate(full, work);
   if (seasonRating) line.seasonRating = seasonRating;
 
@@ -695,7 +729,7 @@ export function simMlbSeason(
   // mine, through one function (mlbHeadToHeadScore). The awards and his
   // All-Star pass still read the draw on the engine's own length (`full`).
   if (c.rival && !c.rival.retired) {
-    for (const n of judgeRivalSeason(c.rival, mlbHeadToHeadScore(c.pos, line), c.name, 'mlb', rng, mlbRivalSeason(c.year, { pos: c.pos, kind: c.archetype.id, slate }))) notes.push(n);
+    for (const n of judgeRivalSeason(c.rival, mlbHeadToHeadScore(c.pos, line), c.name, 'mlb', rng, mlbRivalSeason(c.year, { pos: c.pos, kind: bullpenRole ?? c.archetype.id, slate }))) notes.push(n);
   }
   /* Round 525: the rivalry beat, rolled right after the rival's own season,
      the same point in the loop the flagship and the NFL career roll their

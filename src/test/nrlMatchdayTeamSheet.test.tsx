@@ -98,7 +98,7 @@ it.each([false, true])('records only live participants when the held reserve was
   fireEvent.click(screen.getByRole('button', { name: 'Play Live' }));
   expect(screen.queryByText('Matchday team sheet')).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole('button', { name: 'Play to 60 minutes' }));
-  if (entered) fireEvent.click(screen.getByRole('checkbox', { name: `Bring on ${reserve.name}` }));
+  if (entered) fireEvent.change(screen.getByRole('combobox', { name: 'Reserve to bring on' }), { target: { value: reserve.id } });
   fireEvent.click(screen.getByRole('button', { name: 'Play final 20 minutes' }));
   const bytes = getSave()!;
   const result = readNrlCareerSave(bytes)!.season.results.find(match => match.homeId === 'bears' || match.awayId === 'bears')!;

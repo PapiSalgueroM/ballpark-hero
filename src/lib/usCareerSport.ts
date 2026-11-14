@@ -316,6 +316,12 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   /** The feed line a banned year opens with. */
   suspendedNote: string;
 
+  bullpenRole?: {
+    options(c: C): readonly ('usual' | 'setup' | 'closer')[];
+    current(c: C): 'setup' | 'closer' | null;
+    set(c: C, role: 'usual' | 'setup' | 'closer'): C;
+  };
+
   /* Contracts. */
   tradeRequest?: {
     available(c: C): boolean;
