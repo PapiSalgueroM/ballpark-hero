@@ -121,16 +121,17 @@ describe('NFL front office: the Game Day tile', () => {
     expect(text('[data-gameday-standing]')).toBe(standingLine({ table: conferenceOf(team), seed: seeds.includes(team) ? seeds.indexOf(team) + 1 : null, seeds: 7 }));
     /* the league grid is under the tile, inside the one wrapper the reveal holds, and the box did not change */
     expect(document.querySelectorAll('div.grid.max-h-56 > div')).toHaveLength(16);
+    const leagueScores = q('div.grid.max-h-56')!.textContent;
     expect(q('[data-gameday-box]')!.parentElement!.contains(q('div.grid.max-h-56'))).toBe(true);
     expect(q('[data-gameday-box]')!.className).toBe(boxClass);
     expect(text('[data-record-chip]')).toBe(`Record ${record(s)}`);
     expect(text('[data-week-chip]')).toContain('Week 7/17');
-    /* a remount: the grid is gone (it was never saved), the tile reads the log */
+    /* The league scores and the personal Game Day log both reopen from the save. */
     cleanup();
     render(<Board />);
     await openWeek();
     await waitFor(() => expect(text('[data-gameday-final]')).toBe(final));
-    expect(q('div.grid.max-h-56')).toBeNull();
+    expect(q('div.grid.max-h-56')!.textContent).toBe(leagueScores);
     expect(raw()).toBe(JSON.stringify(s));
   });
 

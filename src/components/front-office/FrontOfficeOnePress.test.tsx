@@ -170,6 +170,8 @@ function onePressDigest(raw: string): string {
   if (s.league) {
     delete s.league.stats;
     delete s.league.awards;
+    // The calendar keeps the exact scores from the settled week. Fixtures and standings still count toward the digest.
+    for (const week of s.league.schedule ?? []) for (const g of week) { g.homeScore = 0; g.awayScore = 0; g.winner = ''; }
     const teams = Object.values((s.league.teams ?? {}) as Record<string, any>);
     for (const p of [...teams.flatMap(t => [...(t.players ?? []), ...(t.practice ?? [])]), ...(s.league.freeAgents ?? [])]) { delete p.awards; delete p.rookieSeason; }
   }

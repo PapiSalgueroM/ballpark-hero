@@ -55,6 +55,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'In Contracts, make one selection promise per season to an eligible generated player with an expiring deal. Give them four appearances in their next six available regular-season matches to lower their renewal asking salary by up to 5%.',
       'Check a late Selection promise in the rotation preview before kick-off. An eligible match counts toward the promise window if the player stays off.',
       'In Contracts, arrange an offseason move for an eligible player. They stay this season, and the receiving club pays their salary for the remaining term.',
+      'Before arranging an offseason move, keep another player signed at the same position for next season.',
       'In Contracts, invite rival approaches for one player each season with simulated written permission from both the player and club. Review any reply after the round and accept or decline before the deadline. An accepted move starts next season.',
       'Before inviting a rival approach, check your signed cover for next season, how many clubs could take over the deal and how much cap room a move would leave.',
       'Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.',

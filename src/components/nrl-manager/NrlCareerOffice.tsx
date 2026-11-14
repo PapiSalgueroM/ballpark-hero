@@ -24,7 +24,7 @@ import {
   nrlMutualReleaseQuote, nrlMutualReleaseSpend,
   nrlProjectedSummerOpenings, nrlSummerApplication, nrlSummerLastRound,
   type NrlCareerAction, type NrlCareerState,
-  nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverOffers, nrlTakeoverPlayers, nrlTicketPricingRefusal,
+  nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverDiscovery, nrlTakeoverPlayers, nrlTicketPricingRefusal,
   nrlSupporterAttendance,
   NRL_ACADEMY_PRIORITIES, NRL_DEVELOPMENT_ASSISTANT, NRL_RECRUITMENT_PLAN_LIMIT, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
   type NrlAcademyPriority, type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlRecruitmentPick, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
@@ -222,8 +222,8 @@ function ContractTakeover({ career, onAction, disabled }: { career: NrlCareerSta
   if (career.legacySeason || career.retired || year === NRL_LAST_YEAR) return null;
   const candidates = nrlTakeoverPlayers(career);
   const player = candidates.find(candidate => candidate.id === playerId);
-  const offers = player ? nrlTakeoverOffers(career, playerId) : [];
-  const quote = offers.find(offer => offer.clubId === destinationId);
+  const move = player ? nrlTakeoverDiscovery(career, playerId) : null;
+  const quote = move?.offers.find(offer => offer.clubId === destinationId);
   const reset = () => {
     setPlayerId('');
     setDestinationId('');
@@ -249,15 +249,15 @@ function ContractTakeover({ career, onAction, disabled }: { career: NrlCareerSta
             </select>
           </label>
         )}
-        {player && (offers.length ? (
+        {move && (move.offers.length ? (
           <label className="block space-y-1 font-semibold">
             <span>Receiving club</span>
             <select className={control} value={destinationId} disabled={disabled} onChange={event => setDestinationId(event.target.value)}>
               <option value="">Choose an interested club</option>
-              {offers.map(offer => <option key={offer.clubId} value={offer.clubId}>{labelForClub(offer.startYear, offer.clubId)}</option>)}
+              {move.offers.map(offer => <option key={offer.clubId} value={offer.clubId}>{labelForClub(offer.startYear, offer.clubId)}</option>)}
             </select>
           </label>
-        ) : <p className="text-muted-foreground">No club can take over this deal.</p>)}
+        ) : <p className="text-muted-foreground">{move.reason ?? 'No club can take over this deal.'}</p>)}
         {player && quote && (
           <>
             <div className="space-y-1 text-muted-foreground" role="status">

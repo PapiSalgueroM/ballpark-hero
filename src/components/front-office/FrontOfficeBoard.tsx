@@ -12,7 +12,7 @@ import {
   defenceRating,
   conferenceOf, conferenceSeeds, executeTalksTrade,
   REGULAR_WEEKS,
-  type LeagueState, type GmGame, type Prospect, type PlayoffRound,
+  type LeagueState, type Prospect, type PlayoffRound,
   ensureFoLeagueIds, NFL_ROSTER_MIN,
   /* Round 723: the depth chart the sim reads, and the franchise tag. */
   DEPTH_GROUPS, depthChart, swapDepth, starterIds, hasSavedDepth, resetDepth, type DepthPos,
@@ -203,7 +203,12 @@ export default function FrontOfficeBoard() {
   const [tab, setTab] = useState<Tab | null>(null);
   const [myTeam, setMyTeam] = useState<string>('');
   const [league, setLeague] = useState<LeagueState | null>(null);
-  const [weekResults, setWeekResults] = useState<GmGame[]>([]);
+  const completedWeek = league?.schedule[league.week - 2];
+  const weekResults = completedWeek?.length && completedWeek.every(game =>
+    Number.isInteger(game.homeScore) && Number.isInteger(game.awayScore)
+    && Math.min(game.homeScore, game.awayScore) >= 0 && game.homeScore !== game.awayScore
+    && game.winner === (game.homeScore > game.awayScore ? game.home : game.away)
+  ) ? completedWeek : [];
   const [newsFeed, setNewsFeed] = useState<string[]>([]);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
@@ -564,7 +569,6 @@ export default function FrontOfficeBoard() {
     setMyTeam(abbr);
     setPhase('hub');
     setTab(null);
-    setWeekResults([]);
     setNewsFeed([
       `Welcome to the ${label(abbr)} front office. The ${lg.season} season starts now.`,
       ...(owed > 0 ? [`✂️ ${overLimitLine(lg.teams[abbr].players.length, owed)}`] : []),
@@ -749,7 +753,6 @@ export default function FrontOfficeBoard() {
     /* Round 1542: his playoff games are credited for the tile (the season's lines are the regular season's) */
     for (const g of told) if (g.home === myTeam || g.away === myTeam) nflRecordGame(lg, g, myTeam, false);
     setGameLog(addToGmGameLog(gameLogLive.current, lg.season, told.filter(g => g.home === myTeam || g.away === myTeam)));
-    setWeekResults([]);
     setFeedSlam(null);
     const champ = bracketChampion(format, after);
     if (champ) {
@@ -825,7 +828,7 @@ export default function FrontOfficeBoard() {
       feed.push(outForPlayoffs ? `🚑 ${inj.player} is out for the playoffs.` : `🚑 ${inj.player} is out ${inj.weeks} week${inj.weeks === 1 ? '' : 's'}.`);
     }
     feed.push(...aiLog.slice(0, 2).map(l => `📰 ${l}`));
-    setWeekResults(told.map(t => t.game));
+    lg.schedule[lg.week - 1] = told.map(t => t.game);
     setNewsFeed(feed);
     setFeedSlam(null);
 
@@ -1014,7 +1017,6 @@ export default function FrontOfficeBoard() {
       ];
       setNewsFeed(feed.slice(0, 8));
       setFeedSlam(null);
-      setWeekResults([]);
       /* Round 1305: the finished season's log ends here, before the save below. */
       setGameLog(null); /* the summer */
       setPlayoffRounds([]);
@@ -1358,7 +1360,7 @@ export default function FrontOfficeBoard() {
     setWonTitleNow(false);
     setGameLog(null); /* his old club's games are not this club's season */
     setHeld(null); setHeldRoom(null); setHeldBracket(null); setGmOpen(null);
-    setTab(null); setWeekResults([]); setFeedSlam(null); setCutArmed(null); setShopOffers([]); setShopTried(false);
+    setTab(null); setFeedSlam(null); setCutArmed(null); setShopOffers([]); setShopTried(false);
     setDraftNight(null); setPlayoffs(null); ask.current = 'week';
     /* Round 1561 (fix, the NHL's critic 21d on its twin): a phone call left open at the old club is the old club's.
        Kept, it hid the new club's deal builder (its piece is on no roster here, so no card drew to end it). */
@@ -2638,18 +2640,21 @@ export default function FrontOfficeBoard() {
             </div>
             {wideAtLoad && bracketBackRow}
           {weekResults.length > 0 && !hold && (!bracketRow) && (
-            <div className="grid max-h-56 grid-cols-1 gap-1 overflow-y-auto text-left sm:grid-cols-2">
-              {weekResults.map((g, i) => {
-                const involved = g.home === myTeam || g.away === myTeam;
-                return (
-                  <div key={i} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', involved ? 'border-gold/60 bg-gold/5' : 'border-border/60 bg-background')}>
-                    <span className={cn('truncate', g.winner === g.home ? 'font-bold text-foreground' : 'text-muted-foreground')}>{g.home} {g.homeScore}</span>
-                    <span className="px-1 text-muted-foreground/60">·</span>
-                    <span className={cn('truncate', g.winner === g.away ? 'font-bold text-foreground' : 'text-muted-foreground')}>{g.awayScore} {g.away}</span>
-                  </div>
-                );
-              })}
-            </div>
+            <section aria-label={`Week ${league.week - 1} league scores`} className="space-y-1">
+              <h3 className="text-left text-xs font-semibold">Week {league.week - 1} league scores</h3>
+              <div className="grid max-h-56 grid-cols-1 gap-1 overflow-y-auto text-left sm:grid-cols-2">
+                {weekResults.map((g, i) => {
+                  const involved = g.home === myTeam || g.away === myTeam;
+                  return (
+                    <div key={i} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', involved ? 'border-gold/60 bg-gold/5' : 'border-border/60 bg-background')}>
+                      <span className={cn('truncate', g.winner === g.home ? 'font-bold text-foreground' : 'text-muted-foreground')}>{g.home} {g.homeScore}</span>
+                      <span className="px-1 text-muted-foreground/60">·</span>
+                      <span className={cn('truncate', g.winner === g.away ? 'font-bold text-foreground' : 'text-muted-foreground')}>{g.awayScore} {g.away}</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </section>
           )}
           </div>
           <div ref={setHelpHost} style={{ margin: 0 }} data-gameday-help-host />
