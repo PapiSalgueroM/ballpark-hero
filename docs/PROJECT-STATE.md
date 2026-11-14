@@ -6,6 +6,8 @@
 
 ## 2026-11-14: State of Origin selections, Fantasy Draft saves and NFL packages
 
+[PR #960](https://github.com/PapiSalgueroM/ballpark-hero/pull/960) published exact main `e86c82293614b219809816690f24cd7a268cfa60`, deployment `73a3244a-04f7-4fb3-968b-ddd04ddcdc10`. Eight live browser journeys, all three raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted all three game guides. The Fantasy Draft two-tab fixture queued both real browser locks and recorded one completion.
+
 - New State of Origin appointments can open the full list of signed players eligible for the state you coach. Search by name before assigning a matchday spot. The opening team remains available, and an older series keeps its saved player list.
 - Fantasy Draft resumes an unfinished draft on the same device and Eastern date. It restores the original rule, first pick and every accepted player. A completed draft keeps its normal score and clears the unfinished draft.
 - NFL Front Office can start two tight ends, two wide receivers and one running back for one game on a full roster. The preview uses the selected players and a small protection bonus. The week report records the package and the game returns to the usual lineup if a second healthy tight end is unavailable at kickoff.
