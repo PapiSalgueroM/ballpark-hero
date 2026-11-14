@@ -20,6 +20,7 @@ export const NRL_ATTACK_PLANS = [...NRL_SPECIALIST_PLANS, 'counter'] as const;
 export const NRL_BENCH_SIZE = 6;
 export const NRL_RESERVE_GRADE_ROUNDS = 4;
 export const NRL_MAX_BENCH_USED = 4;
+const NRL_MAX_INTERCHANGES = NRL_MAX_BENCH_USED * 2;
 export const NRL_FINALS_SPOTS = 8;
 export const NRL_COACHING_BONUS = 2;
 export const NRL_QUALIFIED_COACHING_BONUS = 3;
@@ -649,6 +650,29 @@ export function nrlMinute60Interchange(state: NrlManagerState) {
   return { starterId, reserveId: held.id, role: held.role };
 }
 
+export function nrlMinute60Interchanges(state: NrlManagerState) {
+  const live = state.live;
+  if (!live?.minute60) return [];
+  const held = nrlMinute60Interchange(state);
+  const rotation = nrlBenchRotation(state, live.heldReserveId);
+  const halfway = [live.minute60.interchange, live.minute60.secondInterchange];
+  const entered = halfway.some(change => change && change.reserveId === live.heldReserveId);
+  const kept = halfway.filter(change => change && rotation.get(change.starterId)?.id === change.reserveId).length;
+  const entrants = Number(entered);
+  // A rotating reserve normally comes on and then leaves. A half-time keep skips the return.
+  if (rotation.size + entrants >= NRL_MAX_BENCH_USED || rotation.size * 2 - kept + entrants >= NRL_MAX_INTERCHANGES) return [];
+
+  const restarting = halfway.some(change => change?.starterId === state.kickerId) ? state.backupKickerId : undefined;
+  const used = new Set([...rotation.values()].map(player => player.id));
+  const additional = nrlHoldableReserves(state).flatMap(reserve => {
+    const starterId = state.lineup[reserve.role];
+    return reserve.id === live.heldReserveId || used.has(reserve.id) || rotation.has(starterId)
+      || starterId === restarting || halfway.some(change => change?.starterId === starterId)
+      ? [] : [{ starterId, reserveId: reserve.id, role: reserve.role }];
+  });
+  return held ? [held, ...additional] : additional;
+}
+
 const fieldGoalPlanGap = (gap: number) => gap === 0 || gap === -2;
 
 export function nrlMinute60FieldGoalAvailable({ clubId, live }: Pick<NrlManagerState, 'clubId' | 'live'>) {
@@ -1233,8 +1257,8 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
         const decision = halftimeDecision(state, live, live.minute60);
         if (!decision) return state;
         if (action.reserveId !== undefined) {
-          const late = nrlMinute60Interchange(state);
-          if (!late || late.reserveId !== action.reserveId) return state;
+          const late = nrlMinute60Interchanges(state).find(choice => choice.reserveId === action.reserveId);
+          if (!late) return state;
           decision.lateInterchange = late;
         }
         const { attackPlan } = action;
