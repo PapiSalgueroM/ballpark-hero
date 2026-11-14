@@ -366,6 +366,7 @@ function LiveMinute60({ live, career, onAction, disabled }: {
   const primaryRoles = new Map(squad.map(player => [player.id, player.role]));
   const optionValue = ({ reserveId, role }: typeof lateOptions[number]) => primaryRoles.get(reserveId) === role ? reserveId : reserveId + ':' + role;
   const selected = lateOptions.find(option => optionValue(option) === reserveId);
+  const backupKicker = selected?.starterId === season.kickerId && season.backupKickerId && names.get(season.backupKickerId);
   const { fixture } = live;
   const sides = [[fixture.homeId, stage.homeScoring], [fixture.awayId, stage.awayScoring]] as const;
   const closeChoice = {
@@ -430,6 +431,7 @@ function LiveMinute60({ live, career, onAction, disabled }: {
               </select>
             </div>
           )}
+          {backupKicker && <p className="mt-2 text-sm" role="status">{backupKicker} takes over the goal kicking for the rest of the match.</p>}
         </fieldset>
       )}
       {canSetUpKick && (
@@ -733,7 +735,9 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
         {match.halftimeAttackPlan || match.minute60AttackPlan ? 'Opening counter plan' : 'Counter plan'}: {counterPlanResult[match.counterStyle]}
       </p>}
       {kickerName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-match-kicker>{lateKickerName ? 'Opening goal kicker' : 'Match goal kicker'}: {kickerName}.</p>}
-      {lateKickerName && <p className="mt-1 text-sm text-muted-foreground" data-nrl-kicker-handoff>Goal kicker after half time: {lateKickerName}.</p>}
+      {lateKickerName && <p className="mt-1 text-sm text-muted-foreground" data-nrl-kicker-handoff>
+        {late?.starterId === kickerId ? 'Goal kicker after 60 minutes' : 'Goal kicker after half time'}: {lateKickerName}.
+      </p>}
       {match.goalKickingDrills && <p className="mt-2 text-sm text-muted-foreground">Goal-kicking drills were used for this match.</p>}
       {match.openInterchange && <p className="mt-2 text-sm text-muted-foreground">You left the fourth automatic interchange open.</p>}
       {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
@@ -2450,7 +2454,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>You can end a pending selection promise in Contracts. This gives up its renewal discount and uses your one promise for that season.</li>
               <li>Choose a vice-captain in Squad to keep the one-point defence bonus when the club captain is off the field and the vice-captain is on.</li>
               <li>When you start a new State of Origin series, Past Origin series keeps the previous winner and all three scores.</li>
-              <li>At half time, a rotating reserve can replace your starting goal kicker if the designated backup stays on to take the remaining place kicks.</li>
+              <li>At half time or 60 minutes in Live, an eligible reserve can replace your goal kicker if the named backup stays on to take the remaining place kicks.</li>
               <li>After the Grand Final, release one unsigned academy prospect into next season’s free-agent market or promote him to your own Top 30.</li>
               <li>Choose a Board pathways objective before Round 1. Three young players need four appearances each for $200,000, or two need six each for $225,000. Pathways run-in shows who can reach your target.</li>
               <li>When you stay at the club, a returning starter can keep a position they learned in training.</li>

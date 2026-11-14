@@ -94,11 +94,13 @@ function afterScore(total: NrlScoring, before: NrlScoring): NrlScoring {
 
 export function makeNrlInterchangeScoringReport(
   totals: NrlScoring, firstHalf: NrlScoring, opening: NrlScoringMatchday, closing: NrlScoringMatchday,
-  kickerId: string, rng: () => number, late?: NrlScoringMatchday & { through60: NrlScoring }, closingKickerId = kickerId,
+  kickerId: string, rng: () => number, late?: NrlScoringMatchday & { through60: NrlScoring; kickerId?: string }, closingKickerId = kickerId,
 ): NrlMatchScoringReport {
   const first = makeNrlScoringReport(firstHalf, opening.starting, opening.rotation, kickerId, rng);
   const second = makeNrlScoringReport(afterScore(late?.through60 ?? totals, firstHalf), closing.starting, closing.rotation, closingKickerId, rng);
-  const finish = late && makeNrlScoringReport(afterScore(totals, late.through60), late.starting, late.rotation, closingKickerId, rng);
+  const finishingKickerId = late?.kickerId ?? closingKickerId;
+  const finish = late && makeNrlScoringReport(afterScore(totals, late.through60), late.starting, late.rotation, finishingKickerId, rng);
+  const beforeHandoff = late && finishingKickerId !== closingKickerId ? late.through60 : firstHalf;
   const lines = new Map(first.lines.map(line => [line.playerId, line]));
   for (const line of [...second.lines, ...(finish?.lines ?? [])]) {
     const total = lines.get(line.playerId);
@@ -108,8 +110,8 @@ export function makeNrlInterchangeScoringReport(
       lines.set(line.playerId, line);
     }
   }
-  return { ...first, lines: [...lines.values()], ...(closingKickerId !== kickerId && { kickerHandoff: {
-    playerId: closingKickerId, openingConversions: firstHalf.conversions, openingPenalties: firstHalf.penalties,
+  return { ...first, lines: [...lines.values()], ...(finishingKickerId !== kickerId && { kickerHandoff: {
+    playerId: finishingKickerId, openingConversions: beforeHandoff.conversions, openingPenalties: beforeHandoff.penalties,
   } }) };
 }
 

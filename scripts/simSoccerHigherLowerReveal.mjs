@@ -13,6 +13,8 @@ const controls = {
     test: 'clears actual reveal handles on Give up reset and unmount' },
   stale: { anchor: 'if (version !== revealVersion.current) return;', replacement: 'void version;', count: 2,
     test: 'rejects delivered obsolete correct and wrong callbacks while the new reveal keeps its full three seconds' },
+  best: { anchor: 'if (best > savedBest) safeSetItem(BEST_STREAK_KEY, String(best));', replacement: 'void savedBest;', count: 1,
+    test: 'saves the credited best across a reload without restoring or recording the run' },
 };
 const control = process.env.SOCCER_REVEAL_CONTROL || '';
 assert.ok(!control || control in controls, 'Known soccer reveal control');
@@ -42,20 +44,20 @@ try {
   const report = JSON.parse(await readFile(reportFile, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
   const rows = report.testResults.flatMap(file => file.assertionResults);
-  assert.equal(rows.length, 6, 'All six actual cases collect');
+  assert.equal(rows.length, 9, 'All nine actual cases collect');
   if (control) {
     const spec = controls[control];
-    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, 4);
+    assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, 7);
     const intended = rows.filter(row => row.title === spec.test);
     assert.equal(intended.length, 1); assert.equal(intended[0].status, 'failed');
     const messages = intended[0].failureMessages.join('\n');
     assert.match(messages, /AssertionError:/, 'Intended row fails its actual outcome assertion');
     assert.equal(rows.find(row => row.title === baseline)?.status, 'passed', 'Independent normal scoring and RNG outcome stays green');
-    console.log(`simSoccerHigherLowerReveal ${control}: one intended assertion fails, one original three-second baseline passes, four cases explicitly skipped.`);
-    console.log('SOCCER_REVEAL_RECEIPT: ' + JSON.stringify({ control, intended: spec.test, failed: 1, independentPassed: 1, skipped: 4, messages }));
+    console.log(`simSoccerHigherLowerReveal ${control}: one intended assertion fails, one original three-second baseline passes, seven cases explicitly skipped.`);
+    console.log('SOCCER_REVEAL_RECEIPT: ' + JSON.stringify({ control, intended: spec.test, failed: 1, independentPassed: 1, skipped: 7, messages }));
   } else {
-    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 6); assert.equal(report.numFailedTests, 0); assert.equal(report.numPendingTests, 0);
-    console.log('simSoccerHigherLowerReveal: six actual hook outcomes pass.');
+    assert.equal(run.status, 0); assert.equal(report.numPassedTests, 9); assert.equal(report.numFailedTests, 0); assert.equal(report.numPendingTests, 0);
+    console.log('simSoccerHigherLowerReveal: nine actual hook outcomes pass.');
     console.log('simSoccerHigherLowerReveal: original three-second pair shifts, RNG, streak best and exact once completion.');
     console.log('simSoccerHigherLowerReveal: correct and wrong restart isolation, canceled handles and obsolete delivery.');
   }

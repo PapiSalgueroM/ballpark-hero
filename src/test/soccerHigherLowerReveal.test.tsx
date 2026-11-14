@@ -12,6 +12,7 @@ vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: async () => [] }));
 vi.mock('sonner', () => ({ toast: { success: vi.fn(), error: vi.fn() } }));
 
 type Game = ReturnType<typeof useHigherLower>;
+const bestKey = 'higher-lower-best-streak-v1';
 const stats: HigherLowerStatKey[] = ['appearances', 'goals', 'internationalCaps'];
 const choice = (g: Game, correct: boolean) => stats.find(s => (g.currentPlayer.stats[s] >= g.nextPlayer.stats[s]) === correct)!;
 
@@ -79,7 +80,6 @@ describe('Actual soccer Higher or Lower reveal ownership', () => {
     act(() => view.result.current.chooseStat(choice(view.result.current, true)));
     act(() => vi.advanceTimersByTime(3000)); act(() => view.result.current.giveUp());
     expect(fixture.record.mock.calls).toEqual([['/higher-lower', 300, null, 0], ['/higher-lower', 100, null, 0]]);
-    expect(localStorage.length).toBe(0);
   });
 
   it.each([true, false])('keeps a fresh run quiet after an abandoned %s pick Give up and Play again', correct => {
@@ -99,6 +99,7 @@ describe('Actual soccer Higher or Lower reveal ownership', () => {
     expect(view.result.current.nextPlayer).toBe(next); expect(view.result.current.lastChoice).toBeNull();
     expect(view.result.current.revealedStats).toBe(false); expect(vi.mocked(Math.random).mock.calls.length).toBe(draws);
     expect(fixture.record).toHaveBeenCalledTimes(1);
+    expect(localStorage.getItem(bestKey)).toBeNull();
   });
 
   it('clears actual reveal handles on Give up reset and unmount', () => {
@@ -139,5 +140,43 @@ describe('Actual soccer Higher or Lower reveal ownership', () => {
     expect(view.result.current.currentPlayer).toBe(pair.first); expect(view.result.current.nextPlayer).toBe(pair.second);
     expect(view.result.current.lastChoice).toEqual({ stat, correct: false }); expect(view.result.current.revealedStats).toBe(true);
     expect(fixture.record.mock.calls).toEqual([['/higher-lower', 0, null, 0]]);
+  });
+
+  it('ignores damaged saved values and still scores when the browser refuses saving', () => {
+    localStorage.setItem(bestKey, '2.5');
+    const view = renderHook(useHigherLower);
+    expect(view.result.current.bestStreak).toBe(0);
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('Storage unavailable'); });
+    act(() => view.result.current.chooseStat(choice(view.result.current, true)));
+    act(() => vi.advanceTimersByTime(3000));
+    expect(view.result.current.bestStreak).toBe(1);
+    expect(view.result.current.streak).toBe(1);
+    act(() => view.result.current.giveUp());
+    expect(fixture.record.mock.calls).toEqual([['/higher-lower', 100, null, 0]]);
+  });
+
+  it('saves the credited best across a reload without restoring or recording the run', () => {
+    const view = renderHook(useHigherLower);
+    for (let round = 0; round < 3; round++) {
+      act(() => view.result.current.chooseStat(choice(view.result.current, true)));
+      act(() => vi.advanceTimersByTime(3000));
+    }
+    act(() => view.result.current.giveUp());
+    expect(localStorage.getItem(bestKey)).toBe('3');
+    view.unmount();
+    const reopened = renderHook(useHigherLower);
+    expect(reopened.result.current.bestStreak).toBe(3);
+    expect(reopened.result.current.streak).toBe(0);
+    expect(fixture.record).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps a higher saved best from another tab during a smaller credited run', () => {
+    const view = renderHook(useHigherLower);
+    localStorage.setItem(bestKey, '5');
+    act(() => view.result.current.chooseStat(choice(view.result.current, true)));
+    act(() => vi.advanceTimersByTime(3000));
+    expect(view.result.current.bestStreak).toBe(5);
+    expect(localStorage.getItem(bestKey)).toBe('5');
+    expect(view.result.current.streak).toBe(1);
   });
 });

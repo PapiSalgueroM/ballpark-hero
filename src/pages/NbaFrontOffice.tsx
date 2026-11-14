@@ -16,7 +16,7 @@ const NbaFrontOffice = () => {
       />
       <div className="min-h-screen bg-background text-foreground">
         <GameNavbar />
-        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={['The latest round’s record and headlines stay with your saved season.']} /></div>
+        <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp extraRules={['Ratings can move after each round of games. Open Round results to revisit the record and rating changes for a played round.']} /></div>
         <main id="dukb-main" className="container max-w-2xl mx-auto px-4 py-6 pb-20">
           <div className="text-center mb-4">
             <h1 className="text-2xl font-display font-bold text-primary">NBA Front Office</h1>
@@ -35,7 +35,7 @@ const NbaFrontOffice = () => {
               'Open Roster, then Set rotation: choose five starters and three bench players. Those slots determine strength, fixed minutes and season lines. Use automatic to return to the highest-rated healthy eight.',
               'Watch the tax line, set from your own league\'s payrolls. Payroll over it is taxed at season close in rising brackets, repeaters pay more, ownership holds the bill against you, and the season cannot tip off with fewer than 14 or more than 15 under contract.',
               'Play the season in stretches and watch the conference tables tighten.',
-              'The latest round’s record and headlines stay with your saved season.',
+              'Ratings can move after each round of games. Open Round results to revisit the record and rating changes for a played round. Older rounds may have missing results or ratings.',
               'Finish 7th to 10th and you are in the play-in. Win a title through four best-of-7 rounds.',
               "Close each season on its numbers: the league leaders, your club's lines and five awards named by stated rules, all from this save's sim games, never real NBA stats.",
               'Draft, develop, re-sign and go again. Banners are forever.',

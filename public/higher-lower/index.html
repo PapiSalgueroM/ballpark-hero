@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -56,7 +67,7 @@
          KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
          scripts/simSchema.mjs parses this block and compares it against that
          export, so the two cannot drift apart quietly. -->
-    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Soccer Games","item":"https://douknowball.com/soccer"},{"@type":"ListItem","position":3,"name":"Soccer Higher or Lower","item":"https://douknowball.com/higher-lower"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is this different from classic higher or lower?","acceptedAnswer":{"@type":"Answer","text":"You pick the stat instead of calling a hidden number higher or lower. Choosing the battleground is the whole skill."}},{"@type":"Question","name":"Does a tie end my run?","acceptedAnswer":{"@type":"Answer","text":"No, a level stat counts as a win and the streak continues."}},{"@type":"Question","name":"What is the score?","acceptedAnswer":{"@type":"Answer","text":"The streak itself: 1 per correct pick, with your session best shown as the target to beat."}},{"@type":"Question","name":"Is Soccer Higher or Lower free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Soccer Higher or Lower is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Soccer Higher or Lower: Career Stats Game | DoUKnowBall","description":"Your player's stats are face up and the challenger's are hidden. Pick appearances, goals or caps where yours wins and keep the streak going. Free soccer game.","url":"https://douknowball.com/higher-lower","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Soccer Games","item":"https://douknowball.com/soccer"},{"@type":"ListItem","position":3,"name":"Soccer Higher or Lower","item":"https://douknowball.com/higher-lower"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is this different from classic higher or lower?","acceptedAnswer":{"@type":"Answer","text":"You pick the stat instead of calling a hidden number higher or lower. Choosing the battleground is the whole skill."}},{"@type":"Question","name":"Does a tie end my run?","acceptedAnswer":{"@type":"Answer","text":"No, a level stat counts as a win and the streak continues."}},{"@type":"Question","name":"What is the score?","acceptedAnswer":{"@type":"Answer","text":"The streak itself: 1 per correct pick. Your saved best is the target to beat."}},{"@type":"Question","name":"Is Soccer Higher or Lower free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Soccer Higher or Lower is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Soccer Higher or Lower: Career Stats Game | DoUKnowBall","description":"Your player's stats are face up and the challenger's are hidden. Pick appearances, goals or caps where yours wins and keep the streak going. Free soccer game.","url":"https://douknowball.com/higher-lower","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
     
     
     <!-- Round 286: the site's own social image, on its own domain. The old
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,15 +284,17 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>SOCCER HIGHER OR LOWER</h1>
 <p>Pick a stat where the left player is higher. Build your streak!</p>
-<h3>Martin Ødegaard</h3>
+<h3>Ivan Perišić</h3>
 <p>Club totals here are not checked against a publisher on our counting rule yet. Still working on them.</p>
 <p>This cap total comes from one publisher, not the two we want. Still checking it.</p>
 <p>👆 Tap a stat you think is higher than the opponent</p>
-<h3>Toni Kroos</h3>
+<h3>Virgil van Dijk</h3>
 <h2>Soccer Higher or Lower: Career Stats Game</h2>
 <p>Two soccer players face off. Yours shows his career appearances, goals and international caps while the challenger's stay hidden, so pick the stat where yours is higher. One wrong pick ends the streak.</p>
 <p>Most higher or lower games hide a number and make you call it. This one flips the table: your player's stats are face up, the challenger's are hidden, and you pick the battleground.</p>
@@ -298,15 +332,15 @@
 <li>Remember who might be hiding: the pool mixes recent names with retired icons carrying finished, giant totals.</li>
 <h3>Why a merely solid stat can be safest</h3>
 <li>Ties go to you, so a merely solid stat can still be the safest pick.</li>
-<h3>Chasing your best streak of the session</h3>
-<li>Your best streak of the session stays on screen. Chase it while the pool is fresh in your head.</li>
+<h3>Chasing your best streak</h3>
+<li>Your best streak is saved on this device. For example, a new run of two leaves your saved best of five in place.</li>
 <h2>Soccer Higher or Lower FAQ: ties, streaks and hidden opponents</h2>
 <h3>How is this different from classic higher or lower?</h3>
 <p>You pick the stat instead of calling a hidden number higher or lower. Choosing the battleground is the whole skill.</p>
 <h3>Does a tie end my run?</h3>
 <p>No, a level stat counts as a win and the streak continues.</p>
 <h3>What is the score?</h3>
-<p>The streak itself: 1 per correct pick, with your session best shown as the target to beat.</p>
+<p>The streak itself: 1 per correct pick. Your saved best is the target to beat.</p>
 <h3>Is Soccer Higher or Lower free to play?</h3>
 <p>Yes. Soccer Higher or Lower is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
 <h2>More games to play</h2>
@@ -334,8 +368,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>

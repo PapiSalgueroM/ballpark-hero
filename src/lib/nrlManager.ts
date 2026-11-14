@@ -750,6 +750,9 @@ export function nrlMinute60Interchanges(state: NrlManagerState) {
   const restarting = halfway.some(change => change?.starterId === state.kickerId) ? state.backupKickerId : undefined;
   const used = new Set([...rotation.values()].map(player => player.id));
   const unavailable = nrlUnavailable(state);
+  const backup = state.backupKickerId;
+  const backupCanKick = backup && backup !== state.kickerId && !unavailable.has(backup)
+    && Object.values(state.lineup).includes(backup) && halfway.every(change => change?.starterId !== backup);
   const additional = (state.bench ?? []).flatMap(id => {
     const reserve = state.squad.find(player => player.id === id);
     if (!state.kickerId || !reserve || unavailable.has(id) || used.has(id)) return [];
@@ -757,7 +760,7 @@ export function nrlMinute60Interchanges(state: NrlManagerState) {
     return roles.flatMap(role => {
       if (!role || (id === live.heldReserveId && role === reserve.role)) return [];
       const starterId = state.lineup[role];
-      return starterId === state.kickerId || starterId === restarting || rotation.has(starterId)
+      return (starterId === state.kickerId && !backupCanKick) || starterId === restarting || rotation.has(starterId)
         || halfway.some(change => change?.starterId === starterId) ? [] : [{ starterId, reserveId: id, role }];
     });
   });
@@ -1041,9 +1044,9 @@ function closingSelection(state: NrlManagerState, rotation: ReadonlyMap<string, 
   const secondHalf = { ...withLineup(state, lineup), tactic: decision.tactic,
     ...(attackPlan && { attackPlan: attackPlan === 'standard' ? undefined : attackPlan }) };
   const lateState = lateInterchange || lateTactic || lateAttackPlan ? {
-    ...secondHalf, tactic: lateTactic ?? decision.tactic,
+    ...(lateInterchange ? withLineup(secondHalf, { ...lineup, [lateInterchange.role]: lateInterchange.reserveId }) : secondHalf),
+    tactic: lateTactic ?? decision.tactic,
     ...(lateAttackPlan && { attackPlan: lateAttackPlan === 'standard' ? undefined : lateAttackPlan }),
-    lineup: lateInterchange ? { ...lineup, [lateInterchange.role]: lateInterchange.reserveId } : lineup,
   } : undefined;
   return { state: secondHalf, rotation: finalRotation, talk: decision.talk, attackPlan, lateTactic, lateAttackPlan, lateState, fieldGoalPlan: decision.fieldGoalPlan };
 }
@@ -1218,6 +1221,7 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
       const lateLineup = closing.lateState?.lineup;
       const late = lateInterchange && mid && lateLineup ? {
         through60: home ? mid.homeScoring : mid.awayScoring,
+        kickerId: closing.lateState?.kickerId,
         starting: NRL_ROLES.map(role => ({ role, id: lateLineup[role] })),
         rotation: closing.rotation,
       } : undefined;
@@ -1570,7 +1574,7 @@ function validMinute60Interchange(late: unknown, halftime: unknown[], scoring: N
   benchUsed: string[] | undefined, byId: ReadonlyMap<string, NrlPlayer>): boolean {
   if (late === undefined) return true;
   if (!validHalftimeInterchange(late, scoring, benchUsed, byId, true) || late.enteredAtHalf !== undefined
-    || late.starterId === scoring?.kickerId || late.starterId === scoring?.kickerHandoff?.playerId
+    || late.starterId === scoring?.kickerHandoff?.playerId
     || benchUsed?.at(-1) !== late.reserveId) return false;
   return halftime.every(change => !record(change) || (change.enteredAtHalf === undefined && change.starterId !== late.starterId));
 }
@@ -1580,12 +1584,16 @@ function validKickerHandoff(match: Record<string, unknown>, managedHome: boolean
   const handoff = scoring?.kickerHandoff;
   if (!scoring || !handoff) return true;
   const changes = [match.halftimeInterchange, match.secondHalftimeInterchange].filter(record);
-  const half = (match.scorePeriods as NrlScorePeriods | undefined)?.halfTime[managedHome ? 0 : 1];
-  if (half === undefined || !changes.some(change => change.starterId === scoring.kickerId && change.enteredAtHalf === undefined)
+  const late = match.minute60Interchange;
+  const at60 = record(late) && late.starterId === scoring.kickerId;
+  const periods = match.scorePeriods as NrlScorePeriods | undefined;
+  const before = (at60 ? periods?.at60 : periods?.halfTime)?.[managedHome ? 0 : 1];
+  if (before === undefined
+    || (!at60 && !changes.some(change => change.starterId === scoring.kickerId && change.enteredAtHalf === undefined))
     || changes.some(change => change.starterId === handoff.playerId)) return false;
   const goals = handoff.openingConversions + handoff.openingPenalties;
-  const tries = (half - goals * 2) / 4;
-  return integerIn(tries, handoff.openingConversions, 9) && handoff.openingPenalties <= 1;
+  const tries = (before - goals * 2) / 4;
+  return integerIn(tries, handoff.openingConversions, at60 ? 14 : 9) && handoff.openingPenalties <= 1;
 }
 
 function validGoldenPoint(value: unknown, home: NrlScoring, away: NrlScoring): boolean {
