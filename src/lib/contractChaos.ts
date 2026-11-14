@@ -272,6 +272,16 @@ export function pushOffer(deal: CcDeal, index: number): { deal: CcDeal; line: st
   return { deal: { ...deal, offers }, line: res.line.replace(/(\d+(?:\.\d+)?)M/g, '€$1M') };
 }
 
+/** Trade an agreed wage concession for one step up the manager's promised role. */
+export function roleCounterOffer(offer: CcOffer): CcOffer | null {
+  const { fa, role } = offer;
+  if (fa.gone || fa.pushed || role === 'starter') return null;
+  const cut = Math.max(0.1, round1(fa.salary * 0.15));
+  const salary = round1(fa.salary - cut);
+  if (salary < 0.1) return null;
+  return { ...offer, role: role === 'squad' ? 'rotation' : 'starter', fa: { ...fa, salary, pushed: true } };
+}
+
 export const totalValue = (o: CcOffer) => round1(faTotalValue(o.fa) + o.signingBonus);
 
 /* ------------------------------------------------------------------ */

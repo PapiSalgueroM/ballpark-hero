@@ -2783,7 +2783,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         heading: "Negotiation and walkouts",
-        items: ["A push works more often for a highly rated player and less often for a veteran past his peak.", "A failed push can make an outside club walk away, but your own club never walks and the last offer on the table never walks."],
+        items: ["A push works more often for a highly rated player and less often for a veteran past his peak.", "A failed push can make an outside club walk away, but your own club never walks and the last offer on the table never walks.", "In Free Play, you can trade wages for a stronger promised role. That takes your one counter for that offer, so you cannot push for more money on it as well."],
       },
       {
         heading: "Promises, sackings and settling abroad",
@@ -2813,7 +2813,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         heading: "Three offers side by side",
-        paragraphs: ["His club offers €1.4M for three years. A title chaser offers €1.3M for two years as a rotation player at a squad strength of 91. A rebuild offers €1.9M for four years, the starting spot and a €1.1M signing bonus."],
+        paragraphs: ["His club offers €1.4M for three years. A title chaser offers €1.3M for two years as a rotation player at a squad strength of 91. A rebuild offers €1.9M for four years, the starting spot and a €1.1M signing bonus.", "In Free Play, you can take €1.1M a year from the title chaser for a starting role. That costs €0.4M over two years. Check how safe the manager is before you give up that money."],
       },
       {
         heading: "The push and the release clause",

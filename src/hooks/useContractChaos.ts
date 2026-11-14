@@ -10,7 +10,7 @@ import { useCallback, useState } from 'react';
 import { getTodayET } from '@/lib/dateUtils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
-  SAVE_KEY, HORIZON, buildDeal, dailySeed, freeSeed, pushOffer, allOutcomes,
+  SAVE_KEY, HORIZON, ROLE_WORD, buildDeal, dailySeed, freeSeed, pushOffer, roleCounterOffer, allOutcomes,
   type CcDeal, type CcOutcome,
 } from '@/lib/contractChaos';
 
@@ -58,10 +58,9 @@ export function useContractChaos() {
   const [save, setSave] = useState<CcSave>(loadSave);
   const [mode, setMode] = useState<Mode>('daily');
   const [phase, setPhase] = useState<Phase>('menu');
-  const [deal, setDeal] = useState<CcDeal | null>(null);
+  const [{ deal, talk }, setNegotiation] = useState<{ deal: CcDeal | null; talk: Record<number, string> }>({ deal: null, talk: {} });
   const [dealDate, setDealDate] = useState<string | null>(null);
   const [focus, setFocus] = useState(0);
-  const [talk, setTalk] = useState<Record<number, string>>({});
   const [signed, setSigned] = useState<number | null>(null);
   const [outcomes, setOutcomes] = useState<CcOutcome[]>([]);
   const [revealed, setRevealed] = useState(0);
@@ -72,8 +71,7 @@ export function useContractChaos() {
     const date = m === 'daily' ? getTodayET() : null;
     setMode(m);
     setDealDate(date);
-    setDeal(buildDeal(date ? dailySeed(date) : freeSeed(Math.random())));
-    setTalk({});
+    setNegotiation({ deal: buildDeal(date ? dailySeed(date) : freeSeed(Math.random())), talk: {} });
     setSigned(null);
     setOutcomes([]);
     setRevealed(0);
@@ -84,11 +82,27 @@ export function useContractChaos() {
   const back = useCallback(() => setPhase('deal'), []);
 
   const push = useCallback((i: number) => {
-    if (!deal) return;
-    const r = pushOffer(deal, i);
-    setDeal(r.deal);
-    setTalk(t => ({ ...t, [i]: r.line }));
-  }, [deal]);
+    setNegotiation(current => {
+      if (!current.deal || current.deal.offers[i]?.fa.pushed) return current;
+      const pushed = pushOffer(current.deal, i);
+      return { deal: pushed.deal, talk: { ...current.talk, [i]: pushed.line } };
+    });
+  }, []);
+
+  const counterRole = useCallback((i: number) => {
+    if (mode !== 'free' || phase !== 'offer' || focus !== i) return;
+    setNegotiation(current => {
+      const deal = current.deal;
+      const offer = deal?.offers[i];
+      if (!deal || !offer) return current;
+      const counter = roleCounterOffer(offer);
+      if (!counter) return current;
+      return {
+        deal: { ...deal, offers: deal.offers.map((o, index) => index === i ? counter : o) },
+        talk: { ...current.talk, [i]: `${ROLE_WORD[counter.role]} promised at the lower wage.` },
+      };
+    });
+  }, [focus, mode, phase]);
 
   const sign = useCallback((i: number) => {
     if (!deal || deal.offers[i]?.fa.gone) return;
@@ -136,6 +150,6 @@ export function useContractChaos() {
 
   return {
     save, mode, phase, deal, dealDate, focus, talk, signed, outcomes, revealed, today, dailyPlayed,
-    start, open, back, push, sign, nextSeason, finish, toMenu,
+    start, open, back, push, counterRole, sign, nextSeason, finish, toMenu,
   };
 }
