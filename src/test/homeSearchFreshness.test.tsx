@@ -171,6 +171,40 @@ it('returns keyboard focus to the catalogue tile that opened a game', () => {
   expect(screen.getByRole('status', { name: 'Search results' })).toBeEmptyDOMElement();
 });
 
+it('opens the settled best match with Enter and reaches it with ArrowDown', async () => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  function Game() {
+    const navigate = useNavigate();
+    return <button onClick={() => navigate(-1)}>Go back</button>;
+  }
+  const view = render(<MemoryRouter><Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="/build-your-xi" element={<Game />} />
+  </Routes></MemoryRouter>);
+  const field = () => screen.getByRole('textbox', { name: 'Search games' });
+  const result = () => view.container.querySelector<HTMLAnchorElement>('[data-home-game-card]:not([data-catalog-card]) a[href="/build-your-xi"]')!;
+  field().focus();
+  fireEvent.change(field(), { target: { value: 'Build Your XI' } });
+  await act(async () => { await vi.dynamicImportSettled(); });
+  fireEvent.keyDown(field(), { key: 'ArrowDown' });
+  expect(result()).toHaveFocus();
+  field().focus();
+  state.heldQuery = 'Build Your XI';
+  fireEvent.change(field(), { target: { value: 'Club Manager' } });
+  fireEvent.keyDown(field(), { key: 'Enter' });
+  expect(field()).toHaveFocus();
+  expect(screen.queryByRole('button', { name: 'Go back' })).toBeNull();
+  state.heldQuery = undefined;
+  fireEvent.change(field(), { target: { value: 'Build Your XI' } });
+  fireEvent.keyDown(field(), { key: 'Enter', ctrlKey: true });
+  expect(screen.queryByRole('button', { name: 'Go back' })).toBeNull();
+  fireEvent.keyDown(field(), { key: 'Enter' });
+  fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
+  await act(async () => { await vi.dynamicImportSettled(); });
+  expect(field()).toHaveValue('Build Your XI');
+  expect(result()).toHaveFocus();
+});
+
 it.each([
   ['pin shelf', '[data-home-picks] [data-game-pick-link]', '/hockey-higher-lower'],
   ['first NRL save', '[data-home-continue] a', '/nrl-team-manager'],

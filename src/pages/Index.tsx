@@ -521,13 +521,23 @@ export default function Index() {
                   onChange={e => { warmSearch(); updateSearch(e.target.value); }}
                   onFocus={warmSearch}
                   onKeyDown={e => {
-                    if (e.key === 'Escape' && isSearching && !e.nativeEvent.isComposing && e.nativeEvent.keyCode !== 229) {
+                    if (!isSearching || e.nativeEvent.isComposing || e.nativeEvent.keyCode === 229) return;
+                    if (e.key === 'Escape') {
                       e.preventDefault();
                       updateSearch('');
+                    } else if (querySettled && resultCount > 0 && !e.altKey && !e.ctrlKey && !e.metaKey && !e.shiftKey
+                      && (e.key === 'Enter' || e.key === 'ArrowDown')) {
+                      const first = searchResultsRef.current?.querySelector<HTMLAnchorElement>(SEARCH_GAME_LINK);
+                      if (!first) return;
+                      e.preventDefault();
+                      if (e.key === 'ArrowDown') first.focus();
+                      else if (!e.repeat) first.click();
                     }
                   }}
                   onPointerEnter={warmSearch}
                   aria-label="Search games"
+                  aria-keyshortcuts="ArrowDown Enter Escape"
+                  enterKeyHint="go"
                   placeholder="Search games"
                   className={`h-11 w-full rounded-xl border border-border bg-card pl-9 text-sm text-foreground transition-colors placeholder:text-muted-foreground focus:border-primary/40 focus:outline-none focus:ring-2 focus:ring-primary/40 ${isSearching ? 'pr-11' : 'pr-2'}`}
                 />
