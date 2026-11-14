@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -277,6 +309,7 @@
 <li>Short of money? Sell one of your bench players to a club that has made an offer. Each sale takes an hour and the fee goes straight into the budget.</li>
 <h3>Finishing the day</h3>
 <li>Keep going until every need is filled, or shut the window yourself when you are done.</li>
+<li>After closing a free play window, replay it from the result or menu to try the same brief, targets and budget. Compare your score, needs filled and cash left with the previous run. For example, replay a window where you sold nobody and see whether an early sale helps you fund another signing.</li>
 <h2>Deadline Day rules: the clock, the fee table and the grade</h2>
 <h3>The clock and the brief</h3>
 <li>The window opens at 11am and shuts at 11pm, so you have 12 hours.</li>
@@ -309,16 +342,16 @@
 <li>Deadline Day records that you played but puts no points on the leaderboard for now, while the points system is being rebuilt.</li>
 <h2>A Deadline Day walkthrough, four signings before 11pm</h2>
 <h3>The board's shopping list</h3>
-<p>Say today's club needs a goalkeeper, a central midfielder, a right winger and a striker, and the board have left you £29m.</p>
-<h3>Haggling for the keeper</h3>
-<p>You start with the keeper. His club are asking £3.6m, your desk says he is worth £2.4m to £3.2m, and you bid £3.1m. That is a counter: they come down to £3.4m and one round of patience is gone. It is noon.</p>
-<p>You bid £3.3m, inside 97 percent of their ask, and the fee is agreed. His agent wants 4 years at 10k a week and a £1.8m bonus. You offer exactly that and he signs. It is 2pm and you have £23.9m left.</p>
+<p>Say your club needs a centre back, a goalkeeper, a right back and a left back, and the board have left you £100.5m.</p>
+<h3>Haggling for the centre back</h3>
+<p>You start with the centre back. His club are asking £14.1m, your desk says he is worth £9.5m to £10.1m, and you bid £12.8m. They come down to £13.6m and one round of patience is gone. It is noon.</p>
+<p>You bid £13.2m, above 97 percent of their ask, and the fee is agreed. His agent wants 4 years at 22k a week and a £4m bonus. You offer exactly that and he signs. It is 2pm and you have £83.3m left.</p>
 <h3>A rival steals a target</h3>
-<p>While you were on the phone, a rival came in for the dearest keeper on your list at noon and signed him at 2pm. It did not matter this time, but the same thing can happen to the striker you were saving for last.</p>
-<h3>The striker with an hour to spare</h3>
-<p>By 8pm the midfielder and the winger are in, three hours each. The striker's club will not budge much and a rival is in for him, so you bid over the rival's number and inside 97 percent of the ask. Fee agreed at 9pm, terms signed at 10pm, an hour to spare.</p>
+<p>While you were on the phone, a rival came in for the dearest centre back on your list at noon and signed him at 2pm. Check the rival offers on the targets you still need before picking up the phone again.</p>
+<h3>Leaving time for the last deal</h3>
+<p>If you still need a left back at 8pm, leave an hour to agree the fee and another to finish the terms. A bid above the rival's offer can help you get the fee agreed in one round if it also meets 97 percent of the ask.</p>
 <h3>Grading the window</h3>
-<p>Four needs out of four. The keeper cost £3.3m for a £3m player, 10 percent over his real worth, which keeps 80 percent of his share of the value points, and say the other three went about 10 percent over too. That is 50 for needs, 24 for value and, with £1m of the £29m left, 0.7 for budget: 75 out of 100, a B.</p>
+<p>Say you fill all four needs. The centre back cost £13.2m for a £9.8m player, about 35 percent over his value, which keeps 31 percent of his share of the value points. Say you paid the same percentage above value for the other three. That is 50 for needs, 9.2 for value and, with £1m of the £100.5m left, 0.2 for budget: 59 out of 100, a C.</p>
 <h2>Deadline Day tips for beating the clock without overpaying</h2>
 <h3>Using the free phone calls</h3>
 <li>Call every club on your list early. The call is free, and it puts every asking price in front of you before you spend an hour.</li>

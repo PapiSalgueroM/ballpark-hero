@@ -35,7 +35,7 @@ const DeadlineDay = () => {
                   <li>The daily is the same club, the same list and the same budget for everyone. Free play is any club you like.</li>
                 </ul>
                 <p className="font-semibold text-foreground">A quick example:</p>
-                <p>Say the board want a goalkeeper, a central midfielder, a right winger and a striker and leave you £29m. You call about a keeper listed at £3.3m and his club want £3.6m. Your desk says he is worth £2.4m to £3.2m, so you bid £3.1m. They come down to £3.4m, and that cost a round of their patience. You bid £3.3m, which is within 97 percent of their ask, and the fee is agreed. His agent wants 4 years at 10k a week and a £1.8m signing bonus. You offer exactly that and he signs. That is three hours gone and £23.9m left, with nine hours to find the other three.</p>
+                <p>Say the board want a centre back, a goalkeeper, a right back and a left back and leave you £100.5m. You call about a centre back listed at £12.3m and his club want £14.1m. Your desk says he is worth £9.5m to £10.1m, so you bid £12.8m. They come down to £13.6m and lose a round of patience. You bid £13.2m, above 97 percent of their ask, and the fee is agreed. His agent wants 4 years at 22k a week and a £4m signing bonus. You offer exactly that and he signs. That is three hours gone and £83.3m left, with nine hours to find the other three.</p>
               </div>
             </RulesGate>
           </div>

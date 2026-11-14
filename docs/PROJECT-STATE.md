@@ -1,4 +1,11 @@
+## 2026-11-14: Deadline Day replay and live NRL attack ratings
+
+- Deadline Day free play can replay a completed window and compare the new result with the prior grade, needs filled and cash. Opening needs, players, offers and budget must match for the comparison. An active free run still takes priority when you return.
+- NRL Team Manager previews how attack and defence ratings would change at halftime or 60 minutes, using pending choices and the actual lineup in that phase. The preview appears when opponent positional ratings are available.
+
 ## 2026-11-14: NBA rotation review and NRL halftime attack plans
+
+[PR #948](https://github.com/PapiSalgueroM/ballpark-hero/pull/948) published exact main `2c99e9f0b14ce757ce927f95fae03b591bd1c32d`, deployment `dbf7267c-6ffd-40cd-8e4a-df67a16903e1`. Six live browser journeys, both raw guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted both guides.
 
 - Before simulating Classic or Hard, review the complete rotation and swap the sixth man with an eligible starter. The lineup you confirm drives the season and playoffs. Hard keeps ratings hidden and the Daily keeps its existing automatic flow.
 - NRL managers can change the team's attack plan at halftime for the second half, then adjust it again at 60 minutes. The match report records both choices and the first half keeps its original result.

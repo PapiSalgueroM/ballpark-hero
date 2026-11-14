@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
+import { createNrlCareer, nrlLivePlanPreview, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
 import { nrlBenchRotation, nrlHalftimeInterchanges, nrlHoldableReserves, nrlMinute60Interchanges, nrlNextRound } from '@/lib/nrlManager';
 import { nrlScorePoints } from '@/lib/nrlPlayerScoring';
 
@@ -8,6 +8,38 @@ const finish = (state: NrlCareerState, action: NrlCareerAction) => reduceNrlCare
 const raw = JSON.stringify;
 
 describe('NRL 60-minute tactical check', () => {
+  it('previews the selected phase with the real lineup, team talk and late field-goal tradeoff', () => {
+    const clubId = 'broncos';
+    const kickoff = createNrlCareer(clubId, 1, 2026);
+    const half = start(kickoff);
+    const base = { type: 'finishLive', year: 2026, round: 1, tactic: 'balanced' } as const;
+    expect(nrlLivePlanPreview(kickoff, base)).toBeNull();
+    expect(nrlLivePlanPreview(half, { ...base, round: 2 })).toBeNull();
+    expect(nrlLivePlanPreview(half, base)).toMatchObject({ attackChange: 0, defenseChange: 0 });
+    const choice = { ...base, attackPlan: 'wide', talk: 'reinforceBasics' } as const;
+    const halfBytes = raw(half);
+    const ordinary = nrlLivePlanPreview(half, choice)!;
+    const swap = nrlHalftimeInterchanges(half.season)[0];
+    const changed = nrlLivePlanPreview(half, { ...choice, interchange: swap })!;
+    expect(changed.attackEdge).not.toBe(ordinary.attackEdge);
+    expect(changed.defenseEdge).not.toBe(ordinary.defenseEdge);
+    expect(raw(half)).toBe(halfBytes);
+    const mid = finish(half, { ...choice, type: 'reachMinute60', interchange: swap });
+    const late = { ...base, type: 'finishMinute60' } as const;
+    expect(nrlLivePlanPreview(mid, base)).toBeNull();
+    expect(nrlLivePlanPreview(mid, late)).toEqual({ ...changed, attackChange: 0, defenseChange: 0 });
+
+    const pending = start(createNrlCareer(clubId, 690, 2026));
+    const close = finish(pending, { ...base, type: 'reachMinute60' });
+    const noKick = nrlLivePlanPreview(close, late)!;
+    const kick = nrlLivePlanPreview(close, { ...late, fieldGoalPlan: true })!;
+    expect(kick.attackEdge).toBeLessThan(noKick.attackEdge);
+    expect(kick.defenseEdge).toBe(noKick.defenseEdge);
+    expect(kick.defenseChange).toBe(0);
+    const incomplete = { ...half, players: half.players.filter(player => player.role !== 'Hooker') };
+    expect(nrlLivePlanPreview(incomplete, base)).toBeNull();
+  });
+
   it('carries a half-time attack plan from minutes 40 to 60 and allows a separate closing override', () => {
     const clubId = 'broncos';
     const choice = { year: 2026, round: 1, tactic: 'balanced' } as const;

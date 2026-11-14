@@ -6,6 +6,7 @@ import { getTodayET } from '@/lib/dateUtils';
 import { hotSeatPool } from '@/lib/managerHotSeat';
 import {
   dailyDeadlineDay,
+  deadlineOpening,
   endDay,
   offerPersonalTerms,
   openRefusal,
@@ -42,6 +43,9 @@ export interface DeadlineDailySummary {
   needs: number;
 }
 
+type FreeResult = { score: number; filled: number; budgetLeft: number };
+type FreeReceipt = FreeResult & { setup: DeadlineSetup; opening: string };
+
 const LETTERS: GradeLetter[] = ['A+', 'A', 'B', 'C', 'D', 'F'];
 
 function isNum(v: unknown, lo: number, hi: number): boolean {
@@ -77,6 +81,17 @@ function summaryOf(run: DeadlineRun): DeadlineDailySummary | null {
   return g ? { club: run.setup.club, letter: g.letter, score: g.score, filled: g.filled, needs: g.needs } : null;
 }
 
+function readFreeReceipt(value: unknown): FreeReceipt | null {
+  if (!value || typeof value !== 'object') return null;
+  const receipt = value as Partial<FreeReceipt>;
+  const setup = receipt.setup;
+  if (!setup || setup.daily !== undefined || !hotSeatPool().some(c => c.club === setup.club)
+    || !Number.isInteger(setup.seed) || !isNum(setup.seed, 0, 0xffffffff)
+    || typeof receipt.opening !== 'string' || receipt.opening.length > 20000
+    || !isNum(receipt.score, 0, 100) || !isNum(receipt.filled, 0, 4) || !isNum(receipt.budgetLeft, 0, 100000)) return null;
+  return receipt as FreeReceipt;
+}
+
 export function useDeadlineDay() {
   const today = useRef(getTodayET()).current;
   const daily = useMemo(() => dailyDeadlineDay(today), [today]);
@@ -85,6 +100,8 @@ export function useDeadlineDay() {
   const [dailyDone, setDailyDone] = useState<DeadlineDailySummary | null>(null);
   const [dailySaved, setDailySaved] = useState<DeadlineAction[] | null>(null);
   const [freeSaved, setFreeSaved] = useState<{ setup: DeadlineSetup; actions: DeadlineAction[] } | null>(null);
+  const [lastFreeResult, setLastFreeResult] = useState<FreeReceipt | null>(null);
+  const [freeComparison, setFreeComparison] = useState<FreeResult | null>(null);
   /* Why the last press did nothing, in the engine's or the frame's words. */
   const [notice, setNotice] = useState<string | null>(null);
 
@@ -113,8 +130,9 @@ export function useDeadlineDay() {
         const actions = readActions(p.actions);
         const club = typeof p.club === 'string' ? p.club : '';
         const seed = Number(p.seed);
-        if (p.v === 1 && actions && p.done !== true && hotSeatPool().some(c => c.club === club) && Number.isFinite(seed)) {
-          setFreeSaved({ setup: { club, seed: seed >>> 0 }, actions });
+        if (p.v === 1 && actions && hotSeatPool().some(c => c.club === club) && Number.isFinite(seed)) {
+          if (p.done !== true) setFreeSaved({ setup: { club, seed: seed >>> 0 }, actions });
+          setLastFreeResult(readFreeReceipt(p.last));
         }
       }
     } catch {
@@ -137,22 +155,34 @@ export function useDeadlineDay() {
       if (s) setDailyDone(s);
       setDailySaved(s || !r.actions.length ? null : r.actions);
     } else {
+      const rGrade = r.grade;
+      const last = rGrade ? { setup: r.setup, opening: deadlineOpening(r), score: rGrade.score, filled: rGrade.filled, budgetLeft: rGrade.budgetLeft }
+        : lastFreeResult;
       try {
-        localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, actions: r.actions, done: !!r.grade }));
+        localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, actions: r.actions, done: !!r.grade, ...(last ? { last } : {}) }));
       } catch {
         /* storage full or blocked: the window still plays, it just will not survive a refresh */
       }
       setFreeSaved(r.grade ? null : { setup: r.setup, actions: r.actions });
+      if (rGrade) setLastFreeResult(last);
     }
-  }, []);
+  }, [lastFreeResult]);
 
   /* Opening the day starts a Club Manager career and reads its market, so the
      loading card paints first. */
-  const open = useCallback((setup: DeadlineSetup, actions: DeadlineAction[] = []) => {
+  const open = useCallback((setup: DeadlineSetup, actions: DeadlineAction[] = [], compare?: FreeReceipt, requireSameWindow = false) => {
     setPhase('loading');
+    setFreeComparison(null);
     setNotice(null);
     window.setTimeout(() => {
       const r = actions.length ? replayDeadlineDay(setup, actions) : startDeadlineDay(setup);
+      const matched = compare && deadlineOpening(r) === compare.opening;
+      if (requireSameWindow && !matched) {
+        setPhase('menu');
+        setNotice('This window has changed since you played it. Open a new window to see the current market.');
+        return;
+      }
+      if (matched) setFreeComparison({ score: compare.score, filled: compare.filled, budgetLeft: compare.budgetLeft });
       if (r.grade) markRestoredFinish(DEADLINE_SLUG);
       setRun(r);
       setPhase(r.grade ? 'done' : 'play');
@@ -175,8 +205,15 @@ export function useDeadlineDay() {
   }, [startFree]);
 
   const resumeFree = useCallback(() => {
-    if (freeSaved) open(freeSaved.setup, freeSaved.actions);
-  }, [open, freeSaved]);
+    if (!freeSaved) return;
+    const { setup, actions } = freeSaved;
+    const compare = lastFreeResult?.setup.club === setup.club && lastFreeResult.setup.seed === setup.seed ? lastFreeResult : undefined;
+    open(setup, actions, compare);
+  }, [open, freeSaved, lastFreeResult]);
+
+  const replayFree = useCallback(() => {
+    if (!freeSaved && lastFreeResult) open(lastFreeResult.setup, [], lastFreeResult, true);
+  }, [open, freeSaved, lastFreeResult]);
 
   /* One move. A move the frame or the engine refuses returns the same run,
      and the screen says why instead of a button that does nothing. */
@@ -230,6 +267,7 @@ export function useDeadlineDay() {
 
   const backToMenu = useCallback(() => {
     setRun(null);
+    setFreeComparison(null);
     setNotice(null);
     setPhase('menu');
   }, []);
@@ -243,12 +281,15 @@ export function useDeadlineDay() {
     dailyDone,
     dailySaved,
     freeSaved,
+    lastFreeResult,
+    freeComparison,
     notice,
     clearNotice: () => setNotice(null),
     startDaily,
     startFree,
     randomFree,
     resumeFree,
+    replayFree,
     callClub,
     bid,
     terms,

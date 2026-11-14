@@ -900,8 +900,11 @@ function fixtureEdges(state: NrlManagerState, fixture: NrlFixture,
 
 export function nrlMatchupEdges(state: NrlManagerState, fixture: NrlFixture, opponentStrength?: ReadonlyMap<string, number>,
   options: NrlRoundOptions = {}) {
-  const { homeEdge, awayEdge } = fixtureEdges(state, fixture, opponentStrength, nrlBenchRotation(state), options);
-  return fixture.homeId === state.clubId
+  return clubEdges(fixtureEdges(state, fixture, opponentStrength, nrlBenchRotation(state), options), fixture.homeId === state.clubId);
+}
+
+function clubEdges({ homeEdge, awayEdge }: ReturnType<typeof fixtureEdges>, managedAtHome: boolean) {
+  return managedAtHome
     ? { attackEdge: homeEdge, defenseEdge: -awayEdge }
     : { attackEdge: awayEdge, defenseEdge: -homeEdge };
 }
@@ -946,10 +949,11 @@ function closingSelection(state: NrlManagerState, rotation: ReadonlyMap<string, 
   return { state: secondHalf, rotation: finalRotation, talk: decision.talk, attackPlan, lateTactic, lateAttackPlan, lateState, fieldGoalPlan: decision.fieldGoalPlan };
 }
 
-function regulationEdges({ homeEdge, awayEdge }: ReturnType<typeof fixtureEdges>, talk: NrlHalftimeTalk | undefined, managedAtHome: boolean) {
-  if (!talk) return { homeEdge, awayEdge };
-  const { attack, defense } = NRL_HALFTIME_TALKS[talk];
-  return { homeEdge: homeEdge + (managedAtHome ? attack : -defense), awayEdge: awayEdge + (managedAtHome ? -defense : attack) };
+function regulationEdges({ homeEdge, awayEdge }: ReturnType<typeof fixtureEdges>, talk: NrlHalftimeTalk | undefined,
+  managedAtHome: boolean, fieldGoalPlan = false) {
+  const { attack, defense } = talk ? NRL_HALFTIME_TALKS[talk] : { attack: 0, defense: 0 };
+  const ownAttack = attack - (fieldGoalPlan ? SET_FIELD_GOAL_ATTACK_COST : 0);
+  return { homeEdge: homeEdge + (managedAtHome ? ownAttack : -defense), awayEdge: awayEdge + (managedAtHome ? -defense : ownAttack) };
 }
 
 function minute60Scores(state: NrlManagerState, decision: NrlHalftimeDecision, opponentStrength: ReadonlyMap<string, number> | undefined,
@@ -979,8 +983,8 @@ function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStreng
     ? fixtureEdges(closing.lateState, fixture, opponentStrength, closing.rotation, options) : throughHalf;
   const { homeEdge, awayEdge } = extra;
   const middle = regulationEdges(throughHalf, closing?.talk, homeId === state.clubId);
-  const late = regulationEdges(extra, closing?.talk, homeId === state.clubId);
   const fieldGoalPlan = closing?.fieldGoalPlan;
+  const late = regulationEdges(extra, closing?.talk, homeId === state.clubId, fieldGoalPlan);
   const homeSetsUpKick = fieldGoalPlan && homeId === state.clubId;
   const awaySetsUpKick = fieldGoalPlan && awayId === state.clubId;
   const regulation = (openingEdge: number, closingEdge: number, lateEdge: number) => {
@@ -995,8 +999,8 @@ function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStreng
     addScoring(first, second);
     return { total: first, halfTime };
   };
-  const home = regulation(opening.homeEdge, middle.homeEdge, late.homeEdge - (homeSetsUpKick ? SET_FIELD_GOAL_ATTACK_COST : 0));
-  const away = regulation(opening.awayEdge, middle.awayEdge, late.awayEdge - (awaySetsUpKick ? SET_FIELD_GOAL_ATTACK_COST : 0));
+  const home = regulation(opening.homeEdge, middle.homeEdge, late.homeEdge);
+  const away = regulation(opening.awayEdge, middle.awayEdge, late.awayEdge);
   const homeScoring = home.total, awayScoring = away.total;
   const gap = scoreOf(homeScoring) - scoreOf(awayScoring);
   const homeKick = rng();
@@ -1161,6 +1165,51 @@ function halftimeDecision(state: NrlManagerState, live: NrlLiveHalf, choices: Nr
   return { live, tactic, interchanges, talk, attackPlan: attackPlan === (state.attackPlan ?? 'standard') ? undefined : attackPlan };
 }
 
+function minute60Decision(state: NrlManagerState, live: NrlLiveHalf, choice: Extract<NrlAction, { type: 'finishMinute60' }>,
+  options: NrlRoundOptions): NrlHalftimeDecision | null {
+  const { tactic, fieldGoalPlan, reserveId, attackPlan } = choice;
+  if (!live.minute60 || !NRL_TACTICS.includes(tactic)) return null;
+  if (fieldGoalPlan !== undefined && (fieldGoalPlan !== true || !nrlMinute60FieldGoalAvailable(state))) return null;
+  const decision = halftimeDecision(state, live, live.minute60, options);
+  if (!decision) return null;
+  if (reserveId !== undefined) {
+    const late = nrlMinute60Interchanges(state).find(option => option.reserveId === reserveId);
+    if (!late) return null;
+    decision.lateInterchange = late;
+  }
+  if (attackPlan !== undefined) {
+    if (!validLiveAttackPlan(state, attackPlan, options)) return null;
+    if (attackPlan !== (decision.attackPlan ?? state.attackPlan ?? 'standard')) decision.lateAttackPlan = attackPlan;
+  }
+  if (tactic !== decision.tactic) decision.lateTactic = tactic;
+  if (fieldGoalPlan) decision.fieldGoalPlan = true;
+  return decision;
+}
+
+export type NrlLivePlanChoice = Extract<NrlAction, { type: 'finishLive' | 'finishMinute60' }>;
+
+export function nrlLivePhasePreview(state: NrlManagerState, choice: NrlLivePlanChoice,
+  opponentStrength: ReadonlyMap<string, number>, options: NrlRoundOptions) {
+  const { live } = state;
+  if (!live || choice.year !== state.year || choice.round !== state.round || !options.planRivalRatings) return null;
+  if (Boolean(live.minute60) !== (choice.type === 'finishMinute60')) return null;
+  const decision = choice.type === 'finishMinute60'
+    ? minute60Decision(state, live, choice, options) : halftimeDecision(state, live, choice, options);
+  const unchanged = halftimeDecision(state, live, live.minute60 ?? { tactic: state.tactic }, options);
+  if (!decision || !unchanged) return null;
+  const { fixture, heldReserveId } = live;
+  const rotation = nrlBenchRotation(state, heldReserveId);
+  const atHome = fixture.homeId === state.clubId;
+  const edges = (plan: NrlHalftimeDecision) => {
+    const phase = closingSelection(state, rotation, plan);
+    const teamEdges = fixtureEdges(phase.lateState ?? phase.state, fixture, opponentStrength, phase.rotation, options);
+    return clubEdges(regulationEdges(teamEdges, phase.talk, atHome, phase.fieldGoalPlan), atHome);
+  };
+  const current = edges(unchanged);
+  const planned = edges(decision);
+  return { ...planned, attackChange: planned.attackEdge - current.attackEdge, defenseChange: planned.defenseEdge - current.defenseEdge };
+}
+
 export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
   opponentStrength?: ReadonlyMap<string, number>, options: NrlRoundOptions = {}): NrlManagerState {
   if (state.phase === 'complete') return state;
@@ -1264,23 +1313,8 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
       const { live, ...matchday } = state;
       if (!live || action.year !== state.year || action.round !== state.round) return state;
       if (action.type === 'finishMinute60') {
-        if (!live.minute60 || !NRL_TACTICS.includes(action.tactic)) return state;
-        if (action.fieldGoalPlan !== undefined && (action.fieldGoalPlan !== true || !nrlMinute60FieldGoalAvailable(state))) return state;
-        const decision = halftimeDecision(state, live, live.minute60, options);
-        if (!decision) return state;
-        if (action.reserveId !== undefined) {
-          const late = nrlMinute60Interchanges(state).find(choice => choice.reserveId === action.reserveId);
-          if (!late) return state;
-          decision.lateInterchange = late;
-        }
-        const { attackPlan } = action;
-        if (attackPlan !== undefined) {
-          if (!validLiveAttackPlan(state, attackPlan, options)) return state;
-          if (attackPlan !== (decision.attackPlan ?? state.attackPlan ?? 'standard')) decision.lateAttackPlan = attackPlan;
-        }
-        if (action.tactic !== decision.tactic) decision.lateTactic = action.tactic;
-        if (action.fieldGoalPlan) decision.fieldGoalPlan = true;
-        return advanceRound(matchday, opponentStrength, options, decision);
+        const decision = minute60Decision(state, live, action, options);
+        return decision ? advanceRound(matchday, opponentStrength, options, decision) : state;
       }
       if (live.minute60) return state;
       const decision = halftimeDecision(state, live, action, options);

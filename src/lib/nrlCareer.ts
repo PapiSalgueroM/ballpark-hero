@@ -11,10 +11,10 @@ import {
 } from '@/lib/nrlPlayerScoring';
 import {
   archiveNrlFinals, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
-  isNrlPhysioTreatment, nrlByeTrainingPreview, nrlInjuries, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
+  isNrlPhysioTreatment, nrlByeTrainingPreview, nrlInjuries, nrlLivePhasePreview, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
   nrlPlanAdjustments, nrlPlanMatchups, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore,
-  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlManagerState, type NrlMatchResult,
+  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlLivePlanChoice, type NrlManagerState, type NrlMatchResult,
   type NrlPhysioTreatment, type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
 } from '@/lib/nrlManager';
 import {
@@ -1474,6 +1474,16 @@ export function nrlLiveAttackPlans(state: NrlCareerState): readonly NrlAttackPla
   const { season } = state;
   if (state.legacySeason || state.retired || !season.live || !season.kickerId || !season.bench) return [];
   return planRivalRatings(season, opponentRatings(state)) ? ['standard', ...NRL_ATTACK_PLANS] : ['standard', 'counter'];
+}
+
+export function nrlLivePlanPreview(state: NrlCareerState, choice: NrlLivePlanChoice) {
+  if (state.legacySeason || state.retired || !state.season.live) return null;
+  const ratings = opponentRatings(state);
+  const planRival = planRivalRatings(state.season, ratings);
+  if (!planRival) return null;
+  return nrlLivePhasePreview(state.season, choice, averagesByClub(ratings), {
+    ...nrlCoachTactics(state.finance), planRivalRatings: planRival,
+  });
 }
 
 export function nrlAttackPlanPreview(state: NrlCareerState) {
