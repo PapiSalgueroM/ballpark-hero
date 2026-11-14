@@ -227,7 +227,7 @@ const PuckDetective = () => {
       ...NHL_PLAYER_SOURCE,
       identity: { personKeyColumn: 'player_id' },
       metaColumns: { ...NHL_PLAYER_SOURCE.metaColumns, playerId: 'player_id' },
-      local: () => rows,
+      local: async () => rows,
     };
   }, [pool]);
 
