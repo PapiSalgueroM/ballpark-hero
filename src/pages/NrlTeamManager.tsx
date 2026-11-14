@@ -33,7 +33,7 @@ import {
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
   nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport, nrlPositionTraining,
-  nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
+  nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlSelectionPromise, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
   NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, reduceNrlCareer, runNrlFastForward,
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
@@ -1110,6 +1110,29 @@ function KickoffSelectionPromise({ career, heldReserveId }: { career: NrlCareerS
   );
 }
 
+function AwayRecovery({ career, onAction, disabled }: {
+  career: NrlCareerState; onAction: (action: NrlCareerAction) => void; disabled: boolean;
+}) {
+  const quote = nrlAwayRecoveryQuote(career);
+  if (!quote) return null;
+  const { year, clubId, round } = career.season;
+  const cost = aud.format(quote.cost);
+  return (
+    <section className="mt-3 border-t border-border pt-3 text-sm" aria-labelledby="nrl-away-recovery">
+      <h4 id="nrl-away-recovery" className="font-semibold">Away recovery session</h4>
+      {quote.booked ? <p className="mt-1 text-muted-foreground">Booked for this match · {cost} paid from club cash. Average starter fitness at kickoff {quote.bookedFitness}%.</p>
+        : quote.reason ? <p className="mt-1 text-muted-foreground">{quote.reason}</p> : (
+          <>
+            <p className="mt-1 text-muted-foreground">Average starter fitness at kickoff {quote.normalFitness}% → {quote.bookedFitness}%</p>
+            <p className="mt-1 text-xs text-muted-foreground">Keeps your chosen preparation. One session per season.</p>
+            <Button type="button" size="lg" variant="outline" className="mt-2 px-3" disabled={disabled}
+              onClick={() => onAction({ type: 'bookAwayRecovery', year, clubId, round })}>Book for {cost}</Button>
+          </>
+        )}
+    </section>
+  );
+}
+
 function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLiveResult, initialFixtureClub }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null;
   onOpenOffice: (screen: OfficeScreen) => void; disabled: boolean; showLiveResult: boolean; initialFixtureClub?: string;
@@ -1260,7 +1283,8 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
                 Clear preparation
               </Button>
             )}
-            {!career.legacySeason && season.kickerId && <IndividualRecovery season={season} onAction={onAction} disabled={disabled} />}
+            {!career.legacySeason && season.kickerId && <IndividualRecovery season={season} awayRecovery={nrlAwayRecoveryBonus(career)} onAction={onAction} disabled={disabled} />}
+            <AwayRecovery career={career} onAction={onAction} disabled={disabled} />
           </div>
         </div>
       )}
@@ -1364,13 +1388,13 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
   );
 }
 
-function IndividualRecovery({ season, onAction, disabled }: {
-  season: NrlManagerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
+function IndividualRecovery({ season, awayRecovery, onAction, disabled }: {
+  season: NrlManagerState; awayRecovery: number; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
 }) {
   const { year, clubId, round, preparation, individualRecoveryId } = season;
   const players = nrlIndividualRecoveryOptions(season);
   const selected = players.find(player => player.id === individualRecoveryId);
-  const preview = selected && nrlIndividualRecoveryPreview(selected, preparation);
+  const preview = selected && nrlIndividualRecoveryPreview(selected, preparation, awayRecovery);
   const usualPreparation = preparation === 'train' ? 'team training' : preparation === 'defensiveDrills' ? 'defensive drills' : 'normal preparation';
   return (
     <details className="group mt-2 border-t border-border">
@@ -2282,6 +2306,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Sign one fictional assistant in Finances. Tactical assistants help when you use their tactic. A development assistant can give an eligible young player 1 OVR after eight regular-season appearances from the hire onward.</li>
               <li>Choose a goal kicker and a backup in Squad. The backup takes over if your kicker leaves the starting 13. The halfback covers when neither is available. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>
               <li>Before kick-off, open Hold one reserve for later to see the Quick Sim rotation and compare it with the Live rotation when you hold someone.</li>
+              <li>Before a regular-season away match, book one recovery session per season from Preparation. It costs $120,000 from club cash and adds up to eight fitness points at kickoff.</li>
               <li>Use First reserve in the rotation preview to change who gets first priority. It swaps two places on your named bench.</li>
               <li>Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation. Positional matchups shows the ratings behind the middle and wide plans.</li>
               <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
