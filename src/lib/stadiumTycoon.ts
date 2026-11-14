@@ -692,6 +692,20 @@ export interface LeagueClub {
   pts: number;
 }
 
+/** Fictional brands for the one-season cash offers. */
+export const STADIUM_SPONSORS = {
+  fixed: 'Lantern Lane Print',
+  attendance: 'Touchline Tonic',
+} as const;
+export type StadiumSponsor = keyof typeof STADIUM_SPONSORS;
+
+interface StadiumSponsorDeal {
+  kind: StadiumSponsor;
+  qualifying: number;
+  target: number;
+  rate: number;
+}
+
 export interface TycoonLeague {
   division: number;
   /** Seasons started at this ground, counted from 0. Seeds the rivals. */
@@ -708,6 +722,7 @@ export interface TycoonLeague {
   /** Index 0 is you. */
   clubs: LeagueClub[];
   results?: { day: number; gf: number; ga: number; plan?: MatchPlan }[];
+  sponsor?: StadiumSponsorDeal;
   /** An older save's match in progress when it first loaded: played to full
    *  time against this name, outside the table, before matchday 1. */
   carryover?: string;
@@ -738,6 +753,29 @@ export function leagueShape(division: number): { clubs: number; matchdays: numbe
   const clubs = division <= 2 ? 6 : division <= 5 ? 8 : 10;
   const legs = division < SINGLE_LEG_BELOW ? 1 : 2;
   return { clubs, matchdays: (clubs - 1) * legs, perMatchday: clubs / 2 };
+}
+
+function fixedSponsorDays(lg: TycoonLeague): number {
+  return Math.ceil(leagueShape(lg.division).matchdays * 0.6);
+}
+
+export function stadiumSponsorOffers(s: TycoonState, lg: TycoonLeague) {
+  const days = leagueShape(lg.division).matchdays;
+  const rate = Math.min(Math.floor(Number.MAX_SAFE_INTEGER / days), Math.max(1, Math.round(unboostedIncomePerSec(s) * 12)));
+  return { fixed: fixedSponsorDays(lg) * rate, rate, target: sponsorCrowdTarget(levelOf(s, 'stands')) };
+}
+
+export function stadiumSponsorPayout(lg: TycoonLeague): number {
+  const deal = lg.sponsor;
+  if (!deal) return 0;
+  return deal.rate * (deal.kind === 'fixed' ? fixedSponsorDays(lg) : deal.qualifying);
+}
+
+export function signStadiumSponsor(s: TycoonState, ground: number, season: number, kind: StadiumSponsor): TycoonState {
+  const lg = s.league;
+  if (!lg || s.rep !== ground || lg.season !== season || lg.matchday !== 0 || lg.sponsor || (kind !== 'fixed' && kind !== 'attendance')) return s;
+  const { target, rate } = stadiumSponsorOffers(s, lg);
+  return { ...s, league: { ...lg, sponsor: { kind, qualifying: 0, target, rate } } };
 }
 
 /** The generated names short enough for the table. */
@@ -908,7 +946,7 @@ export function rivalChancePerMin(st: TycoonState, c: LeagueClub, other: LeagueC
  * stream seeded by (rivals, season, matchday), so a reload replays nothing, and
  * the last matchday ends the season. Returns the new league and pushes events.
  */
-function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent[]): TycoonLeague {
+function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent[], crowdAtFullTime: number): TycoonLeague {
   const lg = st.league as TycoonLeague;
   const clubs = lg.clubs.map(c => ({ ...c }));
   const rnd = mulberry32(hash32(lg.seed, lg.season, lg.matchday, 7));
@@ -934,9 +972,17 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
   const plan = st.matchPlan;
   const result = { day: matchday, gf, ga, ...(plan ? { plan: { minute: plan.minute, kind: plan.kind } } : {}) };
   const played: TycoonLeague = { ...lg, clubs, matchday, results: [...(lg.results ?? []), result] };
+  if (lg.sponsor?.kind === 'attendance' && crowdAtFullTime >= lg.sponsor.target) {
+    played.sponsor = { ...lg.sponsor, qualifying: lg.sponsor.qualifying + 1 };
+  }
   if (played.matchday < leagueShape(lg.division).matchdays) return played;
 
   st.lastCompletedLeague = played;
+  const sponsorPay = stadiumSponsorPayout(played);
+  if (sponsorPay > 0) {
+    st.money += sponsorPay;
+    st.lifetime += sponsorPay;
+  }
   const position = leaguePosition(played);
   const d = DIVISIONS[played.division];
   if (position !== 1) {
@@ -1015,9 +1061,12 @@ export function costOf(s: TycoonState, id: string): number {
   return Math.round(t.baseCost * Math.pow(t.growth, levelOf(s, id)));
 }
 
+const seatCount = (stands: number) => 120 + stands * 40;
+const sponsorCrowdTarget = (stands: number) => Math.ceil(seatCount(stands) * 0.8);
+
 /** Seats in the ground. The starting ground is a fence and two benches. */
 export function capacity(s: TycoonState): number {
-  return 120 + levelOf(s, 'stands') * 40;
+  return seatCount(levelOf(s, 'stands'));
 }
 
 export type TicketPolicy = 'standard' | 'community' | 'premium';
@@ -1360,6 +1409,7 @@ export function playMinute(st: TycoonState, roll: () => number, events: TickEven
   }
   if (st.minute >= 90) {
     // Full time: settle, pay, reset.
+    const crowdAtFullTime = st.league?.sponsor?.kind === 'attendance' ? attendance(st) : 0;
     if (st.goalsFor > st.goalsAgainst) {
       const b = opts.pay ? winBonus(st) : 0;
       st.money += b;
@@ -1388,7 +1438,7 @@ export function playMinute(st: TycoonState, roll: () => number, events: TickEven
         const { carryover: _finished, ...rest } = st.league;
         st.league = rest;
       } else {
-        st.league = playMatchday(st, st.goalsFor, st.goalsAgainst, events);
+        st.league = playMatchday(st, st.goalsFor, st.goalsAgainst, events, crowdAtFullTime);
       }
     }
     st.matchNo += 1;
@@ -1675,6 +1725,17 @@ function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: n
   if (sum('w') !== sum('l') || sum('gf') !== sum('ga')) return null;
   const base = Number.isInteger(r.baseMatchNo) && (r.baseMatchNo as number) >= 0 && (r.baseMatchNo as number) <= matchNo ? (r.baseMatchNo as number) : matchNo;
   const out: TycoonLeague = { division: division as number, season: r.season as number, matchday: r.matchday as number, seed: (r.seed as number) >>> 0, baseMatchNo: base, clubs };
+  const sponsor = r.sponsor;
+  const firstTarget = sponsorCrowdTarget(0);
+  const targetStep = sponsorCrowdTarget(1) - firstTarget;
+  if (sponsor && (sponsor.kind === 'fixed' || sponsor.kind === 'attendance') &&
+    Number.isSafeInteger(sponsor.rate) && sponsor.rate > 0 && Number.isSafeInteger(sponsor.rate * shape.matchdays) &&
+    Number.isSafeInteger(sponsor.target) && sponsor.target >= firstTarget && (sponsor.target - firstTarget) % targetStep === 0 &&
+    sponsor.target <= sponsorCrowdTarget(trackById('stands').maxLevel) &&
+    Number.isInteger(sponsor.qualifying) && sponsor.qualifying >= 0 && sponsor.qualifying <= (sponsor.kind === 'fixed' ? 0 : out.matchday)) {
+    const { kind, qualifying, target, rate } = sponsor;
+    out.sponsor = { kind, qualifying, target, rate };
+  }
   if (typeof r.carryover === 'string' && allOpponentNames().includes(r.carryover)) out.carryover = r.carryover;
   if (Array.isArray(r.results) && r.results.length > 0 && r.results.length <= out.matchday) {
     const first = out.matchday - r.results.length + 1;

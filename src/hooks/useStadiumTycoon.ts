@@ -17,9 +17,9 @@ import {
   GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC, HYPE_MULT,
   awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
   setPieceOffer, beginSetPiece, awardSetPieceGoal,
-  setTicketPolicy, setMatchPlan, matchPlanForecast,
+  setTicketPolicy, setMatchPlan, matchPlanForecast, signStadiumSponsor,
 } from '@/lib/stadiumTycoon';
-import type { GoldenKind, AwayMatch, SetPieceOffer, TicketPolicy, MatchPlanKind } from '@/lib/stadiumTycoon';
+import type { GoldenKind, AwayMatch, SetPieceOffer, TicketPolicy, MatchPlanKind, StadiumSponsor } from '@/lib/stadiumTycoon';
 
 /** Round 162: a golden whistle drifting across the pitch, waiting to be
  *  caught. Purely presentational until the tap: the engine only hears about
@@ -90,6 +90,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
   const [setPieceError, setSetPieceError] = useState<string | null>(null);
   const [gearSaveBlocked, setGearSaveBlocked] = useState(false);
   const [ticketSaveFailed, setTicketSaveFailed] = useState(false);
+  const [sponsorSaveError, setSponsorSaveError] = useState<{ ground: number; season: number } | null>(null);
   const [matchPlanError, setMatchPlanError] = useState<number | null>(null);
   const [promotion, setPromotion] = useState<Promotion | null>(null);
   /* Round 1543: badges earned together each get their own turn on the badge
@@ -380,6 +381,18 @@ export function useStadiumTycoon(getEdge?: () => number) {
     saveTicketState(next);
   }, [commit, saveTicketState, markSessionPlay]);
 
+  const doSignSponsor = useCallback((ground: number, season: number, kind: StadiumSponsor) => {
+    if (document.hidden) return;
+    const before = stateRef.current;
+    const next = signStadiumSponsor(before, ground, season, kind);
+    if (next === before) return;
+    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); }
+    catch { setSponsorSaveError({ ground, season }); return; }
+    setSponsorSaveError(null);
+    commit(next);
+    markSessionPlay();
+  }, [commit, markSessionPlay]);
+
   const doSetMatchPlan = useCallback((match: number, kind: MatchPlanKind) => {
     if (document.hidden) return;
     const before = stateRef.current;
@@ -525,7 +538,8 @@ export function useStadiumTycoon(getEdge?: () => number) {
 
   return {
     state, floaters, awayPay, awayTrip, dismissAway, confetti, gearSaveBlocked,
-    doSetTicketPolicy, ticketSaveFailed, retryTicketSave, doSetMatchPlan,
+    doSetTicketPolicy, ticketSaveFailed, retryTicketSave, doSetMatchPlan, doSignSponsor,
+    sponsorSaveFailed: sponsorSaveError?.ground === state.rep && sponsorSaveError.season === state.league?.season,
     matchPlanSaveFailed: matchPlanError === state.matchNo,
     matchPlanForecast: (kind: MatchPlanKind) => matchPlanForecast(state, getEdgeRef.current?.() ?? 0, kind),
     doBuy, doTap, doPrestige, doBoost,
