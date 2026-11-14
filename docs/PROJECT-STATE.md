@@ -1,4 +1,11 @@
+## 2026-11-14: NRL Pathways run-in and NBA player setup
+
+- With four regular-season club games left, NRL Season review shows which youngsters can still reach four appearances for the Board Pathways objective. The forecast counts club fixtures, and the bonus settles through the existing season result.
+- NBA My Career remembers an unfinished setup on this browser before the first prospect or career save. Opening a real save takes precedence. Once either start saves, its setup draft clears.
+
 ## 2026-11-14: Club Manager's 2025 Club World Cup
+
+[PR #916](https://github.com/PapiSalgueroM/ballpark-hero/pull/916) published exact main `544ac69fd6e32c8eb202ac57c29bcc8787e5d99c`, deployment `ce493f7a-93b5-43b8-9bb3-b0b396958d1b`. Chelsea kept its group and five match results through rollover and reload at 320 and 1440 pixels. The Arsenal control had no tournament. IndexNow accepted the Club Manager guide.
 
 - A career that finishes 2024/25 with a verified entrant gets the 2025 Club World Cup. The simulated results use the historical groups and bracket. The result appears in the season review and Cups, with a trophy for the winner. The cup does not affect board or financial calculations.
 - The existing domestic and European fixture calendar remains the route to the end of the club season. The Club World Cup runs as a simulated summer campaign. The 2026 Intercontinental Cup still awaits the last continental champion and the 2029 Club World Cup still needs its full field and format. [2025 Club World Cup groups](https://www.fifa.com/en/tournaments/mens/club-world-cup/usa-2025/articles/teams-dates-venue-groups-draw-matches-tickets) [2026 Intercontinental Cup fixtures](https://www.fifa.com/en/tournaments/mens/intercontinentalcup/2026/articles/qatar-appointed-host-final-three-matches)

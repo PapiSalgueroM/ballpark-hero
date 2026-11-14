@@ -29,7 +29,7 @@ import {
   type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlRecruitmentPick, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryPenalty } from '@/lib/nrlJudiciary';
-import { nrlArchivedFinals, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_QUALIFIED_COACHING_BONUS, NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
+import { nrlArchivedFinals, nrlUnavailable, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_QUALIFIED_COACHING_BONUS, NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
 import {
   archiveNrlPlayerSeasons, archiveNrlScoring, nrlArchivedPlayerSeason, nrlArchivedScoringLeaders,
   nrlScorePoints, nrlTryLeaders, type NrlScoringLeader,
@@ -1586,12 +1586,21 @@ function FinalsHistory({ record, season }: { record: NrlCareerState['history'][n
 }
 
 function BoardPathways({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
-  const { year, clubId, phase } = career.season;
+  const { season } = career;
+  const { year, clubId, round, phase } = season;
   const { accepted, progress, reason, bonus } = nrlBoardPathwaysQuote(career);
   if (!accepted && (phase !== 'regular' || career.season.round !== 1 || career.legacySeason)) return null;
   const { maxAge, players, appearances } = NRL_BOARD_PATHWAYS;
   const qualified = progress.filter(player => player.apps >= appearances).length;
   const paid = nrlBoardPathwaysIncome(career.finance);
+  const remaining = accepted && phase === 'regular'
+    ? nrlSeasonPlan(year).draw.slice(round - 1).filter(fixtures => fixtures.some(pair => pair.includes(clubId))).length
+    : null;
+  const runIn = remaining !== null && remaining <= appearances;
+  const candidates = runIn ? progress.filter(player => player.apps < appearances && player.apps + remaining >= appearances) : [];
+  const unavailable = candidates.length ? nrlUnavailable(season) : null;
+  const targetStatus = qualified >= players ? 'Target secured'
+    : qualified + candidates.length < players ? 'Target out of reach' : 'Target still open';
   return (
     <section className="mt-4 rounded-xl border border-border bg-background p-3" aria-labelledby="nrl-board-pathways">
       <h3 id="nrl-board-pathways" className="text-sm font-bold">Board pathways</h3>
@@ -1605,6 +1614,28 @@ function BoardPathways({ career, onAction, disabled }: { career: NrlCareerState;
             {phase === 'regular' ? `${Math.min(qualified, players)} of ${players} players reached the target.`
               : paid ? `Target met. ${money(paid)} paid into club cash.` : 'Target missed. No bonus was paid.'}
           </p>
+          {runIn && (
+            <section className="mt-2 rounded-lg border border-border p-2 text-sm" aria-labelledby="nrl-pathways-run-in" data-nrl-pathways-run-in>
+              <h4 id="nrl-pathways-run-in" className="font-semibold">Pathways run-in</h4>
+              <p className="text-muted-foreground">{remaining} regular-season club {remaining === 1 ? 'match' : 'matches'} left.</p>
+              <p className="mt-1 font-semibold">{targetStatus}</p>
+              {qualified < players && candidates.length > 0 && (
+                <>
+                  <ul aria-label="Players who can reach four appearances" className="mt-1 divide-y divide-border">
+                    {candidates.map(player => (
+                      <li key={player.id} className="break-words py-1">
+                        <p className="font-medium">{player.name}{unavailable?.has(player.id) && (
+                          <span className="font-normal text-muted-foreground"> · Currently unavailable</span>
+                        )}</p>
+                        <p className="text-xs text-muted-foreground">{player.apps} of {appearances} appearances · Needs {appearances - player.apps} more</p>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-1 text-xs text-muted-foreground">This counts every remaining club match as an opportunity. Injuries, suspensions and reserve-grade spells can reduce those chances.</p>
+                </>
+              )}
+            </section>
+          )}
           {phase === 'regular' && (
             <details className="mt-2 rounded-lg border border-border px-2">
               <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">

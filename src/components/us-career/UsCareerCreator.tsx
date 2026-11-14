@@ -32,10 +32,11 @@ interface UsCareerCreatorProps {
   prospectNotice?: string;
   pending?: boolean;
   draftStatus?: string;
+  creatorSaveNote?: string;
   children?: ReactNode;
 }
 
-export default function UsCareerCreator({ sport, create, draft, setDraft, onBeginProspect, onEnterDraft, prospectNotice, pending, draftStatus, children }: UsCareerCreatorProps) {
+export default function UsCareerCreator({ sport, create, draft, setDraft, onBeginProspect, onEnterDraft, prospectNotice, pending, draftStatus, creatorSaveNote, children }: UsCareerCreatorProps) {
   const { nameInput, eraId, pos, archetypeId, appearance } = draft;
   const patchDraft = (patch: Partial<UsCareerDraft>) => setDraft(previous => ({ ...previous, ...patch }));
   return (
@@ -44,7 +45,7 @@ export default function UsCareerCreator({ sport, create, draft, setDraft, onBegi
         <p className="font-display text-lg font-bold text-foreground">Create your player</p>
         <p className="mt-1 text-xs text-muted-foreground">
           You are a fictional prospect entering the real league. Position and archetype shape your
-          whole career: growth, injuries, money, legacy. Saves automatically.
+          whole career: growth, injuries, money, legacy. {creatorSaveNote ?? 'Saves automatically.'}
         </p>
       </div>
       <div className="mx-auto max-w-md space-y-3">

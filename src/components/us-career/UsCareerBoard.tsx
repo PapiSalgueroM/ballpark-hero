@@ -147,10 +147,12 @@ const SAVE_TOAST_BUTTON = { height: 44, minWidth: 64, paddingLeft: 14, paddingRi
 export interface UsCareerStart {
   draft: UsCareerDraft;
   mode: 'prospect' | 'draft';
+  onSaved?: () => void;
 }
 
 export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: { sport: UsCareerSport; entry?: UsCareerStart; inSeasonRating?: boolean }) {
   const pendingSave = useRef<{ key: string; value: string | null } | null>(null);
+  const onEntrySaved = useRef(entry?.onSaved);
   const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);
   const saveFailed = saveFailure !== null;
   useEffect(() => {
@@ -548,6 +550,12 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       setSaveFailure(null);
     } catch {
       setSaveFailure(pending.value === null ? 'remove' : 'write');
+      return;
+    }
+    if (pending.value !== null && onEntrySaved.current) {
+      const onSaved = onEntrySaved.current;
+      onEntrySaved.current = undefined;
+      onSaved();
     }
   }, [sport.saveKey]);
   /* Round 1144: while a save is refused the storage seam knows one is
