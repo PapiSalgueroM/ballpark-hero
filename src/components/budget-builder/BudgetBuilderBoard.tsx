@@ -8,6 +8,8 @@ import { useRevealScroll } from '@/hooks/useRevealScroll';
 import type { Player } from '@/types/game';
 import styles from './BudgetBuilderBoard.module.css';
 
+const MARKET_PAGE_SIZE = 60;
+
 export function BudgetBuilderBoard() {
   const {
     loading, formation, setFormation, topic, setTopic,
@@ -24,6 +26,7 @@ export function BudgetBuilderBoard() {
   const revealRef = useRevealScroll<HTMLDivElement>(complete);
   const [copied, setCopied] = useState(false);
   const [choice, setChoice] = useState<Player | null>(null);
+  const [marketPage, setMarketPage] = useState(0);
   const [request, setRequest] = useState<{
     slot: number; before: Player | undefined; after: Player | undefined;
     remaining: number; filled: number; formation: string; era: string; text: string;
@@ -33,12 +36,23 @@ export function BudgetBuilderBoard() {
   const opener = useRef<HTMLButtonElement | null>(null);
   const previewOpener = useRef<HTMLButtonElement | null>(null);
   const searchInput = useRef<HTMLInputElement | null>(null);
+  const results = useRef<HTMLDivElement | null>(null);
   const choiceNumber = useRef(0);
 
   useLayoutEffect(() => {
     setChoice(null);
+    setMarketPage(0);
     if (activeSlot !== null) searchInput.current?.focus({ preventScroll: true });
   }, [activeSlot, formation.name, era.id, topic]);
+
+  const pageCount = Math.ceil(candidates.length / MARKET_PAGE_SIZE);
+  const page = Math.min(marketPage, Math.max(0, pageCount - 1));
+  const firstResult = page * MARKET_PAGE_SIZE;
+  const lastResult = Math.min(firstResult + MARKET_PAGE_SIZE, candidates.length);
+
+  useLayoutEffect(() => {
+    if (results.current) results.current.scrollTop = 0;
+  }, [page, search]);
 
   useLayoutEffect(() => { setCue(null); }, [formation.name, era.id, topic]);
 
@@ -305,11 +319,13 @@ export function BudgetBuilderBoard() {
             ref={searchInput}
             aria-label="Search eligible players by name or club"
             value={search}
-            onChange={e => setSearch(e.target.value)}
+            onChange={e => { setSearch(e.target.value); setMarketPage(0); }}
             placeholder="Search name or club…"
             className="mb-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground"
           />
-          <p className="mb-3 text-xs text-muted-foreground">Showing {candidates.length} of up to 60 eligible matches, highest value first. Search to narrow the shortlist.</p>
+          {candidates.length > 0 && (
+            <p className="mb-3 text-xs text-muted-foreground" role="status">Showing {firstResult + 1} to {lastResult} of {candidates.length} eligible players, highest value first.</p>
+          )}
           {choice && <div className={`${styles.wrap} mb-3 rounded-xl border border-primary/40 bg-primary/5 p-3`} data-budget-preview>
             <p className="text-sm font-bold text-foreground">{choice.name}</p>
             <p className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">{choice.club} · {choice.position} · <FlagImg name={choice.nationality} size={12} /> {choice.nationality}</p>
@@ -337,13 +353,13 @@ export function BudgetBuilderBoard() {
               Release {squad[activeSlot]!.name} (+${squad[activeSlot]!.marketValue}M)
             </button>
           )}
-          <div className="max-h-64 space-y-1.5 overflow-y-auto">
+          <div ref={results} className="max-h-64 space-y-1.5 overflow-y-auto">
             {candidates.length === 0 && (
               <p className="py-4 text-center text-xs text-muted-foreground">
                 No eligible matches in this shortlist. Try another name or club, or release a player to free up budget.
               </p>
             )}
-            {candidates.map(p => (
+            {candidates.slice(firstResult, lastResult).map(p => (
               <button
                 key={p.name}
                 onClick={event => { previewOpener.current = event.currentTarget; setChoice(p); }}
@@ -366,6 +382,13 @@ export function BudgetBuilderBoard() {
               </button>
             ))}
           </div>
+          {pageCount > 1 && <nav aria-label="Signing shortlist pages" className="mt-3 flex items-center justify-between gap-2 text-xs">
+            <button type="button" onClick={() => setMarketPage(page - 1)} disabled={page === 0}
+              className="min-h-11 rounded-lg border border-border px-3 disabled:opacity-50">Previous</button>
+            <span className="text-muted-foreground">{page + 1} / {pageCount}</span>
+            <button type="button" onClick={() => setMarketPage(page + 1)} disabled={page + 1 >= pageCount}
+              className="min-h-11 rounded-lg border border-border px-3 disabled:opacity-50">Next</button>
+          </nav>}
         </div>
       )}
 

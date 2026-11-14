@@ -145,16 +145,33 @@ describe('Budget Builder signing decisions', () => {
     expect(view.container.querySelector('[data-budget-feedback]')).toHaveTextContent('Fixture player 0 released. $40M returned.');
   });
 
-  it('closes and escapes to the exact opener without signing, and truthfully keeps the top sixty bound', async () => {
+  it('closes and escapes to the exact opener and reaches eligible players beyond the first page', async () => {
     pool = Array.from({ length: 75 }, (_, index) => player(`Fixture keeper ${index}`, 'GK', 100 - index));
     const view = await start(); open(view);
     expect(view.getAllByRole('button', { name: /^Preview signing/ })).toHaveLength(60);
-    expect(view.getByText('Showing 60 of up to 60 eligible matches, highest value first. Search to narrow the shortlist.')).toBeVisible();
+    expect(view.getByText('Showing 1 to 60 of 75 eligible players, highest value first.')).toBeVisible();
     fireEvent.click(view.getByRole('button', { name: 'Close signing shortlist' })); expect(slot(view)).toHaveFocus();
     open(view); fireEvent.keyDown(view.getByRole('textbox'), { key: 'Escape' }); expect(slot(view)).toHaveFocus();
     expect(boundary.signs).not.toHaveBeenCalled(); expect(boundary.state!.squad).toEqual({});
-    open(view); preview(view, pool[74]); expect(view.getAllByRole('button', { name: /^Preview signing/ })).toHaveLength(1);
+    open(view);
+    const pageButton = (name: string) => within(view.getByRole('navigation', { name: 'Signing shortlist pages' })).getByRole('button', { name });
+    fireEvent.click(pageButton('Next'));
+    expect(view.getByText('Showing 61 to 75 of 75 eligible players, highest value first.')).toBeVisible();
+    expect(view.getAllByRole('button', { name: /^Preview signing/ })).toHaveLength(15);
+    fireEvent.click(pageButton('Previous'));
+    expect(view.getAllByRole('button', { name: /^Preview signing/ })).toHaveLength(60);
+    fireEvent.click(pageButton('Next'));
+    const query = view.getByRole('textbox', { name: /Search eligible players/ });
+    fireEvent.change(query, { target: { value: 'Fixture keeper 74' } });
+    expect(view.getAllByRole('button', { name: /^Preview signing/ })).toHaveLength(1);
+    fireEvent.change(query, { target: { value: '' } });
+    expect(view.getAllByRole('button', { name: /^Preview signing/ })).toHaveLength(60);
+    fireEvent.click(pageButton('Next'));
+    fireEvent.click(view.getByRole('button', { name: /^Preview signing Fixture keeper 74 for/ }));
     expect(field(view, 'Signing cost')).toHaveTextContent('$26M');
+    fireEvent.click(view.getByRole('button', { name: 'Confirm signing' }));
+    expect(boundary.signs).toHaveBeenCalledExactlyOnceWith(pool[74]);
+    expect(boundary.state!.squad[0]).toBe(pool[74]);
   });
 
   it('keeps cues finite, quiet on cloned rerenders and cleared by reset or unmount', async () => {
