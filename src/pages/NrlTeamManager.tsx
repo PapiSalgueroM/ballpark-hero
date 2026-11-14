@@ -472,6 +472,8 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
   const periods = match.scorePeriods;
   const usedReserves = match.benchUsed?.map(id => season.squad.find(player => player.id === id)?.name).filter(Boolean) ?? [];
   const scorers = match.playerScoring?.lines ?? [];
+  const kickerId = match.playerScoring?.kickerId;
+  const kickerName = kickerId && season.squad.find(player => player.id === kickerId)?.name;
   const injury = match.injury;
   const injuredName = injury && season.squad.find(player => player.id === injury.playerId)?.name;
   const recoveredName = match.individualRecoveryId && season.squad.find(player => player.id === match.individualRecoveryId)?.name;
@@ -521,6 +523,7 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
       {match.counterStyle && <p className="mt-2 text-sm text-muted-foreground" data-nrl-counter-plan>
         Counter plan: {counterPlanResult[match.counterStyle]}
       </p>}
+      {kickerName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-match-kicker>Match goal kicker: {kickerName}.</p>}
       {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
         {recoveredName} took individual recovery before this match.
       </p>}
@@ -783,6 +786,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
   const needsJudiciary = judiciaryNeedsResponse(season);
   const approach = nrlContractApproach(career);
   const canPlayLive = Boolean(match && season.kickerId && season.bench);
+  const goalKicker = match && season.backupKickerId && season.squad.find(player => player.id === season.kickerId)?.name;
   const holdable = canPlayLive ? nrlHoldableReserves(season) : [];
   const heldReserve = hold?.year === year && hold.round === season.round ? holdable.find(player => player.id === hold.reserveId) : undefined;
   const selectedHold = heldReserve ? hold : undefined;
@@ -834,6 +838,11 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
               : career.customClub?.slotId === match.homeId ? `${match.homeId === clubId ? 'Home' : 'Away'} match · ${career.customClub.ground}`
               : match.homeId === clubId ? 'Home match' : 'Away match'
               : next.clubStatus === 'eliminated' ? 'You can finish the finals and see who wins.' : phase === 'regular' ? 'Your club gets two ladder points this round.' : 'Your club has advanced and rests this week.'}
+          </p>
+        )}
+        {goalKicker && (
+          <p className="mt-2 break-words text-sm text-emerald-100" data-nrl-goal-kicker>
+            Goal kicker: {goalKicker}{season.kickerId === season.backupKickerId && ' · Backup on duty'}
           </p>
         )}
         {phase === 'complete' && (
@@ -1251,6 +1260,7 @@ function Squad({ career, onAction, disabled }: {
   const proposal = disabled ? null : nrlFitLineup(season);
   const nameOf = (id: string) => season.squad.find(player => player.id === id)?.name;
   const captainOutsideStartingSide = season.captainId && !starters.has(season.captainId);
+  const backupOutsideStartingSide = season.backupKickerId && !starters.has(season.backupKickerId);
   const squadName = (id: string, name: string) =>
     career.openingRoster && !isNrlNamedPlayer(id) ? name + ' (generated)' : name;
   return (
@@ -1354,7 +1364,19 @@ function Squad({ career, onAction, disabled }: {
               <option key={player.id} value={player.id}>{player.name}</option>
             ))}
           </select>
-          <p className="mt-1 text-xs text-muted-foreground">Your kicker gets credit for conversions and penalty goals. If they leave the starting lineup, the halfback takes over.</p>
+          <p className="mt-1 text-xs text-muted-foreground">Your kicker gets credit for conversions and penalty goals.</p>
+          <label htmlFor="nrl-backup-goal-kicker" className="mt-3 block text-sm font-semibold">Backup goal kicker</label>
+          <select id="nrl-backup-goal-kicker" value={season.backupKickerId ?? ''} aria-describedby="nrl-backup-goal-kicker-help"
+            disabled={disabled || season.phase === 'complete'}
+            className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-60 sm:max-w-xs"
+            onChange={event => onAction({ type: 'setBackupKicker', playerId: event.target.value || null, year: season.year, clubId: season.clubId, round: season.round })}>
+            <option value="">No backup selected</option>
+            {backupOutsideStartingSide && <option value={season.backupKickerId}>{nameOf(season.backupKickerId!)} · Outside starting 13</option>}
+            {season.squad.filter(player => starters.has(player.id) && (player.id !== season.kickerId || player.id === season.backupKickerId)).map(player => (
+              <option key={player.id} value={player.id}>{player.name}{player.id === season.kickerId && ' · On duty'}</option>
+            ))}
+          </select>
+          <p id="nrl-backup-goal-kicker-help" className="mt-1 text-xs text-muted-foreground">If your kicker leaves the starting 13, your backup takes over if they still start. Otherwise the halfback takes over.</p>
         </div>
       ) : <p className="mt-3 text-sm text-muted-foreground">Player scoring starts next season for this save.</p>}
       {season.kickerId && (
@@ -1788,7 +1810,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>A match knock can put a player out for up to four rounds. Check Availability in Squad. The countdown includes byes, and an available player fills the vacant spot.</li>
               <li>Buy medical upgrades with club cash in Finances. Upgrades shorten recovery from new knocks.</li>
               <li>Sign one fictional assistant in Finances. Tactical assistants help when you use their tactic. A development assistant can give an eligible young player 1 OVR after eight regular-season appearances from the hire onward.</li>
-              <li>Choose your goal kicker in Squad to credit conversions and penalty goals. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>
+              <li>Choose a goal kicker and a backup in Squad. The backup takes over if your kicker leaves the starting 13. The halfback covers when neither is available. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>
               <li>Before kick-off, open Hold one reserve for later to see the Quick Sim rotation and compare it with the Live rotation when you hold someone.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. Choose Play to 60 minutes to bring on a held reserve who is still on the bench. Quick Sim settles the round in one action.</li>
               <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>
