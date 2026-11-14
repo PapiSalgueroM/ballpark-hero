@@ -1,8 +1,8 @@
-import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  CM_PARTIAL, SAVE_KEY, loanOutFee, loanOutPlayer, loanOutRefusal, loadCareer,
-  recallLoanedPlayer, saveCareer, startCareer,
+  acceptBid, breakLoan, CM_PARTIAL, SAVE_KEY, loanOutFee, loanOutPlayer, loanOutRefusal, loadCareer,
+  playNextEntry, recallLoanedPlayer, resumeMatch, saveCareer, startCareer,
 } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import { TransferScreen } from '@/components/club-manager/TransferScreen';
@@ -82,6 +82,53 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); localStorage.clear(); });
 
 describe('Loan plan through the actual transfer screen and saved hook', () => {
+  it('keeps a starting player on the books until the resumed match finishes', async () => {
+    const result = playNextEntry(fixture());
+    expect(result.kind).toBe('halftime');
+    const c = result.state;
+    const p = c.squad.find(p => c.live?.onPitch.includes(p.id) && p.position !== 'GK' && !p.onLoan)!;
+    expect(p).toBeTruthy();
+    c.incomingBids = [{ playerId: p.id, playerName: p.name, club: 'Ajax', offer: 8, status: 'open' }];
+
+    await mountCareer(c);
+    fireEvent.click(screen.getByRole('button', { name: /^Sell/ }));
+    const playerRow = screen.getByText(p.name, { exact: true }).closest<HTMLElement>('div.py-2.border-b')!;
+    const loan = () => within(playerRow).getByRole('button', { name: /^Loan out now/ });
+    const before = localStorage.getItem(SAVE_KEY);
+    fireEvent.click(loan());
+    expect(localStorage.getItem(SAVE_KEY)).toBe(before);
+    expect(screen.getByText('Finish the match before moving players out.')).toBeVisible();
+    expect(loan()).toBeDisabled();
+    expect(screen.getByRole('button', { name: /^Accept$/ })).toBeDisabled();
+
+    await advanceCalendarEntry();
+    expect(api.career!.live).toBeNull();
+    expect(api.career!.resultLog).toHaveLength(c.resultLog.length + 1);
+    expect(screen.getByRole('button', { name: /^Accept$/ })).toBeEnabled();
+    expect(loan()).toBeEnabled();
+    fireEvent.click(loan());
+    const loaded = loadCareer()!;
+    expect(loaded.loanedOut?.some(loan => loan.player.id === p.id)).toBe(true);
+    expect(loaded.squad.some(pick => pick.id === p.id)).toBe(false);
+  });
+
+  it('holds incoming bids and early loan returns while the match is in progress', () => {
+    const c = fixture(), p = eligible(c);
+    const borrowed = c.squad.find(pick => pick.id !== p.id && pick.position !== 'GK')!;
+    borrowed.onLoan = true;
+    borrowed.loanFrom = 'Ajax';
+    borrowed.loanBreakFee = 1;
+    c.incomingBids = [{ playerId: p.id, playerName: p.name, club: 'Ajax', offer: 8, status: 'open' }];
+    const active = playNextEntry(c).state;
+    expect(active.live).toBeTruthy();
+    expect(acceptBid(active, p.id)).toBeNull();
+    expect(loanOutPlayer(active, p.id, 'Ajax', 1)).toBeNull();
+    expect(breakLoan(active, borrowed.id)).toBeNull();
+    const finished = resumeMatch(active).state;
+    expect(acceptBid(finished, p.id)?.squad.some(pick => pick.id === p.id)).toBe(false);
+    expect(breakLoan(finished, borrowed.id)?.squad.some(pick => pick.id === borrowed.id)).toBe(false);
+  });
+
   it('keeps a default explicit-host loan free of plan metadata and additional random draws', () => {
     const c = fixture(), p = eligible(c);
     const run = () => {

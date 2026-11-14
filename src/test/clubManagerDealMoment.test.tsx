@@ -2,7 +2,7 @@ import { cleanup, render } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TransferScreen } from '@/components/club-manager/TransferScreen';
 import {
-  buildMarket, makeOffer, moneyIn, offerTerms, startCareer, startNegotiation,
+  buildMarket, makeOffer, moneyIn, offerTerms, playNextEntry, resumeMatch, startCareer, startNegotiation,
   type CareerState, type MarketPlayer, type Negotiation,
 } from '@/lib/clubManager';
 
@@ -34,7 +34,7 @@ function seedRandom(seed: number) {
   });
 }
 
-interface Deal { market: MarketPlayer[]; open: CareerState; agreed: CareerState }
+interface Deal { market: MarketPlayer[]; open: CareerState; terms: CareerState; agreed: CareerState }
 
 /** Open talks with an affordable man, shake on the fee, give him his terms. */
 function playDeal(structured = false): Deal {
@@ -56,7 +56,7 @@ function playDeal(structured = false): Deal {
     if (!fee || !want) continue;
     const agreed = offerTerms(fee, want);
     if (agreed?.negotiation?.status !== 'agreed') continue;
-    return { market, open, agreed };
+    return { market, open, terms: fee, agreed };
   }
   throw new Error('the engine agreed no deal on this seed: pick another seed');
 }
@@ -70,6 +70,26 @@ const closed = (open: CareerState, status: Negotiation['status'], note: string):
 });
 
 beforeEach(() => seedRandom(927));
+
+it('leaves agreed part-exchange terms open until an active match finishes', () => {
+  const { terms } = playDeal(true);
+  const offer = terms.negotiation!.terms!.want;
+  const swap = terms.negotiation!.agreedExtras!.swapId;
+  expect(swap).toBeTruthy();
+  const active = playNextEntry(terms).state;
+  expect(active.live).toBeTruthy();
+  const held = offerTerms(active, offer)!;
+  expect(held.negotiation?.status).toBe('open');
+  expect(held.negotiation?.terms?.note).toMatch(/finish the match/i);
+  expect(held.squad).toEqual(active.squad);
+  expect(held.budget).toBe(active.budget);
+  expect(held.live).toEqual(active.live);
+
+  const done = resumeMatch(held).state;
+  const signed = offerTerms(done, offer)!;
+  expect(signed.negotiation?.status).toBe('agreed');
+  expect(signed.squad.some(p => p.id === swap)).toBe(false);
+});
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 describe('Club Manager: the deal moment', () => {
