@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
 import { NRL_ROLES } from '@/lib/nrlManager';
 import {
-  createNrlCareer, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerMarket, nrlCareerSquad,
+  createNrlCareer, nrlAcademyOffer, nrlAcademyReports, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerSquad,
   nrlContractOffer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 
@@ -15,6 +15,69 @@ const finish = (initial: NrlCareerState) => {
 };
 
 describe('NRL Manager Academy', () => {
+  it.each([[2026, 'panthers'], [2027, 'bears']] as const)('buys one parallel scouting report with club cash in %i', (year, clubId) => {
+    const round = 1;
+    const initial = createNrlCareer(clubId, 41, year);
+    const extra = { type: 'scoutAcademyParallel', year, clubId, round, role: 'Fullback', priority: 'ceiling' } as const;
+    const read = (state: NrlCareerState) => readNrlCareerSave(JSON.stringify(state));
+    expect(reduceNrlCareer(initial, extra)).toBe(initial);
+    const first = scout(initial);
+    expect(nrlCareerFinance(first)).toEqual(nrlCareerFinance(initial));
+    const insufficient = { ...first, finance: { ...first.finance, openingCash: 59_999 } };
+    expect(reduceNrlCareer(insufficient, extra)).toBe(insufficient);
+    expect(reduceNrlCareer(first, { ...extra, role: 'Hooker' })).toBe(first);
+    expect(reduceNrlCareer(first, { ...extra, round: 2 })).toBe(first);
+    const parallel = reduceNrlCareer(first, extra);
+    expect(nrlAcademyReports(parallel).map(report => [report.role, report.startedRound, report.status])).toEqual([
+      ['Hooker', round, 'scouting'], ['Fullback', round, 'scouting'],
+    ]);
+    expect(parallel.season).toBe(first.season);
+    expect(parallel.players).toBe(first.players);
+    expect(nrlCareerFinance(parallel).cash).toBe(nrlCareerFinance(first).cash - 60_000);
+    expect(nrlCareerCap(parallel, year + 1)).toEqual(nrlCareerCap(first, year + 1));
+    expect(reduceNrlCareer(parallel, { ...extra, role: 'Prop 8' })).toBe(parallel);
+    expect(read(parallel)).toEqual(parallel);
+    expect(read({ ...parallel, finance: first.finance })).toBeNull();
+    expect(read({ ...parallel, academy: first.academy })).toBeNull();
+    const hired = reduceNrlCareer(first, { type: 'hireCoach', role: 'attack', year, round });
+    const wagesReserved = { ...hired, finance: { ...hired.finance, openingCash: 200_000 } };
+    expect(reduceNrlCareer(wagesReserved, extra)).toBe(wagesReserved);
+    const combined = reduceNrlCareer(hired, extra);
+    expect(read(combined)).toEqual(combined);
+    const after = advance(read(parallel)!);
+    expect(after.season).toEqual(advance(first).season);
+    expect(nrlAcademyReports(after).map(report => report.status)).toEqual(['ready', 'ready']);
+    const sequential = reduceNrlCareer(advance(first), { type: 'scoutAcademy', role: extra.role, priority: extra.priority });
+    expect(after.academy?.[1].player).toEqual(sequential.academy?.[1].player);
+    const playerId = after.academy![1].player.id;
+    const offer = nrlAcademyOffer(after, playerId);
+    expect(offer.ok).toBe(true);
+    const promoted = reduceNrlCareer(after, { type: 'promoteAcademy', playerId });
+    expect(read(promoted)).toEqual(promoted);
+    const next = reduceNrlCareer(finish(promoted), { type: 'startNextSeason' });
+    expect(next.history[0].finance?.academyParallelRound).toBe(round);
+    expect(next.finance.academyParallelRound).toBeUndefined();
+    expect(next.season.squad.some(player => player.id === playerId)).toBe(true);
+    expect(read(next)).toEqual(next);
+  });
+
+  it('can reveal both reports on the final simulated advance without shifting the calendar', () => {
+    const year = 2026, clubId = 'panthers';
+    const penultimate = nrlSeasonPlan(year).draw.length + 4;
+    let career = createNrlCareer(clubId, 41, year);
+    while (career.season.round < penultimate) career = advance(career);
+    expect(career.season.phase).toBe('finals');
+    const first = scout(career);
+    const parallel = reduceNrlCareer(first, { type: 'scoutAcademyParallel', year, clubId, round: penultimate, role: 'Fullback' });
+    expect(readNrlCareerSave(JSON.stringify(parallel))).toEqual(parallel);
+    const completed = advance(parallel);
+    expect(completed.season).toEqual(advance(first).season);
+    expect(completed.season.phase).toBe('complete');
+    expect(nrlAcademyReports(completed).map(report => report.status)).toEqual(['ready', 'ready']);
+    expect(completed.history[0].finance?.academyParallelRound).toBe(penultimate);
+    expect(readNrlCareerSave(JSON.stringify(completed))).toEqual(completed);
+  });
+
   it.each([[2026, 'panthers', 1, null], [2027, 'bears', 3, 'tigers']] as const)('makes a released %i academy prospect available to the existing next-year market', (year, clubId, seed, destination) => {
     const initial = createNrlCareer(clubId, seed, year);
     const assigned = reduceNrlCareer(initial, { type: 'scoutAcademy', role: 'Hooker', priority: 'ready' });

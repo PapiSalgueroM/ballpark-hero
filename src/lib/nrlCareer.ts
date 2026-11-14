@@ -41,6 +41,7 @@ const RETIREMENT_AGE = 36;
 const MEDICAL_UPGRADE_COST = { 2: 800_000, 3: 2_600_000 } as const;
 const NRL_PHYSIO_COST = 60_000;
 const ACADEMY_UPGRADE_COST = 600_000;
+const ACADEMY_PARALLEL_COST = 60_000;
 const ACADEMY_UPGRADE_POTENTIAL = 3;
 const CONCESSIONS_UPGRADE_COST = 250_000;
 const CONCESSIONS_HOME_INCOME = 25_000;
@@ -106,6 +107,7 @@ export interface NrlCareerBook {
   medicalUpgrades?: NrlMedicalUpgrade[];
   physio?: NrlPhysioTreatment;
   academyUpgradeRound?: number;
+  academyParallelRound?: number;
   concessionsUpgradeRound?: number;
   concessionReceipts?: number;
   coachHire?: NrlCoachHire;
@@ -251,6 +253,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'startReserveGrade' | 'recallReserveGrade'; year: number; clubId: string; round: number; playerId: string }
   | { type: 'setShortlist'; playerId: string; saved: boolean; year: number }
   | { type: 'scoutAcademy'; role: NrlRole; priority?: NrlAcademyPriority }
+  | { type: 'scoutAcademyParallel'; year: number; clubId: string; round: number; role: NrlRole; priority?: NrlAcademyPriority }
   | { type: 'promoteAcademy'; playerId: string }
   | { type: 'releaseAcademyProspect'; year: number; clubId: string; playerId: string }
   | { type: 'setDevelopmentFocus'; focus: NrlDevelopmentFocus }
@@ -776,6 +779,16 @@ export function nrlAcademyAvailableRoles(state: NrlCareerState): NrlRole[] {
   return NRL_ROLES.filter(role => !scouted.has(role));
 }
 
+export function nrlAcademyParallelQuote(state: NrlCareerState) {
+  const { season, finance, academy } = state;
+  const roles = state.legacySeason || !season.kickerId || season.live || season.phase === 'complete'
+    || season.year === NRL_LAST_YEAR || finance.academyParallelRound !== undefined
+    || !academy?.some(report => !reportReady(season, report)) ? []
+    : NRL_ROLES.filter(role => !academy.some(report => report.player.role === role));
+  return { cost: ACADEMY_PARALLEL_COST, roles,
+    reason: roles.length ? facilityPurchaseRefusal(finance, lastRound(season.year), ACADEMY_PARALLEL_COST) : null };
+}
+
 function academyProspect(season: NrlManagerState, role: NrlRole, names: Set<string>, upgraded: boolean,
   priority?: NrlAcademyPriority): NrlCareerPlayer {
   const id = academyId(season, role);
@@ -790,8 +803,7 @@ function academyProspect(season: NrlManagerState, role: NrlRole, names: Set<stri
 }
 
 function scoutAcademy(state: NrlCareerState, role: NrlRole, priority?: NrlAcademyPriority): NrlCareerState {
-  if (!nrlAcademyAvailableRoles(state).includes(role)
-    || (priority !== undefined && (state.legacySeason || (priority !== 'ready' && priority !== 'ceiling')))) return state;
+  if (priority !== undefined && (state.legacySeason || (priority !== 'ready' && priority !== 'ceiling'))) return state;
   const { season } = state;
   const reports = state.academy ?? [];
   const names = new Set([...state.players.map(player => player.name), ...reports.map(report => report.player.name)]);
@@ -884,6 +896,10 @@ export function nrlAcademyFacilitySpend(book: NrlCareerBook): number {
   return book.academyUpgradeRound === undefined ? 0 : ACADEMY_UPGRADE_COST;
 }
 
+export function nrlAcademyParallelSpend(book: NrlCareerBook): number {
+  return book.academyParallelRound === undefined ? 0 : ACADEMY_PARALLEL_COST;
+}
+
 export function nrlConcessionsSpend(book: NrlCareerBook): number {
   return book.concessionsUpgradeRound === undefined ? 0 : CONCESSIONS_UPGRADE_COST;
 }
@@ -925,7 +941,7 @@ export function nrlCareerFinance(state: Pick<NrlCareerState, 'finance'>): NrlCar
   const profit = centralFunding + gateReceipts + nrlSponsorIncome(state.finance) + nrlBoardPathwaysIncome(state.finance)
     + nrlBoardRecruitmentIncome(state.finance)
     + (state.finance.concessionReceipts ?? 0) - nrlConcessionsSpend(state.finance)
-    - wagesPaid - operatingCosts - nrlMedicalSpend(state.finance) - nrlAcademyFacilitySpend(state.finance)
+    - wagesPaid - operatingCosts - nrlMedicalSpend(state.finance) - nrlAcademyFacilitySpend(state.finance) - nrlAcademyParallelSpend(state.finance)
     - nrlMutualReleaseSpend(state.finance) - signingFee - wages - nrlCoachCourseSpend(state.finance) - nrlPhysioSpend(state.finance);
   return { ...state.finance, cash: openingCash + profit, profit };
 }
@@ -2491,7 +2507,15 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       return { ...state, selectionPromise: { ...selectionPromise, endedRound: round } };
     }
     case 'scoutAcademy':
-      return scoutAcademy(state, action.role, action.priority);
+      return nrlAcademyAvailableRoles(state).includes(action.role) ? scoutAcademy(state, action.role, action.priority) : state;
+    case 'scoutAcademyParallel': {
+      const { year, clubId, round } = state.season;
+      if (action.year !== year || action.clubId !== clubId || action.round !== round) return state;
+      const quote = nrlAcademyParallelQuote(state);
+      if (quote.reason || !quote.roles.includes(action.role)) return state;
+      const next = scoutAcademy(state, action.role, action.priority);
+      return next === state ? state : { ...next, finance: { ...next.finance, academyParallelRound: round } };
+    }
     case 'promoteAcademy': {
       const quote = nrlAcademyOffer(state, action.playerId);
       if (!quote.ok) return state;
@@ -2564,6 +2588,7 @@ function validBook(value: unknown, roundLimit: number): value is NrlCareerBook {
       && typeof value.mutualRelease.playerName === 'string' && Boolean(value.mutualRelease.playerName)
       && intIn(value.mutualRelease.annualSalary, 1, Number.MAX_SAFE_INTEGER)))
     && (value.academyUpgradeRound === undefined || (value.fromRound === 1 && intIn(value.academyUpgradeRound, 1, roundLimit)))
+    && (value.academyParallelRound === undefined || (value.fromRound === 1 && intIn(value.academyParallelRound, 1, roundLimit)))
     && (value.concessionsUpgradeRound === undefined || (value.fromRound === 1 && intIn(value.concessionsUpgradeRound, 1, roundLimit)))
     && (value.concessionReceipts === undefined || (value.fromRound === 1
       && intIn(value.concessionReceipts, CONCESSIONS_HOME_INCOME, (roundLimit - 1) * CONCESSIONS_HOME_INCOME)
@@ -2697,6 +2722,7 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
         && row[3] + row[4] >= NRL_DEVELOPMENT_ASSISTANT.appearances))) return false;
   }
   if (finance.academyUpgradeRound !== undefined && (year === NRL_LAST_YEAR || value.scoring === undefined)) return false;
+  if (finance.academyParallelRound !== undefined && (year === NRL_LAST_YEAR || value.scoring === undefined)) return false;
   if (finance.mutualRelease && (year === NRL_LAST_YEAR || value.scoring === undefined || finance.cash < 0
     || !intIn(finance.mutualRelease.annualSalary, nrlSeasonPlan(year + 1).minimumSalary, nrlSeasonPlan(year + 1).cap))) return false;
   if (finance.pathways && value.scoring === undefined) return false;
@@ -2728,6 +2754,7 @@ function booksMatch(a: NrlCareerBook, b: NrlCareerBook): boolean {
     && a.wagesPaid === b.wagesPaid && a.operatingCosts === b.operatingCosts
     && a.physio?.playerId === b.physio?.playerId && a.physio?.injuryRound === b.physio?.injuryRound && a.physio?.round === b.physio?.round
     && a.academyUpgradeRound === b.academyUpgradeRound
+    && a.academyParallelRound === b.academyParallelRound
     && a.concessionsUpgradeRound === b.concessionsUpgradeRound && a.concessionReceipts === b.concessionReceipts
     && a.coachHire?.role === b.coachHire?.role && a.coachHire?.round === b.coachHire?.round
     && a.coachHire?.paidRounds === b.coachHire?.paidRounds && a.coachHire?.retained === b.coachHire?.retained
@@ -3035,6 +3062,10 @@ function validCareerBooks(state: NrlCareerState): boolean {
       if (facilityPurchaseRefusal(expected, finalRound, ACADEMY_UPGRADE_COST)) return false;
       expected = { ...expected, academyUpgradeRound: round };
     }
+    if (finance.academyParallelRound === round) {
+      if (facilityPurchaseRefusal(expected, finalRound, ACADEMY_PARALLEL_COST)) return false;
+      expected = { ...expected, academyParallelRound: round };
+    }
     if (finance.coachCourseRound === round) {
       if (facilityPurchaseRefusal(expected, finalRound, COACH_COURSE_FEE)) return false;
       expected = { ...expected, coachCourseRound: round };
@@ -3061,9 +3092,9 @@ function validCareerBooks(state: NrlCareerState): boolean {
 }
 
 function validAcademy(state: NrlCareerState): boolean {
-  const { academy, players, season } = state;
+  const { academy, players, season, finance: { academyParallelRound } } = state;
   const prefix = academyPrefix(season);
-  if (academy === undefined) return !players.some(player => player.id.startsWith(prefix));
+  if (academy === undefined) return academyParallelRound === undefined && !players.some(player => player.id.startsWith(prefix));
   if (season.year === NRL_LAST_YEAR || !Array.isArray(academy) || academy.length > NRL_ROLES.length) return false;
   const activePlayers = new Map(players.map(player => [player.id, player]));
   const activeNames = new Set(players.map(player => player.name));
@@ -3071,9 +3102,14 @@ function validAcademy(state: NrlCareerState): boolean {
   const knownIds = new Set<string>();
   const names = new Set<string>();
   let lastAssignment = 0;
+  let hasParallelReport = false;
   let hasRelease = false;
   for (const report of academy) {
-    if (!record(report) || !intIn(report.startedRound, lastAssignment + 1, season.round) || !validPlayer(report.player, season.year)) return false;
+    if (!record(report) || !intIn(report.startedRound, Math.max(1, lastAssignment), season.round) || !validPlayer(report.player, season.year)) return false;
+    if (report.startedRound === lastAssignment) {
+      if (hasParallelReport || report.startedRound !== academyParallelRound || state.legacySeason || !season.kickerId) return false;
+      hasParallelReport = true;
+    }
     const { player, priority } = report;
     if (player.id !== academyId(season, player.role) || knownIds.has(player.id) || names.has(player.name)
       || player.contract || player.futureContract || player.secondaryRole || player.fitness !== 100 || !intIn(player.age, 18, 21)) return false;
@@ -3107,7 +3143,8 @@ function validAcademy(state: NrlCareerState): boolean {
       || signed.fitness !== player.fitness || signed.contract || !contract || contract.clubId !== season.clubId
       || contract.startYear !== year || contract.endYear !== year || contract.salary !== nrlSeasonPlan(year).minimumSalary) return false;
   }
-  return players.every(player => !player.id.startsWith(prefix) || knownIds.has(player.id));
+  return hasParallelReport === (academyParallelRound !== undefined)
+    && players.every(player => !player.id.startsWith(prefix) || knownIds.has(player.id));
 }
 
 function validShortlist(state: NrlCareerState): boolean {
