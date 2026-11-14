@@ -174,6 +174,7 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer, onRetireOpen
                               <li key={i} className="rounded-md bg-secondary/40 px-2 py-1.5">
                                 <span className="block text-muted-foreground">{match.round}</span>
                                 <span>{match.home} {match.homeGoals}-{match.awayGoals} {match.away}</span>
+                                {match.mentality && <span className="block text-muted-foreground">{MENTALITIES.find(option => option.id === match.mentality)?.label}</span>}
                                 {match.pens && match.winner && <span className="block text-muted-foreground">{match.winner} won on penalties.</span>}
                               </li>
                             ))}

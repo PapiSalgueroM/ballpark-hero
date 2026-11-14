@@ -476,10 +476,25 @@ export interface IntlMatch {
 }
 
 export type ManagerSummerMatch = Pick<IntlMatch, 'round' | 'home' | 'away' | 'homeGoals' | 'awayGoals' | 'pens'>
-  & { winner?: string };
+  & { winner?: string; mentality?: NationalMentality };
 
-type NationalMentality = 'defensive' | 'balanced' | 'attacking';
+export type NationalMentality = 'defensive' | 'balanced' | 'attacking';
 const NATIONAL_TEMPO: Record<NationalMentality, number> = { defensive: -0.25, balanced: 0, attacking: 0.25 };
+
+interface ManagerFinalsReplay {
+  random: () => number;
+  played: readonly ManagerSummerMatch[];
+}
+
+function savedFinalsResult(fixture: ManagerSummerMatch | undefined, round: string, home: string, away: string, knockout: boolean) {
+  if (fixture?.round !== round || fixture.home !== home || fixture.away !== away) return undefined;
+  const { homeGoals: a, awayGoals: b, pens, winner } = fixture;
+  if (fixture.mentality !== 'defensive' && fixture.mentality !== 'balanced' && fixture.mentality !== 'attacking') return undefined;
+  if (!Number.isInteger(a) || !Number.isInteger(b) || a < 0 || b < 0 || a > 11 || b > 11) return undefined;
+  if (!knockout) return pens === false && !winner ? { a, b, pens, aWins: a > b } : undefined;
+  if (a === b) return pens === true && (winner === home || winner === away) ? { a, b, pens, aWins: winner === home } : undefined;
+  return pens === false && winner === (a > b ? home : away) ? { a, b, pens, aWins: a > b } : undefined;
+}
 
 function matchTempo(nation: string, home: string, away: string, tempo: number): number {
   return home === nation || away === nation ? tempo : 0;
@@ -828,14 +843,14 @@ export function xiMen(xi: StartingEleven): XiMan[] {
 
 /** Pick n nations from a pool, strongly favouring the better ranked ones but
     leaving room for a surprise qualifier, and always keeping `forced` in. */
-function pickField(pool: string[], n: number, forced: string | null): string[] {
+function pickField(pool: string[], n: number, forced: string | null, random = Math.random): string[] {
   const out: string[] = [];
   if (forced && pool.includes(forced)) out.push(forced);
   const rest = pool.filter(p => !out.includes(p));
   // Weight is 1/rank, so the top nations nearly always come through and the
   // bottom of the confederation occasionally does.
   const weighted = rest
-    .map(nation => ({ nation, w: (1 / Math.sqrt(fifaRankOf(nation))) * (0.55 + Math.random()) }))
+    .map(nation => ({ nation, w: (1 / Math.sqrt(fifaRankOf(nation))) * (0.55 + random()) }))
     .sort((a, b) => b.w - a.w);
   for (const w of weighted) {
     if (out.length >= n) break;
@@ -848,7 +863,7 @@ function pickField(pool: string[], n: number, forced: string | null): string[] {
     real slot counts; a continental fills from its own confederation, with the
     Copa América's six CONCACAF guests modelled because that is the real
     format. */
-function buildField(fmt: TournamentFormat, nation: string, qualified: boolean): string[] {
+function buildField(fmt: TournamentFormat, nation: string, qualified: boolean, random?: () => number): string[] {
   const forced = qualified ? nation : null;
   if (fmt.kind === 'World Cup') {
     const field: string[] = [];
@@ -858,7 +873,7 @@ function buildField(fmt: TournamentFormat, nation: string, qualified: boolean): 
     const mix = fmt.fieldMix ?? { places: WC_SLOTS, open: WC_PLAYOFF_SLOTS };
     for (const conf of Object.keys(WC_SLOTS) as Confederation[]) {
       const slots = mix.places[conf];
-      const picked = pickField(nationsIn(conf), slots, conf === myConf ? forced : null);
+      const picked = pickField(nationsIn(conf), slots, conf === myConf ? forced : null, random);
       field.push(...picked);
     }
     // The inter confederation play off places (and an older era's host
@@ -868,7 +883,7 @@ function buildField(fmt: TournamentFormat, nation: string, qualified: boolean): 
       .flatMap(c => nationsIn(c as Confederation))
       .filter(n => !field.includes(n));
     const stillOut = forced && !field.includes(forced) ? forced : null;
-    field.push(...pickField(leftovers, mix.open, stillOut));
+    field.push(...pickField(leftovers, mix.open, stillOut, random));
     // With no open place left (the eras counted from the real finalists), a
     // qualified nation still out won its play off against the weakest side
     // in the field and takes its place.
@@ -890,11 +905,11 @@ function buildField(fmt: TournamentFormat, nation: string, qualified: boolean): 
     // The ten CONMEBOL sides plus that era's invited guests: six from
     // Concacaf in 2016 and 2024, two in the twelve team editions (from the
     // AFC in 2019). Round 1027 reads both off the format history.
-    const home = pickField(nationsIn('CONMEBOL'), Math.min(10, fmt.teams), forced);
-    const guests = pickField(nationsIn(fmt.guestsFrom ?? 'CONCACAF'), fmt.teams - home.length, null);
+    const home = pickField(nationsIn('CONMEBOL'), Math.min(10, fmt.teams), forced, random);
+    const guests = pickField(nationsIn(fmt.guestsFrom ?? 'CONCACAF'), fmt.teams - home.length, null, random);
     return [...home, ...guests];
   }
-  const field = pickField(nationsIn(conf), fmt.teams, forced);
+  const field = pickField(nationsIn(conf), fmt.teams, forced, random);
   let filler = 1;
   while (field.length < fmt.teams) field.push(`Invitational XI ${filler++}`);
   return field;
@@ -927,11 +942,12 @@ export function simulateTournament(
   qualifying: QualifyingCampaign, squad: SquadCall | null, form: PlayerForm | null,
   managerFixtures?: ManagerSummerMatch[],
   managerTempo = 0,
+  replay?: ManagerFinalsReplay,
 ): IntlTournament {
   const qualified = qualifying.qualified;
   const inSquad = qualified && !!squad?.called;
   const myForm = inSquad ? form : null;
-  const field = buildField(fmt, nation, qualified);
+  const field = buildField(fmt, nation, qualified, replay?.random);
   const strength: Record<string, number> = {};
   for (const t of field) strength[t] = nationStrength(t);
   // A great player genuinely lifts his nation. This is on top of the per match
@@ -944,7 +960,7 @@ export function simulateTournament(
   /* Group stage. Seeded pots so the groups are balanced, like a real draw. */
   const seeded = [...field].sort((a, b) => strength[b] - strength[a]);
   const pots: string[][] = [];
-  for (let p = 0; p < 4; p++) pots.push(shuffle(seeded.slice(p * fmt.groups, (p + 1) * fmt.groups)));
+  for (let p = 0; p < 4; p++) pots.push(shuffle(seeded.slice(p * fmt.groups, (p + 1) * fmt.groups), replay?.random));
   const groups: string[][] = [];
   for (let g = 0; g < fmt.groups; g++) groups.push(pots.map(pot => pot[g]).filter(Boolean));
 
@@ -957,13 +973,17 @@ export function simulateTournament(
       for (let j = i + 1; j < grp.length; j++) {
         const home = grp[i], away = grp[j];
         const tempo = matchTempo(nation, home, away, managerTempo);
-        const r = simMatch(
+        const rolled = simMatch(
           strength[home], strength[away], false,
-          (home === nation ? lift : 0) + tempo, (away === nation ? lift : 0) + tempo,
+          (home === nation ? lift : 0) + tempo, (away === nation ? lift : 0) + tempo, replay?.random,
         );
+        const mine = home === nation || away === nation;
+        const fixture = mine && managerFixtures ? replay?.played[managerFixtures.length] : undefined;
+        const played = savedFinalsResult(fixture, label, home, away, false);
+        const r = played ?? rolled;
         applyResult(table, home, away, r.a, r.b);
-        if (managerFixtures && (home === nation || away === nation)) {
-          managerFixtures.push({ round: label, home, away, homeGoals: r.a, awayGoals: r.b, pens: false });
+        if (managerFixtures && mine) {
+          managerFixtures.push(played && fixture ? fixture : { round: label, home, away, homeGoals: r.a, awayGoals: r.b, pens: false });
         }
         if (inSquad && (home === nation || away === nation) && myForm) {
           const mine = home === nation ? r.a : r.b;
@@ -994,7 +1014,7 @@ export function simulateTournament(
 
   /* Knockout bracket. Seeded so group winners meet runners up, then played
      round by round until one nation is left standing. */
-  const koField = shuffle(through);
+  const koField = shuffle(through, replay?.random);
   const bracket: IntlTie[] = [];
   // Round 1027: the round the format history says this shape opened with.
   // It always agrees with the size of koField (simIntlFormatHistory holds
@@ -1010,17 +1030,21 @@ export function simulateTournament(
       const home = current[i * 2], away = current[i * 2 + 1];
       const mine = home === nation || away === nation;
       const tempo = mine ? managerTempo : 0;
-      const r = simMatch(
+      const label = round === 'F' ? 'Final' : EXIT_LABEL[round];
+      const fixture = mine && managerFixtures ? replay?.played[managerFixtures.length] : undefined;
+      const rolled = simMatch(
         strength[home] ?? 70, strength[away] ?? 70, true,
-        (home === nation ? lift : 0) + tempo, (away === nation ? lift : 0) + tempo,
+        (home === nation ? lift : 0) + tempo, (away === nation ? lift : 0) + tempo, replay?.random,
       );
+      const played = savedFinalsResult(fixture, label, home, away, true);
+      const r = played ?? rolled;
       const winner = r.aWins ? home : away;
       bracket.push({
         round, slot: i, home, away,
         homeGoals: r.a, awayGoals: r.b, pens: r.pens, winner, mine,
       });
       if (managerFixtures && mine) {
-        managerFixtures.push({ round: round === 'F' ? 'Final' : EXIT_LABEL[round], home, away, homeGoals: r.a, awayGoals: r.b, pens: r.pens, winner });
+        managerFixtures.push(played && fixture ? fixture : { round: label, home, away, homeGoals: r.a, awayGoals: r.b, pens: r.pens, winner });
       }
       if (mine && inSquad && myForm) {
         const myGoals = home === nation ? r.a : r.b;
@@ -1130,6 +1154,7 @@ export function managerQualifierScore(home: string, away: string, nation: string
 export function runManagerSummer(
   nation: string, year: number, lift: number, mentality: NationalMentality = 'balanced', xiAdjustment = 0,
   playedQualifying?: QualifyingCampaign,
+  finalsReplay?: ManagerFinalsReplay,
 ): (IntlTournament & { managerFixtures: ManagerSummerMatch[] }) | null {
   const fmt = tournamentForYear(nation, managerFormatYear(year));
   if (!fmt) return null;
@@ -1143,7 +1168,7 @@ export function runManagerSummer(
     const tempo = NATIONAL_TEMPO[mentality] ?? 0;
     const qualifying = playedQualifying ?? runQualifying(nation, fmt, null, tempo);
     const managerFixtures: ManagerSummerMatch[] = [];
-    return { ...simulateTournament(nation, fmt, year, qualifying, null, null, managerFixtures, tempo), managerFixtures };
+    return { ...simulateTournament(nation, fmt, year, qualifying, null, null, managerFixtures, tempo, finalsReplay), managerFixtures };
   } finally {
     restore();
   }

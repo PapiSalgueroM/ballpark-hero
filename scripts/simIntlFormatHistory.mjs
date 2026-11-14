@@ -128,8 +128,8 @@ const CONTROLS = {
     edits: [
       ["if (forced && !field.includes(forced) && NATION_CONFED[forced]) {",
        "if (false && forced && !field.includes(forced) && NATION_CONFED[forced]) {"],
-      ["field.push(...pickField(leftovers, mix.open, stillOut));",
-       "field.push(...pickField(leftovers, mix.open, null && stillOut));"],
+      ["field.push(...pickField(leftovers, mix.open, stillOut, random));",
+       "field.push(...pickField(leftovers, mix.open, null && stillOut, random));"],
     ],
   },
   identity: {
@@ -142,8 +142,8 @@ const CONTROLS = {
   engine: {
     file: 'src/lib/soccerInternational.ts',
     edits: [
-      ["field.push(...pickField(leftovers, mix.open, stillOut));",
-       "field.push(...pickField(leftovers.reverse(), mix.open, stillOut));"],
+      ["field.push(...pickField(leftovers, mix.open, stillOut, random));",
+       "field.push(...pickField(leftovers.reverse(), mix.open, stillOut, random));"],
     ],
   },
   manager: {
@@ -201,8 +201,8 @@ const MAIN_EDITS = [
    "return WC_SLOTS[conf] + WC_PLAYOFF_SLOTS / 6;"],
   ["const mix = fmt.fieldMix ?? { places: WC_SLOTS, open: WC_PLAYOFF_SLOTS };\n    for (const conf of Object.keys(WC_SLOTS) as Confederation[]) {\n      const slots = mix.places[conf];",
    "for (const conf of Object.keys(WC_SLOTS) as Confederation[]) {\n      const slots = WC_SLOTS[conf];"],
-  ["const stillOut = forced && !field.includes(forced) ? forced : null;\n    field.push(...pickField(leftovers, mix.open, stillOut));",
-   "field.push(...pickField(leftovers, WC_PLAYOFF_SLOTS, null));"],
+  ["const stillOut = forced && !field.includes(forced) ? forced : null;\n    field.push(...pickField(leftovers, mix.open, stillOut, random));",
+   "field.push(...pickField(leftovers, WC_PLAYOFF_SLOTS, null, random));"],
   ["if (forced && !field.includes(forced) && NATION_CONFED[forced]) {",
    "if (false) {"],
   ["nationsIn(fmt.guestsFrom ?? 'CONCACAF')", "nationsIn('CONCACAF')"],

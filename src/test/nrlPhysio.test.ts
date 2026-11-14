@@ -63,7 +63,7 @@ it.each([
 it('keeps reserved assistant wages and a live pause protected from extra purchases', () => {
   const year = 2026, clubId = 'broncos', round = 12, playerId = 'broncos-12-0';
   const opening = createNrlCareer(clubId, 2);
-  const withCoach = reduceNrlCareer(opening, { type: 'hireCoach', year, clubId, round: 1, role: 'attack' });
+  const withCoach = reduceNrlCareer(opening, { type: 'hireCoach', year, round: 1, role: 'attack' });
   const initial = toRound(withCoach, round);
   const action = { type: 'bookPhysio', year, clubId, round, playerId } as const;
   const constrained = { ...initial, finance: { ...initial.finance, openingCash: initial.finance.openingCash - cash(initial) + 60_000 } };
