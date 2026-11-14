@@ -764,8 +764,9 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     const got = cards(withWindow(() => front.renderContinue()));
     const g = gameByPath.get(e.path);
     const target = continueSaveEntries(e)[0].path;
+    const label = e.alternateSaveKeys ? 'Slot 1' : SAVED_FALLBACK;
     if (got.length !== 1 || got[0].href !== target) fail(7, `a save under ${JSON.stringify(e.saveKey)} renders ${JSON.stringify(got.map(c => c.href))}, not one card for ${target}`);
-    else if (g && !(got[0].inner.includes(g.label) && got[0].inner.includes(SAVED_FALLBACK))) fail(7, `the ${e.path} card reads ${JSON.stringify(got[0].inner)}`);
+    else if (g && !(got[0].inner.includes(g.label) && got[0].inner.includes(label))) fail(7, `the ${e.path} card reads ${JSON.stringify(got[0].inner)}`);
   }
   /* Round 1014: the legacy ten round action log still resumes on its own page,
      but the one card belongs to the full season's save (v2), which names its club and season. */
