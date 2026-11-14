@@ -1857,6 +1857,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "The World Cup cycle and your legacy score",
         items: [
           "The World Cup comes every 4 years. Top nations qualify about 90 percent of the time, while a small nation mostly needs a world class you.",
+          "From the 2026/27 season, open International Career and choose Nations League to review your group, results and caps for a completed edition. For example, England can reach the quarterfinals through its group, then play a home and away tie before the June finals. A title goes in your cabinet if you appeared during the winning campaign.",
           "After international retirement, eligible players aged 18 to 44 with a recorded cap can return once per recorded season. Existing caps, goals, trophies and history stay the same. Returning opens selection, not an instant call-up or extra caps; injury, bans and failed qualification can still keep you out.",
           "Legacy runs 0 to 100: 90 is GOAT, 80 LEGEND, 70 GREAT, 60 SOLID PRO, and less is JOURNEYMAN. The verdict also knows the overall you started at, so climbing from 54 to 91 scores better than being handed 91 on the creation screen.",
         ],

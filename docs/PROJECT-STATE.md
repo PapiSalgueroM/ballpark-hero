@@ -1,4 +1,12 @@
+## 2026-11-14: Soccer Career Nations League
+
+- International Career opens a saved Nations League group table and match record from 2026/27 onward. Group finishes feed qualification and promotion across editions. The 2028/29 draw places two teams from each of three pots in each group. Each side plays one home and one away match against each pot.
+- Each campaign records the selected player's actual simulated appearances, goals and assists, and counts the caps in the existing career totals. A campaign title goes in the trophy cabinet when the player made an appearance. World Cup and continental championship campaigns keep their own results. Existing careers start recording Nations League editions when simulating a new qualifying season.
+- Draws and scores are simulated. Where on-field table criteria tie, the game uses the official 2026/27 access list as its last tiebreak. It skips disciplinary points and uses the format shown in UEFA's published 2028 concept for later simulated editions. [UEFA's 2026/27 regulations](https://documents.uefa.com/r/Regulations-of-the-UEFA-Nations-League-2026/27-Online) [UEFA's format slides](https://editorial.uefa.com/resources/02a5-20ab6d2f8514-897923904829-1000/ntc_review._compilation_of_slides_for_media.pdf)
+
 ## 2026-11-14: NRL finals race and Home campaign saves
+
+[PR #907](https://github.com/PapiSalgueroM/ballpark-hero/pull/907) published exact main `5677fda92e6236fa979a88be8c96cc5dffede56b`, deployment `1638da55-048e-4549-ad10-bb701016309f`. Five browser journeys and all 174 sitemap routes passed live. IndexNow accepted the NRL guide.
 
 - In the last four regular rounds, NRL Ladder shows the remaining opponents, possible points and whether a top-four or top-eight finish is secured, open or out of reach. The possible points include guaranteed bye points. Tight positions stay open while the scores or points difference can still change them.
 - Each saved NRL club career has its own Home Continue playing card. The card names the slot and season and resumes that exact career.

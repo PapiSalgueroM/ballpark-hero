@@ -128,7 +128,7 @@ function slotForPosition(pos: string): string {
  */
 function buildStartingXi(
   nation: string, form: PlayerForm | null, myScore: number, myRank: number,
-  rivals: number[], called: boolean, year?: number,
+  rivals: number[], called: boolean, year: number | undefined, random: () => number,
 ): StartingEleven {
   /* Round 259: real men for the years the data covers. The pool is read once
      per sheet and drained per group, so no two shirts carry the same person,
@@ -190,7 +190,7 @@ function buildStartingXi(
        a nation of this strength produces. */
     const others = group === myGroup
       ? [...rivals].sort((a, b) => b - a)
-      : Array.from({ length: starters }, (_, i) => poolTop - i * 1.4 + (Math.random() * 4 - 2)).sort((a, b) => b - a);
+      : Array.from({ length: starters }, (_, i) => poolTop - i * 1.4 + (random() * 4 - 2)).sort((a, b) => b - a);
     /* The real men for this group's shirts, matched to the position each
        shirt asks for. Their names and their numbers both come off the row:
        nothing here rerates a real player to make a sheet look tidier. */
@@ -256,7 +256,7 @@ function buildStartingXi(
  * the other players your nation has in your position. No coin flip. A weak
  * nation will take a 72 rated forward without blinking; Spain will not.
  */
-export function pickSquad(nation: string, form: PlayerForm | null, year?: number): SquadCall {
+export function pickSquad(nation: string, form: PlayerForm | null, year?: number, random = Math.random): SquadCall {
   const grp = form ? positionGroup(form.position) : 'ATT';
   const places = SQUAD_PLACES[grp];
   const str = nationStrength(nation);
@@ -270,7 +270,7 @@ export function pickSquad(nation: string, form: PlayerForm | null, year?: number
   const poolSize = places * 2 + 2;
   const rivals: number[] = [];
   for (let i = 0; i < poolSize - 1; i++) {
-    rivals.push(poolTop - i * 1.4 + (Math.random() * 4 - 2));
+    rivals.push(poolTop - i * 1.4 + (random() * 4 - 2));
   }
   if (!form) {
     return {
@@ -279,7 +279,7 @@ export function pickSquad(nation: string, form: PlayerForm | null, year?: number
       reason: `You are not in the ${nation} setup.`,
       /* Round 197: the eleven exists whether or not he is in it. Watching
          the team you are not in is the point of being left out. */
-      xi: buildStartingXi(nation, null, 0, poolSize, rivals, false, year),
+      xi: buildStartingXi(nation, null, 0, poolSize, rivals, false, year, random),
     };
   }
   // Form is the last club season: a rating above 7.0 and goals both help, and
@@ -309,7 +309,7 @@ export function pickSquad(nation: string, form: PlayerForm | null, year?: number
   return {
     called, role, reason, myRank, poolSize, places,
     myScore: Math.round(myScore), cutScore: Math.round(cut),
-    xi: buildStartingXi(nation, form, myScore, myRank, rivals, called, year),
+    xi: buildStartingXi(nation, form, myScore, myRank, rivals, called, year, random),
   };
 }
 

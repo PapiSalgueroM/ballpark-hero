@@ -428,10 +428,10 @@ export const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.mi
 
 /** Knuth's Poisson. Football scores are Poisson shaped, and rolling one gives
     0-0 and 4-1 at roughly the rates real football produces them. */
-function poisson(mean: number): number {
+function poisson(mean: number, random: () => number): number {
   const l = Math.exp(-Math.max(0.05, mean));
   let k = 0, p = 1;
-  do { k++; p *= Math.random(); } while (p > l && k < 12);
+  do { k++; p *= random(); } while (p > l && k < 12);
   return k - 1;
 }
 
@@ -596,8 +596,9 @@ export function toHistoryEntry(t: IntlTournament, eligible = true): IntlHistoryE
 
 /** A neutral tournament match between two nations. `bonus` is my own effect on
     my nation's expected goals, and is zero for every match I am not in. */
-function simMatch(
+export function simInternationalMatch(
   strA: number, strB: number, knockout: boolean, bonusA = 0, bonusB = 0,
+  random = Math.random, minutes = 90,
 ): { a: number; b: number; pens: boolean; aWins: boolean } {
   // Expected goals scale MULTIPLICATIVELY with the gap, not additively. An
   // even game is 1.35 each; ten points of ranking strength turns that into
@@ -605,8 +606,8 @@ function simMatch(
   // is what a top nation actually does to a minnow. An additive model made
   // every game a coin flip and left Japan missing World Cups.
   const d = (strA - strB) / 10;
-  const a = poisson(Math.max(0.2, 1.35 * Math.exp(0.26 * d) + bonusA));
-  const b = poisson(Math.max(0.2, 1.35 * Math.exp(-0.26 * d) + bonusB));
+  const a = poisson(Math.max(0.2, 1.35 * Math.exp(0.26 * d) + bonusA) * (minutes / 90), random);
+  const b = poisson(Math.max(0.2, 1.35 * Math.exp(-0.26 * d) + bonusB) * (minutes / 90), random);
   if (knockout && a === b) {
     /* Knockout football always produces a winner, and level means penalties.
        The stronger side is only slightly favoured, the way a shootout is.
@@ -615,11 +616,17 @@ function simMatch(
        goal tally by one, which meant a shootout was stored as a 2-1 and the
        bracket read as if somebody had won it in normal time. The Round 124
        harness caught that on its first run. */
-    const diff = (strA - strB) / 100;
-    return { a, b, pens: true, aWins: Math.random() < 0.5 + clamp(diff, -0.25, 0.25) * 0.4 };
+    return { a, b, pens: true, aWins: internationalShootout(strA, strB, random) };
   }
   return { a, b, pens: false, aWins: a > b };
 }
+
+export function internationalShootout(strA: number, strB: number, random: () => number): boolean {
+  const diff = (strA - strB) / 100;
+  return random() < 0.5 + clamp(diff, -0.25, 0.25) * 0.4;
+}
+
+const simMatch = simInternationalMatch;
 
 /* ─── The player's own game ──────────────────────────────────────────────── */
 
@@ -660,7 +667,7 @@ export const SQUAD_PLACES: Record<'GK' | 'DEF' | 'MID' | 'ATT', number> = {
 };
 
 /** What the player does in one international match. */
-function playerMatchStats(form: PlayerForm, teamGoals: number): { goals: number; assists: number; rating: number } {
+export function playerMatchStats(form: PlayerForm, teamGoals: number, random = Math.random, boundContributions = false): { goals: number; assists: number; rating: number } {
   const grp = positionGroup(form.position);
   const quality = clamp((form.overall - 68) / 28, 0, 1.2);
   // The international simulation already raises the nation's goal rate for elite players.
@@ -668,16 +675,16 @@ function playerMatchStats(form: PlayerForm, teamGoals: number): { goals: number;
   const legacyShare = (grp === 'ATT' ? 0.55 : grp === 'MID' ? 0.25 : grp === 'DEF' ? 0.12 : 0) * (0.6 + quality * 0.6);
   let goals = 0, legacyGoals = 0;
   for (let i = 0; i < teamGoals; i++) {
-    const roll = Math.random();
+    const roll = random();
     if (roll < share) goals++;
     if (roll < legacyShare) legacyGoals++;
   }
   // Keep the assist draws in place so the next team score uses the same RNG.
   let assists = 0;
   const aShare = grp === 'ATT' ? 0.2 : grp === 'MID' ? 0.3 : grp === 'DEF' ? 0.12 : 0.02;
-  for (let i = 0; i < teamGoals - legacyGoals; i++) if (Math.random() < aShare * (0.6 + quality * 0.6)) assists++;
+  for (let i = 0; i < teamGoals - (boundContributions ? goals : legacyGoals); i++) if (random() < aShare * (0.6 + quality * 0.6)) assists++;
   const rating = clamp(
-    6.2 + quality * 0.9 + goals * 0.55 + assists * 0.3 + (Math.random() - 0.45) * 1.1,
+    6.2 + quality * 0.9 + goals * 0.55 + assists * 0.3 + (random() - 0.45) * 1.1,
     4.0, 10.0,
   );
   return { goals, assists, rating: Math.round(rating * 10) / 10 };

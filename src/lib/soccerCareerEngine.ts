@@ -180,6 +180,7 @@ import type {
 /* Round 1042: the squad picker and the national team pools it reads live in their own file, so
    only this game downloads them. */
 import { pickSquad, runInternationalSummer } from "./soccerInternationalSquads";
+import { nationsLeagueCampaign, wonNationsLeague, type NationsLeagueCampaign } from "./soccerNationsLeague";
 
 export type {
   IntlTournament, IntlHistoryEntry, IntlTie, IntlTableRow, IntlMatch,
@@ -285,6 +286,7 @@ export interface SeasonRecord {
   /** Round 124: won your continental championship this summer. Kept separate
       from worldCup so the cabinet does not pretend a Euros is a World Cup. */
   continentalCup?: boolean;
+  nationsLeague?: NationsLeagueCampaign;
   /** Round 972: the continental CLUB cup won outside UEFA, by its name that
       season ("Copa Libertadores"). championsLeague stays the UEFA cup alone,
       so a Libertadores is never counted as a Champions League. */
@@ -5216,7 +5218,7 @@ function playerFormOf(state: CareerState): PlayerForm {
 }
 
 /* ─── International season stats ─── */
-function generateIntSeasonStats(state: CareerState, year: number): { intApps: number; intGoals: number; intAssists: number; intRating: number; tournament: string | null; tournamentResult: string | null } {
+function generateIntSeasonStats(state: CareerState, hasNationsLeague: boolean): { intApps: number; intGoals: number; intAssists: number; intRating: number; tournament: string | null; tournamentResult: string | null } {
   if (!state.internationalCareer || state.intStats.isRetired) {
     return { intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null };
   }
@@ -5233,13 +5235,20 @@ function generateIntSeasonStats(state: CareerState, year: number): { intApps: nu
   if (!pickSquad(state.nationality, form).called) {
     return { intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null };
   }
-  const apps = offYearCaps(form);
+  // Use part of the former generic cap budget for the competition with saved match receipts.
+  const genericApps = offYearCaps(form);
+  const apps = hasNationsLeague ? genericApps - 4 : genericApps;
   const goals = calcGoals(state.position, apps);
   const assists = calcAssists(state.position, apps);
   const rating = clamp(parseFloat((6.5 + (state.overall - 72) * 0.06 + (Math.random() - 0.3) * 1.0).toFixed(1)), 4.0, 10.0);
   return { intApps: apps, intGoals: goals, intAssists: assists, intRating: rating, tournament: null, tournamentResult: null };
 }
 
+function nationsLeagueForSeason(state: CareerState, year: number, out = false) {
+  const eligible = !out && state.internationalCareer && !state.intStats.isRetired && !state.retired;
+  const seed = `${state.playerName}|${state.era}|${state.seasons[0]?.year ?? year}`;
+  return nationsLeagueCampaign(year, seed, state.nationality, eligible ? playerFormOf(state) : null);
+}
 
 /* ─── Round 124: one international summer ───
 
@@ -5253,6 +5262,10 @@ function generateIntSeasonStats(state: CareerState, year: number): { intApps: nu
    year): the world still crowns its champion and the history keeps the
    summer, and no screen waits for a player who was never in it. */
 function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number, out = false): void {
+  if (out) {
+    const campaign = nationsLeagueForSeason(s, year, true);
+    if (campaign) season.nationsLeague = campaign;
+  }
   const fmt = tournamentForYear(s.nationality, year);
   if (!fmt) return;
   const eligible = !out && s.internationalCareer && !s.intStats.isRetired && !s.retired;
@@ -5409,6 +5422,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[], inSeasonR
       }];
       recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);
       s.pendingSummary = s.seasons[s.seasons.length - 1];
+      const nationsLeague = nationsLeagueForSeason(s, s.pendingSummary.year, true);
+      if (nationsLeague) s.pendingSummary.nationsLeague = nationsLeague;
       settleReducedRole(s, s.pendingSummary);
       interruptSoccerProgramme(s, s.pendingSummary);
       settleSoccerPress(s, s.pendingSummary);
@@ -5443,6 +5458,8 @@ export function advanceProSeason(prev: CareerState, clubs: ClubData[], inSeasonR
     }];
     recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);
     s.pendingSummary = s.seasons[s.seasons.length - 1];
+    const nationsLeague = nationsLeagueForSeason(s, s.pendingSummary.year, true);
+    if (nationsLeague) s.pendingSummary.nationsLeague = nationsLeague;
     settleReducedRole(s, s.pendingSummary);
     interruptSoccerProgramme(s, s.pendingSummary);
     settleSoccerPress(s, s.pendingSummary);
@@ -5846,7 +5863,20 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   // International season stats
   const lastYear = s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year : season.year - 1;
   const thisYear = lastYear + 1;
-  const intSeason = generateIntSeasonStats(s, thisYear);
+  const nationsLeague = nationsLeagueForSeason(s, thisYear);
+  const intSeason = generateIntSeasonStats(s, Boolean(nationsLeague));
+  if (nationsLeague) {
+    season.nationsLeague = nationsLeague;
+    const { apps, goals, assists, rating } = nationsLeague;
+    const combinedApps = intSeason.intApps + apps;
+    if (combinedApps > 0) intSeason.intRating = Math.round((intSeason.intRating * intSeason.intApps + rating * apps) * 10 / combinedApps) / 10;
+    intSeason.intApps = combinedApps;
+    intSeason.intGoals += goals;
+    intSeason.intAssists += assists;
+    if (nationsLeague.result === 'Winner') {
+      s.events.push(apps > 0 ? `🏆 Won the Nations League with ${s.nationality}!` : `🏆 ${s.nationality} won the Nations League in your career.`);
+    }
+  }
 
   // Update international totals
   if (intSeason.intApps > 0) {
@@ -8791,9 +8821,10 @@ export function getCareerTotals(seasons: SeasonRecord[]) {
     // Round 124: continental championships are counted, and counted separately
     // so a Euros never quietly reads as a World Cup in the cabinet.
     continentalCups: t.continentalCups + (s.continentalCup ? 1 : 0),
+    nationsLeagues: t.nationsLeagues + (wonNationsLeague(s) ? 1 : 0),
     // Round 972: a continental club cup outside UEFA, never a Champions League.
     clubCups: t.clubCups + (s.clubCupTitle ? 1 : 0),
-  }), { apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, leagueTitles: 0, domesticCups: 0, championsLeagues: 0, worldCups: 0, ballonDors: 0, continentalCups: 0, clubCups: 0 });
+  }), { apps: 0, goals: 0, assists: 0, cleanSheets: 0, yellowCards: 0, redCards: 0, leagueTitles: 0, domesticCups: 0, championsLeagues: 0, worldCups: 0, ballonDors: 0, continentalCups: 0, clubCups: 0, nationsLeagues: 0 });
   return { ...totals, communityShields: countCommunityShields(seasons), germanSupercups: countGermanSupercups(seasons) };
 }
 
@@ -9601,6 +9632,6 @@ export function endOwnerCareer(prev: CareerState): CareerState {
 export function generateShareText(state: CareerState): string {
   const totals = getCareerTotals(state.seasons);
   const tier = state.legacy?.tier || "JOURNEYMAN";
-  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.clubCups + totals.communityShields + totals.germanSupercups;
+  const totalTrophies = totals.leagueTitles + totals.domesticCups + totals.championsLeagues + totals.worldCups + totals.continentalCups + totals.nationsLeagues + totals.clubCups + totals.communityShields + totals.germanSupercups;
   return `I finished my Soccer Career as a ${tier}: ${totals.goals} goals, ${totalTrophies} trophies, ${totals.ballonDors} Ballon d'Ors. Can you beat me? douknowball.com/soccer-career`;
 }

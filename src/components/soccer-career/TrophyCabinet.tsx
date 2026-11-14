@@ -7,12 +7,14 @@ import { readCommunityShield, communityShieldWinningSeasons, germanSupercupWinni
 import { escapeCloses, focusDialogOnMount } from '@/lib/dialogA11y';
 import { useBodyLock } from '@/components/season-centre/useBodyLock';
 import { SeasonCupWinBlock } from './CupRunLines';
+import { readNationsLeagueCampaign, wonNationsLeague } from '@/lib/soccerNationsLeague';
+import { NationsLeagueRun } from './NationsLeagueCampaign';
 
-export type TrophyCategory = 'league' | 'domestic' | 'ucl' | 'club' | 'world' | 'continental' | 'ballon' | 'shield' | 'german-supercup';
+export type TrophyCategory = 'league' | 'domestic' | 'ucl' | 'club' | 'world' | 'continental' | 'ballon' | 'shield' | 'german-supercup' | 'nations-league';
 
 export const TROPHY_LABELS: Record<TrophyCategory, string> = {
   league: 'League titles', domestic: 'Domestic cups', ucl: 'European club titles',
-  club: 'Club cups', world: 'World Cups', continental: 'Continental titles', ballon: "Ballon d'Or", shield: 'Community Shield', 'german-supercup': 'German Supercup',
+  club: 'Club cups', world: 'World Cups', continental: 'Continental titles', ballon: "Ballon d'Or", shield: 'Community Shield', 'german-supercup': 'German Supercup', 'nations-league': 'Nations League',
 };
 
 const TROPHY_FIELDS = {
@@ -22,6 +24,7 @@ const TROPHY_FIELDS = {
 
 /** One win per recorded season, just like the career's cabinet counts. */
 export function trophyWins(career: Pick<CareerState, 'seasons'>, category: TrophyCategory): SeasonRecord[] {
+  if (category === 'nations-league') return (career.seasons ?? []).filter(wonNationsLeague).sort((a, b) => b.year - a.year);
   if (category === 'german-supercup') return germanSupercupWinningSeasons(career.seasons ?? []).slice().sort((a, b) => b.year - a.year);
   if (category === 'shield') {
     const years = new Set(communityShieldWinningSeasons(career.seasons ?? []).map(row => row.year));
@@ -34,6 +37,7 @@ export function trophyWins(career: Pick<CareerState, 'seasons'>, category: Troph
 }
 
 function trophyName(row: SeasonRecord, category: TrophyCategory): string {
+  if (category === 'nations-league') return 'Nations League';
   if (category === 'german-supercup') return 'German Supercup';
   if (category === 'shield') return 'Community Shield';
   if (category === 'domestic') return cupChipLabel(row) === 'Cup' ? 'Domestic cup' : cupChipLabel(row);
@@ -139,6 +143,7 @@ export default function TrophyCabinet({ career, category, onClose }: {
   const wasHelp = useRef(false);
   const returnFocus = useRef(document.activeElement instanceof HTMLElement ? document.activeElement : null);
   const wins = trophyWins(career, category);
+  const nationsLeague = category === 'nations-league' && picked ? readNationsLeagueCampaign(picked) : undefined;
   useBodyLock();
   useEffect(() => () => { returnFocus.current?.focus({ preventScroll: true }); }, []);
   useEffect(() => {
@@ -200,6 +205,7 @@ export default function TrophyCabinet({ career, category, onClose }: {
                 {picked.onLoanFrom && <p className="text-xs text-muted-foreground">On loan from {picked.onLoanFrom}</p>}
               </div>
               {(category === 'world' || category === 'continental') && <SeasonTotals row={picked} international />}
+              {nationsLeague && <NationsLeagueRun campaign={nationsLeague} />}
               <SeasonTotals row={picked} />
               <p className="text-[10px] text-muted-foreground">These are the saved season totals, across all competitions.</p>
               {category === 'shield' && <TrophyShieldMatch career={career} row={picked} />}
