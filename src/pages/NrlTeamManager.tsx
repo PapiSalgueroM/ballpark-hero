@@ -2425,6 +2425,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>When staying at your club, select Keep saved lineups in Season review to carry your presets forward. Apply a saved lineup in Squad.</li>
               <li>When staying at your club, check Fill open squad places in Season review to preview affordable one-season free-agent deals. Your preference saves until you make a decision about next season.</li>
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>
+              <li>When starting State of Origin, choose the full eligible player pool to find any eligible player for the state you coach.</li>
               <li>Availability shows the first regular club match after a confirmed suspension and any injury. Byes advance injury recovery, while suspensions count club matches.</li>
               <li>Choose Rugby League World Cup beside Career saves to coach a national team. In Set matchday lineup, you can swap any of the six reserves with a starter. Out-of-position starts carry a rating penalty.</li>
               <li>After finishing a 2026 club season, take a national appointment from the Club office before starting 2027. It saves inside your career.</li>

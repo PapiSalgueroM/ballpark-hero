@@ -127,4 +127,29 @@ describe('State of Origin in the Club office', () => {
     expect(screen.getByText(/Club nomination/)).toBeVisible();
     expect(raw()).toBe(saved);
   });
+
+  it('finds an eligible player beyond the opening shortlist and fields him in the saved series', () => {
+    const initial = createNrlCareer('broncos', 1);
+    const original = JSON.stringify(initial);
+    localStorage.setItem(NRL_SAVE_KEY, original);
+    open();
+    click('Club office');
+    click('State of Origin');
+    fireEvent.click(screen.getByRole('checkbox', { name: 'Include every eligible player for your state' }));
+    expect(raw()).toBe(original);
+    click('Coach Queensland Maroons');
+    expect(save().origin?.fullPool).toBe(true);
+    expect(save().origin?.pools.qld).toHaveLength(231);
+    fireEvent.click(screen.getByText('Select your matchday 19'));
+    const saved = raw();
+    fireEvent.change(screen.getByRole('searchbox', { name: 'Find an eligible player' }), { target: { value: 'DANE MERRITT' } });
+    expect(raw()).toBe(saved);
+    const slot = screen.getByRole('combobox', { name: 'Left Second Row' });
+    expect(within(slot).getByRole('option', { name: /Dane Merritt/ })).toHaveValue('nrl-eels-2026-10');
+    expect(within(slot).getAllByRole('option')).toHaveLength(2);
+    fireEvent.change(slot, { target: { value: 'nrl-eels-2026-10' } });
+    click('Simulate Origin Game 1');
+    expect(save().origin?.matches[0]).toMatchObject({ homeScore: 14, awayScore: 20, selection: { starters: { 'Left Second Row': 'nrl-eels-2026-10' } } });
+    expect(save().season).toEqual(initial.season);
+  });
 });

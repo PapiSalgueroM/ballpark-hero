@@ -246,7 +246,7 @@ export interface NrlPrimaryRoleChange {
 
 export type NrlCareerAction = NrlAction
   | { type: 'bookPhysio'; year: number; clubId: string; round: number; playerId: string }
-  | { type: 'startOrigin'; year: number; side: NrlOriginSide; nominationId?: string }
+  | { type: 'startOrigin'; year: number; side: NrlOriginSide; nominationId?: string; fullPool?: true }
   | OriginMatchAction
   | { type: 'startWorldCupAppointment'; nation: NrlWorldCupNation }
   | { type: 'playWorldCupAppointment'; previous: NrlWorldCupRun; next: NrlWorldCupRun }
@@ -2342,13 +2342,14 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     }
     case 'startOrigin': {
       const { origin, season } = state;
-      if (action.year !== season.year || (origin && (origin.year >= action.year || !nrlOriginComplete(origin)))) return state;
+      if (action.year !== season.year || (action.fullPool !== undefined && action.fullPool !== true)
+        || (origin && (origin.year >= action.year || !nrlOriginComplete(origin)))) return state;
       const players = state.players.filter(player => contractIn(player, season.year));
       const { nominationId } = action;
       if (nominationId !== undefined && (nrlOriginEligibility(nominationId) !== action.side || !players.some(player =>
         player.id === nominationId && contractIn(player, season.year)?.clubId === season.clubId))) return state;
       const next = createNrlOriginSeries(players, season.year, action.side,
-        nominationId === undefined ? undefined : { clubId: season.clubId, playerId: nominationId });
+        nominationId === undefined ? undefined : { clubId: season.clubId, playerId: nominationId }, action.fullPool);
       if (!next) return state;
       const archived = origin && archiveNrlOrigin(origin);
       return archived ? { ...state, origin: next, originHistory: [...(state.originHistory ?? []), archived] } : { ...state, origin: next };
