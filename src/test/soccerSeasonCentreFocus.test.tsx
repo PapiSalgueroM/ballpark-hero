@@ -147,10 +147,10 @@ describe('Soccer Career Season Centre return focus', () => {
     await closeAndCheck(view, opener, 'SC_CENTRE_FOCUS_RESUME', focus);
   }, 20000);
 
-  it.each([true, false])('shows saved season OVR on the correct matchday when path is present (%s)', async withPath => {
+  it.each([true, false])('reports the season OVR and its change on the correct matchday (%s)', async withPath => {
     const career = fixture(false);
     const row = career.seasons[0];
-    if (withPath) row.ratingPath = [70, 74, 78, 82, 86];
+    if (withPath) row.ratingPath = [70, 86, 86, 70, 70];
     const view = mount(career);
     const opener = await screen.findByRole('button', { name: /Season replays/i });
     fireEvent.click(opener);
@@ -165,12 +165,19 @@ describe('Soccer Career Season Centre return focus', () => {
     const saved = localStorage.getItem(SAVE_KEY);
     fireEvent.click(end);
     const reportButtons = screen.getAllByRole('button', { name: /match report:/i });
-    for (const [button, expected] of [[reportButtons[0], 70], [reportButtons.at(-1)!, 86]] as const) {
+    const last = reportButtons.length - 1;
+    const matchdays = withPath ? [
+      [0, /Season OVR 70.*Opening matchday/],
+      [1, /Season OVR 7\d.*Up \d from last matchday/],
+      [Math.floor(last / 2), /Season OVR 86.*No change/],
+      [Math.floor(last * 0.65), /Season OVR 7\d.*Down \d from last matchday/],
+      [last, /Season OVR 70.*No change/],
+    ] as const : [[0, /Season OVR unavailable for this season/]] as const;
+    for (const [index, expected] of matchdays) {
+      const button = reportButtons[index];
       fireEvent.click(button);
       const report = await screen.findByRole('dialog', { name: 'Match report' });
-      const line = report.querySelector('[data-match-development-overall]');
-      if (withPath) expect(line).toHaveTextContent('Season OVR ' + expected);
-      else expect(line).toBeNull();
+      expect(report.querySelector('[data-match-development-overall]')).toHaveTextContent(expected);
       fireEvent.keyDown(report, { key: 'Escape' });
     }
     expect(localStorage.getItem(SAVE_KEY)).toBe(saved);

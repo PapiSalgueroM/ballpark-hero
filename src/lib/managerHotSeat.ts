@@ -60,11 +60,15 @@ import {
   REAL_LEAGUES,
   answerPress,
   autoPickXI,
+  benchFor,
   clubDefFor,
   cupProgressRank,
   engineRegistrations,
+  effectiveXIWithSlots,
   FORMATIONS,
+  fitGrade,
   fixtureFor,
+  isAvailable,
   isPartialClub,
   leaguePosition,
   legacySeason,
@@ -376,8 +380,14 @@ export function tieRulesOf(setup: HotSeatSetup): CareerState['tieRules'] {
   return setup.tie === 1603 ? undefined : 'night';
 }
 
+export interface HotSeatReplacement {
+  slot: number;
+  outId: string;
+  playerId: string;
+}
+
 export type HotSeatAction =
-  | { t: 'match'; m: Mentality; talk: TalkTone | null; formation?: number }
+  | { t: 'match'; m: Mentality; talk: TalkTone | null; formation?: number; replacement?: HotSeatReplacement }
   | { t: 'press'; i: number };
 
 export interface HotSeatMatch {
@@ -746,6 +756,25 @@ export function hotSeatLineup(run: HotSeatRun, formationIndex?: number): CareerS
   };
 }
 
+export function hotSeatReserves(lineup: CareerState, slotIndex: number) {
+  const slot = FORMATIONS[lineup.formationIndex]?.slots[slotIndex];
+  if (!slot) return [];
+  const xiIds = effectiveXIWithSlots(lineup).map(({ p }) => p.id);
+  return benchFor({ ...lineup, xiIds }, undefined, slotIndex)
+    .filter(p => isAvailable(p) && fitGrade(p, slot) !== 'keeper');
+}
+
+export function hotSeatReplacementLineup(lineup: CareerState, replacement: HotSeatReplacement): CareerState | null {
+  const { slot, outId, playerId } = replacement;
+  const xi = effectiveXIWithSlots(lineup);
+  const slots = FORMATIONS[lineup.formationIndex]?.slots;
+  if (!slots || xi.length !== slots.length || xi[slot]?.p.id !== outId) return null;
+  if (!hotSeatReserves(lineup, slot).some(p => p.id === playerId)) return null;
+  const xiIds = xi.map(({ p }) => p.id);
+  xiIds[slot] = playerId;
+  return { ...lineup, xiIds };
+}
+
 export function hotSeatPreMatchRead(run: HotSeatRun, lineup: CareerState): string | null {
   const date = run.setup.daily;
   return date && date < CM_DAILY_SPECIALIST_FULLBACKS_FROM
@@ -758,16 +787,18 @@ export function hotSeatPreMatchRead(run: HotSeatRun, lineup: CareerState): strin
  * engine's own playNextEntry, then walks past any window to the next match
  * and settles the verdict if the leash has run out. Never mutates the input.
  */
-export function playHotSeatMatch(prev: HotSeatRun, mentality: Mentality, talk: TalkTone | null, formation?: number): HotSeatRun {
+export function playHotSeatMatch(prev: HotSeatRun, mentality: Mentality, talk: TalkTone | null, formation?: number, replacement?: HotSeatReplacement): HotSeatRun {
   if (prev.verdict) return prev;
-  return onStaticWorld(() => playOnStaticWorld(prev, mentality, talk, formation), prev.setup.daily);
+  return onStaticWorld(() => playOnStaticWorld(prev, mentality, talk, formation, prev.setup.daily ? undefined : replacement), prev.setup.daily);
 }
 
-function playOnStaticWorld(prev: HotSeatRun, mentality: Mentality, talk: TalkTone | null, formation?: number): HotSeatRun {
+function playOnStaticWorld(prev: HotSeatRun, mentality: Mentality, talk: TalkTone | null, formation?: number, replacement?: HotSeatReplacement): HotSeatRun {
   const run = cloneRun(prev);
   skipToMatch(run);
-  const lineup = hotSeatLineup(run, formation);
-  run.actions.push({ t: 'match', m: mentality, talk, ...(lineup !== run.state ? { formation } : {}) });
+  const base = hotSeatLineup(run, formation);
+  const lineup = replacement ? hotSeatReplacementLineup(base, replacement) : base;
+  if (!lineup) return prev;
+  run.actions.push({ t: 'match', m: mentality, talk, ...(base !== run.state ? { formation } : {}), ...(replacement ? { replacement } : {}) });
   const before = run.state.boardConfidence;
   const ready: CareerState = { ...lineup, mentality, teamTalk: talk };
   /* The nth match of the job draws stream n, whatever was said in between. */
@@ -833,12 +864,11 @@ export function replayHotSeat(setup: HotSeatSetup, actions: HotSeatAction[]): Ho
   let run = startHotSeat(setup);
   for (const a of actions) {
     if (run.verdict) break;
-    if (a.t === 'match') run = playHotSeatMatch(run, a.m, a.talk, a.formation);
-    else {
-      const next = answerHotSeatPress(run, a.i);
-      if (next === run) break;
-      run = next;
-    }
+    const next = a.t === 'match'
+      ? playHotSeatMatch(run, a.m, a.talk, a.formation, a.replacement)
+      : answerHotSeatPress(run, a.i);
+    if (next === run) break;
+    run = next;
   }
   return run;
 }

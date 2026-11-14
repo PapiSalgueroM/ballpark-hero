@@ -73,6 +73,7 @@ export interface FinalsTieRecord { id: string; week: number; homeId: string; awa
 export interface Prospect { id: string; name: string; role: Role; age: number; skill: number; potential: number }
 export interface DraftState { order: string[]; pool: Prospect[]; made: { clubId: string; prospectId: string }[]; at: number }
 interface RatingReview { round: number; changes: [playerId: string, change: -1 | 1][] }
+interface RoundSkillReview { round: number; changes: [playerId: string, before: number, after: number][] }
 export interface HistoryRow {
   season: number; place: number; w: number; d: number; l: number; pf: number; pa: number; exit: FinalsExit;
   premier: string; runnerUp: string; gf: { home: string; away: string; homeScore: Score; awayScore: Score };
@@ -86,6 +87,7 @@ export interface LeagueState {
   match: Match | null; results: Match[]; goals: Record<string, number>;
   finals: { ties: FinalsTieRecord[] } | null; draft: DraftState | null; nextId: number; history: HistoryRow[];
   ratingReview?: RatingReview;
+  skillReviews?: RoundSkillReview[];
 }
 export type LeagueAction =
   | { type: 'lineup'; starters: string[]; bench: string[] }
@@ -427,7 +429,7 @@ function advance(state: LeagueState): LeagueState {
   }
   if (state.phase === 'seasonOver') return runSummer(state);
   if (state.phase === 'summer') {
-    const { ratingReview: _review, ...career } = state;
+    const { ratingReview: _review, skillReviews: _archive, ...career } = state;
     return openDraft(career);
   }
   if (state.phase === 'draft' && state.draft && state.draft.at >= state.draft.order.length) return freshSeason({ ...state, draft: null }, state.season + 1);
@@ -478,6 +480,7 @@ function reviewRatings(state: LeagueState): LeagueState {
   // Recreate the old summer draw schedule independently of the match RNG.
   const rng = rngFrom(hashLabel(`${state.seed}|${state.season}|summer`));
   const ownChanges: RatingReview['changes'] = [];
+  const archivedChanges: RoundSkillReview['changes'] = [];
   const clubs = state.clubs.map(club => {
     const players = club.players.map(player => {
       const budget = growthFor(rng, player.age);
@@ -490,12 +493,16 @@ function reviewRatings(state: LeagueState): LeagueState {
       const step = budget > 0 ? 1 : -1;
       const skill = step > 0 ? raiseWithinPotential(player.skill, player.potential, 1) : Math.max(20, player.skill - 1);
       if (skill === player.skill) return player;
-      if (club.id === state.myClub) ownChanges.push([player.id, step]);
+      if (club.id === state.myClub) {
+        ownChanges.push([player.id, step]);
+        archivedChanges.push([player.id, player.skill, skill]);
+      }
       return { ...player, skill };
     });
     return players.some((player, index) => player !== club.players[index]) ? { ...club, players } : club;
   });
-  return { ...state, clubs, ...(ownChanges.length && { ratingReview: { round: state.round, changes: ownChanges } }) };
+  return { ...state, clubs, ...(ownChanges.length && { ratingReview: { round: state.round, changes: ownChanges } }),
+    skillReviews: [...(state.skillReviews ?? []), { round: state.round, changes: archivedChanges }] };
 }
 
 function runSummer(state: LeagueState): LeagueState {
@@ -754,6 +761,7 @@ export function validLeagueState(value: unknown): value is LeagueState {
   const named = !!value && typeof value === 'object' && !Array.isArray(value) && (value as Record<string, unknown>).clubSet !== undefined;
   const keys = !named ? [...TOP_KEYS] : (value as Record<string, unknown>).clubSet === 'afl2026' ? [...TOP_KEYS, 'clubSet'] : null;
   if (keys && value && Object.prototype.hasOwnProperty.call(value, 'ratingReview')) keys.push('ratingReview');
+  if (keys && value && Object.prototype.hasOwnProperty.call(value, 'skillReviews')) keys.push('skillReviews');
   if (!keys || !exactKeys(value, keys) || value.version !== 2 || !validSeed(value.seed) || !isClubId(value.myClub) || value.clubName !== clubFull(value, value.myClub as string)) return false;
   if (!int(value.season, 1, 10000) || !(value.format === 'final8' || value.format === 'wildcard') || !PHASES.includes(value.phase as LeaguePhase)) return false;
   if (!(value.stage === 'homeAway' || value.stage === 'finals') || !int(value.round, 0, ROUNDS - 1) || !int(value.week, 0, 8) || !int(value.nextId, CLUB_COUNT * LIST_SIZE, 999999)) return false;
@@ -764,13 +772,23 @@ export function validLeagueState(value: unknown): value is LeagueState {
   if (!Array.isArray(s.history) || !s.history.every(validHistory) || s.history.length !== s.season - (closed ? 0 : 1)) return false;
   if (!int(s.swapsThisBreak, 0, 5) || (s.phase !== 'break' && s.swapsThisBreak !== 0) || !(s.preparation === null || s.preparation === 'train' || s.preparation === 'rest')) return false;
   const played = s.stage === 'finals' ? ROUNDS : s.round + (s.phase === 'report' ? 1 : 0);
+  const mySquad = new Set(clubOf(s, s.myClub)!.players.map(player => player.id));
   if (s.ratingReview !== undefined) {
     const review = s.ratingReview;
     if (s.phase === 'draft' || !exactKeys(review, ['round', 'changes']) || !int(review.round, 0, played - 1)
       || !Array.isArray(review.changes) || !review.changes.length || review.changes.length > LIST_SIZE) return false;
-    const squad = new Set(clubOf(s, s.myClub)!.players.map(player => player.id));
-    if (!review.changes.every(row => Array.isArray(row) && row.length === 2 && squad.has(row[0]) && (row[1] === -1 || row[1] === 1))
+    if (!review.changes.every(row => Array.isArray(row) && row.length === 2 && mySquad.has(row[0]) && (row[1] === -1 || row[1] === 1))
       || new Set(review.changes.map(([id]) => id)).size !== review.changes.length) return false;
+  }
+  if (s.skillReviews !== undefined) {
+    const reviews = s.skillReviews;
+    if (s.phase === 'draft' || !Array.isArray(reviews) || !reviews.length || reviews.length > played
+      || !reviews.every((row, index) => exactKeys(row, ['round', 'changes']) && int(row.round, 0, played - 1)
+        && (index === 0 || reviews[index - 1].round < row.round)
+        && Array.isArray(row.changes) && row.changes.length <= LIST_SIZE
+        && row.changes.every(change => Array.isArray(change) && change.length === 3 && mySquad.has(change[0])
+          && int(change[1], 20, 99) && int(change[2], 20, 99) && Math.abs(change[2] - change[1]) === 1)
+        && new Set(row.changes.map(([id]) => id)).size === row.changes.length)) return false;
   }
   if (!Array.isArray(s.results) || s.results.length !== played * (CLUB_COUNT / 2)) return false;
   for (let round = 0; round < played; round += 1) {

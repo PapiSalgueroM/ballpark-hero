@@ -23,6 +23,8 @@ import {
   hotSeatMeters,
   hotSeatPool,
   hotSeatPreMatchRead,
+  hotSeatReplacementLineup,
+  hotSeatReserves,
   ordinal,
   pendingPress,
   playHotSeatMatch,
@@ -31,6 +33,7 @@ import {
   startHotSeat,
   upcoming,
   type HotSeatAction,
+  type HotSeatReplacement,
   type HotSeatRun,
   type HotSeatSetup,
   type VerdictKind,
@@ -51,9 +54,18 @@ function isAction(a: unknown): a is HotSeatAction {
   if (x.t === 'match') {
     return ['defensive', 'balanced', 'attacking'].includes(x.m as string)
       && (x.talk === null || ['calm', 'rally', 'demand', 'blast'].includes(x.talk as string))
-      && (x.formation === undefined || (typeof x.formation === 'number' && Number.isInteger(x.formation) && !!FORMATIONS[x.formation]));
+      && (x.formation === undefined || (typeof x.formation === 'number' && Number.isInteger(x.formation) && !!FORMATIONS[x.formation]))
+      && (x.replacement === undefined || isReplacement(x.replacement));
   }
   return false;
+}
+
+function isReplacement(value: unknown): value is HotSeatReplacement {
+  if (!value || typeof value !== 'object') return false;
+  const { slot, outId, playerId } = value as Record<string, unknown>;
+  return typeof slot === 'number' && Number.isInteger(slot) && slot >= 0 && slot < 11
+    && typeof outId === 'string' && outId.length > 0
+    && typeof playerId === 'string' && playerId.length > 0;
 }
 
 function readActions(v: unknown): HotSeatAction[] | null {
@@ -112,7 +124,19 @@ function Progress({ run }: { run: HotSeatRun }) {
   );
 }
 
-function FormationPicker({ lineup, onChange }: { lineup: HotSeatRun['state']; onChange: (index: number) => void }) {
+function FormationPicker({ base, lineup, replacement, onChange, onReplace }: {
+  base: HotSeatRun['state'];
+  lineup: HotSeatRun['state'];
+  replacement?: HotSeatReplacement;
+  onChange: (index: number) => void;
+  onReplace: (replacement?: HotSeatReplacement) => void;
+}) {
+  const [slotIndex, setSlotIndex] = useState<number | undefined>(replacement?.slot);
+  const slots = FORMATIONS[base.formationIndex].slots;
+  const starters = effectiveXIWithSlots(base);
+  const slot = slotIndex === undefined ? undefined : slots[slotIndex];
+  const starter = starters.find(row => slot && row.slot === slot);
+  const reserves = slotIndex === undefined ? [] : hotSeatReserves(base, slotIndex);
   const xi = effectiveXIWithSlots(lineup);
   const rating = Math.round(xi.reduce((total, { p, slot }) => total + p.rating - fitPenalty(p, slot), 0) / Math.max(1, xi.length));
   return (
@@ -121,7 +145,10 @@ function FormationPicker({ lineup, onChange }: { lineup: HotSeatRun['state']; on
         Formation and XI · {FORMATIONS[lineup.formationIndex]?.name} · {rating} fit-adjusted OVR
       </summary>
       <label className="text-xs font-semibold" htmlFor="hot-seat-formation">Formation</label>
-      <select id="hot-seat-formation" value={lineup.formationIndex} onChange={event => onChange(Number(event.target.value))}
+      <select id="hot-seat-formation" value={lineup.formationIndex} onChange={event => {
+        setSlotIndex(undefined);
+        onChange(Number(event.target.value));
+      }}
         className="mt-1 min-h-11 w-full rounded-md border border-border bg-card px-2 text-sm">
         {FORMATIONS.map((formation, index) => <option key={formation.name} value={index}>{formation.name}</option>)}
       </select>
@@ -129,6 +156,31 @@ function FormationPicker({ lineup, onChange }: { lineup: HotSeatRun['state']; on
       <ul className="my-3 grid grid-cols-2 gap-x-3 gap-y-1 text-xs" aria-label="Starting XI">
         {xi.map(({ p, slot }) => <li key={p.id}><span className="font-semibold">{slot?.label}</span> {p.name}</li>)}
       </ul>
+      <div className="mb-3 space-y-2">
+        <label className="block text-xs font-semibold" htmlFor="hot-seat-starter">Replace one starter</label>
+        <select id="hot-seat-starter" value={slotIndex ?? ''} onChange={event => setSlotIndex(event.target.value === '' ? undefined : Number(event.target.value))}
+          className="min-h-11 w-full rounded-md border border-border bg-card px-2 text-sm">
+          <option value="">Choose a starter</option>
+          {starters.map(({ p, slot }) => slot && <option key={p.id} value={slots.indexOf(slot)}>{slot.label} · {p.name}</option>)}
+        </select>
+        {starter && slotIndex !== undefined && (
+          reserves.length ? (
+            <>
+              <label className="block text-xs font-semibold" htmlFor="hot-seat-reserve">Available reserves</label>
+              <select id="hot-seat-reserve" value={replacement?.slot === slotIndex ? replacement.playerId : ''}
+                onChange={event => onReplace(event.target.value ? { slot: slotIndex, outId: starter.p.id, playerId: event.target.value } : undefined)}
+                className="min-h-11 w-full rounded-md border border-border bg-card px-2 text-sm">
+                <option value="">Choose a reserve</option>
+                {reserves.map(p => {
+                  const penalty = fitPenalty(p, slot);
+                  return <option key={p.id} value={p.id}>{p.name} · {p.position} · {p.rating} OVR · {Math.round(p.fitness)}% fit{penalty ? ` · -${penalty} for position` : ''}</option>;
+                })}
+              </select>
+            </>
+          ) : <p className="text-xs text-muted-foreground">No available reserves for this slot.</p>
+        )}
+        {replacement && <button type="button" onClick={() => onReplace()} className="min-h-11 rounded-md border border-border px-3 text-xs font-semibold">Undo replacement</button>}
+      </div>
     </details>
   );
 }
@@ -149,6 +201,7 @@ export default function ManagerHotSeatBoard() {
   const [league, setLeague] = useState<string>('premier');
   const [mentality, setMentality] = useState<Mentality>('balanced');
   const [formation, setFormation] = useState<number>();
+  const [replacement, setReplacement] = useState<HotSeatReplacement>();
   const [talk, setTalk] = useState<TalkTone | null>(null);
   const [lastLine, setLastLine] = useState<string | null>(null);
 
@@ -230,6 +283,7 @@ export default function ManagerHotSeatBoard() {
       setRun(r);
       setMentality('balanced');
       setFormation(undefined);
+      setReplacement(undefined);
       setTalk(null);
       setPhase(r.verdict ? 'done' : actions.length ? 'match' : 'brief');
     }, 30);
@@ -256,11 +310,16 @@ export default function ManagerHotSeatBoard() {
 
   const play = () => {
     if (!run || run.verdict) return;
-    const next = playHotSeatMatch(run, mentality, talk, formation);
+    const next = playHotSeatMatch(run, mentality, talk, formation, replacement);
+    if (next === run) {
+      setReplacement(undefined);
+      return;
+    }
     setRun(next);
     persist(next);
     setTalk(null);
     setFormation(undefined);
+    setReplacement(undefined);
     setLastLine(null);
     setPhase(next.verdict ? 'done' : 'after');
   };
@@ -281,7 +340,8 @@ export default function ManagerHotSeatBoard() {
   const leagues = useMemo(() => hotSeatLeagues(), []);
   const clubsInLeague = useMemo(() => hotSeatPool().filter(c => c.leagueId === league), [league]);
   const fx = run && !run.verdict ? upcoming(run) : null;
-  const lineup = run && phase === 'match' ? hotSeatLineup(run, formation) : null;
+  const baseLineup = run && phase === 'match' ? hotSeatLineup(run, formation) : null;
+  const lineup = baseLineup && replacement ? hotSeatReplacementLineup(baseLineup, replacement) ?? baseLineup : baseLineup;
   const q = run ? pendingPress(run) : null;
   const last = run?.log[run.log.length - 1] ?? null;
 
@@ -412,7 +472,7 @@ export default function ManagerHotSeatBoard() {
               </div>
             )}
 
-            {phase === 'match' && fx && lineup && (
+            {phase === 'match' && fx && baseLineup && lineup && (
               <div className="space-y-3 rounded-lg border border-border bg-card p-4" data-testid="hot-seat-match">
                 <div>
                   <div className="text-xs text-muted-foreground">{fx.compLabel}{fx.counts ? '' : ', does not count toward the target'}</div>
@@ -430,7 +490,10 @@ export default function ManagerHotSeatBoard() {
                     </div>
                   </div>
                 )}
-                {!run.setup.daily && <FormationPicker lineup={lineup} onChange={setFormation} />}
+                {!run.setup.daily && (
+                  <FormationPicker base={baseLineup} lineup={lineup} replacement={replacement}
+                    onChange={index => { setFormation(index); setReplacement(undefined); }} onReplace={setReplacement} />
+                )}
                 <div>
                   <div className="mb-1 text-xs font-semibold text-muted-foreground">{run.setup.daily ? 'Shape' : 'Mentality'}</div>
                   <div className="grid grid-cols-3 gap-2">

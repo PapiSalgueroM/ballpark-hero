@@ -56,6 +56,34 @@ function Results({ state }: { state: LeagueState }) {
   return <ul className={own.list}>{games.map(game => <li key={`${game.homeId}-${game.awayId}`}>{clubShort(state, game.homeId)} {score(game.homeScore)} v {clubShort(state, game.awayId)} {score(game.awayScore)}</li>)}</ul>;
 }
 
+function CompletedMatchReports({ state }: { state: LeagueState }) {
+  const [round, setRound] = useState<number | null>(null);
+  const completed = state.results.filter(game => game.homeId === state.myClub || game.awayId === state.myClub);
+  const game = completed.find(row => row.round === round) ?? completed[completed.length - 1];
+  if (!game) return null;
+  const receipt = state.skillReviews?.find(row => row.round === game.round);
+  return <section aria-label="Completed match reports">
+    <details className={styles.events}>
+      <summary>Completed match reports</summary>
+      <div className={own.stack}>
+        <label className="block text-xs font-semibold">
+          Played round
+          <select className="mt-1 block min-h-11 rounded-lg border border-border bg-background px-3 text-sm"
+            value={game.round} onChange={event => setRound(Number(event.target.value))}>
+            {completed.map(row => <option key={row.round} value={row.round}>Round {row.round + 1}</option>)}
+          </select>
+        </label>
+        <p data-arl-archived-score>{clubShort(state, game.homeId)} {score(game.homeScore)} v {clubShort(state, game.awayId)} {score(game.awayScore)}</p>
+        {receipt?.changes.length ? <ul className={own.list}>{receipt.changes.map(([id, before, after]) => (
+          <li key={id}>{leaguePlayer(state, id)!.name} · {before} → {after} skill</li>
+        ))}</ul> : <p className={styles.muted}>
+          {receipt ? 'No skill changes this round.' : 'Skill changes are unavailable for this round.'}
+        </p>}
+      </div>
+    </details>
+  </section>;
+}
+
 function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAction) => void }) {
   const [tactic, setTactic] = useState<Tactic>('control');
   const [outId, setOutId] = useState('');
@@ -103,6 +131,7 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
       <Results state={state} />
       <button className={styles.action} data-arl-next onClick={() => act({ type: 'next' })}>{nextLabel}</button></>}
     {match && match.events.length > 0 && <details className={styles.events}><summary>Scoring events ({match.events.length})</summary><ol>{match.events.map(event => <li key={event.id}>{event.quarter > 4 ? 'Extra time' : `Q${event.quarter}`}, {event.minute} min: {leaguePlayer(state, event.playerId)?.name}, {clubShort(state, event.clubId)}, {event.kind} ({event.points} {event.points === 1 ? 'point' : 'points'}).</li>)}</ol></details>}
+    <CompletedMatchReports key={state.season} state={state} />
   </div>;
 }
 
@@ -226,7 +255,8 @@ function StatusCard({ state, act }: { state: LeagueState; act: (action: LeagueAc
       {won ? <VictoryMoment><p data-arl-premiers><strong>Premiers!</strong> {state.clubName} win the Grand Final, {gf}.</p></VictoryMoment>
         : <p data-arl-premier>{clubShort(state, last.premier)} are the premiers, beating {clubShort(state, last.runnerUp)} {gf}.</p>}
       <p className={styles.muted}>You finished {ordinal(last.place)} ({last.w}-{last.d}-{last.l}). {EXIT_LABELS[last.exit]}. Most goals this season: {last.leadingGoalkicker.name}, {last.leadingGoalkicker.goals}.</p>
-      <button className={styles.action} data-arl-next onClick={() => act({ type: 'next' })}>Into the summer</button></div>;
+      <button className={styles.action} data-arl-next onClick={() => act({ type: 'next' })}>Into the summer</button>
+      <CompletedMatchReports key={state.season} state={state} /></div>;
   }
   if (state.phase === 'summer') {
     const out = retirees(state);

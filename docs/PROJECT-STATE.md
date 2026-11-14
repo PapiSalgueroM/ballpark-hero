@@ -1,4 +1,13 @@
+## 2026-11-14: Matchday ratings, open selection and NRL summer applications
+
+- Soccer Career's league match reports show whether your estimated overall rose, fell or held since the previous matchday. They identify seasons that have no saved rating path.
+- Aussie Rules Manager keeps each regular-season fixture's score and recorded skill changes, including rounds when nobody changed. Open Completed match reports to revisit a round.
+- In Manager Hot Seat Free Play, every available eligible reserve can replace a starter before kickoff. The lineup shows how well the player fits the shirt and records the chosen lineup in the match replay.
+- A manager can switch a pending NRL summer application once if the projected vacancy disappears before the deadline. The new application still needs the final ladder and board criteria to qualify.
+
 ## 2026-11-14: NRL assistant appointments, MLB development starts and Home returns
+
+[PR #967](https://github.com/PapiSalgueroM/ballpark-hero/pull/967) published exact main `65f4dba052b2223ed4e178c9a83f795ec82caf8f`, deployment `5b8a9ed9-2c4f-4dbe-9ebc-faca4ba0d60d`. Eleven live browser journeys, three raw game guides, all 174 sitemap routes and seven policy and crawler endpoints passed. IndexNow accepted the three updated guides. The build, application types, 48 focused tests, 18 site checks and all 16 measured download budgets passed.
 
 - An earned NRL job offer can include your qualified tactical assistant when the new club can cover their season's wages. They bring their existing training for one term.
 - MLB Front Office can give one eligible young bench hitter a six-game development start per season. The preview names the starter giving up the spot and shows the change in batting strength. A completed start can raise the prospect's rating by one within their potential.

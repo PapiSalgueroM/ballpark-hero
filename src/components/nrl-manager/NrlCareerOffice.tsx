@@ -23,7 +23,7 @@ import {
   nrlPrimaryRoleOptions, nrlRecruitmentBrief, nrlRecruitmentPlan, nrlReserveCoachSpend, nrlRetentionPriority,
   nrlSeasonOut, nrlSelectionPromise, nrlSelectionPromiseCandidates,
   nrlMutualReleaseQuote, nrlMutualReleaseSpend,
-  nrlProjectedSummerOpenings, nrlSummerApplication, nrlSummerLastRound,
+  nrlSummerApplication, nrlSummerApplicationOpenings, nrlSummerLastRound,
   type NrlCareerAction, type NrlCareerState, type NrlOffseasonFreeAgentTarget, type NrlPrimaryRoleChange,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverDiscovery, nrlTakeoverPlayers, nrlTicketPricingRefusal,
   nrlSupporterAttendance,
@@ -1793,7 +1793,7 @@ function SummerApplications({ career, onAction, disabled }: { career: NrlCareerS
   const summary = useRef<HTMLElement>(null);
   const application = nrlSummerApplication(career);
   const pending = application?.response === 'pending' ? application : null;
-  const openings = pending ? [] : nrlProjectedSummerOpenings(career);
+  const openings = nrlSummerApplicationOpenings(career);
   if (!pending && !openings.length) return null;
   const clubs = nrlSeasonPlan(year + 1).clubs;
   return (
@@ -1802,10 +1802,14 @@ function SummerApplications({ career, onAction, disabled }: { career: NrlCareerS
         Summer job applications<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
       </summary>
       <div className="space-y-2 pb-3 text-sm">
-        {pending ? <p role="status" className="text-muted-foreground">
+        {pending && <p role="status" className="text-muted-foreground">
           Application sent to {clubName(year + 1, pending.clubId)} in Round {pending.round}. You’ll get an answer after the Grand Final.
-        </p> : <>
-          <p className="text-muted-foreground">Apply for one simulated opening for {year + 1} by Round {nrlSummerLastRound(year)}. An opening can disappear before the season ends. Keep coaching your club while you wait for an answer after the Grand Final.</p>
+          {pending.replaced && ` This replaced your application to ${clubName(year + 1, pending.replaced.clubId)}.`}
+        </p>}
+        {openings.length > 0 && <>
+          <p className="text-muted-foreground">{pending
+            ? `${clubName(year + 1, pending.clubId)} has dropped off the projected openings. You can switch once by Round ${nrlSummerLastRound(year)}.`
+            : `Apply for a simulated opening for ${year + 1} by Round ${nrlSummerLastRound(year)}. Keep coaching your club while you wait for an answer after the Grand Final.`}</p>
           <ul className="divide-y divide-border">
             {openings.map(opening => {
               const destinationId = opening.clubId;
@@ -1816,10 +1820,10 @@ function SummerApplications({ career, onAction, disabled }: { career: NrlCareerS
                   <p className="text-muted-foreground">{opening.reason === 'expansion' ? `Joins the league in ${year + 1}` : `Projected opening · Current ladder place ${opening.rank}`}</p>
                 </div>
                 <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled}
-                  aria-label={`Apply to ${clubName(year + 1, club.id)} for ${year + 1}`}
+                  aria-label={pending ? `Switch application to ${clubName(year + 1, club.id)}` : `Apply to ${clubName(year + 1, club.id)} for ${year + 1}`}
                   onClick={() => {
                     if (onAction({ type: 'applyForSummerJob', year, clubId, round, destinationId })) summary.current?.focus();
-                  }}>Apply</Button>
+                  }}>{pending ? 'Switch application' : 'Apply'}</Button>
               </li>;
             })}
           </ul>
@@ -2265,6 +2269,10 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 {record.seasonOut && <p className="text-sm text-muted-foreground">{record.year + 1} season out of work · Premiers {
                   labelForClub(record.year + 1, nrlArchivedFinals(record.seasonOut.finals, record.year + 1)!.championId)
                 }</p>}
+                {record.summerApplication?.replaced && <p className="text-sm text-muted-foreground">
+                  Switched from {clubName(record.year + 1, record.summerApplication.replaced.clubId)} in Round {record.summerApplication.replaced.round}
+                  {' '}to {clubName(record.year + 1, record.summerApplication.clubId)} in Round {record.summerApplication.round}.
+                </p>}
                 {record.summerApplication && !record.appointment && (record.year !== year || retired || outOfWork) && (
                   <p className="text-sm text-muted-foreground">
                     Applied to {labelForClub(record.year + 1, record.summerApplication.clubId)} in Round {record.summerApplication.round} · {

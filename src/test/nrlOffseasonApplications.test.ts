@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
-  createNrlCareer, nrlOffseasonApplication, nrlOffseasonOpportunities, nrlProjectedSummerOpenings, nrlSummerApplication,
-  readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
+  createNrlCareer, nrlOffseasonApplication, nrlOffseasonOpportunities, nrlProjectedSummerOpenings, nrlSummerApplication, nrlSummerApplicationOpenings,
+  readNrlCareerSave, reduceNrlCareer, runNrlFastForward, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { nrlBoardTarget } from '@/lib/nrlBoardTarget';
 import { createNrlSeason, reduceNrlSeason } from '@/lib/nrlManager';
@@ -210,4 +210,65 @@ describe('NRL offseason job applications', () => {
     expect(joined.history[0].appointment).toBeUndefined();
     expect(JSON.stringify(read(joined))).toBe(JSON.stringify(joined));
   });
+});
+
+it.each([[2026, 3, 'raiders', 22, 'knights'], [2027, 8, 'titans', 21, 'dragons']] as const)(
+  'replaces a vanished %i projection once and takes the genuine replacement offer',
+  (year, seed, original, replacementRound, destination) => {
+    const opening = beforeRound(createNrlCareer('storm', seed, year), 14);
+    const applied = summerApply(opening, original);
+    expect(applied.summerApplication).toEqual({ clubId: original, round: 14 });
+    expect(nrlSummerApplicationOpenings(applied)).toEqual([]);
+    expect(summerApply(applied, destination)).toBe(applied);
+
+    const noOpening = beforeRound(applied, replacementRound);
+    expect(nrlProjectedSummerOpenings(noOpening).some(row => row.clubId === original)).toBe(false);
+    expect(nrlSummerApplicationOpenings(noOpening)).toEqual(nrlProjectedSummerOpenings(noOpening));
+    expect(summerApply(noOpening, original)).toBe(noOpening);
+    expect(summerApply(noOpening, destination, replacementRound - 1)).toBe(noOpening);
+    const changed = summerApply(noOpening, destination);
+    const pending = { clubId: destination, round: replacementRound, replaced: { clubId: original, round: 14 } };
+    expect(changed.summerApplication).toEqual(pending);
+    expect(changed.season).toBe(noOpening.season);
+    expect(changed.finance).toBe(noOpening.finance);
+    expect(changed.players).toBe(noOpening.players);
+    expect(nrlSummerApplicationOpenings(changed)).toEqual([]);
+    expect(read(changed)).toEqual(changed);
+
+    const future = beforeRound(noOpening, 23);
+    expect(summerApply(future, destination)).toBe(future);
+    expect(summerApply(changed, nrlProjectedSummerOpenings(changed)[0].clubId)).toBe(changed);
+    const malformed = { ...changed, summerApplication: { ...pending, replaced: { ...pending.replaced, round: replacementRound } } };
+    expect(read(malformed)).toBeNull();
+    const offMarket = ['roosters', 'dolphins', 'sharks'].find(id => !nrlProjectedSummerOpenings(opening).some(job => job.clubId === id))!;
+    const forgedDate = { ...changed, summerApplication: { ...pending, replaced: { ...pending.replaced, clubId: offMarket } } };
+    expect(read(forgedDate)).toBeNull();
+
+    const ordinary = finish(noOpening);
+    const settled = finish(changed);
+    expect(settled.season).toEqual(ordinary.season);
+    expect(settled.finance).toEqual(ordinary.finance);
+    expect(settled.players).toEqual(ordinary.players);
+    expect(nrlSummerApplication(ordinary)).toMatchObject({ clubId: original, response: 'vacancy-closed' });
+    expect(nrlSummerApplication(settled)).toMatchObject({ ...pending, response: 'offered' });
+    expect(read(settled)).toEqual(settled);
+    expect(accept(settled, original)).toBe(settled);
+    const joined = accept(settled, destination);
+    expect(joined.season.clubId).toBe(destination);
+    expect(joined.history.at(-1)?.appointment).toEqual({ clubId: destination, reason: 'missed' });
+    expect(joined.history.at(-1)?.summerApplication).toEqual({ ...pending, response: 'offered' });
+    expect(read(joined)).toEqual(joined);
+  },
+);
+
+it('pauses fast-forward at the real last replacement window', () => {
+  const year = 2026, clubId = 'storm', round = 22;
+  const opening = beforeRound(createNrlCareer(clubId, 3, year), 14);
+  const pending = beforeRound(summerApply(opening, 'raiders'), round);
+  const request = { year, clubId, round, through: round + 1 };
+  const stopped = runNrlFastForward(pending, request);
+  expect(stopped.stop).toBe('applications');
+  expect(stopped.state).toBe(pending);
+  const applied = summerApply(pending, 'knights');
+  expect(runNrlFastForward(applied, request).stop).not.toBe('applications');
 });

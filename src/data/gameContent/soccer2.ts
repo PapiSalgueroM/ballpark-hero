@@ -36,7 +36,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         subsections: [
           {
             heading: "Setting up your team",
-            items: ["Choose a defensive, balanced or attacking mentality.", "In free play, open Formation and XI to see who would start and how well they fit their positions. Pick a formation before kickoff and it carries into the next match."],
+            items: ["Choose a defensive, balanced or attacking mentality.", "In free play, open Formation and XI to see who would start and how well they fit their positions. Pick a formation before kickoff and it carries into the next match.", "Pick a starter to see every available reserve for that slot. You can replace one starter before kickoff. Goalkeepers stay in goal, and outfielders playing out of position show their rating penalty."],
           },
           {
             heading: "Picking a team talk",
@@ -104,7 +104,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "The first two league games",
         paragraphs: [
-          "Game one is at home to a weaker side. The read says the dressing room is flat, so you go balanced and say nothing. A 2 to 0 win puts 3 on the board and lifts the fans.",
+          "Game one is at home to a weaker side. In Free Play, your left back is tired. Open Formation and XI, pick him under Replace one starter, and choose a fresher reserve. The new name appears in the XI and starts with the same ten teammates. The read says the dressing room is flat, so you go balanced and say nothing. A 2 to 0 win puts 3 on the board and lifts the fans.",
           "Game two is away at a stronger side. You sit deep with a defensive shape and take a 1 to 1 draw. That is 4. The press ask about the board and you back yourself.",
         ],
       },
@@ -1820,7 +1820,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
           "Open the Record Book and choose Competitions to see recorded club cup and national tournament totals. Older campaigns can have goals saved without assists, so the book shows which assists were recorded.",
           "Most summers open with one card about your position or your career, before the rest of the news between seasons. Training can trade one skill for another next season, with gains stopping at your ceiling.",
           "Want to see it happen? The 📺 Week by week button plays the same season match by match, with your rating every game and the league table after every matchday, then hands you back to the newspaper. Its ? button has the rules and worked examples.",
-          "In the season viewer, choose Fixtures and open a completed match to see its score, events and your match stats when available. Season OVR on each league matchday follows your saved development checkpoints.",
+          "In the season viewer, choose Fixtures and open a completed match to see its score, events and your match stats when available. League match reports estimate your OVR from saved development checkpoints and show how it moved since the last matchday.",
           "After a senior season, use the Press room to promise a league title or an available domestic cup win. The next played season at that club decides whether you kept the promise.",
           "At an eligible European club you can also promise a Champions League win. If your club misses qualification, the promise closes without a penalty.",
           "An active international player can promise to win their country's next scheduled tournament. Even after a club move, an appearance and a national title keep that promise.",
