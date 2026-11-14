@@ -363,10 +363,14 @@ function LiveMinute60({ live, career, onAction, disabled }: {
   const lateOptions = nrlMinute60Interchanges(season);
   const held = lateOptions.length === 1 && lateOptions[0].reserveId === live.heldReserveId ? lateOptions[0] : undefined;
   const names = new Map(squad.map(player => [player.id, player.name]));
+  const primaryRoles = new Map(squad.map(player => [player.id, player.role]));
+  const optionValue = ({ reserveId, role }: typeof lateOptions[number]) => primaryRoles.get(reserveId) === role ? reserveId : reserveId + ':' + role;
+  const selected = lateOptions.find(option => optionValue(option) === reserveId);
   const { fixture } = live;
   const sides = [[fixture.homeId, stage.homeScoring], [fixture.awayId, stage.awayScoring]] as const;
   const closeChoice = {
-    type: 'finishMinute60', year, round: fixture.round, tactic, reserveId: reserveId || undefined,
+    type: 'finishMinute60', year, round: fixture.round, tactic, reserveId: selected?.reserveId,
+    ...(selected && primaryRoles.get(selected.reserveId) !== selected.role && { reserveRole: selected.role }),
     ...(plans.includes(attackPlan) && attackPlan !== currentPlan && { attackPlan }),
     ...(canSetUpKick && fieldGoal && { fieldGoalPlan: true as const }),
   } as const;
@@ -404,8 +408,8 @@ function LiveMinute60({ live, career, onAction, disabled }: {
           {held ? (
             <>
               <label className="flex min-h-11 items-center gap-2 text-sm font-semibold">
-                <input type="checkbox" checked={reserveId === held.reserveId} disabled={disabled}
-                  onChange={event => setReserveId(event.target.checked ? held.reserveId : '')} />
+                <input type="checkbox" checked={reserveId === optionValue(held)} disabled={disabled}
+                  onChange={event => setReserveId(event.target.checked ? optionValue(held) : '')} />
                 Bring on {names.get(held.reserveId)}
               </label>
               <p className="text-sm text-muted-foreground">{names.get(held.reserveId)} can replace {names.get(held.starterId)} at {held.role} for the rest of the match.</p>
@@ -416,9 +420,13 @@ function LiveMinute60({ live, career, onAction, disabled }: {
               <select id="nrl-late-reserve" value={reserveId} disabled={disabled} onChange={event => setReserveId(event.target.value)}
                 className="min-h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <option value="">Keep the current side</option>
-                {lateOptions.map(({ starterId, reserveId: id, role }) => (
-                  <option key={id} value={id}>{names.get(id)} for {names.get(starterId)} ({role})</option>
-                ))}
+                {lateOptions.map(option => {
+                  const { starterId, reserveId: id, role } = option;
+                  const value = optionValue(option);
+                  return <option key={value} value={value}>
+                    {names.get(id)} for {names.get(starterId)} ({role}){value !== id && ' · Trained cover'}
+                  </option>;
+                })}
               </select>
             </div>
           )}
@@ -670,6 +678,7 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
   const late = match.minute60Interchange;
   const lateReserve = late && season.squad.find(player => player.id === late.reserveId);
   const lateStarter = late && season.squad.find(player => player.id === late.starterId);
+  const lateRole = late && match.playerScoring ? NRL_ROLES[match.playerScoring.starters.indexOf(late.starterId)] : undefined;
   return (
     <>
       {periods && (
@@ -761,7 +770,7 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
           </p>;
         })}
         {lateReserve && lateStarter && <p className="mt-1 text-muted-foreground" data-nrl-minute60-interchange>
-          {lateReserve.name} came on for {lateStarter.name} after 60 minutes.
+          {lateReserve.name} came on for {lateStarter.name}{lateRole && lateRole !== lateReserve.role && ` at ${lateRole}`} after 60 minutes.
         </p>}
       </div>}
       {scorers.length > 0 && (
@@ -2409,6 +2418,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Before a regular-season away match, book one recovery session per season from Preparation. It costs $120,000 from club cash and adds up to eight fitness points at kickoff.</li>
               <li>Use First reserve in the rotation preview to change who gets first priority. It swaps two places on your named bench.</li>
               <li>Leave the fourth interchange open to use only three reserves in Quick Sim or choose a fourth at 60 minutes in Live.</li>
+              <li>At 60 minutes in Live, an unused reserve can cover their trained position if the slot is open.</li>
               <li>Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation. Positional matchups shows the ratings behind the middle and wide plans.</li>
               <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
               <li>In Finances, use Development priority to reserve one assistant rating award for an eligible player. They still need eight appearances.</li>

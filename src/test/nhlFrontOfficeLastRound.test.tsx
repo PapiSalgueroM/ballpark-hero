@@ -1,7 +1,7 @@
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import NhlFrontOfficeBoard from '@/components/nhl-front-office/NhlFrontOfficeBoard';
-import { initNhlLeague, NHL_FO_ROUNDS, simNhlRound, type NhlLeague } from '@/lib/nhlFrontOffice';
+import { initNhlLeague, NHL_FO_ROUNDS, simNhlRound, type NhlLeague, type NhlProspect } from '@/lib/nhlFrontOffice';
 import { keyedRng } from '@/lib/keyedRng';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
@@ -93,5 +93,85 @@ describe('NHL Front Office last round', () => {
       expect(localStorage.getItem(key)).toBe(raw);
       view.unmount();
     }
+  });
+});
+
+describe('NHL draft prospect access', () => {
+  function draft(shortlist?: unknown) {
+    const league = fixture(NHL_FO_ROUNDS);
+    league.teams[team].picks = [1, 2];
+    const draftClass: NhlProspect[] = Array.from({ length: 24 }, (_, i) => ({
+      id: 'fixture-draft-' + i, name: 'Fixture Prospect ' + String(i + 1).padStart(2, '0'),
+      pos: i >= 14 ? 'G' : 'W', age: 19, grade: 76, trueOvr: 86,
+    }));
+    // Legacy draft path takes the first five prospects not chosen by the user.
+    delete league.draftAffordabilityVersion;
+    const raw = JSON.stringify({ league, myTeam: team, phase: 'draft', titles: 0, seasonsPlayed: 1,
+      draftClass, picksLeft: 2, draftBatchesLeft: 2, draftShortlist: shortlist });
+    localStorage.setItem(key, raw);
+    return { raw, draftClass };
+  }
+  const section = () => within(screen.getByRole('region', { name: 'Draft prospects' }));
+  const filter = () => section().getByRole('combobox', { name: 'Filter prospects' });
+  const pin = (n: string) => section().getByRole('button', { name: 'Shortlist Fixture Prospect ' + n });
+  const choose = (n: string) => section().getByRole('button', { name: new RegExp('^Fixture Prospect ' + n) });
+
+  it('finds a goalie beyond the old 14, shortlists across reload, then really drafts him', () => {
+    const { raw, draftClass } = draft();
+    let page = render(<NhlFrontOfficeBoard />);
+    expect(section().getByRole('status')).toHaveTextContent('1 to 12 of 24');
+    expect(section().queryByRole('button', { name: /^Fixture Prospect 23/ })).toBeNull();
+    fireEvent.click(section().getByRole('button', { name: 'Next page' }));
+    expect(section().getByRole('status')).toHaveTextContent('13 to 24 of 24');
+    expect(choose('23')).toHaveTextContent('76');
+    expect(choose('23')).not.toHaveTextContent('86');
+    fireEvent.change(filter(), { target: { value: 'G' } });
+    expect(section().getByRole('status')).toHaveTextContent('1 to 10 of 10');
+    expect(section().queryByRole('button', { name: /^Fixture Prospect 02/ })).toBeNull();
+    expect(localStorage.getItem(key)).toBe(raw);
+
+    fireEvent.click(pin('23'));
+    expect(read().draftShortlist).toEqual([draftClass[22].id]);
+    expect(read().picksLeft).toBe(2);
+    fireEvent.change(filter(), { target: { value: 'all' } });
+    fireEvent.click(pin('01'));
+    fireEvent.click(pin('02'));
+    expect(pin('03')).toBeDisabled();
+    const beforeReload = localStorage.getItem(key);
+    page.unmount();
+    page = render(<NhlFrontOfficeBoard />);
+    expect(localStorage.getItem(key)).toBe(beforeReload);
+    fireEvent.change(filter(), { target: { value: 'shortlist' } });
+    expect(section().getByRole('status')).toHaveTextContent('1 to 3 of 3');
+    expect(pin('23')).toHaveAttribute('aria-pressed', 'true');
+    vi.spyOn(Math, 'random').mockImplementation(keyedRng('draft choice preserved'));
+    fireEvent.click(choose('23'));
+    const saved = read();
+    expect(saved.league.teams[team].players.find((player: { name: string }) => player.name === draftClass[22].name))
+      .toMatchObject({ name: draftClass[22].name, pos: 'G', ovr: 86 });
+    expect(saved.picksLeft).toBe(1);
+    expect(saved.draftClass).toHaveLength(18);
+    expect(saved.draftShortlist).toBeUndefined();
+    expect(section().getByRole('status')).toHaveTextContent('Your shortlist is empty.');
+    page.unmount();
+  });
+
+  it('ignores invalid pins and reports a refused write without moving a pick', () => {
+    const { draftClass, raw } = draft(['unknown', false, 'fixture-draft-0', 'fixture-draft-0', 'fixture-draft-23']);
+    render(<NhlFrontOfficeBoard />);
+    fireEvent.change(filter(), { target: { value: 'shortlist' } });
+    expect(section().getByRole('status')).toHaveTextContent('1 to 2 of 2');
+    expect(pin('01')).toHaveAttribute('aria-pressed', 'true');
+    expect(pin('24')).toHaveAttribute('aria-pressed', 'true');
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementationOnce(() => { throw new Error('quota'); });
+    fireEvent.click(pin('24'));
+    expect(section().getByRole('alert')).toHaveTextContent('Could not save');
+    expect(pin('24')).toHaveAttribute('aria-pressed', 'true');
+    expect(localStorage.getItem(key)).toBe(raw);
+    fireEvent.click(pin('24'));
+    expect(read().draftShortlist).toEqual([draftClass[0].id]);
+    expect(read().picksLeft).toBe(2);
+    expect(section().queryByRole('alert')).toBeNull();
+    expect(filter()).toHaveFocus();
   });
 });

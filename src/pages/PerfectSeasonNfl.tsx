@@ -92,6 +92,8 @@ const PerfectSeasonNfl = () => {
   const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const dailyPicker = useRef<((len: number) => number) | null>(null);
   const dailySaved = useRef(false);
+  const spinning = useRef(false);
+  const retryReroll = useRef(false);
 
   const openSlots = useMemo(
     () => NFL_SLOTS.filter(s => !picks[s.key]).map(s => s.key),
@@ -130,6 +132,7 @@ const PerfectSeasonNfl = () => {
       }
       dailyPicker.current = makeDailyPicker(SPORT_KEY);
     }
+    setIndex([]);
     setPhase('boot');
   };
 
@@ -165,11 +168,9 @@ const PerfectSeasonNfl = () => {
   }, [phase, mode, decade]);
 
   const spin = useCallback(async (isReroll: boolean) => {
-    if (index.length === 0) return;
-    if (isReroll) {
-      if (rerolls <= 0) return;
-      setRerolls(r => r - 1);
-    }
+    if (index.length === 0 || spinning.current || (isReroll && rerolls <= 0)) return;
+    spinning.current = true;
+    retryReroll.current = isReroll;
     const spinStart = Date.now();
     setPhase('spinning');
     setSelected(null);
@@ -199,10 +200,12 @@ const PerfectSeasonNfl = () => {
     }
 
     if (wheelTimer.current) clearInterval(wheelTimer.current);
+    spinning.current = false;
     if (!found) {
       setPhase('error');
       return;
     }
+    if (isReroll) setRerolls(r => r - 1);
     setWheelText(`${found.squad.year} ${found.squad.teamName}`);
     setSquad(found.squad);
     setSpins(s => s + 1);
@@ -535,7 +538,7 @@ const PerfectSeasonNfl = () => {
         {phase === 'error' && (
           <div className="text-center py-12">
             <p className="text-destructive font-semibold mb-3">Couldn't reach the football archives.</p>
-            <button onClick={() => window.location.reload()} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
+            <button onClick={() => index.length ? void spin(retryReroll.current) : setPhase('boot')} className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold">
               Try again
             </button>
           </div>
@@ -826,7 +829,7 @@ const PerfectSeasonNfl = () => {
             'Fill all 8 slots: QB, RB, two receivers, tight end, flex, a real DEFENSE unit, and a HEAD COACH.',
             'Defenses are rated off what they actually allowed that season. Coaches range from Belichick to Urban Meyer, and yes, the bad ones drag you down.',
             'Simulate the 17 game season. Better teams win more, but 17-0 takes serious luck.',
-            'Two rerolls per run if a spin gives you nothing you like.',
+            'Two rerolls per run. If the archives fail, try again to keep your picks. A reroll is spent when a draftable team lands.',
           ]}
           examples={[
             'A 99 rated 2007 Randy Moss can catch passes from a 99 rated 2013 Peyton Manning.',
