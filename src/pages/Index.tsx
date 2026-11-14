@@ -139,6 +139,8 @@ export default function Index() {
     loadSearchEngine().then(setEngine).catch(() => { setSearchFailed(true); });
   };
   const hasDeferredQuery = deferredQuery.trim().length > 0;
+  // Keep the previous results' height while ranking catches up, with no stale targets to activate.
+  const pendingResultStyle = searchQuery !== deferredQuery ? { visibility: 'hidden' as const } : undefined;
   const filteredGames = useMemo(
     () => (hasDeferredQuery && engine ? engine.searchSite(deferredQuery).map(r => r.game) : []),
     [hasDeferredQuery, deferredQuery, engine]
@@ -512,13 +514,13 @@ export default function Index() {
               ) : !engine || !hasDeferredQuery ? (
                 <div aria-busy="true" className="min-h-[120px]" />
               ) : filteredGames.length > 0 ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
+                <div style={pendingResultStyle} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                   {filteredGames.map(game => (
                     <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                   ))}
                 </div>
               ) : (
-                <div className="rounded-xl border border-dashed border-border bg-card/50 p-8 text-center">
+                <div style={pendingResultStyle} className="rounded-xl border border-dashed border-border bg-card/50 p-8 text-center">
                   <p className="text-sm text-muted-foreground mb-4">
                     No games found for "{deferredQuery}"
                   </p>

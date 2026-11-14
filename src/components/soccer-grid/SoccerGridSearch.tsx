@@ -47,8 +47,8 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
         .slice(0, 8)
     : [];
   const popupOpen = showDropdown && suggestions.length > 0;
-  const activeOptionId = popupOpen && highlightIndex >= 0 && highlightIndex < suggestions.length
-    ? `${searchId}-option-${highlightIndex}` : undefined;
+  const activeIndex = Math.min(highlightIndex, suggestions.length - 1);
+  const activeOptionId = popupOpen ? `${searchId}-option-${activeIndex}` : undefined;
 
   useEffect(() => () => {
     if (blurTimer.current !== null) clearTimeout(blurTimer.current);
@@ -64,14 +64,15 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
   }, [query]);
 
   useEffect(() => {
-    listRef.current?.children[highlightIndex]?.scrollIntoView({ block: 'nearest' });
-  }, [highlightIndex]);
+    listRef.current?.children[activeIndex]?.scrollIntoView({ block: 'nearest' });
+  }, [activeIndex]);
 
   const submit = useCallback((name: string) => {
+    if (disabled) return;
     onSelect(name);
     setQuery('');
     setShowDropdown(false);
-  }, [onSelect]);
+  }, [disabled, onSelect]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Escape') {
@@ -81,10 +82,10 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
     if (!showDropdown || suggestions.length === 0) return;
     if (e.key === 'ArrowDown') {
       e.preventDefault();
-      setHighlightIndex(i => Math.min(i + 1, suggestions.length - 1));
+      setHighlightIndex(Math.min(activeIndex + 1, suggestions.length - 1));
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
-      setHighlightIndex(i => Math.max(i - 1, 0));
+      setHighlightIndex(Math.max(activeIndex - 1, 0));
     }
   };
 
@@ -92,7 +93,7 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
     e.preventDefault();
     if (disabled) return;
     if (showDropdown && suggestions.length > 0) {
-      submit(suggestions[highlightIndex].name);
+      submit(suggestions[activeIndex].name);
     } else if (query.trim().length >= 2) {
       submit(toTitleCase(query.trim()));
     }
@@ -142,11 +143,12 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
                 key={p.name}
                 id={`${searchId}-option-${i}`}
                 role="option"
-                aria-selected={i === highlightIndex}
-                onMouseDown={() => submit(p.name)}
+                aria-selected={i === activeIndex}
+                onMouseDown={event => event.preventDefault()}
+                onClick={() => submit(p.name)}
                 onMouseEnter={() => setHighlightIndex(i)}
-                className={`flex items-center justify-between px-4 py-2.5 text-sm cursor-pointer transition-colors ${
-                  i === highlightIndex ? 'bg-accent text-accent-foreground' : 'text-foreground'
+                className={`flex min-h-11 items-center justify-between px-4 py-2.5 text-sm cursor-pointer transition-colors ${
+                  i === activeIndex ? 'bg-accent text-accent-foreground' : 'text-foreground'
                 }`}
               >
                 <span className="font-medium">{p.name}</span>

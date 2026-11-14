@@ -17,11 +17,12 @@ import {
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities,
   nrlLeagueRecruitmentPreview,
   nrlRecruitmentBrief,
+  nrlSelectionPromise, nrlSelectionPromiseCandidates,
   nrlMutualReleaseQuote, nrlMutualReleaseSpend,
   nrlProjectedSummerOpenings, nrlSummerApplication, nrlSummerLastRound,
   type NrlCareerAction, type NrlCareerState,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverOffers, nrlTakeoverPlayers, nrlTicketPricingRefusal,
-  NRL_DEVELOPMENT_ASSISTANT, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
+  NRL_DEVELOPMENT_ASSISTANT, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
   type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryPenalty } from '@/lib/nrlJudiciary';
@@ -71,7 +72,7 @@ function OfferForm({ career, entry, onAction, onClose, disabled }: {
   const [requested, setRequested] = useState(false);
   const annualSalary = Number(salary);
   const preview = nrlContractOffer(career, entry.player.id, annualSalary, years);
-  const canRequest = !career.legacySeason && Number.isSafeInteger(annualSalary)
+  const canRequest = !career.legacySeason && !entry.promiseDiscount && Number.isSafeInteger(annualSalary)
     && annualSalary >= nrlSeasonPlan(entry.startYear).minimumSalary && annualSalary < entry.askingSalary;
   const counter = requested ? nrlContractCounteroffer(career, entry.player.id, annualSalary) : null;
   return (
@@ -368,6 +369,7 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
     <>
       <h2 className="font-display text-xl font-bold">Squad contracts</h2>
       <p className="mt-1 text-sm text-muted-foreground">{squad.length} players · {expiring} deals expire this season</p>
+      <SelectionPromise career={career} onAction={onAction} disabled={disabled} />
       <ContractApproaches career={career} onAction={onAction} disabled={disabled} />
       <ContractTakeover career={career} onAction={onAction} disabled={disabled} />
       <MutualRelease career={career} onAction={onAction} disabled={disabled} />
@@ -375,6 +377,48 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
         {squad.map(player => <PlayerRow key={player.id} player={player} entry={offers.get(player.id)} career={career} onAction={onAction} disabled={disabled} />)}
       </ul>
     </>
+  );
+}
+
+function SelectionPromise({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const [picked, setPicked] = useState('');
+  const { year, clubId, round } = career.season;
+  const progress = nrlSelectionPromise(career);
+  const candidates = nrlSelectionPromiseCandidates(career);
+  const { appearances, matches, discount } = NRL_SELECTION_PROMISE;
+  if (!progress && candidates.length === 0) return null;
+  const player = progress && career.players.find(row => row.id === progress.playerId);
+  const signed = Boolean(player && player.futureContract?.clubId === clubId);
+  return (
+    <details className="group mt-3 rounded-xl border border-border bg-background px-3">
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <span>Selection promise</span>
+        <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-2 pb-3 text-sm">
+        <p className="text-muted-foreground">Promise one generated player with an expiring deal at least {appearances} appearances in their next {matches} available regular-season matches. Keeping it can lower their renewal asking salary by up to {discount}%.</p>
+        {progress ? (
+          <p role="status">
+            {player?.name} · {progress.appearances} of {appearances} appearances in {progress.eligible} of {matches} eligible matches.
+            {progress.status === 'kept' && (signed ? ' Promise kept. Renewal already signed.'
+              : ` Promise kept. Their renewal asking salary is up to ${discount}% lower.`)}
+            {progress.status === 'missed' && ' Promise missed. The normal asking salary applies.'}
+          </p>
+        ) : (
+          <>
+            <label htmlFor="nrl-promise-player" className="block font-semibold">Player to make a promise to</label>
+            <select id="nrl-promise-player" className={control} value={picked} onChange={event => setPicked(event.target.value)} disabled={disabled}>
+              <option value="">Choose a player</option>
+              {candidates.map(row => <option key={row.id} value={row.id}>{row.name} · {row.role}</option>)}
+            </select>
+            <Button type="button" size="lg" className="h-auto min-h-11 whitespace-normal px-3 py-2 text-left"
+              disabled={disabled || !candidates.some(row => row.id === picked)}
+              onClick={() => onAction({ type: 'makeSelectionPromise', year, clubId, round, playerId: picked })}>Confirm selection promise</Button>
+          </>
+        )}
+        <p className="text-xs text-muted-foreground">Starts and used reserves count. Byes and matches they miss through injury, suspension or reserve-grade development do not. The promise ends by the regular-season finish.</p>
+      </div>
+    </details>
   );
 }
 
