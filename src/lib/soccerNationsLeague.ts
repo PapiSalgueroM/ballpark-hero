@@ -355,7 +355,7 @@ export function nationsLeagueCampaign(year: number, seed: string, nation: string
   })!;
   const groups: Partial<Record<Group, GroupRow[]>> = edition.tables;
   const table = groups[group]!.map(({ awayGoals: _awayGoals, awayWins: _awayWins, ...row }) => row);
-  const involved = (match: KnockoutMatch) => match.home === nation || match.away === nation;
+  const involved = (fixture: { home: string; away: string }) => fixture.home === nation || fixture.away === nation;
   const knockout = (ties: TwoLegTie[], stage: 'Quarterfinal' | 'Promotion playoff') => ties.filter(involved).flatMap(tie =>
     tie.legs.map((match, i) => ({ ...match, stage, leg: (i + 1) as 1 | 2 })));
   const regular: (KnockoutMatch & { stage: NationsLeagueMatch['stage']; leg?: 1 | 2 })[] = [
