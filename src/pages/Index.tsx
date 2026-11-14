@@ -16,8 +16,9 @@ import { ContinueRow } from '@/components/home/ContinueRow';
 import { GamePicksRow } from '@/components/home/GamePicksRow';
 import { GamePickButton, GamePicksWarning } from '@/components/game/GamePickButton';
 import { useGamePicks } from '@/hooks/useGamePicks';
-import { FavouriteSport } from '@/components/home/FavouriteSport';
+import { FavouriteSport, browseSportName } from '@/components/home/FavouriteSport';
 import { SportGlyph, sportStyle } from '@/components/home/SportGlyph';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
@@ -101,6 +102,7 @@ export default function Index() {
   const navigationType = useNavigationType();
   const [gameReturn] = useState(() => navigationType === 'POP' ? gameReturns.get(homeEntry) : undefined);
   const [searchQuery, setSearchQuery] = useState(gameReturn?.query ?? '');
+  const [sportsOpen, setSportsOpen] = useState(false);
   const deferredQuery = useDeferredValue(searchQuery);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
@@ -566,9 +568,35 @@ export default function Index() {
                 )}
               </div>
               {!isSearching && (
-                <a href="#browse-sports" className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xl border border-border bg-surface-1 px-2 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:text-primary focus-visible:outline-primary sm:gap-1.5 sm:px-3">
-                  Browse sports <ChevronDown aria-hidden="true" className="h-4 w-4 text-primary" />
-                </a>
+                <Popover open={sportsOpen} onOpenChange={setSportsOpen}>
+                  <PopoverTrigger className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xl border border-border bg-surface-1 px-2 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:text-primary focus-visible:outline-primary sm:gap-1.5 sm:px-3">
+                    Browse sports <ChevronDown aria-hidden="true" className="h-4 w-4 text-primary" />
+                  </PopoverTrigger>
+                  <PopoverContent
+                    align="end"
+                    sideOffset={8}
+                    collisionPadding={12}
+                    aria-label="Browse sports"
+                    className="max-h-[var(--radix-popover-content-available-height)] w-[19rem] max-w-[calc(100vw-1.5rem)] overflow-auto rounded-xl p-2"
+                    onCloseAutoFocus={event => {
+                      if (document.activeElement?.id.startsWith('sport-')) event.preventDefault();
+                    }}
+                  >
+                    <ul className="grid grid-cols-2 gap-1">
+                      {sportSections.map(category => {
+                        const sport = CATEGORY_SPORT[category.title];
+                        return (
+                          <li key={sport}>
+                            <a href={`#sport-${sport}`} onClick={() => setSportsOpen(false)} style={sportStyle(sport)} className="flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-medium hover:bg-accent focus-visible:bg-accent focus-visible:outline-primary">
+                              <SportGlyph sport={sport} className="h-4 w-4 shrink-0 text-tile" />
+                              {browseSportName(sport)}
+                            </a>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </PopoverContent>
+                </Popover>
               )}
             </div>
           </div>
