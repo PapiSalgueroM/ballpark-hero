@@ -134,6 +134,12 @@ export interface NrlLadderRow {
   pointsAgainst: number;
   differential: number;
 }
+type NrlFormResult = 'W' | 'D' | 'L';
+interface NrlClubForm {
+  recent: NrlFormResult[];
+  home: Record<NrlFormResult, number>;
+  away: Record<NrlFormResult, number>;
+}
 export interface NrlManagerState {
   version: 1;
   seed: number;
@@ -251,6 +257,27 @@ export function nrlLadder(state: Pick<NrlManagerState, 'year' | 'round' | 'resul
   return rows.sort((a, b) => b.points - a.points || b.differential - a.differential
     || ratio(b) - ratio(a) || b.tries - a.tries || b.goals - a.goals || b.fieldGoals - a.fieldGoals
     || a.clubId.localeCompare(b.clubId));
+}
+
+export function nrlLeagueForm({ year, results }: Pick<NrlManagerState, 'year' | 'results'>) {
+  const { clubs, draw } = nrlSeasonPlan(year);
+  const form = new Map<string, NrlClubForm>(clubs.map(({ id }) => [id, {
+    recent: [], home: { W: 0, D: 0, L: 0 }, away: { W: 0, D: 0, L: 0 },
+  }]));
+  for (const { round, homeId, awayId, homeScore, awayScore } of results) {
+    if (round > draw.length) continue;
+    const home = form.get(homeId)!;
+    const away = form.get(awayId)!;
+    const homeResult = homeScore > awayScore ? 'W' : homeScore < awayScore ? 'L' : 'D';
+    const awayResult = awayScore > homeScore ? 'W' : awayScore < homeScore ? 'L' : 'D';
+    home.home[homeResult]++;
+    away.away[awayResult]++;
+    home.recent.push(homeResult);
+    away.recent.push(awayResult);
+    if (home.recent.length > 5) home.recent.shift();
+    if (away.recent.length > 5) away.recent.shift();
+  }
+  return form;
 }
 
 function finalsOutcomes(results: NrlMatchResult[]): Record<string, TieOutcome> {
