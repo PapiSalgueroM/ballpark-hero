@@ -83,9 +83,11 @@ export function isConnect4Log(log: ReadonlyArray<unknown>, rows: number, cols: n
   });
 }
 
-/** Transfer Path: a step names its player (the chain is matched on it). */
+/** Transfer Path: a step names its player; only the first step or surrender may carry a special rule. */
 export function isTransferPathLog(log: ReadonlyArray<unknown>): boolean {
-  return log.every((a) => isRecord(a) && (
-    a.t === 'won' || a.t === 'give' || (a.t === 'step' && isText(a.player) && (isText(a.club) || a.club === null))
-  ));
+  return log.every((a, i) => {
+    if (!isRecord(a)) return false;
+    if (a.rule !== undefined && (i !== 0 || (a.t !== 'step' && a.t !== 'give') || (a.rule !== 'active' && a.rule !== 'europe'))) return false;
+    return a.t === 'won' || a.t === 'give' || (a.t === 'step' && isText(a.player) && (isText(a.club) || a.club === null));
+  });
 }
