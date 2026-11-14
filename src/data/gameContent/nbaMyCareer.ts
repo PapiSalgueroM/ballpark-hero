@@ -22,6 +22,7 @@ export const NBA_MY_CAREER_CONTENT: GameContentMap = {
         heading: "Creating your player and picking a league",
         items: [
           "Create your player: name, one of 5 positions (PG, SG, SF, PF, C), and one of 15 archetypes, from Point God to Movement Sniper to Paint Beast.",
+          "Your setup stays in this browser if you leave before starting the draft.",
           "Pick your league: today's NBA, or the 2003-04 throwback with the SuperSonics in Seattle, the Nets in New Jersey, the Hornets in New Orleans and no Charlotte yet.",
         ],
         subsections: [

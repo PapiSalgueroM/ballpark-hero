@@ -1,4 +1,4 @@
-import { lazy, Suspense, useRef, useState } from 'react';
+import { lazy, Suspense, useLayoutEffect, useRef, useState } from 'react';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import { nbaHallHelpRules } from '@/lib/nbaCareerHallRules';
@@ -11,6 +11,7 @@ import { nbaIntlHelpRules } from '@/lib/nbaCareerIntlRules';
 import UsCareerCreator, { emptyUsCareerDraft } from '@/components/us-career/UsCareerCreator';
 import type { UsCareerStart } from '@/components/us-career/UsCareerBoard';
 import { NBA_CAREER_CREATE, NBA_CAREER_SAVE_KEY } from '@/lib/nbaCareerCreation';
+import { clearNbaCreatorDraft, keepNbaCreatorDraft, readNbaCreatorDraft } from '@/lib/nbaCreatorDraft';
 import { hallWallKey } from '@/lib/usCareerHallWallKey';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
@@ -24,10 +25,18 @@ function NbaCareerEntry() {
     try { return !!(localStorage.getItem(NBA_CAREER_SAVE_KEY) || localStorage.getItem(hallWallKey('nba'))); }
     catch { return false; }
   });
-  const [draft, setDraft] = useState(() => emptyUsCareerDraft(NBA_CAREER_CREATE));
+  const [restored] = useState(() => saved ? null : readNbaCreatorDraft());
+  const [draft, setDraft] = useState(() => restored?.draft ?? emptyUsCareerDraft(NBA_CAREER_CREATE));
+  const initialDraft = useRef(draft);
+  const savedDraft = useRef(restored?.raw ?? null);
   const [opened, setOpened] = useState<{ Board: Awaited<ReturnType<typeof loadBoard>>['default']; entry: UsCareerStart } | null>(null);
   const loading = useRef(false);
   const [status, setStatus] = useState<'loading' | 'error' | null>(null);
+  useLayoutEffect(() => {
+    if (saved || opened || draft === initialDraft.current) return;
+    const bytes = JSON.stringify(draft);
+    if (bytes !== savedDraft.current && keepNbaCreatorDraft(savedDraft.current, bytes)) savedDraft.current = bytes;
+  }, [draft, opened, saved]);
 
   if (saved) return <Suspense fallback={<p role="status" className="text-sm text-muted-foreground">Opening your career…</p>}><SavedBoard /></Suspense>;
   if (opened) return <opened.Board entry={opened.entry} />;
@@ -36,8 +45,9 @@ function NbaCareerEntry() {
     if (loading.current) return;
     loading.current = true;
     setStatus('loading');
+    const bytes = savedDraft.current;
     loadBoard().then(({ default: Board }) => {
-      setOpened({ Board, entry: { draft, mode } });
+      setOpened({ Board, entry: { draft, mode, onSaved: () => clearNbaCreatorDraft(bytes) } });
     }).catch(() => {
       loading.current = false;
       setStatus('error');
@@ -46,6 +56,7 @@ function NbaCareerEntry() {
 
   return <UsCareerCreator sport="nba" create={NBA_CAREER_CREATE} draft={draft} setDraft={setDraft}
     onBeginProspect={() => start('prospect')} onEnterDraft={() => start('draft')}
+    creatorSaveNote="Your setup stays in this browser if you leave before starting."
     pending={status === 'loading'}
     draftStatus={status === 'loading' ? 'Opening the draft…' : status === 'error' ? 'The draft could not load. Try again.' : undefined} />;
 }
@@ -75,6 +86,7 @@ const NbaMyCareer = () => {
             description="Build a fictional prospect and live a full NBA career inside the real league. Your position and archetype drive realistic per-game lines, and every summer brings big decisions: hometown discount or the max somewhere new, surgery or load management, the podcast or the gym, even a call from the national team. Chase rings, MVPs, Finals MVPs and All-NBA nods, fight Father Time, and retire to a verdict that runs from ten-day contracts to the GOAT debate."
             howToPlay={[
               'Create your player: name, one of 5 positions (PG, SG, SF, PF, C) and archetype, from Point God to Paint Beast.',
+              'Your setup stays in this browser if you leave before starting the draft.',
               'Pick your league first: today\'s NBA, or the 2003-04 throwback with the SuperSonics in Seattle and no Charlotte yet.',
               'Play each season for a per-game stat line driven by your rating, role, health and team quality: points, rebounds and assists, with your minutes, steals and blocks on the season card.',
               'Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show how your rating changed.',
