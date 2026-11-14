@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import AussieRulesLeagueBoard from '@/components/aussie-rules-manager/AussieRulesLeagueBoard';
 import AussieRulesManager from '@/pages/AussieRulesManager';
-import { clubOf, createLeague, draftPool, lastWeek, LEGACY_SAVE_KEY, opponentPlays, picksLeft, readLeagueSave, reduceLeague, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
+import { clubOf, clubShort, createLeague, draftPool, lastWeek, LEGACY_SAVE_KEY, opponentPlays, picksLeft, readLeagueSave, reduceLeague, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
 import { TACTICS } from '@/lib/aussieRulesManager';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), getCurrentPlayerName: () => null }));
@@ -97,6 +97,43 @@ describe('AussieRulesLeagueBoard', () => {
     const finalView = draw();
     tile(finalView, 'Next match');
     expect(finalView.queryByRole('region', { name: 'Skill changes this round' })).toBeNull();
+  });
+
+  it('reopens the winning or losing score and exact archived skills after later rounds, distinguishing no change from a legacy gap', () => {
+    const opening = createLeague(12, 'club-05')!;
+    const legacy = until(opening, state => state.round === 2 && state.phase === 'prepare');
+    delete legacy.skillReviews;
+    const changed = until(legacy, state => state.stage === 'homeAway' && state.phase === 'report' && state.ratingReview?.round === state.round);
+    const receipt = changed.skillReviews!.find(row => row.round === changed.round)!;
+    expect(receipt.changes.length).toBeGreaterThan(0);
+    const late = until(reduceLeague(changed, { type: 'next' }), state => state.stage === 'homeAway' && state.phase === 'report');
+    store(late);
+    const bytes = localStorage.getItem(SAVE_KEY);
+    const mine = changed.results.find(game => game.round === changed.round && (game.homeId === changed.myClub || game.awayId === changed.myClub))!;
+    const score = (value: typeof mine.homeScore) => `${value.goals}.${value.behinds} (${value.total})`;
+    const squad = clubOf(changed, changed.myClub)!.players;
+    const expected = receipt.changes.map(([id, before, after]) => `${squad.find(player => player.id === id)!.name} · ${before} → ${after} skill`);
+    let view = draw();
+    tile(view, 'Next match');
+    const archive = () => within(view.getByRole('region', { name: 'Completed match reports' }));
+    const open = () => fireEvent.click(archive().getByText('Completed match reports'));
+    const pick = (round: number) => fireEvent.change(archive().getByRole('combobox', { name: 'Played round' }), { target: { value: String(round) } });
+    open();
+    pick(changed.round);
+    expect(archive().getByText(`${clubShort(changed, mine.homeId)} ${score(mine.homeScore)} v ${clubShort(changed, mine.awayId)} ${score(mine.awayScore)}`)).toBeInTheDocument();
+    expect(archive().getAllByRole('listitem').map(row => row.textContent)).toEqual(expected);
+    pick(2);
+    expect(archive().getByText('No skill changes this round.')).toBeInTheDocument();
+    pick(1);
+    expect(archive().getByText('Skill changes are unavailable for this round.')).toBeInTheDocument();
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+    view.unmount();
+    view = draw();
+    tile(view, 'Next match');
+    open();
+    pick(changed.round);
+    expect(archive().getAllByRole('listitem').map(row => row.textContent)).toEqual(expected);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
   });
 
   it('shows the read before a quarter and what the opponent really played after it', () => {

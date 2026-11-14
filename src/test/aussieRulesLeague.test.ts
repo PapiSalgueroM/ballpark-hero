@@ -53,19 +53,29 @@ describe('Aussie Rules Manager full season engine', () => {
     let stepwise = opening;
     let up = 0;
     let down = 0;
+    let quiet = 0;
     while (quick.stage === 'homeAway') {
       const prepared = reduceLeague(quick, { type: 'prepare', choice: 'rest' });
       const before = ratings(prepared);
+      const ownBefore = new Map(prepared.clubs.find(club => club.id === prepared.myClub)!.players.map(player => [player.id, player.skill]));
       stepwise = reduceLeague(stepwise, { type: 'prepare', choice: 'rest' });
       for (let quarter = 0; quarter < 4; quarter++) {
         stepwise = reduceLeague(stepwise, { type: 'play', tactic: 'control' });
         if (quarter < 3) {
           expect(ratings(stepwise)).toEqual(before);
+          expect(stepwise.skillReviews).toEqual(quick.skillReviews);
           stepwise = reduceLeague(stepwise, { type: 'next' });
         }
       }
       const report = reduceLeague(prepared, { type: 'playMatch', tactic: 'control' });
       expect(stepwise).toEqual(report);
+      const changes = report.clubs.find(club => club.id === report.myClub)!.players.flatMap(player => {
+        const skill = ownBefore.get(player.id)!;
+        return player.skill === skill ? [] : [[player.id, skill, player.skill]];
+      });
+      expect(report.skillReviews).toHaveLength(report.round + 1);
+      expect(report.skillReviews?.at(-1)).toEqual({ round: report.round, changes });
+      if (!changes.length) quiet += 1;
       ratings(report).forEach((skill, i) => {
         const delta = skill - before[i];
         expect(Math.abs(delta)).toBeLessThanOrEqual(1);
@@ -78,6 +88,7 @@ describe('Aussie Rules Manager full season engine', () => {
     }
     expect(up).toBeGreaterThan(0);
     expect(down).toBeGreaterThan(0);
+    expect(quiet).toBeGreaterThan(0);
     const rng = rngFrom(hashLabel(`${opening.seed}|${opening.season}|summer`));
     const oldBudget = opening.clubs.flatMap(club => club.players.map(player => {
       const roll = rng();
@@ -88,6 +99,7 @@ describe('Aussie Rules Manager full season engine', () => {
     expect(ratings(quick)).toEqual(oldBudget);
 
     const completed = until(quick, state => state.phase === 'seasonOver');
+    expect(completed.skillReviews).toEqual(quick.skillReviews);
     const summer = reduceLeague(completed, { type: 'next' });
     expect(ratings(summer)).toEqual(ratings(quick));
     expect(summer.clubs[0].players[0].age).toBe(completed.clubs[0].players[0].age + 1);
@@ -95,8 +107,15 @@ describe('Aussie Rules Manager full season engine', () => {
     const existing = new Map(summer.clubs.flatMap(club => club.players.map(player => [player.id, player.skill])));
     expect(second.clubs.every(club => club.players.every(player => !existing.has(player.id) || existing.get(player.id) === player.skill))).toBe(true);
     expect(second.ratingReview).toBeUndefined();
+    expect(second.skillReviews).toBeUndefined();
     const invalid = { ...quick, ratingReview: { round: 0, changes: [[opening.clubs[0].players[0].id, 1]] } };
     expect(readLeagueSave(JSON.stringify(invalid))).toBeNull();
+    for (const skillReviews of [
+      [{ round: 23, changes: [] }],
+      [{ round: 0, changes: [] }, { round: 0, changes: [] }],
+      [{ round: 0, changes: [[opening.clubs[0].players[0].id, 70, 71]] }],
+      [{ round: 0, changes: [[opening.clubs[12].players[0].id, 70, 73]] }],
+    ]) expect(readLeagueSave(JSON.stringify({ ...quick, skillReviews }))).toBeNull();
   }, 60000);
 });
 
