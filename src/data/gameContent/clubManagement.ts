@@ -28,6 +28,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
             heading: "Or found a club of your own",
             items: [
               "Or tap Create your own club: your name, your crest (shape, pattern, colors, initials), your stadium, and one of three budgets. Your club takes the league place of the division's weakest side.",
+              "Choose Edit starting squad to set a generated player's name, age or secondary position before founding the club. For example, give your right back a fictional name, make them 20 and add right wing back as a second position.",
             ],
           },
           {

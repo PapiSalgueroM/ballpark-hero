@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
-import { nrlFitLineup, nrlInjuries, nrlNextRound, nrlStarterOptions } from '@/lib/nrlManager';
+import { nrlFitLineup, nrlHalftimeInterchanges, nrlInjuries, nrlNextRound, nrlStarterOptions } from '@/lib/nrlManager';
 
 const advance = (current: NrlCareerState) => reduceNrlCareer(current, { type: 'advance' });
 const ownMatch = (state: NrlCareerState, round: number) => state.season.results.find(result => result.round === round
@@ -9,6 +9,66 @@ const appoint = (state: NrlCareerState, playerId: string | null, round = state.s
   reduceNrlCareer(state, { type: 'setBackupKicker', year: state.season.year, clubId: state.season.clubId, round, playerId });
 
 describe('NRL backup goal kicker', () => {
+  it.each([[2026, 'broncos', 1], [2027, 'bears', 1]] as const)('lets the %s backup take second-half place kicks after a genuine interchange', (year, clubId, seed) => {
+    const original = createNrlCareer(clubId, seed, year);
+    const primary = original.season.lineup.Hooker;
+    const deputy = original.season.lineup.Lock;
+    const reserve = original.season.squad.find(player => player.role === 'Hooker' && player.id !== primary)!;
+    const chosen = reduceNrlCareer(original, { type: 'setKicker', playerId: primary });
+    const selected = reduceNrlCareer(chosen, { type: 'selectBench', slot: 0, playerId: reserve.id });
+    const liveBefore = reduceNrlCareer(selected, { type: 'startLive' });
+    const live = reduceNrlCareer(appoint(selected, deputy), { type: 'startLive' });
+    expect(live.season.live).toEqual(liveBefore.season.live);
+    expect(nrlHalftimeInterchanges(liveBefore.season).some(row => row.starterId === primary)).toBe(false);
+    const picked = nrlHalftimeInterchanges(live.season).find(row => row.starterId === primary)!;
+    expect(picked.reserveId).toBe(reserve.id);
+    const round = live.season.round;
+    const at60 = reduceNrlCareer(live, { type: 'reachMinute60', year, round, tactic: 'balanced', interchange: picked });
+    const reloaded = readNrlCareerSave(JSON.stringify(at60))!;
+    expect(reloaded).toEqual(at60);
+    const played = reduceNrlCareer(reloaded, { type: 'finishMinute60', year, round, tactic: 'balanced' });
+    const result = ownMatch(played, round);
+    const ownHome = result.homeId === clubId;
+    const first = ownHome ? live.season.live!.homeScoring : live.season.live!.awayScoring;
+    const total = ownHome ? result.homeScoring : result.awayScoring;
+    const scoring = result.playerScoring!;
+    expect(scoring).toMatchObject({ kickerId: primary, kickerHandoff: { playerId: deputy, openingConversions: first.conversions, openingPenalties: first.penalties } });
+    const kicks = (id: string) => {
+      const line = scoring.lines.find(row => row.playerId === id);
+      return [line?.conversions ?? 0, line?.penalties ?? 0];
+    };
+    expect(kicks(primary)).toEqual([first.conversions, first.penalties]);
+    expect(kicks(deputy)).toEqual([total.conversions - first.conversions, total.penalties - first.penalties]);
+    expect(kicks(deputy).reduce((sum, goals) => sum + goals)).toBeGreaterThan(0);
+    expect(readNrlCareerSave(JSON.stringify(played))).toEqual(played);
+    const forged = { ...played, season: { ...played.season, results: played.season.results.map(match => match === result
+      ? { ...match, playerScoring: { ...scoring, kickerHandoff: { ...scoring.kickerHandoff, playerId: primary } } } : match) } };
+    expect(readNrlCareerSave(JSON.stringify(forged))).toBeNull();
+  });
+
+  it('protects the backup if the primary goes off, even if there is a held late reserve', () => {
+    const initial = createNrlCareer('broncos', 1);
+    const primary = initial.season.lineup.Hooker, deputy = initial.season.lineup.Lock;
+    const cover = (role: 'Hooker' | 'Lock') => initial.season.squad.find(player => player.role === role && player.id !== initial.season.lineup[role])!;
+    const pick = (state: NrlCareerState, slot: number, playerId: string) => reduceNrlCareer(state, { type: 'selectBench', slot, playerId });
+    const withKicker = reduceNrlCareer(initial, { type: 'setKicker', playerId: primary });
+    const appointed = appoint(pick(pick(withKicker, 0, cover('Hooker').id), 1, cover('Lock').id), deputy);
+    const normal = reduceNrlCareer(appointed, { type: 'startLive' });
+    const interchanges = nrlHalftimeInterchanges(normal.season);
+    const first = interchanges.find(row => row.starterId === primary)!;
+    const second = interchanges.find(row => row.starterId === deputy)!;
+    const context = { year: 2026, round: 1, tactic: 'balanced' } as const;
+    expect(first).toBeDefined();
+    expect(second).toBeDefined();
+    expect(reduceNrlCareer(normal, { type: 'finishLive', ...context, interchange: first, secondInterchange: second })).toBe(normal);
+    expect(reduceNrlCareer(normal, { type: 'reachMinute60', ...context, interchange: second, secondInterchange: first })).toBe(normal);
+    const held = reduceNrlCareer(appointed, { type: 'startLive', hold: { ...context, reserveId: cover('Lock').id } });
+    const at60 = reduceNrlCareer(held, { type: 'reachMinute60', ...context, interchange: first });
+    expect(at60.season.live?.minute60).toBeDefined();
+    expect(reduceNrlCareer(at60, { type: 'finishMinute60', ...context, reserveId: cover('Lock').id })).toBe(at60);
+    expect(reduceNrlCareer(at60, { type: 'finishMinute60', ...context })).not.toBe(at60);
+  });
+
   it.each([[2026, 'broncos'], [2027, 'bears']] as const)(
     'hands the %s kicking duties to a fit backup when a real match knocks out the starter',
     (year, club) => {

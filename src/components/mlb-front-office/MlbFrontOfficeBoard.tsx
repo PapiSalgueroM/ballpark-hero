@@ -72,6 +72,25 @@ const CUT_SAID = 'You designated him for assignment this season.';
 const MLB_WORDS: FoSportWords = { title: 'the World Series', playoffs: 'October', round: 'a series', games: 162 };
 
 type Postseason = { series: MlbSeriesResult[]; champion: string; gradeLine: string | null };
+type LastRound = { team: string; season: number; round: number; wins: number; losses: number; notes: string[] };
+
+function readLastRound(value: unknown, league: MlbLeague, team: string): LastRound | null {
+  if (!value || typeof value !== 'object') return null;
+  const row = value as Partial<LastRound>;
+  const club = league.teams[team];
+  const closed = league.champions?.some(champion => champion.season === league.season);
+  if (!club || row.team !== team || row.season !== league.season || typeof row.round !== 'number'
+    || !Number.isInteger(row.round) || row.round < 1 || row.round !== league.round - (closed ? 0 : 1)
+    || typeof row.wins !== 'number' || !Number.isInteger(row.wins) || row.wins < 0 || row.wins > club.wins
+    || typeof row.losses !== 'number' || !Number.isInteger(row.losses) || row.losses < 0 || row.losses > club.losses
+    || !Array.isArray(row.notes) || row.notes.length > 4
+    || row.notes.some(line => typeof line !== 'string' || line.length > 640)) return null;
+  return { team, season: league.season, round: row.round, wins: row.wins, losses: row.losses, notes: row.notes };
+}
+
+function roundHeadlines(result: LastRound): string[] {
+  return [`Round ${result.round}: you went ${result.wins}-${result.losses}.`, ...result.notes];
+}
 
 interface SaveShape {
   league: MlbLeague; myTeam: string; phase: Phase; titles: number; seasonsPlayed: number;
@@ -87,6 +106,7 @@ interface SaveShape {
   /* Round 431. Present on a save written from the recap screen, so the recap
      can be drawn again after a reload. Absent on older saves. */
   postseason?: Postseason | null;
+  lastRound?: LastRound;
   /* Round 1020: the GM desk (src/lib/gmDesk.ts). Absent on every save written
      before it, and on those the board plays exactly as it did until the GM
      opens a desk box. Each block inside is validated alone. */
@@ -102,6 +122,7 @@ export default function MlbFrontOfficeBoard() {
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<MlbLeague | null>(null);
   const [feed, setFeed] = useState<string[]>([]);
+  const lastRound = useRef<LastRound | null>(null);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
      moment anything else is prepended it reads as an ordinary row. Transient
@@ -182,6 +203,8 @@ export default function MlbFrontOfficeBoard() {
          is minted from the same counter, so it shares the id space. */
       ensureMlbLeagueIds(s.league, s.draftClass);
       setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
+      lastRound.current = readLastRound(s.lastRound, s.league, s.myTeam);
+      if (lastRound.current) setFeed(roundHeadlines(lastRound.current));
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? (s.phase === 'draft' ? [] : null)); setPicksLeft(s.picksLeft ?? 0);
       setDraftBatchesLeft(s.draftBatchesLeft ?? null);
@@ -216,10 +239,12 @@ export default function MlbFrontOfficeBoard() {
   const persist = useCallback((patch: Partial<SaveShape>, lg: MlbLeague | null, team: string) => {
     try {
       if (!lg) return;
+      const result = lastRound.current;
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft: draftBatchesLeft ?? undefined,
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { series, champion, gradeLine } : null,
+        ...(result?.team === team && result.season === lg.season ? { lastRound: result } : {}),
         ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch,
       } satisfies SaveShape));
     } catch { /* full */ }
@@ -235,6 +260,7 @@ export default function MlbFrontOfficeBoard() {
     lg.inSeasonRatings = true;
     const m = mandateFor(lg, abbr, false);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
+    lastRound.current = null;
     setFeed([
       `Welcome to the ${label(abbr)} front office. Opening Day of the ${lg.season} season is here.`,
       `🏛️ The ownership mandate: ${m.text}`,
@@ -324,11 +350,8 @@ export default function MlbFrontOfficeBoard() {
       nextGm = tick.desk;
       if (tick.line) deskLines.push(tick.line);
     }
-    const newFeed = [
-      `Round ${lg.round}: you went ${report.myWins}-${report.myLosses}.`,
-      ...deskLines,
-      ...report.notes,
-    ];
+    const newFeed = [`Round ${lg.round}: you went ${report.myWins}-${report.myLosses}.`, ...deskLines, ...report.notes];
+    const result = { team: myTeam, season: lg.season, round: lg.round, wins: report.myWins, losses: report.myLosses };
     if (nextGm !== gm) setGm(nextGm);
     if (lg.round >= MLB_ROUNDS) {
       const { series: sr, champion: champ } = runMlbPlayoffs(lg, Math.random, nextGm ? mlbDeskEdges(nextGm, lg, myTeam) : undefined);
@@ -362,6 +385,7 @@ export default function MlbFrontOfficeBoard() {
       }));
       setPhase('recap');
       setLeague(lg);
+      lastRound.current = { ...result, notes: newFeed.slice(1, 5) };
       setFeed(newFeed); setFeedSlam(null);
       persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
       return;
@@ -369,6 +393,7 @@ export default function MlbFrontOfficeBoard() {
     lg.round += 1;
     /* Round 1020: the round the deadline shuts says so in the feed. */
     if (nextGm && mlbTradeWindow(league).open && !mlbTradeWindow(lg).open) newFeed.splice(1, 0, '🔒 The trade deadline has passed. Deals open again once the season is over.');
+    lastRound.current = { ...result, notes: newFeed.slice(1, 5) };
     setLeague(lg);
     setFeed(newFeed); setFeedSlam(null);
     persist({}, lg, myTeam);
@@ -632,6 +657,7 @@ export default function MlbFrontOfficeBoard() {
 
   const reset = () => {
     localStorage.removeItem(SAVE_KEY);
+    lastRound.current = null;
     setPhase('pick'); setLeague(null); setMyTeam('');
     setMandate(null); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
     setPresser(null); setPressTilt(0); setSeasonTradeLine(null);
@@ -842,6 +868,11 @@ export default function MlbFrontOfficeBoard() {
             </div>
           )}
         </div>
+        {lastRound.current && (
+          <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
+            {roundHeadlines(lastRound.current).map((line, index) => <p key={index}>{line}</p>)}
+          </div>
+        )}
         {gm && recapDesk && (
           <GmDeskMount sport="mlb" desk={gm} facts={recapDesk} panels={MLB_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
         )}

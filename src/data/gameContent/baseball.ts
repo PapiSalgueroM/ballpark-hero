@@ -1109,6 +1109,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
         items: [
           "Play the 162 in stretches: each round simulates about a week and a half of baseball, 27 rounds total, with a live read on whether you are on pace.",
           "Player OVR can rise or fall one point at a time after regular-season rounds. A young shortstop can improve toward their potential, while an older pitcher can lose a point. The round news shows your club's changes, and closing ratings carry forward.",
+          "The latest round's record and headlines stay with your saved season.",
         ],
       },
       {

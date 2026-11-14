@@ -82,6 +82,44 @@ describe('1020 MLB GM desk on the board', () => {
     expect(screen.getAllByText(/only Competitive Balance picks can be traded, and this game awards none/).length).toBeGreaterThan(0);
   });
 
+  it('keeps the last played round and its exact headlines after reopening a franchise', () => {
+    const random = vi.spyOn(Math, 'random').mockImplementation(lehmer(1088));
+    try {
+      const league = initMlbLeague(lehmer(7));
+      league.round = 2;
+      league.inSeasonRatings = true;
+      write(league, { trust: 70, fired: false });
+      const view = render(<MlbFrontOfficeBoard />);
+      fireEvent.click(screen.getByText('Play', { exact: true }));
+      fireEvent.click(screen.getByRole('button', { name: 'Play Round 2' }));
+      const report = vi.mocked(engine.simMlbRound).mock.results.at(-1)?.value;
+      const summary = `Round 2: you went ${report?.myWins}-${report?.myLosses}.`;
+      expect(screen.getByText(summary)).toBeInTheDocument();
+      const exact = localStorage.getItem(SAVE_KEY);
+      view.unmount();
+      vi.mocked(engine.simMlbRound).mockClear();
+      render(<MlbFrontOfficeBoard />);
+      expect(screen.getByText(summary)).toBeInTheDocument();
+      for (const line of report?.notes.slice(0, 4) ?? []) expect(screen.getByText(line)).toBeInTheDocument();
+      fireEvent.click(screen.getByText('Play', { exact: true }));
+      expect(screen.getByRole('button', { name: 'Play Round 3' })).toBeVisible();
+      expect(localStorage.getItem(SAVE_KEY)).toBe(exact);
+      expect(engine.simMlbRound).not.toHaveBeenCalled();
+    } finally { random.mockRestore(); }
+  });
+
+  it('ignores a round report from another season without rewriting the legacy save', () => {
+    const league = initMlbLeague(lehmer(7));
+    league.round = 3;
+    league.teams[TEAM].wins = 4;
+    league.teams[TEAM].losses = 8;
+    write(league, { lastRound: { team: TEAM, season: league.season - 1, round: 2, wins: 1, losses: 5, notes: ['Old round fixture note'] } });
+    const bytes = localStorage.getItem(SAVE_KEY);
+    render(<MlbFrontOfficeBoard />);
+    expect(screen.queryByText('Old round fixture note')).toBeNull();
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+  });
+
   /* The last round, October, the draft and the winter, through the board's
      own buttons, with every draw seeded. */
   function walk(withDesk: boolean) {

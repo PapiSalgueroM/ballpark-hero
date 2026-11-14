@@ -1,7 +1,12 @@
 import type { NrlManagerState, NrlPlayer, NrlRole, NrlScoring } from '@/lib/nrlManager';
 
 export interface NrlPlayerScoring extends NrlScoring { playerId: string }
-export interface NrlMatchScoringReport { kickerId: string; starters: string[]; lines: NrlPlayerScoring[] }
+export interface NrlMatchScoringReport {
+  kickerId: string;
+  starters: string[];
+  lines: NrlPlayerScoring[];
+  kickerHandoff?: { playerId: string; openingConversions: number; openingPenalties: number };
+}
 export interface NrlScoringLeader extends NrlPlayerScoring { name: string; points: number }
 export type NrlSeasonScoringTotal = [
   playerId: string, name: string, tries: number, conversions: number, penalties: number, fieldGoals: number, longFieldGoals: number,
@@ -89,11 +94,11 @@ function afterScore(total: NrlScoring, before: NrlScoring): NrlScoring {
 
 export function makeNrlInterchangeScoringReport(
   totals: NrlScoring, firstHalf: NrlScoring, opening: NrlScoringMatchday, closing: NrlScoringMatchday,
-  kickerId: string, rng: () => number, late?: NrlScoringMatchday & { through60: NrlScoring },
+  kickerId: string, rng: () => number, late?: NrlScoringMatchday & { through60: NrlScoring }, closingKickerId = kickerId,
 ): NrlMatchScoringReport {
   const first = makeNrlScoringReport(firstHalf, opening.starting, opening.rotation, kickerId, rng);
-  const second = makeNrlScoringReport(afterScore(late?.through60 ?? totals, firstHalf), closing.starting, closing.rotation, kickerId, rng);
-  const finish = late && makeNrlScoringReport(afterScore(totals, late.through60), late.starting, late.rotation, kickerId, rng);
+  const second = makeNrlScoringReport(afterScore(late?.through60 ?? totals, firstHalf), closing.starting, closing.rotation, closingKickerId, rng);
+  const finish = late && makeNrlScoringReport(afterScore(totals, late.through60), late.starting, late.rotation, closingKickerId, rng);
   const lines = new Map(first.lines.map(line => [line.playerId, line]));
   for (const line of [...second.lines, ...(finish?.lines ?? [])]) {
     const total = lines.get(line.playerId);
@@ -103,7 +108,9 @@ export function makeNrlInterchangeScoringReport(
       lines.set(line.playerId, line);
     }
   }
-  return { ...first, lines: [...lines.values()] };
+  return { ...first, lines: [...lines.values()], ...(closingKickerId !== kickerId && { kickerHandoff: {
+    playerId: closingKickerId, openingConversions: firstHalf.conversions, openingPenalties: firstHalf.penalties,
+  } }) };
 }
 
 const record = (value: unknown): value is Record<string, unknown> =>
@@ -120,12 +127,27 @@ export function validNrlScoringReport(
   if (new Set(participants).size !== participants.length || !participants.every(id => typeof id === 'string' && known.has(id))
     || value.lines.length > participants.length) return false;
   const eligible = new Set(participants);
+  const handoff = value.kickerHandoff;
+  let deputy: string | undefined;
+  let firstConversions = totals.conversions;
+  let firstPenalties = totals.penalties;
+  if (handoff !== undefined) {
+    if (!record(handoff) || Object.keys(handoff).length !== 3 || typeof handoff.playerId !== 'string'
+      || handoff.playerId === value.kickerId || !value.starters.includes(handoff.playerId)
+      || !countIn(handoff.openingConversions, totals.conversions) || !countIn(handoff.openingPenalties, totals.penalties)) return false;
+    deputy = handoff.playerId;
+    firstConversions = handoff.openingConversions as number;
+    firstPenalties = handoff.openingPenalties as number;
+  }
   const scorers = new Set<string>();
   const counted = emptyScoring();
   for (const line of value.lines) {
     if (!record(line) || typeof line.playerId !== 'string' || !eligible.has(line.playerId) || scorers.has(line.playerId)
-      || (line.playerId !== value.kickerId && (line.conversions !== 0 || line.penalties !== 0))
       || !scoringFields.every(field => countIn(line[field], totals[field]))) return false;
+    const opening = line.playerId === value.kickerId;
+    const closing = deputy === line.playerId;
+    if (line.conversions !== (opening ? firstConversions : closing ? totals.conversions - firstConversions : 0)
+      || line.penalties !== (opening ? firstPenalties : closing ? totals.penalties - firstPenalties : 0)) return false;
     const scores = line as unknown as NrlPlayerScoring;
     if (nrlScorePoints(scores) === 0) return false;
     scorers.add(line.playerId);
