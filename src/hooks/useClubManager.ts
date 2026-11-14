@@ -7,7 +7,7 @@ import {
   marketForScreen, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer, savedCareerEraId, savedCareerFixtureKey, leagueOf,
   startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, recallLoanedPlayer, walkAway, respondApproach, expandGround, buyWageRoom,
-  enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, payClause, loanIn, acceptBid, rejectBid,
+  enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, setNationMentality, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract, renewContractWithClause,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
   resumeMatch, makeHalftimeSub, setHalftimeMentality, setSquadRole,
@@ -1200,6 +1200,16 @@ export function useClubManager() {
     setCareer(prev => (prev ? leaveNationJob(prev) : prev));
   }, []);
 
+  const setNationalTactics = useCallback((mentality: Mentality): boolean => {
+    const now = careerRef.current;
+    if (phase !== 'hub' || !holdsActiveSlot() || !now) return false;
+    const next = setNationMentality(now, mentality);
+    if (!next || !persist(next)) return false;
+    careerRef.current = next;
+    setCareer(next);
+    return true;
+  }, [phase, holdsActiveSlot, persist]);
+
   /* Round 201: out of work. Waiting is a move, and taking a job is the
      ordinary season rollover with a different club at the end of it. */
   const waitAWeek = useCallback(() => {
@@ -1479,7 +1489,7 @@ export function useClubManager() {
     setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
-    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, addWageRoom, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
+    negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, addWageRoom, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, setNationalTactics, dismissNegotiation, clause, loan,
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
     setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
     acceptIncomingBid, rejectIncomingBid,

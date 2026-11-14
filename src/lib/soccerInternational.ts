@@ -478,6 +478,13 @@ export interface IntlMatch {
 export type ManagerSummerMatch = Pick<IntlMatch, 'round' | 'home' | 'away' | 'homeGoals' | 'awayGoals' | 'pens'>
   & { winner?: string };
 
+type NationalMentality = 'defensive' | 'balanced' | 'attacking';
+const NATIONAL_TEMPO: Record<NationalMentality, number> = { defensive: -0.25, balanced: 0, attacking: 0.25 };
+
+function matchTempo(nation: string, home: string, away: string, tempo: number): number {
+  return home === nation || away === nation ? tempo : 0;
+}
+
 export interface QualifyingCampaign {
   confederation: Confederation;
   /** Nations in my qualifying group, results included. */
@@ -780,6 +787,7 @@ function sortTable(table: IntlTableRow[]): IntlTableRow[] {
  */
 export function runQualifying(
   nation: string, fmt: TournamentFormat, form: PlayerForm | null,
+  managerTempo = 0,
 ): QualifyingCampaign {
   const conf = confederationOf(nation);
   // Every CONMEBOL side plays the Copa América, so there is nothing to
@@ -794,9 +802,10 @@ export function runQualifying(
       const home = group[i], away = group[j];
       // Home advantage is worth about a third of a goal, and my own lift only
       // applies to my nation.
+      const tempo = matchTempo(nation, home, away, managerTempo);
       const r = simMatch(
         nationStrength(home) + 3, nationStrength(away), false,
-        home === nation ? lift : 0, away === nation ? lift : 0,
+        (home === nation ? lift : 0) + tempo, (away === nation ? lift : 0) + tempo,
       );
       applyResult(table, home, away, r.a, r.b);
     }
@@ -917,6 +926,7 @@ export function simulateTournament(
   nation: string, fmt: TournamentFormat, year: number,
   qualifying: QualifyingCampaign, squad: SquadCall | null, form: PlayerForm | null,
   managerFixtures?: ManagerSummerMatch[],
+  managerTempo = 0,
 ): IntlTournament {
   const qualified = qualifying.qualified;
   const inSquad = qualified && !!squad?.called;
@@ -946,9 +956,10 @@ export function simulateTournament(
     for (let i = 0; i < grp.length; i++) {
       for (let j = i + 1; j < grp.length; j++) {
         const home = grp[i], away = grp[j];
+        const tempo = matchTempo(nation, home, away, managerTempo);
         const r = simMatch(
           strength[home], strength[away], false,
-          home === nation ? lift : 0, away === nation ? lift : 0,
+          (home === nation ? lift : 0) + tempo, (away === nation ? lift : 0) + tempo,
         );
         applyResult(table, home, away, r.a, r.b);
         if (managerFixtures && (home === nation || away === nation)) {
@@ -998,9 +1009,10 @@ export function simulateTournament(
     for (let i = 0; i * 2 + 1 < current.length; i++) {
       const home = current[i * 2], away = current[i * 2 + 1];
       const mine = home === nation || away === nation;
+      const tempo = mine ? managerTempo : 0;
       const r = simMatch(
         strength[home] ?? 70, strength[away] ?? 70, true,
-        home === nation ? lift : 0, away === nation ? lift : 0,
+        (home === nation ? lift : 0) + tempo, (away === nation ? lift : 0) + tempo,
       );
       const winner = r.aWins ? home : away;
       bracket.push({
@@ -1094,7 +1106,7 @@ export function managerFormatYear(year: number): number {
  * whoever is holding the clipboard. simNationJob pins the size of it.
  */
 export function runManagerSummer(
-  nation: string, year: number, lift: number,
+  nation: string, year: number, lift: number, mentality: NationalMentality = 'balanced',
 ): (IntlTournament & { managerFixtures: ManagerSummerMatch[] }) | null {
   const fmt = tournamentForYear(nation, managerFormatYear(year));
   if (!fmt) return null;
@@ -1105,9 +1117,10 @@ export function runManagerSummer(
      match by match. */
   const restore = overrideNationStrength(nation, nationStrength(nation) + bump);
   try {
-    const qualifying = runQualifying(nation, fmt, null);
+    const tempo = NATIONAL_TEMPO[mentality] ?? 0;
+    const qualifying = runQualifying(nation, fmt, null, tempo);
     const managerFixtures: ManagerSummerMatch[] = [];
-    return { ...simulateTournament(nation, fmt, year, qualifying, null, null, managerFixtures), managerFixtures };
+    return { ...simulateTournament(nation, fmt, year, qualifying, null, null, managerFixtures, tempo), managerFixtures };
   } finally {
     restore();
   }
