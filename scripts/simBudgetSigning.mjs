@@ -1,5 +1,5 @@
 /* Round 779: real-hook signing previews and committed, finite feedback.
-   BUDGET_SIGNING_CONTROL=refund|commit|object|focus|cancel|cleanup|motion changes asserted copies. */
+   BUDGET_SIGNING_CONTROL=refund|commit|object|focus|cancel|cleanup|motion|headroom changes asserted copies. */
 import assert from 'node:assert/strict';
 import { mkdir, mkdtemp, readFile, writeFile, rm, rmdir } from 'node:fs/promises';
 import { spawnSync } from 'node:child_process';
@@ -17,6 +17,7 @@ const controls = {
   cancel: { anchor: 'previewOpener.current?.isConnected ? previewOpener.current : searchInput.current', replacement: 'previewOpener.current', failure: 'returns cancel focus to search when filtering removes' },
   cleanup: { anchor: 'return () => window.clearTimeout(timer);', replacement: 'return () => {};', failure: 'keeps cues finite, quiet on cloned rerenders' },
   motion: { anchor: 'className={styles.feedback}', replacement: 'className={undefined}', failure: 'keeps cues finite, quiet on cloned rerenders' },
+  headroom: { anchor: 'minimumCompletionCost(openSlots, pool, new Set(afterSquad.map(player => player.name)))', replacement: '0', failure: 'prices the cheapest legal remaining XI' },
 };
 assert.ok(!control || control in controls, 'Unknown Budget Builder signing control');
 const original = await readFile(source, 'utf8');
@@ -53,8 +54,8 @@ try {
     assert.doesNotMatch(output, /Failed to resolve import|Cannot find module|No test files found|Test timed out/);
     console.log(`simBudgetSigning ${control}: the asserted copy rejects its intended outcome while the independent preview/cancel case passes.`);
   } else {
-    assert.equal(run.status, 0, output.slice(-6000)); assert.match(output, /9 passed/);
-    console.log('simBudgetSigning: nine actual Board/real-hook checks pass for original-player identity, exact refund/budget/rating, no-op/cancel, eligible market pages, connected/fallback focus, finite cues and paired completed XI/score/share.');
+    assert.equal(run.status, 0, output.slice(-6000)); assert.match(output, /11 passed/);
+    console.log('simBudgetSigning: eleven Board and real-hook checks pass, including completion cost, preview and commit, eligible market pages, focus, feedback and final results.');
   }
   assert.equal(await readFile(source, 'utf8'), original, 'Production source must stay unchanged');
   console.log('simBudgetSigning: copied controls preserve the existing hook, pool, economy, criteria and recorded outcomes.');
