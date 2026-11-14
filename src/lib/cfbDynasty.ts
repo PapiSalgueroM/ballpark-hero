@@ -6,7 +6,7 @@ import {
   type SlateGame, type SlateSpec, type StaffRole, type StaffWindow,
 } from './collegeProgram';
 import { hash32, mulberry32 } from './leagueCore';
-import { reviewCollegeRatings, type CollegeRatingReview } from './collegeSeasonRating';
+import { reviewCollegeRatings, type CollegeRatingReview, type CollegeRoundRating } from './collegeSeasonRating';
 import { CFB_RIVALRY_SERIES } from '@/data/collegeRivalries';
 /**
  * CFB Dynasty engine (2026-08-05). The college pillar of the sim suite.
@@ -251,6 +251,7 @@ export interface CfbState {
   /** Round 1554: this season's whole schedule, built at kickoff. */
   slate?: CfbSlate | null;
   ratingReview?: CollegeRatingReview;
+  ratingHistory?: CollegeRoundRating[];
 }
 
 /** Round 1554: a season's schedule. rounds[0] is week 1, each game home side first. */
@@ -829,6 +830,7 @@ export function cfbOffseason(st: CfbState, rng: () => number, inSeasonRatings = 
   st.season += 1;
   st.round = 1;
   delete st.ratingReview;
+  delete st.ratingHistory;
   /* Round 1554: the new season's slate, set before its first kickoff. */
   ensureCfbSlate(st);
   return notes;

@@ -1,4 +1,13 @@
+## 2026-11-14: College and MLB round history, Hot Seat ratings and NRL reserve training
+
+- College Football Dynasty and College Basketball Dynasty can reopen completed regular-season scores and their recorded rating changes. Older games keep their scores and show when the ratings review was never recorded.
+- MLB Front Office keeps each batch's actual record, rating changes and development starts. Review an older batch after advancing or from the season recap.
+- New Manager Hot Seat Free Play runs show the real player rating changes after every finished fixture and link the reports from the final verdict.
+- An eligible young NRL player can learn a second position during a reserve spell while someone else trains with the first team. That course takes the place of the reserve rating award. An early recall ends the course.
+
 ## 2026-11-14: Matchday ratings, open selection and NRL summer applications
+
+[PR #968](https://github.com/PapiSalgueroM/ballpark-hero/pull/968) published exact main `595f7c93e2ac64853c73a3cfd77a3e8a01b2f513`, deployment `74197a87-68da-457b-978d-06769453a99f`. Ten live browser journeys, all four raw game guides, all 174 sitemap routes and seven policy and crawler endpoints passed. IndexNow accepted the four updated guides. The build, application types, 72 focused tests, 18 site checks and all 16 measured download budgets passed.
 
 - Soccer Career's league match reports show whether your estimated overall rose, fell or held since the previous matchday. They identify seasons that have no saved rating path.
 - Aussie Rules Manager keeps each regular-season fixture's score and recorded skill changes, including rounds when nobody changed. Open Completed match reports to revisit a round.

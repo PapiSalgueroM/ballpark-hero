@@ -5,10 +5,15 @@ type Player = { id: string; name: string; pos: string; cls: PlayerClass; ovr: nu
 type RatingRange = readonly [minimum: number, maximum: number];
 type RatingPace = Record<Exclude<PlayerClass, 'SR'>, RatingRange>;
 
+type CollegeRatingChange = { id: string; from: number; to: number };
 export type CollegeRatingReview = {
   round: number;
   teamId: string;
-  changes: { id: string; from: number; to: number }[];
+  changes: CollegeRatingChange[];
+};
+
+export type CollegeRoundRating = Omit<CollegeRatingReview, 'changes'> & {
+  changes: (CollegeRatingChange & { name: string })[];
 };
 
 type RatingState = {
@@ -17,13 +22,35 @@ type RatingState = {
   myTeam: string;
   teams: Record<string, { id: string; players: Player[] }>;
   ratingReview?: CollegeRatingReview;
+  ratingHistory?: CollegeRoundRating[];
 };
+
+function recordCollegeRound(st: RatingState, review: CollegeRatingReview): void {
+  const history = Array.isArray(st.ratingHistory) ? st.ratingHistory : [];
+  if (history.some(row => row?.teamId === st.myTeam && row.round === review.round)) return;
+  const names = new Map(st.teams[st.myTeam]?.players.map(player => [player.id, player.name]));
+  const archive = (entry: CollegeRatingReview): CollegeRoundRating => ({
+    ...entry,
+    changes: entry.changes.flatMap(change => {
+      const name = names.get(change.id);
+      return name ? [{ ...change, name }] : [];
+    }),
+  });
+  const previous = st.ratingReview;
+  const existing = previous?.teamId === st.myTeam && previous.round < review.round
+    && Array.isArray(previous.changes) && !history.some(row => row?.teamId === st.myTeam && row.round === previous.round)
+    ? [archive(previous)] : [];
+  st.ratingHistory = [...history, ...existing, archive(review)];
+}
 
 export function reviewCollegeRatings(st: RatingState, rounds: number, pace: RatingPace): void {
   const checkpoint = [1, 2, 3, 4].find(q => Math.ceil(q * rounds / 4) === st.round);
-  if (!checkpoint || st.ratingReview?.round === st.round) return;
-
   const review: CollegeRatingReview = { round: st.round, teamId: st.myTeam, changes: [] };
+  if (st.ratingReview?.round === st.round) return;
+  if (!checkpoint) {
+    recordCollegeRound(st, review);
+    return;
+  }
   for (const team of Object.values(st.teams)) {
     for (const [index, player] of team.players.entries()) {
       // Stable roster slots keep seeded games reproducible even if player IDs are repaired on load.
@@ -43,5 +70,6 @@ export function reviewCollegeRatings(st: RatingState, rounds: number, pace: Rati
       if (team.id === st.myTeam) review.changes.push({ id: player.id, from, to });
     }
   }
+  recordCollegeRound(st, review);
   st.ratingReview = review;
 }

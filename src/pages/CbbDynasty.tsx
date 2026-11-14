@@ -32,6 +32,7 @@ const CbbDynasty = () => {
               'Pick a real program; prestige drives your recruiting pipeline and NIL power.',
               'Play ten rounds of two games: league nights plus cross-country tests.',
               'Check the results or Roster after rounds 3, 5, 8 and 10. Player ratings can rise with development or fall if form dips, and the new ratings carry into the next game.',
+              'Use Played round to reopen the scores and any recorded rating changes from this regular season.',
               'Finish top four in your league for the conference tournament; win it to dance automatically.',
               'Survive five single-elimination rounds from the Round of 32 to the title game.',
               'Recruit every offseason knowing your best freshman might be gone in one year.',

@@ -75,17 +75,19 @@ describe('Manager Hot Seat: a free run carries the 1603 tie stamp', () => {
     loaded();
     const setup = lastStart();
     expect(setup).toMatchObject(STAMPED);
+    expect(setup.inSeasonRatings).toBe(true);
     expect(tieRulesOf(setup)).toBeUndefined();
     fireEvent.click(view.getByRole('button', { name: 'Take the job' }));
-    expect(JSON.parse(localStorage.getItem(FREE_KEY) ?? 'null')).toMatchObject({ v: 1, club: setup.club, ...STAMPED });
+    expect(JSON.parse(localStorage.getItem(FREE_KEY) ?? 'null')).toMatchObject({ v: 1, club: setup.club, ...STAMPED, inSeasonRatings: true });
   }, 120000);
 
   it('a saved free run hands its stamp back to the engine, and one saved without it stays on the night', () => {
-    localStorage.setItem(FREE_KEY, record(played, { tie: 1603, done: false }));
+    localStorage.setItem(FREE_KEY, record(played, { tie: 1603, inSeasonRatings: true, done: false }));
     let view = board();
     fireEvent.click(view.getByRole('button', { name: `Carry on at ${club}` }));
     loaded();
     expect(lastReplay()[0]).toMatchObject({ club, ...STAMPED });
+    expect(lastReplay()[0].inSeasonRatings).toBe(true);
     expect(lastReplay()[1]).toEqual(played.actions);
     cleanup();
     localStorage.setItem(FREE_KEY, record(played, { done: false }));
@@ -94,6 +96,7 @@ describe('Manager Hot Seat: a free run carries the 1603 tie stamp', () => {
     loaded();
     const old = lastReplay()[0];
     expect('tie' in old).toBe(false);
+    expect('inSeasonRatings' in old).toBe(false);
     expect(tieRulesOf(old)).toBe('night');
   }, 120000);
 

@@ -62,7 +62,7 @@ interface NrlRoundOptions {
 }
 
 export interface NrlPlayer { id: string; name: string; role: NrlRole; rating: number; fitness: number; secondaryRole?: NrlRole }
-interface NrlReserveGradeSpell { playerId: string; startedRound: number; startingRating: number; recalledRound?: number; acceleratedRound?: number }
+interface NrlReserveGradeSpell { playerId: string; startedRound: number; startingRating: number; recalledRound?: number; acceleratedRound?: number; role?: NrlRole }
 
 const RETRAINING_ROLES: Partial<Record<NrlRole, readonly NrlRole[]>> = {
   Fullback: ['Left Wing', 'Right Wing'],
@@ -1830,14 +1830,19 @@ function validReserveGrade(value: unknown, round: number, regularRounds: number,
   if (!enabled || !record(value) || typeof value.playerId !== 'string'
     || !integerIn(value.startedRound, 1, Math.min(round, regularRounds - NRL_RESERVE_GRADE_ROUNDS + 1))
     || !integerIn(value.startingRating, 40, 97)) return false;
-  const { playerId, startedRound, startingRating, recalledRound, acceleratedRound } = value;
+  const { playerId, startedRound, startingRating, recalledRound, acceleratedRound, role } = value;
+  const player = players.get(playerId);
+  if (!player) return false;
   if (acceleratedRound !== undefined && !integerIn(acceleratedRound, startedRound, Math.min(round, startedRound + NRL_RESERVE_GRADE_ROUNDS - 2))) return false;
   const paidRound = typeof acceleratedRound === 'number' ? acceleratedRound : undefined;
   const completed = nrlReserveGradeEnd({ startedRound, acceleratedRound: paidRound });
   if (recalledRound !== undefined && !integerIn(recalledRound, paidRound ?? startedRound, Math.min(round, completed - 1))) return false;
   const gained = recalledRound === undefined && round >= completed;
-  return Object.keys(value).length === 3 + Number(recalledRound !== undefined) + Number(acceleratedRound !== undefined)
-    && players.get(playerId)?.rating === startingRating + Number(gained);
+  const recordedFields = 3 + Number(recalledRound !== undefined) + Number(acceleratedRound !== undefined) + Number(role !== undefined);
+  if (Object.keys(value).length !== recordedFields) return false;
+  if (role === undefined) return player.rating === startingRating + Number(gained);
+  if (!nrlRetrainingRoles(player.role).includes(role as NrlRole)) return false;
+  return gained ? player.secondaryRole === role : recalledRound !== undefined || player.secondaryRole === undefined;
 }
 
 export function isNrlManagerState(value: unknown): value is NrlManagerState {

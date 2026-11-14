@@ -31,6 +31,7 @@ export function FoRoundResults({
       {result ? (
         <>
           <p className="font-medium">Won {result.wins} · Lost {result.losses}{result.otLosses !== undefined && ` · OT losses ${result.otLosses}`}</p>
+          {result.reports?.map((line, i) => <p key={i} className="text-muted-foreground">{line}</p>)}
           <div className="rounded-lg border border-border/60 px-2 py-1.5">
             <h4 className="font-semibold">Rating changes</h4>
             {record?.changes?.length ? (

@@ -146,7 +146,7 @@ export interface NrlCareerHistoryRow {
   playerSeasons?: NrlSeasonPlayerArchive;
   development?: { focus: ActiveDevelopmentFocus; affected: number };
   coachDevelopment?: string[];
-  reserveGrade?: { playerId: string; playerName: string; rounds: number; ratingGain: 0 | 1 };
+  reserveGrade?: { playerId: string; playerName: string; rounds: number; ratingGain: 0 | 1; role?: NrlRole };
   appointment?: NrlOffseasonAppointment;
   rejoinedClubId?: string;
   seasonOut?: NrlSeasonOutArchive;
@@ -264,7 +264,8 @@ export type NrlCareerAction = NrlAction
   | { type: 'startPositionTraining'; year: number; clubId: string; round: number; playerId: string; role: NrlRole }
   | { type: 'cancelPositionTraining'; year: number; clubId: string; playerId: string; role: NrlRole; startedRound: number }
   | { type: 'runIntensiveBye'; year: number; clubId: string; round: number; playerId: string; startedRound: number }
-  | { type: 'startReserveGrade' | 'recallReserveGrade' | 'bookReserveCoach'; year: number; clubId: string; round: number; playerId: string }
+  | { type: 'startReserveGrade'; year: number; clubId: string; round: number; playerId: string; role?: NrlRole }
+  | { type: 'recallReserveGrade' | 'bookReserveCoach'; year: number; clubId: string; round: number; playerId: string }
   | { type: 'setShortlist'; playerId: string; saved: boolean; year: number }
   | { type: 'scoutAcademy'; role: NrlRole; priority?: NrlAcademyPriority }
   | { type: 'scoutAcademyParallel'; year: number; clubId: string; round: number; role: NrlRole; priority?: NrlAcademyPriority }
@@ -1165,7 +1166,8 @@ function seasonReceipt(state: NrlCareerState): NrlCareerHistoryRow {
     ...(spell && trainee ? { reserveGrade: {
       playerId: trainee.id, playerName: trainee.name,
       rounds: nrlReserveGradeEnd(spell) - spell.startedRound,
-      ratingGain: spell.recalledRound === undefined ? 1 : 0,
+      ratingGain: spell.recalledRound === undefined && !spell.role ? 1 : 0,
+      ...(spell.recalledRound === undefined && spell.role && { role: spell.role }),
     } } : {}),
   };
 }
@@ -1686,9 +1688,11 @@ function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type:
     next = { ...trained, players: players.map(qualify), season: { ...season, squad: season.squad.map(qualify) } };
   }
   if (previous.reserveGrade && nrlReserveGradeRemaining(previous) === 1) {
-    const { playerId } = previous.reserveGrade;
-    const develop = <Player extends NrlPlayer>(player: Player): Player =>
-      player.id === playerId ? { ...player, rating: player.rating + 1 } : player;
+    const { playerId, role } = previous.reserveGrade;
+    const develop = <Player extends NrlPlayer>(player: Player): Player => {
+      if (player.id !== playerId) return player;
+      return role ? { ...player, secondaryRole: role } : { ...player, rating: player.rating + 1 };
+    };
     next = { ...next, players: next.players.map(develop), season: { ...next.season, squad: next.season.squad.map(develop) } };
   }
   if (previous.phase === 'regular' && !state.legacySeason) next = reviewRatings(next, previous.round, newResults);
@@ -1737,9 +1741,10 @@ function reviewRatings(state: NrlCareerState, round: number, results: NrlMatchRe
   const assistant = new Set(ratingReview?.assistant);
   const rates = new Map<string, 1 | -1>();
   const own = new Set(state.season.squad.map(player => player.id));
+  const reserved = reserveGrade && (!reserveGrade.role || round < nrlReserveGradeEnd(reserveGrade)) ? reserveGrade.playerId : undefined;
   for (const player of state.players) {
     const club = player.contract?.clubId;
-    if (!club || !played.has(club) || player.id === reserveGrade?.playerId) continue;
+    if (!club || !played.has(club) || player.id === reserved) continue;
     let step = scheduledRatingStep(player, year, seed, appearances.get(club) ?? 0);
     if (club === clubId && year < NRL_LAST_YEAR && contractIn(player, year + 1)?.clubId === clubId && !focus.has(player.id)) {
       if (developmentFocus === 'veterans' && step === -1) {
@@ -1760,7 +1765,7 @@ function reviewRatings(state: NrlCareerState, round: number, results: NrlMatchRe
     const trainee = priority && state.players.find(player => player.id === priority.id);
     const canReserve = trainee && trainee.rating + (rates.get(trainee.id) ?? 0) < trainee.potential;
     if (priority && canReserve && priority.apps >= NRL_DEVELOPMENT_ASSISTANT.appearances
-      && !rates.has(priority.id) && priority.id !== reserveGrade?.playerId) {
+      && !rates.has(priority.id) && priority.id !== reserved) {
       assistant.add(priority.id);
       rates.set(priority.id, 1);
     }
@@ -1768,7 +1773,7 @@ function reviewRatings(state: NrlCareerState, round: number, results: NrlMatchRe
     for (const row of progress) {
       if (row.apps < NRL_DEVELOPMENT_ASSISTANT.appearances) break;
       if (assistant.size >= limit) break;
-      if (rates.has(row.id) || assistant.has(row.id) || focus.has(row.id) || row.id === reserveGrade?.playerId) continue;
+      if (rates.has(row.id) || assistant.has(row.id) || focus.has(row.id) || row.id === reserved) continue;
       assistant.add(row.id);
       rates.set(row.id, 1);
     }
@@ -2698,8 +2703,9 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       if (action.year !== year || action.clubId !== clubId || action.round !== round) return state;
       if (action.type === 'startReserveGrade') {
         const player = nrlReserveGradeCandidates(state).find(candidate => candidate.id === action.playerId);
-        if (!player) return state;
-        const next = { ...season, reserveGrade: { playerId: player.id, startedRound: round, startingRating: player.rating } };
+        const { role } = action;
+        if (!player || (role !== undefined && (player.secondaryRole || !nrlRetrainingRoles(player.role).includes(role)))) return state;
+        const next = { ...season, reserveGrade: { playerId: player.id, startedRound: round, startingRating: player.rating, ...(role && { role }) } };
         return { ...state, season: season.individualRecoveryId === player.id ? repairMatchday(next) : next };
       }
       if (action.type === 'bookReserveCoach') {
@@ -2936,8 +2942,10 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
     const spell = value.reserveGrade;
     const coached = record(value.finance) && value.finance.reserveCoachRound !== undefined;
     const duration = NRL_RESERVE_GRADE_ROUNDS - Number(coached);
-    if (!record(spell) || Object.keys(spell).length !== 4 || typeof spell.playerId !== 'string' || typeof spell.playerName !== 'string'
-      || !intIn(spell.rounds, 0, duration) || spell.ratingGain !== Number(spell.rounds === duration)) return false;
+    if (!record(spell) || Object.keys(spell).length !== (spell.role === undefined ? 4 : 5)
+      || typeof spell.playerId !== 'string' || typeof spell.playerName !== 'string' || !intIn(spell.rounds, 0, duration)
+      || (spell.role !== undefined && (!NRL_ROLES.includes(spell.role as NrlRole) || spell.rounds !== duration))
+      || spell.ratingGain !== Number(spell.rounds === duration && spell.role === undefined)) return false;
   }
   if (value.development !== undefined && (!record(value.development) || !activeDevelopmentFocus(value.development.focus)
     || !intIn(value.development.affected, 0, SQUAD_SIZE))) return false;
@@ -3613,6 +3621,11 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     if (!player || !intIn(player.age, 18, 23) || spell.startingRating >= player.potential) return false;
     const training = state.positionTraining;
     const spellEnd = nrlReserveGradeEnd(spell);
+    if (spell.role) {
+      const movement = state.season.results.reduce((sum, match) => sum + (match.round >= spellEnd
+        ? match.ratingChanges?.find(([id]) => id === spell.playerId)?.[1] ?? 0 : 0), 0);
+      if (player.rating !== spell.startingRating + movement) return false;
+    }
     if (training?.playerId === spell.playerId && training.startedRound < spellEnd
       && training.startedRound + NRL_POSITION_TRAINING_ROUNDS - Number(training.intensiveBye !== undefined) > spell.startedRound) return false;
   }

@@ -6,7 +6,7 @@ import {
   type SlateGame, type StaffRole, type StaffWindow,
 } from './collegeProgram';
 import { CBB_RIVALRY_SERIES } from '@/data/collegeRivalries';
-import { reviewCollegeRatings, type CollegeRatingReview } from './collegeSeasonRating';
+import { reviewCollegeRatings, type CollegeRatingReview, type CollegeRoundRating } from './collegeSeasonRating';
 /**
  * CBB Dynasty engine (2026-08-05). College basketball sibling of
  * cfbDynasty.ts. Real programs, fully fictional generated players (class
@@ -204,6 +204,7 @@ export interface CbbState {
   seasonsPlayed: number;
   poyWinners: string[];
   ratingReview?: CollegeRatingReview;
+  ratingHistory?: CollegeRoundRating[];
   /** Round 823: present once the program layer (staff, rivalry night,
    *  strength of schedule) is on. Absent means the pre-823 game, untouched. */
   depth?: number;
@@ -724,6 +725,7 @@ export function cbbOffseason(st: CbbState, rng: () => number, inSeasonRatings = 
   st.season += 1;
   st.round = 1;
   delete st.ratingReview;
+  delete st.ratingHistory;
   ensureCbbFormat(st);
   return notes;
 }

@@ -326,6 +326,8 @@ export interface HotSeatSetup {
    *  clubManager.ts). Only the number 1603 counts; a run without it replays the night's reading for ever.
    *  Dailies ignore it and go by their date (tieRulesOf). */
   tie?: 1603;
+  /** Only fresh Free Play runs opt in. Unstamped runs and all Dailies replay under their original rules. */
+  inSeasonRatings?: true;
 }
 
 /**
@@ -390,6 +392,14 @@ export type HotSeatAction =
   | { t: 'match'; m: Mentality; talk: TalkTone | null; formation?: number; replacement?: HotSeatReplacement }
   | { t: 'press'; i: number };
 
+interface HotSeatRatingChange {
+  id: string;
+  name: string;
+  before: number;
+  after: number;
+  onLoan?: true;
+}
+
 export interface HotSeatMatch {
   competition: Competition;
   compLabel: string;
@@ -407,6 +417,7 @@ export interface HotSeatMatch {
   fans: number;
   morale: number;
   events: string[];
+  ratingChanges?: HotSeatRatingChange[];
 }
 
 export interface TakeoverInfo {
@@ -565,7 +576,9 @@ function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
   /* startCareer itself registers the static world for a real club; the
      onStaticWorld wrapper is what hands a Club Manager save's registrations
      back once this returns. */
-  let s = withSeed(mixSeed(setup.seed, 0), () => startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, dailyStartOptions(setup.daily)));
+  const options = dailyStartOptions(setup.daily);
+  const seasonOptions = !setup.daily && setup.inSeasonRatings ? { ...options, inSeasonRatings: true as const } : options;
+  let s = withSeed(mixSeed(setup.seed, 0), () => startCareer(setup.club, undefined, undefined, undefined, undefined, undefined, seasonOptions));
   /* Round 1335: and the board the previous manager had. startCareer opens a new appointment at BOARD_FRESH
      since the round; the weeks below are the previous manager's search for the crisis, and they read the
      board (the press question below 32, the desk below 35, the floor reset), so they open where they always
@@ -792,6 +805,13 @@ export function playHotSeatMatch(prev: HotSeatRun, mentality: Mentality, talk: T
   return onStaticWorld(() => playOnStaticWorld(prev, mentality, talk, formation, prev.setup.daily ? undefined : replacement), prev.setup.daily);
 }
 
+function ratingRows(state: CareerState) {
+  return [
+    ...state.squad.map(({ id, name, rating }) => ({ id, name, rating })),
+    ...(state.loanedOut ?? []).map(({ player: { id, name, rating } }) => ({ id, name, rating, onLoan: true as const })),
+  ];
+}
+
 function playOnStaticWorld(prev: HotSeatRun, mentality: Mentality, talk: TalkTone | null, formation?: number, replacement?: HotSeatReplacement): HotSeatRun {
   const run = cloneRun(prev);
   skipToMatch(run);
@@ -801,6 +821,7 @@ function playOnStaticWorld(prev: HotSeatRun, mentality: Mentality, talk: TalkTon
   run.actions.push({ t: 'match', m: mentality, talk, ...(base !== run.state ? { formation } : {}), ...(replacement ? { replacement } : {}) });
   const before = run.state.boardConfidence;
   const ready: CareerState = { ...lineup, mentality, teamTalk: talk };
+  const ratingsBefore = ready.inSeasonRatings ? new Map(ratingRows(ready).map(p => [p.id, p.rating])) : null;
   /* The nth match of the job draws stream n, whatever was said in between. */
   const r = withSeed(mixSeed(run.setup.seed, 1000 + run.log.length), () => playNextEntry(ready, { skipHalftime: true, noCoach: true, noBook: true }));
   run.step += 1;
@@ -817,6 +838,10 @@ function playOnStaticWorld(prev: HotSeatRun, mentality: Mentality, talk: TalkTon
       run.points += PTS[res];
     }
     const m = hotSeatMeters(run.state);
+    const ratingChanges = ratingsBefore ? ratingRows(r.state).flatMap(({ rating, ...p }) => {
+      const before = ratingsBefore.get(p.id);
+      return before !== undefined && before !== rating ? [{ ...p, before, after: rating }] : [];
+    }) : undefined;
     run.log.push({
       competition: rep.competition,
       compLabel: rep.compLabel,
@@ -832,6 +857,7 @@ function playOnStaticWorld(prev: HotSeatRun, mentality: Mentality, talk: TalkTon
       fans: m.fans.value,
       morale: m.morale.value,
       events: Array.isArray(rep.events) ? rep.events.slice(0, 4) : [],
+      ...(ratingChanges ? { ratingChanges } : {}),
     });
   }
   if (r.kind === 'seasonOver') {

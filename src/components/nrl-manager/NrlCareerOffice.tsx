@@ -2343,9 +2343,10 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                   {developmentLabels[record.development.focus]} · {developmentSummary(record.development.focus, record.development.affected)}
                 </p>}
                 {record.reserveGrade && <p className="text-sm text-muted-foreground">
-                  Reserve-grade development · {record.reserveGrade.playerName} · {record.reserveGrade.ratingGain
-                    ? `${record.reserveGrade.rounds} rounds and one rating point`
-                    : `Recalled after ${record.reserveGrade.rounds} ${record.reserveGrade.rounds === 1 ? 'round' : 'rounds'}`}
+                  Reserve-grade development · {record.reserveGrade.playerName} · {record.reserveGrade.role
+                    ? `Learned ${record.reserveGrade.role} in ${record.reserveGrade.rounds} rounds`
+                    : record.reserveGrade.ratingGain ? `${record.reserveGrade.rounds} rounds and one rating point`
+                      : `Recalled after ${record.reserveGrade.rounds} ${record.reserveGrade.rounds === 1 ? 'round' : 'rounds'}`}
                 </p>}
                 {coach && staffSpend && <p className="text-sm text-muted-foreground" data-nrl-coach-receipt>
                   {coachLabels[coach.role]} · {money(staffSpend.signingFee + staffSpend.wages)} total staff cost

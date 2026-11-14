@@ -5,6 +5,7 @@ export type FoRoundRecord = {
   wins: number;
   losses: number;
   otLosses?: number;
+  reports?: string[];
 };
 
 type RoundOwner = { team: string; season: number };
@@ -15,7 +16,7 @@ type RoundLeague = {
   season: number;
   round: number;
   champions: { season: number }[];
-  teams: Record<string, Omit<FoRoundRecord, 'round'>>;
+  teams: Record<string, Pick<FoRoundRecord, 'wins' | 'losses' | 'otLosses'>>;
 };
 
 export const foCompletedRounds = (league: RoundLeague, limit: number): number => {
@@ -50,8 +51,10 @@ export function foRatingChanges(players: ReadonlyArray<{ id: string; name: strin
   });
 }
 
-function roundRecord({ round, wins, losses, otLosses }: FoRoundRecord): FoRoundRecord {
-  return { round, wins, losses, ...(otLosses === undefined ? {} : { otLosses }) };
+function roundRecord({ round, wins, losses, otLosses, reports }: FoRoundRecord): FoRoundRecord {
+  const checkedReports = Array.isArray(reports) && reports.length > 0 && reports.length <= 2
+    && reports.every(line => typeof line === 'string' && line.length > 0 && line.length <= 640);
+  return { round, wins, losses, ...(otLosses === undefined ? {} : { otLosses }), ...(checkedReports ? { reports } : {}) };
 }
 
 export function appendFoRoundHistory(
