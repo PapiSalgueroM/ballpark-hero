@@ -93,7 +93,7 @@
     "date": "2026-10-17"
   },
   "/club-manager": {
-    "hash": "041b2c3f6de8b26f",
+    "hash": "31f0c25ab3d6e18f",
     "date": "2026-11-14"
   },
   "/clue-auction": {
@@ -333,8 +333,8 @@
     "date": "2026-09-30"
   },
   "/mlb-my-career": {
-    "hash": "173e926698969a83",
-    "date": "2026-10-18"
+    "hash": "41716fa860cb3a7c",
+    "date": "2026-11-14"
   },
   "/mlb-postseason-format-history": {
     "hash": "8fde967fbb75bc2f",
@@ -385,8 +385,8 @@
     "date": "2026-10-23"
   },
   "/nba-my-career": {
-    "hash": "82208ddff3da8aba",
-    "date": "2026-11-13"
+    "hash": "5f8bcc1807b4a6b2",
+    "date": "2026-11-14"
   },
   "/nba-playoff-format-history": {
     "hash": "e9ebd68869371222",
@@ -421,8 +421,8 @@
     "date": "2026-10-23"
   },
   "/nfl-my-career": {
-    "hash": "883448c83d8ad6c8",
-    "date": "2026-10-18"
+    "hash": "8890f47f1234757d",
+    "date": "2026-11-14"
   },
   "/nfl-playoff-format-history": {
     "hash": "88c1e478862c9261",
@@ -445,15 +445,15 @@
     "date": "2026-10-01"
   },
   "/nhl-my-career": {
-    "hash": "253e247d0beb312e",
-    "date": "2026-10-18"
+    "hash": "ca66b0fae35f0c1e",
+    "date": "2026-11-14"
   },
   "/nhl-playoff-format-history": {
     "hash": "f53f338375aff255",
     "date": "2026-09-19"
   },
   "/nrl-team-manager": {
-    "hash": "763b8f4e52fe0cea",
+    "hash": "e8a26e9c26a86425",
     "date": "2026-11-14"
   },
   "/olympics": {
@@ -605,7 +605,7 @@
     "date": "2026-11-13"
   },
   "/soccer-career": {
-    "hash": "60616d7e98d0855e",
+    "hash": "16abe17f7fd0b4e5",
     "date": "2026-11-14"
   },
   "/soccer-conquest": {

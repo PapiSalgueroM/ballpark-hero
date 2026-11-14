@@ -1,3 +1,9 @@
+## 2026-11-14: OVR progression during the season
+
+- Club Manager changes managed squad ratings in one-point steps after league matches. Training and minutes help younger players reach their potential, veterans can decline, and loaned-out players can develop before they come home. Match reports show the changes. Returning players keep their closing OVR.
+- NRL Team Manager reviews ratings during regular-season matches for both your squad and AI teams. Squad shows the latest changes. Youth, veteran and assistant development benefits land inside the season. The offseason keeps existing player ratings.
+- Soccer Career and NBA, NFL, MLB and NHL My Career resolve a whole season in one action. The simulation uses ratings from across the year, the recap shows the checkpoints, and the final rating carries forward. Past season records keep the values already saved.
+
 ## 2026-11-14: NRL cap planning, durable Academy sales and visible Home sport shortcuts
 
 - NRL Recruitment previews how up to three shortlisted signings or eligible renewals fit together. Each proposal uses the existing asking salary and offer rules. The table shows projected cap room and signed squad size for each relevant season. The preview leaves the save untouched.

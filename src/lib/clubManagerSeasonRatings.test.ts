@@ -28,7 +28,8 @@ function playSeason(initial: CareerState) {
       if (p.age === 18 && p.rating > old) grew = true;
       if (p.age === 35 && p.rating < old) declined = true;
     }
-    if (state.squad.some(p => p.rating !== before.get(p.id) && before.has(p.id)) && state.week < state.calendar.length / 2) sawReport = true;
+    if (result.kind === 'match' && state.week < state.calendar.length / 2
+      && result.report.events.some(event => event.startsWith('Squad OVR:'))) sawReport = true;
   }
   throw new Error('Season did not finish');
 }

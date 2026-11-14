@@ -44,7 +44,7 @@ export function pickCareerPreparation(prev: CareerState, id: PreparationId | nul
 }
 
 /** After natural growth, so the plan adds no random draw and never banks an interrupted year. */
-export function applyCareerPreparation(career: CareerState, row: SeasonRecord): void {
+export function applyCareerPreparation(career: CareerState, row: Pick<SeasonRecord, 'year' | 'type' | 'apps' | 'club' | 'injurySevere' | 'preparation'>): void {
   const held = preparationForSeason(career, row.year);
   if (!held || row.preparation || row.type !== 'playing' || !(row.apps > 0) || row.injurySevere || YEAR_OUT.includes(row.club) || row.club !== held.club) return;
   const skill = preparationSkill(career.position);

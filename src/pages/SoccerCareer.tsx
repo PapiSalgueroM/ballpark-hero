@@ -570,6 +570,7 @@ function SeasonSummaryCard({ season, position, onContinue, continueRef, appearan
   const familySummary = appearance?.celebration === "cradle" ? seasonFamilySummary(season, familyContext) : null;
   const summaryRating = readMatchRating(season);
   const summaryOvr = summaryRating !== null ? readOvr(season.ovr) : null;
+  const path = Array.isArray(season.ratingPath) && season.ratingPath.length === 5 && season.ratingPath.every(value => readOvr(value) !== null) ? season.ratingPath : null;
 
   return (
     <div className="relative bg-card border-2 border-emerald-500/30 rounded-xl p-5 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -613,10 +614,20 @@ function SeasonSummaryCard({ season, position, onContinue, continueRef, appearan
           Avg Rating: {summaryRating === null
             ? <strong className="text-muted-foreground" aria-label="no rating, no games played" title="No games played this season">-</strong>
             : <strong className="text-foreground">{summaryRating.toFixed(1)}</strong>}
-          {summaryOvr !== null && <span data-summary-ovr> · Played at OVR <strong className="text-foreground">{summaryOvr}</strong></span>}
+          {summaryOvr !== null && <span data-summary-ovr> · {path ? 'Avg OVR' : 'Played at OVR'} <strong className="text-foreground">{summaryOvr}</strong></span>}
         </span>
         <span>🟨 {season.yellowCards} 🟥 {season.redCards}</span>
       </div>
+      {path && (
+        <div data-soccer-rating-path className="rounded-lg bg-muted/20 p-2">
+          <p className="mb-1 text-xs font-semibold">OVR through the season</p>
+          <dl className="grid grid-cols-5 gap-1 text-center text-[10px]">
+            {['Start', 'Early', 'Mid', 'Late', 'Finish'].map((label, index) => (
+              <div key={label}><dt className="text-muted-foreground">{label}</dt><dd className="text-sm font-bold tabular-nums">{path[index]}</dd></div>
+            ))}
+          </dl>
+        </div>
+      )}
 
       {playedWorld && <p data-summary-league-world className="text-xs text-muted-foreground">{playedWorld.simulation === "simulated-partial" ? "Your career's simulated league world. The lower division uses a partial club pool." : "Your career's simulated league world. Promotion and relegation use a simplified two-division model."}</p>}
       {playedWorld?.movement && <p data-summary-club-movement className="text-xs font-semibold">
@@ -1010,7 +1021,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
       setAcademyReport(buildAcademyReport(career, next, effectivePotential(career)));
       setCareer(next);
     } else if (career.phase === "playing") {
-      stepWithMomentsBanked(c => advanceProSeason(c, clubs));
+      stepWithMomentsBanked(c => advanceProSeason(c, clubs, true));
     }
     /* Round 159: a played season counts as playing TODAY. The header's games
        played, points and rank only ever moved at retirement, so a whole
@@ -1328,13 +1339,13 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
 
   const handleDeclineRetirement = () => {
     if (!career) return;
-    setCareer(declineRetirementSuggestion(career, clubs));
+    setCareer(declineRetirementSuggestion({ ...career, inSeasonRatings: true }, clubs));
   };
 
   const handleAnnounceFarewell = () => {
     if (!career || farewellAnnouncement.current === career || !farewellEligibility(career).eligible) return;
     farewellAnnouncement.current = career;
-    setCareer(announceFarewellSeason(career, clubs));
+    setCareer(announceFarewellSeason({ ...career, inSeasonRatings: true }, clubs));
   };
 
   const handlePunditAction = (action: PunditAction) => {

@@ -207,6 +207,7 @@ export interface ClubData {
 }
 
 export interface SeasonRecord {
+  ratingPath?: [opening: number, early: number, middle: number, late: number, closing: number];
   extraCups?: CommunityShieldResult[];
   germanSupercup?: GermanSupercupResult;
   /** Round 1180: the chosen personal target and its actual club season result. */
@@ -235,7 +236,7 @@ export interface SeasonRecord {
   yellowCards: number;
   redCards: number;
   rating: number;
-  /** Round 1011: the overall this season was played at, the number
+  /** The overall this season was played at, averaged across the path when present. The number
       calcSeasonRating rated. Same meaning as SeasonLine.ovr in the four US
       My Careers. Absent on rows from before that round and on rows with no
       season played (bans, prison, retirement, academy), so nothing is guessed. */
@@ -930,6 +931,7 @@ export interface CareerStorySeason {
 }
 
 export interface CareerState {
+  inSeasonRatings?: true;
   historicalArrivals?: SoccerHistoricalArrivals;
   extraCupQualification?: ExtraCupQualification;
   germanSupercupQualification?: GermanSupercupQualification;
@@ -3010,7 +3012,7 @@ export function repairCareer<T extends CareerState>(state: T): T {
    claiming otherwise. The lag is gone: the pro call site now hands this
    the fresh record. The youth call has no season in hand and passes nothing,
    which reads last season exactly as before. */
-function developmentRate(s: CareerState, justPlayed?: SeasonRecord): number {
+function developmentRate(s: CareerState, justPlayed?: Pick<SeasonRecord, 'type' | 'apps' | 'rating'>): number {
   const pot = effectivePotential(s);
   const gap = pot - s.overall;
   const headroom =
@@ -3043,7 +3045,8 @@ function developmentRate(s: CareerState, justPlayed?: SeasonRecord): number {
   return clamp(headroom * form * tierF, 0.1, 2.6);
 }
 
-function growStat(current: number, age: number, isYouth: boolean, isPace: boolean, primeType: PrimeType, potential = 99, currentOverall = 0, dev = 1): number {
+function growStat(current: number, age: number, isYouth: boolean, isPace: boolean, primeType: PrimeType, potential = 99, currentOverall = 0, dev = 1, random = Math.random): number {
+  const rand = (min: number, max: number) => Math.floor(random() * (max - min + 1)) + min;
   let growth: number;
   if (isYouth) {
     growth = current >= 78 ? rand(0, 1) : rand(1, 3);
@@ -3076,22 +3079,22 @@ function growStat(current: number, age: number, isYouth: boolean, isPace: boolea
   // because no amount of good form stops a 37 year old losing a yard.
   if (growth > 0 && dev !== 1) {
     const scaled = growth * dev;
-    growth = Math.floor(scaled) + (Math.random() < scaled % 1 ? 1 : 0);
+    growth = Math.floor(scaled) + (random() < scaled % 1 ? 1 : 0);
   }
   // Round 54 elite ceiling: the closer to perfect, the harder every point.
   // 86+ growth is capped, 90+ usually stalls, 94+ is nearly frozen.
   if (growth > 0 && !isYouth) {
-    if (current >= 94) growth = Math.random() < 0.20 ? 1 : 0;
-    else if (current >= 90) growth = Math.random() < 0.45 ? 1 : 0;
-    else if (current >= 86) growth = Math.min(growth, Math.random() < 0.5 ? 1 : 2);
+    if (current >= 94) growth = random() < 0.20 ? 1 : 0;
+    else if (current >= 90) growth = random() < 0.45 ? 1 : 0;
+    else if (current >= 86) growth = Math.min(growth, random() < 0.5 ? 1 : 2);
   }
   // Round 78: the personal potential wall. At or past your rolled ceiling,
   // natural growth basically stops (events, training and the shop are the
   // only ways to squeeze more). Within 3 points, everything slows. Applies
   // to youth too, so a low-ceiling wonderkid plateaus honestly.
   if (growth > 0 && currentOverall > 0) {
-    if (currentOverall >= potential) growth = Math.random() < 0.12 ? 1 : 0;
-    else if (currentOverall >= potential - 3) growth = Math.min(growth, Math.random() < 0.55 ? 1 : 0);
+    if (currentOverall >= potential) growth = random() < 0.12 ? 1 : 0;
+    else if (currentOverall >= potential - 3) growth = Math.min(growth, random() < 0.55 ? 1 : 0);
   }
   // Pace always declines 1 extra from age 28+, and additional penalty at 35+
   if (isPace && age >= 28 && !isYouth) {
@@ -4145,7 +4148,7 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
    Round 131: the last argument is the build multiplier. It is 1 for everybody
    who did not shape their player, and for the rival simulation and the
    international stub, which have no build to read. */
-function calcGoals(position: string, apps: number, overall?: number, mult = 1): number {
+function calcGoals(position: string, apps: number, overall?: number, mult = 1, roll?: number): number {
   const ovr = overall ?? 75;
   let lo: number, hi: number;
 
@@ -4184,7 +4187,8 @@ function calcGoals(position: string, apps: number, overall?: number, mult = 1): 
     default: lo = 0; hi = 3;
   }
 
-  const rawGoals = Math.max(0, Math.round(rand(lo, hi) * apps / 38 * mult));
+  const per38 = lo + Math.floor((roll ?? Math.random()) * (hi - lo + 1));
+  const rawGoals = Math.max(0, Math.round(per38 * apps / 38 * mult));
 
   // Floor for 90+ attackers in a full season (20+ apps)
   if (ovr >= 90 && apps >= 20 && ["ST", "LW", "RW", "CAM"].includes(position)) {
@@ -4194,7 +4198,7 @@ function calcGoals(position: string, apps: number, overall?: number, mult = 1): 
 }
 
 /* ─── Assists per 38 apps by position ─── */
-function calcAssists(position: string, apps: number, overall?: number, mult = 1): number {
+function calcAssists(position: string, apps: number, overall?: number, mult = 1, roll?: number): number {
   const ovr = overall ?? 75;
   let lo: number, hi: number;
 
@@ -4212,7 +4216,7 @@ function calcAssists(position: string, apps: number, overall?: number, mult = 1)
     };
     [lo, hi] = per38[position] || [1, 4];
   }
-  return Math.max(0, Math.round(rand(lo, hi) * apps / 38 * mult));
+  return Math.max(0, Math.round((lo + Math.floor((roll ?? Math.random()) * (hi - lo + 1))) * apps / 38 * mult));
 }
 
 /* ─── Season rating 1-10 ─── */
@@ -4246,7 +4250,7 @@ const RATING_PER_OVERALL = 0.06;
 export function seasonLevel(rating: number, clubTier: number): number {
   return rating - RATING_PER_OVERALL * (clubAverageRating(1) - clubAverageRating(clubTier));
 }
-function calcSeasonRating(position: string, apps: number, goals: number, assists: number, cleanSheets: number, overall: number, clubTier: number, buildDelta = 0): number {
+function calcSeasonRating(position: string, apps: number, goals: number, assists: number, cleanSheets: number, overall: number, clubTier: number, buildDelta = 0, roll?: number): number {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
   let base = 6.0 + diff * RATING_PER_OVERALL;
@@ -4260,7 +4264,7 @@ function calcSeasonRating(position: string, apps: number, goals: number, assists
      build that does not, even at the same overall. A centre back is judged on
      his defending, a winger on what he does at the other end. */
   base += buildDelta;
-  base += (Math.random() - 0.5) * 0.8;
+  base += ((roll ?? Math.random()) - 0.5) * 0.8;
   return clamp(parseFloat(base.toFixed(1)), 3.0, 10.0);
 }
 
@@ -4278,7 +4282,7 @@ function seasonCupTitle(season: SeasonRecord, s: CareerState): string {
 }
 
 /* ─── Season simulation ─── */
-function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecord {
+function generateSeasonStats(state: CareerState, clubs: ClubData[], rateSeason?: (apps: number, openingForm: number) => NonNullable<SeasonRecord['ratingPath']>): SeasonRecord {
   const { position, age, overall, currentClubTier } = state;
   const isGK = position === "GK";
   const lastYear = state.seasons.length > 0 ? state.seasons[state.seasons.length - 1].year : 0;
@@ -4293,10 +4297,11 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
   const { apps, leagueApps, served } = serveClubSuspension(appearance.apps, appearance.leagueApps, state.pendingSuspensionMatches);
   const { injured, injuryWeeks, injuryName, injurySevere } = appearance;
   const programme = programmeEffects(state);
-  let goals = calcGoals(position, apps, overall, fx.goalMult * programme.goalMult);
-  // Diving reputation: +2 goals from penalties
-  if (apps > 0 && state.divingActive && !isGK) goals += 2;
-  const assists = calcAssists(position, apps, overall, fx.assistMult * programme.assistMult);
+  const goalRoll = !isGK ? Math.random() : undefined;
+  const assistRoll = Math.random();
+  const goalMult = fx.goalMult * programme.goalMult;
+  const assistMult = fx.assistMult * programme.assistMult;
+  const goalBonus = apps > 0 && state.divingActive && !isGK ? 2 : 0;
   /* A clean sheet belongs to the whole back line, not the keeper alone. This
      was gated on GK, so a defender's Clean Sheets tile read 0 for an entire
      career (a player reported it on 2026-09-23). The back line now draws the
@@ -4306,7 +4311,21 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
   const yellowCards = Math.round(rand(0, Math.min(8, Math.round(apps * 0.25))) * programme.yellowCardMult);
   const redCards = Math.random() < 0.08 * programme.redCardMult && apps > 0 ? 1 : 0;
   /* Round 1523: his morale is worth a tenth of a rating point a step, beside the build's own delta. */
-  const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier, fx.ratingDelta + soccerMoraleRating(moraleAtPress(state)));
+  const ratingRoll = Math.random();
+  const ratingAt = (ovr: number, goals: number, assists: number) => calcSeasonRating(position, apps, goals, assists, cleanSheets,
+    ovr, currentClubTier, fx.ratingDelta + soccerMoraleRating(moraleAtPress(state)), ratingRoll);
+  let goals = calcGoals(position, apps, overall, goalMult, goalRoll) + goalBonus;
+  let assists = calcAssists(position, apps, overall, assistMult, assistRoll);
+  let rating = ratingAt(overall, goals, assists);
+  const ratingPath = rateSeason && !injurySevere ? rateSeason(apps, rating) : undefined;
+  let effectiveOvr = overall;
+  if (ratingPath) {
+    const [opening, early, middle, late, closing] = ratingPath;
+    effectiveOvr = Math.round((opening + 2 * (early + middle + late) + closing) / 8);
+    goals = calcGoals(position, apps, effectiveOvr, goalMult, goalRoll) + goalBonus;
+    assists = calcAssists(position, apps, effectiveOvr, assistMult, assistRoll);
+    rating = ratingAt(effectiveOvr, goals, assists);
+  }
 
   // --- Trophy realism ---
   /* Round 929: elite only in a season where the era tier rules leave the club
@@ -4314,7 +4333,7 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
      1990s. Same Math.random calls below, only the threshold moves. */
   const seasonYear = lastYear + 1;
   const isElite = eliteInYear(ELITE_CLUBS, state.currentClub, seasonYear);
-  const performanceBoost = seasonPerformanceBoost(overall, rating);
+  const performanceBoost = seasonPerformanceBoost(effectiveOvr, rating);
 
   let leagueChance: number;
   if (isElite) leagueChance = 0.65;
@@ -4370,7 +4389,8 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[]): SeasonRecor
     club: state.currentClub, clubCountry: state.currentClubCountry, clubTier: currentClubTier,
     apps, leagueApps: leagueGames, goals, assists, cleanSheets, yellowCards, redCards, rating,
     ...(served > 0 ? { suspensionMatches: served } : {}),
-    ovr: overall,
+    ovr: effectiveOvr,
+    ...(ratingPath ? { ratingPath } : {}),
     injury: injured ? injuryName : null, injuryWeeks: injured ? injuryWeeks : 0, injurySevere: injured ? injurySevere : false,
     leagueTitle: winLeague, ...finish, ...(derbies.length > 0 ? { derbies } : {}), domesticCup: winCup, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null,
     type: "playing",
@@ -5358,9 +5378,10 @@ function endClubCaptaincy(s: CareerState, reason: "transfer" | "loan" | "handove
   else s.events.push(n >= 1 ? `©️ Retires as a club captain: ${n} season${n === 1 ? "" : "s"} with the ${club} armband` : "©️ Hands back the armband on the way out");
 }
 
-export function advanceProSeason(prev: CareerState, clubs: ClubData[]): CareerState {
+export function advanceProSeason(prev: CareerState, clubs: ClubData[], inSeasonRatings = false): CareerState {
   if (readSoccerFarewell(prev) && (prev.retired || farewellSeasonComplete(prev))) return prev;
   const s = repairCareer({ ...prev }); s.age += 1; s.story = archiveSeasonStory(s); s.events = [];
+  if (inSeasonRatings) s.inSeasonRatings = true;
   MORALE_AT_PRESS.set(s, s.morale); /* Round 1523: the morale he pressed on, before the summer's texts */
   prepareLeagueWorld(s, clubs, (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1);
   receivePhoneTexts(s, "pro");
@@ -5640,6 +5661,20 @@ export function awardAllTimeTopScorer(s: CareerState, thisYear: number): void {
    playing, the next Next Season aged him again, and the year he chose to
    play was never played or recorded: one live career lost six seasons and
    finished six years behind its own calendar (audit QA847-14). */
+const DEVELOPMENT_STATS = ['pace', 'shooting', 'passing', 'dribbling', 'defending', 'physical', 'reflexes'] as const;
+
+function growProAttributes(s: CareerState, dev: number, random = Math.random): void {
+  for (const key of DEVELOPMENT_STATS) {
+    if (key in s.statBoostNextSeason) s[key] = clamp(s[key] + (s.statBoostNextSeason[key] || 0), 20, 99);
+  }
+  s.statBoostNextSeason = {};
+  const pot = effectivePotential(s);
+  for (const key of DEVELOPMENT_STATS) {
+    s[key] = growStat(s[key], s.age, false, key === 'pace', s.primeType, pot, s.overall, dev, random);
+    if (key === 'physical' && s.purchasedItems.includes('personal_trainer')) s.physical = clamp(s.physical + 1, 20, 99);
+  }
+}
+
 function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   prepareSoccerProgramme(s);
   const worldClubs = prepareLeagueWorld(s, clubs, (s.seasons[s.seasons.length - 1]?.year ?? 2024) + 1);
@@ -5681,7 +5716,26 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     unavailableReason: s.pendingRehab ? 'unresolved-rehab' : (s.pendingSuspensionMatches ?? 0) > 0 ? 'pending-generic-suspension' : null,
     teamStrengths: germanStrengths, englishOpening: shieldMatch,
   });
-  const season = generateSeasonStats(s, worldClubs);
+  let preparation: PreparationResult | undefined;
+  const season = generateSeasonStats(s, worldClubs, s.inSeasonRatings ? (apps, openingForm) => {
+    const opening = { ...s };
+    const dev = developmentRate(opening, { type: 'playing', apps, rating: openingForm });
+    const random = keyedRng(`${soccerDeckIdentity(opening)}|${shieldYear}|${opening.age}|rating-development`);
+    growProAttributes(s, dev, random);
+    const developmentRow: Parameters<typeof applyCareerPreparation>[1] = { year: shieldYear, club: s.currentClub, type: 'playing', apps };
+    applyCareerPreparation(s, developmentRow);
+    const overallAt = (fraction: number) => {
+      const stats = { ...opening };
+      for (const key of DEVELOPMENT_STATS) {
+        stats[key] = opening[key] + Math.sign(s[key] - opening[key]) * Math.round(Math.abs(s[key] - opening[key]) * fraction);
+      }
+      return calcOverall(stats, s.position);
+    };
+    s.overall = overallAt(1);
+    preparation = developmentRow.preparation;
+    return [opening.overall, overallAt(0.25), overallAt(0.5), overallAt(0.75), s.overall];
+  } : undefined);
+  if (preparation) season.preparation = preparation;
   if (shieldMatch) season.extraCups = [shieldMatch];
   if (germanMatch) season.germanSupercup = germanMatch;
   recordLeagueWorldSeason(s, clubs, season);
@@ -5761,30 +5815,11 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
       return s;
     }
   }
-  // Apply stat boosts from previous season's events
-  for (const [key, val] of Object.entries(s.statBoostNextSeason)) {
-    const k = key as keyof typeof s.statBoostNextSeason;
-    if (k in s) (s as any)[k] = clamp((s as any)[k] + (val || 0), 20, 99);
+  if (!season.ratingPath) {
+    growProAttributes(s, developmentRate(s, season));
+    applyCareerPreparation(s, season);
+    s.overall = calcOverall(s, s.position);
   }
-  s.statBoostNextSeason = {};
-  // Round 78: growth respects the rolled potential (legacy default generous).
-  const potWall = effectivePotential(s);
-  // Round 96: the season you just played decides how much you improve.
-  // Round 217: and now it really is the season just played, not last year's.
-  const dev = developmentRate(s, season);
-  s.pace = growStat(s.pace, s.age, false, true, s.primeType, potWall, s.overall, dev);
-  s.shooting = growStat(s.shooting, s.age, false, false, s.primeType, potWall, s.overall, dev);
-  s.passing = growStat(s.passing, s.age, false, false, s.primeType, potWall, s.overall, dev);
-  s.dribbling = growStat(s.dribbling, s.age, false, false, s.primeType, potWall, s.overall, dev);
-  s.defending = growStat(s.defending, s.age, false, false, s.primeType, potWall, s.overall, dev);
-  s.physical = growStat(s.physical, s.age, false, false, s.primeType, potWall, s.overall, dev);
-  // Personal trainer: +1 physical per season
-  if (s.purchasedItems.includes("personal_trainer")) {
-    s.physical = clamp(s.physical + 1, 20, 99);
-  }
-  s.reflexes = growStat(s.reflexes, s.age, false, false, s.primeType, potWall, s.overall, dev);
-  applyCareerPreparation(s, season);
-  s.overall = calcOverall(s, s.position);
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
   s.marketValue = calcMarketValue(s.overall, s.age, s.position, s.socialMediaFollowers);
 
