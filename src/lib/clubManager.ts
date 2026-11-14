@@ -1,6 +1,8 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
+import { clubWorldCup2025TeamCampaign } from '@/lib/soccerClubWorldCup';
+import { clubKeyOf } from '@/lib/soccerCareerLeagueWorld';
 import { noteHighestScoring } from '@/lib/clubManagerRecords';
 import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGoalLift, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';
 /* Round 201: the wilderness reuses the manager job market the retired
@@ -3283,6 +3285,7 @@ export interface CareerState {
   /** Round 202: the national team post, held alongside the club job. */
   nationJob?: NationJob | null;
   nationCampaign?: NationCampaign;
+  clubWorldCup2025?: NonNullable<ReturnType<typeof clubWorldCup2025TeamCampaign>>;
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
   /** Round 1035: a cup field short of sixteen clubs (a one league nation:
@@ -23369,6 +23372,19 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     throw new Error('The season has fixtures still to play.');
   }
   const state: CareerState = JSON.parse(JSON.stringify(career));
+  // The fixed historical field plays after the last club fixture. Keep this cup out of board and reward calculations.
+  if (!state.clubWorldCup2025 && worldYear(state) === 2024 && state.week >= state.calendar.length && !state.sacked
+    && state.customClub?.name !== state.clubName) {
+    const aliases = new Map(Object.keys(state.clubStrengths).map(name => [clubKeyOf(name), name]));
+    const cup = clubWorldCup2025TeamCampaign(state.clubName, String(worldSeedOf(state) ?? state.clubName),
+      name => eraClubDefFor(aliases.get(clubKeyOf(name)) ?? name, state.eraId, state).tier);
+    if (cup) {
+      state.clubWorldCup2025 = cup;
+      if (cup.result === 'Winner' && !state.trophies.some(trophy => trophy.name === 'Club World Cup' && trophy.season === state.season)) {
+        state.trophies.push({ name: 'Club World Cup', emoji: '🌐', season: state.season, minor: true });
+      }
+    }
+  }
   // Round 146: a historic save grades against its era's stature ladder.
   const club = state.eraId && isHistoricEra(state.eraId)
     ? eraClubDefFor(state.clubName, state.eraId)

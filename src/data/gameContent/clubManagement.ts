@@ -49,6 +49,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
           "Squad OVR can rise or fall during the season. A young player with regular minutes can improve and a veteran can lose a point after a league match. Check the match report for changes. Players carry those ratings into next season.",
           "If you earn a national team job, open the Manager tile after a tournament summer to see the latest qualifying table, group table and finals results. If your team misses the tournament and the federation lets you go, you can still read the qualifying report.",
           "Set National tactics in the Manager tile before that summer. Defensive reduces scoring for both sides. Attacking opens up the games and chances for both teams. The report remembers the tactics used.",
+          "Finish 2024/25 with a club from the verified 2025 Club World Cup field to get a simulated summer campaign. Open your season review to see the group table and results, then find the saved report under Cups.",
           "Rivals and free agents also gain or lose OVR during league play. The transfer market and opponent squads show their current ratings. An older career starts these world rating updates when you open its next season.",
         ],
         subsections: [

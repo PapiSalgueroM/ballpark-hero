@@ -4,7 +4,7 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import { revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
 import { dealAnswers, ExpiringDealsCheckpoint } from '@/components/club-manager/ExpiringDealsCheckpoint';
-import { bookAwardsState, evalWorldUcl, expiringDeals, money } from '@/lib/clubManager';
+import { bookAwardsState, evalWorldUcl, expiringDeals, money, worldYear } from '@/lib/clubManager';
 import { BOOK_FULL_SHARE, type AwardMan } from '@/lib/clubManagerLeagueBoards';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { ClubSeasonHonour, LeagueCoachHonour, LeagueKeeperShortlist, TeamLines } from '@/components/club-manager/SeasonHonoursCard';
@@ -13,6 +13,7 @@ import type { CareerState, SeasonSummary } from '@/lib/clubManager';
 import type { SeasonFate } from '@/lib/clubManagerBoardVerdict';
 import type { useClubManager } from '@/hooks/useClubManager';
 import { SavePointsDoor } from '@/components/club-manager/SavePointsDoor';
+import { ClubWorldCupCard } from '@/components/club-manager/ClubWorldCupCard';
 
 /* Round 633: the five terms, in the order they are worth. Kept beside the
    screen that prints them rather than in the engine, because the wording is
@@ -282,6 +283,12 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()} data-cm-review-uel="1">
                 <span className="shrink-0">🟠</span>Europa League: {sm.uelRun}
               </p>
+            )}
+            {c.clubWorldCup2025 && worldYear(c) === 2024 && (
+              <details className="rounded-xl border border-border px-2">
+                <summary className="min-h-11 cursor-pointer py-3 text-xs font-semibold">2025 Club World Cup: {c.clubWorldCup2025.result}</summary>
+                <ClubWorldCupCard cup={c.clubWorldCup2025} />
+              </details>
             )}
             {sm.qualifiedUcl && (
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>

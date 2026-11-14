@@ -128,17 +128,25 @@ export function simulateClubWorldCup2025(seed: string, tierOf: (club: string) =>
   return { tables, matches, champion: final.winner };
 }
 
-export function clubWorldCup2025Campaign(club: string, seed: string, tierOf: (club: string) => number, form: PlayerForm | null, selectionChance: number): ClubWorldCupCampaign | undefined {
+export function clubWorldCup2025TeamCampaign(club: string, seed: string, tierOf: (club: string) => number): Omit<ClubWorldCupCampaign, 'apps' | 'goals' | 'assists' | 'cleanSheets' | 'annualRating'> | undefined {
   const enteredClub = Object.values(CLUB_WORLD_CUP_2025_GROUPS).flat().find(entrant => clubKeyOf(entrant) === clubKeyOf(club));
   if (!enteredClub) return;
   const group = (Object.keys(CLUB_WORLD_CUP_2025_GROUPS) as Group[]).find(key => (CLUB_WORLD_CUP_2025_GROUPS[key] as readonly string[]).includes(enteredClub));
   if (!group) return;
   const tournament = simulateClubWorldCup2025(seed, tierOf);
+  const matches = tournament.matches.filter(match => match.home === enteredClub || match.away === enteredClub);
+  return { edition: 2025, club: enteredClub, group, table: tournament.tables[group], matches, champion: tournament.champion,
+    result: tournament.champion === enteredClub ? 'Winner' : matches.at(-1)!.stage };
+}
+
+export function clubWorldCup2025Campaign(club: string, seed: string, tierOf: (club: string) => number, form: PlayerForm | null, selectionChance: number): ClubWorldCupCampaign | undefined {
+  const team = clubWorldCup2025TeamCampaign(club, seed, tierOf);
+  if (!team) return;
   const random = keyedRng(`club-world-cup|2025|${seed}|${club}|player`);
   let apps = 0, goals = 0, assists = 0, cleanSheets = 0;
-  const matches = tournament.matches.filter(match => match.home === enteredClub || match.away === enteredClub).map(match => {
+  const matches = team.matches.map(match => {
     if (!form || random() >= selectionChance) return match;
-    const home = match.home === enteredClub;
+    const home = match.home === team.club;
     const scoreHome = match.homeGoals + (match.extraTime?.homeGoals ?? 0);
     const scoreAway = match.awayGoals + (match.extraTime?.awayGoals ?? 0);
     const line = playerMatchStats(form, home ? scoreHome : scoreAway, random, true);
@@ -149,8 +157,7 @@ export function clubWorldCup2025Campaign(club: string, seed: string, tierOf: (cl
     if (cleanSheet) cleanSheets++;
     return { ...match, player: { ...line, cleanSheet } };
   });
-  return { edition: 2025, club: enteredClub, group, table: tournament.tables[group], matches, champion: tournament.champion,
-    result: tournament.champion === enteredClub ? 'Winner' : matches.at(-1)!.stage, apps, goals, assists, cleanSheets };
+  return { ...team, matches, apps, goals, assists, cleanSheets };
 }
 
 export function clubWorldCupSeasonStats(annual: SeasonStats, cup: ClubWorldCupCampaign): SeasonStats {
