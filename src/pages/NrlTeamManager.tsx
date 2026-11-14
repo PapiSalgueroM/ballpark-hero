@@ -799,7 +799,8 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
 
 function MatchRatingChanges({ career, match }: { career: NrlCareerState; match: NrlMatchResult }) {
   if (career.legacySeason || match.finalsRound || !match.playerScoring) return null;
-  const changes = career.ratingReview?.round === match.round ? career.ratingReview.changes : [];
+  const changes = match.ratingChanges ?? (career.ratingReview?.round === match.round ? career.ratingReview.changes : undefined);
+  if (!changes) return <p className="mt-2 text-sm text-muted-foreground">Rating changes weren’t recorded for this match.</p>;
   if (!changes.length) return <p className="mt-2 text-sm text-muted-foreground">No OVR changes in this match review.</p>;
   const increases = changes.filter(([, delta]) => delta > 0).length;
   return (
@@ -823,7 +824,7 @@ function MatchRatingChanges({ career, match }: { career: NrlCareerState; match: 
   );
 }
 
-function SavedMatchReport({ label, match, season }: { label: string; match: NrlMatchResult; season: NrlManagerState }) {
+function SavedMatchReport({ label, match, career }: { label: string; match: NrlMatchResult; career: NrlCareerState }) {
   const shortName = useNrlClubName();
   const [expanded, setExpanded] = useState(false);
   return (
@@ -833,8 +834,9 @@ function SavedMatchReport({ label, match, season }: { label: string; match: NrlM
         {label} match report
       </summary>
       {expanded && <div className="border-t border-border pb-3 pt-2">
-        <p className="text-sm font-semibold">{scoreLine(match, season.year, shortName)}{match.extraTime ? ' after extra time' : ''}</p>
-        <NrlMatchDetails match={match} season={season} />
+        <p className="text-sm font-semibold">{scoreLine(match, career.season.year, shortName)}{match.extraTime ? ' after extra time' : ''}</p>
+        <NrlMatchDetails match={match} season={career.season} />
+        <MatchRatingChanges career={career} match={match} />
       </div>}
     </details>
   );
@@ -845,9 +847,10 @@ function roundLabel(round: number, regularRounds: number) {
     : round === regularRounds + 4 ? 'Grand final' : 'Finals week ' + (round - regularRounds);
 }
 
-function SeasonFixtures({ season, next, initialClub }: { season: NrlManagerState; next: NrlNextRound; initialClub?: string }) {
+function SeasonFixtures({ career, next, initialClub }: { career: NrlCareerState; next: NrlNextRound; initialClub?: string }) {
   const shortName = useNrlClubName();
   const fullName = useNrlClubName('full');
+  const { season } = career;
   const { year, clubId, results } = season;
   const { draw, clubs } = nrlSeasonPlan(year);
   const selector = useRef<HTMLSelectElement>(null);
@@ -915,7 +918,7 @@ function SeasonFixtures({ season, next, initialClub }: { season: NrlManagerState
               {match.label}
             </li>)}
           </ol>
-          {managedResult && <SavedMatchReport key={round} label={roundLabel(round, draw.length)} match={managedResult} season={season} />}
+          {managedResult && <SavedMatchReport key={round} label={roundLabel(round, draw.length)} match={managedResult} career={career} />}
           {byes.length > 0 && <p className="border-t border-border pt-2 text-muted-foreground">
             {byes.length === 1 ? 'Bye' : 'Byes'} · {byes.map(club => shortName(year, club.id)).join(', ')}
           </p>}
@@ -931,7 +934,7 @@ function SeasonFixtures({ season, next, initialClub }: { season: NrlManagerState
                   <span className="text-muted-foreground">Round {index + 1}</span>
                   <span>{result ? scoreLine(result, year, shortName) : fixture ? `${shortName(year, fixture[0])} vs ${shortName(year, fixture[1])}` : 'Bye'}</span>
                 </div>
-                {!rival && result && <SavedMatchReport label={roundLabel(index + 1, draw.length)} match={result} season={season} />}
+                {!rival && result && <SavedMatchReport label={roundLabel(index + 1, draw.length)} match={result} career={career} />}
               </li>
             );
           })}
@@ -1410,7 +1413,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
         </details>
       )}
 
-      <SeasonFixtures key={year} season={season} next={next} initialClub={initialFixtureClub} />
+      <SeasonFixtures key={year} career={career} next={next} initialClub={initialFixtureClub} />
 
       {!showLiveResult && report}
     </section>
@@ -2425,6 +2428,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Once per season, use club cash to assign a second academy scout while a report is pending. Both reports arrive next round.</li>
               <li>Choose Ready sooner for higher starting OVR or Higher ceiling for more potential when assigning an academy scout. Balanced uses the standard profile.</li>
               <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check the latest match result or open Rating changes in Squad. Existing ratings carry into the next season.</li>
+              <li>Open a regular-season match report in Season fixtures to see the rating changes saved for that match.</li>
               <li>While a reserve-grade spell has at least two rounds left, book reserve coaching from Squad for $90,000. The prospect returns one round sooner with the same rating gain on completion.</li>
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
