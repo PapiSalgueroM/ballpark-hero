@@ -13,7 +13,7 @@ import {
   MLB_SPEND_ITEMS, buyMlbItem, getMlbSpendItem,
   mlbShouldRetire, mlbLegacyOf, mlbCareerTotals, mlbRollTeamQuality, mlbTeamLabelOf,
   buildMlbFaWindow, mlbFaPushArgs, buildMlbExtension, mlbExtPushArgs,
-  mlbAssignRole, mlbCampBattle, mlbWorkSlate,
+  mlbAssignRole, mlbCampBattle, mlbWorkSlate, mlbBullpenChoices, mlbBullpenAssignment, setMlbBullpenAssignment,
   type MlbCareerPos, type MlbCareerState, type MlbSeasonLine,
 } from '@/lib/mlbMyCareer';
 import { countOf, mlbCareerSoFar, mlbMajorAward, mlbStatLine } from '@/lib/usCareerStatLine';
@@ -82,6 +82,7 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = wi
   rollTeamQuality: mlbRollTeamQuality,
   assignRole: mlbAssignRole,
   campBattle: mlbCampBattle,
+  bullpenRole: { options: mlbBullpenChoices, current: mlbBullpenAssignment, set: setMlbBullpenAssignment },
   simSeason: simMlbSeason,
   progress: mlbProgress,
   drawEvent: drawMlbEvent,

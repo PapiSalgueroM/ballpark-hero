@@ -166,12 +166,17 @@ export interface MlbSeasonLine {
   wins?: number; lossesP?: number; era?: number; so?: number;
   // Round 58: relievers and richer hitting lines
   saves?: number; holds?: number; obp?: number; doubles?: number;
+  bullpenRole?: MlbBullpenRole;
   /** Round 103: October, which is the only month anyone remembers. */
   poGames?: number; poLine?: string;
   awards: string[];
   teamResult: string;
   salary: number;
 }
+
+export type MlbBullpenRole = 'setup' | 'closer';
+export type MlbBullpenChoice = 'usual' | MlbBullpenRole;
+export const MLB_CLOSER_MIN_OVR = 80;
 
 export interface MlbCareerState {
   name: string;
@@ -213,6 +218,7 @@ export interface MlbCareerState {
       means everyday, byte for byte unchanged. Relievers are always
       'starter' by design; the bullpen hierarchy lives in the archetype. */
   role?: 'starter' | 'backup';
+  bullpenAssignment?: { year: number; team: string; role: MlbBullpenRole };
   /** Round 470: the savings account, the market and the statement, on the
       same engine as Soccer Career's. Absent on a pre-470 save and repaired
       lazily by ensureMlbMoney, so an old save opens on every screen with its
@@ -452,6 +458,35 @@ export function mlbCampBattle(c: MlbCareerState, teamQuality: number, rng: () =>
   return '🪑 Another spring on the bench. The gap is closing.';
 }
 
+export function mlbBullpenChoices(c: MlbCareerState): readonly MlbBullpenChoice[] {
+  if (c.pos !== 'RP' || c.retired || (c.suspendedSeasons ?? 0) > 0 || c.contractYears <= 0
+    || !c.seasons.some(season => season.games > 0)) return [];
+  return c.ovr >= MLB_CLOSER_MIN_OVR || c.archetype.id === 'closer'
+    ? ['usual', 'setup', 'closer'] : ['usual', 'setup'];
+}
+
+export function mlbBullpenAssignment(c: MlbCareerState): MlbBullpenRole | null {
+  const plan = c.bullpenAssignment;
+  return plan?.year === c.year && plan.team === c.team && plan.role !== mlbUsualBullpenRole(c)
+    && mlbBullpenChoices(c).includes(plan.role) && (plan.role === 'closer' || plan.role === 'setup') ? plan.role : null;
+}
+
+function mlbUsualBullpenRole(c: MlbCareerState): MlbBullpenRole {
+  return c.archetype.id === 'closer' ? 'closer' : 'setup';
+}
+
+export function setMlbBullpenAssignment(c: MlbCareerState, role: MlbBullpenChoice): MlbCareerState {
+  if (!mlbBullpenChoices(c).includes(role)) return c;
+  if (role === 'usual' || role === mlbUsualBullpenRole(c)) {
+    if (!c.bullpenAssignment) return c;
+    const next = { ...c };
+    delete next.bullpenAssignment;
+    return next;
+  }
+  if (mlbBullpenAssignment(c) === role) return c;
+  return { ...c, bullpenAssignment: { year: c.year, team: c.team, role } };
+}
+
 export function mlbMarketSalary(c: MlbCareerState): number {
   // Round 58: position matters. Aces and shortstops get paid, relievers and
   // designated hitters do not, which is exactly how the market works.
@@ -565,7 +600,13 @@ export function simMlbSeason(
   };
   if (slate !== US_ENGINE_SEASON.mlb) full.slate = slate;
   const prof = MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF;
-  Object.assign(full, mlbStatLineFor({ form, pos: c.pos, kind: c.archetype.id, games: fullGames }, rng));
+  const bullpenRole = mlbBullpenAssignment(c);
+  if (c.bullpenAssignment) delete c.bullpenAssignment;
+  Object.assign(full, mlbStatLineFor({ form, pos: c.pos, kind: bullpenRole ?? c.archetype.id, games: fullGames }, rng));
+  if (bullpenRole) {
+    full.bullpenRole = bullpenRole;
+    notes.push(bullpenRole === 'closer' ? 'Bullpen role: closer, pitching for saves.' : 'Bullpen role: setup, pitching for holds.');
+  }
   const line = mlbLineOnSlate(full, work);
   if (seasonRating) line.seasonRating = seasonRating;
 
@@ -695,7 +736,7 @@ export function simMlbSeason(
   // mine, through one function (mlbHeadToHeadScore). The awards and his
   // All-Star pass still read the draw on the engine's own length (`full`).
   if (c.rival && !c.rival.retired) {
-    for (const n of judgeRivalSeason(c.rival, mlbHeadToHeadScore(c.pos, line), c.name, 'mlb', rng, mlbRivalSeason(c.year, { pos: c.pos, kind: c.archetype.id, slate }))) notes.push(n);
+    for (const n of judgeRivalSeason(c.rival, mlbHeadToHeadScore(c.pos, line), c.name, 'mlb', rng, mlbRivalSeason(c.year, { pos: c.pos, kind: bullpenRole ?? c.archetype.id, slate }))) notes.push(n);
   }
   /* Round 525: the rivalry beat, rolled right after the rival's own season,
      the same point in the loop the flagship and the NFL career roll their
