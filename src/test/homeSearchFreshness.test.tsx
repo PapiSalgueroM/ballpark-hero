@@ -151,3 +151,22 @@ it('restores the exact result and keyboard focus when a game navigates back to a
   expect(screen.getByRole('status', { name: 'Search results' })).toBeEmptyDOMElement();
   view.unmount();
 }, 15000);
+
+it('returns keyboard focus to the catalogue tile that opened a game', () => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  function Game() {
+    const navigate = useNavigate();
+    return <button onClick={() => navigate(-1)}>Go back</button>;
+  }
+  const { container } = render(<MemoryRouter><Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="/hockey-higher-lower" element={<Game />} />
+  </Routes></MemoryRouter>);
+  const card = () => container.querySelector<HTMLAnchorElement>('[data-catalog-card] a[href="/hockey-higher-lower"]')!;
+  card().focus();
+  fireEvent.click(card());
+  fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
+  expect(card()).toHaveFocus();
+  expect(screen.getByRole('textbox', { name: 'Search games' })).toHaveValue('');
+  expect(screen.getByRole('status', { name: 'Search results' })).toBeEmptyDOMElement();
+});
