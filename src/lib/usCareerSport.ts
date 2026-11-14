@@ -320,7 +320,7 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   tradeRequest?: {
     available(c: C): boolean;
     receipt(c: C): string | null;
-    settle(c: C): { teamQuality: number | null; note: string };
+    settle(c: C, kind: 'trade' | 'release'): { teamQuality: number | null; note: string; freeAgency: boolean };
   };
   buildExtension(c: C, rng: () => number): ExtensionTalk;
   extPushArgs(c: C, rng: () => number): ExtPushArgs;
