@@ -1,10 +1,18 @@
+## 2026-11-14: Soccer Career trophy promises, NBA Starting 5 recovery and NRL late tactics
+
+- The Soccer Career Press room lets you promise a league title or a domestic cup win when a cup is confirmed for the following year. The next played season at that club settles the existing popularity, morale and credibility stakes. A move or severe injury closes it without a verdict. Continental and national trophies remain a follow-up.
+- NBA Starting 5 keeps the current challenge, team deals, rerolls and accepted picks in this browser. A completed lineup can reopen at review. Start Over clears the draft, and a second tab cannot submit the same saved lineup twice.
+- At the NRL live 60-minute pause, a team level or two points down can set up a field goal. The call trades some late try threat for a better regulation field-goal chance. The report records the call and any regulation points it produced.
+
 ## 2026-11-14: Accessible clues in three Grids
+
+[PR #920](https://github.com/PapiSalgueroM/ballpark-hero/pull/920) published exact main `6fa31208d464fefc4b232b28b6c3029e723dc510`, deployment `c72811de-d4ad-4ffc-a58c-d4cdac1849d0`. Three live keyboard journeys and all 174 sitemap routes passed.
 
 - College Football, Football and Soccer Grid cells announce both clues and whether a square is empty, incorrect or correct. A correct square also retains the confirmed player name and rarity when available. Keyboard activation opens the existing guess entry for the named clue pair.
 
 ## 2026-11-14: Club Manager Intercontinental Cup and NRL attack plan comparison
 
-[PR #919](https://github.com/PapiSalgueroM/ballpark-hero/pull/919) published exact main `ab6157229f6ae696958e59050ef62b8346b5ba9e`, deployment `7ae1b773-85d9-47a5-81a7-35e794951220`.
+[PR #919](https://github.com/PapiSalgueroM/ballpark-hero/pull/919) published exact main `ab6157229f6ae696958e59050ef62b8346b5ba9e`, deployment `7ae1b773-85d9-47a5-81a7-35e794951220`. Seven live browser journeys and all 174 sitemap routes passed. IndexNow accepted both guides.
 
 - In a Club Manager save’s 2025/26 season, Cups follows the six real entrants across five scheduled matches in Cairo, Jeddah and Al Rayyan. Results simulate as the club calendar passes each date and stay attached to the save. Draws get extra time then penalties. The current manager earns the final trophy only if their real club wins while they are in the job. The edition is a followed competition with simulated scores. [Official bracket regulations](https://digitalhub.fifa.com/m/41ca9a261eb3f7d8/original/FIC2025_regulations_EN.pdf) [Official schedule](https://digitalhub.fifa.com/m/18d32b5e71e584f0/original/FIFA-Intercontinental-Cup-Qatar-2025-Match-Schedule.pdf) [Qatar organising committee schedule](https://pra.roadtoqatar.qa/wp-content/uploads/2025/12/fic2025_match_schedule_v4_05122025.pdf)
 - NRL Opposition report compares the attack and defence edges for every available attack plan with automatic rotation, using the current lineup, preparation and venue. Choose and save the tactic in the existing Attack plan control.

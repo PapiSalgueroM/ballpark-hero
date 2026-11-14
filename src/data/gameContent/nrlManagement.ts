@@ -26,6 +26,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Use First reserve in the rotation preview to move a named reserve to the front of the bench and compare the updated plans before kick-off.',
       'At half time in a live club match, give a team talk if you want. Reinforce the basics to help your defence or lift the tempo to chase tries and leave more space. The talk only affects the second half of regulation.',
       'For a late coaching decision, choose Play to 60 minutes at half time. Keep or change your tactic and bring on a held reserve if they have not played yet. These choices apply to the final 20 minutes and any extra time. The game saves at the 60-minute pause.',
+      'If you are level or two points down at 60 minutes, you can set up a field goal. This trades some late try threat for a better field-goal chance in regulation.',
       'Play the round and check the result against the ladder. In Match centre, use Season fixtures to reopen a completed club match and check its scorers and decisions. New match reports also show points by period, with a 60-minute split if you paused there and a separate extra-time row when played. Choose a finals week in the fixture menu to see its report.',
       'Open Matchday team sheet in a report with a player record to see the starting 13, the reserves who played and how many points each player scored.',
       'In Ladder, open Form and venue records to compare each club’s last five completed league matches and its home and away win, draw and loss records.',

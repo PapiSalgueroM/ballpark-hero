@@ -53,7 +53,7 @@ const NbaLineup = () => {
   const fmtStat = (v: number) => (Number.isInteger(v) ? String(v) : v.toFixed(1));
   const [playerInput, setPlayerInput] = useState('');
   const [showHowToPlay, setShowHowToPlay] = useState(false);
-  const [courtSelection, setCourtSelection] = useState(false);
+  const [courtSelection, setCourtSelection] = useState(selectedPosition !== null);
 
   const handleSelectPlayer = async (entity: PlayerEntity) => {
     if (isValidating) return;
@@ -267,6 +267,15 @@ const NbaLineup = () => {
                 selectionDisabled={isTeamSpinning || isValidating}
               />
             </div>
+            <div className="flex justify-center">
+              <button
+                onClick={resetGame}
+                disabled={isValidating}
+                className="inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold text-muted-foreground hover:text-foreground disabled:opacity-50"
+              >
+                <RotateCcw className="w-4 h-4" /> Start Over
+              </button>
+            </div>
           </div>
         )}
 
@@ -315,6 +324,7 @@ const NbaLineup = () => {
             <div className="flex items-center justify-center gap-3">
               <button
                 onClick={resetGame}
+                disabled={isEvaluating}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
               >
                 <RotateCcw className="w-4 h-4" />

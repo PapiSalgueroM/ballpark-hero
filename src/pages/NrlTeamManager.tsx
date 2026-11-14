@@ -25,7 +25,7 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlBenchRotation, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
-  nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60Interchange, nrlNextRound,
+  nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchange, nrlNextRound,
   nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
@@ -311,7 +311,9 @@ function LiveMinute60({ live, season, onAction, disabled }: {
   const stage = live.minute60!;
   const [tactic, setTactic] = useState(stage.tactic);
   const [bringOn, setBringOn] = useState(false);
+  const [fieldGoal, setFieldGoal] = useState(false);
   const { year, squad } = season;
+  const canSetUpKick = nrlMinute60FieldGoalAvailable(season);
   const late = nrlMinute60Interchange(season);
   const reserve = late && squad.find(player => player.id === late.reserveId);
   const starter = late && squad.find(player => player.id === late.starterId);
@@ -352,8 +354,19 @@ function LiveMinute60({ live, season, onAction, disabled }: {
           <p className="text-sm text-muted-foreground">{reserve.name} can replace {starter.name} at {late.role} for the rest of the match.</p>
         </fieldset>
       )}
+      {canSetUpKick && (
+        <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-3" data-nrl-late-field-goal>
+          <legend className="px-1 font-bold">Late scoring plan</legend>
+          <label className="flex min-h-11 items-center gap-2 text-sm font-semibold">
+            <input type="checkbox" checked={fieldGoal} disabled={disabled} onChange={event => setFieldGoal(event.target.checked)} />
+            Set up a field goal
+          </label>
+          <p className="text-sm text-muted-foreground">Trade a little late try threat for a better chance at a field goal if the score stays close in regulation.</p>
+        </fieldset>
+      )}
       <Button type="button" size="lg" className="w-full" disabled={disabled}
-        onClick={() => onAction({ type: 'finishMinute60', year, round: fixture.round, tactic, reserveId: bringOn ? reserve?.id : undefined })}>
+        onClick={() => onAction({ type: 'finishMinute60', year, round: fixture.round, tactic, reserveId: bringOn ? reserve?.id : undefined,
+          ...(canSetUpKick && fieldGoal && { fieldGoalPlan: true }) })}>
         Play final 20 minutes <ArrowRight aria-hidden="true" />
       </Button>
     </section>
@@ -588,6 +601,10 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
       </p>}
       {match.minute60Tactic && <p className="mt-2 text-sm text-muted-foreground" data-nrl-minute60-tactic>
         60-minute tactic change: {tactics.find(option => option.id === match.minute60Tactic)?.label}.
+      </p>}
+      {match.minute60FieldGoal !== undefined && <p className="mt-2 text-sm text-muted-foreground" data-nrl-minute60-field-goal>
+        {match.minute60FieldGoal === 0 ? 'No field goal in regulation after the setup.'
+          : `Field-goal setup produced a ${match.minute60FieldGoal === 1 ? 'one-point' : 'two-point'} kick in regulation.`}
       </p>}
       {match.counterStyle && <p className="mt-2 text-sm text-muted-foreground" data-nrl-counter-plan>
         Counter plan: {counterPlanResult[match.counterStyle]}
@@ -1990,6 +2007,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
               <li>Check a late Selection promise in the rotation preview before kick-off. An eligible match counts toward the promise window if the player stays off.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. Choose Play to 60 minutes to bring on a held reserve who is still on the bench. Quick Sim settles the round in one action.</li>
+              <li>If you are level or two points down at 60 minutes, you can set up a field goal. This trades some late try threat for a better field-goal chance in regulation.</li>
               <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>
               <li>Open Matchday team sheet in a report with a player record to see the starting 13, the reserves who played and how many points each player scored.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>

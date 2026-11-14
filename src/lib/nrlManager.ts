@@ -27,6 +27,9 @@ export const NRL_CAPTAIN_DEFENCE = 1;
 const MAX_INJURY_ROUNDS = 4;
 const UTILITY_RATING_COST = 12;
 const GOLDEN_POINT_SCORE_CHANCE = 0.78;
+const FIELD_GOAL_CHANCE = 0.14;
+const SET_FIELD_GOAL_CHANCE = 0.28;
+const SET_FIELD_GOAL_ATTACK_COST = 2;
 // Split the existing probability using the same scoring chance in each five-minute period.
 const FIRST_GOLDEN_POINT_SCORE_CHANCE = 1 - Math.sqrt(1 - GOLDEN_POINT_SCORE_CHANCE);
 const GOLDEN_POINT_VALUES = { tries: 4, penalties: 2, longFieldGoals: 2, fieldGoals: 1 } as const;
@@ -89,6 +92,7 @@ interface NrlHalftimeOption extends NrlHalftimeReceipt { role: NrlRole }
 interface NrlHalftimeDecision {
   live: NrlLiveHalf; tactic: NrlTactic; interchanges: NrlHalftimeOption[]; talk?: NrlHalftimeTalk;
   lateTactic?: NrlTactic; lateInterchange?: NrlHalftimeInterchange & { role: NrlRole };
+  fieldGoalPlan?: true;
 }
 export interface NrlInjury { playerId: string; rounds: number }
 type NrlGoldenScore = keyof typeof GOLDEN_POINT_VALUES;
@@ -115,6 +119,7 @@ export interface NrlMatchResult extends NrlFixture {
   halftimeTalk?: NrlHalftimeTalk;
   minute60Tactic?: NrlTactic;
   minute60Interchange?: NrlHalftimeInterchange;
+  minute60FieldGoal?: 0 | 1 | 2;
   individualRecoveryId?: string;
   counterStyle?: NrlOpponentStyle;
   captainId?: string;
@@ -184,7 +189,7 @@ export type NrlAction =
   | { type: 'setIndividualRecovery'; playerId: string | null; year: number; clubId: string; round: number }
   | { type: 'startLive'; hold?: { year: number; round: number; reserveId: string } }
   | NrlHalftimeAction<'finishLive'> | NrlHalftimeAction<'reachMinute60'>
-  | { type: 'finishMinute60'; year: number; round: number; tactic: NrlTactic; reserveId?: string }
+  | { type: 'finishMinute60'; year: number; round: number; tactic: NrlTactic; reserveId?: string; fieldGoalPlan?: true }
   | { type: 'advance' };
 
 const lastRound = (year: number) => nrlRegularRounds(year) + 4;
@@ -581,6 +586,15 @@ export function nrlMinute60Interchange(state: NrlManagerState) {
   if (held) return { starterId: state.lineup[held.role], reserveId: held.id, role: held.role };
 }
 
+const fieldGoalPlanGap = (gap: number) => gap === 0 || gap === -2;
+
+export function nrlMinute60FieldGoalAvailable({ clubId, live }: Pick<NrlManagerState, 'clubId' | 'live'>) {
+  if (!live?.minute60) return false;
+  const { homeScoring, awayScoring } = live.minute60;
+  const gap = scoreOf(homeScoring) - scoreOf(awayScoring);
+  return fieldGoalPlanGap(live.fixture.homeId === clubId ? gap : -gap);
+}
+
 const TACTIC_EFFECT: Record<NrlTactic, { attack: number; defense: number }> = {
   balanced: { attack: 0, defense: 0 },
   attack: { attack: 5, defense: -3 },
@@ -809,7 +823,7 @@ function closingSelection(state: NrlManagerState, rotation: ReadonlyMap<string, 
     ...secondHalf, tactic: lateTactic ?? decision.tactic,
     lineup: lateInterchange ? { ...lineup, [lateInterchange.role]: lateInterchange.reserveId } : lineup,
   } : undefined;
-  return { state: secondHalf, rotation: finalRotation, talk: decision.talk, lateTactic, lateState };
+  return { state: secondHalf, rotation: finalRotation, talk: decision.talk, lateTactic, lateState, fieldGoalPlan: decision.fieldGoalPlan };
 }
 
 function regulationEdges({ homeEdge, awayEdge }: ReturnType<typeof fixtureEdges>, talk: NrlHalftimeTalk | undefined, managedAtHome: boolean) {
@@ -846,9 +860,12 @@ function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStreng
   const { homeEdge, awayEdge } = extra;
   const middle = regulationEdges(throughHalf, closing?.talk, homeId === state.clubId);
   const late = regulationEdges(extra, closing?.talk, homeId === state.clubId);
+  const fieldGoalPlan = closing?.fieldGoalPlan;
+  const homeSetsUpKick = fieldGoalPlan && homeId === state.clubId;
+  const awaySetsUpKick = fieldGoalPlan && awayId === state.clubId;
   const regulation = (openingEdge: number, closingEdge: number, lateEdge: number) => {
     if (!managed) return { total: scoringChances(rng, openingEdge, 18), halfTime: 0 };
-    if (closing?.lateState) {
+    if (closing?.lateState || fieldGoalPlan) {
       const { first, through60, finish } = regulationStages(rng, openingEdge, closingEdge, lateEdge);
       addScoring(through60, finish);
       return { total: through60, halfTime: scoreOf(first) };
@@ -858,20 +875,14 @@ function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStreng
     addScoring(first, second);
     return { total: first, halfTime };
   };
-  const home = regulation(opening.homeEdge, middle.homeEdge, late.homeEdge);
-  const away = regulation(opening.awayEdge, middle.awayEdge, late.awayEdge);
+  const home = regulation(opening.homeEdge, middle.homeEdge, late.homeEdge - (homeSetsUpKick ? SET_FIELD_GOAL_ATTACK_COST : 0));
+  const away = regulation(opening.awayEdge, middle.awayEdge, late.awayEdge - (awaySetsUpKick ? SET_FIELD_GOAL_ATTACK_COST : 0));
   const homeScoring = home.total, awayScoring = away.total;
   const gap = scoreOf(homeScoring) - scoreOf(awayScoring);
   const homeKick = rng();
   const awayKick = rng();
-  if (gap <= 0 && gap >= -2 && homeKick < 0.14) {
-    if (gap === -2 || homeKick < 0.008) homeScoring.longFieldGoals++;
-    else homeScoring.fieldGoals++;
-  }
-  if (gap >= 0 && gap <= 2 && awayKick < 0.14) {
-    if (gap === 2 || awayKick < 0.008) awayScoring.longFieldGoals++;
-    else awayScoring.fieldGoals++;
-  }
+  const homeKickPoints = regulationFieldGoal(homeScoring, gap, homeKick, homeSetsUpKick ? SET_FIELD_GOAL_CHANCE : FIELD_GOAL_CHANCE);
+  const awayKickPoints = regulationFieldGoal(awayScoring, -gap, awayKick, awaySetsUpKick ? SET_FIELD_GOAL_CHANCE : FIELD_GOAL_CHANCE);
   // NRL finals play ten minutes before sudden death. A regular match can finish level.
   // https://www.nrl.com/siteassets/operations/the-game/nrl-international-rules-book-2023.pdf
   const regulationScore: NrlScorePair = [scoreOf(homeScoring), scoreOf(awayScoring)];
@@ -902,10 +913,21 @@ function playFixture(state: NrlManagerState, fixture: NrlFixture, opponentStreng
       regulation: regulationScore } }),
     ...(closing?.talk ? { halftimeTalk: closing.talk } : {}),
     ...(closing?.lateTactic ? { minute60Tactic: closing.lateTactic } : {}),
+    ...(fieldGoalPlan && { minute60FieldGoal: homeSetsUpKick ? homeKickPoints : awayKickPoints }),
   };
   return rotation.size && managed
     ? { ...result, benchUsed: [...rotation.values()].map(player => player.id) }
     : result;
+}
+
+function regulationFieldGoal(scoring: NrlScoring, gap: number, roll: number, chance: number) {
+  if (gap > 0 || gap < -2 || roll >= chance) return 0;
+  if (gap === -2 || roll < 0.008) {
+    scoring.longFieldGoals++;
+    return 2;
+  }
+  scoring.fieldGoals++;
+  return 1;
 }
 
 function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<string, number> | undefined,
@@ -921,7 +943,7 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
   const lateInterchange = halftime?.lateInterchange;
   if (entering) used.add(entering.reserveId);
   if (lateInterchange) used.add(lateInterchange.reserveId);
-  const closing = halftime && (interchanges.length || halftime.talk || halftime.lateTactic || lateInterchange || halftime.tactic !== state.tactic)
+  const closing = halftime && (interchanges.length || halftime.talk || halftime.lateTactic || lateInterchange || halftime.fieldGoalPlan || halftime.tactic !== state.tactic)
     ? closingSelection(state, rotation, halftime) : undefined;
   const squad = state.squad.map(player => {
     const before = readyFitness(player.fitness, playerPreparation(state, player.id), played);
@@ -1093,6 +1115,7 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
       if (!live || action.year !== state.year || action.round !== state.round) return state;
       if (action.type === 'finishMinute60') {
         if (!live.minute60 || !NRL_TACTICS.includes(action.tactic)) return state;
+        if (action.fieldGoalPlan !== undefined && (action.fieldGoalPlan !== true || !nrlMinute60FieldGoalAvailable(state))) return state;
         const decision = halftimeDecision(state, live, live.minute60);
         if (!decision) return state;
         if (action.reserveId !== undefined) {
@@ -1101,6 +1124,7 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
           decision.lateInterchange = late;
         }
         if (action.tactic !== decision.tactic) decision.lateTactic = action.tactic;
+        if (action.fieldGoalPlan) decision.fieldGoalPlan = true;
         return advanceRound(matchday, opponentStrength, options, decision);
       }
       if (live.minute60) return state;
@@ -1268,6 +1292,7 @@ function validResult(value: unknown, expected: NrlFixture, state: Pick<NrlManage
     && (value.halftimeTalk === undefined || (managed && isNrlHalftimeTalk(value.halftimeTalk) && value.playerScoring !== undefined))
     && (value.minute60Tactic === undefined || (managed && NRL_TACTICS.includes(value.minute60Tactic as NrlTactic)
       && value.playerScoring !== undefined))
+    && (value.minute60FieldGoal === undefined || (managed && validMinute60FieldGoal(value, expected.homeId === clubId)))
     && (value.individualRecoveryId === undefined || (managed && typeof value.individualRecoveryId === 'string'
       && byId.has(value.individualRecoveryId) && value.playerScoring !== undefined))
     && (value.counterStyle === undefined || (managed && value.playerScoring !== undefined
@@ -1287,6 +1312,18 @@ function validResult(value: unknown, expected: NrlFixture, state: Pick<NrlManage
       value.benchUsed as string[] | undefined, byId)
     && validMinute60Interchange(value.minute60Interchange, [value.halftimeInterchange, value.secondHalftimeInterchange],
       value.playerScoring as NrlMatchScoringReport | undefined, value.benchUsed as string[] | undefined, byId);
+}
+
+function validMinute60FieldGoal(match: Record<string, unknown>, home: boolean): boolean {
+  const points = match.minute60FieldGoal;
+  const periods = match.scorePeriods as NrlScorePeriods | undefined;
+  const scoring = (home ? match.homeScoring : match.awayScoring) as NrlScoring;
+  if (!integerIn(points, 0, 2) || !periods?.at60 || match.playerScoring === undefined) return false;
+  const side = home ? 0 : 1;
+  return fieldGoalPlanGap(periods.at60[side] - periods.at60[1 - side])
+    && periods.regulation[side] - periods.at60[side] >= points
+    && periods.regulation[side] % 2 === points % 2
+    && (points === 0 || (points === 1 ? scoring.fieldGoals : scoring.longFieldGoals) > 0);
 }
 
 export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
