@@ -1609,6 +1609,7 @@ export function worldSeasonTick(
   s: CareerState,
   opts: {
     year: number; playerLeagueTitle: boolean; playerUcl: boolean; playerCup?: boolean;
+    europeanChampion?: string;
     /** Round 1041: the association whose cup the player's club played. */
     playerCupAssociation?: string;
     /** Saved simulated league champions. Existing world RNG draws stay put. */
@@ -1759,7 +1760,8 @@ export function worldSeasonTick(
     : null;
 
   if (opts.leagueChampions) Object.assign(leagueWinners, opts.leagueChampions);
-  const world: WorldSeason = { year, ucl, leagues: leagueWinners, cups: cupWinners, moves, topScorer, intl };
+  // The draw stays on the same stream, even when the saved final decides the winner.
+  const world: WorldSeason = { year, ucl: opts.europeanChampion ?? ucl, leagues: leagueWinners, cups: cupWinners, moves, topScorer, intl };
   p.world = world;
 
   /* Feed lines. Every one of them is read straight off `world`. Round 1329:
@@ -1784,7 +1786,7 @@ export function worldSeasonTick(
     items.push(`🔄 ${s.rival.name} has left ${p.rivalClub} for ${s.rival.club}.`);
   }
   if (!happened) {
-    if (ucl !== s.currentClub) items.push(`⭐ ${ucl} are champions of Europe.`);
+    if (world.ucl !== s.currentClub) items.push(`⭐ ${world.ucl} are champions of Europe.`);
     const titles = Object.entries(leagueWinners).filter(([, club]) => club !== s.currentClub);
     for (const [lg, club] of titles.slice(0, 2)) {
       items.push(`🏆 ${club} win ${leaguePhrase(lg)}.`);

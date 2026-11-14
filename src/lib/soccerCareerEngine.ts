@@ -6106,11 +6106,17 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      d'Or below reads the same answers, so the phone's sports feed and the
      awards screen can never contradict each other. */
   const cupAssoc = seasonCupAssociation(season, s);
+  const europeanRun = season.clubCupRun;
+  const europeanFinal = europeanRun?.matches.at(-1);
+  const lostEuropeanFinal = europeanRun?.cup === 'ucl' && europeanRun.result === 'Final'
+    && europeanRun.seasonYear === thisYear && europeanRun.club === season.club
+    && europeanFinal?.round === 'Final' && !europeanFinal.won;
   const world = worldSeasonTick(s, {
     year: thisYear,
     leagueChampions: leagueWorldChampions(s, clubs, season),
     playerLeagueTitle: season.leagueTitle,
     playerUcl: season.championsLeague,
+    europeanChampion: lostEuropeanFinal ? europeanFinal.opponent : undefined,
     playerCup: season.domesticCup,
     /* Round 1041: a cup belongs to an association, not a league */
     playerCupAssociation: cupAssoc,

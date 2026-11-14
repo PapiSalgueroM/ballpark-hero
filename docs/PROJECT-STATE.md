@@ -1,4 +1,12 @@
-## Current candidate: NRL match reports, Home shortcuts and NFL News
+## Current candidate: Soccer Career European final winner
+
+Newly closed seasons use the saved European final to name the champion in SportsFeed and the Ballon d'Or. The phone consumes the same draw, and the simulated pick still applies when the player's club missed the final. Four focused checks cover a shootout loss, an awards shortlist, a win and an earlier exit. Compiled comparisons at 390 and 1440 pixels reproduce the same Chelsea shootout win on both builds and show Chelsea instead of PSG in the new feed.
+
+The updated NRL guide now has a matching search index. The Home fold check asserts the published Continue position before the featured games.
+
+## 2026-11-13: NRL match reports, Home shortcuts and NFL News live
+
+[PR #891](https://github.com/PapiSalgueroM/ballpark-hero/pull/891) published from main `e0daeed88764de769c0f2d998ce5569c616f1283`, deployment `04b1f71c-7947-4284-b519-7401a9d8b1bb`. The canonical entry is `/assets/index-BtWLhyiq.js`. The 174-route crawler audit passed and IndexNow accepted the NRL guide.
 
 - NRL's Season fixtures opens saved reports for your completed club matches, including available finals in the fixture selector. Verified earlier scorers and exact saves after reload in 2026 and 2027 at 320, 390 and 1440 pixels.
 - Home shortens pinned games and adds an All sports return link to each sport section. At 390 pixels, the one-save and one-pin fixture brings the feature and Daily sections 48 pixels higher. The sport links pass touch, keyboard and 200% text-size checks.
