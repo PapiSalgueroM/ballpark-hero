@@ -1,3 +1,7 @@
+## 2026-11-14: Fight game rating guides
+
+- Fight Career and Fight Gym explain how training can improve a fighter and how aging and permanent damage can lower the effective rating between bouts. Fight Promoter explains the equivalent boxing effects and distinguishes MMA match ratings from recovery and ranking points.
+
 ## 2026-11-14: Front Office and academy rating timing
 
 - NFL, NBA, MLB and NHL Front Office move OVR one point at a time during regular-season play. Young players can improve toward potential, veterans can decline, and closing ratings carry through the draft and summer. NFL, NBA, MLB and NHL also age returning players once per offseason.
