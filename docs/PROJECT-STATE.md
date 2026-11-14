@@ -1,4 +1,12 @@
+## 2026-11-14: Club Manager national XI, NRL scouting and Home return focus
+
+- Current-era Club Manager coaches can save a formation and starting XI from their career's eligible national pool before a tournament summer. The lineup's ratings and positional fit adjust the existing summer simulation. The report keeps the lineup used, or says when an unavailable player led to automatic selection. The summer still runs in one simulation.
+- NRL academy scouts can look for a player who is ready sooner or has a higher ceiling. The role, prospect identity, deadline and contract remain tied to the same scouting process.
+- Home's pinned games and Continue shelves restore focus and their horizontal position on Back. Both NRL slots restore their own cards, and catalogue and search retain their existing behavior.
+
 ## 2026-11-14: Soccer Career trophy promises, NBA Starting 5 recovery and NRL late tactics
+
+[PR #921](https://github.com/PapiSalgueroM/ballpark-hero/pull/921) published exact main `3c3f3ac3630db72e864863d0ebcf6bb106d0e480`, deployment `8149209d-e90e-4ed3-9e06-4f24966a974a`. Ten native browser journeys, all 174 sitemap routes and all three raw guides passed. IndexNow accepted the three URLs.
 
 - The Soccer Career Press room lets you promise a league title or a domestic cup win when a cup is confirmed for the following year. The next played season at that club settles the existing popularity, morale and credibility stakes. A move or severe injury closes it without a verdict. Continental and national trophies remain a follow-up.
 - NBA Starting 5 keeps the current challenge, team deals, rerolls and accepted picks in this browser. A completed lineup can reopen at review. Start Over clears the draft, and a second tab cannot submit the same saved lineup twice.
