@@ -25,7 +25,7 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview,
-  nrlLadder, nrlMatchdaySelection, nrlMinute60Interchange, nrlNextRound,
+  nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60Interchange, nrlNextRound,
   nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
@@ -1352,9 +1352,11 @@ function Ladder({ career }: { career: NrlCareerState }) {
   const shortName = useNrlClubName();
   const fullName = useNrlClubName('full');
   const { season } = career;
+  const [showForm, setShowForm] = useState(false);
   const [scoutOpen, setScoutOpen] = useState(false);
   const [scoutClubId, setScoutClubId] = useState('');
   const rows = nrlLadder(season);
+  const form = showForm ? nrlLeagueForm(season) : null;
   const clubs = nrlSeasonPlan(season.year).clubs;
   const rivals = clubs.filter(club => club.id !== season.clubId);
   const rival = scoutOpen ? rivals.find(club => club.id === scoutClubId) : undefined;
@@ -1364,34 +1366,60 @@ function Ladder({ career }: { career: NrlCareerState }) {
   return (
     <section className="rounded-xl border border-border bg-card p-3 sm:p-4" aria-labelledby="nrl-ladder">
       <h2 id="nrl-ladder" className="font-display text-lg font-bold">{season.year} ladder</h2>
-      <p className="mt-1 text-sm text-muted-foreground">The top eight make the finals. Diff is points scored minus points conceded.</p>
-      <table className="mt-3 w-full table-fixed text-left text-xs sm:text-sm">
+      <button type="button" aria-pressed={showForm} onClick={() => setShowForm(value => !value)}
+        className="mt-2 min-h-11 rounded-lg border border-border px-3 text-sm font-semibold hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring aria-pressed:bg-primary/10">
+        Form and venue records
+      </button>
+      <p id="nrl-ladder-guide" className="mt-2 text-sm text-muted-foreground">
+        {showForm ? 'Regular season only. Last five matches, oldest first. Home and away show wins, draws and losses.'
+          : 'The top eight make the finals. Diff is points scored minus points conceded.'}
+      </p>
+      <table aria-describedby="nrl-ladder-guide" className="mt-3 w-full table-fixed text-left text-xs sm:text-sm">
         <thead className="text-muted-foreground">
           <tr>
             <th scope="col" className="w-7 py-2"><span className="sr-only">Rank</span>#</th>
             <th scope="col">Club</th>
-            <th scope="col" className="w-7 text-right"><abbr title="Played">P</abbr></th>
-            <th scope="col" className="hidden w-9 text-right sm:table-cell"><abbr title="Wins">W</abbr></th>
-            <th scope="col" className="hidden w-9 text-right sm:table-cell"><abbr title="Draws">D</abbr></th>
-            <th scope="col" className="hidden w-9 text-right sm:table-cell"><abbr title="Losses">L</abbr></th>
-            <th scope="col" className="w-9 text-right"><abbr title="Ladder points">Pts</abbr></th>
-            <th scope="col" className="w-10 text-right"><abbr title="Points differential">Diff</abbr></th>
+            {showForm ? <>
+              <th scope="col" className="w-24 text-right">Last 5</th>
+              <th scope="col" className="w-14 text-right sm:w-20">Home</th>
+              <th scope="col" className="w-14 text-right sm:w-20">Away</th>
+            </> : <>
+              <th scope="col" className="w-7 text-right"><abbr title="Played">P</abbr></th>
+              <th scope="col" className="hidden w-9 text-right sm:table-cell"><abbr title="Wins">W</abbr></th>
+              <th scope="col" className="hidden w-9 text-right sm:table-cell"><abbr title="Draws">D</abbr></th>
+              <th scope="col" className="hidden w-9 text-right sm:table-cell"><abbr title="Losses">L</abbr></th>
+              <th scope="col" className="w-9 text-right"><abbr title="Ladder points">Pts</abbr></th>
+              <th scope="col" className="w-10 text-right"><abbr title="Points differential">Diff</abbr></th>
+            </>}
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, index) => (
-            <tr key={row.clubId} data-nrl-ladder={row.clubId}
-              className={`border-t border-border tabular-nums ${row.clubId === season.clubId ? 'bg-primary/10 font-bold' : ''} ${index === 8 ? 'border-t-2 border-t-primary/60' : ''}`}>
-              <td className="py-2">{index + 1}</td>
-              <th scope="row" className="break-words pr-1 font-medium">{shortName(season.year, row.clubId)}</th>
-              <td className="text-right">{row.played}</td>
-              <td className="hidden text-right sm:table-cell">{row.wins}</td>
-              <td className="hidden text-right sm:table-cell">{row.draws}</td>
-              <td className="hidden text-right sm:table-cell">{row.losses}</td>
-              <td className="text-right font-bold">{row.points}</td>
-              <td className="text-right">{row.differential > 0 ? '+' : ''}{row.differential}</td>
-            </tr>
-          ))}
+          {rows.map((row, index) => {
+            const record = form?.get(row.clubId);
+            return (
+              <tr key={row.clubId} data-nrl-ladder={row.clubId}
+                className={`border-t border-border tabular-nums ${row.clubId === season.clubId ? 'bg-primary/10 font-bold' : ''} ${index === 8 ? 'border-t-2 border-t-primary/60' : ''}`}>
+                <td className="py-2">{index + 1}</td>
+                <th scope="row" className="break-words pr-1 font-medium">{shortName(season.year, row.clubId)}</th>
+                {record ? <>
+                  <td className="text-right">{record.recent.join(' ') || 'None'}</td>
+                  {[record.home, record.away].map(({ W, D, L }, venue) => (
+                    <td key={venue} className="whitespace-nowrap text-right">
+                      <span aria-hidden="true">{W}-{D}-{L}</span>
+                      <span className="sr-only">{W} wins, {D} draws, {L} losses</span>
+                    </td>
+                  ))}
+                </> : <>
+                  <td className="text-right">{row.played}</td>
+                  <td className="hidden text-right sm:table-cell">{row.wins}</td>
+                  <td className="hidden text-right sm:table-cell">{row.draws}</td>
+                  <td className="hidden text-right sm:table-cell">{row.losses}</td>
+                  <td className="text-right font-bold">{row.points}</td>
+                  <td className="text-right">{row.differential > 0 ? '+' : ''}{row.differential}</td>
+                </>}
+              </tr>
+            );
+          })}
         </tbody>
       </table>
       <details className="mt-3 rounded-lg border border-border bg-background px-3"

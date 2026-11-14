@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { NRL_CLUBS, NRL_DRAW } from '@/data/nrlManager2026';
 import {
-  createNrlSeason, isNrlManagerState, nrlFinalsEliminated, nrlLadder, nrlNextRound, nrlRoundFixtures,
-  NRL_REGULAR_ROUNDS, NRL_ROLES, readNrlSave, reduceNrlSeason,
+  createNrlSeason, isNrlManagerState, nrlFinalsEliminated, nrlLadder, nrlLeagueForm, nrlNextRound, nrlRoundFixtures,
+  nrlRegularRounds, NRL_REGULAR_ROUNDS, NRL_ROLES, readNrlSave, reduceNrlSeason,
   type NrlManagerState, type NrlMatchResult,
 } from '@/lib/nrlManager';
 
@@ -99,6 +99,40 @@ describe('NRL Manager season', () => {
     expect(nrlRoundFixtures(complete)).toEqual([]);
     expect(nrlNextRound(complete)).toMatchObject({ title: 'Season complete', clubStatus: 'complete', clubMatch: null });
     expect(advance(complete)).toBe(complete);
+  });
+
+  it.each([['storm', 2026], ['bears', 2027]] as const)('reads settled regular-season form and venue records for %s', (team, year) => {
+    const opening = createNrlSeason(team, 7, year);
+    expect(nrlLeagueForm(opening).get(team)).toEqual({
+      recent: [], home: { W: 0, D: 0, L: 0 }, away: { W: 0, D: 0, L: 0 },
+    });
+    const end = nrlRegularRounds(year);
+    const regular = throughRound(opening, end);
+    const complete = throughRound(regular, end + 4);
+    const bytes = JSON.stringify(complete);
+    const form = nrlLeagueForm(complete);
+    expect(form).toEqual(nrlLeagueForm(regular));
+    expect(form).toEqual(nrlLeagueForm(readNrlSave(bytes)!));
+    expect(form.size).toBe(year === 2026 ? 17 : 18);
+    for (const row of nrlLadder(regular)) {
+      const club = form.get(row.clubId)!;
+      const games = regular.results.filter(match => [match.homeId, match.awayId].includes(row.clubId));
+      const outcome = (match: NrlMatchResult) => match.homeScore === match.awayScore ? 'D'
+        : (match.homeId === row.clubId) === (match.homeScore > match.awayScore) ? 'W' : 'L';
+      expect(club.recent).toEqual(games.slice(-5).map(outcome));
+      for (const [side, id] of [['home', 'homeId'], ['away', 'awayId']] as const) {
+        const results = games.filter(match => match[id] === row.clubId).map(outcome);
+        expect(club[side]).toEqual({
+          W: results.filter(result => result === 'W').length,
+          D: results.filter(result => result === 'D').length,
+          L: results.filter(result => result === 'L').length,
+        });
+      }
+      expect(club.home.W + club.away.W).toBe(row.wins);
+      expect(club.home.D + club.away.D).toBe(row.draws);
+      expect(club.home.L + club.away.L).toBe(row.losses);
+    }
+    expect(JSON.stringify(complete)).toBe(bytes);
   });
 
   it('lets training, recovery and tactics alter the managed club while leaving other fixtures seeded', () => {

@@ -54,6 +54,31 @@ afterEach(() => {
 });
 
 describe('NRL rival club scouting', () => {
+  it('switches the ladder to past form with venue records and preserves focus and save', () => {
+    let career = createNrlCareer('storm', 7);
+    while (career.season.round < 12) career = reduceNrlCareer(career, { type: 'advance' });
+    const bytes = JSON.stringify(career);
+    openLadder(bytes);
+    const fence = localStorage.getItem(fenceKey);
+    const ladder = screen.getByRole('table');
+    const ranks = () => within(ladder).getAllByRole('rowheader').map(cell => cell.textContent);
+    const positions = ranks();
+    const control = screen.getByRole('button', { name: 'Form and venue records' });
+    control.focus();
+    fireEvent.click(control);
+    expect(control).toHaveFocus();
+    expect(control).toHaveAttribute('aria-pressed', 'true');
+    expect(within(ladder).getByRole('columnheader', { name: 'Last 5' })).toBeVisible();
+    const ownRow = within(ladder).getByRole('rowheader', { name: 'Storm' }).closest('tr')!;
+    expect(within(ownRow).getAllByRole('cell')[1]).toHaveTextContent(/^([WDL] ){4}[WDL]$/);
+    expect(within(ownRow).getAllByRole('cell')[2]).toHaveAccessibleName(/\d wins, \d draws, \d losses/);
+    expect(ranks()).toEqual(positions);
+    fireEvent.click(control);
+    expect(within(ladder).getByRole('columnheader', { name: 'Pts' })).toBeVisible();
+    expect(raw()).toBe(bytes);
+    expect(localStorage.getItem(fenceKey)).toBe(fence);
+  });
+
   it.each([['storm', 2026], ['bears', 2027]] as const)('opens one generated squad from the %s %i ladder without saving', async (clubId, year) => {
     const career = createNrlCareer(clubId, 17, year);
     const bytes = JSON.stringify(career);
