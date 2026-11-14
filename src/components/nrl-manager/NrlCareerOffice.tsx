@@ -2067,7 +2067,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
         </label>
         <p className="text-muted-foreground">If you stay, the selected player signs for one year at their asking salary before the remaining places are filled.</p>
         {retentionImpact && <p role="status" className="text-muted-foreground">{year + 1} cap room {money(retentionImpact.before.available)} → {money(retentionImpact.after.available)} · {retentionImpact.after.openSlots} open places.</p>}
-        {retentionChoice && !retentionChoice.quote.ok && <p role="status" className="text-muted-foreground">{retentionChoice.quote.reason} Choose a different player or keep the place open.</p>}
+        {retentionChoice?.quote.ok === false && <p role="status" className="text-muted-foreground">{retentionChoice.quote.reason} Choose a different player or keep the place open.</p>}
       </section>}
       {(canChooseFreeAgents || preferFreeAgents) && <OffseasonFreeAgents career={career} checked={preferFreeAgents} disabled={disabled}
         onChange={enabled => onAction({ type: 'setOffseasonFreeAgents', year, clubId, enabled })} />}
