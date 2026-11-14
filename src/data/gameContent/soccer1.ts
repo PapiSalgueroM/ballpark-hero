@@ -1394,6 +1394,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Playing the daily lineup or the archive",
         items: [
           "Play the shared daily lineup, then raid the archive in Unlimited.",
+          "Your unfinished Unlimited lineup stays in this browser. Choose New Lineup to draw another from the archive.",
         ],
       },
     ],

@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -14,6 +14,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { encodeMissingXiUnlimitedDraft, loadMissingXiUnlimitedDraft, writeMissingXiUnlimitedDraft } from '@/lib/missingXiUnlimitedDraft';
 import { getTodayET } from '@/lib/dateUtils';
 import { flagForClub } from '@/lib/careerLadder';
 import { FlagFromEmoji } from '@/components/FlagImg';
@@ -67,12 +68,11 @@ function isXiAction(a: unknown): a is XiAction {
  * site's React error #310 rule (TransferPathBoard's known bug class).
  */
 const MissingXi = () => {
-  const [playMode, setPlayMode] = useState<PlayMode>('daily');
+  const [saved] = useState(loadMissingXiUnlimitedDraft);
+  const [playMode, setPlayMode] = useState<PlayMode>(saved.draft?.active ? 'unlimited' : 'daily');
 
   const dailyPuzzle = useMemo<ActivePuzzle>(() => pickDailyPuzzle(), []);
-  // Drawn only inside startRun('unlimited'): a random draw in a useState
-  // initialiser is the race simPrerender section 16 refuses.
-  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<ActivePuzzle | null>(null);
+  const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<ActivePuzzle | null>(saved.draft?.puzzle ?? null);
 
   const {
     guesses: dailyActions,
@@ -88,7 +88,21 @@ const MissingXi = () => {
     deserializeGuesses: raw => (Array.isArray(raw) ? raw.filter(isXiAction) : []),
   });
 
-  const [unlimitedActions, setUnlimitedActions] = useState<XiAction[]>([]);
+  const [unlimitedActions, setUnlimitedActions] = useState<XiAction[]>(
+    () => saved.draft?.misses.map(name => ({ t: 'miss', name })) ?? [],
+  );
+  const practiceMisses = useMemo(() => unlimitedActions.flatMap(action => action.t === 'miss' ? [action.name] : []), [unlimitedActions]);
+  const practiceFinished = practiceMisses.length >= MAX_GUESSES || unlimitedActions.some(action => action.t !== 'miss');
+  const storedDraft = useRef(saved.raw);
+  const previousDraft = useRef(saved.draft ? encodeMissingXiUnlimitedDraft(saved.draft) : null);
+  useLayoutEffect(() => {
+    const draft = unlimitedPuzzle && !practiceFinished
+      ? encodeMissingXiUnlimitedDraft({ puzzle: unlimitedPuzzle, misses: practiceMisses, active: playMode === 'unlimited' })
+      : null;
+    if (draft === previousDraft.current) return;
+    previousDraft.current = draft;
+    if (writeMissingXiUnlimitedDraft(storedDraft.current, draft)) storedDraft.current = draft;
+  }, [unlimitedPuzzle, practiceFinished, practiceMisses, playMode]);
 
   const puzzle = playMode === 'daily' ? dailyPuzzle : unlimitedPuzzle;
   const actions = playMode === 'daily' ? dailyActions : unlimitedActions;
@@ -112,16 +126,16 @@ const MissingXi = () => {
 
   // The daily is drawn from the date above and never re-dealt; only an
   // Unlimited run draws a fresh lineup.
-  const startRun = useCallback((nextMode: PlayMode) => {
+  const startRun = (nextMode: PlayMode, newLineup = false) => {
     setPlayMode(nextMode);
-    if (nextMode === 'unlimited') {
+    if (nextMode === 'unlimited' && (newLineup || !unlimitedPuzzle || practiceFinished)) {
       setUnlimitedPuzzle(pickUnlimitedPuzzle());
       setUnlimitedActions([]);
     }
     setInputValue('');
     setSelectedEntity(null);
     setErrorMsg('');
-  }, []);
+  };
 
   // Once the daily log is finished addDailyAction is a no-op, which is what
   // refuses a replay of today's lineup.
@@ -235,8 +249,8 @@ const MissingXi = () => {
               <section>
                 <h3 className="font-bold text-foreground mb-2">📅 Daily vs Unlimited</h3>
                 <p className="text-muted-foreground">
-                  Daily gives everyone the same lineup and the same blanked player each day. Unlimited pulls a
-                  fresh lineup from the archive every time you play.
+                  Daily gives everyone the same lineup and blank each day. Your unfinished Unlimited lineup stays in
+                  this browser. Choose New Lineup to draw another from the archive.
                 </p>
               </section>
             </RulesGate>
@@ -358,6 +372,12 @@ const MissingXi = () => {
                 </button>
                 <div className="flex justify-center">
                   <GiveUpButton onGiveUp={giveUp} />
+                  {playMode === 'unlimited' && (
+                    <button type="button" onClick={() => startRun('unlimited', true)}
+                      className="ml-2 inline-flex min-h-9 items-center rounded-lg px-3 text-xs font-medium text-muted-foreground hover:text-foreground">
+                      New Lineup
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -389,7 +409,7 @@ const MissingXi = () => {
                     gameName: `Missing XI - ${puzzle.lineup.dateLabel}`,
                     gamePath: '/missing-xi',
                   }}
-                  onPlayAgain={() => startRun('unlimited')}
+                  onPlayAgain={() => startRun('unlimited', playMode === 'unlimited')}
                   playAgainLabel={playMode === 'daily' ? 'Play Unlimited' : 'New Lineup'}
                   playNext={playMode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new lineup!</p> : undefined}
                 />
