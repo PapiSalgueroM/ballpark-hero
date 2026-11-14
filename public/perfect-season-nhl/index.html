@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,13 +284,15 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>82-0 NHL Perfect Season</h1>
 <p>Spin the wheel of hockey history, draft one player per stop, and chase the best record you can. 82-0 takes an 89 plus lineup and a lucky sim, and the odds are printed on every result.</p>
 <p>Ratings visible. Play as many runs as you want.</p>
 <p>Ratings hidden until the sim ends. Draft on reputation alone.</p>
-<p>Everyone gets the same wheel today. One attempt.</p>
+<p>Everyone gets the same wheel today. One attempt. Return to Daily to continue your draft in this browser.</p>
 <h2>82-0 NHL Perfect Season: Hockey Draft Sim</h2>
 <p>Draft across every era of NHL history. The wheel decides which franchise and decade you draft from, one player per spin, no repeats. Then the sim decides your fate over 82 games.</p>
 <p>The wheel owns your draft. Every spin lands on a real NHL franchise and one decade of its history, and you take exactly one player before it moves on.</p>
@@ -283,6 +317,7 @@
 <h3>Simulated games and the Daily attempt</h3>
 <li>The season is 82 simulated games; a higher overall wins more, but perfection also needs luck.</li>
 <li>Daily mode allows one attempt per day with a rotating theme and resets at midnight Eastern.</li>
+<li>Return to Daily to continue your draft in this browser with the same lineup, squad and remaining rerolls.</li>
 <h2>82-0 NHL Perfect Season walkthrough: a spin, a reroll and a near miss</h2>
 <h3>An early spin lands the 1980s Oilers</h3>
 <p>Say the first spin lands on the 1980s Oilers and you grab a 99 rated center. Two spins later a thin squad costs a reroll, and you settle for an 85 defenseman.</p>
@@ -330,8 +365,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>
