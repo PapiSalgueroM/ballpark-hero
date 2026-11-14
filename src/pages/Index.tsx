@@ -66,7 +66,10 @@ const SEARCH_GAME_LINK = '[data-home-game-card] a[href]';
 const CATALOGUE_GAME_LINK = '[data-catalog-card] a[href]';
 const CONTINUE_GAME_LINK = 'a[data-continue-card]';
 const PICK_GAME_LINK = 'a[data-game-pick-link]';
-const BROWSE_GAME_LINK = [CATALOGUE_GAME_LINK, CONTINUE_GAME_LINK, PICK_GAME_LINK].join(', ');
+const FEATURED_GAME_LINK = 'a[data-stage-card]';
+const POPULAR_GAME_LINK = 'a[data-home-popular-game]';
+const RECENT_GAME_LINK = '[data-home-shipped] [data-home-game-card] a[href]';
+const HOME_GAME_SHELVES = [CATALOGUE_GAME_LINK, CONTINUE_GAME_LINK, PICK_GAME_LINK, FEATURED_GAME_LINK, POPULAR_GAME_LINK, RECENT_GAME_LINK];
 type GameReturn = { query: string; path: string; selector: string; shelfScroll?: number };
 const gameReturns = new Map<string, GameReturn>();
 
@@ -173,13 +176,14 @@ export default function Index() {
     const fromSearch = event.currentTarget === searchResultsRef.current;
     if ((fromSearch && !querySettled) || event.defaultPrevented || event.button !== 0
       || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || !(event.target instanceof Element)) return;
-    const link = event.target.closest(fromSearch ? SEARCH_GAME_LINK : BROWSE_GAME_LINK);
+    const selectors = fromSearch ? [SEARCH_GAME_LINK] : HOME_GAME_SHELVES;
+    const link = event.target.closest(selectors.join(', '));
     if (!link) return;
     const path = link.getAttribute('href');
     if (!path) return;
     const shelf = link.closest<HTMLElement>('[data-home-shelf-rail]');
-    const selector = fromSearch ? SEARCH_GAME_LINK : link.matches(CONTINUE_GAME_LINK) ? CONTINUE_GAME_LINK
-      : link.matches(PICK_GAME_LINK) ? PICK_GAME_LINK : CATALOGUE_GAME_LINK;
+    const selector = selectors.find(selector => link.matches(selector));
+    if (!selector) return;
     gameReturns.delete(homeEntry);
     gameReturns.set(homeEntry, { query: fromSearch ? searchQuery : '', path, selector, shelfScroll: shelf?.scrollLeft });
     // Keep the tab's recent history without putting search text into storage or the URL.
@@ -727,6 +731,7 @@ function MostPlayedToday() {
             <li key={game.path}>
               <Link
                 to={game.path}
+                data-home-popular-game=""
                 style={sportStyle(sport)}
                 className="group flex h-[68px] min-w-0 items-center gap-3 rounded-xl border border-border/80 bg-surface-1 px-3 transition-colors hover:border-tile/50 hover:bg-surface-2"
               >

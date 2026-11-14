@@ -209,6 +209,9 @@ it.each([
   ['pin shelf', '[data-home-picks] [data-game-pick-link]', '/hockey-higher-lower'],
   ['first NRL save', '[data-home-continue] a', '/nrl-team-manager'],
   ['second NRL save', '[data-home-continue] a', '/nrl-team-manager?slot=2'],
+  ['Main event', 'a[data-stage-card]', '/soccer-career'],
+  ['Most played', 'a[data-home-popular-game]', '/soccer-grid'],
+  ['Just shipped', '[data-home-shipped] [data-home-game-card] a', '/nrl-team-manager'],
 ])('focuses the exact %s opener when navigating back to Home', (_label, selector, href) => {
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
   localStorage.setItem('dukb-game-picks-v1', '["/hockey-higher-lower"]');
