@@ -1,4 +1,13 @@
+## 2026-11-14: Front Office and academy rating timing
+
+- NFL, NBA, MLB and NHL Front Office move OVR one point at a time during regular-season play. Young players can improve toward potential, veterans can decline, and closing ratings carry through the draft and summer. NFL, NBA, MLB and NHL also age returning players once per offseason.
+- Soccer Career's Academy Report shows the OVR through the simulated youth year. The average development during that year can earn additional youth appearances.
+- Wonderkid Factory and Stadium Tycoon's Academy apply senior decline through watched play. The next birthday price already includes the remaining change. The shared calendar holds while away.
+- NBA, NFL, MLB and NHL My Career shop descriptions say when coaching and analyst rating benefits apply.
+
 ## 2026-11-14: In-season development for AFL and college dynasties
+
+[PR #898](https://github.com/PapiSalgueroM/ballpark-hero/pull/898) published exact main `5461762452654127b423748fb39e96a635f07651`, deployment `d30c72f2-830d-4a1b-a466-64c5e5c3d2a9`. The three browser journeys and 174-route crawler audit passed. IndexNow accepted all three updated guides.
 
 - Aussie Rules Manager spreads player skill changes across home-and-away matches, including AI clubs. Squad shows the latest changes, and the draft and season rollover keep existing players' ratings.
 - College Football Dynasty and College Basketball Dynasty review ratings four times during the regular season. Changes apply in the next games, and the Roster shows the latest review. Existing midseason saves pick up at their next scheduled review.
