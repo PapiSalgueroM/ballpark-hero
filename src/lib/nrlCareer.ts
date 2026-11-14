@@ -1350,6 +1350,7 @@ function careerMatchday(state: NrlCareerState) {
   return {
     matchday: state.season,
     opponentStrength,
+    ratings,
     planRatings: state.season.attackPlan && state.season.attackPlan !== 'counter' ? planRivalRatings(state.season, ratings) : undefined,
   };
 }
@@ -1374,6 +1375,7 @@ export interface NrlOppositionReport {
   attackEdge: number;
   defenseEdge: number;
   style?: ReturnType<typeof nrlCounterPlan>['style'];
+  attackPlans?: ({ plan: NrlAttackPlan } & ReturnType<typeof nrlMatchupEdges>)[];
 }
 
 export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport | null {
@@ -1395,7 +1397,7 @@ export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport 
         outcome: scored > conceded ? 'W' : scored < conceded ? 'L' : 'D',
       };
     });
-  const { matchday, opponentStrength, planRatings } = careerMatchday(state);
+  const { matchday, opponentStrength, planRatings, ratings } = careerMatchday(state);
   const meetings = season.results.filter(match =>
     (match.homeId === season.clubId && match.awayId === opponentId)
     || (match.awayId === season.clubId && match.homeId === opponentId)).reverse().map(match => ({
@@ -1404,9 +1406,22 @@ export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport 
     conceded: match.homeId === season.clubId ? match.awayScore : match.homeScore,
   }));
   const style = nrlCounterPlanPreview(state)?.style;
-  return { opponentId, ladderRank, recent, meetings, ...(style && { style }), ...nrlMatchupEdges(matchday, clubMatch, opponentStrength, {
-    ...nrlCoachTactics(state.finance), planRivalRatings: planRatings,
-  }) };
+  const coaches = nrlCoachTactics(state.finance);
+  let attackPlans: NrlOppositionReport['attackPlans'];
+  if (style && ratings && !state.outOfWork) {
+    const rival = planRatings ?? planRivalRatings(season, ratings);
+    const plans: NrlAttackPlan[] = ['standard', ...NRL_ATTACK_PLANS.filter(plan => plan === 'counter' || rival)];
+    attackPlans = plans.map(plan => ({
+      plan,
+      ...nrlMatchupEdges({ ...matchday, attackPlan: plan === 'standard' ? undefined : plan }, clubMatch, opponentStrength, {
+        ...coaches, planRivalRatings: plan === 'standard' || plan === 'counter' ? undefined : rival,
+      }),
+    }));
+  }
+  return {
+    opponentId, ladderRank, recent, meetings, ...(style && { style }), ...(attackPlans && { attackPlans }),
+    ...nrlMatchupEdges(matchday, clubMatch, opponentStrength, { ...coaches, planRivalRatings: planRatings }),
+  };
 }
 
 function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type: 'advance' | 'finishLive' | 'finishMinute60' }>): NrlCareerState {

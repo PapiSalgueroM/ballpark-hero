@@ -18,6 +18,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Courses cover the back three, wing and centre on the same side, the halves, the two props, and the second rows and lock. A player can learn one extra role.',
       'Check the next opponent and pick a tactic. Open Attack plan to compare projected attack and defence changes for playing through the middle or shifting wide. A plan lasts one match, including both halves in Play Live. In Preparation, Train boosts attack, Defensive drills boosts defence at the same workload, and Recover helps tired players. Clear preparation to return to normal before kickoff.',
       'Open Opposition report before a return match to see your earlier scores against that club this season, from your team’s point of view.',
+      'Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation.',
       'Choose Counter opponent in Attack plan to respond to the rival’s simulated style. Shift wide against middle pressure, or protect the edges at the cost of some attack. Check the ratings before choosing.',
       'Use Individual recovery in Preparation to give one available player lighter training before a match. Compare their kickoff fitness while the rest of the squad keeps its plan.',
       'Before Play Live, you can hold one named reserve for later. At the break, choose up to two changes at different positions. Bring on the held reserve, keep a rotating reserve on, or use automatic rotation.',

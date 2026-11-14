@@ -411,7 +411,7 @@ function OppositionReport({ career }: { career: NrlCareerState }) {
   const shortName = useNrlClubName();
   const [expanded, setExpanded] = useState(false);
   const report = expanded ? nrlOppositionReport(career) : null;
-  const { year } = career.season;
+  const { year, attackPlan } = career.season;
   return (
     <details className="group rounded-xl border border-border bg-card px-4" onToggle={event => setExpanded(event.currentTarget.open)}>
       <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -434,6 +434,33 @@ function OppositionReport({ career }: { career: NrlCareerState }) {
             </div>
           </dl>
           <p className="mt-2 text-xs text-muted-foreground">Positive edges favour your club. The model uses your lineup, preparation, tactic and venue.</p>
+          {report.attackPlans && (
+            <>
+              <table className="mt-3 w-full text-left text-xs sm:text-sm" data-nrl-opposition-attack-plans>
+                <caption className="pb-1 text-left font-semibold">Attack plan comparison</caption>
+                <thead className="text-muted-foreground">
+                  <tr>
+                    <th scope="col" className="py-1 pr-2 font-medium">Plan</th>
+                    <th scope="col" className="px-1 text-right font-medium">Attack</th>
+                    <th scope="col" className="px-1 text-right font-medium">Defence</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {report.attackPlans.map(({ plan, attackEdge, defenseEdge }) => (
+                    <tr key={plan}>
+                      <th scope="row" className="py-1 pr-2 font-medium">
+                        {attackPlanLabel(plan)}
+                        {(attackPlan ?? 'standard') === plan && <span className="block text-xs text-muted-foreground">Current</span>}
+                      </th>
+                      <td className="px-1 text-right tabular-nums">{edgeNumber.format(attackEdge)}</td>
+                      <td className="px-1 text-right tabular-nums">{edgeNumber.format(defenseEdge)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className="mt-1 text-xs text-muted-foreground">Uses automatic rotation. Choose your plan in Attack plan.</p>
+            </>
+          )}
           {report.meetings.length > 0 && (
             <div className="mt-4" data-nrl-opposition-meetings>
               <h3 className="text-sm font-semibold">Head-to-head this season</h3>
@@ -1959,6 +1986,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Choose a goal kicker and a backup in Squad. The backup takes over if your kicker leaves the starting 13. The halfback covers when neither is available. In Match centre, open Season fixtures to see your club’s match reports from this season.</li>
               <li>Before kick-off, open Hold one reserve for later to see the Quick Sim rotation and compare it with the Live rotation when you hold someone.</li>
               <li>Use First reserve in the rotation preview to change who gets first priority. It swaps two places on your named bench.</li>
+              <li>Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation.</li>
               <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
               <li>Check a late Selection promise in the rotation preview before kick-off. An eligible match counts toward the promise window if the player stays off.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. Choose Play to 60 minutes to bring on a held reserve who is still on the bench. Quick Sim settles the round in one action.</li>

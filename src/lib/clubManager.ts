@@ -2,6 +2,7 @@ import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
 import { clubWorldCup2025TeamCampaign } from '@/lib/soccerClubWorldCup';
+import { INTERCONTINENTAL_CUP_SCHEDULE, INTERCONTINENTAL_CUP_YEAR, intercontinentalCupDate, simIntercontinentalCupMatch, type IntercontinentalCupMatch } from '@/lib/clubIntercontinentalCup';
 import { noteHighestScoring } from '@/lib/clubManagerRecords';
 import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGoalLift, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';
 /* Round 201: the wilderness reuses the manager job market the retired
@@ -51,7 +52,7 @@ import { ownGoalRole, ownGoalTagged } from '@/lib/ownGoalRule';
 import { keyedRng } from '@/lib/keyedRng';
 /* Round 1510: the shared night of a participant and the one match cups. Pure modules: no cycle. */
 import { nightsDoneAt, placeNights, tickingWeeksDone, tickingWeeksIn } from '@/lib/worldNights';
-import type { CalDate } from '@/lib/calDate';
+import { dateKey, type CalDate } from '@/lib/calDate';
 import type { NightRef, NightResult } from '@/lib/worldNights';
 import { entrantsFrom, evaluateOneOff, myOneOffFixture, oneOffNightsOf, oneOffPartial, oneOffPlayedIn, oneOffRowAt, oneOffRowFor } from '@/lib/worldOneOffs';
 import type { OneOffFixture, OneOffResult, OneOffRow, OneOffSkip, OneOffSlice, OneOffTables } from '@/lib/worldOneOffs';
@@ -3285,6 +3286,7 @@ export interface CareerState {
   nationJob?: NationJob | null;
   nationCampaign?: NationCampaign;
   clubWorldCup2025?: NonNullable<ReturnType<typeof clubWorldCup2025TeamCampaign>>;
+  intercontinentalCup2025?: IntercontinentalCupMatch[];
   /** Round 102: the domestic cup as a real sixteen club bracket. */
   cupBracket?: CupTie[];
   /** Round 1035: a cup field short of sixteen clubs (a one league nation:
@@ -11136,6 +11138,32 @@ function runIntlBreaks(state: CareerState): void {
     state.inbox = (state.inbox ?? []).map(m => (m.kind === 'intlDuty' && !m.resolved ? { ...m, resolved: 'That game has been and gone.' } : m));
   }
   for (const msg of fireDueBreaks(state)) pushMessage(state, msg);
+}
+
+function advanceIntercontinentalCup(state: CareerState, previousWeek = state.week): void {
+  if (worldYear(state) !== INTERCONTINENTAL_CUP_YEAR || state.week === 0) return;
+  const matches = state.intercontinentalCup2025 ?? [];
+  if (matches.length === INTERCONTINENTAL_CUP_SCHEDULE.length) return;
+  const dates = entryDatesOf(state);
+  const playedThrough = dates[state.week - 1];
+  if (!playedThrough) return;
+  const due = dateKey(playedThrough);
+  const next = [...matches];
+  for (const match of INTERCONTINENTAL_CUP_SCHEDULE.slice(matches.length)) {
+    if (dateKey(intercontinentalCupDate(match)) > due) break;
+    next.push(simIntercontinentalCupMatch(next, String(worldSeedOf(state) ?? 'legacy'), name => eraClubDefFor(name, state.eraId, state).tier));
+  }
+  if (next.length === matches.length) return;
+  state.intercontinentalCup2025 = next;
+  const final = INTERCONTINENTAL_CUP_SCHEDULE.at(-1)!;
+  const before = dates[previousWeek - 1];
+  if (next.length === INTERCONTINENTAL_CUP_SCHEDULE.length && previousWeek < state.week
+    && (!before || dateKey(before) < dateKey(intercontinentalCupDate(final)))
+    && !state.sacked && state.customClub?.name !== state.clubName
+    && clubKeyOf(next.at(-1)!.winner) === clubKeyOf(state.clubName)
+    && !state.trophies.some(trophy => trophy.name === 'Intercontinental Cup' && trophy.season === state.season)) {
+    state.trophies = [...state.trophies, { name: 'Intercontinental Cup', emoji: '🌐', season: state.season, minor: true }];
+  }
 }
 
 /** Rolled after each match: someone in the squad has something to say. */
@@ -21776,6 +21804,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
     if (entry.type === 'window') {
       state.week += 1;
       tickWeek(state, null);
+      advanceIntercontinentalCup(state, state.week - 1);
       state.transferWindow = 'january';
       // Round 141: January runs three match weeks before the deadline.
       state.windowWeeksLeft = 3;
@@ -21837,6 +21866,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       state.week += 1;
       /* Round 1510 (ruling 2a): a night I do not play (a semi final lost, a stub) moves the week on and ticks nothing. */
       if (!entry.night && entry.type !== 'promotion') tickWeek(state, null);
+      advanceIntercontinentalCup(state, state.week - 1);
       continue;
     }
     // Round 95: the rest of the football world plays its round too.
@@ -22533,6 +22563,7 @@ export function resumeMatch(career: CareerState): PlayResult {
   }
   /* Round 978: same hook as the quick sim's, see playNextEntry. */
   runIntlBreaks(state);
+  advanceIntercontinentalCup(state, live.week);
   return { state, kind: 'match', report };
 }
 
@@ -23371,6 +23402,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     throw new Error('The season has fixtures still to play.');
   }
   const state: CareerState = JSON.parse(JSON.stringify(career));
+  advanceIntercontinentalCup(state);
   // The fixed historical field plays after the last club fixture. Keep this cup out of board and reward calculations.
   if (!state.clubWorldCup2025 && worldYear(state) === 2024 && state.week >= state.calendar.length && !state.sacked
     && state.customClub?.name !== state.clubName) {
@@ -25111,6 +25143,7 @@ export function loadCareer(): CareerState | null {
     /* Round 978: a damaged international block goes on the way in, so the
        squad screen never reads half of one. */
     ensureIntl(parsed);
+    advanceIntercontinentalCup(parsed);
     /* Round 462: the pair ledger, empty and honest on a save from before it
        existed, and the round of 16 week an era save's old calendar lacks,
        both before any screen reads the table or the calendar. */

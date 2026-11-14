@@ -1097,6 +1097,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
     nationJob: career.nationJob,
     ...(career.nationCampaign ? { nationCampaign: career.nationCampaign } : {}),
     ...(career.clubWorldCup2025 ? { clubWorldCup2025: career.clubWorldCup2025 } : {}),
+    ...(career.intercontinentalCup2025 ? { intercontinentalCup2025: career.intercontinentalCup2025 } : {}),
     startOptions: career.startOptions,
     h2h: career.h2h,
     retiredNames: career.retiredNames,

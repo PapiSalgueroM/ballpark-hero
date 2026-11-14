@@ -4,12 +4,14 @@ import { ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { CareerState, CupRound, TableRow } from '@/lib/clubManager';
 import { careerLeagueOf, cupSatOutBy, uclGroupRule, worldUclFormatOf } from '@/lib/clubManager';
-import { shortDate, type CalDate } from '@/lib/clubManagerCalendar';
+import { shortDate, worldYearOf, type CalDate } from '@/lib/clubManagerCalendar';
 import { uclGroupFootnote } from '@/lib/clubManagerUclGroups';
 import { leaguePhaseFootnote } from '@/lib/uclLeaguePhase';
 import type { WorldCompKey, WorldKoRound } from '@/lib/worldCompetition';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { ClubWorldCupCard } from '@/components/club-manager/ClubWorldCupCard';
+import { IntercontinentalCupCard } from '@/components/club-manager/IntercontinentalCupCard';
+import { INTERCONTINENTAL_CUP_SCHEDULE, INTERCONTINENTAL_CUP_YEAR } from '@/lib/clubIntercontinentalCup';
 import {
   clubRun, firstStageNights, nextNight, nightLabel, ordinal, realFifthNation, roundPlural, routeWords, worldCompView, worldUclStatus, worldUelStatus,
   superCupStatus, superCupView, type SuperCupView,
@@ -33,7 +35,7 @@ import {
  */
 
 type Tab = 'table' | 'matchdays' | 'knockouts' | 'final';
-interface Nav { at: 'tiles' | 'cup' | 'ucl' | 'uel' | 'dsc' | 'usc' | 'cwc'; tab: Tab | null; run: string | null; night: number | null; ko: WorldKoRound | null; group: string | null }
+interface Nav { at: 'tiles' | 'cup' | 'ucl' | 'uel' | 'dsc' | 'usc' | 'cwc' | 'icc'; tab: Tab | null; run: string | null; night: number | null; ko: WorldKoRound | null; group: string | null }
 const HOME: Nav = { at: 'tiles', tab: null, run: null, night: null, ko: null, group: null };
 /** Round 1509: the competitions this screen shows, by key. */
 const COMP_NAME: Record<WorldCompKey, string> = { ucl: 'Champions League', uel: 'Europa League' };
@@ -666,6 +668,9 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
   /* Round 1593: and not a season my club plays the Europa League. */
   const noEurope = career.uclGroup === null && (career.uclKoRound === null || career.uclKoRound === 'out') && uelStatus.mode !== 'in';
   const euro = careerLeagueOf(career).euro;
+  const intercontinentalCup = career.intercontinentalCup2025;
+  const showIntercontinentalCup = !!intercontinentalCup || worldYearOf(career) === INTERCONTINENTAL_CUP_YEAR;
+  const cupWinner = intercontinentalCup?.length === INTERCONTINENTAL_CUP_SCHEDULE.length ? intercontinentalCup.at(-1)?.winner : undefined;
 
   let body: ReactNode;
   if (nav.at === 'cup') {
@@ -735,6 +740,13 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
         <ClubWorldCupCard cup={career.clubWorldCup2025} />
       </div>
     );
+  } else if (nav.at === 'icc' && showIntercontinentalCup) {
+    body = (
+      <div className="space-y-2" data-cm-cups-view="icc">
+        <Back label="Cups" onClick={() => go(HOME)} />
+        <IntercontinentalCupCard matches={intercontinentalCup ?? []} />
+      </div>
+    );
   } else if (nav.at === 'uel') {
     body = (
       <div className="space-y-2" data-cm-cups-view="uel">
@@ -757,6 +769,7 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
           <Tile icon="🛡️" title="Super cup" value={dscStatus.value} sub={dscStatus.sub} testId="dsc" onClick={() => go({ ...HOME, at: 'dsc' })} />
           {uscStatus && <Tile icon="🏆" title="UEFA Super Cup" value={uscStatus.value} sub={uscStatus.sub} testId="usc" onClick={() => go({ ...HOME, at: 'usc' })} />}
           {career.clubWorldCup2025 && <Tile icon="🌐" title="2025 Club World Cup" value={career.clubWorldCup2025.club} sub={career.clubWorldCup2025.result} testId="cwc" onClick={() => go({ ...HOME, at: 'cwc' })} />}
+          {showIntercontinentalCup && <Tile icon="🌐" title="2025 Intercontinental Cup" value={cupWinner ?? `${intercontinentalCup?.length ?? 0}/5 played`} sub={cupWinner && 'Winner'} testId="icc" onClick={() => go({ ...HOME, at: 'icc' })} />}
         </div>
       </div>
     );
