@@ -10,8 +10,8 @@ vi.mock('@/integrations/supabase/client', () => ({
 }));
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: vi.fn() }));
 vi.mock('@/components/game/GameShell', () => ({
-  GameShell: ({ title, headerExtra, children }: { title: string; headerExtra?: ReactNode; children: ReactNode }) =>
-    <main><h1>{title}</h1>{headerExtra}{children}</main>,
+  GameShell: ({ title, subtitle, headerExtra, children }: { title: string; subtitle?: string; headerExtra?: ReactNode; children: ReactNode }) =>
+    <main><h1>{title}</h1>{subtitle && <p>{subtitle}</p>}{headerExtra}{children}</main>,
 }));
 vi.mock('@/components/game/GameNav', () => ({ GameNav: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
@@ -68,6 +68,19 @@ describe('Build Your XI club year setup', () => {
     expect(formationButtons()).toHaveLength(6);
     expect(screen.queryAllByRole('button', { name: 'Club year draft' }).length,
       'XI_CLUB_YEAR_SETUP: recorded year choice').toBe(1);
+  });
+
+  it('lets players choose a five-year era with an explicit inclusive range', () => {
+    render(<LineupBuilder />);
+    fireEvent.click(screen.getByRole('button', { name: 'Club era draft' }));
+    const era = screen.getByRole('combobox', { name: 'Five-year era' });
+    expect(era).toHaveValue('2022');
+    expect(screen.getByRole('option', { name: '2022 to 2026' })).toBeInTheDocument();
+    expect(screen.getByRole('option', { name: '2004 to 2008' })).toBeInTheDocument();
+    fireEvent.change(era, { target: { value: '2010' } });
+    fireEvent.click(formationButtons()[0]);
+    expect(screen.getByText(/Fill each position with a record from 2010 to 2014/)).toBeVisible();
+    expect(fetch).not.toHaveBeenCalled();
   });
 });
 

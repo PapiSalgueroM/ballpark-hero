@@ -339,7 +339,7 @@ export interface PlayerSourceFilter {
    * scoped to a club without swallowing every club whose name contains it.
    */
   op: 'eq' | 'ilike' | 'in';
-  value: string | number | boolean | string[];
+  value: string | number | boolean | (string | number)[];
 }
 
 export interface SearchPlayersOptions {

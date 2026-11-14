@@ -17,7 +17,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
 
         <div className="space-y-5 text-sm">
           <p className="text-muted-foreground text-center">
-            Choose Mixed or Club year draft, then a formation. Fill every position with matching players from the clubs or nations you get.
+            Choose Mixed, Club year draft or Club era draft, then a formation. Fill every position with matching players from the clubs or nations you get.
           </p>
 
           <section>
@@ -43,6 +43,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
             <h3 className="font-bold text-foreground mb-2">Club year draft</h3>
             <ul className="space-y-1.5 text-muted-foreground">
               <li>• Choose a recorded year before your formation. Every draw and reroll uses clubs only, and your year stays fixed</li>
+              <li>• Club era draft works across five recorded years, and adds Boca Juniors, River Plate, Flamengo, Grêmio and Santos to the draw</li>
               <li>• Tap any empty position, then search or use Browse players for matching records. Some players may be missing</li>
               <li>• The selected record must match the club and year, and the position still has to fit</li>
               <li>• If there is no match, try another player or reroll the club</li>

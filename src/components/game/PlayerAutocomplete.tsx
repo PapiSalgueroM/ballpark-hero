@@ -83,6 +83,7 @@ export interface PlayerAutocompleteProps {
    * dedupe by normalized name, and respect searchOptions.exclude.
    */
   localNames?: string[];
+  showRecordedYear?: boolean;
   className?: string;
   inputClassName?: string;
   /** Debounce delay before a search fires, in milliseconds. Default 200. */
@@ -208,6 +209,7 @@ export function PlayerAutocomplete({
   validateOnly = false,
   onSubmitFreeText,
   localNames,
+  showRecordedYear = false,
   className,
   inputClassName,
   debounceMs = DEFAULT_DEBOUNCE_MS,
@@ -572,7 +574,10 @@ export function PlayerAutocomplete({
             /* Round 668: when two rows share a name (Éderson the Atalanta
                midfielder, Ederson the Fenerbahce keeper) the line under each
                says which man it is, from his latest row. */
-            const subtitle = entity.disambiguator ?? metaSubtitle(entity);
+            const baseSubtitle = entity.disambiguator ?? metaSubtitle(entity);
+            const subtitle = showRecordedYear && typeof entity.meta.year === 'number'
+              ? [baseSubtitle, `Record: ${entity.meta.year}`].filter(Boolean).join(' · ')
+              : baseSubtitle;
             return (
               <button
                 key={entity.personKey ?? entity.key}
