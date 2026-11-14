@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,6 +284,8 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>17-0 NFL Perfect Season</h1>
@@ -273,6 +307,7 @@
 <li>Draft one player into an open slot. You fill 8: QB, RB, two receivers, tight end, flex, defense unit, head coach.</li>
 <h4>Using your two rerolls on a dud squad</h4>
 <li>Repeat until the roster is full. No name repeats, and you get 2 rerolls per run for dud squads.</li>
+<li>If the archives fail, Try again keeps your draft picks. A reroll is spent when a draftable team lands.</li>
 <h3>Watching the season sim and sharing it</h3>
 <li>Watch the 17 game sim reveal, then share the result or run it back.</li>
 <h2>17-0 NFL Perfect Season rules: eras, ratings and the playoff push</h2>
@@ -330,8 +365,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>

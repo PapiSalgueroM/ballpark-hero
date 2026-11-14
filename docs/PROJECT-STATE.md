@@ -6,6 +6,8 @@
 
 ## 2026-11-14: Home recommendations, NRL match ratings and Gauntlet redraw
 
+[PR #962](https://github.com/PapiSalgueroM/ballpark-hero/pull/962) published exact main `bb7b3c69608d0d3e245ded9665a4b69b412830b9`, deployment `312a719c-598a-455f-adaa-e757749887fe`. Eight live browser journeys, both raw game guides, all 174 sitemap routes and six policy and crawler endpoints passed. IndexNow accepted both game guides.
+
 - Home shows Games to try while the public ranking loads or fewer than three games qualify. Once the ranking has three games, Most played today shows the actual order.
 - New regular-season NRL match reports record the exact player rating changes after Quick Sim and Live Match. Reopening a saved result continues to show its own changes as the season moves forward.
 - Unlimited Soccer Gauntlet Draft gives one redraw for the five offers at the active position. The rest of the draft stays as dealt, and the Daily uses its original deck.
