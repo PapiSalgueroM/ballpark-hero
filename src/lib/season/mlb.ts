@@ -3,7 +3,8 @@
    pitcher is held with an honest line (src/lib/mlbSeasonHeld.ts says why).
 
    What is the engine's, read from the saved line: games played, the batting
-   average (three places), home runs, runs batted in, doubles, steals, the
+   average (three places), hits and at-bats when recorded, home runs,
+   runs batted in, doubles, steals, the
    team result and the playoff games. The on base percentage stays on the
    season card: walks are not laid out game by game.
 
@@ -50,6 +51,7 @@ import { MLB_DIVISIONS_2026, MLB_FORMULAS, MLB_GAME_RULES, MLB_PLAYOFF_FORMAT, M
 import type { UsShape } from '@/data/usLeagueShape';
 import { postseasonRounds } from '../usSeasonShape';
 import { mlbHeldLine, mlbHeldPos, mlbRealGames, mlbViewGames } from '../mlbSeasonHeld';
+import { MLB_AB_LOW, MLB_AB_HIGH, mlbHitterTotals, mlbThousandths as thousandths } from '../mlbHitterTotals';
 
 /** Wins this career's rule gives each result, of 162: missed, a first round
  *  exit, then the Division Series, the Championship Series, a lost World
@@ -72,8 +74,6 @@ const HOME_RUNS = 0.1;
 const EXTRA_SHARE = 0.3;
 /** His at bats in a game he plays, and a season's at bats a game he played. */
 const AB_MAX = 6;
-const AB_LOW = 2.2;
-const AB_HIGH = 4.5;
 /** A sixth at bat only in a game his side scores this many in (this sim's own
  *  rule): seven, or ten when it wins at home, where it does not bat in the
  *  ninth. A side that scores few sends few men to the plate, so a 4 for 6
@@ -99,7 +99,6 @@ const INNING_RUNS_MAX = 9;
 
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 const of = (g: DerivedGame, k: string): number => g.line[k] ?? 0;
-const thousandths = (v: number): number => Math.round(v * 1000);
 
 /** The share of its innings a side scores in when it averages `m` runs a game. */
 const scoringShare = (m: number): number => (Math.min(MEAN_CEILING, Math.max(MEAN_FLOOR, m)) / INNINGS) * (1 - RUN_ON);
@@ -410,24 +409,7 @@ export function mlbAtBatsCap(g: Pick<DerivedGame, 'us' | 'them' | 'home'>, need:
  *  and doubles are hits), the at bats as near a keyed 3.5 to 4.0 a game as the
  *  average allows and never outside 2.2 to 4.5. null: no such pair. */
 export function mlbAtBats(games: number, avg: number, extra: number, rng: Rng): { ab: number; h: number } | null {
-  const want = Math.round(games * (3.5 + 0.5 * rng()));
-  const lo = Math.ceil(games * AB_LOW);
-  const hi = Math.floor(games * AB_HIGH);
-  const target = thousandths(avg);
-  const fit = (ab: number): number | null => {
-    if (ab < lo || ab > hi || ab < 1) return null;
-    for (const h of [Math.round(avg * ab), Math.round(avg * ab) + 1, Math.round(avg * ab) - 1]) {
-      if (h >= extra && h >= 0 && h <= ab && thousandths(h / ab) === target) return h;
-    }
-    return null;
-  };
-  for (let step = 0; step <= hi - lo; step += 1) {
-    for (const ab of step === 0 ? [want] : [want + step, want - step]) {
-      const h = fit(ab);
-      if (h !== null) return { ab, h };
-    }
-  }
-  return null;
+  return mlbHitterTotals(games, avg, extra, Math.round(games * (3.5 + 0.5 * rng())));
 }
 
 /** Was the game level after nine? Only a one run game can have been. */
@@ -496,8 +478,13 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng, ctx?: 
     [g.line, x.line] = [x.line, g.line];
   }
   const need = on.map(g => of(g, 'hr') + of(g, 'doubles'));
-  const fit = mlbAtBats(on.length, avg, need.reduce((a, b) => a + b, 0), rng);
-  if (!fit) return false;
+  const minimumHits = need.reduce((a, b) => a + b, 0);
+  const fit = row.contactApproach === true
+    ? typeof row.ab === 'number' && typeof row.hits === 'number' ? { ab: row.ab, h: row.hits } : null
+    : mlbAtBats(on.length, avg, minimumHits, rng);
+  if (!fit || !Number.isInteger(fit.ab) || !Number.isInteger(fit.h) || fit.h < minimumHits || fit.h > fit.ab
+    || fit.ab < Math.ceil(on.length * MLB_AB_LOW) || fit.ab > Math.floor(on.length * MLB_AB_HIGH)
+    || thousandths(fit.h / fit.ab) !== thousandths(avg)) return false;
   const ab = splitTotal(fit.ab, on.map(() => 0.8 + 0.4 * rng()), on.map((g, i) => mlbAtBatsCap(g, need[i])), need.map(x => Math.max(1, x)));
   if (!ab) return false;
   /* hits: each at bat a keyed try at his average, then moved one at a time onto the season's hits */
@@ -535,7 +522,8 @@ function check(row: UsRow, _pos: string, s: DerivedSeason, ctx: UsSeasonCtx): st
   const avg = num(row.avg);
   const ab = sum('ab');
   if (avg === null || ab < 1 || thousandths(sum('h') / ab) !== thousandths(avg)) out.push(`hits ${sum('h')} over at bats ${ab} is not ${avg}`);
-  if (on.length && (ab < Math.ceil(on.length * AB_LOW) || ab > Math.floor(on.length * AB_HIGH))) out.push(`${ab} at bats in ${on.length} games`);
+  if (on.length && (ab < Math.ceil(on.length * MLB_AB_LOW) || ab > Math.floor(on.length * MLB_AB_HIGH))) out.push(`${ab} at bats in ${on.length} games`);
+  if (row.contactApproach === true && (ab !== row.ab || sum('h') !== row.hits)) out.push('The reconstructed hits and at-bats differ from the saved batting approach.');
   for (const g of s.games) {
     if (g.us === g.them) out.push(`game ${g.md}: level`);
     const inning = (side: 'us' | 'them', min: number) => g.events.filter(e => e.kind === 'inning' && e.side === side && e.min === min).reduce((a, e) => a + (e.pts ?? 0), 0);
