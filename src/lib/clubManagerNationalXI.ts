@@ -25,12 +25,13 @@ export interface NationalSquad {
 }
 
 export const NATIONAL_SQUAD_SIZE = Object.values(SQUAD_PLACES).reduce((sum, places) => sum + places, 0);
+export const NATIONAL_KEEPER_PLACES = SQUAD_PLACES.GK;
 
 export function resolveNationalSquad(plan: NationalSquad | undefined, pool: readonly NationalPlayer[]) {
   if (!Array.isArray(plan?.keys) || plan.keys.length !== NATIONAL_SQUAD_SIZE || new Set(plan.keys).size !== plan.keys.length) return null;
   const players = plan.keys.map(key => pool.find(player => player.key === key));
   if (!players.every((player): player is NationalPlayer => !!player)) return null;
-  return players.filter(player => player.position === 'GK').length === SQUAD_PLACES.GK ? players : null;
+  return players.filter(player => player.position === 'GK').length === NATIONAL_KEEPER_PLACES ? players : null;
 }
 
 export function defaultNationalSquad(pool: readonly NationalPlayer[], xi: readonly string[]): string[] {
@@ -140,7 +141,7 @@ export function selectedNationalXI(career: CareerState, summer: number) {
   const eligible = nationalPool(career);
   const squad = resolveNationalSquad(squadPlan, eligible);
   const pool = squad ?? eligible;
-  const plan = savedXI ?? (squad ? { year: summer, formation: 0, keys: defaultNationalXI(0, squad) } : null);
+  const plan = savedXI ?? (squadPlan ? { year: summer, formation: 0, keys: defaultNationalXI(0, pool) } : null);
   if (!plan || !Number.isInteger(plan.formation) || !Array.isArray(plan.keys)) return null;
   const result = resolveNationalXI(plan, pool);
   if (!result) return null;

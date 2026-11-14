@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { FORMATIONS, type CareerState } from '@/lib/clubManager';
-import { defaultNationalSquad, defaultNationalXI, nationalPool, NATIONAL_SQUAD_SIZE, resolveNationalSquad, resolveNationalXI, type NationalSquad, type NationalXI } from '@/lib/clubManagerNationalXI';
+import { defaultNationalSquad, defaultNationalXI, nationalPool, NATIONAL_KEEPER_PLACES, NATIONAL_SQUAD_SIZE, resolveNationalSquad, resolveNationalXI, type NationalSquad, type NationalXI } from '@/lib/clubManagerNationalXI';
 
 export function ClubManagerNationalLineup({ career, year, name, onSave, onSaveSquad, onBack }: {
   career: CareerState;
@@ -29,7 +29,9 @@ export function ClubManagerNationalLineup({ career, year, name, onSave, onSaveSq
     setNotice(onSave(next) ? (next ? `Lineup saved for ${year}.` : 'Automatic selection restored.') : 'The lineup could not be saved.');
   };
   const openSquad = () => {
-    setSquadKeys(squad?.map(player => player.key) ?? defaultNationalSquad(eligible, plan.keys));
+    setSquadKeys(Array.isArray(heldSquad?.keys)
+      ? [...new Set(heldSquad.keys.filter(key => eligible.some(player => player.key === key)))]
+      : defaultNationalSquad(eligible, plan.keys));
     setQuery('');
     setNotice('');
     setEditingSquad(true);
@@ -38,7 +40,7 @@ export function ClubManagerNationalLineup({ career, year, name, onSave, onSaveSq
     if (!onSaveSquad?.(next)) { setNotice('The squad could not be saved.'); return; }
     const newPool = resolveNationalSquad(next ?? undefined, eligible) ?? eligible;
     const pinned = career.nationJob?.xi;
-    setPlan(pinned?.year === year && resolveNationalXI(pinned, newPool)
+    setPlan(pinned?.year === year && Array.isArray(pinned.keys) && resolveNationalXI(pinned, newPool)
       ? pinned : { year, formation: plan.formation, keys: defaultNationalXI(plan.formation, newPool) });
     setEditingSquad(false);
     setNotice(next ? `Squad saved for ${year}.` : 'Full eligible pool restored.');
@@ -57,14 +59,14 @@ export function ClubManagerNationalLineup({ career, year, name, onSave, onSaveSq
           <input type="search" value={query} onChange={event => setQuery(event.target.value)}
             className="mt-1 block min-h-11 w-full rounded-md border border-border bg-background px-2" />
         </label>
-        <p role="status">{selected.size}/{NATIONAL_SQUAD_SIZE} called up · {keepers}/3 goalkeepers</p>
+        <p role="status">{selected.size}/{NATIONAL_SQUAD_SIZE} called up · {keepers}/{NATIONAL_KEEPER_PLACES} goalkeepers</p>
         <div className="max-h-64 overflow-y-auto rounded-md border border-border px-2">
           {players.map(player => {
             const included = selected.has(player.key);
             return (
               <label key={player.key} className="flex min-h-11 cursor-pointer items-center gap-2 border-b border-border last:border-0">
                 <input type="checkbox" checked={included}
-                  disabled={!included && (selected.size >= NATIONAL_SQUAD_SIZE || (player.position === 'GK' && keepers >= 3))}
+                  disabled={!included && (selected.size >= NATIONAL_SQUAD_SIZE || (player.position === 'GK' && keepers >= NATIONAL_KEEPER_PLACES))}
                   onChange={() => setSquadKeys(included ? squadKeys.filter(key => key !== player.key) : [...squadKeys, player.key])} />
                 <span>{player.name} · {player.position} · {player.rating}{player.club ? ` · ${player.club}` : ''}</span>
               </label>
