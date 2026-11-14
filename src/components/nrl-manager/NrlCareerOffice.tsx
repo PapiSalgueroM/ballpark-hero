@@ -12,7 +12,8 @@ import {
   nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyParallelQuote, nrlAcademyParallelSpend, nrlAcademyReleaseAvailable, nrlAcademyReports,
   nrlAwayRecoverySpend, nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
   nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
-  nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractApproachPreview, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer, nrlContractTermLimit,
+  nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractApproachPreview, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer,
+  nrlContractSwapOptions, nrlContractSwapPlayers, nrlContractTermLimit,
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
   nrlConcessionsQuote, nrlConcessionsSpend,
   nrlDevelopmentAffected, nrlDevelopmentAssistantProgress, nrlDevelopmentPriorityOptions, nrlFinanceForecast,
@@ -279,6 +280,67 @@ function ContractTakeover({ career, onAction, disabled }: { career: NrlCareerSta
   );
 }
 
+function ContractSwap({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const clubName = useNrlClubName('full');
+  const [outgoingId, setOutgoingId] = useState('');
+  const [incomingId, setIncomingId] = useState('');
+  const [agreed, setAgreed] = useState('');
+  const { year, clubId } = career.season;
+  const outgoing = nrlContractSwapPlayers(career);
+  const pairs = useMemo(() => outgoingId ? nrlContractSwapOptions(career, outgoingId) : [], [career, outgoingId]);
+  const pair = pairs.find(row => row.incoming.id === incomingId);
+  if (!outgoing.length && !agreed) return null;
+  return (
+    <details className="group mt-3 rounded-lg border border-border">
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 text-sm font-semibold">
+        Swap contracted players<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-3 border-t border-border p-3 text-sm">
+        <p className="text-muted-foreground">Both players move in {year + 1} on their current wages and terms. Rivals accept a higher-rated player, or an equal rating at the same or lower wage. Both clubs need cap room and position cover.</p>
+        {agreed && <p role="status" className="font-semibold">{agreed}</p>}
+        {outgoing.length > 0 && <label className="block space-y-1 font-semibold">
+          <span>Your player to swap</span>
+          <select className={control} value={outgoingId} disabled={disabled} onChange={event => {
+            setOutgoingId(event.target.value);
+            setIncomingId('');
+            setAgreed('');
+          }}>
+            <option value="">Choose a player</option>
+            {outgoing.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role} · {player.rating} OVR</option>)}
+          </select>
+        </label>}
+        {outgoingId && (pairs.length ? <label className="block space-y-1 font-semibold">
+          <span>Rival player to receive</span>
+          <select className={control} value={incomingId} disabled={disabled} onChange={event => setIncomingId(event.target.value)}>
+            <option value="">Choose a player</option>
+            {nrlSeasonPlan(year).clubs.map(club => {
+              const choices = pairs.filter(option => option.toRivalClub.clubId === club.id);
+              return choices.length > 0 && <optgroup key={club.id} label={clubName(year, club.id)}>
+                {choices.map(({ incoming }) => <option key={incoming.id} value={incoming.id}>{incoming.name} · {incoming.role} · {incoming.rating} OVR</option>)}
+              </optgroup>;
+            })}
+          </select>
+        </label> : <p className="text-muted-foreground">There are no swaps that fit for this player.</p>)}
+        {pair && <>
+          <div className="space-y-1 text-muted-foreground" role="status">
+            <p>{pair.incoming.name} joins on {money(pair.toOwnClub.salary)} per season through {pair.toOwnClub.endYear}.</p>
+            <p>{pair.outgoing.name} moves to {clubName(year, pair.toRivalClub.clubId)} on {money(pair.toRivalClub.salary)} per season through {pair.toRivalClub.endYear}.</p>
+            <p>{money(pair.capRoom)} left under your {year + 1} cap after reserving open places.</p>
+          </div>
+          <Button type="button" size="lg" className="min-h-11 max-w-full whitespace-normal px-3" disabled={disabled}
+            onClick={() => {
+              if (onAction({ type: 'swapContracts', year, clubId, outgoingId, incomingId })) {
+                setAgreed(`Swap agreed. ${pair.incoming.name} joins in ${year + 1}.`);
+                setOutgoingId('');
+                setIncomingId('');
+              }
+            }}>Confirm contract swap</Button>
+        </>}
+      </div>
+    </details>
+  );
+}
+
 function MutualRelease({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const [playerId, setPlayerId] = useState('');
   const summary = useRef<HTMLElement>(null);
@@ -416,6 +478,7 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
       <SelectionPromise career={career} onAction={onAction} disabled={disabled} />
       <ContractApproaches career={career} onAction={onAction} disabled={disabled} />
       <ContractTakeover career={career} onAction={onAction} disabled={disabled} />
+      <ContractSwap career={career} onAction={onAction} disabled={disabled} />
       <MutualRelease career={career} onAction={onAction} disabled={disabled} />
       <ul className="mt-3 divide-y divide-border">
         {squad.map(player => <PlayerRow key={player.id} player={player} entry={offers.get(player.id)} career={career} onAction={onAction} disabled={disabled} />)}
@@ -1809,7 +1872,7 @@ function SummerApplications({ career, onAction, disabled }: { career: NrlCareerS
         {openings.length > 0 && <>
           <p className="text-muted-foreground">{pending
             ? `${clubName(year + 1, pending.clubId)} has dropped off the projected openings. You can switch once by Round ${nrlSummerLastRound(year)}.`
-            : `Apply for a simulated opening for ${year + 1} by Round ${nrlSummerLastRound(year)}. Keep coaching your club while you wait for an answer after the Grand Final.`}</p>
+            : `Apply for a simulated opening for ${year + 1} by Round ${nrlSummerLastRound(year)}. An opening can disappear before the season ends. Keep coaching your club while you wait for an answer after the Grand Final.`}</p>
           <ul className="divide-y divide-border">
             {openings.map(opening => {
               const destinationId = opening.clubId;

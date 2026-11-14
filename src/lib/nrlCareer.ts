@@ -256,6 +256,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'endSelectionPromise'; year: number; clubId: string; round: number; playerId: string; startedRound: number }
   | { type: 'acceptCounteroffer'; playerId: string; year: number; offeredSalary: number; contract: NrlContract }
   | { type: 'arrangeTakeover'; year: number; clubId: string; playerId: string; destinationId: string }
+  | { type: 'swapContracts'; year: number; clubId: string; outgoingId: string; incomingId: string }
   | { type: 'inviteContractApproach'; year: number; clubId: string; round: number; playerId: string; permission: boolean }
   | { type: 'answerContractApproach'; year: number; clubId: string; listedRound: number; playerId: string; destinationId: string; decision: 'accept' | 'decline' }
   | { type: 'agreeMutualRelease'; year: number; clubId: string; playerId: string }
@@ -669,6 +670,38 @@ function applyTakeover(state: NrlCareerState, playerId: string, futureContract: 
   return { ...current, players: state.players.map(player => player.id === playerId
     ? { ...player, contract: { ...player.contract!, endYear: year }, futureContract }
     : player) };
+}
+
+export function nrlContractSwapPlayers(state: NrlCareerState): NrlCareerPlayer[] {
+  return state.season.phase === 'complete' && state.season.kickerId && !state.outOfWork
+    ? nrlTakeoverPlayers(state).sort(byRating) : [];
+}
+
+export function nrlContractSwapOptions(state: NrlCareerState, outgoingId: string, incomingId?: string) {
+  const { year, clubId } = state.season;
+  const outgoing = nrlContractSwapPlayers(state).find(player => player.id === outgoingId);
+  if (!outgoing?.contract) return [];
+  const outgoingTerms = outgoing.contract;
+  const startYear = year + 1;
+  return state.players.slice().sort(byRating).flatMap(incoming => {
+    const terms = incoming.contract;
+    if ((incomingId !== undefined && incoming.id !== incomingId) || !terms || terms.clubId === clubId
+      || terms.endYear < startYear || incoming.futureContract || incoming.rating > outgoing.rating
+      || (incoming.rating === outgoing.rating && outgoingTerms.salary > terms.salary)) return [];
+    const toRivalClub = { ...outgoingTerms, clubId: terms.clubId, startYear };
+    const toOwnClub = { ...terms, clubId, startYear };
+    const { players } = applyTakeover(applyTakeover(state, outgoing.id, toRivalClub), incoming.id, toOwnClub);
+    const clubs = [[clubId, outgoing.role], [terms.clubId, incoming.role]] as const;
+    for (let nextYear = startYear; nextYear <= Math.max(terms.endYear, outgoingTerms.endYear); nextYear++) {
+      for (const [team, role] of clubs) {
+        const signed = squadAt(players, team, nextYear);
+        const cap = capFor(players, team, nextYear);
+        if (cap.slots > SQUAD_SIZE || cap.available < 0 || missingRoles(signed).length > cap.openSlots
+          || (nextYear === startYear && !signed.some(player => player.role === role))) return [];
+      }
+    }
+    return [{ outgoing, incoming, toOwnClub, toRivalClub, capRoom: capFor(players, clubId, startYear).available }];
+  });
 }
 
 export function nrlContractApproachCandidates(state: NrlCareerState): NrlCareerPlayer[] {
@@ -2735,6 +2768,13 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       const futureContract = nrlTakeoverOffers(state, action.playerId).find(offer => offer.clubId === action.destinationId);
       if (!futureContract) return state;
       return applyTakeover(state, action.playerId, futureContract);
+    }
+    case 'swapContracts': {
+      const { year, clubId } = state.season;
+      if (action.year !== year || action.clubId !== clubId) return state;
+      const pair = nrlContractSwapOptions(state, action.outgoingId, action.incomingId).find(row => row.incoming.id === action.incomingId);
+      if (!pair) return state;
+      return applyTakeover(applyTakeover(state, pair.outgoing.id, pair.toRivalClub), pair.incoming.id, pair.toOwnClub);
     }
     case 'inviteContractApproach': {
       const { year, clubId, round } = state.season;
