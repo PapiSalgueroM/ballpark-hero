@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import { createNrlCareer, nrlDevelopmentAssistantProgress, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
-import { NRL_SAVE_KEY, nrlHoldableReserves } from '@/lib/nrlManager';
+import { NRL_SAVE_KEY, createNrlSeason, nrlHoldableReserves } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
 
@@ -18,6 +18,66 @@ afterEach(() => {
   cleanup();
   saveFence.release(NRL_SAVE_KEY);
   localStorage.clear();
+});
+
+it.each([false, true])('shows exact match rating changes and keeps them on reload with live play %s', live => {
+  let before = createNrlCareer('broncos', 1, 2026);
+  while (before.season.round < 7) before = reduceNrlCareer(before, { type: 'advance' });
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(before));
+  localStorage.setItem(fence, '4');
+  const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const view = show();
+  const click = (name: string) => fireEvent.click(screen.getByRole('button', { name, exact: true }));
+  if (live) {
+    click('Play Live');
+    expect(screen.queryByText('Match rating changes')).toBeNull();
+    click('Play second half');
+  } else click('Quick Sim');
+  const expected = reduceNrlCareer(before, { type: 'advance' });
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(expected));
+  expect(localStorage.getItem(fence)).toBe(live ? '6' : '5');
+  const verify = (reportName: string) => {
+    const report = within(screen.getByRole('region', { name: reportName }));
+    const summary = report.getByText('Match rating changes', { exact: true });
+    expect(summary.closest('summary')).toHaveTextContent('1 up · 1 down');
+    fireEvent.click(summary);
+    const rows = within(report.getByRole('list', { name: 'Player rating changes' })).getAllByRole('listitem');
+    expect(rows.map(row => row.textContent)).toEqual(['Koa Nairn+1 OVR', 'Teo Dawson-1 OVR']);
+  };
+  verify(live ? 'Full time' : 'Round 7 results');
+  view.unmount();
+  show();
+  verify('Round 7 results');
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(expected));
+});
+
+it.each([[11, false, true], [16, false, false], [1, true, false]] as const)(
+  'shows an empty match review only for a tracked round %s, legacy %s', (round, legacy, showEmpty) => {
+    let before = legacy ? readNrlCareerSave(JSON.stringify(createNrlSeason('broncos', 1, 2026)))! : createNrlCareer('broncos', 1, 2026);
+    while (before.season.round < round) before = reduceNrlCareer(before, { type: 'advance' });
+    const settled = reduceNrlCareer(before, { type: 'advance' });
+    if (!legacy) expect(settled.ratingReview?.round).toBe(10);
+    localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(settled));
+    render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+    const report = within(screen.getByRole('region', { name: `Round ${round} results` }));
+    expect(Boolean(report.queryByText('No OVR changes in this match review.'))).toBe(showEmpty);
+    expect(report.queryByText('Match rating changes')).toBeNull();
+    expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(settled));
+  },
+);
+
+it('does not attach the last regular-season review to a settled finals match', () => {
+  let before = createNrlCareer('broncos', 95, 2026);
+  while (before.season.phase === 'regular') before = reduceNrlCareer(before, { type: 'advance' });
+  const settled = reduceNrlCareer(before, { type: 'advance' });
+  expect(settled.ratingReview).toBe(before.ratingReview);
+  expect(settled.season.results.some(match => match.finalsRound && match.playerScoring)).toBe(true);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(settled));
+  render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const report = within(screen.getByRole('region', { name: 'Latest finals results' }));
+  expect(report.queryByText('Match rating changes')).toBeNull();
+  expect(report.queryByText('No OVR changes in this match review.')).toBeNull();
 });
 
 it.each([[2026, 'broncos', 9], [2027, 'bears', 8]] as const)(

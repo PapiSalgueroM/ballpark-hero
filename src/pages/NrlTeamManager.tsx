@@ -793,6 +793,32 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
   );
 }
 
+function MatchRatingChanges({ career, match }: { career: NrlCareerState; match: NrlMatchResult }) {
+  if (career.legacySeason || match.finalsRound || !match.playerScoring) return null;
+  const changes = career.ratingReview?.round === match.round ? career.ratingReview.changes : [];
+  if (!changes.length) return <p className="mt-2 text-sm text-muted-foreground">No OVR changes in this match review.</p>;
+  const increases = changes.filter(([, delta]) => delta > 0).length;
+  return (
+    <details className="group mt-2 rounded-lg border border-border px-3 text-sm">
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        <span className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
+          <span className="font-semibold">Match rating changes</span>
+          <span className="text-xs text-muted-foreground">{increases} up · {changes.length - increases} down</span>
+        </span>
+        <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <ul aria-label="Player rating changes" className="divide-y divide-border pb-2">
+        {changes.map(([id, delta]) => (
+          <li key={id} className="flex flex-wrap justify-between gap-x-3 py-1">
+            <span>{career.season.squad.find(player => player.id === id)?.name}</span>
+            <span className="font-semibold tabular-nums">{delta > 0 ? '+' : ''}{delta} OVR</span>
+          </li>
+        ))}
+      </ul>
+    </details>
+  );
+}
+
 function SavedMatchReport({ label, match, season }: { label: string; match: NrlMatchResult; season: NrlManagerState }) {
   const shortName = useNrlClubName();
   const [expanded, setExpanded] = useState(false);
@@ -1131,6 +1157,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
       <p className="mt-1 text-sm text-muted-foreground" role="status" data-nrl-result>
         {lastMatch ? `${scoreLine(lastMatch, year, shortName)}${lastMatch.extraTime ? ' after extra time' : ''}` : 'Your club did not play this round.'}
       </p>
+      {lastMatch && <MatchRatingChanges career={career} match={lastMatch} />}
       {lastMatch && <NrlMatchDetails match={lastMatch} season={season} />}
       <ul className="mt-2 divide-y divide-border text-sm">
         {latest.map(result => (
@@ -2273,7 +2300,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>
               <li>Once per season, use club cash to assign a second academy scout while a report is pending. Both reports arrive next round.</li>
               <li>Choose Ready sooner for higher starting OVR or Higher ceiling for more potential when assigning an academy scout. Balanced uses the standard profile.</li>
-              <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check Rating changes in Squad. Existing ratings carry into the next season.</li>
+              <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check the latest match result or open Rating changes in Squad. Existing ratings carry into the next season.</li>
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
               <li>Before Round 1, choose an eligible position in the Board recruitment brief. Sign an external player for that position next season to earn a club cash bonus.</li>
