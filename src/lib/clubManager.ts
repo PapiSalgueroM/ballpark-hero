@@ -22983,7 +22983,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     };
     // Round 742: another club's star is read minus the men in my squad, so a
     // man I signed mid season is never the case for the club he left.
-    const uclWinner = state.uclBracket?.find(t => t.round === 'F')?.winner ?? null;
+    const uclWinner = uclHolderOf(state);
     if (uclWinner) {
       const star = uclWinner === state.clubName
         ? [...state.squad].sort((a, b) => b.rating - a.rating)[0]?.name
