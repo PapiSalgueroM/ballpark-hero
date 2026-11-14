@@ -1,4 +1,11 @@
+## 2026-11-14: NFL player setup and NRL late selection promises
+
+- NFL My Career keeps edits to an unfinished setup in this browser, including when you return from an active prospect. The real prospect keeps precedence unless you choose Back to player. Setup clears after the next prospect or career is saved or when you choose Start Over.
+- NRL's pre-match rotation preview shows a late Selection promise and whether each player starts, opens in the rotation, is held for later, or sits out. Eligible fixtures can advance the window even without an appearance. The existing renewal discount still depends on actual appearances.
+
 ## 2026-11-14: NRL Pathways run-in and NBA player setup
+
+[PR #917](https://github.com/PapiSalgueroM/ballpark-hero/pull/917) published exact main `2f35408a5693789ab4d402efa9d88ddd240b663c`, deployment `a456e3d8-cbdb-48dc-b676-43cf174f629f`. Three NBA and five NRL native journeys, all 174 sitemap routes, and both guide updates passed live. IndexNow accepted both URLs.
 
 - With four regular-season club games left, NRL Season review shows which youngsters can still reach four appearances for the Board Pathways objective. The forecast counts club fixtures, and the bonus settles through the existing season result.
 - NBA My Career remembers an unfinished setup on this browser before the first prospect or career save. Opening a real save takes precedence. Once either start saves, its setup draft clears.

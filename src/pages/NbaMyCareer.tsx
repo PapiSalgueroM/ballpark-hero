@@ -11,7 +11,7 @@ import { nbaIntlHelpRules } from '@/lib/nbaCareerIntlRules';
 import UsCareerCreator, { emptyUsCareerDraft } from '@/components/us-career/UsCareerCreator';
 import type { UsCareerStart } from '@/components/us-career/UsCareerBoard';
 import { NBA_CAREER_CREATE, NBA_CAREER_SAVE_KEY } from '@/lib/nbaCareerCreation';
-import { clearNbaCreatorDraft, keepNbaCreatorDraft, readNbaCreatorDraft } from '@/lib/nbaCreatorDraft';
+import { clearUsCareerCreatorDraft, keepUsCareerCreatorDraft, readUsCareerCreatorDraft } from '@/lib/usCareerCreatorDraft';
 import { hallWallKey } from '@/lib/usCareerHallWallKey';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
@@ -25,7 +25,7 @@ function NbaCareerEntry() {
     try { return !!(localStorage.getItem(NBA_CAREER_SAVE_KEY) || localStorage.getItem(hallWallKey('nba'))); }
     catch { return false; }
   });
-  const [restored] = useState(() => saved ? null : readNbaCreatorDraft());
+  const [restored] = useState(() => saved ? null : readUsCareerCreatorDraft('nba', NBA_CAREER_CREATE, NBA_CAREER_SAVE_KEY));
   const [draft, setDraft] = useState(() => restored?.draft ?? emptyUsCareerDraft(NBA_CAREER_CREATE));
   const initialDraft = useRef(draft);
   const savedDraft = useRef(restored?.raw ?? null);
@@ -35,7 +35,7 @@ function NbaCareerEntry() {
   useLayoutEffect(() => {
     if (saved || opened || draft === initialDraft.current) return;
     const bytes = JSON.stringify(draft);
-    if (bytes !== savedDraft.current && keepNbaCreatorDraft(savedDraft.current, bytes)) savedDraft.current = bytes;
+    if (bytes !== savedDraft.current && keepUsCareerCreatorDraft('nba', NBA_CAREER_SAVE_KEY, savedDraft.current, bytes)) savedDraft.current = bytes;
   }, [draft, opened, saved]);
 
   if (saved) return <Suspense fallback={<p role="status" className="text-sm text-muted-foreground">Opening your career…</p>}><SavedBoard /></Suspense>;
@@ -47,7 +47,7 @@ function NbaCareerEntry() {
     setStatus('loading');
     const bytes = savedDraft.current;
     loadBoard().then(({ default: Board }) => {
-      setOpened({ Board, entry: { draft, mode, onSaved: () => clearNbaCreatorDraft(bytes) } });
+      setOpened({ Board, entry: { draft, mode, onSaved: () => clearUsCareerCreatorDraft('nba', bytes) } });
     }).catch(() => {
       loading.current = false;
       setStatus('error');
