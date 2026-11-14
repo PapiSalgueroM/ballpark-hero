@@ -80,7 +80,7 @@ describe('NRL season review for expiring deals', () => {
     staff();
     const before = raw();
     click('Review coaching course');
-    expect(screen.getByText(/four regular rounds/i)).toBeVisible();
+    expect(screen.getByText(/four regular rounds of training, including byes/i)).toBeVisible();
     expect(screen.getByText(/if you retain the assistant and stay/i)).toBeVisible();
     expect(raw()).toBe(before);
     click('Cancel course preview');
