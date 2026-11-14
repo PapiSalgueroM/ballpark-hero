@@ -482,8 +482,11 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
   if (SAVES.length < 15) say(false, `only ${SAVES.length} saves read from src/data/continueSaves.ts, so this planted almost nothing`);
   const fresh = await visit({});
   const planted = await visit({ saves: true });
-  say(!!fresh.first && !!planted.first && Math.abs(planted.first.top - fresh.first.top) <= 2 && planted.first.top <= FOLD_CEILING,
-    `[6a] ${SAVES.length} planted saves leave the first tile where it was (fresh y=${Math.round(fresh.first?.top ?? -1)}, planted y=${Math.round(planted.first?.top ?? -1)}, ceiling ${FOLD_CEILING})`);
+  // Returning players see a Continue card first, while guests see the featured game.
+  say(!!fresh.first && !!planted.first && fresh.first.top <= FOLD_CEILING && planted.first.top <= FOLD_CEILING
+      && planted.rowTop !== null && planted.rowBottom !== null
+      && planted.first.top >= planted.rowTop && planted.first.top < planted.rowBottom,
+    `[6a] both first playable tiles are above y=${FOLD_CEILING} and the returning player's tile is in Continue (fresh y=${Math.round(fresh.first?.top ?? -1)}, ${SAVES.length} planted saves y=${Math.round(planted.first?.top ?? -1)})`);
   say(fresh.rowTop === null, '[6b] a visitor with no saves gets no Continue row at all');
   say(planted.rowBottom !== null && planted.stageTop !== null && planted.rowBottom <= planted.stageTop + 1
       && JSON.stringify(planted.cards.map(c => c.p)) === JSON.stringify(SAVES.map(s => s.path)),

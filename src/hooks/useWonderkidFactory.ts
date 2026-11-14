@@ -18,6 +18,7 @@ import {
 import type { PackId } from '@/lib/wonderkidFactory';
 import { commitOpenPack, clearPendingPack, loadLedger, commitUpgradeBoot } from '@/lib/tycoonRewards';
 import { recordCompletion } from '@/lib/completions';
+import { createSaveFence, type FenceWrite } from '@/lib/saveFence';
 
 export interface Floater {
   id: number;
@@ -25,34 +26,64 @@ export interface Floater {
   kind: 'sale' | 'find' | 'bad' | 'win';
 }
 
+function readAcademy(): FactoryState {
+  const now = Date.now();
+  let loaded: FactoryState | null = null;
+  try { loaded = deserialize(localStorage.getItem(SAVE_KEY), now, loadLedger().gearLevel); } catch { loaded = null; }
+  const s = loaded ?? newFactory(now);
+  const applied = applyOffline(s, now);
+  if (applied > 60) s.scoutProgress = Math.max(s.scoutProgress, 0);
+  return s;
+}
+
 export function useWonderkidFactory() {
+  const [fence] = useState(() => {
+    const academyFence = createSaveFence(() => localStorage);
+    academyFence.adopt(SAVE_KEY);
+    return academyFence;
+  });
   const stateRef = useRef<FactoryState | null>(null);
-  if (stateRef.current === null) {
-    const now = Date.now();
-    let loaded: FactoryState | null = null;
-    try { loaded = deserialize(localStorage.getItem(SAVE_KEY), now, loadLedger().gearLevel); } catch { loaded = null; }
-    const s = loaded ?? newFactory(now);
-    const applied = applyOffline(s, now);
-    if (applied > 60) s.scoutProgress = Math.max(s.scoutProgress, 0);
-    stateRef.current = s;
-  }
+  if (stateRef.current === null) stateRef.current = readAcademy();
   const [, setVersion] = useState(0);
   const bump = useCallback(() => setVersion(v => v + 1), []);
   const [packSaveBlocked, setPackSaveBlocked] = useState(false);
   const [academySaveBlocked, setAcademySaveBlocked] = useState(false);
   const [gearSaveBlocked, setGearSaveBlocked] = useState(false);
 
+  const saveMoved = useRef(false);
+  const checkMoved = useCallback(() => {
+    if (!saveMoved.current && fence.moved(SAVE_KEY)) {
+      saveMoved.current = true;
+      bump();
+    }
+    return saveMoved.current;
+  }, [bump, fence]);
+
+  const writeAcademy = useCallback((next: FactoryState, verifyWrite = false): FenceWrite => {
+    if (checkMoved()) return 'moved';
+    const persist = () => {
+      try { localStorage.setItem(SAVE_KEY, serialize(next)); return true; } catch { return false; }
+    };
+    let saved: string | null | undefined;
+    try { saved = localStorage.getItem(SAVE_KEY); } catch { /* attempt the write */ }
+    if (saved && saved === serialize(next)) return !verifyWrite || persist() ? 'written' : 'failed';
+    const result = fence.write(SAVE_KEY, persist);
+    if (result === 'moved') checkMoved();
+    return result;
+  }, [checkMoved, fence]);
+
   /* Moving a player only reaches the screen after the whole academy is saved. */
   const commitAcademy = useCallback((next: FactoryState): boolean => {
-    try { localStorage.setItem(SAVE_KEY, serialize(next)); } catch {
-      setAcademySaveBlocked(true);
+    const result = writeAcademy(next);
+    if (result !== 'written') {
+      if (result === 'failed') setAcademySaveBlocked(true);
       return false;
     }
     Object.assign(stateRef.current!, next);
     setAcademySaveBlocked(false);
     bump();
     return true;
-  }, [bump]);
+  }, [bump, writeAcademy]);
 
   /** Round 585: a pack opened and not yet in a bed (a reload between the draw
    *  and the delivery, or a bed that filled) moves in as soon as a bed is free. */
@@ -61,14 +92,15 @@ export function useWonderkidFactory() {
     if (!pending) return false;
     const next = { ...s, prospects: [...s.prospects] };
     if (!deliverPack(next, pending.seq, pending.kid, pending.tier)) return false;
-    try { localStorage.setItem(SAVE_KEY, serialize(next)); } catch {
-      setPackSaveBlocked(true);
+    const result = writeAcademy(next);
+    if (result !== 'written') {
+      if (result === 'failed') setPackSaveBlocked(true);
       return false;
     }
     Object.assign(s, next);
     setPackSaveBlocked(false);
     return true;
-  }, []);
+  }, [writeAcademy]);
 
   const [floaters, setFloaters] = useState<Floater[]>([]);
   const floaterId = useRef(1);
@@ -90,7 +122,14 @@ export function useWonderkidFactory() {
      gets on load. The academy panel hidden under Stadium Tycoon's other tab is
      still a visible page, so it keeps its watched clock. */
   useEffect(() => {
+    // A route leaving in this tab can save after the next panel's first render.
+    if (fence.moved(SAVE_KEY)) {
+      fence.adopt(SAVE_KEY);
+      stateRef.current = readAcademy();
+      bump();
+    }
     const iv = window.setInterval(() => {
+      if (checkMoved()) return;
       const s = stateRef.current!;
       const before = s.prospects.length;
       const now = Date.now();
@@ -105,9 +144,7 @@ export function useWonderkidFactory() {
       }
       bump();
     }, 250);
-    const save = () => {
-      try { localStorage.setItem(SAVE_KEY, serialize(stateRef.current!)); } catch { /* storage full or blocked */ }
-    };
+    const save = () => { writeAcademy(stateRef.current!); };
     const saver = window.setInterval(save, 5000);
     document.addEventListener('visibilitychange', save);
     window.addEventListener('pagehide', save);
@@ -118,7 +155,7 @@ export function useWonderkidFactory() {
       window.removeEventListener('pagehide', save);
       save();
     };
-  }, [bump, pushFloater, deliverWaiting]);
+  }, [bump, checkMoved, deliverWaiting, fence, pushFloater, writeAcademy]);
 
   /* Round 195's S-1 rule, the tycoon shape exactly: one unscored mark per
      sitting, on the first meaningful action, behind a ref so marking never
@@ -131,47 +168,52 @@ export function useWonderkidFactory() {
   }, []);
 
   const doBuy = useCallback((id: FacilityId) => {
+    if (checkMoved()) return;
     markSessionPlay();
     if (buyFacility(stateRef.current!, id)) bump();
-  }, [bump, markSessionPlay]);
+  }, [bump, checkMoved, markSessionPlay]);
 
   const doSell = useCallback((id: number) => {
-    markSessionPlay();
-    const s = stateRef.current!;
-    const kid = s.prospects.find(p => p.id === id);
-    const price = sellProspect(s, id);
-    if (price !== null && kid) {
+    if (checkMoved()) return;
+    const next = copyAcademy(stateRef.current!);
+    const kid = next.prospects.find(p => p.id === id);
+    const price = sellProspect(next, id);
+    if (kid && price !== null && commitAcademy(next)) {
+      markSessionPlay();
       pushFloater(`💵 ${kid.name} sold for $${price.toLocaleString('en-US')}`, 'sale');
-      bump();
     }
-  }, [bump, markSessionPlay, pushFloater]);
+  }, [checkMoved, commitAcademy, markSessionPlay, pushFloater]);
 
   const doShowcase = useCallback(() => {
+    if (checkMoved()) return;
     markSessionPlay();
     if (startShowcase(stateRef.current!)) {
       pushFloater('🎪 showcase day: training x3', 'win');
       bump();
     }
-  }, [bump, markSessionPlay, pushFloater]);
+  }, [bump, checkMoved, markSessionPlay, pushFloater]);
 
   const doMoveUp = useCallback(() => {
+    if (checkMoved()) return;
     const next = copyAcademy(stateRef.current!);
     if (moveUp(next) && commitAcademy(next)) {
       markSessionPlay();
       pushFloater('⭐ the academy moves up in the world', 'win');
     }
-  }, [commitAcademy, markSessionPlay, pushFloater]);
+  }, [checkMoved, commitAcademy, markSessionPlay, pushFloater]);
 
   const doPromote = useCallback((id: number) => {
+    if (checkMoved()) return;
     const next = copyAcademy(stateRef.current!);
     const kid = next.prospects.find(p => p.id === id);
     if (kid && promote(next, id) && commitAcademy(next)) {
       markSessionPlay();
       pushFloater(`⚽ ${kid.name} joined the first team`, 'win');
     }
-  }, [commitAcademy, markSessionPlay, pushFloater]);
+  }, [checkMoved, commitAcademy, markSessionPlay, pushFloater]);
 
   const doSellSenior = useCallback((id: string) => {
+    if (checkMoved()) return;
     const next = copyAcademy(stateRef.current!);
     const player = next.firstTeam?.find(p => p.id === id);
     const price = sellSenior(next, id);
@@ -179,28 +221,31 @@ export function useWonderkidFactory() {
       markSessionPlay();
       pushFloater(`💵 ${player.name} sold for $${price.toLocaleString('en-US')}`, 'sale');
     }
-  }, [commitAcademy, markSessionPlay, pushFloater]);
+  }, [checkMoved, commitAcademy, markSessionPlay, pushFloater]);
 
   const doEquipBoot = useCallback((seniorId: string, bootId: string | null) => {
+    if (checkMoved()) return;
     const next = copyAcademy(stateRef.current!);
     if (!equipBoot(next, seniorId, bootId, loadLedger().gearLevel ?? {})) return;
     setGearSaveBlocked(!commitAcademy(next));
-  }, [commitAcademy]);
+  }, [checkMoved, commitAcademy]);
 
   const doUpgradeBoot = useCallback((bootId: string) => {
+    if (checkMoved()) return;
     try {
       if (commitUpgradeBoot(bootId)) {
         setGearSaveBlocked(false);
         bump();
       }
     } catch { setGearSaveBlocked(true); }
-  }, [bump]);
+  }, [bump, checkMoved]);
 
   /* Round 585: open a pack. The ledger stores the draw first, then the kid moves
      into a free bed and the academy is saved, all before anything is shown. */
   /* Review: no session mark here. Safeguard 2 keeps packs and gems away from
      streaks, and a mark is what a streak counts. */
   const doOpenPack = useCallback((id: PackId) => {
+    if (checkMoved()) return;
     const s = stateRef.current!;
     let pending;
     try {
@@ -216,19 +261,22 @@ export function useWonderkidFactory() {
     if (!pending) return;
     deliverWaiting(s);
     bump();
-  }, [bump, deliverWaiting]);
+  }, [bump, checkMoved, deliverWaiting]);
 
   const doDismissPack = useCallback(() => {
     const s = stateRef.current!;
-    try { localStorage.setItem(SAVE_KEY, serialize(s)); } catch {
-      setPackSaveBlocked(true);
+    // Keep the pending draw until the academy accepts a write.
+    const result = writeAcademy(s, true);
+    if (result !== 'written') {
+      if (result === 'failed') setPackSaveBlocked(true);
       return;
     }
     setPackSaveBlocked(false);
     if (clearPendingPack(s.packsDelivered ?? 0)) bump();
-  }, [bump]);
+  }, [bump, writeAcademy]);
 
   return {
+    saveMoved: saveMoved.current,
     state: stateRef.current,
     floaters,
     doBuy,

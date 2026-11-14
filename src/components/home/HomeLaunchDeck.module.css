@@ -6,30 +6,28 @@
 }
 
 .sports {
+  padding: 6px;
   display: flex;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scrollbar-width: thin;
-  border-bottom: 1px solid hsl(var(--border));
+  flex-wrap: wrap;
+  gap: 2px;
   background: hsl(var(--surface-2));
 }
 
 .sportLink {
   display: flex;
-  flex: 1 0 auto;
+  flex: 1 1 auto;
   align-items: center;
   justify-content: center;
-  gap: 7px;
+  gap: 6px;
   min-height: 44px;
-  padding: 0 16px;
-  border-right: 1px solid hsl(var(--border));
+  padding: 0 8px;
+  border-radius: 7px;
   color: hsl(var(--foreground));
   font-size: 12px;
   font-weight: 700;
   white-space: nowrap;
 }
 
-.sportLink:last-child { border-right: 0; }
 .sportLink:hover { background: hsl(var(--tile) / 0.12); }
 .sportGlyph { width: 18px; height: 18px; color: hsl(var(--tile)); }
 .games { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: hsl(var(--border)); }

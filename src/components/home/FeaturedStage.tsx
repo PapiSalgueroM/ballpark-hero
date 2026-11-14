@@ -41,6 +41,10 @@ export function FeaturedStage() {
   return (
     <section aria-labelledby="home-stage-title" data-home-stage="" className={styles.deck}>
       <h2 id="home-stage-title" className="sr-only">Main event</h2>
+      <div className={styles.games}>
+        {cards.map((card, index) => <StageCard key={card.game.path} card={card} lead={index === 0}
+          saved={!!card.entry.saveKey && saved.includes(card.entry.saveKey)} />)}
+      </div>
       <nav aria-label="Sports shortcuts" className={styles.sports}>
         <a href="#sport-rugby" style={sportStyle('rugby')} className={styles.sportLink}>
           <SportGlyph sport="rugby" className={styles.sportGlyph} />
@@ -56,10 +60,6 @@ export function FeaturedStage() {
           );
         })}
       </nav>
-      <div className={styles.games}>
-        {cards.map((card, index) => <StageCard key={card.game.path} card={card} lead={index === 0}
-          saved={!!card.entry.saveKey && saved.includes(card.entry.saveKey)} />)}
-      </div>
     </section>
   );
 }

@@ -1,4 +1,12 @@
+## 2026-11-14: NRL cap planning, durable Academy sales and visible Home sport shortcuts
+
+- NRL Recruitment previews how up to three shortlisted signings or eligible renewals fit together. Each proposal uses the existing asking salary and offer rules. The table shows projected cap room and signed squad size for each relevant season. The preview leaves the save untouched.
+- Wonderkid Factory and Stadium Tycoon's Academy confirm a prospect sale after the updated save is accepted. Both doors stop an older tab from restoring a sold prospect or overwriting newer Academy progress.
+- Home places four playable games before the sport shortcuts. All seven shortcuts wrap within the page width on phones. Rugby League still jumps to its catalogue section.
+
 ## 2026-11-14: Late NRL interchanges, Contract Chaos Daily and compact Home cards
+
+[PR #895](https://github.com/PapiSalgueroM/ballpark-hero/pull/895) published from main `62c68438e363b4f90360d9114e1a572308f51023`, deployment `107edd66-68f1-4af3-86cd-8f718b36dfc3`, entry `/assets/index-DmvfR2Lg.js`. All three changes and all 174 sitemap routes passed live verification. IndexNow accepted the updated NRL guide. The hosted Home launch, Game Picks, and Career Entry Guide passed. The separate Home Search workflow still needs updated font and historical source checks.
 
 - NRL managers can use an unused held reserve at the 60-minute pause. The reserve plays the remainder of the match. The match report records the change and uses the lineup on the field for late scoring credit.
 - Contract Chaos keeps the Eastern date of the Daily deal from the moment it opens through signing and sharing. A tab with an older open deal preserves a result already saved for that date or a later date.

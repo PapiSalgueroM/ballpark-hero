@@ -222,6 +222,34 @@ describe('NRL season review for expiring deals', () => {
     expect(raw()).toBe(before);
   });
 
+  it('opens a cap plan with shortlisted players and renewals, previewing terms without writing', () => {
+    const initial = createNrlCareer('broncos', 1, 2026);
+    const market = nrlCareerMarket(initial);
+    const renewal = market.find(entry => entry.player.id === 'broncos-4-0')!;
+    const target = market.find(entry => entry.player.id === 'nrl-storm-2026-9')!;
+    const saved = reduceNrlCareer(initial, { type: 'setShortlist', year: 2026, playerId: target.player.id, saved: true });
+    open(saved);
+    click('Recruitment');
+    const before = raw();
+    const firstFence = localStorage.getItem(fence);
+    const summary = screen.getByText('Plan future salary cap', { exact: true });
+    fireEvent.click(summary);
+    fireEvent(summary.closest('details')!, new Event('toggle'));
+    const planner = within(summary.closest('details')!);
+    const first = planner.getByRole('combobox', { name: 'First planned player' });
+    fireEvent.change(first, { target: { value: target.player.id } });
+    const second = planner.getByRole('combobox', { name: 'Second planned player' });
+    expect(within(second).queryByRole('option', { name: new RegExp(target.player.name) })).not.toBeInTheDocument();
+    fireEvent.change(second, { target: { value: renewal.player.id } });
+    fireEvent.change(planner.getByRole('combobox', { name: 'First deal length' }), { target: { value: '3' } });
+    expect(planner.getByText(/2027 to 2029/)).toBeVisible();
+    expect(planner.getByRole('table', { name: 'Projected salary cap' })).toBeVisible();
+    expect(planner.getByRole('row', { name: /^2029/ })).toBeVisible();
+    expect(raw()).toBe(before);
+    expect(localStorage.getItem(fence)).toBe(firstFence);
+    expect(JSON.parse(raw()!).shortlist).toEqual([target.player.id]);
+  });
+
   it('previews and confirms one simulated release from Contracts without writing on cancel', () => {
     const player = nrlCareerSquad(completed).find(row => nrlMutualReleaseQuote(completed, row.id).ok)!;
     const view = open(completed);
