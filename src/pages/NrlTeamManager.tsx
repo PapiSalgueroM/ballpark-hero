@@ -32,7 +32,7 @@ import {
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
-  nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlOppositionReport, nrlPositionTraining,
+  nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlOppositionReport, nrlPositionTraining,
   nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlSelectionPromise, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
   NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SELECTION_PROMISE, reduceNrlCareer, runNrlFastForward,
@@ -808,11 +808,13 @@ const fastForwardStops: Record<NrlFastForwardStop, string> = {
   finals: 'The regular season is complete. Play the finals one round at a time.',
   judiciary: 'A Judiciary review needs a response in Match centre.',
   'contract-approach': 'A rival contract offer is ready in Contracts.',
+  'contract-deadline': 'This is the last round to reply to the rival offer. Review it in Contracts or simulate this round on its own to let it expire.',
 };
 type FastForwardResult = { rounds: number; stop: NrlFastForwardStop | null };
 
-function FastForward({ career, onRun, disabled }: {
+function FastForward({ career, onRun, disabled, onOpenOffice }: {
   career: NrlCareerState; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null; disabled: boolean;
+  onOpenOffice: (screen: OfficeScreen) => void;
 }) {
   const shortName = useNrlClubName();
   const { year, round, clubId, phase } = career.season;
@@ -839,6 +841,10 @@ function FastForward({ career, onRun, disabled }: {
           {latest.rounds ? `Simulated ${latest.rounds} ${latest.rounds === 1 ? 'round' : 'rounds'}. ` : 'No rounds simulated. '}
           {latest.stop && fastForwardStops[latest.stop]}
         </p>}
+        {latest?.stop === 'academy' && <Button type="button" size="lg" variant="outline" onClick={() => onOpenOffice('academy')}>Review academy report</Button>}
+        {(latest?.stop === 'contract-approach' || latest?.stop === 'contract-deadline') && (
+          <Button type="button" size="lg" variant="outline" onClick={() => onOpenOffice('contracts')}>Open Contracts</Button>
+        )}
         {fixtures.length >= 2 && <>
           <p className="text-muted-foreground">Simulate up to four regular rounds with your current tactic. The run can stop early for a club decision.</p>
           <ol className="space-y-1" aria-label="Upcoming club fixtures">
@@ -956,9 +962,9 @@ function KickoffSelectionPromise({ career, heldReserveId }: { career: NrlCareerS
   );
 }
 
-function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled, showLiveResult }: {
+function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLiveResult }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null;
-  onReview: () => void; onContracts: () => void; disabled: boolean; showLiveResult: boolean;
+  onOpenOffice: (screen: OfficeScreen) => void; disabled: boolean; showLiveResult: boolean;
 }) {
   const shortName = useNrlClubName();
   const { season } = career;
@@ -976,6 +982,8 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
   const intensiveBye = next.clubStatus === 'bye' && nrlIntensiveBye(career);
   const needsJudiciary = judiciaryNeedsResponse(season);
   const approach = nrlContractApproach(career);
+  const readyAcademy = career.retired ? [] : nrlAcademyReports(career)
+    .flatMap(({ status, player }) => status === 'ready' && player && nrlAcademyOffer(career, player.id).ok ? [player] : []);
   const canPlayLive = Boolean(match && season.kickerId && season.bench);
   const goalKicker = match && season.backupKickerId && season.squad.find(player => player.id === season.kickerId)?.name;
   const holdable = canPlayLive ? nrlHoldableReserves(season) : [];
@@ -1017,10 +1025,20 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
       {!career.retired && <NrlBoardChallengeNotice season={season} status={nrlBoardChallengeStatus(career)} />}
       {showLiveResult && report}
       <NrlJudiciaryReview season={season} onAction={onAction} disabled={disabled} />
-      {approach?.status === 'offered' && <div className="rounded-xl border border-border bg-card p-3 text-sm">
-        <p>A rival wants to take over {approach.player?.name}’s contract. Reply by the end of Round {approach.deadline}.</p>
-        <Button type="button" size="lg" variant="outline" className="mt-2" onClick={onContracts}>Review rival offer</Button>
-      </div>}
+      {(approach?.status === 'offered' || readyAcademy.length > 0) && (
+        <section className="space-y-2 rounded-xl border border-border bg-card p-3 text-sm" aria-labelledby="nrl-club-decisions">
+          <h3 id="nrl-club-decisions" className="font-bold">Club decisions</h3>
+          {approach?.status === 'offered' && <div>
+            <p>A rival wants to take over {approach.player?.name}’s contract. Reply by the end of Round {approach.deadline}.</p>
+            {season.round === approach.deadline && <p className="mt-1 text-xs text-muted-foreground">Simulating this round without replying lets the offer expire.</p>}
+            <Button type="button" size="lg" variant="outline" className="mt-2" onClick={() => onOpenOffice('contracts')}>Review rival offer</Button>
+          </div>}
+          {readyAcademy.length > 0 && <div>
+            <p>{readyAcademy.length === 1 ? `${readyAcademy[0].name} can sign from the academy.` : `${readyAcademy.length} academy prospects can sign.`}</p>
+            <Button type="button" size="lg" variant="outline" className="mt-2" onClick={() => onOpenOffice('academy')}>Open Academy</Button>
+          </div>}
+        </section>
+      )}
       <div className="overflow-hidden rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
         <p className="text-xs font-bold uppercase tracking-widest text-emerald-200">{next.title}</p>
         <h2 className="mt-2 break-words font-display text-2xl font-black leading-tight sm:text-3xl">{title}</h2>
@@ -1038,7 +1056,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
           </p>
         )}
         {phase === 'complete' && (
-          <Button type="button" size="lg" className="mt-3 px-4" onClick={onReview}><Trophy aria-hidden="true" /> Review this season</Button>
+          <Button type="button" size="lg" className="mt-3 px-4" onClick={() => onOpenOffice('history')}><Trophy aria-hidden="true" /> Review this season</Button>
         )}
       </div>
 
@@ -1165,7 +1183,7 @@ function MatchCentre({ career, onAction, onRun, onReview, onContracts, disabled,
         </details>
       )}
 
-      <FastForward key={`fast-forward-${year}`} career={career} onRun={onRun} disabled={disabled} />
+      <FastForward key={`fast-forward-${year}`} career={career} onRun={onRun} disabled={disabled} onOpenOffice={onOpenOffice} />
 
       {phase !== 'regular' && (
         <details className="rounded-xl border border-border bg-card px-4">
@@ -2096,6 +2114,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check Rating changes in Squad. Existing ratings carry into the next season.</li>
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
+              <li>Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.</li>
               <li>If you accepted Board pathways, check Pathways run-in in Season review with four regular-season club matches left. It shows who can still reach four appearances.</li>
               <li>Change clubs between seasons from Season review.</li>
               <li>When staying at your club, check Fill open squad places in Season review to preview affordable one-season free-agent deals before starting the next season.</li>
@@ -2150,7 +2169,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               ))}
             </div>
             {panel === 'match' && <MatchCentre career={career} onAction={dispatch} onRun={fastForward} disabled={moved || retired} showLiveResult={showLiveResult}
-              onReview={() => { setOffice('history'); setPanel('office'); }} onContracts={() => { setOffice('contracts'); setPanel('office'); }} />}
+              onOpenOffice={screen => { setOffice(screen); setPanel('office'); }} />}
             {live && (panel === 'squad' || panel === 'office') && (
               <p className="rounded-xl border border-border bg-card p-3 text-sm">Finish the live match in Match centre to make changes.</p>
             )}

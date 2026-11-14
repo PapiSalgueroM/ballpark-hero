@@ -82,6 +82,32 @@ describe('NRL rival contract approaches', () => {
     expect(raw(readNrlCareerSave(raw(filled)))).toBe(raw(filled));
   });
 
+  it.each([[2026, 'storm'], [2027, 'bears']] as const)('holds the last reply round in an existing %i offer and permits a deliberate skip', (year, clubId) => {
+    const initial = createNrlCareer(clubId, 4, year);
+    const candidate = nrlCareerSquad(initial).find(member => nrlTakeoverOffers(initial, member.id).length > 0)!;
+    const replied = advance(listing(initial, candidate.id));
+    const deadline = advance(replied);
+    const reply = nrlContractApproach(deadline)!;
+    expect(reply.status).toBe('offered');
+    expect(reply.deadline).toBe(deadline.season.round);
+    const through = (state: NrlCareerState) => runNrlFastForward(state, { year, clubId, round: state.season.round, through: reply.deadline + 1 });
+    expect(through(deadline)).toEqual({ state: deadline, stop: 'contract-deadline' });
+    const approach = through(replied);
+    expect(approach.state).toBeDefined();
+    expect(approach.state.season.round).toBe(deadline.season.round);
+    if (approach.stop !== 'injury' && approach.stop !== 'judiciary') expect(approach.stop).toBe('contract-deadline');
+    expect(raw(approach.state)).toBe(raw(deadline));
+    const accepted = respond(deadline, 'accept');
+    expect(nrlCareerCap(accepted, year + 1).available).toBeGreaterThan(nrlCareerCap(deadline, year + 1).available);
+    expect(through(accepted).state).not.toBe(accepted);
+    const declined = respond(deadline, 'decline');
+    expect(through(declined).state).not.toBe(declined);
+    const skipped = advance(deadline);
+    expect(nrlContractApproach(skipped)?.status).toBe('expired');
+    expect(player(skipped, candidate.id).futureContract).toEqual(candidate.futureContract);
+    expect(raw(readNrlCareerSave(raw(skipped)))).toBe(raw(skipped));
+  });
+
   it('settles after a bye and leaves an existing manual offseason move intact', () => {
     const initial = createNrlCareer('panthers', 16);
     const candidate = nrlCareerSquad(initial).find(member => nrlTakeoverOffers(initial, member.id).length > 0)!;
@@ -93,6 +119,10 @@ describe('NRL rival contract approaches', () => {
     });
     const settled = advance(manual);
     expect(nrlContractApproach(settled)?.status).toBe('no-offer');
+    const lastReplyRound = advance(settled);
+    const noOfferRun = runNrlFastForward(lastReplyRound, { year: 2026, clubId: 'panthers', round: 3, through: 4 });
+    expect(noOfferRun.stop).not.toBe('contract-deadline');
+    expect(noOfferRun.state.season.round).toBeGreaterThan(3);
     expect(player(settled, candidate.id).futureContract).toEqual(offer);
     expect(raw(readNrlCareerSave(raw(settled)))).toBe(raw(settled));
   });

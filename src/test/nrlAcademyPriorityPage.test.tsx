@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
-import { createNrlCareer, nrlAcademyReports, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
+import { createNrlCareer, nrlAcademyReports, nrlCareerCap, nrlContractApproach, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
 import { createNrlSeason, NRL_SAVE_KEY } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
@@ -83,4 +83,62 @@ it('keeps default scouting on a legacy save without forcing a profile', () => {
   expect(screen.queryByLabelText('Scouting priority')).not.toBeInTheDocument();
   expect(screen.getByLabelText('Position to scout')).toBeVisible();
   expect(raw()).toBe(bytes);
+});
+
+it('opens a ready academy report from a fast-forward stop and clears the shortcut after the prospect signs', () => {
+  const initial = createNrlCareer('panthers', 41);
+  const view = open(JSON.stringify(initial));
+  fireEvent.change(screen.getByLabelText('Position to scout'), { target: { value: 'Hooker' } });
+  click('Assign scout');
+  click('Match centre');
+  expect(screen.queryByRole('region', { name: 'Club decisions' })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByText('Fast-forward rounds', { exact: true }));
+  click('Simulate through Round 2');
+  const stepped = readNrlCareerSave(raw())!;
+  expect(stepped.season.round).toBe(2);
+  const player = nrlAcademyReports(stepped)[0].player!;
+  const decisions = within(screen.getByRole('region', { name: 'Club decisions' }));
+  expect(decisions.getByText(player.name + ' can sign from the academy.')).toBeVisible();
+  click('Review academy report');
+  expect(raw()).toBe(JSON.stringify(stepped));
+  expect(localStorage.getItem(fence)).toBe('6');
+  view.unmount();
+  renderPage();
+  click('Open Academy');
+  click('Promote ' + player.name);
+  const signed = reduceNrlCareer(stepped, { type: 'promoteAcademy', playerId: player.id });
+  expect(raw()).toBe(JSON.stringify(signed));
+  click('Match centre');
+  expect(screen.queryByRole('region', { name: 'Club decisions' })).not.toBeInTheDocument();
+  expect(localStorage.getItem(fence)).toBe('7');
+});
+
+it('keeps a reply at the deadline, opens Contracts and lets the manager take the cap gain', () => {
+  const clubId = 'storm', year = 2026, playerId = 'storm-3-1';
+  const listed = reduceNrlCareer(createNrlCareer(clubId, 4), { type: 'inviteContractApproach', playerId, permission: true, year, clubId, round: 1 });
+  const deadline = reduceNrlCareer(reduceNrlCareer(listed, { type: 'advance' }), { type: 'advance' });
+  const reply = nrlContractApproach(deadline)!;
+  const before = JSON.stringify(deadline);
+  const view = open(before);
+  click('Match centre');
+  expect(within(screen.getByRole('region', { name: 'Club decisions' })).getByText(/lets the offer expire/)).toBeVisible();
+  fireEvent.click(screen.getByText('Fast-forward rounds', { exact: true }));
+  click('Simulate through Round 4');
+  expect(screen.getByText(/^No rounds simulated\. This is the last round to reply/)).toBeVisible();
+  expect(raw()).toBe(before);
+  expect(localStorage.getItem(fence)).toBe('4');
+  click('Open Contracts');
+  const offer = within(screen.getByRole('region', { name: 'Rival contract offer' }));
+  expect(offer.getByText(/Reply by the end of Round 3/)).toBeVisible();
+  expect(raw()).toBe(before);
+  click('Accept offseason move');
+  const accepted = reduceNrlCareer(deadline, { type: 'answerContractApproach', year, clubId, listedRound: 1,
+    playerId, destinationId: reply.destinationId!, decision: 'accept' });
+  expect(nrlCareerCap(accepted, year + 1).available).toBeGreaterThan(nrlCareerCap(deadline, year + 1).available);
+  expect(raw()).toBe(JSON.stringify(accepted));
+  view.unmount();
+  renderPage();
+  expect(screen.queryByRole('region', { name: 'Club decisions' })).not.toBeInTheDocument();
+  expect(raw()).toBe(JSON.stringify(accepted));
+  expect(localStorage.getItem(fence)).toBe('5');
 });
