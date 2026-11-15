@@ -8,7 +8,7 @@ let result;
 if(mode==='units'){
  const v=read('units.json'),assertions=v.testResults.flatMap(t=>t.assertionResults);
  assert.equal(v.success,true);assert.equal(v.numFailedTests,0);assert.equal(v.numPendingTests,0);assert(assertions.length>0&&assertions.every(t=>t.status==='passed'));
- const files=['soccerInternationalReturn.test.ts','soccerInternationalReturnUi.test.tsx','soccerInternationalReturnPage.test.tsx','soccerCareerSaveRetry.test.tsx'],counts=[83,21,10,8];
+ const files=['soccerInternationalReturn.test.ts','soccerInternationalReturnUi.test.tsx','soccerInternationalReturnPage.test.tsx','soccerCareerSaveRetry.test.tsx'],counts=[83,21,10,9];
  result={mode,total:assertions.length,files:files.map((file,index)=>{const rows=v.testResults.filter(t=>t.name.replaceAll('\\','/').endsWith('/'+file));assert.equal(rows.length,1);assert.equal(rows[0].assertionResults.length,counts[index]);assert(rows[0].assertionResults.every(t=>t.status==='passed'));return{file,passed:rows[0].assertionResults.length};})};
 }else if(mode==='outcomes'){
  const v=read('outcomes.json');assert.equal(v.base,BASE);assert.deepEqual(v.sourceAfter,v.sourceBefore);assert.equal(v.groups.length,8);assert(v.groups.every(t=>t.ok));assert.equal(v.controls.length,6);assert.equal(v.neutral.length,90);
