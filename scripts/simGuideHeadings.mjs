@@ -171,7 +171,8 @@ function reviewedGuideSentences(route, part, sentences) {
     'The assignment gives you roughly 20% more steals or blocks per game, at least 0.1 when there is room under the cap, in exchange for about 8% fewer points per game. It only applies to the regular season. With no room at the cap, you keep your usual scoring.',
     "For example, a point guard's usual 20.0 points and 1.5 steals per game would become 18.4 points and 1.8 steals. The season card shows what your assignment changed."];
   if (route === '/nfl-my-career' && part === 'howToPlay') return [...sentences,
-    'A signed starting Dual Threat quarterback who has played a season can call designed runs. This shifts some passing yards and touchdowns to rushing, and fewer throws can mean fewer interceptions. The extra contact costs up to four health points. Career Log records the tradeoff, and Week by week includes the rushing stats when the season can be replayed.'];
+    'A signed starting Dual Threat quarterback who has played a season can call designed runs. This shifts some passing yards and touchdowns to rushing, and fewer throws can mean fewer interceptions. The extra contact costs up to four health points. Career Log records the tradeoff, and Week by week includes the rushing stats when the season can be replayed.',
+    "Backup quarterbacks get playoff appearances based on their regular-season playing time. Four of 17 regular-season games works out to one appearance in a four-game playoff run. Career Log shows your appearances separately from the team's games."];
   if (route === '/stadium-tycoon' && part === 'howToPlay') return [...sentences,
     "In League, book scouting for the next known opponent. Pay the quoted fee upfront to cut that opponent's scoring chance by 10 percent for one match, including a match played while you're away. Its result records the scouting fee."];
   if (route !== '/soccer-career') return sentences;

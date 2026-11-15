@@ -70,7 +70,7 @@ describe('NRL season player stats', () => {
     expect(playerNumbers(table, names.get(unused)!)).toEqual([0, 0, 0, 0, 0]);
     expect(totals(table)).toEqual([13 + match.benchUsed!.length, 13, match.benchUsed!.length, match.homeScoring.tries, match.homeScore]);
     fireEvent.click(stats.getByText('Player match log', { exact: true }));
-    const player = stats.getByRole('combobox', { name: 'Player', exact: true });
+    const player = stats.getByRole('combobox', { name: 'Player' });
     fireEvent.change(player, { target: { value: scoreless } });
     const log = stats.getByRole('list', { name: 'Player match log' });
     expect(within(log).getByRole('listitem')).toHaveTextContent(/Round 1 .*Started.*0 pts/);
@@ -102,7 +102,7 @@ describe('NRL season player stats', () => {
     const scope = stats.getByRole('combobox', { name: 'Match scope' });
     fireEvent.click(stats.getByText('Player match log', { exact: true }));
     const player = own[0].playerScoring!.starters[0];
-    fireEvent.change(stats.getByRole('combobox', { name: 'Player', exact: true }), { target: { value: player } });
+    fireEvent.change(stats.getByRole('combobox', { name: 'Player' }), { target: { value: player } });
     const log = within(stats.getByRole('list', { name: 'Player match log' }));
     const matchLog = () => log.getAllByRole('listitem');
     expect(totals(table)).toEqual(expected(own));
@@ -119,13 +119,13 @@ describe('NRL season player stats', () => {
     expect(localStorage.getItem(fenceKey)).toBe('7');
   });
 
-  it('keeps missing rating reviews distinct from recorded zeroes and changes', () => {
+  it.each([false, true])('keeps missing rating reviews distinct from recorded zeroes and changes (legacy review: %s)', keepLegacyReview => {
     const career = advance(advance(advance(initialCareer())));
     const managedMatches = career.season.results.filter(managed);
     expect(managedMatches.map(match => match.round)).toEqual([1, 2, 3]);
     const player = managedMatches[0].playerScoring!.starters[0];
     expect(managedMatches[1].playerScoring!.starters).toContain(player);
-    const raw = JSON.stringify({ ...career, ratingReview: undefined, season: { ...career.season, results: career.season.results.map(match => {
+    const raw = JSON.stringify({ ...career, ratingReview: keepLegacyReview ? { round: 1, changes: [[player, -1]] } : undefined, season: { ...career.season, results: career.season.results.map(match => {
       if (!managed(match)) return match;
       if (match.round === 1) return { ...match, ratingChanges: undefined };
       if (match.round === 2) return { ...match, ratingChanges: [] };
@@ -134,11 +134,11 @@ describe('NRL season player stats', () => {
     expect(readNrlCareerSave(raw)).not.toBeNull();
     const stats = openStats(raw);
     fireEvent.click(stats.getByText('Player match log', { exact: true }));
-    fireEvent.change(stats.getByRole('combobox', { name: 'Player', exact: true }), { target: { value: player } });
+    fireEvent.change(stats.getByRole('combobox', { name: 'Player' }), { target: { value: player } });
     const [third, second, first] = within(stats.getByRole('list', { name: 'Player match log' })).getAllByRole('listitem');
     expect(third).toHaveTextContent(/Round 3 .*\+1 OVR/);
     expect(second).toHaveTextContent(/Round 2 .*Started.*No OVR change/);
-    expect(first).toHaveTextContent(/Round 1 .*Started.*OVR review unavailable/);
+    expect(first).toHaveTextContent(keepLegacyReview ? /Round 1 .*Started.*-1 OVR/ : /Round 1 .*Started.*OVR review unavailable/);
     expect(read()).toBe(raw);
     expect(localStorage.getItem(fenceKey)).toBe('7');
   });

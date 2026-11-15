@@ -50,6 +50,20 @@ describe('Aussie Rules Manager full season engine', () => {
     expect(reset).toEqual(automatic);
   });
 
+  it('rejects preferred slots assigned to another club or the wrong known position', () => {
+    const initial = createLeague(1, 'club-00', 'afl2026')!;
+    const kept = reduceLeague(initial, { type: 'keepLineup' });
+    const preferred = kept.preferredLineup!;
+    const rival = kept.clubs.find(club => club.id !== kept.myClub)!.players[0];
+    const rivalSelection = { ...preferred, bench: [rival.id, ...preferred.bench.slice(1)] };
+    expect(readLeagueSave(JSON.stringify({ ...kept, preferredLineup: rivalSelection }))).toBeNull();
+    const own = preferred.starters[0];
+    const other = preferred.starters.find(slot => slot.role !== own.role)!;
+    const wrongRoles = preferred.starters.map(slot => slot === own ? { ...slot, role: other.role }
+      : slot === other ? { ...slot, role: own.role } : slot);
+    expect(readLeagueSave(JSON.stringify({ ...kept, preferredLineup: { ...preferred, starters: wrongRoles } }))).toBeNull();
+  });
+
   it('fills only unavailable preference slots when opening a match', () => {
     const initial = createLeague(1, 'club-00', 'afl2026')!;
     const kept = reduceLeague(initial, { type: 'keepLineup' });

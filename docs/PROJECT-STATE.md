@@ -1,3 +1,12 @@
+## 2026-11-15: Matchday squads, player logs, ticket quotes and playoff appearances
+
+- NRL Team Manager adds a Player match log to Season player stats. Pick any squad player for their starts by position, interchange appearances, points and recorded OVR changes. The finals filter applies to the log. An older standalone rating review appears on its original round.
+- Aussie Rules Manager can keep the selected matchday 23 for the current season. It preserves eligible starters and interchange slots, replaces missing players, and leaves the preference in place through a finals bye. Choose automatic selection at any playable fixture. The new season starts on automatic.
+- Stadium Tycoon quotes attendance and total income per second for all three ticket offers at the current ground. In the low-demand fixture Premium estimates 67 fans and $4.19 per second, against 90 and $4.50 for Standard. With a full ground Premium quotes $7.50 against $6.00.
+- NFL My Career records personal playoff appearances separately from team games for newly simulated backup quarterbacks. The paired title fixture records one personal appearance in four team games. The Wild Card fixture records zero appearances and leaves out the player stat line. Existing playoff records keep their original display.
+
+The combined source passed 128 focused tests. The rebuilt candidate passed all 16 pinned Chromium cases, 19 site checks and 16 download budgets. The four changed games' rendered SEO fields matched their saved pages. The three guide snapshots and their lastmod ledger entries were regenerated. The Aussie comparison matched 5,027 automatic transitions over 60 seasons and kept the chosen defender in 30 of 30 opted-in cases. Updated Aussie club-name and NFL season-tile checks now follow the live scoring list and designed-run fields.
+
 ## 2026-11-15: NBA defensive assignments and first-year NFL rookie contracts
 
 [PR #991](https://github.com/PapiSalgueroM/ballpark-hero/pull/991) published exact main `cc5874240b0513e62203eae9c754b73fb35b156b`, deployment `e391545c-f329-43a0-a9d5-18b278354622`, canonical entry `/assets/index-Bta2oqIL.js`. The merged tree matched tested head `0121b3ce`. All five live browser journeys, 174 sitemap routes and 13 pinned endpoint checks passed. IndexNow accepted the updated NBA My Career guide. All 20 local site checks and 16 download budgets passed. Hosted application types and build passed. Wider hosted jobs reported older font and source checks.
@@ -8,12 +17,6 @@ The NFL season-away harness now includes the weekly ratings update. All 1,020 we
 
 - NBA My Career lets guards and small forwards trade scoring for steals or frontcourt players trade scoring for blocks in the Season Programme. The regular-season recap records the change and shows when the cap prevents a gain.
 - NFL Front Office starts newly drafted players with four contract years, their draft age and their promised salary. Current paused draft saves and older managed drafts with a saved ledger entry get the same correction at rollover. Older saves without a draft record retain their existing terms.
-
-## Next simulation candidates verified on #991
-
-- Aussie Rules Manager rebuilds the matchday group for the next round. In all 30 seeded checks, a manually selected defender played Round 1 and missed the Round 2 group entirely. A lineup preference could preserve eligible selections between rounds while keeping 18 starters and five on the bench.
-- Stadium Tycoon already models ticket demand and income for each price. In a 120-seat ground with 90 fans, the model quotes $4.50 per second for Standard and $4.19 per second for Premium. With 240 fans, both fill the ground and Premium quotes $7.50 against Standard's $6.00. Those values can be previewed before changing policy.
-- NFL My Career credits a backup quarterback with every playoff game and identical passing production to the starter in the paired title fixture, despite four regular-season appearances against the starter's 17. Personal appearances and production can be tracked while preserving the team's playoff outcome.
 
 ## 2026-11-15: Rival contract renewals, Club Manager player ratings and sport order
 

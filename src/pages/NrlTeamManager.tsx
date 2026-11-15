@@ -923,9 +923,13 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
   );
 }
 
+function matchRatingReview({ ratingReview }: NrlCareerState, match: NrlMatchResult) {
+  return match.ratingChanges ?? (ratingReview?.round === match.round ? ratingReview.changes : undefined);
+}
+
 function MatchRatingChanges({ career, match }: { career: NrlCareerState; match: NrlMatchResult }) {
   if (career.legacySeason || match.finalsRound || !match.playerScoring) return null;
-  const changes = match.ratingChanges ?? (career.ratingReview?.round === match.round ? career.ratingReview.changes : undefined);
+  const changes = matchRatingReview(career, match);
   if (!changes) return <p className="mt-2 text-sm text-muted-foreground">Rating changes weren’t recorded for this match.</p>;
   if (!changes.length) return <p className="mt-2 text-sm text-muted-foreground">No OVR changes in this match review.</p>;
   const increases = changes.filter(([, delta]) => delta > 0).length;
@@ -1684,7 +1688,8 @@ function IndividualRecovery({ season, awayRecovery, onAction, disabled }: {
   );
 }
 
-function SquadSeasonStats({ season }: { season: NrlManagerState }) {
+function SquadSeasonStats({ career }: { career: NrlCareerState }) {
+  const { season } = career;
   const shortName = useNrlClubName();
   const [scope, setScope] = useState<NrlSquadStatsScope>('all');
   const [playerId, setPlayerId] = useState('');
@@ -1740,9 +1745,10 @@ function SquadSeasonStats({ season }: { season: NrlManagerState }) {
                   const playedOffBench = match.benchUsed?.includes(playerId);
                   const appearance = role ? `Started at ${role}` : playedOffBench ? 'Interchange' : 'Did not play';
                   const scoring = report.lines.find(line => line.playerId === playerId);
-                  const change = match.ratingChanges?.find(([id]) => id === playerId)?.[1];
+                  const changes = matchRatingReview(career, match);
+                  const change = changes?.find(([id]) => id === playerId)?.[1];
                   const review = change ? `${change > 0 ? '+' : ''}${change} OVR`
-                    : match.ratingChanges ? 'No OVR change' : 'OVR review unavailable';
+                    : changes ? 'No OVR change' : 'OVR review unavailable';
                   return <li key={match.round} className="flex flex-wrap justify-between gap-x-3 gap-y-0.5 py-1.5">
                     <span className="font-semibold">{roundLabel(match.round, regularRounds)} {home ? 'vs' : 'at'} {opponent}</span>
                     <span className="text-muted-foreground">
@@ -2190,7 +2196,7 @@ function Squad({ career, onAction, disabled }: {
           </p>}
         </section>
       ) : <p className="mt-2 text-sm text-muted-foreground">Availability tracking starts next season for this save.</p>}
-      <SquadSeasonStats season={season} />
+      <SquadSeasonStats career={career} />
       <div className="mt-4 grid gap-x-4 gap-y-3 sm:grid-cols-2">
         {NRL_ROLES.map((role, index) => (
           <div key={role} className="min-w-0">

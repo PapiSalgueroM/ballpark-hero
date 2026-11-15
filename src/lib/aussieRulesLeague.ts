@@ -743,14 +743,18 @@ const EXITS: FinalsExit[] = ['missed', 'wildcard', 'elimination', 'semi', 'preli
 // Read at call time, never at module scope (an imported value).
 const maxQuarter = () => 4 + EXTRA_TIME.periods * EXTRA_TIME.blockBound;
 const validScore = (score: unknown): score is Score => exactKeys(score, ['goals', 'behinds', 'total']) && int(score.goals, 0, 999) && int(score.behinds, 0, 999) && score.total === (score.goals as number) * 6 + (score.behinds as number);
-function validPreferredLineup(lineup: unknown, nextId: number): boolean {
+function validPreferredLineup(lineup: unknown, { clubs, myClub, nextId }: LeagueState): boolean {
   if (!exactKeys(lineup, ['starters', 'bench']) || !Array.isArray(lineup.starters) || lineup.starters.length !== 18
     || !Array.isArray(lineup.bench) || lineup.bench.length !== 5) return false;
   const { starters, bench } = lineup;
   if (!starters.every(slot => exactKeys(slot, ['id', 'role']) && ROLES.includes(slot.role as Role))
     || !ROLES.every(role => starters.filter(slot => slot.role === role).length === ROLE_COUNTS[role])) return false;
   const ids = [...starters.map(slot => slot.id), ...bench];
-  return new Set(ids).size === 23 && ids.every(id => isPlayerId(id) && idNumber(id) < nextId);
+  if (new Set(ids).size !== 23 || !ids.every(id => isPlayerId(id) && idNumber(id) < nextId)) return false;
+  const selected = new Set(ids);
+  const positions = new Map(starters.map(slot => [slot.id, slot.role]));
+  return clubs.every(club => club.players.every(({ id, role }) => !selected.has(id)
+    || (club.id === myClub && (!positions.has(id) || positions.get(id) === role))));
 }
 function validMatch(value: unknown, live: boolean): value is Match {
   if (!exactKeys(value, MATCH_KEYS) || !int(value.round, 0, ROUNDS + 8) || !isClubId(value.homeId) || !isClubId(value.awayId) || value.homeId === value.awayId) return false;
@@ -855,7 +859,7 @@ export function validLeagueState(value: unknown): value is LeagueState {
   if (!(value.stage === 'homeAway' || value.stage === 'finals') || !int(value.round, 0, ROUNDS - 1) || !int(value.week, 0, 8) || !int(value.nextId, CLUB_COUNT * LIST_SIZE, 999999)) return false;
   const s = value as unknown as LeagueState;
   if (!validClubs(s.clubs, s.nextId, setOf(s)) || !Array.isArray(s.starters) || !Array.isArray(s.bench)) return false;
-  if (s.preferredLineup !== undefined && !validPreferredLineup(s.preferredLineup, s.nextId)) return false;
+  if (s.preferredLineup !== undefined && !validPreferredLineup(s.preferredLineup, s)) return false;
   if (!s.goals || typeof s.goals !== 'object' || Array.isArray(s.goals) || !Object.entries(s.goals).every(([id, goals]) => isPlayerId(id) && int(goals, 1, 9999))) return false;
   const closed = s.phase === 'seasonOver' || s.phase === 'summer' || s.phase === 'draft';
   if (!Array.isArray(s.history) || !s.history.every(validHistory) || s.history.length !== s.season - (closed ? 0 : 1)) return false;
