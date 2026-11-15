@@ -14,7 +14,7 @@ const held = await Promise.all(files.map(async file => [file, holdSource(await r
 const source = held.find(([file]) => file === engine)[1].source;
 const executable = source => source.replace(/\/\*[\s\S]*?\*\/|^\s*\/\/.*$/gm, '');
 const T = {
-  default: 'preserves physical pre898 default two-season outcomes and every RNG draw',
+  default: 'preserves physical pre898 full-lineup two-season outcomes and every RNG draw',
   legacy: 'preserves actual old saves and unknown-version prices without rerating',
   tuples: 'applies all416 opening tuples and retains32 exact original club budgets',
   terms: 'holds ages terms order schedule RNG and developmental headroom during cutover',
@@ -96,7 +96,7 @@ try {
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0); assert.equal(report.numPendingTests, 0); assert.equal(rows.length, 18); assert.equal(new Set(rows.map(row => row.title)).size, 18);
   assert.ok(rows.every(row => row.status === 'passed' || row.status === 'failed'), 'All18 cases execute, no skips');
   console.log('NHL_OPENING_OUTCOMES ' + JSON.stringify({ control: control || 'normal', outcomes: rows.map(row => ({ title: row.title, status: row.status })) }));
-  for (const title of [T.default, T.legacy, T.source]) assert.equal(rows.find(row => row.title === title)?.status, 'passed', 'Physical default/old-save/source baseline held');
+  for (const title of [T.default, T.legacy, T.source]) assert.equal(rows.find(row => row.title === title)?.status, 'passed', 'Physical full-lineup, old-save and source baselines held');
   if (control) {
     const expected = control === 'original' ? Object.values(T).filter(title => ![T.default, T.legacy, T.source].includes(title)) : controls[control][2];
     const failed = rows.filter(row => row.status === 'failed'); console.log('NHL_OPENING_CONTROL ' + JSON.stringify({ control, failed: failed.map(row => ({ title: row.title, message: row.failureMessages[0].split('\n')[0] })) }));
