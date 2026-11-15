@@ -1,5 +1,7 @@
 ## 2026-11-15: Scheduled rugby rotation, October pitching and Home Back
 
+[PR #988](https://github.com/PapiSalgueroM/ballpark-hero/pull/988) published exact main `e8a355f22a5875b046780a97d8d5f6572d8b17a9`, deployment `62f43e79-c730-43dd-992e-7af155dafab9`, canonical entry `/assets/index-DDUsFCLO.js`. The merged tree matched tested head `75e39bb6f`. All nine live browser journeys, 174 sitemap routes, seven policy and crawler endpoints, both updated guides and both admin noindex tags passed. IndexNow accepted both guides. Application types, the production build, 83 focused tests, all 20 site checks and 16 download budgets passed locally. Hosted Home launch and career entry guide workflows passed. The hosted save retry step passed nine outcomes and 17 fault controls. Broader jobs still report old font and source checks, and the Rugby League direct-link reload failure reproduced at the same scroll position on exact #987.
+
 - NRL Team Manager can book a saved rotation lineup for one regular-season fixture. It covers unavailable players, keeps manual changes for that match and restores the usual selection after settlement in Quick Sim, Live and Fast-forward.
 - MLB Front Office can bring back the ace in elimination games if his effective rating beats the scheduled starter. Short rest costs six rating points and carries between series. The recap records the pitcher, rating and reason for each switch.
 - Home restores the sport catalogue and keyboard focus after Back from a sport hub. The hub link names its sport.
