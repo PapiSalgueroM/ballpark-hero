@@ -7,6 +7,7 @@ on:
     paths:
       - .github/workflows/home-launch.yml
       - scripts/qa/home991.mjs
+      - scripts/simHomeFront.mjs
       - src/components/home/**
       - src/data/homeFront.ts
       - src/pages/Index.tsx
@@ -54,7 +55,7 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           ONLY=simHomeFront,simHomeCopy node scripts/runAllSims.mjs 2>&1 | tee home-launch-artifacts/home.log
-          for control in stage savekey continuekey continuecold; do
+          for control in stage savekey continuekey continuecold xiwrongkey; do
             HOME_FRONT_CONTROL="$control" node scripts/simHomeFront.mjs 2>&1 | tee "home-launch-artifacts/control-$control.log"
           done
       - name: All built readers, search and guide checks
