@@ -1,9 +1,12 @@
 ## 2026-11-14: Saved contracts, tournament scoring and admin report search
 
+[PR #974](https://github.com/PapiSalgueroM/ballpark-hero/pull/974) published exact main `740bb0367cd45c0c074ad81d06aa48ee18187323`, deployment `21482338-7ff5-476d-9b34-e88463430676`, canonical entry `/assets/index-Dd3PPdYo.js`. Twelve exact live browser journeys passed, including four admin journeys with fixture data, and the admin route served its noindex tag. The updated Club Manager guide, all 174 sitemap routes and seven policy and crawler endpoints passed. IndexNow accepted Club Manager. The build, app types, 189 focused tests, all 18 site checks and all 16 download limits passed. The scoring comparison preserved international brackets and RNG draw counts in 2,160 paired campaigns. In 2,400 elite France simulations, the finals Golden Boot rate fell from 33.5% to 6.1%.
+
 - Club Manager repairs old automatic squad releases when the same-club ledger still proves the player's identity and a live contract. It keeps the recorded wage and remaining term and removes the duplicate free-agent row. Expired and manually released deals, missing contract data and signed players stay out of the repair. Club Home lists this summer's actual contract expiries before the opening league match.
 - Soccer Career announces an international debut after the first cap, deducts actual Nations League appearances from the overlapping generic schedule, and gives reserves fewer appearances and minutes. The finals Golden Boot requires more goals than the leading simulated rival, whose goals come from the tournament scores.
 - A genuinely prolific attacker with a strong full club season gets more chances to score in the Champions League. The same 2,400-draw test for an elite Madrid striker moved from 21.9% to 41.2% for 10 or more goals and from 23.9% to 27.0% for titles. The same tests for quieter elite or ordinary Madrid seasons held.
 - Admin Reports reads all pages after checking the role. Search covers report text, game context, IDs, saved notes and fix references. Filter by priority alongside game and status, with counts that follow the filters.
+- The free-agency fleet checked 2,542 summer states with zero missing or duplicate players and retained all 131 contracted players in the four oversize and loan careers. Its three section 8 warnings reproduced against exact #973 and compare newly generated youth against departed namesakes. The departures in those cases were correct.
 
 ## 2026-11-14: Cup replay navigation and more match reports
 
