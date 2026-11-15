@@ -7,7 +7,7 @@ import SeasonCompetitionPanel, { CompetitionNavigation } from '@/components/socc
 import SoccerSeasonCentre from '@/components/soccer-career/SoccerSeasonCentre';
 import { MatchClock } from '@/components/season-centre/MatchClock';
 import { deriveSeason } from '@/lib/season/core';
-import { buildSoccerSeasonCtx, SOCCER } from '@/lib/season/soccer';
+import { buildSoccerSeasonCtx, soccerSeasonKey, SOCCER } from '@/lib/season/soccer';
 import { soccerCardLine } from '@/lib/soccerDiscipline';
 import { RESULTS_ROW, SOCCER_SHAPED, toySeason } from './fixtures/seasonCentreToy';
 import { clubCampaign, competitionCareer, cupSeason, firstStageCampaign, neutralFinalCampaign, twoLegFinalCampaign, twoLegFinalSeason } from './fixtures/soccerSeasonCompetitions1173';
@@ -161,6 +161,31 @@ describe('Soccer Career competition navigation keeps the actual league view', ()
     localStorage.clear();
     localStorage.setItem('seasonCentre:help', '1');
     vi.stubGlobal('matchMedia', (query: string) => ({ matches: false, media: query, addEventListener() {}, removeEventListener() {} }));
+  });
+
+  it.each([true, false])('keeps the same development report for a cup replay and saved fixture (%s)', withPath => {
+    const row: SeasonRecord = { ...cupSeason, leagueTitle: true, leagueFinish: 1, leagueSize: 20 };
+    if (withPath) row.ratingPath = [70, 82, 94, 82, 70];
+    const career = centreCareer(row, { lastUCLResult: null });
+    const before = JSON.stringify(career);
+    localStorage.setItem('seasonCentre:v1:soccer', JSON.stringify({
+      key: soccerSeasonKey(career.playerName, row), year: row.year, md: 25, speed: 'results', stable: true,
+    }));
+    const view = render(<MemoryRouter><SoccerSeasonCentre career={career} clubs={FALLBACK_CLUBS} row={row} mode="watch" offer={false} onClose={() => {}} /></MemoryRouter>);
+    fireEvent.click(view.container.querySelector('[data-kickoff] button.bg-emerald-600')!);
+    const calendar = view.container.querySelector('[data-centre-calendar-cup="domestic:1"]');
+    expect(calendar).not.toBeNull();
+    fireEvent.click(view.container.querySelector('[data-calendar-cup-reveal]')!);
+    expect(calendar!.querySelector('[data-calendar-cup-score]')).toHaveTextContent('2-1');
+    const summary = withPath ? 'Season OVR 86 · Down 1 from last game' : 'Season OVR unavailable for this fixture.';
+    expect(calendar!.querySelector('[data-match-development-overall]')).toHaveTextContent(summary);
+
+    fireEvent.click(calendar!.querySelector('[data-calendar-cup-competition]')!);
+    fireEvent.click(view.container.querySelector('[data-centre-cup-open="1"]')!);
+    const report = view.container.querySelector('[data-centre-cup-game="1"]')!;
+    expect(report.querySelector('[data-centre-cup-score]')).toHaveTextContent('2-1');
+    expect(report.querySelector('[data-match-development-overall]')).toHaveTextContent(summary);
+    expect(JSON.stringify(career)).toBe(before);
   });
 
   it('freezes and resumes the same live clock, pause state and completed review across cup tabs', () => {

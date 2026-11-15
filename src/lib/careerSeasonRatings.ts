@@ -25,6 +25,12 @@ export function readSeasonRatingPath(path: unknown): NonNullable<SeasonRecord["r
     ? path as NonNullable<SeasonRecord["ratingPath"]> : null;
 }
 
+export interface MatchDevelopmentOverall {
+  overall: number;
+  /** A fixture has no prior match if it opens the season. */
+  change: number | null;
+}
+
 /** Estimate the matchday overall between the five saved development checkpoints. */
 export function seasonOverallAtRound(path: NonNullable<SeasonRecord["ratingPath"]>, round: number, rounds: number): number {
   const progress = rounds > 1 ? Math.max(0, Math.min(1, (round - 1) / (rounds - 1))) * 4 : 0;

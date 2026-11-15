@@ -2,7 +2,10 @@ import { useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode }
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
 import type { SavedSeasonCompetition } from '@/lib/soccerSeasonCompetitions';
 import { savedClubCampaign } from '@/lib/soccerSeasonCompetitions';
+import { readSeasonRatingPath } from '@/lib/careerSeasonRatings';
+import type { CalendarCupGame } from '@/lib/soccerSeasonCalendar';
 import { focusDialogOnMount } from '@/lib/dialogA11y';
+import { DevelopmentOverallLine } from '@/components/season-centre/DevelopmentOverallLine';
 import { useBodyLock } from '@/components/season-centre/useBodyLock';
 import { squadNow } from '@/lib/soccerClubSquad';
 import { SquadTile } from './SquadTile';
@@ -20,9 +23,10 @@ export function CompetitionNavigation({ league, competitions, screen, onSelect }
   </nav>;
 }
 
-export default function SeasonCompetitionPanel({ career, row, competition, navigation, exitLabel, onClose, leagueUnavailable }: {
+export default function SeasonCompetitionPanel({ career, row, competition, calendar, navigation, exitLabel, onClose, leagueUnavailable }: {
   career: CareerState; row: SeasonRecord; competition: SavedSeasonCompetition | null;
   navigation: ReactNode; exitLabel: string; onClose: () => void;
+  calendar?: readonly CalendarCupGame[];
   leagueUnavailable?: string;
 }) {
   const [picked, setPicked] = useState<number | null>(null);
@@ -61,6 +65,11 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
     }
   };
   const match = picked === null ? null : competition?.matches[picked];
+  const calendarGame = match && calendar?.find(game => game.competition === competition?.id && game.matchIndex === picked);
+  // The saved opening fixture is anchored even if an older league replay is unavailable.
+  const openingPath = picked === 0 && (competition?.id === 'shield' || competition?.id === 'german-supercup')
+    ? readSeasonRatingPath(row.ratingPath) : null;
+  const development = calendarGame?.development ?? (openingPath ? { overall: openingPath[0], change: null } : null);
   const currentSquad = !competition && !leagueUnavailable ? squadNow(career) : null;
   const title = leagueUnavailable ? 'League replay unavailable' : competition?.name ?? 'Current squad';
   const stages = competition?.id === 'club' ? savedClubCampaign(career, row)?.firstStage?.stages ?? [] : [];
@@ -105,6 +114,7 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
         </div> : match ? <div className="space-y-3" data-centre-cup-game={picked}>
           <button type="button" onClick={() => setPicked(null)} className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold">‹ All games</button>
           <h3 ref={heading} tabIndex={-1} className="text-sm font-bold outline-none">{match.round}</h3>
+          <DevelopmentOverallLine report={development} unit="game" />
           <div className="rounded-xl bg-muted/30 p-4 text-center">
             <p className="text-sm font-semibold">{row.club} vs {match.opponent ?? 'Opponent not recorded'}</p>
             <p className="my-2 text-3xl font-black tabular-nums" data-centre-cup-score>{match.goalsFor === null || match.goalsAgainst === null ? 'Score not recorded' : `${match.goalsFor}-${match.goalsAgainst}`}</p>

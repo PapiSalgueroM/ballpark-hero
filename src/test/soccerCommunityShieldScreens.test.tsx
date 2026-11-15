@@ -173,6 +173,23 @@ describe('Community Shield saved screen adapters', () => {
     expect(JSON.stringify(model.season)).toBe(before);
   });
 
+  it('shows the opening development checkpoint on the Shield and its saved fixture', () => {
+    localStorage.setItem('seasonCentre:help', '1');
+    const row: SeasonRecord = { ...savedShield(), leagueTitle: true, leagueFinish: 1, leagueSize: 20, ratingPath: [70, 82, 94, 82, 70] };
+    resultOf(row).annualRating = cupSeason.rating;
+    const base = careerFor([row]);
+    const career: CareerState = { ...base, phase: 'playing', phone: { ...base.phone, world: { year: row.year, leagues: {}, ucl: '' } } };
+    const before = JSON.stringify(career);
+    const view = render(<MemoryRouter><SoccerSeasonCentre career={career} clubs={FALLBACK_CLUBS} row={row} mode="watch" offer={false} onClose={() => {}} /></MemoryRouter>);
+    fireEvent.click(screen.getByRole('button', { name: '▶ Kick off' }));
+    const opening = view.container.querySelector('[data-centre-calendar-cup="shield:0"]')!;
+    expect(opening.querySelector('[data-match-development-overall]')).toHaveTextContent('Season OVR 70 · Opening match');
+    fireEvent.click(opening.querySelector('[data-calendar-cup-competition]')!);
+    fireEvent.click(view.container.querySelector('[data-centre-cup-open="0"]')!);
+    expect(view.container.querySelector('[data-centre-cup-game="0"] [data-match-development-overall]')).toHaveTextContent('Season OVR 70 · Opening match');
+    expect(JSON.stringify(career)).toBe(before);
+  });
+
   it('SC_SHIELD_UI_CABINET_DETAIL: keeps the original win row and shows the same saved match separately from season totals', () => {
     const row = savedShield(), career = careerFor([row]), before = JSON.stringify(career), close = vi.fn();
     expect(trophyWins(career, 'shield')[0]).toBe(row);

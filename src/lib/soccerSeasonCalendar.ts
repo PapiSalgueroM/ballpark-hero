@@ -1,4 +1,5 @@
 import type { SavedCompetitionMatch, SavedSeasonCompetition } from './soccerSeasonCompetitions';
+import { readSeasonRatingPath, seasonOverallAtRound, type MatchDevelopmentOverall } from './careerSeasonRatings';
 
 export interface CalendarCupGame {
   id: string;
@@ -8,6 +9,7 @@ export interface CalendarCupGame {
   afterLeague: number;
   previous: string | null;
   match: SavedCompetitionMatch;
+  development?: MatchDevelopmentOverall;
 }
 export const CUP_CALENDAR_NOTE = 'This simulation places saved opening matches before the league and later cup games between league games. Your save kept their opponents and results, not calendar dates. Early rounds without match details stay marked.';
 const number = (value: unknown): value is number => Number.isSafeInteger(value) && (value as number) >= 0;
@@ -18,7 +20,7 @@ const recordedMatch = (match: SavedCompetitionMatch) => !!match && typeof match.
   && (match.playerGoals === undefined || number(match.playerGoals));
 
 /** Only saved games enter the calendar. A deciding loss ends that club's route. */
-export function cupCalendar(competitions: readonly SavedSeasonCompetition[], leagueGames: number): CalendarCupGame[] {
+export function cupCalendar(competitions: readonly SavedSeasonCompetition[], leagueGames: number, ratingPath?: unknown): CalendarCupGame[] {
   if (!number(leagueGames) || leagueGames < 1) return [];
   const calendar: CalendarCupGame[] = [];
   for (const competition of competitions) {
@@ -61,7 +63,28 @@ export function cupCalendar(competitions: readonly SavedSeasonCompetition[], lea
       if (match.result === 'Out' || match.result === 'Knocked out') break;
     }
   }
-  return calendar.sort((a, b) => a.afterLeague - b.afterLeague || (a.competition === b.competition ? a.matchIndex - b.matchIndex : a.competition === 'domestic' ? -1 : 1));
+  calendar.sort((a, b) => a.afterLeague - b.afterLeague || (a.competition === b.competition ? a.matchIndex - b.matchIndex : a.competition === 'domestic' ? -1 : 1));
+  const path = readSeasonRatingPath(ratingPath);
+  if (!path) return calendar;
+
+  // Keep the league checkpoints in place and spread cup games between their adjacent matchdays.
+  const gamesBySlot = new Map<number, number>();
+  for (const { afterLeague } of calendar) gamesBySlot.set(afterLeague, (gamesBySlot.get(afterLeague) ?? 0) + 1);
+  let slot = -1;
+  let playedInSlot = 0;
+  for (const cup of calendar) {
+    if (cup.afterLeague !== slot) {
+      slot = cup.afterLeague;
+      playedInSlot = 0;
+    }
+    const gap = 1 / (gamesBySlot.get(slot)! + 1);
+    const previousRound = slot + playedInSlot * gap;
+    const overall = seasonOverallAtRound(path, previousRound + gap, leagueGames);
+    const change = slot === 0 && playedInSlot === 0 ? null : overall - seasonOverallAtRound(path, previousRound, leagueGames);
+    cup.development = { overall, change };
+    playedInSlot++;
+  }
+  return calendar;
 }
 /** A next-round opponent is shown only after the preceding saved game is revealed. */
 export function visibleCupGames(calendar: readonly CalendarCupGame[], seen: ReadonlySet<string>): CalendarCupGame[] {
