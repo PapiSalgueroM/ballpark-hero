@@ -158,6 +158,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         items: [
           "In Classic or Hard, review your rotation before the season. Swap the sixth man with a starter if he can play that position. For example, a point guard you drafted on the bench can start instead. Starters carry more weight in the sim, and Hard keeps ratings hidden until the result. The shared Daily starts the sim as soon as all six slots are filled.",
           "Watch the season play out, or skip straight to the final record.",
+          "With 55 wins or more in Classic or Hard, choose your playoff rotation once the regular-season record is final.",
         ],
       },
     ],
@@ -178,6 +179,8 @@ export const BASKETBALL_CONTENT: GameContentMap = {
             heading: "Reaching the simulated playoffs",
             items: [
               "Win 55 games or more to reach the simulated playoffs.",
+              "Standard rotation keeps your usual team strength each game. Lean on starters gives your starting five more weight in Games 1–4 of each series, with an early edge that depends on how they compare with your sixth man. That edge becomes a fatigue cost in Games 5–7.",
+              "The game saves one playoff result per run. Daily plays its usual bracket automatically.",
             ],
           },
         ],
