@@ -111,14 +111,47 @@ it('lists unused reserves at unrotated positions when the fourth bench place is 
   localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(mid));
   localStorage.setItem(fence, '4');
   render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
-  const reserve = screen.getByRole('combobox', { name: 'Reserve to bring on' });
+  const reserve = screen.getByRole('combobox', { name: 'Late interchange choice' });
   expect(within(reserve).getAllByRole('option').map(option => option.getAttribute('value')))
-    .toEqual(['', held.id, 'broncos-12-1', 'nrl-broncos-2026-28']);
+    .toEqual(['', held.id, 'broncos-12-1', 'nrl-broncos-2026-28', 'return:' + interchange.starterId]);
   fireEvent.change(reserve, { target: { value: 'broncos-12-1' } });
   expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(mid));
   expect(localStorage.getItem(fence)).toBe('4');
   fireEvent.click(screen.getByRole('button', { name: 'Play final 20 minutes' }));
   expect(screen.getByText(/Jalen Hewitt came on for .+ after 60 minutes./)).toBeVisible();
+  expect(localStorage.getItem(fence)).toBe('5');
+});
+
+it('offers the named starter after reload and retains the return in the archived report', () => {
+  const half = reduceNrlCareer(createNrlCareer('broncos', 1), { type: 'startLive' });
+  const interchange = nrlHalftimeInterchanges(half.season)[0];
+  const frame = { year: 2026, round: 1, tactic: 'balanced' } as const;
+  const mid = reduceNrlCareer(half, { type: 'reachMinute60', ...frame, interchange });
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(mid));
+  localStorage.setItem(fence, '4');
+  const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const view = show();
+  const picker = screen.getByRole('combobox', { name: 'Late interchange choice' });
+  fireEvent.change(picker, { target: { value: 'return:' + interchange.starterId } });
+  expect(localStorage.getItem(fence)).toBe('4');
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(mid));
+  fireEvent.click(screen.getByRole('button', { name: 'Play final 20 minutes' }));
+  const settled = reduceNrlCareer(mid, { type: 'finishMinute60', ...frame, returnStarterId: interchange.starterId });
+  const receipt = 'Jalen Lennox returned for Tane Reeve at 60 minutes.';
+  const fullTime = within(screen.getByRole('region', { name: 'Full time' }));
+  expect(fullTime.getByText(receipt)).toBeVisible();
+  expect(fullTime.queryByText(/Lennox stayed off after half time/)).toBeNull();
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(settled));
+  expect(localStorage.getItem(fence)).toBe('5');
+  view.unmount();
+  show();
+  fireEvent.click(screen.getByText('Season fixtures', { exact: true }));
+  const summary = screen.getByText('Round 1 match report', { exact: true });
+  const report = summary.closest('details')!;
+  fireEvent.click(summary);
+  fireEvent(report, new Event('toggle'));
+  expect(within(report).getByText(receipt)).toBeVisible();
   expect(localStorage.getItem(fence)).toBe('5');
 });
 

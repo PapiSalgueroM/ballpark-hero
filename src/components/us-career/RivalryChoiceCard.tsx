@@ -9,8 +9,8 @@
    read as one feature. Sport neutral: the card is plain data off
    careerRivalryChoices.ts, the tap and the outcome come in as props.
 
-   The board commits the answer before showing this outcome. In NBA, the
-   board can reopen the same outcome after a reload until Continue. */
+   The board commits the answer before showing this outcome and restores
+   it after a reload until Continue. */
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import type { RivalryChoiceCard as Card } from '@/lib/careerRivalryChoices';
 import type { RivalryHeadToHead } from '@/components/us-career/RivalryEventCard';

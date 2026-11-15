@@ -1,3 +1,11 @@
+## 2026-11-15: Tactical rugby returns and saved rivalry outcomes
+
+- NRL Team Manager lets an available starter return at 60 minutes for the same reserve involved in their halftime interchange. The return spends one interchange, adds no bench player and changes the final-20 lineup. The chosen pair appears in saved reports and survives a Golden Point pause.
+- In 140 paired openings across all clubs and both league sizes, kickoff, halftime, 60-minute, Keep and Quick Sim results matched the baseline. Regulation changed in two paired returns. The Broncos fixture held 10–6 at 60 minutes and finished 28–8 with the reserve or 22–8 with the starter. Both paths used the same four reserves.
+- MLB, NFL and NHL My Career keep the result of a rivalry decision visible until Continue, using the same save path as NBA My Career. The three browser fixtures reopened the chosen result with its exact saved consequences. Continue acknowledged each result once.
+
+Application types, production build, 204 focused tests, six pinned browser cases, 20 site checks, all 174 SEO split routes and 16 download budgets passed. The NRL guide and search index were refreshed. The four grid archives still match the 360 boards through November 14 Eastern.
+
 ## 2026-11-15: Australian games on Home, AFL saves and NBA choice receipts
 
 - Home puts NRL Team Manager and Aussie Rules Manager directly beneath the lead Soccer Career card. Both links have 48px touch targets. Their lower edges land at 500px on a 320px guest phone and 759px on a 390px phone with a saved Club Manager career and three pins.
@@ -6,6 +14,8 @@
 - The Soccer Farewell test expectations use the ratings option selected by the real page. All six updated assertions still compare complete states and retained RNG behavior. Three copied source controls produced the four intended failures after both healthy baselines passed.
 
 Application types, the production build, 190 focused tests, 11 pinned browser cases, 21 site checks, the Home fold sweep and 16 download budgets passed. The full SEO split check covered all 174 routes. The grid archive refresh reproduced all 360 boards through November 14 Eastern.
+
+[PR #996](https://github.com/PapiSalgueroM/ballpark-hero/pull/996) published exact main `101a61e51412af79fc91e48f6ec2774399b6ca61`, deployment `2328d399-369f-4222-8709-bc79a122c79b`, canonical entry `/assets/index-C8RrOQqd.js`. The merged tree matched tested head `ea6f9583e`. All 11 live browser cases, 14 pinned endpoints and 174 sitemap routes passed. IndexNow accepted Home.
 
 ## 2026-11-15: Fairer soccer rerolls, booked rugby recovery and quicker Home navigation
 

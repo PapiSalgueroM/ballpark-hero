@@ -25,7 +25,7 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlBenchRotation, nrlCanOpenInterchange, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
-  nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlNextRound, nrlOnFieldCaptain, nrlOpeningCoverOptions,
+  nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlMinute60Returns, nrlNextRound, nrlOnFieldCaptain, nrlOpeningCoverOptions,
   nrlQuickInterchangeOptions, nrlQuickInterchangeOutcome, nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFixture, type NrlGoldenPointApproach, type NrlHalftimeTalk, type NrlKickingPlan, type NrlLatePenaltyApproach, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlQuickInterchange, type NrlRole, type NrlTactic,
@@ -314,7 +314,9 @@ function LiveHalftime({ live, career, title, onAction, disabled, coachRole, coac
             <p className="mt-2 text-sm text-muted-foreground">{heldName
               ? `${heldName} sat out the first half. Bring them on now or keep them for the 60-minute pause. You can also keep a rotating reserve on at another position.`
               : flexible ? 'Bring on one unused reserve now or save the place for 60 minutes. You can also keep a rotating reserve on.'
-                : 'Choose up to two reserves already in the rotation to finish. Their starters stay off.'}</p>
+                : 'Choose up to two reserves already in the rotation to finish.'}{' '}
+              Play to 60 minutes to reconsider a halftime change.
+            </p>
             {secondOptions.length > 0 && (
               <label className="mt-3 block text-sm font-semibold" htmlFor="nrl-half-second-reserve">
                 Second reserve to finish the match
@@ -371,7 +373,7 @@ function LiveMinute60({ live, career, onAction, disabled }: {
   const shortName = useNrlClubName();
   const stage = live.minute60!;
   const [tactic, setTactic] = useState(stage.tactic);
-  const [reserveId, setReserveId] = useState('');
+  const [lateChoice, setLateChoice] = useState('');
   const [fieldGoal, setFieldGoal] = useState(false);
   const openingPenalty = season.penaltyTap ? 'tap' : 'goal';
   const [latePenaltyApproach, setLatePenaltyApproach] = useState<NrlLatePenaltyApproach>(openingPenalty);
@@ -381,17 +383,22 @@ function LiveMinute60({ live, career, onAction, disabled }: {
   const { year, squad } = season;
   const canSetUpKick = nrlMinute60FieldGoalAvailable(season);
   const lateOptions = nrlMinute60Interchanges(season);
-  const held = lateOptions.length === 1 && lateOptions[0].reserveId === live.heldReserveId ? lateOptions[0] : undefined;
+  const returns = nrlMinute60Returns(season);
+  const held = returns.length === 0 && lateOptions.length === 1 && lateOptions[0].reserveId === live.heldReserveId ? lateOptions[0] : undefined;
   const names = new Map(squad.map(player => [player.id, player.name]));
   const primaryRoles = new Map(squad.map(player => [player.id, player.role]));
   const optionValue = ({ reserveId, role }: typeof lateOptions[number]) => primaryRoles.get(reserveId) === role ? reserveId : reserveId + ':' + role;
-  const selected = lateOptions.find(option => optionValue(option) === reserveId);
+  const returnValue = ({ starterId }: typeof returns[number]) => 'return:' + starterId;
+  const selected = lateOptions.find(option => optionValue(option) === lateChoice);
+  const returning = returns.find(option => returnValue(option) === lateChoice);
   const backupKicker = selected?.starterId === season.kickerId && season.backupKickerId && names.get(season.backupKickerId);
+  const remainsKicker = returning?.starterId === season.kickerId && season.backupKickerId && names.get(season.backupKickerId);
   const { fixture } = live;
   const sides = [[fixture.homeId, stage.homeScoring], [fixture.awayId, stage.awayScoring]] as const;
   const closeChoice = {
     type: 'finishMinute60', year, round: fixture.round, tactic, reserveId: selected?.reserveId,
     ...(selected && primaryRoles.get(selected.reserveId) !== selected.role && { reserveRole: selected.role }),
+    ...(returning && { returnStarterId: returning.starterId }),
     ...(plans.includes(attackPlan) && attackPlan !== currentPlan && { attackPlan }),
     ...(canSetUpKick && fieldGoal && { fieldGoalPlan: true as const }),
     ...(!fixture.finalsRound && latePenaltyApproach !== openingPenalty && { latePenaltyApproach }),
@@ -439,22 +446,22 @@ function LiveMinute60({ live, career, onAction, disabled }: {
         )}
         {season.preparation === 'goalKickingDrills' && <p className="mt-2 text-sm">Goal-kicking drills still apply.</p>}
       </fieldset>
-      {lateOptions.length > 0 && (
+      {(lateOptions.length > 0 || returns.length > 0) && (
         <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-3">
           <legend className="px-1 font-bold">Late interchange</legend>
           {held ? (
             <>
               <label className="flex min-h-11 items-center gap-2 text-sm font-semibold">
-                <input type="checkbox" checked={reserveId === optionValue(held)} disabled={disabled}
-                  onChange={event => setReserveId(event.target.checked ? optionValue(held) : '')} />
+                <input type="checkbox" checked={lateChoice === optionValue(held)} disabled={disabled}
+                  onChange={event => setLateChoice(event.target.checked ? optionValue(held) : '')} />
                 Bring on {names.get(held.reserveId)}
               </label>
               <p className="text-sm text-muted-foreground">{names.get(held.reserveId)} can replace {names.get(held.starterId)} at {held.role} for the rest of the match.</p>
             </>
           ) : (
             <div className="mt-2 space-y-1 text-sm">
-              <label htmlFor="nrl-late-reserve" className="block font-semibold">Reserve to bring on</label>
-              <select id="nrl-late-reserve" value={reserveId} disabled={disabled} onChange={event => setReserveId(event.target.value)}
+              <label htmlFor="nrl-late-reserve" className="block font-semibold">{returns.length ? 'Late interchange choice' : 'Reserve to bring on'}</label>
+              <select id="nrl-late-reserve" value={lateChoice} disabled={disabled} onChange={event => setLateChoice(event.target.value)}
                 className="min-h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 <option value="">Keep the current side</option>
                 {lateOptions.map(option => {
@@ -464,10 +471,14 @@ function LiveMinute60({ live, career, onAction, disabled }: {
                     {names.get(id)} for {names.get(starterId)} ({role}){value !== id && ' · Trained cover'}
                   </option>;
                 })}
+                {returns.map(option => <option key={returnValue(option)} value={returnValue(option)}>
+                  Return {names.get(option.starterId)} for {names.get(option.reserveId)} ({option.role})
+                </option>)}
               </select>
             </div>
           )}
           {backupKicker && <p className="mt-2 text-sm" role="status">{backupKicker} takes over the goal kicking for the rest of the match.</p>}
+          {remainsKicker && <p className="mt-2 text-sm" role="status">{remainsKicker} keeps the goal-kicking duties.</p>}
         </fieldset>
       )}
       {canSetUpKick && (
@@ -755,6 +766,9 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
   const openingReserve = openingCover && season.squad.find(player => player.id === openingCover.reserveId);
   const openingStarter = openingCover && season.squad.find(player => player.id === openingCover.starterId)?.name;
   const interchanges = [match.halftimeInterchange, match.secondHalftimeInterchange];
+  const returning = match.minute60Return;
+  const returningStarter = returning && season.squad.find(player => player.id === returning.starterId)?.name;
+  const departingReserve = returning && season.squad.find(player => player.id === returning.reserveId)?.name;
   const late = match.minute60Interchange;
   const lateReserve = late && season.squad.find(player => player.id === late.reserveId);
   const lateStarter = late && season.squad.find(player => player.id === late.starterId);
@@ -886,11 +900,16 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
           const reserve = season.squad.find(player => player.id === change.reserveId)?.name;
           const starter = season.squad.find(player => player.id === change.starterId)?.name;
           return reserve && starter && <p key={change.reserveId} className="mt-1 text-muted-foreground" data-nrl-halftime-interchange>
-            {change.enteredAtHalf
+            {returning?.starterId === change.starterId
+              ? `${reserve} ${change.enteredAtHalf ? 'came on' : 'stayed on'} for ${starter} at half time.`
+              : change.enteredAtHalf
               ? `${reserve} came on for ${starter} at half time. Each played about 40 minutes in regulation.`
               : `${reserve} finished the match. In regulation, they played about 53 minutes. ${starter} stayed off after half time and played about 27 minutes.`}
           </p>;
         })}
+        {returningStarter && departingReserve && <p className="mt-1 text-muted-foreground" data-nrl-minute60-return>
+          {returningStarter} returned for {departingReserve} at 60 minutes.
+        </p>}
         {lateReserve && lateStarter && <p className="mt-1 text-muted-foreground" data-nrl-minute60-interchange>
           {lateReserve.name} came on for {lateStarter.name}{lateRole && lateRole !== lateReserve.role && ` at ${lateRole}`} after 60 minutes.
         </p>}
@@ -2806,6 +2825,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>In Squad, open Season player stats and choose a player in Player match log to check starts, interchange appearances, scoring and saved rating changes.</li>
               <li>Open a regular-season match report in Season fixtures to see the rating changes saved for that match.</li>
               <li>At 60 minutes in a regular-season Live match, you can change the penalty approach for the final 20. Take the two points or tap for a try if a kickable penalty comes up.</li>
+              <li>At 60 minutes in Live, an available starter can return for the same reserve who replaced them at half time. The return uses one interchange.</li>
               <li>Before kick-off, open Penalty approach to bank two points from a kickable penalty or tap for a chance at four or six. The match report shows how the tap finished.</li>
               <li>Choose Last-tackle kicks before kick-off. Against a dangerous attack, Kick long lowers the try threat for both teams. Contest kicks opens the game up and gives both teams more chances. Your plan lasts through regulation and resets to Mixed kicks next match.</li>
               <li>In Squad, a young player can learn a second position in reserve grade while another player trains with the first team. The reserve course replaces the one-point rating gain.</li>

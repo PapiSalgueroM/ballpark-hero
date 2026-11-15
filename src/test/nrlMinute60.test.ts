@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { createNrlCareer, nrlLivePlanPreview, readNrlCareerSave, reduceNrlCareer, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
-import { nrlBenchRotation, nrlHalftimeInterchanges, nrlHoldableReserves, nrlMinute60Interchanges, nrlNextRound } from '@/lib/nrlManager';
+import { nrlActingCaptainPhases, nrlBenchRotation, nrlHalftimeInterchanges, nrlHoldableReserves, nrlMinute60Interchanges, nrlMinute60Returns, nrlNextRound } from '@/lib/nrlManager';
 import { nrlScorePoints } from '@/lib/nrlPlayerScoring';
 
 const start = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'startLive' });
@@ -8,6 +8,91 @@ const finish = (state: NrlCareerState, action: NrlCareerAction) => reduceNrlCare
 const raw = JSON.stringify;
 
 describe('NRL 60-minute tactical check', () => {
+  it('returns the same halftime starter at 60 without adding a bench appearance or changing earlier scores', () => {
+    const club = 'broncos', year = 2026, round = 1, tactic = 'balanced';
+    const half = start(createNrlCareer(club, 1, year));
+    const pair = nrlHalftimeInterchanges(half.season)[0];
+    const paused = finish(half, { type: 'reachMinute60', year, round, tactic, interchange: pair });
+    const restored = readNrlCareerSave(raw(paused))!;
+    expect(raw(restored)).toBe(raw(paused));
+    const keep = { type: 'finishMinute60', year, round, tactic } as const;
+    expect(nrlMinute60Returns(restored.season)).toEqual([pair]);
+    expect(finish(restored, { ...keep, returnStarterId: pair.reserveId })).toBe(restored);
+    expect(finish(restored, { ...keep, returnStarterId: pair.starterId, reserveId: pair.reserveId })).toBe(restored);
+    const keepResult = finish(restored, keep);
+    const returnAction = { ...keep, returnStarterId: pair.starterId };
+    const returned = finish(restored, returnAction);
+    const match = (state: NrlCareerState) => state.season.results.find(result => result.playerScoring)!;
+    const receipt = { starterId: pair.starterId, reserveId: pair.reserveId };
+    expect(match(keepResult).scorePeriods).toEqual({ halfTime: [4, 0], at60: [10, 6], regulation: [28, 8] });
+    expect(match(returned)).toMatchObject({ minute60Return: receipt, halftimeInterchange: receipt });
+    expect(match(returned).scorePeriods).toEqual({ halfTime: [4, 0], at60: [10, 6], regulation: [22, 8] });
+    expect(match(returned).benchUsed).toEqual(match(keepResult).benchUsed);
+    expect(match(returned).benchUsed).toHaveLength(4);
+    expect(match(returned).benchUsed).not.toContain(pair.starterId);
+    expect(returned.season.results.filter(result => !result.playerScoring)).toEqual(keepResult.season.results.filter(result => !result.playerScoring));
+    expect(returned.players.map(player => [player.id, player.contract, player.futureContract]))
+      .toEqual(keepResult.players.map(player => [player.id, player.contract, player.futureContract]));
+    expect(raw(readNrlCareerSave(raw(returned)))).toBe(raw(returned));
+    expect(finish(returned, returnAction)).toBe(returned);
+    const forged = structuredClone(returned);
+    match(forged).minute60Return = { ...receipt, reserveId: match(returned).benchUsed![1] };
+    expect(readNrlCareerSave(raw(forged))).toBeNull();
+  });
+
+  it('lets either named halftime player return, including a starter replaced by a fresh reserve', () => {
+    const frame = { year: 2026, round: 1, clubId: 'broncos', tactic: 'balanced' } as const;
+    const open = finish(createNrlCareer(frame.clubId, 1), { type: 'setOpenInterchange', ...frame, enabled: true });
+    const half = start(open);
+    const choices = nrlHalftimeInterchanges(half.season);
+    const interchange = choices.find(pair => pair.enteredAtHalf)!;
+    const secondInterchange = choices.find(pair => pair.starterId !== interchange.starterId && !pair.enteredAtHalf)!;
+    const mid = finish(half, { type: 'reachMinute60', ...frame, interchange, secondInterchange });
+    expect(nrlMinute60Returns(mid.season)).toEqual(expect.arrayContaining([interchange, secondInterchange]));
+    for (const pair of [interchange, secondInterchange]) {
+      const settled = finish(mid, { type: 'finishMinute60', ...frame, returnStarterId: pair.starterId });
+      const report = settled.season.results.find(result => result.playerScoring)!;
+      expect(report.minute60Return).toEqual({ starterId: pair.starterId, reserveId: pair.reserveId });
+      expect(report.benchUsed).toHaveLength(4);
+      expect(readNrlCareerSave(raw(settled))).toEqual(settled);
+    }
+  });
+
+  it('returns the club captain to duty and keeps the named deputy on the remaining place kicks', () => {
+    const frame = { year: 2026, round: 1, clubId: 'broncos', tactic: 'balanced' } as const;
+    let career = createNrlCareer(frame.clubId, 1);
+    const captain = career.season.lineup.Fullback, deputy = career.season.lineup.Halfback;
+    career = finish(career, { type: 'setKicker', playerId: captain });
+    career = finish(career, { type: 'setBackupKicker', ...frame, playerId: deputy });
+    career = finish(career, { type: 'setCaptain', ...frame, playerId: captain });
+    career = finish(career, { type: 'setViceCaptain', ...frame, playerId: deputy });
+    const half = start(career);
+    const interchange = nrlHalftimeInterchanges(half.season).find(pair => pair.starterId === captain)!;
+    const mid = finish(half, { type: 'reachMinute60', ...frame, interchange });
+    const settled = finish(mid, { type: 'finishMinute60', ...frame, returnStarterId: captain });
+    const report = settled.season.results.find(result => result.playerScoring)!;
+    expect(nrlActingCaptainPhases(report).map(({ playerId }) => playerId)).toEqual([captain, deputy, captain]);
+    expect(report.playerScoring?.kickerHandoff?.playerId).toBe(deputy);
+    expect(readNrlCareerSave(raw(settled))).toEqual(settled);
+  });
+
+  it('retains the chosen return when golden point is paused and reloaded', () => {
+    const frame = { year: 2026, round: 1, clubId: 'broncos', tactic: 'balanced' } as const;
+    const half = start(createNrlCareer(frame.clubId, 11));
+    const interchange = nrlHalftimeInterchanges(half.season)[0];
+    const mid = finish(half, { type: 'reachMinute60', ...frame, interchange });
+    const paused = finish(mid, { type: 'finishMinute60', ...frame, returnStarterId: interchange.starterId, pauseForGoldenPoint: true });
+    expect(paused.season.live?.goldenPoint).toMatchObject({ score: 14, finish: { returnStarterId: interchange.starterId } });
+    const restored = readNrlCareerSave(raw(paused))!;
+    expect(raw(restored)).toBe(raw(paused));
+    const settled = finish(restored, { type: 'settleGoldenPoint', ...frame, approach: 'standard' });
+    expect(settled.season.results.find(result => result.playerScoring)).toMatchObject({
+      homeScore: 14, awayScore: 15,
+      minute60Return: { starterId: interchange.starterId, reserveId: interchange.reserveId },
+    });
+    expect(raw(readNrlCareerSave(raw(settled)))).toBe(raw(settled));
+  });
+
   it('previews the selected phase with the real lineup, team talk and late field-goal tradeoff', () => {
     const clubId = 'broncos';
     const kickoff = createNrlCareer(clubId, 1, 2026);
