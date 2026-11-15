@@ -22,6 +22,7 @@ import {
   nrlOffseasonFreeAgentPreview, nrlOffseasonFreeAgentTargets, nrlOffseasonFreeAgentsAvailable,
   nrlOffseasonLineupPreview, nrlOffseasonLineupsAvailable,
   nrlPrimaryRoleOptions, nrlRecruitmentBrief, nrlRecruitmentPlan, nrlReserveCoachSpend, nrlRetentionPriority,
+  nrlRenewalHoldOptions, nrlRenewalHoldQuote, nrlRenewalHoldSpend, NRL_RENEWAL_HOLD_FEE,
   nrlSeasonOut, nrlSelectionPromise, nrlSelectionPromiseCandidates,
   nrlMutualReleaseQuote, nrlMutualReleaseSpend,
   nrlSummerApplication, nrlSummerApplicationOpenings, nrlSummerLastRound,
@@ -476,6 +477,7 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
       <h2 className="font-display text-xl font-bold">Squad contracts</h2>
       <p className="mt-1 text-sm text-muted-foreground">{squad.length} players · {expiring} deals expire this season</p>
       <SelectionPromise career={career} onAction={onAction} disabled={disabled} />
+      <RenewalHold career={career} onAction={onAction} disabled={disabled} />
       <ContractApproaches career={career} onAction={onAction} disabled={disabled} />
       <ContractTakeover career={career} onAction={onAction} disabled={disabled} />
       <ContractSwap career={career} onAction={onAction} disabled={disabled} />
@@ -539,6 +541,52 @@ function SelectionPromise({ career, onAction, disabled }: { career: NrlCareerSta
           </div>
         ) : <Button type="button" size="lg" variant="outline" disabled={disabled} onClick={() => setConfirmEnd(true)}>End selection promise</Button>)}
         <p className="text-xs text-muted-foreground">Starts and used reserves count. Byes and matches they miss through injury, suspension or reserve-grade development do not. The promise ends by the regular-season finish.</p>
+      </div>
+    </details>
+  );
+}
+
+function RenewalHold({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const [picked, setPicked] = useState('');
+  const { year, clubId, round } = career.season;
+  const hold = career.finance.renewalHold;
+  const options = hold ? [] : nrlRenewalHoldOptions(career);
+  const choice = options.find(entry => entry.player.id === picked);
+  const quote = hold && hold.exercisedRound === undefined ? nrlRenewalHoldQuote(career) : null;
+  if (!hold && options.length === 0) return null;
+  return (
+    <details className="group mt-3 rounded-xl border border-border bg-background px-3" data-nrl-renewal-hold>
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Renewal hold
+        <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-2 pb-3 text-sm">
+        <p className="text-muted-foreground">Spend {money(NRL_RENEWAL_HOLD_FEE)} from club cash to hold one player’s one-year asking salary until next season starts. They stay on their current deal. The fee stays spent if you let the hold expire.</p>
+        {hold ? (
+          <>
+            <p role="status" className="break-words">
+              {hold.playerName} · {money(hold.annualSalary)} for {year + 1} · {hold.exercisedRound === undefined ? 'Price held' : 'Renewal signed'}
+            </p>
+            {quote?.ok && <Button type="button" size="lg" className="min-h-11 whitespace-normal px-3" disabled={disabled}
+              onClick={() => onAction({ type: 'exerciseRenewalHold', year, clubId, round, playerId: hold.playerId })}>
+              Sign one-year renewal
+            </Button>}
+            {quote?.ok === false && <p className="text-muted-foreground">{quote.reason}</p>}
+          </>
+        ) : (
+          <>
+            <label htmlFor="nrl-renewal-hold-player" className="block font-semibold">Player to hold a price for</label>
+            <select id="nrl-renewal-hold-player" className={control} value={picked} onChange={event => setPicked(event.target.value)} disabled={disabled}>
+              <option value="">Choose a player</option>
+              {options.map(entry => <option key={entry.player.id} value={entry.player.id}>{entry.player.name} · {entry.player.role}</option>)}
+            </select>
+            {choice && <p>{money(choice.askingSalary)} for {choice.startYear}. Signing later requires an open squad place and room under the cap.</p>}
+            <Button type="button" size="lg" className="min-h-11 whitespace-normal px-3" disabled={disabled || !choice}
+              onClick={() => choice && onAction({ type: 'bookRenewalHold', year, clubId, round, playerId: choice.player.id, annualSalary: choice.askingSalary })}>
+              Pay {money(NRL_RENEWAL_HOLD_FEE)} to hold price
+            </Button>
+          </>
+        )}
       </div>
     </details>
   );
@@ -1497,6 +1545,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
                 ...(academyScoutSpend ? [['Second academy scout', academyScoutSpend] as const] : []),
                 ...(concessionsSpend ? [['Concessions upgrade', concessionsSpend] as const] : []),
                 ...(cash.mutualRelease ? [['Contract settlement', nrlMutualReleaseSpend(cash)] as const] : []),
+                ...(cash.renewalHold ? [['Renewal hold fee', nrlRenewalHoldSpend(cash)] as const] : []),
                 ...(cash.coachHire ? [['Coach signing fee', coachSpend.signingFee], ['Coach wages paid', coachSpend.wages]] as [string, number][] : []),
                 ...(courseSpend ? [['Assistant coaching course', courseSpend] as const] : []),
                 ['Profit or loss', cash.profit], ['Cash balance', cash.cash],
@@ -2401,6 +2450,14 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 {record.finance?.academyParallelRound && <p className="text-sm text-muted-foreground">Second academy scout {money(nrlAcademyParallelSpend(record.finance))}</p>}
                 {record.finance?.awayRecoveryRound && <p className="text-sm text-muted-foreground">Away recovery session · Round {record.finance.awayRecoveryRound} · {money(nrlAwayRecoverySpend(record.finance))}</p>}
                 {record.finance?.reserveCoachRound && <p className="text-sm text-muted-foreground">Reserve coaching · Round {record.finance.reserveCoachRound} · {money(nrlReserveCoachSpend(record.finance))}</p>}
+                {record.finance?.renewalHold && (
+                  <p className="break-words text-sm text-muted-foreground" data-nrl-recorded-renewal-hold>
+                    Renewal hold · {record.finance.renewalHold.playerName} · {money(record.finance.renewalHold.annualSalary)} for {record.year + 1} · {
+                      record.finance.renewalHold.exercisedRound !== undefined ? 'Signed'
+                        : record.year === year && !retired && !outOfWork ? 'Price held' : 'Expired unused'
+                    }
+                  </p>
+                )}
                 {record.finance?.mutualRelease && (
                   <p className="text-sm text-muted-foreground">
                     Mutual release · {record.finance.mutualRelease.playerName} · {money(nrlMutualReleaseSpend(record.finance))} settlement

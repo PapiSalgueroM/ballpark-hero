@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import {
-  createNrlCareer, nrlCareerCap, nrlCareerMarket, nrlContractCounteroffer, nrlContractOffer,
+  createNrlCareer, nrlCareerCap, nrlCareerMarket, nrlContractCounteroffer, nrlContractOffer, nrlRenewalHoldOptions,
   readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { NRL_SAVE_KEY } from '@/lib/nrlManager';
@@ -126,4 +126,32 @@ it('keeps an over-cap offer on its refusal and leaves the save untouched', () =>
   expect(screen.queryByRole('table', { name: 'Cap room and squad places' })).not.toBeInTheDocument();
   expect(raw()).toBe(JSON.stringify(initial));
   expect(localStorage.getItem(fence)).toBe('4');
+});
+
+it('books a renewal price from Contracts and exercises it after reload', () => {
+  const initial = createNrlCareer('broncos', 1);
+  const { player, askingSalary } = nrlRenewalHoldOptions(initial).find(entry => entry.player.id === 'broncos-11-1')!;
+  const hold = { year: 2026, clubId: 'broncos', round: 1, playerId: player.id };
+  const view = open(initial);
+  fireEvent.click(screen.getByText('Renewal hold', { exact: true }));
+  fireEvent.change(screen.getByLabelText('Player to hold a price for'), { target: { value: player.id } });
+  expect(screen.getByText(/\$410,000 for 2027/)).toBeVisible();
+  expect(raw()).toBe(JSON.stringify(initial));
+  click('Pay $25,000 to hold price');
+  const booked = reduceNrlCareer(initial, { type: 'bookRenewalHold', ...hold, annualSalary: askingSalary });
+  expect(raw()).toBe(JSON.stringify(booked));
+  expect(localStorage.getItem(fence)).toBe('5');
+  expect(screen.getByRole('status')).toHaveTextContent(/Brodie Hartley .* \$410,000 for 2027 .* Price held/);
+  view.unmount();
+  show();
+  openContracts();
+  fireEvent.click(screen.getByText('Renewal hold', { exact: true }));
+  expect(screen.getByRole('status')).toHaveTextContent('Price held');
+  click('Sign one-year renewal');
+  const signed = reduceNrlCareer(booked, { type: 'exerciseRenewalHold', ...hold });
+  expect(raw()).toBe(JSON.stringify(signed));
+  expect(localStorage.getItem(fence)).toBe('6');
+  expect(screen.getByRole('status')).toHaveTextContent('Renewal signed');
+  click('Finances');
+  expect(screen.getByText('Renewal hold fee', { exact: true })).toBeVisible();
 });
