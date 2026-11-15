@@ -1,3 +1,10 @@
+## 2026-11-14: Cup replay navigation and more match reports
+
+- In Soccer Career, All games takes you back to the cup fixture you first opened and restores the bracket's scroll position, even if you used Next game in the report.
+- In Stadium Tycoon, League shows the current season's recorded scores and second-half plans. The results stay open and update when the next match settles.
+- In NRL Team Manager, set Penalty approach before kick-off. Bank the two points if a kickable penalty comes up, or tap for a chance at four or six. Full time records the try, conversion, turnover or that the opportunity never came.
+- In MLB My Career, starters and relievers can use Week by week and reopen supported seasons from Career Log. Simulated game reports reconcile appearances, strikeouts and compatible pitching decisions to the saved season. ERA stays in the season review. Contradictory decision totals are identified and shown only at season level.
+
 ## 2026-11-14: Club Manager match ratings, NRL sponsor terms and Home navigation
 
 [PR #972](https://github.com/PapiSalgueroM/ballpark-hero/pull/972) published exact main `58123712576ed569d780f26cdf98355221e07c9e`, deployment `db3dc336-7aaf-4981-9368-449e77d66653`, canonical entry `/assets/index-Xpg7cIak.js`. Seven live browser journeys, both raw game guides, all 174 sitemap routes and seven policy and crawler endpoints passed. IndexNow accepted both updated guides. The build, app types, 74 focused tests, 18 site checks and 16 measured download budgets passed. Home's sports navigation passed all 20 checks over four widths. The existing Quick Sim substitution check passed locally after its hosted job stopped installing dependencies.
