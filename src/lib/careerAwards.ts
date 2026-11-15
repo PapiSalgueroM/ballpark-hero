@@ -94,7 +94,7 @@ export interface AwardSeasonLine {
 /** Round 56 football scoring: every position on its own currency. */
 export function nflSeasonScore(pos: string, line: AwardSeasonLine): number {
   return pos === 'QB'
-    ? (line.passYds ?? 0) / 48 + (line.passTd ?? 0) * 2.4 - (line.ints ?? 0)
+    ? ((line.passYds ?? 0) + (line.rushYds ?? 0)) / 48 + ((line.passTd ?? 0) + (line.rushTd ?? 0)) * 2.4 - (line.ints ?? 0)
     : pos === 'RB'
       ? ((line.rushYds ?? 0) + (line.recYds ?? 0)) / 16 + (line.rushTd ?? 0) * 3
       : pos === 'WR' || pos === 'TE'

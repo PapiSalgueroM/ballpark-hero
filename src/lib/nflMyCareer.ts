@@ -213,8 +213,9 @@ export interface SeasonLine {
   age: number;
   ovr: number;
   games: number;
-  // QB
+  // QB, including an optional regular-season designed runs package
   passYds?: number; passTd?: number; ints?: number;
+  qbRunPackage?: { healthCost: number } | { unavailable: true };
   // RB
   rushYds?: number; rushTd?: number;
   passingDownRole?: true;
@@ -272,6 +273,7 @@ export interface CareerState {
       its exact behavior. Kickers are always starters. */
   role?: 'starter' | 'backup';
   passingDownPlan?: { year: number; team: string };
+  qbRunPlan?: { year: number; team: string };
   /** Round 469: the savings account, the market and the statement, on the
       same engine as Soccer Career's. Absent on a pre-469 save and repaired
       lazily by ensureNflMoney, so an old save opens on every screen with its
@@ -547,16 +549,40 @@ export function setNflPassingDown(c: CareerState, enabled: boolean): CareerState
   return next;
 }
 
+export function nflQbRunAvailable(c: CareerState): boolean {
+  return c.pos === 'QB' && c.archetype?.id === 'dual' && c.role !== 'backup' && !c.retired
+    && (c.suspendedSeasons ?? 0) <= 0 && c.contractYears > 0 && c.seasons.some(season => season.games > 0);
+}
+
+export function nflQbRunActive(c: CareerState): boolean {
+  return nflQbRunAvailable(c) && c.qbRunPlan?.year === c.year && c.qbRunPlan.team === c.team;
+}
+
+export function setNflQbRun(c: CareerState, enabled: boolean): CareerState {
+  if (!nflQbRunAvailable(c) || enabled === nflQbRunActive(c)) return c;
+  if (enabled) return { ...c, qbRunPlan: { year: c.year, team: c.team } };
+  const next = { ...c };
+  delete next.qbRunPlan;
+  return next;
+}
+
 export function simSeason(
   c: CareerState, teamQuality: number, rng: () => number, inSeasonRating = false,
 ): { line: SeasonLine; notes: string[] } {
   const notes: string[] = [];
   const passingDown = nflPassingDownActive(c);
+  const designedRuns = nflQbRunActive(c);
+  const lostQbJob = c.pos === 'QB' && c.archetype?.id === 'dual' && c.role === 'backup'
+    && c.qbRunPlan?.year === c.year && c.qbRunPlan.team === c.team;
   if (c.passingDownPlan) {
     if (c.pos === 'RB' && c.role === 'backup' && c.passingDownPlan.year === c.year && c.passingDownPlan.team === c.team) {
       notes.push('Camp put you in the backup role, so the passing-down plan did not apply.');
     }
     delete c.passingDownPlan;
+  }
+  if (c.qbRunPlan) {
+    if (lostQbJob) notes.push('Camp put you in the backup role, so designed runs did not apply.');
+    delete c.qbRunPlan;
   }
   let { games, injuryNote } = seasonGames(c, rng);
   if (injuryNote) { notes.push(`🚑 ${injuryNote}`); c.health -= 6; }
@@ -581,7 +607,7 @@ export function simSeason(
     awards: [], teamResult: '', salary: c.salary,
   };
   if (seasonRating) line.seasonRating = seasonRating;
-  Object.assign(line, nflStatLineFor({ form, pos: c.pos, games, passingDown }, rng));
+  Object.assign(line, nflStatLineFor({ form, pos: c.pos, games, passingDown, designedRuns }, rng));
   if (passingDown) {
     line.passingDownRole = true;
     notes.push('Passing-down role: more of your regular-season work came as a receiver.');
@@ -590,6 +616,12 @@ export function simSeason(
   // The roster carries the baseline. The player moves it in proportion to the games he played.
   const seasonLen = nflSeasonLength(line.year);
   const gamesShare = games / seasonLen;
+  if (designedRuns) {
+    const healthCost = Math.min(Math.max(0, c.health), Math.ceil(4 * gamesShare));
+    c.health -= healthCost;
+    line.qbRunPackage = { healthCost };
+    notes.push(`Designed runs: ${line.rushYds} rushing yards and ${countOf(line.rushTd!, 'rushing touchdown', 'rushing touchdowns')}. Lost ${countOf(healthCost, 'health point', 'health points')} from the extra contact.`);
+  } else if (lostQbJob) line.qbRunPackage = { unavailable: true };
   const playerImpact = (seasonOverall - 74) * (c.pos === 'QB' ? 0.55 : c.pos === 'K' ? 0.08 : DEFENSIVE_POS.includes(c.pos) ? 0.22 : 0.25);
   const strength = teamQuality + playerImpact * gamesShare;
   if (games < seasonLen) {
@@ -746,7 +778,7 @@ export function simSeason(
    moves no draw, and moves a line only where it printed a number below zero. */
 
 /** What a stat line is made from: the form of the season, the position, and the games of real action. */
-export interface NflLineInput { form: number; pos: CareerPos; games: number; passingDown?: boolean }
+export interface NflLineInput { form: number; pos: CareerPos; games: number; passingDown?: boolean; designedRuns?: boolean }
 /** The stats of one season line, without the season around them. */
 export type NflStatLine = Pick<SeasonLine, 'passYds' | 'passTd' | 'ints' | 'rushYds' | 'rushTd' | 'rec' | 'recYds' | 'recTd' | 'tackles' | 'sacks' | 'picks' | 'passDef' | 'forcedFum' | 'fgMade' | 'fgAtt' | 'longFg'>;
 
@@ -764,6 +796,16 @@ export function nflStatLineFor(x: NflLineInput, rng: () => number): NflStatLine 
     // reference points: elite seasons land around 6 to 9, average starters 12
     // to 14, and bad starters 18 to 20. The steeper slope hits all three.
     line.ints = Math.max(1, Math.round((18.5 - (form - 62) * 0.36 + rng() * 4) * g));
+    if (x.designedRuns) {
+      // Move existing production into planned carries. Fewer throws mean fewer chances for interceptions.
+      const rushYds = Math.min(Math.round(line.passYds * 0.14), Math.floor(35 * x.games));
+      const rushTd = Math.min(Math.floor(line.passTd * 0.23), Math.floor(0.45 * x.games), rushYds);
+      if (rushYds > 0) line.ints -= Math.round(line.ints * (rushYds / line.passYds));
+      line.passYds -= rushYds;
+      line.passTd -= rushTd;
+      line.rushYds = rushYds;
+      line.rushTd = rushTd;
+    }
   } else if (pos === 'RB') {
     /* Round 127: the same cap the quarterback line has had since Round 98,
        which the running back line never got. Eric Dickerson ran for 2105 in
