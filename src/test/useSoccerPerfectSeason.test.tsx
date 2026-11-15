@@ -282,6 +282,31 @@ describe('Soccer Perfect Season saves', () => {
     expect(recordCompletion).not.toHaveBeenCalled();
   });
 
+  it('shows the opening target and records the stronger rerolled XI at the same odds', () => {
+    const { seed } = createSoccerRun('daily', '2026-11-03');
+    let partial = { ...createSoccerRun('unlimited', null), seed };
+    for (let pick = 0; pick < 10; pick++) {
+      partial = applySoccerAction(partial, { type: 'pick', ...deriveSoccerRun(partial).best! })!;
+    }
+    localStorage.setItem(unlimitedKey, JSON.stringify(partial));
+    const page = render(<SoccerPerfectSeason />);
+    fireEvent.click(screen.getByRole('button', { name: 'Resume Unlimited' }));
+    fireEvent.click(screen.getByRole('button', { name: /Reroll/ }));
+    fireEvent.click(screen.getByRole('button', { name: /Angelo Stiller/ }));
+    fireEvent.click(screen.getByRole('button', { name: 'Left midfielder' }));
+    expect(screen.getByText('XI strength 80.0 · Opening XI target 79.3')).toBeVisible();
+    expect(screen.getByText('38 wins: 100%')).toBeVisible();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Finish season' }));
+    expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/soccer-perfect-season', 100);
+    page.unmount();
+
+    render(<SoccerPerfectSeason />);
+    fireEvent.click(screen.getByRole('button', { name: 'View Unlimited result' }));
+    expect(screen.getByText('38 wins. Perfect season.')).toBeVisible();
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
   it('shows Retry save after the final Next match and removes it once the result is stored', () => {
     let partial = createSoccerRun('daily', '2026-11-12');
     let pick = deriveSoccerRun(partial).best;

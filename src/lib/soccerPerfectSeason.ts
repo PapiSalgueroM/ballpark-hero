@@ -6,6 +6,9 @@ export const SOCCER_PS_VERSION = 'soccer-ps-clubs-2026-v1';
 export const SOCCER_PS_GAMES = 38;
 export const SOCCER_PS_MAX_REROLLS = 2;
 
+// Activate on a new Eastern day so a Daily date has one odds rule.
+const OPENING_DRAW_ODDS_DAILY_DATE = '2026-11-17';
+
 // Slot order also defines the eligibility bits in the pinned roster.
 export const SOCCER_PS_SLOTS = [
   { key: 'GK', label: 'Goalkeeper', weight: 2 },
@@ -34,6 +37,7 @@ export interface SoccerPSRun {
   actions: SoccerPSAction[];
   revealed: number;
   completionRecorded: boolean;
+  oddsRule?: 'opening-draw';
 }
 
 interface SoccerPSCard {
@@ -171,7 +175,10 @@ export function createSoccerRun(mode: SoccerPSMode, date: string | null, nonce =
   const seed = mode === 'daily'
     ? dailySeed(date!)
     : Math.floor(keyedRng(SOCCER_PS_VERSION + '|unlimited|' + nonce)() * 2 ** 32);
-  return { version: SOCCER_PS_VERSION, mode, date, seed, actions: [], revealed: 0, completionRecorded: false };
+  return {
+    version: SOCCER_PS_VERSION, mode, date, seed, actions: [], revealed: 0, completionRecorded: false,
+    ...(mode === 'unlimited' ? { oddsRule: 'opening-draw' } : {}),
+  };
 }
 
 export function restoreSoccerRun(raw: unknown): SoccerPSRun | null {
@@ -183,6 +190,7 @@ export function restoreSoccerRun(raw: unknown): SoccerPSRun | null {
   const run = value as SoccerPSRun;
   if (run.version !== SOCCER_PS_VERSION || (run.mode !== 'daily' && run.mode !== 'unlimited') || !validSeed(run.seed)) return null;
   if (run.mode === 'daily' ? !validDate(run.date) || run.seed !== dailySeed(run.date) : run.date !== null) return null;
+  if (run.oddsRule !== undefined && (run.mode !== 'unlimited' || run.oddsRule !== 'opening-draw')) return null;
   if (!Array.isArray(run.actions) || run.actions.length > SOCCER_PS_SLOTS.length + SOCCER_PS_MAX_REROLLS) return null;
   const state = replayDraft(run.seed, run.actions);
   if (!state || !Number.isInteger(run.revealed) || run.revealed < 0 || run.revealed > SOCCER_PS_GAMES) return null;
@@ -248,7 +256,11 @@ export function deriveSoccerRun(run: SoccerPSRun) {
       }
     }
   }
-  const bestStrength = current ? null : strengthSolver(state.clubs)(0, SLOT_MASK)[1];
+  const openingDrawOdds = run.mode === 'daily'
+    ? run.date !== null && run.date >= OPENING_DRAW_ODDS_DAILY_DATE
+    : run.oddsRule === 'opening-draw';
+  const targetClubs = !current && openingDrawOdds && state.skippedClubs.length ? dealClubs(run.seed) : state.clubs;
+  const bestStrength = current ? null : strengthSolver(targetClubs)(0, SLOT_MASK)[1];
   const odds = bestStrength === null ? null : soccerSeasonOdds(state.strength, bestStrength);
   const season = odds ? simulateSoccerSeason(odds.win, run.seed) : null;
   return {
@@ -257,7 +269,7 @@ export function deriveSoccerRun(run: SoccerPSRun) {
     currentClub: current?.name,
     upcoming: state.clubs.slice(state.turn + 1),
     picks: state.picks,
-    offers, best, worst, odds, season,
+    offers, best, worst, odds, season, openingDrawOdds,
     rerollsLeft: SOCCER_PS_MAX_REROLLS - state.skippedClubs.length,
     weightedStrength: state.strength,
     overall: state.strength / TOTAL_WEIGHT,

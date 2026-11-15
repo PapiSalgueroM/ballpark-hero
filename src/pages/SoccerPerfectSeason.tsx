@@ -181,7 +181,7 @@ function SeasonPanel({ game, view, act, freshFinish }: { game: Game; view: View;
       </li>)}
     </ol>
     <div className="rounded-xl border border-border bg-card p-3 text-sm" data-soccer-ps-odds data-perfect={odds.perfect}>
-      <p className="font-semibold">XI strength {view.overall.toFixed(1)} · Best available {view.bestOverall?.toFixed(1)}</p>
+      <p className="font-semibold">XI strength {view.overall.toFixed(1)} · {view.openingDrawOdds ? 'Opening XI target' : 'Best available'} {view.bestOverall?.toFixed(1)}</p>
       <p className="mt-1 text-muted-foreground">Each match: win {percent(odds.win)}, draw {percent(odds.draw)}, loss {percent(odds.loss)}.</p>
       <p className="mt-1">38 wins: {percent(odds.perfect)}</p>
     </div>
