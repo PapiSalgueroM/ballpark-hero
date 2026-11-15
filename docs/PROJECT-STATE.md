@@ -1,7 +1,16 @@
-## 2026-11-14: Season choices, rugby starting roles and match receipts
+## 2026-11-15: Draft save protection, cup ratings and late penalty choices
+
+- Build Your XI saves a pick or reroll before advancing the visible draft. If another tab has already saved progress, the older tab keeps its current lineup and asks the player to reload the winning draft.
+- Soccer Career shows estimated overall at saved cup fixtures in the calendar and match reports. It reads the season's saved development checkpoints. Older saves without checkpoints show that the rating was unavailable.
+- At 60 minutes in a regular-season NRL Live match, switch between taking two points and tapping for a try. The choice affects kickable penalties in the final 20. The report keeps the earlier penalty outcome and records what happened after the change.
+- Admin Reports confirms a saved status after the report leaves the active queue. Keyboard focus returns to the chosen filter when the removed status control held focus.
+
+## 2026-11-15: Season choices, rugby starting roles and match receipts
+
+[PR #981](https://github.com/PapiSalgueroM/ballpark-hero/pull/981) published exact main `83550b956d63041b8f1479fefba30186d54e691f`, deployment `dde3c59d-74d2-4952-8a67-0b2fae107043`, canonical entry `/assets/index-Dwu1a-ok.js`. Nine live browser checks, all 174 sitemap routes, seven policy and crawler endpoints, the two admin noindex tags and both updated guides passed. IndexNow accepted both guides. Hosted application types and the career entry guide workflow passed, along with the production build, 171 focused tests, all 18 site checks and all 16 download budgets. The Stadium test harness passed 24 copied fault checks, and the UCL sim caught the tie-award fault. The old Soccer save-retry fixture reports the same youth season mismatch on exact #980 and #981. Twenty older mixed XI tests still expect pre-autosave storage. Several broader hosted workflows failed in font setup or on historical source anchors.
 
 - In Build Your XI Club era, Browse and search show the eligible seasons for each player. Use Replace to pick a different season for the current starter. The selected record stays visible after reload.
-- Soccer Career awards the Champions League or European Cup Golden Boot only when your goal total beats a simulated leading rival. A strong scoring run can still qualify after your club exits. Existing campaign results, scoring draws and historical awards are preserved.
+- Soccer Career awards the Champions League or European Cup Golden Boot only when your goal total beats a simulated leading rival. A strong scoring run can still qualify after your club exits. Across 15,120 paired campaigns, fixtures, scores and over 2.7 million draws stayed exact. In the live fixture, 15 goals beat 12 and 11 goals tied with 11 earned no award.
 - NRL Team Manager lets you promise a fringe player with an expiring deal four starts in six eligible fixtures. Coming off the bench uses a fixture in the window. Injury absences leave the window open. A kept promise can reduce the renewal asking salary by up to 7%.
 - Stadium Tycoon records full-time attendance with each new league result. When a crowd sponsor is signed, the match report shows whether the gate met the target and earned the payment toward the season total.
 

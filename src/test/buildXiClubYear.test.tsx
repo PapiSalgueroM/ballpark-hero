@@ -536,6 +536,76 @@ describe('Build Your XI unfinished draft', () => {
     expect(localStorage.getItem(draftKey)).toBe(newer);
   });
 
+  it.each([
+    'before validation', 'during validation', 'in the same update batch',
+  ] as const)('refuses an ordinary pick when another tab saves %s', async timing => {
+    const current = renderHook(() => useLineupBuilder());
+    act(() => api(current).selectFormation('4-4-2'));
+    const older = renderHook(() => useLineupBuilder());
+    const club = api(current).currentTeam!.name;
+    const pick = (view: typeof current, name: string, role: PositionRole) =>
+      api(view).submitPlayer(name, meta(club, 2010, role, name));
+    act(() => api(older).selectPosition(1));
+    io.historyHeld = true;
+    const losingName = 'Fixture Other Tab Back';
+    let checking: Promise<void> | undefined;
+    if (timing === 'during validation') {
+      act(() => { checking = pick(older, losingName, 'RWB'); });
+      await flush();
+      expect(io.histories).toHaveLength(1);
+      expect(api(older).isValidating).toBe(true);
+    }
+
+    const winningName = 'Fixture Saved Back';
+    act(() => api(current).selectPosition(1));
+    await act(async () => {
+      const winning = pick(current, winningName, 'LB');
+      if (timing === 'in the same update batch') await pick(older, losingName, 'LB');
+      await winning;
+    });
+    expect(api(current).filledSlots.get(1)?.playerName).toBe(winningName);
+    const winningDraft = localStorage.getItem(draftKey);
+    expect(winningDraft).toContain(winningName);
+
+    if (checking) {
+      await act(async () => { io.histories[0].release(); await checking; });
+    } else if (timing === 'before validation') {
+      await act(async () => pick(older, losingName, 'LB'));
+    }
+    expect(api(older).filledCount).toBe(0);
+    expect(api(older).selectedPositionIndex).toBe(1);
+    expect(api(older).isValidating).toBe(false);
+    expect(api(older).isSpinning).toBe(false);
+    expect(api(older).validationError).toContain('changed in another tab');
+    expect(localStorage.getItem(draftKey)).toBe(winningDraft);
+    const reopened = renderHook(() => useLineupBuilder());
+    expect(api(reopened).filledSlots.get(1)?.playerName).toBe(winningName);
+    legacyQuiet();
+  });
+
+  it('shows why a stale Mixed reroll is refused with the picker closed', async () => {
+    const current = renderHook(() => useLineupBuilder());
+    act(() => api(current).selectFormation('4-4-2'));
+    const older = render(<MemoryRouter><LineupBuilder /></MemoryRouter>);
+    const reroll = within(older.container).getByTitle('Reroll: get a different team');
+    expect(within(older.container).queryByRole('combobox')).toBeNull();
+    const club = api(current).currentTeam!.name;
+    act(() => api(current).selectPosition(0));
+    await act(async () => api(current).submitPlayer('Fixture Saved Keeper', meta(club, 2010, 'GK', 'Fixture Saved Keeper')));
+    expect(api(current).filledSlots.get(0)?.playerName).toBe('Fixture Saved Keeper');
+    const winningDraft = localStorage.getItem(draftKey);
+    const rng = vi.mocked(Math.random);
+    rng.mockClear();
+
+    fireEvent.click(reroll);
+    expect(within(older.container).getByRole('alert')).toHaveTextContent('changed in another tab');
+    expect(reroll).toBeVisible();
+    expect(within(older.container).getByText('0/11')).toBeVisible();
+    expect(rng).not.toHaveBeenCalled();
+    expect(localStorage.getItem(draftKey)).toBe(winningDraft);
+    legacyQuiet();
+  });
+
   it('keeps the review ready for submission and clears it after a result', async () => {
     const view = await startHook(2010);
     await fillHook(view, 2010);

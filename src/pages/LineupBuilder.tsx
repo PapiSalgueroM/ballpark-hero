@@ -508,13 +508,13 @@ const LineupBuilder = () => {
                   </p>
 
                   {pickSearch}
+                </div>
+              )}
 
-                  {validationError && (
-                    <div className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
-                      <AlertCircle className="w-4 h-4 shrink-0" />
-                      <span>{validationError}</span>
-                    </div>
-                  )}
+              {validationError && (
+                <div role="alert" className="flex items-center gap-2 text-destructive text-sm bg-destructive/10 rounded-lg px-3 py-2 animate-fade-in">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  <span>{validationError}</span>
                 </div>
               )}
 

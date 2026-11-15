@@ -116,6 +116,8 @@ function unverifiedLine(answer: Extract<ValidatorAnswer, { kind: 'unverified' }>
   return answer.reason || "Couldn't verify that answer. Try again in a second.";
 }
 
+const STALE_DRAFT_MESSAGE = 'Your lineup changed in another tab. Reload to continue that draft.';
+
 export function useLineupBuilder() {
   const [saved] = useState(() => {
     const saved = loadBuildXiDraft();
@@ -143,13 +145,18 @@ export function useLineupBuilder() {
   const [spinTeamIndex, setSpinTeamIndex] = useState(0);
   const storedDraft = useRef(saved.raw);
   const previousDraft = useRef(saved.draft ? JSON.stringify(saved.draft) : null);
+  // Picks and rerolls save first so a conflict leaves the visible draft intact.
+  const persistDraft = useCallback((draft: string | null) => {
+    if (!writeBuildXiDraft(storedDraft.current, draft)) return false;
+    storedDraft.current = draft;
+    previousDraft.current = draft;
+    return true;
+  }, []);
   useLayoutEffect(() => {
     const draft = formation && (phase === 'building' || phase === 'reviewing')
       ? JSON.stringify({ formation, draftChoice, teamAssignments, slots: [...filledSlots] }) : null;
-    if (draft === previousDraft.current) return;
-    previousDraft.current = draft;
-    if (writeBuildXiDraft(storedDraft.current, draft)) storedDraft.current = draft;
-  }, [formation, phase, draftChoice, teamAssignments, filledSlots]);
+    if (draft !== previousDraft.current && !persistDraft(draft)) previousDraft.current = draft;
+  }, [formation, phase, draftChoice, teamAssignments, filledSlots, persistDraft]);
   /* Round 1138: the validator call in flight, so a reroll, a new formation, a
      reset, leaving the page or a Cancel button can give up on it. A cancelled
      call ends as unverified: nothing filled, no message, not busy. pickRun
@@ -211,7 +218,7 @@ export function useLineupBuilder() {
     cancelValidation();
     cancelEvaluation();
     if (!isCurrentBuildXiDraft(storedDraft.current)) {
-      setValidationError('Your lineup changed in another tab. Reload to continue that draft.');
+      setValidationError(STALE_DRAFT_MESSAGE);
       return false;
     }
     setSelectedPositionIndex(index);
@@ -237,33 +244,41 @@ export function useLineupBuilder() {
   const rerollTeam = useCallback(() => {
     if (phase !== 'building') return;
     cancelValidation();
-    setTeamAssignments((prev) => {
-      const usedNames = new Set(prev.filter((_, i) => i !== filledCount).map((t) => t.name));
-      const all = draftChoice.mode !== 'mixed'
-        ? (draftChoice.mode === 'club-era' ? clubEraClubs : clubYearClubs).map((name) => ({ name, isNation: false }))
-        : [
-        ...ALL_CLUBS.map((name) => ({ name, isNation: false })),
-        ...ALL_NATIONS.map((name) => ({ name, isNation: true })),
-      ];
-      const available = all.filter((t) => !usedNames.has(t.name)
-        && (draftChoice.mode === 'mixed' || t.name !== prev[filledCount]?.name));
-      const pick = available[Math.floor(Math.random() * available.length)];
-      if (!pick) return prev;
-      const next = [...prev];
+    if (!isCurrentBuildXiDraft(storedDraft.current)) {
+      setValidationError(STALE_DRAFT_MESSAGE);
+      return;
+    }
+    const usedNames = new Set(teamAssignments.filter((_, i) => i !== filledCount).map(t => t.name));
+    const all = draftChoice.mode !== 'mixed'
+      ? (draftChoice.mode === 'club-era' ? clubEraClubs : clubYearClubs).map(name => ({ name, isNation: false }))
+      : [
+          ...ALL_CLUBS.map(name => ({ name, isNation: false })),
+          ...ALL_NATIONS.map(name => ({ name, isNation: true })),
+        ];
+    const available = all.filter(t => !usedNames.has(t.name)
+      && (draftChoice.mode === 'mixed' || t.name !== teamAssignments[filledCount]?.name));
+    const pick = available[Math.floor(Math.random() * available.length)];
+    if (pick) {
+      const next = [...teamAssignments];
       next[filledCount] = pick;
-      return next;
-    });
+      const draft = JSON.stringify({ formation, draftChoice, teamAssignments: next, slots: [...filledSlots] });
+      if (!persistDraft(draft)) {
+        setValidationError(STALE_DRAFT_MESSAGE);
+        return;
+      }
+      setTeamAssignments(next);
+    }
     setSelectedPositionIndex(null);
     setValidationError(null);
     startSpin();
-  }, [phase, filledCount, startSpin, cancelValidation, draftChoice]);
+  }, [phase, filledCount, startSpin, cancelValidation, draftChoice, teamAssignments, formation, filledSlots, persistDraft]);
 
   const undoLastPick = useCallback(() => {
     if (filledCount === 0 || (phase !== 'building' && phase !== 'reviewing')) return false;
     cancelValidation();
     cancelEvaluation();
     if (!isCurrentBuildXiDraft(storedDraft.current)) {
-      setValidationError('Your lineup changed in another tab. Reload to continue that draft.');
+      setValidationError(STALE_DRAFT_MESSAGE);
       return false;
     }
     const remaining = new Map(filledSlots);
@@ -283,8 +298,8 @@ export function useLineupBuilder() {
       if (selectedPositionIndex === null || !currentTeam) return;
       if (replacingSlot) cancelValidation();
       const run = pickRun.current; // Round 1138: which pick this is, see cancelValidation
-      if (replacingSlot && !isCurrentBuildXiDraft(storedDraft.current)) {
-        setValidationError('Your lineup changed in another tab. Reload to continue that draft.');
+      if (!isCurrentBuildXiDraft(storedDraft.current)) {
+        setValidationError(STALE_DRAFT_MESSAGE);
         return;
       }
       const position = positions[selectedPositionIndex];
@@ -414,12 +429,6 @@ export function useLineupBuilder() {
         return;
       }
 
-      if (replacingSlot && !isCurrentBuildXiDraft(storedDraft.current)) {
-        setIsValidating(false);
-        setValidationError('Your lineup changed in another tab. Reload to continue that draft.');
-        return;
-      }
-
       const slot: FilledSlot = {
         ...position,
         playerName: playerName.trim(),
@@ -431,11 +440,15 @@ export function useLineupBuilder() {
         ...(pickMeta ? { pick: played.length > 0 ? { ...pickMeta, played } : pickMeta } : {}),
       };
 
-      setFilledSlots((prev) => {
-        const next = new Map(prev);
-        next.set(selectedPositionIndex, slot);
-        return next;
-      });
+      const next = new Map(filledSlots);
+      next.set(selectedPositionIndex, slot);
+      const draft = JSON.stringify({ formation, draftChoice, teamAssignments, slots: [...next] });
+      if (!persistDraft(draft)) {
+        setIsValidating(false);
+        setValidationError(STALE_DRAFT_MESSAGE);
+        return;
+      }
+      setFilledSlots(next);
 
       setSelectedPositionIndex(null);
       setIsValidating(false);
@@ -447,7 +460,7 @@ export function useLineupBuilder() {
         startSpin();
       }
     },
-    [selectedPositionIndex, currentTeam, positions, filledSlots, filledCount, startSpin, draftChoice, replacingSlot, cancelValidation]
+    [selectedPositionIndex, currentTeam, positions, filledSlots, filledCount, startSpin, draftChoice, replacingSlot, cancelValidation, formation, teamAssignments, persistDraft]
   );
 
   const filledSlotsArray = useMemo(() => {

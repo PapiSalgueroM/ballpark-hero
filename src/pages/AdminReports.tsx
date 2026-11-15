@@ -7,6 +7,7 @@ import { LogOut, Loader2, Flag } from 'lucide-react';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import { cn } from '@/lib/utils';
 import { Helmet } from 'react-helmet-async';
+import { toast } from 'sonner';
 import {
   ADMIN_ACCESS_RETRY_MESSAGE,
   ALL_GAMES,
@@ -75,6 +76,7 @@ const AdminReports = () => {
   const reportHash = linkedReportHash(useLocation().hash);
   const reportId = reportHash.slice('#report='.length);
   const backToQueueRef = useRef<HTMLAnchorElement>(null);
+  const activeFilterRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     void fetchReports();
@@ -138,7 +140,7 @@ const AdminReports = () => {
   /* One write path for every change. It asks for the row back, because an
      update RLS refuses is not an error to PostgREST, it is zero rows, and a
      screen that said "saved" over zero rows would be lying. */
-  const save = async (report: Report, patch: Record<string, unknown>): Promise<boolean> => {
+  const save = async (report: Report, patch: Record<string, unknown>, onSaved?: () => void): Promise<boolean> => {
     say(report.id, 'Saving...');
     const { data, error } = await supabase
       .from('question_reports' as any)
@@ -153,13 +155,21 @@ const AdminReports = () => {
       say(report.id, 'Not saved: the database took nothing. Are you still signed in as admin?');
       return false;
     }
+    onSaved?.();
     setReports((prev) => prev.map((r) => (r.id === report.id ? { ...r, ...patch } : r)));
     say(report.id, 'Saved');
     return true;
   };
 
-  const changeStatus = (report: Report, next: ReportStatus) =>
-    save(report, statusUpdate(report, next, new Date().toISOString(), withColumns));
+  const changeStatus = (report: Report, next: ReportStatus, control: HTMLSelectElement) => {
+    const patch = statusUpdate(report, next, new Date().toISOString(), withColumns);
+    return save(report, patch, () => {
+      const activeFilter = activeFilterRef.current;
+      if (!activeFilter || matchesStatus({ ...report, ...patch }, activeFilter.dataset.filter as StatusFilter)) return;
+      toast.success(`Moved to ${statusLabel(next, withColumns)}`);
+      if (document.activeElement === control) activeFilter.focus({ preventScroll: true });
+    });
+  };
 
   const changePriority = (report: Report, value: string) =>
     save(report, { priority: value || null });
@@ -315,6 +325,7 @@ const AdminReports = () => {
           {FILTERS.map((f) => (
             <button
               key={f.key}
+              ref={filter === f.key ? activeFilterRef : undefined}
               onClick={() => setFilter(f.key)}
               aria-pressed={filter === f.key}
               data-filter={f.key}
@@ -431,7 +442,7 @@ const AdminReports = () => {
                     Status
                     <select
                       value={status}
-                      onChange={(e) => changeStatus(report, e.target.value as ReportStatus)}
+                      onChange={(e) => changeStatus(report, e.target.value as ReportStatus, e.currentTarget)}
                       className="mt-1 block w-full min-h-[36px] rounded-lg border border-border bg-background px-2 text-sm text-foreground"
                       data-testid="status-select"
                     >

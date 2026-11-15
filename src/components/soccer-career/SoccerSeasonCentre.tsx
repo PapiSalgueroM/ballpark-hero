@@ -89,7 +89,7 @@ export interface SoccerSeasonCentreProps {
 const HELP: HelpWords = {
   title: 'How the Season Centre works',
   intro: [
-    'Season OVR on a matchday follows the five saved development checkpoints. The game estimates the rating between checkpoints. A match rating still shows your performance that day.',
+    'Season OVR follows the five saved development checkpoints. League and scheduled cup games show the estimate for their slot in your replay. A match rating still shows your performance that day.',
     'Your season was played the moment you pressed Next Season or 📺 Week by week. Here you watch it one matchday at a time, and the final table and your season totals end where your season summary has them.',
     "Earlier seasons use the league's real clubs and competition rules where the game has them checked. From 2026-27, a season with a saved league world runs on your career's simulated clubs, with promotion and relegation between two divisions. Every score, every other club's result and every minute are your career's own.",
     'When the table changes, each club slides from where it was to where it is now. The little pitch shows who scored and when. The ring is you, whenever you are in the move: scoring it, setting it up, or up there with the attack if you play in midfield or up front, and at the back when one goes in past you as a keeper or a defender. ⚽ Yours or 🅰️ Your assist under the pitch tells you when the goal or the assist was yours. How the move looked is the game\'s own drawing.',
@@ -344,7 +344,7 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
   const [screen, setScreen] = useState<CentreScreen>('league');
   const competitions = useMemo(() => savedSeasonCompetitions(career, row), [career, row]);
   const select = useCallback((next: CentreScreen) => setScreen(next), []);
-  const calendar = useMemo(() => season ? cupCalendar(competitions, season.games.length) : [], [competitions, season]);
+  const calendar = useMemo(() => season ? cupCalendar(competitions, season.games.length, row.ratingPath) : [], [competitions, season, row.ratingPath]);
   const model = useMemo(() => {
     if (!season) return null;
     const shieldWin = readCommunityShield(row)?.player.title === true && communityShieldWinningSeasons(career.seasons).some(win => win.year === row.year);
@@ -372,7 +372,7 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
   const resume = stored && stored.key === key && stored.year === row.year ? stored : null;
   return <>
     {model && <SeasonCentre model={model} exitLabel={exitLabel} onClose={onClose} resume={resume} onProgress={onProgress} navigation={navigation} active={screen === 'league'} fixtureReports={mode === 'watch' && !canPlay} />}
-    {screen !== 'league' && <SeasonCompetitionPanel key={screen} career={career} row={row} competition={competitions.find(c => c.id === screen) ?? null} navigation={navigation} exitLabel={exitLabel} onClose={leave} />}
+    {screen !== 'league' && <SeasonCompetitionPanel key={screen} career={career} row={row} competition={competitions.find(c => c.id === screen) ?? null} calendar={calendar} navigation={navigation} exitLabel={exitLabel} onClose={leave} />}
   </>;
 }
 

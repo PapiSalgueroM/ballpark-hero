@@ -55,6 +55,19 @@ describe('saved cups between league games', () => {
     const club: SavedSeasonCompetition = { id: 'club', name: 'Saved club cup', result: 'Group stage', matches: [{ round: 'Group stage, game 1', opponent: 'Saved A', goalsFor: 0, goalsAgainst: 1 }] };
     expect(cupCalendar([domestic, club], 38).map(game => game.id)).toEqual(['club:0', 'domestic:0', 'domestic:1', 'domestic:2', 'domestic:3']);
   });
+  it('estimates each cup game in order when two competitions share a replay slot', () => {
+    const club: SavedSeasonCompetition = { id: 'club', name: 'Saved club cup', result: 'Round of 16', matches: [
+      { round: 'Round of 16, leg 1', opponent: 'Saved A', goalsFor: 1, goalsAgainst: 0 },
+    ] };
+    const legacy = cupCalendar([domestic, club], 38);
+    const calendar = cupCalendar([domestic, club], 38, [90, 90, 98, 60, 60]);
+    expect(calendar.map(({ development, ...game }) => game)).toEqual(legacy);
+    expect(calendar.filter(game => game.afterLeague === 25).map(game => [game.id, game.development])).toEqual([
+      ['domestic:1', { overall: 74, change: -1 }],
+      ['club:0', { overall: 73, change: -1 }],
+    ]);
+    expect(cupCalendar([domestic, club], 38, [90, 90, NaN, 60, 60])).toEqual(legacy);
+  });
   it.each([0, -1, NaN, 1.5, Number.MAX_SAFE_INTEGER + 1])('refuses an invalid league frame %s', games => { expect(cupCalendar([domestic], games)).toEqual([]); });
   it('old winners without saved matches do not gain invented fixtures', () => { expect(cupCalendar([{ ...domestic, matches: [] }], 38)).toEqual([]); });
   it('invalid score or venue data cannot enter a played calendar', () => { expect(cupCalendar([{ ...domestic, matches: [{ ...domestic.matches[1], goalsFor: -1 }] }], 38)).toEqual([]); });

@@ -30,6 +30,7 @@ import { ordinal } from '@/lib/soccerCareerLeague';
 import { MatchClock, scoreAt, type ClockSpeed, type ClockStageAt, type SeasonClock } from './MatchClock';
 import { MomentHost, type CentreMoment, type CentreMoments } from './MomentHost';
 import { SeasonCentreHelp, useHelpOnce, type HelpWords } from './SeasonCentreHelp';
+import { DevelopmentOverallLine } from './DevelopmentOverallLine';
 import { RecordPanel } from './RecordPanel';
 import { useBodyLock } from './useBodyLock';
 import { nextCupGame, visibleCupGames, type CalendarCupGame } from '@/lib/soccerSeasonCalendar';
@@ -242,15 +243,10 @@ function FixtureList({ model, played, current, short, cupSeen = new Set<string>(
 function DevelopmentOverall({ sport, round, settled = true }: { sport: CentreSport; round: number; settled?: boolean }) {
   const overallAt = sport.developmentOverall;
   if (overallAt === undefined) return null;
-  if (overallAt === null) return <p className="text-xs text-muted-foreground" data-match-development-overall>Season OVR unavailable for this season.</p>;
+  if (overallAt === null) return <DevelopmentOverallLine report={null} unit="matchday" />;
   const overall = overallAt(round, settled);
-  const difference = round > 1 ? overall - overallAt(round - 1, true) : 0;
-  const movement = round === 1 ? 'Opening matchday'
-    : difference > 0 ? `Up ${difference} from last matchday`
-      : difference < 0 ? `Down ${-difference} from last matchday` : 'No change from last matchday';
-  return <p className="text-xs text-muted-foreground" title="Estimated from saved development checkpoints" data-match-development-overall>
-    Season OVR <strong className="tabular-nums text-foreground">{overall}</strong> · {movement}
-  </p>;
+  const change = round > 1 ? overall - overallAt(round - 1, true) : null;
+  return <DevelopmentOverallLine report={{ overall, change }} unit="matchday" />;
 }
 
 /** His line in one game, after full time. */
@@ -650,6 +646,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
       return <div className="space-y-3" data-centre-calendar-cup={cup.id} data-cup-revealed={stage.revealed ? 'true' : 'false'}>
         <h3 className="text-sm font-black">{cup.name} · {match.round}</h3>
         <p className="text-xs text-muted-foreground">{cup.afterLeague === 0 ? "Before league game 1." : `After league game ${cup.afterLeague}.`} {cup.afterLeague === 0 && match.neutral ? "Your saved neutral opener." : cup.afterLeague === 0 && cup.competition === "german-supercup" ? "Your saved Supercup opener." : model.calendar?.note}</p>
+        <DevelopmentOverallLine report={cup.development ?? null} unit="game" />
         <div className="rounded-xl bg-muted/30 p-4 text-center">
           <p className="font-bold" data-calendar-cup-opponent>{model.header.club} vs {match.opponent ?? 'Opponents not recorded'}</p>
           <p className="mt-1 text-xs">{match.neutral ? 'Neutral ground' : match.home === undefined ? 'Venue not recorded' : match.home ? 'Home' : 'Away'}</p>
