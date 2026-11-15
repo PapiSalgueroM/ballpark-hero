@@ -693,7 +693,7 @@ describe('Build Your XI Club year Browse on the real page', () => {
       const needle = operation(query, 'ilike', 'name_folded');
       const range = query.operations.find(([name]) => name === 'range')?.[1] as [number, number] | undefined;
       const limit = query.operations.find(([name]) => name === 'limit')?.[1][0] as number | undefined;
-      const matching = typeof needle === 'string' ? records.filter(record => record.name_folded.includes(needle.replaceAll('%', ''))) : records;
+      const matching = typeof needle === 'string' ? records.filter(record => record.name_folded.includes(needle.replace(/%/g, ''))) : records;
       return { data: range ? matching.slice(range[0], range[1] + 1) : matching.slice(0, limit), error: null };
     };
     const open = () => render(<MemoryRouter><LineupBuilder /></MemoryRouter>);
