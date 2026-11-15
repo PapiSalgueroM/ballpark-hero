@@ -6,6 +6,8 @@
 
 Application types, production build, 204 focused tests, six pinned browser cases, 20 site checks, all 174 SEO split routes and 16 download budgets passed. The NRL guide and search index were refreshed. The four grid archives still match the 360 boards through November 14 Eastern.
 
+[PR #997](https://github.com/PapiSalgueroM/ballpark-hero/pull/997) published exact main `3aac84bf8fff086232c502cfdb63e545096d40d9`, deployment `e94882f4-4f91-4567-b18a-85e610e856eb`, canonical entry `/assets/index-DYdwVHad.js`. The merged tree matched tested head `73ebf248d`. Seven live browser cases passed, including the NBA control alongside MLB, NFL and NHL. All 15 pinned endpoints and 174 sitemap routes passed. IndexNow accepted the updated NRL guide.
+
 ## 2026-11-15: Australian games on Home, AFL saves and NBA choice receipts
 
 - Home puts NRL Team Manager and Aussie Rules Manager directly beneath the lead Soccer Career card. Both links have 48px touch targets. Their lower edges land at 500px on a 320px guest phone and 759px on a 390px phone with a saved Club Manager career and three pins.
