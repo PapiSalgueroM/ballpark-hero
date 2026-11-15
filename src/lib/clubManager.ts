@@ -8646,8 +8646,9 @@ function restoreTrimmedContracts(career: CareerState): CareerState {
       || unavailable.has(row.name)) continue;
     const record = records.find(entry => entry.key === row.worldRosterKey);
     const player = record?.player;
+    // Old trim could cut a fresh youth pad before it received a role or contract. Aging can give its record a default term later.
     if (!record || !player || record.status !== 'released' || record.owner !== null || record.year !== year
-      || sameManKey(player) !== sameManKey(row) || player.onLoan
+      || sameManKey(player) !== sameManKey(row) || player.onLoan || (player.isYouth && player.role === undefined)
       || typeof player.contractYears !== 'number' || !Number.isSafeInteger(player.contractYears) || player.contractYears < 1
       || typeof player.wage !== 'number' || !Number.isFinite(player.wage) || player.wage < 0) continue;
     const held = [...restored.squad, ...(restored.loanedOut ?? []).map(loan => loan.player)];
