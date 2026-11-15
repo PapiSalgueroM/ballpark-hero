@@ -5,7 +5,7 @@ import UsCareerBoard from '@/components/us-career/UsCareerBoard';
 import { nflSeasonScore } from '@/lib/careerAwards';
 import { keyedRng } from '@/lib/keyedRng';
 import { NFL_CAREER_SPORT as sport } from '@/lib/nflCareerSport';
-import { nflQbRunAvailable, nflQbRunActive, nflSeasonLength, nflStatLineFor, setNflQbRun, simSeason, type CareerState } from '@/lib/nflMyCareer';
+import { ARCHETYPES, nflQbRunAvailable, nflQbRunActive, nflSeasonLength, nflStatLineFor, setNflQbRun, simSeason, type CareerState } from '@/lib/nflMyCareer';
 import { deriveSeasonOrWhy, disagreements, soFar } from '@/lib/season/core';
 import { NFL_SEASON } from '@/lib/season/nfl';
 import { buildUsSeason, type UsRow } from '@/lib/season/us';
@@ -50,7 +50,7 @@ describe('NFL designed quarterback runs', () => {
       expect(runner.line.passYds! + runner.line.rushYds!).toBe(pocket.line.passYds);
       expect(runner.line.passTd! + runner.line.rushTd!).toBe(pocket.line.passTd);
       expect(runner.line.ints).toBeLessThanOrEqual(pocket.line.ints!);
-      expect(nflSeasonScore('QB', runner.line) - nflSeasonScore('QB', pocket.line)).toBeCloseTo(pocket.line.ints! - runner.line.ints!);
+      expect(nflSeasonScore('QB', { games, ...runner.line }) - nflSeasonScore('QB', { games, ...pocket.line })).toBeCloseTo(pocket.line.ints! - runner.line.ints!);
       shifted += Number(runner.line.rushTd! > 0);
       fewerInts += Number(runner.line.ints! < pocket.line.ints!);
     }
@@ -84,7 +84,7 @@ describe('NFL designed quarterback runs', () => {
       line: { ...regularBackup.line, qbRunPackage: { unavailable: true } },
       notes: ['Camp put you in the backup role, so designed runs did not apply.', ...regularBackup.notes],
     });
-    for (const unavailable of [backup, { ...c, pos: 'RB' as const }, { ...c, archetype: sport.create.archetypes.QB[0] },
+    for (const unavailable of [backup, { ...c, pos: 'RB' as const }, { ...c, archetype: ARCHETYPES.QB[0] },
       { ...c, retired: true }, { ...c, suspendedSeasons: 1 }, { ...c, contractYears: 0 }, { ...c, seasons: [] }]) {
       expect(nflQbRunAvailable(unavailable)).toBe(false);
       expect(setNflQbRun(unavailable, true)).toBe(unavailable);
