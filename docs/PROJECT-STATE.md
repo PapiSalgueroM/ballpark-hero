@@ -1,4 +1,11 @@
+## 2026-11-15: Rugby match gate receipts and season review coverage
+
+- NRL Team Manager shows the amount credited for a paid home match and its ticket tier in the latest result and saved match reports. After a midseason change, it shows what the gate earned compared with the opening price under the same match conditions.
+- The four-sport season review harness registers all 23 mounted cases, including the three historical NBA replays and saved MLB relief pitching decisions.
+
 ## 2026-11-15: Midseason rugby finances, roster depth and account recovery
+
+[PR #984](https://github.com/PapiSalgueroM/ballpark-hero/pull/984) published exact main `8200be8f53e6324d1251079d6414a4c4a528a97b`, deployment `b43d3dfc-88a7-4fab-9c83-0884fcf4fa14`, canonical entry `/assets/index-Dl2OS4uo.js`. Eleven live browser checks, all 174 sitemap routes, seven policy and crawler endpoints, both admin noindex tags and the updated NRL guide passed. IndexNow accepted the guide. Hosted application types and build, Home launch and career entry guide workflows, 99 focused tests, all 20 site checks and 16 download limits passed. Two older trade tests expect the wrong saved `inSeasonRatings` marker and fail identically on #983. In 178 paired legal MLB roster moves, the original method increased strength in 175 cases and the vacancy change eliminated all 175 boosts.
 
 - NRL Team Manager opens a one-time ticket price review in Round 14. Compare projected remaining home gates before confirming. New prices start in Round 14 and enter the saved season review.
 - MLB Front Office counts missing contributors at replacement level. Sending away an eligible player cannot raise the team's strength by shrinking its rotation or lineup.
