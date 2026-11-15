@@ -4,7 +4,7 @@
 - NFL My Career lets a signed starting wide receiver choose Inside routes. In two paired seasons it added 13 catches, kept total receiving yards steady and gave up one touchdown. Existing replay support, camp competition and playoffs were checked. The usual and adjacent RB and QB paths matched 480 paired cases.
 - The GameNavbar Back button sends directly opened games and sport hubs to Home. In-site Back still restores the original Home link or the filtered hub. Both cold-entry fixtures reproduced the old outcome on the pinned published release.
 
-The combined candidate passed 112 focused tests across 13 files. The NRL and NFL guides, publication ledger and guide search keywords were refreshed. Production build and browser verification of the combined candidate are pending.
+The combined production build, 112 focused tests across 13 files and seven pinned local browser journeys passed. The 17-game receiver replay reconciled all game logs with the saved totals and opened a touchdown play in its match report. The 16-game save kept its existing replay availability rule and retained the exact receiving line and single programme receipt across reload. The NRL and NFL guides, publication ledger and guide search keywords were refreshed.
 
 ## 2026-11-15: Injury contracts and saves across tabs
 
