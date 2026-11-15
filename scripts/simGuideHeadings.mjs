@@ -164,6 +164,10 @@ const SOCCER_TRAINING_LOCATION = {
 function reviewedGuideSentences(route, part, sentences) {
   if (route === '/club-manager' && part === 'rules') return [...sentences,
     'In Training, give one player Light or Double for the next paid week. Compare the fitness estimate before you choose how hard he trains.'];
+  if (route === '/nfl-my-career' && part === 'howToPlay') return [...sentences,
+    'A signed starting Dual Threat quarterback who has played a season can call designed runs. This shifts some passing yards and touchdowns to rushing, and fewer throws can mean fewer interceptions. The extra contact costs up to four health points. Career Log records the tradeoff, and Week by week includes the rushing stats when the season can be replayed.'];
+  if (route === '/stadium-tycoon' && part === 'howToPlay') return [...sentences,
+    "In League, book scouting for the next known opponent. Pay the quoted fee upfront to cut that opponent's scoring chance by 10 percent for one match, including a match played while you're away. Its result records the scouting fee."];
   if (route !== '/soccer-career') return sentences;
   if (part === 'rules') return [...sentences,
     'Nations League appearances show the season overall used for that match and any change since your previous appearance.'];
