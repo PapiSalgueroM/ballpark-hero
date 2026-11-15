@@ -485,6 +485,10 @@ export function TournamentCard({
         </div>
       )}
 
+      {t.leadingRivalGoals !== undefined && (
+        <p className="text-xs text-center text-muted-foreground">Highest rival tally · {t.leadingRivalGoals} goals</p>
+      )}
+
       {(t.bestPlayer || t.goldenBoot) && (
         <div
           className={`bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center space-y-0.5${won ? " cm-rise" : ""}`}
