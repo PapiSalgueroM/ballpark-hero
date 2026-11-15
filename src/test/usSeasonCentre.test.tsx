@@ -331,6 +331,43 @@ function openMlb(pos: string, seed: string): UsCareerCore {
 }
 
 describe('the US Season Center with MLB bound', () => {
+  it.each([true, false])('shows the saved reliever record at the end of a replay (%s)', async compatible => {
+    const career = openMlb('RP', 'reliever-record');
+    const row = career.seasons[career.seasons.length - 1] as UsRow;
+    const wins = Number(row.wins), losses = Number(row.lossesP);
+    expect(wins + losses).toBeGreaterThan(0);
+    if (!compatible) row.saves = row.games;
+    const built = buildUsSeason(MLB_SEASON, career, row, MLB_CAREER_SPORT.teamLabelOf);
+    if (built.ok === false) throw new Error(built.why);
+    const season = deriveSeason(built.sport, row, built.ctx)!;
+    const appearance = compatible
+      ? season.games.find(game => game.line.wins === 1 || game.line.lossesP === 1)!
+      : season.games.find(game => game.played)!;
+    expect(appearance?.played).toBe(true);
+    const before = JSON.stringify(career);
+
+    mount(MLB_WITH_LOADER, career);
+    await waitFor(() => expect(document.querySelector('[data-season-help]')).not.toBeNull());
+    press('Got it');
+    press('Play ball');
+    press('Sim the rest');
+    const review = document.querySelector('[data-review]')!;
+    expect(review.querySelector('[data-review-tile="Wins"]')).toHaveTextContent(String(wins));
+    expect(review.querySelector('[data-review-tile="Losses"]')).toHaveTextContent(String(losses));
+    const running = document.querySelector('[data-so-far-desktop]')!;
+    if (compatible) {
+      expect(running).toHaveTextContent(new RegExp(`\\b${wins} w · ${losses} l\\b`));
+    } else {
+      expect(running).not.toHaveTextContent(/\d+ [wl]\b/);
+    }
+    const match = within(document.querySelector(`[data-fixture-row="${appearance.md}"]`)!).getByRole('button', { name: /Match report:/ });
+    fireEvent.click(match);
+    const report = await screen.findByRole('dialog', { name: 'Match report' });
+    const line = within(report.querySelector('[data-his-line]')!);
+    expect(line.getByText(compatible ? appearance.line.wins === 1 ? 'W' : 'L' : 'Pitching decisions unavailable by game')).toBeInTheDocument();
+    expect(JSON.stringify(career)).toBe(before);
+  });
+
   it('prints baseball\'s playoff line the way the other sports read: the games, then his line as the save holds it', () => {
     const career = openMlb('CF', 'mlb-centre-po');
     const base = career.seasons[career.seasons.length - 1];

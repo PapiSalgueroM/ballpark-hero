@@ -70,6 +70,7 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonSource, career:
   const development = savedRating?.checkpoints[3][0] === s.games.length ? savedRating : null;
   const help = view.help(named, named ? ctx.names[1] : undefined, pos);
   const pitcher = bind.slug === 'mlb' && (pos === 'SP' || pos === 'RP');
+  const reviewStats = pitcher ? review.regular.filter(stat => stat.numeric !== undefined) : review.regular.slice(0, 3);
   return {
     season: s,
     words: view.words,
@@ -85,7 +86,7 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonSource, career:
       : "Opponents are not named this season: the game does not hold that season's divisions and schedule.",
     derbyBefore: { w: 0, d: 0, l: 0 },
     review: {
-      tiles: [[pitcher ? review.gamesLabel : bind.slug === 'nhl' && pos === 'G' ? 'Starts' : 'Games', String(row.games)], ...review.regular.slice(0, pitcher ? 4 : 3).map((x): [string, string] => [view.tileLabels[x.label] ?? x.label, view.tileText ? view.tileText(x.label, x.value) : x.value])],
+      tiles: [[pitcher ? review.gamesLabel : bind.slug === 'nhl' && pos === 'G' ? 'Starts' : 'Games', String(row.games)], ...reviewStats.map((x): [string, string] => [view.tileLabels[x.label] ?? x.label, view.tileText ? view.tileText(x.label, x.value) : x.value])],
       finishLine: `${record} · ${row.teamResult}`,
       championLine: null,
       /* no trophy emoji here: the title card draws its own */

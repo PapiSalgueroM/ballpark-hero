@@ -112,7 +112,8 @@ export function pitchingBits(game: DerivedGame): string[] {
 
 export function pitchingSoFar(so: Record<string, number>, pos: string): [string, string][] {
   const totals = [[pos === 'SP' ? 'Starts' : 'Appearances', String(so.apps)]] as [string, string][];
-  for (const [key, label] of pos === 'SP' ? [['wins', 'W'], ['lossesP', 'L'], ['so', 'K']] : [['so', 'K'], ['saves', 'SV'], ['holds', 'HLD']]) {
+  for (const [key, label] of pos === 'SP' ? [['wins', 'W'], ['lossesP', 'L'], ['so', 'K']]
+    : [['so', 'K'], ['saves', 'SV'], ['holds', 'HLD'], ['wins', 'W'], ['lossesP', 'L']]) {
     totals.push([label, so[key] === undefined ? '-' : String(so[key])]);
   }
   return totals;
