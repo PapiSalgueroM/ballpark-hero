@@ -9,6 +9,8 @@
 
 Application types, the production build, 103 focused tests, 15 pinned product browser journeys, 20 site checks and 16 download budgets passed. The full SEO split check covered 174 routes. The final build passed the SEO checks for each of the five refreshed snapshots. The font check rejected a swapped valid WOFF2 file. Home search recovery passed all 10 mounted cases and all 19 copied controls.
 
+[PR #995](https://github.com/PapiSalgueroM/ballpark-hero/pull/995) published exact main `97c7d50b10aeae6461c9c0b16f577e68b434705b`, deployment `95045c7a-0bf8-4ad4-8946-578193981da2`, canonical entry `/assets/index-B16MOB9V.js`. The merged tree matched tested head `00727727f`. All 15 live browser cases, 16 pinned endpoints and 174 sitemap routes passed. The Daily and personalized Home cases passed in fresh retry sessions. Admin checks used mocked writes. IndexNow accepted the soccer guide and all four archive pages.
+
 ## 2026-11-15: Rugby youth appearances, goalie starts and academy deadlines
 
 - NRL Team Manager shows the appearances still needed for Youth development. A newly chosen Youth focus awards the extra OVR at the club's 21st regular-season match only after four actual starts or interchange appearances, including that match. An older save with Youth already selected keeps its original review rule.
