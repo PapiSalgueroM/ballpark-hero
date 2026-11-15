@@ -77,6 +77,7 @@ const AdminReports = () => {
   const reportId = reportHash.slice('#report='.length);
   const backToQueueRef = useRef<HTMLAnchorElement>(null);
   const activeFilterRef = useRef<HTMLButtonElement>(null);
+  const priorityFilterRef = useRef<HTMLSelectElement>(null);
 
   useEffect(() => {
     void fetchReports();
@@ -171,8 +172,17 @@ const AdminReports = () => {
     });
   };
 
-  const changePriority = (report: Report, value: string) =>
-    save(report, { priority: value || null });
+  const changePriority = (report: Report, value: string, control: HTMLSelectElement) => {
+    const priority = value || null;
+    return save(report, { priority }, () => {
+      const activeFilter = priorityFilterRef.current;
+      if (!activeFilter || activeFilter.value === 'all' || activeFilter.value !== (priorityOf(report) ?? 'unranked')
+        || activeFilter.value === (priority ?? 'unranked')) return;
+      const label = REPORT_PRIORITIES.find(option => option.key === priority)?.label;
+      toast.success(label ? `Priority set to ${label}` : 'Priority cleared');
+      if (document.activeElement === control) activeFilter.focus({ preventScroll: true });
+    });
+  };
 
   const draftOf = (report: Report) =>
     drafts[report.id] ?? { note: report.admin_note ?? '', fixRef: report.fix_ref ?? '' };
@@ -290,6 +300,7 @@ const AdminReports = () => {
           <label className="block text-xs font-medium text-muted-foreground">
             Filter by priority
             <select
+              ref={priorityFilterRef}
               value={priorityFilter}
               onChange={(e) => setPriorityFilter(e.target.value)}
               disabled={!withColumns}
@@ -458,7 +469,7 @@ const AdminReports = () => {
                     <select
                       value={priority ?? ''}
                       disabled={!withColumns}
-                      onChange={(e) => changePriority(report, e.target.value)}
+                      onChange={(e) => changePriority(report, e.target.value, e.currentTarget)}
                       className="mt-1 block w-full min-h-[36px] rounded-lg border border-border bg-background px-2 text-sm text-foreground disabled:opacity-50"
                       data-testid="priority-select"
                     >
