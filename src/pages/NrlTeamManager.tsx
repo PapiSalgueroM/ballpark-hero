@@ -32,6 +32,7 @@ import {
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
+  nrlCanReviewTickets, nrlTicketReviewRound,
   nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport, nrlPositionTraining,
   nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveCoachQuote, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlPastLadders, nrlSelectionPromise, nrlSelectionPromiseTerms, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
@@ -1104,6 +1105,8 @@ function FastForward({ career, onRun, disabled, onOpenOffice }: {
     ...(!nrlTicketPricingRefusal(career) && fixtures.slice(0, through - round + 1).some(roundFixtures =>
       roundFixtures.some(([home]) => home === clubId)) ? ['ticket prices'] : []),
   ] : [];
+  const reviewRound = nrlTicketReviewRound(year);
+  const skipsTicketReview = !career.legacySeason && !career.finance.ticketReview && reviewRound >= round && reviewRound <= through;
   return (
     <details className="rounded-xl border border-border bg-card px-4" onToggle={event => setExpanded(event.currentTarget.open)}>
       <summary className="flex min-h-11 cursor-pointer items-center font-bold">Fast-forward rounds</summary>
@@ -1132,6 +1135,7 @@ function FastForward({ career, onRun, disabled, onOpenOffice }: {
             </select>
           </label>
           {closingChoices.length > 0 && <p className="text-muted-foreground">Set these in the Club office first if you want to use them this season: {closingChoices.join(', ')}.</p>}
+          {skipsTicketReview && <p className="text-muted-foreground">Simulating through Round {reviewRound} closes this season’s ticket review.</p>}
           <Button type="button" size="lg" disabled={disabled} className="w-full sm:w-auto" onClick={() => {
             const result = onRun({ year, clubId, round, through });
             if (result) setReceipt({ ...result, round: round + result.rounds });
@@ -1321,6 +1325,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
   const intensiveBye = next.clubStatus === 'bye' && nrlIntensiveBye(career);
   const needsJudiciary = judiciaryNeedsResponse(season);
   const approach = nrlContractApproach(career);
+  const canReviewTickets = nrlCanReviewTickets(career);
   const readyAcademy = career.retired ? [] : nrlAcademyReports(career)
     .flatMap(({ status, player }) => status === 'ready' && player && nrlAcademyOffer(career, player.id).ok ? [player] : []);
   const canPlayLive = Boolean(match && season.kickerId && season.bench);
@@ -1369,9 +1374,13 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
       {!career.retired && <NrlBoardChallengeNotice season={season} status={nrlBoardChallengeStatus(career)} />}
       {showLiveResult && report}
       <NrlJudiciaryReview season={season} onAction={onAction} disabled={disabled} />
-      {(approach?.status === 'offered' || readyAcademy.length > 0) && (
+      {(approach?.status === 'offered' || readyAcademy.length > 0 || canReviewTickets) && (
         <section className="space-y-2 rounded-xl border border-border bg-card p-3 text-sm" aria-labelledby="nrl-club-decisions">
           <h3 id="nrl-club-decisions" className="font-bold">Club decisions</h3>
+          {canReviewTickets && <div>
+            <p>You can change home ticket prices for the rest of the season before this round is played.</p>
+            <Button type="button" size="lg" variant="outline" className="mt-2" onClick={() => onOpenOffice('finances')}>Review ticket prices</Button>
+          </div>}
           {approach?.status === 'offered' && <div>
             <p>A rival wants to take over {approach.player?.name}’s contract. Reply by the end of Round {approach.deadline}.</p>
             {season.round === approach.deadline && <p className="mt-1 text-xs text-muted-foreground">Simulating this round without replying lets the offer expire.</p>}
@@ -2670,6 +2679,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
               <li>Before Round 1, open Season sponsor in Finances to choose a one-season offer or take $160,000 now and $295,000 next year. The two-season deal stays with the club and fills its sponsor slot for both years.</li>
+              <li>At midseason, open Review ticket prices from Match centre. Compare the remaining home gate forecasts and confirm one price change in Finances.</li>
               <li>Before Round 1, choose an eligible position in the Board recruitment brief. Use Recruitment during the season to sign an external player for that position next year and earn a club cash bonus.</li>
               <li>In Ladder, open Scout a club to shortlist eligible rivals and take them straight to Recruitment.</li>
               <li>Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.</li>
