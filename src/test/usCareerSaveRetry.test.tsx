@@ -6,6 +6,7 @@ import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
 import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
 import MlbMyCareerBoard from '@/components/mlb-my-career/MlbMyCareerBoard';
 import NhlMyCareerBoard from '@/components/nhl-my-career/NhlMyCareerBoard';
+import { emptyUsCareerDraft } from '@/components/us-career/UsCareerCreator';
 import { NFL_CAREER_SPORT } from '@/lib/nflCareerSport';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
@@ -283,13 +284,25 @@ describe.each(SPORTS)('$label save recovery on the actual board', row => {
 
   it('Back from an unsaved prospect queues an honest empty-key removal', () => {
     seed(row, null); const view = mount(row), durable = values(); refusing = true;
-    fireEvent.change(view.getByRole('textbox', { name: 'Your player name' }), { target: { value: 'Unsaved Prospect' } });
+    const nameInput = 'Unsaved Prospect';
+    const emptyDraft = emptyUsCareerDraft(row.sport.create);
+    fireEvent.change(view.getByRole('textbox', { name: 'Your player name' }), { target: { value: nameInput } });
+    const creatorKey = `dukb-${row.sport.slug}-career-creator-v1`;
+    const creatorBytes = localStorage.getItem(creatorKey);
+    const savedCreator = row.sport.slug === 'nba' ? null : { ...emptyDraft, nameInput };
+    expect(creatorBytes === null ? null : JSON.parse(creatorBytes)).toEqual(savedCreator);
     fireEvent.click(view.getByRole('button', { name: 'Play your road to the draft' }));
     latest(row, row.label + ': new prospect attempted'); assertNotice(view, 'write', row.label + ': new prospect refusal');
     fireEvent.click(view.getByRole('button', { name: 'Back to player' }));
     assertNotice(view, 'remove', row.label + ': empty removal visible');
-    check(row.label + ': empty key stays empty', { values: values(), create: !!view.queryByRole('button', { name: 'Enter the draft' }), last: attempts[attempts.length - 1] }, { values: durable, create: true, last: { method: 'removeItem', key: row.sport.saveKey, value: null, refused: true } }, observe());
+    const { [creatorKey]: returnedCreator, ...otherValues } = values();
+    check(row.label + ': empty key stays empty', {
+      values: otherValues, creator: returnedCreator == null ? null : JSON.parse(returnedCreator),
+      create: !!view.queryByRole('button', { name: 'Enter the draft' }), last: attempts[attempts.length - 1],
+    }, { values: durable, creator: savedCreator, create: true, last: { method: 'removeItem', key: row.sport.saveKey, value: null, refused: true } }, observe());
     refusing = false; retry(view, row, null, row.label + ': empty removal Retry');
-    reload(row, view, null, row.label + ': empty removal reload', 'create');
+    const reopened = reload(row, view, null, row.label + ': empty removal reload', 'create');
+    expect(reopened.getByRole('textbox', { name: 'Your player name' }))
+      .toHaveValue(row.sport.slug === 'nba' ? emptyDraft.nameInput : nameInput);
   });
 });
