@@ -1,7 +1,9 @@
 import type { NationsLeagueCampaign } from '@/lib/soccerNationsLeague';
+import { readOvr } from '@/lib/careerSeasonRatings';
 
 export function NationsLeagueRun({ campaign }: { campaign: NationsLeagueCampaign }) {
   const { nation, table, matches, year, group, result, apps, goals, assists, champion, nextLeague } = campaign;
+  let previousOverall: number | null = null;
   return <section aria-label="Nations League campaign" className="space-y-3 text-xs">
     <div className="space-y-1">
       <h3 className="font-bold">{nation} · {year}/{String(year + 1).slice(-2)}</h3>
@@ -27,12 +29,18 @@ export function NationsLeagueRun({ campaign }: { campaign: NationsLeagueCampaign
         const homeSide = match.home === nation;
         const home = match.homeGoals + (match.extraTime?.homeGoals ?? 0);
         const away = match.awayGoals + (match.extraTime?.awayGoals ?? 0);
+        const overall = readOvr(match.playerOverall);
+        const change = overall !== null && previousOverall !== null ? overall - previousOverall : null;
+        if (match.player) previousOverall = overall;
         return <li key={i} className="rounded-lg bg-muted/25 px-2 py-1.5">
           <p className="text-[10px] text-muted-foreground">{match.stage}{match.leg ? ` · Leg ${match.leg}` : ''} · {match.venue}</p>
           <p className="break-words font-semibold">{homeSide ? match.away : match.home} · {homeSide ? home : away}-{homeSide ? away : home}</p>
           {match.extraTime && <p className="text-muted-foreground">After extra time</p>}
           {match.penalties && <p className="text-muted-foreground">{match.penalties} won on penalties</p>}
           {match.player && <p className="text-muted-foreground">You: {match.player.goals} G · {match.player.assists} A · {match.player.rating.toFixed(1)} rating</p>}
+          {match.player && <p className="text-muted-foreground" data-nations-league-overall={overall ?? ''}>
+            {overall === null ? 'Season OVR unavailable' : `Season OVR ${overall}${change === null ? '' : change === 0 ? ' · Held' : ` · ${change > 0 ? 'Up' : 'Down'} ${Math.abs(change)}`}`}
+          </p>}
         </li>;
       })}
     </ol>

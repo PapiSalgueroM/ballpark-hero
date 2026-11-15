@@ -248,7 +248,13 @@ export type NationsLeagueMatch = KnockoutMatch & {
   venue: 'Home' | 'Away' | 'Neutral';
   leg?: 1 | 2;
   player?: ReturnType<typeof playerMatchStats>;
+  playerOverall?: number;
 };
+
+export interface NationsLeagueDevelopment {
+  path: readonly [opening: number, early: number, middle: number, late: number, closing: number];
+  debutFloor?: number;
+}
 
 export interface NationsLeagueCampaign {
   year: number;
@@ -346,7 +352,8 @@ function editionFor(year: number, seed: string) {
 }
 
 /** World results draw independently of player selection, so the same save has one qualification path. */
-export function nationsLeagueCampaign(year: number, seed: string, nation: string, form: PlayerForm | null): NationsLeagueCampaign | undefined {
+export function nationsLeagueCampaign(year: number, seed: string, nation: string, form: PlayerForm | null,
+  development?: NationsLeagueDevelopment): NationsLeagueCampaign | undefined {
   if (year < 2026 || year % 2 || !ACCESS_ORDER.has(nation)) return;
   const edition = editionFor(year, seed);
   const group = (Object.keys(edition.tables) as Group[]).find(key => {
@@ -373,20 +380,32 @@ export function nationsLeagueCampaign(year: number, seed: string, nation: string
     if (involved(match)) matches.push({ ...match, stage, venue: 'Neutral' });
   }
   const random = keyedRng(`nations-league|${year}|${seed}|${nation}|player`);
-  const squad = form ? pickSquad(nation, form, year, random) : null;
-  const selected = squad?.called === true;
+  const groupWindow = Math.ceil(matches.filter(match => match.stage === 'Group').length / 2);
+  const squadAtOverall = new Map<number, ReturnType<typeof pickSquad>>();
+  let selected = false;
   let apps = 0, goals = 0, assists = 0, ratings = 0;
-  if (selected && form) {
-    for (const match of matches) {
-      if (squad.role === 'Squad player' && random() >= 0.5) continue;
-      const home = match.home === nation;
-      const teamGoals = home ? match.homeGoals + (match.extraTime?.homeGoals ?? 0) : match.awayGoals + (match.extraTime?.awayGoals ?? 0);
-      match.player = playerMatchStats(form, teamGoals, random, true, internationalShareOfMatch(form, squad.role));
-      apps++;
-      goals += match.player.goals;
-      assists += match.player.assists;
-      ratings += match.player.rating;
+  for (const [index, match] of matches.entries()) {
+    if (!form) break;
+    const checkpoint = match.stage === 'Group' ? (index < groupWindow ? 1 : 2) : match.leg ? 3 : 4;
+    const overall = development?.path[checkpoint] ?? form.overall;
+    if (development?.debutFloor !== undefined && overall < development.debutFloor) continue;
+    const matchForm = overall === form.overall ? form : { ...form, overall };
+    let squad = squadAtOverall.get(overall);
+    if (!squad) {
+      squad = pickSquad(nation, matchForm, year, random);
+      squadAtOverall.set(overall, squad);
     }
+    if (!squad.called) continue;
+    selected = true;
+    if (squad.role === 'Squad player' && random() >= 0.5) continue;
+    const home = match.home === nation;
+    const teamGoals = home ? match.homeGoals + (match.extraTime?.homeGoals ?? 0) : match.awayGoals + (match.extraTime?.awayGoals ?? 0);
+    match.player = playerMatchStats(matchForm, teamGoals, random, true, internationalShareOfMatch(matchForm, squad.role));
+    if (development) match.playerOverall = overall;
+    apps++;
+    goals += match.player.goals;
+    assists += match.player.assists;
+    ratings += match.player.rating;
   }
   const result = involved(edition.final) ? edition.final.winner === nation ? 'Winner' : 'Runner-up'
     : involved(edition.thirdPlace) ? edition.thirdPlace.winner === nation ? 'Third place' : 'Fourth place'

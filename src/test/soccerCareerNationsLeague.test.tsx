@@ -40,9 +40,36 @@ describe('Soccer Career Nations League season integration', () => {
     expect(played.intStats.caps - start.intStats.caps).toBe(season.intApps);
     expect(played.intStats.goals - start.intStats.goals).toBe(season.intGoals);
     expect(played.intStats.assists - start.intStats.assists).toBe(season.intAssists);
+    const groupGames = campaign.matches.filter(match => match.stage === 'Group').length;
+    expect(season.ratingPath).toBeDefined();
+    expect(campaign.matches.filter(match => match.player).map(match => match.playerOverall)).toEqual(
+      campaign.matches.flatMap((match, index) => match.player ? [season.ratingPath![
+        match.stage === 'Group' ? (index < Math.ceil(groupGames / 2) ? 1 : 2)
+          : match.leg ? 3 : 4
+      ]] : []),
+    );
     expect(isSoccerCareerSave(played)).toBe(true);
     expect(readNationsLeagueCampaign(repairCareer(JSON.parse(JSON.stringify(played))).seasons.at(-1)!)).toEqual(campaign);
     expect(readNationsLeagueCampaign(start.seasons.at(-1)!)).toBeUndefined();
+  });
+
+  it('gives the first cap to a late breakthrough and keeps the saved world results', () => {
+    const year = 2028, nation = 'England';
+    const seed = Array.from({ length: 35 }, (_, index) => `breakthrough ${index}`).find(value =>
+      nationsLeagueCampaign(year, value, nation, null)?.matches.some(match => match.stage === 'Quarterfinal'))!;
+    expect(seed).toBeDefined();
+    const original = nationsLeagueCampaign(year, seed, nation, form)!;
+    const changed = nationsLeagueCampaign(year, seed, nation, form, { path: [67, 69, 71, 94, 97], debutFloor: 72 })!;
+    const results = (campaign: typeof changed) => campaign.matches.map(({ player, playerOverall, ...match }) => match);
+    expect(original.matches.some(match => match.stage === 'Group' && match.player)).toBe(true);
+    expect(results(changed)).toEqual(results(original));
+    expect(changed.table).toEqual(original.table);
+    expect(changed.champion).toBe(original.champion);
+    expect(changed.matches.filter(match => match.stage === 'Group').every(match => !match.player)).toBe(true);
+    expect(changed.matches.filter(match => match.stage === 'Quarterfinal').map(match => match.playerOverall)).toEqual([94, 94]);
+    expect(changed.apps).toBe(changed.matches.filter(match => match.player).length);
+    const constant = nationsLeagueCampaign(year, seed, nation, form, { path: [97, 97, 97, 97, 97] })!;
+    expect({ ...constant, matches: constant.matches.map(({ playerOverall, ...match }) => match) }).toEqual(original);
   });
 
   it('shows a saved report and awards a personal trophy only for a winning campaign with a cap', () => {
@@ -62,6 +89,14 @@ describe('Soccer Career Nations League season integration', () => {
     const report = screen.getByRole('region', { name: 'Nations League campaign' });
     expect(within(report).getByRole('table', { name: /Nations League Group/ })).toBeVisible();
     expect(within(report).getByRole('list', { name: 'Nations League matches' }).children).toHaveLength(winning.matches.length);
+    expect(within(report).getAllByText('Season OVR unavailable')).toHaveLength(winning.apps);
+    const developed = { ...winning, matches: winning.matches.map((match, index) => ({
+      ...match, ...(match.player ? { playerOverall: index === 0 ? 89 : 87 } : {}),
+    })) };
+    history.rerender(<NationsLeagueHistory campaigns={[developed]} />);
+    expect(within(report).getByText('Season OVR 89')).toBeVisible();
+    expect(within(report).getByText('Season OVR 87 · Down 2')).toBeVisible();
+    expect(within(report).getAllByText('Season OVR 87 · Held')).toHaveLength(winning.apps - 2);
     history.unmount();
     render(<TrophyCabinet career={{ ...initial, seasons: [won] }} category="nations-league" onClose={() => {}} />);
     fireEvent.click(screen.getByRole('button', { name: /View Nations League, 2028/ }));
