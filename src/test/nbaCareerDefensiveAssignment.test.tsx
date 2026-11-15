@@ -225,8 +225,8 @@ describe('NBA defensive assignment', () => {
     const c = career('PF');
     for (const pos of ['PG', 'SG', 'SF', 'PF', 'C']) {
       const choices = usProgrammeMenus({ ...c, pos }, 'nba').find(menu => menu.id === 'tactics')!.options;
-      expect(choices.map(choice => choice.id)).toEqual(['normal', 'attack', 'support', 'defend']);
-      expect(choices.at(-1)?.label).toBe(['PF', 'C'].includes(pos) ? 'Protect the rim' : 'Pressure the ball');
+      expect(choices.map(choice => choice.id)).toEqual(['normal', 'attack', 'support', 'defend', 'playoff-minutes']);
+      expect(choices.find(choice => choice.id === 'defend')?.label).toBe(['PF', 'C'].includes(pos) ? 'Protect the rim' : 'Pressure the ball');
     }
     for (const slug of ['nfl', 'nhl', 'mlb'] as const) {
       expect(saveUsCareerProgramme(c, slug, defence())).toBe(c);

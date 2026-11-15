@@ -58,8 +58,9 @@ export function nflSeasonReview(s: SeasonLine, pos: CareerPos): CareerReviewStat
 export function nbaSeasonReview(s: NbaSeasonLine): CareerReviewStats {
   const regular = [number('Points per game', s.ppg), number('Rebounds per game', s.rpg), number('Assists per game', s.apg)];
   if (recorded(s.restGames) && s.restGames > 0) regular.push(text('Rest plan', `${s.restGames} planned games`));
-  return stats(s.teamResult, regular,
-    [number('Games', s.poGames), number('Points per game', s.poPpg), number('Rebounds per game', s.poRpg), number('Assists per game', s.poApg)]);
+  const postseason = [number('Games', s.poGames), number('Points per game', s.poPpg), number('Rebounds per game', s.poRpg), number('Assists per game', s.poApg)];
+  if (recorded(s.poMpg)) postseason.push(number('Minutes per game', s.poMpg, 1));
+  return stats(s.teamResult, regular, postseason);
 }
 
 export function mlbSeasonReview(s: MlbSeasonLine, pos: MlbCareerPos): CareerReviewStats {

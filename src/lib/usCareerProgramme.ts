@@ -3,10 +3,10 @@ import type { UsSport } from './usCoachCareer';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 
 export type ProgrammeSection = 'workload' | 'tactics' | 'expectation' | 'partnership' | 'bonus' | 'reinvention';
-export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'steady' | 'stretch' | 'build' | 'maintain';
+export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'steady' | 'stretch' | 'build' | 'maintain';
 export interface ProgrammeChoices {
   workload: 'normal' | 'push' | 'recover';
-  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside';
+  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes';
   expectation: 'normal' | 'steady' | 'stretch';
   partnership: 'normal' | 'build';
   bonus: 'normal' | 'steady' | 'stretch';
@@ -33,6 +33,7 @@ export interface ProgrammePreparation {
   idle?: ProgrammeSection[];
   nhlShutdownBerthGain?: number;
   nflInsideRoutesGain?: number;
+  nbaExtraPlayoffMinutes?: number;
 }
 const DEFAULTS: ProgrammeChoices = { workload: 'normal', tactics: 'normal', expectation: 'normal', partnership: 'normal', bonus: 'normal', reinvention: 'normal' };
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
@@ -42,6 +43,10 @@ const sports: readonly string[] = ['nfl', 'nba', 'mlb', 'nhl'];
 export const NBA_DEFENSIVE_GAIN = 20;
 export const NBA_DEFENSIVE_SCORING_COST = 8;
 export const NBA_DEFENSIVE_CAP = { spg: 3, bpg: 4 } as const;
+export const NBA_PLAYOFF_MINUTES_CAP = 42;
+export const NBA_EXTRA_PLAYOFF_MINUTES = 3;
+export const NBA_PLAYOFF_HEALTH_COST = 4;
+const NBA_PLAYOFF_MINUTES_LABEL = 'Take extra playoff minutes';
 export const NHL_SHUTDOWN_BERTH_POINTS = 6;
 export const NHL_SHUTDOWN_OFFENSIVE_COST = 10;
 export const NFL_WR_REC_CAP = 145;
@@ -51,6 +56,11 @@ const NFL_INSIDE_ROUTES_LABEL = 'Inside routes';
 
 export function nflInsideRoutesAvailable(c: UsCareerCore): boolean {
   return c.pos === 'WR' && c.role !== 'backup' && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0);
+}
+
+export function nbaExtraPlayoffMinutesAvailable(c: UsCareerCore): boolean {
+  return c.role !== 'backup' && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0)
+    && c.seasons.some(season => season.games > 0);
 }
 
 export function nbaDefensiveAssignment(pos: string) {
@@ -141,6 +151,7 @@ function validPlan(c: UsCareerCore, sport: UsSport, plan: UsCareerProgramme): bo
     && typeof plan.team === 'string' && sections.every(key => {
       // A booked receiver plan still needs settling if camp benches him or the deal expires after the season.
       if (key === 'tactics' && plan.tactics === 'inside') return sport === 'nfl' && c.pos === 'WR';
+      if (key === 'tactics' && plan.tactics === 'playoff-minutes') return sport === 'nba';
       return usProgrammeMenus(c, sport).find(menu => menu.id === key)?.options.some(o => o.id === plan[key]);
     });
 }
@@ -249,6 +260,11 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
         label: defence.label,
         effect: `Get ${NBA_DEFENSIVE_GAIN}% more ${defence.unit} in the regular season, at least 0.1 more up to ${NBA_DEFENSIVE_CAP[defence.stat].toFixed(1)}. You give up about ${NBA_DEFENSIVE_SCORING_COST}% of your points per game if the boost lands, with a 1.0 PPG minimum.`,
       }] : []),
+      ...(sport === 'nba' && nbaExtraPlayoffMinutesAvailable(c) ? [{
+        id: 'playoff-minutes' as const,
+        label: NBA_PLAYOFF_MINUTES_LABEL,
+        effect: `Signed starters who have played a season can add 1–${NBA_EXTRA_PLAYOFF_MINUTES} minutes per playoff game, up to ${NBA_PLAYOFF_MINUTES_CAP}. Keep your starting spot after camp, make the playoffs and have at least ${NBA_PLAYOFF_HEALTH_COST} health after the regular season. You spend ${NBA_PLAYOFF_HEALTH_COST} health after the season only if you play extra minutes.`,
+      }] : []),
       ...(sport === 'nhl' && c.pos === 'D' ? [{
         id: 'defend' as const,
         label: 'Shutdown assignment',
@@ -334,7 +350,9 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
     const choice = plan[section];
     if (choice === 'normal') continue;
     const insideRoutes = section === 'tactics' && choice === 'inside';
-    const label = insideRoutes ? NFL_INSIDE_ROUTES_LABEL : menus.find(m => m.id === section)?.options.find(o => o.id === choice)?.label ?? section;
+    const playoffMinutes = section === 'tactics' && choice === 'playoff-minutes';
+    const label = insideRoutes ? NFL_INSIDE_ROUTES_LABEL : playoffMinutes ? NBA_PLAYOFF_MINUTES_LABEL
+      : menus.find(m => m.id === section)?.options.find(o => o.id === choice)?.label ?? section;
     const decision: ProgrammeDecision = { section, label, outcome: played ? 'completed' : 'interrupted' };
     if (played && sport === 'nba' && section === 'tactics' && choice === 'defend' && !preparation?.idle?.includes(section)) {
       const defence = nbaDefensiveAssignment(c.pos);
@@ -351,6 +369,16 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
     if (played && insideRoutes && preparation?.nflInsideRoutesGain !== undefined) {
       decision.actual = preparation.nflInsideRoutesGain;
       decision.unit = 'additional receptions';
+    }
+    if (played && playoffMinutes) {
+      if (preparation?.nbaExtraPlayoffMinutes !== undefined) {
+        // Settle once after the season has restored temporary programme health changes.
+        c.health -= NBA_PLAYOFF_HEALTH_COST;
+        decision.actual = preparation.nbaExtraPlayoffMinutes;
+        decision.unit = 'extra minutes per playoff game';
+      } else {
+        decision.outcome = 'unused';
+      }
     }
     if (played && section === 'expectation') {
       decision.target = gamesTarget({ ...c, year: plan.year, seasons: c.seasons.filter(s => s !== line) }, sport, choice === 'stretch');
