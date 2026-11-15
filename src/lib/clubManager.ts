@@ -17677,16 +17677,20 @@ const SET_PIECE_PREFERENCE: Record<Exclude<SetPieceKey, 'captain'>, Position[][]
   penalties: [['ST', 'CF'], ['CAM', 'LW', 'RW']],
 };
 
+export function eligibleForSetPiece(p: CMPlayer, key: SetPieceKey): boolean {
+  return key === 'captain' ? !p.onLoan : p.position !== 'GK';
+}
+
 /**
  * Everyone who could hold a job, best first: the preferred positions, then
  * the second choice, then the rest, by rating inside a tier. The captain's
  * tiers are the design's: 24 or older, 76 or better, not a youth player and
  * not on loan, ranked on rating plus age; then any grown man; then anyone.
- * A man on loan is never listed. Deterministic (ties on name), so a screen
- * can call it at render time and the auto pick is the head of this list.
+ * A loan signing can take kicks by manual assignment. The list is
+ * deterministic (ties on name), so a screen can call it at render time.
  */
 export function setPieceCandidates(state: CareerState, key: SetPieceKey): CMPlayer[] {
-  const pool = state.squad.filter(p => !p.onLoan);
+  const pool = state.squad.filter(p => eligibleForSetPiece(p, key));
   if (key === 'captain') {
     const tier = (p: CMPlayer): number => (!p.isYouth && p.age >= CAPTAIN_MIN_AGE && p.rating >= CAPTAIN_MIN_RATING ? 0 : !p.isYouth ? 1 : 2);
     return [...pool].sort((a, b) => tier(a) - tier(b) || (b.rating + b.age) - (a.rating + a.age) || a.name.localeCompare(b.name));
@@ -17696,20 +17700,18 @@ export function setPieceCandidates(state: CareerState, key: SetPieceKey): CMPlay
     const i = tiers.findIndex(t => t.includes(p.position));
     return i < 0 ? tiers.length : i;
   };
-  return pool
-    .filter(p => p.position !== 'GK')
-    .sort((a, b) => tier(a) - tier(b) || b.rating - a.rating || a.name.localeCompare(b.name));
+  return pool.sort((a, b) => tier(a) - tier(b) || b.rating - a.rating || a.name.localeCompare(b.name));
 }
 
 function autoSetPiecePick(state: CareerState, key: SetPieceKey, exclude?: string | null): string | null {
-  const c = setPieceCandidates(state, key);
+  const c = setPieceCandidates(state, key).filter(p => !p.onLoan);
   return (c.find(p => p.id !== exclude) ?? c[0])?.id ?? null;
 }
 
 /**
  * The set piece block, repaired: a block from before this round is built,
- * a mangled one is rebuilt, a job naming a man who has left or is on loan
- * is cleared, and every empty job is handed to the auto pick. The two
+ * a mangled one is rebuilt, a job naming a man who has left is cleared,
+ * and every empty job is handed to the auto pick. The two
  * corner jobs go to two different men where the squad allows it. Called
  * before every match and on load, the way ensureStaff is.
  */
@@ -17717,8 +17719,9 @@ export function ensureSetPieces(state: CareerState): SetPieces {
   const sp: SetPieces = isValidSetPieces(state.setPieces)
     ? state.setPieces
     : { captain: null, cornersLeft: null, cornersRight: null, freeKicks: null, penalties: null };
-  const here = (id: string | null): boolean => !!id && state.squad.some(p => p.id === id && !p.onLoan);
-  for (const k of SET_PIECE_KEYS) if (!here(sp[k])) sp[k] = null;
+  const here = (id: string | null, key: SetPieceKey): boolean =>
+    !!id && state.squad.some(p => p.id === id && (!p.onLoan || eligibleForSetPiece(p, key)));
+  for (const k of SET_PIECE_KEYS) if (!here(sp[k], k)) sp[k] = null;
   if (!sp.captain) sp.captain = autoSetPiecePick(state, 'captain');
   if (!sp.cornersLeft) sp.cornersLeft = autoSetPiecePick(state, 'cornersLeft', sp.cornersRight);
   if (!sp.cornersRight) sp.cornersRight = autoSetPiecePick(state, 'cornersRight', sp.cornersLeft);
@@ -17730,15 +17733,14 @@ export function ensureSetPieces(state: CareerState): SetPieces {
 
 /**
  * Hand a job to a man, or clear it (null: the auto pick fills it before the
- * next match). Null back when the man is not in the squad, is on loan, or is
- * a keeper asked to take a set piece. Pure: a copy comes back.
+ * next match). Null back when the man is outside the squad or ineligible
+ * for the job. Pure: a copy comes back.
  */
 export function setSetPiece(career: CareerState, key: SetPieceKey, playerId: string | null): CareerState | null {
   if (!SET_PIECE_KEYS.includes(key)) return null;
   if (playerId !== null) {
     const p = career.squad.find(x => x.id === playerId);
-    if (!p || p.onLoan) return null;
-    if (key !== 'captain' && p.position === 'GK') return null;
+    if (!p || !eligibleForSetPiece(p, key)) return null;
   }
   const state: CareerState = JSON.parse(JSON.stringify(career));
   const sp = ensureSetPieces(state);
@@ -18827,7 +18829,7 @@ function drawSegment(
       if (side === 'me') {
         const on = mineAt(minute);
         const p = assignedOnPitch(state.setPieces, 'penalties', on)
-          ?? setPieceCandidates(state, 'penalties').find(p => on.some(man => man.id === p.id)) ?? on[0];
+          ?? setPieceCandidates(state, 'penalties').find(p => !p.onLoan && on.some(man => man.id === p.id)) ?? on[0];
         return p ? { id: p.id, name: p.name } : null;
       }
       const p = [...(oppAt(live, minute) ?? [])].sort((a, b) => oppShotWeight(b) - oppShotWeight(a) || a.n.localeCompare(b.n))[0];

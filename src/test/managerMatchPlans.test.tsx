@@ -1,9 +1,9 @@
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  DEFAULT_ERA_ID, FORMATIONS, SET_PIECE_KEYS, SAVE_KEY, autoPickXI, dutyOptions,
-  effectiveXIWithSlots, loadCareer, matchStrengthNow, playNextEntry, saveCareer,
-  setDuty, setSetPiece, setShootoutOrder, startCareer, startNextSeason,
+  DEFAULT_ERA_ID, FORMATIONS, SET_PIECE_KEYS, SAVE_KEY, autoPickXI, autoSetPieces, breakLoan, dutyOptions,
+  effectiveXIWithSlots, loadCareer, loanIn, loanOutPlayer, matchStrengthNow, playNextEntry, saveCareer,
+  setDuty, setPieceCandidates, setSetPiece, setShootoutOrder, startCareer, startNextSeason,
 } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import {
@@ -69,6 +69,64 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); localStorage.clear(); });
 
 describe('Club Manager saved match plans', () => {
+  it('lets an incoming loan starter take set pieces through the picker, a saved plan and kickoff', async () => {
+    const initial = fixture();
+    const signed = loanIn(initial, { name: 'Fixture Loan Taker', club: 'Everton', position: 'CM', age: 20, rating: 84, price: 8, generated: true })!;
+    const loanee = signed.squad.find(p => p.name === 'Fixture Loan Taker')!;
+    expect(loanee).toMatchObject({ onLoan: true, loanFrom: 'Everton' });
+    const slot = signed.xiIds.findIndex(id => signed.squad.find(p => p.id === id)?.position === 'CM');
+    expect(slot).toBeGreaterThanOrEqual(0);
+    const owned = signed.xiIds[slot]!;
+    signed.xiIds[slot] = loanee.id;
+    expect(setSetPiece(signed, 'captain', loanee.id)).toBeNull();
+    const jobs = SET_PIECE_KEYS.filter(key => key !== 'captain');
+    for (const key of jobs) {
+      expect(setPieceCandidates(signed, key).map(p => p.id)).toEqual(expect.arrayContaining([owned, loanee.id]));
+      expect(setSetPiece(signed, key, owned)?.setPieces?.[key]).toBe(owned);
+      expect(setSetPiece(signed, key, loanee.id)?.setPieces?.[key]).toBe(loanee.id);
+    }
+    const lowerRatedHosts = signed.squad.map(p => p.id === loanee.id ? p : { ...p, rating: 65 });
+    const rated = { ...signed, squad: lowerRatedHosts };
+    expect(autoSetPieces(rated).setPieces).toEqual(autoSetPieces({ ...rated, squad: lowerRatedHosts.filter(p => !p.onLoan) }).setPieces);
+
+    const view = await mountCareer(signed);
+    fireEvent.click(q('[data-cm-tile-btn="setpieces"]'));
+    for (const key of jobs) {
+      fireEvent.click(q(`[data-cm-sp-row="${key}"]`));
+      fireEvent.click(q(`[data-cm-sp-opt="${loanee.id}"]`));
+      expect(q(`[data-cm-sp-man="${key}"]`)).toHaveTextContent(loanee.name);
+    }
+    const saved = loadCareer()!;
+    view.unmount();
+    const plan = saveMatchPlan(saved, 0, 'Loan taker');
+    const applied = applyMatchPlan(autoSetPieces(plan), 0);
+    expect(jobs.map(key => applied.setPieces?.[key])).toEqual(jobs.map(() => loanee.id));
+
+    const ownedTaker = effectiveXIWithSlots(applied).find(({ p }) => p.id !== loanee.id && p.position !== 'GK')!.p;
+    const counter = setSetPiece(applied, 'penalties', ownedTaker.id)!;
+    random.mockImplementation(stream(1005)); random.mockClear();
+    const opened = playNextEntry(applied);
+    const draws = random.mock.calls.length;
+    random.mockImplementation(stream(1005)); random.mockClear();
+    const ownedKickoff = playNextEntry(counter);
+    expect(random.mock.calls.length).toBe(draws);
+    expect(opened.state.live?.startXi).toContain(loanee.id);
+    expect(opened.state.live?.myGoals).toBe(ownedKickoff.state.live?.myGoals);
+    expect(opened.state.live?.oppGoals).toBe(ownedKickoff.state.live?.oppGoals);
+    const penalty = ownedKickoff.state.live?.h1My?.find(goal => goal.penalty);
+    expect(penalty?.id).toBe(ownedTaker.id);
+    expect(opened.state.live?.h1My?.find(goal => goal.penalty)).toEqual({ ...penalty, id: loanee.id, name: loanee.name });
+    expect(jobs.map(key => opened.state.setPieces?.[key])).toEqual(jobs.map(() => loanee.id));
+    expect(opened.state.setPieces?.captain).toBe(initial.setPieces?.captain);
+    const ended = breakLoan(applied, loanee.id)!;
+    expect(ended.squad.some(p => p.id === loanee.id)).toBe(false);
+    expect(jobs.map(key => ended.setPieces?.[key])).toEqual(jobs.map(() => null));
+    expect(Object.values(applyMatchPlan(ended, 0).setPieces ?? {})).not.toContain(loanee.id);
+    const nextSeason = startNextSeason(applied);
+    expect(nextSeason.squad.some(p => p.id === loanee.id)).toBe(false);
+    expect(Object.values(nextSeason.setPieces ?? {})).not.toContain(loanee.id);
+  });
+
   it('retains an independent engine kickoff and saved tactics baseline without using match plans', () => {
     const c = fixture(), expected = clone(tactics(c)), before = JSON.stringify(c);
     const xi = effectiveXIWithSlots(c);
@@ -244,14 +302,16 @@ describe('Club Manager saved match plans', () => {
     expect(matchPlansOf(replacement)).toHaveLength(1); expect(matchPlansOf(replacement)[0].clubName).toBe('Barcelona');
   });
 
-  it('drops departed or loaned taker assignments while keeping the saved request for honest previews', () => {
+  it('drops departed or loaned-out taker assignments while keeping the saved request', () => {
     const saved = saveMatchPlan(fixture(), 0, 'First XI'), plan = clone(matchPlansOf(saved)[0]);
     const gone = plan.setPieces.captain!, loaned = plan.setPieces.cornersLeft!;
-    const c = { ...saved, squad: saved.squad.filter(p => p.id !== gone).map(p => p.id === loaned ? { ...p, onLoan: true } : p) };
+    const away = loanOutPlayer(saved, loaned, 'Everton')!;
+    expect(away.loanedOut?.some(entry => entry.player.id === loaned)).toBe(true);
+    const c = { ...away, squad: away.squad.filter(p => p.id !== gone) };
     const applied = applyMatchPlan(c, 0);
     expect(applied.setPieces!.captain).toBeNull(); expect(applied.setPieces!.cornersLeft).toBeNull();
     expect(applied.setPieces!.cornersRight).toBe(plan.setPieces.cornersRight);
-    expect(applied.shootoutOrder).toEqual(plan.shootoutOrder.filter(id => id !== gone));
+    expect(applied.shootoutOrder).toEqual(plan.shootoutOrder.filter(id => id !== gone && id !== loaned));
     expect(matchPlansOf(applied)[0]).toEqual(plan);
     const loaded = (saveCareer(applied), loadCareer()!);
     expect(loaded.setPieces!.captain).not.toBe(gone); expect(loaded.setPieces!.cornersLeft).not.toBe(loaned);
