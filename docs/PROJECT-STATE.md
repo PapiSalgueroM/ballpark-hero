@@ -1,3 +1,26 @@
+## 2026-11-15: NRL edge tactics, career decisions and easier game controls
+
+- NRL Team Manager adds Attack left and Attack right at kickoff, halftime and 60 minutes. The preview compares the selected wing and centre with the rival's opposite edge. The new options use the same two-point defence cost as Shift wide and appear in saved reports.
+- Soccer Career uses the saved opening overall to judge last season's league minutes. Closing overall still drives squad fit and future projections. The seven-match elite-club example now reaches normal contract expiry after growing from 70 to 71 OVR. The five-match control still triggers release.
+- Club Manager lets an incoming outfielder take penalties, free kicks and corners through manual assignment. The choice works in saved match plans and clears when the player leaves. Automatic choices and captain eligibility follow their existing rules.
+- Build Your XI keeps each pitch card within its row spacing, so a long name leaves the next slot tappable. The position coordinates and chemistry rules stay the same.
+- Home's Game picks link opens and focuses Games to try even when Your picks is visible. The existing direct link and Back focus work in both states.
+
+Application types and the production build passed. All 49 pinned browser cases, 20 site checks and 16 download budgets passed locally. The Build Your XI sweep covered all six formations at four widths and found no pitch card overlaps. Across 336 paired NRL fixtures, the two directions changed club scoring in 49 fixtures. The 1,344 existing-plan saves and 2,256 unrelated match results stayed identical. Only the NRL guide, its lastmod entry and the guide search index were regenerated.
+
+## Game priorities from traffic and play activity
+
+The Oct 16 to Nov 15 Lovable pageview report puts Soccer Career and Club Manager first among games, with NBA My Career, NFL My Career, Stadium Tycoon and Build Your XI also in its ten reported routes. Australia ranks second among countries.
+
+The site's public most-played aggregate returned these 20 game routes by distinct saved player handles at 10:23 UTC on Nov 15. This is a partial-day sample for planning. It weights a handle once per game, even if it records many seasons.
+
+1. Soccer Career, Club Manager, NBA My Career, Soccer Perfect Season, Stadium Tycoon
+2. NFL My Career, Wonderkid Factory, NHL My Career, MLB My Career, World XI
+3. NFL Front Office, Mystery Box, Build Your XI, Dart Draft, Manager Hot Seat
+4. MLB Front Office, NHL Front Office, NBA Perfect Season, Soccer Grid, Who Am I
+
+NRL Team Manager and Aussie Rules Manager remain explicit priorities for Australian players.
+
 ## 2026-11-15: Matchday squads, player logs, ticket quotes and playoff appearances
 
 [PR #992](https://github.com/PapiSalgueroM/ballpark-hero/pull/992) published exact main `4ca4c602de2d8b108bdddd0d993572f815b3cb15`, deployment `a59b3b81-68b7-4b49-ab04-3307437f5a8f`, canonical entry `/assets/index-B2_WY7cg.js`. The merged tree matched tested head `02797854c`. All 16 live browser cases, 174 sitemap routes and 14 pinned endpoint checks passed. IndexNow accepted the NRL, Aussie Rules and NFL guides. The full local SEO split check also passed across 174 routes and 32 chunks, bringing the local site checks to 20. Hosted application types and build passed. The broader hosted career decision outcome step reported a failure.
@@ -8,12 +31,6 @@
 - NFL My Career records personal playoff appearances separately from team games for newly simulated backup quarterbacks. The paired title fixture records one personal appearance in four team games. The Wild Card fixture records zero appearances and leaves out the player stat line. Existing playoff records keep their original display.
 
 The combined source passed 128 focused tests. The rebuilt candidate passed all 16 pinned Chromium cases, 19 site checks and 16 download budgets. The four changed games' rendered SEO fields matched their saved pages. The three guide snapshots and their lastmod ledger entries were regenerated. The Aussie comparison matched 5,027 automatic transitions over 60 seasons and kept the chosen defender in 30 of 30 opted-in cases. Updated Aussie club-name and NFL season-tile checks now follow the live scoring list and designed-run fields.
-
-## Next verified product issues
-
-- A pinned game sent Home's Game picks shortcut to the personal shelf, leaving Games to try below the viewport at all three phone sizes tested. The personal heading needs a unique ID so existing discovery links land on the right shelf.
-- NRL's wide plan averages both edges. In a 336-fixture probe of a proposed directional choice, 113 pairs differed by at least two attack rating and 49 changed the managed club's scoring. All 2,256 other fixture rows matched. Carry forward the existing wide plan and compare each edge with the physically opposite defenders.
-- Soccer Career records league appearances before applying development. Its contract verdict can then use the closing overall to raise the benchmark for those appearances. A paired seven-game elite-club fixture flipped from normal expiry to release after one point of growth. The five-game control still warranted release at the opening rating.
 
 ## 2026-11-15: NBA defensive assignments and first-year NFL rookie contracts
 

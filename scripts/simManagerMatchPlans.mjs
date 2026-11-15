@@ -8,6 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 const self = fileURLToPath(import.meta.url), root = path.resolve(path.dirname(self), '..');
 const helper = 'src/lib/clubManagerMatchPlans.ts', card = 'src/components/club-manager/MatchPlansCard.tsx';
+const core = 'src/lib/clubManagerMatchPlansCore.ts';
 const hook = 'src/hooks/useClubManager.ts', tactics = 'src/components/club-manager/TacticsScreen.tsx';
 const testFile = 'src/test/managerMatchPlans.test.tsx';
 const cases = {
@@ -19,39 +20,41 @@ const cases = {
   slots: 'keeps three named slots independent and replaces or deletes only the selected saved setup',
   invalid: 'ignores damaged and old plan metadata without discarding the earned career',
   club: 'refuses another club or era and keeps valid plans across the same clubs next season',
-  takers: 'drops departed or loaned taker assignments while keeping the saved request for honest previews',
+  takers: 'drops departed or loaned-out taker assignments while keeping the saved request',
+  loanKicks: 'lets an incoming loan starter take set pieces through the picker, a saved plan and kickoff',
   guards: 'blocks saved plan actions during a live match a sack or a stale manager slot',
   controls: 'shows the worked example and current assignments then restores focus when the plan tile closes',
   reveal: 'reveals the actual plan action row after opening and selecting a saved setup',
   refused: 'reports refused actual plan clicks without success notices or clearing a pending bench selection',
 };
 const controls = {
-  captureXi: { file: helper, from: 'xiIds: formation.slots.map((_, i) => career.xiIds[i] ?? null),', to: 'xiIds: formation.slots.map(() => null),', test: cases.capture },
-  captureDuty: { file: helper, from: 'xiDuties: formation.slots.map((_, i) => slotDuty(career, formation, i)),', to: 'xiDuties: formation.slots.map(() => null),', test: cases.capture },
-  captureTakers: { file: helper, from: 'setPieces: currentSetPieces(career, career.setPieces),', to: 'setPieces: currentSetPieces(career, undefined),', test: cases.capture },
-  captureShootout: { file: helper, from: 'shootoutOrder: [...new Set(shootoutOrderOf(career) ?? [])].slice(0, SHOOTOUT_MAX_ORDER),', to: 'shootoutOrder: [],', test: cases.capture },
-  alias: { file: helper, from: 'xiIds: formation.slots.map((_, i) => career.xiIds[i] ?? null),', to: 'xiIds: career.xiIds,', test: cases.capture },
-  random: { file: helper, from: 'const label = name.trim().replace', to: 'Math.random();\n  const label = name.trim().replace', test: cases.capture },
+  captureXi: { file: core, from: 'xiIds: formation.slots.map((_, i) => career.xiIds[i] ?? null),', to: 'xiIds: formation.slots.map(() => null),', test: cases.capture },
+  captureDuty: { file: core, from: 'xiDuties: formation.slots.map((_, i) => slotDuty(career, formation, i)),', to: 'xiDuties: formation.slots.map(() => null),', test: cases.capture },
+  captureTakers: { file: core, from: 'setPieces: currentSetPieces(career, career.setPieces),', to: 'setPieces: currentSetPieces(career, undefined),', test: cases.capture },
+  captureShootout: { file: core, from: 'shootoutOrder: [...new Set(shootoutOrderOf(career) ?? [])].slice(0, SHOOTOUT_MAX_ORDER),', to: 'shootoutOrder: [],', test: cases.capture },
+  alias: { file: core, from: 'xiIds: formation.slots.map((_, i) => career.xiIds[i] ?? null),', to: 'xiIds: career.xiIds,', test: cases.capture },
+  random: { file: core, from: 'const label = name.trim().replace', to: 'Math.random();\n  const label = name.trim().replace', test: cases.capture },
   hookSave: { file: hook, from: "const next = savePlan(now, slot, name);", to: "const next = now;", test: cases.mounted },
   hookApply: { file: hook, from: "const next = applyPlan(now, slot);", to: "const next = now;", test: cases.mounted },
   persistence: { file: hook, from: 'const ok = saveCareer(c);', to: 'const ok = true;', test: cases.mounted },
-  applyFormation: { file: helper, from: '...career, formationIndex: plan.formationIndex, mentality: plan.mentality,', to: '...career, formationIndex: career.formationIndex, mentality: plan.mentality,', test: cases.mounted },
-  applyMentality: { file: helper, from: '...career, formationIndex: plan.formationIndex, mentality: plan.mentality,', to: '...career, formationIndex: plan.formationIndex, mentality: career.mentality,', test: cases.mounted },
+  applyFormation: { file: core, from: '...career, formationIndex: plan.formationIndex, mentality: plan.mentality,', to: '...career, formationIndex: career.formationIndex, mentality: plan.mentality,', test: cases.mounted },
+  applyMentality: { file: core, from: '...career, formationIndex: plan.formationIndex, mentality: plan.mentality,', to: '...career, formationIndex: plan.formationIndex, mentality: career.mentality,', test: cases.mounted },
   replacements: { file: helper, from: 'player: kickoff?.p ?? null, duty:', to: 'player: picked, duty:', test: cases.preview },
   strength: { file: helper, from: 'currentStrength: matchStrengthNow(career), strength: matchStrengthNow(state),', to: 'currentStrength: matchStrengthNow(career), strength: matchStrengthNow(career),', test: cases.preview },
   fitness: { file: helper, from: 'sum + x.p.fitness, 0) / actual.length', to: 'sum + x.p.rating, 0) / actual.length', test: cases.preview },
   previewText: { file: card, from: '{preview.strength.toFixed(1)} with plan', to: '{preview.currentStrength.toFixed(1)} with plan', test: cases.preview },
-  kickoffDuty: { file: helper, from: 'xiIds: [...plan.xiIds], xiDuties: [...plan.xiDuties],', to: 'xiIds: [...plan.xiIds], xiDuties: [],', test: cases.kickoff },
-  kickoffXi: { file: helper, from: 'xiIds: [...plan.xiIds], xiDuties: [...plan.xiDuties],', to: 'xiIds: [...career.xiIds], xiDuties: [...plan.xiDuties],', test: cases.kickoff },
-  overwrite: { file: helper, from: 'matchPlans: [...matchPlansOf(career).filter(p => p.slot !== slot), plan]', to: 'matchPlans: [plan]', test: cases.slots },
+  kickoffDuty: { file: core, from: 'xiIds: [...plan.xiIds], xiDuties: [...plan.xiDuties],', to: 'xiIds: [...plan.xiIds], xiDuties: [],', test: cases.kickoff },
+  kickoffXi: { file: core, from: 'xiIds: [...plan.xiIds], xiDuties: [...plan.xiDuties],', to: 'xiIds: [...career.xiIds], xiDuties: [...plan.xiDuties],', test: cases.kickoff },
+  overwrite: { file: core, from: 'matchPlans: [...matchPlansOf(career).filter(p => p.slot !== slot), plan]', to: 'matchPlans: [plan]', test: cases.slots },
   delete: { file: hook, from: "const next = deletePlan(now, slot);", to: "const next = now;", test: cases.slots },
-  limit: { file: helper, from: 'export const MATCH_PLAN_LIMIT = 3;', to: 'export const MATCH_PLAN_LIMIT = 4;', test: cases.slots },
-  version: { file: helper, from: "(p.version !== 1 && p.version !== 2) || !validSlot(p.slot)", to: "!validSlot(p.slot)", test: cases.invalid },
-  club: { file: helper, from: 'p.clubName !== career.clubName || p.eraId !== (career.eraId ?? DEFAULT_ERA_ID)', to: 'p.eraId !== (career.eraId ?? DEFAULT_ERA_ID)', test: cases.club },
-  era: { file: helper, from: 'p.clubName !== career.clubName || p.eraId !== (career.eraId ?? DEFAULT_ERA_ID)', to: 'p.clubName !== career.clubName', test: cases.club },
-  takers: { file: helper, from: 'setPieces: currentSetPieces(career, plan.setPieces),', to: 'setPieces: { ...plan.setPieces },', test: cases.takers },
-  removedShootout: { file: helper, from: 'shootoutOrder: plan.shootoutOrder.filter(id => career.squad.some(p => p.id === id)),', to: 'shootoutOrder: [...plan.shootoutOrder],', test: cases.takers },
-  live: { file: helper, from: "if (career.live || career.sacked || career.wilderness || !currentTactics(career)) return false;", to: "if (career.sacked || career.wilderness || !currentTactics(career)) return false;", test: cases.guards },
+  limit: { file: core, from: 'export const MATCH_PLAN_LIMIT = 3;', to: 'export const MATCH_PLAN_LIMIT = 4;', test: cases.slots },
+  version: { file: core, from: "(p.version !== 1 && p.version !== 2) || !validSlot(p.slot)", to: "!validSlot(p.slot)", test: cases.invalid },
+  club: { file: core, from: 'p.clubName !== career.clubName || p.eraId !== (career.eraId ?? DEFAULT_ERA_ID)', to: 'p.eraId !== (career.eraId ?? DEFAULT_ERA_ID)', test: cases.club },
+  era: { file: core, from: 'p.clubName !== career.clubName || p.eraId !== (career.eraId ?? DEFAULT_ERA_ID)', to: 'p.clubName !== career.clubName', test: cases.club },
+  takers: { file: core, from: 'setPieces: currentSetPieces(career, plan.setPieces),', to: 'setPieces: { ...plan.setPieces },', test: cases.takers },
+  loanKicks: { file: core, from: 'return [key, p && eligibleForSetPiece(p, key) ? id : null];', to: 'return [key, p && !p.onLoan && eligibleForSetPiece(p, key) ? id : null];', test: cases.loanKicks },
+  removedShootout: { file: core, from: 'shootoutOrder: plan.shootoutOrder.filter(id => career.squad.some(p => p.id === id)),', to: 'shootoutOrder: [...plan.shootoutOrder],', test: cases.takers },
+  live: { file: core, from: "if (career.live || career.sacked || career.wilderness || !currentTactics(career)) return false;", to: "if (career.sacked || career.wilderness || !currentTactics(career)) return false;", test: cases.guards },
   phase: { file: hook, from: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    const now = careerRef.current;\n    if (phase !== 'hub' || !holdsActiveSlot() || !now || now.retired) return false;", to: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    const now = careerRef.current;\n    if (!holdsActiveSlot() || !now || now.retired) return false;", test: cases.guards },
   stale: { file: hook, from: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    const now = careerRef.current;\n    if (phase !== 'hub' || !holdsActiveSlot() || !now || now.retired) return false;", to: "const saveMatchPlan = useCallback((slot: number, name: string) => {\n    const now = careerRef.current;\n    if (phase !== 'hub' || !now || now.retired) return false;", test: cases.guards },
   focus: { file: card, from: 'triggerRef.current?.focus({ preventScroll: true });', to: 'void 0;', test: cases.controls },
@@ -82,7 +85,7 @@ if (control === 'all') {
   process.exit(0);
 }
 const digest = bytes => createHash('sha256').update(bytes).digest('hex');
-const held = [helper, card, hook, tactics, 'src/pages/ClubManager.tsx', 'src/lib/clubManager.ts', 'src/lib/clubManagerInternationals.ts', 'src/lib/clubManagerSlots.ts', 'src/test/clubManagerSave.test.tsx', 'src/test/clubManagerShootoutTile.test.tsx', 'scripts/simTacticsEngine.mjs', testFile, 'scripts/simManagerMatchPlans.mjs'];
+const held = [helper, core, card, hook, tactics, 'src/pages/ClubManager.tsx', 'src/lib/clubManager.ts', 'src/lib/clubManagerInternationals.ts', 'src/lib/clubManagerSlots.ts', 'src/test/clubManagerSave.test.tsx', 'src/test/clubManagerShootoutTile.test.tsx', 'scripts/simTacticsEngine.mjs', testFile, 'scripts/simManagerMatchPlans.mjs'];
 const before = {};
 for (const file of held) { const bytes = await readFile(path.join(root, file)); before[file] = digest(bytes); }
 const env = { ...process.env, FORCE_COLOR: '0' }; delete env.NO_COLOR; delete env.NO_DOUBLE_SWAP;
