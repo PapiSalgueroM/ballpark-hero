@@ -198,6 +198,67 @@ describe('MLB October starters', () => {
     return l;
   };
 
+  it.each([true, false])('uses the short-rest ace to extend a losing series and brings the cost into the next series (home=%s)', host => {
+    const league = contenders(host);
+    const play = (booked: MlbLeague) => {
+      const queue = host ? [0.1, 0.1, 0.8, 0.52, 0.49] : [0.1, 0.48, 0.5];
+      let draws = 0;
+      return runMlbPlayoffs(booked, () => queue[draws++] ?? 0.1, undefined, team)
+        .series.filter(row => row.home === team || row.away === team);
+    };
+    const defaultAce = play(setMlbOctoberRotation(league, team, true));
+    expect(defaultAce[0].october?.games.map(game => [game.rating, game.won])).toEqual([[96, false], [84, false]]);
+    const shortRest = play(setMlbOctoberRotation(league, team, 'elimination'));
+    expect(shortRest[0].winner).toBe(team);
+    expect(shortRest[0].october?.games.map(game => [game.rating, game.won])).toEqual([[96, false], [90, true], [90, true]]);
+    expect(shortRest[0].october?.games[1]).toMatchObject({ shortRest: true, aceOverride: true });
+    expect(shortRest[1].october?.games[0]).toMatchObject({ rating: 90, shortRest: true });
+    expect(shortRest[1].october?.games[0].aceOverride).toBeUndefined();
+  });
+
+  it('keeps the scheduled starter if the short-rest ace would only tie his rating', () => {
+    const booked = setMlbOctoberRotation(contenders(true, [90, 84, 72]), team, 'elimination');
+    let draws = 0;
+    const queue = [0.1, 0.1, 0.8, 0.52];
+    const row = runMlbPlayoffs(booked, () => queue[draws++] ?? 0.1, undefined, team)
+      .series.find(series => series.home === team || series.away === team)!;
+    expect(row.winner).not.toBe(team);
+    const receipt = readMlbOctoberReceipt(row, team)!;
+    expect(receipt.mode).toBe('elimination');
+    expect(receipt.games[1]).toEqual({ pitcher: 'NYY fixture 9', rating: 84, won: false });
+    expect(readMlbOctoberReceipt({ ...row, october: { team, games: [{ ...receipt.games[0], shortRest: true }, receipt.games[1]] } }, team)).toBeNull();
+  });
+
+  it('saves the elimination choice and both short-rest reasons through the actual October recap', () => {
+    const league = contenders(true);
+    localStorage.setItem(key, JSON.stringify({ league, myTeam: team, phase: 'hub', titles: 0, seasonsPlayed: 0, picksLeft: 0, draftClass: null }));
+    let mounted = render(<MlbFrontOfficeBoard />);
+    openRound();
+    fireEvent.change(october(), { target: { value: 'elimination' } });
+    const planned = localStorage.getItem(key);
+    expect(read().league.octoberRotation).toEqual({ team, season: league.season, mode: 'elimination' });
+    expect(screen.getByText('NYY fixture 8 would pitch at 90 OVR on short rest.')).toBeInTheDocument();
+    mounted.unmount();
+    mounted = render(<MlbFrontOfficeBoard />);
+    openRound();
+    expect(october()).toHaveValue('elimination');
+    expect(localStorage.getItem(key)).toBe(planned);
+    let draws = 0;
+    const cpuClubs = Object.keys(league.teams).length - 1;
+    const queue = [0.6, ...Array(6 + cpuClubs).fill(0.9), 0.1, 0.1, 0.8, 0.52, 0.49];
+    vi.spyOn(Math, 'random').mockImplementation(() => queue[draws++] ?? 0.1);
+    fireEvent.click(screen.getByRole('button', { name: /Final stretch/ }));
+    const result = read();
+    expect(result.league.octoberRotation).toBeUndefined();
+    const first = result.postseason.series.find((row: { october?: unknown }) => row.october);
+    expect(first.october.games[1]).toMatchObject({ rating: 90, won: true, shortRest: true, aceOverride: true });
+    expect(screen.getByRole('region', { name: 'October starters' })).toHaveTextContent('90 OVR · Win · Ace switched in · Short rest');
+    mounted.unmount();
+    render(<MlbFrontOfficeBoard />);
+    expect(screen.getByRole('region', { name: 'October starters' })).toHaveTextContent('Elimination plan used.');
+    expect(read()).toEqual(result);
+  });
+
   it.each([true, false])('changes played games both ways using the same draws (home=%s)', host => {
     const start = contenders(host);
     const seeds = mlbLeagueSeeds(start, true);

@@ -1100,6 +1100,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
           "Give a young bench hitter a development start. Once per season, a healthy bench hitter aged 24 or under can take the lowest-rated spot in your batting lineup for one round and gain up to one overall point after play. You keep the opportunity if the planned swap cannot play.",
           "Open Round results to revisit a played round’s record, rating changes and development starts. Earlier saves may have missing results or ratings.",
           "Before the final stretch, choose Start the ace first to use three individual starters in each playoff series. A 96, 84 and 72 rotation uses 96 in Game 1, 84 in Game 2 and 72 in Game 3, then repeats. The usual rotation averages all three. The season recap shows each actual starter and result.",
+          "Use the ace in elimination games to make a late change when the ace still rates higher than the scheduled starter. A 96-rated ace pitches at 90 on short rest. He needs two team games between starts, even between series. The recap marks the switch, short rest and the rating used.",
         ],
       },
       {
