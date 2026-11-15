@@ -56,11 +56,11 @@ describe('NRL Live golden point', () => {
     expect(reduceNrlCareer(paused, settle)).toEqual(reduceNrlCareer(started, { ...finish, tactic: 'attack' }));
   });
 
-  it('replays a specialist attack plan chosen only at 60 minutes', () => {
+  it.each(['middle', 'wideRight'] as const)('replays the %s attack plan chosen only at 60 minutes', attackPlan => {
     const started = atMinute60(live(29));
-    const throughRegulation = { ...finishFrom60, attackPlan: 'middle' } as const;
+    const throughRegulation = { ...finishFrom60, attackPlan } as const;
     const paused = reduceNrlCareer(started, { ...throughRegulation, pauseForGoldenPoint: true });
-    expect(paused.season.live?.goldenPoint?.finish.attackPlan).toBe('middle');
+    expect(paused.season.live?.goldenPoint?.finish.attackPlan).toBe(attackPlan);
     const expected = reduceNrlCareer(started, throughRegulation);
     const restored = read(paused)!;
     expect(restored).toEqual(paused);

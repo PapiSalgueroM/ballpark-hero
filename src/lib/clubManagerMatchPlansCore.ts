@@ -1,6 +1,6 @@
 import {
   DEFAULT_ERA_ID, FORMATIONS, MENTALITIES, SET_PIECE_KEYS, SHOOTOUT_MAX_ORDER,
-  slotDuty, dutyOptions, shootoutOrderOf,
+  slotDuty, dutyOptions, eligibleForSetPiece, shootoutOrderOf,
 } from '@/lib/clubManager';
 import type { CareerState, Duty, Mentality, SetPieces } from '@/lib/clubManager';
 import { BALANCED, INSTRUCTION_KEYS, isBalanced, readInstructions, type TeamInstructions } from '@/lib/clubManagerTacticsCore';
@@ -103,7 +103,7 @@ function currentSetPieces(career: CareerState, source: SetPieces | undefined): S
   return Object.fromEntries(SET_PIECE_KEYS.map(key => {
     const id = source?.[key] ?? null;
     const p = career.squad.find(player => player.id === id);
-    return [key, p && !p.onLoan && (key === 'captain' || p.position !== 'GK') ? id : null];
+    return [key, p && eligibleForSetPiece(p, key) ? id : null];
   })) as unknown as SetPieces;
 }
 

@@ -2,7 +2,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, renderHook } from '@testing-library/react';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import type { PickMeta } from '@/types/lineupBuilder';
+import { clubs, nations } from '@/data/lineupTeams';
+import { BUILD_XI_DRAFT_KEY, readBuildXiDraft } from '@/lib/buildXiDraft';
+import { FORMATIONS, type PickMeta } from '@/types/lineupBuilder';
 
 /* Fictional players and deferred transport. The actual hook and position/validator
    code run. Only deterministic team assignment, transport and completion side
@@ -26,6 +28,7 @@ const FULLBACK: PickMeta = { rawName: 'Fixture Harbor Fullback', rawPosition: 'R
 const NATION: PickMeta = { ...STRIKER, rawName: 'Fixture Nation Striker', club: 'Fixture Harbor FC', nationality: 'Argentina' };
 type Hook = ReturnType<typeof useLineupBuilder>;
 type Result = { current: Hook };
+type Draft = NonNullable<ReturnType<typeof readBuildXiDraft>>;
 type Pending = { url: string; kind: 'history' | 'validator'; settled: boolean; release: (body: unknown) => void };
 const copy = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const observations: Record<string, unknown> = {};
@@ -38,7 +41,37 @@ function stores() {
 }
 function state(result: Result) {
   return { hook: JSON.parse(JSON.stringify(result.current, (_key, value) => value instanceof Map ? [...value] : typeof value === 'function' ? undefined : value)),
-    draws: [...draws], stores: stores(), trace: copy(trace) };
+    draws: [...draws], stores: stores(), trace: copy(trace),
+    writes: {
+      sets: copy(vi.mocked(Storage.prototype.setItem).mock.calls),
+      removes: copy(vi.mocked(Storage.prototype.removeItem).mock.calls),
+    } };
+}
+type State = ReturnType<typeof state>;
+function expectStored(actual: State, draft: Draft | null, before?: State) {
+  const local: Record<string, string> = { 'xi-race-sentinel': 'local-held' };
+  const sets = [...(before?.writes.sets ?? [])];
+  const removes = [...(before?.writes.removes ?? [])];
+  if (draft) {
+    const raw = JSON.stringify(draft);
+    local[BUILD_XI_DRAFT_KEY] = raw;
+    sets.push([BUILD_XI_DRAFT_KEY, raw]);
+  } else {
+    removes.push([BUILD_XI_DRAFT_KEY]);
+  }
+  expect(actual.stores).toEqual({ local, session: { 'xi-race-sentinel': 'session-held' } });
+  expect(actual.writes).toEqual({ sets, removes });
+}
+function expectNoWrite(actual: State, before: State) {
+  expect(actual.stores).toEqual(before.stores);
+  expect(actual.writes).toEqual(before.writes);
+}
+function expectPickStored(actual: State, before: State, slot: number, pick: PickMeta) {
+  const draft = readBuildXiDraft(before.stores.local[BUILD_XI_DRAFT_KEY])!;
+  const team = draft.teamAssignments[0];
+  expectStored(actual, { ...draft, slots: [[slot, {
+    ...FORMATIONS[draft.formation][slot], playerName: pick.rawName!, assignedTeam: team.name, isNation: team.isNation, pick,
+  }]] }, before);
 }
 function retain(id: string, row: unknown) {
   observations[id] = copy(row);
@@ -56,6 +89,11 @@ function open(slot = 9, nation = false) {
   const view = renderHook(() => useLineupBuilder());
   act(() => view.result.current.selectFormation('4-4-2'));
   act(() => view.result.current.selectPosition(slot));
+  expectStored(state(view.result), {
+    formation: '4-4-2', draftChoice: { mode: 'mixed' },
+    teamAssignments: (nation ? nations : clubs).slice(0, 11).map(name => ({ name, isNation: nation })),
+    slots: [],
+  });
   trace.push({ action: 'actual selectFormation/selectPosition', formation: '4-4-2', slot, team: view.result.current.currentTeam });
   return view;
 }
@@ -76,6 +114,7 @@ beforeEach(async () => {
   await act(async () => {});
   fixture.nation = false; draws = []; trace = []; pending = []; active = [];
   localStorage.clear(); sessionStorage.clear(); localStorage.setItem('xi-race-sentinel', 'local-held'); sessionStorage.setItem('xi-race-sentinel', 'session-held');
+  vi.spyOn(Storage.prototype, 'setItem'); vi.spyOn(Storage.prototype, 'removeItem');
   vi.spyOn(Math, 'random').mockImplementation(() => { draws.push(0.5); return 0.5; });
   vi.spyOn(Date, 'now').mockReturnValue(Date.UTC(2026, 9, 16, 12));
   vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
@@ -117,7 +156,9 @@ describe('Build Your XI history selection ownership', () => {
     expect(view.result.current.isValidating).toBe(false);
     expect(pending.map(request => request.kind)).toEqual(['history']);
     expect(draws).toEqual([]);
-    expect(afterHistory.stores).toEqual(before.stores);
+    expectNoWrite(duringHistory, before);
+    expectNoWrite(afterRetry, before);
+    expectPickStored(afterHistory, before, 9, { ...DEFENDER, played: ['ST'] });
   });
 
   it('history race preservation: a matching-primary club pick stays local and immediate', async () => {
@@ -126,7 +167,8 @@ describe('Build Your XI history selection ownership', () => {
     const after = state(view.result); retain('primary', { before, after, input: KEEPER });
     expect(view.result.current.filledSlots.get(0)?.playerName).toBe(KEEPER.rawName);
     expect(view.result.current.isValidating).toBe(false);
-    expect(pending).toEqual([]); expect(draws).toEqual([]); expect(after.stores).toEqual(before.stores);
+    expect(pending).toEqual([]); expect(draws).toEqual([]);
+    expectPickStored(after, before, 0, KEEPER);
   });
 
   it('history race preservation: valid history still admits the originally selected player', async () => {
@@ -136,7 +178,9 @@ describe('Build Your XI history selection ownership', () => {
     expect(view.result.current.filledSlots.get(9)?.playerName).toBe(FIRST);
     expect(view.result.current.filledSlots.get(9)?.pick?.played).toEqual(['ST']);
     expect(view.result.current.isValidating).toBe(false);
-    expect(pending.map(request => request.kind)).toEqual(['history']); expect(draws).toEqual([]); expect(after.stores).toEqual(before.stores);
+    expect(pending.map(request => request.kind)).toEqual(['history']); expect(draws).toEqual([]);
+    expectNoWrite(during, before);
+    expectPickStored(after, before, 9, { ...DEFENDER, played: ['ST'] });
   });
 
   it('history race preservation: refused history releases the picker for a valid retry', async () => {
@@ -148,7 +192,10 @@ describe('Build Your XI history selection ownership', () => {
     expect(refused.hook.filledCount).toBe(0); expect(refused.hook.validationError).toContain('slot needs');
     expect(retryEnabled).toBe(true); expect(view.result.current.filledSlots.get(9)?.playerName).toBe(SECOND);
     expect(view.result.current.validationError).toBeNull(); expect(view.result.current.isValidating).toBe(false);
-    expect(pending.map(request => request.kind)).toEqual(['history']); expect(draws).toEqual([]); expect(afterRetry.stores).toEqual(before.stores);
+    expect(pending.map(request => request.kind)).toEqual(['history']); expect(draws).toEqual([]);
+    expectNoWrite(during, before);
+    expectNoWrite(refused, before);
+    expectPickStored(afterRetry, before, 9, STRIKER);
   });
 
   it('history race preservation: an unverified nation pick releases the picker and retry can succeed', async () => {
@@ -163,7 +210,10 @@ describe('Build Your XI history selection ownership', () => {
     expect(during.hook.isValidating).toBe(true); expect(unverified.hook.filledCount).toBe(0);
     expect(unverified.hook.validationError).toBe('Fixture temporarily unavailable'); expect(retryEnabled).toBe(true);
     expect(view.result.current.filledSlots.get(9)?.playerName).toBe(NATION.rawName); expect(view.result.current.isValidating).toBe(false);
-    expect(pending.map(request => request.kind)).toEqual(['validator', 'validator']); expect(draws).toEqual([]); expect(afterRetry.stores).toEqual(before.stores);
+    expect(pending.map(request => request.kind)).toEqual(['validator', 'validator']); expect(draws).toEqual([]);
+    expectNoWrite(during, before);
+    expectNoWrite(unverified, before);
+    expectPickStored(afterRetry, before, 9, NATION);
   });
 
   it('history race preservation: reroll abandons a pending history without publishing into its new team', async () => {
@@ -172,9 +222,13 @@ describe('Build Your XI history selection ownership', () => {
     const cancelled = state(view.result);
     await release(pending[0], validHistory, done);
     const after = state(view.result); retain('reroll', { before, during, cancelled, after, input: DEFENDER });
-    expect(after.hook).toEqual(cancelled.hook); expect(after.draws).toEqual(cancelled.draws); expect(after.stores).toEqual(cancelled.stores); expect(view.result.current.filledSlots.size).toBe(0);
+    expect(after.hook).toEqual(cancelled.hook); expect(after.draws).toEqual(cancelled.draws); expect(view.result.current.filledSlots.size).toBe(0);
     expect(view.result.current.selectedPositionIndex).toBeNull(); expect(view.result.current.isValidating).toBe(false);
-    expect(draws).toEqual([0.5]); expect(after.stores).toEqual(before.stores);
+    expect(draws).toEqual([0.5]);
+    const draft = readBuildXiDraft(before.stores.local[BUILD_XI_DRAFT_KEY])!;
+    expectNoWrite(during, before);
+    expectStored(cancelled, { ...draft, teamAssignments: [{ name: 'Brazil', isNation: true }, ...draft.teamAssignments.slice(1)] }, before);
+    expectNoWrite(after, cancelled);
   });
 
   it('history race preservation: reset abandons a pending history without repopulating the formation', async () => {
@@ -183,9 +237,12 @@ describe('Build Your XI history selection ownership', () => {
     const cancelled = state(view.result);
     await release(pending[0], validHistory, done);
     const after = state(view.result); retain('reset', { before, during, cancelled, after, input: DEFENDER });
-    expect(after.hook).toEqual(cancelled.hook); expect(after.draws).toEqual(cancelled.draws); expect(after.stores).toEqual(cancelled.stores); expect(view.result.current.phase).toBe('formation');
+    expect(after.hook).toEqual(cancelled.hook); expect(after.draws).toEqual(cancelled.draws); expect(view.result.current.phase).toBe('formation');
     expect(view.result.current.formation).toBeNull(); expect(view.result.current.filledSlots.size).toBe(0);
-    expect(view.result.current.isValidating).toBe(false); expect(draws).toEqual([]); expect(after.stores).toEqual(before.stores);
+    expect(view.result.current.isValidating).toBe(false); expect(draws).toEqual([]);
+    expectNoWrite(during, before);
+    expectStored(cancelled, null, before);
+    expectNoWrite(after, cancelled);
   });
 
   it('history race preservation: the existing next-door history wait stays busy and settles normally', async () => {
@@ -194,6 +251,8 @@ describe('Build Your XI history selection ownership', () => {
     const after = state(view.result); retain('next-door', { before, during, after, input: FULLBACK });
     expect(during.hook.isValidating).toBe(true); expect(view.result.current.filledSlots.get(1)?.playerName).toBe(FULLBACK.rawName);
     expect(view.result.current.isValidating).toBe(false); expect(pending.map(request => request.kind)).toEqual(['history']);
-    expect(draws).toEqual([]); expect(after.stores).toEqual(before.stores);
+    expect(draws).toEqual([]);
+    expectNoWrite(during, before);
+    expectPickStored(after, before, 1, FULLBACK);
   });
 });

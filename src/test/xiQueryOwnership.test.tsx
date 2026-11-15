@@ -3,6 +3,8 @@ import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } 
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { BUILD_XI_DRAFT_KEY, readBuildXiDraft } from '@/lib/buildXiDraft';
+import { FORMATIONS } from '@/types/lineupBuilder';
 
 /* The actual page, hook, picker, search ranking, pitch and spinner run remotely.
  * Shell/SEO/ad wrappers are omitted. Auth/completion and Supabase's fluent HTTP
@@ -67,17 +69,28 @@ type Key = typeof definitions[number][0];
 type Outcome = 'valid' | 'refused' | 'network' | 'timeout';
 type Gate = { kind: 'history' | 'validator'; name: string; settled: boolean; outcome: string | null; resolve: (body: unknown) => void; reject: (reason: unknown) => void };
 type Row = Record<string, unknown> & { key: Key; title: string; moments: unknown[] };
+type Draft = NonNullable<ReturnType<typeof readBuildXiDraft>>;
 const cases: Record<string, Row> = {};
 const copy = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 let gates: Gate[], requests: Record<string, unknown>[], trace: Record<string, unknown>[], draws: { at: number; value: number }[];
 let unexpected: string[], consoleErrors: string[], clockSteps: number[], rng: number, remoteRows: boolean;
 let activeRow: Row | undefined;
+let expectedDrafts: Draft[];
 
 function stores() {
   const one = (storage: Storage) => Object.fromEntries(Array.from({ length: storage.length }, (_, index) => {
     const key = storage.key(index)!; return [key, storage.getItem(key)] as const;
   }).sort(([a], [b]) => a.localeCompare(b)));
   return { local: one(localStorage), session: one(sessionStorage) };
+}
+function expectStorage(actual: ReturnType<typeof stores>) {
+  const writes = expectedDrafts.map(draft => [BUILD_XI_DRAFT_KEY, JSON.stringify(draft)]);
+  const initial = activeRow!.initialStores as ReturnType<typeof stores>;
+  const raw = writes.at(-1)?.[1];
+  const local = raw === undefined ? initial.local : { ...initial.local, [BUILD_XI_DRAFT_KEY]: raw };
+  expect(actual).toEqual({ ...initial, local });
+  expect(vi.mocked(Storage.prototype.setItem).mock.calls).toEqual(writes);
+  expect(Storage.prototype.removeItem).not.toHaveBeenCalled();
 }
 function snapshot(label: string) {
   const input = document.querySelector<HTMLInputElement>('input[role="combobox"]');
@@ -93,7 +106,12 @@ function snapshot(label: string) {
     result: Boolean([...document.querySelectorAll('button')].find(node => node.textContent?.includes('Play Again'))),
     stores: stores(), requests: copy(requests), trace: copy(trace), draws: copy(draws), completions: copy(io.completions) };
 }
-function retain(label: string) { const value = snapshot(label); activeRow!.moments.push(value); return value; }
+function retain(label: string) {
+  const value = snapshot(label);
+  activeRow!.moments.push(value);
+  expectStorage(value.stores);
+  return value;
+}
 async function flush() { await act(async () => { for (let i = 0; i < 12; i++) await Promise.resolve(); }); }
 async function advance(ms: number) { clockSteps.push(ms); await act(async () => { await vi.advanceTimersByTimeAsync(ms); }); }
 function response(body: unknown): Response { return new Response(JSON.stringify(body), { status: 200, headers: { 'Content-Type': 'application/json' } }); }
@@ -142,11 +160,19 @@ async function pick(name: string) {
 async function open() {
   render(<LineupBuilder />); await flush();
   fireEvent.click(screen.getByRole('button', { name: /^4-4-2/ })); await flush();
+  expectedDrafts.push({
+    formation: '4-4-2', draftChoice: { mode: 'mixed' },
+    teamAssignments: ['Real Madrid', 'Barcelona', 'Manchester City', 'Liverpool', 'Bayern Munich',
+      'PSG', 'Chelsea', 'Arsenal', 'Manchester United', 'Juventus', 'AC Milan'].map(name => ({ name, isNation: false })),
+    slots: [],
+  });
   await chooseSlot(); retain('opened');
   expect(field().placeholder).toBe('Search a Real Madrid player...');
 }
 async function reroll() {
   trace.push({ action: 'reroll', at: performance.now() }); rng = 0.1; fireEvent.click(screen.getByRole('button', { name: /^Reroll: get a different team$/ })); await flush(); rng = 0.5;
+  const draft = expectedDrafts.at(-1)!;
+  expectedDrafts.push({ ...draft, teamAssignments: [{ name: 'Tottenham', isNation: false }, ...draft.teamAssignments.slice(1)] });
   retain('rerolled'); await advance(3100); await chooseSlot();
   expect(field().placeholder).toBe('Search a Tottenham player...');
   expect(field().disabled).toBe(false); retain('new-slot');
@@ -158,7 +184,19 @@ async function settleOld(gate: Gate, outcome: Outcome) {
   else await release(gate, outcome === 'valid' ? VALID_HISTORY : []);
   expect(gate.settled).toBe(true);
 }
-async function finishAccepted() {
+async function finishAccepted(name: string) {
+  const draft = expectedDrafts.at(-1)!;
+  const team = draft.teamAssignments[0];
+  expectedDrafts.push({ ...draft, slots: [[9, {
+    ...FORMATIONS['4-4-2'][9], playerName: name, assignedTeam: team.name, isNation: team.isNation,
+    pick: {
+      rawName: name, rawPosition: remoteRows ? 'Fixture Unknown' : 'Centre-Forward',
+      ...(remoteRows ? {} : { position: 'CF' }),
+      club: team.name === 'Tottenham' ? 'Tottenham Hotspur' : team.name, nationality: 'Fixture Nation',
+      value: 1_200_000 + [OLD, NEXT, PRIMARY].indexOf(name) * 100_000, age: 27, year: 2026,
+    },
+  }]] });
+  expectStorage(stores());
   await advance(3100); await chooseSlot(); expect(field().value).toBe('');
   expect(retain('accepted-next-slot').progress).toEqual(['1/11']);
 }
@@ -170,12 +208,14 @@ async function run(key: Key, body: () => Promise<boolean | void>, fault = false)
   finally {
     await act(async () => { for (const gate of gates) if (!gate.settled) gate.resolve(gate.kind === 'history' ? [] : { unverified: true, reason: 'Fixture cleanup' }); });
     await flush(); retain('settled-before-cleanup'); cleanup(); await flush();
-    Object.assign(activeRow, { finalStores: stores(), requests: copy(requests), gates: gates.map(({ kind, name, settled, outcome }) => ({ kind, name, settled, outcome })),
+    const finalStores = stores();
+    expectStorage(finalStores);
+    Object.assign(activeRow, { finalStores, requests: copy(requests), gates: gates.map(({ kind, name, settled, outcome }) => ({ kind, name, settled, outcome })),
       trace: copy(trace), draws: copy(draws), unexpected: [...unexpected], consoleErrors: [...consoleErrors], completions: copy(io.completions), clockSteps: [...clockSteps], cleanupHTML: document.body.innerHTML });
     cases[key] = copy(activeRow); activeRow = undefined;
   }
   const row = cases[key];
-  expect(row.finalStores).toEqual(row.initialStores); expect(row.unexpected).toEqual([]); expect(row.consoleErrors).toEqual([]); expect(row.completions).toEqual([]);
+  expect(row.unexpected).toEqual([]); expect(row.consoleErrors).toEqual([]); expect(row.completions).toEqual([]);
   expect((row.gates as { settled: boolean }[]).every(gate => gate.settled)).toBe(true);
   const opened = row.moments[0] as ReturnType<typeof snapshot>;
   expect(opened.pitch).toHaveLength(11); expect(opened.progress).toEqual(['0/11']);
@@ -190,6 +230,8 @@ beforeEach(() => {
   vi.useFakeTimers({ toFake: ['Date', 'performance', 'setTimeout', 'clearTimeout', 'setInterval', 'clearInterval'] }); vi.setSystemTime(EPOCH);
   gates = []; requests = []; trace = []; draws = []; unexpected = []; consoleErrors = []; clockSteps = []; rng = 0.5; remoteRows = false; io.completions.length = 0;
   localStorage.clear(); sessionStorage.clear(); localStorage.setItem('lineup-rules-seen', '1'); localStorage.setItem('xi-query-sentinel', 'local-held'); sessionStorage.setItem('xi-query-sentinel', 'session-held');
+  expectedDrafts = [];
+  vi.spyOn(Storage.prototype, 'setItem'); vi.spyOn(Storage.prototype, 'removeItem');
   vi.spyOn(Math, 'random').mockImplementation(() => { draws.push({ at: performance.now(), value: rng }); return rng; });
   vi.spyOn(console, 'error').mockImplementation((...args) => consoleErrors.push(args.map(String).join(' ')));
   installTransport();
@@ -228,11 +270,11 @@ describe('Build Your XI query ownership', () => {
       await settleOld(old, 'valid'); const middle = retain('obsolete-settled-during-current');
       expect(middle.progress).toEqual(['0/11']); expect(middle.input?.disabled).toBe(true); expect(middle.errors).toEqual([]); expect(current.settled).toBe(false);
       const owns = middle.input?.value === name;
-      await release(current, { valid: true, fullName: name }); await finishAccepted(); expect(gates).toHaveLength(2); return owns;
+      await release(current, { valid: true, fullName: name }); await finishAccepted(name); expect(gates).toHaveLength(2); return owns;
     }, true);
   });
   it(definitions[7][1], async () => {
-    await run('primary', async () => { await pick(PRIMARY); expect(gates).toHaveLength(0); await finishAccepted(); });
+    await run('primary', async () => { await pick(PRIMARY); expect(gates).toHaveLength(0); await finishAccepted(PRIMARY); });
   });
   it(definitions[8][1], async () => {
     await run('currentRefused', async () => {
@@ -241,7 +283,7 @@ describe('Build Your XI query ownership', () => {
     });
   });
   it(definitions[9][1], async () => {
-    await run('remote', async () => { remoteRows = true; await pick(NEXT); retain('current-pending'); expect(requests.filter(request => request.kind === 'validator').map(request => request.body)).toEqual([{ playerName: NEXT, teamName: 'Real Madrid', isNation: false, position: 'ST' }]); await release(gates[0], { valid: true, fullName: NEXT }); await finishAccepted(); expect(gates).toHaveLength(1); });
+    await run('remote', async () => { remoteRows = true; await pick(NEXT); retain('current-pending'); expect(requests.filter(request => request.kind === 'validator').map(request => request.body)).toEqual([{ playerName: NEXT, teamName: 'Real Madrid', isNation: false, position: 'ST' }]); await release(gates[0], { valid: true, fullName: NEXT }); await finishAccepted(NEXT); expect(gates).toHaveLength(1); });
   });
   it(definitions[10][1], async () => {
     await run('unverified', async () => {

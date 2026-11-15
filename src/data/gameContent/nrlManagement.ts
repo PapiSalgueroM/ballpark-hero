@@ -29,6 +29,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Open Opposition report before a return match to see your earlier scores against that club this season, from your team’s point of view.',
       'Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation.',
       'Open Positional matchups in the Opposition report to see the ratings behind the middle and wide attack plans.',
+      'Choose Attack left or Attack right to match your wing and centre against the rival’s opposite edge. Compare the two sides in Positional matchups. You can change sides at half time or 60 minutes in Play Live, and the match report saves your choices.',
       'Choose Counter opponent in Attack plan to respond to the rival’s simulated style. Shift wide against middle pressure, or protect the edges at the cost of some attack. Check the ratings before choosing.',
       'Use Individual recovery in Preparation to give one available player lighter training before a match. Compare their kickoff fitness while the rest of the squad keeps its plan.',
       'Before a regular-season away match, book one recovery session per season from Preparation. It costs $120,000 from club cash and adds up to eight fitness points at kickoff.',

@@ -19,6 +19,7 @@ import { captureCommunityShield, playCommunityShield, communityShieldSeasonStats
 import { captureGermanSupercup, playGermanSupercup, germanSupercupSeasonStats, countGermanSupercups, type GermanSupercupQualification, type GermanSupercupResult } from './soccerCareerExtraCups';
 import { settleCareerAmbition, type CareerSeasonAmbition, type SeasonAmbitionResult } from './soccerCareerAmbitions';
 import { recentClubForm } from './soccerCareerSelection';
+import { readSeasonRatingPath } from './careerSeasonRatings';
 import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';
 import { createCareerMentor, recordMentorSeason, endCareerMentorForMove, endCareerMentorForRetirement, validMentor, type CareerMentor } from './soccerCareerMentor';
 import { settleSoccerPress, type SoccerPressState } from './soccerCareerPress';
@@ -4741,7 +4742,9 @@ export function seasonStrikes(state: CareerState): string[] {
   if (!last || last.type !== "playing") return [];
   const strikes: string[] = [];
   const seasonsHere = state.seasons.filter(s => s.club === last.club && s.type === "playing").length;
-  const band = projectLeagueApps(state.overall, last.clubTier, last.club, Math.max(0, seasonsHere - 1), { league: last.club === state.currentClub ? state.currentLeague : FALLBACK_CLUBS.find(club => club.name === last.club)?.league ?? "", year: last.year });
+  // Appearances were rolled before this season's rating changes.
+  const openingOverall = readSeasonRatingPath(last.ratingPath)?.[0] ?? state.overall;
+  const band = projectLeagueApps(openingOverall, last.clubTier, last.club, Math.max(0, seasonsHere - 1), { league: last.club === state.currentClub ? state.currentLeague : FALLBACK_CLUBS.find(club => club.name === last.club)?.league ?? "", year: last.year });
   /* League games only, against a league projection. Comparing total
      appearances to this band was the first draft and it was wrong in the
      player's favour: a fringe man at a giant plays eight league games, six in

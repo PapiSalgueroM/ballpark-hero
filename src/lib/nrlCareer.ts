@@ -12,7 +12,7 @@ import {
 } from '@/lib/nrlPlayerScoring';
 import {
   archiveNrlFinals, archiveNrlLadder, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlArchivedLadder, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
-  isNrlPhysioTreatment, nrlByeTrainingPreview, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularReturnFixture, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
+  isNrlPhysioTreatment, isNrlSpecialistPlan, nrlByeTrainingPreview, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularReturnFixture, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
   nrlPlanAdjustments, nrlPlanMatchups, nrlReserveGradeEnd, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore, validNrlRatingChanges,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlLeagueLadderArchive, type NrlLivePlanChoice, type NrlManagerState, type NrlMatchResult,
@@ -1778,7 +1778,7 @@ function careerMatchday(state: NrlCareerState, requestedPlan?: NrlAttackPlan) {
   const opponentStrength = averagesByClub(ratings);
   const { attackPlan, live } = state.season;
   const usesPositionRatings = [attackPlan, live?.minute60?.attackPlan, live?.goldenPoint?.finish.attackPlan, requestedPlan]
-    .some(plan => plan === 'middle' || plan === 'wide');
+    .some(isNrlSpecialistPlan);
   return {
     matchday: state.season,
     opponentStrength,

@@ -3,8 +3,8 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   acceptOffer, advanceProSeason, applyMoralDilemmaChoice, completeClubVerdictMove, dismissAppealResult,
-  dismissMoralDilemma, FALLBACK_CLUBS, initCareer, MORAL_DILEMMAS, repairCareer, signExtension, stayAtClub,
-  type CareerState, type ContractOffer,
+  dismissMoralDilemma, FALLBACK_CLUBS, initCareer, MORAL_DILEMMAS, repairCareer, seasonStrikes, signExtension, stayAtClub,
+  type CareerState, type ContractOffer, type SeasonRecord,
 } from '@/lib/soccerCareerEngine';
 import { soccerExtensionQuote } from '@/lib/soccerCareerContracts';
 
@@ -78,6 +78,45 @@ describe('Soccer Career extension terms', () => {
 });
 
 describe('Soccer Career club decisions', () => {
+  it('judges league minutes at opening overall when the player grows during a contract year', () => {
+    vi.spyOn(Math, 'random').mockReturnValue(0.99);
+    const club = FALLBACK_CLUBS.find(entry => entry.name === 'Man City')!;
+    const source = career(19, 71, 6.2);
+    const season: SeasonRecord = {
+      ...source.seasons[0], club: club.name, clubCountry: club.country, clubTier: 1,
+      apps: 13, leagueApps: 7, goals: 1, assists: 1, redCards: 0, ovr: 70,
+      ratingPath: [70, 70, 70, 71, 71],
+    };
+    const completed: CareerState = {
+      ...source, currentClub: club.name, currentClubCountry: club.country, currentLeague: club.league,
+      currentClubTier: 1, contractYearsLeft: 0, phase: 'red_card_appeal_result',
+      pendingAppealResult: null, pendingEvents: [], seasons: [season],
+    };
+    const finish = (row: SeasonRecord, overall = completed.overall) => {
+      const saved = JSON.parse(JSON.stringify({ ...completed, overall, seasons: [row] })) as CareerState;
+      return dismissAppealResult(saved, FALLBACK_CLUBS);
+    };
+    const held = finish({ ...season, ratingPath: [70, 70, 70, 70, 70] }, 70);
+    const improved = finish(season);
+    for (const result of [held, improved]) {
+      expect(result).toMatchObject({ phase: 'transfer_window', badSeasonStreak: 0, transferSituation: { type: 'contract_expiry' } });
+    }
+    expect(improved.seasons).toEqual([season]);
+    expect(seasonStrikes(improved)).toEqual([
+      'You averaged 6.2 across the season', 'You are 9 rating points under what this squad expects',
+    ]);
+
+    const short = finish({ ...season, leagueApps: 5 });
+    expect(short).toMatchObject({ badSeasonStreak: 1, transferSituation: { type: 'frozen_out', mode: 'released' } });
+    expect(seasonStrikes(short)[0]).toBe('5 league games all season, and the projection here was 8 to 16');
+
+    for (const ratingPath of [undefined, [70, 70, 70, 71, 100] as const]) {
+      const legacy = finish({ ...season, ratingPath: ratingPath && [...ratingPath] });
+      expect(legacy).toMatchObject({ badSeasonStreak: 1, transferSituation: { type: 'frozen_out', mode: 'released' } });
+      expect(seasonStrikes(legacy)[0]).toBe('7 league games all season, and the projection here was 14 to 22');
+    }
+  });
+
   it.each([21, 26])('completes the existing listed destination, reloads and acknowledges it once at age %s', age => {
     const state = listing(age);
     const input = JSON.stringify(state);
