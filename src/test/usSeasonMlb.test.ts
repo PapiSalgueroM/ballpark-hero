@@ -10,7 +10,7 @@ import { deriveSeason, deriveSeasonOrWhy, disagreements, type DerivedGame } from
 import {
   MLB_SEASON, mlbAtBats, mlbAtBatsCap, mlbAvgText, mlbDeal, mlbDealProblems, mlbDealUnnamed, mlbOrderProblems, mlbScore, mlbSeriesList, mlbSpreadRuns, mlbWentExtra,
 } from '@/lib/season/mlb';
-import { mlbHeldLine, mlbHeldPos, mlbRealGames, mlbSeasonHeld, mlbViewGames } from '@/lib/mlbSeasonHeld';
+import { mlbHeldLine, mlbRealGames, mlbSeasonHeld, mlbViewGames } from '@/lib/mlbSeasonHeld';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { MLB_MISSED_PLAYOFFS, MLB_PLAYOFF_LADDER, MLB_WILD_CARD_GAME_EXIT, mlbEraTeamIds, mlbPlayoffResults, mlbTeamLabelOf } from '@/lib/mlbMyCareer';
 import { MLB_DIVISIONS_2026, MLB_FORMULAS, MLB_GAME_RULES, MLB_INNINGS_SRC, MLB_PLAYOFF_FORMAT, MLB_RIVALS, MLB_SCORING, MLB_SEASONS } from '@/data/usSeasonLedgerMlb';
@@ -215,14 +215,11 @@ describe('the at bats and hits a batting average allows', () => {
 });
 
 describe('held, said before he presses (the whole sentence, typed here)', () => {
-  it('holds pitchers and no hitter', () => {
-    for (const pos of ['SP', 'RP']) {
-      expect(mlbHeldPos(pos), pos).toBe('📺 No week by week for pitchers yet: this view cannot yet show which games were your wins.');
-      const b = build(ROW(), pos);
-      expect(b.ok === false && b.why === 'held' && b.line, pos).toBe(mlbHeldPos(pos));
-      expect(mlbSeasonHeld(2027, 'now', { pos, team: 'DET' }), pos).toBe(mlbHeldPos(pos));
+  it('allows every position for a supported league season', () => {
+    for (const pos of [...HITTERS, 'SP', 'RP']) {
+      expect(mlbSeasonHeld(2027, 'now', { pos, team: 'DET' }), pos).toBeNull();
+      expect(build(ROW(), pos).ok, pos).toBe(true);
     }
-    for (const pos of HITTERS) { expect(mlbHeldPos(pos), pos).toBeNull(); expect(build(ROW(), pos).ok, pos).toBe(true); }
   });
   it('holds the short season, a club a game short, a club on 163 and a club outside the league, each in its own true words', () => {
     expect(mlbViewGames()).toBe(162);

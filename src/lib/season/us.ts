@@ -83,7 +83,7 @@ export interface UsSeasonView {
   postLabels?: Record<string, string>;
   /** The "?" sheet. `named`: opponents are named this season. `opp`: a team of
    *  this season that is not his, for the worked example; absent when nobody is named. */
-  help(named: boolean, opp?: string): UsHelp;
+  help(named: boolean, opp?: string, pos?: string): UsHelp;
 }
 
 export interface UsSeasonCtx {

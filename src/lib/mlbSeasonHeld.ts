@@ -20,26 +20,15 @@
    saved before the engine read the ledger was played on 162 in every year,
    and "the real 2020 season had 60 games" is still so.
 
-   Pitchers are held for now. A pitcher's wins and losses are claims about
-   the results of particular games, and the season core cannot yet make his
-   team win the games his line says he won.
-
    No React, no Math.random, nothing evaluated at module scope from an
    import. */
 import { MLB_FORMULAS, MLB_OUTSIDE_CLUBS, MLB_PLAYOFF_FORMAT, MLB_SEASONS } from '@/data/usSeasonLedgerMlb';
 import { seasonLengthRow } from './usSeasonShape';
-import { MLB_PITCHERS, mlbEraTeamIds, mlbPlayoffResults, type MlbSeasonLine } from './mlbMyCareer';
+import { mlbEraTeamIds, mlbPlayoffResults, type MlbSeasonLine } from './mlbMyCareer';
 
 /** The season the game by game view is built for: the schedule formula's own length. */
 export function mlbViewGames(): number {
   return MLB_FORMULAS[0].games;
-}
-
-/** Why a position has no game by game view yet, or null. */
-export function mlbHeldPos(pos: string | undefined): string | null {
-  return pos !== undefined && (MLB_PITCHERS as readonly string[]).includes(pos)
-    ? '📺 No week by week for pitchers yet: this view cannot yet show which games were your wins.'
-    : null;
 }
 
 /** Is that club a club of the league in that era's own team list (and not one the ledger puts outside it)? */
@@ -74,9 +63,22 @@ export function mlbHeldLine(year: number, team: string | undefined, eraId?: stri
   return `📺 No week by week this season: the real ${year} season had ${real} games and the week by week view is built for ${full}.`;
 }
 
-/** The hub's line for the coming season (or the last one, for Watch again): the position first, then the season. */
+/** The hub's line for the coming season or the last one. */
 export function mlbSeasonHeld(year: number, eraId: string | undefined, who?: { pos: string; team: string }): string | null {
-  return mlbHeldPos(who?.pos) ?? mlbHeldLine(year, who?.team, eraId);
+  return mlbHeldLine(year, who?.team, eraId);
+}
+
+/** A career can save more pitcher decisions than its appearances can hold. */
+export function mlbPitchingDecisionsFit(
+  row: { games: number; wins?: unknown; lossesP?: unknown; saves?: unknown; holds?: unknown },
+  pos: string,
+  teamWins = Infinity,
+  teamLosses = Infinity,
+): boolean {
+  const [wins, losses, saves, holds] = [row.wins, row.lossesP, row.saves, row.holds].map(v => v === undefined ? 0 : Number(v));
+  return wins + losses + saves <= row.games && wins + saves + holds <= row.games
+    && wins + saves <= teamWins && losses <= teamLosses
+    && (pos !== 'SP' || (saves === 0 && holds === 0));
 }
 
 /** A team playoff replay needs only the saved finish and a game count that fits the format. */

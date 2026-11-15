@@ -16,7 +16,6 @@ import { nflSeasonLength } from '@/lib/nflMyCareer';
 import { NFL_SEASON } from '@/lib/season/nfl';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { MLB_SEASON } from '@/lib/season/mlb';
-import { mlbSeasonHeld } from '@/lib/mlbSeasonHeld';
 import { keyedRng } from '@/lib/keyedRng';
 import { usSeasonHeldLine } from '@/data/usSeasonLengths';
 import { resetCareerMomentsForTest } from '@/components/soccer-career/careerMoments';
@@ -301,7 +300,7 @@ describe('saved US season OVR in the game reports', () => {
   });
 });
 
-/* ─── Round 1212: baseball, bound to the same viewer (hitters; pitchers are held) ─── */
+/* ─── Round 1212: baseball, bound to the same viewer ─── */
 const MLB_WITH_LOADER: UsCareerSport = { ...MLB_CAREER_SPORT, loadSeasonCentre: () => Promise.resolve(MLB_SEASON) };
 
 /** An MLB career played with the binding's own calls on a seeded stream. */
@@ -403,7 +402,7 @@ describe('the US Season Center with MLB bound', () => {
     expect(Object.keys(localStorage)).toEqual(['seasonCentre:help:mlb']);
   }, 60000);
 
-  it('shows the held line for a pitcher, for the 60 game season and for a club outside the league, never a guess', async () => {
+  it('shows the held line for the 60 game season and for a club outside the league, never a guess', async () => {
     const shows = async (career: UsCareerCore, row: UsCareerCore['seasons'][number], line: string) => {
       render(<MemoryRouter><UsSeasonCentre sport={MLB_WITH_LOADER} career={career} row={row} onClose={vi.fn()} /></MemoryRouter>);
       await waitFor(() => expect(document.querySelector('[data-centre-tile]')).not.toBeNull());
@@ -411,10 +410,6 @@ describe('the US Season Center with MLB bound', () => {
       expect(document.querySelector('[data-kickoff]')).toBeNull();
       cleanup();
     };
-    const pitcher = playMlb('SP', 'mlb-centre-sp', 1);
-    const pitcherLine = mlbSeasonHeld(pitcher.seasons[0].year, 'now', { pos: 'SP', team: pitcher.seasons[0].team })!;
-    expect(pitcherLine).toContain('for pitchers yet');
-    await shows(pitcher, pitcher.seasons[0], pitcherLine);
     const hitter = playMlb('CF', 'mlb-centre-held', 1);
     const short = { ...hitter.seasons[0], year: 2020, team: 'BOS' };
     await shows({ ...hitter, eraId: 'y2004', seasons: [short] }, short, 'the real 2020 season had 60 games');

@@ -911,6 +911,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
           "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
           "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
           "For seasons supported by Week by week, Season Center shows your overall before and after each game if the season has saved rating checkpoints. Review its change by opening a finished game in the game log.",
+          "Pitchers can open Week by week in supported seasons and reopen earlier years from Career Log. The simulated game reports show starts or relief appearances, strikeouts and any recorded pitching decision. The season review keeps your saved ERA.",
           "After playing a season, relievers can choose their bullpen role for the next signed year. Setup pitchers work for holds. Choose Close for saves at 80 overall or with the Closer build. The role stays with that club and season.",
           "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         ],
@@ -1021,6 +1022,10 @@ export const BASEBALL_CONTENT: GameContentMap = {
         paragraphs: [
           "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.",
         ],
+      },
+      {
+        heading: "Reading a pitching game report",
+        paragraphs: ["Your team wins a simulated game 4 to 2. You get the pitching win and six strikeouts, or a reliever might earn a save or a hold. The game-by-game totals add up to what your save recorded. ERA appears in the season review."],
       },
       {
         heading: "Drafting a Slugging Shortstop at 12th overall",
