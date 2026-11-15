@@ -30,6 +30,8 @@ import {
   shuffle,
   respinSlotCountry,
   simulateWorldXiSeason,
+  worldXiMatchOdds,
+  type WorldXiSeasonApproach,
   ratingsFor,
   SeasonReport,
   ordinal,
@@ -55,6 +57,12 @@ const NATION_MODES: { key: WorldXiNationMode; label: string; hint: string }[] = 
   { key: '2026', label: '2026 Nations', hint: "Tournament nations, using players from the game's existing pool." },
 ];
 
+const PROTECT_THE_POINT = 'Protect the point';
+const SEASON_APPROACHES: { key: WorldXiSeasonApproach; label: string; hint: string }[] = [
+  { key: 'balanced', label: 'Balanced', hint: 'Use the usual mix of wins, draws and losses.' },
+  { key: 'protect', label: PROTECT_THE_POINT, hint: 'Trade some wins and losses for draws.' },
+];
+
 const WorldXi = () => {
   const [phase, setPhase] = useState<Phase>('boot');
   const [data, setData] = useState<WorldXiData | null>(null);
@@ -77,6 +85,7 @@ const WorldXi = () => {
   const [spinKey, setSpinKey] = useState(0); // bumping this starts a SlotReel spin
   const [reelGlimpse, setReelGlimpse] = useState<string>(''); // country under the payline mid-spin
   const [seasonReport, setSeasonReport] = useState<SeasonReport | null>(null);
+  const [seasonApproach, setSeasonApproach] = useState<WorldXiSeasonApproach>('balanced');
   const [showClubChemistry, setShowClubChemistry] = useState(false);
   const [paraguayArchive, setParaguayArchive] = useState<ParaguayArchive | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -267,6 +276,7 @@ const WorldXi = () => {
     setQuery('');
     setFeedback(null);
     setSeasonReport(null);
+    setSeasonApproach('balanced');
     setShowClubChemistry(false);
     setPhase('setup');
   };
@@ -309,10 +319,11 @@ const WorldXi = () => {
     setSpinKey(k => k + 1);
   };
 
+  const seasonPlayers = useMemo(() => filled.filter((p): p is WxPlayer => p !== null), [filled]);
+  const previewOdds = phase === 'won' && !seasonReport ? worldXiMatchOdds(seasonPlayers, seasonApproach) : null;
   const simulateSeason = () => {
-    const players = filled.filter((p): p is WxPlayer => p !== null);
-    if (players.length === 0) return;
-    setSeasonReport(simulateWorldXiSeason(players, formation.name));
+    if (phase !== 'won' || seasonReport || seasonPlayers.length !== formation.slots.length) return;
+    setSeasonReport(simulateWorldXiSeason(seasonPlayers, formation.name, undefined, seasonApproach));
   };
 
   const squadValue = filled.reduce((sum, p) => sum + (p ? p.value : 0), 0);
@@ -327,10 +338,9 @@ const WorldXi = () => {
   );
   const clubLinks = chemistry.links.filter(link => link.type === 'club');
   const playerOveralls = useMemo(() => {
-    const players = filled.filter((p): p is WxPlayer => p !== null);
-    const ratings = ratingsFor(players);
-    return new Map(players.map((p, i) => [p.name, ratings[i]]));
-  }, [filled]);
+    const ratings = ratingsFor(seasonPlayers);
+    return new Map(seasonPlayers.map((p, i) => [p.name, ratings[i]]));
+  }, [seasonPlayers]);
   const flagRow = countries.map(c => flagFor(c)).join('');
   const emojiGrid = [
     `🌍 World XI ${formation.name}${timerMode.seconds > 0 ? ' ⏱️ ' + timerMode.label : ''}`,
@@ -736,8 +746,32 @@ const WorldXi = () => {
               </p>
             )}
 
-            {phase === 'won' && !seasonReport && (
+            {previewOdds && (
               <div className="text-center mt-4">
+                <fieldset className="mb-3 text-left">
+                  <legend className="mb-2 text-sm font-semibold">Season approach</legend>
+                  <div className="grid gap-2 sm:grid-cols-2">
+                    {SEASON_APPROACHES.map(option => (
+                      <label key={option.key} className="flex min-h-11 cursor-pointer items-start gap-2 rounded-lg border border-border p-2.5 has-[:checked]:border-primary">
+                        <input
+                          type="radio"
+                          name="world-xi-season-approach"
+                          aria-label={option.label}
+                          className="mt-1 accent-primary"
+                          checked={seasonApproach === option.key}
+                          onChange={() => setSeasonApproach(option.key)}
+                        />
+                        <span>
+                          <span className="block text-sm font-semibold">{option.label}</span>
+                          <span className="block text-xs text-muted-foreground">{option.hint}</span>
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                  <p role="status" aria-label="League match probabilities" className="mt-2 text-xs text-muted-foreground">
+                    Win {(previewOdds.win * 100).toFixed(1)}% · Draw {(previewOdds.draw * 100).toFixed(1)}% · Loss {(previewOdds.loss * 100).toFixed(1)}% per league match.
+                  </p>
+                </fieldset>
                 <button
                   onClick={simulateSeason}
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-full border-2 border-primary text-primary font-bold hover:bg-primary hover:text-primary-foreground transition-all"
@@ -757,6 +791,7 @@ const WorldXi = () => {
                   <h3 className="text-lg font-bold text-primary font-display">Season Report</h3>
                   <p className="text-xs text-muted-foreground">
                     A simulated season for your {formation.name} World XI.
+                    {seasonApproach === 'protect' && ` ${PROTECT_THE_POINT}.`}
                   </p>
                 </div>
 
@@ -802,6 +837,7 @@ const WorldXi = () => {
                     ? [
                         emojiGrid,
                         `Season sim: rated ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)} with ${seasonReport.points} points`,
+                        ...(seasonApproach === 'protect' ? [`Simulated with ${PROTECT_THE_POINT}.`] : []),
                         /* Round 726: the share card carries the finish, the top
                            scorer and the player of the season, as text. */
                         ...(seasonReport.topScorer ? [`Top scorer: ${seasonReport.topScorer.name} (${seasonReport.topScorer.goals})`] : []),
