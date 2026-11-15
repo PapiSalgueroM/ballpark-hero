@@ -8,9 +8,11 @@ const manifest = JSON.parse(fs.readFileSync('src/test/controls/headerAccountLoad
 const out = path.resolve(process.env.LEGAL_PRIVACY_OUT || 'legal-privacy-artifacts', 'header-account-loading-controls');
 fs.mkdirSync(out, { recursive: true });
 const hash = value => createHash('sha256').update(value).digest('hex');
+const canonical = bytes => bytes.toString('utf8').replace(/\r\n/g, '\n');
 const report = { cases: [], complete: false };
 for (const row of manifest.files) {
-  const original = fs.readFileSync(row.source, 'utf8'), copy = fs.readFileSync(row.copy, 'utf8');
+  const originalBytes = fs.readFileSync(row.source);
+  const original = canonical(originalBytes), copy = canonical(fs.readFileSync(row.copy));
   assert.equal(hash(original), row.sourceSha256, row.name + ' actual source hash');
   assert.equal(hash(copy), row.copySha256, row.name + ' copied source hash');
   assert.equal(original.split(row.old).length - 1, 1, row.name + ' exact unique fault target');
@@ -37,7 +39,7 @@ for (const row of manifest.files) {
     report.cases.push({ name, controlledFault: control, exit: child.status, selectedStatus: selected[0].status });
     console.log(`Header account loading: ${name}, expected ${selected[0].status}.`);
   }
-  assert.equal(hash(fs.readFileSync(row.source)), row.sourceSha256, 'Actual source stays unchanged');
+  assert.deepEqual(fs.readFileSync(row.source), originalBytes, 'Actual source bytes stay unchanged');
 }
 report.complete = true;
 fs.writeFileSync(path.join(out, 'report.json'), JSON.stringify(report, null, 2) + '\n');
