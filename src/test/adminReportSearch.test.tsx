@@ -171,6 +171,100 @@ describe('admin report queue', () => {
     expect(await screen.findByText('Priority cleared')).toBeVisible();
   });
 
+  it.each([
+    { field: 'status' as const, label: 'Status', first: 'investigating', second: 'confirmed' },
+    { field: 'priority' as const, label: 'Priority', first: 'medium', second: 'low' },
+  ])('blocks an overlapping $field change and reopens after the save', async ({ field, label, first, second }) => {
+    let durable = { ...contract };
+    const commits: Array<() => void> = [];
+    db.read.mockImplementation(() => ({ data: [durable], error: null }));
+    db.write.mockImplementation((id: string, patch: Record<string, unknown>) => new Promise(resolve => {
+      commits.push(() => {
+        durable = { ...durable, ...patch };
+        resolve({ data: [{ id }], error: null });
+      });
+    }));
+
+    const view = openQueue();
+    const card = within((await screen.findByText(contract.description)).closest('[data-report]') as HTMLElement);
+    const control = card.getByRole('combobox', { name: label });
+    control.focus();
+    fireEvent.change(control, { target: { value: first } });
+    fireEvent.change(control, { target: { value: second } });
+
+    expect(commits).toHaveLength(1);
+    expect(control).toHaveAttribute('aria-disabled', 'true');
+    expect(control).toHaveFocus();
+    expect(card.getByText(/Saving…/)).toBeVisible();
+    expect(durable[field]).toBe(contract[field]);
+
+    await act(async () => commits[0]());
+    expect(control).toHaveValue(first);
+    expect(control).not.toHaveAttribute('aria-disabled', 'true');
+    fireEvent.change(control, { target: { value: second } });
+    expect(commits).toHaveLength(2);
+    await act(async () => commits[1]());
+    expect(control).toHaveValue(second);
+    expect(durable[field]).toBe(second);
+
+    view.unmount();
+    openQueue();
+    const reloaded = within((await screen.findByText(contract.description)).closest('[data-report]') as HTMLElement);
+    expect(reloaded.getByRole('combobox', { name: label })).toHaveValue(second);
+  });
+
+  it('keeps the other field, other reports and note drafts available during a status save', async () => {
+    let resolveStatus: () => void = () => {};
+    db.write.mockImplementationOnce((id: string) => new Promise(resolve => {
+      resolveStatus = () => resolve({ data: [{ id }], error: null });
+    }));
+    openQueue();
+    const card = within((await screen.findByText(contract.description)).closest('[data-report]') as HTMLElement);
+    const other = within(screen.getByText(fixture.description).closest('[data-report]') as HTMLElement);
+    const status = card.getByRole('combobox', { name: 'Status' });
+    const priority = card.getByRole('combobox', { name: 'Priority' });
+    const otherStatus = other.getByRole('combobox', { name: 'Status' });
+    const note = card.getByRole('textbox', { name: 'Note' });
+
+    fireEvent.change(status, { target: { value: 'investigating' } });
+    fireEvent.change(priority, { target: { value: 'low' } });
+    fireEvent.change(otherStatus, { target: { value: 'confirmed' } });
+    fireEvent.change(note, { target: { value: 'Draft during triage' } });
+    fireEvent.click(card.getByRole('button', { name: 'Save note' }));
+
+    await waitFor(() => expect(priority).toHaveValue('low'));
+    expect(otherStatus).toHaveValue('confirmed');
+    expect(note).toHaveValue('Draft during triage');
+    expect(status).toHaveAttribute('aria-disabled', 'true');
+    expect(card.getByText(/Saving…/)).toBeVisible();
+    expect(db.write).toHaveBeenNthCalledWith(2, contract.id, { priority: 'low' });
+    expect(db.write).toHaveBeenNthCalledWith(3, fixture.id, { status: 'confirmed', resolved: false, resolved_at: null });
+    expect(db.write).toHaveBeenNthCalledWith(4, contract.id, { admin_note: 'Draft during triage', fix_ref: '#972' });
+
+    await act(async () => resolveStatus());
+    expect(status).toHaveValue('investigating');
+    expect(priority).toHaveValue('low');
+    expect(note).toHaveValue('Draft during triage');
+  });
+
+  it.each([
+    { reason: 'zero rows', response: { data: [], error: null } },
+    { reason: 'a write error', response: { data: null, error: { message: 'Unavailable' } } },
+  ])('reopens a priority change after $reason', async ({ response }) => {
+    db.write.mockResolvedValueOnce(response);
+    openQueue();
+    const card = within((await screen.findByText(contract.description)).closest('[data-report]') as HTMLElement);
+    const priority = card.getByRole('combobox', { name: 'Priority' });
+    fireEvent.change(priority, { target: { value: 'low' } });
+    expect(priority).toHaveAttribute('aria-disabled', 'true');
+    await waitFor(() => expect(card.getByRole('status')).toHaveTextContent('Not saved'));
+
+    expect(priority).toHaveValue('high');
+    expect(priority).not.toHaveAttribute('aria-disabled', 'true');
+    fireEvent.change(priority, { target: { value: 'low' } });
+    await waitFor(() => expect(priority).toHaveValue('low'));
+    expect(db.write.mock.calls).toEqual([[contract.id, { priority: 'low' }], [contract.id, { priority: 'low' }]]);
+  });
   it('keeps newer note and fix-reference drafts while an earlier save completes', async () => {
     let release: () => void = () => {};
     db.write.mockImplementationOnce((id: string) => new Promise(resolve => {
