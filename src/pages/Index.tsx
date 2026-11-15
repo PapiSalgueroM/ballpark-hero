@@ -86,7 +86,7 @@ type GameReturn = {
 const gameReturns = new Map<string, GameReturn>();
 const BROWSE_SPORTS_TRIGGER = 'home-browse-sports-trigger';
 const HOME_GAME_PICKS_ID = 'home-game-picks';
-const sportReturns = new Map<string, { top: number; opener: string }>();
+const sportReturns = new Map<string, { hash: string; top: number; opener: string }>();
 
 function revealSport(target: HTMLElement) {
   target.scrollIntoView({ block: 'start', behavior: 'instant' });
@@ -131,7 +131,7 @@ export default function Index() {
       return;
     }
     sportReturns.delete(homeEntry);
-    sportReturns.set(homeEntry, { top: window.scrollY, opener });
+    sportReturns.set(homeEntry, { hash, top: window.scrollY, opener });
     if (sportReturns.size > 20) sportReturns.delete(sportReturns.keys().next().value);
     navigate({ search, hash: nextHash }, { state: { homeSportAnchor: nextHash } });
   }, [hash, homeEntry, navigate, search]);
@@ -140,7 +140,8 @@ export default function Index() {
     if (previousHomeEntry.current === homeEntry) return;
     previousHomeEntry.current = homeEntry;
     const returned = navigationType === 'POP' && sportReturns.get(homeEntry);
-    if (returned) {
+    // Native fragment navigation can reuse the initial Router key.
+    if (returned && returned.hash === hash) {
       window.scrollTo({ top: returned.top, behavior: 'instant' });
       document.getElementById(returned.opener)?.focus({ preventScroll: true });
     } else if (state?.homeSportAnchor === hash) {
