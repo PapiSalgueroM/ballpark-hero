@@ -3746,7 +3746,8 @@
         "Set the fame level: Easy draws from the most famous third, Hard from the least famous third, Normal from the whole pool.",
         "Open with any big name. Type 2 or more letters and pick anyone from the database.",
         "Read the chips: green matches, yellow is close, arrows point older, younger, pricier or cheaper.",
-        "Keep triangulating until you name him or run dry."
+        "Keep triangulating until you name him or run dry.",
+        "After a counted guess, Continue playing on Home reopens your unfinished round."
       ],
       "rules": [
         "The secret is always one of the top 400 current players by market value. Guesses can be anyone among over 27,000 names.",

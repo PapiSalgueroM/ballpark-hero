@@ -5,6 +5,7 @@ import { CONTINUE_SAVES, continueSaveEntries, describeSave, savedGames, type Sav
 import { ALL_GAMES } from '@/data/gameRegistry';
 import { sportOf } from '@/data/homeFront';
 import { BUILD_XI_DRAFT_KEY, readBuildXiDraft } from '@/lib/buildXiDraft';
+import { readWhoAmIRound, readWhoAmIRoundBytes, WHO_AM_I_ROUND_KEY } from '@/lib/whoAmIRoundSave';
 import { FIGHT_PROMOTER_MODE_KEY } from '@/lib/fightPromoterRoutes';
 import { parkedKey, SLOT_COUNT, SLOTS_INDEX_KEY } from '@/lib/clubManagerSaveKeys';
 import { homeSaveStorage, useHomeSaveRefresh } from './homeSaveRefresh';
@@ -17,9 +18,12 @@ export const SAVED_FALLBACK = 'Saved in this browser';
 
 const xiEntry = { path: '/build-your-xi', saveKey: BUILD_XI_DRAFT_KEY };
 const xiGame = ALL_GAMES.find(game => game.path === xiEntry.path);
+const whoEntry = { path: '/who-am-i', saveKey: WHO_AM_I_ROUND_KEY };
+const whoGame = ALL_GAMES.find(game => game.path === whoEntry.path);
 const continueKeys = new Set([
   ...CONTINUE_SAVES.flatMap(entry => continueSaveEntries(entry).map(save => save.saveKey)),
   BUILD_XI_DRAFT_KEY,
+  WHO_AM_I_ROUND_KEY,
   FIGHT_PROMOTER_MODE_KEY,
   SLOTS_INDEX_KEY,
   ...Array.from({ length: SLOT_COUNT }, (_, index) => parkedKey(index + 1)),
@@ -27,14 +31,21 @@ const continueKeys = new Set([
 
 function homeSavedGames(storage: Storage | null): SavedGame[] {
   const saved = savedGames(storage, true);
-  if (!storage || !xiGame) return saved;
+  if (!storage) return saved;
   let raw: string | null = null;
   try { raw = storage.getItem(BUILD_XI_DRAFT_KEY); } catch { /* The browser could not read this draft. */ }
   const draft = readBuildXiDraft(raw);
-  if (draft?.slots.length) {
+  if (xiGame && draft?.slots.length) {
     saved.push({
       entry: xiEntry, game: xiGame,
       description: `${draft.formation} · ${draft.slots.length}/11 picked`,
+    });
+  }
+  const round = readWhoAmIRound(readWhoAmIRoundBytes(storage));
+  if (whoGame && round?.phase === 'playing' && round.guesses.length) {
+    saved.push({
+      entry: whoEntry, game: whoGame,
+      description: `${round.guesses.length}/${round.budget} guesses used`,
     });
   }
   return saved;

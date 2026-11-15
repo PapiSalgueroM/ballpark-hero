@@ -9,8 +9,8 @@ export interface WhoAmIRound {
   guesses: GuessResult[];
 }
 
-export function readWhoAmIRoundBytes(): string | null | undefined {
-  try { return localStorage.getItem(WHO_AM_I_ROUND_KEY); }
+export function readWhoAmIRoundBytes(storage?: Pick<Storage, 'getItem'>): string | null | undefined {
+  try { return (storage ?? localStorage).getItem(WHO_AM_I_ROUND_KEY); }
   catch { return undefined; }
 }
 

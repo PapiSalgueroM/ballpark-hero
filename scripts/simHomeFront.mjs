@@ -764,13 +764,15 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   if (cold !== '') fail(7, `with no save in the browser the row renders ${cold.length} characters instead of nothing`);
   if (savedGames(globalThis.localStorage).length !== 0) fail(7, 'savedGames finds a save in an empty browser');
   const { SLOTS_INDEX_KEY, SLOT_COUNT, parkedKey, READABLE_SAVE_VERSION, BUILD_XI_DRAFT_KEY } = front;
+  const whoRoundKey = 'who-am-i-round-v1';
   const clubSave = JSON.stringify({ saveVersion: READABLE_SAVE_VERSION, clubName: 'Planted FC', season: 3, week: 0,
     leagueClubs: ['Planted FC'], squad: [], calendar: [], xiIds: [], table: [] });
   const defaultTarget = entry => entry.slots ? entry.path + '?slot=1' : continueSaveEntries(entry)[0].path;
-  const allowedReads = [...allKeys, FIGHT_PROMOTER_MODE_KEY, SLOTS_INDEX_KEY, BUILD_XI_DRAFT_KEY,
+  const allowedReads = [...allKeys, FIGHT_PROMOTER_MODE_KEY, SLOTS_INDEX_KEY, BUILD_XI_DRAFT_KEY, whoRoundKey,
     ...Array.from({ length: SLOT_COUNT }, (_, i) => parkedKey(i + 1))];
   if (reads.some(k => !allowedReads.includes(k))) fail(7, `the row asks storage for an unregistered key: ${reads.filter(k => !allowedReads.includes(k)).join(', ')}`);
   if (reads.filter(key => key === BUILD_XI_DRAFT_KEY).length !== 1) fail(7, 'the row must read the exact XI draft key once');
+  if (reads.filter(key => key === whoRoundKey).length !== 1) fail(7, 'the row must read the exact Who Am I round key once');
   for (const e of CONTINUE_SAVES) {
     store.clear();
     store.set(e.saveKey, e.slots ? clubSave : '{}');
@@ -838,6 +840,25 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     if (cards(withWindow(() => front.renderContinue())).length) fail(7, 'an absent, malformed, empty or wrong-key XI draft should stay off Home');
     if (key !== null && store.get(key) !== raw) fail(7, 'Continue changed ignored XI draft bytes');
   }
+  const secret = { name: 'Sealed answer', personKey: 'sealed-answer', nationality: 'England',
+    position: 'Centre-Forward', club: 'Fixture United', value: 50_000_000, age: 25, year: 2026 };
+  const guess = { player: { ...secret, name: 'Fixture guess', personKey: 'fixture-guess' },
+    breakdown: { isExact: false, natMatch: true, posGroupMatch: true, posExactMatch: true, sameClub: true,
+      sharedClubPast: false, ageDiff: 0, valueLogDiff: 0, score: 99 } };
+  const whoRound = { version: 1, phase: 'playing', budget: 10, secret, guesses: [guess] };
+  const whoRaw = JSON.stringify(whoRound);
+  store.clear();
+  store.set(whoRoundKey, whoRaw);
+  const whoCards = cards(withWindow(() => front.renderContinue()));
+  if (whoCards.length !== 1 || whoCards[0].href !== '/who-am-i' || !whoCards[0].inner.includes('1/10 guesses used')
+    || whoCards[0].inner.includes(secret.name)) fail(7, 'the active Who Am I round needs one resume card with progress and no answer');
+  if (store.get(whoRoundKey) !== whoRaw) fail(7, 'Home changed Who Am I round bytes');
+  for (const raw of ['{damaged', JSON.stringify({ ...whoRound, guesses: [] }), JSON.stringify({ ...whoRound, phase: 'lost' })]) {
+    store.set(whoRoundKey, raw);
+    if (cards(withWindow(() => front.renderContinue())).length || store.get(whoRoundKey) !== raw) {
+      fail(7, 'Home should ignore unreadable, unplayed and finished Who Am I rounds');
+    }
+  }
   store.clear();
   for (const e of CONTINUE_SAVES) store.set(e.saveKey, e.slots ? clubSave : '{}');
   const all = cards(withWindow(() => front.renderContinue())).map(c => c.href);
@@ -849,6 +870,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     console.log(`   ${Object.keys(engine).length} engine built saves and ${Object.values(SAMPLES).flat().length} shaped saves read right, ${hostileRuns} hostile saves survived, empty with none, one card per save`);
     console.log('   three real Aussie action logs resume exact initial/break/completed states, generic card only, bytes held and no absent/wrong-key card');
     console.log('   XI draft key read once, two legacy picks rendered with exact progress, bytes held and no absent/malformed/empty/wrong-key card');
+    console.log('   Who Am I shows the accepted guess count for an active round and preserves the exact save');
   }
 }
 
