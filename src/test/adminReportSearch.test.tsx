@@ -2,19 +2,21 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import AdminLogin from '@/pages/AdminLogin';
 import AdminReports from '@/pages/AdminReports';
 
 const db = vi.hoisted(() => ({
   getUser: vi.fn(),
   getRoles: vi.fn(),
   read: vi.fn(),
+  signIn: vi.fn(),
   signOut: vi.fn(),
   write: vi.fn(),
 }));
 
 vi.mock('@/integrations/supabase/client', () => ({
   supabase: {
-    auth: { getUser: db.getUser, signOut: db.signOut },
+    auth: { getUser: db.getUser, signInWithPassword: db.signIn, signOut: db.signOut },
     from: (table: string) => {
       if (table === 'user_roles') {
         return { select: () => ({ eq: () => ({ eq: db.getRoles }) }) };
@@ -47,19 +49,19 @@ const defaults = {
 const contract = { ...defaults, id: 'club-1', game_type: 'Club Manager', description: 'Players left for free', priority: 'high', admin_note: 'Contract rollover', fix_ref: '#972', game_context: { round: 'Summer' } };
 const fixture = { ...defaults, id: 'club-2', game_type: 'Club Manager', description: 'Blank match report', priority: 'critical', game_context: { screen: 'Summer' } };
 const scoring = { ...defaults, id: 'career-1', game_type: 'Soccer Career', description: 'Cup scoring is too high', priority: null };
-const archive = { ...defaults, id: 'club-3', game_type: 'Club Manager', description: 'Archived rollover report', priority: 'high', status: 'fixed', resolved: true };
+const archive = { ...defaults, id: '12345678-1234-4321-9876-123456789abc', game_type: 'Club Manager', description: 'Archived rollover report', priority: 'high', status: 'fixed', resolved: true };
 
 function serve(rows: unknown[]) {
   db.read.mockImplementation((from: number, to: number) => ({ data: rows.slice(from, to + 1), error: null }));
 }
 
-function openQueue() {
+function openQueue(entry = '/admin/reports') {
   return render(
     <HelmetProvider>
-      <MemoryRouter initialEntries={['/admin/reports']}>
+      <MemoryRouter initialEntries={[entry]}>
         <Routes>
           <Route path="/admin/reports" element={<AdminReports />} />
-          <Route path="/admin/login" element={<h1>Admin sign in</h1>} />
+          <Route path="/admin/login" element={<AdminLogin />} />
         </Routes>
       </MemoryRouter>
     </HelmetProvider>,
@@ -129,7 +131,55 @@ describe('admin report queue', () => {
   it('waits for the admin role before reading the report queue', async () => {
     db.getRoles.mockResolvedValue({ data: [] });
     openQueue();
-    expect(await screen.findByRole('heading', { name: 'Admin sign in' })).toBeVisible();
+    expect(await screen.findByRole('heading', { name: 'Admin Login' })).toBeVisible();
     expect(db.read).not.toHaveBeenCalled();
+  });
+
+  it('opens a fixed report directly and keeps it visible when its status changes', async () => {
+    openQueue(`/admin/reports#report=${archive.id}`);
+    const report = await screen.findByText(archive.description);
+    expect(screen.queryByText(contract.description)).not.toBeInTheDocument();
+    const card = report.closest('[data-report]') as HTMLElement;
+    fireEvent.change(within(card).getByRole('combobox', { name: 'Status' }), { target: { value: 'investigating' } });
+    await waitFor(() => expect(db.write).toHaveBeenCalledWith(archive.id, expect.objectContaining({ status: 'investigating' })));
+    expect(report).toBeVisible();
+    fireEvent.click(screen.getByRole('link', { name: 'Back to report queue' }));
+    expect(await screen.findByText(contract.description)).toBeVisible();
+  });
+
+  it('offers a report link in the queue', async () => {
+    openQueue();
+    await screen.findByText(contract.description);
+    fireEvent.click(screen.getByRole('button', { name: 'Fixed (1)' }));
+    const card = screen.getByText(archive.description).closest('[data-report]') as HTMLElement;
+    const link = within(card).getByRole('link', { name: 'Open report' });
+    expect(link).toHaveAttribute('href', `/admin/reports#report=${archive.id}`);
+    fireEvent.click(link);
+    expect(screen.getByRole('link', { name: 'Back to report queue' })).toHaveFocus();
+  });
+
+  it('distinguishes a missing linked report', async () => {
+    serve([contract]);
+    openQueue(`/admin/reports#report=${archive.id}`);
+    expect(await screen.findByText('This report could not be found.')).toBeVisible();
+  });
+
+  it('ignores a malformed report reference', async () => {
+    openQueue('/admin/reports#report=https://example.com');
+    expect(await screen.findByText(contract.description)).toBeVisible();
+    expect(screen.queryByRole('link', { name: 'Back to report queue' })).not.toBeInTheDocument();
+  });
+
+  it('returns to a linked report after admin sign-in without reading it as a guest', async () => {
+    db.getUser.mockResolvedValueOnce({ data: { user: null } });
+    db.signIn.mockResolvedValue({ error: null });
+    openQueue(`/admin/reports#report=${archive.id}`);
+    expect(await screen.findByRole('heading', { name: 'Admin Login' })).toBeVisible();
+    expect(db.read).not.toHaveBeenCalled();
+    fireEvent.change(screen.getByRole('textbox', { name: 'Email' }), { target: { value: 'owner@example.com' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'fixture-only' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Sign In' }));
+    expect(await screen.findByText(archive.description)).toBeVisible();
+    expect(screen.queryByText(contract.description)).not.toBeInTheDocument();
   });
 });

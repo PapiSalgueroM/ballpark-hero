@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import type { Tables } from '@/integrations/supabase/types';
 import { LogOut, Loader2, Flag } from 'lucide-react';
@@ -16,6 +16,7 @@ import {
   gameCounts,
   hasTriageColumns,
   isClosed,
+  linkedReportHash,
   matchesGame,
   matchesStatus,
   noteUpdate,
@@ -68,15 +69,23 @@ const AdminReports = () => {
   const [drafts, setDrafts] = useState<Record<string, { note: string; fixRef: string }>>({});
   const [messages, setMessages] = useState<Record<string, string>>({});
   const navigate = useNavigate();
+  const reportHash = linkedReportHash(useLocation().hash);
+  const reportId = reportHash.slice('#report='.length);
+  const backToQueueRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     void fetchReports();
   }, []);
 
+  useEffect(() => {
+    if (reportId) backToQueueRef.current?.focus();
+  }, [reportId]);
+
   const checkAuth = async () => {
+    const login = { pathname: '/admin/login', hash: reportHash };
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-      navigate('/admin/login');
+      navigate(login);
       return false;
     }
     const { data: roles } = await supabase
@@ -86,7 +95,7 @@ const AdminReports = () => {
       .eq('role', 'admin') as any;
     if (!roles?.length) {
       await supabase.auth.signOut();
-      navigate('/admin/login');
+      navigate(login);
       return false;
     }
     return true;
@@ -169,7 +178,9 @@ const AdminReports = () => {
   }, [reports, search, priorityFilter]);
   const counts = statusCounts(matchingReports, game);
   const games = useMemo(() => gameCounts(reports), [reports]);
-  const filtered = sortForTriage(matchingReports.filter((r) => matchesGame(r, game) && matchesStatus(r, filter)));
+  const filtered = reportId
+    ? reports.filter((r) => r.id === reportId)
+    : sortForTriage(matchingReports.filter((r) => matchesGame(r, game) && matchesStatus(r, filter)));
   const critical = matchingReports.filter((r) => matchesGame(r, game) && priorityOf(r) === 'critical' && !isClosed(statusOf(r))).length;
   const filterLabel = FILTERS.find((f) => f.key === filter)?.label ?? '';
   const hasRefinement = Boolean(search.trim()) || priorityFilter !== 'all';
@@ -196,9 +207,15 @@ const AdminReports = () => {
             Logout
           </button>
         </div>
-        <p className="text-sm text-muted-foreground mb-5" data-testid="triage-summary">
-          {counts.open} open{game ? ` for ${game}` : ''}, {critical} critical still open. Critical means {CRITICAL_EXAMPLES}.
-        </p>
+        {reportId ? (
+          <Link ref={backToQueueRef} to="/admin/reports" className="mb-3 inline-flex min-h-11 items-center text-sm font-medium text-primary hover:underline">
+            Back to report queue
+          </Link>
+        ) : (
+          <p className="text-sm text-muted-foreground mb-5" data-testid="triage-summary">
+            {counts.open} open{game ? ` for ${game}` : ''}, {critical} critical still open. Critical means {CRITICAL_EXAMPLES}.
+          </p>
+        )}
 
         {!loading && !withColumns && (
           <div className="mb-5 rounded-lg border border-border bg-secondary/60 p-3 text-sm text-foreground" data-testid="triage-pending">
@@ -217,6 +234,7 @@ const AdminReports = () => {
           </div>
         )}
 
+        {!reportId && <>
         <div className="mb-3 grid gap-3 sm:grid-cols-[minmax(0,1fr)_12rem]">
           <label className="block text-xs font-medium text-muted-foreground">
             Search reports
@@ -280,6 +298,7 @@ const AdminReports = () => {
             </button>
           ))}
         </div>
+        </>}
 
         {loading ? (
           <div className="flex justify-center py-12">
@@ -287,7 +306,9 @@ const AdminReports = () => {
           </div>
         ) : loadError && reports.length === 0 ? null : filtered.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">
-            {hasRefinement ? (
+            {reportId ? (
+              <p>{loadError ? 'The linked report may be on a page that did not load.' : 'This report could not be found.'}</p>
+            ) : hasRefinement ? (
               <>
                 <p>No reports match these filters.</p>
                 <button
@@ -352,6 +373,11 @@ const AdminReports = () => {
                   >
                     {report.emailed === true ? "emailed" : report.emailed === false ? "not emailed" : "delivery unknown"}
                   </span>
+                  {!reportId && (
+                    <Link to={{ pathname: '/admin/reports', hash: `#report=${report.id}` }} className="inline-flex min-h-9 items-center px-1 text-xs font-medium text-primary hover:underline">
+                      Open report
+                    </Link>
+                  )}
                 </div>
                 <p className="text-sm text-foreground break-words">{report.description}</p>
                 {Object.keys(report.game_context || {}).length > 0 && (
