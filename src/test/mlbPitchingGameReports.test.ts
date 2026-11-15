@@ -5,16 +5,73 @@ import { buildUsSeason, type UsRow } from '@/lib/season/us';
 import { deriveSeason, type DerivedGame } from '@/lib/season/core';
 import { pitchingOpportunities, placeMlbPitching } from '@/lib/season/mlbPitching';
 import { keyedRng } from '@/lib/keyedRng';
+import { mlbLineOnSlate, mlbStatLineFor, type MlbSeasonLine } from '@/lib/mlbMyCareer';
 
-function fixture(pos: 'SP' | 'RP', kind: 'setup' | 'closer' | null, seed = 0, ovr = 84, health = 96, quality = 82) {
+function fixture(pos: 'SP' | 'RP', kind: 'setup' | 'closer' | null, seed = 0, ovr = 84, health = 96, quality = 82, year = 2026, role = 'starter') {
   const rng = keyedRng('pitch-replay|' + pos + '|' + kind + '|' + seed);
   const sport = MLB_CAREER_SPORT;
   const archetypes = sport.create.archetypes[pos];
   const career = sport.startCareer('Fixture Pitcher', pos, archetypes.find(value => value.id === kind) ?? archetypes[0], rng, null as never, 'now');
-  Object.assign(career, { team: 'SEA', role: 'starter', ovr, health, year: 2026 });
+  Object.assign(career, { team: 'SEA', role, ovr, health, year });
   const { line } = sport.simSeason(career, quality, rng, true);
   return { career, line };
 }
+
+function expectPitchingCapacity(games: number, line: { wins?: number; lossesP?: number; saves?: number; holds?: number }) {
+  const winsAndSaves = (line.wins ?? 0) + (line.saves ?? 0);
+  expect(winsAndSaves + (line.lossesP ?? 0)).toBeLessThanOrEqual(games);
+  expect(winsAndSaves + (line.holds ?? 0)).toBeLessThanOrEqual(games);
+}
+
+describe('MLB My Career generated pitching capacity', () => {
+  it('fits the generated decisions to the workload on the original stat draws', () => {
+    let draws = 0;
+    const highRoll = () => { draws++; return 0.999; };
+    const starter = mlbStatLineFor({ pos: 'SP', kind: '', form: 110, games: 6 }, highRoll);
+    expect(draws).toBe(4);
+    expectPitchingCapacity(6, starter);
+    expect(starter.wins).toBe(6);
+    const closer = mlbStatLineFor({ pos: 'RP', kind: 'closer', form: 99, games: 62 }, highRoll);
+    expect(draws).toBe(10);
+    expectPitchingCapacity(62, closer);
+    expect(closer).toMatchObject({ saves: 58, holds: 4 });
+  });
+
+  it('checks rounded decisions again on a short slate without changing the full line', () => {
+    const full: MlbSeasonLine = {
+      year: 2020, team: 'SEA', age: 24, ovr: 99, games: 20, awards: [], teamResult: '', salary: 1, slate: 60,
+      wins: 5, lossesP: 2, saves: 13, holds: 1, so: 21, era: 2.4,
+    };
+    const save = { ...full };
+    expectPitchingCapacity(full.games, full);
+    expect(mlbLineOnSlate(full, 162)).toBe(full);
+    const short = mlbLineOnSlate(full, 60);
+    expect(short).toMatchObject({ games: 7, wins: 2, saves: 5, holds: 0, so: 8, era: 2.4 });
+    expectPitchingCapacity(short.games, short);
+    expect(full).toEqual(save);
+  });
+
+  it('fits entire seasons for starters, spot starters, setup pitchers and closers', () => {
+    const jobs = [
+      ['SP', null, 'starter'], ['SP', null, 'backup'], ['RP', 'setup', 'starter'], ['RP', 'closer', 'starter'],
+    ] as const;
+    let checked = 0, shortened = 0, lowWorkload = 0;
+    for (const year of [2020, 2026]) for (const [pos, kind, role] of jobs) for (let i = 0; i < 80; i++) {
+      const { line } = fixture(pos, kind, i, i < 40 ? 99 : 50 + i % 49, i % 2 ? 43 : 97, 96, year, role);
+      expectPitchingCapacity(line.games, line);
+      if (pos === 'SP') {
+        expect(line.saves).toBeUndefined();
+        expect(line.holds).toBeUndefined();
+      }
+      checked++;
+      if (line.slate === 60) shortened++;
+      if (year === 2026 && pos === 'RP' && line.games < 50) lowWorkload++;
+    }
+    expect(checked).toBe(640);
+    expect(shortened).toBe(320);
+    expect(lowWorkload).toBeGreaterThan(0);
+  });
+});
 
 function replay(career: ReturnType<typeof fixture>['career'], row: UsRow) {
   const built = buildUsSeason(MLB_SEASON, career, row, MLB_CAREER_SPORT.teamLabelOf);

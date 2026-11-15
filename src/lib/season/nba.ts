@@ -163,11 +163,13 @@ export const NBA_SEASON: UsSeasonBind = {
   strengthFor: share => { const p = Math.min(0.98, Math.max(0.02, share)); return 7.9 * Math.log(p / (1 - p)); },
   oppSpread: 6,
   totals: row => totals(row),
-  /* the engine's own ranges: 74 games or fewer is an injury season (one run of
-     missed games), 75 or more is a healthy one whose few missed games are rest */
-  availability: row => (row.games <= 74
-    ? { played: row.games, block: Math.max(0, GAMES - row.games), severe: false }
-    : { played: row.games, block: 0, severe: false }),
+  availability: row => {
+    const missed = Math.max(0, GAMES - row.games);
+    const planned = Math.min(missed, Math.max(0, Math.floor(num(row.restGames) ?? 0)));
+    const unplanned = missed - planned;
+    /* The engine's injuries cost at least eight games on a full schedule. */
+    return { played: row.games, block: unplanned >= 8 ? unplanned : 0, severe: false };
+  },
   meanBase: (key, g, row, u) => {
     const mean = num(key === 'pts' ? row.ppg : key === 'reb' ? row.rpg : row.apg) ?? 0;
     const base = mean * (0.55 + 0.9 * u);

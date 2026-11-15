@@ -28,7 +28,7 @@ import {
   nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlNextRound, nrlOnFieldCaptain,
   nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
-  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
+  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlKickingPlan, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
@@ -72,6 +72,12 @@ const tactics: { id: NrlTactic; label: string; description: string }[] = [
   { id: 'attack', label: 'Attack', description: 'Chase tries and risk leaving gaps.' },
   { id: 'defense', label: 'Defence', description: 'Protect your line and create fewer chances.' },
 ];
+const kickingPlans = {
+  mixed: { label: 'Mixed kicks', description: 'Use your usual mix of long and contestable kicks.' },
+  territory: { label: 'Kick long', description: 'Pin the opposition deeper. Both sides have a slightly lower chance of scoring tries.' },
+  contest: { label: 'Contest kicks', description: 'Put kicks up for your chasers to win. Both sides have a slightly higher chance of scoring tries.' },
+} satisfies Record<NrlKickingPlan, { label: string; description: string }>;
+const kickingPlanChoices = ['mixed', 'territory', 'contest'] as const;
 const halftimeTalkLabels: Record<NrlHalftimeTalk, string> = {
   reinforceBasics: 'Reinforce the basics',
   liftTempo: 'Lift the tempo',
@@ -248,6 +254,7 @@ function LiveHalftime({ live, career, title, onAction, disabled, coachRole, coac
       <div className="rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
         <p className="text-xs font-bold uppercase tracking-widest text-emerald-200">{title}</p>
         <h2 id="nrl-halftime" className="mt-2 font-display text-2xl font-black">Half time</h2>
+        {season.kickingPlan && <p className="mt-1 text-sm text-emerald-100">Last-tackle kicks: {kickingPlans[season.kickingPlan].label}.</p>}
         <ul className="mt-3 grid grid-cols-2 gap-3" aria-label="First-half score" data-nrl-halftime>
           {sides.map(([id, scoring]) => (
             <li key={id} className="min-w-0 rounded-xl bg-black/20 p-3">
@@ -382,6 +389,7 @@ function LiveMinute60({ live, career, onAction, disabled }: {
     <section className="space-y-4" aria-labelledby="nrl-minute60">
       <div className="rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
         <h2 id="nrl-minute60" className="font-display text-2xl font-black">60 minutes</h2>
+        {season.kickingPlan && <p className="mt-1 text-sm text-emerald-100">Last-tackle kicks: {kickingPlans[season.kickingPlan].label}.</p>}
         <ul className="mt-3 grid grid-cols-2 gap-3" aria-label="Score after 60 minutes">
           {sides.map(([clubId, scoring]) => (
             <li key={clubId} className="min-w-0 rounded-xl bg-black/20 p-3">
@@ -741,6 +749,9 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
         {late?.starterId === kickerId ? 'Goal kicker after 60 minutes' : 'Goal kicker after half time'}: {lateKickerName}.
       </p>}
       {match.goalKickingDrills && <p className="mt-2 text-sm text-muted-foreground">Goal-kicking drills were used for this match.</p>}
+      {match.kickingPlan && <p className="mt-2 text-sm text-muted-foreground" data-nrl-kicking-plan-result>
+        Last-tackle kicks: {kickingPlans[match.kickingPlan].label}.
+      </p>}
       {match.penaltyTap !== undefined && <p className="mt-2 text-sm text-muted-foreground" data-nrl-penalty-tap-result>
         {match.penaltyTap === 'none' ? 'You chose to tap for a try. No kickable penalty came up.'
           : match.penaltyTap === 0 ? 'Your penalty tap ended without points.'
@@ -1184,6 +1195,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
   const readyAcademy = career.retired ? [] : nrlAcademyReports(career)
     .flatMap(({ status, player }) => status === 'ready' && player && nrlAcademyOffer(career, player.id).ok ? [player] : []);
   const canPlayLive = Boolean(match && season.kickerId && season.bench);
+  const kickingPlan = season.kickingPlan ?? 'mixed';
   const goalKicker = match && season.backupKickerId && season.squad.find(player => player.id === season.kickerId)?.name;
   const actingCaptain = match && season.viceCaptainId && nrlOnFieldCaptain(season) === season.viceCaptainId
     ? season.squad.find(player => player.id === season.viceCaptainId)?.name : undefined;
@@ -1278,6 +1290,21 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
             </div>
             <p className="mt-2 text-sm text-muted-foreground">{tactics.find(tactic => tactic.id === season.tactic)?.description}{coachTacticNote(coachRole, coachBonus, season.tactic)}</p>
             <AttackPlan key={`${year}:${next.round}`} career={career} onAction={onAction} disabled={disabled} />
+            {!career.legacySeason && canPlayLive && (
+              <details key={`kicks:${year}:${next.round}`} className="mt-3 rounded-lg border border-border px-3" data-nrl-kicking-plan>
+                <summary className="min-h-11 cursor-pointer py-2.5 text-sm font-semibold">
+                  Last-tackle kicks{season.kickingPlan && ` · ${kickingPlans[kickingPlan].label}`}
+                </summary>
+                <div className="flex flex-wrap gap-2" role="group" aria-label="Last-tackle kicks">
+                  {kickingPlanChoices.map(plan => <Button key={plan} type="button" size="lg" className="px-3"
+                    variant={plan === kickingPlan ? 'default' : 'outline'} aria-pressed={plan === kickingPlan} disabled={disabled}
+                    onClick={() => onAction({ type: 'setKickingPlan', year, clubId, round: season.round, plan })}>
+                    {kickingPlans[plan].label}
+                  </Button>)}
+                </div>
+                <p className="pb-3 pt-2 text-sm text-muted-foreground" aria-live="polite">{kickingPlans[kickingPlan].description}</p>
+              </details>
+            )}
             {!career.legacySeason && season.kickerId && season.bench && (
               <details className="mt-3 rounded-lg border border-border px-3" data-nrl-penalty-approach>
                 <summary className="min-h-11 cursor-pointer py-2.5 text-sm font-semibold">
@@ -2484,6 +2511,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check the latest match result or open Rating changes in Squad. Existing ratings carry into the next season.</li>
               <li>Open a regular-season match report in Season fixtures to see the rating changes saved for that match.</li>
               <li>Before kick-off, open Penalty approach to bank two points from a kickable penalty or tap for a chance at four or six. The match report shows how the tap finished.</li>
+              <li>Choose Last-tackle kicks before kick-off. Against a dangerous attack, Kick long lowers the try threat for both teams. Contest kicks opens the game up and gives both teams more chances. Your plan lasts through regulation and resets to Mixed kicks next match.</li>
               <li>In Squad, a young player can learn a second position in reserve grade while another player trains with the first team. The reserve course replaces the one-point rating gain.</li>
               <li>While a reserve-grade spell has at least two rounds left, book reserve coaching from Squad for $90,000. The prospect returns one round sooner with their rating gain or new position.</li>
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>

@@ -17,6 +17,7 @@ import {
   buildNbaFaWindow, nbaFaPushArgs, buildNbaExtension, nbaExtPushArgs, nbaFreeAgencyTeams, contactNbaFreeAgencyTeam,
   nbaAssignRole, nbaCampBattle, enableNbaDraft2004, hasNbaDraft2004,
   nbaRosterPriority, nbaRosterPriorityBoost, requestNbaRosterPriority, clearNbaRosterPriority,
+  nbaRestPlanAvailable, nbaRestPlanActive, setNbaRestPlan, nbaScheduledRestGames,
   type NbaCareerPos, type NbaCareerState, type NbaSeasonLine,
 } from '@/lib/nbaMyCareer';
 import { countOf, nbaStatLine } from '@/lib/usCareerStatLine';
@@ -78,6 +79,13 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = wi
   campBattle: nbaCampBattle,
   tradeRequest: { available: nbaTradeRequestAvailable, receipt: nbaTradeRequestReceipt, settle: settleNbaTradeRequest },
   rosterPriority: { boost: nbaRosterPriorityBoost, receipt: nbaRosterPriority, request: requestNbaRosterPriority, cancel: clearNbaRosterPriority },
+  restPlan: {
+    available: nbaRestPlanAvailable,
+    current: nbaRestPlanActive,
+    completed: (c, year, team) => c.seasons.some(s => s.year === year && s.team === team),
+    set: setNbaRestPlan,
+    games: nbaScheduledRestGames,
+  },
   simSeason: simNbaSeason,
   progress: nbaProgress,
   drawEvent: drawNbaEvent,
