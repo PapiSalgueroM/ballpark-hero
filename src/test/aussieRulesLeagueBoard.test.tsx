@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import AussieRulesLeagueBoard from '@/components/aussie-rules-manager/AussieRulesLeagueBoard';
 import AussieRulesManager from '@/pages/AussieRulesManager';
 import { clubOf, clubShort, createLeague, draftPool, lastWeek, LEGACY_SAVE_KEY, opponentPlays, picksLeft, readLeagueSave, reduceLeague, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
-import { TACTICS } from '@/lib/aussieRulesManager';
+import { effectiveSkill, TACTICS } from '@/lib/aussieRulesManager';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), getCurrentPlayerName: () => null }));
 vi.mock('@/lib/badges', () => ({ getNewlyEarnedBadges: async () => [] }));
@@ -55,6 +55,29 @@ describe('AussieRulesLeagueBoard', () => {
     click(view, '[data-arl-next]');
     expect(saved().round).toBe(1);
     expect(saved().phase).toBe('prepare');
+  });
+
+  it.each([0, 64])('previews actual starting strength and fatigue from a starter fatigue of %i', fatigue => {
+    const state = createLeague(12, 'club-05')!;
+    const starterIds = new Set(state.starters);
+    clubOf(state, state.myClub)!.players.forEach(player => { if (starterIds.has(player.id)) player.fatigue = fatigue; });
+    store(state);
+    const bytes = localStorage.getItem(SAVE_KEY);
+    const view = draw();
+    tile(view, 'Next match');
+    const previews = (['train', 'rest'] as const).map(choice => {
+      const expected = reduceLeague(state, { type: 'prepare', choice });
+      const starters = clubOf(expected, state.myClub)!.players.filter(player => starterIds.has(player.id));
+      const strength = starters.reduce((sum, player) => sum + effectiveSkill(player), 0) / starters.length;
+      const averageFatigue = starters.reduce((sum, player) => sum + player.fatigue, 0) / starters.length;
+      const option = view.container.querySelector<HTMLElement>(`[data-arl-prepare="${choice}"]`)!;
+      expect(within(option).getByText(`Starting strength ${strength.toFixed(1)} · Avg fatigue ${Math.round(averageFatigue)}`)).toBeVisible();
+      return strength;
+    });
+    expect(previews[0] > previews[1]).toBe(fatigue === 0);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+    click(view, '[data-arl-prepare="rest"]');
+    expect(saved()).toEqual(reduceLeague(state, { type: 'prepare', choice: 'rest' }));
   });
 
   it('shows skill movement in the exact full-time report and after reload', () => {

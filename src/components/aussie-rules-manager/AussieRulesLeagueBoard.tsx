@@ -5,7 +5,7 @@ import { HubPanelHeader, HubTiles } from '@/components/hub/HubTiles';
 import VictoryMoment from '@/components/game/VictoryMoment';
 import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard';
 import { buildDraftNight } from '@/lib/draftNight';
-import { PREPARATIONS, ROLE_LABELS, ROLES, TACTICS, type Score, type Tactic } from '@/lib/aussieRulesManager';
+import { lineupStrength, prepareClubs, PREPARATIONS, ROLE_LABELS, ROLES, TACTICS, type Score, type Tactic } from '@/lib/aussieRulesManager';
 import { EXIT_LABELS } from '@/lib/aussieRulesFormat';
 import {
   CLUBS, clubFull, clubIdentities, clubOf, clubShort, CURRENT_CLUB_SET, draftPool, hubTiles, lastWeek, leagueLadder, leaguePlayer, myFinalsTie, opponentPlays, ordinal, pickRefusal, picksLeft, retirees,
@@ -103,7 +103,15 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
     {!match && state.phase === 'prepare' && <><h3>You are not playing this week</h3><p className={styles.muted}>Here is the week's draw. Play it out to see who goes through.</p><Results state={state} />
       <button className={styles.action} data-arl-simweek onClick={() => act({ type: 'simWeek' })}>Play the week</button></>}
     {match && state.phase === 'prepare' && <><h3>Prepare your matchday 23</h3><p className={styles.muted}>Your list manager picked the best 23 on current form: skill, less fatigue. Change it in Squad, then choose this week's preparation.</p>
-      <div className={styles.choices}>{PREPARATIONS.map(choice => <button key={choice.id} className={styles.tile} data-arl-prepare={choice.id} onClick={() => act({ type: 'prepare', choice: choice.id })}><strong>{choice.label}</strong><span>{choice.description}</span></button>)}</div></>}
+      <div className={styles.choices}>{PREPARATIONS.map(choice => {
+        const [prepared] = prepareClubs([clubOf(state, state.myClub)!], state.myClub, choice.id, match.round);
+        const starters = prepared.players.filter(player => state.starters.includes(player.id));
+        const fatigue = Math.round(starters.reduce((sum, player) => sum + player.fatigue, 0) / starters.length);
+        const strength = lineupStrength(prepared, state.starters).toFixed(1);
+        return <button key={choice.id} className={styles.tile} data-arl-prepare={choice.id} onClick={() => act({ type: 'prepare', choice: choice.id })}>
+          <strong>{choice.label}</strong><span>{choice.description}</span><span>Starting strength {strength} · Avg fatigue {fatigue}</span>
+        </button>;
+      })}</div></>}
     {(state.phase === 'quarter' || state.phase === 'break') && match && <>
       <p className={styles.muted}>Opponent read: {read}, their usual style, though they switch it up some quarters.{lastPlayed ? ` Last quarter they played ${lastPlayed}.` : ''} {state.phase === 'quarter' ? `Quarter ${match.quarter + 1} of 4 is next.` : `Quarter ${match.quarter} break.`}</p>
       <div className={styles.tabs} role="group" aria-label="Tactic">{TACTICS.map(value => <button key={value.id} aria-pressed={tactic === value.id} className={tactic === value.id ? styles.action : styles.secondary} data-arl-tactic={value.id} onClick={() => setTactic(value.id)}>{value.label}</button>)}</div>
