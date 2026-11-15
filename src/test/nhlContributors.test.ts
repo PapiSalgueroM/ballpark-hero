@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { describe, expect, it, vi } from 'vitest';
 import * as engine from '@/lib/nhlFrontOffice';
 import { rngFrom } from '@/lib/careerEngine';
+import { NHL_OPENING_RATINGS } from '@/data/nhlOpeningRatings';
 import type { NhlContributors, NhlGmPlayer, NhlGmTeam, NhlLeague } from '@/lib/nhlFrontOffice';
 
 const clone = <T>(value: T): T => JSON.parse(JSON.stringify(value));
@@ -48,6 +49,12 @@ const ORIGINAL_REFERENCES = [
   { seed: 431, digest: 'fc273a8285ad7eab1cff2bdeba9084c3401d989e16551ad072fc03589af8044b', rngCalls: 12080 },
   { seed: 907, digest: '1da7787fbd0f1e5f2f5c410beae4a26cc6e4244e3561b9963228c9a528583ec9', rngCalls: 12055 },
 ];
+/* Filling vacant slots changes injury and waiver outcomes. Series can end a different game. */
+const VACANCY_REFERENCES = [
+  { seed: 117, digest: 'cef8e5ecf6c8797357585dce3f92b42cbee859757e6fe74e4e2c5dd67ae7cfaf', rngCalls: 12088 },
+  { seed: 431, digest: '26d89defdcab43a672079e63835fcf7db74e2de384a7bbc768ecaf9582b02e77', rngCalls: 12078 },
+  { seed: 907, digest: '023d7e7674dcd095e459e2cc17a81abac3047f24bb71f8a24f56a1cc7966db36', rngCalls: 12056 },
+];
 function automaticCampaign(api: typeof engine, seed: number) {
   let calls = 0;
   const seeded = rngFrom(seed), rng = () => { calls += 1; return seeded(); };
@@ -89,19 +96,25 @@ function automaticCampaign(api: typeof engine, seed: number) {
 
 describe('NHL simulation contributor outcomes', () => {
   it('holds the frozen automatic season outcomes and RNG counts with no override fields', () => {
-    for (const reference of ORIGINAL_REFERENCES) {
-      const outcome = automaticCampaign(engine, reference.seed);
-      console.log(`AUTOMATIC ${reference.seed}: digest=${outcome.digest}, rngCalls=${outcome.rngCalls}`);
-      expect(outcome.digest).toBe(reference.digest); expect(outcome.rngCalls).toBe(reference.rngCalls);
-    }
+    const observed = VACANCY_REFERENCES.map(({ seed }) => {
+      const { digest, rngCalls } = automaticCampaign(engine, seed);
+      console.log(`AUTOMATIC ${seed}: digest=${digest}, rngCalls=${rngCalls}`);
+      return { seed, digest, rngCalls };
+    });
+    expect(observed).toEqual(VACANCY_REFERENCES);
   });
 
-  it.skipIf(!process.env.NHL_CONTRIBUTORS_BASELINE)('matches physical original rounds, AI, roster moves, playoffs and offseason', async () => {
+  it.skipIf(!process.env.NHL_CONTRIBUTORS_BASELINE)('verifies physical original campaign fingerprints and exact full-lineup strengths', async () => {
     const original = await import(/* @vite-ignore */ process.env.NHL_CONTRIBUTORS_BASELINE!) as typeof engine;
     for (const reference of ORIGINAL_REFERENCES) {
-      const old = automaticCampaign(original, reference.seed), current = automaticCampaign(engine, reference.seed);
+      const old = automaticCampaign(original, reference.seed);
       console.log(`PHYSICAL ORIGINAL ${reference.seed}: digest=${old.digest}, rngCalls=${old.rngCalls}`);
-      expect(current.normalized).toEqual(old.normalized); expect(current.rngCalls).toBe(old.rngCalls);
+      expect(old.digest).toBe(reference.digest); expect(old.rngCalls).toBe(reference.rngCalls);
+    }
+    const full = engine.initNhlLeague(rngFrom(17));
+    for (const team of Object.values(full.teams)) {
+      expect(ids(engine.nhlContributors(team))).toHaveLength(11);
+      expect(engine.nhlStrength(team)).toBe(original.nhlStrength(team));
     }
   });
 
@@ -163,11 +176,45 @@ describe('NHL simulation contributor outcomes', () => {
     expect(random).not.toHaveBeenCalled(); random.mockRestore();
   });
 
-  it('uses all available healthy thin-roster groups and the original62 empty-group fallback', () => {
+  it('charges for a vacant defense slot after a legal waiver or an injury until the player returns', () => {
+    const league = engine.initNhlLeague(rngFrom(17), NHL_OPENING_RATINGS);
+    const team = league.teams.DAL;
+    const defender = team.players.filter(player => player.pos === 'D').sort((a, b) => a.ovr - b.ovr)[0];
+    expect(defender.ovr).toBe(70);
+    expect(engine.nhlContributors(team).defense).toHaveLength(4);
+    const full = engine.nhlStrength(team);
+    expect(full).toBeCloseTo(86.85, 10);
+
+    const waived = clone(team), waivers: NhlGmPlayer[] = [];
+    expect(engine.nhlRelease(waived, waivers, defender.id, league.ratingModelVersion)).toBe(true);
+    expect(engine.nhlContributors(waived).defense).toHaveLength(3);
+    expect(waivers.map(player => player.id)).toEqual([defender.id]);
+    expect(engine.nhlCapUsed(waived)).toBeCloseTo(98.1, 10);
+    expect(engine.nhlStrength(waived)).toBeCloseTo(86.25, 10);
+    expect(engine.nhlWinProb(waived, league.teams.TOR)).toBeLessThan(engine.nhlWinProb(team, league.teams.TOR));
+
+    const selected = clone(team);
+    const preferred = engine.nhlContributors(selected);
+    selected.contributors = preferred;
+    selected.players.find(player => player.id === defender.id)!.out = 2;
+    const inProgress = clone(league);
+    inProgress.teams.DAL = selected;
+    engine.simNhlRound(inProgress, 'DAL', () => 0.99);
+    expect(selected.players.find(player => player.id === defender.id)!.out).toBe(1);
+    expect(engine.nhlStrength(selected)).toBeCloseTo(engine.nhlStrength(waived), 10);
+    expect(selected.contributors).toEqual(preferred);
+    const restored = clone(inProgress), restoredTeam = restored.teams.DAL;
+    engine.simNhlRound(restored, 'DAL', () => 0.99);
+    expect(restoredTeam.players.find(player => player.id === defender.id)!.out).toBe(0);
+    expect(engine.nhlContributors(restoredTeam)).toEqual(preferred);
+    expect(engine.nhlStrength(restoredTeam)).toBe(full);
+  });
+
+  it('uses all available healthy thin-roster groups and the existing 62 rating for every vacancy', () => {
     const team = fixtureTeam(); team.players = team.players.filter(player => player.pos !== 'G').slice(0, 2);
     const effective = engine.nhlContributors(team);
     expect(effective).toEqual({ forwards: team.players.map(player => player.id), defense: [], goalie: null });
-    expect(engine.nhlStrength(team)).toBe(95 * 0.5 + 62 * 0.3 + 62 * 0.2);
+    expect(engine.nhlStrength(team)).toBe(73 * 0.5 + 62 * 0.3 + 62 * 0.2);
     expect(engine.nhlSetContributors(team, effective)).toBe(false);
     raw(team, { forwards: ['departed'], defense: ['departed-D'], goalie: 'departed-G' });
     expect(engine.repairNhlContributors(team)).toBe(true); expect(team.contributors).toEqual(effective);

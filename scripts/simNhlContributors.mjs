@@ -13,7 +13,7 @@ const control = process.env.NHL_CONTRIBUTORS_CONTROL || '';
 const controls = {
   strength: { test: 'offers real first-season choices', anchor: 'const selection = t.contributors === undefined ? null : nhlContributors(t);', replacement: 'const selection = null;' },
   policy: { test: 'measures a paired complete-season win effect', independent: 'refuses malformed', anchor: 'const selection = t.contributors === undefined ? null : nhlContributors(t);', replacement: 'const selection = null;' },
-  weights: { test: 'holds the frozen automatic season outcomes', anchor: 'avg(g, 62) * 0.2;', replacement: 'avg(g, 62) * 0.1;' },
+  weights: { test: 'holds the frozen automatic season outcomes', anchor: 'avg(g, 1) * 0.2;', replacement: 'avg(g, 1) * 0.1;' },
   shape: { test: 'refuses malformed', anchor: "if (Object.keys(record).length !== 3 || !['forwards', 'defense', 'goalie'].every(key => Object.prototype.hasOwnProperty.call(record, key))) return false;", replacement: 'if (false) return false;' },
   health: { test: 'refuses malformed', anchor: "if (!contributorsShape(value)) return false;\n  const healthy = t.players.filter(p => p.out === 0);", replacement: "if (!contributorsShape(value)) return false;\n  const healthy = t.players;" },
   duplicates: { test: 'refuses malformed', anchor: 'if (new Set(ids).size !== ids.length) return false;', replacement: 'if (false) return false;' },
@@ -22,7 +22,8 @@ const controls = {
   unavailable: { test: 'resolves unavailable IDs', anchor: 'if (!selected.includes(id) && players.some(p => p.id === id)) selected.push(id);', replacement: 'if (!selected.includes(id)) selected.push(id);' },
   malformedrepair: { test: 'resolves unavailable IDs', anchor: 'if (!contributorsShape(t.contributors)) return nhlResetContributors(t);', replacement: 'if (!contributorsShape(t.contributors)) return false;' },
   rng: { test: 'resolves unavailable IDs', anchor: 'export function nhlContributors(t: NhlGmTeam): NhlContributors {', replacement: 'export function nhlContributors(t: NhlGmTeam): NhlContributors { Math.random();' },
-  thin: { test: 'uses all available healthy thin-roster groups', independent: 'refuses malformed', anchor: 'return avg(fwd, 62) * 0.5 + avg(d, 62) * 0.3 + avg(g, 62) * 0.2;', replacement: 'return avg(fwd, 61) * 0.5 + avg(d, 61) * 0.3 + avg(g, 61) * 0.2;' },
+  thin: { test: 'uses all available healthy thin-roster groups', independent: 'refuses malformed', anchor: '(slots - xs.length) * 62', replacement: '(slots - xs.length) * 61' },
+  vacancy: { test: 'charges for a vacant defense slot', independent: 'refuses malformed', anchor: '(xs.reduce((s, p) => s + p.ovr, 0) + (slots - xs.length) * 62) / slots;', replacement: 'xs.length ? xs.reduce((s, p) => s + p.ovr, 0) / xs.length : 62;' },
   release: { test: 'repairs successful releases', anchor: 'if (released) repairNhlContributors(t);', replacement: 'if (false) repairNhlContributors(t);' },
   sign: { test: 'repairs successful releases', anchor: 't.players.push(p);\n  repairNhlContributors(t);', replacement: 't.players.push(p);' },
   trade: { test: 'repairs both successful trade routes', anchor: 'if (sweeten && my.picks.length) { their.picks.push(my.picks.pop()!); }\n  repairNhlContributors(my); repairNhlContributors(their);', replacement: 'if (sweeten && my.picks.length) { their.picks.push(my.picks.pop()!); }' },
@@ -75,16 +76,16 @@ try {
   assert.doesNotMatch(output, /Failed to resolve import|Cannot find module|Failed to load url|No test files found|Unhandled Errors|Test timed out|RPC timeout/, 'Collection, import and timeout failures earn no credit');
   if (control) {
     assert.notEqual(run.status, 0, 'Mutated behavior must fail its intended outcome');
-    assert.match(output, /Tests\s+1 failed.*1 passed.*10 skipped/, 'One intended failure and one independent pass must run');
+    assert.match(output, /Tests\s+1 failed.*1 passed.*11 skipped/, 'One intended failure and one independent pass must run');
     assert.match(output, new RegExp(`FAIL[^\\n]*${controls[control].test}`)); assert.match(output, /AssertionError|expected .* to/i, 'An actual outcome assertion must fail');
     console.log(`simNhlContributors ${control}: asserted copied binding changed; intended outcome failed and independent automatic/selection baseline passed.`);
   } else {
     assert.equal(run.status, 0, output.slice(-8000));
-    assert.match(output, process.env.NHL_LEGACY_ENGINE ? /12 passed/ : /11 passed.*1 skipped/);
-    console.log(`simNhlContributors: ${process.env.NHL_LEGACY_ENGINE ? 'twelve outcomes including the supplied physical original' : 'eleven outcomes; one optional physical-original comparison explicitly skipped'} passed.`);
+    assert.match(output, process.env.NHL_LEGACY_ENGINE ? /13 passed/ : /12 passed.*1 skipped/);
+    console.log(`simNhlContributors: ${process.env.NHL_LEGACY_ENGINE ? 'thirteen outcomes including the supplied physical original' : 'twelve outcomes; one optional physical-original comparison explicitly skipped'} passed.`);
   }
   await Promise.all(verifyBytes.map(verify => verify()));
-  console.log('simNhlContributors: frozen original complete-season fingerprints/RNG counts, actual choices and roster lifecycle are exercised.');
+  console.log('simNhlContributors: frozen complete-season fingerprints/RNG counts, actual choices and roster lifecycle are exercised.');
   console.log('simNhlContributors: paired synthetic policy means and block headroom are printed; no new real NHL facts or booking are produced.');
   console.log('simNhlContributors: no Git history/network dependency; only owned source copies are written and removed.');
 } finally {
