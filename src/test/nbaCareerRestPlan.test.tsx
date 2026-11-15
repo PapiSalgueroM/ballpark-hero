@@ -93,7 +93,7 @@ describe('NBA scheduled rest', () => {
     const absent = (line: typeof healthy) => {
       const row = { ...line };
       const built = buildUsSeason(NBA_SEASON, c, row, sport.teamLabelOf);
-      if (!built.ok) throw new Error(built.line);
+      if (built.ok === false) throw new Error(built.line);
       const replay = deriveSeasonOrWhy(built.sport, row, built.ctx);
       if (typeof replay === 'string') throw new Error(replay);
       expect(replay.games.filter(game => game.played)).toHaveLength(row.games);
