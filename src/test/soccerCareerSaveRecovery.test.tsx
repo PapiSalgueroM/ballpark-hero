@@ -45,6 +45,7 @@ vi.mock('@/components/ui/select', () => ({
 
 import * as E from '@/lib/soccerCareerEngine';
 import { recordCompletion } from '@/lib/completions';
+import { keyedRng } from '@/lib/keyedRng';
 import SoccerCareer from '@/pages/SoccerCareer';
 
 /* The page, its creator, actual engine and completion hook run here. Only
@@ -99,6 +100,42 @@ beforeEach(() => {
   window.scrollTo = () => undefined;
 });
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); Math.random = realRandom; });
+
+describe('Soccer Career national selection uses the club season just played', () => {
+  it.each([
+    { name: 'breakthrough', seed: 2, lastRating: 5.8, lastGoals: 2, oldCaps: 0, earned: 2, debut: 2025, clubRating: 6.8, clubGoals: 15 },
+    { name: 'decline', seed: 0, lastRating: 8.5, lastGoals: 30, oldCaps: 21, earned: 0, debut: 2021, clubRating: 6.5, clubGoals: 10 },
+  ])('keeps the $name caps from Next Season after reopening', ({ seed, lastRating, lastGoals, oldCaps, earned, debut, clubRating, clubGoals }) => {
+    const club = E.FALLBACK_CLUBS.find(row => row.name === 'Arsenal')!;
+    const ovr = 79;
+    const attrs = { pace: ovr, shooting: ovr, passing: ovr, dribbling: ovr, defending: ovr, physical: ovr, reflexes: ovr };
+    Math.random = keyedRng('national selection save');
+    const career = E.initCareer('Fixture Striker', 'France', 'ST', '2026', attrs, ovr, 2024, E.FALLBACK_CLUBS, null, ovr, null, null, club.name);
+    const prior = { ...career.seasons[0], year: 2024, age: 25, club: club.name, clubCountry: club.country, clubTier: club.tier,
+      type: 'playing' as const, apps: 33, leagueApps: 27, rating: lastRating, goals: lastGoals, ovr };
+    Object.assign(career, {
+      ...attrs, phase: 'playing', age: 25, overall: ovr, currentClub: club.name, contractYearsLeft: 4,
+      currentClubCountry: club.country, currentClubTier: club.tier, currentClubColor: club.color, currentLeague: club.league,
+      internationalCareer: oldCaps > 0, startingOverall: ovr, seasons: [prior],
+      intStats: { ...career.intStats, caps: oldCaps, goals: oldCaps ? 5 : 0, debutYear: oldCaps ? 2021 : null, debutAge: oldCaps ? 22 : null },
+    });
+    const { view } = mount(JSON.stringify(career));
+    Math.random = keyedRng('selection profile ' + seed);
+    fireEvent.click(view.getByRole('button', { name: 'Next Season' }));
+    const saved = read();
+    expect(saved.seasons.slice(0, -1)).toEqual([prior]);
+    const played = saved.seasons.at(-1)!;
+    expect(played).toMatchObject({ year: 2025, intApps: earned, rating: clubRating, goals: clubGoals });
+    expect(saved.intStats).toMatchObject({
+      caps: oldCaps + earned, debutYear: debut, goals: career.intStats.goals + played.intGoals,
+      assists: career.intStats.assists + played.intAssists,
+    });
+    view.unmount();
+    mount(localStorage.getItem(KEY));
+    expect(read().seasons).toEqual(saved.seasons);
+    expect(read().intStats).toEqual(saved.intStats);
+  });
+});
 
 describe('Soccer Career actual save recovery', () => {
   it('restores current progress synchronously and advances the same career once', () => {
