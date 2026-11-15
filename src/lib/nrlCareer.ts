@@ -1594,7 +1594,7 @@ function careerMatchday(state: NrlCareerState, requestedPlan?: NrlAttackPlan) {
   const ratings = opponentRatings(state);
   const opponentStrength = averagesByClub(ratings);
   const { attackPlan, live } = state.season;
-  const usesPositionRatings = [attackPlan, live?.minute60?.attackPlan, requestedPlan]
+  const usesPositionRatings = [attackPlan, live?.minute60?.attackPlan, live?.goldenPoint?.finish.attackPlan, requestedPlan]
     .some(plan => plan === 'middle' || plan === 'wide');
   return {
     matchday: state.season,
@@ -1694,16 +1694,18 @@ export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport 
   };
 }
 
-function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type: 'advance' | 'finishLive' | 'finishMinute60' }>,
+function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type: 'advance' | 'finishLive' | 'finishMinute60' | 'settleGoldenPoint' }>,
   intensiveByePlayerId?: string): NrlCareerState {
   const previous = state.season;
   if (judiciaryNeedsResponse(previous) && nrlNextRound(previous).clubMatch) return state;
-  const { matchday, opponentStrength, planRatings } = careerMatchday(state, action.type === 'advance' ? undefined : action.attackPlan);
+  const requestedPlan = action.type === 'finishLive' || action.type === 'finishMinute60' ? action.attackPlan : undefined;
+  const { matchday, opponentStrength, planRatings } = careerMatchday(state, requestedPlan);
   const played = reduceNrlSeason(matchday, action, opponentStrength, {
     medicalReduction: nrlMedicalLevel(state) - 1, ...nrlCoachTactics(state.finance), planRivalRatings: planRatings, intensiveByePlayerId,
     awayRecovery: nrlAwayRecoveryBonus(state),
   });
   if (played === matchday) return state;
+  if (played.live) return { ...state, season: played };
   const newResults = played.results.slice(previous.results.length);
   const review = nrlNewJudiciaryCase(previous, newResults);
   const season = review ? { ...played, judiciary: { ...played.judiciary, case: review } }
@@ -2482,7 +2484,8 @@ function settleOriginClubWorkload(state: NrlCareerState, origin: NrlOriginSeries
 }
 
 export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction): NrlCareerState {
-  if (state.retired || (state.season.live && action.type !== 'finishLive' && action.type !== 'reachMinute60' && action.type !== 'finishMinute60')) return state;
+  if (state.retired || (state.season.live && action.type !== 'finishLive' && action.type !== 'reachMinute60'
+    && action.type !== 'finishMinute60' && action.type !== 'settleGoldenPoint')) return state;
   if (state.outOfWork && action.type !== 'acceptVacancy' && action.type !== 'retireCareer' && action.type !== 'simulateSeasonOut') return state;
   switch (action.type) {
     case 'resolveJudiciary': {
@@ -2918,6 +2921,7 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     case 'advance':
     case 'finishLive':
     case 'finishMinute60':
+    case 'settleGoldenPoint':
       return advanceCareer(state, action);
     default: {
       if (action.type === 'startLive' && judiciaryNeedsResponse(state.season)) return state;

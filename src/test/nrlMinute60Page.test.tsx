@@ -148,9 +148,9 @@ it('reopens a 60-minute save and uses the pending reserve only when play resumes
 });
 
 it.each([
-  [690, 'Field-goal setup produced a two-point kick in regulation.'],
-  [20, 'No field goal in regulation after the setup.'],
-] as const)('reopens the confirmed field-goal plan for seed %i in the saved report', (seed, label) => {
+  [690, 'Field-goal setup produced a two-point kick in regulation.', true],
+  [20, 'No field goal in regulation after the setup.', false],
+] as const)('reopens the confirmed field-goal plan for seed %i in the saved report', (seed, label, goldenPoint) => {
   const before = createNrlCareer('broncos', seed);
   const half = reduceNrlCareer(before, { type: 'startLive' });
   const mid = reduceNrlCareer(half, { type: 'reachMinute60', year: 2026, round: 1, tactic: 'balanced' });
@@ -173,10 +173,12 @@ it.each([
   expect(reloaded).not.toBeChecked();
   fireEvent.click(reloaded);
   fireEvent.click(screen.getByRole('button', { name: 'Play final 20 minutes' }));
+  expect(Boolean(screen.queryByRole('heading', { name: 'Golden point' }))).toBe(goldenPoint);
+  if (goldenPoint) fireEvent.click(screen.getByRole('button', { name: 'Play standard' }));
   const expected = reduceNrlCareer(mid, { type: 'finishMinute60', year: 2026, round: 1, tactic: 'balanced', fieldGoalPlan: true });
   const bytes = JSON.stringify(expected);
   expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(bytes);
-  expect(localStorage.getItem(fence)).toBe('5');
+  expect(localStorage.getItem(fence)).toBe(goldenPoint ? '6' : '5');
   const latest = within(screen.getByRole('region', { name: 'Full time' }));
   expect(latest.getByText(label)).toBeVisible();
   const fixtures = screen.getByText('Season fixtures', { exact: true });
@@ -187,4 +189,35 @@ it.each([
   fireEvent(report, new Event('toggle'));
   expect(within(report).getByText(label)).toBeVisible();
   expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(bytes);
+});
+
+it('pauses a tied Live match at 80 minutes and reopens the golden-point decision after reload', () => {
+  const half = reduceNrlCareer(createNrlCareer('storm', 29), { type: 'startLive' });
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(half));
+  localStorage.setItem(fence, '4');
+  const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const view = show();
+  fireEvent.click(screen.getByRole('button', { name: 'Play second half' }));
+  const pause = reduceNrlCareer(half, { type: 'finishLive', year: 2026, round: 1, tactic: 'balanced', pauseForGoldenPoint: true });
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(pause));
+  expect(localStorage.getItem(fence)).toBe('5');
+  expect(screen.getByRole('heading', { name: 'Golden point' })).toHaveFocus();
+  const regulation = screen.getByRole('list', { name: 'Score after 80 minutes' });
+  expect(within(regulation).getAllByText('20')).toHaveLength(2);
+  view.unmount();
+  show();
+  expect(within(screen.getByRole('list', { name: 'Score after 80 minutes' })).getAllByText('20')).toHaveLength(2);
+  fireEvent.click(screen.getByRole('button', { name: 'Protect the draw' }));
+  const settled = reduceNrlCareer(pause, { type: 'settleGoldenPoint', year: 2026, round: 1, clubId: 'storm', approach: 'protect' });
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(settled));
+  expect(localStorage.getItem(fence)).toBe('6');
+  expect(within(screen.getByRole('region', { name: 'Full time' })).getByText('Golden-point approach: Protect the draw.')).toBeVisible();
+  fireEvent.click(screen.getByText('Season fixtures', { exact: true }));
+  fireEvent.change(screen.getByRole('combobox', { name: 'Fixtures to show' }), { target: { value: '1' } });
+  const summary = screen.getByText('Round 1 match report', { exact: true });
+  const report = summary.closest('details')!;
+  fireEvent.click(summary);
+  fireEvent(report, new Event('toggle'));
+  expect(within(report).getByText('Golden-point approach: Protect the draw.')).toBeVisible();
 });
