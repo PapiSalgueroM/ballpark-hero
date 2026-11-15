@@ -18,6 +18,7 @@ import { usSeasonLength } from '@/data/usSeasonLengths';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nbaSeasonScore, wonAward } from './careerAwards';
 import { decideNbaAwards, NBA_FIELD } from './nbaCareerAwards';
+import { NBA_DEFENSIVE_CAP, NBA_DEFENSIVE_GAIN, NBA_DEFENSIVE_SCORING_COST, nbaDefensiveAssignment, type ProgrammePreparation } from './usCareerProgramme';
 import { draftRival, judgeRivalSeason, rivalKindOf, rivalSeasonDraws, rivalSeasonStream } from './careerRival';
 import type { CareerRival, RivalSeasonPlay } from './careerRival';
 import { nbaStatLine } from './usCareerStatLine';
@@ -683,8 +684,8 @@ export function nbaStatLineFor(input: NbaLineInput, rng: () => number): NbaLineN
   const rpg = clampTo((0.12 + d * 0.0048) * a.rebounding * NBA_POS_REB[input.pos] * minutes * era.reb * (0.92 + u4 * 0.16), 0.5, po ? 18 : 16);
   const apg = clampTo((0.045 + d * 0.0052) * a.playmaking * NBA_POS_AST[input.pos] * minutes * era.ast * (0.92 + u5 * 0.16), 0.3, po ? 14 : 13);
   const hands = (0.75 + d * 0.012) * minutes / 36;
-  const spg = clampTo(NBA_POS_STL[input.pos] * def.stl * hands * era.stl * (0.8 + u6 * 0.4), 0.1, 3);
-  const bpg = clampTo(NBA_POS_BLK[input.pos] * def.blk * hands * era.blk * (0.8 + u7 * 0.4), 0, 4);
+  const spg = clampTo(NBA_POS_STL[input.pos] * def.stl * hands * era.stl * (0.8 + u6 * 0.4), 0.1, NBA_DEFENSIVE_CAP.spg);
+  const bpg = clampTo(NBA_POS_BLK[input.pos] * def.blk * hands * era.blk * (0.8 + u7 * 0.4), 0, NBA_DEFENSIVE_CAP.bpg);
   return { mpg: tenth(minutes), ppg: tenth(ppg), rpg: tenth(rpg), apg: tenth(apg), spg: tenth(spg), bpg: tenth(bpg) };
 }
 
@@ -805,6 +806,7 @@ export const NBA_RECORD_BANDS: Record<string, readonly [number, number]> = {
 
 export function simNbaSeason(
   c: NbaCareerState, teamQuality: number, rng: () => number, inSeasonRating = false,
+  programme?: ProgrammePreparation | null,
 ): { line: NbaSeasonLine; notes: string[] } {
   const notes: string[] = [];
   /* Round 1103: the All-Star vote is in February, so it reads the fanbase he tipped off with, before a title's
@@ -842,6 +844,21 @@ export function simNbaSeason(
   const role: 'starter' | 'backup' = c.role === 'backup' ? 'backup' : 'starter';
   const seasonsPlayed = c.seasons.length;
   const stat = nbaStatLineFor({ form, pos: c.pos, archetype: a, role, seasonsPlayed, year: c.year }, rng);
+  if (programme?.plan.tactics === 'defend') {
+    const { label, stat: key, unit } = nbaDefensiveAssignment(c.pos);
+    const cap = NBA_DEFENSIVE_CAP[key];
+    const usual = stat[key];
+    const gain = tenth(Math.min(cap, Math.max(usual + 0.1, usual * (1 + NBA_DEFENSIVE_GAIN / 100))));
+    if (gain > usual) {
+      const points = stat.ppg;
+      stat[key] = gain;
+      stat.ppg = Math.max(1, tenth(points * (1 - NBA_DEFENSIVE_SCORING_COST / 100)));
+      notes.push(`🛡️ ${label} moved your ${unit} from ${usual.toFixed(1)} to ${gain.toFixed(1)} and points per game from ${points.toFixed(1)} to ${stat.ppg.toFixed(1)}.`);
+    } else {
+      (programme.idle ??= []).push('tactics');
+      notes.push(`🛡️ ${label} had no scoring cost. You were already at the ${cap.toFixed(1)} ${unit} cap.`);
+    }
+  }
   const { ppg, rpg, apg } = stat;
   if (c.role === 'backup') notes.push('🪑 Second unit season: your numbers come in bench minutes.');
   const line: NbaSeasonLine = {

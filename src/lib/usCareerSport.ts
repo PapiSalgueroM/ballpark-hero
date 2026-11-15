@@ -21,6 +21,7 @@
 import type { ComponentType } from 'react';
 import type { CareerDraftEntry, PreDraftDescriptor, PreDraftState } from '@/lib/careerPreDraft';
 import type { PlayerAppearance } from '@/lib/soccerCareerAppearance';
+import type { ProgrammePreparation } from '@/lib/usCareerProgramme';
 import type { CareerRival } from '@/lib/careerRival';
 import type { InboxBeat, InboxMessage } from '@/lib/careerInbox';
 import type { RivalryEvent } from '@/lib/careerRivalryEvents';
@@ -297,7 +298,7 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   rollTeamQuality(prev: number | null, rng: () => number, career?: C): number;
   assignRole(c: C, teamQuality: number, rng: () => number): string;
   campBattle(c: C, teamQuality: number, rng: () => number): string | null;
-  simSeason(c: C, teamQuality: number, rng: () => number, inSeasonRating?: boolean): { line: L; notes: string[] };
+  simSeason(c: C, teamQuality: number, rng: () => number, inSeasonRating?: boolean, programme?: ProgrammePreparation | null): { line: L; notes: string[] };
   progress(c: C, rng: () => number, seasonRating?: UsSeasonRating): string[];
   drawEvent(c: C, rng: () => number): UsCareerEvent<C>;
   /** Round 1038: every card drawEvent could have picked, built with the same

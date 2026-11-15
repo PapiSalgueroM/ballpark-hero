@@ -840,7 +840,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     /* Round 182: every season starts with a camp, and camps have losers. */
     const campNote = sport.campBattle(c, teamQuality, Math.random);
     const programmePreparation = prepareUsCareerProgramme(c, sport.slug);
-    const { line, notes } = sport.simSeason(c, teamQuality, Math.random, inSeasonRating);
+    const { line, notes } = sport.simSeason(c, teamQuality, Math.random, inSeasonRating, programmePreparation);
     playedRef.current = c;
     restoreUsCareerProgramme(c, programmePreparation);
     const progressNotes = sport.progress(c, Math.random, line.seasonRating);
