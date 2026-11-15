@@ -28,7 +28,7 @@ import {
   nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlNextRound, nrlOnFieldCaptain,
   nrlQuickInterchangeOptions, nrlQuickInterchangeOutcome, nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
-  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlGoldenPointApproach, type NrlHalftimeTalk, type NrlKickingPlan, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlQuickInterchange, type NrlRole, type NrlTactic,
+  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlGoldenPointApproach, type NrlHalftimeTalk, type NrlKickingPlan, type NrlLatePenaltyApproach, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlQuickInterchange, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
@@ -370,6 +370,8 @@ function LiveMinute60({ live, career, onAction, disabled }: {
   const [tactic, setTactic] = useState(stage.tactic);
   const [reserveId, setReserveId] = useState('');
   const [fieldGoal, setFieldGoal] = useState(false);
+  const openingPenalty = season.penaltyTap ? 'tap' : 'goal';
+  const [latePenaltyApproach, setLatePenaltyApproach] = useState<NrlLatePenaltyApproach>(openingPenalty);
   const currentPlan = stage.attackPlan ?? season.attackPlan ?? 'standard';
   const [attackPlan, setAttackPlan] = useState<NrlAttackPlan>(currentPlan);
   const plans = nrlLiveAttackPlans(career);
@@ -389,6 +391,7 @@ function LiveMinute60({ live, career, onAction, disabled }: {
     ...(selected && primaryRoles.get(selected.reserveId) !== selected.role && { reserveRole: selected.role }),
     ...(plans.includes(attackPlan) && attackPlan !== currentPlan && { attackPlan }),
     ...(canSetUpKick && fieldGoal && { fieldGoalPlan: true as const }),
+    ...(!fixture.finalsRound && latePenaltyApproach !== openingPenalty && { latePenaltyApproach }),
   } as const;
   const preview = nrlLivePlanPreview(career, closeChoice);
   return (
@@ -419,6 +422,18 @@ function LiveMinute60({ live, career, onAction, disabled }: {
         </div>
         <LiveAttackPlanPicker id="nrl-closing-attack-plan" label="Closing attack plan" plans={plans}
           value={attackPlan} onChange={setAttackPlan} disabled={disabled} preview={preview} />
+        {!fixture.finalsRound && (
+          <div className="mt-3 space-y-1 text-sm" data-nrl-late-penalty>
+            <label htmlFor="nrl-late-penalty" className="block font-semibold">Final-20 penalty approach</label>
+            <select id="nrl-late-penalty" value={latePenaltyApproach} disabled={disabled}
+              className="min-h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              onChange={event => setLatePenaltyApproach(event.target.value as NrlLatePenaltyApproach)}>
+              <option value="goal">Take two points</option>
+              <option value="tap">Tap for a try</option>
+            </select>
+            <p className="text-muted-foreground">Bank two or take a chance at four or six if a kickable penalty comes up in the final 20 minutes.</p>
+          </div>
+        )}
         {season.preparation === 'goalKickingDrills' && <p className="mt-2 text-sm">Goal-kicking drills still apply.</p>}
       </fieldset>
       {lateOptions.length > 0 && (
@@ -804,6 +819,14 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
           : match.penaltyTap === 0 ? 'Your penalty tap ended without points.'
             : match.penaltyTap === 4 ? 'Your penalty tap led to a try for four points.'
               : 'Your penalty tap led to a converted try for six points.'}
+      </p>}
+      {match.latePenalty && <p className="mt-2 text-sm text-muted-foreground" data-nrl-late-penalty-result>
+        {match.latePenalty.points === 'none'
+          ? `You switched to ${match.latePenalty.approach === 'goal' ? 'taking the two points' : 'tapping for a try'}. The final 20 passed without a kickable penalty.`
+          : match.latePenalty.points === 2 ? 'Your late penalty goal banked two points.'
+            : match.latePenalty.points === 0 ? 'Your late penalty tap ended without points.'
+              : match.latePenalty.points === 4 ? 'Your late penalty tap led to a try for four points.'
+                : 'Your late penalty tap led to a converted try for six points.'}
       </p>}
       {match.openInterchange && <p className="mt-2 text-sm text-muted-foreground">You left the fourth automatic interchange open.</p>}
       {quick && quickReserve && <p className="mt-2 text-sm text-muted-foreground" data-nrl-quick-interchange-result>
@@ -2615,6 +2638,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Choose Ready sooner for higher starting OVR or Higher ceiling for more potential when assigning an academy scout. Balanced uses the standard profile.</li>
               <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check the latest match result or open Rating changes in Squad. Existing ratings carry into the next season.</li>
               <li>Open a regular-season match report in Season fixtures to see the rating changes saved for that match.</li>
+              <li>At 60 minutes in a regular-season Live match, you can change the penalty approach for the final 20. Take the two points or tap for a try if a kickable penalty comes up.</li>
               <li>Before kick-off, open Penalty approach to bank two points from a kickable penalty or tap for a chance at four or six. The match report shows how the tap finished.</li>
               <li>Choose Last-tackle kicks before kick-off. Against a dangerous attack, Kick long lowers the try threat for both teams. Contest kicks opens the game up and gives both teams more chances. Your plan lasts through regulation and resets to Mixed kicks next match.</li>
               <li>In Squad, a young player can learn a second position in reserve grade while another player trains with the first team. The reserve course replaces the one-point rating gain.</li>

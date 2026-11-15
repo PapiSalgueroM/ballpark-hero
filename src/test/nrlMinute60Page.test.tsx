@@ -221,3 +221,38 @@ it('pauses a tied Live match at 80 minutes and reopens the golden-point decision
   fireEvent(report, new Event('toggle'));
   expect(within(report).getByText('Golden-point approach: Protect the draw.')).toBeVisible();
 });
+
+it('keeps the 60-minute score while changing the late penalty and reopens its report', () => {
+  const original = createNrlCareer('storm', 14);
+  const half = reduceNrlCareer(original, { type: 'startLive' });
+  const mid = reduceNrlCareer(half, { type: 'reachMinute60', year: 2026, round: 1, tactic: 'balanced' });
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(mid));
+  localStorage.setItem(fence, '4');
+  const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const view = show();
+  const approach = () => screen.getByRole('combobox', { name: 'Final-20 penalty approach' });
+  const at60 = () => screen.getByRole('list', { name: 'Score after 60 minutes' }).textContent;
+  const score = at60();
+  expect(approach()).toHaveValue('goal');
+  fireEvent.change(approach(), { target: { value: 'tap' } });
+  expect(at60()).toBe(score);
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(mid));
+  view.unmount();
+  show();
+  expect(at60()).toBe(score);
+  expect(approach()).toHaveValue('goal');
+  fireEvent.change(approach(), { target: { value: 'tap' } });
+  fireEvent.click(screen.getByRole('button', { name: 'Play final 20 minutes' }));
+  const finished = reduceNrlCareer(mid, { type: 'finishMinute60', year: 2026, round: 1, tactic: 'balanced', latePenaltyApproach: 'tap' });
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(finished));
+  expect(localStorage.getItem(fence)).toBe('5');
+  const receipt = 'Your late penalty tap led to a converted try for six points.';
+  expect(within(screen.getByRole('region', { name: 'Full time' })).getByText(receipt)).toBeVisible();
+  fireEvent.click(screen.getByText('Season fixtures', { exact: true }));
+  const summary = screen.getByText('Round 1 match report', { exact: true });
+  const report = summary.closest('details')!;
+  fireEvent.click(summary);
+  fireEvent(report, new Event('toggle'));
+  expect(within(report).getByText(receipt)).toBeVisible();
+});
