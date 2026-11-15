@@ -362,7 +362,7 @@ it('jumps from Browse sports to game picks and restores the opener with Back', (
     return <><button onClick={() => navigate(-1)}>Go back</button><output aria-label="Current anchor">{hash}</output></>;
   }
   render(<MemoryRouter initialEntries={[{ pathname: '/', key: 'home-picks-discovery-entry' }]}><Index /><HistoryControls /></MemoryRouter>);
-  const trigger = screen.getByRole('button', { name: 'Browse sports', exact: true });
+  const trigger = screen.getByRole('button', { name: 'Browse sports' });
   const target = screen.getByRole('heading', { name: 'Games to try' });
   target.scrollIntoView = vi.fn();
   trigger.focus();
