@@ -125,7 +125,7 @@ describe('Stadium Tycoon: the Latest season review', () => {
     expect(picker().querySelectorAll('option')).toHaveLength(3);
     fireEvent.change(picker(), { target: { value: '3' } });
     expect(text('[data-season-headline]')).toBe('Season 4 · Muddy Meadows League');
-    fireEvent.click(screen.getByRole('button', { name: 'Back', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: /^Back$/ }));
     await waitFor(() => expect(document.querySelector('[data-last-season]')).toHaveFocus());
   });
 
