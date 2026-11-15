@@ -724,16 +724,19 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     const tandem = sport.goalieTandem;
     const passingDown = sport.passingDownRole;
     const batting = sport.battingApproach;
-    if (!career || (!trade && !priority && !bullpen && !tandem && !passingDown && !batting) || pendingSave.current) return false;
+    const restPlan = sport.restPlan;
+    if (!career || (!trade && !priority && !bullpen && !tandem && !passingDown && !batting && !restPlan) || pendingSave.current) return false;
     const currentBullpen = bullpen?.current(career);
     const currentTandem = tandem?.current(career);
     const currentPassingDown = passingDown?.current(career);
     const currentBatting = batting?.current(career);
+    const currentRest = restPlan?.current(career);
     try {
       const raw = localStorage.getItem(sport.saveKey);
       if (raw === savedBytes.current) return false;
       const stored = raw ? JSON.parse(raw) as SaveShape : null;
-      if (stored?.c && (passingDown?.completed(stored.c, career.year, career.team) || batting?.completed(stored.c, career.year, career.team))
+      if (stored?.c && (passingDown?.completed(stored.c, career.year, career.team) || batting?.completed(stored.c, career.year, career.team)
+        || restPlan?.completed(stored.c, career.year, career.team))
         && summerCareerKey(stored.c) === summerCareerKey(career)) {
         setTradeSaveMoved(true);
         return true;
@@ -741,7 +744,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       if (stored && (stored.phase === 'season' || stored.phase === 'freeagency') && stored.c && stored.teamQuality != null
         && (trade?.receipt(stored.c) || priority?.receipt(stored.c) || bullpen?.current(stored.c) || currentBullpen
           || tandem?.current(stored.c) || currentTandem || passingDown?.current(stored.c) || currentPassingDown
-          || batting?.current(stored.c) || currentBatting)
+          || batting?.current(stored.c) || currentBatting || restPlan?.current(stored.c) || currentRest)
         && stored.c.year === career.year && summerCareerKey(stored.c) === summerCareerKey(career)) {
         const held = restoreMarketTalk(stored.contractTalk, stored.c, sport.slug, sport.freeAgencyContact?.teams(stored.c).map(t => t.id));
         if (stored.phase === 'season' || held?.kind === 'freeagency') {
@@ -754,8 +757,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
         }
       }
     } catch { /* An unreadable career cannot safely accept a request. */ }
-    if (requesting || currentBullpen || currentTandem || currentPassingDown || currentBatting) setTradeSaveMoved(true);
-    return requesting || Boolean(currentBullpen || currentTandem || currentPassingDown || currentBatting);
+    if (requesting || currentBullpen || currentTandem || currentPassingDown || currentBatting || currentRest) setTradeSaveMoved(true);
+    return requesting || Boolean(currentBullpen || currentTandem || currentPassingDown || currentBatting || currentRest);
   };
 
   const playSeason = () => {
@@ -1869,6 +1872,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   const goalieTandem = sport.goalieTandem;
   const passingDownRole = sport.passingDownRole;
   const battingApproach = sport.battingApproach;
+  const restPlan = sport.restPlan;
 
   /* ------------------------------ season hub ------------------------------ */
   return withSaveStatus(
@@ -2098,6 +2102,22 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
               <option value="contact">Shorten your swing</option>
             </select>
             <span className="mt-1 block font-normal text-muted-foreground">Trade up to five regular-season home runs and some RBI for more hits at the same number of at-bats. Shorter seasons trade fewer. Camp still decides your role.</span>
+          </label>}
+          {restPlan?.available(career) && <label className="mt-3 block text-left text-xs font-semibold">
+            Rest plan for this season
+            <select className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm"
+              disabled={!!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
+              value={restPlan.current(career) ? 'rest' : 'usual'} onChange={event => {
+                if (pendingSave.current || marketRef.current || teamPlanSaveChanged(true)) return;
+                const next = restPlan.set(career, event.target.value === 'rest');
+                if (next === career) return;
+                setCareer(next);
+                persist(next, 'season', teamQuality);
+              }}>
+              <option value="usual">Usual schedule</option>
+              <option value="rest">Schedule {restPlan.games(career)} rest games</option>
+            </select>
+            <span className="mt-1 block font-normal text-muted-foreground">Cut your simulated injury chance by 30%. Sitting out gives you fewer games for season totals and awards. Camp still decides your role.</span>
           </label>}
           <UsCareerProgramme career={career} sport={sport.slug} onChange={next => {
             if (next === career || phase !== 'season') return;

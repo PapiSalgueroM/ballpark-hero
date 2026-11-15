@@ -102,6 +102,7 @@ export interface NbaSeasonLine {
   age: number;
   ovr: number;
   games: number;
+  restGames?: number;
   ppg: number;
   rpg: number;
   apg: number;
@@ -146,6 +147,7 @@ export interface NbaCareerState {
   retirement?: import('./careerRetirement').RetirementBlock;
   tradeRequest?: { year: number; from: string; to: string | null; release?: 'granted' | 'declined' };
   rosterPriority?: { year: number; team: string; before: number; boost: number };
+  restPlan?: { year: number; team: string };
   seasons: NbaSeasonLine[];
   rings: number;
   mvps: number;
@@ -693,16 +695,37 @@ export function nbaSeasonGames(year: number): number {
   return usSeasonLength('nba', year) ?? 82;
 }
 
-function gamesFor(c: NbaCareerState, rng: () => number): { games: number; note: string | null } {
+export function nbaScheduledRestGames(c: NbaCareerState): number {
+  return Math.round(nbaSeasonGames(c.year) * 8 / 82);
+}
+
+export function nbaRestPlanAvailable(c: NbaCareerState): boolean {
+  return !c.retired && !(c.suspendedSeasons ?? 0) && c.contractYears > 0
+    && c.role !== 'backup' && c.seasons.some(s => s.games > 0);
+}
+
+export function nbaRestPlanActive(c: NbaCareerState): boolean {
+  return c.restPlan?.year === c.year && c.restPlan.team === c.team && nbaRestPlanAvailable(c);
+}
+
+export function setNbaRestPlan(c: NbaCareerState, enabled: boolean): NbaCareerState {
+  if (!nbaRestPlanAvailable(c) || enabled === nbaRestPlanActive(c)) return c;
+  if (enabled) return { ...c, restPlan: { year: c.year, team: c.team } };
+  const next = { ...c };
+  delete next.restPlan;
+  return next;
+}
+
+function gamesFor(c: NbaCareerState, rng: () => number, restGames: number): { games: number; note: string | null } {
   const L = nbaSeasonGames(c.year);
   const risk = careerRecoveryRisk('nba', c.purchased, (1 - c.archetype.durability) * 0.5 + (100 - c.health) / 240);
-  if (rng() < risk) {
+  if (rng() < risk * (restGames ? 0.7 : 1)) {
     /* With L at 82 every number here is what the old line returned for the same draws. */
     const missed = 8 + Math.floor(rng() * 35);
     const lost = Math.round(missed * L / 82);
-    return { games: Math.max(Math.round(20 * L / 82), L - lost), note: `Missed ${lost} games hurt.` };
+    return { games: Math.max(Math.round(20 * L / 82), L - lost) - restGames, note: `Missed ${lost} games hurt.` };
   }
-  return { games: L - 4 + Math.floor(rng() * 5), note: null };
+  return { games: L - 4 + Math.floor(rng() * 5) - restGames, note: null };
 }
 
 /* ─── Round 1112: the rival plays on the player's own line ───
@@ -787,7 +810,13 @@ export function simNbaSeason(
   /* Round 1103: the All-Star vote is in February, so it reads the fanbase he tipped off with, before a title's
      bump lands. */
   const fansAtTipOff = c.fanbase;
-  const { games, note } = gamesFor(c, rng);
+  const restGames = nbaRestPlanActive(c) ? nbaScheduledRestGames(c) : 0;
+  if (c.restPlan?.year === c.year && c.restPlan.team === c.team && c.role === 'backup') {
+    notes.push('Camp put you on the bench, so your rest plan was dropped.');
+  }
+  delete c.restPlan;
+  const { games, note } = gamesFor(c, rng, restGames);
+  if (restGames) notes.push(`Sat ${restGames} games as planned. Your injury chance was 30% lower.`);
   if (note) { notes.push(`🚑 ${note}`); c.health -= 7; }
   const swing = seasonSwing(rng, c.age);
   const L = nbaSeasonGames(c.year);
@@ -821,6 +850,7 @@ export function simNbaSeason(
     mpg: stat.mpg, spg: stat.spg, bpg: stat.bpg,
   };
   if (seasonRating) line.seasonRating = seasonRating;
+  if (restGames) line.restGames = restGames;
   /* The season card's stat line stays three parts (the hub tile has room for three), so the rest is said here. */
   notes.push(`📊 ${stat.mpg.toFixed(1)} mpg, ${stat.spg.toFixed(1)} spg, ${stat.bpg.toFixed(1)} bpg.`);
   // Round 123: computed up here rather than down with the rest of the awards
