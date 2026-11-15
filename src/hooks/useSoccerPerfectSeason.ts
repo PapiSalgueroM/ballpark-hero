@@ -127,10 +127,10 @@ export function useSoccerPerfectSeason() {
   const startUnlimited = () => apply(createSoccerRun('unlimited', null, randomSeed()), readRaw('unlimited'));
 
   const syncStoredRun = (current: SoccerPSRun) => {
-    if (savedRef.current[current.mode].refused) return false;
     try {
       const raw = localStorage.getItem(saveKey(current.mode));
-      if (!raw || raw === JSON.stringify(current)) return false;
+      // A refused write can leave the visible run ahead of its last accepted save.
+      if (!raw || raw === savedRef.current[current.mode].raw) return false;
       const persisted = restoreSoccerRun(raw);
       if (persisted?.mode !== current.mode) return false;
       // A stale action belongs to the old board. Show the latest board first.

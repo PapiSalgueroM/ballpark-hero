@@ -210,6 +210,47 @@ describe('Soccer Perfect Season saves', () => {
     expect(recordCompletion).not.toHaveBeenCalled();
   });
 
+  it('keeps another tab’s earned finish when an unsaved match advances', () => {
+    const first = renderHook(() => useSoccerPerfectSeason());
+    act(() => first.result.current.startDaily());
+    pickBestXI(first);
+    const second = renderHook(() => useSoccerPerfectSeason());
+    act(() => second.result.current.resumeDaily());
+
+    const refused = refuseWrites(dailyKey, run => run.revealed === 1);
+    act(() => first.result.current.revealNext());
+    expect(first.result.current.run?.revealed).toBe(1);
+    expect(first.result.current.storageNotice).toBe(true);
+    refused.mockRestore();
+    act(() => second.result.current.finishSeason());
+    const finish = localStorage.getItem(dailyKey);
+    expect(second.result.current.view?.finished).toBe(true);
+
+    act(() => first.result.current.revealNext());
+    expect(localStorage.getItem(dailyKey)).toBe(finish);
+    expect(first.result.current.run).toEqual(second.result.current.run);
+    expect(first.result.current.storageNotice).toBe(false);
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
+  it('continues from the locally revealed match when the last accepted save is unchanged', () => {
+    const game = renderHook(() => useSoccerPerfectSeason());
+    act(() => game.result.current.startDaily());
+    pickBestXI(game);
+    const draft = localStorage.getItem(dailyKey);
+    const refused = refuseWrites(dailyKey, run => run.revealed === 1);
+    act(() => game.result.current.revealNext());
+    expect(game.result.current.run?.revealed).toBe(1);
+    expect(localStorage.getItem(dailyKey)).toBe(draft);
+    refused.mockRestore();
+
+    act(() => game.result.current.revealNext());
+    expect(game.result.current.run?.revealed).toBe(2);
+    expect(game.result.current.storageNotice).toBe(false);
+    expect(localStorage.getItem(dailyKey)).toBe(JSON.stringify(game.result.current.run));
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
   it('keeps a cleared save cleared when another tab retries a previous result', () => {
     const game = renderHook(() => useSoccerPerfectSeason());
     act(() => game.result.current.startDaily());
