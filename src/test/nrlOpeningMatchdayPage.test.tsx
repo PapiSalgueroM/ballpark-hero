@@ -51,6 +51,7 @@ describe('NRL opening matchday chooser', () => {
     expect(raw()).toBeNull();
     fireEvent.click(manage());
     await waitFor(() => expect(readNrlCareerSave(raw())?.openingRoster).toBe('matchday-2026'));
+    expect(readNrlCareerSave(raw())?.season.domesticScoringModel).toBe('league-2026');
     expect(chunks.load).toHaveBeenCalledTimes(1);
     expect(screen.getByText(/2026 opening matchday snapshot/)).toBeVisible();
     click('Squad');
@@ -62,6 +63,7 @@ describe('NRL opening matchday chooser', () => {
     const first = page();
     fireEvent.click(manage());
     expect(readNrlCareerSave(raw())).not.toHaveProperty('openingRoster');
+    expect(readNrlCareerSave(raw())?.season.domesticScoringModel).toBe('league-2026');
     first.unmount();
     localStorage.clear();
     page();
@@ -70,6 +72,7 @@ describe('NRL opening matchday chooser', () => {
     expect(screen.queryByRole('checkbox', { name: /2026 opening matchday names/i })).toBeNull();
     click('Manage Perth Bears');
     expect(readNrlCareerSave(raw())?.season.clubId).toBe('bears');
+    expect(readNrlCareerSave(raw())?.season.domesticScoringModel).toBe('league-2026');
     expect(readNrlCareerSave(raw())).not.toHaveProperty('openingRoster');
     expect(chunks.load).not.toHaveBeenCalled();
   });
@@ -83,6 +86,7 @@ describe('NRL opening matchday chooser', () => {
     fireEvent.click(signings);
     click('Manage Perth Bears');
     await waitFor(() => expect(readNrlCareerSave(raw())?.openingRoster).toBe('perth-signings-2027'));
+    expect(readNrlCareerSave(raw())?.season.domesticScoringModel).toBe('league-2026');
     expect(screen.getByText(/2027 Perth Bears signings snapshot/)).toBeVisible();
     click('Squad');
     expect(within(screen.getByLabelText('Halfback')).getByRole('option', { name: /Toby Sexton/ })).toBeInTheDocument();

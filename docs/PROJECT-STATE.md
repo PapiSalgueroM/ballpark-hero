@@ -1,4 +1,17 @@
+## 2026-11-15: NRL scoring, Aussie Rules interchanges and mobile sport hubs
+
+- New NRL club careers use revised domestic regular-season scoring. Across 34 seeded seasons and 6,936 matches per arm, mean total points rose from 41.61 to 47.93 against 48.11 in the actual 2026 NRL ladder. The share of margins of 30 or more fell from 14.99% to 10.06%. Existing careers replayed exactly through 141 checkpoints. A pinned browser resumed a new Perth Bears match at 60 minutes and settled the same round as Quick Sim. The existing Live and Quick Sim saves also matched the published baseline. [Official NRL ladder](https://www.nrl.com/ladder)
+- Aussie Rules Manager lets you book a same-role half-time interchange before the match. The fixture records whether the change happened or a manual change used the player first. In the paired Geelong browser cases the usual lineup won 93–57 and the booked change won 99–51. The booked and overridden outcomes survived reload and the receipt expired at the next fixture. The unbooked path matched 418 saved checkpoints.
+- The Soccer and NBA sport hubs put Browse games directly after Play or Resume on phones. At 320px the new control ends before 442px in all four guest and saved cases tested. It moves focus to the currently filtered library and preserves the save through Back.
+- The US Career recovery harness checks the separately retained creator setup. All 33 mounted cases passed, with 265 complete save comparisons and all 23 copied controls triggering their intended assertions.
+
+The production build and 14 pinned local browser journeys passed. The two Australian game guides, the publication ledger and guide search keywords were refreshed.
+
 ## 2026-11-15: Rugby match plans, receiver roles and direct-entry Back
+
+[PR #1004](https://github.com/PapiSalgueroM/ballpark-hero/pull/1004) published exact main `362cbe482b9389d559dfd8ec52e17ea459c30d7f`, deployment `a8345ee6-36f9-46a3-830b-460bda40cdd6`, canonical entry `/assets/index-BwgxO2BH.js`. The merged tree matched tested head `3a554d72`. All seven live browser journeys, 14 pinned endpoints and 174 sitemap routes passed. IndexNow accepted both updated guides. The 20 local site checks, 174-route SEO comparison, Home fold and 16 download budgets passed.
+
+Hosted application types, the standard production build and the complete Career entry guide workflow passed. The broader Career Decision, Gameplay Programme and Four Career Prospect failures reproduced on the #1003 baseline.
 
 - NRL Team Manager lets First choice or Rotation save a matchday team with its attack plan and last-tackle kicks. The preview shows any player replacements and tactical changes before one save write applies the plan. Ordinary lineup presets and scheduled rotation still work on their own. In the paired Bears fixture, Counter opponent with Contest kicks changed a 28–24 win into a 28–30 loss. Existing paths matched the #1002 engine across 158 save checkpoints.
 - NFL My Career lets a signed starting wide receiver choose Inside routes. In two paired seasons it added 13 catches, kept total receiving yards steady and gave up one touchdown. Existing replay support, camp competition and playoffs were checked. The usual and adjacent RB and QB paths matched 480 paired cases.

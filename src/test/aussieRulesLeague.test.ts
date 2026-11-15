@@ -1,6 +1,6 @@
 import { act, cleanup, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { CLUBS, clubOf, createLeague, draftPool, LEGACY_SAVE_KEY, pickRefusal, picksLeft, readLeagueSave, reduceLeague, retirees, roleDeficits, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
+import { CLUBS, clubOf, createLeague, draftPool, leaguePlayer, LEGACY_SAVE_KEY, pickRefusal, picksLeft, readLeagueSave, reduceLeague, retirees, roleDeficits, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
 import { useAussieRulesLeague } from '@/hooks/useAussieRulesLeague';
 import { automaticLineup } from '@/lib/aussieRulesManager';
 import { hashLabel, rngFrom } from '@/lib/careerEngine';
@@ -19,6 +19,113 @@ const bot = (s: LeagueState): LeagueAction => s.phase === 'prepare' ? (s.match ?
   : s.phase === 'draft' && s.draft!.at < s.draft!.order.length ? { type: 'draftAuto' } : { type: 'next' };
 const until = (s: LeagueState, done: (s: LeagueState) => boolean) => { let state = s; for (let n = 0; !done(state) && n < 5000; n += 1) state = reduceLeague(state, bot(state)); return state; };
 const V1_SAVE = JSON.stringify({ version: 1, seed: 1234567, clubId: 'club-0', actions: [] });
+const rest = { type: 'prepare', choice: 'rest' } as const;
+const quarter = { type: 'play', tactic: 'control' } as const;
+const whole = { type: 'playMatch', tactic: 'control' } as const;
+const next = { type: 'next' } as const;
+const geelongChange = { type: 'planHalftime', outId: 'p-153', inId: 'p-144' } as const;
+const halfTime = (s: LeagueState) => reduceLeague(reduceLeague(reduceLeague(s, quarter), next), quarter);
+const score = (s: LeagueState) => s.match!.homeId === s.myClub
+  ? [s.match!.homeScore.total, s.match!.awayScore.total] : [s.match!.awayScore.total, s.match!.homeScore.total];
+
+describe('Aussie Rules Manager planned half-time interchange', () => {
+  it.each([
+    { seed: 1, club: 'club-04', outId: 'p-153', inId: 'p-144', from: [93, 57], to: [99, 51], fresh: 25, rested: 28.4 },
+    { seed: 4, club: 'club-00', outId: 'p-23', inId: 'p-22', from: [144, 78], to: [143, 79], fresh: 28.8, rested: 20.4 },
+  ])('reproduces the manual score and fatigue for $club on the same rolls', ({ seed, club, outId, inId, from, to, fresh, rested }) => {
+    const start = createLeague(seed, club, 'afl2026')!;
+    const booked = reduceLeague(start, { type: 'planHalftime', outId, inId });
+    expect(booked.halftimeInterchange).toEqual({ outId, inId, outcome: 'planned' });
+    expect(booked.starters).toEqual(start.starters);
+    expect(readLeagueSave(JSON.stringify(booked))).toEqual(booked);
+    const original = reduceLeague(reduceLeague(start, rest), whole);
+    const manual = reduceLeague(reduceLeague(halfTime(reduceLeague(start, rest)), { type: 'swap', outId, inId }), whole);
+    const planned = reduceLeague(reduceLeague(booked, rest), whole);
+    expect(score(original)).toEqual(from);
+    expect(score(planned)).toEqual(to);
+    expect(leaguePlayer(planned, inId)?.fatigue).toBeCloseTo(fresh);
+    expect(leaguePlayer(planned, outId)?.fatigue).toBeCloseTo(rested);
+    expect(leaguePlayer(original, inId)?.fatigue).toBe(0);
+    const { halftimeInterchange, ...withoutReceipt } = planned;
+    expect(halftimeInterchange).toEqual({ outId, inId, outcome: 'applied' });
+    expect(withoutReceipt).toEqual(manual);
+    expect(readLeagueSave(JSON.stringify(planned))).toEqual(planned);
+
+    const atHalf = halfTime(reduceLeague(booked, rest));
+    const resumed = readLeagueSave(JSON.stringify(atHalf))!;
+    expect(resumed.halftimeInterchange?.outcome).toBe('planned');
+    expect(reduceLeague(resumed, whole)).toEqual(planned);
+    const third = reduceLeague(resumed, next);
+    expect(third.halftimeInterchange?.outcome).toBe('applied');
+    expect(third.starters).toContain(inId);
+    expect(reduceLeague(reduceLeague(reduceLeague(third, quarter), next), quarter)).toEqual(planned);
+    expect(reduceLeague(planned, next).halftimeInterchange).toBeUndefined();
+  });
+
+  it('clears a pre-match booking, and records a manual override or full break budget at half time', () => {
+    const start = createLeague(1, 'club-04', 'afl2026')!;
+    const booked = reduceLeague(start, geelongChange);
+    expect(reduceLeague(booked, { type: 'cancelHalftime' })).toEqual(start);
+    const half = halfTime(reduceLeague(booked, rest));
+    const cancelled = reduceLeague(half, { type: 'cancelHalftime' });
+    expect(cancelled.halftimeInterchange).toMatchObject({ outcome: 'skipped', reason: 'cancelled' });
+    const manual = reduceLeague(half, { type: 'swap', outId: geelongChange.outId, inId: geelongChange.inId });
+    const superseded = reduceLeague(manual, next);
+    expect(superseded.starters).toEqual(manual.starters);
+    expect(superseded.halftimeInterchange).toMatchObject({ outcome: 'skipped', reason: 'selection' });
+    expect(readLeagueSave(JSON.stringify(superseded))).toEqual(superseded);
+
+    const otherIn = half.bench.find(id => leaguePlayer(half, id)!.role !== 'defender')!;
+    const otherOut = half.starters.find(id => leaguePlayer(half, id)!.role === leaguePlayer(half, otherIn)!.role)!;
+    let full = half;
+    for (let i = 0; i < 5; i++) full = reduceLeague(full, { type: 'swap', outId: i % 2 ? otherIn : otherOut, inId: i % 2 ? otherOut : otherIn });
+    expect(full.swapsThisBreak).toBe(5);
+    const noRoom = reduceLeague(full, next);
+    expect(noRoom.starters).toEqual(full.starters);
+    expect(noRoom.halftimeInterchange).toMatchObject({ outcome: 'skipped', reason: 'limit' });
+  });
+
+  it('rejects illegal or late plans and clears the Round 23 receipt before finals', () => {
+    const late = until(createLeague(3, 'club-00', 'afl2026')!, s => s.round === 22 && s.phase === 'prepare');
+    const outId = late.starters[0];
+    const inId = late.bench.find(id => leaguePlayer(late, id)!.role === leaguePlayer(late, outId)!.role)!;
+    const wrong = late.bench.find(id => leaguePlayer(late, id)!.role !== leaguePlayer(late, outId)!.role)!;
+    const decide = { type: 'planHalftime', outId, inId } as const;
+    expect(reduceLeague(late, { ...decide, inId: wrong })).toBe(late);
+    expect(reduceLeague(late, { ...decide, inId: outId })).toBe(late);
+    const prepared = reduceLeague(late, rest);
+    expect(reduceLeague(prepared, decide)).toBe(prepared);
+    const regular = reduceLeague(reduceLeague(reduceLeague(late, decide), rest), whole);
+    expect(regular.halftimeInterchange?.outcome).toBe('applied');
+    let finals = reduceLeague(regular, next);
+    expect(finals.halftimeInterchange).toBeUndefined();
+    if (!finals.match) {
+      expect(reduceLeague(finals, decide)).toBe(finals);
+      finals = reduceLeague(reduceLeague(finals, { type: 'simWeek' }), next);
+    }
+    expect(finals.stage).toBe('finals');
+    expect(finals.match).not.toBeNull();
+    const finalOut = finals.starters[0], finalIn = finals.bench.find(id => leaguePlayer(finals, id)!.role === leaguePlayer(finals, finalOut)!.role)!;
+    const finalBooked = reduceLeague(finals, { type: 'planHalftime', outId: finalOut, inId: finalIn });
+    const finalReport = reduceLeague(reduceLeague(finalBooked, rest), whole);
+    expect(finalReport.halftimeInterchange?.outcome).toBe('applied');
+    expect(readLeagueSave(JSON.stringify(finalReport))).toEqual(finalReport);
+    expect(reduceLeague(finalReport, next).halftimeInterchange).toBeUndefined();
+  });
+
+  it('retains a no-booking resume and refuses a forged saved half-time pair or phase', () => {
+    const start = createLeague(1, 'club-04', 'afl2026')!;
+    const prepared = reduceLeague(start, rest);
+    const legacyHalf = halfTime(prepared);
+    const bytes = JSON.stringify(legacyHalf);
+    expect(JSON.stringify(readLeagueSave(bytes))).toBe(bytes);
+    expect(reduceLeague(readLeagueSave(bytes)!, whole)).toEqual(reduceLeague(prepared, whole));
+    const { outId, inId } = geelongChange;
+    const plan = { outId, inId, outcome: 'planned' };
+    expect(readLeagueSave(JSON.stringify({ ...start, halftimeInterchange: { ...plan, inId: outId } }))).toBeNull();
+    expect(readLeagueSave(JSON.stringify({ ...reduceLeague(prepared, whole), halftimeInterchange: plan }))).toBeNull();
+  });
+});
 
 describe('Aussie Rules Manager full season engine', () => {
   it('carries a kept 23 into the next season only when chosen and replaces the delisted ruck', () => {

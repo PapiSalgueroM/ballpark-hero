@@ -75,6 +75,9 @@ export interface DraftState { order: string[]; pool: Prospect[]; made: { clubId:
 interface RatingReview { round: number; changes: [playerId: string, change: -1 | 1][] }
 interface RoundSkillReview { round: number; changes: [playerId: string, before: number, after: number][] }
 interface PreferredLineup { starters: { id: string; role: Role }[]; bench: string[] }
+type HalftimeInterchange = { outId: string; inId: string } & (
+  { outcome: 'planned' | 'applied' } | { outcome: 'skipped'; reason: 'cancelled' | 'selection' | 'limit' }
+);
 export interface HistoryRow {
   season: number; place: number; w: number; d: number; l: number; pf: number; pa: number; exit: FinalsExit;
   premier: string; runnerUp: string; gf: { home: string; away: string; homeScore: Score; awayScore: Score };
@@ -91,6 +94,7 @@ export interface LeagueState {
   ratingReview?: RatingReview;
   skillReviews?: RoundSkillReview[];
   preferredLineup?: PreferredLineup;
+  halftimeInterchange?: HalftimeInterchange;
 }
 export type LeagueAction =
   | { type: 'lineup'; starters: string[]; bench: string[] }
@@ -101,6 +105,8 @@ export type LeagueAction =
   | { type: 'play'; tactic: Tactic }
   | { type: 'playMatch'; tactic: Tactic }
   | { type: 'swap'; outId: string; inId: string }
+  | { type: 'planHalftime'; outId: string; inId: string }
+  | { type: 'cancelHalftime' }
   | { type: 'next' }
   | { type: 'simWeek' }
   | { type: 'delist'; season: number; playerId: string }
@@ -435,6 +441,29 @@ function playQuarter(state: LeagueState, tactic: Tactic): LeagueState {
   return finishMine(state, result, tactic);
 }
 const sameIds = (a: string[], b: string[]) => a.length === b.length && a.every((id, index) => id === b[index]);
+const halftimeAhead = (state: LeagueState) => !!state.match
+  && (state.match.quarter < 2 || (state.match.quarter === 2 && state.phase === 'break'));
+
+function eligibleSwap(state: LeagueState, outId: string, inId: string): boolean {
+  return state.starters.includes(outId) && state.bench.includes(inId) && leaguePlayer(state, outId)?.role === leaguePlayer(state, inId)?.role;
+}
+
+function swapAtBreak(state: LeagueState, outId: string, inId: string): LeagueState {
+  if (state.phase !== 'break' || state.swapsThisBreak >= 5 || !eligibleSwap(state, outId, inId)) return state;
+  return { ...state, starters: state.starters.map(id => id === outId ? inId : id), bench: state.bench.map(id => id === inId ? outId : id), swapsThisBreak: state.swapsThisBreak + 1 };
+}
+
+function startNextQuarter(state: LeagueState): LeagueState {
+  const plan = state.halftimeInterchange;
+  if (state.match?.quarter === 2 && plan?.outcome === 'planned') {
+    const changed = swapAtBreak(state, plan.outId, plan.inId);
+    const halftimeInterchange: HalftimeInterchange = changed === state
+      ? { ...plan, outcome: 'skipped', reason: state.swapsThisBreak >= 5 ? 'limit' : 'selection' }
+      : { ...plan, outcome: 'applied' };
+    return { ...changed, phase: 'quarter', swapsThisBreak: 0, halftimeInterchange };
+  }
+  return { ...state, phase: 'quarter', swapsThisBreak: 0 };
+}
 
 export function reduceLeague(state: LeagueState, action: LeagueAction): LeagueState {
   if (!isLeagueAction(action)) return state;
@@ -459,6 +488,19 @@ export function reduceLeague(state: LeagueState, action: LeagueAction): LeagueSt
     const lineup = nextSeasonLineupPreview(state);
     return lineup ? freshSeason(state, state.season + 1, lineup) : state;
   }
+  if (action.type === 'planHalftime') {
+    const { outId, inId } = action;
+    if (state.phase !== 'prepare' || !state.match || !eligibleSwap(state, outId, inId)) return state;
+    if (state.halftimeInterchange?.outId === outId && state.halftimeInterchange.inId === inId) return state;
+    return { ...state, halftimeInterchange: { outId, inId, outcome: 'planned' } };
+  }
+  if (action.type === 'cancelHalftime') {
+    const plan = state.halftimeInterchange;
+    if (plan?.outcome !== 'planned' || !halftimeAhead(state)) return state;
+    if (state.phase !== 'prepare') return { ...state, halftimeInterchange: { ...plan, outcome: 'skipped', reason: 'cancelled' } };
+    const { halftimeInterchange: _cancelled, ...career } = state;
+    return career;
+  }
   if (action.type === 'prepare') {
     if (state.phase !== 'prepare' || !state.match) return state;
     const clubs = prepareClubs(state.clubs, state.myClub, action.choice, state.match.round);
@@ -470,17 +512,14 @@ export function reduceLeague(state: LeagueState, action: LeagueAction): LeagueSt
   if (action.type === 'play') return state.phase === 'quarter' && state.match && state.match.quarter < 4 ? playQuarter(state, action.tactic) : state;
   if (action.type === 'playMatch') {
     if ((state.phase !== 'quarter' && state.phase !== 'break') || !state.match) return state;
-    let next: LeagueState = state.phase === 'break' ? { ...state, phase: 'quarter', swapsThisBreak: 0 } : state;
+    let next = state.phase === 'break' ? startNextQuarter(state) : state;
     while (next.phase === 'quarter') {
       next = playQuarter(next, action.tactic);
-      if (next.phase === 'break') next = { ...next, phase: 'quarter', swapsThisBreak: 0 };
+      if (next.phase === 'break') next = startNextQuarter(next);
     }
     return next;
   }
-  if (action.type === 'swap') {
-    if (state.phase !== 'break' || state.swapsThisBreak >= 5 || !state.starters.includes(action.outId) || !state.bench.includes(action.inId) || leaguePlayer(state, action.outId)?.role !== leaguePlayer(state, action.inId)?.role) return state;
-    return { ...state, starters: state.starters.map(id => id === action.outId ? action.inId : id), bench: state.bench.map(id => id === action.inId ? action.outId : id), swapsThisBreak: state.swapsThisBreak + 1 };
-  }
+  if (action.type === 'swap') return swapAtBreak(state, action.outId, action.inId);
   if (action.type === 'simWeek') return state.stage === 'finals' && state.phase === 'prepare' && !state.match ? playRestOfWeek(state, null, false) : state;
   if (action.type === 'delist') {
     if (action.season !== state.season) return state;
@@ -496,11 +535,12 @@ export function reduceLeague(state: LeagueState, action: LeagueAction): LeagueSt
   return advance(state);
 }
 function advance(state: LeagueState): LeagueState {
-  if (state.phase === 'break') return { ...state, phase: 'quarter', swapsThisBreak: 0 };
+  if (state.phase === 'break') return startNextQuarter(state);
   if (state.phase === 'report') {
+    const { halftimeInterchange: _finished, ...career } = state;
     const clubs = recover(state.clubs);
-    if (state.stage === 'homeAway') return state.round < ROUNDS - 1 ? openRound({ ...state, clubs }, state.round + 1) : openWeek({ ...state, clubs }, 0);
-    return state.week < lastWeek(state.format) ? openWeek({ ...state, clubs }, state.week + 1) : closeSeason(state);
+    if (state.stage === 'homeAway') return state.round < ROUNDS - 1 ? openRound({ ...career, clubs }, state.round + 1) : openWeek({ ...career, clubs }, 0);
+    return state.week < lastWeek(state.format) ? openWeek({ ...career, clubs }, state.week + 1) : closeSeason(career);
   }
   if (state.phase === 'seasonOver') return runSummer(state);
   if (state.phase === 'summer') {
@@ -738,11 +778,11 @@ const isPlayerId = (id: unknown): id is string => typeof id === 'string' && PLAY
 export function isLeagueAction(value: unknown): value is LeagueAction {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const item = value as Record<string, unknown>;
-  if (item.type === 'next' || item.type === 'simWeek' || item.type === 'draftAuto' || item.type === 'keepLineup' || item.type === 'autoLineup') return exactKeys(item, ['type']);
+  if (item.type === 'next' || item.type === 'simWeek' || item.type === 'draftAuto' || item.type === 'keepLineup' || item.type === 'autoLineup' || item.type === 'cancelHalftime') return exactKeys(item, ['type']);
   if (item.type === 'carryLineup') return exactKeys(item, ['type', 'season', 'clubId']) && int(item.season, 1, 10000) && isClubId(item.clubId);
   if (item.type === 'prepare') return exactKeys(item, ['type', 'choice']) && (item.choice === 'train' || item.choice === 'rest');
   if (item.type === 'play' || item.type === 'playMatch') return exactKeys(item, ['type', 'tactic']) && TACTIC_IDS.includes(item.tactic as string);
-  if (item.type === 'swap') return exactKeys(item, ['type', 'outId', 'inId']) && isPlayerId(item.outId) && isPlayerId(item.inId);
+  if (item.type === 'swap' || item.type === 'planHalftime') return exactKeys(item, ['type', 'outId', 'inId']) && isPlayerId(item.outId) && isPlayerId(item.inId);
   if (item.type === 'delist') return exactKeys(item, ['type', 'season', 'playerId']) && int(item.season, 1, 10000) && isPlayerId(item.playerId);
   if (item.type === 'pick') return exactKeys(item, ['type', 'prospectId']) && isPlayerId(item.prospectId);
   return item.type === 'lineup' && exactKeys(item, ['type', 'starters', 'bench']) && Array.isArray(item.starters) && Array.isArray(item.bench)
@@ -764,6 +804,22 @@ const EXITS: FinalsExit[] = ['missed', 'wildcard', 'elimination', 'semi', 'preli
 // Read at call time, never at module scope (an imported value).
 const maxQuarter = () => 4 + EXTRA_TIME.periods * EXTRA_TIME.blockBound;
 const validScore = (score: unknown): score is Score => exactKeys(score, ['goals', 'behinds', 'total']) && int(score.goals, 0, 999) && int(score.behinds, 0, 999) && score.total === (score.goals as number) * 6 + (score.behinds as number);
+function validHalftimeInterchange(value: unknown, state: LeagueState): boolean {
+  if (!value || typeof value !== 'object' || !state.match) return false;
+  const outcome = (value as Record<string, unknown>).outcome;
+  const keys = outcome === 'skipped' ? ['outId', 'inId', 'outcome', 'reason'] : ['outId', 'inId', 'outcome'];
+  if (!exactKeys(value, keys) || !isPlayerId(value.outId) || !isPlayerId(value.inId) || value.outId === value.inId) return false;
+  const club = clubOf(state, state.myClub)!;
+  const out = club.players.find(player => player.id === value.outId);
+  const incoming = club.players.find(player => player.id === value.inId);
+  if (!out || !incoming || out.role !== incoming.role) return false;
+  const pending = halftimeAhead(state);
+  if (outcome === 'planned') return pending;
+  if (outcome === 'applied') return !pending;
+  return outcome === 'skipped' && (value.reason === 'cancelled' ? state.phase !== 'prepare'
+    : !pending && (value.reason === 'selection' || value.reason === 'limit'));
+}
+
 function validPreferredLineup(lineup: unknown, { clubs, myClub, nextId }: LeagueState): boolean {
   if (!exactKeys(lineup, ['starters', 'bench']) || !Array.isArray(lineup.starters) || lineup.starters.length !== 18
     || !Array.isArray(lineup.bench) || lineup.bench.length !== 5) return false;
@@ -875,12 +931,14 @@ export function validLeagueState(value: unknown): value is LeagueState {
   if (keys && value && Object.prototype.hasOwnProperty.call(value, 'ratingReview')) keys.push('ratingReview');
   if (keys && value && Object.prototype.hasOwnProperty.call(value, 'skillReviews')) keys.push('skillReviews');
   if (keys && value && Object.prototype.hasOwnProperty.call(value, 'preferredLineup')) keys.push('preferredLineup');
+  if (keys && value && Object.prototype.hasOwnProperty.call(value, 'halftimeInterchange')) keys.push('halftimeInterchange');
   if (!keys || !exactKeys(value, keys) || value.version !== 2 || !validSeed(value.seed) || !isClubId(value.myClub) || value.clubName !== clubFull(value, value.myClub as string)) return false;
   if (!int(value.season, 1, 10000) || !(value.format === 'final8' || value.format === 'wildcard') || !PHASES.includes(value.phase as LeaguePhase)) return false;
   if (!(value.stage === 'homeAway' || value.stage === 'finals') || !int(value.round, 0, ROUNDS - 1) || !int(value.week, 0, 8) || !int(value.nextId, CLUB_COUNT * LIST_SIZE, 999999)) return false;
   const s = value as unknown as LeagueState;
   if (!validClubs(s.clubs, s.nextId, setOf(s)) || !Array.isArray(s.starters) || !Array.isArray(s.bench)) return false;
   if (s.preferredLineup !== undefined && !validPreferredLineup(s.preferredLineup, s)) return false;
+  if (s.halftimeInterchange !== undefined && !validHalftimeInterchange(s.halftimeInterchange, s)) return false;
   if (!s.goals || typeof s.goals !== 'object' || Array.isArray(s.goals) || !Object.entries(s.goals).every(([id, goals]) => isPlayerId(id) && int(goals, 1, 9999))) return false;
   const closed = s.phase === 'seasonOver' || s.phase === 'summer' || s.phase === 'draft';
   if (!Array.isArray(s.history) || !s.history.every(validHistory) || s.history.length !== s.season - (closed ? 0 : 1)) return false;

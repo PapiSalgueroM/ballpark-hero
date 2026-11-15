@@ -50,6 +50,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'If a Live regular-season match is level at 80 minutes, choose your golden-point approach. Chase the win opens the game up for both sides. Protect the draw makes it more likely that extra time ends scoreless.',
       'Choose Last-tackle kicks before kick-off. Against a dangerous attack, Kick long lowers the try threat for both teams. Contest kicks opens the game up and gives both teams more chances. Your plan lasts through regulation and resets to Mixed kicks next match.',
       'Play the round and check the result against the ladder. In Match centre, use Season fixtures to reopen a completed club match and check its scorers and decisions. New match reports also show points by period, with a 60-minute split if you paused there and a separate extra-time row when played. Choose a finals week in the fixture menu to see its report.',
+      'Fresh club careers use regular-season try rates calibrated against the 2026 NRL. A saved career keeps the scoring model it started with.',
       'Open a regular-season match report in Season fixtures to see the rating changes saved for that match.',
       'Leave the fourth interchange open to rotate three reserves early. In Quick Sim, choose a reserve to come on at 60 minutes when ahead or behind. The report shows whether they came on.',
       'At 60 minutes in Live, an unused reserve can cover their trained position if the slot is open.',

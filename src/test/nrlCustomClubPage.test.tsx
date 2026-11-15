@@ -34,6 +34,7 @@ it('creates a fictional Perth-slot club and consistently shows its world name ac
   fireEvent.click(fields.getByRole('button', { name: 'Start custom career' }));
   const saved = readNrlCareerSave(localStorage.getItem(NRL_SAVE_KEY))!;
   expect(saved.customClub).toEqual({ name, ground: 'River City Oval', colour: 'purple', slotId: 'bears' });
+  expect(saved.season.domesticScoringModel).toBe('league-2026');
   expect(screen.getByRole('heading', { name: /Bulldogs vs River City Redbacks|River City Redbacks vs Bulldogs/ })).toBeVisible();
   expect(screen.queryByText(/Bears · 2027 season/)).toBeNull();
   click('Play Live');
