@@ -163,6 +163,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "Saves and what survives a sell up",
         items: [
           "Progress saves on this device automatically. Selling up resets the ground while Reputation, badges, club records and lifetime totals survive. Your academy save, including its first team, stays with you.",
+          "If Stadium Tycoon pauses because another tab saved newer progress, use Reload latest save to continue with the current ground and bookings.",
         ],
       },
     ],

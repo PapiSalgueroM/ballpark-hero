@@ -1180,7 +1180,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     persist(state, phase, teamQuality);
   };
 
-  const rivalrySaveMoved = () => {
+  const careerSaveMoved = () => {
     if (tradeSaveMoved) return true;
     try {
       if (localStorage.getItem(sport.saveKey) === savedBytes.current) return false;
@@ -1195,7 +1195,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   const chooseRivalry = (choiceIdx: number) => {
     if (!career?.pendingRivalryChoice) return;
     const card = career.pendingRivalryChoice;
-    if (consumedRivalryAction.current === card || rivalrySaveMoved()) return;
+    if (consumedRivalryAction.current === card || careerSaveMoved()) return;
     const res = sport.resolveRivalryChoice(career, choiceIdx, Math.random);
     if (!res) return;
     const next = { ...res.state, pendingRivalryOutcome: { card, choiceIdx, line: res.line } };
@@ -1207,7 +1207,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
 
   const continueRivalry = () => {
     const outcome = career?.pendingRivalryOutcome;
-    if (!career || !outcome || consumedRivalryAction.current === outcome || rivalrySaveMoved()) return;
+    if (!career || !outcome || consumedRivalryAction.current === outcome || careerSaveMoved()) return;
     consumedRivalryAction.current = outcome;
     const next = { ...career };
     delete next.pendingRivalryOutcome;
@@ -2175,8 +2175,9 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
             </select>
             <span className="mt-1 block font-normal text-muted-foreground">Cut your simulated injury chance by 30%. Sitting out gives you fewer games for season totals and awards. Camp still decides your role.</span>
           </label>}
-          <UsCareerProgramme career={career} sport={sport.slug} onChange={next => {
-            if (next === career || phase !== 'season') return;
+          <UsCareerProgramme career={career} sport={sport.slug} saveMoved={tradeSaveMoved} onChange={next => {
+            if (next === career) return;
+            if (phase !== 'season' || careerSaveMoved()) return false;
             setCareer(next);
             persist(next, 'season', teamQuality);
           }} />

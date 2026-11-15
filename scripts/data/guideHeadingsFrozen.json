@@ -3288,6 +3288,7 @@
         "In the academy, the report shows how your OVR improved during the year. Improving sooner can help you earn more youth appearances.",
         "In senior seasons, OVR can rise or fall as the season plays out. For example, a young starter can improve by midseason, and an older player can lose pace later in the year. Next Season simulates the year in one go. Season Summary shows the OVR at each checkpoint, and the final OVR carries forward.",
         "Reopen Season Ratings and choose a year under Season development to see the saved checkpoints for an academy or senior season. After a serious injury, it shows your OVR before rehab and on return.",
+        "A completed senior season uses one contract year even if you need rehab. If the deal expires that year, settle your rehab choice before reviewing extensions or free transfer offers.",
         "Season Ratings shows your career's prime. An early-prime player can improve faster before age 23. A late bloomer develops more slowly when young and gets a lift from ages 27 to 31. An extended prime softens the first two seasons of decline. Form, injuries and the growth ceiling still matter.",
         "Open the Record Book and choose Competitions to see recorded club cup and national tournament totals. Older campaigns can have goals saved without assists, so the book shows which assists were recorded.",
         "Most summers open with one card about your position or your career, before the rest of the news between seasons. Training can trade one skill for another next season, with gains stopping at your ceiling.",
@@ -3317,6 +3318,7 @@
         "A farewell is one declared final year for eligible players aged 30 to 44. The announcement is saved and cannot be undone or extended. Finish its results and queued ceremonies, then retire. Injuries, bans and forced retirement still apply; appearances and trophies are not promised.",
         "The World Cup comes every 4 years. Top nations qualify about 90 percent of the time, while a small nation mostly needs a world class you.",
         "From the 2026/27 season, open International Career and choose Nations League to review your group, results and caps for a completed edition. For example, England can reach the quarterfinals through its group, then play a home and away tie before the June finals. A title goes in your cabinet if you appeared during the winning campaign.",
+        "Nations League appearances show the season overall used for that match and any change since your previous appearance.",
         "After international retirement, eligible players aged 18 to 44 with a recorded cap can return once per recorded season. Existing caps, goals, trophies and history stay the same. Returning opens selection, not an instant call-up or extra caps; injury, bans and failed qualification can still keep you out.",
         "Legacy runs 0 to 100: 90 is GOAT, 80 LEGEND, 70 GREAT, 60 SOLID PRO, and less is JOURNEYMAN. The verdict also knows the overall you started at, so climbing from 54 to 91 scores better than being handed 91 on the creation screen.",
         "There is no cap on your starting overall, but a high start eats the room you had to grow into, and if you are already world class as a teenager you pick up far more injuries before you turn 24.",
@@ -3549,7 +3551,8 @@
         "A scored set piece before full time adds one goal and the usual goal bonus. A miss, save or block costs nothing. A saved shot result cannot pay twice, and a kick left open past full time cannot change the next match. Away matches have no kick offers; these kicks have no daily record or direct gem reward.",
         "First-team players train at half the academy rate through age 27 and hold steady at 28. From 29 they lose 1.2 rating over each fifteen watched academy minutes. Age and decline pause while you are away. They retire at 34 without a fee.",
         "A graduate starts age 29 at 80.0 OVR. After seven minutes and thirty seconds of watched play, he is at 79.4 and the next-birthday quote uses 78.8. His current rating feeds into the first team's defensive edge.",
-        "Progress saves on this device automatically. Selling up resets the ground while Reputation, badges, club records and lifetime totals survive. Your academy save, including its first team, stays with you."
+        "Progress saves on this device automatically. Selling up resets the ground while Reputation, badges, club records and lifetime totals survive. Your academy save, including its first team, stays with you.",
+        "If Stadium Tycoon pauses because another tab saved newer progress, use Reload latest save to continue with the current ground and bookings."
       ],
       "example": [
         "You open the game to 90 fans paying five cents each, $4.50 a second. The first Stands level costs 30 and adds 40 seats nobody fills yet, so you buy the Ticket Office instead and watch the rate tick up.",

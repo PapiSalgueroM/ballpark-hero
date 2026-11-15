@@ -25,6 +25,14 @@ const install = (c: Career, teamQuality = 86) => {
   localStorage.setItem(sport.saveKey, bytes);
   return bytes;
 };
+const staleProgramme = 'Your career changed in another tab. Reload this page to make changes.';
+
+function openProgramme(board: ReturnType<typeof open>) {
+  fireEvent.click(within(board.container).getByRole('button', { name: 'Plan your season' }));
+  const dialog = within(screen.getByRole('dialog', { name: 'NBA season programme' }));
+  fireEvent.click(dialog.getByRole('button', { name: 'Continue to programme' }));
+  return dialog;
+}
 
 function career(pos: NbaCareerPos, era = 'now', year?: number): Career {
   const c = sport.startCareer('Fixture Player', pos, sport.create.archetypes[pos][0], keyedRng(era + pos), null, era);
@@ -56,6 +64,53 @@ function playPair(c: Career, seed: string, teamQuality = 86) {
 afterEach(() => { cleanup(); localStorage.clear(); vi.restoreAllMocks(); });
 
 describe('NBA defensive assignment', () => {
+  it.each(['preview Apply', 'immediate choice', 'Clear'] as const)('refuses stale %s after another tab plays the season', action => {
+    const c = career('PG');
+    const olderBytes = install(action === 'Clear' ? saveUsCareerProgramme(c, 'nba', defence()) : c);
+    const older = open();
+    const newer = open();
+    const play = within(newer.container).getByRole('button', { name: 'Play the ' + c.year + ' season' });
+    const dialog = openProgramme(older);
+    if (action === 'preview Apply') fireEvent.click(dialog.getByRole('button', { name: 'Try a plan' }));
+    if (action !== 'Clear') fireEvent.click(dialog.getByRole('button', { name: /Tactical approach/ }));
+    if (action === 'preview Apply') fireEvent.click(dialog.getByRole('button', { name: /Pressure the ball/ }));
+    const button = dialog.getByRole('button', {
+      name: action === 'Clear' ? 'Use your usual routine' : action === 'preview Apply' ? 'Apply plan' : /Pressure the ball/,
+    });
+    expect(button).toBeEnabled();
+    expect(localStorage.getItem(sport.saveKey)).toBe(olderBytes);
+
+    vi.spyOn(Math, 'random').mockReturnValue(0.99);
+    fireEvent.click(play);
+    const advanced = localStorage.getItem(sport.saveKey);
+    expect(read().year).toBe(c.year + 1);
+    expect(read().seasons).toHaveLength(c.seasons.length + 1);
+    expect(read().seasons.at(-1)).toMatchObject({ year: c.year, team: c.team, games: 82 });
+    if (action === 'Clear') expect(read().programmeResults?.at(-1)?.year).toBe(c.year);
+    expect(advanced).not.toBe(olderBytes);
+
+    fireEvent.click(button);
+    expect(localStorage.getItem(sport.saveKey)).toBe(advanced);
+    expect(dialog.getByRole('status')).toHaveTextContent(staleProgramme);
+    expect(dialog.getByRole('status')).toBeVisible();
+    expect(button).toBeDisabled();
+  });
+
+  it('still applies a fresh preview and clears the saved programme', () => {
+    const c = career('PG');
+    const raw = install(c);
+    const dialog = openProgramme(open());
+    fireEvent.click(dialog.getByRole('button', { name: 'Try a plan' }));
+    fireEvent.click(dialog.getByRole('button', { name: /Tactical approach/ }));
+    fireEvent.click(dialog.getByRole('button', { name: /Pressure the ball/ }));
+    expect(localStorage.getItem(sport.saveKey)).toBe(raw);
+    fireEvent.click(dialog.getByRole('button', { name: 'Apply plan' }));
+    expect(read().programme).toMatchObject({ sport: 'nba', year: c.year, team: c.team, tactics: 'defend' });
+    fireEvent.click(dialog.getByRole('button', { name: 'Use your usual routine' }));
+    expect(read().programme).toBeUndefined();
+    expect(dialog.queryByText(staleProgramme)).toBeNull();
+  });
+
   it.each([
     ['PG', 'now', undefined, 'spg', 'bpg', 'Pressure the ball', 'steals per game', 82, 3],
     ['C', 'y2004', 2011, 'bpg', 'spg', 'Protect the rim', 'blocks per game', 66, 4],

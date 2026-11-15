@@ -1,4 +1,14 @@
+## 2026-11-15: Injury contracts and saves across tabs
+
+- Soccer Career charges a completed injury season to the current contract. If it expires, the normal extension and free transfer decisions open after rehab. In the Brighton fixture, the 19-appearance injury season uses the last year and keeps the weekly wage at €4,592 until the player signs a new deal. The injury season and the rehab outcome each settle once across reloads.
+- Stadium Tycoon pauses purchases, match rewards and away settlement when it detects a newer stadium save. Reload latest save opens the current ground. An older tab closing or reloading preserved the other tab's exact $24 construction booking, two-match delivery, and $16 remaining cash in the fixture.
+- The US Career season programme protects the current save when a player applies a preview, chooses an option, or clears a plan in an older tab. In the paired NBA browser journeys, each action preserved every saved byte of a newer 82-game season and showed a reload notice inside the open programme.
+
+The production build, 95 focused tests and seven local browser journeys passed. All seven paired controls reproduced the old behavior on the previous pinned deployment. The Soccer Career and Stadium Tycoon guides, publication ledger and guide search keywords were refreshed. The 360 archived boards through November 14 Eastern match the previous release byte for byte.
+
 ## 2026-11-15: Rugby skills, basketball playoff rotations, World XI tactics and admin retries
+
+[PR #1002](https://github.com/PapiSalgueroM/ballpark-hero/pull/1002) published exact main `2d1b187b2df7189b0b5e75229852e2fad31423eb`, deployment `8a0e2e59-290d-44d6-949e-db47ef3331d9`, canonical entry `/assets/index-ZIXw5Vgc.js`. The merged tree matched tested head `cc7e0bb7f`. All 13 live browser journeys, 14 pinned endpoints and 174 sitemap routes passed. IndexNow accepted the three refreshed guides. The hosted Career entry guide workflow passed app types, the standard build, the guide and fault checks, and the native cases across four sports.
 
 - NRL Team Manager lets one developing player do extra skill work before a regular-season match. It costs four kickoff fitness points. After at least three worked appearances, the player can gain one extra OVR that season up to their potential. The Sharks replay took Tane Nairn from 88% to 84% kickoff fitness and from 84 to 85 OVR after Round 4. The paired teams recorded the same three scores. The opt-out matched 156 saved checkpoints.
 - NBA Perfect Season saves the 82-game record before offering a playoff rotation to Classic and Hard teams with at least 55 wins. Lean on starters gives the first five more weight early in each series and adds fatigue late. The same 55–27 roster flipped a 2–4 Toronto loss to a 4–3 win and a 4–3 Miami win to a 3–4 loss on paired draws. Daily keeps its automatic bracket.

@@ -6,7 +6,9 @@ import type { UsSport } from '@/lib/usCoachCareer';
 /** A gross bonus the way a player reads money: thousands under a tenth of a million, millions above. */
 const grossMoney = (millions: number) => millions < 0.095 ? '$' + Math.round(millions * 1000) + 'K' : '$' + millions.toFixed(2) + 'M';
 
-export default function UsCareerProgramme({ career, sport, onChange }: { career: ProgrammeCareer; sport: UsSport; onChange: (next: ProgrammeCareer) => void }) {
+export default function UsCareerProgramme({ career, sport, saveMoved = false, onChange }: {
+  career: ProgrammeCareer; sport: UsSport; saveMoved?: boolean; onChange: (next: ProgrammeCareer) => void | false;
+}) {
   const [open, setOpen] = useState(false);
   const [draft, setDraft] = useState<{ career: ProgrammeCareer; sport: UsSport; choices: ProgrammeChoices } | null>(null);
   const [mode, setMode] = useState<ProgrammeSection | 'menu' | 'help'>('help');
@@ -28,7 +30,8 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
   const currentMenus = preview ? usProgrammeMenus(career, sport, held) : menus;
   const results = usProgrammeResults(career);
   const last = results[results.length - 1];
-  const disabled = !usProgrammeStateValid(career) || career.retired || (career.suspendedSeasons ?? 0) > 0;
+  const unavailable = !usProgrammeStateValid(career) || career.retired || (career.suspendedSeasons ?? 0) > 0;
+  const disabled = saveMoved || unavailable;
   useEffect(() => { setDraft(null); }, [career, sport]);
   useEffect(() => {
     if (!open) return;
@@ -63,6 +66,7 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
         <header className="shrink-0 border-b border-border p-3">
           <DialogTitle>{sport.toUpperCase()} season programme</DialogTitle>
           <DialogDescription>Season {career.year}, {career.team}. Choices apply once when this team plays the year.</DialogDescription>
+          {saveMoved && <p role="status" className="mt-2 text-xs text-muted-foreground">Your career changed in another tab. Reload this page to make changes.</p>}
           <div className="mt-2 flex items-center gap-2">
             <button data-us-programme-back className={button} onClick={() => {
               if (mode === 'help') { pending.current = { top: helpTop.current, target: 'help' }; setMode(returnMode.current); }
@@ -73,11 +77,11 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
             <button data-us-programme-close className={button + ' ml-auto'} onClick={() => { setDraft(null); setOpen(false); }}>Close</button>
           </div>
           {preview && <div className="mt-2">
-            <p role="status" className="text-xs text-muted-foreground">Preview only. Try choices, then apply the whole plan or discard.</p>
+            {!saveMoved && <p role="status" className="text-xs text-muted-foreground">Preview only. Try choices, then apply the whole plan or discard.</p>}
             <div className="mt-2 grid grid-cols-2 gap-2">
               <button className={button + ' border-primary disabled:opacity-50'} disabled={disabled} onClick={() => {
                 const next = saveUsCareerProgramme(career, sport, preview.choices);
-                if (next !== career) onChange(next);
+                if (next !== career && onChange(next) === false) return;
                 setDraft(null); setMode('menu');
               }}>Apply plan</button>
               <button className={button} onClick={() => { setDraft(null); setMode('menu'); }}>Discard preview</button>
@@ -111,8 +115,8 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
               <p data-us-programme-preview-selection className="mt-2">Preview: <b>{previewOption?.label}</b>. {previewOption?.effect}</p>
             </div>}
             {selectedMenu?.options.map(option => <button key={option.id} disabled={disabled} aria-pressed={(choices?.[selectedMenu.id] ?? 'normal') === option.id} data-us-programme-choice={selectedMenu.id + ':' + option.id} className={button + ' w-full text-left disabled:opacity-50 aria-pressed:border-primary aria-pressed:bg-primary/10'} onClick={() => choose(selectedMenu.id, option.id)}><span className="block">{option.label}</span><span className="mt-1 block text-xs font-normal">{option.effect}</span></button>)}
-            {disabled && <p className="text-xs text-muted-foreground">Choices are unavailable while retired, suspended or when the saved programme record is incomplete.</p>}
-            <p className="text-xs text-muted-foreground">{preview ? 'These choices only change your preview. Apply the whole plan when ready.' : 'Each choice saves immediately. You can change it before playing.'}</p>
+            {unavailable && <p className="text-xs text-muted-foreground">Choices are unavailable while retired, suspended or when the saved programme record is incomplete.</p>}
+            {!saveMoved && <p className="text-xs text-muted-foreground">{preview ? 'These choices only change your preview. Apply the whole plan when ready.' : 'Each choice saves immediately. You can change it before playing.'}</p>}
           </div>}
         </div>
       </DialogContent>
