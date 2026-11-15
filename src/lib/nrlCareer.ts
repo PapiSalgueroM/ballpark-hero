@@ -129,6 +129,7 @@ export interface NrlCareerBook {
   coachHire?: NrlCoachHire;
   coachCourseRound?: number;
   mutualRelease?: NrlMutualRelease;
+  rivalTakeover?: { playerId: string; playerName: string; sellerId: string; annualSalary: number; endYear: number };
   renewalHold?: NrlRenewalHold;
   ticketTier?: ActiveTicketTier;
   ticketReview?: { round: number; tier: NrlTicketTier };
@@ -270,6 +271,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'acceptCounteroffer'; playerId: string; year: number; offeredSalary: number; contract: NrlContract }
   | { type: 'arrangeTakeover'; year: number; clubId: string; playerId: string; destinationId: string }
   | { type: 'swapContracts'; year: number; clubId: string; outgoingId: string; incomingId: string }
+  | { type: 'takeOverRivalContract'; year: number; clubId: string; playerId: string; fee: number }
   | { type: 'inviteContractApproach'; year: number; clubId: string; round: number; playerId: string; permission: boolean }
   | { type: 'answerContractApproach'; year: number; clubId: string; listedRound: number; playerId: string; destinationId: string; decision: 'accept' | 'decline' }
   | { type: 'agreeMutualRelease'; year: number; clubId: string; playerId: string }
@@ -759,6 +761,58 @@ export function nrlContractSwapOptions(state: NrlCareerState, outgoingId: string
   });
 }
 
+export function nrlRivalTakeoverOpen({ season, legacySeason, retired, outOfWork }: NrlCareerState) {
+  return season.phase === 'complete' && !!season.kickerId && season.year < NRL_LAST_YEAR
+    && !legacySeason && !retired && !outOfWork;
+}
+
+function transferableRivalDeal(player: NrlCareerPlayer, clubId: string, year: number): NrlContract | null {
+  const { contract, age, futureContract } = player;
+  return contract && contract.clubId !== clubId && contract.endYear > year && !futureContract && age + 1 < RETIREMENT_AGE ? contract : null;
+}
+
+function rivalRetainsCover(players: NrlCareerPlayer[], target: NrlCareerPlayer, sellerId: string, nextYear: number) {
+  return squadAt(players, sellerId, nextYear).some(player => player.id !== target.id && player.role === target.role
+    && player.rating >= target.rating && player.age + 1 < RETIREMENT_AGE);
+}
+
+export function nrlRivalTakeoverCandidates(state: NrlCareerState, sellerId: string) {
+  if (!nrlRivalTakeoverOpen(state) || state.finance.rivalTakeover) return [];
+  const { clubId, year } = state.season;
+  return state.players.filter(player => transferableRivalDeal(player, clubId, year)?.clubId === sellerId
+    && rivalRetainsCover(state.players, player, sellerId, year + 1)).sort(byRating);
+}
+
+const rivalTakeoverFee = (annualSalary: number) => Math.ceil(annualSalary / 2);
+
+export function nrlRivalTakeoverSpend({ rivalTakeover }: NrlCareerBook) {
+  return rivalTakeover ? rivalTakeoverFee(rivalTakeover.annualSalary) : 0;
+}
+
+export function nrlRivalTakeoverQuote(state: NrlCareerState, playerId: string):
+  { ok: true; fee: number; contract: NrlContract; capAfter: NrlCareerCap[] } | { ok: false; reason: string } {
+  const { year, clubId } = state.season;
+  if (!nrlRivalTakeoverOpen(state)) return { ok: false, reason: 'Contract takeovers open in the offseason.' };
+  if (state.finance.rivalTakeover) return { ok: false, reason: 'You already took over a rival contract this offseason.' };
+  const player = state.players.find(candidate => candidate.id === playerId);
+  const terms = player && transferableRivalDeal(player, clubId, year);
+  if (!terms || !player) return { ok: false, reason: 'This player is unavailable for a takeover.' };
+  const startYear = year + 1;
+  if (!rivalRetainsCover(state.players, player, terms.clubId, startYear))
+    return { ok: false, reason: 'The rival needs an equally rated player signed at this position.' };
+  const contract = { ...terms, clubId, startYear };
+  const reason = contractCapacityRefusal(state.players, player, contract);
+  if (reason) return { ok: false, reason };
+  const fee = rivalTakeoverFee(contract.salary);
+  const cash = nrlCareerFinance(state).cash;
+  if (cash < fee) return { ok: false, reason: 'The club cannot cover the acquisition fee.' };
+  if (state.coachRetention && cash - fee < nrlCoachRetentionQuote(state).reservedWages)
+    return { ok: false, reason: 'Club cash is reserved for the assistant’s next-season wages.' };
+  const { players } = applyTakeover(state, player.id, contract);
+  const capAfter = Array.from({ length: contract.endYear - startYear + 1 }, (_, offset) => capFor(players, clubId, startYear + offset));
+  return { ok: true, fee, contract, capAfter };
+}
+
 export function nrlContractApproachCandidates(state: NrlCareerState): NrlCareerPlayer[] {
   const { season } = state;
   return !state.contractApproach && season.phase === 'regular' && season.round <= nrlContractApproachLastRound(season.year)
@@ -1089,7 +1143,7 @@ export function nrlCareerFinance(state: Pick<NrlCareerState, 'finance'>): NrlCar
     - wagesPaid - operatingCosts - nrlMedicalSpend(state.finance) - nrlAcademyFacilitySpend(state.finance) - nrlAcademyParallelSpend(state.finance)
     - nrlMutualReleaseSpend(state.finance) - signingFee - wages - nrlCoachCourseSpend(state.finance) - nrlPhysioSpend(state.finance)
     - nrlAwayRecoverySpend(state.finance) - nrlReserveCoachSpend(state.finance) - nrlRenewalHoldSpend(state.finance)
-    - nrlAcademyCrossTrainingSpend(state.finance);
+    - nrlAcademyCrossTrainingSpend(state.finance) - nrlRivalTakeoverSpend(state.finance);
   return { ...state.finance, cash: openingCash + profit, profit };
 }
 
@@ -2979,6 +3033,21 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       if (!pair) return state;
       return applyTakeover(applyTakeover(state, pair.outgoing.id, pair.toRivalClub), pair.incoming.id, pair.toOwnClub);
     }
+    case 'takeOverRivalContract': {
+      const { year, clubId } = state.season;
+      if (action.year !== year || action.clubId !== clubId) return state;
+      const quote = nrlRivalTakeoverQuote(state, action.playerId);
+      if (!quote.ok || quote.fee !== action.fee) return state;
+      const source = state.players.find(player => player.id === action.playerId)!;
+      const takeover = applyTakeover(state, source.id, quote.contract);
+      const rivalTakeover = {
+        playerId: source.id, playerName: source.name, sellerId: source.contract!.clubId,
+        annualSalary: quote.contract.salary, endYear: quote.contract.endYear,
+      };
+      const finance = { ...state.finance, rivalTakeover };
+      return { ...takeover, finance,
+        history: state.history.map(row => row.year === year ? { ...row, finance: nrlCareerFinance({ finance }) } : row) };
+    }
     case 'inviteContractApproach': {
       const { year, clubId, round } = state.season;
       if (action.year !== year || action.clubId !== clubId || action.round !== round || action.permission !== true) return state;
@@ -3169,6 +3238,12 @@ function validBook(value: unknown, roundLimit: number): value is NrlCareerBook {
       && intIn(value.renewalHold.annualSalary, 1, Number.MAX_SAFE_INTEGER)
       && (value.renewalHold.exercisedRound === undefined
         || intIn(value.renewalHold.exercisedRound, value.renewalHold.bookedRound, roundLimit))))
+    && (value.rivalTakeover === undefined || (value.fromRound === 1 && record(value.rivalTakeover)
+      && Object.keys(value.rivalTakeover).length === 5 && typeof value.rivalTakeover.playerId === 'string'
+      && !!value.rivalTakeover.playerId && typeof value.rivalTakeover.playerName === 'string' && !!value.rivalTakeover.playerName
+      && typeof value.rivalTakeover.sellerId === 'string'
+      && intIn(value.rivalTakeover.annualSalary, 1, Number.MAX_SAFE_INTEGER)
+      && intIn(value.rivalTakeover.endYear, 2027, NRL_LAST_YEAR)))
     && (value.academyUpgradeRound === undefined || (value.fromRound === 1 && intIn(value.academyUpgradeRound, 1, roundLimit)))
     && (value.academyParallelRound === undefined || (value.fromRound === 1 && intIn(value.academyParallelRound, 1, roundLimit)))
     && (value.academyCrossTraining === undefined || (value.fromRound === 1 && record(value.academyCrossTraining)
@@ -3356,6 +3431,10 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
   }
   if (finance.mutualRelease && (year === NRL_LAST_YEAR || value.scoring === undefined || finance.cash < 0
     || !intIn(finance.mutualRelease.annualSalary, nrlSeasonPlan(year + 1).minimumSalary, nrlSeasonPlan(year + 1).cap))) return false;
+  const takeover = finance.rivalTakeover;
+  if (takeover && (takeover.endYear <= year || value.scoring === undefined || finance.cash < 0
+    || takeover.sellerId === value.clubId || !nrlSeasonPlan(year).clubs.some(club => club.id === takeover.sellerId)
+    || !intIn(takeover.annualSalary, nrlSeasonPlan(takeover.endYear).minimumSalary, nrlSeasonPlan(takeover.endYear).cap))) return false;
   if (finance.renewalHold && (year === NRL_LAST_YEAR || value.scoring === undefined
     || finance.renewalHold.bookedRound > nrlRegularRounds(year)
     || !intIn(finance.renewalHold.annualSalary, nrlSeasonPlan(year + 1).minimumSalary, nrlSeasonPlan(year + 1).cap))) return false;
@@ -3404,6 +3483,9 @@ function booksMatch(a: NrlCareerBook, b: NrlCareerBook): boolean {
     && a.coachHire?.qualified === b.coachHire?.qualified && a.coachCourseRound === b.coachCourseRound
     && a.mutualRelease?.playerId === b.mutualRelease?.playerId && a.mutualRelease?.playerName === b.mutualRelease?.playerName
     && a.mutualRelease?.annualSalary === b.mutualRelease?.annualSalary
+    && a.rivalTakeover?.playerId === b.rivalTakeover?.playerId && a.rivalTakeover?.playerName === b.rivalTakeover?.playerName
+    && a.rivalTakeover?.sellerId === b.rivalTakeover?.sellerId && a.rivalTakeover?.annualSalary === b.rivalTakeover?.annualSalary
+    && a.rivalTakeover?.endYear === b.rivalTakeover?.endYear
     && a.renewalHold?.playerId === b.renewalHold?.playerId && a.renewalHold?.playerName === b.renewalHold?.playerName
     && a.renewalHold?.bookedRound === b.renewalHold?.bookedRound && a.renewalHold?.annualSalary === b.renewalHold?.annualSalary
     && a.renewalHold?.exercisedRound === b.renewalHold?.exercisedRound
@@ -3527,6 +3609,7 @@ function validCareerBooks(state: NrlCareerState): boolean {
     || finance.ticketReview.round > season.round)) return false;
   const coach = finance.coachHire;
   const release = finance.mutualRelease;
+  const incoming = finance.rivalTakeover;
   const physio = finance.physio;
   const hold = finance.renewalHold;
   if (hold && !validCurrentRenewalHold(state, hold)) return false;
@@ -3543,6 +3626,15 @@ function validCareerBooks(state: NrlCareerState): boolean {
       || player.name !== release.playerName || player.contract?.clubId !== season.clubId || player.contract.endYear !== season.year
       || player.contract.salary !== release.annualSalary || player.futureContract || player.age + 1 >= RETIREMENT_AGE
       || !nrlCareerSquad(state, season.year + 1).some(teammate => teammate.role === player.role)) return false;
+  }
+  if (incoming) {
+    const player = state.players.find(candidate => candidate.id === incoming.playerId);
+    const future = player?.futureContract;
+    if (legacySeason || !complete || !season.kickerId || !player || player.name !== incoming.playerName
+      || player.age + 1 >= RETIREMENT_AGE || player.contract?.clubId !== incoming.sellerId
+      || player.contract.endYear !== season.year || player.contract.salary !== incoming.annualSalary
+      || future?.clubId !== season.clubId || future.startYear !== season.year + 1
+      || future.endYear !== incoming.endYear || future.salary !== incoming.annualSalary) return false;
   }
   if (coach) {
     if (legacySeason) return false;
@@ -3674,6 +3766,13 @@ function validCareerBooks(state: NrlCareerState): boolean {
         || (receipt.finance && expected.finance && !booksMatch(receipt.finance, expected.finance))) return false;
     } else if (receipt.finance) {
       if (!validArchivedAttendance(receipt)) return false;
+      const bought = receipt.finance.rivalTakeover;
+      if (bought && year + 1 === season.year) {
+        const player = state.players.find(candidate => candidate.id === bought.playerId);
+        if (!player?.contract || player.name !== bought.playerName || player.contract.clubId !== receipt.clubId
+          || player.contract.startYear !== season.year || player.contract.endYear > bought.endYear
+          || player.contract.salary !== bought.annualSalary) return false;
+      }
       const recruitment = receipt.finance.boardRecruitment;
       if (recruitment?.signed && year + 1 === season.year) {
         const signed = recruitment.signed;
@@ -3806,6 +3905,10 @@ function validCareerBooks(state: NrlCareerState): boolean {
   if (release) {
     if (nrlCareerFinance({ finance: expected }).cash < nrlMutualReleaseSpend(finance)) return false;
     expected = { ...expected, mutualRelease: release };
+  }
+  if (incoming) {
+    if (nrlCareerFinance({ finance: expected }).cash < nrlRivalTakeoverSpend(finance)) return false;
+    expected = { ...expected, rivalTakeover: incoming };
   }
   return nextPurchase === purchases.length && booksMatch(expected, finance);
 }

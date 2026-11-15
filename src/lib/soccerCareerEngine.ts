@@ -180,7 +180,7 @@ import type {
 /* Round 1042: the squad picker and the national team pools it reads live in their own file, so
    only this game downloads them. */
 import { pickSquad, runInternationalSummer } from "./soccerInternationalSquads";
-import { nationsLeagueCampaign, wonNationsLeague, type NationsLeagueCampaign } from "./soccerNationsLeague";
+import { nationsLeagueCampaign, wonNationsLeague, type NationsLeagueCampaign, type NationsLeagueDevelopment } from "./soccerNationsLeague";
 import { clubWorldCup2025Campaign, clubWorldCupSeasonStats, wonClubWorldCup, type ClubWorldCupCampaign } from './soccerClubWorldCup';
 
 export type {
@@ -5214,11 +5214,8 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer, clubDirecte
 */
 
 /* ─── International call-up check ─── */
-function shouldGetCallUp(state: CareerState): boolean {
-  if (state.intStats.isRetired) return false;
-  if (state.age < 18 || state.age > 33) return false;
-  const threshold = state.currentClubTier <= 2 ? 70 : 72;
-  return state.overall >= threshold;
+function internationalCallUpFloor(state: CareerState): number | undefined {
+  if (!state.intStats.isRetired && state.age >= 18 && state.age <= 33) return state.currentClubTier <= 2 ? 70 : 72;
 }
 
 /** Everything the international code needs to know about the player. */
@@ -5264,10 +5261,10 @@ function generateIntSeasonStats(state: CareerState, clubSeason: SeasonRecord, na
   return { intApps: apps, intGoals: goals, intAssists: assists, intRating: rating, tournament: null, tournamentResult: null };
 }
 
-function nationsLeagueForSeason(state: CareerState, year: number, out = false) {
-  const eligible = !out && state.internationalCareer && !state.intStats.isRetired && !state.retired;
+function nationsLeagueForSeason(state: CareerState, year: number, out = false, development?: NationsLeagueDevelopment) {
+  const eligible = !out && !state.intStats.isRetired && !state.retired && (state.internationalCareer || development?.debutFloor !== undefined);
   const seed = `${state.playerName}|${state.era}|${state.seasons[0]?.year ?? year}`;
-  return nationsLeagueCampaign(year, seed, state.nationality, eligible ? playerFormOf(state) : null);
+  return nationsLeagueCampaign(year, seed, state.nationality, eligible ? playerFormOf(state) : null, development);
 }
 
 /* ─── Round 124: one international summer ───
@@ -5875,7 +5872,8 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
 
   // Make the player eligible for selection. The first cap confirms the debut.
   const firstInternationalSeason = s.intStats.caps === 0;
-  const firstCallUp = !s.internationalCareer && shouldGetCallUp(s);
+  const debutFloor = s.internationalCareer ? undefined : internationalCallUpFloor(s);
+  const firstCallUp = debutFloor !== undefined && s.overall >= debutFloor;
   if (firstCallUp) s.internationalCareer = true;
 
   // International season stats
@@ -5890,7 +5888,8 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     season.clubWorldCup = clubWorldCup;
     if (wonClubWorldCup(season)) s.events.push(`🏆 Won the Club World Cup with ${season.club}!`);
   }
-  const nationsLeague = nationsLeagueForSeason(s, thisYear);
+  const nationsLeague = nationsLeagueForSeason(s, thisYear, false, season.ratingPath && { path: season.ratingPath, debutFloor });
+  if (nationsLeague?.apps) s.internationalCareer = true;
   const intSeason = generateIntSeasonStats(s, season, nationsLeague?.apps ?? 0);
   if (nationsLeague) {
     season.nationsLeague = nationsLeague;
@@ -6882,7 +6881,7 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
     { id: 17, emoji: "🇺🇳", title: "International Call-Up!", description: "You receive your first call-up to the national team.",
       category: "international", choices: [
         { label: "Accept with pride", emoji: "🏳️", color: "bg-emerald-600", consequence: "International career begins, Morale +15",
-          /* Round 1327: this card is never drawn now (the season's finish calls up whoever shouldGetCallUp says has
+          /* Round 1327: this card is never drawn now (the normal season step calls up whoever has
              earned it). A card already on screen in an older save still answers, and records the debut the way that
              call up does. */
           apply: s => { s.internationalCareer = true; s.intStats = { ...s.intStats, debutYear: eventSeasonIndex(s), debutAge: s.age }; s.morale = clamp(s.morale + 15, 0, 100); s.events = [...s.events, `🇺🇳 Called up to ${s.nationality} national team!`]; return s; } },
@@ -7125,7 +7124,7 @@ export function soccerDeckIdentity(state: CareerState): string {
    bad finish, being dropped, a call up, a goal for your country, a World Cup
    snub. They are dealt only when the season's row holds that fact; a row
    that is not a playing season deals none of them. Card 17 is never dealt:
-   the season's finish already calls up whoever shouldGetCallUp says has
+   the normal season step already calls up whoever has
    earned it, and its own debut screen tells that story. */
 const SEASON_CARDS = new Set([1, 4, 7, 9, 11, 12, 15, 17, 18, 19]);
 

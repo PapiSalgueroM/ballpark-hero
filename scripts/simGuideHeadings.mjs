@@ -162,7 +162,10 @@ const SOCCER_TRAINING_LOCATION = {
   after: 'Open the training ground (the dumbbell button, above your player on phones or bottom right on desktop)',
 };
 function reviewedGuideSentences(route, part, sentences) {
-  if (route !== '/soccer-career' || part !== 'howToPlay') return sentences;
+  if (route !== '/soccer-career') return sentences;
+  if (part === 'rules') return [...sentences,
+    'Nations League appearances show the season overall used for that match and any change since your previous appearance.'];
+  if (part !== 'howToPlay') return sentences;
   const instructions = sentences.filter(line => line.startsWith(`${SOCCER_TRAINING_LOCATION.before} once a season.`)
     || line.startsWith(`${SOCCER_TRAINING_LOCATION.after} once a season.`));
   if (instructions.length !== 1) abort('Reviewed training location requires exactly one original or refreshed instruction');
