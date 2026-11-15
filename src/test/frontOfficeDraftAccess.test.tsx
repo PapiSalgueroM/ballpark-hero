@@ -118,7 +118,7 @@ describe('NFL draft prospect access', () => {
     expect(after.draftBatchesLeft).toBe(2);
     expect(after.league.teams.SEA.picks).toEqual([2, 3]);
     const arrived = after.league.teams.SEA.players[after.league.teams.SEA.players.length - 1];
-    expect(arrived).toEqual({ id: arrived.id, name: 'Draft Prospect 38', pos: 'QB', age: 22, ovr: 80, salary: 7, years: 4, out: 0, pot: 84, rookieSeason: source.league.season + 1 });
+    expect(arrived).toEqual({ id: arrived.id, name: 'Draft Prospect 38', pos: 'QB', age: 22, ovr: 80, salary: 7, years: 4, out: 0, pot: 84, rookieSeason: source.league.season + 1, rookieOptionEligible: true });
     const rivals = draftOrder(before.league.teams).filter(team => team !== 'SEA' && before.league.teams[team].picks.length > 0).slice(0, 6);
     const wantedLeague: LeagueState = clone(before.league);
     wantedLeague.teams.SEA.picks.shift();
@@ -129,7 +129,7 @@ describe('NFL draft prospect access', () => {
     for (let i = 0; i < rivals.length; i++) {
       const team = rivals[i], player = after.league.teams[team].players[after.league.teams[team].players.length - 1];
       const prospect = source.draftClass[i];
-      expect(player).toEqual({ id: player.id, name: prospect.name, pos: 'RB', age: 22, ovr: 80, salary: 7, years: 4, out: 0, pot: pots[i], rookieSeason: source.league.season + 1 });
+      expect(player).toEqual({ id: player.id, name: prospect.name, pos: 'RB', age: 22, ovr: 80, salary: 7, years: 4, out: 0, pot: pots[i], rookieSeason: source.league.season + 1, rookieOptionEligible: true });
       wantedLeague.teams[team].picks.shift();
       wantedLeague.teams[team].players.push(player);
       newIds.push(player.id);

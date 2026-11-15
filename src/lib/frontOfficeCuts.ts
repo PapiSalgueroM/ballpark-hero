@@ -45,6 +45,8 @@ export interface DeadCapEntry {
   amount: number;
   /** Seasons this entry still runs, counting this one. */
   seasonsLeft: number;
+  /** Exact amounts owed in subsequent seasons on a guaranteed NFL option. */
+  futureAmounts?: number[];
 }
 
 /** The two fields a team carries. Both optional so every saved league loads. */
@@ -62,12 +64,22 @@ export interface CutPlayer {
   /** Round 723: a fully guaranteed deal (the NFL franchise tag). Cutting him
       is dead money in full. Optional, and absent on every other sport's men. */
   guaranteed?: boolean;
+  fifthYearOption?: { season: number; salary: number | null };
 }
 
 const round1 = (n: number): number => Math.round(n * 10) / 10;
 
 /** What cutting this man would cost, so a screen can say so before it happens. */
-export function deadMoneyFor(p: Pick<CutPlayer, 'salary' | 'years' | 'guaranteed'>): { now: number; next: number } {
+export function deadMoneyFor(
+  p: Pick<CutPlayer, 'salary' | 'years' | 'guaranteed' | 'fifthYearOption'>,
+): { now: number; next: number; later?: number } {
+  const optionSalary = p.fifthYearOption?.salary;
+  if (optionSalary != null) {
+    const now = round1(p.salary);
+    return p.years > 1
+      ? { now, next: now, later: optionSalary }
+      : { now, next: optionSalary };
+  }
   /* Round 723: guaranteed money is owed whatever happens, all of it this season. */
   if (p.guaranteed) return { now: round1(p.salary), next: 0 };
   const now = round1(p.salary * 0.5);
@@ -115,8 +127,13 @@ export function cutPlayer<P extends CutPlayer>(team: CutLedger & { players: P[] 
   const idx = team.players.findIndex(p => p.id === playerId);
   if (idx < 0 || cutRefusal(team, floor)) return false;
   const [p] = team.players.splice(idx, 1);
-  const { now } = deadMoneyFor(p);
-  team.deadCap = [...(team.deadCap ?? []), { playerId: p.id, name: p.name, amount: now, seasonsLeft: p.years > 1 ? 2 : 1 }];
+  const { now, next, later } = deadMoneyFor(p);
+  const entry: DeadCapEntry = { playerId: p.id, name: p.name, amount: now, seasonsLeft: p.years > 1 ? 2 : 1 };
+  if (p.fifthYearOption?.salary != null) {
+    entry.futureAmounts = later == null ? [next] : [next, later];
+    entry.seasonsLeft = 1 + entry.futureAmounts.length;
+  }
+  team.deadCap = [...(team.deadCap ?? []), entry];
   team.releasedThisSeason = [...(team.releasedThisSeason ?? []), p.id];
   freeAgents.push({ ...p, years: 1 });
   return true;
@@ -149,7 +166,12 @@ export function tradeRefusal(team: CutLedger, incomingId: string, said = 'You cu
 /** One offseason's worth of the ledger, for one team. */
 export function rollDeadCap(team: CutLedger): void {
   team.deadCap = (team.deadCap ?? [])
-    .map(d => ({ ...d, amount: round1(d.amount / 2), seasonsLeft: d.seasonsLeft - 1 }))
+    .map(d => ({
+      ...d,
+      amount: d.futureAmounts?.[0] ?? round1(d.amount / 2),
+      seasonsLeft: d.seasonsLeft - 1,
+      ...(d.futureAmounts ? { futureAmounts: d.futureAmounts.slice(1) } : {}),
+    }))
     .filter(d => d.seasonsLeft > 0);
   team.releasedThisSeason = [];
 }

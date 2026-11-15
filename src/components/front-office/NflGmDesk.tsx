@@ -29,7 +29,8 @@ import { NFL_STAFF_PACK } from '@/data/gmStaff/packs';
 import { type LeagueState, tradeValue } from '@/lib/frontOffice';
 import {
   NFL_DEFENSE_WEIGHT, NFL_DESK_KEYS, NFL_OFFENSE_WEIGHT, NFL_TRADE_BONUS_SHARE, deskCopy, nflContractsOf,
-  nflContractsTile, nflDealsTile, nflGamePickRules, nflPackageContext, nflPicksOf, nflPicksTile, nflProposePackage,
+  nflContractsTile, nflDecideFifthYearOption, nflDealsTile, nflFifthYearCases,
+  nflGamePickRules, nflPackageContext, nflPicksOf, nflPicksTile, nflProposePackage,
   nflStaffCtx, nflStaffOf, nflStaffTile, nflStances, nflTradeDeadMoney, nflTradeWindow,
 } from '@/lib/nflGmDesk';
 
@@ -86,6 +87,7 @@ function ContractsPanel({ desk, facts, onDesk }: Props) {
   const [pushes, setPushes] = useState<Record<string, PushResult | undefined>>({});
   const ledger = nflContractsOf(desk, league, teamId);
   const cases = deskCases(nflContractHost, league, ledger);
+  const options = nflFifthYearCases(league, ledger, facts.seasonOver);
   const decisions = Object.fromEntries(cases.map(c => [c.man.id, decisionFor(ledger, league.season, c.man.id)]));
   /* Every handler works on a copy of the ledger and hands the copy back: the
      stored block is never changed in place (gmDesk's rule). */
@@ -102,7 +104,38 @@ function ContractsPanel({ desk, facts, onDesk }: Props) {
     setPushes(p => ({ ...p, [c.man.id]: res }));
     onDesk(withGmBlock(desk, NFL_DESK_KEYS.contracts, copy));
   };
+  const decideOption = (playerId: string, name: string, exercise: boolean) => {
+    const next = deskCopy(league);
+    if (nflDecideFifthYearOption(next, ledger, playerId, exercise, facts.seasonOver)) {
+      facts.commit(next, desk, `✍️ ${exercise ? 'Exercised' : 'Declined'} ${name}'s fifth-year option.`);
+    }
+  };
   return (
+    <>
+    {options.length > 0 && (
+      <section className="mb-3 space-y-2 text-xs" aria-label="Fifth-year options">
+        <h3 className="font-bold">Fifth-year options</h3>
+        <p className="text-muted-foreground">Decide at the end of season three. Exercising guarantees both remaining salaries.</p>
+        {options.map(({ player, salary }) => (
+          <div key={player.id} className="space-y-2 rounded-lg border border-border/60 bg-background p-3">
+            <p className="font-bold">{player.name}</p>
+            <p>Year four {money(player.salary)} · Year five {money(salary)}</p>
+            {player.fifthYearOption ? (
+              <p>{player.fifthYearOption.salary == null ? 'Option declined. Year four stays on his deal.' : 'Option exercised. Both seasons are guaranteed.'}</p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                <button type="button" className="min-h-11 rounded-full bg-primary px-3 font-bold text-primary-foreground" onClick={() => decideOption(player.id, player.name, true)}>
+                  Exercise option
+                </button>
+                <button type="button" className="min-h-11 rounded-full border border-border px-3 font-bold" onClick={() => decideOption(player.id, player.name, false)}>
+                  Decline option
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
+      </section>
+    )}
     <GmResignDesk
       sport="nfl"
       cases={cases}
@@ -117,8 +150,9 @@ function ContractsPanel({ desk, facts, onDesk }: Props) {
       onQualify={c => act(l => qualify(l, league, c))}
       onMatch={c => act(l => matchSheet(l, league, c))}
       onTakePicks={c => act(l => takePicks(l, league, c))}
-      footnote="Decide any time this season. Anyone you leave open is settled by your staff's own rule when the offseason starts, never by a coin flip. The franchise tag is still on the draft screen, and a man you tag there leaves this desk. The money is this game's own figures, not real contracts."
+      footnote="Decide on expiring deals any time this season. Your staff settles open options when you go to the draft and open expiring deals at the offseason. The franchise tag is on the draft screen and a tagged player leaves this desk."
     />
+    </>
   );
 }
 

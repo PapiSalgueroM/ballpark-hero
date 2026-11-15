@@ -1,3 +1,15 @@
+## 2026-11-15: Rugby training, NFL rookie options, stadium construction and Daily saves
+
+- NRL Team Manager lets a coach book one intensive match-week session during an active position course. It costs four kickoff fitness points and advances the course by one round after full-time. It shares the existing once-per-course spot with the bye session. In the Sharks fixture, Tane Nairn qualified at Halfback for Round 5. Selecting him changed a 20–24 loss and six ladder points into a 20–18 win and eight points.
+- NFL Front Office presents a first-round rookie's fifth-year option at the third-season recap. Exercise guarantees the original fourth-year salary and sets a separate guaranteed fifth-year salary. Decline keeps year four in place. The guarantees follow the player through trades and feed the cut ledger. Fenwick kept his $8.8M fourth-year salary and exercised a $13.3M fifth year in the browser fixture.
+- Stadium Tycoon offers scheduled Stands construction at 20% less than buying immediately. The old seats stay in use through two full-times. In the played examples, scheduling saved $6 at a quiet ground and opening immediately earned $323.85 more at a sold-out ground.
+- Manager Hot Seat opens a newer saved Daily match, press answer or verdict when a stale tab tries to act. After Eastern midnight, the older tab opens the current day's menu without replacing that day's save. The León verdict retained its Club Manager carry-on.
+- The Home search browser runner can bundle the actual search engine again after the flags-only asset setup.
+
+The production build, 156 focused tests, 11 pinned local browser cases and 20 site checks passed. The NRL Team Manager, NFL Front Office and Stadium Tycoon guides and their lastmod entries were refreshed. The 360 archived grid boards through November 14 Eastern matched the previous release.
+
+All seven NFL desk simulation checks passed across ten seeds and ten seasons. Nine no-desk seasons matched their saved fingerprints after excluding the new first-round eligibility marker. The rating review fault still failed all nine comparisons. The 11 NHL waiver controls passed against the shared cut ledger.
+
 ## 2026-11-15: Rugby match timelines and puzzle saves
 
 - NRL Team Manager shows the points and actual scoring plays in each completed period. Confirmed interchanges appear by name during Live. The same scoring data carries into new Live and Quick Sim match reports. Older reports retain their saved period scores.
@@ -7,6 +19,10 @@
 - The Home search browser check verifies the shipped WOFF2 files and continues to use the cached poll flags.
 
 The production build, 152 focused tests, seven pinned local browser cases and 20 site checks passed. The two updated guides and their lastmod entries were refreshed. All 360 archived boards through November 14 Eastern matched the previous release.
+
+[PR #998](https://github.com/PapiSalgueroM/ballpark-hero/pull/998) published exact main `f41611440d98410a815341ce6185a3e514e9c532`, deployment `0758da2a-c054-4c97-a02f-db374cd13e26`, canonical entry `/assets/index-Dd-62R82.js`. The merged tree matched tested head `68de9dc62`. All seven live browser cases, 13 pinned endpoints and 174 sitemap routes passed. IndexNow accepted the NRL and Who Am I? guides. The local run also passed all 174 SEO route checks, the Home fold and 16 download budgets.
+
+The full application type check and standard build passed on GitHub. Home launch and Career entry guide passed. Home search cached all 12 poll flag files, passed its 10 mounted cases and rejected all 19 copied faults. Both hosted native steps stopped on an unbound esbuild import. The next candidate restores the shared import. Three older NRL expectations also failed on the baseline.
 
 ## 2026-11-15: Tactical rugby returns and saved rivalry outcomes
 

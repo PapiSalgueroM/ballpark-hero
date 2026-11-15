@@ -8,9 +8,9 @@ import { leagueNames, uniqueName } from './foNames';
 import { NFL_SALARY_CAP_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 import { keyedRng } from './keyedRng';
-import { NFL_ROOKIE_DEAL_YEARS } from './gmContractRules';
+import { NFL_OPTION_ROUND, NFL_ROOKIE_DEAL_YEARS } from './gmContractRules';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
-import { type CutLedger, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal, tradeRefusal, rosterFullRefusal } from './frontOfficeCuts';
+import { type CutLedger, type CutPlayer, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal, tradeRefusal, rosterFullRefusal } from './frontOfficeCuts';
 /* Round 1542: the season's lines and awards are the board's (src/lib/nflSeasonStats.ts); the engine carries their
    types only, so nothing of that file is evaluated here and no import cycle runs. */
 import type { NflSeasonAwards, NflSeasonStats } from './nflSeasonStats';
@@ -56,6 +56,10 @@ export interface GmPlayer extends FoPlayer {
   /* Round 1542. Both absent on every man of every older save. */
   /** The season he is a first year man in: stamped by the board on every man drafted in this save, never inferred. */
   rookieSeason?: number;
+  /** First-round provenance travels with a drafted player's rookie contract. */
+  rookieOptionEligible?: true;
+  /** A pending fifth-season salary, or null if the option was declined. */
+  fifthYearOption?: CutPlayer['fifthYearOption'];
   /** This save's sim awards, as `${season} ${label}` (src/lib/nflSeasonStats.ts). */
   awards?: string[];
 }
@@ -938,7 +942,10 @@ export function releasePlayer(team: GmTeamState, freeAgents: GmPlayer[], playerI
      paid as dead money. In the pool he is an ordinary man on one year. */
   if (done) {
     const fa = freeAgents.find(p => p.id === playerId);
-    if (fa) clearTag(fa);
+    if (fa) {
+      clearTag(fa);
+      delete fa.fifthYearOption;
+    }
   }
   return done;
 }
@@ -1256,6 +1263,7 @@ export function nflAiDraftPicks(
     const player = prospectToPlayer(prospect, rng);
     if (!player) continue;
     player.rookieSeason = league.season + 1;
+    if (league.teams[abbr].picks[0] === NFL_OPTION_ROUND) player.rookieOptionEligible = true;
     consumeDraftPick(league.teams[abbr]);
     league.teams[abbr].players.push(player);
     remaining.shift();
@@ -1357,7 +1365,7 @@ export function franchiseTagSalary(league: LeagueState, p: Pick<GmPlayer, 'pos' 
 
 /** The men whose deals end at this offseason. */
 export function expiringPlayers(team: GmTeamState): GmPlayer[] {
-  return team.players.filter(p => p.years <= 1).sort((a, b) => b.ovr - a.ovr);
+  return team.players.filter(p => p.years <= 1 && p.fifthYearOption?.salary == null).sort((a, b) => b.ovr - a.ovr);
 }
 
 /** Why this team cannot tag this man right now, or null. The board shows the sentence beside a greyed button. */
@@ -1365,6 +1373,7 @@ export function tagRefusal(league: LeagueState, team: GmTeamState, playerId: str
   const p = team.players.find(x => x.id === playerId);
   if (!p) return 'He is not on your roster.';
   if (team.tagUsedFor === league.season + 1) return 'One tag per offseason, and yours is used.';
+  if (p.fifthYearOption?.salary != null) return `${p.name} is under contract for his option season.`;
   if (p.years > 1) return `${p.name} has ${p.years} years left, so there is nothing to tag.`;
   const salary = franchiseTagSalary(league, p);
   const short = round1(salary - p.salary - capRoom(team, league.cap));
@@ -1532,6 +1541,14 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
       // contracts
       p.years -= 1;
       if (p.years <= 0) {
+        if (p.fifthYearOption?.season === nextSeason && p.fifthYearOption.salary != null) {
+          p.years = 1;
+          p.salary = p.fifthYearOption.salary;
+          p.guaranteed = true;
+          delete p.fifthYearOption;
+          keep.push(p);
+          continue;
+        }
         /* Round 723: a tagged man is under contract for the coming season at
            the tender already on his line. He never reaches the pool. */
         if (p.tagSeason === league.season + 1) {

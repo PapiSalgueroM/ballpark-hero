@@ -66,6 +66,7 @@ export default function TycoonSaleReview({ state, onSell }: {
               <p className="font-semibold">This ground resets</p>
               <p>Current cash becomes {money(startingCash)}. This ground's earnings reset to 0. Fans return to {fresh.fanbase}. Ground upgrades and staff start at level 0.</p>
               <p>You restart in {DIVISIONS[0].name}. The current match, table, win streak and temporary boosts reset.</p>
+              {state.standsOpenAfterMatch !== undefined && <p>Selling up abandons the Stands project and forfeits the fee you paid.</p>}
               <p>Ticket offer returns to {TICKET_POLICIES.find(policy => policy.id === 'standard')!.label}.</p>
             </div>
             <div data-sale-keeps className="space-y-1">

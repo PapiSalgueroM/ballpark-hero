@@ -36,7 +36,7 @@ import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
   nrlCanReviewTickets, nrlHomeGateReport, nrlScheduledRotationOptions, nrlTicketReviewRound,
   nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport, nrlPositionTraining,
-  nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveCoachQuote, nrlReserveGradeCandidates, nrlRivalSquad,
+  nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlIntensiveMatch, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveCoachQuote, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlPastLadders, nrlSelectionPromise, nrlSelectionPromiseTerms, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
   NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SHORTLIST_LIMIT, reduceNrlCareer, runNrlFastForward,
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
@@ -798,6 +798,7 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
   const injury = match.injury;
   const injuredName = injury && season.squad.find(player => player.id === injury.playerId)?.name;
   const recoveredName = match.individualRecoveryId && season.squad.find(player => player.id === match.individualRecoveryId)?.name;
+  const trainedName = match.intensivePositionTrainingId && season.squad.find(player => player.id === match.intensivePositionTrainingId)?.name;
   const captainName = match.captainId && season.squad.find(player => player.id === match.captainId)?.name;
   const openingCover = match.openingCover;
   const openingReserve = openingCover && season.squad.find(player => player.id === openingCover.reserveId);
@@ -912,6 +913,9 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
       </p>}
       {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
         {recoveredName} took individual recovery before this match.
+      </p>}
+      {trainedName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-intensive-position-result>
+        {trainedName} completed an intensive position training session before kickoff.
       </p>}
       {match.actingCaptain ? (
         <div className="mt-2 text-sm text-muted-foreground" data-nrl-match-captain>
@@ -1404,6 +1408,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
   const club = shortName(year, clubId);
   const match = next.clubMatch;
   const intensiveBye = next.clubStatus === 'bye' && nrlIntensiveBye(career);
+  const intensiveMatch = match && nrlIntensiveMatch(career);
   const needsJudiciary = judiciaryNeedsResponse(season);
   const approach = nrlContractApproach(career);
   const canReviewTickets = nrlCanReviewTickets(career);
@@ -1665,6 +1670,19 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
             </div>
             <DevelopmentAppearances career={career} heldReserveId={heldReserve?.id} />
             <KickoffSelectionPromise career={career} heldReserveId={heldReserve?.id} />
+          </div>
+        </details>
+      )}
+      {intensiveMatch && (
+        <details className="rounded-xl border border-border bg-card px-4" data-nrl-intensive-match>
+          <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold">Intensive position training</summary>
+          <div className="space-y-2 pb-3 text-sm">
+            <p>{intensiveMatch.player.name} can finish learning {intensiveMatch.role} one round sooner.</p>
+            <p className="text-muted-foreground">The session reduces their kickoff fitness from {intensiveMatch.normal}% to {intensiveMatch.intensive}%.</p>
+            <Button type="button" size="lg" variant="outline" disabled={disabled} onClick={() => onAction({
+              type: 'setIntensivePositionTraining', enabled: !intensiveMatch.queued, year, clubId, round: season.round,
+              playerId: intensiveMatch.playerId, startedRound: intensiveMatch.startedRound,
+            })}>{intensiveMatch.queued ? 'Cancel intensive session' : 'Queue intensive session'}</Button>
           </div>
         </details>
       )}
@@ -1960,6 +1978,7 @@ function PositionTraining({ career, onAction, disabled }: {
   const { season, legacySeason } = career;
   if (legacySeason) return null;
   const course = nrlPositionTraining(career);
+  const intensiveRound = course?.intensiveBye ?? course?.intensiveMatch;
   const candidates = nrlPositionTrainingCandidates(career);
   const player = candidates.find(candidate => candidate.id === playerId);
   const roles = player ? nrlRetrainingRoles(player.role) : [];
@@ -1974,8 +1993,9 @@ function PositionTraining({ career, onAction, disabled }: {
         {course ? (
           <div className="space-y-2">
             <p role="status" className="font-semibold">{course.player.name} is learning {course.role}. {course.remaining} {course.remaining === 1 ? 'round' : 'rounds'} left.</p>
-            {course.intensiveBye && <p className="text-muted-foreground">Intensive training completed in Round {course.intensiveBye}.</p>}
-            <Button type="button" size="lg" variant="outline" className="px-3" disabled={disabled} onClick={() => {
+            {intensiveRound && <p className="text-muted-foreground">Intensive training completed in Round {intensiveRound}.</p>}
+            <Button type="button" size="lg" variant="outline" className="px-3"
+              disabled={disabled || Boolean(season.live && season.intensivePositionTrainingId)} onClick={() => {
               if (onAction({ type: 'cancelPositionTraining', year: season.year, clubId: season.clubId, playerId: course.playerId, role: course.role, startedRound: course.startedRound })) summary.current?.focus();
             }}>Cancel training</Button>
           </div>

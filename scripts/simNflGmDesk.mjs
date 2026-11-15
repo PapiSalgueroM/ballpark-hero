@@ -289,8 +289,11 @@ function mulberry32(seed) {
     return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
   };
 }
-/* Ids carry a per process epoch; the fixture compares the league with it taken out. */
-const leagueHash = lg => crypto.createHash('sha1').update(J(lg).replace(/"p[0-9a-z]+-(\d+)"/g, '"p-$1"')).digest('hex');
+/* The original fixture predates the first-round option marker. Compare the rest of the league and normalize the id epoch. */
+const leagueHash = lg => {
+  const legacy = JSON.stringify(lg, (key, value) => key === 'rookieOptionEligible' ? undefined : value);
+  return crypto.createHash('sha1').update(legacy.replace(/"p[0-9a-z]+-(\d+)"/g, '"p-$1"')).digest('hex');
+};
 const TEAM = 'KC';
 const newLeague = rng => E.initLeague(rng, { depth: FO_DEPTH, userTeam: TEAM });
 const byValue = arr => [...arr].sort((a, b) => E.tradeValue(a) - E.tradeValue(b) || a.id.localeCompare(b.id));

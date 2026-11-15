@@ -82,7 +82,8 @@ import { GmDeskMount } from '@/components/front-office-shared/GmDeskMount';
 import { type GmDesk, gmPanelFor, readGmDesk, withGmBlock } from '@/lib/gmDesk';
 import { gmStaffLevel } from '@/lib/gmStaff';
 import {
-  nflApplyTradeDeadMoney, nflDeadlineRefusal, nflDeskAfterWeek, nflDeskEdges, nflDeskOffseason, nflDeskWeekOptions,
+  deskCopy, nflApplyTradeDeadMoney, nflContractsOf, nflDeadlineRefusal, nflDecideFifthYearOption, nflDeskAfterWeek,
+  nflDeskEdges, nflDeskOffseason, nflDeskWeekOptions, nflFifthYearCases,
   nflMirrorPickMove, nflNoteArrivals, nflPackageCapCheck, nflPicksOf, nflScoutRead, nflSignDraftee, nflStaffOf, nflTradeDeadMoney,
   nflTradeWindow, openNflDesk, syncNflPicks, NFL_DESK_KEYS,
   nflSeasonCounted, NFL_XP_LIVE, NFL_XP_SOURCES,
@@ -899,7 +900,19 @@ export default function FrontOfficeBoard() {
 
   const startDraft = () => {
     if (!league) return;
-    openDraft(league, myTeam);
+    const ledger = nflContractsOf(gm ?? readGmDesk(undefined), league, myTeam);
+    const options = nflFifthYearCases(league, ledger, true).filter(({ player }) => !player.fifthYearOption);
+    const lg = options.length ? deskCopy(league) : league;
+    const lines = options.map(({ player }) => {
+      const exercise = player.ovr >= 72;
+      nflDecideFifthYearOption(lg, ledger, player.id, exercise, true);
+      return `📋 Staff ${exercise ? 'exercised' : 'declined'} ${player.name}'s fifth-year option.`;
+    });
+    if (lines.length) {
+      setLeague(lg);
+      setNewsFeed(feed => [...lines, ...feed].slice(0, 6));
+    }
+    openDraft(lg, myTeam);
   };
 
   const draftProspect = (id: string) => {
@@ -930,7 +943,7 @@ export default function FrontOfficeBoard() {
       minePos = pl ? pl.pos : pr.pos;
       /* Round 1019: with the desk on he signs the rules' four year rookie
          deal, and the re-sign desk learns he is a draft pick and his round. */
-      if (pl && gm) nflSignDraftee(pl);
+      if (pl) nflSignDraftee(pl, pickRound);
       if (pl) lg.teams[myTeam].players.push(pl);
       /* Round 1542: a man drafted here is a first year man next season (the draft runs before the summer rolls it) */
       if (pl) nflMarkRookies(lg, [{ team: myTeam, playerName: pr.name }], lg.season + 1);
@@ -1580,7 +1593,9 @@ export default function FrontOfficeBoard() {
     /* Round 1019: the season is over and the summer runs after the draft, so
        the re-sign desk is a box here, under the verdict. Open, it takes the
        screen, with a back button to the recap. */
-    const recapDesk = gm && !fired ? deskFacts(hubFacts) : null;
+    const recapGm = gm ?? readGmDesk(undefined);
+    const optionDue = !gm && nflFifthYearCases(league, nflContractsOf(recapGm, league, myTeam), true).length > 0;
+    const recapDesk = !fired && (gm || optionDue) ? deskFacts(hubFacts) : null;
     if (gm && recapDesk && gmPanelFor(NFL_RECAP_PANELS, gmOpen)) {
       return (
         <div className="space-y-4">
@@ -1677,8 +1692,8 @@ export default function FrontOfficeBoard() {
             <NflWeekResults league={league} team={myTeam} />
           </details>
         )}
-        {gm && recapDesk && (
-          <GmDeskMount sport="nfl" desk={gm} facts={recapDesk} panels={NFL_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
+        {recapDesk && (
+          <GmDeskMount sport="nfl" desk={recapGm} facts={recapDesk} panels={NFL_RECAP_PANELS} open={gmOpen} onOpen={openDesk} onDesk={changeDesk} />
         )}
       </div>
     );
@@ -1984,7 +1999,7 @@ export default function FrontOfficeBoard() {
           <p className="text-[10px] text-foreground">
             Cut {p.name}? {p.guaranteed
               ? `His deal is fully guaranteed, so all $${cost.now}M stays on this season's cap as dead money`
-              : `$${cost.now}M of his $${p.salary}M stays on this season's cap as dead money${cost.next > 0 ? `, and $${cost.next}M lands on next season's` : ''}`}. He goes to the pool and you cannot sign him back until the offseason.
+              : `$${cost.now}M of his $${p.salary}M stays on this season's cap as dead money`}{cost.next > 0 ? `, and $${cost.next}M lands on next season's cap` : ''}{cost.later != null ? ` with $${cost.later}M the season after` : ''}. He goes to the pool and you cannot sign him back until the offseason.
           </p>
           <div className="flex gap-1.5">
             <button
@@ -2430,7 +2445,7 @@ export default function FrontOfficeBoard() {
           {gm && myTradePiece && (() => {
             const p = my.players.find(x => x.id === myTradePiece);
             const dead = p ? nflTradeDeadMoney(p) : 0;
-            return p ? <p data-nfl-trade-dead className="text-center text-[11px] text-muted-foreground">Trading {p.name} leaves {dead > 0 ? `$${dead}M of dead money on your cap this season` : 'no dead money behind: his deal is a guaranteed one year'}.</p> : null;
+            return p ? <p data-nfl-trade-dead className="text-center text-[11px] text-muted-foreground">Trading {p.name} leaves {dead > 0 ? `$${dead}M of dead money on your cap this season` : 'no dead money behind because his guaranteed salary moves with him'}.</p> : null;
           })()}
           {/* Round 82: Trade Finder, shop a player and let the league bid */}
           <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2">

@@ -17,7 +17,7 @@ import {
   GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC, HYPE_MULT,
   awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
   setPieceOffer, beginSetPiece, awardSetPieceGoal,
-  setTicketPolicy, setMatchPlan, matchPlanForecast, signStadiumSponsor, bookMatchScouting,
+  setTicketPolicy, setMatchPlan, matchPlanForecast, signStadiumSponsor, bookMatchScouting, bookStandsConstruction,
 } from '@/lib/stadiumTycoon';
 import type { GoldenKind, AwayMatch, SetPieceOffer, TicketPolicy, MatchPlanKind, StadiumSponsor } from '@/lib/stadiumTycoon';
 
@@ -93,6 +93,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
   const [sponsorSaveError, setSponsorSaveError] = useState<{ ground: number; season: number } | null>(null);
   const [matchPlanError, setMatchPlanError] = useState<number | null>(null);
   const [scoutingSaveError, setScoutingSaveError] = useState<{ ground: number; match: number } | null>(null);
+  const [standsConstructionSaveError, setStandsConstructionSaveError] = useState<number | null>(null);
   const [promotion, setPromotion] = useState<Promotion | null>(null);
   /* Round 1543: badges earned together each get their own turn on the badge
      line. It used to hold one, so the last of a tick's badges wiped the rest. */
@@ -247,8 +248,9 @@ export function useStadiumTycoon(getEdge?: () => number) {
         // Round 439: the loop has now paid for these seconds, so the away
         // settle must not bill for them again.
         paidUntilRef.current += use * 1000;
-        const playedDivision = stateRef.current.league?.division;
-        const { state: next, events } = tick(stateRef.current, use, Math.random, getEdgeRef.current?.() ?? 0);
+        const before = stateRef.current;
+        const playedDivision = before.league?.division;
+        const { state: next, events } = tick(before, use, Math.random, getEdgeRef.current?.() ?? 0);
         stateRef.current = next;
         for (const e of events) reactToEvent(e);
         /* Round 585: a watched full time earns its gems, once, keyed on the
@@ -257,10 +259,11 @@ export function useStadiumTycoon(getEdge?: () => number) {
         if (ft) {
           const season = events.find(e => (e.kind === 'title' || e.kind === 'seasonEnd') && e.position !== undefined);
           let allowGear = true;
-          if (season) {
-            // Save the final table before a title can award gear.
+          const openedStands = before.standsOpenAfterMatch !== undefined && next.standsOpenAfterMatch === undefined;
+          if (season || openedStands) {
+            // Save completed construction at full time, and the final table before a title can award gear.
             const saved = saveTicketState(next);
-            if (season.kind === 'title') {
+            if (season?.kind === 'title') {
               allowGear = saved;
               setGearSaveBlocked(!saved);
             }
@@ -418,6 +421,18 @@ export function useStadiumTycoon(getEdge?: () => number) {
     markSessionPlay();
   }, [commit, markSessionPlay]);
 
+  const doBookStandsConstruction = useCallback((ground: number, opensAfterMatch: number, cost: number) => {
+    if (document.hidden) return;
+    const before = stateRef.current;
+    const next = bookStandsConstruction(before, ground, opensAfterMatch, cost);
+    if (next === before) return;
+    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); }
+    catch { setStandsConstructionSaveError(ground); return; }
+    setStandsConstructionSaveError(null);
+    commit(next);
+    markSessionPlay();
+  }, [commit, markSessionPlay]);
+
   const doBuy = useCallback((id: string, amount: 1 | 5 = 1) => {
     markSessionPlay();
     commit(amount === 1 ? buy(stateRef.current, id) : upgradePurchase(stateRef.current, id, amount).state);
@@ -556,6 +571,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
     matchPlanSaveFailed: matchPlanError === state.matchNo,
     scoutingSaveFailed: scoutingSaveError?.ground === state.rep && scoutingSaveError.match === state.matchNo + 1,
     matchPlanForecast: (kind: MatchPlanKind) => matchPlanForecast(state, getEdgeRef.current?.() ?? 0, kind),
+    doBookStandsConstruction, standsConstructionSaveFailed: standsConstructionSaveError === state.rep,
     doBuy, doTap, doPrestige, doBoost,
     golden, doCatchGolden, doHire, doLegacyPerk,
     promotion, dismissPromotion, badge, dismissBadge, doSetClubName,
