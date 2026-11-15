@@ -20,6 +20,40 @@ afterEach(() => {
   localStorage.clear();
 });
 
+it('shows recorded Youth development appearances and the review countdown after reload', async () => {
+  const initial = createNrlCareer('storm', 1, 2026);
+  const lineup = reduceNrlCareer(initial, { type: 'selectStarter', role: 'Hooker', playerId: 'storm-9-1' });
+  const first = reduceNrlCareer(lineup, { type: 'advance' });
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(first));
+  localStorage.setItem(fence, '4');
+  const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const openReview = () => {
+    fireEvent.click(screen.getByRole('button', { name: 'Club office' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Season review' }));
+  };
+  const renderOnce = show();
+  openReview();
+  const focus = await screen.findByRole('combobox', { name: 'Development focus' });
+  fireEvent.change(focus, { target: { value: 'youth' } });
+  const raw = localStorage.getItem(NRL_SAVE_KEY);
+  expect(readNrlCareerSave(raw)?.youthFocusRequiresAppearances).toBe(true);
+  const check = async () => {
+    const progress = await screen.findByRole('region', { name: 'Youth development progress' });
+    expect(progress).toHaveTextContent('20 club matches to the review');
+    expect(progress).toHaveTextContent('1 of 1 club matches have appearance records');
+    const hooker = within(progress).getByText('Jalen Rowan').closest('li');
+    expect(hooker).toHaveTextContent('1 / 4 appearances');
+  };
+  await check();
+  renderOnce.unmount();
+  show();
+  openReview();
+  await check();
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(raw);
+  expect(localStorage.getItem(fence)).toBe('5');
+});
+
 it.each([false, true])('shows exact match rating changes and keeps them on reload with live play %s', live => {
   let before = createNrlCareer('broncos', 1, 2026);
   while (before.season.round < 7) before = reduceNrlCareer(before, { type: 'advance' });

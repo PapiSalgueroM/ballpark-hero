@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET, dailyDraw } from '@/lib/dateUtils';
 import { FORMATIONS, playerRating, type FormationSlot } from '@/lib/squadDeal';
@@ -31,6 +31,7 @@ export interface MysteryBoxState {
   squad: (PackPlayer | undefined)[];
   compatibleSlots: number[];
   discards: number;
+  staleDraft: boolean;
   finished: boolean;
   rating: number;
   filled: number;
@@ -60,18 +61,13 @@ interface Saved {
   revealedCurrent: boolean;
 }
 
-function loadSaved(today: string): Saved | null {
+function loadSaved(key: string): { raw: string | null; draft: Saved | null } {
+  let raw: string | null = null;
   try {
-    const raw = localStorage.getItem(`${STORAGE_PREFIX}${today}`);
-    if (raw) return JSON.parse(raw) as Saved;
+    raw = localStorage.getItem(key);
+    return { raw, draft: raw ? JSON.parse(raw) as Saved : null };
   } catch { /* ignore */ }
-  return null;
-}
-
-function save(today: string, s: Saved) {
-  try {
-    localStorage.setItem(`${STORAGE_PREFIX}${today}`, JSON.stringify(s));
-  } catch { /* storage unavailable */ }
+  return { raw, draft: null };
 }
 
 /**
@@ -109,14 +105,19 @@ function dailyPacks(pool: PackPlayer[], today: string): PackPlayer[] {
 
 export function useMysteryBox(): MysteryBoxState {
   const today = useMemo(() => getTodayET(), []);
+  const key = `${STORAGE_PREFIX}${today}`;
   const formation = FORMATIONS[0]; // 4-3-3, fixed so everyone's run is comparable
 
   const [pool, setPool] = useState<PackPlayer[]>([]);
   const [loading, setLoading] = useState(true);
-  const [decisions, setDecisions] = useState<Array<{ slot: number | null }>>(
-    () => loadSaved(today)?.decisions ?? [],
-  );
-  const [revealed, setRevealed] = useState<boolean>(() => loadSaved(today)?.revealedCurrent ?? false);
+  const [saved] = useState(() => loadSaved(key));
+  const storedDraft = useRef(saved.raw);
+  const [draft, setDraft] = useState<Saved>(() => ({
+    decisions: saved.draft?.decisions ?? [],
+    revealedCurrent: saved.draft?.revealedCurrent ?? false,
+  }));
+  const [staleDraft, setStaleDraft] = useState(false);
+  const { decisions, revealedCurrent: revealed } = draft;
 
   useEffect(() => {
     let cancelled = false;
@@ -128,13 +129,13 @@ export function useMysteryBox(): MysteryBoxState {
          so first, or the completion hook sees false then true and records it
          again on every reload. */
       const count = dailyPacks(p, today).length;
-      const decided = loadSaved(today)?.decisions;
+      const decided = saved.draft?.decisions;
       if (count > 0 && Array.isArray(decided) && decided.length >= count) markRestoredFinish('mystery-box');
       setPool(p);
       setLoading(false);
     });
     return () => { cancelled = true; };
-  }, [today]);
+  }, [today, saved]);
 
   const packs = useMemo(() => dailyPacks(pool, today), [pool, today]);
 
@@ -174,31 +175,34 @@ export function useMysteryBox(): MysteryBoxState {
 
   useGameCompletion('mystery-box', finished, rating * 10, filled);
 
-  const persist = useCallback((d: Array<{ slot: number | null }>, r: boolean) => {
-    save(today, { decisions: d, revealedCurrent: r });
-  }, [today]);
+  const commitDraft = useCallback((next: Saved) => {
+    if (staleDraft) return;
+    try {
+      if (localStorage.getItem(key) !== storedDraft.current) {
+        setStaleDraft(true);
+        return;
+      }
+      const raw = JSON.stringify(next);
+      localStorage.setItem(key, raw);
+      storedDraft.current = raw;
+    } catch { /* Keep playing locally while storage is unavailable. */ }
+    setDraft(next);
+  }, [key, staleDraft]);
 
   const openPack = useCallback(() => {
     if (finished || revealed || loading) return;
-    setRevealed(true);
-    persist(decisions, true);
-  }, [finished, revealed, loading, decisions, persist]);
+    commitDraft({ decisions, revealedCurrent: true });
+  }, [finished, revealed, loading, decisions, commitDraft]);
 
   const place = useCallback((slotIndex: number) => {
     if (!current || !compatibleSlots.includes(slotIndex)) return;
-    const next = [...decisions, { slot: slotIndex }];
-    setDecisions(next);
-    setRevealed(false);
-    persist(next, false);
-  }, [current, compatibleSlots, decisions, persist]);
+    commitDraft({ decisions: [...decisions, { slot: slotIndex }], revealedCurrent: false });
+  }, [current, compatibleSlots, decisions, commitDraft]);
 
   const discard = useCallback(() => {
     if (!current) return;
-    const next = [...decisions, { slot: null }];
-    setDecisions(next);
-    setRevealed(false);
-    persist(next, false);
-  }, [current, decisions, persist]);
+    commitDraft({ decisions: [...decisions, { slot: null }], revealedCurrent: false });
+  }, [current, decisions, commitDraft]);
 
   const shareText = useMemo(() => {
     if (!finished) return '';
@@ -211,6 +215,6 @@ export function useMysteryBox(): MysteryBoxState {
 
   return {
     loading, formation, packIndex, current, revealed, squad, compatibleSlots,
-    discards, finished, rating, filled, bestPull, openPack, place, discard, shareText,
+    discards, staleDraft, finished, rating, filled, bestPull, openPack, place, discard, shareText,
   };
 }

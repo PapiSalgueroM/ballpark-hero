@@ -537,11 +537,11 @@ export function getNhlLifeEventsA(c: NhlCareerState, rng: () => number): NhlCare
     });
   }
 
-  /* Round 920: the card tells a playoff story, so it waits for a season that
-     had playoff games in it (poGames is the season line's own count, never a
-     parse of the result string). It used to promise a second round to men
-     whose team had missed the playoffs. */
-  if (yrs >= 2 && (c.seasons[yrs - 1]?.poGames ?? 0) > 0) {
+  /* The card tells a personal playoff story. New backup goalie lines record
+     their own starts, and earlier lines still use the recorded team games. */
+  const lastSeason = c.seasons[yrs - 1];
+  const playoffGames = isG ? lastSeason?.poStarts ?? lastSeason?.poGames : lastSeason?.poGames;
+  if (yrs >= 2 && (playoffGames ?? 0) > 0) {
     deck.push({
       id: 'nhlA_broken_hand',
       category: 'body', cooldown: 2,

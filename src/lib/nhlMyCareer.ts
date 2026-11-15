@@ -132,6 +132,8 @@ export interface NhlSeasonLine {
   tandemStarts?: number;
   /** Round 103: the run to the Cup, or the four games that ended it. */
   poGames?: number; poGoals?: number; poAssists?: number; poPoints?: number;
+  /** Personal postseason starts for a goalie who entered the season as the backup. */
+  poStarts?: number;
   poWins?: number; poSvpct?: number;
   awards: string[];
   teamResult: string;
@@ -567,13 +569,23 @@ export function simNhlSeason(
     const poForm = form + clutch - 1.2;   // playoff hockey is tighter
     line.poGames = poG;
     if (c.pos === 'G') {
+      if (c.role === 'backup') line.poStarts = Math.floor(poG * line.games / slate);
+      const starts = line.poStarts ?? poG;
       const roundWins = NHL_PLAYOFF_FORMAT.series[0][0];
       const rounds = NHL_PLAYOFF_FORMAT.series.length;
       // An eliminated team lost at least one full series and won fewer than the next round would require.
       const teamWinLimit = poDepth < rounds ? Math.min(roundWins * (poDepth + 1) - 1, poG - roundWins) : roundWins * rounds;
-      line.poWins = Math.max(0, Math.min(teamWinLimit, Math.round(poG * (0.45 + (poForm - 64) * 0.006))));
-      line.poSvpct = Math.min(0.96, Math.max(0.86, Math.round((0.903 + (poForm - 64) * 0.0012 + rng() * 0.006) * 1000) / 1000));
-      notes.push(`📊 Playoffs: ${poG} games, ${line.poWins} wins, ${line.poSvpct.toFixed(3)} SV%.`);
+      // Consume the same save-percentage draw even if the backup didn't start.
+      const svpct = Math.min(0.96, Math.max(0.86, Math.round((0.903 + (poForm - 64) * 0.0012 + rng() * 0.006) * 1000) / 1000));
+      if (starts === 0) {
+        notes.push(`📊 Playoffs: No starts in ${poG} team games.`);
+      } else {
+        line.poWins = Math.max(0, Math.min(starts, teamWinLimit, Math.round(starts * (0.45 + (poForm - 64) * 0.006))));
+        line.poSvpct = svpct;
+        const workload = line.poStarts === undefined ? `${poG} games` : `${starts} ${starts === 1 ? 'start' : 'starts'} in ${poG} team games`;
+        const wins = line.poStarts !== undefined && line.poWins === 1 ? 'win' : 'wins';
+        notes.push(`📊 Playoffs: ${workload}, ${line.poWins} ${wins}, ${svpct.toFixed(3)} SV%.`);
+      }
     } else {
       const pg = poG / US_ENGINE_SEASON.nhl;
       const off = (NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).offense;
@@ -582,7 +594,7 @@ export function simNhlSeason(
       line.poPoints = (line.poGoals ?? 0) + (line.poAssists ?? 0);
       notes.push(`📊 Playoffs: ${poG} games, ${line.poGoals}G ${line.poAssists}A ${line.poPoints}P.`);
     }
-    const cn = clutchNote(clutch, poDepth, 'nhl', poForm);
+    const cn = line.poStarts === 0 ? null : clutchNote(clutch, poDepth, 'nhl', poForm);
     if (cn) notes.push(cn);
   }
 

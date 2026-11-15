@@ -37,7 +37,10 @@ import { nhlEraById } from './nhlMyCareer';
 const currentAgreement = (c: NhlCareerState): boolean => nhlEraById(c.eraId).id === 'now' || c.year >= 2013;
 const gamesLimit = (c: NhlCareerState): number => (c.pos === 'G' ? 80 : 160);
 const regularGames = (c: NhlCareerState): number => c.seasons.reduce((s, l) => s + (l.games || 0), 0);
-const allGames = (c: NhlCareerState): number => c.seasons.reduce((s, l) => s + (l.games || 0) + (l.poGames || 0), 0);
+const allGames = (c: NhlCareerState): number => c.seasons.reduce((s, l) => {
+  const playoffs = c.pos === 'G' ? l.poStarts ?? l.poGames : l.poGames;
+  return s + (l.games || 0) + (playoffs ?? 0);
+}, 0);
 
 /** Still exempt in the season ahead: the club can send him down and bring
  *  him back without waivers. */

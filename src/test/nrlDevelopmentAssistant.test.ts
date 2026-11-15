@@ -161,7 +161,14 @@ describe('NRL development assistant', () => {
 
     const normal = advance(ready);
     const focused = advance(read(nominated)!);
-    expect(focused.season.results).toEqual(normal.season.results);
+    const onField = (career: NrlCareerState) => career.season.results.map(({ ratingChanges: _review, ...match }) => match);
+    expect(onField(focused)).toEqual(onField(normal));
+    const reviewedMatch = (career: NrlCareerState) => career.season.results.find(match =>
+      match.round === career.ratingReview?.round && match.playerScoring);
+    expect(reviewedMatch(focused)?.ratingChanges).toEqual(focused.ratingReview?.changes);
+    expect(reviewedMatch(normal)?.ratingChanges).toEqual(normal.ratingReview?.changes);
+    expect(reviewedMatch(focused)?.ratingChanges).toContainEqual([playerId, 1]);
+    expect(reviewedMatch(normal)?.ratingChanges).not.toContainEqual([playerId, 1]);
     expect(focused.finance).toEqual(normal.finance);
     const normalAwards = normal.ratingReview?.assistant ?? [];
     const focusedAwards = focused.ratingReview?.assistant ?? [];

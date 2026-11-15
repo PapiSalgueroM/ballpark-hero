@@ -2810,7 +2810,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Choose Last-tackle kicks before kick-off. Against a dangerous attack, Kick long lowers the try threat for both teams. Contest kicks opens the game up and gives both teams more chances. Your plan lasts through regulation and resets to Mixed kicks next match.</li>
               <li>In Squad, a young player can learn a second position in reserve grade while another player trains with the first team. The reserve course replaces the one-point rating gain.</li>
               <li>While a reserve-grade spell has at least two rounds left, book reserve coaching from Squad for $90,000. The prospect returns one round sooner with their rating gain or new position.</li>
-              <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
+              <li>Set a development focus in Season review for players signed to return. With a new Youth development choice, a young player needs four actual appearances by your 21st club match to earn 1 OVR.</li>
               <li>Check your regular-season board target in Season review.</li>
               <li>Before Round 1, open Season sponsor in Finances to choose a one-season offer or take $160,000 now and $295,000 next year. The two-season deal stays with the club and fills its sponsor slot for both years.</li>
               <li>At midseason, open Review ticket prices from Match centre. Compare the remaining home gate forecasts and confirm one price change in Finances. Paid home match reports show the gate your club earned.</li>
