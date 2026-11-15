@@ -1,3 +1,11 @@
+## 2026-11-15: Rugby match plans, receiver roles and direct-entry Back
+
+- NRL Team Manager lets First choice or Rotation save a matchday team with its attack plan and last-tackle kicks. The preview shows any player replacements and tactical changes before one save write applies the plan. Ordinary lineup presets and scheduled rotation still work on their own. In the paired Bears fixture, Counter opponent with Contest kicks changed a 28–24 win into a 28–30 loss. Existing paths matched the #1002 engine across 158 save checkpoints.
+- NFL My Career lets a signed starting wide receiver choose Inside routes. In two paired seasons it added 13 catches, kept total receiving yards steady and gave up one touchdown. Existing replay support, camp competition and playoffs were checked. The usual and adjacent RB and QB paths matched 480 paired cases.
+- The GameNavbar Back button sends directly opened games and sport hubs to Home. In-site Back still restores the original Home link or the filtered hub. Both cold-entry fixtures reproduced the old outcome on the pinned published release.
+
+The combined candidate passed 112 focused tests across 13 files. The NRL and NFL guides, publication ledger and guide search keywords were refreshed. Production build and browser verification of the combined candidate are pending.
+
 ## 2026-11-15: Injury contracts and saves across tabs
 
 [PR #1003](https://github.com/PapiSalgueroM/ballpark-hero/pull/1003) published exact main `975f8569dda0da269f12baa67d065a077a49764a`, deployment `9f509103-b7f2-4808-856c-28dcf9782ca7`, canonical entry `/assets/index-jZ00Dt3c.js`. The merged tree matched tested head `1f2908bed`. All seven live browser journeys, 14 pinned endpoints and 174 sitemap routes passed. IndexNow accepted both refreshed guides. All 20 local site checks, the 174-route local SEO comparison, the Home fold and all 16 download budgets passed.
