@@ -2358,7 +2358,7 @@ function offseasonSquads(state: NrlCareerState, allCpu = false, preferFreeAgents
     && !player.futureContract && player.age + 1 < RETIREMENT_AGE).sort(byRating);
   const rivalRenewals = new Map<string, NrlContract>();
   for (const clubId of priorClubs) {
-    if (clubId === season.clubId || clubId === nextClubId) continue;
+    if ((!allCpu && clubId === season.clubId) || clubId === nextClubId) continue;
     const signed = squadAt(players, clubId, year);
     for (const player of expiring) {
       if (player.contract?.clubId !== clubId || signed.some(row => row.role === player.role && row.rating >= player.rating)) continue;

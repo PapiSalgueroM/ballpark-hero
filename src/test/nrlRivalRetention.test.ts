@@ -2,7 +2,7 @@ import { expect, it } from 'vitest';
 import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
 import {
   createNrlCareer, nrlCareerCap, nrlCareerMarket, nrlContractOffer, nrlLeagueRecruitmentPreview,
-  nrlOffseasonClubs, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
+  nrlOffseasonClubs, nrlSeasonOut, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { NRL_ROLES } from '@/lib/nrlManager';
 
@@ -102,5 +102,24 @@ it('honors a pre-agreed arrival and still settles the preview exactly when takin
   expect(next.season.clubId).toBe(destination);
   expect(next.history.at(-1)?.leagueRecruitment).toEqual(preview);
   expect(contract(next, keyId)).toEqual(future);
+  expect(read(next)).toEqual(next);
+});
+
+it('lets the former club renew a player during an unattended season and saves those results at re-entry', () => {
+  const year = 2027, clubId = 'bears', destinationId = 'sea-eagles';
+  const complete = finish(createNrlCareer(clubId, 4, year));
+  const departed = reduceNrlCareer(complete, { type: 'leaveClub', year, clubId });
+  expect(departed.outOfWork).toBe(true);
+  const skipped = read(reduceNrlCareer(departed, { type: 'simulateSeasonOut', year, clubId }))!;
+  expect(skipped.satOutSeason).toBe(true);
+  const report = nrlSeasonOut(skipped)!;
+  expect(report.vacancies.some(job => job.clubId === destinationId)).toBe(true);
+  expect(report.leagueLadder.find(row => row[0] === clubId)).toEqual(['bears', 7, 0, 434, 621]);
+  const next = reduceNrlCareer(skipped, { type: 'acceptVacancy', year, clubId, destinationId, joinYear: 2029 });
+  expect(next.season).toMatchObject({ year: 2029, clubId: destinationId, round: 1 });
+  expect(next.history.at(-1)?.seasonOut?.leagueLadder).toEqual(report.leagueLadder);
+  for (const player of complete.players.filter(player => player.contract && player.contract.endYear >= 2029)) {
+    expect(contract(next, player.id)).toEqual(player.contract);
+  }
   expect(read(next)).toEqual(next);
 });
