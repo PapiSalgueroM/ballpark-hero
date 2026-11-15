@@ -1,3 +1,12 @@
+## 2026-11-15: Rugby youth appearances, goalie starts and academy deadlines
+
+- NRL Team Manager shows the appearances still needed for Youth development. A newly chosen Youth focus awards the extra OVR at the club's 21st regular-season match only after four actual starts or interchange appearances, including that match. An older save with Youth already selected keeps its original review rule.
+- NHL My Career records personal playoff starts for newly simulated backup goalies. The season recap and Career Log show those starts and wins. A backup who makes no starts has no personal playoff stat line. Existing playoff records retain their original display.
+- Wonderkid Factory and the Stadium Tycoon Academy show how much watched time age-23 prospects have before leaving and whether the next Deadline Day arrives in time to sell.
+- Mystery Box holds a stale Daily draft when another tab has already saved changes. Reload opens the latest draft. The checks cover Open, Keep, Bin and completion.
+
+Application types, the production build, 104 focused tests, 13 pinned Chromium cases, 20 site checks and 16 download budgets passed. The SEO split check covered all 174 routes. The NRL guide, its lastmod ledger entry and the guide search index were refreshed.
+
 ## 2026-11-15: NRL edge tactics, career decisions and easier game controls
 
 [PR #993](https://github.com/PapiSalgueroM/ballpark-hero/pull/993) published exact main `194201319779e2922b24fc7522b7d6676919014f`, deployment `14767ee1-78c9-4974-a102-fa0923031d5f`, canonical entry `/assets/index-DcP4wzeb.js`. The merged tree matched tested head `1e91bd88e`. All 49 live browser cases, 174 sitemap routes and 14 pinned endpoint checks passed. IndexNow accepted the NRL guide. The final focused suites passed all 261 tests offline after updating two older XI fixtures to check exact saved draft bytes and write calls. Club Manager's match-plan runner passed 14 outcomes and all 35 effective faults. Hosted Home launch, Game picks and career entry guide passed. Other hosted workflows reported dependency, presentation asset and broader career outcome failures.
