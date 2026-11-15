@@ -7,6 +7,8 @@
 
 Application types, the production build, 104 focused tests, 13 pinned Chromium cases, 20 site checks and 16 download budgets passed. The SEO split check covered all 174 routes. The NRL guide, its lastmod ledger entry and the guide search index were refreshed.
 
+[PR #994](https://github.com/PapiSalgueroM/ballpark-hero/pull/994) published exact main `fed0ef0c0f8827d611356151ddaac2407cf59a2f`, deployment `fe52b8d6-1a2b-4f69-84a0-be7cd57d6132`, canonical entry `/assets/index-CshU-6OM.js`. The merged tree matched tested head `9334a0343`. All 13 live browser cases, 15 pinned endpoint checks and 174 sitemap routes passed. IndexNow accepted the updated NRL guide.
+
 ## 2026-11-15: NRL edge tactics, career decisions and easier game controls
 
 [PR #993](https://github.com/PapiSalgueroM/ballpark-hero/pull/993) published exact main `194201319779e2922b24fc7522b7d6676919014f`, deployment `14767ee1-78c9-4974-a102-fa0923031d5f`, canonical entry `/assets/index-DcP4wzeb.js`. The merged tree matched tested head `1e91bd88e`. All 49 live browser cases, 174 sitemap routes and 14 pinned endpoint checks passed. IndexNow accepted the NRL guide. The final focused suites passed all 261 tests offline after updating two older XI fixtures to check exact saved draft bytes and write calls. Club Manager's match-plan runner passed 14 outcomes and all 35 effective faults. Hosted Home launch, Game picks and career entry guide passed. Other hosted workflows reported dependency, presentation asset and broader career outcome failures.
