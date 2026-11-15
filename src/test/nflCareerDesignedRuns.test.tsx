@@ -2,6 +2,7 @@ import { cleanup, fireEvent, render, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import UsCareerBoard from '@/components/us-career/UsCareerBoard';
+import { buildUsModel } from '@/components/us-career/season/UsSeasonCentre';
 import { nflSeasonScore } from '@/lib/careerAwards';
 import { keyedRng } from '@/lib/keyedRng';
 import { NFL_CAREER_SPORT as sport } from '@/lib/nflCareerSport';
@@ -109,6 +110,9 @@ describe('NFL designed quarterback runs', () => {
     const scoredOnFoot = rebuilt.games.find(g => (g.line.rushTd ?? 0) > 0)!;
     expect(NFL_SEASON.view.lineOf(scoredOnFoot, 'QB')).toContain(`${scoredOnFoot.line.rushTd} RUSH TD`);
     expect(NFL_SEASON.view.soFar(soFar(rebuilt, rebuilt.games.length), 'QB')).toContainEqual(['Rush TD', String(line.rushTd)]);
+    const review = buildUsModel(sport, NFL_SEASON, c, row, prepared.ctx, rebuilt, prepared.key).review;
+    expect(review.tiles).toContainEqual(['Rush yds', String(line.rushYds)]);
+    expect(review.tiles).toContainEqual(['Rush TD', String(line.rushTd)]);
     const old = c.seasons[0];
     expect(old.rushYds).toBeUndefined();
     expect(sport.reviewStats(old, 'QB').regular.map(s => s.label)).not.toContain('Rushing yards');
