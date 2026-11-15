@@ -109,4 +109,3 @@ describe('NRL renewal hold', () => {
     expect(read(direct)).toEqual(direct);
   });
 });
-

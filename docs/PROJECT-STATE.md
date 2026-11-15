@@ -1,3 +1,10 @@
+## 2026-11-14: Shorter Home browsing, contract holds and awards on actual play
+
+- Home previews the first 12 games in long sport lists. Open the rest in place. Back from a game restores the expanded list and focuses the exact card that opened it.
+- NRL Team Manager lets the club pay $25,000 once per season to hold an expiring player's asking salary for a one-year renewal. Exercise the hold in season review if the squad and cap still fit. The fee stays spent if unused, and Season Review records how the hold ended.
+- Club Manager settles a promise to start against the kickoff lineup. A substitute appearance no longer fulfills it. An unavailable player keeps the promise for a future match.
+- NBA My Career Finals MVP reads the saved playoff line. In 80,000 paired seasons the same 2,897 titles held, while Finals MVP awards dropped from 621 to 591.
+
 ## 2026-11-14: Linked reports, rugby golden point and NFL availability
 
 [PR #976](https://github.com/PapiSalgueroM/ballpark-hero/pull/976) published exact main `4e4d7ab7fa287a10e9389108cbd439646e4767da`, deployment `13cdfa86-029f-43c5-a11e-f8f2bf00c9db`, canonical entry `/assets/index-BUzUOWgn.js`. Fourteen live browser checks passed, including four admin journeys with fixture accounts and reports. All 174 sitemap routes, seven policy and crawler endpoints, the two admin noindex tags and the updated NRL guide passed. IndexNow accepted the NRL guide. Application types, normal build, 34 integrated tests, all 18 site checks and all 16 measured download limits passed. The older shared-career guard still flags unchanged imports and wrapper anchors. All 22 saved-season review tests passed on both #975 and #976. The legacy runner still expects 19 tests and rejects both builds.
