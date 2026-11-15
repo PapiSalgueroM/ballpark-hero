@@ -84,6 +84,7 @@ type GameReturn = {
 };
 const gameReturns = new Map<string, GameReturn>();
 const BROWSE_SPORTS_TRIGGER = 'home-browse-sports-trigger';
+const HOME_GAME_PICKS_ID = 'home-game-picks';
 const sportReturns = new Map<string, { top: number; opener: string }>();
 
 function revealSport(target: HTMLElement) {
@@ -665,10 +666,18 @@ export default function Index() {
                     aria-label="Browse sports"
                     className="max-h-[var(--radix-popover-content-available-height)] w-[19rem] max-w-[calc(100vw-1.5rem)] overflow-auto rounded-xl px-2 py-1"
                     onCloseAutoFocus={event => {
-                      if (document.activeElement?.id.startsWith('sport-')) event.preventDefault();
+                      const target = document.activeElement?.id;
+                      if (target === HOME_GAME_PICKS_ID || target?.startsWith('sport-')) event.preventDefault();
                     }}
                   >
                     <ul className="grid grid-cols-2 gap-x-1">
+                      <li className="col-span-2 border-b border-border">
+                        <a href={`#${HOME_GAME_PICKS_ID}`} onClick={event => { jumpToSport(event, BROWSE_SPORTS_TRIGGER); setSportsOpen(false); }}
+                          className="flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-semibold hover:bg-accent focus-visible:bg-accent focus-visible:outline-primary">
+                          <Flame aria-hidden="true" className="h-4 w-4 shrink-0 text-warn" />
+                          Game picks
+                        </a>
+                      </li>
                       {sportSections.map(category => {
                         const sport = CATEGORY_SPORT[category.title];
                         return (
@@ -855,7 +864,7 @@ function MostPlayedToday({ returnPath }: { returnPath?: string }) {
   const ranked = entries.length > 0 && entries.every(entry => !entry.isFallback);
   const List = ranked ? 'ol' : 'ul';
   const heading = (
-    <h2 ref={title} tabIndex={-1} className="mb-3 flex items-center gap-2.5 text-lg font-display font-bold text-foreground focus-visible:outline-primary">
+    <h2 id={HOME_GAME_PICKS_ID} ref={title} tabIndex={-1} className="mb-3 flex scroll-mt-36 items-center gap-2.5 text-lg font-display font-bold text-foreground focus-visible:outline-primary sm:scroll-mt-28">
       <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-warn/15 text-warn ring-1 ring-inset ring-warn/30">
         <Flame className="h-4 w-4" />
       </span>

@@ -604,7 +604,8 @@ for (const width of [320, 390, 430, 1440]) {
     })));
     const sections = await page.locator('section[data-sport] > div > h2').evaluateAll(headings => headings.map(h => '#' + h.id));
     const stayedAtTop = await page.evaluate(() => scrollY === 0 && document.documentElement.scrollWidth <= innerWidth);
-    say(stayedAtTop && links.length === sections.length && links.every(link => sections.includes(link.href) && link.height >= 44),
+    const sportLinks = links.filter(link => link.href !== '#home-game-picks');
+    say(stayedAtTop && sportLinks.length === sections.length && sportLinks.every(link => sections.includes(link.href) && link.height >= 44),
       width + 'px header opens every sport at the top with 44px targets');
     await page.keyboard.press('Escape');
     await quick.waitFor({ state: 'hidden' });
@@ -628,6 +629,27 @@ for (const width of [320, 390, 430, 1440]) {
       && location.hash === '#sport-rugby'
       && Math.abs(heading.getBoundingClientRect().top - parseFloat(getComputedStyle(heading).scrollMarginTop)) <= 3);
     say(advanced, width + 'px browser Forward restores the selected sport heading');
+    await page.goBack();
+    await trigger.press('Enter');
+    await quick.waitFor();
+    const picks = quick.getByRole('link', { name: 'Game picks', exact: true });
+    if (await picks.count() !== 1) {
+      say(false, width + 'px Browse sports has a Game picks shortcut');
+      continue;
+    }
+    const picksBox = await picks.boundingBox();
+    say(links.filter(link => link.href === '#home-game-picks').length === 1 && picksBox?.height >= 44,
+      width + 'px Browse sports has a single full-size Game picks shortcut');
+    if (width < 768) await picks.tap();
+    else { await picks.focus(); await picks.press('Enter'); }
+    await quick.waitFor({ state: 'hidden' });
+    const picksHeading = page.locator('#home-game-picks');
+    say(await picksHeading.evaluate(heading => document.activeElement === heading && location.hash === '#home-game-picks'
+      && Math.abs(heading.getBoundingClientRect().top - parseFloat(getComputedStyle(heading).scrollMarginTop)) <= 3),
+      width + 'px Game picks opens the discovery shelf with focus below the header');
+    await page.goBack();
+    say(await trigger.evaluate(button => document.activeElement === button && !location.hash && scrollY === 0),
+      width + 'px Back from Game picks restores the opener at the top');
   } finally {
     await ctx.close();
   }

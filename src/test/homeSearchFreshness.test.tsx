@@ -351,6 +351,35 @@ it.each([
   expect(screen.getByRole('textbox', { name: 'Search games' })).toHaveValue('');
 });
 
+it('jumps from Browse sports to game picks and restores the opener with Back', () => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  const scrollTo = vi.fn();
+  vi.stubGlobal('scrollTo', scrollTo);
+  function HistoryControls() {
+    const navigate = useNavigate();
+    const { hash } = useLocation();
+    return <><button onClick={() => navigate(-1)}>Go back</button><output aria-label="Current anchor">{hash}</output></>;
+  }
+  render(<MemoryRouter initialEntries={[{ pathname: '/', key: 'home-picks-discovery-entry' }]}><Index /><HistoryControls /></MemoryRouter>);
+  const trigger = screen.getByRole('button', { name: 'Browse sports', exact: true });
+  const target = screen.getByRole('heading', { name: 'Games to try' });
+  target.scrollIntoView = vi.fn();
+  trigger.focus();
+  fireEvent.click(trigger);
+  const menu = screen.getByRole('dialog', { name: 'Browse sports' });
+  expect(within(menu).getByRole('link', { name: 'Rugby League' })).toHaveAttribute('href', '#sport-rugby');
+  fireEvent.click(within(menu).getByRole('link', { name: 'Game picks' }));
+  expect(screen.queryByRole('dialog', { name: 'Browse sports' })).toBeNull();
+  expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#home-game-picks');
+  expect(target).toHaveFocus();
+  expect(target.scrollIntoView).toHaveBeenCalledWith({ block: 'start', behavior: 'instant' });
+
+  fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
+  expect(screen.getByLabelText('Current anchor')).toBeEmptyDOMElement();
+  expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'instant' });
+  expect(trigger).toHaveFocus();
+});
+
 it.each(['same game', 'different games', 'focus moved'])('restores focus after Back when the ranking returns with %s', async scenario => {
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
   const entry = (path: string, isFallback: boolean) => ({
