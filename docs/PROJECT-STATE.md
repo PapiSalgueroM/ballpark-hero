@@ -8,6 +8,8 @@
 
 The production build, 156 focused tests, 11 pinned local browser cases and 20 site checks passed. The NRL Team Manager, NFL Front Office and Stadium Tycoon guides and their lastmod entries were refreshed. The 360 archived grid boards through November 14 Eastern matched the previous release.
 
+All seven NFL desk simulation checks passed across ten seeds and ten seasons. Nine no-desk seasons matched their saved fingerprints after excluding the new first-round eligibility marker. The rating review fault still failed all nine comparisons. The 11 NHL waiver controls passed against the shared cut ledger.
+
 ## 2026-11-15: Rugby match timelines and puzzle saves
 
 - NRL Team Manager shows the points and actual scoring plays in each completed period. Confirmed interchanges appear by name during Live. The same scoring data carries into new Live and Quick Sim match reports. Older reports retain their saved period scores.
