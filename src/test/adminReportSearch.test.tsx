@@ -3,6 +3,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { AuthApiError, AuthRetryableFetchError } from '@supabase/supabase-js';
+import { Toaster } from 'sonner';
 import AdminLogin from '@/pages/AdminLogin';
 import AdminReports from '@/pages/AdminReports';
 
@@ -60,6 +61,7 @@ function openQueue(entry = '/admin/reports') {
   return render(
     <HelmetProvider>
       <MemoryRouter initialEntries={[entry]}>
+        <Toaster />
         <Routes>
           <Route path="/admin/reports" element={<AdminReports />} />
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -101,6 +103,34 @@ describe('admin report queue', () => {
     expect(db.write).toHaveBeenCalledWith('club-1', expect.objectContaining({ status: 'fixed', resolved: true }));
     fireEvent.click(status.getByRole('button', { name: 'Fixed (1)' }));
     expect(screen.getByText('Players left for free')).toBeVisible();
+  });
+
+  it('confirms a status move after the report leaves the queue and keeps keyboard focus', async () => {
+    openQueue();
+    const report = await screen.findByText(contract.description);
+    const select = within(report.closest('[data-report]') as HTMLElement).getByRole('combobox', { name: 'Status' });
+    select.focus();
+    fireEvent.change(select, { target: { value: 'fixed' } });
+    await waitFor(() => expect(screen.queryByText(contract.description)).not.toBeInTheDocument());
+    expect(screen.getByRole('button', { name: 'Open (2)' })).toHaveFocus();
+    expect(await screen.findByText('Moved to Fixed')).toBeVisible();
+  });
+
+  it('respects focus moved to another control while a status change saves', async () => {
+    let release: () => void = () => {};
+    db.write.mockImplementationOnce((id: string) => new Promise(resolve => {
+      release = () => resolve({ data: [{ id }], error: null });
+    }));
+    openQueue();
+    const report = await screen.findByText(contract.description);
+    const select = within(report.closest('[data-report]') as HTMLElement).getByRole('combobox', { name: 'Status' });
+    select.focus();
+    fireEvent.change(select, { target: { value: 'fixed' } });
+    const search = screen.getByRole('searchbox', { name: 'Search reports' });
+    search.focus();
+    await act(async () => release());
+    expect(screen.queryByText(contract.description)).not.toBeInTheDocument();
+    expect(search).toHaveFocus();
   });
 
   it('keeps newer note and fix-reference drafts while an earlier save completes', async () => {
