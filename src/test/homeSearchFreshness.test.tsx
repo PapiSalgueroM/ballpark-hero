@@ -336,11 +336,12 @@ it.each([
     const location = useLocation();
     return <><output>{location.pathname + location.search}</output><button onClick={() => navigate(-1)}>Go back</button></>;
   }
-  const { container } = render(<MemoryRouter><Routes>
+  const { container } = render(<MemoryRouter initialEntries={[{ pathname: '/', key: 'return-' + _label }]}><Routes>
     <Route path="/" element={<Index />} />
     <Route path="*" element={<Game />} />
   </Routes></MemoryRouter>);
   const card = () => container.querySelector<HTMLAnchorElement>(selector + '[href="' + href + '"]')!;
+  if (href === '/soccer-grid') fireEvent.click(screen.getByRole('button', { name: /^Show \d+ more Soccer games$/ }));
   expect(container.querySelector('[data-catalog-card] a[href="' + href.split('?')[0] + '"]')).toBeInTheDocument();
   card().focus();
   fireEvent.click(card());

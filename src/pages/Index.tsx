@@ -507,7 +507,7 @@ export default function Index() {
                     {expanded ? 'Show fewer games' : `Show ${extraGames.length} more games`}
                     <ChevronDown aria-hidden="true" className={expanded ? 'h-4 w-4 shrink-0 rotate-180' : 'h-4 w-4 shrink-0'} />
                   </button>
-                  <div id={moreId} hidden={!expanded}>
+                  <div id={moreId}>
                     {expanded && (
                       <div className="mt-2 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3" data-home-catalogue="">
                         {extraGames.map(game => (
