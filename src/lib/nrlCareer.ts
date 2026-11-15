@@ -2343,7 +2343,7 @@ export function nrlOfferAssistantQuote(state: NrlCareerState, destinationId: str
   return { name: current.name, role: current.role, reservedWages, reason };
 }
 
-function offseasonSquads(state: NrlCareerState, allCpu = false, preferFreeAgents = false) {
+function offseasonSquads(state: NrlCareerState, allCpu = false, preferFreeAgents = false, nextClubId = state.season.clubId) {
   const { season } = state;
   const year = season.year + 1;
   const focusAffected = state.ratingReview?.focus?.length ?? 0;
@@ -2354,14 +2354,32 @@ function offseasonSquads(state: NrlCareerState, allCpu = false, preferFreeAgents
     .filter(player => player.contract || player.futureContract || player.age < RETIREMENT_AGE);
   const names = new Set(players.map(player => player.name));
   const priorClubs = new Set(nrlSeasonPlan(season.year).clubs.map(club => club.id));
+  const expiring = state.players.filter(player => player.contract?.endYear === season.year
+    && !player.futureContract && player.age + 1 < RETIREMENT_AGE).sort(byRating);
+  const rivalRenewals = new Map<string, NrlContract>();
+  for (const clubId of priorClubs) {
+    if (clubId === season.clubId || clubId === nextClubId) continue;
+    const signed = squadAt(players, clubId, year);
+    for (const player of expiring) {
+      if (player.contract?.clubId !== clubId || signed.some(row => row.role === player.role && row.rating >= player.rating)) continue;
+      const contract = { clubId, startYear: year, endYear: year, salary: salaryRequest(player, year, true, 0) };
+      if (contractCapacityRefusal(players, player, contract)) continue;
+      rivalRenewals.set(player.id, contract);
+      break;
+    }
+  }
   for (const club of nrlSeasonPlan(year).clubs) {
     if (!priorClubs.has(club.id)) players.push(...initialSquad(club, year, season.seed, names));
   }
   players.push(...newMarket(season.seed, year, names));
   const signings: NrlFreeAgentSigning[] = [];
   const fill = preferFreeAgents ? { exclude: state.finance.mutualRelease?.playerId, signings } : undefined;
-  const settled = completeSquads(players, season.seed, allCpu ? '' : season.clubId, year, names, fill);
-  return { settled, focusAffected, coachDevelopment, signings };
+  const renewed = players.map(player => {
+    const contract = rivalRenewals.get(player.id);
+    return contract ? { ...player, contract } : player;
+  });
+  const settled = completeSquads(renewed, season.seed, allCpu ? '' : season.clubId, year, names, fill);
+  return { settled, focusAffected, coachDevelopment, signings, rivalRenewals };
 }
 
 function canStayForNextSeason(state: NrlCareerState): boolean {
@@ -2487,13 +2505,14 @@ function leagueRecruitmentAvailable({ season, retired, legacySeason }: NrlCareer
   return !retired && !legacySeason && Boolean(season.kickerId) && season.phase === 'complete' && season.year + 2 <= NRL_LAST_YEAR;
 }
 
-function leagueRecruitmentDeals(state: NrlCareerState, settled: NrlCareerPlayer[], nextClubId: string): NrlLeagueRecruitmentDeal[] {
+function leagueRecruitmentDeals(state: NrlCareerState, settled: NrlCareerPlayer[], nextClubId: string,
+  rivalRenewals: ReadonlyMap<string, NrlContract>): NrlLeagueRecruitmentDeal[] {
   const { year, clubId } = state.season;
   const expiring = new Set(state.players.filter(player => player.contract?.endYear === year && !player.futureContract).map(player => player.id));
   return nrlSeasonPlan(year + 1).clubs.flatMap(club => {
     if (club.id === clubId || club.id === nextClubId) return [];
     const candidate = settled.filter(player => player.contract?.clubId === club.id && player.contract.startYear === year + 1
-      && player.contract.endYear === year + 1 && expiring.has(player.id)).sort(byRating).find(player =>
+      && player.contract.endYear === year + 1 && expiring.has(player.id) && !rivalRenewals.has(player.id)).sort(byRating).find(player =>
         !contractCapacityRefusal(settled, player, { clubId: club.id, startYear: year + 2, endYear: year + 2, salary: player.contract!.salary }));
     return candidate ? [{ playerId: candidate.id, playerName: candidate.name, clubId: club.id, annualSalary: candidate.contract!.salary }] : [];
   });
@@ -2507,11 +2526,12 @@ export function nrlLeagueRecruitmentPreview(state: NrlCareerState, destinationId
   const incoming = destinationId === state.season.clubId ? retentionPreparation(state) : { state };
   if (!incoming) return [];
   const projected = incomingWithPrimaryRole(incoming.state, destinationId === state.season.clubId ? primaryRole : undefined);
-  return leagueRecruitmentDeals(projected, offseasonSquads(projected, false, freeAgents).settled, destinationId);
+  const { settled, rivalRenewals } = offseasonSquads(projected, false, freeAgents, destinationId);
+  return leagueRecruitmentDeals(projected, settled, destinationId, rivalRenewals);
 }
 
 function offseasonWorld(state: NrlCareerState, nextClubId: string, allCpu = false, preferFreeAgents = false, selection?: NrlOffseasonFreeAgentTarget) {
-  const { settled: projected, focusAffected, coachDevelopment, signings } = offseasonSquads(state, allCpu, preferFreeAgents);
+  const { settled: projected, focusAffected, coachDevelopment, signings, rivalRenewals } = offseasonSquads(state, allCpu, preferFreeAgents, nextClubId);
   const target = selection ? offseasonFreeAgentTargets(state, projected, selection.playerId)[0] : undefined;
   const contract = offseasonTargetContract(target, selection?.years);
   const settled = target && contract ? projected.flatMap(player => player.id === target.academyId ? []
@@ -2533,7 +2553,7 @@ function offseasonWorld(state: NrlCareerState, nextClubId: string, allCpu = fals
     const graduate = graduateId && available.find(player => player.id === graduateId);
     return graduate && !market.includes(graduate) ? [...market, graduate] : market;
   });
-  const deals = state.leagueRecruitment ? leagueRecruitmentDeals(state, settled, nextClubId) : null;
+  const deals = state.leagueRecruitment ? leagueRecruitmentDeals(state, settled, nextClubId, rivalRenewals) : null;
   const extensions = deals && new Set(deals.map(deal => deal.playerId));
   const contracted = settled.filter(player => player.contract || player.futureContract);
   const world = [...(extensions ? contracted.map(player => extensions.has(player.id)
@@ -2584,7 +2604,7 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
   const { focusAffected, coachDevelopment, deals, signings } = opening;
   const { world } = seasonOut
     ? offseasonWorld({ ...state, season: seasonOut.skipped, players: seasonOut.players, finance: bookFrom(OPENING_CASH),
-    developmentFocus: undefined, ratingReview: undefined, leagueRecruitment: undefined }, '', true)
+    developmentFocus: undefined, ratingReview: undefined, leagueRecruitment: undefined }, clubId, true)
     : opening;
   const squad = squadAt(world, clubId, year).sort(byRating);
   const lineup = { ...season.lineup };
