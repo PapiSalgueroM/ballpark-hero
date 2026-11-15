@@ -1,3 +1,12 @@
+## 2026-11-15: World Cup scores, captain reviews, playoff minutes and mobile game cards
+
+- New Rugby League World Cup runs use a wider scoring model for countries far apart in strength. In the same 75,000 pooled fixture draws, median total points rose from 42 to 52 and median margin from 14 to 26. All 35,000 near-strength fixture scores matched and the complete legacy report digest matched across 5,000 tournaments. The pinned browser finished new and legacy tournaments and checked that a Club office appointment used the new model in its own save.
+- NRL Team Manager can pause Live for a late strip ruling. An on-field captain or vice-captain has a view of the tackle to help decide whether to challenge. Accepting keeps the ordinary result. In the paired Storm fixture, an overturned goal sent a 32–34 loss to a 32–32 Golden Point draw and earned one ladder point. The review, extra time and settled report survived reload. The markerless paused save kept its original result.
+- NBA My Career lets eligible starters take one to three extra playoff minutes per game for four health. The pinned case moved from 19.8 to 21.5 playoff points per game and paid the health cost once. Missing the playoffs waived the cost. The unchanged defensive role and ordinary saves matched the published engine across 480 paired checkpoints.
+- Related-game cards wrap full titles with 14px titles and 12px descriptions on phones. The real recommendations in Soccer Career, Club Manager, NBA My Career and Stadium Tycoon kept their order and worked at 320px and 390px. The published baseline reproduced the smaller or clipped titles at both widths.
+
+The exact production build and all four pinned browser groups passed. The NRL and NBA guide snapshots, publication ledger and guide search keywords were refreshed. The recommendation graph, guide outline and snapshot asset checks passed.
+
 ## 2026-11-15: NRL scoring, Aussie Rules interchanges and mobile sport hubs
 
 [PR #1005](https://github.com/PapiSalgueroM/ballpark-hero/pull/1005) published exact main `c7562514ddd76186cffdbfcd54a2d9967e05deca`, deployment `fe37c1fe-c26b-4336-a611-8c295a15783e`, canonical entry `/assets/index-C0Q5Mk2E.js`. The merged tree matched tested head `da18eb3ae`. All 14 live browser journeys, 14 pinned endpoints and 174 sitemap routes passed. IndexNow accepted both updated guides. The 160 local focused tests, 20 site checks, 174-route SEO comparison, Home fold and all 16 download budgets passed.

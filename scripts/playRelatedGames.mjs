@@ -25,6 +25,9 @@ const say = (ok, what) => {
 
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+await page.addInitScript(origin => {
+  if (location.origin === origin) localStorage.setItem('rules-gate-seen:' + location.pathname, '1');
+}, new URL(BASE).origin);
 const errors = [];
 page.on('pageerror', e => errors.push(String(e)));
 
@@ -63,6 +66,10 @@ for (const route of ['/soccer-career', '/club-manager', '/nba-my-career', '/stad
   const recommendations = page.locator('[data-related-games] a');
   await recommendations.last().waitFor({ state: 'attached' });
   await page.evaluate(() => document.fonts.ready);
+  const stadiumRules = page.getByRole('dialog', { name: 'How Stadium Tycoon works' });
+  if (await stadiumRules.isVisible()) {
+    await stadiumRules.getByRole('button', { name: 'Close the rules', exact: true }).click();
+  }
 
   const desktop = await recommendations.evaluateAll(links => links.map(link => ({
     href: link.getAttribute('href'),
