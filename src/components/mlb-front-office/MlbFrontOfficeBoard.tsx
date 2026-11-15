@@ -1411,9 +1411,9 @@ export default function MlbFrontOfficeBoard() {
                   {development?.eligible.map(player => <option key={player.id} value={player.id}>{player.name} · {player.ovr} OVR</option>)}
                 </select>
               </label>
-              <p className="mt-1 text-xs text-muted-foreground">Once per season, give a healthy bench hitter aged 24 or under a full round and up to one OVR point toward their potential.</p>
+              <p className="mt-1 text-xs text-muted-foreground">Once per season, give a bench hitter aged 24 or under a full round and up to one OVR point toward their potential. The preview includes hitters due back from the IL.</p>
               {developmentPreview ? <p className="mt-1 text-xs text-muted-foreground" data-development-preview>
-                {developmentPreview.player.name} replaces {developmentPreview.replaced.name}. Current team strength {mlbStrength(my, developmentRotation).toFixed(2)} usual · {mlbStrength(my, developmentRotation, undefined, developmentPreview.bats).toFixed(2)} with the change.
+                {developmentPreview.player.name} replaces {developmentPreview.replaced.name}. Team strength with current pitching {mlbStrength(my, developmentRotation, undefined, developmentPreview.usualBats).toFixed(2)} usual · {mlbStrength(my, developmentRotation, undefined, developmentPreview.bats).toFixed(2)} with the change.
               </p> : developmentPlan && <p className="mt-1 text-xs text-muted-foreground">The saved swap is unavailable. The usual lineup will play unless the planned pair is available at the start of the round.</p>}
               {developmentSaveError && <p role="alert" className="mt-1 text-xs text-destructive">Could not save the development start. Choose it again to retry.</p>}
             </div>
