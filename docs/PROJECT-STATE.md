@@ -1,3 +1,12 @@
+## 2026-11-15: Aussie Rules squad carry, Dart Draft quotes and report note retries
+
+- Aussie Rules Manager offers to carry a kept matchday 23 after the draft. The preview names returning players and replacements before saving. The Fremantle fixture retained 17 starters and every eligible interchange player, replacing the delisted ruck with Dravin Dunholm. The default option matched 173 old-engine saved checkpoints byte for byte.
+- Dart Draft shows each out-of-position player on the same rating scale as the XI and the simulation. In the Georgia fixture, Kvaratskhelia's offer and settled RB card show 81 OVR. The full team still scores 648 and grades 54/D, with the same chemistry, match results and 83 draws.
+- Admin Reports keeps a failed note reachable when a status or priority edit moves the report out of the current filter. Opening the notice restores the draft and fix reference. A successful retry clears it.
+- The hosted Home search check waits for the search placeholder when the results wrapper is also marked busy.
+
+The production build, 91 focused tests, seven pinned local browser cases and 20 site checks passed. The Aussie Rules Manager and Dart Draft guides and lastmod entries were refreshed. The 360 archived grid boards through November 14 Eastern matched the previous release.
+
 ## 2026-11-15: Rugby training, NFL rookie options, stadium construction and Daily saves
 
 - NRL Team Manager lets a coach book one intensive match-week session during an active position course. It costs four kickoff fitness points and advances the course by one round after full-time. It shares the existing once-per-course spot with the bye session. In the Sharks fixture, Tane Nairn qualified at Halfback for Round 5. Selecting him changed a 20–24 loss and six ladder points into a 20–18 win and eight points.
