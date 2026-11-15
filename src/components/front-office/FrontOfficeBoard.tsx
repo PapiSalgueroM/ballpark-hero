@@ -948,7 +948,6 @@ export default function FrontOfficeBoard() {
     const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
     for (let i = 0; i < batches; i++) {
       const resolved = nflAiDraftPicks(lg, nextClass, myTeam, Math.random);
-      nflMarkRookies(lg, resolved.picks, lg.season + 1);
       nextClass = resolved.remaining;
       rivalPicks.push(...resolved.picks);
     }
@@ -1048,7 +1047,6 @@ export default function FrontOfficeBoard() {
     const batches = draftBatchesLeft ?? Math.min(3, picksLeft);
     for (let i = 0; i < batches; i++) {
       const resolved = nflAiDraftPicks(lg, remaining, myTeam, Math.random);
-      nflMarkRookies(lg, resolved.picks, lg.season + 1);
       remaining = resolved.remaining;
       rivalPicks.push(...resolved.picks);
     }

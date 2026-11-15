@@ -54,7 +54,7 @@
  *   nodefault  the engine's win probability reads an edge by default        (1)
  *   nodead     a trade leaves no dead money behind                          (6)
  *   boardsummer  the board's finishDraft never runs the desk summer         (2)
- *   boarddraftee the board's draftProspect skips the rookie deal            (2)
+ *   boarddraftee the board's draftProspect skips the rookie season stamp    (2)
  *   boardedges   the board's playWeek drops the staff edge from the games   (5)
  *   stancespots  buyers are the top seven by record, not the seeds held      (3)
  *   stanceswap   a package is priced off the user's stance, not the partner's (3)
@@ -172,7 +172,8 @@ const EDITS = {
   noreview: ['engine', '  if (week < 1 || week > REGULAR_WEEKS || (ratingReview && ratingReview.week >= week)) return;', '  return;'],
   coinflip: ['desk', '  const run = runDeskOffseason(nflContractHost, league, ledger, rng);',
     '  const run = { ok: true as const, engine: nflContractHost.runOffseason(league, rng, team), applied: [] as GmDecision[], picksAdded: [] as number[] };'],
-  shortrookie: ['desk', '  p.years = NFL_ROOKIE_DEAL_YEARS + 1;', '  p.years = NFL_ROOKIE_DEAL_YEARS;'],
+  shortrookie: ['engine', '        if (p.years === NFL_ROOKIE_DEAL_YEARS + 1) p.years = NFL_ROOKIE_DEAL_YEARS;',
+    '        p.years = NFL_ROOKIE_DEAL_YEARS - 1;'],
   latetrade: ['desk', 'periodsPlayed: nflWeeksPlayed(league), seasonClosed: false },', 'periodsPlayed: 0, seasonClosed: false },'],
   noguard: ['board', '    if (!league || !myTradePiece || deadlineBlock()) return;\n    const lg: LeagueState = JSON.parse(JSON.stringify(league));\n    const pickRound = lastPickRound(lg, o.sweeten);',
     '    if (!league || !myTradePiece) return;\n    const lg: LeagueState = JSON.parse(JSON.stringify(league));\n    const pickRound = lastPickRound(lg, o.sweeten);'],
@@ -189,7 +190,7 @@ const EDITS = {
   /* The board's own wiring: the walk replays the board's calls, so only a read of the board can see it drop one. */
   boardsummer: ['board', '      const summer = deskNow ? nflDeskOffseason(lg, deskNow, myTeam, Math.random) : null;',
     '      const summer = deskNow && false ? nflDeskOffseason(lg, deskNow, myTeam, Math.random) : null;'],
-  boarddraftee: ['board', '      if (pl && gm) nflSignDraftee(pl);\n', ''],
+  boarddraftee: ['board', '      if (pl) nflMarkRookies(lg, [{ team: myTeam, playerName: pr.name }], lg.season + 1);\n', ''],
   boardedges: ['board', 'simGame(g, lg.teams, Math.random, deskWeek.edges)', 'simGame(g, lg.teams, Math.random)'],
   stancespots: ['desk', 'deadlineStances(rows, NFL_PLAYOFF_SPOTS, nflPlacedClubs(league))', 'deadlineStances(rows, NFL_PLAYOFF_SPOTS)'],
   stanceswap: ['desk', "  const stance = nflStances(league)[partner] ?? 'holding';", "  const stance = nflStances(league)[team] ?? 'holding';"],
@@ -333,7 +334,7 @@ function draftNight(lg, team, rng, desk) {
     if (!E.consumeDraftPick(mine)) break;
     const p = E.prospectToPlayer(pr, rng);
     if (p && desk) { D.nflSignDraftee(p); draftedIn.set(p.id, { season: lg.season, round }); }
-    if (p) mine.players.push(p);
+    if (p) { p.rookieSeason = lg.season + 1; mine.players.push(p); }
     if (p && desk) desk = D.nflNoteArrivals(desk, lg, team, [p.id], 'draft', round);
     cls = cls.filter(x => x.id !== pr.id);
     const nextPicks = picksLeft - 1;
@@ -378,7 +379,7 @@ for (const seed of ID_SEEDS) {
 }
 if (RECORD) {
   fs.mkdirSync(path.dirname(FIXTURE), { recursive: true });
-  const recordedFrom = RECORD === 'working-tree' ? 'weekly rating reviews and single offseason aging' : RECORD;
+  const recordedFrom = RECORD === 'working-tree' ? 'draft rookies open with their full contract and draft age' : RECORD;
   fs.writeFileSync(FIXTURE, `${J({ recordedFrom, team: TEAM, seasons: ID_SEASONS, hashes: played })}\n`);
   console.log(`wrote ${path.relative(ROOT, FIXTURE)} from ${RECORD}: ${ID_SEEDS.length} seeds x ${ID_SEASONS} seasons`);
   process.exit(0);
@@ -622,7 +623,7 @@ console.log(`   ${stats.applyChecks} expiring men: ${stats.gm} decided by the GM
   if (!fin.includes('summer?.news ?? runOffseason(')) fail('the board\'s finishDraft runs the engine\'s own offseason when the desk summer ran');
   const iRound = dp.indexOf('const pickRound = mine.picks[0];'), iSpend = dp.indexOf('consumeDraftPick(mine)');
   if (iRound < 0 || iSpend < 0 || iRound > iSpend) fail('the board\'s draftProspect does not read the pick\'s round before it spends the pick');
-  if (!dp.includes('if (pl && gm) nflSignDraftee(pl);')) fail('the board\'s draftProspect no longer signs a draftee to the rules\' four year rookie deal with the desk on');
+  if (!dp.includes('if (pl) nflMarkRookies(lg, [{ team: myTeam, playerName: pr.name }], lg.season + 1);')) fail('the board\'s draftProspect no longer records the draftee\'s first season');
   if (!dp.includes("nflNoteArrivals(gm, lg, myTeam, [pl.id], 'draft', pickRound)")) fail('the board\'s draftProspect no longer tells the re-sign desk the draftee\'s round');
   if (!dp.includes('finishDraft(lg, note, deskNow ?? gm)')) fail('the board\'s last pick hands the summer no desk');
   console.log('   the board runs the summer and the draft through the desk (read from FrontOfficeBoard.tsx)');

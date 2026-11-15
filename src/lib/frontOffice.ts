@@ -8,6 +8,7 @@ import { leagueNames, uniqueName } from './foNames';
 import { NFL_SALARY_CAP_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 import { keyedRng } from './keyedRng';
+import { NFL_ROOKIE_DEAL_YEARS } from './gmContractRules';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
 import { type CutLedger, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal, tradeRefusal, rosterFullRefusal } from './frontOfficeCuts';
 /* Round 1542: the season's lines and awards are the board's (src/lib/nflSeasonStats.ts); the engine carries their
@@ -1254,6 +1255,7 @@ export function nflAiDraftPicks(
     if (!prospect) break;
     const player = prospectToPlayer(prospect, rng);
     if (!player) continue;
+    player.rookieSeason = league.season + 1;
     consumeDraftPick(league.teams[abbr]);
     league.teams[abbr].players.push(player);
     remaining.shift();
@@ -1279,7 +1281,7 @@ export function prospectToPlayer(pr: Prospect, rng: () => number): GmPlayer | nu
     age: pr.age,
     ovr,
     salary: Math.max(1, Math.round((ovr - 60) * 0.35 * 10) / 10),
-    years: 4,
+    years: NFL_ROOKIE_DEAL_YEARS,
     out: 0,
     pot: Math.min(97, ovr + 3 + Math.floor(rng() * 8)),
   };
@@ -1501,6 +1503,7 @@ export function readNflGameRatings(game: GmGame, team: string): readonly NflRati
    CPU policy skips it. Callers without one (the harnesses) run it everywhere. */
 export function runOffseason(league: LeagueState, rng: () => number, userTeam?: string): OffseasonNews {
   const openingMarket = new Set(league.freeAgents);
+  const nextSeason = league.season + 1;
   const news: OffseasonNews = { retired: [], expired: [], tagged: [] };
   /* Round 723: the tags go on before free agency opens, which is this loop. */
   news.tagged = cpuFranchiseTags(league, userTeam);
@@ -1508,8 +1511,14 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
     if (t.practiceElevations) delete t.practiceElevations;
     const keep: GmPlayer[] = [];
     for (const p of t.players) {
-      p.age += 1;
       p.out = 0;
+      if (p.rookieSeason === nextSeason) {
+        // The draft happens before rollover. A paused desk draft can carry one extra year for the old tick.
+        if (p.years === NFL_ROOKIE_DEAL_YEARS + 1) p.years = NFL_ROOKIE_DEAL_YEARS;
+        keep.push(p);
+        continue;
+      }
+      p.age += 1;
       // retirement
       if (p.age >= 34 && (p.ovr <= 70 || rng() < 0.3 || p.age >= 40)) {
         news.retired.push({ team: t.abbr, player: p.name });
