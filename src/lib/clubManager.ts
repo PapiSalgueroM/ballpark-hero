@@ -8630,6 +8630,39 @@ export function recoverPooledReleases(career: CareerState): CareerState {
   return back.length ? { ...done, freeAgents: [...career.freeAgents, ...back] } : done;
 }
 
+/** Restore active deals the old summer squad trim cut. The released ledger still holds the original terms. */
+function restoreTrimmedContracts(career: CareerState): CareerState {
+  if (career.live || career.sacked || career.wilderness || career.retired || !Array.isArray(career.history)
+    || !Array.isArray(career.freeAgents) || !career.freeAgents.some(row => row?.trimmed === true)) return career;
+  const records = worldRosterView(career)?.records;
+  if (!records) return career;
+  const formerClubs = new Map(career.history.map(season => [season.season, season.club]));
+  const unavailable = new Set([...(career.retiredNames ?? []), ...(career.releasedNames ?? [])]);
+  const year = worldYear(career);
+  let restored = career;
+  for (const row of career.freeAgents) {
+    if (row?.trimmed !== true || row.fromMyClub !== true || row.reason !== 'released' || !row.worldRosterKey
+      || !Number.isSafeInteger(row.since) || row.since > career.season || formerClubs.get(row.since - 1) !== career.clubName
+      || unavailable.has(row.name)) continue;
+    const record = records.find(entry => entry.key === row.worldRosterKey);
+    const player = record?.player;
+    // Old trim could cut a fresh youth pad before it received a role or contract. Aging can give its record a default term later.
+    if (!record || !player || record.status !== 'released' || record.owner !== null || record.year !== year
+      || sameManKey(player) !== sameManKey(row) || player.onLoan || (player.isYouth && player.role === undefined)
+      || typeof player.contractYears !== 'number' || !Number.isSafeInteger(player.contractYears) || player.contractYears < 1
+      || typeof player.wage !== 'number' || !Number.isFinite(player.wage) || player.wage < 0) continue;
+    const held = [...restored.squad, ...(restored.loanedOut ?? []).map(loan => loan.player)];
+    if (held.some(member => member.worldRosterKey === record.key || sameManKey(member) === sameManKey(player))) continue;
+    const returning = { ...player, id: freeSquadId(held, player.id) };
+    const withPlayer = { ...restored, squad: [...restored.squad, returning] };
+    const registered = recordWorldRosterTransfer(withPlayer, {
+      player: returning, from: null, to: career.clubName, kind: 'permanent', key: record.key,
+    });
+    if (registered !== withPlayer) restored = { ...registered, freeAgents: restored.freeAgents!.filter(entry => entry !== row) };
+  }
+  return restored;
+}
+
 /**
  * Round 1597 closing check: what a mid season job move (joinClubNow) carries of free agency, the way a summer move
  * keeps it (startNextSeason's pool block). Every man on the list stays in the world except the made up journeymen
@@ -25226,7 +25259,7 @@ export function loadCareer(slotSave?: string): CareerState | null {
     const disk: unknown = JSON.parse(raw);
     const restored = isPackedParkedCareer(disk) ? restoreParkedCareer(disk) : disk as CareerState | null;
     if (!restored) return null;
-    const parsed = trimCareer(restored);
+    let parsed = trimCareer(restored);
     /* Round 617: the fixture rule flag is exactly true or absent. A hand
        edited or damaged value would otherwise read as balanced through the
        callers' !! and flip a season's venues, so it is dropped, which keeps
@@ -25247,6 +25280,7 @@ export function loadCareer(slotSave?: string): CareerState | null {
     ) {
       return null;
     }
+    parsed = restoreTrimmedContracts(parsed);
     /* Round 127: repair the save the moment it is opened rather than on the
        first kick off. ensureRoles has always run at the top of playNextEntry,
        which is the house pattern and is enough for the engine, but it is NOT

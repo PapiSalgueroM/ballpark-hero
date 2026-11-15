@@ -1,7 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import type { Tables } from '@/integrations/supabase/types';
 import { LogOut, Loader2, Flag } from 'lucide-react';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 import { cn } from '@/lib/utils';
 import { Helmet } from 'react-helmet-async';
 import {
@@ -29,25 +31,18 @@ import {
   type StatusFilter,
 } from '@/lib/reportTriage';
 
-interface Report {
-  id: string;
-  game_type: string;
-  game_context: Record<string, unknown>;
-  description: string;
-  resolved: boolean;
-  resolved_at: string | null;
-  created_at: string;
+type Report = Tables<'question_reports'> & {
   /* Round 446: did the relay get a confirmed email delivery for this one?
      null on every row written before that round, which is honest: unknown,
      not false. */
-  emailed: boolean | null;
+  emailed?: boolean | null;
   /* Round 713: the triage columns. Absent until the migration is applied,
      which is why every read goes through statusOf and priorityOf. */
   status?: string | null;
   priority?: string | null;
   admin_note?: string | null;
   fix_ref?: string | null;
-}
+};
 
 const FILTERS: ReadonlyArray<{ key: StatusFilter; label: string }> = [
   { key: 'open', label: 'Open' },
@@ -68,20 +63,21 @@ const AdminReports = () => {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [filter, setFilter] = useState<StatusFilter>('open');
   const [game, setGame] = useState<string>(ALL_GAMES);
+  const [search, setSearch] = useState('');
+  const [priorityFilter, setPriorityFilter] = useState('all');
   const [drafts, setDrafts] = useState<Record<string, { note: string; fixRef: string }>>({});
   const [messages, setMessages] = useState<Record<string, string>>({});
   const navigate = useNavigate();
 
   useEffect(() => {
-    checkAuth();
-    fetchReports();
+    void fetchReports();
   }, []);
 
   const checkAuth = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       navigate('/admin/login');
-      return;
+      return false;
     }
     const { data: roles } = await supabase
       .from('user_roles' as any)
@@ -91,17 +87,22 @@ const AdminReports = () => {
     if (!roles?.length) {
       await supabase.auth.signOut();
       navigate('/admin/login');
+      return false;
     }
+    return true;
   };
 
   const fetchReports = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from('question_reports' as any)
+    if (!await checkAuth()) return;
+    const { data, error } = await fetchAllRows<Report>((from, to) => supabase
+      .from('question_reports')
       .select('*')
-      .order('created_at', { ascending: false }) as any;
-    setLoadError(error ? error.message : null);
-    setReports(data || []);
+      .order('created_at', { ascending: false })
+      .order('id', { ascending: false })
+      .range(from, to));
+    setLoadError(error ? (typeof error === 'object' && 'message' in error ? String(error.message) : String(error)) : null);
+    setReports(data);
     setLoading(false);
   };
 
@@ -155,11 +156,23 @@ const AdminReports = () => {
     navigate('/admin/login');
   };
 
-  const counts = statusCounts(reports, game);
-  const games = gameCounts(reports);
-  const filtered = sortForTriage(reports.filter((r) => matchesGame(r, game) && matchesStatus(r, filter)));
-  const critical = reports.filter((r) => matchesGame(r, game) && priorityOf(r) === 'critical' && !isClosed(statusOf(r))).length;
+  const matchingReports = useMemo(() => {
+    const words = search.toLowerCase().split(/\s+/).filter(Boolean);
+    return reports.filter((report) => {
+      if (priorityFilter !== 'all' && (priorityOf(report) ?? 'unranked') !== priorityFilter) return false;
+      if (words.length === 0) return true;
+      const text = [
+        report.description, report.game_type, report.id, report.admin_note, report.fix_ref, JSON.stringify(report.game_context),
+      ].join(' ').toLowerCase();
+      return words.every((word) => text.includes(word));
+    });
+  }, [reports, search, priorityFilter]);
+  const counts = statusCounts(matchingReports, game);
+  const games = useMemo(() => gameCounts(reports), [reports]);
+  const filtered = sortForTriage(matchingReports.filter((r) => matchesGame(r, game) && matchesStatus(r, filter)));
+  const critical = matchingReports.filter((r) => matchesGame(r, game) && priorityOf(r) === 'critical' && !isClosed(statusOf(r))).length;
   const filterLabel = FILTERS.find((f) => f.key === filter)?.label ?? '';
+  const hasRefinement = Boolean(search.trim()) || priorityFilter !== 'all';
 
   return (
     <>
@@ -195,11 +208,40 @@ const AdminReports = () => {
             and notes are switched off.
           </div>
         )}
-        {loadError && (
+        {!loading && loadError && (
           <div className="mb-5 rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
-            Could not load reports: {loadError}
+            <p role="alert">Could not load every report. {loadError}</p>
+            <button type="button" className="mt-2 min-h-11 rounded-lg bg-secondary px-3 text-foreground" onClick={() => void fetchReports()}>
+              Retry loading reports
+            </button>
           </div>
         )}
+
+        <div className="mb-3 grid gap-3 sm:grid-cols-[minmax(0,1fr)_12rem]">
+          <label className="block text-xs font-medium text-muted-foreground">
+            Search reports
+            <input
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Description, game context, note or fix reference"
+              className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-card px-3 text-sm text-foreground"
+            />
+          </label>
+          <label className="block text-xs font-medium text-muted-foreground">
+            Filter by priority
+            <select
+              value={priorityFilter}
+              onChange={(e) => setPriorityFilter(e.target.value)}
+              disabled={!withColumns}
+              className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-card px-3 text-sm text-foreground disabled:opacity-50"
+            >
+              <option value="all">Any priority</option>
+              {REPORT_PRIORITIES.map((p) => <option key={p.key} value={p.key}>{p.label}</option>)}
+              <option value="unranked">Unranked</option>
+            </select>
+          </label>
+        </div>
 
         {/* Game filter, busiest open queue first */}
         <label className="block mb-3 text-xs font-medium text-muted-foreground">
@@ -243,9 +285,20 @@ const AdminReports = () => {
           <div className="flex justify-center py-12">
             <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
           </div>
-        ) : filtered.length === 0 ? (
+        ) : loadError && reports.length === 0 ? null : filtered.length === 0 ? (
           <div className="text-center py-12 text-muted-foreground">
-            No {filter === 'all' ? '' : `${filterLabel.toLowerCase()} `}reports{game ? ` for ${game}` : ''}.
+            {hasRefinement ? (
+              <>
+                <p>No reports match these filters.</p>
+                <button
+                  type="button"
+                  onClick={() => { setSearch(''); setPriorityFilter('all'); }}
+                  className="mt-2 min-h-11 rounded-lg bg-secondary px-3 text-sm text-foreground"
+                >
+                  Clear search and priority
+                </button>
+              </>
+            ) : <>No {filter === 'all' ? '' : `${filterLabel.toLowerCase()} `}reports{game ? ` for ${game}` : ''}.</>}
           </div>
         ) : (
           <div className="space-y-3">

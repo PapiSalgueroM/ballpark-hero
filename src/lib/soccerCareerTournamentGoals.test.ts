@@ -1,6 +1,7 @@
 import { afterEach, expect, it, vi } from 'vitest';
-import { simulateUCL, type CareerState, type SeasonRecord } from './soccerCareerEngine';
+import { advanceProSeason, FALLBACK_CLUBS, initCareer, simulateUCL, type CareerState, type SeasonRecord } from './soccerCareerEngine';
 import { simulateTournament, tournamentForYear, type PlayerForm, type SquadCall } from './soccerInternational';
+import { rngFrom } from './careerEngine';
 
 function seedRandom(seed: number) {
   return () => {
@@ -15,7 +16,7 @@ const career = (currentClub: string, currentClubCountry: string, year: number, o
 const squad: SquadCall = {
   called: true, role: 'Starter', reason: '', myRank: 1, poolSize: 6, places: 6, myScore: 80, cutScore: 75,
 };
-const seeds = Array.from({ length: 160 }, (_, i) => 45_103 + i * 10_007);
+const seeds = Array.from({ length: 720 }, (_, i) => 3_519_711 + i * 190_013);
 
 afterEach(() => vi.restoreAllMocks());
 
@@ -38,7 +39,7 @@ it.each([
     const state = career(club, country, year, 95, position);
     let goals = 0, appearances = 0, doubleDigits = 0;
     for (const seed of seeds) {
-      random.mockImplementation(seedRandom(seed));
+      random.mockImplementation(rngFrom(seed));
       const cup = simulateUCL(state, {} as SeasonRecord);
       const matches = [...cup.matches, ...(cup.firstStage?.stages.flatMap(stage => stage.games) ?? [])];
       expect(matches.every(match => match.playerGoals >= 0 && match.playerGoals <= match.goalsFor)).toBe(true);
@@ -69,9 +70,10 @@ it.each([
     const form = { overall, position, age, lastRating: 7.2, lastGoals: 16, isCaptain: false };
     let goals = 0, appearances = 0, boots = 0;
     for (const seed of seeds) {
-      random.mockImplementation(seedRandom(seed));
+      random.mockImplementation(rngFrom(seed));
       const cup = simulateTournament(nation, format, year, qualifying, squad, form);
       expect(cup.matches.every(match => match.playerGoals + match.playerAssists <= (match.home === nation ? match.homeGoals : match.awayGoals))).toBe(true);
+      expect(cup.goldenBoot).toBe(cup.playerGoals > cup.leadingRivalGoals!);
       goals += cup.playerGoals;
       appearances += cup.playerApps;
       boots += Number(cup.goldenBoot);
@@ -82,7 +84,82 @@ it.each([
   const striker = sample(95, 'ST');
   expect(winger.rate).toBeLessThan(0.60);
   expect(striker.rate).toBeGreaterThan(winger.rate);
-  expect(striker.rate).toBeLessThan(0.95);
+  expect(striker.rate).toBeLessThan(0.72);
   expect(striker.boots).toBeGreaterThan(0);
-  expect(striker.boots / seeds.length).toBeLessThan(0.40);
+  expect(striker.boots / seeds.length).toBeLessThan(0.14);
+});
+
+it('keeps the same international bracket and restricts tournament minutes for a reserve', () => {
+  const nation = 'Spain', year = 2024;
+  const format = tournamentForYear(nation, year)!;
+  const qualifying = { confederation: 'UEFA' as const, table: [], myPosition: 1, through: 1, qualified: true, automatic: true };
+  const form = { overall: 82, position: 'ST', age: 21, lastRating: 7.2, lastGoals: 13, isCaptain: false };
+  const random = vi.spyOn(Math, 'random');
+  let starts = 0, reserveApps = 0, starterGoals = 0, reserveGoals = 0;
+  for (const seed of seeds.slice(0, 240)) {
+    random.mockImplementation(rngFrom(seed));
+    const first = simulateTournament(nation, format, year, qualifying, squad, form);
+    random.mockImplementation(rngFrom(seed));
+    const reserve = simulateTournament(nation, format, year, qualifying, { ...squad, role: 'Squad player', myRank: 5 }, form);
+    expect(reserve.bracket).toEqual(first.bracket);
+    expect(reserve.groupTable).toEqual(first.groupTable);
+    expect(reserve.matches.every(match => first.matches.some(full => full.home === match.home && full.away === match.away && full.round === match.round))).toBe(true);
+    starts += first.playerApps;
+    reserveApps += reserve.playerApps;
+    starterGoals += first.playerGoals;
+    reserveGoals += reserve.playerGoals;
+  }
+  expect(reserveApps / starts).toBeGreaterThan(0.35);
+  expect(reserveApps / starts).toBeLessThan(0.65);
+  expect(reserveGoals / reserveApps).toBeLessThan(0.65 * starterGoals / starts);
+});
+
+it('only records an international debut after the season produces a cap', () => {
+  const club = 'Real Madrid', country = 'Spain', year = 2025;
+  const random = vi.spyOn(Math, 'random');
+  const season = (overall: number) => {
+    const attributes = { pace: overall, shooting: overall, passing: overall, dribbling: overall, defending: overall, physical: overall, reflexes: overall };
+    random.mockImplementation(rngFrom(3_519_711));
+    const fresh = initCareer('Synthetic Career', country, 'ST', 'modern', attributes, overall, year - 1, FALLBACK_CLUBS, null, 99, null, null, club);
+    Object.assign(fresh, { ...career(club, country, year, overall, 'ST'), ...attributes,
+      currentLeague: 'La Liga', phase: 'playing', age: 21, contractYearsLeft: 3, internationalCareer: false,
+      seasons: [{ ...fresh.seasons[0], type: 'playing', year: year - 1, age: 21, club, clubCountry: country, clubTier: 1, apps: 38, leagueApps: 34, goals: 11, assists: 8, ovr: overall, rating: 6.9 }],
+    });
+    return advanceProSeason(fresh, FALLBACK_CLUBS);
+  };
+  const leftOut = season(73);
+  expect(leftOut.seasons.at(-1)?.year).toBe(year);
+  expect(leftOut.intStats.caps).toBe(0);
+  expect(leftOut.intStats.debutYear).toBeNull();
+  expect(leftOut.internationalCareer).toBe(false);
+  const selected = season(90);
+  expect(selected.intStats.caps).toBeGreaterThan(0);
+  expect(selected.intStats.caps).toBeLessThanOrEqual(4);
+  expect(selected.intStats.debutYear).toBe(year);
+});
+
+it('lets exceptional sustained scoring help in Europe without making the title routine', () => {
+  const state = career('Real Madrid', 'Spain', 2026, 98, 'ST');
+  const profile = { type: 'playing', year: 2026, club: 'Real Madrid', apps: 38, leagueApps: 34, ovr: 98, rating: 8.2 } as SeasonRecord;
+  const random = vi.spyOn(Math, 'random');
+  let strongTen = 0, ordinaryTen = 0, strongTitles = 0, ordinaryTitles = 0, observedStages = 0;
+  for (const seed of seeds) {
+    random.mockImplementation(rngFrom(seed));
+    const strong = simulateUCL(state, { ...profile, goals: 42 });
+    random.mockImplementation(rngFrom(seed));
+    const ordinary = simulateUCL(state, { ...profile, goals: 20 });
+    expect(strong.qualified).toBe(ordinary.qualified);
+    expect(strong.firstStage?.stages.map(stage => [stage.myRow, stage.table]))
+      .toEqual(ordinary.firstStage?.stages.map(stage => [stage.myRow, stage.table]));
+    observedStages += strong.firstStage?.stages.length ?? 0;
+    strongTen += Number(strong.playerGoals >= 10);
+    ordinaryTen += Number(ordinary.playerGoals >= 10);
+    strongTitles += Number(strong.result === 'Winner');
+    ordinaryTitles += Number(ordinary.result === 'Winner');
+  }
+  expect(observedStages).toBeGreaterThan(0);
+  expect((strongTen - ordinaryTen) / seeds.length).toBeGreaterThan(0.12);
+  expect(strongTen / seeds.length).toBeLessThan(0.48);
+  expect((strongTitles - ordinaryTitles) / seeds.length).toBeGreaterThan(0.015);
+  expect(strongTitles / seeds.length).toBeLessThan(0.35);
 });

@@ -37,6 +37,7 @@
 import {
   periodInForce, playedPeriod, wcFieldMixFor, type IntlCompetition,
 } from './intlFormatHistory';
+import { keyedRng } from './keyedRng';
 
 /* ─── Confederations ─────────────────────────────────────────────────────── */
 
@@ -591,6 +592,7 @@ export interface IntlTournament {
   playerGoals: number;
   playerAssists: number;
   playerAvgRating: number;
+  leadingRivalGoals?: number;
   goldenBoot: boolean;
   bestPlayer: boolean;
 }
@@ -665,6 +667,7 @@ export interface PlayerForm {
   lastGoals: number;
   age: number;
   isCaptain: boolean;
+  firstInternationalSeason?: boolean;
 }
 
 const ATTACKERS = ['ST', 'CAM', 'LW', 'RW'];
@@ -701,11 +704,11 @@ export const SQUAD_PLACES: Record<'GK' | 'DEF' | 'MID' | 'ATT', number> = {
 };
 
 /** What the player does in one international match. */
-export function playerMatchStats(form: PlayerForm, teamGoals: number, random = Math.random, boundContributions = false): { goals: number; assists: number; rating: number } {
+export function playerMatchStats(form: PlayerForm, teamGoals: number, random = Math.random, boundContributions = false, shareOfMatch = 1): { goals: number; assists: number; rating: number } {
   const grp = positionGroup(form.position);
   const quality = clamp((form.overall - 68) / 28, 0, 1.2);
   // The international simulation already raises the nation's goal rate for elite players.
-  const share = tournamentGoalShare(form.position, form.overall) * 0.85;
+  const share = tournamentGoalShare(form.position, form.overall) * 0.85 * shareOfMatch;
   const legacyShare = (grp === 'ATT' ? 0.55 : grp === 'MID' ? 0.25 : grp === 'DEF' ? 0.12 : 0) * (0.6 + quality * 0.6);
   let goals = 0, legacyGoals = 0;
   for (let i = 0; i < teamGoals; i++) {
@@ -715,13 +718,17 @@ export function playerMatchStats(form: PlayerForm, teamGoals: number, random = M
   }
   // Keep the assist draws in place so the next team score uses the same RNG.
   let assists = 0;
-  const assistShare = tournamentAssistShare(form.position, form.overall);
+  const assistShare = tournamentAssistShare(form.position, form.overall) * shareOfMatch;
   for (let i = 0; i < teamGoals - (boundContributions ? goals : legacyGoals); i++) if (random() < assistShare) assists++;
   const rating = clamp(
     6.2 + quality * 0.9 + goals * 0.55 + assists * 0.3 + (random() - 0.45) * 1.1,
     4.0, 10.0,
   );
   return { goals, assists, rating: Math.round(rating * 10) / 10 };
+}
+
+export function internationalShareOfMatch(form: PlayerForm, role: SquadCall['role']): number {
+  return form.position === 'GK' ? 1 : role === 'Squad player' ? 0.38 : form.firstInternationalSeason ? 0.72 : 0.86;
 }
 
 /** How much a player lifts his own nation's expected goals in a match. A
@@ -940,6 +947,30 @@ function firstRoundFor(n: number): IntlRound {
   return 'SF';
 }
 
+function leadingTournamentRival(
+  tables: IntlTableRow[][], bracket: IntlTie[], nation: string, playerGoals: number, year: number,
+): number {
+  const teamGoals = new Map(tables.flat().map(row => [row.nation, row.gf]));
+  for (const tie of bracket) {
+    teamGoals.set(tie.home, (teamGoals.get(tie.home) ?? 0) + tie.homeGoals);
+    teamGoals.set(tie.away, (teamGoals.get(tie.away) ?? 0) + tie.awayGoals);
+  }
+  let leading = 0;
+  for (const [team, goals] of teamGoals) {
+    const random = keyedRng(`international-scorers|${year}|${team}|${goals}`);
+    // Credit the simulated team goals to anonymous scoring roles, led by a striker.
+    const cumulativeShares = [0.33, 0.53, 0.69, 0.81, 0.89, 0.95, 1];
+    const tallies = cumulativeShares.map(() => 0);
+    const available = goals - (team === nation ? playerGoals : 0);
+    for (let i = 0; i < available; i++) {
+      const roll = random();
+      tallies[cumulativeShares.findIndex(share => roll < share)]++;
+    }
+    leading = Math.max(leading, ...tallies);
+  }
+  return leading;
+}
+
 /**
  * Play a whole international tournament and crown a champion, every time,
  * whether or not the player is in it. Same shape as advanceCupBracket in
@@ -965,6 +996,18 @@ export function simulateTournament(
 
   const matches: IntlMatch[] = [];
   const lift = playerLift(myForm);
+  const recordPlayerMatch = (round: string, home: string, away: string, score: ReturnType<typeof simMatch>) => {
+    if (!myForm) return;
+    const reserve = squad?.role === 'Squad player';
+    const keeper = myForm.position === 'GK';
+    const appearance = !reserve || keyedRng(`international-appearance|${year}|${nation}|${home}|${away}|${round}`)() < (keeper ? 0.18 : 0.5);
+    // Keep the existing stats draws even when a reserve stays on the bench.
+    const stats = playerMatchStats(myForm, home === nation ? score.a : score.b, Math.random, false, internationalShareOfMatch(myForm, squad?.role ?? null));
+    if (appearance) matches.push({
+      round, home, away, homeGoals: score.a, awayGoals: score.b, pens: score.pens,
+      playerGoals: stats.goals, playerAssists: stats.assists, playerRating: stats.rating,
+    });
+  };
 
   /* Group stage. Seeded pots so the groups are balanced, like a real draw. */
   const seeded = [...field].sort((a, b) => strength[b] - strength[a]);
@@ -994,14 +1037,7 @@ export function simulateTournament(
         if (managerFixtures && mine) {
           managerFixtures.push(played && fixture ? fixture : { round: label, home, away, homeGoals: r.a, awayGoals: r.b, pens: false });
         }
-        if (inSquad && (home === nation || away === nation) && myForm) {
-          const mine = home === nation ? r.a : r.b;
-          const ps = playerMatchStats(myForm, mine);
-          matches.push({
-            round: label, home, away, homeGoals: r.a, awayGoals: r.b, pens: false,
-            playerGoals: ps.goals, playerAssists: ps.assists, playerRating: ps.rating,
-          });
-        }
+        if (mine) recordPlayerMatch(label, home, away, r);
       }
     }
     tables.push(sortTable(table));
@@ -1055,14 +1091,7 @@ export function simulateTournament(
       if (managerFixtures && mine) {
         managerFixtures.push(played && fixture ? fixture : { round: label, home, away, homeGoals: r.a, awayGoals: r.b, pens: r.pens, winner });
       }
-      if (mine && inSquad && myForm) {
-        const myGoals = home === nation ? r.a : r.b;
-        const ps = playerMatchStats(myForm, myGoals);
-        matches.push({
-          round, home, away, homeGoals: r.a, awayGoals: r.b, pens: r.pens,
-          playerGoals: ps.goals, playerAssists: ps.assists, playerRating: ps.rating,
-        });
-      }
+      if (mine) recordPlayerMatch(round, home, away, r);
       next.push(winner);
     }
     current = next;
@@ -1096,8 +1125,8 @@ export function simulateTournament(
   const playerAvgRating = playerApps
     ? Math.round((matches.reduce((s, m) => s + m.playerRating, 0) / playerApps) * 10) / 10
     : 0;
-  // A tournament golden boot is a real haul, not three goals in the group.
-  const goldenBoot = playerGoals >= (fmt.kind === 'World Cup' ? 6 : 5);
+  const leadingRivalGoals = playerApps ? leadingTournamentRival(tables, bracket, nation, playerGoals, year) : undefined;
+  const goldenBoot = leadingRivalGoals !== undefined && playerGoals > leadingRivalGoals;
   const bestPlayer = playerApps >= 4 && playerAvgRating >= 7.6
     && (myResult === 'Winner' || myResult === 'Runner-up' || myResult === 'Semi-final');
 
@@ -1108,7 +1137,7 @@ export function simulateTournament(
     groupLabel: myGroupIdx >= 0 ? `Group ${String.fromCharCode(65 + myGroupIdx)}` : undefined,
     thirdsThrough: fmt.thirdsThrough,
     myResult, matches, playerApps, playerGoals, playerAssists, playerAvgRating,
-    goldenBoot, bestPlayer,
+    leadingRivalGoals, goldenBoot, bestPlayer,
   };
 }
 

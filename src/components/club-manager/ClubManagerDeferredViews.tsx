@@ -38,13 +38,18 @@ type OverviewMatch = {
   onQuick: () => void; onCentre: (() => void) | null; shootout: { onClick: () => void; label: string } | null;
 };
 
-export function OverviewIntro({ summerBudget, retired, freeRetired, freeLeft, deals, transfer, match, windowAction, seasonAction }: {
+export function OverviewIntro({ summerBudget, summerContracts, retired, freeRetired, freeLeft, deals, transfer, match, windowAction, seasonAction }: {
   summerBudget: (NonNullable<CareerState['summerBudget']> & { format: (n: number) => string }) | null;
+  summerContracts?: Pick<CareerState, 'clubName' | 'season' | 'transferLog'>;
   retired: string | null; freeRetired: string | null; freeLeft: string | null;
   deals: { onClick: () => void; text: string; real: boolean } | null;
   transfer: { onClick: () => void; summer: boolean } | null; match: OverviewMatch | null;
   windowAction: (() => void) | null; seasonAction: (() => void) | null;
 }) {
+  const expired = summerContracts ? (summerContracts.transferLog ?? [])
+    .filter(row => row.season === summerContracts.season && row.from === summerContracts.clubName
+      && row.to === 'a free transfer' && row.fee === 0)
+    .map(row => row.name) : [];
   const budgetRows: [string, string][] = [];
   if (summerBudget) {
     const { unspent, allocation, usualAllocation, carried, adjustments, opening, format } = summerBudget;
@@ -61,6 +66,12 @@ export function OverviewIntro({ summerBudget, retired, freeRetired, freeLeft, de
     budgetRows.push(['Opening budget', format(opening)]);
   }
   return <>
+          {expired.length > 0 && (
+            <section data-cm-summer-contracts className="rounded-xl border border-border bg-card p-2.5">
+              <h2 className="text-xs font-semibold text-foreground">Contracts expired</h2>
+              <p className="mt-1 text-xs text-muted-foreground">{expired.join(' · ')}</p>
+            </section>
+          )}
           {budgetRows.length > 0 && (
             <section data-cm-summer-budget className="rounded-xl border border-border bg-card p-2.5">
               <h2 className="text-xs font-semibold text-foreground">Summer transfer budget</h2>

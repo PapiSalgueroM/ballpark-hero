@@ -130,6 +130,28 @@ describe('Club Manager same-club summer bank', () => {
 });
 
 describe('Club Manager summer receipt', () => {
+  it('shows who left this club at expiry before the opening match', () => {
+    const career = closedCareer();
+    career.squad = career.squad.map((p, index) => ({ ...p, age: 24, contractYears: index < 2 ? 1 : 3 }));
+    career.transferLog = [
+      { name: 'Earlier expiry', from: career.clubName, to: 'a free transfer', fee: 0, week: 0, season: career.season },
+      { name: 'Other club expiry', from: 'Chelsea', to: 'a free transfer', fee: 0, week: 0, season: career.season + 1 },
+    ];
+    const names = career.squad.slice(0, 2).map(p => p.name);
+    const opening = roll(career, 250);
+    const context = { retired: null, freeRetired: null, freeLeft: null, deals: null, transfer: null, match: null, windowAction: null, seasonAction: null, summerBudget: null };
+    const view = render(<OverviewIntro {...context} summerContracts={opening} />);
+
+    const receipt = view.getByRole('heading', { name: 'Contracts expired' }).parentElement!;
+    expect(receipt).toHaveTextContent(names.join(' · '));
+    expect(receipt).not.toHaveTextContent('Earlier expiry');
+    expect(receipt).not.toHaveTextContent('Other club expiry');
+    expect(receipt).not.toHaveTextContent(career.squad[2].name);
+
+    view.rerender(<OverviewIntro {...context} />);
+    expect(view.queryByRole('heading', { name: 'Contracts expired' })).toBeNull();
+  });
+
   it('labels the actual top-up and keeps previous capped receipts truthful', () => {
     const other = { retired: null, freeRetired: null, freeLeft: null, deals: null, transfer: null, match: null, windowAction: null, seasonAction: null };
     const previous = { club: 'Arsenal', unspent: 1000, allocation: 165, carried: 165, adjustments: 0, opening: 330, format: (n: number) => `£${n}m` };

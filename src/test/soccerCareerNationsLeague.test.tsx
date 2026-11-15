@@ -34,8 +34,9 @@ describe('Soccer Career Nations League season integration', () => {
     expect(campaign.apps).toBeGreaterThanOrEqual(6);
     expect(played.lastTournament?.name).toContain('Euro');
     const summer = played.lastTournament!;
-    expect(season.intApps - campaign.apps - summer.playerApps).toBeGreaterThanOrEqual(1);
-    expect(season.intApps - campaign.apps - summer.playerApps).toBeLessThanOrEqual(5);
+    const genericCaps = season.intApps - campaign.apps - summer.playerApps;
+    expect(genericCaps).toBeGreaterThanOrEqual(0);
+    expect(genericCaps).toBeLessThanOrEqual(Math.max(0, 9 - campaign.apps));
     expect(played.intStats.caps - start.intStats.caps).toBe(season.intApps);
     expect(played.intStats.goals - start.intStats.goals).toBe(season.intGoals);
     expect(played.intStats.assists - start.intStats.assists).toBe(season.intAssists);

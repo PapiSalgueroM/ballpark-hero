@@ -5220,7 +5220,7 @@ function shouldGetCallUp(state: CareerState): boolean {
 }
 
 /** Everything the international code needs to know about the player. */
-function playerFormOf(state: CareerState): PlayerForm {
+function playerFormOf(state: CareerState, firstInternationalSeason = state.intStats.caps === 0): PlayerForm {
   const last = state.seasons[state.seasons.length - 1];
   return {
     overall: state.overall,
@@ -5229,11 +5229,12 @@ function playerFormOf(state: CareerState): PlayerForm {
     lastGoals: last?.goals ?? 0,
     age: state.age,
     isCaptain: state.intStats.isCaptain,
+    firstInternationalSeason,
   };
 }
 
 /* ─── International season stats ─── */
-function generateIntSeasonStats(state: CareerState, hasNationsLeague: boolean): { intApps: number; intGoals: number; intAssists: number; intRating: number; tournament: string | null; tournamentResult: string | null } {
+function generateIntSeasonStats(state: CareerState, nationsLeagueApps: number): { intApps: number; intGoals: number; intAssists: number; intRating: number; tournament: string | null; tournamentResult: string | null } {
   if (!state.internationalCareer || state.intStats.isRetired) {
     return { intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null };
   }
@@ -5247,12 +5248,15 @@ function generateIntSeasonStats(state: CareerState, hasNationsLeague: boolean): 
      A player who cannot get into the squad does not get called up for the
      friendlies either. */
   const form = playerFormOf(state);
-  if (!pickSquad(state.nationality, form).called) {
+  const squad = pickSquad(state.nationality, form);
+  if (!squad.called) {
     return { intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null };
   }
-  // Use part of the former generic cap budget for the competition with saved match receipts.
+  // The saved Nations League matches use the same calendar as the generic caps.
   const genericApps = offYearCaps(form);
-  const apps = hasNationsLeague ? genericApps - 4 : genericApps;
+  const firstSeason = state.intStats.caps === 0;
+  const roleLimit = squad.role === "Squad player" ? (firstSeason ? 2 : 4) : (firstSeason ? 4 : genericApps);
+  const apps = Math.min(roleLimit, Math.max(0, genericApps - nationsLeagueApps));
   const goals = calcGoals(state.position, apps);
   const assists = calcAssists(state.position, apps);
   const rating = clamp(parseFloat((6.5 + (state.overall - 72) * 0.06 + (Math.random() - 0.3) * 1.0).toFixed(1)), 4.0, 10.0);
@@ -5276,7 +5280,7 @@ function nationsLeagueForSeason(state: CareerState, year: number, out = false) {
 /* Round 850: `out` runs the summer without him (an injury year or a trial
    year): the world still crowns its champion and the history keeps the
    summer, and no screen waits for a player who was never in it. */
-function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number, out = false): void {
+function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number, out = false, firstInternationalSeason = s.intStats.caps === 0): void {
   if (out) {
     const campaign = nationsLeagueForSeason(s, year, true);
     if (campaign) season.nationsLeague = campaign;
@@ -5284,7 +5288,7 @@ function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number,
   const fmt = tournamentForYear(s.nationality, year);
   if (!fmt) return;
   const eligible = !out && s.internationalCareer && !s.intStats.isRetired && !s.retired;
-  const t = runInternationalSummer(s.nationality, year, eligible ? playerFormOf(s) : null);
+  const t = runInternationalSummer(s.nationality, year, eligible ? playerFormOf(s, firstInternationalSeason) : null);
   if (!t) return;
 
   s.lastTournament = t;
@@ -5868,12 +5872,10 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
   s.marketValue = calcMarketValue(s.overall, s.age, s.position, s.socialMediaFollowers);
 
-  // International career check, first call-up
-  if (!s.internationalCareer && !s.intStats.isRetired && shouldGetCallUp(s)) {
-    s.internationalCareer = true;
-    s.intStats = { ...s.intStats, debutYear: season.year, debutAge: s.age };
-    // Don't set phase yet, show in season summary, debut screen comes after
-  }
+  // Make the player eligible for selection. The first cap confirms the debut.
+  const firstInternationalSeason = s.intStats.caps === 0;
+  const firstCallUp = !s.internationalCareer && shouldGetCallUp(s);
+  if (firstCallUp) s.internationalCareer = true;
 
   // International season stats
   const lastYear = s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year : season.year - 1;
@@ -5888,7 +5890,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     if (wonClubWorldCup(season)) s.events.push(`🏆 Won the Club World Cup with ${season.club}!`);
   }
   const nationsLeague = nationsLeagueForSeason(s, thisYear);
-  const intSeason = generateIntSeasonStats(s, Boolean(nationsLeague));
+  const intSeason = generateIntSeasonStats(s, nationsLeague?.apps ?? 0);
   if (nationsLeague) {
     season.nationsLeague = nationsLeague;
     const { apps, goals, assists, rating } = nationsLeague;
@@ -6197,7 +6199,12 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      Runs every tournament year whether the player is involved or not, so the
      World Cup and the continental championships crown a winner across a whole
      career even if you never get a cap. */
-  runTournamentSummer(s, season, thisYear);
+  runTournamentSummer(s, season, thisYear, false, firstInternationalSeason);
+  if (firstInternationalSeason && season.intApps > 0) {
+    s.intStats = { ...s.intStats, debutYear: thisYear, debutAge: s.age };
+  } else if (firstCallUp) {
+    s.internationalCareer = false;
+  }
   settleSoccerPress(s, season, true);
   /* Round 1022: the scoring record is checked after the summer, so goals at a
      World Cup or a continental final count the season they are scored (a man
@@ -7340,10 +7347,14 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
     clamp(0.3 + (state.overall - 75) * 0.012 + eliteBonus - roundIndex * 0.04, 0.15, 0.75);
   // Keep qualification and the play-off on the existing model. A strong
   // season with regular playing time can help the club in the main bracket.
-  const knockoutForm = isUcl && season.type === "playing" && !season.injurySevere
-    && (season.leagueApps ?? 0) >= 20 && season.ovr !== undefined
-    ? seasonPerformanceBoost(season.ovr, season.rating) / 3
+  const formOverall = isUcl && season.type === "playing" && !season.injurySevere
+    && (season.leagueApps ?? 0) >= 20 ? season.ovr : undefined;
+  const scoringForm = formOverall !== undefined && season.apps > 0 && season.rating >= 7.5
+    && ["ST", "CAM", "LW", "RW"].includes(state.position)
+    ? clamp((season.goals / season.apps - 0.72) / 0.38, 0, 1) * clamp((formOverall - 88) / 8, 0, 1)
     : 0;
+  const knockoutForm = formOverall === undefined ? 0
+    : seasonPerformanceBoost(formOverall, season.rating) / 3 + scoringForm * 0.025;
   /* Round 972: the old qualification rate (85 percent at tier 1, 35 at tier 2)
      always meant "in the knockout rounds", because nothing came before them,
      and it keeps meaning that. A first stage is now played in front of them,
@@ -7380,7 +7391,7 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
   let legacyPlayerGoals = 0;
   const usedOpponents = new Set<string>([state.currentClub]);
   const isAttacker = ["ST", "CAM", "LW", "RW"].includes(state.position);
-  const playerShare = tournamentGoalShare(state.position, state.overall);
+  const playerShare = tournamentGoalShare(state.position, state.overall) * (1 + scoringForm * 0.25);
 
   // Draw the binomial share of the actual goals with the original match roll.
   const playerGoalsFromScore = (goalsFor: number, roll: number) => {

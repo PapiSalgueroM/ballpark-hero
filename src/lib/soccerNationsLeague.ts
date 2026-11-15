@@ -1,6 +1,6 @@
 import { keyedRng } from './keyedRng';
 import { shuffled } from './keyedShuffle';
-import { internationalShootout, nationStrength, playerMatchStats, simInternationalMatch, type IntlTableRow, type PlayerForm } from './soccerInternational';
+import { internationalShareOfMatch, internationalShootout, nationStrength, playerMatchStats, simInternationalMatch, type IntlTableRow, type PlayerForm } from './soccerInternational';
 import { pickSquad } from './soccerInternationalSquads';
 
 // The 2026/27 draw is cross-checked against the published competition tables.
@@ -381,7 +381,7 @@ export function nationsLeagueCampaign(year: number, seed: string, nation: string
       if (squad.role === 'Squad player' && random() >= 0.5) continue;
       const home = match.home === nation;
       const teamGoals = home ? match.homeGoals + (match.extraTime?.homeGoals ?? 0) : match.awayGoals + (match.extraTime?.awayGoals ?? 0);
-      match.player = playerMatchStats(form, teamGoals, random, true);
+      match.player = playerMatchStats(form, teamGoals, random, true, internationalShareOfMatch(form, squad.role));
       apps++;
       goals += match.player.goals;
       assists += match.player.assists;

@@ -1,9 +1,19 @@
+## 2026-11-14: Saved contracts, tournament scoring and admin report search
+
+- Club Manager repairs old automatic squad releases when the same-club ledger still proves the player's identity and a live contract. It keeps the recorded wage and remaining term and removes the duplicate free-agent row. Expired and manually released deals, missing contract data and signed players stay out of the repair. Club Home lists this summer's actual contract expiries before the opening league match.
+- Soccer Career announces an international debut after the first cap, deducts actual Nations League appearances from the overlapping generic schedule, and gives reserves fewer appearances and minutes. The finals Golden Boot requires more goals than the leading simulated rival, whose goals come from the tournament scores.
+- A genuinely prolific attacker with a strong full club season gets more chances to score in the Champions League. The same 2,400-draw test for an elite Madrid striker moved from 21.9% to 41.2% for 10 or more goals and from 23.9% to 27.0% for titles. The same tests for quieter elite or ordinary Madrid seasons held.
+- Admin Reports reads all pages after checking the role. Search covers report text, game context, IDs, saved notes and fix references. Filter by priority alongside game and status, with counts that follow the filters.
+
 ## 2026-11-14: Cup replay navigation and more match reports
+
+[PR #973](https://github.com/PapiSalgueroM/ballpark-hero/pull/973) merged at `e4f6f8eec4aa46eb2c41814ce0a36fefcf858131`. Lovable sync recovered after an empty commit left the tested tree identical. Published exact main `7363dfed3679dec874eda11f60985eb34b3b3892`, deployment `9c39e820-54df-44c2-a7bb-ada7399e6900`, canonical entry `/assets/index-DIJGt0rz.js`. Thirteen live browser journeys, three raw game guides, all 174 sitemap routes and seven policy and crawler endpoints passed. IndexNow accepted the three updated guides. The build, app types, 257 focused tests, all 18 site checks and all 16 download budgets passed. The corrected multi-sport Season Center simulation passed 158 checks across 13,051 seasons and retained 13,266 identical save hashes.
 
 - In Soccer Career, All games takes you back to the cup fixture you first opened and restores the bracket's scroll position, even if you used Next game in the report.
 - In Stadium Tycoon, League shows the current season's recorded scores and second-half plans. The results stay open and update when the next match settles.
 - In NRL Team Manager, set Penalty approach before kick-off. Bank the two points if a kickable penalty comes up, or tap for a chance at four or six. Full time records the try, conversion, turnover or that the opportunity never came.
 - In MLB My Career, starters and relievers can use Week by week and reopen supported seasons from Career Log. Simulated game reports reconcile appearances, strikeouts and compatible pitching decisions to the saved season. ERA stays in the season review. If the recorded decisions do not fit the appearance count or simulated scores, the decisions appear only at season level.
+- Follow-up for MLB My Career generation. The independent decision draws and later workload rounding can produce more pitching decisions than appearances. In a 1,500-draw test, 114 full lines were infeasible, and four feasible full lines became infeasible when scaled to 60 cards. Check capacity at both generation boundaries. The current replay preserves affected career totals and reports when decisions are unavailable by game.
 
 ## 2026-11-14: Club Manager match ratings, NRL sponsor terms and Home navigation
 

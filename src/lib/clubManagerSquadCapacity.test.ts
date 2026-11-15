@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
-  buyPlayer, doorRefusal, freeAgentBlock, loadCareer, promoteProspect, releasedByYou,
+  buyPlayer, doorRefusal, finishSeason, freeAgentBlock, loadCareer, promoteProspect, releasedByYou,
   recallLoanedPlayer, SAVE_KEY, saveCareer, signFreeAgent, startCareer, startNextSeason,
   type CareerState, type CMPlayer, type FreeAgent, type MarketPlayer, type Prospect,
 } from '@/lib/clubManager';
+import { readWorldRoster, recordWorldRosterTransfer } from '@/lib/clubManagerWorldRoster';
 import { saveFence } from '@/lib/saveFence';
 
 const market: MarketPlayer = {
@@ -34,6 +35,22 @@ function fixture(): CareerState {
     loanedOut: [30, 31, 32].map(i => ({ player: player(i), club: 'Ajax', fee: 0, recallFee: 0, season: 1 })),
     freeAgents: [freeAgent], academy: { ...career.academy!, prospects: [prospect] },
   };
+}
+
+function legacyTrim(): { career: CareerState; fallen: CMPlayer; trimmed: FreeAgent } {
+  const before = { ...fixture(), worldSeed: 73 };
+  const next = startNextSeason(finishSeason(before).state);
+  const fallen = next.squad.find(player => player.id === 'capacity-0')!;
+  const career = recordWorldRosterTransfer({ ...next, squad: next.squad.filter(p => p.id !== fallen.id) }, {
+    player: fallen, from: next.clubName, to: null, kind: 'release',
+  });
+  const record = readWorldRoster(career)!.records.find(r => r.player.id === fallen.id)!;
+  const trimmed: FreeAgent = {
+    name: fallen.name, position: fallen.position, age: fallen.age, rating: fallen.rating,
+    since: next.season, reason: 'released', fromMyClub: true, trimmed: true, worldRosterKey: record.key,
+  };
+  career.freeAgents = [...(career.freeAgents ?? []), trimmed];
+  return { career, fallen, trimmed };
 }
 
 beforeEach(() => {
@@ -98,5 +115,70 @@ describe('Club Manager squad capacity with loans', () => {
     expect(legacy?.trimmed).toBe(true);
     expect(releasedByYou(legacy!)).toBe(false);
     expect(freeAgentBlock(loaded, legacy!)).toBe('justLeft');
+  });
+
+  it('restores an old automatic release with its recorded unexpired contract above the signing limit', () => {
+    const { career, fallen, trimmed } = legacyTrim();
+    expect(career.squad.length).toBeGreaterThan(30);
+    expect(fallen.contractYears).toBe(2);
+    const loaded = loadCareer(JSON.stringify(career))!;
+    expect(loaded.squad.find(p => p.id === fallen.id)).toMatchObject({
+      name: fallen.name, age: fallen.age, contractYears: 2, wage: fallen.wage, rating: fallen.rating,
+    });
+    expect(loaded.freeAgents?.some(p => p.name === fallen.name)).toBe(false);
+    expect(readWorldRoster(loaded)?.records.find(record => record.key === trimmed.worldRosterKey))
+      .toMatchObject({ status: 'owned', owner: career.clubName });
+    expect(loaded.budget).toBe(career.budget);
+    expect(loaded.transferLog).toEqual(career.transferLog);
+    const reloaded = loadCareer(JSON.stringify(loaded))!;
+    expect(reloaded.squad.filter(p => p.id === fallen.id)).toHaveLength(1);
+    expect(reloaded.squad.find(p => p.id === fallen.id)?.contractYears).toBe(2);
+    expect(startNextSeason(loaded).squad.find(p => p.id === fallen.id)?.contractYears).toBe(1);
+  });
+
+  it.each([
+    ['expiry', { reason: 'expired', trimmed: undefined }],
+    ['missing identity', { worldRosterKey: undefined }],
+    ['wrong identity', { worldRosterKey: 'other player' }],
+    ['ordinary release', { trimmed: undefined }],
+  ] as const)('leaves %s alone in free agency', (_label, change) => {
+    const { career, fallen, trimmed } = legacyTrim();
+    career.freeAgents = [{ ...trimmed, ...change }];
+    const loaded = loadCareer(JSON.stringify(career))!;
+    expect(loaded.squad.some(p => p.id === fallen.id)).toBe(false);
+    expect(loaded.freeAgents?.some(p => p.name === fallen.name)).toBe(true);
+    expect(readWorldRoster(loaded)?.records.find(record => record.key === trimmed.worldRosterKey)?.status).toBe('released');
+  });
+
+  it('requires the former club to match the current job', () => {
+    const { career, fallen } = legacyTrim();
+    career.history = career.history.map(season => ({ ...season, club: 'Ajax' }));
+    const loaded = loadCareer(JSON.stringify(career))!;
+    expect(loaded.squad.some(p => p.id === fallen.id)).toBe(false);
+    expect(loaded.freeAgents?.some(p => p.name === fallen.name)).toBe(true);
+  });
+
+  it('recovers only original deals after the released ledger ages another summer', () => {
+    const { career, fallen } = legacyTrim();
+    const shortDeal = { ...fallen, id: 'short-contract', name: 'Short Deal Fixture', contractYears: 1 };
+    const pad = { ...fallen, id: 'youth-unregistered', name: 'Unregistered Fixture (Youth)', age: 18,
+      isYouth: true, role: undefined, contractYears: undefined };
+    let before = career;
+    for (const player of [shortDeal, pad]) {
+      before = recordWorldRosterTransfer(before, { player, from: before.clubName, to: null, kind: 'release' });
+      const record = readWorldRoster(before)!.records.find(r => r.player.id === player.id)!;
+      before.freeAgents = [...(before.freeAgents ?? []), {
+        name: player.name, position: player.position, age: player.age, rating: player.rating,
+        since: before.season, reason: 'released', fromMyClub: true, trimmed: true, worldRosterKey: record.key,
+      }];
+    }
+    const aged = startNextSeason(finishSeason(before).state);
+    const records = readWorldRoster(aged)?.records;
+    expect(records?.find(record => record.player.id === shortDeal.id)?.player.contractYears).toBe(0);
+    expect(records?.find(record => record.player.id === pad.id)?.player.contractYears).toBe(2);
+    const loaded = loadCareer(JSON.stringify(aged))!;
+    expect(loaded.squad.find(p => p.id === fallen.id)?.contractYears).toBe(1);
+    expect(loaded.squad.some(p => p.id === shortDeal.id || p.id === pad.id)).toBe(false);
+    expect(loaded.freeAgents?.map(row => row.name)).toEqual(expect.arrayContaining([shortDeal.name, pad.name]));
   });
 });
