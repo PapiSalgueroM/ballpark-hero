@@ -1176,6 +1176,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         items: [
           "No duplicate players across your XI.",
           "In review, replace any starter from the original club or nation draw. The same position and recorded dates apply, and your first pick stays until the new one is verified.",
+          "Open Browse players and use Next to page through the whole player pool for the draw. You can still search by name.",
         ],
       },
       {
