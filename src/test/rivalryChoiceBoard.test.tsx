@@ -126,8 +126,7 @@ describe('the rival choice card in the My Career boards', () => {
     expect((await hubChip(c)).length).toBeGreaterThan(0);
   });
 
-  it('NBA keeps an answered rivalry receipt through reload until Continue', async () => {
-    const { saveKey, make, def } = CASES[1];
+  it.each(CASES)('$label keeps an answered rivalry receipt through reload until Continue', async ({ saveKey, Board, make, def }) => {
     const c = { ...make(), morale: 70, fanbase: 34, netWorth: 2.6 };
     const card = rivalryChoiceCard(def, c as never, c.rival as never);
     c.pendingRivalryChoice = card;
@@ -137,21 +136,22 @@ describe('the rival choice card in the My Career boards', () => {
     const writes = vi.spyOn(Storage.prototype, 'setItem');
     try {
       const chosen = `You chose: ${card.choices[0].emoji} ${card.choices[0].label}`;
-      const result = /tossed, fined, and the fans did not love it/i;
-      const first = render(<NbaMyCareerBoard />);
-      const answer = await screen.findByRole('button', { name: /Give it right back/ });
+      const name = new RegExp(card.choices[0].label);
+      const first = render(<Board />);
+      const answer = await screen.findByRole('button', { name });
       act(() => { answer.click(); answer.click(); });
-      expect(await screen.findByText(result)).toBeInTheDocument();
+      const result = (await screen.findByText(/fans did not love it/i)).textContent!;
+      expect(result).toContain(c.rival!.name);
       const committed = localStorage.getItem(saveKey);
       expect(saved(saveKey)).toMatchObject({ morale: 65, fanbase: 29, netWorth: 2.5, pendingRivalryChoice: null });
       expect(writes.mock.calls.filter(([key]) => key === saveKey)).toHaveLength(1);
       first.unmount();
 
       random.mockClear();
-      const restored = render(<NbaMyCareerBoard />);
+      const restored = render(<Board />);
       expect(await screen.findByText(chosen)).toBeInTheDocument();
       expect(screen.getByText(result)).toBeInTheDocument();
-      expect(screen.queryByRole('button', { name: /Give it right back/ })).not.toBeInTheDocument();
+      expect(screen.queryByRole('button', { name })).not.toBeInTheDocument();
       expect(localStorage.getItem(saveKey)).toBe(committed);
       expect(random).not.toHaveBeenCalled();
       expect(writes.mock.calls.filter(([key]) => key === saveKey)).toHaveLength(1);
@@ -162,7 +162,7 @@ describe('the rival choice card in the My Career boards', () => {
       expect(writes.mock.calls.filter(([key]) => key === saveKey)).toHaveLength(2);
       expect(saved(saveKey)).toMatchObject({ morale: 65, fanbase: 29, netWorth: 2.5 });
       restored.unmount();
-      render(<NbaMyCareerBoard />);
+      render(<Board />);
       await hubChip(c);
       expect(screen.queryByText(chosen)).not.toBeInTheDocument();
       expect(random).not.toHaveBeenCalled();
@@ -173,24 +173,24 @@ describe('the rival choice card in the My Career boards', () => {
     }
   });
 
-  it('NBA opens a career with a malformed optional rivalry receipt', async () => {
-    const { saveKey, make } = CASES[1];
+  it.each(CASES)('$label opens a career with a malformed optional rivalry receipt', async ({ saveKey, Board, make }) => {
     const c = { ...make(), pendingRivalryOutcome: { card: { choices: [] }, choiceIdx: 1 } };
     store(saveKey, c);
     const raw = localStorage.getItem(saveKey);
-    render(<NbaMyCareerBoard />);
+    render(<Board />);
     await hubChip(c);
     expect(document.querySelector('[data-rivalry-choice]')).toBeNull();
     expect(localStorage.getItem(saveKey)).toBe(raw);
   });
 
-  it('NBA Continue keeps a newer save from another tab', async () => {
-    const { saveKey, make, def } = CASES[1];
+  it.each(CASES)('$label Continue keeps a newer save from another tab', async ({ saveKey, Board, make, def }) => {
     const c = make();
-    c.pendingRivalryChoice = rivalryChoiceCard(def, c as never, c.rival as never);
+    const card = rivalryChoiceCard(def, c as never, c.rival as never);
+    c.pendingRivalryChoice = card;
     store(saveKey, c);
-    render(<NbaMyCareerBoard />);
-    fireEvent.click(await screen.findByRole('button', { name: /Help him up on camera/ }));
+    render(<Board />);
+    const calm = def.choices.findIndex(option => !option.risk);
+    fireEvent.click(await screen.findByRole('button', { name: new RegExp(card.choices[calm].label) }));
     const newer = JSON.parse(localStorage.getItem(saveKey)!);
     delete newer.c.pendingRivalryOutcome;
     newer.c.morale += 1;

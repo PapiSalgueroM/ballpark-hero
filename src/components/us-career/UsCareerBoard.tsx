@@ -335,9 +335,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
      inbox tab is open, so a set inside it started empty on every open and
      replayed the whole list with nothing new in it. */
   const inboxSeenRef = useRef<Set<string>>(new Set());
-  // NBA keeps the answered card in the same save as its consequences until Continue.
-  const keepRivalryOutcome = sport.slug === 'nba';
-  const [transientRivalryOutcome, setTransientRivalryOutcome] = useState<RivalryOutcome | null>(null);
+  // Hold both the answer and its acknowledgement before React rerenders.
   const consumedRivalryAction = useRef<RivalryChoice | RivalryOutcome | null>(null);
   /* Round 126: the coaching career. It lives in a ref as well as in state so
      persist can always write the current one without every existing call site
@@ -511,7 +509,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
          negative number here is the defect and never a debt the player chose.
          A healthy save is returned untouched. */
       const loaded: CareerState = sport.repairNetWorth(s.c);
-      if (keepRivalryOutcome && loaded.pendingRivalryOutcome && !validRivalryOutcome(loaded.pendingRivalryOutcome)) {
+      if (loaded.pendingRivalryOutcome && !validRivalryOutcome(loaded.pendingRivalryOutcome)) {
         delete loaded.pendingRivalryOutcome;
       }
       /* Round 1038: the summer, the ledger and the salt are each checked
@@ -1197,23 +1195,17 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   const chooseRivalry = (choiceIdx: number) => {
     if (!career?.pendingRivalryChoice) return;
     const card = career.pendingRivalryChoice;
-    if (keepRivalryOutcome && (consumedRivalryAction.current === card || rivalrySaveMoved())) return;
+    if (consumedRivalryAction.current === card || rivalrySaveMoved()) return;
     const res = sport.resolveRivalryChoice(career, choiceIdx, Math.random);
     if (!res) return;
-    const outcome = { card, choiceIdx, line: res.line };
-    const next = keepRivalryOutcome ? { ...res.state, pendingRivalryOutcome: outcome } : res.state;
-    if (keepRivalryOutcome) consumedRivalryAction.current = card;
-    else setTransientRivalryOutcome(outcome);
+    const next = { ...res.state, pendingRivalryOutcome: { card, choiceIdx, line: res.line } };
+    consumedRivalryAction.current = card;
     setCareer(next);
     setFeed(f => [res.line, ...f].slice(0, 8));
     persist(next, phase, teamQuality);
   };
 
   const continueRivalry = () => {
-    if (!keepRivalryOutcome) {
-      setTransientRivalryOutcome(null);
-      return;
-    }
     const outcome = career?.pendingRivalryOutcome;
     if (!career || !outcome || consumedRivalryAction.current === outcome || rivalrySaveMoved()) return;
     consumedRivalryAction.current = outcome;
@@ -1311,7 +1303,6 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     setFaWindow(null);
     setTalkLine(null);
     setDraftDay(null);
-    setTransientRivalryOutcome(null);
     consumedRivalryAction.current = null;
     setPanel('none');
     setRetiredReview(false);
@@ -1507,9 +1498,9 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
 
   /* ------------------- Round 796: a rival choice -------------------
      Same place in the flow as the beat card above, which a season never
-     stacks with this one. A reload can restore the pending choice or, in
-     NBA, the outcome of a choice that already took effect. */
-  const rivalryOutcome = keepRivalryOutcome ? career.pendingRivalryOutcome : transientRivalryOutcome;
+     stacks with this one. A reload restores the pending choice or its
+     saved outcome until Continue. */
+  const rivalryOutcome = career.pendingRivalryOutcome;
   const rivalryChoice = career.pendingRivalryChoice ?? rivalryOutcome?.card ?? null;
   if (rivalryChoice) {
     return withSaveStatus(
@@ -1524,7 +1515,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
             rivalName: career.rival.name, rivalRating: career.rival.ovr,
           } : undefined}
         />
-        {keepRivalryOutcome && tradeSaveMoved && <p className="mt-2 text-sm text-muted-foreground" role="status">
+        {tradeSaveMoved && <p className="mt-2 text-sm text-muted-foreground" role="status">
           Your career changed in another tab. Reload to resume.
         </p>}
       </div>
