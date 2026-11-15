@@ -587,8 +587,14 @@ export function simSeason(
     notes.push('Passing-down role: more of your regular-season work came as a receiver.');
   }
 
-  // team result
-  const strength = teamQuality + (seasonOverall - 74) * (c.pos === 'QB' ? 0.55 : c.pos === 'K' ? 0.08 : DEFENSIVE_POS.includes(c.pos) ? 0.22 : 0.25);
+  // The roster carries the baseline. The player moves it in proportion to the games he played.
+  const seasonLen = nflSeasonLength(line.year);
+  const gamesShare = games / seasonLen;
+  const playerImpact = (seasonOverall - 74) * (c.pos === 'QB' ? 0.55 : c.pos === 'K' ? 0.08 : DEFENSIVE_POS.includes(c.pos) ? 0.22 : 0.25);
+  const strength = teamQuality + playerImpact * gamesShare;
+  if (games < seasonLen) {
+    notes.push(`You played ${games} of ${seasonLen} regular-season games. Your rating had ${Math.round(gamesShare * 100)}% of its full-season effect on the team.`);
+  }
   const playoffOdds = Math.max(0.04, Math.min(0.92, (strength - 66) / 26));
   let result: string = NFL_MISSED_PLAYOFFS;
   let poStage = -1;
@@ -652,7 +658,6 @@ export function simSeason(
      short of the schedule (15 of 17, 14 of 16), so the smallest injury does
      not shut a 16 game season out of every award. In a 17 game season the
      pace line is the line itself and the gate is the 15 it always was. */
-  const seasonLen = nflSeasonLength(line.year);
   const awardGames = seasonLen - 2;
   const statScore = nflSeasonScore(c.pos, nflAwardPaceLine(line, seasonLen));
   const isDef = DEFENSIVE_POS.includes(c.pos);
