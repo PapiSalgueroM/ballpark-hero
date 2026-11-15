@@ -19,6 +19,10 @@ The production build, 156 focused tests, 11 pinned local browser cases and 20 si
 
 All seven NFL desk simulation checks passed across ten seeds and ten seasons. Nine no-desk seasons matched their saved fingerprints after excluding the new first-round eligibility marker. The rating review fault still failed all nine comparisons. The 11 NHL waiver controls passed against the shared cut ledger.
 
+[PR #999](https://github.com/PapiSalgueroM/ballpark-hero/pull/999) published exact main `5bf4b48a6d008118136c7ed2e086c0f4ec9f1ea9`, deployment `2d394b45-f687-4ca9-be3d-9aa31680b794`, canonical entry `/assets/index-csyDdlYM.js`. The merged tree matched tested head `7b9d1dc74`. All 11 live browser cases, 15 pinned endpoints and 174 sitemap routes passed. IndexNow accepted the three updated guides. The 174-route SEO split check, Home fold and all 16 download budgets also passed locally.
+
+Exact hosted app types and the standard build passed. Home search passed flag setup, mounted outcomes and the deadline control. Its remaining native assertion matched both nested busy elements. The next candidate targets the placeholder directly. Several older Tycoon workflows stopped at font setup. The hosted NHL waiver workflow still reported older outcome and source comparison failures, and its shared cut ledger harness passed.
+
 ## 2026-11-15: Rugby match timelines and puzzle saves
 
 - NRL Team Manager shows the points and actual scoring plays in each completed period. Confirmed interchanges appear by name during Live. The same scoring data carries into new Live and Quick Sim match reports. Older reports retain their saved period scores.
