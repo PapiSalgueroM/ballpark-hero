@@ -34,12 +34,16 @@ const money = (m: number) => (m >= 1000 ? `£${(m / 1000).toFixed(1)}B` : `£${m
 
 /** Adjust out-of-position picks before rating and simulating. */
 function adjustedXi(xi: (Player | null)[], oop: boolean[]): (Player | null)[] {
-  return xi.map((p, i) => (p && oop[i] ? { ...p, marketValue: Math.max(1, Math.round(p.marketValue / 3)) } : p));
+  return xi.map((p, i) => p ? adjustedPick(p, oop[i]) : null);
 }
 
-/** One rating everywhere: fillers keep their pinned overall, everyone else the shared card curve minus the OOP tax. */
+function adjustedPick(p: Player, outOfPosition: boolean): Player {
+  return outOfPosition ? { ...p, marketValue: Math.max(1, Math.round(p.marketValue / 3)) } : p;
+}
+
+/** Quote the same rating the XI and match use, including pinned fillers. */
 const shownRating = (p: Player, isOop: boolean) =>
-  p.fixedOverall ?? Math.max(35, playerRating(p) - (isOop ? 8 : 0));
+  p.fixedOverall ?? playerRating(adjustedPick(p, isOop));
 
 const DartDraft = () => {
   const [phase, setPhase] = useState<Phase>('intro');

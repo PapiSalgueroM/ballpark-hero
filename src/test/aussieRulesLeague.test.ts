@@ -21,6 +21,50 @@ const until = (s: LeagueState, done: (s: LeagueState) => boolean) => { let state
 const V1_SAVE = JSON.stringify({ version: 1, seed: 1234567, clubId: 'club-0', actions: [] });
 
 describe('Aussie Rules Manager full season engine', () => {
+  it('carries a kept 23 into the next season only when chosen and replaces the delisted ruck', () => {
+    const clubId = 'club-00';
+    const initial = createLeague(1, clubId, 'afl2026')!;
+    expect(clubOf(initial, clubId)!.players.find(player => player.id === 'p-0')?.name).toBe('Elwen Pellwick');
+    const selected = reduceLeague(initial, { type: 'lineup', starters: ['p-0', ...initial.starters.slice(1)], bench: initial.bench });
+    const kept = reduceLeague(selected, { type: 'keepLineup' });
+    const summer = until(kept, state => state.phase === 'summer');
+    const delisted = reduceLeague(summer, { type: 'delist', season: 1, playerId: 'p-22' });
+    expect(delisted.history.at(-1)?.delisted?.playerName).toBe('Faelan Pellwick');
+    const draft = reduceLeague(delisted, { type: 'next' });
+    const carry = { type: 'carryLineup', clubId, season: 1 } as const;
+    expect(reduceLeague(draft, carry)).toBe(draft);
+    const drafted = until(draft, state => state.phase === 'draft' && state.draft!.at === state.draft!.order.length);
+    const restored = readLeagueSave(JSON.stringify(drafted))!;
+    expect(restored).toEqual(drafted);
+    expect(reduceLeague(restored, { ...carry, season: 2 })).toBe(restored);
+    expect(reduceLeague(restored, { ...carry, clubId: 'club-01' })).toBe(restored);
+
+    const automatic = reduceLeague(restored, { type: 'next' });
+    expect(automatic.preferredLineup).toBeUndefined();
+    expect(automatic.starters).not.toContain('p-0');
+    const next = reduceLeague(restored, carry);
+    expect(next.season).toBe(2);
+    const ruck = kept.preferredLineup!.starters.findIndex(slot => slot.role === 'ruck');
+    const club = clubOf(next, clubId)!;
+    expect(club.players.find(player => player.id === next.starters[ruck])).toMatchObject({ name: 'Dravin Dunholm', role: 'ruck' });
+    expect(next.starters.map((id, i) => i === ruck ? 'p-22' : id)).toEqual(kept.starters);
+    kept.bench.forEach((id, i) => {
+      if (club.players.some(player => player.id === id)) expect(next.bench[i]).toBe(id);
+    });
+    expect(new Set([...next.starters, ...next.bench]).size).toBe(23);
+    expect([...next.starters, ...next.bench]).not.toContain('p-22');
+    expect(next.preferredLineup?.starters.map(slot => slot.id)).toEqual(next.starters);
+    expect(next.preferredLineup?.bench).toEqual(next.bench);
+    expect(readLeagueSave(JSON.stringify(next))).toEqual(next);
+    expect(reduceLeague(next, carry)).toBe(next);
+
+    const settle = (state: LeagueState) => reduceLeague(reduceLeague(state, { type: 'prepare', choice: 'rest' }), { type: 'playMatch', tactic: 'direct' });
+    const regular = settle(automatic), carried = settle(next);
+    expect([regular.match!.homeScore.total, regular.match!.awayScore.total]).toEqual([89, 70]);
+    expect([carried.match!.homeScore.total, carried.match!.awayScore.total]).toEqual([83, 76]);
+    expect(reduceLeague(carried, { type: 'next' }).starters).toEqual(next.starters);
+  });
+
   it('carries the exact selected 23 against the seeded automatic reset and can switch back', () => {
     const initial = createLeague(1, 'club-00', 'afl2026')!;
     const authored = [...initial.starters];

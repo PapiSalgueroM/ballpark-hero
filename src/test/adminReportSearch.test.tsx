@@ -317,6 +317,82 @@ describe('admin report queue', () => {
     await waitFor(() => expect(priority).toHaveValue('low'));
     expect(db.write.mock.calls).toEqual([[contract.id, { priority: 'low' }], [contract.id, { priority: 'low' }]]);
   });
+  it.each([
+    { field: 'status', triageFirst: true },
+    { field: 'status', triageFirst: false },
+    { field: 'priority', triageFirst: true },
+    { field: 'priority', triageFirst: false },
+  ] as const)('keeps a failed note reachable when $field hides the report (triage first: $triageFirst)', async ({ field, triageFirst }) => {
+    const report = { ...contract, id: 'aaaaaaaa-1234-4321-9876-123456789abc' };
+    serve([report]);
+    type WriteResult = { data: { id: string }[] | null; error: { message: string } | null };
+    let settleNote: (result: WriteResult) => void = () => {};
+    let settleTriage: (result: WriteResult) => void = () => {};
+    db.write
+      .mockImplementationOnce(() => new Promise<WriteResult>(resolve => { settleNote = resolve; }))
+      .mockImplementationOnce(() => new Promise<WriteResult>(resolve => { settleTriage = resolve; }));
+
+    openQueue();
+    const card = within((await screen.findByText(report.description)).closest('[data-report]') as HTMLElement);
+    const select = card.getByRole('combobox', { name: field === 'status' ? 'Status' : 'Priority' });
+    const priorityFilter = screen.getByRole('combobox', { name: 'Filter by priority' });
+    if (field === 'priority') fireEvent.change(priorityFilter, { target: { value: 'high' } });
+
+    const notePatch = { admin_note: 'Follow up with the roster owner', fix_ref: '#999' };
+    fireEvent.change(card.getByRole('textbox', { name: 'Note' }), { target: { value: notePatch.admin_note } });
+    fireEvent.change(card.getByRole('textbox', { name: 'Fix reference' }), { target: { value: notePatch.fix_ref } });
+    fireEvent.click(card.getByRole('button', { name: 'Save note' }));
+    select.focus();
+    fireEvent.change(select, { target: { value: field === 'status' ? 'fixed' : 'low' } });
+
+    const failed = { data: null, error: { message: 'Note temporarily unavailable' } };
+    const saved = { data: [{ id: report.id }], error: null };
+    const errorText = 'Not saved: Note temporarily unavailable';
+    const receiptRegion = () => screen.queryByRole('region', { name: 'Report notes needing retry' });
+    if (!triageFirst) {
+      await act(async () => settleNote(failed));
+      expect(card.getByText(errorText)).toBeVisible();
+      expect(receiptRegion()).not.toBeInTheDocument();
+    }
+
+    await act(async () => settleTriage(saved));
+    expect(await screen.findByText(field === 'status' ? 'Moved to Fixed' : 'Priority set to Low')).toBeVisible();
+    expect(screen.queryByTestId('note-input')).not.toBeInTheDocument();
+    expect(field === 'status' ? screen.getByRole('button', { name: 'Open (0)' }) : priorityFilter).toHaveFocus();
+    if (triageFirst) {
+      expect(receiptRegion()).not.toBeInTheDocument();
+      await act(async () => settleNote(failed));
+    }
+
+    const notice = receiptRegion();
+    expect(notice).toBeInTheDocument();
+    const retryLink = within(notice!).getByRole('link', { name: 'Open report to retry' });
+    expect(within(notice!).getByText(errorText)).toBeVisible();
+    expect(retryLink).toHaveAttribute('href', `/admin/reports#report=${report.id}`);
+    fireEvent.click(retryLink);
+    const back = await screen.findByRole('link', { name: 'Back to report queue' });
+    expect(back).toHaveFocus();
+    expect(screen.getByRole('textbox', { name: 'Note' })).toHaveValue(notePatch.admin_note);
+    expect(screen.getByRole('textbox', { name: 'Fix reference' })).toHaveValue(notePatch.fix_ref);
+    expect(screen.getByText(errorText)).toBeVisible();
+    expect(db.write).toHaveBeenCalledTimes(2);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Save note' }));
+    await waitFor(() => expect(screen.getByRole('status', { name: 'Note save' })).toHaveTextContent(/^Saved$/));
+    expect(db.write.mock.calls).toEqual([
+      [report.id, notePatch],
+      [report.id, field === 'status' ? { status: 'fixed', resolved: true, resolved_at: expect.any(String) } : { priority: 'low' }],
+      [report.id, notePatch],
+    ]);
+
+    fireEvent.click(back);
+    expect(await screen.findByRole('searchbox', { name: 'Search reports' })).toBeVisible();
+    expect(receiptRegion()).not.toBeInTheDocument();
+    expect(screen.queryByTestId('note-input')).not.toBeInTheDocument();
+    if (field === 'status') expect(screen.getByRole('button', { name: 'Open (0)' })).toHaveAttribute('aria-pressed', 'true');
+    else expect(screen.getByRole('combobox', { name: 'Filter by priority' })).toHaveValue('high');
+  });
+
   it('keeps newer note and fix-reference drafts while an earlier save completes', async () => {
     let release: () => void = () => {};
     db.write.mockImplementationOnce((id: string) => new Promise(resolve => {

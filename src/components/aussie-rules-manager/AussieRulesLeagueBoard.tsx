@@ -8,7 +8,7 @@ import { buildDraftNight } from '@/lib/draftNight';
 import { lineupStrength, prepareClubs, PREPARATIONS, ROLE_LABELS, ROLES, TACTICS, type Score, type Tactic } from '@/lib/aussieRulesManager';
 import { EXIT_LABELS } from '@/lib/aussieRulesFormat';
 import {
-  CLUBS, clubFull, clubIdentities, clubOf, clubShort, CURRENT_CLUB_SET, draftPool, hubTiles, lastWeek, leagueLadder, leaguePlayer, myFinalsTie, opponentPlays, ordinal, pickRefusal, picksLeft, retirees,
+  CLUBS, clubFull, clubIdentities, clubOf, clubShort, CURRENT_CLUB_SET, draftPool, hubTiles, lastWeek, leagueLadder, leaguePlayer, myFinalsTie, nextSeasonLineupPreview, opponentPlays, ordinal, pickRefusal, picksLeft, retirees,
   LIST_SIZE, roleDeficits, ROUNDS, scoutedPotential, summerDelistCandidates, tieName, type LeagueAction, type LeagueState,
 } from '@/lib/aussieRulesLeague';
 import styles from './AussieRulesManagerBoard.module.css';
@@ -168,7 +168,7 @@ function SquadPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
   const rest = club.players.filter(p => !state.starters.includes(p.id) && !state.bench.includes(p.id)).sort((a, b) => ROLES.indexOf(a.role) - ROLES.indexOf(b.role) || b.skill - a.skill);
   return <div className={styles.card}><h3>Starting 18, interchange five, and the rest of the list</h3>
     <p className={styles.muted}>{editable ? 'Tap a starter or an interchange player to change that spot before preparation.' : 'Selection opens again before the next match.'}</p>
-    {editable && <><p className={styles.muted} role="status">{preferred ? 'A matchday 23 is kept for this season. Next season starts with automatic selection.' : 'New matches use automatic selection unless you keep a 23 for this season.'}</p>
+    {editable && <><p className={styles.muted} role="status">{preferred ? 'A matchday 23 is kept for this season. You can carry it forward after the draft.' : 'New matches use automatic selection unless you keep a 23 for this season.'}</p>
       <div className={styles.actions} role="group" aria-label="Matchday selection">
         <button ref={selectionAction} type="button" className={styles.secondary} onClick={() => act({ type: matchesPreference ? 'autoLineup' : 'keepLineup' })}>
           {matchesPreference ? 'Use automatic selection' : 'Keep this matchday 23'}
@@ -244,6 +244,10 @@ function DraftPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
   const draft = state.draft;
   const mineLeft = picksLeft(state, state.myClub);
   const myTurn = draft.at < draft.order.length && draft.order[draft.at] === state.myClub;
+  const carry = nextSeasonLineupPreview(state);
+  const previous = new Set(state.preferredLineup ? [...state.preferredLineup.starters.map(slot => slot.id), ...state.preferredLineup.bench] : []);
+  const remaining = carry ? [...carry.starters.map(slot => slot.id), ...carry.bench].filter(id => previous.has(id)).length : 0;
+  const selectionName = (id: string) => `${leaguePlayer(state, id)!.name}${previous.has(id) ? '' : ' (replacement)'}`;
   const prospect = (id: string) => draft.pool.find(value => value.id === id)!;
   const raw = (index: number) => { const pick = draft.made[index], p = prospect(pick.prospectId); return { team: clubShort(state, pick.clubId), playerName: p.name, pos: ROLE_LABELS[p.role], grade: scoutedPotential(state, p).mid }; };
   const rivals: ReturnType<typeof raw>[] = [];
@@ -265,6 +269,19 @@ function DraftPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
       <div className={styles.players}>{pool.map(p => { const read = scoutedPotential(state, p); return <button key={p.id} className={styles.player} data-arl-prospect={p.id} onClick={() => pick(p.id)}>
         <strong>{p.name}</strong><span>{ROLE_LABELS[p.role]} · Age {p.age} · Skill {p.skill} · Ceiling {read.low} to {read.high}</span></button>; })}</div></>}
     {draft.at >= draft.order.length && <button className={styles.action} data-arl-next onClick={() => act({ type: 'next' })}>Start season {state.season + 1}</button>}
+    {carry && <details className={styles.events} data-arl-carry-lineup>
+      <summary>Preview previous matchday 23</summary>
+      <p>{remaining} of 23 players return from your previous selection. This becomes your kept 23 for the new season.</p>
+      <ul>
+        {ROLES.map(role => <li key={role}><strong>{ROLE_LABELS[role]}</strong>{' · '}
+          {carry.starters.filter(slot => slot.role === role).map(slot => selectionName(slot.id)).join(', ')}
+        </li>)}
+        <li><strong>Interchange</strong>{' · '}{carry.bench.map(selectionName).join(', ')}</li>
+      </ul>
+      <button className={styles.secondary} onClick={() => act({ type: 'carryLineup', season: state.season, clubId: state.myClub })}>
+        Start season {state.season + 1} with previous 23
+      </button>
+    </details>}
   </div>;
 }
 

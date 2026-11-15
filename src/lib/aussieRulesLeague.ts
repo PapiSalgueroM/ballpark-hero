@@ -96,6 +96,7 @@ export type LeagueAction =
   | { type: 'lineup'; starters: string[]; bench: string[] }
   | { type: 'keepLineup' }
   | { type: 'autoLineup' }
+  | { type: 'carryLineup'; season: number; clubId: string }
   | { type: 'prepare'; choice: Preparation }
   | { type: 'play'; tactic: Tactic }
   | { type: 'playMatch'; tactic: Tactic }
@@ -265,9 +266,7 @@ function tally(goals: Record<string, number>, match: Match): Record<string, numb
 export const leagueLadder = (state: Pick<LeagueState, 'clubs' | 'results'>): LadderRow[] => ladderFor(state);
 export const seedsOf = (state: Pick<LeagueState, 'clubs' | 'results'>) => leagueLadder(state).map(row => row.clubId);
 
-function matchdayLineup(state: LeagueState) {
-  const club = clubOf(state, state.myClub)!;
-  const preferred = state.preferredLineup;
+function matchdayLineup(club: LeagueClub, preferred?: PreferredLineup) {
   if (!preferred) return automaticLineup(club);
 
   const roles = new Map(club.players.map(player => [player.id, player.role]));
@@ -291,19 +290,35 @@ function matchdayLineup(state: LeagueState) {
   return { starters: selected, bench };
 }
 
+function rememberLineup(club: LeagueClub, starters: string[], bench: string[]): PreferredLineup {
+  return { starters: starters.map(id => ({ id, role: club.players.find(player => player.id === id)!.role })), bench: [...bench] };
+}
+
+const resetSeasonClub = (club: LeagueClub): LeagueClub =>
+  ({ ...club, players: club.players.map(player => ({ ...player, fatigue: 0, prep: 0 })) });
+
+export function nextSeasonLineupPreview(state: LeagueState): PreferredLineup | null {
+  const { phase, draft, preferredLineup, myClub } = state;
+  if (phase !== 'draft' || !draft || draft.at !== draft.order.length || !preferredLineup) return null;
+  const club = resetSeasonClub(clubOf(state, myClub)!);
+  const { starters, bench } = matchdayLineup(club, preferredLineup);
+  return validLineup({ clubs: [club], clubId: myClub }, starters, bench) ? rememberLineup(club, starters, bench) : null;
+}
+
 /** Open the next fixture with the manager's preferred or automatic matchday 23. */
 function openRound(state: LeagueState, round: number): LeagueState {
   const fixture = fixturesFor(state.seed, state.season, round).find(value => value.homeId === state.myClub || value.awayId === state.myClub)!;
-  const lineup = matchdayLineup(state);
+  const lineup = matchdayLineup(clubOf(state, state.myClub)!, state.preferredLineup);
   return { ...state, ...lineup, stage: 'homeAway', round, phase: 'prepare', preparation: null, swapsThisBreak: 0, match: emptyMatch(round, fixture.homeId, fixture.awayId) };
 }
 function recover(clubs: LeagueClub[]): LeagueClub[] {
   return clubs.map(club => ({ ...club, players: club.players.map(player => ({ ...player, fatigue: Math.max(0, player.fatigue - RECOVERY), prep: 0 })) }));
 }
-function freshSeason(state: LeagueState, season: number): LeagueState {
+function freshSeason(state: LeagueState, season: number, preferredLineup?: PreferredLineup): LeagueState {
   const { preferredLineup: _previous, ...career } = state;
-  const clubs = state.clubs.map(club => ({ ...club, players: club.players.map(player => ({ ...player, fatigue: 0, prep: 0 })) }));
-  return openRound({ ...career, season, format: CURRENT_FINALS_FORMAT, clubs, week: 0, results: [], goals: {}, finals: null, draft: null }, 0);
+  const clubs = state.clubs.map(resetSeasonClub);
+  return openRound({ ...career, season, format: CURRENT_FINALS_FORMAT, clubs, week: 0, results: [], goals: {}, finals: null, draft: null,
+    ...(preferredLineup && { preferredLineup }) }, 0);
 }
 /** No set means Round 1014's invented league, the same rule as the save; only the hook's start passes CURRENT_CLUB_SET. */
 export function createLeague(seed: number, clubId: string, set: ClubSetId = 'fictional'): LeagueState | null {
@@ -372,7 +387,8 @@ function openWeek(state: LeagueState, week: number): LeagueState {
   const pairings = resolveWeek(preset.ties, seedsOf(state), finalsOutcomes(state), week) ?? [];
   const ties = [...(state.finals?.ties ?? []), ...pairings.map(pair => ({ id: pair.id, week, homeId: pair.homeId, awayId: pair.awayId }))];
   const mine = pairings.find(pair => pair.homeId === state.myClub || pair.awayId === state.myClub);
-  const lineup = mine ? matchdayLineup(state) : automaticLineup(clubOf(state, state.myClub)!);
+  const club = clubOf(state, state.myClub)!;
+  const lineup = mine ? matchdayLineup(club, state.preferredLineup) : automaticLineup(club);
   return { ...state, ...lineup, stage: 'finals', week, phase: 'prepare', preparation: null, swapsThisBreak: 0, finals: { ties }, match: mine ? emptyMatch(finalsRound(week), mine.homeId, mine.awayId) : null };
 }
 /** Your match is over: record it, play the rest of the round or week, show the report. */
@@ -436,8 +452,12 @@ export function reduceLeague(state: LeagueState, action: LeagueAction): LeagueSt
     }
     const previous = state.preferredLineup;
     if (previous && sameIds(previous.starters.map(slot => slot.id), state.starters) && sameIds(previous.bench, state.bench)) return state;
-    const starters = state.starters.map(id => ({ id, role: club.players.find(player => player.id === id)!.role }));
-    return { ...state, preferredLineup: { starters, bench: [...state.bench] } };
+    return { ...state, preferredLineup: rememberLineup(club, state.starters, state.bench) };
+  }
+  if (action.type === 'carryLineup') {
+    if (action.season !== state.season || action.clubId !== state.myClub) return state;
+    const lineup = nextSeasonLineupPreview(state);
+    return lineup ? freshSeason(state, state.season + 1, lineup) : state;
   }
   if (action.type === 'prepare') {
     if (state.phase !== 'prepare' || !state.match) return state;
@@ -719,6 +739,7 @@ export function isLeagueAction(value: unknown): value is LeagueAction {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const item = value as Record<string, unknown>;
   if (item.type === 'next' || item.type === 'simWeek' || item.type === 'draftAuto' || item.type === 'keepLineup' || item.type === 'autoLineup') return exactKeys(item, ['type']);
+  if (item.type === 'carryLineup') return exactKeys(item, ['type', 'season', 'clubId']) && int(item.season, 1, 10000) && isClubId(item.clubId);
   if (item.type === 'prepare') return exactKeys(item, ['type', 'choice']) && (item.choice === 'train' || item.choice === 'rest');
   if (item.type === 'play' || item.type === 'playMatch') return exactKeys(item, ['type', 'tactic']) && TACTIC_IDS.includes(item.tactic as string);
   if (item.type === 'swap') return exactKeys(item, ['type', 'outId', 'inId']) && isPlayerId(item.outId) && isPlayerId(item.inId);
