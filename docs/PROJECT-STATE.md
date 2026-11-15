@@ -1,5 +1,7 @@
 ## 2026-11-14: Academy cross-training, current form for call-ups and admin recovery
 
+[PR #978](https://github.com/PapiSalgueroM/ballpark-hero/pull/978) published exact main `d78bf9f471d7a8d2ed1b5d8151c3626bdadcf242`, deployment `bd75578c-b911-4799-a7d4-fcd00e4194ce`, canonical entry `/assets/index-BZBRuOh9.js`. Ten live browser checks, all 174 sitemap routes, seven policy and crawler endpoints, both admin noindex tags and the NRL academy guide passed. The admin checks used fixture accounts and reports. IndexNow accepted the NRL guide. Application types, build, 79 integrated tests, 18 site checks and 16 download limits passed.
+
 - NRL Team Manager can spend $75,000 of club cash once per season to cross-train a ready academy prospect for two regular-season rounds. The new position carries into promotion or release, without changing the player's primary position, rating or salary.
 - Soccer Career routine national call-ups use the club season the player just completed. Breakthroughs and declines count immediately. The in-season Nations League still uses the form available when it is played.
 - NHL My Career bounds new playoff goalie wins by the team's recorded result and games played. In 960 paired runs the correction fixed 240 impossible rows and kept all 720 feasible results and 28,031 random draws.
