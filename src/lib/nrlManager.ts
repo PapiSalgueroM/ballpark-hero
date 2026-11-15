@@ -102,6 +102,7 @@ interface NrlLatePenalty { approach: NrlLatePenaltyApproach; points: NrlPenaltyT
 type NrlActiveKickingPlan = 'territory' | 'contest';
 export type NrlKickingPlan = 'mixed' | NrlActiveKickingPlan;
 const isActiveKickingPlan = (plan: unknown): plan is NrlActiveKickingPlan => plan === 'territory' || plan === 'contest';
+export const isNrlKickingPlan = (plan: unknown): plan is NrlKickingPlan => plan === 'mixed' || isActiveKickingPlan(plan);
 export interface NrlHalftimeInterchange { starterId: string; reserveId: string }
 export interface NrlQuickInterchange { reserveId: string; role: NrlRole; trigger: 'ahead' | 'behind' }
 interface NrlHalftimeChoice {
@@ -1827,7 +1828,7 @@ const integerIn = (value: unknown, low: number, high: number): value is number =
   typeof value === 'number' && Number.isInteger(value) && value >= low && value <= high;
 const record = (value: unknown): value is Record<string, unknown> =>
   value !== null && typeof value === 'object' && !Array.isArray(value);
-const isNrlAttackPlan = (value: unknown): value is NrlAttackPlan =>
+export const isNrlAttackPlan = (value: unknown): value is NrlAttackPlan =>
   value === 'standard' || NRL_ATTACK_PLANS.includes(value as NrlActiveAttackPlan);
 
 const isNrlHalftimeTalk = (value: unknown): value is NrlHalftimeTalk =>

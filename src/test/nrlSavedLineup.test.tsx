@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
+import { createNrlCareer, nrlSavedMatchPlanPreview, readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
 import { createNrlSeason, nrlInjuries, nrlNextRound, nrlSavedLineupPreview, nrlStarterOptions, NRL_ROLES, NRL_SAVE_KEY } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
@@ -56,6 +56,66 @@ afterEach(() => {
 });
 
 describe('NRL saved lineup', () => {
+  it('saves and previews a match plan, then restores both settings in one write after reload', async () => {
+    const opening = createNrlCareer('bears', 3, 2027);
+    const frame = { year: 2027, clubId: 'bears', round: 1 } as const;
+    const set = (state: NrlCareerState) => reduceNrlCareer(reduceNrlCareer(state, {
+      type: 'setAttackPlan', ...frame, attackPlan: 'counter',
+    }), { type: 'setKickingPlan', ...frame, plan: 'contest' });
+    const first = open(bytes(set(opening)));
+    const panel = desk();
+    fireEvent.click(panel.getByRole('button', { name: 'Save current match plan' }));
+    const saved = readNrlCareerSave(raw())!;
+    expect(saved.savedMatchPlans?.first).toEqual({ attackPlan: 'counter', kickingPlan: 'contest' });
+    expect(localStorage.getItem(fence)).toBe('5');
+    expect(panel.getByRole('button', { name: 'Apply saved match plan' })).toBeDisabled();
+    click('Match centre');
+    fireEvent.click(screen.getByText('Attack plan: Counter opponent'));
+    fireEvent.click(await screen.findByRole('button', { name: 'Standard' }));
+    fireEvent.click(screen.getByText('Last-tackle kicks · Contest kicks'));
+    click('Mixed kicks');
+    const ordinary = readNrlCareerSave(raw())!;
+    expect(ordinary.season.attackPlan).toBeUndefined();
+    expect(ordinary.season.kickingPlan).toBeUndefined();
+    expect(localStorage.getItem(fence)).toBe('7');
+    first.unmount();
+
+    render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+    click('Squad');
+    const preview = desk();
+    expect(preview.getByText(/Standard → Counter opponent/)).toBeVisible();
+    expect(preview.getByText(/Mixed kicks → Contest kicks/)).toBeVisible();
+    expect(raw()).toBe(bytes(ordinary));
+    expect(localStorage.getItem(fence)).toBe('7');
+    fireEvent.click(preview.getByRole('button', { name: 'Apply saved match plan' }));
+    const applied = nrlSavedMatchPlanPreview(ordinary, 'first')!.next;
+    expect(raw()).toBe(bytes(applied));
+    expect(localStorage.getItem(fence)).toBe('8');
+    expect(preview.getByText('Saved lineup', { exact: true })).toHaveFocus();
+    click('Match centre');
+    click('Quick Sim');
+    expect(raw()).toBe(bytes(advance(applied)));
+    expect(localStorage.getItem(fence)).toBe('9');
+    expect(screen.getByText(/Last-tackle kicks: Contest kicks/)).toBeVisible();
+  });
+
+  it('refuses to apply a preview after another tab advances the save', () => {
+    const initial = start();
+    const frame = { year: 2026, clubId: 'storm', round: 1 } as const;
+    const territory = reduceNrlCareer(initial, { type: 'setKickingPlan', ...frame, plan: 'territory' });
+    const saved = reduceNrlCareer(territory, { type: 'saveMatchPlan', ...frame, slot: 'first' });
+    const prepared = { ...saved, season: initial.season };
+    open(bytes(prepared));
+    const panel = desk();
+    const elsewhere = bytes(advance(prepared));
+    localStorage.setItem(NRL_SAVE_KEY, elsewhere);
+    localStorage.setItem(fence, '5');
+    fireEvent.click(panel.getByRole('button', { name: 'Apply saved match plan' }));
+    expect(raw()).toBe(elsewhere);
+    expect(localStorage.getItem(fence)).toBe('5');
+    expect(screen.getByText(/this season changed in another tab/i)).toBeVisible();
+  });
+
   it('books and cancels a future rotation in Squad, then uses the edited team for only that match', () => {
     const first = save(start());
     const rotation = reduceNrlCareer(rearrange(first), { type: 'saveLineup', year: 2026, clubId: 'storm', slot: 'rotation' });
