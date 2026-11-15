@@ -21,7 +21,7 @@ const TIER_STYLE: Record<PackTier, { label: string; cls: string }> = {
 export function MysteryBoxBoard() {
   const {
     loading, formation, packIndex, current, revealed, squad, compatibleSlots,
-    discards, finished, rating, filled, bestPull, openPack, place, discard, shareText,
+    discards, staleDraft, finished, rating, filled, bestPull, openPack, place, discard, shareText,
   } = useMysteryBox();
   const [placedSlot, setPlacedSlot] = useState<number | null>(null);
   const previous = useRef({ packIndex, squad });
@@ -86,6 +86,16 @@ export function MysteryBoxBoard() {
         </div>
       </div>
 
+      {staleDraft && (
+        <div className="mt-4 rounded-xl border border-border bg-card p-3 text-sm" role="alert">
+          <p>This Mystery Box draft changed in another tab.</p>
+          <button type="button" onClick={() => window.location.reload()}
+            className="mt-1 inline-flex min-h-11 items-center rounded-lg border border-border px-3 font-semibold hover:bg-muted">
+            Reload saved draft
+          </button>
+        </div>
+      )}
+
       {/* Finished */}
       {/* Round 951: the last pack ends on the shared result moment, the XI
           below stays as the review. A full XI is a win, most of one (six or
@@ -120,7 +130,8 @@ export function MysteryBoxBoard() {
               </p>
               <button
                 onClick={openPack}
-                className="mt-4 rounded-full bg-primary px-8 py-3 font-display text-lg font-black text-primary-foreground hover:opacity-90"
+                disabled={staleDraft}
+                className="mt-4 rounded-full bg-primary px-8 py-3 font-display text-lg font-black text-primary-foreground hover:opacity-90 disabled:opacity-50"
               >
                 Open it
               </button>
@@ -156,7 +167,8 @@ export function MysteryBoxBoard() {
 
               <button
                 onClick={discard}
-                className="mt-3 inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-destructive/40 px-5 py-2 text-sm font-semibold text-destructive hover:bg-destructive/10"
+                disabled={staleDraft}
+                className="mt-3 inline-flex min-h-[44px] items-center gap-1.5 rounded-full border border-destructive/40 px-5 py-2 text-sm font-semibold text-destructive hover:bg-destructive/10 disabled:opacity-50"
               >
                 <Trash2 className="h-4 w-4" /> Bin him
               </button>
@@ -172,7 +184,7 @@ export function MysteryBoxBoard() {
       <div className="mt-2 space-y-1.5">
         {formation.slots.map((slot, i) => {
           const p = squad[i];
-          const highlight = !!current && compatibleSlots.includes(i);
+          const highlight = !staleDraft && !!current && compatibleSlots.includes(i);
           return (
             <button
               key={i}
