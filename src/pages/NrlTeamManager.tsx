@@ -32,7 +32,7 @@ import {
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
-  nrlCanReviewTickets, nrlTicketReviewRound,
+  nrlCanReviewTickets, nrlHomeGateReport, nrlTicketReviewRound,
   nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport, nrlPositionTraining,
   nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveCoachQuote, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlPastLadders, nrlSelectionPromise, nrlSelectionPromiseTerms, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
@@ -731,9 +731,12 @@ function NrlMatchdayTeamSheet({ match, squad }: { match: NrlMatchResult; squad: 
   );
 }
 
-function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: NrlManagerState }) {
+function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: NrlCareerState }) {
   const shortName = useNrlClubName();
+  const { season } = career;
   const { year } = season;
+  const gate = nrlHomeGateReport(career, match);
+  const priceLabel = gate && gate.tier.charAt(0).toUpperCase() + gate.tier.slice(1);
   const goldenPoint = match.goldenPoint;
   const periods = match.scorePeriods;
   const usedReserves = match.benchUsed?.map(id => season.squad.find(player => player.id === id)?.name).filter(Boolean) ?? [];
@@ -759,6 +762,12 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
   const quickReserve = quick && season.squad.find(player => player.id === quick.reserveId)?.name;
   return (
     <>
+      {gate && <div className="mt-2 text-sm" data-nrl-home-gate>
+        <p className="font-semibold">{`Gate receipts ${aud.format(gate.amount)} · ${priceLabel} ticket prices`}</p>
+        {gate.priceChange !== undefined && <p className="text-muted-foreground">
+          {`${gate.priceChange > 0 ? '+' : ''}${aud.format(gate.priceChange)} compared with opening prices.`}
+        </p>}
+      </div>}
       {periods && (
         <table className="mt-3 w-full text-left text-sm" data-nrl-score-periods>
           <caption className="pb-1 text-left font-semibold">Score by period</caption>
@@ -952,7 +961,7 @@ function SavedMatchReport({ label, match, career }: { label: string; match: NrlM
       </summary>
       {expanded && <div className="border-t border-border pb-3 pt-2">
         <p className="text-sm font-semibold">{scoreLine(match, career.season.year, shortName)}{match.extraTime ? ' after extra time' : ''}</p>
-        <NrlMatchDetails match={match} season={career.season} />
+        <NrlMatchDetails match={match} career={career} />
         <MatchRatingChanges career={career} match={match} />
       </div>}
     </details>
@@ -1356,7 +1365,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
         {lastMatch ? `${scoreLine(lastMatch, year, shortName)}${lastMatch.extraTime ? ' after extra time' : ''}` : 'Your club did not play this round.'}
       </p>
       {lastMatch && <MatchRatingChanges career={career} match={lastMatch} />}
-      {lastMatch && <NrlMatchDetails match={lastMatch} season={season} />}
+      {lastMatch && <NrlMatchDetails match={lastMatch} career={career} />}
       <ul className="mt-2 divide-y divide-border text-sm">
         {latest.map(result => (
           <li key={`${result.homeId}-${result.awayId}`} className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 py-2">
@@ -2679,7 +2688,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
               <li>Before Round 1, open Season sponsor in Finances to choose a one-season offer or take $160,000 now and $295,000 next year. The two-season deal stays with the club and fills its sponsor slot for both years.</li>
-              <li>At midseason, open Review ticket prices from Match centre. Compare the remaining home gate forecasts and confirm one price change in Finances.</li>
+              <li>At midseason, open Review ticket prices from Match centre. Compare the remaining home gate forecasts and confirm one price change in Finances. Paid home match reports show the gate your club earned.</li>
               <li>Before Round 1, choose an eligible position in the Board recruitment brief. Use Recruitment during the season to sign an external player for that position next year and earn a club cash bonus.</li>
               <li>In Ladder, open Scout a club to shortlist eligible rivals and take them straight to Recruitment.</li>
               <li>Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.</li>
