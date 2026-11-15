@@ -290,6 +290,44 @@ describe('AussieRulesLeagueBoard', () => {
     expect(view.getByText('Next match', { selector: 'div' })).toBeTruthy();
   });
 
+  it('previews and carries a legal kept 23 across the draft and reload', () => {
+    const initial = createLeague(1, 'club-00', 'afl2026')!;
+    const chosen = reduceLeague(initial, { type: 'lineup', starters: ['p-0', ...initial.starters.slice(1)], bench: initial.bench });
+    const summer = until(reduceLeague(chosen, { type: 'keepLineup' }), state => state.phase === 'summer');
+    const delisted = reduceLeague(summer, { type: 'delist', season: 1, playerId: 'p-22' });
+    const ready = until(delisted, state => state.phase === 'draft' && state.draft!.at === state.draft!.order.length);
+    const expected = reduceLeague(ready, { type: 'carryLineup', clubId: ready.myClub, season: 1 });
+    const ruck = expected.preferredLineup!.starters.find(slot => slot.role === 'ruck')!;
+    const name = clubOf(expected, expected.myClub)!.players.find(player => player.id === ruck.id)!.name;
+    const bytes = JSON.stringify(ready);
+    store(ready);
+    const first = draw();
+    tile(first, 'Draft');
+    const preview = (view: ReturnType<typeof draw>) => {
+      const summary = view.getByText('Preview previous matchday 23', { exact: true });
+      fireEvent.click(summary);
+      return within(summary.closest('details')!);
+    };
+    const panel = preview(first);
+    expect(panel.getByText(/Elwen Pellwick/)).toBeVisible();
+    expect(panel.getByText(new RegExp(name + ' \\(replacement\\)'))).toBeVisible();
+    expect(panel.queryByText(/Faelan Pellwick/)).toBeNull();
+    expect(first.getByRole('button', { name: 'Start season 2', exact: true })).toBeVisible();
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+    first.unmount();
+
+    const second = draw();
+    tile(second, 'Draft');
+    fireEvent.click(preview(second).getByRole('button', { name: 'Start season 2 with previous 23' }));
+    expect(saved()).toEqual(expected);
+    second.unmount();
+    const restored = draw();
+    tile(restored, 'Squad');
+    expect(restored.getByText('Use automatic selection', { exact: true })).toBeVisible();
+    expect(restored.container.querySelector('option[value="p-22"]')).toBeNull();
+    expect(saved().starters).toContain('p-0');
+  });
+
   it('opens an unfinished ten round season on the old board, and its new season goes to the full season menu', () => {
     localStorage.setItem(LEGACY_SAVE_KEY, JSON.stringify({ version: 1, seed: 1234567, clubId: 'club-0', actions: [] }));
     const view = render(<MemoryRouter><AussieRulesManager /></MemoryRouter>);
