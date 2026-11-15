@@ -285,6 +285,77 @@ describe('useAussieRulesLeague', () => {
     act(() => { expect(result.current.dispatch({ type: 'prepare', choice: 'rest' })).toBe(false); });
   });
 
+  it('keeps the finals save when an older tab prepares Round 23 and resumes the saved 23', () => {
+    const late = until(createLeague(3, 'club-00', 'afl2026')!, state => state.round === 22 && state.phase === 'prepare');
+    const defender = clubOf(late, late.myClub)!.players.find(player => player.name === 'Albren Sellmere')!;
+    const starters = [defender.id, ...late.starters.slice(1)];
+    localStorage.setItem(SAVE_KEY, JSON.stringify(late));
+    const stale = renderHook(() => useAussieRulesLeague());
+    const newer = renderHook(() => useAussieRulesLeague());
+    act(() => { expect(newer.result.current.dispatch({ type: 'lineup', starters, bench: late.bench })).toBe(true); });
+    act(() => { expect(newer.result.current.dispatch({ type: 'keepLineup' })).toBe(true); });
+    for (const action of [{ type: 'prepare', choice: 'train' }, { type: 'playMatch', tactic: 'control' }, { type: 'next' }] as const) {
+      act(() => { expect(newer.result.current.dispatch(action)).toBe(true); });
+    }
+    const finals = newer.result.current.state!;
+    expect(finals).toMatchObject({ stage: 'finals', phase: 'prepare', week: 0, match: null });
+    expect(finals.results).toHaveLength(207);
+    const bytes = JSON.stringify(finals);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+
+    act(() => { expect(stale.result.current.dispatch({ type: 'prepare', choice: 'rest' })).toBe(false); });
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+    expect(stale.result.current.state).toEqual(finals);
+    expect(stale.result.current.storageNotice).toMatch(/changed in another tab/);
+
+    stale.unmount();
+    const reloaded = renderHook(() => useAussieRulesLeague());
+    expect(reloaded.result.current.state).toEqual(finals);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+    act(() => { expect(reloaded.result.current.dispatch({ type: 'simWeek' })).toBe(true); });
+    act(() => { expect(reloaded.result.current.dispatch({ type: 'next' })).toBe(true); });
+    expect(reloaded.result.current.state!.match).not.toBeNull();
+    expect(reloaded.result.current.state!.starters).toEqual(starters);
+    expect(reloaded.result.current.state!.bench).toEqual(late.bench);
+    act(() => { expect(reloaded.result.current.dispatch({ type: 'prepare', choice: 'rest' })).toBe(true); });
+    expect(readLeagueSave(localStorage.getItem(SAVE_KEY))).toEqual(reloaded.result.current.state);
+  });
+
+  it('retains the valid stored career while reads are blocked and continues local play', () => {
+    const before = createLeague(3, 'club-00', 'afl2026')!;
+    const bytes = JSON.stringify(before);
+    localStorage.setItem(SAVE_KEY, bytes);
+    const page = renderHook(() => useAussieRulesLeague());
+    const get = Storage.prototype.getItem;
+    const blocked = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(function (this: Storage, key) {
+      if (key === SAVE_KEY) throw new Error('storage unavailable');
+      return get.call(this, key);
+    });
+    act(() => { expect(page.result.current.dispatch({ type: 'prepare', choice: 'rest' })).toBe(true); });
+    expect(page.result.current.state).toMatchObject({ phase: 'quarter', preparation: 'rest' });
+    expect(page.result.current.storageNotice).toMatch(/could not save/);
+    blocked.mockRestore();
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+
+    act(() => { expect(page.result.current.dispatch({ type: 'playMatch', tactic: 'control' })).toBe(true); });
+    expect(page.result.current.storageNotice).toBeNull();
+    expect(readLeagueSave(localStorage.getItem(SAVE_KEY))).toEqual(page.result.current.state);
+  });
+
+  it('does not submit another completion when it adopts a finished career from storage', () => {
+    const before = createLeague(3, 'club-00', 'afl2026')!;
+    localStorage.setItem(SAVE_KEY, JSON.stringify(before));
+    const stale = renderHook(() => useAussieRulesLeague());
+    const finished = until(before, state => state.phase === 'seasonOver');
+    const bytes = JSON.stringify(finished);
+    localStorage.setItem(SAVE_KEY, bytes);
+
+    act(() => { expect(stale.result.current.dispatch({ type: 'prepare', choice: 'rest' })).toBe(false); });
+    expect(stale.result.current.state).toEqual(finished);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+    expect(outward.record).not.toHaveBeenCalled();
+  });
+
   it('records one completion for each finished season and stays quiet when a finished season is restored', () => {
     const { result, unmount } = renderHook(() => useAussieRulesLeague());
     act(() => { result.current.start(31, 'club-07'); });
