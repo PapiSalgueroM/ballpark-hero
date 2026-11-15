@@ -626,6 +626,7 @@ const DRIVE = {
       E.injuryPass(lg.teams, rng);
       E.aiWeeklyMoves(lg, '', rng);
       for (const g of lg.schedule[lg.week - 1]) E.simGame(g, lg.teams, rng);
+      E.reviewNflWeekRatings(lg);
       if (lg.week < E.REGULAR_WEEKS) lg.week += 1;
     },
     overLimit: t => E.deepOverLimit(t) > 0,
