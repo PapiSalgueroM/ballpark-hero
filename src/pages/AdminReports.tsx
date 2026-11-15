@@ -71,6 +71,8 @@ const AdminReports = () => {
   const [priorityFilter, setPriorityFilter] = useState('all');
   const [drafts, setDrafts] = useState<Record<string, { note: string; fixRef: string }>>({});
   const [savingNotes, setSavingNotes] = useState(() => new Set<string>());
+  const triageInFlight = useRef(new Set<string>());
+  const [savingTriage, setSavingTriage] = useState(() => new Set<string>());
   const [messages, setMessages] = useState<Record<string, string>>({});
   const navigate = useNavigate();
   const reportHash = linkedReportHash(useLocation().hash);
@@ -162,9 +164,24 @@ const AdminReports = () => {
     return true;
   };
 
+  const saveTriage = async (report: Report, field: 'status' | 'priority', patch: Record<string, unknown>, onSaved: () => void) => {
+    const key = report.id + ':' + field;
+    // Hold the field before React rerenders so a second event cannot send another write.
+    const pending = triageInFlight.current;
+    if (pending.has(key)) return;
+    pending.add(key);
+    setSavingTriage(new Set(pending));
+    try {
+      await save(report, patch, onSaved);
+    } finally {
+      pending.delete(key);
+      setSavingTriage(new Set(pending));
+    }
+  };
+
   const changeStatus = (report: Report, next: ReportStatus, control: HTMLSelectElement) => {
     const patch = statusUpdate(report, next, new Date().toISOString(), withColumns);
-    return save(report, patch, () => {
+    return saveTriage(report, 'status', patch, () => {
       const activeFilter = activeFilterRef.current;
       if (!activeFilter || matchesStatus({ ...report, ...patch }, activeFilter.dataset.filter as StatusFilter)) return;
       toast.success(`Moved to ${statusLabel(next, withColumns)}`);
@@ -174,7 +191,7 @@ const AdminReports = () => {
 
   const changePriority = (report: Report, value: string, control: HTMLSelectElement) => {
     const priority = value || null;
-    return save(report, { priority }, () => {
+    return saveTriage(report, 'priority', { priority }, () => {
       const activeFilter = priorityFilterRef.current;
       if (!activeFilter || activeFilter.value === 'all' || activeFilter.value !== (priorityOf(report) ?? 'unranked')
         || activeFilter.value === (priority ?? 'unranked')) return;
@@ -382,6 +399,8 @@ const AdminReports = () => {
               const closed = isClosed(status);
               const draft = draftOf(report);
               const noteSaving = savingNotes.has(report.id);
+              const statusSaving = savingTriage.has(report.id + ':status');
+              const prioritySaving = savingTriage.has(report.id + ':priority');
               const unsavedNote = draft.note !== (report.admin_note ?? '') || draft.fixRef !== (report.fix_ref ?? '');
               const message = noteSaving ? 'Saving...' : messages[report.id];
               return (
@@ -447,14 +466,16 @@ const AdminReports = () => {
                 )}
 
                 {/* Round 713: the workflow. Status and priority save on change;
-                    the note and the fix reference save together. */}
+                    the note and the fix reference save together. Keep pending selects
+                    focusable so a filtered save can return focus to its filter. */}
                 <div className="mt-3 grid grid-cols-2 gap-2">
                   <label className="text-xs font-medium text-muted-foreground">
-                    Status
+                    Status{statusSaving && <span aria-hidden="true"> · Saving…</span>}
                     <select
                       value={status}
+                      aria-disabled={statusSaving || undefined}
                       onChange={(e) => changeStatus(report, e.target.value as ReportStatus, e.currentTarget)}
-                      className="mt-1 block w-full min-h-[36px] rounded-lg border border-border bg-background px-2 text-sm text-foreground"
+                      className="mt-1 block w-full min-h-[36px] rounded-lg border border-border bg-background px-2 text-sm text-foreground aria-disabled:opacity-50"
                       data-testid="status-select"
                     >
                       {/* Round 713 fix: before the migration only Open and
@@ -465,12 +486,13 @@ const AdminReports = () => {
                     </select>
                   </label>
                   <label className="text-xs font-medium text-muted-foreground">
-                    Priority
+                    Priority{prioritySaving && <span aria-hidden="true"> · Saving…</span>}
                     <select
                       value={priority ?? ''}
                       disabled={!withColumns}
+                      aria-disabled={prioritySaving || undefined}
                       onChange={(e) => changePriority(report, e.target.value, e.currentTarget)}
-                      className="mt-1 block w-full min-h-[36px] rounded-lg border border-border bg-background px-2 text-sm text-foreground disabled:opacity-50"
+                      className="mt-1 block w-full min-h-[36px] rounded-lg border border-border bg-background px-2 text-sm text-foreground disabled:opacity-50 aria-disabled:opacity-50"
                       data-testid="priority-select"
                     >
                       <option value="">Not ranked</option>

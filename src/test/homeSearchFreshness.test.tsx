@@ -1,6 +1,6 @@
 import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { useSyncExternalStore } from 'react';
-import { Link, MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Link, MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import Index from '@/pages/Index';
 import { ScrollToTop } from '@/App';
@@ -416,6 +416,36 @@ it('jumps from Browse sports to game picks and restores the opener with Back', (
   expect(screen.getByLabelText('Current anchor')).toBeEmptyDOMElement();
   expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'instant' });
   expect(trigger).toHaveFocus();
+});
+
+it('keeps the sport heading when native history reuses the initial key for a different fragment', () => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  const scrollTo = vi.fn();
+  vi.stubGlobal('scrollTo', scrollTo);
+  const originalUrl = window.location.href;
+  const originalState = window.history.state;
+  const initialKey = 'sport-reload-test';
+  window.history.replaceState({ idx: 0, key: initialKey }, '', '/#browse-sports');
+  try {
+    render(<BrowserRouter><Index /></BrowserRouter>);
+    const catalogue = screen.getByRole('navigation', { name: 'Browse sports' });
+    const link = within(catalogue).getByRole('link', { name: 'Rugby League' });
+    const heading = screen.getByRole('heading', { name: /^Rugby League/, level: 2 });
+    heading.scrollIntoView = vi.fn();
+    fireEvent.click(link);
+    expect(window.location.hash).toBe('#sport-rugby');
+    expect(heading).toHaveFocus();
+
+    act(() => {
+      window.history.pushState({ key: initialKey }, '', '/#sport-rugby');
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    });
+    expect(window.location.hash).toBe('#sport-rugby');
+    expect(heading).toHaveFocus();
+    expect(scrollTo).not.toHaveBeenCalled();
+  } finally {
+    window.history.replaceState(originalState, '', originalUrl);
+  }
 });
 
 it('stops the previous Home scroll restore on a second browser Back from Game picks', () => {
