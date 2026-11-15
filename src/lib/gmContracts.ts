@@ -59,6 +59,8 @@ export interface GmMan {
   salary: number;
   /** NFL: a fully guaranteed deal. frontOfficeCuts reads it. */
   guaranteed?: boolean;
+  /** NFL: first-round picks stamped by the draft use the third-season window. */
+  rookieOptionEligible?: true;
 }
 
 export interface GmClub<P extends GmMan = GmMan> {
@@ -328,9 +330,9 @@ export function contractClass(sport: GmSportKey, ledger: GmContractLedger, leagu
   const drafted = rec?.how === 'draft';
   const service = seasonsHere(ledger, league, man);
   if (sport === 'nfl') {
-    /* The option is part of a first rounder's rookie deal, so it is offered
-       at the end of that deal and never again, whatever happened at it. */
-    return drafted && rec?.round === NFL_OPTION_ROUND && !rec.optionUsed && !rec.firstDealDone ? 'fifth-year-option' : 'veteran';
+    /* Preserve the late offer for older saves already past the third-season window. */
+    return !man.rookieOptionEligible && drafted && rec?.round === NFL_OPTION_ROUND && !rec.optionUsed && !rec.firstDealDone
+      ? 'fifth-year-option' : 'veteran';
   }
   if (sport === 'nba') {
     const tier = birdTier(ledger, league, man);
@@ -572,6 +574,11 @@ export function offerSheetFor(league: GmContractLeague, man: GmMan, ask: GmAsk, 
   return { years: Math.min(DESK_MAX_YEARS, ask.years + 1), salary, picks };
 }
 
+export function nflOptionTerms(man: GmMan, market: number): GmTerms {
+  const tier = OPTION_TIERS.find(t => man.ovr >= t.minOvr) ?? OPTION_TIERS[OPTION_TIERS.length - 1];
+  return { years: NFL_OPTION_YEARS, salary: round1(Math.max(man.salary, round1(market) * tier.share)) };
+}
+
 export function deskCase<L extends GmContractLeague>(
   host: GmContractHost<L, unknown>, league: L, ledger: GmContractLedger, man: GmMan,
 ): DeskCase {
@@ -580,10 +587,7 @@ export function deskCase<L extends GmContractLeague>(
   const out: DeskCase = { man, cls, ask, maxYears: DESK_MAX_YEARS, canNegotiate: true };
   const floor = host.minSalary?.(league) ?? 0.5;
 
-  if (cls === 'fifth-year-option') {
-    const tier = OPTION_TIERS.find(t => man.ovr >= t.minOvr) ?? OPTION_TIERS[OPTION_TIERS.length - 1];
-    out.option = { years: NFL_OPTION_YEARS, salary: round1(Math.max(man.salary, ask.market * tier.share)) };
-  }
+  if (cls === 'fifth-year-option') out.option = nflOptionTerms(man, ask.market);
 
   if (host.sport === 'nba') {
     const club = league.teams[ledger.team];

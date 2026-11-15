@@ -15,9 +15,9 @@ export const nflContractHost: GmContractHost<LeagueState, OffseasonNews> = {
   marketSalary: (_league, man) => salaryFor(man.pos as GmPlayer['pos'], man.ovr),
   nextCap: league => Math.round(league.cap * NFL_DESK_CAP_RISE),
   runOffseason: (league, rng, team) => runOffseason(league, rng, team),
-  /* A man tagged for the coming season is under contract already. The engine
-     keeps him and the desk never sees him. */
-  held: (league, man) => (man as GmPlayer).tagSeason === league.season + 1,
+  /* A tag or exercised option already covers this offseason. */
+  held: (league, man) => (man as GmPlayer).tagSeason === league.season + 1
+    || (man as GmPlayer).fifthYearOption?.salary != null,
   minSalary: () => 1,
   /* The engine's own clearTag (frontOffice.ts, not exported): when a deal
      ends the tag and its guarantee end with it. The engine runs it on every

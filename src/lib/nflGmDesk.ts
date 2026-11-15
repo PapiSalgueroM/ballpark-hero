@@ -31,8 +31,8 @@
  */
 import { type GmDesk, type GmTileFace, freshGmDesk, gmBlock, withGmBlock } from './gmDesk';
 import {
-  type GmContractLedger, type GmDecision, autoDecide, expiringMen, isValidLedger, noteArrival, openLedger,
-  runDeskOffseason, undecided,
+  type GmContractLedger, type GmDecision, autoDecide, contractClass, expiringMen, isValidLedger, nflOptionTerms,
+  noteArrival, openLedger, runDeskOffseason, seasonsHere, undecided,
 } from './gmContracts';
 import { nflContractHost } from './gmContractsHostNfl';
 import {
@@ -51,7 +51,7 @@ import {
   gmScoutNoise, gmStaffEffect, gmStaffLevel, gmStatureAnchor, gmSummerWalk, gmTickStaff,
 } from './gmStaff';
 import { deadMoneyFor, tradeRefusal } from './frontOfficeCuts';
-import { NFL_ROOKIE_DEAL_YEARS } from './gmContractRules';
+import { NFL_OPTION_ROUND, NFL_ROOKIE_DEAL_YEARS } from './gmContractRules';
 import { NFL_STAFF_PACK, type NflStaffPost } from '@/data/gmStaff/packs';
 import {
   DEEP_ROSTER_MAX, NFL_ROSTER_MIN, REGULAR_WEEKS, capUsed, conferenceOf, conferenceSeeds, teamStrength, tradeValue,
@@ -309,8 +309,8 @@ const round1 = (n: number): number => Math.round(n * 10) / 10;
 
 /**
  * What his old club keeps on this season's cap when he is traded. Nothing
- * for a man on a guaranteed one year deal (the tag, the option year): there
- * is no bonus in it. Never more than a cut would leave this season.
+ * for a man on a guaranteed tag or rookie option: the salary moves with him.
+ * Never more than a cut would leave this season.
  */
 export function nflTradeDeadMoney(p: Pick<GmPlayer, 'salary' | 'years' | 'guaranteed'>): number {
   if (p.guaranteed) return 0;
@@ -453,8 +453,37 @@ export function nflProposePackage(league: LeagueState, desk: GmDesk, team: strin
 }
 
 /** Sign the four-year rookie deal during the draft. */
-export function nflSignDraftee(p: GmPlayer): void {
+export function nflSignDraftee(p: GmPlayer, round?: number): void {
   p.years = NFL_ROOKIE_DEAL_YEARS;
+  if (round === NFL_OPTION_ROUND) p.rookieOptionEligible = true;
+}
+
+/** The option is due at the third-season recap, while the fourth year is still on the rookie deal. */
+export function nflFifthYearCases(league: LeagueState, ledger: GmContractLedger, seasonOver: boolean) {
+  if (!seasonOver) return [];
+  return (league.teams[ledger.team]?.players ?? [])
+    .filter(player => {
+      const service = player.rookieSeason == null
+        ? seasonsHere(ledger, league, player) : league.season - player.rookieSeason + 1;
+      return player.years === 2 && service === 3
+        && (player.rookieOptionEligible || contractClass('nfl', ledger, league, player) === 'fifth-year-option');
+    })
+    .map(player => ({
+      player,
+      salary: player.fifthYearOption?.salary ?? nflOptionTerms(player, nflContractHost.marketSalary(league, player)).salary,
+    }));
+}
+
+export function nflDecideFifthYearOption(
+  league: LeagueState, ledger: GmContractLedger, playerId: string, exercise: boolean, seasonOver: boolean,
+): boolean {
+  const option = nflFifthYearCases(league, ledger, seasonOver).find(c => c.player.id === playerId);
+  if (!option || option.player.fifthYearOption) return false;
+  const { player, salary } = option;
+  player.rookieOptionEligible = true;
+  player.fifthYearOption = { season: league.season + 2, salary: exercise ? salary : null };
+  if (exercise) player.guaranteed = true;
+  return true;
 }
 
 /** Tell the re-sign ledger how men arrived: a trade or a signing in season, or the draft with its round. */
@@ -577,9 +606,11 @@ export function nflStaffTile(desk: GmDesk, league: LeagueState, team: string, on
 /** The re-sign box. It pulses once the deadline has passed and somebody is still waiting on you. */
 export function nflContractsTile(desk: GmDesk, league: LeagueState, team: string, seasonOver: boolean, on = true): GmTileFace {
   const up = expiringMen(nflContractHost, league, team);
+  const ledger = nflContractsOf(desk, league, team);
+  const options = nflFifthYearCases(league, ledger, seasonOver).filter(({ player }) => !player.fifthYearOption).length;
   /* Without the desk the summer still runs the engine's own offseason, so
      nobody is waiting on the GM until he opens it. */
-  if (!on) {
+  if (!on && !options) {
     return {
       icon: '✍️',
       value: up.length ? `${plural(up.length, 'deal')} end this spring` : 'Nobody expiring',
@@ -587,11 +618,10 @@ export function nflContractsTile(desk: GmDesk, league: LeagueState, team: string
       accent: false,
     };
   }
-  const ledger = nflContractsOf(desk, league, team);
-  const waiting = undecided(nflContractHost, league, ledger).length;
+  const waiting = options + (on ? undecided(nflContractHost, league, ledger).length : 0);
   return {
     icon: '✍️',
-    value: up.length ? `${plural(up.length, 'deal')} end this spring` : 'Nobody expiring',
+    value: options ? `${plural(options, 'fifth-year option')} due` : up.length ? `${plural(up.length, 'deal')} end this spring` : 'Nobody expiring',
     sub: waiting ? `${waiting} still waiting on you` : up.length ? 'Every call is made' : 'Nobody is out of contract this spring',
     accent: waiting > 0 && (seasonOver || !nflTradeWindow(league).open),
   };
