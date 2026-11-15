@@ -170,6 +170,7 @@
         "A slot takes a player who plays there or right beside it: full backs and wing backs cover each other, wingers count on both flanks, CM covers CDM and CAM, strikers cover each other. A keeper only ever goes in goal.",
         "No duplicate players across your XI.",
         "In review, replace any starter from the original club or nation draw. The same position and recorded dates apply, and your first pick stays until the new one is verified.",
+        "Open Browse players and use Next to page through the whole player pool for the draw. You can still search by name.",
         "Chemistry: two players standing next to each other on the pitch who are at the same club on our data add +0.6 to the side, from the same country +0.2, up to +2 in all.",
         "Mixed uses its offline backup if the AI cannot respond. Club year draft uses the selected records instead.",
         "Role fit: a player in a slot his recorded positions cover plays at full value. Next door, like a right back at left back, costs 2 rating points on him, averaged over the eleven. The slot check never lets anyone further out of position than that.",
@@ -2718,6 +2719,8 @@
         "Get drafted by a real club; your slot reflects your starting ability.",
         "Check the lineup. Top ten skaters step straight in; everyone else fights the incumbent in camp every fall. Goalies always apprentice first, because no rookie walks into a number one crease.",
         "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
+        "Select Week by week to watch simulated regular-season games built from your saved totals. Open a finished fixture for its game report and any OVR change. You can also replay older seasons through the Regular season tab in Career Log.",
+        "The current 84-game schedule uses the verified opponent and home and away counts. Other saved schedules keep their original length and can use unnamed opponents.",
         "Starting goalies can choose Share the crease before playing a season. Camp still decides who starts. Sharing gives about 20% fewer planned starts and a 20% lower simulated injury chance. For example, the usual draw of 60 starts becomes 48 before injuries. Career Log keeps the plan and actual starts for that year.",
         "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
         "Face up to three offseason decisions each year, one card at a time: training, trade requests, media noise. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
@@ -2744,6 +2747,7 @@
       ],
       "example": [
         "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.",
+        "A skater scores once and assists twice in a simulated 4 to 2 win. The game report shows three points. A goalie who saves 27 of 30 shots gets a .900 save percentage for that game. Across all starts, the reconstructed shot totals match the save percentage on your season card.",
         "Say your Sniper winger goes 23rd overall to a rebuilding club. Year one is 24 goals and silence. At 23 you erupt for 47 with an All-Star nod, but the losing wrecks your morale, so you force a trade to a contender.",
         "At 27 you win the Cup. The legs go at 33, you switch to maintenance summers, grab two more years and retire at 38: one Cup, six All-Star nods, a franchise icon verdict. The Hall says not quite.",
         "Your rival gets away with a cheap shot after the whistle, no call, and the card asks what you do about it. Settle it next game heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets the penalty (Morale -5, Fanbase -5, Net worth -$100k). Shrug it off on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the tape: Morale +6, the feud heats up, and those six points ride into next season's line."
@@ -3509,7 +3513,7 @@
         "From halftime until 75 minutes in a watched league match, you can choose one second-half plan. Protect lowers both clubs' scoring chances by 20 percent for the rest of the match. Push raises both by 20 percent. Choose Protect to hold a one-goal lead or keep playing to stay balanced. Latest season keeps any plan you used alongside the recorded score.",
         "Win your league to climb the divisions. Each division is a small league of named rival clubs with a table on the League tab, and only the champion goes up. Every division multiplies all income up to five and a half times, each promotion pays a bonus on the spot, and higher divisions send tougher opponents.",
         "Before your first league match finishes, open Season sponsorship in League. Pick the fixed fee or earn cash for each watched or away matchday that reaches the crowd target at full time. A small crowd makes the fixed fee safer, while regular sellouts can make the crowd deal pay more. Both pay when the season ends.",
-        "Open Latest season in the League tab to see your final table and recorded match scores after reload. If you win the Muddy Meadows League, for example, you can reopen its table while playing in Gravel Lane. The next completed season replaces it, and selling up clears it with the rest of the ground's league.",
+        "Open Latest season in the League tab and choose a completed season. The report keeps its final table, recorded match scores and sponsorship payout. If you win the Muddy Meadows League, for example, you can reopen its table while playing in Gravel Lane. Recorded seasons stay with this ground until you sell up.",
         "Hire from the payroll: eight staff from a Turnstile Steward to a Club Legend Ambassador, each level adding steady income of its own before the multipliers touch it.",
         "Catch the golden whistle when it drifts onto the pitch. You get about twelve seconds, and it carries one of five prizes, from seven times the income to fifteen minutes of income in one lump.",
         "Open a penalty or free-kick offer during a watched match. You have twelve seconds to open it, then choose your aim, power and curve while the match clock keeps running. Opening uses that match's one attempt, even if you leave or reload.",

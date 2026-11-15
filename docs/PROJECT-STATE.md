@@ -1,3 +1,10 @@
+## 2026-11-14: Full player browse, hockey replays and Origin workload
+
+- Build Your XI can browse every available player for the selected draw in 50-player pages. The same club, nation and season eligibility applies when swapping a starter. Search by name still works.
+- NHL My Career can replay every regular-season game through Season Center and Career Log. Simulated three-period reports reconcile to the saved skater or goalie totals and show saved rating checkpoints when available. Historical schedules use unnamed opponents where the saved calendar cannot support names.
+- NRL Team Manager can let State of Origin starters spend fitness from their active club roster. The Origin report names the affected players and points to the next scheduled club match. The player chooses this rule during Origin setup.
+- Stadium Tycoon keeps earlier completed season reports for the same ground, including the club name used at the time, final ladder, results, plans and sponsor payment. Selling up starts a new ground's history.
+
 ## 2026-11-14: Search by sport, player career reports and deeper front offices
 
 [PR #970](https://github.com/PapiSalgueroM/ballpark-hero/pull/970) published exact main `6b3841087af5827cb83293427516425ad8d02ff9`, deployment `ca2efac9-8440-4e71-8f99-e6585ba0f30d`, canonical entry `/assets/index-D2_ECAqd.js`. Thirteen live browser journeys, all five raw game guides, all 174 sitemap routes and seven policy and crawler endpoints passed. IndexNow accepted the five updated guides. The build, application types, 96 focused tests, all 18 site checks and all 16 measured download budgets passed. Home import recovery passed its ten scenarios and the rejected-import control. All 22 old career layouts matched the exact #969 source in a paired comparison. The historical markup fixture already differed on #969.
