@@ -27,6 +27,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
             heading: "What each upgrade tile does",
             items: [
               "Buy upgrades from the nine tiles: Stands add seats, Ticket Office, Snack Bar and Club Shop raise what each fan spends, Parking pays flat money, Floodlights and Academy grow the fanbase, Squad wins matches, Megaphone boosts taps.",
+              "Schedule one Stands level for 20% less. Pay upfront and use the old capacity for two more matches. The new seats open after the second full-time, including matches played while you are away.",
             ],
           },
         ],
