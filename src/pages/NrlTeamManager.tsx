@@ -25,7 +25,7 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlBenchRotation, nrlCanOpenInterchange, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
-  nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlNextRound, nrlOnFieldCaptain,
+  nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlNextRound, nrlOnFieldCaptain, nrlOpeningCoverOptions,
   nrlQuickInterchangeOptions, nrlQuickInterchangeOutcome, nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlGoldenPointApproach, type NrlHalftimeTalk, type NrlKickingPlan, type NrlLatePenaltyApproach, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlQuickInterchange, type NrlRole, type NrlTactic,
@@ -745,6 +745,9 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
   const injuredName = injury && season.squad.find(player => player.id === injury.playerId)?.name;
   const recoveredName = match.individualRecoveryId && season.squad.find(player => player.id === match.individualRecoveryId)?.name;
   const captainName = match.captainId && season.squad.find(player => player.id === match.captainId)?.name;
+  const openingCover = match.openingCover;
+  const openingReserve = openingCover && season.squad.find(player => player.id === openingCover.reserveId);
+  const openingStarter = openingCover && season.squad.find(player => player.id === openingCover.starterId)?.name;
   const interchanges = [match.halftimeInterchange, match.secondHalftimeInterchange];
   const late = match.minute60Interchange;
   const lateReserve = late && season.squad.find(player => player.id === late.reserveId);
@@ -860,6 +863,9 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
       {usedReserves.length > 0 && <div className="mt-3 text-sm" data-nrl-interchange>
         <h4 className="font-semibold">Interchange used</h4>
         <p className="text-muted-foreground">{usedReserves.join(", ")}</p>
+        {openingReserve?.secondaryRole && openingStarter && <p className="mt-1 text-muted-foreground" data-nrl-opening-cover-result>
+          {openingReserve.name} covered {openingStarter} at {openingReserve.secondaryRole} in the opening rotation.
+        </p>}
         {interchanges.map(change => {
           if (!change) return null;
           const reserve = season.squad.find(player => player.id === change.reserveId)?.name;
@@ -1140,6 +1146,7 @@ function ReserveRotationList({ label, season, heldReserveId }: {
   label: string; season: NrlManagerState; heldReserveId?: string;
 }) {
   const rotation = nrlBenchRotation(season, heldReserveId);
+  const roles = new Map(NRL_ROLES.map(role => [season.lineup[role], role]));
   return (
     <div className="min-w-0">
       <p className="mb-1 font-semibold">{label}</p>
@@ -1149,7 +1156,7 @@ function ReserveRotationList({ label, season, heldReserveId }: {
             <li key={reserve.id} data-nrl-rotation-reserve={reserve.id} className="break-words py-1">
               <span className="font-medium">{reserve.name}</span>
               <span className="block text-xs text-muted-foreground">
-                {reserve.role} · covers {season.squad.find(player => player.id === starterId)?.name}
+                {roles.get(starterId)} · covers {season.squad.find(player => player.id === starterId)?.name}
               </span>
             </li>
           ))}
@@ -1323,6 +1330,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
     ? season.squad.find(player => player.id === season.viceCaptainId)?.name : undefined;
   const holdable = canPlayLive ? nrlHoldableReserves(season) : [];
   const namedReserves = canPlayLive ? nrlBench(season) : [];
+  const openingCovers = canPlayLive ? nrlOpeningCoverOptions(season) : [];
   const heldReserve = hold?.year === year && hold.round === season.round ? holdable.find(player => player.id === hold.reserveId) : undefined;
   const selectedHold = heldReserve ? hold : undefined;
   const opponent = match ? shortName(year, match.homeId === clubId ? match.awayId : match.homeId) : null;
@@ -1519,6 +1527,21 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
                   })}
                 </select>
                 <p id="nrl-first-reserve-help" className="mt-1 text-xs text-muted-foreground">This swaps the selected reserve with the first one on your bench.</p>
+              </>
+            )}
+            {openingCovers.length > 0 && (
+              <>
+                <label htmlFor="nrl-opening-cover" className="mt-3 block text-sm font-semibold">Trained opening cover</label>
+                <select id="nrl-opening-cover" value={season.openingCoverId ?? ''} aria-describedby="nrl-opening-cover-help" disabled={disabled}
+                  className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  onChange={event => onAction({ type: 'setOpeningCover', year, clubId, round: season.round, reserveId: event.target.value || null })}>
+                  <option value="">Use primary positions</option>
+                  {openingCovers.map(({ reserve, role }) =>
+                    <option key={reserve.id} value={reserve.id}>{reserve.name} · {role}</option>)}
+                </select>
+                <p id="nrl-opening-cover-help" className="mt-1 text-xs text-muted-foreground">
+                  Give one trained reserve the first spell at their second position. It uses a regular interchange spot in Quick Sim and Live.
+                </p>
               </>
             )}
             {(season.openInterchange || nrlCanOpenInterchange(season)) && (
@@ -2613,6 +2636,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Before kick-off, open Hold one reserve for later to see the Quick Sim rotation and compare it with the Live rotation when you hold someone.</li>
               <li>Before a regular-season away match, book one recovery session per season from Preparation. It costs $120,000 from club cash and adds up to eight fitness points at kickoff.</li>
               <li>Use First reserve in the rotation preview to change who gets first priority. It swaps two places on your named bench.</li>
+              <li>Before a regular-season match, use Trained opening cover to give one named reserve an opening spell at their second position. It uses a regular interchange spot.</li>
               <li>Leave the fourth interchange open to rotate three reserves early. In Quick Sim, choose a reserve to come on at 60 minutes when ahead or behind. The report shows whether they came on.</li>
               <li>At 60 minutes in Live, an unused reserve can cover their trained position if the slot is open.</li>
               <li>Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation. Positional matchups shows the ratings behind the middle and wide plans.</li>

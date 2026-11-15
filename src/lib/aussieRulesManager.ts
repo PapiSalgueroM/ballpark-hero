@@ -139,7 +139,7 @@ export function tacticEdge(tactic: Tactic, against: Tactic): number {
   if (tactic === against) return 0;
   return (tactic === 'control' && against === 'direct') || (tactic === 'direct' && against === 'pressure') || (tactic === 'pressure' && against === 'control') ? 9 : -9;
 }
-function strength(club: Club, ids: string[]): number { return ids.reduce((sum, id) => sum + effectiveSkill(club.players.find(player => player.id === id)!), 0) / ids.length; }
+export function lineupStrength(club: Club, ids: string[]): number { return ids.reduce((sum, id) => sum + effectiveSkill(club.players.find(player => player.id === id)!), 0) / ids.length; }
 function scoreFor(events: ScoringEvent[], clubId: string): Score {
   const goals = events.filter(event => event.clubId === clubId && event.kind === 'goal').length;
   const behinds = events.filter(event => event.clubId === clubId && event.kind === 'behind').length;
@@ -150,8 +150,8 @@ function scoreFor(events: ScoringEvent[], clubId: string): Score {
 export function quarter<C extends Club>(clubs: C[], match: Match, seed: number, homeIds: string[], awayIds: string[], homeTactic: Tactic, awayTactic: Tactic, minutes = 20): { clubs: C[]; match: Match } {
   const home = clubs.find(club => club.id === match.homeId)!;
   const away = clubs.find(club => club.id === match.awayId)!;
-  const homeStrength = strength(home, homeIds) + tacticEdge(homeTactic, awayTactic);
-  const awayStrength = strength(away, awayIds) + tacticEdge(awayTactic, homeTactic);
+  const homeStrength = lineupStrength(home, homeIds) + tacticEdge(homeTactic, awayTactic);
+  const awayStrength = lineupStrength(away, awayIds) + tacticEdge(awayTactic, homeTactic);
   const rng = rngFrom(hashLabel(`${seed}|${match.round}|${match.homeId}|${match.awayId}|${match.quarter}`));
   const events = [...match.events];
   for (let minute = 1; minute <= minutes; minute += 1) {

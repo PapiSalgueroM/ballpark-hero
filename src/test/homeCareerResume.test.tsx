@@ -3,12 +3,28 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ContinueRow } from '@/components/home/ContinueRow';
 import { FeaturedStage } from '@/components/home/FeaturedStage';
+import { clubEraClubs, clubTableNames } from '@/data/lineupTeams';
+import { FORMATIONS } from '@/types/lineupBuilder';
 
 vi.mock('@/components/home/art/HomeArt', () => ({ default: () => null }));
 
 const soccer = 'soccerCareerSave';
 const nrl = 'nrl-manager-save-v1-slot-2';
+const xi = 'dukb-build-your-xi-draft-v1';
 const example = '{"currentClub":"Arsenal","age":23}';
+
+function legacyXi(count: number, year = 2012) {
+  const formation = '4-4-2';
+  const teamAssignments = clubEraClubs.slice(0, 11).map(name => ({ name, isNation: false }));
+  return JSON.stringify({
+    formation, draftChoice: { mode: 'club-era', year: 2008 }, teamAssignments,
+    slots: FORMATIONS[formation].slice(0, count).map((slot, index) => {
+      const club = teamAssignments[index].name, playerName = 'Fixture Draft Pick ' + index;
+      return [index, { ...slot, playerName, assignedTeam: club, isNation: false,
+        pick: { rawName: playerName, rawPosition: slot.role, club: clubTableNames(club)[0], year } }];
+    }),
+  });
+}
 
 function mount() {
   render(<MemoryRouter><FeaturedStage /><ContinueRow /></MemoryRouter>);
@@ -81,5 +97,32 @@ describe('Home career resume links', () => {
     expect(oldCareer).not.toBeInTheDocument();
     expect(otherCareer).toHaveFocus();
     expect(localStorage.getItem(nrl)).toBe(second);
+  });
+
+  it('links to an older XI draft with its recorded progress and follows completion', () => {
+    const started = legacyXi(1);
+    localStorage.setItem(xi, started);
+    mount();
+    expect(screen.getByRole('link', { name: /Build Your XI.*4-4-2.*1\/11 picked/ })).toHaveAttribute('href', '/build-your-xi');
+    expect(localStorage.getItem(xi)).toBe(started);
+
+    const reviewing = legacyXi(11);
+    localStorage.setItem(xi, reviewing);
+    announce(xi, reviewing);
+    expect(screen.getByRole('link', { name: /Build Your XI.*11\/11 picked/ })).toHaveAttribute('href', '/build-your-xi');
+    expect(localStorage.getItem(xi)).toBe(reviewing);
+    localStorage.removeItem(xi);
+    announce(xi);
+    expect(screen.queryByRole('heading', { name: 'Continue playing' })).not.toBeInTheDocument();
+  });
+
+  it('leaves the Home shelf hidden for empty, corrupt and out-of-range XI drafts', () => {
+    mount();
+    for (const raw of [legacyXi(0), '{damaged', legacyXi(1, 2013)]) {
+      localStorage.setItem(xi, raw);
+      announce(xi, raw);
+      expect(screen.queryByRole('heading', { name: 'Continue playing' })).not.toBeInTheDocument();
+      expect(localStorage.getItem(xi)).toBe(raw);
+    }
   });
 });

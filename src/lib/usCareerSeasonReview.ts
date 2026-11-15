@@ -48,7 +48,8 @@ export function mlbSeasonReview(s: MlbSeasonLine, pos: MlbCareerPos): CareerRevi
   const regular = pos === 'SP'
     ? [number('Wins', s.wins), number('Losses', s.lossesP), number('ERA', s.era, 2), number('Strikeouts', s.so)]
     : pos === 'RP'
-      ? [number('Saves', s.saves), number('Holds', s.holds), number('ERA', s.era, 2), number('Strikeouts', s.so)]
+      ? [number('Saves', s.saves), number('Holds', s.holds), number('ERA', s.era, 2), number('Strikeouts', s.so),
+        number('Wins', s.wins), number('Losses', s.lossesP)]
       : [number('Batting average', s.avg, 3), number('Home runs', s.hr), number('Runs batted in', s.rbi), number('Stolen bases', s.sb), number('On base percentage', s.obp, 3), number('Doubles', s.doubles)];
   const bullpenRole = pos === 'RP' && (s.bullpenRole === 'closer' || s.bullpenRole === 'setup')
     ? [text('Bullpen role', s.bullpenRole === 'closer' ? 'Closer' : 'Setup')] : [];

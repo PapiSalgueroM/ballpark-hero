@@ -60,6 +60,18 @@ function assertPosition(fixture: ReviewFixture) {
   expect(stats()).toEqual(fixture.postseason);
   unmount();
 }
+
+it('shows missing reliever decisions as unrecorded and a recorded zero as zero', () => {
+  const fixture = reviewFixtures.find(row => row.slug === 'mlb' && row.pos === 'RP')!;
+  const career = makeReviewCareer(fixture);
+  Object.assign(career.seasons[1], { wins: undefined, lossesP: 0 });
+  const before = JSON.stringify(career);
+  mountReview(fixture, career);
+  choose(1);
+  click('Regular season');
+  expect(stats()).toMatchObject({ Wins: 'Not recorded', Losses: '0' });
+  expect(JSON.stringify(career)).toBe(before);
+});
 beforeEach(() => {
   localStorage.clear();
   vi.clearAllMocks();

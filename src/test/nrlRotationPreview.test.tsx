@@ -162,3 +162,49 @@ it('saves the selected fourth-reserve rule and reopens the actual Quick Sim outc
   fireEvent(report, new Event('toggle'));
   expect(within(report).getByText(receipt)).toBeVisible();
 });
+
+it.each(['Quick Sim', 'Play Live'])('reloads trained opening cover and keeps its report in %s', action => {
+  const reserveId = 'storm-5-1';
+  const clubId = 'storm', year = 2026;
+  let career = createNrlCareer(clubId, 88, year);
+  career = reduceNrlCareer(career, { type: 'startPositionTraining', year, clubId, round: 1, playerId: reserveId, role: 'Fullback' });
+  for (let i = 0; i < 4; i++) career = reduceNrlCareer(career, { type: 'advance' });
+  career = reduceNrlCareer(career, { type: 'selectBench', slot: 0, playerId: reserveId });
+
+  const { season } = career;
+  const starterId = season.lineup.Fullback;
+  const nameOf = (id: string) => season.squad.find(player => player.id === id)!.name;
+  const save = () => readNrlCareerSave(localStorage.getItem(NRL_SAVE_KEY))!;
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(career));
+  localStorage.setItem(fenceKeyOf(NRL_SAVE_KEY), '4');
+  const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const open = () => {
+    const details = screen.getByText('Hold one reserve for later').closest('details')!;
+    details.open = true;
+    return within(details);
+  };
+  const view = show();
+  const picker = open().getByLabelText('Trained opening cover');
+  expect(picker).toHaveValue('');
+  fireEvent.change(picker, { target: { value: reserveId } });
+  expect(save().season.openingCoverId).toBe(reserveId);
+  view.unmount();
+  show();
+  const preview = open();
+  expect(preview.getByLabelText('Trained opening cover')).toHaveValue(reserveId);
+  const list = preview.getByRole('list', { name: 'Quick Sim rotation' });
+  const first = within(list).getAllByRole('listitem')[0];
+  expect(first).toHaveTextContent(nameOf(reserveId));
+  expect(first).toHaveTextContent('Fullback · covers ' + nameOf(starterId));
+  fireEvent.click(screen.getByRole('button', { name: action }));
+  if (action === 'Play Live') fireEvent.click(screen.getByRole('button', { name: 'Play second half' }));
+  expect(save().season.openingCoverId).toBeUndefined();
+  const receipt = nameOf(reserveId) + ' covered ' + nameOf(starterId) + ' at Fullback in the opening rotation.';
+  expect(screen.getByText(receipt)).toBeVisible();
+  fireEvent.click(screen.getByText('Season fixtures', { exact: true }));
+  const summary = screen.getByText('Round 5 match report', { exact: true });
+  const report = summary.closest('details')!;
+  fireEvent.click(summary);
+  fireEvent(report, new Event('toggle'));
+  expect(within(report).getByText(receipt)).toBeVisible();
+});

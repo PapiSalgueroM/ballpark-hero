@@ -1,4 +1,13 @@
+## 2026-11-15: Opening lineups, Home resume and saved pitching decisions
+
+- Home's Continue playing shelf includes a valid unfinished Build Your XI draft after the first accepted pick. The card shows the formation and pick count and opens the saved lineup.
+- Aussie Rules Manager previews the starting eighteen's strength and average fatigue for Train and Rest. The numbers use the same preparation and strength calculations as the first quarter, before tactics.
+- MLB My Career shows saved relief pitching wins and losses in the season review. Supported replays also show the running record, and older seasons with only a season total keep it in Career Log.
+- A trained NRL reserve can cover their learned role in the opening rotation. The choice uses the existing interchange budget, shifts which starter gets relief and appears in the saved match report.
+
 ## 2026-11-15: Draft save protection, cup ratings and late penalty choices
+
+[PR #982](https://github.com/PapiSalgueroM/ballpark-hero/pull/982) published exact main `79b273ceea2e631f6b8652fed37c4d16ec5f78e6`, deployment `94c4ab20-bb7f-4e1f-a107-71d119b5fe3b`, canonical entry `/assets/index-BltsJXHV.js`. All 11 live browser checks, all 174 sitemap routes, seven policy and crawler endpoints, both admin noindex tags and the updated NRL guide passed. The admin checks used fixture accounts and reports and blocked external writes. IndexNow accepted the NRL guide. Hosted application types and build passed. Locally, 231 focused tests, 18 site checks, 16 download limits and Home navigation passed. The broader Career gameplay workflow failed in font setup and on two historical source anchors.
 
 - Build Your XI saves a pick or reroll before advancing the visible draft. If another tab has already saved progress, the older tab keeps its current lineup and asks the player to reload the winning draft.
 - Soccer Career shows estimated overall at saved cup fixtures in the calendar and match reports. It reads the season's saved development checkpoints. Older saves without checkpoints show that the rating was unavailable.

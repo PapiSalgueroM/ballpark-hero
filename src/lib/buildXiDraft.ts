@@ -1,10 +1,12 @@
-import { clubs, nations, clubYearClubs, clubEraClubs } from '@/data/lineupTeams';
-import { ALL_POSITIONS } from '@/lib/positionFit';
+import { clubs, nations, clubYearClubs, clubEraClubs, CLUB_TABLE_NAMES, clubEraAdditionalNames } from '@/data/lineupTeams';
+import { ALL_POSITIONS, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionFit';
 import { safeLocalStorage } from '@/lib/safeStorage';
+import { normalizePosition } from '@/lib/squadShape';
+import type { Position } from '@/types/game';
 import { FORMATIONS, lastRecordedYear } from '@/types/lineupBuilder';
-import type { DraftChoice, FilledSlot, Formation, PickMeta, TeamAssignment } from '@/types/lineupBuilder';
+import type { DraftChoice, FilledSlot, Formation, PickMeta, RecordedClubDraft, TeamAssignment } from '@/types/lineupBuilder';
 
-const DRAFT_KEY = 'dukb-build-your-xi-draft-v1';
+export const BUILD_XI_DRAFT_KEY = 'dukb-build-your-xi-draft-v1';
 
 type Draft = {
   formation: Formation;
@@ -33,6 +35,27 @@ function isPickMeta(value: unknown): value is PickMeta {
     && (value.position === undefined || ALL_POSITIONS.some(position => position === value.position))
     && (value.played === undefined || (Array.isArray(value.played)
       && value.played.every(role => ALL_POSITIONS.some(position => position === role))));
+}
+
+/**
+ * A matching club record settles membership when the slot and the player's
+ * position are known. Some records list two clubs in one season.
+ */
+export function clubPickVerifies(team: TeamAssignment, slotRole: Position, pick: PickMeta | undefined): boolean {
+  if (team.isNation || !pick?.club || !pick.rawPosition) return false;
+  if (!SLOT_ALLOWED_BY_ROLE[slotRole]) return false;
+  if (!normalizePosition(pick.rawPosition.trim())) return false;
+  const stored = CLUB_TABLE_NAMES[team.name] ?? clubEraAdditionalNames[team.name];
+  if (!stored) return false;
+  return pick.club.split(' / ').map(part => part.trim()).some(part => stored.includes(part));
+}
+
+export function recordedPickVerifies(team: TeamAssignment, role: Position, pick: PickMeta | undefined, draft: RecordedClubDraft): boolean {
+  return typeof pick?.year === 'number' && Number.isInteger(pick.year)
+    && pick.year >= draft.year && pick.year <= lastRecordedYear(draft)
+    && typeof pick?.rawName === 'string' && Boolean(pick.rawName.trim())
+    && typeof pick.club === 'string' && typeof pick.rawPosition === 'string'
+    && clubPickVerifies(team, role, pick);
 }
 
 function readDraft(value: unknown): Draft | null {
@@ -67,25 +90,31 @@ function readDraft(value: unknown): Draft | null {
     }]);
   }
   if (new Set(slots.map(([index]) => index)).size !== slots.length) return null;
+  if (draftChoice.mode !== 'mixed' && slots.some(([, slot], pickIndex) =>
+    !recordedPickVerifies(assignments[pickIndex], slot.role, slot.pick, draftChoice))) return null;
   return { formation, draftChoice, teamAssignments: assignments, slots };
 }
 
-export function loadBuildXiDraft(): { raw: string | null; draft: Draft | null } {
-  const raw = safeLocalStorage.getItem(DRAFT_KEY);
+export function readBuildXiDraft(raw: string | null): Draft | null {
   try {
-    return { raw, draft: raw ? readDraft(JSON.parse(raw)) : null };
+    return raw ? readDraft(JSON.parse(raw)) : null;
   } catch {
-    return { raw, draft: null };
+    return null;
   }
 }
 
+export function loadBuildXiDraft(): { raw: string | null; draft: Draft | null } {
+  const raw = safeLocalStorage.getItem(BUILD_XI_DRAFT_KEY);
+  return { raw, draft: readBuildXiDraft(raw) };
+}
+
 export function isCurrentBuildXiDraft(previous: string | null): boolean {
-  return safeLocalStorage.getItem(DRAFT_KEY) === previous;
+  return safeLocalStorage.getItem(BUILD_XI_DRAFT_KEY) === previous;
 }
 
 export function writeBuildXiDraft(previous: string | null, next: string | null): boolean {
   if (!isCurrentBuildXiDraft(previous)) return false;
-  if (next === null) safeLocalStorage.removeItem(DRAFT_KEY);
-  else safeLocalStorage.setItem(DRAFT_KEY, next);
+  if (next === null) safeLocalStorage.removeItem(BUILD_XI_DRAFT_KEY);
+  else safeLocalStorage.setItem(BUILD_XI_DRAFT_KEY, next);
   return true;
 }
