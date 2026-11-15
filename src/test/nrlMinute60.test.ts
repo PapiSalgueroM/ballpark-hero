@@ -93,6 +93,42 @@ describe('NRL 60-minute tactical check', () => {
     expect(raw(readNrlCareerSave(raw(settled)))).toBe(raw(settled));
   });
 
+  it('files only regulation scoring at the Golden Point choice and records regulation and extra time separately', () => {
+    const frame = { year: 2026, round: 1, clubId: 'broncos', tactic: 'balanced' } as const;
+    const half = start(createNrlCareer(frame.clubId, 690));
+    const mid = finish(half, { type: 'reachMinute60', ...frame });
+    const paused = finish(mid, { type: 'finishMinute60', ...frame, fieldGoalPlan: true, pauseForGoldenPoint: true });
+    const score = (tries: number, conversions: number, penalties = 0, longFieldGoals = 0) => ({
+      tries, conversions, penalties, fieldGoals: 0, longFieldGoals,
+    });
+    const regulation = [score(2, 2, 0, 1), score(2, 2, 1)];
+    expect(paused.season.live?.goldenPoint?.regulation).toEqual(regulation);
+    const restored = readNrlCareerSave(raw(paused))!;
+    expect(raw(restored)).toBe(raw(paused));
+    const older = structuredClone(paused);
+    delete older.season.live!.goldenPoint!.regulation;
+    expect(raw(readNrlCareerSave(raw(older)))).toBe(raw(older));
+    const forged = structuredClone(paused);
+    forged.season.live!.goldenPoint!.regulation![1].fieldGoals = 1;
+    expect(readNrlCareerSave(raw(forged))).toBeNull();
+
+    const settled = finish(restored, { type: 'settleGoldenPoint', ...frame, approach: 'standard' });
+    const report = settled.season.results.find(result => result.playerScoring)!;
+    expect(report.phaseScoring).toEqual({
+      halfTime: [score(1, 1), score(1, 1)],
+      at60: [score(2, 2), score(2, 2)],
+      regulation,
+    });
+    expect(report.awayScoring.fieldGoals).toBe(1);
+    expect(raw(readNrlCareerSave(raw(settled)))).toBe(raw(settled));
+    const badReport = structuredClone(settled);
+    badReport.season.results.find(row => row.playerScoring)!.phaseScoring!.at60![1].tries = 0;
+    expect(readNrlCareerSave(raw(badReport))).toBeNull();
+    const quick = finish(createNrlCareer(frame.clubId, 690), { type: 'advance' }).season.results.find(row => row.playerScoring)!;
+    expect(quick.phaseScoring?.halfTime).toEqual(report.phaseScoring?.halfTime);
+    expect(quick.phaseScoring).not.toHaveProperty('at60');
+  });
+
   it('previews the selected phase with the real lineup, team talk and late field-goal tradeoff', () => {
     const clubId = 'broncos';
     const kickoff = createNrlCareer(clubId, 1, 2026);

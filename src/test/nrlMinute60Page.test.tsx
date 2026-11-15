@@ -155,6 +155,69 @@ it('offers the named starter after reload and retains the return in the archived
   expect(localStorage.getItem(fence)).toBe('5');
 });
 
+it('shows only completed phases and confirmed interchanges until Golden Point is played', () => {
+  const half = reduceNrlCareer(createNrlCareer('broncos', 11), { type: 'startLive' });
+  const interchange = nrlHalftimeInterchanges(half.season)[0];
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(half));
+  localStorage.setItem(fence, '4');
+  const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const row = (name: RegExp) => within(screen.getByRole('region', { name: 'Match timeline' })).getByRole('row', { name });
+  let view = show();
+  expect(row(/^First half/)).toHaveTextContent('1 try');
+  expect(screen.queryByRole('row', { name: /40 to 60 min|60 to 80 min|Golden point/ })).toBeNull();
+  fireEvent.click(screen.getByText('Keep a reserve on', { exact: true }));
+  fireEvent.change(screen.getByLabelText('Reserve to finish the match'), { target: { value: interchange.reserveId } });
+  fireEvent.click(screen.getByRole('button', { name: 'Play to 60 minutes' }));
+  expect(row(/^40 to 60 min/)).toHaveTextContent('2 tries, 1 conversion');
+  expect(screen.getByText('Arlo Vale stayed on for Tama Dawson at half time.')).toBeVisible();
+  expect(screen.queryByRole('row', { name: /60 to 80 min|Golden point/ })).toBeNull();
+
+  view.unmount();
+  view = show();
+  expect(row(/^40 to 60 min/)).toHaveTextContent('2 tries, 1 conversion');
+  fireEvent.change(screen.getByRole('combobox', { name: 'Late interchange choice' }), {
+    target: { value: 'return:' + interchange.starterId },
+  });
+  expect(screen.queryByText('Tama Dawson returned for Arlo Vale at 60 minutes.')).toBeNull();
+  fireEvent.click(screen.getByRole('button', { name: 'Play final 20 minutes' }));
+  expect(row(/^60 to 80 min/)).toHaveTextContent('2 tries, 1 conversion');
+  expect(screen.getByText('Tama Dawson returned for Arlo Vale at 60 minutes.')).toBeVisible();
+  expect(screen.queryByRole('row', { name: /Golden point/ })).toBeNull();
+  const paused = localStorage.getItem(NRL_SAVE_KEY);
+  view.unmount();
+  view = show();
+  expect(row(/^60 to 80 min/)).toHaveTextContent('2 tries, 1 conversion');
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(paused);
+  expect(screen.queryByRole('row', { name: /Golden point/ })).toBeNull();
+
+  fireEvent.click(screen.getByRole('button', { name: 'Play standard' }));
+  expect(row(/^Golden point/)).toHaveTextContent('1 field goal');
+  expect(screen.queryByRole('table', { name: 'Score by period' })).toBeNull();
+  const settled = localStorage.getItem(NRL_SAVE_KEY);
+  view.unmount();
+  const archive = () => {
+    fireEvent.click(screen.getByText('Season fixtures', { exact: true }));
+    const summary = screen.getByText('Round 1 match report', { exact: true });
+    const report = summary.closest('details')!;
+    fireEvent.click(summary);
+    fireEvent(report, new Event('toggle'));
+    return within(report);
+  };
+  view = show();
+  expect(archive().getByRole('row', { name: /^Golden point/ })).toHaveTextContent('1 field goal');
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(settled);
+  view.unmount();
+
+  const older = JSON.stringify(JSON.parse(settled!), (key, value) => key === 'phaseScoring' ? undefined : value);
+  localStorage.setItem(NRL_SAVE_KEY, older);
+  show();
+  const olderReport = archive();
+  expect(olderReport.getByRole('table', { name: 'Score by period' })).toBeVisible();
+  expect(olderReport.queryByRole('region', { name: 'Match timeline' })).toBeNull();
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(older);
+});
+
 it('reopens a 60-minute save and uses the pending reserve only when play resumes', () => {
   const start = createNrlCareer('broncos', 1, 2026);
   const reserve = nrlHoldableReserves(start.season)[0];

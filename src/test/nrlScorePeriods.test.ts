@@ -16,8 +16,10 @@ describe('NRL score by period', () => {
       halfTime: [nrlScorePoints(homeScoring), nrlScorePoints(awayScoring)],
       regulation: [22, 8],
     });
-    expect(managed(reduceNrlCareer(live, { type: 'finishLive', year: 2026, round: 1, tactic: 'balanced' }))).toEqual(quick);
-    expect(settled.season.results.filter(match => match !== quick).every(match => match.scorePeriods === undefined)).toBe(true);
+    const watched = managed(reduceNrlCareer(live, { type: 'finishLive', year: 2026, round: 1, tactic: 'balanced' }));
+    expect(watched).toEqual(quick);
+    expect(quick.phaseScoring).toEqual({ halfTime: [homeScoring, awayScoring], regulation: [quick.homeScoring, quick.awayScoring] });
+    expect(settled.season.results.filter(match => match !== quick).every(match => !match.scorePeriods && !match.phaseScoring)).toBe(true);
   });
 
   it('keeps the paused scores and separates 80 minutes from golden point', () => {
@@ -39,7 +41,7 @@ describe('NRL score by period', () => {
     expect(JSON.stringify(readNrlCareerSave(JSON.stringify(result)))).toBe(JSON.stringify(result));
 
     const usePeriods = (scorePeriods: unknown) => JSON.stringify({ ...result, season: { ...result.season,
-      results: result.season.results.map(fixture => fixture === match ? { ...match, scorePeriods } : fixture) } });
+      results: result.season.results.map(fixture => fixture === match ? { ...match, scorePeriods, phaseScoring: undefined } : fixture) } });
     expect(JSON.stringify(readNrlCareerSave(usePeriods(undefined)))).toBe(usePeriods(undefined));
     for (const scorePeriods of [
       { ...match.scorePeriods, halfTime: [-1, 12] },
