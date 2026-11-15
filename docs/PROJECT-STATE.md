@@ -1,3 +1,11 @@
+## 2026-11-15: Injury contracts and saves across tabs
+
+- Soccer Career charges a completed injury season to the current contract. If it expires, the normal extension and free transfer decisions open after rehab. In the Brighton fixture, the 19-appearance injury season uses the last year and keeps the weekly wage at €4,592 until the player signs a new deal. The injury season and the rehab outcome each settle once across reloads.
+- Stadium Tycoon pauses purchases, match rewards and away settlement when it detects a newer stadium save. Reload latest save opens the current ground. An older tab closing or reloading preserved the other tab's exact $24 construction booking, two-match delivery, and $16 remaining cash in the fixture.
+- The US Career season programme protects the current save when a player applies a preview, chooses an option, or clears a plan in an older tab. In the paired NBA browser journeys, each action preserved every saved byte of a newer 82-game season and showed a reload notice inside the open programme.
+
+The production build, 95 focused tests and seven local browser journeys passed. All seven paired controls reproduced the old behavior on the previous pinned deployment. The Soccer Career and Stadium Tycoon guides, publication ledger and guide search keywords were refreshed. The 360 archived boards through November 14 Eastern match the previous release byte for byte.
+
 ## 2026-11-15: Rugby skills, basketball playoff rotations, World XI tactics and admin retries
 
 [PR #1002](https://github.com/PapiSalgueroM/ballpark-hero/pull/1002) published exact main `2d1b187b2df7189b0b5e75229852e2fad31423eb`, deployment `8a0e2e59-290d-44d6-949e-db47ef3331d9`, canonical entry `/assets/index-ZIXw5Vgc.js`. The merged tree matched tested head `cc7e0bb7f`. All 13 live browser journeys, 14 pinned endpoints and 174 sitemap routes passed. IndexNow accepted the three refreshed guides. The hosted Career entry guide workflow passed app types, the standard build, the guide and fault checks, and the native cases across four sports.
@@ -8,8 +16,6 @@
 - Admin Reports keeps failed status and priority edits reachable when another successful change filters the report out. The retry link reopens the report with the last saved values. The reviewer can try the failed field once the original request settles.
 
 Scoped application types, the production build, 162 focused tests and 13 pinned local browser journeys passed. The 20 site checks, 174-route SEO split check, Home fold and download budgets passed. The NRL Team Manager, NBA Perfect Season and World XI guides and their search keywords were refreshed. The archive matches the 360 published boards through November 14 Eastern.
-
-The next local candidate, `codex/nov15-career-save-integrity` at `61a8435c0`, passed 31 combined focused tests. It spends the completed injury season's contract year in Soccer Career, protects a newer Stadium Tycoon booking from an older tab, and protects shared US Career season programmes from stale saves. The previous canonical release reproduced the Soccer Career injury term and Stadium booking issues in isolated browser fixtures. The new candidate is awaiting a combined production build and browser verification.
 
 ## 2026-11-15: Rugby staff, NHL shutdown assignments, academy sale quotes and Home return focus
 
