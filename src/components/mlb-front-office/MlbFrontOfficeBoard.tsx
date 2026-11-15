@@ -132,7 +132,7 @@ function OctoberRecap({ rows, team, unavailable, label }: {
 }) {
   const october = rows.flatMap(row => {
     const receipt = readMlbOctoberReceipt(row, team);
-    return receipt ? [{ name: row.name, opponent: row.home === team ? row.away : row.home, ...receipt }] : [];
+    return receipt ? [{ name: row.name, opponent: row.home === team ? row.away : row.home, games: receipt.games, mode: receipt.mode }] : [];
   });
   return (
     <>

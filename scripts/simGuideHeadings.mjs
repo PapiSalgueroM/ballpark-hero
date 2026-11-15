@@ -164,6 +164,8 @@ const SOCCER_TRAINING_LOCATION = {
 function reviewedGuideSentences(route, part, sentences) {
   if (route === '/club-manager' && part === 'rules') return [...sentences,
     'In Training, give one player Light or Double for the next paid week. Compare the fitness estimate before you choose how hard he trains.'];
+  if (route === '/mlb-front-office' && part === 'howToPlay') return [...sentences,
+    'Use the ace in elimination games to make a late change when the ace still rates higher than the scheduled starter. A 96-rated ace pitches at 90 on short rest. He needs two team games between starts, even between series. The recap marks the switch, short rest and the rating used.'];
   if (route === '/nfl-my-career' && part === 'howToPlay') return [...sentences,
     'A signed starting Dual Threat quarterback who has played a season can call designed runs. This shifts some passing yards and touchdowns to rushing, and fewer throws can mean fewer interceptions. The extra contact costs up to four health points. Career Log records the tradeoff, and Week by week includes the rushing stats when the season can be replayed.'];
   if (route === '/stadium-tycoon' && part === 'howToPlay') return [...sentences,
