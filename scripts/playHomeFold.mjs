@@ -511,7 +511,7 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
 }
 
 console.log('7) a direct Browse sports link reaches the catalogue after Home loads');
-for (const width of [320, 390, 1440]) {
+for (const width of [320, 390, 430, 1440]) {
   const ctx = await browser.newContext({ viewport: { width, height: width < 768 ? 844 : 900 } });
   try {
     const page = await ctx.newPage();
@@ -535,11 +535,15 @@ for (const width of [320, 390, 1440]) {
       const firstGame = document.querySelector('section[data-sport] [data-catalog-card] a[href]');
       const card = firstGame?.getBoundingClientRect();
       const indexBox = index?.firstElementChild?.getBoundingClientRect();
-      return card && indexBox ? { cardTop: Math.round(card.top), beside: card.left >= indexBox.right, indexTop: Math.round(indexBox.top) } : null;
+      const summary = firstGame?.querySelector('.home-tile-summary');
+      const lines = summary ? summary.getBoundingClientRect().height / parseFloat(getComputedStyle(summary).lineHeight) : 0;
+      return card && indexBox ? { cardTop: Math.round(card.top), beside: card.left >= indexBox.right, indexTop: Math.round(indexBox.top), lines } : null;
     });
     say(Boolean(catalogue && catalogue.cardTop < (width < 768 ? 844 : 900)
       && (width < 768 ? !catalogue.beside : catalogue.beside && catalogue.cardTop - catalogue.indexTop < 100)),
     width + 'px Browse sports shows its first catalogue game on screen at y=' + (catalogue?.cardTop ?? 'missing'));
+    say(Boolean(catalogue && catalogue.lines >= 0.9 && catalogue.lines <= (width < 640 ? 1.1 : 2.1)),
+      width + 'px catalogue shows a compact game description (' + (catalogue?.lines ?? 0).toFixed(2) + ' lines)');
   } finally {
     await ctx.close();
   }

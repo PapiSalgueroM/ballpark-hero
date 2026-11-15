@@ -907,7 +907,12 @@ function HomeTileStyles() {
           transform: none;
         }
         [data-catalog-card] .home-tile:hover { background: hsl(var(--surface-2)); }
-        [data-catalog-card] :is(.home-tile-accent, .home-tile-summary) { display: none; }
+        [data-catalog-card] .home-tile-accent { display: none; }
+        [data-catalog-card] .home-tile-summary {
+          margin-top: 2px;
+          font-size: .6875rem;
+          -webkit-line-clamp: 1;
+        }
         [data-catalog-card] .home-tile-icon { width: 24px; height: 24px; margin-top: 0; border-radius: 8px; font-size: 1rem; }
         [data-catalog-card] h3 { width: 100%; font-size: .875rem; line-height: 1.2; overflow-wrap: anywhere; }
         [data-catalog-card] > [data-game-pick] { position: static; width: 44px; height: 44px; }
