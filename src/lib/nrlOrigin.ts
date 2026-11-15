@@ -6,16 +6,19 @@ import {
 } from '@/lib/nrlManager';
 
 export const NRL_ORIGIN_SIDES = ['nsw', 'qld'] as const;
+export const NRL_ORIGIN_WORKLOAD = 8;
 export type NrlOriginSide = typeof NRL_ORIGIN_SIDES[number];
 export const NRL_ORIGIN_TEAM_NAMES = { nsw: 'New South Wales Blues', qld: 'Queensland Maroons' } as const;
 type OriginPlayer = Omit<NrlPlayer, 'fitness'>;
 interface OriginSelection { starters: Record<NrlRole, string>; bench: string[] }
+interface OriginClubLoad { clubId: string; round: number; players: [string, number][] }
 interface OriginMatch {
   selection: OriginSelection;
   tactic: NrlTactic;
   homeScore: number;
   awayScore: number;
   goldenPoint: boolean;
+  clubLoad?: OriginClubLoad;
 }
 type NrlOriginScore = Pick<OriginMatch, 'homeScore' | 'awayScore' | 'goldenPoint'>;
 export interface NrlOriginHistory {
@@ -34,6 +37,7 @@ export interface NrlOriginSeries {
   matches: OriginMatch[];
   nomination?: { clubId: string; playerId: string };
   fullPool?: true;
+  clubWorkload?: true;
 }
 interface OriginFixture {
   game: number;
@@ -316,11 +320,23 @@ function isOriginPool(value: unknown, side: NrlOriginSide, limit = MAX_POOL): va
   return Boolean(originSelection(value));
 }
 
+function validOriginClubLoad(value: OriginClubLoad, year: number, selection: OriginSelection): boolean {
+  if (!value || typeof value !== 'object' || Object.keys(value).length !== 3) return false;
+  const starters = Object.values(selection.starters);
+  return Number.isInteger(value.round) && value.round >= 1
+    && nrlSeasonPlan(year).draw[value.round - 1]?.some(fixture => fixture.includes(value.clubId))
+    && Array.isArray(value.players) && value.players.length > 0 && value.players.length <= starters.length
+    && new Set(value.players.map(row => row?.[0])).size === value.players.length
+    && value.players.every(row => Array.isArray(row) && row.length === 2 && starters.includes(row[0])
+      && Number.isInteger(row[1]) && row[1] > 0 && row[1] <= 100);
+}
+
 export function isNrlOriginSeries(value: unknown, seed: number): value is NrlOriginSeries {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const series = value as NrlOriginSeries;
-  if ((series.fullPool !== undefined && series.fullPool !== true)
+  if ((series.fullPool !== undefined && series.fullPool !== true) || (series.clubWorkload !== undefined && series.clubWorkload !== true)
     || Object.keys(series).length !== 7 + Number(series.nomination !== undefined) + Number(series.fullPool === true)
+      + Number(series.clubWorkload === true)
     || series.version !== 1 || !isYear(series.year) || !isSide(series.side)
     || !series.pools || typeof series.pools !== 'object' || Object.keys(series.pools).length !== 2) return false;
   const limit = series.fullPool ? nrlSeasonPlan(series.year).clubs.length * 30 : MAX_POOL;
@@ -336,9 +352,15 @@ export function isNrlOriginSeries(value: unknown, seed: number): value is NrlOri
   const final = series.matches[SERIES_GAMES - 1];
   if (final && (final.tactic !== series.tactic || NRL_ROLES.some(role => final.selection?.starters?.[role] !== series.selection.starters[role])
     || series.selection.bench.some((id, index) => final.selection?.bench?.[index] !== id))) return false;
+  let earlierLoad: OriginClubLoad | undefined;
   return series.matches.every((match, index) => {
-    if (!match || typeof match !== 'object' || Object.keys(match).length !== 5
+    if (!match || typeof match !== 'object' || Object.keys(match).length !== 5 + Number(match.clubLoad !== undefined)
       || !isOriginSelection(match.selection, series.pools[series.side]) || !NRL_TACTICS.includes(match.tactic)) return false;
+    if (match.clubLoad !== undefined) {
+      if (!series.clubWorkload || !validOriginClubLoad(match.clubLoad, series.year, match.selection)
+        || (earlierLoad && (earlierLoad.clubId !== match.clubLoad.clubId || earlierLoad.round > match.clubLoad.round))) return false;
+      earlierLoad = match.clubLoad;
+    }
     const expected = simulateMatch(series, seed, fixtures[index], match.selection, match.tactic);
     return match.homeScore === expected.homeScore && match.awayScore === expected.awayScore && match.goldenPoint === expected.goldenPoint;
   });

@@ -12,14 +12,15 @@ import {
 } from '@/lib/nrlPlayerScoring';
 import {
   archiveNrlFinals, archiveNrlLadder, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlArchivedLadder, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
-  isNrlPhysioTreatment, nrlByeTrainingPreview, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
+  isNrlPhysioTreatment, nrlByeTrainingPreview, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularReturnFixture, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
   nrlPlanAdjustments, nrlPlanMatchups, nrlReserveGradeEnd, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore, validNrlRatingChanges,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlLeagueLadderArchive, type NrlLivePlanChoice, type NrlManagerState, type NrlMatchResult,
   type NrlPhysioTreatment, type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
 } from '@/lib/nrlManager';
 import {
-  archiveNrlOrigin, createNrlOriginSeries, isNrlOriginSeries, nrlOriginComplete, nrlOriginEligibility, playNrlOriginMatch, selectNrlOriginReserve, selectNrlOriginStarter,
+  archiveNrlOrigin, createNrlOriginSeries, isNrlOriginSeries, nrlOriginComplete, nrlOriginEligibility, NRL_ORIGIN_WORKLOAD,
+  playNrlOriginMatch, selectNrlOriginReserve, selectNrlOriginStarter,
   setNrlOriginTactic, validNrlOriginHistory, type NrlOriginHistory, type NrlOriginSeries, type NrlOriginSide,
 } from '@/lib/nrlOrigin';
 import {
@@ -246,7 +247,7 @@ export interface NrlPrimaryRoleChange {
 
 export type NrlCareerAction = NrlAction
   | { type: 'bookPhysio'; year: number; clubId: string; round: number; playerId: string }
-  | { type: 'startOrigin'; year: number; side: NrlOriginSide; nominationId?: string; fullPool?: true }
+  | { type: 'startOrigin'; year: number; side: NrlOriginSide; nominationId?: string; fullPool?: true; clubWorkload?: true }
   | OriginMatchAction
   | { type: 'startWorldCupAppointment'; nation: NrlWorldCupNation }
   | { type: 'playWorldCupAppointment'; previous: NrlWorldCupRun; next: NrlWorldCupRun }
@@ -2435,6 +2436,36 @@ export function nrlWorldCupAppointmentAvailable({ retired, outOfWork, legacySeas
   return !retired && !outOfWork && !legacySeason && !worldCup && season.year === 2026 && season.phase === 'complete';
 }
 
+export function nrlOriginWorkloadAvailable({ retired, outOfWork, legacySeason, season }: NrlCareerState): boolean {
+  return !retired && !outOfWork && !legacySeason && !season.live && Boolean(season.kickerId)
+    && Boolean(nrlRegularReturnFixture(season, 0, 0));
+}
+
+export function nrlOriginClubWorkload(state: NrlCareerState) {
+  const { origin, season } = state;
+  if (!origin?.clubWorkload || origin.year !== season.year || nrlOriginComplete(origin) || !nrlOriginWorkloadAvailable(state)) return [];
+  const starters = new Set(Object.values(origin.selection.starters));
+  return nrlCareerSquad(state).filter(player => starters.has(player.id) && player.fitness > 0).map(({ id, name, fitness }) => ({
+    id, name, before: fitness, after: Math.max(0, fitness - NRL_ORIGIN_WORKLOAD),
+  }));
+}
+
+function settleOriginClubWorkload(state: NrlCareerState, origin: NrlOriginSeries): NrlCareerState {
+  const workload = nrlOriginClubWorkload(state);
+  const { season } = state;
+  const fixture = workload.length ? nrlRegularReturnFixture(season, 0, 0) : undefined;
+  if (!fixture) return { ...state, origin };
+  const players: [string, number][] = workload.map(({ id, before }) => [id, before]);
+  const actual = new Map(workload.map(({ id, after }) => [id, after]));
+  const adjust = <Player extends NrlPlayer>(player: Player): Player => {
+    const fitness = actual.get(player.id);
+    return fitness === undefined ? player : { ...player, fitness };
+  };
+  const matches = origin.matches.slice();
+  matches[matches.length - 1] = { ...matches[matches.length - 1], clubLoad: { clubId: season.clubId, round: fixture.round, players } };
+  return { ...state, origin: { ...origin, matches }, players: state.players.map(adjust), season: { ...season, squad: season.squad.map(adjust) } };
+}
+
 export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction): NrlCareerState {
   if (state.retired || (state.season.live && action.type !== 'finishLive' && action.type !== 'reachMinute60' && action.type !== 'finishMinute60')) return state;
   if (state.outOfWork && action.type !== 'acceptVacancy' && action.type !== 'retireCareer' && action.type !== 'simulateSeasonOut') return state;
@@ -2468,6 +2499,7 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     case 'startOrigin': {
       const { origin, season } = state;
       if (action.year !== season.year || (action.fullPool !== undefined && action.fullPool !== true)
+        || (action.clubWorkload !== undefined && (action.clubWorkload !== true || !nrlOriginWorkloadAvailable(state)))
         || (origin && (origin.year >= action.year || !nrlOriginComplete(origin)))) return state;
       const players = state.players.filter(player => contractIn(player, season.year));
       const { nominationId } = action;
@@ -2477,7 +2509,8 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         nominationId === undefined ? undefined : { clubId: season.clubId, playerId: nominationId }, action.fullPool);
       if (!next) return state;
       const archived = origin && archiveNrlOrigin(origin);
-      return archived ? { ...state, origin: next, originHistory: [...(state.originHistory ?? []), archived] } : { ...state, origin: next };
+      const series = action.clubWorkload ? { ...next, clubWorkload: true as const } : next;
+      return archived ? { ...state, origin: series, originHistory: [...(state.originHistory ?? []), archived] } : { ...state, origin: series };
     }
     case 'selectOriginStarter':
     case 'selectOriginReserve':
@@ -2489,7 +2522,8 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         : action.type === 'selectOriginReserve' ? selectNrlOriginReserve(origin, action.slot, action.playerId)
         : action.type === 'setOriginTactic' ? setNrlOriginTactic(origin, action.tactic)
         : playNrlOriginMatch(origin, state.season.seed, action.game);
-      return next === origin ? state : { ...state, origin: next };
+      if (next === origin) return state;
+      return action.type === 'playOriginMatch' ? settleOriginClubWorkload(state, next) : { ...state, origin: next };
     }
     case 'setAttackPlan': {
       const { season } = state;
@@ -3654,6 +3688,12 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
   if (state.origin !== undefined && (!isNrlOriginSeries(state.origin, state.season.seed)
     || state.origin.year < state.openingYear || state.origin.year > year
     || (!state.openingRoster && Object.values(state.origin.pools).some(pool => pool.some(player => isNrlNamedPlayer(player.id)))))) return false;
+  if (state.origin?.year === year && state.origin.clubWorkload) {
+    const latestRound = nrlRegularReturnFixture(state.season, 0, 0)?.round ?? state.season.round;
+    const squadIds = new Set(state.season.squad.map(player => player.id));
+    if (state.origin.matches.some(({ clubLoad }) => clubLoad && (clubLoad.clubId !== state.season.clubId
+      || clubLoad.round > latestRound || clubLoad.players.some(([id]) => !squadIds.has(id))))) return false;
+  }
   if (value.originHistory !== undefined && (!state.origin || !validNrlOriginHistory(value.originHistory, state.openingYear, state.origin.year))) return false;
   const spell = state.season.reserveGrade;
   if (spell) {

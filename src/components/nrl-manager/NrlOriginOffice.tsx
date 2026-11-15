@@ -1,10 +1,12 @@
 import { useRef, useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import type { NrlCareerAction, NrlCareerState } from '@/lib/nrlCareer';
+import { useNrlClubName } from '@/components/nrl-manager/NrlClubIdentity';
+import { nrlOriginClubWorkload, nrlOriginWorkloadAvailable, type NrlCareerAction, type NrlCareerState } from '@/lib/nrlCareer';
 import { NRL_ROLES, type NrlTactic } from '@/lib/nrlManager';
 import {
-  nrlOriginComplete, nrlOriginEligibility, nrlOriginFixtures, nrlOriginResult, nrlOriginStarterOptions, NRL_ORIGIN_SIDES, NRL_ORIGIN_TEAM_NAMES,
+  nrlOriginComplete, nrlOriginEligibility, nrlOriginFixtures, nrlOriginResult, nrlOriginStarterOptions,
+  NRL_ORIGIN_SIDES, NRL_ORIGIN_TEAM_NAMES, NRL_ORIGIN_WORKLOAD,
   type NrlOriginHistory, type NrlOriginSeries,
 } from '@/lib/nrlOrigin';
 
@@ -84,8 +86,13 @@ function OriginMatchday({ series, disabled, onAction }: { series: NrlOriginSerie
   );
 }
 
-function ActiveOrigin({ series, disabled, onAction }: { series: NrlOriginSeries; disabled: boolean; onAction: Dispatch }) {
+function ActiveOrigin({ career, series, disabled, onAction }: {
+  career: NrlCareerState; series: NrlOriginSeries; disabled: boolean; onAction: Dispatch;
+}) {
+  const clubName = useNrlClubName('full');
   const { side, year, matches, nomination } = series;
+  const workload = nrlOriginClubWorkload(career);
+  const latestLoad = matches.at(-1)?.clubLoad;
   const { wins, winner } = nrlOriginResult(series);
   const complete = nrlOriginComplete(series);
   const status = useRef<HTMLParagraphElement>(null);
@@ -104,8 +111,19 @@ function ActiveOrigin({ series, disabled, onAction }: { series: NrlOriginSeries;
           : winner ? `${NRL_ORIGIN_TEAM_NAMES[winner]} have clinched the series. Game 3 is still to play.`
           : matches.length ? `Game ${matches.length} complete. Game ${matches.length + 1} is next.` : 'Game 1 is ready.'}
       </p>
+      {latestLoad && <div className="rounded-lg border border-border p-2 text-sm" data-nrl-origin-club-load>
+        <p className="font-semibold">Game {matches.length} club workload</p>
+        <p className="text-muted-foreground">{latestLoad.players.length} starters from {clubName(year, latestLoad.clubId)} lost fitness before club Round {latestLoad.round}.</p>
+      </div>}
       {!complete && <>
         <OriginMatchday series={series} disabled={disabled} onAction={onAction} />
+        {workload.length > 0 && <div className="rounded-lg border border-border p-2 text-sm" data-nrl-origin-club-load-preview>
+          <p className="font-semibold">Club fitness after this Origin game</p>
+          <ul aria-label="Club starters affected" className="mt-1 space-y-1 text-muted-foreground">
+            {workload.map(row => <li key={row.id}>{row.name} · {row.before}% to {row.after}% fit</li>)}
+          </ul>
+          <p className="mt-1 text-muted-foreground">Choose Recover or change your lineup before your next club match.</p>
+        </div>}
         <div className="grid items-end gap-2 sm:grid-cols-[minmax(0,1fr)_auto]">
           <label className="min-w-0 space-y-1 text-sm font-semibold">
             <span>Origin tactic</span>
@@ -130,6 +148,8 @@ function StartOrigin({ career, disabled, onAction }: { career: NrlCareerState; d
   const [unavailable, setUnavailable] = useState(false);
   const [nominationId, setNominationId] = useState('');
   const [fullPool, setFullPool] = useState(false);
+  const [clubWorkload, setClubWorkload] = useState(false);
+  const workloadAvailable = nrlOriginWorkloadAvailable(career);
   const eligible = NRL_ORIGIN_SIDES.map(side => ({
     side, players: season.squad.filter(player => nrlOriginEligibility(player.id) === side).sort((a, b) => a.name.localeCompare(b.name)),
   }));
@@ -150,6 +170,16 @@ function StartOrigin({ career, disabled, onAction }: { career: NrlCareerState; d
       <p id="nrl-origin-full-pool-hint" className="text-sm text-muted-foreground">
         Search all signed league players eligible for the state you coach.
       </p>
+      {workloadAvailable && <>
+        <label className="flex min-h-11 items-center gap-2 text-sm font-semibold">
+          <input type="checkbox" checked={clubWorkload} disabled={disabled} aria-describedby="nrl-origin-club-load-hint"
+            onChange={event => setClubWorkload(event.target.checked)} />
+          Apply Origin workload to your club
+        </label>
+        <p id="nrl-origin-club-load-hint" className="text-sm text-muted-foreground">
+          Each player from your club who starts for your state uses up to {NRL_ORIGIN_WORKLOAD} club fitness after the game.
+        </p>
+      </>}
       {eligible.some(group => group.players.length) && <>
         <label className="block min-w-0 space-y-1 text-sm font-semibold">
           <span>Nominate a club player</span>
@@ -171,7 +201,11 @@ function StartOrigin({ career, disabled, onAction }: { career: NrlCareerState; d
       <div className="grid gap-2 sm:grid-cols-2">
         {NRL_ORIGIN_SIDES.map(side => <Button key={side} type="button" size="lg" variant="outline"
           disabled={disabled || Boolean(nomineeSide && nomineeSide !== side)}
-          onClick={() => setUnavailable(!onAction({ type: 'startOrigin', year: season.year, side, nominationId: nominationId || undefined, ...(fullPool && { fullPool: true as const }) }))}>
+          onClick={() => setUnavailable(!onAction({
+            type: 'startOrigin', year: season.year, side, nominationId: nominationId || undefined,
+            ...(fullPool && { fullPool: true as const }),
+            ...(workloadAvailable && clubWorkload && { clubWorkload: true as const }),
+          }))}>
           Coach {NRL_ORIGIN_TEAM_NAMES[side]}
         </Button>)}
       </div>
@@ -204,7 +238,7 @@ export default function NrlOriginOffice({ career, disabled, onAction }: {
           </p>
           {origin && <>
             <h3 className="font-semibold">{origin.year === 2026 ? 'Official 2026 schedule' : `Simulated ${origin.year} schedule`}</h3>
-            <ActiveOrigin key={origin.year} series={origin} disabled={disabled} onAction={onAction} />
+            <ActiveOrigin key={origin.year} career={career} series={origin} disabled={disabled} onAction={onAction} />
           </>}
           {canStart && <StartOrigin key={season.year} career={career} disabled={disabled} onAction={onAction} />}
           {originHistory && (
