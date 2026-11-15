@@ -1,3 +1,12 @@
+## 2026-11-15: Australian games on Home, AFL saves and NBA choice receipts
+
+- Home puts NRL Team Manager and Aussie Rules Manager directly beneath the lead Soccer Career card. Both links have 48px touch targets. Their lower edges land at 500px on a 320px guest phone and 759px on a 390px phone with a saved Club Manager career and three pins.
+- Aussie Rules Manager opens a newer save when an older tab tries to act. The Fremantle fixture keeps all 137,822 bytes of the newer finals save, carries the chosen matchday 23 through the wildcard bye and accepts a fresh Rest action in QF2.
+- NBA My Career restores the outcome of a rivalry decision until Continue. The 2027 Warriors fixture reloads the same ejection and fine receipt with its net worth, morale and fanbase already settled. One write acknowledges the result and opens the next offseason card.
+- The Soccer Farewell test expectations use the ratings option selected by the real page. All six updated assertions still compare complete states and retained RNG behavior. Three copied source controls produced the four intended failures after both healthy baselines passed.
+
+Application types, the production build, 190 focused tests, 11 pinned browser cases, 21 site checks, the Home fold sweep and 16 download budgets passed. The full SEO split check covered all 174 routes. The grid archive refresh reproduced all 360 boards through November 14 Eastern.
+
 ## 2026-11-15: Fairer soccer rerolls, booked rugby recovery and quicker Home navigation
 
 - Soccer Perfect Season holds the opening XI target across rerolls in new Unlimited runs and Daily boards starting November 17 Eastern. Older Daily and Unlimited runs keep their original target and result. The stronger XI in the pinned Unlimited run improved from 35 wins and a site score of 92 to 38 wins and 100.
