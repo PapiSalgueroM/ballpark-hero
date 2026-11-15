@@ -146,8 +146,8 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
       return 'failed';
     }
   }, [checkSaveMoved]);
-  const saveTicketState = useCallback((next: TycoonState) => {
-    const result = writeStadium(next);
+  const saveTicketState = useCallback((next: TycoonState, now?: number) => {
+    const result = writeStadium(next, now);
     if (result !== 'moved') setTicketSaveFailed(result === 'failed');
     return result;
   }, [writeStadium]);
