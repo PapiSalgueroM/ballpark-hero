@@ -5,6 +5,9 @@ import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { nbaSeasonGames, setNbaRestPlan, simNbaSeason, type NbaCareerState } from '@/lib/nbaMyCareer';
 import { keyedRng } from '@/lib/keyedRng';
+import { deriveSeasonOrWhy } from '@/lib/season/core';
+import { NBA_SEASON } from '@/lib/season/nba';
+import { buildUsSeason } from '@/lib/season/us';
 
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null, refreshProfile: vi.fn() }) }));
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), recordActivity: vi.fn(), getCurrentPlayerName: () => null }));
@@ -78,6 +81,31 @@ describe('NBA scheduled rest', () => {
     const hurt = playWith(0.139, true);
     expect(hurt.line).toMatchObject({ games: slate - 12 - 8, restGames: 8 });
     expect(hurt.health).toBe(93);
+  });
+
+  it('rebuilds appearances, injuries and rest separately in Season Center', () => {
+    const first = career();
+    const c = { ...first, purchased: [], archetype: { ...first.archetype, durability: 0.6 } };
+    const healthy = simNbaSeason(setNbaRestPlan(structuredClone(c), true), 76, () => 0.8).line;
+    const injured = simNbaSeason(setNbaRestPlan(structuredClone(c), true), 76, () => 0.139).line;
+    const oldSave = { ...healthy };
+    delete oldSave.restGames;
+    const absent = (line: typeof healthy) => {
+      const row = { ...line };
+      const built = buildUsSeason(NBA_SEASON, c, row, sport.teamLabelOf);
+      if (!built.ok) throw new Error(built.line);
+      const replay = deriveSeasonOrWhy(built.sport, row, built.ctx);
+      if (typeof replay === 'string') throw new Error(replay);
+      expect(replay.games.filter(game => game.played)).toHaveLength(row.games);
+      return replay.games.reduce((count, game) => {
+        if (game.why === 'rested') count.rested++;
+        if (game.why === 'injured') count.injured++;
+        return count;
+      }, { rested: 0, injured: 0 });
+    };
+    expect(absent(healthy)).toEqual({ rested: 8, injured: 0 });
+    expect(absent(injured)).toEqual({ rested: 8, injured: 12 });
+    expect(absent(oldSave)).toEqual({ rested: 0, injured: 8 });
   });
 
   it.each([false, true])('protects a plan and its completed season from a stale tab (benched: %s)', benched => {
