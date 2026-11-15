@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2, LogIn } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
+import { linkedReportHash } from '@/lib/reportTriage';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -10,6 +11,7 @@ const AdminLogin = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const reportHash = linkedReportHash(useLocation().hash);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,7 +36,7 @@ const AdminLogin = () => {
         throw new Error('You do not have admin access.');
       }
 
-      navigate('/admin/reports');
+      navigate({ pathname: '/admin/reports', hash: reportHash });
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {

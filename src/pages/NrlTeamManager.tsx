@@ -28,7 +28,7 @@ import {
   nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlNextRound, nrlOnFieldCaptain,
   nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
-  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlHalftimeTalk, type NrlKickingPlan, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
+  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlGoldenPointApproach, type NrlHalftimeTalk, type NrlKickingPlan, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
@@ -51,6 +51,11 @@ const SLUG = 'nrl-team-manager';
 const loadWorldCup = () => import('@/components/nrl-manager/NrlWorldCup');
 const YEARS = [2026, 2027] as const;
 const goldenPointMethods = { tries: 'a try', penalties: 'a penalty goal', longFieldGoals: 'a two-point field goal', fieldGoals: 'a field goal' };
+const goldenPointApproaches: { id: NrlGoldenPointApproach; label: string; description: string }[] = [
+  { id: 'standard', label: 'Play standard', description: 'Use your usual extra-time approach.' },
+  { id: 'chase', label: 'Chase the win', description: 'Open the game up. Either side is more likely to score.' },
+  { id: 'protect', label: 'Protect the draw', description: 'Keep the game tight. Both sides are less likely to score.' },
+];
 const PANELS = [
   { id: 'match', label: 'Match centre', Icon: Radio },
   { id: 'squad', label: 'Squad', Icon: ClipboardList },
@@ -343,8 +348,9 @@ function LiveHalftime({ live, career, title, onAction, disabled, coachRole, coac
             : 'Keep your current ratings or choose a small second-half trade-off.'}
         </p>
       </fieldset>
+      {!fixture.finalsRound && <p className="text-sm text-muted-foreground">If scores are level at 80 minutes, you can choose your golden-point approach.</p>}
       <Button type="button" size="lg" className="w-full" disabled={disabled}
-        onClick={() => onAction({ type: 'finishLive', ...halfChoices })}>
+        onClick={() => onAction({ type: 'finishLive', ...halfChoices, pauseForGoldenPoint: true })}>
         Play second half <ArrowRight aria-hidden="true" />
       </Button>
       <Button type="button" size="lg" variant="outline" className="w-full" disabled={disabled}
@@ -401,7 +407,9 @@ function LiveMinute60({ live, career, onAction, disabled }: {
       </div>
       <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-4">
         <legend className="px-1 font-bold">Closing tactic</legend>
-        <p className="mt-2 text-sm text-muted-foreground">Keep your plan or change it for the final 20 minutes and any extra time.</p>
+        <p className="mt-2 text-sm text-muted-foreground">{fixture.finalsRound
+          ? 'Keep your plan or change it for the final 20 minutes and any extra time.'
+          : 'Keep or change your plan for the final 20 minutes. If scores are level, choose a golden-point approach at 80 minutes.'}</p>
         <div className="mt-2 flex flex-wrap gap-2">
           {tactics.map(option => (
             <Button key={option.id} type="button" size="lg" className="px-3" disabled={disabled}
@@ -455,7 +463,7 @@ function LiveMinute60({ live, career, onAction, disabled }: {
         </fieldset>
       )}
       <Button type="button" size="lg" className="w-full" disabled={disabled}
-        onClick={() => onAction(closeChoice)}>
+        onClick={() => onAction({ ...closeChoice, pauseForGoldenPoint: true })}>
         Play final 20 minutes <ArrowRight aria-hidden="true" />
       </Button>
     </section>
@@ -508,6 +516,42 @@ function AttackPlan({ career, onAction, disabled }: {
         ? 'Attack plans unlock after the imported season.'
         : 'Attack plans need saved opponent ratings for all starting positions.'}</p>)}
     </details>
+  );
+}
+
+function LiveGoldenPoint({ fixture, score, season, onAction, disabled }: {
+  fixture: NrlLiveHalf['fixture']; score: number; season: NrlManagerState;
+  onAction: (action: NrlAction) => void; disabled: boolean;
+}) {
+  const { year, clubId, round } = season;
+  const shortName = useNrlClubName();
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => heading.current?.focus({ preventScroll: true }), []);
+  return (
+    <section className="space-y-4" aria-labelledby="nrl-golden-point" data-nrl-golden-point>
+      <div className="rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
+        <h2 ref={heading} id="nrl-golden-point" tabIndex={-1} className="font-display text-2xl font-black">Golden point</h2>
+        <ul className="mt-3 grid grid-cols-2 gap-3" aria-label="Score after 80 minutes">
+          {[fixture.homeId, fixture.awayId].map(id => (
+            <li key={id} className="min-w-0 rounded-xl bg-black/20 p-3">
+              <p className="break-words text-sm font-semibold">{shortName(year, id)}</p>
+              <strong className="block font-display text-3xl tabular-nums">{score}</strong>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-3 text-sm text-emerald-100">The first score wins. If both five-minute periods finish scoreless, the match ends in a draw.</p>
+      </div>
+      <div className="grid gap-3 sm:grid-cols-3">
+        {goldenPointApproaches.map(({ id, label, description }) => (
+          <div key={id} className="min-w-0 space-y-2">
+            <Button type="button" size="lg" variant={id === 'standard' ? 'default' : 'outline'} disabled={disabled}
+              className="w-full whitespace-normal px-3" aria-describedby={`nrl-golden-point-${id}`}
+              onClick={() => onAction({ type: 'settleGoldenPoint', year, clubId, round, approach: id })}>{label}</Button>
+            <p id={`nrl-golden-point-${id}`} className="text-sm text-muted-foreground">{description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -773,6 +817,9 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
           </ul>
         </div>
       ) : captainName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-match-captain>Club captain: {captainName}.</p>}
+      {match.goldenPointApproach && <p className="mt-2 text-sm text-muted-foreground" data-nrl-golden-point-approach>
+        Golden-point approach: {goldenPointApproaches.find(approach => approach.id === match.goldenPointApproach)?.label}.
+      </p>}
       {goldenPoint && (
         <p className="mt-2 text-sm text-muted-foreground" data-nrl-golden-point>
           {goldenPoint === 'draw' ? 'Golden point ended scoreless after two five-minute periods.'
@@ -1183,6 +1230,9 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
   const { coachRole, coachBonus } = nrlCoachTactics(career.finance);
   const [hold, setHold] = useState<{ year: number; round: number; reserveId: string }>();
   if (season.live) {
+    if (season.live.goldenPoint) return (
+      <LiveGoldenPoint fixture={season.live.fixture} score={season.live.goldenPoint.score} season={season} onAction={onAction} disabled={disabled} />
+    );
     return season.live.minute60
       ? <LiveMinute60 live={season.live} career={career} onAction={onAction} disabled={disabled} />
       : <LiveHalftime live={season.live} career={career} title={next.title} onAction={onAction} disabled={disabled} coachRole={coachRole} coachBonus={coachBonus} />;
@@ -2422,7 +2472,9 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     if (next === before) return false;
     const result = persist(next);
     if (result === 'moved' || result === 'too-large') return false;
-    if (action.type === 'finishLive' || action.type === 'finishMinute60') setShowLiveResult(true);
+    if (!next.season.live && (action.type === 'finishLive' || action.type === 'finishMinute60' || action.type === 'settleGoldenPoint')) {
+      setShowLiveResult(true);
+    }
     const newSeason = next.season.year !== before.season.year;
     if (action.type === 'advance' || newSeason) setShowLiveResult(false);
     if (newSeason) setPanel('match');
@@ -2498,6 +2550,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>At half time, choose a Second-half attack plan. If you pause at 60 minutes, Closing attack plan can change it again for the rest of the match.</li>
               <li>Use the live ratings to compare your pending choices with keeping the current setup. The preview includes changes to your tactic and players for the next period of regulation.</li>
               <li>If you are level or two points down at 60 minutes, you can set up a field goal. This trades some late try threat for a better field-goal chance in regulation.</li>
+              <li>If a Live regular-season match is level at 80 minutes, choose your golden-point approach. Chase the win opens the game up for both sides. Protect the draw makes it more likely that extra time ends scoreless.</li>
               <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>
               <li>Open Matchday team sheet in a report with a player record to see the starting 13, the reserves who played and how many points each player scored.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>

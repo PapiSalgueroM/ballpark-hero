@@ -69,6 +69,10 @@ export const FIX_REF_MAX = 200;
 export type StatusFilter = 'open' | 'all' | ReportStatus;
 export const ALL_GAMES = '';
 
+export function linkedReportHash(hash: string): string {
+  return /^#report=[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(hash) ? hash.toLowerCase() : '';
+}
+
 export interface TriageRow {
   id: string;
   game_type: string;
