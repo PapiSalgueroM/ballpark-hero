@@ -1463,10 +1463,11 @@ export function nrlConcessionsQuote(state: NrlCareerState) {
   };
 }
 
-function homeGateReceipt(fixture: NrlFixture, homeWin: boolean, tier: NrlTicketTier) {
+function homeGateReceipt(fixture: NrlFixture, homeWin: boolean, tier: NrlTicketTier, form?: readonly NrlSupporterForm[]) {
   const changes = NRL_TICKET_GATE_CHANGES[tier];
   return 240_000 + (homeWin ? 30_000 : 0) + (fixture.finalsRound ? 120_000 : 0)
-    + changes[fixture.finalsRound ? 'homeFinal' : homeWin ? 'regularWin' : 'regularNonWin'];
+    + changes[fixture.finalsRound ? 'homeFinal' : homeWin ? 'regularWin' : 'regularNonWin']
+    + (form ? supporterAdjustment(form, tier) : 0);
 }
 
 export const nrlTicketReviewRound = (year: number) => Math.floor(nrlRegularRounds(year) / 2) + 1;
@@ -1493,6 +1494,18 @@ function supporterAdjustment(form: readonly string[], tier: NrlTicketTier) {
 function recentSupporterForm({ results, clubId }: NrlManagerState, before: number) {
   return results.filter(match => match.round < before && (match.homeId === clubId || match.awayId === clubId))
     .slice(-SUPPORTER_FORM_MATCHES).map(match => clubResult(match, clubId));
+}
+
+export function nrlHomeGateReport({ finance, season }: Pick<NrlCareerState, 'finance' | 'season'>, match: NrlMatchResult) {
+  const { round } = match;
+  if (round < finance.fromRound || !hasHomeGate(match, season.clubId) || !season.results.includes(match)) return null;
+  const tier = nrlTicketTierAtRound(finance, round);
+  const form = finance.supporterAttendance ? recentSupporterForm(season, round) : undefined;
+  const won = match.homeScore > match.awayScore;
+  const amount = homeGateReceipt(match, won, tier, form);
+  return { tier, amount, ...(finance.ticketReview && finance.ticketReview.round <= round && {
+    priceChange: amount - homeGateReceipt(match, won, finance.ticketTier ?? 'standard', form),
+  }) };
 }
 
 export function nrlSupporterAttendance({ season, finance, legacySeason, retired }: NrlCareerState) {
@@ -1602,8 +1615,8 @@ function tickBooks(finance: NrlCareerBook, season: NrlManagerState, round: numbe
   const fixture = results.find(result => result.homeId === season.clubId || result.awayId === season.clubId);
   const home = fixture && hasHomeGate(fixture, season.clubId);
   const tier = nrlTicketTierAtRound(finance, round);
-  const gate = home ? homeGateReceipt(fixture, fixture.homeScore > fixture.awayScore, tier)
-    + (finance.supporterAttendance ? supporterAdjustment(recentSupporterForm(season, round), tier) : 0) : 0;
+  const gate = home ? homeGateReceipt(fixture, fixture.homeScore > fixture.awayScore, tier,
+    finance.supporterAttendance ? recentSupporterForm(season, round) : undefined) : 0;
   const concessions = home && concessionsActive(finance, round, inheritedConcessions);
   const earnsSponsorBonus = finance.sponsor?.offer === 'finals' && round === nrlRegularRounds(season.year)
     && nrlLadder(season).slice(0, NRL_FINALS_SPOTS).some(row => row.clubId === season.clubId);
@@ -3426,7 +3439,7 @@ function validArchivedAttendance({ year, clubId, finance, attendanceForm, finals
   const append = (fixture: NrlFixture, result: NrlSupporterForm) => {
     if (hasHomeGate(fixture, clubId)) {
       const tier = nrlTicketTierAtRound(finance, fixture.round);
-      gate += homeGateReceipt(fixture, result === 'W', tier) + (finance.supporterAttendance ? supporterAdjustment(form, tier) : 0);
+      gate += homeGateReceipt(fixture, result === 'W', tier, finance.supporterAttendance ? form : undefined);
     }
     form.push(result);
   };
