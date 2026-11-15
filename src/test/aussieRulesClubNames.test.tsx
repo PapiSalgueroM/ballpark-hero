@@ -50,8 +50,8 @@ function pullAll(view: ReturnType<typeof render>, mine: () => void, texts: strin
   for (const title of titles) {
     fireEvent.click(view.getByText(title, { selector: 'div' }).closest('button')!);
     for (const strong of box.querySelectorAll('[data-arl-score] strong')) out.score.push(words(strong.textContent));
-    for (const li of box.querySelectorAll('[data-arl-match] details li')) { const m = /^[^:]+: (.+?), (.+?), (?:goal|behind) \(/.exec(words(li.textContent)); expect(m, li.textContent ?? '').not.toBeNull(); out.events.push(m![2]); }
-    for (const li of box.querySelectorAll('[data-arl-match] ul li')) pair(li.textContent ?? '', out.results);
+    for (const li of box.querySelectorAll('[data-arl-match] > details > ol > li')) { const m = /^[^:]+: (.+?), (.+?), (?:goal|behind) \(/.exec(words(li.textContent)); expect(m, li.textContent ?? '').not.toBeNull(); out.events.push(m![2]); }
+    for (const li of box.querySelectorAll('[data-arl-match] > ul > li')) pair(li.textContent ?? '', out.results);
     for (const th of box.querySelectorAll('[data-arl-ladder] th')) out.ladder.push(words(th.textContent).replace(/^\d+\. /, ''));
     for (const li of box.querySelectorAll('[data-arl-final]')) pair(li.textContent ?? '', out.finals);
     for (const li of box.querySelectorAll('[data-arl-history]')) {

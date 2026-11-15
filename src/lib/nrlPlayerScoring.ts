@@ -1,4 +1,4 @@
-import type { NrlManagerState, NrlPlayer, NrlRole, NrlScoring } from '@/lib/nrlManager';
+import type { NrlManagerState, NrlMatchResult, NrlPlayer, NrlRole, NrlScoring } from '@/lib/nrlManager';
 
 export interface NrlPlayerScoring extends NrlScoring { playerId: string }
 export interface NrlMatchScoringReport {
@@ -184,14 +184,14 @@ export function nrlSquadSeasonStats({ clubId, results, squad }: Pick<NrlManagerS
   scope: NrlSquadStatsScope) {
   const players = new Map(squad.map(({ id, name, rating }) => [id, { id, name, rating, starts: 0, bench: 0, ...emptyScoring() }]));
   let played = 0;
-  let tracked = 0;
+  const matchLog: { match: NrlMatchResult; report: NrlMatchScoringReport }[] = [];
   for (const match of results) {
     if (match.homeId !== clubId && match.awayId !== clubId) continue;
     if ((scope === 'regular' && match.finalsRound) || (scope === 'finals' && !match.finalsRound)) continue;
     played++;
     const report = match.playerScoring;
     if (!report) continue;
-    tracked++;
+    matchLog.push({ match, report });
     for (const id of report.starters) players.get(id)!.starts++;
     for (const id of match.benchUsed ?? []) players.get(id)!.bench++;
     for (const line of report.lines) {
@@ -201,7 +201,7 @@ export function nrlSquadSeasonStats({ clubId, results, squad }: Pick<NrlManagerS
   }
   const rows = [...players.values()].map(player => ({ ...player, apps: player.starts + player.bench, points: nrlScorePoints(player) }))
     .sort((a, b) => b.apps - a.apps || b.points - a.points || a.name.localeCompare(b.name) || a.id.localeCompare(b.id));
-  return { played, tracked, rows };
+  return { played, tracked: matchLog.length, rows, matchLog };
 }
 
 export function archiveNrlPlayerSeasons(season: Pick<NrlManagerState, 'clubId' | 'results' | 'squad'>): NrlSeasonPlayerArchive | undefined {

@@ -923,9 +923,13 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
   );
 }
 
+function matchRatingReview({ ratingReview }: NrlCareerState, match: NrlMatchResult) {
+  return match.ratingChanges ?? (ratingReview?.round === match.round ? ratingReview.changes : undefined);
+}
+
 function MatchRatingChanges({ career, match }: { career: NrlCareerState; match: NrlMatchResult }) {
   if (career.legacySeason || match.finalsRound || !match.playerScoring) return null;
-  const changes = match.ratingChanges ?? (career.ratingReview?.round === match.round ? career.ratingReview.changes : undefined);
+  const changes = matchRatingReview(career, match);
   if (!changes) return <p className="mt-2 text-sm text-muted-foreground">Rating changes weren’t recorded for this match.</p>;
   if (!changes.length) return <p className="mt-2 text-sm text-muted-foreground">No OVR changes in this match review.</p>;
   const increases = changes.filter(([, delta]) => delta > 0).length;
@@ -1684,10 +1688,14 @@ function IndividualRecovery({ season, awayRecovery, onAction, disabled }: {
   );
 }
 
-function SquadSeasonStats({ season }: { season: NrlManagerState }) {
+function SquadSeasonStats({ career }: { career: NrlCareerState }) {
+  const { season } = career;
+  const shortName = useNrlClubName();
   const [scope, setScope] = useState<NrlSquadStatsScope>('all');
+  const [playerId, setPlayerId] = useState('');
   const hasFinals = season.results.some(match => match.finalsRound && match.playerScoring);
-  const { rows, tracked, played } = nrlSquadSeasonStats(season, hasFinals ? scope : 'all');
+  const { rows, tracked, played, matchLog } = nrlSquadSeasonStats(season, hasFinals ? scope : 'all');
+  const regularRounds = nrlRegularRounds(season.year);
   return (
     <details className="group mt-5 rounded-lg border border-border bg-background px-3">
       <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -1714,6 +1722,44 @@ function SquadSeasonStats({ season }: { season: NrlManagerState }) {
             <p className="mb-2 text-xs text-muted-foreground">
               Player records cover {tracked} of {played} matches. Apps include starts and games played off the bench.
             </p>
+            <details className="group/log mb-3 rounded-lg border border-border px-3">
+              <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                Player match log<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open/log:rotate-180" />
+              </summary>
+              <label className="mb-2 block text-sm font-semibold">
+                Player
+                <select value={playerId} onChange={event => setPlayerId(event.target.value)}
+                  className="mt-1 min-h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:max-w-xs">
+                  <option value="">Choose a player</option>
+                  {[...season.squad].sort((a, b) => a.name.localeCompare(b.name)).map(player => (
+                    <option key={player.id} value={player.id}>{player.name}</option>
+                  ))}
+                </select>
+              </label>
+              {playerId && <ol aria-label="Player match log" tabIndex={0}
+                className="max-h-60 divide-y divide-border overflow-y-auto rounded-md pr-1 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+                {[...matchLog].reverse().map(({ match, report }) => {
+                  const home = match.homeId === season.clubId;
+                  const opponent = shortName(season.year, home ? match.awayId : match.homeId);
+                  const role = NRL_ROLES[report.starters.indexOf(playerId)];
+                  const playedOffBench = match.benchUsed?.includes(playerId);
+                  const appearance = role ? `Started at ${role}` : playedOffBench ? 'Interchange' : 'Did not play';
+                  const scoring = report.lines.find(line => line.playerId === playerId);
+                  const changes = matchRatingReview(career, match);
+                  const change = changes?.find(([id]) => id === playerId)?.[1];
+                  const review = change ? `${change > 0 ? '+' : ''}${change} OVR`
+                    : changes ? 'No OVR change' : 'OVR review unavailable';
+                  return <li key={match.round} className="flex flex-wrap justify-between gap-x-3 gap-y-0.5 py-1.5">
+                    <span className="font-semibold">{roundLabel(match.round, regularRounds)} {home ? 'vs' : 'at'} {opponent}</span>
+                    <span className="text-muted-foreground">
+                      {appearance}
+                      {(role || playedOffBench) && ` · ${scoring ? nrlScorePoints(scoring) : 0} pts`}
+                      {!match.finalsRound && ` · ${review}`}
+                    </span>
+                  </li>;
+                })}
+              </ol>}
+            </details>
             <table className="w-full text-left text-xs">
               <caption className="sr-only">{season.year} squad stats</caption>
               <thead>
@@ -2150,7 +2196,7 @@ function Squad({ career, onAction, disabled }: {
           </p>}
         </section>
       ) : <p className="mt-2 text-sm text-muted-foreground">Availability tracking starts next season for this save.</p>}
-      <SquadSeasonStats season={season} />
+      <SquadSeasonStats career={career} />
       <div className="mt-4 grid gap-x-4 gap-y-3 sm:grid-cols-2">
         {NRL_ROLES.map((role, index) => (
           <div key={role} className="min-w-0">
@@ -2751,6 +2797,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>In Academy, spend $75,000 to teach one scouted, unsigned prospect a second position. Their promotion offer reopens after two rounds, including byes. Graduates keep the new position next season.</li>
               <li>Choose Ready sooner for higher starting OVR or Higher ceiling for more potential when assigning an academy scout. Balanced uses the standard profile.</li>
               <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check the latest match result or open Rating changes in Squad. Existing ratings carry into the next season.</li>
+              <li>In Squad, open Season player stats and choose a player in Player match log to check starts, interchange appearances, scoring and saved rating changes.</li>
               <li>Open a regular-season match report in Season fixtures to see the rating changes saved for that match.</li>
               <li>At 60 minutes in a regular-season Live match, you can change the penalty approach for the final 20. Take the two points or tap for a try if a kickable penalty comes up.</li>
               <li>Before kick-off, open Penalty approach to bank two points from a kickable penalty or tap for a chance at four or six. The match report shows how the tap finished.</li>

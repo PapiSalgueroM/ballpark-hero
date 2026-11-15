@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useAussieRulesLeague } from '@/hooks/useAussieRulesLeague';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { HubPanelHeader, HubTiles } from '@/components/hub/HubTiles';
@@ -102,7 +102,7 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
     {match && <div className={styles.score} data-arl-score><div><strong>{clubFull(state, match.homeId)}</strong><span>{score(match.homeScore)}</span></div><div><strong>{clubFull(state, match.awayId)}</strong><span>{score(match.awayScore)}</span></div></div>}
     {!match && state.phase === 'prepare' && <><h3>You are not playing this week</h3><p className={styles.muted}>Here is the week's draw. Play it out to see who goes through.</p><Results state={state} />
       <button className={styles.action} data-arl-simweek onClick={() => act({ type: 'simWeek' })}>Play the week</button></>}
-    {match && state.phase === 'prepare' && <><h3>Prepare your matchday 23</h3><p className={styles.muted}>Your list manager picked the best 23 on current form: skill, less fatigue. Change it in Squad, then choose this week's preparation.</p>
+    {match && state.phase === 'prepare' && <><h3>Prepare your matchday 23</h3><p className={styles.muted}>{state.preferredLineup ? 'Check your selection in Squad, then choose this week’s preparation.' : "Your list manager picked the best 23 on current form: skill, less fatigue. Change it in Squad, then choose this week's preparation."}</p>
       <div className={styles.choices}>{PREPARATIONS.map(choice => {
         const [prepared] = prepareClubs([clubOf(state, state.myClub)!], state.myClub, choice.id, match.round);
         const starters = prepared.players.filter(player => state.starters.includes(player.id));
@@ -145,8 +145,12 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
 
 function SquadPanel({ state, act }: { state: LeagueState; act: (action: LeagueAction) => void }) {
   const [slot, setSlot] = useState<{ bench: boolean; index: number } | null>(null);
+  const selectionAction = useRef<HTMLButtonElement>(null);
   const club = clubOf(state, state.myClub)!;
   const editable = state.phase === 'prepare' && !!state.match;
+  const preferred = state.preferredLineup;
+  const matchesPreference = preferred?.starters.every((player, index) => player.id === state.starters[index])
+    && preferred.bench.every((id, index) => id === state.bench[index]);
   const line = (id: string) => { const p = leaguePlayer(state, id)!; return <><strong>{p.name}</strong><span>{ROLE_LABELS[p.role]} · Skill {p.skill} · Ceiling {p.potential} · Age {p.age} · Fatigue {Math.round(p.fatigue)}</span></>; };
   if (slot && editable) {
     const current = leaguePlayer(state, (slot.bench ? state.bench : state.starters)[slot.index])!;
@@ -164,6 +168,15 @@ function SquadPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
   const rest = club.players.filter(p => !state.starters.includes(p.id) && !state.bench.includes(p.id)).sort((a, b) => ROLES.indexOf(a.role) - ROLES.indexOf(b.role) || b.skill - a.skill);
   return <div className={styles.card}><h3>Starting 18, interchange five, and the rest of the list</h3>
     <p className={styles.muted}>{editable ? 'Tap a starter or an interchange player to change that spot before preparation.' : 'Selection opens again before the next match.'}</p>
+    {editable && <><p className={styles.muted} role="status">{preferred ? 'A matchday 23 is kept for this season. Next season starts with automatic selection.' : 'New matches use automatic selection unless you keep a 23 for this season.'}</p>
+      <div className={styles.actions} role="group" aria-label="Matchday selection">
+        <button ref={selectionAction} type="button" className={styles.secondary} onClick={() => act({ type: matchesPreference ? 'autoLineup' : 'keepLineup' })}>
+          {matchesPreference ? 'Use automatic selection' : 'Keep this matchday 23'}
+        </button>
+        {preferred && !matchesPreference && <button type="button" className={styles.secondary} onClick={() => {
+          act({ type: 'autoLineup' }); selectionAction.current?.focus();
+        }}>Use automatic selection</button>}
+      </div></>}
     <details className={styles.events}>
       <summary>Skill changes</summary>
       <p className={styles.muted}>Skills can rise or fall by one point at a time during the regular season. They carry into the next season.</p>

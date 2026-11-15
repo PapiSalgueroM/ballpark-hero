@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { TICKET_POLICIES, newTycoon, setTicketPolicy, ticketEconomy } from '@/lib/stadiumTycoon';
 import type { TicketPolicy, TycoonState } from '@/lib/stadiumTycoon';
 import { formatNumber } from '@/lib/formatNumber';
@@ -18,6 +19,7 @@ const explanations: Record<TicketPolicy, string> = {
 const dollars = (value: number) => `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 
 export default function TicketPolicyCard({ state, onSelect, saveFailed, onRetrySave, showSaveNotice = true }: TicketPolicyCardProps) {
+  const quotesId = useId();
   const current = ticketEconomy(state);
   const early = newTycoon(0);
   const full = { ...early, fanbase: 240 };
@@ -35,13 +37,24 @@ export default function TicketPolicyCard({ state, onSelect, saveFailed, onRetryS
   ] as const;
   return <section data-ticket-policy-panel data-current-policy={current.policy} data-save-status={saveFailed ? 'failed' : 'current'} className="rounded-xl border border-border bg-card p-3 mb-3 text-xs">
     <h3 className="font-bold text-sm">Ticket offer: pick your price</h3>
-    <p className="text-muted-foreground mt-1">Trade gate money for supporter growth. Choose freely; your money stays put.</p>
+    <p className="text-muted-foreground mt-1">Trade gate money for supporter growth. Compare the crowd and total income per second at your ground. Switching is free.</p>
     {saveFailed && showSaveNotice && <div role="alert" className="mt-3 rounded-lg border border-destructive p-2">
       <p>Active now, but not saved on this device. Keep this page open and retry.</p>
       <button type="button" onClick={onRetrySave} className="min-h-[44px] min-w-[44px] font-bold underline">Retry save</button>
     </div>}
     <div className="grid grid-cols-3 gap-2 mt-3" role="group" aria-label="Ticket policy">
-      {TICKET_POLICIES.map(policy => <button key={policy.id} type="button" aria-label={policy.label} aria-pressed={current.policy === policy.id} data-ticket-policy={policy.id} onClick={() => onSelect(policy.id)} className={`min-h-[44px] min-w-[44px] rounded-lg border px-1 text-xs font-bold ${current.policy === policy.id ? 'bg-primary text-primary-foreground border-primary' : 'bg-secondary border-border'}`}>{policy.label}</button>)}
+      {TICKET_POLICIES.map(policy => {
+        const active = current.policy === policy.id;
+        const quote = active ? current : ticketEconomy(setTicketPolicy(state, policy.id));
+        const quoteId = `${quotesId}-${policy.id}`;
+        return <button key={policy.id} type="button" aria-label={policy.label} aria-describedby={quoteId} aria-pressed={active} data-ticket-policy={policy.id} onClick={() => onSelect(policy.id)} className={`min-h-[44px] min-w-[44px] rounded-lg border px-1 py-2 text-xs font-bold ${active ? 'bg-primary text-primary-foreground border-primary' : 'bg-secondary border-border'}`}>
+          {policy.label}
+          <span id={quoteId} className="mt-1 block break-words text-[11px] font-medium tabular-nums">
+            <span className="block">{formatNumber(quote.crowd)} {quote.crowd === 1 ? 'fan' : 'fans'}</span>{' '}
+            <span className="block">{dollars(quote.totalPerSec)}/sec</span>
+          </span>
+        </button>;
+      })}
     </div>
     <p data-ticket-policy-explanation className="mt-2">{explanations[current.policy]}</p>
     <dl className="grid grid-cols-2 gap-x-3 gap-y-2 mt-3 tabular-nums">

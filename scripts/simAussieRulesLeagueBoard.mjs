@@ -2,7 +2,7 @@
    engine and the hook, and src/test/aussieRulesLeagueBoard.test.tsx, the board and the page) so
    runAllSims covers them. No other harness runs them.
 
-   AUSSIE_LEAGUE_BOARD_CONTROL=<name> copies the board or the hook with one asserted statement
+   AUSSIE_LEAGUE_BOARD_CONTROL=<name> copies a source file with one asserted statement
    changed (the anchor must occur exactly once and the copy must differ), swaps the copy in
    through NO_DOUBLE_SWAP (vitest.config.ts), and runs only the test that binds it plus one
    independent engine test. A control passes only when that test fails on a real assertion and
@@ -19,8 +19,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const vitestBin = [root, path.resolve(root, '../../..')].map(dir => path.join(dir, 'node_modules/vitest/vitest.mjs')).find(file => existsSync(file));
 assert.ok(vitestBin, 'vitest must be installed');
 const BOARD = 'src/components/aussie-rules-manager/AussieRulesLeagueBoard.tsx', HOOK = 'src/hooks/useAussieRulesLeague.ts';
+const LEAGUE = 'src/lib/aussieRulesLeague.ts';
 const FILES = ['src/test/aussieRulesLeague.test.ts', 'src/test/aussieRulesLeagueBoard.test.tsx'];
-const TOTAL = 15;
+const TOTAL = 29;
 const independent = 'starts 18 fixed clubs of 36 generated players with unique names and a readable save';
 const controls = {
   /* The hub after the flag (review fix #6/#11): a stale panel from the match hid the premiership. */
@@ -29,6 +30,7 @@ const controls = {
   lastquarter: { file: BOARD, anchor: 'opponentPlays(state.seed, state.season, { ...match, quarter: match.quarter - 1 }, clubOf(state, other)!.style)', replacement: 'clubOf(state, other)!.style', test: 'shows the read before a quarter and what the opponent really played after it' },
   refusal: { file: BOARD, anchor: 'if (reason) { setRefusal(reason); return; }', replacement: 'if (reason) { return; }', test: 'refuses a draft pick that would leave your list short of rucks, and says why' },
   completion: { file: HOOK, anchor: "useGameCompletion(SLUG, state?.phase === 'seasonOver', undefined);", replacement: "useGameCompletion(SLUG, state?.phase === 'summer', undefined);", test: 'records one completion for each finished season and stays quiet when a finished season is restored' },
+  keepround: { file: LEAGUE, anchor: 'const lineup = matchdayLineup(state);', replacement: 'const lineup = automaticLineup(clubOf(state, state.myClub)!);', test: 'carries the exact selected 23 against the seeded automatic reset and can switch back' },
 };
 const control = process.env.AUSSIE_LEAGUE_BOARD_CONTROL || '';
 assert.ok(!control || control in controls, `unknown control ${control}`);

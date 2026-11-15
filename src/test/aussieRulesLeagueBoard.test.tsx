@@ -57,6 +57,33 @@ describe('AussieRulesLeagueBoard', () => {
     expect(saved().phase).toBe('prepare');
   });
 
+  it('keeps a chosen player through the match, next round, and a reload from the Squad panel', () => {
+    store(createLeague(1, 'club-00', 'afl2026')!);
+    const view = draw();
+    tile(view, 'Squad');
+    click(view, '[data-arl-slot="0"]');
+    click(view, '[data-arl-candidate="p-3"]');
+    const keep = view.getByRole('button', { name: 'Keep this matchday 23' });
+    keep.focus();
+    fireEvent.click(keep);
+    expect(view.getByRole('button', { name: 'Use automatic selection' })).toHaveFocus();
+    fireEvent.click(view.getByRole('button', { name: /Hub/ }));
+    tile(view, 'Next match');
+    click(view, '[data-arl-prepare="rest"]');
+    click(view, '[data-arl-playmatch]');
+    click(view, '[data-arl-next]');
+    expect(saved().round).toBe(1);
+    expect(saved().starters[0]).toBe('p-3');
+    const bytes = localStorage.getItem(SAVE_KEY);
+    view.unmount();
+    const restored = draw();
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+    tile(restored, 'Squad');
+    expect(restored.getByRole('button', { name: 'Use automatic selection' })).toBeVisible();
+    fireEvent.click(restored.getByRole('button', { name: 'Use automatic selection' }));
+    expect(saved().starters).not.toContain('p-3');
+  });
+
   it.each([0, 64])('previews actual starting strength and fatigue from a starter fatigue of %i', fatigue => {
     const state = createLeague(12, 'club-05')!;
     const starterIds = new Set(state.starters);

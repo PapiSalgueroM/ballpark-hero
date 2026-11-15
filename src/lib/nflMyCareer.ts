@@ -225,8 +225,10 @@ export interface SeasonLine {
   tackles?: number; sacks?: number; picks?: number; passDef?: number; forcedFum?: number;
   // Round 56 kicker
   fgMade?: number; fgAtt?: number; longFg?: number;
-  /** Round 103: January football, told as numbers rather than a sentence. */
+  /** The team's playoff game count and the player's postseason stats for display. */
   poGames?: number; poLine?: string;
+  /** Player appearances for newly simulated backup QB playoff runs. poGames is the team count. */
+  poPlayerGames?: number;
   awards: string[];
   teamResult: string; // 'Missed playoffs' | 'Lost Wild Card' | ... | 'Won the Super Bowl'
   salary: number;
@@ -648,9 +650,13 @@ export function simSeason(
     const poG = playoffGames(depth, rng, 'nfl');
     const clutch = clutchSwing(rng);
     const pf = form + clutch - 1;      // January defences are better
-    const per = poG / NFL_RATE_GAMES;
+    const backupQbGames = c.pos === 'QB' && c.role === 'backup' ? Math.round(poG * gamesShare) : undefined;
+    const per = (backupQbGames ?? poG) / NFL_RATE_GAMES;
     line.poGames = poG;
-    if (c.pos === 'QB') {
+    if (backupQbGames !== undefined) line.poPlayerGames = backupQbGames;
+    if (backupQbGames === 0) {
+      notes.push(`📊 You didn’t appear in the team’s ${countOf(poG, 'game', 'games')} in the playoffs.`);
+    } else if (c.pos === 'QB') {
       const y = Math.max(0, Math.round((1900 + (pf - 62) * 92) * per));
       const td = Math.max(0, Math.round((6 + (pf - 62) * 0.95) * per));
       const ip = Math.max(0, Math.round((18.5 - (pf - 62) * 0.36) * per));
@@ -676,9 +682,13 @@ export function simSeason(
         ? `${countOf(tk, 'tackle', 'tackles')}, ${countOf(pd, 'pass defended', 'passes defended')}`
         : `${countOf(tk, 'tackle', 'tackles')}, ${countOf(sk, 'sack', 'sacks')}`;
     }
-    notes.push(`📊 Playoffs: ${poG} game${poG === 1 ? '' : 's'}, ${line.poLine}.`);
-    const cn = clutchNote(clutch, depth, 'nfl', pf);
-    if (cn) notes.push(cn);
+    if (backupQbGames !== 0) {
+      notes.push(backupQbGames === undefined
+        ? `📊 Playoffs: ${poG} game${poG === 1 ? '' : 's'}, ${line.poLine}.`
+        : `📊 You played ${backupQbGames} of the team’s ${countOf(poG, 'game', 'games')} in the playoffs. ${line.poLine}.`);
+      const cn = clutchNote(clutch, depth, 'nfl', pf);
+      if (cn) notes.push(cn);
+    }
   }
 
   // awards

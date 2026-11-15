@@ -639,10 +639,12 @@ describe('the order of the games', () => {
 describe('the tiles above the record, position by position', () => {
   /* every field holds a number no other field holds, so two fields changing places cannot pass */
   const so = { apps: 9, passYds: 2104, passTd: 15, ints: 6, rushYds: 611, rushTd: 4, rec: 33, recYds: 402, recTd: 3, tackles: 71, sacks: 5.5, picks: 2, passDef: 8, forcedFum: 1, fgMade: 14, fgAtt: 16 };
-  it('prints each position its own three numbers, every one from its own field', () => {
+  it('prints each position its own numbers, every one from its own field', () => {
     const v = NFL_SEASON.view;
     expect(new Set(Object.values(so)).size).toBe(Object.values(so).length);
-    expect(v.soFar(so, 'QB')).toEqual([['Played', '9'], ['Pass yds', '2,104'], ['TD', '15'], ['INT', '6']]);
+    expect(v.soFar(so, 'QB')).toEqual([['Played', '9'], ['Pass yds', '2,104'], ['Pass TD', '15'], ['INT', '6'], ['Rush yds', '611'], ['Rush TD', '4']]);
+    const { rushYds: _rushYds, rushTd: _rushTd, ...passing } = so;
+    expect(v.soFar(passing, 'QB')).toEqual([['Played', '9'], ['Pass yds', '2,104'], ['TD', '15'], ['INT', '6']]);
     expect(v.soFar(so, 'RB')).toEqual([['Played', '9'], ['Rush yds', '611'], ['Rush TD', '4'], ['Rec', '33']]);
     expect(v.soFar(so, 'WR')).toEqual([['Played', '9'], ['Rec', '33'], ['Rec yds', '402'], ['TD', '3']]);
     expect(v.soFar(so, 'TE')).toEqual(v.soFar(so, 'WR'));

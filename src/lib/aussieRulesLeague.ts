@@ -36,7 +36,7 @@ import { roundRobinCalendar } from '@/lib/leagueCore';
 import { raiseWithinPotential } from '@/lib/careerHeadroom';
 import { bandRead } from '@/lib/gmDealTable';
 import {
-  automaticLineup, emptyMatch, ladderFor, prepareClubs, quarter, readManagerSave, ROLE_COUNTS, ROLES, simulateOtherMatch, validLineup,
+  automaticLineup, effectiveSkill, emptyMatch, ladderFor, prepareClubs, quarter, readManagerSave, ROLE_COUNTS, ROLES, simulateOtherMatch, validLineup,
   type Club, type LadderRow, type Match, type Player, type Preparation, type Role, type Score, type Tactic,
 } from '@/lib/aussieRulesManager';
 import { CURRENT_FINALS_FORMAT, EXTRA_TIME, exitForTie, FINALS_PRESETS, type AussieFinalsFormat, type FinalsExit } from '@/lib/aussieRulesFormat';
@@ -74,6 +74,7 @@ export interface Prospect { id: string; name: string; role: Role; age: number; s
 export interface DraftState { order: string[]; pool: Prospect[]; made: { clubId: string; prospectId: string }[]; at: number }
 interface RatingReview { round: number; changes: [playerId: string, change: -1 | 1][] }
 interface RoundSkillReview { round: number; changes: [playerId: string, before: number, after: number][] }
+interface PreferredLineup { starters: { id: string; role: Role }[]; bench: string[] }
 export interface HistoryRow {
   season: number; place: number; w: number; d: number; l: number; pf: number; pa: number; exit: FinalsExit;
   premier: string; runnerUp: string; gf: { home: string; away: string; homeScore: Score; awayScore: Score };
@@ -89,9 +90,12 @@ export interface LeagueState {
   finals: { ties: FinalsTieRecord[] } | null; draft: DraftState | null; nextId: number; history: HistoryRow[];
   ratingReview?: RatingReview;
   skillReviews?: RoundSkillReview[];
+  preferredLineup?: PreferredLineup;
 }
 export type LeagueAction =
   | { type: 'lineup'; starters: string[]; bench: string[] }
+  | { type: 'keepLineup' }
+  | { type: 'autoLineup' }
   | { type: 'prepare'; choice: Preparation }
   | { type: 'play'; tactic: Tactic }
   | { type: 'playMatch'; tactic: Tactic }
@@ -261,18 +265,45 @@ function tally(goals: Record<string, number>, match: Match): Record<string, numb
 export const leagueLadder = (state: Pick<LeagueState, 'clubs' | 'results'>): LadderRow[] => ladderFor(state);
 export const seedsOf = (state: Pick<LeagueState, 'clubs' | 'results'>) => leagueLadder(state).map(row => row.clubId);
 
-/** The new round's own fixture with your list manager's best 23 on current form. */
+function matchdayLineup(state: LeagueState) {
+  const club = clubOf(state, state.myClub)!;
+  const preferred = state.preferredLineup;
+  if (!preferred) return automaticLineup(club);
+
+  const roles = new Map(club.players.map(player => [player.id, player.role]));
+  const starters = preferred.starters.map(({ id, role }) => roles.get(id) === role ? id : null);
+  const used = new Set(starters.filter(id => id !== null));
+  const reservedBench = new Set(preferred.bench);
+  const ranked = [...club.players].sort((a, b) => effectiveSkill(b) - effectiveSkill(a) || a.id.localeCompare(b.id));
+  const fill = (role?: Role) => {
+    const available = ranked.filter(player => !used.has(player.id) && (!role || player.role === role));
+    // Keep every surviving interchange slot unless its player has to fill a starter's role.
+    const player = available.find(candidate => !reservedBench.has(candidate.id)) ?? available[0];
+    used.add(player.id);
+    return player.id;
+  };
+  const selected = starters.map((id, index) => id ?? fill(preferred.starters[index].role));
+  const bench = preferred.bench.map(id => {
+    if (!roles.has(id) || used.has(id)) return fill();
+    used.add(id);
+    return id;
+  });
+  return { starters: selected, bench };
+}
+
+/** Open the next fixture with the manager's preferred or automatic matchday 23. */
 function openRound(state: LeagueState, round: number): LeagueState {
   const fixture = fixturesFor(state.seed, state.season, round).find(value => value.homeId === state.myClub || value.awayId === state.myClub)!;
-  const lineup = automaticLineup(clubOf(state, state.myClub)!);
+  const lineup = matchdayLineup(state);
   return { ...state, ...lineup, stage: 'homeAway', round, phase: 'prepare', preparation: null, swapsThisBreak: 0, match: emptyMatch(round, fixture.homeId, fixture.awayId) };
 }
 function recover(clubs: LeagueClub[]): LeagueClub[] {
   return clubs.map(club => ({ ...club, players: club.players.map(player => ({ ...player, fatigue: Math.max(0, player.fatigue - RECOVERY), prep: 0 })) }));
 }
 function freshSeason(state: LeagueState, season: number): LeagueState {
+  const { preferredLineup: _previous, ...career } = state;
   const clubs = state.clubs.map(club => ({ ...club, players: club.players.map(player => ({ ...player, fatigue: 0, prep: 0 })) }));
-  return openRound({ ...state, season, format: CURRENT_FINALS_FORMAT, clubs, week: 0, results: [], goals: {}, finals: null, draft: null }, 0);
+  return openRound({ ...career, season, format: CURRENT_FINALS_FORMAT, clubs, week: 0, results: [], goals: {}, finals: null, draft: null }, 0);
 }
 /** No set means Round 1014's invented league, the same rule as the save; only the hook's start passes CURRENT_CLUB_SET. */
 export function createLeague(seed: number, clubId: string, set: ClubSetId = 'fictional'): LeagueState | null {
@@ -341,7 +372,7 @@ function openWeek(state: LeagueState, week: number): LeagueState {
   const pairings = resolveWeek(preset.ties, seedsOf(state), finalsOutcomes(state), week) ?? [];
   const ties = [...(state.finals?.ties ?? []), ...pairings.map(pair => ({ id: pair.id, week, homeId: pair.homeId, awayId: pair.awayId }))];
   const mine = pairings.find(pair => pair.homeId === state.myClub || pair.awayId === state.myClub);
-  const lineup = automaticLineup(clubOf(state, state.myClub)!);
+  const lineup = mine ? matchdayLineup(state) : automaticLineup(clubOf(state, state.myClub)!);
   return { ...state, ...lineup, stage: 'finals', week, phase: 'prepare', preparation: null, swapsThisBreak: 0, finals: { ties }, match: mine ? emptyMatch(finalsRound(week), mine.homeId, mine.awayId) : null };
 }
 /** Your match is over: record it, play the rest of the round or week, show the report. */
@@ -394,6 +425,19 @@ export function reduceLeague(state: LeagueState, action: LeagueAction): LeagueSt
   if (action.type === 'lineup') {
     if (state.phase !== 'prepare' || !state.match || !validLineup({ clubs: state.clubs, clubId: state.myClub }, action.starters, action.bench) || (sameIds(state.starters, action.starters) && sameIds(state.bench, action.bench))) return state;
     return { ...state, starters: [...action.starters], bench: [...action.bench] };
+  }
+  if (action.type === 'keepLineup' || action.type === 'autoLineup') {
+    if (state.phase !== 'prepare' || !state.match) return state;
+    const club = clubOf(state, state.myClub)!;
+    if (action.type === 'autoLineup') {
+      if (!state.preferredLineup) return state;
+      const { preferredLineup: _previous, ...career } = state;
+      return { ...career, ...automaticLineup(club) };
+    }
+    const previous = state.preferredLineup;
+    if (previous && sameIds(previous.starters.map(slot => slot.id), state.starters) && sameIds(previous.bench, state.bench)) return state;
+    const starters = state.starters.map(id => ({ id, role: club.players.find(player => player.id === id)!.role }));
+    return { ...state, preferredLineup: { starters, bench: [...state.bench] } };
   }
   if (action.type === 'prepare') {
     if (state.phase !== 'prepare' || !state.match) return state;
@@ -674,7 +718,7 @@ const isPlayerId = (id: unknown): id is string => typeof id === 'string' && PLAY
 export function isLeagueAction(value: unknown): value is LeagueAction {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const item = value as Record<string, unknown>;
-  if (item.type === 'next' || item.type === 'simWeek' || item.type === 'draftAuto') return exactKeys(item, ['type']);
+  if (item.type === 'next' || item.type === 'simWeek' || item.type === 'draftAuto' || item.type === 'keepLineup' || item.type === 'autoLineup') return exactKeys(item, ['type']);
   if (item.type === 'prepare') return exactKeys(item, ['type', 'choice']) && (item.choice === 'train' || item.choice === 'rest');
   if (item.type === 'play' || item.type === 'playMatch') return exactKeys(item, ['type', 'tactic']) && TACTIC_IDS.includes(item.tactic as string);
   if (item.type === 'swap') return exactKeys(item, ['type', 'outId', 'inId']) && isPlayerId(item.outId) && isPlayerId(item.inId);
@@ -699,6 +743,19 @@ const EXITS: FinalsExit[] = ['missed', 'wildcard', 'elimination', 'semi', 'preli
 // Read at call time, never at module scope (an imported value).
 const maxQuarter = () => 4 + EXTRA_TIME.periods * EXTRA_TIME.blockBound;
 const validScore = (score: unknown): score is Score => exactKeys(score, ['goals', 'behinds', 'total']) && int(score.goals, 0, 999) && int(score.behinds, 0, 999) && score.total === (score.goals as number) * 6 + (score.behinds as number);
+function validPreferredLineup(lineup: unknown, { clubs, myClub, nextId }: LeagueState): boolean {
+  if (!exactKeys(lineup, ['starters', 'bench']) || !Array.isArray(lineup.starters) || lineup.starters.length !== 18
+    || !Array.isArray(lineup.bench) || lineup.bench.length !== 5) return false;
+  const { starters, bench } = lineup;
+  if (!starters.every(slot => exactKeys(slot, ['id', 'role']) && ROLES.includes(slot.role as Role))
+    || !ROLES.every(role => starters.filter(slot => slot.role === role).length === ROLE_COUNTS[role])) return false;
+  const ids = [...starters.map(slot => slot.id), ...bench];
+  if (new Set(ids).size !== 23 || !ids.every(id => isPlayerId(id) && idNumber(id) < nextId)) return false;
+  const selected = new Set(ids);
+  const positions = new Map(starters.map(slot => [slot.id, slot.role]));
+  return clubs.every(club => club.players.every(({ id, role }) => !selected.has(id)
+    || (club.id === myClub && (!positions.has(id) || positions.get(id) === role))));
+}
 function validMatch(value: unknown, live: boolean): value is Match {
   if (!exactKeys(value, MATCH_KEYS) || !int(value.round, 0, ROUNDS + 8) || !isClubId(value.homeId) || !isClubId(value.awayId) || value.homeId === value.awayId) return false;
   if (!int(value.quarter, 0, maxQuarter()) || !validScore(value.homeScore) || !validScore(value.awayScore)) return false;
@@ -796,11 +853,13 @@ export function validLeagueState(value: unknown): value is LeagueState {
   const keys = !named ? [...TOP_KEYS] : (value as Record<string, unknown>).clubSet === 'afl2026' ? [...TOP_KEYS, 'clubSet'] : null;
   if (keys && value && Object.prototype.hasOwnProperty.call(value, 'ratingReview')) keys.push('ratingReview');
   if (keys && value && Object.prototype.hasOwnProperty.call(value, 'skillReviews')) keys.push('skillReviews');
+  if (keys && value && Object.prototype.hasOwnProperty.call(value, 'preferredLineup')) keys.push('preferredLineup');
   if (!keys || !exactKeys(value, keys) || value.version !== 2 || !validSeed(value.seed) || !isClubId(value.myClub) || value.clubName !== clubFull(value, value.myClub as string)) return false;
   if (!int(value.season, 1, 10000) || !(value.format === 'final8' || value.format === 'wildcard') || !PHASES.includes(value.phase as LeaguePhase)) return false;
   if (!(value.stage === 'homeAway' || value.stage === 'finals') || !int(value.round, 0, ROUNDS - 1) || !int(value.week, 0, 8) || !int(value.nextId, CLUB_COUNT * LIST_SIZE, 999999)) return false;
   const s = value as unknown as LeagueState;
   if (!validClubs(s.clubs, s.nextId, setOf(s)) || !Array.isArray(s.starters) || !Array.isArray(s.bench)) return false;
+  if (s.preferredLineup !== undefined && !validPreferredLineup(s.preferredLineup, s)) return false;
   if (!s.goals || typeof s.goals !== 'object' || Array.isArray(s.goals) || !Object.entries(s.goals).every(([id, goals]) => isPlayerId(id) && int(goals, 1, 9999))) return false;
   const closed = s.phase === 'seasonOver' || s.phase === 'summer' || s.phase === 'draft';
   if (!Array.isArray(s.history) || !s.history.every(validHistory) || s.history.length !== s.season - (closed ? 0 : 1)) return false;
