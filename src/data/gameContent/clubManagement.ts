@@ -157,6 +157,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "Facilities, finances and your backroom staff",
         items: [
           "The club has four facilities, stadium, training ground, medical and dressing room, each level 1 to 10 and each starting where the club's stature puts it: the giants on 8 to 10, most clubs on 1 or 2. Level 1 does nothing. Each level up is a small real lift (faster growth for players with room under their ceiling, shorter injury spells, quicker morale recovery, more food and drink money a head) paid from the transfer kitty at a price that climbs every level.",
+          "In Training, give one player Light or Double for the next paid week. Compare the fitness estimate before you choose how hard he trains.",
         ],
         subsections: [
           {

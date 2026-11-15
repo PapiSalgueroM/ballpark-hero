@@ -79,6 +79,59 @@ function withoutQueue(c: CareerState): CareerState {
 }
 
 describe('Club Manager one-player recovery week', () => {
+  it('books one Double week with a real fitness cost and a matching development record', async () => {
+    const { c, id } = fixture();
+    c.training = { intensity: 'normal', focus: 'youth' };
+    c.squad = c.squad.map(p => ({ ...p, injuryWeeks: 0 }));
+    const existing = step(c, 4310008);
+    const order = { v: 2, club: c.clubName, season: c.season, playerId: id, intensity: 'double' };
+    const input = E.setTrainingPlan(c, { ...c.training, recoveryWeek: order });
+    const fence = await import('@/lib/saveFence');
+    fence.saveFence.adopt(E.SAVE_KEY);
+    expect(E.saveCareer(input)).toBe(true);
+    const loaded = E.loadCareer();
+    expect(loaded).toBeTruthy();
+    const run = step(loaded!, 4310008);
+    const target = player(run.state, id);
+    expect(target.fitness).toBe(81);
+    expect(target.fitness).toBeLessThan(player(existing.state, id).fitness);
+    expect(history(target)?.counts).toStrictEqual([0, 0, 0, 0, 0, 0, 0, 0, 1]);
+    expect(run.state.squad.filter(p => p.id !== id)).toStrictEqual(existing.state.squad.filter(p => p.id !== id));
+    expect(run.draws).toStrictEqual(existing.draws);
+    expect(queueOf(loaded!)).toStrictEqual(order);
+    expect(queueOf(run.state)).toBeUndefined();
+    expect(run.state.xiIds).toStrictEqual(existing.state.xiIds);
+  });
+
+  it('previews both workloads and queues or cancels Double using the normal training controls', async () => {
+    const { c, id } = fixture();
+    c.training = { intensity: 'normal', focus: 'youth' };
+    const { TrainingScreen } = await import('@/components/club-manager/TrainingScreen');
+    const changed = vi.fn();
+    function App() {
+      const [career, setCareer] = useState(c);
+      return <TrainingScreen career={career} onSetPlan={plan => {
+        changed(plan);
+        setCareer(E.setTrainingPlan(career, plan));
+      }} onRetrain={vi.fn()} onStopRetrain={vi.fn()} />;
+    }
+    render(<App />);
+    const button = screen.getByRole('button', { name: 'Queue double training' });
+    expect(button).toBeDisabled();
+    const at = draws.length;
+    fireEvent.change(screen.getByRole('combobox', { name: 'Player for the next week' }), { target: { value: id } });
+    expect(screen.getByText(/Light 98% · Double 81%/)).toBeVisible();
+    expect(changed).not.toHaveBeenCalled();
+    fireEvent.click(button);
+    expect(screen.getByText(/Double next paid week/)).toHaveTextContent(player(c, id).name);
+    expect(changed).toHaveBeenLastCalledWith({ ...c.training, recoveryWeek: {
+      v: 2, club: c.clubName, season: c.season, playerId: id, intensity: 'double',
+    } });
+    fireEvent.click(screen.getByRole('button', { name: 'Cancel double training' }));
+    expect(changed).toHaveBeenLastCalledWith(c.training);
+    expect(draws.length - at).toBe(0);
+  });
+
   it('applies Light recovery and its growth record only to the selected player on a paid week', () => {
     const { c, id } = fixture(), input = queued(c, id), before = copy(input), run = step(input, 4310101);
     const target = player(run.state, id), peers = run.state.squad.filter(p => p.id !== id);
@@ -154,7 +207,7 @@ describe('Club Manager one-player recovery week', () => {
         onStopRetrain={() => { throw new Error('Unexpected retraining cancellation'); }} />;
     }
     render(<Harness />);
-    const pick = screen.queryByRole('combobox', { name: 'Player for recovery' });
+    const pick = screen.queryByRole('combobox', { name: 'Player for the next week' });
     const button = screen.queryByRole('button', { name: 'Queue recovery week' });
     let pending = '', hasCancel = false;
     if (pick && button) {
@@ -180,7 +233,8 @@ describe('Club Manager one-player recovery week', () => {
   it('preserves unreadable recovery metadata and refuses queue or cancel without blocking ordinary plan edits', () => {
     const { c, id } = fixture(), samples: unknown[] = [null, { v: 99, club: c.clubName,
       season: c.season, playerId: id }, { v: 1, club: c.clubName, season: c.season },
-      { v: 1, club: c.clubName, season: c.season, playerId: id, extra: true }];
+      { v: 1, club: c.clubName, season: c.season, playerId: id, extra: true },
+      { v: 2, club: c.clubName, season: c.season, playerId: id, intensity: 'normal' }];
     const rows = samples.map((value, index) => {
       const input = copy(c); input.training = { ...BASE, recoveryWeek: value } as Plan;
       const before = JSON.stringify(input), at = draws.length;

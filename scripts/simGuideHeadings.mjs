@@ -162,6 +162,8 @@ const SOCCER_TRAINING_LOCATION = {
   after: 'Open the training ground (the dumbbell button, above your player on phones or bottom right on desktop)',
 };
 function reviewedGuideSentences(route, part, sentences) {
+  if (route === '/club-manager' && part === 'rules') return [...sentences,
+    'In Training, give one player Light or Double for the next paid week. Compare the fitness estimate before you choose how hard he trains.'];
   if (route !== '/soccer-career') return sentences;
   if (part === 'rules') return [...sentences,
     'Nations League appearances show the season overall used for that match and any change since your previous appearance.'];
