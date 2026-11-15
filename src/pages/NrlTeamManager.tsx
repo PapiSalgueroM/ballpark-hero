@@ -2466,6 +2466,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>While a reserve-grade spell has at least two rounds left, book reserve coaching from Squad for $90,000. The prospect returns one round sooner with their rating gain or new position.</li>
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
               <li>Check your regular-season board target in Season review.</li>
+              <li>Before Round 1, open Season sponsor in Finances to choose a one-season offer or take $160,000 now and $295,000 next year. The two-season deal stays with the club and fills its sponsor slot for both years.</li>
               <li>Before Round 1, choose an eligible position in the Board recruitment brief. Use Recruitment during the season to sign an external player for that position next year and earn a club cash bonus.</li>
               <li>In Ladder, open Scout a club to shortlist eligible rivals and take them straight to Recruitment.</li>
               <li>Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.</li>

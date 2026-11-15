@@ -1302,12 +1302,14 @@ function SupporterAttendance({ career, onAction, disabled }: { career: NrlCareer
   );
 }
 
-const sponsorLabels: Record<NrlSponsorOffer, string> = { fixed: 'Fixed offer', finals: 'Finals offer' };
+const sponsorLabels: Record<NrlSponsorOffer, string> = { fixed: 'Fixed offer', finals: 'Finals offer', twoSeason: 'Two-season offer' };
 
 function SeasonSponsor({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { season, finance } = career;
   const sponsor = finance.sponsor;
   const reason = nrlSponsorRefusal(career);
+  const offers: NrlSponsorOffer[] = ['fixed', 'finals'];
+  if (season.kickerId && season.year < NRL_LAST_YEAR) offers.push('twoSeason');
   const summary = useRef<HTMLElement>(null);
   return (
     <details className="group mt-4 rounded-lg border border-border bg-background px-3">
@@ -1315,7 +1317,7 @@ function SeasonSponsor({ career, onAction, disabled }: { career: NrlCareerState;
         Season sponsor<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
       </summary>
       <div className="space-y-2 pb-3 text-sm">
-        <p className="text-muted-foreground">Simulated one-season offers in AUD. Choose before Round 1 starts.</p>
+        <p className="text-muted-foreground">Simulated sponsor offers in AUD. Choose before Round 1 starts.</p>
         {sponsor ? (
           <div role="status">
             <p className="font-semibold">{sponsorLabels[sponsor.offer]} · {season.year}</p>
@@ -1327,14 +1329,21 @@ function SeasonSponsor({ career, onAction, disabled }: { career: NrlCareerState;
                     : 'Top-eight bonus missed.'}
               </p>
             )}
+            {sponsor.offer === 'twoSeason' && <p className="text-muted-foreground">
+              {sponsor.continued ? 'Year 2 of 2. The deal finishes this season.'
+                : `Year 1 of 2. This club receives ${money(NRL_SPONSOR_OFFERS.twoSeason.secondYear)} next season.`}
+            </p>}
           </div>
         ) : reason ? <p className="text-muted-foreground">{reason}</p> : (
-          <div className="grid gap-2 sm:grid-cols-2">
-            {(['fixed', 'finals'] as const).map(offer => {
+          <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+            {offers.map(offer => {
               const { upfront, bonus } = NRL_SPONSOR_OFFERS[offer];
               return (
                 <div key={offer} className="flex flex-col items-start gap-2 rounded-md border border-border p-2">
-                  <p>{money(upfront)} now{bonus > 0 && <> · {money(bonus)} for finishing in the top eight</>}</p>
+                  {offer === 'twoSeason' ? <>
+                    <p>{money(upfront)} now. {money(NRL_SPONSOR_OFFERS.twoSeason.secondYear)} next season.</p>
+                    <p className="text-muted-foreground">Commits this club’s sponsor slot for both seasons.</p>
+                  </> : <p>{money(upfront)} now{bonus > 0 && <> · {money(bonus)} for finishing in the top eight</>}</p>}
                   <Button type="button" variant="outline" size="lg" className="mt-auto px-3" disabled={disabled}
                     onClick={() => {
                       if (onAction({ type: 'signSponsor', offer, year: season.year, clubId: season.clubId })) summary.current?.focus();
@@ -2246,6 +2255,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
           </summary>
           <div className="space-y-2 pb-3 text-sm">
             <p className="text-muted-foreground">Take over the new club’s squad and contracts. If you return to a club, you resume its last balance and medical facilities.</p>
+            {career.finance.sponsor?.offer === 'twoSeason' && !career.finance.sponsor.continued
+              && <p className="text-muted-foreground">Next season’s sponsor payment stays with this club.</p>}
             {career.coachRetention && <p className="text-muted-foreground">Moving clubs cancels the assistant extension.</p>}
             {retentionChoice && <p className="text-muted-foreground">Moving clubs clears the pending player retention choice.</p>}
             {openings.length > 0 && <section className="rounded-lg border border-border p-2" aria-labelledby="nrl-openings-title">

@@ -59,6 +59,74 @@ afterEach(() => {
 });
 
 describe('NRL season sponsor', () => {
+  it('pays a two-season offer once per season and opens bids again after its term', () => {
+    const start = createNrlCareer('storm', 4);
+    const signed = sign(start, 'twoSeason');
+    expect(cash(signed) - cash(start)).toBe(160_000);
+    expect(sign(signed, 'fixed')).toBe(signed);
+    assertReload(signed);
+    const complete = (state: NrlCareerState) => state.season.phase === 'complete';
+    const ended = until(signed, complete);
+    const stayed = reduceNrlCareer(ended, { type: 'startNextSeason' });
+    expect(stayed.finance.sponsor).toEqual({ offer: 'twoSeason', continued: true });
+    expect(stayed.finance.openingCash).toBe(cash(ended));
+    expect(cash(stayed) - cash(ended)).toBe(295_000);
+    expect(sign(stayed, 'finals')).toBe(stayed);
+    expect(reduceNrlCareer(stayed, { type: 'startNextSeason' })).toBe(stayed);
+    assertReload(stayed);
+    const view = open(JSON.stringify(stayed));
+    const sponsor = openSponsor();
+    expect(sponsor.getByText('$295,000 received')).toBeVisible();
+    expect(sponsor.getByText('Year 2 of 2. The deal finishes this season.')).toBeVisible();
+    expect(sponsor.queryByRole('button', { name: 'Sign fixed offer' })).toBeNull();
+    view.unmount();
+    expect(readNrlCareerSave(JSON.stringify({ ...stayed, finance: { ...stayed.finance, sponsor: undefined } }))).toBeNull();
+    const second = until(stayed, complete);
+    expect(second.history[1].finance?.sponsor).toEqual({ offer: 'twoSeason', continued: true });
+    assertReload(second);
+    const third = reduceNrlCareer(second, { type: 'startNextSeason' });
+    expect(third.finance.sponsor).toBeUndefined();
+    expect(cash(third)).toBe(cash(second));
+    expect(cash(sign(third, 'fixed')) - cash(third)).toBe(200_000);
+    assertReload(third);
+  });
+
+  it('keeps the second payment with its signing club when the manager moves away and returns', () => {
+    const start = createNrlCareer('storm', 4);
+    const view = open(JSON.stringify(start));
+    const sponsor = openSponsor();
+    expect(sponsor.getByText('$160,000 now. $295,000 next season.')).toBeVisible();
+    click('Sign two-season offer');
+    expect(sponsor.getByText('$160,000 received')).toBeVisible();
+    expect(sponsor.getByText('Year 1 of 2. This club receives $295,000 next season.')).toBeVisible();
+    const signed = sign(start, 'twoSeason');
+    expect(raw()).toBe(JSON.stringify(signed));
+    view.unmount();
+    const complete = (state: NrlCareerState) => state.season.phase === 'complete';
+    const ended = until(signed, complete);
+    const vacancy = { year: 2026, clubId: 'storm', destinationId: 'bears' };
+    const applied = reduceNrlCareer(ended, { type: 'applyForOffseasonJob', ...vacancy });
+    const moved = reduceNrlCareer(applied, { type: 'acceptOffseasonJob', ...vacancy });
+    expect(moved.season.clubId).toBe('bears');
+    expect(moved.finance.sponsor).toBeUndefined();
+    expect(moved.finance.openingCash).toBe(2_500_000);
+    const forged = { ...moved, finance: { ...moved.finance, sponsor: { offer: 'twoSeason', continued: true } } };
+    expect(readNrlCareerSave(JSON.stringify(forged))).toBeNull();
+    assertReload(sign(moved, 'fixed'));
+    const away = until(moved, complete);
+    const returned = reduceNrlCareer(away, { type: 'startNextSeason', move: { fromYear: 2027, clubId: 'storm' } });
+    expect(returned.finance.sponsor).toBeUndefined();
+    expect(returned.finance.openingCash).toBe(cash(ended) + 295_000);
+    assertReload(returned);
+    const returnedForLess = { ...returned, finance: { ...returned.finance, openingCash: cash(ended) } };
+    expect(readNrlCareerSave(JSON.stringify(returnedForLess))).toBeNull();
+    const throughReturn = until(returned, complete);
+    expect(throughReturn.history[2].finance?.openingCash).toBe(cash(ended) + 295_000);
+    const next = reduceNrlCareer(throughReturn, { type: 'startNextSeason' });
+    expect(next.finance.openingCash).toBe(cash(throughReturn));
+    assertReload(next);
+  });
+
   it('opens without saving, pays the fixed offer once and reloads its ledger receipt', () => {
     const start = createNrlCareer('storm', 4);
     const bytes = JSON.stringify(start);
@@ -66,7 +134,7 @@ describe('NRL season sponsor', () => {
     const sponsor = openSponsor();
     expect(raw()).toBe(bytes);
     expect(localStorage.getItem(fenceKey)).toBe('4');
-    expect(sponsor.getByText(/simulated one-season offers/i)).toBeVisible();
+    expect(sponsor.getByText(/simulated sponsor offers/i)).toBeVisible();
     click('Sign fixed offer');
     expect(sponsor.getByText('Season sponsor', { exact: true })).toHaveFocus();
     expect(sponsor.getByText('$200,000 received')).toBeVisible();
