@@ -7,6 +7,7 @@
    data still reaches every route through the coach career
    (usCareerToCoach.ts), as it did before Round 900. */
 import UsCareerBoard from '@/components/us-career/UsCareerBoard';
+import { UsSeasonCentreHost } from '@/components/us-career/season/UsSeasonCentreHost';
 import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 
 /* Round 530 review: one number for round one, used by the pressure line and
@@ -15,5 +16,5 @@ import { NHL_CAREER_SPORT } from '@/lib/nhlCareerSport';
 export const FIRST_ROUND_END = NHL_CAREER_SPORT.firstRoundEnd;
 
 export default function NhlMyCareerBoard() {
-  return <UsCareerBoard sport={NHL_CAREER_SPORT} inSeasonRating />;
+  return <UsSeasonCentreHost sport={NHL_CAREER_SPORT}><UsCareerBoard sport={NHL_CAREER_SPORT} inSeasonRating /></UsSeasonCentreHost>;
 }

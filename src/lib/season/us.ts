@@ -166,6 +166,16 @@ export interface UsSeasonBind {
   view: UsSeasonView;
 }
 
+export type NhlSeasonViewer = Pick<UsSeasonBind, 'league' | 'seasonLabel' | 'results' | 'view'> & {
+  slug: 'nhl';
+  prepare(career: UsCareerCore, row: UsRow, labelOf: (team: string, era?: string) => string): {
+    ctx: UsSeasonCtx;
+    season: DerivedSeason;
+  } | null;
+};
+
+export type UsSeasonSource = UsSeasonBind | NhlSeasonViewer;
+
 /** Round 1212: the four members of a bind that describe one year's postseason. */
 export type UsSeasonFormat = Pick<UsSeasonBind, 'results' | 'bands' | 'series' | 'rounds'>;
 

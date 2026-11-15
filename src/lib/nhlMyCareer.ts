@@ -137,6 +137,10 @@ export interface NhlSeasonLine {
   salary: number;
 }
 
+export const NHL_CAREER_PLAYOFF_RESULTS: readonly string[] = [
+  'Lost in Round 1', 'Lost in Round 2', 'Lost the Conference Final', 'Lost the Cup Final', 'WON THE STANLEY CUP',
+];
+
 export interface NhlCareerState {
   name: string;
   pos: NhlCareerPos;
@@ -536,11 +540,10 @@ export function simNhlSeason(
   let result = 'Missed the playoffs';
   let poStage = -1;
   if (rng() < playoffOdds) {
-    const stages = ['Lost in Round 1', 'Lost in Round 2', 'Lost the Conference Final', 'Lost the Cup Final', 'WON THE STANLEY CUP'];
     let stage = 0;
     while (stage < 4 && rng() < 0.42 + (strength - 78) / 85) stage++;
     poStage = stage;
-    result = stages[stage];
+    result = NHL_CAREER_PLAYOFF_RESULTS[stage];
     if (result === 'WON THE STANLEY CUP') {
       c.cups += 1;
       c.fanbase = Math.min(100, c.fanbase + 15);

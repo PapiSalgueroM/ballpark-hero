@@ -210,6 +210,7 @@ const BOUND: { name: string; Board: ComponentType; sport: UsCareerSport; pos: st
   /* Round 1212: a hitter (pitchers are held). No seed of this block drafts him to the Orioles or the Yankees,
      whose real 2026 season is held; those two have their own tests below. */
   { name: 'MLB', Board: MlbMyCareerBoard, sport: MLB_CAREER_SPORT, pos: 'CF' },
+  { name: 'NHL', Board: NhlMyCareerBoard, sport: NHL_CAREER_SPORT, pos: 'C' },
 ].filter(b => !!b.sport.loadSeasonCentre);
 
 describe.each(BOUND)('$name My Career: watching changes nothing', ({ Board, sport, pos }) => {
@@ -720,8 +721,8 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     expect(q('[data-season-centre-held]')).toBeNull();
     expect(q('[data-week-by-week]')).not.toBeNull();
   });
-  it('has the NBA, the NFL and MLB all bound, so no arm above can drop out through its own filter', () => {
-    expect(BOUND.map(b => b.name)).toEqual(['NBA', 'NFL', 'MLB']);
+  it('has all four sports bound, so no arm above can drop out through its own filter', () => {
+    expect(BOUND.map(b => b.name)).toEqual(['NBA', 'NFL', 'MLB', 'NHL']);
   });
   it('says there is nothing to watch in a banned year', async () => {
     seedSave(NBA_CAREER_SPORT, 'SG', 'banned', 'now', c => { c.suspendedSeasons = 1; });
@@ -730,21 +731,6 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     expect(q('[data-season-centre-held]')!.textContent).toContain('you are suspended');
     expect(q('[data-week-by-week]')).toBeNull();
   });
-  const UNBOUND: [string, ComponentType, UsCareerSport, string][] = ([
-    ['NFL', NflMyCareerBoard, NFL_CAREER_SPORT, 'QB'],
-    ['MLB', MlbMyCareerBoard, MLB_CAREER_SPORT, MLB_CAREER_SPORT.create.defaultPos],
-    ['NHL', NhlMyCareerBoard, NHL_CAREER_SPORT, NHL_CAREER_SPORT.create.defaultPos],
-  ] as [string, ComponentType, UsCareerSport, string][]).filter(x => !x[2].loadSeasonCentre);
-  it.each(UNBOUND)('%s My Career renders no entry at all', async (_name, Board, sport, pos) => {
-    seedSave(sport, pos, `none|${sport.slug}`);
-    render(<MemoryRouter><Board /></MemoryRouter>);
-    await flush();
-    expect(playButton()).toBeDefined();
-    expect(q('[data-season-centre-entry]')).toBeNull();
-  });
-  /* Round 1212: with baseball bound the table above holds the NHL alone, and it will be empty when hockey is
-     bound. "A binding with no loader shows no entry" is therefore also held on a copy of a bound binding with
-     its loader taken away, which no later bind can empty. */
   it('renders no entry at all for a binding whose loader is taken away', async () => {
     const NO_LOADER: UsCareerSport = { ...MLB_CAREER_SPORT, loadSeasonCentre: undefined, seasonCentreHeld: undefined };
     seedSave(MLB_CAREER_SPORT, 'CF', 'none|copy');
@@ -752,12 +738,6 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     await flush();
     expect(playButton()).toBeDefined();
     expect(q('[data-season-centre-entry]')).toBeNull();
-  });
-  it('has MLB bound and the NHL still unbound (hockey is the next round)', () => {
-    expect(MLB_CAREER_SPORT.loadSeasonCentre).toBeTypeOf('function');
-    expect(MLB_CAREER_SPORT.seasonCentreHeld).toBeTypeOf('function');
-    expect(NHL_CAREER_SPORT.loadSeasonCentre).toBeUndefined();
-    expect(UNBOUND.map(x => x[0])).toEqual(['NHL']);
   });
   /* Round 1212, baseball's own holds, each sentence typed here whole: a pitcher, a club a game short in the real
      2026 season, a club outside the league, the 60 game season, and the Watch again link asking about the club
