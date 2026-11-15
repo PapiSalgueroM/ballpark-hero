@@ -29,6 +29,7 @@ function isPickMeta(value: unknown): value is PickMeta {
   return record(value)
     && ['rawName', 'rawPosition', 'club', 'nationality'].every(key => value[key] === undefined || typeof value[key] === 'string')
     && ['value', 'age', 'year'].every(key => value[key] === undefined || Number.isFinite(value[key]))
+    && (value.recordId === undefined || (typeof value.recordId === 'number' && Number.isSafeInteger(value.recordId) && value.recordId > 0))
     && (value.position === undefined || ALL_POSITIONS.some(position => position === value.position))
     && (value.played === undefined || (Array.isArray(value.played)
       && value.played.every(role => ALL_POSITIONS.some(position => position === role))));

@@ -600,10 +600,9 @@ export function PlayerAutocomplete({
             /* Round 668: when two rows share a name (Éderson the Atalanta
                midfielder, Ederson the Fenerbahce keeper) the line under each
                says which man it is, from his latest row. */
-            const baseSubtitle = entity.disambiguator ?? metaSubtitle(entity);
             const subtitle = showRecordedYear && typeof entity.meta.year === 'number'
-              ? [baseSubtitle, `Record: ${entity.meta.year}`].filter(Boolean).join(' · ')
-              : baseSubtitle;
+              ? [metaSubtitle(entity), `Record: ${entity.meta.year}`].filter(Boolean).join(' · ')
+              : entity.disambiguator ?? metaSubtitle(entity);
             return (
               <button
                 key={entity.personKey ?? entity.key}

@@ -73,6 +73,7 @@ const RAW: Record<PositionRole, string> = {
   LW: 'Left Winger', RW: 'Right Winger', ST: 'Centre-Forward', CF: 'Second Striker',
 };
 const VERDICT: AIVerdict = { rating: 'Fixture recorded-year result', headline: 'Fixture summary', analysis: 'Fictional selected-record simulation.' };
+const draftKey = 'dukb-build-your-xi-draft-v1';
 const api = (view: { result: { current: ReturnType<typeof useLineupBuilder> } }) =>
   view.result.current as unknown as DraftHook;
 
@@ -434,7 +435,6 @@ describe('Build Your XI recorded year admissions', () => {
 });
 
 describe('Build Your XI unfinished draft', () => {
-  const draftKey = 'dukb-build-your-xi-draft-v1';
 
   it('reopens only the last accepted club year pick from review with the same assigned club', async () => {
     const view = await startHook(2010);
@@ -667,6 +667,65 @@ describe('Build Your XI unfinished draft', () => {
 });
 
 describe('Build Your XI Club year Browse on the real page', () => {
+  it('shows separate Club era records and can switch the existing keeper to a lower-value season', async () => {
+    const teamAssignments = clubEraClubs.slice(0, 11).map(name => ({ name, isNation: false }));
+    const keeper = 'Era Keeper';
+    const slots = FORMATIONS['4-4-2'].map((slot, index) => {
+      const name = index === 0 ? keeper : `Era Draft Pick ${index}`;
+      const club = teamAssignments[index].name;
+      return [index, { ...slot, playerName: name, assignedTeam: club, isNation: false,
+        pick: { ...meta(club, 2012, slot.role, name), recordId: 501 + index, value: index === 0 ? 9_000_000 : 2_000_000 } }] as const;
+    });
+    localStorage.setItem(draftKey, JSON.stringify({ formation: '4-4-2', draftChoice: { mode: 'club-era', year: 2008 }, teamAssignments, slots }));
+    const club = clubTableNames(teamAssignments[0].name)[0];
+    const row = (id: number, name: string, year: number, age: number, value: number) => ({
+      id, player_name: name, name_folded: name.toLowerCase(), club, nationality: 'Fixture Nation',
+      position: 'Goalkeeper', year, age, market_value_usd: value,
+    });
+    const records = [
+      row(501, keeper, 2012, 26, 9_000_000),
+      ...Array.from({ length: 50 }, (_, index) => row(index + 1, `Era Prospect ${index}`, 2010, 25, 4_000_000)),
+      row(601, keeper, 2009, 23, 1_000_000),
+      row(602, slots[1][1].playerName, 2009, 23, 1_000_000),
+    ];
+    io.rest = async query => {
+      io.queries.push(query);
+      const needle = operation(query, 'ilike', 'name_folded');
+      const range = query.operations.find(([name]) => name === 'range')?.[1] as [number, number] | undefined;
+      const limit = query.operations.find(([name]) => name === 'limit')?.[1][0] as number | undefined;
+      const matching = typeof needle === 'string' ? records.filter(record => record.name_folded.includes(needle.replaceAll('%', ''))) : records;
+      return { data: range ? matching.slice(range[0], range[1] + 1) : matching.slice(0, limit), error: null };
+    };
+    const open = () => render(<MemoryRouter><LineupBuilder /></MemoryRouter>);
+    const view = open();
+    fireEvent.click(screen.getByRole('button', { name: 'Replace Era Keeper at GK' }));
+    fireEvent.change(field(), { target: { value: keeper } });
+    await advance(230); await flush();
+    expect(screen.getByRole('option', { name: /Era Keeper.*Record: 2012/ })).toBeVisible();
+    expect(screen.getByRole('option', { name: /Era Keeper.*Record: 2009/ })).toBeVisible();
+    await browse();
+    expect(screen.getByText('1 to 50 of 52')).toBeVisible();
+    fireEvent.click(screen.getByRole('button', { name: 'Next players' }));
+    expect(screen.getByText('51 to 52 of 52')).toBeVisible();
+    expect(screen.queryByRole('option', { name: /Era Draft Pick 1/ })).toBeNull();
+    fireEvent.click(screen.getByRole('option', { name: /Era Keeper.*Record: 2009/ }));
+    await flush();
+
+    const saved = JSON.parse(localStorage.getItem(draftKey)!);
+    expect(saved.slots[0][1]).toMatchObject({ playerName: keeper, pick: { recordId: 601, year: 2009, age: 23, value: 1_000_000 } });
+    expect(saved.slots.slice(1)).toEqual(slots.slice(1));
+    view.unmount();
+    open();
+    const replace = screen.getByRole('button', { name: 'Replace Era Keeper at GK' });
+    expect(within(replace.parentElement!).getByText('Record: 2009')).toBeVisible();
+    expect(JSON.parse(localStorage.getItem(draftKey)!)).toEqual(saved);
+    for (const query of io.queries) {
+      expect(String(query.operations.find(([name]) => name === 'select')?.[1][0]).split(', ')).toContain('id');
+    }
+    expect(io.queries.map(query => operation(query, 'in', 'year'))).toEqual(io.queries.map(() => [2008, 2009, 2010, 2011, 2012]));
+    legacyQuiet();
+  });
+
   it('pages through the full assigned pool when replacing a starter', async () => {
     io.pool = 'complete'; await openPage(2026); await fillPage();
     const before = io.simulate.mock.calls[0][0] as { name: string; value: number }[];
