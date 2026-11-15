@@ -158,15 +158,15 @@ const DEFS = {
     route: '/nfl-my-career', binding: 'NFL_CAREER_SPORT', file: 'src/lib/nflCareerSport.ts', pos: 'QB', words: 'The kick after is no good.', start: 'Kick off', held: { era: 'y2005', year: 2005 }, feed: 'nfl', minLines: 1, minScores: 2, minColumn: 30, games: 17, twice: 'YDS', starter: true,
     also: [{ pos: 'QB', line: /^\d+ YDS\d+ TD\d+ INT$/ }, { pos: 'K', line: /^\d\/\d FG(LONG \d+)?$/ }, { pos: 'LB', line: /^\d+ TKL/ }],
   },
-  /* Round 1212: baseball, a center fielder (pitchers are held). `starter`: the plain first draft of this
+  /* Round 1212: baseball, a center fielder. `starter`: the plain first draft of this
      walk's seed is a bench Oriole of 2026, whose real season is held (161 games), so the walk takes the first
      keyed draft that starts him, at a club whose 2026 season was 162 games. `words` is a line of the feed only
-     the number file holds. `heldAlso`: more hubs that must show a held line and no button, at both sizes: a
-     pitcher, and that plain first draft (a club a game short in the real 2026 season). */
+     the number file holds. `heldAlso`: the plain first draft must show a held line and no button at both sizes
+     because his club finished a game short in the real 2026 season. */
   mlb: {
     route: '/mlb-my-career', binding: 'MLB_CAREER_SPORT', file: 'src/lib/mlbCareerSport.ts', pos: 'CF', words: 'You go deep', start: 'Play ball', held: { era: 'y2004', year: 2020 }, feed: 'mlb', minLines: 1, minScores: 2, minColumn: 20, games: 162, twice: 'RBI', starter: true,
     also: [{ pos: 'SS', line: /^\d-\d/ }],
-    heldAlso: [{ pos: 'SP', plain: false, says: 'for pitchers yet' }, { pos: 'CF', plain: true, says: 'finished on 161 games' }],
+    heldAlso: [{ pos: 'CF', plain: true, says: 'finished on 161 games' }],
   },
 };
 /** Runs in the page: [side, points] of one feed line, or null for a line that scores nothing. */
