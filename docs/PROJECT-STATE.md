@@ -2,6 +2,8 @@
 
 The integrated candidate passed application types, production build, 127 focused tests and five pinned Chromium cases. The native NBA checks covered 82 and 66 games, paired playoffs and exact saved choice and receipt reloads. The NFL cases opened four-year rookie deals through desk-on, desk-off and season-away paths. Only the NBA guide was regenerated.
 
+The NFL season-away harness now includes the weekly ratings update. All 1,020 weekly replays, 60 draft replays and 60 offseason replays matched. The separate career checkpoint fixture pinned to `6d2d7a7d` still differs on the exact #990 baseline as well as the candidate.
+
 - NBA My Career lets guards and small forwards trade scoring for steals or frontcourt players trade scoring for blocks in the Season Programme. The regular-season recap records the change and shows when the cap prevents a gain.
 - NFL Front Office starts newly drafted players with four contract years, their draft age and their promised salary. Current paused draft saves and older managed drafts with a saved ledger entry get the same correction at rollover.
 
