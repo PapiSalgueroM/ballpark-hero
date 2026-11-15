@@ -20,13 +20,15 @@ export interface LocalVerdict {
 
 /* ---------------- soccer: Build Your XI ---------------- */
 
+type MarketValue = { name: string; mv: number };
+
 function soccerRating(mvUsd: number): number {
   const mvM = Math.max(1, mvUsd / 1_000_000);
   const r = 35 + 64 * (Math.log10(mvM + 1) / Math.log10(1001));
   return Math.max(35, Math.min(99, Math.round(r)));
 }
 
-async function lookupMarketValue(name: string): Promise<{ name: string; mv: number } | null> {
+async function lookupMarketValue(name: string, signal: AbortSignal): Promise<MarketValue | null> {
   try {
     const { data } = await supabase
       .from('player_market_values')
@@ -34,7 +36,8 @@ async function lookupMarketValue(name: string): Promise<{ name: string; mv: numb
       .eq('year', 2026)
       .ilike('player_name', `%${name.trim()}%`)
       .order('market_value_usd', { ascending: false })
-      .limit(1);
+      .limit(1)
+      .abortSignal(signal);
     if (data && data.length > 0) return { name: data[0].player_name, mv: data[0].market_value_usd };
     return null;
   } catch {
@@ -42,8 +45,23 @@ async function lookupMarketValue(name: string): Promise<{ name: string; mv: numb
   }
 }
 
-export async function localEvaluateSoccerXI(playerNames: string[]): Promise<LocalVerdict> {
-  const found = await Promise.all(playerNames.map(lookupMarketValue));
+export async function localEvaluateSoccerXI(playerNames: string[], signal: AbortSignal): Promise<LocalVerdict> {
+  const found = new Array<MarketValue | null>(playerNames.length).fill(null);
+  if (!signal.aborted) {
+    // Supabase can wait for an auth session before passing the signal to fetch.
+    let stopWaiting: () => void;
+    const stopped = new Promise<void>(resolve => { stopWaiting = resolve; });
+    signal.addEventListener('abort', stopWaiting, { once: true });
+    try {
+      const reads = playerNames.map(async (name, index) => {
+        const hit = await lookupMarketValue(name, signal);
+        if (!signal.aborted) found[index] = hit;
+      });
+      await Promise.race([stopped, Promise.all(reads)]);
+    } finally {
+      signal.removeEventListener('abort', stopWaiting);
+    }
+  }
   const rated = found
     .map((f, i) => ({ input: playerNames[i], hit: f }))
     .map(x => ({
@@ -65,10 +83,10 @@ export async function localEvaluateSoccerXI(playerNames: string[]): Promise<Loca
                 { rating: 'Relegation Scrap 😬', headline: 'This squad needs January signings' };
 
   const lines = [
-    `Squad average ${avg} on current 2026 market values.`,
-    star ? `Star man: ${star.name} (${star.rating}).` : '',
-    weakest && weakest !== star ? `Weak link: ${weakest.name} (${weakest.rating}).` : '',
-    unknowns > 0 ? `${unknowns} pick${unknowns === 1 ? '' : 's'} weren't in the value database, rated on trust.` : '',
+    signal.aborted ? `Squad average ${avg}.` : `Squad average ${avg} on current 2026 market values.`,
+    !signal.aborted && star ? `Star man: ${star.name} (${star.rating}).` : '',
+    !signal.aborted && weakest && weakest !== star ? `Weak link: ${weakest.name} (${weakest.rating}).` : '',
+    unknowns > 0 ? `${unknowns} pick${unknowns === 1 ? '' : 's'} ${signal.aborted ? 'could not be checked before the timeout' : "weren't in the value database"}, rated on trust.` : '',
     'Verdict by the offline judge (AI referee back soon).',
   ].filter(Boolean);
 
