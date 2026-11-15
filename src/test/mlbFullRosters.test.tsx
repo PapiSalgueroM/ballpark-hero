@@ -14,7 +14,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import fs from 'node:fs';
 import path from 'node:path';
-import { initMlbLeague, mlbSimReads, mlbDraftClass, mlbProspectToPlayer, mlbSalaryFor, MLB_DEPTH_SALARY, MLB_ROSTER_MIN, MLB_ROSTER_MAX, MLB_LEGACY_ROSTER_MIN, MLB_LEGACY_ROSTER_MAX, type MlbLeague } from '@/lib/mlbFrontOffice';
+import { initMlbLeague, mlbSimReads, mlbStrength, mlbStrengthUnits, mlbDraftClass, mlbProspectToPlayer, mlbSalaryFor, simMlbRound,
+  MLB_DEPTH_SALARY, MLB_ROSTER_MIN, MLB_ROSTER_MAX, MLB_LEGACY_ROSTER_MIN, MLB_LEGACY_ROSTER_MAX, type MlbLeague } from '@/lib/mlbFrontOffice';
 import { leagueNames } from '@/lib/foNames';
 import { MLB_FO_PARTIAL } from '@/data/mlbFoRosters2026';
 import MlbFrontOfficeBoard from '@/components/mlb-front-office/MlbFrontOfficeBoard';
@@ -108,6 +109,58 @@ describe('MLB Front Office: full rosters on the board', () => {
     fireEvent.click(screen.getByText('Roster'));
     expect(document.querySelector('[data-cut-block]')?.textContent).toBe(`Your roster is at the minimum of ${MLB_ROSTER_MIN}, so nobody else can go.`);
     expect(MLB_ROSTER_MAX).toBe(28);
+  });
+
+  it('does not award a rotation upgrade for a legal DFA while the rotation is short', () => {
+    const league = initMlbLeague(lehmer(5));
+    const team = 'NYY', club = league.teams[team];
+    const pitchers = club.players.filter(player => player.pos === 'SP');
+    expect(pitchers.length).toBeGreaterThanOrEqual(4);
+    pitchers.forEach((player, index) => { player.ovr = [84, 78, 65][index] ?? 73; player.out = index < 3 ? 0 : 2; });
+    const cut = pitchers[2];
+    const before = mlbStrength(club);
+    save(league, team);
+    const view = render(<MlbFrontOfficeBoard />);
+    fireEvent.click(screen.getByText('Roster'));
+    const strength = () => Number(screen.getByText('Strength', { exact: true }).querySelector('b')!.textContent);
+    const shown = strength();
+    fireEvent.click(view.container.querySelector(`[data-roster-row="${cut.id}"] button`)!);
+    fireEvent.click(screen.getByText('DFA him'));
+    const bytes = localStorage.getItem(SAVE_KEY)!;
+    const updated = JSON.parse(bytes).league as MlbLeague;
+    expect(updated.teams[team].players).toHaveLength(25);
+    expect(updated.teams[team].deadCap).toHaveLength(1);
+    expect(updated.freeAgents.some(p => p.id === cut.id)).toBe(true);
+    expect(mlbStrength(updated.teams[team])).toBeCloseTo(before - 0.33, 10);
+    expect(strength()).toBeLessThanOrEqual(shown);
+    view.unmount();
+
+    render(<MlbFrontOfficeBoard />);
+    expect(strength()).toBeLessThanOrEqual(shown);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+
+    // A known return fills the vacancy after the usual injury countdown.
+    for (const player of mlbStrengthUnits(updated.teams[team]).rot) expect(player.out).toBe(0);
+    const returning = updated.teams[team].players.find(player => player.pos === 'SP' && player.out > 0)!;
+    returning.out = 1;
+    let draws = 0;
+    simMlbRound(updated, team, () => { draws++; return 0.99; });
+    expect(returning.out).toBe(0);
+    expect(mlbStrengthUnits(updated.teams[team]).rot).toContain(returning);
+    expect(draws).toBe(91);
+  });
+
+  it('keeps the exact healthy formula, with the individual October starter still overriding the rotation', () => {
+    const league = initMlbLeague(lehmer(5));
+    for (const club of Object.values(league.teams)) {
+      const units = mlbStrengthUnits(club);
+      expect([units.bats.length, units.rot.length, units.pen.length]).toEqual([8, 3, 2]);
+      const mean = (players: typeof club.players) => players.reduce((sum, player) => sum + player.ovr, 0) / players.length;
+      expect(mlbStrength(club)).toBe(mean(units.bats) * 0.55 + mean(units.rot) * 0.33 + mean(units.pen) * 0.12);
+      expect(mlbStrength(club, 3, units.rot[0])).toBe(mean(units.bats) * 0.55 + units.rot[0].ovr * 0.33 + mean(units.pen) * 0.12);
+      const protectedRotation = mlbStrengthUnits(club, 5).rot;
+      if (protectedRotation.length === 5) expect(mlbStrength(club, 5)).toBe(mean(units.bats) * 0.55 + mean(protectedRotation) * 0.33 + mean(units.pen) * 0.12);
+    }
   });
 
   /* Round 829 review: the draft can take a full roster club past 28. Every

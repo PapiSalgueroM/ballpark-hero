@@ -219,19 +219,22 @@ export function mlbCapRoom(t: MlbGmTeam, cap: number): number {
   return Math.round((cap - mlbCapUsed(t)) * 10) / 10;
 }
 
+export const MLB_STRENGTH_SLOTS = { bats: 8, rot: 3, pen: 2 } as const;
+export const MLB_REPLACEMENT_RATING = 62;
+
 function mlbStartingBatters<T extends { pos: string; ovr: number }>(available: T[]): T[] {
-  return available.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, 8);
+  return available.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, MLB_STRENGTH_SLOTS.bats);
 }
 
 /** Round 829: the men the strength reads, best healthy first: 8 bats, 3
     starters, 2 relievers. Lifted out of mlbStrength unchanged so the roster
     screen and the opening payroll read the same men the sim does. A bench
     man counts only when he is better than a starter or a starter is hurt. */
-export function mlbStrengthUnits<T extends { pos: string; ovr: number; out: number }>(t: { players: T[] }, rotationSize = 3): { bats: T[]; rot: T[]; pen: T[] } {
+export function mlbStrengthUnits<T extends { pos: string; ovr: number; out: number }>(t: { players: T[] }, rotationSize: number = MLB_STRENGTH_SLOTS.rot): { bats: T[]; rot: T[]; pen: T[] } {
   const healthy = t.players.filter(p => p.out === 0);
   const bats = mlbStartingBatters(healthy);
   const rot = healthy.filter(p => p.pos === 'SP').sort((a, b) => b.ovr - a.ovr).slice(0, rotationSize);
-  const pen = healthy.filter(p => p.pos === 'RP' || p.pos === 'CL').sort((a, b) => b.ovr - a.ovr).slice(0, 2);
+  const pen = healthy.filter(p => p.pos === 'RP' || p.pos === 'CL').sort((a, b) => b.ovr - a.ovr).slice(0, MLB_STRENGTH_SLOTS.pen);
   return { bats, rot, pen };
 }
 
@@ -241,12 +244,17 @@ export function mlbSimReads(t: { players: MlbGmPlayer[] }): string[] {
   return [...u.bats, ...u.rot, ...u.pen].map(p => p.id);
 }
 
-/** Strength: lineup 55%, rotation 33%, bullpen 12%; IL players excluded. */
-export function mlbStrength(t: MlbGmTeam, rotationSize = 3, starter?: MlbGmPlayer, battingOverride?: MlbGmPlayer[]): number {
+/** Strength: lineup 55%, rotation 33%, bullpen 12%. An empty slot uses the replacement rating. */
+export function mlbStrength(t: MlbGmTeam, rotationSize: number = MLB_STRENGTH_SLOTS.rot, starter?: MlbGmPlayer, battingOverride?: MlbGmPlayer[]): number {
   const { bats, rot, pen } = mlbStrengthUnits(t, rotationSize);
-  const avg = (xs: MlbGmPlayer[], fallback: number) =>
-    xs.length ? xs.reduce((s, p) => s + p.ovr, 0) / xs.length : fallback;
-  return avg(battingOverride ?? bats, 62) * 0.55 + (starter?.ovr ?? avg(rot, 62)) * 0.33 + avg(pen, 62) * 0.12;
+  const average = (players: MlbGmPlayer[], counted: number) => {
+    const slots = Math.max(counted, players.length, 1);
+    const filled = players.reduce((total, player) => total + player.ovr, 0);
+    return (filled + (slots - players.length) * MLB_REPLACEMENT_RATING) / slots;
+  };
+  return average(battingOverride ?? bats, MLB_STRENGTH_SLOTS.bats) * 0.55
+    + (starter?.ovr ?? average(rot, rotationSize)) * 0.33
+    + average(pen, MLB_STRENGTH_SLOTS.pen) * 0.12;
 }
 
 export function mlbDevelopmentUsed(league: MlbLeague, team: string): boolean {

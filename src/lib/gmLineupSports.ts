@@ -12,7 +12,7 @@
 
    Every weight below is the game's own assumption, not a measured split. */
 import { type GmLineupMan, type GmLineupSport, type GmScheme, type GmSlot, type GmSlotGroup, gmFillByRating, gmGroupPool } from './gmLineup';
-import { type MlbGmTeam, mlbStrengthUnits } from './mlbFrontOffice';
+import { type MlbGmTeam, mlbStrengthUnits, MLB_REPLACEMENT_RATING, MLB_STRENGTH_SLOTS } from './mlbFrontOffice';
 import { type NhlGmTeam, nhlContributors } from './nhlFrontOffice';
 import { type GmTeamState, type DepthPos, DEF_POS, DEF_SLOTS, OL_SLOTS, REPLACEMENT_OVR, SKILL_POS, SKILL_SLOTS, depthOrder, unitStarters } from './frontOffice';
 
@@ -39,17 +39,17 @@ export function mlbLineupSport(): GmLineupSport<MlbGmTeam> {
   if (mlb) return mlb;
   const groups: GmSlotGroup[] = [
     {
-      key: 'bats', label: 'Batting order', share: 0.55, counted: 8, fallback: 62,
+      key: 'bats', label: 'Batting order', share: 0.55, counted: MLB_STRENGTH_SLOTS.bats, fallback: MLB_REPLACEMENT_RATING, empty: MLB_REPLACEMENT_RATING,
       positions: { not: ['SP', 'RP', 'CL'] },
       slots: ORDINAL.map((label, i) => ({ label, weight: 3 + (10 - (i + 1)) / 9 })),
     },
     {
-      key: 'rotation', label: 'Rotation', share: 0.33, counted: 3, fallback: 62,
+      key: 'rotation', label: 'Rotation', share: 0.33, counted: MLB_STRENGTH_SLOTS.rot, fallback: MLB_REPLACEMENT_RATING, empty: MLB_REPLACEMENT_RATING,
       positions: ['SP'], slots: slots('Starter', 5, 1),
       rotation: { fullRest: 4, shortRestCost: 4, optional: 1 },
     },
     {
-      key: 'pen', label: 'Bullpen', share: 0.12, counted: 2, fallback: 62,
+      key: 'pen', label: 'Bullpen', share: 0.12, counted: MLB_STRENGTH_SLOTS.pen, fallback: MLB_REPLACEMENT_RATING, empty: MLB_REPLACEMENT_RATING,
       positions: ['RP', 'CL'], slots: [{ label: 'Closer', weight: 0.55 }, { label: 'Setup', weight: 0.45 }],
     },
   ];

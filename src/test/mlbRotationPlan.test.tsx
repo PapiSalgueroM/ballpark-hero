@@ -50,6 +50,11 @@ describe('MLB rotation workload', () => {
     const choice = mlbRotationChoices(start, team)!;
     expect(choice.usual - choice.protected).toBeCloseTo(cost, 6);
     const baselineOut = { rotation: 0, wins: 0 }, protectedOut = { rotation: 0, wins: 0 };
+    let availableRounds = 0, availableWins = 0, protectedAvailableWins = 0;
+    const hasGroup = (league: MlbLeague, rotationSize: number) => {
+      const units = mlbStrengthUnits(league.teams[team], rotationSize);
+      return units.bats.length === 8 && units.rot.length === rotationSize && units.pen.length === 2;
+    };
     for (let i = 0; i < 1600; i++) {
       const usual = structuredClone(start), protectedRound = plan(structuredClone(start));
       const run = (league: MlbLeague) => {
@@ -68,14 +73,46 @@ describe('MLB rotation workload', () => {
       protectedOut.rotation += mine(protectedRound);
       baselineOut.wins += a.report.myWins;
       protectedOut.wins += b.report.myWins;
+      if (hasGroup(usual, 3) && hasGroup(protectedRound, 5)) {
+        availableRounds++;
+        availableWins += a.report.myWins;
+        protectedAvailableWins += b.report.myWins;
+      }
       expect(b.report.rotation).toEqual({ available: 5 - mine(protectedRound) });
       expect(protectedRound.teams.BOS.players).toEqual(usual.teams.BOS.players);
       expect(protectedRound.teams[team].players.filter(p => p.pos !== 'SP')).toEqual(usual.teams[team].players.filter(p => p.pos !== 'SP'));
     }
     expect(baselineOut.rotation).toBeGreaterThan(170);
     expect(protectedOut.rotation / baselineOut.rotation).toBeLessThan(0.72);
-    if (cost < 1) expect(Math.abs(baselineOut.wins - protectedOut.wins)).toBeLessThan(winThreshold);
-    else expect(baselineOut.wins - protectedOut.wins).toBeGreaterThan(winThreshold);
+    if (cost < 1) {
+      expect(availableRounds).toBeGreaterThan(900);
+      expect(Math.abs(availableWins - protectedAvailableWins)).toBeLessThan(winThreshold);
+    } else expect(baselineOut.wins - protectedOut.wins).toBeGreaterThan(winThreshold);
+  });
+
+  it('uses a replacement slot if a late-season protection plan loses its fifth starter on match day', () => {
+    const start = smallLeague([92, 92, 92, 81, 80]);
+    start.round = MLB_ROUNDS;
+    start.schedule![MLB_ROUNDS - 1] = Array(6).fill('NYY-BOS');
+    const planned = plan(start);
+    let found = false;
+    for (let i = 0; i < 400 && !found; i++) {
+      const injurySeed = keyedRng('September vacant slot:' + i)();
+      const probe = structuredClone(planned);
+      simMlbRound(probe, team, () => injurySeed);
+      const home = mlbStrengthUnits(probe.teams[team], 5), away = mlbStrengthUnits(probe.teams.BOS);
+      if (home.rot.length !== 4 || home.bats.length !== 8 || home.pen.length !== 2
+        || away.bats.length !== 8 || away.rot.length !== 3 || away.pen.length !== 2) continue;
+      const existing = home.rot.reduce((sum, player) => sum + player.ovr, 0);
+      const winChance = (rating: number) => 1 / (1 + 10 ** (-(rating - 88) * 0.33 / 25));
+      const separatingDraw = (winChance(existing / 4) + winChance((existing + 62) / 5)) / 2;
+      let draws = 0;
+      const outcome = simMlbRound(structuredClone(planned), team, () => ++draws === 1 ? injurySeed : separatingDraw);
+      expect(outcome).toMatchObject({ rotation: { available: 4 }, myWins: 0, myLosses: 6 });
+      expect(draws).toBe(7);
+      found = true;
+    }
+    expect(found).toBe(true);
   });
 
   it('uses the usual plan if the saved choice no longer has five healthy starters', () => {
