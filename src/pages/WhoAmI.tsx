@@ -18,7 +18,6 @@ import { fmtCompactUsd } from '@/lib/dealPlayers';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import {
   WhoAmIData,
-  WhoAmIPlayer,
   WhoAmIDifficulty,
   GuessResult,
   buildWhoAmISecretPool,
@@ -34,9 +33,11 @@ import {
   shortPosition,
   positionGroup,
 } from '@/lib/whoAmI';
+import { readWhoAmIRound, readWhoAmIRoundBytes, WHO_AM_I_ROUND_KEY, type WhoAmIRound } from '@/lib/whoAmIRoundSave';
 
-type Phase = 'boot' | 'error' | 'mode' | 'playing' | 'won' | 'lost';
+type PoolPhase = 'boot' | 'error' | 'mode';
 type ChipState = 'hit' | 'near' | 'miss';
+const noGuesses: GuessResult[] = [];
 
 const scoreColor = (s: number) =>
   s >= 75 ? 'text-correct' : s >= 55 ? 'text-yellow-500' : s >= 35 ? 'text-orange-500' : 'text-destructive';
@@ -62,12 +63,23 @@ const chip = (key: string, state: ChipState, label: ReactNode, title?: string) =
 );
 
 const WhoAmI = () => {
-  const [phase, setPhase] = useState<Phase>('boot');
+  const [{ raw, restored }] = useState(() => {
+    const bytes = readWhoAmIRoundBytes();
+    return { raw: bytes, restored: readWhoAmIRound(bytes) };
+  });
+  const [round, setRound] = useState(restored);
+  const latestRound = useRef(restored);
+  const savedBytes = useRef(raw);
+  const lastSecretName = useRef(restored?.secret.name);
+  const [saveChanged, setSaveChanged] = useState(false);
+  const [poolPhase, setPoolPhase] = useState<PoolPhase>('boot');
   const [data, setData] = useState<WhoAmIData | null>(null);
-  const [budget, setBudget] = useState(25);
-  const [secret, setSecret] = useState<WhoAmIPlayer | null>(null);
-  const [guesses, setGuesses] = useState<GuessResult[]>([]);
   const [guessInput, setGuessInput] = useState('');
+  const checkingRequest = useRef<symbol | null>(null);
+  const [checking, setChecking] = useState(false);
+  const [lookupFailed, setLookupFailed] = useState(false);
+  const { budget = 25, secret, guesses = noGuesses } = round ?? {};
+  const phase = round?.phase ?? poolPhase;
 
   // #40: prominence tier for the secret pick, remembered across sessions.
   // This game has no separate daily mode, so the tier applies to every round.
@@ -78,19 +90,47 @@ const WhoAmI = () => {
   }, []);
 
   const boot = useCallback(async () => {
-    setPhase('boot');
+    setPoolPhase('boot');
     const d = await fetchWhoAmIPool();
     if (!d) {
-      setPhase('error');
+      setPoolPhase('error');
       return;
     }
     setData(d);
-    setPhase('mode');
+    setPoolPhase('mode');
   }, []);
 
   useEffect(() => {
-    boot();
+    void boot();
+    return () => { checkingRequest.current = null; };
   }, [boot]);
+
+  const isCurrentSave = (bytes: string | null | undefined) => {
+    if (saveChanged) return false;
+    if (bytes === undefined || bytes === (savedBytes.current ?? null)) return true;
+    setSaveChanged(true);
+    return false;
+  };
+
+  const commitRound = (next: WhoAmIRound | null) => {
+    const before = readWhoAmIRoundBytes();
+    if (!isCurrentSave(before)) return false;
+    if (before !== undefined) {
+      try {
+        const bytes = next ? JSON.stringify({ version: 1, ...next }) : null;
+        if (bytes === null) localStorage.removeItem(WHO_AM_I_ROUND_KEY);
+        else localStorage.setItem(WHO_AM_I_ROUND_KEY, bytes);
+        savedBytes.current = bytes;
+      } catch { /* A refused save still leaves this round playable in memory. */ }
+    }
+    const finished = latestRound.current?.phase === 'playing' && next && next.phase !== 'playing';
+    latestRound.current = next;
+    setRound(next);
+    if (next) lastSecretName.current = next.secret.name;
+    // Finishing an accepted action earns play credit once. Restoring a result only renders it.
+    if (finished) recordCompletion('/who-am-i', undefined, getCurrentPlayerName());
+    return true;
+  };
 
   /* Round 668: who has been guessed, by person rather than by folded name, so
      guessing the Fenerbahce keeper Ederson no longer hides the Atalanta
@@ -106,16 +146,16 @@ const WhoAmI = () => {
     [guesses],
   );
 
-  const startGame = (guessBudget: number) => {
+  const startGame = (guessBudget: WhoAmIRound['budget']) => {
     if (!data) return;
-    setBudget(guessBudget);
-    setSecret(prev => pickSecret(buildWhoAmISecretPool(difficulty, data.pool), prev?.name));
-    setGuesses([]);
+    const nextSecret = pickSecret(buildWhoAmISecretPool(difficulty, data.pool), lastSecretName.current);
+    if (!commitRound({ phase: 'playing', budget: guessBudget, secret: nextSecret, guesses: [] })) return;
+    checkingRequest.current = null;
+    setChecking(false);
     setGuessInput('');
     /* Round 443: the "couldn't pull up his season" line is per guess, so a new
        round must not open with the last round's failure still on screen. */
     setLookupFailed(false);
-    setPhase('playing');
   };
 
   // #196: guesses now come from the site-wide PlayerAutocomplete against the
@@ -130,12 +170,11 @@ const WhoAmI = () => {
      that could otherwise finish after the round. A lookup that fails costs
      the player nothing: the guess is refused with a line to try again rather
      than scored against a club and a value nobody fetched. */
-  const checkingRequest = useRef<symbol | null>(null);
-  const [checking, setChecking] = useState(false);
-  const [lookupFailed, setLookupFailed] = useState(false);
   const submitGuess = async (entity: PlayerEntity) => {
-    if (phase !== 'playing' || !data || !secret || checkingRequest.current) return;
-    if (guessedPeople.has(entity.personKey ?? whoAmIPersonKey(entity.rawName || entity.name))) return;
+    const current = latestRound.current;
+    if (current?.phase !== 'playing' || !data || checkingRequest.current || !isCurrentSave(readWhoAmIRoundBytes())) return;
+    const personKey = entity.personKey ?? whoAmIPersonKey(entity.rawName || entity.name);
+    if (current.guesses.some(guess => guess.player.personKey === personKey)) return;
     const request = Symbol();
     checkingRequest.current = request;
     setChecking(true);
@@ -146,51 +185,28 @@ const WhoAmI = () => {
        an await flashes the list back open under the player. */
     setGuessInput('');
     const p = await whoAmIPlayerFromEntity(entity);
-    if (checkingRequest.current !== request) return;
+    if (checkingRequest.current !== request || latestRound.current !== current) return;
     checkingRequest.current = null;
     setChecking(false);
     if (!p) {
-      setLookupFailed(true);
+      if (isCurrentSave(readWhoAmIRoundBytes())) setLookupFailed(true);
       return;
     }
-    const breakdown = scoreGuess(p, secret, data.clubHistory);
-    const next = [...guesses, { player: p, breakdown }];
-    setGuesses(next);
-    if (breakdown.isExact) {
-      setPhase('won');
-    } else if (next.length >= budget) {
-      setPhase('lost');
-    }
+    const breakdown = scoreGuess(p, current.secret, data.clubHistory);
+    const next = [...current.guesses, { player: p, breakdown }];
+    commitRound({ ...current, guesses: next, phase: breakdown.isExact ? 'won' : next.length >= current.budget ? 'lost' : 'playing' });
   };
 
   // Give Up: reveals the secret player and ends the round at 0 guesses
   // remaining, reusing the same "lost" result screen (which already shows
   // revealCard with the answer) rather than a separate code path.
   const giveUp = () => {
-    if (phase !== 'playing') return;
+    const current = latestRound.current;
+    if (current?.phase !== 'playing') return;
     checkingRequest.current = null;
     setChecking(false);
-    setPhase('lost');
+    commitRound({ ...current, phase: 'lost' });
   };
-
-  /* Round 299, the scoring audit: this page never recorded a play, so a
-     finished round earned no streak day and no played-today credit. The end
-     moment is the phase landing on 'won' or 'lost' (out of guesses and Give
-     Up both end on 'lost'). Once per round: the ref re-arms only when a new
-     round enters 'playing', so mount, the mode screen and re-renders of the
-     result screen never record. No score on purpose: the number this game
-     shows is guesses used, where lower is better, and the leaderboard ranks
-     by max score, so it would reward the worst detective. */
-  const recordedRef = useRef(false);
-  useEffect(() => {
-    if (phase === 'playing') {
-      recordedRef.current = false;
-      return;
-    }
-    if ((phase !== 'won' && phase !== 'lost') || recordedRef.current) return;
-    recordedRef.current = true;
-    recordCompletion('/who-am-i', undefined, getCurrentPlayerName());
-  }, [phase]);
 
   const lastGuess = guesses.length > 0 ? guesses[guesses.length - 1] : null;
   const bestScore = sortedGuesses.length > 0 ? sortedGuesses[0].breakdown.score : 0;
@@ -358,13 +374,15 @@ const WhoAmI = () => {
     <div className="flex flex-wrap justify-center gap-3 mt-4">
       <button
         onClick={() => startGame(budget)}
-        className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity"
+        disabled={!data || saveChanged}
+        className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
       >
         <RotateCcw className="w-4 h-4" /> Play again
       </button>
       <button
-        onClick={() => setPhase('mode')}
-        className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-foreground rounded-full font-semibold hover:bg-secondary/70 transition-colors"
+        onClick={() => commitRound(null)}
+        disabled={saveChanged}
+        className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-foreground rounded-full font-semibold hover:bg-secondary/70 transition-colors disabled:opacity-50"
       >
         Switch mode
       </button>
@@ -439,6 +457,12 @@ const WhoAmI = () => {
           </RulesGate>
         </header>
 
+        {saveChanged && (
+          <p role="status" className="mb-4 text-center text-sm text-muted-foreground">
+            This round changed in another tab. Reload to continue.
+          </p>
+        )}
+
         {phase === 'boot' && (
           <div className="flex flex-col items-center gap-3 py-16">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -446,7 +470,7 @@ const WhoAmI = () => {
           </div>
         )}
 
-        {phase === 'error' && (
+        {poolPhase === 'error' && (
           <div className="text-center py-12">
             <p className="text-destructive font-semibold mb-3">Couldn't load the player pool right now.</p>
             <button
@@ -470,7 +494,8 @@ const WhoAmI = () => {
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={() => startGame(25)}
-                className="bg-card border border-border hover:border-primary/60 rounded-2xl p-5 text-center transition-colors"
+                disabled={saveChanged}
+                className="bg-card border border-border hover:border-primary/60 rounded-2xl p-5 text-center transition-colors disabled:opacity-50"
               >
                 <div className="text-2xl mb-1">🧢</div>
                 <div className="font-bold text-foreground">Casual</div>
@@ -478,7 +503,8 @@ const WhoAmI = () => {
               </button>
               <button
                 onClick={() => startGame(10)}
-                className="bg-card border border-border hover:border-primary/60 rounded-2xl p-5 text-center transition-colors"
+                disabled={saveChanged}
+                className="bg-card border border-border hover:border-primary/60 rounded-2xl p-5 text-center transition-colors disabled:opacity-50"
               >
                 <div className="text-2xl mb-1">🎯</div>
                 <div className="font-bold text-foreground">Expert</div>
@@ -537,6 +563,7 @@ const WhoAmI = () => {
                 value={guessInput}
                 onChange={setGuessInput}
                 onSelect={submitGuess}
+                disabled={!data || saveChanged}
                 searchOptions={{
                   source: SOCCER_MARKET_VALUE_SOURCE,
                   minChars: 2,
@@ -547,6 +574,9 @@ const WhoAmI = () => {
                 validateOnly
                 autoFocus
               />
+              {!data && poolPhase === 'boot' && (
+                <p data-no-prerender className="mt-2 text-xs text-muted-foreground text-center">Scouting the player pool...</p>
+              )}
               {checking && <p data-no-prerender className="mt-2 text-xs text-muted-foreground text-center">Checking his season...</p>}
               {lookupFailed && (
                 <p className="mt-2 text-xs text-destructive text-center">
@@ -559,7 +589,7 @@ const WhoAmI = () => {
             </div>
 
             <div className="flex justify-center mb-4">
-              <GiveUpButton onGiveUp={giveUp} />
+              <GiveUpButton onGiveUp={giveUp} disabled={saveChanged} />
             </div>
 
             {guesses.length === 0 && (
