@@ -140,8 +140,8 @@ export interface CentreSport {
   markText?: (g: DerivedGame) => string;
   /** Round 1046: what that mark is called, printed in front of it on his line (soccer: "Rating"). Absent: the bare number. */
   markWord?: string;
-  /** Matchday overall estimate. A null value means this season has no saved ratings path. */
-  developmentOverall?: ((round: number) => number) | null;
+  /** Matchday overall. Some paths update at full time. A null value means this season has no saved ratings path. */
+  developmentOverall?: ((round: number, settled: boolean) => number) | null;
   /** Round 1046: the review's strip of his mark in every game: its heading, what a screen reader is told, and the
    *  mark's own lowest and highest value (the sport's numbers, never the viewer's). Absent: no strip. */
   form?: { head: string; label: string; range: [number, number] };
@@ -239,12 +239,12 @@ function FixtureList({ model, played, current, short, cupSeen = new Set<string>(
   );
 }
 
-function DevelopmentOverall({ sport, round }: { sport: CentreSport; round: number }) {
+function DevelopmentOverall({ sport, round, settled = true }: { sport: CentreSport; round: number; settled?: boolean }) {
   const overallAt = sport.developmentOverall;
   if (overallAt === undefined) return null;
   if (overallAt === null) return <p className="text-xs text-muted-foreground" data-match-development-overall>Season OVR unavailable for this season.</p>;
-  const overall = overallAt(round);
-  const difference = round > 1 ? overall - overallAt(round - 1) : 0;
+  const overall = overallAt(round, settled);
+  const difference = round > 1 ? overall - overallAt(round - 1, true) : 0;
   const movement = round === 1 ? 'Opening matchday'
     : difference > 0 ? `Up ${difference} from last matchday`
       : difference < 0 ? `Down ${-difference} from last matchday` : 'No change from last matchday';
@@ -672,7 +672,7 @@ export function SeasonCentre({ model, exitLabel, onClose, resume, onProgress, na
         <div className="text-xs text-muted-foreground">
           {roundWord} {stage.md}{s.mode === 'table' ? ` of ${M}` : ''} · {g.home ? 'Home' : 'Away'}{g.fixedKey ? ` · ${model.occasion[g.fixedKey] ?? model.sport.fixed.poster}` : ''}
         </div>
-        <DevelopmentOverall sport={model.sport} round={stage.md} />
+        <DevelopmentOverall sport={model.sport} round={stage.md} settled={ft} />
         <div className={host ? 'hidden' : undefined}>
           <MatchClock key={`clock-${stage.md}`} game={g} clock={model.sport.clock} usName={model.header.club} themName={model.names[g.opp]} speed={speed} paused={paused || !active || !!report || (fixtureReports && fixturesShown)} reduced={reduced} onFullTime={onFullTime} active={active}
             holdAt={host ? host.minute : pending ? pending.minute : null} onHold={() => { if (pending) setHosting(momentKeyOf(pending)); }}

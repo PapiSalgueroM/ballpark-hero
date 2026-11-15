@@ -92,6 +92,7 @@ export const NBA_MY_CAREER_CONTENT: GameContentMap = {
           "In free agency, ask your agent to contact one franchise from your career's league that has not offered. You see the chance before making the call. If the team says yes, compare and sign its offer like the original deals. A no leaves those original deals open.",
           "Request roster investment before playing another season with the same team and at least two years on your deal. You can bring up to three roster quality points forward. For example, 78 can rise to 81 for this season, leaving roster quality up to three points lower at the next offseason than it would have been. The investment stays with this season and club.",
           "Press 📺 Week by week instead of Play the season to watch that season one game at a time, with your stat line and your team's record after every game. It is the same season either way.",
+          "With a saved rating path, Season Center shows your overall before and after each game. Open a finished game from the game log to see whether your rating rose, fell or stayed the same.",
           "Throwback careers play against unnamed teams, and the real seasons that were not a full 82 games (2011-12, 2012-13, 2019-20 and 2020-21) have no game by game view. The game tells you before you press.",
           "Handle the summer, up to three cards one at a time. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
           "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
@@ -180,6 +181,10 @@ export const NBA_MY_CAREER_CONTENT: GameContentMap = {
       },
     ],
     exampleSections: [
+      {
+        heading: "Reading a rating change after a game",
+        paragraphs: ["You start a game at 72 OVR. Its saved checkpoint takes you to 73, so the full-time screen and the game report show 73 and say you went up one. If there is no new rating at the next game, its report says no change."],
+      },
       {
         heading: "Reading an actual capped change",
         paragraphs: [

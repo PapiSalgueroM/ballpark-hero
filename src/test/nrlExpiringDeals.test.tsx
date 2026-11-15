@@ -81,7 +81,7 @@ describe('NRL season review for expiring deals', () => {
     const before = raw();
     click('Review coaching course');
     expect(screen.getByText(/four regular rounds of training, including byes/i)).toBeVisible();
-    expect(screen.getByText(/if you retain the assistant and stay/i)).toBeVisible();
+    expect(screen.getByText(/the qualification takes effect next season if the assistant re-signs or joins you on an earned club offer/i)).toBeVisible();
     expect(raw()).toBe(before);
     click('Cancel course preview');
     expect(raw()).toBe(before);

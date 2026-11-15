@@ -366,6 +366,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
           "Play each season with one tap: yards, touchdowns, awards, how far the team went.",
           "A signed starting running back who has played a season can take more passing downs. This shifts some regular-season rushing yards and touchdown chances to catches and receiving yards. Camp still decides who starts, and Career Log records the role if you play it.",
           "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
+          "Week by week shows your overall before and after each game when the season has saved rating checkpoints. Open a finished game from the game log to check whether your overall changed.",
           "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         ],
         subsections: [
@@ -498,7 +499,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "A Dual Threat quarterback's rookie leap",
         paragraphs: [
-          "You make a Dual Threat quarterback and go 12th overall to a shaky roster. The leap comes at 25: 4,000 plus yards, an All-Pro nod, a run that dies in the Championship game. At contract time you take the discount.",
+          "You make a Dual Threat quarterback and go 12th overall to a shaky roster. If a saved checkpoint moves your overall from 72 to 73, Season Center shows 72 at kickoff and 73 at full time. The leap comes at 25: 4,000 plus yards, an All-Pro nod, a run that dies in the Championship game. At contract time you take the discount.",
         ],
       },
       {

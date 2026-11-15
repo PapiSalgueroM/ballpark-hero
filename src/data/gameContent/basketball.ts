@@ -1837,6 +1837,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         heading: "Simming the season in 20 stretches",
         items: [
           "Sim the season in 20 short stretches, watching the conference standings tighten and the mandate's live pace read.",
+          "Rest a healthy starter for one regular-season round. The backup rotation plays while that starter avoids new simulated injuries, and the usual rotation returns for the next round or playoffs.",
           "Ratings can move after each round of games. Open Round results to revisit the record and rating changes for a played round. Older rounds may have missing results or ratings.",
         ],
       },

@@ -72,7 +72,7 @@ const NRL_GAME_LINK = 'a[data-home-nrl-launch]';
 const POPULAR_GAME_LINK = 'a[data-home-popular-game]';
 const RECENT_GAME_LINK = '[data-home-shipped] [data-home-game-card] a[href]';
 const HOME_GAME_SHELVES = [CATALOGUE_GAME_LINK, CONTINUE_GAME_LINK, PICK_GAME_LINK, FEATURED_GAME_LINK, NRL_GAME_LINK, POPULAR_GAME_LINK, RECENT_GAME_LINK];
-type GameReturn = { query: string; path: string; selector: string; shelfScroll?: number };
+type GameReturn = { query: string; sport?: SportKey | ''; path: string; selector: string; shelfScroll?: number };
 const gameReturns = new Map<string, GameReturn>();
 
 function getPopularFallbackGames(): GameDef[] {
@@ -103,16 +103,19 @@ export default function Index() {
   const [gameReturn] = useState(() => navigationType === 'POP' ? gameReturns.get(homeEntry) : undefined);
   const popularReturnPath = gameReturn?.selector === POPULAR_GAME_LINK ? gameReturn.path : undefined;
   const [searchQuery, setSearchQuery] = useState(gameReturn?.query ?? '');
+  const [searchSport, setSearchSport] = useState<SportKey | ''>(gameReturn?.sport ?? '');
   const [sportsOpen, setSportsOpen] = useState(false);
   const deferredQuery = useDeferredValue(searchQuery);
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const searchSportRef = useRef<HTMLSelectElement>(null);
   const searchResultsRef = useRef<HTMLDivElement>(null);
   const catalogueRef = useRef<HTMLDivElement>(null);
   const pendingGameReturn = useRef(gameReturn);
-  const updateSearch = (query: string) => {
+  const updateSearch = (query: string, sport = searchSport) => {
     gameReturns.delete(homeEntry);
     pendingGameReturn.current = undefined;
     setSearchQuery(query);
+    setSearchSport(query.trim() ? sport : '');
   };
   const clearSearch = () => { updateSearch(''); searchInputRef.current?.focus({ preventScroll: true }); };
   const [bestScores, setBestScores] = useState(EMPTY_BEST_SCORES);
@@ -167,14 +170,18 @@ export default function Index() {
   const hasDeferredQuery = deferredQuery.trim().length > 0;
   // Keep the previous results' height while ranking catches up, with no stale targets to activate.
   const pendingResultStyle = searchQuery !== deferredQuery ? { visibility: 'hidden' as const } : undefined;
-  const filteredGames = useMemo(
-    () => (hasDeferredQuery && engine ? engine.searchSite(deferredQuery).map(r => r.game) : []),
+  const searchMatches = useMemo(
+    () => (hasDeferredQuery && engine ? engine.searchSite(deferredQuery) : []),
     [hasDeferredQuery, deferredQuery, engine]
+  );
+  const filteredGames = useMemo(
+    () => searchMatches.filter(result => !searchSport || CATEGORY_SPORT[result.category] === searchSport).map(result => result.game),
+    [searchMatches, searchSport],
   );
   const querySettled = isSearching && engine && !searchFailed && searchQuery === deferredQuery;
   const resultCount = filteredGames.length;
   const searchStatus = querySettled
-    ? `${resultCount === 0 ? 'No games found' : resultCount === 1 ? '1 game found' : `${resultCount} games found`} for ${deferredQuery.trim()}`
+    ? `${resultCount === 0 ? 'No games found' : resultCount === 1 ? '1 game found' : `${resultCount} games found`} for ${deferredQuery.trim()}${searchSport ? ` in ${browseSportName(searchSport)}` : ''}`
     : '';
   const rememberGameLink = (event: MouseEvent<HTMLDivElement>) => {
     const fromSearch = event.currentTarget === searchResultsRef.current;
@@ -189,7 +196,7 @@ export default function Index() {
     const selector = selectors.find(selector => link.matches(selector));
     if (!selector) return;
     gameReturns.delete(homeEntry);
-    gameReturns.set(homeEntry, { query: fromSearch ? searchQuery : '', path, selector, shelfScroll: shelf?.scrollLeft });
+    gameReturns.set(homeEntry, { query: fromSearch ? searchQuery : '', sport: fromSearch ? searchSport : undefined, path, selector, shelfScroll: shelf?.scrollLeft });
     // Keep the tab's recent history without putting search text into storage or the URL.
     if (gameReturns.size > 20) gameReturns.delete(gameReturns.keys().next().value);
   };
@@ -603,7 +610,17 @@ export default function Index() {
           </div>
 
           {picksStorageFailed && <div className="mb-4"><GamePicksWarning /></div>}
-          <p className="break-words text-sm text-muted-foreground [&:not(:empty)]:mb-3" role="status" aria-label="Search results">{searchStatus}</p>
+          <div className={isSearching && !searchFailed ? 'mb-3 flex flex-wrap items-center gap-x-3 gap-y-1' : undefined}>
+            {isSearching && !searchFailed && (
+              <select ref={searchSportRef} aria-label="Filter by sport" value={searchSport}
+                onChange={event => updateSearch(searchQuery, event.currentTarget.value as SportKey | '')}
+                className="min-h-11 max-w-full rounded-lg border border-border bg-surface-1 px-3 text-sm font-medium text-foreground focus-visible:outline-primary">
+                <option value="">All sports</option>
+                {pickableSports.map(sport => <option key={sport} value={sport}>{browseSportName(sport)}</option>)}
+              </select>
+            )}
+            <p className="min-w-0 break-words text-sm text-muted-foreground" role="status" aria-label="Search results">{searchStatus}</p>
+          </div>
 
           {/* Defer ranking and rendering while the search field updates. */}
           {(isSearching || hasDeferredQuery) && (
@@ -617,6 +634,13 @@ export default function Index() {
                   {filteredGames.map(game => (
                     <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
                   ))}
+                </div>
+              ) : searchSport ? (
+                <div style={pendingResultStyle} className="rounded-xl border border-border bg-card px-4 py-2">
+                  <button type="button" className="min-h-11 rounded text-sm font-semibold text-primary hover:underline focus-visible:outline-primary" onClick={() => {
+                    updateSearch(searchQuery, '');
+                    searchSportRef.current?.focus({ preventScroll: true });
+                  }}>Show all sports</button>
                 </div>
               ) : (
                 <div style={pendingResultStyle} className="rounded-xl border border-dashed border-border bg-card/50 p-8 text-center">

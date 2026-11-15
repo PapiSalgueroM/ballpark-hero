@@ -1988,6 +1988,7 @@
         "Some seasons your rival puts a decision on your plate instead of a story: benches clearing that you can answer or calm down, a debate show offering real money, a youth clinic his foundation wants you to co-host, an All-Star vote his club is buying ads for. Every button prints exactly what it moves, and a gamble prints its odds.",
         "Enter the draft, land on a real club, and play seasons for full stat lines: average, homers and RBI, or wins, ERA and strikeouts.",
         "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
+        "For seasons supported by Week by week, Season Center shows your overall before and after each game if the season has saved rating checkpoints. Review its change by opening a finished game in the game log.",
         "After playing a season, relievers can choose their bullpen role for the next signed year. Setup pitchers work for holds. Choose Close for saves at 80 overall or with the Closer build. The role stays with that club and season.",
         "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         "Check the lineup card. Top ten picks play from Opening Day; everyone else fights the veteran in spring, with bench bats and long-relief arms waiting on spot starts until the job flips. Relievers climb their own bullpen ladder instead.",
@@ -2014,7 +2015,7 @@
       ],
       "example": [
         "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.",
-        "You build a Slugging Shortstop who goes 12th overall. Year two brings the breakout, year five a ring. When control ends, the hometown club offers a discount while the market whispers bigger money elsewhere.",
+        "You build a Slugging Shortstop who goes 12th overall. If a saved checkpoint moves your overall from 72 to 73, Season Center shows 72 at first pitch and 73 when the game is final. Year two brings the breakout, year five a ring. When control ends, the hometown club offers a discount while the market whispers bigger money elsewhere.",
         "You chase the money, the new fanbase starts cold, and the decline grinds. At 38 you retire with 430 homers, a ring and five All-Star nods. Verdict: Hall of Famer.",
         "Both benches empty after a pitch up and in, your rival is first out of his dugout, and the card asks what you do about it. Answer it on the field heats the feud and usually pays Morale +8, but it carries a 30% chance you are the one who gets tossed (Morale -5, Fanbase -5, Net worth -$100k). Play peacemaker on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the tape: Morale +6, the feud heats up, and those six points ride into next season's numbers."
       ],
@@ -2185,6 +2186,7 @@
         "Work the roster. Waive contracts, sign free agents with your cap room, and propose trades.",
         "If a Trade desk package falls short on value, add the lowest-valued available future pick that would get it accepted. The suggestion stays in the builder for review until you make the trade. If no one pick meets all the trade rules, there is no suggestion.",
         "Sim the season in 20 short stretches, watching the conference standings tighten and the mandate's live pace read.",
+        "Rest a healthy starter for one regular-season round. The backup rotation plays while that starter avoids new simulated injuries, and the usual rotation returns for the next round or playoffs.",
         "Ratings can move after each round of games. Open Round results to revisit the record and rating changes for a played round. Older rounds may have missing results or ratings.",
         "Finish top 6 for a direct playoff seed, or 7th through 10th for the play-in.",
         "Win four best of 7 rounds, then draft and rebuild for the repeat, as long as ownership keeps you."
@@ -2313,6 +2315,7 @@
         "In free agency, ask your agent to contact one franchise from your career's league that has not offered. You see the chance before making the call. If the team says yes, compare and sign its offer like the original deals. A no leaves those original deals open.",
         "Request roster investment before playing another season with the same team and at least two years on your deal. You can bring up to three roster quality points forward. For example, 78 can rise to 81 for this season, leaving roster quality up to three points lower at the next offseason than it would have been. The investment stays with this season and club.",
         "Press 📺 Week by week instead of Play the season to watch that season one game at a time, with your stat line and your team's record after every game. It is the same season either way.",
+        "With a saved rating path, Season Center shows your overall before and after each game. Open a finished game from the game log to see whether your rating rose, fell or stayed the same.",
         "Throwback careers play against unnamed teams, and the real seasons that were not a full 82 games (2011-12, 2012-13, 2019-20 and 2020-21) have no game by game view. The game tells you before you press.",
         "Handle the summer, up to three cards one at a time. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
         "After a normal offseason choice, the result shows the actual changes. Expand it for any extra changes, then Continue opens the next card, or takes you back to your career after the last one, without applying the choice again.",
@@ -2338,6 +2341,7 @@
         "The season the game retires you (41, 21 seasons, or a rating that craters) sends nothing about a year you will not play: no summer runs, no early lifts, no extension talk."
       ],
       "example": [
+        "You start a game at 72 OVR. Its saved checkpoint takes you to 73, so the full-time screen and the game report show 73 and say you went up one. If there is no new rating at the next game, its report says no change.",
         "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.",
         "You roll a Two-Way Menace guard, go 11th, and win Rookie of the Year on a bad team. Year three, morale craters and you demand a trade. Villain arc unlocked.",
         "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does.",
@@ -2529,6 +2533,7 @@
         "Play each season with one tap: yards, touchdowns, awards, how far the team went.",
         "A signed starting running back who has played a season can take more passing downs. This shifts some regular-season rushing yards and touchdown chances to catches and receiving yards. Camp still decides who starts, and Career Log records the role if you play it.",
         "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
+        "Week by week shows your overall before and after each game when the season has saved rating checkpoints. Open a finished game from the game log to check whether your overall changed.",
         "Open Career Log and pick a year to review its saved overview, regular season and postseason. Changes compare with the previous saved season; older missing values say Not recorded. Back to seasons returns to the year tiles, and Review seasons is available after retirement.",
         "When the deal expires, work a real free agency window: competing offers from named teams with their own money, length and roster quality, and one push for more on any of them.",
         "Make up to three offseason calls, one card at a time: train skills or body, fix the knee or play through it, take the envelope or report it. Only the first card of a summer can move your rating, and a card you just saw rests for a while before it comes back (press moments follow your season, so those can come right back).",
@@ -2561,7 +2566,7 @@
       ],
       "example": [
         "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.",
-        "You make a Dual Threat quarterback and go 12th overall to a shaky roster. The leap comes at 25: 4,000 plus yards, an All-Pro nod, a run that dies in the Championship game. At contract time you take the discount.",
+        "You make a Dual Threat quarterback and go 12th overall to a shaky roster. If a saved checkpoint moves your overall from 72 to 73, Season Center shows 72 at kickoff and 73 at full time. The leap comes at 25: 4,000 plus yards, an All-Pro nod, a run that dies in the Championship game. At contract time you take the discount.",
         "At 28 the knee starts talking. You play through it, lose four games, and demand a trade. The ring comes at 31, you retire at 35 with one MVP, and the verdict reads Hall of Famer.",
         "Your rival drills you a second after the whistle and the card asks what you do about it. Settle it next time heats the feud and usually pays Morale +8, but it carries a 30% chance you draw the flag yourself (Morale -5, Fanbase -5, Net worth -$100k). Shake it off on camera is Fanbase +5, Karma +5 and the feud cools. You pick say nothing and watch the film: Morale +6, the feud heats up, and those six points ride into next season's stat line."
       ],

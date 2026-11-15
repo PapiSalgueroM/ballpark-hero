@@ -12,6 +12,7 @@ import {
   nbaDraftClass, nbaProspectToPlayer, nbaStrength, nbaCapUsed, nbaCapRoom,
   nbaRelease, nbaSign, nbaTrade, nbaTradeValue, EAST,
   NBA_ROUNDS,
+  nbaRestCandidates, nbaRestPlan, nbaRestPreview, readNbaRestReceipt, setNbaRestPlan, type NbaRestReceipt,
   type NbaLeague, type NbaGmPlayer, type NbaProspect, type SeriesResult, nbaExecuteTalksTrade,
   ensureNbaLeagueIds, NBA_ROSTER_MIN, NBA_ROSTER_MAX,
   /* Round 722: the luxury tax, the aprons and the fourteen man tip off floor. */
@@ -138,7 +139,7 @@ type TaxClose = {
   trustDelta: number; payers: number; biggest: { team: string; bill: number } | null;
 };
 type Postseason = { series: SeriesResult[]; champion: string; gradeLine: string | null; tax?: TaxClose | null };
-type LastRound = { team: string; season: number; round: number; wins: number; losses: number; notes: string[] };
+type LastRound = { team: string; season: number; round: number; wins: number; losses: number; notes: string[]; rest?: NbaRestReceipt };
 
 function readLastRound(value: unknown, league: NbaLeague, team: string): LastRound | null {
   if (!value || typeof value !== 'object') return null;
@@ -151,11 +152,18 @@ function readLastRound(value: unknown, league: NbaLeague, team: string): LastRou
     || typeof result.losses !== 'number' || !Number.isInteger(result.losses) || result.losses < 0 || result.losses > club.losses
     || !Array.isArray(result.notes) || result.notes.length > 4
     || result.notes.some(line => typeof line !== 'string' || line.length > 640)) return null;
-  return { team, season: league.season, round: result.round, wins: result.wins, losses: result.losses, notes: result.notes };
+  const rest = readNbaRestReceipt(result.rest);
+  return { team, season: league.season, round: result.round, wins: result.wins, losses: result.losses, notes: result.notes, ...(rest ? { rest } : {}) };
+}
+
+function restReports(rest: NbaRestReceipt | undefined): string[] {
+  if (!rest) return [];
+  return ['unavailable' in rest ? 'The saved rest choice was unavailable. The usual rotation played.'
+    : `${rest.player} rested this round. The usual rotation resumes next round.`];
 }
 
 function roundHeadlines(result: LastRound): string[] {
-  return [`Round ${result.round}: you went ${result.wins}-${result.losses}.`, ...result.notes];
+  return [`Round ${result.round}: you went ${result.wins}-${result.losses}.`, ...restReports(result.rest), ...result.notes];
 }
 
 interface SaveShape {
@@ -302,6 +310,7 @@ export default function NbaFrontOfficeBoard() {
       /* Round 1566: the season's lines in the shared save shape; a save of named rows is turned into it here, before
          anything reads the league, so its next save writes the new shape. */
       nbaCleanStats(s.league);
+      if (!nbaRestPlan(s.league, s.myTeam)) delete s.league.restPlan;
       setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
       lastRound.current = readLastRound(s.lastRound, s.league, s.myTeam);
       roundHistory.current = readFoRoundHistory(s.roundHistory, s.league, s.myTeam, NBA_ROUNDS);
@@ -522,10 +531,14 @@ export default function NbaFrontOfficeBoard() {
     const keepRound = () => {
       const result: LastRound = {
         team: myTeam, season: lg.season, round: league.round, wins: report.myWins, losses: report.myLosses,
-        notes: newFeed.slice(1, 5).map(line => line.slice(0, 640)),
+        notes: newFeed.slice(1, 5).map(line => line.slice(0, 640)), ...(report.rest ? { rest: report.rest } : {}),
       };
-      roundHistory.current = appendFoRoundHistory(roundHistory.current, lastRound.current, result, changes);
+      const previous = lastRound.current;
+      const reports = restReports(result.rest);
+      roundHistory.current = appendFoRoundHistory(roundHistory.current,
+        previous ? { ...previous, reports: restReports(previous.rest) } : null, { ...result, reports }, changes);
       lastRound.current = result;
+      return [newFeed[0], ...reports, ...newFeed.slice(1)];
     };
     if (nextGm !== gm) setGm(nextGm);
     if (lg.round >= NBA_ROUNDS) {
@@ -583,17 +596,16 @@ export default function NbaFrontOfficeBoard() {
       }));
       setPhase('recap');
       setLeague(lg);
-      setFeed(newFeed); setFeedSlam(null);
-      keepRound();
+      setFeed(keepRound()); setFeedSlam(null);
       persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict, tax } }, lg, myTeam);
       return;
     }
     lg.round += 1;
     /* Round 1018: the round the deadline shuts says so in the feed. */
     if (nextGm && nbaTradeWindow(league).open && !nbaTradeWindow(lg).open) newFeed.splice(1, 0, '🔒 The trade deadline has passed. Deals open again once the season is over.');
-    keepRound();
+    const playedFeed = keepRound();
     setLeague(lg);
-    setFeed(newFeed); setFeedSlam(null);
+    setFeed(playedFeed); setFeedSlam(null);
     persist({}, lg, myTeam);
   };
 
@@ -1004,7 +1016,9 @@ export default function NbaFrontOfficeBoard() {
 
   const room = nbaCapRoom(my, league.cap);
   const strength = Math.round(nbaStrength(my));
-  const roundResults = <FoRoundResults completed={foCompletedRounds(league, NBA_ROUNDS)} history={roundHistory.current} lastRound={lastRound.current} />;
+  const last = lastRound.current;
+  const roundResults = <FoRoundResults completed={foCompletedRounds(league, NBA_ROUNDS)} history={roundHistory.current}
+    lastRound={last ? { ...last, reports: restReports(last.rest) } : null} />;
   /* Round 722: the tax as it stands today, shown all season as a projection. */
   const view = nbaTaxView(my, league);
 
@@ -1325,6 +1339,9 @@ export default function NbaFrontOfficeBoard() {
   /* Round 722: the season tips off on fourteen to fifteen men. Above fifteen
      the first round waits on a waiver; below fourteen the league fills in. */
   const tipBlock = league.round === 1 ? nbaTipOffRefusal(my) : null;
+  const restPlan = tab === 'round' ? nbaRestPlan(league, myTeam) : null;
+  const restChoices = tab === 'round' ? nbaRestCandidates(league, myTeam) : [];
+  const restPreview = restPlan ? nbaRestPreview(league, myTeam) : null;
   const tipShort = league.round === 1 ? Math.max(0, NBA_TIPOFF_MIN - my.players.length) : 0;
   const tipPayroll = nbaTipOffPayroll(my, league.cap);
   const tipTax = view.pending ? null : nbaTaxBill(tipPayroll, league.cap, view.repeater, league.taxScale);
@@ -1595,6 +1612,30 @@ export default function NbaFrontOfficeBoard() {
             <p data-tipoff-short className="mb-2 text-[11px] text-muted-foreground">
               {tipShort} short of the {NBA_TIPOFF_MIN} man floor. At tip off the league fills the gap on minimum deals (${nbaMinContract(league.cap)}M each), so sign who you want first.
             </p>
+          )}
+          {(restChoices.length > 0 || restPlan) && (
+            <div className="mx-auto mb-3 max-w-sm text-left">
+              <label className="block text-xs font-semibold">
+                Rest a starter
+                <select className="mt-1 min-h-11 w-full rounded-lg border border-border bg-background px-3 text-sm"
+                  value={restPlan?.playerId ?? ''} onChange={event => {
+                    const next = setNbaRestPlan(league, myTeam, event.target.value);
+                    if (next === league) return;
+                    setLeague(next);
+                    persist({}, next, myTeam);
+                  }}>
+                  <option value="">Usual rotation</option>
+                  {restPlan && !restChoices.some(player => player.id === restPlan.playerId) && (
+                    <option value={restPlan.playerId} disabled>Saved choice unavailable</option>
+                  )}
+                  {restChoices.map(player => <option key={player.id} value={player.id}>{player.name} · {player.ovr} OVR</option>)}
+                </select>
+              </label>
+              <p className="mt-1 text-xs text-muted-foreground">A rested starter sits out this round and avoids a new simulated injury. Your usual rotation resumes after the round.</p>
+              {restPreview ? <p className="mt-1 text-xs text-muted-foreground" data-nba-rest-preview>
+                {restPreview.cover.name} moves into the starting five if healthy. Current team strength {nbaStrength(my).toFixed(2)} usual · {nbaStrength(restPreview.lineup).toFixed(2)} with rest.
+              </p> : restPlan && <p className="mt-1 text-xs text-muted-foreground">The saved choice is unavailable. Your usual rotation will play.</p>}
+            </div>
           )}
           <button onClick={playRound} disabled={!!tipBlock} title={tipBlock ?? undefined} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">
             <ShieldHalf className="h-4 w-4" /> {league.round >= NBA_ROUNDS ? 'Final stretch + playoffs' : `Play Round ${league.round}`}

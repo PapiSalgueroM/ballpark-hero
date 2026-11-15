@@ -1,4 +1,14 @@
+## 2026-11-14: Search by sport, player career reports and deeper front offices
+
+- Home search can filter a query by sport. Browser Back restores the selected sport and focuses the game you opened.
+- NBA Front Office can rest any healthy starter for a regular-season round. The preview shows the cover and the strength change. The rested starter avoids that round's injury roll and keeps their usual rotation spot for the next round.
+- In NRL Team Manager, the offseason Contracts office can exchange two players. Each carries their existing wage and remaining term to the new club next season. Both clubs must have enough cap room and position cover.
+- NBA and NFL My Career and supported MLB hitting seasons show saved overall checkpoints in their game reports. A checkpoint change appears at full time, and earlier reports can be opened again.
+- Lovable's October 15 to November 13 pageviews put NBA and NFL My Career among the five most-viewed games. Australia ranked second among countries.
+
 ## 2026-11-14: College and MLB round history, Hot Seat ratings and NRL reserve training
+
+[PR #969](https://github.com/PapiSalgueroM/ballpark-hero/pull/969) published exact main `e9f361f174f82bdb97029fddd8bc20a059a3f399`, deployment `e6df3cc3-1c77-44bb-a1f1-982d819c1738`, canonical entry `/assets/index-DfumxEM9.js`. Fifteen live browser journeys, the Home layout sweep, all five raw game guides, all 174 sitemap routes and seven policy and crawler endpoints passed. IndexNow accepted the five updated guides. The build, application types, 88 focused tests, 18 site checks and all 16 measured download budgets passed. The paired college runs matched 66 regular-season rounds and 8,248 random draws, with 166 named rating changes recorded.
 
 - College Football Dynasty and College Basketball Dynasty can reopen completed regular-season scores and their recorded rating changes. Older games keep their scores and show when the ratings review was never recorded.
 - MLB Front Office keeps each batch's actual record, rating changes and development starts. Review an older batch after advancing or from the season recap.
