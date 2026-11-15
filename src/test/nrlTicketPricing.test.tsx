@@ -2,10 +2,10 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import { afterEach, describe, expect, it } from 'vitest';
 import NrlCareerOffice from '@/components/nrl-manager/NrlCareerOffice';
 import {
-  createNrlCareer, nrlCareerFinance, readNrlCareerSave, reduceNrlCareer,
+  createNrlCareer, nrlCareerFinance, nrlFinanceForecast, readNrlCareerSave, reduceNrlCareer,
   type NrlCareerAction, type NrlCareerState, type NrlTicketTier,
 } from '@/lib/nrlCareer';
-import { createNrlSeason, nrlNextRound, nrlRegularRounds } from '@/lib/nrlManager';
+import { archiveNrlLadder, createNrlSeason, nrlNextRound, nrlRegularRounds } from '@/lib/nrlManager';
 
 afterEach(cleanup);
 
@@ -115,6 +115,7 @@ describe('NRL home ticket pricing', () => {
     expect(playerSeasons?.length).toBeGreaterThanOrEqual(13);
     expect(returned).toEqual({
       ...value.history[0],
+      leagueLadder: archiveNrlLadder(value.season),
       finals: {
         seeds: ['broncos', 'bulldogs', 'storm', 'raiders', 'panthers', 'sea-eagles', 'roosters', 'warriors'],
         scores: [[18, 28], [22, 24], [12, 13], [4, 10], [22, 12], [24, 16], [4, 16], [22, 2], [10, 28]],
@@ -144,6 +145,69 @@ describe('NRL home ticket pricing', () => {
     }
   });
 
+  it.each([false, true])('applies a single midseason review only to remaining home gates, with supporter attendance %s', attendance => {
+    const year = 2026, clubId = 'storm', round = 14;
+    const action = { type: 'reviewTicketTier', year, clubId, round, tier: 'premium' } as const;
+    let opening = choose(start(), 'value');
+    if (attendance) opening = reduceNrlCareer(opening, { type: 'setSupporterAttendance', year, clubId, enabled: true });
+    const early = opening;
+    while (opening.season.round < round) opening = advance(opening);
+
+    const baselineForecast = nrlFinanceForecast(opening)!;
+    const reviewed = reduceNrlCareer(opening, action);
+    expect(reviewed.finance.ticketReview).toEqual({ round, tier: 'premium' });
+    expect(reduceNrlCareer(early, { ...action, round: 1 })).toBe(early);
+    expect(reviewed.finance.ticketTier).toBe('value');
+    expect(reviewed.season).toBe(opening.season);
+    expect(reviewed.finance.gateReceipts).toBe(opening.finance.gateReceipts);
+    expect(nrlCareerFinance(reviewed).cash).toBe(nrlCareerFinance(opening).cash);
+    expect(reduceNrlCareer(reviewed, { ...action, tier: 'standard' })).toBe(reviewed);
+    expect(reduceNrlCareer(opening, { ...action, clubId: 'broncos' })).toBe(opening);
+    expect(reduceNrlCareer(opening, { ...action, tier: 'value' })).toBe(opening);
+    const paused = reduceNrlCareer(opening, { type: 'startLive' });
+    expect(reduceNrlCareer(paused, action)).toBe(paused);
+
+    const forecast = nrlFinanceForecast(reviewed)!;
+    const supporterDelta = attendance ? -12_000 : 0;
+    expect(forecast.homeMatches).toBe(5);
+    expect(forecast.gateLow - baselineForecast.gateLow).toBe(5 * (-32_000 + supporterDelta));
+    expect(forecast.gateHigh - baselineForecast.gateHigh).toBe(5 * (30_000 + supporterDelta));
+    expect(raw(readNrlCareerSave(raw(reviewed))!)).toBe(raw(reviewed));
+    const forged = { ...reviewed, finance: { ...reviewed.finance, ticketReview: { round: 15, tier: 'premium' } } };
+    expect(readNrlCareerSave(JSON.stringify(forged))).toBeNull();
+
+    let original = opening;
+    let changed = reviewed;
+    let gap = 0;
+    const seen = new Set<string>();
+    while (original.season.phase !== 'complete') {
+      const fixture = nrlNextRound(original.season).clubMatch;
+      const at = original.season.round;
+      original = advance(original);
+      changed = advance(changed);
+      const match = original.season.results.find(row => row.round === at && row.playerScoring);
+      const kind = fixture?.tieId === 'GF' ? 'neutral'
+        : match?.homeId === clubId ? match.finalsRound ? 'final' : match.homeScore > match.awayScore ? 'win' : 'non-win'
+          : match ? 'away' : 'bye';
+      if (kind === 'final') gap += 72_000 + supporterDelta;
+      if (kind === 'win') gap += 40_000 + supporterDelta;
+      if (kind === 'non-win') gap += -42_000 + supporterDelta;
+      expect(changed.finance.gateReceipts - original.finance.gateReceipts).toBe(gap);
+      seen.add(kind);
+    }
+    expect([...seen].sort()).toEqual(['away', 'bye', 'final', 'neutral', 'non-win', 'win']);
+    expect(changed.season).toEqual(original.season);
+    expect(nrlCareerFinance(changed).cash - nrlCareerFinance(original).cash).toBe(gap);
+    expect(raw(readNrlCareerSave(raw(changed))!)).toBe(raw(changed));
+
+    const next = reduceNrlCareer(changed, { type: 'startNextSeason' });
+    expect(next.finance.ticketReview).toBeUndefined();
+    expect(next.history[0].finance?.ticketReview).toEqual({ round, tier: 'premium' });
+    expect(next.history[0].attendanceForm).toHaveLength(24);
+    expect(next.finance.openingCash).toBe(nrlCareerFinance(changed).cash);
+    expect(raw(readNrlCareerSave(raw(next))!)).toBe(raw(next));
+  });
+
   it('shows the simulated receipt changes in Club finances and disables pricing after the home gate', () => {
     let career = start();
     const action = (event: NrlCareerAction) => { career = reduceNrlCareer(career, event); return true; };
@@ -160,5 +224,50 @@ describe('NRL home ticket pricing', () => {
     view.rerender(<NrlCareerOffice career={career} onAction={action} screen="finances" disabled={false} />);
     expect(screen.getByLabelText('Home ticket pricing')).toBeDisabled();
     expect(screen.getByText(/locked until next season/i)).toBeVisible();
+  });
+
+  it('can return to Standard during an away round and only changes the next paid home gate', () => {
+    const year = 2027, clubId = 'bears', round = 14;
+    let original = choose(createNrlCareer(clubId, 17, year), 'premium');
+    while (original.season.round < round) original = advance(original);
+    const act = { type: 'reviewTicketTier', year, clubId, round, tier: 'standard' } as const;
+    let changed = reduceNrlCareer(original, act);
+    expect(changed.finance.ticketReview).toEqual({ round, tier: 'standard' });
+    const firstGates = changed.finance.gateReceipts;
+    for (let awayRound = round; awayRound < 16; awayRound++) {
+      expect(nrlNextRound(changed.season).clubMatch?.awayId).toBe(clubId);
+      original = advance(original);
+      changed = advance(changed);
+      expect(changed.finance.gateReceipts).toBe(firstGates);
+    }
+    original = advance(original);
+    changed = advance(changed);
+    expect(changed.finance.gateReceipts - original.finance.gateReceipts).toBe(24_000);
+    expect(changed.season).toEqual(original.season);
+    expect(raw(readNrlCareerSave(raw(changed))!)).toBe(raw(changed));
+  });
+
+  it('previews the remaining home gates before committing the one review', () => {
+    let career = choose(start(), 'value');
+    while (career.season.round < 14) career = advance(career);
+    const review = () => <NrlCareerOffice career={career} onAction={event => {
+      career = reduceNrlCareer(career, event);
+      return true;
+    }} screen="finances" disabled={false} />;
+    const view = render(review());
+    const initialSave = raw(career);
+    const picker = screen.getByLabelText('Midseason ticket review');
+    const confirm = screen.getByRole('button', { name: 'Confirm ticket prices' });
+    expect(confirm).toBeDisabled();
+    expect(screen.getByText(/5 remaining regular-season home games/)).toHaveTextContent('$1,240,000 to $1,290,000');
+    fireEvent.change(picker, { target: { value: 'premium' } });
+    expect(raw(career)).toBe(initialSave);
+    expect(screen.getByText(/5 remaining regular-season home games/)).toHaveTextContent('$1,080,000 to $1,440,000');
+    fireEvent.click(confirm);
+    career = readNrlCareerSave(raw(career))!;
+    view.rerender(review());
+    expect(screen.getByLabelText('Home ticket pricing')).toHaveValue('premium');
+    expect(screen.queryByLabelText('Midseason ticket review')).toBeNull();
+    expect(screen.getByText('Value to Premium from Round 14.')).toBeVisible();
   });
 });

@@ -9,8 +9,8 @@
       "new": "if (AccountMenu || accountMenuFailed) return;",
       "test": "src/test/headerAccountLoading1442.test.tsx",
       "testName": "does not import the member menu for a guest",
-      "sourceSha256": "245e4a9b90851de13f90442786d24be06c9a2da5f939b1bfcc21e170b6ce4639",
-      "copySha256": "59606e0f906298f0aef3cae4cae1fb96d694bd6a230c4e286fe5d37910d4254d"
+      "sourceSha256": "6aa66188a9250c68a5a5db19413fa13f8e0b35df2dd5de39c8f26963d4ae356c",
+      "copySha256": "df1adeea26c97aa6f3ae728e2ac875b2aae492246478f4ec130055ae69dee41f"
     },
     {
       "name": "pending-enabled",
@@ -21,8 +21,8 @@
       "new": "",
       "test": "src/test/headerAccountLoading1442.test.tsx",
       "testName": "keeps the account button disabled and announces the pending menu",
-      "sourceSha256": "245e4a9b90851de13f90442786d24be06c9a2da5f939b1bfcc21e170b6ce4639",
-      "copySha256": "c4e9fa2506c7a5fca4869c08e137fbd87698b88ddea332595d4fe5a15962c74e"
+      "sourceSha256": "6aa66188a9250c68a5a5db19413fa13f8e0b35df2dd5de39c8f26963d4ae356c",
+      "copySha256": "6c7172e78a885d819556b74e7227a3d0d2d52b62536bec5e30cf3c925ed3cfbd"
     },
     {
       "name": "missing-alert",
@@ -33,8 +33,8 @@
       "new": "role=\"status\"",
       "test": "src/test/headerAccountLoading1442.test.tsx",
       "testName": "contains an import failure in a local alert",
-      "sourceSha256": "245e4a9b90851de13f90442786d24be06c9a2da5f939b1bfcc21e170b6ce4639",
-      "copySha256": "60e1be94c4a5e29ceb02add78b1a1c739717f0a77ed02b6f5c87de327386b304"
+      "sourceSha256": "6aa66188a9250c68a5a5db19413fa13f8e0b35df2dd5de39c8f26963d4ae356c",
+      "copySha256": "e15d0f08f2bfac60b0583b81632ec8675ad15a0f9640a504de9cd3faeb591473"
     },
     {
       "name": "lost-signout",
@@ -45,8 +45,8 @@
       "new": "onClick={() => {}}>Log Out</Button>",
       "test": "src/test/headerAccountLoading1442.test.tsx",
       "testName": "keeps Log Out working when the member chunk fails",
-      "sourceSha256": "245e4a9b90851de13f90442786d24be06c9a2da5f939b1bfcc21e170b6ce4639",
-      "copySha256": "e8855821f6cda84c9f1f67c9752abb021aba694bcc19cc8c65c4dbd90db95bbe"
+      "sourceSha256": "6aa66188a9250c68a5a5db19413fa13f8e0b35df2dd5de39c8f26963d4ae356c",
+      "copySha256": "b1102c8dc7c2eb807cd7e140b5bab426840e41ac289722da9a457ef672446a82"
     },
     {
       "name": "wrong-initial",
@@ -57,8 +57,8 @@
       "new": "initial=\"?\"",
       "test": "src/test/headerAccountLoading1442.test.tsx",
       "testName": "passes the current identity and account actions to the loaded menu",
-      "sourceSha256": "245e4a9b90851de13f90442786d24be06c9a2da5f939b1bfcc21e170b6ce4639",
-      "copySha256": "72c23d388b083ac6990e5b7cee0a0e3dd6ffc8cca6bba0e6cd62524ae57a5a09"
+      "sourceSha256": "6aa66188a9250c68a5a5db19413fa13f8e0b35df2dd5de39c8f26963d4ae356c",
+      "copySha256": "d82ab030480f12ab2ec5dcdd8cf29fb6c6991891486aece2760b4e3ccf7f0289"
     }
   ]
 }

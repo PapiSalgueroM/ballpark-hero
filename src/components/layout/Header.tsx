@@ -123,7 +123,15 @@ export function Header() {
                     onSignOut={handleSignOut}
                   />
                 ) : accountMenuFailed ? (
-                  <Button variant="ghost" size="sm" onClick={handleSignOut}>Log Out</Button>
+                  <>
+                    <Button variant="ghost" size="sm" asChild className="min-h-11 min-w-11 px-1.5 text-xs min-[416px]:text-sm sm:px-3">
+                      <Link to="/profile" aria-label="My Profile">
+                        <span className="sm:hidden">Profile</span>
+                        <span className="hidden sm:inline">My Profile</span>
+                      </Link>
+                    </Button>
+                    <Button variant="ghost" size="sm" className="min-h-11 min-w-11 px-1.5 text-xs min-[416px]:text-sm sm:px-3" onClick={handleSignOut}>Log Out</Button>
+                  </>
                 ) : (
                   <>
                     <Button
@@ -166,7 +174,7 @@ export function Header() {
         </div>
 
         {user && accountMenuFailed && (
-          <p role="alert" className="px-4 py-2 text-center text-xs text-muted-foreground">Account menu could not load. You can still log out.</p>
+          <p role="alert" className="px-4 py-2 text-center text-xs text-muted-foreground">Account menu could not load. Open your profile or log out.</p>
         )}
 
         {/* Sign up CTA for guests.

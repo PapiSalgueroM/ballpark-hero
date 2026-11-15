@@ -1,5 +1,5 @@
 import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { AccountMenuProps } from '@/components/layout/AccountMenu';
 
@@ -21,6 +21,7 @@ vi.mock('@/lib/googlePaused', () => ({ isGoogleOnlyAccount: () => true }));
 let Header: typeof import('@/components/layout/Header').Header;
 let resolveMenu: () => void;
 let rejectMenu: (reason: Error) => void;
+let loadRealMenu = false;
 const imported = vi.fn();
 function LoadedMenu(props: AccountMenuProps) {
   return <div role="region" aria-label="Loaded account menu">
@@ -35,12 +36,25 @@ beforeEach(async () => {
   spies.user = { id: 'fictional-a', email: 'a@example.test' };
   spies.profile = { display_name: 'Avery', username: 'avery' };
   spies.signOut.mockResolvedValue(undefined);
+  loadRealMenu = false;
   const pending = new Promise<void>((resolve, reject) => { resolveMenu = resolve; rejectMenu = reject; });
-  vi.doMock('@/components/layout/AccountMenu', async () => { imported(); await pending; return { AccountMenu: LoadedMenu }; });
+  vi.doMock('@/components/layout/AccountMenu', async () => {
+    imported();
+    await pending;
+    return loadRealMenu
+      ? vi.importActual<typeof import('@/components/layout/AccountMenu')>('@/components/layout/AccountMenu')
+      : { AccountMenu: LoadedMenu };
+  });
   ({ Header } = await import('@/components/layout/Header'));
 });
 afterEach(async () => { cleanup(); await act(async () => { resolveMenu(); }); vi.doUnmock('@/components/layout/AccountMenu'); });
 const mount = () => render(<MemoryRouter><Header /></MemoryRouter>);
+function mountProfileNavigation() {
+  render(<MemoryRouter><Routes>
+    <Route path="/" element={<Header />} />
+    <Route path="/profile" element={<h1>Fixture profile</h1>} />
+  </Routes></MemoryRouter>);
+}
 
 describe('member account menu loads only for a signed-in player', () => {
   it('does not import the member menu for a guest', async () => {
@@ -73,6 +87,33 @@ describe('member account menu loads only for a signed-in player', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Log Out' }));
     await waitFor(() => expect(spies.signOut).toHaveBeenCalledTimes(1));
     expect(spies.navigate).toHaveBeenCalledWith('/');
+  });
+  it('keeps a focusable My Profile link when the member chunk fails', async () => {
+    mountProfileNavigation();
+    await waitFor(() => expect(imported).toHaveBeenCalledTimes(1));
+    await act(async () => { rejectMenu(new Error('Fixture member chunk failed')); });
+    const link = screen.getByRole('link', { name: 'My Profile' });
+    expect(link).toHaveAttribute('href', '/profile');
+    expect(link.tabIndex).toBe(0);
+    act(() => link.focus());
+    expect(link).toHaveFocus();
+    fireEvent.click(link);
+    expect(await screen.findByRole('heading', { name: 'Fixture profile' })).toBeVisible();
+    expect(spies.signOut).not.toHaveBeenCalled();
+  });
+  it('opens My Profile from the ordinary account menu with the keyboard', async () => {
+    loadRealMenu = true;
+    mountProfileNavigation();
+    await waitFor(() => expect(imported).toHaveBeenCalledTimes(1));
+    await act(async () => { resolveMenu(); });
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Account menu' })).toBeEnabled());
+    const opener = screen.getByRole('button', { name: 'Account menu' });
+    act(() => opener.focus());
+    fireEvent.keyDown(opener, { key: 'Enter', code: 'Enter' });
+    const item = await screen.findByRole('menuitem', { name: 'My Profile' });
+    fireEvent.keyDown(item, { key: 'Enter', code: 'Enter' });
+    expect(await screen.findByRole('heading', { name: 'Fixture profile' })).toBeVisible();
+    expect(spies.signOut).not.toHaveBeenCalled();
   });
   it('passes the current identity and account actions to the loaded menu', async () => {
     const view = mount(); await waitFor(() => expect(imported).toHaveBeenCalledTimes(1));

@@ -28,6 +28,7 @@ import {
   nrlSummerApplication, nrlSummerApplicationOpenings, nrlSummerLastRound,
   type NrlCareerAction, type NrlCareerState, type NrlOffseasonFreeAgentTarget, type NrlPrimaryRoleChange,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverDiscovery, nrlTakeoverPlayers, nrlTicketPricingRefusal,
+  nrlTicketReviewQuotes, nrlTicketReviewRound, nrlTicketTierAtRound,
   nrlSupporterAttendance,
   NRL_ACADEMY_CROSS_TRAINING_COST, NRL_ACADEMY_PRIORITIES, NRL_DEVELOPMENT_ASSISTANT, NRL_RECRUITMENT_PLAN_LIMIT, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
   type NrlAcademyPriority, type NrlAcademyReport, type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlRecruitmentPick, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
@@ -1356,8 +1357,14 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
 }
 
 function TicketPricing({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
-  const { year, round } = career.season;
-  const tier = career.finance.ticketTier ?? 'standard';
+  const { year, clubId, round } = career.season;
+  const [draft, setDraft] = useState<{ year: number; clubId: string; tier: string }>();
+  const tier = nrlTicketTierAtRound(career.finance, round);
+  const review = career.finance.ticketReview;
+  const reviewRound = nrlTicketReviewRound(year);
+  const alternatives = nrlTicketReviewQuotes(career);
+  const selected = draft?.year === year && draft.clubId === clubId ? alternatives.find(quote => quote.tier === draft.tier) : undefined;
+  const forecast = alternatives.length ? selected ?? nrlFinanceForecast(career) : null;
   const reason = nrlTicketPricingRefusal(career);
   const gateTypes = [
     ['Regular home loss or draw', 'regularNonWin'], ['Regular home win', 'regularWin'], ['Home final', 'homeFinal'],
@@ -1366,7 +1373,8 @@ function TicketPricing({ career, onAction, disabled }: { career: NrlCareerState;
     <section className="mt-4 rounded-xl border border-border bg-background p-3">
       <label htmlFor="nrl-ticket-pricing" className="block text-sm font-bold">Home ticket pricing</label>
       <p className="mt-1 text-sm text-muted-foreground" id="nrl-ticket-pricing-status">
-        {reason ?? 'Set before your first home game. Your choice then stays in place until next season.'}
+        {review ? 'Your revised prices apply to your remaining home games.' : reason ?? 'Set before your first home game.'}
+        {!career.legacySeason && round < reviewRound && ` A ticket review opens in Round ${reviewRound}.`}
       </p>
       <select id="nrl-ticket-pricing" aria-describedby="nrl-ticket-pricing-status" className={control + ' mt-2 sm:max-w-xs'}
         value={tier} disabled={disabled || reason !== null}
@@ -1392,6 +1400,30 @@ function TicketPricing({ career, onAction, disabled }: { career: NrlCareerState;
         </tbody>
       </table>
       <p className="mt-1 text-xs text-muted-foreground">Away games, byes and the neutral Grand Final earn no home gate.</p>
+      {forecast && (
+        <fieldset className="mt-3 space-y-2 border-t border-border pt-2 text-sm">
+          <label htmlFor="nrl-ticket-review" className="block font-bold">Midseason ticket review</label>
+          <p id="nrl-ticket-review-help" className="text-muted-foreground">
+            You can change your prices once before Round {round} is played. Earlier gates stay at their opening prices.
+          </p>
+          <select id="nrl-ticket-review" aria-describedby="nrl-ticket-review-help" className={control + ' sm:max-w-xs'}
+            value={selected?.tier ?? ''} disabled={disabled}
+            onChange={event => setDraft({ year, clubId, tier: event.target.value })}>
+            <option value="">Keep {ticketLabels[tier].toLowerCase()} prices</option>
+            {alternatives.map(quote => <option key={quote.tier} value={quote.tier}>{ticketLabels[quote.tier]}</option>)}
+          </select>
+          <p aria-live="polite" data-nrl-ticket-review-forecast>
+            {forecast.homeMatches} remaining regular-season home games · {money(forecast.gateLow)} to {money(forecast.gateHigh)} in projected gate receipts.
+          </p>
+          <Button type="button" size="lg" disabled={disabled || !selected}
+            onClick={() => selected && onAction({ type: 'reviewTicketTier', year, clubId, round, tier: selected.tier })}>
+            Confirm ticket prices
+          </Button>
+        </fieldset>
+      )}
+      {review && <p role="status" className="mt-3 text-sm font-semibold" data-nrl-ticket-review-receipt>
+        {ticketLabels[career.finance.ticketTier ?? 'standard']} to {ticketLabels[review.tier]} from Round {review.round}.
+      </p>}
     </section>
   );
 }
@@ -2528,7 +2560,9 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 {record.finance?.physio && <p className="text-sm text-muted-foreground">
                   Physio session in Round {record.finance.physio.round} · {money(nrlPhysioSpend(record.finance))}
                 </p>}
-                {record.finance?.ticketTier && <p className="text-sm text-muted-foreground">Home ticket pricing {ticketLabels[record.finance.ticketTier]}</p>}
+                {record.finance?.ticketReview ? <p className="text-sm text-muted-foreground" data-nrl-archived-ticket-review>
+                  Home ticket pricing {ticketLabels[record.finance.ticketTier ?? 'standard']} to {ticketLabels[record.finance.ticketReview.tier]} from Round {record.finance.ticketReview.round}.
+                </p> : record.finance?.ticketTier && <p className="text-sm text-muted-foreground">Home ticket pricing {ticketLabels[record.finance.ticketTier]}</p>}
                 {record.finance?.sponsor && <p className="text-sm text-muted-foreground">Sponsor income {money(nrlSponsorIncome(record.finance))}</p>}
                 {(record.year !== year || retired) && record.finance?.pathways && (
                   <p className="text-sm text-muted-foreground">

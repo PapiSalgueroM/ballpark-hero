@@ -133,6 +133,44 @@ describe('admin report queue', () => {
     expect(search).toHaveFocus();
   });
 
+  it('confirms a priority change after the report leaves the active priority filter', async () => {
+    openQueue();
+    const report = await screen.findByText(contract.description);
+    const filter = screen.getByRole('combobox', { name: 'Filter by priority' });
+    fireEvent.change(filter, { target: { value: 'high' } });
+    const select = within(report.closest('[data-report]') as HTMLElement).getByRole('combobox', { name: 'Priority' });
+    select.focus();
+    fireEvent.change(select, { target: { value: 'critical' } });
+
+    await waitFor(() => expect(screen.queryByText(contract.description)).not.toBeInTheDocument());
+    expect(filter).toHaveFocus();
+    expect(await screen.findByText('Priority set to Critical')).toBeVisible();
+    expect(db.write).toHaveBeenCalledWith(contract.id, { priority: 'critical' });
+    fireEvent.change(filter, { target: { value: 'critical' } });
+    expect(within(screen.getByText(contract.description).closest('[data-report]') as HTMLElement)
+      .getByRole('combobox', { name: 'Priority' })).toHaveValue('critical');
+  });
+
+  it('keeps focus where the reviewer moved it while a priority change saves', async () => {
+    let release: () => void = () => {};
+    db.write.mockImplementationOnce((id: string) => new Promise(resolve => {
+      release = () => resolve({ data: [{ id }], error: null });
+    }));
+    openQueue();
+    const report = await screen.findByText(contract.description);
+    fireEvent.change(screen.getByRole('combobox', { name: 'Filter by priority' }), { target: { value: 'high' } });
+    const select = within(report.closest('[data-report]') as HTMLElement).getByRole('combobox', { name: 'Priority' });
+    select.focus();
+    fireEvent.change(select, { target: { value: '' } });
+    const search = screen.getByRole('searchbox', { name: 'Search reports' });
+    search.focus();
+    await act(async () => release());
+
+    expect(screen.queryByText(contract.description)).not.toBeInTheDocument();
+    expect(search).toHaveFocus();
+    expect(await screen.findByText('Priority cleared')).toBeVisible();
+  });
+
   it('keeps newer note and fix-reference drafts while an earlier save completes', async () => {
     let release: () => void = () => {};
     db.write.mockImplementationOnce((id: string) => new Promise(resolve => {
