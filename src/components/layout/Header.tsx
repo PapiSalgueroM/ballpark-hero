@@ -79,7 +79,16 @@ export function Header() {
               The mark returns when it can fit beside a three-digit streak. */}
           <div className="flex shrink-0 items-center gap-1 min-[416px]:gap-2">
             <SiteMenuHost />
-            <Link to="/" className={`flex min-w-0 items-center gap-2 py-1.5 ${isHome ? 'min-[380px]:max-[479px]:min-h-11' : ''}`}>
+            <Link
+              to="/"
+              onClick={event => {
+                if (isHome && !event.defaultPrevented && event.button === 0
+                  && !event.altKey && !event.ctrlKey && !event.metaKey && !event.shiftKey) {
+                  window.scrollTo({ top: 0, behavior: 'instant' });
+                }
+              }}
+              className={`flex min-w-0 items-center gap-2 py-1.5 ${isHome ? 'min-[380px]:max-[479px]:min-h-11' : ''}`}
+            >
               <LogoMark size={28} className="shrink-0 hidden min-[416px]:block sm:hidden" />
               <LogoMark size={32} className="shrink-0 hidden sm:block" />
               <span className="font-display font-black text-sm min-[360px]:text-base min-[416px]:text-lg min-[520px]:text-2xl sm:text-3xl sm:leading-10 tracking-normal min-[520px]:tracking-wide text-primary truncate">DoUKnowBall</span>
