@@ -7,6 +7,7 @@ import { createServer } from 'node:net';
 import { spawn } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { chromium } from './lib/playwrightLoader.mjs';
+import { captureShippedFonts } from './lib/captureShippedFonts.mjs';
 
 assert(process.env.CI && process.env.GITHUB_ACTIONS, 'Home search verification runs only in remote GitHub Actions');
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -18,21 +19,16 @@ const NOW = Date.parse('2026-10-07T12:00:00.000Z');
 const QUERY = 'soccer career';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const write = (name, value) => fs.writeFileSync(path.join(OUT, name), JSON.stringify(value, null, 2));
-const template = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
-const sheets = [...template.matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^"]+)"\s+rel="stylesheet"/g)].map(m => new URL(m[1]).href);
-assert.equal(sheets.length, 1);
-const { build } = await import('esbuild');
 if (process.argv.includes('--prefetch-assets-only')) {
+  const { build } = await import('esbuild');
   fs.mkdirSync(path.dirname(CACHE), { recursive: true });
   const entries = [];
   const fetchAsset = async url => {
-    assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://flagcdn.com'].includes(new URL(url).origin));
+    assert.equal(new URL(url).origin, 'https://flagcdn.com');
     const r = await fetch(url); assert.equal(r.status, 200);
     const body = Buffer.from(await r.arrayBuffer()), file = hash(url); fs.writeFileSync(path.join(path.dirname(CACHE), file), body);
     entries.push({ url, file, sha256: hash(body), bytes: body.length, contentType: r.headers.get('content-type') }); return body;
   };
-  const css = (await fetchAsset(sheets[0])).toString('utf8');
-  for (const url of new Set([...css.matchAll(/url\(['"]?(https:\/\/fonts\.gstatic\.com\/[^)'"\s]+)['"]?\)/g)].map(m => m[1]))) await fetchAsset(url);
   const bundle = await build({ absWorkingDir: ROOT, stdin: { contents: "export { POLLS } from './src/data/pollFixtures'; export { FLAG_EMOJI_RE, flagEmojiToIso } from './src/lib/flagUtils';", resolveDir: ROOT }, platform: 'node', format: 'esm', bundle: true, write: false, logLevel: 'silent', metafile: true });
   const helper = path.join(path.dirname(CACHE), 'poll-flag-sources.mjs'); fs.writeFileSync(helper, bundle.outputFiles[0].contents);
   fs.writeFileSync(path.join(path.dirname(CACHE), 'poll-flag-metafile.json'), JSON.stringify(bundle.metafile, null, 2));
@@ -40,7 +36,7 @@ if (process.argv.includes('--prefetch-assets-only')) {
   const codes = new Set([...JSON.stringify(POLLS).matchAll(FLAG_EMOJI_RE)].map(m => flagEmojiToIso(m[0])).filter(c => c && c !== 'gb-eng'));
   for (const code of codes) for (const width of [40, 80]) await fetchAsset(`https://flagcdn.com/w${width}/${code}.png`);
   fs.writeFileSync(CACHE, JSON.stringify(entries, null, 2));
-  console.log(`Home search: ${entries.length} actual template font and baked-poll flag payloads cached.`); process.exit(0);
+  console.log(`Home search: ${entries.length} actual baked-poll flag payloads cached.`); process.exit(0);
 }
 fs.mkdirSync(OUT, { recursive: true });
 assert(fs.existsSync(path.join(ROOT, 'dist/index.html')), 'Build the actual application first');
@@ -53,17 +49,16 @@ const STALE_KEY = staleKeys[0][1];
 const serviceOrigin = new URL(fs.readFileSync(path.join(ROOT, 'src/integrations/supabase/config.ts'), 'utf8').match(/export const SUPABASE_URL = "([^"]+)";/)[1]).origin;
 const entries = JSON.parse(fs.readFileSync(CACHE, 'utf8'));
 const assets = new Map(entries.map(entry => {
-  assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://flagcdn.com'].includes(new URL(entry.url).origin));
+  assert.equal(new URL(entry.url).origin, 'https://flagcdn.com');
   assert(/^[a-f0-9]{64}$/.test(entry.file)); const body = fs.readFileSync(path.join(path.dirname(CACHE), entry.file));
   assert.equal(hash(body), entry.sha256); assert.equal(body.length, entry.bytes);
   return [entry.url, { body, contentType: entry.contentType }];
 }));
-assert(assets.has(sheets[0]));
 function hashes(directories, files = []) {
   const out = {}; const walk = rel => { for (const item of fs.readdirSync(path.join(ROOT, rel), { withFileTypes: true })) { const file = `${rel}/${item.name}`; if (item.isDirectory()) walk(file); else if (item.isFile()) out[file] = hash(fs.readFileSync(path.join(ROOT, file))); } };
   directories.forEach(walk); files.forEach(file => { out[file] = hash(fs.readFileSync(path.join(ROOT, file))); }); return out;
 }
-const sourceHashes = () => hashes(['src'], ['scripts/playHomeSearchRecovery1088.mjs', 'scripts/simHomeSearchRecovery.mjs', 'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs', 'index.html', 'package.json', 'package-lock.json']);
+const sourceHashes = () => hashes(['src'], ['scripts/playHomeSearchRecovery1088.mjs', 'scripts/simHomeSearchRecovery.mjs', 'scripts/lib/hostLikeServer.mjs', 'scripts/lib/playwrightLoader.mjs', 'scripts/lib/captureShippedFonts.mjs', 'index.html', 'package.json', 'package-lock.json']);
 const cacheHashes = () => Object.fromEntries([path.basename(CACHE), ...entries.map(e => e.file)].map(file => [file, hash(fs.readFileSync(path.join(path.dirname(CACHE), file)))]));
 const report = { complete: false, scope: DEADLINE_CONTROL ? 'An intentionally unfinished browser/server operation proves the external deadline fails with durable holds and owned-process cleanup.' : 'Four actual built Home profiles, each with healthy search and failed-import recovery through actual offline/online explicit reload.',
   limits: ['Fresh signed-out browser fixtures; no saved career is played, queried, completed or changed.', 'Known public read endpoints return explicit locally empty results, so popularity uses its actual curated fallback.', 'No real network read, write, score, analytics or socket is forwarded. The stale-chunk automatic retry is already exhausted by the actual session guard fixture.'],
@@ -120,8 +115,8 @@ async function snapshot(page) {
   return observe('evaluate snapshot', () => page.evaluate(() => ({ local: Object.fromEntries(Object.entries(localStorage).sort()), session: Object.fromEntries(Object.entries(sessionStorage).sort()), draws: window.__homeSearchAudit.draws, writes: structuredClone(window.__homeSearchAudit.writes), now: Date.now(), doc: performance.timeOrigin, scrollY, input: document.querySelector('input[aria-label="Search games"]')?.value, focus: document.activeElement?.getAttribute('aria-label') || document.activeElement?.textContent?.trim().slice(0, 100) })));
 }
 async function fonts(page) {
-  const rows = await observe('evaluate fonts ready and eight loads', () => page.evaluate(async () => { await document.fonts.ready; const out = []; for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 500, 600, 700]) { const faces = await document.fonts.load(`${weight} 16px "${family}"`); out.push({ family, weight, faces: faces.map(f => ({ family: f.family, weight: f.weight, status: f.status })) }); } return out; }));
-  assert(rows.every(r => r.faces.length && r.faces.every(f => f.status === 'loaded' && f.family.replaceAll('"', '') === r.family && f.weight === String(r.weight))), 'Eight actual font faces load'); return rows;
+  const rows = await observe('evaluate fonts ready and eight loads', () => page.evaluate(async () => { await document.fonts.ready; const out = []; for (const family of ['Inter', 'Space Grotesk']) for (const weight of [400, 500, 600, 700]) { const faces = await document.fonts.load(`${weight} 16px "${family}"`, 'Football'); out.push({ family, weight, faces: faces.map(f => ({ family: f.family, weight: f.weight, status: f.status })) }); } return out; }));
+  assert(rows.every(r => r.faces.length && r.faces.every(f => f.status === 'loaded' && f.family.replaceAll('"', '') === r.family && f.weight === '400 700')), 'Both shipped variable families load at all four weights'); return rows;
 }
 async function finite(page) {
   let watchdog;
@@ -295,10 +290,12 @@ try {
     });
     await context.routeWebSocket('**/*', socket => { report.sockets.push(socket.url()); socket.close(); });
     const page = await context.newPage(); page.on('pageerror', error => row.errors.push(error.message)); page.on('console', message => { if (message.type() === 'error') row.console.push({ text: message.text(), location: message.location() }); });
+    const verifyShippedFonts = captureShippedFonts(page, BASE);
     const snap = async name => { const value = await observe(`snapshot ${name}`, () => snapshot(page)); row.snapshots.push({ name, ...value }); save(); return value; };
     const shot = async name => { const file = `${width}-${name}.png`; await observe(`screenshot ${file}`, () => page.screenshot({ path: path.join(OUT, file) })); row.screenshots.push(file); };
     try {
       await observe('navigation initial Home load', () => page.goto(BASE, { waitUntil: 'load' })); await page.locator('[data-home-stage] [data-stage-card]').first().waitFor(); row.healthy.fonts = await fonts(page); await finite(page);
+      row.healthy.fontResponses = await observe('verify shipped font bytes', verifyShippedFonts);
       row.healthy.catalog = await catalog(page); assert.equal(row.healthy.catalog.length, 4);
       row.healthy.firstTile = await page.locator('[data-stage-card]').first().boundingBox(); assert(row.healthy.firstTile.y <= 430 && row.healthy.firstTile.height >= 44, 'Actual healthy first playable tile stays at or above y430');
       await observe('account prompt control', () => accountControl(page, row));
@@ -371,5 +368,5 @@ finally {
 console.log(`Home search native: ${report.complete ? 'PASS' : 'FAIL'}, ${report.cases.filter(c => c.complete).length}/4 completed route journeys.`);
 console.log(`Effective restored DOM controls: ${report.controls.filter(c => c.proved).length}/20; unexpected requests: ${report.unexpected.length}.`);
 console.log(`Source/build/cache held: ${!report.sourceHoldError}; artifact path: ${OUT}`);
-console.log('Scope: actual built signed-out Home with explicit locally fulfilled public reads and real cached fonts/flags; no gameplay or production forwarding.');
+console.log('Scope: actual built signed-out Home with shipped fonts, cached poll flags and locally fulfilled public reads.');
 process.exitCode = report.complete ? 0 : 1;
