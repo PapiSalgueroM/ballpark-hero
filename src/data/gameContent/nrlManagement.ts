@@ -46,7 +46,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Choose Last-tackle kicks before kick-off. Against a dangerous attack, Kick long lowers the try threat for both teams. Contest kicks opens the game up and gives both teams more chances. Your plan lasts through regulation and resets to Mixed kicks next match.',
       'Play the round and check the result against the ladder. In Match centre, use Season fixtures to reopen a completed club match and check its scorers and decisions. New match reports also show points by period, with a 60-minute split if you paused there and a separate extra-time row when played. Choose a finals week in the fixture menu to see its report.',
       'Open a regular-season match report in Season fixtures to see the rating changes saved for that match.',
-      'Leave the fourth interchange open to use only three reserves in Quick Sim or choose a fourth at 60 minutes in Live.',
+      'Leave the fourth interchange open to rotate three reserves early. In Quick Sim, choose a reserve to come on at 60 minutes when ahead or behind. The report shows whether they came on.',
       'At 60 minutes in Live, an unused reserve can cover their trained position if the slot is open.',
       'With Open interchange on, bring on one eligible unused reserve at half time or save the place for 60 minutes.',
       'At half time or 60 minutes in Live, an eligible reserve can replace your goal kicker if the named backup stays on to take the remaining place kicks.',
