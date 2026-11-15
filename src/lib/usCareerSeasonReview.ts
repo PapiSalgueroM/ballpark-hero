@@ -44,7 +44,15 @@ export function nflSeasonReview(s: SeasonLine, pos: CareerPos): CareerReviewStat
       regular.push(text('Quarterback plan', 'Designed runs unavailable after camp'));
     }
   }
-  return stats(s.teamResult, regular, [number('Games', s.poGames), text('Performance', s.poLine)]);
+  const appearances = s.poPlayerGames;
+  const teamGames = s.poGames;
+  const hasAppearances = pos === 'QB' && recorded(appearances) && Number.isInteger(appearances) && appearances >= 0
+    && recorded(teamGames) && Number.isInteger(teamGames) && teamGames > 0 && appearances <= teamGames;
+  const postseason = hasAppearances ? [
+    number('Team games', teamGames), number('Appearances', appearances),
+    ...(appearances > 0 ? [text('Performance', s.poLine)] : []),
+  ] : [number('Games', teamGames), text('Performance', s.poLine)];
+  return stats(s.teamResult, regular, postseason);
 }
 
 export function nbaSeasonReview(s: NbaSeasonLine): CareerReviewStats {

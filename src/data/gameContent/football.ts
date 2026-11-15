@@ -356,6 +356,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
             heading: "Winning your job over the incumbent",
             items: [
               "Check the depth chart. Top twelve picks open as starters; everyone else fights the incumbent in camp, every single summer, and backup seasons are spot duty until you take the job.",
+              "Backup quarterbacks get playoff appearances based on their regular-season playing time. Four of 17 regular-season games works out to one appearance in a four-game playoff run. Career Log shows your appearances separately from the team's games.",
             ],
           },
         ],
