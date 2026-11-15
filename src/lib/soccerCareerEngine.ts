@@ -911,6 +911,8 @@ export interface PendingRehab {
   year: number;
   /** what the specialist would cost, in millions; null when unaffordable */
   specialistCost: number | null;
+  /** The recorded injury season has settled the contract before this choice. */
+  contractExpired?: true;
 }
 
 /** Round 253: one serious injury, and how the career answered it. */
@@ -1876,8 +1878,8 @@ function yearOutRow(s: CareerState, reason: string | null): SeasonRecord {
  * Every road records the injury in the career's history, so a comeback is
  * something the save remembers rather than a line that scrolls away.
  */
-export function applyRehabChoice(prev: CareerState, choiceIndex: number): CareerState {
-  if (readSoccerFarewell(prev) && !prev.pendingRehab && (prev.retired || farewellSeasonComplete(prev))) return prev;
+export function applyRehabChoice(prev: CareerState, choiceIndex: number, clubs = FALLBACK_CLUBS): CareerState {
+  if (prev.phase !== "rehab_choice" || (readSoccerFarewell(prev) && !prev.pendingRehab && (prev.retired || farewellSeasonComplete(prev)))) return prev;
   const s = { ...prev };
   const r = s.pendingRehab;
   s.pendingRehab = null;
@@ -1951,6 +1953,9 @@ export function applyRehabChoice(prev: CareerState, choiceIndex: number): Career
   if (farewellSeasonComplete(s)) {
     s.pendingSummary = s.seasons[s.seasons.length - 1];
     s.phase = "season_summary";
+  } else if (r.contractExpired === true && s.contractYearsLeft === 0 && injurySeason?.year === r.year && injurySeason.injurySevere) {
+    returnFromLoan(s, clubs, injurySeason.year);
+    enterTransferWindow(s, clubs);
   }
   return s;
 }
@@ -4667,6 +4672,26 @@ export function acceptLoan(prev: CareerState, offer: ContractOffer): CareerState
   return clearLoyaltyChoice(s);
 }
 
+function returnFromLoan(s: CareerState, clubs: ClubData[], year: number): void {
+  if (!s.loan) return;
+  const back = s.loan;
+  cancelReducedRole(s);
+  s.currentClub = back.parentClub; s.currentClubTier = back.parentTier;
+  s.currentLeague = back.parentLeague; s.currentClubCountry = back.parentCountry;
+  s.currentClubColor = back.parentColor;
+  s.loan = null;
+  Object.assign(s, endCareerMentorForMove(s, s.currentClub));
+  prepareLeagueWorld(s, clubs, year + 1);
+  const backSeasons = s.seasons.filter(row => row.club === back.parentClub && row.type === "playing").length;
+  const nextHere = projectLeagueApps(s.overall, s.currentClubTier, back.parentClub, backSeasons, { league: s.currentLeague, year: year + 1 });
+  if (nextHere.min >= 20) {
+    s.morale = clamp(s.morale + 5, 0, 100);
+    s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and this time they are planning around you: about ${nextHere.min} to ${nextHere.max} league games on the table.`);
+  } else {
+    s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and the pecking order has not moved much: about ${nextHere.min} to ${nextHere.max} league games unless something changes.`);
+  }
+}
+
 /** Complete a new club listing using its existing offer, then show the move once. */
 export function completeClubVerdictMove(prev: CareerState): CareerState {
   const verdict = prev.transferSituation;
@@ -5801,6 +5826,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      line so the season's own news leads the story, and before the severe
      injury branch so an injured season keeps the derbies he did play. */
   applySeasonDerbies(s, season);
+  s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
   if (season.injury) {
     if (season.injurySevere) {
       /* Round 253: a serious injury is a chapter, not a stat line. The
@@ -5817,6 +5843,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
            file for a career with no seasons behind it yet */
         year: s.seasons.length > 0 ? s.seasons[s.seasons.length - 1].year + 1 : 2020,
         specialistCost: s.netWorth >= 1.6 ? 0.8 : null,
+        ...(s.contractYearsLeft === 0 && { contractExpired: true as const }),
       };
       /* Round 850: the season stops here for the rehab choice and the next
          Next Season is the year after, so this IS the injury year and it goes
@@ -5870,7 +5897,6 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     applyCareerPreparation(s, season);
     s.overall = calcOverall(s, s.position);
   }
-  s.contractYearsLeft = Math.max(0, s.contractYearsLeft - 1);
   s.marketValue = calcMarketValue(s.overall, s.age, s.position, s.socialMediaFollowers);
 
   // Make the player eligible for selection. The first cap confirms the debut.
@@ -6333,24 +6359,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
      season, so the screen can promise nothing the simulation will not keep. */
   const programmeLoanClub = s.loan ? worldClubs.find(club => club.name === s.currentClub) : undefined;
   if (programmeLoanClub) completeProgrammeLoanBuy(s, programmeLoanClub);
-  if (s.loan) {
-    const back = s.loan;
-    cancelReducedRole(s);
-    s.currentClub = back.parentClub; s.currentClubTier = back.parentTier;
-    s.currentLeague = back.parentLeague; s.currentClubCountry = back.parentCountry;
-    s.currentClubColor = back.parentColor;
-    s.loan = null;
-    Object.assign(s, endCareerMentorForMove(s, s.currentClub));
-    prepareLeagueWorld(s, clubs, season.year + 1);
-    const backSeasons = s.seasons.filter(ss => ss.club === back.parentClub && ss.type === "playing").length;
-    const nextHere = projectLeagueApps(s.overall, s.currentClubTier, back.parentClub, backSeasons, { league: s.currentLeague, year: season.year + 1 });
-    if (nextHere.min >= 20) {
-      s.morale = clamp(s.morale + 5, 0, 100);
-      s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and this time they are planning around you: about ${nextHere.min} to ${nextHere.max} league games on the table.`);
-    } else {
-      s.events.push(`🔙 Loan over. Back at ${back.parentClub}, and the pecking order has not moved much: about ${nextHere.min} to ${nextHere.max} league games unless something changes.`);
-    }
-  }
+  returnFromLoan(s, clubs, season.year);
   prepareLeagueWorld(s, clubs, season.year + 1);
   if (germanMatch) {
     if (germanMatch.player.apps === 1) germanMatch.annualRating = season.apps > 0 ? season.rating : 0;

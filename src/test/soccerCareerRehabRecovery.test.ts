@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
-  acceptOffer, advanceProSeason, advanceYouthYear, applyRehabChoice, calcOverall, FALLBACK_CLUBS, initCareer, manualRetire, repairCareer,
+  acceptLoan, acceptOffer, advanceProSeason, advanceYouthYear, applyRehabChoice, calcOverall, FALLBACK_CLUBS, initCareer, manualRetire, repairCareer,
+  signExtension, stayAtClub,
   type CareerState,
 } from '@/lib/soccerCareerEngine';
 import { announceSoccerFarewell, farewellSeasonComplete } from '@/lib/soccerCareerFarewell';
@@ -12,16 +13,22 @@ function seeded<T>(seed: number, run: () => T): T {
   try { return run(); } finally { random.mockRestore(); }
 }
 
-function injuredCareer(): CareerState {
+function signedCareer(inSeason = false): CareerState {
   const clubs = FALLBACK_CLUBS;
   const signed = seeded(166, () => {
     const academy = initCareer('Fixture Prospect', 'England', 'ST', '2020', {
       pace: 60, shooting: 60, passing: 60, dribbling: 60, defending: 60, physical: 60, reflexes: 60,
     }, 60, 2020, clubs);
-    const offered = advanceYouthYear(academy, clubs);
+    const offered = advanceYouthYear(academy, clubs, inSeason);
     return acceptOffer(offered, offered.pendingOffers[0]);
   });
   expect(signed.phase).toBe('playing');
+  return signed;
+}
+
+function injuredCareer(): CareerState {
+  const signed = signedCareer();
+  const clubs = FALLBACK_CLUBS;
   const career = seeded(13, () => advanceProSeason(signed, clubs));
   expect(career.phase).toBe('rehab_choice');
   expect(career.pendingRehab?.name).toBe('ACL rupture');
@@ -35,6 +42,76 @@ function load(career: CareerState) {
 }
 
 describe('Soccer Career rehab save recovery', () => {
+  it('spends the injured season once while the active contract and rehab carry across reload', () => {
+    const before = signedCareer(true);
+    const paid = seeded(13, () => advanceProSeason(before, FALLBACK_CLUBS, true));
+    expect(paid.seasons.at(-1)).toMatchObject({ year: 2022, apps: 19, injury: 'ACL rupture' });
+    expect(paid).toMatchObject({ phase: 'rehab_choice', contractYearsLeft: 4, weeklyWage: before.weeklyWage });
+    const after = load(seeded(166, () => applyRehabChoice(load(paid), 1, FALLBACK_CLUBS)));
+    expect(after).toMatchObject({ phase: 'playing', contractYearsLeft: 4, weeklyWage: before.weeklyWage, currentClub: before.currentClub });
+    expect(after.seasons).toHaveLength(before.seasons.length + 1);
+    expect(after.seriousInjuries?.at(-1)).toMatchObject({ path: 'plan', year: 2022 });
+    expect(stayAtClub(after)).toMatchObject({ contractYearsLeft: 4, weeklyWage: before.weeklyWage });
+  });
+
+  it.each([[0, 'rushed'], [1, 'plan'], [2, 'specialist']] as const)(
+    'opens ordinary expiry only after the %s rehab choice and keeps the played year once',
+    (choice, path) => {
+      const before = { ...signedCareer(true), contractYearsLeft: 1, netWorth: 3 };
+      const healthy = seeded(166, () => advanceProSeason(before, FALLBACK_CLUBS, true));
+      const paid = load(seeded(13, () => advanceProSeason(before, FALLBACK_CLUBS, true)));
+      expect(healthy.contractYearsLeft).toBe(0);
+      expect(paid).toMatchObject({ phase: 'rehab_choice', contractYearsLeft: 0, weeklyWage: before.weeklyWage, transferSituation: null });
+      expect(paid.pendingRehab?.name).toBe('ACL rupture');
+      const offered = load(seeded(166, () => applyRehabChoice(paid, choice, FALLBACK_CLUBS)));
+      expect(offered).toMatchObject({ phase: 'transfer_window', contractYearsLeft: 0, weeklyWage: before.weeklyWage, pendingRehab: null });
+      expect(offered.seasons).toHaveLength(before.seasons.length + 1);
+      expect(offered.seriousInjuries).toMatchObject([{ path, year: 2022 }]);
+      expect(offered.transferSituation?.type).toBe('contract_expiry');
+      if (offered.transferSituation?.type !== 'contract_expiry') throw new Error('Expected contract expiry offers');
+      expect(offered.transferSituation.offers.length).toBeGreaterThan(0);
+      expect(offered.transferSituation.offers.every(offer => offer.transferFee === 0)).toBe(true);
+      expect(applyRehabChoice(offered, choice, FALLBACK_CLUBS)).toBe(offered);
+
+      const extended = seeded(166, () => signExtension(offered));
+      expect(extended.phase).toBe('playing');
+      expect(extended.contractYearsLeft).toBeGreaterThan(0);
+      expect(extended.weeklyWage).toBe(Math.round(before.weeklyWage * 1.15));
+      const free = offered.transferSituation.offers[0];
+      const moved = seeded(166, () => acceptOffer(offered, free));
+      expect(moved).toMatchObject({ phase: 'playing', currentClub: free.club.name, contractYearsLeft: free.contractYears, weeklyWage: free.wage });
+      expect(moved.seasons).toEqual(offered.seasons);
+    },
+  );
+
+  it('keeps the recorded terms of older pending and completed rehab saves', () => {
+    const before = { ...signedCareer(true), contractYearsLeft: 1 };
+    const injured = seeded(13, () => advanceProSeason(before, FALLBACK_CLUBS, true));
+    const legacy = load({ ...injured, contractYearsLeft: 1, pendingRehab: {
+      name: 'ACL rupture', weeks: injured.pendingRehab!.weeks, year: 2022, specialistCost: null,
+    } });
+    expect(legacy.contractYearsLeft).toBe(1);
+    const after = seeded(166, () => applyRehabChoice(legacy, 1, FALLBACK_CLUBS));
+    expect(after).toMatchObject({ phase: 'playing', contractYearsLeft: 1, weeklyWage: before.weeklyWage, transferSituation: null });
+    expect(load(after)).toEqual(after);
+    expect(after.seasons).toHaveLength(before.seasons.length + 1);
+    expect(after.seriousInjuries).toHaveLength(1);
+  });
+
+  it('takes an expired parent-club contract back from loan after rehab', () => {
+    const before = { ...signedCareer(true), contractYearsLeft: 1 };
+    const club = FALLBACK_CLUBS.find(row => row.name === 'Twente')!;
+    const loan = acceptLoan(before, { club, contractYears: 1, wage: before.weeklyWage, transferFee: 0, isLoan: true });
+    const paid = load(seeded(13, () => advanceProSeason(loan, FALLBACK_CLUBS, true)));
+    expect(paid).toMatchObject({ phase: 'rehab_choice', contractYearsLeft: 0, currentClub: 'Twente', weeklyWage: before.weeklyWage });
+    expect(paid.seasons.at(-1)).toMatchObject({ club: 'Twente', onLoanFrom: before.currentClub });
+    const after = load(seeded(166, () => applyRehabChoice(paid, 1, FALLBACK_CLUBS)));
+    expect(after).toMatchObject({ phase: 'transfer_window', contractYearsLeft: 0, loan: null,
+      currentClub: before.currentClub, currentLeague: before.currentLeague, weeklyWage: before.weeklyWage });
+    expect(after.transferSituation?.type).toBe('contract_expiry');
+    expect(after.seasons.at(-1)).toMatchObject({ club: 'Twente', onLoanFrom: before.currentClub });
+  });
+
   it.each([undefined, null])('reopens a rehab save with no choice payload (%s) and can play its next season', missing => {
     const normal = load(injuredCareer());
     const saved = { ...normal, pendingRehab: missing };

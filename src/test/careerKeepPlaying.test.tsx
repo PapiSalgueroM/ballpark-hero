@@ -312,6 +312,50 @@ describe('Soccer Career: Keep Playing plays the season through the page', () => 
     expect(problems, problems.join('\n')).toEqual([]);
   }, 240_000);
 
+  it('shows renewal and free transfers after completing rehab on an expired deal', async () => {
+    const random = vi.spyOn(Math, 'random').mockImplementation(seeded(166));
+    const clubs = E.FALLBACK_CLUBS;
+    const academy = E.initCareer('Fixture Prospect', 'England', 'ST', '2020', {
+      pace: 60, shooting: 60, passing: 60, dribbling: 60, defending: 60, physical: 60, reflexes: 60,
+    }, 60, 2020, clubs);
+    const offered = E.advanceYouthYear(academy, clubs, true);
+    const initial = { ...E.acceptOffer(offered, offered.pendingOffers[0]), contractYearsLeft: 1 };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(initial));
+    let view = mount(<SoccerCareer />);
+    try {
+      await tick(60);
+      random.mockImplementation(seeded(13));
+      await press(nextSeasonButton(view.container)!);
+      const injured = readSave()!;
+      expect(injured).toMatchObject({ phase: 'rehab_choice', contractYearsLeft: 0, weeklyWage: initial.weeklyWage });
+      expect(injured.seasons.at(-1)).toMatchObject({ year: 2022, injury: 'ACL rupture', apps: 19 });
+      view.unmount();
+      view = mount(<SoccerCareer />);
+      await tick(60);
+      expect(buttonStarting(view.container, 'Sign Extension')).toBeUndefined();
+      random.mockImplementation(seeded(166));
+      await press(buttonStarting(view.container, "Follow the club's plan")!);
+      const expiry = readSave()!;
+      expect(expiry).toMatchObject({ phase: 'transfer_window', contractYearsLeft: 0, transferSituation: { type: 'contract_expiry' } });
+      expect(expiry.seasons).toHaveLength(initial.seasons.length + 1);
+      expect(expiry.seriousInjuries).toMatchObject([{ path: 'plan', year: 2022 }]);
+      expect(buttonStarting(view.container, 'Sign Extension')).toBeDefined();
+      expect(view.container.textContent).toContain('Free transfer');
+      view.unmount();
+      view = mount(<SoccerCareer />);
+      await tick(60);
+      expect(readSave()).toEqual(expiry);
+      await press(buttonStarting(view.container, 'Sign Extension')!);
+      const renewed = readSave()!;
+      expect(renewed.phase).toBe('playing');
+      expect(renewed.contractYearsLeft).toBeGreaterThan(0);
+      expect(renewed.seasons).toEqual(expiry.seasons);
+    } finally {
+      view.unmount();
+      random.mockRestore();
+    }
+  });
+
   it('a save left on the rehab choice or the conviction paper gets that year once', async () => {
     const problems: string[] = [];
     const seen = { rehab: 0, conviction: 0 };

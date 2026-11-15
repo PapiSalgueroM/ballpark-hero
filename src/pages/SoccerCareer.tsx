@@ -1313,7 +1313,8 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
 
   const handleRehabChoice = (choiceIndex: number) => {
     if (!career) return;
-    setCareer(applyRehabChoice(career, choiceIndex));
+    const next = applyRehabChoice(career, choiceIndex, clubs);
+    setCareer(prev => prev === career ? next : prev);
   };
 
   const handleDismissMoralDilemma = () => {
