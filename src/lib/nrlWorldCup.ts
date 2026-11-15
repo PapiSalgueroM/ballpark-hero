@@ -84,19 +84,22 @@ function homeGround(fixture: CupFixture): NrlWorldCupNation {
   return 'australia';
 }
 
-function simulateCupMatch(seed: number, nation: NrlWorldCupNation, tactic: NrlTactic, fixture: CupFixture,
-  change?: NrlWorldCupLineup): CupResult {
+function simulateCupMatch({ seed, nation, version }: Pick<NrlWorldCupRun, 'seed' | 'nation' | 'version'>,
+  tactic: NrlTactic, fixture: CupFixture, change?: NrlWorldCupLineup): CupResult {
   const { id, home, away } = fixture;
   const homeTeam = nation === home ? tournamentTeam(home, tactic, change) : tournamentTeam(home, 'balanced');
   const awayTeam = nation === away ? tournamentTeam(away, tactic, change) : tournamentTeam(away, 'balanced');
   const ground = homeGround(fixture);
   const rng = rngFrom(hashLabel(`nrl-world-cup-v1|${seed}|${id}`));
-  const score = scoreNrlRepresentativeMatch(homeTeam, awayTeam, rng, ground !== home);
+  const ratingGap = version === 2 ? GAME_RATINGS[home] - GAME_RATINGS[away] : 0;
+  const score = scoreNrlRepresentativeMatch(homeTeam, awayTeam, rng, ground !== home, ratingGap);
   return { id, home, away, ...score, winner: score.homeScore > score.awayScore ? home : away, simulated: true };
 }
 
 export function simulateNrlWorldCupOpener(seed: number, side: NrlWorldCupOpenerSide, tactic: NrlTactic) {
-  const { homeScore, awayScore, goldenPoint, winner, simulated } = simulateCupMatch(seed, side, tactic, NRL_WORLD_CUP_2026_OPENER);
+  const { homeScore, awayScore, goldenPoint, winner, simulated } = simulateCupMatch(
+    { seed, nation: side, version: 2 }, tactic, NRL_WORLD_CUP_2026_OPENER,
+  );
   return { homeScore, awayScore, goldenPoint, winner, simulated };
 }
 
@@ -206,9 +209,10 @@ export function readNrlWorldCupSave(raw: string | null): NrlWorldCupRun | null {
   }
 }
 
-export function nrlWorldCupResults({ seed, nation, tactics, lineups }: NrlWorldCupRun) {
+export function nrlWorldCupResults(run: NrlWorldCupRun) {
+  const { tactics, lineups } = run;
   const poolMatches = NRL_WORLD_CUP_2026_POOL_FIXTURES.filter(fixture => tactics[fixture.round - 1])
-    .map(fixture => simulateCupMatch(seed, nation, tactics[fixture.round - 1], fixture, lineups?.[fixture.round]));
+    .map(fixture => simulateCupMatch(run, tactics[fixture.round - 1], fixture, lineups?.[fixture.round]));
   const tables = rankNrlWorldCupPools(poolMatches);
   const semifinals: CupResult[] = [];
   let final: CupResult | null = null;
@@ -217,11 +221,11 @@ export function nrlWorldCupResults({ seed, nation, tactics, lineups }: NrlWorldC
     // These cross-table pairings match the real draw outcome. Their venue order is a simulator convention.
     const [newcastle, sydney, brisbane] = NRL_WORLD_CUP_2026_KNOCKOUT_VENUES;
     semifinals.push(
-      simulateCupMatch(seed, nation, tactics[3], { id: '2026-semifinal-1', home: A[1].nation, away: BC[0].nation, venue: newcastle.venue }, lineups?.[4]),
-      simulateCupMatch(seed, nation, tactics[3], { id: '2026-semifinal-2', home: A[0].nation, away: BC[1].nation, venue: sydney.venue }, lineups?.[4]),
+      simulateCupMatch(run, tactics[3], { id: '2026-semifinal-1', home: A[1].nation, away: BC[0].nation, venue: newcastle.venue }, lineups?.[4]),
+      simulateCupMatch(run, tactics[3], { id: '2026-semifinal-2', home: A[0].nation, away: BC[1].nation, venue: sydney.venue }, lineups?.[4]),
     );
     if (tactics[4]) {
-      final = simulateCupMatch(seed, nation, tactics[4], { id: '2026-final', home: semifinals[1].winner, away: semifinals[0].winner, venue: brisbane.venue }, lineups?.[5]);
+      final = simulateCupMatch(run, tactics[4], { id: '2026-final', home: semifinals[1].winner, away: semifinals[0].winner, venue: brisbane.venue }, lineups?.[5]);
     }
   }
   return { poolMatches, tables, semifinals, final, champion: final?.winner ?? null };

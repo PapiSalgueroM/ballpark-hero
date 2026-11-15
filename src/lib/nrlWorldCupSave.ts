@@ -16,7 +16,7 @@ export interface NrlWorldCupLineup {
 }
 
 export interface NrlWorldCupRun {
-  version: 1;
+  version: 1 | 2;
   year: 2026;
   seed: number;
   nation: NrlWorldCupNation;
@@ -29,7 +29,7 @@ export const isNrlWorldCupNation = (nation: unknown): nation is NrlWorldCupNatio
 export const isNrlWorldCupTactic = (tactic: unknown): tactic is NrlTactic => NRL_TACTICS.includes(tactic as NrlTactic);
 
 export function createNrlWorldCup(seed: number, nation: NrlWorldCupNation): NrlWorldCupRun {
-  return { version: 1, year: 2026, seed: seed >>> 0, nation, tactics: [] };
+  return { version: 2, year: 2026, seed: seed >>> 0, nation, tactics: [] };
 }
 
 export function isNrlWorldCupLineup(value: unknown): value is NrlWorldCupLineup {
@@ -45,7 +45,7 @@ export function isNrlWorldCupLineup(value: unknown): value is NrlWorldCupLineup 
 export function isNrlWorldCupRun(value: unknown): value is NrlWorldCupRun {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const run = value as NrlWorldCupRun;
-  if (Object.keys(run).length !== (run.lineups === undefined ? 5 : 6) || run.version !== 1 || run.year !== 2026
+  if (Object.keys(run).length !== (run.lineups === undefined ? 5 : 6) || (run.version !== 1 && run.version !== 2) || run.year !== 2026
     || !Number.isSafeInteger(run.seed) || run.seed !== (run.seed >>> 0) || !isNrlWorldCupNation(run.nation)
     || !Array.isArray(run.tactics) || run.tactics.length > NRL_WORLD_CUP_STAGES || !run.tactics.every(isNrlWorldCupTactic)) return false;
   if (run.lineups === undefined) return true;

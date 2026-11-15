@@ -1097,10 +1097,11 @@ function fixtureTryRate(state: NrlManagerState, fixture: NrlFixture) {
 }
 
 function tryChances(rng: () => number, edge: number, chances: number, conversion = 0, plan?: NrlActiveKickingPlan,
-  rate = ORIGINAL_TRY_RATE): NrlScoring {
+  rate = ORIGINAL_TRY_RATE, tryChanceOverride?: number): NrlScoring {
   const scoring: NrlScoring = { tries: 0, conversions: 0, penalties: 0, fieldGoals: 0, longFieldGoals: 0 };
   const convert = conversionChance(edge, conversion);
-  const tryChance = clamp(rate.base + edge / rate.edgeDivisor, 0.065, 0.40) + (plan === 'territory' ? -0.025 : plan === 'contest' ? 0.025 : 0);
+  const tryChance = tryChanceOverride ?? (clamp(rate.base + edge / rate.edgeDivisor, 0.065, 0.40)
+    + (plan === 'territory' ? -0.025 : plan === 'contest' ? 0.025 : 0));
   for (let chance = 0; chance < chances; chance++) {
     const tryRoll = rng();
     const conversionRoll = rng();
@@ -1112,15 +1113,23 @@ function tryChances(rng: () => number, edge: number, chances: number, conversion
   return scoring;
 }
 
-function scoringChances(rng: () => number, edge: number, chances: number, conversion = 0, rate = ORIGINAL_TRY_RATE): NrlScoring {
-  const scoring = tryChances(rng, edge, chances, conversion, undefined, rate);
+function scoringChances(rng: () => number, edge: number, chances: number, conversion = 0,
+  rate = ORIGINAL_TRY_RATE, tryChanceOverride?: number): NrlScoring {
+  const scoring = tryChances(rng, edge, chances, conversion, undefined, rate, tryChanceOverride);
   if (rng() < (chances === 18 ? 0.21 : 0.04)) scoring.penalties++;
   return scoring;
 }
 
-// Saved Origin results replay this calculation, including the order of its RNG draws.
+function worldCupTryChance(edge: number, ratingGap: number): number | undefined {
+  const excess = Math.abs(ratingGap) - 4;
+  if (excess <= 0) return undefined;
+  return clamp(ORIGINAL_TRY_RATE.base + edge / ORIGINAL_TRY_RATE.edgeDivisor
+    + excess * (ratingGap > 0 ? 0.022 : -0.004), 0.025, 0.62);
+}
+
+// Saved Origin and version 1 World Cup rounds replay the default calculation and RNG draws.
 export function scoreNrlRepresentativeMatch(home: NrlSelectedSquad & { tactic: NrlTactic },
-  away: NrlSelectedSquad & { tactic: NrlTactic }, rng: () => number, neutral: boolean) {
+  away: NrlSelectedSquad & { tactic: NrlTactic }, rng: () => number, neutral: boolean, worldCupRatingGap = 0) {
   const homeBase = matchdayBase(home, nrlBenchRotation(home));
   const awayBase = matchdayBase(away, nrlBenchRotation(away));
   const homeTactic = TACTIC_EFFECT[home.tactic];
@@ -1128,8 +1137,8 @@ export function scoreNrlRepresentativeMatch(home: NrlSelectedSquad & { tactic: N
   const venue = neutral ? 0 : 2;
   const homeEdge = homeBase + homeTactic.attack - awayBase - awayTactic.defense + venue;
   const awayEdge = awayBase + awayTactic.attack - homeBase - homeTactic.defense - venue;
-  const homeScoring = scoringChances(rng, homeEdge, 18);
-  const awayScoring = scoringChances(rng, awayEdge, 18);
+  const homeScoring = scoringChances(rng, homeEdge, 18, 0, ORIGINAL_TRY_RATE, worldCupTryChance(homeEdge, worldCupRatingGap));
+  const awayScoring = scoringChances(rng, awayEdge, 18, 0, ORIGINAL_TRY_RATE, worldCupTryChance(awayEdge, -worldCupRatingGap));
   const goldenPoint = scoreOf(homeScoring) === scoreOf(awayScoring);
   if (goldenPoint) {
     const winner = rng() < clamp(0.5 + (homeEdge - awayEdge) / 140, 0.25, 0.75) ? homeScoring : awayScoring;

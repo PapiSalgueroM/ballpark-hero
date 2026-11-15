@@ -120,7 +120,7 @@ describe('World Cup club appointment', () => {
     let complete = initial;
     while (complete.season.phase !== 'complete') complete = advance(complete);
     const appointed = appoint(complete);
-    expect(appointed.worldCup).toMatchObject({ year: 2026, nation: 'australia', tactics: [] });
+    expect(appointed.worldCup).toMatchObject({ version: 2, year: 2026, nation: 'australia', tactics: [] });
     expect(appointed.worldCup?.seed).not.toBe(initial.season.seed);
     expect(stripCup(appointed)).toEqual(complete);
     expect(appoint(appointed)).toBe(appointed);
@@ -139,10 +139,18 @@ describe('World Cup club appointment', () => {
     const rewrittenSwap = { ...advanceNrlWorldCup(next, 2, 'attack'), lineups: { 1: { swap: 0, target: 0, firstReserve: 3 } } };
     expect(reduceNrlCareer(started, { type: 'playWorldCupAppointment', previous: next, next: rewrittenSwap })).toBe(started);
     const appointmentSwap = advanceNrlWorldCup(next, 2, 'attack', { swap: 5, target: 0 });
+    const downgraded = { ...appointmentSwap, version: 1 as const };
+    expect(reduceNrlCareer(started, { type: 'playWorldCupAppointment', previous: next, next: downgraded })).toBe(started);
     const withSwap = reduceNrlCareer(started, { type: 'playWorldCupAppointment', previous: next, next: appointmentSwap });
     expect(withSwap.worldCup?.lineups?.[2]).toEqual({ swap: 5, target: 0 });
     expect(stripCup(withSwap)).toEqual(complete);
     expect(readNrlCareerSave(JSON.stringify(withSwap))).toEqual(withSwap);
+    const restored = readNrlCareerSave(JSON.stringify(withSwap))!;
+    expect(restored.worldCup?.version).toBe(2);
+    const restoredNext = advanceNrlWorldCup(restored.worldCup!, 3, 'defense');
+    expect(nrlWorldCupResults(restoredNext)).toEqual(nrlWorldCupResults(advanceNrlWorldCup(appointmentSwap, 3, 'defense')));
+    expect(reduceNrlCareer(restored, { type: 'playWorldCupAppointment',
+      previous: restored.worldCup!, next: restoredNext }).worldCup).toEqual(restoredNext);
     expect(readNrlCareerSave(JSON.stringify({ ...started, worldCup: { ...next, lineups: { 2: { firstReserve: 3 } } } }))).toBeNull();
     const move = { type: 'startNextSeason', move: { fromYear: 2026, clubId: 'bears' } } as const;
     let current = reduceNrlCareer(started, move);
@@ -224,7 +232,7 @@ describe('2026 men’s Rugby League World Cup draw', () => {
 describe('2026 men’s Rugby League World Cup simulation', () => {
   it('runs three complete pool rounds, two cross-table semifinals and a winners-only final', () => {
     const start = createNrlWorldCup(42, 'australia');
-    expect(start).toEqual({ version: 1, year: 2026, seed: 42, nation: 'australia', tactics: [] });
+    expect(start).toEqual({ version: 2, year: 2026, seed: 42, nation: 'australia', tactics: [] });
     expect(advanceNrlWorldCup(start, 2, 'attack')).toBe(start);
     let run = start;
     for (let step = 1; step <= 5; step++) {
@@ -248,6 +256,48 @@ describe('2026 men’s Rugby League World Cup simulation', () => {
     expect(report.champion).toBe(report.final?.winner);
     expect(nrlWorldCupResults(run)).toEqual(report);
     expect(advanceNrlWorldCup(run, 6, 'attack')).toBe(run);
+  });
+
+  it('preserves the exact version 1 scores and continues the old knockout after reload', () => {
+    const raw = '{"version":1,"year":2026,"seed":42,"nation":"australia","tactics":["balanced","attack","defense"],"lineups":{"1":{"swap":0,"firstReserve":3}}}';
+    const saved = readNrlWorldCupSave(raw)!;
+    expect(JSON.stringify(saved)).toBe(raw);
+    const groups = nrlWorldCupResults(saved);
+    expect(groups.poolMatches.map(({ homeScore, awayScore }) => [homeScore, awayScore])).toEqual([
+      [23, 22], [42, 4], [40, 18], [2, 18], [28, 6], [36, 6], [35, 34], [28, 10],
+      [60, 12], [44, 6], [40, 10], [34, 12], [26, 0], [22, 40], [32, 22],
+    ]);
+    const semifinal = advanceNrlWorldCup(saved, 4, 'balanced', { firstReserve: 3 });
+    const finished = advanceNrlWorldCup(readNrlWorldCupSave(JSON.stringify(semifinal))!, 5, 'balanced');
+    expect(finished.version).toBe(1);
+    const report = nrlWorldCupResults(finished);
+    expect(report.poolMatches).toEqual(groups.poolMatches);
+    expect(report.tables).toEqual(groups.tables);
+    expect(report.semifinals).toMatchObject([
+      { home: 'new-zealand', away: 'tonga', homeScore: 22, awayScore: 8 },
+      { home: 'australia', away: 'england', homeScore: 20, awayScore: 10 },
+    ]);
+    expect(report.final).toMatchObject({ home: 'australia', away: 'new-zealand', homeScore: 18, awayScore: 16 });
+  });
+
+  it('widens seeded mismatches while preserving the exact close fixtures and reload continuation', () => {
+    const start = createNrlWorldCup(42, 'australia');
+    const firstRound = advanceNrlWorldCup(start, 1, 'balanced', { swap: 0, firstReserve: 3 });
+    const restored = readNrlWorldCupSave(JSON.stringify(firstRound))!;
+    const secondRound = advanceNrlWorldCup(restored, 2, 'attack');
+    expect(nrlWorldCupResults(secondRound)).toEqual(nrlWorldCupResults(advanceNrlWorldCup(firstRound, 2, 'attack')));
+    const groups = nrlWorldCupResults(advanceNrlWorldCup(secondRound, 3, 'defense'));
+    expect(groups.poolMatches[1]).toMatchObject({ home: 'samoa', away: 'france', homeScore: 60, awayScore: 0 });
+    expect(groups.poolMatches[6]).toMatchObject({ home: 'papua-new-guinea', away: 'samoa', homeScore: 28, awayScore: 34 });
+    expect(groups.poolMatches[8]).toMatchObject({ home: 'new-zealand', away: 'cook-islands', homeScore: 98, awayScore: 6 });
+
+    const close = [0, 3, 13, 14];
+    for (const seed of [0, 3, 16, 42, 250]) {
+      const run = { ...createNrlWorldCup(seed, 'australia'), tactics: secondRound.tactics.concat('defense'), lineups: firstRound.lineups };
+      const previous = nrlWorldCupResults({ ...run, version: 1 }).poolMatches;
+      const current = nrlWorldCupResults(run).poolMatches;
+      expect(close.map(index => current[index])).toEqual(close.map(index => previous[index]));
+    }
   });
 
   it('uses points difference within a pool and a head-to-head winner over a higher difference across pools', () => {
@@ -282,6 +332,7 @@ describe('2026 men’s Rugby League World Cup simulation', () => {
     expect(advanceNrlWorldCup(start, 1, 'balanced')).not.toBe(start);
     expect(advanceNrlWorldCup(start, 1, 'invalid' as never)).toBe(start);
     expect(readNrlWorldCupSave(JSON.stringify({ ...start, year: 2027 }))).toBeNull();
+    expect(readNrlWorldCupSave(JSON.stringify({ ...start, version: 3 }))).toBeNull();
     expect(readNrlWorldCupSave(JSON.stringify({ ...start, seed: -1 }))).toBeNull();
     expect(readNrlWorldCupSave(JSON.stringify({ ...start, nation: 'usa' }))).toBeNull();
     expect(readNrlWorldCupSave(JSON.stringify({ ...start, tactics: Array(6).fill('attack') }))).toBeNull();

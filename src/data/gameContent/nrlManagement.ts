@@ -84,6 +84,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Turn on Origin workload to use club fitness when your players start for your state. Plan recovery before their next club match.',
       'When you start a new State of Origin series, Past Origin series keeps the previous winner and all three scores.',
       'Choose Rugby League World Cup beside Career saves to coach one of ten men’s national teams through the 2026 pools, semifinals and final. Use Set matchday lineup to swap any of the six reserves with a starter or set first interchange priority. Out-of-position starts carry a rating penalty. The fixtures and opening squads are sourced. Lineup changes, ratings and results are simulated. Your tournament saves separately.',
+      'New World Cup runs can produce bigger wins when teams are far apart in strength. Saved tournaments keep the scoring they started with.',
       'After finishing a 2026 club season, take a national appointment in the Club office before starting 2027. Your World Cup progress saves with your club career, so you can return to it after switching clubs.',
       'Offer an eligible player less than the asking salary to request a simulated three-season counteroffer. Review the salary and dates before accepting.',
       'In Contracts, make one selection promise per season to an eligible generated player with an expiring deal. Give them four appearances in their next six available regular-season matches to lower their renewal asking salary by up to 5%.',

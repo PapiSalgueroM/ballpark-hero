@@ -2883,7 +2883,7 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     case 'playWorldCupAppointment': {
       const { previous, next } = action;
       if (!state.worldCup || state.worldCup !== previous || !isNrlWorldCupRun(next)
-        || next.seed !== previous.seed || next.nation !== previous.nation
+        || next.version !== previous.version || next.seed !== previous.seed || next.nation !== previous.nation
         || next.tactics.length !== previous.tactics.length + 1
         || !previous.tactics.every((tactic, index) => {
           const before = previous.lineups?.[index + 1], after = next.lineups?.[index + 1];
