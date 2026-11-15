@@ -1,12 +1,16 @@
+import { useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { FIRST_TEAM_SLOTS, LEAVE_AGE, PROMOTE_AGE, YEAR_SEC, fmtCash, potentialRead, salePrice } from '@/lib/wonderkidFactory';
 import type { FactoryState } from '@/lib/wonderkidFactory';
 
 export default function AcademyProspects({ s, doSell, doPromote }: {
   s: FactoryState;
-  doSell: (id: number) => void;
+  doSell: (id: number, minimumPrice: number) => 'price-changed' | void;
   doPromote: (id: number) => void;
 }) {
+  const pressedSale = useRef<{ id: number; pointerId: number; price: number } | null>(null);
+  const [lowerQuoteId, setLowerQuoteId] = useState<number | null>(null);
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
       {s.prospects.map(p => {
@@ -39,11 +43,26 @@ export default function AcademyProspects({ s, doSell, doPromote }: {
               </p>
             )}
             <button
-              onClick={() => doSell(p.id)}
+              type="button"
+              onPointerDown={(event) => {
+                if (event.button === 0) pressedSale.current = { id: p.id, pointerId: event.pointerId, price };
+              }}
+              onPointerCancel={(event) => {
+                if (pressedSale.current?.pointerId === event.pointerId) pressedSale.current = null;
+              }}
+              onClick={(event) => {
+                const press = pressedSale.current;
+                pressedSale.current = null;
+                const minimumPrice = event.detail > 0 && press?.id === p.id ? press.price : price;
+                setLowerQuoteId(doSell(p.id, minimumPrice) === 'price-changed' ? p.id : null);
+              }}
               className="mt-2 w-full rounded-lg bg-primary text-primary-foreground text-xs font-bold py-2 hover:opacity-90 transition-opacity"
             >
               Sell for {fmtCash(price)}
             </button>
+            {lowerQuoteId === p.id && <p role="status" className="mt-1.5 text-[11px] leading-4 text-muted-foreground">
+              The sale price fell to {fmtCash(price)}. Choose Sell again to accept.
+            </p>}
             <button
               type="button"
               onClick={() => doPromote(p.id)}

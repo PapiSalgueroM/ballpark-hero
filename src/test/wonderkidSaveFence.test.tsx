@@ -9,7 +9,7 @@ import { fenceKeyOf } from '@/lib/saveFence';
 import { BOOTS } from '@/lib/soccerCareerAppearance';
 import { newTycoon, serializeTycoon, TYCOON_SAVE_KEY } from '@/lib/stadiumTycoon';
 import { creditFullTimes, newLedger, REWARDS_KEY } from '@/lib/tycoonRewards';
-import { deserialize, makeProspectInBand, newFactory, PACKS, salePrice, SAVE_KEY, serialize } from '@/lib/wonderkidFactory';
+import { DEADLINE_EVERY, DEADLINE_SEC, deserialize, fmtCash, LEAVE_AGE, makeProspectInBand, newFactory, PACKS, salePrice, SAVE_KEY, serialize, tick, YEAR_SEC } from '@/lib/wonderkidFactory';
 import StadiumTycoon from '@/pages/StadiumTycoon';
 import WonderkidFactory from '@/pages/WonderkidFactory';
 
@@ -178,4 +178,111 @@ it.each([false, true])('holds a prospect and its fee until storage accepts the s
   expect(sold.soldCareer).toBe(state.soldCareer + 1);
   expect(academy.queryByText(/The academy could not save that change/)).toBeNull();
   expect(recordCompletion.mock.calls).toEqual([['/wonderkid-factory']]);
+}, 15_000);
+
+function saleFixture(watchedSeconds: number) {
+  const academy = newFactory(now, 216);
+  for (let i = 0; i < watchedSeconds * 4; i++) tick(academy, 0.25);
+  expect(academy.prospects[0]?.name).toBe('Joris Kortenhorst');
+  return academy;
+}
+
+async function openQuotedSale(stadium: boolean, fee: number) {
+  const view = stadium ? mountPage(<StadiumTycoon />, '/stadium-tycoon') : mountPage(<WonderkidFactory />, '/wonderkid-factory');
+  const academy = within(view.container);
+  if (stadium) fireEvent.click(academy.getByRole('button', { name: /^🎓 Academy/ }));
+  const button = (price: number) => academy.getByRole('button', { name: `Sell for ${fmtCash(price)}` });
+  const sell = await academy.findByRole('button', { name: `Sell for ${fmtCash(fee)}` });
+  return { academy, button, sell };
+}
+
+function touch(button: HTMLElement, event: 'pointerdown' | 'pointerup' | 'pointercancel') {
+  fireEvent(button, Object.assign(new Event(event, { bubbles: true }), { button: 0, pointerId: 1, pointerType: 'touch' }));
+}
+
+function advanceSaleTick() {
+  vi.mocked(Date.now).mockReturnValue(now + 250);
+  act(academyTicks[0]);
+}
+
+it.each([false, true])('asks for a fresh sale after Deadline Day lowers the held quote (Stadium: %s)', async stadium => {
+  const academy = saleFixture(DEADLINE_EVERY + DEADLINE_SEC - 0.25);
+  const kid = academy.prospects[0];
+  expect(academy.deadlineLeft).toBe(0.25);
+  expect(salePrice(academy, kid)).toBe(357);
+  localStorage.setItem(SAVE_KEY, serialize(academy));
+  const { academy: view, button, sell } = await openQuotedSale(stadium, 357);
+  const before = save();
+
+  touch(sell, 'pointerdown');
+  advanceSaleTick();
+  expect(button(238)).toBe(sell);
+  touch(sell, 'pointerup');
+  fireEvent.click(sell, { detail: 1 });
+
+  expect(save()).toBe(before);
+  expect(recordCompletion).not.toHaveBeenCalled();
+  expect(button(238)).toBeVisible();
+  expect(view.getByText('The sale price fell to $238. Choose Sell again to accept.')).toBeVisible();
+
+  const retry = button(238);
+  touch(retry, 'pointerdown');
+  touch(retry, 'pointerup');
+  fireEvent.click(retry, { detail: 1 });
+  const sold = deserialize(save(), now + 250)!;
+  expect(sold.cash).toBe(238);
+  expect(sold.sold).toBe(1);
+  expect(sold.prospects.some(prospect => prospect.id === kid.id)).toBe(false);
+  expect(view.queryByText(/The sale price fell/)).not.toBeInTheDocument();
+  expect(recordCompletion.mock.calls).toEqual([['/wonderkid-factory']]);
+}, 15_000);
+
+it.each([
+  { action: 'immediate touch', beforeDeadline: false, expected: 357 },
+  { action: 'a new click after cancellation', beforeDeadline: false, expected: 238 },
+  { action: 'keyboard', beforeDeadline: false, expected: 238 },
+  { action: 'higher quote', beforeDeadline: true, expected: 351 },
+])('accepts the live fee for $action', async ({ action, beforeDeadline, expected }) => {
+  const academy = saleFixture((beforeDeadline ? DEADLINE_EVERY : DEADLINE_EVERY + DEADLINE_SEC) - 0.25);
+  localStorage.setItem(SAVE_KEY, serialize(academy));
+  const { sell } = await openQuotedSale(false, beforeDeadline ? 234 : 357);
+
+  const before = save();
+  touch(sell, 'pointerdown');
+  if (action === 'a new click after cancellation') {
+    touch(sell, 'pointercancel');
+    expect(save()).toBe(before);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  }
+  if (action !== 'immediate touch') advanceSaleTick();
+  if (action === 'immediate touch' || action === 'higher quote') touch(sell, 'pointerup');
+  const detail = action === 'keyboard' ? 0 : 1;
+  fireEvent.click(sell, { detail });
+
+  const sold = deserialize(save(), Date.now())!;
+  expect(sold.cash).toBe(expected);
+  expect(sold.sold).toBe(1);
+  expect(recordCompletion.mock.calls).toEqual([['/wonderkid-factory']]);
+}, 15_000);
+
+it('does not sell an expired prospect when the held button disappears', async () => {
+  const academy = saleFixture(DEADLINE_EVERY + DEADLINE_SEC - 0.25);
+  const kid = academy.prospects[0];
+  kid.age = LEAVE_AGE - 1;
+  kid.ageClock = YEAR_SEC - 0.25;
+  localStorage.setItem(SAVE_KEY, serialize(academy));
+  const { sell } = await openQuotedSale(false, salePrice(academy, kid));
+  const before = save();
+
+  touch(sell, 'pointerdown');
+  await act(async () => {
+    advanceSaleTick();
+    await import('@/components/club-manager/CelebrationStyles');
+  });
+  expect(sell).not.toBeInTheDocument();
+  touch(sell, 'pointerup');
+  fireEvent.click(sell, { detail: 1 });
+
+  expect(save()).toBe(before);
+  expect(recordCompletion).not.toHaveBeenCalled();
 }, 15_000);
