@@ -115,17 +115,26 @@ describe('saved Soccer Career competitions', () => {
     expect([final.goalsFor, final.goalsAgainst]).toEqual([null, null]);
   });
 
-  it('opens the recorded score tile, returns to the compact grid and writes no save', () => {
+  it('opens the recorded score tile and returns to the same grid position without writing a save', () => {
     const before = JSON.stringify(cupSeason);
     const competition = savedSeasonCompetitions(competitionCareer, cupSeason)[0];
     render(<SeasonCompetitionPanel career={{ ...competitionCareer, retired: false } as CareerState} row={cupSeason} competition={competition}
       navigation={null} exitLabel="Back to your career" onClose={() => {}} />);
-    fireEvent.click(document.querySelector('[data-centre-cup-open="1"]')!);
+    const fixture = () => document.querySelector<HTMLButtonElement>('[data-centre-cup-open="1"]')!;
+    const scroller = fixture().closest<HTMLDivElement>('.overflow-y-auto')!;
+    scroller.scrollTop = 87;
+    fixture().focus();
+    fireEvent.click(fixture());
     expect(screen.getByText('Arsenal vs Chelsea')).toBeInTheDocument();
     expect(document.querySelector('[data-centre-cup-score]')?.textContent).toBe('2-1');
     expect(document.querySelector('[data-centre-cup-game] h3')).toHaveFocus();
+    expect(scroller.scrollTop).toBe(0);
+    fireEvent.click(screen.getByRole('button', { name: '› Next game' }));
+    expect(screen.getByText('Arsenal vs Liverpool')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: '‹ All games' }));
     expect(document.querySelectorAll('[data-centre-cup-open]')).toHaveLength(4);
+    expect(fixture()).toHaveFocus();
+    expect(scroller.scrollTop).toBe(87);
     expect(JSON.stringify(cupSeason)).toBe(before);
   });
 
