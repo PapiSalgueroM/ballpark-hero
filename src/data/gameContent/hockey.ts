@@ -1112,6 +1112,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
           "Open Roster and choose your simulation contributors: six healthy forwards, four healthy defensemen and one healthy goalie. If a group has fewer available players, use all of them. Uncheck a selected forward or defenseman before choosing his replacement.",
           "Stage your changes, then Apply contributors to save them. Use automatic goes back to the highest rated healthy players. These groups feed the rating model; they are not full lines, defensive pairs or ice time.",
           "A healthy player fills in during an injury and your saved choices return when they are healthy. For example, if your chosen goalie gets hurt, the backup covers until he returns. Applying a different selection for that group replaces those saved choices.",
+          "Book one goalie development trial per season in Simulation contributors. An eligible backup under 23 starts Games 2 and 4 in each of the next two regular-season rounds. Four trial starts raise his overall by one, up to his potential. Round results records the starts and the outcome if the trial ends early.",
         ],
       },
       {

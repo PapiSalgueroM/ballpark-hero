@@ -47,6 +47,42 @@ const replace = (view: ReturnType<typeof render>) => { check(view, 'f0'); check(
 const noBooking = () => { expect(recordCompletion).not.toHaveBeenCalled(); expect(recordActivity).not.toHaveBeenCalled(); };
 
 describe('actual NHL contributor decisions', () => {
+  it('books a goalie trial inside Contributors and keeps its starts and award after reload', async () => {
+    const league = fixture();
+    const young = league.teams.BOS.players.find(player => player.id === 'g1')!;
+    Object.assign(young, { ovr: 79, pot: 88, age: 21 });
+    league.schedule = Array.from({ length: 20 }, () => ['BOS-BUF', 'BUF-BOS', 'BOS-BUF', 'BUF-BOS']);
+    const { view, raw, writes } = await open(league);
+    const trial = within(view.getByRole('region', { name: 'Goalie development trial' }));
+    fireEvent.change(trial.getByRole('combobox', { name: 'Prospect goalie' }), { target: { value: 'g1' } });
+    expect(localStorage.getItem(KEY)).toBe(raw);
+    fireEvent.click(trial.getByRole('button', { name: 'Book goalie trial' }));
+    expect(writes).toHaveBeenCalledTimes(1);
+    expect(read().league.goalieTrial).toMatchObject({ firstRound: 4, goalieId: 'g1', starts: 0 });
+    expect(input(view, 'g0')).toBeChecked();
+    noBooking();
+
+    fireEvent.click(view.getByRole('button', { name: 'Hub' }));
+    fireEvent.click(view.getByRole('button', { name: /Play Round 4 of 20/ }));
+    vi.spyOn(Math, 'random').mockReturnValue(0.99);
+    fireEvent.click(view.getByRole('button', { name: 'Play Round 4' }));
+    expect(read().league.goalieTrial).toMatchObject({ starts: 2 });
+    expect(within(view.getByRole('region', { name: 'Round results' })).getByText(/2 of 4 trial starts/)).toBeVisible();
+    const firstBytes = localStorage.getItem(KEY);
+    view.unmount();
+
+    const restored = render(<Board />);
+    fireEvent.click(await restored.findByRole('button', { name: /Play Round 5 of 20/ }));
+    expect(localStorage.getItem(KEY)).toBe(firstBytes);
+    fireEvent.click(restored.getByRole('button', { name: 'Play Round 5' }));
+    expect(read().league.goalieTrial).toMatchObject({ starts: 4, result: { kind: 'developed' } });
+    expect(read().league.teams.BOS.players.find(player => player.id === 'g1')).toMatchObject({ salary: 1, years: 2 });
+    const results = within(restored.getByRole('region', { name: 'Round results' }));
+    expect(results.getByText(/4 trial starts.*gained 1 OVR/)).toBeVisible();
+    fireEvent.change(results.getByRole('combobox', { name: 'Played round' }), { target: { value: '4' } });
+    expect(results.getByText(/2 of 4 trial starts/)).toBeVisible();
+  });
+
   it('opens automatic contributors quietly with exact healthy counts and unchanged ratings', async () => {
     const { view, writes, raw, league } = await open();
     expect(view.getByRole('group', { name: 'Forwards 6/6 · 50%' })).toBeVisible();
