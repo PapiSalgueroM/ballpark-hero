@@ -7,6 +7,10 @@
 
 The production build, 91 focused tests, seven pinned local browser cases and 20 site checks passed. The Aussie Rules Manager and Dart Draft guides and lastmod entries were refreshed. The 360 archived grid boards through November 14 Eastern matched the previous release.
 
+[PR #1000](https://github.com/PapiSalgueroM/ballpark-hero/pull/1000) published exact main `a25f83aa246249bb611dd66ae2d4e0ab2783cc25`, deployment `538b71ae-fe12-4af4-9af2-7a5a9765094c`, canonical entry `/assets/index-BfVtn445.js`. The merged tree matched tested head `1ac80cf81`. All seven live browser cases, 13 pinned endpoints and 174 sitemap routes passed. IndexNow accepted the Aussie Rules Manager and Dart Draft guides. The 174-route local SEO split check, Home fold and 16 download budgets passed.
+
+Exact hosted app types, the standard build and Career entry guide verification passed. The Home search workflow passed mounted recovery, the deadline control and the native failed-search recovery check. Its older combined gameplay and score step still reported a failure.
+
 ## 2026-11-15: Rugby training, NFL rookie options, stadium construction and Daily saves
 
 - NRL Team Manager lets a coach book one intensive match-week session during an active position course. It costs four kickoff fitness points and advances the course by one round after full-time. It shares the existing once-per-course spot with the bye session. In the Sharks fixture, Tane Nairn qualified at Halfback for Round 5. Selecting him changed a 20–24 loss and six ladder points into a 20–18 win and eight points.
