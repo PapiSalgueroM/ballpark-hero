@@ -35,6 +35,8 @@ const FormationPitch = ({ positions, filledSlots, selectedIndex, onSelectPositio
         const isSelected = selectedIndex === i;
         const coord = coords[i];
         if (!coord) return null;
+        const rowSize = coords.filter(spot => spot.row === coord.row).length;
+        const slotWidth = `calc(${100 / (rowSize + 1)}% - 2px)`;
 
         return (
           <button
@@ -43,23 +45,25 @@ const FormationPitch = ({ positions, filledSlots, selectedIndex, onSelectPositio
             disabled={!!filled}
             className={cn(
               'absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-200',
-              'flex flex-col items-center justify-center rounded-lg text-center min-w-[4rem] px-2 py-1.5',
+              'flex min-h-8 flex-col items-center justify-center rounded-lg px-2 py-1.5 text-center',
               filled
                 ? 'bg-correct text-correct-foreground shadow-md cursor-default'
                 : isSelected
-                  ? 'bg-primary text-primary-foreground shadow-lg scale-110 ring-2 ring-primary/50'
-                  : 'bg-card border border-border text-foreground hover:bg-primary/20 hover:scale-105 cursor-pointer'
+                  ? 'bg-primary text-primary-foreground shadow-lg ring-2 ring-inset ring-primary/50'
+                  : 'bg-card border border-border text-foreground hover:bg-primary/20 cursor-pointer'
             )}
             style={{
               left: `${coord.x}%`,
               top: `${coord.y}%`,
+              minWidth: `min(4rem, ${slotWidth})`,
+              maxWidth: slotWidth,
             }}
           >
             <span className="text-[10px] font-bold uppercase tracking-wide opacity-80">
               {pos.label}
             </span>
             {filled && (
-              <span className="text-[8px] font-semibold truncate max-w-[7rem] leading-tight mt-0.5 whitespace-nowrap">
+              <span className="mt-0.5 max-w-[min(7rem,100%)] truncate text-[8px] font-semibold leading-tight">
                 {filled.playerName}
               </span>
             )}
