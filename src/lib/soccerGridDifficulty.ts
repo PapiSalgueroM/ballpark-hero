@@ -255,9 +255,10 @@ export function loadTimerExpired(dateStr: string): boolean {
   }
 }
 
-export function saveTimerExpired(dateStr: string): void {
+export function saveTimerExpired(dateStr: string, expired = true): void {
   try {
-    localStorage.setItem(timerExpiredKey(dateStr), '1');
+    if (expired) localStorage.setItem(timerExpiredKey(dateStr), '1');
+    else localStorage.removeItem(timerExpiredKey(dateStr));
   } catch {
     // ignore
   }

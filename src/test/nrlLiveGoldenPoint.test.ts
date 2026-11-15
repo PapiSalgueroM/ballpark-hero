@@ -14,7 +14,7 @@ const atMinute60 = (state: NrlCareerState) => reduceNrlCareer(state, { ...finish
 const finishFrom60 = { ...finish, type: 'finishMinute60' } as const;
 
 describe('NRL Live golden point', () => {
-  it.each([29, 88, 202])('keeps standard settlement byte-identical to direct play for seed %i', seed => {
+  it.each([29, 88, 202])('keeps standard settlement game state identical to Quick Sim for seed %i', seed => {
     const started = live(seed);
     const paused = reduceNrlCareer(started, playRegulation);
     const checkpoint = paused.season.live?.goldenPoint;
@@ -27,6 +27,7 @@ describe('NRL Live golden point', () => {
     expect(reduceNrlCareer(paused, { ...settle, round: 2 })).toBe(paused);
     expect(reduceNrlCareer(paused, { ...settle, clubId: 'bears' })).toBe(paused);
     const finished = reduceNrlCareer(read(paused)!, settle);
+    expect(match(finished).phaseScoring?.regulation).toEqual(checkpoint?.regulation);
     expect(JSON.stringify(finished)).toBe(JSON.stringify(quick));
     expect(reduceNrlCareer(finished, settle)).toBe(finished);
   });

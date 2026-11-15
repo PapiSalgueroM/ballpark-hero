@@ -36,10 +36,12 @@ describe('NRL last-tackle kicking', () => {
     const late = reduceNrlCareer(live, { type: 'reachMinute60', year, round, tactic });
     expect(reload(late)).toEqual(late);
     const final = reduceNrlCareer(late, { type: 'finishMinute60', year, round, tactic });
-    const { scorePeriods, ...played } = managedMatch(final);
+    const { scorePeriods, phaseScoring, ...played } = managedMatch(final);
     const { at60, ...samePeriods } = scorePeriods!;
-    expect({ ...played, scorePeriods: samePeriods }).toEqual(result);
+    const { at60: scoringAt60, ...sameScoring } = phaseScoring!;
+    expect({ ...played, scorePeriods: samePeriods, phaseScoring: sameScoring }).toEqual(result);
     expect(at60).toBeDefined();
+    expect(scoringAt60).toBeDefined();
     expect(reload(final)).toEqual(final);
 
     const spoofed = { ...quick, season: { ...quick.season, results: quick.season.results.map(row =>

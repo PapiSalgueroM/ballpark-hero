@@ -38,10 +38,12 @@ describe('NRL penalty approach', () => {
       const late = reduceNrlCareer(live, { type: 'reachMinute60', year, round, tactic });
       expect(reload(late)).toEqual(late);
       const final = reduceNrlCareer(late, { type: 'finishMinute60', year, round, tactic });
-      const { scorePeriods, ...played } = match(final);
+      const { scorePeriods, phaseScoring, ...played } = match(final);
       const { at60, ...samePeriods } = scorePeriods!;
-      expect({ ...played, scorePeriods: samePeriods }).toEqual(result);
+      const { at60: scoringAt60, ...sameScoring } = phaseScoring!;
+      expect({ ...played, scorePeriods: samePeriods, phaseScoring: sameScoring }).toEqual(result);
       expect(at60).toBeDefined();
+      expect(scoringAt60).toBeDefined();
       expect(reload(final)).toEqual(final);
       const spoof = points === 'none' ? 6 : 'none';
       expect(reload({ ...settled, season: { ...settled.season, results: settled.season.results.map(row =>

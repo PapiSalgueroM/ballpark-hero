@@ -681,6 +681,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
             heading: "Triangulating until the name clicks",
             items: [
               "Keep triangulating until you name him or run dry.",
+              "After a counted guess, Continue playing on Home reopens your unfinished round.",
             ],
           },
         ],

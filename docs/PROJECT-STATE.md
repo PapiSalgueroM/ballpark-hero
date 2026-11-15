@@ -1,3 +1,13 @@
+## 2026-11-15: Rugby match timelines and puzzle saves
+
+- NRL Team Manager shows the points and actual scoring plays in each completed period. Confirmed interchanges appear by name during Live. The same scoring data carries into new Live and Quick Sim match reports. Older reports retain their saved period scores.
+- Across 140 paired NRL fixtures, adding the timeline preserved prior gameplay. Direct Live and Quick Sim produced byte-identical saves when the choices matched. The comparison included 14 Golden Point pauses.
+- Soccer Grid keeps the board and clock mode from the first counted guess, even if another tab switches difficulty or timer. Reload restores the original board and guess history.
+- Who Am I? saves the clues, selected mode and guesses. Home's Continue playing card resumes an unfinished round. A refused result write can be retried before completion credit is recorded.
+- The Home search browser check verifies the shipped WOFF2 files and continues to use the cached poll flags.
+
+The production build, 152 focused tests, seven pinned local browser cases and 20 site checks passed. The two updated guides and their lastmod entries were refreshed. All 360 archived boards through November 14 Eastern matched the previous release.
+
 ## 2026-11-15: Tactical rugby returns and saved rivalry outcomes
 
 - NRL Team Manager lets an available starter return at 60 minutes for the same reserve involved in their halftime interchange. The return spends one interchange, adds no bench player and changes the final-20 lineup. The chosen pair appears in saved reports and survives a Golden Point pause.
@@ -5,6 +15,8 @@
 - MLB, NFL and NHL My Career keep the result of a rivalry decision visible until Continue, using the same save path as NBA My Career. The three browser fixtures reopened the chosen result with its exact saved consequences. Continue acknowledged each result once.
 
 Application types, production build, 204 focused tests, six pinned browser cases, 20 site checks, all 174 SEO split routes and 16 download budgets passed. The NRL guide and search index were refreshed. The four grid archives still match the 360 boards through November 14 Eastern.
+
+[PR #997](https://github.com/PapiSalgueroM/ballpark-hero/pull/997) published exact main `3aac84bf8fff086232c502cfdb63e545096d40d9`, deployment `e94882f4-4f91-4567-b18a-85e610e856eb`, canonical entry `/assets/index-DYdwVHad.js`. The merged tree matched tested head `73ebf248d`. Seven live browser cases passed, including the NBA control alongside MLB, NFL and NHL. All 15 pinned endpoints and 174 sitemap routes passed. IndexNow accepted the updated NRL guide.
 
 ## 2026-11-15: Australian games on Home, AFL saves and NBA choice receipts
 

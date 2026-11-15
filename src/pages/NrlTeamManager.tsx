@@ -10,6 +10,7 @@ import NrlCareerOffice from '@/components/nrl-manager/NrlCareerOffice';
 import NrlOriginOffice from '@/components/nrl-manager/NrlOriginOffice';
 import NrlJudiciaryReview from '@/components/nrl-manager/NrlJudiciaryReview';
 import NrlCareerSlots from '@/components/nrl-manager/NrlCareerSlots';
+import NrlMatchTimeline from '@/components/nrl-manager/NrlMatchTimeline';
 import { NrlClubIdentity, NrlCustomBadge, useNrlClubName } from '@/components/nrl-manager/NrlClubIdentity';
 import NrlCustomClubForm from '@/components/nrl-manager/NrlCustomClubForm';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -26,6 +27,7 @@ import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlBenchRotation, nrlCanOpenInterchange, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
   nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlMinute60Returns, nrlNextRound, nrlOnFieldCaptain, nrlOpeningCoverOptions,
+  nrlLivePhaseScoring,
   nrlQuickInterchangeOptions, nrlQuickInterchangeOutcome, nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFixture, type NrlGoldenPointApproach, type NrlHalftimeTalk, type NrlKickingPlan, type NrlLatePenaltyApproach, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlQuickInterchange, type NrlRole, type NrlTactic,
@@ -224,6 +226,40 @@ function LiveAttackPlanPicker({ id, label, plans, value, onChange, disabled, pre
   );
 }
 
+function LiveMatchTimeline({ live, season }: { live: NrlLiveHalf; season: NrlManagerState }) {
+  const shortName = useNrlClubName();
+  const { fixture, minute60, goldenPoint } = live;
+  const { year, squad, lineup } = season;
+  const name = (id: string) => squad.find(player => player.id === id)?.name;
+  const finish = goldenPoint?.finish;
+  const half = minute60 ?? (finish?.type === 'finishLive' ? finish : undefined);
+  const pairs = [half?.interchange, half?.secondInterchange].filter(pair => pair !== undefined);
+  const options = pairs.length ? nrlHalftimeInterchanges(season) : [];
+  const changes = pairs.flatMap(({ starterId, reserveId }) => {
+    const choice = options.find(option => option.starterId === starterId && option.reserveId === reserveId);
+    const starter = name(starterId), reserve = name(reserveId);
+    return choice && reserve && starter
+      ? [`${reserve} ${choice.enteredAtHalf ? 'came on' : 'stayed on'} for ${starter} at half time.`] : [];
+  });
+  if (finish?.type === 'finishMinute60') {
+    const returning = pairs.find(pair => pair.starterId === finish.returnStarterId);
+    if (returning) {
+      const starter = name(returning.starterId), reserve = name(returning.reserveId);
+      if (starter && reserve) changes.push(`${starter} returned for ${reserve} at 60 minutes.`);
+    } else if (finish.reserveId) {
+      const reserve = squad.find(player => player.id === finish.reserveId);
+      const starter = reserve && name(lineup[finish.reserveRole ?? reserve.role]);
+      if (reserve && starter) changes.push(`${reserve.name} came on for ${starter} at 60 minutes.`);
+    }
+  }
+  return (
+    <div className="rounded-xl border border-border bg-card px-3 py-2">
+      <NrlMatchTimeline home={shortName(year, fixture.homeId)} away={shortName(year, fixture.awayId)}
+        phases={nrlLivePhaseScoring(live)} changes={changes} />
+    </div>
+  );
+}
+
 function LiveHalftime({ live, career, title, onAction, disabled, coachRole, coachBonus }: {
   live: NrlLiveHalf; career: NrlCareerState; title: string;
   onAction: (action: NrlAction) => void; disabled: boolean; coachRole?: NrlCoachRole; coachBonus: number;
@@ -268,14 +304,11 @@ function LiveHalftime({ live, career, title, onAction, disabled, coachRole, coac
             <li key={id} className="min-w-0 rounded-xl bg-black/20 p-3">
               <p className="break-words text-sm font-semibold">{shortName(year, id)}</p>
               <strong className="block font-display text-3xl tabular-nums">{nrlScorePoints(scoring)}</strong>
-              <p className="mt-1 text-xs text-emerald-100">
-                {scoring.tries} {scoring.tries === 1 ? 'try' : 'tries'} · {scoring.conversions} {scoring.conversions === 1 ? 'conversion' : 'conversions'}
-                {scoring.penalties > 0 && ' · 1 penalty goal'}
-              </p>
             </li>
           ))}
         </ul>
       </div>
+      <LiveMatchTimeline live={live} season={season} />
       <div className="rounded-xl border border-border bg-card p-4">
         <h3 className="font-bold">Second-half tactic</h3>
         <div className="mt-2 flex flex-wrap gap-2" role="group" aria-label="Second-half tactic">
@@ -418,6 +451,7 @@ function LiveMinute60({ live, career, onAction, disabled }: {
           ))}
         </ul>
       </div>
+      <LiveMatchTimeline live={live} season={season} />
       <fieldset className="min-w-0 rounded-xl border border-border bg-card px-4 pb-4">
         <legend className="px-1 font-bold">Closing tactic</legend>
         <p className="mt-2 text-sm text-muted-foreground">{fixture.finalsRound
@@ -548,11 +582,13 @@ function AttackPlan({ career, onAction, disabled }: {
   );
 }
 
-function LiveGoldenPoint({ fixture, score, season, onAction, disabled }: {
-  fixture: NrlLiveHalf['fixture']; score: number; season: NrlManagerState;
+function LiveGoldenPoint({ live, season, onAction, disabled }: {
+  live: NrlLiveHalf; season: NrlManagerState;
   onAction: (action: NrlAction) => void; disabled: boolean;
 }) {
   const { year, clubId, round } = season;
+  const { fixture } = live;
+  const { score } = live.goldenPoint!;
   const shortName = useNrlClubName();
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => heading.current?.focus({ preventScroll: true }), []);
@@ -570,6 +606,7 @@ function LiveGoldenPoint({ fixture, score, season, onAction, disabled }: {
         </ul>
         <p className="mt-3 text-sm text-emerald-100">The first score wins. If both five-minute periods finish scoreless, the match ends in a draw.</p>
       </div>
+      <LiveMatchTimeline live={live} season={season} />
       <div className="grid gap-3 sm:grid-cols-3">
         {goldenPointApproaches.map(({ id, label, description }) => (
           <div key={id} className="min-w-0 space-y-2">
@@ -784,7 +821,14 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
           {`${gate.priceChange > 0 ? '+' : ''}${aud.format(gate.priceChange)} compared with opening prices.`}
         </p>}
       </div>}
-      {periods && (
+      {match.phaseScoring ? (
+        <div className="mt-3">
+          <NrlMatchTimeline home={shortName(year, match.homeId)} away={shortName(year, match.awayId)}
+            phases={match.phaseScoring} extra={match.extraTime ? {
+              label: match.finalsRound ? 'Extra time' : 'Golden point', final: [match.homeScoring, match.awayScoring],
+            } : undefined} />
+        </div>
+      ) : periods && (
         <table className="mt-3 w-full text-left text-sm" data-nrl-score-periods>
           <caption className="pb-1 text-left font-semibold">Score by period</caption>
           <thead className="text-muted-foreground">
@@ -1351,7 +1395,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
   const [hold, setHold] = useState<{ year: number; round: number; reserveId: string }>();
   if (season.live) {
     if (season.live.goldenPoint) return (
-      <LiveGoldenPoint fixture={season.live.fixture} score={season.live.goldenPoint.score} season={season} onAction={onAction} disabled={disabled} />
+      <LiveGoldenPoint live={season.live} season={season} onAction={onAction} disabled={disabled} />
     );
     return season.live.minute60
       ? <LiveMinute60 live={season.live} career={career} onAction={onAction} disabled={disabled} />
@@ -2810,7 +2854,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Use the live ratings to compare your pending choices with keeping the current setup. The preview includes changes to your tactic and players for the next period of regulation.</li>
               <li>If you are level or two points down at 60 minutes, you can set up a field goal. This trades some late try threat for a better field-goal chance in regulation.</li>
               <li>If a Live regular-season match is level at 80 minutes, choose your golden-point approach. Chase the win opens the game up for both sides. Protect the draw makes it more likely that extra time ends scoreless.</li>
-              <li>New match reports show points by period. A Live match you paused at 60 minutes splits the second half there. If the match went to extra time, its points have their own row.</li>
+              <li>The Live match timeline shows the scores and scoring types for each completed period. A Golden Point score appears after you choose how to play extra time.</li>
               <li>Open Matchday team sheet in a report with a player record to see the starting 13, the reserves who played and how many points each player scored.</li>
               <li>Advance a round to simulate every fixture. A win or bye earns two ladder points, a draw earns one and a loss earns zero.</li>
               <li>In Ladder, choose a past season to see the final standings saved in your career.</li>

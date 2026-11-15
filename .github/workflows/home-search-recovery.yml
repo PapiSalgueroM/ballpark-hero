@@ -13,6 +13,7 @@ on:
       - src/test/homeSearchRecovery.test.tsx
       - scripts/simHomeSearchRecovery.mjs
       - scripts/playHomeSearchRecovery1088.mjs
+      - scripts/lib/captureShippedFonts.mjs
 
 permissions:
   contents: read
@@ -100,10 +101,10 @@ jobs:
         run: |
           node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee home-search-recovery-artifacts/types.log
           npm run build 2>&1 | tee home-search-recovery-artifacts/build.log
-      - name: Cache actual template fonts
+      - name: Cache actual baked-poll flags
         id: assets
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: node scripts/playHomeSearchRecovery1088.mjs --prefetch-assets-only 2>&1 | tee home-search-recovery-artifacts/fonts.log
+        run: node scripts/playHomeSearchRecovery1088.mjs --prefetch-assets-only 2>&1 | tee home-search-recovery-artifacts/flags.log
       - name: Actual outcomes and effective copied faults
         if: ${{ !cancelled() && steps.build.outcome == 'success' && steps.assets.outcome == 'success' }}
         run: NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs" node scripts/simHomeSearchRecovery.mjs 2>&1 | tee home-search-recovery-artifacts/outcomes.log
