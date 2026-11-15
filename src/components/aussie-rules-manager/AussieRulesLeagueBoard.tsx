@@ -89,17 +89,39 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
   const [outId, setOutId] = useState('');
   const [inId, setInId] = useState('');
   const match = state.match;
+  const change = state.halftimeInterchange;
+  const planned = change?.outcome === 'planned' ? change : undefined;
   const other = match ? (match.homeId === state.myClub ? match.awayId : match.homeId) : '';
   const read = other ? TACTICS.find(value => value.id === clubOf(state, other)!.style)!.label : '';
   const lastPlayed = other && match && match.quarter > 0 && match.quarter <= 4 ? TACTICS.find(value => value.id === opponentPlays(state.seed, state.season, { ...match, quarter: match.quarter - 1 }, clubOf(state, other)!.style))!.label : '';
-  const selectedOut = state.starters.includes(outId) ? outId : state.starters[0] ?? '';
+  const selectedOut = [outId, state.phase === 'prepare' ? planned?.outId : undefined]
+    .find(id => id && state.starters.includes(id)) ?? state.starters[0] ?? '';
   const outgoing = leaguePlayer(state, selectedOut);
   const eligible = state.bench.map(id => leaguePlayer(state, id)!).filter(player => player.role === outgoing?.role);
-  const selectedIn = eligible.some(player => player.id === inId) ? inId : eligible[0]?.id ?? '';
+  const selectedIn = [inId, state.phase === 'prepare' ? planned?.inId : undefined]
+    .find(id => eligible.some(player => player.id === id)) ?? eligible[0]?.id ?? '';
   const nextLabel = state.stage === 'homeAway' ? (state.round === ROUNDS - 1 ? 'On to the finals' : 'Next round') : state.week === lastWeek(state.format) ? 'Wrap up the season' : 'Next finals week';
   const changes = state.ratingReview?.round === state.round ? state.ratingReview.changes : [];
+  const describeSwap = (id: string) => {
+    const player = leaguePlayer(state, id)!;
+    return `${player.name} (${ROLE_LABELS[player.role]}${state.phase === 'prepare' ? `, skill ${player.skill}` : ''}, fatigue ${Math.round(player.fatigue)})`;
+  };
+  const swapInputs = (state.phase === 'prepare' || state.phase === 'break') && <div className={styles.swap}>
+    <label>Off the field<select aria-label="Off the field" value={selectedOut} onChange={event => setOutId(event.target.value)}>{state.starters.map(id => <option key={id} value={id}>{describeSwap(id)}</option>)}</select></label>
+    <label>On the field<select aria-label="On the field" value={selectedIn} disabled={!eligible.length} onChange={event => setInId(event.target.value)}>{eligible.map(player => <option key={player.id} value={player.id}>{describeSwap(player.id)}</option>)}</select></label>
+  </div>;
   return <div className={styles.card} data-arl-match>
     {match && <div className={styles.score} data-arl-score><div><strong>{clubFull(state, match.homeId)}</strong><span>{score(match.homeScore)}</span></div><div><strong>{clubFull(state, match.awayId)}</strong><span>{score(match.awayScore)}</span></div></div>}
+    {change && <div>
+      <p role="status" data-arl-halftime-interchange={change.outcome}>
+        {change.outcome === 'planned' ? 'Booked for half time.' : change.outcome === 'applied' ? 'Half-time interchange made.' : 'Half-time interchange skipped.'}
+        {change.outcome === 'skipped' && ' The booked change was'}
+        {' '}{leaguePlayer(state, change.outId)!.name} off, {leaguePlayer(state, change.inId)!.name} on.
+        {change.outcome === 'skipped' && ' ' + (change.reason === 'limit' ? 'All five changes at the break were used.'
+          : change.reason === 'selection' ? 'The booked players were no longer available for this swap.' : 'You cancelled the plan.')}
+      </p>
+      {planned && <button type="button" className={styles.secondary} onClick={() => act({ type: 'cancelHalftime' })}>Cancel half-time interchange</button>}
+    </div>}
     {!match && state.phase === 'prepare' && <><h3>You are not playing this week</h3><p className={styles.muted}>Here is the week's draw. Play it out to see who goes through.</p><Results state={state} />
       <button className={styles.action} data-arl-simweek onClick={() => act({ type: 'simWeek' })}>Play the week</button></>}
     {match && state.phase === 'prepare' && <><h3>Prepare your matchday 23</h3><p className={styles.muted}>{state.preferredLineup ? 'Check your selection in Squad, then choose this week’s preparation.' : "Your list manager picked the best 23 on current form: skill, less fatigue. Change it in Squad, then choose this week's preparation."}</p>
@@ -111,15 +133,19 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
         return <button key={choice.id} className={styles.tile} data-arl-prepare={choice.id} onClick={() => act({ type: 'prepare', choice: choice.id })}>
           <strong>{choice.label}</strong><span>{choice.description}</span><span>Starting strength {strength} · Avg fatigue {fatigue}</span>
         </button>;
-      })}</div></>}
+      })}</div>
+      <section aria-label="Plan a half-time interchange">
+        <h4>Plan a half-time interchange</h4>
+        <p className={styles.muted}>Book one same-role change for the start of the third quarter. It uses one of your five changes at the break.</p>
+        {swapInputs}
+        <button type="button" className={styles.secondary} disabled={!selectedIn || (planned?.outId === selectedOut && planned.inId === selectedIn)}
+          onClick={() => act({ type: 'planHalftime', outId: selectedOut, inId: selectedIn })}>Book half-time interchange</button>
+      </section></>}
     {(state.phase === 'quarter' || state.phase === 'break') && match && <>
       <p className={styles.muted}>Opponent read: {read}, their usual style, though they switch it up some quarters.{lastPlayed ? ` Last quarter they played ${lastPlayed}.` : ''} {state.phase === 'quarter' ? `Quarter ${match.quarter + 1} of 4 is next.` : `Quarter ${match.quarter} break.`}</p>
       <div className={styles.tabs} role="group" aria-label="Tactic">{TACTICS.map(value => <button key={value.id} aria-pressed={tactic === value.id} className={tactic === value.id ? styles.action : styles.secondary} data-arl-tactic={value.id} onClick={() => setTactic(value.id)}>{value.label}</button>)}</div>
       <p className={styles.muted}>{TACTICS.find(value => value.id === tactic)!.description}</p>
-      {state.phase === 'break' && <><div className={styles.swap}>
-        <label>Off the field<select aria-label="Off the field" value={selectedOut} onChange={event => setOutId(event.target.value)}>{state.starters.map(id => { const player = leaguePlayer(state, id)!; return <option key={id} value={id}>{player.name} ({ROLE_LABELS[player.role]}, fatigue {Math.round(player.fatigue)})</option>; })}</select></label>
-        <label>On the field<select aria-label="On the field" value={selectedIn} disabled={!eligible.length} onChange={event => setInId(event.target.value)}>{eligible.map(player => <option key={player.id} value={player.id}>{player.name} ({ROLE_LABELS[player.role]}, fatigue {Math.round(player.fatigue)})</option>)}</select></label>
-      </div><button className={styles.secondary} data-arl-swap disabled={!selectedIn || state.swapsThisBreak >= 5} onClick={() => act({ type: 'swap', outId: selectedOut, inId: selectedIn })}>Make change ({state.swapsThisBreak}/5)</button></>}
+      {state.phase === 'break' && <>{swapInputs}<button className={styles.secondary} data-arl-swap disabled={!selectedIn || state.swapsThisBreak >= 5} onClick={() => act({ type: 'swap', outId: selectedOut, inId: selectedIn })}>Make change ({state.swapsThisBreak}/5)</button></>}
       <div className={styles.actions}>
         <button className={styles.secondary} data-arl-play onClick={() => act(state.phase === 'break' ? { type: 'next' } : { type: 'play', tactic })}>{state.phase === 'break' ? 'Start the next quarter' : 'Play this quarter'}</button>
         <button className={styles.action} data-arl-playmatch onClick={() => act({ type: 'playMatch', tactic })}>Play the whole match</button>

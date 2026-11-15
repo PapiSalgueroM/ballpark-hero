@@ -29,6 +29,37 @@ beforeEach(() => { localStorage.clear(); vi.spyOn(Math, 'random').mockReturnValu
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 describe('AussieRulesLeagueBoard', () => {
+  it.each(['applied', 'skipped'] as const)('books and reloads a named half-time interchange with a %s receipt', outcome => {
+    store(createLeague(1, 'club-04', 'afl2026')!);
+    const first = draw();
+    tile(first, 'Next match');
+    const plan = within(first.getByRole('region', { name: 'Plan a half-time interchange' }));
+    fireEvent.change(plan.getByRole('combobox', { name: 'Off the field' }), { target: { value: 'p-153' } });
+    fireEvent.change(plan.getByRole('combobox', { name: 'On the field' }), { target: { value: 'p-144' } });
+    fireEvent.click(plan.getByRole('button', { name: 'Book half-time interchange' }));
+    const bytes = localStorage.getItem(SAVE_KEY);
+    expect(saved().halftimeInterchange).toEqual({ outId: 'p-153', inId: 'p-144', outcome: 'planned' });
+    first.unmount();
+    const resumed = draw();
+    tile(resumed, 'Next match');
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+    expect(resumed.getByText(/Booked for half time.*Dellan Marlfen.*Irvane Coldholm/)).toBeVisible();
+    click(resumed, '[data-arl-prepare="rest"]');
+    if (outcome === 'skipped') {
+      for (let i = 0; i < 3; i++) click(resumed, '[data-arl-play]');
+      expect(saved().match?.quarter).toBe(2);
+      fireEvent.change(resumed.getByRole('combobox', { name: 'Off the field' }), { target: { value: 'p-153' } });
+      fireEvent.change(resumed.getByRole('combobox', { name: 'On the field' }), { target: { value: 'p-144' } });
+      click(resumed, '[data-arl-swap]');
+    }
+    click(resumed, '[data-arl-playmatch]');
+    const receipt = resumed.container.querySelector('[data-arl-halftime-interchange]');
+    expect(receipt).toBeVisible();
+    expect(receipt).toHaveTextContent(outcome === 'applied' ? /Half-time interchange made.*Dellan Marlfen.*Irvane Coldholm/ :
+      /Half-time interchange skipped.*Dellan Marlfen.*Irvane Coldholm.*no longer available/);
+    expect(saved().halftimeInterchange?.outcome).toBe(outcome);
+  });
+
   it('opens the hub from the 18 club menu, and every box opens a panel with a way back', () => {
     const view = draw();
     expect(view.container.querySelectorAll('[data-arl-club]')).toHaveLength(18);
