@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
+import { useLayoutEffect, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
 import type { SavedSeasonCompetition } from '@/lib/soccerSeasonCompetitions';
 import { savedClubCampaign } from '@/lib/soccerSeasonCompetitions';
@@ -29,11 +29,27 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
   const [help, setHelp] = useState(false);
   const content = useRef<HTMLDivElement>(null);
   const heading = useRef<HTMLHeadingElement>(null);
+  const fixtureReturn = useRef<{ index: number; top: number } | null>(null);
   useBodyLock();
-  useEffect(() => {
-    if (content.current) content.current.scrollTop = 0;
+  useLayoutEffect(() => {
+    const panel = content.current;
+    const returned = picked === null && !help ? fixtureReturn.current : null;
+    if (panel && returned) {
+      fixtureReturn.current = null;
+      const fixture = panel.querySelector<HTMLButtonElement>(`[data-centre-cup-open="${returned.index}"]`);
+      if (fixture) {
+        panel.scrollTop = returned.top;
+        fixture.focus({ preventScroll: true });
+        return;
+      }
+    }
+    if (panel) panel.scrollTop = 0;
     heading.current?.focus({ preventScroll: true });
   }, [picked, help]);
+  const openFixture = (index: number) => {
+    fixtureReturn.current = { index, top: content.current?.scrollTop ?? 0 };
+    setPicked(index);
+  };
   const keyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if ((event.target as HTMLElement).closest('[role="dialog"]') !== event.currentTarget) return;
     if (event.key === 'Escape') { event.preventDefault(); onClose(); return; }
@@ -71,7 +87,7 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
       <div ref={content} className="min-h-0 overflow-y-auto overscroll-contain p-4">
         {help ? <div className="space-y-3 text-sm" data-centre-competition-help>
           <h3 ref={heading} tabIndex={-1} className="font-bold outline-none">Your saved competitions</h3>
-          <p>Pick a competition, then a game. These are the opponents and scores your career kept. Missing scores and early-round opponents stay marked as missing.</p>
+          <p>Pick a competition, then a game. All games returns you to the fixture you first opened. These are the opponents and scores your career kept. Missing scores and early-round opponents stay marked as missing.</p>
           <p>The score is always shown from your club's side. An aggregate score covers the whole tie. Your league season keeps its place when you switch back.</p>
           <p>The bracket is your club's saved route. Other knockout ties were not kept. A recorded group table is shown whole; a league phase with only your club's row stays one row. Cup placement between league games is simulated, without invented calendar dates.</p>
           <p>Current squad opens the same eleven, bench and selection plan as the Squad tile on your career page. It is the current squad on our ratings, not a saved matchday lineup.</p>
@@ -126,7 +142,7 @@ export default function SeasonCompetitionPanel({ career, row, competition, navig
             <p className="text-xs text-muted-foreground">{competition.id === 'shield' ? 'This competition has one neutral match.' : competition.id === 'german-supercup' ? 'One saved match. Venue not recorded.' : 'Other knockout ties were not kept.'}</p>
             {rounds.map((round, roundIndex) => <section key={roundIndex} data-centre-cup-round={roundIndex} className="rounded-xl border border-border p-2">
               <h5 className="mb-2 text-xs font-bold">{roundIndex > 0 ? '↓ ' : ''}{round.name}</h5>
-              <div className="grid grid-cols-2 gap-2">{round.games.map(({ game, index }) => <button key={index} type="button" onClick={() => setPicked(index)} data-centre-cup-open={index} className="min-h-20 min-w-0 rounded-xl border border-border bg-muted/20 p-3 text-left">
+              <div className="grid grid-cols-2 gap-2">{round.games.map(({ game, index }) => <button key={index} type="button" onClick={() => openFixture(index)} data-centre-cup-open={index} className="min-h-20 min-w-0 rounded-xl border border-border bg-muted/20 p-3 text-left">
                 <span className="block text-xs font-bold">{game.round}</span>
                 <span className="block break-words text-xs">{game.opponent ?? 'Opponents not recorded'}</span>
                 <span className="block text-sm font-black tabular-nums">{game.goalsFor === null || game.goalsAgainst === null ? game.result ?? 'Score not recorded' : `${game.goalsFor}-${game.goalsAgainst}`}</span>

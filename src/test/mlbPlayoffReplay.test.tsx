@@ -239,12 +239,10 @@ describe('MLB playoff replay from the real season viewer', { timeout: 90000 }, (
     expect(JSON.stringify(career)).toBe(saved);
   });
 
-  it('preserves the current pitcher, short-season and outside-league held views', async () => {
-    const pitcher = savedPitcher('SP').career;
+  it('preserves short-season and outside-league held views', async () => {
     const hitterCareer = hitter('held-context');
     const last = hitterCareer.seasons[hitterCareer.seasons.length - 1];
     const cases = [
-      { career: pitcher, row: { ...pitcher.seasons[pitcher.seasons.length - 1], poGames: undefined }, note: 'for pitchers yet' },
       { career: hitterCareer, row: { ...last, year: 2020, team: 'BOS' }, note: 'the real 2020 season had 60 games' },
       { career: hitterCareer, row: { ...last, team: 'Yomiuri Giants' }, note: 'your club plays outside Major League Baseball' },
     ];
@@ -257,7 +255,7 @@ describe('MLB playoff replay from the real season viewer', { timeout: 90000 }, (
     }
   });
 
-  it.each(['SP', 'RP'] as const)('opens team-only playoffs from a genuinely played %s save while holding regular games', async pos => {
+  it.each(['SP', 'RP'] as const)('opens team-only playoffs independently of regular games from a genuinely played %s save', async pos => {
     const { career, row } = savedPitcher(pos);
     const saved = JSON.stringify({ c: career, phase: 'season', teamQuality: 80, coach: null });
     localStorage.setItem(MLB_CAREER_SPORT.saveKey, saved);
@@ -267,8 +265,7 @@ describe('MLB playoff replay from the real season viewer', { timeout: 90000 }, (
     const view = render(<MemoryRouter><UsSeasonCentreHost sport={sport}>
       <UsSeasonCentreEntry sport={sport} career={career} busy={false} onPlay={onPlay} />
     </UsSeasonCentreHost></MemoryRouter>);
-    expect(view.getByText(/No week by week for pitchers yet/)).toBeInTheDocument();
-    expect(view.queryByRole('button', { name: /watch .* game by game/i })).toBeNull();
+    expect(view.getByRole('button', { name: /watch .* game by game/i })).toBeInTheDocument();
     const opener = view.getByRole('button', { name: /Replay \d+ team playoffs/ });
     fireEvent.click(opener);
     const replay = await view.findByRole('dialog', { name: 'Playoff replay' });

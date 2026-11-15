@@ -145,8 +145,9 @@ export interface SeasonSport<Row, Ctx> {
    *  sport's last pass over the whole season, for numbers that hang off other
    *  numbers of the same game (yards off catches, a kicker's field goals off
    *  his team's score) and the timed events that need them. It may add keys
-   *  to a played game's line and set `events`; it must leave scores, `played`,
-   *  `why` and every key the core's totals own alone. (Round 1147: it may
+   *  to a played game's line and set `events`; it must leave scores and every key
+   *  the core's totals own alone. A binding with no stat or absence allocation
+   *  can place exact appearances after the scores are known. (Round 1147: it may
    *  have two games he played exchange their whole lines, which keeps every
    *  total and every cap; `disagreements` still holds his floor on the result.
    *  The NFL does, so his touchdown days go with his team's big days.) false: the

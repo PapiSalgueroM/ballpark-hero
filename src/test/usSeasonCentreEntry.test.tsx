@@ -207,7 +207,7 @@ afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.useRealTimers(); });
 const BOUND: { name: string; Board: ComponentType; sport: UsCareerSport; pos: string }[] = [
   { name: 'NBA', Board: NbaMyCareerBoard, sport: NBA_CAREER_SPORT, pos: 'SG' },
   { name: 'NFL', Board: NflMyCareerBoard, sport: NFL_CAREER_SPORT, pos: 'QB' },
-  /* Round 1212: a hitter (pitchers are held). No seed of this block drafts him to the Orioles or the Yankees,
+  /* Round 1212: a hitter. No seed of this block drafts him to the Orioles or the Yankees,
      whose real 2026 season is held; those two have their own tests below. */
   { name: 'MLB', Board: MlbMyCareerBoard, sport: MLB_CAREER_SPORT, pos: 'CF' },
   { name: 'NHL', Board: NhlMyCareerBoard, sport: NHL_CAREER_SPORT, pos: 'C' },
@@ -739,7 +739,7 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     expect(playButton()).toBeDefined();
     expect(q('[data-season-centre-entry]')).toBeNull();
   });
-  /* Round 1212, baseball's own holds, each sentence typed here whole: a pitcher, a club a game short in the real
+  /* Round 1212, baseball's own holds, each sentence typed here whole: a club a game short in the real
      2026 season, a club outside the league, the 60 game season, and the Watch again link asking about the club
      he played that season for. */
   const mlbHub = async (pos: string, seed: string, eraId: string, change?: (c: UsCareerCore) => void) => {
@@ -749,9 +749,9 @@ describe('a held year, a banned year, and the sports with no Season Center', () 
     expect(playButton()).toBeDefined();
     return q('[data-season-centre-held]')?.textContent ?? null;
   };
-  it.each(['SP', 'RP'])('MLB: a saved %s sees the line for pitchers and no button', async pos => {
-    expect(await mlbHub(pos, `mlb-pitcher|${pos}`, 'now')).toBe('📺 No week by week for pitchers yet: this view cannot yet show which games were your wins.');
-    expect(q('[data-week-by-week]')).toBeNull();
+  it.each(['SP', 'RP'])('MLB: a saved %s sees the Week by week button for a supported season', async pos => {
+    expect(await mlbHub(pos, `mlb-pitcher|${pos}`, 'now', c => { c.team = 'SEA'; })).toBeNull();
+    expect(q('[data-week-by-week]')).not.toBeNull();
   });
   it('MLB: the Orioles and the Yankees of 2026 are held in the words of the ledger, and another club that year is not', async () => {
     for (const team of ['BAL', 'NYY']) {

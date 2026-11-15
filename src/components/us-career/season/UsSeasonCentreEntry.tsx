@@ -57,7 +57,7 @@ export function UsSeasonCentreEntry({ sport, career, busy, onPlay, played }: {
   played?: () => UsCareerCore | null;
 }) {
   const centre = useContext(UsSeasonCentreOpen);
-  const [loading, setLoading] = useState<'play' | 'watch' | null>(null);
+  const [loading, setLoading] = useState<'play' | 'watch' | 'playoffs' | null>(null);
   /* the hub as it is NOW, for the moment the viewer has finished loading */
   const now = useRef({ career, busy, onPlay, played });
   now.current = { career, busy, onPlay, played };
@@ -97,16 +97,19 @@ export function UsSeasonCentreEntry({ sport, career, busy, onPlay, played }: {
   /* a season he already played (he answered a contract talk with "play it out", or just wants it again) */
   const last = career.seasons.length ? career.seasons[career.seasons.length - 1] : null;
   const lastHeld = last && sport.seasonCentreHeld?.(last.year, career.eraId, { pos: career.pos, team: last.team });
-  const heldReplay = !!(last && lastHeld && sport.canReplayPlayoffs?.(career, last));
+  const canReplay = !!(last && sport.canReplayPlayoffs?.(career, last));
+  const heldReplay = !!lastHeld && canReplay;
   const watchLast = centre && playable(last) && (!lastHeld || heldReplay) ? last : null;
-  const watch = async (e: MouseEvent<HTMLButtonElement>) => {
+  const separatePlayoffs = !!watchLast && !heldReplay && canReplay
+    && sport.slug === 'mlb' && (career.pos === 'SP' || career.pos === 'RP');
+  const watch = async (e: MouseEvent<HTMLButtonElement>, playoffsOnly = heldReplay) => {
     if (busy || loading || !centre || !watchLast) return;
     const from = e.currentTarget;
-    setLoading('watch');
+    setLoading(playoffsOnly && separatePlayoffs ? 'playoffs' : 'watch');
     const ready = await centre.ready(from);
     if (!alive.current) return;
     setLoading(null);
-    if (ready) centre.open({ career, row: watchLast, playoffsOnly: heldReplay, from });
+    if (ready) centre.open({ career, row: watchLast, playoffsOnly, from });
   };
   return (
     <span data-season-centre-entry className="mt-2 block sm:ml-2 sm:mt-0 sm:inline-block">
@@ -137,6 +140,13 @@ export function UsSeasonCentreEntry({ sport, career, busy, onPlay, played }: {
           className="ml-1 inline-flex min-h-11 items-center px-3 text-xs font-semibold text-muted-foreground underline-offset-2 hover:underline"
         >
           {loading === 'watch' ? '↺ Loading...' : heldReplay ? `↺ Replay ${watchLast.year} team playoffs` : `↺ Watch the ${watchLast.year} season again`}
+        </button>
+      )}
+      {watchLast && separatePlayoffs && (
+        <button type="button" disabled={busy} aria-busy={loading === 'playoffs' || undefined}
+          onClick={event => void watch(event, true)}
+          className="ml-1 inline-flex min-h-11 items-center px-3 text-xs font-semibold text-muted-foreground underline-offset-2 hover:underline">
+          {loading === 'playoffs' ? '↺ Loading...' : `↺ Replay ${watchLast.year} team playoffs`}
         </button>
       )}
     </span>

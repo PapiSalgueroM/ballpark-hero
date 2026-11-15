@@ -157,9 +157,9 @@
  *              careers, the counts and the stray draws must hold.
  * A digest run reads the NBA and the NFL only, whatever else is bound.
  *
- * Round 1212, baseball (hitters; pitchers are held). The default run plays
+ * Round 1212, baseball. The default run plays
  * the NBA, the NFL and MLB. What the harness expects of baseball is typed in
- * its OWN table (MLB_HELD_POS, MLB_OUTSIDE, MLB_SHORT_YEARS, MLB_SHORT_CLUBS,
+ * its OWN table (MLB_PITCHERS, MLB_OUTSIDE, MLB_SHORT_YEARS, MLB_SHORT_CLUBS,
  * MLB_SERIES, MLB_ROUNDS, MLB_OWN_DIVS, MLB_OWN_RIVALS, the whole held
  * sentences), never read from the number file, so a control that edits the
  * module cannot move both sides. Its controls, each naming ONE check by a
@@ -174,7 +174,7 @@
  *   hits       finish hands him one hit too many                 -> section 3
  *   rbi        his RBI may exceed his team's runs that game      -> section 3
  *   allstar    the halfway sentence printed for every season     -> section 3
- *   pitcher    the position hold is off                          -> section 2
+ *   pitcher    a supported starter season is held               -> section 2
  *   club       the Orioles and the Yankees dropped from the
  *              ledger's 2026 row (run it on a population that
  *              holds one: 40 careers, or the five seed sets)     -> section 2
@@ -356,7 +356,7 @@ const CONTROLS = {
     { file: MLB, from: 'gab > mlbAtBatsCap(g, ghr + g2b))', to: 'gab > AB_MAX)' },
   ] },
   allstar: { section: 3, label: 'independent checker', patches: [{ file: MLB, from: "const star = row && Array.isArray(row.awards) && row.awards.includes('All-Star') ? ' You are an All-Star this year.' : '';", to: "const star = ' You are an All-Star this year.';" }] },
-  pitcher: { section: 2, label: "every pitcher's season is held", patches: [{ file: MLB_HELD, from: '  return pos !== undefined && (MLB_PITCHERS as readonly string[]).includes(pos)', to: '  return pos !== undefined && ([] as readonly string[]).includes(pos)' }] },
+  pitcher: { section: 2, label: "pitchers in supported seasons are open", patches: [{ file: MLB, from: '  statKeys: pos => mlbPitcher(pos)', to: "  heldFor: pos => pos === 'SP' ? 'Starting pitchers held' : null,\n  statKeys: pos => mlbPitcher(pos)" }] },
   club: { section: 2, label: 'every 2026 season of the Orioles or the Yankees is held', patches: [{ file: MLB_LEDGER, from: "      clubs: ['Baltimore Orioles', 'New York Yankees'], ids: ['BAL', 'NYY'],", to: "      clubs: ['Baltimore Orioles', 'New York Yankees'], ids: []," }] },
   /* the critic's first wrong thing: with both rules gone a season at the Japanese club is laid out as 162 unnamed games */
   outside: { section: 2, label: 'at a club outside the league is held', patches: [
@@ -364,7 +364,7 @@ const CONTROLS = {
     { file: MLB_HELD, from: '  if (team !== undefined && !mlbEraTeamIds(eraId).includes(team)) {', to: '  if (team === undefined && !mlbEraTeamIds(eraId).includes(team)) {' },
     { file: MLB_HELD, from: '  return !MLB_OUTSIDE_CLUBS.some(o => o.team === team) && mlbEraTeamIds(eraId).includes(team);', to: '  return !MLB_OUTSIDE_CLUBS.some(o => o.team === team);' },
   ] },
-  /* the binding stops telling the held function who is asking (the hub would offer a pitcher the button) */
+  /* the binding stops telling the held function what club is asking */
   mlbwho: { section: 2, label: "the hub's held line is there exactly when the binding holds the season", patches: [{ file: 'src/lib/mlbCareerSport.ts', from: '  seasonCentreHeld: (year, eraId, who) => mlbSeasonHeld(year, eraId, who),', to: '  seasonCentreHeld: (year, eraId) => mlbSeasonHeld(year, eraId),' }] },
   pathyear: { section: 4, label: 'playoff path follows', patches: [{ file: MLB, from: '  pathFrom: MLB_PLAYOFF_FORMAT.from,\n', to: '' }] },
   mlblevel: { section: 7, label: 'no game is level', patches: [
@@ -446,7 +446,7 @@ const SPORT_DEFS = {
     binding: 'MLB_CAREER_SPORT', bindingFile: 'src/lib/mlbCareerSport.ts', bindName: 'MLB_SEASON', numberFile: 'src/lib/season/mlb.ts',
     positions: ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH', 'SP', 'RP'], eras: ['now', 'y2004'],
     gamesOk: (g, _year, r) => (r.pos === 'SP' ? g >= 1 && g <= 32 : r.pos === 'RP' ? g >= 1 && g <= 71 : g >= 14 && g <= 163),
-    injury: l => !l.backup && !MLB_HELD_POS.includes(l.pos) && l.games <= 122, targetedFrom: { era: 'y2004', year: 2016 },
+    injury: l => !l.backup && !MLB_PITCHERS.includes(l.pos) && l.games <= 122, targetedFrom: { era: 'y2004', year: 2016 },
   },
 };
 /* Round 1212, the harness's OWN table for baseball (never the module's): who is held and why, the rounds and
@@ -454,7 +454,7 @@ const SPORT_DEFS = {
    The club by club lengths of the throwback years are read from the ledger's DATA (MLB_SEASONS, two sourced),
    never from the module's functions; 2020 and the two clubs of 2026 are typed here as well, so a control that
    edits the ledger cannot move both sides at once. */
-const MLB_HELD_POS = ['SP', 'RP'];
+const MLB_PITCHERS = ['SP', 'RP'];
 const MLB_OUTSIDE = ['Yomiuri Giants'];
 const MLB_SHORT_YEARS = { 2020: 60 };
 const MLB_SHORT_CLUBS = { 2026: { BAL: 161, NYY: 161 } };
@@ -480,7 +480,6 @@ const MLB_OWN_RIVALS = [
   ['NYY', 'NYM'], ['CHW', 'CHC'], ['LAA', 'LAD'], ['ATH', 'SFG'], ['CLE', 'CIN'], ['TBR', 'MIA'], ['BAL', 'WSN'], ['KCR', 'STL'],
   ['MIN', 'MIL'], ['BOS', 'ATL'], ['DET', 'PIT'], ['TOR', 'PHI'], ['TEX', 'ARI'], ['HOU', 'COL'], ['SEA', 'SDP'],
 ];
-const MLB_PITCHER_LINE = '📺 No week by week for pitchers yet: this view cannot yet show which games were your wins.';
 const MLB_OUTSIDE_LINE = '📺 No week by week this season: your club plays outside Major League Baseball, and this view lays out a Major League season.';
 /** The games that club's real season held, read from the ledger's rows (data) and from the table above; null: no row. */
 function mlbOwnGames(year, team) {
@@ -497,8 +496,7 @@ function mlbOwnGames(year, team) {
   return group ? group.games : row.games;
 }
 /** The whole sentence the hub must show for that season, by the harness's own rule; null: the season is open. */
-function mlbOwnHeld(year, eraId, pos, team) {
-  if (MLB_HELD_POS.includes(pos)) return MLB_PITCHER_LINE;
+function mlbOwnHeld(year, eraId, team) {
   if (MLB_OUTSIDE.includes(team)) return MLB_OUTSIDE_LINE;
   if (!M.mlbEraTeamIds(eraId).includes(team)) return '📺 No week by week this season: the game holds no league schedule for your club.';
   const games = mlbOwnGames(year, team);
@@ -726,8 +724,20 @@ function shownIsSavedMlb(row, bind, pos, s) {
   const out = [];
   const on = s.games.filter(g => g.played);
   const of = (g, k) => g.line[k] ?? 0;
+  const pitcher = MLB_PITCHERS.includes(pos);
   if (s.games.length !== OWN.mlb.games) out.push(`games ${s.games.length}`);
   if (on.length !== row.games) out.push(`played ${on.length} != ${row.games}`);
+  if (pitcher) {
+    const decisions = on.some(g => ['wins', 'lossesP', 'saves', 'holds'].some(k => g.line[k] !== undefined));
+    for (const k of ['so', 'wins', 'lossesP', 'saves', 'holds']) {
+      if (!isNum(row[k]) || (k !== 'so' && !decisions)) {
+        if (on.some(g => g.line[k] !== undefined)) out.push(`${k} printed without a matching saved count`);
+      } else {
+        const sum = on.reduce((total, g) => total + of(g, k), 0);
+        if (sum !== row[k]) out.push(`${k} ${sum} != ${row[k]}`);
+      }
+    }
+  } else {
   for (const k of MLB_SUM_FIELDS) {
     if (!isNum(row[k])) { if (on.some(g => g.line[k] !== undefined)) out.push(`${k} on his line and not on the save`); continue; }
     const sum = on.reduce((a, g) => a + of(g, k), 0);
@@ -737,6 +747,7 @@ function shownIsSavedMlb(row, bind, pos, s) {
   const hits = on.reduce((a, g) => a + of(g, 'h'), 0);
   if (!isNum(row.avg) || ab < 1 || Math.round((hits / ab) * 1000) !== Math.round(row.avg * 1000)) out.push(`hits ${hits} over at bats ${ab} do not round to ${row.avg}`);
   if (on.length && (ab / on.length < 2.2 - 1e-9 || ab / on.length > 4.5 + 1e-9)) out.push(`${(ab / on.length).toFixed(2)} at bats a game`);
+  }
   for (const g of s.games) {
     if (g.us === g.them) out.push(`md ${g.md}: level`);
     const runs = (side, from, to) => g.events.filter(e => e.kind === 'inning' && e.side === side && e.min >= from && e.min <= to).reduce((a, e) => a + (e.pts ?? 0), 0);
@@ -759,6 +770,25 @@ function shownIsSavedMlb(row, bind, pos, s) {
       if (bind.view.missed(g.why) !== 'Did not play') out.push(`md ${g.md}: a missed game reads "${bind.view.missed(g.why)}"`);
       continue;
     }
+    if (pitcher) {
+      if (g.started !== (pos === 'SP')) out.push(`md ${g.md}: wrong pitching role`);
+      const innings = past ? 10 : 9;
+      const defense = Array.from({ length: innings }, (_, i) => {
+        const before = runs('us', 1, g.home ? i : i + 1) - runs('them', 1, i);
+        return [before, before - runs('them', i + 1, i + 1)];
+      });
+      const save = defense.some(([before], i) => (before <= 3 || i <= innings - 3) && defense.slice(i).every(([start, end]) => start > 0 && end > 0));
+      const holdLoss = defense.some(([before, after], i) => before > 0 && before <= 2 && after < 0
+        && defense.slice(i + 1).every(([start, end]) => start < 0 && end < 0));
+      const hold = holdLoss || defense.some(([before, after], i) => before > 0 && before <= 3 && after > 0 && i < innings - 1);
+      if (of(g, 'wins') + of(g, 'saves') + of(g, 'holds') > 1
+          || (of(g, 'wins') && g.us <= g.them)
+          || (of(g, 'saves') && !(g.us > g.them && save))
+          || (of(g, 'lossesP') && g.us >= g.them)
+          || (of(g, 'holds') && !(of(g, 'lossesP') ? g.us < g.them && holdLoss : hold))) out.push(`md ${g.md}: incompatible pitching decision`);
+      if (g.line.era !== undefined) out.push(`md ${g.md}: ERA is only saved for the season`);
+      continue;
+    }
     for (const k of ['ab', 'h', 'rbi', ...MLB_SUM_FIELDS]) if (g.line[k] !== undefined && (!Number.isInteger(g.line[k]) || g.line[k] < 0)) out.push(`md ${g.md}: ${k} ${g.line[k]}`);
     if (of(g, 'ab') < 1 || of(g, 'ab') > 6) out.push(`md ${g.md}: ${of(g, 'ab')} at bats`);
     /* six at bats only where his side scores enough for a sixth, unless his own home runs and doubles are six */
@@ -772,7 +802,7 @@ function shownIsSavedMlb(row, bind, pos, s) {
   /* the halfway poster: the All-Star sentence exactly when the saved line holds the award */
   const half = bind.view.half(M.soFar(s, Math.floor(s.games.length / 2)), pos, row);
   const star = Array.isArray(row.awards) && row.awards.includes('All-Star');
-  if (half.includes('You are an All-Star this year.') !== star) out.push(`the halfway line ${star ? 'leaves out' : 'prints'} the All-Star sentence`);
+  if (!pitcher && half.includes('You are an All-Star this year.') !== star) out.push(`the halfway line ${star ? 'leaves out' : 'prints'} the All-Star sentence`);
   return out;
 }
 
@@ -1343,7 +1373,7 @@ function observe(c, line, who) {
     /* Round 1212: the hub hands the function who is asking (his position and his club of that season), so the
        harness does too; and baseball's expected line is the harness's OWN (mlbOwnHeld), never the module's */
     heldLine: SB.seasonCentreHeld?.(row.year, career.eraId, { pos: career.pos, team: row.team }) ?? null,
-    ledgerLine: who.slug === 'mlb' ? mlbOwnHeld(row.year, career.eraId, career.pos, row.team) : M.usSeasonHeldLine(who.slug, row.year),
+    ledgerLine: who.slug === 'mlb' ? mlbOwnHeld(row.year, career.eraId, row.team) : M.usSeasonHeldLine(who.slug, row.year),
     team: row.team, p3: [], p4: [], p5: [], p6: [],
   };
   seen.push(rec);
@@ -1416,7 +1446,7 @@ function observe(c, line, who) {
         const total = side === 'us' ? g.us : g.them;
         if (total >= 4) { mlbSeen.fourUp += 1; if (by.size === 1) mlbSeen.oneFrame += 1; }
       }
-      if (!g.played) continue;
+      if (!g.played || MLB_PITCHERS.includes(career.pos)) continue;
       mlbSeen.played += 1;
       mlbSeen.ab += g.line.ab ?? 0;
       if ((g.line.h ?? 0) === 0) mlbSeen.hitless += 1;
@@ -1667,11 +1697,11 @@ for (const slug of SPORTS) {
   tally('2', `${slug} no held season yields a derived season`, live.filter(r => r.heldLine !== null && r.derived).map(r => `${r.year}`), live.filter(r => r.heldLine !== null).length);
   if (slug === 'mlb') {
     /* Round 1212: who and what baseball holds, each by the harness's own table, each counted (a count of 0 fails) */
-    const pitchers = live.filter(r => MLB_HELD_POS.includes(r.pos));
-    check('2', pitchers.length > 0 && pitchers.every(r => r.build === 'held' && r.heldLine === MLB_PITCHER_LINE), `mlb every pitcher's season is held, with the pitchers' line (${pitchers.length} seasons)`);
+    const pitchers = live.filter(r => MLB_PITCHERS.includes(r.pos) && r.ledgerLine === null);
+    check('2', pitchers.length > 0 && pitchers.every(r => r.build === 'ok'), `mlb pitchers in supported seasons are open (${pitchers.length} seasons)`);
     const outside = live.filter(r => MLB_OUTSIDE.includes(r.team));
-    check('2', outside.length > 0 && outside.every(r => r.build === 'held' && (MLB_HELD_POS.includes(r.pos) || r.heldLine === MLB_OUTSIDE_LINE)), `mlb every season at a club outside the league is held (${outside.length} seasons; the engine's Japan card)`);
-    const hitters = live.filter(r => !MLB_HELD_POS.includes(r.pos) && !MLB_OUTSIDE.includes(r.team));
+    check('2', outside.length > 0 && outside.every(r => r.build === 'held' && r.heldLine === MLB_OUTSIDE_LINE), `mlb every season at a club outside the league is held (${outside.length} seasons; the engine's Japan card)`);
+    const hitters = live.filter(r => !MLB_PITCHERS.includes(r.pos) && !MLB_OUTSIDE.includes(r.team));
     const clubShort = hitters.filter(r => MLB_SHORT_YEARS[r.year] === undefined && mlbOwnGames(r.year, r.team) !== MLB_VIEW);
     console.log(`     hitters' seasons at a club whose real season was not ${MLB_VIEW} games (outside 2020): ${clubShort.length} (${clubShort.filter(r => !r.targeted).length} organic), ${clubShort.filter(r => r.build === 'held').length} held; first: ${clubShort.slice(0, 4).map(r => `${r.year} ${r.team}`).join(', ')}`);
     check('2', clubShort.length > 0 && clubShort.every(r => r.build === 'held'), `mlb a club that did not play ${MLB_VIEW} games that year is in the population and every one is held (${clubShort.length})`);

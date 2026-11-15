@@ -1,12 +1,13 @@
 /* Round 1212: baseball's number file for the US Season Center
-   (src/lib/season/us.ts binds it to the season core). Hitters only: a
-   pitcher is held with an honest line (src/lib/mlbSeasonHeld.ts says why).
+   (src/lib/season/us.ts binds it to the season core).
 
    What is the engine's, read from the saved line: games played, the batting
    average (three places), hits and at-bats when recorded, home runs,
    runs batted in, doubles, steals, the
    team result and the playoff games. The on base percentage stays on the
-   season card: walks are not laid out game by game.
+   season card: walks are not laid out game by game. A pitcher's saved
+   appearances, decisions and strikeouts fit the simulated results. His
+   ERA stays on the saved season line.
 
    What is real and two sourced, all of it read from Round 1211's ledger
    (src/data/usSeasonLedgerMlb.ts) and never typed here: the season's length
@@ -24,8 +25,7 @@
    where, every score, every inning and every line of his.
 
    What a game claims: a score, runs by inning, and for him at bats, hits,
-   home runs, doubles, runs batted in and steals. Nothing else (no walks, no
-   pitchers, no dates).
+   home runs, doubles, runs batted in and steals, or his pitching counts.
 
    Nine innings, the home side not batting in a ninth it leads, and extra
    innings until one side has won: the clock is built on it, and the number
@@ -50,7 +50,8 @@ import { MLB_MISSED_PLAYOFFS, MLB_PLAYOFF_LADDER, mlbEraTeamIds, mlbPlayoffResul
 import { MLB_DIVISIONS_2026, MLB_FORMULAS, MLB_GAME_RULES, MLB_PLAYOFF_FORMAT, MLB_RIVALS, MLB_SCORING } from '@/data/usSeasonLedgerMlb';
 import type { UsShape } from '@/data/usLeagueShape';
 import { postseasonRounds } from '../usSeasonShape';
-import { mlbHeldLine, mlbHeldPos, mlbRealGames, mlbViewGames } from '../mlbSeasonHeld';
+import { mlbHeldLine, mlbRealGames, mlbViewGames } from '../mlbSeasonHeld';
+import { mlbPitcher, pitchingBits, pitchingDecisions, pitchingOpportunities, pitchingSoFar, PITCHING_KEYS, placeMlbPitching } from './mlbPitching';
 import { MLB_AB_LOW, MLB_AB_HIGH, mlbHitterTotals, mlbThousandths as thousandths } from '../mlbHitterTotals';
 
 /** Wins this career's rule gives each result, of 162: missed, a first round
@@ -460,13 +461,27 @@ function layInnings(g: DerivedGame, extra: boolean, q: number, rng: Rng): Season
   return events.sort((a, b) => a.min - b.min || (a.side === b.side ? (a.kind === b.kind ? 0 : a.kind === 'hr' ? -1 : 1) : a.side === away ? -1 : 1));
 }
 
-/** His at bats, hits and runs batted in for every game he played, and every game's innings. */
-function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng, ctx?: UsSeasonCtx): boolean {
+function finishInnings(games: DerivedGame[], rng: Rng, ctx?: UsSeasonCtx): boolean {
+  const q = scoringShare(MLB_SCORING[ctx?.eraId ?? 'now'] ?? MLB_SCORING.now);
+  for (const g of games) {
+    /* drawn for every game, so the rule never moves another game's innings */
+    const u = rng();
+    const extra = Math.abs(g.us - g.them) === 1 && u < EXTRA_SHARE;
+    const events = layInnings(g, extra, q, rng);
+    if (!events) return false;
+    g.events = events;
+  }
+  return true;
+}
+
+/** His saved player line and every game's innings. */
+function finish(games: DerivedGame[], row: UsRow, pos: string, rng: Rng, ctx?: UsSeasonCtx): boolean {
+  /* a line the engine played on another length is not this view's season */
+  if (num(row.slate) !== null && row.slate !== mlbViewGames()) return false;
+  if (mlbPitcher(pos)) return finishInnings(games, rng, ctx) && placeMlbPitching(games, row, pos, rng);
   const avg = num(row.avg);
   const rbi = num(row.rbi);
   if (avg === null || rbi === null || !Number.isInteger(rbi) || rbi < 0) return false;
-  /* a line the engine played on another length is not this view's season */
-  if (num(row.slate) !== null && row.slate !== mlbViewGames()) return false;
   const on = games.filter(g => g.played);
   /* his home runs stay inside his team's runs: a line his team's runs cannot hold changes places with a
      line they can (two games he played exchange their whole lines, which keeps every total and every cap) */
@@ -497,33 +512,28 @@ function finish(games: DerivedGame[], row: UsRow, _pos: string, rng: Rng, ctx?: 
   if (driven.some((v, i) => v > room[i])) return false;
   if (!settle(driven, rbi, floor, room, i => (room[i] - driven[i]) * (hits[i] > 0 ? 1 : 0.25), rng)) return false;
   on.forEach((g, i) => { g.line.ab = ab[i]; g.line.h = hits[i]; g.line.rbi = driven[i]; });
-  /* the innings are spread by the score law's own chances, at the era's league mean */
-  const q = scoringShare(MLB_SCORING[ctx?.eraId ?? 'now'] ?? MLB_SCORING.now);
-  for (const g of games) {
-    /* drawn for every game, so the rule never moves another game's innings */
-    const u = rng();
-    const extra = Math.abs(g.us - g.them) === 1 && u < EXTRA_SHARE;
-    const events = layInnings(g, extra, q, rng);
-    if (!events) return false;
-    g.events = events;
-  }
-  return true;
+  return finishInnings(games, rng, ctx);
 }
 
 /** Every way a derived season disagrees with the saved line or with baseball. */
-function check(row: UsRow, _pos: string, s: DerivedSeason, ctx: UsSeasonCtx): string[] {
+function check(row: UsRow, pos: string, s: DerivedSeason, ctx: UsSeasonCtx): string[] {
   const out: string[] = [];
   const on = s.games.filter(g => g.played);
   const sum = (k: string) => on.reduce((a, g) => a + of(g, k), 0);
-  for (const k of ['hr', 'doubles', 'sb', 'rbi']) {
-    const want = num(row[k]);
+  const pitching = mlbPitcher(pos);
+  const useDecisions = pitching && pitchingDecisions(s.games, row, pos) !== null;
+  for (const k of pitching ? PITCHING_KEYS : ['hr', 'doubles', 'sb', 'rbi']) {
+    const want = !pitching || k === 'so' || useDecisions ? num(row[k]) : null;
     if (want !== null && sum(k) !== want) out.push(`${k} ${sum(k)} != ${want}`);
+    if (pitching && want === null && on.some(g => g.line[k] !== undefined)) out.push(`${k} is unavailable for these pitching reports`);
   }
-  const avg = num(row.avg);
-  const ab = sum('ab');
-  if (avg === null || ab < 1 || thousandths(sum('h') / ab) !== thousandths(avg)) out.push(`hits ${sum('h')} over at bats ${ab} is not ${avg}`);
-  if (on.length && (ab < Math.ceil(on.length * MLB_AB_LOW) || ab > Math.floor(on.length * MLB_AB_HIGH))) out.push(`${ab} at bats in ${on.length} games`);
-  if (row.contactApproach === true && (ab !== row.ab || sum('h') !== row.hits)) out.push('The reconstructed hits and at-bats differ from the saved batting approach.');
+  if (!pitching) {
+    const avg = num(row.avg);
+    const ab = sum('ab');
+    if (avg === null || ab < 1 || thousandths(sum('h') / ab) !== thousandths(avg)) out.push(`hits ${sum('h')} over at bats ${ab} is not ${avg}`);
+    if (on.length && (ab < Math.ceil(on.length * MLB_AB_LOW) || ab > Math.floor(on.length * MLB_AB_HIGH))) out.push(`${ab} at bats in ${on.length} games`);
+    if (row.contactApproach === true && (ab !== row.ab || sum('h') !== row.hits)) out.push('The reconstructed hits and at-bats differ from the saved batting approach.');
+  }
   for (const g of s.games) {
     if (g.us === g.them) out.push(`game ${g.md}: level`);
     const inning = (side: 'us' | 'them', min: number) => g.events.filter(e => e.kind === 'inning' && e.side === side && e.min === min).reduce((a, e) => a + (e.pts ?? 0), 0);
@@ -543,6 +553,14 @@ function check(row: UsRow, _pos: string, s: DerivedSeason, ctx: UsSeasonCtx): st
     if (homers.length !== (g.played ? of(g, 'hr') : 0)) out.push(`game ${g.md}: ${homers.length} home runs in the feed for ${g.played ? of(g, 'hr') : 0} on his line`);
     for (const e of homers) if (inning('us', e.min) < homers.filter(x => x.min === e.min).length) out.push(`game ${g.md}: a home run in an inning his side does not score in`);
     if (!g.played) { if (Object.keys(g.line).length) out.push(`game ${g.md}: a line in a game he missed`); continue; }
+    if (pitching) {
+      const opportunity = pitchingOpportunities(g);
+      if (of(g, 'wins') + of(g, 'saves') + of(g, 'holds') > 1
+          || (of(g, 'wins') && g.us <= g.them) || (of(g, 'saves') && !opportunity.save)
+          || (of(g, 'lossesP') && g.them <= g.us)
+          || (of(g, 'holds') && !(of(g, 'lossesP') ? opportunity.holdLoss : opportunity.hold))) out.push(`game ${g.md}: incompatible pitching decision`);
+      continue;
+    }
     const [gab, gh, ghr, g2b, grbi] = [of(g, 'ab'), of(g, 'h'), of(g, 'hr'), of(g, 'doubles'), of(g, 'rbi')];
     if (!Number.isInteger(gab) || gab < 1 || gab > mlbAtBatsCap(g, ghr + g2b)) out.push(`game ${g.md}: ${gab} at bats in a game his team scores ${g.us}`);
     if (!Number.isInteger(gh) || gh < ghr + g2b || gh > gab) out.push(`game ${g.md}: ${gh} hits in ${gab} at bats with ${ghr} home runs and ${g2b} doubles`);
@@ -617,7 +635,6 @@ export const MLB_SEASON: UsSeasonBind = {
   fullSeason: MLB_FORMULAS[0].games,
   realLength: (year, team, eraId) => mlbRealGames(year, team, eraId),
   heldLine: (year, team, eraId) => mlbHeldLine(year, team, eraId),
-  heldFor: pos => mlbHeldPos(pos),
   shapeOf,
   formatOf,
   olderBand,
@@ -635,7 +652,7 @@ export const MLB_SEASON: UsSeasonBind = {
   cap: 30,
   seasonLabel: year => String(year),
   /* all six enter the key, laid out or not, so a different saved line is a different season */
-  statKeys: () => ['avg', 'hr', 'rbi', 'sb', 'doubles', 'obp'],
+  statKeys: pos => mlbPitcher(pos) ? [...PITCHING_KEYS, 'era'] : ['avg', 'hr', 'rbi', 'sb', 'doubles', 'obp'],
   teamIds: eraId => mlbEraTeamIds(eraId),
   score: mlbScore,
   /* the margin of one game has a standard deviation of about four runs, so a logistic of 2.5 a unit lands
@@ -643,7 +660,7 @@ export const MLB_SEASON: UsSeasonBind = {
      no repair and every median of wins by result sits in the middle half of its band) */
   strengthFor: share => { const p = Math.min(0.98, Math.max(0.02, share)); return 2.5 * Math.log(p / (1 - p)); },
   oppSpread: 0.6,
-  totals: row => totals(row),
+  totals: (row, pos) => mlbPitcher(pos) ? [] : totals(row),
   /* the line does not say why a game was missed (a bench season and a hurt one overlap), so nothing is claimed */
   availability: row => ({ played: row.games, block: 0, severe: false }),
   meanBase: () => 0,
@@ -664,18 +681,21 @@ export const MLB_SEASON: UsSeasonBind = {
       : `⚾ ${e.side === 'us' ? us : them} put ${e.pts ?? 0} on the board ${inningWords(e.min)}`),
     missed: () => 'Did not play',
     /* the hits and at bats are the chip, printed first, so the bits are the rest of his line */
-    lineOf: g => [
+    lineOf: (g, pos) => mlbPitcher(pos) ? pitchingBits(g) : [
       ...(of(g, 'hr') ? [count(of(g, 'hr'), 'HR')] : []),
       ...(of(g, 'rbi') ? [`${of(g, 'rbi')} RBI`] : []),
       ...(of(g, 'doubles') ? [count(of(g, 'doubles'), '2B')] : []),
       ...(of(g, 'sb') ? [count(of(g, 'sb'), 'SB')] : []),
     ],
-    markOf: g => of(g, 'h') + 2 * of(g, 'hr') + of(g, 'doubles') + of(g, 'rbi'),
-    markChip: g => `${of(g, 'h')}-${of(g, 'ab')}`,
-    markText: g => gameWords(g),
-    soFar: so => [['Played', String(so.apps)], ['AVG', mlbAvgText(so.h ?? 0, so.ab ?? 0)], ['HR', String(so.hr ?? 0)], ['RBI', String(so.rbi ?? 0)]],
-    half: (so, _pos, row) => {
+    markOf: (g, pos) => mlbPitcher(pos) ? of(g, 'so') + 3 * of(g, 'wins') + 3 * of(g, 'saves') + of(g, 'holds')
+      : of(g, 'h') + 2 * of(g, 'hr') + of(g, 'doubles') + of(g, 'rbi'),
+    markChip: (g, pos) => mlbPitcher(pos) ? g.line.so === undefined ? 'Pitched' : `${g.line.so} K` : `${of(g, 'h')}-${of(g, 'ab')}`,
+    markText: (g, pos) => mlbPitcher(pos) ? g.line.so === undefined ? 'Pitched' : `${g.line.so} strikeouts` : gameWords(g),
+    soFar: (so, pos) => mlbPitcher(pos) ? pitchingSoFar(so, pos)
+      : [['Played', String(so.apps)], ['AVG', mlbAvgText(so.h ?? 0, so.ab ?? 0)], ['HR', String(so.hr ?? 0)], ['RBI', String(so.rbi ?? 0)]],
+    half: (so, pos, row) => {
       if (!so.apps) return 'First half: you did not play a game.';
+      if (mlbPitcher(pos)) return 'First half · ' + pitchingSoFar(so, pos).map(([label, value]) => label + ' ' + value).join(' · ');
       const hr = so.hr ?? 0;
       const star = row && Array.isArray(row.awards) && row.awards.includes('All-Star') ? ' You are an All-Star this year.' : '';
       return `First half: ${so.apps === 1 ? '1 game' : `${so.apps} games`}, ${mlbAvgText(so.h ?? 0, so.ab ?? 0)} with ${hr === 1 ? '1 home run' : `${hr} home runs`}.${star}`;
@@ -687,11 +707,14 @@ export const MLB_SEASON: UsSeasonBind = {
     postLabels: { 'Team postseason games': 'games' },
     groupWords: ['Division', 'League'],
     noPathNote,
-    help: (named, opp) => usHelp({
+    help: (named, opp, pos) => usHelp({
       named, games: MLB_FORMULAS[0].games, bands: BANDS,
       whoWhen: 'How the games are grouped into series, which series falls where and which park a league series is played in',
       playoffNote: `Every October here starts at the first round: this career has no first round bye. The path shows each round and its score, not who you played. A season before ${MLB_PLAYOFF_FORMAT.from} shows no playoff path, because the playoffs had a different shape then, and a season whose playoff games do not fit today's rounds shows none either.`,
-      examples: [
+      examples: mlbPitcher(pos) ? [
+        { head: 'Reading your pitching line', body: 'In a simulated 4 to 2 team win, the game report might credit a starter with the win and six strikeouts. A reliever can instead earn a save or hold. The counts shown add up to the saved season line.' },
+        { head: 'Where to find ERA', body: 'Your season ERA stays on the season review. This career saves the rate, and individual innings pitched and earned runs are unavailable.' },
+      ] : [
         { head: 'A game', body: `Game 41, at home to ${named && opp ? `the ${opp}` : 'another team'}. You win 6-4 and go 2 for 4 with a home run and 3 RBI. Your record goes to 24-17.` },
         { head: 'Your numbers', body: 'Your season card says .287 with 24 home runs and 81 RBI. Every home run, RBI, double and steal here adds up to exactly that, and your hits over your at bats round to .287. Walks are not dealt game by game, so your on base percentage is the one on your card.' },
         { head: 'Series', body: `Baseball is played in series: a few games in a row against one club in one park. ${named ? 'You meet each division rival 13 times, and how often you meet everybody else follows the league formula too.' : 'Here each series is three games.'} A game you sat out reads Did not play.` },

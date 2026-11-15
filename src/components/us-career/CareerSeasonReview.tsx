@@ -3,6 +3,7 @@ import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { cn } from '@/lib/utils';
 import { formatNumber } from '@/lib/formatNumber';
+import { mlbPitchingDecisionsFit } from '@/lib/mlbSeasonHeld';
 import CareerSeasonComparison from '@/components/us-career/CareerSeasonComparison';
 import CareerSeasonHighs from '@/components/us-career/CareerSeasonHighs';
 import SeasonRating from '@/components/us-career/SeasonRating';
@@ -53,7 +54,8 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
       ? { career, row: season, playoffsOnly: true, from }
       : { career, row: season, from });
   };
-  const showReplay = (sport.slug === 'nba' || sport.slug === 'nhl') && !!(centre && sport.loadSeasonCentre && season);
+  const mlbPitcher = sport.slug === 'mlb' && (career.pos === 'SP' || career.pos === 'RP');
+  const showReplay = (sport.slug === 'nba' || sport.slug === 'nhl' || mlbPitcher) && !!(centre && sport.loadSeasonCentre && season);
   const replayReason = showReplay && season
     ? !finite(season.games) || season.games <= 0 || season.teamResult === 'SUSPENDED'
       ? 'No games were recorded for this season.'
@@ -132,7 +134,11 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
             replayReason ? <p className="text-xs text-muted-foreground">{replayReason}</p> : <div className="space-y-2">
               <p id={`${sport.slug}-season-replay-details`} className="text-xs text-muted-foreground">{sport.slug === 'nhl'
                 ? 'Games are recreated from your saved season totals. Individual scores, shots and saves are simulated.'
-                : 'Games are recreated from your saved season totals. Individual scores and quarters are estimates.'}</p>
+                : mlbPitcher ? 'Games are recreated from your saved season totals. Individual scores and pitching lines are simulated.'
+                  : 'Games are recreated from your saved season totals. Individual scores and quarters are estimates.'}</p>
+              {mlbPitcher && <p className="text-xs text-muted-foreground">{mlbPitchingDecisionsFit(season, career.pos)
+                ? 'If the simulated games cannot support all your pitching decisions, the decisions stay in the season totals above.'
+                : 'The saved pitching decisions do not fit the appearance count. They are shown above as season totals only.'}</p>}
               <button type="button" className={control} aria-describedby={`${sport.slug}-season-replay-details`} aria-busy={loadingReplay || undefined} onClick={event => void openSeason(event)}>
                 {loadingReplay ? 'Loading Season Center...' : 'Watch reconstructed games'}
               </button>

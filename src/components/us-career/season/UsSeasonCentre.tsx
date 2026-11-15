@@ -68,7 +68,8 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonSource, career:
   const range = (n: number) => Array.from({ length: n }, (_, i) => i + 1);
   const savedRating = readUsSeasonRating(row.seasonRating);
   const development = savedRating?.checkpoints[3][0] === s.games.length ? savedRating : null;
-  const help = view.help(named, named ? ctx.names[1] : undefined);
+  const help = view.help(named, named ? ctx.names[1] : undefined, pos);
+  const pitcher = bind.slug === 'mlb' && (pos === 'SP' || pos === 'RP');
   return {
     season: s,
     words: view.words,
@@ -84,7 +85,7 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonSource, career:
       : "Opponents are not named this season: the game does not hold that season's divisions and schedule.",
     derbyBefore: { w: 0, d: 0, l: 0 },
     review: {
-      tiles: [[bind.slug === 'nhl' && pos === 'G' ? 'Starts' : 'Games', String(row.games)], ...review.regular.slice(0, 3).map((x): [string, string] => [view.tileLabels[x.label] ?? x.label, view.tileText ? view.tileText(x.label, x.value) : x.value])],
+      tiles: [[pitcher ? review.gamesLabel : bind.slug === 'nhl' && pos === 'G' ? 'Starts' : 'Games', String(row.games)], ...review.regular.slice(0, pitcher ? 4 : 3).map((x): [string, string] => [view.tileLabels[x.label] ?? x.label, view.tileText ? view.tileText(x.label, x.value) : x.value])],
       finishLine: `${record} · ${row.teamResult}`,
       championLine: null,
       /* no trophy emoji here: the title card draws its own */
@@ -205,7 +206,8 @@ function CentreBody({ sport, career, row, playoffsOnly, onClose }: UsSeasonCentr
   };
   return (
     <>
-      <SeasonCentre model={model} exitLabel={EXIT} onClose={onClose} active={part === 'regular'} fixtureReports={bind.slug === 'nhl' || !!model.sport.developmentOverall} navigation={replay ? (
+      <SeasonCentre model={model} exitLabel={EXIT} onClose={onClose} active={part === 'regular'}
+        fixtureReports={bind.slug === 'nhl' || (bind.slug === 'mlb' && (career.pos === 'SP' || career.pos === 'RP')) || !!model.sport.developmentOverall} navigation={replay ? (
         <div className="border-b border-border px-3 py-2">
           <button type="button" ref={replayOpener} onClick={() => setPart('playoffs')} className="min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-bold">Replay playoffs</button>
         </div>

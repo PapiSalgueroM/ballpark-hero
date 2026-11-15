@@ -290,6 +290,27 @@ function helpFacts() {
   };
 }
 
+export function SeasonMatchResults({ league, current = false }: { league: TycoonLeague; current?: boolean }) {
+  const results = league.results ?? [];
+  if (current ? league.matchday === 0 : results.length === 0) return null;
+
+  return <details data-current-season-results={current ? '' : undefined} data-latest-season-results={current ? undefined : ''} className="rounded-lg border border-border px-3 text-xs">
+    <summary className="min-h-11 cursor-pointer py-3 font-bold">{current ? 'Results this season' : 'Match results'}</summary>
+    {results.length === 0 ? <p className="pb-2 text-muted-foreground">Scores for these matchdays were not recorded.</p> : <>
+      {results.length < league.matchday && <p className="pb-2 text-muted-foreground">Earlier scores were not recorded.</p>}
+      <ol className="space-y-2 pb-3">
+        {results.map(({ day, gf, ga, plan }) => <li key={day} className="flex items-baseline justify-between gap-2">
+          <div>
+            <span>Matchday {day} · {league.clubs[yourOpponentIndex(league, day - 1)].name}</span>
+            {plan && <span className="block text-muted-foreground">{MATCH_PLANS[plan.kind].label} from {plan.minute}′</span>}
+          </div>
+          <span className="shrink-0 font-bold tabular-nums">{gf}-{ga}</span>
+        </li>)}
+      </ol>
+    </>}
+  </details>;
+}
+
 /* Release AP: exported so src/test/tycoonLatestSeason.test.tsx can read the dialog's numbers on any tree
    (Round 1095's own driver only runs on its own branch). */
 export function LatestSeasonReview({ last, history }: { last: TycoonLeague; history?: TycoonLeague[] }) {
@@ -354,19 +375,7 @@ export function LatestSeasonReview({ last, history }: { last: TycoonLeague; hist
               </tr>
             ))}</tbody>
           </table>
-          {snapshot.results?.length ? <details data-latest-season-results className="rounded-lg border border-border px-3">
-            <summary className="min-h-11 cursor-pointer py-3 font-bold">Match results</summary>
-            {snapshot.results.length < snapshot.matchday && <p className="pb-2 text-muted-foreground">Earlier scores were not recorded.</p>}
-            <ol className="space-y-2 pb-3">
-              {snapshot.results.map(({ day, gf, ga, plan }) => <li key={day} className="flex items-baseline justify-between gap-2">
-                <div>
-                  <span>Matchday {day} · {snapshot.clubs[yourOpponentIndex(snapshot, day - 1)].name}</span>
-                  {plan && <span className="block text-muted-foreground">{MATCH_PLANS[plan.kind].label} from {plan.minute}′</span>}
-                </div>
-                <span className="shrink-0 font-bold tabular-nums">{gf}-{ga}</span>
-              </li>)}
-            </ol>
-          </details> : null}
+          <SeasonMatchResults league={snapshot} />
         </div>
         <button type="button" onClick={() => changeOpen(false)} className="min-h-11 min-w-11 w-full shrink-0 rounded-lg border border-border px-3 text-xs font-bold hover:bg-secondary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary">Back</button>
       </DialogContent>
@@ -403,6 +412,7 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
         </div>
         {(s.leagueTitles ?? 0) > 0 && <div className="mt-0.5 text-gold font-bold">🏆 {s.leagueTitles} league title{s.leagueTitles === 1 ? '' : 's'} in your career</div>}
       </div>
+      <SeasonMatchResults league={lg} current />
       <LeagueTableCard rows={rows} myClub={lg.clubs[0].name} title={`Season ${lg.season + 1} at this ground`} preseason={preseason} zoneTop={1} />
       {last && <LatestSeasonReview last={last} history={s.completedLeagueHistory} />}
       {sponsor && <div data-league-sponsor className="rounded-xl border border-border bg-card p-3 text-xs">
@@ -1081,7 +1091,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
               <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>
-              <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. In League, open Latest season and choose a completed season to see its final table, recorded match scores and sponsorship. If your club wins Muddy Meadows, for example, you can reopen its final table and scores while playing in Gravel Lane. Recorded seasons stay with this ground until you sell up.</p>
+              <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. In League, open Results this season to see each recorded score and any second-half plan. Open Latest season and choose a completed season to see its final table, recorded match scores and sponsorship. If your club wins Muddy Meadows, for example, you can reopen its final table and scores while playing in Gravel Lane. Recorded seasons stay with this ground until you sell up.</p>
               <p>Before the first league match finishes, Season sponsorship offers a fixed fee or more cash for a strong crowd. In a five-matchday season the fixed deal pays the same as three qualifying crowds. The crowd deal beats it if four or five matchdays reach the target at full time, including games played away. Check the signed target and the final payment in League.</p>
               <p>The payroll hires {h.staff} staff, from a {h.firstStaff} to a {h.lastStaff}. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
               <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about {h.catchSec} seconds to catch it, for one of {h.prizes} prizes: {GOLDEN_INFO.frenzy.label} ({GOLDEN_INFO.frenzy.blurb} for {GOLDEN_INFO.frenzy.duration} seconds), {GOLDEN_INFO.tapRush.label} ({GOLDEN_INFO.tapRush.blurb} for {GOLDEN_INFO.tapRush.duration} seconds), {GOLDEN_INFO.windfall.label} ({h.windfallMin} minutes of income, instantly), {GOLDEN_INFO.fanWave.label} ({GOLDEN_INFO.fanWave.blurb}) or {GOLDEN_INFO.freeLevel.label} ({GOLDEN_INFO.freeLevel.blurb}).</p>

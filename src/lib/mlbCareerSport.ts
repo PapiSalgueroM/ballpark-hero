@@ -158,7 +158,7 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = wi
   hall: MLB_CAREER_HALL,
   /* Round 1212: the Season Center. Its numbers load when he first watches a
      season; the held line is small and eager (src/lib/mlbSeasonHeld.ts), so the
-     hub can say a pitcher, a short season or a club outside the league has no
+     hub can say a short season or a club outside the league has no
      game by game view before he presses. */
   loadSeasonCentre: () => import('@/lib/season/mlb').then(m => m.MLB_SEASON),
   seasonCentreHeld: (year, eraId, who) => mlbSeasonHeld(year, eraId, who),

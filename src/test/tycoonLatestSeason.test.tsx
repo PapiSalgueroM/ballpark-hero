@@ -12,7 +12,7 @@
 import './dailyReload/mocks';
 import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { LatestSeasonReview } from '@/pages/StadiumTycoon';
+import { LatestSeasonReview, SeasonMatchResults } from '@/pages/StadiumTycoon';
 import {
   clubNameOptions, deserializeTycoon, leagueShape, newTycoon, prestige, serializeTycoon, setClubName, setMatchPlan,
   signStadiumSponsor, stadiumSponsorPayout, tick, type LeagueClub, type TycoonLeague, type TycoonState,
@@ -33,6 +33,35 @@ const text = (sel: string) => document.querySelector(sel)?.textContent ?? null;
 const open = () => fireEvent.click(document.querySelector('[data-last-season]') as HTMLElement);
 
 afterEach(cleanup);
+
+describe('Stadium Tycoon: current season results', () => {
+  it('starts after the first matchday and adds settled scores while the results stay open', () => {
+    const fresh = newTycoon(1794085200000);
+    const first = tick({ ...setMatchPlan({ ...fresh, minute: 70 }, fresh.matchNo, 'protect'), minute: 89, goalsFor: 2 }, 1.5, () => 1).state;
+    const second = tick({ ...setMatchPlan({ ...first, minute: 71 }, first.matchNo, 'push'), minute: 89, goalsFor: 3, goalsAgainst: 1 }, 1.5, () => 1).state;
+    const view = render(<SeasonMatchResults league={fresh.league!} current />);
+    expect(document.querySelector('[data-current-season-results]')).toBeNull();
+    view.rerender(<SeasonMatchResults league={first.league!} current />);
+    const results = document.querySelector<HTMLDetailsElement>('[data-current-season-results]')!;
+    expect(results.textContent).toMatch(/Results this season.*Matchday 1.*Protect from 70′.*2-0/);
+    results.open = true;
+    view.rerender(<SeasonMatchResults league={second.league!} current />);
+    expect(document.querySelector('[data-current-season-results]')).toBe(results);
+    expect(results.open).toBe(true);
+    expect(results.textContent).toMatch(/Matchday 1.*2-0.*Matchday 2.*Push from 71′.*3-1/);
+    expect(results.querySelectorAll('li')).toHaveLength(2);
+  });
+
+  it('shows when an older current season has no scores and keeps any recorded tail', () => {
+    const fresh = newTycoon(1794085200000).league!;
+    const legacy = { ...fresh, matchday: 2 };
+    const view = render(<SeasonMatchResults league={legacy} current />);
+    expect(text('[data-current-season-results]')).toContain('Scores for these matchdays were not recorded.');
+    view.rerender(<SeasonMatchResults league={{ ...legacy, results: [{ day: 2, gf: 1, ga: 0 }] }} current />);
+    expect(text('[data-current-season-results]')).toMatch(/Earlier scores were not recorded.*Matchday 2.*1-0/);
+    expect(document.querySelectorAll('[data-current-season-results] li')).toHaveLength(1);
+  });
+});
 
 describe('Stadium Tycoon: the Latest season review', () => {
   it('keeps exact league results across promotion and reload and drops a forged result', () => {
