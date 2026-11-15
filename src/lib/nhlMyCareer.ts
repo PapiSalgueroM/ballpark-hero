@@ -11,6 +11,7 @@ import { formatNumber } from './formatNumber';
 
 import { NHL_TEAMS } from '@/data/conquestDataNhl';
 import { NHL_PLAYOFF_FORMAT } from '@/data/usSeasonLedgerNhl';
+import { NHL_SHUTDOWN_BERTH_POINTS, NHL_SHUTDOWN_OFFENSIVE_COST, type ProgrammePreparation } from './usCareerProgramme';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nhlSeasonScore, wonAward } from './careerAwards';
 import { US_ENGINE_SEASON, seasonLength, toSlate, fullSeasonOf } from './usSeasonShape';
@@ -474,7 +475,7 @@ function gamesFor(c: NhlCareerState, rng: () => number, tandem: boolean): { game
 }
 
 export function simNhlSeason(
-  c: NhlCareerState, teamQuality: number, rng: () => number, inSeasonRating = false,
+  c: NhlCareerState, teamQuality: number, rng: () => number, inSeasonRating = false, programme?: ProgrammePreparation | null,
 ): { line: NhlSeasonLine; notes: string[] } {
   const notes: string[] = [];
   /* Round 1226: how many games his club's season holds comes from the sourced
@@ -522,6 +523,23 @@ export function simNhlSeason(
     // Round 98: the season itself gets a say, so career years and lost
     // years both exist. Averages out to zero across a career.
     + swing;
+  const strength = teamQuality + (seasonOverall - 76) * 0.4;
+  const usualOdds = Math.max(0.05, Math.min(0.9, (strength - 66) / 28));
+  let playoffOdds = usualOdds;
+  let offensiveIceShare = iceShare;
+  if (c.pos === 'D' && programme?.plan.sport === 'nhl' && programme.plan.tactics === 'defend') {
+    const coverage = iceShare * fullGames / US_ENGINE_SEASON.nhl;
+    playoffOdds = Math.min(0.9, usualOdds + NHL_SHUTDOWN_BERTH_POINTS / 100 * coverage);
+    if (playoffOdds > usualOdds) {
+      offensiveIceShare *= 1 - NHL_SHUTDOWN_OFFENSIVE_COST / 100;
+      const edge = ((playoffOdds - usualOdds) * 100).toFixed(1);
+      programme.nhlShutdownBerthGain = Number(edge);
+      notes.push(`🛡️ Shutdown assignment added ${edge} percentage points to playoff qualification with less offensive ice time.`);
+    } else {
+      programme.idle = [...(programme.idle ?? []), 'tactics'];
+      notes.push('🛡️ Shutdown assignment unused. Playoff qualification was already at the 90% cap.');
+    }
+  }
   /* `full` is the season on the engine's own length. Its `slate` is set here
      so the saved line keeps its keys in the order it always had. */
   const full: NhlSeasonLine = {
@@ -529,7 +547,7 @@ export function simNhlSeason(
     awards: [], teamResult: '', salary: c.salary,
   };
   if (slate !== US_ENGINE_SEASON.nhl) full.slate = slate;
-  Object.assign(full, nhlStatLineFor({ form, pos: c.pos, scoringMult: c.archetype.scoringMult, games: fullGames, iceShare }, rng));
+  Object.assign(full, nhlStatLineFor({ form, pos: c.pos, scoringMult: c.archetype.scoringMult, games: fullGames, iceShare: offensiveIceShare }, rng));
   const line = nhlLineOnSlate(full, work);
   if (tandem) line.tandemStarts = cut(plannedStarts);
   if (seasonRating) line.seasonRating = seasonRating;
@@ -538,8 +556,6 @@ export function simNhlSeason(
   // needs the same number everything else is judged on.
   const statScore = nhlSeasonScore(c.pos, full);
 
-  const strength = teamQuality + (seasonOverall - 76) * 0.4;
-  const playoffOdds = Math.max(0.05, Math.min(0.9, (strength - 66) / 28));
   let result = 'Missed the playoffs';
   let poStage = -1;
   if (rng() < playoffOdds) {

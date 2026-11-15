@@ -31,6 +31,7 @@ export interface ProgrammePreparation {
   archetypeBefore: unknown; archetypeChanged: boolean;
   /** The chosen trades that had nothing to add (see land): they changed nothing and are settled as unused. */
   idle?: ProgrammeSection[];
+  nhlShutdownBerthGain?: number;
 }
 const DEFAULTS: ProgrammeChoices = { workload: 'normal', tactics: 'normal', expectation: 'normal', partnership: 'normal', bonus: 'normal', reinvention: 'normal' };
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
@@ -40,6 +41,8 @@ const sports: readonly string[] = ['nfl', 'nba', 'mlb', 'nhl'];
 export const NBA_DEFENSIVE_GAIN = 20;
 export const NBA_DEFENSIVE_SCORING_COST = 8;
 export const NBA_DEFENSIVE_CAP = { spg: 3, bpg: 4 } as const;
+export const NHL_SHUTDOWN_BERTH_POINTS = 6;
+export const NHL_SHUTDOWN_OFFENSIVE_COST = 10;
 export function nbaDefensiveAssignment(pos: string) {
   return pos === 'PF' || pos === 'C'
     ? { label: 'Protect the rim', stat: 'bpg', unit: 'blocks per game' } as const
@@ -227,6 +230,11 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
         label: defence.label,
         effect: `Get ${NBA_DEFENSIVE_GAIN}% more ${defence.unit} in the regular season, at least 0.1 more up to ${NBA_DEFENSIVE_CAP[defence.stat].toFixed(1)}. You give up about ${NBA_DEFENSIVE_SCORING_COST}% of your points per game if the boost lands, with a 1.0 PPG minimum.`,
       }] : []),
+      ...(sport === 'nhl' && c.pos === 'D' ? [{
+        id: 'defend' as const,
+        label: 'Shutdown assignment',
+        effect: `Take the tougher matchups. Give up ${NHL_SHUTDOWN_OFFENSIVE_COST}% of your regular season offensive ice time to add up to ${NHL_SHUTDOWN_BERTH_POINTS} percentage points to playoff qualification. The gain scales with games and minutes played. At the 90% qualification cap it costs nothing.`,
+      }] : []),
     ] },
     { id: 'expectation', label: 'Coach expectations', options: [{ id: 'normal', label: 'No extra target', effect: 'Keep the normal season.' }, { id: 'steady', label: 'Steady availability', effect: 'Play ' + gamesTarget(c, sport, false) + ' games: morale +3 (morale tops out at 100). Miss it: morale -3.' }, { id: 'stretch', label: 'Earn a bigger role', effect: 'Play ' + gamesTarget(c, sport, true) + ' games: morale +6 (morale tops out at 100). Miss it: morale -5. This does not guarantee a starting spot.' }] },
     { id: 'partnership', label: 'Teammate partnership', options: [{ id: 'normal', label: 'Keep your own routine', effect: 'No extra partnership input.' }, { id: 'build', label: sport === 'nba' ? 'Build a two-player rhythm' : sport === 'nhl' ? c.pos === 'G' ? 'Work with your defense pair' : 'Build line chemistry' : sport === 'mlb' ? c.pos === 'SP' || c.pos === 'RP' ? 'Work with your catcher' : 'Build a lineup partnership' : c.pos === 'QB' ? 'Work with your receivers' : 'Build unit chemistry', effect: 'A role-based teammate partnership, with no invented player. At least ' + gamesBase(c, sport) + ' games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6.' + partnerText }] },
@@ -314,6 +322,10 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
         decision.actual = actual;
         decision.unit = defence.unit;
       }
+    }
+    if (played && sport === 'nhl' && section === 'tactics' && choice === 'defend' && preparation?.nhlShutdownBerthGain !== undefined) {
+      decision.actual = preparation.nhlShutdownBerthGain;
+      decision.unit = 'percentage points of playoff qualification';
     }
     if (played && section === 'expectation') {
       decision.target = gamesTarget({ ...c, year: plan.year, seasons: c.seasons.filter(s => s !== line) }, sport, choice === 'stretch');
