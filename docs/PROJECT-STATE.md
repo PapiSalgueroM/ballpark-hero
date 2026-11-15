@@ -1,11 +1,15 @@
 ## 2026-11-15: Rugby skills, basketball playoff rotations, World XI tactics and admin retries
 
+[PR #1002](https://github.com/PapiSalgueroM/ballpark-hero/pull/1002) published exact main `2d1b187b2df7189b0b5e75229852e2fad31423eb`, deployment `8a0e2e59-290d-44d6-949e-db47ef3331d9`, canonical entry `/assets/index-ZIXw5Vgc.js`. The merged tree matched tested head `cc7e0bb7f`. All 13 live browser journeys, 14 pinned endpoints and 174 sitemap routes passed. IndexNow accepted the three refreshed guides. The hosted Career entry guide workflow passed app types, the standard build, the guide and fault checks, and the native cases across four sports.
+
 - NRL Team Manager lets one developing player do extra skill work before a regular-season match. It costs four kickoff fitness points. After at least three worked appearances, the player can gain one extra OVR that season up to their potential. The Sharks replay took Tane Nairn from 88% to 84% kickoff fitness and from 84 to 85 OVR after Round 4. The paired teams recorded the same three scores. The opt-out matched 156 saved checkpoints.
 - NBA Perfect Season saves the 82-game record before offering a playoff rotation to Classic and Hard teams with at least 55 wins. Lean on starters gives the first five more weight early in each series and adds fatigue late. The same 55–27 roster flipped a 2–4 Toronto loss to a 4–3 win and a 4–3 Miami win to a 3–4 loss on paired draws. Daily keeps its automatic bracket.
 - World XI previews the season odds for Balanced and Protect the point. The latter moves some wins and losses into draws while preserving expected points. The report compares both on the same rolls. A seeded fixture moved from third with 105 points to second with 108. Another moved from second with 111 to third with 110. World XI Balanced and Build Your XI matched the previous build across 480 paired reports.
 - Admin Reports keeps failed status and priority edits reachable when another successful change filters the report out. The retry link reopens the report with the last saved values. The reviewer can try the failed field once the original request settles.
 
 Scoped application types, the production build, 162 focused tests and 13 pinned local browser journeys passed. The 20 site checks, 174-route SEO split check, Home fold and download budgets passed. The NRL Team Manager, NBA Perfect Season and World XI guides and their search keywords were refreshed. The archive matches the 360 published boards through November 14 Eastern.
+
+The next local candidate, `codex/nov15-career-save-integrity` at `61a8435c0`, passed 31 combined focused tests. It spends the completed injury season's contract year in Soccer Career, protects a newer Stadium Tycoon booking from an older tab, and protects shared US Career season programmes from stale saves. The previous canonical release reproduced the Soccer Career injury term and Stadium booking issues in isolated browser fixtures. The new candidate is awaiting a combined production build and browser verification.
 
 ## 2026-11-15: Rugby staff, NHL shutdown assignments, academy sale quotes and Home return focus
 
