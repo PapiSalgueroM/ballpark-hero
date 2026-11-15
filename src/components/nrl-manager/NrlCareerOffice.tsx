@@ -31,7 +31,8 @@ import {
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverDiscovery, nrlTakeoverPlayers, nrlTicketPricingRefusal,
   nrlTicketReviewQuotes, nrlTicketReviewRound, nrlTicketTierAtRound,
   nrlSupporterAttendance,
-  NRL_ACADEMY_CROSS_TRAINING_COST, NRL_ACADEMY_PRIORITIES, NRL_DEVELOPMENT_ASSISTANT, NRL_RECRUITMENT_PLAN_LIMIT, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
+  nrlYouthFocusProgress,
+  NRL_ACADEMY_CROSS_TRAINING_COST, NRL_ACADEMY_PRIORITIES, NRL_DEVELOPMENT_ASSISTANT, NRL_RECRUITMENT_PLAN_LIMIT, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES, NRL_YOUTH_FOCUS,
   type NrlAcademyPriority, type NrlAcademyReport, type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlRecruitmentPick, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryPenalty } from '@/lib/nrlJudiciary';
@@ -1729,9 +1730,12 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
 function DevelopmentFocus({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const focus = career.developmentFocus ?? 'balanced';
   const adjusted = nrlDevelopmentAffected(career);
+  const youthProgress = nrlYouthFocusProgress(career);
   const locked = adjusted > 0 || career.season.phase !== 'regular';
   const effect = focus === 'balanced' ? 'Players develop at their usual age-based rate.'
-    : focus === 'youth' ? 'At your 21st club match, players aged 24 or younger next year can gain 1 extra OVR up to their potential.'
+    : focus === 'youth' ? youthProgress
+      ? `At your 21st club match, players aged 24 or younger next year can gain 1 extra OVR up to their potential after ${NRL_YOUTH_FOCUS.appearances} regular-season appearances, including the review match.`
+      : 'At your 21st club match, players aged 24 or younger next year can gain 1 extra OVR up to their potential.'
       : 'Players aged 30 or older next year can avoid one scheduled 1 OVR drop during the season.';
   return (
     <div className="mt-4 rounded-xl border border-border bg-background p-3">
@@ -1749,6 +1753,22 @@ function DevelopmentFocus({ career, onAction, disabled }: { career: NrlCareerSta
           {developmentSummary(focus, adjusted)}
         </p>
       )}
+      {youthProgress && (youthProgress.remaining ? (
+        <section className="mt-3 border-t border-border pt-3 text-sm" aria-label="Youth development progress">
+          <p className="font-semibold">{youthProgress.remaining} club {youthProgress.remaining === 1 ? 'match' : 'matches'} to the review</p>
+          {youthProgress.played > 0 && <p className="mt-1 text-muted-foreground">{youthProgress.tracked} of {youthProgress.played} club matches have appearance records.</p>}
+          {youthProgress.rows.length ? (
+            <ul className="mt-1 divide-y divide-border">
+              {youthProgress.rows.map(({ id, name, apps }) => (
+                <li key={id} className="flex flex-wrap justify-between gap-x-3 py-1">
+                  <span>{name}</span><span className="tabular-nums">{apps >= NRL_YOUTH_FOCUS.appearances
+                    ? `${apps} appearances · Target met` : `${apps} / ${NRL_YOUTH_FOCUS.appearances} appearances`}</span>
+                </li>
+              ))}
+            </ul>
+          ) : <p className="mt-1 text-muted-foreground">No returning youth are eligible for a rating gain yet.</p>}
+        </section>
+      ) : <p className="mt-1 text-sm text-muted-foreground">The Youth development review is complete for this season.</p>)}
     </div>
   );
 }
