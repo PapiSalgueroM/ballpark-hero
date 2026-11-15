@@ -48,6 +48,8 @@ type Report = Tables<'question_reports'> & {
   fix_ref?: string | null;
 };
 
+type SaveField = 'status' | 'priority' | 'note';
+
 const FILTERS: ReadonlyArray<{ key: StatusFilter; label: string }> = [
   { key: 'open', label: 'Open' },
   ...REPORT_STATUSES.map((s) => ({ key: s.key as StatusFilter, label: s.label })),
@@ -73,7 +75,7 @@ const AdminReports = () => {
   const [savingNotes, setSavingNotes] = useState(() => new Set<string>());
   const triageInFlight = useRef(new Set<string>());
   const [savingTriage, setSavingTriage] = useState(() => new Set<string>());
-  const [messages, setMessages] = useState<Record<string, string>>({});
+  const [messages, setMessages] = useState<Record<string, Partial<Record<SaveField, string>>>>({});
   const navigate = useNavigate();
   const reportHash = linkedReportHash(useLocation().hash);
   const reportId = reportHash.slice('#report='.length);
@@ -138,29 +140,30 @@ const AdminReports = () => {
   const withColumns = hasTriageColumns(reports);
   const accessFailed = loadError?.source === 'access';
 
-  const say = (id: string, text: string) => setMessages((prev) => ({ ...prev, [id]: text }));
+  const say = (id: string, field: SaveField, text: string) =>
+    setMessages((prev) => ({ ...prev, [id]: { ...prev[id], [field]: text } }));
 
   /* One write path for every change. It asks for the row back, because an
      update RLS refuses is not an error to PostgREST, it is zero rows, and a
      screen that said "saved" over zero rows would be lying. */
-  const save = async (report: Report, patch: Record<string, unknown>, onSaved?: () => void): Promise<boolean> => {
-    say(report.id, 'Saving...');
+  const save = async (report: Report, field: SaveField, patch: Record<string, unknown>, onSaved?: () => void): Promise<boolean> => {
+    say(report.id, field, 'Saving...');
     const { data, error } = await supabase
       .from('question_reports' as any)
       .update(patch as any)
       .eq('id', report.id)
       .select('id') as any;
     if (error) {
-      say(report.id, `Not saved: ${error.message}`);
+      say(report.id, field, `Not saved: ${error.message}`);
       return false;
     }
     if (!data?.length) {
-      say(report.id, 'Not saved: the database took nothing. Are you still signed in as admin?');
+      say(report.id, field, 'Not saved: the database took nothing. Are you still signed in as admin?');
       return false;
     }
     onSaved?.();
     setReports((prev) => prev.map((r) => (r.id === report.id ? { ...r, ...patch } : r)));
-    say(report.id, 'Saved');
+    say(report.id, field, 'Saved');
     return true;
   };
 
@@ -172,7 +175,7 @@ const AdminReports = () => {
     pending.add(key);
     setSavingTriage(new Set(pending));
     try {
-      await save(report, patch, onSaved);
+      await save(report, field, patch, onSaved);
     } finally {
       pending.delete(key);
       setSavingTriage(new Set(pending));
@@ -212,7 +215,7 @@ const AdminReports = () => {
     const patch = noteUpdate(draft.note, draft.fixRef);
     setSavingNotes((prev) => new Set(prev).add(report.id));
     try {
-      if (await save(report, patch)) {
+      if (await save(report, 'note', patch)) {
         setDrafts((prev) => {
           const current = prev[report.id];
           if (current && (current.note !== draft.note || current.fixRef !== draft.fixRef)) return prev;
@@ -402,7 +405,13 @@ const AdminReports = () => {
               const statusSaving = savingTriage.has(report.id + ':status');
               const prioritySaving = savingTriage.has(report.id + ':priority');
               const unsavedNote = draft.note !== (report.admin_note ?? '') || draft.fixRef !== (report.fix_ref ?? '');
-              const message = noteSaving ? 'Saving...' : messages[report.id];
+              const savedMessages = messages[report.id];
+              const feedback = [
+                { label: 'Note', message: savedMessages?.note === 'Saved' && unsavedNote
+                  ? 'Earlier changes saved. You have unsaved edits.' : savedMessages?.note },
+                { label: 'Status', message: savedMessages?.status },
+                { label: 'Priority', message: savedMessages?.priority },
+              ];
               return (
               <div
                 key={report.id}
@@ -537,14 +546,21 @@ const AdminReports = () => {
                     Save note
                   </button>
                 </div>
-                {message && (
+                {feedback.map(({ label, message }) => message && (
                   <p
-                    className={cn('mt-2 text-xs', message.startsWith('Not saved') ? 'text-destructive' : 'text-muted-foreground')}
+                    key={label}
+                    className={cn(
+                      'mt-2 break-words text-xs',
+                      message.startsWith('Not saved') ? 'text-destructive' : 'text-muted-foreground',
+                      label !== 'Note' && message === 'Saving...' && 'sr-only',
+                    )}
                     role="status"
+                    aria-label={`${label} save`}
                   >
-                    {message === 'Saved' && unsavedNote ? 'Earlier changes saved. You have unsaved edits.' : message}
+                    {label !== 'Note' && <span className="font-medium">{label} · </span>}
+                    {message}
                   </p>
-                )}
+                ))}
               </div>
               );
             })}
