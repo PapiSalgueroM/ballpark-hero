@@ -179,7 +179,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
             heading: "Reaching the simulated playoffs",
             items: [
               "Win 55 games or more to reach the simulated playoffs.",
-              "Standard rotation keeps your usual team strength each game. Lean on starters gives your starting five more weight in Games 1–4 of each series, with an early edge that depends on how they compare with your sixth man. That edge becomes a fatigue cost in Games 5–7.",
+              "Standard rotation keeps your usual team strength each game. Lean on starters gives your starting five more weight in Games 1 through 4 of each series, with an early edge that depends on how they compare with your sixth man. That edge becomes a fatigue cost in Games 5 through 7.",
               "The game saves one playoff result per run. Daily plays its usual bracket automatically.",
             ],
           },
