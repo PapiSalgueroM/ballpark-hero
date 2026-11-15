@@ -616,6 +616,14 @@ for (const width of [320, 390, 430, 1440]) {
       && Math.abs(heading.getBoundingClientRect().top - parseFloat(getComputedStyle(heading).scrollMarginTop)) <= 3
       && localStorage.getItem('dukb-fav-sport') === null);
     say(entered, width + 'px header selection focuses Rugby League and keeps the sport order');
+    await page.goBack();
+    const returned = await trigger.evaluate(button => document.activeElement === button && !location.hash && scrollY === 0);
+    say(returned, width + 'px browser Back restores the Browse sports button and its scroll position');
+    await page.goForward();
+    const advanced = await target.evaluate(heading => document.activeElement === heading
+      && location.hash === '#sport-rugby'
+      && Math.abs(heading.getBoundingClientRect().top - parseFloat(getComputedStyle(heading).scrollMarginTop)) <= 3);
+    say(advanced, width + 'px browser Forward restores the selected sport heading');
   } finally {
     await ctx.close();
   }

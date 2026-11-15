@@ -1,4 +1,5 @@
 import { Star } from 'lucide-react';
+import type { MouseEventHandler } from 'react';
 import { cn } from '@/lib/utils';
 import { SPORT_NAME, type SportKey } from '@/data/homeFront';
 import { SportGlyph, sportStyle } from './SportGlyph';
@@ -12,10 +13,11 @@ export const browseSportName = (sport: SportKey) => (sport === 'world' ? 'World 
  * The index sits above the sections it reorders, so toggling a star keeps the
  * control in place.
  */
-export function FavouriteSport({ sports, value, onPick }: {
+export function FavouriteSport({ sports, value, onPick, onJump }: {
   sports: readonly SportKey[];
   value: SportKey | null;
   onPick: (sport: SportKey | null) => void;
+  onJump: MouseEventHandler<HTMLAnchorElement>;
 }) {
   return (
     <nav aria-labelledby="browse-sports-heading" data-home-fav-sport="" className="mt-2">
@@ -28,6 +30,8 @@ export function FavouriteSport({ sports, value, onPick }: {
             <li key={sport} className="flex min-w-0 items-stretch border-b border-border">
               <a
                 href={`#sport-${sport}`}
+                id={`home-sport-index-${sport}`}
+                onClick={onJump}
                 style={sportStyle(sport)}
                 className="flex min-h-11 min-w-0 flex-1 items-center gap-1.5 rounded px-1 text-xs font-semibold leading-tight text-foreground hover:text-primary focus-visible:outline-primary sm:px-2"
               >

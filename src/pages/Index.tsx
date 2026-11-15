@@ -1,6 +1,6 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, useDeferredValue, lazy, memo, Suspense, type MouseEvent, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Link, useLocation, useNavigationType } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin, ArrowUp } from 'lucide-react';
 import { loadSupabase } from '@/integrations/supabase/loadClient';
 import PageSeo from '@/components/seo/PageSeo';
@@ -74,6 +74,13 @@ const RECENT_GAME_LINK = '[data-home-shipped] [data-home-game-card] a[href]';
 const HOME_GAME_SHELVES = [CATALOGUE_GAME_LINK, CONTINUE_GAME_LINK, PICK_GAME_LINK, FEATURED_GAME_LINK, NRL_GAME_LINK, POPULAR_GAME_LINK, RECENT_GAME_LINK];
 type GameReturn = { query: string; sport?: SportKey | ''; path: string; selector: string; shelfScroll?: number };
 const gameReturns = new Map<string, GameReturn>();
+const BROWSE_SPORTS_TRIGGER = 'home-browse-sports-trigger';
+const sportReturns = new Map<string, { top: number; opener: string }>();
+
+function revealSport(target: HTMLElement) {
+  target.scrollIntoView({ block: 'start', behavior: 'instant' });
+  target.focus({ preventScroll: true });
+}
 
 function getPopularFallbackGames(): GameDef[] {
   const all = VISIBLE_CATEGORIES.flatMap(c => c.games);
@@ -98,8 +105,38 @@ export default function Index() {
   const playerName = useMemo(() => getCurrentPlayerName(profile), [profile]);
   const accountId = user?.id ?? null;
   const canReadPersonal = !!accountId && profile?.user_id === accountId;
-  const { key: homeEntry } = useLocation();
+  const { key: homeEntry, hash, search, state } = useLocation();
+  const navigate = useNavigate();
   const navigationType = useNavigationType();
+  const previousHomeEntry = useRef(homeEntry);
+  const jumpToSport = useCallback((event: MouseEvent<HTMLAnchorElement>, opener = event.currentTarget.id) => {
+    if (event.defaultPrevented || event.button !== 0 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    const nextHash = event.currentTarget.hash;
+    const target = document.getElementById(nextHash.slice(1));
+    if (!target) return;
+    event.preventDefault();
+    if (nextHash === hash) {
+      revealSport(target);
+      return;
+    }
+    sportReturns.delete(homeEntry);
+    sportReturns.set(homeEntry, { top: window.scrollY, opener });
+    if (sportReturns.size > 20) sportReturns.delete(sportReturns.keys().next().value);
+    navigate({ search, hash: nextHash }, { state: { homeSportAnchor: nextHash } });
+  }, [hash, homeEntry, navigate, search]);
+  useLayoutEffect(() => {
+    // New Home mounts already handle direct anchors and returns from games.
+    if (previousHomeEntry.current === homeEntry) return;
+    previousHomeEntry.current = homeEntry;
+    const returned = navigationType === 'POP' && sportReturns.get(homeEntry);
+    if (returned) {
+      window.scrollTo({ top: returned.top, behavior: 'instant' });
+      document.getElementById(returned.opener)?.focus({ preventScroll: true });
+    } else if (state?.homeSportAnchor === hash) {
+      const target = document.getElementById(hash.slice(1));
+      if (target) revealSport(target);
+    }
+  }, [hash, homeEntry, navigationType, state]);
   const [gameReturn] = useState(() => navigationType === 'POP' ? gameReturns.get(homeEntry) : undefined);
   const popularReturnPath = gameReturn?.selector === POPULAR_GAME_LINK ? gameReturn.path : undefined;
   const [searchQuery, setSearchQuery] = useState(gameReturn?.query ?? '');
@@ -396,7 +433,7 @@ export default function Index() {
         <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="scroll-mt-36 focus-visible:outline-primary sm:scroll-mt-28">
           <div className="rounded-xl border border-border bg-surface-1 p-3 lg:sticky lg:top-28 lg:max-h-[calc(100dvh-8rem)] lg:overflow-y-auto xl:p-4">
             <h2 id="browse-sports-heading" className="font-display text-lg font-bold">Browse sports</h2>
-            <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} />
+            <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} onJump={jumpToSport} />
             <p className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">
               <Pin aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
               Pin a game to keep it in Your picks on Home.
@@ -431,7 +468,7 @@ export default function Index() {
                       Hub
                     </Link>
                   )}
-                  <a href="#browse-sports" className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground hover:text-primary focus-visible:outline-primary">
+                  <a id={`home-all-sports-${CATEGORY_SPORT[cat.title]}`} href="#browse-sports" onClick={jumpToSport} className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground hover:text-primary focus-visible:outline-primary">
                     All sports <ArrowUp aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
                   </a>
                 </div>
@@ -446,7 +483,7 @@ export default function Index() {
         </div>
       </div>
     </div>
-  ), [badgeDate, bestScores, favSport, gamePicks, pickSport, pickableSports, popularReturnPath, sportSections, toggleGamePick, user]);
+  ), [badgeDate, bestScores, favSport, gamePicks, jumpToSport, pickSport, pickableSports, popularReturnPath, sportSections, toggleGamePick, user]);
 
   return (
     <>
@@ -577,7 +614,7 @@ export default function Index() {
               </div>
               {!isSearching && (
                 <Popover open={sportsOpen} onOpenChange={setSportsOpen}>
-                  <PopoverTrigger className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xl border border-border bg-surface-1 px-2 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:text-primary focus-visible:outline-primary sm:gap-1.5 sm:px-3">
+                  <PopoverTrigger id={BROWSE_SPORTS_TRIGGER} className="inline-flex min-h-11 shrink-0 items-center gap-1 rounded-xl border border-border bg-surface-1 px-2 text-sm font-semibold text-foreground transition-colors hover:border-primary/50 hover:text-primary focus-visible:outline-primary sm:gap-1.5 sm:px-3">
                     Browse sports <ChevronDown aria-hidden="true" className="h-4 w-4 text-primary" />
                   </PopoverTrigger>
                   <PopoverContent
@@ -595,7 +632,7 @@ export default function Index() {
                         const sport = CATEGORY_SPORT[category.title];
                         return (
                           <li key={sport}>
-                            <a href={`#sport-${sport}`} onClick={() => setSportsOpen(false)} style={sportStyle(sport)} className="flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-medium hover:bg-accent focus-visible:bg-accent focus-visible:outline-primary">
+                            <a href={`#sport-${sport}`} onClick={event => { jumpToSport(event, BROWSE_SPORTS_TRIGGER); setSportsOpen(false); }} style={sportStyle(sport)} className="flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-medium hover:bg-accent focus-visible:bg-accent focus-visible:outline-primary">
                               <SportGlyph sport={sport} className="h-4 w-4 shrink-0 text-tile" />
                               {browseSportName(sport)}
                             </a>
