@@ -73,6 +73,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "The Academy tab and its graduates",
         items: [
           "Open the Academy tab to run your youth academy beside the stadium.",
+          "If a prospect's fee falls while you press Sell, press Sell again to accept the updated fee.",
           "Open Coaching to focus on one prospect. Up to 15 percent of the other prospects' training gains go to him, and any gain he cannot use stays with the others. For example, two one-point gains can each become 0.85, giving the focus prospect an extra 0.30. Balanced training restores the usual shares.",
         ],
         subsections: [

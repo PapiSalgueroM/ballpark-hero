@@ -205,7 +205,11 @@ function advanceSaleTick() {
   act(academyTicks[0]);
 }
 
-it.each([false, true])('asks for a fresh sale after Deadline Day lowers the held quote (Stadium: %s)', async stadium => {
+it.each([
+  { stadium: false, keyboard: false },
+  { stadium: true, keyboard: false },
+  { stadium: false, keyboard: true },
+])('asks for a fresh sale after Deadline Day lowers the held quote (Stadium: $stadium, keyboard: $keyboard)', async ({ stadium, keyboard }) => {
   const academy = saleFixture(DEADLINE_EVERY + DEADLINE_SEC - 0.25);
   const kid = academy.prospects[0];
   expect(academy.deadlineLeft).toBe(0.25);
@@ -214,11 +218,17 @@ it.each([false, true])('asks for a fresh sale after Deadline Day lowers the held
   const { academy: view, button, sell } = await openQuotedSale(stadium, 357);
   const before = save();
 
-  touch(sell, 'pointerdown');
+  const press = (target: HTMLElement) => keyboard
+    ? fireEvent.keyDown(target, { key: ' ' }) : touch(target, 'pointerdown');
+  const release = (target: HTMLElement) => {
+    if (keyboard) fireEvent.keyUp(target, { key: ' ' });
+    else touch(target, 'pointerup');
+    fireEvent.click(target, { detail: keyboard ? 0 : 1 });
+  };
+  press(sell);
   advanceSaleTick();
   expect(button(238)).toBe(sell);
-  touch(sell, 'pointerup');
-  fireEvent.click(sell, { detail: 1 });
+  release(sell);
 
   expect(save()).toBe(before);
   expect(recordCompletion).not.toHaveBeenCalled();
@@ -226,9 +236,8 @@ it.each([false, true])('asks for a fresh sale after Deadline Day lowers the held
   expect(view.getByText('The sale price fell to $238. Choose Sell again to accept.')).toBeVisible();
 
   const retry = button(238);
-  touch(retry, 'pointerdown');
-  touch(retry, 'pointerup');
-  fireEvent.click(retry, { detail: 1 });
+  press(retry);
+  release(retry);
   const sold = deserialize(save(), now + 250)!;
   expect(sold.cash).toBe(238);
   expect(sold.sold).toBe(1);

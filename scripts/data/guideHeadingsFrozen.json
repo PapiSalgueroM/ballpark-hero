@@ -3524,6 +3524,7 @@
         "Open a penalty or free-kick offer during a watched match. You have twelve seconds to open it, then choose your aim, power and curve while the match clock keeps running. Opening uses that match's one attempt, even if you leave or reload.",
         "When lifetime earnings fill the yellow bar, sell up and move grounds: the club resets, but Reputation stars (plus 50 percent income each, forever), your badges and your club records all survive.",
         "Open the Academy tab to run your youth academy beside the stadium.",
+        "If a prospect's fee falls while you press Sell, press Sell again to accept the updated fee.",
         "Open Coaching to focus on one prospect. Up to 15 percent of the other prospects' training gains go to him, and any gain he cannot use stays with the others. For example, two one-point gains can each become 0.85, giving the focus prospect an extra 0.30. Balanced training restores the usual shares.",
         "Promote academy players aged 18 to 23 into five first-team places. A graduate frees his bed, keeps developing and helps reduce the opposition's scoring chances. Open First team in the Academy to compare his current fee with the fee at his next birthday.",
         "League titles earn fictional boots and kit upgrades. Open First team, then Boot room, to equip a graduate or improve a pair. Boots add to match rating for defense while leaving every transfer fee unchanged. Move a pair to another player whenever you like; it stays with the club when its wearer leaves."
@@ -3796,6 +3797,7 @@
         "Wait for the scouts: kids arrive on their own, faster with every Scouting network level.",
         "Watch each kid grow toward his hidden ceiling. Scouting level 3 reads the ceiling as a range, level 6 reads it exactly, and a kid from a pack arrives with his tier's band already known.",
         "Press Sell on a kid when the price looks right. The fee is quoted live on his card.",
+        "If the fee falls while you press Sell, the player stays in your academy. Press Sell again to accept the updated fee.",
         "From age 18 to 23, you can promote a kid into one of five first-team places instead. Promotion frees his bed without paying a fee. Open First team to select a graduate, see his next birthday and decide when to sell him.",
         "Titles at Stadium Tycoon earn fictional boots and kit upgrades. Open the Boot room from First team to choose a wearer, move a pair or improve its level. Boots add to match rating for the defensive edge, without changing the player's transfer fee. Your collection survives sales, retirement and moving either ground.",
         "Spend the cash on Scouting, Coaching, Dorms and the Agent office. Costs climb with every level.",

@@ -8,7 +8,7 @@ export default function AcademyProspects({ s, doSell, doPromote }: {
   doSell: (id: number, minimumPrice: number) => 'price-changed' | void;
   doPromote: (id: number) => void;
 }) {
-  const pressedSale = useRef<{ id: number; pointerId: number; price: number } | null>(null);
+  const pressedSale = useRef<{ id: number; pointerId?: number; price: number } | null>(null);
   const [lowerQuoteId, setLowerQuoteId] = useState<number | null>(null);
 
   return (
@@ -50,10 +50,18 @@ export default function AcademyProspects({ s, doSell, doPromote }: {
               onPointerCancel={(event) => {
                 if (pressedSale.current?.pointerId === event.pointerId) pressedSale.current = null;
               }}
+              onKeyDown={(event) => {
+                if (event.key === ' ' && !event.repeat) pressedSale.current = { id: p.id, price };
+                else if (event.key === 'Enter') pressedSale.current = null;
+              }}
+              onBlur={() => {
+                if (pressedSale.current?.id === p.id) pressedSale.current = null;
+              }}
               onClick={(event) => {
                 const press = pressedSale.current;
                 pressedSale.current = null;
-                const minimumPrice = event.detail > 0 && press?.id === p.id ? press.price : price;
+                const sameInput = (event.detail > 0) === (press?.pointerId !== undefined);
+                const minimumPrice = sameInput && press?.id === p.id ? press.price : price;
                 setLowerQuoteId(doSell(p.id, minimumPrice) === 'price-changed' ? p.id : null);
               }}
               className="mt-2 w-full rounded-lg bg-primary text-primary-foreground text-xs font-bold py-2 hover:opacity-90 transition-opacity"
