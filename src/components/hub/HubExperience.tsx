@@ -1,6 +1,6 @@
 import { useEffect, useId, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { Link, useLocation, useNavigate, useNavigationType, useSearchParams } from 'react-router-dom';
-import { ArrowUpRight, CalendarDays, Gamepad2, Search, Shuffle, X } from 'lucide-react';
+import { ArrowUpRight, CalendarDays, ChevronDown, Gamepad2, Search, Shuffle, X } from 'lucide-react';
 import type { GameDef } from '@/data/gameRegistry';
 import { describeSave, savedGames } from '@/data/continueSaves';
 import { useGamePicks } from '@/hooks/useGamePicks';
@@ -69,6 +69,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
   const setFilter = (nextFilter: HubFilter) => setLibrary(nextFilter);
   const setQuery = (nextQuery: string) => setLibrary(undefined, nextQuery);
   const searchRef = useRef<HTMLInputElement>(null);
+  const libraryHeadingRef = useRef<HTMLHeadingElement>(null);
   const [saveRevision, setSaveRevision] = useState(0);
   useEffect(() => {
     const refresh = () => setSaveRevision(value => value + 1);
@@ -129,9 +130,15 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
           <h1 className="font-display">{hub.h1}</h1>
           <p className={styles.tagline}>{arena.line}</p>
           <p className={styles.welcome}>All {games.length} of them in one place. Every one is free with no sign-up.</p>
-          {first && <Link to={saved[0]?.path ?? first.path} className={styles.heroPlay}>
-            <Gamepad2 aria-hidden="true" />{saved[0] ? `Resume ${saved[0].label}` : `Play ${first.label}`}<ArrowUpRight aria-hidden="true" />
-          </Link>}
+          <div className={styles.arenaActions}>
+            {first && <Link to={saved[0]?.path ?? first.path} className={styles.heroPlay}>
+              <Gamepad2 aria-hidden="true" />{saved[0] ? `Resume ${saved[0].label}` : `Play ${first.label}`}<ArrowUpRight aria-hidden="true" />
+            </Link>}
+            <button type="button" className={styles.heroBrowse} onClick={() => {
+              libraryHeadingRef.current?.focus({ preventScroll: true });
+              libraryHeadingRef.current?.scrollIntoView({ block: 'start', behavior: 'instant' });
+            }}>Browse games<ChevronDown aria-hidden="true" /></button>
+          </div>
         </div>
         <div className={styles.arenaScoreboard} aria-label="Available games">
           <span><b>{games.length}</b> games</span><span><b>{dailyCount}</b> daily puzzles</span>
@@ -147,7 +154,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
 
       <section className={styles.library} aria-label={`${hub.navLabel} game library`}>
         <div className={styles.libraryTop}>
-          <div><h2 className="font-display">What are you playing?</h2><p>{hub.intro}</p></div>
+          <div><h2 ref={libraryHeadingRef} tabIndex={-1} className="font-display">What are you playing?</h2><p>{hub.intro}</p></div>
           <button className={styles.shuffle} disabled={visible.length === 0} onClick={() => {
             const game = visible[Math.floor(Math.random() * visible.length)];
             if (game) navigate(game.path);
