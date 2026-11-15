@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { isAuthRetryableFetchError } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import type { Tables } from '@/integrations/supabase/types';
 import { LogOut, Loader2, Flag } from 'lucide-react';
@@ -7,6 +8,7 @@ import { fetchAllRows } from '@/lib/fetchAllRows';
 import { cn } from '@/lib/utils';
 import { Helmet } from 'react-helmet-async';
 import {
+  ADMIN_ACCESS_RETRY_MESSAGE,
   ALL_GAMES,
   CRITICAL_EXAMPLES,
   FIX_REF_MAX,
@@ -61,7 +63,7 @@ const PRIORITY_STYLE: Record<ReportPriority, string> = {
 const AdminReports = () => {
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<{ source: 'access' | 'reports'; message: string } | null>(null);
   const [filter, setFilter] = useState<StatusFilter>('open');
   const [game, setGame] = useState<string>(ALL_GAMES);
   const [search, setSearch] = useState('');
@@ -83,39 +85,52 @@ const AdminReports = () => {
 
   const checkAuth = async () => {
     const login = { pathname: '/admin/login', hash: reportHash };
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (isAuthRetryableFetchError(userError) || userError?.code === 'request_timeout') return 'retry';
     if (!user) {
       navigate(login);
-      return false;
+      return 'denied';
     }
-    const { data: roles } = await supabase
+    const { data: roles, error: roleError } = await supabase
       .from('user_roles' as any)
       .select('role')
       .eq('user_id', user.id)
       .eq('role', 'admin') as any;
+    if (roleError) return 'retry';
     if (!roles?.length) {
       await supabase.auth.signOut();
       navigate(login);
-      return false;
+      return 'denied';
     }
-    return true;
+    return 'allowed';
   };
 
   const fetchReports = async () => {
     setLoading(true);
-    if (!await checkAuth()) return;
+    const access = await checkAuth();
+    if (access === 'denied') return;
+    if (access === 'retry') {
+      setReports([]);
+      setLoadError({ source: 'access', message: ADMIN_ACCESS_RETRY_MESSAGE });
+      setLoading(false);
+      return;
+    }
     const { data, error } = await fetchAllRows<Report>((from, to) => supabase
       .from('question_reports')
       .select('*')
       .order('created_at', { ascending: false })
       .order('id', { ascending: false })
       .range(from, to));
-    setLoadError(error ? (typeof error === 'object' && 'message' in error ? String(error.message) : String(error)) : null);
+    setLoadError(error ? {
+      source: 'reports',
+      message: `Could not load every report. ${typeof error === 'object' && 'message' in error ? String(error.message) : String(error)}`,
+    } : null);
     setReports(data);
     setLoading(false);
   };
 
   const withColumns = hasTriageColumns(reports);
+  const accessFailed = loadError?.source === 'access';
 
   const say = (id: string, text: string) => setMessages((prev) => ({ ...prev, [id]: text }));
 
@@ -211,13 +226,13 @@ const AdminReports = () => {
           <Link ref={backToQueueRef} to="/admin/reports" className="mb-3 inline-flex min-h-11 items-center text-sm font-medium text-primary hover:underline">
             Back to report queue
           </Link>
-        ) : (
+        ) : !accessFailed && (
           <p className="text-sm text-muted-foreground mb-5" data-testid="triage-summary">
             {counts.open} open{game ? ` for ${game}` : ''}, {critical} critical still open. Critical means {CRITICAL_EXAMPLES}.
           </p>
         )}
 
-        {!loading && !withColumns && (
+        {!loading && !withColumns && !accessFailed && (
           <div className="mb-5 rounded-lg border border-border bg-secondary/60 p-3 text-sm text-foreground" data-testid="triage-pending">
             The status, priority and note columns are not in the database yet (migration
             20260930_round_713_report_triage.sql). Until it runs, the status box offers Open
@@ -227,14 +242,14 @@ const AdminReports = () => {
         )}
         {!loading && loadError && (
           <div className="mb-5 rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
-            <p role="alert">Could not load every report. {loadError}</p>
+            <p role="alert">{loadError.message}</p>
             <button type="button" className="mt-2 min-h-11 rounded-lg bg-secondary px-3 text-foreground" onClick={() => void fetchReports()}>
-              Retry loading reports
+              {accessFailed ? 'Retry access check' : 'Retry loading reports'}
             </button>
           </div>
         )}
 
-        {!reportId && <>
+        {!reportId && !accessFailed && <>
         <div className="mb-3 grid gap-3 sm:grid-cols-[minmax(0,1fr)_12rem]">
           <label className="block text-xs font-medium text-muted-foreground">
             Search reports

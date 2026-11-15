@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { isAuthRetryableFetchError } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2, LogIn } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
-import { linkedReportHash } from '@/lib/reportTriage';
+import { ADMIN_ACCESS_RETRY_MESSAGE, linkedReportHash } from '@/lib/reportTriage';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -22,15 +23,17 @@ const AdminLogin = () => {
       if (authError) throw authError;
 
       // Check admin role
-      const { data: { user } } = await supabase.auth.getUser();
+      const { data: { user }, error: userError } = await supabase.auth.getUser();
+      if (isAuthRetryableFetchError(userError) || userError?.code === 'request_timeout') throw new Error(ADMIN_ACCESS_RETRY_MESSAGE);
       if (!user) throw new Error('Not authenticated');
 
-      const { data: roles } = await supabase
+      const { data: roles, error: roleError } = await supabase
         .from('user_roles' as any)
         .select('role')
         .eq('user_id', user.id)
         .eq('role', 'admin') as any;
 
+      if (roleError) throw new Error(ADMIN_ACCESS_RETRY_MESSAGE);
       if (!roles?.length) {
         await supabase.auth.signOut();
         throw new Error('You do not have admin access.');
@@ -72,7 +75,7 @@ const AdminLogin = () => {
           required
           className="w-full rounded-xl border border-border bg-background px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
         />
-        {error && <p className="text-xs text-destructive text-center">{error}</p>}
+        {error && <p role="alert" className="text-xs text-destructive text-center">{error}</p>}
         <button
           type="submit"
           disabled={loading}
