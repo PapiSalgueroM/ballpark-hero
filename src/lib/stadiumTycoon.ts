@@ -478,6 +478,7 @@ export function startingMoneyOf(s: TycoonState): number {
 export interface TycoonState {
   v: number;
   matchPlan?: MatchPlan & { match: number };
+  scouting?: MatchScouting & { match: number };
   /** Absence is the original Standard offer. A new ground starts Standard. */
   ticketPolicy?: 'community' | 'premium';
   money: number;
@@ -723,7 +724,7 @@ export interface TycoonLeague {
   baseMatchNo?: number;
   /** Index 0 is you. */
   clubs: LeagueClub[];
-  results?: { day: number; gf: number; ga: number; attendance?: number; plan?: MatchPlan }[];
+  results?: { day: number; gf: number; ga: number; attendance?: number; plan?: MatchPlan; scouting?: MatchScouting }[];
   sponsor?: StadiumSponsorDeal;
   /** An older save's match in progress when it first loaded: played to full
    *  time against this name, outside the table, before matchday 1. */
@@ -972,7 +973,12 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
   }
   const matchday = lg.matchday + 1;
   const plan = st.matchPlan;
-  const result = { day: matchday, gf, ga, attendance: crowdAtFullTime, ...(plan ? { plan: { minute: plan.minute, kind: plan.kind } } : {}) };
+  const scouting = activeMatchScouting(st);
+  const result = {
+    day: matchday, gf, ga, attendance: crowdAtFullTime,
+    ...(plan ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
+    ...(scouting ? { scouting: { fee: scouting.fee, reduction: scouting.reduction } } : {}),
+  };
   const played: TycoonLeague = { ...lg, clubs, matchday, results: [...(lg.results ?? []), result] };
   if (lg.sponsor?.kind === 'attendance' && crowdAtFullTime >= lg.sponsor.target) {
     played.sponsor = { ...lg.sponsor, qualifying: lg.sponsor.qualifying + 1 };
@@ -1230,6 +1236,48 @@ export function matchPlanForecast(s: TycoonState, edge: number, kind?: MatchPlan
   return { goalsFor: goalChancePerMin(s) * pace * minutes, goalsAgainst: oppChancePerMin(s, edge) * pace * minutes };
 }
 
+const SCOUTING_COST_SEC = 24;
+export const SCOUTING_REDUCTION = 10;
+type MatchScouting = { fee: number; reduction: number };
+
+function validScouting(value: unknown): value is MatchScouting {
+  if (!value || typeof value !== 'object') return false;
+  const scout = value as Partial<MatchScouting>;
+  return typeof scout.fee === 'number' && Number.isSafeInteger(scout.fee) && scout.fee > 0
+    && scout.reduction === SCOUTING_REDUCTION;
+}
+
+function scoutingRound(s: TycoonState, match: number): number | null {
+  const lg = s.league;
+  if (!lg || !Number.isSafeInteger(match)) return null;
+  const offset = match - s.matchNo;
+  if (offset < 0 || offset > 1 || (offset === 0 && lg.carryover)) return null;
+  const round = lg.matchday + Number(offset === 1 && !lg.carryover);
+  return round < leagueShape(lg.division).matchdays ? round : null;
+}
+
+export function matchScoutingDetails(s: TycoonState) {
+  const lg = s.league;
+  const match = s.scouting?.match ?? s.matchNo + 1;
+  const round = scoutingRound(s, match);
+  if (!lg || round === null) return null;
+  const fee = s.scouting?.fee
+    ?? Math.min(Number.MAX_SAFE_INTEGER, Math.max(1, Math.round(unboostedIncomePerSec(s) * SCOUTING_COST_SEC)));
+  return { match, day: round + 1, opponent: lg.clubs[yourOpponentIndex(lg, round)].name, fee,
+    reduction: s.scouting?.reduction ?? SCOUTING_REDUCTION };
+}
+
+export function bookMatchScouting(s: TycoonState, ground: number, match: number, fee: number): TycoonState {
+  if (s.rep !== ground || s.scouting) return s;
+  const offer = matchScoutingDetails(s);
+  if (!offer || offer.match !== match || offer.fee !== fee || s.money < fee) return s;
+  return { ...s, money: s.money - fee, scouting: { match, fee, reduction: offer.reduction } };
+}
+
+function activeMatchScouting(s: TycoonState): MatchScouting | undefined {
+  return s.league && !s.league.carryover && s.scouting?.match === s.matchNo ? s.scouting : undefined;
+}
+
 export function goalChancePerMin(s: TycoonState): number {
   return goalLambda(matchGap(s), LAW.home) / 90;
 }
@@ -1241,7 +1289,9 @@ export function oppChancePerMin(s: TycoonState, edge = 0): number {
   // Round 586: the first team's edge takes exactly its share off the rival's
   // expected goals, with no floor after it, so every step of it counts.
   const defence = Number.isFinite(edge) ? Math.max(0, Math.min(0.40, edge)) : 0;
-  return goalLambda(-matchGap(s), LAW.away) * (1 - defence) / 90;
+  const chance = goalLambda(-matchGap(s), LAW.away) * (1 - defence) / 90;
+  const scout = activeMatchScouting(s);
+  return scout ? chance * (1 - scout.reduction / 100) : chance;
 }
 
 /** Round 1532: the law's numbers the rules quote, so the page never imports the
@@ -1446,6 +1496,7 @@ export function playMinute(st: TycoonState, roll: () => number, events: TickEven
         st.league = playMatchday(st, st.goalsFor, st.goalsAgainst, events, crowdAtFullTime);
       }
     }
+    if (st.scouting?.match === st.matchNo) delete st.scouting;
     st.matchNo += 1;
     delete st.matchPlan;
     st.totalMatches = (st.totalMatches ?? 0) + 1;
@@ -1753,10 +1804,11 @@ function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: n
       return true;
     }) && (['w', 'd', 'l', 'gf', 'ga'] as const).every(key => first === 1 ? tally[key] === own[key] : tally[key] <= own[key])) {
       const maxSeats = seatCount(trackById('stands').maxLevel);
-      out.results = r.results.map(({ day, gf, ga, attendance, plan }) => ({
+      out.results = r.results.map(({ day, gf, ga, attendance, plan, scouting }) => ({
         day, gf, ga,
         ...(typeof attendance === 'number' && Number.isInteger(attendance) && attendance >= 0 && attendance <= maxSeats ? { attendance } : {}),
         ...(validMatchPlan(plan) ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
+        ...(validScouting(scouting) ? { scouting: { fee: scouting.fee, reduction: scouting.reduction } } : {}),
       }));
     }
   }
@@ -1888,7 +1940,9 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
        the opponent it was already playing, outside the table. */
     const rawLeague = (p as { league?: unknown }).league;
     const plan = s.matchPlan;
+    const scouting = s.scouting;
     delete s.matchPlan;
+    delete s.scouting;
     delete s.lastCompletedLeague;
     delete s.completedLeagueHistory;
     if (rawLeague === undefined) {
@@ -1931,6 +1985,9 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
       }
       if (activeLeague && !activeLeague.carryover && validMatchPlan(plan) && plan.match === s.matchNo && plan.minute <= s.minute) {
         s.matchPlan = { match: plan.match, minute: plan.minute, kind: plan.kind };
+      }
+      if (activeLeague && validScouting(scouting) && scoutingRound(s, scouting.match) !== null) {
+        s.scouting = { match: scouting.match, fee: scouting.fee, reduction: scouting.reduction };
       }
     }
     return s;
