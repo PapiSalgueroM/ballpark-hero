@@ -80,6 +80,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Before assigning an academy scout, choose Balanced, Ready sooner for higher starting OVR, or Higher ceiling for more potential. Each report takes one round.',
       'Once per season, pay $60,000 in club cash to scout a second position while your first report is pending. Both reports arrive after you advance one round. Your salary cap stays the same.',
       'After the Grand Final, release one unsigned academy prospect into next season’s free-agent market or promote him to your own Top 30.',
+      'In Season review, keep one unsigned academy prospect for the next season if you stay at your club. They keep their trained position, and a later promotion uses the usual Top 30 and salary cap rules.',
       'Open State of Origin in the club office to coach New South Wales or Queensland through three games. You can nominate one eligible player from your club before starting, then pick your 13 starters, six reserves and tactic. The 2026 series uses the official dates and venues. Later schedules and all results are simulated.',
       'When starting State of Origin, choose the full eligible player pool to find any eligible player for the state you coach.',
       'Turn on Origin workload to use club fitness when your players start for your state. Plan recovery before their next club match.',

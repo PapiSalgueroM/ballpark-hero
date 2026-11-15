@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import { createNrlCareer, nrlAcademyReports, nrlCareerCap, nrlContractApproach, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
-import { createNrlSeason, NRL_SAVE_KEY } from '@/lib/nrlManager';
+import { createNrlSeason, NRL_DOMESTIC_SCORING_MODEL, NRL_SAVE_KEY } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
 
@@ -83,6 +83,41 @@ it('keeps default scouting on a legacy save without forcing a profile', () => {
   expect(screen.queryByLabelText('Scouting priority')).not.toBeInTheDocument();
   expect(screen.getByLabelText('Position to scout')).toBeVisible();
   expect(raw()).toBe(bytes);
+});
+
+it('previews an academy berth without saving, then reopens the prospect and offers normal promotion', () => {
+  const origin = createNrlCareer('panthers', 41);
+  let completed = reduceNrlCareer({ ...origin, season: { ...origin.season, domesticScoringModel: NRL_DOMESTIC_SCORING_MODEL } },
+    { type: 'scoutAcademy', role: 'Fullback' });
+  while (completed.season.phase !== 'complete') completed = reduceNrlCareer(completed, { type: 'advance' });
+  const player = nrlAcademyReports(completed)[0].player!;
+  const saved = JSON.stringify(completed);
+  const view = open(saved);
+  click('Season review');
+  const select = screen.getByLabelText('Keep one academy prospect for 2027');
+  expect(select).toHaveValue('');
+  fireEvent.change(select, { target: { value: player.id } });
+  expect(raw()).toBe(saved);
+  expect(localStorage.getItem(fence)).toBe('4');
+  click('Start 2027');
+  const retainedBytes = raw()!;
+  expect(readNrlCareerSave(retainedBytes)!.history[0].academyCarry).toEqual({ version: 1, player });
+  expect(localStorage.getItem(fence)).toBe('5');
+  view.unmount();
+  renderPage();
+  goAcademy();
+  expect(raw()).toBe(retainedBytes);
+  expect(localStorage.getItem(fence)).toBe('5');
+  const reports = within(screen.getByRole('list', { name: 'Academy reports' }));
+  expect(reports.getByText('Retained in the academy through 2027')).toBeVisible();
+  expect(reports.getByText(player.name)).toBeVisible();
+  click('Promote ' + player.name);
+  expect(reports.getByText('Signed for 2028')).toBeVisible();
+  expect(localStorage.getItem(fence)).toBe('6');
+  const staged = readNrlCareerSave(raw())!;
+  expect(staged.players.find(candidate => candidate.id === player.id)?.futureContract).toMatchObject({
+    clubId: 'panthers', startYear: 2028, endYear: 2028,
+  });
 });
 
 it('confirms the cost of a second scout and reveals both exact reports after reopening', () => {
