@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
+import { Fragment, lazy, Suspense, useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -14,6 +14,10 @@ const HomeArt = lazy(() => import('./art/HomeArt'));
 
 /** Save existence changes the invitation, never opens or rewrites a save. */
 const stageSaveKeys = new Set(HOME_STAGE.flatMap(entry => entry.saveKey ? [entry.saveKey] : []));
+const managerLinks = [
+  { path: '/nrl-team-manager', sport: 'rugby' },
+  { path: '/aussie-rules-manager', sport: 'aussie' },
+] as const;
 
 function stageSaves(storage: Storage | null): string[] {
   return [...stageSaveKeys].filter(key => {
@@ -29,7 +33,6 @@ export function FeaturedStage() {
     const game = ALL_GAMES.find(g => g.path === entry.path);
     return game ? [{ entry, game }] : [];
   }), []);
-  const rugbyManager = ALL_GAMES.find(game => game.path === '/nrl-team-manager');
   const [saved, setSaved] = useState(() => stageSaves(homeSaveStorage()));
   const refresh = useCallback((storage: Storage | null) => {
     const next = stageSaves(storage);
@@ -42,16 +45,27 @@ export function FeaturedStage() {
     <section aria-labelledby="home-stage-title" data-home-stage="" className={styles.deck}>
       <h2 id="home-stage-title" className="sr-only">Main event</h2>
       <div className={styles.games}>
-        {cards.map((card, index) => <StageCard key={card.game.path} card={card} lead={index === 0}
-          saved={!!card.entry.saveKey && saved.includes(card.entry.saveKey)} />)}
+        {cards.map((card, index) => (
+          <Fragment key={card.game.path}>
+            <StageCard card={card} lead={index === 0} saved={!!card.entry.saveKey && saved.includes(card.entry.saveKey)} />
+            {index === 0 && (
+              <div className={styles.managers}>
+                {managerLinks.map(({ path, sport }) => {
+                  const game = ALL_GAMES.find(candidate => candidate.path === path);
+                  return game && (
+                    <Link key={path} to={path} style={sportStyle(sport)} data-home-manager-launch={sport}
+                      data-home-nrl-launch={sport === 'rugby' ? '' : undefined} className={styles.managerLaunch}>
+                      <SportGlyph sport={sport} className={styles.managerGlyph} />
+                      <span>{game.label}</span>
+                      <ArrowRight aria-hidden="true" className={styles.launchArrow} />
+                    </Link>
+                  );
+                })}
+              </div>
+            )}
+          </Fragment>
+        ))}
       </div>
-      {rugbyManager && (
-        <Link to={rugbyManager.path} style={sportStyle('rugby')} data-home-nrl-launch="" className={styles.rugbyLaunch}>
-          <SportGlyph sport="rugby" className={styles.rugbyGlyph} />
-          <span>{rugbyManager.label}</span>
-          <ArrowRight aria-hidden="true" className={styles.launchArrow} />
-        </Link>
-      )}
     </section>
   );
 }
