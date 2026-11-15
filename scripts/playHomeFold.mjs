@@ -557,8 +557,8 @@ for (const width of [320, 390, 430, 1440]) {
 }
 
 console.log('8) the sport index jumps to a heading without changing the favourite');
-for (const width of [320, 390, 1440]) {
-  const ctx = await browser.newContext({ viewport: { width, height: 844 }, reducedMotion: 'reduce' });
+for (const [width, height] of [[320, 844], [390, 844], [1280, 250], [1440, 844]]) {
+  const ctx = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
   try {
     const page = await ctx.newPage();
     await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
@@ -566,6 +566,10 @@ for (const width of [320, 390, 1440]) {
     await page.goto(BASE + '/#browse-sports', { waitUntil: 'domcontentloaded' });
     const index = page.getByRole('navigation', { name: 'Browse sports' });
     const link = index.getByRole('link', { name: 'Rugby League', exact: true });
+    if (height === 250) {
+      const usable = await link.click({ trial: true, timeout: 5000 }).then(() => true, () => false);
+      say(usable, `${width} by ${height} desktop can scroll to and click Rugby League`);
+    }
     await link.focus();
     await link.press('Enter');
     const target = page.locator('#sport-rugby');
