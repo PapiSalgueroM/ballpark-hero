@@ -11396,7 +11396,7 @@ function generatePlayerMessage(state: CareerState, xi: CMPlayer[], won: boolean,
         text: pick(WANT_MOVE_TEXTS).replace('{P}', unhappy.name),
         options: [
           { label: 'You are going nowhere', effect: 'refuse' },
-          { label: 'Promise more minutes', effect: 'promise' },
+          { label: 'Promise him a start', effect: 'promise' },
           { label: 'Talk it through', effect: 'listen' },
         ],
       });
@@ -20678,23 +20678,21 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
        until he is fit enough to be picked. */
     const stillOwed: string[] = [];
     for (const id of promised) {
-      if (xiIdSet.has(id)) continue;
+      if (startedIds.has(id)) continue;
       const p = state.squad.find(x => x.id === id);
       if (!p) continue;
       if (!fitAtKickoff.has(id)) { stillOwed.push(id); continue; }
-      if (p && isAvailable(p)) {
-        p.morale = clamp(p.morale - 14, 5, 99);
-        pushMessage(state, {
-          playerName: p.name,
-          playerId: p.id,
-          kind: 'drama',
-          /* Round 137: the broken promise is the football event, so the name
-             stays. What he did about it afterwards was invented, so it goes. */
-          text: `You promised ${p.name} a start and he was not on the teamsheet. He noticed, and so did the dressing room.`,
-          options: [],
-          resolved: 'He will remember this.',
-        });
-      }
+      p.morale = clamp(p.morale - 14, 5, 99);
+      pushMessage(state, {
+        playerName: p.name,
+        playerId: p.id,
+        kind: 'drama',
+        /* Round 137: the broken promise is the football event, so the name
+           stays. What he did about it afterwards was invented, so it goes. */
+        text: `You promised ${p.name} a start and left him out of the starting lineup. He noticed, and so did the dressing room.`,
+        options: [],
+        resolved: 'He will remember this.',
+      });
     }
     state.promisedStarts = stillOwed;
   }
