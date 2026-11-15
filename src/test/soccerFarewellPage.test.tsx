@@ -148,7 +148,7 @@ afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstub
 describe('Soccer farewell real page actions', () => {
   it('saves one next-year announcement for two captured confirmation clicks without playing or drawing', () => {
     const view = mount(senior()), before = read();
-    const expectedDraws = tape(), expected = copy(E.announceFarewellSeason(copy(before), E.FALLBACK_CLUBS));
+    const expectedDraws = tape(), expected = copy(E.announceFarewellSeason({ ...copy(before), inSeasonRatings: true }, E.FALLBACK_CLUBS));
     expect(expectedDraws).toEqual([]); expect(readSoccerFarewell(expected)?.year).toBe(2027);
     const actualDraws = tape(); twice(confirmFarewell());
     expect(read()).toEqual(expected); expect(actualDraws).toEqual(expectedDraws);
@@ -159,7 +159,7 @@ describe('Soccer farewell real page actions', () => {
   });
   it('plays one complete final year and draw vector for two captured Next Season clicks', () => {
     const view = mount(announceSoccerFarewell(senior())), before = read();
-    const expectedDraws = tape(), expected = copy(E.advanceProSeason(copy(before), E.FALLBACK_CLUBS));
+    const expectedDraws = tape(), expected = copy(E.advanceProSeason(copy(before), E.FALLBACK_CLUBS, true));
     expect(expected.seasons).toHaveLength(before.seasons.length + 1);
     expect(lastRow(expected)?.year).toBe(2027); expect(expectedDraws.length).toBeGreaterThan(0);
     const actualDraws = tape(); twice(nextButton(view));
@@ -193,7 +193,7 @@ describe('Soccer farewell real page actions', () => {
     expect(read()).toEqual(before);
     const expectedDraws = tape(), banked = closeSeasonMoments(copy(before), E.FALLBACK_CLUBS);
     expect(readSeasonMoments(banked.seasonMoments)?.banked).toBe(1);
-    const expected = copy(E.advanceProSeason(banked, E.FALLBACK_CLUBS));
+    const expected = copy(E.advanceProSeason(banked, E.FALLBACK_CLUBS, true));
     const actualStacks: string[] = [], actualDraws = tape(12345, actualStacks), button = nextButton(view);
     await act(async () => {
       fireEvent.click(button); fireEvent.click(button);
@@ -221,7 +221,7 @@ describe('Soccer farewell real page actions', () => {
     const view = mount(suggestion()), before = read();
     expect(view.getByRole('button', { name: /Hang Up the Boots: Retire/ })).toBeEnabled();
     expect(view.getByRole('button', { name: /Not Done Yet: Keep Playing/ })).toBeEnabled();
-    const expectedDraws = tape(), expected = copy(E.announceFarewellSeason(copy(before), E.FALLBACK_CLUBS));
+    const expectedDraws = tape(), expected = copy(E.announceFarewellSeason({ ...copy(before), inSeasonRatings: true }, E.FALLBACK_CLUBS));
     expect(expected.age).toBe(30); expect(expected.seasons).toHaveLength(before.seasons.length + 1);
     expect(lastRow(expected)?.year).toBe(2027); expect(lastRow(expected)?.age).toBe(30);
     confirmFarewell(); const capturedAction = pageAction.announce;
@@ -245,7 +245,7 @@ describe('Soccer farewell real page actions', () => {
   });
   it('keeps the original Keep Playing transition and complete draw vector without opting in', () => {
     const view = mount(suggestion()), before = read();
-    const expectedDraws = tape(), expected = copy(E.declineRetirementSuggestion(copy(before), E.FALLBACK_CLUBS));
+    const expectedDraws = tape(), expected = copy(E.declineRetirementSuggestion({ ...copy(before), inSeasonRatings: true }, E.FALLBACK_CLUBS));
     const actualDraws = tape(); fireEvent.click(view.getByRole('button', { name: /Not Done Yet: Keep Playing/ }));
     expect(read()).toEqual(expected); expect(actualDraws).toEqual(expectedDraws); expect(read().age).toBe(before.age);
     expect(readSoccerFarewell(read())).toBeNull(); expect(read().seasons).toHaveLength(before.seasons.length + 1);
@@ -315,7 +315,7 @@ describe('Soccer farewell real page actions', () => {
     const view = mount(saved), before = read();
     expect(before.isFinalSeason).toBe(false);
     expect(readSoccerFarewell(before)).toBeNull(); expect(view.container.querySelector('[data-farewell-open]')).not.toBeNull();
-    const expectedDraws = tape(), expected = copy(E.advanceProSeason(copy(before), E.FALLBACK_CLUBS));
+    const expectedDraws = tape(), expected = copy(E.advanceProSeason(copy(before), E.FALLBACK_CLUBS, true));
     const actualDraws = tape(); fireEvent.click(nextButton(view));
     expect(read()).toEqual(expected); expect(actualDraws).toEqual(expectedDraws);
     expect(read().farewellSeason).toEqual(saved.farewellSeason); expect(readSoccerFarewell(read())).toBeNull();

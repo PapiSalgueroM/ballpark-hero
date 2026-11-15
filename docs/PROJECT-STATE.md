@@ -1,3 +1,12 @@
+## 2026-11-15: Australian games on Home, AFL saves and NBA choice receipts
+
+- Home puts NRL Team Manager and Aussie Rules Manager directly beneath the lead Soccer Career card. Both links have 48px touch targets. Their lower edges land at 500px on a 320px guest phone and 759px on a 390px phone with a saved Club Manager career and three pins.
+- Aussie Rules Manager opens a newer save when an older tab tries to act. The Fremantle fixture keeps all 137,822 bytes of the newer finals save, carries the chosen matchday 23 through the wildcard bye and accepts a fresh Rest action in QF2.
+- NBA My Career restores the outcome of a rivalry decision until Continue. The 2027 Warriors fixture reloads the same ejection and fine receipt with its net worth, morale and fanbase already settled. One write acknowledges the result and opens the next offseason card.
+- The Soccer Farewell test expectations use the ratings option selected by the real page. All six updated assertions still compare complete states and retained RNG behavior. Three copied source controls produced the four intended failures after both healthy baselines passed.
+
+Application types, the production build, 190 focused tests, 11 pinned browser cases, 21 site checks, the Home fold sweep and 16 download budgets passed. The full SEO split check covered all 174 routes. The grid archive refresh reproduced all 360 boards through November 14 Eastern.
+
 ## 2026-11-15: Fairer soccer rerolls, booked rugby recovery and quicker Home navigation
 
 - Soccer Perfect Season holds the opening XI target across rerolls in new Unlimited runs and Daily boards starting November 17 Eastern. Older Daily and Unlimited runs keep their original target and result. The stronger XI in the pinned Unlimited run improved from 35 wins and a site score of 92 to 38 wins and 100.
@@ -8,6 +17,8 @@
 - Soccer Career gameplay, Soccer Farewell and Club Manager Match Plans now verify fonts from the compiled app and the checked-in WOFF2 files. The Manager fixture still verifies real PNG flags.
 
 Application types, the production build, 103 focused tests, 15 pinned product browser journeys, 20 site checks and 16 download budgets passed. The full SEO split check covered 174 routes. The final build passed the SEO checks for each of the five refreshed snapshots. The font check rejected a swapped valid WOFF2 file. Home search recovery passed all 10 mounted cases and all 19 copied controls.
+
+[PR #995](https://github.com/PapiSalgueroM/ballpark-hero/pull/995) published exact main `97c7d50b10aeae6461c9c0b16f577e68b434705b`, deployment `95045c7a-0bf8-4ad4-8946-578193981da2`, canonical entry `/assets/index-B16MOB9V.js`. The merged tree matched tested head `00727727f`. All 15 live browser cases, 16 pinned endpoints and 174 sitemap routes passed. The Daily and personalized Home cases passed in fresh retry sessions. Admin checks used mocked writes. IndexNow accepted the soccer guide and all four archive pages.
 
 ## 2026-11-15: Rugby youth appearances, goalie starts and academy deadlines
 

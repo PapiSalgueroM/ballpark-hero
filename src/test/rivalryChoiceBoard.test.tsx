@@ -10,7 +10,7 @@
  */
 import type { ComponentType } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 
 vi.mock('@/lib/completions', () => ({
   recordCompletion: vi.fn(),
@@ -124,6 +124,82 @@ describe('the rival choice card in the My Career boards', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
     expect(screen.queryByText(card.title)).toBeNull();
     expect((await hubChip(c)).length).toBeGreaterThan(0);
+  });
+
+  it('NBA keeps an answered rivalry receipt through reload until Continue', async () => {
+    const { saveKey, make, def } = CASES[1];
+    const c = { ...make(), morale: 70, fanbase: 34, netWorth: 2.6 };
+    const card = rivalryChoiceCard(def, c as never, c.rival as never);
+    c.pendingRivalryChoice = card;
+    c.rivalryChoicesSeen = [card.id];
+    store(saveKey, c);
+    const random = vi.spyOn(Math, 'random').mockReturnValue(0.22);
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    try {
+      const chosen = `You chose: ${card.choices[0].emoji} ${card.choices[0].label}`;
+      const result = /tossed, fined, and the fans did not love it/i;
+      const first = render(<NbaMyCareerBoard />);
+      const answer = await screen.findByRole('button', { name: /Give it right back/ });
+      act(() => { answer.click(); answer.click(); });
+      expect(await screen.findByText(result)).toBeInTheDocument();
+      const committed = localStorage.getItem(saveKey);
+      expect(saved(saveKey)).toMatchObject({ morale: 65, fanbase: 29, netWorth: 2.5, pendingRivalryChoice: null });
+      expect(writes.mock.calls.filter(([key]) => key === saveKey)).toHaveLength(1);
+      first.unmount();
+
+      random.mockClear();
+      const restored = render(<NbaMyCareerBoard />);
+      expect(await screen.findByText(chosen)).toBeInTheDocument();
+      expect(screen.getByText(result)).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /Give it right back/ })).not.toBeInTheDocument();
+      expect(localStorage.getItem(saveKey)).toBe(committed);
+      expect(random).not.toHaveBeenCalled();
+      expect(writes.mock.calls.filter(([key]) => key === saveKey)).toHaveLength(1);
+
+      const acknowledge = screen.getByRole('button', { name: 'Continue' });
+      act(() => { acknowledge.click(); acknowledge.click(); });
+      await hubChip(c);
+      expect(writes.mock.calls.filter(([key]) => key === saveKey)).toHaveLength(2);
+      expect(saved(saveKey)).toMatchObject({ morale: 65, fanbase: 29, netWorth: 2.5 });
+      restored.unmount();
+      render(<NbaMyCareerBoard />);
+      await hubChip(c);
+      expect(screen.queryByText(chosen)).not.toBeInTheDocument();
+      expect(random).not.toHaveBeenCalled();
+      expect(writes.mock.calls.filter(([key]) => key === saveKey)).toHaveLength(2);
+    } finally {
+      random.mockRestore();
+      writes.mockRestore();
+    }
+  });
+
+  it('NBA opens a career with a malformed optional rivalry receipt', async () => {
+    const { saveKey, make } = CASES[1];
+    const c = { ...make(), pendingRivalryOutcome: { card: { choices: [] }, choiceIdx: 1 } };
+    store(saveKey, c);
+    const raw = localStorage.getItem(saveKey);
+    render(<NbaMyCareerBoard />);
+    await hubChip(c);
+    expect(document.querySelector('[data-rivalry-choice]')).toBeNull();
+    expect(localStorage.getItem(saveKey)).toBe(raw);
+  });
+
+  it('NBA Continue keeps a newer save from another tab', async () => {
+    const { saveKey, make, def } = CASES[1];
+    const c = make();
+    c.pendingRivalryChoice = rivalryChoiceCard(def, c as never, c.rival as never);
+    store(saveKey, c);
+    render(<NbaMyCareerBoard />);
+    fireEvent.click(await screen.findByRole('button', { name: /Help him up on camera/ }));
+    const newer = JSON.parse(localStorage.getItem(saveKey)!);
+    delete newer.c.pendingRivalryOutcome;
+    newer.c.morale += 1;
+    const newerBytes = JSON.stringify(newer);
+    localStorage.setItem(saveKey, newerBytes);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Continue' }));
+    expect(await screen.findByText('Your career changed in another tab. Reload to resume.')).toBeInTheDocument();
+    expect(localStorage.getItem(saveKey)).toBe(newerBytes);
   });
 
   it.each(CASES)('$label: a save from before the round opens on the hub with no card from nowhere', async ({ saveKey, Board, make }) => {

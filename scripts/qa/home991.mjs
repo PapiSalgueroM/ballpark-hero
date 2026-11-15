@@ -6,6 +6,8 @@ import { chromium } from 'playwright';
 
 const output = 'home-launch-artifacts';
 const base = process.env.HOME_LAUNCH_BASE || 'http://127.0.0.1:4189';
+const entry = process.env.HOME_LAUNCH_ENTRY;
+const origin = new URL(base).origin;
 const baseline = process.env.HOME_LAUNCH_BASELINE === '1';
 const server = process.env.HOME_LAUNCH_BASE ? null : spawn(process.execPath, ['scripts/lib/hostLikeServer.mjs', 'dist', '4189'], { stdio: 'pipe' });
 let browser;
@@ -27,12 +29,14 @@ try {
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
-    await context.route('**/*', route => route.request().url().startsWith(base) ? route.continue() : route.abort());
+    await context.route('**/*', route => new URL(route.request().url()).origin === origin
+      && ['GET', 'HEAD'].includes(route.request().method()) ? route.continue() : route.abort());
     await page.addInitScript(() => {
       localStorage.setItem('cookie-consent', 'essential');
       localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() }));
     });
-    const response = await page.goto(base, { waitUntil: 'domcontentloaded' });
+    const asset = entry && page.waitForResponse(response => new URL(response.url()).pathname === entry && response.ok());
+    const [response] = await Promise.all([page.goto(base, { waitUntil: 'domcontentloaded' }), asset]);
     if (process.env.HOME_LAUNCH_DEPLOYMENT) {
       assert.ok(response?.headers()['x-deployment-id']?.includes(process.env.HOME_LAUNCH_DEPLOYMENT), 'Expected deployment answered');
     }
@@ -78,6 +82,7 @@ try {
     const daily = await page.locator('[data-daily-spotlight]').boundingBox();
     assert.ok(daily, 'The first Daily is playable');
     const launch = stage.locator('[data-home-nrl-launch]');
+    const aussie = stage.locator('[data-home-manager-launch="aussie"]');
     const shortcuts = stage.getByRole('navigation', { name: 'Sports shortcuts' });
     let finalRow;
     if (baseline) {
@@ -88,12 +93,23 @@ try {
       assert.equal(await shortcuts.count(), 0, 'The duplicate shortcuts are gone');
       assert.equal(await launch.getAttribute('href'), '/nrl-team-manager');
       assert.equal(await launch.innerText(), 'NRL Team Manager');
+      assert.equal(await aussie.count(), 1, 'The featured deck has one direct Aussie Rules launch');
+      assert.equal(await aussie.getAttribute('href'), '/aussie-rules-manager');
+      assert.equal(await aussie.innerText(), 'Aussie Rules Manager');
       finalRow = await launch.boundingBox();
+      const aussieRow = await aussie.boundingBox();
       const finalCard = await stage.locator('[data-stage-card]').last().boundingBox();
-      assert.ok(finalRow && finalCard && finalRow.height >= 44 && finalRow.y >= finalCard.y + finalCard.height - 1, 'Direct launch has a full tap target below the featured games');
-      assert.ok(finalRow.x >= 0 && finalRow.x + finalRow.width <= width, 'Direct launch fits the viewport');
-      assert.equal(await launch.evaluate(link => link.scrollWidth > link.clientWidth), false, 'The launch label fits');
-      if (width <= 430) assert.ok(daily.y + 60 <= height, 'Phone shows enough of the first Daily card to read and tap its title');
+      assert.ok(finalRow && aussieRow && finalCard && Math.abs(finalRow.y - aussieRow.y) <= 1, 'Both manager links share a row');
+      assert.ok(finalRow.y >= box.y + box.height - 1 && aussieRow.y + aussieRow.height <= finalCard.y + 1,
+        'Manager links sit between the lead game and supporting games');
+      for (const [link, row] of [[launch, finalRow], [aussie, aussieRow]]) {
+        assert.ok(row.height >= 44 && row.x >= 0 && row.x + row.width <= width, 'Each manager link has a full tap target');
+        assert.equal(await link.evaluate(el => el.scrollWidth > el.clientWidth), false, 'Each manager label fits');
+      }
+      if (width <= 430) {
+        assert.ok(aussieRow.y + aussieRow.height <= 568, 'Both managers fit in the first 568px on a phone');
+        assert.ok(daily.y + 60 <= height, 'Phone shows enough of the first Daily card to read and tap its title');
+      }
     }
     const hubs = ['/soccer', '/pro-basketball', '/hockey', '/pro-football', '/baseball', '/college'];
     for (const href of hubs) {
@@ -106,18 +122,22 @@ try {
     assert.match(page.url(), /\/soccer-career$/, 'Keyboard activation reaches the flagship');
     if (!baseline) {
       await page.goBack();
-      await launch.waitFor();
-      await launch.focus();
-      await launch.press('Enter');
-      await page.waitForURL('**/nrl-team-manager');
-      const rules = page.getByRole('dialog', { name: 'How to play NRL Team Manager' });
-      await rules.getByRole('button', { name: "Let's Play!", exact: true }).click();
-      await page.getByRole('heading', { name: 'NRL Team Manager', level: 1 }).waitFor();
-      const back = page.getByRole('button', { name: 'Go back', exact: true });
-      await back.focus();
-      await back.press('Enter');
-      await launch.waitFor();
-      await page.waitForFunction(() => document.activeElement?.hasAttribute('data-home-nrl-launch'));
+      for (const [link, path, name] of [
+        [launch, '/nrl-team-manager', 'NRL Team Manager'],
+        [aussie, '/aussie-rules-manager', 'Aussie Rules Manager'],
+      ]) {
+        await link.focus();
+        await link.press('Enter');
+        await page.waitForURL(url => url.pathname === path);
+        const rules = page.getByRole('dialog', { name: 'How to play ' + name });
+        await rules.getByRole('button', { name: "Let's Play!", exact: true }).click();
+        await page.getByRole('heading', { name, level: 1 }).waitFor();
+        const back = page.getByRole('button', { name: 'Go back', exact: true });
+        await back.focus();
+        await back.press('Enter');
+        await page.waitForFunction(href =>
+          document.activeElement?.matches('a[data-home-manager-launch]') && document.activeElement?.getAttribute('href') === href, path);
+      }
     }
     assert.deepEqual(errors, [], 'No page exceptions');
     rows.push({ width, height, motion, scale, firstGameTop: box.y, dailyTop: daily.y, launchRowHeight: finalRow?.height });

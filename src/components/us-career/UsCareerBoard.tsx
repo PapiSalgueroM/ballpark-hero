@@ -133,11 +133,21 @@ type Phase = 'create' | 'prospect' | 'season' | 'event' | 'extension' | 'freeage
 /* The board holds a career as the part every sport keeps. Each sport's own
    fields (its stats, its awards) ride along untouched and are read only by
    the sport's own functions. */
-type CareerState = ProgrammeCareer;
+type RivalryOutcome = { card: RivalryChoice; choiceIdx: number; line: string };
+type CareerState = ProgrammeCareer & { pendingRivalryOutcome?: RivalryOutcome };
 type SeasonLine = UsCareerSeason;
 type CareerEvent = UsCareerEvent<UsCareerCore>;
 
 interface SaveShape { c: CareerState | null; phase: Phase; teamQuality: number | null; coach?: CoachCareerState | null; prospect?: UsCareerProspect; contractTalk?: UsCareerMarketTalk }
+
+function validRivalryOutcome(outcome: RivalryOutcome | undefined): boolean {
+  if (!outcome?.card || !Array.isArray(outcome.card.choices) || !Number.isInteger(outcome.choiceIdx)) return false;
+  const { card, choiceIdx, line } = outcome;
+  const choice = card.choices[choiceIdx];
+  return typeof card.id === 'string' && typeof card.title === 'string' && typeof card.emoji === 'string'
+    && typeof card.description === 'string' && typeof choice?.label === 'string' && typeof choice.emoji === 'string'
+    && typeof line === 'string';
+}
 
 /** Round 1144: how long the toast that says a save was refused stays, with its Retry on it. */
 const SAVE_TOAST_MS = 10_000;
@@ -325,10 +335,10 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
      inbox tab is open, so a set inside it started empty on every open and
      replayed the whole list with nothing new in it. */
   const inboxSeenRef = useRef<Set<string>>(new Set());
-  /* Round 796: what a rival choice did, shown on the card until Continue.
-     Transient like the curtain: the answer is already on the save, so a
-     reload lands on the hub with the choice made. */
-  const [rivalryOutcome, setRivalryOutcome] = useState<{ card: RivalryChoice; choiceIdx: number; line: string } | null>(null);
+  // NBA keeps the answered card in the same save as its consequences until Continue.
+  const keepRivalryOutcome = sport.slug === 'nba';
+  const [transientRivalryOutcome, setTransientRivalryOutcome] = useState<RivalryOutcome | null>(null);
+  const consumedRivalryAction = useRef<RivalryChoice | RivalryOutcome | null>(null);
   /* Round 126: the coaching career. It lives in a ref as well as in state so
      persist can always write the current one without every existing call site
      having to learn about it. */
@@ -500,7 +510,10 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
          were charged every year against income that was never banked, so a
          negative number here is the defect and never a debt the player chose.
          A healthy save is returned untouched. */
-      const loaded = sport.repairNetWorth(s.c);
+      const loaded: CareerState = sport.repairNetWorth(s.c);
+      if (keepRivalryOutcome && loaded.pendingRivalryOutcome && !validRivalryOutcome(loaded.pendingRivalryOutcome)) {
+        delete loaded.pendingRivalryOutcome;
+      }
       /* Round 1038: the summer, the ledger and the salt are each checked
          alone, and a broken one is dropped alone. Old saves have none. */
       repairSummerOnLoad(loaded);
@@ -1169,18 +1182,45 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     persist(state, phase, teamQuality);
   };
 
+  const rivalrySaveMoved = () => {
+    if (tradeSaveMoved) return true;
+    try {
+      if (localStorage.getItem(sport.saveKey) === savedBytes.current) return false;
+    } catch { return false; /* The existing save retry will handle storage refusal. */ }
+    setTradeSaveMoved(true);
+    return true;
+  };
+
   /* Round 796: answering a rival choice writes it to the save at once and
      keeps the card up to show what happened. A second tap finds nothing
      pending and changes nothing. */
   const chooseRivalry = (choiceIdx: number) => {
     if (!career?.pendingRivalryChoice) return;
     const card = career.pendingRivalryChoice;
+    if (keepRivalryOutcome && (consumedRivalryAction.current === card || rivalrySaveMoved())) return;
     const res = sport.resolveRivalryChoice(career, choiceIdx, Math.random);
     if (!res) return;
-    setCareer(res.state);
+    const outcome = { card, choiceIdx, line: res.line };
+    const next = keepRivalryOutcome ? { ...res.state, pendingRivalryOutcome: outcome } : res.state;
+    if (keepRivalryOutcome) consumedRivalryAction.current = card;
+    else setTransientRivalryOutcome(outcome);
+    setCareer(next);
     setFeed(f => [res.line, ...f].slice(0, 8));
-    setRivalryOutcome({ card, choiceIdx, line: res.line });
-    persist(res.state, phase, teamQuality);
+    persist(next, phase, teamQuality);
+  };
+
+  const continueRivalry = () => {
+    if (!keepRivalryOutcome) {
+      setTransientRivalryOutcome(null);
+      return;
+    }
+    const outcome = career?.pendingRivalryOutcome;
+    if (!career || !outcome || consumedRivalryAction.current === outcome || rivalrySaveMoved()) return;
+    consumedRivalryAction.current = outcome;
+    const next = { ...career };
+    delete next.pendingRivalryOutcome;
+    setCareer(next);
+    persist(next, phase, teamQuality);
   };
 
   /* Round 1039: the answer to the retirement talk. Retire now ends the career
@@ -1271,7 +1311,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     setFaWindow(null);
     setTalkLine(null);
     setDraftDay(null);
-    setRivalryOutcome(null);
+    setTransientRivalryOutcome(null);
+    consumedRivalryAction.current = null;
     setPanel('none');
     setRetiredReview(false);
     /* Since Round 1569 Start over is drawn on every screen, so two transient
@@ -1466,8 +1507,9 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
 
   /* ------------------- Round 796: a rival choice -------------------
      Same place in the flow as the beat card above, which a season never
-     stacks with this one. Persisted on the save while unanswered, so a
-     reload mid-choice still asks. */
+     stacks with this one. A reload can restore the pending choice or, in
+     NBA, the outcome of a choice that already took effect. */
+  const rivalryOutcome = keepRivalryOutcome ? career.pendingRivalryOutcome : transientRivalryOutcome;
   const rivalryChoice = career.pendingRivalryChoice ?? rivalryOutcome?.card ?? null;
   if (rivalryChoice) {
     return withSaveStatus(
@@ -1476,12 +1518,15 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
           card={rivalryChoice}
           onChoose={chooseRivalry}
           outcome={career.pendingRivalryChoice ? null : rivalryOutcome}
-          onContinue={() => setRivalryOutcome(null)}
+          onContinue={continueRivalry}
           headToHead={career.rival ? {
             myName: career.name, myRating: career.ovr,
             rivalName: career.rival.name, rivalRating: career.rival.ovr,
           } : undefined}
         />
+        {keepRivalryOutcome && tradeSaveMoved && <p className="mt-2 text-sm text-muted-foreground" role="status">
+          Your career changed in another tab. Reload to resume.
+        </p>}
       </div>
     );
   }
