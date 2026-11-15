@@ -32,7 +32,12 @@ const controls = {
   archive: { file: BOARD, from: 'const campNote = sport.campBattle(c, teamQuality, Math.random);', to: 'delete c.prospect;\n    const campNote = sport.campBattle(c, teamQuality, Math.random);', test: JOURNEY },
   corrupt: { file: 'src/lib/usCareerProspect.ts', from: 'const state = loadPreDraft(p.state, desc);', to: 'const state = p.state;', test: 'rejects corrupt nested journey saves without changing storage' },
   outcome: { file: ENGINE, from: "if (s.phase === 'done' && s.draft) {", to: 'if (false) {', test: 'rejects corrupt nested journey saves without changing storage' },
-  back: { file: BOARD, from: "prospectRef.current = null; setProspect(null); setPhase('create');\n      saveValue(null);", to: "prospectRef.current = null; setProspect(null); setPhase('create');", test: 'back before route selection preserves the player and clears only the unfinished save' },
+  back: {
+    file: BOARD,
+    from: "prospectRef.current = null;\n        setProspect(null);\n        setPhase('create');\n        saveValue(null);",
+    to: "prospectRef.current = null;\n        setProspect(null);\n        setPhase('create');",
+    test: 'back before route selection preserves the player and clears only the unfinished save',
+  },
   rules: { file: 'src/components/us-career/ProspectJourney.tsx', from: 'The button shows the exact change before you choose.', to: 'Pick whatever you want.', test: SHOWCASE },
 };
 assert(!CONTROL || CONTROL === 'before' || CONTROL === 'historical' || controls[CONTROL], `Unknown prospect control: ${CONTROL}`);
