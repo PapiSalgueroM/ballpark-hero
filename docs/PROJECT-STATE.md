@@ -1,11 +1,19 @@
 ## 2026-11-15: NBA defensive assignments and first-year NFL rookie contracts
 
+[PR #991](https://github.com/PapiSalgueroM/ballpark-hero/pull/991) published exact main `cc5874240b0513e62203eae9c754b73fb35b156b`, deployment `e391545c-f329-43a0-a9d5-18b278354622`, canonical entry `/assets/index-Bta2oqIL.js`. The merged tree matched tested head `0121b3ce`. All five live browser journeys, 174 sitemap routes and 13 pinned endpoint checks passed. IndexNow accepted the updated NBA My Career guide. All 20 local site checks and 16 download budgets passed. Hosted application types and build passed. Wider hosted jobs reported older font and source checks.
+
 The integrated candidate passed application types, production build, 127 focused tests and five pinned Chromium cases. The native NBA checks covered 82 and 66 games, paired playoffs and exact saved choice and receipt reloads. The NFL cases opened four-year rookie deals through desk-on, desk-off and season-away paths. Only the NBA guide was regenerated.
 
 The NFL season-away harness now includes the weekly ratings update. All 1,020 weekly replays, 60 draft replays and 60 offseason replays matched. The separate career checkpoint fixture pinned to `6d2d7a7d` still differs on the exact #990 baseline as well as the candidate.
 
 - NBA My Career lets guards and small forwards trade scoring for steals or frontcourt players trade scoring for blocks in the Season Programme. The regular-season recap records the change and shows when the cap prevents a gain.
-- NFL Front Office starts newly drafted players with four contract years, their draft age and their promised salary. Current paused draft saves and older managed drafts with a saved ledger entry get the same correction at rollover.
+- NFL Front Office starts newly drafted players with four contract years, their draft age and their promised salary. Current paused draft saves and older managed drafts with a saved ledger entry get the same correction at rollover. Older saves without a draft record retain their existing terms.
+
+## Next simulation candidates verified on #991
+
+- Aussie Rules Manager rebuilds the matchday group for the next round. In all 30 seeded checks, a manually selected defender played Round 1 and missed the Round 2 group entirely. A lineup preference could preserve eligible selections between rounds while keeping 18 starters and five on the bench.
+- Stadium Tycoon already models ticket demand and income for each price. In a 120-seat ground with 90 fans, the model quotes $4.50 per second for Standard and $4.19 per second for Premium. With 240 fans, both fill the ground and Premium quotes $7.50 against Standard's $6.00. Those values can be previewed before changing policy.
+- NFL My Career credits a backup quarterback with every playoff game and identical passing production to the starter in the paired title fixture, despite four regular-season appearances against the starter's 17. Personal appearances and production can be tracked while preserving the team's playoff outcome.
 
 ## 2026-11-15: Rival contract renewals, Club Manager player ratings and sport order
 
