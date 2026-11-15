@@ -194,7 +194,7 @@ const HEADER_PATHS = ['/', '/leaderboard', '/profile'];
 const shouldShowHeader = (pathname: string) =>
   HEADER_PATHS.includes(pathname) || pathname.startsWith('/profile/');
 
-const ScrollToTop = () => {
+export const ScrollToTop = () => {
   const { pathname } = useLocation();
   const navigationType = useNavigationType();
   const previousNavigation = useRef([pathname, navigationType]);
@@ -307,10 +307,11 @@ const ScrollToTop = () => {
       let cancelled = false;
       const deadline = performance.now() + 1200;
       const cancel = () => { cancelled = true; };
-      // Any input the player makes takes over immediately.
+      // User input or another history traversal takes over immediately.
       window.addEventListener('wheel', cancel, { passive: true, once: true });
       window.addEventListener('touchstart', cancel, { passive: true, once: true });
       window.addEventListener('keydown', cancel, { once: true });
+      window.addEventListener('popstate', cancel, { once: true });
 
       const hold = () => {
         if (cancelled || performance.now() > deadline) return;
@@ -327,6 +328,7 @@ const ScrollToTop = () => {
         window.removeEventListener('wheel', cancel);
         window.removeEventListener('touchstart', cancel);
         window.removeEventListener('keydown', cancel);
+        window.removeEventListener('popstate', cancel);
       };
     }
     // New navigations (clicking into a game) start at the top of the page.

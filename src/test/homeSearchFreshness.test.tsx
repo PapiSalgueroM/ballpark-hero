@@ -3,6 +3,7 @@ import { useSyncExternalStore } from 'react';
 import { Link, MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import Index from '@/pages/Index';
+import { ScrollToTop } from '@/App';
 import { ALL_GAMES, VISIBLE_CATEGORIES } from '@/data/gameRegistry';
 import type { useMostPlayed } from '@/hooks/useMostPlayed';
 
@@ -378,6 +379,38 @@ it('jumps from Browse sports to game picks and restores the opener with Back', (
   expect(screen.getByLabelText('Current anchor')).toBeEmptyDOMElement();
   expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'instant' });
   expect(trigger).toHaveFocus();
+});
+
+it('stops the previous Home scroll restore on a second browser Back from Game picks', () => {
+  const scrollTo = vi.fn();
+  const requestFrame = vi.fn((_callback: FrameRequestCallback) => 1);
+  vi.stubGlobal('scrollTo', scrollTo);
+  vi.stubGlobal('requestAnimationFrame', requestFrame);
+  sessionStorage.setItem('home-scroll-y', '860');
+  function HistoryControls() {
+    const navigate = useNavigate();
+    const { pathname, hash } = useLocation();
+    return <><button onClick={() => navigate(-1)}>Go back</button><output aria-label="Current page">{pathname + hash}</output></>;
+  }
+  try {
+    render(<MemoryRouter initialEntries={['/', '/#home-game-picks', '/nfl-my-career']} initialIndex={2}>
+      <ScrollToTop /><HistoryControls />
+    </MemoryRouter>);
+    const back = screen.getByRole('button', { name: 'Go back' });
+    fireEvent.click(back);
+    expect(screen.getByLabelText('Current page')).toHaveTextContent('/#home-game-picks');
+    expect(scrollTo).toHaveBeenLastCalledWith(0, 860);
+    const hold = requestFrame.mock.calls.at(-1)![0];
+
+    act(() => window.dispatchEvent(new PopStateEvent('popstate')));
+    fireEvent.click(back);
+    expect(screen.getByLabelText('Current page')).toHaveTextContent(/^\/$/);
+    scrollTo.mockClear();
+    act(() => hold(performance.now()));
+    expect(scrollTo).not.toHaveBeenCalled();
+  } finally {
+    sessionStorage.removeItem('home-scroll-y');
+  }
 });
 
 it.each(['same game', 'different games', 'focus moved'])('restores focus after Back when the ranking returns with %s', async scenario => {
