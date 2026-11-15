@@ -181,7 +181,7 @@ describe('Soccer international return real page actions', () => {
   });
   it('plays the actual next club season with the unchanged engine outcome and complete draw vector', () => {
     const view = mount(R.makeInternationallyAvailable(senior())), before = read();
-    const expectedValues = tape(), expected = copy(E.advanceProSeason(copy(before), E.FALLBACK_CLUBS));
+    const expectedValues = tape(), expected = copy(E.advanceProSeason(copy(before), E.FALLBACK_CLUBS, true));
     expect(expected.seasons).toHaveLength(before.seasons.length + 1); expect(expectedValues.length).toBeGreaterThan(0);
     const mutation = vi.spyOn(R, 'makeInternationallyAvailable'), actualValues = tape();
     const bar = view.container.querySelector<HTMLElement>('[data-career-action-bar]'); expect(bar).not.toBeNull();
@@ -193,7 +193,7 @@ describe('Soccer international return real page actions', () => {
   it('rejects a never-used stale eligible callback after the actual next season without invoking the mutation', () => {
     const view = mount(senior()), before = read(), stale = pageAction.return;
     expect(R.internationalReturnEligibility(before).available).toBe(true); expect(stale).toBeTypeOf('function');
-    const expectedValues = tape(), expected = copy(E.advanceProSeason(copy(before), E.FALLBACK_CLUBS));
+    const expectedValues = tape(), expected = copy(E.advanceProSeason(copy(before), E.FALLBACK_CLUBS, true));
     expect(expected.seasons).toHaveLength(before.seasons.length + 1);
     const actualValues = tape(), bar = view.container.querySelector<HTMLElement>('[data-career-action-bar]');
     expect(bar).not.toBeNull(); fireEvent.click(within(bar!).getByRole('button', { name: /Next Season/ }));
