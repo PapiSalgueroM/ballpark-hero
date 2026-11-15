@@ -69,6 +69,7 @@ type NrlSupporterForm = 'W' | 'D' | 'L';
 export const NRL_SPONSOR_OFFERS = {
   fixed: { upfront: 200_000, bonus: 0 },
   finals: { upfront: 110_000, bonus: 200_000 },
+  twoSeason: { upfront: 160_000, bonus: 0, secondYear: 295_000 },
 } as const;
 export type NrlSponsorOffer = keyof typeof NRL_SPONSOR_OFFERS;
 
@@ -124,7 +125,7 @@ export interface NrlCareerBook {
   mutualRelease?: NrlMutualRelease;
   ticketTier?: ActiveTicketTier;
   supporterAttendance?: true;
-  sponsor?: { offer: NrlSponsorOffer; bonusPaid?: true };
+  sponsor?: { offer: NrlSponsorOffer; bonusPaid?: true; continued?: true };
   pathways?: NrlBoardPathways;
   boardRecruitment?: NrlBoardRecruitment;
 }
@@ -975,6 +976,7 @@ function coachWageReserve(book: NrlCareerBook, finalRound: number): number {
 
 export function nrlSponsorIncome({ sponsor }: NrlCareerBook): number {
   if (!sponsor) return 0;
+  if (sponsor.offer === 'twoSeason' && sponsor.continued) return NRL_SPONSOR_OFFERS.twoSeason.secondYear;
   const { upfront, bonus } = NRL_SPONSOR_OFFERS[sponsor.offer];
   return upfront + (sponsor.bonusPaid ? bonus : 0);
 }
@@ -1426,7 +1428,7 @@ export function nrlSponsorRefusal({ season, finance, legacySeason }: NrlCareerSt
 }
 
 function isSponsorOffer(offer: unknown): offer is NrlSponsorOffer {
-  return offer === 'fixed' || offer === 'finals';
+  return offer === 'fixed' || offer === 'finals' || offer === 'twoSeason';
 }
 
 export function nrlBoardPathwaysQuote({ season, players, finance, legacySeason }: NrlCareerState) {
@@ -2092,8 +2094,17 @@ export function nrlOffseasonApplication(state: NrlCareerState) {
   return { ...opening, response: offered ? 'offered' as const : 'declined' as const };
 }
 
-function returningClubCash(history: readonly NrlCareerHistoryRow[], clubId: string): number {
-  return history.reduce((cash, receipt) => receipt.clubId === clubId && receipt.finance ? receipt.finance.cash : cash, OPENING_CASH);
+function sponsorSecondYear({ year, finance }: NrlCareerHistoryRow): number | undefined {
+  return finance?.sponsor?.offer === 'twoSeason' && !finance.sponsor.continued ? year + 1 : undefined;
+}
+
+function deferredSponsorCash(secondYear: number | undefined, openingYear: number): number {
+  return secondYear !== undefined && secondYear < openingYear ? NRL_SPONSOR_OFFERS.twoSeason.secondYear : 0;
+}
+
+function returningClubCash(history: readonly NrlCareerHistoryRow[], clubId: string, year: number): number {
+  return history.reduce((cash, receipt) => receipt.clubId === clubId && receipt.finance
+    ? receipt.finance.cash + deferredSponsorCash(sponsorSecondYear(receipt), year) : cash, OPENING_CASH);
 }
 
 export function nrlOfferAssistantQuote(state: NrlCareerState, destinationId: string) {
@@ -2105,7 +2116,7 @@ export function nrlOfferAssistantQuote(state: NrlCareerState, destinationId: str
   const current = nrlCoachQuote(state).current;
   if (!current || current.role === 'development') return null;
   const reservedWages = coachTermWages(1, lastRound(season.year + 1));
-  const cash = returningClubCash(history, destinationId);
+  const cash = returningClubCash(history, destinationId, season.year + 1);
   const reason = cash < reservedWages ? 'The new club needs enough cash to cover the season’s assistant wages.' : null;
   return { name: current.name, role: current.role, reservedWages, reason };
 }
@@ -2401,8 +2412,12 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
     ...(review && { judiciary: { case: review, matchesAfter: nrlJudiciaryMatchesAfter(season, review.round) } }),
     ...(carried && { judiciaryCarry: carried }),
   } : row);
-  const openingCash = move ? returningClubCash(history, clubId) : nrlCareerFinance(state).cash;
+  const openingCash = move ? returningClubCash(history, clubId, year) : nrlCareerFinance(state).cash;
   const finance = bookFrom(openingCash);
+  const previousSponsor = state.finance.sponsor;
+  if (!move && previousSponsor?.offer === 'twoSeason' && !previousSponsor.continued) {
+    finance.sponsor = { offer: 'twoSeason', continued: true };
+  }
   const next = {
     ...career, players: world, history, legacySeason: false, academy: undefined,
     finance: coachHire ? { ...finance, coachHire } : finance,
@@ -2702,6 +2717,7 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     }
     case 'signSponsor': {
       if (action.year !== state.season.year || action.clubId !== state.season.clubId
+        || (action.offer === 'twoSeason' && (!state.season.kickerId || action.year === NRL_LAST_YEAR))
         || !isSponsorOffer(action.offer) || nrlSponsorRefusal(state) !== null) return state;
       return { ...state, finance: { ...state.finance, sponsor: { offer: action.offer } } };
     }
@@ -2978,7 +2994,8 @@ function validBook(value: unknown, roundLimit: number): value is NrlCareerBook {
     && (value.supporterAttendance === undefined || (value.fromRound === 1 && value.supporterAttendance === true))
     && (value.sponsor === undefined || (value.fromRound === 1 && record(value.sponsor)
       && isSponsorOffer(value.sponsor.offer)
-      && Object.keys(value.sponsor).length === (value.sponsor.bonusPaid === undefined ? 1 : 2)
+      && Object.keys(value.sponsor).length === 1 + Number(value.sponsor.bonusPaid !== undefined) + Number(value.sponsor.continued !== undefined)
+      && (value.sponsor.continued === undefined || (value.sponsor.offer === 'twoSeason' && value.sponsor.continued === true))
       && (value.sponsor.bonusPaid === undefined || (value.sponsor.offer === 'finals' && value.sponsor.bonusPaid === true))))
     && (value.coachHire === undefined || (record(value.coachHire) && isCoachRole(value.coachHire.role)
       && intIn(value.coachHire.round, value.fromRound, roundLimit)
@@ -3146,6 +3163,7 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
     || !finance.coachHire || finance.coachHire.retained || (value.appointment
       ? finance.coachCourseRound === undefined : finance.cash < coachTermWages(1, lastRound(year + 1))))) return false;
   if (finance.sponsor?.offer === 'finals' && Boolean(finance.sponsor.bonusPaid) !== (value.rank <= NRL_FINALS_SPOTS)) return false;
+  if (finance.sponsor?.offer === 'twoSeason' && (!scoring || (!finance.sponsor.continued && year === NRL_LAST_YEAR))) return false;
   return value.finance.cash === finance.cash && value.finance.profit === finance.profit;
 }
 
@@ -3168,7 +3186,7 @@ function booksMatch(a: NrlCareerBook, b: NrlCareerBook): boolean {
     && a.mutualRelease?.annualSalary === b.mutualRelease?.annualSalary
     && a.ticketTier === b.ticketTier
     && a.supporterAttendance === b.supporterAttendance
-    && a.sponsor?.offer === b.sponsor?.offer && a.sponsor?.bonusPaid === b.sponsor?.bonusPaid
+    && a.sponsor?.offer === b.sponsor?.offer && a.sponsor?.bonusPaid === b.sponsor?.bonusPaid && a.sponsor?.continued === b.sponsor?.continued
     && JSON.stringify(a.pathways) === JSON.stringify(b.pathways)
     && a.boardRecruitment?.role === b.boardRecruitment?.role && a.boardRecruitment?.paid === b.boardRecruitment?.paid
     && a.boardRecruitment?.signed?.id === b.boardRecruitment?.signed?.id
@@ -3281,7 +3299,8 @@ function validCareerBooks(state: NrlCareerState): boolean {
       ...season, round: coach.round, phase: 'finals', results: season.results.filter(match => match.round < coach.round),
     }).clubStatus === 'eliminated') return false;
   }
-  const firstBook = { cash: OPENING_CASH, medicalLevel: 1, academyInstalled: false, concessionsInstalled: false };
+  const firstBook = { cash: OPENING_CASH, medicalLevel: 1, academyInstalled: false, concessionsInstalled: false,
+    sponsorSecondYear: undefined as number | undefined };
   const clubs = new Map<string, typeof firstBook>();
   let calendarYear = openingYear;
   for (const [index, receipt] of history.entries()) {
@@ -3299,15 +3318,17 @@ function validCareerBooks(state: NrlCareerState): boolean {
     if (receipt.rejoinedClubId !== undefined && (year === season.year || receipt.coachRetained
       || receipt.rejoinedClubId !== (history[index + 1]?.clubId ?? season.clubId))) return false;
     const previous = clubs.get(receipt.clubId) ?? firstBook;
-    if (receipt.finance && receipt.finance.openingCash !== previous.cash) return false;
+    if (receipt.finance && receipt.finance.openingCash !== previous.cash + deferredSponsorCash(previous.sponsorSecondYear, year)) return false;
+    if (Boolean(receipt.finance?.sponsor?.continued) !== (previous.sponsorSecondYear === year)) return false;
     if (receipt.coachRetained) {
       const incoming = history[index + 1];
       const nextClub = incoming?.clubId ?? season.clubId;
       const nextCoach = incoming ? incoming.finance?.coachHire : coach;
       if (year === season.year || !nextCoach?.retained || nextCoach.role !== receipt.finance?.coachHire?.role
         || Boolean(nextCoach.qualified) !== (receipt.finance?.coachCourseRound !== undefined)) return false;
+      const otherClub = clubs.get(nextClub) ?? firstBook;
       if (nextClub !== receipt.clubId && (receipt.appointment?.clubId !== nextClub || !nextCoach.qualified
-        || (clubs.get(nextClub)?.cash ?? OPENING_CASH) < coachTermWages(1, lastRound(year + 1)))) return false;
+        || otherClub.cash + deferredSponsorCash(otherClub.sponsorSecondYear, year + 1) < coachTermWages(1, lastRound(year + 1)))) return false;
     }
     if (receipt.judiciary) {
       const { case: review, matchesAfter } = receipt.judiciary;
@@ -3420,7 +3441,7 @@ function validCareerBooks(state: NrlCareerState): boolean {
       if (!upgrades.every((purchase, index) => purchase.level === previous.medicalLevel + index + 1)) return false;
       clubs.set(receipt.clubId, { cash: receipt.finance.cash, medicalLevel: upgrades.at(-1)?.level ?? previous.medicalLevel,
         academyInstalled: previous.academyInstalled || academyPurchased,
-        concessionsInstalled: activeAfter !== undefined });
+        concessionsInstalled: activeAfter !== undefined, sponsorSecondYear: sponsorSecondYear(receipt) });
     }
   }
   if (calendarYear !== season.year + Number(complete)) return false;
@@ -3435,10 +3456,13 @@ function validCareerBooks(state: NrlCareerState): boolean {
   if (due > 0 ? carried?.playerId !== review?.playerId || carried?.matches !== due : carried !== undefined) return false;
   if (JSON.stringify(carried) !== JSON.stringify(previous?.judiciaryCarry)) return false;
   if (coach?.retained && !previous?.coachRetained) return false;
-  let expected = bookFrom(currentClub.cash, finance.fromRound);
+  const continued = currentClub.sponsorSecondYear === season.year;
+  if (Boolean(finance.sponsor?.continued) !== continued
+    || (finance.sponsor?.offer === 'twoSeason' && (!season.kickerId || (!continued && season.year === NRL_LAST_YEAR)))) return false;
+  let expected = bookFrom(currentClub.cash + deferredSponsorCash(currentClub.sponsorSecondYear, season.year), finance.fromRound);
   if (finance.ticketTier) expected.ticketTier = finance.ticketTier;
   if (finance.supporterAttendance) expected.supporterAttendance = true;
-  if (finance.sponsor) expected.sponsor = { offer: finance.sponsor.offer };
+  if (finance.sponsor) expected.sponsor = { offer: finance.sponsor.offer, ...(continued && { continued: true as const }) };
   if (finance.pathways) {
     const { brief } = finance.pathways;
     if (legacySeason || !season.kickerId

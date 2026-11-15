@@ -1,4 +1,12 @@
+## 2026-11-14: Club Manager match ratings, NRL sponsor terms and Home navigation
+
+- Club Manager keeps the recorded player rating changes for each completed league game in Calendar. Open the fixture to see the actual before and after, whether everyone held, or whether the old save has no review.
+- NRL Team Manager can sign a club for two sponsor seasons. The deal pays $160,000 at signing and $295,000 in the next season, fills the club's sponsor slot both years, and stays with the club when a manager leaves.
+- Home returns to the opening sports control and its scroll position on browser Back. Forward restores the chosen sport. Direct links and Back from a game still work.
+
 ## 2026-11-14: Full player browse, hockey replays and Origin workload
+
+[PR #971](https://github.com/PapiSalgueroM/ballpark-hero/pull/971) published exact main `119486f108376393a216783d120665d48be4fb4f`, deployment `a2f0d32e-018a-4c03-8157-cba57bd9664e`, canonical entry `/assets/index-fEKEb0sm.js`. Ten live browser journeys, four raw game guides, all 174 sitemap routes and seven policy and crawler endpoints passed. IndexNow accepted the four guides. The normal build, app types, 277 focused tests, all 18 site checks and all 16 measured download budgets passed.
 
 - Build Your XI can browse every available player for the selected draw in 50-player pages. The same club, nation and season eligibility applies when swapping a starter. Search by name still works.
 - NHL My Career can replay every regular-season game through Season Center and Career Log. Simulated three-period reports reconcile to the saved skater or goalie totals and show saved rating checkpoints when available. Historical schedules use unnamed opponents where the saved calendar cannot support names.

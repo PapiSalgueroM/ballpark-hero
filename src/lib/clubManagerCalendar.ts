@@ -41,7 +41,7 @@ import {
   freeAgencyCarry, worldRatingHandover, snapshotRatingDeparture,
 } from '@/lib/clubManager';
 import type { WorldCompKey } from '@/lib/worldCompetition';
-import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
+import type { CareerState, CalendarEntry, Competition, FormResult, LeagueRatingChange, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
 import { BOARD_FRESH, LEGACY_BOARD_START, LEGACY_NEW_JOB_BOARD } from '@/lib/clubManagerBoardVerdict';
 import { applyNewJobDials } from '@/lib/clubManagerDifficulty';
 import type { CmVarAsk } from '@/lib/clubManagerVar';
@@ -418,6 +418,7 @@ export interface CalendarDay {
   /** Once played. */
   res?: FormResult;
   score?: string;
+  ratingChanges?: LeagueRatingChange[];
   /** The window that opens on this day. */
   windowOpens?: WindowKind;
   /** The window this day is deadline day for. */
@@ -540,8 +541,9 @@ export function seasonDays(state: CareerState): SeasonDays {
   const today = entryDates[todayIdx] ?? seasonStart;
   const todayKey = dateKey(today);
   const windows = windowSpans(state);
-  const played = new Map<number, { res: FormResult; opp: string; comp: string; home: boolean | null; score: string; competition?: Competition }>();
-  for (const r of state.resultLog ?? []) played.set(r.week, { res: r.res, opp: r.opp, comp: r.comp, home: r.home, score: r.score, competition: r.competition });
+  const played = new Map((state.resultLog ?? []).map(result => [result.week, result]));
+  const stamp = state.leagueRatingResults;
+  const leagueRatings = stamp?.season === state.season && stamp.club === state.clubName ? stamp.results : undefined;
 
   const openDays = new Map<number, WindowKind>();
   const deadlineDays = new Map<number, WindowKind>();
@@ -565,12 +567,26 @@ export function seasonDays(state: CareerState): SeasonDays {
       entryDays.set(key, { date, key, weekIdx: w, kind: 'window', windowOpens: 'january', windowOpen: true, isToday, past });
       return;
     }
-    const p = played.get(w);
+    const saved = played.get(w);
+    const review = past && entry.type === 'league' ? leagueRatings?.[entry.round] : undefined;
+    const fixture = review && !saved ? fixtureFor(state, entry) : null;
+    const confirmed = review?.week === w && review.competition === 'league'
+      && typeof review.opp === 'string' && typeof review.comp === 'string' && typeof review.score === 'string' && /^\d+-\d+$/.test(review.score)
+      && (review.res === 'W' || review.res === 'D' || review.res === 'L')
+      && (review.home === null || typeof review.home === 'boolean')
+      && Array.isArray(review.ratingChanges) && review.ratingChanges.every(move => move && typeof move.id === 'string' && typeof move.name === 'string'
+        && Number.isInteger(move.before) && move.before >= 1 && move.before <= 99
+        && Number.isInteger(move.after) && move.after >= 1 && move.after <= 99 && move.before !== move.after
+        && (move.onLoan === undefined || move.onLoan === true))
+      && (saved ? saved.opp === review.opp && saved.home === review.home && saved.score === review.score && saved.res === review.res
+        : fixture?.opponent === review.opp && fixture.home === review.home);
+    const p = saved ?? (confirmed ? review : undefined);
     if (p) {
       entryDays.set(key, {
         date, key, weekIdx: w, kind: 'match',
         competition: p.competition ?? entry.type,
         compLabel: p.comp, opponent: p.opp, home: p.home, res: p.res, score: p.score,
+        ...(confirmed ? { ratingChanges: review.ratingChanges } : {}),
         deadline: deadlineDays.get(key), windowOpen: inWindow(key), isToday, past,
       });
       return;

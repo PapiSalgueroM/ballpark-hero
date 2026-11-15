@@ -318,6 +318,18 @@ export function CalendarScreen({ career, onSimTo, onSetTraining }: CalendarScree
             <div className="rounded-lg border border-primary/40 bg-primary/5 p-2">
               <div className="text-xs font-bold text-foreground">{shortDate(selected.date)}{selected.isToday ? ' · today' : ''}</div>
               <div className="text-xs text-foreground/90">{dayEmoji(selected) ? `${dayEmoji(selected)} ` : ''}{dayLine(selected)}</div>
+              {selected.kind === 'match' && selected.competition === 'league' && selected.res && (
+                <div className="mt-1 text-xs text-muted-foreground" data-testid="cm-calendar-rating-review">
+                  {selected.ratingChanges === undefined ? 'Squad OVR review was not recorded.'
+                    : selected.ratingChanges.length === 0 ? 'No squad OVR changes this match.'
+                      : <>
+                        <span className="font-semibold text-foreground">Squad OVR changes</span>
+                        <ul className="max-h-36 overflow-y-auto">
+                          {selected.ratingChanges.map(change => <li key={change.id}>{change.name} {change.before} to {change.after}{change.onLoan ? ' (on loan)' : ''}</li>)}
+                        </ul>
+                      </>}
+                </div>
+              )}
               {windowLine && <div className="text-xs text-gold mt-0.5">{selected.deadline ? '🔒' : '🔓'} {windowLine}</div>}
               {selectedIntl && <div data-cm-intl-line className="text-xs text-emerald-300 mt-0.5">🌍 {intlMarkLine(selectedIntl)}</div>}
               <div className="mt-1.5 flex items-center gap-2">

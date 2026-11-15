@@ -83,6 +83,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.',
       'After the Grand Final, open Contracts to negotiate one simulated mutual release. A player with one season left can leave if you have another player signed in that position. Check the settlement and next season’s cap room before confirming.',
       'Set Standard, Value or Premium ticket prices in Finance before your first paid home match. That choice applies to home gates for the rest of the season.',
+      'Before Round 1, open Season sponsor in Finances to choose a one-season offer or take $160,000 now and $295,000 next year. The two-season deal stays with the club and fills its sponsor slot for both years.',
       'Before Round 1, enable Supporter attendance in Finances if you want simulated home gate receipts to respond to recent results and ticket prices. The preview uses your last four club matches.',
       'Review home-ground concessions in Finances. The club pays once and earns simulated concessions income from eligible home games starting next round. Check the cash forecast for payback.',
       'Hire a development assistant in Finances to help up to three young players who are signed to return. Each needs eight regular-season appearances from the hire onward to earn a rating point during the season.',
