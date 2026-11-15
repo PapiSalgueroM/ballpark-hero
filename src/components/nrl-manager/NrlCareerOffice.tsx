@@ -25,6 +25,7 @@ import {
   nrlRenewalHoldOptions, nrlRenewalHoldQuote, nrlRenewalHoldSpend, NRL_RENEWAL_HOLD_FEE,
   nrlSeasonOut, nrlSelectionPromise, nrlSelectionPromiseCandidates, nrlSelectionPromiseTerms,
   nrlMutualReleaseQuote, nrlMutualReleaseSpend,
+  nrlRivalTakeoverCandidates, nrlRivalTakeoverOpen, nrlRivalTakeoverQuote, nrlRivalTakeoverSpend,
   nrlSummerApplication, nrlSummerApplicationOpenings, nrlSummerLastRound,
   type NrlCareerAction, type NrlCareerState, type NrlOffseasonFreeAgentTarget, type NrlPrimaryRoleChange,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverDiscovery, nrlTakeoverPlayers, nrlTicketPricingRefusal,
@@ -343,6 +344,59 @@ function ContractSwap({ career, onAction, disabled }: { career: NrlCareerState; 
   );
 }
 
+function RivalTakeover({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const clubName = useNrlClubName('full');
+  const [sellerId, setSellerId] = useState('');
+  const [playerId, setPlayerId] = useState('');
+  if (!nrlRivalTakeoverOpen(career)) return null;
+  const { year, clubId } = career.season;
+  const agreed = career.finance.rivalTakeover;
+  const candidates = sellerId ? nrlRivalTakeoverCandidates(career, sellerId) : [];
+  const selected = candidates.find(player => player.id === playerId);
+  const quote = selected && nrlRivalTakeoverQuote(career, selected.id);
+  return (
+    <details className="group mt-3 rounded-lg border border-border" data-nrl-rival-takeover>
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 text-sm font-semibold">
+        Approach a contracted rival<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-3 border-t border-border p-3 text-sm">
+        {agreed ? <p role="status" data-nrl-rival-takeover-receipt>
+          {agreed.playerName} joins in {year + 1} from {clubName(year, agreed.sellerId)}. {money(nrlRivalTakeoverSpend(career.finance))} paid from club cash.
+        </p> : <>
+          <p className="text-muted-foreground">Take over one rival contract this offseason. The player keeps their wage and remaining term, and the selling club keeps a player rated at least as high at that position.</p>
+          <label className="block space-y-1 font-semibold">
+            <span>Selling club</span>
+            <select className={control} value={sellerId} disabled={disabled} onChange={event => {
+              setSellerId(event.target.value);
+              setPlayerId('');
+            }}>
+              <option value="">Choose a club</option>
+              {nrlSeasonPlan(year).clubs.filter(club => club.id !== clubId).map(club => (
+                <option key={club.id} value={club.id}>{clubName(year, club.id)}</option>
+              ))}
+            </select>
+          </label>
+          {sellerId && (candidates.length ? <label className="block space-y-1 font-semibold">
+            <span>Contracted player</span>
+            <select className={control} value={playerId} disabled={disabled} onChange={event => setPlayerId(event.target.value)}>
+              <option value="">Choose a player</option>
+              {candidates.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role} · {player.rating} OVR</option>)}
+            </select>
+          </label> : <p className="text-muted-foreground">This club has no covered contracts available.</p>)}
+          {quote?.ok ? <>
+            <div className="space-y-1 text-muted-foreground" role="status">
+              <p>{money(quote.fee)} acquisition fee. {selected?.name} joins for {money(quote.contract.salary)} per season through {quote.contract.endYear}.</p>
+              {quote.capAfter.map(cap => <p key={cap.year}>{cap.year} cap room after the deal: {money(cap.available)}.</p>)}
+            </div>
+            <Button type="button" size="lg" disabled={disabled}
+              onClick={() => onAction({ type: 'takeOverRivalContract', year, clubId, playerId, fee: quote.fee })}>Confirm takeover</Button>
+          </> : quote && 'reason' in quote && <p role="status" className="text-muted-foreground">{quote.reason}</p>}
+        </>}
+      </div>
+    </details>
+  );
+}
+
 function MutualRelease({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const [playerId, setPlayerId] = useState('');
   const summary = useRef<HTMLElement>(null);
@@ -482,6 +536,7 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
       <ContractApproaches career={career} onAction={onAction} disabled={disabled} />
       <ContractTakeover career={career} onAction={onAction} disabled={disabled} />
       <ContractSwap career={career} onAction={onAction} disabled={disabled} />
+      <RivalTakeover career={career} onAction={onAction} disabled={disabled} />
       <MutualRelease career={career} onAction={onAction} disabled={disabled} />
       <ul className="mt-3 divide-y divide-border">
         {squad.map(player => <PlayerRow key={player.id} player={player} entry={offers.get(player.id)} career={career} onAction={onAction} disabled={disabled} />)}
@@ -1650,6 +1705,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
                 ...(cash.academyCrossTraining ? [['Academy cross-training', nrlAcademyCrossTrainingSpend(cash)] as const] : []),
                 ...(concessionsSpend ? [['Concessions upgrade', concessionsSpend] as const] : []),
                 ...(cash.mutualRelease ? [['Contract settlement', nrlMutualReleaseSpend(cash)] as const] : []),
+                ...(cash.rivalTakeover ? [['Rival contract acquisition', nrlRivalTakeoverSpend(cash)] as const] : []),
                 ...(cash.renewalHold ? [['Renewal hold fee', nrlRenewalHoldSpend(cash)] as const] : []),
                 ...(cash.coachHire ? [['Coach signing fee', coachSpend.signingFee], ['Coach wages paid', coachSpend.wages]] as [string, number][] : []),
                 ...(courseSpend ? [['Assistant coaching course', courseSpend] as const] : []),
@@ -2559,6 +2615,9 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 <p className="text-sm text-muted-foreground">Premiers {labelForClub(record.year, record.championId)}{record.finance ? ` · Profit or loss ${money(record.finance.profit)}` : ''}</p>
                 {record.finance?.physio && <p className="text-sm text-muted-foreground">
                   Physio session in Round {record.finance.physio.round} · {money(nrlPhysioSpend(record.finance))}
+                </p>}
+                {record.finance?.rivalTakeover && <p className="text-sm text-muted-foreground">
+                  {record.finance.rivalTakeover.playerName} signed through {record.finance.rivalTakeover.endYear} · {money(nrlRivalTakeoverSpend(record.finance))} acquisition fee.
                 </p>}
                 {record.finance?.ticketReview ? <p className="text-sm text-muted-foreground" data-nrl-archived-ticket-review>
                   Home ticket pricing {ticketLabels[record.finance.ticketTier ?? 'standard']} to {ticketLabels[record.finance.ticketReview.tier]} from Round {record.finance.ticketReview.round}.
