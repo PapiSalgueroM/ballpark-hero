@@ -155,9 +155,13 @@ describe('Soccer Career failed write recovery', () => {
   }, 20000);
   it('retries the latest earned season after more than one failed career change without rerunning its engine', async () => {
     const m = mount(), before = read(), oldBytes = localStorage.getItem(KEY);
-    const trained = E.applyTrainingResult(copy(before), 'pace', 80), expected = copy(E.advanceYouthYear(copy(trained), E.FALLBACK_CLUBS));
+    const trained = E.applyTrainingResult(copy(before), 'pace', 80);
+    const expected = copy(E.advanceYouthYear(trained, E.FALLBACK_CLUBS, true));
     m.refuse(true); await bankSprint(m.view); pressNext(m.view); assertWarning(m.view);
-    expect(localStorage.getItem(KEY)).toBe(oldBytes); expect(JSON.parse(m.attempts[m.attempts.length - 1])).toEqual(expected);
+    const earned = JSON.parse(m.attempts[m.attempts.length - 1]);
+    expect(localStorage.getItem(KEY)).toBe(oldBytes); expect(earned).toEqual(expected);
+    expect(earned.seasons.at(-1)?.ratingPath).toHaveLength(5);
+    expect(earned.seasons.at(-1)?.academyReport).toBeDefined();
     expect(expected.seasons).toHaveLength(before.seasons.length + 1); expect(expected.age).toBe(before.age + 1);
     clearReplayCounts(); m.refuse(false); retry(m.view); noReplay(); expect(read()).toEqual(expected);
     expect(warning(m.view)).toBeNull(); expect(recordCompletion).not.toHaveBeenCalled();

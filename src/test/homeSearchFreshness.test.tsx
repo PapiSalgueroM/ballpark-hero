@@ -352,6 +352,43 @@ it.each([
   expect(screen.getByRole('textbox', { name: 'Search games' })).toHaveValue('');
 });
 
+it.each([false, true])('restores the Soccer hub link with its catalogue expanded=%s', expanded => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  function Hub() {
+    const navigate = useNavigate();
+    return <><h1>Soccer Games</h1><button onClick={() => navigate(-1)}>Go back</button></>;
+  }
+  function LocationMarker() {
+    return <output aria-label="Current anchor">{useLocation().hash}</output>;
+  }
+  const { container } = render(<MemoryRouter initialEntries={[{ pathname: '/', hash: '#sport-soccer', key: 'hub-return-' + expanded }]}>
+    <LocationMarker />
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/soccer" element={<Hub />} />
+    </Routes>
+  </MemoryRouter>);
+  const section = () => container.querySelector<HTMLElement>('section[data-sport="soccer"]')!;
+  const opener = () => within(section().querySelector('h2')!.parentElement!).getByRole('link', { name: /^(Hub|Soccer hub)$/ });
+  const more = () => section().querySelector('button[aria-controls="home-more-soccer"]')!;
+  if (expanded) fireEvent.click(more());
+  const visibleGames = section().querySelectorAll('[data-catalog-card]').length;
+  expect(opener()).toHaveAttribute('href', '/soccer');
+  opener().focus();
+  fireEvent.click(opener());
+  expect(screen.getByRole('heading', { name: 'Soccer Games' })).toBeVisible();
+  expect(screen.getByLabelText('Current anchor')).toBeEmptyDOMElement();
+
+  fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
+  expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#sport-soccer');
+  expect(opener()).toHaveFocus();
+  expect(opener()).toHaveAccessibleName('Soccer hub');
+  expect(more()).toHaveAttribute('aria-expanded', String(expanded));
+  expect(section().querySelectorAll('[data-catalog-card]')).toHaveLength(visibleGames);
+  const football = container.querySelector<HTMLElement>('section[data-sport="football"] h2')!.parentElement!;
+  expect(within(football).getByRole('link', { name: 'NFL hub' })).toHaveAttribute('href', '/pro-football');
+});
+
 it('jumps from Browse sports to game picks and restores the opener with Back', () => {
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
   const scrollTo = vi.fn();

@@ -10,7 +10,8 @@ import {
   mlbDraftClass, mlbProspectToPlayer, mlbStrength, mlbCapUsed, mlbCapRoom,
   mlbRelease, mlbSign, mlbTrade, mlbTradeValue, mlbAiMoves, AL, NL, MLB_DIVISIONS,
   MLB_ROUNDS, MLB_PROTECTED_STARTERS, MLB_ROTATION_RISK_REDUCTION, mlbRotationChoices, mlbRotationPlanned, setMlbRotationPlan,
-  mlbOctoberRotationPlanned, mlbStrengthUnits, readMlbOctoberReceipt, setMlbOctoberRotation,
+  MLB_OCTOBER_REST_GAMES, mlbOctoberPlanMode, mlbOctoberRotationPlanned, mlbOctoberShortRestRating,
+  mlbStrengthUnits, readMlbOctoberReceipt, setMlbOctoberRotation,
   mlbDevelopmentChoices, mlbDevelopmentPlan, mlbDevelopmentPreview, mlbDevelopmentUsed, readMlbDevelopmentReceipt, setMlbDevelopmentStart,
   type MlbDevelopmentReceipt,
   type MlbLeague, type MlbProspect, type MlbSeriesResult, type MlbRotationReceipt, mlbExecuteTalksTrade,
@@ -131,19 +132,20 @@ function OctoberRecap({ rows, team, unavailable, label }: {
 }) {
   const october = rows.flatMap(row => {
     const receipt = readMlbOctoberReceipt(row, team);
-    return receipt ? [{ name: row.name, opponent: row.home === team ? row.away : row.home, games: receipt.games }] : [];
+    return receipt ? [{ name: row.name, opponent: row.home === team ? row.away : row.home, games: receipt.games, mode: receipt.mode }] : [];
   });
   return (
     <>
-      {unavailable && <p className="rounded-xl border border-border bg-card p-3 text-xs text-muted-foreground" data-october-fallback>Usual rotation played in October. Three healthy starters were needed for the ace-first plan.</p>}
+      {unavailable && <p className="rounded-xl border border-border bg-card p-3 text-xs text-muted-foreground" data-october-fallback>Usual rotation played in October. The saved plan needed three healthy starters.</p>}
       {october.length > 0 && (
         <section aria-label="October starters" className="rounded-2xl border border-border bg-card p-3 text-xs">
           <h2 className="font-semibold">October starters</h2>
+          {october.some(row => row.mode === 'elimination') && <p className="mt-1 text-muted-foreground">Elimination plan used. Ratings shown include any short-rest drop.</p>}
           {october.map(({ name, opponent, games }) => (
             <details key={opponent} className="mt-2 rounded-lg border border-border px-2">
               <summary className="flex min-h-11 cursor-pointer items-center font-semibold">{name} vs {label(opponent)}</summary>
               <ol className="space-y-1 pb-2 text-muted-foreground">
-                {games.map((game, index) => <li key={index}>Game {index + 1} · {game.pitcher} · {game.rating} OVR · {game.won ? 'Win' : 'Loss'}</li>)}
+                {games.map((game, index) => <li key={index}>Game {index + 1} · {game.pitcher} · {game.rating} OVR · {game.won ? 'Win' : 'Loss'}{game.aceOverride ? ' · Ace switched in' : ''}{game.shortRest ? ' · Short rest' : ''}</li>)}
               </ol>
             </details>
           ))}
@@ -838,7 +840,7 @@ export default function MlbFrontOfficeBoard() {
   const developmentRotation = rotation && mlbRotationPlanned(league, myTeam) ? MLB_PROTECTED_STARTERS : 3;
   const showOctoberChoice = tab === 'round' && league.round === MLB_ROUNDS && !!my.depth;
   const octoberStarters = showOctoberChoice ? mlbStrengthUnits(my).rot : [];
-  const octoberBooked = showOctoberChoice && mlbOctoberRotationPlanned(league, myTeam);
+  const octoberBooked = showOctoberChoice ? mlbOctoberPlanMode(league, myTeam) : null;
   const last = lastRound.current;
   const roundResults = <FoRoundResults completed={foCompletedRounds(league, MLB_ROUNDS)} history={roundHistory.current}
     lastRound={last ? { ...last, reports: roundPlanReports(last) } : null} />;
@@ -1452,10 +1454,10 @@ export default function MlbFrontOfficeBoard() {
               <label className="block text-xs font-semibold">
                 October rotation
                 <select className="mt-1 min-h-11 w-full rounded-lg border border-border bg-background px-3 text-sm"
-                  value={octoberBooked ? 'ace' : 'usual'} onChange={event => {
+                  value={octoberBooked ?? 'usual'} onChange={event => {
                     const choice = event.target.value;
-                    if (choice !== 'ace' && choice !== 'usual') return;
-                    const next = setMlbOctoberRotation(league, myTeam, choice === 'ace');
+                    if (choice !== 'ace' && choice !== 'usual' && choice !== 'elimination') return;
+                    const next = setMlbOctoberRotation(league, myTeam, choice === 'elimination' ? choice : choice === 'ace');
                     if (next === league) return;
                     if (!persist({}, next, myTeam)) { setOctoberSaveError(true); return; }
                     setOctoberSaveError(false);
@@ -1463,13 +1465,18 @@ export default function MlbFrontOfficeBoard() {
                   }}>
                   <option value="usual">Usual rotation</option>
                   <option value="ace" disabled={octoberStarters.length !== 3}>Start the ace first</option>
+                  <option value="elimination" disabled={octoberStarters.length !== 3}>Use the ace in elimination games</option>
                 </select>
               </label>
-              <p className="mt-1 text-xs text-muted-foreground">Your three best healthy starters pitch in rating order at the start of each playoff series. Each game uses its starter&apos;s rating. The usual rotation averages all three.</p>
+              <p className="mt-1 text-xs text-muted-foreground">Your three best healthy starters pitch in rating order in each playoff series. The usual rotation averages all three.</p>
+              <p className="mt-1 text-xs text-muted-foreground">The elimination plan brings your ace in only if he still rates higher than the scheduled starter. He pitches at a lower rating until {MLB_OCTOBER_REST_GAMES} team games have passed since his last start, even across series.</p>
               {octoberBooked && <p className="mt-1 text-xs text-muted-foreground" data-october-preview>
                 {octoberStarters.length === 3
                   ? octoberStarters.map(player => player.name + ' ' + player.ovr).join(' · ')
                   : 'The usual rotation will play if you are short of three healthy starters when October begins.'}
+              </p>}
+              {octoberBooked === 'elimination' && octoberStarters.length === 3 && <p className="mt-1 text-xs text-muted-foreground">
+                {octoberStarters[0].name} would pitch at {mlbOctoberShortRestRating(octoberStarters[0].ovr)} OVR on short rest.
               </p>}
               {octoberSaveError && <p role="alert" className="mt-1 text-xs text-destructive">Could not save the October rotation. Choose it again to retry.</p>}
             </div>

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createNrlCareer, readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
-import { createNrlSeason, nrlInjuries, nrlNextRound, nrlSavedLineupPreview, NRL_SAVE_KEY } from '@/lib/nrlManager';
+import { createNrlSeason, nrlInjuries, nrlNextRound, nrlSavedLineupPreview, nrlStarterOptions, NRL_ROLES, NRL_SAVE_KEY } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
 
@@ -56,6 +56,55 @@ afterEach(() => {
 });
 
 describe('NRL saved lineup', () => {
+  it('books and cancels a future rotation in Squad, then uses the edited team for only that match', () => {
+    const first = save(start());
+    const rotation = reduceNrlCareer(rearrange(first), { type: 'saveLineup', year: 2026, clubId: 'storm', slot: 'rotation' });
+    const initial = apply(rotation, nrlSavedLineupPreview(rotation.season, first.savedLineup!)!.key);
+    const read = () => readNrlCareerSave(raw())!;
+    const view = open(bytes(initial));
+    const selection = desk();
+    const choose = () => {
+      fireEvent.click(selection.getByRole('button', { name: 'Rotation' }));
+      const picker = selection.getByLabelText('Fixture for saved rotation');
+      expect(within(picker).queryByRole('option', { name: /Round 21/ })).toBeNull();
+      fireEvent.change(picker, { target: { value: '2' } });
+    };
+    const book = () => fireEvent.click(selection.getByRole('button', { name: 'Schedule saved rotation' }));
+    choose();
+    expect(raw()).toBe(bytes(initial));
+    book();
+    expect(read().scheduledRotation?.fixture.round).toBe(2);
+    expect(selection.getByText(/Round 2 .* Rotation scheduled\./)).toBeVisible();
+    fireEvent.click(selection.getByRole('button', { name: 'Cancel scheduled rotation' }));
+    expect(raw()).toBe(bytes(initial));
+    choose();
+    book();
+    const planned = raw();
+
+    view.unmount();
+    render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+    click('Squad');
+    expect(desk().getByText(/Round 2 .* Rotation scheduled\./)).toBeVisible();
+    expect(raw()).toBe(planned);
+    click('Match centre');
+    click('Quick Sim');
+    expect(screen.getByText(/Saved rotation is active/)).toBeVisible();
+    expect(read().season.lineup.Halfback).toBe(rotation.savedRotationLineup!.lineup.Halfback);
+    const usual = read().scheduledRotation!.returnLineup!;
+    click('Squad');
+    const neighbour = nrlStarterOptions(read().season, 'Left Centre').find(player => player.id !== read().season.lineup['Left Centre'])!;
+    fireEvent.change(screen.getByLabelText('Left Centre'), { target: { value: neighbour.id } });
+    click('Match centre');
+    click('Quick Sim');
+    const result = read().season.results.find(match => match.round === 2 && match.playerScoring)!;
+    expect(result.playerScoring?.starters[NRL_ROLES.indexOf('Left Centre')]).toBe(neighbour.id);
+    expect(result.playerScoring?.starters[NRL_ROLES.indexOf('Halfback')]).toBe(rotation.savedRotationLineup!.lineup.Halfback);
+    expect(read().season.lineup['Left Centre']).toBe(usual.lineup['Left Centre']);
+    expect(read().season.lineup.Halfback).toBe(usual.lineup.Halfback);
+    expect(read().scheduledRotation).toBeUndefined();
+    expect(screen.queryByText(/Saved rotation is active/)).toBeNull();
+  });
+
   it('captures one exact selection and applies it without restoring tactics or preparation', () => {
     const original = start();
     const selected = reduceNrlCareer(original, { type: 'setKicker', playerId: original.season.lineup.Fullback });

@@ -65,13 +65,14 @@ const POPULAR_FALLBACK_PATHS = ['/soccer-grid', '/footle', '/squad-deal'];
 const EMPTY_BEST_SCORES: Readonly<Record<string, number>> = {};
 const SEARCH_GAME_LINK = '[data-home-game-card] a[href]';
 const CATALOGUE_GAME_LINK = '[data-catalog-card] a[href]';
+const CATALOGUE_HUB_LINK = 'a[data-home-hub-link]';
 const CONTINUE_GAME_LINK = 'a[data-continue-card]';
 const PICK_GAME_LINK = 'a[data-game-pick-link]';
 const FEATURED_GAME_LINK = 'a[data-stage-card]';
 const NRL_GAME_LINK = 'a[data-home-nrl-launch]';
 const POPULAR_GAME_LINK = 'a[data-home-popular-game]';
 const RECENT_GAME_LINK = '[data-home-shipped] [data-home-game-card] a[href]';
-const HOME_GAME_SHELVES = [CATALOGUE_GAME_LINK, CONTINUE_GAME_LINK, PICK_GAME_LINK, FEATURED_GAME_LINK, NRL_GAME_LINK, POPULAR_GAME_LINK, RECENT_GAME_LINK];
+const HOME_GAME_SHELVES = [CATALOGUE_GAME_LINK, CATALOGUE_HUB_LINK, CONTINUE_GAME_LINK, PICK_GAME_LINK, FEATURED_GAME_LINK, NRL_GAME_LINK, POPULAR_GAME_LINK, RECENT_GAME_LINK];
 const SPORT_PREVIEW_GAMES = 12;
 type GameReturn = {
   query: string;
@@ -243,7 +244,8 @@ export default function Index() {
     const shelf = link.closest<HTMLElement>('[data-home-shelf-rail]');
     const selector = selectors.find(selector => link.matches(selector));
     if (!selector) return;
-    const catalogueSport = selector === CATALOGUE_GAME_LINK && link.closest('section[data-sport]') ? sportOf(path) : undefined;
+    const sourceSport = link.closest('section[data-sport]')?.getAttribute('data-sport');
+    const catalogueSport = pickableSports.find(sport => sport === sourceSport);
     gameReturns.delete(homeEntry);
     gameReturns.set(homeEntry, {
       query: fromSearch ? searchQuery : '', sport: fromSearch ? searchSport : undefined, path, selector,
@@ -462,6 +464,7 @@ export default function Index() {
             const extraGames = cat.games.slice(SPORT_PREVIEW_GAMES);
             const expanded = expandedSports.includes(sport);
             const moreId = `home-more-${sport}`;
+            const hub = hubForCategory(cat.title);
             return (
             <section key={cat.title} data-sport={sport}>
               {/* Round 658: the sport's drawn glyph in its own ink leads
@@ -484,8 +487,9 @@ export default function Index() {
                 </h2>
                 <div className="ml-auto flex max-w-full flex-wrap items-center gap-x-1">
                   {/* Round 198: each sport hub is discoverable from its Home section. */}
-                  {hubForCategory(cat.title) && (
-                    <Link to={hubForCategory(cat.title)!.route} className="inline-flex min-h-11 items-center rounded-lg px-2.5 text-xs text-primary hover:underline focus-visible:outline-primary">
+                  {hub && (
+                    <Link to={hub.route} aria-label={`${hub.navLabel} hub`} data-home-hub-link=""
+                      className="inline-flex min-h-11 items-center rounded-lg px-2.5 text-xs text-primary hover:underline focus-visible:outline-primary">
                       Hub
                     </Link>
                   )}

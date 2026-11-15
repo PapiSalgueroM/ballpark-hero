@@ -1,4 +1,13 @@
+## 2026-11-15: Scheduled rugby rotation, October pitching and Home Back
+
+- NRL Team Manager can book a saved rotation lineup for one regular-season fixture. It covers unavailable players, keeps manual changes for that match and restores the usual selection after settlement in Quick Sim, Live and Fast-forward.
+- MLB Front Office can bring back the ace in elimination games if his effective rating beats the scheduled starter. Short rest costs six rating points and carries between series. The recap records the pitcher, rating and reason for each switch.
+- Home restores the sport catalogue and keyboard focus after Back from a sport hub. The hub link names its sport.
+- Soccer Career save verification now uses the current in-season academy mode in the mounted test. All nine outcomes and 17 fault controls passed, including retry of the latest earned season without replaying it.
+
 ## 2026-11-15: Summer draft choices, quarterback runs and targeted preparation
+
+[PR #987](https://github.com/PapiSalgueroM/ballpark-hero/pull/987) published exact main `a49fb94f5d35068b55e2196452fd242b1031b526`, deployment `e9dbeab9-fb15-49ec-adae-51e5f41d3b73`, canonical entry `/assets/index-BJggnWPj.js`. All 11 live browser journeys and all 174 sitemap routes passed. Seven policy and crawler endpoints, both admin noindex tags and the four updated guides passed. IndexNow accepted all four guides. Hosted app types, production build and the career entry guide workflow passed. The integrated candidate passed 103 focused tests, 20 site checks and all 16 download budgets. Two older Aussie Rules club-name assertions reproduce on exact #986 because their selector reads a player skill-change row.
 
 - Aussie Rules Manager lets the club delist one returning player before the draft pool is revealed. The open spot adds one draft pick, with the existing positional minimums still required.
 - NFL My Career offers signed Dual Threat starters a designed-runs package. It moves regular-season production from passing to rushing and trades an interception reduction for up to four points of health. Camp can take away the starting job and cancel the choice. The season review and supported Week by week replays show the saved rushing line.

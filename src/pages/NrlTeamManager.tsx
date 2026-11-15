@@ -28,11 +28,11 @@ import {
   nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlNextRound, nrlOnFieldCaptain, nrlOpeningCoverOptions,
   nrlQuickInterchangeOptions, nrlQuickInterchangeOutcome, nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
-  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlGoldenPointApproach, type NrlHalftimeTalk, type NrlKickingPlan, type NrlLatePenaltyApproach, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlQuickInterchange, type NrlRole, type NrlTactic,
+  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFixture, type NrlGoldenPointApproach, type NrlHalftimeTalk, type NrlKickingPlan, type NrlLatePenaltyApproach, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlQuickInterchange, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
-  nrlCanReviewTickets, nrlHomeGateReport, nrlTicketReviewRound,
+  nrlCanReviewTickets, nrlHomeGateReport, nrlScheduledRotationOptions, nrlTicketReviewRound,
   nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport, nrlPositionTraining,
   nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveCoachQuote, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlPastLadders, nrlSelectionPromise, nrlSelectionPromiseTerms, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
@@ -1418,6 +1418,9 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
           </p>
         )}
         {actingCaptain && <p className="mt-2 break-words text-sm text-emerald-100" data-nrl-acting-captain>Acting captain · {actingCaptain}</p>}
+        {career.scheduledRotation?.returnLineup && <p className="mt-2 text-sm text-emerald-100" data-nrl-active-rotation>
+          Saved rotation is active for this match. Changes in Squad apply today. Your usual lineup returns afterward.
+        </p>}
         {phase === 'complete' && (
           <Button type="button" size="lg" className="mt-3 px-4" onClick={() => onOpenOffice('history')}><Trophy aria-hidden="true" /> Review this season</Button>
         )}
@@ -1746,17 +1749,28 @@ function SquadSeasonStats({ season }: { season: NrlManagerState }) {
 function SavedLineup({ career, onAction, disabled }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
 }) {
+  const shortName = useNrlClubName();
   const summary = useRef<HTMLElement>(null);
   const [active, setActive] = useState<'first' | 'rotation'>('first');
+  const [fixtureRound, setFixtureRound] = useState<number>();
   const { season } = career;
+  const { year, clubId, round } = season;
   const savedLineup = active === 'first' ? career.savedLineup : career.savedRotationLineup;
   const slot = active === 'rotation' ? 'rotation' : undefined;
-  const selection = disabled || career.legacySeason ? null : nrlMatchdaySelection(season);
-  if (!selection) return null;
+  if (disabled || career.legacySeason) return null;
+  const selection = nrlMatchdaySelection(season);
+  const fixtures = nrlScheduledRotationOptions(career);
+  const booking = career.scheduledRotation;
+  if (!selection && !booking && !fixtures.length) return null;
   const preview = savedLineup ? nrlSavedLineupPreview(season, savedLineup) : null;
   const nameOf = (id: string) => season.squad.find(player => player.id === id)?.name;
+  const chosen = fixtures.find(fixture => fixture.round === fixtureRound);
+  const fixtureLabel = (fixture: NrlFixture) => {
+    const home = fixture.homeId === clubId;
+    return `Round ${fixture.round} · ${shortName(year, home ? fixture.awayId : fixture.homeId)} (${home ? 'home' : 'away'})`;
+  };
   const save = () => {
-    if (onAction({ type: 'saveLineup', year: season.year, clubId: season.clubId, slot })) summary.current?.focus();
+    if (onAction({ type: 'saveLineup', year, clubId, slot })) summary.current?.focus();
   };
   return (
     <details className="group mt-3 rounded-lg border border-border bg-background px-3">
@@ -1764,11 +1778,11 @@ function SavedLineup({ career, onAction, disabled }: {
         Saved lineup<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
       </summary>
       <div className="space-y-3 pb-3 text-sm">
-        <p className="text-muted-foreground">Save a first-choice team and a rotation team for this season. Each keeps its starting 13, bench order and goal kicker.</p>
+        {selection && <><p className="text-muted-foreground">Save a first-choice team and a rotation team for this season. Each keeps its starting 13, bench order and goal kicker.</p>
         <div role="group" aria-label="Saved lineup slot" className="grid grid-cols-2 gap-2">
           <Button type="button" size="lg" variant={active === 'first' ? 'secondary' : 'outline'} className="px-2" aria-pressed={active === 'first'} onClick={() => setActive('first')}>First choice</Button>
           <Button type="button" size="lg" variant={active === 'rotation' ? 'secondary' : 'outline'} className="px-2" aria-pressed={active === 'rotation'} onClick={() => setActive('rotation')}>Rotation</Button>
-        </div>
+        </div></>}
         {preview && (
           <div className="space-y-2 text-muted-foreground" role="status">
             {preview.replacements > 0 && <p>Saved picks adjusted for this round: {preview.replacements}.</p>}
@@ -1784,7 +1798,7 @@ function SavedLineup({ career, onAction, disabled }: {
             {!preview.changed && <p>Your current lineup matches the preview.</p>}
           </div>
         )}
-        <div className="flex flex-wrap gap-2">
+        {selection && <div className="flex flex-wrap gap-2">
           <Button type="button" size="lg" variant="outline" className="px-3"
             disabled={JSON.stringify(selection) === JSON.stringify(savedLineup)} onClick={save}>
             {savedLineup ? 'Replace saved lineup' : 'Save this lineup'}
@@ -1792,7 +1806,32 @@ function SavedLineup({ career, onAction, disabled }: {
           {preview && <Button type="button" size="lg" className="px-3" disabled={!preview.changed} onClick={() => {
             if (onAction({ type: 'applySavedLineup', previewKey: preview.key, slot })) summary.current?.focus();
           }}>Apply saved lineup</Button>}
-        </div>
+        </div>}
+        {booking ? <div className="space-y-2 border-t border-border pt-2" data-nrl-scheduled-rotation>
+          <p className="font-semibold" role="status">{fixtureLabel(booking.fixture)}. {booking.returnLineup ? 'Rotation active.' : 'Rotation scheduled.'}</p>
+          <Button type="button" size="lg" variant="outline" onClick={() => {
+            if (onAction({ type: 'cancelRotation', year, clubId, round })) summary.current?.focus();
+          }}>Cancel scheduled rotation</Button>
+        </div> : (active === 'rotation' || !selection) && fixtures.length > 0 && (
+          <div className="space-y-2 border-t border-border pt-2">
+            <label htmlFor="nrl-rotation-fixture" className="block font-semibold">Fixture for saved rotation</label>
+            <select id="nrl-rotation-fixture" value={chosen?.round ?? ''} aria-describedby="nrl-rotation-fixture-help"
+              className="min-h-11 w-full rounded-lg border border-input bg-background px-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              onChange={event => setFixtureRound(Number(event.target.value))}>
+              <option value="">Choose a fixture</option>
+              {fixtures.map(fixture => <option key={fixture.round} value={fixture.round}>{fixtureLabel(fixture)}</option>)}
+            </select>
+            <p id="nrl-rotation-fixture-help" className="text-muted-foreground">
+              This saves a copy of your rotation lineup for one match. Unavailable players are replaced before kickoff. Your usual selection returns afterward.
+            </p>
+            <Button type="button" size="lg" variant="outline" disabled={!chosen} onClick={() => {
+              if (chosen && onAction({ type: 'scheduleRotation', year, clubId, round, fixtureRound: chosen.round })) {
+                setFixtureRound(undefined);
+                summary.current?.focus();
+              }
+            }}>Schedule saved rotation</Button>
+          </div>
+        )}
       </div>
     </details>
   );
@@ -2704,6 +2743,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>When you stay at the club, a returning starter can keep a position they learned in training.</li>
               <li>Change clubs between seasons from Season review.</li>
               <li>When staying at your club, select Keep saved lineups in Season review to carry your presets forward. Apply a saved lineup in Squad.</li>
+              <li>In Squad, open Saved lineup and choose Rotation to schedule that team for one upcoming regular-season match. You can edit the team for that fixture, and your usual lineup returns afterward.</li>
               <li>When staying at your club, check Fill open squad places in Season review to preview affordable one-season free-agent deals. Your preference saves until you make a decision about next season.</li>
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>
               <li>When starting State of Origin, choose the full eligible player pool to find any eligible player for the state you coach.</li>
