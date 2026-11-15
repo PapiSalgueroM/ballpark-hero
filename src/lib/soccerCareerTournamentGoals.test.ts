@@ -142,19 +142,22 @@ it('lets exceptional sustained scoring help in Europe without making the title r
   const state = career('Real Madrid', 'Spain', 2026, 98, 'ST');
   const profile = { type: 'playing', year: 2026, club: 'Real Madrid', apps: 38, leagueApps: 34, ovr: 98, rating: 8.2 } as SeasonRecord;
   const random = vi.spyOn(Math, 'random');
-  let strongTen = 0, ordinaryTen = 0, strongTitles = 0, ordinaryTitles = 0;
+  let strongTen = 0, ordinaryTen = 0, strongTitles = 0, ordinaryTitles = 0, observedStages = 0;
   for (const seed of seeds) {
     random.mockImplementation(rngFrom(seed));
     const strong = simulateUCL(state, { ...profile, goals: 42 });
     random.mockImplementation(rngFrom(seed));
     const ordinary = simulateUCL(state, { ...profile, goals: 20 });
     expect(strong.qualified).toBe(ordinary.qualified);
-    expect(strong.firstStage?.myRow).toEqual(ordinary.firstStage?.myRow);
+    expect(strong.firstStage?.stages.map(stage => [stage.myRow, stage.table]))
+      .toEqual(ordinary.firstStage?.stages.map(stage => [stage.myRow, stage.table]));
+    observedStages += strong.firstStage?.stages.length ?? 0;
     strongTen += Number(strong.playerGoals >= 10);
     ordinaryTen += Number(ordinary.playerGoals >= 10);
     strongTitles += Number(strong.result === 'Winner');
     ordinaryTitles += Number(ordinary.result === 'Winner');
   }
+  expect(observedStages).toBeGreaterThan(0);
   expect((strongTen - ordinaryTen) / seeds.length).toBeGreaterThan(0.12);
   expect(strongTen / seeds.length).toBeLessThan(0.48);
   expect((strongTitles - ordinaryTitles) / seeds.length).toBeGreaterThan(0.015);
