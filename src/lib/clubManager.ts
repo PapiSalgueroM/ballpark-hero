@@ -1645,6 +1645,18 @@ export interface ResultLogEntry {
   tie?: 'W' | 'L';
 }
 
+export interface LeagueRatingChange {
+  id: string;
+  name: string;
+  before: number;
+  after: number;
+  onLoan?: true;
+}
+
+export interface LeagueRatingResult extends ResultLogEntry {
+  ratingChanges: LeagueRatingChange[];
+}
+
 export type MessageEffect = 'promise' | 'refuse' | 'listen' | 'fine' | 'support' | 'laugh' | 'setRole'
   /* Round 474: the five senders who are not in your squad. Every one of these
      moves a number that already has a screen: the pot, the board meter, a
@@ -3318,6 +3330,8 @@ export interface CareerState {
   transferLog?: TransferNews[];
   /** Round 73: this season's played fixtures, newest last, capped at 60. */
   resultLog?: ResultLogEntry[];
+  /** Current club's settled league reviews, keyed by league round, with the original calendar score. */
+  leagueRatingResults?: { season: number; club: string; results: Record<number, LeagueRatingResult> };
   /** Round 1603: 'night' reads a deciding second leg's reactions off the night, the way every match did
    *  before Round 1603 (judgedByTie). Set only by Manager Hot Seat on a day dated before HOT_SEAT_TIE_FROM or
    *  a free run started before it, so a run in flight and every past daily replay exactly; taken off when the
@@ -20559,7 +20573,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
 
   // Round 73: the season's fixture log feeds the calendar card.
   const log = state.resultLog ?? [];
-  log.push({
+  const fixtureResult: ResultLogEntry = {
     week: state.week,
     comp: fx.compLabel,
     opp: fx.opponent,
@@ -20570,7 +20584,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     competition: fx.competition,
     /* Round 1603: the tie, only where it differs from the night, for the fans (ResultLogEntry.tie). */
     ...(reactWon !== won || reactDrawn !== drawn ? { tie: reactWon ? 'W' as const : 'L' as const } : {}),
-  });
+  };
+  log.push(fixtureResult);
   state.resultLog = log.slice(-60);
 
   const res: FormResult = won ? 'W' : drawn ? 'D' : 'L';
@@ -20760,7 +20775,17 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   if (entry.night) nightSquadTick(state, new Set(xi.map(p => p.id)));
   else tickWeek(state, new Set(xi.map(p => p.id)));
   if (state.inSeasonRatings && !state.worldRatingRunIn && entry.type === 'league') {
-    applyLeagueRatingChanges(state, events);
+    const ratingChanges = applyLeagueRatingChanges(state, events);
+    /* Only the career's own league book records reviews. Hot Seat and other no-book runs keep their tape. */
+    if (state.leagueBook) {
+      const stamp = state.leagueRatingResults;
+      const results = stamp?.season === state.season && stamp.club === state.clubName ? stamp.results : {};
+      state.leagueRatingResults = {
+        season: state.season,
+        club: state.clubName,
+        results: { ...results, [entry.round]: { ...fixtureResult, ratingChanges } },
+      };
+    }
   }
   if (tacticsDay && tacticsDay.stats.legs !== 0) {
     const played = new Set(xi.map(p => p.id));
@@ -21449,10 +21474,10 @@ export function recordedTraining(p: CMPlayer, career: CareerState): { weeks: num
 }
 
 /** Bank a fraction of the age curve after each league match, with the training when it was earned. */
-function applyLeagueRatingChanges(state: CareerState, events: string[]): void {
+function applyLeagueRatingChanges(state: CareerState, events: string[]): LeagueRatingChange[] {
   const rounds = leagueRounds(state.leagueClubs.length);
-  if (rounds < 1) return;
-  const changes: string[] = [];
+  if (rounds < 1) return [];
+  const changes: LeagueRatingChange[] = [];
   const develop = (p: CMPlayer, onLoan: boolean): CMPlayer => {
     if (p.onLoan && p.loanFrom && timedWorldRatings(state)) {
       const progress = worldRatingProgress(state, state.week + 1);
@@ -21461,7 +21486,7 @@ function applyLeagueRatingChanges(state: CareerState, events: string[]): void {
           : p.name === row.n && p.position === row.p && p.age === row.a);
       if (parent.length !== 1) return p;
       const [{ r, v, potential }] = parent;
-      if (p.rating !== r) changes.push(`${p.name} ${r > p.rating ? '+' : ''}${r - p.rating} (on loan)`);
+      if (p.rating !== r) changes.push({ id: p.id, name: p.name, before: p.rating, after: r, onLoan: true });
       return { ...p, rating: r, value: v, ...(potential === undefined ? {} : { potential }) };
     }
     const rng = keyedRng(`cm-rating|${worldSeedOf(state) ?? state.eraId}|${state.season}|${p.id}`);
@@ -21476,7 +21501,7 @@ function applyLeagueRatingChanges(state: CareerState, events: string[]): void {
       + drift * (drift > 0 && !onLoan ? recordedTraining(p, state).rate : 1) / rounds;
       const potential = p.potential ?? rollPotential(ceilingBase(p), p.age, rng);
     const step = credit >= 1 && p.rating < Math.min(95, potential) ? 1 : credit <= -1 && p.rating > 40 ? -1 : 0;
-    if (step) changes.push(`${p.name} ${step > 0 ? '+1' : '-1'}${onLoan ? ' (on loan)' : ''}`);
+    if (step) changes.push({ id: p.id, name: p.name, before: p.rating, after: p.rating + step, ...(onLoan ? { onLoan: true } : {}) });
     return {
       ...p,
       potential,
@@ -21493,7 +21518,13 @@ function applyLeagueRatingChanges(state: CareerState, events: string[]): void {
       return { ...loan, player, ...(gain > 0 ? { ratingGains: (loan.ratingGains ?? 0) + gain } : {}) };
     });
   }
-  if (changes.length) events.push(`Squad OVR: ${changes.join(', ')}.`);
+  if (changes.length) {
+    events.push(`Squad OVR: ${changes.map(p => {
+      const step = p.after - p.before;
+      return `${p.name} ${step > 0 ? '+' : ''}${step}${p.onLoan ? ' (on loan)' : ''}`;
+    }).join(', ')}.`);
+  }
+  return changes;
 }
 
 /**
@@ -24627,6 +24658,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     coldNames: [],
     loanedOut: [],
     resultLog: [],
+    leagueRatingResults: undefined,
     inbox: [],
     /* Round 979: the desk goes with the inbox. A ban is wiped over the summer
        (agePlayer), so an appeal carried across would close on a ban that no
