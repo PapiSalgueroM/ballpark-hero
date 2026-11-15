@@ -190,7 +190,7 @@ export interface NrlAcademyReport {
   priority?: NrlAcademyPriority;
   crossTraining?: { role: NrlRole; remaining: number };
 }
-interface NrlPositionCourse { playerId: string; role: NrlRole; startedRound: number; intensiveBye?: number }
+interface NrlPositionCourse { playerId: string; role: NrlRole; startedRound: number; intensiveBye?: number; intensiveMatch?: number }
 interface NrlContractApproach {
   playerId: string;
   listedRound: number;
@@ -285,6 +285,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'startPositionTraining'; year: number; clubId: string; round: number; playerId: string; role: NrlRole }
   | { type: 'cancelPositionTraining'; year: number; clubId: string; playerId: string; role: NrlRole; startedRound: number }
   | { type: 'runIntensiveBye'; year: number; clubId: string; round: number; playerId: string; startedRound: number }
+  | { type: 'setIntensivePositionTraining'; year: number; clubId: string; round: number; playerId: string; startedRound: number; enabled: boolean }
   | { type: 'startReserveGrade'; year: number; clubId: string; round: number; playerId: string; role?: NrlRole }
   | { type: 'recallReserveGrade' | 'bookReserveCoach'; year: number; clubId: string; round: number; playerId: string }
   | { type: 'setShortlist'; playerId: string; saved: boolean; year: number }
@@ -1040,16 +1041,30 @@ export function nrlPositionTraining(state: NrlCareerState) {
   if (!course) return null;
   const player = state.season.squad.find(candidate => candidate.id === course.playerId);
   return player ? { ...course, player, remaining: course.startedRound + NRL_POSITION_TRAINING_ROUNDS
-    - state.season.round - Number(course.intensiveBye !== undefined) } : null;
+    - state.season.round - Number((course.intensiveBye ?? course.intensiveMatch) !== undefined) } : null;
 }
 
 export function nrlIntensiveBye(state: NrlCareerState) {
   const { season } = state;
   const course = nrlPositionTraining(state);
-  if (state.legacySeason || state.retired || state.outOfWork || season.live || !course || course.intensiveBye !== undefined || course.remaining < 2
+  if (state.legacySeason || state.retired || state.outOfWork || season.live || !course
+    || (course.intensiveBye ?? course.intensiveMatch) !== undefined || course.remaining < 2
     || season.phase !== 'regular' || nrlNextRound(season).clubStatus !== 'bye' || nrlUnavailable(season).has(course.playerId)
     || (judiciaryNeedsResponse(season) && season.judiciary?.case?.playerId === course.playerId)) return null;
   return { ...course, ...nrlByeTrainingPreview(course.player, season.preparation) };
+}
+
+export function nrlIntensiveMatch(state: NrlCareerState) {
+  const { season } = state;
+  const course = nrlPositionTraining(state);
+  if (!course || state.legacySeason || state.retired || state.outOfWork || season.live || season.phase !== 'regular'
+    || (course.intensiveBye ?? course.intensiveMatch) !== undefined || course.remaining < 2 || !nrlNextRound(season).clubMatch
+    || nrlUnavailable(season).has(course.playerId) || season.individualRecoveryId === course.playerId
+    || (judiciaryNeedsResponse(season) && season.judiciary?.case?.playerId === course.playerId)) return null;
+  const recovery = nrlAwayRecoveryBonus(state);
+  return { ...course, queued: season.intensivePositionTrainingId === course.playerId,
+    normal: nrlMatchFitness({ ...season, intensivePositionTrainingId: undefined }, course.player, recovery),
+    intensive: nrlMatchFitness({ ...season, intensivePositionTrainingId: course.playerId }, course.player, recovery) };
 }
 
 export function nrlPositionTrainingCandidates(state: NrlCareerState): NrlPlayer[] {
@@ -1938,6 +1953,10 @@ function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type:
   const book = tickBooks(state.finance, season, previous.round, newResults, nrlCareerCap(state), concessionsFromPastSeason(state));
   const finance = settleBoardRecruitment(settlePathways(book, season, previous.round, players), season.year, previous.round);
   let next = { ...state, season, players, finance };
+  const { positionTraining } = state;
+  if (positionTraining && newResults.some(match => match.intensivePositionTrainingId === positionTraining.playerId)) {
+    next = { ...next, positionTraining: { ...positionTraining, intensiveMatch: previous.round } };
+  }
   const course = nrlPositionTraining(next);
   if (course && course.remaining === 0) {
     const { positionTraining, ...trained } = next;
@@ -3059,9 +3078,13 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     }
     case 'cancelPositionTraining': {
       const { positionTraining, ...next } = state;
-      return positionTraining && state.season.phase === 'regular' && action.year === state.season.year && action.clubId === state.season.clubId
-        && action.playerId === positionTraining.playerId && action.role === positionTraining.role
-        && action.startedRound === positionTraining.startedRound ? next : state;
+      const { season } = state;
+      if (!positionTraining || season.phase !== 'regular' || action.year !== season.year || action.clubId !== season.clubId
+        || action.playerId !== positionTraining.playerId || action.role !== positionTraining.role
+        || action.startedRound !== positionTraining.startedRound || (season.live && season.intensivePositionTrainingId)) return state;
+      if (season.intensivePositionTrainingId === undefined) return next;
+      const { intensivePositionTrainingId: _cancelled, ...preparation } = season;
+      return { ...next, season: preparation };
     }
     case 'runIntensiveBye': {
       const { season, positionTraining } = state;
@@ -3069,6 +3092,16 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         || action.playerId !== positionTraining.playerId || action.startedRound !== positionTraining.startedRound || !nrlIntensiveBye(state)) return state;
       return advanceCareer({ ...state, positionTraining: { ...positionTraining, intensiveBye: season.round } },
         { type: 'advance' }, positionTraining.playerId);
+    }
+    case 'setIntensivePositionTraining': {
+      const { season, positionTraining } = state;
+      const { year, clubId, round, playerId, startedRound, enabled } = action;
+      if (!positionTraining || year !== season.year || clubId !== season.clubId || round !== season.round || season.live
+        || playerId !== positionTraining.playerId || startedRound !== positionTraining.startedRound || typeof enabled !== 'boolean') return state;
+      const { intensivePositionTrainingId, ...preparation } = season;
+      if (!enabled) return intensivePositionTrainingId === playerId ? { ...state, season: preparation } : state;
+      return intensivePositionTrainingId === undefined && nrlIntensiveMatch(state)
+        ? { ...state, season: { ...season, intensivePositionTrainingId: playerId } } : state;
     }
     case 'startReserveGrade':
     case 'bookReserveCoach':
@@ -4108,14 +4141,22 @@ function validScheduledRotation(value: unknown, season: NrlManagerState, legacy:
 }
 
 function validPositionTraining(value: unknown, season: NrlManagerState, legacySeason: boolean): boolean {
-  if (value === undefined) return true;
+  if (value === undefined) return season.intensivePositionTrainingId === undefined;
   if (legacySeason || !season.injuryTracking || !season.kickerId || season.phase !== 'regular' || !record(value)
-    || Object.keys(value).length !== 3 + Number(value.intensiveBye !== undefined)
+    || Object.keys(value).length !== 3 + Number(value.intensiveBye !== undefined) + Number(value.intensiveMatch !== undefined)
     || !intIn(value.startedRound, Math.max(1, season.round - NRL_POSITION_TRAINING_ROUNDS + 1),
       Math.min(season.round, nrlRegularRounds(season.year) - NRL_POSITION_TRAINING_ROUNDS + 1))) return false;
   const player = season.squad.find(candidate => candidate.id === value.playerId);
   if (!player || player.secondaryRole || !nrlRetrainingRoles(player.role).includes(value.role as NrlRole)) return false;
   const bye = value.intensiveBye;
+  const match = value.intensiveMatch;
+  const queued = season.intensivePositionTrainingId;
+  if (queued !== undefined && (queued !== player.id || bye !== undefined || match !== undefined
+    || season.round > value.startedRound + NRL_POSITION_TRAINING_ROUNDS - 2
+    || (judiciaryNeedsResponse(season) && season.judiciary?.case?.playerId === player.id))) return false;
+  if (match !== undefined && (bye !== undefined || season.round >= value.startedRound + NRL_POSITION_TRAINING_ROUNDS - 1
+    || !intIn(match, value.startedRound, Math.min(season.round - 1, value.startedRound + NRL_POSITION_TRAINING_ROUNDS - 2))
+    || !season.results.some(row => row.round === match && row.intensivePositionTrainingId === player.id))) return false;
   if (bye !== undefined) {
     if (!intIn(bye, value.startedRound, Math.min(season.round - 1, value.startedRound + NRL_POSITION_TRAINING_ROUNDS - 2))
       || season.round >= value.startedRound + NRL_POSITION_TRAINING_ROUNDS - 1
@@ -4227,7 +4268,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
       if (player.rating !== spell.startingRating + movement) return false;
     }
     if (training?.playerId === spell.playerId && training.startedRound < spellEnd
-      && training.startedRound + NRL_POSITION_TRAINING_ROUNDS - Number(training.intensiveBye !== undefined) > spell.startedRound) return false;
+      && training.startedRound + NRL_POSITION_TRAINING_ROUNDS - Number((training.intensiveBye ?? training.intensiveMatch) !== undefined) > spell.startedRound) return false;
   }
   if (!validWorld(state) || !validRatingReview(state) || !validCareerBooks(state) || !validAcademy(state)
     || (state.developmentPriorityId !== undefined && (typeof state.developmentPriorityId !== 'string'
@@ -4288,7 +4329,8 @@ export function readNrlCareerSave(raw: string | null): NrlCareerState | null {
     if (isNrlCareerState(value)) {
       return value.season.bench ? value : { ...value, season: { ...value.season, bench: nrlBench(value.season) } };
     }
-    return isNrlManagerState(value) && isNrlOpeningYear(value.year) ? careerFrom(value, value.year, true) : null;
+    return isNrlManagerState(value) && isNrlOpeningYear(value.year) && value.intensivePositionTrainingId === undefined
+      ? careerFrom(value, value.year, true) : null;
   } catch {
     return null;
   }

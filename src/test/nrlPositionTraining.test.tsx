@@ -67,6 +67,43 @@ it('shows the one-round reserve-coach acceleration, charges it once and restores
 });
 
 describe('NRL position training', () => {
+  it('previews a match-week session and records it once after resuming Live', () => {
+    const train = (career: NrlCareerState) => reduceNrlCareer(career, { type: 'prepare', choice: 'train' });
+    const playerId = 'sharks-6-0';
+    const initial = startCourse(train(advance(train(createNrlCareer('sharks', 5, 2026)))), playerId, 'Halfback');
+    const first = open(bytes(initial));
+    const training = () => {
+      const summary = screen.getByText('Intensive position training', { exact: true });
+      fireEvent.click(summary);
+      return within(summary.closest('details')!);
+    };
+    const preview = training();
+    expect(preview.getByText(/fitness from 88% to 84%/)).toBeVisible();
+    expect(preview.getByText(/Tane Nairn can finish learning Halfback one round sooner/)).toBeVisible();
+    expect(raw()).toBe(bytes(initial));
+    click('Queue intensive session');
+    const booked = reduceNrlCareer(initial, {
+      type: 'setIntensivePositionTraining', year: 2026, clubId: 'sharks', round: 2, playerId, startedRound: 2, enabled: true,
+    });
+    expect(raw()).toBe(bytes(booked));
+    expect(localStorage.getItem(fence)).toBe('5');
+    first.unmount();
+    const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+    const second = show();
+    expect(training().getByRole('button', { name: 'Cancel intensive session' })).toBeVisible();
+    click('Play Live');
+    const half = reduceNrlCareer(booked, { type: 'startLive' });
+    expect(raw()).toBe(bytes(half));
+    expect(localStorage.getItem(fence)).toBe('6');
+    second.unmount();
+    show();
+    click('Play second half');
+    const full = within(screen.getByRole('region', { name: 'Full time' }));
+    expect(full.getByText('Tane Nairn completed an intensive position training session before kickoff.')).toBeVisible();
+    expect(raw()).toBe(bytes(advance(booked)));
+    expect(localStorage.getItem(fence)).toBe('7');
+  });
+
   it.each([
     ['panthers', 16, 2026, 1, 'panthers-6-1'],
     ['dolphins', 4, 2027, 11, 'dolphins-6-1'],
