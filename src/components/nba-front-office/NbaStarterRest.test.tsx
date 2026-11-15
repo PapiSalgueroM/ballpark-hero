@@ -2,7 +2,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import NbaFrontOfficeBoard from '@/components/nba-front-office/NbaFrontOfficeBoard';
 import {
-  initNbaLeague, nbaRestPlan, nbaRestPreview, nbaStrength, nbaWinProb, setNbaRestPlan, simRound,
+  initNbaLeague, nbaRestCandidates, nbaRestPlan, nbaRestPreview, nbaStrength, nbaWinProb, readNbaRestReceipt, setNbaRestPlan, simRound,
   NBA_ROUNDS, type NbaGmPlayer, type NbaLeague,
 } from '@/lib/nbaFrontOffice';
 import { nbaTeamLines } from '@/lib/nbaSeasonStats';
@@ -41,6 +41,50 @@ const open = () => fireEvent.click(screen.getByText('Play', { exact: true }));
 afterEach(() => { cleanup(); localStorage.clear(); vi.restoreAllMocks(); });
 
 describe('NBA Front Office starter rest', () => {
+  it('previews the starter who really covers after a scheduled injury return', () => {
+    const usual = start();
+    Object.assign(usual.teams.DEN.players[6], { out: 1, ovr: 90 });
+    const rested = setNbaRestPlan(structuredClone(usual), team, starter);
+    const preview = nbaRestPreview(rested, team)!;
+    expect(rested.teams.DEN.players[6].out).toBe(1);
+    const a = play(usual), b = play(rested);
+    expect(b.draws).toBe(a.draws);
+    expect(nbaTeamLines(usual, team).find(line => line.id === 'DEN4')).toMatchObject({ g: 4, gs: 0 });
+    expect(nbaTeamLines(rested, team).find(line => line.id === 'DEN4')).toMatchObject({ g: 4, gs: 4 });
+    expect(nbaTeamLines(rested, team).find(line => line.id === 'DEN6')).toMatchObject({ g: 4, gs: 4 });
+    expect(preview.cover.id).toBe('DEN4');
+    expect(b.report.rest).toEqual({ player: 'DEN fixture 0', lineup: {
+      cover: 'DEN fixture 4', usualStrength: preview.usualStrength, restingStrength: nbaStrength(preview.lineup),
+    } });
+    expect(preview.usualStrength).toBeCloseTo(85.29333);
+    expect(nbaStrength(preview.lineup)).toBeCloseTo(82.45333);
+  });
+
+  it('offers scheduled returns who start and stops resting a saved choice that would be on the bench', () => {
+    const savedChoice = setNbaRestPlan(start(), team, 'DEN4');
+    Object.assign(savedChoice.teams.DEN.players[6], { out: 1, ovr: 90 });
+    expect(nbaRestCandidates(savedChoice, team).map(player => player.id)).toContain('DEN6');
+    expect(nbaRestCandidates(savedChoice, team).map(player => player.id)).not.toContain('DEN4');
+    const bookReturningStarter = setNbaRestPlan(structuredClone(savedChoice), team, 'DEN6');
+    expect(play(bookReturningStarter).report.rest).toMatchObject({ player: 'DEN fixture 6' });
+    expect(bookReturningStarter.teams.DEN.players[6].out).toBe(0);
+    expect(nbaTeamLines(bookReturningStarter, team).find(line => line.id === 'DEN6')).toBeUndefined();
+    const usual = setNbaRestPlan(structuredClone(savedChoice), team, '');
+    const a = play(usual), b = play(savedChoice);
+    expect(b).toEqual({ ...a, report: { ...a.report, rest: { unavailable: true } } });
+    expect(savedChoice).toEqual(usual);
+    expect(nbaTeamLines(savedChoice, team).find(line => line.id === 'DEN4')).toMatchObject({ g: 4, gs: 0 });
+  });
+
+  it('records the new cover who actually started when the expected cover was injured', () => {
+    const rested = setNbaRestPlan(start(), team, starter);
+    expect(nbaRestPreview(rested, team)?.cover.id).toBe('DEN5');
+    const { report } = play(rested, [...Array(5).fill(0.48), 0.01, 0.99]);
+    expect(report.rest).toMatchObject({ player: 'DEN fixture 0', lineup: { cover: 'DEN fixture 6' } });
+    expect(nbaTeamLines(rested, team).find(line => line.id === 'DEN5')).toBeUndefined();
+    expect(nbaTeamLines(rested, team).find(line => line.id === 'DEN6')).toMatchObject({ g: 4, gs: 4 });
+  });
+
   it('uses the actual cover for game odds and box scores, preserving the preferred rotation and random stream', () => {
     const usual = start();
     usual.teams.DEN.rotation = usual.teams.DEN.players.slice(0, 8).map(player => player.id);
@@ -68,7 +112,7 @@ describe('NBA Front Office starter rest', () => {
     expect(a.draws).toBe(b.draws);
     expect(usual.teams.DEN.players[0].out).toBe(3);
     expect(rested.teams.DEN.players[0].out).toBe(0);
-    expect(b.report.rest).toEqual({ player: 'DEN fixture 0' });
+    expect(b.report.rest).toMatchObject({ player: 'DEN fixture 0', lineup: { cover: 'DEN fixture 5' } });
     expect(b.report.notes.every(note => !note.includes('DEN fixture 0 is out'))).toBe(true);
     expect(rested.teams.BOS.players).toEqual(usual.teams.BOS.players);
   });
@@ -83,14 +127,16 @@ describe('NBA Front Office starter rest', () => {
   });
 
   it('saves the choice across reload and keeps the actual rest receipt after another batch', () => {
-    const league = start(true), raw = saved(league);
+    const league = start(true);
+    Object.assign(league.teams.DEN.players[6], { out: 1, ovr: 90 });
+    const raw = saved(league);
     localStorage.setItem(key, raw);
     let view = render(<NbaFrontOfficeBoard />);
     open();
     const picker = () => screen.getByRole('combobox', { name: 'Rest a starter' });
     expect(localStorage.getItem(key)).toBe(raw);
     fireEvent.change(picker(), { target: { value: starter } });
-    expect(screen.getByText(/DEN fixture 5 moves into the starting five/)).toBeInTheDocument();
+    expect(screen.getByText(/DEN fixture 4 moves into the starting five/)).toHaveTextContent('85.29 usual · 82.45 with rest');
     const booked = localStorage.getItem(key);
     view.unmount();
     view = render(<NbaFrontOfficeBoard />);
@@ -99,7 +145,7 @@ describe('NBA Front Office starter rest', () => {
     expect(picker()).toHaveValue(starter);
     vi.spyOn(Math, 'random').mockReturnValue(0.48);
     fireEvent.click(screen.getByRole('button', { name: 'Play Round 2' }));
-    expect(read().lastRound.rest).toMatchObject({ player: 'DEN fixture 0' });
+    expect(read().lastRound.rest).toMatchObject({ player: 'DEN fixture 0', lineup: { cover: 'DEN fixture 4' } });
     expect(nbaTeamLines(read().league, team).find(line => line.id === starter)).toBeUndefined();
     expect(picker()).toHaveValue('');
     fireEvent.click(screen.getByRole('button', { name: 'Play Round 3' }));
@@ -111,6 +157,13 @@ describe('NBA Front Office starter rest', () => {
     const history = within(screen.getByRole('region', { name: 'Round results' }));
     fireEvent.change(history.getByRole('combobox', { name: 'Played round' }), { target: { value: '2' } });
     expect(history.getByText('DEN fixture 0 rested this round. The usual rotation resumes next round.')).toBeInTheDocument();
+    expect(history.getByText(/DEN fixture 4 moved into the starting five/)).toHaveTextContent('85.29 usual · 82.45 with rest');
     expect(localStorage.getItem(key)).toBe(bytes);
+  });
+
+  it('keeps the recorded player from older receipts or from an invalid saved lineup detail', () => {
+    const legacy = { player: 'DEN fixture 0' };
+    expect(readNbaRestReceipt(legacy)).toEqual(legacy);
+    expect(readNbaRestReceipt({ ...legacy, lineup: { cover: 'DEN fixture 4', usualStrength: 85.29, restingStrength: Infinity } })).toEqual(legacy);
   });
 });

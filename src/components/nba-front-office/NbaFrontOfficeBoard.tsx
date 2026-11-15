@@ -158,8 +158,13 @@ function readLastRound(value: unknown, league: NbaLeague, team: string): LastRou
 
 function restReports(rest: NbaRestReceipt | undefined): string[] {
   if (!rest) return [];
-  return ['unavailable' in rest ? 'The saved rest choice was unavailable. The usual rotation played.'
-    : `${rest.player} rested this round. The usual rotation resumes next round.`];
+  if ('unavailable' in rest) return ['The saved rest choice was unavailable. The usual rotation played.'];
+  const reports = [`${rest.player} rested this round. The usual rotation resumes next round.`];
+  if (rest.lineup) {
+    const { cover, usualStrength, restingStrength } = rest.lineup;
+    reports.push(`${cover ? `${cover} moved into the starting five.` : 'No available player moved into the starting five.'} Team strength ${usualStrength.toFixed(2)} usual · ${restingStrength.toFixed(2)} with rest.`);
+  }
+  return reports;
 }
 
 function roundHeadlines(result: LastRound): string[] {
@@ -1633,7 +1638,7 @@ export default function NbaFrontOfficeBoard() {
               </label>
               <p className="mt-1 text-xs text-muted-foreground">A rested starter sits out this round and avoids a new simulated injury. Your usual rotation resumes after the round.</p>
               {restPreview ? <p className="mt-1 text-xs text-muted-foreground" data-nba-rest-preview>
-                {restPreview.cover.name} moves into the starting five if healthy. Current team strength {nbaStrength(my).toFixed(2)} usual · {nbaStrength(restPreview.lineup).toFixed(2)} with rest.
+                {restPreview.cover.name} moves into the starting five after scheduled injury returns. Estimated team strength {restPreview.usualStrength.toFixed(2)} usual · {nbaStrength(restPreview.lineup).toFixed(2)} with rest. New injuries{tipShort > 0 ? ' or minimum signings' : ''} can change the lineup.
               </p> : restPlan && <p className="mt-1 text-xs text-muted-foreground">The saved choice is unavailable. Your usual rotation will play.</p>}
             </div>
           )}

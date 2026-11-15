@@ -377,11 +377,29 @@ export function nbaRestPlan(league: NbaLeague, team: string) {
     && typeof plan.playerId === 'string' && plan.playerId.length > 0 && plan.playerId.length <= 128 ? plan : null;
 }
 
-export function nbaRestCandidates(league: NbaLeague, team: string): NbaGmPlayer[] {
-  const club = league.teams[team];
-  if (!club || league.round < 1 || league.round > NBA_ROUNDS || league.champions.some(row => row.season === league.season)
-    || club.players.filter(player => player.out === 0).length < 6) return [];
+function nbaTickInjury(out: number): number {
+  return out - 1;
+}
+
+function nbaRestStarters(club: NbaGmTeam): NbaGmPlayer[] {
   return nbaRotationSlots(club).slice(0, 5).filter((player): player is NbaGmPlayer => !!player);
+}
+
+function nbaRestCover(starters: NbaGmPlayer[], lineup: NbaGmTeam): NbaGmPlayer | undefined {
+  return nbaRestStarters(lineup).find(player => !starters.some(starter => starter.id === player.id));
+}
+
+function nbaRestTipoff(league: NbaLeague, team: string) {
+  const club = league.teams[team];
+  if (!club || league.round < 1 || league.round > NBA_ROUNDS || league.champions.some(row => row.season === league.season)) return null;
+  const players = club.players.map(player => player.out > 0 ? { ...player, out: nbaTickInjury(player.out) } : player);
+  if (players.filter(player => player.out === 0).length < 6) return null;
+  const tipoff = { ...club, players };
+  return { club: tipoff, starters: nbaRestStarters(tipoff) };
+}
+
+export function nbaRestCandidates(league: NbaLeague, team: string): NbaGmPlayer[] {
+  return nbaRestTipoff(league, team)?.starters ?? [];
 }
 
 export function setNbaRestPlan(league: NbaLeague, team: string, playerId: string): NbaLeague {
@@ -399,21 +417,34 @@ export function setNbaRestPlan(league: NbaLeague, team: string, playerId: string
 export function nbaRestPreview(league: NbaLeague, team: string) {
   const plan = nbaRestPlan(league, team);
   if (!plan) return null;
-  const starters = nbaRestCandidates(league, team);
+  const tipoff = nbaRestTipoff(league, team);
+  if (!tipoff) return null;
+  const { club, starters } = tipoff;
   const player = starters.find(row => row.id === plan.playerId);
   if (!player) return null;
-  const club = league.teams[team];
   const lineup = { ...club, players: club.players.filter(row => row.id !== player.id) };
-  const cover = nbaRotationSlots(lineup).slice(0, 5).find(row => row && !starters.some(starter => starter.id === row.id));
-  return cover ? { player, lineup, cover } : null;
+  const cover = nbaRestCover(starters, lineup);
+  return cover ? { player, lineup, cover, usualStrength: nbaStrength(club) } : null;
 }
 
-export type NbaRestReceipt = { player: string } | { unavailable: true };
+interface NbaRestLineupReceipt {
+  cover: string | null;
+  usualStrength: number;
+  restingStrength: number;
+}
+
+export type NbaRestReceipt = { player: string; lineup?: NbaRestLineupReceipt } | { unavailable: true };
 
 export function readNbaRestReceipt(value: unknown): NbaRestReceipt | undefined {
   if (!value || typeof value !== 'object') return;
   if ('unavailable' in value && value.unavailable === true) return { unavailable: true };
   if ('player' in value && typeof value.player === 'string' && value.player.length > 0 && value.player.length <= 160) {
+    const lineup = 'lineup' in value ? value.lineup as Partial<NbaRestLineupReceipt> | null : null;
+    if (lineup && typeof lineup === 'object' && (lineup.cover === null || (typeof lineup.cover === 'string' && lineup.cover.length > 0 && lineup.cover.length <= 160))
+      && typeof lineup.usualStrength === 'number' && Number.isFinite(lineup.usualStrength)
+      && typeof lineup.restingStrength === 'number' && Number.isFinite(lineup.restingStrength)) {
+      return { player: value.player, lineup: { cover: lineup.cover, usualStrength: lineup.usualStrength, restingStrength: lineup.restingStrength } };
+    }
     return { player: value.player };
   }
 }
@@ -440,22 +471,32 @@ export function simRound(league: NbaLeague, myTeam: string, rng: () => number, o
   const notes: string[] = [];
   let myW = 0, myL = 0;
   const plan = nbaRestPlan(league, myTeam);
-  const resting = plan ? nbaRestPreview(league, myTeam) : null;
+  const resting = plan ? nbaRestPreview(league, myTeam)?.player : undefined;
   if (league.restPlan) delete league.restPlan;
   // injuries tick down; new ones roll
   for (const t of Object.values(league.teams)) {
     for (const p of t.players) {
-      if (p.out > 0) p.out -= 1;
+      if (p.out > 0) p.out = nbaTickInjury(p.out);
       else if (rng() < 0.02) {
         const duration = 1 + Math.floor(rng() * 3);
         // Spend the same draws so protecting one player leaves every other injury roll in place.
-        if (t.abbr === myTeam && resting?.player.id === p.id) continue;
+        if (t.abbr === myTeam && resting?.id === p.id) continue;
         p.out = duration;
         if (opts?.injuryRounds) p.out = opts.injuryRounds(t.abbr, p, p.out);
         if (t.abbr === myTeam) notes.push(`🚑 ${p.name} is out ${p.out} round${p.out === 1 ? '' : 's'}.`);
       }
     }
   }
+  const club = league.teams[myTeam];
+  const restedLineup = resting ? { ...club, players: club.players.filter(player => player.id !== resting.id) } : null;
+  const rest: NbaRestReceipt | undefined = resting && restedLineup ? {
+    player: resting.name,
+    lineup: {
+      cover: nbaRestCover(nbaRestStarters(club), restedLineup)?.name ?? null,
+      usualStrength: nbaStrength(club),
+      restingStrength: nbaStrength(restedLineup),
+    },
+  } : plan ? { unavailable: true } : undefined;
   /* Round 824: the season's lines, when the league is keeping them this season. */
   const stats = nbaLiveStats(league);
   /* Round 851: the round's booked games (foSchedule.ts), every club exactly
@@ -464,8 +505,8 @@ export function simRound(league: NbaLeague, myTeam: string, rng: () => number, o
   foPlayRound(league, abbrs, GAMES_PER_ROUND, rng, (abbr, opp, k) => {
     const me = league.teams[abbr];
     const them = league.teams[opp];
-    const playingHome = resting && abbr === myTeam ? resting.lineup : me;
-    const playingAway = resting && opp === myTeam ? resting.lineup : them;
+    const playingHome = restedLineup && abbr === myTeam ? restedLineup : me;
+    const playingAway = restedLineup && opp === myTeam ? restedLineup : them;
     const p = opts?.edges ? nbaWinProb(playingHome, playingAway, opts.edges[abbr] ?? 0, opts.edges[opp] ?? 0) : nbaWinProb(playingHome, playingAway);
     /* Round 824: the deciding draw is kept so the box score can be read off
        it. Still exactly one draw, so every result is what it always was. */
@@ -479,7 +520,6 @@ export function simRound(league: NbaLeague, myTeam: string, rng: () => number, o
     sport: 'nba', rounds: NBA_ROUNDS, youngThrough: 24, declineFrom: 32,
     acceleratedFrom: 36, marketDeclineFrom: 32, floor: 64,
   }, myTeam, notes, opts?.growth);
-  const rest: NbaRestReceipt | undefined = resting ? { player: resting.player.name } : plan ? { unavailable: true } : undefined;
   return { myWins: myW, myLosses: myL, notes, ...(rest ? { rest } : {}) };
 }
 
