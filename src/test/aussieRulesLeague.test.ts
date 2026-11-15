@@ -1,6 +1,6 @@
 import { act, cleanup, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { CLUBS, createLeague, LEGACY_SAVE_KEY, readLeagueSave, reduceLeague, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
+import { CLUBS, clubOf, createLeague, draftPool, LEGACY_SAVE_KEY, pickRefusal, picksLeft, readLeagueSave, reduceLeague, retirees, roleDeficits, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
 import { useAussieRulesLeague } from '@/hooks/useAussieRulesLeague';
 import { hashLabel, rngFrom } from '@/lib/careerEngine';
 
@@ -45,6 +45,76 @@ describe('Aussie Rules Manager full season engine', () => {
     expect(readLeagueSave(JSON.stringify(forged))).toBeNull();
     expect(readLeagueSave(JSON.stringify({ ...state, version: 1 }))).toBeNull();
   }, 60000); // a whole season of save round trips took 8.2 s on a loaded machine, past the 5 s default
+
+  it('makes exactly one new selection when the normal draft has zero picks', () => {
+    const completed = until(createLeague(19, 'club-04', 'afl2026')!, state => state.phase === 'seasonOver');
+    const summer = reduceLeague(completed, { type: 'next' });
+    const original = clubOf(summer, summer.myClub)!.players;
+    const player = original[0];
+    const action = { type: 'delist', season: 1, playerId: player.id } as const;
+    expect(retirees(summer).size).toBe(0);
+    expect(reduceLeague(completed, action)).toBe(completed);
+    expect(reduceLeague(summer, { ...action, season: 2 })).toBe(summer);
+    const none = reduceLeague(summer, { type: 'next' });
+    expect(none.draft?.order).toEqual([]);
+    expect(none.history[0].delisted).toBeUndefined();
+    expect(readLeagueSave(JSON.stringify(none))).toEqual(none);
+
+    const agreed = reduceLeague(summer, action);
+    expect(agreed.history[0].delisted).toEqual({ playerId: player.id, playerName: player.name, role: player.role, picksBefore: 0 });
+    expect(agreed.clubs).toBe(summer.clubs);
+    expect(agreed.draft).toBeNull();
+    expect(reduceLeague(agreed, { ...action, playerId: original[1].id })).toBe(agreed);
+    const refused = { ...agreed, history: [{ ...agreed.history[0], delisted: {
+      ...agreed.history[0].delisted!, playerId: clubOf(agreed, 'club-05')!.players[0].id,
+    } }] };
+    expect(readLeagueSave(JSON.stringify(refused))).toBeNull();
+    const restored = readLeagueSave(JSON.stringify(agreed))!;
+    expect(restored).toEqual(agreed);
+    const draft = reduceLeague(restored, { type: 'next' });
+    expect(draft.draft?.order).toEqual([summer.myClub]);
+    expect(picksLeft(draft, summer.myClub)).toBe(1);
+    expect(clubOf(draft, summer.myClub)!.players).toHaveLength(35);
+    expect(clubOf(draft, summer.myClub)!.players.some(candidate => candidate.id === player.id)).toBe(false);
+    expect(reduceLeague(draft, action)).toBe(draft);
+    expect(readLeagueSave(JSON.stringify(draft))).toEqual(draft);
+    const mismatchedDraft = { ...draft, history: [{ ...draft.history[0], delisted: { ...draft.history[0].delisted!, picksBefore: 1 } }] };
+    expect(readLeagueSave(JSON.stringify(mismatchedDraft))).toBeNull();
+    const next = reduceLeague(reduceLeague(draft, { type: 'draftAuto' }), { type: 'next' });
+    expect(next.season).toBe(2);
+    expect(clubOf(next, summer.myClub)!.players).toHaveLength(36);
+    expect(next.history[0].delisted).toEqual(agreed.history[0].delisted);
+    expect(readLeagueSave(JSON.stringify(next))).toEqual(next);
+  });
+
+  it('reserves a replacement for a delisted player at the role floor', () => {
+    const completed = until(createLeague(16, 'club-04', 'afl2026')!, state => state.phase === 'seasonOver');
+    const summer = reduceLeague(completed, { type: 'next' });
+    const retiring = retirees(summer);
+    const returningRucks = clubOf(summer, summer.myClub)!.players.filter(player => player.role === 'ruck' && !retiring.has(player.id));
+    expect(returningRucks).toHaveLength(2);
+    const action = { type: 'delist', season: 1, playerId: returningRucks[0].id } as const;
+    const alreadyRetiring = clubOf(summer, summer.myClub)!.players.find(player => retiring.has(player.id))!;
+    expect(reduceLeague(summer, { ...action, playerId: alreadyRetiring.id })).toBe(summer);
+    const before = reduceLeague(summer, { type: 'next' });
+    let draft = reduceLeague(reduceLeague(summer, action), { type: 'next' });
+    expect(picksLeft(draft, summer.myClub)).toBe(picksLeft(before, summer.myClub) + 1);
+    expect(roleDeficits(clubOf(draft, summer.myClub)!).ruck).toBe(1);
+    while (picksLeft(draft, summer.myClub) > 1) {
+      const prospect = draftPool(draft).find(player => player.role !== 'ruck' && !pickRefusal(draft, player.id));
+      expect(prospect).toBeDefined();
+      const changed = reduceLeague(draft, { type: 'pick', prospectId: prospect!.id });
+      expect(changed).not.toBe(draft);
+      draft = changed;
+    }
+    const wrong = draftPool(draft).find(player => player.role !== 'ruck')!;
+    expect(pickRefusal(draft, wrong.id)).toMatch(/ruck/i);
+    expect(reduceLeague(draft, { type: 'pick', prospectId: wrong.id })).toBe(draft);
+    expect(readLeagueSave(JSON.stringify(draft))).toEqual(draft);
+    const final = reduceLeague(draft, { type: 'draftAuto' });
+    expect(roleDeficits(clubOf(final, summer.myClub)!)).toEqual({ defender: 0, midfielder: 0, ruck: 0, forward: 0 });
+    expect(clubOf(final, summer.myClub)!.players).toHaveLength(36);
+  });
 
   it('spends the old rating budget one point at a time before summer, through both play modes', () => {
     const opening = createLeague(77, 'club-12', 'afl2026')!;

@@ -3,7 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import AussieRulesLeagueBoard from '@/components/aussie-rules-manager/AussieRulesLeagueBoard';
 import AussieRulesManager from '@/pages/AussieRulesManager';
-import { clubOf, clubShort, createLeague, draftPool, lastWeek, LEGACY_SAVE_KEY, opponentPlays, picksLeft, readLeagueSave, reduceLeague, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
+import { clubOf, clubShort, createLeague, draftPool, lastWeek, LEGACY_SAVE_KEY, opponentPlays, picksLeft, readLeagueSave, reduceLeague, SAVE_KEY, summerDelistCandidates, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
 import { effectiveSkill, TACTICS } from '@/lib/aussieRulesManager';
 
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), getCurrentPlayerName: () => null }));
@@ -220,6 +220,35 @@ describe('AussieRulesLeagueBoard', () => {
     click(view, `[data-arl-prospect="${wrong.id}"]`);
     expect(view.container.querySelector('[data-arl-refusal]')!.textContent).toMatch(/ruck/);
     expect(saved()).toEqual(state);
+  });
+
+  it('previews and saves one delisting from Summer before opening the draft', () => {
+    const state = until(createLeague(16, 'club-04', 'afl2026')!, s => s.phase === 'summer');
+    const player = summerDelistCandidates(state).find(candidate => candidate.role === 'ruck')!;
+    const bytes = JSON.stringify(state);
+    store(state);
+    const view = draw();
+    fireEvent.click(view.getByText('Delist a player', { exact: true }));
+    const confirm = view.getByRole('button', { name: 'Confirm delisting' });
+    expect(confirm).toBeDisabled();
+    fireEvent.change(view.getByLabelText('Returning player'), { target: { value: player.id } });
+    expect(view.getByText('Draft picks increase from 9 to 10.')).toBeVisible();
+    expect(view.getByText('Draft role needs: 1 ruck.')).toBeVisible();
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+    fireEvent.click(confirm);
+    const receipt = player.name + ' will leave when the draft opens. Your draft gets one extra pick.';
+    expect(view.getByText(receipt)).toBeVisible();
+    expect(saved().history[0].delisted?.playerId).toBe(player.id);
+    expect(saved().draft).toBeNull();
+
+    view.unmount();
+    const reopened = draw();
+    expect(reopened.getByText(receipt)).toBeVisible();
+    expect(reopened.queryByRole('button', { name: 'Confirm delisting' })).toBeNull();
+    fireEvent.click(reopened.getByRole('button', { name: 'Open the draft' }));
+    expect(saved().phase).toBe('draft');
+    expect(picksLeft(saved(), state.myClub)).toBe(10);
+    expect(clubOf(saved(), state.myClub)!.players.some(candidate => candidate.id === player.id)).toBe(false);
   });
 
   it('starts season two after the draft', () => {
