@@ -124,3 +124,41 @@ it.each([[2026, 'broncos', 1, 'Quick Sim'], [2027, 'bears', 17, 'Play Live']] as
     expect(saved().season.results.find(match => match.homeId === club || match.awayId === club)?.benchUsed).toEqual(shown);
   },
 );
+
+it('saves the selected fourth-reserve rule and reopens the actual Quick Sim outcome', () => {
+  const career = createNrlCareer('storm', 13);
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(career));
+  localStorage.setItem(fence, '4');
+  const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const view = show();
+  const open = () => {
+    const details = screen.getByText('Hold one reserve for later').closest('details')!;
+    details.open = true;
+    return within(details);
+  };
+  const kickoff = open();
+  const checkbox = kickoff.getByRole('checkbox', { name: 'Leave the fourth interchange open' });
+  fireEvent.click(checkbox);
+  const key = 'ahead|storm-11-1|Left Second Row';
+  fireEvent.change(kickoff.getByRole('combobox', { name: 'Fourth interchange in Quick Sim' }), { target: { value: key } });
+  expect(localStorage.getItem(fence)).toBe('6');
+  const saved = readNrlCareerSave(localStorage.getItem(NRL_SAVE_KEY))!;
+  expect(saved.season.quickInterchange).toEqual({ reserveId: 'storm-11-1', role: 'Left Second Row', trigger: 'ahead' });
+  view.unmount();
+  show();
+  expect(open().getByRole('combobox', { name: 'Fourth interchange in Quick Sim' })).toHaveValue(key);
+  fireEvent.click(screen.getByRole('button', { name: 'Quick Sim' }));
+  const expected = reduceNrlCareer(saved, { type: 'advance' });
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(expected));
+  expect(localStorage.getItem(fence)).toBe('7');
+  const reserve = career.season.squad.find(player => player.id === 'storm-11-1')!;
+  const receipt = reserve.name + ' came on because you were ahead at 60 minutes.';
+  expect(screen.getByText(receipt)).toBeVisible();
+  fireEvent.click(screen.getByText('Season fixtures', { exact: true }));
+  const summary = screen.getByText('Round 1 match report', { exact: true });
+  const report = summary.closest('details')!;
+  fireEvent.click(summary);
+  fireEvent(report, new Event('toggle'));
+  expect(within(report).getByText(receipt)).toBeVisible();
+});

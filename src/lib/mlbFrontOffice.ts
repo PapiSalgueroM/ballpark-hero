@@ -219,13 +219,17 @@ export function mlbCapRoom(t: MlbGmTeam, cap: number): number {
   return Math.round((cap - mlbCapUsed(t)) * 10) / 10;
 }
 
+function mlbStartingBatters<T extends { pos: string; ovr: number }>(available: T[]): T[] {
+  return available.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, 8);
+}
+
 /** Round 829: the men the strength reads, best healthy first: 8 bats, 3
     starters, 2 relievers. Lifted out of mlbStrength unchanged so the roster
     screen and the opening payroll read the same men the sim does. A bench
     man counts only when he is better than a starter or a starter is hurt. */
 export function mlbStrengthUnits<T extends { pos: string; ovr: number; out: number }>(t: { players: T[] }, rotationSize = 3): { bats: T[]; rot: T[]; pen: T[] } {
   const healthy = t.players.filter(p => p.out === 0);
-  const bats = healthy.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, 8);
+  const bats = mlbStartingBatters(healthy);
   const rot = healthy.filter(p => p.pos === 'SP').sort((a, b) => b.ovr - a.ovr).slice(0, rotationSize);
   const pen = healthy.filter(p => p.pos === 'RP' || p.pos === 'CL').sort((a, b) => b.ovr - a.ovr).slice(0, 2);
   return { bats, rot, pen };
@@ -258,14 +262,16 @@ export function mlbDevelopmentPlan(league: MlbLeague, team: string) {
     && plan.playerId !== plan.replacedId ? plan : null;
 }
 
-export function mlbDevelopmentChoices(league: MlbLeague, team: string) {
+const ilRoundsAfterCountdown = (out: number) => out > 0 ? out - 1 : out;
+
+export function mlbDevelopmentChoices(league: MlbLeague, team: string, afterInjuryPass = false) {
   const club = league.teams[team];
   if (!club || !league.inSeasonRatings || mlbDevelopmentUsed(league, team)
     || league.round < 1 || league.round > MLB_ROUNDS || league.champions.some(row => row.season === league.season)) return null;
-  const { bats } = mlbStrengthUnits(club);
+  const available = club.players.filter(player => (afterInjuryPass ? player.out : ilRoundsAfterCountdown(player.out)) === 0);
+  const bats = mlbStartingBatters(available);
   if (bats.length < 8) return null;
-  const eligible = club.players.filter(player => player.out === 0 && player.age <= 24 && player.ovr < player.pot
-    && !isPitcher(player) && !bats.includes(player));
+  const eligible = available.filter(player => player.age <= 24 && player.ovr < player.pot && !isPitcher(player) && !bats.includes(player));
   return { bats, replaced: bats[bats.length - 1], eligible };
 }
 
@@ -283,13 +289,13 @@ export function setMlbDevelopmentStart(league: MlbLeague, team: string, playerId
   return { ...league, developmentStart: { team, season: league.season, round: league.round, playerId, replacedId: choices.replaced.id } };
 }
 
-export function mlbDevelopmentPreview(league: MlbLeague, team: string) {
+export function mlbDevelopmentPreview(league: MlbLeague, team: string, afterInjuryPass = false) {
   const plan = mlbDevelopmentPlan(league, team);
   if (!plan) return null;
-  const choices = mlbDevelopmentChoices(league, team);
+  const choices = mlbDevelopmentChoices(league, team, afterInjuryPass);
   if (!choices || choices.replaced.id !== plan.replacedId) return null;
   const player = choices.eligible.find(row => row.id === plan.playerId);
-  return player ? { player, replaced: choices.replaced, bats: [...choices.bats.slice(0, -1), player] } : null;
+  return player ? { player, replaced: choices.replaced, usualBats: choices.bats, bats: [...choices.bats.slice(0, -1), player] } : null;
 }
 
 export const MLB_PROTECTED_STARTERS = 5;
@@ -392,7 +398,7 @@ function rollDepthInjuries(league: MlbLeague, myTeam: string, rng: () => number,
   const roundSeed = Math.floor(rng() * 4294967296);
   for (const t of Object.values(league.teams)) {
     for (const p of t.players) {
-      if (p.out > 0) { p.out -= 1; continue; }
+      if (p.out > 0) { p.out = ilRoundsAfterCountdown(p.out); continue; }
       const risk = t.abbr === myTeam && protectedIds?.has(p.id) ? PROTECTED_INJURY_RISK : DEFAULT_INJURY_RISK;
       if (unitHash(roundSeed, p.name, 1) < risk) {
         p.out = 1 + Math.floor(unitHash(roundSeed, p.name, 2) * 4);
@@ -417,7 +423,7 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
   else {
     for (const t of Object.values(league.teams)) {
       for (const p of t.players) {
-        if (p.out > 0) p.out -= 1;
+        if (p.out > 0) p.out = ilRoundsAfterCountdown(p.out);
         else if (rng() < DEFAULT_INJURY_RISK) {
           p.out = 1 + Math.floor(rng() * 4);
           if (opts?.injuryRounds) p.out = opts.injuryRounds(t.abbr, p, p.out);
@@ -426,7 +432,8 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
       }
     }
   }
-  const batting = developmentPlan ? mlbDevelopmentPreview(league, myTeam) : null;
+  // Known returns were included when booking. A new injury can still change the pair.
+  const batting = developmentPlan ? mlbDevelopmentPreview(league, myTeam, true) : null;
   if (league.developmentStart) delete league.developmentStart;
   const openingRating = batting?.player.ovr;
   const plannedStrength = protectedIds || batting

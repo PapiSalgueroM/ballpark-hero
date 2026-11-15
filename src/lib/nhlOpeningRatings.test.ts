@@ -68,17 +68,47 @@ function oldDraft(api: typeof E, lg: E.NhlLeague, remaining: E.NhlProspect[], or
   for (const [i, pr] of takes.entries()) lg.teams[order[i % order.length]].players.push(api.nhlProspectToPlayer(pr, rng));
   return remaining.filter(p => !takes.includes(p));
 }
-function play(api: typeof E, lg: E.NhlLeague, rng: () => number) {
-  for (let round = 1; round <= 20; round++) { lg.round = round; api.simNhlRound(lg, 'TOR', rng); api.nhlAiMoves(lg, 'TOR', rng); }
+function completeLineupCount(lg: E.NhlLeague): number {
+  let count = 0;
+  for (const t of Object.values(lg.teams)) {
+    const healthy = t.players.filter(p => p.out === 0);
+    const available = [
+      healthy.filter(p => p.pos === 'C' || p.pos === 'W').length,
+      healthy.filter(p => p.pos === 'D').length,
+      healthy.filter(p => p.pos === 'G').length,
+    ];
+    expect(healthy, `${t.abbr} healthy roster`).toHaveLength(t.players.length);
+    expect(available[0], `${t.abbr} forwards`).toBeGreaterThanOrEqual(6);
+    expect(available[1], `${t.abbr} defensemen`).toBeGreaterThanOrEqual(4);
+    expect(available[2], `${t.abbr} goalies`).toBeGreaterThanOrEqual(1);
+    count += healthy.length;
+  }
+  return count;
+}
+function playFullLineups(api: typeof E, lg: E.NhlLeague, rng: () => number) {
+  for (let round = 1; round <= 20; round++) {
+    lg.round = round;
+    let injuryRolls = completeLineupCount(lg);
+    // Both engines roll injury risk once per healthy player before any game.
+    api.simNhlRound(lg, 'TOR', () => {
+      const draw = rng();
+      return injuryRolls-- > 0 ? 0.999 : draw;
+    });
+    expect(injuryRolls).toBeLessThanOrEqual(0);
+    api.nhlAiMoves(lg, 'TOR', rng);
+  }
+  completeLineupCount(lg);
   const post = api.runNhlFoPlayoffs(lg, rng); lg.champions.push({ season: lg.season, team: post.champion }); return post;
 }
 
 describe('NHL opening rating integration', () => {
-  it('preserves physical pre898 default two-season outcomes and every RNG draw', () => {
-    const a = rngFor(898), b = rngFor(898), previous = old.initNhlLeague(a.draw), current = E.initNhlLeague(b.draw);
+  it('preserves physical pre898 full-lineup two-season outcomes and every RNG draw', () => {
+    // With injuries held here, this draw keeps complete position groups through both seasons.
+    // The contributor tests exercise real injuries and short rosters under the vacancy rule.
+    const a = rngFor(899), b = rngFor(899), previous = old.initNhlLeague(a.draw), current = E.initNhlLeague(b.draw);
     expect(canonical(current)).toEqual(canonical(previous));
     for (let year = 0; year < 2; year++) {
-      expect(canonical(play(E, current, b.draw))).toEqual(canonical(play(old, previous, a.draw)));
+      expect(canonical(playFullLineups(E, current, b.draw))).toEqual(canonical(playFullLineups(old, previous, a.draw)));
       E.nhlOffseason(current, b.draw); old.nhlOffseason(previous, a.draw);
       expect(canonical(current)).toEqual(canonical(previous)); expect([b.calls(), b.state()]).toEqual([a.calls(), a.state()]);
     }

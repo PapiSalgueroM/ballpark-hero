@@ -69,6 +69,7 @@ const AdminReports = () => {
   const [search, setSearch] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('all');
   const [drafts, setDrafts] = useState<Record<string, { note: string; fixRef: string }>>({});
+  const [savingNotes, setSavingNotes] = useState(() => new Set<string>());
   const [messages, setMessages] = useState<Record<string, string>>({});
   const navigate = useNavigate();
   const reportHash = linkedReportHash(useLocation().hash);
@@ -169,10 +170,25 @@ const AdminReports = () => {
   const setDraft = (report: Report, next: { note: string; fixRef: string }) =>
     setDrafts((prev) => ({ ...prev, [report.id]: next }));
 
-  /* The box shows what was actually stored, trimmed and clipped. */
   const saveNote = async (report: Report, draft: { note: string; fixRef: string }) => {
+    if (savingNotes.has(report.id)) return;
     const patch = noteUpdate(draft.note, draft.fixRef);
-    if (await save(report, patch)) setDraft(report, { note: patch.admin_note ?? '', fixRef: patch.fix_ref ?? '' });
+    setSavingNotes((prev) => new Set(prev).add(report.id));
+    try {
+      if (await save(report, patch)) {
+        setDrafts((prev) => {
+          const current = prev[report.id];
+          if (current && (current.note !== draft.note || current.fixRef !== draft.fixRef)) return prev;
+          return { ...prev, [report.id]: { note: patch.admin_note ?? '', fixRef: patch.fix_ref ?? '' } };
+        });
+      }
+    } finally {
+      setSavingNotes((prev) => {
+        const next = new Set(prev);
+        next.delete(report.id);
+        return next;
+      });
+    }
   };
 
   const handleLogout = async () => {
@@ -343,7 +359,9 @@ const AdminReports = () => {
               const priority = priorityOf(report);
               const closed = isClosed(status);
               const draft = draftOf(report);
-              const message = messages[report.id];
+              const noteSaving = savingNotes.has(report.id);
+              const unsavedNote = draft.note !== (report.admin_note ?? '') || draft.fixRef !== (report.fix_ref ?? '');
+              const message = noteSaving ? 'Saving...' : messages[report.id];
               return (
               <div
                 key={report.id}
@@ -468,7 +486,7 @@ const AdminReports = () => {
                   </label>
                   <button
                     onClick={() => saveNote(report, draft)}
-                    disabled={!withColumns}
+                    disabled={!withColumns || noteSaving}
                     className="min-h-[36px] px-4 rounded-lg bg-primary text-primary-foreground text-sm font-medium disabled:opacity-50"
                     data-testid="note-save"
                   >
@@ -480,7 +498,7 @@ const AdminReports = () => {
                     className={cn('mt-2 text-xs', message.startsWith('Not saved') ? 'text-destructive' : 'text-muted-foreground')}
                     role="status"
                   >
-                    {message}
+                    {message === 'Saved' && unsavedNote ? 'Earlier changes saved. You have unsaved edits.' : message}
                   </p>
                 )}
               </div>

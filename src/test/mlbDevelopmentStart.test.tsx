@@ -77,6 +77,18 @@ describe('MLB bench development start', () => {
     expect(mlbDevelopmentUsed(lg, team)).toBe(false);
   });
 
+  it('books the returning hitter before kickoff so a scheduled IL return cannot cancel the development start', () => {
+    const league = fixture();
+    const returning = get(league, team + '0');
+    returning.out = 1;
+    const booked = setMlbDevelopmentStart(league, team, prospect);
+    expect(booked).not.toBe(league);
+    const receipt = play(booked).development;
+    expect(receipt).toEqual({ player: 'NYY fixture 9', replaced: 'NYY fixture 7', before: 62, after: 63 });
+    expect(mlbDevelopmentUsed(booked, team)).toBe(true);
+    expect(returning.out).toBe(0);
+  });
+
   it('counts a natural same-round gain once', () => {
     const lg = fixture();
     get(lg).pot = 89;
@@ -93,7 +105,7 @@ describe('MLB bench development start', () => {
     expect(get(active).ovr).toBe(63);
   });
 
-  it('drops the booked batting change when an actual kickoff injury makes the selected hitter unavailable', () => {
+  it('drops the booked batting change when the selected hitter picks up a new one-round injury', () => {
     const initial = fixture();
     const prep = setMlbDevelopmentStart(structuredClone(initial), team, prospect);
     expect(mlbDevelopmentPreview(prep, team)?.player.id).toBe(prospect);
@@ -103,7 +115,7 @@ describe('MLB bench development start', () => {
       const candidate = structuredClone(initial);
       let first = true;
       simMlbRound(candidate, team, () => { if (!first) return 0.48; first = false; return seed; });
-      if (get(candidate).out === 0) continue;
+      if (get(candidate).out !== 1) continue;
       control = candidate;
       injuryDraw = seed;
       break;
@@ -115,8 +127,9 @@ describe('MLB bench development start', () => {
     expect(JSON.stringify(prep)).toBe(JSON.stringify(control));
   });
 
-  it('saves the selection, keeps the exact preview on reload, and reports the played result', () => {
+  it('saves the selection, keeps the preview with an IL return on reload, and reports the played result', () => {
     const league = mountedLeague();
+    get(league, team + '0').out = 1;
     const initial = JSON.stringify({ league, myTeam: team, phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0 });
     localStorage.setItem(key, initial);
     const picker = () => screen.getByRole('combobox', { name: 'Development start' });

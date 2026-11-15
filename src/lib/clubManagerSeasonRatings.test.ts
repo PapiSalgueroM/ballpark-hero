@@ -59,4 +59,22 @@ describe('Club Manager in-season ratings', () => {
     const next = startNextSeason(state);
     expect(next.squad.some(p => state.squad.some(old => old.id === p.id && old.rating !== p.rating))).toBe(true);
   });
+
+  it('explains steady ratings after a league match and a cup tie', () => {
+    vi.spyOn(Math, 'random').mockReturnValue(0.62);
+    let state = setup(true);
+    state.squad = state.squad.map(p => ({ ...p, age: 27, potential: p.rating }));
+    const reviews = new Map<string, string[]>();
+    for (let i = 0; i < 20 && (!reviews.has('league') || !reviews.has('cup')); i++) {
+      const before = new Map(state.squad.map(p => [p.id, p.rating]));
+      const result = playNextEntry(state, { skipHalftime: true });
+      state = result.state;
+      if (result.kind !== 'match') continue;
+      const { competition, events } = result.report;
+      expect(state.squad.every(p => !before.has(p.id) || before.get(p.id) === p.rating)).toBe(true);
+      reviews.set(competition, events.filter(event => event.startsWith('Squad OVR')));
+    }
+    expect(reviews.get('league')).toEqual(['Squad OVR held this match.']);
+    expect(reviews.get('cup')).toEqual(['Squad OVR held. Ratings are reviewed after league matches.']);
+  });
 });

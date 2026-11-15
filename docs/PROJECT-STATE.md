@@ -1,4 +1,14 @@
+## 2026-11-14: Timed rugby interchanges, match ratings and safer admin drafts
+
+- NRL Team Manager can hold the fourth interchange and tell Quick Sim to bring on an eligible reserve at 60 minutes when ahead or behind. The report records the decision, and Live still takes the manager's choice at the pause.
+- MLB Front Office accounts for scheduled injured-list returns when you choose a batting prospect's development start. The preview names the hitter who would actually sit. A new injury can still change the lineup before the start.
+- Club Manager reports when squad OVR holds after a league match or a cup tie. The cup report explains when the next rating review takes place.
+- Admin Reports allows more typing while a note saves. A response preserves any newer edits, and the report shows when those edits still need saving.
+- The NHL opening-rating harness compares full lineups across two seasons against the historical engine. Separate waiver and injury cases cover the intended vacancy penalty. The older waiver reference, draft anchor and roster-limit controls also fail on exact #978. The old native fixture omits the in-season rating flag that the live page has added on load since #899.
+
 ## 2026-11-14: Daily puzzle navigation, save protection and offseason deals
+
+[PR #979](https://github.com/PapiSalgueroM/ballpark-hero/pull/979) published exact main `66b158739f6320b45424478ecc2aa8ca6cb2f951`, deployment `e9de2339-70d8-4a45-80c0-a14dca4a0eb5`, canonical entry `/assets/index-DY_xdSbo.js`. Ten live browser checks, all 174 sitemap routes, seven policy and crawler endpoints, two admin noindex tags and the updated NRL guide passed. IndexNow accepted the NRL guide. Application types, build, 76 focused tests, all 18 site checks and all 16 download limits passed. One optional physical-original NHL comparison skipped in the integrated suite. The Home launch and career entry workflows passed.
 
 - Home's Daily puzzles rail brings the opening card into view and restores focus on Back, including after the rail switches between its phone and desktop layouts. It remembers the sport filter and keeps the saved rail position if the card still fits.
 - Soccer Perfect Season checks for a newer save in another tab even after a failed write. An older tab keeps the completed run intact and can retry when the save is still unchanged.

@@ -20805,8 +20805,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const tacticsDay = logEverSet(live.instrLog) ? tacticsImpl()?.day(state, fx, live, second, lastMinute) ?? null : null;
   if (entry.night) nightSquadTick(state, new Set(xi.map(p => p.id)));
   else tickWeek(state, new Set(xi.map(p => p.id)));
-  if (state.inSeasonRatings && !state.worldRatingRunIn && entry.type === 'league') {
+  const ratingsActive = state.inSeasonRatings && !state.worldRatingRunIn;
+  if (ratingsActive && entry.type === 'league') {
     const ratingChanges = applyLeagueRatingChanges(state, events);
+    if (ratingChanges.length === 0) events.push('Squad OVR held this match.');
     /* Only the career's own league book records reviews. Hot Seat and other no-book runs keep their tape. */
     if (state.leagueBook) {
       const stamp = state.leagueRatingResults;
@@ -20817,6 +20819,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
         results: { ...results, [entry.round]: { ...fixtureResult, ratingChanges } },
       };
     }
+  } else if (ratingsActive) {
+    events.push('Squad OVR held. Ratings are reviewed after league matches.');
   }
   if (tacticsDay && tacticsDay.stats.legs !== 0) {
     const played = new Set(xi.map(p => p.id));

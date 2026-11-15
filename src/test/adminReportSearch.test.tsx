@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -101,6 +101,57 @@ describe('admin report queue', () => {
     expect(db.write).toHaveBeenCalledWith('club-1', expect.objectContaining({ status: 'fixed', resolved: true }));
     fireEvent.click(status.getByRole('button', { name: 'Fixed (1)' }));
     expect(screen.getByText('Players left for free')).toBeVisible();
+  });
+
+  it('keeps newer note and fix-reference drafts while an earlier save completes', async () => {
+    let release: () => void = () => {};
+    db.write.mockImplementationOnce((id: string) => new Promise(resolve => {
+      release = () => resolve({ data: [{ id }], error: null });
+    }));
+    openQueue();
+    const report = await screen.findByText(contract.description);
+    const card = within(report.closest('[data-report]') as HTMLElement);
+    const note = card.getByRole('textbox', { name: 'Note' });
+    const reference = card.getByRole('textbox', { name: 'Fix reference' });
+    const save = card.getByRole('button', { name: 'Save note' });
+    fireEvent.change(note, { target: { value: '  First draft  ' } });
+    fireEvent.change(reference, { target: { value: '  #978  ' } });
+    fireEvent.click(save);
+    expect(card.getByRole('status')).toHaveTextContent('Saving...');
+    expect(save).toBeDisabled();
+    expect(db.write).toHaveBeenNthCalledWith(1, contract.id, { admin_note: 'First draft', fix_ref: '#978' });
+
+    fireEvent.change(note, { target: { value: '  Latest draft  ' } });
+    fireEvent.change(reference, { target: { value: '  #979  ' } });
+    await act(async () => release());
+    expect(note).toHaveValue('  Latest draft  ');
+    expect(reference).toHaveValue('  #979  ');
+    expect(card.getByRole('status')).toHaveTextContent('unsaved edits');
+    expect(save).toBeEnabled();
+
+    fireEvent.click(save);
+    expect(db.write).toHaveBeenNthCalledWith(2, contract.id, { admin_note: 'Latest draft', fix_ref: '#979' });
+    await waitFor(() => expect(note).toHaveValue('Latest draft'));
+    expect(reference).toHaveValue('#979');
+    expect(card.getByRole('status')).toHaveTextContent(/^Saved$/);
+  });
+
+  it('keeps a refused note available for retry', async () => {
+    db.write.mockResolvedValueOnce({ data: [], error: null });
+    openQueue();
+    const report = await screen.findByText(contract.description);
+    const card = within(report.closest('[data-report]') as HTMLElement);
+    const note = card.getByRole('textbox', { name: 'Note' });
+    const save = card.getByRole('button', { name: 'Save note' });
+    fireEvent.change(note, { target: { value: '  Keep this draft  ' } });
+    fireEvent.click(save);
+    await waitFor(() => expect(card.getByRole('status')).toHaveTextContent('Not saved'));
+    expect(save).toBeEnabled();
+    expect(note).toHaveValue('  Keep this draft  ');
+
+    fireEvent.click(save);
+    await waitFor(() => expect(note).toHaveValue('Keep this draft'));
+    expect(db.write).toHaveBeenCalledTimes(2);
   });
 
   it('finds an older report beyond the first request and supports unranked reports', async () => {

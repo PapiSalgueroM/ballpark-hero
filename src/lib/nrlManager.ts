@@ -88,6 +88,7 @@ type NrlActiveKickingPlan = 'territory' | 'contest';
 export type NrlKickingPlan = 'mixed' | NrlActiveKickingPlan;
 const isActiveKickingPlan = (plan: unknown): plan is NrlActiveKickingPlan => plan === 'territory' || plan === 'contest';
 export interface NrlHalftimeInterchange { starterId: string; reserveId: string }
+export interface NrlQuickInterchange { reserveId: string; role: NrlRole; trigger: 'ahead' | 'behind' }
 interface NrlHalftimeChoice {
   tactic: NrlTactic; interchange?: NrlHalftimeInterchange; secondInterchange?: NrlHalftimeInterchange; talk?: NrlHalftimeTalk;
   attackPlan?: NrlAttackPlan;
@@ -103,6 +104,7 @@ interface NrlHalftimeDecision {
   live: NrlLiveHalf; tactic: NrlTactic; interchanges: NrlHalftimeOption[]; talk?: NrlHalftimeTalk;
   attackPlan?: NrlAttackPlan;
   lateTactic?: NrlTactic; lateInterchange?: NrlHalftimeInterchange & { role: NrlRole };
+  quickInterchange?: NrlQuickInterchange;
   fieldGoalPlan?: true;
   lateAttackPlan?: NrlAttackPlan;
 }
@@ -139,6 +141,7 @@ export interface NrlMatchResult extends NrlFixture {
   minute60Tactic?: NrlTactic;
   minute60AttackPlan?: NrlAttackPlan;
   minute60Interchange?: NrlHalftimeInterchange;
+  quickInterchange?: NrlQuickInterchange;
   minute60FieldGoal?: 0 | 1 | 2;
   individualRecoveryId?: string;
   goalKickingDrills?: true;
@@ -209,6 +212,7 @@ export interface NrlManagerState {
   individualRecoveryId?: string;
   results: NrlMatchResult[];
   openInterchange?: true;
+  quickInterchange?: NrlQuickInterchange;
   penaltyTap?: true;
   kickingPlan?: NrlActiveKickingPlan;
   championId: string | null;
@@ -236,6 +240,7 @@ export type NrlAction =
   | NrlPreparationAction
   | { type: 'setIndividualRecovery'; playerId: string | null; year: number; clubId: string; round: number }
   | { type: 'setOpenInterchange'; enabled: boolean; year: number; clubId: string; round: number }
+  | { type: 'setQuickInterchange'; plan: NrlQuickInterchange | null; year: number; clubId: string; round: number }
   | { type: 'setPenaltyTap'; enabled: boolean; year: number; clubId: string; round: number }
   | { type: 'setKickingPlan'; plan: NrlKickingPlan; year: number; clubId: string; round: number }
   | { type: 'startLive'; hold?: { year: number; round: number; reserveId: string } }
@@ -778,24 +783,47 @@ export function nrlMinute60Interchanges(state: NrlManagerState) {
   // A rotating reserve normally comes on and then leaves. A half-time keep skips the return.
   if (rotation.size + entrants >= NRL_MAX_BENCH_USED || rotation.size * 2 - kept + entrants >= NRL_MAX_INTERCHANGES) return [];
 
+  const additional = additionalMinute60Interchanges(state, rotation, halfway, live.heldReserveId);
+  return held ? [held, ...additional] : additional;
+}
+
+function additionalMinute60Interchanges(state: NrlManagerState, rotation: ReadonlyMap<string, NrlPlayer>,
+  halfway: (NrlHalftimeInterchange | undefined)[], heldReserveId?: string) {
   const restarting = halfway.some(change => change?.starterId === state.kickerId) ? state.backupKickerId : undefined;
   const used = new Set([...rotation.values()].map(player => player.id));
   const unavailable = nrlUnavailable(state);
   const backup = state.backupKickerId;
   const backupCanKick = backup && backup !== state.kickerId && !unavailable.has(backup)
     && Object.values(state.lineup).includes(backup) && halfway.every(change => change?.starterId !== backup);
-  const additional = (state.bench ?? []).flatMap(id => {
+  return (state.bench ?? []).flatMap(id => {
     const reserve = state.squad.find(player => player.id === id);
     if (!state.kickerId || !reserve || unavailable.has(id) || used.has(id)) return [];
     const roles = [reserve.role, reserve.secondaryRole];
     return roles.flatMap(role => {
-      if (!role || (id === live.heldReserveId && role === reserve.role)) return [];
+      if (!role || (id === heldReserveId && role === reserve.role)) return [];
       const starterId = state.lineup[role];
       return (starterId === state.kickerId && !backupCanKick) || starterId === restarting || rotation.has(starterId)
         || halfway.some(change => change?.starterId === starterId) ? [] : [{ starterId, reserveId: id, role }];
     });
   });
-  return held ? [held, ...additional] : additional;
+}
+
+export function nrlQuickInterchangeOptions(state: NrlManagerState) {
+  if (!state.openInterchange || state.live || state.phase !== 'regular' || !nrlNextRound(state).clubMatch) return [];
+  const rotation = nrlBenchRotation(state);
+  return rotation.size === NRL_MAX_BENCH_USED - 1 ? additionalMinute60Interchanges(state, rotation, []) : [];
+}
+
+function quickInterchangeDue([home, away]: NrlScorePair, atHome: boolean, trigger: NrlQuickInterchange['trigger']) {
+  const margin = atHome ? home - away : away - home;
+  return trigger === 'ahead' ? margin > 0 : margin < 0;
+}
+
+export function nrlQuickInterchangeOutcome(result: NrlMatchResult, clubId: string) {
+  const { quickInterchange, scorePeriods, minute60Interchange } = result;
+  if (!quickInterchange || !scorePeriods?.at60) return null;
+  if (minute60Interchange) return 'used';
+  return quickInterchangeDue(scorePeriods.at60, result.homeId === clubId, quickInterchange.trigger) ? 'unavailable' : 'missed';
 }
 
 const fieldGoalPlanGap = (gap: number) => gap === 0 || gap === -2;
@@ -1297,6 +1325,7 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
       ...(state.individualRecoveryId && { individualRecoveryId: state.individualRecoveryId }),
       ...(state.preparation === 'goalKickingDrills' && { goalKickingDrills: true as const }),
       ...(state.openInterchange && { openInterchange: true as const }),
+      ...(halftime?.quickInterchange && { quickInterchange: halftime.quickInterchange }),
       ...(state.attackPlan === 'counter' && { counterStyle: nrlCounterPlan(state, fixture).style }),
       ...(state.captainId && (starters.has(state.captainId) || lateInterchange?.reserveId === state.captainId
         || interchanges.some(change => change.reserveId === state.captainId))
@@ -1335,7 +1364,7 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
   const championId = premierOf(FINALS, finalsOutcomes(results))?.winner ?? null;
   const round = Math.min(state.round + 1, lastRound(state.year));
   const { attackPlan: _playedPlan, individualRecoveryId: _spentRecovery, openInterchange: _playedInterchange,
-    penaltyTap: _takenPenaltyTap, kickingPlan: _playedKickingPlan, ...settled } = state;
+    penaltyTap: _takenPenaltyTap, kickingPlan: _playedKickingPlan, quickInterchange: _playedQuickInterchange, ...settled } = state;
   const next: NrlManagerState = {
     ...settled, round, squad, results, championId, preparation: null,
     phase: championId ? 'complete' : round > nrlRegularRounds(state.year) ? 'finals' : 'regular',
@@ -1391,6 +1420,24 @@ function liveFinishDecision(state: NrlManagerState, live: NrlLiveHalf, choice: N
   if (choice.year !== state.year || choice.round !== state.round) return null;
   if (choice.type === 'finishMinute60') return minute60Decision(state, live, choice, options);
   return live.minute60 ? null : halftimeDecision(state, live, choice, options);
+}
+
+function plannedQuickInterchange(state: NrlManagerState, opponentStrength: ReadonlyMap<string, number> | undefined,
+  options: NrlRoundOptions): NrlHalftimeDecision | undefined {
+  const plan = state.quickInterchange;
+  if (!plan) return;
+  const { clubMatch } = nrlNextRound(state);
+  if (!clubMatch) return;
+  const opening = drawHalftime(state, clubMatch, opponentStrength, options);
+  const halftime = { live: opening, tactic: state.tactic, interchanges: [] };
+  const minute60 = { tactic: state.tactic, ...minute60Scores(state, halftime, opponentStrength, options) };
+  const live = { ...opening, minute60 };
+  const choice = nrlQuickInterchangeOptions(state).find(row => row.reserveId === plan.reserveId && row.role === plan.role);
+  const due = quickInterchangeDue([scoreOf(minute60.homeScoring), scoreOf(minute60.awayScoring)], clubMatch.homeId === state.clubId, plan.trigger);
+  const { year, round, tactic } = state;
+  const decision = minute60Decision({ ...state, live }, live, { type: 'finishMinute60', year, round, tactic,
+    ...(due && choice && { reserveId: choice.reserveId, reserveRole: choice.role }) }, options);
+  if (decision) return { ...decision, quickInterchange: plan };
 }
 
 export function nrlLivePhasePreview(state: NrlManagerState, choice: NrlLivePlanChoice,
@@ -1518,8 +1565,22 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
       if (typeof enabled !== 'boolean' || year !== state.year || clubId !== state.clubId || round !== state.round
         || enabled === Boolean(state.openInterchange)) return state;
       if (enabled) return nrlCanOpenInterchange(state) ? { ...state, openInterchange: true } : state;
-      const { openInterchange, ...cleared } = state;
+      const { openInterchange, quickInterchange, ...cleared } = state;
       return cleared;
+    }
+    case 'setQuickInterchange': {
+      const { year, clubId, round, plan } = action;
+      if (year !== state.year || clubId !== state.clubId || round !== state.round || !state.openInterchange) return state;
+      if (plan === null) {
+        if (!state.quickInterchange) return state;
+        const { quickInterchange, ...cleared } = state;
+        return cleared;
+      }
+      if (!validQuickInterchange(plan, new Map(state.squad.map(player => [player.id, player])))
+        || !nrlQuickInterchangeOptions(state).some(option => option.reserveId === plan.reserveId && option.role === plan.role)
+        || (plan.trigger === state.quickInterchange?.trigger && plan.reserveId === state.quickInterchange.reserveId
+          && plan.role === state.quickInterchange.role)) return state;
+      return { ...state, quickInterchange: { ...plan } };
     }
     case 'setPenaltyTap': {
       const { year, clubId, round, enabled } = action;
@@ -1581,7 +1642,7 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
       return { ...state, live: { ...live, minute60 } };
     }
     case 'advance':
-      return advanceRound(state, opponentStrength, options);
+      return advanceRound(state, opponentStrength, options, plannedQuickInterchange(state, opponentStrength, options));
   }
 }
 
@@ -1785,6 +1846,24 @@ function validActingCaptain(match: Record<string, unknown>, byId: ReadonlyMap<st
     && match.captainId === (phases.some(phase => phase.playerId === clubCaptainId) ? clubCaptainId : undefined);
 }
 
+function validQuickInterchange(value: unknown, byId: ReadonlyMap<string, NrlPlayer>): value is NrlQuickInterchange {
+  if (!record(value) || Object.keys(value).length !== 3 || typeof value.reserveId !== 'string'
+    || (value.trigger !== 'ahead' && value.trigger !== 'behind') || !NRL_ROLES.includes(value.role as NrlRole)) return false;
+  const reserve = byId.get(value.reserveId);
+  return reserve !== undefined && nrlCanPlayRole(reserve, value.role as NrlRole);
+}
+
+function validQuickInterchangeResult(value: Record<string, unknown>, atHome: boolean, byId: ReadonlyMap<string, NrlPlayer>) {
+  const { quickInterchange: plan, minute60Interchange: late, playerScoring: scoring } = value;
+  const at60 = (value.scorePeriods as NrlScorePeriods | undefined)?.at60;
+  if (!validQuickInterchange(plan, byId) || !at60 || value.openInterchange !== true || !record(scoring) || !Array.isArray(scoring.starters)
+    || value.halftimeInterchange !== undefined || value.secondHalftimeInterchange !== undefined || value.halftimeTalk !== undefined
+    || value.halftimeAttackPlan !== undefined || value.minute60Tactic !== undefined || value.minute60AttackPlan !== undefined
+    || value.minute60FieldGoal !== undefined || value.goldenPointApproach !== undefined) return false;
+  return late === undefined || (record(late) && late.reserveId === plan.reserveId
+    && scoring.starters[NRL_ROLES.indexOf(plan.role)] === late.starterId && quickInterchangeDue(at60, atHome, plan.trigger));
+}
+
 function validResult(value: unknown, expected: NrlFixture, state: Pick<NrlManagerState, 'clubId' | 'seed' | 'year'>,
   byId: Map<string, NrlPlayer>): value is NrlMatchResult {
   if (!record(value)) return false;
@@ -1810,6 +1889,7 @@ function validResult(value: unknown, expected: NrlFixture, state: Pick<NrlManage
     && (value.goldenPointApproach === undefined || (value.goldenPoint !== undefined && value.scorePeriods !== undefined
       && isActiveGoldenPointApproach(value.goldenPointApproach)))
     && validBenchUse(value.benchUsed, managed, byId, value.minute60Interchange, value.playerScoring)
+    && (value.quickInterchange === undefined || (managed && !expected.finalsRound && validQuickInterchangeResult(value, home, byId)))
     && (value.halftimeTalk === undefined || (managed && isNrlHalftimeTalk(value.halftimeTalk) && value.playerScoring !== undefined))
     && (value.halftimeAttackPlan === undefined || (managed && value.scorePeriods !== undefined
       && isNrlAttackPlan(value.halftimeAttackPlan) && value.playerScoring !== undefined))
@@ -1955,7 +2035,8 @@ export function isNrlSeasonProgress(value: unknown): value is NrlManagerState {
   if (bench !== undefined && (!Array.isArray(bench) || bench.length !== NRL_BENCH_SIZE
     || new Set(bench).size !== bench.length
     || !bench.every(id => typeof id === 'string' && byId.has(id) && !starters.has(id) && !unavailable.has(id)))) return false;
-  const { individualRecoveryId, openInterchange, penaltyTap, kickingPlan } = value;
+  const { individualRecoveryId, openInterchange, penaltyTap, kickingPlan, quickInterchange } = value;
+  if (quickInterchange !== undefined && (phase !== 'regular' || openInterchange !== true || !validQuickInterchange(quickInterchange, byId))) return false;
   if (openInterchange !== undefined && (openInterchange !== true || phase === 'complete')) return false;
   if (penaltyTap !== undefined && (penaltyTap !== true || phase === 'complete')) return false;
   if (kickingPlan !== undefined && (!isActiveKickingPlan(kickingPlan) || phase === 'complete')) return false;

@@ -26,9 +26,9 @@ import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlBenchRotation, nrlCanOpenInterchange, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
   nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlNextRound, nrlOnFieldCaptain,
-  nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
+  nrlQuickInterchangeOptions, nrlQuickInterchangeOutcome, nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
-  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlGoldenPointApproach, type NrlHalftimeTalk, type NrlKickingPlan, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlRole, type NrlTactic,
+  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlGoldenPointApproach, type NrlHalftimeTalk, type NrlKickingPlan, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlQuickInterchange, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
@@ -735,6 +735,9 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
   const lateReserve = late && season.squad.find(player => player.id === late.reserveId);
   const lateStarter = late && season.squad.find(player => player.id === late.starterId);
   const lateRole = late && match.playerScoring ? NRL_ROLES[match.playerScoring.starters.indexOf(late.starterId)] : undefined;
+  const quick = match.quickInterchange;
+  const quickOutcome = nrlQuickInterchangeOutcome(match, season.clubId);
+  const quickReserve = quick && season.squad.find(player => player.id === quick.reserveId)?.name;
   return (
     <>
       {periods && (
@@ -803,6 +806,11 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
               : 'Your penalty tap led to a converted try for six points.'}
       </p>}
       {match.openInterchange && <p className="mt-2 text-sm text-muted-foreground">You left the fourth automatic interchange open.</p>}
+      {quick && quickReserve && <p className="mt-2 text-sm text-muted-foreground" data-nrl-quick-interchange-result>
+        {quickOutcome === 'used' ? `${quickReserve} came on because you were ${quick.trigger} at 60 minutes.`
+          : quickOutcome === 'unavailable' ? `You were ${quick.trigger} at 60 minutes. ${quickReserve} was unavailable for the fourth interchange.`
+            : `The fourth interchange for ${quickReserve} needed you to be ${quick.trigger} at 60 minutes. The trigger was missed.`}
+      </p>}
       {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
         {recoveredName} took individual recovery before this match.
       </p>}
@@ -1219,6 +1227,45 @@ function AwayRecovery({ career, onAction, disabled }: {
   );
 }
 
+function QuickInterchange({ season, onAction, disabled }: {
+  season: NrlManagerState; onAction: (action: NrlAction) => void; disabled: boolean;
+}) {
+  const { year, clubId, round, quickInterchange } = season;
+  const options = nrlQuickInterchangeOptions(season);
+  if (!options.length && !quickInterchange) return null;
+  const triggers = ['ahead', 'behind'] as const;
+  const keyOf = ({ reserveId, role, trigger }: NrlQuickInterchange) => [trigger, reserveId, role].join('|');
+  const selected = quickInterchange ? keyOf(quickInterchange) : '';
+  const stale = quickInterchange && !options.some(option => option.reserveId === quickInterchange.reserveId && option.role === quickInterchange.role);
+  return (
+    <div className="mt-3" data-nrl-quick-interchange>
+      <label htmlFor="nrl-quick-interchange" className="text-sm font-semibold">Fourth interchange in Quick Sim</label>
+      <select id="nrl-quick-interchange" value={selected} disabled={disabled} aria-describedby="nrl-quick-interchange-help"
+        className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        onChange={event => {
+          const value = event.target.value;
+          const plan = triggers.flatMap(trigger => options.map(({ reserveId, role }) => ({ reserveId, role, trigger })))
+            .find(option => keyOf(option) === value);
+          if (!value || plan) onAction({ type: 'setQuickInterchange', year, clubId, round, plan: plan ?? null });
+        }}>
+        <option value="">Keep the fourth spot open</option>
+        {stale && <option value={selected}>Selected reserve is unavailable</option>}
+        {triggers.map(trigger => (
+          <optgroup key={trigger} label={trigger === 'ahead' ? 'When ahead at 60 minutes' : 'When behind at 60 minutes'}>
+            {options.map(({ reserveId, role }) => {
+              const key = keyOf({ reserveId, role, trigger });
+              return <option key={key} value={key}>{season.squad.find(player => player.id === reserveId)?.name} · {role}</option>;
+            })}
+          </optgroup>
+        ))}
+      </select>
+      <p id="nrl-quick-interchange-help" className="mt-1 text-xs text-muted-foreground">
+        Keep three opening reserves and use the fourth only if the score matches your choice at 60 minutes. Fast-forward follows this plan for the fixture. In Live, make the call yourself.
+      </p>
+    </div>
+  );
+}
+
 function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLiveResult, initialFixtureClub }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null;
   onOpenOffice: (screen: OfficeScreen) => void; disabled: boolean; showLiveResult: boolean; initialFixtureClub?: string;
@@ -1459,10 +1506,11 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
                 </label>
                 <p id="nrl-open-interchange-help" className="text-xs text-muted-foreground">
                   {nrlCanOpenInterchange(season)
-                    ? 'Quick Sim uses three reserves. The unused reserve stays fresher and their starter gets less rest.'
+                    ? 'With the fourth spot open, three reserves rotate early. The unused reserve stays fresher and their starter gets less rest.'
                     : 'This bench would already use three or fewer automatic reserves.'}
                   {' In Live, bring on one eligible unused reserve at half time or keep the place for 60 minutes.'}
                 </p>
+                {season.openInterchange && !career.legacySeason && <QuickInterchange season={season} onAction={onAction} disabled={disabled} />}
               </>
             )}
             <p className="mt-2 text-sm text-muted-foreground" aria-live="polite">
@@ -2540,7 +2588,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Before kick-off, open Hold one reserve for later to see the Quick Sim rotation and compare it with the Live rotation when you hold someone.</li>
               <li>Before a regular-season away match, book one recovery session per season from Preparation. It costs $120,000 from club cash and adds up to eight fitness points at kickoff.</li>
               <li>Use First reserve in the rotation preview to change who gets first priority. It swaps two places on your named bench.</li>
-              <li>Leave the fourth interchange open to use only three reserves in Quick Sim or choose a fourth at 60 minutes in Live.</li>
+              <li>Leave the fourth interchange open to rotate three reserves early. In Quick Sim, choose a reserve to come on at 60 minutes when ahead or behind. The report shows whether they came on.</li>
               <li>At 60 minutes in Live, an unused reserve can cover their trained position if the slot is open.</li>
               <li>Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation. Positional matchups shows the ratings behind the middle and wide plans.</li>
               <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
