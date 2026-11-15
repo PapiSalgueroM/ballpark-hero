@@ -1,3 +1,10 @@
+## 2026-11-14: Rugby kicking plans, career workload and Home browsing
+
+- NRL Team Manager lets you choose your last-tackle kicking plan before a match. Kick long cuts the try threat for both sides. Contest kicks gives both sides more chances. Match Centre saves the choice through Live and records it in the report. The next match starts with Mixed kicks.
+- NBA My Career signed starters can plan rest after completing a season. They sit eight games in a full schedule and six in a 66-game season, with a 30% lower simulated injury chance. The missed games count against award eligibility. Career Log and Season Center show the scheduled absences.
+- For new MLB My Career pitching seasons, wins, losses and saves fit within the number of appearances, and wins, saves and holds fit too. The correction covers both the original stat draw and shortened workloads. In a paired check, all 29 infeasible original pitching lines were corrected and the 691 feasible original draws held.
+- Home shows descriptions under the game names in the compact phone catalogue. The descriptions occupy one line at 320, 390 and 430 pixels, with usable game links and pin buttons at all three widths.
+
 ## 2026-11-14: Saved contracts, tournament scoring and admin report search
 
 [PR #974](https://github.com/PapiSalgueroM/ballpark-hero/pull/974) published exact main `740bb0367cd45c0c074ad81d06aa48ee18187323`, deployment `21482338-7ff5-476d-9b34-e88463430676`, canonical entry `/assets/index-Dd3PPdYo.js`. Twelve exact live browser journeys passed, including four admin journeys with fixture data, and the admin route served its noindex tag. The updated Club Manager guide, all 174 sitemap routes and seven policy and crawler endpoints passed. IndexNow accepted Club Manager. The build, app types, 189 focused tests, all 18 site checks and all 16 download limits passed. The scoring comparison preserved international brackets and RNG draw counts in 2,160 paired campaigns. In 2,400 elite France simulations, the finals Golden Boot rate fell from 33.5% to 6.1%.
