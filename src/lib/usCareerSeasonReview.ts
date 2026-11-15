@@ -78,11 +78,18 @@ export function mlbSeasonReview(s: MlbSeasonLine, pos: MlbCareerPos): CareerRevi
 
 export function nhlSeasonReview(s: NhlSeasonLine, pos: NhlCareerPos): CareerReviewStats {
   const tandem = pos === 'G' && recorded(s.tandemStarts);
+  const { poGames, poStarts } = s;
+  const hasStarts = recorded(poStarts) && Number.isInteger(poStarts) && poStarts >= 0
+    && recorded(poGames) && Number.isInteger(poGames) && poGames > 0 && poStarts <= poGames;
+  const goalieResults = [number('Wins', s.poWins), number('Save percentage', s.poSvpct, 3)];
+  const goaliePostseason = hasStarts
+    ? [number('Team games', poGames), number('Starts', poStarts), ...(poStarts > 0 ? goalieResults : [])]
+    : [number('Games', poGames), ...goalieResults];
   const detail = stats(s.teamResult,
     pos === 'G' ? [number('Wins', s.wins), number('Save percentage', s.svpct, 3),
       ...(tandem ? [text('Goalie workload', 'Shared crease'), number('Planned starts', s.tandemStarts)] : [])]
       : [number('Goals', s.goals), number('Assists', s.assists), number('Points', s.points)],
-    pos === 'G' ? [number('Games', s.poGames), number('Wins', s.poWins), number('Save percentage', s.poSvpct, 3)]
+    pos === 'G' ? goaliePostseason
       : [number('Games', s.poGames), number('Goals', s.poGoals), number('Assists', s.poAssists), number('Points', s.poPoints)]);
   return tandem ? { ...detail, gamesLabel: 'Starts' } : detail;
 }
