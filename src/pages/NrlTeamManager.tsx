@@ -2560,6 +2560,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Open Finals race in Ladder during the last four regular rounds to check your remaining opponents, possible ladder points and whether your club has secured a place.</li>
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>
               <li>Once per season, use club cash to assign a second academy scout while a report is pending. Both reports arrive next round.</li>
+              <li>In Academy, spend $75,000 to teach one scouted, unsigned prospect a second position. Their promotion offer reopens after two rounds, including byes. Graduates keep the new position next season.</li>
               <li>Choose Ready sooner for higher starting OVR or Higher ceiling for more potential when assigning an academy scout. Balanced uses the standard profile.</li>
               <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check the latest match result or open Rating changes in Squad. Existing ratings carry into the next season.</li>
               <li>Open a regular-season match report in Season fixtures to see the rating changes saved for that match.</li>

@@ -9,7 +9,7 @@ import { useNrlClubName } from '@/components/nrl-manager/NrlClubIdentity';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   isNrlNamedPlayer,
-  nrlAcademyAvailableRoles, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyParallelQuote, nrlAcademyParallelSpend, nrlAcademyReleaseAvailable, nrlAcademyReports,
+  nrlAcademyAvailableRoles, nrlAcademyCrossTrainingQuote, nrlAcademyCrossTrainingSpend, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyParallelQuote, nrlAcademyParallelSpend, nrlAcademyReleaseAvailable, nrlAcademyReports,
   nrlAwayRecoverySpend, nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
   nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractApproachPreview, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer,
@@ -29,8 +29,8 @@ import {
   type NrlCareerAction, type NrlCareerState, type NrlOffseasonFreeAgentTarget, type NrlPrimaryRoleChange,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverDiscovery, nrlTakeoverPlayers, nrlTicketPricingRefusal,
   nrlSupporterAttendance,
-  NRL_ACADEMY_PRIORITIES, NRL_DEVELOPMENT_ASSISTANT, NRL_RECRUITMENT_PLAN_LIMIT, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
-  type NrlAcademyPriority, type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlRecruitmentPick, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
+  NRL_ACADEMY_CROSS_TRAINING_COST, NRL_ACADEMY_PRIORITIES, NRL_DEVELOPMENT_ASSISTANT, NRL_RECRUITMENT_PLAN_LIMIT, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
+  type NrlAcademyPriority, type NrlAcademyReport, type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlRecruitmentPick, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryPenalty } from '@/lib/nrlJudiciary';
 import { nrlArchivedFinals, nrlUnavailable, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_QUALIFIED_COACHING_BONUS, NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
@@ -981,6 +981,61 @@ function Recruitment({ career, onAction, disabled, openShortlist }: {
   );
 }
 
+function AcademyCrossTraining({ career, reports, onAction, disabled }: {
+  career: NrlCareerState; reports: NrlAcademyReport[]; onAction: Dispatch; disabled: boolean;
+}) {
+  const [playerId, setPlayerId] = useState('');
+  const [role, setRole] = useState<NrlRole | ''>('');
+  const { year, clubId, round } = career.season;
+  const course = career.finance.academyCrossTraining;
+  const progress = course && reports.find(report => report.player?.id === course.playerId)?.crossTraining;
+  const candidates = course ? [] : reports.flatMap(report => {
+    if (!report.player || report.status !== 'ready') return [];
+    const quote = nrlAcademyCrossTrainingQuote(career, report.player.id);
+    return quote ? [{ player: report.player, quote }] : [];
+  });
+  const picked = candidates.find(candidate => candidate.player.id === playerId);
+  if (!course && !candidates.length) return null;
+  return (
+    <details className="group mt-3 rounded-xl border border-border bg-background px-3" data-nrl-academy-cross-training>
+      <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Academy cross-training
+        <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-2 pb-3 text-sm">
+        <p className="text-muted-foreground">Spend {money(NRL_ACADEMY_CROSS_TRAINING_COST)} to teach one unsigned prospect a second position. It takes two rounds, including byes. You can promote them when training finishes.</p>
+        {course && progress ? (
+          <p role="status" className="break-words">{course.playerName} · {course.role} · {progress.remaining
+            ? progress.remaining === 1 ? '1 round left' : '2 rounds left' : 'Cross-training complete'}</p>
+        ) : (
+          <>
+            <label className="block space-y-1 font-semibold">
+              <span>Prospect to train</span>
+              <select className={control} value={playerId} disabled={disabled} onChange={event => { setPlayerId(event.target.value); setRole(''); }}>
+                <option value="">Choose a prospect</option>
+                {candidates.map(({ player }) => <option key={player.id} value={player.id}>{player.name} · {player.role}</option>)}
+              </select>
+            </label>
+            {picked && <label className="block space-y-1 font-semibold">
+              <span>Second position</span>
+              <select className={control} value={role} disabled={disabled} onChange={event => setRole(event.target.value as NrlRole | '')}>
+                <option value="">Choose a position</option>
+                {picked.quote.roles.map(option => <option key={option}>{option}</option>)}
+              </select>
+            </label>}
+            {picked?.quote.reason && <p className="text-muted-foreground">{picked.quote.reason}</p>}
+            <Button type="button" size="lg" className="min-h-11 whitespace-normal px-3"
+              disabled={disabled || !role || !picked || Boolean(picked.quote.reason)}
+              onClick={() => role && onAction({ type: 'startAcademyCrossTraining', year, clubId, round, playerId, role })}>
+              Start cross-training for {money(NRL_ACADEMY_CROSS_TRAINING_COST)}
+            </Button>
+          </>
+        )}
+      </div>
+    </details>
+  );
+}
+
 function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const [position, setPosition] = useState<NrlRole>('Fullback');
   const [priorityChoice, setPriorityChoice] = useState<NrlAcademyPriority | ''>('');
@@ -1038,6 +1093,7 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
           {parallel.reason && <p className="text-sm text-muted-foreground">{parallel.reason}</p>}
         </div>
       ) : scouting.length === 0 && <p className="mt-3 text-sm text-muted-foreground">Scouting is closed for this season.</p>}
+      <AcademyCrossTraining career={career} reports={reports} onAction={onAction} disabled={disabled} />
       {reports.some(report => report.player) && (
         <ul className="mt-4 divide-y divide-border" aria-label="Academy reports">
           {reports.flatMap(report => {
@@ -1048,6 +1104,7 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
               <li key={player.id} className="py-3" data-nrl-academy-report={player.id}>
                 <h3 className="break-words font-semibold">{player.name}</h3>
                 <p className="text-sm text-muted-foreground">{player.role} · age {player.age} · {player.rating} OVR · {player.potential} potential</p>
+                {player.secondaryRole && <p className="mt-1 text-sm text-muted-foreground">Also plays {player.secondaryRole}</p>}
                 {report.priority && <p className="mt-1 text-xs text-muted-foreground">Scouting priority {NRL_ACADEMY_PRIORITIES[report.priority].label}</p>}
                 {report.status === 'released' ? <p className="mt-1 text-sm font-semibold">Entering free agency in {year + 1}</p>
                   : offer === null ? <p className="mt-1 text-sm font-semibold">Signed for {year + 1}</p>
@@ -1543,6 +1600,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
                 ...(cash.reserveCoachRound ? [['Reserve coaching', nrlReserveCoachSpend(cash)] as const] : []),
                 ...(academySpend ? [['Academy facilities', academySpend] as const] : []),
                 ...(academyScoutSpend ? [['Second academy scout', academyScoutSpend] as const] : []),
+                ...(cash.academyCrossTraining ? [['Academy cross-training', nrlAcademyCrossTrainingSpend(cash)] as const] : []),
                 ...(concessionsSpend ? [['Concessions upgrade', concessionsSpend] as const] : []),
                 ...(cash.mutualRelease ? [['Contract settlement', nrlMutualReleaseSpend(cash)] as const] : []),
                 ...(cash.renewalHold ? [['Renewal hold fee', nrlRenewalHoldSpend(cash)] as const] : []),
@@ -2448,6 +2506,9 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 )}
                 {record.finance?.academyUpgradeRound && <p className="text-sm text-muted-foreground">Academy facilities {money(nrlAcademyFacilitySpend(record.finance))}</p>}
                 {record.finance?.academyParallelRound && <p className="text-sm text-muted-foreground">Second academy scout {money(nrlAcademyParallelSpend(record.finance))}</p>}
+                {record.finance?.academyCrossTraining && <p className="break-words text-sm text-muted-foreground" data-nrl-archived-academy-cross-training>
+                  Academy cross-training · {record.finance.academyCrossTraining.playerName} learned {record.finance.academyCrossTraining.role}
+                </p>}
                 {record.finance?.awayRecoveryRound && <p className="text-sm text-muted-foreground">Away recovery session · Round {record.finance.awayRecoveryRound} · {money(nrlAwayRecoverySpend(record.finance))}</p>}
                 {record.finance?.reserveCoachRound && <p className="text-sm text-muted-foreground">Reserve coaching · Round {record.finance.reserveCoachRound} · {money(nrlReserveCoachSpend(record.finance))}</p>}
                 {record.finance?.renewalHold && (

@@ -177,3 +177,40 @@ it('keeps a reply at the deadline, opens Contracts and lets the manager take the
   expect(raw()).toBe(JSON.stringify(accepted));
   expect(localStorage.getItem(fence)).toBe('5');
 });
+
+it('reopens an academy course after reload and promotes the prospect with real second-position cover', () => {
+  const initial = createNrlCareer('panthers', 41);
+  const advance = { type: 'advance' } as const;
+  const scouted = reduceNrlCareer(initial, { type: 'scoutAcademy', role: 'Fullback' });
+  const ready = reduceNrlCareer(scouted, advance);
+  const player = nrlAcademyReports(ready)[0].player!;
+  const view = open(JSON.stringify(ready));
+  fireEvent.click(screen.getByText('Academy cross-training', { exact: true }));
+  fireEvent.change(screen.getByLabelText('Prospect to train'), { target: { value: player.id } });
+  fireEvent.change(screen.getByLabelText('Second position'), { target: { value: 'Left Wing' } });
+  expect(raw()).toBe(JSON.stringify(ready));
+  click('Start cross-training for $75,000');
+  const booked = reduceNrlCareer(ready, { type: 'startAcademyCrossTraining', year: 2026, clubId: 'panthers',
+    round: 2, playerId: player.id, role: 'Left Wing' });
+  expect(raw()).toBe(JSON.stringify(booked));
+  expect(localStorage.getItem(fence)).toBe('5');
+  expect(screen.getByText(/Left Wing · 2 rounds left/)).toBeVisible();
+  expect(screen.queryByRole('button', { name: 'Promote ' + player.name })).not.toBeInTheDocument();
+  view.unmount();
+  renderPage();
+  goAcademy();
+  fireEvent.click(screen.getByText('Academy cross-training', { exact: true }));
+  expect(screen.getByText(/Left Wing · 2 rounds left/)).toBeVisible();
+  click('Match centre');
+  click('Quick Sim');
+  click('Quick Sim');
+  const trained = reduceNrlCareer(reduceNrlCareer(booked, advance), advance);
+  expect(raw()).toBe(JSON.stringify(trained));
+  goAcademy();
+  expect(screen.getByText('Also plays Left Wing')).toBeVisible();
+  click('Promote ' + player.name);
+  const promoted = reduceNrlCareer(trained, { type: 'promoteAcademy', playerId: player.id });
+  expect(readNrlCareerSave(raw())).toEqual(promoted);
+  expect(promoted.players.find(row => row.id === player.id)?.secondaryRole).toBe('Left Wing');
+  expect(localStorage.getItem(fence)).toBe('8');
+});

@@ -66,6 +66,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Shortlist two players in Recruitment, then open Compare shortlisted players to check their asking salaries, cap fit and who is already signed at their positions for the year they could join.',
       'In Recruitment, open Plan future salary cap to check how up to three shortlisted players or renewals at their asking salaries would fit together across seasons before making offers.',
       'In Academy, you can pay once from simulated club cash to improve the potential of newly scouted prospects from the next round. The facilities stay with that club if you move.',
+      'In Academy, spend $75,000 to teach one scouted, unsigned prospect a second position. Their promotion offer reopens after two rounds, including byes. Graduates keep the new position next season.',
       'Before assigning an academy scout, choose Balanced, Ready sooner for higher starting OVR, or Higher ceiling for more potential. Each report takes one round.',
       'Once per season, pay $60,000 in club cash to scout a second position while your first report is pending. Both reports arrive after you advance one round. Your salary cap stays the same.',
       'After the Grand Final, release one unsigned academy prospect into next season’s free-agent market or promote him to your own Top 30.',
