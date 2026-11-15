@@ -1,7 +1,11 @@
-## 2026-11-15: Academy sale quotes and Home return focus
+## 2026-11-15: Rugby staff, NHL shutdown assignments, academy sale quotes and Home return focus
 
+- NRL Team Manager lets clubs pay $60,000 once per season to reassign a tactical assistant between Attack and Defence before a regular-season match. The assistant keeps their contract, wages and original qualification. The Broncos fixture changed Round 7 against the Raiders from an 18–22 loss to an 18–16 win. The default path matched 140 saved checkpoints across three careers.
+- NHL My Career lets a signed defenseman trade 10% of regular-season offensive ice time for a playoff qualification boost of up to six percentage points. The Seattle fixture gained 5.9 points of qualification chance and reached Round 1 on the same draw, with 67 personal points instead of 74. The usual approach matched the prior engine in 480 paired cases.
 - Wonderkid Factory and the Stadium Tycoon Academy keep the prospect when the fee drops during a held tap or Space press. The current fee is shown for a fresh sale. In the Deadline Day fixture, a held $357 quote drops to $238 and a fresh press records one sale at $238.
 - Home restores keyboard focus after a finished game disappears from Continue playing. Back focuses the first remaining saved game, or the lead Soccer Career link when the shelf is empty.
+
+The production build passed along with 212 focused tests and 15 pinned local browser journeys. The archive refresh matched the 360 published boards through November 14 Eastern. The NRL, NHL, Stadium Tycoon and Wonderkid Factory guides were refreshed.
 
 ## 2026-11-15: Aussie Rules squad carry, Dart Draft quotes and report note retries
 
