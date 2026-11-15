@@ -173,7 +173,12 @@ export default function StadiumTycoon() {
         </div>
 
         {g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}
-        {g.ticketSaveFailed && (
+        {g.saveMoved ? (
+          <div role="alert" data-tycoon-save-moved data-no-prerender className="mb-3 rounded-xl border border-border bg-card p-3 text-xs">
+            <p>Stadium progress changed in another tab. This stadium is paused.</p>
+            <button type="button" onClick={() => window.location.reload()} className="mt-2 min-h-11 min-w-11 rounded-full border border-border px-3 font-bold">Reload latest save</button>
+          </div>
+        ) : g.ticketSaveFailed && (
           <div role="alert" data-tycoon-save-notice data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
             <p>Stadium progress is not saved on this device. Keep this page open and retry.</p>
             <button type="button" onClick={g.retryTicketSave} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
@@ -508,7 +513,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
   const tapRunTimer = useRef<number | undefined>(undefined);
   useEffect(() => () => window.clearTimeout(tapRunTimer.current), []);
   const tapAt = (x: number, y: number) => {
-    g.doTap(x, y);
+    if (!g.doTap(x, y)) return;
     setTapFx(f => ({ seq: (f?.seq ?? 0) + 1, x, y }));
     setTapRun(r => r + 1);
     window.clearTimeout(tapRunTimer.current);
@@ -832,7 +837,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         {/* Prestige bar */}
         <div className="mb-3">
           {canPrestige(s) ? (
-            <TycoonSaleReview state={s} onSell={g.doPrestige} />
+            !g.saveMoved && <TycoonSaleReview state={s} onSell={g.doPrestige} />
           ) : (
             <div className="relative h-2 rounded-full bg-secondary overflow-hidden" title="Progress to your next reputation star">
               <div className="absolute inset-y-0 left-0 bg-yellow-500/80 transition-all duration-700" style={{ width: `${Math.min(100, (s.lifetime / prestigeThreshold(s)) * 100)}%` }} />
@@ -1060,7 +1065,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           lifetime {fmtMoney(s.lifetime)} · {formatNumber(s.totalWins)} wins · {formatNumber(s.totalGoals)} goals · {formatNumber(s.totalTaps)} taps · match #{s.matchNo + 1} · milestones {(s.claimed ?? []).length}/{MILESTONES.length} · badges {achCount}/{ACHIEVEMENTS.length}
         </div>
 
-      <Dialog open={Boolean(g.activeSetPiece)} onOpenChange={open => { if (!open) g.closeSetPiece(); }}>
+      <Dialog open={Boolean(g.activeSetPiece) && !g.saveMoved} onOpenChange={open => { if (!open) g.closeSetPiece(); }}>
         <DialogContent className="max-h-[90dvh] w-[calc(100%-1rem)] max-w-lg overflow-y-auto rounded-2xl p-4">
           <DialogTitle className="sr-only">Watched match kick</DialogTitle>
           <DialogDescription data-set-piece-match className="text-xs tabular-nums text-muted-foreground">
