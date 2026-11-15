@@ -2006,6 +2006,17 @@ function Squad({ career, onAction, disabled }: {
   const backupOutsideStartingSide = season.backupKickerId && !starters.has(season.backupKickerId);
   const squadName = (id: string, name: string) =>
     career.openingRoster && !isNrlNamedPlayer(id) ? name + ' (generated)' : name;
+  const seasonRatingChanges = new Map<string, number>();
+  let clubMatches = 0;
+  let reviewedMatches = 0;
+  for (const match of season.results) {
+    if (match.finalsRound !== undefined || (match.homeId !== season.clubId && match.awayId !== season.clubId)) continue;
+    clubMatches++;
+    if (!match.ratingChanges) continue;
+    reviewedMatches++;
+    for (const [id, delta] of match.ratingChanges) seasonRatingChanges.set(id, (seasonRatingChanges.get(id) ?? 0) + delta);
+  }
+  const changedPlayers = season.squad.filter(player => seasonRatingChanges.has(player.id));
   return (
     <section className="rounded-xl border border-border bg-card p-4" aria-labelledby="nrl-squad">
       <h2 id="nrl-squad" className="font-display text-lg font-bold">Starting 13</h2>
@@ -2026,6 +2037,28 @@ function Squad({ career, onAction, disabled }: {
               </li>)}
             </ul>
           ) : <p className="mt-1 text-muted-foreground">No rating changes to show for your club.</p>}
+          <section className="mt-3 border-t border-border pt-3" aria-labelledby="nrl-season-rating-progress">
+            <h3 id="nrl-season-rating-progress" className="font-semibold">Season rating progress</h3>
+            {clubMatches ? (
+              <p className="mt-1 text-muted-foreground">Reviews recorded for {reviewedMatches} of {clubMatches} regular-season club matches.</p>
+            ) : <p className="mt-1 text-muted-foreground">Play a regular-season club match to start this review.</p>}
+            {changedPlayers.length > 0 ? (
+              <>
+                <p className="mt-1 text-muted-foreground">The totals add up match reviews. Current OVR also reflects reserve-grade development.</p>
+                <ul className="mt-1 divide-y divide-border">
+                  {changedPlayers.map(({ id, name, rating }) => {
+                    const delta = seasonRatingChanges.get(id) ?? 0;
+                    return <li key={id} className="flex flex-wrap items-baseline justify-between gap-x-3 py-1">
+                      <span className="min-w-0 break-words">{squadName(id, name)}</span>
+                      <span className="font-semibold tabular-nums">{rating} OVR · {delta > 0 ? '+' : ''}{delta} from reviews</span>
+                    </li>;
+                  })}
+                </ul>
+              </>
+            ) : clubMatches > 0 && (
+              <p className="mt-1 text-muted-foreground">{reviewedMatches ? 'All recorded ratings held steady.' : 'Season rating history is unavailable for these matches.'}</p>
+            )}
+          </section>
         </div>
       </details>}
       {proposal && (
