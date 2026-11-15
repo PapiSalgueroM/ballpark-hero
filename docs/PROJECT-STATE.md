@@ -1,4 +1,13 @@
+## 2026-11-14: Academy cross-training, current form for call-ups and admin recovery
+
+- NRL Team Manager can spend $75,000 of club cash once per season to cross-train a ready academy prospect for two regular-season rounds. The new position carries into promotion or release, without changing the player's primary position, rating or salary.
+- Soccer Career routine national call-ups use the club season the player just completed. Breakthroughs and declines count immediately. The in-season Nations League still uses the form available when it is played.
+- NHL My Career bounds new playoff goalie wins by the team's recorded result and games played. In 960 paired runs the correction fixed 240 impossible rows and kept all 720 feasible results and 28,031 random draws.
+- Admin Reports offers a retry from the same link after a temporary identity or role check error. Reports stay out of view until access is verified. The sign-in screen also distinguishes a failed access check from a missing admin role.
+
 ## 2026-11-14: Shorter Home browsing, contract holds and awards on actual play
+
+[PR #977](https://github.com/PapiSalgueroM/ballpark-hero/pull/977) published exact main `47a13dc488f57488b21aa0cc46de9a139a8186a1`, deployment `04e42c0d-ba90-4a76-a022-1bb251aae7ba`, canonical entry `/assets/index-DvJgmZJS.js`. Twelve live browser checks, all 174 sitemap routes, seven policy and crawler endpoints, both admin noindex tags and the NRL guide passed. IndexNow accepted the NRL guide. Application types, build, 48 integrated tests, all 18 site checks and all 16 measured download limits passed. The complete Home launch workflow also passed. The hosted Club Manager substitution job stopped during dependency installation. Its ten match outcomes and all 13 copied controls passed locally on the tested release tree.
 
 - Home previews the first 12 games in long sport lists. Open the rest in place. Back from a game restores the expanded list and focuses the exact card that opened it.
 - NRL Team Manager lets the club pay $25,000 once per season to hold an expiring player's asking salary for a one-year renewal. Exercise the hold in season review if the squad and cap still fit. The fee stays spent if unused, and Season Review records how the hold ended.

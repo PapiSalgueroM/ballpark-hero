@@ -5220,8 +5220,7 @@ function shouldGetCallUp(state: CareerState): boolean {
 }
 
 /** Everything the international code needs to know about the player. */
-function playerFormOf(state: CareerState, firstInternationalSeason = state.intStats.caps === 0): PlayerForm {
-  const last = state.seasons[state.seasons.length - 1];
+function playerFormOf(state: CareerState, last = state.seasons[state.seasons.length - 1], firstInternationalSeason = state.intStats.caps === 0): PlayerForm {
   return {
     overall: state.overall,
     position: state.position,
@@ -5234,7 +5233,7 @@ function playerFormOf(state: CareerState, firstInternationalSeason = state.intSt
 }
 
 /* ─── International season stats ─── */
-function generateIntSeasonStats(state: CareerState, nationsLeagueApps: number): { intApps: number; intGoals: number; intAssists: number; intRating: number; tournament: string | null; tournamentResult: string | null } {
+function generateIntSeasonStats(state: CareerState, clubSeason: SeasonRecord, nationsLeagueApps: number): { intApps: number; intGoals: number; intAssists: number; intRating: number; tournament: string | null; tournamentResult: string | null } {
   if (!state.internationalCareer || state.intStats.isRetired) {
     return { intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null };
   }
@@ -5247,7 +5246,7 @@ function generateIntSeasonStats(state: CareerState, nationsLeagueApps: number): 
      average career finished on 111 caps whether the manager rated you or not.
      A player who cannot get into the squad does not get called up for the
      friendlies either. */
-  const form = playerFormOf(state);
+  const form = playerFormOf(state, clubSeason);
   const squad = pickSquad(state.nationality, form);
   if (!squad.called) {
     return { intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null };
@@ -5288,7 +5287,7 @@ function runTournamentSummer(s: CareerState, season: SeasonRecord, year: number,
   const fmt = tournamentForYear(s.nationality, year);
   if (!fmt) return;
   const eligible = !out && s.internationalCareer && !s.intStats.isRetired && !s.retired;
-  const t = runInternationalSummer(s.nationality, year, eligible ? playerFormOf(s, firstInternationalSeason) : null);
+  const t = runInternationalSummer(s.nationality, year, eligible ? playerFormOf(s, season, firstInternationalSeason) : null);
   if (!t) return;
 
   s.lastTournament = t;
@@ -5890,7 +5889,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
     if (wonClubWorldCup(season)) s.events.push(`🏆 Won the Club World Cup with ${season.club}!`);
   }
   const nationsLeague = nationsLeagueForSeason(s, thisYear);
-  const intSeason = generateIntSeasonStats(s, nationsLeague?.apps ?? 0);
+  const intSeason = generateIntSeasonStats(s, season, nationsLeague?.apps ?? 0);
   if (nationsLeague) {
     season.nationsLeague = nationsLeague;
     const { apps, goals, assists, rating } = nationsLeague;

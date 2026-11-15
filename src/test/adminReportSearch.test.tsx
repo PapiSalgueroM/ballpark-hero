@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { AuthApiError, AuthRetryableFetchError } from '@supabase/supabase-js';
 import AdminLogin from '@/pages/AdminLogin';
 import AdminReports from '@/pages/AdminReports';
 
@@ -133,6 +134,39 @@ describe('admin report queue', () => {
     openQueue();
     expect(await screen.findByRole('heading', { name: 'Admin Login' })).toBeVisible();
     expect(db.read).not.toHaveBeenCalled();
+    expect(db.signOut).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(['identity', 'identity timeout', 'role'])('can retry a temporary %s check on a linked report', async (part) => {
+    if (part === 'identity') {
+      db.getUser.mockResolvedValueOnce({ data: { user: null }, error: new AuthRetryableFetchError('Unavailable', 503) });
+    } else if (part === 'identity timeout') {
+      db.getUser.mockResolvedValueOnce({ data: { user: null }, error: new AuthApiError('Timed out', 504, 'request_timeout') });
+    } else {
+      db.getRoles.mockResolvedValueOnce({ data: null, error: { message: 'Unavailable' } });
+    }
+    openQueue(`/admin/reports#report=${archive.id}`);
+    expect(await screen.findByRole('alert')).toHaveTextContent('Could not verify admin access.');
+    expect(db.read).not.toHaveBeenCalled();
+    expect(db.signOut).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'Retry access check' }));
+    expect(await screen.findByText(archive.description)).toBeVisible();
+  });
+
+  it('keeps report data out of view when a retry cannot verify access', async () => {
+    const rows = [contract, ...Array.from({ length: 999 }, (_, i) => ({ ...archive, id: `closed-${i}` }))];
+    db.read.mockImplementation((from: number) => from === 0
+      ? { data: rows, error: null }
+      : { data: null, error: { message: 'A report page timed out.' } });
+    openQueue();
+    expect(await screen.findByText(contract.description, {}, { timeout: 2500 })).toBeVisible();
+    const previousReads = db.read.mock.calls.length;
+    db.getRoles.mockResolvedValueOnce({ data: null, error: { message: 'Unavailable' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Retry loading reports' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('Could not verify admin access.');
+    expect(screen.queryByText(contract.description)).not.toBeInTheDocument();
+    expect(db.read).toHaveBeenCalledTimes(previousReads);
+    expect(db.signOut).not.toHaveBeenCalled();
   });
 
   it('opens a fixed report directly and keeps it visible when its status changes', async () => {
@@ -181,5 +215,19 @@ describe('admin report queue', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Sign In' }));
     expect(await screen.findByText(archive.description)).toBeVisible();
     expect(screen.queryByText(contract.description)).not.toBeInTheDocument();
+  });
+
+  it('can retry a failed role check after sign-in without losing the report link', async () => {
+    db.signIn.mockResolvedValue({ error: null });
+    db.getRoles.mockResolvedValueOnce({ data: null, error: { message: 'Unavailable' } });
+    openQueue(`/admin/login#report=${archive.id}`);
+    fireEvent.change(screen.getByRole('textbox', { name: 'Email' }), { target: { value: 'owner@example.com' } });
+    fireEvent.change(screen.getByLabelText('Password'), { target: { value: 'fixture-only' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Sign In' }));
+    expect(await screen.findByRole('alert')).toHaveTextContent('Could not verify admin access.');
+    expect(db.signOut).not.toHaveBeenCalled();
+    expect(db.read).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button', { name: 'Sign In' }));
+    expect(await screen.findByText(archive.description)).toBeVisible();
   });
 });

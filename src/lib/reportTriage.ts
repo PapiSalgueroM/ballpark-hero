@@ -68,6 +68,7 @@ export const FIX_REF_MAX = 200;
 
 export type StatusFilter = 'open' | 'all' | ReportStatus;
 export const ALL_GAMES = '';
+export const ADMIN_ACCESS_RETRY_MESSAGE = 'Could not verify admin access. Try again.';
 
 export function linkedReportHash(hash: string): string {
   return /^#report=[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i.test(hash) ? hash.toLowerCase() : '';
