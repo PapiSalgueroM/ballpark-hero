@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest';
-import { createNrlCareer, nrlCareerCap, nrlCareerSquad, nrlOffseasonFreeAgentPreview, nrlOffseasonFreeAgentTargets, nrlRetentionPriority,
+import { createNrlCareer, nrlCareerCap, nrlCareerMarket, nrlCareerSquad, nrlMutualReleaseQuote, nrlOffseasonFreeAgentPreview, nrlOffseasonFreeAgentTargets, nrlRetentionPriority,
   readNrlCareerSave, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
 import { NRL_ROLES } from '@/lib/nrlManager';
 
@@ -74,5 +74,65 @@ it('keeps every earlier automatic signing and refuses a target when no academy p
   expect(nrlCareerCap(next).available).toBe(projected.available);
   expect(next.history.at(-1)?.freeAgentFill?.slice(0, -1)).toEqual(before.signings);
   expect(next.history.at(-1)?.freeAgentFill?.at(-1)?.playerId).toBe(target.player.id);
+  expect(readNrlCareerSave(JSON.stringify(next))).toEqual(next);
+});
+
+it('fixes a two-year deal and its net cap cost across both seasons', () => {
+  const finished = finish(createNrlCareer('storm', 4));
+  const baseline = reduceNrlCareer(finished, { type: 'startNextSeason' });
+  const target = nrlOffseasonFreeAgentTargets(finished).find(row => row.twoYear?.ok)!;
+  expect(target).toBeDefined();
+  const { player, twoYear } = target;
+  if (!twoYear.ok) throw new Error('Expected an available two-year fixture.');
+  const freeAgentTarget = { fromYear: 2026, clubId: 'storm', playerId: player.id, years: 2 } as const;
+  const next = reduceNrlCareer(finished, { type: 'startNextSeason', freeAgentTarget });
+  expect(nrlCareerSquad(next).find(row => row.id === player.id)?.contract).toEqual(twoYear.contract);
+  expect(twoYear.contract).toMatchObject({ clubId: 'storm', startYear: 2027, endYear: 2028 });
+  for (const year of [2027, 2028]) {
+    expect(nrlCareerCap(next, year).available).toBe(nrlCareerCap(baseline, year).available
+      + nrlCareerCap(baseline, year).minimumSalary - twoYear.contract.salary);
+  }
+  expect(next.history[0].freeAgentFill).toEqual([{ playerId: player.id, playerName: player.name, role: player.role,
+    annualSalary: twoYear.contract.salary, endYear: 2028 }]);
+  expect(readNrlCareerSave(JSON.stringify(next))).toEqual(next);
+  const afterAnotherYear = reduceNrlCareer(finish(next), { type: 'startNextSeason' });
+  expect(nrlCareerSquad(afterAnotherYear).find(row => row.id === player.id)?.contract).toEqual(twoYear.contract);
+  expect(readNrlCareerSave(JSON.stringify(afterAnotherYear))).toEqual(afterAnotherYear);
+  const oneYear = { ...freeAgentTarget, years: 1 } as const;
+  const { years, ...legacy } = oneYear;
+  expect(reduceNrlCareer(finished, { type: 'startNextSeason', freeAgentTarget: oneYear }))
+    .toEqual(reduceNrlCareer(finished, { type: 'startNextSeason', freeAgentTarget: legacy }));
+});
+
+it('keeps a one-year target when only the second-year cap rejects the longer term', () => {
+  const initial = finish(createNrlCareer('storm', 4));
+  const room = nrlCareerCap(initial, 2028);
+  const renewal = nrlCareerMarket(initial).find(entry => entry.kind === 'renewal' && entry.startYear === 2028)!;
+  expect(renewal).toBeDefined();
+  const full = reduceNrlCareer(initial, { type: 'offerContract', playerId: renewal.player.id,
+    salary: room.available + room.minimumSalary, years: 1 });
+  expect(nrlCareerCap(full, 2028).available).toBe(0);
+  const target = nrlOffseasonFreeAgentTargets(full).find(row => row.contract.salary > room.minimumSalary)!;
+  expect(target.twoYear).toEqual({ ok: false, reason: 'This offer exceeds the 2028 salary cap.' });
+  const base = { fromYear: 2026, clubId: 'storm', playerId: target.player.id };
+  expect(reduceNrlCareer(full, { type: 'startNextSeason', freeAgentTarget: { ...base, years: 2 } })).toBe(full);
+  expect(reduceNrlCareer(full, { type: 'startNextSeason', freeAgentTarget: { ...base, years: 1 } }).season.year).toBe(2027);
+});
+
+it('allows an ordinary approved release after the first year of the longer deal', () => {
+  const finished = finish(createNrlCareer('storm', 4));
+  const guaranteed = nrlCareerSquad(finished, 2028);
+  const target = nrlOffseasonFreeAgentTargets(finished).find(row => row.twoYear.ok && row.player.age < 34
+    && guaranteed.some(player => player.role === row.player.role))!;
+  expect(target).toBeDefined();
+  const yearOne = reduceNrlCareer(finished, { type: 'startNextSeason',
+    freeAgentTarget: { fromYear: 2026, clubId: 'storm', playerId: target.player.id, years: 2 } });
+  const completed = finish(yearOne);
+  expect(nrlMutualReleaseQuote(completed, target.player.id).ok).toBe(true);
+  const released = reduceNrlCareer(completed, { type: 'agreeMutualRelease', year: 2027, clubId: 'storm', playerId: target.player.id });
+  expect(readNrlCareerSave(JSON.stringify(released))).toEqual(released);
+  const next = reduceNrlCareer(released, { type: 'startNextSeason' });
+  expect(nrlCareerSquad(next).some(row => row.id === target.player.id)).toBe(false);
+  expect(next.history[0].freeAgentFill?.[0].endYear).toBe(2028);
   expect(readNrlCareerSave(JSON.stringify(next))).toEqual(next);
 });

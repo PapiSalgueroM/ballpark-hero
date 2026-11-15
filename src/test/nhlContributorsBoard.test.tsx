@@ -118,15 +118,15 @@ describe('actual NHL contributor decisions', () => {
     noBooking();
   });
 
-  it('shows thin and empty groups truthfully with the original empty-group rating', async () => {
+  it('shows vacant spots and their contribution to strength', async () => {
     const league = fixture(); league.teams.BOS.players = league.teams.BOS.players.filter(p => ['f0', 'f1', 'f2', 'd0', 'd1'].includes(p.id));
     const { view, writes } = await open(league);
-    expect(view.getByRole('group', { name: 'Forwards 3/3 · 50%' })).toBeVisible();
-    expect(view.getByRole('group', { name: 'Defense 2/2 · 30%' })).toBeVisible();
-    expect(view.getByRole('group', { name: 'Goalie 0/0 · 20%' })).toBeVisible();
+    expect(view.getByRole('group', { name: 'Forwards 3/6 · 50%' })).toBeVisible();
+    expect(view.getByRole('group', { name: 'Defense 2/4 · 30%' })).toBeVisible();
+    expect(view.getByRole('group', { name: 'Goalie 0/1 · 20%' })).toBeVisible();
     expect(view.getByText('No healthy goalie.')).toBeVisible();
-    expect(view.getByText('Strength preview 82.0 · forwards 50%, defense 30%, goalie 20%')).toBeVisible();
-    expect(nhlStrength(league.teams.BOS)).toBeCloseTo(81.95, 10);
+    expect(view.getByText('Strength preview 72.0 · forwards 50%, defense 30%, goalie 20%')).toBeVisible();
+    expect(nhlStrength(league.teams.BOS)).toBeCloseTo(71.975, 10);
     expect(apply(view)).toBeDisabled(); expect(writes).not.toHaveBeenCalled(); noBooking();
   });
 

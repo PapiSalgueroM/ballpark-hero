@@ -332,16 +332,16 @@ export function repairNhlContributors(t: NhlGmTeam): boolean {
   return true;
 }
 
-/** Strength: top six forwards 50%, top four D 30%, best goalie 20%. */
+/** Strength: six forwards at 50%, four defensemen at 30%, one goalie at 20%. Vacant slots count as 62. */
 export function nhlStrength(t: NhlGmTeam): number {
   const healthy = t.players.filter(p => p.out === 0);
   const selection = t.contributors === undefined ? null : nhlContributors(t);
   const fwd = selection ? selection.forwards.map(id => healthy.find(p => p.id === id)!) : healthy.filter(p => p.pos === 'C' || p.pos === 'W').sort((a, b) => b.ovr - a.ovr).slice(0, 6);
   const d = selection ? selection.defense.map(id => healthy.find(p => p.id === id)!) : healthy.filter(p => p.pos === 'D').sort((a, b) => b.ovr - a.ovr).slice(0, 4);
   const g = selection ? selection.goalie === null ? [] : [healthy.find(p => p.id === selection.goalie)!] : healthy.filter(p => p.pos === 'G').sort((a, b) => b.ovr - a.ovr).slice(0, 1);
-  const avg = (xs: NhlGmPlayer[], fallback: number) =>
-    xs.length ? xs.reduce((s, p) => s + p.ovr, 0) / xs.length : fallback;
-  return avg(fwd, 62) * 0.5 + avg(d, 62) * 0.3 + avg(g, 62) * 0.2;
+  const avg = (xs: NhlGmPlayer[], slots: number) =>
+    (xs.reduce((s, p) => s + p.ovr, 0) + (slots - xs.length) * 62) / slots;
+  return avg(fwd, 6) * 0.5 + avg(d, 4) * 0.3 + avg(g, 1) * 0.2;
 }
 
 /* Round 987: the two edges are strength points a GM desk adds (a staff's

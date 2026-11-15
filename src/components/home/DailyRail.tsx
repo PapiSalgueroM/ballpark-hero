@@ -82,6 +82,17 @@ export function DailyRail({ today }: { today?: string }) {
       const link = [...rail.querySelectorAll<HTMLAnchorElement>('a[data-daily-spotlight], a[data-daily-chip]')]
         .find(card => card.getAttribute('href') === held.path);
       (link ?? filterRef.current)?.focus({ preventScroll: true });
+      if (link) {
+        const { vertical, size } = railPosition(rail);
+        const track = rail.getBoundingClientRect();
+        const card = link.getBoundingClientRect();
+        const start = vertical ? card.top - track.top : card.left - track.left;
+        const end = vertical ? card.bottom - track.top : card.right - track.left;
+        if (start < -1 || end > size + 1) {
+          // Align with the card's snap point instead of snapping to the preceding card.
+          rail.scrollBy(vertical ? { top: start, behavior: 'instant' } : { left: start, behavior: 'instant' });
+        }
+      }
     }
     updateEdges(rail);
   }, [entry, sport]);

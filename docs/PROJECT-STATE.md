@@ -1,4 +1,13 @@
+## 2026-11-14: Daily puzzle navigation, save protection and offseason deals
+
+- Home's Daily puzzles rail brings the opening card into view and restores focus on Back, including after the rail switches between its phone and desktop layouts. It remembers the sport filter and keeps the saved rail position if the card still fits.
+- Soccer Perfect Season checks for a newer save in another tab even after a failed write. An older tab keeps the completed run intact and can retry when the save is still unchanged.
+- NHL Front Office accounts for vacant contributing slots when calculating team strength. Waiving an available player cannot increase strength by leaving a slot empty. In all 416 opening-roster waiver cases, the transaction and cap ledger were unchanged. Previously 61 cases could boost strength, and now none do.
+- NRL Team Manager offers one or two seasons for an offseason free-agent signing. Season review previews the quoted annual wage, cap and squad space for both years before committing a two-season deal. The review records when the deal ends.
+
 ## 2026-11-14: Academy cross-training, current form for call-ups and admin recovery
+
+[PR #978](https://github.com/PapiSalgueroM/ballpark-hero/pull/978) published exact main `d78bf9f471d7a8d2ed1b5d8151c3626bdadcf242`, deployment `bd75578c-b911-4799-a7d4-fcd00e4194ce`, canonical entry `/assets/index-BZBRuOh9.js`. Ten live browser checks, all 174 sitemap routes, seven policy and crawler endpoints, both admin noindex tags and the NRL academy guide passed. The admin checks used fixture accounts and reports. IndexNow accepted the NRL guide. Application types, build, 79 integrated tests, 18 site checks and 16 download limits passed.
 
 - NRL Team Manager can spend $75,000 of club cash once per season to cross-train a ready academy prospect for two regular-season rounds. The new position carries into promotion or release, without changing the player's primary position, rating or salary.
 - Soccer Career routine national call-ups use the club season the player just completed. Breakthroughs and declines count immediately. The in-season Nations League still uses the form available when it is played.

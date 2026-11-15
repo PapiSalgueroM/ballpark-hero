@@ -673,6 +673,40 @@ for (const width of [320, 390, 430, 1440]) {
   }
 }
 
+console.log('11) going Back after a resize reveals the exact daily puzzle');
+for (const [from, to] of [[390, 1440], [1440, 390], [390, 390]]) {
+  const ctx = await browser.newContext({ viewport: { width: from, height: 844 }, reducedMotion: 'reduce' });
+  try {
+    const page = await ctx.newPage();
+    await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
+    await page.addInitScript(() => localStorage.setItem('cookie-consent', 'essential'));
+    await page.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
+    const daily = page.getByRole('region', { name: 'Daily puzzles' });
+    const filter = daily.getByRole('combobox', { name: 'Filter daily puzzles by sport' });
+    await filter.selectOption('basketball');
+    const card = daily.locator('[data-daily-chip]').last();
+    const destination = await card.getAttribute('href');
+    await card.click();
+    await page.waitForURL(url => url.pathname === destination);
+    await filter.waitFor({ state: 'hidden' });
+    if (from !== to) await page.setViewportSize({ width: to, height: 844 });
+    await page.goBack();
+    await filter.waitFor();
+    const reveal = await daily.locator(`[data-daily-chip][href="${destination}"]`).evaluate(link => {
+      const rail = link.closest('ul').parentElement;
+      const vertical = rail.scrollHeight > rail.clientHeight && rail.scrollWidth <= rail.clientWidth;
+      const box = link.getBoundingClientRect(), clip = rail.getBoundingClientRect();
+      const visible = vertical ? box.top >= clip.top - 2 && box.bottom <= clip.top + rail.clientHeight + 2
+        : box.left >= clip.left - 2 && box.right <= clip.left + rail.clientWidth + 2;
+      return visible && document.activeElement === link;
+    });
+    say(reveal && await filter.inputValue() === 'basketball',
+      from + 'px to ' + to + 'px Back restores the filtered and visible daily puzzle with focus');
+  } finally {
+    await ctx.close();
+  }
+}
+
 await browser.close();
 
 console.log('');

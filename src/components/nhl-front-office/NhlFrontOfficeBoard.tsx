@@ -231,7 +231,7 @@ function ContributorPicker({ team, onApply, onAuto, onBack }: {
       <button ref={back} type="button" onClick={onBack} className={cn(contributorsStyles.action, 'rounded-lg border border-border px-3 text-xs font-semibold')}>Back to roster</button>
       <h3 className="mt-3 font-bold text-foreground">Simulation contributors</h3>
       <p className="mt-1 text-xs text-muted-foreground">Choose whose ratings feed the simulation. This does not set lines or ice time. Only healthy players can contribute.</p>
-      <p className="mt-2 text-xs text-muted-foreground">Select six forwards, four defensemen and one goalie, or every healthy player when a group is thin. Uncheck a selected forward or defenseman before choosing a replacement. An empty group uses rating 62.</p>
+      <p className="mt-2 text-xs text-muted-foreground">Select six forwards, four defensemen and one goalie, or every healthy player when a group is thin. Uncheck a selected forward or defenseman before choosing a replacement. Each vacant spot counts as rating 62.</p>
       {covers.length > 0 && <div className="mt-2 space-y-1 text-xs text-muted-foreground">
         {covers.map(({ key, injured, healthyCover }) => (
           <p key={key}>{injured.map(p => p.name).join(', ')} {injured.length === 1 ? 'is' : 'are'} out.
@@ -244,7 +244,7 @@ function ContributorPicker({ team, onApply, onAuto, onBack }: {
         {groups.map(group => {
           const selected = ids(draft, group.key), required = Math.min(group.cap, group.players.length);
           return <fieldset key={group.key} className="min-w-0 rounded-lg border border-border p-2" data-nhl-group={group.key}>
-            <legend className="px-1 text-xs font-bold">{group.label} {selected.length}/{required} · {group.weight}</legend>
+            <legend className="px-1 text-xs font-bold">{group.label} {selected.length}/{group.cap} · {group.weight}</legend>
             <div className={contributorsStyles.choices}>
               {[...group.players].sort((a, b) => b.ovr - a.ovr).map(player => {
                 const checked = selected.includes(player.id);
