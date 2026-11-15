@@ -741,6 +741,12 @@ function NrlMatchDetails({ match, season }: { match: NrlMatchResult; season: Nrl
         {late?.starterId === kickerId ? 'Goal kicker after 60 minutes' : 'Goal kicker after half time'}: {lateKickerName}.
       </p>}
       {match.goalKickingDrills && <p className="mt-2 text-sm text-muted-foreground">Goal-kicking drills were used for this match.</p>}
+      {match.penaltyTap !== undefined && <p className="mt-2 text-sm text-muted-foreground" data-nrl-penalty-tap-result>
+        {match.penaltyTap === 'none' ? 'You chose to tap for a try. No kickable penalty came up.'
+          : match.penaltyTap === 0 ? 'Your penalty tap ended without points.'
+            : match.penaltyTap === 4 ? 'Your penalty tap led to a try for four points.'
+              : 'Your penalty tap led to a converted try for six points.'}
+      </p>}
       {match.openInterchange && <p className="mt-2 text-sm text-muted-foreground">You left the fourth automatic interchange open.</p>}
       {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
         {recoveredName} took individual recovery before this match.
@@ -1272,6 +1278,21 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
             </div>
             <p className="mt-2 text-sm text-muted-foreground">{tactics.find(tactic => tactic.id === season.tactic)?.description}{coachTacticNote(coachRole, coachBonus, season.tactic)}</p>
             <AttackPlan key={`${year}:${next.round}`} career={career} onAction={onAction} disabled={disabled} />
+            {!career.legacySeason && season.kickerId && season.bench && (
+              <details className="mt-3 rounded-lg border border-border px-3" data-nrl-penalty-approach>
+                <summary className="min-h-11 cursor-pointer py-2.5 text-sm font-semibold">
+                  Penalty approach{season.penaltyTap && ' · Tap for a try'}
+                </summary>
+                <p className="pb-2 text-sm text-muted-foreground">For this match, bank two points from a kickable penalty or take a tap for a chance at four or six. A tap can leave you with no points.</p>
+                <div className="flex flex-wrap gap-2 pb-3" role="group" aria-label="Penalty approach">
+                  {[false, true].map(enabled => <Button key={String(enabled)} type="button" size="lg" className="px-3"
+                    variant={enabled === Boolean(season.penaltyTap) ? 'default' : 'outline'} aria-pressed={enabled === Boolean(season.penaltyTap)}
+                    disabled={disabled} onClick={() => onAction({ type: 'setPenaltyTap', year, clubId, round: season.round, enabled })}>
+                    {enabled ? 'Tap for a try' : 'Take two points'}
+                  </Button>)}
+                </div>
+              </details>
+            )}
           </div>
           <div className="rounded-xl border border-border bg-card p-4">
             <h3 className="font-bold">Preparation <span className="ml-1 font-normal text-muted-foreground">· {fitness}% starter fitness</span></h3>
@@ -2462,6 +2483,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Choose Ready sooner for higher starting OVR or Higher ceiling for more potential when assigning an academy scout. Balanced uses the standard profile.</li>
               <li>Regular-season club matches can raise or lower ratings by 1 OVR at a time. Check the latest match result or open Rating changes in Squad. Existing ratings carry into the next season.</li>
               <li>Open a regular-season match report in Season fixtures to see the rating changes saved for that match.</li>
+              <li>Before kick-off, open Penalty approach to bank two points from a kickable penalty or tap for a chance at four or six. The match report shows how the tap finished.</li>
               <li>In Squad, a young player can learn a second position in reserve grade while another player trains with the first team. The reserve course replaces the one-point rating gain.</li>
               <li>While a reserve-grade spell has at least two rounds left, book reserve coaching from Squad for $90,000. The prospect returns one round sooner with their rating gain or new position.</li>
               <li>Set a development focus in Season review for eligible players who are signed to return. It applies during the regular season.</li>
