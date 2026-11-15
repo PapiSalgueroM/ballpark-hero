@@ -1,11 +1,19 @@
 ## 2026-11-15: Matchday squads, player logs, ticket quotes and playoff appearances
 
+[PR #992](https://github.com/PapiSalgueroM/ballpark-hero/pull/992) published exact main `4ca4c602de2d8b108bdddd0d993572f815b3cb15`, deployment `a59b3b81-68b7-4b49-ab04-3307437f5a8f`, canonical entry `/assets/index-B2_WY7cg.js`. The merged tree matched tested head `02797854c`. All 16 live browser cases, 174 sitemap routes and 14 pinned endpoint checks passed. IndexNow accepted the NRL, Aussie Rules and NFL guides. The full local SEO split check also passed across 174 routes and 32 chunks, bringing the local site checks to 20. Hosted application types and build passed. The broader hosted career decision outcome step reported a failure.
+
 - NRL Team Manager adds a Player match log to Season player stats. Pick any squad player for their starts by position, interchange appearances, points and recorded OVR changes. The finals filter applies to the log. An older standalone rating review appears on its original round.
 - Aussie Rules Manager can keep the selected matchday 23 for the current season. It preserves eligible starters and interchange slots, replaces missing players, and leaves the preference in place through a finals bye. Choose automatic selection at any playable fixture. The new season starts on automatic.
 - Stadium Tycoon quotes attendance and total income per second for all three ticket offers at the current ground. In the low-demand fixture Premium estimates 67 fans and $4.19 per second, against 90 and $4.50 for Standard. With a full ground Premium quotes $7.50 against $6.00.
 - NFL My Career records personal playoff appearances separately from team games for newly simulated backup quarterbacks. The paired title fixture records one personal appearance in four team games. The Wild Card fixture records zero appearances and leaves out the player stat line. Existing playoff records keep their original display.
 
 The combined source passed 128 focused tests. The rebuilt candidate passed all 16 pinned Chromium cases, 19 site checks and 16 download budgets. The four changed games' rendered SEO fields matched their saved pages. The three guide snapshots and their lastmod ledger entries were regenerated. The Aussie comparison matched 5,027 automatic transitions over 60 seasons and kept the chosen defender in 30 of 30 opted-in cases. Updated Aussie club-name and NFL season-tile checks now follow the live scoring list and designed-run fields.
+
+## Next verified product issues
+
+- A pinned game sent Home's Game picks shortcut to the personal shelf, leaving Games to try below the viewport at all three phone sizes tested. The personal heading needs a unique ID so existing discovery links land on the right shelf.
+- NRL's wide plan averages both edges. In a 336-fixture probe of a proposed directional choice, 113 pairs differed by at least two attack rating and 49 changed the managed club's scoring. All 2,256 other fixture rows matched. Carry forward the existing wide plan and compare each edge with the physically opposite defenders.
+- Soccer Career records league appearances before applying development. Its contract verdict can then use the closing overall to raise the benchmark for those appearances. A paired seven-game elite-club fixture flipped from normal expiry to release after one point of growth. The five-game control still warranted release at the opening rating.
 
 ## 2026-11-15: NBA defensive assignments and first-year NFL rookie contracts
 
