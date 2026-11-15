@@ -1,5 +1,7 @@
 ## 2026-11-14: Search by sport, player career reports and deeper front offices
 
+[PR #970](https://github.com/PapiSalgueroM/ballpark-hero/pull/970) published exact main `6b3841087af5827cb83293427516425ad8d02ff9`, deployment `ca2efac9-8440-4e71-8f99-e6585ba0f30d`, canonical entry `/assets/index-D2_ECAqd.js`. Thirteen live browser journeys, all five raw game guides, all 174 sitemap routes and seven policy and crawler endpoints passed. IndexNow accepted the five updated guides. The build, application types, 96 focused tests, all 18 site checks and all 16 measured download budgets passed. Home import recovery passed its ten scenarios and the rejected-import control. All 22 old career layouts matched the exact #969 source in a paired comparison. The historical markup fixture already differed on #969.
+
 - Home search can filter a query by sport. Browser Back restores the selected sport and focuses the game you opened.
 - NBA Front Office can rest any healthy starter for a regular-season round. The preview shows the cover and the strength change. The rested starter avoids that round's injury roll and keeps their usual rotation spot for the next round.
 - In NRL Team Manager, the offseason Contracts office can exchange two players. Each carries their existing wage and remaining term to the new club next season. Both clubs must have enough cap room and position cover.
