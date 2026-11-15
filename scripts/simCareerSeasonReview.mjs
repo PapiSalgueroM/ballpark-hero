@@ -13,6 +13,9 @@ const highs = 'src/components/us-career/CareerSeasonHighs.tsx';
 const helper = 'src/lib/usCareerSeasonReview.ts', board = 'src/components/us-career/UsCareerBoard.tsx';
 const testFile = 'src/test/careerSeasonReview.test.tsx';
 const titles = {
+  archiveReplay: 'opens the selected earlier NBA season for reconstruction without saving or credit',
+  archiveEligibility: 'keeps archived short and unplayed NBA seasons outside the reconstruction',
+  archiveUnavailable: 'returns an unavailable NBA historical view to its Career Log opener',
   highsPositions: 'finds saved season highs from the correct positive field for every position',
   highsTies: 'keeps every tied original index latest first and compares raw high values before formatting',
   highsSparse: 'keeps zero highs while excluding missing nonfinite and suspended seasons',
@@ -24,6 +27,7 @@ const titles = {
   nba: 'shows the saved NBA regular and postseason values separately',
   nfl: 'shows NFL passing and defensive stats for their saved positions',
   mlb: 'distinguishes MLB batting starts and relief appearances from saved stats',
+  mlbRelieverDecisions: 'shows missing reliever decisions as unrecorded and a recorded zero as zero',
   nhl: 'distinguishes NHL attackers defenders and goalies in both season phases',
   compare: 'compares saved seasons exactly and returns focus to the selected year',
   legacy: 'keeps missing legacy fields honest and records real zero values',
