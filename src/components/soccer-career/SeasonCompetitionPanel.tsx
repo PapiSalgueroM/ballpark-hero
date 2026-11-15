@@ -4,6 +4,7 @@ import type { SavedSeasonCompetition } from '@/lib/soccerSeasonCompetitions';
 import { savedClubCampaign } from '@/lib/soccerSeasonCompetitions';
 import { readSeasonRatingPath } from '@/lib/careerSeasonRatings';
 import type { CalendarCupGame } from '@/lib/soccerSeasonCalendar';
+import { readClubWorldCup } from '@/lib/soccerClubWorldCup';
 import { focusDialogOnMount } from '@/lib/dialogA11y';
 import { DevelopmentOverallLine } from '@/components/season-centre/DevelopmentOverallLine';
 import { useBodyLock } from '@/components/season-centre/useBodyLock';
@@ -67,9 +68,11 @@ export default function SeasonCompetitionPanel({ career, row, competition, calen
   const match = picked === null ? null : competition?.matches[picked];
   const calendarGame = match && calendar?.find(game => game.competition === competition?.id && game.matchIndex === picked);
   // The saved opening fixture is anchored even if an older league replay is unavailable.
-  const openingPath = picked === 0 && (competition?.id === 'shield' || competition?.id === 'german-supercup')
-    ? readSeasonRatingPath(row.ratingPath) : null;
-  const development = calendarGame?.development ?? (openingPath ? { overall: openingPath[0], change: null } : null);
+  const path = match ? readSeasonRatingPath(row.ratingPath) : null;
+  const opening = picked === 0 && (competition?.id === 'shield' || competition?.id === 'german-supercup');
+  const closing = !!path && competition?.id === 'club-world-cup' && !!readClubWorldCup(row);
+  const anchoredOverall = closing ? path?.[4] : opening ? path?.[0] : undefined;
+  const development = calendarGame?.development ?? (anchoredOverall === undefined ? null : { overall: anchoredOverall, change: null });
   const currentSquad = !competition && !leagueUnavailable ? squadNow(career) : null;
   const title = leagueUnavailable ? 'League replay unavailable' : competition?.name ?? 'Current squad';
   const stages = competition?.id === 'club' ? savedClubCampaign(career, row)?.firstStage?.stages ?? [] : [];
@@ -114,7 +117,7 @@ export default function SeasonCompetitionPanel({ career, row, competition, calen
         </div> : match ? <div className="space-y-3" data-centre-cup-game={picked}>
           <button type="button" onClick={() => setPicked(null)} className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold">‹ All games</button>
           <h3 ref={heading} tabIndex={-1} className="text-sm font-bold outline-none">{match.round}</h3>
-          <DevelopmentOverallLine report={development} unit="game" />
+          <DevelopmentOverallLine report={development} unit="game" leagueClosingEstimate={closing} />
           <div className="rounded-xl bg-muted/30 p-4 text-center">
             <p className="text-sm font-semibold">{row.club} vs {match.opponent ?? 'Opponent not recorded'}</p>
             <p className="my-2 text-3xl font-black tabular-nums" data-centre-cup-score>{match.goalsFor === null || match.goalsAgainst === null ? 'Score not recorded' : `${match.goalsFor}-${match.goalsAgainst}`}</p>

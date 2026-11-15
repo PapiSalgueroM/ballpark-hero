@@ -3,6 +3,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { FALLBACK_CLUBS, type CareerState, type SeasonRecord } from '@/lib/soccerCareerEngine';
 import { savedClubCampaign, savedSeasonCompetitions } from '@/lib/soccerSeasonCompetitions';
+import { clubWorldCup2025Campaign } from '@/lib/soccerClubWorldCup';
 import SeasonCompetitionPanel, { CompetitionNavigation } from '@/components/soccer-career/SeasonCompetitionPanel';
 import SoccerSeasonCentre from '@/components/soccer-career/SoccerSeasonCentre';
 import { MatchClock } from '@/components/season-centre/MatchClock';
@@ -161,6 +162,24 @@ describe('Soccer Career competition navigation keeps the actual league view', ()
     localStorage.clear();
     localStorage.setItem('seasonCentre:help', '1');
     vi.stubGlobal('matchMedia', (query: string) => ({ matches: false, media: query, addEventListener() {}, removeEventListener() {} }));
+  });
+
+  it.each([true, false])('reports only the closing estimate on saved Club World Cup games (%s)', withPath => {
+    const row: SeasonRecord = { ...cupSeason, year: 2024, club: 'Chelsea', ovr: 70,
+      clubWorldCup: clubWorldCup2025Campaign('Chelsea', 'postseason development fixture', () => 3, null, 0) };
+    if (withPath) row.ratingPath = [60, 65, 70, 75, 81];
+    const career = centreCareer(row, { lastUCLResult: null });
+    const competition = savedSeasonCompetitions(career, row).find(cup => cup.id === 'club-world-cup');
+    expect(competition?.matches.length).toBeGreaterThan(1);
+    const before = JSON.stringify(career);
+    const view = render(<SeasonCompetitionPanel career={career} row={row} competition={competition!} navigation={null}
+      exitLabel="Back" onClose={() => {}} />);
+    fireEvent.click(view.container.querySelector('[data-centre-cup-open="0"]')!);
+    const expected = withPath ? 'Season OVR 81 · League closing estimate' : 'Season OVR unavailable for this fixture.';
+    expect(view.container.querySelector('[data-match-development-overall]')).toHaveTextContent(expected);
+    fireEvent.click(screen.getByRole('button', { name: /Next game/ }));
+    expect(view.container.querySelector('[data-centre-cup-game="1"] [data-match-development-overall]')).toHaveTextContent(expected);
+    expect(JSON.stringify(career)).toBe(before);
   });
 
   it.each([true, false])('keeps the same development report for a cup replay and saved fixture (%s)', withPath => {
