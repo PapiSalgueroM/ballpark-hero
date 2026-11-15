@@ -292,6 +292,7 @@ function helpFacts() {
 
 export function SeasonMatchResults({ league, current = false }: { league: TycoonLeague; current?: boolean }) {
   const results = league.results ?? [];
+  const crowdTarget = league.sponsor?.kind === 'attendance' ? league.sponsor.target : undefined;
   if (current ? league.matchday === 0 : results.length === 0) return null;
 
   return <details data-current-season-results={current ? '' : undefined} data-latest-season-results={current ? undefined : ''} className="rounded-lg border border-border px-3 text-xs">
@@ -299,9 +300,12 @@ export function SeasonMatchResults({ league, current = false }: { league: Tycoon
     {results.length === 0 ? <p className="pb-2 text-muted-foreground">Scores for these matchdays were not recorded.</p> : <>
       {results.length < league.matchday && <p className="pb-2 text-muted-foreground">Earlier scores were not recorded.</p>}
       <ol className="space-y-2 pb-3">
-        {results.map(({ day, gf, ga, plan }) => <li key={day} className="flex items-baseline justify-between gap-2">
+        {results.map(({ day, gf, ga, attendance, plan }) => <li key={day} className="flex items-baseline justify-between gap-2">
           <div>
             <span>Matchday {day} · {league.clubs[yourOpponentIndex(league, day - 1)].name}</span>
+            {attendance !== undefined && <span className="block text-muted-foreground">
+              {formatNumber(attendance)} fans{crowdTarget === undefined ? '' : attendance >= crowdTarget ? ' · Reached sponsor target' : ' · Missed sponsor target'}
+            </span>}
             {plan && <span className="block text-muted-foreground">{MATCH_PLANS[plan.kind].label} from {plan.minute}′</span>}
           </div>
           <span className="shrink-0 font-bold tabular-nums">{gf}-{ga}</span>

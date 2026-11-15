@@ -14,7 +14,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { LatestSeasonReview, SeasonMatchResults } from '@/pages/StadiumTycoon';
 import {
-  clubNameOptions, deserializeTycoon, leagueShape, newTycoon, prestige, serializeTycoon, setClubName, setMatchPlan,
+  attendance, clubNameOptions, deserializeTycoon, leagueShape, newTycoon, prestige, serializeTycoon, setClubName, setMatchPlan,
   signStadiumSponsor, stadiumSponsorPayout, tick, type LeagueClub, type TycoonLeague, type TycoonState,
 } from '@/lib/stadiumTycoon';
 
@@ -89,7 +89,11 @@ describe('Stadium Tycoon: the Latest season review', () => {
     const old = finish(finish(base));
     delete old.league!.results;
     const next = finish(deserializeTycoon(serializeTycoon(old, now), now)!);
-    expect(deserializeTycoon(serializeTycoon(next, now), now)?.league?.results).toEqual([{ day: 3, gf: 3, ga: 0 }]);
+    const reopened = deserializeTycoon(serializeTycoon(next, now), now)!;
+    expect(reopened.league?.results).toEqual([{ day: 3, gf: 3, ga: 0, attendance: attendance(old) }]);
+    const malformed = structuredClone(reopened);
+    malformed.league!.results![0].attendance = -5;
+    expect(deserializeTycoon(serializeTycoon(malformed, now), now)?.league?.results).toEqual([{ day: 3, gf: 3, ga: 0 }]);
   });
   it('offers the review on a button that says where you finished', () => {
     render(<LatestSeasonReview last={last} />);

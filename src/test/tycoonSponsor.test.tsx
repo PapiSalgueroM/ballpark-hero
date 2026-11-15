@@ -59,6 +59,7 @@ describe('Stadium Tycoon season sponsors', () => {
     expect(first.fanbase).toBeGreaterThan(premium.fanbase);
     expect(attendance(first)).toBeGreaterThanOrEqual(96);
     expect(first.league?.sponsor?.qualifying).toBe(0);
+    expect(reload(first).league?.results?.[0].attendance).toBe(90);
     const ready = setTicketPolicy(reload(first), 'standard');
     const played = playAwayMatchdays(ready, 30, () => 1);
     expect(played.results).toHaveLength(3);
@@ -67,6 +68,13 @@ describe('Stadium Tycoon season sponsors', () => {
     expect(played.state.lastCompletedLeague).toBeUndefined();
     const final = nextMatch(reload(played.state));
     expect(final.lastCompletedLeague?.sponsor?.qualifying).toBe(4);
+    const last = reload(final).lastCompletedLeague!;
+    expect(last.results?.map(row => row.attendance)).toEqual([90, 120, 120, 120, 120]);
+    render(<LatestSeasonReview last={last} />);
+    fireEvent.click(screen.getByRole('button', { name: /Latest season/ }));
+    fireEvent.click(screen.getByText('Match results'));
+    expect(screen.getByText('90 fans · Missed sponsor target')).toBeVisible();
+    expect(screen.getAllByText('120 fans · Reached sponsor target')).toHaveLength(4);
     expect(final.league?.sponsor).toBeUndefined();
     const ordinary = nextMatch(reload(final));
     expect(ordinary.lastCompletedLeague).toEqual(final.lastCompletedLeague);
