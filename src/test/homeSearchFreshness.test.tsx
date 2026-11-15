@@ -429,7 +429,7 @@ it('keeps the sport heading when native history reuses the initial key for a dif
   try {
     render(<BrowserRouter><Index /></BrowserRouter>);
     const catalogue = screen.getByRole('navigation', { name: 'Browse sports' });
-    const link = within(catalogue).getByRole('link', { name: 'Rugby League', exact: true });
+    const link = within(catalogue).getByRole('link', { name: 'Rugby League' });
     const heading = screen.getByRole('heading', { name: /^Rugby League/, level: 2 });
     heading.scrollIntoView = vi.fn();
     fireEvent.click(link);
