@@ -650,7 +650,10 @@ export function simMlbSeason(
   const prof = MLB_POS_PROFILE[c.pos] ?? MLB_POS_PROFILE.LF;
   const bullpenRole = mlbBullpenAssignment(c);
   if (c.bullpenAssignment) delete c.bullpenAssignment;
-  Object.assign(full, mlbStatLineFor({ form, pos: c.pos, kind: bullpenRole ?? c.archetype.id, games: fullGames }, rng));
+  const stats = drawMlbStatLine({ form, pos: c.pos, kind: bullpenRole ?? c.archetype.id, games: fullGames }, rng);
+  const drawnSaves = stats.saves ?? 0;
+  fitMlbPitchingDecisions(stats, fullGames);
+  Object.assign(full, stats);
   if (bullpenRole) {
     full.bullpenRole = bullpenRole;
     notes.push(bullpenRole === 'closer' ? 'Bullpen role: closer, pitching for saves.' : 'Bullpen role: setup, pitching for holds.');
@@ -775,7 +778,8 @@ export function simMlbSeason(
   if (c.pos === 'SP' && (full.era ?? 9) <= 2.6 && fullGames >= 28 && wonAward(rng, 'mlb', 'eraTitle', c.pos, statScore)) {
     line.awards.push('ERA Title'); notes.push('🎯 Led the league in ERA.');
   }
-  if (c.pos === 'RP' && (full.saves ?? 0) >= 38 && wonAward(rng, 'mlb', 'savesLeader', c.pos, statScore)) {
+  // Short workloads can put the corrected total below the original ballot gate.
+  if (c.pos === 'RP' && drawnSaves >= 38 && wonAward(rng, 'mlb', 'savesLeader', c.pos, statScore) && (full.saves ?? 0) >= 38) {
     line.awards.push('Saves Leader'); notes.push('🚪 Led the league in saves.');
   }
   // Comeback needs a real bounce off a lost season, not just a good year. The
@@ -832,6 +836,12 @@ export type MlbStatLine = Pick<MlbSeasonLine, 'era' | 'wins' | 'lossesP' | 'so' 
 
 /** One season's stat block on the engine's own length. Draws: a starter 4, a reliever 6, a hitter 6. */
 export function mlbStatLineFor(x: MlbLineInput, rng: () => number): MlbStatLine {
+  const line = drawMlbStatLine(x, rng);
+  fitMlbPitchingDecisions(line, x.games);
+  return line;
+}
+
+function drawMlbStatLine(x: MlbLineInput, rng: () => number): MlbStatLine {
   const form = x.form;
   const fullGames = x.games;
   const prof = MLB_POS_PROFILE[x.pos] ?? MLB_POS_PROFILE.LF;
@@ -884,6 +894,19 @@ export function mlbStatLineFor(x: MlbLineInput, rng: () => number): MlbStatLine 
   return full;
 }
 
+/** Trim excess decisions around the bullpen credits for that job.
+ * A loss can share an appearance with a hold. Wins and saves need separate slots. */
+function fitMlbPitchingDecisions(line: MlbStatLine, games: number): void {
+  if (line.wins === undefined || line.lossesP === undefined) return;
+  const saves = Math.min(line.saves ?? 0, games);
+  const slots = games - saves;
+  const holds = Math.min(line.holds ?? 0, slots);
+  line.wins = Math.min(line.wins, slots - holds);
+  line.lossesP = Math.min(line.lossesP, slots - line.wins);
+  if (line.saves !== undefined) line.saves = saves;
+  if (line.holds !== undefined) line.holds = holds;
+}
+
 /** The healthy workload on the engine's own season, as gamesFor draws it: 32 starts, 62 to 71 appearances,
  *  or all but zero to seven of the games. Draws: a starter none, a reliever 1, a hitter 1. */
 export function mlbFullWorkload(pos: string, rng: () => number): number {
@@ -897,16 +920,15 @@ export function mlbFullWorkload(pos: string, rng: () => number): number {
  *  one object the season sim always kept. Draws nothing. */
 export function mlbLineOnSlate(full: MlbSeasonLine, work: number): MlbSeasonLine {
   const cut = (n: number) => toSlate('mlb', n, work);
-  /* The line that is saved: the same season at the length his club played.
-     Every count is carried the same way, so a starter's record stays inside
-     his starts and a hitter's runs batted in stay in step with his home runs.
-     Rates (the average, the on base, the ERA) do not move. */
+  /* Carry each count to the length his club played. Rates stay on the same
+     scale, and independently rounded decisions get another capacity check. */
   const line: MlbSeasonLine = work === US_ENGINE_SEASON.mlb ? full : { ...full };
   if (line !== full) {
     for (const k of MLB_LINE_COUNTS) {
       const v = full[k];
       if (v !== undefined) line[k] = cut(v);
     }
+    fitMlbPitchingDecisions(line, line.games);
   }
   return line;
 }
