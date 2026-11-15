@@ -292,7 +292,7 @@ function helpFacts() {
 
 /* Release AP: exported so src/test/tycoonLatestSeason.test.tsx can read the dialog's numbers on any tree
    (Round 1095's own driver only runs on its own branch). */
-export function LatestSeasonReview({ last }: { last: TycoonLeague }) {
+export function LatestSeasonReview({ last, history }: { last: TycoonLeague; history?: TycoonLeague[] }) {
   const [open, setOpen] = useState(false);
   const [snapshot, setSnapshot] = useState(last);
   const trigger = useRef<HTMLButtonElement>(null);
@@ -302,6 +302,7 @@ export function LatestSeasonReview({ last }: { last: TycoonLeague }) {
     setOpen(next);
   };
   const formatSeasonCount = (value: number) => value.toLocaleString('en-US');
+  const reports = useMemo(() => [last, ...(history ?? []).slice().reverse().filter(report => report.season !== last.season)], [last, history]);
   const own = snapshot.clubs[0];
   const rows = leagueStandings(snapshot);
   const position = rows.indexOf(own) + 1;
@@ -316,9 +317,21 @@ export function LatestSeasonReview({ last }: { last: TycoonLeague }) {
       <DialogContent data-latest-season-review className="flex max-h-[calc(100dvh_-_2rem)] w-[calc(100vw_-_2rem)] max-w-md flex-col gap-3 rounded-xl p-4 text-xs [&>button:last-child]:h-11 [&>button:last-child]:w-11"
         onOpenAutoFocus={event => { event.preventDefault(); heading.current?.focus({ preventScroll: true }); }}
         onCloseAutoFocus={event => { event.preventDefault(); trigger.current?.focus({ preventScroll: true }); }}>
-        <DialogTitle ref={heading} tabIndex={-1} className="pr-12 text-base">Latest season</DialogTitle>
-        <DialogDescription className="text-xs">The final table and recorded match results stay available until the next season ends or you sell up. The match keeps running while you read.</DialogDescription>
+        <DialogTitle ref={heading} tabIndex={-1} className="pr-12 text-base">{reports.length > 1 ? 'Season reports' : 'Latest season'}</DialogTitle>
+        <DialogDescription className="text-xs">Final tables and recorded match results stay available at this ground until you sell up. The match keeps running while you read.</DialogDescription>
         <div className="min-h-0 space-y-3 overflow-y-auto text-xs">
+          {reports.length > 1 && <label className="block text-xs font-bold">
+            Completed season
+            <select className="mt-1 min-h-11 w-full rounded-lg border border-border bg-background px-3 text-sm"
+              value={snapshot.season} onChange={event => {
+                const chosen = reports.find(report => report.season === Number(event.target.value));
+                if (chosen) setSnapshot(chosen);
+              }}>
+              {reports.map(report => <option key={report.season} value={report.season}>
+                Season {report.season + 1} · {DIVISIONS[report.division].name}
+              </option>)}
+            </select>
+          </label>}
           <p data-season-headline className="break-words font-bold text-primary">Season {snapshot.season + 1} · {DIVISIONS[snapshot.division].name}{position === 1 ? ' champions' : ''}</p>
           <dl className="grid grid-cols-2 gap-3 rounded-lg border border-border p-3">
             <div><dt className="text-muted-foreground">Finished</dt><dd data-season-position className="font-bold">{ordinal(position)} of {formatSeasonCount(snapshot.clubs.length)}</dd></div>
@@ -375,7 +388,7 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
   const preseason = lg.matchday === 0;
   const options = s.clubName ? [] : clubNameOptions(s);
   const atSummit = lg.division >= DIVISIONS.length - 1;
-  const last = s.lastCompletedLeague;
+  const last = s.lastCompletedLeague ?? s.completedLeagueHistory?.at(-1);
   const sponsor = lg.sponsor;
   const offers = !sponsor && preseason ? stadiumSponsorOffers(s, lg) : null;
   return (
@@ -391,7 +404,7 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
         {(s.leagueTitles ?? 0) > 0 && <div className="mt-0.5 text-gold font-bold">🏆 {s.leagueTitles} league title{s.leagueTitles === 1 ? '' : 's'} in your career</div>}
       </div>
       <LeagueTableCard rows={rows} myClub={lg.clubs[0].name} title={`Season ${lg.season + 1} at this ground`} preseason={preseason} zoneTop={1} />
-      {last && <LatestSeasonReview last={last} />}
+      {last && <LatestSeasonReview last={last} history={s.completedLeagueHistory} />}
       {sponsor && <div data-league-sponsor className="rounded-xl border border-border bg-card p-3 text-xs">
         <p className="font-bold">{STADIUM_SPONSORS[sponsor.kind]} · {fmtMoney(stadiumSponsorPayout(lg))} {sponsor.kind === 'fixed' ? 'at season end' : 'earned so far'}</p>
         {sponsor.kind === 'attendance' && <p className="mt-1 text-muted-foreground">{formatNumber(sponsor.qualifying)} of {formatNumber(lg.matchday)} completed matchdays drew at least {formatNumber(sponsor.target)} fans. {fmtMoney(sponsor.rate)} per qualifying matchday, paid at season end.</p>}
@@ -1068,7 +1081,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
               <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>
-              <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. In League, open Latest season to see the final table and your recorded match scores. If your club wins Muddy Meadows, for example, you can reopen its final table and scores while playing in Gravel Lane. The report survives reload until another season ends or you sell up.</p>
+              <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. In League, open Latest season and choose a completed season to see its final table, recorded match scores and sponsorship. If your club wins Muddy Meadows, for example, you can reopen its final table and scores while playing in Gravel Lane. Recorded seasons stay with this ground until you sell up.</p>
               <p>Before the first league match finishes, Season sponsorship offers a fixed fee or more cash for a strong crowd. In a five-matchday season the fixed deal pays the same as three qualifying crowds. The crowd deal beats it if four or five matchdays reach the target at full time, including games played away. Check the signed target and the final payment in League.</p>
               <p>The payroll hires {h.staff} staff, from a {h.firstStaff} to a {h.lastStaff}. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
               <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about {h.catchSec} seconds to catch it, for one of {h.prizes} prizes: {GOLDEN_INFO.frenzy.label} ({GOLDEN_INFO.frenzy.blurb} for {GOLDEN_INFO.frenzy.duration} seconds), {GOLDEN_INFO.tapRush.label} ({GOLDEN_INFO.tapRush.blurb} for {GOLDEN_INFO.tapRush.duration} seconds), {GOLDEN_INFO.windfall.label} ({h.windfallMin} minutes of income, instantly), {GOLDEN_INFO.fanWave.label} ({GOLDEN_INFO.fanWave.blurb}) or {GOLDEN_INFO.freeLevel.label} ({GOLDEN_INFO.freeLevel.blurb}).</p>

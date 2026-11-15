@@ -11,9 +11,12 @@
    the wrong club or the wrong column cannot come out right by luck. */
 import './dailyReload/mocks';
 import { afterEach, describe, expect, it } from 'vitest';
-import { cleanup, fireEvent, render } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { LatestSeasonReview } from '@/pages/StadiumTycoon';
-import { deserializeTycoon, leagueShape, newTycoon, prestige, serializeTycoon, tick, type LeagueClub, type TycoonLeague } from '@/lib/stadiumTycoon';
+import {
+  clubNameOptions, deserializeTycoon, leagueShape, newTycoon, prestige, serializeTycoon, setClubName, setMatchPlan,
+  signStadiumSponsor, stadiumSponsorPayout, tick, type LeagueClub, type TycoonLeague, type TycoonState,
+} from '@/lib/stadiumTycoon';
 
 const club = (name: string, w: number, d: number, l: number, gf: number, ga: number): LeagueClub => ({ name, offset: 0, w, d, l, gf, ga, pts: w * 3 + d });
 /* index 0 is you (the engine's rule), second on points */
@@ -104,6 +107,71 @@ describe('Stadium Tycoon: the Latest season review', () => {
     expect(text('[data-season-headline]')).toBe('Season 4 · Muddy Meadows League champions');
     expect(text('[data-season-points]')).toBe('37');
     expect(text('[data-season-position]')).toBe('1st of 4');
+  });
+
+  it('keeps the picked existing report open as another season arrives, with all choices still available', async () => {
+    const oldest = { ...last, season: 1 };
+    const view = render(<LatestSeasonReview last={last} history={[oldest]} />);
+    open();
+    const picker = () => screen.getByRole('combobox', { name: 'Completed season' });
+    fireEvent.change(picker(), { target: { value: '1' } });
+    expect(text('[data-season-headline]')).toBe('Season 2 · Muddy Meadows League');
+    picker().focus();
+    const newer = { ...last, season: 3 };
+    view.rerender(<LatestSeasonReview last={newer} history={[oldest, last]} />);
+    expect(picker()).toHaveFocus();
+    expect(picker()).toHaveValue('1');
+    expect(text('[data-season-headline]')).toBe('Season 2 · Muddy Meadows League');
+    expect(picker().querySelectorAll('option')).toHaveLength(3);
+    fireEvent.change(picker(), { target: { value: '3' } });
+    expect(text('[data-season-headline]')).toBe('Season 4 · Muddy Meadows League');
+    fireEvent.click(screen.getByRole('button', { name: 'Back', exact: true }));
+    await waitFor(() => expect(document.querySelector('[data-last-season]')).toHaveFocus());
+  });
+
+  it('archives real results, old names, sponsorship and tactics from a legacy latest-only save and clears them on sell-up', () => {
+    const now = 1794085200000;
+    const finish = (state: TycoonState, winning: boolean, kind: 'protect' | 'push') => {
+      const end = leagueShape(state.league!.division).matchdays;
+      for (let day = 0; day < end; day += 1) {
+        state = setMatchPlan({ ...state, minute: 70 }, state.matchNo, kind);
+        state = tick({ ...state, minute: 89, goalsFor: winning ? 3 : 0, goalsAgainst: winning ? 0 : 4 }, 1.5, () => 1).state;
+      }
+      return state;
+    };
+    const start = { ...newTycoon(now), fanbase: 220 };
+    const signed = signStadiumSponsor(start, start.rep, 0, 'fixed');
+    const first = finish(signed, true, 'protect');
+    const previous = first.lastCompletedLeague!;
+    expect(first.completedLeagueHistory).toBeUndefined();
+    expect(previous.clubs[0].name).toBe('Your club');
+    expect(previous.results?.at(-1)).toMatchObject({ gf: 3, ga: 0, plan: { minute: 70, kind: 'protect' } });
+    const loaded = deserializeTycoon(serializeTycoon(first, now), now)!;
+    expect(loaded.completedLeagueHistory).toBeUndefined();
+    const renamed = setClubName(loaded, clubNameOptions(loaded)[0]);
+    const second = finish(signStadiumSponsor(renamed, renamed.rep, 1, 'attendance'), false, 'push');
+    expect(second.completedLeagueHistory).toEqual([previous]);
+    expect(previous.clubs[0].name).not.toBe(second.lastCompletedLeague!.clubs[0].name);
+    expect(second.lastCompletedLeague!.sponsor?.kind).toBe('attendance');
+    expect(second.lastCompletedLeague!.results?.at(-1)).toMatchObject({ gf: 0, ga: 4, plan: { minute: 70, kind: 'push' } });
+    const third = finish(second, false, 'push');
+    const reloaded = deserializeTycoon(serializeTycoon(third, now), now)!;
+    expect(reloaded.completedLeagueHistory).toEqual([previous, second.lastCompletedLeague]);
+
+    const previousPayout = stadiumSponsorPayout(previous);
+    render(<LatestSeasonReview last={reloaded.lastCompletedLeague!} history={reloaded.completedLeagueHistory!} />);
+    open();
+    fireEvent.change(screen.getByRole('combobox', { name: 'Completed season' }), { target: { value: '0' } });
+    expect(text('[data-season-sponsor]')).toContain(`paid $${previousPayout}`);
+    expect(text('[data-latest-season-table]')).toContain('Your club');
+    expect(text('[data-latest-season-results]')).toContain('Protect from 70′');
+    expect(text('[data-latest-season-results]')).toContain('3-0');
+
+    const corrupted = { ...third, completedLeagueHistory: [previous, { ...previous, season: 10 }, { ...previous, matchday: 2 }] };
+    expect(deserializeTycoon(serializeTycoon(corrupted, now), now)?.completedLeagueHistory).toEqual([previous]);
+    const sold = prestige({ ...third, lifetime: 4_000_000 }, now);
+    expect(sold.lastCompletedLeague).toBeUndefined();
+    expect(sold.completedLeagueHistory).toBeUndefined();
   });
 
   it.each([true, false])('retains the actual last table on reload after a season with winning=%s', winning => {

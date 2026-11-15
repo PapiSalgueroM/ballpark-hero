@@ -552,6 +552,8 @@ export interface TycoonState {
   league?: TycoonLeague;
   /** The last final table at this ground, before the live league moves on. */
   lastCompletedLeague?: TycoonLeague;
+  /** Earlier completed seasons at this ground. The newest stays in lastCompletedLeague. */
+  completedLeagueHistory?: TycoonLeague[];
   /** Round 582: league titles won, career-wide. Survives selling up. */
   leagueTitles?: number;
   /** Round 582: the club name picked from the generated banks, career-wide.
@@ -977,6 +979,9 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
   }
   if (played.matchday < leagueShape(lg.division).matchdays) return played;
 
+  if (st.lastCompletedLeague) {
+    st.completedLeagueHistory = [...(st.completedLeagueHistory ?? []), st.lastCompletedLeague];
+  }
   st.lastCompletedLeague = played;
   const sponsorPay = stadiumSponsorPayout(played);
   if (sponsorPay > 0) {
@@ -1882,6 +1887,7 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
     const plan = s.matchPlan;
     delete s.matchPlan;
     delete s.lastCompletedLeague;
+    delete s.completedLeagueHistory;
     if (rawLeague === undefined) {
       const division = legacyDivisionIndex(s.groundWins ?? 0);
       const seeded = newLeague(s.rep, division, 0, youName, s.matchNo);
@@ -1909,6 +1915,16 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
       if (completed && activeLeague && completed.season + 1 === activeLeague.season
         && activeLeague.division - completed.division === Number(completed.division < DIVISIONS.length - 1 && leaguePosition(completed) === 1)) {
         s.lastCompletedLeague = completed;
+      }
+      if (activeLeague && Array.isArray(p.completedLeagueHistory)) {
+        const bySeason = new Map<number, TycoonLeague>();
+        for (const value of p.completedLeagueHistory) {
+          const report = cleanLeague(value, undefined, activeLeague.division, s.matchNo, true);
+          if (report && report.season < activeLeague.season - 1 && !bySeason.has(report.season)) {
+            bySeason.set(report.season, report);
+          }
+        }
+        if (bySeason.size) s.completedLeagueHistory = Array.from(bySeason.values()).sort((a, b) => a.season - b.season);
       }
       if (activeLeague && !activeLeague.carryover && validMatchPlan(plan) && plan.match === s.matchNo && plan.minute <= s.minute) {
         s.matchPlan = { match: plan.match, minute: plan.minute, kind: plan.kind };
