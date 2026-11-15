@@ -1,8 +1,9 @@
-import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { useSyncExternalStore } from 'react';
 import { BrowserRouter, Link, MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import Index from '@/pages/Index';
+import { GameNavbar } from '@/components/game/GameNavbar';
 import { ScrollToTop } from '@/App';
 import { ALL_GAMES, VISIBLE_CATEGORIES } from '@/data/gameRegistry';
 import type { useMostPlayed } from '@/hooks/useMostPlayed';
@@ -412,41 +413,63 @@ it.each([
   expect(screen.getByRole('textbox', { name: 'Search games' })).toHaveValue('');
 });
 
-it.each([false, true])('restores the Soccer hub link with its catalogue expanded=%s', expanded => {
+it.each(['/soccer', '/soccer-career'])('opens Home from GameNavbar Back on a direct visit to %s', path => {
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
-  function Hub() {
-    const navigate = useNavigate();
-    return <><h1>Soccer Games</h1><button onClick={() => navigate(-1)}>Go back</button></>;
+  const originalUrl = window.location.href, originalState = window.history.state;
+  window.history.replaceState(null, '', path);
+  try {
+    render(<BrowserRouter><Routes>
+      <Route path="/" element={<Index />} />
+      <Route path={path} element={<GameNavbar />} />
+    </Routes></BrowserRouter>);
+    expect(window.history.state.idx).toBe(0);
+    const length = window.history.length;
+    fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
+    expect(window.location.pathname).toBe('/');
+    expect(window.history.length).toBe(length);
+    expect(screen.getByRole('textbox', { name: 'Search games' })).toBeVisible();
+  } finally {
+    window.history.replaceState(originalState, '', originalUrl);
   }
+});
+
+it.each([false, true])('restores the Soccer hub link with its catalogue expanded=%s', async expanded => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
   function LocationMarker() {
     return <output aria-label="Current anchor">{useLocation().hash}</output>;
   }
-  const { container } = render(<MemoryRouter initialEntries={[{ pathname: '/', hash: '#sport-soccer', key: 'hub-return-' + expanded }]}>
-    <LocationMarker />
-    <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/soccer" element={<Hub />} />
-    </Routes>
-  </MemoryRouter>);
-  const section = () => container.querySelector<HTMLElement>('section[data-sport="soccer"]')!;
-  const opener = () => within(section().querySelector('h2')!.parentElement!).getByRole('link', { name: /^(Hub|Soccer hub)$/ });
-  const more = () => section().querySelector('button[aria-controls="home-more-soccer"]')!;
-  if (expanded) fireEvent.click(more());
-  const visibleGames = section().querySelectorAll('[data-catalog-card]').length;
-  expect(opener()).toHaveAttribute('href', '/soccer');
-  opener().focus();
-  fireEvent.click(opener());
-  expect(screen.getByRole('heading', { name: 'Soccer Games' })).toBeVisible();
-  expect(screen.getByLabelText('Current anchor')).toBeEmptyDOMElement();
+  const originalUrl = window.location.href, originalState = window.history.state;
+  window.history.replaceState({ idx: 0, key: 'hub-return-' + expanded }, '', '/#sport-soccer');
+  try {
+    const { container } = render(<BrowserRouter>
+      <LocationMarker />
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/soccer" element={<><GameNavbar /><h1>Soccer Games</h1></>} />
+      </Routes>
+    </BrowserRouter>);
+    const section = () => container.querySelector<HTMLElement>('section[data-sport="soccer"]')!;
+    const opener = () => within(section().querySelector('h2')!.parentElement!).getByRole('link', { name: /^(Hub|Soccer hub)$/ });
+    const more = () => section().querySelector('button[aria-controls="home-more-soccer"]')!;
+    if (expanded) fireEvent.click(more());
+    const visibleGames = section().querySelectorAll('[data-catalog-card]').length;
+    expect(opener()).toHaveAttribute('href', '/soccer');
+    opener().focus();
+    fireEvent.click(opener());
+    expect(screen.getByRole('heading', { name: 'Soccer Games' })).toBeVisible();
+    expect(screen.getByLabelText('Current anchor')).toBeEmptyDOMElement();
 
-  fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
-  expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#sport-soccer');
-  expect(opener()).toHaveFocus();
-  expect(opener()).toHaveAccessibleName('Soccer hub');
-  expect(more()).toHaveAttribute('aria-expanded', String(expanded));
-  expect(section().querySelectorAll('[data-catalog-card]')).toHaveLength(visibleGames);
-  const football = container.querySelector<HTMLElement>('section[data-sport="football"] h2')!.parentElement!;
-  expect(within(football).getByRole('link', { name: 'NFL hub' })).toHaveAttribute('href', '/pro-football');
+    fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
+    await waitFor(() => expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#sport-soccer'));
+    expect(opener()).toHaveFocus();
+    expect(opener()).toHaveAccessibleName('Soccer hub');
+    expect(more()).toHaveAttribute('aria-expanded', String(expanded));
+    expect(section().querySelectorAll('[data-catalog-card]')).toHaveLength(visibleGames);
+    const football = container.querySelector<HTMLElement>('section[data-sport="football"] h2')!.parentElement!;
+    expect(within(football).getByRole('link', { name: 'NFL hub' })).toHaveAttribute('href', '/pro-football');
+  } finally {
+    window.history.replaceState(originalState, '', originalUrl);
+  }
 });
 
 it.each([false, true])('jumps from Browse sports to game picks and restores the opener with a saved pin=%s', pinned => {
