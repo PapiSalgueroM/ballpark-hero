@@ -15,7 +15,8 @@ export const NRL_ROLES = [
   'Five-eighth', 'Halfback', 'Prop 8', 'Hooker', 'Prop 10', 'Left Second Row', 'Right Second Row', 'Lock',
 ] as const;
 export const NRL_TACTICS = ['balanced', 'attack', 'defense'] as const;
-const NRL_SPECIALIST_PLANS = ['middle', 'wide'] as const;
+const NRL_DIRECTIONAL_PLANS = ['wideLeft', 'wideRight'] as const;
+const NRL_SPECIALIST_PLANS = ['middle', 'wide', ...NRL_DIRECTIONAL_PLANS] as const;
 export const NRL_ATTACK_PLANS = [...NRL_SPECIALIST_PLANS, 'counter'] as const;
 export const NRL_BENCH_SIZE = 6;
 export const NRL_RESERVE_GRADE_ROUNDS = 4;
@@ -39,8 +40,13 @@ const GOLDEN_POINT_VALUES = { tries: 4, penalties: 2, longFieldGoals: 2, fieldGo
 export type NrlRole = typeof NRL_ROLES[number];
 export type NrlTactic = typeof NRL_TACTICS[number];
 type NrlSpecialistPlan = typeof NRL_SPECIALIST_PLANS[number];
+type NrlDirectionalPlan = typeof NRL_DIRECTIONAL_PLANS[number];
 type NrlActiveAttackPlan = typeof NRL_ATTACK_PLANS[number];
 export type NrlAttackPlan = 'standard' | NrlActiveAttackPlan;
+export const isNrlSpecialistPlan = (plan: unknown): plan is NrlSpecialistPlan =>
+  NRL_SPECIALIST_PLANS.includes(plan as NrlSpecialistPlan);
+const isNrlDirectionalPlan = (plan: unknown): plan is NrlDirectionalPlan =>
+  NRL_DIRECTIONAL_PLANS.includes(plan as NrlDirectionalPlan);
 type NrlOpponentStyle = 'middle' | 'edges';
 export type NrlCoachRole = Exclude<NrlTactic, 'balanced'>;
 export type NrlPreparation = 'train' | 'recover' | 'defensiveDrills' | 'goalKickingDrills';
@@ -154,6 +160,7 @@ export interface NrlMatchResult extends NrlFixture {
   latePenalty?: NrlLatePenalty;
   kickingPlan?: NrlActiveKickingPlan;
   ratingChanges?: [playerId: string, change: 1 | -1][];
+  openingAttackPlan?: NrlDirectionalPlan;
   counterStyle?: NrlOpponentStyle;
   captainId?: string;
   actingCaptain?: { clubCaptainId: string; viceCaptainId: string };
@@ -921,6 +928,12 @@ function matchInjury(state: NrlManagerState, used: Set<string>, medicalReduction
 const PLAN_ROLES: Record<NrlSpecialistPlan, readonly NrlRole[]> = {
   middle: ['Prop 8', 'Hooker', 'Prop 10', 'Lock'],
   wide: ['Left Wing', 'Left Centre', 'Right Centre', 'Right Wing'],
+  wideLeft: ['Left Wing', 'Left Centre'],
+  wideRight: ['Right Wing', 'Right Centre'],
+};
+const OPPOSITE_EDGE: Partial<Record<NrlRole, NrlRole>> = {
+  'Left Wing': 'Right Wing', 'Left Centre': 'Right Centre',
+  'Right Wing': 'Left Wing', 'Right Centre': 'Left Centre',
 };
 
 function addMatchdayRating(sum: number, player: NrlPlayer, role: NrlRole, state: NrlRoundPreparation, reserve?: NrlPlayer, awayRecovery = 0): number {
@@ -938,7 +951,7 @@ function matchdayBase(state: NrlSelectedSquad, rotation: ReadonlyMap<string, Nrl
     addMatchdayRating(sum, player, starters.get(player.id) as NrlRole, state, rotation.get(player.id), awayRecovery), 0) / NRL_ROLES.length;
 }
 
-interface NrlPlanPosition { role: NrlRole; own: number; rival: number }
+interface NrlPlanPosition { role: NrlRole; own: number; rival: number; rivalRole?: NrlRole }
 
 function planLaneGap(state: NrlManagerState, rotation: ReadonlyMap<string, NrlPlayer>,
   plan: NrlSpecialistPlan, rival: ReadonlyMap<NrlRole, number>, positions?: NrlPlanPosition[], awayRecovery = 0) {
@@ -948,8 +961,10 @@ function planLaneGap(state: NrlManagerState, rotation: ReadonlyMap<string, NrlPl
     const id = state.lineup[role];
     const starter = players.get(id)!;
     const reserve = rotation.get(id);
-    const reference = rival.get(role)!;
-    if (positions) positions.push({ role, own: addMatchdayRating(0, starter, role, state, reserve, awayRecovery), rival: reference });
+    const rivalRole = isNrlDirectionalPlan(plan) ? OPPOSITE_EDGE[role]! : role;
+    const reference = rival.get(rivalRole)!;
+    if (positions) positions.push({ role, own: addMatchdayRating(0, starter, role, state, reserve, awayRecovery), rival: reference,
+      ...(rivalRole !== role && { rivalRole }) });
     return addMatchdayRating(sum, starter, role, state, reserve, awayRecovery) - reference;
   }, 0) / roles.length;
 }
@@ -964,8 +979,12 @@ function planAdjustment(state: NrlManagerState, rotation: ReadonlyMap<string, Nr
 export function nrlPlanAdjustments(state: NrlManagerState, rival: ReadonlyMap<NrlRole, number>, awayRecovery = 0) {
   const rotation = nrlBenchRotation(state);
   const base = matchdayBase(state, rotation, awayRecovery);
-  return { middle: planAdjustment(state, rotation, base, 'middle', rival, awayRecovery),
-    wide: planAdjustment(state, rotation, base, 'wide', rival, awayRecovery) };
+  return {
+    middle: planAdjustment(state, rotation, base, 'middle', rival, awayRecovery),
+    wide: planAdjustment(state, rotation, base, 'wide', rival, awayRecovery),
+    wideLeft: planAdjustment(state, rotation, base, 'wideLeft', rival, awayRecovery),
+    wideRight: planAdjustment(state, rotation, base, 'wideRight', rival, awayRecovery),
+  };
 }
 
 export function nrlPlanMatchups(state: NrlManagerState, rival: ReadonlyMap<NrlRole, number>, awayRecovery = 0) {
@@ -975,7 +994,7 @@ export function nrlPlanMatchups(state: NrlManagerState, rival: ReadonlyMap<NrlRo
     const gap = planLaneGap(state, rotation, plan, rival, positions, awayRecovery);
     return { gap, positions };
   };
-  return { middle: group('middle'), wide: group('wide') };
+  return { middle: group('middle'), wide: group('wide'), wideLeft: group('wideLeft'), wideRight: group('wideRight') };
 }
 
 export function nrlCounterPlan({ clubId, seed, year }: Pick<NrlManagerState, 'clubId' | 'seed' | 'year'>, fixture: NrlFixture) {
@@ -1378,6 +1397,7 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
       ...(state.openInterchange && { openInterchange: true as const }),
       ...(halftime?.quickInterchange && { quickInterchange: halftime.quickInterchange }),
       ...(coverPair && { openingCover: { starterId: coverPair[0], reserveId: coverPair[1].id } }),
+      ...(isNrlDirectionalPlan(state.attackPlan) && { openingAttackPlan: state.attackPlan }),
       ...(state.attackPlan === 'counter' && { counterStyle: nrlCounterPlan(state, fixture).style }),
       ...(state.captainId && (starters.has(state.captainId) || lateInterchange?.reserveId === state.captainId
         || interchanges.some(change => change.reserveId === state.captainId))
@@ -1427,7 +1447,7 @@ function advanceRound(state: NrlManagerState, opponentStrength: ReadonlyMap<stri
 
 function validLiveAttackPlan(state: NrlManagerState, plan: unknown, options: NrlRoundOptions): plan is NrlAttackPlan {
   return !!state.kickerId && !!state.bench && isNrlAttackPlan(plan)
-    && ((plan !== 'middle' && plan !== 'wide') || !!options.planRivalRatings);
+    && (!isNrlSpecialistPlan(plan) || !!options.planRivalRatings);
 }
 
 function halftimeDecision(state: NrlManagerState, live: NrlLiveHalf, choices: NrlHalftimeChoice, options: NrlRoundOptions): NrlHalftimeDecision | null {
@@ -1987,6 +2007,8 @@ function validResult(value: unknown, expected: NrlFixture, state: Pick<NrlManage
     && validBenchUse(value.benchUsed, managed, byId, value.minute60Interchange, value.openingCover, value.playerScoring)
     && (value.quickInterchange === undefined || (managed && !expected.finalsRound && validQuickInterchangeResult(value, home, byId)))
     && (value.halftimeTalk === undefined || (managed && isNrlHalftimeTalk(value.halftimeTalk) && value.playerScoring !== undefined))
+    && (value.openingAttackPlan === undefined || (managed && value.scorePeriods !== undefined && value.playerScoring !== undefined
+      && value.counterStyle === undefined && isNrlDirectionalPlan(value.openingAttackPlan)))
     && (value.halftimeAttackPlan === undefined || (managed && value.scorePeriods !== undefined
       && isNrlAttackPlan(value.halftimeAttackPlan) && value.playerScoring !== undefined))
     && (value.minute60Tactic === undefined || (managed && NRL_TACTICS.includes(value.minute60Tactic as NrlTactic)

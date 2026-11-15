@@ -1,9 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 import * as random from '@/lib/careerEngine';
 import {
-  createNrlCareer, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlOppositionReport, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
+  createNrlCareer, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport,
+  nrlRivalSquad, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { createNrlSeason, nrlNextRound, type NrlAttackPlan } from '@/lib/nrlManager';
+import { nrlScorePoints } from '@/lib/nrlPlayerScoring';
 
 const bytes = JSON.stringify;
 const open = (seed = 16) => createNrlCareer('broncos', seed);
@@ -100,6 +102,8 @@ describe('NRL match attack plans', () => {
     expect(nrlAttackPlanPreview(state)).toEqual({
       middle: { attack: 6, defense: -2 },
       wide: { attack: -4, defense: -2 },
+      wideLeft: { attack: -4, defense: -2 },
+      wideRight: { attack: -4, defense: -2 },
     });
     expect(nrlOppositionReport(plan(state, 'middle'))!.attackEdge - standard.attackEdge).toBeCloseTo(6);
     expect(nrlOppositionReport(plan(state, 'wide'))!.attackEdge - standard.attackEdge).toBeCloseTo(-4);
@@ -108,6 +112,91 @@ describe('NRL match attack plans', () => {
     expect(nrlAttackPlanPreview(incomplete)).toBeNull();
     expect(nrlOppositionReport(incomplete)?.matchups).toBeUndefined();
     expect(plan(incomplete, 'middle')).toBe(incomplete);
+    expect(plan(incomplete, 'wideLeft')).toBe(incomplete);
+    const half = startLive(incomplete);
+    expect(nrlLiveAttackPlans(half)).toEqual(['standard', 'counter']);
+    expect(reduceNrlCareer(half, { type: 'reachMinute60', year: 2026, round: 1, tactic: 'balanced', attackPlan: 'wideRight' })).toBe(half);
+  });
+
+  it.each([
+    [2026, 5, 'sharks', true, 1.899, -1.951, [34, 40, 34]],
+    [2027, 6, 'titans', false, -2.601, 1.789, [26, 20, 26]],
+  ] as const)('uses the opposing edge in the %s Storm fixture and keeps the other results byte-identical', (year, seed, opponent, home, left, right, scores) => {
+    const initial = createNrlCareer('storm', seed, year);
+    const before = bytes(initial);
+    const report = nrlOppositionReport(initial)!;
+    const rival = nrlRivalSquad(initial, opponent);
+    expect(report.opponentId).toBe(opponent);
+    expect(nrlNextRound(initial.season).clubMatch!.homeId === 'storm').toBe(home);
+    const preview = nrlAttackPlanPreview(initial)!;
+    expect(preview.wideLeft.attack).toBeCloseTo(left, 3);
+    expect(preview.wideRight.attack).toBeCloseTo(right, 3);
+    const options = ['wide', 'wideLeft', 'wideRight'] as const;
+    for (const [side, positions] of [
+      ['wideLeft', [['Left Wing', 'Right Wing'], ['Left Centre', 'Right Centre']]],
+      ['wideRight', [['Right Wing', 'Left Wing'], ['Right Centre', 'Left Centre']]],
+    ] as const) {
+      const matchup = report.matchups![side];
+      expect(matchup.positions.map(({ role, rivalRole }) => [role, rivalRole])).toEqual(positions);
+      for (const position of matchup.positions) {
+        expect(position.rival).toBe(rival.find(({ player }) => player.role === position.rivalRole)?.player.rating);
+      }
+    }
+    const baseline = advance(initial);
+    const outsiders = (state: NrlCareerState) => state.season.results.filter(match => match.homeId !== 'storm' && match.awayId !== 'storm');
+    for (const [index, choice] of options.entries()) {
+      const selected = plan(initial, choice);
+      expect(selected.season.attackPlan).toBe(choice);
+      expect(bytes(plan(selected, 'standard'))).toBe(before);
+      const selectedReport = nrlOppositionReport(selected)!;
+      expect(selectedReport.attackEdge - report.attackEdge).toBeCloseTo(preview[choice].attack, 10);
+      expect(selectedReport.defenseEdge - report.defenseEdge).toBeCloseTo(-2, 10);
+      const result = advance(readNrlCareerSave(bytes(selected))!);
+      const match = managed(result);
+      expect(result.season.attackPlan).toBeUndefined();
+      expect(home ? match.homeScore : match.awayScore).toBe(scores[index]);
+      expect(match.openingAttackPlan).toBe(choice === 'wide' ? undefined : choice);
+      expect(outsiders(result)).toStrictEqual(outsiders(baseline));
+      expect(bytes(readNrlCareerSave(bytes(result)))).toBe(bytes(result));
+      const foreign = outsiders(result)[0];
+      for (const [target, forged] of [[match, 'wide'], [foreign, 'wideLeft']] as const) {
+        const tampered = { ...result, season: { ...result.season, results: result.season.results.map(row =>
+          row === target ? { ...row, openingAttackPlan: forged } : row) } };
+        expect(readNrlCareerSave(bytes(tampered))).toBeNull();
+      }
+    }
+    expect(bytes(initial)).toBe(before);
+  });
+
+  it('keeps the completed periods and phase receipts when switching sides in a reloaded Live Match', () => {
+    const initial = createNrlCareer('storm', 5, 2026);
+    const action = { year: 2026, round: 1, tactic: 'balanced' } as const;
+    const half = startLive(plan(initial, 'wideLeft'));
+    expect(half.season.attackPlan).toBe('wideLeft');
+    expect(nrlLiveAttackPlans(half)).toEqual(['standard', 'middle', 'wide', 'wideLeft', 'wideRight', 'counter']);
+    expect(plan(half, 'wideRight')).toBe(half);
+    const fromHalf = { ...action, type: 'finishLive', attackPlan: 'wideRight' } as const;
+    const halfPreview = nrlLivePlanPreview(half, fromHalf)!;
+    expect(halfPreview.attackChange).toBeCloseTo(-3.85, 2);
+    expect(halfPreview.defenseChange).toBeCloseTo(0, 10);
+    const staged = reduceNrlCareer(readNrlCareerSave(bytes(half))!, { ...fromHalf, type: 'reachMinute60' });
+    expect(staged.season.live?.minute60?.attackPlan).toBe('wideRight');
+    expect(staged.season.live?.homeScoring).toEqual(half.season.live!.homeScoring);
+    expect(staged.season.live?.awayScoring).toEqual(half.season.live!.awayScoring);
+    const restored = readNrlCareerSave(bytes(staged))!;
+    expect(bytes(restored)).toBe(bytes(staged));
+    let finished = reduceNrlCareer(restored, { ...action, type: 'finishMinute60', attackPlan: 'wideLeft' });
+    if (finished.season.live?.goldenPoint) {
+      finished = reduceNrlCareer(readNrlCareerSave(bytes(finished))!,
+        { type: 'settleGoldenPoint', year: 2026, round: 1, clubId: 'storm', approach: 'standard' });
+    }
+    const match = managed(finished);
+    expect(match.openingAttackPlan).toBe('wideLeft');
+    expect(match.halftimeAttackPlan).toBe('wideRight');
+    expect(match.minute60AttackPlan).toBe('wideLeft');
+    expect(match.scorePeriods?.halfTime).toEqual([half.season.live!.homeScoring, half.season.live!.awayScoring].map(nrlScorePoints));
+    expect(match.scorePeriods?.at60).toEqual([staged.season.live!.minute60!.homeScoring, staged.season.live!.minute60!.awayScoring].map(nrlScorePoints));
+    expect(bytes(readNrlCareerSave(bytes(finished)))).toBe(bytes(finished));
   });
 
   it('reads the preview without draws or mutation and refuses legacy, bye, stale and forged selections', () => {
@@ -198,6 +287,7 @@ describe('NRL match attack plans', () => {
     expect(planned.season.attackPlan).toBe('counter');
     const pending = startLive(planned);
     expect(pending.season.live?.fixture.finalsRound).toBeDefined();
+    expect(nrlLiveAttackPlans(pending)).toEqual(expect.arrayContaining(['wideLeft', 'wideRight']));
     const liveBytes = bytes(pending);
     const reopened = readNrlCareerSave(liveBytes)!;
     expect(bytes(reopened)).toBe(liveBytes);

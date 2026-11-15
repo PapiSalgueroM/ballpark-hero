@@ -93,6 +93,8 @@ const attackPlanChoices: readonly { id: NrlAttackPlan; label: string }[] = [
   { id: 'standard', label: 'Standard' },
   { id: 'middle', label: 'Through the middle' },
   { id: 'wide', label: 'Shift wide' },
+  { id: 'wideLeft', label: 'Attack left' },
+  { id: 'wideRight', label: 'Attack right' },
   { id: 'counter', label: 'Counter opponent' },
 ];
 const attackPlanLabel = (plan: NrlAttackPlan) => attackPlanChoices.find(choice => choice.id === plan)?.label ?? 'Standard';
@@ -507,9 +509,9 @@ function AttackPlan({ career, onAction, disabled }: {
       </summary>
       {expanded && (preview || counter ? (
         <>
-          {preview && <p className="text-xs text-muted-foreground">Compare projected ratings for this match. The middle uses props, hooker and lock. Wide uses wings and centres. Either specialist plan leaves more room for the opposition.</p>}
+          {preview && <p className="text-xs text-muted-foreground">The middle uses props, hooker and lock. Shift wide uses both edges. Attack left and right match your wing and centre against the rival’s opposite edge. These plans cost 2 defence.</p>}
           {counter && <p className="mt-2 text-xs text-muted-foreground">Simulated opponent style: {opponentStyleLabel[counter.style]}. {counterPlanLabel[counter.style]}</p>}
-          <div className="mt-2 grid gap-2" role="group" aria-label="Match attack plan">
+          <div className="mt-2 grid gap-2 sm:grid-cols-2" role="group" aria-label="Match attack plan">
             {attackPlanChoices.map(({ id, label }) => {
               const adjustment = id === 'standard' ? null : id === 'counter' ? counter : preview?.[id];
               if (id !== 'standard' && !adjustment) return null;
@@ -631,10 +633,10 @@ function OppositionReport({ career }: { career: NrlCareerState }) {
               <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold">Positional matchups</summary>
               <p className="text-xs text-muted-foreground">Your rating includes fitness, position fit and automatic rotation. The rival rating is the highest signed OVR at that position.</p>
               <div className="mt-2 grid gap-3 sm:grid-cols-2">
-                {(['middle', 'wide'] as const).map(plan => {
+                {([['middle', 'Middle'], ['wide', 'Edges'], ['wideLeft', 'Left edge'], ['wideRight', 'Right edge']] as const).map(([plan, label]) => {
                   const { positions, gap } = matchups[plan];
                   return <table key={plan} className="w-full text-left text-xs sm:text-sm">
-                    <caption className="pb-1 text-left font-semibold">{plan === 'middle' ? 'Middle' : 'Edges'}</caption>
+                    <caption className="pb-1 text-left font-semibold">{label}</caption>
                     <thead className="text-muted-foreground">
                       <tr>
                         <th scope="col" className="py-1 pr-2 font-medium">Position</th>
@@ -643,8 +645,8 @@ function OppositionReport({ career }: { career: NrlCareerState }) {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-border">
-                      {positions.map(({ role, own, rival }) => <tr key={role}>
-                        <th scope="row" className="py-1 pr-2 font-medium">{role}</th>
+                      {positions.map(({ role, own, rival, rivalRole }) => <tr key={role}>
+                        <th scope="row" className="py-1 pr-2 font-medium">{role}{rivalRole && <span className="block text-muted-foreground">v {rivalRole}</span>}</th>
                         <td className="px-1 text-right tabular-nums">{matchupRating.format(own)}</td>
                         <td className="px-1 text-right tabular-nums">{matchupRating.format(rival)}</td>
                       </tr>)}
@@ -800,6 +802,9 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
       )}
       {match.halftimeTalk && <p className="mt-2 text-sm text-muted-foreground" data-nrl-halftime-talk>
         Half-time talk: {halftimeTalkLabels[match.halftimeTalk]}.
+      </p>}
+      {match.openingAttackPlan && <p className="mt-2 text-sm text-muted-foreground" data-nrl-opening-attack-plan>
+        Opening attack plan: {attackPlanLabel(match.openingAttackPlan)}.
       </p>}
       {match.halftimeAttackPlan && <p className="mt-2 text-sm text-muted-foreground" data-nrl-halftime-attack-plan>
         Half-time attack plan change: {attackPlanLabel(match.halftimeAttackPlan)}.
@@ -2776,6 +2781,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Leave the fourth interchange open to rotate three reserves early. In Quick Sim, choose a reserve to come on at 60 minutes when ahead or behind. The report shows whether they came on.</li>
               <li>At 60 minutes in Live, an unused reserve can cover their trained position if the slot is open.</li>
               <li>Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation. Positional matchups shows the ratings behind the middle and wide plans.</li>
+              <li>Choose Attack left or Attack right to use your wing and centre against the rival’s opposite side. Check both ratings in Positional matchups and look for the confirmed choices in the match report.</li>
               <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
               <li>In Finances, use Development priority to reserve one assistant rating award for an eligible player. They still need eight appearances.</li>
               <li>A Starting role promise is available to expiring generated players with two or fewer starts in their last six eligible matches. Start them at kickoff in four of their next six eligible matches to earn up to 7% off their renewal asking salary.</li>

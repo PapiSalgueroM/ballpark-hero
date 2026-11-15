@@ -52,7 +52,8 @@ it.each([
   const comparison = report.getByRole('table', { name: 'Attack plan comparison' });
   const rows = within(comparison).getAllByRole('row').slice(1);
   const choices = [
-    ['standard', 'Standard'], ['middle', 'Through the middle'], ['wide', 'Shift wide'], ['counter', 'Counter opponent'],
+    ['standard', 'Standard'], ['middle', 'Through the middle'], ['wide', 'Shift wide'],
+    ['wideLeft', 'Attack left'], ['wideRight', 'Attack right'], ['counter', 'Counter opponent'],
   ] as const;
   expect(rows).toHaveLength(choices.length);
   choices.forEach(([plan, label], index) => {

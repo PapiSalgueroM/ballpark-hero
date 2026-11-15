@@ -19,7 +19,7 @@ const raw = () => localStorage.getItem(NRL_SAVE_KEY);
 const page = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
 const click = (name: string | RegExp) => fireEvent.click(screen.getByRole('button', { name }));
 const openPlans = () => {
-  const summary = screen.getByText(/^Attack plan/);
+  const summary = screen.getByText(/^Attack plan(?:: .*)?$/);
   const details = summary.closest('details')!;
   details.open = true;
   fireEvent(details, new Event('toggle'));
@@ -40,7 +40,7 @@ it('shows both signed tradeoffs and preserves a match choice at a reloaded halft
   expect(raw()).toBe(baseline);
   let choices = openPlans();
   expect(choices.getAllByText(/Attack [+-]/).length).toBeGreaterThan(0);
-  expect(choices.getAllByText('Defence -2')).toHaveLength(2);
+  expect(choices.getAllByText('Defence -2')).toHaveLength(4);
   expect(raw()).toBe(baseline);
   click(/Through the middle/);
   expect(readNrlCareerSave(raw())!.season.attackPlan).toBe('middle');
@@ -61,6 +61,48 @@ it('shows both signed tradeoffs and preserves a match choice at a reloaded halft
   expect(screen.queryByRole('button', { name: /Through the middle/ })).toBeNull();
   click('Play second half');
   expect(readNrlCareerSave(raw())!.season).not.toHaveProperty('attackPlan');
+});
+
+it('compares opposite edges, resumes a saved side and reports every confirmed Live Match choice', () => {
+  const baseline = JSON.stringify(createNrlCareer('storm', 5, 2026));
+  localStorage.setItem(NRL_SAVE_KEY, baseline);
+  localStorage.setItem(fence, '6');
+  const first = page();
+  const opposition = screen.getByText('Opposition report');
+  const oppositionDetails = opposition.closest('details')!;
+  oppositionDetails.open = true;
+  fireEvent(oppositionDetails, new Event('toggle'));
+  const compare = within(oppositionDetails);
+  fireEvent.click(compare.getByText('Positional matchups'));
+  expect(within(compare.getByRole('table', { name: 'Left edge' })).getByText('v Right Wing')).toBeVisible();
+  expect(within(compare.getByRole('table', { name: 'Right edge' })).getByText('v Left Centre')).toBeVisible();
+  const choices = openPlans();
+  const left = choices.getByRole('button', { name: /Attack left/ });
+  expect(left).toHaveTextContent('Attack +1.9');
+  expect(choices.getByRole('button', { name: /Attack right/ })).toHaveTextContent('Attack -2');
+  expect(raw()).toBe(baseline);
+  fireEvent.click(left);
+  click('Play Live');
+  const half = screen.getByRole('combobox', { name: 'Second-half attack plan' });
+  expect(half).toHaveValue('wideLeft');
+  const firstHalf = screen.getByRole('list', { name: 'First-half score' }).textContent;
+  fireEvent.change(half, { target: { value: 'wideRight' } });
+  expect(screen.getByRole('list', { name: 'First-half score' }).textContent).toBe(firstHalf);
+  click('Play to 60 minutes');
+  const saved = raw();
+  const at60 = screen.getByRole('list', { name: 'Score after 60 minutes' }).textContent;
+  first.unmount();
+  page();
+  const closing = screen.getByRole('combobox', { name: 'Closing attack plan' });
+  expect(closing).toHaveValue('wideRight');
+  fireEvent.change(closing, { target: { value: 'wideLeft' } });
+  expect(raw()).toBe(saved);
+  expect(screen.getByRole('list', { name: 'Score after 60 minutes' }).textContent).toBe(at60);
+  click('Play final 20 minutes');
+  const full = within(screen.getByRole('region', { name: 'Full time' }));
+  expect(full.getByText('Opening attack plan: Attack left.')).toBeVisible();
+  expect(full.getByText('Half-time attack plan change: Attack right.')).toBeVisible();
+  expect(full.getByText('60-minute attack plan change: Attack left.')).toBeVisible();
 });
 
 it('shows the simulated read, carries the counter plan forward when the closing selection stays the same and records it at full time', () => {
