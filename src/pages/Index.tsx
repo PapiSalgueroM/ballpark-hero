@@ -72,7 +72,16 @@ const NRL_GAME_LINK = 'a[data-home-nrl-launch]';
 const POPULAR_GAME_LINK = 'a[data-home-popular-game]';
 const RECENT_GAME_LINK = '[data-home-shipped] [data-home-game-card] a[href]';
 const HOME_GAME_SHELVES = [CATALOGUE_GAME_LINK, CONTINUE_GAME_LINK, PICK_GAME_LINK, FEATURED_GAME_LINK, NRL_GAME_LINK, POPULAR_GAME_LINK, RECENT_GAME_LINK];
-type GameReturn = { query: string; sport?: SportKey | ''; path: string; selector: string; shelfScroll?: number };
+const SPORT_PREVIEW_GAMES = 12;
+type GameReturn = {
+  query: string;
+  sport?: SportKey | '';
+  path: string;
+  selector: string;
+  shelfScroll?: number;
+  expandedSports: SportKey[];
+  catalogueSport?: SportKey;
+};
 const gameReturns = new Map<string, GameReturn>();
 const BROWSE_SPORTS_TRIGGER = 'home-browse-sports-trigger';
 const sportReturns = new Map<string, { top: number; opener: string }>();
@@ -142,6 +151,7 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState(gameReturn?.query ?? '');
   const [searchSport, setSearchSport] = useState<SportKey | ''>(gameReturn?.sport ?? '');
   const [sportsOpen, setSportsOpen] = useState(false);
+  const [expandedSports, setExpandedSports] = useState<SportKey[]>(gameReturn?.expandedSports ?? []);
   const deferredQuery = useDeferredValue(searchQuery);
   const searchInputRef = useRef<HTMLInputElement>(null);
   const searchSportRef = useRef<HTMLSelectElement>(null);
@@ -232,8 +242,12 @@ export default function Index() {
     const shelf = link.closest<HTMLElement>('[data-home-shelf-rail]');
     const selector = selectors.find(selector => link.matches(selector));
     if (!selector) return;
+    const catalogueSport = selector === CATALOGUE_GAME_LINK && link.closest('section[data-sport]') ? sportOf(path) : undefined;
     gameReturns.delete(homeEntry);
-    gameReturns.set(homeEntry, { query: fromSearch ? searchQuery : '', sport: fromSearch ? searchSport : undefined, path, selector, shelfScroll: shelf?.scrollLeft });
+    gameReturns.set(homeEntry, {
+      query: fromSearch ? searchQuery : '', sport: fromSearch ? searchSport : undefined, path, selector,
+      shelfScroll: shelf?.scrollLeft, expandedSports, catalogueSport,
+    });
     // Keep the tab's recent history without putting search text into storage or the URL.
     if (gameReturns.size > 20) gameReturns.delete(gameReturns.keys().next().value);
   };
@@ -242,7 +256,8 @@ export default function Index() {
     if (!opener || (isSearching && !querySettled && !searchFailed)) return;
     pendingGameReturn.current = undefined;
     if (opener.selector === POPULAR_GAME_LINK || document.activeElement !== document.body) return;
-    const scope = isSearching ? searchResultsRef.current : catalogueRef.current;
+    const scope = isSearching ? searchResultsRef.current : opener.catalogueSport
+      ? catalogueRef.current?.querySelector(`section[data-sport="${opener.catalogueSport}"]`) : catalogueRef.current;
     const result = Array.from(scope?.querySelectorAll<HTMLAnchorElement>(opener.selector) ?? [])
       .find(link => link.getAttribute('href') === opener.path);
     const shelf = result?.closest<HTMLElement>('[data-home-shelf-rail]');
@@ -441,8 +456,13 @@ export default function Index() {
           </div>
         </section>
         <div data-home-sport-catalogue className="min-w-0 space-y-7 lg:space-y-9">
-          {sportSections.map(cat => (
-            <section key={cat.title} data-sport={CATEGORY_SPORT[cat.title]}>
+          {sportSections.map(cat => {
+            const sport = CATEGORY_SPORT[cat.title];
+            const extraGames = cat.games.slice(SPORT_PREVIEW_GAMES);
+            const expanded = expandedSports.includes(sport);
+            const moreId = `home-more-${sport}`;
+            return (
+            <section key={cat.title} data-sport={sport}>
               {/* Round 658: the sport's drawn glyph in its own ink leads
                   every section, so the colour on the cards below always
                   has a shape and a name beside it. */}
@@ -474,16 +494,37 @@ export default function Index() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3" data-home-catalogue="">
-                {cat.games.map(game => (
+                {cat.games.slice(0, SPORT_PREVIEW_GAMES).map(game => (
                   <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
                 ))}
               </div>
+              {extraGames.length > 0 && (
+                <>
+                  <button type="button" aria-expanded={expanded} aria-controls={moreId}
+                    aria-label={expanded ? `Show fewer ${browseSportName(sport)} games` : `Show ${extraGames.length} more ${browseSportName(sport)} games`}
+                    onClick={() => setExpandedSports(current => current.includes(sport) ? current.filter(item => item !== sport) : [...current, sport])}
+                    className="mt-2 flex min-h-11 w-full items-center justify-between gap-3 rounded-lg border border-border bg-surface-1 px-3 text-left text-sm font-semibold text-primary hover:bg-surface-2 focus-visible:outline-primary">
+                    {expanded ? 'Show fewer games' : `Show ${extraGames.length} more games`}
+                    <ChevronDown aria-hidden="true" className={expanded ? 'h-4 w-4 shrink-0 rotate-180' : 'h-4 w-4 shrink-0'} />
+                  </button>
+                  <div id={moreId}>
+                    {expanded && (
+                      <div className="mt-2 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3" data-home-catalogue="">
+                        {extraGames.map(game => (
+                          <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
             </section>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>
-  ), [badgeDate, bestScores, favSport, gamePicks, jumpToSport, pickSport, pickableSports, popularReturnPath, sportSections, toggleGamePick, user]);
+  ), [badgeDate, bestScores, expandedSports, favSport, gamePicks, jumpToSport, pickSport, pickableSports, popularReturnPath, sportSections, toggleGamePick, user]);
 
   return (
     <>

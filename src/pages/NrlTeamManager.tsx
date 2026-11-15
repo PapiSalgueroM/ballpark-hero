@@ -2574,6 +2574,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>In Ladder, open Scout a club to shortlist eligible rivals and take them straight to Recruitment.</li>
               <li>Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.</li>
               <li>Before arranging an offseason move, keep another player signed at the same position for next season.</li>
+              <li>In Contracts, spend $25,000 from club cash to hold one expiring player’s one-year asking salary. Sign before the next season starts if a squad place and cap room are still available. The fee stays spent if the hold expires.</li>
               <li>You can end a pending selection promise in Contracts. This gives up its renewal discount and uses your one promise for that season.</li>
               <li>Choose a vice-captain in Squad to keep the one-point defence bonus when the club captain is off the field and the vice-captain is on.</li>
               <li>When you start a new State of Origin series, Past Origin series keeps the previous winner and all three scores.</li>

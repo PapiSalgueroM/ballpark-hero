@@ -23,7 +23,7 @@ const titles = {
   baseline: 'keeps the original Search result link and arrow-key launch flow with no picks',
 };
 const controls = {
-  browse: { file: 'src/pages/Index.tsx', from: '<a href="#browse-sports" className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground', to: '<a href="#main-content" className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground', test: titles.browse },
+  browse: { file: 'src/pages/Index.tsx', from: 'href="#browse-sports" onClick={jumpToSport}', to: 'href="#main-content" onClick={jumpToSport}', test: titles.browse },
   pin: { file: button, from: 'onClick={() => onToggle(game.path)}', to: 'onClick={() => {}}', test: titles.pin },
   persist: { file: hook, from: 'window.localStorage.setItem(GAME_PICKS_KEY, JSON.stringify(paths));', to: 'void paths;', test: titles.pin },
   restore: { file: hook, from: 'return storedPicks(window.localStorage.getItem(GAME_PICKS_KEY));', to: 'return { paths: [], storageFailed: false };', test: titles.restore },
