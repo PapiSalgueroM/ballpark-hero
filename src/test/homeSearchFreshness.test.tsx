@@ -48,6 +48,34 @@ function home() {
   return { main, field, change, release: () => { state.heldQuery = undefined; view.rerender(tree()); } };
 }
 
+it('keeps every sport jump and saves the order through one labelled control', () => {
+  const { main } = home();
+  const catalogue = within(main).getByRole('navigation', { name: 'Browse sports' });
+  const links = within(catalogue).getAllByRole('link');
+  const order = within(catalogue).getByRole<HTMLSelectElement>('combobox', { name: 'Show first' });
+  expect(links).toHaveLength(VISIBLE_CATEGORIES.length);
+  expect(within(catalogue).queryAllByRole('button')).toHaveLength(0);
+  expect([...order.options].map(option => option.value)).toEqual(['', ...links.map(link => link.getAttribute('href')?.replace('#sport-', ''))]);
+  expect(order).toHaveDisplayValue('Default order');
+  const firstSport = () => screen.getByRole('main').querySelector('section[data-sport]')?.getAttribute('data-sport');
+  expect(firstSport()).toBe('soccer');
+
+  order.focus();
+  fireEvent.change(order, { target: { value: 'hockey' } });
+  expect(order).toHaveFocus();
+  expect(firstSport()).toBe('hockey');
+  expect(localStorage.getItem('dukb-fav-sport')).toBe('hockey');
+
+  cleanup();
+  home();
+  const restored = screen.getByRole('combobox', { name: 'Show first' });
+  expect(restored).toHaveValue('hockey');
+  expect(firstSport()).toBe('hockey');
+  fireEvent.change(restored, { target: { value: '' } });
+  expect(firstSport()).toBe('soccer');
+  expect(localStorage.getItem('dukb-fav-sport')).toBeNull();
+});
+
 it('holds the old results in place without exposing old links or pin controls during rapid input', async () => {
   const { main, field, change, release } = home();
   change('Soccer Career');

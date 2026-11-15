@@ -52,7 +52,7 @@
  *   8 favsport  The favourite sport moves exactly its own section to the
  *               front and leaves the rest in registry order, no pick is
  *               registry order, a stored value that is not a sport reads as no
- *               pick, and the chips render one pressed button for the pick.
+ *               pick, and one labelled control displays the pick or Default order.
  *
  * NEGATIVE CONTROLS, HOME_FRONT_CONTROL=<name>. Each rewrites one input in
  * memory, refuses to run if the rewrite changed nothing, and must turn ONLY
@@ -873,15 +873,18 @@ console.log('8) the favourite sport moves its own section first and nothing else
   if (readFavouriteSport(null) !== null) fail(8, 'no storage does not read as no pick');
   const html = front.renderFav(sports, 'hockey');
   const jumps = [...html.matchAll(/<a href="#sport-([^"]+)"/g)].map(match => match[1]);
-  const buttons = [...html.matchAll(/<button ([^>]*)>/g)].map(m => m[1]);
-  const pressed = buttons.filter(a => /aria-pressed="true"/.test(a));
+  const readOptions = markup => [...(markup.match(/<label[^>]*><span[^>]*>Show first<\/span><select[^>]*>([\s\S]*?)<\/select><\/label>/)?.[1] ?? '')
+    .matchAll(/<option value="([^"]*)"([^>]*)>([^<]+)<\/option>/g)]
+    .map(([, value, attributes, label]) => ({ value, label, selected: /\bselected=""/.test(attributes) }));
+  const options = readOptions(html);
+  const selected = options.filter(option => option.selected).map(option => option.value);
   if (JSON.stringify(jumps) !== JSON.stringify(sports)) fail(8, 'the catalogue does not link to each sport in index order');
-  if (buttons.length !== sports.length) fail(8, `${buttons.length} chips for ${sports.length} sports`);
-  if (buttons.some(a => !/type="button"/.test(a))) fail(8, 'a chip is not a plain button');
-  if (buttons.some(a => !/aria-label="Show [^"]+ first"/.test(a))) fail(8, 'a star is missing its accessible label');
-  if (pressed.length !== 1 || !/data-fav-sport="hockey"/.test(pressed[0])) fail(8, `with hockey picked ${pressed.length} chip(s) read pressed`);
-  if (/aria-pressed="true"/.test(front.renderFav(sports, null))) fail(8, 'a chip reads pressed with no pick');
-  if (!failedSections.has(8)) console.log(`   ${sports.length} sports, each moves only its own section first, 8 bad stored values read as no pick, one pressed chip`);
+  if ((html.match(/<select\b/g) ?? []).length !== 1 || /<button\b/.test(html)) fail(8, 'the index needs one shared order control');
+  if (options[0]?.label !== 'Default order' || JSON.stringify(options.map(option => option.value)) !== JSON.stringify(['', ...sports])) fail(8, 'the labelled order control does not offer Default order and every sport in index order');
+  if (selected.length !== 1 || selected[0] !== 'hockey') fail(8, `with hockey picked the control reads ${JSON.stringify(selected)}`);
+  const defaults = readOptions(front.renderFav(sports, null)).filter(option => option.selected).map(option => option.value);
+  if (defaults.length !== 1 || defaults[0] !== '') fail(8, 'the control does not show Default order with no pick');
+  if (!failedSections.has(8)) console.log(`   ${sports.length} sport links, each pick moves only its own section first, 8 bad stored values read as no pick, one labelled order control`);
 }
 
 /* ── the verdict ──────────────────────────────────────────────────────── */

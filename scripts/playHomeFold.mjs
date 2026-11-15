@@ -403,7 +403,7 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
   };
   const WANT_LINES = { '/club-manager?slot=1': 'Slot 1 · Planted FC, season 3', '/soccer-career': 'Planted Town, age 24' };
 
-  const visit = async ({ saves = false, fav = null, click = null }) => {
+  const visit = async ({ saves = false, fav = null, choose = null }) => {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
     const page = await ctx.newPage();
     await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
@@ -433,21 +433,21 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
     await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForFunction(() => (document.body?.innerText ?? '').trim().length > 200, { timeout: 20000 }).catch(() => {});
     await page.waitForTimeout(2000);
-    let clicked = null;
-    if (click) {
-      /* element.click(), never page.click(): Playwright scrolls before it
-         clicks, and whether the PAGE moves on a tap is what is measured */
-      clicked = await page.evaluate(async sport => {
+    let chosen = null;
+    if (choose) {
+      // Measure order updates without Playwright scrolling to the control first.
+      chosen = await page.evaluate(async sport => {
         const row = document.querySelector('[data-home-fav-sport]');
-        const btn = document.querySelector(`[data-fav-sport="${sport}"]`);
-        if (!row || !btn) return null;
+        const select = row?.querySelector('select');
+        if (!row || !select) return null;
         const before = { y: window.scrollY, top: row.getBoundingClientRect().top + window.scrollY };
-        btn.click();
+        select.value = sport;
+        select.dispatchEvent(new Event('change', { bubbles: true }));
         await new Promise(r => setTimeout(r, 400));
         let stored = null;
         try { stored = localStorage.getItem('dukb-fav-sport'); } catch { /* blocked */ }
         return { before, after: { y: window.scrollY, top: row.getBoundingClientRect().top + window.scrollY }, stored };
-      }, click);
+      }, choose);
     }
     const r = await page.evaluate(nonGameSrc => {
       const NON_GAME = new RegExp(nonGameSrc);
@@ -462,9 +462,11 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
         const b = a.getBoundingClientRect();
         return { p: a.getAttribute('href'), line: (a.querySelector('[data-continue-line]')?.textContent || '').trim(), h: b.height, w: b.width };
       }) : [];
-      const chips = [...document.querySelectorAll('[data-fav-sport]')].map(b => {
-        const r = b.getBoundingClientRect();
-        return { s: b.getAttribute('data-fav-sport'), pressed: b.getAttribute('aria-pressed') === 'true', h: r.height, w: r.width };
+      const browse = document.querySelector('[data-home-fav-sport]');
+      const order = browse?.querySelector('select');
+      const controls = [...(browse?.querySelectorAll('a, select, button') ?? [])].map(control => {
+        const r = control.getBoundingClientRect();
+        return { name: control.textContent?.trim(), h: r.height, w: r.width };
       });
       return {
         first,
@@ -472,13 +474,15 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
         rowTop: row ? row.getBoundingClientRect().top + window.scrollY : null,
         rowBottom: row ? row.getBoundingClientRect().bottom + window.scrollY : null,
         cards,
-        chips,
+        controls,
+        links: browse?.querySelectorAll('a').length ?? 0,
+        order: order?.value ?? null,
         firstSport: document.querySelector('section[data-sport]')?.getAttribute('data-sport') ?? null,
         pageWide: document.documentElement.scrollWidth,
       };
     }, NON_GAME.source);
     await ctx.close();
-    return { ...r, clicked };
+    return { ...r, chosen };
   };
 
   if (SAVES.length < 15) say(false, `only ${SAVES.length} saves read from src/data/continueSaves.ts, so this planted almost nothing`);
@@ -495,24 +499,24 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
     `[6b] the row sits before the stage (stage starts y=${Math.round(planted.stageTop ?? -1)}, row ends y=${Math.round(planted.rowBottom ?? -1)}) with ${planted.cards.length} of ${SAVES.length} cards in list order`);
   const lines = Object.entries(WANT_LINES).map(([p, want]) => ({ p, want, got: planted.cards.find(c => c.p === p)?.line ?? null }));
   say(lines.every(l => l.got === l.want), `[6c] the cards read the saves: ${lines.map(l => `${l.p} "${l.got}"`).join(', ')}`);
-  const small = [...planted.cards.map(c => ({ what: c.p, h: c.h, w: c.w })), ...planted.chips.map(c => ({ what: `chip ${c.s}`, h: c.h, w: c.w }))]
-    .filter(x => x.h < 32 || x.w < 32);
-  say(planted.chips.length >= 10 && small.length === 0 && planted.pageWide <= 390,
-    `[6d] ${planted.cards.length} cards and ${planted.chips.length} chips, none under 32px (${small.map(s => s.what).join(', ') || 'none'}), page ${planted.pageWide}px wide`);
+  const small = [...planted.cards.filter(c => c.h < 32 || c.w < 32).map(c => c.p),
+    ...planted.controls.filter(c => c.h < 44 || c.w < 44).map(c => c.name)];
+  say(planted.links >= 10 && planted.controls.length === planted.links + 1 && planted.order !== null && small.length === 0 && planted.pageWide <= 390,
+    `[6d] ${planted.cards.length} cards at least 32px, ${planted.links} sport links and one order control at least 44px (${small.join(', ') || 'none undersize'}), page ${planted.pageWide}px wide`);
   const hockey = await visit({ fav: 'hockey' });
-  say(fresh.firstSport === 'soccer' && hockey.firstSport === 'hockey' && hockey.chips.filter(c => c.pressed).map(c => c.s).join() === 'hockey',
-    `[6e] a stored hockey pick leads the sport sections (first section: fresh ${fresh.firstSport}, picked ${hockey.firstSport}) and its chip reads pressed`);
+  say(fresh.firstSport === 'soccer' && hockey.firstSport === 'hockey' && hockey.order === 'hockey',
+    `[6e] a stored hockey pick leads the sport sections (first section: fresh ${fresh.firstSport}, picked ${hockey.firstSport}) and the order control shows hockey`);
   const junk = await visit({ fav: 'banana' });
-  say(junk.firstSport === 'soccer' && junk.chips.every(c => !c.pressed), `[6f] a stored value that is not a sport is ignored (first section ${junk.firstSport})`);
-  const tapped = await visit({ click: 'golf' });
-  const c = tapped.clicked;
-  say(!!c && tapped.firstSport === 'golf' && c.stored === 'golf' && c.before.y === c.after.y && Math.abs(c.before.top - c.after.top) <= 1,
-    `[6g] tapping Golf moves golf first (${tapped.firstSport}), remembers it (${c?.stored}), and the page does not move (scroll ${c?.before.y} to ${c?.after.y}, chips at ${Math.round(c?.before.top ?? -1)} to ${Math.round(c?.after.top ?? -1)})`);
+  say(junk.firstSport === 'soccer' && junk.order === '', `[6f] an invalid stored value leaves the default order (first section ${junk.firstSport})`);
+  const picked = await visit({ choose: 'golf' });
+  const c = picked.chosen;
+  say(!!c && picked.firstSport === 'golf' && c.stored === 'golf' && c.before.y === c.after.y && Math.abs(c.before.top - c.after.top) <= 1,
+    `[6g] choosing Golf moves golf first (${picked.firstSport}), remembers it (${c?.stored}), and holds scroll (scroll ${c?.before.y} to ${c?.after.y}, sport index at ${Math.round(c?.before.top ?? -1)} to ${Math.round(c?.after.top ?? -1)})`);
 }
 
 console.log('7) a direct Browse sports link reaches the catalogue after Home loads');
 for (const width of [320, 390, 430, 1440]) {
-  const ctx = await browser.newContext({ viewport: { width, height: width < 768 ? 844 : 900 } });
+  const ctx = await browser.newContext({ viewport: { width, height: 844 } });
   try {
     const page = await ctx.newPage();
     await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
@@ -535,13 +539,16 @@ for (const width of [320, 390, 430, 1440]) {
       const firstGame = document.querySelector('section[data-sport] [data-catalog-card] a[href]');
       const card = firstGame?.getBoundingClientRect();
       const indexBox = index?.firstElementChild?.getBoundingClientRect();
+      const order = index?.querySelector('select')?.getBoundingClientRect();
       const summary = firstGame?.querySelector('.home-tile-summary');
       const lines = summary ? summary.getBoundingClientRect().height / parseFloat(getComputedStyle(summary).lineHeight) : 0;
-      return card && indexBox ? { cardTop: Math.round(card.top), beside: card.left >= indexBox.right, indexTop: Math.round(indexBox.top), lines } : null;
+      const orderInView = !!order && !!indexBox && order.top >= Math.max(indexBox.top, 0) && order.bottom <= Math.min(indexBox.bottom, innerHeight);
+      return card && indexBox ? { cardTop: Math.round(card.top), beside: card.left >= indexBox.right, indexTop: Math.round(indexBox.top), lines, orderInView } : null;
     });
-    say(Boolean(catalogue && catalogue.cardTop < (width < 768 ? 844 : 900)
+    say(Boolean(catalogue && catalogue.cardTop < 844
       && (width < 768 ? !catalogue.beside : catalogue.beside && catalogue.cardTop - catalogue.indexTop < 100)),
     width + 'px Browse sports shows its first catalogue game on screen at y=' + (catalogue?.cardTop ?? 'missing'));
+    say(Boolean(catalogue?.orderInView), width + 'px the order control is fully visible without scrolling the sport list');
     say(Boolean(catalogue && catalogue.lines >= 0.9 && catalogue.lines <= (width < 640 ? 1.1 : 2.1)),
       width + 'px catalogue shows a compact game description (' + (catalogue?.lines ?? 0).toFixed(2) + ' lines)');
   } finally {
