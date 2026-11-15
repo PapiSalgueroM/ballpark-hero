@@ -500,7 +500,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Avoiding costly out of position picks",
         items: [
-          "Out of position picks lose 8 rating, so a misplaced superstar can be worse than a natural fit.",
+          "Out of position, a player's rating uses one third of their market value, rounded to the nearest million with a minimum of one million. The offer shows that rating.",
         ],
       },
     ],
