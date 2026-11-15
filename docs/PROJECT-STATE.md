@@ -1,3 +1,10 @@
+## 2026-11-15: Midseason rugby finances, roster depth and account recovery
+
+- NRL Team Manager opens a one-time ticket price review in Round 14. Compare projected remaining home gates before confirming. New prices start in Round 14 and enter the saved season review.
+- MLB Front Office counts missing contributors at replacement level. Sending away an eligible player cannot raise the team's strength by shrinking its rotation or lineup.
+- Admin Reports confirms a saved priority when the report leaves the active priority filter. Keyboard focus returns to that filter when the removed control had focus.
+- A signed-in player can open My Profile if the account menu fails to load. The Home workflow verifies the Build Your XI draft storage key with actual saved progress and a wrong-key control.
+
 ## 2026-11-15: Opening lineups, Home resume and saved pitching decisions
 
 [PR #983](https://github.com/PapiSalgueroM/ballpark-hero/pull/983) published exact main `c8d251e642b909f6f018af88cbd76d9f7a61c549`, deployment `d28b7fc6-36f9-4ef3-84b9-a63aae9a47ae`, canonical entry `/assets/index-DY-iYJnB.js`. All ten live browser checks, all 174 sitemap routes, seven policy and crawler endpoints, both admin noindex tags and both updated manager guides passed. IndexNow accepted both guides. Hosted application types and build, the career entry guide workflow, 130 integrated tests, 18 site checks, 16 download limits and the Home fold sweep passed. The hosted Home workflow flagged the unregistered XI draft storage key. The next round registers the key and exercises both valid saves and the wrong-key control.
