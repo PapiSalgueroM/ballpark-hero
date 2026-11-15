@@ -633,6 +633,46 @@ for (const width of [320, 390, 430, 1440]) {
   }
 }
 
+console.log('10) long sport lists preview games and restore the opened game on Back');
+for (const width of [320, 390, 430, 1440]) {
+  const ctx = await browser.newContext({ viewport: { width, height: 844 }, reducedMotion: 'reduce' });
+  try {
+    const page = await ctx.newPage();
+    await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
+    await page.addInitScript(() => localStorage.setItem('cookie-consent', 'essential'));
+    await page.goto(BASE + '/#sport-soccer', { waitUntil: 'domcontentloaded' });
+    const sport = page.locator('section[data-sport="soccer"]');
+    const cards = sport.locator('[data-catalog-card] a');
+    const open = sport.getByRole('button', { name: /^Show \d+ more Soccer games$/ });
+    await sport.waitFor();
+    if (!await open.count()) {
+      say(false, width + 'px Soccer shows a short preview with a disclosure');
+      continue;
+    }
+    const total = Number((await sport.getByRole('heading', { level: 2 }).textContent()).match(/\((\d+) games\)/)?.[1]);
+    say(await cards.count() === 12 && await open.getAttribute('aria-expanded') === 'false', width + 'px Soccer shows 12 games first');
+    await open.scrollIntoViewIfNeeded();
+    const before = await open.boundingBox();
+    await open.press('Enter');
+    const close = sport.getByRole('button', { name: 'Show fewer Soccer games' });
+    const after = await close.boundingBox();
+    say(await cards.count() === total && before && after && Math.abs(before.y - after.y) <= 2 && after.height >= 44,
+      width + 'px full Soccer list opens without moving its control');
+    const footle = sport.locator('[data-catalog-card] a[href="/footle"]');
+    await footle.click();
+    await page.waitForURL('**/footle');
+    await page.goBack();
+    const focusReturned = await footle.evaluate(link => document.activeElement === link);
+    say(focusReturned && await cards.count() === total && await close.getAttribute('aria-expanded') === 'true',
+      width + 'px Back restores the expanded list and exact game focus');
+    await close.click();
+    say(await cards.count() === 12 && await open.evaluate(button => button === document.activeElement),
+      width + 'px the list folds and focus stays on its control');
+  } finally {
+    await ctx.close();
+  }
+}
+
 await browser.close();
 
 console.log('');

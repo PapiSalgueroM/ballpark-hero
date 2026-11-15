@@ -3,7 +3,7 @@ import { useSyncExternalStore } from 'react';
 import { Link, MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import Index from '@/pages/Index';
-import { ALL_GAMES } from '@/data/gameRegistry';
+import { ALL_GAMES, VISIBLE_CATEGORIES } from '@/data/gameRegistry';
 import type { useMostPlayed } from '@/hooks/useMostPlayed';
 
 const state = vi.hoisted(() => ({
@@ -246,6 +246,36 @@ it('returns keyboard focus to the catalogue tile that opened a game', () => {
   expect(card()).toHaveFocus();
   expect(screen.getByRole('textbox', { name: 'Search games' })).toHaveValue('');
   expect(screen.getByRole('status', { name: 'Search results' })).toBeEmptyDOMElement();
+});
+
+it.each(['/footle', '/stadium-tycoon'])('expands the full sport catalogue and restores it when returning from %s', (path) => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  function Game() {
+    const navigate = useNavigate();
+    return <button onClick={() => navigate(-1)}>Go back</button>;
+  }
+  const { container } = render(<MemoryRouter initialEntries={[{ pathname: '/', key: 'catalogue-' + path }]}><Routes>
+    <Route path="/" element={<Index />} />
+    <Route path={path} element={<Game />} />
+  </Routes></MemoryRouter>);
+  const sport = () => container.querySelector<HTMLElement>('section[data-sport="soccer"]')!;
+  const cards = () => Array.from(sport().querySelectorAll<HTMLAnchorElement>('[data-catalog-card] a[href]'));
+  const openingCard = () => cards().find(card => card.getAttribute('href') === path);
+  const gamePaths = VISIBLE_CATEGORIES.find(category => category.title === 'Soccer')!.games.map(game => game.path);
+  expect(cards().map(card => card.getAttribute('href'))).toEqual(gamePaths.slice(0, 12));
+  const showMore = within(sport()).getByRole('button', { name: /^Show \d+ more Soccer games$/ });
+  expect(showMore).toHaveAttribute('aria-expanded', 'false');
+  fireEvent.click(showMore);
+  expect(showMore).toHaveAttribute('aria-expanded', 'true');
+  expect(cards().map(card => card.getAttribute('href'))).toEqual(gamePaths);
+  const opener = openingCard()!;
+  opener.focus();
+  fireEvent.click(opener);
+  fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
+  expect(openingCard()).toHaveFocus();
+  expect(within(sport()).getByRole('button', { name: 'Show fewer Soccer games' })).toHaveAttribute('aria-expanded', 'true');
+  fireEvent.click(within(sport()).getByRole('button', { name: 'Show fewer Soccer games' }));
+  expect(cards()).toHaveLength(12);
 });
 
 it('opens the settled best match with Enter and reaches it with ArrowDown', async () => {

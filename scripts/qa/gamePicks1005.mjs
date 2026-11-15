@@ -134,9 +134,11 @@ try {
     const shelf = page.locator('[data-home-picks]');
     const stored = () => page.evaluate(key => localStorage.getItem(key), KEY);
     const held = () => page.evaluate(keys => keys.map(key => [key, localStorage.getItem(key)]), Object.keys(HELD));
+    const showSoccerGames = () => activate(page.getByRole('button', { name: /^Show \d+ more Soccer games$/ }), input);
     const shoot = async label => { await settle(page); const file = `${id}-${label}.png`; await page.screenshot({ path: path.join(OUT, file), animations: 'disabled' }); result.screenshots.push(file); result.layouts.push(await layout(page, label)); };
     try {
       await page.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
+      await showSoccerGames();
       const homePin = page.locator('button[data-game-pick="/footle"]').last();
       await homePin.waitFor(); await homePin.scrollIntoViewIfNeeded(); await settle(page);
       assert((await page.evaluate(() => scrollY)) > height, 'First Home pin is exercised deep in the catalog');
@@ -244,6 +246,7 @@ try {
         await activate(peerUnpin, input);
         await page.waitForFunction(() => !document.querySelector('[data-home-picks] a[data-game-pick-link="/footle"]'));
         await links(shelf, ['/nhl-connections'], 'other-tab-removal');
+        await showSoccerGames();
         assert.equal(await page.locator('button[data-game-pick="/footle"]').last().getAttribute('aria-label'), 'Pin Footle');
       } finally { await peer.close(); }
       await page.reload({ waitUntil: 'domcontentloaded' }); await shelf.waitFor();

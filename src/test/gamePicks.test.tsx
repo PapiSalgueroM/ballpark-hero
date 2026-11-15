@@ -42,6 +42,7 @@ async function mount(path = '/') {
 }
 type View = Awaited<ReturnType<typeof mount>>;
 const pin = (view: View, name: string) => view.getByRole('button', { name: 'Pin ' + name });
+const showSoccerGames = (view: View) => fireEvent.click(view.getByRole('button', { name: /^Show \d+ more Soccer games$/ }));
 const shelf = (view: View) => view.container.querySelector<HTMLElement>('[data-home-picks]')!;
 const shelfLinks = (view: View) => Array.from(shelf(view)?.querySelectorAll<HTMLAnchorElement>('a[data-game-pick-link]') ?? []).map(link => ({ path: link.getAttribute('href'), name: link.textContent?.trim() }));
 const saved = () => JSON.parse(localStorage.getItem(KEY) || '[]') as string[];
@@ -65,7 +66,9 @@ afterEach(() => {
 describe('browser-local game picks', () => {
   it('pins Footle from Home without opening a game or touching saves and scores', async () => {
     expect(GAME_PICKS_KEY).toBe(KEY);
-    const view = await mount(), before = protectedBytes(), control = pin(view, 'Footle');
+    const view = await mount(), before = protectedBytes();
+    showSoccerGames(view);
+    const control = pin(view, 'Footle');
     expect(control.closest('a'), 'Pinning has a separate button from the launch link').toBeNull();
     expect(control).toHaveAttribute('aria-pressed', 'false');
     fireEvent.click(control);
@@ -115,6 +118,7 @@ describe('browser-local game picks', () => {
     fireEvent.click(within(shelf(view)).getByRole('button', { name: 'Unpin Footle' }));
     expect(saved()).toEqual(['/nhl-connections']);
     expect(shelfLinks(view).map(link => link.path)).toEqual(['/nhl-connections']);
+    showSoccerGames(view);
     expect(pin(view, 'Footle')).toHaveAttribute('aria-pressed', 'false');
     view.unmount(); const again = await mount();
     expect(shelfLinks(again).map(link => link.path)).toEqual(['/nhl-connections']);
@@ -148,6 +152,7 @@ describe('browser-local game picks', () => {
     vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function(this: Storage, key, value) {
       if (key === KEY) throw new Error('Fixture quota'); realSet.call(this, key, value);
     });
+    showSoccerGames(home);
     fireEvent.click(pin(home, 'Footle'));
     expect(shelfLinks(home).map(link => link.path)).toEqual(['/footle']);
     expect(home.queryByText(warning) !== null, 'Failed writes show the visit-only warning').toBe(true);
@@ -173,6 +178,7 @@ describe('browser-local game picks', () => {
     const view = await mount();
     expect(view.queryByText(warning) !== null, 'Failed reads show the visit-only warning').toBe(true);
     expect(view.queryByText(warning)).toBeVisible();
+    showSoccerGames(view);
     expect(shelfLinks(view)).toEqual([]); expect(pin(view, 'Footle')).toBeEnabled();
   });
 
@@ -205,6 +211,7 @@ describe('browser-local game picks', () => {
   it('merges a stale tab toggle with the current stored picks', async () => {
     const view = await mount(), before = protectedBytes();
     localStorage.setItem(KEY, JSON.stringify(['/nhl-connections']));
+    showSoccerGames(view);
     fireEvent.click(pin(view, 'Footle'));
     expect(saved(), 'A local pin must retain a pick saved before its storage event arrives').toEqual(['/nhl-connections', '/footle']);
     expect(shelfLinks(view).map(link => link.path)).toEqual(['/nhl-connections', '/footle']);
@@ -212,6 +219,7 @@ describe('browser-local game picks', () => {
 
     localStorage.setItem(KEY, JSON.stringify(['/nhl-connections']));
     const sameTarget = await mount();
+    showSoccerGames(sameTarget);
     const stalePin = pin(sameTarget, 'Footle');
     localStorage.setItem(KEY, JSON.stringify(['/nhl-connections', '/footle']));
     fireEvent.click(stalePin);
