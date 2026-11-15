@@ -1,3 +1,10 @@
+## 2026-11-15: Rival contracts, international development and easier game discovery
+
+- NRL Team Manager can approach one contracted rival in the offseason. The seller keeps signed positional cover rated at least as high. The buyer pays half the annual wage once and must be able to carry the existing contract through every remaining season.
+- Soccer Career Nations League selections and appearances use the saved early, middle, late or closing season overall for the stage. The report shows the overall used and its change since the previous appearance. Older games still open and mark missing overall values.
+- NBA Front Office previews a rest decision with players who are due back at tipoff. The round receipt records the actual replacement and lineup strength, including changes caused by a new injury.
+- Home offers a Game picks shortcut in Browse sports. The same shelf shows current rankings when they are available and can restore focus through Back.
+
 ## 2026-11-15: Rugby match gate receipts and season review coverage
 
 [PR #985](https://github.com/PapiSalgueroM/ballpark-hero/pull/985) published exact main `00479402fe65af60a1425b8defc5880b59a30aba`, deployment `f2ce65df-7af0-4fd2-8787-4d2f874ce01e`, canonical entry `/assets/index-Bc6x-Bwe.js`. Three live browser journeys, all 174 sitemap routes, seven policy and crawler endpoints, both admin noindex tags and the updated NRL guide passed. IndexNow accepted the guide. Hosted application types and build passed, and the saved-season outcome step verified all 23 mounted cases and 51 effective controls. The integrated build, 51 focused tests, all 20 site checks and 16 download limits passed locally. The live cases held $288,000 for the Storm with the $40,000 price effect, $240,000 for Perth with the $30,000 effect, and $270,000 at the first booked home game of an imported career.
