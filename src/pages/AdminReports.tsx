@@ -86,7 +86,7 @@ const AdminReports = () => {
   const checkAuth = async () => {
     const login = { pathname: '/admin/login', hash: reportHash };
     const { data: { user }, error: userError } = await supabase.auth.getUser();
-    if (isAuthRetryableFetchError(userError) || userError?.code === 'request_timeout') return 'retry';
+    if (userError?.code === 'request_timeout' || isAuthRetryableFetchError(userError)) return 'retry';
     if (!user) {
       navigate(login);
       return 'denied';

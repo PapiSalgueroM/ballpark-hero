@@ -24,7 +24,7 @@ const AdminLogin = () => {
 
       // Check admin role
       const { data: { user }, error: userError } = await supabase.auth.getUser();
-      if (isAuthRetryableFetchError(userError) || userError?.code === 'request_timeout') throw new Error(ADMIN_ACCESS_RETRY_MESSAGE);
+      if (userError?.code === 'request_timeout' || isAuthRetryableFetchError(userError)) throw new Error(ADMIN_ACCESS_RETRY_MESSAGE);
       if (!user) throw new Error('Not authenticated');
 
       const { data: roles, error: roleError } = await supabase

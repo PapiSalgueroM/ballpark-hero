@@ -2,7 +2,7 @@ import { fireEvent, render, screen, waitFor, within } from '@testing-library/rea
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { AuthRetryableFetchError } from '@supabase/supabase-js';
+import { AuthApiError, AuthRetryableFetchError } from '@supabase/supabase-js';
 import AdminLogin from '@/pages/AdminLogin';
 import AdminReports from '@/pages/AdminReports';
 
@@ -137,9 +137,11 @@ describe('admin report queue', () => {
     expect(db.signOut).toHaveBeenCalledTimes(1);
   });
 
-  it.each(['identity', 'role'])('can retry a temporary %s check on a linked report', async (part) => {
+  it.each(['identity', 'identity timeout', 'role'])('can retry a temporary %s check on a linked report', async (part) => {
     if (part === 'identity') {
       db.getUser.mockResolvedValueOnce({ data: { user: null }, error: new AuthRetryableFetchError('Unavailable', 503) });
+    } else if (part === 'identity timeout') {
+      db.getUser.mockResolvedValueOnce({ data: { user: null }, error: new AuthApiError('Timed out', 504, 'request_timeout') });
     } else {
       db.getRoles.mockResolvedValueOnce({ data: null, error: { message: 'Unavailable' } });
     }
