@@ -5,7 +5,7 @@ import {
   nrlOffseasonOpportunities, readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
-import { createNrlSeason, nrlLadder, NRL_ROLES, reduceNrlSeason } from '@/lib/nrlManager';
+import { archiveNrlLadder, createNrlSeason, nrlLadder, NRL_ROLES, reduceNrlSeason } from '@/lib/nrlManager';
 
 const advance = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'advance' });
 const stay = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'startNextSeason' });
@@ -176,9 +176,10 @@ describe('NRL Manager offseason club moves', () => {
     expect(imported.history[0].finance).toBeNull();
     const perth = move(imported, 'bears');
     expect(perth.season.clubId).toBe('bears');
-    const { finals, ...receipt } = perth.history[0];
+    const { finals, leagueLadder, ...receipt } = perth.history[0];
     expect([receipt]).toEqual(imported.history);
     expect(finals?.scores).toHaveLength(9);
+    expect(leagueLadder).toEqual(archiveNrlLadder(legacy));
     expect(perth.legacySeason).toBe(false);
     expect(sameSave(perth)).toBe(true);
     expect(saved({ ...perth, history: [{ ...perth.history[0], clubId: 'bears' }] })).toBeNull();

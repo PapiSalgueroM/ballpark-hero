@@ -1,4 +1,14 @@
+## 2026-11-15: Rival contract renewals, Club Manager player ratings and sport order
+
+The integrated candidate passed application types, production build, 102 focused tests and 15 Chromium cases. Only the NRL guide was regenerated. The imported-season verification now checks the saved ladder against the finished season and rejects a copied rollover that omits it.
+
+- NRL rivals can renew one expiring player for a year before league free-agent recruitment if he improves their signed positional cover and fits the cap. Across 64 paired rollovers, moves by 80+ rated rivals fell from 2,313 to 1,793. All 22,400 existing active deals kept their terms.
+- Club Manager player cards show each recorded league round that changed the selected player's overall, the net change and review coverage. Earlier saves can still have missing match reviews.
+- Home puts the sport order preference in one Show first selector. The same sport links remain available, and Default order clears the preference.
+
 ## 2026-11-15: Rugby season ratings, Home sport links and admin triage
+
+[PR #989](https://github.com/PapiSalgueroM/ballpark-hero/pull/989) published exact main `a23f3b2e7d5ebeb78d8b31872e342094ca7aec27`, deployment `f8c91ce3-343d-48e8-97b9-bcbcc749a926`, canonical entry `/assets/index-fvIjZoc2.js`. The merged tree matched tested head `69123cd01`. All 174 sitemap routes and 12 pinned endpoint checks passed. Browser checks passed for four NRL ratings cases, three Home hub returns, six fixture-only admin cases and twelve sport-link reloads. Nine reload cases used verified published assets after direct browser navigation timed out. Hosted Home launch and Game picks workflows, all 20 local site checks and 16 download budgets passed. The older Home search workflow still expects an external font tag.
 
 The integrated candidate passed application types, production build, 74 focused tests and 27 pinned Chromium cases. The Home checks cover 12 reloads across four widths, exact hub focus, browser Back and Forward, and manual scroll restoration. All admin writes use browser fixtures.
 
