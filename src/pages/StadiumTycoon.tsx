@@ -30,7 +30,7 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
-  TRACKS, levelOf, costOf, canBuy, upgradePurchase, capacity, attendance, incomePerSec,
+  TRACKS, levelOf, costOf, canBuy, upgradePurchase, standsConstructionQuote, STANDS_SEATS_PER_LEVEL, capacity, attendance, incomePerSec,
   ticketPolicyOf, TICKET_POLICIES,
   tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney as tycoonMoney,
   boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,
@@ -534,7 +534,9 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
   const atSummit = divisionIndex(s) >= DIVISIONS.length - 1;
   const achCount = (s.ach ?? []).length;
   const pts = legacyPointsOf(s);
-  const affordable = TRACKS.filter(t => canBuy(s, t.id)).length;
+  const construction = standsConstructionQuote(s);
+  const affordable = TRACKS.filter(t => canBuy(s, t.id) || (t.id === 'stands' && construction && s.money >= construction.cost)).length;
+  const matchesToOpening = s.standsOpenAfterMatch === undefined ? 0 : s.standsOpenAfterMatch - s.matchNo;
   const officeTiles: { key: OfficePanel; icon: string; title: string; value: string; accent: boolean }[] = [
     { key: 'upgrades', icon: '🏗️', title: 'Upgrades', value: affordable > 0 ? `${affordable} ready` : 'saving up', accent: false },
     { key: 'tickets', icon: '🎟️', title: 'Ticket offer', value: TICKET_POLICIES.find(p => p.id === ticketPolicyOf(s))?.label ?? 'Standard', accent: false },
@@ -875,12 +877,27 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         {buyAmount === 5 && <p className="text-[10px] text-muted-foreground mb-2">{panel === 'payroll' ? 'Each hire costs more. Hire up to five you can afford, stopping at the staff cap.' : 'Each level costs more. Buy up to five you can afford, stopping at the level cap.'}</p>}
         </>)}
         {panel === 'upgrades' && (<>
+        {(construction || matchesToOpening > 0) && (
+          <section aria-label="Stands construction" className="mb-2 space-y-2 rounded-xl border border-border bg-card p-3 text-xs">
+            {matchesToOpening > 0 && <p role="status" className="font-semibold">{STANDS_SEATS_PER_LEVEL} seats open {matchesToOpening === 1 ? 'after the next match' : `after ${matchesToOpening} matches`}.</p>}
+            {construction && <>
+              <p className="text-muted-foreground">One Stands level opens {STANDS_SEATS_PER_LEVEL} seats immediately for {fmtMoney(costOf(s, 'stands'))}. Schedule one level at a lower price to open the seats after two matches.</p>
+              {g.standsConstructionSaveFailed && <p role="alert" className="text-destructive">Could not save construction. Schedule again to retry.</p>}
+              <button type="button" className="min-h-11 rounded-lg border border-border bg-background px-3 py-2 text-left font-bold disabled:opacity-50"
+                disabled={s.money < construction.cost}
+                onClick={() => g.doBookStandsConstruction(s.rep, construction.opensAfterMatch, construction.cost)}>
+                Schedule construction for {fmtMoney(construction.cost)}
+              </button>
+            </>}
+          </section>
+        )}
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pb-4">
           {TRACKS.map(t => {
             const lvl = levelOf(s, t.id);
             const batch = buyAmount === 5 ? upgradePurchase(s, t.id, 5) : null;
             const cost = batch ? batch.cost : costOf(s, t.id);
             const ok = batch ? batch.quantity > 0 : canBuy(s, t.id);
+            const building = t.id === 'stands' && matchesToOpening > 0;
             return (
               <button
                 key={t.id}
@@ -897,7 +914,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                   <span className="ml-auto text-[9px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5">Lv {lvl}</span>
                 </div>
                 <div className="text-[9px] text-muted-foreground mt-1 leading-snug min-h-[22px]">{t.blurb}</div>
-                <div className={cn('text-[11px] font-bold mt-1 tabular-nums', ok ? 'text-gold' : 'text-muted-foreground')}>{batch ? batch.quantity > 0 ? `Buy ${batch.quantity} · ${fmtMoney(cost)} total` : lvl >= t.maxLevel ? 'Max level' : 'Save for the next level' : fmtMoney(cost)}</div>
+                <div className={cn('text-[11px] font-bold mt-1 tabular-nums', ok ? 'text-gold' : 'text-muted-foreground')}>{building ? 'Under construction' : batch ? batch.quantity > 0 ? `Buy ${batch.quantity} · ${fmtMoney(cost)} total` : lvl >= t.maxLevel ? 'Max level' : 'Save for the next level' : fmtMoney(cost)}</div>
               </button>
             );
           })}
@@ -1110,6 +1127,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>You run a tiny club's matchday money machine. Fans show up if there are seats and things to spend on; every fan pays you every second.</p>
               <p>The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about {h.evenFor} goals to their {h.evenAgainst}, and each Squad level adds about {h.levelGoals} of a goal a match to your side and takes up to as much off theirs. A goal pays {h.goalSec} seconds of your income, a win {h.winSec} seconds and going up a division {h.promotionMin} minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you win the league.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
+              <p>Schedule one Stands level in Upgrades for 20% less. You pay upfront and the new seats open after two matches finish, including any played while you are away.</p>
               <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>
               <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. In League, open Results this season to see each recorded score and any second-half plan. Open Latest season and choose a completed season to see its final table, recorded match scores and sponsorship. If your club wins Muddy Meadows, for example, you can reopen its final table and scores while playing in Gravel Lane. Recorded seasons stay with this ground until you sell up.</p>

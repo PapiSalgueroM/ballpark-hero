@@ -35,12 +35,14 @@ export interface TycoonTrack {
   maxLevel: number;
 }
 
+export const STANDS_SEATS_PER_LEVEL = 40;
+
 /* The nine tracks. Costs and effects are tuned together with the harness:
  * the measured first prestige on a greedy strategy lands around a quarter
  * of an hour of active play (12.7 to 13.3 minutes, measured in Round 583), and no state exists where nothing is affordable
  * within a minute of income. */
 export const TRACKS: TycoonTrack[] = [
-  { id: 'stands', name: 'Stands', emoji: '\u{1F3DF}\u{FE0F}', blurb: 'Seats. Every level adds room for 40 more fans', baseCost: 30, growth: 1.15, maxLevel: 200 },
+  { id: 'stands', name: 'Stands', emoji: '\u{1F3DF}\u{FE0F}', blurb: `Seats. Every level adds room for ${STANDS_SEATS_PER_LEVEL} more fans`, baseCost: 30, growth: 1.15, maxLevel: 200 },
   { id: 'tickets', name: 'Ticket Office', emoji: '\u{1F39F}\u{FE0F}', blurb: 'Faster turnstiles, better prices per fan', baseCost: 25, growth: 1.14, maxLevel: 200 },
   { id: 'snacks', name: 'Snack Bar', emoji: '\u{1F32D}', blurb: 'Every fan buys a little more each second', baseCost: 60, growth: 1.14, maxLevel: 200 },
   { id: 'shop', name: 'Club Shop', emoji: '\u{1F455}', blurb: 'Scarves and shirts, higher spend per fan', baseCost: 220, growth: 1.16, maxLevel: 200 },
@@ -263,8 +265,11 @@ export function catchGolden(s: TycoonState, kind: GoldenKind): { state: TycoonSt
     st.fanbase = s.fanbase + bump;
     return { state: st, amount: bump };
   }
-  // freeLevel: the cheapest still-buyable track levels up, on the house.
-  const open = TRACKS.filter(t => levelOf(s, t.id) < t.maxLevel);
+  // Reserve room for the paid Stands level when choosing the free upgrade.
+  const open = TRACKS.filter(t => {
+    const reserved = t.id === 'stands' && s.standsOpenAfterMatch !== undefined ? 1 : 0;
+    return levelOf(s, t.id) + reserved < t.maxLevel;
+  });
   if (!open.length) return { state: st };
   const cheapest = open.sort((a, b) => costOf(s, a.id) - costOf(s, b.id))[0];
   st.levels = { ...st.levels, [cheapest.id]: levelOf(s, cheapest.id) + 1 };
@@ -502,6 +507,8 @@ export interface TycoonState {
   streak: number;
   /** Opponent index, drives opponent strength scaling. */
   matchNo: number;
+  /** Full-time count after which the prepaid Stands level opens. */
+  standsOpenAfterMatch?: number;
   /** Wall-clock ms of the last save, for offline earnings. */
   savedAt: number;
   /** Lifetime counters for the header and the harness. */
@@ -1072,7 +1079,7 @@ export function costOf(s: TycoonState, id: string): number {
   return Math.round(t.baseCost * Math.pow(t.growth, levelOf(s, id)));
 }
 
-const seatCount = (stands: number) => 120 + stands * 40;
+const seatCount = (stands: number) => 120 + stands * STANDS_SEATS_PER_LEVEL;
 const sponsorCrowdTarget = (stands: number) => Math.ceil(seatCount(stands) * 0.8);
 
 /** Seats in the ground. The starting ground is a fence and two benches. */
@@ -1388,6 +1395,7 @@ export function winBonus(s: TycoonState): number {
 
 /** Can this track be bought right now? */
 export function canBuy(s: TycoonState, id: string): boolean {
+  if (id === 'stands' && s.standsOpenAfterMatch !== undefined) return false;
   return levelOf(s, id) < trackById(id).maxLevel && s.money >= costOf(s, id);
 }
 
@@ -1411,6 +1419,22 @@ export function upgradePurchase(s: TycoonState, id: string, amount: 1 | 5): { st
     quantity++;
   }
   return { state, quantity, cost };
+}
+
+const STANDS_CONSTRUCTION_MATCHES = 2;
+
+/** Prepay for one Stands level that opens after the next two full-times. */
+export function standsConstructionQuote(s: TycoonState) {
+  const opensAfterMatch = s.matchNo + STANDS_CONSTRUCTION_MATCHES;
+  if (s.standsOpenAfterMatch !== undefined || levelOf(s, 'stands') >= trackById('stands').maxLevel
+    || !Number.isSafeInteger(opensAfterMatch)) return null;
+  return { cost: Math.round(costOf(s, 'stands') * 0.8), opensAfterMatch };
+}
+
+export function bookStandsConstruction(s: TycoonState, ground: number, opensAfterMatch: number, cost: number): TycoonState {
+  const quote = standsConstructionQuote(s);
+  if (!quote || s.rep !== ground || quote.opensAfterMatch !== opensAfterMatch || quote.cost !== cost || s.money < cost) return s;
+  return { ...s, money: s.money - cost, standsOpenAfterMatch: opensAfterMatch };
 }
 
 /** One tap: money in, counter up. */
@@ -1498,6 +1522,11 @@ export function playMinute(st: TycoonState, roll: () => number, events: TickEven
     }
     if (st.scouting?.match === st.matchNo) delete st.scouting;
     st.matchNo += 1;
+    // The completed fixture keeps the crowd and rewards from before opening.
+    if (st.standsOpenAfterMatch === st.matchNo) {
+      st.levels.stands = levelOf(st, 'stands') + 1;
+      delete st.standsOpenAfterMatch;
+    }
     delete st.matchPlan;
     st.totalMatches = (st.totalMatches ?? 0) + 1;
     st.minute = 0;
@@ -1862,6 +1891,9 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
     for (const k of ['streak', 'matchNo', 'totalGoals', 'totalWins', 'totalTaps'] as const) {
       s[k] = wholeIn(s[k], 0, Number.MAX_SAFE_INTEGER);
     }
+    const opening = s.standsOpenAfterMatch;
+    if (opening !== undefined && (!Number.isSafeInteger(opening) || opening <= s.matchNo || opening - s.matchNo > STANDS_CONSTRUCTION_MATCHES
+      || levelOf(s, 'stands') >= trackById('stands').maxLevel)) delete s.standsOpenAfterMatch;
     /* A save stamped in the future, or not stamped with a number at all, would
        make the away settle pay NaN or refuse to pay for real time away. */
     if (!Number.isFinite(s.savedAt) || s.savedAt > now) s.savedAt = now;
