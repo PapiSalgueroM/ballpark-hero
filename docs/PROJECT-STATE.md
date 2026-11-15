@@ -8,6 +8,10 @@
 
 The production build, 152 focused tests, seven pinned local browser cases and 20 site checks passed. The two updated guides and their lastmod entries were refreshed. All 360 archived boards through November 14 Eastern matched the previous release.
 
+[PR #998](https://github.com/PapiSalgueroM/ballpark-hero/pull/998) published exact main `f41611440d98410a815341ce6185a3e514e9c532`, deployment `0758da2a-c054-4c97-a02f-db374cd13e26`, canonical entry `/assets/index-Dd-62R82.js`. The merged tree matched tested head `68de9dc62`. All seven live browser cases, 13 pinned endpoints and 174 sitemap routes passed. IndexNow accepted the NRL and Who Am I? guides. The local run also passed all 174 SEO route checks, the Home fold and 16 download budgets.
+
+The full application type check and standard build passed on GitHub. Home launch and Career entry guide passed. Home search cached all 12 poll flag files, passed its 10 mounted cases and rejected all 19 copied faults. Both hosted native steps stopped on an unbound esbuild import. The next candidate restores the shared import. Three older NRL expectations also failed on the baseline.
+
 ## 2026-11-15: Tactical rugby returns and saved rivalry outcomes
 
 - NRL Team Manager lets an available starter return at 60 minutes for the same reserve involved in their halftime interchange. The return spends one interchange, adds no bench player and changes the final-20 lineup. The chosen pair appears in saved reports and survives a Golden Point pause.
