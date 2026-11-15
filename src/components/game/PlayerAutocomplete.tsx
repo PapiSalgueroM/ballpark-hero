@@ -84,6 +84,8 @@ export interface PlayerAutocompleteProps {
    */
   localNames?: string[];
   showRecordedYear?: boolean;
+  /** Number of options per page when browsing with an empty query. */
+  browsePageSize?: number;
   className?: string;
   inputClassName?: string;
   /** Debounce delay before a search fires, in milliseconds. Default 200. */
@@ -210,6 +212,7 @@ export function PlayerAutocomplete({
   onSubmitFreeText,
   localNames,
   showRecordedYear = false,
+  browsePageSize,
   className,
   inputClassName,
   debounceMs = DEFAULT_DEBOUNCE_MS,
@@ -225,6 +228,7 @@ export function PlayerAutocomplete({
   const [searchFailed, setSearchFailed] = useState(false);
   const [open, setOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const [browsePage, setBrowsePage] = useState(0);
   /* Bumped when the player comes back to a list that was dropped, so the
      search effect runs again under the same text. */
   const [refresh, setRefresh] = useState(0);
@@ -267,7 +271,14 @@ export function PlayerAutocomplete({
   const normalizedValue = normalizeName(value);
   const enoughText = normalizedValue.length >= minChars;
   const tag = normalizedValue + '\u0000' + optionsKey;
-  const suggestions = heldTag === tag ? heldSuggestions : NO_SUGGESTIONS;
+  const matches = heldTag === tag ? heldSuggestions : NO_SUGGESTIONS;
+  const pageSize = normalizedValue.length === 0 ? browsePageSize ?? 0 : 0;
+  const pageStart = browsePage * pageSize;
+  const suggestions = useMemo(
+    () => pageSize ? matches.slice(pageStart, pageStart + pageSize) : matches,
+    [matches, pageSize, pageStart],
+  );
+  const canPage = pageSize > 0 && matches.length > pageSize;
   const loading = searching || (enoughText && open && heldTag !== tag);
 
   useEffect(() => {
@@ -326,6 +337,7 @@ export function PlayerAutocomplete({
           if (thisRequestId !== requestIdRef.current) return;
           const commit = () => {
             setSuggestions(mergeLocal(results));
+            setBrowsePage(0);
             setHeldTag(requestTag);
             setSearchFailed(Boolean(error));
             setLoading(false);
@@ -488,6 +500,13 @@ export function PlayerAutocomplete({
   );
 
   const showDropdown = open && (loading || suggestions.length > 0 || enoughText);
+  const changeBrowsePage = (step: number) => {
+    setBrowsePage(current => current + step);
+    setHighlightedIndex(-1);
+    const list = containerRef.current?.querySelector<HTMLElement>('[role="listbox"]');
+    if (list) list.scrollTop = 0;
+    containerRef.current?.querySelector('input')?.focus({ preventScroll: true });
+  };
 
   useEffect(() => {
     if (!showDropdown || highlightedIndex < 0) return;
@@ -544,11 +563,18 @@ export function PlayerAutocomplete({
       </div>
 
       {showDropdown && (
-        <div
-          id={listboxId}
-          role="listbox"
-          className="absolute z-20 mt-1.5 w-full rounded-xl border border-border bg-card shadow-lg overflow-hidden max-h-72 overflow-y-auto"
-        >
+        <div className={canPage ? 'absolute z-20 mt-1.5 w-full overflow-hidden rounded-xl border border-border bg-card shadow-lg' : 'contents'}>
+          {canPage && (
+            <div className="flex flex-wrap items-center justify-between gap-x-2 border-b border-border px-2 text-xs">
+              <button type="button" className="min-h-11 px-2 font-semibold text-primary disabled:text-muted-foreground"
+                aria-label="Previous players" disabled={disabled || browsePage === 0} onClick={() => changeBrowsePage(-1)}>Previous</button>
+              <span role="status">{(pageStart + 1).toLocaleString('en-US')} to {Math.min(pageStart + pageSize, matches.length).toLocaleString('en-US')} of {matches.length.toLocaleString('en-US')}</span>
+              <button type="button" className="min-h-11 px-2 font-semibold text-primary disabled:text-muted-foreground"
+                aria-label="Next players" disabled={disabled || pageStart + pageSize >= matches.length} onClick={() => changeBrowsePage(1)}>Next</button>
+            </div>
+          )}
+          <div id={listboxId} role="listbox" className={cn('max-h-72 overflow-y-auto',
+            !canPage && 'absolute z-20 mt-1.5 w-full rounded-xl border border-border bg-card shadow-lg overflow-hidden overflow-y-auto')}>
           {loading && suggestions.length === 0 && (
             <div
               className="flex items-center justify-center gap-2 px-4 text-xs text-muted-foreground"
@@ -611,6 +637,7 @@ export function PlayerAutocomplete({
               </button>
             );
           })}
+          </div>
         </div>
       )}
     </div>

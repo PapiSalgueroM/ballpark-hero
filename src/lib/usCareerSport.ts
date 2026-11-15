@@ -34,7 +34,7 @@ import type { TrainingBank, TrainingSport } from '@/lib/careerTraining';
 import type { CareerReviewStats } from '@/lib/usCareerSeasonReview';
 import type { RetirementBlock } from '@/lib/careerRetirement';
 import type { HallCalibration, HallSpeechBlock, LegacyRead, NumberRetiredBy, UsHallSport } from '@/lib/careerHallOfFame';
-import type { UsSeasonBind } from '@/lib/season/us';
+import type { UsSeasonSource } from '@/lib/season/us';
 import type { CareerIntlBlock, IntlCall, IntlSummerEntry, IntlTournament } from '@/lib/careerIntl';
 import type { UsSeasonRating } from '@/lib/usInSeasonRating';
 
@@ -428,7 +428,7 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   /** Round 1048: the Season Center's numbers for this sport (src/lib/season/us.ts), loaded when he first
    *  watches a season. Optional: a binding without it shows no button, which is the NHL today (baseball
    *  was bound in Round 1212). */
-  loadSeasonCentre?: () => Promise<UsSeasonBind>;
+  loadSeasonCentre?: () => Promise<UsSeasonSource>;
   /** Round 1048: why the coming season has no game by game view (its real length is not the one this
    *  career plays), or null. Tiny and eager, from src/data/usSeasonLengths.ts. Absent: never held.
    *  Round 1212: handed who is asking as well (his position and his club of that season), for a position

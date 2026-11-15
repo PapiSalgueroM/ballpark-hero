@@ -95,6 +95,7 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = wi
   teamLabelOf: nhlTeamLabelOf,
   statLine: (s, pos) => nhlStatLine(s, pos as NhlCareerPos),
   reviewStats: (s, pos) => nhlSeasonReview(s, pos as NhlCareerPos),
+  loadSeasonCentre: () => import('@/lib/season/nhl').then(m => m.NHL_SEASON),
   suspendedLine: c => ({
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,
     awards: [], teamResult: 'SUSPENDED', salary: 0,

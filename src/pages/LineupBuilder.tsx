@@ -242,7 +242,8 @@ const LineupBuilder = () => {
             value={playerInput}
             onChange={value => { inputRevision.current += 1; setBrowsingPlayers(false); setPlayerInput(value); }}
             onSelect={handleSelectPlayer}
-            searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers, boostNames: cappedNames, ...(browsingPlayers ? { minChars: 0, limit: 50 } : {}) }}
+            searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers, boostNames: cappedNames, ...(browsingPlayers && teamScopedSource ? { minChars: 0, browseOrderColumn: 'id' } : {}) }}
+            browsePageSize={browsingPlayers ? 50 : undefined}
             placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
             disabled={searchDisabled}
             autoFocus={!isClubYear}

@@ -1,6 +1,7 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { isPlaceholderName } from '@/lib/placeholderName';
 import { supabase } from '@/integrations/supabase/client';
+import { fetchAllRows } from '@/lib/fetchAllRows';
 
 /**
  * Shared player-search layer for the site's autocomplete inputs.
@@ -349,6 +350,8 @@ export interface SearchPlayersOptions {
   minChars?: number;
   /** Max results returned after ranking and dedupe. Default 8. */
   limit?: number;
+  /** Unique sort column for a complete read of the filtered source on an empty query. */
+  browseOrderColumn?: string;
   /** Normalized names to exclude from results (e.g. players already picked). */
   exclude?: Set<string>;
   /**
@@ -667,6 +670,21 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
   const selectCols = buildSelectColumns(source);
 
   try {
+    if (!normalizedQuery && options.browseOrderColumn) {
+      const { data, error } = await fetchAllRows<RawRow>((from, to) => {
+        if (signal?.aborted) return Promise.resolve({ data: [], error: null });
+        let page = applyFilters((supabase as any).from(source.table).select(selectCols), source.filters)
+          .order(options.browseOrderColumn, { ascending: true }).range(from, to);
+        if (signal) page = page.abortSignal(signal);
+        return page;
+      });
+      if (signal?.aborted) return { results: [], error: null };
+      if (error) return { results: [], error: 'Could not load players' };
+      return {
+        results: dedupeAndRank([data], source, normalizedQuery, { exclude, boostNames: options.boostNames, limit: data.length }),
+        error: null,
+      };
+    }
     // Leg 1: direct ilike substring search on the raw typed text. Correct and
     // fast whenever query/data accent state already matches. For split-name
     // sources, match the first typed word against EITHER the first- or

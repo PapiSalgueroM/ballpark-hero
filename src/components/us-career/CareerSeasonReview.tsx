@@ -53,8 +53,8 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
       ? { career, row: season, playoffsOnly: true, from }
       : { career, row: season, from });
   };
-  const showNbaReplay = sport.slug === 'nba' && !!(centre && sport.loadSeasonCentre && season);
-  const nbaReplayReason = showNbaReplay && season
+  const showReplay = (sport.slug === 'nba' || sport.slug === 'nhl') && !!(centre && sport.loadSeasonCentre && season);
+  const replayReason = showReplay && season
     ? !finite(season.games) || season.games <= 0 || season.teamResult === 'SUSPENDED'
       ? 'No games were recorded for this season.'
       : sport.seasonCentreHeld?.(season.year, career.eraId, { pos: career.pos, team: season.team })
@@ -128,10 +128,12 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
             </div>)}
           </dl>
           <p className="text-xs text-muted-foreground">These are the numbers kept in your save. Older saves may not have every field.</p>
-          {tab === 'Regular season' && showNbaReplay && (
-            nbaReplayReason ? <p className="text-xs text-muted-foreground">{nbaReplayReason}</p> : <div className="space-y-2">
-              <p id="nba-season-replay-details" className="text-xs text-muted-foreground">Games are recreated from your saved season totals. Individual scores and quarters are estimates.</p>
-              <button type="button" className={control} aria-describedby="nba-season-replay-details" aria-busy={loadingReplay || undefined} onClick={event => void openSeason(event)}>
+          {tab === 'Regular season' && showReplay && (
+            replayReason ? <p className="text-xs text-muted-foreground">{replayReason}</p> : <div className="space-y-2">
+              <p id={`${sport.slug}-season-replay-details`} className="text-xs text-muted-foreground">{sport.slug === 'nhl'
+                ? 'Games are recreated from your saved season totals. Individual scores, shots and saves are simulated.'
+                : 'Games are recreated from your saved season totals. Individual scores and quarters are estimates.'}</p>
+              <button type="button" className={control} aria-describedby={`${sport.slug}-season-replay-details`} aria-busy={loadingReplay || undefined} onClick={event => void openSeason(event)}>
                 {loadingReplay ? 'Loading Season Center...' : 'Watch reconstructed games'}
               </button>
             </div>

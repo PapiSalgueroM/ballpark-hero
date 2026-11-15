@@ -910,6 +910,8 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Play seasons, offseasons and free agency",
         items: [
           "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
+          "Select Week by week to watch simulated regular-season games built from your saved totals. Open a finished fixture for its game report and any OVR change. You can also replay older seasons through the Regular season tab in Career Log.",
+          "The current 84-game schedule uses the verified opponent and home and away counts. Other saved schedules keep their original length and can use unnamed opponents.",
           "Starting goalies can choose Share the crease before playing a season. Camp still decides who starts. Sharing gives about 20% fewer planned starts and a 20% lower simulated injury chance. For example, the usual draw of 60 starts becomes 48 before injuries. Career Log keeps the plan and actual starts for that year.",
           "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
           "Face up to three offseason decisions each year, one card at a time: training, trade requests, media noise. Only the first card can move your rating, and a card you just saw rests for a while (press moments follow your season, so those can come right back).",
@@ -976,6 +978,12 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Reading an actual capped change",
         paragraphs: [
           "Say Health is 98 before a recovery choice that adds 10. The 100 cap makes the result 98 to 100, so the card shows +2. Continue moves you on (to the next card, or back to your career after the last one) with Health still at 100.",
+        ],
+      },
+      {
+        heading: "Reading a hockey game report",
+        paragraphs: [
+          "A skater scores once and assists twice in a simulated 4 to 2 win. The game report shows three points. A goalie who saves 27 of 30 shots gets a .900 save percentage for that game. Across all starts, the reconstructed shot totals match the save percentage on your season card.",
         ],
       },
       {

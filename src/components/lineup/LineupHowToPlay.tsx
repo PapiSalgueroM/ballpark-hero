@@ -46,7 +46,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
             <ul className="space-y-1.5 text-muted-foreground">
               <li>• Choose a recorded year before your formation. Every draw and reroll uses clubs only, and your year stays fixed</li>
               <li>• Club era draft works across five recorded years, and adds Boca Juniors, River Plate, Flamengo, Grêmio and Santos to the draw</li>
-              <li>• Tap any empty position, then search or use Browse players for matching records. Some players may be missing</li>
+              <li>• Tap any empty position, then search or use Browse players and Next to page through the player list. Some players may be missing</li>
               <li>• The selected record must match the club and year, and the position still has to fit</li>
               <li>• If there is no match, try another player or reroll the club</li>
               <li>• Ratings use the value and age on your selected records. If either is missing, the draft can finish without a rating</li>

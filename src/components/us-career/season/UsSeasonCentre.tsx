@@ -16,7 +16,7 @@
 import { Component, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { UsCareerCore, UsCareerSeason, UsCareerSport } from '@/lib/usCareerSport';
 import { deriveSeason, type DerivedGame, type DerivedSeason } from '@/lib/season/core';
-import { buildUsSeason, usPlayoffPath, usSeasonKey, type UsPlayoffPath, type UsRow, type UsSeasonBind, type UsSeasonCtx } from '@/lib/season/us';
+import { buildUsSeason, usPlayoffPath, usSeasonKey, type UsPlayoffPath, type UsRow, type UsSeasonSource, type UsSeasonCtx } from '@/lib/season/us';
 import { SeasonCentre, type CentreModel } from '@/components/season-centre/SeasonCentre';
 import { CentreTile } from '@/components/season-centre/CentreTile';
 import { MiniBasketballCourt } from '@/components/us-career/season/MiniBasketballCourt';
@@ -44,7 +44,7 @@ export function pathStepText(step: UsPlayoffPath['steps'][number], unnamed: stri
 }
 
 /** The viewer's model for one derived US season. */
-export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: UsCareerCore, row: UsRow, ctx: UsSeasonCtx, s: DerivedSeason, key: string): CentreModel {
+export function buildUsModel(sport: UsCareerSport, bind: UsSeasonSource, career: UsCareerCore, row: UsRow, ctx: UsSeasonCtx, s: DerivedSeason, key: string): CentreModel {
   const view = bind.view;
   const pos = ctx.pos;
   const named = !!ctx.shape;
@@ -57,7 +57,7 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
   const prev = at > 0 ? career.seasons[at - 1] : null;
   const review = sport.reviewStats(row, pos);
   const title = bind.results.length > 0 && row.teamResult === bind.results[bind.results.length - 1];
-  const path = usPlayoffPath(bind, row, ctx, key);
+  const path = 'prepare' in bind ? null : usPlayoffPath(bind, row, ctx, key);
   const noPath = !path && view.noPathNote ? view.noPathNote(row) : null;
   /* Round 1147: the NFL saves its playoff line as a sentence ("512 yds, 4 TD, 1 INT"), printed as it is, and one game is "1 game" */
   const post = review.postseason.filter(x => x.value !== 'Not recorded')
@@ -75,12 +75,16 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonBind, career: U
     names: s.labels.map(lb => lb.name),
     occasion: {},
     header: { club: ctx.teamLabel, seasonLabel: bind.seasonLabel(row.year), league: bind.league, loanFrom: null },
-    frameLine: `${s.games.length} games · ${homes} home, ${s.games.length - homes} away · ${named ? "the league's schedule formula, this career's own draw" : "this career's own draw"}`,
+    frameLine: `${s.games.length} games · ${homes} home, ${s.games.length - homes} away · ${bind.slug === 'nhl'
+      ? named ? 'verified league matchups, simulated schedule and results' : 'simulated schedule and results'
+      : named ? "the league's schedule formula, this career's own draw" : "this career's own draw"}`,
     lastSeason: prev ? `Last season: ${prev.teamResult === 'SUSPENDED' ? 'suspended' : prev.teamResult}` : null,
-    resultsWhy: named ? null : "Opponents are not named this season: the game does not hold that season's divisions and schedule.",
+    resultsWhy: named ? null : bind.slug === 'nhl'
+      ? 'This saved season uses unnamed opponents.'
+      : "Opponents are not named this season: the game does not hold that season's divisions and schedule.",
     derbyBefore: { w: 0, d: 0, l: 0 },
     review: {
-      tiles: [['Games', String(row.games)], ...review.regular.slice(0, 3).map((x): [string, string] => [view.tileLabels[x.label] ?? x.label, view.tileText ? view.tileText(x.label, x.value) : x.value])],
+      tiles: [[bind.slug === 'nhl' && pos === 'G' ? 'Starts' : 'Games', String(row.games)], ...review.regular.slice(0, 3).map((x): [string, string] => [view.tileLabels[x.label] ?? x.label, view.tileText ? view.tileText(x.label, x.value) : x.value])],
       finishLine: `${record} · ${row.teamResult}`,
       championLine: null,
       /* no trophy emoji here: the title card draws its own */
@@ -151,7 +155,7 @@ class CentreBoundary extends Component<{ onClose: () => void; children: ReactNod
 }
 
 function CentreBody({ sport, career, row, playoffsOnly, onClose }: UsSeasonCentreProps) {
-  const [bind, setBind] = useState<UsSeasonBind | null>(null);
+  const [bind, setBind] = useState<UsSeasonSource | null>(null);
   const [failed, setFailed] = useState(false);
   const [tries, setTries] = useState(0);
   const [part, setPart] = useState<'regular' | 'playoffs'>('regular');
@@ -164,14 +168,18 @@ function CentreBody({ sport, career, row, playoffsOnly, onClose }: UsSeasonCentr
     load().then(b => { if (live) setBind(b); }).catch(() => { if (live) setFailed(true); });
     return () => { live = false; };
   }, [sport, tries]);
-  const built = useMemo(() => (bind && !playoffsOnly ? buildUsSeason(bind, career, row as UsRow, sport.teamLabelOf) : null), [bind, career, row, sport, playoffsOnly]);
+  const built = useMemo(() => (bind && !playoffsOnly && !('prepare' in bind) ? buildUsSeason(bind, career, row as UsRow, sport.teamLabelOf) : null), [bind, career, row, sport, playoffsOnly]);
   const season = useMemo(() => (built && built.ok === true ? deriveSeason(built.sport, row as UsRow, built.ctx) : null), [built, row]);
-  const model = useMemo(
-    () => (bind && built && built.ok === true && season ? buildUsModel(sport, bind, career, row as UsRow, built.ctx, season, built.key) : null),
-    [bind, built, season, sport, career, row],
-  );
+  const model = useMemo(() => {
+    if (!bind || playoffsOnly) return null;
+    if ('prepare' in bind) {
+      const prepared = bind.prepare(career, row as UsRow, sport.teamLabelOf);
+      return prepared ? buildUsModel(sport, bind, career, row as UsRow, prepared.ctx, prepared.season, prepared.season.key) : null;
+    }
+    return built?.ok === true && season ? buildUsModel(sport, bind, career, row as UsRow, built.ctx, season, built.key) : null;
+  }, [bind, built, season, sport, career, row, playoffsOnly]);
   const replay = useMemo(() => {
-    if (!bind) return null;
+    if (!bind || 'prepare' in bind) return null;
     if (built?.ok === true) return buildMlbPlayoffReplay(bind, row as UsRow, built.ctx, built.key);
     if (!playoffsOnly || !sport.canReplayPlayoffs?.(career, row)) return null;
     return buildMlbPlayoffReplay(bind, row as UsRow, null, usSeasonKey(bind, career, row as UsRow));
@@ -190,15 +198,14 @@ function CentreBody({ sport, career, row, playoffsOnly, onClose }: UsSeasonCentr
   if (playoffsOnly) return replay
     ? <MlbPlayoffReplay replay={replay} club={sport.teamLabelOf(row.team, career.eraId)} year={row.year} onClose={onClose} />
     : <CentreTile title={TITLE} text="The saved team playoffs cannot be replayed." exitLabel={EXIT} onClose={onClose} />;
-  if (!built || built.ok === false) return <CentreTile title={TITLE} text={built?.ok === false && built.why === 'held' ? built.line : CANNOT} exitLabel={EXIT} onClose={onClose} />;
-  if (!model) return <CentreTile title={TITLE} text={CANNOT} exitLabel={EXIT} onClose={onClose} />;
+  if (!model) return <CentreTile title={TITLE} text={built?.ok === false && built.why === 'held' ? built.line : CANNOT} exitLabel={EXIT} onClose={onClose} />;
   const backToRegular = () => {
     setPart('regular');
     requestAnimationFrame(() => replayOpener.current?.focus({ preventScroll: true }));
   };
   return (
     <>
-      <SeasonCentre model={model} exitLabel={EXIT} onClose={onClose} active={part === 'regular'} fixtureReports={!!model.sport.developmentOverall} navigation={replay ? (
+      <SeasonCentre model={model} exitLabel={EXIT} onClose={onClose} active={part === 'regular'} fixtureReports={bind.slug === 'nhl' || !!model.sport.developmentOverall} navigation={replay ? (
         <div className="border-b border-border px-3 py-2">
           <button type="button" ref={replayOpener} onClick={() => setPart('playoffs')} className="min-h-11 rounded-lg border border-border px-3 py-2 text-xs font-bold">Replay playoffs</button>
         </div>

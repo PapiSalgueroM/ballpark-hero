@@ -26,7 +26,7 @@ vi.mock('@/integrations/supabase/client', () => ({
         return io.rest(query).then(resolve, reject);
       },
     };
-    for (const method of ['select', 'ilike', 'eq', 'in', 'order', 'limit', 'abortSignal']) {
+    for (const method of ['select', 'ilike', 'eq', 'in', 'order', 'limit', 'range', 'abortSignal']) {
       builder[method] = (...args: unknown[]) => {
         if (method === 'abortSignal') query.signal = args[0] as AbortSignal;
         else query.operations.push([method, args]);
@@ -100,15 +100,20 @@ function operation(query: Query, method: string, column: string) {
   return query.operations.find(([name, args]) => name === method && args[0] === column)?.[1][1];
 }
 function assertYearQueries(year: number) {
-  expect(io.queries.length, 'XI_CLUB_YEAR_SEARCH: both real query legs must run').toBeGreaterThanOrEqual(2);
+  expect(io.queries.length, 'XI_CLUB_YEAR_SEARCH: a filtered query must run').toBeGreaterThanOrEqual(1);
   for (const query of io.queries) {
     expect(query.table).toBe('player_market_values');
     expect(operation(query, 'eq', 'year'), 'XI_CLUB_YEAR_SEARCH: numeric year before dedupe').toBe(year);
     expect(Array.isArray(operation(query, 'in', 'club')), 'XI_CLUB_YEAR_SEARCH: exact assigned aliases').toBe(true);
     expect(operation(query, 'eq', 'nationality')).toBeUndefined();
   }
-  expect(io.queries.some(query => operation(query, 'ilike', 'name_folded') !== undefined)).toBe(true);
-  expect(io.queries.some(query => operation(query, 'ilike', 'name_folded') === undefined)).toBe(true);
+  const browsing = io.queries.filter(query => query.operations.some(([name]) => name === 'range'));
+  const typed = io.queries.filter(query => !browsing.includes(query));
+  for (const page of browsing) expect(operation(page, 'order', 'id')).toEqual({ ascending: true });
+  if (typed.length) {
+    expect(typed.some(query => operation(query, 'ilike', 'name_folded') !== undefined)).toBe(true);
+    expect(typed.some(query => operation(query, 'ilike', 'name_folded') === undefined)).toBe(true);
+  }
 }
 function legacyQuiet() {
   expect(io.fetches.filter(url => url.includes('/functions/v1/'))).toEqual([]);
@@ -662,6 +667,43 @@ describe('Build Your XI unfinished draft', () => {
 });
 
 describe('Build Your XI Club year Browse on the real page', () => {
+  it('pages through the full assigned pool when replacing a starter', async () => {
+    io.pool = 'complete'; await openPage(2026); await fillPage();
+    const before = io.simulate.mock.calls[0][0] as { name: string; value: number }[];
+    const oldQuery = io.rest!;
+    const startingReads = io.queries.length;
+    io.rest = async query => {
+      if (query.table !== 'player_market_values') return oldQuery(query);
+      io.queries.push({ ...query, operations: query.operations.map(([method, args]) => [method, [...args]]) });
+      const aliases = operation(query, 'in', 'club') as string[];
+      const records = Array.from({ length: 1055 }, (_, index) => {
+        const name = 'Browse Keeper ' + String(index + 1).padStart(4, '0');
+        return {
+          id: index + 1, club: aliases[0], nationality: 'Fixture Nation', year: 2026, age: 25, position: 'Goalkeeper',
+          market_value_usd: 2_000_000 - index, name_folded: name.toLowerCase(), player_name: name,
+        };
+      });
+      const range = query.operations.find(([name]) => name === 'range')?.[1] as [number, number] | undefined;
+      const limit = query.operations.find(([name]) => name === 'limit')?.[1][0] as number | undefined;
+      return { data: range ? records.slice(range[0], range[1] + 1) : records.slice(0, limit), error: null };
+    };
+    fireEvent.click(screen.getByRole('button', { name: 'Replace ' + before[0].name + ' at GK' })); await flush();
+    await browse();
+    const reads = io.queries.slice(startingReads);
+    expect(reads.map(query => query.operations.find(([name]) => name === 'range')?.[1])).toEqual([[0, 999], [1000, 1999]]);
+    expect(screen.getByText('1 to 50 of 1,055')).toBeVisible();
+    expect(screen.queryByText('Browse Keeper 0051', { exact: true })).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Next players' }));
+    expect(screen.getByText('51 to 100 of 1,055')).toBeVisible();
+    fireEvent.click(option('Browse Keeper 0051'));
+    await flush();
+    expect(screen.queryByRole('region', { name: 'Replace a starter' })).toBeNull();
+    const after = io.simulate.mock.calls[1][0] as typeof before;
+    expect(after[0].name).toBe('Browse Keeper 0051');
+    expect(after.slice(1)).toEqual(before.slice(1));
+    expect(io.queries.slice(startingReads)).toEqual(reads);
+  }, 20000);
+
   it('browses past eight records and reopens after Escape and outside focus', async () => {
     await openPage(2010); await chooseSlot('GK');
     expect(screen.queryAllByRole('option')).toHaveLength(0);
@@ -694,7 +736,7 @@ describe('Build Your XI Club year Browse on the real page', () => {
     await openPage(2010); await chooseSlot('GK'); io.market = 'empty'; await browse();
     expect(screen.getByText('No matching records. Try another name or reroll the club.', { exact: true })).toBeVisible();
     expect(screen.queryAllByRole('option')).toHaveLength(0);
-    io.market = 'error'; await browse();
+    io.market = 'error'; await browse(); await advance(1250); await flush();
     expect(screen.getByText('Could not load players', { exact: false })).toBeVisible();
     expect(screen.queryByText('No matching records. Try another name or reroll the club.', { exact: true })).toBeNull();
     expect(screen.getByText('0/11', { exact: true })).toBeVisible(); legacyQuiet();
