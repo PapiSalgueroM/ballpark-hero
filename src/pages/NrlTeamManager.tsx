@@ -29,7 +29,7 @@ import {
   nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMatchFitness, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlMinute60Returns, nrlNextRound, nrlOnFieldCaptain, nrlOpeningCoverOptions,
   nrlLivePhaseScoring,
   nrlQuickInterchangeOptions, nrlQuickInterchangeOutcome, nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
-  NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
+  NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_DOMESTIC_SCORING_MODEL, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFixture, type NrlGoldenPointApproach, type NrlHalftimeTalk, type NrlKickingPlan, type NrlLatePenaltyApproach, type NrlLiveHalf, type NrlManagerState, type NrlMatchResult, type NrlNextRound, type NrlQuickInterchange, type NrlRole, type NrlTactic,
 } from '@/lib/nrlManager';
 import {
@@ -2819,6 +2819,9 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
   async function start(clubId: string, boardChallenge: boolean, openingNames: boolean, judiciary: boolean, customClub?: NrlCustomClub) {
     if (moved || startRequest.current || current.current || committed.current !== null) return;
     const seed = Math.floor(Math.random() * 0x1_0000_0000);
+    const persistNewCareer = (next: NrlCareerState) => persist({
+      ...next, season: { ...next.season, domesticScoringModel: NRL_DOMESTIC_SCORING_MODEL },
+    });
     if (openingNames) {
       const request = Symbol();
       startRequest.current = request;
@@ -2828,7 +2831,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
         const next = year === 2026 ? await loadNrlOpeningMatchdayCareer(clubId, seed, boardChallenge)
           : await loadNrlPerthSigningsCareer(seed, boardChallenge);
         if (startRequest.current !== request || current.current || committed.current !== null) return;
-        if (persist(next) === 'moved') return;
+        if (persistNewCareer(next) === 'moved') return;
       } catch {
         if (startRequest.current === request) setNamesFailed(true);
         return;
@@ -2841,7 +2844,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     } else {
       const next = customClub ? createNrlCustomCareer(clubId, seed, year, customClub, boardChallenge, judiciary)
         : createNrlCareer(clubId, seed, year, boardChallenge, judiciary);
-      if (!next || persist(next) === 'moved') return;
+      if (!next || persistNewCareer(next) === 'moved') return;
     }
     setPanel('match');
     setShowLiveResult(false);

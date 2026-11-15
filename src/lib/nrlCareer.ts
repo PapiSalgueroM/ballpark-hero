@@ -2701,7 +2701,7 @@ function deriveSeasonOut(state: NrlCareerState) {
       });
     }
     return strengths;
-  });
+  }, season.domesticScoringModel);
   const leagueLadder = archiveNrlLadder(skipped);
   const archive = { ladder: leagueLadder.map(([clubId]) => clubId), finals: archiveNrlFinals(skipped), leagueLadder };
   return { opening, skipped, players, archive };
