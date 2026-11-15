@@ -19,7 +19,7 @@ const hook = 'src/hooks/useStadiumTycoon.ts';
 const card = 'src/components/tycoon/TicketPolicyCard.tsx';
 const baseline = 'independent upgrade purchase keeps original cost and money accounting';
 const bindingCase = 'rules modal keeps distinct Premium gate demand and growth cells separate';
-const COUNT = 21;
+const COUNT = 23;
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n');
 const hash = text => crypto.createHash('sha256').update(text).digest('hex');
 const held = [engine, hook, card, 'src/pages/StadiumTycoon.tsx', test, 'src/test/tycoonPitch.test.tsx',
@@ -51,6 +51,7 @@ const controls = [
   ['restore', engine, "if (p.ticketPolicy !== 'community' && p.ticketPolicy !== 'premium') delete s.ticketPolicy;", 'delete s.ticketPolicy;', 'policy migration accepts only supported values and remains readable by the old loader'],
   ['prestige', engine, 'leagueTitles: s.leagueTitles ?? 0,', 'leagueTitles: s.leagueTitles ?? 0,\n    ticketPolicy: s.ticketPolicy,', 'a new ground resets the offer without changing the original prestige award'],
   ['display', card, "['gate', 'Gate / sec', current.gatePerSec, dollars(current.gatePerSec)]", "['gate', 'Gate / sec', current.totalPerSec, dollars(current.totalPerSec)]", 'mounted choices drive actual hook rates and every displayed accounting line'],
+  ['quoteactive', card, 'const quote = active ? current : ticketEconomy(setTicketPolicy(state, policy.id));', 'const quote = current;', 'quotes the three offers before selection at a 120-seat ground with 90 supporters'],
   ['label', card, '15% less gate money per fan. Supporters grow 50% faster.', '5% less gate money per fan. Supporters grow 50% faster.', 'rules describe the actual finite example and selected tradeoffs before play'],
   ['helpbinding', 'src/pages/StadiumTycoon.tsx', 'Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower.', 'Premium adds {h.ticketPremiumGrowth}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGate}% slower.', bindingCase],
   ['selection', hook, 'const next = setTicketPolicy(stateRef.current, policy);', "const next = setTicketPolicy(stateRef.current, 'standard');", 'mounted choices drive actual hook rates and every displayed accounting line'],

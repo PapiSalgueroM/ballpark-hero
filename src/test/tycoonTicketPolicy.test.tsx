@@ -298,6 +298,43 @@ describe('Stadium ticket policy', () => {
     }
   });
 
+  it.each([
+    { fans: 90, community: '90 fans $3.83/sec', standard: '90 fans $4.50/sec', premium: '67 fans $4.19/sec', crowd: 67, total: 4.1875 },
+    { fans: 240, community: '120 fans $5.10/sec', standard: '120 fans $6.00/sec', premium: '120 fans $7.50/sec', crowd: 120, total: 7.5 },
+  ])('quotes the three offers before selection at a 120-seat ground with $fans supporters', fixture => {
+    const start = { ...engine.newTycoon(EPOCH), fanbase: fixture.fans };
+    const raw = engine.serializeTycoon(start, EPOCH);
+    localStorage.setItem(engine.TYCOON_SAVE_KEY, raw);
+    const writes = vi.spyOn(Storage.prototype, 'setItem');
+    const draws = vi.mocked(Math.random).mock.calls.length;
+    const mounted = render(<Probe />);
+    const standard = screen.getByRole('button', { name: 'Standard' });
+    const premium = screen.getByRole('button', { name: 'Premium' });
+    premium.focus();
+    expect(screen.getByRole('button', { name: 'Community' })).toHaveAccessibleDescription(fixture.community);
+    expect(standard).toHaveAccessibleDescription(fixture.standard);
+    expect(premium).toHaveAccessibleDescription(fixture.premium);
+    expect(standard).toHaveAttribute('aria-pressed', 'true');
+    expect(premium).toHaveAttribute('aria-pressed', 'false');
+    expect(writes).not.toHaveBeenCalled();
+    expect(recordCompletion).not.toHaveBeenCalled();
+    expect(Math.random).toHaveBeenCalledTimes(draws);
+    expect(localStorage.getItem(engine.TYCOON_SAVE_KEY)).toBe(raw);
+    expect(latest.state.money).toBe(start.money);
+
+    fireEvent.click(premium);
+    expect(premium).toHaveAttribute('aria-pressed', 'true');
+    expect(mounted.container.querySelector('[data-ticket-value="crowd"]')).toHaveAttribute('data-value', String(fixture.crowd));
+    expect(mounted.container.querySelector('[data-ticket-value="total"]')).toHaveAttribute('data-value', String(fixture.total));
+    const chosenBytes = localStorage.getItem(engine.TYCOON_SAVE_KEY);
+    expect(chosenBytes).not.toBe(raw);
+    expect(latest.state.money).toBe(start.money);
+    mounted.unmount();
+    render(<Probe />);
+    expect(screen.getByRole('button', { name: 'Premium' })).toHaveAttribute('aria-pressed', 'true');
+    expect(localStorage.getItem(engine.TYCOON_SAVE_KEY)).toBe(chosenBytes);
+  });
+
   it('rules describe the actual finite example and selected tradeoffs before play', () => {
     render(<Probe />);
     expect(screen.getByText(/Trade gate money for supporter growth/)).toBeInTheDocument();

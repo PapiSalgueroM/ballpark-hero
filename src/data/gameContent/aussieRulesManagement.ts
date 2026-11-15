@@ -16,7 +16,8 @@ export const AUSSIE_RULES_MANAGEMENT_CONTENT: GameContentMap = {
     },
     howToPlay: [
       'Choose a club from the menu. The clubs are grouped by where they finished the 2026 ladder, so you can pick an easy start at the top or a long rebuild near the bottom. Every club has thirty-six generated players with a skill, a ceiling, an age and a fitness level.',
-      'Before each match your list manager picks the best eighteen starters and five interchange players on current form: skill, less what fatigue takes off. You can change any spot in Squad, then choose to train or rest. Training adds eight preparation and eight fatigue to every player; rest takes thirty fatigue off.',
+      'By default your list manager picks eighteen starters and five interchange players on current form, taking fatigue off their skill. In Squad, change any spot before the match. Choose Keep this matchday 23 to bring that selection into later matches this season. Any unavailable player is replaced. Choose Use automatic selection to hand it back to the list manager. Each new season starts with automatic selection.',
+      'Choose to train or rest. Training adds eight preparation and eight fatigue to every player. Rest takes thirty fatigue off.',
       'The preparation cards preview strength and average fatigue for your selected starters. Use the preview to see when resting gives a tired side more strength than training.',
       'After regular-season matches, skill can rise or fall one point at a time. Open Skill changes this round at full time to see who moved and by how much. Squad keeps the latest review. Existing players carry their skill into the new season.',
       'Open Completed match reports to revisit your score and recorded skill changes for a regular-season match. Earlier saves may only have the score.',

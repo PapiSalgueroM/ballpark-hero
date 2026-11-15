@@ -2,6 +2,7 @@ import { act, cleanup, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CLUBS, clubOf, createLeague, draftPool, LEGACY_SAVE_KEY, pickRefusal, picksLeft, readLeagueSave, reduceLeague, retirees, roleDeficits, SAVE_KEY, type LeagueAction, type LeagueState } from '@/lib/aussieRulesLeague';
 import { useAussieRulesLeague } from '@/hooks/useAussieRulesLeague';
+import { automaticLineup } from '@/lib/aussieRulesManager';
 import { hashLabel, rngFrom } from '@/lib/careerEngine';
 
 const outward = vi.hoisted(() => ({ record: vi.fn(), refresh: vi.fn() }));
@@ -20,6 +21,75 @@ const until = (s: LeagueState, done: (s: LeagueState) => boolean) => { let state
 const V1_SAVE = JSON.stringify({ version: 1, seed: 1234567, clubId: 'club-0', actions: [] });
 
 describe('Aussie Rules Manager full season engine', () => {
+  it('carries the exact selected 23 against the seeded automatic reset and can switch back', () => {
+    const initial = createLeague(1, 'club-00', 'afl2026')!;
+    const authored = [...initial.starters];
+    expect([...initial.starters, ...initial.bench]).not.toContain('p-3');
+    authored[0] = 'p-3';
+    const selected = reduceLeague(initial, { type: 'lineup', starters: authored, bench: initial.bench });
+    expect(selected.starters).toEqual(authored);
+    const saved = reduceLeague(selected, { type: 'keepLineup' });
+    const restored = readLeagueSave(JSON.stringify(saved))!;
+    expect(restored).toEqual(saved);
+    expect(reduceLeague(restored, { type: 'keepLineup' })).toBe(restored);
+    const duplicate = JSON.parse(JSON.stringify(restored));
+    duplicate.preferredLineup.bench[0] = 'p-3';
+    expect(readLeagueSave(JSON.stringify(duplicate))).toBeNull();
+    const play = (state: LeagueState) => reduceLeague(reduceLeague(state, { type: 'prepare', choice: 'rest' }), { type: 'playMatch', tactic: 'control' });
+    const report = play(restored);
+    expect(reduceLeague(report, { type: 'autoLineup' })).toBe(report);
+    const match = report.match!;
+    expect(match.homeId === report.myClub ? match.homeSquad : match.awaySquad).toContain('p-3');
+    const kept = reduceLeague(report, { type: 'next' });
+    expect(kept.starters).toEqual(authored);
+    expect(kept.bench).toEqual(initial.bench);
+    const automatic = reduceLeague(play(selected), { type: 'next' });
+    expect(automatic.starters).not.toContain('p-3');
+    expect(automatic.bench).not.toContain('p-3');
+    const reset = reduceLeague(kept, { type: 'autoLineup' });
+    expect(reset).toEqual(automatic);
+  });
+
+  it('fills only unavailable preference slots when opening a match', () => {
+    const initial = createLeague(1, 'club-00', 'afl2026')!;
+    const kept = reduceLeague(initial, { type: 'keepLineup' });
+    const played = until(kept, state => state.phase === 'report');
+    const missing = [initial.starters[0], initial.bench[4]];
+    const club = clubOf(played, played.myClub)!;
+    const replacements = missing.map((id, index) => ({ ...club.players.find(player => player.id === id)!, id: `p-${played.nextId + index}` }));
+    const updated = { ...played, nextId: played.nextId + replacements.length,
+      clubs: played.clubs.map(current => current.id === club.id
+        ? { ...current, players: current.players.filter(player => !missing.includes(player.id)).concat(replacements) } : current) };
+    const opened = reduceLeague(updated, { type: 'next' });
+    expect(readLeagueSave(JSON.stringify(opened))).toEqual(opened);
+    expect(opened.starters.slice(1)).toEqual(initial.starters.slice(1));
+    expect(opened.bench.slice(0, 4)).toEqual(initial.bench.slice(0, 4));
+    const starters = clubOf(opened, opened.myClub)!.players;
+    expect(starters.find(player => player.id === opened.starters[0])?.role).toBe(replacements[0].role);
+    expect(new Set([...opened.starters, ...opened.bench]).size).toBe(23);
+    for (const id of missing) expect([...opened.starters, ...opened.bench]).not.toContain(id);
+  });
+
+  it('keeps a preferred 23 through a finals bye and starts the next season on automatic', () => {
+    const initial = createLeague(3, 'club-00', 'afl2026')!;
+    const late = until(initial, state => state.round === 22 && state.phase === 'prepare');
+    const kept = reduceLeague(late, { type: 'keepLineup' });
+    const bye = until(kept, state => state.stage === 'finals' && state.phase === 'prepare' && !state.match);
+    expect(bye.stage).toBe('finals');
+    expect(bye.match).toBeNull();
+    expect(bye).toMatchObject(automaticLineup(clubOf(bye, bye.myClub)!));
+    const reloaded = readLeagueSave(JSON.stringify(bye))!;
+    const nextMatch = until(reloaded, state => state.season !== 1 || (state.stage === 'finals' && state.phase === 'prepare' && !!state.match));
+    expect(nextMatch.season).toBe(1);
+    expect(nextMatch.match).not.toBeNull();
+    expect(nextMatch.starters).toEqual(late.starters);
+    expect(nextMatch.bench).toEqual(late.bench);
+    const newSeason = until(nextMatch, state => state.season === 2);
+    expect(newSeason).toMatchObject(automaticLineup(clubOf(newSeason, newSeason.myClub)!));
+    expect(newSeason).not.toHaveProperty('preferredLineup');
+    expect(readLeagueSave(JSON.stringify(newSeason))).toEqual(newSeason);
+  });
+
   it('starts 18 fixed clubs of 36 generated players with unique names and a readable save', () => {
     const state = createLeague(2026, 'club-04')!;
     expect(state.clubs.map(club => club.id)).toEqual(CLUBS.map(club => club.id));
