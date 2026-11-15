@@ -70,6 +70,9 @@ const WhoAmI = () => {
   const [round, setRound] = useState(restored);
   const latestRound = useRef(restored);
   const savedBytes = useRef(raw);
+  const hasSavedRound = useRef(restored?.phase === 'playing');
+  const pendingFinish = useRef<WhoAmIRound | null>(null);
+  const [finishNeedsSave, setFinishNeedsSave] = useState(false);
   const lastSecretName = useRef(restored?.secret.name);
   const [saveChanged, setSaveChanged] = useState(false);
   const [poolPhase, setPoolPhase] = useState<PoolPhase>('boot');
@@ -112,24 +115,50 @@ const WhoAmI = () => {
     return false;
   };
 
-  const commitRound = (next: WhoAmIRound | null) => {
+  const writeRound = (next: WhoAmIRound | null): 'saved' | 'unavailable' | 'stale' => {
     const before = readWhoAmIRoundBytes();
-    if (!isCurrentSave(before)) return false;
-    if (before !== undefined) {
-      try {
-        const bytes = next ? JSON.stringify({ version: 1, ...next }) : null;
-        if (bytes === null) localStorage.removeItem(WHO_AM_I_ROUND_KEY);
-        else localStorage.setItem(WHO_AM_I_ROUND_KEY, bytes);
-        savedBytes.current = bytes;
-      } catch { /* A refused save still leaves this round playable in memory. */ }
+    if (!isCurrentSave(before)) return 'stale';
+    if (before === undefined) return 'unavailable';
+    try {
+      const bytes = next ? JSON.stringify({ version: 1, ...next }) : null;
+      if (bytes === null) localStorage.removeItem(WHO_AM_I_ROUND_KEY);
+      else localStorage.setItem(WHO_AM_I_ROUND_KEY, bytes);
+      savedBytes.current = bytes;
+      return 'saved';
+    } catch {
+      return 'unavailable';
     }
-    const finished = latestRound.current?.phase === 'playing' && next && next.phase !== 'playing';
+  };
+
+  const commitRound = (next: WhoAmIRound | null) => {
+    if (pendingFinish.current) return false;
+    const write = writeRound(next);
+    if (write === 'stale') return false;
+    const wasPlaying = latestRound.current?.phase === 'playing';
+    if (next?.phase === 'playing') {
+      hasSavedRound.current = write === 'saved' || (wasPlaying && hasSavedRound.current);
+    }
     latestRound.current = next;
     setRound(next);
     if (next) lastSecretName.current = next.secret.name;
-    // Finishing an accepted action earns play credit once. Restoring a result only renders it.
-    if (finished) recordCompletion('/who-am-i', undefined, getCurrentPlayerName());
+    if (wasPlaying && next && next.phase !== 'playing') {
+      // A saved round can still be finished after reload, so credit it only once its result is saved.
+      if (hasSavedRound.current && write === 'unavailable') {
+        pendingFinish.current = next;
+        setFinishNeedsSave(true);
+      } else {
+        recordCompletion('/who-am-i', undefined, getCurrentPlayerName());
+      }
+    }
     return true;
+  };
+
+  const retryResultSave = () => {
+    const result = pendingFinish.current;
+    if (!result || writeRound(result) !== 'saved') return;
+    pendingFinish.current = null;
+    setFinishNeedsSave(false);
+    recordCompletion('/who-am-i', undefined, getCurrentPlayerName());
   };
 
   /* Round 668: who has been guessed, by person rather than by folded name, so
@@ -147,7 +176,7 @@ const WhoAmI = () => {
   );
 
   const startGame = (guessBudget: WhoAmIRound['budget']) => {
-    if (!data) return;
+    if (!data || latestRound.current?.phase === 'playing') return;
     const nextSecret = pickSecret(buildWhoAmISecretPool(difficulty, data.pool), lastSecretName.current);
     if (!commitRound({ phase: 'playing', budget: guessBudget, secret: nextSecret, guesses: [] })) return;
     checkingRequest.current = null;
@@ -372,16 +401,24 @@ const WhoAmI = () => {
 
   const endButtons = (
     <div className="flex flex-wrap justify-center gap-3 mt-4">
+      {finishNeedsSave && !saveChanged && (
+        <div className="basis-full text-sm">
+          <p role="status" className="text-muted-foreground">This result could not be saved. Retry to record your finish.</p>
+          <button type="button" onClick={retryResultSave} className="min-h-11 font-semibold text-primary underline">
+            Retry result save
+          </button>
+        </div>
+      )}
       <button
         onClick={() => startGame(budget)}
-        disabled={!data || saveChanged}
+        disabled={!data || saveChanged || finishNeedsSave}
         className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-opacity disabled:opacity-50"
       >
         <RotateCcw className="w-4 h-4" /> Play again
       </button>
       <button
         onClick={() => commitRound(null)}
-        disabled={saveChanged}
+        disabled={saveChanged || finishNeedsSave}
         className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-foreground rounded-full font-semibold hover:bg-secondary/70 transition-colors disabled:opacity-50"
       >
         Switch mode

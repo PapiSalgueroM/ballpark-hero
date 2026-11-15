@@ -188,6 +188,57 @@ describe('Who Am I guess lookup ownership', () => {
     expect(await reopened.findByText('10 left')).toBeVisible();
   });
 
+  it.each(['retry', 'reload', 'newer save'])('handles a refused finish on a saved round with %s', async recovery => {
+    const view = await start();
+    const playing = roundBytes();
+    const put = Storage.prototype.setItem;
+    let refused = true;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (refused && key === WHO_AM_I_ROUND_KEY && JSON.parse(value).phase === 'won') throw new Error('Storage full');
+      return put.call(this, key, value);
+    });
+    lookup.mockResolvedValueOnce(first);
+    await act(async () => click(view, 'Guess Fixture Alder'));
+    expect(view.getByRole('heading', { name: 'Found him in 1 guess' })).toBeVisible();
+    expect(roundBytes()).toBe(playing);
+    expect(recordCompletion).not.toHaveBeenCalled();
+    const retry = view.getByRole('button', { name: 'Retry result save' });
+    expect(retry).toBeEnabled();
+    expect(view.getByRole('button', { name: 'Play again' })).toBeDisabled();
+    expect(view.getByRole('button', { name: 'Switch mode' })).toBeDisabled();
+
+    if (recovery === 'retry') {
+      fireEvent.click(retry);
+      expect(roundBytes()).toBe(playing);
+      expect(recordCompletion).not.toHaveBeenCalled();
+      refused = false;
+      act(() => { retry.click(); retry.click(); });
+    } else if (recovery === 'reload') {
+      view.unmount();
+      refused = false;
+      const reopened = openGame();
+      expect(await reopened.findByText('25 left')).toBeVisible();
+      lookup.mockResolvedValueOnce(first);
+      await act(async () => click(reopened, 'Guess Fixture Alder'));
+    } else {
+      const newer = JSON.stringify({ version: 1, phase: 'playing', budget: 10, secret: second, guesses: [] });
+      localStorage.setItem(WHO_AM_I_ROUND_KEY, newer);
+      refused = false;
+      fireEvent.click(retry);
+      expect(view.getByRole('status')).toHaveTextContent('This round changed in another tab. Reload to continue.');
+      expect(roundBytes()).toBe(newer);
+      expect(recordCompletion).not.toHaveBeenCalled();
+      return;
+    }
+
+    expect(JSON.parse(roundBytes()!).phase).toBe('won');
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+    cleanup();
+    const reopened = openGame();
+    expect(await reopened.findByRole('heading', { name: 'Found him in 1 guess' })).toBeVisible();
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
   it('drops a pending guess when its original page unmounts', async () => {
     const complete = holdLookup();
     const old = await start();
