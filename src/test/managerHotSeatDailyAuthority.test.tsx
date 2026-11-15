@@ -69,7 +69,7 @@ it('adopts the completed León verdict and carry-on when a stale job brief is ac
   await flushLoad();
   const latest = saveFromOtherTab(completed);
 
-  fireEvent.click(view.getByRole('button', { name: 'Take the job', exact: true }));
+  fireEvent.click(view.getByRole('button', { name: 'Take the job' }));
   await flushLoad();
   expect(localStorage.getItem(key)).toBe(latest);
   expect(view.getByTestId('hot-seat-verdict')).toHaveTextContent('You keep the job');
@@ -78,7 +78,7 @@ it('adopts the completed León verdict and carry-on when a stale job brief is ac
   expect(await view.findByTestId('hot-seat-carry-on')).toHaveTextContent('León');
   expect(recordCompletion).not.toHaveBeenCalled();
 
-  fireEvent.click(view.getByRole('button', { name: 'Menu', exact: true }));
+  fireEvent.click(view.getByRole('button', { name: 'Menu' }));
   expect(view.getByTestId('hot-seat-daily-done')).toHaveTextContent('3 of 3 points');
   expect(view.getByRole('button', { name: 'See the Club Manager offer' })).toBeVisible();
 });
@@ -88,10 +88,10 @@ it('shows the latest match and its pending press when an older tab presses Kick 
   const view = board();
   fireEvent.click(view.getByRole('button', { name: 'Back to the dugout' }));
   await flushLoad();
-  fireEvent.click(view.getByRole('button', { name: 'Defensive', exact: true }));
+  fireEvent.click(view.getByRole('button', { name: 'Defensive' }));
   const latest = saveFromOtherTab(afterFirstMatch);
 
-  fireEvent.click(view.getByRole('button', { name: 'Kick off', exact: true }));
+  fireEvent.click(view.getByRole('button', { name: 'Kick off' }));
   await flushLoad();
   expect(localStorage.getItem(key)).toBe(latest);
   expect(view.getByTestId('hot-seat-result')).toHaveTextContent('León 1 to 2 Toluca');
@@ -117,9 +117,9 @@ it('continues a normal daily across reload and keeps free play on its own replay
   const view = board();
   fireEvent.click(view.getByRole('button', { name: "Take today's job" }));
   await flushLoad();
-  fireEvent.click(view.getByRole('button', { name: 'Take the job', exact: true }));
+  fireEvent.click(view.getByRole('button', { name: 'Take the job' }));
   fireEvent.click(view.getByRole('button', { name: 'These players are with me' }));
-  fireEvent.click(view.getByRole('button', { name: 'Kick off', exact: true }));
+  fireEvent.click(view.getByRole('button', { name: 'Kick off' }));
   const dailyBytes = localStorage.getItem(key)!;
   expect(JSON.parse(dailyBytes).actions).toEqual(afterFirstMatch.actions);
   view.unmount();
@@ -135,9 +135,9 @@ it('continues a normal daily across reload and keeps free play on its own replay
   const unlimited = board();
   fireEvent.click(unlimited.getByRole('button', { name: `Carry on at ${free.setup.club}` }));
   await flushLoad();
-  fireEvent.click(unlimited.getByRole('button', { name: 'Take the job', exact: true }));
+  fireEvent.click(unlimited.getByRole('button', { name: 'Take the job' }));
   const press = pendingPress(free);
-  fireEvent.click(unlimited.getByRole('button', { name: press ? press.options[0].label : 'Kick off', exact: true }));
+  fireEvent.click(unlimited.getByRole('button', { name: press ? press.options[0].label : 'Kick off' }));
   const savedFree = localStorage.getItem(freeKey)!;
   expect(JSON.parse(savedFree).actions).toHaveLength(1);
   expect(localStorage.getItem(key)).toBe(dailyBytes);
@@ -155,7 +155,7 @@ it('continues at the last playable action in an older daily log', async () => {
   const view = board();
   fireEvent.click(view.getByRole('button', { name: 'Back to the dugout' }));
   await flushLoad();
-  fireEvent.click(view.getByRole('button', { name: 'Kick off', exact: true }));
+  fireEvent.click(view.getByRole('button', { name: 'Kick off' }));
   expect(view.getByTestId('hot-seat-result')).toHaveTextContent('León 1 to 2 Toluca');
   expect(JSON.parse(localStorage.getItem(key)!).actions).toEqual(afterFirstMatch.actions);
 });
@@ -164,7 +164,7 @@ it('keeps the new Eastern day record when an overnight tab accepts the old brief
   const view = board();
   fireEvent.click(view.getByRole('button', { name: "Take today's job" }));
   await flushLoad();
-  expect(view.getByRole('button', { name: 'Take the job', exact: true })).toBeVisible();
+  expect(view.getByRole('button', { name: 'Take the job' })).toBeVisible();
 
   const tomorrow = '2026-11-16';
   const next = dailyHotSeat(tomorrow);
@@ -173,7 +173,7 @@ it('keeps the new Eastern day record when an overnight tab accepts the old brief
   writeDailyRecord(slug, tomorrow, { club: next.club, actions: [], done: false });
   const current = localStorage.getItem(nextKey);
   expect(current).not.toBeNull();
-  fireEvent.click(view.getByRole('button', { name: 'Take the job', exact: true }));
+  fireEvent.click(view.getByRole('button', { name: 'Take the job' }));
 
   expect(localStorage.getItem(nextKey)).toBe(current);
   expect(localStorage.getItem(key)).toBeNull();

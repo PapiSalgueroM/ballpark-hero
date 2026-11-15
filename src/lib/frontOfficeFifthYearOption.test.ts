@@ -85,6 +85,7 @@ describe('NFL fifth-year option', () => {
     const resumed: typeof league = JSON.parse(JSON.stringify(league));
     const away = nflAwayHost(teamId);
     const fourth = away.awaySummer(resumed, seeded(1), desk);
+    if (!fourth) throw new Error('Expected the away summer to return the GM desk');
     const current = resumed.teams[teamId].players.find(p => p.id === playerId)!;
     expect(current).toMatchObject({ salary: 8.8, years: 1, guaranteed: true });
     expect(tagRefusal(resumed, resumed.teams[teamId], playerId)).toMatch(/under contract/);
