@@ -3,7 +3,7 @@
 - In Soccer Career, All games takes you back to the cup fixture you first opened and restores the bracket's scroll position, even if you used Next game in the report.
 - In Stadium Tycoon, League shows the current season's recorded scores and second-half plans. The results stay open and update when the next match settles.
 - In NRL Team Manager, set Penalty approach before kick-off. Bank the two points if a kickable penalty comes up, or tap for a chance at four or six. Full time records the try, conversion, turnover or that the opportunity never came.
-- In MLB My Career, starters and relievers can use Week by week and reopen supported seasons from Career Log. Simulated game reports reconcile appearances, strikeouts and compatible pitching decisions to the saved season. ERA stays in the season review. Contradictory decision totals are identified and shown only at season level.
+- In MLB My Career, starters and relievers can use Week by week and reopen supported seasons from Career Log. Simulated game reports reconcile appearances, strikeouts and compatible pitching decisions to the saved season. ERA stays in the season review. If the recorded decisions do not fit the appearance count or simulated scores, the decisions appear only at season level.
 
 ## 2026-11-14: Club Manager match ratings, NRL sponsor terms and Home navigation
 
