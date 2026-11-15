@@ -178,7 +178,8 @@ describe('Community Shield saved screen adapters', () => {
     const row: SeasonRecord = { ...savedShield(), leagueTitle: true, leagueFinish: 1, leagueSize: 20, ratingPath: [70, 82, 94, 82, 70] };
     resultOf(row).annualRating = cupSeason.rating;
     const base = careerFor([row]);
-    const career: CareerState = { ...base, phase: 'playing', phone: { ...base.phone, world: { year: row.year, leagues: {}, ucl: '' } } };
+    const world = { year: row.year, leagues: {}, ucl: '', moves: [], topScorer: null, intl: null };
+    const career: CareerState = { ...base, phase: 'playing', phone: { ...base.phone, world } };
     const before = JSON.stringify(career);
     const view = render(<MemoryRouter><SoccerSeasonCentre career={career} clubs={FALLBACK_CLUBS} row={row} mode="watch" offer={false} onClose={() => {}} /></MemoryRouter>);
     fireEvent.click(screen.getByRole('button', { name: '▶ Kick off' }));
