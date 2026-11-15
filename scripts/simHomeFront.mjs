@@ -68,6 +68,7 @@
  *   continuefield  the Stadium Tycoon card reads a field the save does not have
  *   continueguard  a card prints a save's name at any length
  *   continuecold   the row renders its heading with no save in the browser
+ *   xiwrongkey     the XI card reads a key the draft never writes
  *   aussiemissing  the new manager's real save has no registered card
  *   aussiekey      the manager card reads a key its hook never writes
  *   aussiefield    the club ID (myClub) is mistaken for the display name
@@ -90,7 +91,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROLS = {
   stage: 1, savekey: 2, nocolour: 3, noglyph: 3, rail: 4, shipped: 5, progress: 6,
   continuekey: 7, continuefield: 7, continueguard: 7, continuecold: 7, favfirst: 8, favtrust: 8,
-  aussiemissing: 7, aussiekey: 7, aussiefield: 7, aussieround: 7,
+  aussiemissing: 7, aussiekey: 7, aussiefield: 7, aussieround: 7, xiwrongkey: 7,
 };
 const CONTROL = process.env.HOME_FRONT_CONTROL || '';
 if (CONTROL && !(CONTROL in CONTROLS)) {
@@ -163,6 +164,8 @@ continueSrc = controlled('continueguard', continueSrc,
   'return t.length > SAVE_NAME_MAX ? `${t.slice(0, SAVE_NAME_MAX - 3).trimEnd()}...` : t;', 'return t;');
 let rowSrc = read('src/components/home/ContinueRow.tsx');
 rowSrc = controlled('continuecold', rowSrc, 'if (saved.length === 0) return null;', 'if (saved.length < 0) return null;');
+rowSrc = controlled('xiwrongkey', rowSrc,
+  'storage.getItem(BUILD_XI_DRAFT_KEY)', "storage.getItem(BUILD_XI_DRAFT_KEY + '-other')");
 homeFrontSrc = controlled('favfirst', homeFrontSrc, 'if (!fav) return all;', 'return all;');
 homeFrontSrc = controlled('favtrust', homeFrontSrc, '.includes(raw) ? (raw as SportKey) : null', '.includes(raw) ? (raw as SportKey) : (raw as SportKey)');
 
@@ -202,6 +205,9 @@ await build({
       import { FavouriteSport } from './src/components/home/FavouriteSport';
       export { CONTINUE_SAVES, continueSaveEntries, describeSave, savedGames, SAVE_NAME_MAX } from './src/data/continueSaves';
       export { FIGHT_PROMOTER_MODE_KEY } from './src/lib/fightPromoterRoutes';
+      export { BUILD_XI_DRAFT_KEY, readBuildXiDraft } from './src/lib/buildXiDraft';
+      export { clubEraClubs, clubTableNames } from './src/data/lineupTeams';
+      export { FORMATIONS as XI_FORMATIONS } from './src/types/lineupBuilder';
       export { SAVED_FALLBACK } from './src/components/home/ContinueRow';
       export { SLOTS_INDEX_KEY, SLOT_COUNT, parkedKey, READABLE_SAVE_VERSION } from './src/lib/clubManagerSaveKeys';
       export { VISIBLE_CATEGORIES } from './src/data/gameRegistry';
@@ -757,13 +763,14 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   const cold = withWindow(() => front.renderContinue());
   if (cold !== '') fail(7, `with no save in the browser the row renders ${cold.length} characters instead of nothing`);
   if (savedGames(globalThis.localStorage).length !== 0) fail(7, 'savedGames finds a save in an empty browser');
-  const { SLOTS_INDEX_KEY, SLOT_COUNT, parkedKey, READABLE_SAVE_VERSION } = front;
+  const { SLOTS_INDEX_KEY, SLOT_COUNT, parkedKey, READABLE_SAVE_VERSION, BUILD_XI_DRAFT_KEY } = front;
   const clubSave = JSON.stringify({ saveVersion: READABLE_SAVE_VERSION, clubName: 'Planted FC', season: 3, week: 0,
     leagueClubs: ['Planted FC'], squad: [], calendar: [], xiIds: [], table: [] });
   const defaultTarget = entry => entry.slots ? entry.path + '?slot=1' : continueSaveEntries(entry)[0].path;
-  const allowedReads = [...allKeys, FIGHT_PROMOTER_MODE_KEY, SLOTS_INDEX_KEY,
+  const allowedReads = [...allKeys, FIGHT_PROMOTER_MODE_KEY, SLOTS_INDEX_KEY, BUILD_XI_DRAFT_KEY,
     ...Array.from({ length: SLOT_COUNT }, (_, i) => parkedKey(i + 1))];
   if (reads.some(k => !allowedReads.includes(k))) fail(7, `the row asks storage for an unregistered key: ${reads.filter(k => !allowedReads.includes(k)).join(', ')}`);
+  if (reads.filter(key => key === BUILD_XI_DRAFT_KEY).length !== 1) fail(7, 'the row must read the exact XI draft key once');
   for (const e of CONTINUE_SAVES) {
     store.clear();
     store.set(e.saveKey, e.slots ? clubSave : '{}');
@@ -806,6 +813,31 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     if (line !== `${year} season`) fail(7, `the ${year} NRL Continue card must read its saved season, got ${JSON.stringify(line)}`);
     if (store.get(nrl.saveKey) !== nrlRaw) fail(7, 'Continue changed the serialized NRL save bytes');
   }
+  const formation = '4-4-2';
+  const teamAssignments = front.clubEraClubs.slice(0, 11).map(name => ({ name, isNation: false }));
+  const xiDraft = { formation, teamAssignments, draftChoice: { mode: 'club-era', year: 2008 },
+    slots: front.XI_FORMATIONS[formation].slice(0, 2).map((slot, index) => {
+      const assignedTeam = teamAssignments[index].name, playerName = 'Fixture Draft Pick ' + index;
+      return [index, { ...slot, assignedTeam, isNation: false, playerName,
+        pick: { rawName: playerName, rawPosition: slot.role, club: front.clubTableNames(assignedTeam)[0], year: 2012 } }];
+    }) };
+  const xiRaw = JSON.stringify(xiDraft);
+  if (front.readBuildXiDraft(xiRaw)?.slots.length !== 2) fail(7, 'the XI fixture must reopen with two accepted picks');
+  store.clear();
+  store.set(BUILD_XI_DRAFT_KEY, xiRaw);
+  const xiCards = cards(withWindow(() => front.renderContinue()));
+  const xiGame = gameByPath.get('/build-your-xi');
+  if (!xiGame || xiCards.length !== 1 || xiCards[0].href !== xiGame.path
+    || !xiCards[0].inner.includes(xiGame.label)
+    || !xiCards[0].inner.includes('4-4-2 · 2/11 picked')) fail(7, `the XI draft should render one accurate resume card, got ${JSON.stringify(xiCards)}`);
+  if (store.get(BUILD_XI_DRAFT_KEY) !== xiRaw) fail(7, 'Continue changed the serialized XI draft bytes');
+  for (const [key, raw] of [[null, null], [BUILD_XI_DRAFT_KEY + '-other', xiRaw],
+    [BUILD_XI_DRAFT_KEY, '{damaged'], [BUILD_XI_DRAFT_KEY, JSON.stringify({ ...xiDraft, slots: [] })]]) {
+    store.clear();
+    if (key !== null) store.set(key, raw);
+    if (cards(withWindow(() => front.renderContinue())).length) fail(7, 'an absent, malformed, empty or wrong-key XI draft should stay off Home');
+    if (key !== null && store.get(key) !== raw) fail(7, 'Continue changed ignored XI draft bytes');
+  }
   store.clear();
   for (const e of CONTINUE_SAVES) store.set(e.saveKey, e.slots ? clubSave : '{}');
   const all = cards(withWindow(() => front.renderContinue())).map(c => c.href);
@@ -816,6 +848,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     console.log(`   ${CONTINUE_SAVES.length} games, every key the game's own, ${found.size} save keys in src all accounted for (${Object.keys(EXCUSED).length} excused), ${fieldsChecked} fields declared by the games`);
     console.log(`   ${Object.keys(engine).length} engine built saves and ${Object.values(SAMPLES).flat().length} shaped saves read right, ${hostileRuns} hostile saves survived, empty with none, one card per save`);
     console.log('   three real Aussie action logs resume exact initial/break/completed states, generic card only, bytes held and no absent/wrong-key card');
+    console.log('   XI draft key read once, two legacy picks rendered with exact progress, bytes held and no absent/malformed/empty/wrong-key card');
   }
 }
 
