@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { createNrlCareer, nrlAwayRecoveryQuote, nrlCareerFinance, nrlOppositionReport, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
-import { nrlNextRound } from '@/lib/nrlManager';
+import { createNrlCareer, nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlCareerFinance, nrlOppositionReport, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
+import { nrlFitLineup, nrlMatchFitness, nrlNextRound } from '@/lib/nrlManager';
 
 const ready = () => {
   let career = createNrlCareer('broncos', 1, 2026);
@@ -48,6 +48,38 @@ describe('NRL away recovery', () => {
     expect(next.history[0].finance?.awayRecoveryRound).toBe(4);
     expect(next.finance.awayRecoveryRound).toBeUndefined();
     expect(readNrlCareerSave(JSON.stringify(next))).toEqual(next);
+  });
+
+  it('regrades the fit lineup after booking away recovery and rejects the old preview', () => {
+    let before = createNrlCareer('bulldogs', 11);
+    while (before.season.round < 6) before = reduceNrlCareer(before, { type: 'advance' });
+    const fixture = { year: 2026, round: 6, clubId: 'bulldogs' };
+    expect(nrlNextRound(before.season).clubMatch).toMatchObject({ round: 6, homeId: 'sharks', awayId: 'bulldogs' });
+    const oldPreview = nrlFitLineup(before.season)!;
+    expect(oldPreview.changes).toContainEqual({ role: 'Lock', fromId: 'bulldogs-13-0', toId: 'bulldogs-13-1' });
+    expect(reduceNrlCareer(before, { type: 'applyFitLineup', previewKey: oldPreview.key }).season.lineup.Lock).toBe('bulldogs-13-1');
+
+    const booked = reduceNrlCareer(before, { type: 'bookAwayRecovery', ...fixture });
+    const restored = readNrlCareerSave(JSON.stringify(booked))!;
+    expect(restored).toEqual(booked);
+    expect(nrlAwayRecoveryQuote(restored)).toMatchObject({ booked: true, normalFitness: 93, bookedFitness: 100 });
+    const bonus = nrlAwayRecoveryBonus(restored);
+    const locks = restored.season.squad.filter(player => player.role === 'Lock');
+    expect(locks.map(player => [player.name, player.rating, nrlMatchFitness(restored.season, player, bonus)]))
+      .toEqual([['Arlo Forde', 77, 100], ['Callum Rowan', 76, 100]]);
+
+    const preview = nrlFitLineup(restored.season, bonus)!;
+    expect(preview.changes).toEqual(oldPreview.changes.filter(change => change.role !== 'Lock'));
+    expect(preview.key).not.toBe(oldPreview.key);
+    expect(reduceNrlCareer(restored, { type: 'applyFitLineup', previewKey: oldPreview.key })).toBe(restored);
+
+    const applied = reduceNrlCareer(restored, { type: 'applyFitLineup', previewKey: preview.key });
+    expect(applied.season.lineup).toEqual(preview.next.lineup);
+    expect(readNrlCareerSave(JSON.stringify(applied))).toEqual(applied);
+    const played = reduceNrlCareer(applied, { type: 'advance' });
+    const match = played.season.results.find(row => row.round === 6 && row.awayId === 'bulldogs')!;
+    expect(match.playerScoring!.starters).toContain('bulldogs-13-0');
+    expect(match.playerScoring!.starters).not.toContain('bulldogs-13-1');
   });
 
   it('rejects purchases at home, in another round, and when club cash cannot cover reserved staff wages', () => {
