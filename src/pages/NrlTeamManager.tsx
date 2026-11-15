@@ -34,7 +34,7 @@ import {
 } from '@/lib/nrlManager';
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
-  nrlCanReviewTickets, nrlHomeGateReport, nrlScheduledRotationOptions, nrlTicketReviewRound,
+  nrlCanReviewTickets, nrlHomeGateReport, nrlSavedMatchPlanPreview, nrlScheduledRotationOptions, nrlTicketReviewRound,
   nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport, nrlPositionTraining,
   nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIndividualSkillWorkOptions, nrlIndividualSkillWorkProgress, nrlIntensiveBye, nrlIntensiveMatch, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveCoachQuote, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlPastLadders, nrlSelectionPromise, nrlSelectionPromiseTerms, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
@@ -1919,6 +1919,11 @@ function SavedLineup({ career, onAction, disabled }: {
   const booking = career.scheduledRotation;
   if (!selection && !booking && !fixtures.length) return null;
   const preview = savedLineup ? nrlSavedLineupPreview(season, savedLineup) : null;
+  const matchPlan = nrlSavedMatchPlanPreview(career, active);
+  const attack = season.attackPlan ?? 'standard';
+  const kicks = season.kickingPlan ?? 'mixed';
+  const sameLineup = JSON.stringify(selection) === JSON.stringify(savedLineup);
+  const sameSettings = matchPlan?.settings.attackPlan === attack && matchPlan.settings.kickingPlan === kicks;
   const nameOf = (id: string) => season.squad.find(player => player.id === id)?.name;
   const chosen = fixtures.find(fixture => fixture.round === fixtureRound);
   const fixtureLabel = (fixture: NrlFixture) => {
@@ -1956,13 +1961,31 @@ function SavedLineup({ career, onAction, disabled }: {
         )}
         {selection && <div className="flex flex-wrap gap-2">
           <Button type="button" size="lg" variant="outline" className="px-3"
-            disabled={JSON.stringify(selection) === JSON.stringify(savedLineup)} onClick={save}>
+            disabled={sameLineup} onClick={save}>
             {savedLineup ? 'Replace saved lineup' : 'Save this lineup'}
           </Button>
           {preview && <Button type="button" size="lg" className="px-3" disabled={!preview.changed} onClick={() => {
             if (onAction({ type: 'applySavedLineup', previewKey: preview.key, slot })) summary.current?.focus();
           }}>Apply saved lineup</Button>}
         </div>}
+        {selection && <section className="space-y-2 border-t border-border pt-2" aria-labelledby="nrl-saved-match-plan">
+          <h3 id="nrl-saved-match-plan" className="font-semibold">Match plan</h3>
+          <p className="text-muted-foreground">Save your current team, attack plan and last-tackle kicks to this slot. Replacing only the lineup keeps its saved tactics.</p>
+          {matchPlan && <div className="space-y-1 text-muted-foreground" role="status">
+            <p>Attack plan · {attack !== matchPlan.settings.attackPlan && attackPlanLabel(attack) + ' → '}{attackPlanLabel(matchPlan.settings.attackPlan)}</p>
+            <p>Last-tackle kicks · {kicks !== matchPlan.settings.kickingPlan && kickingPlans[kicks].label + ' → '}{kickingPlans[matchPlan.settings.kickingPlan].label}</p>
+            {!matchPlan.available && <p>The saved attack plan is unavailable for this fixture.</p>}
+            {matchPlan.available && !matchPlan.changed && <p>This match already uses the saved plan.</p>}
+          </div>}
+          <div className="flex flex-wrap gap-2">
+            <Button type="button" size="lg" variant="outline" className="px-3" disabled={sameLineup && sameSettings} onClick={() => {
+              if (onAction({ type: 'saveMatchPlan', year, clubId, round, slot: active })) summary.current?.focus();
+            }}>Save current match plan</Button>
+            {matchPlan && <Button type="button" size="lg" className="px-3" disabled={!matchPlan.available || !matchPlan.changed} onClick={() => {
+              if (onAction({ type: 'applySavedMatchPlan', year, clubId, round, slot: active, previewKey: matchPlan.key })) summary.current?.focus();
+            }}>Apply saved match plan</Button>}
+          </div>
+        </section>}
         {booking ? <div className="space-y-2 border-t border-border pt-2" data-nrl-scheduled-rotation>
           <p className="font-semibold" role="status">{fixtureLabel(booking.fixture)}. {booking.returnLineup ? 'Rotation active.' : 'Rotation scheduled.'}</p>
           <Button type="button" size="lg" variant="outline" onClick={() => {
@@ -2952,6 +2975,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>When you stay at the club, a returning starter can keep a position they learned in training.</li>
               <li>Change clubs between seasons from Season review.</li>
               <li>When staying at your club, select Keep saved lineups in Season review to carry your presets forward. Apply a saved lineup in Squad.</li>
+              <li>In Saved lineup, save a match plan to keep the team's attack and last-tackle kicks with its selection. Preview the slot and apply the plan for your next match.</li>
               <li>In Squad, open Saved lineup and choose Rotation to schedule that team for one upcoming regular-season match. You can edit the team for that fixture, and your usual lineup returns afterward.</li>
               <li>When staying at your club, check Fill open squad places in Season review to preview affordable one-season free-agent deals. Your preference saves until you make a decision about next season.</li>
               <li>Open State of Origin in the Club office to coach New South Wales or Queensland through three games alongside your club career.</li>

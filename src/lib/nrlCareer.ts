@@ -12,10 +12,10 @@ import {
 } from '@/lib/nrlPlayerScoring';
 import {
   archiveNrlFinals, archiveNrlLadder, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlArchivedLadder, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
-  isNrlPhysioTreatment, isNrlSpecialistPlan, nrlByeTrainingPreview, nrlIndividualRecoveryOptions, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularReturnFixture, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
+  isNrlAttackPlan, isNrlKickingPlan, isNrlPhysioTreatment, isNrlSpecialistPlan, nrlByeTrainingPreview, nrlIndividualRecoveryOptions, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularReturnFixture, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
   nrlPlanAdjustments, nrlPlanMatchups, nrlReserveGradeEnd, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore, validNrlRatingChanges,
-  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlLeagueLadderArchive, type NrlLivePlanChoice, type NrlManagerState, type NrlMatchResult,
+  type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlKickingPlan, type NrlLeagueLadderArchive, type NrlLivePlanChoice, type NrlManagerState, type NrlMatchResult,
   type NrlPhysioTreatment, type NrlPlayer, type NrlRole, type NrlSavedLineup, type NrlYear,
 } from '@/lib/nrlManager';
 import {
@@ -210,6 +210,9 @@ interface NrlRatingReview {
   assistant?: string[];
 }
 
+type NrlMatchPlanSlot = 'first' | 'rotation';
+interface NrlSavedMatchPlan { attackPlan: NrlAttackPlan; kickingPlan: NrlKickingPlan }
+
 export interface NrlCareerState {
   version: 2;
   openingYear: NrlYear;
@@ -232,6 +235,7 @@ export interface NrlCareerState {
   shortlist?: string[];
   savedLineup?: NrlSavedLineup;
   savedRotationLineup?: NrlSavedLineup;
+  savedMatchPlans?: Partial<Record<NrlMatchPlanSlot, NrlSavedMatchPlan>>;
   scheduledRotation?: { fixture: NrlFixture; preset: NrlSavedLineup; returnLineup?: NrlSavedLineup };
   positionTraining?: NrlPositionCourse;
   origin?: NrlOriginSeries;
@@ -283,6 +287,8 @@ export type NrlCareerAction = NrlAction
   | { type: 'agreeMutualRelease'; year: number; clubId: string; playerId: string }
   | { type: 'saveLineup'; year: number; clubId: string; slot?: 'rotation' }
   | { type: 'applySavedLineup'; previewKey: string; slot?: 'rotation' }
+  | { type: 'saveMatchPlan'; year: number; clubId: string; round: number; slot: NrlMatchPlanSlot }
+  | { type: 'applySavedMatchPlan'; year: number; clubId: string; round: number; slot: NrlMatchPlanSlot; previewKey: string }
   | { type: 'scheduleRotation'; year: number; clubId: string; round: number; fixtureRound: number }
   | { type: 'cancelRotation'; year: number; clubId: string; round: number }
   | { type: 'startPositionTraining'; year: number; clubId: string; round: number; playerId: string; role: NrlRole }
@@ -1857,6 +1863,27 @@ export function nrlCounterPlanPreview({ season, legacySeason, retired }: NrlCare
   return clubMatch ? nrlCounterPlan(season, clubMatch) : null;
 }
 
+export function nrlSavedMatchPlanPreview(state: NrlCareerState, slot: NrlMatchPlanSlot) {
+  const selection = slot === 'first' ? state.savedLineup : state.savedRotationLineup;
+  const settings = state.savedMatchPlans?.[slot];
+  if (!selection || !settings || state.legacySeason || state.retired || state.outOfWork) return null;
+  const { season } = state;
+  const lineup = nrlSavedLineupPreview(season, selection);
+  if (!lineup) return null;
+  const { year, clubId, round } = season;
+  const currentAttack = season.attackPlan ?? 'standard';
+  const currentKicks = season.kickingPlan ?? 'mixed';
+  const prepared = lineup.changed ? { ...state, season: lineup.next } : state;
+  const attack = reduceNrlCareer(prepared, { type: 'setAttackPlan', year, clubId, round, attackPlan: settings.attackPlan });
+  const next = reduceNrlCareer(attack, { type: 'setKickingPlan', year, clubId, round, plan: settings.kickingPlan });
+  const available = (next.season.attackPlan ?? 'standard') === settings.attackPlan
+    && (next.season.kickingPlan ?? 'mixed') === settings.kickingPlan;
+  return {
+    lineup, settings, next, available, changed: next !== state,
+    key: JSON.stringify([slot, lineup.key, currentAttack, currentKicks, settings]),
+  };
+}
+
 export interface NrlOppositionReport {
   opponentId: string;
   ladderRank: number | null;
@@ -2690,7 +2717,7 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
   if (move && (move.fromYear !== season.year || (!seasonOut && !nrlOffseasonClubs(state).some(club => club.id === move.clubId)))) return state;
   const incoming = move ? { state, retained: undefined } : retentionPreparation(state);
   if (!incoming) return state;
-  const { developmentFocus, youthFocusRequiresAppearances: _youthFocusRule, ratingReview: _oldRatingReview, shortlist, savedLineup, savedRotationLineup, positionTraining, offseasonApplication, leagueRecruitment, coachRetention, contractApproach,
+  const { developmentFocus, youthFocusRequiresAppearances: _youthFocusRule, ratingReview: _oldRatingReview, shortlist, savedLineup, savedRotationLineup, savedMatchPlans, positionTraining, offseasonApplication, leagueRecruitment, coachRetention, contractApproach,
     selectionPromise, outOfWork, satOutSeason, preferFreeAgents: _freeAgentChoice, retentionPriorityId: _priority, ...career } = state;
   const year = season.year + (seasonOut ? 2 : 1);
   const clubId = move?.clubId ?? season.clubId;
@@ -3021,6 +3048,7 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         ...next,
         ...(state.savedLineup && { savedLineup: carrySavedLineup(next.season, state.savedLineup) }),
         ...(state.savedRotationLineup && { savedRotationLineup: carrySavedLineup(next.season, state.savedRotationLineup) }),
+        ...(state.savedMatchPlans && { savedMatchPlans: state.savedMatchPlans }),
       };
     }
     case 'upgradeMedical': {
@@ -3202,6 +3230,25 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       if (state.legacySeason || !savedLineup) return state;
       const preview = nrlSavedLineupPreview(state.season, savedLineup);
       return preview?.changed && preview.key === action.previewKey ? { ...state, season: preview.next } : state;
+    }
+    case 'saveMatchPlan':
+    case 'applySavedMatchPlan': {
+      const { season } = state;
+      const { year, clubId, round, slot } = action;
+      if (state.legacySeason || year !== season.year || clubId !== season.clubId || round !== season.round
+        || (slot !== 'first' && slot !== 'rotation')) return state;
+      if (action.type === 'applySavedMatchPlan') {
+        const preview = nrlSavedMatchPlanPreview(state, slot);
+        return preview?.available && preview.changed && preview.key === action.previewKey ? preview.next : state;
+      }
+      const selection = nrlMatchdaySelection(season);
+      if (!selection) return state;
+      const field = slot === 'first' ? 'savedLineup' : 'savedRotationLineup';
+      const settings = { attackPlan: season.attackPlan ?? 'standard', kickingPlan: season.kickingPlan ?? 'mixed' } satisfies NrlSavedMatchPlan;
+      const existing = state.savedMatchPlans?.[slot];
+      if (existing?.attackPlan === settings.attackPlan && existing.kickingPlan === settings.kickingPlan
+        && JSON.stringify(selection) === JSON.stringify(state[field])) return state;
+      return { ...state, [field]: selection, savedMatchPlans: { ...state.savedMatchPlans, [slot]: settings } };
     }
     case 'scheduleRotation':
     case 'cancelRotation': {
@@ -4208,6 +4255,16 @@ function validSavedLineup(value: unknown, season: NrlManagerState): boolean {
     && selected.every(id => typeof id === 'string' && squad.has(id));
 }
 
+function validSavedMatchPlans(state: Record<string, unknown>): boolean {
+  const value = state.savedMatchPlans;
+  if (value === undefined) return true;
+  if (state.legacySeason || !record(value)) return false;
+  const plans = Object.entries(value);
+  return plans.length > 0 && plans.every(([slot, plan]) =>
+    ((slot === 'first' && state.savedLineup !== undefined) || (slot === 'rotation' && state.savedRotationLineup !== undefined))
+      && record(plan) && Object.keys(plan).length === 2 && isNrlAttackPlan(plan.attackPlan) && isNrlKickingPlan(plan.kickingPlan));
+}
+
 function validScheduledRotation(value: unknown, season: NrlManagerState, legacy: boolean): boolean {
   if (value === undefined) return true;
   if (legacy || !season.kickerId || season.phase !== 'regular' || !record(value)
@@ -4330,6 +4387,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     || (value.legacySeason && (value.season.year !== value.openingYear || value.season.kickerId || value.season.injuryTracking || value.season.results.some(match => match.benchUsed !== undefined)))
     || !validSavedLineup(value.savedLineup, value.season)
     || !validSavedLineup(value.savedRotationLineup, value.season)
+    || !validSavedMatchPlans(value)
     || !validScheduledRotation(value.scheduledRotation, value.season, value.legacySeason)
     || !validPositionTraining(value.positionTraining, value.season, value.legacySeason)
     || !Array.isArray(value.players) || value.players.length > 650

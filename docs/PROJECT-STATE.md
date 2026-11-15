@@ -1,10 +1,24 @@
+## 2026-11-15: Rugby match plans, receiver roles and direct-entry Back
+
+- NRL Team Manager lets First choice or Rotation save a matchday team with its attack plan and last-tackle kicks. The preview shows any player replacements and tactical changes before one save write applies the plan. Ordinary lineup presets and scheduled rotation still work on their own. In the paired Bears fixture, Counter opponent with Contest kicks changed a 28–24 win into a 28–30 loss. Existing paths matched the #1002 engine across 158 save checkpoints.
+- NFL My Career lets a signed starting wide receiver choose Inside routes. In two paired seasons it added 13 catches, kept total receiving yards steady and gave up one touchdown. Existing replay support, camp competition and playoffs were checked. The usual and adjacent RB and QB paths matched 480 paired cases.
+- The GameNavbar Back button sends directly opened games and sport hubs to Home. In-site Back still restores the original Home link or the filtered hub. Both cold-entry fixtures reproduced the old outcome on the pinned published release.
+
+The combined production build, 112 focused tests across 13 files and seven pinned local browser journeys passed. The 17-game receiver replay reconciled all game logs with the saved totals and opened a touchdown play in its match report. The 16-game save kept its existing replay availability rule and retained the exact receiving line and single programme receipt across reload. The NRL and NFL guides, publication ledger and guide search keywords were refreshed.
+
 ## 2026-11-15: Injury contracts and saves across tabs
+
+[PR #1003](https://github.com/PapiSalgueroM/ballpark-hero/pull/1003) published exact main `975f8569dda0da269f12baa67d065a077a49764a`, deployment `9f509103-b7f2-4808-856c-28dcf9782ca7`, canonical entry `/assets/index-jZ00Dt3c.js`. The merged tree matched tested head `1f2908bed`. All seven live browser journeys, 14 pinned endpoints and 174 sitemap routes passed. IndexNow accepted both refreshed guides. All 20 local site checks, the 174-route local SEO comparison, the Home fold and all 16 download budgets passed.
 
 - Soccer Career charges a completed injury season to the current contract. If it expires, the normal extension and free transfer decisions open after rehab. In the Brighton fixture, the 19-appearance injury season uses the last year and keeps the weekly wage at €4,592 until the player signs a new deal. The injury season and the rehab outcome each settle once across reloads.
 - Stadium Tycoon pauses purchases, match rewards and away settlement when it detects a newer stadium save. Reload latest save opens the current ground. An older tab closing or reloading preserved the other tab's exact $24 construction booking, two-match delivery, and $16 remaining cash in the fixture.
 - The US Career season programme protects the current save when a player applies a preview, chooses an option, or clears a plan in an older tab. In the paired NBA browser journeys, each action preserved every saved byte of a newer 82-game season and showed a reload notice inside the open programme.
 
 The production build, 95 focused tests and seven local browser journeys passed. All seven paired controls reproduced the old behavior on the previous pinned deployment. The Soccer Career and Stadium Tycoon guides, publication ledger and guide search keywords were refreshed. The 360 archived boards through November 14 Eastern match the previous release byte for byte.
+
+Hosted application types, production build and Career entry guide verification passed. Wider Soccer, US Career and Tycoon jobs reported failures. Three broader US Career recovery assertions also failed on exact #1002 because the expected empty career key omitted the separately saved creator setup in NFL, MLB and NHL.
+
+Across 34 seeded NRL seasons, 6,936 match results averaged 41.61 total points against 48.11 from the official 2026 ladder. Managed and rival games averaged 41.22 and 41.67. An isolated scoring prototype reached 47.93 on the same seeds, with average best and worst records of 19.76 and 3.53 wins. The official 2026 records ranged from five to 18 wins. Club and international play still require separate scoring checks. [Official NRL ladder](https://www.nrl.com/ladder)
 
 ## 2026-11-15: Rugby skills, basketball playoff rotations, World XI tactics and admin retries
 
