@@ -14,7 +14,7 @@ import {
   nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractApproachPreview, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer,
   nrlContractSwapOptions, nrlContractSwapPlayers, nrlContractTermLimit,
-  nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
+  nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachReassignmentQuote, nrlCoachReassignmentSpend, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
   nrlConcessionsQuote, nrlConcessionsSpend,
   nrlDevelopmentAffected, nrlDevelopmentAssistantProgress, nrlDevelopmentPriorityOptions, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities, nrlPhysioSpend,
@@ -1328,11 +1328,41 @@ function AssistantCourse({ career, role, onAction, disabled }: {
   );
 }
 
+function AssistantReassignment({ career, name, onAction, disabled }: {
+  career: NrlCareerState; name: string; onAction: Dispatch; disabled: boolean;
+}) {
+  const title = useRef<HTMLHeadingElement>(null);
+  const quote = nrlCoachReassignmentQuote(career);
+  if (!quote) return null;
+  const { year, clubId, round } = career.season;
+  const changed = career.finance.coachReassignmentRound;
+  const focus = quote.role === 'attack' ? 'Attack' : 'Defence';
+  return (
+    <section className="mt-3 space-y-2 rounded-lg border border-border bg-background p-3 text-sm">
+      <h3 ref={title} tabIndex={-1} className="font-bold outline-none">Assistant reassignment</h3>
+      {changed !== undefined ? <p role="status" className="text-muted-foreground" data-nrl-coach-reassigned>
+        {name} moved to {focus} in Round {changed}. Fee paid {money(quote.fee)}.
+      </p> : quote.reason ? <p className="text-muted-foreground">{quote.reason}</p> : <details>
+        <summary className="flex min-h-11 cursor-pointer items-center font-semibold">Review assistant reassignment</summary>
+        <div className="space-y-2 pb-2">
+          <p>Move {name} to {focus} for the rest of this season. {coachEffect(quote.role)}</p>
+          <p className="text-muted-foreground">Pay {money(quote.fee)} from club cash. Their existing wages remain due.{!career.finance.coachHire?.retained && year < NRL_LAST_YEAR && ' If you retain them next season, they resume their original role.'}</p>
+          {career.finance.coachHire?.qualified && <p className="text-muted-foreground">The qualification belongs to their original role. Their new focus gives the standard +{NRL_COACHING_BONUS} bonus.</p>}
+          <Button type="button" size="lg" disabled={disabled} onClick={() => {
+            if (onAction({ type: 'reassignCoach', year, clubId, round })) title.current?.focus();
+          }}>Confirm assistant reassignment</Button>
+        </div>
+      </details>}
+    </section>
+  );
+}
+
 function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const { year, clubId, round } = career.season;
   const clubName = useNrlClubName('full');
   const source = career.history.find(row => row.year === year - 1 && row.coachRetained && row.appointment?.clubId === clubId);
   const { candidates, current, fee, wagePerRound, remainingWages, reason, developmentReason } = nrlCoachQuote(career);
+  const { coachRole, coachBonus } = nrlCoachTactics(career.finance);
   const progress = nrlDevelopmentAssistantProgress(career);
   const priorityOptions = nrlDevelopmentPriorityOptions(career, progress);
   return (
@@ -1343,8 +1373,8 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
       <div className="pb-3 text-sm">
         {current ? (
           <>
-            <p className="font-semibold" data-nrl-coach-current>{current.name} · {coachLabels[current.role]}</p>
-            <p className="mt-1 text-muted-foreground">{coachEffect(current.role, nrlCoachTactics(career.finance).coachBonus)}</p>
+            <p className="font-semibold" data-nrl-coach-current>{current.name} · {coachLabels[coachRole ?? current.role]}</p>
+            <p className="mt-1 text-muted-foreground">{coachEffect(coachRole ?? current.role, coachBonus)}</p>
             <p className="mt-2 text-muted-foreground">Signed through this season. Remaining wages {money(remainingWages)}.</p>
             {career.finance.coachHire?.retained && <p className="mt-1 text-muted-foreground">
               {source ? `Joined with you from ${clubName(source.year, source.clubId)}.` : `Retained from ${year - 1}.`} No new signing fee.
@@ -1379,7 +1409,10 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
                 ) : <p className="mt-1 text-muted-foreground">No eligible players are signed to return yet.</p>}
               </>
             )}
-            {current.role !== 'development' && <AssistantCourse career={career} role={current.role} onAction={onAction} disabled={disabled} />}
+            {current.role !== 'development' && <>
+              <AssistantReassignment career={career} name={current.name} onAction={onAction} disabled={disabled} />
+              <AssistantCourse career={career} role={current.role} onAction={onAction} disabled={disabled} />
+            </>}
             <AssistantExtension career={career} onAction={onAction} disabled={disabled} />
           </>
         ) : (
@@ -1710,6 +1743,7 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
                 ...(cash.renewalHold ? [['Renewal hold fee', nrlRenewalHoldSpend(cash)] as const] : []),
                 ...(cash.coachHire ? [['Coach signing fee', coachSpend.signingFee], ['Coach wages paid', coachSpend.wages]] as [string, number][] : []),
                 ...(courseSpend ? [['Assistant coaching course', courseSpend] as const] : []),
+                ...(cash.coachReassignmentRound !== undefined ? [['Assistant reassignment', nrlCoachReassignmentSpend(cash)] as const] : []),
                 ['Profit or loss', cash.profit], ['Cash balance', cash.cash],
               ]} />
             </>
@@ -2703,6 +2737,9 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                 </p>}
                 {record.finance?.coachCourseRound !== undefined && <p className="text-sm text-muted-foreground">
                   Assistant coaching course completed · {money(nrlCoachCourseSpend(record.finance))}
+                </p>}
+                {record.finance?.coachReassignmentRound !== undefined && <p className="text-sm text-muted-foreground">
+                  Assistant reassignment · Round {record.finance.coachReassignmentRound} · {money(nrlCoachReassignmentSpend(record.finance))}
                 </p>}
                 {record.coachDevelopment && (
                   <p className="text-sm text-muted-foreground">

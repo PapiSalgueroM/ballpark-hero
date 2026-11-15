@@ -12,7 +12,7 @@ import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import {
   FactoryState, FacilityId, SAVE_KEY,
   newFactory, deserialize, serialize, applyOffline, advanceClock,
-  buyFacility, sellProspect, startShowcase, moveUp, setCoachingFocus,
+  buyFacility, salePrice, sellProspect, startShowcase, moveUp, setCoachingFocus,
   bedFree, deliverPack, makeProspectInBand, promote, sellSenior, equipBoot,
 } from '@/lib/wonderkidFactory';
 import type { PackId } from '@/lib/wonderkidFactory';
@@ -173,12 +173,15 @@ export function useWonderkidFactory() {
     if (buyFacility(stateRef.current!, id)) bump();
   }, [bump, checkMoved, markSessionPlay]);
 
-  const doSell = useCallback((id: number) => {
+  const doSell = useCallback((id: number, minimumPrice: number): 'price-changed' | undefined => {
     if (checkMoved()) return;
-    const next = copyAcademy(stateRef.current!);
-    const kid = next.prospects.find(p => p.id === id);
+    const current = stateRef.current!;
+    const kid = current.prospects.find(p => p.id === id);
+    if (!kid) return;
+    if (salePrice(current, kid) < minimumPrice) return 'price-changed';
+    const next = copyAcademy(current);
     const price = sellProspect(next, id);
-    if (kid && price !== null && commitAcademy(next)) {
+    if (price !== null && commitAcademy(next)) {
       markSessionPlay();
       pushFloater(`💵 ${kid.name} sold for $${price.toLocaleString('en-US')}`, 'sale');
     }

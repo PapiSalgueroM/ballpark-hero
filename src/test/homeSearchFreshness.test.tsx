@@ -6,6 +6,8 @@ import Index from '@/pages/Index';
 import { ScrollToTop } from '@/App';
 import { ALL_GAMES, VISIBLE_CATEGORIES } from '@/data/gameRegistry';
 import type { useMostPlayed } from '@/hooks/useMostPlayed';
+import { scoreGuess, type WhoAmIPlayer } from '@/lib/whoAmI';
+import { WHO_AM_I_ROUND_KEY } from '@/lib/whoAmIRoundSave';
 
 const state = vi.hoisted(() => ({
   heldQuery: undefined as string | undefined,
@@ -217,6 +219,35 @@ it('puts active saves and picks before discovery in keyboard order and restores 
   expect(continueShelf).toBeVisible();
   expect(pickShelf).toBeVisible();
   expect(localStorage.getItem('nrl-manager-save-v1-slot-2')).toBe(saved);
+});
+
+it.each([true, false])('moves Back focus after a completed Who Am I round, with another save=%s', anotherSave => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  const secret: WhoAmIPlayer = {
+    name: 'Fixture Alder', personKey: 'alder', nationality: 'England',
+    position: 'Centre-Forward', club: 'Fixture City', value: 20_000_000, age: 27, year: 2026,
+  };
+  const other = { ...secret, name: 'Fixture Birch', personKey: 'birch', age: 25 };
+  const guess = (player: WhoAmIPlayer) => ({ player, breakdown: scoreGuess(player, secret, new Map()) });
+  const round = { version: 1, phase: 'playing', budget: 10, secret, guesses: [guess(other)] };
+  localStorage.setItem(WHO_AM_I_ROUND_KEY, JSON.stringify(round));
+  if (anotherSave) localStorage.setItem('nrl-manager-save-v1', '{"season":{"year":2027}}');
+  function Game() {
+    const navigate = useNavigate();
+    return <button onClick={() => {
+      localStorage.setItem(WHO_AM_I_ROUND_KEY, JSON.stringify({ ...round, phase: 'won', guesses: [...round.guesses, guess(secret)] }));
+      navigate(-1);
+    }}>Finish and go back</button>;
+  }
+  const { container } = render(<MemoryRouter initialEntries={[{ pathname: '/', key: `finished-round-${anotherSave}` }]}><Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="/who-am-i" element={<Game />} />
+  </Routes></MemoryRouter>);
+  const returnCard = () => container.querySelector('[data-continue-card="/who-am-i"]');
+  fireEvent.click(returnCard()!);
+  fireEvent.click(screen.getByRole('button', { name: 'Finish and go back' }));
+  expect(returnCard()).toBeNull();
+  expect(container.querySelector(anotherSave ? '[data-continue-card="/nrl-team-manager"]' : '[data-stage-card="/soccer-career"]')).toHaveFocus();
 });
 
 it('restores the exact result and keyboard focus when a game navigates back to a Home search', async () => {

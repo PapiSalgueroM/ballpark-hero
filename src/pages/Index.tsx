@@ -262,8 +262,11 @@ export default function Index() {
     if (opener.selector === POPULAR_GAME_LINK || document.activeElement !== document.body) return;
     const scope = isSearching ? searchResultsRef.current : opener.catalogueSport
       ? catalogueRef.current?.querySelector(`section[data-sport="${opener.catalogueSport}"]`) : catalogueRef.current;
-    const result = Array.from(scope?.querySelectorAll<HTMLAnchorElement>(opener.selector) ?? [])
+    const returned = Array.from(scope?.querySelectorAll<HTMLAnchorElement>(opener.selector) ?? [])
       .find(link => link.getAttribute('href') === opener.path);
+    const result = returned ?? (opener.selector === CONTINUE_GAME_LINK
+      ? scope?.querySelector<HTMLAnchorElement>(CONTINUE_GAME_LINK) ?? scope?.querySelector<HTMLAnchorElement>(FEATURED_GAME_LINK)
+      : undefined);
     const shelf = result?.closest<HTMLElement>('[data-home-shelf-rail]');
     if (shelf && result && opener.shelfScroll !== undefined) {
       shelf.scrollLeft = opener.shelfScroll;

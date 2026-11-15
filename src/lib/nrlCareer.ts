@@ -79,6 +79,7 @@ export type NrlSponsorOffer = keyof typeof NRL_SPONSOR_OFFERS;
 const COACH_SIGNING_FEE = 120_000;
 const COACH_ROUND_WAGE = 18_000;
 const COACH_COURSE_FEE = COACH_SIGNING_FEE / 2;
+const COACH_REASSIGNMENT_FEE = 60_000;
 const COACH_COURSE_ROUNDS = 4;
 const COACH_ROLES = ['attack', 'defense', 'development'] as const;
 export type NrlStaffRole = typeof COACH_ROLES[number];
@@ -129,6 +130,7 @@ export interface NrlCareerBook {
   concessionReceipts?: number;
   coachHire?: NrlCoachHire;
   coachCourseRound?: number;
+  coachReassignmentRound?: number;
   mutualRelease?: NrlMutualRelease;
   rivalTakeover?: { playerId: string; playerName: string; sellerId: string; annualSalary: number; endYear: number };
   renewalHold?: NrlRenewalHold;
@@ -320,6 +322,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'setRetentionPriority'; year: number; clubId: string; playerId: string | null }
   | { type: 'setLeagueRecruitment'; year: number; clubId: string; enabled: boolean }
   | { type: 'setCoachRetention'; year: number; clubId: string; enabled: boolean }
+  | { type: 'reassignCoach'; year: number; clubId: string; round: number }
   | { type: 'startCoachCourse'; year: number; clubId: string; round: number }
   | { type: 'resolveJudiciary'; year: number; clubId: string; caseRound: number; decision: NrlJudiciaryDecision }
   | { type: 'retireCareer'; year: number; clubId: string };
@@ -1123,6 +1126,10 @@ export function nrlCoachCourseSpend({ coachCourseRound }: NrlCareerBook): number
   return coachCourseRound === undefined ? 0 : COACH_COURSE_FEE;
 }
 
+export function nrlCoachReassignmentSpend({ coachReassignmentRound }: NrlCareerBook): number {
+  return coachReassignmentRound === undefined ? 0 : COACH_REASSIGNMENT_FEE;
+}
+
 function coachTermWages(firstRound: number, finalRound: number): number {
   return (finalRound - firstRound + 1) * COACH_ROUND_WAGE;
 }
@@ -1161,7 +1168,8 @@ export function nrlCareerFinance(state: Pick<NrlCareerState, 'finance'>): NrlCar
     + nrlBoardRecruitmentIncome(state.finance)
     + (state.finance.concessionReceipts ?? 0) - nrlConcessionsSpend(state.finance)
     - wagesPaid - operatingCosts - nrlMedicalSpend(state.finance) - nrlAcademyFacilitySpend(state.finance) - nrlAcademyParallelSpend(state.finance)
-    - nrlMutualReleaseSpend(state.finance) - signingFee - wages - nrlCoachCourseSpend(state.finance) - nrlPhysioSpend(state.finance)
+    - nrlMutualReleaseSpend(state.finance) - signingFee - wages - nrlCoachCourseSpend(state.finance)
+    - nrlCoachReassignmentSpend(state.finance) - nrlPhysioSpend(state.finance)
     - nrlAwayRecoverySpend(state.finance) - nrlReserveCoachSpend(state.finance) - nrlRenewalHoldSpend(state.finance)
     - nrlAcademyCrossTrainingSpend(state.finance) - nrlRivalTakeoverSpend(state.finance);
   return { ...state.finance, cash: openingCash + profit, profit };
@@ -1183,15 +1191,29 @@ function canHireDevelopmentAssistant(year: number, clubId: string, round: number
     .filter(fixtures => fixtures.some(fixture => fixture.includes(clubId))).length >= NRL_DEVELOPMENT_ASSISTANT.appearances;
 }
 
-export function nrlTacticalAssistant({ coachHire }: NrlCareerBook): NrlCoachRole | undefined {
-  return coachHire?.role === 'development' ? undefined : coachHire?.role;
+export function nrlTacticalAssistant({ coachHire, coachReassignmentRound }: NrlCareerBook): NrlCoachRole | undefined {
+  const role = coachHire?.role;
+  if (!role || role === 'development') return undefined;
+  return coachReassignmentRound === undefined ? role : role === 'attack' ? 'defense' : 'attack';
 }
 
 export function nrlCoachTactics(finance: NrlCareerBook) {
   return {
     coachRole: nrlTacticalAssistant(finance),
-    coachBonus: finance.coachHire?.qualified ? NRL_QUALIFIED_COACHING_BONUS : NRL_COACHING_BONUS,
+    coachBonus: finance.coachHire?.qualified && finance.coachReassignmentRound === undefined ? NRL_QUALIFIED_COACHING_BONUS : NRL_COACHING_BONUS,
   };
+}
+
+export function nrlCoachReassignmentQuote(state: NrlCareerState) {
+  const { finance, season } = state;
+  const original = finance.coachHire?.role;
+  if (!original || original === 'development' || state.legacySeason || state.retired || !season.kickerId) return null;
+  const role: NrlCoachRole = original === 'attack' ? 'defense' : 'attack';
+  const reason = finance.coachReassignmentRound !== undefined ? 'The assistant has already changed focus this season.'
+    : season.live ? 'Finish the live match first.'
+    : season.phase !== 'regular' || !nrlNextRound(season).clubMatch ? 'Reassignment opens before a regular-season match.'
+      : facilityPurchaseRefusal(finance, lastRound(season.year), COACH_REASSIGNMENT_FEE);
+  return { role, fee: COACH_REASSIGNMENT_FEE, reason };
 }
 
 export function nrlCoachCourseQuote(state: NrlCareerState) {
@@ -2894,6 +2916,11 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       if (action.year !== year || action.clubId !== clubId || action.round !== round || nrlCoachCourseQuote(state).reason !== null) return state;
       return { ...state, finance: { ...state.finance, coachCourseRound: round } };
     }
+    case 'reassignCoach': {
+      const { year, clubId, round } = state.season;
+      if (action.year !== year || action.clubId !== clubId || action.round !== round || nrlCoachReassignmentQuote(state)?.reason !== null) return state;
+      return { ...state, finance: { ...state.finance, coachReassignmentRound: round } };
+    }
     case 'setOffseasonFreeAgents': {
       const { year, clubId } = state.season;
       if (action.year !== year || action.clubId !== clubId || typeof action.enabled !== 'boolean'
@@ -3384,6 +3411,7 @@ function validBook(value: unknown, roundLimit: number): value is NrlCareerBook {
       && intIn(value.concessionReceipts, CONCESSIONS_HOME_INCOME, (roundLimit - 1) * CONCESSIONS_HOME_INCOME)
       && value.concessionReceipts % CONCESSIONS_HOME_INCOME === 0))
     && (value.coachCourseRound === undefined || (value.fromRound === 1 && intIn(value.coachCourseRound, 1, roundLimit)))
+    && (value.coachReassignmentRound === undefined || (value.fromRound === 1 && intIn(value.coachReassignmentRound, 1, roundLimit)))
     && (value.pathways === undefined || (value.fromRound === 1 && record(value.pathways)
       && (value.pathways.brief === undefined || value.pathways.brief === 'rotation')
       && Object.keys(value.pathways).length === Number(value.pathways.brief !== undefined) + Number(value.pathways.earnedBy !== undefined)
@@ -3537,6 +3565,8 @@ function validReceipt(value: unknown, year: number): value is NrlCareerHistoryRo
       || !/^[WDL]{24}$/.test(value.attendanceForm) || !value.finals)) return false;
   if (finance.supporterAttendance && value.scoring === undefined) return false;
   if (!validCoachCourse(finance, year, lastRound(year)) || (finance.coachCourseRound !== undefined && value.scoring === undefined)) return false;
+  if (!validCoachReassignment(finance, year, value.clubId, lastRound(year))
+    || (finance.coachReassignmentRound !== undefined && value.scoring === undefined)) return false;
   if (finance.coachHire?.role === 'development'
     && (value.scoring === undefined || !canHireDevelopmentAssistant(year, value.clubId, finance.coachHire.round))) return false;
   if (value.coachDevelopment !== undefined) {
@@ -3608,6 +3638,7 @@ function booksMatch(a: NrlCareerBook, b: NrlCareerBook): boolean {
     && a.coachHire?.role === b.coachHire?.role && a.coachHire?.round === b.coachHire?.round
     && a.coachHire?.paidRounds === b.coachHire?.paidRounds && a.coachHire?.retained === b.coachHire?.retained
     && a.coachHire?.qualified === b.coachHire?.qualified && a.coachCourseRound === b.coachCourseRound
+    && a.coachReassignmentRound === b.coachReassignmentRound
     && a.mutualRelease?.playerId === b.mutualRelease?.playerId && a.mutualRelease?.playerName === b.mutualRelease?.playerName
     && a.mutualRelease?.annualSalary === b.mutualRelease?.annualSalary
     && a.rivalTakeover?.playerId === b.rivalTakeover?.playerId && a.rivalTakeover?.playerName === b.rivalTakeover?.playerName
@@ -3635,6 +3666,13 @@ function validCoachCourse(book: NrlCareerBook, year: number, through: number): b
   return coachCourseRound === undefined || (year < NRL_LAST_YEAR && Boolean(coachHire && !coachHire.retained
     && coachHire.role !== 'development' && coachCourseRound >= coachHire.round && coachCourseRound <= through
     && coachCourseRound + COACH_COURSE_ROUNDS - 1 <= nrlRegularRounds(year)));
+}
+
+function validCoachReassignment(book: NrlCareerBook, year: number, clubId: string, through: number): boolean {
+  const { coachHire, coachReassignmentRound: round } = book;
+  return round === undefined || Boolean(coachHire && coachHire.role !== 'development'
+    && intIn(round, coachHire.round, Math.min(through, nrlRegularRounds(year)))
+    && nrlSeasonPlan(year).draw[round - 1].some(fixture => fixture.includes(clubId)));
 }
 
 function validArchivedAttendance({ year, clubId, finance, attendanceForm, finals, wins, draws }: NrlCareerHistoryRow): boolean {
@@ -3747,6 +3785,8 @@ function validCareerBooks(state: NrlCareerState): boolean {
     || physio?.injuryRound !== season.physio?.injuryRound || physio?.round !== season.physio?.round) return false;
   if (!validCoachCourse(finance, season.year, season.round)
     || (finance.coachCourseRound !== undefined && (legacySeason || !season.kickerId))) return false;
+  if (!validCoachReassignment(finance, season.year, season.clubId, season.round)
+    || (finance.coachReassignmentRound !== undefined && (legacySeason || !season.kickerId))) return false;
   if (release) {
     const player = state.players.find(candidate => candidate.id === release.playerId);
     if (legacySeason || !complete || !season.kickerId || season.year === NRL_LAST_YEAR || !player
@@ -4002,6 +4042,10 @@ function validCareerBooks(state: NrlCareerState): boolean {
     if (finance.coachCourseRound === round) {
       if (facilityPurchaseRefusal(expected, finalRound, COACH_COURSE_FEE)) return false;
       expected = { ...expected, coachCourseRound: round };
+    }
+    if (finance.coachReassignmentRound === round) {
+      if (facilityPurchaseRefusal(expected, finalRound, COACH_REASSIGNMENT_FEE)) return false;
+      expected = { ...expected, coachReassignmentRound: round };
     }
     if (finance.concessionsUpgradeRound === round) {
       if (facilityPurchaseRefusal(expected, finalRound, CONCESSIONS_UPGRADE_COST)) return false;

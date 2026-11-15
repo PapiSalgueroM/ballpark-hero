@@ -26,6 +26,7 @@ export const ACADEMY_MANAGEMENT_CONTENT: GameContentMap = {
         heading: 'Selling a kid when his price looks right',
         items: [
           'Press Sell on a kid when the price looks right. The fee is quoted live on his card.',
+          'If the fee falls while you press Sell, the player stays in your academy. Press Sell again to accept the updated fee.',
         ],
         subsections: [
           {
