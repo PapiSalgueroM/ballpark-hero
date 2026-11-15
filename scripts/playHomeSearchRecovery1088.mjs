@@ -19,8 +19,8 @@ const NOW = Date.parse('2026-10-07T12:00:00.000Z');
 const QUERY = 'soccer career';
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
 const write = (name, value) => fs.writeFileSync(path.join(OUT, name), JSON.stringify(value, null, 2));
+const { build } = await import('esbuild');
 if (process.argv.includes('--prefetch-assets-only')) {
-  const { build } = await import('esbuild');
   fs.mkdirSync(path.dirname(CACHE), { recursive: true });
   const entries = [];
   const fetchAsset = async url => {
