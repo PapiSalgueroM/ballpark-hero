@@ -1,14 +1,14 @@
 import { useState, useCallback, useMemo, useEffect, useLayoutEffect, useRef } from 'react';
 import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
-import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS, CLUB_TABLE_NAMES, clubEraAdditionalNames, clubEraClubs, clubYearClubs } from '@/data/lineupTeams';
+import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS, clubEraClubs, clubYearClubs } from '@/data/lineupTeams';
 import { askValidator, type ValidatorAnswer } from '@/lib/validatorClient';
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/client';
-import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment, DraftChoice, RecordedClubDraft } from '@/types/lineupBuilder';
+import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment, DraftChoice } from '@/types/lineupBuilder';
 import { FORMATIONS, lastRecordedYear, recordedYearsLabel } from '@/types/lineupBuilder';
 import { checkLineupPick, gradeFit, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionFit';
 import type { Position } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
-import { isCurrentBuildXiDraft, loadBuildXiDraft, writeBuildXiDraft } from '@/lib/buildXiDraft';
+import { clubPickVerifies, isCurrentBuildXiDraft, loadBuildXiDraft, recordedPickVerifies, writeBuildXiDraft } from '@/lib/buildXiDraft';
 import { normalizeName } from '@/lib/playerSearch';
 
 /* The project URL and public key are hardcoded on purpose: CLAUDE.md records
@@ -71,42 +71,7 @@ async function verifiedSecondaries(name: string, primary: Position | null): Prom
 }
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
-/* ROUND 1138: a club slot pick that our own row settles, with no request.
-
-   The row the scoped list returned is AT this club (the list is filtered to
-   the club's stored names, and one row is one man in one season), and the
-   browser's position rule above has really ruled on it. Such a pick used to
-   cost one edge call and, for half the position and slot pairs, a wait on a
-   language model that could run past thirty seconds.
-
-   Never true for a nation. Never true without a position the browser knows:
-   checkLineupPick answers ok WITHOUT judging when the row has no position or
-   a spelling the map does not hold, and that pick must go to the validator as
-   it always has. Never true for a club label with no stored names, which is
-   how the validator's own records pass reads the same table (an unknown club
-   matches nothing there). A season at two clubs is stored "A / B", and the
-   validator splits it the same way.
-
-   What this gives up, said plainly: a club pick from the list is now settled
-   by the browser's fit rule alone (the game's declared rule since Round 442),
-   so the validator's own position map and any refusal it once stored for a
-   club pick no longer bind. A nation pick is still judged by the validator. */
-export function clubPickVerifies(team: TeamAssignment, slotRole: Position, pick: PickMeta | undefined): boolean {
-  if (team.isNation || !pick?.club || !pick.rawPosition) return false;
-  if (!SLOT_ALLOWED_BY_ROLE[slotRole]) return false;
-  if (!normalizePosition(pick.rawPosition.trim())) return false;
-  const stored = CLUB_TABLE_NAMES[team.name] ?? clubEraAdditionalNames[team.name];
-  if (!stored) return false;
-  return pick.club.split(' / ').map((part) => part.trim()).some((part) => stored.includes(part));
-}
-
-function recordedPickVerifies(team: TeamAssignment, role: Position, pick: PickMeta | undefined, draft: RecordedClubDraft): boolean {
-  return typeof pick?.year === 'number' && Number.isInteger(pick.year)
-    && pick.year >= draft.year && pick.year <= lastRecordedYear(draft)
-    && typeof pick?.rawName === 'string' && Boolean(pick.rawName.trim())
-    && typeof pick.club === 'string' && typeof pick.rawPosition === 'string'
-    && clubPickVerifies(team, role, pick);
-}
+export { clubPickVerifies };
 
 function unverifiedLine(answer: Extract<ValidatorAnswer, { kind: 'unverified' }>): string {
   if (answer.exhausted) {
@@ -119,15 +84,7 @@ function unverifiedLine(answer: Extract<ValidatorAnswer, { kind: 'unverified' }>
 const STALE_DRAFT_MESSAGE = 'Your lineup changed in another tab. Reload to continue that draft.';
 
 export function useLineupBuilder() {
-  const [saved] = useState(() => {
-    const saved = loadBuildXiDraft();
-    const draft = saved.draft;
-    if (!draft || draft.draftChoice.mode === 'mixed') return saved;
-    const choice = draft.draftChoice;
-    return draft.slots.every(([, slot]) => recordedPickVerifies(
-      { name: slot.assignedTeam, isNation: slot.isNation }, slot.role, slot.pick, choice,
-    )) ? saved : { ...saved, draft: null };
-  });
+  const [saved] = useState(loadBuildXiDraft);
   const [formation, setFormation] = useState<Formation | null>(saved.draft?.formation ?? null);
   const [phase, setPhase] = useState<GamePhase>(() => {
     if (!saved.draft) return 'formation';

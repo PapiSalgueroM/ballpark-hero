@@ -2,7 +2,9 @@ import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, History } from 'lucide-react';
 import { CONTINUE_SAVES, continueSaveEntries, describeSave, savedGames, type SavedGame } from '@/data/continueSaves';
+import { ALL_GAMES } from '@/data/gameRegistry';
 import { sportOf } from '@/data/homeFront';
+import { BUILD_XI_DRAFT_KEY, readBuildXiDraft } from '@/lib/buildXiDraft';
 import { FIGHT_PROMOTER_MODE_KEY } from '@/lib/fightPromoterRoutes';
 import { parkedKey, SLOT_COUNT, SLOTS_INDEX_KEY } from '@/lib/clubManagerSaveKeys';
 import { homeSaveStorage, useHomeSaveRefresh } from './homeSaveRefresh';
@@ -13,12 +15,30 @@ import styles from './HomeLaunchDeck.module.css';
     has nothing on it that reads cleanly. */
 export const SAVED_FALLBACK = 'Saved in this browser';
 
+const xiEntry = { path: '/build-your-xi', saveKey: BUILD_XI_DRAFT_KEY };
+const xiGame = ALL_GAMES.find(game => game.path === xiEntry.path);
 const continueKeys = new Set([
   ...CONTINUE_SAVES.flatMap(entry => continueSaveEntries(entry).map(save => save.saveKey)),
+  BUILD_XI_DRAFT_KEY,
   FIGHT_PROMOTER_MODE_KEY,
   SLOTS_INDEX_KEY,
   ...Array.from({ length: SLOT_COUNT }, (_, index) => parkedKey(index + 1)),
 ]);
+
+function homeSavedGames(storage: Storage | null): SavedGame[] {
+  const saved = savedGames(storage, true);
+  if (!storage || !xiGame) return saved;
+  let raw: string | null = null;
+  try { raw = storage.getItem(BUILD_XI_DRAFT_KEY); } catch { /* The browser could not read this draft. */ }
+  const draft = readBuildXiDraft(raw);
+  if (draft?.slots.length) {
+    saved.push({
+      entry: xiEntry, game: xiGame,
+      description: `${draft.formation} · ${draft.slots.length}/11 picked`,
+    });
+  }
+  return saved;
+}
 
 /**
  * Round 717: Continue playing, under the Main Event band.
@@ -32,10 +52,10 @@ const continueKeys = new Set([
  */
 export function ContinueRow() {
   const [{ saved, lines }, setResume] = useState<{ saved: SavedGame[]; lines: Record<string, string> }>(
-    () => ({ saved: savedGames(homeSaveStorage(), true), lines: {} }),
+    () => ({ saved: homeSavedGames(homeSaveStorage()), lines: {} }),
   );
   const refresh = useCallback((storage: Storage | null) => {
-    const current = savedGames(storage, true);
+    const current = homeSavedGames(storage);
     const descriptions: Record<string, string> = {};
     for (const { entry, description } of current) {
       if (description !== undefined) {
