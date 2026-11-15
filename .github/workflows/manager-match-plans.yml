@@ -16,6 +16,7 @@ on:
       - scripts/qa/managerLegacy1079.mjs
       - scripts/qa/managerLegacy1079Clock.cjs
       - scripts/simTactics.mjs
+      - scripts/lib/captureShippedFonts.mjs
 permissions:
   contents: read
 concurrency:
@@ -63,15 +64,15 @@ jobs:
       - name: Actual outcomes and effective copied faults
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: MANAGER_MATCH_PLANS_CONTROL=all ONLY=simManagerMatchPlans node scripts/runAllSims.mjs 2>&1 | tee manager-match-plans-artifacts/outcomes.log
-      - name: Cache actual presentation assets
+      - name: Cache actual presentation flags
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        run: node scripts/qa/managerMatchPlans1079.mjs --prefetch-fonts-only 2>&1 | tee manager-match-plans-artifacts/fonts.log
+        run: node scripts/qa/managerMatchPlans1079.mjs --prefetch-flags-only 2>&1 | tee manager-match-plans-artifacts/flags.log
       - name: Preserve existing game behavior
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         run: |
           failed=0
           for harness in simTactics simTacticsEngine simClubManagerSave simClubManagerSaveSize; do
-            SIM_TACTICS_ASSET_CACHE="$PWD/manager-match-plans-artifacts/font-cache/manifest.json" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-match-plans-artifacts/$harness.log" || failed=1
+            SIM_TACTICS_ASSET_CACHE="$PWD/manager-match-plans-artifacts/flag-cache/manifest.json" ONLY="$harness" node scripts/runAllSims.mjs --browser 2>&1 | tee "manager-match-plans-artifacts/$harness.log" || failed=1
           done
           exit "$failed"
       - name: Compare unchanged baseline failures

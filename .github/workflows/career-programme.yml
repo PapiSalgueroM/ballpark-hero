@@ -25,6 +25,7 @@ on:
       - src/components/us-career/UsCareerBoard.tsx
       - scripts/*CareerProgramme*
       - scripts/playSoccerSeasonCalendar.mjs
+      - scripts/lib/captureShippedFonts.mjs
       - scripts/data/careerChanceActions1197.json
       - scripts/checkCareerProgrammeUnits.mjs
       - src/components/soccer-career/SquadSheet.tsx
@@ -52,7 +53,6 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       TZ: UTC
-      FREE_KICK_FONT_CACHE: career-programme-artifacts/font-cache
     steps:
       - uses: actions/checkout@v4
         with:
@@ -75,7 +75,6 @@ jobs:
           npm install --no-save playwright
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
-          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only | tee career-programme-artifacts/fonts.log
       - name: Actual app types and production build
         id: build
         run: |

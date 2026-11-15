@@ -5,16 +5,30 @@ import {
   type SoccerPSRun,
 } from '@/lib/soccerPerfectSeason';
 
-function finishDraft(run: SoccerPSRun, choose: 'best' | 'worst') {
+function draftPicks(run: SoccerPSRun, choose: 'best' | 'worst', count: number = SOCCER_PS_SLOTS.length) {
   let next = run;
-  for (let turn = 0; turn < SOCCER_PS_SLOTS.length; turn++) {
+  for (let turn = 0; turn < count; turn++) {
     const view = deriveSoccerRun(next);
     const offer = view[choose];
     expect(offer).toBeTruthy();
     next = applySoccerAction(next, { type: 'pick', ...offer! })!;
     expect(next).toBeTruthy();
   }
-  return deriveSoccerRun(next);
+  return next;
+}
+
+function finishDraft(run: SoccerPSRun, choose: 'best' | 'worst') {
+  return deriveSoccerRun(draftPicks(run, choose));
+}
+
+function playFinalClub(run: SoccerPSRun, reroll: boolean) {
+  const prefix = draftPicks(run, 'best', 10);
+  const finalClub = reroll ? applySoccerAction(prefix, { type: 'reroll' })! : prefix;
+  const drafted = draftPicks(finalClub, 'best', 1);
+  const finished = { ...drafted, revealed: SOCCER_PS_GAMES, completionRecorded: true };
+  const restored = restoreSoccerRun(JSON.stringify(finished));
+  expect(restored).toEqual(finished);
+  return deriveSoccerRun(restored!);
 }
 
 describe('Soccer Perfect Season', () => {
@@ -48,6 +62,45 @@ describe('Soccer Perfect Season', () => {
     expect(restoreSoccerRun({ ...twice, actions: [...twice.actions, { type: 'reroll' }] })).toBeNull();
     expect(deriveSoccerRun(restoreSoccerRun(JSON.stringify(twice))!)).toEqual(second);
     expect(finishDraft(twice, 'best').season?.wins).toBe(38);
+  });
+
+
+  it('keeps the opening target when the final reroll improves the XI on a new run', () => {
+    const { seed } = createSoccerRun('daily', '2026-11-03');
+    const run = { ...createSoccerRun('unlimited', null), seed };
+    const original = playFinalClub(run, false);
+    const stronger = playFinalClub(run, true);
+
+    expect(original.picks.LCM).toMatchObject({ name: 'Christian Eriksen', rating: 74 });
+    expect(stronger.picks).toEqual({ ...original.picks, LCM: expect.objectContaining({ name: 'Angelo Stiller', rating: 83 }) });
+    expect(original.weightedStrength).toBe(1031);
+    expect(stronger.weightedStrength).toBe(1040);
+    expect(stronger.bestOverall).toBe(original.bestOverall);
+    expect(stronger.odds?.perfect).toBe(1);
+    expect(stronger.season?.games).toEqual(original.season?.games);
+    expect(stronger.record).toMatchObject({ wins: 38, points: 114, score: 100 });
+  });
+
+  it('replays the original odds and result for archived Daily and pre-change Unlimited saves', () => {
+    const daily = createSoccerRun('daily', '2026-11-03');
+    const legacyUnlimited: SoccerPSRun = { ...daily, mode: 'unlimited', date: null };
+    const original = playFinalClub(daily, false);
+    const rerolled = playFinalClub(daily, true);
+
+    expect(original.record).toMatchObject({ wins: 38, points: 114, score: 100 });
+    expect(rerolled.odds?.perfect).toBeCloseTo(0.0082483, 6);
+    expect(rerolled.record).toMatchObject({ wins: 35, losses: 3, points: 105, score: 92 });
+    expect(playFinalClub(legacyUnlimited, true).season).toEqual(rerolled.season);
+  });
+
+  it('applies the new Daily rule starting with the November 17 Eastern board', () => {
+    const previousDay = createSoccerRun('daily', '2026-11-16');
+    const openingDay = createSoccerRun('daily', '2026-11-17');
+    expect(playFinalClub(previousDay, true).openingDrawOdds).toBe(false);
+    const rerolled = playFinalClub(openingDay, true);
+    expect(rerolled.openingDrawOdds).toBe(true);
+    expect(rerolled.bestOverall).toBe(playFinalClub(openingDay, false).bestOverall);
+    expect(restoreSoccerRun({ ...openingDay, oddsRule: 'opening-draw' })).toBeNull();
   });
 
   it('rejects wrong players or slots and restores picked players by identity', () => {

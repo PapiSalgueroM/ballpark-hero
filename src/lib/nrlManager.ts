@@ -635,12 +635,12 @@ function withLineup(state: NrlManagerState, lineup: NrlManagerState['lineup']): 
   return { ...state, lineup, kickerId: backup && starters.includes(backup) ? backup : lineup.Halfback };
 }
 
-export function repairMatchday(state: NrlManagerState, preferFit = false): NrlManagerState {
+export function repairMatchday(state: NrlManagerState, preferFit = false, awayRecovery = 0): NrlManagerState {
   const unavailable = nrlUnavailable(state);
   if (state.individualRecoveryId && unavailable.has(state.individualRecoveryId)) state = clearIndividualRecovery(state);
   const healthy = state.squad.filter(player => !unavailable.has(player.id));
   const byId = new Map(healthy.map(player => [player.id, player]));
-  const grade = (player: NrlPlayer) => player.rating - fitnessPenalty(player, playerPreparation(state, player.id));
+  const grade = (player: NrlPlayer) => player.rating - fitnessPenalty(player, playerPreparation(state, player.id), awayRecovery);
   if (preferFit) healthy.sort((a, b) => grade(b) - grade(a) || a.id.localeCompare(b.id));
   else {
     const benchRank = new Map(state.bench?.map((id, index) => [id, index]));
@@ -680,14 +680,15 @@ function lineupChanges(from: NrlManagerState['lineup'], to: NrlManagerState['lin
   return NRL_ROLES.flatMap(role => from[role] === to[role] ? [] : [{ role, fromId: from[role], toId: to[role] }]);
 }
 
-export function nrlFitLineup(state: NrlManagerState) {
+export function nrlFitLineup(state: NrlManagerState, awayRecovery = 0) {
   if (state.live || state.phase === 'complete' || !nrlNextRound(state).clubMatch) return null;
-  const next = repairMatchday(state, true);
+  const next = repairMatchday(state, true, awayRecovery);
   const changes = lineupChanges(state.lineup, next.lineup);
   const key = JSON.stringify([state.seed, state.clubId, state.year, state.round, state.preparation, state.lineup, state.bench, state.kickerId,
     ...(state.squad.some(player => player.secondaryRole) ? [next.lineup, next.bench, next.kickerId] : []),
     ...(state.individualRecoveryId ? [state.individualRecoveryId] : []),
-    ...(state.backupKickerId ? ['backup-kicker', state.backupKickerId] : [])]);
+    ...(state.backupKickerId ? ['backup-kicker', state.backupKickerId] : []),
+    ...(awayRecovery ? ['away-recovery', awayRecovery] : [])]);
   return { next, changes, key };
 }
 
@@ -1613,7 +1614,7 @@ export function reduceNrlSeason(state: NrlManagerState, action: NrlAction,
         ? state : { ...state, viceCaptainId: playerId };
     }
     case 'applyFitLineup': {
-      const proposal = nrlFitLineup(state);
+      const proposal = nrlFitLineup(state, options.awayRecovery);
       return proposal?.changes.length && proposal.key === action.previewKey ? proposal.next : state;
     }
     case 'setTactic':

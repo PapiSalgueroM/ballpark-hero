@@ -8,15 +8,14 @@ import { createServer } from 'node:net';
 import { spawn, execFileSync } from 'node:child_process';
 import pw from './lib/playwrightLoader.mjs';
 import { answerConsent, storedConsent } from './lib/answerConsent.mjs';
+import { captureShippedFonts } from './lib/captureShippedFonts.mjs';
 assert(process.env.CI, 'Native programme checks run remotely');
 const out=path.resolve('career-programme-artifacts/native');fs.mkdirSync(out,{recursive:true});
 const sha=v=>createHash('sha256').update(v).digest('hex'),fixtures=JSON.parse(fs.readFileSync('career-programme-artifacts/native-fixtures.json','utf8'));
-const fontManifest=JSON.parse(fs.readFileSync(path.join(process.env.FREE_KICK_FONT_CACHE,'manifest.json'),'utf8'));
-const fonts=new Map(fontManifest.map(v=>{const body=fs.readFileSync(path.join(process.env.FREE_KICK_FONT_CACHE,v.file));assert.equal(sha(body),v.sha256);return[v.url,{body,contentType:v.contentType}];}));
 const port=await new Promise((resolve,reject)=>{const server=createServer();server.once('error',reject);server.listen(0,'127.0.0.1',()=>{const p=server.address().port;server.close(()=>resolve(p));});});
 const base='http://127.0.0.1:'+port,server=spawn(process.execPath,['scripts/lib/hostLikeServer.mjs','dist',String(port)],{stdio:['ignore','pipe','pipe']});
 await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error('Server start timeout')),15000);server.stdout.on('data',v=>{if(String(v).includes('host-like server:')){clearTimeout(timer);resolve();}});server.once('error',reject);server.once('exit',v=>reject(Error('Server exited '+v)));});
-const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),cases:[],checks:0,forwarded:0,controls:[],fontManifest,scope:'Actual production actions and raw saved-byte holds. The seeded page stream is fixture setup, not an independent native RNG oracle.'};
+const report={head:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),cases:[],checks:0,forwarded:0,controls:[],scope:'Actual production actions and raw saved-byte holds. The seeded page stream is fixture setup, not an independent native RNG oracle.'};
 const browser=await pw.chromium.launch({headless:true});
 function viewportFailures(v){return v.inner.width>v.requested.width+1||v.client.width>v.requested.width+1||(v.visual&&Math.abs(v.visual.scale-1)>0.01)?['viewport-scale']:[];}
 function cookieFailures(v){return[...(v.controls.every(c=>c.painted&&!c.clipped)?[]:['cookie-painted']),...viewportFailures(v.viewport)];}
@@ -24,14 +23,16 @@ function openingFailures(v){return v.after.y===v.before.y?[]:['opening-position'
 function layoutFailures(v){return[...(v.overflow?['overflow']:[]),...viewportFailures(v.viewport),...(!v.inside?['dialog-viewport']:[]),...(!v.painted?['dialog-painted']:[]),...(v.stableFrames<4||v.finiteAnimations||v.fonts!=='loaded'||v.fontFaces.some(f=>f.status==='error')?['capture-readiness']:[]),...(v.controls.some(c=>c.width<43.5||c.height<43.5)?['touch-size']:[]),...(v.controls.some(c=>!c.painted&&!c.clipped)?['painted-controls']:[])];}
 try{for(const width of[320,390,1280])for(const fixture of fixtures){const id=width+'-'+fixture.slug+(fixture.id?'-'+fixture.id:''),soccer=fixture.slug==='soccer-career',row={id,choices:[],shots:[],layouts:[],reloads:[],errors:[],assetErrors:[],blocked:[],fontsUsed:[],toasts:[],checks:0};report.cases.push(row);
   const context=await browser.newContext({viewport:{width,height:width===320?568:width===390?844:900},hasTouch:width<1000,isMobile:width<1000}),page=await context.newPage();
+  const verifyFonts=captureShippedFonts(page,base);
   const check=(value,label)=>{assert(value,id+': '+label);report.checks++;row.checks++;};
   const bodyState=()=>page.evaluate(()=>({y:scrollY,overflow:document.body.style.overflow,computed:getComputedStyle(document.body).overflow,locked:document.body.getAttribute('data-scroll-locked')}));
-  try{await context.route('**/*',async route=>{const req=route.request(),url=req.url();if(url.startsWith(base+'/'))return route.continue();if(fonts.has(url)){row.fontsUsed.push(url);return route.fulfill(fonts.get(url));}if(url.startsWith('data:'))return route.continue();row.blocked.push({url,method:req.method()});if(req.method()!=='GET')return route.fulfill({status:200,contentType:'application/json',body:'{}'});if(url.includes('/rest/v1/'))return route.fulfill({status:200,contentType:'application/json',body:'[]'});return route.abort();});
+  try{await context.route('**/*',async route=>{const req=route.request(),url=req.url();if(url.startsWith(base+'/'))return route.continue();if(url.startsWith('data:'))return route.continue();row.blocked.push({url,method:req.method()});if(req.method()!=='GET')return route.fulfill({status:200,contentType:'application/json',body:'{}'});if(url.includes('/rest/v1/'))return route.fulfill({status:200,contentType:'application/json',body:'[]'});return route.abort();});
     await context.addInitScript(({key,value})=>{if(!sessionStorage.getItem('programme-seeded:'+key)){localStorage.setItem(key,JSON.stringify(value));sessionStorage.setItem('programme-seeded:'+key,'1');}let n=1197;Math.random=()=>{n+=0x6D2B79F5;let t=n;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296;};},fixture);
     page.on('pageerror',e=>row.errors.push(String(e)));
     page.on('requestfailed',r=>{if(r.url().startsWith(base+'/assets/'))row.assetErrors.push({url:r.url(),error:r.failure()?.errorText});});
     page.on('response',r=>{if(r.url().startsWith(base+'/assets/')&&r.status()>=400)row.assetErrors.push({url:r.url(),status:r.status()});});
     await page.goto(base+'/'+fixture.slug,{waitUntil:'networkidle'});
+    row.fontsUsed=await verifyFonts();
     const bytes=()=>page.evaluate(key=>localStorage.getItem(key),fixture.key),entryBefore=await bytes();
     const consent=page.getByRole('region',{name:'Cookie choices',exact:true});
     await consent.waitFor();let cookieLayout;

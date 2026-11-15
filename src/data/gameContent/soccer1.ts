@@ -42,8 +42,8 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "How the game sets match odds",
         items: [
-          "Goalkeeper and striker ratings count twice. The game compares your XI with the strongest possible XI from the same final set of clubs to work out your odds.",
-          "Every offered slot keeps a route to a full XI. The strongest available XI guarantees all 38 wins.",
+          "Goalkeeper and striker ratings count twice. When the odds panel shows Opening XI target, it uses the strongest possible XI from the opening draw. Rerolls change who you can draft and keep that target fixed.",
+          "Earlier runs use Best available, the strongest possible XI from their final set of clubs. Every offered slot keeps a route to a full XI. Meeting the target guarantees all 38 wins.",
         ],
       },
     ],

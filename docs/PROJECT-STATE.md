@@ -1,3 +1,14 @@
+## 2026-11-15: Fairer soccer rerolls, booked rugby recovery and quicker Home navigation
+
+- Soccer Perfect Season holds the opening XI target across rerolls in new Unlimited runs and Daily boards starting November 17 Eastern. Older Daily and Unlimited runs keep their original target and result. The stronger XI in the pinned Unlimited run improved from 35 wins and a site score of 92 to 38 wins and 100.
+- Home's sticky wordmark brings users back to search and the hero when they are already on Home. Browser Back from a game still restores the sport section, scroll position and focused card.
+- NRL Team Manager uses booked away recovery to suggest and apply a fit lineup. Booking recovery makes a previous suggestion stale. In the Bulldogs' Round 6 example, the saved team sheet keeps the higher-rated starting lock after reload.
+- Admin Reports keeps feedback for note, status and priority separate. A successful save leaves another field's failure visible for retry.
+- The NBA, MLB, NHL and college basketball grid archives add November 12 to 14 Eastern. All 348 previously published boards match, and all 360 boards passed the answer and count check.
+- Soccer Career gameplay, Soccer Farewell and Club Manager Match Plans now verify fonts from the compiled app and the checked-in WOFF2 files. The Manager fixture still verifies real PNG flags.
+
+Application types, the production build, 103 focused tests, 15 pinned product browser journeys, 20 site checks and 16 download budgets passed. The full SEO split check covered 174 routes. The final build passed the SEO checks for each of the five refreshed snapshots. The font check rejected a swapped valid WOFF2 file. Home search recovery passed all 10 mounted cases and all 19 copied controls.
+
 ## 2026-11-15: Rugby youth appearances, goalie starts and academy deadlines
 
 - NRL Team Manager shows the appearances still needed for Youth development. A newly chosen Youth focus awards the extra OVR at the club's 21st regular-season match only after four actual starts or interchange appearances, including that match. An older save with Youth already selected keeps its original review rule.
@@ -6,6 +17,8 @@
 - Mystery Box holds a stale Daily draft when another tab has already saved changes. Reload opens the latest draft. The checks cover Open, Keep, Bin and completion.
 
 Application types, the production build, 104 focused tests, 13 pinned Chromium cases, 20 site checks and 16 download budgets passed. The SEO split check covered all 174 routes. The NRL guide, its lastmod ledger entry and the guide search index were refreshed.
+
+[PR #994](https://github.com/PapiSalgueroM/ballpark-hero/pull/994) published exact main `fed0ef0c0f8827d611356151ddaac2407cf59a2f`, deployment `fe52b8d6-1a2b-4f69-84a0-be7cd57d6132`, canonical entry `/assets/index-CshU-6OM.js`. The merged tree matched tested head `9334a0343`. All 13 live browser cases, 15 pinned endpoint checks and 174 sitemap routes passed. IndexNow accepted the updated NRL guide. Hosted career entry guide verification passed. Wider Career and NHL Front Office workflows reported source guard failures and stale presentation setup. Three NHL front-office harness failures also reproduced on the #993 source.
 
 ## 2026-11-15: NRL edge tactics, career decisions and easier game controls
 

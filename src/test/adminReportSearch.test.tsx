@@ -248,6 +248,58 @@ describe('admin report queue', () => {
   });
 
   it.each([
+    { field: 'status' as const, label: 'Status', next: 'investigating', failed: 'note' },
+    { field: 'priority' as const, label: 'Priority', next: 'low', failed: 'note' },
+    { field: 'status' as const, label: 'Status', next: 'investigating', failed: 'triage' },
+    { field: 'priority' as const, label: 'Priority', next: 'low', failed: 'triage' },
+  ])('preserves $failed save feedback when a note and $field save overlap', async ({ field, label, next, failed }) => {
+    type WriteResult = { data: { id: string }[] | null; error: { message: string } | null };
+    let settleNote: (result: WriteResult) => void = () => {};
+    let settleTriage: (result: WriteResult) => void = () => {};
+    db.write
+      .mockImplementationOnce(() => new Promise<WriteResult>(resolve => { settleNote = resolve; }))
+      .mockImplementationOnce(() => new Promise<WriteResult>(resolve => { settleTriage = resolve; }));
+    openQueue();
+    const card = within((await screen.findByText(contract.description)).closest('[data-report]') as HTMLElement);
+    const note = card.getByRole('textbox', { name: 'Note' });
+    const save = card.getByRole('button', { name: 'Save note' });
+    const triage = card.getByRole('combobox', { name: label });
+    const notePatch = { admin_note: 'An investigation note', fix_ref: '#972' };
+    const triagePatch = field === 'status' ? { status: next, resolved: false, resolved_at: null } : { priority: next };
+
+    fireEvent.change(note, { target: { value: notePatch.admin_note } });
+    fireEvent.click(save);
+    fireEvent.change(triage, { target: { value: next } });
+    expect(db.write.mock.calls).toEqual([[contract.id, notePatch], [contract.id, triagePatch]]);
+    expect(save).toBeDisabled();
+    expect(triage).toHaveAttribute('aria-disabled', 'true');
+
+    const failure = { data: null, error: { message: 'Write unavailable' } };
+    const success = { data: [{ id: contract.id }], error: null };
+    await act(async () => (failed === 'note' ? settleNote : settleTriage)(failure));
+    const errorText = 'Not saved: Write unavailable';
+    const errorWhilePending = Boolean(card.queryByText(errorText));
+    await act(async () => (failed === 'note' ? settleTriage : settleNote)(success));
+
+    expect(card.getByText(errorText)).toBeVisible();
+    expect(errorWhilePending).toBe(true);
+    expect(note).toHaveValue(notePatch.admin_note);
+    expect(save).toBeEnabled();
+    expect(triage).not.toHaveAttribute('aria-disabled', 'true');
+    expect(triage).toHaveValue(failed === 'note' ? next : contract[field]);
+    if (failed === 'note') fireEvent.click(save);
+    else fireEvent.change(triage, { target: { value: next } });
+    await waitFor(() => {
+      expect(save).toBeEnabled();
+      expect(triage).toHaveValue(next);
+      expect(card.queryByText(errorText)).not.toBeInTheDocument();
+    });
+    expect(db.write.mock.calls).toEqual([
+      [contract.id, notePatch], [contract.id, triagePatch], [contract.id, failed === 'note' ? notePatch : triagePatch],
+    ]);
+  });
+
+  it.each([
     { reason: 'zero rows', response: { data: [], error: null } },
     { reason: 'a write error', response: { data: null, error: { message: 'Unavailable' } } },
   ])('reopens a priority change after $reason', async ({ response }) => {

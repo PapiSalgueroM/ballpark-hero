@@ -2049,7 +2049,7 @@ function Squad({ career, onAction, disabled }: {
   const tryLeaders = nrlTryLeaders(leaders);
   const unavailable = season.squad.filter(player => availability.has(player.id));
   const reserves = season.squad.filter(player => !starters.has(player.id) && !availability.has(player.id));
-  const proposal = disabled ? null : nrlFitLineup(season);
+  const proposal = disabled ? null : nrlFitLineup(season, nrlAwayRecoveryBonus(career));
   const starterSwaps = disabled ? [] : nrlStarterSwaps(season);
   const nameOf = (id: string) => season.squad.find(player => player.id === id)?.name;
   const captainOutsideStartingSide = season.captainId && !starters.has(season.captainId);
