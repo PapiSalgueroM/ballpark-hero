@@ -1,4 +1,13 @@
+## 2026-11-14: Season choices, rugby starting roles and match receipts
+
+- In Build Your XI Club era, Browse and search show the eligible seasons for each player. Use Replace to pick a different season for the current starter. The selected record stays visible after reload.
+- Soccer Career awards the Champions League or European Cup Golden Boot only when your goal total beats a simulated leading rival. A strong scoring run can still qualify after your club exits. Existing campaign results, scoring draws and historical awards are preserved.
+- NRL Team Manager lets you promise a fringe player with an expiring deal four starts in six eligible fixtures. Coming off the bench uses a fixture in the window. Injury absences leave the window open. A kept promise can reduce the renewal asking salary by up to 7%.
+- Stadium Tycoon records full-time attendance with each new league result. When a crowd sponsor is signed, the match report shows whether the gate met the target and earned the payment toward the season total.
+
 ## 2026-11-14: Timed rugby interchanges, match ratings and safer admin drafts
+
+[PR #980](https://github.com/PapiSalgueroM/ballpark-hero/pull/980) published exact main `06218b86e3b082e3d052806f2a8c5686c3430e4d`, deployment `b5e21365-fc35-4403-8f74-a644c4b37f5e`, canonical entry `/assets/index-C6E1ZX6x.js`. Nine live browser checks, all 174 sitemap routes, seven policy and crawler endpoints, two admin noindex tags and the updated NRL guide passed. The admin checks used fixture data and blocked external writes. IndexNow accepted the NRL guide. Hosted application types and the career entry guide workflow passed. The production build, 109 focused tests, 18 site checks and all 16 download limits passed locally. The local Windows type run hit its configured heap limit. The old World Save Size anchor remains stale, and the inactive and constructor world continuity failures reproduced on exact #979. The hosted Club Manager quick substitutions job stopped during dependency installation. Its normal harness passed locally.
 
 - NRL Team Manager can hold the fourth interchange and tell Quick Sim to bring on an eligible reserve at 60 minutes when ahead or behind. The report records the decision, and Live still takes the manager's choice at the pause.
 - MLB Front Office accounts for scheduled injured-list returns when you choose a batting prospect's development start. The preview names the hitter who would actually sit. A new injury can still change the lineup before the start.

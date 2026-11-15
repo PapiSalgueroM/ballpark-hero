@@ -723,7 +723,7 @@ export interface TycoonLeague {
   baseMatchNo?: number;
   /** Index 0 is you. */
   clubs: LeagueClub[];
-  results?: { day: number; gf: number; ga: number; plan?: MatchPlan }[];
+  results?: { day: number; gf: number; ga: number; attendance?: number; plan?: MatchPlan }[];
   sponsor?: StadiumSponsorDeal;
   /** An older save's match in progress when it first loaded: played to full
    *  time against this name, outside the table, before matchday 1. */
@@ -972,7 +972,7 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
   }
   const matchday = lg.matchday + 1;
   const plan = st.matchPlan;
-  const result = { day: matchday, gf, ga, ...(plan ? { plan: { minute: plan.minute, kind: plan.kind } } : {}) };
+  const result = { day: matchday, gf, ga, attendance: crowdAtFullTime, ...(plan ? { plan: { minute: plan.minute, kind: plan.kind } } : {}) };
   const played: TycoonLeague = { ...lg, clubs, matchday, results: [...(lg.results ?? []), result] };
   if (lg.sponsor?.kind === 'attendance' && crowdAtFullTime >= lg.sponsor.target) {
     played.sponsor = { ...lg.sponsor, qualifying: lg.sponsor.qualifying + 1 };
@@ -1414,7 +1414,7 @@ export function playMinute(st: TycoonState, roll: () => number, events: TickEven
   }
   if (st.minute >= 90) {
     // Full time: settle, pay, reset.
-    const crowdAtFullTime = st.league?.sponsor?.kind === 'attendance' ? attendance(st) : 0;
+    const crowdAtFullTime = attendance(st);
     if (st.goalsFor > st.goalsAgainst) {
       const b = opts.pay ? winBonus(st) : 0;
       st.money += b;
@@ -1752,8 +1752,11 @@ function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: n
       recordResult(tally, result.gf, result.ga);
       return true;
     }) && (['w', 'd', 'l', 'gf', 'ga'] as const).every(key => first === 1 ? tally[key] === own[key] : tally[key] <= own[key])) {
-      out.results = r.results.map(({ day, gf, ga, plan }) => ({
-        day, gf, ga, ...(validMatchPlan(plan) ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
+      const maxSeats = seatCount(trackById('stands').maxLevel);
+      out.results = r.results.map(({ day, gf, ga, attendance, plan }) => ({
+        day, gf, ga,
+        ...(typeof attendance === 'number' && Number.isInteger(attendance) && attendance >= 0 && attendance <= maxSeats ? { attendance } : {}),
+        ...(validMatchPlan(plan) ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
       }));
     }
   }

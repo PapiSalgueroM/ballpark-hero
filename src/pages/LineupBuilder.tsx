@@ -125,8 +125,10 @@ const LineupBuilder = () => {
   }, []);
 
   const excludedPlayers = useMemo(
-    () => new Set(filledSlotsArray.map((slot) => normalizeName(slot.playerName))),
-    [filledSlotsArray]
+    () => new Set(filledSlotsArray
+      .filter(slot => draftChoice.mode !== 'club-era' || slot !== replacingSlot)
+      .map(slot => normalizeName(slot.playerName))),
+    [draftChoice.mode, filledSlotsArray, replacingSlot]
   );
 
   /* Round 484: the men this country has actually named in a squad, lifted to
@@ -186,6 +188,10 @@ const LineupBuilder = () => {
     if (!currentTeam) return null;
     const source: PlayerSourceConfig = {
       ...SOCCER_MARKET_VALUE_SOURCE,
+      ...(draftChoice.mode === 'club-era' ? {
+        identity: { personKeyColumn: 'id' },
+        metaColumns: { ...SOCCER_MARKET_VALUE_SOURCE.metaColumns, recordId: 'id' },
+      } : {}),
       filters: currentTeam.isNation
         ? [{ column: 'nationality', op: 'eq', value: nationSearchTerm(currentTeam.name) }]
         : [{ column: 'club', op: 'in', value: clubTableNames(currentTeam.name) }],
@@ -197,7 +203,7 @@ const LineupBuilder = () => {
         ? { column: 'year', op: 'eq', value: recordedYear }
         : { column: 'year', op: 'in', value: years }],
     };
-  }, [currentTeam, recordedYear, lastYear]);
+  }, [currentTeam, draftChoice.mode, recordedYear, lastYear]);
 
   /* Round 442: the whole dropdown row rides along to the hook now. It is what
      the position gate reads, and it is what the season report is built from,
@@ -206,6 +212,7 @@ const LineupBuilder = () => {
     if (isValidating) return;
     const revision = inputRevision.current;
     const raw = typeof entity.meta.position === 'string' ? entity.meta.position : undefined;
+    const recordId = entity.meta.recordId;
     await submitPlayer(entity.name, {
       rawName: entity.rawName,
       rawPosition: raw,
@@ -215,6 +222,7 @@ const LineupBuilder = () => {
       value: typeof entity.meta.value === 'number' ? entity.meta.value : undefined,
       age: typeof entity.meta.age === 'number' ? entity.meta.age : undefined,
       year: typeof entity.meta.year === 'number' ? entity.meta.year : undefined,
+      recordId: typeof recordId === 'number' && Number.isSafeInteger(recordId) && recordId > 0 ? recordId : undefined,
     });
     if (inputRevision.current === revision) setPlayerInput('');
   };
@@ -565,7 +573,12 @@ const LineupBuilder = () => {
                 {filledSlotsArray.map((slot, i) => (
                   <div key={i} className="flex items-center gap-2 rounded-lg bg-secondary/30 px-2 py-1 sm:gap-3 sm:px-4">
                     <span className="text-xs font-bold text-primary w-10 shrink-0">{slot.label}</span>
-                    <span className="font-semibold text-foreground flex-1 min-w-0 truncate">{slot.playerName}</span>
+                    <span className="flex-1 min-w-0">
+                      <span className="font-semibold text-foreground block truncate">{slot.playerName}</span>
+                      {draftChoice.mode === 'club-era' && typeof slot.pick?.year === 'number' && (
+                        <span className="block text-[11px] text-muted-foreground">Record: {slot.pick.year}</span>
+                      )}
+                    </span>
                     <span className="text-xs text-muted-foreground shrink-0 max-w-[35%] truncate">
                       {slot.isNation ? <FlagImg name={slot.assignedTeam} size={16} showLabel /> : <>🏟️ {slot.assignedTeam}</>}
                     </span>

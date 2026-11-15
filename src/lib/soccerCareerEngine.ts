@@ -33,8 +33,8 @@ import { uclTieOutcome } from '@/lib/uclTieRule';
 import {
   uclProbit, poissonGoals, UCL_BASE_LAMBDA, UCL_HOME_EDGE, clubCupFor, CONTINENTAL_LADDER,
   CONTINENTAL_SIMPLIFIED, continentalOpponents, firstStageShape, firstStageOpponentCount,
-  firstStageTarget, solveStageStrength, playFirstStage, isFirstStageResult,
-  type ClubCupId, type FirstStageResult,
+  firstStageTarget, solveStageStrength, playFirstStage, isFirstStageResult, leadingUclRivalGoals,
+  type ClubCupId, type FirstStageResult, type FirstStageShape,
 } from './soccerCareerContinental';
 /* Round 1013: the clubs generated from Club Manager's four leagues. The file
    imports nothing, so Club Manager never enters this page's bundle. */
@@ -476,6 +476,8 @@ export interface UCLResult {
   /** Every goal of the campaign, first stage included. */
   playerGoals: number;
   playerAssists?: number;
+  /** Simulated leading rival's tally, absent from older campaigns. */
+  leadingRivalGoals?: number;
   isTopScorer: boolean;
   /** Round 972: the competition's name that season ("Champions League",
    *  "European Cup", "Copa Libertadores"...). Absent on results from before,
@@ -7419,6 +7421,11 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
      from the measured pass curve so it gets through at passTarget. */
   let firstStage: FirstStageResult | undefined;
   let stageGames = 0;
+  const uclScoringAward = (format: FirstStageShape) => {
+    const random = keyedRng(`career-european-golden-boot|${uclYear}|${qualificationRoll}`);
+    const leadingRivalGoals = leadingUclRivalGoals(format, tieLegs, stageGames, matches.length, random);
+    return { leadingRivalGoals, isTopScorer: totalPlayerGoals > leadingRivalGoals };
+  };
   const campaignAssists = () => {
     const random = keyedRng(`career-club-cup-assists|${state.playerName}|${season.year}|${season.club}|${cupFor.cup}`);
     const chance = tournamentAssistShare(state.position, season.ovr ?? state.overall);
@@ -7449,7 +7456,7 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
     if (!firstStage.through && !firstStage.playoff) {
       return {
         qualified: true, matches, result: shape.kind === "leaguePhase" ? "League Phase" : "Group Stage",
-        playerGoals: totalPlayerGoals, playerAssists: campaignAssists(), isTopScorer: false, competition, cup: cupFor.cup, firstStage,
+        playerGoals: totalPlayerGoals, playerAssists: campaignAssists(), ...uclScoringAward(shape), competition, cup: cupFor.cup, firstStage,
       };
     }
     /* Ninth to 24th: a two legged play-off for the round of 16 (the format
@@ -7572,13 +7579,12 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
 
   /* The scorer bar rises with the extra nights in a group or league stage. */
   const topScorerBar = 6 + Math.ceil(stageGames * TOP_SCORER_BAR_PER_STAGE_GAME);
-  // Reuse the normalized qualification roll if the original run drew no award coin.
+  // Preserve the old shared draw for replay. The European award uses its own field.
   const awardRoll = legacyPlayerGoals >= topScorerBar ? Math.random() : qualificationRoll / qualChance;
-  // More runs now clear the bar. Keep the award rare across the existing club and rating mix.
-  const isTopScorer = totalPlayerGoals >= topScorerBar && awardRoll < 0.25;
+  const scoringAward = shape ? uclScoringAward(shape) : { isTopScorer: totalPlayerGoals >= topScorerBar && awardRoll < 0.25 };
 
   return {
-    qualified: true, matches, result, playerGoals: totalPlayerGoals, playerAssists: campaignAssists(), isTopScorer, competition, cup: cupFor.cup,
+    qualified: true, matches, result, playerGoals: totalPlayerGoals, playerAssists: campaignAssists(), ...scoringAward, competition, cup: cupFor.cup,
     ...(firstStage ? { firstStage } : {}),
     ...(isUcl ? {} : { simplified: CONTINENTAL_SIMPLIFIED }),
   };

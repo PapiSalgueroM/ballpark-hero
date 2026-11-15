@@ -28,11 +28,13 @@ export interface PickMeta {
   position?: PositionRole;
   club?: string;
   nationality?: string;
-  /** market_value_usd on the row the search kept (his highest-valued season). */
+  /** market_value_usd on the selected row. */
   value?: number;
   age?: number;
   /** Year of that row, so the result screen can say which season it is quoting. */
   year?: number;
+  /** Exact player_market_values row chosen in Club era. */
+  recordId?: number;
   /** Round 825: positions his verified history covers (player_verified_positions),
    *  kept when the game looked them up, so role fit reads them too. */
   played?: PositionRole[];

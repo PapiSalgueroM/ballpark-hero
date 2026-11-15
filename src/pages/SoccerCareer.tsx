@@ -3991,6 +3991,11 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                   ⚽ {career.lastUCLResult.playerGoals} goal{career.lastUCLResult.playerGoals > 1 ? "s" : ""} in tournament
                 </div>
               )}
+              {career.lastUCLResult.leadingRivalGoals !== undefined && (
+                <div className="text-[10px] text-center text-muted-foreground">
+                  Simulated leading rival · {career.lastUCLResult.leadingRivalGoals} goal{career.lastUCLResult.leadingRivalGoals === 1 ? "" : "s"}
+                </div>
+              )}
               {career.lastUCLResult.simplified && (
                 <div className="text-[10px] text-muted-foreground">{career.lastUCLResult.simplified}</div>
               )}

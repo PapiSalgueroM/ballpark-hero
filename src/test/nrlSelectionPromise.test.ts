@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
-  createNrlCareer, loadNrlOpeningMatchdayCareer, nrlCareerMarket, nrlContractCounteroffer, nrlContractOffer, nrlSelectionPromise, nrlSelectionPromiseCandidates,
+  createNrlCareer, loadNrlOpeningMatchdayCareer, nrlCareerCap, nrlCareerMarket, nrlContractCounteroffer, nrlContractOffer, nrlRenewalHoldOptions, nrlRenewalHoldQuote, nrlSelectionPromise, nrlSelectionPromiseCandidates,
   readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
-import { nrlNextRound, nrlRegularRounds } from '@/lib/nrlManager';
+import { nrlNextRound, nrlRegularRounds, nrlUnavailable } from '@/lib/nrlManager';
 
 const raw = JSON.stringify;
 const advance = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'advance' });
@@ -142,4 +142,58 @@ describe('NRL selection promises', () => {
     expect(nrlSelectionPromiseCandidates(named).some(row => row.id === player.id)).toBe(false);
     expect(promise(named, player.id)).toBe(named);
   });
+});
+
+it('earns a fringe starter renewal only from kickoff starts and skips a real injury', () => {
+  const year = 2026, clubId = 'broncos', playerId = 'nrl-broncos-2026-27';
+  const initial = createNrlCareer(clubId, 78, year);
+  const startPromise = (round: number) => ({ type: 'makeSelectionPromise', year, clubId, round, playerId, mode: 'starts' } as const);
+  expect(reduceNrlCareer(initial, startPromise(1))).toBe(initial);
+  let eligible = initial;
+  while (eligible.season.round < 8) eligible = advance(eligible);
+  const choices = nrlSelectionPromiseCandidates(eligible, 'starts');
+  expect(choices.some(row => row.id === playerId)).toBe(true);
+  expect(choices.every(row => eligible.season.results.filter(result => result.playerScoring)
+    .slice(-6).filter(result => result.playerScoring!.starters.includes(row.id)).length <= 2)).toBe(true);
+  const promised = reduceNrlCareer(eligible, startPromise(8));
+  expect(promised.selectionPromise).toEqual({ playerId, startedRound: 8, mode: 'starts' });
+  expect(save(promised)).toEqual(promised);
+  const usedFromBench = advance(promised);
+  const played = usedFromBench.season.results.find(row => row.round === 8 && row.playerScoring)!;
+  expect(played.benchUsed).toContain(playerId);
+  expect(played.playerScoring?.starters).not.toContain(playerId);
+  expect(played.injury).toEqual({ playerId, rounds: 1 });
+  expect(nrlSelectionPromise(usedFromBench)).toMatchObject({ appearances: 0, eligible: 1 });
+  const injured = advance(usedFromBench);
+  expect(nrlSelectionPromise(injured)).toMatchObject({ appearances: 0, eligible: 1 });
+  let starting = injured;
+  for (let count = 0; count < 4; count++) {
+    expect(nrlUnavailable(starting.season).has(playerId)).toBe(false);
+    const selected = reduceNrlCareer(starting, { type: 'selectStarter', role: 'Left Wing', playerId });
+    expect(selected.season.lineup['Left Wing']).toBe(playerId);
+    starting = advance(selected);
+    expect(nrlSelectionPromise(starting)).toMatchObject({ appearances: count + 1, eligible: count + 2 });
+  }
+  expect(nrlSelectionPromise(starting)?.status).toBe('kept');
+  expect(save(starting)).toEqual(starting);
+  const { selectionPromise, ...withoutPromise } = starting;
+  const normal = price(withoutPromise, playerId);
+  const discounted = Math.ceil(normal * 93 / 100);
+  expect(price(starting, playerId)).toBe(discounted);
+  const room = nrlCareerCap(starting, 2027);
+  const other = nrlCareerMarket(starting).find(row => row.kind === 'renewal' && row.startYear === 2027 && row.player.id !== playerId)!;
+  const crowded = reduceNrlCareer(starting, { type: 'offerContract', playerId: other.player.id,
+    salary: room.available + 2 * room.minimumSalary - discounted, years: 1 });
+  expect(nrlCareerCap(crowded, 2027).available).toBe(discounted - room.minimumSalary);
+  const { selectionPromise: _promise, ...ordinary } = crowded;
+  expect(nrlContractOffer(ordinary, playerId, normal, 1)).toEqual({ ok: false, reason: 'This offer exceeds the 2027 salary cap.' });
+  const held = nrlRenewalHoldOptions(crowded).find(row => row.player.id === playerId)!;
+  expect(held.askingSalary).toBe(discounted);
+  const booking = reduceNrlCareer(crowded, { type: 'bookRenewalHold', year, clubId,
+    round: crowded.season.round, playerId, annualSalary: discounted });
+  expect(nrlRenewalHoldQuote(save(booking)!)).toMatchObject({ ok: true, contract: { salary: discounted } });
+  const signed = reduceNrlCareer(booking, { type: 'exerciseRenewalHold', year, clubId, round: booking.season.round, playerId });
+  expect(nrlCareerCap(signed, 2027).available).toBe(0);
+  expect(signed.players.find(row => row.id === playerId)?.futureContract?.salary).toBe(discounted);
+  expect(save(signed)).toEqual(signed);
 });

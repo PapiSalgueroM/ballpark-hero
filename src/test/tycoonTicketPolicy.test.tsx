@@ -105,7 +105,11 @@ describe('Stadium ticket policy', () => {
        Round 1080 claimed still holds: a Standard club's money, crowd, taps, boost
        and its own row are the pre 1080 game. 374 seconds is under three matches, so
        no season ends inside the run (asserted). */
-    const ownRow = (state: TycoonState) => (state.league ? { ...state, league: { ...state.league, clubs: state.league.clubs.slice(0, 1) } } : state);
+    const ownRow = (state: TycoonState) => {
+      if (!state.league) return state;
+      const { clubs, results: _results, ...league } = state.league;
+      return { ...state, league: { ...league, clubs: clubs.slice(0, 1) } };
+    };
     for (const seed of [1, 29, 901, 8117]) {
       let live = engine.newTycoon(EPOCH);
       let old = original.newTycoon(EPOCH);
@@ -118,6 +122,11 @@ describe('Stadium ticket policy', () => {
         if (i % 97 === 0) { live = engine.activateBoost(live); old = original.activateBoost(old); }
         const current = engine.tick(live, 0.208, quietA), baseline = original.tick(old, 0.208, quietB);
         expect(current.events.some(e => e.kind === 'title' || e.kind === 'seasonEnd')).toBe(false);
+        const settledDay = current.state.league?.matchday;
+        if (settledDay !== live.league?.matchday) {
+          const crowd = engine.attendance({ ...live, fanbase: live.fanbase + engine.fanGrowthPerSec(live) * 0.208 });
+          expect(current.state.league?.results?.at(-1)).toEqual({ day: settledDay, gf: 0, ga: 0, attendance: crowd });
+        }
         expect({ ...current, state: ownRow(current.state) }).toEqual({ ...baseline, state: ownRow(baseline.state as TycoonState) });
         live = current.state; old = baseline.state;
       }
@@ -213,15 +222,23 @@ describe('Stadium ticket policy', () => {
       let state = chosen(policy);
       const random = stream(81120);
       const scores: unknown[] = [];
+      let firstCrowd: number | undefined;
       for (let i = 0; i < 1800; i += 1) {
         const next = engine.tick(state, 0.7, random.next);
         state = next.state;
-        scores.push([state.minute, state.goalsFor, state.goalsAgainst, state.totalGoals, state.totalWins, state.totalMatches, state.league]);
+        const league = state.league;
+        firstCrowd ??= league?.results?.[0]?.attendance;
+        const results = league?.results?.map(({ attendance: _attendance, ...result }) => result);
+        scores.push([state.minute, state.goalsFor, state.goalsAgainst, state.totalGoals, state.totalWins, state.totalMatches,
+          league && { ...league, results }]);
       }
-      return { scores, draws: random.draws };
+      return { scores, draws: random.draws, firstCrowd };
     });
-    expect(results[0]).toEqual(results[1]);
-    expect(results[2]).toEqual(results[1]);
+    const [community, standard, premium] = results.map(({ firstCrowd, ...run }) => run);
+    expect(community).toEqual(standard);
+    expect(premium).toEqual(standard);
+    expect(results[0].firstCrowd).toBeGreaterThanOrEqual(results[1].firstCrowd!);
+    expect(results[2].firstCrowd).toBeLessThan(results[1].firstCrowd!);
   });
 
   it('offline uses the saved offer once with unchanged caps and no live boosts or fan growth', () => {

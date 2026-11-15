@@ -296,7 +296,9 @@ export function useLineupBuilder() {
       }
 
       const trimmedName = normalizeName(playerName);
-      const names = new Set(Array.from(filledSlots.values(), slot => normalizeName(slot.playerName)));
+      const names = new Set(Array.from(filledSlots.values())
+        .filter(slot => draftChoice.mode !== 'club-era' || slot !== replacingSlot)
+        .map(slot => normalizeName(slot.playerName)));
       if (names.has(trimmedName)) {
         setValidationError(`${playerName.trim()} is already in your lineup!`);
         return;
