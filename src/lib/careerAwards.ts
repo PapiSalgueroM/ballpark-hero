@@ -372,8 +372,10 @@ const NBA_ROY: FieldConfig = { pool: 45, slots: 1, grade: -2.15 };
  * Finals MVP. You have already won the title to get here, so the field is
  * the handful of people on your own team who could take it off you. Michael
  * Jordan holds the record with six.
+ * The playoff stat line has a different spread from the regular-season line.
+ * The grade keeps the award marginally harder on paired title seasons.
  */
-const NBA_FINALS_MVP: FieldConfig = { pool: 7, slots: 1, grade: 0.04 };
+const NBA_FINALS_MVP: FieldConfig = { pool: 7, slots: 1, grade: 0.18 };
 /** The three league leader awards. One winner each, from the starters. */
 const NBA_SCORING: FieldConfig = { pool: 150, slots: 1, grade: -0.35 };
 const NBA_ASSISTS: FieldConfig = { pool: 150, slots: 1, grade: -0.35 };

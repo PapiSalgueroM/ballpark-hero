@@ -367,7 +367,7 @@ const CONTROLS = {
   /* R: my side of the verdict read off the era neutral line again instead of the printed one. In a modern
      season the two are the same number, so only the 2003-04 careers can tell (one career in four). */
   neutralmine: { file: 'src/lib/nbaMyCareer.ts', find: "    for (const n of judgeRivalSeason(c.rival, nbaSeasonScore(line), c.name, 'nba', rng, nbaRivalSeason(c.year, seasonsPlayed))) notes.push(n);",
-    put: "    for (const n of judgeRivalSeason(c.rival, statScore, c.name, 'nba', rng, nbaRivalSeason(c.year, seasonsPlayed))) notes.push(n);", needs: 'R' },
+    put: "    for (const n of judgeRivalSeason(c.rival, nbaSeasonScore(nbaEraNeutral(line, c.year)), c.name, 'nba', rng, nbaRivalSeason(c.year, seasonsPlayed))) notes.push(n);", needs: 'R' },
   /* R: the All-Star beat dealt on the two ratings again (both at 80), as it was while it flipped a coin. It then
      turns up in years neither made the roster, saying one of them did. */
   oldgate306: { file: 'src/lib/careerFactBeats.ts', find: '        when: (s, r) => { const f = facts(s, r); return !!f && !f.mine && f.his; },', put: '        when: (s, r) => (s as { ovr?: number }).ovr! >= 80 && (r as { ovr?: number }).ovr! >= 80,', needs: 'R' },

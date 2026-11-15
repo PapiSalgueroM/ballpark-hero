@@ -853,17 +853,11 @@ export function simNbaSeason(
   if (restGames) line.restGames = restGames;
   /* The season card's stat line stays three parts (the hub tile has room for three), so the rest is said here. */
   notes.push(`📊 ${stat.mpg.toFixed(1)} mpg, ${stat.spg.toFixed(1)} spg, ${stat.bpg.toFixed(1)} bpg.`);
-  // Round 123: computed up here rather than down with the rest of the awards
-  // because Finals MVP is decided inside the playoff block below and it needs
-  // the same number everything else is judged on.
-  /* Round 1103: every score that judges a season reads the line with the era's level divided out, so a 2004
-     season is measured against 2004's league. The saved and printed line stays raw. */
-  const statScore = nbaSeasonScore(nbaEraNeutral(line, c.year));
-
   const strength = teamQuality + (seasonOverall - 78) * 0.5;
   const playoffOdds = Math.max(0.05, Math.min(0.92, (strength - 66) / 28));
   let result: string = NBA_MISSED_PLAYOFFS;
   let poStage = -1;
+  let finalsMvpDraw: number | undefined;
   if (rng() < playoffOdds) {
     const stages = NBA_PLAYOFF_RESULTS;
     let stage = 0;
@@ -874,14 +868,8 @@ export function simNbaSeason(
       c.rings += 1;
       c.fanbase = Math.min(100, c.fanbase + 15);
       notes.push('💍 A RING.');
-      // Round 123: you have already won the title to be standing here, so the
-      // field is the handful of people on your own team who could take it off
-      // you. The old ovr >= 88 gate meant a title team's best player could be
-      // ineligible for the trophy his own run earned. Michael Jordan holds the
-      // record with six.
-      if (wonAward(rng, 'nba', 'finalsMvp', c.pos, statScore)) {
-        line.awards.push('Finals MVP'); c.finalsMvps += 1; notes.push('🏆 FINALS MVP.');
-      }
+      // Keep the field's draw in its original place before generating the playoff line.
+      finalsMvpDraw = rng();
     }
   }
   line.teamResult = result;
@@ -909,6 +897,10 @@ export function simNbaSeason(
     line.poRpg = po.rpg;
     line.poApg = po.apg;
     notes.push(`📊 Playoffs: ${poG} games, ${po.ppg.toFixed(1)} ppg, ${po.rpg.toFixed(1)} rpg, ${po.apg.toFixed(1)} apg.`);
+    const vote = finalsMvpDraw;
+    if (vote !== undefined && wonAward(() => vote, 'nba', 'finalsMvp', c.pos, nbaSeasonScore(nbaEraNeutral({ games: poG, ...po }, c.year)))) {
+      line.awards.push('Finals MVP'); c.finalsMvps += 1; notes.push('🏆 FINALS MVP.');
+    }
     const cn = clutchNote(clutch, depth, 'nba', poForm);
     if (cn) notes.push(cn);
   }
@@ -919,7 +911,7 @@ export function simNbaSeason(
      Round 1103: the season's awards are decided TOGETHER, in one pass that knows the club's record
      (nbaCareerAwards.ts). MVP needs the All-NBA First Team and a playoff club, the defensive awards read a
      defence score, All-Rookie is for a first season, the Rookie of the Year is on its first team, and the
-     real games rule applies from 2023-24. Finals MVP stays above, inside the title it belongs to. */
+     real games rule applies from 2023-24. Finals MVP reads the playoff line after a title. */
   const prev = c.seasons[c.seasons.length - 1];
   const won = decideNbaAwards(rng, {
     pos: c.pos, defenceRep: (NBA_ARCH_DEFENSE[a.id] ?? NBA_DEFENSE_UNKNOWN).rep,
