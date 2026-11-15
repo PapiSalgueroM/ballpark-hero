@@ -3,10 +3,10 @@ import type { UsSport } from './usCoachCareer';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 
 export type ProgrammeSection = 'workload' | 'tactics' | 'expectation' | 'partnership' | 'bonus' | 'reinvention';
-export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'steady' | 'stretch' | 'build' | 'maintain';
+export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'steady' | 'stretch' | 'build' | 'maintain';
 export interface ProgrammeChoices {
   workload: 'normal' | 'push' | 'recover';
-  tactics: 'normal' | 'attack' | 'support' | 'defend';
+  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside';
   expectation: 'normal' | 'steady' | 'stretch';
   partnership: 'normal' | 'build';
   bonus: 'normal' | 'steady' | 'stretch';
@@ -32,6 +32,7 @@ export interface ProgrammePreparation {
   /** The chosen trades that had nothing to add (see land): they changed nothing and are settled as unused. */
   idle?: ProgrammeSection[];
   nhlShutdownBerthGain?: number;
+  nflInsideRoutesGain?: number;
 }
 const DEFAULTS: ProgrammeChoices = { workload: 'normal', tactics: 'normal', expectation: 'normal', partnership: 'normal', bonus: 'normal', reinvention: 'normal' };
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
@@ -43,6 +44,15 @@ export const NBA_DEFENSIVE_SCORING_COST = 8;
 export const NBA_DEFENSIVE_CAP = { spg: 3, bpg: 4 } as const;
 export const NHL_SHUTDOWN_BERTH_POINTS = 6;
 export const NHL_SHUTDOWN_OFFENSIVE_COST = 10;
+export const NFL_WR_REC_CAP = 145;
+export const NFL_INSIDE_CATCH_GAIN = 12;
+export const NFL_INSIDE_TD_COST = 10;
+const NFL_INSIDE_ROUTES_LABEL = 'Inside routes';
+
+export function nflInsideRoutesAvailable(c: UsCareerCore): boolean {
+  return c.pos === 'WR' && c.role !== 'backup' && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0);
+}
+
 export function nbaDefensiveAssignment(pos: string) {
   return pos === 'PF' || pos === 'C'
     ? { label: 'Protect the rim', stat: 'bpg', unit: 'blocks per game' } as const
@@ -128,7 +138,11 @@ export function usProgrammeStateValid(c: ProgrammeCareer): boolean {
 export function usProgrammeResults(c: ProgrammeCareer): readonly UsCareerProgrammeResult[] { return Array.isArray(c.programmeResults) ? c.programmeResults.filter(validResult) : []; }
 function validPlan(c: UsCareerCore, sport: UsSport, plan: UsCareerProgramme): boolean {
   return !!plan && typeof plan === 'object' && plan.sport === sport && Number.isSafeInteger(plan.year)
-    && typeof plan.team === 'string' && sections.every(key => usProgrammeMenus(c, sport).find(menu => menu.id === key)?.options.some(o => o.id === plan[key]));
+    && typeof plan.team === 'string' && sections.every(key => {
+      // A booked receiver plan still needs settling if camp benches him or the deal expires after the season.
+      if (key === 'tactics' && plan.tactics === 'inside') return sport === 'nfl' && c.pos === 'WR';
+      return usProgrammeMenus(c, sport).find(menu => menu.id === key)?.options.some(o => o.id === plan[key]);
+    });
 }
 /* Release AV: baseball and hockey play the season as long as it really was since Round 1226 (48 games in
    2012-13, 56 in 2020-21, 60 in baseball's 2020), and every games and counting target below was typed on 162
@@ -225,6 +239,11 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
       { id: 'normal', label: 'Your usual approach', effect: 'Keep your current style.' },
       { id: 'attack', label: attack, effect: attackEffect },
       { id: 'support', label: support, effect: supportEffect },
+      ...(sport === 'nfl' && nflInsideRoutesAvailable(c) ? [{
+        id: 'inside' as const,
+        label: NFL_INSIDE_ROUTES_LABEL,
+        effect: `Use shorter targets for about ${NFL_INSIDE_CATCH_GAIN}% more regular-season receptions at the same total yards. Give up about ${NFL_INSIDE_TD_COST}% of your receiving touchdowns, at least one if you score. The ${NFL_WR_REC_CAP}-reception cap applies, and if you gain no catches, you give up nothing. Camp still decides who starts.`,
+      }] : []),
       ...(defence ? [{
         id: 'defend' as const,
         label: defence.label,
@@ -314,7 +333,9 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
   for (const section of sections) {
     const choice = plan[section];
     if (choice === 'normal') continue;
-    const decision: ProgrammeDecision = { section, label: menus.find(m => m.id === section)?.options.find(o => o.id === choice)?.label ?? section, outcome: played ? 'completed' : 'interrupted' };
+    const insideRoutes = section === 'tactics' && choice === 'inside';
+    const label = insideRoutes ? NFL_INSIDE_ROUTES_LABEL : menus.find(m => m.id === section)?.options.find(o => o.id === choice)?.label ?? section;
+    const decision: ProgrammeDecision = { section, label, outcome: played ? 'completed' : 'interrupted' };
     if (played && sport === 'nba' && section === 'tactics' && choice === 'defend' && !preparation?.idle?.includes(section)) {
       const defence = nbaDefensiveAssignment(c.pos);
       const actual = (line as UsCareerSeason & { spg?: number; bpg?: number })[defence.stat];
@@ -326,6 +347,10 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
     if (played && sport === 'nhl' && section === 'tactics' && choice === 'defend' && preparation?.nhlShutdownBerthGain !== undefined) {
       decision.actual = preparation.nhlShutdownBerthGain;
       decision.unit = 'percentage points of playoff qualification';
+    }
+    if (played && insideRoutes && preparation?.nflInsideRoutesGain !== undefined) {
+      decision.actual = preparation.nflInsideRoutesGain;
+      decision.unit = 'additional receptions';
     }
     if (played && section === 'expectation') {
       decision.target = gamesTarget({ ...c, year: plan.year, seasons: c.seasons.filter(s => s !== line) }, sport, choice === 'stretch');

@@ -57,6 +57,7 @@ import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
 import { stageUsSeasonRating, type UsSeasonRating } from './usInSeasonRating';
+import { NFL_INSIDE_CATCH_GAIN, NFL_INSIDE_TD_COST, NFL_WR_REC_CAP, nflInsideRoutesAvailable, type ProgrammePreparation } from './usCareerProgramme';
 
 export type CareerPos = 'QB' | 'RB' | 'WR' | 'TE' | 'LB' | 'CB' | 'EDGE' | 'K';
 
@@ -495,7 +496,6 @@ export function nflSeasonLength(year: number): number {
    receiving yards by a tight end 1,416 in 2020 (NFL.com, "Chiefs TE Travis
    Kelce sets single-season TE receiving yardage record"; Guinness World
    Records, "Most yards receiving by a tight end in an NFL season"). */
-const NFL_WR_REC_CAP = 145;
 const NFL_WR_YDS_CAP = 1950;
 const NFL_TE_YDS_CAP = 1400;
 
@@ -569,7 +569,7 @@ export function setNflQbRun(c: CareerState, enabled: boolean): CareerState {
 }
 
 export function simSeason(
-  c: CareerState, teamQuality: number, rng: () => number, inSeasonRating = false,
+  c: CareerState, teamQuality: number, rng: () => number, inSeasonRating = false, programme?: ProgrammePreparation | null,
 ): { line: SeasonLine; notes: string[] } {
   const notes: string[] = [];
   const passingDown = nflPassingDownActive(c);
@@ -610,6 +610,24 @@ export function simSeason(
   };
   if (seasonRating) line.seasonRating = seasonRating;
   Object.assign(line, nflStatLineFor({ form, pos: c.pos, games, passingDown, designedRuns }, rng));
+  if (c.pos === 'WR' && programme?.plan.sport === 'nfl' && programme.plan.tactics === 'inside') {
+    const catches = line.rec ?? 0;
+    const adjusted = Math.min(NFL_WR_REC_CAP, Math.round(catches * (1 + NFL_INSIDE_CATCH_GAIN / 100)));
+    if (nflInsideRoutesAvailable(c) && adjusted > catches) {
+      const touchdowns = line.recTd ?? 0;
+      const cost = Math.min(touchdowns, Math.max(1, Math.round(touchdowns * NFL_INSIDE_TD_COST / 100)));
+      line.rec = adjusted;
+      line.recTd = touchdowns - cost;
+      programme.nflInsideRoutesGain = adjusted - catches;
+      const touchdownNote = cost > 0 ? ` Receiving touchdowns fell from ${touchdowns} to ${line.recTd}.` : '';
+      notes.push(`Inside routes took you from ${catches} to ${adjusted} receptions for the same receiving yards.${touchdownNote}`);
+    } else {
+      programme.idle = [...(programme.idle ?? []), 'tactics'];
+      const reason = c.role === 'backup' ? 'Camp moved you to the backup role.'
+        : catches === NFL_WR_REC_CAP ? `You were already at the ${NFL_WR_REC_CAP}-reception cap.` : 'No extra receptions landed.';
+      notes.push(`Inside routes unused. ${reason}`);
+    }
+  }
   if (passingDown) {
     line.passingDownRole = true;
     notes.push('Passing-down role: more of your regular-season work came as a receiver.');
