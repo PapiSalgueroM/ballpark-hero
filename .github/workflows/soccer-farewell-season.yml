@@ -13,6 +13,7 @@ on:
       - scripts/simSoccerContractMoves.mjs
       - scripts/qa/*soccerFarewell*.mjs
       - scripts/qa/*SoccerFarewell*.mjs
+      - scripts/lib/captureShippedFonts.mjs
   workflow_dispatch:
 permissions:
   contents: read
@@ -30,7 +31,6 @@ jobs:
       SIM_NETWORK: offline
       ENGINES: chromium
       TZ: UTC
-      FREE_KICK_FONT_CACHE: soccer-farewell-artifacts/font-cache
     steps:
       - uses: actions/checkout@v4
         with:
@@ -44,7 +44,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Remote dependencies and font receipts
+      - name: Remote dependencies
         run: |
           mkdir -p soccer-farewell-artifacts
           git rev-parse HEAD > soccer-farewell-artifacts/source-head.txt
@@ -55,7 +55,6 @@ jobs:
           node scripts/qa/soccerFarewellDependencies.mjs after
           npx playwright install --with-deps chromium
           python -m pip install fonttools pillow
-          node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only 2>&1 | tee soccer-farewell-artifacts/fonts.log
       - name: Actual app types and production build
         id: build
         run: |

@@ -6,31 +6,26 @@ import { createHash } from 'node:crypto';
 import { createServer } from 'node:http';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { noteNoIntlCareer } from '../lib/intlCallNote.mjs';
+import { captureShippedFonts } from '../lib/captureShippedFonts.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const ARTIFACTS = path.join(ROOT, 'manager-match-plans-artifacts');
 const OUT = path.join(ARTIFACTS, 'native');
-const CACHE = path.resolve(process.env.MANAGER_MATCH_PLANS_FONT_CACHE || path.join(ARTIFACTS, 'font-cache'));
+const CACHE = path.resolve(process.env.MANAGER_MATCH_PLANS_FLAG_CACHE || path.join(ARTIFACTS, 'flag-cache'));
 const digest = value => createHash('sha256').update(value).digest('hex');
-const sheets = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(row => new URL(row[1]).href);
-assert.equal(sheets.length, 1, 'Read the actual template font stylesheet');
 assert(process.env.CI, 'Match plan native execution runs only in remote CI');
-if (process.argv.includes('--prefetch-fonts-only')) {
+if (process.argv.includes('--prefetch-flags-only')) {
   fs.mkdirSync(CACHE, { recursive: true });
   const manifest = [];
   const download = async url => {
-    assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://flagcdn.com'].includes(new URL(url).origin));
+    assert.equal(new URL(url).origin, 'https://flagcdn.com');
     const response = await fetch(url, { redirect: 'error', signal: AbortSignal.timeout(20000), headers: { 'User-Agent': 'Mozilla/5.0 Chrome/131.0.0.0 Safari/537.36' } });
-    assert(response.ok, 'Font dependency response succeeds');
+    assert(response.ok, 'Flag dependency response succeeds');
+    assert.equal(response.headers.get('content-type'), 'image/png');
     const body = Buffer.from(await response.arrayBuffer()), file = digest(url);
     fs.writeFileSync(path.join(CACHE, file), body);
     manifest.push({ url, file, contentType: response.headers.get('content-type'), sha256: digest(body) });
-    return body.toString('utf8');
   };
-  const css = await download(sheets[0]);
-  const urls = [...new Set([...css.matchAll(/url\(\s*['"]?(https:\/\/[^)'"\s]+)/g)].map(row => row[1]))];
-  assert(urls.length > 0, 'Actual stylesheet declares font files');
-  for (const url of urls) { assert.equal(new URL(url).origin, 'https://fonts.gstatic.com'); await download(url); }
   const engine = fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf8');
   const flags = fs.readFileSync(path.join(ROOT, 'src/components/FlagImg.tsx'), 'utf8');
   const nations = engine.match(/export const NATIONS:[\s\S]*?\]\.map\(n =>/)[0];
@@ -39,16 +34,16 @@ if (process.argv.includes('--prefetch-fonts-only')) {
   assert(required.length > 0, 'Actual manager countries contribute flag dependencies');
   for (const code of required) if (code !== 'gb-eng') await download(`https://flagcdn.com/w40/${code}.png`);
   fs.writeFileSync(path.join(CACHE, 'manifest.json'), JSON.stringify(manifest, null, 2));
-  console.log(`Prepared ${manifest.length} match plan font and flag dependencies.`);
+  console.log(`Prepared ${manifest.length} match plan flag dependencies.`);
   process.exit(0);
 }
-const fonts = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.json'), 'utf8')).map(entry => {
-  assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com', 'https://flagcdn.com'].includes(new URL(entry.url).origin));
+const flagCache = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.json'), 'utf8')).map(entry => {
+  assert.equal(new URL(entry.url).origin, 'https://flagcdn.com');
   assert(/^[a-f0-9]{64}$/.test(entry.file));
   const body = fs.readFileSync(path.join(CACHE, entry.file)); assert.equal(digest(body), entry.sha256);
   return [entry.url, { body, contentType: entry.contentType }];
 }));
-assert(fonts.has(sheets[0]), 'Prefetch current fonts before the guarded native run');
+assert(flagCache.size > 0, 'Prefetch actual flags before the guarded native run');
 const held = ['src/components/club-manager/MatchPlansCard.tsx', 'src/components/club-manager/TacticsScreen.tsx', 'src/hooks/useClubManager.ts', 'src/lib/clubManagerMatchPlans.ts', 'src/lib/clubManager.ts', 'src/lib/clubManagerSlots.ts', 'src/lib/clubManagerEras.ts', 'src/lib/clubManagerInternationals.ts', 'src/components/FlagImg.tsx', 'src/hooks/useRevealScroll.ts', 'src/data/clubManagerWorldRosters.ts', 'src/data/clubManagerRosters.ts', 'src/data/clubManagerALeague2026.ts', 'scripts/qa/managerMatchPlans1079.mjs'];
 const hashes = () => Object.fromEntries(held.map(file => [file, digest(fs.readFileSync(path.join(ROOT, file)))]));
 const report = { sourceBefore: hashes(), cases: [], controls: [], forwardedWrites: 0, scope: 'Actual useClubManager and TacticsScreen, isolated browser storage, independent unchanged engine baseline' };
@@ -113,7 +108,7 @@ function App() {
 createRoot(document.getElementById('root')).render(<App />);`;
 fs.writeFileSync(path.join(temp, 'entry.tsx'), entry);
 fs.writeFileSync(path.join(OUT, 'fixture-entry.tsx'), entry);
-fs.writeFileSync(path.join(temp, 'index.html'), `<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link href="${sheets[0]}" rel="stylesheet"></head><body><div id="root"></div><script type="module" src="./entry.tsx"></script></body></html>`);
+fs.writeFileSync(path.join(temp, 'index.html'), `<!doctype html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="root"></div><script type="module" src="./entry.tsx"></script></body></html>`);
 report.fixture = { sha256: digest(entry), availability: 'Two genuine saved player IDs get injury/suspension and a third gets fitness 27 before real hook reload. No result or player is invented.', foreign: 'Actual Chelsea startCareer receives foreign Arsenal plans to test isolation.' };
 const dist = path.join(temp, 'dist');
 let browser, server;
@@ -195,7 +190,7 @@ try {
   };
   const { build } = await import('vite');
   await build({ root:temp, configFile:path.join(ROOT,'vite.config.ts'), publicDir:false, build:{outDir:dist,emptyOutDir:true,minify:false}, logLevel:'warn' });
-  const mime = {'.html':'text/html','.js':'application/javascript','.css':'text/css','.svg':'image/svg+xml','.png':'image/png'};
+  const mime = {'.html':'text/html','.js':'application/javascript','.css':'text/css','.svg':'image/svg+xml','.png':'image/png','.woff2':'font/woff2'};
   server = createServer((request,response) => {
     if (!['GET','HEAD'].includes(request.method)) { response.writeHead(405); response.end(); return; }
     const url=new URL(request.url,'http://localhost'); let file=path.resolve(dist,'.'+decodeURIComponent(url.pathname));
@@ -217,11 +212,12 @@ try {
       if(!['GET','HEAD','OPTIONS'].includes(request.method()))row.networkWrites.push({url:url.href,method:request.method(),body:request.postData()});
       if(url.origin===BASE){assert(['GET','HEAD'].includes(request.method()));return route.continue();}
       row.network.push({url:url.href,method:request.method(),fulfilledLocally:true});
-      if(fonts.has(url.href)){const asset=fonts.get(url.href);row.assets.push({url:url.href,sha256:digest(asset.body),bytes:asset.body.length});return route.fulfill({status:200,...asset});}
+      if(flagCache.has(url.href)){const asset=flagCache.get(url.href);row.assets.push({url:url.href,sha256:digest(asset.body),bytes:asset.body.length});return route.fulfill({status:200,...asset});}
       if(['image','font','stylesheet'].includes(request.resourceType()))row.errors.push(`Uncached actual asset: ${url.href}`);
       return route.fulfill({status:200,contentType:'application/json',body:'[]'});
     });
     const page=await context.newPage();page.setDefaultTimeout(15000);
+    const verifyFonts=captureShippedFonts(page,BASE);
     await page.addInitScript(()=>{
       window.__planEvents=[];window.__planWrites=[];window.__planRemovals=[];
       const set=Storage.prototype.setItem,remove=Storage.prototype.removeItem;
@@ -285,6 +281,7 @@ try {
     };
     try {
       await page.goto(BASE,{waitUntil:'domcontentloaded'});await resume();
+      row.assets.push(...await verifyFonts());
       let proof=await assertPersisted();const original=structuredClone(proof.career);
       await openPlans();await typeName('First XI');await activate(page.locator('[data-cm-plan-save]'));proof=await assertPersisted();
       const first=proof.career.matchPlans.find(plan=>plan.slot===0);assert(first);assert.deepEqual(tactics(first),tactics(original));assert.deepEqual(otherState(proof.career),otherState(original));

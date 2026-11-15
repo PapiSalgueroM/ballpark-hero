@@ -8,14 +8,13 @@ import { execFileSync, spawn } from 'node:child_process';
 import { createServer } from 'node:net';
 import pw from './lib/playwrightLoader.mjs';
 import { answerConsent, storedConsent } from './lib/answerConsent.mjs';
+import { captureShippedFonts } from './lib/captureShippedFonts.mjs';
 assert(process.env.CI, 'Calendar browser proof runs remotely');
 const out = path.resolve('career-programme-artifacts/calendar-native');
 fs.mkdirSync(out, { recursive: true });
 const sha = bytes => createHash('sha256').update(bytes).digest('hex');
 const fixtures = JSON.parse(fs.readFileSync('career-programme-artifacts/calendar-fixtures.json', 'utf8'));
 assert.equal(fixtures.length, 2, 'Actual advancing and eliminated cup saves are required');
-const manifest = JSON.parse(fs.readFileSync(path.join(process.env.FREE_KICK_FONT_CACHE, 'manifest.json'), 'utf8'));
-const fonts = new Map(manifest.map(item => { const body = fs.readFileSync(path.join(process.env.FREE_KICK_FONT_CACHE, item.file)); assert.equal(sha(body), item.sha256); return [item.url, { body, contentType: item.contentType }]; }));
 const held = [];
 for (const file of ['src/lib/soccerCareerCup.ts', 'src/lib/soccerSeasonCalendar.ts', 'src/lib/soccerSeasonCompetitions.ts', 'src/components/season-centre/SeasonCentre.tsx', 'src/components/soccer-career/SoccerSeasonCentre.tsx', 'src/components/soccer-career/SeasonCompetitionPanel.tsx']) {
   const bytes = fs.readFileSync(file); held.push({ file, bytes, sha256: sha(bytes) });
@@ -30,9 +29,10 @@ function viewportFailures(value) { return value.inner.width > value.requested.wi
 function layoutFailures(value) { return [...(value.overflow ? ['overflow'] : []), ...viewportFailures(value.viewport), ...(!value.inside || !value.painted ? ['dialog'] : []), ...(value.stable < 4 || value.finite || value.fonts !== 'loaded' ? ['capture-ready'] : []), ...(value.buttons.some(button => !button.clipped && (!button.painted || button.width < 43.5 || button.height < 43.5)) ? ['controls'] : [])]; }
 try {
   for (const width of [320, 390, 1280]) for (const fixture of fixtures) {
-    const id = width + '-' + fixture.id, row = { id, shots: [], layouts: [], reads: [], reloads: [], errors: [], assets: [], blocked: [], checks: 0 };
+    const id = width + '-' + fixture.id, row = { id, shots: [], layouts: [], reads: [], reloads: [], errors: [], assets: [], blocked: [], fontsUsed: [], checks: 0 };
     report.cases.push(row);
     const context = await browser.newContext({ viewport: { width, height: width === 320 ? 568 : width === 390 ? 844 : 900 }, isMobile: width < 1000, hasTouch: width < 1000 }), page = await context.newPage();
+    const verifyFonts = captureShippedFonts(page, base);
     const check = (value, label) => { assert(value, id + ': ' + label); row.checks++; report.checks++; };
     const key = 'soccerCareerSave', state = fixture.value, season = state.pendingSummary;
     check(season && season.type === 'playing' && season.apps > 0, 'Fixture carries the actual played row');
@@ -42,12 +42,13 @@ try {
     check(run.opening && typeof run.opening.opp === 'string' && run.opening.won === early.won, 'New modern engine fixture holds a named opening match');
     const initialStats = JSON.stringify([season.apps, season.leagueApps, season.goals, season.assists, season.cleanSheets, season.rating]);
     try {
-      await context.route('**/*', async route => { const request = route.request(), url = request.url(); if (url.startsWith(base + '/')) return route.continue(); if (fonts.has(url)) return route.fulfill(fonts.get(url)); if (url.startsWith('data:')) return route.continue(); row.blocked.push({ url, method: request.method(), forwarded: false }); if (request.method() !== 'GET') return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }); if (url.includes('/rest/v1/')) return route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }); return route.abort(); });
+      await context.route('**/*', async route => { const request = route.request(), url = request.url(); if (url.startsWith(base + '/')) return route.continue(); if (url.startsWith('data:')) return route.continue(); row.blocked.push({ url, method: request.method(), forwarded: false }); if (request.method() !== 'GET') return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' }); if (url.includes('/rest/v1/')) return route.fulfill({ status: 200, contentType: 'application/json', body: '[]' }); return route.abort(); });
       await context.addInitScript(({ key, state }) => { if (!sessionStorage.getItem('calendar-seeded')) { localStorage.setItem(key, JSON.stringify(state)); sessionStorage.setItem('calendar-seeded', '1'); } localStorage.setItem('dukb-guest-handle', 'CalendarVisitor'); }, { key, state });
       page.on('pageerror', error => row.errors.push(String(error)));
       page.on('requestfailed', request => { if (request.url().startsWith(base + '/assets/')) row.assets.push({ url: request.url(), error: request.failure()?.errorText }); });
       page.on('response', response => { if (response.url().startsWith(base + '/assets/') && response.status() >= 400) row.assets.push({ url: response.url(), status: response.status() }); });
       await page.goto(base + '/soccer-career', { waitUntil: 'networkidle' });
+      row.fontsUsed = await verifyFonts();
       await page.locator('[data-watch-week-by-week]').waitFor();
       const bytes = () => page.evaluate(key => localStorage.getItem(key), key), before = await bytes();
       check(JSON.stringify(JSON.parse(before).pendingSummary) === JSON.stringify(season), 'Loaded actual summary holds every saved row field');
