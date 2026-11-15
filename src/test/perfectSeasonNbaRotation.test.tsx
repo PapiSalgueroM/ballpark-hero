@@ -3,9 +3,10 @@ import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import NbaPage from '@/pages/PerfectSeasonNba';
-import { getDailyDateET, loadDailyAttempt } from '@/lib/perfectSeason';
-import { simulateSeasonFair } from '@/lib/perfectSeasonExpansion';
+import { getDailyDateET, loadDailyAttempt, randomSeed } from '@/lib/perfectSeason';
+import { buildPlayoffRun, playoffSeedForDaily, simulateSeasonFair } from '@/lib/perfectSeasonExpansion';
 import { recordCompletion } from '@/lib/completions';
+import { loadNbaPlayoffs } from '@/lib/perfectSeasonNbaPlayoffs';
 
 const fixture = [
   { slot: 'PG', name: 'Rotation Guard', rating: 55, eligible: ['PG', 'SIXTH'] },
@@ -15,6 +16,7 @@ const fixture = [
   { slot: 'C', name: 'Rotation Center', rating: 79, eligible: ['C', 'SIXTH'] },
   { slot: 'SIXTH', name: 'Rotation Reserve', rating: 99, eligible: ['PG', 'SIXTH'] },
 ];
+let fixtureRatings: number[];
 
 vi.mock('@/components/game/GameNavbar', () => ({ GameNavbar: () => null }));
 vi.mock('@/components/game/GameNav', () => ({ GameNav: () => null }));
@@ -24,20 +26,25 @@ vi.mock('@/components/ads/AdBanner', () => ({ default: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
 vi.mock('@/components/seo/GameSeoContent', () => ({ default: () => null }));
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn(), getCurrentPlayerName: () => null }));
+vi.mock('@/lib/perfectSeason', async original => {
+  const actual = await original<typeof import('@/lib/perfectSeason')>();
+  return { ...actual, randomSeed: vi.fn(actual.randomSeed) };
+});
 vi.mock('@/lib/perfectSeasonExpansion', async original => {
   const actual = await original<typeof import('@/lib/perfectSeasonExpansion')>();
-  return { ...actual, simulateSeasonFair: vi.fn(actual.simulateSeasonFair) };
+  return { ...actual, simulateSeasonFair: vi.fn(actual.simulateSeasonFair), buildPlayoffRun: vi.fn(actual.buildPlayoffRun) };
 });
 vi.mock('@/lib/perfectSeasonNba', async original => ({
   ...await original<typeof import('@/lib/perfectSeasonNba')>(),
   fetchTeamSeasonIndex: async () => [{ season: '2000-01', team: 'FXR', teamName: 'Rotation Club' }],
   fetchSquad: async () => ({ squadId: 'rotation-club', teamName: 'Rotation Club', year: 2001,
-    players: fixture.map(p => ({ ...p, playerId: p.slot, detail: 'Generated test stats' })) }),
+    players: fixture.map((p, i) => ({ ...p, rating: fixtureRatings[i], playerId: p.slot, detail: 'Generated test stats' })) }),
 }));
 
 const tick = (ms = 10) => act(async () => { await vi.advanceTimersByTimeAsync(ms); });
+const loadGame = () => render(<HelmetProvider><MemoryRouter><NbaPage /></MemoryRouter></HelmetProvider>);
 async function finishDraft(mode: 'Classic' | 'Hard' | 'Daily') {
-  render(<HelmetProvider><MemoryRouter><NbaPage /></MemoryRouter></HelmetProvider>);
+  const game = loadGame();
   fireEvent.click(screen.getByText(mode).closest('button')!);
   await tick();
   for (const p of fixture) {
@@ -48,9 +55,11 @@ async function finishDraft(mode: 'Classic' | 'Hard' | 'Daily') {
     if (option) fireEvent.click(option);
     await tick();
   }
+  return game;
 }
 
 beforeEach(() => {
+  fixtureRatings = fixture.map(p => p.rating);
   localStorage.clear();
   vi.clearAllMocks();
   vi.useFakeTimers();
@@ -91,12 +100,102 @@ it('keeps Hard ratings hidden during rotation review and simulates the original 
 });
 
 it('starts Daily immediately and writes its existing dated receipt', async () => {
-  await finishDraft('Daily');
+  fixtureRatings = [95, 95, 95, 95, 95, 82];
+  const game = await finishDraft('Daily');
   expect(screen.queryByRole('region', { name: 'Review rotation' })).toBeNull();
   expect(simulateSeasonFair).toHaveBeenCalledTimes(1);
   fireEvent.click(screen.getByRole('button', { name: 'Skip to result' }));
   await tick();
   const result = vi.mocked(simulateSeasonFair).mock.results[0].value;
+  expect(result.wins).toBeGreaterThanOrEqual(55);
+  expect(screen.queryByRole('region', { name: 'Playoff rotation' })).toBeNull();
+  const liveBracket = vi.mocked(buildPlayoffRun).mock.results.slice(-1)[0]?.value;
+  expect(liveBracket).toEqual(buildPlayoffRun('nba', result.overall, result.wins,
+    playoffSeedForDaily('nba', getDailyDateET()), fixture.map((p, i) => ({ name: p.name, rating: fixtureRatings[i] }))));
   expect(loadDailyAttempt('nba', getDailyDateET())?.sim).toEqual(result);
+  const storedDaily = localStorage.getItem(`perfect-season-nba-daily-${getDailyDateET()}`);
+  game.unmount();
+  loadGame();
+  fireEvent.click(screen.getByText('Daily').closest('button')!);
+  expect(screen.getByText("Today's daily is done")).toBeVisible();
+  expect(vi.mocked(buildPlayoffRun).mock.results.slice(-1)[0]?.value?.rounds).toEqual(liveBracket?.rounds);
+  expect(localStorage.getItem(`perfect-season-nba-daily-${getDailyDateET()}`)).toBe(storedDaily);
+  expect(loadNbaPlayoffs()).toBeNull();
+  expect(recordCompletion).toHaveBeenCalledTimes(1);
+});
+
+async function finishQualifyingSeason(mode: 'Classic' | 'Hard', bracketSeed: number) {
+  fixtureRatings = [86, 85, 84, 83, 82, 62];
+  vi.mocked(randomSeed).mockReturnValueOnce(13).mockReturnValueOnce(bracketSeed);
+  const game = await finishDraft(mode);
+  fireEvent.click(screen.getByRole('button', { name: 'Simulate season' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Skip to result' }));
+  await tick();
+  expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/perfect-season-nba', 55, null);
+  expect(screen.getByText(/Team overall 81 · drafted/)).toBeVisible();
+  expect(screen.queryByText('Postseason run')).toBeNull();
+  return game;
+}
+
+it('saves the 55–27 season before choosing and reopens one playoff outcome after choosing', async () => {
+  const game = await finishQualifyingSeason('Classic', 4);
+  const awarded = vi.mocked(simulateSeasonFair).mock.results[0].value;
+  expect(awarded.games).toHaveLength(82);
+  expect(loadNbaPlayoffs()).toMatchObject({ mode: 'classic', sim: awarded, seed: 4, postseason: null });
+  const best = localStorage.getItem('perfect-season-nba-best');
+  expect(best).toBeTruthy();
+  game.unmount();
+
+  const resumed = loadGame();
+  fireEvent.click(screen.getByRole('button', { name: /Resume playoffs/ }));
+  const choice = screen.getByRole('region', { name: 'Playoff rotation' });
+  expect(within(choice).getByRole('heading')).toHaveFocus();
+  expect(within(choice).getByText(/Games 1–4.*Games 5–7/)).toBeVisible();
+  expect(screen.getByText(/55-27 season/)).toBeVisible();
+  fireEvent.click(within(choice).getByRole('button', { name: /Lean on starters/ }));
+  expect(screen.getByRole('heading', { name: 'Postseason run' })).toHaveFocus();
+  expect(within(screen.getByText('vs Toronto Raptors').parentElement!).getByText('W 4-3')).toBeVisible();
+  expect(loadNbaPlayoffs()).toMatchObject({ sim: awarded, postseason: { rotation: 'starters' } });
+  expect(screen.queryByRole('button', { name: /Lean on starters/ })).toBeNull();
+  expect(buildPlayoffRun).toHaveBeenCalledTimes(1);
+  resumed.unmount();
+
+  loadGame();
+  fireEvent.click(screen.getByRole('button', { name: /Review saved playoffs/ }));
+  expect(within(screen.getByText('vs Toronto Raptors').parentElement!).getByText('W 4-3')).toBeVisible();
+  expect(screen.getByText(/55-27 season/)).toBeVisible();
+  expect(screen.queryByRole('button', { name: /Standard rotation/ })).toBeNull();
+  expect(buildPlayoffRun).toHaveBeenCalledTimes(1);
+  expect(simulateSeasonFair).toHaveBeenCalledTimes(1);
+  expect(recordCompletion).toHaveBeenCalledTimes(1);
+  expect(localStorage.getItem('perfect-season-nba-best')).toBe(best);
+  fireEvent.click(screen.getByRole('button', { name: 'Run it back' }));
+  await tick();
+  expect(screen.getByRole('button', { name: 'Spin the wheel' })).toBeVisible();
+});
+
+it.each([
+  ['Classic', 4, 'Standard rotation', 'Toronto Raptors', 'L 2-4'],
+  ['Hard', 11, 'Lean on starters', 'Miami Heat', 'L 3-4'],
+  ['Hard', 11, 'Standard rotation', 'Miami Heat', 'W 4-3'],
+] as const)('applies %s seed %i through the selected postseason rotation', async (mode, seed, label, opponent, score) => {
+  await finishQualifyingSeason(mode, seed);
+  fireEvent.click(screen.getByRole('button', { name: new RegExp(label) }));
+  expect(within(screen.getByText(`vs ${opponent}`).parentElement!).getByText(score)).toBeVisible();
+  expect(recordCompletion).toHaveBeenCalledTimes(1);
+});
+
+it('reopens the first saved outcome when another open page already chose the rotation', async () => {
+  const first = await finishQualifyingSeason('Classic', 4);
+  const second = loadGame();
+  const firstPage = within(first.container);
+  const secondPage = within(second.container);
+  fireEvent.click(secondPage.getByRole('button', { name: /Resume playoffs/ }));
+  fireEvent.click(firstPage.getByRole('button', { name: /Standard rotation/ }));
+  fireEvent.click(secondPage.getByRole('button', { name: /Lean on starters/ }));
+  expect(secondPage.getByText('Standard rotation')).toBeVisible();
+  expect(within(secondPage.getByText('vs Toronto Raptors').parentElement!).getByText('L 2-4')).toBeVisible();
+  expect(loadNbaPlayoffs()?.postseason?.rotation).toBe('standard');
+  expect(buildPlayoffRun).toHaveBeenCalledTimes(1);
   expect(recordCompletion).toHaveBeenCalledTimes(1);
 });

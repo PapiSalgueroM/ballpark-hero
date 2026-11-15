@@ -22,8 +22,9 @@ import {
 } from '@/lib/perfectSeasonNba';
 import {
   simulateSeasonFair, buildPlayoffRun, playoffSeedForDaily, buildAnalysis,
-  PLAYOFF_THRESHOLD, PlayoffRun,
+  nbaStarterRotationBoost, PLAYOFF_THRESHOLD, type NbaPlayoffRotation, type PlayoffRun,
 } from '@/lib/perfectSeasonExpansion';
+import { loadNbaPlayoffs, saveNbaPlayoffs, type NbaPlayoffSave } from '@/lib/perfectSeasonNbaPlayoffs';
 import { perfectSeasonTagline } from '@/lib/perfectSeasonOdds';
 import { usePerfectSeasonBest } from '@/hooks/usePerfectSeasonBest';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -39,6 +40,11 @@ const SPORT_KEY = 'nba';
 type Phase = 'mode-select' | 'daily-locked' | 'boot' | 'error' | 'spin' | 'spinning' | 'draft' | 'review' | 'ready' | 'sim' | 'done';
 
 const MAX_REROLLS = 2;
+
+const ROTATION_LABELS: Record<NbaPlayoffRotation, string> = {
+  standard: 'Standard rotation',
+  starters: 'Lean on starters',
+};
 
 // Owner request 2026-07-10: "a little more time for the teams to spin".
 // Spins used to resolve as fast as the squad fetch (~1s on a typical
@@ -87,6 +93,7 @@ const PerfectSeasonNba = () => {
   const [dailyTheme, setDailyTheme] = useState<PerfectSeasonTheme | null>(null);
   const [decade, setDecade] = useState<NbaDecadeDef | null>(null);
   const [poSeed, setPoSeed] = useState<number | null>(null);
+  const [savedPlayoffs, setSavedPlayoffs] = useState(loadNbaPlayoffs);
   /* Round 784: the best record this browser has posted, and whether the run on
      screen set it. Round 820 moved it into the hook all four sports share. */
   const { best, newBest, record: recordBest, reset: resetBest } = usePerfectSeasonBest(SPORT_KEY);
@@ -96,6 +103,9 @@ const PerfectSeasonNba = () => {
   const dailyPicker = useRef<((len: number) => number) | null>(null);
   const dailySaved = useRef(false);
   const retryReroll = useRef(false);
+  const postseasonSettled = useRef(false);
+  const playoffHeading = useRef<HTMLHeadingElement>(null);
+  const focusPlayoffs = useRef(false);
 
   const openSlots = useMemo(
     () => NBA_SLOTS.filter(s => !picks[s.key]).map(s => s.key),
@@ -308,12 +318,20 @@ const PerfectSeasonNba = () => {
     // Round 784: the best record is the honest target, so every finished run
     // is weighed against it, in any mode.
     recordBest({ wins: sim.wins, losses: sim.losses, overall: Math.round(overall), date: todayStr, mode });
-  }, [phase, sim, overall, mode, todayStr, recordBest]);
+    if (mode !== 'daily' && poSeed !== null && sim.wins >= PLAYOFF_THRESHOLD.nba) {
+      const save: NbaPlayoffSave = {
+        v: 1, mode, sim, spins, picks, decadeId: decade?.id ?? null, seed: poSeed, postseason: null,
+      };
+      saveNbaPlayoffs(save);
+      setSavedPlayoffs(save);
+    }
+  }, [phase, sim, overall, mode, todayStr, recordBest, poSeed, spins, picks, decade]);
 
   const skipSim = () => setRevealed(NBA_GAMES);
 
   const restart = () => {
     completionSaved.current = false;
+    postseasonSettled.current = false;
     resetBest();
     setPicks(Object.fromEntries(NBA_SLOTS.map(s => [s.key, null])));
     setUsedNames(new Set());
@@ -325,7 +343,7 @@ const PerfectSeasonNba = () => {
     setRerolls(MAX_REROLLS);
     setSpins(0);
     setTeamNames([]);
-    setPhase('spin');
+    setPhase(index.length ? 'spin' : 'boot');
   };
 
   const backToModes = () => {
@@ -334,6 +352,21 @@ const PerfectSeasonNba = () => {
     setDailyTheme(null);
     restart();
     setPhase('mode-select');
+  };
+
+  const resumePlayoffs = () => {
+    if (!savedPlayoffs) return;
+    completionSaved.current = true;
+    focusPlayoffs.current = true;
+    setMode(savedPlayoffs.mode);
+    setDecade(NBA_DECADES.find(era => era.id === savedPlayoffs.decadeId) ?? null);
+    setIndex([]);
+    setPicks(savedPlayoffs.picks);
+    setSpins(savedPlayoffs.spins);
+    setSim(savedPlayoffs.sim);
+    setPoSeed(savedPlayoffs.seed);
+    setRevealed(NBA_GAMES);
+    setPhase('done');
   };
 
   const winsSoFar = sim ? sim.games.slice(0, revealed).filter(Boolean).length : 0;
@@ -348,15 +381,44 @@ const PerfectSeasonNba = () => {
     return out;
   }, [picks]);
 
+  const activePlayoffs = phase === 'done' && savedPlayoffs?.sim === sim ? savedPlayoffs : null;
+  const choosePlayoffRotation = (rotation: NbaPlayoffRotation) => {
+    if (!activePlayoffs || activePlayoffs.postseason || postseasonSettled.current) return;
+    const stored = loadNbaPlayoffs();
+    const sameRun = stored?.seed === activePlayoffs.seed && stored.mode === activePlayoffs.mode
+      && stored.sim.games.every((win, i) => win === activePlayoffs.sim.games[i]);
+    if (sameRun && stored.postseason) {
+      focusPlayoffs.current = true;
+      setSavedPlayoffs({ ...activePlayoffs, postseason: stored.postseason });
+      return;
+    }
+    const run = buildPlayoffRun('nba', activePlayoffs.sim.overall, activePlayoffs.sim.wins, activePlayoffs.seed, draftedList, rotation);
+    if (!run) return;
+    postseasonSettled.current = true;
+    focusPlayoffs.current = true;
+    const save = { ...activePlayoffs, postseason: { rotation, run } };
+    if (!stored || sameRun) saveNbaPlayoffs(save);
+    setSavedPlayoffs(save);
+  };
+
   const playoffRun: PlayoffRun | null = useMemo(() => {
+    if (mode !== 'daily') return activePlayoffs?.postseason?.run ?? null;
     if (!sim || poSeed == null) return null;
     return buildPlayoffRun('nba', Math.round(overall), sim.wins, poSeed,
       draftedList.map(d => ({ name: d.name, rating: d.rating })));
-  }, [sim, poSeed, overall, draftedList]);
+  }, [mode, activePlayoffs, sim, poSeed, overall, draftedList]);
+
+  useEffect(() => {
+    if (!focusPlayoffs.current || !playoffHeading.current) return;
+    focusPlayoffs.current = false;
+    playoffHeading.current.focus();
+  }, [phase, playoffRun]);
+
+  const choosingPlayoffs = mode !== 'daily' && !!sim && sim.wins >= PLAYOFF_THRESHOLD.nba && !playoffRun;
 
   const analysis = useMemo(
-    () => (sim ? buildAnalysis('nba', draftedList, Math.round(overall), sim.wins, sim.losses, playoffRun) : []),
-    [sim, draftedList, overall, playoffRun]
+    () => (sim && !choosingPlayoffs ? buildAnalysis('nba', draftedList, Math.round(overall), sim.wins, sim.losses, playoffRun) : []),
+    [sim, draftedList, overall, playoffRun, choosingPlayoffs]
   );
 
   // The daily locked screen replays the postseason deterministically from
@@ -446,6 +508,19 @@ const PerfectSeasonNba = () => {
 
         {phase === 'mode-select' && (
           <>
+          {savedPlayoffs && (
+            <div className="max-w-2xl mx-auto mb-4">
+              <button type="button" onClick={resumePlayoffs}
+                className="w-full rounded-2xl border border-border bg-card px-4 py-3 text-left transition-colors hover:border-primary">
+                <span className="block font-semibold text-foreground">
+                  {savedPlayoffs.postseason ? 'Review saved playoffs' : 'Resume playoffs'}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {GAME_MODE_LABELS[savedPlayoffs.mode]} · {savedPlayoffs.sim.wins}–{savedPlayoffs.sim.losses}
+                </span>
+              </button>
+            </div>
+          )}
           <div className="grid sm:grid-cols-3 gap-3 max-w-2xl mx-auto">
             {(['classic', 'hard', 'daily'] as GameMode[]).map(m => {
               const Icon = MODE_ICONS[m];
@@ -800,11 +875,40 @@ const PerfectSeasonNba = () => {
                 onRestart={restart}
               />
 
-              {playoffRun ? (
-                <div className="bg-card border border-border rounded-2xl p-6 mt-4">
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground mb-3 text-center">
-                    Postseason run
+              {choosingPlayoffs && activePlayoffs && (
+                <section aria-labelledby="nba-playoff-choice" className="mt-4 rounded-2xl border border-border bg-card p-4 sm:p-6">
+                  <h2 id="nba-playoff-choice" ref={playoffHeading} tabIndex={-1} className="font-display text-xl font-bold">
+                    Playoff rotation
+                  </h2>
+                  <p className="mt-1 text-sm text-muted-foreground">Choose once before the first series.</p>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                    <button type="button" onClick={() => choosePlayoffRotation('standard')}
+                      className="rounded-xl border border-border p-3 text-left hover:border-primary">
+                      <span className="block font-semibold">{ROTATION_LABELS.standard}</span>
+                      <span className="text-sm text-muted-foreground">Keep your usual rotation strength in every game.</span>
+                    </button>
+                    <button type="button" onClick={() => choosePlayoffRotation('starters')}
+                      className="rounded-xl border border-border p-3 text-left hover:border-primary">
+                      <span className="block font-semibold">{ROTATION_LABELS.starters}</span>
+                      <span className="text-sm text-muted-foreground">
+                        {nbaStarterRotationBoost(draftedList) > 0
+                          ? 'Gain strength in Games 1–4 of each series and lose it to fatigue in Games 5–7.'
+                          : 'With this sixth man, a shorter rotation leaves your strength the same.'}
+                      </span>
+                    </button>
                   </div>
+                </section>
+              )}
+
+              {playoffRun ? (
+                <section aria-labelledby="nba-playoff-result" className="bg-card border border-border rounded-2xl p-6 mt-4">
+                  <h2 id="nba-playoff-result" ref={playoffHeading} tabIndex={-1}
+                    className="text-xs uppercase tracking-wider text-muted-foreground mb-3 text-center">
+                    Postseason run
+                  </h2>
+                  {activePlayoffs?.postseason && (
+                    <p className="mb-3 text-center text-sm font-semibold">{ROTATION_LABELS[activePlayoffs.postseason.rotation]}</p>
+                  )}
                   <div className="space-y-2">
                     {playoffRun.rounds.map(r => (
                       <div key={r.name} className="flex items-center gap-2 text-sm">
@@ -831,8 +935,8 @@ const PerfectSeasonNba = () => {
                       Season ends in the {playoffRun.exitRound}. The banner stays unhung.
                     </p>
                   )}
-                </div>
-              ) : (
+                </section>
+              ) : !choosingPlayoffs && (
                 <p className="text-xs text-muted-foreground text-center mt-3">
                   Missed the postseason: {PLAYOFF_THRESHOLD.nba}+ wins makes the playoffs.
                 </p>
@@ -872,6 +976,7 @@ const PerfectSeasonNba = () => {
             picks: NBA_SLOTS.map(slot => [slot.key, picks[slot.key]?.playerId ?? null]),
             openSlots,
             result: sim ? [sim.wins, sim.losses, sim.overall, revealed, poSeed] : null,
+            playoffRotation: activePlayoffs?.postseason?.rotation ?? null,
             lockedResult: lockedAttempt ? [lockedAttempt.sim.wins, lockedAttempt.sim.losses, lockedAttempt.overall] : null,
           }}
           title="82-0 NBA Perfect Season Challenge"

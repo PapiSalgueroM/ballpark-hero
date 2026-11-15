@@ -805,6 +805,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Filling all eleven and simulating a season",
         items: [
           "Fill all 11 to win, then check squad value and chemistry, and simulate a season if you are curious. The report has a month by month tab, a player stats tab and a share card with your finish, top scorer and player of the season.",
+          "Before you simulate, preview the league match odds for Balanced or Protect the point. Protect the point trades some wins and losses for draws, and its report compares your finish with Balanced on the same rolls.",
         ],
       },
     ],

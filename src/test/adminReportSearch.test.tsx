@@ -348,7 +348,7 @@ describe('admin report queue', () => {
     const failed = { data: null, error: { message: 'Note temporarily unavailable' } };
     const saved = { data: [{ id: report.id }], error: null };
     const errorText = 'Not saved: Note temporarily unavailable';
-    const receiptRegion = () => screen.queryByRole('region', { name: 'Report notes needing retry' });
+    const receiptRegion = () => screen.queryByRole('region', { name: 'Report changes needing retry' });
     if (!triageFirst) {
       await act(async () => settleNote(failed));
       expect(card.getByText(errorText)).toBeVisible();
@@ -391,6 +391,55 @@ describe('admin report queue', () => {
     expect(screen.queryByTestId('note-input')).not.toBeInTheDocument();
     if (field === 'status') expect(screen.getByRole('button', { name: 'Open (0)' })).toHaveAttribute('aria-pressed', 'true');
     else expect(screen.getByRole('combobox', { name: 'Filter by priority' })).toHaveValue('high');
+  });
+
+  it.each([
+    { hiddenBy: 'Status', failureFirst: false },
+    { hiddenBy: 'Priority', failureFirst: true },
+  ])('keeps the failed triage field reachable when $hiddenBy hides the report', async ({ hiddenBy, failureFirst }) => {
+    const report = { ...contract, id: 'aaaaaaaa-1234-4321-9876-123456789abc' };
+    const failedField = hiddenBy === 'Status' ? 'Priority' : 'Status';
+    const statusPatch = { status: 'fixed', resolved: true, resolved_at: expect.any(String) };
+    const priorityPatch = { priority: 'low' };
+    type WriteResult = { data: { id: string }[] | null; error: { message: string } | null };
+    let settleStatus: (result: WriteResult) => void = () => {};
+    let settlePriority: (result: WriteResult) => void = () => {};
+    db.write
+      .mockImplementationOnce(() => new Promise<WriteResult>(resolve => { settleStatus = resolve; }))
+      .mockImplementationOnce(() => new Promise<WriteResult>(resolve => { settlePriority = resolve; }));
+    serve([report]);
+    openQueue();
+    await screen.findByText(report.description);
+    if (hiddenBy === 'Priority') {
+      fireEvent.change(screen.getByRole('combobox', { name: 'Filter by priority' }), { target: { value: 'high' } });
+    }
+    fireEvent.change(screen.getByRole('combobox', { name: 'Status' }), { target: { value: 'fixed' } });
+    fireEvent.change(screen.getByRole('combobox', { name: 'Priority' }), { target: { value: 'low' } });
+
+    const settleHidden = hiddenBy === 'Status' ? settleStatus : settlePriority;
+    const settleFailed = hiddenBy === 'Status' ? settlePriority : settleStatus;
+    const hide = () => settleHidden({ data: [{ id: report.id }], error: null });
+    const fail = () => settleFailed({ data: null, error: { message: 'Triage temporarily unavailable' } });
+    if (failureFirst) await act(async () => fail());
+    await act(async () => hide());
+    expect(screen.queryByTestId('status-select')).not.toBeInTheDocument();
+    if (!failureFirst) await act(async () => fail());
+
+    const notice = await screen.findByRole('region', { name: 'Report changes needing retry' });
+    expect(within(notice).getByText(failedField)).toBeVisible();
+    expect(within(notice).getByText('Not saved: Triage temporarily unavailable')).toBeVisible();
+    fireEvent.click(within(notice).getByRole('link', { name: 'Open report to retry' }));
+    const field = screen.getByRole('combobox', { name: failedField });
+    const value = failedField === 'Status' ? 'fixed' : 'low';
+    expect(field).toHaveValue(failedField === 'Status' ? 'new' : 'high');
+    fireEvent.change(field, { target: { value } });
+    await waitFor(() => expect(field).toHaveValue(value));
+    expect(db.write.mock.calls).toEqual([
+      [report.id, statusPatch], [report.id, priorityPatch], [report.id, failedField === 'Status' ? statusPatch : priorityPatch],
+    ]);
+    fireEvent.click(screen.getByRole('link', { name: 'Back to report queue' }));
+    expect(screen.queryByRole('region', { name: 'Report changes needing retry' })).not.toBeInTheDocument();
+    expect(screen.queryByTestId('status-select')).not.toBeInTheDocument();
   });
 
   it('keeps newer note and fix-reference drafts while an earlier save completes', async () => {

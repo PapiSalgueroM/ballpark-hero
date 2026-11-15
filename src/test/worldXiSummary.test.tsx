@@ -79,6 +79,30 @@ function simulate(view: View) {
 }
 
 describe('World XI ratings and club chemistry display', () => {
+  it('previews the season approach only after the real draft and plays it once', async () => {
+    const view = await mount();
+    expect(view.queryByRole('group', { name: 'Season approach' })).toBeNull();
+    await complete(view);
+    const group = view.getByRole('group', { name: 'Season approach' });
+    const probabilities = within(group).getByRole('status', { name: 'League match probabilities' });
+    const balanced = within(group).getByRole('radio', { name: 'Balanced' });
+    const protect = within(group).getByRole('radio', { name: 'Protect the point' });
+    expect(balanced).toBeChecked();
+    const standardOdds = probabilities.textContent;
+    fireEvent.click(protect);
+    expect(protect).toBeChecked();
+    expect(probabilities.textContent).not.toBe(standardOdds);
+    expect(H.simulate).not.toHaveBeenCalled();
+    simulate(view);
+    expect(H.simulate).toHaveBeenCalledTimes(1);
+    expect(H.simulate.mock.calls[0].slice(1)).toEqual(['4-3-3', undefined, 'protect']);
+    expect(view.getByText(/On the same rolls, Balanced would finish/)).toBeVisible();
+    expect(view.queryByRole('group', { name: 'Season approach' })).toBeNull();
+    fireEvent.click(view.getByRole('button', { name: 'Play again' }));
+    await complete(view);
+    expect(view.getByRole('radio', { name: 'Balanced' })).toBeChecked();
+  });
+
   it('shows the exact card overall for every player after simulation', async () => {
     const view = await mount(), chosen = await complete(view);
     expect(view.queryByLabelText(`Overall for ${chosen[0].name}`)).toBeNull();
@@ -130,7 +154,7 @@ describe('World XI ratings and club chemistry display', () => {
     const view = await mount(), chosen = await complete(view); simulate(view);
     expect(H.simulate).toHaveBeenCalledTimes(1);
     const args = H.simulate.mock.calls[0];
-    expect(args).toHaveLength(2); expect(args[1]).toBe('4-3-3');
+    expect(args.slice(1)).toEqual(['4-3-3', undefined, 'balanced']);
     expect((args[0] as WxPlayer[]).map(p => p.name).sort()).toEqual(chosen.map(p => p.name).sort());
     const report = H.simulate.mock.results[0].value;
     expect(report.fit).toBeUndefined();

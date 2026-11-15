@@ -1,4 +1,15 @@
+## 2026-11-15: Rugby skills, basketball playoff rotations, World XI tactics and admin retries
+
+- NRL Team Manager lets one developing player do extra skill work before a regular-season match. It costs four kickoff fitness points. After at least three worked appearances, the player can gain one extra OVR that season up to their potential. The Sharks replay took Tane Nairn from 88% to 84% kickoff fitness and from 84 to 85 OVR after Round 4. The paired teams recorded the same three scores. The opt-out matched 156 saved checkpoints.
+- NBA Perfect Season saves the 82-game record before offering a playoff rotation to Classic and Hard teams with at least 55 wins. Lean on starters gives the first five more weight early in each series and adds fatigue late. The same 55–27 roster flipped a 2–4 Toronto loss to a 4–3 win and a 4–3 Miami win to a 3–4 loss on paired draws. Daily keeps its automatic bracket.
+- World XI previews the season odds for Balanced and Protect the point. The latter moves some wins and losses into draws while preserving expected points. The report compares both on the same rolls. A seeded fixture moved from third with 105 points to second with 108. Another moved from second with 111 to third with 110. World XI Balanced and Build Your XI matched the previous build across 480 paired reports.
+- Admin Reports keeps failed status and priority edits reachable when another successful change filters the report out. The retry link reopens the report with the last saved values. The reviewer can try the failed field once the original request settles.
+
+Scoped application types, the production build, 162 focused tests and 13 pinned local browser journeys passed. The 20 site checks, 174-route SEO split check, Home fold and download budgets passed. The NRL Team Manager, NBA Perfect Season and World XI guides and their search keywords were refreshed. The archive matches the 360 published boards through November 14 Eastern.
+
 ## 2026-11-15: Rugby staff, NHL shutdown assignments, academy sale quotes and Home return focus
+
+[PR #1001](https://github.com/PapiSalgueroM/ballpark-hero/pull/1001) published exact main `3a6a062e1908c004d000f0c28916efeca82d5f81`, deployment `7ae1871b-43a9-499f-8d82-1b5c8bdfc9bc`, canonical entry `/assets/index-DFGSs5oF.js`. The merged tree matched tested head `437971a5e`. All 15 live browser journeys, 15 pinned endpoints and 174 sitemap routes passed. IndexNow accepted the four refreshed guides. The full local SEO split audit, the Home fold and all 16 download budgets also passed.
 
 - NRL Team Manager lets clubs pay $60,000 once per season to reassign a tactical assistant between Attack and Defence before a regular-season match. The assistant keeps their contract, wages and original qualification. The Broncos fixture changed Round 7 against the Raiders from an 18–22 loss to an 18–16 win. The default path matched 140 saved checkpoints across three careers.
 - NHL My Career lets a signed defenseman trade 10% of regular-season offensive ice time for a playoff qualification boost of up to six percentage points. The Seattle fixture gained 5.9 points of qualification chance and reached Round 1 on the same draw, with 67 personal points instead of 74. The usual approach matched the prior engine in 480 paired cases.
@@ -6,6 +17,10 @@
 - Home restores keyboard focus after a finished game disappears from Continue playing. Back focuses the first remaining saved game, or the lead Soccer Career link when the shelf is empty.
 
 The production build passed along with 212 focused tests and 15 pinned local browser journeys. The archive refresh matched the 360 published boards through November 14 Eastern. The NRL, NHL, Stadium Tycoon and Wonderkid Factory guides were refreshed.
+
+Hosted full application types, the standard production build, Home launch, Game Picks and Career entry passed. The hosted Home search workflow passed its mounted recovery, deadline control and native failed-search check. Its older gameplay and score step reported a failure. Wider hosted career and NHL waiver workflows also reported failures.
+
+The Club Manager comparison identified five remaining areas for NRL career depth. Individual skills work can use the existing match and player development reports. Reusable match plans can combine an eligible squad with attacking and last-tackle kicking choices. Other gaps include recurring board and player choices, senior recruitment scouting and international appointments after the 2026 World Cup.
 
 ## 2026-11-15: Aussie Rules squad carry, Dart Draft quotes and report note retries
 

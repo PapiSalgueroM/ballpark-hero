@@ -134,6 +134,17 @@ export interface PlayoffRun {
   exitRound: string | null;    // round name where eliminated, null if champion
 }
 
+export type NbaPlayoffRotation = 'standard' | 'starters';
+
+/** Roster order is the five starters followed by the sixth man. */
+export function nbaStarterRotationBoost(roster: { rating: number }[]): number {
+  if (roster.length !== 6) return 0;
+  const starters = roster.slice(0, 5).reduce((total, player) => total + player.rating, 0);
+  const sixth = roster[5].rating;
+  if (sixth >= starters / 5) return 0;
+  return (starters + 0.4 * sixth) / 5.4 - (starters + 0.8 * sixth) / 5.8;
+}
+
 const NFL_FRANCHISES = [
   'Arizona Cardinals', 'Atlanta Falcons', 'Baltimore Ravens', 'Buffalo Bills',
   'Carolina Panthers', 'Chicago Bears', 'Cincinnati Bengals', 'Cleveland Browns',
@@ -191,10 +202,8 @@ export function playoffSeedForDaily(sport: ExpansionSport, dateStr: string): num
 
 /**
  * Simulates the playoff bracket, or returns null when the record misses the
- * threshold. Deterministic for a given (sport, overall, seasonWins, seed):
- * the rng stream never depends on `roster`, which is only consulted at the
- * very end for the MVP pick, so a recap that passes an empty roster still
- * reproduces the identical rounds and champion flag.
+ * threshold. Standard rotation uses the roster only for the MVP pick, so
+ * Daily recaps can still replay the same bracket with an empty roster.
  */
 export function buildPlayoffRun(
   sport: ExpansionSport,
@@ -202,6 +211,7 @@ export function buildPlayoffRun(
   seasonWins: number,
   seed: number,
   roster: { name: string; rating: number }[],
+  nbaRotation: NbaPlayoffRotation = 'standard',
 ): PlayoffRun | null {
   if (seasonWins < PLAYOFF_THRESHOLD[sport]) return null;
   const rand = rng(seed);
@@ -211,6 +221,7 @@ export function buildPlayoffRun(
   const heatPerWin = sport === 'nfl' ? 0.5 : 0.11;
   const heat = Math.min(3, (seasonWins - PLAYOFF_THRESHOLD[sport]) * heatPerWin);
   const eff = overall + heat;
+  const starterBoost = sport === 'nba' && nbaRotation === 'starters' ? nbaStarterRotationBoost(roster) : 0;
 
   const pool = sport === 'nfl' ? NFL_FRANCHISES : NBA_FRANCHISES;
   const opponents: string[] = [];
@@ -239,8 +250,10 @@ export function buildPlayoffRun(
     } else {
       let userGames = 0;
       let oppGames = 0;
+      const earlyChance = starterBoost ? 1 / (1 + Math.exp((oppOvr - (eff + starterBoost)) / 5)) : pGame;
+      const lateChance = starterBoost ? 1 / (1 + Math.exp((oppOvr - (eff - starterBoost)) / 5)) : pGame;
       while (userGames < 4 && oppGames < 4) {
-        if (rand() < pGame) userGames++;
+        if (rand() < (userGames + oppGames < 4 ? earlyChance : lateChance)) userGames++;
         else oppGames++;
       }
       const won = userGames === 4;
