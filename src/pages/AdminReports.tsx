@@ -48,7 +48,12 @@ type Report = Tables<'question_reports'> & {
   fix_ref?: string | null;
 };
 
-type SaveField = 'status' | 'priority' | 'note';
+const SAVE_FIELDS = [
+  { key: 'note', label: 'Note' },
+  { key: 'status', label: 'Status' },
+  { key: 'priority', label: 'Priority' },
+] as const;
+type SaveField = typeof SAVE_FIELDS[number]['key'];
 
 const FILTERS: ReadonlyArray<{ key: StatusFilter; label: string }> = [
   { key: 'open', label: 'Open' },
@@ -253,8 +258,14 @@ const AdminReports = () => {
     ? reports.filter((r) => r.id === reportId)
     : sortForTriage(matchingReports.filter((r) => matchesGame(r, game) && matchesStatus(r, filter)));
   const visibleReportIds = new Set(filtered.map((report) => report.id));
-  const hiddenNoteFailures = reports.filter((report) =>
-    !visibleReportIds.has(report.id) && messages[report.id]?.note?.startsWith('Not saved'));
+  const hiddenSaveFailures = reports.flatMap((report) => {
+    if (visibleReportIds.has(report.id)) return [];
+    const failures = SAVE_FIELDS.flatMap(({ key, label }) => {
+      const message = messages[report.id]?.[key];
+      return message?.startsWith('Not saved') ? [{ label, message }] : [];
+    });
+    return failures.length ? [{ report, failures }] : [];
+  });
   const critical = matchingReports.filter((r) => matchesGame(r, game) && priorityOf(r) === 'critical' && !isClosed(statusOf(r))).length;
   const filterLabel = FILTERS.find((f) => f.key === filter)?.label ?? '';
   const hasRefinement = Boolean(search.trim()) || priorityFilter !== 'all';
@@ -378,17 +389,19 @@ const AdminReports = () => {
 
         {!reportId && !accessFailed && !loading && (
           <div aria-live="polite">
-            {hiddenNoteFailures.length > 0 && (
-              <section aria-label="Report notes needing retry" className="mb-4 space-y-2">
-                {hiddenNoteFailures.map((report) => (
+            {hiddenSaveFailures.length > 0 && (
+              <section aria-label="Report changes needing retry" className="mb-4 space-y-2">
+                {hiddenSaveFailures.map(({ report, failures }) => (
                   <div key={report.id} className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm sm:flex sm:items-center sm:justify-between sm:gap-3">
                     <div className="min-w-0">
-                      <p id={`note-retry-${report.id}`} className="line-clamp-2 break-words font-medium">{report.description}</p>
-                      <p className="break-words text-destructive"><span className="font-medium">Note · </span><span>{messages[report.id]?.note}</span></p>
+                      <p id={`save-retry-${report.id}`} className="line-clamp-2 break-words font-medium">{report.description}</p>
+                      {failures.map(({ label, message }) => (
+                        <p key={label} className="break-words text-destructive"><span className="font-medium">{label}</span> · <span>{message}</span></p>
+                      ))}
                     </div>
                     <Link
                       to={{ pathname: '/admin/reports', hash: `#report=${report.id}` }}
-                      aria-describedby={`note-retry-${report.id}`}
+                      aria-describedby={`save-retry-${report.id}`}
                       className="inline-flex min-h-11 shrink-0 items-center font-medium text-primary hover:underline"
                     >
                       Open report to retry
@@ -433,12 +446,11 @@ const AdminReports = () => {
               const prioritySaving = savingTriage.has(report.id + ':priority');
               const unsavedNote = draft.note !== (report.admin_note ?? '') || draft.fixRef !== (report.fix_ref ?? '');
               const savedMessages = messages[report.id];
-              const feedback = [
-                { label: 'Note', message: savedMessages?.note === 'Saved' && unsavedNote
-                  ? 'Earlier changes saved. You have unsaved edits.' : savedMessages?.note },
-                { label: 'Status', message: savedMessages?.status },
-                { label: 'Priority', message: savedMessages?.priority },
-              ];
+              const feedback = SAVE_FIELDS.map(({ key, label }) => ({
+                label,
+                message: key === 'note' && savedMessages?.note === 'Saved' && unsavedNote
+                  ? 'Earlier changes saved. You have unsaved edits.' : savedMessages?.[key],
+              }));
               return (
               <div
                 key={report.id}
