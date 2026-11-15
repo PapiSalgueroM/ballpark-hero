@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,12 +284,56 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>MLB Grid Answers: Past Daily Boards</h1>
 <p>Past boards from August 17, 2026, with the players who solve each crossing</p>
-<p>The MLB grid builds a fresh board from each day's date, so no two days share a puzzle. These are the 87 boards from August 17, 2026 to November 11, 2026. Each crossing shows how many players in our data satisfy both sides, and the rarest few of them by career games played, because naming the obvious answer is easy and naming the deep cut is the point.</p>
+<p>The MLB grid builds a fresh board from each day's date, so no two days share a puzzle. These are the 90 boards from August 17, 2026 to November 14, 2026. Each crossing shows how many players in our data satisfy both sides, and the rarest few of them by career games played, because naming the obvious answer is easy and naming the deep cut is the point.</p>
 <p>The counts and names come from the same player data the game checks your guesses against, so anything listed here would be accepted in the game. A board only goes up once its day is over. <a href="/mlb-grid">Play today's MLB grid</a>.</p>
+<h2>MLB grid answers for November 14, 2026</h2>
+<p>Rows: Athletics, Reds, Phillies. Columns: 2,000+ Career Hits, Cubs, Tigers.</p>
+<table>
+<tr><th>Crossing</th><th>Valid players</th><th>Rarest answers</th></tr>
+<tr><th>Athletics and 2,000+ Career Hits</th><td>46</td><td>George Kell, Carney Lansford, Bob Johnson (1933-1945), George Burns (1914-1929), Matt Holliday, Mike Piazza, Ray Durham, Orlando Cabrera</td></tr>
+<tr><th>Athletics and Cubs</th><td>76</td><td>Harry Chiti, Ron Mahay, Gary Woods, Luis Vizcaino, Alex Metzler, Jay Howell, Bob Locker, Bobby Shantz</td></tr>
+<tr><th>Athletics and Tigers</th><td>93</td><td>Harry Chiti, Charlie Carr, Jim Finigan, Joe Boever, Virgil Trucks, Paul Richards, Charlie Lau, Dick Kryhoski</td></tr>
+<tr><th>Reds and 2,000+ Career Hits</th><td>42</td><td>Dummy Hoy, Joe Kelley, George Burns (1911-1925), Kiki Cuyler, Brandon Phillips, Del Ennis, Hal Chase, Edd Roush</td></tr>
+<tr><th>Reds and Cubs</th><td>156</td><td>Bob Fisher, Turk Lown, Felix Heredia, Bob Scheffing, George Magoon, Milt Pappas, Brendan Harris, Bill Henry</td></tr>
+<tr><th>Reds and Tigers</th><td>78</td><td>Charlie Carr, Chick Shorten, Syl Johnson, Matt Batts, Wayne Krenchicki, Harry Spilman, Ted Power, Doug Bair</td></tr>
+<tr><th>Phillies and 2,000+ Career Hits</th><td>43</td><td>Billy Hamilton, Dan Brouthers, Hugh Duffy, Chuck Klein, Al Dark, Harvey Kuenn, Ed Delahanty, George Burns (1911-1925)</td></tr>
+<tr><th>Phillies and Cubs</th><td>154</td><td>Charlie Bastian, Andres Blanco, Randall Simon, Joe Marty, Shawn Camp, Heathcliff Slocumb, Turk Wendell, Doc Miller</td></tr>
+<tr><th>Phillies and Tigers</th><td>67</td><td>Nig Clarke, Ezequiel Carrera, Tim Corcoran, Dan Schatzeder, Joe Boever, Randall Simon, Syl Johnson, Ernie Courtney</td></tr>
+</table>
+<h2>MLB grid answers for November 13, 2026</h2>
+<p>Rows: Reds, 2,000+ Games Played, White Sox. Columns: Tigers, Cleveland, Braves.</p>
+<table>
+<tr><th>Crossing</th><th>Valid players</th><th>Rarest answers</th></tr>
+<tr><th>Reds and Tigers</th><td>78</td><td>Charlie Carr, Chick Shorten, Syl Johnson, Matt Batts, Wayne Krenchicki, Harry Spilman, Ted Power, Doug Bair</td></tr>
+<tr><th>Reds and Cleveland</th><td>98</td><td>Charlie Carr, Dave Burba, Dave Altizer, Danny Graves, Cliff Lee, Mark Wohlers, Camilo Pascual, Gus Weyhing</td></tr>
+<tr><th>Reds and Braves</th><td>130</td><td>Gabby Street, Milt Pappas, Mark Wohlers, Rube Marquard, Guy Bush, Lena Blackburne, Doc Miller, Dolf Luque</td></tr>
+<tr><th>2,000+ Games Played and Tigers</th><td>29</td><td>Heinie Manush, Dick Bartell, Aurelio Rodriguez, Willie Horton, Curtis Granderson, Norm Cash, Eddie Yost, Harry Heilmann</td></tr>
+<tr><th>2,000+ Games Played and Cleveland</th><td>35</td><td>Ellis Burks, Roger Peckinpaugh, Jose Cardenal, Willie Horton, Boog Powell, George Hendrick, Jay Bell, Keith Hernandez</td></tr>
+<tr><th>2,000+ Games Played and Braves</th><td>42</td><td>Gary Matthews (1972-1987), Wally Joyner, Dusty Baker, George Sisler, A. J. Pierzynski, Felipe Alou, Ed Konetchy, Sherry Magee</td></tr>
+<tr><th>White Sox and Tigers</th><td>84</td><td>Eddie Cicotte, Mark Salas, Virgil Trucks, Matt Batts, Phil Regan, Jason Grilli, Red Wilson, Timo Perez</td></tr>
+<tr><th>White Sox and Cleveland</th><td>145</td><td>Mark Salas, Bill Hunnefield, Dave Altizer, Gary Bell, Herbert Perry, Paul Lehner, Luis Vizcaino, Oris Hockett</td></tr>
+<tr><th>White Sox and Braves</th><td>85</td><td>Bill Hunnefield, Ralph Hodgin, Dave Nicholson, Dave Harris, Lena Blackburne, Bartolo Colon, Dewayne Wise, Moe Drabowsky</td></tr>
+</table>
+<h2>MLB grid answers for November 12, 2026</h2>
+<p>Rows: Yankees, Twins, 300+ Career Home Runs. Columns: Athletics, Reds, Giants.</p>
+<table>
+<tr><th>Crossing</th><th>Valid players</th><th>Rarest answers</th></tr>
+<tr><th>Yankees and Athletics</th><td>140</td><td>Gene Nelson, Catfish Hunter, Johnny Blanchard, Virgil Trucks, Bump Hadley, Jimmy Walsh (1912-1917), Luis Vizcaino, Tom Zachary</td></tr>
+<tr><th>Yankees and Reds</th><td>85</td><td>Chad Moeller, Carl Mays, Gabby Street, Jesse Tannehill, Felix Heredia, Dale Murray, Bert Daniels, Mark Wohlers</td></tr>
+<tr><th>Yankees and Giants</th><td>93</td><td>Carl Mays, Bump Hadley, Todd Greene, Doyle Alexander, Felix Rodriguez, Kiddo Davis, Rick Reuschel, Mickey Witek</td></tr>
+<tr><th>Twins and Athletics</th><td>83</td><td>Dee Miles, Pedro Munoz, Ron Mahay, Bump Hadley, Grant Balfour, Pat Neshek, Tom Zachary, Bartolo Colon</td></tr>
+<tr><th>Twins and Reds</th><td>58</td><td>Chad Moeller, Gabby Street, Jesse Tannehill, Dave Altizer, Brendan Harris, Camilo Pascual, Zach Duke, Bruce Edwards</td></tr>
+<tr><th>Twins and Giants</th><td>53</td><td>Dustan Mohr, Dan Schatzeder, Bump Hadley, Livan Hernandez, Firpo Marberry, Mickey Livingston, Win Mercer, Bullet Joe Bush</td></tr>
+<tr><th>300+ Career Home Runs and Athletics</th><td>26</td><td>David Justice, Dick Allen, Jermaine Dye, Ron Gant, Rocky Colavito, Mark McGwire, Jose Canseco, Matt Holliday</td></tr>
+<tr><th>300+ Career Home Runs and Reds</th><td>17</td><td>Greg Vaughn, Reggie Sanders, Ron Gant, Joe Adcock, George Foster, Adam Dunn, Jim Edmonds, Scott Rolen</td></tr>
+<tr><th>300+ Career Home Runs and Giants</th><td>27</td><td>Darryl Strawberry, Reggie Sanders, Bobby Bonds, Matt Williams, Johnny Mize, Dave Kingman, Moises Alou, George Foster</td></tr>
+</table>
 <h2>MLB grid answers for November 11, 2026</h2>
 <p>Rows: Braves, Giants, Cleveland. Columns: Red Sox, 2,000+ Games Played, White Sox.</p>
 <table>
@@ -1477,9 +1553,9 @@
 <tr><th>2,000+ Career Hits and Cleveland</th><td>36</td><td>Earl Averill, Mark Grudzielanek, Harvey Kuenn, George Burns (1914-1929), Brandon Phillips, Joe Sewell, Victor Martinez, Orlando Cabrera</td></tr>
 </table>
 <h2>Answers for the other grids</h2>
-<li><a href="/nba-grid/archive">NBA grid answers</a>, 87 past boards and their answers.</li>
-<li><a href="/hockey-grid/archive">NHL grid answers</a>, 87 past boards and their answers.</li>
-<li><a href="/cbb-grid/archive">College Basketball grid answers</a>, 87 past boards and their answers.</li>
+<li><a href="/nba-grid/archive">NBA grid answers</a>, 90 past boards and their answers.</li>
+<li><a href="/hockey-grid/archive">NHL grid answers</a>, 90 past boards and their answers.</li>
+<li><a href="/cbb-grid/archive">College Basketball grid answers</a>, 90 past boards and their answers.</li>
 <p>Report a problem</p>
 <div data-site-chrome>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
@@ -1499,8 +1575,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>

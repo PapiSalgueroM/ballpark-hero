@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,12 +284,56 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>NHL Grid Answers: Past Daily Boards</h1>
 <p>Past boards from August 17, 2026, with the players who solve each crossing</p>
-<p>The NHL grid builds a fresh board from each day's date, so no two days share a puzzle. These are the 87 boards from August 17, 2026 to November 11, 2026. Each crossing shows how many players in our data satisfy both sides, and the rarest few of them by career games played, because naming the obvious answer is easy and naming the deep cut is the point.</p>
+<p>The NHL grid builds a fresh board from each day's date, so no two days share a puzzle. These are the 90 boards from August 17, 2026 to November 14, 2026. Each crossing shows how many players in our data satisfy both sides, and the rarest few of them by career games played, because naming the obvious answer is easy and naming the deep cut is the point.</p>
 <p>The counts and names come from the same player data the game checks your guesses against, so anything listed here would be accepted in the game. A board only goes up once its day is over. <a href="/hockey-grid">Play today's NHL grid</a>.</p>
+<h2>NHL grid answers for November 14, 2026</h2>
+<p>Rows: Flames, Flyers, Red Wings. Columns: 500+ Career Points, Bruins, Canadiens.</p>
+<table>
+<tr><th>Crossing</th><th>Valid players</th><th>Rarest answers</th></tr>
+<tr><th>Flames and 500+ Career Points</th><td>62</td><td>Kent Nilsson, Guy Chouinard, Paul Reinhart, Brian Bradley, Matthew Tkachuk, Mike Bullard, Bob MacMillan, Kelly Kisio</td></tr>
+<tr><th>Flames and Bruins</th><td>59</td><td>Lane MacDermid, C.J. Young, Corey Potter, John Beecher, Austin Czarnik, Craig MacDonald, Matt Bartkowski, Aaron Johnson</td></tr>
+<tr><th>Flames and Canadiens</th><td>57</td><td>Patrick Lebeau, Randy Bucyk, Craig Ferguson, Kerby Rychel, Benoît Gratton, Éric Landry, Yves Sarault, Éric Charron</td></tr>
+<tr><th>Flyers and 500+ Career Points</th><td>73</td><td>Tim Young, Tim Kerr, Peter Forsberg, Travis Konecny, Dave Poulin, Gary Dornhoefer, Mike Bullard, Eric Lindros</td></tr>
+<tr><th>Flyers and Bruins</th><td>60</td><td>Danny Schock, Chris Winnes, Anthony Richard, Guillaume Lefebvre, Gord Hynes, Brian Dobbin, Andre Savage, Paul Guay</td></tr>
+<tr><th>Flyers and Canadiens</th><td>64</td><td>Scott Sandelin, Anthony Richard, Jim Montgomery, Mark Pederson, Craig Darby, Noah Juulsen, Jordan Weal, Gilbert Dionne</td></tr>
+<tr><th>Red Wings and 500+ Career Points</th><td>88</td><td>Frank Mahovlich, Norm Ullman, Jimmy Carson, Dennis Hextall, Alex DeBrincat, Paul MacLean, Guy Charron, Danny Grant</td></tr>
+<tr><th>Red Wings and Bruins</th><td>53</td><td>Nathan Robinson, Dan Renouf, Anders Myrvold, Andrew McKim, Tom Webster, Earl Anderson, Marc Potvin, Josh Langfeld</td></tr>
+<tr><th>Red Wings and Canadiens</th><td>50</td><td>Riley Barber, Steve Martinson, William Lagesson, Mitchell Stephens, Eric Tangradi, Mark Pederson, Gustav Lindström, Jeff Brubaker</td></tr>
+</table>
+<h2>NHL grid answers for November 13, 2026</h2>
+<p>Rows: Flyers, 1000+ Games Played, Capitals. Columns: Canadiens, Oilers, Islanders.</p>
+<table>
+<tr><th>Crossing</th><th>Valid players</th><th>Rarest answers</th></tr>
+<tr><th>Flyers and Canadiens</th><td>64</td><td>Scott Sandelin, Anthony Richard, Jim Montgomery, Mark Pederson, Craig Darby, Noah Juulsen, Jordan Weal, Gilbert Dionne</td></tr>
+<tr><th>Flyers and Oilers</th><td>61</td><td>Danny Syvret, Jiří Dopita, Patrick Thoresen, Ryan Potulny, Colin McDonald, Ryan McGill, Michel Picard, Jesse Boulerice</td></tr>
+<tr><th>Flyers and Islanders</th><td>54</td><td>Rod Dallman, Corey Foster, Jim Mair, Aris Brimanis, Kieffer Bellows, Paul Guay, Colin McDonald, Don Blackburn</td></tr>
+<tr><th>1000+ Games Played and Canadiens</th><td>55</td><td>Tomáš Plekanec, Ryan Walter, Craig Conroy, Patrice Brisebois, Andrew Cassels, Keith Acton, Donald Brashear, Brian Gionta</td></tr>
+<tr><th>1000+ Games Played and Oilers</th><td>58</td><td>Evander Kane, Steve Staios, Adam Larsson, Jason Smith, Shawn Horcoff, Eric Brewer, Laurie Boschman, Derick Brassard</td></tr>
+<tr><th>1000+ Games Played and Islanders</th><td>52</td><td>Andrew Ladd, Steve Staios, Dave Lewis, Eric Brewer, Derick Brassard, Keith Acton, Nino Niederreiter, John Tonelli</td></tr>
+<tr><th>Capitals and Canadiens</th><td>55</td><td>Riley Barber, Jakub Jeřábek, Benoît Gratton, Alfie Turcotte, Kent Carlson, Daniel Carr, Éric Charron, Alex Henry</td></tr>
+<tr><th>Capitals and Oilers</th><td>35</td><td>Chris Hajt, Barrie Moore, Alexandre Giroux, Chris Ferraro, Taylor Chorney, Alex Henry, John Blum, Nathan Walker</td></tr>
+<tr><th>Capitals and Islanders</th><td>42</td><td>Joel Rechlicz, Aaron Ness, Chris Ferraro, Keith Aucoin, Bill Mikkelson, Dennis Cholowski, David Harlock, Mike Kaszycki</td></tr>
+</table>
+<h2>NHL grid answers for November 12, 2026</h2>
+<p>Rows: Rangers, Sabres, 300+ Career Goals. Columns: Flames, Flyers, Blues.</p>
+<table>
+<tr><th>Crossing</th><th>Valid players</th><th>Rarest answers</th></tr>
+<tr><th>Rangers and Flames</th><td>61</td><td>Marek Hrivík, Brennan Othmann, Connor Mackey, Dallas Eakins, Corey Potter, Jeff Brubaker, Raphael Diaz, Nigel Dawes</td></tr>
+<tr><th>Rangers and Flyers</th><td>69</td><td>Mike Siklenka, Chris Jensen, Kris Newbury, Don Blackburn, Daniel Lacroix, P.J. Stock, Larry Mickey, Reggie Fleming</td></tr>
+<tr><th>Rangers and Blues</th><td>100</td><td>Chris Kenady, Ron Attwell, Wayne Rivers, Peter Smrek, Evgeny Grachev, Rob Whistle, Camille Henry, Dallas Eakins</td></tr>
+<tr><th>Sabres and Flames</th><td>41</td><td>Jim Jackson, Dennis Gilbert, Dale DeGray, Brandon Davidson, Adam Pardy, Chris Butler, Paul Kruse, Derek Grant</td></tr>
+<tr><th>Sabres and Flyers</th><td>48</td><td>Cliff Schmautz, Terry Ball, Phil Varone, Justin Bailey, Mike Byers, Denis Hamel, David Fenyves, Larry Keenan</td></tr>
+<tr><th>Sabres and Blues</th><td>46</td><td>Joe Noris, Kevin O'Shea, André Benoit, Tyson Strachan, Larry Keenan, Chris Evans, Ron Anderson, Bill Stewart</td></tr>
+<tr><th>300+ Career Goals and Flames</th><td>23</td><td>Mike Bullard, Dave Gagner, Tyler Toffoli, Don Lever, John Tonelli, Joe Mullen, Nazem Kadri, Theo Fleury</td></tr>
+<tr><th>300+ Career Goals and Flyers</th><td>31</td><td>Tim Kerr, Mike Bullard, Eric Lindros, Rick MacLeish, Kevin Stevens, Bill Barber, Reggie Leach, John LeClair</td></tr>
+<tr><th>300+ Career Goals and Blues</th><td>37</td><td>Paul MacLean, Mike Bullard, Brian Sutter, Pavol Demitra, Vladimir Tarasenko, Tony McKegney, Peter Šťastný, Petr Nedvěd</td></tr>
+</table>
 <h2>NHL grid answers for November 11, 2026</h2>
 <p>Rows: Islanders, Blues, Oilers. Columns: Penguins, 1000+ Games Played, Capitals.</p>
 <table>
@@ -1477,9 +1553,9 @@
 <tr><th>500+ Career Points and Oilers</th><td>67</td><td>Mike Rogers, Kent Nilsson, Jimmy Carson, Derek Roy, Bobby Schmautz, Mark Napier, Joe Murphy, Petr Klíma</td></tr>
 </table>
 <h2>Answers for the other grids</h2>
-<li><a href="/nba-grid/archive">NBA grid answers</a>, 87 past boards and their answers.</li>
-<li><a href="/mlb-grid/archive">MLB grid answers</a>, 87 past boards and their answers.</li>
-<li><a href="/cbb-grid/archive">College Basketball grid answers</a>, 87 past boards and their answers.</li>
+<li><a href="/nba-grid/archive">NBA grid answers</a>, 90 past boards and their answers.</li>
+<li><a href="/mlb-grid/archive">MLB grid answers</a>, 90 past boards and their answers.</li>
+<li><a href="/cbb-grid/archive">College Basketball grid answers</a>, 90 past boards and their answers.</li>
 <p>Report a problem</p>
 <div data-site-chrome>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
@@ -1499,8 +1575,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>

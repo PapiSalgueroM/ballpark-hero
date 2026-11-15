@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,12 +284,56 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <div data-site-chrome>
+<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>Google Analytics is paused. Lovable still measures basic visits.</p>
 <a href="/">DOUKNOWBALL</a>
 </div>
 <h1>NBA Grid Answers: Past Daily Boards</h1>
 <p>Past boards from August 17, 2026, with the players who solve each crossing</p>
-<p>The NBA grid builds a fresh board from each day's date, so no two days share a puzzle. These are the 87 boards from August 17, 2026 to November 11, 2026. Each crossing shows how many players in our data satisfy both sides, and the rarest few of them by career games played, because naming the obvious answer is easy and naming the deep cut is the point.</p>
+<p>The NBA grid builds a fresh board from each day's date, so no two days share a puzzle. These are the 90 boards from August 17, 2026 to November 14, 2026. Each crossing shows how many players in our data satisfy both sides, and the rarest few of them by career games played, because naming the obvious answer is easy and naming the deep cut is the point.</p>
 <p>The counts and names come from the same player data the game checks your guesses against, so anything listed here would be accepted in the game. A board only goes up once its day is over. <a href="/nba-grid">Play today's NBA grid</a>.</p>
+<h2>NBA grid answers for November 14, 2026</h2>
+<p>Rows: Hawks, Pistons, Suns. Columns: 10,000+ Career Points, Knicks, Mavericks.</p>
+<table>
+<tr><th>Crossing</th><th>Valid players</th><th>Rarest answers</th></tr>
+<tr><th>Hawks and 10,000+ Career Points</th><td>54</td><td>Trae Young, Kristaps Porziņģis, Ray Williams, Pete Maravich, Glenn Robinson, John Drew, Dan Roundfield, Buddy Hield</td></tr>
+<tr><th>Hawks and Knicks</th><td>46</td><td>Jacob Toppin, Charlie Brown Jr., Stewart Granger, Larry Robinson, Dylan Windler, Jeremy Tyler, Ron Grandison, Sedric Toney</td></tr>
+<tr><th>Hawks and Mavericks</th><td>49</td><td>Howard Wright, Antonius Cleveland, Charlie Brown Jr., Nicolás Brussino, Mamadou N'Diaye, Jared Cunningham, Tyler Dorsey, Obinna Ekezie</td></tr>
+<tr><th>Pistons and 10,000+ Career Points</th><td>50</td><td>Kelly Tripucka, Bojan Bogdanović, Derrick Rose, Sean Elliott, Ben Gordon, Dan Roundfield, Blake Griffin, Jerami Grant</td></tr>
+<tr><th>Pistons and Knicks</th><td>49</td><td>Cheikh Samb, Tosan Evbuomwan, Josh Harrellson, Henry Ellenson, Jermaine Jackson, Malachi Flynn, Ray Tolbert, Shawne Williams</td></tr>
+<tr><th>Pistons and Mavericks</th><td>48</td><td>Steve Bardo, Eugene Omoruyi, Tracy Moore, Terry Duerod, Bill Curley, Walter Bond, Bob McCann, Khalid Reeves</td></tr>
+<tr><th>Suns and 10,000+ Career Points</th><td>53</td><td>Charlie Scott, Michael Redd, Anfernee Hardaway, Joe Barry Carroll, Kevin Johnson, Devin Booker, Eric Bledsoe, Truck Robinson</td></tr>
+<tr><th>Suns and Knicks</th><td>51</td><td>Jared Harper, Bill Martin, Sedric Toney, Earl Barron, Brooks Thompson, John Jenkins, Jerrod Mustaf, Jimmer Fredette</td></tr>
+<tr><th>Suns and Mavericks</th><td>52</td><td>George King, Ray Spalding, Loren Meyer, Tony Dumas, John Jenkins, Shawn Respert, Donnell Harvey, Marty Byrnes</td></tr>
+</table>
+<h2>NBA grid answers for November 13, 2026</h2>
+<p>Rows: Pistons, 900+ Games Played, Bucks. Columns: Mavericks, Rockets, Spurs.</p>
+<table>
+<tr><th>Crossing</th><th>Valid players</th><th>Rarest answers</th></tr>
+<tr><th>Pistons and Mavericks</th><td>48</td><td>Steve Bardo, Eugene Omoruyi, Tracy Moore, Terry Duerod, Bill Curley, Walter Bond, Bob McCann, Khalid Reeves</td></tr>
+<tr><th>Pistons and Rockets</th><td>37</td><td>Khyri Thomas, Tracy Moore, Bill Curley, Steve Harris, John Lucas III, John Shumate, Boban Marjanović, Christian Wood</td></tr>
+<tr><th>Pistons and Spurs</th><td>37</td><td>Steve Bardo, Stanley Umude, Darrun Hilliard, David Thirdkill, Lindy Waters III, Steve Hayes, William Bedford, Chimezie Metu</td></tr>
+<tr><th>900+ Games Played and Mavericks</th><td>46</td><td>JaVale McGee, Dennis Rodman, Mark Aguirre, Klay Thompson, JJ Redick, Eddie Jones, Adrian Dantley, Rajon Rondo</td></tr>
+<tr><th>900+ Games Played and Rockets</th><td>51</td><td>Dennis Schröder, Brent Barry, Clarence Weatherspoon, Robert Reid, John Lucas, Eric Gordon, Tracy McGrady, Goran Dragić</td></tr>
+<tr><th>900+ Games Played and Spurs</th><td>48</td><td>George Johnson, Artis Gilmore, Steve Kerr, Dennis Rodman, Brent Barry, George Hill, Danny Ferry, Patty Mills</td></tr>
+<tr><th>Bucks and Mavericks</th><td>57</td><td>Tyler Smith, AJ Johnson, Jared Cunningham, Shawn Respert, DeAndre Liggins, Chris Douglas-Roberts, Sterling Brown, Yi Jianlian</td></tr>
+<tr><th>Bucks and Rockets</th><td>50</td><td>Josh Davis, Reece Gaines, TyTy Washington Jr., Conner Henry, Larry Micheaux, Tim Breaux, Rodions Kurucs, Dan Langhi</td></tr>
+<tr><th>Bucks and Spurs</th><td>55</td><td>Jaylen Morris, John Stroeder, Stanley Umude, Mamadi Diakite, Linton Townes, Jamaree Bouyea, Marcus Haislip, Joe Courtney</td></tr>
+</table>
+<h2>NBA grid answers for November 12, 2026</h2>
+<p>Rows: Lakers, Trail Blazers, 5,000+ Career Rebounds. Columns: Hawks, Pistons, Warriors.</p>
+<table>
+<tr><th>Crossing</th><th>Valid players</th><th>Rarest answers</th></tr>
+<tr><th>Lakers and Hawks</th><td>51</td><td>Chaundee Brown Jr., Kobe Bufkin, Dylan Windler, Trevor Wilson, Skylar Mays, Christian Koloko, Ryan Kelly, Anthony Miller</td></tr>
+<tr><th>Lakers and Pistons</th><td>51</td><td>Cole Swider, Dwight Buycks, Alan Hardy, Sekou Doumbouya, Ray Tolbert, Earl Tatum, Smush Parker, Shawne Williams</td></tr>
+<tr><th>Lakers and Warriors</th><td>43</td><td>Zach Norvell, Coby Karl, Sam Jacobson, Alfonzo McKinnie, Quinn Cook, Mike Smrek, MarShon Brooks, Juan Toscano-Anderson</td></tr>
+<tr><th>Trail Blazers and Hawks</th><td>37</td><td>Jeremy Richardson, Skylar Mays, Reggie Jordan, Antonio Harvey, Vít Krejčí, Steve Henson, Cam Reddish, Reggie Slater</td></tr>
+<tr><th>Trail Blazers and Pistons</th><td>32</td><td>Luis Montero, Marcus Brown, Randolph Childress, Brook Steppe, Steve Henson, Jeff Judkins, Negele Knight, Tim Frazier</td></tr>
+<tr><th>Trail Blazers and Warriors</th><td>32</td><td>Nate Williams, Earl Barron, Hank McDowell, Sean Higgins, Ike Diogu, Pete Verhoeven, Carlos Rogers, Kevin Knox</td></tr>
+<tr><th>5,000+ Career Rebounds and Hawks</th><td>31</td><td>Clint Capela, John Drew, Dan Roundfield, Tom Gugliotta, Truck Robinson, Shareef Abdur-Rahim, Christian Laettner, Antoine Walker</td></tr>
+<tr><th>5,000+ Career Rebounds and Pistons</th><td>34</td><td>Greg Monroe, Dan Roundfield, Blake Griffin, Derrick Coleman, Dave Greenwood, Chris Webber, Bob McAdoo, Christian Laettner</td></tr>
+<tr><th>5,000+ Career Rebounds and Warriors</th><td>38</td><td>DeMarcus Cousins, Rony Seikaly, Joe Barry Carroll, Andrew Bogut, Troy Murphy, Tom Gugliotta, Clifford Ray, Rick Barry</td></tr>
+</table>
 <h2>NBA grid answers for November 11, 2026</h2>
 <p>Rows: Spurs, Warriors, Rockets. Columns: Celtics, 900+ Games Played, Bucks.</p>
 <table>
@@ -1477,9 +1553,9 @@
 <tr><th>10,000+ Career Points and Rockets</th><td>56</td><td>Steve Francis, John Wall, DeMarcus Cousins, Joe Barry Carroll, Kevin Martin, Cuttino Mobley, Mike Woodson, Vin Baker</td></tr>
 </table>
 <h2>Answers for the other grids</h2>
-<li><a href="/mlb-grid/archive">MLB grid answers</a>, 87 past boards and their answers.</li>
-<li><a href="/hockey-grid/archive">NHL grid answers</a>, 87 past boards and their answers.</li>
-<li><a href="/cbb-grid/archive">College Basketball grid answers</a>, 87 past boards and their answers.</li>
+<li><a href="/mlb-grid/archive">MLB grid answers</a>, 90 past boards and their answers.</li>
+<li><a href="/hockey-grid/archive">NHL grid answers</a>, 90 past boards and their answers.</li>
+<li><a href="/cbb-grid/archive">College Basketball grid answers</a>, 90 past boards and their answers.</li>
 <p>Report a problem</p>
 <div data-site-chrome>
 <p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
@@ -1499,8 +1575,6 @@
 <a href="/cookie-policy">Cookie Policy</a>
 <a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Essential storage keeps games working. Advertising is optional. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
-<p>Analytics is paused. Google Analytics is off while we check its privacy settings.</p>
 </div>
 </div>
 </div>
