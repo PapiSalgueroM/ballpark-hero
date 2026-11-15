@@ -111,14 +111,14 @@ describe('NFL draft prospect review', () => {
     const confirm = within(screen.getByRole('region', { name: 'Draft review' })).getByRole('button', { name: 'Confirm draft' });
     act(() => { fireEvent.click(confirm); fireEvent.click(confirm); });
     const after = read(), arrived = after.league.teams.SEA.players.at(-1)!;
-    expect(arrived).toEqual({ id: arrived.id, name: target.name, pos: 'QB', age: 22, ovr: 80, salary: 7, years: 4, out: 0, pot: 84, rookieSeason: source.league.season + 1 });
+    expect(arrived).toEqual({ id: arrived.id, name: target.name, pos: 'QB', age: 22, ovr: 80, salary: 7, years: 4, out: 0, pot: 84, rookieSeason: source.league.season + 1, rookieOptionEligible: true });
     const rivals = draftOrder(before.league.teams).filter(team => team !== 'SEA' && before.league.teams[team].picks.length > 0).slice(0, 6);
     const wanted: LeagueState = clone(before.league), oldIds = new Set(Object.values(before.league.teams).flatMap(team => team.players.map(p => p.id))), ids = [arrived.id];
     wanted.teams.SEA.picks.shift(); wanted.teams.SEA.players.push(arrived);
     const pots = [90, 88, 88, 88, 85, 89];
     for (let i = 0; i < rivals.length; i++) {
       const team = rivals[i], player = after.league.teams[team].players.at(-1)!;
-      expect(player).toEqual({ id: player.id, name: source.draftClass[i].name, pos: 'RB', age: 22, ovr: 80, salary: 7, years: 4, out: 0, pot: pots[i], rookieSeason: source.league.season + 1 });
+      expect(player).toEqual({ id: player.id, name: source.draftClass[i].name, pos: 'RB', age: 22, ovr: 80, salary: 7, years: 4, out: 0, pot: pots[i], rookieSeason: source.league.season + 1, rookieOptionEligible: true });
       wanted.teams[team].picks.shift(); wanted.teams[team].players.push(player); ids.push(player.id);
     }
     expect(ids).toHaveLength(7); expect(new Set(ids).size).toBe(7); expect(ids.every(id => !oldIds.has(id))).toBe(true);
