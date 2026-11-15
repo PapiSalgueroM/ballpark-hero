@@ -148,6 +148,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
             heading: "Wages, renewals and release clauses",
             items: [
               "Players carry contracts, wages, form, fitness and opinions. They retire, walk on expired deals unless you re-sign them at the contracts desk, and your academy feeds the first team if you invest in it. A renewal can trade 12 percent of the wage for a release clause at 1.5 times his value that day: any club can pay it, it cannot be refused, and only a later full price renewal deletes it.",
+              "Before the first league match, Contracts expired on the club home screen lists the players who left when their deals ended.",
             ],
           },
         ],
