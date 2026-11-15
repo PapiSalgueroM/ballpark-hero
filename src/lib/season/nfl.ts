@@ -461,7 +461,7 @@ function lineOf(g: DerivedGame, pos: string): string[] {
   const has = (key: string) => g.line[key] !== undefined;
   const bit = (key: string, label: string) => (has(key) ? [`${of(key)} ${label}`] : []);
   switch (familyOf(pos)) {
-    case 'qb': return [...bit('passTd', 'TD'), ...bit('ints', 'INT')];
+    case 'qb': return [...bit('passTd', has('rushTd') ? 'PASS TD' : 'TD'), ...bit('ints', 'INT'), ...bit('rushYds', 'RUSH YDS'), ...bit('rushTd', 'RUSH TD')];
     case 'rb': return [...bit('rushTd', 'TD'), ...(has('rec') ? [has('recYds') ? `${of('rec')}-${of('recYds')} REC` : `${of('rec')} REC`] : [])];
     case 'catch': return [...bit('rec', 'REC'), ...bit('recTd', 'TD')];
     case 'kick': return of('fgMade') > 0 && has('longFg') ? [`LONG ${of('longFg')}`] : [];
@@ -490,7 +490,7 @@ function markChip(g: DerivedGame, pos: string): string {
 function markOf(g: DerivedGame, pos: string): number {
   const of = (key: string) => g.line[key] ?? 0;
   switch (familyOf(pos)) {
-    case 'qb': return of('passYds') / 25 + 4 * of('passTd') - 2 * of('ints');
+    case 'qb': return (of('passYds') + of('rushYds')) / 25 + 4 * (of('passTd') + of('rushTd')) - 2 * of('ints');
     case 'rb': return (of('rushYds') + of('recYds')) / 10 + 6 * of('rushTd') + 0.5 * of('rec');
     case 'catch': return of('recYds') / 10 + 6 * of('recTd') + 0.5 * of('rec');
     case 'kick': return 3 * of('fgMade') - 2 * (of('fgAtt') - of('fgMade')) + of('longFg') / 50;
@@ -504,7 +504,13 @@ function markText(g: DerivedGame, pos: string): string {
   const out: string[] = [];
   const add = (key: string, one: string, many: string, always = true) => { if (has(key) && (always || of(key) > 0)) out.push(plural(of(key), one, many)); };
   switch (familyOf(pos)) {
-    case 'qb': add('passYds', 'yard', 'yards'); add('passTd', 'touchdown', 'touchdowns', false); add('ints', 'interception', 'interceptions', false); break;
+    case 'qb':
+      add('passYds', 'yard', 'yards');
+      add('passTd', 'touchdown', 'touchdowns', false);
+      add('ints', 'interception', 'interceptions', false);
+      add('rushYds', 'rushing yard', 'rushing yards', false);
+      add('rushTd', 'rushing touchdown', 'rushing touchdowns', false);
+      break;
     case 'rb': add('rushYds', 'rushing yard', 'rushing yards'); add('rushTd', 'touchdown', 'touchdowns', false); break;
     case 'catch':
       if (has('rec')) out.push(has('recYds') ? `${plural(of('rec'), 'catch', 'catches')} for ${plural(of('recYds'), 'yard', 'yards')}` : plural(of('rec'), 'catch', 'catches'));
@@ -530,7 +536,12 @@ function soFarTiles(so: Record<string, number>, pos: string): [string, string][]
   const t = (key: string) => (so[key] === undefined ? '-' : tenth(sum(so, key)));
   const played: [string, string] = ['Played', String(so.apps ?? 0)];
   switch (pos) {
-    case 'QB': return [played, ['Pass yds', n('passYds')], ['TD', n('passTd')], ['INT', n('ints')]];
+    case 'QB': {
+      const tiles: [string, string][] = [played, ['Pass yds', n('passYds')], [so.rushTd === undefined ? 'TD' : 'Pass TD', n('passTd')], ['INT', n('ints')]];
+      if (so.rushYds !== undefined) tiles.push(['Rush yds', n('rushYds')]);
+      if (so.rushTd !== undefined) tiles.push(['Rush TD', n('rushTd')]);
+      return tiles;
+    }
     case 'RB': return [played, ['Rush yds', n('rushYds')], ['Rush TD', n('rushTd')], ['Rec', n('rec')]];
     case 'WR': case 'TE': return [played, ['Rec', n('rec')], ['Rec yds', n('recYds')], ['TD', n('recTd')]];
     case 'K': return [played, ['FG made', n('fgMade')], ['FG tries', n('fgAtt')], ['FG %', sum(so, 'fgAtt') > 0 ? `${Math.round((100 * sum(so, 'fgMade')) / sum(so, 'fgAtt'))}%` : '-']];

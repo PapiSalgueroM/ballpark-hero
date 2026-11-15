@@ -58,7 +58,10 @@ const seasonLine = (teamResult: string, parts: readonly Part[]): string =>
 /** One NFL season, in the numbers simSeason writes for that position. */
 export function nflStatLine(s: SeasonLine, p: CareerPos): string {
   switch (p) {
-    case 'QB': return seasonLine(s.teamResult, [[s.passYds, n => `${formatNumber(n)} yds`], [s.passTd, n => `${formatNumber(n)} TD`], [s.ints, n => `${formatNumber(n)} INT`]]);
+    case 'QB': return seasonLine(s.teamResult, [
+      [s.passYds, n => `${formatNumber(n)} yds`], [s.passTd, n => `${formatNumber(n)} TD`], [s.ints, n => `${formatNumber(n)} INT`],
+      [s.rushYds, n => `${formatNumber(n)} rush yds`], [s.rushTd, n => `${formatNumber(n)} rush TD`],
+    ]);
     case 'RB': return seasonLine(s.teamResult, [[s.rushYds, n => `${formatNumber(n)} rush yds`], [s.rushTd, n => `${formatNumber(n)} TD`], [s.rec, n => `${formatNumber(n)} rec`]]);
     case 'WR':
     case 'TE': return seasonLine(s.teamResult, [[s.rec, n => `${formatNumber(n)} rec`], [s.recYds, n => `${formatNumber(n)} yds`], [s.recTd, n => `${formatNumber(n)} TD`]]);
@@ -101,7 +104,8 @@ export type NhlPrintedStats = Pick<NhlSeasonLine, 'games' | 'goals' | 'assists' 
 export function nflLineAsPrinted(s: NflPrintedStats, p: CareerPos): AwardSeasonLine {
   const games = s.games;
   switch (p) {
-    case 'QB': return { games, passYds: s.passYds, passTd: s.passTd, ints: s.ints };
+    case 'QB': return { games, passYds: s.passYds, passTd: s.passTd, ints: s.ints,
+      ...(isNum(s.rushYds) ? { rushYds: s.rushYds } : {}), ...(isNum(s.rushTd) ? { rushTd: s.rushTd } : {}) };
     case 'RB': return { games, rushYds: s.rushYds, rushTd: s.rushTd, rec: s.rec, recYds: (s.rec ?? 0) * NFL_RB_PRINTED_YARDS_A_CATCH };
     case 'WR':
     case 'TE': return { games, rec: s.rec, recYds: s.recYds, recTd: s.recTd };
@@ -138,7 +142,8 @@ export interface NflCareerSums {
 /** The retirement card's stat bullet for an NFL career. */
 export function nflCareerStatBullet(t: NflCareerSums, p: CareerPos): string {
   switch (p) {
-    case 'QB': return `${t.passYds.toLocaleString('en-US')} passing yards, ${formatNumber(t.passTd)} touchdowns`;
+    case 'QB': return `${t.passYds.toLocaleString('en-US')} passing yards, ${formatNumber(t.passTd)} touchdowns`
+      + (t.rushYds > 0 ? `, ${formatNumber(t.rushYds)} rushing yards, ${formatNumber(t.rushTd)} rushing touchdowns` : '');
     case 'RB': return `${t.rushYds.toLocaleString('en-US')} rushing yards, ${formatNumber(t.rushTd)} touchdowns`;
     case 'WR':
     case 'TE': return `${formatNumber(t.rec)} catches for ${t.recYds.toLocaleString('en-US')} yards, ${formatNumber(t.recTd)} touchdowns`;
@@ -153,7 +158,8 @@ export function nflCareerStatBullet(t: NflCareerSums, p: CareerPos): string {
 /** The hub's "career so far" figure: the one number that position is about. */
 export function nflCareerSoFar(t: NflCareerSums, p: CareerPos): string {
   switch (p) {
-    case 'QB': return `${t.passYds.toLocaleString('en-US')} pass yds`;
+    case 'QB': return `${t.passYds.toLocaleString('en-US')} pass yds`
+      + (t.rushYds > 0 ? `, ${formatNumber(t.rushYds)} rush yds` : '');
     case 'RB': return `${t.rushYds.toLocaleString('en-US')} rush yds`;
     case 'WR':
     case 'TE': return `${t.recYds.toLocaleString('en-US')} rec yds`;

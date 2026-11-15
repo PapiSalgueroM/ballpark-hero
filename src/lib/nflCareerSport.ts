@@ -14,6 +14,7 @@ import {
   buildNflFaWindow, nflFaPushArgs, buildNflExtension, nflExtPushArgs,
   nflAssignRole, nflCampBattle,
   nflPassingDownAvailable, nflPassingDownActive, setNflPassingDown,
+  nflQbRunAvailable, nflQbRunActive, setNflQbRun,
   type CareerPos, type CareerState, type SeasonLine,
 } from '@/lib/nflMyCareer';
 import { countOf, nflCareerSoFar, nflMajorAward, nflStatLine } from '@/lib/usCareerStatLine';
@@ -90,6 +91,12 @@ export const NFL_CAREER_SPORT: UsCareerSport<CareerState, SeasonLine> = withBank
     current: nflPassingDownActive,
     completed: (c, year, team) => c.seasons.some(s => s.year === year && s.team === team && s.passingDownRole === true),
     set: setNflPassingDown,
+  },
+  qbRunPlan: {
+    available: nflQbRunAvailable,
+    current: nflQbRunActive,
+    completed: (c, year, team) => c.seasons.some(s => s.year === year && s.team === team && s.qbRunPackage != null),
+    set: setNflQbRun,
   },
   suspendedLine: c => ({
     year: c.year, team: c.team, age: c.age, ovr: c.ovr, games: 0,

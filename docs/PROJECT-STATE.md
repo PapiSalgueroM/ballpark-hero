@@ -1,4 +1,13 @@
+## 2026-11-15: Summer draft choices, quarterback runs and targeted preparation
+
+- Aussie Rules Manager lets the club delist one returning player before the draft pool is revealed. The open spot adds one draft pick, with the existing positional minimums still required.
+- NFL My Career offers signed Dual Threat starters a designed-runs package. It moves regular-season production from passing to rushing and trades an interception reduction for up to four points of health. Camp can take away the starting job and cancel the choice. The season review and supported Week by week replays show the saved rushing line.
+- Stadium Tycoon lets clubs book scouting for one known opponent. The cash cost is quoted up front and the opponent has a 10 percent lower scoring chance in that fixture. Watched and away results keep the paid scouting receipt.
+- Club Manager lets you queue Double or Light for one named player next paid week and see the fitness estimate before deciding. Double uses the established training development and injury tradeoffs. The prior Light order stays readable.
+
 ## 2026-11-15: Rival contracts, international development and easier game discovery
+
+[PR #986](https://github.com/PapiSalgueroM/ballpark-hero/pull/986) published exact main `34d771d4e1df3ef915de06f66598410748e41b8c`, deployment `4c82cf01-3674-4749-a63e-88d56e03d82f`, canonical entry `/assets/index-D6-9hWEz.js`. Eleven live browser journeys, all 174 sitemap routes, seven policy and crawler endpoints, both admin noindex tags and the updated NRL and Soccer Career guides passed. IndexNow accepted both guides. App types, production build, complete Home launch, Game picks and career entry guide workflows, 127 integrated tests, 20 site checks and all 16 download limits passed. All 1,080 paired Nations League campaigns preserved world scores and standings. The older NBA My Career static graph check also fails on exact #985. Several wider Soccer jobs failed in setup or on older fixtures including the established save-retry mismatch.
 
 - NRL Team Manager can approach one contracted rival in the offseason. The seller keeps signed positional cover rated at least as high. The buyer pays half the annual wage once and must be able to carry the existing contract through every remaining season.
 - Soccer Career Nations League selections and appearances use the saved early, middle, late or closing season overall for the stage. The report shows the overall used and its change since the previous appearance. Older games still open and mark missing overall values.

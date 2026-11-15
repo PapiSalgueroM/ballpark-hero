@@ -9,7 +9,7 @@ import { lineupStrength, prepareClubs, PREPARATIONS, ROLE_LABELS, ROLES, TACTICS
 import { EXIT_LABELS } from '@/lib/aussieRulesFormat';
 import {
   CLUBS, clubFull, clubIdentities, clubOf, clubShort, CURRENT_CLUB_SET, draftPool, hubTiles, lastWeek, leagueLadder, leaguePlayer, myFinalsTie, opponentPlays, ordinal, pickRefusal, picksLeft, retirees,
-  ROUNDS, scoutedPotential, tieName, type LeagueAction, type LeagueState,
+  LIST_SIZE, roleDeficits, ROUNDS, scoutedPotential, summerDelistCandidates, tieName, type LeagueAction, type LeagueState,
 } from '@/lib/aussieRulesLeague';
 import styles from './AussieRulesManagerBoard.module.css';
 import own from './AussieRulesLeagueBoard.module.css';
@@ -218,6 +218,7 @@ function ClubPanel({ state, onSwitch }: { state: LeagueState; onSwitch: () => vo
     <h3>Honour board</h3>
     {rows.length ? <ul className={own.list}>{rows.map(row => <li key={row.season} data-arl-history={row.season}>
       <strong>Season {row.season}</strong>: {ordinal(row.place)} on the ladder ({row.w}-{row.d}-{row.l}), {EXIT_LABELS[row.exit].toLowerCase()}. Premiers: {clubShort(state, row.premier)}, beating {clubShort(state, row.runnerUp)} {score(row.gf.home === row.premier ? row.gf.homeScore : row.gf.awayScore)} to {score(row.gf.home === row.premier ? row.gf.awayScore : row.gf.homeScore)}. Most goals: {row.leadingGoalkicker.name} ({clubShort(state, row.leadingGoalkicker.club)}), {row.leadingGoalkicker.goals}.
+      {row.delisted && <p>{row.delisted.playerName} delisted to open one more draft pick.</p>}
     </li>)}</ul> : <p className={styles.muted}>Your first season is under way. Every season you finish goes up here.</p>}
   </div>;
 }
@@ -256,6 +257,7 @@ function DraftPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
 
 function StatusCard({ state, act }: { state: LeagueState; act: (action: LeagueAction) => boolean }) {
   const last = state.history[state.history.length - 1];
+  const [selection, setSelection] = useState<{ season: number; playerId: string }>();
   if (state.phase === 'seasonOver' && last) {
     const won = last.premier === state.myClub;
     const gf = `${score(last.gf.home === last.premier ? last.gf.homeScore : last.gf.awayScore)} to ${score(last.gf.home === last.premier ? last.gf.awayScore : last.gf.homeScore)}`;
@@ -269,8 +271,32 @@ function StatusCard({ state, act }: { state: LeagueState; act: (action: LeagueAc
   if (state.phase === 'summer') {
     const out = retirees(state);
     const mine = clubOf(state, state.myClub)!.players.filter(p => out.has(p.id));
+    const candidates = summerDelistCandidates(state);
+    const player = selection?.season === state.season ? candidates.find(candidate => candidate.id === selection.playerId) : undefined;
+    const deficits = player && roleDeficits({ players: candidates.filter(candidate => candidate.id !== player.id) });
+    const needs = deficits && ROLES.filter(role => deficits[role] > 0)
+      .map(role => `${deficits[role]} ${ROLE_LABELS[role].toLowerCase()}${deficits[role] > 1 ? 's' : ''}`);
     return <div className={styles.card} data-arl-summer><h3>Summer</h3><p>Everyone is a year older and keeps the skill rating they finished on.</p>
       <p className={styles.muted}>{mine.length ? `Retiring from your list: ${mine.map(p => `${p.name} (${p.age})`).join(', ')}.` : 'Nobody on your list is retiring.'} {out.size} players retire across the league.</p>
+      {last?.delisted ? <p role="status" data-arl-delist-receipt>{last.delisted.playerName} will leave when the draft opens. Your draft gets one extra pick.</p>
+        : candidates.length > 0 && <details className={styles.events} data-arl-delist>
+          <summary>Delist a player</summary>
+          <div className={styles.swap}>
+            <p className={styles.muted}>Release one returning player to open an extra draft pick. Choose before the prospects are revealed.</p>
+            <label>Returning player<select value={player?.id ?? ''} onChange={event => setSelection({ season: state.season, playerId: event.target.value })}>
+              <option value="">Choose a player</option>
+              {candidates.map(candidate => <option key={candidate.id} value={candidate.id}>
+                {candidate.name} ({ROLE_LABELS[candidate.role]}, age {candidate.age}, skill {candidate.skill})
+              </option>)}
+            </select></label>
+            {player && <div role="status">
+              <p>Draft picks increase from {LIST_SIZE - candidates.length} to {LIST_SIZE - candidates.length + 1}.</p>
+              {needs?.length ? <p>Draft role needs: {needs.join(', ')}.</p> : <p>Your returning list still covers every role minimum.</p>}
+            </div>}
+            <button type="button" className={styles.secondary} disabled={!player}
+              onClick={() => player && act({ type: 'delist', season: state.season, playerId: player.id })}>Confirm delisting</button>
+          </div>
+        </details>}
       <button className={styles.action} data-arl-next onClick={() => act({ type: 'next' })}>Open the draft</button></div>;
   }
   if (state.phase === 'draft') return <div className={styles.card}><p>Draft night. Open the Draft box to make your picks.</p></div>;

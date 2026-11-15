@@ -23,6 +23,7 @@ export const AUSSIE_RULES_MANAGEMENT_CONTENT: GameContentMap = {
       'Pick a tactic and play one quarter at a time, or play the whole match in one tap with the same tactic. At each quarter break you can make up to five same-role changes from the bench.',
       'After the match you see the round\'s other results. The hub boxes show your next match, your ladder spot with points and percentage, your squad, your honour board, and the finals bracket once September comes round.',
       'Finish in the top ten to play the finals. Win the Grand Final for the flag. Then the summer ages everyone a year, some veterans retire, and on draft night you pick young players to fill your list back to thirty-six before the next season starts.',
+      'In Summer, you can delist one returning player for one extra draft pick before the prospects are revealed. The draft still reserves enough choices to meet each role minimum.',
     ],
     rules: [
       'A goal adds six points and a behind adds one. A displayed score of 6.8 means six goals and eight behinds, for 44 points. Compare totals to find the winner.',

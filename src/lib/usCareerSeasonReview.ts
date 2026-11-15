@@ -34,6 +34,16 @@ export function nflSeasonReview(s: SeasonLine, pos: CareerPos): CareerReviewStat
     default: regular = [text('Performance', undefined)];
   }
   if (pos === 'RB' && s.passingDownRole === true) regular.push(text('Backfield role', 'Passing downs'));
+  if (pos === 'QB' && (recorded(s.rushYds) || recorded(s.rushTd))) {
+    regular.push(number('Rushing yards', s.rushYds), number('Rushing touchdowns', s.rushTd));
+  }
+  if (pos === 'QB' && s.qbRunPackage && typeof s.qbRunPackage === 'object') {
+    if ('healthCost' in s.qbRunPackage && recorded(s.qbRunPackage.healthCost)) {
+      regular.push(text('Quarterback plan', 'Designed runs'), number('Health lost to extra contact', s.qbRunPackage.healthCost));
+    } else if ('unavailable' in s.qbRunPackage && s.qbRunPackage.unavailable === true) {
+      regular.push(text('Quarterback plan', 'Designed runs unavailable after camp'));
+    }
+  }
   return stats(s.teamResult, regular, [number('Games', s.poGames), text('Performance', s.poLine)]);
 }
 

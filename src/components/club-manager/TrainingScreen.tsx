@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Dumbbell, GraduationCap } from 'lucide-react';
 import {
-  developmentRate, developingPlayers, recordedTraining, recoveryWeekOf,
+  developmentRate, developingPlayers, recordedTraining, recoveryWeekOf, trainingFitnessIfRested,
   retrainWeeks, retrainRefusal, validRetrainingCourse, heldPositions, MAX_SECONDARY_POSITIONS, RETRAIN_MIN_WEEKS, FORMATIONS, fitPenalty,
 } from '@/lib/clubManager';
 import type {
@@ -311,25 +311,28 @@ export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: 
       </div>
 
       <div className="bg-card border border-border rounded-xl p-3">
-        <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">One player's recovery week</div>
+        <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">One player's next training week</div>
         <p className="text-[10px] text-muted-foreground mb-2">
-          Give one player Light training for the next paid week. Everyone else keeps your plan. Light training can slow development and keep legs fresher. Midweek nights do not use this order.
+          Pick Light for fresher legs or Double for faster development with more fatigue and a small risk of injury. The order applies to one paid week.
         </p>
         {recoveryBlocked ? (
           <p className="text-[10px] text-amber-400">This recovery order uses a different format. It is kept unchanged; recovery edits are unavailable.</p>
         ) : (
           <>
             {recovery && <p className="text-[11px] text-primary mb-2">
-              {pendingRecovery ? <>{pendingRecovery.name}: Light next paid week, then {INTENSITY_INFO[plan.intensity].label} again. {FOCUS_INFO[plan.focus].label} stays on.</>
+              {pendingRecovery ? <>{pendingRecovery.name}: {recovery.v === 2 ? 'Double' : 'Light'} next paid week, then {INTENSITY_INFO[plan.intensity].label} again.</>
                 : <>This old recovery order is inactive. It clears at the next paid week, or you can replace or cancel it now.</>}
             </p>}
-            <label className="block text-[10px] text-muted-foreground mb-1" htmlFor="cm-recovery-player">Player for recovery</label>
-            <select id="cm-recovery-player" aria-label="Player for recovery" value={recoveryId}
+            <label className="block text-[10px] text-muted-foreground mb-1" htmlFor="cm-recovery-player">Player for the next week</label>
+            <select id="cm-recovery-player" value={recoveryId}
               onChange={e => setRecoveryId(e.target.value)}
               className="w-full min-h-[44px] bg-secondary border border-border rounded px-2 text-[11px] text-foreground">
               <option value="">Pick a player</option>
               {career.squad.map(p => <option key={p.id} value={p.id}>{p.position} {p.name} ({p.fitness}% fitness)</option>)}
             </select>
+            {pickedRecovery && <p className="mt-1 text-[10px] text-muted-foreground" data-cm-individual-training-fitness>
+              Fitness after a paid week if he sits out. Light {trainingFitnessIfRested(career, pickedRecovery.fitness, 'light')}% · Double {trainingFitnessIfRested(career, pickedRecovery.fitness, 'double')}%
+            </p>}
             <div className="flex flex-wrap gap-2 mt-2">
               <button type="button" disabled={!pickedRecovery}
                 onClick={() => { if (pickedRecovery) onSetPlan({ ...plan, recoveryWeek: {
@@ -338,15 +341,21 @@ export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: 
                 className="min-h-[44px] rounded-lg border border-primary px-3 text-[11px] font-bold text-primary disabled:opacity-40">
                 Queue recovery week
               </button>
+              <button type="button" disabled={!pickedRecovery}
+                onClick={() => { if (pickedRecovery) onSetPlan({ ...plan, recoveryWeek: {
+                  v: 2, club: career.clubName, season: career.season, playerId: pickedRecovery.id, intensity: 'double',
+                } }); }}
+                className="min-h-[44px] rounded-lg border border-primary px-3 text-[11px] font-bold text-primary disabled:opacity-40">
+                Queue double training
+              </button>
               {recovery && <button type="button" onClick={() => {
                 const { recoveryWeek: _cancelled, ...standing } = plan; onSetPlan(standing);
               }} className="min-h-[44px] rounded-lg border border-border px-3 text-[11px] text-muted-foreground">
-                Cancel recovery week
+                {recovery.v === 2 ? 'Cancel double training' : 'Cancel recovery week'}
               </button>}
             </div>
           </>
         )}
-        <p className="text-[9px] text-muted-foreground mt-2">For example, keep Double for the squad while one player takes one Light paid week. This does not rest him from matches or cure an injury.</p>
       </div>
 
       <RetrainCard career={career} onRetrain={onRetrain} onStopRetrain={onStopRetrain} />

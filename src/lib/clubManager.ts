@@ -1780,7 +1780,8 @@ export interface TrainingPlan {
   recoveryWeek?: unknown;
 }
 
-export interface RecoveryWeek { v: 1; club: string; season: number; playerId: string }
+export type RecoveryWeek = { club: string; season: number; playerId: string }
+  & ({ v: 1 } | { v: 2; intensity: 'double' });
 
 export interface TrainingExposure {
   v: 1;
@@ -19283,6 +19284,11 @@ function fitnessAfterWeek(fitness: number, played: boolean, recoveryMod: number,
   return clamp(fitness + recovery - cost, 20, 100);
 }
 
+export function trainingFitnessIfRested(state: CareerState, fitness: number, intensity: TrainingIntensity): number {
+  const { recoveryMod, flat } = weekRecoveryOf(state, intensity);
+  return fitnessAfterWeek(fitness, false, recoveryMod, flat);
+}
+
 /**
  * Round 1510 (ruling 2b): what a NIGHT does to the squad in place of tickWeek. The recovery and the match cost a
  * European midweek gets from its own tick, and nothing else: no knock risk, no injury or retraining countdown, no
@@ -19316,27 +19322,33 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   // development the same setting buys you at the end of the season.
   const plan = state.training ?? DEFAULT_TRAINING;
   const recovery = recoveryWeekOf(plan.recoveryWeek);
-  const restId = recovery?.club === state.clubName && recovery.season === state.season ? recovery.playerId : null;
+  const trainedId = recovery?.club === state.clubName && recovery.season === state.season ? recovery.playerId : null;
+  const individualIntensity = recovery?.v === 2 ? recovery.intensity : 'light';
   const { recoveryMod, flat } = weekRecoveryOf(state);
-  const light = weekRecoveryOf(state, 'light');
-  const knockRisk = plan.intensity === 'double' ? 0.005 : 0;
+  const individual = weekRecoveryOf(state, individualIntensity);
   const policy = (plan.intensity === 'light' ? 0 : plan.intensity === 'double' ? 6 : 3)
     + (plan.focus === 'firstTeam' ? 0 : plan.focus === 'youth' ? 2 : 1);
+  const individualPolicy = (individualIntensity === 'double' ? 6 : 0) + policy % 3;
   /* Round 505: anyone who finished learning a second position this week. */
   const learned: string[] = [];
   state.squad = state.squad.map(p => {
     const played = playedIds ? playedIds.has(p.id) : false;
-    const recovering = p.id === restId;
-    const fitness = fitnessAfterWeek(p.fitness, played, recovering ? light.recoveryMod : recoveryMod, recovering ? light.flat : flat);
+    const hasOrder = p.id === trainedId;
+    const intensity = hasOrder ? individualIntensity : plan.intensity;
+    const fitness = fitnessAfterWeek(p.fitness, played, hasOrder ? individual.recoveryMod : recoveryMod, hasOrder ? individual.flat : flat);
     let injuryWeeks = p.majorInjury ? p.injuryWeeks : Math.max(0, p.injuryWeeks - 1);
-    if (!recovering && knockRisk > 0 && injuryWeeks === 0 && Math.random() < knockRisk) injuryWeeks = injurySpell(state, ri(1, 3));
+    if (intensity === 'double' && injuryWeeks === 0) {
+      const random = plan.intensity === 'double' ? Math.random
+        : keyedRng(`cm-extra-training|${worldSeedOf(state) ?? state.eraId}|${state.clubName}|${state.season}|${state.week}|${p.id}`);
+      if (random() < 0.005) injuryWeeks = injurySpell(state, 1 + Math.floor(random() * 3));
+    }
     const out: CMPlayer = { ...p, fitness, injuryWeeks };
     const previous = readTrainingExposure(p.trainingExposure);
     if (p.trainingExposure === undefined || previous) {
       const counts = previous && previous.club === state.clubName && previous.season === state.season
         ? [...previous.counts] : Array(9).fill(0) as number[];
       if (Number.isSafeInteger(counts.reduce((sum, n) => sum + n, 0) + 1)) {
-        counts[recovering ? policy % 3 : policy] += 1;
+        counts[hasOrder ? individualPolicy : policy] += 1;
         out.trainingExposure = { v: 1, club: state.clubName, season: state.season, counts };
       }
     }
@@ -21410,8 +21422,9 @@ export function releaseProspect(career: CareerState, prospectId: string): Career
 
 export function recoveryWeekOf(value: unknown): RecoveryWeek | null {
   const r = value as RecoveryWeek | null;
-  return r && typeof r === 'object' && !Array.isArray(r) && Object.keys(r).length === 4
-    && r.v === 1 && typeof r.club === 'string' && Number.isSafeInteger(r.season) && r.season > 0
+  return r && typeof r === 'object' && !Array.isArray(r)
+    && (r.v === 1 && Object.keys(r).length === 4 || r.v === 2 && r.intensity === 'double' && Object.keys(r).length === 5)
+    && typeof r.club === 'string' && Number.isSafeInteger(r.season) && r.season > 0
     && typeof r.playerId === 'string' && r.playerId.length > 0 ? r : null;
 }
 

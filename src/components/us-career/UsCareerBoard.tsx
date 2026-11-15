@@ -723,19 +723,21 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     const bullpen = sport.bullpenRole;
     const tandem = sport.goalieTandem;
     const passingDown = sport.passingDownRole;
+    const qbRun = sport.qbRunPlan;
     const batting = sport.battingApproach;
     const restPlan = sport.restPlan;
-    if (!career || (!trade && !priority && !bullpen && !tandem && !passingDown && !batting && !restPlan) || pendingSave.current) return false;
+    if (!career || (!trade && !priority && !bullpen && !tandem && !passingDown && !qbRun && !batting && !restPlan) || pendingSave.current) return false;
     const currentBullpen = bullpen?.current(career);
     const currentTandem = tandem?.current(career);
     const currentPassingDown = passingDown?.current(career);
+    const currentQbRun = qbRun?.current(career);
     const currentBatting = batting?.current(career);
     const currentRest = restPlan?.current(career);
     try {
       const raw = localStorage.getItem(sport.saveKey);
       if (raw === savedBytes.current) return false;
       const stored = raw ? JSON.parse(raw) as SaveShape : null;
-      if (stored?.c && (passingDown?.completed(stored.c, career.year, career.team) || batting?.completed(stored.c, career.year, career.team)
+      if (stored?.c && (passingDown?.completed(stored.c, career.year, career.team) || qbRun?.completed(stored.c, career.year, career.team) || batting?.completed(stored.c, career.year, career.team)
         || restPlan?.completed(stored.c, career.year, career.team))
         && summerCareerKey(stored.c) === summerCareerKey(career)) {
         setTradeSaveMoved(true);
@@ -744,6 +746,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       if (stored && (stored.phase === 'season' || stored.phase === 'freeagency') && stored.c && stored.teamQuality != null
         && (trade?.receipt(stored.c) || priority?.receipt(stored.c) || bullpen?.current(stored.c) || currentBullpen
           || tandem?.current(stored.c) || currentTandem || passingDown?.current(stored.c) || currentPassingDown
+          || qbRun?.current(stored.c) || currentQbRun
           || batting?.current(stored.c) || currentBatting || restPlan?.current(stored.c) || currentRest)
         && stored.c.year === career.year && summerCareerKey(stored.c) === summerCareerKey(career)) {
         const held = restoreMarketTalk(stored.contractTalk, stored.c, sport.slug, sport.freeAgencyContact?.teams(stored.c).map(t => t.id));
@@ -757,8 +760,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
         }
       }
     } catch { /* An unreadable career cannot safely accept a request. */ }
-    if (requesting || currentBullpen || currentTandem || currentPassingDown || currentBatting || currentRest) setTradeSaveMoved(true);
-    return requesting || Boolean(currentBullpen || currentTandem || currentPassingDown || currentBatting || currentRest);
+    if (requesting || currentBullpen || currentTandem || currentPassingDown || currentQbRun || currentBatting || currentRest) setTradeSaveMoved(true);
+    return requesting || Boolean(currentBullpen || currentTandem || currentPassingDown || currentQbRun || currentBatting || currentRest);
   };
 
   const playSeason = () => {
@@ -1871,6 +1874,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   const bullpenOptions = bullpen?.options(career) ?? [];
   const goalieTandem = sport.goalieTandem;
   const passingDownRole = sport.passingDownRole;
+  const qbRunPlan = sport.qbRunPlan;
   const battingApproach = sport.battingApproach;
   const restPlan = sport.restPlan;
 
@@ -2086,6 +2090,22 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
               <option value="passing">Take more passing downs</option>
             </select>
             <span className="mt-1 block font-normal text-muted-foreground">Trade some regular-season rushing yards and touchdown chances for more catches and receiving yards. Camp still decides your role.</span>
+          </label>}
+          {qbRunPlan?.available(career) && <label className="mt-3 block text-left text-xs font-semibold">
+            Quarterback plan for this season
+            <select className="mt-1 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm"
+              disabled={!!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
+              value={qbRunPlan.current(career) ? 'runs' : 'usual'} onChange={event => {
+                if (pendingSave.current || marketRef.current || teamPlanSaveChanged(true)) return;
+                const next = qbRunPlan.set(career, event.target.value === 'runs');
+                if (next === career) return;
+                setCareer(next);
+                persist(next, 'season', teamQuality);
+              }}>
+              <option value="usual">Usual playbook</option>
+              <option value="runs">Call designed runs</option>
+            </select>
+            <span className="mt-1 block font-normal text-muted-foreground">Trade some regular-season passing yards and touchdowns for rushing production. Fewer throws can mean fewer interceptions. The extra contact costs up to four health points. Camp still decides who starts.</span>
           </label>}
           {battingApproach?.available(career) && <label className="mt-3 block text-left text-xs font-semibold">
             Batting approach for this season

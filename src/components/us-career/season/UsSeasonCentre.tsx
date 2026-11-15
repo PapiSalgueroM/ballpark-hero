@@ -70,7 +70,8 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonSource, career:
   const development = savedRating?.checkpoints[3][0] === s.games.length ? savedRating : null;
   const help = view.help(named, named ? ctx.names[1] : undefined, pos);
   const pitcher = bind.slug === 'mlb' && (pos === 'SP' || pos === 'RP');
-  const reviewStats = pitcher ? review.regular.filter(stat => stat.numeric !== undefined) : review.regular.slice(0, 3);
+  const quarterbackRushing = bind.slug === 'nfl' && pos === 'QB' && (typeof row.rushYds === 'number' || typeof row.rushTd === 'number');
+  const reviewStats = pitcher ? review.regular.filter(stat => stat.numeric !== undefined) : review.regular.slice(0, quarterbackRushing ? 5 : 3);
   return {
     season: s,
     words: view.words,
