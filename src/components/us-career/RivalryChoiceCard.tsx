@@ -9,9 +9,8 @@
    read as one feature. Sport neutral: the card is plain data off
    careerRivalryChoices.ts, the tap and the outcome come in as props.
 
-   The outcome lives on the board, not here, because the board has already
-   written the answer to the save by the time this card shows it: a reload
-   on the outcome lands on the hub with the choice made, never asks twice. */
+   The board commits the answer before showing this outcome. In NBA, the
+   board can reopen the same outcome after a reload until Continue. */
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import type { RivalryChoiceCard as Card } from '@/lib/careerRivalryChoices';
 import type { RivalryHeadToHead } from '@/components/us-career/RivalryEventCard';
