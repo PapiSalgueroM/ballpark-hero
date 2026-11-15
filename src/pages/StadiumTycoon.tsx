@@ -110,13 +110,17 @@ function readAcademySnapshot(gear: GearLevels) {
 export default function StadiumTycoon() {
   const [savedAcademy] = useState(() => readAcademySnapshot(loadLedger().gearLevel));
   const academyRef = useRef(savedAcademy);
+  const readOwnedAcademy = useRef<(() => FactoryState | null) | null>(null);
   const getEdge = useCallback(() => academyRef.current ? squadEdge(academyRef.current, loadLedger().gearLevel) : 0, []);
   const getAttackOptions = useCallback(() => {
     const gear = loadLedger().gearLevel;
-    const academy = readAcademySnapshot(gear);
+    const academy = readOwnedAcademy.current?.() ?? readAcademySnapshot(gear);
     return academy ? graduateAttackOptions(academy, gear) : [];
   }, []);
-  const onAcademySnapshot = useCallback((snapshot: FactoryState) => { academyRef.current = snapshot; }, []);
+  const onAcademySnapshot = useCallback((snapshot: FactoryState, readOwnedSnapshot: () => FactoryState | null) => {
+    academyRef.current = snapshot;
+    readOwnedAcademy.current = readOwnedSnapshot;
+  }, []);
   const g = useStadiumTycoon(getEdge, getAttackOptions);
   const [room, setRoom] = useState<Room>('stadium');
   /* A returning first team keeps its clock even before the Academy tab opens. */

@@ -52,15 +52,15 @@ const AcademyProspects = lazy(() => import('@/components/tycoon/AcademyProspects
 
 type Panel = 'scouting' | 'coaching' | 'dorms' | 'agents' | 'legacy' | 'packs' | 'firstTeam' | null;
 
-export default function AcademyPanel({ visible = true, stylesReady = false, onStatus, onSnapshot }: { visible?: boolean; stylesReady?: boolean; onStatus?: (s: AcademyStatus) => void; onSnapshot?: (s: FactoryState) => void }) {
-  const { state: s, saveMoved, floaters, doBuy, doSetCoachingFocus, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked, doPromote, doSellSenior, academySaveBlocked, doEquipBoot, doUpgradeBoot, gearSaveBlocked } = useWonderkidFactory();
+export default function AcademyPanel({ visible = true, stylesReady = false, onStatus, onSnapshot }: { visible?: boolean; stylesReady?: boolean; onStatus?: (s: AcademyStatus) => void; onSnapshot?: (s: FactoryState, readOwnedSnapshot: () => FactoryState | null) => void }) {
+  const { state: s, readOwnedSnapshot, saveMoved, floaters, doBuy, doSetCoachingFocus, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked, doPromote, doSellSenior, academySaveBlocked, doEquipBoot, doUpgradeBoot, gearSaveBlocked } = useWonderkidFactory();
   /* Round 585: the gem ledger, shared with the stadium that earns it. */
   const ledger = useTycoonRewards();
   const [panel, setPanel] = useState<Panel>(null);
   const firstTeamRef = useRevealScroll(panel === 'firstTeam', { enabled: visible });
   const onSnapshotRef = useRef(onSnapshot);
   onSnapshotRef.current = onSnapshot;
-  useEffect(() => { onSnapshotRef.current?.(s); });
+  useEffect(() => { onSnapshotRef.current?.(s, readOwnedSnapshot); });
   /* the rules open themselves exactly once, before first play */
   const [showHelp, setShowHelp] = useState(false);
   useEffect(() => {

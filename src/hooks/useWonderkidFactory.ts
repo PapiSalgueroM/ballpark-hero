@@ -26,10 +26,13 @@ export interface Floater {
   kind: 'sale' | 'find' | 'bad' | 'win';
 }
 
-function readAcademy(): FactoryState {
+function readAcademyBytes(): string | null | undefined {
+  try { return localStorage.getItem(SAVE_KEY); } catch { return undefined; }
+}
+
+function readAcademy(raw: string | null | undefined): FactoryState {
   const now = Date.now();
-  let loaded: FactoryState | null = null;
-  try { loaded = deserialize(localStorage.getItem(SAVE_KEY), now, loadLedger().gearLevel); } catch { loaded = null; }
+  const loaded = deserialize(raw ?? null, now, loadLedger().gearLevel);
   const s = loaded ?? newFactory(now);
   const applied = applyOffline(s, now);
   if (applied > 60) s.scoutProgress = Math.max(s.scoutProgress, 0);
@@ -42,8 +45,12 @@ export function useWonderkidFactory() {
     academyFence.adopt(SAVE_KEY);
     return academyFence;
   });
+  const savedAcademyBytes = useRef<string | null | undefined>(undefined);
   const stateRef = useRef<FactoryState | null>(null);
-  if (stateRef.current === null) stateRef.current = readAcademy();
+  if (stateRef.current === null) {
+    savedAcademyBytes.current = readAcademyBytes();
+    stateRef.current = readAcademy(savedAcademyBytes.current);
+  }
   const [, setVersion] = useState(0);
   const bump = useCallback(() => setVersion(v => v + 1), []);
   const [packSaveBlocked, setPackSaveBlocked] = useState(false);
@@ -59,15 +66,21 @@ export function useWonderkidFactory() {
     return saveMoved.current;
   }, [bump, fence]);
 
+  const readOwnedSnapshot = useCallback(() => {
+    if (saveMoved.current || fence.moved(SAVE_KEY)) return null;
+    const bytes = readAcademyBytes();
+    return bytes !== undefined && bytes === savedAcademyBytes.current ? stateRef.current : null;
+  }, [fence]);
+
   const writeAcademy = useCallback((next: FactoryState, verifyWrite = false): FenceWrite => {
     if (checkMoved()) return 'moved';
+    const bytes = serialize(next);
     const persist = () => {
-      try { localStorage.setItem(SAVE_KEY, serialize(next)); return true; } catch { return false; }
+      try { localStorage.setItem(SAVE_KEY, bytes); return true; } catch { return false; }
     };
-    let saved: string | null | undefined;
-    try { saved = localStorage.getItem(SAVE_KEY); } catch { /* attempt the write */ }
-    if (saved && saved === serialize(next)) return !verifyWrite || persist() ? 'written' : 'failed';
-    const result = fence.write(SAVE_KEY, persist);
+    const saved = readAcademyBytes();
+    const result = saved === bytes ? (!verifyWrite || persist() ? 'written' : 'failed') : fence.write(SAVE_KEY, persist);
+    if (result === 'written') savedAcademyBytes.current = bytes;
     if (result === 'moved') checkMoved();
     return result;
   }, [checkMoved, fence]);
@@ -125,7 +138,8 @@ export function useWonderkidFactory() {
     // A route leaving in this tab can save after the next panel's first render.
     if (fence.moved(SAVE_KEY)) {
       fence.adopt(SAVE_KEY);
-      stateRef.current = readAcademy();
+      savedAcademyBytes.current = readAcademyBytes();
+      stateRef.current = readAcademy(savedAcademyBytes.current);
       bump();
     }
     const iv = window.setInterval(() => {
@@ -287,6 +301,7 @@ export function useWonderkidFactory() {
   return {
     saveMoved: saveMoved.current,
     state: stateRef.current,
+    readOwnedSnapshot,
     floaters,
     doBuy,
     doSetCoachingFocus,

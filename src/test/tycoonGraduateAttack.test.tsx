@@ -1,16 +1,17 @@
-import { act, cleanup, fireEvent, renderHook, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, renderHook, screen, within } from '@testing-library/react';
 import { afterEach, expect, it, vi } from 'vitest';
 import { mountPage } from './dailyReload/harness';
 import { resetMocks } from './dailyReload/mocks';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import StadiumTycoon from '@/pages/StadiumTycoon';
 import { BOOT_IDS } from '@/lib/soccerBootIds';
-import { newLedger, REWARDS_KEY } from '@/lib/tycoonRewards';
+import { balance, GEM_PAY, newLedger, REWARDS_KEY } from '@/lib/tycoonRewards';
+import { fenceKeyOf } from '@/lib/saveFence';
 import {
   AWAY_MATCHDAY_SEC, TYCOON_SAVE_KEY, bookGraduateAttack, deserializeTycoon, goalChancePerMin,
   graduateAttackFixture, newTycoon, oppChancePerMin, playAwayMatchdays, playMinute, serializeTycoon, type TycoonState,
 } from '@/lib/stadiumTycoon';
-import { SAVE_KEY, graduateAttackOptions, newFactory, serialize, squadEdge, type Senior } from '@/lib/wonderkidFactory';
+import { SAVE_KEY, RETIRE_AGE, SENIOR_YEAR_SEC, deserialize, graduateAttackOptions, newFactory, serialize, squadEdge, type Senior } from '@/lib/wonderkidFactory';
 
 const now = 1794085200000;
 const forward: Senior = { id: 'sr-fixture-fw', name: 'Fixture Forward', nation: 'England', pos: 'FW', age: 23, ageClock: 0, rating: 90, potential: 90 };
@@ -33,14 +34,19 @@ function nextFixture() {
 }
 
 function fixtureClock(time = now) {
-  let frame: FrameRequestCallback;
+  let nextId = 0;
+  const frames = new Map<number, FrameRequestCallback>();
   vi.spyOn(Date, 'now').mockReturnValue(time);
   vi.spyOn(performance, 'now').mockReturnValue(0);
   vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
   vi.spyOn(document, 'visibilityState', 'get').mockReturnValue('visible');
-  vi.stubGlobal('requestAnimationFrame', (next: FrameRequestCallback) => { frame = next; return 1; });
-  vi.stubGlobal('cancelAnimationFrame', () => {});
-  return (milliseconds: number) => act(() => { frame(milliseconds); });
+  vi.stubGlobal('requestAnimationFrame', (next: FrameRequestCallback) => { frames.set(++nextId, next); return nextId; });
+  vi.stubGlobal('cancelAnimationFrame', (id: number) => { frames.delete(id); });
+  return (milliseconds: number) => act(() => {
+    const pending = [...frames.values()];
+    frames.clear();
+    for (const frame of pending) frame(milliseconds);
+  });
 }
 
 function refuseStadiumWrites() {
@@ -53,7 +59,7 @@ function refuseStadiumWrites() {
   return () => { refuse = false; };
 }
 
-afterEach(() => { cleanup(); localStorage.clear(); vi.restoreAllMocks(); vi.unstubAllGlobals(); resetMocks(); });
+afterEach(() => { cleanup(); vi.useRealTimers(); localStorage.clear(); vi.restoreAllMocks(); vi.unstubAllGlobals(); resetMocks(); });
 
 it('shifts the actual share from the five capped totals and counts each boot once', () => {
   const boots = { [BOOT_IDS[0]]: 3 };
@@ -131,20 +137,25 @@ it('rechecks the shared academy on booking and only shows a successfully saved b
   expect(screen.getByText('Attacking assignment booked')).toBeVisible();
 });
 
-it.each(['watched', 'away'] as const)('holds the %s result, receipt and reward when its write is refused', mode => {
+it.each(['watched', 'away'] as const)('retries the exact %s result after a refused write, despite a new roll or a sold graduate', mode => {
   const { booked } = nextFixture();
-  playMinute(booked, () => 1, [], { pay: true }, 0.12, resolveForward);
-  booked.minute = 89;
-  booked.goalsFor = 1;
+  if (mode === 'watched') {
+    playMinute(booked, () => 1, [], { pay: true }, 0.12, resolveForward);
+    booked.minute = 89;
+    booked.goalsFor = 1;
+  }
   const frame = fixtureClock();
-  vi.spyOn(Math, 'random').mockReturnValue(0.99);
+  const random = vi.spyOn(Math, 'random').mockReturnValue(0.99);
+  if (mode === 'away') random.mockReturnValueOnce(0);
   const savedAt = mode === 'away' ? now - AWAY_MATCHDAY_SEC * 1000 : now;
   const bytes = serializeTycoon(booked, savedAt);
   const ledger = JSON.stringify(newLedger(586));
   localStorage.setItem(TYCOON_SAVE_KEY, bytes);
   localStorage.setItem(REWARDS_KEY, ledger);
-  refuseStadiumWrites();
-  const { result } = renderHook(() => useStadiumTycoon(() => 0.12, () => [quote()]));
+  localStorage.setItem(SAVE_KEY, serialize(academy()));
+  const allow = refuseStadiumWrites();
+  const readOptions = vi.fn(() => graduateAttackOptions(deserialize(localStorage.getItem(SAVE_KEY), now)!));
+  const { result } = renderHook(() => useStadiumTycoon(() => 0.12, readOptions));
   if (mode === 'watched') frame(2000);
   expect(localStorage.getItem(TYCOON_SAVE_KEY)).toBe(bytes);
   expect(localStorage.getItem(REWARDS_KEY)).toBe(ledger);
@@ -152,4 +163,51 @@ it.each(['watched', 'away'] as const)('holds the %s result, receipt and reward w
   expect(result.current.state.league?.results?.[1]).toBeUndefined();
   expect(result.current.awayTrip).toBeNull();
   expect(result.current.ticketSaveFailed).toBe(true);
+
+  allow();
+  random.mockReturnValue(0);
+  localStorage.setItem(SAVE_KEY, serialize(academy([defender])));
+  act(() => {
+    result.current.doSetTicketPolicy('premium');
+    result.current.doTap(10, 10);
+  });
+  expect(localStorage.getItem(TYCOON_SAVE_KEY)).toBe(bytes);
+  expect(result.current.ticketSaveFailed).toBe(true);
+  const previousReads = readOptions.mock.calls.length;
+  act(() => { result.current.retryTicketSave(); });
+  expect(result.current.ticketSaveFailed).toBe(false);
+  expect(readOptions).toHaveBeenCalledTimes(previousReads);
+  const settled = deserializeTycoon(localStorage.getItem(TYCOON_SAVE_KEY), now)!;
+  expect(settled.league?.results?.[1]).toMatchObject({ gf: 1, ga: 0, graduateAttack: { name: forward.name } });
+  expect(settled.league?.results?.[1].graduateAttack?.share).toBeCloseTo(0.06, 12);
+  expect(result.current.state.league?.matchday).toBe(2);
+  const paidLedger = localStorage.getItem(REWARDS_KEY)!;
+  expect(balance(JSON.parse(paidLedger))).toBe(mode === 'watched' ? GEM_PAY.win : GEM_PAY.awayWin);
+  act(() => { result.current.retryTicketSave(); });
+  expect(localStorage.getItem(REWARDS_KEY)).toBe(paidLedger);
+  expect(result.current.state.league?.results?.filter(row => row.graduateAttack)).toHaveLength(1);
+});
+
+it.each(['live retirement', 'sibling sale'] as const)('uses the authoritative academy at kickoff after %s', async cause => {
+  const { booked } = nextFixture();
+  const frame = fixtureClock();
+  vi.spyOn(Math, 'random').mockReturnValue(0.99);
+  vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+  const senior = cause === 'live retirement' ? { ...forward, age: RETIRE_AGE - 1, ageClock: SENIOR_YEAR_SEC - 0.1 } : forward;
+  localStorage.setItem(SAVE_KEY, serialize(academy([senior, defender])));
+  localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(booked, now));
+  mountPage(<StadiumTycoon />, '/stadium-tycoon');
+  const rooms = await screen.findByRole('group', { name: 'Tycoon rooms' });
+  fireEvent.click(within(rooms).getByRole('button', { name: /Academy/ }));
+  await screen.findByText('First team', { exact: true });
+  if (cause === 'live retirement') {
+    vi.mocked(Date.now).mockReturnValue(now + 250);
+    act(() => { vi.advanceTimersByTime(250); });
+    expect(JSON.parse(localStorage.getItem(SAVE_KEY)!).firstTeam.map((p: Senior) => p.id)).toContain(forward.id);
+  } else {
+    localStorage.setItem(SAVE_KEY, serialize(academy([defender])));
+    localStorage.setItem(fenceKeyOf(SAVE_KEY), '10');
+  }
+  frame(1700);
+  expect(deserializeTycoon(localStorage.getItem(TYCOON_SAVE_KEY), now)?.graduateAttack?.played).toBeNull();
 });
