@@ -687,6 +687,18 @@ for (const width of [320, 390, 430, 1440]) {
     const focusReturned = await footle.evaluate(link => document.activeElement === link);
     say(focusReturned && await cards.count() === total && await close.getAttribute('aria-expanded') === 'true',
       width + 'px Back restores the expanded list and exact game focus');
+    const hub = sport.getByRole('link', { name: 'Soccer hub', exact: true });
+    await sport.getByRole('heading', { level: 2 }).focus();
+    await page.keyboard.press('Tab');
+    say(await hub.evaluate(link => link === document.activeElement && link.getAttribute('href') === '/soccer'),
+      width + 'px the Soccer hub has its own name and is next in the keyboard order');
+    await page.keyboard.press('Enter');
+    await page.waitForURL(url => url.pathname === '/soccer');
+    await page.getByRole('heading', { name: 'Soccer Games', exact: true }).waitFor();
+    await page.goBack();
+    say(await hub.evaluate(link => link === document.activeElement && location.hash === '#sport-soccer')
+      && await cards.count() === total && await close.getAttribute('aria-expanded') === 'true',
+      width + 'px Back from the hub restores the exact anchored link and expanded list');
     await close.click();
     say(await cards.count() === 12 && await open.evaluate(button => button === document.activeElement),
       width + 'px the list folds and focus stays on its control');
