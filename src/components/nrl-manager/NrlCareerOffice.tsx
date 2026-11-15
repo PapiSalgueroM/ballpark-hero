@@ -2051,14 +2051,14 @@ function LeagueRecruitment({ career, onAction, disabled, nextClubId, preferFreeA
   );
 }
 
-function OffseasonFreeAgents({ career, checked, onChange, disabled, primaryRole, open, onToggle, targets, playerId, onTarget }: {
+function OffseasonFreeAgents({ career, checked, onChange, disabled, primaryRole, open, onToggle, targets, playerId, years, onTarget, onYears }: {
   career: NrlCareerState; checked: boolean; onChange: (checked: boolean) => void; disabled: boolean; primaryRole?: NrlPrimaryRoleChange;
   open: boolean; onToggle: (open: boolean) => void; targets: ReturnType<typeof nrlOffseasonFreeAgentTargets>;
-  playerId: string; onTarget: (playerId: string) => void;
+  playerId: string; years: 1 | 2; onTarget: (playerId: string) => void; onYears: (years: 1 | 2) => void;
 }) {
   const target = targets.find(row => row.player.id === playerId);
-  const preview = useMemo(() => open ? nrlOffseasonFreeAgentPreview(career, primaryRole, checked && target ? playerId : undefined) : null,
-    [career, open, primaryRole, checked, playerId, target]);
+  const preview = useMemo(() => open ? nrlOffseasonFreeAgentPreview(career, primaryRole, checked && target ? playerId : undefined, years) : null,
+    [career, open, primaryRole, checked, playerId, target, years]);
   const year = career.season.year + 1;
   return (
     <details className="group mt-3 rounded-xl border border-border bg-background px-3" data-nrl-offseason-free-agents
@@ -2067,7 +2067,7 @@ function OffseasonFreeAgents({ career, checked, onChange, disabled, primaryRole,
         Fill open squad places<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
       </summary>
       {open && <div className="space-y-2 border-t border-border pb-3 pt-2 text-sm">
-        <p className="text-muted-foreground">Your open Top 30 places usually go to academy players. If you stay at this club, you can give affordable free agents one-season deals before turning to the academy. Clubs draw from the same free-agent pool.</p>
+        <p className="text-muted-foreground">Your open Top 30 places usually go to academy players. If you stay at this club, automatic free-agent signings use one-season deals before turning to the academy. Clubs draw from the same free-agent pool.</p>
         {(checked || Boolean(preview?.signings.length)) && (
           <label className="flex min-h-11 items-center gap-2 font-semibold">
             <input type="checkbox" className="h-5 w-5 shrink-0 accent-primary" checked={checked} disabled={disabled}
@@ -2091,7 +2091,27 @@ function OffseasonFreeAgents({ career, checked, onChange, disabled, primaryRole,
             </select>
           </label>
         ) : (preview || !career.retentionPriorityId) && <p className="text-muted-foreground">No unsigned player fits the remaining academy places and cap room.</p>}
-        {target && <p role="status">{target.player.name} will sign for {money(target.contract.salary)} for {year}.</p>}
+        {target && (
+          <>
+            <label className="block space-y-1 font-semibold">
+              <span>Offseason contract term</span>
+              <select className={control} disabled={disabled} value={years} onChange={event => onYears(event.target.value === '2' ? 2 : 1)}>
+                <option value={1}>One season</option>
+                <option value={2}>Two seasons</option>
+              </select>
+            </label>
+            {years === 1 ? <p role="status">{target.player.name} will sign for {money(target.contract.salary)} for {year}.</p>
+              : target.twoYear.ok === false ? <p role="status">Two-season deal unavailable. {target.twoYear.reason}</p>
+              : <>
+                <p role="status">{target.player.name} will sign for {money(target.twoYear.contract.salary)} per season through {target.twoYear.contract.endYear}.</p>
+                <ul aria-label="Two-season cap preview" className="text-muted-foreground">
+                  {target.twoYearCap?.map(cap => (
+                    <li key={cap.year}>{cap.year} · {money(cap.available)} cap room · {cap.openSlots} open squad places</li>
+                  ))}
+                </ul>
+              </>}
+          </>
+        )}
         {playerId && !target && <p role="status">Choose another free agent or clear the target before you start.</p>}
         {preview && preview.signings.length > 0 ? (
           <>
@@ -2142,7 +2162,8 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
     ? freeAgentSelection : undefined;
   const targets = useMemo(() => recruitmentOpen || freeAgentTarget ? nrlOffseasonFreeAgentTargets(career, primaryRole) : [],
     [career, recruitmentOpen, freeAgentTarget, primaryRole]);
-  const unavailableTarget = Boolean(freeAgentTarget && !targets.some(row => row.player.id === freeAgentTarget.playerId));
+  const selectedTarget = targets.find(row => row.player.id === freeAgentTarget?.playerId);
+  const unavailableTarget = Boolean(freeAgentTarget && (!selectedTarget || (freeAgentTarget.years === 2 && !selectedTarget.twoYear.ok)));
   const lineupPreview = useMemo(() => carryLineups && !unavailableTarget ? nrlOffseasonLineupPreview(career, primaryRole, freeAgentTarget) : [],
     [career, carryLineups, primaryRole, freeAgentTarget, unavailableTarget]);
   const preferFreeAgents = career.preferFreeAgents === true;
@@ -2328,8 +2349,10 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
         </p>}
       </section>}
       {(canChooseFreeAgents || preferFreeAgents) && <OffseasonFreeAgents career={career} checked={preferFreeAgents} disabled={disabled} primaryRole={primaryRole}
-        open={recruitmentOpen} onToggle={setRecruitmentOpen} targets={targets} playerId={freeAgentTarget?.playerId ?? ''}
+        open={recruitmentOpen} onToggle={setRecruitmentOpen} targets={targets}
+        playerId={freeAgentTarget?.playerId ?? ''} years={freeAgentTarget?.years ?? 1}
         onTarget={playerId => setFreeAgentSelection(playerId ? { playerId, fromYear: year, clubId } : undefined)}
+        onYears={years => setFreeAgentSelection(selection => selection && { ...selection, years })}
         onChange={enabled => onAction({ type: 'setOffseasonFreeAgents', year, clubId, enabled })} />}
       {showLineupChoice && <div className="mt-3 rounded-xl border border-border bg-background px-3 pb-3 text-sm">
         <label className="flex min-h-11 items-center gap-2 font-semibold">
@@ -2479,7 +2502,7 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
                     <ul aria-label="Recorded free-agent signings" className="divide-y divide-border pb-2 text-sm text-muted-foreground">
                       {record.freeAgentFill.map(signing => (
                         <li key={signing.playerId} className="break-words py-1" data-nrl-fill-player={signing.playerId}>
-                          {signing.playerName} · {signing.role} · {money(signing.annualSalary)}
+                          {signing.playerName} · {signing.role} · {money(signing.annualSalary)}{signing.endYear && ` per season through ${signing.endYear}`}
                         </li>
                       ))}
                     </ul>

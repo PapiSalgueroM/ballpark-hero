@@ -205,3 +205,40 @@ it('lists every eligible free-agent target and commits the chosen player only wh
   expect(within(screen.getByRole('list', { name: 'Recorded free-agent signings' })).getByRole('listitem')).toHaveTextContent(target.player.name);
   expect(raw()).toBe(JSON.stringify(expected));
 });
+
+it('previews two cap years from the normal offseason picker and reopens the signed term after reload', () => {
+  let career = createNrlCareer('storm', 4);
+  while (career.season.phase !== 'complete') career = reduceNrlCareer(career, { type: 'advance' });
+  const target = nrlOffseasonFreeAgentTargets(career).find(row => row.twoYear.ok)!;
+  if (!target.twoYear.ok) throw new Error('Expected an available two-year fixture.');
+  const bytes = JSON.stringify(career);
+  localStorage.setItem(NRL_SAVE_KEY, bytes);
+  localStorage.setItem(fence, '4');
+  const view = show();
+  review();
+  const summary = screen.getByText('Fill open squad places', { exact: true });
+  const details = summary.closest('details')!;
+  fireEvent.click(summary);
+  fireEvent(details, new Event('toggle'));
+  const card = within(details);
+  fireEvent.change(card.getByRole('combobox', { name: 'Free agent to sign' }), { target: { value: target.player.id } });
+  const term = card.getByRole('combobox', { name: 'Offseason contract term' });
+  expect(term).toHaveValue('1');
+  fireEvent.change(term, { target: { value: '2' } });
+  const caps = card.getByRole('list', { name: 'Two-season cap preview' });
+  expect(within(caps).getAllByRole('listitem').map(item => item.textContent)).toEqual(target.twoYearCap!.map(cap =>
+    cap.year + ' · ' + currency.format(cap.available) + ' cap room · ' + cap.openSlots + ' open squad places'));
+  expect(raw()).toBe(bytes);
+  expect(localStorage.getItem(fence)).toBe('4');
+  click('Start 2027');
+  const expected = reduceNrlCareer(career, { type: 'startNextSeason',
+    freeAgentTarget: { fromYear: 2026, clubId: 'storm', playerId: target.player.id, years: 2 } });
+  expect(readNrlCareerSave(raw())).toEqual(expected);
+  expect(localStorage.getItem(fence)).toBe('5');
+  view.unmount();
+  show();
+  review();
+  fireEvent.click(screen.getByText('Free agents signed for 2027 · 1', { exact: true }));
+  expect(screen.getByRole('list', { name: 'Recorded free-agent signings' }))
+    .toHaveTextContent(currency.format(target.twoYear.contract.salary) + ' per season through 2028');
+});

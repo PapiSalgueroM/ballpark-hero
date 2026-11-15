@@ -2528,7 +2528,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Goal-kicking drills add eight percentage points to your conversion chance for one match. They carry the same fitness cost and injury risk as Train.</li>
               <li>In Squad, use Swap starters when two available starters can cover each other’s position. The same players keep the kicking and captaincy duties.</li>
               <li>In Season review, a returning player with eight league starts in a trained position can make it their primary position when you stay.</li>
-              <li>In Season review, pick one affordable free agent from the full unsigned pool for a one-season deal in place of an academy player when you stay.</li>
+              <li>In Season review, pick one free agent from the full unsigned pool in place of an academy player when you stay. Choose one season or check the cap and squad room for two seasons before signing.</li>
               <li>A match knock can put a player out for up to four rounds. Availability in Squad shows the first regular-season match an injured player can return for. The recovery countdown includes byes, and an available player fills the vacant spot.</li>
               <li>In Squad, you can pay once per season for physio to shorten an injury by one round. The player still sits out the current round.</li>
               <li>During a regular-season bye, intensive position training can finish an active course one round sooner. The player ends the bye four fitness points below their usual recovery.</li>
