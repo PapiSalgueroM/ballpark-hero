@@ -1825,7 +1825,8 @@ function careerMatchday(state: NrlCareerState, requestedPlan?: NrlAttackPlan) {
   const ratings = opponentRatings(state);
   const opponentStrength = averagesByClub(ratings);
   const { attackPlan, live } = state.season;
-  const usesPositionRatings = [attackPlan, live?.minute60?.attackPlan, live?.goldenPoint?.finish.attackPlan, requestedPlan]
+  const usesPositionRatings = [attackPlan, live?.minute60?.attackPlan, live?.captainChallenge?.finish.attackPlan,
+    live?.goldenPoint?.finish.attackPlan, requestedPlan]
     .some(isNrlSpecialistPlan);
   return {
     matchday: state.season,
@@ -1981,7 +1982,9 @@ function advanceScheduledRotation(state: NrlCareerState): NrlCareerState {
     : clearScheduledRotation(state);
 }
 
-function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type: 'advance' | 'finishLive' | 'finishMinute60' | 'settleGoldenPoint' }>,
+function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, {
+  type: 'advance' | 'finishLive' | 'finishMinute60' | 'resolveCaptainChallenge' | 'settleGoldenPoint';
+}>,
   intensiveByePlayerId?: string): NrlCareerState {
   const previous = state.season;
   if (judiciaryNeedsResponse(previous) && nrlNextRound(previous).clubMatch) return state;
@@ -2863,7 +2866,7 @@ function settleOriginClubWorkload(state: NrlCareerState, origin: NrlOriginSeries
 
 export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction): NrlCareerState {
   if (state.retired || (state.season.live && action.type !== 'finishLive' && action.type !== 'reachMinute60'
-    && action.type !== 'finishMinute60' && action.type !== 'settleGoldenPoint')) return state;
+    && action.type !== 'finishMinute60' && action.type !== 'resolveCaptainChallenge' && action.type !== 'settleGoldenPoint')) return state;
   if (state.outOfWork && action.type !== 'acceptVacancy' && action.type !== 'retireCareer' && action.type !== 'simulateSeasonOut') return state;
   switch (action.type) {
     case 'resolveJudiciary': {
@@ -3411,6 +3414,7 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
     case 'advance':
     case 'finishLive':
     case 'finishMinute60':
+    case 'resolveCaptainChallenge':
     case 'settleGoldenPoint':
       return advanceCareer(state, action);
     default: {

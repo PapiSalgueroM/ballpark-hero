@@ -26,7 +26,7 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlBenchRotation, nrlCanOpenInterchange, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
-  nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMatchFitness, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlMinute60Returns, nrlNextRound, nrlOnFieldCaptain, nrlOpeningCoverOptions,
+  nrlActingCaptainPhases, nrlCaptainChallengePreview, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMatchFitness, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlMinute60Returns, nrlNextRound, nrlOnFieldCaptain, nrlOpeningCoverOptions,
   nrlLivePhaseScoring,
   nrlQuickInterchangeOptions, nrlQuickInterchangeOutcome, nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_DOMESTIC_SCORING_MODEL, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
@@ -582,13 +582,51 @@ function AttackPlan({ career, onAction, disabled }: {
   );
 }
 
+const captainChallengeClues = {
+  'ball-first': 'thought the ball was loose before the contact.',
+  'contact-first': 'saw a hand on the ball in the tackle.',
+  obscured: 'had a blocked view of how the ball came loose.',
+};
+const captainChallengeResults = {
+  overturned: 'Challenge successful. The Bunker ruled a rival knock-on. Your scrum replaces the opposition penalty.',
+  upheld: 'Challenge unsuccessful. The penalty stands and your side loses its challenge.',
+  inconclusive: 'The replay was inconclusive. The penalty stands and your side retains its challenge.',
+};
+
+function LiveCaptainChallenge({ live, season, onAction, disabled }: {
+  live: NrlLiveHalf; season: NrlManagerState; onAction: (action: NrlAction) => void; disabled: boolean;
+}) {
+  const { year, clubId, round } = season;
+  const { captainId, clue } = nrlCaptainChallengePreview(season)!;
+  const captain = season.squad.find(player => player.id === captainId)?.name ?? 'Your captain';
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => heading.current?.focus({ preventScroll: true }), []);
+  return (
+    <section className="space-y-4" aria-labelledby="nrl-captain-challenge" data-nrl-captain-challenge>
+      <div className="space-y-2 rounded-2xl border border-emerald-500/35 bg-emerald-950 p-4 text-emerald-50 sm:p-6">
+        <h2 ref={heading} id="nrl-captain-challenge" tabIndex={-1} className="font-display text-2xl font-black">Captain’s challenge</h2>
+        <p className="text-sm">The referee has penalised your side for a strip. The opposition are lining up a penalty goal.</p>
+        <p className="text-sm">{captain} {captainChallengeClues[clue]}</p>
+        <p className="text-sm text-emerald-100">Decide before the restart. If the Bunker confirms the ruling, your side loses its challenge.</p>
+      </div>
+      <LiveMatchTimeline live={live} season={season} />
+      <div className="grid gap-3 sm:grid-cols-2">
+        <Button type="button" size="lg" disabled={disabled}
+          onClick={() => onAction({ type: 'resolveCaptainChallenge', year, clubId, round, decision: 'challenge' })}>Challenge ruling</Button>
+        <Button type="button" size="lg" variant="outline" disabled={disabled}
+          onClick={() => onAction({ type: 'resolveCaptainChallenge', year, clubId, round, decision: 'accept' })}>Accept penalty</Button>
+      </div>
+    </section>
+  );
+}
+
 function LiveGoldenPoint({ live, season, onAction, disabled }: {
   live: NrlLiveHalf; season: NrlManagerState;
   onAction: (action: NrlAction) => void; disabled: boolean;
 }) {
   const { year, clubId, round } = season;
   const { fixture } = live;
-  const { score } = live.goldenPoint!;
+  const { score, captainChallenge } = live.goldenPoint!;
   const shortName = useNrlClubName();
   const heading = useRef<HTMLHeadingElement>(null);
   useEffect(() => heading.current?.focus({ preventScroll: true }), []);
@@ -607,6 +645,7 @@ function LiveGoldenPoint({ live, season, onAction, disabled }: {
         <p className="mt-3 text-sm text-emerald-100">The first score wins. If both five-minute periods finish scoreless, the match ends in a draw.</p>
       </div>
       <LiveMatchTimeline live={live} season={season} />
+      {captainChallenge && <p className="text-sm" data-nrl-captain-challenge-result>{captainChallengeResults[captainChallenge.outcome]}</p>}
       <div className="grid gap-3 sm:grid-cols-3">
         {goldenPointApproaches.map(({ id, label, description }) => (
           <div key={id} className="min-w-0 space-y-2">
@@ -788,6 +827,7 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
   const gate = nrlHomeGateReport(career, match);
   const priceLabel = gate && gate.tier.charAt(0).toUpperCase() + gate.tier.slice(1);
   const goldenPoint = match.goldenPoint;
+  const captainChallenge = match.captainChallenge;
   const periods = match.scorePeriods;
   const usedReserves = match.benchUsed?.map(id => season.squad.find(player => player.id === id)?.name).filter(Boolean) ?? [];
   const scorers = match.playerScoring?.lines ?? [];
@@ -880,6 +920,9 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
       {match.minute60FieldGoal !== undefined && <p className="mt-2 text-sm text-muted-foreground" data-nrl-minute60-field-goal>
         {match.minute60FieldGoal === 0 ? 'No field goal in regulation after the setup.'
           : `Field-goal setup produced a ${match.minute60FieldGoal === 1 ? 'one-point' : 'two-point'} kick in regulation.`}
+      </p>}
+      {captainChallenge && <p className="mt-2 text-sm text-muted-foreground" data-nrl-captain-challenge-result>
+        {captainChallengeResults[captainChallenge.outcome]}
       </p>}
       {match.counterStyle && <p className="mt-2 text-sm text-muted-foreground" data-nrl-counter-plan>
         {match.halftimeAttackPlan || match.minute60AttackPlan ? 'Opening counter plan' : 'Counter plan'}: {counterPlanResult[match.counterStyle]}
@@ -1402,6 +1445,9 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
   const { coachRole, coachBonus } = nrlCoachTactics(career.finance);
   const [hold, setHold] = useState<{ year: number; round: number; reserveId: string }>();
   if (season.live) {
+    if (season.live.captainChallenge) return (
+      <LiveCaptainChallenge live={season.live} season={season} onAction={onAction} disabled={disabled} />
+    );
     if (season.live.goldenPoint) return (
       <LiveGoldenPoint live={season.live} season={season} onAction={onAction} disabled={disabled} />
     );
@@ -1692,7 +1738,8 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
       )}
       {phase !== 'complete' && (
         <div className={canPlayLive ? 'grid grid-cols-2 gap-2' : undefined}>
-          {canPlayLive && <Button type="button" size="lg" disabled={disabled || needsJudiciary} onClick={() => onAction({ type: 'startLive', hold: selectedHold })}>
+          {canPlayLive && <Button type="button" size="lg" disabled={disabled || needsJudiciary}
+            onClick={() => onAction({ type: 'startLive', hold: selectedHold, captainChallengeRules: true })}>
             Play Live <ArrowRight aria-hidden="true" />
           </Button>}
           <Button type="button" size="lg" className="w-full" variant={canPlayLive ? 'outline' : 'default'}
@@ -2857,7 +2904,8 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     if (next === before) return false;
     const result = persist(next);
     if (result === 'moved' || result === 'too-large') return false;
-    if (!next.season.live && (action.type === 'finishLive' || action.type === 'finishMinute60' || action.type === 'settleGoldenPoint')) {
+    if (!next.season.live && (action.type === 'finishLive' || action.type === 'finishMinute60'
+      || action.type === 'resolveCaptainChallenge' || action.type === 'settleGoldenPoint')) {
       setShowLiveResult(true);
     }
     const newSeason = next.season.year !== before.season.year;
@@ -2938,6 +2986,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>At half time, choose a Second-half attack plan. If you pause at 60 minutes, Closing attack plan can change it again for the rest of the match.</li>
               <li>Use the live ratings to compare your pending choices with keeping the current setup. The preview includes changes to your tactic and players for the next period of regulation.</li>
               <li>If you are level or two points down at 60 minutes, you can set up a field goal. This trades some late try threat for a better field-goal chance in regulation.</li>
+              <li>In eligible Live regular-season matches, your on-field captain or vice-captain can challenge a late strip ruling before the opposition takes the penalty.</li>
               <li>If a Live regular-season match is level at 80 minutes, choose your golden-point approach. Chase the win opens the game up for both sides. Protect the draw makes it more likely that extra time ends scoreless.</li>
               <li>The Live match timeline shows the scores and scoring types for each completed period. A Golden Point score appears after you choose how to play extra time.</li>
               <li>Open Matchday team sheet in a report with a player record to see the starting 13, the reserves who played and how many points each player scored.</li>
