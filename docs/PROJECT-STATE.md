@@ -5,7 +5,7 @@
 - World XI previews the season odds for Balanced and Protect the point. The latter moves some wins and losses into draws while preserving expected points. The report compares both on the same rolls. A seeded fixture moved from third with 105 points to second with 108. Another moved from second with 111 to third with 110. World XI Balanced and Build Your XI matched the previous build across 480 paired reports.
 - Admin Reports keeps failed status and priority edits reachable when another successful change filters the report out. The retry link reopens the report with the last saved values. The reviewer can try the failed field once the original request settles.
 
-Scoped application types, the production build, 162 focused tests and 13 pinned local browser journeys passed. The 174-route SEO split check, Home fold and download budgets passed. The NRL Team Manager, NBA Perfect Season and World XI guides were refreshed. The archive matches the 360 published boards through November 14 Eastern.
+Scoped application types, the production build, 162 focused tests and 13 pinned local browser journeys passed. The 20 site checks, 174-route SEO split check, Home fold and download budgets passed. The NRL Team Manager, NBA Perfect Season and World XI guides and their search keywords were refreshed. The archive matches the 360 published boards through November 14 Eastern.
 
 ## 2026-11-15: Rugby staff, NHL shutdown assignments, academy sale quotes and Home return focus
 
