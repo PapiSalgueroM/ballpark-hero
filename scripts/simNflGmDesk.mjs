@@ -44,7 +44,7 @@
  *      tile for every expiring man; the deal box says shut only with the desk on
  * Negative controls (SIM_NFL_GM_DESK_CONTROL), each must go red in its check:
  *   coinflip   the summer runs the engine's own offseason, coin flip and all  (2)
- *   shortrookie  a draftee signs the engine's figure, a season short          (2)
+ *   shortrookie  a draftee opens his first season with only three years     (2)
  *   latetrade  the package clock never moves, so deals pass the deadline     (3)
  *   noguard    the trade finder's accept skips the deadline                 (3)
  *   droppick   a pick sent in a package is dropped from the ledger           (4)
@@ -172,7 +172,7 @@ const EDITS = {
   noreview: ['engine', '  if (week < 1 || week > REGULAR_WEEKS || (ratingReview && ratingReview.week >= week)) return;', '  return;'],
   coinflip: ['desk', '  const run = runDeskOffseason(nflContractHost, league, ledger, rng);',
     '  const run = { ok: true as const, engine: nflContractHost.runOffseason(league, rng, team), applied: [] as GmDecision[], picksAdded: [] as number[] };'],
-  shortrookie: ['engine', '        if (p.years === NFL_ROOKIE_DEAL_YEARS + 1) p.years = NFL_ROOKIE_DEAL_YEARS;',
+  shortrookie: ['engine', '        p.years = nflDraftContractYears(p, league.season);',
     '        p.years = NFL_ROOKIE_DEAL_YEARS - 1;'],
   latetrade: ['desk', 'periodsPlayed: nflWeeksPlayed(league), seasonClosed: false },', 'periodsPlayed: 0, seasonClosed: false },'],
   noguard: ['board', '    if (!league || !myTradePiece || deadlineBlock()) return;\n    const lg: LeagueState = JSON.parse(JSON.stringify(league));\n    const pickRound = lastPickRound(lg, o.sweeten);',

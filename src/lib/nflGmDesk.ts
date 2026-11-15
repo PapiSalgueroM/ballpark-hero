@@ -452,12 +452,9 @@ export function nflProposePackage(league: LeagueState, desk: GmDesk, team: strin
   return { verdict: out.verdict, desk: next, arrived, dead };
 }
 
-/**
- * Keep the pending desk draft's saved contract shape until rollover.
- * The summer opens the four-year deal when the rookie's first season starts.
- */
+/** Sign the four-year rookie deal during the draft. */
 export function nflSignDraftee(p: GmPlayer): void {
-  p.years = NFL_ROOKIE_DEAL_YEARS + 1;
+  p.years = NFL_ROOKIE_DEAL_YEARS;
 }
 
 /** Tell the re-sign ledger how men arrived: a trade or a signing in season, or the draft with its round. */

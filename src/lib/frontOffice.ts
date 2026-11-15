@@ -1499,6 +1499,12 @@ export function readNflGameRatings(game: GmGame, team: string): readonly NflRati
   return review.changes;
 }
 
+/** Old paused desk drafts padded first-year deals for the summer's old contract tick. */
+export function nflDraftContractYears(player: GmPlayer, draftSeason: number): number {
+  return player.rookieSeason === draftSeason + 1 && player.years === NFL_ROOKIE_DEAL_YEARS + 1
+    ? NFL_ROOKIE_DEAL_YEARS : player.years;
+}
+
 /* Round 723: userTeam is the club whose tag decision is the GM's own, so the
    CPU policy skips it. Callers without one (the harnesses) run it everywhere. */
 export function runOffseason(league: LeagueState, rng: () => number, userTeam?: string): OffseasonNews {
@@ -1513,8 +1519,7 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
     for (const p of t.players) {
       p.out = 0;
       if (p.rookieSeason === nextSeason) {
-        // The draft happens before rollover. A paused desk draft can carry one extra year for the old tick.
-        if (p.years === NFL_ROOKIE_DEAL_YEARS + 1) p.years = NFL_ROOKIE_DEAL_YEARS;
+        p.years = nflDraftContractYears(p, league.season);
         keep.push(p);
         continue;
       }

@@ -475,7 +475,7 @@ function nflDraft(lg, team, rng, desk) {
     if (!E.consumeDraftPick(mine)) break;
     const p = E.prospectToPlayer(pr, rng);
     if (p && desk) D.nflSignDraftee(p);
-    if (p) mine.players.push(p);
+    if (p) { p.rookieSeason = lg.season + 1; mine.players.push(p); }
     if (p && desk) desk = D.nflNoteArrivals(desk, lg, team, [p.id], 'draft', round);
     cls = cls.filter(x => x.id !== pr.id);
     const nextPicks = picksLeft - 1;
