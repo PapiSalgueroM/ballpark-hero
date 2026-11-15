@@ -63,10 +63,34 @@ function Help({ card }: { card: PlayerCard }) {
   return (
     <div data-cm-card-rules className="rounded-xl border border-border bg-background/40 p-3 space-y-1.5 text-xs text-muted-foreground">
       <p><span className="font-bold text-foreground">Your players:</span> this season counts every competition, and the league line is the league on its own. When a season ends, every man who played for you gets a row, the last {PAST_KEPT} kept. Seasons are kept for the men at your club when a season ends, while they stay.</p>
+      {card.leagueOvr && <p>League OVR history uses saved league reviews. A move from 72 to 73 adds one point to the recorded change.</p>}
       <p><span className="font-bold text-foreground">Other clubs in your league:</span> goals, assists and clean sheets as the league book counted them. The book has no appearances, match ratings or cards for them, so the card shows none.</p>
       <p><span className="font-bold text-foreground">Clubs outside your league:</span> who he is and where he plays. The game keeps goals for your league only.</p>
       <p data-cm-card-example><span className="font-bold text-foreground">Worked example:</span> {p ? 'his' : 'say a man has'} {sum.toFixed(1)} in match ratings over {apps} games, which is an average of {avg(example)}.</p>
     </div>
+  );
+}
+
+function LeagueOvr({ history }: { history: NonNullable<PlayerCard['leagueOvr']> }) {
+  const change = history.changes.reduce((total, row) => total + row.after - row.before, 0);
+  return (
+    <details className="rounded-xl border border-border bg-card">
+      <summary className="min-h-11 cursor-pointer px-3 py-3 text-sm font-bold text-foreground">League OVR history</summary>
+      <div className="space-y-1 px-3 pb-3 text-xs text-muted-foreground">
+        {history.reviewed === 0 ? <p>{history.played ? 'League OVR reviews were not recorded.' : 'No league rounds played yet.'}</p> : <>
+          <p>{history.reviewed} of {history.played} league rounds reviewed</p>
+          {history.changes.length === 0 ? <p>No OVR changes were recorded for this player.</p> : <>
+            <p className="font-semibold text-foreground">Recorded change {change > 0 ? '+' : ''}{change} OVR</p>
+            <ul className="divide-y divide-border/40">
+              {history.changes.map(row => <li key={row.round} className="flex items-start justify-between gap-2 py-1.5">
+                <span className="min-w-0 break-words">Round {row.round} · {row.opponent}</span>
+                <span className="shrink-0 text-foreground">{row.before} to {row.after}</span>
+              </li>)}
+            </ul>
+          </>}
+        </>}
+      </div>
+    </details>
   );
 }
 
@@ -145,6 +169,7 @@ export function PlayerCardScreen({ card: ref, career, onBack }: { card: CardRef;
             </table>}
         </div>
       )}
+      {card.leagueOvr && <LeagueOvr history={card.leagueOvr} />}
       <div className="space-y-1">
         {card.notes.map(n => <p key={n.k} data-cm-card-note={n.k} className="text-xs text-muted-foreground">{noteText(n, card, career)}</p>)}
         <p className="text-xs text-muted-foreground">Every season on this card is one this save played, never his real career.</p>
