@@ -20,6 +20,7 @@
 
 import { roundRobinCalendar, tableOrder, mulberry32, hash32 } from '@/lib/leagueCore';
 import { goalLambda, LAW } from '@/lib/season/law';
+import type { GraduateAttackOption } from '@/lib/wonderkidFactory';
 
 export interface TycoonTrack {
   id: string;
@@ -484,6 +485,7 @@ export interface TycoonState {
   v: number;
   matchPlan?: MatchPlan & { match: number };
   scouting?: MatchScouting & { match: number };
+  graduateAttack?: GraduateAttackBooking;
   /** Absence is the original Standard offer. A new ground starts Standard. */
   ticketPolicy?: 'community' | 'premium';
   money: number;
@@ -731,7 +733,7 @@ export interface TycoonLeague {
   baseMatchNo?: number;
   /** Index 0 is you. */
   clubs: LeagueClub[];
-  results?: { day: number; gf: number; ga: number; attendance?: number; plan?: MatchPlan; scouting?: MatchScouting }[];
+  results?: { day: number; gf: number; ga: number; attendance?: number; plan?: MatchPlan; scouting?: MatchScouting; graduateAttack?: GraduateAttackReceipt }[];
   sponsor?: StadiumSponsorDeal;
   /** An older save's match in progress when it first loaded: played to full
    *  time against this name, outside the table, before matchday 1. */
@@ -981,10 +983,12 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
   const matchday = lg.matchday + 1;
   const plan = st.matchPlan;
   const scouting = activeMatchScouting(st);
+  const graduate = activeGraduateAttack(st);
   const result = {
     day: matchday, gf, ga, attendance: crowdAtFullTime,
     ...(plan ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
     ...(scouting ? { scouting: { fee: scouting.fee, reduction: scouting.reduction } } : {}),
+    ...(graduate && graduate.played !== undefined ? { graduateAttack: { name: graduate.name, share: graduate.played?.attack ?? 0 } } : {}),
   };
   const played: TycoonLeague = { ...lg, clubs, matchday, results: [...(lg.results ?? []), result] };
   if (lg.sponsor?.kind === 'attendance' && crowdAtFullTime >= lg.sponsor.target) {
@@ -1254,7 +1258,7 @@ function validScouting(value: unknown): value is MatchScouting {
     && scout.reduction === SCOUTING_REDUCTION;
 }
 
-function scoutingRound(s: TycoonState, match: number): number | null {
+function knownLeagueRound(s: TycoonState, match: number): number | null {
   const lg = s.league;
   if (!lg || !Number.isSafeInteger(match)) return null;
   const offset = match - s.matchNo;
@@ -1266,7 +1270,7 @@ function scoutingRound(s: TycoonState, match: number): number | null {
 export function matchScoutingDetails(s: TycoonState) {
   const lg = s.league;
   const match = s.scouting?.match ?? s.matchNo + 1;
-  const round = scoutingRound(s, match);
+  const round = knownLeagueRound(s, match);
   if (!lg || round === null) return null;
   const fee = s.scouting?.fee
     ?? Math.min(Number.MAX_SAFE_INTEGER, Math.max(1, Math.round(unboostedIncomePerSec(s) * SCOUTING_COST_SEC)));
@@ -1285,8 +1289,42 @@ function activeMatchScouting(s: TycoonState): MatchScouting | undefined {
   return s.league && !s.league.carryover && s.scouting?.match === s.matchNo ? s.scouting : undefined;
 }
 
+type GraduateAttackEffect = Pick<GraduateAttackOption, 'attack' | 'defence'>;
+interface GraduateAttackBooking { match: number; playerId: string; name: string; played?: GraduateAttackEffect | null }
+interface GraduateAttackReceipt { name: string; share: number }
+type ResolveGraduate = (playerId: string) => GraduateAttackOption | undefined;
+
+const validGraduateName = (name: unknown): name is string => typeof name === 'string' && name.trim().length > 0 && name.length <= 100;
+const validGraduateId = (id: unknown): id is string => typeof id === 'string' && id.length > 0 && id.length <= 100 && !/\s/.test(id);
+const validGraduateShare = (share: unknown): share is number => typeof share === 'number' && share >= 0 && share <= 0.078 + 1e-9;
+
+function validGraduateEffect(value: unknown): value is GraduateAttackEffect {
+  if (!value || typeof value !== 'object') return false;
+  const { attack, defence } = value as Partial<GraduateAttackEffect>;
+  return validGraduateShare(attack) && attack > 0 && typeof defence === 'number' && defence >= 0 && attack + defence <= 0.4 + 1e-9;
+}
+
+export function graduateAttackFixture(s: TycoonState) {
+  const match = s.graduateAttack?.match ?? s.matchNo + 1;
+  const round = knownLeagueRound(s, match);
+  const league = s.league;
+  return league && round !== null ? { match, day: round + 1, opponent: league.clubs[yourOpponentIndex(league, round)].name } : null;
+}
+
+export function bookGraduateAttack(s: TycoonState, ground: number, match: number, option: GraduateAttackOption): TycoonState {
+  if (s.rep !== ground || s.graduateAttack || graduateAttackFixture(s)?.match !== match
+    || !validGraduateId(option.playerId) || !validGraduateName(option.name) || !validGraduateEffect(option)) return s;
+  return { ...s, graduateAttack: { match, playerId: option.playerId, name: option.name } };
+}
+
+function activeGraduateAttack(s: TycoonState): GraduateAttackBooking | undefined {
+  return s.league && !s.league.carryover && s.graduateAttack?.match === s.matchNo ? s.graduateAttack : undefined;
+}
+
 export function goalChancePerMin(s: TycoonState): number {
-  return goalLambda(matchGap(s), LAW.home) / 90;
+  const chance = goalLambda(matchGap(s), LAW.home) / 90;
+  const attack = activeGraduateAttack(s)?.played?.attack;
+  return attack ? chance * (1 + attack) : chance;
 }
 
 /** Chance the opponent scores in one minute. Round 1532: the law's expected
@@ -1295,7 +1333,7 @@ export function goalChancePerMin(s: TycoonState): number {
 export function oppChancePerMin(s: TycoonState, edge = 0): number {
   // Round 586: the first team's edge takes exactly its share off the rival's
   // expected goals, with no floor after it, so every step of it counts.
-  const defence = Number.isFinite(edge) ? Math.max(0, Math.min(0.40, edge)) : 0;
+  const defence = activeGraduateAttack(s)?.played?.defence ?? (Number.isFinite(edge) ? Math.max(0, Math.min(0.40, edge)) : 0);
   const chance = goalLambda(-matchGap(s), LAW.away) * (1 - defence) / 90;
   const scout = activeMatchScouting(s);
   return scout ? chance * (1 - scout.reduction / 100) : chance;
@@ -1465,7 +1503,14 @@ export interface TickEvent {
  * the goals, the result, the streak, the fans a win brings and the table all
  * happen, and no money moves: no goal bonus and no win bonus.
  */
-export function playMinute(st: TycoonState, roll: () => number, events: TickEvent[], opts: { pay: boolean }, edge = 0): void {
+export function playMinute(st: TycoonState, roll: () => number, events: TickEvent[], opts: { pay: boolean }, edge = 0, resolveGraduate?: ResolveGraduate): void {
+  const graduate = activeGraduateAttack(st);
+  if (st.minute === 0 && graduate && graduate.played === undefined) {
+    const chosen = resolveGraduate?.(graduate.playerId);
+    st.graduateAttack = chosen && chosen.playerId === graduate.playerId && validGraduateName(chosen.name) && validGraduateEffect(chosen)
+      ? { ...graduate, name: chosen.name, played: { attack: chosen.attack, defence: chosen.defence } }
+      : { ...graduate, played: null };
+  }
   st.minute += 1;
   if (st.minute <= 90) {
     const pace = st.matchPlan ? MATCH_PLANS[st.matchPlan.kind].pace : 1;
@@ -1521,6 +1566,7 @@ export function playMinute(st: TycoonState, roll: () => number, events: TickEven
       }
     }
     if (st.scouting?.match === st.matchNo) delete st.scouting;
+    if (st.graduateAttack?.match === st.matchNo) delete st.graduateAttack;
     st.matchNo += 1;
     // The completed fixture keeps the crowd and rewards from before opening.
     if (st.standsOpenAfterMatch === st.matchNo) {
@@ -1564,7 +1610,7 @@ export function awayMatchdaysPlayable(s: TycoonState, count: number): number {
  *  doctored totalMatches of 2^53 does not change when one is added, and the
  *  review found away play then spilling into the final matchday). After each
  *  one the milestones and badges it reached settle as they would have live. */
-export function playAwayMatchdays(s: TycoonState, count: number, roll: () => number, edge = 0): { state: TycoonState; results: AwayMatch[]; events: TickEvent[] } {
+export function playAwayMatchdays(s: TycoonState, count: number, roll: () => number, edge = 0, resolveGraduate?: ResolveGraduate): { state: TycoonState; results: AwayMatch[]; events: TickEvent[] } {
   const st: TycoonState = { ...s, levels: { ...s.levels } };
   const events: TickEvent[] = [];
   const results: AwayMatch[] = [];
@@ -1574,7 +1620,7 @@ export function playAwayMatchdays(s: TycoonState, count: number, roll: () => num
     let result: TickEvent['kind'] | null = null;
     for (let guard = 0; guard <= 90 && result === null; guard += 1) {
       const k = events.length;
-      playMinute(st, roll, events, { pay: false }, edge);
+      playMinute(st, roll, events, { pay: false }, edge, resolveGraduate);
       for (let j = k; j < events.length; j += 1) {
         if (events[j].kind === 'win' || events[j].kind === 'draw' || events[j].kind === 'loss') result = events[j].kind;
       }
@@ -1590,7 +1636,7 @@ export function playAwayMatchdays(s: TycoonState, count: number, roll: () => num
  * passes Math.random, the harness passes a seeded stream). Match minutes run
  * at 1.4 real seconds each, so a full match is about two minutes of play.
  */
-export function tick(s: TycoonState, dt: number, roll: () => number, edge = 0): { state: TycoonState; events: TickEvent[] } {
+export function tick(s: TycoonState, dt: number, roll: () => number, edge = 0, resolveGraduate?: ResolveGraduate): { state: TycoonState; events: TickEvent[] } {
   const events: TickEvent[] = [];
   let st = { ...s, levels: { ...s.levels } };
 
@@ -1638,7 +1684,7 @@ export function tick(s: TycoonState, dt: number, roll: () => number, edge = 0): 
   // A huge dt (returning from background) fast-forwards at most one match.
   if (minutes > 120) { minutes = 120; st.matchSec = 0; }
   minutes = Math.max(0, minutes);
-  for (let i = 0; i < minutes; i++) playMinute(st, roll, events, { pay: true }, edge);
+  for (let i = 0; i < minutes; i++) playMinute(st, roll, events, { pay: true }, edge, resolveGraduate);
   settleFirsts(st, events);
   return { state: st, events };
 }
@@ -1833,11 +1879,13 @@ function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: n
       return true;
     }) && (['w', 'd', 'l', 'gf', 'ga'] as const).every(key => first === 1 ? tally[key] === own[key] : tally[key] <= own[key])) {
       const maxSeats = seatCount(trackById('stands').maxLevel);
-      out.results = r.results.map(({ day, gf, ga, attendance, plan, scouting }) => ({
+      out.results = r.results.map(({ day, gf, ga, attendance, plan, scouting, graduateAttack }) => ({
         day, gf, ga,
         ...(typeof attendance === 'number' && Number.isInteger(attendance) && attendance >= 0 && attendance <= maxSeats ? { attendance } : {}),
         ...(validMatchPlan(plan) ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
         ...(validScouting(scouting) ? { scouting: { fee: scouting.fee, reduction: scouting.reduction } } : {}),
+        ...(graduateAttack && validGraduateName(graduateAttack.name) && validGraduateShare(graduateAttack.share)
+          ? { graduateAttack: { name: graduateAttack.name, share: graduateAttack.share } } : {}),
       }));
     }
   }
@@ -1973,8 +2021,10 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
     const rawLeague = (p as { league?: unknown }).league;
     const plan = s.matchPlan;
     const scouting = s.scouting;
+    const graduate = s.graduateAttack;
     delete s.matchPlan;
     delete s.scouting;
+    delete s.graduateAttack;
     delete s.lastCompletedLeague;
     delete s.completedLeagueHistory;
     if (rawLeague === undefined) {
@@ -2018,8 +2068,19 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
       if (activeLeague && !activeLeague.carryover && validMatchPlan(plan) && plan.match === s.matchNo && plan.minute <= s.minute) {
         s.matchPlan = { match: plan.match, minute: plan.minute, kind: plan.kind };
       }
-      if (activeLeague && validScouting(scouting) && scoutingRound(s, scouting.match) !== null) {
+      if (activeLeague && validScouting(scouting) && knownLeagueRound(s, scouting.match) !== null) {
         s.scouting = { match: scouting.match, fee: scouting.fee, reduction: scouting.reduction };
+      }
+      if (activeLeague && graduate && knownLeagueRound(s, graduate.match) !== null
+        && validGraduateId(graduate.playerId) && validGraduateName(graduate.name)) {
+        const { match, playerId, name, played } = graduate;
+        if (match > s.matchNo || s.minute === 0) {
+          if (played === undefined) s.graduateAttack = { match, playerId, name };
+        } else if (played === null) {
+          s.graduateAttack = { match, playerId, name, played };
+        } else if (validGraduateEffect(played)) {
+          s.graduateAttack = { match, playerId, name, played: { attack: played.attack, defence: played.defence } };
+        }
       }
     }
     return s;

@@ -43,7 +43,7 @@ import {
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
   totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC, yourOpponentIndex, type TycoonLeague,
   GOAL_BONUS_SEC, WIN_BONUS_SEC, PROMOTION_BONUS_SEC, scoringFacts,
-  canSetMatchPlan, MATCH_PLANS, MATCH_PLAN_END, SCOUTING_REDUCTION, matchScoutingDetails,
+  canSetMatchPlan, MATCH_PLANS, MATCH_PLAN_END, SCOUTING_REDUCTION, matchScoutingDetails, graduateAttackFixture,
   STADIUM_SPONSORS, stadiumSponsorOffers, stadiumSponsorPayout,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
@@ -57,8 +57,8 @@ import { useTycoonRewards } from '@/hooks/useTycoonRewards';
 import { balance, GEM_PAY, loadLedger } from '@/lib/tycoonRewards';
 import type { TapFx } from '@/components/tycoon/TycoonPitch';
 import type { AcademyStatus, Room } from '@/lib/tycoonRooms';
-import { deserialize as deserializeAcademy, applyOffline as applyAcademyOffline, SAVE_KEY as ACADEMY_SAVE_KEY, squadEdge } from '@/lib/wonderkidFactory';
-import type { FactoryState } from '@/lib/wonderkidFactory';
+import { deserialize as deserializeAcademy, applyOffline as applyAcademyOffline, SAVE_KEY as ACADEMY_SAVE_KEY, graduateAttackOptions, squadEdge } from '@/lib/wonderkidFactory';
+import type { FactoryState, GearLevels, GraduateAttackOption } from '@/lib/wonderkidFactory';
 import { OVERLAY_ABOVE_BANNER, boxInsideOverlay } from '@/components/game/aboveConsentBanner';
 
 const AcademyPanel = lazy(() => import('@/components/tycoon/AcademyPanel'));
@@ -98,20 +98,26 @@ const CONFETTI_COLORS = ['#22c55e', '#eab308', '#3b82f6', '#ef4444', '#a855f7', 
 /** Round 583: the Stadium tab's office panels, one open at a time. */
 type OfficePanel = 'upgrades' | 'tickets' | 'payroll' | 'ach' | 'legacy' | 'stats';
 
+function readAcademySnapshot(gear: GearLevels) {
+  try {
+    const now = Date.now();
+    const snapshot = deserializeAcademy(localStorage.getItem(ACADEMY_SAVE_KEY), now, gear);
+    if (snapshot) applyAcademyOffline(snapshot, now);
+    return snapshot;
+  } catch { return null; }
+}
+
 export default function StadiumTycoon() {
-  const [savedAcademy] = useState(() => {
-    try {
-      const now = Date.now();
-      const snapshot = deserializeAcademy(localStorage.getItem(ACADEMY_SAVE_KEY), now, loadLedger().gearLevel);
-      if (snapshot) applyAcademyOffline(snapshot, now);
-      return snapshot;
-    }
-    catch { return null; }
-  });
+  const [savedAcademy] = useState(() => readAcademySnapshot(loadLedger().gearLevel));
   const academyRef = useRef(savedAcademy);
   const getEdge = useCallback(() => academyRef.current ? squadEdge(academyRef.current, loadLedger().gearLevel) : 0, []);
+  const getAttackOptions = useCallback(() => {
+    const gear = loadLedger().gearLevel;
+    const academy = readAcademySnapshot(gear);
+    return academy ? graduateAttackOptions(academy, gear) : [];
+  }, []);
   const onAcademySnapshot = useCallback((snapshot: FactoryState) => { academyRef.current = snapshot; }, []);
-  const g = useStadiumTycoon(getEdge);
+  const g = useStadiumTycoon(getEdge, getAttackOptions);
   const [room, setRoom] = useState<Room>('stadium');
   /* A returning first team keeps its clock even before the Academy tab opens. */
   const [academyOpened, setAcademyOpened] = useState(() => Boolean(savedAcademy?.firstTeam?.length));
@@ -185,7 +191,8 @@ export default function StadiumTycoon() {
           </div>
         )}
         <StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />
-        <LeagueRoom g={g} visible={room === 'league'} />
+        <LeagueRoom g={g} visible={room === 'league'} attackOptions={room === 'league' && academyRef.current
+          ? graduateAttackOptions(academyRef.current, loadLedger().gearLevel) : []} />
         {academyOpened && (
           <Suspense fallback={<div className="h-40" />}>
             <AcademyPanel stylesReady visible={room === 'academy'} onStatus={setAcademyStatus} onSnapshot={onAcademySnapshot} />
@@ -295,6 +302,8 @@ function helpFacts() {
   };
 }
 
+const attackShareLabel = (share: number) => share < 0.0005 ? '<0.1' : (share * 100).toFixed(1);
+
 export function SeasonMatchResults({ league, current = false }: { league: TycoonLeague; current?: boolean }) {
   const results = league.results ?? [];
   const crowdTarget = league.sponsor?.kind === 'attendance' ? league.sponsor.target : undefined;
@@ -305,7 +314,7 @@ export function SeasonMatchResults({ league, current = false }: { league: Tycoon
     {results.length === 0 ? <p className="pb-2 text-muted-foreground">Scores for these matchdays were not recorded.</p> : <>
       {results.length < league.matchday && <p className="pb-2 text-muted-foreground">Earlier scores were not recorded.</p>}
       <ol className="space-y-2 pb-3">
-        {results.map(({ day, gf, ga, attendance, plan, scouting }) => <li key={day} className="flex items-baseline justify-between gap-2">
+        {results.map(({ day, gf, ga, attendance, plan, scouting, graduateAttack }) => <li key={day} className="flex items-baseline justify-between gap-2">
           <div>
             <span>Matchday {day} · {league.clubs[yourOpponentIndex(league, day - 1)].name}</span>
             {attendance !== undefined && <span className="block text-muted-foreground">
@@ -314,6 +323,11 @@ export function SeasonMatchResults({ league, current = false }: { league: Tycoon
             {plan && <span className="block text-muted-foreground">{MATCH_PLANS[plan.kind].label} from {plan.minute}′</span>}
             {scouting && <span className="block text-muted-foreground">
               Scouting · {fmtMoney(scouting.fee)} paid · {scouting.reduction}% lower opponent scoring chance
+            </span>}
+            {graduateAttack && <span className="block text-muted-foreground">
+              {graduateAttack.share > 0
+                ? `${graduateAttack.name} in attack · +${attackShareLabel(graduateAttack.share)}% own scoring chance · gave up ${attackShareLabel(graduateAttack.share)} percentage points of defensive edge`
+                : `${graduateAttack.name} was unavailable at kickoff. The attacking assignment went unused.`}
             </span>}
           </div>
           <span className="shrink-0 font-bold tabular-nums">{gf}-{ga}</span>
@@ -398,7 +412,7 @@ export function LatestSeasonReview({ last, history }: { last: TycoonLeague; hist
 /* Round 582: the league. The table through Club Manager's own card, today's
    fixture, and the club name picked from the generated banks. Never the
    default tab, so none of it reaches a snapshot. */
-function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; visible: boolean }) {
+function LeagueRoom({ g, visible, attackOptions }: { g: ReturnType<typeof useStadiumTycoon>; visible: boolean; attackOptions: GraduateAttackOption[] }) {
   if (!visible) return null;
   const s = g.state;
   const lg = s.league;
@@ -413,6 +427,7 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
   const sponsor = lg.sponsor;
   const offers = !sponsor && preseason ? stadiumSponsorOffers(s, lg) : null;
   const scouting = matchScoutingDetails(s);
+  const attackFixture = graduateAttackFixture(s);
   return (
     <div data-league-room className="space-y-3 mb-3">
       <div className="rounded-xl border border-border bg-card px-3 py-2 text-xs text-muted-foreground">
@@ -436,6 +451,22 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
             onClick={() => g.doBookScouting(s.rep, scouting.match, scouting.fee)}>
             Book scouting · {fmtMoney(scouting.fee)}
           </button>
+        </>}
+      </details>}
+      {attackFixture && (s.graduateAttack || attackOptions.length > 0) && <details className="rounded-xl border border-border bg-card px-3 text-xs">
+        <summary className="min-h-11 cursor-pointer py-3 font-bold">{s.graduateAttack ? 'Attacking assignment booked' : 'Graduate in attack'}</summary>
+        <p className="font-medium">Matchday {attackFixture.day} vs {attackFixture.opponent}</p>
+        {s.graduateAttack ? <p className="pb-3">{s.graduateAttack.name}{s.graduateAttack.played === null ? ' was unavailable at kickoff.' : ' in attack'}</p> : <>
+          <p className="mt-1 pb-2 text-muted-foreground">Move one forward’s defensive contribution to your scoring chance for this fixture. The first team is checked at kickoff.</p>
+          {g.graduateAttackError && <p role="alert" className="pb-2 text-destructive">{g.graduateAttackError}</p>}
+          <div className="grid gap-2 pb-3">
+            {attackOptions.map(option => <button key={option.playerId} type="button" aria-label={`Start ${option.name} in attack`}
+              onClick={() => g.doBookGraduateAttack(s.rep, attackFixture.match, option.playerId)}
+              className="min-h-11 rounded-lg border border-border bg-background px-3 py-2 text-left">
+              <span className="block font-bold">Start {option.name} in attack</span>
+              <span className="text-muted-foreground">+{attackShareLabel(option.attack)}% own scoring chance · {attackShareLabel(option.attack)} percentage points less defensive edge</span>
+            </button>)}
+          </div>
         </>}
       </details>}
       <SeasonMatchResults league={lg} current />

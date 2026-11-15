@@ -18,8 +18,10 @@ import {
   awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
   setPieceOffer, beginSetPiece, awardSetPieceGoal,
   setTicketPolicy, setMatchPlan, matchPlanForecast, signStadiumSponsor, bookMatchScouting, bookStandsConstruction,
+  bookGraduateAttack,
 } from '@/lib/stadiumTycoon';
 import type { GoldenKind, AwayMatch, SetPieceOffer, TicketPolicy, MatchPlanKind, StadiumSponsor } from '@/lib/stadiumTycoon';
+import type { GraduateAttackOption } from '@/lib/wonderkidFactory';
 
 /** Round 162: a golden whistle drifting across the pitch, waiting to be
  *  caught. Purely presentational until the tap: the engine only hears about
@@ -69,9 +71,12 @@ export interface AwayTrip {
   standing: { position: number; clubs: number; left: number } | null;
 }
 
-export function useStadiumTycoon(getEdge?: () => number) {
+export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () => GraduateAttackOption[]) {
   const getEdgeRef = useRef(getEdge);
   getEdgeRef.current = getEdge;
+  const getAttackOptionsRef = useRef(getAttackOptions);
+  getAttackOptionsRef.current = getAttackOptions;
+  const resolveGraduate = useCallback((id: string) => getAttackOptionsRef.current?.().find(option => option.playerId === id), []);
   const savedBytes = useRef<string | null>(null);
   const [state, setState] = useState<TycoonState>(() => {
     const now = Date.now();
@@ -103,6 +108,8 @@ export function useStadiumTycoon(getEdge?: () => number) {
   const [setPieceError, setSetPieceError] = useState<string | null>(null);
   const [gearSaveBlocked, setGearSaveBlocked] = useState(false);
   const [ticketSaveFailed, setTicketSaveFailed] = useState(false);
+  const graduateSaveBlocked = useRef<'watched' | 'away' | null>(null);
+  const [graduateAttackError, setGraduateAttackError] = useState<{ ground: number; match: number; message: string } | null>(null);
   const [sponsorSaveError, setSponsorSaveError] = useState<{ ground: number; season: number } | null>(null);
   const [matchPlanError, setMatchPlanError] = useState<number | null>(null);
   const [scoutingSaveError, setScoutingSaveError] = useState<{ ground: number; match: number } | null>(null);
@@ -144,7 +151,6 @@ export function useStadiumTycoon(getEdge?: () => number) {
     if (result !== 'moved') setTicketSaveFailed(result === 'failed');
     return result;
   }, [writeStadium]);
-  const retryTicketSave = useCallback(() => saveTicketState(stateRef.current), [saveTicketState]);
   const goldenRef = useRef(golden);
   goldenRef.current = golden;
 
@@ -183,10 +189,11 @@ export function useStadiumTycoon(getEdge?: () => number) {
      paid, and the difference gone for good. */
   const paidUntilRef = useRef(state.savedAt);
   const settleAway = useCallback(() => {
-    if (checkSaveMoved()) return;
+    if (checkSaveMoved() || graduateSaveBlocked.current === 'watched') return;
     const now = Date.now();
     const cur = stateRef.current;
-    const trip = { ...cur, savedAt: paidUntilRef.current };
+    const previousPaidUntil = paidUntilRef.current;
+    const trip = { ...cur, savedAt: previousPaidUntil };
     const pay = offlineEarnings(trip, now);
     /* Round 584: a matchday for every half hour of the same trip the pay counts.
        Played after the pay is worked out, so the results cannot move it. */
@@ -196,10 +203,18 @@ export function useStadiumTycoon(getEdge?: () => number) {
        matchdays, so the pay alone cannot gate the settle. */
     if (!(pay > 0) && matchdays === 0) return;
     const paid = { ...cur, money: cur.money + Math.max(0, pay), lifetime: cur.lifetime + Math.max(0, pay), savedAt: now };
-    const away = matchdays > 0 ? playAwayMatchdays(paid, matchdays, Math.random, getEdgeRef.current?.() ?? 0) : null;
+    const away = matchdays > 0 ? playAwayMatchdays(paid, matchdays, Math.random, getEdgeRef.current?.() ?? 0, resolveGraduate) : null;
     const next = away ? away.state : paid;
     // Bank it straight away and leave another tab's matches out of the rewards ledger.
-    if (writeStadium(next, now) === 'moved') return;
+    const settlesGraduate = cur.graduateAttack && next.matchNo > cur.graduateAttack.match;
+    const saved = settlesGraduate ? saveTicketState(next, now) : writeStadium(next, now);
+    if (saved === 'moved') return;
+    if (settlesGraduate && saved === 'failed') {
+      paidUntilRef.current = previousPaidUntil;
+      graduateSaveBlocked.current = 'away';
+      return;
+    }
+    if (graduateSaveBlocked.current === 'away') graduateSaveBlocked.current = null;
     setAwayPay(Math.max(0, pay));
     const lg = away?.state.league;
     /* Round 585: an away win earns its gem, credited once per match. */
@@ -219,7 +234,14 @@ export function useStadiumTycoon(getEdge?: () => number) {
         : null,
     } : null);
     commit(next);
-  }, [checkSaveMoved, writeStadium, commit]);
+  }, [checkSaveMoved, writeStadium, saveTicketState, resolveGraduate, commit]);
+
+  const retryTicketSave = useCallback(() => {
+    if (graduateSaveBlocked.current === 'away') return settleAway();
+    const result = saveTicketState(stateRef.current);
+    if (result === 'written') graduateSaveBlocked.current = null;
+    return result;
+  }, [settleAway, saveTicketState]);
 
   // The settlement for the time before this mount, before the loop starts.
   useEffect(() => {
@@ -259,6 +281,10 @@ export function useStadiumTycoon(getEdge?: () => number) {
       release();
       const dt = Math.min(2, (t - last) / 1000);
       last = t;
+      if (graduateSaveBlocked.current) {
+        raf = requestAnimationFrame(step);
+        return;
+      }
       acc += dt;
       sinceSave += dt;
       if (acc >= 0.2) {
@@ -267,10 +293,22 @@ export function useStadiumTycoon(getEdge?: () => number) {
         acc = 0;
         // Round 439: the loop has now paid for these seconds, so the away
         // settle must not bill for them again.
-        paidUntilRef.current += use * 1000;
         const before = stateRef.current;
         const playedDivision = before.league?.division;
-        const { state: next, events } = tick(before, use, Math.random, getEdgeRef.current?.() ?? 0);
+        const { state: next, events } = tick(before, use, Math.random, getEdgeRef.current?.() ?? 0, resolveGraduate);
+        const graduate = before.graduateAttack;
+        const graduateBoundary = graduate && (next.matchNo > graduate.match || (graduate.played === undefined && next.graduateAttack?.played !== undefined));
+        if (graduateBoundary) {
+          const saved = saveTicketState(next);
+          if (saved === 'moved') return;
+          if (saved === 'failed') {
+            graduateSaveBlocked.current = 'watched';
+            raf = requestAnimationFrame(step);
+            return;
+          }
+          sinceSave = 0;
+        }
+        paidUntilRef.current += use * 1000;
         stateRef.current = next;
         for (const e of events) reactToEvent(e);
         /* Round 585: a watched full time earns its gems, once, keyed on the
@@ -282,7 +320,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
           const openedStands = before.standsOpenAfterMatch !== undefined && next.standsOpenAfterMatch === undefined;
           if (season || openedStands) {
             // Save completed construction at full time, and the final table before a title can award gear.
-            const saved = saveTicketState(next);
+            const saved = graduateBoundary ? 'written' : saveTicketState(next);
             if (saved === 'moved') return;
             if (season?.kind === 'title') {
               allowGear = saved === 'written';
@@ -366,7 +404,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
     };
     raf = requestAnimationFrame(step);
     const saveNow = () => {
-      saveTicketState(stateRef.current);
+      if (!graduateSaveBlocked.current) saveTicketState(stateRef.current);
     };
     /* Round 439: hiding banks the save, coming back settles the hours. The
        frame clock restarts on the way back in so the return frame pays for
@@ -392,7 +430,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
       window.removeEventListener('storage', onStorage);
       saveNow();
     };
-  }, [pushFloater, settleAway, saveTicketState, checkSaveMoved]);
+  }, [pushFloater, settleAway, saveTicketState, checkSaveMoved, resolveGraduate]);
 
   /* Round 195: the idle game counts as playing TODAY. One unscored mark
      per session, on the first meaningful action (a tap, a purchase, a
@@ -458,6 +496,26 @@ export function useStadiumTycoon(getEdge?: () => number) {
     commit(next);
     markSessionPlay();
   }, [commit, markSessionPlay, writeStadium]);
+
+  const doBookGraduateAttack = useCallback((ground: number, match: number, playerId: string) => {
+    if (document.hidden || graduateSaveBlocked.current || checkSaveMoved()) return;
+    const option = resolveGraduate(playerId);
+    if (!option) {
+      setGraduateAttackError({ ground, match, message: 'That forward is no longer available. Reload to see the latest first team.' });
+      return;
+    }
+    const before = stateRef.current;
+    const next = bookGraduateAttack(before, ground, match, option);
+    if (next === before) return;
+    const saved = writeStadium(next);
+    if (saved === 'written') {
+      setGraduateAttackError(null);
+      commit(next);
+      markSessionPlay();
+    } else if (saved === 'failed') {
+      setGraduateAttackError({ ground, match, message: 'Could not save the attacking assignment. Try again.' });
+    }
+  }, [checkSaveMoved, commit, markSessionPlay, resolveGraduate, writeStadium]);
 
   const doBookStandsConstruction = useCallback((ground: number, opensAfterMatch: number, cost: number) => {
     if (document.hidden) return;
@@ -618,6 +676,8 @@ export function useStadiumTycoon(getEdge?: () => number) {
     sponsorSaveFailed: sponsorSaveError?.ground === state.rep && sponsorSaveError.season === state.league?.season,
     matchPlanSaveFailed: matchPlanError === state.matchNo,
     scoutingSaveFailed: scoutingSaveError?.ground === state.rep && scoutingSaveError.match === state.matchNo + 1,
+    doBookGraduateAttack,
+    graduateAttackError: graduateAttackError?.ground === state.rep && graduateAttackError.match === state.matchNo + 1 ? graduateAttackError.message : null,
     matchPlanForecast: (kind: MatchPlanKind) => matchPlanForecast(state, getEdgeRef.current?.() ?? 0, kind),
     doBookStandsConstruction, standsConstructionSaveFailed: standsConstructionSaveError === state.rep,
     doBuy, doTap, doPrestige, doBoost,

@@ -176,7 +176,8 @@ function reviewedGuideSentences(route, part, sentences) {
     'A signed starting Dual Threat quarterback who has played a season can call designed runs. This shifts some passing yards and touchdowns to rushing, and fewer throws can mean fewer interceptions. The extra contact costs up to four health points. Career Log records the tradeoff, and Week by week includes the rushing stats when the season can be replayed.',
     "Backup quarterbacks get playoff appearances based on their regular-season playing time. Four of 17 regular-season games works out to one appearance in a four-game playoff run. Career Log shows your appearances separately from the team's games."];
   if (route === '/stadium-tycoon' && part === 'howToPlay') return [...sentences,
-    "In League, book scouting for the next known opponent. Pay the quoted fee upfront to cut that opponent's scoring chance by 10 percent for one match, including a match played while you're away. Its result records the scouting fee."];
+    "In League, book scouting for the next known opponent. Pay the quoted fee upfront to cut that opponent's scoring chance by 10 percent for one match, including a match played while you're away. Its result records the scouting fee.",
+    "In League, use Graduate in attack to move one promoted forward's defensive contribution to your scoring chance for the next known fixture. The forward must still be available at kickoff, and the result records the choice in watched and away matches."];
   if (route !== '/soccer-career') return sentences;
   if (part === 'rules') return [...sentences,
     'Nations League appearances show the season overall used for that match and any change since your previous appearance.'];
