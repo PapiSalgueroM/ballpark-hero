@@ -1,7 +1,9 @@
 ## 2026-11-14: Rugby kicking plans, career workload and Home browsing
 
+[PR #975](https://github.com/PapiSalgueroM/ballpark-hero/pull/975) published exact main `40f915096ca7343b6570cbe5de83c5d20c3a92d8`, deployment `242fd8df-7bbd-4491-a9c1-4a5d8642e359`, canonical entry `/assets/index-BCiI1c1c.js`. Twelve live browser checks passed across Home, NRL, NBA and MLB. All 174 sitemap routes, all seven policy and crawler endpoints and the new NRL guide passed. IndexNow accepted the NRL guide. Application types, production build, 88 focused tests, all 18 site checks and all 16 measured download limits passed. The older shared-career guard still rejects unchanged MLB imports and stale wrapper anchors.
+
 - NRL Team Manager lets you choose your last-tackle kicking plan before a match. Kick long cuts the try threat for both sides. Contest kicks gives both sides more chances. Match Centre saves the choice through Live and records it in the report. The next match starts with Mixed kicks.
-- NBA My Career signed starters can plan rest after completing a season. They sit eight games in a full schedule and six in a 66-game season, with a 30% lower simulated injury chance. The missed games count against award eligibility. Career Log and Season Center show the scheduled absences.
+- NBA My Career signed starters can plan rest after completing a season. They sit eight games in a full schedule and six in a 66-game season, with a 30% lower simulated injury chance. The missed games count against award eligibility. Career Log records the absences and supported Season Center replays distinguish them from injuries.
 - For new MLB My Career pitching seasons, wins, losses and saves fit within the number of appearances, and wins, saves and holds fit too. The correction covers both the original stat draw and shortened workloads. In a paired check, all 29 infeasible original pitching lines were corrected and the 691 feasible original draws held.
 - Home shows descriptions under the game names in the compact phone catalogue. The descriptions occupy one line at 320, 390 and 430 pixels, with usable game links and pin buttons at all three widths.
 
