@@ -1,3 +1,8 @@
+## 2026-11-15: Academy sale quotes and Home return focus
+
+- Wonderkid Factory and the Stadium Tycoon Academy keep the prospect when the fee drops during a held tap or Space press. The current fee is shown for a fresh sale. In the Deadline Day fixture, a held $357 quote drops to $238 and a fresh press records one sale at $238.
+- Home restores keyboard focus after a finished game disappears from Continue playing. Back focuses the first remaining saved game, or the lead Soccer Career link when the shelf is empty.
+
 ## 2026-11-15: Aussie Rules squad carry, Dart Draft quotes and report note retries
 
 - Aussie Rules Manager offers to carry a kept matchday 23 after the draft. The preview names returning players and replacements before saving. The Fremantle fixture retained 17 starters and every eligible interchange player, replacing the delisted ruck with Dravin Dunholm. The default option matched 173 old-engine saved checkpoints byte for byte.
