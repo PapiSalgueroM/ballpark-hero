@@ -1,3 +1,10 @@
+## 2026-11-14: Saved contracts, tournament scoring and admin report search
+
+- Club Manager repairs old automatic squad releases when the same-club ledger still proves the player's identity and a live contract. It keeps the recorded wage and remaining term and removes the duplicate free-agent row. Expired and manually released deals, missing contract data and signed players stay out of the repair. Club Home lists this summer's actual contract expiries before the opening league match.
+- Soccer Career announces an international debut after the first cap, deducts actual Nations League appearances from the overlapping generic schedule, and gives reserves fewer appearances and minutes. The finals Golden Boot requires more goals than the leading simulated rival, whose goals come from the tournament scores.
+- A genuinely prolific attacker with a strong full club season gets more chances to score in the Champions League. The same 2,400-draw test for an elite Madrid striker moved from 21.9% to 41.2% for 10 or more goals and from 23.9% to 27.0% for titles. The same tests for quieter elite or ordinary Madrid seasons held.
+- Admin Reports reads all pages after checking the role. Search covers report text, game context, IDs, saved notes and fix references. Filter by priority alongside game and status, with counts that follow the filters.
+
 ## 2026-11-14: Cup replay navigation and more match reports
 
 [PR #973](https://github.com/PapiSalgueroM/ballpark-hero/pull/973) merged at `e4f6f8eec4aa46eb2c41814ce0a36fefcf858131`. Lovable sync recovered after an empty commit left the tested tree identical. Published exact main `7363dfed3679dec874eda11f60985eb34b3b3892`, deployment `9c39e820-54df-44c2-a7bb-ada7399e6900`, canonical entry `/assets/index-DIJGt0rz.js`. Thirteen live browser journeys, three raw game guides, all 174 sitemap routes and seven policy and crawler endpoints passed. IndexNow accepted the three updated guides. The build, app types, 257 focused tests, all 18 site checks and all 16 download budgets passed. The corrected multi-sport Season Center simulation passed 158 checks across 13,051 seasons and retained 13,266 identical save hashes.
