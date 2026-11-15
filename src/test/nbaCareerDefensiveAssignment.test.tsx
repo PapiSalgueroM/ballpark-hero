@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
 import UsCareerProgramme from '@/components/us-career/UsCareerProgramme';
+import { NBA_ARCHETYPES } from '@/lib/nbaCareerCreation';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
 import { simNbaSeason, type NbaCareerPos, type NbaCareerState, type NbaSeasonLine } from '@/lib/nbaMyCareer';
 import { keyedRng } from '@/lib/keyedRng';
@@ -134,7 +135,7 @@ describe('NBA defensive assignment', () => {
 
   it('leaves scoring intact at the steals cap and gives a low-minute blocker a visible increase', () => {
     const cappedCareer = career('PG');
-    cappedCareer.archetype = sport.create.archetypes.PG[2];
+    cappedCareer.archetype = NBA_ARCHETYPES.PG[2];
     cappedCareer.ovr = cappedCareer.pot = 99;
     cappedCareer.morale = 100;
     const lowMinutes = { ...career('C'), ovr: 62, pot: 62, role: 'backup' as const, morale: 50 };

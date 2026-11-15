@@ -1,4 +1,13 @@
+## 2026-11-15: NBA defensive assignments and first-year NFL rookie contracts
+
+The integrated candidate passed application types, production build, 127 focused tests and five pinned Chromium cases. The native NBA checks covered 82 and 66 games, paired playoffs and exact saved choice and receipt reloads. The NFL cases opened four-year rookie deals through desk-on, desk-off and season-away paths. Only the NBA guide was regenerated.
+
+- NBA My Career lets guards and small forwards trade scoring for steals or frontcourt players trade scoring for blocks in the Season Programme. The regular-season recap records the change and shows when the cap prevents a gain.
+- NFL Front Office starts newly drafted players with four contract years, their draft age and their promised salary. Current paused draft saves and older managed drafts with a saved ledger entry get the same correction at rollover.
+
 ## 2026-11-15: Rival contract renewals, Club Manager player ratings and sport order
+
+[PR #990](https://github.com/PapiSalgueroM/ballpark-hero/pull/990) published exact main `4fb7394ba7e21ad42015084a5d537bfbe6397ff7`, deployment `eea934de-441b-464a-b75e-1c78a9fba9c2`, canonical entry `/assets/index-1hRPEIgV.js`. The merged tree matched tested head `46ce66db`. All 10 live browser journeys, 174 sitemap routes and 12 pinned endpoint checks passed. IndexNow accepted the updated NRL guide. The full Home sweep, all 21 local site checks and 16 download budgets passed. Hosted Home launch, Game picks and career entry guide passed. The hosted Club Manager quick-sub job stopped during dependency installation, and its full local fault harness passed.
 
 The integrated candidate passed application types, production build, 102 focused tests and 15 Chromium cases. Only the NRL guide was regenerated. The imported-season verification now checks the saved ladder against the finished season and rejects a copied rollover that omits it.
 
