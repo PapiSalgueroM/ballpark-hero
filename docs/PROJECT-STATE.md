@@ -7,6 +7,8 @@
 
 Application types, the production build, 190 focused tests, 11 pinned browser cases, 21 site checks, the Home fold sweep and 16 download budgets passed. The full SEO split check covered all 174 routes. The grid archive refresh reproduced all 360 boards through November 14 Eastern.
 
+[PR #996](https://github.com/PapiSalgueroM/ballpark-hero/pull/996) published exact main `101a61e51412af79fc91e48f6ec2774399b6ca61`, deployment `2328d399-369f-4222-8709-bc79a122c79b`, canonical entry `/assets/index-C8RrOQqd.js`. The merged tree matched tested head `ea6f9583e`. All 11 live browser cases, 14 pinned endpoints and 174 sitemap routes passed. IndexNow accepted Home.
+
 ## 2026-11-15: Fairer soccer rerolls, booked rugby recovery and quicker Home navigation
 
 - Soccer Perfect Season holds the opening XI target across rerolls in new Unlimited runs and Daily boards starting November 17 Eastern. Older Daily and Unlimited runs keep their original target and result. The stronger XI in the pinned Unlimited run improved from 35 wins and a site score of 92 to 38 wins and 100.
