@@ -1,5 +1,7 @@
 ## 2026-11-15: Rugby match gate receipts and season review coverage
 
+[PR #985](https://github.com/PapiSalgueroM/ballpark-hero/pull/985) published exact main `00479402fe65af60a1425b8defc5880b59a30aba`, deployment `f2ce65df-7af0-4fd2-8787-4d2f874ce01e`, canonical entry `/assets/index-Bc6x-Bwe.js`. Three live browser journeys, all 174 sitemap routes, seven policy and crawler endpoints, both admin noindex tags and the updated NRL guide passed. IndexNow accepted the guide. Hosted application types and build passed, and the saved-season outcome step verified all 23 mounted cases and 51 effective controls. The integrated build, 51 focused tests, all 20 site checks and 16 download limits passed locally. The live cases held $288,000 for the Storm with the $40,000 price effect, $240,000 for Perth with the $30,000 effect, and $270,000 at the first booked home game of an imported career.
+
 - NRL Team Manager shows the amount credited for a paid home match and its ticket tier in the latest result and saved match reports. After a midseason change, it shows what the gate earned compared with the opening price under the same match conditions.
 - The four-sport season review harness registers all 23 mounted cases, including the three historical NBA replays and saved MLB relief pitching decisions.
 
