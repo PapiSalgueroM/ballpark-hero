@@ -30,7 +30,7 @@
  * nights before them, including going out in them. scripts/simSoccerCareerUcl.mjs
  * section 8 holds the title rate per tier against main's measured band.
  */
-import { confederationOf, poissonGoals, type Confederation } from './soccerInternational';
+import { confederationOf, poissonGoals, tournamentGoalShare, type Confederation } from './soccerInternational';
 import { adjustClubsForYear } from './careerEras';
 import type { ClubData } from './soccerCareerEngine';
 import { periodFor } from './uclFormatHistory';
@@ -386,6 +386,65 @@ export type Rng = () => number;
  *  the group nights, the knockout ties and the calibration read one number. */
 export const UCL_BASE_LAMBDA = 1.32;
 export const UCL_HOME_EDGE = 0.18;
+
+/** Draw a leading scorer from clubs playing the same format as the career.
+ *  Each club's simulated scorer gets that club's available scoring nights.
+ *  Thinning the phase's Poisson goals is the same as drawing each team's
+ *  match scores and assigning a share of those goals to its scorer. */
+export function leadingUclRivalGoals(
+  shape: FirstStageShape, tieLegs: number, myPhaseGames: number, myKnockoutGames: number, rng: Rng,
+): number {
+  const entrants = 2 ** shape.ladder.length;
+  const fullPhase = shape.games * shape.stages;
+  const clubs = shape.kind === 'leaguePhase' ? LEAGUE_PHASE.clubs : shape.kind === 'groups' ? shape.groups * 4 : entrants;
+  // The shorter modeled fields contain only the deepest clubs. In larger fields
+  // the model spreads the elite scoring-form bonus across more contenders.
+  const share = tournamentGoalShare('ST', 96) * (1 + 0.25 * Math.min(1, 8 / clubs));
+  // The best clubs in the existing sim average about 2.1 phase and 1.8 knockout goals a game.
+  const phaseRate = (UCL_BASE_LAMBDA + 0.8) * share;
+  const knockoutRate = (UCL_BASE_LAMBDA + 0.45) * share;
+  let best = 0;
+  let skipMyPath = true;
+  const scorePaths = (count: number, phase: number, knockout: number) => {
+    if (skipMyPath && count > 0 && phase === myPhaseGames && knockout === myKnockoutGames) {
+      count--;
+      skipMyPath = false;
+    }
+    for (let i = 0; i < count; i++) {
+      let goals = 0;
+      for (let game = 0; game < phase; game++) goals += poissonGoals(phaseRate, rng);
+      for (let game = 0; game < knockout; game++) goals += poissonGoals(knockoutRate, rng);
+      best = Math.max(best, goals);
+    }
+  };
+  if (shape.kind === 'leaguePhase') {
+    scorePaths(LEAGUE_PHASE.clubs - LEAGUE_PHASE.playoffTo, fullPhase, 0);
+    scorePaths((LEAGUE_PHASE.playoffTo - LEAGUE_PHASE.direct) / 2, fullPhase, 2);
+  } else if (shape.kind === 'groups') {
+    let remaining = shape.groups * 4;
+    for (let stage = 1; stage <= shape.stages; stage++) {
+      const through = stage < shape.stages ? remaining / 2 : entrants;
+      scorePaths(remaining - through, shape.games * stage, 0);
+      remaining = through;
+    }
+  }
+  let remaining = entrants;
+  let knockout = 0;
+  for (const round of shape.ladder) {
+    const final = round === 'Final';
+    knockout += final ? 1 : tieLegs;
+    const finishers = final ? remaining : remaining / 2;
+    // The league phase benchmark gives both routes equal representation at each depth.
+    if (shape.kind === 'leaguePhase') {
+      scorePaths(finishers / 2, fullPhase, knockout);
+      scorePaths(finishers / 2, fullPhase, knockout + 2);
+    } else {
+      scorePaths(finishers, fullPhase, knockout);
+    }
+    remaining -= finishers;
+  }
+  return best;
+}
 
 /** How far apart the other clubs in a group or the league phase are, in the
  *  same strength units as the player's club (a gap of 1 is half a goal of

@@ -33,10 +33,8 @@
  *      ratings and club tiers, sits within a measured tolerance of the model
  *      this replaced. The old win chance is reimplemented here as the baseline
  *      rather than quoted, so the comparison is against behaviour.
- *   4. Balance held again on the other axis: tournament goal totals and the top
- *      scorer rate have not moved. A two legged tie is twice the matches, so
- *      the per leg player goal chance is halved; without that the top scorer
- *      threshold of 6 would have become far easier to reach.
+ *   4. Check the range of knockout totals and require the top scorer to beat
+ *      the simulated rival tally. The award stays rare across the player grid.
  *   5. Away goals appear only in the seasons that had them, and never after
  *      2020-21, which is when the competition abolished them.
  *   6. Round 563: a second leg always carries an aggregate and a first leg
@@ -71,8 +69,7 @@
  *      from the table's words rather than from the engine; every first stage
  *      and knockout opponent is in that era's pool; going out in the first
  *      stage really happens; and the cup is won per tier within main's
- *      measured band, the knockouts reached as often, and the top scorer
- *      award never more common. The band and how it was measured are written
+ *      measured band, with the knockouts reached as often. The bands are written
  *      at the section. Section 4 now holds the KNOCKOUT goals of a campaign
  *      that reached the knockouts, which is what every campaign was before.
  *
@@ -101,7 +98,7 @@
  * aggregate there); same anchor rule, and it too must turn section 7 red and
  * nothing before it. SC_UCL_CONTROL=nostage (Round 972) skips the first stage,
  * the way every season was played before; same anchor rule, and section 8
- * must go red.
+ * must go red. SC_UCL_CONTROL=awardtie gives the award to tied scorers.
  *
  * Run: node scripts/simSoccerCareerUcl.mjs      (no database)
  */
@@ -117,7 +114,7 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 const CONTROL = process.env.SC_UCL_CONTROL || '';
-const KNOWN_CONTROLS = ['coinflip', 'noagg', 'etaway', 'etsettled', 'nostage'];
+const KNOWN_CONTROLS = ['coinflip', 'noagg', 'etaway', 'etsettled', 'nostage', 'awardtie'];
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`SC_UCL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -208,6 +205,14 @@ if (CONTROL === 'nostage') {
   }
   fs.writeFileSync(BUNDLE, text.replace(anchor, 'if (false) {'));
   console.log('   NEGATIVE CONTROL ON: the first stage is skipped, section 8 must go red');
+}
+
+if (CONTROL === 'awardtie') {
+  const text = fs.readFileSync(BUNDLE, 'utf8');
+  const anchor = 'isTopScorer: totalPlayerGoals > leadingRivalGoals';
+  if (text.split(anchor).length !== 2) throw new Error('CONTROL awardtie cannot find exactly one award comparison');
+  fs.writeFileSync(BUNDLE, text.replace(anchor, 'isTopScorer: totalPlayerGoals >= leadingRivalGoals'));
+  console.log('   NEGATIVE CONTROL ON: a tie earns the award, section 4 must go red');
 }
 
 const bundle = await import(pathToFileURL(BUNDLE).href);
@@ -380,28 +385,40 @@ console.log('3) Balance held: the advance rate matches the model this replaced')
 }
 
 /* ------------------------------------------------------------------ */
-console.log('4) Balance held: knockout goals and the top scorer rate have not moved');
+console.log('4) Knockout scoring stays in range and the Golden Boot requires a higher tally');
+let redAwardComparison = false;
 {
   const before = failures;
   /* Round 972: a campaign now plays a first stage in front of its knockout,
      and can go out in it. The replaced model's quantity is the KNOCKOUT goals
      of a campaign that reached the knockouts, which every campaign did before,
-     so that is what is held to its range here. The first stage's own goals
-     and the top scorer bar that allows for them are section 8's. */
+     so that is what is held to its range here. The award counts the entire campaign. */
   const ko = rows.filter(({ r }) => r.matches.length > 0);
   const goals = ko.map(({ r }) => r.matches.reduce((a, m) => a + m.playerGoals, 0));
   const mean = goals.reduce((a, b) => a + b, 0) / goals.length;
   const topScorerRate = ko.filter(({ r }) => r.isTopScorer).length / ko.length;
+  const inconsistentAwards = rows.filter(({ r }) => !Number.isInteger(r.leadingRivalGoals)
+    || r.isTopScorer !== (r.playerGoals > r.leadingRivalGoals)).length;
+  if (inconsistentAwards > 0) {
+    redAwardComparison = true;
+    fail(`${inconsistentAwards} awards disagree with the highest simulated rival tally`);
+  }
   /* The replaced model gave an attacker a 40% chance of 1 to 2 goals per match
      over at most four matches, so the mean sat near 1.2 and six goals was rare.
      A two legged tie is twice the matches, which is why the per leg chance is
      halved. These gates are the measured range of the replaced model. */
   if (mean < 0.6 || mean > 2.2) fail(`mean knockout goals ${mean.toFixed(2)}, outside the replaced model's range of roughly 0.6 to 2.2`);
-  if (topScorerRate > 0.12) fail(`top scorer in ${(topScorerRate * 100).toFixed(1)}% of campaigns, which the six goal threshold was never meant to hand out`);
+  if (topScorerRate > 0.12) fail(`top scorer in ${(topScorerRate * 100).toFixed(1)}% of campaigns that reached the knockouts, above the established rarity ceiling`);
   if (failures === before) console.log(`   mean ${mean.toFixed(2)} knockout goals a campaign that reached the knockouts, top scorer ${(topScorerRate * 100).toFixed(1)}% of the time`);
 }
 
 /* ------------------------------------------------------------------ */
+if (CONTROL === 'awardtie') {
+  if (redAwardComparison && failures === 1) { console.log('\n   CONTROL FIRED: section 4 caught tied Golden Boot winners'); process.exit(0); }
+  console.error('\n   CONTROL DID NOT FIRE CLEANLY: the award comparison guard did not catch the tied winner');
+  process.exit(1);
+}
+
 console.log('5) Away goals only in the seasons that had them');
 {
   const before = failures;
@@ -638,9 +655,9 @@ let redCount8 = false;
      origin/main c4ba7492 over this exact grid (seasons from 1995, 2010 and
      2026, overall 70 to 90 in fours, a striker) at 4,000 campaigns a cell and
      eight seeds, 576,000 seasons a tier:
-       Real Madrid (tier 1, elite)  title 5.920%  knockouts 85.01%  top scorer 0.43% of knockout runs
-       Ajax (tier 1)                title 3.385%  knockouts 85.03%  top scorer 0.31%
-       Sevilla (tier 2)             title 0.656%  knockouts 34.92%  top scorer 0.22%
+       Real Madrid (tier 1, elite)  title 5.920%  knockouts 85.01%
+       Ajax (tier 1)                title 3.385%  knockouts 85.03%
+       Sevilla (tier 2)             title 0.656%  knockouts 34.92%
      with single seeds (72,000 seasons) ranging 5.86 to 6.01, 3.32 to 3.44 and
      0.61 to 0.71. This section runs one seed of 72,000 a tier, so the title
      gate is main's figure plus or minus three binomial standard errors at
@@ -648,22 +665,16 @@ let redCount8 = false;
      engine over the same eight seeds: 5.856, 3.435 and 0.662. The knockout
      rate carries a measured bias of +0.3 to +0.4 points at tier 1 (the pass
      curves are interpolated linearly, which reads slightly under a bending
-     curve), so its gate is three standard errors plus 0.6 points. The top
-     scorer gate is one sided: never more common than main beyond three
-     standard errors, and not under a third of it. This round's engine
-     measures 0.25, 0.21 and 0.12 (about 55 to 70 percent of main), the cost
-     of a whole goal bar that never makes the award more common (see
-     TOP_SCORER_BAR_PER_STAGE_GAME); at Sevilla that is about 30 awards a
-     run, too few to hold a tighter floor without a coin toss. */
+     curve), so its gate is three standard errors plus 0.6 points. */
   const MAIN = {
-    'Real Madrid': { tier: 1, title: 5.920, ko: 85.01, ts: 0.43 },
-    Ajax: { tier: 1, title: 3.385, ko: 85.03, ts: 0.31 },
-    Sevilla: { tier: 2, title: 0.656, ko: 34.92, ts: 0.22 },
+    'Real Madrid': { tier: 1, title: 5.920, ko: 85.01 },
+    Ajax: { tier: 1, title: 3.385, ko: 85.03 },
+    Sevilla: { tier: 2, title: 0.656, ko: 34.92 },
   };
   const se = (p, n) => 100 * Math.sqrt((p / 100) * (1 - p / 100) / n);
   const lines = [];
   for (const [club, m] of Object.entries(MAIN)) {
-    let n = 0, ko = 0, won = 0, ts = 0;
+    let n = 0, ko = 0, won = 0;
     for (const year of [1995, 2010, 2026]) {
       for (let overall = 70; overall <= 90; overall += 4) {
         for (let i = 0; i < 4000; i++) {
@@ -674,21 +685,16 @@ let redCount8 = false;
           if (!r.qualified || ['Group Stage', 'League Phase', 'Play-off'].includes(r.result)) continue;
           ko += 1;
           if (r.result === 'Winner') won += 1;
-          if (r.isTopScorer) ts += 1;
         }
       }
     }
     const title = (100 * won) / n;
     const koRate = (100 * ko) / n;
-    const tsRate = (100 * ts) / ko;
     const tGate = 3 * se(m.title, n);
     const kGate = 3 * se(m.ko, n) + 0.6;
-    const sGate = 3 * se(m.ts, ko);
     if (Math.abs(title - m.title) > tGate) fail(`${club}: the cup is won in ${title.toFixed(3)}% of seasons, main's band is ${m.title} plus or minus ${tGate.toFixed(3)}`);
     if (Math.abs(koRate - m.ko) > kGate) fail(`${club}: the knockouts are reached in ${koRate.toFixed(2)}% of seasons, main's band is ${m.ko} plus or minus ${kGate.toFixed(2)}`);
-    if (tsRate > m.ts + sGate) fail(`${club}: top scorer in ${tsRate.toFixed(2)}% of knockout runs, more common than main's ${m.ts}% beyond ${sGate.toFixed(2)}`);
-    if (tsRate < m.ts / 3) fail(`${club}: top scorer in ${tsRate.toFixed(2)}% of knockout runs, under a third of main's ${m.ts}%`);
-    lines.push(`${club}: title ${title.toFixed(3)}% (main ${m.title} +/- ${tGate.toFixed(3)}), knockouts ${koRate.toFixed(2)}% (main ${m.ko}), top scorer ${tsRate.toFixed(2)}% of knockout runs (main ${m.ts})`);
+    lines.push(`${club}: title ${title.toFixed(3)}% (main ${m.title} +/- ${tGate.toFixed(3)}), knockouts ${koRate.toFixed(2)}% (main ${m.ko})`);
   }
   if (failures === before) for (const l of lines) console.log(`   ${l}`);
   else console.error(`   ${lines.join('; ')}`);

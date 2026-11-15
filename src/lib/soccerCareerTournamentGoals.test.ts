@@ -163,3 +163,35 @@ it('lets exceptional sustained scoring help in Europe without making the title r
   expect((strongTitles - ordinaryTitles) / seeds.length).toBeGreaterThan(0.015);
   expect(strongTitles / seeds.length).toBeLessThan(0.35);
 });
+
+it('lets an exceptional scoring run win the European Golden Boot after a group exit', () => {
+  vi.spyOn(Math, 'random').mockImplementation(rngFrom(94_345_925));
+  const state = career('Real Madrid', 'Spain', 1992, 98, 'ST');
+  const profile = { type: 'playing', year: 1992, club: 'Real Madrid', apps: 38, leagueApps: 34, ovr: 98, rating: 8.2, goals: 42 } as SeasonRecord;
+  const cup = simulateUCL(state, profile);
+
+  expect(cup).toMatchObject({ result: 'Group Stage', playerGoals: 9, leadingRivalGoals: 6, isTopScorer: true });
+});
+
+it('decides the modern European Golden Boot on the rival tally and keeps it rare', () => {
+  const state = career('Real Madrid', 'Spain', 2026, 98, 'ST');
+  const profile = { type: 'playing', year: 2026, club: 'Real Madrid', apps: 38, leagueApps: 34, ovr: 98, rating: 8.2, goals: 42 } as SeasonRecord;
+  const random = vi.spyOn(Math, 'random');
+  let awards = 0, strongRuns = 0, strongAwards = 0, ties = 0;
+  for (const seed of seeds) {
+    random.mockImplementation(rngFrom(seed));
+    const cup = simulateUCL(state, profile);
+    if (!cup.qualified) continue;
+    expect(Number.isInteger(cup.leadingRivalGoals)).toBe(true);
+    expect(cup.isTopScorer).toBe(cup.playerGoals > cup.leadingRivalGoals!);
+    awards += Number(cup.isTopScorer);
+    ties += Number(cup.playerGoals === cup.leadingRivalGoals);
+    if (cup.playerGoals < 12) continue;
+    strongRuns++;
+    strongAwards += Number(cup.isTopScorer);
+  }
+  expect(ties).toBeGreaterThan(0);
+  expect(strongRuns).toBeGreaterThan(150);
+  expect(strongAwards / strongRuns).toBeGreaterThan(0.5);
+  expect(awards / seeds.length).toBeLessThan(0.25);
+});
