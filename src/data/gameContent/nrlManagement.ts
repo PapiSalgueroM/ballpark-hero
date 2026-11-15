@@ -33,6 +33,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Choose Attack left or Attack right to match your wing and centre against the rival’s opposite edge. Compare the two sides in Positional matchups. You can change sides at half time or 60 minutes in Play Live, and the match report saves your choices.',
       'Choose Counter opponent in Attack plan to respond to the rival’s simulated style. Shift wide against middle pressure, or protect the edges at the cost of some attack. Check the ratings before choosing.',
       'Use Individual recovery in Preparation to give one available player lighter training before a match. Compare their kickoff fitness while the rest of the squad keeps its plan.',
+      'In Preparation, give one player extra skill work before a regular-season match at a cost of four kickoff fitness points. After three appearances with extra work, the player can earn one extra OVR that season, up to their potential. See their progress under Rating changes in Squad.',
       'Before a regular-season away match, book one recovery session per season from Preparation. It costs $120,000 from club cash and adds up to eight fitness points at kickoff.',
       'In Squad, a young player can learn a second position in reserve grade while another player trains with the first team. The reserve course replaces the one-point rating gain.',
       'While a reserve-grade spell has at least two rounds left, book reserve coaching from Squad for $90,000. A completed spell returns the prospect one round sooner with their rating gain or new position.',

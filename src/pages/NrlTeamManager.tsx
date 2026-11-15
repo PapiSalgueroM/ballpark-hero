@@ -26,7 +26,7 @@ import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
   nrlBench, nrlBenchRotation, nrlCanOpenInterchange, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
-  nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlMinute60Returns, nrlNextRound, nrlOnFieldCaptain, nrlOpeningCoverOptions,
+  nrlActingCaptainPhases, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMatchFitness, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlMinute60Returns, nrlNextRound, nrlOnFieldCaptain, nrlOpeningCoverOptions,
   nrlLivePhaseScoring,
   nrlQuickInterchangeOptions, nrlQuickInterchangeOutcome, nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
   NRL_BENCH_SIZE, NRL_CAPTAIN_DEFENCE, NRL_CONVERSION_DRILLS_BOOST, NRL_HALFTIME_TALKS, NRL_MAX_BENCH_USED, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
@@ -36,9 +36,9 @@ import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
   nrlCanReviewTickets, nrlHomeGateReport, nrlScheduledRotationOptions, nrlTicketReviewRound,
   nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport, nrlPositionTraining,
-  nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlIntensiveMatch, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveCoachQuote, nrlReserveGradeCandidates, nrlRivalSquad,
+  nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIndividualSkillWorkOptions, nrlIndividualSkillWorkProgress, nrlIntensiveBye, nrlIntensiveMatch, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveCoachQuote, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlPastLadders, nrlSelectionPromise, nrlSelectionPromiseTerms, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
-  NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SHORTLIST_LIMIT, reduceNrlCareer, runNrlFastForward,
+  NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SHORTLIST_LIMIT, NRL_SKILL_WORK_APPEARANCES, reduceNrlCareer, runNrlFastForward,
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
 } from '@/lib/nrlCareer';
 import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryCase } from '@/lib/nrlJudiciary';
@@ -798,6 +798,7 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
   const injury = match.injury;
   const injuredName = injury && season.squad.find(player => player.id === injury.playerId)?.name;
   const recoveredName = match.individualRecoveryId && season.squad.find(player => player.id === match.individualRecoveryId)?.name;
+  const skillsName = match.individualSkillWorkId && season.squad.find(player => player.id === match.individualSkillWorkId)?.name;
   const trainedName = match.intensivePositionTrainingId && season.squad.find(player => player.id === match.intensivePositionTrainingId)?.name;
   const captainName = match.captainId && season.squad.find(player => player.id === match.captainId)?.name;
   const openingCover = match.openingCover;
@@ -913,6 +914,9 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
       </p>}
       {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
         {recoveredName} took individual recovery before this match.
+      </p>}
+      {skillsName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-skill-work-result>
+        {match.individualSkillGain ? `${skillsName} earned +1 OVR from extra skill work.` : `${skillsName} played after extra skill work. One appearance credited.`}
       </p>}
       {trainedName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-intensive-position-result>
         {trainedName} completed an intensive position training session before kickoff.
@@ -1590,7 +1594,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
                 Clear preparation
               </Button>
             )}
-            {!career.legacySeason && season.kickerId && <IndividualRecovery season={season} awayRecovery={nrlAwayRecoveryBonus(career)} onAction={onAction} disabled={disabled} />}
+            {!career.legacySeason && season.kickerId && <IndividualPreparation career={career} awayRecovery={nrlAwayRecoveryBonus(career)} onAction={onAction} disabled={disabled} />}
             <AwayRecovery career={career} onAction={onAction} disabled={disabled} />
           </div>
         </div>
@@ -1740,19 +1744,24 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
   );
 }
 
-function IndividualRecovery({ season, awayRecovery, onAction, disabled }: {
-  season: NrlManagerState; awayRecovery: number; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
+function IndividualPreparation({ career, awayRecovery, onAction, disabled }: {
+  career: NrlCareerState; awayRecovery: number; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
 }) {
-  const { year, clubId, round, preparation, individualRecoveryId } = season;
+  const { season } = career;
+  const { year, clubId, round, preparation, individualRecoveryId, individualSkillWorkId } = season;
   const players = nrlIndividualRecoveryOptions(season);
   const selected = players.find(player => player.id === individualRecoveryId);
   const preview = selected && nrlIndividualRecoveryPreview(selected, preparation, awayRecovery);
+  const trainees = nrlIndividualSkillWorkOptions(career);
+  const trainee = trainees.find(player => player.id === individualSkillWorkId);
+  const worked = trainee && nrlIndividualSkillWorkProgress(season, trainee.id).appearances;
   const usualPreparation = preparation === 'train' ? 'team training' : preparation === 'defensiveDrills' ? 'defensive drills'
     : preparation === 'goalKickingDrills' ? 'goal-kicking drills' : 'normal preparation';
   return (
     <details className="group mt-2 border-t border-border">
       <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 rounded-md text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-        <span className="min-w-0 truncate">Individual recovery{selected && ` · ${selected.name}`}</span>
+        <span className="min-w-0 truncate">Individual recovery{trainees.length > 0 && ' and skill work'}
+          {(selected || trainee) && ` · ${(selected ?? trainee)?.name}`}</span>
         <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
       </summary>
       {preparation === 'recover' ? <p className="text-sm text-muted-foreground">The whole squad is already recovering.</p> : (
@@ -1768,6 +1777,21 @@ function IndividualRecovery({ season, awayRecovery, onAction, disabled }: {
           {preview && <p className="text-sm text-muted-foreground" role="status">
             Kickoff fitness is {preview.normal}% with {usualPreparation}, {preview.recovery}% with individual recovery.
           </p>}
+          {trainees.length > 0 && <div className="space-y-2 border-t border-border pt-2">
+            <label htmlFor="nrl-skill-work-player" className="block text-sm font-semibold">Player for extra skill work</label>
+            <p className="text-sm text-muted-foreground">Trade four kickoff fitness points for training credit if the player takes the field. After {NRL_SKILL_WORK_APPEARANCES} worked appearances, they can earn one extra OVR this season, up to their potential.</p>
+            <select id="nrl-skill-work-player" value={individualSkillWorkId ?? ''} disabled={disabled}
+              className="min-h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              onChange={event => onAction({ type: 'setIndividualSkillWork', year, clubId, round, playerId: event.target.value || null })}>
+              <option value="">No extra skill work</option>
+              {trainees.map(player => <option key={player.id} value={player.id}>{player.name} · {player.role} · {player.rating} OVR</option>)}
+            </select>
+            {trainee && worked !== undefined && <p className="text-sm text-muted-foreground" role="status">
+              Kickoff fitness is {nrlIndividualRecoveryPreview(trainee, preparation, awayRecovery).normal}% with {usualPreparation}, {nrlMatchFitness(season, trainee, awayRecovery)}% with extra skill work.
+              {' '}{Math.min(worked, NRL_SKILL_WORK_APPEARANCES)} of {NRL_SKILL_WORK_APPEARANCES} worked appearances.
+              {worked >= NRL_SKILL_WORK_APPEARANCES && ' The extra point can settle on a worked appearance when their rating would otherwise stay steady.'}
+            </p>}
+          </div>}
         </div>
       )}
     </details>
@@ -2141,11 +2165,13 @@ function Squad({ career, onAction, disabled }: {
   const squadName = (id: string, name: string) =>
     career.openingRoster && !isNrlNamedPlayer(id) ? name + ' (generated)' : name;
   const seasonRatingChanges = new Map<string, number>();
+  const skillWorkIds = new Set<string>();
   let clubMatches = 0;
   let reviewedMatches = 0;
   for (const match of season.results) {
     if (match.finalsRound !== undefined || (match.homeId !== season.clubId && match.awayId !== season.clubId)) continue;
     clubMatches++;
+    if (match.individualSkillWorkId) skillWorkIds.add(match.individualSkillWorkId);
     if (!match.ratingChanges) continue;
     reviewedMatches++;
     for (const [id, delta] of match.ratingChanges) seasonRatingChanges.set(id, (seasonRatingChanges.get(id) ?? 0) + delta);
@@ -2193,6 +2219,19 @@ function Squad({ career, onAction, disabled }: {
               <p className="mt-1 text-muted-foreground">{reviewedMatches ? 'All recorded ratings held steady.' : 'Season rating history is unavailable for these matches.'}</p>
             )}
           </section>
+          {skillWorkIds.size > 0 && <section className="mt-3 border-t border-border pt-3" aria-labelledby="nrl-skill-work-progress">
+            <h3 id="nrl-skill-work-progress" className="font-semibold">Individual skill work</h3>
+            <ul className="mt-1 divide-y divide-border">
+              {[...skillWorkIds].map(id => {
+                const { appearances, earned } = nrlIndividualSkillWorkProgress(season, id);
+                return <li key={id} className="flex flex-wrap justify-between gap-x-3 py-1">
+                  <span>{nameOf(id)}</span>
+                  <span className="font-semibold tabular-nums">{appearances} worked {appearances === 1 ? 'appearance' : 'appearances'}
+                    {earned ? ' · +1 OVR earned' : ` · ${Math.min(appearances, NRL_SKILL_WORK_APPEARANCES)} of ${NRL_SKILL_WORK_APPEARANCES} toward +1 OVR`}</span>
+                </li>;
+              })}
+            </ul>
+          </section>}
         </div>
       </details>}
       {proposal && (

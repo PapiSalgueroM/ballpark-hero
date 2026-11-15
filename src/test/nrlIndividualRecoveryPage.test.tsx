@@ -66,6 +66,43 @@ it('retains the other tab’s match when an old page tries to queue recovery', (
   expect(screen.getByText(/this season changed in another tab/i)).toBeVisible();
 });
 
+it('previews extra skills work, restores the queue and shows the rating award after the match', () => {
+  const train = (career: ReturnType<typeof createNrlCareer>) => reduceNrlCareer(career, { type: 'prepare', choice: 'train' });
+  const advance = (career: ReturnType<typeof createNrlCareer>) => reduceNrlCareer(career, { type: 'advance' });
+  const playerId = 'sharks-6-0';
+  const order = (career: ReturnType<typeof createNrlCareer>) => reduceNrlCareer(career, {
+    type: 'setIndividualSkillWork', clubId: 'sharks', year: 2026, round: career.season.round, playerId,
+  });
+  const roundTwo = train(advance(train(createNrlCareer('sharks', 5))));
+  const before = train(advance(order(train(advance(order(roundTwo))))));
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(before));
+  const fence = fenceKeyOf(NRL_SAVE_KEY);
+  localStorage.setItem(fence, '4');
+  const draw = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const picker = () => {
+    playerPicker();
+    return screen.getByRole('combobox', { name: 'Player for extra skill work' });
+  };
+  const first = draw();
+  fireEvent.change(picker(), { target: { value: playerId } });
+  expect(screen.getByText(/2 of 3 worked appearances/)).toBeVisible();
+  expect(screen.getByText(/Kickoff fitness is \d+% with team training, \d+% with extra skill work/)).toBeVisible();
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(order(before)));
+  expect(localStorage.getItem(fence)).toBe('5');
+
+  first.unmount();
+  draw();
+  expect(picker()).toHaveValue(playerId);
+  fireEvent.click(screen.getByRole('button', { name: 'Quick Sim' }));
+  expect(screen.getByText('Tane Nairn earned +1 OVR from extra skill work.')).toBeVisible();
+  expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(JSON.stringify(advance(order(before))));
+  expect(localStorage.getItem(fence)).toBe('6');
+  fireEvent.click(screen.getByRole('button', { name: 'Squad' }));
+  const ratings = screen.getByText('Rating changes', { selector: 'summary' });
+  fireEvent.click(ratings);
+  expect(screen.getByText(/3 worked appearances · \+1 OVR earned/)).toBeVisible();
+});
+
 it('quotes and saves one paid away recovery session before playing', () => {
   let before = createNrlCareer('broncos', 1, 2026);
   while (before.season.round < 4) before = reduceNrlCareer(before, { type: 'advance' });

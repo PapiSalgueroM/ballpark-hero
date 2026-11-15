@@ -12,7 +12,7 @@ import {
 } from '@/lib/nrlPlayerScoring';
 import {
   archiveNrlFinals, archiveNrlLadder, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlArchivedLadder, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
-  isNrlPhysioTreatment, isNrlSpecialistPlan, nrlByeTrainingPreview, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularReturnFixture, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
+  isNrlPhysioTreatment, isNrlSpecialistPlan, nrlByeTrainingPreview, nrlIndividualRecoveryOptions, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularReturnFixture, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
   nrlPlanAdjustments, nrlPlanMatchups, nrlReserveGradeEnd, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore, validNrlRatingChanges,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlLeagueLadderArchive, type NrlLivePlanChoice, type NrlManagerState, type NrlMatchResult,
@@ -85,6 +85,7 @@ const COACH_ROLES = ['attack', 'defense', 'development'] as const;
 export type NrlStaffRole = typeof COACH_ROLES[number];
 export const NRL_DEVELOPMENT_ASSISTANT = { appearances: 8, players: 3, nextAge: 24 } as const;
 export const NRL_YOUTH_FOCUS = { appearances: 4, reviewAt: 21, nextAge: 24 } as const;
+export const NRL_SKILL_WORK_APPEARANCES = 3;
 const COACH_FIRST = ['Alden', 'Emery', 'Jory', 'Merrick', 'Quill', 'Rowe'];
 const COACH_LAST = ['Bramwell', 'Chetwynd', 'Dacre', 'Emsley', 'Fenwick', 'Redfern'];
 const FIRST = ['Arlo', 'Asa', 'Beau', 'Brodie', 'Callum', 'Coby', 'Dane', 'Eli', 'Eru', 'Finn', 'Hemi', 'Isaac', 'Jalen', 'Jesse', 'Keanu', 'Koa', 'Lachlan', 'Levi', 'Luca', 'Malachi', 'Mana', 'Niko', 'Oren', 'Peni', 'Remy', 'Riley', 'Sol', 'Tama', 'Tane', 'Teo', 'Toby', 'Zane'];
@@ -288,6 +289,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'cancelPositionTraining'; year: number; clubId: string; playerId: string; role: NrlRole; startedRound: number }
   | { type: 'runIntensiveBye'; year: number; clubId: string; round: number; playerId: string; startedRound: number }
   | { type: 'setIntensivePositionTraining'; year: number; clubId: string; round: number; playerId: string; startedRound: number; enabled: boolean }
+  | { type: 'setIndividualSkillWork'; year: number; clubId: string; round: number; playerId: string | null }
   | { type: 'startReserveGrade'; year: number; clubId: string; round: number; playerId: string; role?: NrlRole }
   | { type: 'recallReserveGrade' | 'bookReserveCoach'; year: number; clubId: string; round: number; playerId: string }
   | { type: 'setShortlist'; playerId: string; saved: boolean; year: number }
@@ -1063,6 +1065,7 @@ export function nrlIntensiveMatch(state: NrlCareerState) {
   if (!course || state.legacySeason || state.retired || state.outOfWork || season.live || season.phase !== 'regular'
     || (course.intensiveBye ?? course.intensiveMatch) !== undefined || course.remaining < 2 || !nrlNextRound(season).clubMatch
     || nrlUnavailable(season).has(course.playerId) || season.individualRecoveryId === course.playerId
+    || season.individualSkillWorkId === course.playerId
     || (judiciaryNeedsResponse(season) && season.judiciary?.case?.playerId === course.playerId)) return null;
   const recovery = nrlAwayRecoveryBonus(state);
   return { ...course, queued: season.intensivePositionTrainingId === course.playerId,
@@ -2054,6 +2057,25 @@ export function nrlYouthFocusProgress(state: NrlCareerState) {
   return { played, tracked, remaining, rows: rows.filter(row => eligible.has(row.id)).map(({ id, name, apps }) => ({ id, name, apps })) };
 }
 
+export function nrlIndividualSkillWorkProgress(season: NrlManagerState, playerId: string) {
+  let appearances = 0;
+  let earned = false;
+  for (const match of season.results) {
+    if (match.individualSkillWorkId !== playerId) continue;
+    appearances++;
+    if (match.individualSkillGain) earned = true;
+  }
+  return { appearances, earned };
+}
+
+export function nrlIndividualSkillWorkOptions(state: NrlCareerState): NrlCareerPlayer[] {
+  const { season } = state;
+  if (state.legacySeason || state.retired || state.outOfWork || season.phase !== 'regular') return [];
+  const available = new Set(nrlIndividualRecoveryOptions(season).map(player => player.id));
+  return state.players.filter(player => available.has(player.id) && player.rating < player.potential
+    && !nrlIndividualSkillWorkProgress(season, player.id).earned);
+}
+
 function reviewRatings(state: NrlCareerState, round: number, results: NrlMatchResult[]): NrlCareerState {
   const { developmentFocus, ratingReview, season: { year, clubId, seed, reserveGrade } } = state;
   const played = new Set(results.flatMap(match => [match.homeId, match.awayId]));
@@ -2102,19 +2124,25 @@ function reviewRatings(state: NrlCareerState, round: number, results: NrlMatchRe
       rates.set(row.id, 1);
     }
   }
+  const managedMatch = ownMatch ? results.find(match => match.playerScoring && (match.homeId === clubId || match.awayId === clubId)) : undefined;
+  const skillId = managedMatch?.individualSkillWorkId;
+  const trainee = skillId && state.players.find(player => player.id === skillId);
+  // Let a scheduled rating change settle on its own. The earned point can follow on another worked appearance.
+  const skillGain = trainee && !rates.has(trainee.id) && trainee.rating < trainee.potential
+    && nrlIndividualSkillWorkProgress(state.season, trainee.id).appearances >= NRL_SKILL_WORK_APPEARANCES;
+  if (skillGain) rates.set(trainee.id, 1);
   const changes = [...rates].filter(([id]) => own.has(id));
   // Leave the last visible changes available until another review has something to report.
   const ratingUpdate = ownMatch && (changes.length || focus.size !== (ratingReview?.focus?.length ?? 0))
     ? { ratingReview: { round, changes, ...(focus.size && { focus: [...focus] }), ...(assistant.size && { assistant: [...assistant] }) } }
     : {};
-  const managedMatch = ownMatch ? results.find(match => match.playerScoring && (match.homeId === clubId || match.awayId === clubId)) : undefined;
   if (!rates.size && !ratingUpdate.ratingReview && !managedMatch) return state;
   const update = <P extends NrlPlayer>(player: P): P => {
     const step = rates.get(player.id);
     return step ? { ...player, rating: player.rating + step } : player;
   };
   const recorded = managedMatch ? state.season.results.map(match =>
-    match === managedMatch ? { ...match, ratingChanges: changes } : match) : state.season.results;
+    match === managedMatch ? { ...match, ratingChanges: changes, ...(skillGain && { individualSkillGain: true as const }) } : match) : state.season.results;
   return { ...state, ...ratingUpdate, players: rates.size ? state.players.map(update) : state.players,
     season: { ...state.season, results: recorded, squad: rates.size ? state.season.squad.map(update) : state.season.squad } };
 }
@@ -2321,6 +2349,7 @@ export function runNrlFastForward(initial: NrlCareerState, request: NrlFastForwa
     if ((state.positionTraining && !next.positionTraining)
       || (state.finance.academyCrossTraining && academyCrossTrainingRemaining(season.round, state.finance.academyCrossTraining) === 1)
       || (nrlReserveGradeRemaining(season) === 1)
+      || next.season.results.slice(season.results.length).some(result => result.individualSkillGain)
       || (state.finance.coachCourseRound !== undefined && nrlCoachCourseQuote(state).remaining === 1)) {
       return { state: next, stop: 'development' };
     }
@@ -3130,6 +3159,16 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       return intensivePositionTrainingId === undefined && nrlIntensiveMatch(state)
         ? { ...state, season: { ...season, intensivePositionTrainingId: playerId } } : state;
     }
+    case 'setIndividualSkillWork': {
+      const { season } = state;
+      const { year, clubId, round, playerId } = action;
+      if (year !== season.year || clubId !== season.clubId || round !== season.round) return state;
+      const { individualSkillWorkId, ...previous } = season;
+      if (playerId === null) return individualSkillWorkId ? { ...state, season: previous } : state;
+      if (playerId === individualSkillWorkId || !nrlIndividualSkillWorkOptions(state).some(player => player.id === playerId)) return state;
+      const { individualRecoveryId: _recovery, ...practice } = previous;
+      return { ...state, season: { ...practice, individualSkillWorkId: playerId } };
+    }
     case 'startReserveGrade':
     case 'bookReserveCoach':
     case 'recallReserveGrade': {
@@ -3141,7 +3180,7 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         const { role } = action;
         if (!player || (role !== undefined && (player.secondaryRole || !nrlRetrainingRoles(player.role).includes(role)))) return state;
         const next = { ...season, reserveGrade: { playerId: player.id, startedRound: round, startingRating: player.rating, ...(role && { role }) } };
-        return { ...state, season: season.individualRecoveryId === player.id ? repairMatchday(next) : next };
+        return { ...state, season: season.individualRecoveryId === player.id || season.individualSkillWorkId === player.id ? repairMatchday(next) : next };
       }
       if (action.type === 'bookReserveCoach') {
         if (!reserveGrade || reserveGrade.playerId !== action.playerId || nrlReserveCoachQuote(state)?.reason !== null) return state;
@@ -4261,6 +4300,23 @@ function validRatingReview(state: NrlCareerState): boolean {
   return review.assistant.every(id => earned.has(id) && !review.focus?.includes(id));
 }
 
+function validIndividualSkillWork({ season, players }: NrlCareerState): boolean {
+  const completed = new Map<string, number>();
+  const earned = new Set<string>();
+  for (const { individualSkillWorkId: id, individualSkillGain } of season.results) {
+    if (!id) continue;
+    if (!season.injuryTracking || earned.has(id)) return false;
+    const appearances = (completed.get(id) ?? 0) + 1;
+    completed.set(id, appearances);
+    if (individualSkillGain) {
+      if (appearances < NRL_SKILL_WORK_APPEARANCES) return false;
+      earned.add(id);
+    }
+  }
+  const id = season.individualSkillWorkId;
+  return id === undefined || (!earned.has(id) && players.some(player => player.id === id && player.rating < player.potential));
+}
+
 export function isNrlCareerState(value: unknown): value is NrlCareerState {
   if (!record(value) || value.version !== 2 || !isNrlOpeningYear(value.openingYear)
     || !isNrlSeasonProgress(value.season) || value.season.year < value.openingYear
@@ -4314,7 +4370,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     if (training?.playerId === spell.playerId && training.startedRound < spellEnd
       && training.startedRound + NRL_POSITION_TRAINING_ROUNDS - Number((training.intensiveBye ?? training.intensiveMatch) !== undefined) > spell.startedRound) return false;
   }
-  if (!validWorld(state) || !validRatingReview(state) || !validCareerBooks(state) || !validAcademy(state)
+  if (!validWorld(state) || !validRatingReview(state) || !validIndividualSkillWork(state) || !validCareerBooks(state) || !validAcademy(state)
     || (state.developmentPriorityId !== undefined && (typeof state.developmentPriorityId !== 'string'
       || !nrlDevelopmentPriorityOptions(state).some(row => row.id === state.developmentPriorityId)))
     || !validShortlist(state) || !validContractApproach(state)) return false;
@@ -4374,6 +4430,7 @@ export function readNrlCareerSave(raw: string | null): NrlCareerState | null {
       return value.season.bench ? value : { ...value, season: { ...value.season, bench: nrlBench(value.season) } };
     }
     return isNrlManagerState(value) && isNrlOpeningYear(value.year) && value.intensivePositionTrainingId === undefined
+      && value.individualSkillWorkId === undefined && !value.results.some(match => match.individualSkillWorkId)
       ? careerFrom(value, value.year, true) : null;
   } catch {
     return null;
