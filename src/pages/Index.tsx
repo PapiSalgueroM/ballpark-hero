@@ -450,7 +450,7 @@ export default function Index() {
 
       <div className="grid min-w-0 gap-6 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-8 xl:grid-cols-[14rem_minmax(0,1fr)]">
         <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="scroll-mt-36 focus-visible:outline-primary sm:scroll-mt-28">
-          <div className="rounded-xl border border-border bg-surface-1 p-3 lg:sticky lg:top-28 lg:max-h-[calc(100dvh-8rem)] lg:overflow-y-auto xl:p-4">
+          <div className="rounded-xl border border-border bg-surface-1 p-3 lg:top-28 lg:flex lg:flex-col lg:[@media(min-height:540px)]:sticky lg:[@media(min-height:540px)]:max-h-[calc(100dvh-8rem)] xl:p-4">
             <h2 id="browse-sports-heading" className="font-display text-lg font-bold">Browse sports</h2>
             <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} onJump={jumpToSport} />
             <p className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">

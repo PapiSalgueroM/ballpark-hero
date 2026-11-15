@@ -74,12 +74,12 @@ it('rechecks a genuinely changed cap before accepting a previously available swa
 it('can replace the only returning player at a position and uses the replacement in Round 1', () => {
   const year = 2026, clubId = 'storm';
   const ended = finish(createNrlCareer(clubId, 1, year));
-  const action = { type: 'swapContracts', year, clubId, outgoingId: 'storm-2-0', incomingId: 'nrl-roosters-2026-14' } as const;
+  const action = { type: 'swapContracts', year, clubId, outgoingId: 'storm-2-0', incomingId: 'nrl-sea-eagles-2026-1' } as const;
   expect(nrlCareerSquad(ended, year + 1).filter(row => row.role === 'Left Wing').map(row => row.id)).toEqual([action.outgoingId]);
   expect(nrlTakeoverDiscovery(ended, action.outgoingId).offers).toEqual([]);
   const pair = nrlContractSwapOptions(ended, action.outgoingId, action.incomingId)[0];
   expect(pair.incoming.role).toBe('Left Wing');
-  expect(pair.capRoom - nrlCareerCap(ended, year + 1).available).toBe(801);
+  expect(pair.capRoom - nrlCareerCap(ended, year + 1).available).toBe(37704);
   const next = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'startNextSeason' });
   const normal = next(ended);
   const changed = next(reduceNrlCareer(ended, action));

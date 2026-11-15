@@ -23,7 +23,7 @@ import type { Position } from '@/types/game';
 import { mineSheets, rowKey } from '@/lib/clubManagerLeagueBook';
 import { BOOK_FULL_SHARE } from '@/lib/clubManagerLeagueBoards';
 import { averageOf, pastOf, rowIsHere } from '@/lib/clubManagerCareerLines';
-import { worldYearOf } from '@/lib/clubManagerCalendar';
+import { seasonDays, worldYearOf } from '@/lib/clubManagerCalendar';
 import { seasonLabel } from '@/lib/clubManagerEras';
 import type { SeasonHistoryMetric } from '@/lib/soccerCareerSeasonHistory';
 
@@ -47,6 +47,12 @@ export interface PastLine {
   label: string;
   club: string | null;
   metrics: SeasonHistoryMetric[];
+}
+
+interface LeagueOvrHistory {
+  played: number;
+  reviewed: number;
+  changes: { round: number; opponent: string; before: number; after: number }[];
 }
 
 /** The plain lines a card may carry, as codes the screen words once. */
@@ -75,6 +81,7 @@ export interface PlayerCard {
   back: boolean;
   now: SeasonLine | null;
   league: SeasonLine | null;
+  leagueOvr?: LeagueOvrHistory;
   past: PastLine[];
   keptFrom: number | null;
   notes: CardNote[];
@@ -104,6 +111,19 @@ const lineOfMine = (p: CMPlayer): SeasonLine => ({
   apps: p.apps ?? 0, goals: p.seasonGoals, assists: p.seasonAssists, cleanSheets: p.cleanSheets ?? 0,
   yellows: p.seasonYellows ?? 0, reds: p.seasonReds ?? 0, average: averageOf(p.apps ?? 0, Math.round((p.ratingSum ?? 0) * 10)),
 });
+
+function leagueOvrOf(state: CareerState, playerId: string): LeagueOvrHistory {
+  const played = state.calendar.slice(0, state.week).filter(entry => entry.type === 'league').length;
+  const history: LeagueOvrHistory = { played, reviewed: 0, changes: [] };
+  if (!state.leagueRatingResults) return history;
+  for (const day of seasonDays(state).entryDays.values()) {
+    if (day.competition !== 'league' || !day.ratingChanges || !day.opponent || day.weekIdx === undefined) continue;
+    history.reviewed += 1;
+    const move = day.ratingChanges.find(change => change.id === playerId);
+    if (move) history.changes.push({ round: state.calendar[day.weekIdx].round + 1, opponent: day.opponent, before: move.before, after: move.after });
+  }
+  return history;
+}
 
 /** The notes about this season's book, for a rival's league line. */
 function bookNotes(boards: LeagueBoards | null): CardNote[] {
@@ -145,6 +165,7 @@ export function playerCardOf(state: CareerState, ref: CardRef): PlayerCard | nul
         cleanSheets: back && boards && boards.from === null ? mineSheets(boards.input.book, p.id) : null,
         yellows: lg?.yellows ?? 0, reds: lg?.reds ?? 0, average: averageOf(lg?.apps ?? 0, Math.round((lg?.ratingSum ?? 0) * 10)),
       },
+      leagueOvr: leagueOvrOf(state, p.id),
       /* Seasons HERE only: a row of a season finished at a club the manager has left is another man's. */
       past: pastOf(state.pastLines, p.id).filter(row => rowIsHere(state, row)).reverse().map(row => ({
         season: row[0], label: seasonLabelOf(state, row[0]),
