@@ -312,7 +312,7 @@ describe('AussieRulesLeagueBoard', () => {
     expect(panel.getByText(/Elwen Pellwick/)).toBeVisible();
     expect(panel.getByText(new RegExp(name + ' \\(replacement\\)'))).toBeVisible();
     expect(panel.queryByText(/Faelan Pellwick/)).toBeNull();
-    expect(first.getByRole('button', { name: 'Start season 2', exact: true })).toBeVisible();
+    expect(first.getByRole('button', { name: /^Start season 2$/ })).toBeVisible();
     expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
     first.unmount();
 
