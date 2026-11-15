@@ -18,7 +18,7 @@ import { usSeasonLength } from '@/data/usSeasonLengths';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nbaSeasonScore, wonAward } from './careerAwards';
 import { decideNbaAwards, NBA_FIELD } from './nbaCareerAwards';
-import { NBA_DEFENSIVE_CAP, NBA_DEFENSIVE_GAIN, NBA_DEFENSIVE_SCORING_COST, nbaDefensiveAssignment, type ProgrammePreparation } from './usCareerProgramme';
+import { NBA_DEFENSIVE_CAP, NBA_DEFENSIVE_GAIN, NBA_DEFENSIVE_SCORING_COST, NBA_EXTRA_PLAYOFF_MINUTES, NBA_PLAYOFF_HEALTH_COST, NBA_PLAYOFF_MINUTES_CAP, nbaDefensiveAssignment, nbaExtraPlayoffMinutesAvailable, type ProgrammePreparation } from './usCareerProgramme';
 import { draftRival, judgeRivalSeason, rivalKindOf, rivalSeasonDraws, rivalSeasonStream } from './careerRival';
 import type { CareerRival, RivalSeasonPlay } from './careerRival';
 import { nbaStatLine } from './usCareerStatLine';
@@ -109,6 +109,7 @@ export interface NbaSeasonLine {
   apg: number;
   /** Round 103: what you did once the regular season ended. */
   poGames?: number; poPpg?: number; poRpg?: number; poApg?: number;
+  poMpg?: number;
   awards: string[];
   teamResult: string;
   salary: number;
@@ -637,8 +638,9 @@ export interface NbaLineInput {
   /** The season's start year, for the league's level that year. */
   year: number;
   playoffs?: boolean;
+  extraPlayoffMinutes?: boolean;
 }
-export interface NbaLineNumbers { mpg: number; ppg: number; rpg: number; apg: number; spg: number; bpg: number }
+export interface NbaLineNumbers { mpg: number; ppg: number; rpg: number; apg: number; spg: number; bpg: number; extraMpg?: number }
 export const NBA_LINE_DRAWS = 7;
 
 /** What a position passes, steals and blocks, a 36 minute starter of average hands. */
@@ -678,7 +680,13 @@ export function nbaStatLineFor(input: NbaLineInput, rng: () => number): NbaLineN
     * (0.95 + u2 * 0.1);
   /* Rotations shorten in the playoffs: a starter plays a couple more. */
   if (po && !bench) minutes += 2;
-  minutes = clampTo(minutes, 8, 42);
+  minutes = clampTo(minutes, 8, NBA_PLAYOFF_MINUTES_CAP);
+  let extraMpg = 0;
+  if (po && !bench && input.extraPlayoffMinutes) {
+    const extended = Math.min(NBA_PLAYOFF_MINUTES_CAP, minutes + NBA_EXTRA_PLAYOFF_MINUTES);
+    const added = tenth(tenth(extended) - tenth(minutes));
+    if (added >= 1) { minutes = extended; extraMpg = added; }
+  }
   const pointsRate = Math.max(0.20 + d * 0.011, 0.0811 + d * 0.0212) * (1 + (a.scoring - 1) * 0.6);
   const ppg = clampTo(pointsRate * minutes * era.pts * (0.92 + u3 * 0.16), 1, po ? 42 : 38);
   const rpg = clampTo((0.12 + d * 0.0048) * a.rebounding * NBA_POS_REB[input.pos] * minutes * era.reb * (0.92 + u4 * 0.16), 0.5, po ? 18 : 16);
@@ -686,7 +694,7 @@ export function nbaStatLineFor(input: NbaLineInput, rng: () => number): NbaLineN
   const hands = (0.75 + d * 0.012) * minutes / 36;
   const spg = clampTo(NBA_POS_STL[input.pos] * def.stl * hands * era.stl * (0.8 + u6 * 0.4), 0.1, NBA_DEFENSIVE_CAP.spg);
   const bpg = clampTo(NBA_POS_BLK[input.pos] * def.blk * hands * era.blk * (0.8 + u7 * 0.4), 0, NBA_DEFENSIVE_CAP.bpg);
-  return { mpg: tenth(minutes), ppg: tenth(ppg), rpg: tenth(rpg), apg: tenth(apg), spg: tenth(spg), bpg: tenth(bpg) };
+  return { mpg: tenth(minutes), ppg: tenth(ppg), rpg: tenth(rpg), apg: tenth(apg), spg: tenth(spg), bpg: tenth(bpg), ...(extraMpg ? { extraMpg } : {}) };
 }
 
 /** Round 1103: the games a club plays in the season that starts in `year`, off the two sourced ledger Round 1048
@@ -901,6 +909,7 @@ export function simNbaSeason(
 
   // Round 103: the postseason is its own performance, not a sentence.
   const depth = playoffDepthOf(poStage >= 0, poStage);
+  const playoffMinutes = programme?.plan.tactics === 'playoff-minutes' ? programme : null;
   if (depth >= 0) {
     const poG = playoffGames(depth, rng, 'nba');
     const clutch = clutchSwing(rng);
@@ -909,10 +918,17 @@ export function simNbaSeason(
     const poForm = form + clutch - 1.5;
     line.poGames = poG;
     /* Round 1103: the same function as the regular season, on the playoff form. */
-    const po = nbaStatLineFor({ form: poForm, pos: c.pos, archetype: a, role, seasonsPlayed, year: c.year, playoffs: true }, rng);
+    const extraPlayoffMinutes = !!playoffMinutes && nbaExtraPlayoffMinutesAvailable(c)
+      && c.health - playoffMinutes.healthDelta >= NBA_PLAYOFF_HEALTH_COST;
+    const po = nbaStatLineFor({ form: poForm, pos: c.pos, archetype: a, role, seasonsPlayed, year: c.year, playoffs: true, extraPlayoffMinutes }, rng);
     line.poPpg = po.ppg;
     line.poRpg = po.rpg;
     line.poApg = po.apg;
+    if (playoffMinutes && po.extraMpg) {
+      playoffMinutes.nbaExtraPlayoffMinutes = po.extraMpg;
+      line.poMpg = po.mpg;
+      notes.push(`🏀 Extra playoff minutes: +${po.extraMpg.toFixed(1)} minutes per game, costing ${NBA_PLAYOFF_HEALTH_COST} health after the season.`);
+    }
     notes.push(`📊 Playoffs: ${poG} games, ${po.ppg.toFixed(1)} ppg, ${po.rpg.toFixed(1)} rpg, ${po.apg.toFixed(1)} apg.`);
     const vote = finalsMvpDraw;
     if (vote !== undefined && wonAward(() => vote, 'nba', 'finalsMvp', c.pos, nbaSeasonScore(nbaEraNeutral({ games: poG, ...po }, c.year)))) {
@@ -921,6 +937,7 @@ export function simNbaSeason(
     const cn = clutchNote(clutch, depth, 'nba', poForm);
     if (cn) notes.push(cn);
   }
+  if (playoffMinutes && !playoffMinutes.nbaExtraPlayoffMinutes) notes.push('🏀 Extra playoff minutes went unused. No health cost.');
 
   /* Round 123: an award is a draw against the rest of the league, never a bare threshold (MVP used to be
      gated on an overall of 92 the engine never reached, so it fired exactly zero times, and All-NBA was a

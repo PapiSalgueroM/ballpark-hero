@@ -42,7 +42,7 @@ describe('Rugby League World Cup screen', () => {
     expect(screen.getByText(/published 2026 fixtures/i)).toBeVisible();
     fireEvent.change(screen.getByRole('combobox', { name: 'Coach a nation' }), { target: { value: 'new-zealand' } });
     click('Start World Cup');
-    expect(cup()?.nation).toBe('new-zealand');
+    expect(cup()).toMatchObject({ version: 2, nation: 'new-zealand' });
     expect(localStorage.getItem(NRL_SAVE_KEY)).toBeNull();
     fireEvent.change(screen.getByRole('combobox', { name: 'World Cup tactic' }), { target: { value: 'attack' } });
     click('Play pool round 1');
@@ -178,7 +178,7 @@ describe('Rugby League World Cup screen', () => {
     expect(localStorage.getItem(NRL_SAVE_KEY)).toBe(clubBytes);
     fireEvent.change(screen.getByRole('combobox', { name: 'Coach a nation' }), { target: { value: 'new-zealand' } });
     click('Accept national appointment');
-    expect(JSON.parse(localStorage.getItem(NRL_SAVE_KEY)!).worldCup).toMatchObject({ nation: 'new-zealand', tactics: [] });
+    expect(JSON.parse(localStorage.getItem(NRL_SAVE_KEY)!).worldCup).toMatchObject({ version: 2, nation: 'new-zealand', tactics: [] });
     click('Play pool round 1');
     expect(JSON.parse(localStorage.getItem(NRL_SAVE_KEY)!).worldCup.tactics).toEqual(['balanced']);
     expect(localStorage.getItem(cupKey)).toBe(standalone);

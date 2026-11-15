@@ -419,8 +419,8 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1, children,
                 className="rounded-xl border border-border bg-card px-3 py-2.5 transition-colors hover:border-primary/50"
               >
                 <span className="block text-lg">{r.emoji}</span>
-                <span className="mt-0.5 block truncate text-xs font-bold text-foreground">{r.label}</span>
-                <span className="mt-0.5 block text-[10px] leading-snug text-muted-foreground line-clamp-2">{r.description}</span>
+                <span className="mt-0.5 block break-words text-sm font-bold text-foreground sm:truncate sm:text-xs">{r.label}</span>
+                <span className="mt-0.5 block line-clamp-2 text-xs leading-snug text-muted-foreground sm:text-[10px]">{r.description}</span>
               </Link>
             ))}
           </div>

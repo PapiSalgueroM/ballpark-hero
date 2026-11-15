@@ -2,8 +2,8 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
-import { createNrlCareer, readNrlCareerSave } from '@/lib/nrlCareer';
-import { createNrlSeason, NRL_ROLES, NRL_SAVE_KEY, nrlHoldableReserves, reduceNrlSeason } from '@/lib/nrlManager';
+import { createNrlCareer, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
+import { createNrlSeason, NRL_DOMESTIC_SCORING_MODEL, NRL_ROLES, NRL_SAVE_KEY, nrlHoldableReserves, reduceNrlSeason } from '@/lib/nrlManager';
 import { nrlScorePoints } from '@/lib/nrlPlayerScoring';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
@@ -108,6 +108,42 @@ it.each([false, true])('records only live participants when the held reserve was
   page.unmount();
   show();
   verifyTeamSheet(openSavedReport(), bytes);
+});
+
+it('reopens the live strip ruling without writing and saves one captain’s challenge', () => {
+  const start = createNrlCareer('broncos', 1, 2026);
+  const captainId = start.season.lineup.Fullback;
+  const initial = reduceNrlCareer({ ...start, season: { ...start.season, domesticScoringModel: NRL_DOMESTIC_SCORING_MODEL } },
+    { type: 'setCaptain', year: 2026, clubId: 'broncos', round: 1, playerId: captainId });
+  const page = open(JSON.stringify(initial));
+  fireEvent.click(screen.getByRole('button', { name: 'Play Live' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Play to 60 minutes' }));
+  fireEvent.click(screen.getByRole('button', { name: 'Play final 20 minutes' }));
+  const heading = { name: 'Captain’s challenge' };
+  expect(screen.getByRole('heading', heading)).toHaveFocus();
+  expect(screen.getByText(/thought the ball was loose before the contact/)).toBeVisible();
+  const pending = getSave()!;
+  const pendingFence = localStorage.getItem(fenceKey);
+  page.unmount();
+  const resumed = show();
+  expect(screen.getByRole('heading', heading)).toHaveFocus();
+  expect(getSave()).toBe(pending);
+  expect(localStorage.getItem(fenceKey)).toBe(pendingFence);
+  fireEvent.click(screen.getByRole('button', { name: 'Challenge ruling' }));
+  const saved = getSave()!;
+  const result = readNrlCareerSave(saved)!.season.results.find(match => match.playerScoring)!;
+  expect(result.captainChallenge).toMatchObject({ captainId, outcome: 'overturned' });
+  expect(screen.getByText(/rival knock-on/i)).toBeVisible();
+  const settledFence = localStorage.getItem(fenceKey);
+  expect(settledFence).toBe(String(Number(pendingFence) + 1));
+  resumed.unmount();
+
+  open(pending);
+  const blocked = screen.getByRole('button', { name: 'Challenge ruling' });
+  localStorage.setItem(NRL_SAVE_KEY, saved);
+  fireEvent.click(blocked);
+  expect(getSave()).toBe(saved);
+  expect(localStorage.getItem(fenceKey)).toBe('4');
 });
 
 it('keeps the score in legacy match reports without a saved player sheet', () => {

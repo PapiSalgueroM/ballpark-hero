@@ -43,6 +43,13 @@ export const NBA_MY_CAREER_CONTENT: GameContentMap = {
         ],
       },
       {
+        heading: "Taking extra playoff minutes",
+        items: [
+          "In Tactical approach, signed starters who have played a season can choose Take extra playoff minutes. If you keep your starting spot in camp and make the playoffs, you can add one to three minutes per playoff game, up to 42.",
+          "Playing the extra minutes costs four health after the season. You need four health to spend and room for at least one extra minute. The Season Programme records the extra minutes and the Career Log shows your playoff minutes per game.",
+        ],
+      },
+      {
         heading: "Managing your money between seasons",
         items: [
           "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school on the team plane is one sitting a season on odds that are printed before you sit in.",
