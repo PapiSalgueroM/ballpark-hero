@@ -248,6 +248,22 @@ function isGuessLog(value: unknown): value is unknown[] {
   return Array.isArray(value) && value.every((g) => g !== null && g !== undefined);
 }
 
+/** Games with a pre-play board choice can recover the board already played today. */
+export function readPlayedDailyPuzzleId(storageSlug: string, todayStr: string): string | null {
+  try {
+    const raw = localStorage.getItem(`${storageSlug}-daily-${todayStr}`);
+    if (!raw) return null;
+    const saved = JSON.parse(raw) as PersistedDailyState<unknown>;
+    if (saved.v === SCHEMA_VERSION && saved.date === todayStr && typeof saved.puzzleId === 'string'
+      && isGuessLog(saved.guesses) && saved.guesses.length > 0 && GAME_STATUSES.includes(saved.gameStatus)) {
+      return saved.puzzleId;
+    }
+  } catch {
+    // An unreadable record cannot pick the board.
+  }
+  return null;
+}
+
 function readPersistedState<G>(
   storageKey: string,
   todayStr: string,
