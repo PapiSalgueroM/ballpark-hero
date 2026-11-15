@@ -417,19 +417,25 @@ it.each([false, true])('restores the Soccer hub link with its catalogue expanded
   expect(within(football).getByRole('link', { name: 'NFL hub' })).toHaveAttribute('href', '/pro-football');
 });
 
-it('jumps from Browse sports to game picks and restores the opener with Back', () => {
+it.each([false, true])('jumps from Browse sports to game picks and restores the opener with a saved pin=%s', pinned => {
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
   const scrollTo = vi.fn();
   vi.stubGlobal('scrollTo', scrollTo);
+  if (pinned) localStorage.setItem('dukb-game-picks-v1', JSON.stringify(['/soccer-grid']));
   function HistoryControls() {
     const navigate = useNavigate();
     const { hash } = useLocation();
     return <><button onClick={() => navigate(-1)}>Go back</button><output aria-label="Current anchor">{hash}</output></>;
   }
-  render(<MemoryRouter initialEntries={[{ pathname: '/', key: 'home-picks-discovery-entry' }]}><Index /><HistoryControls /></MemoryRouter>);
+  const { container } = render(<MemoryRouter initialEntries={[{ pathname: '/', key: 'home-picks-discovery-entry-' + pinned }]}><Index /><HistoryControls /></MemoryRouter>);
   const trigger = screen.getByRole('button', { name: 'Browse sports' });
   const target = screen.getByRole('heading', { name: 'Games to try' });
   target.scrollIntoView = vi.fn();
+  if (pinned) {
+    const shelf = screen.getByRole('region', { name: 'Your picks' });
+    within(shelf).getByRole('heading', { name: 'Your picks' }).scrollIntoView = vi.fn();
+    expect(within(shelf).getByRole('link')).toHaveAttribute('href', '/soccer-grid');
+  }
   trigger.focus();
   fireEvent.click(trigger);
   const menu = screen.getByRole('dialog', { name: 'Browse sports' });
@@ -439,6 +445,7 @@ it('jumps from Browse sports to game picks and restores the opener with Back', (
   expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#home-game-picks');
   expect(target).toHaveFocus();
   expect(target.scrollIntoView).toHaveBeenCalledWith({ block: 'start', behavior: 'instant' });
+  expect(container.querySelectorAll('[id="home-game-picks"]')).toHaveLength(1);
 
   fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
   expect(screen.getByLabelText('Current anchor')).toBeEmptyDOMElement();
