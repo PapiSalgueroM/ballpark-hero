@@ -56,6 +56,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'At 60 minutes in Live, an unused reserve can cover their trained position if the slot is open.',
       'At 60 minutes in Live, an available starter can return for the same reserve who replaced them at half time. The return uses one interchange.',
       'The Live match timeline shows scores and scoring types for completed periods. A Golden Point score appears after you choose how to play extra time.',
+      'In a new club career, Live can pause on a late strip penalty. When your captain or vice-captain is on the field, use their view of the tackle to decide whether to challenge. The match report records the Bunker ruling.',
       'With Open interchange on, bring on one eligible unused reserve at half time or save the place for 60 minutes.',
       'At half time or 60 minutes in Live, an eligible reserve can replace your goal kicker if the named backup stays on to take the remaining place kicks.',
       'In Season fixtures, choose a rival under Follow a club to view their draw, scores and known finals fixtures. In Finals race, use View fixtures beside an opponent to open that club’s draw.',
