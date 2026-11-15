@@ -136,7 +136,9 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
                 ? 'Games are recreated from your saved season totals. Individual scores, shots and saves are simulated.'
                 : mlbPitcher ? 'Games are recreated from your saved season totals. Individual scores and pitching lines are simulated.'
                   : 'Games are recreated from your saved season totals. Individual scores and quarters are estimates.'}</p>
-              {mlbPitcher && !mlbPitchingDecisionsFit(season, career.pos) && <p className="text-xs text-muted-foreground">The saved pitching decisions do not fit the appearance count. They are shown above as season totals only.</p>}
+              {mlbPitcher && <p className="text-xs text-muted-foreground">{mlbPitchingDecisionsFit(season, career.pos)
+                ? 'If the simulated games cannot support all your pitching decisions, the decisions stay in the season totals above.'
+                : 'The saved pitching decisions do not fit the appearance count. They are shown above as season totals only.'}</p>}
               <button type="button" className={control} aria-describedby={`${sport.slug}-season-replay-details`} aria-busy={loadingReplay || undefined} onClick={event => void openSeason(event)}>
                 {loadingReplay ? 'Loading Season Center...' : 'Watch reconstructed games'}
               </button>

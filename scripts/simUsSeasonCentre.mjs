@@ -728,13 +728,9 @@ function shownIsSavedMlb(row, bind, pos, s) {
   if (s.games.length !== OWN.mlb.games) out.push(`games ${s.games.length}`);
   if (on.length !== row.games) out.push(`played ${on.length} != ${row.games}`);
   if (pitcher) {
-    const teamWins = s.games.filter(g => g.us > g.them).length;
-    const [wins, losses, saves, holds] = [row.wins, row.lossesP, row.saves, row.holds].map(value => value ?? 0);
-    const fit = wins + saves <= teamWins && losses <= s.games.length - teamWins
-      && wins + saves + Math.max(losses, holds) <= row.games
-      && (pos === 'RP' || saves + holds === 0);
+    const decisions = on.some(g => ['wins', 'lossesP', 'saves', 'holds'].some(k => g.line[k] !== undefined));
     for (const k of ['so', 'wins', 'lossesP', 'saves', 'holds']) {
-      if (!isNum(row[k]) || (k !== 'so' && !fit)) {
+      if (!isNum(row[k]) || (k !== 'so' && !decisions)) {
         if (on.some(g => g.line[k] !== undefined)) out.push(`${k} printed without a matching saved count`);
       } else {
         const sum = on.reduce((total, g) => total + of(g, k), 0);
@@ -776,9 +772,20 @@ function shownIsSavedMlb(row, bind, pos, s) {
     }
     if (pitcher) {
       if (g.started !== (pos === 'SP')) out.push(`md ${g.md}: wrong pitching role`);
+      const innings = past ? 10 : 9;
+      const defense = Array.from({ length: innings }, (_, i) => {
+        const before = runs('us', 1, g.home ? i : i + 1) - runs('them', 1, i);
+        return [before, before - runs('them', i + 1, i + 1)];
+      });
+      const save = defense.some(([before], i) => (before <= 3 || i <= innings - 3) && defense.slice(i).every(([start, end]) => start > 0 && end > 0));
+      const holdLoss = defense.some(([before, after], i) => before > 0 && before <= 2 && after < 0
+        && defense.slice(i + 1).every(([start, end]) => start < 0 && end < 0));
+      const hold = holdLoss || defense.some(([before, after], i) => before > 0 && before <= 3 && after > 0 && i < innings - 1);
       if (of(g, 'wins') + of(g, 'saves') + of(g, 'holds') > 1
-          || ((of(g, 'wins') || of(g, 'saves')) && g.us <= g.them)
-          || (of(g, 'lossesP') && g.us >= g.them)) out.push(`md ${g.md}: incompatible pitching decision`);
+          || (of(g, 'wins') && g.us <= g.them)
+          || (of(g, 'saves') && !(g.us > g.them && save))
+          || (of(g, 'lossesP') && g.us >= g.them)
+          || (of(g, 'holds') && !(of(g, 'lossesP') ? g.us < g.them && holdLoss : hold))) out.push(`md ${g.md}: incompatible pitching decision`);
       if (g.line.era !== undefined) out.push(`md ${g.md}: ERA is only saved for the season`);
       continue;
     }

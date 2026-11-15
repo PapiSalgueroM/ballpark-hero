@@ -2,15 +2,16 @@ import { describe, expect, it } from 'vitest';
 import { MLB_CAREER_SPORT } from '@/lib/mlbCareerSport';
 import { MLB_SEASON } from '@/lib/season/mlb';
 import { buildUsSeason, type UsRow } from '@/lib/season/us';
-import { deriveSeason } from '@/lib/season/core';
+import { deriveSeason, type DerivedGame } from '@/lib/season/core';
+import { pitchingOpportunities, placeMlbPitching } from '@/lib/season/mlbPitching';
 import { keyedRng } from '@/lib/keyedRng';
 
 function fixture(pos: 'SP' | 'RP', kind: 'setup' | 'closer' | null, seed = 0, ovr = 84, health = 96, quality = 82) {
   const rng = keyedRng('pitch-replay|' + pos + '|' + kind + '|' + seed);
   const sport = MLB_CAREER_SPORT;
-  const career = sport.startCareer('Fixture Pitcher', pos, sport.create.archetypes[pos][0], rng, null as never, 'now');
+  const archetypes = sport.create.archetypes[pos];
+  const career = sport.startCareer('Fixture Pitcher', pos, archetypes.find(value => value.id === kind) ?? archetypes[0], rng, null as never, 'now');
   Object.assign(career, { team: 'SEA', role: 'starter', ovr, health, year: 2026 });
-  if (kind) career.bullpenAssignment = { year: career.year, team: career.team, role: kind };
   const { line } = sport.simSeason(career, quality, rng, true);
   return { career, line };
 }
@@ -29,6 +30,8 @@ describe('MLB My Career pitching fixture reports', () => {
     ['RP', 'closer'],
   ] as const)('keeps each saved %s regular-season total in compatible game reports (%s)', (pos, kind) => {
     const { career, line } = fixture(pos, kind);
+    if (kind === 'setup') expect(line.holds).toBeGreaterThan(line.saves!);
+    if (kind === 'closer') expect(line.saves).toBeGreaterThan(line.holds!);
     const save = JSON.stringify(career);
     const result = replay(career, { ...line });
     expect(result).not.toBeNull();
@@ -45,6 +48,8 @@ describe('MLB My Career pitching fixture reports', () => {
     for (const game of appearances) {
       if (game.line.wins || game.line.saves) expect(game.us).toBeGreaterThan(game.them);
       if (game.line.lossesP) expect(game.them).toBeGreaterThan(game.us);
+      if (game.line.saves) expect(pitchingOpportunities(game).save).toBe(true);
+      if (game.line.holds) expect(pitchingOpportunities(game).hold).toBe(true);
       expect(Number(!!game.line.wins) + Number(!!game.line.saves) + Number(!!game.line.holds)).toBeLessThanOrEqual(1);
       expect(game.line).not.toHaveProperty('era');
       expect(game.line).not.toHaveProperty('outs');
@@ -53,6 +58,24 @@ describe('MLB My Career pitching fixture reports', () => {
       expect(game.events.filter(e => e.side === 'us').reduce((total, e) => total + (e.pts ?? 0), 0)).toBe(game.us);
       expect(game.events.filter(e => e.side === 'them').reduce((total, e) => total + (e.pts ?? 0), 0)).toBe(game.them);
     }
+  });
+
+  it('rules out a shutout hold and distinguishes a walk-off from an away save', () => {
+    const game = (home: boolean, us: [number, number], them: [number, number]): DerivedGame => ({
+      md: 1, opp: 1, home, played: true, started: false, fixed: false, us: us[1], them: them[1], line: {},
+      events: [
+        ...(us[1] ? [{ side: 'us' as const, min: us[0], pts: us[1], kind: 'inning' }] : []),
+        ...(them[1] ? [{ side: 'them' as const, min: them[0], pts: them[1], kind: 'inning' }] : []),
+      ],
+    });
+    expect(pitchingOpportunities(game(false, [1, 0], [2, 6]))).toMatchObject({ save: false, hold: false });
+    expect(pitchingOpportunities(game(true, [9, 1], [1, 0]))).toMatchObject({ save: false, hold: false });
+    expect(pitchingOpportunities(game(false, [9, 1], [1, 0]))).toMatchObject({ save: true, hold: false });
+    expect(pitchingOpportunities(game(false, [5, 2], [9, 4]))).toEqual({ save: false, hold: true, holdLoss: true });
+    const walkoff = game(true, [9, 1], [1, 0]);
+    const { line } = fixture('RP', 'closer');
+    expect(placeMlbPitching([walkoff], { ...line, games: 1, wins: 0, lossesP: 0, saves: 1, holds: 0, so: 2 }, 'RP', keyedRng('walkoff'))).toBe(true);
+    expect(walkoff.line).toEqual({ so: 2 });
   });
 
   it('keeps old missing bullpen fields missing and omits incompatible game decisions', () => {

@@ -50,8 +50,8 @@ import { MLB_MISSED_PLAYOFFS, MLB_PLAYOFF_LADDER, mlbEraTeamIds, mlbPlayoffResul
 import { MLB_DIVISIONS_2026, MLB_FORMULAS, MLB_GAME_RULES, MLB_PLAYOFF_FORMAT, MLB_RIVALS, MLB_SCORING } from '@/data/usSeasonLedgerMlb';
 import type { UsShape } from '@/data/usLeagueShape';
 import { postseasonRounds } from '../usSeasonShape';
-import { mlbHeldLine, mlbPitchingDecisionsFit, mlbRealGames, mlbViewGames } from '../mlbSeasonHeld';
-import { mlbPitcher, pitchingBits, pitchingSoFar, PITCHING_KEYS, placeMlbPitching } from './mlbPitching';
+import { mlbHeldLine, mlbRealGames, mlbViewGames } from '../mlbSeasonHeld';
+import { mlbPitcher, pitchingBits, pitchingDecisions, pitchingOpportunities, pitchingSoFar, PITCHING_KEYS, placeMlbPitching } from './mlbPitching';
 import { MLB_AB_LOW, MLB_AB_HIGH, mlbHitterTotals, mlbThousandths as thousandths } from '../mlbHitterTotals';
 
 /** Wins this career's rule gives each result, of 162: missed, a first round
@@ -478,7 +478,7 @@ function finishInnings(games: DerivedGame[], rng: Rng, ctx?: UsSeasonCtx): boole
 function finish(games: DerivedGame[], row: UsRow, pos: string, rng: Rng, ctx?: UsSeasonCtx): boolean {
   /* a line the engine played on another length is not this view's season */
   if (num(row.slate) !== null && row.slate !== mlbViewGames()) return false;
-  if (mlbPitcher(pos)) return placeMlbPitching(games, row, pos, rng) && finishInnings(games, rng, ctx);
+  if (mlbPitcher(pos)) return finishInnings(games, rng, ctx) && placeMlbPitching(games, row, pos, rng);
   const avg = num(row.avg);
   const rbi = num(row.rbi);
   if (avg === null || rbi === null || !Number.isInteger(rbi) || rbi < 0) return false;
@@ -521,8 +521,7 @@ function check(row: UsRow, pos: string, s: DerivedSeason, ctx: UsSeasonCtx): str
   const on = s.games.filter(g => g.played);
   const sum = (k: string) => on.reduce((a, g) => a + of(g, k), 0);
   const pitching = mlbPitcher(pos);
-  const useDecisions = pitching && mlbPitchingDecisionsFit(row, pos,
-    s.games.filter(g => g.us > g.them).length, s.games.filter(g => g.us < g.them).length);
+  const useDecisions = pitching && pitchingDecisions(s.games, row, pos) !== null;
   for (const k of pitching ? PITCHING_KEYS : ['hr', 'doubles', 'sb', 'rbi']) {
     const want = !pitching || k === 'so' || useDecisions ? num(row[k]) : null;
     if (want !== null && sum(k) !== want) out.push(`${k} ${sum(k)} != ${want}`);
@@ -555,9 +554,11 @@ function check(row: UsRow, pos: string, s: DerivedSeason, ctx: UsSeasonCtx): str
     for (const e of homers) if (inning('us', e.min) < homers.filter(x => x.min === e.min).length) out.push(`game ${g.md}: a home run in an inning his side does not score in`);
     if (!g.played) { if (Object.keys(g.line).length) out.push(`game ${g.md}: a line in a game he missed`); continue; }
     if (pitching) {
+      const opportunity = pitchingOpportunities(g);
       if (of(g, 'wins') + of(g, 'saves') + of(g, 'holds') > 1
-          || ((of(g, 'wins') || of(g, 'saves')) && g.us <= g.them)
-          || (of(g, 'lossesP') && g.them <= g.us)) out.push(`game ${g.md}: incompatible pitching decision`);
+          || (of(g, 'wins') && g.us <= g.them) || (of(g, 'saves') && !opportunity.save)
+          || (of(g, 'lossesP') && g.them <= g.us)
+          || (of(g, 'holds') && !(of(g, 'lossesP') ? opportunity.holdLoss : opportunity.hold))) out.push(`game ${g.md}: incompatible pitching decision`);
       continue;
     }
     const [gab, gh, ghr, g2b, grbi] = [of(g, 'ab'), of(g, 'h'), of(g, 'hr'), of(g, 'doubles'), of(g, 'rbi')];
