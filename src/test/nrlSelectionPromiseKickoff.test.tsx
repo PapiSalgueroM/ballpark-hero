@@ -113,3 +113,40 @@ it('keeps the early promise out of the kickoff drawer and byes out of the window
   fireEvent.click(rotation().getByText('Hold one reserve for later'));
   expect(rotation().queryByRole('region', { name: 'Selection promise' })).not.toBeInTheDocument();
 });
+
+it('confirms a starting role promise from Contracts and restores the bench and injury progress', () => {
+  const year = 2026, clubId = 'broncos', playerId = 'nrl-broncos-2026-27';
+  const advance = { type: 'advance' } as const;
+  let initial = createNrlCareer(clubId, 78, year);
+  while (initial.season.round < 8) initial = reduceNrlCareer(initial, advance);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(initial));
+  localStorage.setItem(fence, '4');
+  const open = () => {
+    click('Club office');
+    click('Contracts');
+    const summary = screen.getByText('Selection promise', { selector: 'summary span' });
+    fireEvent.click(summary);
+    return within(summary.closest('details')!);
+  };
+  const view = show();
+  const panel = open();
+  fireEvent.change(panel.getByLabelText('Selection promise type'), { target: { value: 'starts' } });
+  fireEvent.change(panel.getByLabelText('Player to make a promise to'), { target: { value: playerId } });
+  expect(raw()).toBe(JSON.stringify(initial));
+  expect(panel.getByText(/Only kickoff starts count/)).toBeVisible();
+  click('Confirm selection promise');
+  const promised = reduceNrlCareer(initial, { type: 'makeSelectionPromise', year, clubId, round: 8, playerId, mode: 'starts' });
+  expect(raw()).toBe(JSON.stringify(promised));
+  expect(panel.getByRole('status')).toHaveTextContent('0 of 4 starts in 0 of 6 eligible matches');
+  expect(localStorage.getItem(fence)).toBe('5');
+  view.unmount();
+  show();
+  expect(open().getByRole('status')).toHaveTextContent('0 of 4 starts in 0 of 6 eligible matches');
+  click('Match centre');
+  click('Quick Sim');
+  click('Quick Sim');
+  const finished = reduceNrlCareer(reduceNrlCareer(promised, advance), advance);
+  expect(raw()).toBe(JSON.stringify(finished));
+  expect(open().getByRole('status')).toHaveTextContent('0 of 4 starts in 1 of 6 eligible matches');
+  expect(localStorage.getItem(fence)).toBe('7');
+});

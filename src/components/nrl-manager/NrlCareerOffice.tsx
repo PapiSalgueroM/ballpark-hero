@@ -23,13 +23,13 @@ import {
   nrlOffseasonLineupPreview, nrlOffseasonLineupsAvailable,
   nrlPrimaryRoleOptions, nrlRecruitmentBrief, nrlRecruitmentPlan, nrlReserveCoachSpend, nrlRetentionPriority,
   nrlRenewalHoldOptions, nrlRenewalHoldQuote, nrlRenewalHoldSpend, NRL_RENEWAL_HOLD_FEE,
-  nrlSeasonOut, nrlSelectionPromise, nrlSelectionPromiseCandidates,
+  nrlSeasonOut, nrlSelectionPromise, nrlSelectionPromiseCandidates, nrlSelectionPromiseTerms,
   nrlMutualReleaseQuote, nrlMutualReleaseSpend,
   nrlSummerApplication, nrlSummerApplicationOpenings, nrlSummerLastRound,
   type NrlCareerAction, type NrlCareerState, type NrlOffseasonFreeAgentTarget, type NrlPrimaryRoleChange,
   nrlSponsorIncome, nrlSponsorRefusal, nrlTakeoverDiscovery, nrlTakeoverPlayers, nrlTicketPricingRefusal,
   nrlSupporterAttendance,
-  NRL_ACADEMY_CROSS_TRAINING_COST, NRL_ACADEMY_PRIORITIES, NRL_DEVELOPMENT_ASSISTANT, NRL_RECRUITMENT_PLAN_LIMIT, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
+  NRL_ACADEMY_CROSS_TRAINING_COST, NRL_ACADEMY_PRIORITIES, NRL_DEVELOPMENT_ASSISTANT, NRL_RECRUITMENT_PLAN_LIMIT, NRL_SHORTLIST_LIMIT, NRL_SPONSOR_OFFERS, NRL_TICKET_GATE_CHANGES,
   type NrlAcademyPriority, type NrlAcademyReport, type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlRecruitmentPick, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryPenalty } from '@/lib/nrlJudiciary';
@@ -491,12 +491,17 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
 
 function SelectionPromise({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const [picked, setPicked] = useState('');
+  const [choice, setChoice] = useState<'starts'>();
   const [confirmEnd, setConfirmEnd] = useState(false);
   const { year, clubId, round } = career.season;
   const progress = nrlSelectionPromise(career);
-  const candidates = nrlSelectionPromiseCandidates(career);
-  const { appearances, matches, discount } = NRL_SELECTION_PROMISE;
-  if (!progress && candidates.length === 0) return null;
+  const eligible = nrlSelectionPromiseCandidates(career);
+  const fringe = eligible.length ? nrlSelectionPromiseCandidates(career, 'starts') : [];
+  const mode = progress ? progress.mode : choice;
+  const candidates = mode === 'starts' ? fringe : eligible;
+  const { appearances, matches, discount } = nrlSelectionPromiseTerms(mode);
+  const unit = mode === 'starts' ? 'starts' : 'appearances';
+  if (!progress && eligible.length === 0) return null;
   const player = progress && career.players.find(row => row.id === progress.playerId);
   const signed = Boolean(player && player.futureContract?.clubId === clubId);
   return (
@@ -506,10 +511,10 @@ function SelectionPromise({ career, onAction, disabled }: { career: NrlCareerSta
         <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
       </summary>
       <div className="space-y-2 pb-3 text-sm">
-        <p className="text-muted-foreground">Promise one generated player with an expiring deal at least {appearances} appearances in their next {matches} available regular-season matches. Keeping it can lower their renewal asking salary by up to {discount}%.</p>
+        <p className="text-muted-foreground">Promise one generated player with an expiring deal at least {appearances} {unit} in their next {matches} available regular-season matches. Keeping it can lower their renewal asking salary by up to {discount}%.</p>
         {progress ? (
           <p role="status">
-            {player?.name} · {progress.appearances} of {appearances} appearances in {progress.eligible} of {matches} eligible matches.
+            {player?.name} · {progress.appearances} of {appearances} {unit} in {progress.eligible} of {matches} eligible matches.
             {progress.status === 'kept' && (signed ? ' Promise kept. Renewal already signed.'
               : ` Promise kept. Their renewal asking salary is up to ${discount}% lower.`)}
             {progress.status === 'missed' && ' Promise missed. The normal asking salary applies.'}
@@ -517,6 +522,15 @@ function SelectionPromise({ career, onAction, disabled }: { career: NrlCareerSta
           </p>
         ) : (
           <>
+            <label className="block space-y-1 font-semibold">
+              <span>Selection promise type</span>
+              <select className={control} value={choice ?? ''} disabled={disabled}
+                onChange={event => { setChoice(event.target.value === 'starts' ? 'starts' : undefined); setPicked(''); }}>
+                <option value="">Appearances · up to {nrlSelectionPromiseTerms().discount}% off</option>
+                <option value="starts" disabled={!fringe.length}>Starting role · up to {nrlSelectionPromiseTerms('starts').discount}% off</option>
+              </select>
+            </label>
+            <p className="text-xs text-muted-foreground">A starting role promise needs a player with two or fewer starts in their last six eligible matches.</p>
             <label htmlFor="nrl-promise-player" className="block font-semibold">Player to make a promise to</label>
             <select id="nrl-promise-player" className={control} value={picked} onChange={event => setPicked(event.target.value)} disabled={disabled}>
               <option value="">Choose a player</option>
@@ -524,7 +538,7 @@ function SelectionPromise({ career, onAction, disabled }: { career: NrlCareerSta
             </select>
             <Button type="button" size="lg" className="h-auto min-h-11 whitespace-normal px-3 py-2 text-left"
               disabled={disabled || !candidates.some(row => row.id === picked)}
-              onClick={() => onAction({ type: 'makeSelectionPromise', year, clubId, round, playerId: picked })}>Confirm selection promise</Button>
+              onClick={() => onAction({ type: 'makeSelectionPromise', year, clubId, round, playerId: picked, ...(mode && { mode }) })}>Confirm selection promise</Button>
           </>
         )}
         {progress?.status === 'pending' && (confirmEnd ? (
@@ -540,7 +554,8 @@ function SelectionPromise({ career, onAction, disabled }: { career: NrlCareerSta
             </div>
           </div>
         ) : <Button type="button" size="lg" variant="outline" disabled={disabled} onClick={() => setConfirmEnd(true)}>End selection promise</Button>)}
-        <p className="text-xs text-muted-foreground">Starts and used reserves count. Byes and matches they miss through injury, suspension or reserve-grade development do not. The promise ends by the regular-season finish.</p>
+        <p className="text-xs text-muted-foreground">{mode === 'starts' ? 'Only kickoff starts count toward a starting role.' : 'Starts and used reserves count.'}
+          {' The window skips byes, injuries, suspensions and reserve-grade assignments. The promise ends by the regular-season finish.'}</p>
       </div>
     </details>
   );

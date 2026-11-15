@@ -34,8 +34,8 @@ import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
   nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport, nrlPositionTraining,
   nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIntensiveBye, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveCoachQuote, nrlReserveGradeCandidates, nrlRivalSquad,
-  nrlPastLadders, nrlSelectionPromise, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
-  NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SELECTION_PROMISE, NRL_SHORTLIST_LIMIT, reduceNrlCareer, runNrlFastForward,
+  nrlPastLadders, nrlSelectionPromise, nrlSelectionPromiseTerms, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
+  NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SHORTLIST_LIMIT, reduceNrlCareer, runNrlFastForward,
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
 } from '@/lib/nrlCareer';
 import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryCase } from '@/lib/nrlJudiciary';
@@ -1171,7 +1171,7 @@ function DevelopmentAppearances({ career, heldReserveId }: { career: NrlCareerSt
 function KickoffSelectionPromise({ career, heldReserveId }: { career: NrlCareerState; heldReserveId?: string }) {
   if (!career.selectionPromise) return null;
   const progress = nrlSelectionPromise(career);
-  const { appearances: target, matches } = NRL_SELECTION_PROMISE;
+  const { appearances: target, matches } = nrlSelectionPromiseTerms(progress?.mode);
   if (!progress || progress.status !== 'pending' || (progress.appearances < target - 1 && progress.eligible < matches - 2)) return null;
   const { season } = career;
   const player = career.players.find(row => row.id === progress.playerId);
@@ -1188,7 +1188,7 @@ function KickoffSelectionPromise({ career, heldReserveId }: { career: NrlCareerS
     <section className="mt-3 border-t border-border pt-3 text-sm" aria-labelledby="nrl-kickoff-selection-promise" data-nrl-kickoff-selection-promise>
       <h3 id="nrl-kickoff-selection-promise" className="font-semibold">Selection promise</h3>
       <p className="mt-1 break-words font-medium">{player.name}</p>
-      <p className="text-xs text-muted-foreground">{progress.appearances} of {target} appearances in {progress.eligible} of {matches} eligible matches</p>
+      <p className="text-xs text-muted-foreground">{progress.appearances} of {target} {progress.mode === 'starts' ? 'starts' : 'appearances'} in {progress.eligible} of {matches} eligible matches</p>
       {unavailable ? (
         <p className="text-xs text-muted-foreground">Unavailable for this match. It will not count toward the promise window.</p>
       ) : (
@@ -1197,7 +1197,9 @@ function KickoffSelectionPromise({ career, heldReserveId }: { career: NrlCareerS
             <span>Quick Sim: {placement()}</span>
             {heldReserveId && <>{' · '}<span>Live: {placement(heldReserveId)}</span></>}
           </p>
-          <p className="mt-1 text-xs text-muted-foreground">An eligible match still counts toward the promise window if the player stays off.</p>
+          <p className="mt-1 text-xs text-muted-foreground">{progress.mode === 'starts'
+            ? 'A kickoff start is required. A reserve appearance still uses an eligible match.'
+            : 'An eligible match still counts toward the promise window if the player stays off.'}</p>
         </>
       )}
     </section>
@@ -2593,6 +2595,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>Open Opposition report to compare the attack and defence edges of each available attack plan with automatic rotation. Positional matchups shows the ratings behind the middle and wide plans.</li>
               <li>With a development assistant hired, check Development appearances in the rotation preview for players one match away from eight appearances.</li>
               <li>In Finances, use Development priority to reserve one assistant rating award for an eligible player. They still need eight appearances.</li>
+              <li>A Starting role promise is available to expiring generated players with two or fewer starts in their last six eligible matches. Start them at kickoff in four of their next six eligible matches to earn up to 7% off their renewal asking salary.</li>
               <li>Check a late Selection promise in the rotation preview before kick-off. An eligible match counts toward the promise window if the player stays off.</li>
               <li>Play Live shows the first half. At half time, change tactics, bring on a held reserve, or keep a rotating reserve on. If you still have an open bench place at 60 minutes, choose the held player or another eligible unused reserve. Quick Sim settles the round in one action.</li>
               <li>At half time, choose a Second-half attack plan. If you pause at 60 minutes, Closing attack plan can change it again for the rest of the match.</li>

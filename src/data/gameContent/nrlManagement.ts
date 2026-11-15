@@ -78,6 +78,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'After finishing a 2026 club season, take a national appointment in the Club office before starting 2027. Your World Cup progress saves with your club career, so you can return to it after switching clubs.',
       'Offer an eligible player less than the asking salary to request a simulated three-season counteroffer. Review the salary and dates before accepting.',
       'In Contracts, make one selection promise per season to an eligible generated player with an expiring deal. Give them four appearances in their next six available regular-season matches to lower their renewal asking salary by up to 5%.',
+      'A Starting role promise is available to expiring generated players with two or fewer starts in their last six eligible matches. Start them at kickoff in four of their next six eligible matches to earn up to 7% off their renewal asking salary.',
       'You can end a pending selection promise in Contracts. This gives up its renewal discount and uses your one promise for that season.',
       'Check a late Selection promise in the rotation preview before kick-off. An eligible match counts toward the promise window if the player stays off.',
       'In Contracts, arrange an offseason move for an eligible player. They stay this season, and the receiving club pays their salary for the remaining term.',
