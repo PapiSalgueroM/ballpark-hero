@@ -252,6 +252,9 @@ const AdminReports = () => {
   const filtered = reportId
     ? reports.filter((r) => r.id === reportId)
     : sortForTriage(matchingReports.filter((r) => matchesGame(r, game) && matchesStatus(r, filter)));
+  const visibleReportIds = new Set(filtered.map((report) => report.id));
+  const hiddenNoteFailures = reports.filter((report) =>
+    !visibleReportIds.has(report.id) && messages[report.id]?.note?.startsWith('Not saved'));
   const critical = matchingReports.filter((r) => matchesGame(r, game) && priorityOf(r) === 'critical' && !isClosed(statusOf(r))).length;
   const filterLabel = FILTERS.find((f) => f.key === filter)?.label ?? '';
   const hasRefinement = Boolean(search.trim()) || priorityFilter !== 'all';
@@ -372,6 +375,30 @@ const AdminReports = () => {
           ))}
         </div>
         </>}
+
+        {!reportId && !accessFailed && !loading && (
+          <div aria-live="polite">
+            {hiddenNoteFailures.length > 0 && (
+              <section aria-label="Report notes needing retry" className="mb-4 space-y-2">
+                {hiddenNoteFailures.map((report) => (
+                  <div key={report.id} className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-sm sm:flex sm:items-center sm:justify-between sm:gap-3">
+                    <div className="min-w-0">
+                      <p id={`note-retry-${report.id}`} className="line-clamp-2 break-words font-medium">{report.description}</p>
+                      <p className="break-words text-destructive"><span className="font-medium">Note · </span><span>{messages[report.id]?.note}</span></p>
+                    </div>
+                    <Link
+                      to={{ pathname: '/admin/reports', hash: `#report=${report.id}` }}
+                      aria-describedby={`note-retry-${report.id}`}
+                      className="inline-flex min-h-11 shrink-0 items-center font-medium text-primary hover:underline"
+                    >
+                      Open report to retry
+                    </Link>
+                  </div>
+                ))}
+              </section>
+            )}
+          </div>
+        )}
 
         {loading ? (
           <div className="flex justify-center py-12">
