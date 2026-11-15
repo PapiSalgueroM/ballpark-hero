@@ -227,6 +227,7 @@ export interface NrlCareerState {
   shortlist?: string[];
   savedLineup?: NrlSavedLineup;
   savedRotationLineup?: NrlSavedLineup;
+  scheduledRotation?: { fixture: NrlFixture; preset: NrlSavedLineup; returnLineup?: NrlSavedLineup };
   positionTraining?: NrlPositionCourse;
   origin?: NrlOriginSeries;
   originHistory?: NrlOriginHistory[];
@@ -277,6 +278,8 @@ export type NrlCareerAction = NrlAction
   | { type: 'agreeMutualRelease'; year: number; clubId: string; playerId: string }
   | { type: 'saveLineup'; year: number; clubId: string; slot?: 'rotation' }
   | { type: 'applySavedLineup'; previewKey: string; slot?: 'rotation' }
+  | { type: 'scheduleRotation'; year: number; clubId: string; round: number; fixtureRound: number }
+  | { type: 'cancelRotation'; year: number; clubId: string; round: number }
   | { type: 'startPositionTraining'; year: number; clubId: string; round: number; playerId: string; role: NrlRole }
   | { type: 'cancelPositionTraining'; year: number; clubId: string; playerId: string; role: NrlRole; startedRound: number }
   | { type: 'runIntensiveBye'; year: number; clubId: string; round: number; playerId: string; startedRound: number }
@@ -1874,6 +1877,41 @@ export function nrlOppositionReport(state: NrlCareerState): NrlOppositionReport 
   };
 }
 
+export function nrlScheduledRotationOptions({ season, legacySeason, retired, savedRotationLineup, scheduledRotation }: NrlCareerState): NrlFixture[] {
+  const { year, clubId, round } = season;
+  if (legacySeason || retired || !savedRotationLineup || scheduledRotation || season.live || season.phase !== 'regular') return [];
+  return nrlSeasonPlan(year).draw.slice(round).flatMap((fixtures, offset) => {
+    const pair = fixtures.find(match => match.includes(clubId));
+    return pair ? [{ round: round + offset + 1, homeId: pair[0], awayId: pair[1] }] : [];
+  });
+}
+
+function sameRotationFixture(actual: NrlFixture | undefined, expected: NrlFixture) {
+  return actual?.round === expected.round && actual.homeId === expected.homeId && actual.awayId === expected.awayId
+    && actual.finalsRound === undefined;
+}
+
+function clearScheduledRotation(state: NrlCareerState): NrlCareerState {
+  const { scheduledRotation, ...next } = state;
+  if (!scheduledRotation) return state;
+  const usual = scheduledRotation.returnLineup;
+  if (!usual) return next;
+  const { lineup, bench, kickerId } = usual;
+  return { ...next, season: repairMatchday({ ...next.season, lineup, bench, kickerId }) };
+}
+
+function advanceScheduledRotation(state: NrlCareerState): NrlCareerState {
+  const { scheduledRotation, season } = state;
+  if (!scheduledRotation || season.round < scheduledRotation.fixture.round) return state;
+  if (scheduledRotation.returnLineup || !sameRotationFixture(nrlNextRound(season).clubMatch, scheduledRotation.fixture))
+    return clearScheduledRotation(state);
+  const returnLineup = nrlMatchdaySelection(season);
+  const preview = nrlSavedLineupPreview(season, scheduledRotation.preset);
+  return returnLineup && preview
+    ? { ...state, season: preview.next, scheduledRotation: { ...scheduledRotation, returnLineup } }
+    : clearScheduledRotation(state);
+}
+
 function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type: 'advance' | 'finishLive' | 'finishMinute60' | 'settleGoldenPoint' }>,
   intensiveByePlayerId?: string): NrlCareerState {
   const previous = state.season;
@@ -1918,6 +1956,7 @@ function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, { type:
     next = clearDevelopmentPriority(next);
   }
   next = settleContractApproach(next, previous.round);
+  next = advanceScheduledRotation(next);
   if (season.phase !== 'complete') return next;
   const receipt = seasonReceipt(next);
   const { summerApplication, ...finished } = next;
@@ -3019,6 +3058,15 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       const preview = nrlSavedLineupPreview(state.season, savedLineup);
       return preview?.changed && preview.key === action.previewKey ? { ...state, season: preview.next } : state;
     }
+    case 'scheduleRotation':
+    case 'cancelRotation': {
+      const { year, clubId, round } = state.season;
+      if (action.year !== year || action.clubId !== clubId || action.round !== round) return state;
+      if (action.type === 'cancelRotation') return clearScheduledRotation(state);
+      const fixture = nrlScheduledRotationOptions(state).find(option => option.round === action.fixtureRound);
+      const preset = state.savedRotationLineup;
+      return fixture && preset ? { ...state, scheduledRotation: { fixture, preset } } : state;
+    }
     case 'arrangeTakeover': {
       const { year, clubId } = state.season;
       if (action.year !== year || action.clubId !== clubId) return state;
@@ -3998,6 +4046,21 @@ function validSavedLineup(value: unknown, season: NrlManagerState): boolean {
     && selected.every(id => typeof id === 'string' && squad.has(id));
 }
 
+function validScheduledRotation(value: unknown, season: NrlManagerState, legacy: boolean): boolean {
+  if (value === undefined) return true;
+  if (legacy || !season.kickerId || season.phase !== 'regular' || !record(value)
+    || Object.keys(value).length !== 2 + Number(value.returnLineup !== undefined)
+    || value.preset === undefined || !validSavedLineup(value.preset, season)) return false;
+  const { fixture, returnLineup } = value;
+  if (!record(fixture) || Object.keys(fixture).length !== 3 || !intIn(fixture.round, season.round, nrlRegularRounds(season.year))
+    || typeof fixture.homeId !== 'string' || typeof fixture.awayId !== 'string' || fixture.homeId === fixture.awayId
+    || (fixture.homeId !== season.clubId && fixture.awayId !== season.clubId)
+    || ![fixture.homeId, fixture.awayId].every(id => nrlSeasonPlan(season.year).clubs.some(club => club.id === id))) return false;
+  if (fixture.round > season.round) return returnLineup === undefined;
+  return returnLineup !== undefined && validSavedLineup(returnLineup, season)
+    && sameRotationFixture(nrlNextRound(season).clubMatch, { round: fixture.round, homeId: fixture.homeId, awayId: fixture.awayId });
+}
+
 function validPositionTraining(value: unknown, season: NrlManagerState, legacySeason: boolean): boolean {
   if (value === undefined) return true;
   if (legacySeason || !season.injuryTracking || !season.kickerId || season.phase !== 'regular' || !record(value)
@@ -4074,6 +4137,7 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     || (value.legacySeason && (value.season.year !== value.openingYear || value.season.kickerId || value.season.injuryTracking || value.season.results.some(match => match.benchUsed !== undefined)))
     || !validSavedLineup(value.savedLineup, value.season)
     || !validSavedLineup(value.savedRotationLineup, value.season)
+    || !validScheduledRotation(value.scheduledRotation, value.season, value.legacySeason)
     || !validPositionTraining(value.positionTraining, value.season, value.legacySeason)
     || !Array.isArray(value.players) || value.players.length > 650
     || !Array.isArray(value.history) || !validBook(value.finance, value.season.round + 1)) return false;
