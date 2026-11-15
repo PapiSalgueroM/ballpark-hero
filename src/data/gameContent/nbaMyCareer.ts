@@ -35,6 +35,14 @@ export const NBA_MY_CAREER_CONTENT: GameContentMap = {
         ],
       },
       {
+        heading: "Choosing your defensive assignment",
+        items: [
+          "Before you play a season, open Plan your season, then Tactical approach. Point guards, shooting guards and small forwards can choose Pressure the ball for more steals. Power forwards and centers can choose Protect the rim for more blocks.",
+          "The assignment gives you roughly 20% more steals or blocks per game, at least 0.1 when there is room under the cap, in exchange for about 8% fewer points per game. It only applies to the regular season. With no room at the cap, you keep your usual scoring.",
+          "For example, a point guard's usual 20.0 points and 1.5 steals per game would become 18.4 points and 1.8 steals. The season card shows what your assignment changed.",
+        ],
+      },
+      {
         heading: "Managing your money between seasons",
         items: [
           "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school on the team plane is one sitting a season on odds that are printed before you sit in.",

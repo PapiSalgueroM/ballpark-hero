@@ -475,7 +475,7 @@ function nflDraft(lg, team, rng, desk) {
     if (!E.consumeDraftPick(mine)) break;
     const p = E.prospectToPlayer(pr, rng);
     if (p && desk) D.nflSignDraftee(p);
-    if (p) mine.players.push(p);
+    if (p) { p.rookieSeason = lg.season + 1; mine.players.push(p); }
     if (p && desk) desk = D.nflNoteArrivals(desk, lg, team, [p.id], 'draft', round);
     cls = cls.filter(x => x.id !== pr.id);
     const nextPicks = picksLeft - 1;
@@ -626,6 +626,7 @@ const DRIVE = {
       E.injuryPass(lg.teams, rng);
       E.aiWeeklyMoves(lg, '', rng);
       for (const g of lg.schedule[lg.week - 1]) E.simGame(g, lg.teams, rng);
+      E.reviewNflWeekRatings(lg);
       if (lg.week < E.REGULAR_WEEKS) lg.week += 1;
     },
     overLimit: t => E.deepOverLimit(t) > 0,

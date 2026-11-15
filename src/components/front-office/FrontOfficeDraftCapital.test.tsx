@@ -9,6 +9,7 @@ import { consumeDraftPick, draftOrder, executeTalksTrade, franchiseTagSalary, ge
 import * as engine from '@/lib/frontOffice';
 import { leagueNames } from '@/lib/foNames';
 import { isFrontOfficeSave } from '@/lib/frontOfficeSave';
+import { nflContractsOf, openNflDesk } from '@/lib/nflGmDesk';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
@@ -105,6 +106,82 @@ describe('NFL draft capital outcomes', () => {
     expect(screen.getByText(/That is your draft done/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Continue to the hub' }));
     expect(localStorage.getItem(KEY)).toBe(raw); expect(localStorage.getItem('draft-scout-sentinel')).toBe('held');
+  });
+
+  it.each([false, true])('opens every drafted rookie with four years at his draft age (desk: %s)', deskOn => {
+    const lg = league();
+    const opening = { ...saved(lg), ...(deskOn && { gm: openNflDesk(lg, 'SEA') }) };
+    const { snapshots } = captureOffseason();
+    mount(opening);
+    open(); pick();
+    const pending = read();
+    const draftee = (pending.league.teams.SEA.players as engine.GmPlayer[]).find(p => p.rookieSeason === lg.season + 1)!;
+    expect(draftee.years).toBe(4);
+    pick(); pick();
+    const raw = localStorage.getItem(KEY)!;
+    const after = read().league as LeagueState;
+    const nextYear = lg.season + 1;
+    expect(after.season).toBe(nextYear);
+    const drafted = Object.values(snapshots[0].teams).flatMap(team => team.players.filter(p => p.rookieSeason === nextYear)
+      .map(player => ({ team: team.abbr, player })));
+    expect(drafted).toHaveLength(21);
+    expect(drafted.filter(row => row.team === 'SEA')).toHaveLength(3);
+    for (const { team, player } of drafted) {
+      expect(after.teams[team].players.find(p => p.id === player.id)).toMatchObject({
+        age: player.age, years: 4, salary: player.salary, rookieSeason: nextYear,
+      });
+    }
+    const active = lg.teams.SEA.players.find(p => p.age < 28 && p.years >= 2)!;
+    expect(after.teams.SEA.players.find(p => p.id === active.id)).toMatchObject({
+      age: active.age + 1, years: active.years - 1, salary: active.salary,
+    });
+    cleanup();
+    mount(read());
+    expect(localStorage.getItem(KEY)).toBe(raw);
+  });
+
+  it('finishes a paused older draft from saved rookie markers and the managed draft ledger', () => {
+    const lg = league(), opening = saved(lg);
+    const withDesk = { ...opening, gm: openNflDesk(lg, 'SEA') };
+    mount(withDesk);
+    open(); pick();
+    const pending = read();
+    const nextYear = lg.season + 1;
+    const human = (pending.league.teams.SEA.players as engine.GmPlayer[]).find(p => p.rookieSeason === nextYear)!;
+    const rivals = Object.values((pending.league as LeagueState).teams).filter(team => team.abbr !== 'SEA')
+      .flatMap(team => team.players.filter(p => p.rookieSeason === nextYear).map(player => ({ team: team.abbr, player })));
+    expect(rivals).toHaveLength(6);
+    const [unknown, marked] = rivals;
+    expect(nflContractsOf(pending.gm, pending.league, 'SEA').men[human.id]).toMatchObject({ how: 'draft', since: lg.season });
+    expect(unknown.player.years).toBe(4);
+    human.years = 5;
+    cleanup();
+    const legacy = mount(pending);
+    expect((read().league.teams.SEA.players as engine.GmPlayer[]).find(p => p.id === human.id)?.years).toBe(5);
+    const prospect = (pending.draftClass as engine.Prospect[]).find(p => p.pos === human.pos)!;
+    fireEvent.change(screen.getByLabelText('Prospect position'), { target: { value: human.pos } });
+    fireEvent.click(screen.getByText(prospect.name, { exact: true }));
+    expect(document.querySelector(`[data-draft-current-player="${human.id}"]`)).toHaveTextContent('4 years left');
+    expect(localStorage.getItem(KEY)).toBe(legacy.raw);
+    expect(legacy.writes).not.toHaveBeenCalled();
+    delete human.rookieSeason;
+    delete unknown.player.rookieSeason;
+    cleanup();
+    const restored = mount(pending);
+    expect(localStorage.getItem(KEY)).toBe(restored.raw);
+    expect(restored.writes).not.toHaveBeenCalled();
+    pick(); pick();
+    const next = read().league as LeagueState;
+    expect(next.season).toBe(nextYear);
+    expect(next.teams.SEA.players.find(p => p.id === human.id)).toMatchObject({
+      age: human.age, years: 4, salary: human.salary, rookieSeason: nextYear,
+    });
+    expect(next.teams[marked.team].players.find(p => p.id === marked.player.id)).toMatchObject({
+      age: marked.player.age, years: 4, salary: marked.player.salary, rookieSeason: nextYear,
+    });
+    const undated = next.teams[unknown.team].players.find(p => p.id === unknown.player.id);
+    expect(undated).toMatchObject({ age: unknown.player.age + 1, years: 3, salary: unknown.player.salary });
+    expect(undated?.rookieSeason).toBeUndefined();
   });
 
   it('completes two human picks with the minimum three rival batches and one offseason', () => {
@@ -214,21 +291,30 @@ describe('NFL draft capital outcomes', () => {
   it('holds all ordinary three-pick league outcomes and exact random draws against the original loop', () => {
     const lg = league(), originalSave = saved(lg), reference = clone(lg), expectedRandom = seeded(29), expectedTape: number[] = [];
     const rng = () => { const value = expectedRandom(); expectedTape.push(value); return value; };
+    const draftAges = new Map<string, number>();
+    const addProspect = (team: string, prospect: engine.Prospect) => {
+      const player = prospectToPlayer(prospect, rng)!;
+      draftAges.set(player.id, player.age);
+      reference.teams[team].players.push(player);
+    };
     let prospects = generateDraftClass(rng, 40, leagueNames(reference));
     for (let choice = 0; choice < 3; choice++) {
-      reference.teams.SEA.players.push(prospectToPlayer(prospects[0], rng)!);
+      addProspect('SEA', prospects[0]);
       const order = draftOrder(reference.teams).filter(a => a !== 'SEA');
       const remaining = prospects.slice(1), takes = remaining.slice(0, 6);
-      takes.forEach((p, i) => reference.teams[order[i]].players.push(prospectToPlayer(p, rng)!));
+      takes.forEach((p, i) => addProspect(order[i], p));
       prospects = remaining.slice(takes.length);
     }
     runOffseason(reference, rng, 'SEA');
+    expect(draftAges.size).toBe(21);
+    for (const team of Object.values(reference.teams)) for (const player of team.players) {
+      const age = draftAges.get(player.id);
+      if (age !== undefined) Object.assign(player, { age, years: 4, rookieSeason: reference.season });
+    }
     const actualRandom = seeded(29), actualTape: number[] = [];
     vi.mocked(Math.random).mockImplementation(() => { const value = actualRandom(); actualTape.push(value); return value; });
     mount(originalSave); open(); pick(); pick(); pick();
-    /* Round 1542: the board stamps each man drafted with his first year (rookieSeason), a key the original loop never
-       wrote; it moves no outcome and takes no draw, so it is set aside with the ids */
-    const withoutIds = (value: unknown) => JSON.parse(JSON.stringify(value, (key, item) => key === 'id' || key === 'rookieSeason' ? undefined : item));
+    const withoutIds = (value: unknown) => JSON.parse(JSON.stringify(value, (key, item) => key === 'id' ? undefined : item));
     expect(withoutIds(read().league)).toEqual(withoutIds(reference)); expect(actualTape).toEqual(expectedTape);
   });
 

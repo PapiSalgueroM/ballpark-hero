@@ -53,7 +53,7 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
     <p className="mt-1 text-xs text-muted-foreground">{held ? 'Programme saved for ' + career.year + ' at ' + career.team + '.' : 'Choose how to approach the season. Your usual routine stays available.'}</p>
     {last && <div data-us-programme-result className="mt-2 text-xs">
       <p className="font-bold">{last.year}: {last.outcome === 'interrupted' ? 'Programme interrupted' : 'Programme completed'}</p>
-      {last.decisions.map(d => <p key={d.section}>{d.label}: {d.outcome === 'unused' ? 'not used, it had nothing to add and cost nothing' : d.outcome}{d.target !== undefined ? ' (' + (d.actual ?? 'not recorded') + '/' + d.target + ' ' + d.unit + ')' : ''}.</p>)}
+      {last.decisions.map(d => <p key={d.section}>{d.label}: {d.outcome === 'unused' ? 'not used, it had nothing to add and cost nothing' : d.outcome}{d.target !== undefined ? ' (' + (d.actual ?? 'not recorded') + '/' + d.target + ' ' + d.unit + ')' : d.actual !== undefined && d.unit ? ' (' + d.actual.toFixed(1) + ' ' + d.unit + ')' : ''}.</p>)}
       {last.bonusGross > 0 && <p data-us-programme-bonus>Bonus: {grossMoney(last.bonusGross)} gross, {last.bonusNet >= 0.05 ? '$' + last.bonusNet.toFixed(1) + 'M banked.' : 'none of it banked (the 45% share was under the $0.1M the bank counts in).'}</p>}
       {last.partnershipProgress > 0 && <p>Partnership progress: {last.partnershipProgress}/3.</p>}
     </div>}
@@ -89,6 +89,7 @@ export default function UsCareerProgramme({ career, sport, onChange }: { career:
           {mode === 'help' ? <div className="space-y-2 text-sm">
             <p>These are choices for your generated career. Nothing changes until you play the season. Moving teams cancels the pending programme.</p>
             <p>Workload trades form against injury risk. Tactical preparation changes existing simulation inputs. Your real season decides stats, awards and injuries together.</p>
+            {sport === 'nba' && <p>Pressure the ball gives PG, SG and SF more steals. Protect the rim gives PF and C more blocks. The trade only applies in the regular season. A guard averaging 20.0 points and 1.5 steals per game on their usual plan would get 18.4 points and 1.8 steals. If the defensive stat is already capped, scoring stays the same.</p>}
             <p>Coach targets use games played. Partnership progress needs enough games at this team in consecutive seasons. A missed year resets its progress. Teammates are described by role, with no invented real player.</p>
             <p>Bonus targets use your saved position stats and enough games played. A successful challenge adds 2% or 5% of that season's salary to gross earnings. 45% of it reaches the bank, counted in tenths of a million like the rest of your bank, so each card shows what your salary would bank. Targets and rewards never alter the recorded stats.</p>
             <p>Veteran adaptation is available from age 30. It trades form for durability this season and earns health +3 for next year after games played. It cannot promise another contract or prevent retirement.</p>

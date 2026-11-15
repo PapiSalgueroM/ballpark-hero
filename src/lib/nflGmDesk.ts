@@ -452,17 +452,9 @@ export function nflProposePackage(league: LeagueState, desk: GmDesk, team: strin
   return { verdict: out.verdict, desk: next, arrived, dead };
 }
 
-/**
- * A draftee with the desk on signs the rules' four year rookie deal, plus
- * the season the summer right after draft night takes off before he has
- * played a game (the engine's offseason runs after the draft and takes a
- * season off every deal). So he plays four seasons before he comes up on
- * the re-sign desk, and a first rounder comes up with his fifth year option.
- * With the desk off the engine's own figure stands, so an old save plays as
- * it did.
- */
+/** Sign the four-year rookie deal during the draft. */
 export function nflSignDraftee(p: GmPlayer): void {
-  p.years = NFL_ROOKIE_DEAL_YEARS + 1;
+  p.years = NFL_ROOKIE_DEAL_YEARS;
 }
 
 /** Tell the re-sign ledger how men arrived: a trade or a signing in season, or the draft with its round. */
@@ -524,9 +516,16 @@ export function nflDeskOffseason(league: LeagueState, desk: GmDesk, team: string
   const picksBefore = nflPicksOf(desk, league);
   const staffBefore = nflStaffOf(desk, league, team);
   const ledger = deskCopy(nflContractsOf(desk, league, team));
+  // Older paused drafts can identify the GM's unstamped picks from this season's ledger.
+  const unstamped = league.teams[team]?.players.filter(player => {
+    const arrival = ledger.men[player.id];
+    return player.rookieSeason === undefined && arrival?.how === 'draft' && arrival.since === closed;
+  }) ?? [];
+  for (const player of unstamped) player.rookieSeason = closed + 1;
   const autoSettled = autoDecide(nflContractHost, league, ledger);
   const run = runDeskOffseason(nflContractHost, league, ledger, rng);
   if (run.ok === false) {
+    for (const player of unstamped) delete player.rookieSeason;
     return { ok: false, desk, news: null, lines: [`Still waiting on: ${run.undecided.map(u => u.name).join(', ')}.`], autoSettled: [], applied: [] };
   }
 

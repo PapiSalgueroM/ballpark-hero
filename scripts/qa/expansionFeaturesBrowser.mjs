@@ -172,7 +172,7 @@ try{for(const width of[390,1280]){
   const oldIds=new Set(Object.values(before.league.teams).flatMap(t=>t.players.map(x=>x.id))),newIds=[],arrivals=[];
   for(const[team,wanted]of[[before.myTeam,target.name],...rivals.map((team,i)=>[team,f.rivals[i]])]){
    const original=before.league.teams[team],now=after.league.teams[team];assert.deepEqual(now.players.slice(0,original.players.length),original.players);assert.equal(now.players.length,original.players.length+1);
-   const player=now.players.at(-1);assert.equal(player.name,wanted);assert.equal(player.ovr,80);assert.equal(player.salary,7);assert.equal(player.years,team===before.myTeam?5:4);assert.equal(player.rookieSeason,before.league.season+1);assert(player.pot>=83&&player.pot<=90);assert(!oldIds.has(player.id));
+   const player=now.players.at(-1);assert.equal(player.name,wanted);assert.equal(player.ovr,80);assert.equal(player.salary,7);assert.equal(player.years,4);assert.equal(player.rookieSeason,before.league.season+1);assert(player.pot>=83&&player.pot<=90);assert(!oldIds.has(player.id));
    newIds.push(player.id);arrivals.push({team,name:player.name,pos:player.pos});expected.teams[team].players.push(player);expected.teams[team].picks.shift();
   }
   assert.equal(new Set(newIds).size,7);assert.deepEqual(after.league,expected);assert.equal(after.picksLeft,2);assert.equal(after.draftBatchesLeft,2);assert.equal(after.league.teams[before.myTeam].players.at(-1).pos,'QB');

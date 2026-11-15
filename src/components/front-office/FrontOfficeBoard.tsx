@@ -7,7 +7,7 @@ import { buildDraftNight } from '@/lib/draftNight';
 import type { DraftNight } from '@/lib/draftNight';
 import {
   initLeague, simGame, injuryPass, standings, runPlayoffs, runOffseason, reviewNflWeekRatings,
-  generateDraftClass, prospectToPlayer, consumeDraftPick, nflAiDraftPicks, teamStrength, capUsed, capRoom,
+  generateDraftClass, prospectToPlayer, consumeDraftPick, nflAiDraftPicks, nflDraftContractYears, teamStrength, capUsed, capRoom,
   releasePlayer, signPlayer, proposeTrade, tradeValue, aiWeeklyMoves, divisionOf,
   defenceRating,
   conferenceOf, conferenceSeeds, executeTalksTrade,
@@ -948,7 +948,6 @@ export default function FrontOfficeBoard() {
     const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
     for (let i = 0; i < batches; i++) {
       const resolved = nflAiDraftPicks(lg, nextClass, myTeam, Math.random);
-      nflMarkRookies(lg, resolved.picks, lg.season + 1);
       nextClass = resolved.remaining;
       rivalPicks.push(...resolved.picks);
     }
@@ -1048,7 +1047,6 @@ export default function FrontOfficeBoard() {
     const batches = draftBatchesLeft ?? Math.min(3, picksLeft);
     for (let i = 0; i < batches; i++) {
       const resolved = nflAiDraftPicks(lg, remaining, myTeam, Math.random);
-      nflMarkRookies(lg, resolved.picks, lg.season + 1);
       remaining = resolved.remaining;
       rivalPicks.push(...resolved.picks);
     }
@@ -1787,7 +1785,10 @@ export default function FrontOfficeBoard() {
           <p>{reviewed.pos} · age {reviewed.age}</p><p>Scouted grade {gradeOf(reviewed)}</p>
           <p className="font-bold">Your {reviewed.pos} roster</p>
           <div className="max-h-48 overflow-y-auto space-y-1">
-            {current.map(p => <p key={p.id} data-draft-current-player={p.id}>{p.name}: OVR {p.ovr}, age {p.age}, {p.years} year{p.years === 1 ? '' : 's'} left</p>)}
+            {current.map(p => {
+              const years = nflDraftContractYears(p, league.season);
+              return <p key={p.id} data-draft-current-player={p.id}>{p.name}: OVR {p.ovr}, age {p.age}, {years} year{years === 1 ? '' : 's'} left</p>;
+            })}
             {!current.length && <p>No players at this position.</p>}
           </div>
           <div className="flex gap-2">

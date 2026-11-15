@@ -3,10 +3,10 @@ import type { UsSport } from './usCoachCareer';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 
 export type ProgrammeSection = 'workload' | 'tactics' | 'expectation' | 'partnership' | 'bonus' | 'reinvention';
-export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'steady' | 'stretch' | 'build' | 'maintain';
+export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'steady' | 'stretch' | 'build' | 'maintain';
 export interface ProgrammeChoices {
   workload: 'normal' | 'push' | 'recover';
-  tactics: 'normal' | 'attack' | 'support';
+  tactics: 'normal' | 'attack' | 'support' | 'defend';
   expectation: 'normal' | 'steady' | 'stretch';
   partnership: 'normal' | 'build';
   bonus: 'normal' | 'steady' | 'stretch';
@@ -37,6 +37,14 @@ const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n
 const validNumber = (n: unknown): n is number => typeof n === 'number' && Number.isFinite(n) && n >= 0;
 const sections = Object.keys(DEFAULTS) as ProgrammeSection[];
 const sports: readonly string[] = ['nfl', 'nba', 'mlb', 'nhl'];
+export const NBA_DEFENSIVE_GAIN = 20;
+export const NBA_DEFENSIVE_SCORING_COST = 8;
+export const NBA_DEFENSIVE_CAP = { spg: 3, bpg: 4 } as const;
+export function nbaDefensiveAssignment(pos: string) {
+  return pos === 'PF' || pos === 'C'
+    ? { label: 'Protect the rim', stat: 'bpg', unit: 'blocks per game' } as const
+    : { label: 'Pressure the ball', stat: 'spg', unit: 'steals per game' } as const;
+}
 /* Release AU fix pass, the lead's ruling R1. A card states what the season will
    really get, and a trade whose whole gain a cap cuts away is not charged. One
    law does both: land() is read by the card and applied by prepare, so the two
@@ -206,10 +214,20 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
   const nbaSupport = c.pos === 'PF' || c.pos === 'C' ? 'rebounding' : 'playmaking';
   const attackEffect = kind === 'nba' ? 'Season scoring multiplier +8%, ' + nbaSupport + ' multiplier -8%. Your position stays the same.' : kind === 'nhl' ? 'Season scoring multiplier +0.08, favoring goals over assists.' : tradeText('attack', 'More form, more injury risk.');
   const supportEffect = kind === 'nba' ? 'Season ' + nbaSupport + ' multiplier +8%, scoring multiplier -8%. Your position stays the same.' : kind === 'nhl' ? 'Season scoring multiplier -0.08 (minimum 0.4), favoring assists over goals.' : tradeText('support', 'Less form, less injury risk.');
+  const defence = sport === 'nba' ? nbaDefensiveAssignment(c.pos) : null;
   const steadyBonus = bonusTarget(c, sport, false), stretchBonus = bonusTarget(c, sport, true);
   return [
     { id: 'workload', label: 'Workload and recovery', options: [{ id: 'normal', label: 'Usual routine', effect: 'Keep your current inputs.' }, { id: 'push', label: 'Push the workload', effect: workloadText('push', 'More form, more injury risk.') }, { id: 'recover', label: 'Prioritize recovery', effect: workloadText('recover', 'Less injury risk, less form.') }] },
-    { id: 'tactics', label: 'Tactical approach', options: [{ id: 'normal', label: 'Your usual approach', effect: 'Keep your current style.' }, { id: 'attack', label: attack, effect: attackEffect }, { id: 'support', label: support, effect: supportEffect }] },
+    { id: 'tactics', label: 'Tactical approach', options: [
+      { id: 'normal', label: 'Your usual approach', effect: 'Keep your current style.' },
+      { id: 'attack', label: attack, effect: attackEffect },
+      { id: 'support', label: support, effect: supportEffect },
+      ...(defence ? [{
+        id: 'defend' as const,
+        label: defence.label,
+        effect: `Get ${NBA_DEFENSIVE_GAIN}% more ${defence.unit} in the regular season, at least 0.1 more up to ${NBA_DEFENSIVE_CAP[defence.stat].toFixed(1)}. You give up about ${NBA_DEFENSIVE_SCORING_COST}% of your points per game if the boost lands, with a 1.0 PPG minimum.`,
+      }] : []),
+    ] },
     { id: 'expectation', label: 'Coach expectations', options: [{ id: 'normal', label: 'No extra target', effect: 'Keep the normal season.' }, { id: 'steady', label: 'Steady availability', effect: 'Play ' + gamesTarget(c, sport, false) + ' games: morale +3 (morale tops out at 100). Miss it: morale -3.' }, { id: 'stretch', label: 'Earn a bigger role', effect: 'Play ' + gamesTarget(c, sport, true) + ' games: morale +6 (morale tops out at 100). Miss it: morale -5. This does not guarantee a starting spot.' }] },
     { id: 'partnership', label: 'Teammate partnership', options: [{ id: 'normal', label: 'Keep your own routine', effect: 'No extra partnership input.' }, { id: 'build', label: sport === 'nba' ? 'Build a two-player rhythm' : sport === 'nhl' ? c.pos === 'G' ? 'Work with your defense pair' : 'Build line chemistry' : sport === 'mlb' ? c.pos === 'SP' || c.pos === 'RP' ? 'Work with your catcher' : 'Build a lineup partnership' : c.pos === 'QB' ? 'Work with your receivers' : 'Build unit chemistry', effect: 'A role-based teammate partnership, with no invented player. At least ' + gamesBase(c, sport) + ' games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6.' + partnerText }] },
     { id: 'bonus', label: 'Performance bonus', options: [{ id: 'normal', label: 'No bonus challenge', effect: 'Keep the normal pay.' }, { id: 'steady', label: 'Match the benchmark', effect: steadyBonus.target + ' ' + steadyBonus.label + ' and ' + gamesBase(c, sport) + ' games: 2% of season salary as a gross bonus.' + bankText(false) }, { id: 'stretch', label: 'Stretch the benchmark', effect: stretchBonus.target + ' ' + stretchBonus.label + ' and ' + gamesBase(c, sport) + ' games: 5% of season salary as a gross bonus.' + bankText(true) }] },
@@ -243,7 +261,7 @@ export function prepareUsCareerProgramme(c: ProgrammeCareer, sport: UsSport): Pr
   const before = host.archetype;
   const archetype = before ? { ...before } : undefined;
   const kind = tacticsKind(c, sport);
-  if (plan.tactics !== 'normal' && archetype) {
+  if ((plan.tactics === 'attack' || plan.tactics === 'support') && archetype) {
     if (kind === 'nba') {
       const support = c.pos === 'PF' || c.pos === 'C' ? 'rebounding' : 'playmaking';
       if (validNumber(archetype.scoring) && validNumber(archetype[support])) {
@@ -289,6 +307,14 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
     const choice = plan[section];
     if (choice === 'normal') continue;
     const decision: ProgrammeDecision = { section, label: menus.find(m => m.id === section)?.options.find(o => o.id === choice)?.label ?? section, outcome: played ? 'completed' : 'interrupted' };
+    if (played && sport === 'nba' && section === 'tactics' && choice === 'defend' && !preparation?.idle?.includes(section)) {
+      const defence = nbaDefensiveAssignment(c.pos);
+      const actual = (line as UsCareerSeason & { spg?: number; bpg?: number })[defence.stat];
+      if (validNumber(actual)) {
+        decision.actual = actual;
+        decision.unit = defence.unit;
+      }
+    }
     if (played && section === 'expectation') {
       decision.target = gamesTarget({ ...c, year: plan.year, seasons: c.seasons.filter(s => s !== line) }, sport, choice === 'stretch');
       decision.actual = line.games; decision.unit = 'games';
