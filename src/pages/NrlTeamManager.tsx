@@ -25,7 +25,7 @@ import { useRulesGateState } from '@/hooks/useRulesGateState';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
-  nrlBench, nrlBenchRotation, nrlCanOpenInterchange, nrlCanPairHalftimeInterchanges, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
+  nrlBench, nrlBenchRotation, nrlCanOpenInterchange, nrlCanPairHalftimeInterchanges, nrlClubOriginAbsences, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
   nrlActingCaptainPhases, nrlCaptainChallengePreview, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMatchFitness, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlMinute60Returns, nrlNextRound, nrlOnFieldCaptain, nrlOpeningCoverOptions,
   nrlLivePhaseScoring,
   nrlQuickInterchangeOptions, nrlQuickInterchangeOutcome, nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
@@ -1211,6 +1211,7 @@ const fastForwardStops: Record<NrlFastForwardStop, string> = {
   applications: 'Check summer job applications in Season review before advancing.',
   finals: 'The regular season is complete. Play the finals one round at a time.',
   judiciary: 'A Judiciary review needs a response in Match centre.',
+  'origin-stand-down': 'State of Origin call-ups changed the teams. Check the matchday lineup.',
   'contract-approach': 'A rival contract offer is ready in Contracts.',
   'contract-deadline': 'This is the last round to reply to the rival offer. Review it in Contracts or simulate this round on its own to let it expire.',
 };
@@ -1434,6 +1435,36 @@ function QuickInterchange({ season, onAction, disabled }: {
   );
 }
 
+function OriginCallUps({ career, fixture }: { career: NrlCareerState; fixture?: NrlFixture }) {
+  const fullName = useNrlClubName('full');
+  const { year, clubId, round, originStandDown } = career.season;
+  const camp = originStandDown?.find(row => row.round === round);
+  if (!camp) return null;
+  const clubs = fixture ? [fixture.homeId, fixture.awayId] : [clubId];
+  if (!clubs.some(id => camp.clubs[id]?.length)) return null;
+  const names = new Map(career.players.map(({ id, name }) => [id, name]));
+  return (
+    <section className="rounded-xl border border-border bg-card p-4" aria-labelledby="nrl-origin-call-ups">
+      <h3 className="font-bold" id="nrl-origin-call-ups">State of Origin call-ups</h3>
+      <p className="mt-1 text-sm text-muted-foreground">{fixture
+        ? 'These players are in Origin camp for this club round.'
+        : 'Your club has a bye during this Origin camp.'}</p>
+      <div className="mt-2 grid gap-3 sm:grid-cols-2">
+        {clubs.map(id => (
+          <div key={id}>
+            <h4 className="text-sm font-semibold">{fullName(year, id)}</h4>
+            {camp.clubs[id]?.length ? (
+              <ul className="mt-1 space-y-1 text-sm text-muted-foreground">
+                {camp.clubs[id].map(playerId => <li key={playerId}>{names.get(playerId)}</li>)}
+              </ul>
+            ) : <p className="text-sm text-muted-foreground">No call-ups</p>}
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLiveResult, initialFixtureClub }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null;
   onOpenOffice: (screen: OfficeScreen) => void; disabled: boolean; showLiveResult: boolean; initialFixtureClub?: string;
@@ -1553,6 +1584,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
         )}
       </div>
 
+      <OriginCallUps career={career} fixture={match} />
       {match && <OppositionReport key={`${year}:${match.round}`} career={career} />}
 
       {match && (
@@ -2218,6 +2250,7 @@ function Squad({ career, onAction, disabled }: {
   const bench = nrlBench(season);
   const starters = new Set(Object.values(season.lineup));
   const availability = nrlUnavailable(season);
+  const originAbsences = nrlClubOriginAbsences(season);
   const injuries = nrlInjuries(season);
   const bans = season.judiciary && nrlJudiciaryBans(season);
   const pendingCase = judiciaryNeedsResponse(season) ? nrlJudiciaryCase(season)?.playerId : undefined;
@@ -2362,7 +2395,8 @@ function Squad({ career, onAction, disabled }: {
                   return <li key={player.id} className="py-1">
                     <div className="flex flex-wrap justify-between gap-x-3">
                       <span>{player.name} · {player.role}</span>
-                      <span className="text-muted-foreground">{player.id === reserveGradeId ? 'On reserve-grade development'
+                      <span className="text-muted-foreground">{originAbsences.includes(player.id) ? 'On State of Origin duty'
+                        : player.id === reserveGradeId ? 'On reserve-grade development'
                         : ban ? `Suspended for ${ban} club ${ban === 1 ? 'match' : 'matches'}`
                         : `Out for ${remaining} ${remaining === 1 ? 'round' : 'rounds'}`}</span>
                     </div>
@@ -2868,6 +2902,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     const seed = Math.floor(Math.random() * 0x1_0000_0000);
     const persistNewCareer = (next: NrlCareerState) => persist({
       ...next, season: { ...next.season, domesticScoringModel: NRL_DOMESTIC_SCORING_MODEL },
+      ...(next.season.year === 2026 && { originClubCalendar: true as const }),
     });
     if (openingNames) {
       const request = Symbol();
