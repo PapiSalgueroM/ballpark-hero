@@ -158,7 +158,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
     ],
     faqs: [
       { q: 'When can I manage the Perth Bears?', a: 'Start with Perth in 2027 and choose confirmed signings or a generated squad. You can also move there in Season review after finishing 2026 and continue with that career’s squads.' },
-      { q: 'Does the game use the published NRL fixtures?', a: 'Each season has an original simulated fixture list. The optional 2026 names and ages come from each club’s opening matchday. All match results are simulated.' },
+      { q: 'Does the game use the published NRL fixtures?', a: 'Each season has a generated draw. New 2026 careers have five matches in each of the three rounds before State of Origin games. The optional 2026 names and ages come from each club’s opening matchday. All match results are simulated.' },
       { q: 'Can I resume my season later?', a: 'Yes. When browser storage is available, use Career saves to keep up to three careers on the same browser and device. Each slot can keep one checkpoint to restore, and 2026 and 2027 careers can sit side by side.' },
     ],
   },

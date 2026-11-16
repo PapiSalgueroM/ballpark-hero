@@ -37,7 +37,8 @@ function careerId(career: NrlCareerState): string {
   const { openingYear, openingRoster, season, customClub } = career;
   // Rollover keeps the seed and the first completed club, even when the manager moves.
   const id = [openingYear, nrlOpeningClubId(career), season.seed,
-    ...(season.domesticScoringModel ? [season.domesticScoringModel] : [])].join(':');
+    ...(season.domesticScoringModel ? [season.domesticScoringModel] : []),
+    ...(season.drawModel ? [season.drawModel] : [])].join(':');
   if (customClub) return `${id}:custom:${JSON.stringify([customClub.name, customClub.ground, customClub.colour])}`;
   return openingRoster ? `${id}:${openingRoster}` : id;
 }

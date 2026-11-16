@@ -2097,7 +2097,7 @@ function BoardPathways({ career, onAction, disabled }: { career: NrlCareerState;
   const qualified = progress.filter(player => player.apps >= appearances).length;
   const paid = nrlBoardPathwaysIncome(career.finance);
   const remaining = accepted && phase === 'regular'
-    ? nrlSeasonPlan(year).draw.slice(round - 1).filter(fixtures => fixtures.some(pair => pair.includes(clubId))).length
+    ? nrlSeasonPlan(year, season.drawModel).draw.slice(round - 1).filter(fixtures => fixtures.some(pair => pair.includes(clubId))).length
     : null;
   const runIn = remaining !== null && remaining <= appearances;
   const candidates = runIn ? progress.filter(player => player.apps < appearances && player.apps + remaining >= appearances) : [];

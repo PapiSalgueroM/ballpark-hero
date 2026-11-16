@@ -1,4 +1,4 @@
-import { NRL_LAST_YEAR, nrlSeasonPlan } from '@/data/nrlManagerSeasons';
+import { NRL_LAST_YEAR, nrlSeasonPlan, type NrlDrawModel } from '@/data/nrlManagerSeasons';
 import { hashLabel, rngFrom } from '@/lib/careerEngine';
 import {
   nrlCanPlayRole, nrlRetrainingRoles, NRL_BENCH_SIZE, NRL_ROLES, NRL_TACTICS, scoreNrlRepresentativeMatch,
@@ -327,18 +327,18 @@ function isOriginPool(value: unknown, side: NrlOriginSide, limit = MAX_POOL): va
   return Boolean(originSelection(value));
 }
 
-function validOriginClubLoad(value: OriginClubLoad, year: number, selection: OriginSelection): boolean {
+function validOriginClubLoad(value: OriginClubLoad, year: number, selection: OriginSelection, drawModel?: NrlDrawModel): boolean {
   if (!value || typeof value !== 'object' || Object.keys(value).length !== 3) return false;
   const starters = Object.values(selection.starters);
   return Number.isInteger(value.round) && value.round >= 1
-    && nrlSeasonPlan(year).draw[value.round - 1]?.some(fixture => fixture.includes(value.clubId))
+    && nrlSeasonPlan(year, drawModel).draw[value.round - 1]?.some(fixture => fixture.includes(value.clubId))
     && Array.isArray(value.players) && value.players.length > 0 && value.players.length <= starters.length
     && new Set(value.players.map(row => row?.[0])).size === value.players.length
     && value.players.every(row => Array.isArray(row) && row.length === 2 && starters.includes(row[0])
       && Number.isInteger(row[1]) && row[1] > 0 && row[1] <= 100);
 }
 
-export function isNrlOriginSeries(value: unknown, seed: number): value is NrlOriginSeries {
+export function isNrlOriginSeries(value: unknown, seed: number, drawModel?: NrlDrawModel): value is NrlOriginSeries {
   if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
   const series = value as NrlOriginSeries;
   if ((series.fullPool !== undefined && series.fullPool !== true) || (series.clubWorkload !== undefined && series.clubWorkload !== true)
@@ -364,7 +364,7 @@ export function isNrlOriginSeries(value: unknown, seed: number): value is NrlOri
     if (!match || typeof match !== 'object' || Object.keys(match).length !== 5 + Number(match.clubLoad !== undefined)
       || !isOriginSelection(match.selection, series.pools[series.side]) || !NRL_TACTICS.includes(match.tactic)) return false;
     if (match.clubLoad !== undefined) {
-      if (!series.clubWorkload || !validOriginClubLoad(match.clubLoad, series.year, match.selection)
+      if (!series.clubWorkload || !validOriginClubLoad(match.clubLoad, series.year, match.selection, drawModel)
         || (earlierLoad && (earlierLoad.clubId !== match.clubLoad.clubId || earlierLoad.round > match.clubLoad.round))) return false;
       earlierLoad = match.clubLoad;
     }

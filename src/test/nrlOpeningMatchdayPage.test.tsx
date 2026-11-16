@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createNrlCareer, createNrlOpeningMatchdayCareer, readNrlCareerSave, type NrlCareerState } from '@/lib/nrlCareer';
 import { NRL_OPENING_MATCHDAY_2026 } from '@/data/nrlOpeningMatchday2026';
+import { NRL_ORIGIN_DRAW_MODEL, type NrlDrawModel } from '@/data/nrlManagerSeasons';
 import { NRL_SAVE_KEY } from '@/lib/nrlManager';
 import { createSaveFence, fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
@@ -29,8 +30,8 @@ const raw = () => localStorage.getItem(NRL_SAVE_KEY);
 
 beforeEach(() => {
   chunks.load.mockReset();
-  chunks.load.mockImplementation(async (clubId: string, seed: number, board: boolean) =>
-    createNrlOpeningMatchdayCareer(clubId, seed, NRL_OPENING_MATCHDAY_2026, board));
+  chunks.load.mockImplementation(async (clubId: string, seed: number, board: boolean, drawModel?: NrlDrawModel) =>
+    createNrlOpeningMatchdayCareer(clubId, seed, NRL_OPENING_MATCHDAY_2026, board, drawModel));
   chunks.reload.mockClear();
 });
 
@@ -52,6 +53,8 @@ describe('NRL opening matchday chooser', () => {
     fireEvent.click(manage());
     await waitFor(() => expect(readNrlCareerSave(raw())?.openingRoster).toBe('matchday-2026'));
     expect(readNrlCareerSave(raw())?.season.domesticScoringModel).toBe('league-2026');
+    expect(readNrlCareerSave(raw())?.season.drawModel).toBe(NRL_ORIGIN_DRAW_MODEL);
+    expect(screen.getByText('Generated draw with five matches in each pre-Origin round.')).toBeInTheDocument();
     expect(chunks.load).toHaveBeenCalledTimes(1);
     expect(screen.getByText(/2026 opening matchday snapshot/)).toBeVisible();
     click('Squad');
@@ -64,6 +67,7 @@ describe('NRL opening matchday chooser', () => {
     fireEvent.click(manage());
     expect(readNrlCareerSave(raw())).not.toHaveProperty('openingRoster');
     expect(readNrlCareerSave(raw())?.season.domesticScoringModel).toBe('league-2026');
+    expect(readNrlCareerSave(raw())?.season.drawModel).toBe(NRL_ORIGIN_DRAW_MODEL);
     first.unmount();
     localStorage.clear();
     page();
@@ -73,6 +77,7 @@ describe('NRL opening matchday chooser', () => {
     click('Manage Perth Bears');
     expect(readNrlCareerSave(raw())?.season.clubId).toBe('bears');
     expect(readNrlCareerSave(raw())?.season.domesticScoringModel).toBe('league-2026');
+    expect(readNrlCareerSave(raw())?.season.drawModel).toBeUndefined();
     expect(readNrlCareerSave(raw())).not.toHaveProperty('openingRoster');
     expect(chunks.load).not.toHaveBeenCalled();
   });

@@ -18,7 +18,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import { Button } from '@/components/ui/button';
 import { resolveContinueSave, type ContinueSave } from '@/data/continueSaves';
 import { NRL_SEASONS, type NrlYear } from '@/data/nrlManager2026';
-import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
+import { nrlSeasonPlan, NRL_ORIGIN_DRAW_MODEL } from '@/data/nrlManagerSeasons';
 import { useArrivalTop } from '@/hooks/useArrivalTop';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRulesGateState } from '@/hooks/useRulesGateState';
@@ -166,7 +166,7 @@ function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
         onStart={club => onStart(club.slotId, boardChallenge, false, judiciary, club)} />
       <div className="flex flex-wrap items-baseline justify-between gap-1">
         <h2 id="nrl-choose-club" className="text-xl font-display font-bold">Choose your club</h2>
-        <p className="text-sm text-muted-foreground">{competition.clubs.length} clubs · {competition.draw.length} rounds</p>
+        <p className="text-sm text-muted-foreground">{competition.clubs.length} clubs · {competition.draw.length} rounds · Generated draw</p>
       </div>
       {loading && <p role="status" className="text-sm">Loading the {rosterLabel}...</p>}
       {loadFailed && openingNames && (
@@ -1187,7 +1187,7 @@ function SeasonFixtures({ career, next, initialClub }: { career: NrlCareerState;
   const year = archived?.year ?? season.year;
   const archivedClub = archived && career.history.find(row => row.year === year || (row.year === year - 1 && row.seasonOut))?.clubId;
   const clubId = archivedClub || season.clubId;
-  const { draw, clubs } = nrlSeasonPlan(year);
+  const { draw, clubs } = nrlSeasonPlan(year, season.drawModel);
   const results = archived ? nrlLeagueFixtures(archived) : season.results;
   const book = archived ?? career.leagueBook;
   const selector = useRef<HTMLSelectElement>(null);
@@ -1226,6 +1226,7 @@ function SeasonFixtures({ career, next, initialClub }: { career: NrlCareerState;
   return (
     <details className="rounded-xl border border-border bg-card px-4">
       <summary className="flex min-h-11 cursor-pointer items-center font-bold">Season fixtures</summary>
+      {year === 2026 && season.drawModel && <p className="mb-2 text-sm text-muted-foreground">Generated draw with five matches in each pre-Origin round.</p>}
       {latestLeagueBook && <label className="mb-2 block max-w-xs space-y-1 text-sm font-semibold">
         <span>Fixture season</span>
         <select value={year} onChange={event => { setFixtureYear(Number(event.target.value)); setView(''); }}
@@ -1324,12 +1325,12 @@ function FastForward({ career, onRun, disabled, onOpenOffice }: {
   onOpenOffice: (screen: OfficeScreen) => void;
 }) {
   const shortName = useNrlClubName();
-  const { year, round, clubId, phase } = career.season;
+  const { year, round, clubId, phase, drawModel } = career.season;
   const [expanded, setExpanded] = useState(false);
   const [target, setTarget] = useState<{ round: number; through: number }>();
   const [receipt, setReceipt] = useState<(FastForwardResult & { round: number }) | null>(null);
   const status = useRef<HTMLParagraphElement>(null);
-  const fixtures = phase === 'regular' ? nrlSeasonPlan(year).draw.slice(round - 1, round - 1 + NRL_FAST_FORWARD_ROUNDS) : [];
+  const fixtures = phase === 'regular' ? nrlSeasonPlan(year, drawModel).draw.slice(round - 1, round - 1 + NRL_FAST_FORWARD_ROUNDS) : [];
   const through = target?.round === round ? target.through : round + 1;
   const latest = receipt?.round === round ? receipt : null;
   useEffect(() => { if (latest) status.current?.focus(); }, [latest]);
@@ -3069,6 +3070,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
   async function start(clubId: string, boardChallenge: boolean, openingNames: boolean, judiciary: boolean, customClub?: NrlCustomClub) {
     if (moved || startRequest.current || current.current || committed.current !== null) return;
     const seed = Math.floor(Math.random() * 0x1_0000_0000);
+    const drawModel = year === 2026 ? NRL_ORIGIN_DRAW_MODEL : undefined;
     const persistNewCareer = (next: NrlCareerState) => persist({
       ...next, season: { ...next.season, domesticScoringModel: NRL_DOMESTIC_SCORING_MODEL, halftimeInjuryCover: true },
       ...(next.season.year === 2026 && { originClubCalendar: true as const, originClubRecovery: true as const }),
@@ -3079,7 +3081,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
       setLoadingNames(true);
       setNamesFailed(false);
       try {
-        const next = year === 2026 ? await loadNrlOpeningMatchdayCareer(clubId, seed, boardChallenge)
+        const next = year === 2026 ? await loadNrlOpeningMatchdayCareer(clubId, seed, boardChallenge, drawModel)
           : await loadNrlPerthSigningsCareer(seed, boardChallenge);
         if (startRequest.current !== request || current.current || committed.current !== null) return;
         if (persistNewCareer(next) === 'moved') return;
@@ -3093,8 +3095,8 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
         }
       }
     } else {
-      const next = customClub ? createNrlCustomCareer(clubId, seed, year, customClub, boardChallenge, judiciary)
-        : createNrlCareer(clubId, seed, year, boardChallenge, judiciary);
+      const next = customClub ? createNrlCustomCareer(clubId, seed, year, customClub, boardChallenge, judiciary, drawModel)
+        : createNrlCareer(clubId, seed, year, boardChallenge, judiciary, drawModel);
       if (!next || persistNewCareer(next) === 'moved') return;
     }
     setPanel('match');

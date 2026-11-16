@@ -1,4 +1,4 @@
-import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
+import { nrlSeasonPlan, type NrlDrawModel } from '@/data/nrlManagerSeasons';
 import { hashLabel, rngFrom } from '@/lib/careerEngine';
 import {
   NRL_MAX_BENCH_USED, NRL_ROLES, nrlArchivedFinals, nrlLadder,
@@ -246,8 +246,8 @@ export function validNrlActiveLeagueBook(value: unknown, season: NrlManagerState
 }
 
 export function validNrlArchivedLeagueBook(value: unknown, year: number, finals: unknown, ladder: unknown,
-  managed: ManagedClub): value is NrlLeagueBook {
-  const { draw } = nrlSeasonPlan(year);
+  managed: ManagedClub, drawModel?: NrlDrawModel): value is NrlLeagueBook {
+  const { draw } = nrlSeasonPlan(year, drawModel);
   const pastFinals = nrlArchivedFinals(finals, year);
   if (!pastFinals) return false;
   const regular = draw.flatMap((round, index) => round.map(([homeId, awayId]) => ({ round: index + 1, homeId, awayId })));
