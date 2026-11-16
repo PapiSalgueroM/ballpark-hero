@@ -3640,7 +3640,8 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
       const match = (action.type === 'startLive' || action.type === 'reachMinute60') && state.season.kickerId
         ? careerMatchday(state, action.type === 'reachMinute60' ? action.attackPlan : undefined) : null;
       const season = reduceNrlSeason(state.season, action, match?.opponentStrength, {
-        ...nrlCoachTactics(state.finance), planRivalRatings: match?.planRatings, awayRecovery: nrlAwayRecoveryBonus(state),
+        medicalReduction: nrlMedicalLevel(state) - 1, ...nrlCoachTactics(state.finance),
+        planRivalRatings: match?.planRatings, awayRecovery: nrlAwayRecoveryBonus(state),
       });
       return season === state.season ? state : { ...state, season };
     }
@@ -4749,7 +4750,8 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
   const { opponentStrength, planRatings } = careerMatchday(state);
   return (!state.season.attackPlan || (state.season.attackPlan === 'counter' ? !state.legacySeason : Boolean(planRatings)))
     && validNrlLiveScore(state.season, opponentStrength, {
-      ...nrlCoachTactics(state.finance), planRivalRatings: planRatings, awayRecovery: nrlAwayRecoveryBonus(state),
+      medicalReduction: nrlMedicalLevel(state) - 1, ...nrlCoachTactics(state.finance),
+      planRivalRatings: planRatings, awayRecovery: nrlAwayRecoveryBonus(state),
     });
 }
 

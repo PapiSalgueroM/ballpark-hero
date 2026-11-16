@@ -61,3 +61,52 @@ it('previews two distinct positions without saving, then shows both full-time ou
   show();
   verifyReport();
 });
+
+it('opts a new club career in and saves the selected injury replacement through the full-time report', () => {
+  const show = () => render(<MemoryRouter initialEntries={['/nrl-team-manager']}><NrlTeamManager /></MemoryRouter>);
+  const first = show();
+  const seed = vi.spyOn(Math, 'random').mockReturnValue(4 / 0x1_0000_0000);
+  try {
+    fireEvent.click(screen.getByRole('button', { name: 'Manage Brisbane Broncos' }));
+  } finally {
+    seed.mockRestore();
+  }
+  const raw = () => localStorage.getItem(NRL_SAVE_KEY)!;
+  expect(JSON.parse(raw()).season).toMatchObject({ seed: 4, halftimeInjuryCover: true });
+  first.unmount();
+
+  const original = createNrlCareer('broncos', 4);
+  const year = 2026, clubId = 'broncos', round = 1, playerId = 'nrl-broncos-2026-26';
+  const marked = { ...original, season: { ...original.season, halftimeInjuryCover: true as const } };
+  const named = reduceNrlCareer(marked, { type: 'selectBench', slot: 4, playerId });
+  const open = reduceNrlCareer(named, { type: 'setOpenInterchange', year, clubId, round, enabled: true });
+  const starter = open.season.squad.find(player => player.id === 'broncos-1-0')!;
+  const reserve = open.season.squad.find(player => player.id === playerId)!;
+  saveFence.release(NRL_SAVE_KEY);
+  localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(open));
+  const view = show();
+  fireEvent.click(screen.getByRole('button', { name: 'Play Live' }));
+  const half = raw();
+  expect(screen.getByText(starter.name + ' came off with a knock.')).toBeVisible();
+  view.unmount();
+  saveFence.release(NRL_SAVE_KEY);
+  const resumed = show();
+  expect(raw()).toBe(half);
+  const replacement = screen.getByRole('combobox', { name: 'Injury replacement' });
+  expect(replacement).toHaveValue('broncos-1-1');
+  fireEvent.change(replacement, { target: { value: reserve.id } });
+  expect(raw()).toBe(half);
+  fireEvent.click(screen.getByRole('button', { name: 'Play second half' }));
+
+  const report = () => {
+    expect(screen.getByText(starter.name + ' went off at half time with a knock and will miss 3 rounds.')).toBeVisible();
+    expect(screen.getByText(reserve.name + ' came on for ' + starter.name + ' at half time. Each played about 40 minutes in regulation.')).toBeVisible();
+  };
+  report();
+  const settled = raw();
+  resumed.unmount();
+  saveFence.release(NRL_SAVE_KEY);
+  show();
+  expect(raw()).toBe(settled);
+  report();
+});

@@ -271,14 +271,16 @@ function LiveHalftime({ live, career, title, onAction, disabled, coachRole, coac
   const currentPlan = season.attackPlan ?? 'standard';
   const [attackPlan, setAttackPlan] = useState<NrlAttackPlan>(currentPlan);
   const plans = nrlLiveAttackPlans(career);
-  const [reserveId, setReserveId] = useState('');
+  const injured = live.halftimeInjury && squad.find(player => player.id === live.halftimeInjury?.playerId);
+  const options = nrlHalftimeInterchanges(season);
+  const replacements = injured ? options.filter(option => option.starterId === injured.id) : options;
+  const [reserveId, setReserveId] = useState(injured ? replacements[0]?.reserveId ?? '' : '');
   const [secondReserveId, setSecondReserveId] = useState('');
   const [talk, setTalk] = useState<NrlHalftimeTalk>();
   const talkEffect = talk && NRL_HALFTIME_TALKS[talk];
   const { fixture, homeScoring, awayScoring } = live;
   const sides = [[fixture.homeId, homeScoring], [fixture.awayId, awayScoring]] as const;
-  const options = nrlHalftimeInterchanges(season);
-  const chosen = options.find(option => option.reserveId === reserveId);
+  const chosen = replacements.find(option => option.reserveId === reserveId);
   const { kickerId, backupKickerId } = season;
   const secondOptions = chosen ? options.filter(option => nrlCanPairHalftimeInterchanges(season, chosen, option)) : [];
   const second = secondOptions.find(option => option.reserveId === secondReserveId);
@@ -326,30 +328,31 @@ function LiveHalftime({ live, career, title, onAction, disabled, coachRole, coac
         {season.preparation === 'defensiveDrills' && <p className="mt-2 text-sm">Defensive drills apply through the second half.</p>}
         {season.preparation === 'goalKickingDrills' && <p className="mt-2 text-sm">Goal-kicking drills apply through the second half.</p>}
       </div>
-      {options.length > 0 ? (
-        <details className="group rounded-xl border border-border bg-card px-4">
+      {replacements.length > 0 ? (
+        <details className="group rounded-xl border border-border bg-card px-4" open={injured ? true : undefined}>
           <summary className="flex min-h-11 cursor-pointer items-center justify-between gap-2 rounded-md font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-            <span>{chosen ? `${name(chosen.reserveId)} ${chosen.enteredAtHalf ? 'comes on' : 'stays on'}` : heldName || flexible ? 'Halftime interchange' : 'Keep a reserve on'}</span>
+            <span>{injured ? 'Halftime injury cover' : chosen ? `${name(chosen.reserveId)} ${chosen.enteredAtHalf ? 'comes on' : 'stays on'}` : heldName || flexible ? 'Halftime interchange' : 'Keep a reserve on'}</span>
             <ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
           </summary>
           <div className="pb-4">
-            <label htmlFor="nrl-half-reserve" className="sr-only">Reserve to finish the match</label>
+            {injured && <p className="text-sm">{injured.name} came off with a knock.</p>}
+            <label htmlFor="nrl-half-reserve" className="sr-only">{injured ? 'Injury replacement' : 'Reserve to finish the match'}</label>
             <select id="nrl-half-reserve" className="mt-2 min-h-11 w-full rounded-lg border border-input bg-background px-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
               value={reserveId} disabled={disabled} onChange={event => {
                 const id = event.target.value;
                 setReserveId(id);
-                const next = options.find(option => option.reserveId === id);
+                const next = replacements.find(option => option.reserveId === id);
                 if (!next || (second && !nrlCanPairHalftimeInterchanges(season, next, second))) setSecondReserveId('');
               }}>
-              <option value="">{heldName ? 'Keep held reserve on the bench' : flexible ? 'Leave the open place unused' : 'Automatic rotation'}</option>
-              {options.map(option => <option key={option.reserveId} value={option.reserveId}>{option.enteredAtHalf && 'Bring on '}{name(option.reserveId)} · {option.role}</option>)}
+              {!injured && <option value="">{heldName ? 'Keep held reserve on the bench' : flexible ? 'Leave the open place unused' : 'Automatic rotation'}</option>}
+              {replacements.map(option => <option key={option.reserveId} value={option.reserveId}>{option.enteredAtHalf && 'Bring on '}{name(option.reserveId)} · {option.role}</option>)}
             </select>
-            <p className="mt-2 text-sm text-muted-foreground">{heldName
+            {!injured && <p className="mt-2 text-sm text-muted-foreground">{heldName
               ? `${heldName} sat out the first half. Bring them on now or keep them for the 60-minute pause. You can also keep a rotating reserve on at another position.`
               : flexible ? 'Bring on one unused reserve now or save the place for 60 minutes. You can also keep a rotating reserve on.'
                 : 'Choose up to two reserves already in the rotation to finish.'}{' '}
               Play to 60 minutes to reconsider a halftime change.
-            </p>
+            </p>}
             {secondOptions.length > 0 && (
               <label className="mt-3 block text-sm font-semibold" htmlFor="nrl-half-second-reserve">
                 Second reserve to finish the match
@@ -1037,7 +1040,7 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
       <NrlMatchdayTeamSheet key={`${year}:${match.round}`} match={match} squad={season.squad} />
       {injury && injuredName && (
         <p className="mt-3 text-sm text-muted-foreground" data-nrl-match-injury>
-          {injuredName} picked up a knock and will miss {injury.rounds} {injury.rounds === 1 ? 'round' : 'rounds'}.
+          {injuredName} {match.halftimeInjury ? 'went off at half time with a knock' : 'picked up a knock'} and will miss {injury.rounds} {injury.rounds === 1 ? 'round' : 'rounds'}.
         </p>
       )}
     </>
@@ -2937,7 +2940,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     if (moved || startRequest.current || current.current || committed.current !== null) return;
     const seed = Math.floor(Math.random() * 0x1_0000_0000);
     const persistNewCareer = (next: NrlCareerState) => persist({
-      ...next, season: { ...next.season, domesticScoringModel: NRL_DOMESTIC_SCORING_MODEL },
+      ...next, season: { ...next.season, domesticScoringModel: NRL_DOMESTIC_SCORING_MODEL, halftimeInjuryCover: true },
       ...(next.season.year === 2026 && { originClubCalendar: true as const, originClubRecovery: true as const }),
     });
     if (openingNames) {
