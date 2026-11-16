@@ -1185,7 +1185,8 @@ function SeasonFixtures({ career, next, initialClub }: { career: NrlCareerState;
   const [fixtureYear, setFixtureYear] = useState(season.year);
   const archived = latestLeagueBook?.year === fixtureYear ? latestLeagueBook : undefined;
   const year = archived?.year ?? season.year;
-  const clubId = archived ? career.history.find(row => row.year === year)?.clubId ?? season.clubId : season.clubId;
+  const archivedClub = archived && career.history.find(row => row.year === year || (row.year === year - 1 && row.seasonOut))?.clubId;
+  const clubId = archivedClub || season.clubId;
   const { draw, clubs } = nrlSeasonPlan(year);
   const results = archived ? nrlLeagueFixtures(archived) : season.results;
   const book = archived ?? career.leagueBook;
@@ -1237,7 +1238,7 @@ function SeasonFixtures({ career, next, initialClub }: { career: NrlCareerState;
         <span>Fixtures to show</span>
         <select ref={selector} value={view} onChange={event => setView(event.target.value)}
           className="min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-          <option value="">My club</option>
+          <option value="">{archived ? fullName(year, clubId) : 'My club'}</option>
           <optgroup label="Follow a club">
             {clubs.filter(club => club.id !== clubId).map(club => (
               <option key={club.id} value={'club:' + club.id}>{fullName(year, club.id)}</option>

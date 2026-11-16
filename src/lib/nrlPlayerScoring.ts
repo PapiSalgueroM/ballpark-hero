@@ -121,7 +121,7 @@ const countIn = (value: unknown, max: number) =>
   typeof value === 'number' && Number.isInteger(value) && value >= 0 && value <= max;
 
 export function validNrlScoringReport(
-  value: unknown, totals: NrlScoring, benchUsed: string[], known: ReadonlyMap<string, NrlPlayer>, starterCount: number,
+  value: unknown, totals: NrlScoring, benchUsed: string[], known: Pick<ReadonlySet<string>, 'has'>, starterCount: number,
 ): value is NrlMatchScoringReport {
   if (!record(value) || !Array.isArray(value.starters) || value.starters.length !== starterCount
     || typeof value.kickerId !== 'string' || !value.starters.includes(value.kickerId) || !Array.isArray(value.lines)) return false;

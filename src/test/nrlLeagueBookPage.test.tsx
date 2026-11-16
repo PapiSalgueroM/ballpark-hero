@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createNrlCareer, reduceNrlCareer, type NrlCareerState } from '@/lib/nrlCareer';
-import { NRL_SAVE_KEY } from '@/lib/nrlManager';
+import { NRL_SAVE_KEY, nrlRegularRounds } from '@/lib/nrlManager';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
 import NrlTeamManager from '@/pages/NrlTeamManager';
 
@@ -136,6 +136,25 @@ describe('NRL league match book on the manager route', () => {
     expect(fixtures.queryByRole('combobox', { name: 'Fixture season' })).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Ladder' }));
     expect(screen.queryByText('League player leaders')).not.toBeInTheDocument();
+    expect(saveBytes()).toBe(bytes);
+  });
+
+  it('opens the former club’s archive when rejoining at an expansion club', () => {
+    let career = createNrlCareer('storm', 4, 2026);
+    for (let round = 0; round < 36 && career.season.phase !== 'complete'; round++) career = advance(career);
+    career = reduceNrlCareer(career, { type: 'leaveClub', year: 2026, clubId: 'storm' });
+    career = reduceNrlCareer(career, { type: 'simulateSeasonOut', year: 2026, clubId: 'storm' });
+    career = reduceNrlCareer(career, {
+      type: 'acceptVacancy', year: 2026, clubId: 'storm', destinationId: 'chiefs', joinYear: 2028,
+    });
+    expect(career.season.clubId).toBe('chiefs');
+    const { bytes } = open(career);
+    const fixtures = openPanel('Season fixtures');
+    fireEvent.change(fixtures.getByRole('combobox', { name: 'Fixture season' }), { target: { value: '2027' } });
+    expect(fixtures.getByRole('option', { name: 'Melbourne Storm' })).toBeInTheDocument();
+    const selector = fixtures.getByRole('combobox', { name: 'Fixture player scores' });
+    expect(within(selector).getAllByRole('option', { name: /Storm/ })).toHaveLength(24 + career.latestLeagueBook!.fixtures
+      .filter(([round, home, away]) => round > nrlRegularRounds(2027) && [home, away].includes('storm')).length);
     expect(saveBytes()).toBe(bytes);
   });
 });
