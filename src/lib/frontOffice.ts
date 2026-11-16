@@ -10,7 +10,7 @@ import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 import { keyedRng } from './keyedRng';
 import { NFL_OPTION_ROUND, NFL_ROOKIE_DEAL_YEARS } from './gmContractRules';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
-import { type CutLedger, type CutPlayer, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal, tradeRefusal, rosterFullRefusal } from './frontOfficeCuts';
+import { type CutLedger, type CutPlayer, type DeadCapEntry, cutPlayer, cutRefusal, payrollWithDeadCap, rollDeadCap, signRefusal, tradeRefusal, rosterFullRefusal } from './frontOfficeCuts';
 /* Round 1542: the season's lines and awards are the board's (src/lib/nflSeasonStats.ts); the engine carries their
    types only, so nothing of that file is evaluated here and no import cycle runs. */
 import type { NflSeasonAwards, NflSeasonStats } from './nflSeasonStats';
@@ -98,6 +98,14 @@ export interface GmTeamState extends CutLedger {
   /** The practice squad: real men off the active roster, off the cap. */
   practice?: GmPlayer[];
   practiceElevations?: NflPracticeElevation[];
+  /** Owned players on reserve and that season's completed returns. */
+  injuredReserve?: NflInjuredReserveEntry[];
+}
+
+export interface NflInjuredReserveEntry {
+  playerId: string;
+  placedWeek: number;
+  returnedWeek?: number;
 }
 
 interface NflPracticeElevation {
@@ -445,7 +453,7 @@ export const DEPTH_BAND: Record<'OL' | 'other', [number, number]> = { OL: [75, 7
 /** The men a group offers its unit: every healthy man, or on a full roster the first STARTER_SLOTS healthy men off the chart. */
 function unitCandidates(team: GmTeamState, groups: DepthPos[]): GmPlayer[] {
   if (team.rosterDepth !== 2) return team.players.filter(p => p.out === 0 && groups.includes(p.pos));
-  return groups.flatMap(g => depthOrder(team, g).filter(p => p.out === 0).slice(0, STARTER_SLOTS[g]));
+  return groups.flatMap(g => availableDepth(team, g).slice(0, STARTER_SLOTS[g]));
 }
 
 /** A group's chart: the saved order, with any man it does not name slotted
@@ -535,8 +543,7 @@ export function unitStarters(team: GmTeamState, groups: DepthPos[], slots: numbe
   for (const g of groups) {
     const share = top.filter(p => p.pos === g).length;
     if (share === 0) continue;
-    const order = depthOrder(team, g);
-    out.push(...order.filter(p => p.out === 0).slice(0, share));
+    out.push(...availableDepth(team, g).slice(0, share));
   }
   return out;
 }
@@ -546,9 +553,9 @@ const TWO_TE_EXTRA_PROTECTION = 3;
 /** Read the roster at kickoff, including available practice elevations. */
 export function twoTightEndSkill(team: GmTeamState): GmPlayer[] | null {
   if (team.rosterDepth !== 2) return null;
-  const rb = depthOrder(team, 'RB').filter(player => player.out === 0).slice(0, 1);
-  const wr = depthOrder(team, 'WR').filter(player => player.out === 0).slice(0, 2);
-  const te = depthOrder(team, 'TE').filter(player => player.out === 0).slice(0, 2);
+  const rb = availableDepth(team, 'RB').slice(0, 1);
+  const wr = availableDepth(team, 'WR').slice(0, 2);
+  const te = availableDepth(team, 'TE').slice(0, 2);
   return rb.length === 1 && wr.length === 2 && te.length === 2 ? [...rb, ...wr, ...te] : null;
 }
 
@@ -826,6 +833,7 @@ export function injuryPass(
     for (const p of t.practice ?? []) if (p.out > 0) p.out -= 1;
     for (const p of t.players) {
       if (p.out > 0) { p.out -= 1; continue; }
+      if (injuredReserveEntry(t, p.id)) continue;
       if (rng() < 0.012) {
         p.out = 1 + Math.floor(rng() * 4);
         if (weeksFor) p.out = weeksFor(t.abbr, p, p.out);
@@ -936,7 +944,13 @@ export function runPlayoffs(
 /** Round 631: the fewest men a club may carry. The board greys Cut at it. The NFL sign path has no ceiling. */
 export const NFL_ROSTER_MIN = 6;
 
+export function nflReleaseRefusal(team: GmTeamState, playerId: string): string | null {
+  if (injuredReserveEntry(team, playerId)) return 'Activate him from injured reserve before cutting him.';
+  return cutRefusal({ players: nflActiveRoster(team) }, NFL_ROSTER_MIN);
+}
+
 export function releasePlayer(team: GmTeamState, freeAgents: GmPlayer[], playerId: string): boolean {
+  if (nflReleaseRefusal(team, playerId)) return false;
   const done = cutPlayer(team, freeAgents, playerId, NFL_ROSTER_MIN);
   /* Round 723: the guarantee was this club's promise and it has just been
      paid as dead money. In the pool he is an ordinary man on one year. */
@@ -967,7 +981,7 @@ export function signPlayer(team: GmTeamState, freeAgents: GmPlayer[], playerId: 
 /** Round 828: why a full roster cannot add a man right now, or null. Always null on a fifteen man club. */
 export function deepRosterRefusal(team: GmTeamState): string | null {
   if (team.rosterDepth !== 2) return null;
-  return rosterFullRefusal(team, DEEP_ROSTER_MAX);
+  return rosterFullRefusal({ players: nflActiveRoster(team) }, DEEP_ROSTER_MAX);
 }
 
 /* Round 828: THE PRACTICE SQUAD. Real men off the active roster and off the
@@ -1010,6 +1024,111 @@ export function practiceElevationCost(player: GmPlayer): number {
 function hasUnplayedRegularGame(league: LeagueState, abbr: string): boolean {
   return league.week <= REGULAR_WEEKS && !league.champions.some(c => c.season === league.season)
     && !!league.schedule[league.week - 1]?.some(g => !g.winner && (g.home === abbr || g.away === abbr));
+}
+
+export const NFL_IR_MIN_GAMES = 4;
+export const NFL_IR_TEAM_RETURNS = 8;
+export const NFL_IR_PLAYER_RETURNS = 2;
+
+export function injuredReserveEntry(team: GmTeamState, playerId: string): NflInjuredReserveEntry | undefined {
+  return team.injuredReserve?.find(entry => entry.playerId === playerId && entry.returnedWeek === undefined);
+}
+
+/** Reserve keeps a player's contract on the club, while the 53 counts only the active roster. */
+export function nflActiveRoster(team: GmTeamState): GmPlayer[] {
+  if (!team.injuredReserve?.some(entry => entry.returnedWeek === undefined)) return team.players;
+  return team.players.filter(player => !injuredReserveEntry(team, player.id));
+}
+
+export function isNflGameAvailable(team: GmTeamState, player: GmPlayer): boolean {
+  return player.out === 0 && !injuredReserveEntry(team, player.id);
+}
+
+function availableDepth(team: GmTeamState, pos: DepthPos): GmPlayer[] {
+  return depthOrder(team, pos).filter(player => isNflGameAvailable(team, player));
+}
+
+export function injuredReserveMissedGames(league: LeagueState, abbr: string, entry: NflInjuredReserveEntry): number {
+  const before = Math.min(entry.returnedWeek ?? league.week, league.week);
+  return league.schedule.slice(entry.placedWeek - 1, before - 1).reduce((total, games) =>
+    total + games.filter(game => game.winner && (game.home === abbr || game.away === abbr)).length, 0);
+}
+
+function injuredReserveWindow(league: LeagueState, team: GmTeamState): string | null {
+  if (team.rosterDepth !== 2) return 'Injured reserve is available with a full roster.';
+  if (!hasUnplayedRegularGame(league, team.abbr)) return 'Available before an unplayed regular-season game.';
+  return null;
+}
+
+export function injuredReservePlacementRefusal(league: LeagueState, team: GmTeamState, playerId: string): string | null {
+  const window = injuredReserveWindow(league, team);
+  if (window) return window;
+  const player = team.players.find(row => row.id === playerId);
+  if (!player) return 'He is not under contract with this club.';
+  if (injuredReserveEntry(team, playerId)) return 'He is already on injured reserve.';
+  if (player.out < NFL_IR_MIN_GAMES) return 'Placement requires a four-game injury in this game.';
+  return null;
+}
+
+export function injuredReserveActivationRefusal(league: LeagueState, team: GmTeamState, playerId: string): string | null {
+  const window = injuredReserveWindow(league, team);
+  if (window) return window;
+  const entry = injuredReserveEntry(team, playerId);
+  const player = team.players.find(row => row.id === playerId);
+  if (!entry || !player) return 'He is not on this club’s injured reserve.';
+  if (injuredReserveMissedGames(league, team.abbr, entry) < NFL_IR_MIN_GAMES) return 'He must miss four settled club games.';
+  if (player.out > 0) return 'He has not recovered from his injury.';
+  const returned = team.injuredReserve!.filter(row => row.returnedWeek !== undefined);
+  if (returned.filter(row => row.playerId === playerId).length >= NFL_IR_PLAYER_RETURNS) return 'He has used both injury returns this season.';
+  if (returned.length >= NFL_IR_TEAM_RETURNS) return 'This club has used all eight injury returns this season.';
+  return deepRosterRefusal(team);
+}
+
+export function placeOnInjuredReserve(league: LeagueState, abbr: string, playerId: string): boolean {
+  const team = league.teams[abbr];
+  if (!team || injuredReservePlacementRefusal(league, team, playerId)) return false;
+  team.injuredReserve = [...(team.injuredReserve ?? []), { playerId, placedWeek: league.week }];
+  return true;
+}
+
+export function activateFromInjuredReserve(league: LeagueState, abbr: string, playerId: string): boolean {
+  const team = league.teams[abbr];
+  if (!team || injuredReserveActivationRefusal(league, team, playerId)) return false;
+  const entry = injuredReserveEntry(team, playerId)!;
+  team.injuredReserve = team.injuredReserve!.map(row => row === entry ? { ...row, returnedWeek: league.week } : row);
+  return true;
+}
+
+export function validNflInjuredReserve(league: LeagueState): boolean {
+  const teams = Object.values(league.teams);
+  const tracked = teams.filter(team => team.injuredReserve !== undefined);
+  if (!tracked.length) return true;
+  const known = new Set([...league.freeAgents, ...teams.flatMap(team =>
+    [...team.players, ...(Array.isArray(team.practice) ? team.practice : [])])].map(player => player?.id));
+  const weekInSeason = (week: unknown): week is number => typeof week === 'number'
+    && Number.isInteger(week) && week >= 1 && week <= Math.min(league.week, REGULAR_WEEKS);
+  return tracked.every(team => {
+    const entries = team.injuredReserve;
+    if (team.rosterDepth !== 2 || !Array.isArray(entries) || !entries.length
+      || entries.length > team.players.length + NFL_IR_TEAM_RETURNS) return false;
+    const last = new Map<string, NflInjuredReserveEntry>();
+    const returns = new Map<string, number>();
+    let returned = 0, latestPlacement = 0;
+    return entries.every(entry => {
+      if (!entry || typeof entry.playerId !== 'string' || !known.has(entry.playerId) || !weekInSeason(entry.placedWeek)
+        || entry.placedWeek < latestPlacement || Object.keys(entry).length !== (entry.returnedWeek === undefined ? 2 : 3)) return false;
+      const previous = last.get(entry.playerId);
+      if (previous && (previous.returnedWeek === undefined || entry.placedWeek <= previous.returnedWeek)) return false;
+      latestPlacement = entry.placedWeek;
+      last.set(entry.playerId, entry);
+      if (entry.returnedWeek === undefined) return team.players.some(player => player.id === entry.playerId);
+      if (!weekInSeason(entry.returnedWeek)
+        || injuredReserveMissedGames(league, team.abbr, entry) < NFL_IR_MIN_GAMES) return false;
+      const count = (returns.get(entry.playerId) ?? 0) + 1;
+      returns.set(entry.playerId, count);
+      return count <= NFL_IR_PLAYER_RETURNS && ++returned <= NFL_IR_TEAM_RETURNS;
+    });
+  });
 }
 
 export function practiceElevationRefusal(league: LeagueState, team: GmTeamState, player: GmPlayer): string | null {
@@ -1125,9 +1244,10 @@ export function proposeTrade(
   my: GmTeamState, their: GmTeamState, myPlayerId: string, theirPlayerId: string,
   sweetenerPick: boolean, cap: number,
 ): 'accepted' | 'rejected' | 'invalid' {
-  const mine = my.players.find(p => p.id === myPlayerId);
-  const theirs = their.players.find(p => p.id === theirPlayerId);
-  if (!mine || !theirs || my.players.length <= 6 || their.players.length <= 6) return 'invalid';
+  const activeMine = nflActiveRoster(my), activeTheirs = nflActiveRoster(their);
+  const mine = activeMine.find(p => p.id === myPlayerId);
+  const theirs = activeTheirs.find(p => p.id === theirPlayerId);
+  if (!mine || !theirs || activeMine.length <= NFL_ROSTER_MIN || activeTheirs.length <= NFL_ROSTER_MIN) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirPlayerId) || tradeRefusal(their, myPlayerId)) return 'invalid';
   // Round 82: salary matching so cap-strapped teams can still swap contracts
@@ -1157,9 +1277,10 @@ export function executeTalksTrade(
   my: GmTeamState, their: GmTeamState, myPlayerId: string, theirPlayerId: string,
   addPick: boolean, cap: number,
 ): 'done' | 'invalid' {
-  const mine = my.players.find(p => p.id === myPlayerId);
-  const theirs = their.players.find(p => p.id === theirPlayerId);
-  if (!mine || !theirs || my.players.length <= 6 || their.players.length <= 6) return 'invalid';
+  const activeMine = nflActiveRoster(my), activeTheirs = nflActiveRoster(their);
+  const mine = activeMine.find(p => p.id === myPlayerId);
+  const theirs = activeTheirs.find(p => p.id === theirPlayerId);
+  if (!mine || !theirs || activeMine.length <= NFL_ROSTER_MIN || activeTheirs.length <= NFL_ROSTER_MIN) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirPlayerId) || tradeRefusal(their, myPlayerId)) return 'invalid';
   if (addPick && my.picks.length === 0) return 'invalid';
@@ -1524,6 +1645,7 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
   news.tagged = cpuFranchiseTags(league, userTeam);
   for (const t of Object.values(league.teams)) {
     if (t.practiceElevations) delete t.practiceElevations;
+    if (t.injuredReserve) delete t.injuredReserve;
     const keep: GmPlayer[] = [];
     for (const p of t.players) {
       p.out = 0;
@@ -1732,7 +1854,7 @@ export function refillDeepRoster(t: GmTeamState, taken: Set<string>, rng: () => 
     may play, 0 at or under 53 and always 0 on a fifteen man club. The board
     holds Play on it until the GM has cut down through the shared cut. */
 export function deepOverLimit(team: GmTeamState): number {
-  return team.rosterDepth === 2 ? Math.max(0, team.players.length - DEEP_ROSTER_MAX) : 0;
+  return team.rosterDepth === 2 ? Math.max(0, nflActiveRoster(team).length - DEEP_ROSTER_MAX) : 0;
 }
 
 /* Round 828: THE CUT DOWN TO 53. A full club over DEEP_ROSTER_MAX after the
@@ -1747,8 +1869,8 @@ export function deepOverLimit(team: GmTeamState): number {
 export function cutDownToMax(t: GmTeamState, freeAgents: GmPlayer[]): { team: string; player: string; pos: string }[] {
   const out: { team: string; player: string; pos: string }[] = [];
   if (t.rosterDepth !== 2) return out;
-  while (t.players.length > DEEP_ROSTER_MAX) {
-    const roster = [...t.players];
+  while (deepOverLimit(t) > 0) {
+    const roster = nflActiveRoster(t);
     const starting = starterIds(t);
     const count = (pos: DepthPos) => roster.reduce((n, q) => n + (q.pos === pos ? 1 : 0), 0);
     const spare = roster.filter(p => !starting.has(p.id) && !p.guaranteed);
@@ -1787,7 +1909,7 @@ export function aiWeeklyMoves(league: LeagueState, userTeam: string, rng: () => 
        would sign until the cap ran out. A full club at 53 signs nobody. */
     if (deepRosterRefusal(t)) continue;
     const worstSamePos = (t.rosterDepth === 2
-      ? depthOrder(t, target.pos).slice(0, STARTER_SLOTS[target.pos])
+      ? depthOrder(t, target.pos).filter(player => !injuredReserveEntry(t, player.id)).slice(0, STARTER_SLOTS[target.pos])
       : t.players.filter(p => p.pos === target.pos)).sort((a, b) => a.ovr - b.ovr)[0];
     if (worstSamePos && worstSamePos.ovr + 2 < target.ovr) {
       signPlayer(t, league.freeAgents, target.id, league.cap);
