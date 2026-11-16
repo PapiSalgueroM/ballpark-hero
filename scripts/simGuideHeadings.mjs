@@ -164,8 +164,6 @@ const SOCCER_TRAINING_LOCATION = {
 function reviewedGuideSentences(route, part, sentences) {
   if (route === '/club-manager' && part === 'rules') return [...sentences,
     'In Training, give one player Light or Double for the next paid week. Compare the fitness estimate before you choose how hard he trains.'];
-  if (route === '/mlb-front-office' && part === 'howToPlay') return [...sentences,
-    'Use the ace in elimination games to make a late change when the ace still rates higher than the scheduled starter. A 96-rated ace pitches at 90 on short rest. He returns to full rating after two team games, even between series. The recap marks the switch, short rest and the rating used.'];
   if (route === '/nba-my-career' && part === 'howToPlay') return [...sentences.map(line => line.replace(
     'Either request has a 50% chance of approval, and a decline costs up to four morale points.',
     "Any team trade requests and releases have a 50% chance of approval. Pick a preferred destination for a lower chance shown alongside that team's roster quality. A decline costs up to four morale points.",
