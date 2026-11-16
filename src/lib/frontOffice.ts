@@ -944,13 +944,8 @@ export function runPlayoffs(
 /** Round 631: the fewest men a club may carry. The board greys Cut at it. The NFL sign path has no ceiling. */
 export const NFL_ROSTER_MIN = 6;
 
-export function nflReleaseRefusal(team: GmTeamState, playerId: string): string | null {
-  if (injuredReserveEntry(team, playerId)) return 'Activate him from injured reserve before cutting him.';
-  return cutRefusal({ players: nflActiveRoster(team) }, NFL_ROSTER_MIN);
-}
-
 export function releasePlayer(team: GmTeamState, freeAgents: GmPlayer[], playerId: string): boolean {
-  if (nflReleaseRefusal(team, playerId)) return false;
+  if (injuredReserveEntry(team, playerId) || cutRefusal({ players: nflActiveRoster(team) }, NFL_ROSTER_MIN)) return false;
   const done = cutPlayer(team, freeAgents, playerId, NFL_ROSTER_MIN);
   /* Round 723: the guarantee was this club's promise and it has just been
      paid as dead money. In the pool he is an ordinary man on one year. */

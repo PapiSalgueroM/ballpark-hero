@@ -6,6 +6,8 @@
 
 The integrated candidate passed 98 focused tests across six suites, full application types, the production build and seven browser profiles. Search recovery passed all ten cases and its copied terminal-failure control. The NHL and NFL guides, search index and sitemap ledger were refreshed. The guide, search, static page and Home checks and all 16 download budgets passed.
 
+Hosted CI initially classified a read-only NFL roster check as a separate cut path. The single-use guard now runs in the existing cut function. All 1,187 cut harness checks and ten Reserve/Injured tests passed on the revision. The separate NHL Front Office waiver fixture and native comparison reproduced their previous failures on the hosted logs.
+
 
 ## 2026-11-16 — NRL league player scores and scouting
 
