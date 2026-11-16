@@ -1,4 +1,4 @@
-import { NRL_SEASONS, type NrlYear } from '@/data/nrlManager2026';
+import { NRL_SEASONS, type NrlFixture, type NrlYear } from '@/data/nrlManager2026';
 import { hashLabel, rngFrom } from '@/lib/careerEngine';
 
 export interface NrlClub { id: string; name: string; shortName: string; strength: number }
@@ -11,7 +11,9 @@ export interface NrlSeasonPlan {
 }
 
 export const NRL_LAST_YEAR = 9999;
-// The premiership's pre-Origin rounds. The game keeps its existing generated club draw.
+export const NRL_ORIGIN_DRAW_MODEL = 'origin-breaks-2026';
+export type NrlDrawModel = typeof NRL_ORIGIN_DRAW_MODEL;
+// The premiership rounds before each Origin game.
 // https://www.nrl.com/news/2025/11/14/2026-nrl-telstra-premiership-schedule/
 export const NRL_2026_ORIGIN_STAND_DOWN_ROUNDS: readonly number[] = [12, 15, 18];
 export const isNrlOpeningYear = (year: unknown): year is NrlYear => year === 2026 || year === 2027;
@@ -66,9 +68,29 @@ const OPENING_PLANS: Record<NrlYear, NrlSeasonPlan> = {
   2026: { ...NRL_SEASONS[2026], cap: 11_550_000, minimumSalary: 140_000, projected: false },
   2027: { ...NRL_SEASONS[2027], cap: 11_700_000, minimumSalary: 145_000, projected: false },
 };
+
+// Redistribute 18 fixtures from the original generated draw. Each club keeps
+// the same opponents and home assignments, with five games in each pre-Origin round.
+const originDrawMoves = new Map<string, number>([
+  ['raiders/broncos', 15], ['rabbitohs/panthers', 1], ['broncos/rabbitohs', 4],
+  ['storm/titans', 15], ['knights/sea-eagles', 15], ['tigers/panthers', 4],
+  ['bulldogs/broncos', 16], ['cowboys/warriors', 17], ['dragons/panthers', 17],
+  ['cowboys/panthers', 12], ['knights/rabbitohs', 6], ['storm/roosters', 6],
+  ['tigers/sea-eagles', 6], ['broncos/titans', 6], ['raiders/dolphins', 4],
+  ['dragons/cowboys', 6], ['sharks/tigers', 17], ['panthers/warriors', 6],
+]);
+const originDraw: NrlFixture[][] = NRL_SEASONS[2026].draw.map(() => []);
+NRL_SEASONS[2026].draw.forEach((fixtures, index) => {
+  for (const fixture of fixtures) {
+    const round = originDrawMoves.get(fixture.join('/')) ?? index + 1;
+    originDraw[round - 1].push(fixture);
+  }
+});
+const originPlan = { ...OPENING_PLANS[2026], draw: originDraw };
 const projectedPlans = new Map<number, NrlSeasonPlan>();
 
-export function nrlSeasonPlan(year: number): NrlSeasonPlan {
+export function nrlSeasonPlan(year: number, drawModel?: NrlDrawModel): NrlSeasonPlan {
+  if (year === 2026 && drawModel === NRL_ORIGIN_DRAW_MODEL) return originPlan;
   if (isNrlOpeningYear(year)) return OPENING_PLANS[year];
   if (!Number.isInteger(year) || year < 2028 || year > NRL_LAST_YEAR) throw new RangeError('Unsupported NRL season year.');
   const cached = projectedPlans.get(year);
