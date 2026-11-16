@@ -119,6 +119,38 @@ describe('saved career season review', () => {
     expect(centre.ready).not.toHaveBeenCalled();
   });
 
+  it('reads pitcher replay notes from the MLB binding and keeps held seasons outside after reload', () => {
+    const fixture = reviewFixtures.find(row => row.slug === 'mlb' && row.pos === 'SP')!;
+    const sport = reviewSports.mlb;
+    const career = makeReviewCareer(fixture);
+    career.seasons[0].year = 2020;
+    Object.assign(career.seasons[2], { wins: fixture.games });
+    const bytes = reviewSave(career);
+    localStorage.setItem(sport.saveKey, bytes);
+    const note = vi.fn(sport.seasonCentreReviewNote);
+    const bound = { ...sport, seasonCentreReviewNote: note };
+    const centre = { ready: vi.fn(async () => true), open: vi.fn() };
+    const load = () => render(<UsSeasonCentreOpen.Provider value={centre}>
+      <CareerSeasonReview career={JSON.parse(localStorage.getItem(sport.saveKey)!).c} sport={bound} onBack={() => {}} backLabel="Back to career" />
+    </UsSeasonCentreOpen.Provider>);
+    const first = load();
+    choose(1); click('Regular season');
+    expect(note).toHaveBeenCalledExactlyOnceWith(career.seasons[1], 'SP');
+    expect(screen.getByText(/if the simulated games cannot support all your pitching decisions/i)).toBeVisible();
+    first.unmount();
+
+    load();
+    choose(2); click('Regular season');
+    expect(screen.getByText(/the saved pitching decisions do not fit the appearance count/i)).toBeVisible();
+    click('Back to seasons');
+    note.mockClear();
+    choose(0); click('Regular season');
+    expect(screen.getByText(/the real 2020 season had 60 games/i)).toBeVisible();
+    expect(screen.queryByRole('button', { name: 'Watch reconstructed games' })).toBeNull();
+    expect(note).not.toHaveBeenCalled();
+    expect(localStorage.getItem(sport.saveKey)).toBe(bytes);
+  });
+
   it('returns an unavailable NBA historical view to its Career Log opener', async () => {
     const career = makeReviewCareer(reviewFixtures.find(row => row.slug === 'nba')!);
     const sport = { ...reviewSports.nba, loadSeasonCentre: async () => { throw new Error('Archive chunk unavailable'); } };

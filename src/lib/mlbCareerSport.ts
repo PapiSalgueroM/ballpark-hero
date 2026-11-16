@@ -31,7 +31,7 @@ import { bindUsProgrammeSeason } from '@/lib/usCareerProgramme';
 import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { MLB_CAREER_HALL } from '@/lib/mlbCareerHall';
 import { mlbSeasonReview } from '@/lib/usCareerSeasonReview';
-import { canReplayMlbPlayoffs, mlbSeasonHeld } from '@/lib/mlbSeasonHeld';
+import { canReplayMlbPlayoffs, mlbPitchingDecisionsFit, mlbSeasonHeld } from '@/lib/mlbSeasonHeld';
 
 /* Release AV: the planning panel's games and counting targets follow the season this engine plays (the
    ProgrammeSeasonShape of src/lib/usCareerProgramme.ts): the same reader of the ledger and the same
@@ -162,5 +162,8 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = wi
      game by game view before he presses. */
   loadSeasonCentre: () => import('@/lib/season/mlb').then(m => m.MLB_SEASON),
   seasonCentreHeld: (year, eraId, who) => mlbSeasonHeld(year, eraId, who),
+  seasonCentreReviewNote: (row, pos) => mlbPitchingDecisionsFit(row, pos)
+    ? 'If the simulated games cannot support all your pitching decisions, the decisions stay in the season totals above.'
+    : 'The saved pitching decisions do not fit the appearance count. They are shown above as season totals only.',
   canReplayPlayoffs: (career, row) => canReplayMlbPlayoffs(career.eraId, row),
 });
