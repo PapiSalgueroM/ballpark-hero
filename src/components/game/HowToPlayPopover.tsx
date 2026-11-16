@@ -43,6 +43,7 @@ export function HowToPlayPopover({
 }: HowToPlayPopoverProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
+  const headingRef = useRef<HTMLHeadingElement>(null);
   const isControlled = open !== undefined;
   const isOpen = isControlled ? open : internalOpen;
   const setOpen = isControlled ? (onOpenChange ?? (() => {})) : setInternalOpen;
@@ -65,29 +66,40 @@ export function HowToPlayPopover({
 
       <Dialog open={isOpen} onOpenChange={setOpen}>
         <DialogContent
-          className="max-w-md bg-card border-border text-foreground max-h-[85vh] overflow-y-auto"
+          aria-describedby={undefined}
+          className="flex max-h-[85dvh] max-w-md flex-col overflow-hidden bg-card border-border text-foreground"
+          onOpenAutoFocus={event => {
+            event.preventDefault();
+            headingRef.current?.focus({ preventScroll: true });
+          }}
           onCloseAutoFocus={event => {
             event.preventDefault();
             triggerRef.current?.focus();
           }}
         >
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-display text-primary text-center">
+          <DialogHeader className="shrink-0 px-5">
+            <DialogTitle ref={headingRef} tabIndex={-1} className="text-2xl font-display text-primary text-center">
               {title}
             </DialogTitle>
           </DialogHeader>
 
-          {isOpen && <div data-dukb-help-cookie-choices="" className="empty:hidden" />}
-          <div className="space-y-5 text-sm">
-            {children}
-
-            <button
-              onClick={() => setOpen(false)}
-              className="w-full py-3 min-h-[44px] bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90 transition-opacity"
-            >
-              Let's Play!
-            </button>
+          <div
+            role="region"
+            aria-label="Game instructions"
+            tabIndex={0}
+            className="min-h-0 overflow-y-auto overscroll-contain focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring"
+          >
+            {isOpen && <div data-dukb-help-cookie-choices="" className="mb-4 empty:hidden" />}
+            <div className="space-y-5 text-sm">{children}</div>
           </div>
+
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="w-full shrink-0 py-3 min-h-[44px] bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90 transition-opacity"
+          >
+            Let's Play!
+          </button>
         </DialogContent>
       </Dialog>
     </>
