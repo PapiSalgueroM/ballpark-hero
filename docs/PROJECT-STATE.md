@@ -1,3 +1,11 @@
+## 2026-11-16 — One-tap Club Manager resume and MLB Triple-A options
+
+- Home opens the active Club Manager save from the flagship in one tap. Both phone widths reopened Everton with the same save bytes. The explicit link opened parked Lincoln City and the bare Club Manager route showed the chooser. An invalid active index preserved all three slots and returned to the chooser.
+- MLB Front Office can option eligible drafted prospects to Triple-A before Round 1. The Arizona fixture reached 28 active players with 29 under contract and kept the $189.6 million payroll. A later recall required an open place and covered Ryne Nelson’s actual IL absence. The recalled starter raised rotation strength by 1.32. With the same random rolls, Arizona finished 1–5 with the recalled starter and 0–6 with the existing rotation. Assignments, contracts and recalls survived reload at both phone widths.
+
+The integrated candidate passed 102 tests across five suites and the production build. Three Home browser cases and two MLB cases passed on the same build. The published MLB guide, frozen guide fixture, search index and sitemap ledger were refreshed. The guide, sitemap, search, snapshot boot and Home checks passed.
+
+
 ## 2026-11-16 — NRL caretaker jobs and faster Career Logs
 
 [PR #1012](https://github.com/PapiSalgueroM/ballpark-hero/pull/1012) published exact main `bcd4cc3b6667e397513facfca2eb185149b7b72c`, deployment `445bc74d-2116-45a4-9ca8-e7409676c915` and canonical entry `/assets/index-DEUt_H75.js`. The squash tree matched tested head `df7d33e35`. All six pinned live game profiles, 20 control endpoints, the new NRL guide and all 174 sitemap routes passed. IndexNow accepted the updated NRL guide.
