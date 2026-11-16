@@ -17,7 +17,10 @@ vi.mock('@/components/auth/AuthModal', () => ({ AuthModal: () => null }));
 vi.mock('@/components/game/StreakReminder', () => ({ StreakReminder: () => null }));
 vi.mock('@/components/home/art/HomeArt', () => ({ default: () => null }));
 vi.mock('@/components/home/ContinueRow', () => ({ ContinueRow: () => null }));
-vi.mock('@/components/home/DailyRail', () => ({ DailyRail: () => <a href="/daily-fixture">Daily fixture</a> }));
+vi.mock('@/components/home/DailyRail', async importOriginal => ({
+  ...await importOriginal<typeof import('@/components/home/DailyRail')>(),
+  DailyRail: () => <a href="/daily-fixture">Daily fixture</a>,
+}));
 vi.mock('@/components/home/JustShipped', () => ({ JustShipped: () => null }));
 vi.mock('@/components/home/HomeAbout', () => ({ HomeAbout: () => null }));
 vi.mock('@/components/home/PollOfTheDay', () => ({ PollOfTheDay: () => null }));
@@ -87,8 +90,10 @@ describe('browser-local game picks', () => {
     const browse = view.getByRole('region', { name: 'Browse sports' });
     expect(browse).toHaveAttribute('id', 'browse-sports');
     expect(browse).toHaveAttribute('tabindex', '-1');
-    const sports = within(browse).getAllByRole('link');
-    expect(sports.length).toBeGreaterThan(0);
+    fireEvent.click(within(browse).getByRole('button', { name: 'Jump to sport' }));
+    const sports = within(view.getByRole('dialog', { name: 'Jump to sport' })).getAllByRole('link');
+    const sectionIds = Array.from(view.container.querySelectorAll('section[data-sport] > div > h2'), heading => `#${heading.id}`);
+    expect(sports.map(link => link.getAttribute('href'))).toEqual(sectionIds);
     for (const sport of sports) {
       const id = sport.getAttribute('href')!.slice(1);
       const section = view.container.querySelector<HTMLElement>(`section[data-sport="${id.slice(6)}"]`)!;

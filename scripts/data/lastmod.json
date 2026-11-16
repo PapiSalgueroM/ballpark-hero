@@ -21,8 +21,8 @@
     "date": "2026-09-30"
   },
   "/aussie-rules-manager": {
-    "hash": "150d434716588151",
-    "date": "2026-11-15"
+    "hash": "7683606552b41475",
+    "date": "2026-11-16"
   },
   "/ball-iq": {
     "hash": "6f8a7e00e1863905",
@@ -73,8 +73,8 @@
     "date": "2026-10-01"
   },
   "/cbb-grid/archive": {
-    "hash": "72231acf76644660",
-    "date": "2026-11-15"
+    "hash": "ebad5b5ed90216d6",
+    "date": "2026-11-16"
   },
   "/cfb-dynasty": {
     "hash": "9a69af5ef5f5200e",
@@ -261,8 +261,8 @@
     "date": "2026-10-06"
   },
   "/hockey-grid/archive": {
-    "hash": "ac5d9059ad6d225a",
-    "date": "2026-11-15"
+    "hash": "5d76aa964aa0f44a",
+    "date": "2026-11-16"
   },
   "/hockey-higher-lower": {
     "hash": "afe99447d0a3375f",
@@ -325,8 +325,8 @@
     "date": "2026-10-01"
   },
   "/mlb-grid/archive": {
-    "hash": "c4085ca0ae40aafb",
-    "date": "2026-11-15"
+    "hash": "21bcfcc41c06d2bf",
+    "date": "2026-11-16"
   },
   "/mlb-higher-lower": {
     "hash": "8bb21a141aed7b88",
@@ -377,16 +377,16 @@
     "date": "2026-10-01"
   },
   "/nba-grid/archive": {
-    "hash": "747dc3fea0cacb3d",
-    "date": "2026-11-15"
+    "hash": "c9f96b0088515b61",
+    "date": "2026-11-16"
   },
   "/nba-higher-lower": {
     "hash": "c5e8d571dd910d3a",
     "date": "2026-10-23"
   },
   "/nba-my-career": {
-    "hash": "205744f94ae272ca",
-    "date": "2026-11-15"
+    "hash": "4dc7db1cedd04754",
+    "date": "2026-11-16"
   },
   "/nba-playoff-format-history": {
     "hash": "e9ebd68869371222",
@@ -453,7 +453,7 @@
     "date": "2026-09-19"
   },
   "/nrl-team-manager": {
-    "hash": "6168f30b8a6b50c9",
+    "hash": "e1a2286dc75c8c7f",
     "date": "2026-11-16"
   },
   "/olympics": {

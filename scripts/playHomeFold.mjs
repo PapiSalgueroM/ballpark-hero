@@ -674,6 +674,11 @@ for (const width of [320, 390, 430, 1440]) {
       say(false, width + 'px Home has a Browse sports button beside search');
       continue;
     }
+    say(await page.evaluate(() => {
+      const polls = document.getElementById('home-polls');
+      const gameSections = [document.getElementById('home-career-sims'), document.querySelector('[data-home-sport-catalogue]')];
+      return !!polls && gameSections.every(section => section && (section.compareDocumentPosition(polls) & Node.DOCUMENT_POSITION_FOLLOWING));
+    }), width + 'px career games and sport catalogue sit above the late-loading polls');
     await trigger.focus();
     await trigger.press('Enter');
     const quick = page.getByRole('dialog', { name: 'Browse sports' });

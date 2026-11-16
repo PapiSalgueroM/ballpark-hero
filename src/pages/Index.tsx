@@ -434,10 +434,6 @@ export default function Index() {
         </JustShipped>
       </div>
 
-      {/* Round 659: the polls sit under the games now. They invite a
-          click, the tiles get played, and the first screen belongs to
-          the tiles. PollOfTheDay holds its own height while it loads. */}
-      <PollsWhenNear />
       {/* ROUND 382: the maker's note is gone from here, on the owner's
           instruction: "it shouldnt pop up there I would rather you put it
           in one the small like tabs on the bottom like near the privacy
@@ -539,6 +535,8 @@ export default function Index() {
           })}
         </div>
       </div>
+      {/* Late poll results should never shift a game destination. */}
+      <PollsWhenNear />
     </div>
   ), [badgeDate, bestScores, expandedSports, favSport, gamePicks, jumpToSport, pickSport, pickableSports, popularReturnPath, sportSections, toggleGamePick, user]);
 

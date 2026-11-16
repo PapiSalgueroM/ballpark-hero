@@ -20,7 +20,10 @@ vi.mock('@/components/auth/AuthModal', () => ({ AuthModal: () => null }));
 vi.mock('@/components/game/StreakReminder', () => ({ StreakReminder: () => null }));
 vi.mock('@/components/home/FeaturedStage', () => ({ FeaturedStage: () => null }));
 vi.mock('@/components/home/ContinueRow', () => ({ ContinueRow: () => null }));
-vi.mock('@/components/home/DailyRail', () => ({ DailyRail: () => null }));
+vi.mock('@/components/home/DailyRail', async importOriginal => ({
+  ...await importOriginal<typeof import('@/components/home/DailyRail')>(),
+  DailyRail: () => null,
+}));
 vi.mock('@/components/home/JustShipped', () => ({ JustShipped: () => null }));
 vi.mock('@/components/home/HomeAbout', () => ({ HomeAbout: () => null }));
 vi.mock('@/components/home/PollOfTheDay', () => ({ PollOfTheDay: () => null }));
