@@ -15,9 +15,9 @@ export interface NrlJudiciary {
   case?: NrlJudiciaryCase;
   carried?: NrlJudiciaryCarry;
 }
-type Season = Pick<NrlManagerState, 'year' | 'clubId' | 'seed' | 'results' | 'judiciary'>;
+type Season = Pick<NrlManagerState, 'year' | 'clubId' | 'seed' | 'results' | 'judiciary' | 'caretaker'>;
 type Hearing = Pick<Season, 'year' | 'clubId' | 'seed'>;
-type ClubResults = Pick<NrlManagerState, 'clubId' | 'results'>;
+type ClubResults = Pick<NrlManagerState, 'clubId' | 'results' | 'caretaker'>;
 
 const fictionalPlayer = (id: string) => !id.startsWith('nrl-real-');
 const isClubMatch = (match: NrlMatchResult, clubId: string) => match.homeId === clubId || match.awayId === clubId;
@@ -47,7 +47,8 @@ export function nrlJudiciaryPenalty(season: Hearing, review: NrlJudiciaryCase): 
 }
 
 export function nrlJudiciaryMatchesAfter(season: ClubResults, round: number): number {
-  return season.results.filter(match => match.round > round && isClubMatch(match, season.clubId)).length;
+  return season.results.filter(match => match.round > round && match.round >= (season.caretaker?.round ?? 1)
+    && isClubMatch(match, season.clubId)).length;
 }
 
 export function nrlJudiciaryBannedBefore(season: Season, playerId: string, round: number): boolean {
@@ -111,7 +112,7 @@ export function validNrlJudiciary(season: Season & Pick<NrlManagerState, 'round'
   let banLeft = 0;
   let issued = false;
   for (const match of season.results) {
-    if (!isClubMatch(match, season.clubId)) continue;
+    if (match.round < (season.caretaker?.round ?? 1) || !isClubMatch(match, season.clubId)) continue;
     const played = participants(match);
     if (carryLeft) {
       if (played.includes(carried!.playerId)) return false;

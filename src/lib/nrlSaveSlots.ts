@@ -1,6 +1,6 @@
 import { CONTINUE_SAVES, continueSaveEntries, type ContinueSave } from '@/data/continueSaves';
 import { backupKeysOf, browserStorage, copyAside, pruneBackups } from '@/lib/brokenSaveRecovery';
-import { NRL_SAVE_MAX_CHARS, readNrlCareerSave, type NrlCareerState } from '@/lib/nrlCareer';
+import { NRL_SAVE_MAX_CHARS, nrlOpeningClubId, readNrlCareerSave, type NrlCareerState } from '@/lib/nrlCareer';
 import { saveFence, type FenceWrite } from '@/lib/saveFence';
 
 export const NRL_SAVE_ENTRY = CONTINUE_SAVES.find(entry => entry.path === '/nrl-team-manager')!;
@@ -34,9 +34,9 @@ export const nrlCheckpointKey = (key: string) => 'dukb-nrl-checkpoint:' + key;
 const replayKey = (key: string) => 'dukb-nrl-checkpoint-replay:' + key;
 
 function careerId(career: NrlCareerState): string {
-  const { openingYear, openingRoster, season, history, customClub } = career;
+  const { openingYear, openingRoster, season, customClub } = career;
   // Rollover keeps the seed and the first completed club, even when the manager moves.
-  const id = [openingYear, history[0]?.clubId ?? season.clubId, season.seed,
+  const id = [openingYear, nrlOpeningClubId(career), season.seed,
     ...(season.domesticScoringModel ? [season.domesticScoringModel] : [])].join(':');
   if (customClub) return `${id}:custom:${JSON.stringify([customClub.name, customClub.ground, customClub.colour])}`;
   return openingRoster ? `${id}:${openingRoster}` : id;

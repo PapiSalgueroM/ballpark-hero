@@ -6,7 +6,7 @@ import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { RulesGate } from '@/components/game/RulesGate';
 import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeNotice';
-import NrlCareerOffice from '@/components/nrl-manager/NrlCareerOffice';
+import NrlCareerOffice, { NrlCaretakerOffice } from '@/components/nrl-manager/NrlCareerOffice';
 import NrlOriginOffice from '@/components/nrl-manager/NrlOriginOffice';
 import NrlJudiciaryReview from '@/components/nrl-manager/NrlJudiciaryReview';
 import NrlCareerSlots from '@/components/nrl-manager/NrlCareerSlots';
@@ -2983,8 +2983,12 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
       setShowLiveResult(true);
     }
     const newSeason = next.season.year !== before.season.year;
-    if (action.type === 'advance' || newSeason) setShowLiveResult(false);
-    if (newSeason) setPanel('match');
+    const newClub = next.season.clubId !== before.season.clubId;
+    if (action.type === 'advance' || newSeason || newClub) setShowLiveResult(false);
+    if (newSeason || newClub) {
+      setFixtureClub(undefined);
+      setPanel('match');
+    }
     return true;
   }
 
@@ -3179,6 +3183,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
                       aria-pressed={office === id} onClick={() => { setOpenShortlist(false); setOffice(id); }}>{label}</Button>
                   ))}
                 </div>
+                <NrlCaretakerOffice key={season.clubId} career={career} disabled={rosterLocked} onAction={dispatch} />
                 <NrlOriginOffice career={career} disabled={rosterLocked} onAction={dispatch} />
                 {(career.worldCup || nrlWorldCupAppointmentAvailable(career)) && <div className="space-y-2 rounded-xl border border-border bg-card p-3">
                   <h2 className="font-display text-lg font-bold">National appointment</h2>
