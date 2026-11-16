@@ -1,4 +1,16 @@
+## 2026-11-16 — Halftime cover, requested trades and season tickets
+
+- NRL Team Manager lets a manager cover a first-half injury with a legal named reserve in new regular seasons. The saves record who came off and who took the reserve place. Quick Sim matched Live using the same default cover. Both phone widths also allowed a different legal fourth reserve and stopped the injured starter from returning.
+- NBA My Career can name an era-eligible trade destination in the existing annual request. The confirmation shows approval odds and destination roster quality. The browser saved the signed terms and the selected franchise after two approvals, and preserved one refusal across a stale tab.
+- Stadium Tycoon can reserve up to a quarter of existing seats for season tickets before the first result. At the fixture's Premium price in both play modes, 30 reserved seats raised the crowd to 101 and qualified for the existing 96-supporter sponsor target. The game records the attendance split without a second payment.
+- Six tested games keep the shared rules heading and dismissal controls visible while their instructions scroll. The native guide checks cover first open, keyboard scroll, touch dismissal, reload and reopening at 320px, with two additional 390px profiles.
+
+The rebased candidate matches the built source tree and passed all 17 native profiles and scoped application and test types. The NRL, NBA and Stadium guides were regenerated. All 21 site checks, the 174-route crawler comparison and all 16 download budgets passed. All four archives retain the 364 November 15 Eastern boards verified in the prior release.
+
+
 ## 2026-11-16 — Match availability, NBA bench roles and Home shortcuts
+
+[PR #1010](https://github.com/PapiSalgueroM/ballpark-hero/pull/1010) published exact main `32cd8883dbc8bf477420501f4c84b56e46899181`, deployment `e7cf3d95-b31e-4dc8-b5e1-fbe028a9577b` and canonical entry `/assets/index-CJHyiPdl.js`. The squash tree matched verified head `a5a867122`. The live build passed 14 feature cases and all six Club Manager Messi cases, plus 19 pinned endpoints and all 174 sitemap routes. IndexNow accepted the three updated guides and four grid archives. Hosted application types, production builds, Home launch, Game Picks and Career entry guide workflows passed. The final integrated local run passed 274 tests across 18 suites. Wider career and Home search workflows still reported failures. The failing ordinary NBA career save fixture produced the same expected and received bytes on exact #1009 and #1010.
 
 - New Aussie Rules Manager league careers can lose a selected player to a short injury for one to three club fixtures. The full-time report names injuries for both clubs. A saved Geelong lineup kept Jarrin Pellwick out for two fixtures and selected him again after recovery on both tested phone widths. The paired engine replay preserved all 675 older-save transitions.
 - New 2026 NRL club careers account for Origin workload. Managers can rest one returning player for the next actual club match, including after a bye. Three real browser scenarios reproduced the saved selection and matching Quick and Live results after reload.
