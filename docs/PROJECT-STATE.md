@@ -1,3 +1,14 @@
+## 2026-11-15 — Home navigation and season decisions
+
+- Home's Browse sports section uses a compact sport picker on phones. The first catalogue card fits after All sports on 320×568 and 390×640 phones. The browser checks cover all sport choices, Back, Forward, keyboard focus and direct links.
+- New 2026 NRL club careers simulate State of Origin call-ups in rounds 12, 15 and 18. The Brisbane fixture removed seven home and three opposing players from club availability. The Live halftime reload and Quick Sim settled the same result. Careers can also nominate an eligible academy graduate for up to $300,000 in cap relief while paying the player's full wage.
+- MLB backup starters can stretch out for one season of spot starts. In the paired Seattle fixtures, a successful plan took starts from 13 to 18. A fatigue case dropped to six starts and cost eight health. The shortened 2020 fixture still uses the existing 58-game slate.
+- Mystery Box allows one strictly stronger, position-compatible swap on Daily boards starting November 21 Eastern. A refused save keeps the reveal available for retry. The previous day preserves its original save bytes and score.
+- The NHL contributor harness now counts all 11 regular cases and binds its duplicate-Apply control to the contributor action. All 12 copied controls reached their intended assertion.
+
+The candidate passed 103 focused tests, scoped application types, the production build, all five browser groups, 21 site checks, the 174-route metadata comparison and all 16 download budgets. The three updated guides were regenerated. The 360 grid boards through November 14 Eastern matched the earlier verified archive.
+
+
 ## 2026-11-15: Academy prospects, goalie trials and mobile controls
 
 [PR #1008](https://github.com/PapiSalgueroM/ballpark-hero/pull/1008) published exact main `ca92abaaea3c99fc87b00ea93fa82bdf2af881ac`, deployment `7aeb7cef-90bc-4da3-891c-312b40398e80` and canonical entry `/assets/index-DkCb0wW-.js`. The squash tree matched tested head `f11e1ffa4`. The published build passed 16 native feature checks, all 12 Messi regression checks, 17 pinned endpoints and all 174 sitemap routes. IndexNow accepted the three updated guides.
