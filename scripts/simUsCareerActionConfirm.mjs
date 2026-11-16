@@ -45,7 +45,7 @@ const controls = {
   cancel: [component, '<AlertDialogCancel className="min-h-11 min-w-11">', '<AlertDialogCancel onClick={onConfirm} className="min-h-11 min-w-11">', [...actionTitles, titles.focus('retire'), titles.focus('restart'), coachTitle]],
   escape: [component, '        className="max-w-md"', '        className="max-w-md" onEscapeKeyDown={onConfirm}', [...actionTitles, titles.focus('retire'), titles.focus('restart'), coachTitle]],
   duplicate: [component, 'if (!open || acceptedRef.current) return;', 'if (!open) return;', [titles.duplicate, coachTitle]],
-  rearm: [component, 'if (nextOpen) acceptedRef.current = false;', 'void nextOpen;', [titles.duplicate, coachTitle]],
+  rearm: [component, '      acceptedRef.current = false;', '      void acceptedRef;', [titles.duplicate, coachTitle]],
   initial: [component, cancelBlock, cancelBlock.replace('<AlertDialogCancel ', '<button onClick={() => changeOpen(false)} ').replace('</AlertDialogCancel>', '</button>'), [titles.focus('retire'), titles.focus('restart'), titles.keyboard, coachTitle]],
   focus: [component, 'triggerRef.current.focus({ preventScroll: true });', 'triggerRef.current.focus();', [titles.focus('retire'), titles.focus('restart'), coachTitle]],
   unmount: [component, '          event.preventDefault();', '          event.preventDefault();\n          if (!triggerRef.current?.isConnected) onConfirm();', [titles.unmount, coachTitle]],
@@ -53,7 +53,7 @@ const controls = {
   /* Round 1569 (ruling R3): the retired card's prompt also says whether the Hall card goes, so its line carries hallCard.
      Round 1570: and whether it stays on the Hall wall, so it carries hallKept too; the control still swaps only reset. */
   restartWiring: [sharedBoard, '<USCareerActionConfirm action="restart" sport={sport.label} onConfirm={reset} hallCard={hallOnRestart} hallKept={hallKept}>', '<USCareerActionConfirm action="restart" sport={sport.label} onConfirm={retireNow} hallCard={hallOnRestart} hallKept={hallKept}>', sports.map(restartTitle)],
-  ownKey: [sharedBoard, 'const reset = () => {\n    setMarketTalk(null);\n    extDeclinedRef.current = false;\n    saveValue(null);', 'const reset = () => {\n    setMarketTalk(null);\n    extDeclinedRef.current = false;\n    localStorage.clear();', sports.map(restartTitle)],
+  ownKey: [sharedBoard, '    saveValue(null);\n    setCareer(null);', '    localStorage.clear();\n    setCareer(null);', sports.map(restartTitle)],
   legacy: [sharedBoard, 'useGameCompletion(sport.gameSlug, done, career ? sport.legacyOf(career).score : 0);', 'useGameCompletion(sport.gameSlug, done, career ? sport.legacyOf(career).score + 1 : 0);', sports.map(retirementTitle)],
 };
 const control = process.env.US_CAREER_ACTION_CONTROL || '';
