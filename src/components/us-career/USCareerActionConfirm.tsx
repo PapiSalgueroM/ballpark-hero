@@ -20,6 +20,7 @@ interface Props {
   sport: Sport;
   onConfirm: (preferredTeam?: string) => void;
   tradeDestinations?: UsCareerTradeDestination[];
+  tradeOnly?: boolean;
   children: ReactElement;
   description?: string;
   /** Round 1569 (the lead's ruling R3): the career being cleared is retired and has a Hall of Fame card. The
@@ -53,7 +54,7 @@ const COPY: Record<Action, (sport: Sport, hallCard: boolean, hallKept: boolean) 
   }),
   tradeRequest: () => ({
     title: 'Request a trade?',
-    description: 'You have a 50% chance of a trade this season. A deal keeps your salary and contract years. If the team declines, morale drops by up to 4 points. You get one trade or release request this season.',
+    description: 'You have a 50% chance of a trade this season. A deal keeps your salary and contract years. If the team declines, morale drops by up to 4 points.',
     cancel: 'Keep playing',
     confirm: 'Send request',
   }),
@@ -71,13 +72,14 @@ const COPY: Record<Action, (sport: Sport, hallCard: boolean, hallKept: boolean) 
   }),
 };
 
-export default function USCareerActionConfirm({ action, sport, onConfirm, children, description, tradeDestinations, hallCard = false, hallKept = false }: Props) {
+export default function USCareerActionConfirm({ action, sport, onConfirm, children, description, tradeDestinations, tradeOnly = false, hallCard = false, hallKept = false }: Props) {
   const [open, setOpen] = useState(false);
   const [preferredTeam, setPreferredTeam] = useState('');
   const destination = tradeDestinations?.find(team => team.id === preferredTeam);
   const acceptedRef = useRef(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const copy = COPY[action](sport, hallCard, hallKept);
+  const tradeLimit = tradeOnly ? ' You get one trade request this season.' : ' You get one trade or release request this season.';
 
   const changeOpen = (nextOpen: boolean) => {
     if (nextOpen) {
@@ -107,8 +109,8 @@ export default function USCareerActionConfirm({ action, sport, onConfirm, childr
         <AlertDialogHeader>
           <AlertDialogTitle>{copy.title}</AlertDialogTitle>
           <AlertDialogDescription>{destination
-            ? 'You have a ' + destination.chance + '% chance of a trade. Roster quality ' + destination.quality + ' if they agree. A deal keeps your salary and contract years. A refusal costs up to 4 morale. You get one trade or release request this season.'
-            : description ?? copy.description}</AlertDialogDescription>
+            ? 'You have a ' + destination.chance + '% chance of a trade. Roster quality ' + destination.quality + ' if they agree. A deal keeps your salary and contract years. A refusal costs up to 4 morale.' + tradeLimit
+            : description ?? (action === 'tradeRequest' ? copy.description + tradeLimit : copy.description)}</AlertDialogDescription>
         </AlertDialogHeader>
         {!!tradeDestinations?.length && (
           <label className="grid min-w-0 gap-1.5 text-sm font-medium">
