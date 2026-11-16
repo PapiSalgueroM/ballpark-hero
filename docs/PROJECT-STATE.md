@@ -5,7 +5,7 @@
 - Stadium Tycoon can reserve up to a quarter of existing seats for season tickets before the first result. At the fixture's Premium price in both play modes, 30 reserved seats raised the crowd to 101 and qualified for the existing 96-supporter sponsor target. The game records the attendance split without a second payment.
 - Six tested games keep the shared rules heading and dismissal controls visible while their instructions scroll. The native guide checks cover first open, keyboard scroll, touch dismissal, reload and reopening at 320px, with two additional 390px profiles.
 
-The rebased candidate matches the built source tree and passed all 17 native profiles and scoped application and test types. The NRL, NBA and Stadium guides were regenerated. All 21 site checks, the 174-route crawler comparison and all 16 download budgets passed. All four archives retain the 364 November 15 Eastern boards verified in the prior release.
+The rebased candidate matches the built source tree and passed all 17 native profiles and scoped application and test types. The NRL, NBA and Stadium guides were regenerated. All 21 site checks, the 174-route crawler comparison and all 16 download budgets passed. All four archives retain all 364 boards through November 15 Eastern, as verified in the prior release.
 
 
 ## 2026-11-16 — Match availability, NBA bench roles and Home shortcuts
