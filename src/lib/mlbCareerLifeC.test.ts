@@ -6,7 +6,7 @@ import {
   MLB_LIFE_C, applyMlbLifeCFx, mlbLifeCChip, buildMlbLifeCCard, getMlbLifeEventsC,
 } from './mlbCareerLifeC';
 import { getMlbLifeEventsA } from './mlbCareerLifeA';
-import { MLB_ARCHETYPES, startMlbCareer, mlbEraTeamIds } from './mlbMyCareer';
+import { MLB_ARCHETYPES, startMlbCareer, mlbEraTeamIds, mlbEventDeck, mlbTeamLabelOf, simMlbSeason } from './mlbMyCareer';
 import type { MlbCareerPos, MlbCareerState } from './mlbMyCareer';
 
 const seeded = (seed: number) => () => {
@@ -29,6 +29,33 @@ function career(pos: MlbCareerPos, patch: Partial<MlbCareerState> = {}, seasons 
 
 const idsFor = (c: MlbCareerState) => getMlbLifeEventsC(c, () => 0.5).map(e => e.id);
 const GROUP_IDS = (c: MlbCareerState) => idsFor(c).filter(id => /^mlbC_(sp|rp|c|if|of|dh)_/.test(id));
+
+describe('offseason trade rumors', () => {
+  it.each(['now', 'y2004'])('moves the player to a different club in the %s era', era => {
+    const [current, destination] = mlbEraTeamIds(era);
+    const c = career('SS', { team: current, contractYears: 3, salary: 12.5 }, 2, era);
+    const completed = JSON.stringify(c.seasons);
+    const trade = mlbEventDeck(c, seeded(79)).find(card => card.id === 'trade')!;
+
+    const note = trade.options[0].apply(c, () => 0);
+
+    expect(c.team).toBe(destination);
+    expect(note).toContain(mlbTeamLabelOf(destination, era));
+    expect(c).toMatchObject({ contractYears: 3, salary: 12.5 });
+    expect(JSON.stringify(c.seasons)).toBe(completed);
+    expect(simMlbSeason(c, 78, seeded(104)).line.team).toBe(destination);
+  });
+
+  it('keeps the player and contract on the current club when he chooses to stay', () => {
+    const c = career('SS', { contractYears: 3, salary: 12.5 });
+    const originalTeam = c.team;
+    const trade = mlbEventDeck(c, seeded(79)).find(card => card.id === 'trade')!;
+
+    trade.options[1].apply(c, () => 0);
+
+    expect(c).toMatchObject({ team: originalTeam, contractYears: 3, salary: 12.5, morale: 56, fanbase: 56 });
+  });
+});
 
 describe('the catalog', () => {
   it('is 36 cards with unique mlbC_ ids, three options each, and every tag filled', () => {
