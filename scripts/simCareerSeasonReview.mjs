@@ -15,6 +15,7 @@ const testFile = 'src/test/careerSeasonReview.test.tsx';
 const titles = {
   archiveReplay: 'opens the selected earlier NBA season for reconstruction without saving or credit',
   archiveEligibility: 'keeps archived short and unplayed NBA seasons outside the reconstruction',
+  pitchingNote: 'reads pitcher replay notes from the MLB binding and keeps held seasons outside after reload',
   archiveUnavailable: 'returns an unavailable NBA historical view to its Career Log opener',
   highsPositions: 'finds saved season highs from the correct positive field for every position',
   highsTies: 'keeps every tied original index latest first and compares raw high values before formatting',
@@ -70,6 +71,7 @@ const controls = {
   mlbStarter: { file: helper, from: "const regular = pos === 'SP'", to: "const regular = pos === 'CF'", test: titles.mlb },
   mlbReliever: { file: helper, from: "    : pos === 'RP'", to: "    : pos === 'CF'", test: titles.mlb },
   mlbUnits: { file: helper, from: "gamesLabel: pos === 'SP' ? 'Starts' : pos === 'RP' ? 'Appearances' : 'Games'", to: "gamesLabel: 'Games'", test: titles.mlb },
+  pitchingRole: { file: component, from: 'sport.seasonCentreReviewNote(season, career.pos)', to: "sport.seasonCentreReviewNote(season, 'RP')", test: titles.pitchingNote },
   nhlGoalie: { file: helper, from: "pos === 'G' ? [number('Wins', s.wins)", to: "pos === 'C' ? [number('Wins', s.wins)", test: titles.nhl },
   nhlPostseason: { file: helper, from: "number('Save percentage', s.poSvpct, 3)", to: "number('Save percentage', s.svpct, 3)", test: titles.nhl },
   savedOvr: { file: component, from: '{recorded(season.ovr)}', to: '{recorded(career.ovr)}', test: titles.compare },
