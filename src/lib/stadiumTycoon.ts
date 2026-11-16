@@ -718,6 +718,11 @@ interface StadiumSponsorDeal {
   rate: number;
 }
 
+export interface SeasonTicketAllocation {
+  seats: number;
+  ticketLevel: number;
+}
+
 export interface TycoonLeague {
   division: number;
   /** Seasons started at this ground, counted from 0. Seeds the rivals. */
@@ -733,8 +738,9 @@ export interface TycoonLeague {
   baseMatchNo?: number;
   /** Index 0 is you. */
   clubs: LeagueClub[];
-  results?: { day: number; gf: number; ga: number; attendance?: number; plan?: MatchPlan; scouting?: MatchScouting; graduateAttack?: GraduateAttackReceipt }[];
+  results?: { day: number; gf: number; ga: number; attendance?: number; seasonTicketFans?: number; plan?: MatchPlan; scouting?: MatchScouting; graduateAttack?: GraduateAttackReceipt }[];
   sponsor?: StadiumSponsorDeal;
+  seasonTickets?: SeasonTicketAllocation;
   /** An older save's match in progress when it first loaded: played to full
    *  time against this name, outside the table, before matchday 1. */
   carryover?: string;
@@ -986,6 +992,7 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
   const graduate = activeGraduateAttack(st);
   const result = {
     day: matchday, gf, ga, attendance: crowdAtFullTime,
+    ...(lg.seasonTickets ? { seasonTicketFans: Math.min(lg.seasonTickets.seats, crowdAtFullTime) } : {}),
     ...(plan ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
     ...(scouting ? { scouting: { fee: scouting.fee, reduction: scouting.reduction } } : {}),
     ...(graduate && graduate.played !== undefined ? { graduateAttack: { name: graduate.name, share: graduate.played?.attack ?? 0 } } : {}),
@@ -1115,9 +1122,42 @@ export function setTicketPolicy(s: TycoonState, policy: TicketPolicy): TycoonSta
   return next;
 }
 
-/** Willing supporters, capped by seats. No offer creates extra supporters. */
+/** One offer before the first league result. A reserved supporter uses one of the existing seats. */
+export function seasonTicketQuote(s: TycoonState): SeasonTicketAllocation | null {
+  const league = s.league;
+  if (!league || league.matchday !== 0 || league.carryover || league.seasonTickets) return null;
+  const seats = Math.floor(Math.min(capacity(s), s.fanbase) / 4);
+  return seats > 0 ? { seats, ticketLevel: levelOf(s, 'tickets') } : null;
+}
+
+export function reserveSeasonTickets(s: TycoonState, ground: number, season: number, quoted: SeasonTicketAllocation): TycoonState {
+  const league = s.league;
+  if (!league || s.rep !== ground || league.season !== season) return s;
+  const quote = seasonTicketQuote(s);
+  if (!quote || quote.seats !== quoted.seats || quote.ticketLevel !== quoted.ticketLevel) return s;
+  return { ...s, league: { ...league, seasonTickets: quote } };
+}
+
+function seasonTicketAttendance(s: TycoonState): number {
+  const seats = s.league?.seasonTickets?.seats;
+  return seats ? Math.floor(Math.min(seats, s.fanbase, capacity(s))) : 0;
+}
+
+const standardGate = (ticketLevel: number) => 0.05 + ticketLevel * 0.011;
+
+export function seasonTicketGateRate(allocation: SeasonTicketAllocation): number {
+  return standardGate(allocation.ticketLevel) * 0.8;
+}
+
+function seasonTicketGateAdjustment(s: TycoonState): number {
+  const allocation = s.league?.seasonTickets;
+  return allocation ? seasonTicketAttendance(s) * (seasonTicketGateRate(allocation) - standardGate(levelOf(s, 'tickets')) * ticketTerms(s).gate) : 0;
+}
+
+/** Willing supporters, capped by seats. A pass holder is removed from walk-up demand. */
 export function attendance(s: TycoonState): number {
-  return Math.min(capacity(s), Math.floor(s.fanbase * ticketTerms(s).demand));
+  const passHolders = seasonTicketAttendance(s);
+  return Math.min(capacity(s), passHolders + Math.floor((s.fanbase - passHolders) * ticketTerms(s).demand));
 }
 
 /** Reputation multiplier: each star is +50%, permanent. */
@@ -1132,12 +1172,12 @@ export function streakMult(s: TycoonState): number {
 
 /** Money per second per fan from each spending track, at a level. */
 function perFanRate(s: TycoonState): number {
-  const tk = levelOf(s, 'tickets');
+  const gate = standardGate(levelOf(s, 'tickets'));
   const sn = levelOf(s, 'snacks');
   const sh = levelOf(s, 'shop');
   // Gate money is the backbone; snacks and shop stack on top of it.
-  if (ticketPolicyOf(s) === 'standard') return 0.05 + tk * 0.011 + sn * 0.009 + sh * 0.016;
-  return (0.05 + tk * 0.011) * ticketTerms(s).gate + sn * 0.009 + sh * 0.016;
+  if (ticketPolicyOf(s) === 'standard') return gate + sn * 0.009 + sh * 0.016;
+  return gate * ticketTerms(s).gate + sn * 0.009 + sh * 0.016;
 }
 
 /** The number on the header: money per second, all sources. */
@@ -1156,7 +1196,7 @@ export function incomePerSec(s: TycoonState): number {
      in the line so the code reads the way the screen explains it. */
   const golden = goldenActive(s) && s.goldenKind === 'frenzy' ? FRENZY_MULT : 1;
   /* Round 196: Boardroom Sway rides the same product as everything else. */
-  return (fans * perFan + parking + staffBaseIncome(s))
+  return (fans * perFan + seasonTicketGateAdjustment(s) + parking + staffBaseIncome(s))
     * repMult(s) * streakMult(s) * divisionOf(s).incomeMult * achMult(s) * swayMult(s) * hype * golden;
 }
 
@@ -1204,7 +1244,7 @@ export function ticketEconomy(s: TycoonState) {
     crowd,
     seats: capacity(s),
     supporters: Math.floor(s.fanbase),
-    gatePerSec: crowd * (0.05 + levelOf(s, 'tickets') * 0.011) * terms.gate * multiplier,
+    gatePerSec: (crowd * standardGate(levelOf(s, 'tickets')) * terms.gate + seasonTicketGateAdjustment(s)) * multiplier,
     concessionsPerSec: crowd * (levelOf(s, 'snacks') * 0.009 + levelOf(s, 'shop') * 0.016) * multiplier,
     otherPerSec: (levelOf(s, 'parking') * 0.9 + staffBaseIncome(s)) * multiplier,
     totalPerSec: incomePerSec(s),
@@ -1819,7 +1859,7 @@ const MATCH_MINUTE_SEC = 1.4;
 
 /** Round 582: a stored league, kept only if every part of it is a league this
  *  engine could have produced. Null means rebuild it. */
-function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: number, matchNo: number, completed = false): TycoonLeague | null {
+function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: number, matchNo: number, ticketLimit: SeasonTicketAllocation, completed = false): TycoonLeague | null {
   if (!raw || typeof raw !== 'object') return null;
   const r = raw as Partial<TycoonLeague>;
   const division = r.division;
@@ -1868,6 +1908,11 @@ function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: n
     out.sponsor = { kind, qualifying, target, rate };
   }
   if (typeof r.carryover === 'string' && allOpponentNames().includes(r.carryover)) out.carryover = r.carryover;
+  const passes = r.seasonTickets;
+  if (passes && !out.carryover && Number.isSafeInteger(passes.seats) && passes.seats > 0 && passes.seats <= ticketLimit.seats
+    && Number.isInteger(passes.ticketLevel) && passes.ticketLevel >= 0 && passes.ticketLevel <= ticketLimit.ticketLevel) {
+    out.seasonTickets = { seats: passes.seats, ticketLevel: passes.ticketLevel };
+  }
   if (Array.isArray(r.results) && r.results.length > 0 && r.results.length <= out.matchday) {
     const first = out.matchday - r.results.length + 1;
     const own = clubs[0];
@@ -1879,14 +1924,18 @@ function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: n
       return true;
     }) && (['w', 'd', 'l', 'gf', 'ga'] as const).every(key => first === 1 ? tally[key] === own[key] : tally[key] <= own[key])) {
       const maxSeats = seatCount(trackById('stands').maxLevel);
-      out.results = r.results.map(({ day, gf, ga, attendance, plan, scouting, graduateAttack }) => ({
-        day, gf, ga,
-        ...(typeof attendance === 'number' && Number.isInteger(attendance) && attendance >= 0 && attendance <= maxSeats ? { attendance } : {}),
-        ...(validMatchPlan(plan) ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
-        ...(validScouting(scouting) ? { scouting: { fee: scouting.fee, reduction: scouting.reduction } } : {}),
-        ...(graduateAttack && validGraduateName(graduateAttack.name) && validGraduateShare(graduateAttack.share)
-          ? { graduateAttack: { name: graduateAttack.name, share: graduateAttack.share } } : {}),
-      }));
+      out.results = r.results.map(({ day, gf, ga, attendance, seasonTicketFans, plan, scouting, graduateAttack }) => {
+        const validCrowd = typeof attendance === 'number' && Number.isInteger(attendance) && attendance >= 0 && attendance <= maxSeats;
+        return {
+          day, gf, ga,
+          ...(validCrowd ? { attendance } : {}),
+          ...(validCrowd && out.seasonTickets && seasonTicketFans === Math.min(attendance, out.seasonTickets.seats) ? { seasonTicketFans } : {}),
+          ...(validMatchPlan(plan) ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
+          ...(validScouting(scouting) ? { scouting: { fee: scouting.fee, reduction: scouting.reduction } } : {}),
+          ...(graduateAttack && validGraduateName(graduateAttack.name) && validGraduateShare(graduateAttack.share)
+            ? { graduateAttack: { name: graduateAttack.name, share: graduateAttack.share } } : {}),
+        };
+      });
     }
   }
   return out;
@@ -2045,11 +2094,12 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
          name bank, would have dropped the club. */
       const best = s.bestDivision ?? 0;
       const claimed = (rawLeague as { division?: unknown }).division;
-      const activeLeague = cleanLeague(rawLeague, youName, best, s.matchNo);
+      const ticketLimit = { seats: Math.floor(capacity(s) / 4), ticketLevel: levelOf(s, 'tickets') };
+      const activeLeague = cleanLeague(rawLeague, youName, best, s.matchNo, ticketLimit);
       s.league = activeLeague ??
         newLeague(s.rep, Number.isInteger(claimed) ? Math.min(Math.max(0, claimed as number), best) : Math.min(legacyDivisionIndex(s.groundWins ?? 0), best), 0, youName, s.matchNo);
       const completed = p.lastCompletedLeague && activeLeague
-        ? cleanLeague(p.lastCompletedLeague, undefined, activeLeague.division, s.matchNo, true)
+        ? cleanLeague(p.lastCompletedLeague, undefined, activeLeague.division, s.matchNo, ticketLimit, true)
         : null;
       if (completed && activeLeague && completed.season + 1 === activeLeague.season
         && activeLeague.division - completed.division === Number(completed.division < DIVISIONS.length - 1 && leaguePosition(completed) === 1)) {
@@ -2058,7 +2108,7 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
       if (activeLeague && Array.isArray(p.completedLeagueHistory)) {
         const bySeason = new Map<number, TycoonLeague>();
         for (const value of p.completedLeagueHistory) {
-          const report = cleanLeague(value, undefined, activeLeague.division, s.matchNo, true);
+          const report = cleanLeague(value, undefined, activeLeague.division, s.matchNo, ticketLimit, true);
           if (report && report.season < activeLeague.season - 1 && !bySeason.has(report.season)) {
             bySeason.set(report.season, report);
           }

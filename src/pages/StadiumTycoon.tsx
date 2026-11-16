@@ -45,6 +45,7 @@ import {
   GOAL_BONUS_SEC, WIN_BONUS_SEC, PROMOTION_BONUS_SEC, scoringFacts,
   canSetMatchPlan, MATCH_PLANS, MATCH_PLAN_END, SCOUTING_REDUCTION, matchScoutingDetails, graduateAttackFixture,
   STADIUM_SPONSORS, stadiumSponsorOffers, stadiumSponsorPayout,
+  reserveSeasonTickets, seasonTicketQuote, seasonTicketGateRate, ticketEconomy,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
@@ -307,6 +308,7 @@ function helpFacts() {
 }
 
 const attackShareLabel = (share: number) => share < 0.0005 ? '<0.1' : (share * 100).toFixed(1);
+const gateRateText = (rate: number) => '$' + rate.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 export function SeasonMatchResults({ league, current = false }: { league: TycoonLeague; current?: boolean }) {
   const results = league.results ?? [];
@@ -318,11 +320,14 @@ export function SeasonMatchResults({ league, current = false }: { league: Tycoon
     {results.length === 0 ? <p className="pb-2 text-muted-foreground">Scores for these matchdays were not recorded.</p> : <>
       {results.length < league.matchday && <p className="pb-2 text-muted-foreground">Earlier scores were not recorded.</p>}
       <ol className="space-y-2 pb-3">
-        {results.map(({ day, gf, ga, attendance, plan, scouting, graduateAttack }) => <li key={day} className="flex items-baseline justify-between gap-2">
+        {results.map(({ day, gf, ga, attendance, seasonTicketFans, plan, scouting, graduateAttack }) => <li key={day} className="flex items-baseline justify-between gap-2">
           <div>
             <span>Matchday {day} · {league.clubs[yourOpponentIndex(league, day - 1)].name}</span>
             {attendance !== undefined && <span className="block text-muted-foreground">
               {formatNumber(attendance)} fans{crowdTarget === undefined ? '' : attendance >= crowdTarget ? ' · Reached sponsor target' : ' · Missed sponsor target'}
+            </span>}
+            {seasonTicketFans !== undefined && attendance !== undefined && <span className="block text-muted-foreground">
+              {formatNumber(seasonTicketFans)} season-ticket holders · {formatNumber(attendance - seasonTicketFans)} walk-ups
             </span>}
             {plan && <span className="block text-muted-foreground">{MATCH_PLANS[plan.kind].label} from {plan.minute}′</span>}
             {scouting && <span className="block text-muted-foreground">
@@ -430,6 +435,12 @@ function LeagueRoom({ g, visible, attackOptions }: { g: ReturnType<typeof useSta
   const last = s.lastCompletedLeague ?? s.completedLeagueHistory?.at(-1);
   const sponsor = lg.sponsor;
   const offers = !sponsor && preseason ? stadiumSponsorOffers(s, lg) : null;
+  const seasonTicketOffer = seasonTicketQuote(s);
+  const tickets = lg.seasonTickets;
+  const seasonTicketPreview = seasonTicketOffer
+    ? ticketEconomy(reserveSeasonTickets(s, s.rep, lg.season, seasonTicketOffer))
+    : null;
+  const currentTickets = seasonTicketPreview ? ticketEconomy(s) : null;
   const scouting = matchScoutingDetails(s);
   const attackFixture = graduateAttackFixture(s);
   return (
@@ -476,6 +487,23 @@ function LeagueRoom({ g, visible, attackOptions }: { g: ReturnType<typeof useSta
       <SeasonMatchResults league={lg} current />
       <LeagueTableCard rows={rows} myClub={lg.clubs[0].name} title={`Season ${lg.season + 1} at this ground`} preseason={preseason} zoneTop={1} />
       {last && <LatestSeasonReview last={last} history={s.completedLeagueHistory} />}
+      {tickets && <div className="rounded-xl border border-border bg-card p-3 text-xs">
+        <p className="font-bold">{formatNumber(tickets.seats)} season-ticket seats reserved</p>
+        <p className="mt-1 text-muted-foreground">Gate rate held at {(seasonTicketGateRate(tickets) * 100).toLocaleString('en-US', { maximumFractionDigits: 2 })} cents per seat per second before boosts. The chosen Ticket offer applies to walk-ups.</p>
+      </div>}
+      {seasonTicketOffer && seasonTicketPreview && currentTickets && <details className="rounded-xl border border-border bg-card px-3 text-xs">
+        <summary className="min-h-11 cursor-pointer py-3 font-bold">Season tickets</summary>
+        <p className="pb-2 text-muted-foreground">Reserve seats before your first league result. Hold their price 20% below today's Standard gate rate for this season. Ticket offers still apply to walk-ups.</p>
+        <dl className="grid gap-2 pb-2 sm:grid-cols-2">
+          <div><dt>Walk-up pricing</dt><dd className="font-bold">{formatNumber(currentTickets.crowd)} fans · {gateRateText(currentTickets.gatePerSec)} gate/sec</dd></div>
+          <div><dt>Reserve {formatNumber(seasonTicketOffer.seats)} seats</dt><dd className="font-bold">{formatNumber(seasonTicketPreview.crowd)} fans · {gateRateText(seasonTicketPreview.gatePerSec)} gate/sec</dd></div>
+        </dl>
+        {g.seasonTicketSaveFailed && <p role="alert" className="pb-2 text-destructive">Could not save the season tickets. Try again.</p>}
+        <button type="button" className="mb-3 min-h-11 rounded-lg border border-border bg-background px-3 py-2 text-left font-bold"
+          onClick={() => g.doReserveSeasonTickets(s.rep, lg.season, seasonTicketOffer)}>
+          Reserve {formatNumber(seasonTicketOffer.seats)} season-ticket seats
+        </button>
+      </details>}
       {sponsor && <div data-league-sponsor className="rounded-xl border border-border bg-card p-3 text-xs">
         <p className="font-bold">{STADIUM_SPONSORS[sponsor.kind]} · {fmtMoney(stadiumSponsorPayout(lg))} {sponsor.kind === 'fixed' ? 'at season end' : 'earned so far'}</p>
         {sponsor.kind === 'attendance' && <p className="mt-1 text-muted-foreground">{formatNumber(sponsor.qualifying)} of {formatNumber(lg.matchday)} completed matchdays drew at least {formatNumber(sponsor.target)} fans. {fmtMoney(sponsor.rate)} per qualifying matchday, paid at season end.</p>}
