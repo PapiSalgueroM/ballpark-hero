@@ -920,6 +920,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
             heading: "Climbing the lineup card from the bench",
             items: [
               "Check the lineup card. Top ten picks play from Opening Day; everyone else fights the veteran in spring, with bench bats and long-relief arms waiting on spot starts until the job flips. Relievers climb their own bullpen ladder instead.",
+              "Signed backup starters who have already pitched a season can choose Stretch out for spot starts under Plan your season, then Tactical approach. A healthy pitcher can get more starts, but fatigue can cut the year short. The plan applies to one season with your current club. Win a regular rotation spot in camp and the plan goes unused.",
             ],
           },
           {

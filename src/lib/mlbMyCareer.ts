@@ -54,6 +54,7 @@ import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
 import { stageUsSeasonRating, type UsSeasonRating } from './usInSeasonRating';
+import { MLB_SPOT_START_INJURY_POINTS, mlbSpotStartsAvailable, type ProgrammePreparation } from './usCareerProgramme';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -555,7 +556,7 @@ const MLB_LINE_COUNTS = ['games', 'wins', 'lossesP', 'so', 'saves', 'holds', 'hr
    appearances, or all but zero to seven of the games. simMlbSeason carries
    it, and every count drawn from it, to the season the ledger says his club
    played that year. */
-function gamesFor(c: MlbCareerState, rng: () => number): { games: number; note: string | null } {
+function gamesFor(c: MlbCareerState, rng: () => number, spotStarts: boolean): { games: number; note: string | null; preFatigueGames?: number } {
   const isSp = c.pos === 'SP';
   // Round 58: relievers are their own thing. A closer appears in about 65
   // games, not 155. Getting this wrong once had a reliever striking out 490
@@ -564,9 +565,18 @@ function gamesFor(c: MlbCareerState, rng: () => number): { games: number; note: 
   const full = mlbFullWorkload(c.pos, rng);
   const floorGames = isSp ? 8 : isRp ? 20 : 45;
   const risk = careerRecoveryRisk('mlb', c.purchased, (1 - c.archetype.durability) * 0.55 + (100 - c.health) / 250);
-  if (rng() < risk) {
+  const injuryDraw = rng();
+  if (injuryDraw < risk) {
     const frac = 0.35 + rng() * 0.4;
     return { games: Math.max(floorGames, Math.round(full * frac)), note: (isSp || isRp) && rng() < 0.4 ? 'The elbow. Season shortened, surgery whispers.' : 'Injured list stints ate the season.' };
+  }
+  if (spotStarts) {
+    const extraRisk = careerRecoveryRisk('mlb', c.purchased, MLB_SPOT_START_INJURY_POINTS / 100);
+    if (injuryDraw < risk + extraRisk) {
+      // Use the added band of the same draw for severity. Ordinary injuries keep their existing draws.
+      const fraction = 0.35 + (injuryDraw - risk) / extraRisk * 0.25;
+      return { games: Math.max(floorGames, Math.round(full * fraction)), note: 'Arm fatigue cut the spot-start plan short.', preFatigueGames: full };
+    }
   }
   return { games: full, note: null };
 }
@@ -593,7 +603,7 @@ export function mlbPlayoffResults(year: number): string[] {
 }
 
 export function simMlbSeason(
-  c: MlbCareerState, teamQuality: number, rng: () => number, inSeasonRating = false,
+  c: MlbCareerState, teamQuality: number, rng: () => number, inSeasonRating = false, programme?: ProgrammePreparation | null,
 ): { line: MlbSeasonLine; notes: string[] } {
   const notes: string[] = [];
   const contact = mlbContactActive(c);
@@ -618,16 +628,34 @@ export function simMlbSeason(
   const slate = seasonLength('mlb', c.year, c.team);
   const work = mlbWorkSlate(c.pos, slate);
   const cut = (n: number) => toSlate('mlb', n, work);
-  let { games: fullGames, note } = gamesFor(c, rng);
+  const spotStartPlan = programme?.plan.tactics === 'spot-starts' ? programme : null;
+  const useSpotStarts = spotStartPlan !== null && mlbSpotStartsAvailable(c);
+  const { games, note, preFatigueGames } = gamesFor(c, rng, useSpotStarts);
+  let fullGames = games;
   if (note) { notes.push(`🚑 ${note}`); c.health -= 8; }
+  if (spotStartPlan && c.role === 'starter') notes.push('Spot-start plan unused. You earned a regular rotation spot in camp.');
   /* Round 183: the lineup card decides the workload. A bench bat gets
      half the games, a long-relief arm gets spot starts, relievers are
      exempt (their hierarchy is the archetype). Absent role = everyday,
      byte for byte. */
   if (c.role === 'backup' && c.pos !== 'RP') {
     if (c.pos === 'SP') {
-      fullGames = Math.max(6, Math.round(fullGames * 0.4));
-      notes.push(`🪑 Long relief and spot duty: ${cut(fullGames)} starts when the phone rang.`);
+      const usualStarts = Math.max(6, Math.round((preFatigueGames ?? games) * 0.4));
+      fullGames = usualStarts;
+      if (spotStartPlan && useSpotStarts) {
+        const plannedStarts = Math.max(6, Math.round(games * 0.56));
+        const actual = cut(plannedStarts);
+        const usual = cut(usualStarts);
+        if (actual !== usual || preFatigueGames !== undefined) {
+          fullGames = plannedStarts;
+          spotStartPlan.mlbSpotStartOutcome = actual > usual ? 'completed' : 'missed';
+          notes.push(`The spot-start plan ended with ${actual} starts. Usual spot duty would have given you ${usual}.`);
+        } else {
+          notes.push(`Spot-start plan unused. Either approach would have given you ${usual} starts.`);
+        }
+      } else {
+        notes.push(`🪑 Long relief and spot duty: ${cut(fullGames)} starts when the phone rang.`);
+      }
     } else {
       fullGames = Math.max(40, Math.round(fullGames * (0.45 + rng() * 0.1)));
       notes.push(`🪑 A bench season: ${cut(fullGames)} games of pinch hits and spot starts.`);
