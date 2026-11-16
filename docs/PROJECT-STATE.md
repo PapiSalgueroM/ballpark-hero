@@ -1,3 +1,14 @@
+## 2026-11-15: Academy prospects, goalie trials and mobile controls
+
+- NRL Team Manager can retain one unsigned academy prospect over the summer. The Penrith fixture carried Eli Cairns and his earned wing cover into 2027 with all 30 senior places filled. His later promotion used the normal 2028 squad and salary cap checks. The ordinary and older starting saves matched their prior fixtures.
+- NHL Front Office can give a healthy backup goalie four scheduled starts over two simulation rounds. Jacob Fowler made all four starts for Montreal and went from 79 to 80 overall. His four-year, $4.5 million contract stayed in place.
+- Stadium Tycoon can move a promoted forward into attack for one league fixture. At 320px and 390px, watched and away matches saved the assignment and result together. The watched match retried its captured result after a storage refusal and kept one receipt after reload.
+- The shared player picker exposes the highlighted option to assistive technology. Build Your XI keeps the rules dismissal button visible while the rules scroll. Touch and keyboard journeys covered Build Your XI and Who Am I, including the 320×568 rules view.
+- The US Career prospect Back control now runs its save-clearing fault against the current executable code. The four expected failures and four independent legacy passes fired.
+
+All 210 focused tests passed with one opt-in historical case skipped. The rebased application passed 16 native feature journeys and 12 more for the live Messi regression. Three guide snapshots, the NHL guide fixture and affected sitemap data were refreshed. All 360 archived boards through November 14 Eastern matched byte for byte. All 21 site checks passed. The full comparison matched crawler fields on 174 routes. Home fold and all 16 download budgets passed.
+
+
 ## 2026-11-15: Messi in 2015–16 Club Manager
 
 [PR #1007](https://github.com/PapiSalgueroM/ballpark-hero/pull/1007) published exact main `f6c3a53a66b0cb9171ccce073fba28b19022e14b`, deployment `3ad1f9aa-76b6-49fe-b149-21375f28094a`, canonical entry `/assets/index-qrX0WoK5.js`. The squash tree matched tested head `338476fad`. All 12 pinned live browser checks passed at 320px and 390px. The canonical audit passed all 174 sitemap routes. Messi stayed on the market at age 29 after two played seasons and at 35 and 36 across later rollovers. The original Barcelona expiry save paid £22.7m for three years and kept one squad record with the same world key after reload.
