@@ -181,7 +181,8 @@ function reviewedGuideSentences(route, part, sentences) {
     "Backup quarterbacks get playoff appearances based on their regular-season playing time. Four of 17 regular-season games works out to one appearance in a four-game playoff run. Career Log shows your appearances separately from the team's games."];
   if (route === '/stadium-tycoon' && part === 'howToPlay') return [...sentences,
     "In League, book scouting for the next known opponent. Pay the quoted fee upfront to cut that opponent's scoring chance by 10 percent for one match, including a match played while you're away. Its result records the scouting fee.",
-    "In League, use Graduate in attack to move one promoted forward's defensive contribution to your scoring chance for the next known fixture. The forward must still be available at kickoff, and the result records the choice in watched and away matches."];
+    "In League, use Graduate in attack to move one promoted forward's defensive contribution to your scoring chance for the next known fixture. The forward must still be available at kickoff, and the result records the choice in watched and away matches.",
+    "Before the first league result, open Season tickets in League to reserve up to a quarter of the ground for existing supporters. Their gate rate stays 20 percent below the Standard rate at booking for this season. Compare the crowd and gate income before reserving. The choice can fill empty seats under Premium and reduces gate money on seats you would already fill. Match results show season-ticket holders and walk-ups."];
   if (route !== '/soccer-career') return sentences;
   if (part === 'rules') return [...sentences,
     'Nations League appearances show the season overall used for that match and any change since your previous appearance.'];
