@@ -18,9 +18,9 @@ import {
   awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
   setPieceOffer, beginSetPiece, awardSetPieceGoal,
   setTicketPolicy, setMatchPlan, matchPlanForecast, signStadiumSponsor, bookMatchScouting, bookStandsConstruction,
-  bookGraduateAttack,
+  bookGraduateAttack, reserveSeasonTickets,
 } from '@/lib/stadiumTycoon';
-import type { GoldenKind, AwayMatch, SetPieceOffer, TicketPolicy, MatchPlanKind, StadiumSponsor } from '@/lib/stadiumTycoon';
+import type { GoldenKind, AwayMatch, SetPieceOffer, TicketPolicy, MatchPlanKind, StadiumSponsor, SeasonTicketAllocation } from '@/lib/stadiumTycoon';
 import type { GraduateAttackOption } from '@/lib/wonderkidFactory';
 
 /** Round 162: a golden whistle drifting across the pitch, waiting to be
@@ -118,6 +118,7 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
   const stadiumActionsBlocked = useCallback(() => Boolean(heldGraduateWrite.current) || checkSaveMoved(), [checkSaveMoved]);
   const [graduateAttackError, setGraduateAttackError] = useState<{ ground: number; match: number; message: string } | null>(null);
   const [sponsorSaveError, setSponsorSaveError] = useState<{ ground: number; season: number } | null>(null);
+  const [seasonTicketSaveError, setSeasonTicketSaveError] = useState<{ ground: number; season: number } | null>(null);
   const [matchPlanError, setMatchPlanError] = useState<number | null>(null);
   const [scoutingSaveError, setScoutingSaveError] = useState<{ ground: number; match: number } | null>(null);
   const [standsConstructionSaveError, setStandsConstructionSaveError] = useState<number | null>(null);
@@ -478,6 +479,21 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
     markSessionPlay();
   }, [commit, markSessionPlay, writeStadium, stadiumActionsBlocked]);
 
+  const doReserveSeasonTickets = useCallback((ground: number, season: number, quote: SeasonTicketAllocation) => {
+    if (document.hidden || stadiumActionsBlocked()) return;
+    const before = stateRef.current;
+    const next = reserveSeasonTickets(before, ground, season, quote);
+    if (next === before) return;
+    const saved = writeStadium(next);
+    if (saved !== 'written') {
+      if (saved === 'failed') setSeasonTicketSaveError({ ground, season });
+      return;
+    }
+    setSeasonTicketSaveError(null);
+    commit(next);
+    markSessionPlay();
+  }, [commit, markSessionPlay, writeStadium, stadiumActionsBlocked]);
+
   const doSetMatchPlan = useCallback((match: number, kind: MatchPlanKind) => {
     if (document.hidden || stadiumActionsBlocked()) return;
     const before = stateRef.current;
@@ -688,6 +704,8 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
     state, floaters, awayPay, awayTrip, dismissAway, confetti, gearSaveBlocked, saveMoved,
     doSetTicketPolicy, ticketSaveFailed, retryTicketSave, doSetMatchPlan, doSignSponsor, doBookScouting,
     sponsorSaveFailed: sponsorSaveError?.ground === state.rep && sponsorSaveError.season === state.league?.season,
+    doReserveSeasonTickets,
+    seasonTicketSaveFailed: seasonTicketSaveError?.ground === state.rep && seasonTicketSaveError.season === state.league?.season,
     matchPlanSaveFailed: matchPlanError === state.matchNo,
     scoutingSaveFailed: scoutingSaveError?.ground === state.rep && scoutingSaveError.match === state.matchNo + 1,
     doBookGraduateAttack,

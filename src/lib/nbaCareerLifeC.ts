@@ -68,12 +68,13 @@
    file): the catalog below is functions, and they run at draw time.
 */
 import type { NbaCareerState, NbaCareerEvent } from './nbaMyCareer';
-import { nbaTeamLabelOf, nbaEraById, nbaEraTeamIds, nbaRollTeamQuality } from './nbaMyCareer';
+import { nbaTeamLabelOf, nbaEraById, nbaEraTeamIds, nbaRollTeamQuality, nbaFaPushArgs } from './nbaMyCareer';
 import { applyDeckCFx, buildDeckCCard, deckCChip, dealDeckC, deckCOption } from './usCareerDeckC';
 import type { DeckCDef, DeckCFx, DeckCOptionDef, DeckCSport } from './usCareerDeckC';
 import { isFarewellSeason } from './careerRetirement';
 import { keyedRng } from './keyedRng';
 import { summerCareerKey } from './usCareerSummer';
+import { faLeverage } from './usCareerFreeAgency';
 
 /* Round 988: the machinery (the clamps, the era money, the gamble, the
    trade, the words) is the shared engine in usCareerDeckC.ts. This file
@@ -101,12 +102,12 @@ const NBA_DECK_C: DeckCSport<NbaCareerState> = {
   teamLabel: (id, c) => nbaTeamLabelOf(id, c.eraId),
 };
 
-const tradeRequestOption: NbaLifeCOptionDef = {
+const tradeRequestOption = {
   label: 'Ask your agent to request a trade',
   p: 0.5,
   win: { say: 'The front office granted your trade request.', fx: {}, move: 'trade' },
   lose: { say: 'The front office declined your request. You are staying with your team.', fx: { morale: -4 } },
-};
+} satisfies NbaLifeCOptionDef;
 
 export function nbaTradeRequestAvailable(c: NbaCareerState): boolean {
   return c.seasons.length > 0 && c.contractYears > 1 && !c.retired && !(c.suspendedSeasons ?? 0)
@@ -120,12 +121,31 @@ export function nbaTradeRequestReceipt(c: NbaCareerState): string | null {
   if (!teams.includes(receipt.from)) return null;
   if (receipt.release === 'granted') return `Release granted by ${nbaTeamLabelOf(receipt.from, c.eraId)}. Your old contract ended without a payout.`;
   if (receipt.release === 'declined') return `Release declined. Your ${nbaTeamLabelOf(receipt.from, c.eraId)} contract stays in place.`;
+  const requested = receipt.requestedTeam && receipt.requestedTeam !== receipt.from && teams.includes(receipt.requestedTeam)
+    ? nbaTeamLabelOf(receipt.requestedTeam, c.eraId) : null;
+  if (receipt.to === null && requested) return 'Trade request to ' + requested + ' declined. You stayed with ' + nbaTeamLabelOf(receipt.from, c.eraId) + '.';
   if (receipt.to === null) return `Trade request declined. You stayed with ${nbaTeamLabelOf(receipt.from, c.eraId)}.`;
   if (!teams.includes(receipt.to) || receipt.to === receipt.from) return null;
   return `Trade request granted. Traded to ${nbaTeamLabelOf(receipt.to, c.eraId)} on the same contract.`;
 }
 
-export function settleNbaTradeRequest(c: NbaCareerState, kind: 'trade' | 'release') {
+export function nbaTradeDestinations(c: NbaCareerState) {
+  if (!nbaTradeRequestAvailable(c) || nbaTradeRequestReceipt(c)) return [];
+  // A specific club has to be interested as well as the current club agreeing.
+  const chance = Math.round(tradeRequestOption.p * faLeverage(nbaFaPushArgs(c)) * 100);
+  return nbaEraTeamIds(c.eraId).filter(id => id !== c.team).map(id => ({
+    id,
+    label: nbaTeamLabelOf(id, c.eraId),
+    chance,
+    quality: nbaRollTeamQuality(null, keyedRng('nba-trade-roster:' + summerCareerKey(c) + ':' + c.year + ':' + id)),
+  }));
+}
+
+export function settleNbaTradeRequest(c: NbaCareerState, kind: 'trade' | 'release', preferredTeam?: string) {
+  if (!nbaTradeRequestAvailable(c) || nbaTradeRequestReceipt(c)) return null;
+  const destination = kind === 'trade' && preferredTeam !== undefined
+    ? nbaTradeDestinations(c).find(team => team.id === preferredTeam) : undefined;
+  if (preferredTeam !== undefined && !destination) return null;
   const rng = keyedRng(`nba-trade-request:${summerCareerKey(c)}:${c.year}`);
   const from = c.team;
   if (kind === 'release') {
@@ -138,9 +158,15 @@ export function settleNbaTradeRequest(c: NbaCareerState, kind: 'trade' | 'releas
     c.tradeRequest = { year: c.year, from, to: null, release: granted ? 'granted' : 'declined' };
     return { teamQuality: null, note: [nbaTradeRequestReceipt(c), effect].filter(Boolean).join(' '), freeAgency: granted };
   }
-  const note = deckCOption(NBA_DECK_C, tradeRequestOption, c).apply(c, rng);
-  c.tradeRequest = { year: c.year, from, to: c.team === from ? null : c.team };
-  return { teamQuality: c.team === from ? null : nbaRollTeamQuality(null, rng), note, freeAgency: false };
+  const deck = destination ? { ...NBA_DECK_C, teamIds: () => [destination.id] } : NBA_DECK_C;
+  const request = destination ? {
+    ...tradeRequestOption,
+    p: destination.chance / 100,
+    lose: { ...tradeRequestOption.lose, say: 'A deal with ' + destination.label + ' fell through. You are staying with your team.' },
+  } : tradeRequestOption;
+  const note = deckCOption(deck, request, c).apply(c, rng);
+  c.tradeRequest = { year: c.year, from, to: c.team === from ? null : c.team, ...(destination ? { requestedTeam: destination.id } : {}) };
+  return { teamQuality: c.team === from ? null : destination?.quality ?? nbaRollTeamQuality(null, rng), note, freeAgency: false };
 }
 
 const isModern = (c: NbaCareerState): boolean => nbaEraById(c.eraId).id === 'now';

@@ -10,6 +10,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import type { UsCareerTradeDestination } from '@/lib/usCareerSport';
 
 type Sport = 'NFL' | 'NBA' | 'MLB' | 'NHL';
 type Action = 'retire' | 'restart' | 'retireCoach' | 'tradeRequest' | 'releaseRequest' | 'rosterPriority';
@@ -17,7 +18,8 @@ type Action = 'retire' | 'restart' | 'retireCoach' | 'tradeRequest' | 'releaseRe
 interface Props {
   action: Action;
   sport: Sport;
-  onConfirm: () => void;
+  onConfirm: (preferredTeam?: string) => void;
+  tradeDestinations?: UsCareerTradeDestination[];
   children: ReactElement;
   description?: string;
   /** Round 1569 (the lead's ruling R3): the career being cleared is retired and has a Hall of Fame card. The
@@ -69,21 +71,27 @@ const COPY: Record<Action, (sport: Sport, hallCard: boolean, hallKept: boolean) 
   }),
 };
 
-export default function USCareerActionConfirm({ action, sport, onConfirm, children, description, hallCard = false, hallKept = false }: Props) {
+export default function USCareerActionConfirm({ action, sport, onConfirm, children, description, tradeDestinations, hallCard = false, hallKept = false }: Props) {
   const [open, setOpen] = useState(false);
+  const [preferredTeam, setPreferredTeam] = useState('');
+  const destination = tradeDestinations?.find(team => team.id === preferredTeam);
   const acceptedRef = useRef(false);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const copy = COPY[action](sport, hallCard, hallKept);
 
   const changeOpen = (nextOpen: boolean) => {
-    if (nextOpen) acceptedRef.current = false;
+    if (nextOpen) {
+      acceptedRef.current = false;
+      setPreferredTeam('');
+    }
     setOpen(nextOpen);
   };
 
   const confirm = () => {
     if (!open || acceptedRef.current) return;
     acceptedRef.current = true;
-    onConfirm();
+    if (preferredTeam) onConfirm(preferredTeam);
+    else onConfirm();
   };
 
   return (
@@ -98,8 +106,20 @@ export default function USCareerActionConfirm({ action, sport, onConfirm, childr
       >
         <AlertDialogHeader>
           <AlertDialogTitle>{copy.title}</AlertDialogTitle>
-          <AlertDialogDescription>{description ?? copy.description}</AlertDialogDescription>
+          <AlertDialogDescription>{destination
+            ? 'You have a ' + destination.chance + '% chance of a trade. Roster quality ' + destination.quality + ' if they agree. A deal keeps your salary and contract years. A refusal costs up to 4 morale. You get one trade or release request this season.'
+            : description ?? copy.description}</AlertDialogDescription>
         </AlertDialogHeader>
+        {!!tradeDestinations?.length && (
+          <label className="grid min-w-0 gap-1.5 text-sm font-medium">
+            Trade destination
+            <select className="h-11 min-w-0 rounded-md border border-input bg-background px-3" value={preferredTeam}
+              onChange={event => setPreferredTeam(event.target.value)}>
+              <option value="">Any team</option>
+              {tradeDestinations.map(team => <option key={team.id} value={team.id}>{team.label}</option>)}
+            </select>
+          </label>
+        )}
         <AlertDialogFooter>
           <AlertDialogCancel className="min-h-11 min-w-11">
             {copy.cancel}

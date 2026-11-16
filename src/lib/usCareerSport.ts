@@ -39,6 +39,13 @@ import type { UsSeasonSource } from '@/lib/season/us';
 import type { CareerIntlBlock, IntlCall, IntlSummerEntry, IntlTournament } from '@/lib/careerIntl';
 import type { UsSeasonRating } from '@/lib/usInSeasonRating';
 
+export interface UsCareerTradeDestination {
+  id: string;
+  label: string;
+  chance: number;
+  quality: number;
+}
+
 export interface UsCareerPracticeResult extends TrainingBank {
   year: number;
   drill: string;
@@ -358,7 +365,8 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
   tradeRequest?: {
     available(c: C): boolean;
     receipt(c: C): string | null;
-    settle(c: C, kind: 'trade' | 'release'): { teamQuality: number | null; note: string; freeAgency: boolean };
+    destinations(c: C): UsCareerTradeDestination[];
+    settle(c: C, kind: 'trade' | 'release', preferredTeam?: string): { teamQuality: number | null; note: string; freeAgency: boolean } | null;
   };
   rosterPriority?: {
     boost(c: C, quality: number): number;

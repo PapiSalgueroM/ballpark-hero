@@ -3,7 +3,8 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
 import { NBA_CAREER_SPORT } from '@/lib/nbaCareerSport';
-import { nbaEraTeamIds, nbaRosterPriorityBoost, nbaRollTeamQuality, requestNbaRosterPriority, simNbaSeason, type NbaCareerState } from '@/lib/nbaMyCareer';
+import { nbaTradeDestinations, settleNbaTradeRequest } from '@/lib/nbaCareerLifeC';
+import { nbaEraTeamIds, nbaRosterPriorityBoost, nbaRollTeamQuality, nbaTeamLabelOf, requestNbaRosterPriority, simNbaSeason, type NbaCareerState } from '@/lib/nbaMyCareer';
 import { keyedRng } from '@/lib/keyedRng';
 import { summerCareerKey } from '@/lib/usCareerSummer';
 import { defaultAppearance } from '@/lib/soccerCareerAppearance';
@@ -70,6 +71,98 @@ describe('standing NBA trade request', () => {
     expect(localStorage.getItem(sport.saveKey)).toBe(receipt);
     fireEvent.click(restored.getByRole('button', { name: `Play the ${before.year} season` }));
     expect(read().c.seasons.at(-1)).toMatchObject({ team: after.team, year: before.year, salary: before.salary });
+  });
+
+  it.each(['now', 'y2004'])('can request one named franchise in the %s era and play there', era => {
+    const c = makeCareer(era);
+    c.summerSalt = Array.from({ length: 100 }, (_, salt) => String(salt)).find(salt =>
+      keyedRng('nba-trade-request:' + summerCareerKey({ ...c, summerSalt: salt }) + ':' + c.year)() < 0.07)!;
+    const raw = install(c);
+    const view = open();
+    confirm(view);
+    const dialog = within(view.getByRole('alertdialog', { name: 'Request a trade?' }));
+    const choice = dialog.getByRole('combobox', { name: 'Trade destination' });
+    expect(choice).toHaveValue('');
+    expect(dialog.getByText(/50% chance/)).toBeVisible();
+    const eraTeams = nbaEraTeamIds(era).filter(team => team !== c.team);
+    expect(dialog.getAllByRole('option').map(option => (option as HTMLOptionElement).value)).toEqual(['', ...eraTeams]);
+    const target = eraTeams.at(-1)!;
+    const teamLabel = nbaTeamLabelOf(target, era);
+    fireEvent.change(choice, { target: { value: target } });
+    const destination = nbaTradeDestinations(c).find(option => option.id === target)!;
+    expect(destination.chance).toBeLessThan(50);
+    expect(dialog.getByText(new RegExp(destination.chance + '% chance'))).toBeVisible();
+    expect(dialog.getByText(new RegExp('Roster quality ' + destination.quality))).toBeVisible();
+    expect(localStorage.getItem(sport.saveKey)).toBe(raw);
+
+    fireEvent.click(dialog.getByRole('button', { name: 'Keep playing' }));
+    expect(localStorage.getItem(sport.saveKey)).toBe(raw);
+    const send = confirm(view);
+    const reopened = within(view.getByRole('alertdialog', { name: 'Request a trade?' }));
+    expect(reopened.getByRole('combobox', { name: 'Trade destination' })).toHaveValue('');
+    fireEvent.change(reopened.getByRole('combobox', { name: 'Trade destination' }), { target: { value: target } });
+    fireEvent.click(send);
+    expect(read()).toMatchObject({ teamQuality: destination.quality, c: {
+      team: target, contractYears: c.contractYears, salary: c.salary, seasons: c.seasons,
+      tradeRequest: { year: c.year, from: c.team, to: target, requestedTeam: target },
+    } });
+    const saved = localStorage.getItem(sport.saveKey);
+    view.unmount();
+    const restored = open();
+    expect(restored.getByText('Trade request granted. Traded to ' + teamLabel + ' on the same contract.')).toBeVisible();
+    expect(ask(restored)).toBeDisabled();
+    expect(localStorage.getItem(sport.saveKey)).toBe(saved);
+    const next = structuredClone(read().c) as NbaCareerState;
+    sport.campBattle(next, destination.quality, () => 0.51);
+    const expected = sport.simSeason(next, destination.quality, () => 0.51, true).line;
+    vi.spyOn(Math, 'random').mockReturnValue(0.51);
+    fireEvent.click(restored.getByRole('button', { name: 'Play the ' + c.year + ' season' }));
+    expect(read().c.seasons.at(-1)).toEqual(expected);
+  });
+
+  it('can be refused by a preferred team without converting into a random offer or letting a stale tab try again', () => {
+    const c = makeCareer();
+    const target = nbaEraTeamIds(c.eraId).find(team => team !== c.team)!;
+    const chance = nbaTradeDestinations(c).find(option => option.id === target)!.chance / 100;
+    c.summerSalt = Array.from({ length: 100 }, (_, salt) => String(salt)).find(salt => {
+      const draw = keyedRng('nba-trade-request:' + summerCareerKey({ ...c, summerSalt: salt }) + ':' + c.year)();
+      return draw >= chance && draw < 0.5;
+    })!;
+    const broad = structuredClone(c);
+    settleNbaTradeRequest(broad, 'trade');
+    expect(broad.team).not.toBe(c.team);
+    install(c);
+    const first = open(), stale = open();
+    fireEvent.click(ask(first));
+    const firstDialog = within(first.getByRole('alertdialog', { name: 'Request a trade?' }));
+    fireEvent.change(firstDialog.getByRole('combobox', { name: 'Trade destination' }), { target: { value: target } });
+    fireEvent.click(firstDialog.getByRole('button', { name: 'Send request' }));
+    expect(first.getByText(new RegExp('Trade request to ' + nbaTeamLabelOf(target, c.eraId) + ' declined'))).toBeVisible();
+    expect(read()).toMatchObject({ teamQuality: 75, c: {
+      team: c.team, salary: c.salary, contractYears: c.contractYears, morale: c.morale - 4,
+      tradeRequest: { year: c.year, from: c.team, to: null, requestedTeam: target },
+    } });
+    const saved = localStorage.getItem(sport.saveKey);
+    fireEvent.click(confirm(stale));
+    expect(localStorage.getItem(sport.saveKey)).toBe(saved);
+    expect(within(stale.container).getByText(/Trade request to .* declined/)).toBeVisible();
+    expect(ask(stale)).toBeDisabled();
+  });
+
+  it('refuses invalid preferred destinations or ineligible contracts without changing the career', () => {
+    const c = makeCareer('y2004');
+    const someTeam = nbaEraTeamIds(c.eraId).find(team => team !== c.team)!;
+    for (const [career, kind, target] of [
+      [c, 'trade', c.team],
+      [c, 'trade', 'BKN'],
+      [c, 'release', someTeam],
+      [{ ...c, contractYears: 1 }, 'trade', someTeam],
+      [{ ...c, suspendedSeasons: 1 }, 'trade', someTeam],
+    ] as const) {
+      const bytes = JSON.stringify(career);
+      expect(settleNbaTradeRequest(career, kind, target)).toBeNull();
+      expect(JSON.stringify(career)).toBe(bytes);
+    }
   });
 
   it('keeps a denied ruling and rejects a stale second tab without changing the saved bytes', () => {
