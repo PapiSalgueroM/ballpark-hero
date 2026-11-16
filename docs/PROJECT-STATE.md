@@ -1,5 +1,9 @@
 ## 2026-11-15: Academy prospects, goalie trials and mobile controls
 
+[PR #1008](https://github.com/PapiSalgueroM/ballpark-hero/pull/1008) published exact main `ca92abaaea3c99fc87b00ea93fa82bdf2af881ac`, deployment `7aeb7cef-90bc-4da3-891c-312b40398e80` and canonical entry `/assets/index-DkCb0wW-.js`. The squash tree matched tested head `f11e1ffa4`. The published build passed 16 native feature checks, all 12 Messi regression checks, 17 pinned endpoints and all 174 sitemap routes. IndexNow accepted the three updated guides.
+
+Hosted application types and production builds passed. Career entry guide verification passed. The prospect workflow passed its actual save and rejection controls, while its broader career and native families still have failures. The NHL waiver workflow reported the same failed step pattern as three earlier releases. The goalie trial and adjacent waiver behavior passed the focused local and live checks.
+
 - NRL Team Manager can retain one unsigned academy prospect over the summer. The Penrith fixture carried Eli Cairns and his earned wing cover into 2027 with all 30 senior places filled. His later promotion used the normal 2028 squad and salary cap checks. The ordinary and older starting saves matched their prior fixtures.
 - NHL Front Office can give a healthy backup goalie four scheduled starts over two simulation rounds. Jacob Fowler made all four starts for Montreal and went from 79 to 80 overall. His four-year, $4.5 million contract stayed in place.
 - Stadium Tycoon can move a promoted forward into attack for one league fixture. At 320px and 390px, watched and away matches saved the assignment and result together. The watched match retried its captured result after a storage refusal and kept one receipt after reload.
