@@ -13,7 +13,7 @@ const controls = {
   unreveal: { failed: 2, passed: 8, changes: [['className={motion.drawn}', 'className=""']] },
   uncue: { failed: 2, passed: 8, changes: [['highlight && <span', 'false && <span']] },
   unplaced: { failed: 1, passed: 9, changes: [["p && placedSlot === i ? motion.placed : ''", "false ? motion.placed : ''"]] },
-  wrongslot: { failed: 2, passed: 8, changes: [['onClick={() => place(i)}', 'onClick={() => place((i + 1) % 11)}']] },
+  wrongslot: { failed: 2, passed: 8, changes: [['onClick={() => swapGain > 0 ? swap(i) : place(i)}', 'onClick={() => swapGain > 0 ? swap(i) : place((i + 1) % 11)}']] },
   notitle: { failed: 2, passed: 8, changes: [['title={p.name}', '']] },
   restorecue: { failed: 2, passed: 8, changes: [['if (packIndex !== previous.current.packIndex)', 'if (true)'], ['packIndex > previous.current.packIndex && added >= 0', 'added >= 0']] },
 };

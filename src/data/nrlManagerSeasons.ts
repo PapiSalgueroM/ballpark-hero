@@ -11,6 +11,9 @@ export interface NrlSeasonPlan {
 }
 
 export const NRL_LAST_YEAR = 9999;
+// The premiership's pre-Origin rounds. The game keeps its existing generated club draw.
+// https://www.nrl.com/news/2025/11/14/2026-nrl-telstra-premiership-schedule/
+export const NRL_2026_ORIGIN_STAND_DOWN_ROUNDS: readonly number[] = [12, 15, 18];
 export const isNrlOpeningYear = (year: unknown): year is NrlYear => year === 2026 || year === 2027;
 
 // The Chiefs' confirmed 2028 entry is real; the club strength, fixture pairings and financial rules are modeled.

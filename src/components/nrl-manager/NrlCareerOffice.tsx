@@ -13,9 +13,10 @@ import {
   nrlAwayRecoverySpend, nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
   nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractApproachPreview, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer,
-  nrlContractSwapOptions, nrlContractSwapPlayers, nrlContractTermLimit,
+  nrlContractDepartureCapGain, nrlContractSwapOptions, nrlContractSwapPlayers, nrlContractTermLimit,
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachReassignmentQuote, nrlCoachReassignmentSpend, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
   nrlConcessionsQuote, nrlConcessionsSpend,
+  DEVELOPED_PLAYER_ALLOWANCE, nrlDevelopedAllowanceOptions, nrlDevelopedAllowanceQuote,
   nrlDevelopmentAffected, nrlDevelopmentAssistantProgress, nrlDevelopmentPriorityOptions, nrlFinanceForecast,
   nrlMedicalSpend, nrlMedicalUpgradeQuote, nrlOffseasonApplication, nrlOffseasonClubs, nrlOffseasonOpportunities, nrlPhysioSpend,
   nrlLeagueRecruitmentPreview, nrlOfferAssistantQuote,
@@ -230,6 +231,7 @@ function ContractTakeover({ career, onAction, disabled }: { career: NrlCareerSta
   const player = candidates.find(candidate => candidate.id === playerId);
   const move = player ? nrlTakeoverDiscovery(career, playerId) : null;
   const quote = move?.offers.find(offer => offer.clubId === destinationId);
+  const capGain = player && quote ? nrlContractDepartureCapGain(career, player.id, quote.startYear) : 0;
   const reset = () => {
     setPlayerId('');
     setDestinationId('');
@@ -269,7 +271,7 @@ function ContractTakeover({ career, onAction, disabled }: { career: NrlCareerSta
             <div className="space-y-1 text-muted-foreground" role="status">
               <p>{player.name} stays with {labelForClub(year, clubId)} for {year}.</p>
               <p>{labelForClub(quote.startYear, quote.clubId)} will pay {money(quote.salary)} per season from {quote.startYear} through {quote.endYear}.</p>
-              <p>Adds {money(quote.salary - nrlCareerCap(career, quote.startYear).minimumSalary)} of {quote.startYear} cap space after reserving a roster place.</p>
+              <p>{capGain < 0 ? 'Uses' : 'Adds'} {money(Math.abs(capGain))} of {quote.startYear} cap space after reserving a roster place.</p>
             </div>
             <div className="flex flex-wrap gap-2">
               <Button type="button" size="lg" variant="outline" className="px-4" onClick={reset}>Cancel move</Button>
@@ -463,6 +465,7 @@ function ContractApproaches({ career, onAction, disabled }: { career: NrlCareerS
   };
   const buyer = reply?.destinationId && labelForClub(year + 1, reply.destinationId);
   const terms = reply?.contract;
+  const capGain = terms && reply?.player ? nrlContractDepartureCapGain(career, reply.player.id, terms.startYear) : 0;
   return (
     <details className="group mt-3 rounded-lg border border-border" open={reply ? true : undefined}>
       <summary ref={summary} className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 text-sm font-semibold">
@@ -476,7 +479,7 @@ function ContractApproaches({ career, onAction, disabled }: { career: NrlCareerS
             {terms ? <div className="space-y-1 text-muted-foreground">
               <p>{reply.player?.name} stays with your club this season at the same salary.</p>
               <p>{buyer} would pay {money(terms.salary)} a season from {terms.startYear} through {terms.endYear}.</p>
-              <p>Your {terms.startYear} cap room would increase by {money(terms.salary - nrlCareerCap(career, terms.startYear).minimumSalary)} after reserving a roster place.</p>
+              <p>Your {terms.startYear} cap room would {capGain < 0 ? 'decrease' : 'increase'} by {money(Math.abs(capGain))} after reserving a roster place.</p>
             </div> : <p className="text-muted-foreground">{reply.reason}</p>}
             <div className="flex flex-wrap gap-2">
               <Button type="button" size="lg" disabled={disabled || !terms} onClick={() => answer('accept')}>Accept offseason move</Button>
@@ -523,6 +526,48 @@ function ContractApproaches({ career, onAction, disabled }: { career: NrlCareerS
   );
 }
 
+function DevelopedPlayerAllowance({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const [draft, setDraft] = useState<string>();
+  const plan = nrlDevelopedAllowanceOptions(career);
+  if (!plan?.options.length) return null;
+  const { allowanceYear, nominated, options } = plan;
+  const savedId = nominated?.player.id ?? '';
+  const playerId = draft ?? savedId;
+  const current = nrlCareerCap(career, allowanceYear);
+  const quote = playerId !== savedId ? nrlDevelopedAllowanceQuote(career, playerId || null) : null;
+
+  return (
+    <details className="group mt-3 rounded-lg border border-border" data-nrl-developed-allowance>
+      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-2 rounded-md px-3 py-2 text-sm font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        Developed player allowance<ChevronDown size={16} aria-hidden="true" className="shrink-0 group-open:rotate-180" />
+      </summary>
+      <div className="space-y-2 border-t border-border p-3 text-sm">
+        <p className="text-muted-foreground">Apply up to {money(DEVELOPED_PLAYER_ALLOWANCE)} of a signed graduate’s wages in {allowanceYear} cap relief. The club pays their full wage and keeps their Top 30 place.</p>
+        {nominated && <p className="font-semibold">{nominated.player.name} nominated for {allowanceYear}.</p>}
+        <label className="block space-y-1 font-semibold">
+          <span>Nominate a signed graduate</span>
+          <select className={control} value={playerId} disabled={disabled} onChange={event => setDraft(event.target.value)}>
+            <option value="">No nomination</option>
+            {options.map(({ player, allowance }) => (
+              <option key={player.id} value={player.id}>{player.name} · {money(allowance)} cap relief</option>
+            ))}
+          </select>
+        </label>
+        {quote && (quote.ok === true ? (
+          <div className="text-muted-foreground" role="status">
+            <p>{money(quote.cap.developedAllowance ?? 0)} in {allowanceYear} cap relief.</p>
+            <p>Cap room {money(current.available)} → {money(quote.cap.available)}</p>
+          </div>
+        ) : <p className="text-muted-foreground" role="status">{quote.reason}</p>)}
+        <Button type="button" size="lg" disabled={disabled || !quote?.ok} onClick={() => {
+          const { year, clubId } = career.season;
+          if (onAction({ type: 'setDevelopedAllowance', year, clubId, allowanceYear, playerId: playerId || null })) setDraft(undefined);
+        }}>{playerId || !savedId ? 'Apply nomination' : 'Remove nomination'}</Button>
+      </div>
+    </details>
+  );
+}
+
 function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const squad = nrlCareerSquad(career);
   const offers = new Map(nrlCareerMarket(career).filter(entry => entry.kind === 'renewal').map(entry => [entry.player.id, entry]));
@@ -532,6 +577,7 @@ function Contracts({ career, onAction, disabled }: { career: NrlCareerState; onA
     <>
       <h2 className="font-display text-xl font-bold">Squad contracts</h2>
       <p className="mt-1 text-sm text-muted-foreground">{squad.length} players · {expiring} deals expire this season</p>
+      <DevelopedPlayerAllowance career={career} onAction={onAction} disabled={disabled} />
       <SelectionPromise career={career} onAction={onAction} disabled={disabled} />
       <RenewalHold career={career} onAction={onAction} disabled={disabled} />
       <ContractApproaches career={career} onAction={onAction} disabled={disabled} />
@@ -1715,7 +1761,9 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
           </div>
           <p className="mt-2 text-sm text-muted-foreground">{cap.slots} signed · {cap.openSlots} open slots</p>
           {nrlSeasonPlan(capYear).projected && <p className="mt-1 text-xs text-muted-foreground">Projected season rules</p>}
-          <MoneyRows entries={[['Cap limit', cap.cap], ['Contracted wages', cap.committed], ['Reserved for open slots', cap.holds], ['Available to spend', cap.available]]} />
+          <MoneyRows entries={[['Cap limit', cap.cap], ['Contracted wages', cap.committed], ['Reserved for open slots', cap.holds],
+            ...(cap.developedAllowance ? [['Developed player allowance', cap.developedAllowance] as const] : []),
+            ['Available to spend', cap.available]]} />
         </div>
         <div>
           <h3 className="font-bold">{year} club accounts</h3>

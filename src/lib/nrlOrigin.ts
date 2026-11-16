@@ -152,6 +152,13 @@ function eligibleOriginPlayers(players: readonly NrlPlayer[], side: NrlOriginSid
     .sort((a, b) => b.rating - a.rating || (a.id < b.id ? -1 : Number(a.id > b.id)));
 }
 
+export function nrlOriginCallUpIds(players: readonly NrlPlayer[]): string[] {
+  return NRL_ORIGIN_SIDES.flatMap(side => {
+    const selection = originSelection(eligibleOriginPlayers(players, side));
+    return selection ? [...Object.values(selection.starters), ...selection.bench] : [];
+  });
+}
+
 function originPool(players: readonly NrlPlayer[], side: NrlOriginSide): OriginPlayer[] {
   const eligible = eligibleOriginPlayers(players, side);
   const selection = originSelection(eligible);

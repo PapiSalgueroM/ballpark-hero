@@ -51,7 +51,24 @@ function home() {
   return { main, field, change, release: () => { state.heldQuery = undefined; view.rerender(tree()); } };
 }
 
-it('keeps every sport jump and saves the order through one labelled control', () => {
+function catalogueViewport(desktop: boolean) {
+  const query = '(min-width: 1024px)';
+  const matchMedia = window.matchMedia;
+  const changes = new EventTarget();
+  const catalogue = {
+    ...matchMedia(query), matches: desktop,
+    addEventListener: changes.addEventListener.bind(changes),
+    removeEventListener: changes.removeEventListener.bind(changes),
+  };
+  vi.stubGlobal('matchMedia', (requested: string) => requested === query ? catalogue : matchMedia(requested));
+  return (wide: boolean) => {
+    catalogue.matches = wide;
+    changes.dispatchEvent(new Event('change'));
+  };
+}
+
+it('keeps every desktop sport jump and saves the order through one labelled control', () => {
+  catalogueViewport(true);
   const { main } = home();
   const catalogue = within(main).getByRole('navigation', { name: 'Browse sports' });
   const links = within(catalogue).getAllByRole('link');
@@ -78,6 +95,75 @@ it('keeps every sport jump and saves the order through one labelled control', ()
   expect(firstSport()).toBe('soccer');
   expect(localStorage.getItem('dukb-fav-sport')).toBeNull();
 });
+
+it.each([[false, false], [false, true], [true, false]])(
+  'restores the sport opener across Back and Forward with desktop=%s then desktop=%s',
+  async (desktop, desktopOnReturn) => {
+    const resize = catalogueViewport(desktop);
+    vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+    vi.stubGlobal('scrollTo', vi.fn());
+    const originalScroll = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'scrollIntoView');
+    const scrollIntoView = vi.fn();
+    Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', { configurable: true, value: scrollIntoView });
+    function HistoryControls() {
+      const navigate = useNavigate();
+      return <>
+        <output aria-label="Current anchor">{useLocation().hash}</output>
+        <button onClick={() => navigate(-1)}>Back one anchor</button>
+        <button onClick={() => navigate(1)}>Forward one anchor</button>
+      </>;
+    }
+    try {
+      render(<MemoryRouter initialEntries={[{ pathname: '/', hash: '#browse-sports', key: 'catalogue-' + desktop + desktopOnReturn }]}>
+        <Index />
+        <HistoryControls />
+      </MemoryRouter>);
+      const nav = screen.getByRole('navigation', { name: 'Browse sports' });
+      const trigger = () => within(nav).getByRole('button', { name: 'Jump to sport' });
+      const heading = document.getElementById('sport-rugby')!;
+      const order = within(nav).getByRole('combobox', { name: 'Show first' });
+      expect(order).toHaveValue('');
+      let link: HTMLElement;
+      if (desktop) {
+        expect(within(nav).queryByRole('button', { name: 'Jump to sport' })).toBeNull();
+        link = within(nav).getByRole('link', { name: 'Rugby League' });
+      } else {
+        expect(within(nav).queryByRole('link')).toBeNull();
+        expect(trigger()).toHaveAttribute('aria-expanded', 'false');
+        fireEvent.click(trigger());
+        let dialog = screen.getByRole('dialog', { name: 'Jump to sport' });
+        expect(within(dialog).getAllByRole('link')).toHaveLength(VISIBLE_CATEGORIES.length);
+        fireEvent.keyDown(document, { key: 'Escape' });
+        await waitFor(() => expect(trigger()).toHaveFocus());
+        expect(trigger()).toHaveAttribute('aria-expanded', 'false');
+        fireEvent.click(trigger());
+        dialog = screen.getByRole('dialog', { name: 'Jump to sport' });
+        link = within(dialog).getByRole('link', { name: 'Rugby League' });
+      }
+
+      link.focus();
+      fireEvent.click(link);
+      await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Jump to sport' })).toBeNull());
+      expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#sport-rugby');
+      expect(heading).toHaveFocus();
+      expect(order).toHaveValue('');
+      expect(localStorage.getItem('dukb-fav-sport')).toBeNull();
+
+      act(() => resize(desktopOnReturn));
+      fireEvent.click(screen.getByRole('button', { name: 'Back one anchor' }));
+      expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#browse-sports');
+      const opener = desktopOnReturn ? within(nav).getByRole('link', { name: 'Rugby League' }) : trigger();
+      expect(opener).toHaveFocus();
+      if (desktop !== desktopOnReturn) expect(scrollIntoView.mock.contexts.at(-1)).toBe(opener);
+      fireEvent.click(screen.getByRole('button', { name: 'Forward one anchor' }));
+      expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#sport-rugby');
+      expect(heading).toHaveFocus();
+    } finally {
+      if (originalScroll) Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', originalScroll);
+      else Reflect.deleteProperty(HTMLElement.prototype, 'scrollIntoView');
+    }
+  },
+);
 
 it('holds the old results in place without exposing old links or pin controls during rapid input', async () => {
   const { main, field, change, release } = home();
@@ -509,6 +595,7 @@ it.each([false, true])('jumps from Browse sports to game picks and restores the 
 });
 
 it('keeps the sport heading when native history reuses the initial key for a different fragment', () => {
+  catalogueViewport(true);
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
   const scrollTo = vi.fn();
   vi.stubGlobal('scrollTo', scrollTo);

@@ -501,8 +501,8 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
   say(lines.every(l => l.got === l.want), `[6c] the cards read the saves: ${lines.map(l => `${l.p} "${l.got}"`).join(', ')}`);
   const small = [...planted.cards.filter(c => c.h < 32 || c.w < 32).map(c => c.p),
     ...planted.controls.filter(c => c.h < 44 || c.w < 44).map(c => c.name)];
-  say(planted.links >= 10 && planted.controls.length === planted.links + 1 && planted.order !== null && small.length === 0 && planted.pageWide <= 390,
-    `[6d] ${planted.cards.length} cards at least 32px, ${planted.links} sport links and one order control at least 44px (${small.join(', ') || 'none undersize'}), page ${planted.pageWide}px wide`);
+  say(planted.links === 0 && planted.controls.length === 2 && planted.order !== null && small.length === 0 && planted.pageWide <= 390,
+    `[6d] ${planted.cards.length} cards at least 32px, two catalogue controls at least 44px (${small.join(', ') || 'none undersize'}), page ${planted.pageWide}px wide`);
   const hockey = await visit({ fav: 'hockey' });
   say(fresh.firstSport === 'soccer' && hockey.firstSport === 'hockey' && hockey.order === 'hockey',
     `[6e] a stored hockey pick leads the sport sections (first section: fresh ${fresh.firstSport}, picked ${hockey.firstSport}) and the order control shows hockey`);
@@ -514,9 +514,9 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
     `[6g] choosing Golf moves golf first (${picked.firstSport}), remembers it (${c?.stored}), and holds scroll (scroll ${c?.before.y} to ${c?.after.y}, sport index at ${Math.round(c?.before.top ?? -1)} to ${Math.round(c?.after.top ?? -1)})`);
 }
 
-console.log('7) a direct Browse sports link reaches the catalogue after Home loads');
-for (const width of [320, 390, 430, 1440]) {
-  const ctx = await browser.newContext({ viewport: { width, height: 844 } });
+console.log('7) direct Browse sports and All sports links keep the first game visible');
+for (const [width, height] of [[320, 568], [390, 640], [430, 844], [1440, 844]]) {
+  const ctx = await browser.newContext({ viewport: { width, height } });
   try {
     const page = await ctx.newPage();
     await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
@@ -534,44 +534,86 @@ for (const width of [320, 390, 430, 1440]) {
       focus: document.activeElement === document.body,
     }));
     say(reached && position.focus, width + 'px direct link reaches Browse sports at y=' + position.top + ' with no focus change');
-    const catalogue = await page.evaluate(() => {
+    const measureCatalogue = () => page.evaluate(() => {
       const index = document.getElementById('browse-sports');
       const firstGame = document.querySelector('section[data-sport] [data-catalog-card] a[href]');
-      const card = firstGame?.getBoundingClientRect();
+      const card = firstGame?.closest('[data-catalog-card]')?.getBoundingClientRect();
       const indexBox = index?.firstElementChild?.getBoundingClientRect();
       const order = index?.querySelector('select')?.getBoundingClientRect();
       const summary = firstGame?.querySelector('.home-tile-summary');
       const lines = summary ? summary.getBoundingClientRect().height / parseFloat(getComputedStyle(summary).lineHeight) : 0;
       const orderInView = !!order && !!indexBox && order.top >= Math.max(indexBox.top, 0) && order.bottom <= Math.min(indexBox.bottom, innerHeight);
-      return card && indexBox ? { cardTop: Math.round(card.top), beside: card.left >= indexBox.right, indexTop: Math.round(indexBox.top), lines, orderInView } : null;
+      return card && indexBox ? { cardTop: Math.round(card.top), cardBottom: Math.ceil(card.bottom), beside: card.left >= indexBox.right, indexTop: Math.round(indexBox.top), lines, orderInView } : null;
     });
-    say(Boolean(catalogue && catalogue.cardTop < 844
-      && (width < 768 ? !catalogue.beside : catalogue.beside && catalogue.cardTop - catalogue.indexTop < 100)),
-    width + 'px Browse sports shows its first catalogue game on screen at y=' + (catalogue?.cardTop ?? 'missing'));
+    const catalogue = await measureCatalogue();
+    say(Boolean(catalogue && catalogue.cardTop > 0 && catalogue.cardBottom <= height
+      && (width < 1024 ? !catalogue.beside : catalogue.beside && catalogue.cardTop - catalogue.indexTop < 100)),
+    `${width} by ${height} shows a whole catalogue card at y=${catalogue?.cardTop ?? 'missing'}–${catalogue?.cardBottom ?? 'missing'}`);
     say(Boolean(catalogue?.orderInView), width + 'px the order control is fully visible without scrolling the sport list');
     say(Boolean(catalogue && catalogue.lines >= 0.9 && catalogue.lines <= (width < 640 ? 1.1 : 2.1)),
       width + 'px catalogue shows a compact game description (' + (catalogue?.lines ?? 0).toFixed(2) + ' lines)');
+    if (width < 1024) {
+      await page.goto(BASE + '/#sport-rugby', { waitUntil: 'domcontentloaded' });
+      await page.locator('#home-all-sports-rugby').click();
+      // The URL can change before React commits the focus and scroll.
+      const arrived = await page.waitForFunction(() => {
+        const section = document.getElementById('browse-sports');
+        const card = document.querySelector('section[data-sport] [data-catalog-card]')?.getBoundingClientRect();
+        return location.hash === '#browse-sports' && section === document.activeElement
+          && card && card.top > 0 && card.bottom <= innerHeight;
+      }, null, { timeout: 2500 }).then(() => true, () => false);
+      const focused = await target.evaluate(section => document.activeElement === section);
+      const afterJump = await measureCatalogue();
+      say(arrived && focused && Boolean(afterJump && afterJump.cardTop > 0 && afterJump.cardBottom <= height),
+        `${width} by ${height} All sports lands on the catalogue with a whole game in view`);
+    }
   } finally {
     await ctx.close();
   }
 }
 
 console.log('8) the sport index jumps to a heading without changing the favourite');
-for (const [width, height] of [[320, 844], [390, 844], [1280, 250], [1440, 844]]) {
-  const ctx = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce' });
+for (const [width, height] of [[320, 568], [390, 640], [1280, 250], [1440, 844]]) {
+  const touch = width === 390;
+  const ctx = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce', hasTouch: touch });
   try {
     const page = await ctx.newPage();
     await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
     await page.addInitScript(() => localStorage.setItem('cookie-consent', 'essential'));
     await page.goto(BASE + '/#browse-sports', { waitUntil: 'domcontentloaded' });
     const index = page.getByRole('navigation', { name: 'Browse sports' });
-    const link = index.getByRole('link', { name: 'Rugby League', exact: true });
+    const picker = index.getByRole('button', { name: 'Jump to sport', exact: true });
+    const menu = page.getByRole('dialog', { name: 'Jump to sport' });
+    const compact = width < 1024;
+    if (compact) {
+      await picker.waitFor();
+      say(await index.getByRole('link').count() === 0 && await picker.getAttribute('aria-expanded') === 'false',
+        `${width}px catalogue opens with a collapsed sport picker`);
+      await picker.press('Enter');
+      await menu.waitFor();
+      const links = await menu.getByRole('link').evaluateAll(items => items.map(item => {
+        const { width, height } = item.getBoundingClientRect();
+        return { href: item.getAttribute('href'), width, height };
+      }));
+      const all = await index.locator('select option').evaluateAll(options => options.slice(1).map(option => '#sport-' + option.value));
+      say(JSON.stringify(links.map(link => link.href)) === JSON.stringify(all)
+        && links.every(link => link.width >= 44 && link.height >= 44), `${width}px catalogue picker offers every sport at full tap size`);
+      await page.keyboard.press('Escape');
+      await menu.waitFor({ state: 'hidden' });
+      await page.waitForFunction(() => document.activeElement?.id === 'home-catalogue-sport-trigger', null, { timeout: 5000 }).catch(() => {});
+      say(await picker.evaluate(trigger => trigger === document.activeElement), `${width}px Escape restores the catalogue picker`);
+      if (touch) await picker.tap();
+      else await picker.press('Enter');
+    }
+    const link = (compact ? menu : index).getByRole('link', { name: 'Rugby League', exact: true });
     if (height === 250) {
       const usable = await link.click({ trial: true, timeout: 5000 }).then(() => true, () => false);
       say(usable, `${width} by ${height} desktop can scroll to and click Rugby League`);
     }
-    await link.focus();
-    await link.press('Enter');
+    if (!touch) await link.focus();
+    const originTop = await page.evaluate(() => window.scrollY);
+    if (touch) await link.tap();
+    else await link.press('Enter');
     const target = page.locator('#sport-rugby');
     const land = () => page.waitForFunction(() => {
       const heading = document.getElementById('sport-rugby');
@@ -581,10 +623,35 @@ for (const [width, height] of [[320, 844], [390, 844], [1280, 250], [1440, 844]]
     const focused = await target.evaluate(heading => document.activeElement === heading);
     const changed = await page.evaluate(() => localStorage.getItem('dukb-fav-sport'));
     const first = await page.locator('section[data-sport]').first().getAttribute('data-sport');
-    say(landed && focused && first === 'soccer' && changed === null, `${width}px keyboard jump lands and focuses Rugby League with the original sport order`);
+    say(landed && focused && first === 'soccer' && changed === null, `${width}px ${touch ? 'touch' : 'keyboard'} jump focuses Rugby League with the original order`);
+    await page.goBack({ waitUntil: 'domcontentloaded' });
+    const openerId = compact ? 'home-catalogue-sport-trigger' : 'home-sport-index-rugby';
+    const back = await page.waitForFunction(id => document.activeElement?.id === id, openerId, { timeout: 5000 })
+      .then(() => true, () => false);
+    const backTop = await page.evaluate(() => window.scrollY);
+    say(back && Math.abs(originTop - backTop) <= 3, `${width}px Back restores the exact catalogue control and scroll`);
+    await page.goForward({ waitUntil: 'domcontentloaded' });
+    say(await land() && await target.evaluate(heading => document.activeElement === heading), `${width}px Forward restores the sport heading`);
     await page.goto(BASE + '/#sport-rugby', { waitUntil: 'domcontentloaded' });
     await page.reload({ waitUntil: 'domcontentloaded' });
     say(await land(), `${width}px a direct Rugby League link remains reachable on reload`);
+    if (width === 320) {
+      await page.goto(BASE + '/#browse-sports', { waitUntil: 'domcontentloaded' });
+      await picker.press('Enter');
+      await menu.getByRole('link', { name: 'Rugby League', exact: true }).press('Enter');
+      await land();
+      await page.setViewportSize({ width: 1280, height: 800 });
+      await page.locator('#home-sport-index-rugby').waitFor({ state: 'attached' });
+      await page.goBack({ waitUntil: 'domcontentloaded' });
+      const visible = await page.waitForFunction(() => {
+        const opener = document.getElementById('home-sport-index-rugby');
+        if (opener !== document.activeElement) return false;
+        const box = opener.getBoundingClientRect();
+        return box.top >= 0 && box.bottom <= innerHeight
+          && opener.contains(document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2));
+      }, null, { timeout: 5000 }).then(() => true, () => false);
+      say(visible, '320px to 1280px Back reveals the corresponding desktop sport link');
+    }
   } finally {
     await ctx.close();
   }

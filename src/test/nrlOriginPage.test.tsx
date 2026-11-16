@@ -153,3 +153,33 @@ describe('State of Origin in the Club office', () => {
     expect(save().season).toEqual(initial.season);
   });
 });
+
+it('opens a new 2026 club career with call-ups and shows both sides before the Round 12 fixture', () => {
+  const first = open();
+  const seed = vi.spyOn(Math, 'random').mockReturnValue(4 / 0x1_0000_0000);
+  click('Manage Brisbane Broncos');
+  seed.mockRestore();
+  let state = save();
+  expect(state).toMatchObject({ originClubCalendar: true, season: { year: 2026, seed: 4 } });
+  first.unmount();
+  saveFence.release(NRL_SAVE_KEY);
+  while (state.season.round < 12) state = reduceNrlCareer(state, { type: 'advance' });
+  const original = JSON.stringify(state);
+  localStorage.setItem(NRL_SAVE_KEY, original);
+  open();
+
+  const callUps = within(screen.getByRole('region', { name: 'State of Origin call-ups' }));
+  expect(callUps.getByText('Brisbane Broncos', { exact: true })).toBeVisible();
+  expect(callUps.getByText('Canterbury-Bankstown Bulldogs', { exact: true })).toBeVisible();
+  const called = state.season.originStandDown?.[0].clubs.broncos.find(id => id === 'broncos-7-0');
+  expect(called).toBeDefined();
+  const player = state.players.find(player => player.id === called)!;
+  expect(callUps.getByText(player.name, { exact: true })).toBeVisible();
+  expect(raw()).toBe(original);
+
+  click('Squad');
+  const availability = within(screen.getByRole('region', { name: 'Availability' }));
+  expect(availability.getByText(player.name + ' · ' + player.role, { exact: true })).toBeVisible();
+  expect(availability.getAllByText('On State of Origin duty').length).toBeGreaterThan(0);
+  expect(raw()).toBe(original);
+});

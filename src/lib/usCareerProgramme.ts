@@ -3,10 +3,10 @@ import type { UsSport } from './usCoachCareer';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 
 export type ProgrammeSection = 'workload' | 'tactics' | 'expectation' | 'partnership' | 'bonus' | 'reinvention';
-export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'steady' | 'stretch' | 'build' | 'maintain';
+export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'spot-starts' | 'steady' | 'stretch' | 'build' | 'maintain';
 export interface ProgrammeChoices {
   workload: 'normal' | 'push' | 'recover';
-  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes';
+  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'spot-starts';
   expectation: 'normal' | 'steady' | 'stretch';
   partnership: 'normal' | 'build';
   bonus: 'normal' | 'steady' | 'stretch';
@@ -34,6 +34,7 @@ export interface ProgrammePreparation {
   nhlShutdownBerthGain?: number;
   nflInsideRoutesGain?: number;
   nbaExtraPlayoffMinutes?: number;
+  mlbSpotStartOutcome?: 'completed' | 'missed';
 }
 const DEFAULTS: ProgrammeChoices = { workload: 'normal', tactics: 'normal', expectation: 'normal', partnership: 'normal', bonus: 'normal', reinvention: 'normal' };
 const clamp = (n: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, n));
@@ -53,6 +54,8 @@ export const NFL_WR_REC_CAP = 145;
 export const NFL_INSIDE_CATCH_GAIN = 12;
 export const NFL_INSIDE_TD_COST = 10;
 const NFL_INSIDE_ROUTES_LABEL = 'Inside routes';
+export const MLB_SPOT_START_INJURY_POINTS = 10;
+const MLB_SPOT_START_LABEL = 'Stretch out for spot starts';
 
 export function nflInsideRoutesAvailable(c: UsCareerCore): boolean {
   return c.pos === 'WR' && c.role !== 'backup' && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0);
@@ -60,6 +63,11 @@ export function nflInsideRoutesAvailable(c: UsCareerCore): boolean {
 
 export function nbaExtraPlayoffMinutesAvailable(c: UsCareerCore): boolean {
   return c.role !== 'backup' && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0)
+    && c.seasons.some(season => season.games > 0);
+}
+
+export function mlbSpotStartsAvailable(c: UsCareerCore): boolean {
+  return c.pos === 'SP' && c.role === 'backup' && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0)
     && c.seasons.some(season => season.games > 0);
 }
 
@@ -152,6 +160,7 @@ function validPlan(c: UsCareerCore, sport: UsSport, plan: UsCareerProgramme): bo
       // A booked receiver plan still needs settling if camp benches him or the deal expires after the season.
       if (key === 'tactics' && plan.tactics === 'inside') return sport === 'nfl' && c.pos === 'WR';
       if (key === 'tactics' && plan.tactics === 'playoff-minutes') return sport === 'nba';
+      if (key === 'tactics' && plan.tactics === 'spot-starts') return sport === 'mlb' && c.pos === 'SP';
       return usProgrammeMenus(c, sport).find(menu => menu.id === key)?.options.some(o => o.id === plan[key]);
     });
 }
@@ -212,6 +221,7 @@ function bonusTarget(c: UsCareerCore, sport: UsSport, stretch: boolean) {
 /** The cards. `chosen` is the plan held so far: a card is drawn against what the choices in the sections above it leave (see TRADE_ORDER). */
 export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partial<ProgrammeChoices> | null = null): ProgrammeMenu[] {
   const kind = tacticsKind(c, sport);
+  const spotStarts = sport === 'mlb' && mlbSpotStartsAvailable(c);
   const start = inputsOf(c);
   const afterWorkload = landFor(c, sport, start, 'workload', chosen?.workload)?.next ?? start;
   const afterTactics = landFor(c, sport, afterWorkload, 'tactics', chosen?.tactics)?.next ?? afterWorkload;
@@ -247,9 +257,14 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
   return [
     { id: 'workload', label: 'Workload and recovery', options: [{ id: 'normal', label: 'Usual routine', effect: 'Keep your current inputs.' }, { id: 'push', label: 'Push the workload', effect: workloadText('push', 'More form, more injury risk.') }, { id: 'recover', label: 'Prioritize recovery', effect: workloadText('recover', 'Less injury risk, less form.') }] },
     { id: 'tactics', label: 'Tactical approach', options: [
-      { id: 'normal', label: 'Your usual approach', effect: 'Keep your current style.' },
+      { id: 'normal', label: spotStarts ? 'Usual spot duty' : 'Your usual approach', effect: spotStarts ? 'Keep your usual long-relief and spot-start workload.' : 'Keep your current style.' },
       { id: 'attack', label: attack, effect: attackEffect },
       { id: 'support', label: support, effect: supportEffect },
+      ...(spotStarts ? [{
+        id: 'spot-starts' as const,
+        label: MLB_SPOT_START_LABEL,
+        effect: `A healthy 162-game season usually goes from 13 to 18 starts. Injury chance rises by up to ${MLB_SPOT_START_INJURY_POINTS} percentage points, so arm fatigue can leave you with fewer starts. If you earn a regular rotation spot in camp, the plan is unused.`,
+      }] : []),
       ...(sport === 'nfl' && nflInsideRoutesAvailable(c) ? [{
         id: 'inside' as const,
         label: NFL_INSIDE_ROUTES_LABEL,
@@ -351,8 +366,9 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
     if (choice === 'normal') continue;
     const insideRoutes = section === 'tactics' && choice === 'inside';
     const playoffMinutes = section === 'tactics' && choice === 'playoff-minutes';
+    const spotStarts = section === 'tactics' && choice === 'spot-starts';
     const label = insideRoutes ? NFL_INSIDE_ROUTES_LABEL : playoffMinutes ? NBA_PLAYOFF_MINUTES_LABEL
-      : menus.find(m => m.id === section)?.options.find(o => o.id === choice)?.label ?? section;
+      : spotStarts ? MLB_SPOT_START_LABEL : menus.find(m => m.id === section)?.options.find(o => o.id === choice)?.label ?? section;
     const decision: ProgrammeDecision = { section, label, outcome: played ? 'completed' : 'interrupted' };
     if (played && sport === 'nba' && section === 'tactics' && choice === 'defend' && !preparation?.idle?.includes(section)) {
       const defence = nbaDefensiveAssignment(c.pos);
@@ -378,6 +394,13 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
         decision.unit = 'extra minutes per playoff game';
       } else {
         decision.outcome = 'unused';
+      }
+    }
+    if (played && spotStarts) {
+      decision.outcome = preparation?.mlbSpotStartOutcome ?? 'unused';
+      if (decision.outcome !== 'unused') {
+        decision.actual = line.games;
+        decision.unit = 'starts';
       }
     }
     if (played && section === 'expectation') {

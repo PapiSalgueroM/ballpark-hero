@@ -22,7 +22,8 @@ export default function MysteryBox() {
           'Open packs one at a time, 15 in total.',
           'Each pack reveals a real player with his real market value.',
           'Keep him: tap a highlighted compatible slot in your 4-3-3.',
-          'Or bin him, but with 15 packs and 11 slots, you only get 4 bins.',
+          'On boards from November 21, 2026, one swap lets you upgrade an occupied slot when there is no compatible empty slot.',
+          'A full XI leaves four spare packs for bins or a swap.',
           'Empty slots drag your rating down hard. Fill the XI.',
           'Same pack sequence for everyone each day. Share your pulls.',
         ]}

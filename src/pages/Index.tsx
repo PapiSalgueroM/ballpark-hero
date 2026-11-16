@@ -86,7 +86,7 @@ type GameReturn = {
 const gameReturns = new Map<string, GameReturn>();
 const BROWSE_SPORTS_TRIGGER = 'home-browse-sports-trigger';
 const HOME_GAME_PICKS_ID = 'home-game-picks';
-const sportReturns = new Map<string, { hash: string; top: number; opener: string }>();
+const sportReturns = new Map<string, { hash: string; top: number; opener: string; fallback?: string }>();
 
 function revealSport(target: HTMLElement) {
   target.scrollIntoView({ block: 'start', behavior: 'instant' });
@@ -120,20 +120,21 @@ export default function Index() {
   const navigate = useNavigate();
   const navigationType = useNavigationType();
   const previousHomeEntry = useRef(homeEntry);
-  const jumpToSport = useCallback((event: MouseEvent<HTMLAnchorElement>, opener = event.currentTarget.id) => {
-    if (event.defaultPrevented || event.button !== 0 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+  const jumpToSport = useCallback((event: MouseEvent<HTMLAnchorElement>, opener = event.currentTarget.id, fallback?: string) => {
+    if (event.defaultPrevented || event.button !== 0 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return false;
     const nextHash = event.currentTarget.hash;
     const target = document.getElementById(nextHash.slice(1));
-    if (!target) return;
+    if (!target) return false;
     event.preventDefault();
     if (nextHash === hash) {
       revealSport(target);
-      return;
+      return true;
     }
     sportReturns.delete(homeEntry);
-    sportReturns.set(homeEntry, { hash, top: window.scrollY, opener });
+    sportReturns.set(homeEntry, { hash, top: window.scrollY, opener, fallback });
     if (sportReturns.size > 20) sportReturns.delete(sportReturns.keys().next().value);
     navigate({ search, hash: nextHash }, { state: { homeSportAnchor: nextHash } });
+    return true;
   }, [hash, homeEntry, navigate, search]);
   useLayoutEffect(() => {
     // New Home mounts already handle direct anchors and returns from games.
@@ -142,8 +143,13 @@ export default function Index() {
     const returned = navigationType === 'POP' && sportReturns.get(homeEntry);
     // Native fragment navigation can reuse the initial Router key.
     if (returned && returned.hash === hash) {
-      window.scrollTo({ top: returned.top, behavior: 'instant' });
-      document.getElementById(returned.opener)?.focus({ preventScroll: true });
+      const opener = document.getElementById(returned.opener);
+      const alternate = !opener && returned.fallback && document.getElementById(returned.fallback);
+      if (alternate) revealSport(alternate);
+      else {
+        window.scrollTo({ top: returned.top, behavior: 'instant' });
+        opener?.focus({ preventScroll: true });
+      }
     } else if (state?.homeSportAnchor === hash) {
       const target = document.getElementById(hash.slice(1));
       if (target) revealSport(target);

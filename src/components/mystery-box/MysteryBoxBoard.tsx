@@ -20,8 +20,8 @@ const TIER_STYLE: Record<PackTier, { label: string; cls: string }> = {
 
 export function MysteryBoxBoard() {
   const {
-    loading, formation, packIndex, current, revealed, squad, compatibleSlots,
-    discards, staleDraft, finished, rating, filled, bestPull, openPack, place, discard, shareText,
+    loading, formation, packIndex, current, revealed, squad, compatibleSlots, swapSlots, swapStatus, swapSaveFailed,
+    discards, staleDraft, finished, rating, filled, bestPull, openPack, place, swap, discard, shareText,
   } = useMysteryBox();
   const [placedSlot, setPlacedSlot] = useState<number | null>(null);
   const previous = useRef({ packIndex, squad });
@@ -30,7 +30,7 @@ export function MysteryBoxBoard() {
 
   useEffect(() => {
     if (packIndex !== previous.current.packIndex) {
-      const added = squad.findIndex((player, i) => player && !previous.current.squad[i]);
+      const added = squad.findIndex((player, i) => player && player.name !== previous.current.squad[i]?.name);
       setPlacedSlot(packIndex > previous.current.packIndex && added >= 0 ? added : null);
     }
     previous.current = { packIndex, squad };
@@ -82,6 +82,7 @@ export function MysteryBoxBoard() {
             <p className="text-[11px] text-muted-foreground">XI rating</p>
             <p className="font-display text-3xl font-black text-primary">{rating}</p>
             <p className="text-[10px] text-muted-foreground">{filled}/11 filled · {discards} binned</p>
+            {swapStatus && <p className="text-[10px] text-muted-foreground">{swapStatus === 'used' ? 'Swap used' : '1 swap available'}</p>}
           </div>
         </div>
       </div>
@@ -158,6 +159,10 @@ export function MysteryBoxBoard() {
                 <p className="mt-3 text-xs text-muted-foreground">
                   Tap a highlighted slot below to keep him, or bin him.
                 </p>
+              ) : swapSlots.length > 0 ? (
+                <p className="mt-3 text-xs text-muted-foreground">
+                  Tap a highlighted player below to use your one swap, or bin this pull.
+                </p>
               ) : (
                 <p className="mt-3 text-xs text-destructive">
                   No compatible slot is open. Bin him to move on.
@@ -165,6 +170,9 @@ export function MysteryBoxBoard() {
               )}
               </div>
 
+              {swapSaveFailed && !staleDraft && (
+                <p role="alert" className="mt-3 text-sm text-destructive">The swap could not be saved. Try again.</p>
+              )}
               <button
                 onClick={discard}
                 disabled={staleDraft}
@@ -184,14 +192,16 @@ export function MysteryBoxBoard() {
       <div className="mt-2 space-y-1.5">
         {formation.slots.map((slot, i) => {
           const p = squad[i];
-          const highlight = !staleDraft && !!current && compatibleSlots.includes(i);
+          const swapGain = current && p && swapSlots.includes(i) ? playerRating(current) - playerRating(p) : 0;
+          const highlight = !staleDraft && !!current && (compatibleSlots.includes(i) || swapGain > 0);
           return (
             <button
               key={i}
               data-mystery-slot={i}
               data-placement={p && placedSlot === i ? 'latest' : undefined}
               disabled={!highlight}
-              onClick={() => place(i)}
+              aria-label={swapGain > 0 && current && p ? `Swap in ${current.name} for ${p.name} (+${swapGain} OVR)` : undefined}
+              onClick={() => swapGain > 0 ? swap(i) : place(i)}
               className={`relative flex min-h-[44px] w-full items-center justify-between rounded-lg border px-3 py-2 text-left transition-all ${p && placedSlot === i ? motion.placed : ''} ${
                 highlight
                   ? 'border-gold bg-gold/10 cursor-pointer'
@@ -214,7 +224,9 @@ export function MysteryBoxBoard() {
                   </span>
                 )}
               </span>
-              {p && (
+              {swapGain > 0 ? (
+                <span className="ml-2 shrink-0 text-xs font-semibold text-gold">Swap +{swapGain} OVR</span>
+              ) : p && (
                 <span className="ml-2 shrink-0 text-xs">
                   <span className="font-bold text-primary">{playerRating(p)}</span>
                   <span className="text-gold"> €{p.marketValue}M</span>

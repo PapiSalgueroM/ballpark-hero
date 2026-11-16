@@ -2213,6 +2213,7 @@ export const WORLD_CONTENT: GameContentMap = {
         heading: "Keeping a player in a compatible slot",
         items: [
           "Keep him by tapping a highlighted compatible slot in your 4-3-3.",
+          "On daily boards from November 21, 2026, you can make one swap. When all compatible slots are filled, tap a highlighted player to replace him with a higher-rated pull that fits his slot.",
         ],
       },
       {
@@ -2232,7 +2233,7 @@ export const WORLD_CONTENT: GameContentMap = {
       {
         heading: "How many bins you can actually afford",
         items: [
-          "You open 15 packs to fill 11 slots, which means you can only afford 4 bins all run.",
+          "To fill all 11 slots with 15 packs, you have four spare packs for bins or a swap. A swap uses the current pack and keeps the same number of filled slots.",
         ],
       },
       {
@@ -2274,7 +2275,7 @@ export const WORLD_CONTENT: GameContentMap = {
       {
         heading: "Counting your bins before you spend them",
         items: [
-          "Count your bins. Spend all 4 early and every remaining pack becomes a forced keep.",
+          "Count your spare packs. If you use four on bins or a swap, each remaining pack has to fill an empty slot for you to finish with a full XI.",
         ],
       },
       {
