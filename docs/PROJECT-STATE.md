@@ -1,5 +1,7 @@
 ## 2026-11-16 — NRL league player scores and scouting
 
+[PR #1014](https://github.com/PapiSalgueroM/ballpark-hero/pull/1014) published exact main `188b189dcf164003b8b1220514a69d80498cafb5`, deployment `9bca0e3b-20a1-49cf-9605-5818c5fa06f9` and canonical entry `/assets/index-DPSVI8d-.js`. The squash tree matched tested head `3c7feea96`. Three pinned live browser profiles, 20 control endpoints, the live NRL guide and all 174 sitemap routes passed. IndexNow accepted the NRL guide. Hosted types, build, guide checks and native career controls also passed.
+
 - Season fixtures shows both starting 13s and each side’s scoring in settled league matches. The 50–8 Storm–Knights fixture recorded 26 starters and every try and kick. Scouting and the ladder show named starts and tries. The latest completed season stays available after rollover, and the report identifies which seasons have player scores.
 - The book keeps the league together across a caretaker move. Both phone widths preserved 98 prior results and archived the same 213-match season. An older save kept its original Storm–Sharks score and recorded named players in seven fixtures on its first round of 2027. New careers record from their first match.
 
