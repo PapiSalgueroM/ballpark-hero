@@ -242,6 +242,7 @@ export interface NrlCareerState {
   legacySeason: boolean;
   leagueBook?: NrlLeagueBook;
   latestLeagueBook?: NrlLeagueBook;
+  leagueBookFromYear?: number;
   caretakerJobs?: true;
   caretakerDeparture?: NrlCaretakerDeparture;
   boardChallenge?: true;
@@ -2577,6 +2578,7 @@ function acceptCaretakerJob(state: NrlCareerState, action: Extract<NrlCareerActi
     originClubCalendar: state.originClubCalendar, originClubRecovery: state.originClubRecovery,
     ...(state.leagueBook && { leagueBook: state.leagueBook }),
     ...(state.latestLeagueBook && { latestLeagueBook: state.latestLeagueBook }),
+    ...(state.leagueBookFromYear && { leagueBookFromYear: state.leagueBookFromYear }),
   };
 }
 
@@ -3087,10 +3089,8 @@ function rolloverCareer(state: NrlCareerState, move?: { fromYear: number; clubId
     ...career, players: world, history, legacySeason: false, academy: undefined,
     finance: coachHire ? { ...finance, coachHire } : finance,
     season: carried ? repairMatchday(nextSeason) : { ...nextSeason, bench: nrlBench(nextSeason) },
-    ...(state.leagueBook && {
-      leagueBook: createNrlLeagueBook(year, leaguePlayers(world, year)),
-      latestLeagueBook: seasonOut?.leagueBook ?? state.leagueBook,
-    }),
+    leagueBook: createNrlLeagueBook(year, leaguePlayers(world, year)),
+    ...(state.leagueBook ? { latestLeagueBook: seasonOut?.leagueBook ?? state.leagueBook } : { leagueBookFromYear: year }),
   };
   return move || !shortlist ? next : withShortlist(next, shortlist.filter(id => isRecruitmentTarget(next, id)));
 }
@@ -4245,14 +4245,16 @@ function validWorld(state: NrlCareerState): boolean {
 }
 
 function validLeagueBooks(state: NrlCareerState): boolean {
-  const { season, leagueBook, latestLeagueBook } = state;
+  const { season, leagueBook, latestLeagueBook, leagueBookFromYear, openingYear, history } = state;
   const { year } = season;
-  if (leagueBook === undefined) return latestLeagueBook === undefined;
+  if (leagueBook === undefined) return latestLeagueBook === undefined && leagueBookFromYear === undefined;
   if (state.legacySeason || !validNrlActiveLeagueBook(leagueBook, season, leaguePlayers(state.players, year))) return false;
-  if (year === state.openingYear) return latestLeagueBook === undefined;
-  const skipped = state.history.find(row => row.year === year - 2)?.seasonOut;
+  if (leagueBookFromYear !== undefined && (!intIn(leagueBookFromYear, openingYear + 1, year)
+    || !history.some(row => row.year === leagueBookFromYear - 1 || (row.year === leagueBookFromYear - 2 && row.seasonOut)))) return false;
+  if (year === (leagueBookFromYear ?? openingYear)) return latestLeagueBook === undefined;
+  const skipped = history.find(row => row.year === year - 2)?.seasonOut;
   if (skipped) return validNrlArchivedLeagueBook(latestLeagueBook, year - 1, skipped.finals, skipped.leagueLadder, () => '');
-  const previous = state.history.find(row => row.year === year - 1);
+  const previous = history.find(row => row.year === year - 1);
   return Boolean(previous && validNrlArchivedLeagueBook(latestLeagueBook, year - 1, previous.finals, previous.leagueLadder,
     ({ round }) => previous.caretaker && round < previous.caretaker.round ? previous.caretaker.former.clubId : previous.clubId));
 }

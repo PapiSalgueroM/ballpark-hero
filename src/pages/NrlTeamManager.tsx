@@ -3202,7 +3202,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>In Ladder, choose a past season to see the final standings saved in your career.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
               <li>In Season fixtures, choose a rival under Follow a club to view their draw, scores and known finals fixtures.</li>
-              <li>In new careers, choose a completed match under Fixture player scores to see simulated starters and scoring for both clubs. Use Fixture season to reopen the latest saved match book.</li>
+              <li>Choose a completed match under Fixture player scores to see simulated starters and scoring for both clubs. New careers record from their first match, and existing careers begin recording next season. Use Fixture season to reopen the latest completed season with player scores.</li>
               <li>Open Finals race in Ladder during the last four regular rounds to check your remaining opponents, possible ladder points and whether your club has secured a place.</li>
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>
               <li>Once per season, use club cash to assign a second academy scout while a report is pending. Both reports arrive next round.</li>

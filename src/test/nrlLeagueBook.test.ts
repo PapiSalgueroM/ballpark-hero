@@ -11,7 +11,7 @@ const move = { type: 'acceptCaretakerJob', year, round, clubId, destinationId } 
 const advance = (state: NrlCareerState) => reduceNrlCareer(state, { type: 'advance' });
 const reload = (state: NrlCareerState) => readNrlCareerSave(JSON.stringify(state));
 
-const withoutLeagueBook = ({ leagueBook, latestLeagueBook, ...state }: NrlCareerState): NrlCareerState => state;
+const withoutLeagueBook = ({ leagueBook, latestLeagueBook, leagueBookFromYear, ...state }: NrlCareerState): NrlCareerState => state;
 const fields = ['tries', 'conversions', 'penalties', 'fieldGoals', 'longFieldGoals'] as const;
 
 function reachVacancy(initial: NrlCareerState): NrlCareerState {
@@ -124,10 +124,10 @@ describe('NRL league performances', () => {
     expect(nrlLeagueFixtures(next.latestLeagueBook)).toHaveLength(225);
     expect(nrlLeagueLeaders(next.latestLeagueBook).every(player => player.starts === player.appearances)).toBe(true);
     expect(reload(next)).toEqual(next);
-    expect(withoutLeagueBook(next)).toEqual(reduceNrlCareer(withoutLeagueBook(departed), rejoin));
+    expect(withoutLeagueBook(next)).toEqual(withoutLeagueBook(reduceNrlCareer(withoutLeagueBook(departed), rejoin)));
   });
 
-  it('keeps old saves on their existing tracking coverage', () => {
+  it('starts recording an older save when its next real season begins', () => {
     const initial = withoutLeagueBook(createNrlCareer(clubId, 3, year));
     expect(reload(initial)).toEqual(initial);
     const next = advance(initial);
@@ -135,8 +135,19 @@ describe('NRL league performances', () => {
     expect(next.leagueBook).toBeUndefined();
     expect(reload(next)).toEqual(next);
     const rollover = reduceNrlCareer(finish(next), { type: 'startNextSeason' });
-    expect(rollover.leagueBook).toBeUndefined();
+    expect(rollover.leagueBook).toMatchObject({ year: 2027, fixtures: [] });
+    expect(rollover.leagueBookFromYear).toBe(2027);
     expect(rollover.latestLeagueBook).toBeUndefined();
     expect(reload(rollover)).toEqual(rollover);
+    expect(reload({ ...rollover, leagueBookFromYear: undefined })).toBeNull();
+    expect(reload({ ...rollover, leagueBookFromYear: 2028 })).toBeNull();
+    const firstRound = advance(rollover);
+    expect(firstRound.leagueBook?.fixtures).toHaveLength(firstRound.season.results.length);
+    const archived = reduceNrlCareer(finish(firstRound), { type: 'startNextSeason' });
+    expect(archived.leagueBookFromYear).toBe(2027);
+    expect(archived.leagueBook).toMatchObject({ year: 2028, fixtures: [] });
+    expect(archived.latestLeagueBook).toMatchObject({ year: 2027 });
+    expect(nrlLeagueFixtures(archived.latestLeagueBook)).toHaveLength(225);
+    expect(reload(archived)).toEqual(archived);
   });
 });

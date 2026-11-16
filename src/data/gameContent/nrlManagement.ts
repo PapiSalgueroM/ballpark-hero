@@ -61,7 +61,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'With Open interchange on, bring on one eligible unused reserve at half time or save the place for 60 minutes.',
       'At half time or 60 minutes in Live, an eligible reserve can replace your goal kicker if the named backup stays on to take the remaining place kicks.',
       'In Season fixtures, choose a rival under Follow a club to view their draw, scores and known finals fixtures. In Finals race, use View fixtures beside an opponent to open that club’s draw.',
-      'In new careers, choose a completed match under Fixture player scores to see simulated starters and scoring for both clubs. Use Fixture season to reopen the latest saved match book.',
+      'Choose a completed match under Fixture player scores to see simulated starters and scoring for both clubs. New careers record from their first match, and existing careers begin recording next season. Use Fixture season to reopen the latest completed season with player scores.',
       'Open Matchday team sheet in a report with a player record to see the starting 13, the reserves who played and how many points each player scored.',
       'In Squad, open Season player stats and choose a player in Player match log to check each match. See where they started, whether they came off the bench, their points and any recorded regular-season rating changes.',
       'In Ladder, open Form and venue records to compare each club’s last five completed league matches and its home and away win, draw and loss records.',
