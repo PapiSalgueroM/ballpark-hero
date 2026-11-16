@@ -3103,6 +3103,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>After the Grand Final, release one unsigned academy prospect into next season’s free-agent market or promote him to your own Top 30.</li>
               <li>Choose a Board pathways objective before Round 1. Three young players need four appearances each for $200,000, or two need six each for $225,000. Pathways run-in shows who can reach your target.</li>
               <li>When you stay at the club, a returning starter can keep a position they learned in training.</li>
+              <li>In new careers, check Caretaker vacancies in Club Office from Round 14. You can take one eligible job per season and start at the new club’s current ladder position. Played results and signed contracts stay in the league, and Season review shows your record at each club.</li>
               <li>Change clubs between seasons from Season review.</li>
               <li>When staying at your club, select Keep saved lineups in Season review to carry your presets forward. Apply a saved lineup in Squad.</li>
               <li>In Saved lineup, save a match plan to keep the team's attack and last-tackle kicks with its selection. Preview the slot and apply the plan for your next match.</li>
