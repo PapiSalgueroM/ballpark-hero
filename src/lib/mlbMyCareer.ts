@@ -1192,10 +1192,16 @@ function buildMlbDeck(c: MlbCareerState, rng: () => number, stopAtBig: boolean):
   if (c.morale < 55) {
     deck.push({
       id: 'trade',
-      title: 'Trade deadline rumors',
-      body: 'The team is selling and your name leads every rumor column.',
+      title: 'Offseason trade rumors',
+      body: 'Your club is fielding offers. You can ask for a move or tell the front office you want to stay.',
       options: [
-        { label: 'Ask out', effect: 'Contender bound', apply: (cc, r) => { const pool = mlbEraTeamIds(cc.eraId); const nt = pool[Math.floor(r() * pool.length)]; cc.team = nt; cc.morale = 74; cc.fanbase = 38; return `Dealt to ${mlbTeamLabelOf(nt, cc.eraId)} at the deadline.`; } },
+        { label: 'Ask out', effect: 'Move to another club', apply: (cc, r) => {
+          const destinations = mlbEraTeamIds(cc.eraId).filter(team => team !== cc.team);
+          cc.team = destinations[Math.floor(r() * destinations.length)];
+          cc.morale = 74;
+          cc.fanbase = 38;
+          return `Traded to ${mlbTeamLabelOf(cc.team, cc.eraId)}.`;
+        } },
         { label: 'Be the franchise guy', effect: 'Loyalty points', apply: (cc) => { cc.morale += 6; cc.fanbase += 6; return 'You stay and say the right things. The city loves it.'; } },
       ],
     });
