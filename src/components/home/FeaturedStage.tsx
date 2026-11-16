@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ALL_GAMES, type GameDef } from '@/data/gameRegistry';
 import { HOME_STAGE, sportOf, type StageEntry } from '@/data/homeFront';
+import { CLUB_MANAGER_ACTIVE_RESUME_QUERY } from '@/lib/clubManagerSaveKeys';
 import { homeSaveStorage, useHomeSaveRefresh } from './homeSaveRefresh';
 import { SportGlyph, sportStyle } from './SportGlyph';
 import styles from './HomeLaunchDeck.module.css';
@@ -75,9 +76,10 @@ function StageCard({ card, lead, saved }: { card: Card; lead: boolean; saved: bo
   const sport = sportOf(game.path);
   const resuming = saved && !!entry.continueCta;
   const cta = resuming ? entry.continueCta : entry.cta;
+  const to = resuming && game.path === '/club-manager' ? game.path + CLUB_MANAGER_ACTIVE_RESUME_QUERY : game.path;
 
   return (
-    <Link to={game.path} style={sportStyle(sport)} data-stage-card={game.path}
+    <Link to={to} style={sportStyle(sport)} data-stage-card={game.path}
       className={cn(styles.game, lead && styles.lead)}>
       <span aria-hidden="true" className={styles.art}>
         <Suspense fallback={null}><HomeArt art={entry.art} /></Suspense>

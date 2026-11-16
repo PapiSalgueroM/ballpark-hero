@@ -10,7 +10,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, act, waitFor } from '@testing-library/react';
 import { SAVE_KEY, leanCareer, startCareer } from '@/lib/clubManager';
 import { parkedKey, readSlots, activeSlot, SLOTS_INDEX_KEY } from '@/lib/clubManagerSlots';
-import { clubManagerRequestedSlot } from '@/lib/clubManagerSaveKeys';
+import { clubManagerRequestedSlot, type ClubManagerSlotRequest } from '@/lib/clubManagerSaveKeys';
 import { savedGames } from '@/data/continueSaves';
 
 vi.mock('@/lib/completions', () => ({
@@ -23,7 +23,7 @@ const { useClubManager } = await import('@/hooks/useClubManager');
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 let api: any = null;
-function Harness({ requestedSlot }: { requestedSlot?: number | null } = {}) {
+function Harness({ requestedSlot }: { requestedSlot?: ClubManagerSlotRequest } = {}) {
   api = useClubManager(requestedSlot);
   return null;
 }
@@ -358,6 +358,59 @@ describe('Club Manager slots from the Home Continue row', () => {
     act(() => api.showSlots());
     r.rerender(<Harness requestedSlot={slot} />);
     expect(api.phase).toBe('resume');
+  });
+
+  it.each([null, '{"v":1,"active":2}'])('resumes the active Home manager for slot index %s', async index => {
+    if (index !== null) localStorage.setItem(SLOTS_INDEX_KEY, index);
+    const parked = parkedKey(index === null ? 2 : 1);
+    localStorage.setItem(SAVE_KEY, hold('Everton'));
+    localStorage.setItem(parked, hold('Lincoln City'));
+    const before = storageBytes();
+    render(<Harness requestedSlot={clubManagerRequestedSlot('?resume=active')} />);
+    await waitFor(() => expect(api.phase).toBe('hub'));
+    expect(api.career.clubName).toBe('Everton');
+    expect(activeSlot()).toBe(index === null ? 1 : 2);
+    expect(localStorage.getItem(parked)).toBe(before[parked]);
+    expect(localStorage.getItem(SLOTS_INDEX_KEY)).toBe(index);
+  });
+
+  it.each([
+    ['?resume=active', '{broken'],
+    ['?resume=active', '{"active":7}'],
+    ['?resume=active&slot=2', '{"active":2}'],
+    ['?resume=active&resume=active', '{"active":2}'],
+  ])('returns an invalid active-resume link %s to the chooser for index %s', async (search, index) => {
+    localStorage.setItem(SAVE_KEY, hold('Everton'));
+    localStorage.setItem(SLOTS_INDEX_KEY, index);
+    localStorage.setItem(parkedKey(1), hold('Lincoln City'));
+    const before = storageBytes();
+    render(<Harness requestedSlot={clubManagerRequestedSlot(search)} />);
+    await waitFor(() => expect(api.phase).toBe('resume'));
+    expect(api.career).toBeNull();
+    expect(api.slotNote).toContain('could not be opened');
+    expect(storageBytes()).toEqual(before);
+  });
+
+  it('returns a stale active-resume link to the chooser if the index changes while loading', async () => {
+    const eras = await import('@/lib/clubManagerEras');
+    await eras.ensureEraRosters('era2020');
+    localStorage.setItem(SAVE_KEY, JSON.stringify(leanCareer(startCareer('Liverpool', 'era2020'))));
+    localStorage.setItem(SLOTS_INDEX_KEY, '{"active":2}');
+    localStorage.setItem(parkedKey(1), hold('Everton'));
+    delete eras.HISTORIC_ROSTERS.era2020;
+    let finish = () => {};
+    const load = vi.spyOn(eras, 'ensureEraRosters').mockImplementationOnce(() => new Promise<void>(resolve => { finish = resolve; }));
+    try {
+      render(<Harness requestedSlot={clubManagerRequestedSlot('?resume=active')} />);
+      await waitFor(() => expect(load).toHaveBeenCalledWith('era2020'));
+      localStorage.setItem(SLOTS_INDEX_KEY, '{"active":1}');
+      const afterMove = storageBytes();
+      await act(async () => { finish(); });
+      expect(api.phase).toBe('resume');
+      expect(api.career).toBeNull();
+      expect(api.slotNote).toContain('could not be opened');
+      expect(storageBytes()).toEqual(afterMove);
+    } finally { load.mockRestore(); }
   });
 
   it('opens the parked career if the active slot is empty', async () => {
