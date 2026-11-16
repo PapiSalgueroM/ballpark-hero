@@ -54,7 +54,8 @@ import { deadMoneyFor, tradeRefusal } from './frontOfficeCuts';
 import { NFL_OPTION_ROUND, NFL_ROOKIE_DEAL_YEARS } from './gmContractRules';
 import { NFL_STAFF_PACK, type NflStaffPost } from '@/data/gmStaff/packs';
 import {
-  DEEP_ROSTER_MAX, NFL_ROSTER_MIN, REGULAR_WEEKS, capUsed, conferenceOf, conferenceSeeds, teamStrength, tradeValue,
+  DEEP_ROSTER_MAX, NFL_ROSTER_MIN, REGULAR_WEEKS, capUsed, conferenceOf, conferenceSeeds, injuredReserveEntry, nflActiveRoster,
+  teamStrength, tradeValue,
   type GmPlayer, type GmTeamState, type LeagueState, type OffseasonNews, type Prospect,
 } from './frontOffice';
 /* Round 1533: the GM's career (the desk host, bound to this board). Round 1550: only the part every screen reads
@@ -374,7 +375,8 @@ export function nflPackageCapCheck(league: LeagueState, pkg: TradePackage): stri
     if (!t) return 'That club is not in this league.';
     const outMen = out.flatMap(a => (a.kind === 'player' ? [a] : []));
     const inMen = inc.flatMap(a => (a.kind === 'player' ? [a] : []));
-    const after = t.players.length - outMen.length + inMen.length;
+    if (outMen.some(asset => injuredReserveEntry(t, asset.id))) return `${club} must activate the player from injured reserve before trading him.`;
+    const after = nflActiveRoster(t).length - outMen.length + inMen.length;
     if (after < NFL_ROSTER_MIN) return `That would leave ${club} with ${after} players. A club needs at least ${NFL_ROSTER_MIN}.`;
     if (t.rosterDepth === 2 && inMen.length > outMen.length && after > DEEP_ROSTER_MAX) {
       return `${club} has no room for that many players: the limit is ${DEEP_ROSTER_MAX}.`;
