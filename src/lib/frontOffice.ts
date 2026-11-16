@@ -1054,6 +1054,11 @@ export function injuredReserveMissedGames(league: LeagueState, abbr: string, ent
     total + games.filter(game => game.winner && (game.home === abbr || game.away === abbr)).length, 0);
 }
 
+export function nflInjuredReserveReturns(league: LeagueState, playerId: string): number {
+  return Object.values(league.teams).reduce((count, team) => count
+    + (team.injuredReserve?.filter(row => row.playerId === playerId && row.returnedWeek !== undefined).length ?? 0), 0);
+}
+
 function injuredReserveWindow(league: LeagueState, team: GmTeamState): string | null {
   if (team.rosterDepth !== 2) return 'Injured reserve is available with a full roster.';
   if (!hasUnplayedRegularGame(league, team.abbr)) return 'Available before an unplayed regular-season game.';
@@ -1078,8 +1083,8 @@ export function injuredReserveActivationRefusal(league: LeagueState, team: GmTea
   if (!entry || !player) return 'He is not on this club’s injured reserve.';
   if (injuredReserveMissedGames(league, team.abbr, entry) < NFL_IR_MIN_GAMES) return 'He must miss four settled club games.';
   if (player.out > 0) return 'He has not recovered from his injury.';
+  if (nflInjuredReserveReturns(league, playerId) >= NFL_IR_PLAYER_RETURNS) return 'He has used both injury returns this season.';
   const returned = team.injuredReserve!.filter(row => row.returnedWeek !== undefined);
-  if (returned.filter(row => row.playerId === playerId).length >= NFL_IR_PLAYER_RETURNS) return 'He has used both injury returns this season.';
   if (returned.length >= NFL_IR_TEAM_RETURNS) return 'This club has used all eight injury returns this season.';
   return deepRosterRefusal(team);
 }
@@ -1105,6 +1110,7 @@ export function validNflInjuredReserve(league: LeagueState): boolean {
   if (!tracked.length) return true;
   const known = new Set([...league.freeAgents, ...teams.flatMap(team =>
     [...team.players, ...(Array.isArray(team.practice) ? team.practice : [])])].map(player => player?.id));
+  const returns = new Map<string, number>();
   const weekInSeason = (week: unknown): week is number => typeof week === 'number'
     && Number.isInteger(week) && week >= 1 && week <= Math.min(league.week, REGULAR_WEEKS);
   return tracked.every(team => {
@@ -1112,7 +1118,6 @@ export function validNflInjuredReserve(league: LeagueState): boolean {
     if (team.rosterDepth !== 2 || !Array.isArray(entries) || !entries.length
       || entries.length > team.players.length + NFL_IR_TEAM_RETURNS) return false;
     const last = new Map<string, NflInjuredReserveEntry>();
-    const returns = new Map<string, number>();
     let returned = 0, latestPlacement = 0;
     return entries.every(entry => {
       if (!entry || typeof entry.playerId !== 'string' || !known.has(entry.playerId) || !weekInSeason(entry.placedWeek)

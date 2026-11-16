@@ -12,9 +12,9 @@ import type { TradePackage } from '@/lib/gmTradePackage';
 
 const teamId = 'DET';
 
-function play(league: LeagueState, rng: () => number) {
+function play(league: LeagueState, rng: () => number, club = teamId) {
   const games = league.schedule[league.week - 1];
-  const index = games.findIndex(game => game.home === teamId || game.away === teamId);
+  const index = games.findIndex(game => game.home === club || game.away === club);
   expect(index).toBeGreaterThanOrEqual(0);
   games[index] = simGame(games[index], league.teams, rng);
   league.week++;
@@ -156,23 +156,35 @@ describe('NFL Front Office Reserve/Injured', () => {
     expect(validNflInjuredReserve(league)).toBe(true);
   });
 
-  it('limits a player to two regular-season returns in independent injury spells', () => {
+  it('limits a player to two regular-season returns after a trade to a different club', () => {
     const { league, team, goff, rng } = injuredDetroit();
-    for (let designation = 0; designation < 3; designation++) {
+    for (let designation = 0; designation < 2; designation++) {
       goff.out = 4;
       expect(placeOnInjuredReserve(league, teamId, goff.id)).toBe(true);
       for (let count = 0; count < 4; count++) {
         injuryPass({ DET: team }, () => 0.5);
         play(league, rng);
       }
-      if (designation < 2) {
-        expect(activateFromInjuredReserve(league, teamId, goff.id)).toBe(true);
-        play(league, rng);
-      }
+      expect(activateFromInjuredReserve(league, teamId, goff.id)).toBe(true);
+      play(league, rng);
+    }
+    const partner = Object.values(league.teams)
+      .find(club => club.abbr !== teamId && capRoom(club, league.cap) >= goff.salary)!;
+    const incoming = partner.players.find(player => player.salary <= capRoom(team, league.cap))!;
+    expect(executeTalksTrade(team, partner, goff.id, incoming.id, false, league.cap)).toBe('done');
+    expect(partner.players.find(player => player.id === goff.id)).toBe(goff);
+    goff.out = 4;
+    expect(placeOnInjuredReserve(league, partner.abbr, goff.id)).toBe(true);
+    for (let count = 0; count < 4; count++) {
+      injuryPass({ [partner.abbr]: partner }, () => 0.5);
+      play(league, rng, partner.abbr);
     }
     expect(league.week).toBe(16);
-    expect(injuredReserveActivationRefusal(league, team, goff.id)).toMatch(/used both injury returns/);
-    expect(activateFromInjuredReserve(league, teamId, goff.id)).toBe(false);
+    expect(injuredReserveActivationRefusal(league, partner, goff.id)).toMatch(/used both injury returns/);
+    expect(activateFromInjuredReserve(league, partner.abbr, goff.id)).toBe(false);
     expect(validNflInjuredReserve(league)).toBe(true);
+    const forged = JSON.parse(JSON.stringify(league)) as LeagueState;
+    forged.teams[partner.abbr].injuredReserve![0].returnedWeek = league.week;
+    expect(validNflInjuredReserve(forged)).toBe(false);
   });
 });
