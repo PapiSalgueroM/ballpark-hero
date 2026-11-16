@@ -77,7 +77,7 @@ export const NBA_CAREER_SPORT: UsCareerSport<NbaCareerState, NbaSeasonLine> = wi
   /* Round 182: the rotation is set the night you arrive. */
   assignRole: nbaAssignRole,
   campBattle: nbaCampBattle,
-  tradeRequest: { available: nbaTradeRequestAvailable, receipt: nbaTradeRequestReceipt, destinations: nbaTradeDestinations, settle: settleNbaTradeRequest },
+  tradeRequest: { allowRelease: true, available: nbaTradeRequestAvailable, receipt: nbaTradeRequestReceipt, destinations: nbaTradeDestinations, settle: settleNbaTradeRequest },
   rosterPriority: { boost: nbaRosterPriorityBoost, receipt: nbaRosterPriority, request: requestNbaRosterPriority, cancel: clearNbaRosterPriority },
   restPlan: {
     available: nbaRestPlanAvailable,

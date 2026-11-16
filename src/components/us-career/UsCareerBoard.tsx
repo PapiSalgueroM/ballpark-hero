@@ -1033,7 +1033,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
 
   const requestTrade = (kind: 'trade' | 'release', preferredTeam?: string) => {
     const trade = sport.tradeRequest;
-    if (!career || !trade || phase !== 'season' || teamQuality == null || practiceOpen || pendingSave.current
+    if (!career || !trade || (kind === 'release' && !trade.allowRelease) || phase !== 'season' || teamQuality == null || practiceOpen || pendingSave.current
       || marketRef.current || !trade.available(career) || trade.receipt(career) || teamPlanSaveChanged(true)) return;
     const next: CareerState = JSON.parse(JSON.stringify(career));
     const settled = trade.settle(next, kind, preferredTeam);
@@ -2056,15 +2056,15 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
           </p>
           {(tradeReceipt || trade?.available(career)) && <div className="mt-2">
             <div className="flex flex-wrap justify-center gap-2">
-              <USCareerActionConfirm action="tradeRequest" sport={sport.label} tradeDestinations={trade?.destinations(career)}
+              <USCareerActionConfirm action="tradeRequest" sport={sport.label} tradeDestinations={trade?.destinations(career)} tradeOnly={!trade?.allowRelease}
                 onConfirm={team => requestTrade('trade', team)}>
                 <button type="button" disabled={!!tradeReceipt || !!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
                   className="min-h-11 rounded-lg border border-border px-3 text-xs font-semibold disabled:opacity-50">Request a trade</button>
               </USCareerActionConfirm>
-              <USCareerActionConfirm action="releaseRequest" sport={sport.label} onConfirm={() => requestTrade('release')}>
+              {trade?.allowRelease && <USCareerActionConfirm action="releaseRequest" sport={sport.label} onConfirm={() => requestTrade('release')}>
                 <button type="button" disabled={!!tradeReceipt || !!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
                   className="min-h-11 rounded-lg border border-border px-3 text-xs font-semibold disabled:opacity-50">Request a release</button>
-              </USCareerActionConfirm>
+              </USCareerActionConfirm>}
             </div>
             {tradeReceipt && <p className="mt-1 text-xs font-semibold" role="status">{tradeReceipt}</p>}
           </div>}

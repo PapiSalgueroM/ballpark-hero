@@ -67,10 +67,14 @@
    file): the catalog below is functions, and they run at draw time.
 */
 import type { NhlCareerState, NhlCareerEvent } from './nhlMyCareer';
-import { nhlTeamLabelOf, nhlEraById, nhlEraTeamIds } from './nhlMyCareer';
+import { nhlTeamLabelOf, nhlEraById, nhlEraTeamIds, nhlFaPushArgs, nhlRollTeamQuality } from './nhlMyCareer';
 import { nhlWaiverExempt, nhlWaiverRequired } from './nhlCareerWaivers';
-import { applyDeckCFx, buildDeckCCard, deckCChip, dealDeckC } from './usCareerDeckC';
+import { applyDeckCFx, buildDeckCCard, deckCChip, deckCOption, dealDeckC } from './usCareerDeckC';
 import type { DeckCDef, DeckCFx, DeckCOptionDef, DeckCSport } from './usCareerDeckC';
+import { isFarewellSeason } from './careerRetirement';
+import { keyedRng } from './keyedRng';
+import { faLeverage } from './usCareerFreeAgency';
+import { summerCareerKey } from './usCareerSummer';
 
 /* Round 988: the machinery (the clamps, the era money, the gamble, the
    trade and the claim, the words) is the shared engine in usCareerDeckC.ts.
@@ -96,6 +100,62 @@ const NHL_DECK_C: DeckCSport<NhlCareerState> = {
   teamIds: c => nhlEraTeamIds(c.eraId),
   teamLabel: (id, c) => nhlTeamLabelOf(id, c.eraId),
 };
+
+const tradeRequestOption = {
+  label: 'Ask your agent to request a trade',
+  p: 0.5,
+  win: { say: 'The front office granted your trade request.', fx: {}, move: 'trade' },
+  lose: { say: 'The front office declined your trade request.', fx: { morale: -4 } },
+} satisfies NhlLifeCOptionDef;
+
+export function nhlTradeRequestAvailable(c: NhlCareerState): boolean {
+  return c.seasons.length > 0 && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0)
+    && !isFarewellSeason(c.retirement, c.year) && nhlEraTeamIds(c.eraId).includes(c.team);
+}
+
+export function nhlTradeRequestReceipt(c: NhlCareerState): string | null {
+  const receipt = c.tradeRequest;
+  if (!receipt || receipt.year !== c.year) return null;
+  const teams = nhlEraTeamIds(c.eraId);
+  if (!teams.includes(receipt.from)) return null;
+  if (receipt.to === null) {
+    const requested = receipt.requestedTeam && receipt.requestedTeam !== receipt.from && teams.includes(receipt.requestedTeam)
+      ? ' to ' + nhlTeamLabelOf(receipt.requestedTeam, c.eraId) : '';
+    return 'Trade request' + requested + ' declined. You stayed with ' + nhlTeamLabelOf(receipt.from, c.eraId) + '.';
+  }
+  if (!teams.includes(receipt.to) || receipt.to === receipt.from) return null;
+  return 'Trade request granted. Traded to ' + nhlTeamLabelOf(receipt.to, c.eraId) + ' on the same contract.';
+}
+
+export function nhlTradeDestinations(c: NhlCareerState) {
+  if (!nhlTradeRequestAvailable(c) || nhlTradeRequestReceipt(c)) return [];
+  const chance = Math.round(tradeRequestOption.p * faLeverage(nhlFaPushArgs(c)) * 100);
+  return nhlEraTeamIds(c.eraId).filter(id => id !== c.team).map(id => ({
+    id,
+    label: nhlTeamLabelOf(id, c.eraId),
+    chance,
+    quality: nhlRollTeamQuality(null, keyedRng('nhl-trade-roster:' + summerCareerKey(c) + ':' + c.year + ':' + id)),
+  }));
+}
+
+export function settleNhlTradeRequest(c: NhlCareerState, kind: 'trade' | 'release', preferredTeam?: string) {
+  if (kind !== 'trade' || !nhlTradeRequestAvailable(c) || nhlTradeRequestReceipt(c)) return null;
+  const destination = preferredTeam === undefined ? undefined : nhlTradeDestinations(c).find(team => team.id === preferredTeam);
+  if (preferredTeam !== undefined && !destination) return null;
+  const rng = keyedRng('nhl-trade-request:' + summerCareerKey(c) + ':' + c.year);
+  const from = c.team;
+  const deck = destination ? { ...NHL_DECK_C, teamIds: () => [destination.id] } : NHL_DECK_C;
+  const option = destination ? {
+    ...tradeRequestOption,
+    p: destination.chance / 100,
+    lose: { ...tradeRequestOption.lose, say: 'The deal with ' + destination.label + ' fell through.' },
+  } : tradeRequestOption;
+  const note = deckCOption(deck, option, c).apply(c, rng);
+  const moved = c.team !== from;
+  if (moved && c.goalieTandem?.team === from) delete c.goalieTandem;
+  c.tradeRequest = { year: c.year, from, to: moved ? c.team : null, ...(destination && { requestedTeam: destination.id }) };
+  return { teamQuality: moved ? destination?.quality ?? nhlRollTeamQuality(null, rng) : null, note, freeAgency: false };
+}
 
 const flagOf = (c: NhlCareerState, k: string): number => (c.lifeFlags || {})[k] || 0;
 const isModern = (c: NhlCareerState): boolean => nhlEraById(c.eraId).id === 'now';

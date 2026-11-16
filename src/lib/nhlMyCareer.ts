@@ -186,6 +186,9 @@ export interface NhlCareerState {
       first choice, byte for byte unchanged. */
   role?: 'starter' | 'backup';
   goalieTandem?: { year: number; team: string };
+  summerSalt?: string;
+  retirement?: import('./careerRetirement').RetirementBlock;
+  tradeRequest?: { year: number; from: string; to: string | null; requestedTeam?: string };
   /** Round 470: the savings account, the market and the statement, on the
       same engine as Soccer Career's. Absent on a pre-470 save and repaired
       lazily by ensureNhlMoney, so an old save opens on every screen with its
