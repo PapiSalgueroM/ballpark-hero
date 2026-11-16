@@ -11,7 +11,7 @@ import {
   isNrlNamedPlayer,
   nrlAcademyAvailableRoles, nrlAcademyCarryOptions, nrlAcademyCrossTrainingQuote, nrlAcademyCrossTrainingSpend, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyParallelQuote, nrlAcademyParallelSpend, nrlAcademyReleaseAvailable, nrlAcademyReports,
   nrlAwayRecoverySpend, nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
-  nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
+  nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad, nrlCaretakerOpenings, nrlCoachingRecord,
   nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractApproachPreview, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer,
   nrlContractDepartureCapGain, nrlContractSwapOptions, nrlContractSwapPlayers, nrlContractTermLimit,
   nrlCoachCourseQuote, nrlCoachCourseSpend, nrlCoachQuote, nrlCoachReassignmentQuote, nrlCoachReassignmentSpend, nrlCoachRetentionQuote, nrlCoachSpend, nrlCoachTactics,
@@ -37,7 +37,7 @@ import {
   type NrlAcademyPriority, type NrlAcademyReport, type NrlDevelopmentFocus, type NrlMedicalLevel, type NrlRecruitmentPick, type NrlSponsorOffer, type NrlStaffRole, type NrlTicketTier,
 } from '@/lib/nrlCareer';
 import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryPenalty } from '@/lib/nrlJudiciary';
-import { nrlArchivedFinals, nrlUnavailable, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_QUALIFIED_COACHING_BONUS, NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
+import { nrlArchivedFinals, nrlLadder, nrlUnavailable, NRL_COACHING_BONUS, NRL_FINALS_ROUND_TITLES, NRL_QUALIFIED_COACHING_BONUS, NRL_ROLES, type NrlRole } from '@/lib/nrlManager';
 import {
   archiveNrlPlayerSeasons, archiveNrlScoring, nrlArchivedPlayerSeason, nrlArchivedScoringLeaders,
   nrlScorePoints, nrlTryLeaders, type NrlScoringLeader,
@@ -1299,7 +1299,8 @@ function MedicalFacilities({ career, onAction, disabled }: { career: NrlCareerSt
           <p className="text-sm font-semibold">{medicalLabels[nextLevel]}</p>
           <p className="mt-1 text-sm text-muted-foreground">{effect(nextLevel)}</p>
           <Button type="button" size="lg" className="mt-2 w-full px-3 sm:w-auto" disabled={disabled || reason !== null}
-            onClick={() => onAction({ type: 'upgradeMedical', level: nextLevel })}>
+            onClick={() => onAction({ type: 'upgradeMedical', level: nextLevel,
+              year: career.season.year, clubId: career.season.clubId, round: career.season.round })}>
             Upgrade for {money(cost)}
           </Button>
           <p className="mt-1 text-sm text-muted-foreground">One-time charge from club cash.</p>
@@ -1475,9 +1476,7 @@ function CoachingStaff({ career, onAction, disabled }: { career: NrlCareerState;
                   <p className="mt-1 text-muted-foreground">{coachEffect(candidate.role)}</p>
                   <Button type="button" size="lg" variant="outline" className="mt-2 w-full px-3"
                     disabled={disabled || reason !== null || (candidate.role === 'development' && developmentReason !== null)}
-                    onClick={() => onAction(candidate.role === 'development'
-                      ? { type: 'hireCoach', role: candidate.role, year, clubId, round }
-                      : { type: 'hireCoach', role: candidate.role, year, round })}>
+                    onClick={() => onAction({ type: 'hireCoach', role: candidate.role, year, clubId, round })}>
                     Hire {coachLabels[candidate.role].toLowerCase()}
                   </Button>
                   {!reason && candidate.role === 'development' && developmentReason && <p className="mt-1 text-muted-foreground">{developmentReason}</p>}
@@ -1769,7 +1768,10 @@ function Finances({ career, onAction, disabled }: { career: NrlCareerState; onAc
           <h3 className="font-bold">{year} club accounts</h3>
           {hasAccounts ? (
             <>
-              {cash.fromRound > 1 && <p className="mt-2 text-sm text-muted-foreground">This save began tracking finances in round {cash.fromRound}.</p>}
+              {cash.fromRound > 1 && <p className="mt-2 text-sm text-muted-foreground">
+                {career.season.caretaker ? <>Your accounts for this club start in Round {cash.fromRound}.</>
+                  : <>This save began tracking finances in round {cash.fromRound}.</>}
+              </p>}
               <MoneyRows entries={[
                 ['Opening cash', cash.openingCash], ['Central funding', cash.centralFunding],
                 ['Gate receipts', cash.gateReceipts],
@@ -2338,6 +2340,56 @@ function OffseasonFreeAgents({ career, checked, onChange, disabled, primaryRole,
   );
 }
 
+const recordLine = ({ wins, draws, losses }: ReturnType<typeof nrlCoachingRecord>) => `${wins} wins · ${draws} draws · ${losses} losses`;
+
+export function NrlCaretakerOffice({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
+  const clubName = useNrlClubName('full');
+  const [review, setReview] = useState<Extract<NrlCareerAction, { type: 'acceptCaretakerJob' }> | null>(null);
+  const { season, caretakerDeparture: former } = career;
+  const { year, clubId, round, caretaker } = season;
+  if (caretaker && former) return (
+    <section aria-label="Caretaker appointment" className="space-y-1 rounded-xl border border-border bg-card p-3 text-sm">
+      <h2 className="font-display text-lg font-bold">Caretaker appointment</h2>
+      <p>{clubName(year, clubId)} · Round {caretaker.round} onward · {recordLine(nrlCoachingRecord(season))}</p>
+      <p className="text-muted-foreground">
+        {clubName(year, former.clubId)} · Rounds 1–{caretaker.round - 1} · {recordLine(former)} · Closing cash {money(former.finance.cash)}
+      </p>
+    </section>
+  );
+  const openings = nrlCaretakerOpenings(career);
+  if (!openings.length) return null;
+  const selected = review?.year === year && review.clubId === clubId && review.round === round
+    ? openings.find(job => job.clubId === review.destinationId) : undefined;
+  const ladder = nrlLadder(season);
+  return (
+    <section aria-label="Caretaker vacancies" className="space-y-2 rounded-xl border border-border bg-card p-3">
+      <h2 className="font-display text-lg font-bold">Caretaker vacancies</h2>
+      {selected && review ? <div className="space-y-2 text-sm">
+        <p className="font-semibold">Leave {clubName(year, clubId)} for {clubName(year, selected.clubId)}?</p>
+        <p>The appointment starts in Round {round}. Every played match and signed contract stays in this league.</p>
+        <div className="flex flex-wrap gap-2">
+          <Button className="min-h-11" variant="outline" onClick={() => setReview(null)}>Back to vacancies</Button>
+          <Button className="min-h-11" disabled={disabled} onClick={() => { if (onAction(review)) setReview(null); }}>Accept caretaker job</Button>
+        </div>
+      </div> : <ul className="divide-y divide-border">
+        {openings.map(job => {
+          const row = ladder.find(team => team.clubId === job.clubId)!;
+          return <li key={job.clubId} className="flex flex-wrap items-center justify-between gap-2 py-2">
+            <div className="text-sm">
+              <p className="font-semibold">{clubName(year, job.clubId)}</p>
+              <p className="text-muted-foreground">Ladder place {ladder.indexOf(row) + 1} · {recordLine(row)}</p>
+            </div>
+            <Button className="min-h-11 h-auto whitespace-normal" variant="outline" disabled={disabled}
+              onClick={() => setReview({ type: 'acceptCaretakerJob', year, round, clubId, destinationId: job.clubId })}>
+              Review {clubName(year, job.clubId)} job
+            </Button>
+          </li>;
+        })}
+      </ul>}
+    </section>
+  );
+}
+
 function History({ career, onAction, disabled }: { career: NrlCareerState; onAction: Dispatch; disabled: boolean }) {
   const labelForClub = useNrlClubName();
   const clubName = useNrlClubName('full');
@@ -2689,6 +2741,13 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
               <li key={record.year} className="space-y-1 py-3">
                 <p className="font-bold">{record.year} {labelForClub(record.year, record.clubId)}</p>
                 <p className="text-sm text-muted-foreground">Ladder place {record.rank} · {record.wins} wins · {record.draws} draws · {record.losses} losses</p>
+                {record.caretaker && <div className="rounded-lg border border-border p-2 text-sm">
+                  <p className="font-semibold">Coaching stints</p>
+                  <p>{clubName(record.year, record.caretaker.former.clubId)} · Rounds 1–{record.caretaker.round - 1}
+                    {' '}· {recordLine(record.caretaker.former)} · Closing cash {money(record.caretaker.former.finance.cash)}</p>
+                  <p>{clubName(record.year, record.clubId)} · Round {record.caretaker.round} onward
+                    {' '}· {recordLine(record.caretaker.incoming)}{record.finance && <> · Closing cash {money(record.finance.cash)}</>}</p>
+                </div>}
                 {record.appointment && (
                   <p className="text-sm text-muted-foreground">Accepted the {labelForClub(record.year + 1, record.appointment.clubId)} job for {record.year + 1}</p>
                 )}

@@ -1,4 +1,16 @@
+## 2026-11-16 — NRL caretaker jobs and faster Career Logs
+
+- In new NRL Team Manager careers, Club Office can offer one eligible midseason appointment per year. The tested Round 14 move from Storm to Dragons kept all 98 league results, the full ladder and 510 signed senior contracts. Both phone sizes loaded the same Bulldogs fixture after reload, blocked the stale tab and played the remaining 18 rounds. The season review kept separate records and finances for the two clubs. Six seeded careers completed 12 moves over 2026 and 2027 and passed 396 save and reload checks.
+- The first Career Log visit on NBA, NFL and NHL My Career now opens with one JavaScript request in the built browser comparison. Each stopped downloading the 66,306-byte Brotli MLB pitching asset. The MLB Career Log still shows the relevant pitching notes and 2020 held-season explanation after reload, with identical save bytes.
+
+The integrated candidate passed 85 tests across nine suites, a production build, both native NRL cases and the cold-browser comparison across four sports. The NRL guide was refreshed on the published route and in the game dialog. The regenerated search index, all 183 static page boot tags, all 16 download budgets and the 174-route sitemap checks passed. The Career Log harness registers all 24 cases and rejects a copied fault that passes the wrong pitching position.
+
+
 ## 2026-11-16 — Halftime cover, requested trades and season tickets
+
+[PR #1011](https://github.com/PapiSalgueroM/ballpark-hero/pull/1011) published exact main `70d33aca87686d14490fa09a3f9bad93a159211d`, deployment `5447853f-b076-431b-afac-d11d9f86bea7` and canonical entry `/assets/index-gc9ukfBs.js`. The squash tree matched tested head `8f98ce35b`. All 17 live browser profiles, 20 pinned endpoints and 174 sitemap routes passed. IndexNow accepted all three updated game guides.
+
+Hosted application types, production builds and Career entry guide verification passed. All 110 integrated focused tests passed. The broader hosted Stadium ticket workflow reported a copied-test failure. The focused Stadium run passed in both play modes, and its Standard, concessions and payroll fault copies reached their intended assertions.
 
 - NRL Team Manager lets a manager cover a first-half injury with a legal named reserve in new regular seasons. The saves record who came off and who took the reserve place. Quick Sim matched Live using the same default cover. Both phone widths also allowed a different legal fourth reserve and stopped the injured starter from returning.
 - NBA My Career can name an era-eligible trade destination in the existing annual request. The confirmation shows approval odds and destination roster quality. The browser saved the signed terms and the selected franchise after two approvals, and preserved one refusal across a stale tab.

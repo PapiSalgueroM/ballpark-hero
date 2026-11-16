@@ -6,7 +6,7 @@ import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { RulesGate } from '@/components/game/RulesGate';
 import NrlBoardChallengeNotice from '@/components/nrl-manager/NrlBoardChallengeNotice';
-import NrlCareerOffice from '@/components/nrl-manager/NrlCareerOffice';
+import NrlCareerOffice, { NrlCaretakerOffice } from '@/components/nrl-manager/NrlCareerOffice';
 import NrlOriginOffice from '@/components/nrl-manager/NrlOriginOffice';
 import NrlJudiciaryReview from '@/components/nrl-manager/NrlJudiciaryReview';
 import NrlCareerSlots from '@/components/nrl-manager/NrlCareerSlots';
@@ -2983,8 +2983,12 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
       setShowLiveResult(true);
     }
     const newSeason = next.season.year !== before.season.year;
-    if (action.type === 'advance' || newSeason) setShowLiveResult(false);
-    if (newSeason) setPanel('match');
+    const newClub = next.season.clubId !== before.season.clubId;
+    if (action.type === 'advance' || newSeason || newClub) setShowLiveResult(false);
+    if (newSeason || newClub) {
+      setFixtureClub(undefined);
+      setPanel('match');
+    }
     return true;
   }
 
@@ -3099,6 +3103,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>After the Grand Final, release one unsigned academy prospect into next season’s free-agent market or promote him to your own Top 30.</li>
               <li>Choose a Board pathways objective before Round 1. Three young players need four appearances each for $200,000, or two need six each for $225,000. Pathways run-in shows who can reach your target.</li>
               <li>When you stay at the club, a returning starter can keep a position they learned in training.</li>
+              <li>In new careers, check Caretaker vacancies in Club Office from Round 14. You can take one eligible job per season and start at the new club’s current ladder position. Played results and signed contracts stay in the league, and Season review shows your record at each club.</li>
               <li>Change clubs between seasons from Season review.</li>
               <li>When staying at your club, select Keep saved lineups in Season review to carry your presets forward. Apply a saved lineup in Squad.</li>
               <li>In Saved lineup, save a match plan to keep the team's attack and last-tackle kicks with its selection. Preview the slot and apply the plan for your next match.</li>
@@ -3179,6 +3184,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
                       aria-pressed={office === id} onClick={() => { setOpenShortlist(false); setOffice(id); }}>{label}</Button>
                   ))}
                 </div>
+                <NrlCaretakerOffice key={season.clubId} career={career} disabled={rosterLocked} onAction={dispatch} />
                 <NrlOriginOffice career={career} disabled={rosterLocked} onAction={dispatch} />
                 {(career.worldCup || nrlWorldCupAppointmentAvailable(career)) && <div className="space-y-2 rounded-xl border border-border bg-card p-3">
                   <h2 className="font-display text-lg font-bold">National appointment</h2>

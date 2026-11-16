@@ -57,6 +57,40 @@ function leave() {
 }
 
 describe('NRL between clubs in a saved career', () => {
+  it('confirms a same-season job in the Club office and reloads the new club’s actual fixture and finances', () => {
+    let career = createNrlCareer('storm', 3, 2026, true);
+    career = reduceNrlCareer(career, { type: 'signSponsor', year: 2026, clubId: 'storm', offer: 'twoSeason' });
+    while (career.season.round < 14) career = reduceNrlCareer(career, { type: 'advance' });
+    localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(career));
+    const first = open();
+    click('Club office');
+    const jobs = within(screen.getByRole('region', { name: 'Caretaker vacancies' }));
+    fireEvent.click(jobs.getByRole('button', { name: 'Review St George Illawarra Dragons job' }));
+    expect(saved()).toEqual(career);
+    expect(jobs.getByText('The appointment starts in Round 14. Every played match and signed contract stays in this league.')).toBeVisible();
+    fireEvent.click(jobs.getByRole('button', { name: 'Accept caretaker job' }));
+    expect(saved()?.season).toMatchObject({ year: 2026, round: 14, clubId: 'dragons' });
+    expect(screen.getByRole('button', { name: 'Match centre' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getAllByText(/bulldogs/i).length).toBeGreaterThan(0);
+    first.unmount();
+    const resumed = open();
+    expect(saved()?.season).toMatchObject({ year: 2026, round: 14, clubId: 'dragons' });
+    click('Club office');
+    expect(screen.getByRole('region', { name: 'Caretaker appointment' })).toHaveTextContent('Melbourne Storm');
+    expect(screen.getByRole('region', { name: 'Caretaker appointment' })).toHaveTextContent('8 wins · 0 draws · 4 losses');
+    expect(screen.queryByRole('region', { name: 'Caretaker vacancies' })).toBeNull();
+    click('Finances');
+    expect(screen.getByText('Your accounts for this club start in Round 14.')).toBeVisible();
+    const finished = finish(saved()!);
+    resumed.unmount();
+    localStorage.setItem(NRL_SAVE_KEY, JSON.stringify(finished));
+    open();
+    review();
+    const stints = screen.getByText('Coaching stints').parentElement!;
+    expect(stints).toHaveTextContent('Melbourne Storm · Rounds 1–13 · 8 wins · 0 draws · 4 losses · Closing cash $3,610,620');
+    expect(stints).toHaveTextContent('St George Illawarra Dragons · Round 14 onward');
+  });
+
   it('explains the two board misses and takes the confirmed departure through the settled job market', () => {
     const ended = boardDecision();
     const before = JSON.stringify(ended);
