@@ -1,3 +1,11 @@
+## 2026-11-16 — NRL league player scores and scouting
+
+- Season fixtures shows both starting 13s and each side’s scoring in settled league matches. The 50–8 Storm–Knights fixture recorded 26 starters and every try and kick. Scouting and the ladder show named starts and tries. The latest completed season stays available after rollover, and the report identifies which seasons have player scores.
+- The book keeps the league together across a caretaker move. Both phone widths preserved 98 prior results and archived the same 213-match season. An older save kept its original Storm–Sharks score and recorded named players in seven fixtures on its first round of 2027. New careers record from their first match.
+
+The 64 focused tests, scoped application typecheck, production build, three browser cases, search and static guide checks, and all 16 download budgets passed. The five-season test verified 162 exact save reloads and matched the pre-change 2026 results and finances. The largest save was 446,562 characters against the 1,000,000 limit.
+
+
 ## 2026-11-16 — One-tap Club Manager resume and MLB Triple-A options
 
 - Home opens the active Club Manager save from the flagship in one tap. Both phone widths reopened Everton with the same save bytes. The explicit link opened parked Lincoln City and the bare Club Manager route showed the chooser. An invalid active index preserved all three slots and returned to the chooser.
