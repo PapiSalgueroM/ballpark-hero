@@ -17,7 +17,7 @@ import {
   type MlbLeague, type MlbProspect, type MlbSeriesResult, type MlbRotationReceipt, mlbExecuteTalksTrade,
   ensureMlbLeagueIds, mlbRosterMin, mlbRosterMax, mlbSimReads, isPitcher, mlbOverLimit, mlbSalaryFor,
   type MlbGmPlayer,
-  mlbDraftCapital, mlbConsumeDraftPick, mlbAiDraftPicks,
+  mlbDraftCapital, mlbConsumeDraftPick, mlbAiDraftPicks, mlbActivePlayers, mlbIsInTripleA, mlbFarmChoice, mlbMoveFarmPlayer,
 } from '@/lib/mlbFrontOffice';
 import { appendFoRoundHistory, foCompletedRounds, foRatingChanges, readFoRoundHistory, type FoRoundHistory } from '@/lib/foRoundHistory';
 import { FoRoundResults } from '@/components/front-office-shared/FoRoundResults';
@@ -63,7 +63,7 @@ import { GmDeskMount } from '@/components/front-office-shared/GmDeskMount';
 import { type GmDesk, gmPanelFor, readGmDesk } from '@/lib/gmDesk';
 import { gmStaffLevel } from '@/lib/gmStaff';
 import {
-  MLB_NO_PICK_TRADES, mlbDeadlineRefusal, mlbDeskAfterRound, mlbDeskEdges, mlbDeskFinderTrade, mlbDeskOffseason,
+  MLB_NO_PICK_TRADES, mlbContractsOf, mlbDeadlineRefusal, mlbDeskAfterRound, mlbDeskEdges, mlbDeskFinderTrade, mlbDeskOffseason,
   mlbDeskRoundOptions, mlbNoteArrivals, mlbPicksOf, mlbScoutRead, mlbStaffOf, mlbTradeWindow, openMlbDesk, syncMlbPicks,
 } from '@/lib/mlbGmDesk';
 import { MLB_DESK_PANELS, MLB_RECAP_PANELS, MlbDeskHelp, type MlbDeskFacts } from '@/components/mlb-front-office/MlbGmDesk';
@@ -186,6 +186,7 @@ export default function MlbFrontOfficeBoard() {
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<MlbLeague | null>(null);
   const [rotationSaveError, setRotationSaveError] = useState(false);
+  const [farmSaveError, setFarmSaveError] = useState(false);
   const [developmentSaveError, setDevelopmentSaveError] = useState(false);
   const [octoberSaveError, setOctoberSaveError] = useState(false);
   const [octoberUnavailable, setOctoberUnavailable] = useState(false);
@@ -419,8 +420,7 @@ export default function MlbFrontOfficeBoard() {
        already has one is a closed season being clicked again, and the answer
        is to do nothing rather than play an extra round. */
     if (league.champions.some(c => c.season === league.season)) return;
-    /* Round 829 review: a full roster club the draft took past 28 DFAs down
-       before it plays, through the same two tap DFA as any other cut. */
+    // Finish the cut-down before starting the regular season.
     if (mlbOverLimit(my) > 0) return;
     setRotationSaveError(false);
     setDevelopmentSaveError(false);
@@ -537,6 +537,7 @@ export default function MlbFrontOfficeBoard() {
     if (!mlbConsumeDraftPick(mine)) return;
     draftAction.current = true;
     const drafted = mlbProspectToPlayer(pr, Math.random);
+    if (lg.teams[myTeam].depth) drafted.draftedBy = { team: myTeam, season: lg.season };
     lg.teams[myTeam].players.push(drafted);
     /* Round 1020: the re-sign desk learns he is a draft pick, so his club
        control is counted from tonight. */
@@ -598,7 +599,7 @@ export default function MlbFrontOfficeBoard() {
       setMandate(m);
       const over = mlbOverLimit(lg.teams[myTeam]);
       setFeed([
-        ...(over > 0 ? [`✂️ You are carrying ${lg.teams[myTeam].players.length}, ${over} over the limit of ${mlbRosterMax(lg.teams[myTeam])}. DFA ${over === 1 ? 'one man' : `${over} men`} on the roster box before Round 1.`] : []),
+        ...(over > 0 ? [`✂️ You are carrying ${mlbActivePlayers(lg.teams[myTeam]).length} active players, ${over} over the limit of ${mlbRosterMax(lg.teams[myTeam])}. Use Roster to option eligible prospects to Triple-A or DFA down before Round 1.`] : []),
         `🏛️ The new mandate: ${m.text}`,
         ...(draftNote ? [draftNote] : []),
         ...(pressTilt === 1 ? ['🎙️ Your season-end answer raised the bar upstairs.']
@@ -652,6 +653,24 @@ export default function MlbFrontOfficeBoard() {
     setTab(null);
   };
 
+  const draftArrivals = league && gm && tab === 'team' ? mlbContractsOf(gm, league, myTeam).men : undefined;
+  const rookieRights = (player: MlbGmPlayer) => {
+    const arrival = draftArrivals?.[player.id];
+    return player.draftedBy ?? (arrival?.how === 'draft' ? { team: myTeam, season: arrival.since } : undefined);
+  };
+
+  const doFarmMove = (pid: string, move: 'option' | 'recall') => {
+    if (!league || phase !== 'hub') return;
+    const lg = structuredClone(league);
+    const player = lg.teams[myTeam].players.find(p => p.id === pid);
+    if (!player) return;
+    player.draftedBy = rookieRights(player);
+    if (!mlbMoveFarmPlayer(lg, myTeam, pid, move)) return;
+    const saved = persist({}, lg, myTeam);
+    setFarmSaveError(!saved);
+    if (saved) { setCutArmed(null); setLeague(lg); }
+  };
+
   const doRelease = (pid: string) => {
     if (!league) return;
     setCutArmed(null);
@@ -679,14 +698,15 @@ export default function MlbFrontOfficeBoard() {
     if (!league) return null;
     const mySide = league.teams[myTeam];
     const their = league.teams[partner];
-    const mine = mySide.players.find(p => p.id === myPieceId);
-    const want = their.players.find(p => p.id === wantId);
+    const theirRoster = mlbActivePlayers(their);
+    const mine = mlbActivePlayers(mySide).find(p => p.id === myPieceId);
+    const want = theirRoster.find(p => p.id === wantId);
     if (!mine || !want) return null;
     return {
-      mine, want, theirRoster: their.players,
+      mine, want, theirRoster,
       /* Round 1020: with the desk on, MLB's own rule: no pick goes into a deal. */
       myPickCount: gm ? 0 : mySide.picks.length, pickValue: 13, value: mlbTradeValue,
-      theirCoverAtMyPos: their.players.filter(p => p.pos === mine.pos && p.ovr >= mine.ovr - 2).length,
+      theirCoverAtMyPos: theirRoster.filter(p => p.pos === mine.pos && p.ovr >= mine.ovr - 2).length,
       openPremium: 1.07,
     };
   };
@@ -873,8 +893,10 @@ export default function MlbFrontOfficeBoard() {
      re-sign desk too. */
   const myLeagueName = AL.includes(myTeam) ? 'AL' : 'NL';
   const confTable = mlbStandings(league, AL.includes(myTeam) ? AL : NL);
+  const active = mlbActivePlayers(my);
+  const farmCount = my.players.length - active.length;
   const hubFacts: MlbDeskFacts['hub'] = {
-    roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    roster: active.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
     freeAgents: league.freeAgents.map(p => ({ id: p.id, name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
     capRoom: room,
     /* Round 631: the box offers only men the sign path would take. */
@@ -1023,7 +1045,7 @@ export default function MlbFrontOfficeBoard() {
             <p className="mt-1 text-xs text-muted-foreground">
               You hold <b className="text-gold">{availablePicks}</b> pick{availablePicks === 1 ? '' : 's'}. {gm ? "Grades are your scouting director's read, and a better one misses by less." : 'Scout grades carry error.'}
               {/* Round 829 review: said before the pick, not after it. */}
-              {my?.depth ? ` The roster limit is ${mlbRosterMax(my)}: if your picks take you over it, you DFA down before Round 1, dead money and all.` : ''}
+              {my?.depth ? ` The roster limit is ${mlbRosterMax(my)}: if your picks take you over it, option eligible picks to Triple-A or DFA down before Round 1.` : ''}
             </p>
           )}
         </div>
@@ -1070,13 +1092,12 @@ export default function MlbFrontOfficeBoard() {
   /* Round 631: dead money on the payroll line, only when there is any. */
   const dead = deadCapUsed(my);
   /* Round 631: at the engine's floor every DFA waits, at its ceiling every Sign does, and both say why. */
-  const cutBlock = cutRefusal(my, mlbRosterMin(my));
-  const fullBlock = rosterFullRefusal(my, mlbRosterMax(my));
-  /* Round 829 review: men to DFA before Play, 0 unless the draft took a full roster club past 28. */
+  const cutBlock = cutRefusal({ players: active }, mlbRosterMin(my));
+  const fullBlock = rosterFullRefusal({ players: active }, mlbRosterMax(my));
   const overLimit = mlbOverLimit(my);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
-  const tradeOwnPlayers = [...my.players].sort((a, b) => b.ovr - a.ovr);
-  const tradePartnerPlayers = tradePartner ? [...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr) : [];
+  const tradeOwnPlayers = [...active].sort((a, b) => b.ovr - a.ovr);
+  const tradePartnerPlayers = tradePartner ? mlbActivePlayers(league.teams[tradePartner]).sort((a, b) => b.ovr - a.ovr) : [];
   const marketPositions = tab === 'market' ? [...new Set(league.freeAgents.map(player => player.pos))].sort() : [];
   const marketNeedle = foldName(marketQuery);
   const marketMatches = tab === 'market' ? league.freeAgents
@@ -1157,7 +1178,7 @@ export default function MlbFrontOfficeBoard() {
           {/* Round 829: who the sim plays is a fact the engine decides, so the
               screen reads it from the engine rather than guessing. */}
           <p className="mb-2 text-center text-[10px] text-muted-foreground" data-roster-count>
-            {my.players.length} on the roster. The usual sim picks are your best healthy 8 bats, 3 starters and 2 relievers.
+            {farmCount > 0 ? `${active.length} active · ${farmCount} in Triple-A` : `${active.length} on the roster`}. The usual sim picks are your best healthy 8 bats, 3 starters and 2 relievers.
           </p>
           {/* Round 829 review: real men on made up money, said where the money
               is shown, and the re-sign jump said before it lands. */}
@@ -1167,9 +1188,10 @@ export default function MlbFrontOfficeBoard() {
           </p>
           {overLimit > 0 && (
             <p data-over-limit className="mb-2 text-center text-[10px] text-destructive">
-              {overLimit} over the limit of {mlbRosterMax(my)}. DFA {overLimit === 1 ? 'one man' : `${overLimit} men`} before Round {league.round}.
+              {overLimit} over the limit of {mlbRosterMax(my)}. Option eligible prospects or DFA down before Round {league.round}.
             </p>
           )}
+          {farmSaveError && <p role="alert" className="mb-2 text-xs text-destructive">Could not save the Triple-A move. Try again.</p>}
           {/* Round 829: 26 men, so three small groups inside the one box. Every
               row is still drawn, and the box scrolls, never the page. */}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
@@ -1187,7 +1209,11 @@ export default function MlbFrontOfficeBoard() {
                 ...[...g.men].sort((a, b) => b.ovr - a.ovr).map(p => {
               /* Round 631: the cost is on screen before the second tap. */
               const cost = deadMoneyFor(p);
-              const arming = cutArmed === p.id;
+              const inFarm = mlbIsInTripleA(p, myTeam);
+              const farmMove = league.round === 1 || inFarm
+                ? mlbFarmChoice(league, myTeam, { ...p, draftedBy: rookieRights(p) }) : null;
+              const recall = p.draftedBy?.team === myTeam ? p.farmAssignment?.recalled : undefined;
+              const arming = !inFarm && cutArmed === p.id;
               return (
               <div key={p.id} data-roster-row={p.id} className="rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
                 <div className="flex items-center justify-between">
@@ -1197,13 +1223,13 @@ export default function MlbFrontOfficeBoard() {
                     {p.pos} · {p.age}y · ${p.salary}M x{p.years}
                     {/* Round 829 review: the jump, on his row, a season before it lands */}
                     {my.depth && p.years === 1 && mlbSalaryFor(p.ovr) > p.salary && <span data-last-year> (last year, his price is ${mlbSalaryFor(p.ovr)}M)</span>}
-                    {' · '}<span data-sim-plays={plays.has(p.id) ? 'yes' : 'no'}>{plays.has(p.id) ? 'plays' : 'depth'}</span>
+                    {' · '}<span data-sim-plays={plays.has(p.id) ? 'yes' : 'no'}>{inFarm ? 'Triple-A' : plays.has(p.id) ? 'plays' : 'depth'}</span>
                     {p.partial && <span data-partial className="text-gold"> · thin 2026 data</span>}
                   </span>
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
                   <b className="text-primary">{p.ovr}</b>
-                  <button
+                  {!inFarm && <button
                     onClick={() => setCutArmed(arming ? null : p.id)}
                     disabled={!!cutBlock}
                     title={cutBlock ?? `Designate him for assignment and $${cost.now}M stays on this season's payroll`}
@@ -1211,9 +1237,28 @@ export default function MlbFrontOfficeBoard() {
                       arming ? 'text-foreground' : 'text-muted-foreground hover:border-destructive hover:text-destructive')}
                   >
                     {arming ? 'Keep' : `DFA, $${cost.now}M dead`}
-                  </button>
+                  </button>}
                 </span>
                 </div>
+                {farmMove && <div className="mt-1.5 flex flex-wrap items-baseline gap-x-2 gap-y-1">
+                  <button
+                    type="button"
+                    className="rounded-full border border-border px-2 py-1 text-[10px] text-foreground disabled:opacity-40"
+                    aria-label={farmMove.move === 'option' ? `Option ${p.name} to Triple-A` : `Recall ${p.name}`}
+                    disabled={!!farmMove.reason}
+                    onClick={() => doFarmMove(p.id, farmMove.move)}
+                  >
+                    {farmMove.move === 'option' ? 'Option to Triple-A' : 'Recall'}
+                  </button>
+                  <span className="text-[10px] text-muted-foreground">
+                    {farmMove.reason ?? (farmMove.move === 'option'
+                      ? `Opens one active spot. His salary stays on payroll. Recall needs an open spot. Wait ${isPitcher(p) ? '3 rounds' : '2 rounds'} or recall early for an injury in his role.`
+                      : farmMove.injured ? `Covers ${farmMove.injured.name} on the IL.` : 'Takes one active roster spot.')}
+                  </span>
+                </div>}
+                {recall && <p className="mt-1 text-[10px] text-muted-foreground">
+                  Recalled in {recall.season}, Round {recall.round}{recall.coverage ? ` to cover ${recall.coverage.name} on the IL` : ''}.
+                </p>}
                 {arming && (
                   <div className="mt-1.5 rounded-lg border border-destructive/50 bg-destructive/10 p-2 space-y-1.5" data-cut-confirm>
                     <p className="text-[10px] text-foreground">
@@ -1336,7 +1381,7 @@ export default function MlbFrontOfficeBoard() {
           </div>
           {/* Round 190: an open call takes over the desk until it ends. */}
           {talks && (() => {
-            const minePiece = my.players.find(p => p.id === talks.myPieceId);
+            const minePiece = active.find(p => p.id === talks.myPieceId);
             return minePiece ? (
               <TradeTalksCard
                 talks={talks.state}
@@ -1446,7 +1491,7 @@ export default function MlbFrontOfficeBoard() {
           </div>}
           {overLimit > 0 && (
             <p data-over-limit className="mb-2 text-xs text-destructive">
-              You are carrying {my.players.length}, {overLimit} over the limit of {mlbRosterMax(my)}. DFA {overLimit === 1 ? 'one man' : `${overLimit} men`} on the roster box before you play.
+              You are carrying {active.length} active players, {overLimit} over the limit of {mlbRosterMax(my)}. Option eligible prospects or DFA down in Roster before you play.
             </p>
           )}
           {showOctoberChoice && (octoberStarters.length === 3 || octoberBooked) && (

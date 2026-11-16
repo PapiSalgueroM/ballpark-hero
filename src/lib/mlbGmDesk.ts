@@ -49,7 +49,7 @@ import { tradeRefusal } from './frontOfficeCuts';
 import { MLB_STAFF_PACK, type MlbStaffPost } from '@/data/gmStaff/packs';
 import {
   AL, MLB_ROUNDS, type MlbGmPlayer, type MlbGmTeam, type MlbLeague, type MlbOffseasonOptions, type MlbProspect,
-  type MlbRoundOptions, mlbCapUsed, mlbOffseason, mlbRosterMax, mlbRosterMin, mlbStrength, mlbTrade, mlbTradeValue,
+  type MlbRoundOptions, mlbActivePlayers, mlbIsInTripleA, mlbCapUsed, mlbOffseason, mlbRosterMax, mlbRosterMin, mlbStrength, mlbTrade, mlbTradeValue,
 } from './mlbFrontOffice';
 
 /* ------------------------------------------------------------------ */
@@ -338,7 +338,11 @@ export function mlbPackageCapCheck(league: MlbLeague, pkg: TradePackage): string
     if (!t) return 'That club is not in this league.';
     const outMen = out.flatMap(a => (a.kind === 'player' ? [a] : []));
     const inMen = inc.flatMap(a => (a.kind === 'player' ? [a] : []));
-    const after = t.players.length - outMen.length + inMen.length;
+    if (outMen.some(a => {
+      const player = t.players.find(p => p.id === a.id);
+      return player && mlbIsInTripleA(player, club);
+    })) return 'Recall your Triple-A player before trading him.';
+    const after = mlbActivePlayers(t).length - outMen.length + inMen.length;
     if (after < mlbRosterMin(t)) return `That would leave ${club} with ${after} players. A club needs at least ${mlbRosterMin(t)}.`;
     if (after > mlbRosterMax(t)) return `${club} has no room for that many players: the limit is ${mlbRosterMax(t)}.`;
     let outMoved = 0, inMoved = 0;
