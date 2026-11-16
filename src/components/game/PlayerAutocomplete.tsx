@@ -500,6 +500,7 @@ export function PlayerAutocomplete({
   );
 
   const showDropdown = open && (loading || suggestions.length > 0 || enoughText);
+  const activeOptionId = showDropdown && suggestions[highlightedIndex] ? `${listboxId}-option-${highlightedIndex}` : undefined;
   const changeBrowsePage = (step: number) => {
     setBrowsePage(current => current + step);
     setHighlightedIndex(-1);
@@ -536,7 +537,8 @@ export function PlayerAutocomplete({
           type="text"
           role="combobox"
           aria-expanded={showDropdown}
-          aria-controls={listboxId}
+          aria-controls={showDropdown ? listboxId : undefined}
+          aria-activedescendant={activeOptionId}
           aria-autocomplete="list"
           value={value}
           onChange={e => onChange(e.target.value)}
@@ -573,7 +575,7 @@ export function PlayerAutocomplete({
                 aria-label="Next players" disabled={disabled || pageStart + pageSize >= matches.length} onClick={() => changeBrowsePage(1)}>Next</button>
             </div>
           )}
-          <div id={listboxId} role="listbox" className={cn('max-h-72 overflow-y-auto',
+          <div id={listboxId} role="listbox" aria-label="Player suggestions" className={cn('max-h-72 overflow-y-auto',
             !canPage && 'absolute z-20 mt-1.5 w-full rounded-xl border border-border bg-card shadow-lg overflow-hidden overflow-y-auto')}>
           {loading && suggestions.length === 0 && (
             <div
@@ -606,6 +608,7 @@ export function PlayerAutocomplete({
             return (
               <button
                 key={entity.personKey ?? entity.key}
+                id={`${listboxId}-option-${i}`}
                 type="button"
                 role="option"
                 disabled={disabled}

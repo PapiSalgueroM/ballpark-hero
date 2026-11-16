@@ -1,9 +1,30 @@
+## 2026-11-15: Academy prospects, goalie trials and mobile controls
+
+- NRL Team Manager can retain one unsigned academy prospect over the summer. The Penrith fixture carried Eli Cairns and his earned wing cover into 2027 with all 30 senior places filled. His later promotion used the normal 2028 squad and salary cap checks. The ordinary and older starting saves matched their prior fixtures.
+- NHL Front Office can give a healthy backup goalie four scheduled starts over two simulation rounds. Jacob Fowler made all four starts for Montreal and went from 79 to 80 overall. His four-year, $4.5 million contract stayed in place.
+- Stadium Tycoon can move a promoted forward into attack for one league fixture. At 320px and 390px, watched and away matches saved the assignment and result together. The watched match retried its captured result after a storage refusal and kept one receipt after reload.
+- The shared player picker exposes the highlighted option to assistive technology. Build Your XI keeps the rules dismissal button visible while the rules scroll. Touch and keyboard journeys covered Build Your XI and Who Am I, including the 320×568 rules view.
+- The US Career prospect Back control now runs its save-clearing fault against the current executable code. The four expected failures and four independent legacy passes fired.
+
+All 210 focused tests passed with one opt-in historical case skipped. The rebased application passed 16 native feature journeys and 12 more for the live Messi regression. Three guide snapshots, the NHL guide fixture and affected sitemap data were refreshed. All 360 archived boards through November 14 Eastern matched byte for byte. All 21 site checks passed. The full comparison matched crawler fields on 174 routes. Home fold and all 16 download budgets passed.
+
+
 ## 2026-11-15: Messi in 2015–16 Club Manager
+
+[PR #1007](https://github.com/PapiSalgueroM/ballpark-hero/pull/1007) published exact main `f6c3a53a66b0cb9171ccce073fba28b19022e14b`, deployment `3ad1f9aa-76b6-49fe-b149-21375f28094a`, canonical entry `/assets/index-qrX0WoK5.js`. The squash tree matched tested head `338476fad`. All 12 pinned live browser checks passed at 320px and 390px. The canonical audit passed all 174 sitemap routes. Messi stayed on the market at age 29 after two played seasons and at 35 and 36 across later rollovers. The original Barcelona expiry save paid £22.7m for three years and kept one squad record with the same world key after reload.
+
+The exact head passed 140 focused cases, the historical 2015 engine harness, scoped types, the production build and all 21 site checks. The hosted Manager match plans type and build step passed on the identical merge tree. The broader free-agency fleet reproduced the same three modern youth-name issues on the previous release and candidate across 2,542 summer checks. The full ledger timing harness flagged one modern comparison under contention.
 
 - Barcelona's projected Messi used to leave the simulated leagues at age 29 after two summers. The 2015–16 player now stays eligible until age 36 across the projected world, managed squads and free agency. The normal retirement curve takes over at 36. Careers that already recorded his retirement retain it.
 - New 2015–16 Barcelona careers start Messi on a three-season deal, matching the agreement through June 2018. Existing deals keep their terms. Barcelona can re-sign the verified free agent from a save where the old one-year opening deal expired, using the regular wage, cap and signing fee. [Barcelona contract announcement](https://www.fcbarcelona.com/en/news/1144640/messi-extends-contract-through-2018-its-a-fantastic-day)
 
 ## 2026-11-15: World Cup scores, captain reviews, playoff minutes and mobile game cards
+
+[PR #1006](https://github.com/PapiSalgueroM/ballpark-hero/pull/1006) published exact main `138ccd9acc6d535138b68e9cc6b5630693a456b3`, deployment `607c7fc2-b1df-49e9-acbf-22f2c88ec8a6`, canonical entry `/assets/index-DjsiJATq.js`. Its tree matched tested head `f8f67160`. All four live browser groups, 14 pinned endpoints and 174 sitemap routes passed. IndexNow accepted both updated guides. The 115 focused cases, 21 site checks, 174-route SEO comparison, Home fold and 16 download budgets passed.
+
+Hosted application types, standard builds and the full Career entry guide workflow passed. Dedicated saved-season and number display outcomes passed. Broader hosted jobs reported the same gameplay source anchors, decision outcomes and prospect transition failures as earlier releases, along with historical fixture and font checks.
+
+The exact local build also passed a guest phone layout check on the 20 games in the earlier played-route sample plus NRL and Aussie Rules. Across 44 views at 320px and 390px there were no horizontal overflows or page exceptions.
 
 - New Rugby League World Cup runs use a wider scoring model for countries far apart in strength. In the same 75,000 pooled fixture draws, median total points rose from 42 to 52 and median margin from 14 to 26. All 35,000 near-strength fixture scores matched and the complete legacy report digest matched across 5,000 tournaments. The pinned browser finished new and legacy tournaments and checked that a Club office appointment used the new model in its own save.
 - NRL Team Manager can pause Live for a late strip ruling. An on-field captain or vice-captain has a view of the tackle to help decide whether to challenge. Accepting keeps the ordinary result. In the paired Storm fixture, an overturned goal sent a 32–34 loss to a 32–32 Golden Point draw and earned one ladder point. The review, extra time and settled report survived reload. The markerless paused save kept its original result.

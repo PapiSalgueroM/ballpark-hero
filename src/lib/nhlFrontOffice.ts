@@ -95,6 +95,19 @@ export interface NhlLeague {
       Optional: a league saved before the round finishes that season the old
       way and is booked at its next summer. */
   schedule?: FoSchedule;
+  goalieTrial?: NhlGoalieTrial;
+}
+
+const GOALIE_TRIAL_SCRATCHES = ['unavailable', 'usual-starter', 'potential', 'schedule'] as const;
+type NhlGoalieTrialScratch = typeof GOALIE_TRIAL_SCRATCHES[number];
+export interface NhlGoalieTrial {
+  team: string;
+  season: number;
+  firstRound: number;
+  goalieId: string;
+  goalieName: string;
+  starts: number;
+  result?: { kind: 'developed'; before: number; after: number } | { kind: 'scratched'; reason: NhlGoalieTrialScratch };
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -352,11 +365,66 @@ export function nhlWinProb(a: NhlGmTeam, b: NhlGmTeam, edgeA = 0, edgeB = 0): nu
   return 1 / (1 + Math.pow(10, -gap / 14));
 }
 
+function fullGoalieTrialRound(league: NhlLeague, team: string, round: number): boolean {
+  const fixtures = league.schedule?.[round - 1];
+  return Array.isArray(fixtures) && fixtures.filter(fixture => {
+    if (typeof fixture !== 'string') return false;
+    const [home, away, extra] = fixture.split('-');
+    return extra === undefined && home !== away && (home === team || away === team) && league.teams[home] && league.teams[away];
+  }).length === NHL_GAMES_PER_ROUND;
+}
+
+export function nhlGoalieTrial(league: NhlLeague, team: string): NhlGoalieTrial | null {
+  const trial = league.goalieTrial;
+  if (!trial || trial.team !== team || trial.season !== league.season || !league.teams[team]
+    || !Number.isInteger(trial.firstRound) || trial.firstRound < 1 || trial.firstRound >= NHL_FO_ROUNDS || trial.firstRound > league.round
+    || typeof trial.goalieId !== 'string' || !trial.goalieId || trial.goalieId.length > 128
+    || typeof trial.goalieName !== 'string' || !trial.goalieName || trial.goalieName.length > 160 || ![0, 2, 4].includes(trial.starts)) return null;
+  const result = trial.result;
+  if (result === undefined) return trial.starts < 4 && league.round <= trial.firstRound + trial.starts / 2 ? trial : null;
+  if (result?.kind === 'developed') {
+    return trial.starts === 4 && league.round > trial.firstRound && Number.isInteger(result.before)
+      && result.before >= 1 && result.after === result.before + 1 && result.after <= 99 ? trial : null;
+  }
+  return result?.kind === 'scratched' && GOALIE_TRIAL_SCRATCHES.includes(result.reason)
+    && (trial.starts < 4 || (result.reason === 'potential' && league.round > trial.firstRound)) ? trial : null;
+}
+
+export function nhlGoalieTrialChoices(league: NhlLeague, team: string) {
+  const club = league.teams[team], trial = nhlGoalieTrial(league, team);
+  if (!club || !league.inSeasonRatings || league.round < 1 || league.round >= NHL_FO_ROUNDS
+    || league.champions.some(row => row.season === league.season)
+    || (trial && (trial.starts > 0 || trial.result || trial.firstRound !== league.round))
+    || !fullGoalieTrialRound(league, team, league.round) || !fullGoalieTrialRound(league, team, league.round + 1)) return null;
+  const usual = nhlContributors(club);
+  if (usual.goalie === null) return null;
+  return {
+    usualStrength: nhlStrength(club),
+    eligible: club.players.filter(p => p.pos === 'G' && p.id !== usual.goalie && p.age < 23 && p.out === 0 && p.ovr < Math.min(99, p.pot))
+      .map(player => ({ player, strength: nhlStrength({ ...club, contributors: { ...usual, goalie: player.id } }) })),
+  };
+}
+
+export function setNhlGoalieTrial(league: NhlLeague, team: string, goalieId: string): NhlLeague {
+  const trial = nhlGoalieTrial(league, team);
+  if (!goalieId) {
+    if (!trial || trial.result || trial.starts > 0 || trial.firstRound !== league.round) return league;
+    const next = { ...league };
+    delete next.goalieTrial;
+    return next;
+  }
+  const choice = nhlGoalieTrialChoices(league, team)?.eligible.find(row => row.player.id === goalieId);
+  if (!choice || trial?.goalieId === goalieId) return league;
+  return { ...league, goalieTrial: { team, season: league.season, firstRound: league.round,
+    goalieId, goalieName: choice.player.name, starts: 0 } };
+}
+
 export interface NhlRoundReport {
   myWins: number;
   myLosses: number;
   myOtLosses: number;
   notes: string[];
+  goalieTrialLine?: string;
 }
 
 /** Round 987: what a GM desk may hand a round. Absent, the round plays exactly as it always has. */
@@ -369,6 +437,10 @@ export interface NhlRoundOptions {
 }
 
 export function simNhlRound(league: NhlLeague, myTeam: string, rng: () => number, opts?: NhlRoundOptions): NhlRoundReport {
+  const bookedTrial = nhlGoalieTrial(league, myTeam);
+  const trial = league.inSeasonRatings && bookedTrial && !bookedTrial.result
+    && league.round === bookedTrial.firstRound + bookedTrial.starts / 2
+    && !league.champions.some(row => row.season === league.season) ? bookedTrial : null;
   const abbrs = Object.keys(league.teams);
   const notes: string[] = [];
   let myW = 0, myL = 0, myOtl = 0;
@@ -383,6 +455,17 @@ export function simNhlRound(league: NhlLeague, myTeam: string, rng: () => number
     }
     repairNhlContributors(t);
   }
+  const trialClub = league.teams[myTeam];
+  const usual = trial ? nhlContributors(trialClub) : null;
+  const prospect = trial ? trialClub.players.find(p => p.id === trial.goalieId && p.name === trial.goalieName && p.pos === 'G') : undefined;
+  const scratch: NhlGoalieTrialScratch | undefined = trial
+    ? !fullGoalieTrialRound(league, myTeam, league.round) ? 'schedule'
+      : !prospect || prospect.out > 0 || prospect.age >= 23 || !usual?.goalie ? 'unavailable'
+      : prospect.id === usual.goalie ? 'usual-starter' : prospect.ovr >= Math.min(99, prospect.pot) ? 'potential' : undefined
+    : undefined;
+  const trialEdge = prospect && usual && !scratch
+    ? nhlStrength({ ...trialClub, contributors: { ...usual, goalie: prospect.id } }) - nhlStrength(trialClub) : null;
+  let myGames = 0, trialStarts = 0;
   const loseGame = (loser: NhlGmTeam, isMe: boolean) => {
     if (rng() < 0.25) { loser.otLosses += 1; if (isMe) myOtl += 1; }
     else { loser.losses += 1; if (isMe) myL += 1; }
@@ -392,7 +475,11 @@ export function simNhlRound(league: NhlLeague, myTeam: string, rng: () => number
   foPlayRound(league, abbrs, NHL_GAMES_PER_ROUND, rng, (abbr, opp) => {
     const me = league.teams[abbr];
     const them = league.teams[opp];
-    const p = opts?.edges ? nhlWinProb(me, them, opts.edges[abbr] ?? 0, opts.edges[opp] ?? 0) : nhlWinProb(me, them);
+    const trialStart = trialEdge !== null && (abbr === myTeam || opp === myTeam) && ++myGames % 2 === 0;
+    if (trialStart) trialStarts++;
+    const startEdge = trialStart ? trialEdge : 0;
+    const p = nhlWinProb(me, them, (opts?.edges?.[abbr] ?? 0) + (abbr === myTeam ? startEdge : 0),
+      (opts?.edges?.[opp] ?? 0) + (opp === myTeam ? startEdge : 0));
     if (rng() < p) {
       me.wins += 1; if (abbr === myTeam) myW += 1;
       loseGame(them, opp === myTeam);
@@ -405,7 +492,28 @@ export function simNhlRound(league: NhlLeague, myTeam: string, rng: () => number
     sport: 'nhl', rounds: NHL_FO_ROUNDS, youngThrough: 23, declineFrom: p => p.pos === 'G' ? 34 : 31,
     acceleratedFrom: 37, marketDeclineFrom: 32, floor: 63,
   }, myTeam, notes, opts?.growth);
-  return { myWins: myW, myLosses: myL, myOtLosses: myOtl, notes };
+  const report: NhlRoundReport = { myWins: myW, myLosses: myL, myOtLosses: myOtl, notes };
+  if (trial) {
+    const next = { ...trial, starts: trial.starts + trialStarts };
+    if (prospect && next.starts === 4 && prospect.ovr < prospect.pot && prospect.ovr < 99) {
+      const before = prospect.ovr;
+      prospect.ovr++;
+      next.result = { kind: 'developed', before, after: prospect.ovr };
+      report.goalieTrialLine = `${trial.goalieName} made 4 trial starts and gained 1 OVR (${before} to ${prospect.ovr}).`;
+    } else if (scratch || next.starts === 4) {
+      const reason = scratch ?? 'potential';
+      next.result = { kind: 'scratched', reason };
+      const detail = {
+        unavailable: 'the prospect was no longer available', 'usual-starter': 'the prospect was already the usual starter',
+        potential: 'the prospect reached his potential', schedule: 'the full round was no longer booked',
+      }[reason];
+      report.goalieTrialLine = `${trial.goalieName} finished with ${next.starts} of 4 trial starts and no development gain because ${detail}.`;
+    } else {
+      report.goalieTrialLine = `${trial.goalieName} made ${next.starts} of 4 trial starts.`;
+    }
+    league.goalieTrial = next;
+  }
+  return report;
 }
 
 export function nhlFoStandings(league: NhlLeague, group?: string[]): NhlGmTeam[] {
@@ -695,6 +803,7 @@ export function nhlOffseason(league: NhlLeague, rng: () => number, userTeam?: st
   league.cap = Math.round(league.cap * 1.09);
   league.season += 1;
   league.round = 1;
+  delete league.goalieTrial;
   /* Round 851: the new season's fixtures, for an old save too. */
   league.schedule = nhlBookSeason(league, rng);
   return notes;

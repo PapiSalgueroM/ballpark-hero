@@ -13,6 +13,7 @@ import {
   type NhlLeague, type NhlProspect, type NhlSeriesResult, nhlExecuteTalksTrade,
   ensureNhlLeagueIds, NHL_ROSTER_MIN, NHL_ROSTER_MAX,
   nhlContributors, nhlSetContributors, nhlResetContributors, repairNhlContributors,
+  nhlGoalieTrial, nhlGoalieTrialChoices, setNhlGoalieTrial,
   type NhlContributors, type NhlGmTeam, type NhlGmPlayer,
 } from '@/lib/nhlFrontOffice';
 import { appendFoRoundHistory, foCompletedRounds, foRatingChanges, readFoRoundHistory, type FoRoundHistory } from '@/lib/foRoundHistory';
@@ -112,7 +113,7 @@ function ratingMarker(p: NhlGmPlayer) {
 const NHL_WORDS: FoSportWords = { title: 'the Stanley Cup', playoffs: 'the playoffs', round: 'a series', games: 80 };
 
 type Postseason = { series: NhlSeriesResult[]; champion: string; gradeLine: string | null };
-type LastRound = { team: string; season: number; round: number; wins: number; losses: number; otLosses: number; notes: string[] };
+type LastRound = { team: string; season: number; round: number; wins: number; losses: number; otLosses: number; notes: string[]; reports?: string[] };
 
 function readLastRound(value: unknown, league: NhlLeague, team: string): LastRound | null {
   if (!value || typeof value !== 'object') return null;
@@ -126,7 +127,10 @@ function readLastRound(value: unknown, league: NhlLeague, team: string): LastRou
     || typeof row.otLosses !== 'number' || !Number.isInteger(row.otLosses) || row.otLosses < 0 || row.otLosses > club.otLosses
     || !Array.isArray(row.notes) || row.notes.length > 4
     || row.notes.some(line => typeof line !== 'string' || line.length > 640)) return null;
-  return { team, season: league.season, round: row.round, wins: row.wins, losses: row.losses, otLosses: row.otLosses, notes: row.notes };
+  const reports = Array.isArray(row.reports) && row.reports.length === 1
+    && typeof row.reports[0] === 'string' && row.reports[0].length > 0 && row.reports[0].length <= 640 ? row.reports : undefined;
+  return { team, season: league.season, round: row.round, wins: row.wins, losses: row.losses, otLosses: row.otLosses, notes: row.notes,
+    ...(reports ? { reports } : {}) };
 }
 
 function roundHeadlines(row: LastRound): string[] {
@@ -172,12 +176,15 @@ interface SaveShape {
   gm?: unknown;
 }
 
-function ContributorPicker({ team, onApply, onAuto, onBack }: {
-  team: NhlGmTeam; onApply: (value: NhlContributors) => boolean; onAuto: () => boolean; onBack: () => void;
+function ContributorPicker({ league, team, onApply, onAuto, onTrial, onBack }: {
+  league: NhlLeague; team: NhlGmTeam; onApply: (value: NhlContributors) => boolean; onAuto: () => boolean;
+  onTrial: (goalieId: string) => boolean; onBack: () => void;
 }) {
   const effective = nhlContributors(team);
   const [draft, setDraft] = useState<NhlContributors>(() => nhlContributors(team));
   const [receipt, setReceipt] = useState<{ id: number; text: string } | null>(null);
+  const [prospectId, setProspectId] = useState('');
+  const [trialSaveFailed, setTrialSaveFailed] = useState(false);
   const sequence = useRef(0), back = useRef<HTMLButtonElement>(null), notice = useRef<HTMLDivElement>(null);
   const rosterKey = JSON.stringify(team.players.map(p => [p.id, p.pos, p.out, p.ovr]));
   const savedKey = JSON.stringify(effective);
@@ -213,6 +220,14 @@ function ContributorPicker({ team, onApply, onAuto, onBack }: {
     return selected.length !== current.length || selected.some(id => !current.includes(id));
   });
   const preview = complete ? nhlStrength({ ...team, contributors: draft }) : null;
+  const trial = nhlGoalieTrial(league, team.abbr);
+  const trialChoices = nhlGoalieTrialChoices(league, team.abbr);
+  const prospect = trialChoices?.eligible.find(row => row.player.id === prospectId);
+  const saveTrial = (id: string) => {
+    const saved = onTrial(id);
+    setTrialSaveFailed(!saved);
+    if (saved) setProspectId('');
+  };
   const toggle = (key: typeof groups[number]['key'], id: string, cap: number) => {
     setDraft(previous => {
       const selected = ids(previous, key);
@@ -266,6 +281,37 @@ function ContributorPicker({ team, onApply, onAuto, onBack }: {
       <div ref={notice} tabIndex={-1} role="status" className={contributorsStyles.receipt} data-nhl-contributor-feedback>
         {receipt && <span key={receipt.id} className={contributorsStyles.committed}>{receipt.text}</span>}
       </div>
+      {(trial || !!trialChoices?.eligible.length) && (
+        <section aria-label="Goalie development trial" className="mt-2 space-y-2 rounded-lg border border-border p-3 text-xs">
+          <h4 className="font-semibold">Goalie development trial</h4>
+          {trial ? (
+            <>
+              <p aria-live="polite">
+                {trial.result?.kind === 'developed' ? `${trial.goalieName} gained 1 OVR after 4 trial starts.`
+                  : trial.result ? `${trial.goalieName} finished with ${trial.starts} of 4 trial starts. See Round results.`
+                  : `${trial.goalieName} · Rounds ${trial.firstRound} and ${trial.firstRound + 1} · ${trial.starts} of 4 trial starts.`}
+              </p>
+              {!trial.result && trial.starts === 0 && <button type="button" onClick={() => saveTrial('')}
+                className={cn(contributorsStyles.action, 'rounded-lg border border-border px-3 text-xs font-semibold')}>Cancel goalie trial</button>}
+            </>
+          ) : (
+            <>
+              <p className="text-muted-foreground">Give a goalie under 23 Games 2 and 4 of the next two rounds. Four trial starts add 1 OVR up to his potential. You can use one trial each season.</p>
+              <label className="block font-semibold">Prospect goalie
+                <select value={prospectId} onChange={event => setProspectId(event.target.value)}
+                  className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-background px-2 font-normal">
+                  <option value="">Choose a goalie</option>
+                  {trialChoices?.eligible.map(({ player }) => <option key={player.id} value={player.id}>{player.name} · {player.ovr} OVR</option>)}
+                </select>
+              </label>
+              {prospect && <p>Team strength {trialChoices?.usualStrength.toFixed(2)} usual · {prospect.strength.toFixed(2)} for his starts.</p>}
+              <button type="button" disabled={!prospect} onClick={() => saveTrial(prospectId)}
+                className={cn(contributorsStyles.action, 'rounded-lg bg-primary px-3 text-xs font-bold text-primary-foreground disabled:opacity-40')}>Book goalie trial</button>
+            </>
+          )}
+          {trialSaveFailed && <p role="alert" className="text-destructive">The goalie trial could not be saved. Try again.</p>}
+        </section>
+      )}
     </section>
   );
 }
@@ -406,6 +452,7 @@ export default function NhlFrontOfficeBoard() {
          is minted from the same counter, so it shares the id space. */
       ensureNhlLeagueIds(s.league, s.draftClass);
       if (s.league.teams[s.myTeam]) repairNhlContributors(s.league.teams[s.myTeam]);
+      if (s.league.goalieTrial && !nhlGoalieTrial(s.league, s.myTeam)) delete s.league.goalieTrial;
       setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
       lastRound.current = readLastRound(s.lastRound, s.league, s.myTeam);
       roundHistory.current = readFoRoundHistory(s.roundHistory, s.league, s.myTeam, NHL_FO_ROUNDS);
@@ -594,7 +641,8 @@ export default function NhlFrontOfficeBoard() {
     }
     const news = [...deskLines, ...report.notes];
     const result: LastRound = { team: myTeam, season: lg.season, round: lg.round, wins: report.myWins,
-      losses: report.myLosses, otLosses: report.myOtLosses, notes: roundNotes(news) };
+      losses: report.myLosses, otLosses: report.myOtLosses, notes: roundNotes(news),
+      ...(report.goalieTrialLine ? { reports: [report.goalieTrialLine] } : {}) };
     const keepRound = () => {
       roundHistory.current = appendFoRoundHistory(roundHistory.current, lastRound.current, result, changes);
       lastRound.current = result;
@@ -860,6 +908,14 @@ export default function NhlFrontOfficeBoard() {
     if (!changed) return false;
     contributorCommit.current = league;
     setLeague(lg); persist({}, lg, myTeam);
+    return true;
+  };
+  const changeGoalieTrial = (goalieId: string): boolean => {
+    if (!league || contributorCommit.current === league) return false;
+    const next = setNhlGoalieTrial(league, myTeam, goalieId);
+    if (next === league || !persist({}, next, myTeam)) return false;
+    contributorCommit.current = league;
+    setLeague(next);
     return true;
   };
   const doSign = (pid: string) => {
@@ -1505,7 +1561,9 @@ export default function NhlFrontOfficeBoard() {
 
       {tab === 'team' && (
         <div className="rounded-2xl border border-border bg-card p-3">
-          {contributorsOpen ? <ContributorPicker team={my} onApply={value => changeContributors(value)} onAuto={() => changeContributors(null)} onBack={() => { contributorReturn.current = true; setContributorsOpen(false); }} /> : <>
+          {contributorsOpen ? <ContributorPicker league={league} team={my} onApply={value => changeContributors(value)}
+            onAuto={() => changeContributors(null)} onTrial={changeGoalieTrial}
+            onBack={() => { contributorReturn.current = true; setContributorsOpen(false); }} /> : <>
           <button ref={contributorsOpener} type="button" data-nhl-open-contributors onClick={() => setContributorsOpen(true)} className={cn(contributorsStyles.action, 'mb-3 w-full rounded-lg border border-border px-3 text-xs font-semibold')}>Choose simulation contributors</button>
           <p className="mb-2 text-center text-xs text-muted-foreground">
             Cap hit ${nhlCapUsed(my)}M of the ${league.cap}M ceiling

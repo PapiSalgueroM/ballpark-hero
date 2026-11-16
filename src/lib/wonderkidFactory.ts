@@ -413,16 +413,36 @@ export function seniorBirthdayPreview(s: FactoryState, p: Senior): { age: number
   return { age, rating, price: retiring ? 0 : salePrice(s, { ...p, age, rating }), retiring };
 }
 
-/** This defensive edge belongs to the first team, not a purchasable track. */
-export function squadEdge(s: FactoryState, levels: GearLevels = {}): number {
+function firstTeamShares(s: FactoryState, levels: GearLevels) {
   const worn = new Set<string>();
-  const total = (s.firstTeam ?? []).slice(0, FIRST_TEAM_SLOTS).reduce((sum, p) => {
+  return (s.firstTeam ?? []).slice(0, FIRST_TEAM_SLOTS).map(p => {
     const level = p.bootId && !worn.has(p.bootId) ? bootLevel(levels, p.bootId) : 0;
     if (level && p.bootId) worn.add(p.bootId);
     const effectiveRating = Math.min(99, p.rating + level);
-    return sum + Math.max(0, effectiveRating - 60);
-  }, 0);
-  return Math.min(0.40, total * 0.002);
+    return { player: p, points: Math.max(0, effectiveRating - 60) };
+  });
+}
+
+const edgeForPoints = (points: number) => Math.min(0.40, points * 0.002);
+
+/** This defensive edge belongs to the first team, not a purchasable track. */
+export function squadEdge(s: FactoryState, levels: GearLevels = {}): number {
+  return edgeForPoints(firstTeamShares(s, levels).reduce((sum, { points }) => sum + points, 0));
+}
+
+export interface GraduateAttackOption { playerId: string; name: string; attack: number; defence: number }
+
+export function graduateAttackOptions(s: FactoryState, levels: GearLevels = {}): GraduateAttackOption[] {
+  const shares = firstTeamShares(s, levels);
+  const total = shares.reduce((sum, { points }) => sum + points, 0);
+  const options: GraduateAttackOption[] = [];
+  for (const { player, points } of shares) {
+    if (player.pos !== 'FW' || points <= 0) continue;
+    const defence = edgeForPoints(total - points);
+    const attack = edgeForPoints(total) - defence;
+    if (attack > 0) options.push({ playerId: player.id, name: player.name, attack, defence });
+  }
+  return options;
 }
 
 function bootLevel(levels: GearLevels, id: string): number {

@@ -1,4 +1,4 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 interface LineupHowToPlayProps {
   open: boolean;
@@ -8,17 +8,17 @@ interface LineupHowToPlayProps {
 export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md bg-card border-border text-foreground max-h-[85vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="flex max-h-[85dvh] max-w-md flex-col overflow-hidden border-border bg-card text-foreground">
+        <DialogHeader className="shrink-0 px-2">
           <DialogTitle className="text-2xl font-display text-primary text-center">
             How to Play: Build Your XI
           </DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-5 text-sm">
-          <p className="text-muted-foreground text-center">
+        <div role="region" aria-label="Rules" tabIndex={0} className="min-h-0 space-y-5 overflow-y-auto pr-1 text-sm">
+          <DialogDescription className="text-center">
             Choose Mixed, Club year draft or Club era draft, then a formation. Fill every position with matching players from the clubs or nations you get.
-          </p>
+          </DialogDescription>
 
           <section>
             <h3 className="font-bold text-foreground mb-2">⚽ How It Works</h3>
@@ -107,13 +107,16 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
             </ul>
           </section>
 
+        </div>
+        <DialogFooter className="shrink-0 border-t border-border pt-3">
           <button
+            type="button"
             onClick={() => onOpenChange(false)}
-            className="w-full py-3 bg-primary text-primary-foreground rounded-xl font-semibold hover:opacity-90 transition-opacity"
+            className="min-h-11 w-full rounded-xl bg-primary py-3 font-semibold text-primary-foreground transition-opacity hover:opacity-90"
           >
             Got it!
           </button>
-        </div>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

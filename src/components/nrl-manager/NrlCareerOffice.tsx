@@ -9,7 +9,7 @@ import { useNrlClubName } from '@/components/nrl-manager/NrlClubIdentity';
 import { nrlSeasonPlan, NRL_LAST_YEAR } from '@/data/nrlManagerSeasons';
 import {
   isNrlNamedPlayer,
-  nrlAcademyAvailableRoles, nrlAcademyCrossTrainingQuote, nrlAcademyCrossTrainingSpend, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyParallelQuote, nrlAcademyParallelSpend, nrlAcademyReleaseAvailable, nrlAcademyReports,
+  nrlAcademyAvailableRoles, nrlAcademyCarryOptions, nrlAcademyCrossTrainingQuote, nrlAcademyCrossTrainingSpend, nrlAcademyFacilityQuote, nrlAcademyFacilitySpend, nrlAcademyOffer, nrlAcademyParallelQuote, nrlAcademyParallelSpend, nrlAcademyReleaseAvailable, nrlAcademyReports,
   nrlAwayRecoverySpend, nrlBoardPathwaysIncome, nrlBoardPathwaysQuote, nrlBoardRecruitmentIncome, nrlBoardRecruitmentQuote,
   nrlCanLeaveClub, nrlCareerCap, nrlCareerFinance, nrlCareerMarket, nrlCareerRecord, nrlCareerSquad,
   nrlContractApproach, nrlContractApproachCandidates, nrlContractApproachLastRound, nrlContractApproachPreview, nrlContractCapImpact, nrlContractCounteroffer, nrlContractOffer,
@@ -1176,6 +1176,7 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
               <li key={player.id} className="py-3" data-nrl-academy-report={player.id}>
                 <h3 className="break-words font-semibold">{player.name}</h3>
                 <p className="text-sm text-muted-foreground">{player.role} · age {player.age} · {player.rating} OVR · {player.potential} potential</p>
+                {report.retained && <p className="mt-1 text-sm font-semibold">Retained in the academy through {year}</p>}
                 {player.secondaryRole && <p className="mt-1 text-sm text-muted-foreground">Also plays {player.secondaryRole}</p>}
                 {report.priority && <p className="mt-1 text-xs text-muted-foreground">Scouting priority {NRL_ACADEMY_PRIORITIES[report.priority].label}</p>}
                 {report.status === 'released' ? <p className="mt-1 text-sm font-semibold">Entering free agency in {year + 1}</p>
@@ -1188,7 +1189,7 @@ function Academy({ career, onAction, disabled }: { career: NrlCareerState; onAct
                       <span className="text-sm text-muted-foreground">1 year · {money(offer.contract.salary)}</span>
                     </div>
                   )}
-                {canRelease && report.status === 'ready' && (
+                {canRelease && report.status === 'ready' && !report.retained && (
                   <details className="mt-2 border-t border-border">
                     <summary className="flex min-h-11 cursor-pointer items-center text-sm font-semibold">Release to free agency</summary>
                     <p className="text-sm text-muted-foreground">{player.name} enters the open market next season. Releasing him ends your academy promotion offer.</p>
@@ -2305,6 +2306,9 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
   const pastPlaces = new Map(career.history.map(record => [`${record.clubId}:${record.year}`, record.rank]));
   const [nextClubId, setNextClubId] = useState('');
   const [keepLineups, setKeepLineups] = useState<string>();
+  const [academyChoice, setAcademyChoice] = useState('');
+  const academyOptions = useMemo(() => nrlAcademyCarryOptions(career), [career]);
+  const academyCarry = academyOptions.find(player => player.id === academyChoice);
   const [primarySelection, setPrimarySelection] = useState('');
   const roleOptions = useMemo(() => nrlPrimaryRoleOptions(career), [career]);
   const roleSelection = roleOptions.find(({ choice }) => `${choice.fromYear}:${choice.clubId}:${choice.playerId}` === primarySelection);
@@ -2511,6 +2515,19 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
         onTarget={playerId => setFreeAgentSelection(playerId ? { playerId, fromYear: year, clubId } : undefined)}
         onYears={years => setFreeAgentSelection(selection => selection && { ...selection, years })}
         onChange={enabled => onAction({ type: 'setOffseasonFreeAgents', year, clubId, enabled })} />}
+      {academyOptions.length > 0 && <div className="mt-3 space-y-1 rounded-xl border border-border bg-background p-3 text-sm">
+        <label className="block font-semibold" htmlFor="nrl-academy-carry">Keep one academy prospect for {year + 1}</label>
+        <select id="nrl-academy-carry" className={control} value={academyCarry?.id ?? ''} disabled={disabled}
+          aria-describedby="nrl-academy-carry-help" onChange={event => setAcademyChoice(event.target.value)}>
+          <option value="">Leave the place open</option>
+          {academyOptions.map(player => <option value={player.id} key={player.id}>
+            {player.name} · {player.role} · {player.rating} OVR · {player.potential} potential
+          </option>)}
+        </select>
+        <p id="nrl-academy-carry-help" className="text-muted-foreground">
+          If you stay at this club, keep them in the academy for one more season. A future Top 30 promotion uses the usual salary cap and squad limits.
+        </p>
+      </div>}
       {showLineupChoice && <div className="mt-3 rounded-xl border border-border bg-background px-3 pb-3 text-sm">
         <label className="flex min-h-11 items-center gap-2 font-semibold">
           <input type="checkbox" checked={carryLineups} disabled={disabled}
@@ -2531,7 +2548,10 @@ function History({ career, onAction, disabled }: { career: NrlCareerState; onAct
       </div>}
       {finished && employed && year < NRL_LAST_YEAR && !mustMove && (
         <Button type="button" size="lg" className="mt-3 w-full" disabled={disabled || needsJudiciary || retentionBlocked || unavailableTarget}
-          onClick={() => onAction({ type: 'startNextSeason', primaryRole, freeAgentTarget, ...(carryLineups && { carryLineups: { fromYear: year, clubId } }) })}>
+          onClick={() => onAction({ type: 'startNextSeason', primaryRole, freeAgentTarget,
+            ...(academyCarry && { academyCarry: { fromYear: year, clubId, playerId: academyCarry.id } }),
+            ...(carryLineups && { carryLineups: { fromYear: year, clubId } }),
+          })}>
           Start {year + 1}<ArrowRight aria-hidden="true" />
         </Button>
       )}
