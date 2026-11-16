@@ -1,7 +1,7 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, useDeferredValue, lazy, memo, Suspense, type MouseEvent, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
-import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin, ArrowUp } from 'lucide-react';
+import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin, ArrowUp, CalendarDays } from 'lucide-react';
 import { loadSupabase } from '@/integrations/supabase/loadClient';
 import PageSeo from '@/components/seo/PageSeo';
 
@@ -10,7 +10,7 @@ import { useMostPlayed } from '@/hooks/useMostPlayed';
 import { PollsPlaceholder } from '@/components/home/PollsPlaceholder';
 import HomeSearchUnavailable from '@/components/home/HomeSearchUnavailable';
 import { FeaturedStage } from '@/components/home/FeaturedStage';
-import { DailyRail } from '@/components/home/DailyRail';
+import { DailyRail, HOME_DAILIES_ID } from '@/components/home/DailyRail';
 import { JustShipped } from '@/components/home/JustShipped';
 import { ContinueRow } from '@/components/home/ContinueRow';
 import { GamePicksRow } from '@/components/home/GamePicksRow';
@@ -86,6 +86,7 @@ type GameReturn = {
 const gameReturns = new Map<string, GameReturn>();
 const BROWSE_SPORTS_TRIGGER = 'home-browse-sports-trigger';
 const HOME_GAME_PICKS_ID = 'home-game-picks';
+const HOME_CAREER_ID = 'home-career-sims';
 const sportReturns = new Map<string, { hash: string; top: number; opener: string; fallback?: string }>();
 
 function revealSport(target: HTMLElement) {
@@ -445,8 +446,8 @@ export default function Index() {
           put it here and that was his idea at the time; changing his mind
           about his own voice on his own site is his call. */}
 
-      <section aria-labelledby="home-career-sims">
-        <h2 id="home-career-sims" className="mb-3 flex items-center gap-2 font-display text-lg font-bold text-foreground">
+      <section aria-labelledby={HOME_CAREER_ID}>
+        <h2 id={HOME_CAREER_ID} tabIndex={-1} className="mb-3 flex scroll-mt-36 items-center gap-2 font-display text-lg font-bold text-foreground focus-visible:outline-primary sm:scroll-mt-28">
           <Trophy aria-hidden="true" className="h-4 w-4 shrink-0 text-gold" />
           Dynasty & Career Sims
         </h2>
@@ -681,10 +682,24 @@ export default function Index() {
                     className="max-h-[var(--radix-popover-content-available-height)] w-[19rem] max-w-[calc(100vw-1.5rem)] overflow-auto rounded-xl px-2 py-1"
                     onCloseAutoFocus={event => {
                       const target = document.activeElement?.id;
-                      if (target === HOME_GAME_PICKS_ID || target?.startsWith('sport-')) event.preventDefault();
+                      if (target === HOME_GAME_PICKS_ID || target === HOME_DAILIES_ID || target === HOME_CAREER_ID || target?.startsWith('sport-')) event.preventDefault();
                     }}
                   >
                     <ul className="grid grid-cols-2 gap-x-1">
+                      <li>
+                        <a href={'#' + HOME_DAILIES_ID} onClick={event => { jumpToSport(event, BROWSE_SPORTS_TRIGGER); setSportsOpen(false); }}
+                          className="flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-semibold hover:bg-accent focus-visible:bg-accent focus-visible:outline-primary">
+                          <CalendarDays aria-hidden="true" className="h-4 w-4 shrink-0 text-primary" />
+                          Daily puzzles
+                        </a>
+                      </li>
+                      <li>
+                        <a href={'#' + HOME_CAREER_ID} onClick={event => { jumpToSport(event, BROWSE_SPORTS_TRIGGER); setSportsOpen(false); }}
+                          className="flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-semibold hover:bg-accent focus-visible:bg-accent focus-visible:outline-primary">
+                          <Trophy aria-hidden="true" className="h-4 w-4 shrink-0 text-gold" />
+                          Career sims
+                        </a>
+                      </li>
                       <li className="col-span-2 border-b border-border">
                         <a href={`#${HOME_GAME_PICKS_ID}`} onClick={event => { jumpToSport(event, BROWSE_SPORTS_TRIGGER); setSportsOpen(false); }}
                           className="flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-semibold hover:bg-accent focus-visible:bg-accent focus-visible:outline-primary">

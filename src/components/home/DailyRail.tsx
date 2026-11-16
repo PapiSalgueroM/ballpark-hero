@@ -6,6 +6,8 @@ import { dailyGames, dealtBySport, todaysPuzzle, sportOf, SPORT_NAME, type Sport
 import type { GameDef } from '@/data/gameRegistry';
 import { SportGlyph, sportStyle } from './SportGlyph';
 
+export const HOME_DAILIES_ID = 'home-dailies';
+
 type DailyRailReturn = { sport: SportKey | ''; path: string; left: number; top: number };
 const railReturns = new Map<string, DailyRailReturn>();
 
@@ -124,10 +126,10 @@ export function DailyRail({ today }: { today?: string }) {
   if (sports.length === 0) return null;
 
   return (
-    <section aria-labelledby="home-dailies" data-home-dailies="" className="lg:overflow-hidden lg:rounded-2xl lg:border lg:border-border lg:bg-surface-1 lg:px-3 lg:pb-3 lg:pt-2.5 xl:px-4">
+    <section aria-labelledby={HOME_DAILIES_ID} data-home-dailies="" className="lg:overflow-hidden lg:rounded-2xl lg:border lg:border-border lg:bg-surface-1 lg:px-3 lg:pb-3 lg:pt-2.5 xl:px-4">
       <div className="mb-3 space-y-2">
         <div>
-          <h2 id="home-dailies" className="flex items-center gap-2 text-lg font-display font-bold text-foreground">
+          <h2 id={HOME_DAILIES_ID} tabIndex={-1} className="flex scroll-mt-36 items-center gap-2 text-lg font-display font-bold text-foreground focus-visible:outline-primary sm:scroll-mt-28">
             <CalendarDays aria-hidden="true" className="h-4 w-4 shrink-0 text-primary" />
             Daily puzzles
           </h2>

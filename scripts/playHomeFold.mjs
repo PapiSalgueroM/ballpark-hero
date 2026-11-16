@@ -661,12 +661,12 @@ console.log('9) the Home header offers a sport before leaving the first screen')
 for (const width of [320, 390, 430, 1440]) {
   const ctx = await browser.newContext({ viewport: { width, height: width === 320 ? 568 : 844 }, reducedMotion: 'reduce', hasTouch: width < 768 });
   try {
-    const page = await ctx.newPage();
-    await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
-    await page.addInitScript(light => {
+    await ctx.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
+    await ctx.addInitScript(light => {
       localStorage.setItem('cookie-consent', 'essential');
       if (light) localStorage.setItem('dukb-theme', 'light');
     }, width === 320 || width === 430);
+    const page = await ctx.newPage();
     await page.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
     const trigger = page.getByRole('button', { name: 'Browse sports', exact: true });
     const ready = await trigger.waitFor({ timeout: 5000 }).then(() => true, () => false);
@@ -682,7 +682,7 @@ for (const width of [320, 390, 430, 1440]) {
     })));
     const sections = await page.locator('section[data-sport] > div > h2').evaluateAll(headings => headings.map(h => '#' + h.id));
     const stayedAtTop = await page.evaluate(() => scrollY === 0 && document.documentElement.scrollWidth <= innerWidth);
-    const sportLinks = links.filter(link => link.href !== '#home-game-picks');
+    const sportLinks = links.filter(link => link.href?.startsWith('#sport-'));
     say(stayedAtTop && sportLinks.length === sections.length && sportLinks.every(link => sections.includes(link.href) && link.height >= 44),
       width + 'px header opens every sport at the top with 44px targets');
     await page.keyboard.press('Escape');
@@ -728,6 +728,55 @@ for (const width of [320, 390, 430, 1440]) {
     await page.goBack();
     say(await trigger.evaluate(button => document.activeElement === button && !location.hash && scrollY === 0),
       width + 'px Back from Game picks restores the opener at the top');
+
+    for (const shortcut of [
+      { label: 'Daily puzzles', hash: '#home-dailies', card: '[data-daily-spotlight]' },
+      { label: 'Career sims', hash: '#home-career-sims', card: '[data-catalog-card] a[href]' },
+    ]) {
+      await trigger.press('Enter');
+      await quick.waitFor();
+      const link = quick.getByRole('link', { name: shortcut.label, exact: true });
+      if (await link.count() !== 1) {
+        say(false, width + 'px header offers a ' + shortcut.label + ' shortcut');
+        await page.keyboard.press('Escape');
+        continue;
+      }
+      const box = await link.boundingBox();
+      say(await link.getAttribute('href') === shortcut.hash && box?.width >= 44 && box.height >= 44,
+        width + 'px ' + shortcut.label + ' shortcut has the exact destination and a full tap target');
+      if (width < 768) await link.tap();
+      else { await link.focus(); await link.press('Enter'); }
+
+      const reachesCard = ({ hash, card, direct }) => {
+        const heading = document.querySelector(hash);
+        const first = heading?.closest('section')?.querySelector(card)?.getBoundingClientRect();
+        const wantedFocus = direct ? document.body : heading;
+        return heading && first && location.hash === hash && document.activeElement === wantedFocus
+          && Math.abs(heading.getBoundingClientRect().top - parseFloat(getComputedStyle(heading).scrollMarginTop)) <= 3
+          && first.top > heading.getBoundingClientRect().bottom && first.bottom <= innerHeight;
+      };
+      const lands = (destination, direct = false) =>
+        destination.waitForFunction(reachesCard, { ...shortcut, direct }, { timeout: 2500 }).then(() => true, () => false);
+      say(await lands(page), width + 'px jump focuses ' + shortcut.label + ' with a full game visible');
+      await page.goBack();
+      const returnsToOpener = () => page.waitForFunction(id => document.activeElement?.id === id && !location.hash && scrollY === 0,
+        'home-browse-sports-trigger', { timeout: 2500 }).then(() => true, () => false);
+      say(await returnsToOpener(), width + 'px Back from ' + shortcut.label + ' restores the opener at the top');
+      await page.goForward();
+      say(await lands(page), width + 'px Forward restores ' + shortcut.label + ' and its first full game');
+      await page.goBack();
+      await returnsToOpener();
+
+      if (width === 320) {
+        const direct = await ctx.newPage();
+        try {
+          await direct.goto(BASE + '/' + shortcut.hash, { waitUntil: 'domcontentloaded' });
+          say(await lands(direct, true), width + 'px direct ' + shortcut.label + ' link shows a game with no focus change');
+        } finally {
+          await direct.close();
+        }
+      }
+    }
   } finally {
     await ctx.close();
   }
