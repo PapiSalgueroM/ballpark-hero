@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import {
-  createNrlCareer, nrlCareerCap, nrlCareerMarket, nrlContractCounteroffer, nrlContractOffer, nrlRenewalHoldOptions,
+  createNrlCareer, nrlAcademyReports, nrlCareerCap, nrlCareerMarket, nrlContractCounteroffer, nrlContractOffer, nrlRenewalHoldOptions,
   readNrlCareerSave, reduceNrlCareer, type NrlCareerState,
 } from '@/lib/nrlCareer';
 import { NRL_SAVE_KEY } from '@/lib/nrlManager';
@@ -154,4 +154,54 @@ it('books a renewal price from Contracts and exercises it after reload', () => {
   expect(screen.getByRole('status')).toHaveTextContent('Renewal signed');
   click('Finances');
   expect(screen.getByText('Renewal hold fee', { exact: true })).toBeVisible();
+});
+
+it('previews and saves next season’s developed player allowance through Contracts', () => {
+  const clubId = 'panthers';
+  let career = reduceNrlCareer(createNrlCareer(clubId, 41), { type: 'scoutAcademy', role: 'Fullback', priority: 'ceiling' });
+  while (career.season.phase !== 'complete') career = reduceNrlCareer(career, { type: 'advance' });
+  const prospect = nrlAcademyReports(career)[0].player!;
+  const retained = reduceNrlCareer(career, {
+    type: 'startNextSeason', academyCarry: { fromYear: 2026, clubId, playerId: prospect.id },
+  });
+  const signed = reduceNrlCareer(retained, { type: 'promoteAcademy', playerId: prospect.id });
+  expect(signed).not.toBe(retained);
+  const action = { type: 'setDevelopedAllowance', year: 2027, clubId, allowanceYear: 2028, playerId: prospect.id } as const;
+  const expected = reduceNrlCareer(signed, action);
+  expect(expected).not.toBe(signed);
+  const unclaimedCap = nrlCareerCap(signed, 2028);
+  const claimedCap = nrlCareerCap(expected, 2028);
+  const view = open(signed);
+  fireEvent.click(screen.getByText('Developed player allowance', { exact: true }));
+  const pick = screen.getByRole('combobox', { name: 'Nominate a signed graduate' });
+  expect(pick).toHaveValue('');
+  fireEvent.change(pick, { target: { value: prospect.id } });
+  expect(screen.getByText(currency.format(claimedCap.developedAllowance!) + ' in 2028 cap relief.')).toBeVisible();
+  expect(screen.getByText('Cap room ' + currency.format(unclaimedCap.available) + ' → ' + currency.format(claimedCap.available))).toBeVisible();
+  expect(raw()).toBe(JSON.stringify(signed));
+  expect(localStorage.getItem(fence)).toBe('4');
+
+  click('Apply nomination');
+  expect(raw()).toBe(JSON.stringify(expected));
+  expect(localStorage.getItem(fence)).toBe('5');
+  expect(screen.getByText(prospect.name + ' nominated for 2028.')).toBeVisible();
+
+  view.unmount();
+  show();
+  openContracts();
+  fireEvent.click(screen.getByText('Developed player allowance', { exact: true }));
+  expect(screen.getByRole('combobox', { name: 'Nominate a signed graduate' })).toHaveValue(prospect.id);
+  click('Finances');
+  expect(screen.queryByText('Developed player allowance', { exact: true })).not.toBeInTheDocument();
+  click('2028');
+  expect(screen.getByText('Developed player allowance', { exact: true }).nextElementSibling).toHaveTextContent('$145,000');
+  expect(screen.getByText('Contracted wages', { exact: true }).nextElementSibling).toHaveTextContent(currency.format(unclaimedCap.committed));
+  expect(screen.getByText('Available to spend', { exact: true }).nextElementSibling).toHaveTextContent(currency.format(claimedCap.available));
+
+  click('Contracts');
+  fireEvent.click(screen.getByText('Developed player allowance', { exact: true }));
+  fireEvent.change(screen.getByRole('combobox', { name: 'Nominate a signed graduate' }), { target: { value: '' } });
+  click('Remove nomination');
+  expect(raw()).toBe(JSON.stringify(signed));
+  expect(localStorage.getItem(fence)).toBe('6');
 });

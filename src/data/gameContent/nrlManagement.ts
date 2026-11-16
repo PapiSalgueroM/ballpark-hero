@@ -70,6 +70,7 @@ export const NRL_MANAGEMENT_CONTENT: GameContentMap = {
       'Finish in the top eight to reach the finals. Follow the bracket and try to win the Grand Final.',
       'In Contracts, spend $25,000 from club cash to hold one expiring player’s one-year asking salary. Sign before the next season starts if a squad place and cap room are still available. The fee stays spent if the hold expires.',
       'Open the club office to extend contracts and approach eligible recruits. Check how much cap room you have in the season the deal starts.',
+      'Keep an unsigned academy prospect across seasons and sign them to your Top 30. In Contracts, nominate one eligible graduate for up to $300,000 of cap relief next year. Their full wages and squad place still count.',
       'When you make an offer or request a counteroffer, check how its salary and term would change your cap room and open squad places in every year of the deal.',
       'In Ladder, open Scout a club to shortlist eligible rivals and take them straight to Recruitment.',
       'In Recruitment, choose a position to see who is signed for next year, any ready academy prospect and up to three external targets. The brief checks whether a one-season offer at each player’s asking salary fits your squad and cap.',
