@@ -104,6 +104,8 @@ export interface NbaSeasonLine {
   ovr: number;
   games: number;
   restGames?: number;
+  /** Appearances from an opted-in regular-season second-unit assignment. */
+  benchAppearances?: number;
   ppg: number;
   rpg: number;
   apg: number;
@@ -820,9 +822,12 @@ export function simNbaSeason(
   /* Round 1103: the All-Star vote is in February, so it reads the fanbase he tipped off with, before a title's
      bump lands. */
   const fansAtTipOff = c.fanbase;
-  const restGames = nbaRestPlanActive(c) ? nbaScheduledRestGames(c) : 0;
-  if (c.restPlan?.year === c.year && c.restPlan.team === c.team && c.role === 'backup') {
-    notes.push('Camp put you on the bench, so your rest plan was dropped.');
+  const campRole = c.role === 'backup' ? 'backup' : 'starter';
+  const secondUnit = programme?.plan.tactics === 'second-unit' && campRole === 'starter';
+  const regularRole = secondUnit ? 'backup' : campRole;
+  const restGames = !secondUnit && nbaRestPlanActive(c) ? nbaScheduledRestGames(c) : 0;
+  if (c.restPlan?.year === c.year && c.restPlan.team === c.team && regularRole === 'backup') {
+    notes.push(secondUnit ? 'The second-unit assignment replaced your scheduled rest games.' : 'Camp put you on the bench, so your rest plan was dropped.');
   }
   delete c.restPlan;
   const { games, note } = gamesFor(c, rng, restGames);
@@ -849,9 +854,8 @@ export function simNbaSeason(
      is a starter.
      Round 1103: the whole line comes from nbaStatLineFor above (minutes by role, production a minute, the
      league's level that year), and a season now records its minutes, steals and blocks too. */
-  const role: 'starter' | 'backup' = c.role === 'backup' ? 'backup' : 'starter';
   const seasonsPlayed = c.seasons.length;
-  const stat = nbaStatLineFor({ form, pos: c.pos, archetype: a, role, seasonsPlayed, year: c.year }, rng);
+  const stat = nbaStatLineFor({ form, pos: c.pos, archetype: a, role: regularRole, seasonsPlayed, year: c.year }, rng);
   if (programme?.plan.tactics === 'defend') {
     const { label, stat: key, unit } = nbaDefensiveAssignment(c.pos);
     const cap = NBA_DEFENSIVE_CAP[key];
@@ -874,6 +878,10 @@ export function simNbaSeason(
     ppg, rpg, apg, awards: [], teamResult: '', salary: c.salary,
     mpg: stat.mpg, spg: stat.spg, bpg: stat.bpg,
   };
+  if (secondUnit) {
+    line.benchAppearances = games;
+    notes.push(`Lead the second unit recorded ${games} bench appearances at ${stat.mpg.toFixed(1)} minutes per game.`);
+  }
   if (seasonRating) line.seasonRating = seasonRating;
   if (restGames) line.restGames = restGames;
   /* The season card's stat line stays three parts (the hub tile has room for three), so the rest is said here. */
@@ -920,7 +928,7 @@ export function simNbaSeason(
     /* Round 1103: the same function as the regular season, on the playoff form. */
     const extraPlayoffMinutes = !!playoffMinutes && nbaExtraPlayoffMinutesAvailable(c)
       && c.health - playoffMinutes.healthDelta >= NBA_PLAYOFF_HEALTH_COST;
-    const po = nbaStatLineFor({ form: poForm, pos: c.pos, archetype: a, role, seasonsPlayed, year: c.year, playoffs: true, extraPlayoffMinutes }, rng);
+    const po = nbaStatLineFor({ form: poForm, pos: c.pos, archetype: a, role: campRole, seasonsPlayed, year: c.year, playoffs: true, extraPlayoffMinutes }, rng);
     line.poPpg = po.ppg;
     line.poRpg = po.rpg;
     line.poApg = po.apg;
@@ -949,7 +957,7 @@ export function simNbaSeason(
   const prev = c.seasons[c.seasons.length - 1];
   const won = decideNbaAwards(rng, {
     pos: c.pos, defenceRep: (NBA_ARCH_DEFENSE[a.id] ?? NBA_DEFENSE_UNKNOWN).rep,
-    bench: c.role === 'backup', rookie: c.seasons.length === 0,
+    bench: regularRole === 'backup', rookie: c.seasons.length === 0,
     year: c.year, seasonLength: L, games,
     ppg, rpg, apg, spg: stat.spg, bpg: stat.bpg,
     winShare: (line.clubWins ?? 0) / L, madePlayoffs: result !== NBA_MISSED_PLAYOFFS,
