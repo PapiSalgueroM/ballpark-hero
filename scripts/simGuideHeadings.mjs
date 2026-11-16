@@ -162,6 +162,14 @@ const SOCCER_TRAINING_LOCATION = {
   after: 'Open the training ground (the dumbbell button, above your player on phones or bottom right on desktop)',
 };
 function reviewedGuideSentences(route, part, sentences) {
+  if (route === '/front-office' && part === 'howToPlay') return sentences.flatMap(line =>
+    line.startsWith('Need cover for one regular-season game? Elevate up to two practice squad players,') ? [line,
+      'In a full-roster career, use Place on injured reserve before your next regular-season game for a player with a four-game injury. You keep his contract and full cap hit, and his place opens on the active roster. In Injured reserve, activate him once he has recovered and missed four settled team games, provided an active roster spot is open. A team has eight regular-season activations, with up to two per player.',
+    ] : [line]);
+  if (route === '/front-office' && part === 'rules') return sentences.map(line => line.replace(
+    'The Giants open at 54, because a starter on injured reserve still counts, so a Giants GM owes one cut before Week 1.',
+    'The Giants start at 54 because the opening snapshot includes a reserve-listed starter on the game roster. A Giants GM needs one preseason cut before Week 1.',
+  ));
   if (route === '/club-manager' && part === 'rules') return [...sentences,
     'In Training, give one player Light or Double for the next paid week. Compare the fitness estimate before you choose how hard he trains.'];
   if (route === '/nba-my-career' && part === 'howToPlay') return [...sentences.map(line => line.replace(

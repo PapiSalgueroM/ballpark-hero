@@ -177,6 +177,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
         items: [
           "Open Roster, then Practice squad. A permanent call-up needs a spot on the 53-player roster and room for his displayed fictional salary, including dead money. At the limit, cut or trade before signing anyone permanently.",
           "Need cover for one regular-season game? Elevate up to two practice squad players, even with 53 on the roster. Each player can be elevated three times per season. For example, if your starting quarterback is hurt, elevate a backup, play the week, and he goes back to practice. The game counts one week's share of his displayed fictional salary against your season cap. Cancel before playing to free the reserved amount.",
+          "In a full-roster career, use Place on injured reserve before your next regular-season game for a player with a four-game injury. You keep his contract and full cap hit, and his place opens on the active roster. In Injured reserve, activate him once he has recovered and missed four settled team games, provided an active roster spot is open. A team has eight regular-season activations, with up to two per player.",
         ],
       },
       {
@@ -251,7 +252,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "The 53 man limit and the offseason refill",
         items: [
-          "Every offseason each position group is refilled to its real size. The club calls up its own practice squad first and only signs a generated depth man when the squad has nobody left at that spot. A computer club the draft takes over 53 releases its lowest rated men who do not start, dead money and all, never a starter. Your club is never cut behind your back: if your picks take you over 53, the board tells you how many you owe and Play waits until you have cut down yourself. The Giants open at 54, because a starter on injured reserve still counts, so a Giants GM owes one cut before Week 1.",
+          "Every offseason each position group is refilled to its real size. The club calls up its own practice squad first and only signs a generated depth man when the squad has nobody left at that spot. A computer club the draft takes over 53 releases its lowest rated men who do not start, dead money and all, never a starter. Your club is never cut behind your back: if your picks take you over 53, the board tells you how many you owe and Play waits until you have cut down yourself. The Giants start at 54 because the opening snapshot includes a reserve-listed starter on the game roster. A Giants GM needs one preseason cut before Week 1.",
         ],
       },
       {

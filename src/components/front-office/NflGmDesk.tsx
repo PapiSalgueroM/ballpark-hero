@@ -26,7 +26,7 @@ import { nflContractHost } from '@/lib/gmContractsHostNfl';
 import { pickKey, pickRefusal, picksHeldBy } from '@/lib/gmPicks';
 import { assetKey, evaluatePackage, type TradeAsset, type TradePackage } from '@/lib/gmTradePackage';
 import { NFL_STAFF_PACK } from '@/data/gmStaff/packs';
-import { type LeagueState, tradeValue } from '@/lib/frontOffice';
+import { nflActiveRoster, type LeagueState, tradeValue } from '@/lib/frontOffice';
 import {
   NFL_DEFENSE_WEIGHT, NFL_DESK_KEYS, NFL_OFFENSE_WEIGHT, NFL_TRADE_BONUS_SHARE, deskCopy, nflContractsOf,
   nflContractsTile, nflDecideFifthYearOption, nflDealsTile, nflFifthYearCases,
@@ -188,7 +188,7 @@ function DealsPanel({ desk, facts }: Props) {
   const them = league.teams[partner];
   const me = league.teams[teamId];
 
-  const playerTiles = (abbr: string): BuilderTile[] => league.teams[abbr].players
+  const playerTiles = (abbr: string): BuilderTile[] => nflActiveRoster(league.teams[abbr])
     .slice().sort((a, b) => tradeValue(b) - tradeValue(a))
     .map(p => ({ asset: { kind: 'player', id: p.id }, label: p.name, sub: `${p.pos} ${p.ovr}, age ${p.age}, $${p.salary}M x ${p.years}` }));
   const pickTiles = (abbr: string): BuilderTile[] => picksHeldBy(ledger, abbr).map(p => {
