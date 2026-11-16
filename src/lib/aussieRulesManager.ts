@@ -178,9 +178,9 @@ export function quarter<C extends Club>(clubs: C[], match: Match, seed: number, 
   });
   return { clubs: nextClubs, match: { ...match, quarter: match.quarter + 1, events, homeScore: scoreFor(events, home.id), awayScore: scoreFor(events, away.id) } };
 }
-export function simulateOtherMatch<C extends Club>(state: Pick<ManagerState, 'seed' | 'round'> & { clubs: C[] }, homeId: string, awayId: string): { clubs: C[]; match: Match } {
-  const homeOpening = automaticLineup(clubById(state, homeId)!);
-  const awayOpening = automaticLineup(clubById(state, awayId)!);
+export function simulateOtherMatch<C extends Club>(state: Pick<ManagerState, 'seed' | 'round'> & { clubs: C[] }, homeId: string, awayId: string, pick = (club: C) => automaticLineup(club)): { clubs: C[]; match: Match } {
+  const homeOpening = pick(state.clubs.find(club => club.id === homeId)!);
+  const awayOpening = pick(state.clubs.find(club => club.id === awayId)!);
   let result = { clubs: state.clubs, match: { ...emptyMatch(state.round, homeId, awayId), homeSquad: [...homeOpening.starters, ...homeOpening.bench], awaySquad: [...awayOpening.starters, ...awayOpening.bench] } };
   for (let index = 0; index < 4; index += 1) {
     const home = result.clubs.find(club => club.id === homeId)!;

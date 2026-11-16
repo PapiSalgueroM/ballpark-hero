@@ -67,7 +67,7 @@ export function useAussieRulesLeague() {
 
   const start = (seed: number, clubId: string): boolean => {
     // Round 1572: a new career runs the real AFL clubs; a saved career keeps the set it was started with.
-    const next = createLeague(seed, clubId, CURRENT_CLUB_SET);
+    const next = createLeague(seed, clubId, CURRENT_CLUB_SET, true);
     return next ? write(next, true) : false;
   };
   const dispatch = (action: LeagueAction): boolean => {
