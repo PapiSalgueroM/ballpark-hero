@@ -67,6 +67,21 @@ function catalogueViewport(desktop: boolean) {
   };
 }
 
+it('links the saved Club Manager flagship to active resume and keeps the fresh entry bare', () => {
+  const { main } = home();
+  const card = main.querySelector('[data-stage-card="/club-manager"]');
+  expect(card).toHaveAttribute('href', '/club-manager');
+  expect(card).toHaveTextContent('Take the job');
+  localStorage.setItem('dukb-club-manager-save', JSON.stringify({
+    saveVersion: 3, clubName: 'Fixture FC', season: 3, week: 0, leagueClubs: ['Fixture FC'],
+    squad: [], calendar: [], xiIds: [], table: [],
+  }));
+  fireEvent(window, new StorageEvent('storage', { key: 'dukb-club-manager-save', storageArea: localStorage }));
+  expect(card).toHaveAttribute('href', '/club-manager?resume=active');
+  expect(card).toHaveTextContent('Back to the dugout');
+  expect(main.querySelector('[data-continue-card="/club-manager"]')).toHaveAttribute('href', '/club-manager?slot=1');
+});
+
 it('keeps every desktop sport jump and saves the order through one labelled control', () => {
   catalogueViewport(true);
   const { main } = home();

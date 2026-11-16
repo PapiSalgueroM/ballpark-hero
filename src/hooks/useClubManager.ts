@@ -37,7 +37,8 @@ import { eraById, eraRostersLoaded, ensureEraRosters, isHistoricEra } from '@/li
 import { ensureRealLeagueFixtures, realLeagueFixturesLoaded, realLeagueFixtureKeyFor } from '@/lib/clubManagerFixtures';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { kLeagueMember } from '@/data/kLeague2026';
-import { readSlotSave, readSlots, summarize as summarizeSlotSave, switchSlot, deleteSlot, activeSlot, type SlotView } from '@/lib/clubManagerSlots';
+import { readSlotSave, readSlots, summarize as summarizeSlotSave, switchSlot, deleteSlot, activeSlot, activeResumeSlot, type SlotView } from '@/lib/clubManagerSlots';
+import type { ClubManagerSlotRequest } from '@/lib/clubManagerSaveKeys';
 import { clearSlotPoints, noteSeasonCredited, seasonPosts } from '@/lib/cmSavePointsStore';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
@@ -143,7 +144,7 @@ function creditSeason(s: CareerState): void {
   noteSeasonCredited(activeSlot(), s.season);
 }
 
-export function useClubManager(requestedSlot?: number | null) {
+export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
   const [phase, setPhase] = useState<CMPhase>('boot');
   const [career, setCareer] = useState<CareerState | null>(null);
   const [report, setReport] = useState<MatchWeekReport | null>(null);
@@ -200,7 +201,9 @@ export function useClubManager(requestedSlot?: number | null) {
   // Boot: look for a saved career and offer to resume it.
   useEffect(() => {
     let alive = true;
-    const requested = incomingSlot.current;
+    const request = incomingSlot.current;
+    const activeOnly = request === 'active';
+    const requested = activeOnly ? activeResumeSlot() : request;
     const showUnavailableSlot = (message: string) => {
       incomingSlot.current = undefined;
       ownSlot.current = activeSlot();
@@ -224,7 +227,9 @@ export function useClubManager(requestedSlot?: number | null) {
     const open = () => {
       let saved: CareerState | null;
       if (typeof requested === 'number' && target) {
-        if (saveFence.moved(SAVE_KEY) || readSlotSave(requested) !== target) {
+        const requestStillCurrent = () =>
+          (!activeOnly || activeResumeSlot() === requested) && !saveFence.moved(SAVE_KEY) && readSlotSave(requested) === target;
+        if (!requestStillCurrent()) {
           saveFence.adopt(SAVE_KEY);
           showUnavailableSlot(unavailableSlot);
           return;
@@ -236,9 +241,9 @@ export function useClubManager(requestedSlot?: number | null) {
           showUnavailableSlot(unavailableSlot);
           return;
         }
-        if (!switchSlot(requested)) {
+        if (activeOnly ? !requestStillCurrent() : !switchSlot(requested)) {
           restoreEngineRegistrations(registrations);
-          showUnavailableSlot('This browser would not save the switch, so nothing moved. Choose a manager to try again.');
+          showUnavailableSlot(activeOnly ? unavailableSlot : 'This browser would not save the switch, so nothing moved. Choose a manager to try again.');
           return;
         }
         incomingSlot.current = undefined;

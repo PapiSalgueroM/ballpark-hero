@@ -65,6 +65,19 @@ export interface MlbGmPlayer {
   pot: number;
   /** Round 829: his opening rating rests on thin 2026 numbers. Optional, so older saves read as not. */
   partial?: boolean;
+  /** Identifies an in-game draft pick and the club that holds his rookie rights. */
+  draftedBy?: { team: string; season: number };
+  farmAssignment?: MlbFarmAssignment;
+}
+
+interface MlbFarmAssignment {
+  season: number;
+  round: number;
+  recalled?: {
+    season: number;
+    round: number;
+    coverage?: { id: string; name: string; returnRound: number };
+  };
 }
 
 /* Round 631: CutLedger is the optional deadCap and releasedThisSeason pair,
@@ -222,6 +235,16 @@ export function mlbCapRoom(t: MlbGmTeam, cap: number): number {
 export const MLB_STRENGTH_SLOTS = { bats: 8, rot: 3, pen: 2 } as const;
 export const MLB_REPLACEMENT_RATING = 62;
 
+export function mlbIsInTripleA(p: Pick<MlbGmPlayer, 'farmAssignment' | 'draftedBy'>, team: string | undefined): boolean {
+  const assignment = p.farmAssignment;
+  return !!team && p.draftedBy?.team === team
+    && assignment?.round === 1 && Number.isInteger(assignment.season) && !assignment.recalled;
+}
+
+export function mlbActivePlayers<T extends Pick<MlbGmPlayer, 'pos' | 'farmAssignment' | 'draftedBy'>>(team: { abbr?: string; players: T[] }): T[] {
+  return team.players.filter(p => !mlbIsInTripleA(p, team.abbr));
+}
+
 function mlbStartingBatters<T extends { pos: string; ovr: number }>(available: T[]): T[] {
   return available.filter(p => !isPitcher(p)).sort((a, b) => b.ovr - a.ovr).slice(0, MLB_STRENGTH_SLOTS.bats);
 }
@@ -230,8 +253,8 @@ function mlbStartingBatters<T extends { pos: string; ovr: number }>(available: T
     starters, 2 relievers. Lifted out of mlbStrength unchanged so the roster
     screen and the opening payroll read the same men the sim does. A bench
     man counts only when he is better than a starter or a starter is hurt. */
-export function mlbStrengthUnits<T extends { pos: string; ovr: number; out: number }>(t: { players: T[] }, rotationSize: number = MLB_STRENGTH_SLOTS.rot): { bats: T[]; rot: T[]; pen: T[] } {
-  const healthy = t.players.filter(p => p.out === 0);
+export function mlbStrengthUnits<T extends Pick<MlbGmPlayer, 'pos' | 'ovr' | 'out' | 'farmAssignment' | 'draftedBy'>>(t: { abbr?: string; players: T[] }, rotationSize: number = MLB_STRENGTH_SLOTS.rot): { bats: T[]; rot: T[]; pen: T[] } {
+  const healthy = mlbActivePlayers(t).filter(p => p.out === 0);
   const bats = mlbStartingBatters(healthy);
   const rot = healthy.filter(p => p.pos === 'SP').sort((a, b) => b.ovr - a.ovr).slice(0, rotationSize);
   const pen = healthy.filter(p => p.pos === 'RP' || p.pos === 'CL').sort((a, b) => b.ovr - a.ovr).slice(0, MLB_STRENGTH_SLOTS.pen);
@@ -239,7 +262,7 @@ export function mlbStrengthUnits<T extends { pos: string; ovr: number; out: numb
 }
 
 /** Round 829: the ids of the men the sim plays right now. */
-export function mlbSimReads(t: { players: MlbGmPlayer[] }): string[] {
+export function mlbSimReads(t: { abbr?: string; players: MlbGmPlayer[] }): string[] {
   const u = mlbStrengthUnits(t);
   return [...u.bats, ...u.rot, ...u.pen].map(p => p.id);
 }
@@ -276,7 +299,7 @@ export function mlbDevelopmentChoices(league: MlbLeague, team: string, afterInju
   const club = league.teams[team];
   if (!club || !league.inSeasonRatings || mlbDevelopmentUsed(league, team)
     || league.round < 1 || league.round > MLB_ROUNDS || league.champions.some(row => row.season === league.season)) return null;
-  const available = club.players.filter(player => (afterInjuryPass ? player.out : ilRoundsAfterCountdown(player.out)) === 0);
+  const available = mlbActivePlayers(club).filter(player => (afterInjuryPass ? player.out : ilRoundsAfterCountdown(player.out)) === 0);
   const bats = mlbStartingBatters(available);
   if (bats.length < 8) return null;
   const eligible = available.filter(player => player.age <= 24 && player.ovr < player.pot && !isPitcher(player) && !bats.includes(player));
@@ -405,7 +428,7 @@ function unitHash(seed: number, key: string, salt: number): number {
 function rollDepthInjuries(league: MlbLeague, myTeam: string, rng: () => number, notes: string[], opts?: MlbRoundOptions, protectedIds?: Set<string>): void {
   const roundSeed = Math.floor(rng() * 4294967296);
   for (const t of Object.values(league.teams)) {
-    for (const p of t.players) {
+    for (const p of mlbActivePlayers(t)) {
       if (p.out > 0) { p.out = ilRoundsAfterCountdown(p.out); continue; }
       const risk = t.abbr === myTeam && protectedIds?.has(p.id) ? PROTECTED_INJURY_RISK : DEFAULT_INJURY_RISK;
       if (unitHash(roundSeed, p.name, 1) < risk) {
@@ -430,7 +453,7 @@ export function simMlbRound(league: MlbLeague, myTeam: string, rng: () => number
   if (deep) rollDepthInjuries(league, myTeam, rng, notes, opts, protectedIds);
   else {
     for (const t of Object.values(league.teams)) {
-      for (const p of t.players) {
+      for (const p of mlbActivePlayers(t)) {
         if (p.out > 0) p.out = ilRoundsAfterCountdown(p.out);
         else if (rng() < DEFAULT_INJURY_RISK) {
           p.out = 1 + Math.floor(rng() * 4);
@@ -650,19 +673,73 @@ export const MLB_ROSTER_MAX = 28;
 export const mlbRosterMin = (t: { depth?: number }): number => (t.depth ? MLB_ROSTER_MIN : MLB_LEGACY_ROSTER_MIN);
 export const mlbRosterMax = (t: { depth?: number }): number => (t.depth ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);
 
+const mlbRosterRole = (player: MlbGmPlayer) => player.pos === 'SP' ? 'starter' : isPitcher(player) ? 'bullpen' : 'position';
+
+export function mlbFarmChoice(league: MlbLeague, team: string, player: MlbGmPlayer) {
+  const club = league.teams[team];
+  const drafted = player.draftedBy;
+  if (!club?.depth || drafted?.team !== team || !Number.isInteger(drafted.season)) return null;
+  const active = mlbActivePlayers(club);
+  const closed = league.champions.some(row => row.season === league.season);
+  const assignment = player.farmAssignment;
+  if (assignment && mlbIsInTripleA(player, team)) {
+    const readyRound = assignment.round + (isPitcher(player) ? 3 : 2);
+    const waiting = assignment.season === league.season && league.round < readyRound;
+    // One early recall covers one injury until the player is due back.
+    const injured = waiting ? active.find(p => p.out > 1 && mlbRosterRole(p) === mlbRosterRole(player)
+      && !club.players.some(man => {
+        const recall = man.farmAssignment?.recalled;
+        return recall?.season === league.season && recall.coverage?.id === p.id
+          && recall.coverage.returnRound === league.round + p.out;
+      })) : undefined;
+    const reason = closed ? 'Recalls reopen before Round 1 next season.'
+      : active.length >= mlbRosterMax(club) ? 'Open an active roster spot before recalling him.'
+      : waiting && !injured ? `Recall from Round ${readyRound}, or sooner for an injured player in his role.` : null;
+    return { move: 'recall' as const, reason, injured };
+  }
+
+  if (league.season <= drafted.season || league.season > drafted.season + 3) return null;
+  const reason = closed || league.round !== 1 ? 'Triple-A options are available before Round 1.'
+    : assignment?.season === league.season ? 'He has already used his Triple-A assignment this season.'
+    : player.out > 0 ? 'Wait until he is healthy to option him.'
+    : active.length <= mlbRosterMin(club) ? `Keep at least ${mlbRosterMin(club)} active players.` : null;
+  return { move: 'option' as const, reason };
+}
+
+export function mlbMoveFarmPlayer(league: MlbLeague, team: string, playerId: string, move: 'option' | 'recall'): boolean {
+  const player = league.teams[team]?.players.find(p => p.id === playerId);
+  if (!player) return false;
+  const choice = mlbFarmChoice(league, team, player);
+  if (!choice || choice.move !== move || choice.reason) return false;
+  if (choice.move === 'option') {
+    player.farmAssignment = { season: league.season, round: league.round };
+  } else if (player.farmAssignment) {
+    const injured = choice.injured;
+    player.farmAssignment.recalled = {
+      season: league.season,
+      round: league.round,
+      ...(injured ? { coverage: { id: injured.id, name: injured.name, returnRound: league.round + injured.out } } : {}),
+    };
+  }
+  return true;
+}
+
 export function mlbRelease(t: MlbGmTeam, fas: MlbGmPlayer[], id: string): boolean {
-  const floor = mlbRosterMin(t);
-  return cutPlayer(t, fas, id, floor);
+  const active = mlbActivePlayers(t);
+  if (active.length <= mlbRosterMin(t) || !active.some(p => p.id === id)) return false;
+  return cutPlayer(t, fas, id, mlbRosterMin(t));
 }
 
 export function mlbSign(t: MlbGmTeam, fas: MlbGmPlayer[], id: string, cap: number): boolean {
   const i = fas.findIndex(p => p.id === id);
-  if (i < 0 || rosterFullRefusal(t, mlbRosterMax(t))) return false;
+  if (i < 0 || rosterFullRefusal({ players: mlbActivePlayers(t) }, mlbRosterMax(t))) return false;
   /* Round 631: the same refusal the board shows beside the greyed button. */
   if (signRefusal(t, id)) return false;
   const p = fas[i];
   if (mlbCapRoom(t, cap) < p.salary) return false;
   fas.splice(i, 1);
+  delete p.draftedBy;
+  delete p.farmAssignment;
   t.players.push(p);
   return true;
 }
@@ -676,9 +753,10 @@ export function mlbTradeValue(p: MlbGmPlayer): number {
 export function mlbTrade(
   my: MlbGmTeam, their: MlbGmTeam, myId: string, theirId: string, sweeten: boolean, cap: number,
 ): 'accepted' | 'rejected' | 'invalid' {
-  const mine = my.players.find(p => p.id === myId);
-  const theirs = their.players.find(p => p.id === theirId);
-  if (!mine || !theirs || my.players.length <= mlbRosterMin(my) || their.players.length <= mlbRosterMin(their)) return 'invalid';
+  const myActive = mlbActivePlayers(my), theirActive = mlbActivePlayers(their);
+  const mine = myActive.find(p => p.id === myId);
+  const theirs = theirActive.find(p => p.id === theirId);
+  if (!mine || !theirs || myActive.length <= mlbRosterMin(my) || theirActive.length <= mlbRosterMin(their)) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   // Round 82: salary matching so payroll-heavy teams can still swap contracts
@@ -702,9 +780,10 @@ export function mlbTrade(
 export function mlbExecuteTalksTrade(
   my: MlbGmTeam, their: MlbGmTeam, myId: string, theirId: string, addPick: boolean, cap: number,
 ): 'done' | 'invalid' {
-  const mine = my.players.find(p => p.id === myId);
-  const theirs = their.players.find(p => p.id === theirId);
-  if (!mine || !theirs || my.players.length <= mlbRosterMin(my) || their.players.length <= mlbRosterMin(their)) return 'invalid';
+  const myActive = mlbActivePlayers(my), theirActive = mlbActivePlayers(their);
+  const mine = myActive.find(p => p.id === myId);
+  const theirs = theirActive.find(p => p.id === theirId);
+  if (!mine || !theirs || myActive.length <= mlbRosterMin(my) || theirActive.length <= mlbRosterMin(their)) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   if (addPick && !my.picks.length) return 'invalid';
@@ -789,8 +868,8 @@ const MLB_SIDE_SHARE = 13;
 export function mlbCutDownToMax(t: MlbGmTeam, freeAgents: MlbGmPlayer[]): { team: string; player: string; pos: string }[] {
   const out: { team: string; player: string; pos: string }[] = [];
   if (!t.depth) return out;
-  while (t.players.length > mlbRosterMax(t)) {
-    const roster = [...t.players];
+  while (mlbOverLimit(t) > 0) {
+    const roster = mlbActivePlayers(t);
     const reads = new Set(mlbSimReads(t));
     const n = (f: (p: MlbGmPlayer) => boolean) => roster.reduce((s, p) => s + (f(p) ? 1 : 0), 0);
     const isRp = (p: MlbGmPlayer) => p.pos === 'RP' || p.pos === 'CL';
@@ -810,14 +889,12 @@ export function mlbCutDownToMax(t: MlbGmTeam, freeAgents: MlbGmPlayer[]): { team
   return out;
 }
 
-/** Round 829 review: how many men a full roster club must DFA before it may
-    play, 0 when it is at or under its ceiling. The board holds Play on it. */
+/** How many active roster spots a full roster club has to clear before it plays. */
 export function mlbOverLimit(t: MlbGmTeam): number {
-  return t.depth ? Math.max(0, t.players.length - mlbRosterMax(t)) : 0;
+  return t.depth ? Math.max(0, mlbActivePlayers(t).length - mlbRosterMax(t)) : 0;
 }
 
-/* userTeam: the club whose cut down is the GM's own. The board passes it and
-   holds Play until he has DFA'd to 28 himself; every other club is cut here. */
+/* userTeam: the club whose cut-down decisions the player makes before Round 1. */
 /* Round 1020: opts carries a GM desk's farm director (src/lib/mlbGmDesk.ts).
    It reads the points the engine drew and draws nothing itself, so without
    it, or with it, the stream of draws is the same. */
@@ -888,11 +965,11 @@ export function replenishMlbRoster(t: MlbGmTeam, rng: () => number, taken: Set<s
   /* Round 829 review: a full roster club carries two catchers, as it was
      dealt. Measured before this line, 30 franchises by 10 seasons: 808 of
      9,000 club seasons opened with no catcher at all and 3,158 with one. */
-  if (t.depth) while (t.players.filter(p => p.pos === 'C').length < 2) add('C');
-  while (t.players.filter(p => !isPitcher(p)).length < bats) add(['C', '1B', 'SS', 'OF'][Math.floor(rng() * 4)]);
-  while (t.players.filter(p => p.pos === 'SP').length < starters) add('SP');
-  while (t.players.filter(p => p.pos === 'RP' || p.pos === 'CL').length < pen) add('RP');
-  while (t.players.length < floor) add(rng() < 0.5 ? 'OF' : 'RP');
+  if (t.depth) while (mlbActivePlayers(t).filter(p => p.pos === 'C').length < 2) add('C');
+  while (mlbActivePlayers(t).filter(p => !isPitcher(p)).length < bats) add(['C', '1B', 'SS', 'OF'][Math.floor(rng() * 4)]);
+  while (mlbActivePlayers(t).filter(p => p.pos === 'SP').length < starters) add('SP');
+  while (mlbActivePlayers(t).filter(p => p.pos === 'RP' || p.pos === 'CL').length < pen) add('RP');
+  while (mlbActivePlayers(t).length < floor) add(rng() < 0.5 ? 'OF' : 'RP');
 }
 
 /** Light AI roster churn for the 29 CPU clubs. */
@@ -901,7 +978,7 @@ export function mlbAiMoves(league: MlbLeague, myTeam: string, rng: () => number)
   for (const t of cpu) {
     if (rng() > 0.25 || !league.freeAgents.length) continue;
     const best = [...league.freeAgents].sort((a, b) => b.ovr - a.ovr)[0];
-    if (best && mlbCapRoom(t, league.cap) >= best.salary && t.players.length < mlbRosterMax(t)) {
+    if (best && mlbCapRoom(t, league.cap) >= best.salary && mlbActivePlayers(t).length < mlbRosterMax(t)) {
       mlbSign(t, league.freeAgents, best.id, league.cap);
     }
   }

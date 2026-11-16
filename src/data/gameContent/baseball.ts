@@ -1170,8 +1170,9 @@ export const BASEBALL_CONTENT: GameContentMap = {
       {
         heading: "Roster size and depth deals",
         items: [
-          "A new franchise carries 26 and can hold 22 to 28. The 13 men the sim plays earn their rating's price, the other 13 start on depth deals at 0.7 million until those deals run out, and then they re-sign at their rating's price like anybody else. The roster box flags a cheap deal in its last year with what he will cost, so the jump never lands by surprise.",
-          "If the draft takes you past 28, you DFA down to 28 before Round 1, dead money and all, and Play waits until you have. The CPU clubs cut their own lowest rated depth men the same way.",
+          "A new franchise starts with 26 players and can carry 22 to 28 on its active roster. The 13 men the sim plays earn their rating's price, the other 13 start on depth deals at 0.7 million until those deals run out, and then they re-sign at their rating's price like anybody else. The roster box flags a cheap deal in its last year with what he will cost, so the jump never lands by surprise.",
+          "If the draft takes you over 28 active players, open Roster before Round 1. You can option a prospect you drafted once per season in his first three seasons, or DFA a player. An option opens a spot while the player keeps his existing contract and full salary counts toward payroll. The CPU clubs cut their own depth players.",
+          "To recall a prospect, you need an open active spot. The game uses a two-round wait for position players and a three-round wait for pitchers. You can recall sooner to cover a qualifying IL injury in the same roster role.",
           "A save started before the full rosters keeps its 13 man roster and its old limits of 9 to 16.",
         ],
       },

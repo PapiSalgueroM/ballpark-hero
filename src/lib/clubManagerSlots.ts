@@ -18,7 +18,7 @@
  * never cost a career.
  */
 import { leanCareer, worldSeasonLabel, type CareerState } from './clubManager';
-import { SAVE_KEY, SLOT_COUNT, SLOTS_INDEX_KEY, parkedKey, readClubManagerActiveSlot, readableClubManagerSave } from './clubManagerSaveKeys';
+import { SAVE_KEY, SLOT_COUNT, SLOTS_INDEX_KEY, parkedKey, readClubManagerActiveSlot, readClubManagerResumeSlot, readableClubManagerSave } from './clubManagerSaveKeys';
 import { eraById, isHistoricEra } from './clubManagerEras';
 import { levelFrom, noSackFrom } from '@/lib/clubManagerStart';
 import type { DifficultyLevel } from '@/lib/managerDifficulty';
@@ -66,6 +66,11 @@ function get(key: string): string | null {
  *  index, or nothing readable in it. */
 export function activeSlot(): number {
   return readClubManagerActiveSlot(get(SLOTS_INDEX_KEY));
+}
+
+export function activeResumeSlot(): number | null {
+  try { return readClubManagerResumeSlot(localStorage.getItem(SLOTS_INDEX_KEY)); }
+  catch { return null; }
 }
 
 /** Where a slot's career is stored right now. */

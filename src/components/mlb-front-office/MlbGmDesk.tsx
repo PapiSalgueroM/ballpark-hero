@@ -26,7 +26,7 @@ import { assetKey, evaluatePackage, MLB_CASH_RETENTION, type TradeAsset, type Tr
 import { MLB_STAFF_PACK } from '@/data/gmStaff/packs';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import { gmEffectAt } from '@/lib/gmStaff';
-import { type MlbLeague, mlbTradeValue } from '@/lib/mlbFrontOffice';
+import { type MlbLeague, mlbActivePlayers, mlbTradeValue } from '@/lib/mlbFrontOffice';
 import {
   MLB_DESK_KEYS, deskCopy, mlbContractsOf, mlbContractsTile, mlbDealsTile, mlbGamePickRules, mlbPackageContext,
   mlbPicksOf, mlbPicksTile, mlbProposePackage, mlbRetainedOf, mlbStaffCtx, mlbStaffOf, mlbStaffTile, mlbStances,
@@ -156,8 +156,8 @@ function DealsPanel({ desk, facts }: Props) {
   const them = league.teams[partner];
   const me = league.teams[teamId];
 
-  const playerTiles = (abbr: string): BuilderTile[] => league.teams[abbr].players
-    .slice().sort((a, b) => mlbTradeValue(b) - mlbTradeValue(a))
+  const playerTiles = (abbr: string): BuilderTile[] => mlbActivePlayers(league.teams[abbr])
+    .sort((a, b) => mlbTradeValue(b) - mlbTradeValue(a))
     .map(p => ({ asset: { kind: 'player', id: p.id }, label: p.name, sub: `${p.pos} ${p.ovr}, age ${p.age}, $${p.salary}M x ${p.years}` }));
   /* The picks are on the board so the rule is in plain sight: each one says why it cannot move. */
   const pickTiles = (abbr: string): BuilderTile[] => picksHeldBy(ledger, abbr).map(p => {

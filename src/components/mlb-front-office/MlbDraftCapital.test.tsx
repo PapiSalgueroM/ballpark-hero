@@ -30,7 +30,10 @@ const select = (name: string) => screen.getByRole('button', { name: new RegExp(`
 const pickFirst = () => fireEvent.click(select(saved().draftClass[0].name));
 const noIds = (lg: MlbLeague) => {
   const clean = clone(lg);
-  for (const team of Object.values(clean.teams)) for (const player of team.players) delete (player as Partial<typeof player>).id;
+  for (const team of Object.values(clean.teams)) for (const player of team.players) {
+    delete (player as Partial<typeof player>).id;
+    delete player.draftedBy;
+  }
   for (const player of clean.freeAgents) delete (player as Partial<typeof player>).id;
   return clean;
 };
