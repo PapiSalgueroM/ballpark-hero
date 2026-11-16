@@ -3,7 +3,7 @@
 - In new NRL Team Manager careers, Club Office can offer one eligible midseason appointment per year. The tested Round 14 move from Storm to Dragons kept all 98 league results, the full ladder and 510 signed senior contracts. Both phone sizes loaded the same Bulldogs fixture after reload, blocked the stale tab and played the remaining 18 rounds. The season review kept separate records and finances for the two clubs. Six seeded careers completed 12 moves over 2026 and 2027 and passed 396 save and reload checks.
 - The first Career Log visit on NBA, NFL and NHL My Career now opens with one JavaScript request in the built browser comparison. Each stopped downloading the 66,306-byte Brotli MLB pitching asset. The MLB Career Log still shows the relevant pitching notes and 2020 held-season explanation after reload, with identical save bytes.
 
-The integrated candidate passed 85 tests across nine suites, a production build, both native NRL cases and the cold-browser comparison across four sports. The NRL guide was refreshed on the published route and in the game dialog. The sitemap still has 174 routes.
+The integrated candidate passed 85 tests across nine suites, a production build, both native NRL cases and the cold-browser comparison across four sports. The NRL guide was refreshed on the published route and in the game dialog. The regenerated search index, all 183 static page boot tags, all 16 download budgets and the 174-route sitemap checks passed. The Career Log harness registers all 24 cases and rejects a copied fault that passes the wrong pitching position.
 
 
 ## 2026-11-16 — Halftime cover, requested trades and season tickets
