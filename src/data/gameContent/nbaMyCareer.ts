@@ -101,6 +101,7 @@ export const NBA_MY_CAREER_CONTENT: GameContentMap = {
         heading: "Playing seasons and handling the offseason",
         items: [
           "Sim each season for a full line: games, minutes, points, rebounds, assists, steals, blocks, awards, team result.",
+          "Under Plan your season, choose Lead the second unit after playing a season under contract. Take fewer regular-season minutes for a chance at Sixth Man of the Year. Career Log records the bench appearances and minutes. Any booked starter rest goes away with the starting assignment.",
           "Your overall can rise or fall during the season. The sim rolls the full season in one go, then the result and Career Log show the rating at each stage.",
           "After your first season, ask your agent to request a trade before the next one if your contract has at least two years left. You can request a trade or a release once a season. Either request has a 50% chance of approval, and a decline costs up to four morale points. A trade keeps your salary and years. For example, a two-year deal still has two years left after a move.",
           "Request a release to end your remaining contract and open free agency if the team agrees. You keep the salary you already earned. The remaining years end without a payout, and your next season pays the salary of the deal you sign.",

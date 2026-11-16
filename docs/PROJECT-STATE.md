@@ -1,4 +1,16 @@
+## 2026-11-16 — Match availability, NBA bench roles and Home shortcuts
+
+- New Aussie Rules Manager league careers can lose a selected player to a short injury for one to three club fixtures. The full-time report names injuries for both clubs. A saved Geelong lineup kept Jarrin Pellwick out for two fixtures and selected him again after recovery on both tested phone widths. The paired engine replay preserved all 675 older-save transitions.
+- New 2026 NRL club careers account for Origin workload. Managers can rest one returning player for the next actual club match, including after a bye. Three real browser scenarios reproduced the saved selection and matching Quick and Live results after reload.
+- NBA My Career's Lead the second unit plan gives an eligible player real regular-season bench minutes and Sixth Man eligibility. In the paired modern fixture, minutes fell from 33.4 to 18.4, scoring fell from 28.0 to 15.5, and the camp playoff role stayed in effect. The shortened historical fixture still played 66 games.
+- Home's Browse sports menu jumps directly to Daily puzzles and Career sims. The polls load below the game catalogue so a late result cannot move either destination. The native checks cover touch, keyboard, direct links, Back and Forward and place all 163 Home assertions on the same built entry.
+
+The candidate passed 257 focused tests, a production build, and all four native feature groups. The AFL, NBA and NRL guide snapshots and publication data were refreshed. Generation added one November 15 Eastern board to each of the four grid archives, with all 360 previously published boards unchanged.
+
+
 ## 2026-11-15 — Home navigation and season decisions
+
+[PR #1009](https://github.com/PapiSalgueroM/ballpark-hero/pull/1009) published exact main `ed0b3bed597a62d3f413ff7e3bb892e0157f59d5`, deployment `b3b664ca-4a2f-48a1-92c9-fbc41af1414f` and canonical entry `/assets/index-DCsyobWH.js`. Its squash tree matched tested head `8d5feaca2b`. The live checks passed for both compact Home views, all three Origin scenarios, four academy allowance scenarios, three paired MLB plans and eight Mystery Box scenarios. All 17 pinned endpoints and 174 sitemap routes passed. IndexNow accepted the three updated guides. The deployed build also passed the Messi retirement regression on both phone widths. Hosted Home launch and Career entry guide passed, including full application types and production builds. Game picks failed its copied controls, Home search recovery failed the older gameplay and preservation steps, and several broader career and waiver jobs also reported failures.
 
 - Home's Browse sports section uses a compact sport picker on phones. The first catalogue card fits after All sports on 320×568 and 390×640 phones. The browser checks cover all sport choices, Back, Forward, keyboard focus and direct links.
 - New 2026 NRL club careers simulate State of Origin call-ups in rounds 12, 15 and 18. The Brisbane fixture removed seven home and three opposing players from club availability. The Live halftime reload and Quick Sim settled the same result. Careers can also nominate an eligible academy graduate for up to $300,000 in cap relief while paying the player's full wage.

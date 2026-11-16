@@ -12,7 +12,7 @@ import {
 } from '@/lib/nrlPlayerScoring';
 import {
   archiveNrlFinals, archiveNrlLadder, createNrlSeason, isNrlManagerState, isNrlSeasonProgress, nrlArchivedFinals, nrlArchivedLadder, nrlBench, nrlCounterPlan, nrlLadder, nrlMatchdaySelection,
-  isNrlAttackPlan, isNrlKickingPlan, isNrlPhysioTreatment, isNrlSpecialistPlan, nrlByeTrainingPreview, nrlClubOriginAbsences, nrlIndividualRecoveryOptions, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularReturnFixture, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
+  isNrlAttackPlan, isNrlKickingPlan, isNrlPhysioTreatment, isNrlSpecialistPlan, nrlByeTrainingPreview, nrlClubOriginAbsences, nrlClubOriginReturning, nrlIndividualRecoveryOptions, nrlInjuries, nrlLivePhasePreview, nrlMatchFitness, nrlMatchupEdges, nrlNextRound, nrlRegularReturnFixture, nrlRegularRounds, nrlRetrainingRoles, nrlSavedLineupPreview, NRL_BENCH_SIZE,
   nrlPlanAdjustments, nrlPlanMatchups, nrlReserveGradeEnd, nrlReserveGradeRemaining, nrlUnavailable, NRL_FINALS_SPOTS, NRL_RESERVE_GRADE_ROUNDS, NRL_ROLES,
   NRL_ATTACK_PLANS, NRL_COACHING_BONUS, NRL_QUALIFIED_COACHING_BONUS, NRL_UTILITY_RATING_COST, reduceNrlSeason, repairMatchday, simulateNrlSeasonWithoutManager, validNrlLiveScore, validNrlRatingChanges,
   type NrlAction, type NrlAttackPlan, type NrlCoachRole, type NrlFinalsArchive, type NrlFixture, type NrlKickingPlan, type NrlLeagueLadderArchive, type NrlLivePlanChoice, type NrlManagerState, type NrlMatchResult,
@@ -242,6 +242,7 @@ export interface NrlCareerState {
   positionTraining?: NrlPositionCourse;
   origin?: NrlOriginSeries;
   originClubCalendar?: true;
+  originClubRecovery?: true;
   originHistory?: NrlOriginHistory[];
   worldCup?: NrlWorldCupRun;
   offseasonApplication?: string;
@@ -273,6 +274,7 @@ export type NrlCareerAction = NrlAction
   | { type: 'bookPhysio'; year: number; clubId: string; round: number; playerId: string }
   | { type: 'startOrigin'; year: number; side: NrlOriginSide; nominationId?: string; fullPool?: true; clubWorkload?: true }
   | OriginMatchAction
+  | { type: 'restOriginPlayer'; year: number; clubId: string; round: number; playerId: string | null }
   | { type: 'startWorldCupAppointment'; nation: NrlWorldCupNation }
   | { type: 'playWorldCupAppointment'; previous: NrlWorldCupRun; next: NrlWorldCupRun }
   | { type: 'setAttackPlan'; attackPlan: NrlAttackPlan; year: number; clubId: string; round: number }
@@ -2184,7 +2186,7 @@ function advanceCareer(state: NrlCareerState, action: Extract<NrlAction, {
     next = clearDevelopmentPriority(next);
   }
   next = settleContractApproach(next, previous.round);
-  next = advanceOriginCalendar(advanceScheduledRotation(next));
+  next = advanceOriginCalendar(advanceScheduledRotation(applyOriginReturnLoad(next, previous.round)));
   if (season.phase !== 'complete') return next;
   const receipt = seasonReceipt(next);
   const { summerApplication, ...finished } = next;
@@ -2493,7 +2495,7 @@ export function nrlSummerApplicationOpenings(state: NrlCareerState): NrlOffseaso
 export const NRL_FAST_FORWARD_ROUNDS = 4;
 export type NrlFastForwardRequest = { year: number; clubId: string; round: number; through: number };
 export type NrlFastForwardStop = 'injury' | 'lineup' | 'academy' | 'development' | 'applications' | 'finals' | 'judiciary'
-  | 'contract-approach' | 'contract-deadline' | 'origin-stand-down';
+  | 'contract-approach' | 'contract-deadline' | 'origin-stand-down' | 'origin-recovery';
 
 export function runNrlFastForward(initial: NrlCareerState, request: NrlFastForwardRequest): {
   state: NrlCareerState; stop: NrlFastForwardStop | null;
@@ -2528,6 +2530,7 @@ export function runNrlFastForward(initial: NrlCareerState, request: NrlFastForwa
       const fixture = nrlNextRound(next.season).clubMatch;
       if (fixture && (standDown.clubs[fixture.homeId] || standDown.clubs[fixture.awayId])) return { state: next, stop: 'origin-stand-down' };
     }
+    if (next !== state && nrlOriginRestOptions(next).length) return { state: next, stop: 'origin-recovery' };
     if (judiciaryNeedsResponse(next.season)) return { state: next, stop: 'judiciary' };
     if (!state.contractApproach?.destinationId && next.contractApproach?.destinationId) return { state: next, stop: 'contract-approach' };
     if (next.season.results.slice(season.results.length).some(result => result.injury)) return { state: next, stop: 'injury' };
@@ -2993,6 +2996,37 @@ export function nrlWorldCupAppointmentAvailable({ retired, outOfWork, legacySeas
   return !retired && !outOfWork && !legacySeason && !worldCup && season.year === 2026 && season.phase === 'complete';
 }
 
+export function nrlOriginRestOptions({ originClubRecovery, retired, season }: NrlCareerState): NrlPlayer[] {
+  if (!originClubRecovery || retired || season.live || judiciaryNeedsResponse(season)) return [];
+  const returning = nrlClubOriginReturning(season);
+  if (!returning.length) return [];
+  const unavailable = nrlUnavailable({ ...season, originRestId: undefined });
+  const available = season.squad.filter(player => !unavailable.has(player.id));
+  return available.length > NRL_ROLES.length + NRL_BENCH_SIZE
+    ? available.filter(player => returning.includes(player.id)) : [];
+}
+
+function applyOriginFitness(state: NrlCareerState, actual: Map<string, number>): NrlCareerState {
+  if (!actual.size) return state;
+  const adjust = <Player extends NrlPlayer>(player: Player): Player => {
+    const fitness = actual.get(player.id);
+    return fitness === undefined ? player : { ...player, fitness };
+  };
+  return { ...state, players: state.players.map(adjust), season: { ...state.season, squad: state.season.squad.map(adjust) } };
+}
+
+function applyOriginReturnLoad(state: NrlCareerState, playedRound: number): NrlCareerState {
+  const { originClubRecovery, season, origin } = state;
+  if (!originClubRecovery || !season.originStandDown || season.round <= playedRound) return state;
+  const game = season.originStandDown.findIndex(camp => camp.round === playedRound);
+  const players = season.originStandDown[game]?.clubs[season.clubId];
+  if (!players) return state;
+  const coachedLoad = origin?.year === season.year ? origin.matches[game]?.clubLoad?.players : undefined;
+  const alreadyLoaded = new Set(coachedLoad?.map(([id]) => id));
+  return applyOriginFitness(state, new Map(season.squad.filter(player => players.includes(player.id) && !alreadyLoaded.has(player.id))
+    .map(player => [player.id, Math.max(0, player.fitness - NRL_ORIGIN_WORKLOAD)])));
+}
+
 export function nrlOriginWorkloadAvailable({ retired, outOfWork, legacySeason, season }: NrlCareerState): boolean {
   return !retired && !outOfWork && !legacySeason && !season.live && Boolean(season.kickerId)
     && Boolean(nrlRegularReturnFixture(season, 0, 0));
@@ -3003,7 +3037,10 @@ export function nrlOriginClubWorkload(state: NrlCareerState) {
   if (!origin?.clubWorkload || origin.year !== season.year || nrlOriginComplete(origin) || !nrlOriginWorkloadAvailable(state)) return [];
   const starters = new Set(Object.values(origin.selection.starters));
   const absent = nrlClubOriginAbsences(season);
-  return nrlCareerSquad(state).filter(player => starters.has(player.id) && player.fitness > 0 && !absent.includes(player.id)).map(({ id, name, fitness }) => ({
+  const camp = state.originClubRecovery ? season.originStandDown?.[origin.matches.length] : undefined;
+  const alreadyLoaded = camp && camp.round < season.round ? camp.clubs[season.clubId] : undefined;
+  return nrlCareerSquad(state).filter(player => starters.has(player.id) && player.fitness > 0 && !absent.includes(player.id)
+    && !alreadyLoaded?.includes(player.id)).map(({ id, name, fitness }) => ({
     id, name, before: fitness, after: Math.max(0, fitness - NRL_ORIGIN_WORKLOAD),
   }));
 }
@@ -3014,14 +3051,9 @@ function settleOriginClubWorkload(state: NrlCareerState, origin: NrlOriginSeries
   const fixture = workload.length ? nrlRegularReturnFixture(season, 0, 0) : undefined;
   if (!fixture) return { ...state, origin };
   const players: [string, number][] = workload.map(({ id, before }) => [id, before]);
-  const actual = new Map(workload.map(({ id, after }) => [id, after]));
-  const adjust = <Player extends NrlPlayer>(player: Player): Player => {
-    const fitness = actual.get(player.id);
-    return fitness === undefined ? player : { ...player, fitness };
-  };
   const matches = origin.matches.slice();
   matches[matches.length - 1] = { ...matches[matches.length - 1], clubLoad: { clubId: season.clubId, round: fixture.round, players } };
-  return { ...state, origin: { ...origin, matches }, players: state.players.map(adjust), season: { ...season, squad: season.squad.map(adjust) } };
+  return applyOriginFitness({ ...state, origin: { ...origin, matches } }, new Map(workload.map(({ id, after }) => [id, after])));
 }
 
 export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction): NrlCareerState {
@@ -3083,6 +3115,20 @@ export function reduceNrlCareer(state: NrlCareerState, action: NrlCareerAction):
         : playNrlOriginMatch(origin, state.season.seed, action.game);
       if (next === origin) return state;
       return action.type === 'playOriginMatch' ? settleOriginClubWorkload(state, next) : { ...state, origin: next };
+    }
+    case 'restOriginPlayer': {
+      const { season } = state;
+      const { year, clubId, round, playerId } = action;
+      if (!state.originClubRecovery || year !== season.year || clubId !== season.clubId || round !== season.round
+        || playerId === (season.originRestId ?? null)
+        || (playerId !== null && !nrlOriginRestOptions(state).some(player => player.id === playerId))) return state;
+      const matchday = { ...season };
+      if (playerId === null) delete matchday.originRestId;
+      else {
+        matchday.originRestId = playerId;
+        if (matchday.intensivePositionTrainingId === playerId) delete matchday.intensivePositionTrainingId;
+      }
+      return { ...state, season: repairMatchday(matchday) };
     }
     case 'setAttackPlan': {
       const { season } = state;
@@ -4616,6 +4662,8 @@ export function isNrlCareerState(value: unknown): value is NrlCareerState {
     || (state.history[0]?.clubId ?? state.season.clubId) !== state.customClub!.slotId)) return false;
   if (state.season.judiciary && (state.openingRoster || state.legacySeason || (state.retired && judiciaryNeedsResponse(state.season)))) return false;
   if (state.originClubCalendar !== undefined && (state.originClubCalendar !== true || state.legacySeason || state.openingYear !== 2026)) return false;
+  if ((state.originClubRecovery !== undefined && (state.originClubRecovery !== true || !state.originClubCalendar))
+    || (!state.originClubRecovery && (state.season.originRestId || state.season.results.some(match => match.originRestId)))) return false;
   const camps = state.season.originStandDown;
   const expectsCamps = state.originClubCalendar && year === 2026 && state.season.round >= NRL_2026_ORIGIN_STAND_DOWN_ROUNDS[0];
   if (Boolean(camps) !== Boolean(expectsCamps)) return false;

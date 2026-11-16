@@ -29,6 +29,35 @@ beforeEach(() => { localStorage.clear(); vi.spyOn(Math, 'random').mockReturnValu
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 describe('AussieRulesLeagueBoard', () => {
+  it('names a short injury in full time, reloads it and keeps the player out of selection', () => {
+    const start = createLeague(1, 'club-04', 'afl2026', true)!;
+    store(start);
+    const first = draw();
+    tile(first, 'Next match');
+    click(first, '[data-arl-prepare="rest"]');
+    click(first, '[data-arl-playmatch]');
+    const report = saved();
+    const id = report.injuries!.report.find(player => start.starters.includes(player))!;
+    const name = clubOf(start, start.myClub)!.players.find(player => player.id === id)!.name;
+    const fullTime = first.getByRole('region', { name: 'Match injuries' });
+    expect(fullTime).toHaveTextContent(name);
+    expect(fullTime).toHaveTextContent('Misses 2 matches');
+    const bytes = localStorage.getItem(SAVE_KEY);
+    first.unmount();
+    const resumed = draw();
+    tile(resumed, 'Next match');
+    expect(resumed.getByRole('region', { name: 'Match injuries' })).toHaveTextContent(name);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+
+    click(resumed, '[data-arl-next]');
+    expect(resumed.getByRole('region', { name: 'Injury list' })).toHaveTextContent(name);
+    fireEvent.click(resumed.getByRole('button', { name: /Hub/ }));
+    tile(resumed, 'Squad');
+    expect(resumed.container.querySelector('[data-arl-injury="' + id + '"]')).toHaveTextContent('Misses 2 matches');
+    click(resumed, '[data-arl-slot="' + start.starters.indexOf(id) + '"]');
+    expect(resumed.container.querySelector('[data-arl-candidate="' + id + '"]')).toBeNull();
+  });
+
   it.each(['applied', 'skipped'] as const)('books and reloads a named half-time interchange with a %s receipt', outcome => {
     store(createLeague(1, 'club-04', 'afl2026')!);
     const first = draw();

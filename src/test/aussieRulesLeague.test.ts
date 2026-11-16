@@ -28,6 +28,90 @@ const halfTime = (s: LeagueState) => reduceLeague(reduceLeague(reduceLeague(s, q
 const score = (s: LeagueState) => s.match!.homeId === s.myClub
   ? [s.match!.homeScore.total, s.match!.awayScore.total] : [s.match!.awayScore.total, s.match!.homeScore.total];
 
+describe('Aussie Rules Manager match injuries', () => {
+  it('carries a named injury through reload and restores the kept player after two missed matches', () => {
+    const start = reduceLeague(createLeague(1, 'club-04', 'afl2026', true)!, { type: 'keepLineup' });
+    expect(start.injuries).toEqual({ out: {}, report: [] });
+    const prepared = reduceLeague(start, rest);
+    const fullTime = reduceLeague(prepared, whole);
+    const hurt = fullTime.injuries!.report.find(id => start.starters.includes(id))!;
+    expect(hurt).toBeTruthy();
+    expect(fullTime.injuries!.out[hurt]).toBe(2);
+    expect(readLeagueSave(JSON.stringify(fullTime))).toEqual(fullTime);
+    expect(readLeagueSave(JSON.stringify(halfTime(prepared)))).not.toBeNull();
+    expect(reduceLeague(readLeagueSave(JSON.stringify(halfTime(prepared)))!, whole)).toEqual(fullTime);
+
+    let opening = reduceLeague(fullTime, next);
+    const place = start.starters.indexOf(hurt);
+    expect(opening.injuries!.report).toEqual([]);
+    expect(opening.starters[place]).not.toBe(hurt);
+    expect([...opening.starters, ...opening.bench]).not.toContain(hurt);
+    const invalid = [...opening.starters];
+    invalid[place] = hurt;
+    expect(reduceLeague(opening, { type: 'lineup', starters: invalid, bench: opening.bench })).toBe(opening);
+    expect(readLeagueSave(JSON.stringify({ ...opening, starters: invalid }))).toBeNull();
+
+    for (const remaining of [1, undefined]) {
+      opening = reduceLeague(reduceLeague(reduceLeague(opening, rest), whole), next);
+      expect(opening.injuries!.out[hurt]).toBe(remaining);
+      expect(readLeagueSave(JSON.stringify(opening))).toEqual(opening);
+    }
+    expect(opening.starters[place]).toBe(hurt);
+    expect(opening.preferredLineup).toEqual(start.preferredLineup);
+  });
+
+  it('keeps absences out of both the managed opponent and other clubs’ team sheets', () => {
+    const start = createLeague(1, 'club-04', 'afl2026', true)!;
+    const opponent = start.match!.homeId === start.myClub ? start.match!.awayId : start.match!.homeId;
+    const otherClub = start.clubs.find(club => club.id !== start.myClub && club.id !== opponent)!;
+    const rivalHurt = automaticLineup(clubOf(start, opponent)!).starters[0];
+    const otherHurt = automaticLineup(otherClub).starters[0];
+    const changed = { ...start, injuries: { out: { [rivalHurt]: 2, [otherHurt]: 2 }, report: [] } };
+    expect(readLeagueSave(JSON.stringify(changed))).toEqual(changed);
+    const prepared = reduceLeague(changed, rest);
+    const rivalSquad = prepared.match!.homeId === opponent ? prepared.match!.homeSquad : prepared.match!.awaySquad;
+    expect(rivalSquad).toHaveLength(23);
+    expect(rivalSquad).not.toContain(rivalHurt);
+    const report = reduceLeague(prepared, whole);
+    for (const id of [rivalHurt, otherHurt]) {
+      expect(report.injuries!.out[id]).toBe(1);
+      expect(leaguePlayer(report, id)?.fatigue).toBe(leaguePlayer(prepared, id)?.fatigue);
+    }
+  });
+
+  it('counts only the club’s actual fixtures while an injured player is out in the finals', () => {
+    const bye = until(createLeague(3, 'club-00', 'afl2026')!, state => state.stage === 'finals' && state.phase === 'prepare' && !state.match);
+    expect(bye.match).toBeNull();
+    const id = clubOf(bye, bye.myClub)!.players.find(player => player.role === 'defender' && ![...bye.starters, ...bye.bench].includes(player.id))!.id;
+    const medical = { ...bye, injuries: { out: { [id]: 2 }, report: [] } };
+    expect(readLeagueSave(JSON.stringify(medical))).toEqual(medical);
+    const playedWeek = reduceLeague(medical, { type: 'simWeek' });
+    expect(playedWeek.injuries?.out[id]).toBe(2);
+    expect(playedWeek.injuries?.report).toEqual([]);
+    const nextMatch = until(playedWeek, state => state.season !== 1 || (state.phase === 'prepare' && !!state.match));
+    expect(nextMatch.season).toBe(1);
+    expect(nextMatch.match).not.toBeNull();
+    const after = reduceLeague(reduceLeague(nextMatch, rest), whole);
+    expect(after.injuries?.out[id]).toBe(1);
+    expect(readLeagueSave(JSON.stringify(after))).toEqual(after);
+    const summer = until(after, state => state.phase === 'summer');
+    expect(summer.injuries).toEqual({ out: {}, report: [] });
+  });
+
+  it('starts the medical rules through the current career entry and preserves markerless saves', () => {
+    const { result } = renderHook(() => useAussieRulesLeague());
+    act(() => { expect(result.current.start(1, 'club-04')).toBe(true); });
+    expect(result.current.state?.injuries).toEqual({ out: {}, report: [] });
+    const legacy = createLeague(1, 'club-04', 'afl2026')!;
+    expect(legacy.injuries).toBeUndefined();
+    const fullTime = reduceLeague(reduceLeague(legacy, rest), whole);
+    expect(score(fullTime)).toEqual([93, 57]);
+    expect(fullTime.injuries).toBeUndefined();
+    expect(readLeagueSave(JSON.stringify(fullTime))).toEqual(fullTime);
+    expect(readLeagueSave(JSON.stringify({ ...legacy, injuries: { out: { 'p-999999': 2 }, report: [] } }))).toBeNull();
+  });
+});
+
 describe('Aussie Rules Manager planned half-time interchange', () => {
   it.each([
     { seed: 1, club: 'club-04', outId: 'p-153', inId: 'p-144', from: [93, 57], to: [99, 51], fresh: 25, rested: 28.4 },

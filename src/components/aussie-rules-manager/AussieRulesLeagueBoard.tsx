@@ -8,7 +8,7 @@ import { buildDraftNight } from '@/lib/draftNight';
 import { lineupStrength, prepareClubs, PREPARATIONS, ROLE_LABELS, ROLES, TACTICS, type Score, type Tactic } from '@/lib/aussieRulesManager';
 import { EXIT_LABELS } from '@/lib/aussieRulesFormat';
 import {
-  CLUBS, clubFull, clubIdentities, clubOf, clubShort, CURRENT_CLUB_SET, draftPool, hubTiles, lastWeek, leagueLadder, leaguePlayer, myFinalsTie, nextSeasonLineupPreview, opponentPlays, ordinal, pickRefusal, picksLeft, retirees,
+  CLUBS, clubFull, clubIdentities, clubOf, clubShort, CURRENT_CLUB_SET, draftPool, hubTiles, injuryAbsence, lastWeek, leagueLadder, leaguePlayer, myFinalsTie, nextSeasonLineupPreview, opponentPlays, ordinal, pickRefusal, picksLeft, retirees,
   LIST_SIZE, roleDeficits, ROUNDS, scoutedPotential, summerDelistCandidates, tieName, type LeagueAction, type LeagueState,
 } from '@/lib/aussieRulesLeague';
 import styles from './AussieRulesManagerBoard.module.css';
@@ -89,6 +89,13 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
   const [outId, setOutId] = useState('');
   const [inId, setInId] = useState('');
   const match = state.match;
+  const injuries = state.injuries;
+  const injuryHeading = state.phase === 'report' ? 'Match injuries' : 'Injury list';
+  const listedInjuries = match && injuries && (state.phase === 'prepare' || state.phase === 'report')
+    ? [match.homeId, match.awayId].flatMap(clubId => clubOf(state, clubId)!.players
+      .filter(player => state.phase === 'report' ? injuries.report.includes(player.id) : injuryAbsence(state, player.id) > 0)
+      .map(player => ({ clubId, player, left: injuries.out[player.id] })))
+    : [];
   const change = state.halftimeInterchange;
   const planned = change?.outcome === 'planned' ? change : undefined;
   const other = match ? (match.homeId === state.myClub ? match.awayId : match.homeId) : '';
@@ -112,6 +119,12 @@ function MatchPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
   </div>;
   return <div className={styles.card} data-arl-match>
     {match && <div className={styles.score} data-arl-score><div><strong>{clubFull(state, match.homeId)}</strong><span>{score(match.homeScore)}</span></div><div><strong>{clubFull(state, match.awayId)}</strong><span>{score(match.awayScore)}</span></div></div>}
+    {listedInjuries.length > 0 && <section aria-label={injuryHeading}>
+      <h4>{injuryHeading}</h4>
+      <ul className={own.list}>{listedInjuries.map(({ clubId, player, left }) => <li key={player.id}>
+        {player.name} · {clubShort(state, clubId)} · Misses {left} {left === 1 ? 'match' : 'matches'}
+      </li>)}</ul>
+    </section>}
     {change && <div>
       <p role="status" data-arl-halftime-interchange={change.outcome}>
         {change.outcome === 'planned' ? 'Booked for half time.' : change.outcome === 'applied' ? 'Half-time interchange made.' : 'Half-time interchange skipped.'}
@@ -177,10 +190,16 @@ function SquadPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
   const preferred = state.preferredLineup;
   const matchesPreference = preferred?.starters.every((player, index) => player.id === state.starters[index])
     && preferred.bench.every((id, index) => id === state.bench[index]);
-  const line = (id: string) => { const p = leaguePlayer(state, id)!; return <><strong>{p.name}</strong><span>{ROLE_LABELS[p.role]} · Skill {p.skill} · Ceiling {p.potential} · Age {p.age} · Fatigue {Math.round(p.fatigue)}</span></>; };
+  const line = (id: string) => {
+    const p = leaguePlayer(state, id)!;
+    const left = injuryAbsence(state, id);
+    return <><strong>{p.name}</strong><span>{ROLE_LABELS[p.role]} · Skill {p.skill} · Ceiling {p.potential} · Age {p.age} · Fatigue {Math.round(p.fatigue)}</span>
+      {left > 0 && <span data-arl-injury={id}>Misses {left} {left === 1 ? 'match' : 'matches'}</span>}</>;
+  };
   if (slot && editable) {
     const current = leaguePlayer(state, (slot.bench ? state.bench : state.starters)[slot.index])!;
-    const candidates = club.players.filter(p => p.id !== current.id && !state.starters.includes(p.id) && (slot.bench ? !state.bench.includes(p.id) : p.role === current.role));
+    const candidates = club.players.filter(p => p.id !== current.id && !state.starters.includes(p.id) && !injuryAbsence(state, p.id)
+      && (slot.bench ? !state.bench.includes(p.id) : p.role === current.role));
     const choose = (id: string) => {
       const starters = [...state.starters], bench = [...state.bench];
       if (slot.bench) bench[slot.index] = id;
@@ -219,7 +238,7 @@ function SquadPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
       {[...state.starters, ...state.bench].map((id, index) => editable
         ? <button key={id} className={styles.player} data-arl-slot={index} onClick={() => setSlot({ bench: index >= 18, index: index >= 18 ? index - 18 : index })}>{line(id)}<span>{index >= 18 ? 'Interchange' : 'Starter'}</span></button>
         : <div key={id} className={styles.player}>{line(id)}<span>{index >= 18 ? 'Interchange' : 'Starter'}</span></div>)}
-      {rest.map(p => <div key={p.id} className={styles.player}>{line(p.id)}<span>Not selected</span></div>)}
+      {rest.map(p => <div key={p.id} className={styles.player}>{line(p.id)}{!injuryAbsence(state, p.id) && <span>Not selected</span>}</div>)}
     </div></div>;
 }
 

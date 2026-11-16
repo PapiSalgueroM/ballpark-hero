@@ -3,10 +3,10 @@ import type { UsSport } from './usCoachCareer';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 
 export type ProgrammeSection = 'workload' | 'tactics' | 'expectation' | 'partnership' | 'bonus' | 'reinvention';
-export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'spot-starts' | 'steady' | 'stretch' | 'build' | 'maintain';
+export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'steady' | 'stretch' | 'build' | 'maintain';
 export interface ProgrammeChoices {
   workload: 'normal' | 'push' | 'recover';
-  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'spot-starts';
+  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts';
   expectation: 'normal' | 'steady' | 'stretch';
   partnership: 'normal' | 'build';
   bonus: 'normal' | 'steady' | 'stretch';
@@ -48,6 +48,7 @@ export const NBA_PLAYOFF_MINUTES_CAP = 42;
 export const NBA_EXTRA_PLAYOFF_MINUTES = 3;
 export const NBA_PLAYOFF_HEALTH_COST = 4;
 const NBA_PLAYOFF_MINUTES_LABEL = 'Take extra playoff minutes';
+const NBA_SECOND_UNIT_LABEL = 'Lead the second unit';
 export const NHL_SHUTDOWN_BERTH_POINTS = 6;
 export const NHL_SHUTDOWN_OFFENSIVE_COST = 10;
 export const NFL_WR_REC_CAP = 145;
@@ -61,9 +62,13 @@ export function nflInsideRoutesAvailable(c: UsCareerCore): boolean {
   return c.pos === 'WR' && c.role !== 'backup' && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0);
 }
 
-export function nbaExtraPlayoffMinutesAvailable(c: UsCareerCore): boolean {
-  return c.role !== 'backup' && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0)
+function nbaSeasonRotationAvailable(c: UsCareerCore): boolean {
+  return c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0)
     && c.seasons.some(season => season.games > 0);
+}
+
+export function nbaExtraPlayoffMinutesAvailable(c: UsCareerCore): boolean {
+  return c.role !== 'backup' && nbaSeasonRotationAvailable(c);
 }
 
 export function mlbSpotStartsAvailable(c: UsCareerCore): boolean {
@@ -275,6 +280,11 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
         label: defence.label,
         effect: `Get ${NBA_DEFENSIVE_GAIN}% more ${defence.unit} in the regular season, at least 0.1 more up to ${NBA_DEFENSIVE_CAP[defence.stat].toFixed(1)}. You give up about ${NBA_DEFENSIVE_SCORING_COST}% of your points per game if the boost lands, with a 1.0 PPG minimum.`,
       }] : []),
+      ...(sport === 'nba' && nbaSeasonRotationAvailable(c) ? [{
+        id: 'second-unit' as const,
+        label: NBA_SECOND_UNIT_LABEL,
+        effect: 'Come off the bench during the regular season. Bench roles play fewer minutes and can earn Sixth Man of the Year. Moving to the bench clears booked starter rest. If camp already assigns you to the bench, the plan goes unused.',
+      }] : []),
       ...(sport === 'nba' && nbaExtraPlayoffMinutesAvailable(c) ? [{
         id: 'playoff-minutes' as const,
         label: NBA_PLAYOFF_MINUTES_LABEL,
@@ -354,7 +364,14 @@ export function restoreUsCareerProgramme(c: ProgrammeCareer, preparation: Progra
 }
 export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason, sport: UsSport, preparation: ProgrammePreparation | null = null): UsCareerProgrammeResult | null {
   const plan = preparation?.plan ?? c.programme;
-  if (!usProgrammeStateValid(c) || !plan || !validPlan({ ...c, year: line.year, age: line.age }, sport, plan) || line.year !== plan.year || line.team !== plan.team || c.team !== line.team || !c.seasons.includes(line)) return null;
+  const secondUnit = sport === 'nba' && plan?.tactics === 'second-unit';
+  const atTipOff = { ...c, year: line.year, age: line.age };
+  if (secondUnit) {
+    atTipOff.seasons = c.seasons.filter(season => season !== line);
+    // Preparation already validated this contract before the season used up its last year.
+    if (preparation && c.contractYears === 0) atTipOff.contractYears = 1;
+  }
+  if (!usProgrammeStateValid(c) || !plan || !validPlan(atTipOff, sport, plan) || line.year !== plan.year || line.team !== plan.team || c.team !== line.team || !c.seasons.includes(line)) return null;
   if (c.programmeResults?.some(r => r.sport === sport && r.year === line.year && r.team === line.team)) { delete c.programme; return null; }
   const played = validNumber(line.games) && line.games > 0;
   const result: UsCareerProgrammeResult = { sport, year: line.year, team: line.team, outcome: played ? 'completed' : 'interrupted', decisions: [], bonusGross: 0, bonusNet: 0, partnershipProgress: 0 };
@@ -367,8 +384,10 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
     const insideRoutes = section === 'tactics' && choice === 'inside';
     const playoffMinutes = section === 'tactics' && choice === 'playoff-minutes';
     const spotStarts = section === 'tactics' && choice === 'spot-starts';
+    const secondUnitRequest = section === 'tactics' && secondUnit;
     const label = insideRoutes ? NFL_INSIDE_ROUTES_LABEL : playoffMinutes ? NBA_PLAYOFF_MINUTES_LABEL
-      : spotStarts ? MLB_SPOT_START_LABEL : menus.find(m => m.id === section)?.options.find(o => o.id === choice)?.label ?? section;
+      : spotStarts ? MLB_SPOT_START_LABEL : secondUnitRequest ? NBA_SECOND_UNIT_LABEL
+        : menus.find(m => m.id === section)?.options.find(o => o.id === choice)?.label ?? section;
     const decision: ProgrammeDecision = { section, label, outcome: played ? 'completed' : 'interrupted' };
     if (played && sport === 'nba' && section === 'tactics' && choice === 'defend' && !preparation?.idle?.includes(section)) {
       const defence = nbaDefensiveAssignment(c.pos);
@@ -392,6 +411,15 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
         c.health -= NBA_PLAYOFF_HEALTH_COST;
         decision.actual = preparation.nbaExtraPlayoffMinutes;
         decision.unit = 'extra minutes per playoff game';
+      } else {
+        decision.outcome = 'unused';
+      }
+    }
+    if (played && secondUnitRequest) {
+      const appearances = (line as UsCareerSeason & { benchAppearances?: number }).benchAppearances;
+      if (validNumber(appearances) && appearances > 0) {
+        decision.actual = appearances;
+        decision.unit = 'bench appearances';
       } else {
         decision.outcome = 'unused';
       }

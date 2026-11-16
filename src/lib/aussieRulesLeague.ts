@@ -75,6 +75,7 @@ export interface DraftState { order: string[]; pool: Prospect[]; made: { clubId:
 interface RatingReview { round: number; changes: [playerId: string, change: -1 | 1][] }
 interface RoundSkillReview { round: number; changes: [playerId: string, before: number, after: number][] }
 interface PreferredLineup { starters: { id: string; role: Role }[]; bench: string[] }
+interface MatchInjuries { out: Record<string, number>; report: string[] }
 type HalftimeInterchange = { outId: string; inId: string } & (
   { outcome: 'planned' | 'applied' } | { outcome: 'skipped'; reason: 'cancelled' | 'selection' | 'limit' }
 );
@@ -95,6 +96,7 @@ export interface LeagueState {
   skillReviews?: RoundSkillReview[];
   preferredLineup?: PreferredLineup;
   halftimeInterchange?: HalftimeInterchange;
+  injuries?: MatchInjuries;
 }
 export type LeagueAction =
   | { type: 'lineup'; starters: string[]; bench: string[] }
@@ -272,6 +274,52 @@ function tally(goals: Record<string, number>, match: Match): Record<string, numb
 export const leagueLadder = (state: Pick<LeagueState, 'clubs' | 'results'>): LadderRow[] => ladderFor(state);
 export const seedsOf = (state: Pick<LeagueState, 'clubs' | 'results'>) => leagueLadder(state).map(row => row.clubId);
 
+export function injuryAbsence(state: Pick<LeagueState, 'injuries'>, playerId: string): number {
+  return state.injuries?.out[playerId] ?? 0;
+}
+
+function roleCounts(players: LeaguePlayer[]): Record<Role, number> {
+  const counts = { defender: 0, midfielder: 0, ruck: 0, forward: 0 };
+  for (const player of players) counts[player.role] += 1;
+  return counts;
+}
+
+function availableClub(club: LeagueClub, injuries?: MatchInjuries): LeagueClub {
+  if (!injuries) return club;
+  const players = club.players.filter(player => !injuries.out[player.id]);
+  return players.length === club.players.length ? club : { ...club, players };
+}
+
+function settleInjuries(injuries: MatchInjuries | undefined, before: LeagueClub[], played: { clubs: LeagueClub[]; match: Match }, seed: number, ownMatch = false): MatchInjuries | undefined {
+  if (!injuries) return undefined;
+  const out = { ...injuries.out };
+  const report = ownMatch ? [] : injuries.report;
+  const { match } = played;
+  for (const clubId of [match.homeId, match.awayId]) {
+    const club = played.clubs.find(side => side.id === clubId)!;
+    const previous = before.find(side => side.id === clubId)!;
+    for (const player of club.players) {
+      const left = out[player.id];
+      if (left === 1) delete out[player.id];
+      else if (left > 1) out[player.id] = left - 1;
+    }
+    const healthy = availableClub(club, { out, report }).players;
+    if (healthy.length <= 23) continue;
+    const random = rngFrom(hashLabel([seed, match.round, clubId, 'match-injury'].join('|')));
+    // Model at most one short injury per club. Its draw is separate from the match.
+    if (random() >= 0.52) continue;
+    const previousFatigue = new Map(previous.players.map(player => [player.id, player.fatigue]));
+    const counts = roleCounts(healthy);
+    const eligible = healthy.filter(player => player.fatigue > (previousFatigue.get(player.id) ?? player.fatigue)
+      && counts[player.role] > ROLE_FLOORS[player.role]);
+    if (eligible.length === 0) continue;
+    const player = eligible[Math.floor(random() * eligible.length)];
+    out[player.id] = [1, 1, 1, 2, 2, 3][Math.floor(random() * 6)];
+    if (ownMatch) report.push(player.id);
+  }
+  return { out, report };
+}
+
 function matchdayLineup(club: LeagueClub, preferred?: PreferredLineup) {
   if (!preferred) return automaticLineup(club);
 
@@ -314,7 +362,7 @@ export function nextSeasonLineupPreview(state: LeagueState): PreferredLineup | n
 /** Open the next fixture with the manager's preferred or automatic matchday 23. */
 function openRound(state: LeagueState, round: number): LeagueState {
   const fixture = fixturesFor(state.seed, state.season, round).find(value => value.homeId === state.myClub || value.awayId === state.myClub)!;
-  const lineup = matchdayLineup(clubOf(state, state.myClub)!, state.preferredLineup);
+  const lineup = matchdayLineup(availableClub(clubOf(state, state.myClub)!, state.injuries), state.preferredLineup);
   return { ...state, ...lineup, stage: 'homeAway', round, phase: 'prepare', preparation: null, swapsThisBreak: 0, match: emptyMatch(round, fixture.homeId, fixture.awayId) };
 }
 function recover(clubs: LeagueClub[]): LeagueClub[] {
@@ -327,13 +375,14 @@ function freshSeason(state: LeagueState, season: number, preferredLineup?: Prefe
     ...(preferredLineup && { preferredLineup }) }, 0);
 }
 /** No set means Round 1014's invented league, the same rule as the save; only the hook's start passes CURRENT_CLUB_SET. */
-export function createLeague(seed: number, clubId: string, set: ClubSetId = 'fictional'): LeagueState | null {
+export function createLeague(seed: number, clubId: string, set: ClubSetId = 'fictional', matchInjuries = false): LeagueState | null {
   if (!validSeed(seed) || !isClubId(clubId) || (set !== 'fictional' && set !== 'afl2026')) return null;
   const world = createLeagueWorld(seed, set);
   const named = set === 'afl2026' ? { clubSet: 'afl2026' as const } : {};
   const base: LeagueState = {
     version: 2, seed, myClub: clubId, clubName: identityIn(set, clubId)!.full, ...named, season: 1, format: CURRENT_FINALS_FORMAT, phase: 'prepare', stage: 'homeAway', round: 0, week: 0,
     clubs: world.clubs, starters: [], bench: [], preparation: null, swapsThisBreak: 0, match: null, results: [], goals: {}, finals: null, draft: null, nextId: world.nextId, history: [],
+    ...(matchInjuries && { injuries: { out: {}, report: [] } }),
   };
   return freshSeason(base, 1);
 }
@@ -373,8 +422,8 @@ export function settleLevelFinal<C extends LeagueClub>(clubs: C[], match: Match,
   }
   return { ...result, extraTime: true, blocks };
 }
-function simulateTie(clubs: LeagueClub[], seed: number, round: number, homeId: string, awayId: string): { clubs: LeagueClub[]; match: Match; extraTime: boolean } {
-  const played = simulateOtherMatch({ clubs, seed, round }, homeId, awayId);
+function simulateTie(clubs: LeagueClub[], seed: number, round: number, homeId: string, awayId: string, injuries?: MatchInjuries): { clubs: LeagueClub[]; match: Match; extraTime: boolean } {
+  const played = simulateOtherMatch({ clubs, seed, round }, homeId, awayId, club => automaticLineup(availableClub(club, injuries)));
   const home = (list: LeagueClub[]) => list.find(club => club.id === homeId)!;
   const away = (list: LeagueClub[]) => list.find(club => club.id === awayId)!;
   return settleLevelFinal(played.clubs, played.match, seed, (list, match) => [matchdayStarters(home(list), match.homeSquad), matchdayStarters(away(list), match.awaySquad)], [home(clubs).style, away(clubs).style]);
@@ -393,7 +442,7 @@ function openWeek(state: LeagueState, week: number): LeagueState {
   const pairings = resolveWeek(preset.ties, seedsOf(state), finalsOutcomes(state), week) ?? [];
   const ties = [...(state.finals?.ties ?? []), ...pairings.map(pair => ({ id: pair.id, week, homeId: pair.homeId, awayId: pair.awayId }))];
   const mine = pairings.find(pair => pair.homeId === state.myClub || pair.awayId === state.myClub);
-  const club = clubOf(state, state.myClub)!;
+  const club = availableClub(clubOf(state, state.myClub)!, state.injuries);
   const lineup = mine ? matchdayLineup(club, state.preferredLineup) : automaticLineup(club);
   return { ...state, ...lineup, stage: 'finals', week, phase: 'prepare', preparation: null, swapsThisBreak: 0, finals: { ties }, match: mine ? emptyMatch(finalsRound(week), mine.homeId, mine.awayId) : null };
 }
@@ -402,33 +451,38 @@ function finishMine(state: LeagueState, played: { clubs: LeagueClub[]; match: Ma
   const seed = seasonSeed(state.seed, state.season);
   let clubs = played.clubs;
   if (state.stage === 'homeAway') {
+    let injuries = settleInjuries(state.injuries, state.clubs, played, seed, true);
     const results = [...state.results, strip(played.match)];
     const goals = tally({ ...state.goals }, played.match);
     for (const fixture of fixturesFor(state.seed, state.season, state.round).filter(value => value.homeId !== state.myClub && value.awayId !== state.myClub)) {
-      const other = simulateOtherMatch({ clubs, seed, round: state.round }, fixture.homeId, fixture.awayId);
+      const other = simulateOtherMatch({ clubs, seed, round: state.round }, fixture.homeId, fixture.awayId, club => automaticLineup(availableClub(club, injuries)));
+      injuries = settleInjuries(injuries, clubs, other, seed);
       clubs = other.clubs; tally(goals, other.match); results.push(strip(other.match));
     }
-    return reviewRatings({ ...state, clubs, results, goals, match: played.match, phase: 'report', swapsThisBreak: 0 });
+    return reviewRatings({ ...state, clubs, results, goals, ...(injuries && { injuries }), match: played.match, phase: 'report', swapsThisBreak: 0 });
   }
   const settled = settleLevelFinal(clubs, played.match, seed, (list, match) => {
     const ownHome = match.homeId === state.myClub;
     const other = matchdayStarters(list.find(club => club.id === otherSide(match, state.myClub))!, ownHome ? match.awaySquad : match.homeSquad);
     return ownHome ? [state.starters, other] : [other, state.starters];
   }, [played.match.homeId === state.myClub ? tactic : opponentPlays(state.seed, state.season, played.match, clubOf(state, played.match.homeId)!.style), played.match.awayId === state.myClub ? tactic : opponentPlays(state.seed, state.season, played.match, clubOf(state, played.match.awayId)!.style)]);
-  return playRestOfWeek({ ...state, clubs: settled.clubs, match: settled.match }, settled.match, settled.extraTime);
+  const injuries = settleInjuries(state.injuries, state.clubs, settled, seed, true);
+  return playRestOfWeek({ ...state, clubs: settled.clubs, match: settled.match, ...(injuries && { injuries }) }, settled.match, settled.extraTime);
 }
 /** Record your tie (if you played) and play every other tie of the week. */
 function playRestOfWeek(state: LeagueState, mine: Match | null, mineExtra: boolean): LeagueState {
   const seed = seasonSeed(state.seed, state.season);
   let clubs = state.clubs;
+  let injuries = state.injuries;
   const ties = (state.finals?.ties ?? []).map(tie => {
     if (tie.week !== state.week || tie.result) return tie;
     if (mine && tie.homeId === mine.homeId && tie.awayId === mine.awayId) return { ...tie, result: { home: mine.homeScore, away: mine.awayScore, extraTime: mineExtra } };
-    const played = simulateTie(clubs, seed, finalsRound(state.week), tie.homeId, tie.awayId);
+    const played = simulateTie(clubs, seed, finalsRound(state.week), tie.homeId, tie.awayId, injuries);
+    injuries = settleInjuries(injuries, clubs, played, seed);
     clubs = played.clubs;
     return { ...tie, result: { home: played.match.homeScore, away: played.match.awayScore, extraTime: played.extraTime } };
   });
-  return { ...state, clubs, finals: { ties }, phase: 'report', swapsThisBreak: 0 };
+  return { ...state, clubs, ...(injuries && { injuries }), finals: { ties }, phase: 'report', swapsThisBreak: 0 };
 }
 function playQuarter(state: LeagueState, tactic: Tactic): LeagueState {
   const match = state.match!;
@@ -468,7 +522,9 @@ function startNextQuarter(state: LeagueState): LeagueState {
 export function reduceLeague(state: LeagueState, action: LeagueAction): LeagueState {
   if (!isLeagueAction(action)) return state;
   if (action.type === 'lineup') {
-    if (state.phase !== 'prepare' || !state.match || !validLineup({ clubs: state.clubs, clubId: state.myClub }, action.starters, action.bench) || (sameIds(state.starters, action.starters) && sameIds(state.bench, action.bench))) return state;
+    if (state.phase !== 'prepare' || !state.match || !validLineup({ clubs: state.clubs, clubId: state.myClub }, action.starters, action.bench)
+      || [...action.starters, ...action.bench].some(id => injuryAbsence(state, id))
+      || (sameIds(state.starters, action.starters) && sameIds(state.bench, action.bench))) return state;
     return { ...state, starters: [...action.starters], bench: [...action.bench] };
   }
   if (action.type === 'keepLineup' || action.type === 'autoLineup') {
@@ -477,7 +533,7 @@ export function reduceLeague(state: LeagueState, action: LeagueAction): LeagueSt
     if (action.type === 'autoLineup') {
       if (!state.preferredLineup) return state;
       const { preferredLineup: _previous, ...career } = state;
-      return { ...career, ...automaticLineup(club) };
+      return { ...career, ...automaticLineup(availableClub(club, state.injuries)) };
     }
     const previous = state.preferredLineup;
     if (previous && sameIds(previous.starters.map(slot => slot.id), state.starters) && sameIds(previous.bench, state.bench)) return state;
@@ -504,7 +560,7 @@ export function reduceLeague(state: LeagueState, action: LeagueAction): LeagueSt
   if (action.type === 'prepare') {
     if (state.phase !== 'prepare' || !state.match) return state;
     const clubs = prepareClubs(state.clubs, state.myClub, action.choice, state.match.round);
-    const other = automaticLineup(clubs.find(club => club.id === otherSide(state.match!, state.myClub))!);
+    const other = automaticLineup(availableClub(clubs.find(club => club.id === otherSide(state.match!, state.myClub))!, state.injuries));
     const own = [...state.starters, ...state.bench], otherSquad = [...other.starters, ...other.bench];
     const match = { ...state.match, homeSquad: state.match.homeId === state.myClub ? own : otherSquad, awaySquad: state.match.awayId === state.myClub ? own : otherSquad };
     return { ...state, clubs, match, phase: 'quarter', preparation: action.choice };
@@ -537,7 +593,8 @@ export function reduceLeague(state: LeagueState, action: LeagueAction): LeagueSt
 function advance(state: LeagueState): LeagueState {
   if (state.phase === 'break') return startNextQuarter(state);
   if (state.phase === 'report') {
-    const { halftimeInterchange: _finished, ...career } = state;
+    const { halftimeInterchange: _finished, ...previous } = state;
+    const career = state.injuries?.report.length ? { ...previous, injuries: { ...state.injuries, report: [] } } : previous;
     const clubs = recover(state.clubs);
     if (state.stage === 'homeAway') return state.round < ROUNDS - 1 ? openRound({ ...career, clubs }, state.round + 1) : openWeek({ ...career, clubs }, 0);
     return state.week < lastWeek(state.format) ? openWeek({ ...career, clubs }, state.week + 1) : closeSeason(career);
@@ -622,7 +679,7 @@ function reviewRatings(state: LeagueState): LeagueState {
 
 function runSummer(state: LeagueState): LeagueState {
   const clubs = state.clubs.map(club => ({ ...club, players: club.players.map(player => ({ ...player, age: player.age + 1, fatigue: 0, prep: 0 })) }));
-  return { ...state, clubs, phase: 'summer' };
+  return { ...state, clubs, phase: 'summer', ...(state.injuries && { injuries: { out: {}, report: [] } }) };
 }
 /** Retirement odds by age after the summer birthday: none before 31, certain at 35. Game rule. */
 export const retireOdds = (age: number) => age < 31 ? 0 : age >= 35 ? 1 : [0.15, 0.3, 0.5, 0.75][age - 31];
@@ -924,6 +981,25 @@ function fieldsMatchday(club: LeagueClub, squad: string[]): boolean {
     && ROLES.every(role => players.filter(player => player?.role === role).length >= ROLE_FLOORS[role]);
 }
 /** Every check a loaded save must pass. Anything else is refused whole, never half trusted. */
+function validInjuries(value: unknown, state: LeagueState): boolean {
+  if (!exactKeys(value, ['out', 'report']) || !value.out || typeof value.out !== 'object' || Array.isArray(value.out)
+    || !Array.isArray(value.report) || value.report.length > 2 || new Set(value.report).size !== value.report.length) return false;
+  const out = value.out as Record<string, number>;
+  const entries = Object.entries(out);
+  if (entries.length > 3 * CLUB_COUNT || !entries.every(([id, left]) => isPlayerId(id) && int(left, 1, 3) && !!leaguePlayer(state, id))) return false;
+  if (entries.length && (state.phase === 'summer' || state.phase === 'draft')) return false;
+  if (value.report.length) {
+    const match = state.match;
+    if (state.phase !== 'report' || !match || !Array.isArray(match.homeSquad) || !Array.isArray(match.awaySquad)
+      || !value.report.every(id => isPlayerId(id) && out[id] && (match.homeSquad.includes(id) || match.awaySquad.includes(id)))) return false;
+  }
+  return !entries.length || state.clubs.every(club => {
+    const players = availableClub(club, { out, report: [] }).players;
+    const counts = roleCounts(players);
+    return players.length >= 23 && ROLES.every(role => counts[role] >= ROLE_FLOORS[role]);
+  });
+}
+
 export function validLeagueState(value: unknown): value is LeagueState {
   // Round 1572: no clubSet key is the invented league; the one other way to write a set is exactly 'afl2026'.
   const named = !!value && typeof value === 'object' && !Array.isArray(value) && (value as Record<string, unknown>).clubSet !== undefined;
@@ -932,6 +1008,7 @@ export function validLeagueState(value: unknown): value is LeagueState {
   if (keys && value && Object.prototype.hasOwnProperty.call(value, 'skillReviews')) keys.push('skillReviews');
   if (keys && value && Object.prototype.hasOwnProperty.call(value, 'preferredLineup')) keys.push('preferredLineup');
   if (keys && value && Object.prototype.hasOwnProperty.call(value, 'halftimeInterchange')) keys.push('halftimeInterchange');
+  if (keys && value && Object.prototype.hasOwnProperty.call(value, 'injuries')) keys.push('injuries');
   if (!keys || !exactKeys(value, keys) || value.version !== 2 || !validSeed(value.seed) || !isClubId(value.myClub) || value.clubName !== clubFull(value, value.myClub as string)) return false;
   if (!int(value.season, 1, 10000) || !(value.format === 'final8' || value.format === 'wildcard') || !PHASES.includes(value.phase as LeaguePhase)) return false;
   if (!(value.stage === 'homeAway' || value.stage === 'finals') || !int(value.round, 0, ROUNDS - 1) || !int(value.week, 0, 8) || !int(value.nextId, CLUB_COUNT * LIST_SIZE, 999999)) return false;
@@ -939,6 +1016,7 @@ export function validLeagueState(value: unknown): value is LeagueState {
   if (!validClubs(s.clubs, s.nextId, setOf(s)) || !Array.isArray(s.starters) || !Array.isArray(s.bench)) return false;
   if (s.preferredLineup !== undefined && !validPreferredLineup(s.preferredLineup, s)) return false;
   if (s.halftimeInterchange !== undefined && !validHalftimeInterchange(s.halftimeInterchange, s)) return false;
+  if (s.injuries !== undefined && !validInjuries(s.injuries, s)) return false;
   if (!s.goals || typeof s.goals !== 'object' || Array.isArray(s.goals) || !Object.entries(s.goals).every(([id, goals]) => isPlayerId(id) && int(goals, 1, 9999))) return false;
   const closed = s.phase === 'seasonOver' || s.phase === 'summer' || s.phase === 'draft';
   if (!Array.isArray(s.history) || !s.history.every(validHistory) || s.history.length !== s.season - (closed ? 0 : 1)) return false;
@@ -997,6 +1075,7 @@ export function validLeagueState(value: unknown): value is LeagueState {
   }
   if (s.draft !== null || !s.clubs.every(club => club.players.length === LIST_SIZE && ROLES.every(role => roleDeficits(club)[role] === 0))) return false;
   if (!validLineup({ clubs: s.clubs, clubId: s.myClub }, s.starters, s.bench)) return false;
+  if (!closed && s.phase !== 'report' && [...s.starters, ...s.bench].some(id => injuryAbsence(s, id))) return false;
   if (closed) return s.stage === 'finals' && s.match === null && s.preparation === null && s.week === lastWeek(s.format) && validFinals(s, lastWeek(s.format), true);
   let mine: { homeId: string; awayId: string } | undefined;
   if (s.stage === 'homeAway') {
@@ -1012,7 +1091,8 @@ export function validLeagueState(value: unknown): value is LeagueState {
   const squad = match.homeId === s.myClub ? match.homeSquad : match.awaySquad;
   if (s.phase === 'prepare') return match.quarter === 0 && match.events.length === 0 && squad.length === 0 && s.preparation === null;
   if (s.preparation === null || squad.length !== 23 || !sameIds([...squad].sort(), [...s.starters, ...s.bench].sort())) return false;
-  if (!fieldsMatchday(clubOf(s, otherSide(match, s.myClub))!, match.homeId === s.myClub ? match.awaySquad : match.homeSquad)) return false;
+  const opponent = clubOf(s, otherSide(match, s.myClub))!;
+  if (!fieldsMatchday(s.phase === 'report' ? opponent : availableClub(opponent, s.injuries), match.homeId === s.myClub ? match.awaySquad : match.homeSquad)) return false;
   if (s.phase === 'quarter') return match.quarter < 4;
   if (s.phase === 'break') return match.quarter >= 1 && match.quarter < 4;
   return match.quarter >= 4;

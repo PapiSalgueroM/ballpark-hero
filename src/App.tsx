@@ -271,7 +271,7 @@ export const ScrollToTop = () => {
         y = 0;
       }
       const homeAnchor = window.location.hash.slice(1);
-      if (initial && (homeAnchor === "browse-sports" || homeAnchor === "home-game-picks" || /^sport-[a-z0-9]+$/.test(homeAnchor))) {
+      if (initial && (homeAnchor === "browse-sports" || /^home-(game-picks|dailies|career-sims)$/.test(homeAnchor) || /^sport-[a-z0-9]+$/.test(homeAnchor))) {
         const navigation = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
         if (navigation?.type === "navigate" || (y <= 0 && navigation?.type !== "back_forward")) {
           // Home may mount after this effect. Its heading carries the

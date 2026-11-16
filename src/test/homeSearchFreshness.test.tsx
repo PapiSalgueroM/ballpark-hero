@@ -594,6 +594,51 @@ it.each([false, true])('jumps from Browse sports to game picks and restores the 
   expect(trigger).toHaveFocus();
 });
 
+it.each([
+  ['Daily puzzles', 'Daily puzzles', '#home-dailies'],
+  ['Career sims', 'Dynasty & Career Sims', '#home-career-sims'],
+])('opens %s from the header and restores its history focus', (label, title, hash) => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  const scrollTo = vi.fn();
+  vi.stubGlobal('scrollTo', scrollTo);
+  localStorage.setItem('dukb-fav-sport', 'hockey');
+  function HistoryControls() {
+    const navigate = useNavigate();
+    return <>
+      <output aria-label="Current anchor">{useLocation().hash}</output>
+      <button onClick={() => navigate(-1)}>Back one shelf</button>
+      <button onClick={() => navigate(1)}>Forward one shelf</button>
+    </>;
+  }
+  const { container } = render(<MemoryRouter initialEntries={[{ pathname: '/', key: 'home-shelf-' + label }]}>
+    <Index /><HistoryControls />
+  </MemoryRouter>);
+  const trigger = screen.getByRole('button', { name: 'Browse sports' });
+  const heading = screen.getByRole('heading', { name: title });
+  heading.scrollIntoView = vi.fn();
+
+  trigger.focus();
+  fireEvent.click(trigger);
+  const menu = screen.getByRole('dialog', { name: 'Browse sports' });
+  const shortcut = within(menu).getByRole('link', { name: label });
+  expect(shortcut).toHaveAttribute('href', hash);
+  fireEvent.click(shortcut);
+  expect(screen.queryByRole('dialog', { name: 'Browse sports' })).toBeNull();
+  expect(screen.getByLabelText('Current anchor')).toHaveTextContent(hash);
+  expect(heading).toHaveFocus();
+  expect(heading.scrollIntoView).toHaveBeenCalledWith({ block: 'start', behavior: 'instant' });
+  expect(container.querySelectorAll('[id="' + hash.slice(1) + '"]')).toHaveLength(1);
+
+  fireEvent.click(screen.getByRole('button', { name: 'Back one shelf' }));
+  expect(screen.getByLabelText('Current anchor')).toBeEmptyDOMElement();
+  expect(trigger).toHaveFocus();
+  expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'instant' });
+  fireEvent.click(screen.getByRole('button', { name: 'Forward one shelf' }));
+  expect(screen.getByLabelText('Current anchor')).toHaveTextContent(hash);
+  expect(heading).toHaveFocus();
+  expect(localStorage.getItem('dukb-fav-sport')).toBe('hockey');
+});
+
 it('keeps the sport heading when native history reuses the initial key for a different fragment', () => {
   catalogueViewport(true);
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
