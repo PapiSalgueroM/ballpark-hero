@@ -12,7 +12,7 @@ export interface GameDef {
    * February: "u call like everything new".
    */
   addedOn?: string;
-  /** Shown in the Dynasty & Career Sims showcase at the top of the home page. */
+  /** A career or management sim featured on Home and in the sport hubs. */
   featured?: boolean;
 }
 
@@ -271,7 +271,7 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Aussie Rules',
     emoji: '🏉',
     games: [
-      { path: '/aussie-rules-manager', label: 'Aussie Rules Manager', emoji: '🏉', description: 'Run one of the 18 AFL clubs through 23 rounds, the finals and a draft into next season', addedOn: '2026-10-01' },
+      { path: '/aussie-rules-manager', label: 'Aussie Rules Manager', emoji: '🏉', description: 'Run one of the 18 AFL clubs through 23 rounds, the finals and a draft into next season', addedOn: '2026-10-01', featured: true },
       { path: '/afl-higher-lower', label: 'AFL Higher or Lower', emoji: '📊', description: 'Which legend kicked more career goals?', daily: true, addedOn: '2026-03-08' },
     ],
   },

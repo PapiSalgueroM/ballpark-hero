@@ -470,6 +470,11 @@ export default function Index() {
             const sport = CATEGORY_SPORT[cat.title];
             const extraGames = cat.games.slice(SPORT_PREVIEW_GAMES);
             const expanded = expandedSports.includes(sport);
+            // Hold a place for featured sims in the preview. Show the registry's full order when expanded.
+            const featured = cat.games.filter(game => game.featured).slice(0, SPORT_PREVIEW_GAMES);
+            const other = cat.games.filter(game => !game.featured).slice(0, SPORT_PREVIEW_GAMES - featured.length);
+            const preview = expanded ? cat.games.slice(0, SPORT_PREVIEW_GAMES)
+              : cat.games.filter(game => featured.includes(game) || other.includes(game));
             const moreId = `home-more-${sport}`;
             const hub = hubForCategory(cat.title);
             return (
@@ -506,7 +511,7 @@ export default function Index() {
                 </div>
               </div>
               <div className="grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3" data-home-catalogue="">
-                {cat.games.slice(0, SPORT_PREVIEW_GAMES).map(game => (
+                {preview.map(game => (
                   <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
                 ))}
               </div>
