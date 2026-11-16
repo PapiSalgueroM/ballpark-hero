@@ -8,6 +8,8 @@ import { markRestoredFinish } from '@/lib/restoredFinish';
 export const TOTAL_PACKS = 15;
 const EMPTY_SLOT_RATING = 45;
 const STORAGE_PREFIX = 'mystery-box-';
+// Start on a future shared Eastern board so an in-progress daily keeps its rules.
+const FIRST_SWAP_DAY = '2026-11-21';
 
 /**
  * Pack odds. Tuned so a finished XI averages in the 60s-70s and a superstar
@@ -30,6 +32,9 @@ export interface MysteryBoxState {
   revealed: boolean;
   squad: (PackPlayer | undefined)[];
   compatibleSlots: number[];
+  swapSlots: number[];
+  swapStatus: 'available' | 'used' | null;
+  swapSaveFailed: boolean;
   discards: number;
   staleDraft: boolean;
   finished: boolean;
@@ -38,6 +43,7 @@ export interface MysteryBoxState {
   bestPull: PackPlayer | null;
   openPack: () => void;
   place: (slotIndex: number) => void;
+  swap: (slotIndex: number) => void;
   discard: () => void;
   shareText: string;
 }
@@ -57,8 +63,17 @@ export function tierFor(today: string, i: number): PackTier {
 }
 
 interface Saved {
-  decisions: Array<{ slot: number | null }>; // per opened pack: slot index or null=discard
+  decisions: Array<{ slot: number | null; replace?: true }>; // null is a bin
   revealedCurrent: boolean;
+}
+
+function swapTargets(slots: readonly FormationSlot[], squad: (PackPlayer | undefined)[], incoming: PackPlayer): number[] {
+  if (slots.some((slot, i) => !squad[i] && slot.allowed.includes(incoming.position))) return [];
+  const rating = playerRating(incoming);
+  return slots.flatMap((slot, i) => {
+    const outgoing = squad[i];
+    return outgoing && slot.allowed.includes(incoming.position) && rating > playerRating(outgoing) ? [i] : [];
+  });
 }
 
 function loadSaved(key: string): { raw: string | null; draft: Saved | null } {
@@ -116,7 +131,10 @@ export function useMysteryBox(): MysteryBoxState {
     decisions: saved.draft?.decisions ?? [],
     revealedCurrent: saved.draft?.revealedCurrent ?? false,
   }));
+  const latestDraft = useRef(draft);
   const [staleDraft, setStaleDraft] = useState(false);
+  const [swapSaveFailed, setSwapSaveFailed] = useState(false);
+  const swapsEnabled = today >= FIRST_SWAP_DAY;
   const { decisions, revealedCurrent: revealed } = draft;
 
   useEffect(() => {
@@ -143,13 +161,20 @@ export function useMysteryBox(): MysteryBoxState {
   const finished = packs.length > 0 && packIndex >= packs.length;
   const current = !finished && revealed ? (packs[packIndex] ?? null) : null;
 
-  const squad = useMemo(() => {
-    const s: (PackPlayer | undefined)[] = Array(formation.slots.length).fill(undefined);
-    decisions.forEach((d, i) => {
-      if (d.slot !== null && packs[i]) s[d.slot] = packs[i];
+  const { squad, swapped } = useMemo(() => {
+    const squad: (PackPlayer | undefined)[] = Array(formation.slots.length).fill(undefined);
+    let swapped = false;
+    decisions.forEach((decision, i) => {
+      const incoming = packs[i];
+      if (decision.slot === null || !incoming) return;
+      if (decision.replace) {
+        if (!swapsEnabled || swapped || !swapTargets(formation.slots, squad, incoming).includes(decision.slot)) return;
+        swapped = true;
+      }
+      squad[decision.slot] = incoming;
     });
-    return s;
-  }, [decisions, packs, formation.slots.length]);
+    return { squad, swapped };
+  }, [decisions, packs, formation.slots, swapsEnabled]);
 
   const compatibleSlots = useMemo(() => {
     if (!current) return [];
@@ -158,6 +183,11 @@ export function useMysteryBox(): MysteryBoxState {
       .filter(({ slot, i }) => !squad[i] && slot.allowed.includes(current.position))
       .map(({ i }) => i);
   }, [current, formation.slots, squad]);
+
+  const swapStatus = swapsEnabled ? (swapped ? 'used' : 'available') : null;
+  const swapSlots = useMemo(() => (
+    current && swapStatus === 'available' ? swapTargets(formation.slots, squad, current) : []
+  ), [current, formation.slots, squad, swapStatus]);
 
   const discards = decisions.filter(d => d.slot === null).length;
   const filled = squad.filter(Boolean).length;
@@ -175,8 +205,8 @@ export function useMysteryBox(): MysteryBoxState {
 
   useGameCompletion('mystery-box', finished, rating * 10, filled);
 
-  const commitDraft = useCallback((next: Saved) => {
-    if (staleDraft) return;
+  const commitDraft = useCallback((next: Saved, requiresSave = false) => {
+    if (staleDraft || latestDraft.current !== draft) return;
     try {
       if (localStorage.getItem(key) !== storedDraft.current) {
         setStaleDraft(true);
@@ -185,9 +215,17 @@ export function useMysteryBox(): MysteryBoxState {
       const raw = JSON.stringify(next);
       localStorage.setItem(key, raw);
       storedDraft.current = raw;
-    } catch { /* Keep playing locally while storage is unavailable. */ }
+    } catch {
+      // A swap spends the one upgrade. Leave the reveal open if it cannot be saved.
+      if (requiresSave) {
+        setSwapSaveFailed(true);
+        return;
+      }
+    }
+    latestDraft.current = next;
     setDraft(next);
-  }, [key, staleDraft]);
+    setSwapSaveFailed(false);
+  }, [draft, key, staleDraft]);
 
   const openPack = useCallback(() => {
     if (finished || revealed || loading) return;
@@ -198,6 +236,11 @@ export function useMysteryBox(): MysteryBoxState {
     if (!current || !compatibleSlots.includes(slotIndex)) return;
     commitDraft({ decisions: [...decisions, { slot: slotIndex }], revealedCurrent: false });
   }, [current, compatibleSlots, decisions, commitDraft]);
+
+  const swap = useCallback((slotIndex: number) => {
+    if (!swapSlots.includes(slotIndex)) return;
+    commitDraft({ decisions: [...decisions, { slot: slotIndex, replace: true }], revealedCurrent: false }, true);
+  }, [swapSlots, decisions, commitDraft]);
 
   const discard = useCallback(() => {
     if (!current) return;
@@ -214,7 +257,7 @@ export function useMysteryBox(): MysteryBoxState {
   }, [finished, packs, rating, filled, bestPull, today]);
 
   return {
-    loading, formation, packIndex, current, revealed, squad, compatibleSlots,
-    discards, staleDraft, finished, rating, filled, bestPull, openPack, place, discard, shareText,
+    loading, formation, packIndex, current, revealed, squad, compatibleSlots, swapSlots, swapStatus, swapSaveFailed,
+    discards, staleDraft, finished, rating, filled, bestPull, openPack, place, swap, discard, shareText,
   };
 }

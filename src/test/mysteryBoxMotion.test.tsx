@@ -23,8 +23,9 @@ beforeEach(() => {
   vi.clearAllMocks();
   state = {
     loading: false, formation: FORMATIONS[0], packIndex: 0, current: null, revealed: false, squad: empty(), compatibleSlots: [],
+    swapSlots: [], swapStatus: null, swapSaveFailed: false,
     discards: 0, staleDraft: false, finished: false, rating: 45, filled: 0, bestPull: null,
-    openPack: vi.fn(), place: vi.fn(), discard: vi.fn(), shareText: 'Fixture share payload',
+    openPack: vi.fn(), place: vi.fn(), swap: vi.fn(), discard: vi.fn(), shareText: 'Fixture share payload',
   };
   vi.mocked(useMysteryBox).mockImplementation(() => state);
 });

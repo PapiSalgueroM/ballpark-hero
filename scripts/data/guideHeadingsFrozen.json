@@ -2034,11 +2034,12 @@
         "Open packs one at a time, 15 in total.",
         "Each pack reveals a real player with his club, position, rating and market value, plus a tier from fringe to superstar.",
         "Keep him by tapping a highlighted compatible slot in your 4-3-3.",
+        "On daily boards from November 21, 2026, you can make one swap. When all compatible slots are filled, tap a highlighted player to replace him with a higher-rated pull that fits his slot.",
         "Or bin him, if you can afford to.",
         "After pack 15, your final XI rating and best pull are ready to share."
       ],
       "rules": [
-        "You open 15 packs to fill 11 slots, which means you can only afford 4 bins all run.",
+        "To fill all 11 slots with 15 packs, you have four spare packs for bins or a swap. A swap uses the current pack and keeps the same number of filled slots.",
         "Pack odds per tier: superstar 3 percent, star 9, quality 22, squad player 41, fringe 25.",
         "Your rating averages all 11 slots, and an empty slot counts as a 45, below even the weakest real player.",
         "One run per day, the same sequence for everyone, saved as you go."
@@ -2048,7 +2049,7 @@
         "Then pack 9 is a fringe goalkeeper. Keeping him feels bad, but there's one goalkeeper slot and no guarantee anything better is coming. You keep him and finish with a full XI in the low 70s."
       ],
       "tips": [
-        "Count your bins. Spend all 4 early and every remaining pack becomes a forced keep.",
+        "Count your spare packs. If you use four on bins or a swap, each remaining pack has to fill an empty slot for you to finish with a full XI.",
         "Guard the scarce spots. There's one goalkeeper slot and one striker slot, but three central midfield slots.",
         "A fringe body still beats a hole. Empty slots score 45, lower than any real player.",
         "Superstars are a 3 percent event. Don't bin solid players betting on one."
