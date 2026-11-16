@@ -1,5 +1,9 @@
 ## 2026-11-16 — Halftime cover, requested trades and season tickets
 
+[PR #1011](https://github.com/PapiSalgueroM/ballpark-hero/pull/1011) published exact main `70d33aca87686d14490fa09a3f9bad93a159211d`, deployment `5447853f-b076-431b-afac-d11d9f86bea7` and canonical entry `/assets/index-gc9ukfBs.js`. The squash tree matched tested head `8f98ce35b`. All 17 live browser profiles, 20 pinned endpoints and 174 sitemap routes passed. IndexNow accepted all three updated game guides.
+
+Hosted application types, production builds and Career entry guide verification passed. All 110 integrated focused tests passed. The broader hosted Stadium ticket workflow reported a copied-test failure. The focused Stadium run passed in both play modes, and its Standard, concessions and payroll fault copies reached their intended assertions.
+
 - NRL Team Manager lets a manager cover a first-half injury with a legal named reserve in new regular seasons. The saves record who came off and who took the reserve place. Quick Sim matched Live using the same default cover. Both phone widths also allowed a different legal fourth reserve and stopped the injured starter from returning.
 - NBA My Career can name an era-eligible trade destination in the existing annual request. The confirmation shows approval odds and destination roster quality. The browser saved the signed terms and the selected franchise after two approvals, and preserved one refusal across a stale tab.
 - Stadium Tycoon can reserve up to a quarter of existing seats for season tickets before the first result. At the fixture's Premium price in both play modes, 30 reserved seats raised the crowd to 101 and qualified for the existing 96-supporter sponsor target. The game records the attendance split without a second payment.
