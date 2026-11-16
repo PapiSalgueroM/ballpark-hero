@@ -160,7 +160,7 @@ it('opens a new 2026 club career with call-ups and shows both sides before the R
   click('Manage Brisbane Broncos');
   seed.mockRestore();
   let state = save();
-  expect(state).toMatchObject({ originClubCalendar: true, season: { year: 2026, seed: 4 } });
+  expect(state).toMatchObject({ originClubCalendar: true, originClubRecovery: true, season: { year: 2026, seed: 4 } });
   first.unmount();
   saveFence.release(NRL_SAVE_KEY);
   while (state.season.round < 12) state = reduceNrlCareer(state, { type: 'advance' });
@@ -182,4 +182,35 @@ it('opens a new 2026 club career with call-ups and shows both sides before the R
   expect(availability.getByText(player.name + ' · ' + player.role, { exact: true })).toBeVisible();
   expect(availability.getAllByText('On State of Origin duty').length).toBeGreaterThan(0);
   expect(raw()).toBe(original);
+});
+
+it('books and reloads Origin recovery in the club Match centre', () => {
+  let current: ReturnType<typeof createNrlCareer> = {
+    ...createNrlCareer('broncos', 4, 2026), originClubCalendar: true, originClubRecovery: true,
+  };
+  while (current.season.round < 13) current = reduceNrlCareer(current, { type: 'advance' });
+  const original = JSON.stringify(current);
+  localStorage.setItem(NRL_SAVE_KEY, original);
+  const view = open();
+  const region = within(screen.getByRole('region', { name: 'State of Origin recovery' }));
+  const select = region.getByRole('combobox', { name: 'Rest a returning Origin player' });
+  expect(raw()).toBe(original);
+  fireEvent.change(select, { target: { value: 'broncos-7-0' } });
+  expect(save().season.originRestId).toBe('broncos-7-0');
+  const booked = raw();
+
+  view.unmount();
+  saveFence.release(NRL_SAVE_KEY);
+  open();
+  expect(screen.getByRole('combobox', { name: 'Rest a returning Origin player' })).toHaveValue('broncos-7-0');
+  expect(raw()).toBe(booked);
+  click('Squad');
+  const availability = within(screen.getByRole('region', { name: 'Availability' }));
+  expect(availability.getByText('Rested after State of Origin')).toBeVisible();
+
+  click('Match centre');
+  click('Quick Sim');
+  const name = current.season.squad.find(player => player.id === 'broncos-7-0')!.name;
+  expect(screen.getByText('Rested after State of Origin: ' + name)).toBeVisible();
+  expect(save().season.results.find(match => match.round === 13 && match.playerScoring)?.originRestId).toBe('broncos-7-0');
 });

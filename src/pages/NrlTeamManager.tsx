@@ -25,7 +25,7 @@ import { useRulesGateState } from '@/hooks/useRulesGateState';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { nrlBoardChallengeStatus } from '@/lib/nrlBoardTarget';
 import {
-  nrlBench, nrlBenchRotation, nrlCanOpenInterchange, nrlCanPairHalftimeInterchanges, nrlClubOriginAbsences, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
+  nrlBench, nrlBenchRotation, nrlCanOpenInterchange, nrlCanPairHalftimeInterchanges, nrlClubOriginAbsences, nrlClubOriginReturning, nrlFitLineup, nrlHalftimeInterchanges, nrlHoldableReserves, nrlIndividualRecoveryOptions, nrlIndividualRecoveryPreview, nrlInjuries,
   nrlActingCaptainPhases, nrlCaptainChallengePreview, nrlCounterPlan, nrlFinalsRace, nrlLadder, nrlLeagueForm, nrlMatchdaySelection, nrlMatchFitness, nrlMinute60FieldGoalAvailable, nrlMinute60Interchanges, nrlMinute60Returns, nrlNextRound, nrlOnFieldCaptain, nrlOpeningCoverOptions,
   nrlLivePhaseScoring,
   nrlQuickInterchangeOptions, nrlQuickInterchangeOutcome, nrlRegularReturnFixture, nrlRegularRounds, nrlReserveGradeRemaining, nrlRetrainingRoles, nrlSavedLineupPreview, nrlStarterOptions, nrlStarterSwaps, nrlUnavailable,
@@ -35,7 +35,7 @@ import {
 import {
   createNrlCareer, createNrlCustomCareer, isNrlNamedPlayer, loadNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer,
   nrlCanReviewTickets, nrlHomeGateReport, nrlSavedMatchPlanPreview, nrlScheduledRotationOptions, nrlTicketReviewRound,
-  nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport, nrlPositionTraining,
+  nrlAcademyOffer, nrlAcademyReports, nrlAttackPlanPreview, nrlCounterPlanPreview, nrlDevelopmentAssistantProgress, nrlLiveAttackPlans, nrlLivePlanPreview, nrlOppositionReport, nrlOriginRestOptions, nrlPositionTraining,
   nrlAwayRecoveryBonus, nrlAwayRecoveryQuote, nrlBoardPathwaysQuote, nrlCoachTactics, nrlContractApproach, nrlIndividualSkillWorkOptions, nrlIndividualSkillWorkProgress, nrlIntensiveBye, nrlIntensiveMatch, nrlPhysioQuote, nrlPositionTrainingCandidates, nrlReserveCoachQuote, nrlReserveGradeCandidates, nrlRivalSquad,
   nrlPastLadders, nrlSelectionPromise, nrlSelectionPromiseTerms, nrlSponsorRefusal, nrlTicketPricingRefusal, nrlWorldCupAppointmentAvailable,
   NRL_DEVELOPMENT_ASSISTANT, NRL_FAST_FORWARD_ROUNDS, NRL_POSITION_TRAINING_ROUNDS, NRL_SAVE_MAX_CHARS, NRL_SHORTLIST_LIMIT, NRL_SKILL_WORK_APPEARANCES, reduceNrlCareer, runNrlFastForward,
@@ -838,6 +838,7 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
   const injury = match.injury;
   const injuredName = injury && season.squad.find(player => player.id === injury.playerId)?.name;
   const recoveredName = match.individualRecoveryId && season.squad.find(player => player.id === match.individualRecoveryId)?.name;
+  const originRestName = match.originRestId && season.squad.find(player => player.id === match.originRestId)?.name;
   const skillsName = match.individualSkillWorkId && season.squad.find(player => player.id === match.individualSkillWorkId)?.name;
   const trainedName = match.intensivePositionTrainingId && season.squad.find(player => player.id === match.intensivePositionTrainingId)?.name;
   const captainName = match.captainId && season.squad.find(player => player.id === match.captainId)?.name;
@@ -955,6 +956,7 @@ function NrlMatchDetails({ match, career }: { match: NrlMatchResult; career: Nrl
           : quickOutcome === 'unavailable' ? `You were ${quick.trigger} at 60 minutes. ${quickReserve} was unavailable for the fourth interchange.`
             : `The fourth interchange for ${quickReserve} needed you to be ${quick.trigger} at 60 minutes. The trigger was missed.`}
       </p>}
+      {originRestName && <p className="mt-2 text-sm text-muted-foreground">Rested after State of Origin: {originRestName}</p>}
       {recoveredName && <p className="mt-2 text-sm text-muted-foreground" data-nrl-individual-recovery-result>
         {recoveredName} took individual recovery before this match.
       </p>}
@@ -1212,6 +1214,7 @@ const fastForwardStops: Record<NrlFastForwardStop, string> = {
   finals: 'The regular season is complete. Play the finals one round at a time.',
   judiciary: 'A Judiciary review needs a response in Match centre.',
   'origin-stand-down': 'State of Origin call-ups changed the teams. Check the matchday lineup.',
+  'origin-recovery': 'State of Origin players have returned. Review who backs up for the club match.',
   'contract-approach': 'A rival contract offer is ready in Contracts.',
   'contract-deadline': 'This is the last round to reply to the rival offer. Review it in Contracts or simulate this round on its own to let it expire.',
 };
@@ -1465,6 +1468,37 @@ function OriginCallUps({ career, fixture }: { career: NrlCareerState; fixture?: 
   );
 }
 
+function OriginRecovery({ career, onAction, disabled }: {
+  career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; disabled: boolean;
+}) {
+  const { season } = career;
+  const returning = nrlClubOriginReturning(season);
+  if (!career.originClubRecovery || !returning.length) return null;
+  const options = nrlOriginRestOptions(career);
+  const rested = season.squad.find(player => player.id === season.originRestId);
+  return (
+    <section className="rounded-xl border border-border bg-card p-4" aria-labelledby="nrl-origin-recovery">
+      <h3 id="nrl-origin-recovery" className="font-bold">State of Origin recovery</h3>
+      <p className="mt-1 text-sm text-muted-foreground">
+        This is your first club match after Origin. Pick returning players in Squad, or rest one for this fixture.
+      </p>
+      {(options.length > 0 || rested) && (<>
+        <label htmlFor="nrl-origin-rest" className="mt-3 block text-sm font-semibold">Rest a returning Origin player</label>
+        <select id="nrl-origin-rest" value={season.originRestId ?? ''} disabled={disabled}
+          className="mt-1 min-h-11 w-full min-w-0 rounded-lg border border-input bg-background px-2 text-sm sm:max-w-xs"
+          onChange={event => onAction({ type: 'restOriginPlayer', year: season.year, clubId: season.clubId, round: season.round,
+            playerId: event.target.value || null })}>
+          <option value="">Use Squad selection</option>
+          {rested && !options.some(player => player.id === rested.id) && (
+            <option value={rested.id}>{rested.name} · resting</option>
+          )}
+          {options.map(player => <option key={player.id} value={player.id}>{player.name} · {player.fitness}% fit</option>)}
+        </select>
+      </>)}
+    </section>
+  );
+}
+
 function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLiveResult, initialFixtureClub }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onRun: (request: NrlFastForwardRequest) => FastForwardResult | null;
   onOpenOffice: (screen: OfficeScreen) => void; disabled: boolean; showLiveResult: boolean; initialFixtureClub?: string;
@@ -1585,6 +1619,7 @@ function MatchCentre({ career, onAction, onRun, onOpenOffice, disabled, showLive
       </div>
 
       <OriginCallUps career={career} fixture={match} />
+      <OriginRecovery career={career} onAction={onAction} disabled={disabled} />
       {match && <OppositionReport key={`${year}:${match.round}`} career={career} />}
 
       {match && (
@@ -2396,6 +2431,7 @@ function Squad({ career, onAction, disabled }: {
                     <div className="flex flex-wrap justify-between gap-x-3">
                       <span>{player.name} · {player.role}</span>
                       <span className="text-muted-foreground">{originAbsences.includes(player.id) ? 'On State of Origin duty'
+                        : player.id === season.originRestId ? 'Rested after State of Origin'
                         : player.id === reserveGradeId ? 'On reserve-grade development'
                         : ban ? `Suspended for ${ban} club ${ban === 1 ? 'match' : 'matches'}`
                         : `Out for ${remaining} ${remaining === 1 ? 'round' : 'rounds'}`}</span>
@@ -2902,7 +2938,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
     const seed = Math.floor(Math.random() * 0x1_0000_0000);
     const persistNewCareer = (next: NrlCareerState) => persist({
       ...next, season: { ...next.season, domesticScoringModel: NRL_DOMESTIC_SCORING_MODEL },
-      ...(next.season.year === 2026 && { originClubCalendar: true as const }),
+      ...(next.season.year === 2026 && { originClubCalendar: true as const, originClubRecovery: true as const }),
     });
     if (openingNames) {
       const request = Symbol();

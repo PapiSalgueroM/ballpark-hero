@@ -108,3 +108,105 @@ it('retains explicitly coached workload for available club players during a stan
   expect(reopened).toEqual(played);
   expect(reduceNrlCareer(reopened!, action)).toBe(reopened);
 });
+
+const withRecovery = (state: NrlCareerState): NrlCareerState => ({ ...state, originClubRecovery: true });
+const rest = (state: NrlCareerState, playerId: string | null) => reduceNrlCareer(state, {
+  type: 'restOriginPlayer', year: state.season.year, clubId: state.season.clubId, round: state.season.round, playerId,
+});
+const fitnessOf = (state: NrlCareerState, playerId: string) => state.season.squad.find(player => player.id === playerId)!.fitness;
+
+it('rests one Origin returnee for the next club fixture and records the choice in Quick Sim and Live', () => {
+  const camp = toRound(newCareer('broncos', 4), 12);
+  const ordinary = next(camp);
+  const recovered = next(withRecovery(camp));
+  const playerId = 'broncos-7-0';
+  expect(recovered.season.round).toBe(13);
+  expect(fitnessOf(recovered, playerId)).toBe(fitnessOf(ordinary, playerId) - 8);
+  expect(nrlUnavailable(recovered.season).has(playerId)).toBe(false);
+  const backedUp = reduceNrlCareer(recovered, { type: 'selectStarter', role: 'Halfback', playerId });
+  expect(teamSheet(backedUp)).toContain(playerId);
+
+  const rested = rest(backedUp, playerId);
+  expect(rested.season.originRestId).toBe(playerId);
+  expect(rest(rested, playerId)).toBe(rested);
+  expect(rest(ordinary, playerId)).toBe(ordinary);
+  expect(rest(camp, playerId)).toBe(camp);
+  expect(teamSheet(rested)).toHaveLength(19);
+  expect(teamSheet(rested)).not.toContain(playerId);
+  expect(nrlUnavailable(rested.season).has(playerId)).toBe(true);
+  expect(read(rested)).toEqual(rested);
+  expect(nrlUnavailable(rest(rested, null).season).has(playerId)).toBe(false);
+  expect(read({ ...rested, originClubRecovery: undefined })).toBeNull();
+
+  const quick = next(read(rested)!);
+  const played = quick.season.results.find(match => match.round === 13 && match.playerScoring)!;
+  expect(played.originRestId).toBe(playerId);
+  expect(played.playerScoring!.starters).not.toContain(playerId);
+  expect(played.benchUsed ?? []).not.toContain(playerId);
+  expect(quick.season.originRestId).toBeUndefined();
+  expect(nrlUnavailable(quick.season).has(playerId)).toBe(false);
+  expect(fitnessOf(quick, playerId)).toBeGreaterThan(fitnessOf(next(backedUp), playerId));
+  expect(read(quick)).toEqual(quick);
+  expect(rest(quick, playerId)).toBe(quick);
+
+  const live = reduceNrlCareer(rested, { type: 'startLive' });
+  expect(read(live)).toEqual(live);
+  expect(rest(live, null)).toBe(live);
+  expect(reduceNrlCareer(read(live)!, { type: 'finishLive', year: 2026, round: 13, tactic: live.season.tactic })).toEqual(quick);
+
+  const fast = runNrlFastForward(withRecovery(camp), { year: 2026, clubId: 'broncos', round: 12, through: 14 });
+  expect(fast.stop).toBe('origin-recovery');
+  expect(fast.state).toEqual(recovered);
+});
+
+it('lets a club bye take the recovery week before the rest decision', () => {
+  // Find a scheduled bye immediately after the first camp with an actual call-up.
+  const candidates = ['broncos', 'bulldogs', 'cowboys', 'dolphins', 'dragons', 'eels', 'knights',
+    'panthers', 'rabbitohs', 'raiders', 'roosters', 'sea-eagles', 'sharks', 'storm', 'titans', 'warriors', 'wests-tigers'];
+  let pair: { camp: NrlCareerState; playerId: string } | undefined;
+  for (const clubId of candidates) {
+    const camp = toRound(newCareer(clubId, 4), 12);
+    const playerId = camp.season.originStandDown?.[0].clubs[clubId]?.[0];
+    if (playerId && nrlNextRound(next(camp).season).clubStatus === 'bye') {
+      pair = { camp, playerId };
+      break;
+    }
+  }
+  expect(pair).toBeDefined();
+  const { camp, playerId } = pair!;
+  const bye = next(withRecovery(camp));
+  const ordinaryBye = next(camp);
+  expect(fitnessOf(bye, playerId)).toBe(fitnessOf(ordinaryBye, playerId) - 8);
+  expect(rest(bye, playerId)).toBe(bye);
+  const returning = next(bye);
+  expect(nrlNextRound(returning.season).clubMatch).toBeTruthy();
+  expect(fitnessOf(returning, playerId)).toBeGreaterThan(fitnessOf(bye, playerId));
+  expect(rest(returning, playerId).season.originRestId).toBe(playerId);
+});
+
+it('counts the same Origin game once when using the coached series workload before or after club camp', () => {
+  const start = { type: 'startOrigin', year: 2026, side: 'qld', clubWorkload: true, fullPool: true } as const;
+  const match = { type: 'playOriginMatch', year: 2026, side: 'qld', game: 1 } as const;
+  const entered = toRound(withRecovery(newCareer('broncos', 4)), 11);
+  const early = reduceNrlCareer(reduceNrlCareer(entered, start), match);
+  const camp = toRound(early, 12);
+  const charged = new Set(early.origin!.matches[0].clubLoad!.players.map(([id]) => id));
+  const called = camp.season.originStandDown![0].clubs.broncos;
+  const alreadyCharged = called.find(id => charged.has(id))!;
+  const onlyAutomatic = called.find(id => !charged.has(id))!;
+  expect(alreadyCharged).toBeDefined();
+  expect(onlyAutomatic).toBeDefined();
+  const returning = next(camp);
+  const comparison = next({ ...camp, originClubRecovery: undefined });
+  expect(fitnessOf(returning, alreadyCharged)).toBe(fitnessOf(comparison, alreadyCharged));
+  expect(fitnessOf(returning, onlyAutomatic)).toBe(fitnessOf(comparison, onlyAutomatic) - 8);
+
+  const late = toRound(withRecovery(newCareer('broncos', 4)), 13);
+  const lateMatch = reduceNrlCareer(reduceNrlCareer(late, start), match);
+  const automatic = late.season.originStandDown![0].clubs.broncos;
+  const returningStarter = Object.values(lateMatch.origin!.selection.starters).find(id => automatic.includes(id))!;
+  expect(returningStarter).toBeDefined();
+  expect(fitnessOf(lateMatch, returningStarter)).toBe(fitnessOf(late, returningStarter));
+  expect(lateMatch.origin!.matches[0].clubLoad?.players.some(([id]) => automatic.includes(id)) ?? false).toBe(false);
+  expect(read(lateMatch)).toEqual(lateMatch);
+});
