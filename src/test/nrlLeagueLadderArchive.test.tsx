@@ -38,7 +38,7 @@ describe('NRL past ladders', () => {
       expect(nrlPastLadders(reload(moved)!)).toEqual([{ year, managedClubId: clubId, rows: tableRows(end) }]);
       const [archive] = moved.history;
       expect(archive.leagueLadder).toHaveLength(tableRows(end).length);
-      const old = { ...moved, history: [{ ...archive, leagueLadder: undefined }] };
+      const old = { ...moved, leagueBook: undefined, latestLeagueBook: undefined, history: [{ ...archive, leagueLadder: undefined }] };
       expect(reload(old)).toEqual(JSON.parse(JSON.stringify(old)));
       expect(nrlPastLadders(reload(old)!)[0]).toMatchObject({ year, managedClubId: clubId, ranked: expect.any(Array) });
       expect(nrlPastLadders(reload(old)!)[0]).not.toHaveProperty('rows');
@@ -59,7 +59,8 @@ describe('NRL past ladders', () => {
     expect(cpu.rows.map(row => row.clubId)).toEqual(report.ladder);
     expect(cpu.managedClubId).toBeUndefined();
     const [prior] = moved.history;
-    const older = { ...moved, history: [{ ...prior, seasonOut: { ...prior.seasonOut!, leagueLadder: undefined } }] };
+    const older = { ...moved, leagueBook: undefined, latestLeagueBook: undefined,
+      history: [{ ...prior, seasonOut: { ...prior.seasonOut!, leagueLadder: undefined } }] };
     expect(reload(older)).toEqual(JSON.parse(JSON.stringify(older)));
     expect(nrlPastLadders(reload(older)!)[0]).toEqual({ year: 2027, ranked: report.ladder.map((clubId, index) => ({ clubId, rank: index + 1 })) });
   });

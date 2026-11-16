@@ -42,6 +42,7 @@ import {
   type NrlCareerAction, type NrlCareerState, type NrlFastForwardRequest, type NrlFastForwardStop,
 } from '@/lib/nrlCareer';
 import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryCase } from '@/lib/nrlJudiciary';
+import { nrlLeagueFixtures, nrlLeagueLeaders, nrlLeagueMatch } from '@/lib/nrlLeagueBook';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
 import { NRL_SAVE_ENTRY, nrlSeasonCanCredit, readNrlReplayCutoff, readNrlSaveSlot, writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
 import { saveFence } from '@/lib/saveFence';
@@ -192,7 +193,9 @@ function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
   );
 }
 
-function scoreLine(result: NrlMatchResult, year: number, shortName: ReturnType<typeof useNrlClubName>) {
+type FixtureScore = Pick<NrlMatchResult, 'round' | 'homeId' | 'awayId' | 'homeScore' | 'awayScore'>;
+
+function scoreLine(result: FixtureScore, year: number, shortName: ReturnType<typeof useNrlClubName>) {
   return `${shortName(year, result.homeId)} ${result.homeScore}–${result.awayScore} ${shortName(year, result.awayId)}`;
 }
 
@@ -1101,12 +1104,92 @@ function roundLabel(round: number, regularRounds: number) {
     : round === regularRounds + 4 ? 'Grand final' : 'Finals week ' + (round - regularRounds);
 }
 
+const leagueScoring = [
+  ['tries', 'Tries'], ['conversions', 'Conversions'], ['penalties', 'Penalty goals'],
+  ['fieldGoals', 'Field goals'], ['longFieldGoals', '2-point field goals'],
+] as const;
+const fixtureKey = ({ round, homeId, awayId }: FixtureScore) => `${round}:${homeId}:${awayId}`;
+
+function LeagueMatchSide({ club, side }: { club: string; side: NonNullable<ReturnType<typeof nrlLeagueMatch>>['home'] }) {
+  return (
+    <section aria-label={club + ' player scores'} className="min-w-0 space-y-2 rounded-lg border border-border p-3">
+      <h3 className="break-words font-semibold">{club} · {nrlScorePoints(side.scoring)}</h3>
+      <ul aria-label="Scoring totals" className="flex flex-wrap gap-x-3 gap-y-1 text-xs text-muted-foreground">
+        {leagueScoring.map(([key, label]) => <li key={key}>{label} <strong className="tabular-nums text-foreground">{side.scoring[key]}</strong></li>)}
+      </ul>
+      {side.scorers.length > 0 && <ul aria-label="Scorers" className="divide-y divide-border">
+        {side.scorers.map(player => <li key={player.playerId} className="py-1">
+          <div className="flex flex-wrap justify-between gap-x-2">
+            <strong className="min-w-0 break-words">{player.name}</strong>
+            <span className="tabular-nums">{nrlScorePoints(player)} pts</span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            {leagueScoring.filter(([key]) => player[key] > 0).map(([key, label]) => `${label} ${player[key]}`).join(' · ')}
+          </p>
+        </li>)}
+      </ul>}
+      <details className="border-t border-border">
+        <summary className="flex min-h-11 cursor-pointer items-center rounded-md font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          Starting 13
+        </summary>
+        <ol aria-label="Starters" className="list-inside list-decimal break-words text-muted-foreground">
+          {side.starters.map(player => <li key={player.id}>{player.name}</li>)}
+        </ol>
+        {side.bench.length > 0 && <>
+          <h4 className="mt-2 font-semibold">Bench used</h4>
+          <ul aria-label="Bench used" className="break-words text-muted-foreground">
+            {side.bench.map(player => <li key={player.id}>{player.name}</li>)}
+          </ul>
+        </>}
+      </details>
+    </section>
+  );
+}
+
+function LeagueFixtureBook({ book, fixtures, rounds }: {
+  book: NonNullable<NrlCareerState['leagueBook']>; fixtures: FixtureScore[]; rounds: number;
+}) {
+  const shortName = useNrlClubName();
+  const fullName = useNrlClubName('full');
+  const [selection, setSelection] = useState('');
+  if (fixtures.length === 0) return null;
+  const fixture = fixtures.find(row => fixtureKey(row) === selection);
+  const match = fixture && nrlLeagueMatch(book, fixture.round, fixture.homeId, fixture.awayId);
+  return (
+    <section className="mb-2 space-y-2 border-b border-border pb-3 text-sm">
+      <label className="block max-w-sm space-y-1 font-semibold">
+        <span>Fixture player scores</span>
+        <select value={selection} onChange={event => setSelection(event.target.value)}
+          className="min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <option value="">Choose a completed match</option>
+          {fixtures.map(row => <option key={fixtureKey(row)} value={fixtureKey(row)}>
+            {roundLabel(row.round, rounds)} · {scoreLine(row, book.year, shortName)}
+          </option>)}
+        </select>
+      </label>
+      {match && <>
+        <p className="text-xs text-muted-foreground">Simulated scoring and team sheets</p>
+        <div className="grid gap-2 sm:grid-cols-2">
+          <LeagueMatchSide club={fullName(book.year, match.homeId)} side={match.home} />
+          <LeagueMatchSide club={fullName(book.year, match.awayId)} side={match.away} />
+        </div>
+      </>}
+    </section>
+  );
+}
+
 function SeasonFixtures({ career, next, initialClub }: { career: NrlCareerState; next: NrlNextRound; initialClub?: string }) {
   const shortName = useNrlClubName();
   const fullName = useNrlClubName('full');
-  const { season } = career;
-  const { year, clubId, results } = season;
+  const { season, latestLeagueBook } = career;
+  const [fixtureYear, setFixtureYear] = useState(season.year);
+  const archived = latestLeagueBook?.year === fixtureYear ? latestLeagueBook : undefined;
+  const year = archived?.year ?? season.year;
+  const archivedClub = archived && career.history.find(row => row.year === year || (row.year === year - 1 && row.seasonOut))?.clubId;
+  const clubId = archivedClub || season.clubId;
   const { draw, clubs } = nrlSeasonPlan(year);
+  const results = archived ? nrlLeagueFixtures(archived) : season.results;
+  const book = archived ?? career.leagueBook;
   const selector = useRef<HTMLSelectElement>(null);
   const [view, setView] = useState(initialClub ? 'club:' + initialClub : '');
   useEffect(() => {
@@ -1122,19 +1205,20 @@ function SeasonFixtures({ career, next, initialClub }: { career: NrlCareerState;
   const round = Number(view);
   const regular = draw[round - 1];
   const settled = results.filter(match => match.round === round);
-  const managedResult = settled.find(match => match.homeId === clubId || match.awayId === clubId);
+  const managedResult = archived ? undefined : season.results.find(match =>
+    match.round === round && (match.homeId === clubId || match.awayId === clubId));
   const upcoming = regular?.map(([homeId, awayId]) => ({ homeId, awayId }))
-    ?? (next.finalsRound !== null && next.round === round ? next.fixtures : []);
+    ?? (!archived && next.finalsRound !== null && next.round === round ? next.fixtures : []);
   const matches = settled.length
     ? settled.map(match => ({ homeId: match.homeId, label: scoreLine(match, year, shortName) }))
     : upcoming.map(match => ({ homeId: match.homeId, label: `${shortName(year, match.homeId)} vs ${shortName(year, match.awayId)}` }));
   const byes = regular ? clubs.filter(club => !regular.some(pair => pair.includes(club.id))) : [];
   const finals = new Set(results.filter(match => match.finalsRound !== undefined).map(match => match.round));
-  if (next.finalsRound !== null && next.fixtures.length) finals.add(next.round);
+  if (!archived && next.finalsRound !== null && next.fixtures.length) finals.add(next.round);
   const rivalFinals = rival ? [
     ...results.filter(match => match.finalsRound !== undefined && (match.homeId === rival.id || match.awayId === rival.id))
       .map(match => ({ round: match.round, label: scoreLine(match, year, shortName) })),
-    ...(next.finalsRound === null ? [] : next.fixtures)
+    ...(archived || next.finalsRound === null ? [] : next.fixtures)
       .filter(match => match.homeId === rival.id || match.awayId === rival.id)
       .map(match => ({ round: match.round, label: shortName(year, match.homeId) + ' vs ' + shortName(year, match.awayId) })),
   ] : [];
@@ -1142,11 +1226,19 @@ function SeasonFixtures({ career, next, initialClub }: { career: NrlCareerState;
   return (
     <details className="rounded-xl border border-border bg-card px-4">
       <summary className="flex min-h-11 cursor-pointer items-center font-bold">Season fixtures</summary>
+      {latestLeagueBook && <label className="mb-2 block max-w-xs space-y-1 text-sm font-semibold">
+        <span>Fixture season</span>
+        <select value={year} onChange={event => { setFixtureYear(Number(event.target.value)); setView(''); }}
+          className="min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <option value={season.year}>{season.year} current season</option>
+          <option value={latestLeagueBook.year}>{latestLeagueBook.year} archived season</option>
+        </select>
+      </label>}
       <label className="mb-2 block max-w-xs space-y-1 text-sm font-semibold">
         <span>Fixtures to show</span>
         <select ref={selector} value={view} onChange={event => setView(event.target.value)}
           className="min-h-11 w-full rounded-lg border border-input bg-background px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-          <option value="">My club</option>
+          <option value="">{archived ? fullName(year, clubId) : 'My club'}</option>
           <optgroup label="Follow a club">
             {clubs.filter(club => club.id !== clubId).map(club => (
               <option key={club.id} value={'club:' + club.id}>{fullName(year, club.id)}</option>
@@ -1164,6 +1256,8 @@ function SeasonFixtures({ career, next, initialClub }: { career: NrlCareerState;
           )}
         </select>
       </label>
+      {book && <LeagueFixtureBook key={year + ':' + view} book={book} rounds={draw.length}
+        fixtures={view && !rival ? settled : results.filter(result => result.homeId === selectedClub || result.awayId === selectedClub)} />}
       {view && !rival ? (
         <div className="pb-2 text-sm">
           <p className="text-xs text-muted-foreground">{settled.length ? 'Results from this career' : 'Upcoming in this career'}</p>
@@ -1181,14 +1275,16 @@ function SeasonFixtures({ career, next, initialClub }: { career: NrlCareerState;
         <ol aria-label={rival ? fullName(year, rival.id) + ' season fixtures' : 'Club season fixtures'} className="divide-y divide-border pb-2 text-sm">
           {draw.map((round, index) => {
             const fixture = round.find(([home, away]) => home === selectedClub || away === selectedClub);
-            const result = results.find(row => row.round === index + 1 && (row.homeId === selectedClub || row.awayId === selectedClub));
+            const report = !archived && !rival ? season.results.find(row => row.round === index + 1
+              && (row.homeId === selectedClub || row.awayId === selectedClub)) : undefined;
+            const result = report ?? results.find(row => row.round === index + 1 && (row.homeId === selectedClub || row.awayId === selectedClub));
             return (
               <li key={index} className="py-2">
                 <div className="flex flex-wrap justify-between gap-x-2">
                   <span className="text-muted-foreground">Round {index + 1}</span>
                   <span>{result ? scoreLine(result, year, shortName) : fixture ? `${shortName(year, fixture[0])} vs ${shortName(year, fixture[1])}` : 'Bye'}</span>
                 </div>
-                {!rival && result && <SavedMatchReport label={roundLabel(index + 1, draw.length)} match={result} career={career} />}
+                {report && <SavedMatchReport label={roundLabel(index + 1, draw.length)} match={report} career={career} />}
               </li>
             );
           })}
@@ -2599,6 +2695,33 @@ function Squad({ career, onAction, disabled }: {
 
 const finalsRaceLabels = { secured: 'Secured', open: 'Still open', out: 'Out of reach' } as const;
 
+function LeaguePlayerLeaders({ book }: { book: NonNullable<NrlCareerState['leagueBook']> }) {
+  const shortName = useNrlClubName();
+  const [open, setOpen] = useState(false);
+  const leaders = open ? nrlLeagueLeaders(book).filter(row => row.tries > 0).slice(0, 10) : [];
+  return (
+    <details className="mt-3 rounded-lg border border-border bg-background px-3" onToggle={event => setOpen(event.currentTarget.open)}>
+      <summary className="flex min-h-11 cursor-pointer items-center rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+        League player leaders
+      </summary>
+      {open && (leaders.length > 0 ? <table aria-label={book.year + ' try leaders'} className="mb-3 w-full text-left text-sm">
+        <thead className="text-xs text-muted-foreground">
+          <tr><th scope="col">Player</th><th scope="col" className="px-2 text-right">Starts</th><th scope="col" className="text-right">Tries</th></tr>
+        </thead>
+        <tbody>
+          {leaders.map(player => <tr key={player.clubId + ':' + player.playerId} className="border-t border-border">
+            <th scope="row" className="break-words py-1 font-medium">
+              {player.name} <span className="block text-xs text-muted-foreground sm:inline">{shortName(book.year, player.clubId)}</span>
+            </th>
+            <td className="px-2 text-right tabular-nums">{player.starts}</td>
+            <td className="text-right font-semibold tabular-nums">{player.tries}</td>
+          </tr>)}
+        </tbody>
+      </table> : <p className="pb-3 text-sm text-muted-foreground">No tries recorded yet.</p>)}
+    </details>
+  );
+}
+
 function Ladder({ career, onAction, onOpenShortlist, onFollowClub, disabled }: {
   career: NrlCareerState; onAction: (action: NrlCareerAction) => boolean; onOpenShortlist: () => void;
   onFollowClub: (clubId: string) => void; disabled: boolean;
@@ -2622,6 +2745,10 @@ function Ladder({ career, onAction, onOpenShortlist, onFollowClub, disabled }: {
   const rivalName = rival && fullName(season.year, rival.id);
   const rank = rows.findIndex(row => row.clubId === rival?.id && row.played > 0) + 1;
   const rivalSquad = rival ? nrlRivalSquad(career, rival.id) : [];
+  const book = past ? (career.latestLeagueBook?.year === past.year ? career.latestLeagueBook : undefined) : career.leagueBook;
+  const rivalStats = rival && book?.fixtures.length
+    ? new Map(nrlLeagueLeaders(book, rival.id).map(row => [row.playerId, row]))
+    : null;
   const shortlist = career.shortlist ?? [];
   const yearPicker = pastLadders.length > 0 && (
     <div className="mt-2">
@@ -2747,6 +2874,7 @@ function Ladder({ career, onAction, onOpenShortlist, onFollowClub, disabled }: {
           })}
         </tbody>
       </table>
+      {book && book.fixtures.length > 0 && <LeaguePlayerLeaders key={book.year} book={book} />}
       {!past && <details className="mt-3 rounded-lg border border-border bg-background px-3"
         onToggle={event => setScoutOpen(event.currentTarget.open)}>
         <summary className="flex min-h-11 cursor-pointer items-center rounded-md text-sm font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
@@ -2780,12 +2908,14 @@ function Ladder({ career, onAction, onOpenShortlist, onFollowClub, disabled }: {
                 <ul className="divide-y divide-border text-sm">
                   {rivalSquad.map(({ player, contractEnd, marketYear }) => {
                     const future = player.futureContract;
+                    const stats = rivalStats?.get(player.id);
                     const saved = shortlist.includes(player.id);
                     const destination = future && clubs.find(club => club.id === future.clubId);
                     return (
                       <li key={player.id} className="break-words py-2">
                         <p className="font-semibold">{player.name}{career.openingRoster && !isNrlNamedPlayer(player.id) && ' (generated)'}</p>
                         <p className="text-muted-foreground">{player.role} · Age {player.age} · {player.rating} OVR</p>
+                        {rivalStats && <p className="text-xs text-muted-foreground">Starts {stats?.starts ?? 0} · Tries {stats?.tries ?? 0}</p>}
                         <p className="text-xs text-muted-foreground">
                           Signed through {contractEnd}
                           {future && (future.clubId === rival.id ? ` · Extended through ${future.endYear}`
@@ -3072,6 +3202,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>In Ladder, choose a past season to see the final standings saved in your career.</li>
               <li>The top eight make finals. The top four get a second chance if they lose their qualifying final. The last club standing wins the premiership.</li>
               <li>In Season fixtures, choose a rival under Follow a club to view their draw, scores and known finals fixtures.</li>
+              <li>Choose a completed match under Fixture player scores to see simulated starters and scoring for both clubs. New careers record from their first match, and existing careers begin recording next season. Use Fixture season to reopen the latest completed season with player scores.</li>
               <li>Open Finals race in Ladder during the last four regular rounds to check your remaining opponents, possible ladder points and whether your club has secured a place.</li>
               <li>Scout a position in the Academy. The report arrives after you advance a round, and a promotion reserves a place next season.</li>
               <li>Once per season, use club cash to assign a second academy scout while a report is pending. Both reports arrive next round.</li>
@@ -3092,6 +3223,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
               <li>At midseason, open Review ticket prices from Match centre. Compare the remaining home gate forecasts and confirm one price change in Finances. Paid home match reports show the gate your club earned.</li>
               <li>Before Round 1, choose an eligible position in the Board recruitment brief. Use Recruitment during the season to sign an external player for that position next year and earn a club cash bonus.</li>
               <li>In Ladder, open Scout a club to shortlist eligible rivals and take them straight to Recruitment.</li>
+              <li>Open League player leaders in Ladder to compare tries and starts. Scout a club shows those totals alongside individual contracts.</li>
               <li>Check Club decisions in Match centre for rival offers and academy prospects ready to sign. Fast-forward stops before the last round to reply to a rival offer.</li>
               <li>Before arranging an offseason move, keep another player signed at the same position for next season.</li>
               <li>In Contracts, spend $25,000 from club cash to hold one expiring player’s one-year asking salary. Sign before the next season starts if a squad place and cap room are still available. The fee stays spent if the hold expires.</li>

@@ -1,4 +1,16 @@
+## 2026-11-16 — NRL league player scores and scouting
+
+- Season fixtures shows both starting 13s and each side’s scoring in settled league matches. The 50–8 Storm–Knights fixture recorded 26 starters and every try and kick. Scouting and the ladder show named starts and tries. The latest completed season stays available after rollover, and the report identifies which seasons have player scores.
+- The book keeps the league together across a caretaker move. Both phone widths preserved 98 prior results and archived the same 213-match season. An older save kept its original Storm–Sharks score and recorded named players in seven fixtures on its first round of 2027. New careers record from their first match.
+
+The 64 focused tests, full application typecheck, scoped test typecheck, production build, three browser cases, search and static guide checks, and all 16 download budgets passed. The five-season test verified 162 exact save reloads and matched the pre-change 2026 results and finances. The largest save was 446,562 characters against the 1,000,000 limit.
+
+
 ## 2026-11-16 — One-tap Club Manager resume and MLB Triple-A options
+
+[PR #1013](https://github.com/PapiSalgueroM/ballpark-hero/pull/1013) published exact main `6f774df6815a8ce5dae7db1b596716a0d908d558`, deployment `35d9eb3a-f4e0-4767-b7bb-46efd263335b` and canonical entry `/assets/index-Q1tB5JSy.js`. The squash tree matched tested head `6fe6dc591`. All 11 live browser cases passed, including the six Club Manager Messi regressions. Twenty pinned control endpoints, the Triple-A guide, the caretaker guide and all 174 sitemap routes passed. IndexNow accepted the updated MLB guide.
+
+Hosted application types, builds, Home launch and Career entry guide verification passed. GitHub accepted a retry of the separate Club Manager quick-substitution job after its dependency install failed.
 
 - Home opens the active Club Manager save from the flagship in one tap. Both phone widths reopened Everton with the same save bytes. The explicit link opened parked Lincoln City and the bare Club Manager route showed the chooser. An invalid active index preserved all three slots and returned to the chooser.
 - MLB Front Office can option eligible drafted prospects to Triple-A before Round 1. The Arizona fixture reached 28 active players with 29 under contract and kept the $189.6 million payroll. A later recall required an open place and covered Ryne Nelson’s actual IL absence. The recalled starter raised rotation strength by 1.32. With the same random rolls, Arizona finished 1–5 with the recalled starter and 0–6 with the existing rotation. Assignments, contracts and recalls survived reload at both phone widths.
@@ -7,6 +19,10 @@ The integrated candidate passed 102 tests across five suites and the production 
 
 
 ## 2026-11-16 — NRL caretaker jobs and faster Career Logs
+
+[PR #1012](https://github.com/PapiSalgueroM/ballpark-hero/pull/1012) published exact main `bcd4cc3b6667e397513facfca2eb185149b7b72c`, deployment `445bc74d-2116-45a4-9ca8-e7409676c915` and canonical entry `/assets/index-DEUt_H75.js`. The squash tree matched tested head `df7d33e35`. All six pinned live game profiles, 20 control endpoints, the new NRL guide and all 174 sitemap routes passed. IndexNow accepted the updated NRL guide.
+
+Hosted application types, builds, the Career entry guide workflow and all mounted Career Log outcomes and fault controls passed. The broader Career season review workflow still reports failures in the shared bundle guards and an older native font selector. The deployed browser checks cover the new Career Log dependency, the MLB pitching disclosures and the exact save bytes.
 
 - In new NRL Team Manager careers, Club Office can offer one eligible midseason appointment per year. The tested Round 14 move from Storm to Dragons kept all 98 league results, the full ladder and 510 signed senior contracts. Both phone sizes loaded the same Bulldogs fixture after reload, blocked the stale tab and played the remaining 18 rounds. The season review kept separate records and finances for the two clubs. Six seeded careers completed 12 moves over 2026 and 2027 and passed 396 save and reload checks.
 - The first Career Log visit on NBA, NFL and NHL My Career now opens with one JavaScript request in the built browser comparison. Each stopped downloading the 66,306-byte Brotli MLB pitching asset. The MLB Career Log still shows the relevant pitching notes and 2020 held-season explanation after reload, with identical save bytes.
