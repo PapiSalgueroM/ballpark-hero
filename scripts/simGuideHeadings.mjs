@@ -166,7 +166,10 @@ function reviewedGuideSentences(route, part, sentences) {
     'In Training, give one player Light or Double for the next paid week. Compare the fitness estimate before you choose how hard he trains.'];
   if (route === '/mlb-front-office' && part === 'howToPlay') return [...sentences,
     'Use the ace in elimination games to make a late change when the ace still rates higher than the scheduled starter. A 96-rated ace pitches at 90 on short rest. He returns to full rating after two team games, even between series. The recap marks the switch, short rest and the rating used.'];
-  if (route === '/nba-my-career' && part === 'howToPlay') return [...sentences,
+  if (route === '/nba-my-career' && part === 'howToPlay') return [...sentences.map(line => line.replace(
+    'Either request has a 50% chance of approval, and a decline costs up to four morale points.',
+    "Any team trade requests and releases have a 50% chance of approval. Pick a preferred destination for a lower chance shown alongside that team's roster quality. A decline costs up to four morale points.",
+  )),
     'Before you play a season, open Plan your season, then Tactical approach. Point guards, shooting guards and small forwards can choose Pressure the ball for more steals. Power forwards and centers can choose Protect the rim for more blocks.',
     'The assignment gives you roughly 20% more steals or blocks per game, at least 0.1 when there is room under the cap, in exchange for about 8% fewer points per game. It only applies to the regular season. With no room at the cap, you keep your usual scoring.',
     "For example, a point guard's usual 20.0 points and 1.5 steals per game would become 18.4 points and 1.8 steals. The season card shows what your assignment changed.",

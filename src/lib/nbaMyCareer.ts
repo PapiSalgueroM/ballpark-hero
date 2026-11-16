@@ -149,7 +149,7 @@ export interface NbaCareerState {
   /** Existing shared career metadata, retained on NBA saves between seasons. */
   summerSalt?: string;
   retirement?: import('./careerRetirement').RetirementBlock;
-  tradeRequest?: { year: number; from: string; to: string | null; release?: 'granted' | 'declined' };
+  tradeRequest?: { year: number; from: string; to: string | null; requestedTeam?: string; release?: 'granted' | 'declined' };
   rosterPriority?: { year: number; team: string; before: number; boost: number };
   restPlan?: { year: number; team: string };
   seasons: NbaSeasonLine[];

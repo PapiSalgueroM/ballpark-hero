@@ -1031,12 +1031,14 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     persist(career, 'freeagency', teamQuality);
   };
 
-  const requestTrade = (kind: 'trade' | 'release') => {
+  const requestTrade = (kind: 'trade' | 'release', preferredTeam?: string) => {
     const trade = sport.tradeRequest;
     if (!career || !trade || phase !== 'season' || teamQuality == null || practiceOpen || pendingSave.current
       || marketRef.current || !trade.available(career) || trade.receipt(career) || teamPlanSaveChanged(true)) return;
     const next: CareerState = JSON.parse(JSON.stringify(career));
-    const { teamQuality: incoming, note, freeAgency } = trade.settle(next, kind);
+    const settled = trade.settle(next, kind, preferredTeam);
+    if (!settled) return;
+    const { teamQuality: incoming, note, freeAgency } = settled;
     const quality = incoming ?? (freeAgency ? sport.rosterPriority?.cancel(next, teamQuality) ?? teamQuality : teamQuality);
     if (incoming !== null) sport.rosterPriority?.cancel(next, null);
     next.headlines = pushHeadlines(next.headlines, [note]);
@@ -2054,7 +2056,8 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
           </p>
           {(tradeReceipt || trade?.available(career)) && <div className="mt-2">
             <div className="flex flex-wrap justify-center gap-2">
-              <USCareerActionConfirm action="tradeRequest" sport={sport.label} onConfirm={() => requestTrade('trade')}>
+              <USCareerActionConfirm action="tradeRequest" sport={sport.label} tradeDestinations={trade?.destinations(career)}
+                onConfirm={team => requestTrade('trade', team)}>
                 <button type="button" disabled={!!tradeReceipt || !!marketTalk || practiceOpen || !!saveFailure || tradeSaveMoved}
                   className="min-h-11 rounded-lg border border-border px-3 text-xs font-semibold disabled:opacity-50">Request a trade</button>
               </USCareerActionConfirm>
