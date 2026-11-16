@@ -1,5 +1,9 @@
 ## 2026-11-16 — NRL caretaker jobs and faster Career Logs
 
+[PR #1012](https://github.com/PapiSalgueroM/ballpark-hero/pull/1012) published exact main `bcd4cc3b6667e397513facfca2eb185149b7b72c`, deployment `445bc74d-2116-45a4-9ca8-e7409676c915` and canonical entry `/assets/index-DEUt_H75.js`. The squash tree matched tested head `df7d33e35`. All six pinned live game profiles, 20 control endpoints, the new NRL guide and all 174 sitemap routes passed. IndexNow accepted the updated NRL guide.
+
+Hosted application types, builds, the Career entry guide workflow and all mounted Career Log outcomes and fault controls passed. The broader Career season review workflow still reports failures in the shared bundle guards and an older native font selector. The deployed browser checks cover the new Career Log dependency, the MLB pitching disclosures and the exact save bytes.
+
 - In new NRL Team Manager careers, Club Office can offer one eligible midseason appointment per year. The tested Round 14 move from Storm to Dragons kept all 98 league results, the full ladder and 510 signed senior contracts. Both phone sizes loaded the same Bulldogs fixture after reload, blocked the stale tab and played the remaining 18 rounds. The season review kept separate records and finances for the two clubs. Six seeded careers completed 12 moves over 2026 and 2027 and passed 396 save and reload checks.
 - The first Career Log visit on NBA, NFL and NHL My Career now opens with one JavaScript request in the built browser comparison. Each stopped downloading the 66,306-byte Brotli MLB pitching asset. The MLB Career Log still shows the relevant pitching notes and 2020 held-season explanation after reload, with identical save bytes.
 
