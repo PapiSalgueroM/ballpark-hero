@@ -1,3 +1,8 @@
+## 2026-11-15: Messi in 2015–16 Club Manager
+
+- Barcelona's projected Messi used to leave the simulated leagues at age 29 after two summers. The 2015–16 player now stays eligible until age 36 across the projected world, managed squads and free agency. The normal retirement curve takes over at 36. Careers that already recorded his retirement retain it.
+- New 2015–16 Barcelona careers start Messi on a three-season deal, matching the agreement through June 2018. Existing deals keep their terms. Barcelona can re-sign the verified free agent from a save where the old one-year opening deal expired, using the regular wage, cap and signing fee. [Barcelona contract announcement](https://www.fcbarcelona.com/en/news/1144640/messi-extends-contract-through-2018-its-a-fantastic-day)
+
 ## 2026-11-15: World Cup scores, captain reviews, playoff minutes and mobile game cards
 
 - New Rugby League World Cup runs use a wider scoring model for countries far apart in strength. In the same 75,000 pooled fixture draws, median total points rose from 42 to 52 and median margin from 14 to 26. All 35,000 near-strength fixture scores matched and the complete legacy report digest matched across 5,000 tournaments. The pinned browser finished new and legacy tournaments and checked that a Club office appointment used the new model in its own save.

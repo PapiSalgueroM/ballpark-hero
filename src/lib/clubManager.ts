@@ -108,7 +108,7 @@ import { realDugoutFor, realDugoutNames, realDugoutPartial } from '@/lib/realDug
 import {
   CM_BASE_YEAR, CM_ERAS, DEFAULT_ERA_ID, eraById, seasonLabel,
   projectedRatingAt, projectedRatingValue, projectedRoster, projectedRosterAtProgress, projectedWorld, projectedXIAvg, projectedWorldFor, projectedClubXIAvg,
-  ageDriftBand, declineScale, retireChance,
+  ageDriftBand, declineScale, retireChance, is2015Messi,
   isHistoricEra, eraRosters, eraRostersRaw, eraUpliftRating, HISTORIC_PARTIAL,
   makeGeneratedName, eraBakeRating, bakedValueForRating,
   eraRostersLoaded,
@@ -490,7 +490,9 @@ function refreshWorldRosterOnce(career: CareerState, held: WorldRosterState, yea
       } else player = agePlayer(player, neutral, random);
       delete player.worldRatingForecast;
       delete player.worldRatingStart;
-      if (random() < retireChance(player.age, player.rating, player.position)) { status = 'retired'; owner = null; break; }
+      if (random() < retireChance(player.age, player.rating, player.position, career.eraId, madeUp(player) ? undefined : player.name)) {
+        status = 'retired'; owner = null; break;
+      }
       /* Release AZ fix (reviewer 4, MAJOR 2): a man I sold kept the countdown of the deal he had with ME, and at
          zero this line released him, so an 86 rated 25 year old sold in the last year of his deal was gone from
          the buyer a season later and from the whole world after that, against the help's worked example and
@@ -530,12 +532,19 @@ function pruneWorldRoster(career: CareerState): CareerState {
     ? { ...ledger, records: kept.map(record => plainCopy(record)) } : ledger };
 }
 
+// Older saves may have pruned his retired ledger entry after the old projection dropped him.
+function withoutRetiredMessi(roster: ProjectedPlayer[], club: string, career?: CareerState): ProjectedPlayer[] {
+  if (club !== 'Barcelona' || !career?.retiredNames?.some(name => is2015Messi(career.eraId, name))) return roster;
+  return roster.filter(player => player.g || !is2015Messi(career.eraId, player.n));
+}
+
 /** Ownership is applied to the same projected players used for rivals and the market. */
 export function worldRosterFor(career: CareerState, club: string, onYears = yearsOn(career), progress = worldRatingProgress(career)): ProjectedPlayer[] {
   const era = career.eraId ?? 'now', seed = worldSeedOf(career);
   const preview = timedWorldRatings(career) && onYears === yearsOn(career) && club !== career.clubName;
-  const fallback = preview
-    ? projectedRosterAtProgress(club, onYears, era, seed, progress, true) : projectedRoster(club, onYears, era, seed);
+  const fallback = withoutRetiredMessi(preview
+    ? projectedRosterAtProgress(club, onYears, era, seed, progress, true)
+    : projectedRoster(club, onYears, era, seed), club, career);
   const current = refreshWorldRoster(career);
   if (!worldRosterView(current)) return fallback;
   const base = fallback.map(bakedToCMPlayer);
@@ -7450,7 +7459,7 @@ function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now', car
   // people. Round 132: at yearsOn 0 the projection IS the bake, so a career
   // in the current era gets exactly the squad it always got. Round 146: the
   // era picks the bake, so a 2010 save is handed the real 2010 squad.
-  const baked = projectedRoster(clubName, yearsOnNow, eraId, career ? worldSeedOf(career) : undefined);
+  const baked = withoutRetiredMessi(projectedRoster(clubName, yearsOnNow, eraId, career ? worldSeedOf(career) : undefined), clubName, career);
   const modelOnly = !isHistoricEra(eraId) && usesGeneratedOpeningSquad(clubName);
   const real = modelOnly ? [] : baked.length
     ? baked.slice(0, 26).map(bakedToCMPlayer)
@@ -8558,7 +8567,10 @@ export function summerFreeAgents(career: CareerState): { pool: FreeAgent[]; reti
       man.rating = closing.rating;
       if (closing.value !== undefined) man.value = Math.max(0.2, Math.round(closing.value * (man.age >= 31 ? 0.85 : 1) * 10) / 10);
     }
-    if (random() < retireChance(man.age, man.rating, man.position)) { retired.push({ name: f.name, age: man.age, rating: man.rating }); continue; }
+    if (random() < retireChance(man.age, man.rating, man.position, career.eraId, f.generated ? undefined : f.name)) {
+      retired.push({ name: f.name, age: man.age, rating: man.rating });
+      continue;
+    }
     stay(f, { ...f, age: man.age, rating: man.rating, ...(f.value !== undefined && man.value !== undefined ? { value: man.value } : {}) });
   }
   return { pool: kept, retired, left };
@@ -8964,7 +8976,11 @@ export function freeAgentBlock(career: CareerState, fa: FreeAgent): FreeAgentBlo
     || canonical && (canonical.status !== 'released' || canonical.owner !== null)
     || (career.retiredNames ?? []).includes(fa.name)) return 'notInPool';
   if (fa.fromMyClub && fa.since === career.season && !(fa.reason === 'expired' && canonical)) return 'justLeft';
-  if (!freeAgentInterest(career, fa)) return 'notInterested';
+  // Let Barcelona recover the verified Messi from saves with the old one-season opening deal.
+  const expiredOpeningDeal = fa.reason === 'expired' && fa.fromMyClub === true && fa.since === 2 && !fa.generated
+    && is2015Messi(career.eraId, fa.name) && career.clubName === 'Barcelona'
+    && canonical?.origin.club === career.clubName && canonical.origin.since === 0;
+  if (!expiredOpeningDeal && !freeAgentInterest(career, fa)) return 'notInterested';
   if (career.squad.length >= 30) return 'squadFull';
   const bill = wageBill(career);
   const terms = freeAgentTerms(fa, career);
@@ -21684,6 +21700,11 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     : historic ? eraClubDefFor(clubName, era.id) : clubDefFor(clubName);
   const startYearsOn = world ? world.yearsOn : historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
   const squad = custom ? buildCustomSquad(custom, era.id) : buildSquad(club.name, startYearsOn, era.id, world?.rosterCareer);
+  if (!world && !custom && club.name === 'Barcelona') {
+    const messi = squad.find(p => is2015Messi(era.id, p.name) && !madeUp(p));
+    // Barcelona confirmed his opening agreement ran through June 2018.
+    if (messi) messi.contractYears = 3;
+  }
   // Owner task 61: the league is the club's REAL league with its real clubs.
   // Round 1035: withClubCup, so a club outside its league's cup starts cupless.
   const league = withClubCup((custom && customLeagueDef(custom, era.id))
@@ -24436,7 +24457,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
        keepers last and wingers do not. */
     const stillPlaying: CMPlayer[] = [];
     for (const p of aged) {
-      if (Math.random() < retireChance(p.age, p.rating, p.position)) {
+      if (Math.random() < retireChance(p.age, p.rating, p.position, eraId, madeUp(p) ? undefined : p.name)) {
         retiredNow.push({ name: p.name, age: p.age, rating: p.rating });
         rosterExits.push({ player: p, kind: 'retire' });
       } else {

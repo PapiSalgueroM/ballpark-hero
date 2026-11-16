@@ -1,11 +1,16 @@
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ERA2010_ROSTERS } from '@/data/clubManagerEra2010';
 import {
-  finishSeason, loadCareer, playNextEntry, renewContract, SAVE_KEY, saveCareer,
-  startCareer, startNextSeason, worldSeasonLabel, type CareerState, type CMPlayer,
+  finishSeason, freeAgentBlock, loadCareer, playNextEntry, renewContract, SAVE_KEY, saveCareer, signFreeAgent,
+  startCareer, startNextSeason, worldRosterFor, worldSeasonLabel, type CareerState, type CMPlayer,
 } from '@/lib/clubManager';
-import { ensureEraRosters } from '@/lib/clubManagerEras';
+import { ensureEraRosters, projectedRoster } from '@/lib/clubManagerEras';
 import { saveFence } from '@/lib/saveFence';
+
+const CAREER_RULES = {
+  championshipPlayoffs: true, bundesligaPlayoff: true, frenchPlayoffs: true,
+  inSeasonRatings: true, worldRatingTiming: true,
+} as const;
 
 function completeSeason(initial: CareerState): CareerState {
   let state = initial;
@@ -48,7 +53,9 @@ function generatedPlayer(age: number): CMPlayer {
 }
 
 describe('reported historical Club Manager retirement', () => {
-  beforeAll(async () => { await ensureEraRosters('era2010'); });
+  beforeAll(async () => {
+    await Promise.all([ensureEraRosters('era2010'), ensureEraRosters('era2015')]);
+  });
   beforeEach(() => {
     saveFence.release(SAVE_KEY);
     localStorage.clear();
@@ -91,6 +98,80 @@ describe('reported historical Club Manager retirement', () => {
     expect(renewedSummer.squad.find(p => p.name === baked.n)).toMatchObject({ age: 23, contractYears: 3 });
     expect(renewedSummer.freeAgents?.some(p => p.name === baked.n)).toBe(false);
   }, 30000);
+
+  it('keeps the historical Messi in the projected world after two seasons and into his mid-thirties', () => {
+    for (const seed of [undefined, 42]) {
+      for (const [years, age] of [[0, 27], [2, 29], [8, 35]]) {
+        const messi = projectedRoster('Barcelona', years, 'era2015', seed).filter(p => p.n === 'Lionel Messi');
+        expect(messi).toEqual([expect.objectContaining({ a: age })]);
+      }
+    }
+  });
+
+  it('plays two Barcelona seasons and carries Messi into 2017-18 on his opening deal', () => {
+    const initial = startCareer('Barcelona', 'era2015', undefined, undefined, undefined, undefined, CAREER_RULES);
+    const messi = initial.squad.find(p => p.name === 'Lionel Messi')!;
+    expect(messi).toMatchObject({ age: 27, contractYears: 3 });
+    const second = roundTrip(startNextSeason(completeSeason(initial)));
+    expect(second.squad.find(p => p.id === messi.id)).toMatchObject({ age: 28, contractYears: 2 });
+    const third = roundTrip(startNextSeason(completeSeason(second)));
+    expect(worldSeasonLabel(third)).toBe('2017-18');
+    expect(third.squad.find(p => p.id === messi.id)).toMatchObject({ age: 29, contractYears: 1 });
+    expect(third.retiredNames).not.toContain(messi.name);
+  }, 30000);
+
+  it('lets Barcelona re-sign the same Messi after his old one-year deal expires', () => {
+    const initial = startCareer('Barcelona', 'era2015', undefined, undefined, undefined, undefined, CAREER_RULES);
+    const messi = initial.squad.find(p => p.name === 'Lionel Messi')!;
+    const oldSave = roundTrip({
+      ...initial,
+      squad: initial.squad.map(p => p.id === messi.id ? { ...p, contractYears: 1 } : p),
+    });
+    expect(oldSave.squad.find(p => p.id === messi.id)?.contractYears).toBe(1);
+    const second = roundTrip(startNextSeason(completeSeason(oldSave)));
+    const expired = second.freeAgents?.find(p => p.name === messi.name)!;
+    expect(expired).toMatchObject({ age: 28, reason: 'expired', fromMyClub: true });
+    expect(freeAgentBlock(second, expired)).toBeNull();
+    expect(freeAgentBlock({ ...second, budget: 0 }, expired)).toBe('cantAfford');
+    expect(freeAgentBlock({ ...second, clubName: 'Real Madrid' }, expired)).toBe('notInterested');
+    const signed = signFreeAgent(second, messi.name)!;
+    expect(signed.squad.filter(p => p.name === messi.name)).toEqual([
+      expect.objectContaining({ id: messi.id, age: 28, worldRosterKey: expired.worldRosterKey }),
+    ]);
+    expect(signed.freeAgents?.some(p => p.name === messi.name)).toBe(false);
+  }, 30000);
+
+  it('honors a retirement already recorded in an older save after the roster ledger pruned it', () => {
+    const initial = startCareer('Real Madrid', 'era2015', undefined, undefined, undefined, undefined, CAREER_RULES);
+    const name = 'Lionel Messi';
+    const oldSave = roundTrip({ ...initial, season: 9, retiredNames: [name] });
+    expect(projectedRoster('Barcelona', 8, 'era2015').some(player => player.n === name)).toBe(true);
+    expect(worldRosterFor(oldSave, 'Barcelona').some(player => player.n === name)).toBe(false);
+    const moved = startNextSeason(oldSave, 'Barcelona');
+    expect(moved.clubName).toBe('Barcelona');
+    expect(moved.squad.some(player => player.name === name)).toBe(false);
+  });
+
+  it.each([{ age: 34, retires: false }, { age: 35, retires: true }])(
+    'allows retirement for a signed 2015 Messi starting the summer at age $age only when eligible',
+    ({ age, retires }) => {
+      vi.mocked(Math.random).mockReturnValue(0.001);
+      const initial = startCareer('Barcelona', 'era2015', undefined, undefined, undefined, undefined, CAREER_RULES);
+      const name = 'Lionel Messi';
+      const state = roundTrip({
+        ...initial, season: age - 26,
+        squad: initial.squad.map(p => p.name === name ? { ...p, age, contractYears: 4 } : p),
+      });
+      const summer = roundTrip(startNextSeason(state));
+      expect(summer.retiredNames?.includes(name)).toBe(retires);
+      expect(summer.retiredLastSummer?.filter(p => p.name === name)).toEqual(
+        retires ? [{ name, age: 36, rating: expect.any(Number) }] : [],
+      );
+      expect(summer.squad.filter(p => p.name === name)).toEqual(
+        retires ? [] : [expect.objectContaining({ age: 35, contractYears: 3 })],
+      );
+    },
+  );
 
   it.each([{ age: 30, retires: false }, { age: 41, retires: true }])(
     'uses the actual summer retirement branch for a generated player aged $age',

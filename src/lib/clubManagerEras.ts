@@ -145,6 +145,14 @@ export function ageDriftBand(age: number): [number, number] {
   return [-7, -4];
 }
 
+export function is2015Messi(eraId: string | undefined, name: string | undefined): boolean {
+  return eraId === 'era2015' && name === 'Lionel Messi';
+}
+
+function minimumExitAge(eraId: string | undefined, name: string | undefined): number {
+  return is2015Messi(eraId, name) ? 36 : 0;
+}
+
 /**
  * The chance a player calls it a career this summer, given the age he is
  * turning, what he is still rated and where he plays.
@@ -156,9 +164,9 @@ export function ageDriftBand(age: number): [number, number] {
  * which is why quality scales it down. Keepers get a long grace period. And
  * forty two is the wall: everybody is done.
  */
-export function retireChance(age: number, rating: number, position: Position): number {
+export function retireChance(age: number, rating: number, position: Position, eraId?: string, name?: string): number {
   if (age >= 42) return 1;
-  if (age < 32) return 0;
+  if (age < 32 || age < minimumExitAge(eraId, name)) return 0;
   const byAge: Record<number, number> = {
     32: 0.01, 33: 0.03, 34: 0.06, 35: 0.12, 36: 0.22,
     37: 0.35, 38: 0.52, 39: 0.68, 40: 0.8, 41: 0.88,
@@ -502,12 +510,14 @@ export function rawCurveValue(rating: number, age: number): number {
 }
 
 /** One year on for one projected player. Null means he is gone from the game. */
-function ageOne(club: string, pl: ProjectedPlayer, year: number, scale: number, worldSeed?: number, dropShift = 0): ProjectedPlayer | null {
+function ageOne(club: string, pl: ProjectedPlayer, year: number, scale: number, eraId: string, worldSeed?: number, dropShift = 0): ProjectedPlayer | null {
   const age = pl.a + 1;
   const key = `${club}|${pl.n}|${year}`;
   /* Round 1600 (critic correction 5 of the ratings design): the exit reads the higher of his rating and his level,
      so a boy shown under his level by the age read does not leave the game more often for it. */
-  if (rnd(`${key}|ret`) < worldExitChance(age, futureRead(pl), pl.p, age - dropShift)) return null;
+  // Apply the historical minimum to league departures as well as retirements.
+  if (rnd(`${key}|ret`) < worldExitChance(age, futureRead(pl), pl.p, age - dropShift)
+    && (pl.g || age >= minimumExitAge(eraId, pl.n))) return null;
   if (worldSeed !== undefined && pl.worldRosterKey) {
     const next = advanceClubManagerTrajectory(pl, { seed: worldSeed, identity: pl.worldRosterKey, year,
       ageBand: ageDriftBand(age), declineScale: declineScale(pl.p) });
@@ -862,7 +872,7 @@ function projectClub(club: string, baked: BakedPlayer[], y: number, seed: number
     const kept: ProjectedPlayer[] = [];
     const emptied: ProjectedPlayer[] = [];
     for (const pl of roster) {
-      const next = ageOne(club, pl, year, scale, seed, dropShift);
+      const next = ageOne(club, pl, year, scale, trajectoryEra, seed, dropShift);
       if (next) kept.push(next); else emptied.push(pl);
     }
     // Every slot that emptied gets filled the same summer. A real club does
