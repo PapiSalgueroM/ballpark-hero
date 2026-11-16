@@ -555,9 +555,16 @@ for (const [width, height] of [[320, 568], [390, 640], [430, 844], [1440, 844]])
     if (width < 1024) {
       await page.goto(BASE + '/#sport-rugby', { waitUntil: 'domcontentloaded' });
       await page.locator('#home-all-sports-rugby').click();
+      // The URL can change before React commits the focus and scroll.
+      const arrived = await page.waitForFunction(() => {
+        const section = document.getElementById('browse-sports');
+        const card = document.querySelector('section[data-sport] [data-catalog-card]')?.getBoundingClientRect();
+        return location.hash === '#browse-sports' && section === document.activeElement
+          && card && card.top > 0 && card.bottom <= innerHeight;
+      }, null, { timeout: 2500 }).then(() => true, () => false);
       const focused = await target.evaluate(section => document.activeElement === section);
       const afterJump = await measureCatalogue();
-      say(focused && Boolean(afterJump && afterJump.cardTop > 0 && afterJump.cardBottom <= height),
+      say(arrived && focused && Boolean(afterJump && afterJump.cardTop > 0 && afterJump.cardBottom <= height),
         `${width} by ${height} All sports lands on the catalogue with a whole game in view`);
     }
   } finally {

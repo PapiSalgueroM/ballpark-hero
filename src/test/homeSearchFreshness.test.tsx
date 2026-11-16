@@ -595,6 +595,7 @@ it.each([false, true])('jumps from Browse sports to game picks and restores the 
 });
 
 it('keeps the sport heading when native history reuses the initial key for a different fragment', () => {
+  catalogueViewport(true);
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
   const scrollTo = vi.fn();
   vi.stubGlobal('scrollTo', scrollTo);
