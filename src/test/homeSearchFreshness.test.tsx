@@ -453,7 +453,7 @@ it.each(['/footle', '/stadium-tycoon'])('expands the full sport catalogue and re
   const cards = () => Array.from(sport().querySelectorAll<HTMLAnchorElement>('[data-catalog-card] a[href]'));
   const openingCard = () => cards().find(card => card.getAttribute('href') === path);
   const gamePaths = VISIBLE_CATEGORIES.find(category => category.title === 'Soccer')!.games.map(game => game.path);
-  expect(cards().map(card => card.getAttribute('href'))).toEqual(gamePaths.slice(0, 12));
+  expect(cards().map(card => card.getAttribute('href'))).toEqual([...gamePaths.slice(0, 11), '/soccer-career']);
   const showMore = within(sport()).getByRole('button', { name: /^Show \d+ more Soccer games$/ });
   expect(showMore).toHaveAttribute('aria-expanded', 'false');
   fireEvent.click(showMore);
@@ -467,6 +467,44 @@ it.each(['/footle', '/stadium-tycoon'])('expands the full sport catalogue and re
   expect(within(sport()).getByRole('button', { name: 'Show fewer Soccer games' })).toHaveAttribute('aria-expanded', 'true');
   fireEvent.click(within(sport()).getByRole('button', { name: 'Show fewer Soccer games' }));
   expect(cards()).toHaveLength(12);
+});
+
+it('keeps both NBA career games in the narrow Home preview without changing the full list', () => {
+  catalogueViewport(false);
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  function Game() {
+    const navigate = useNavigate();
+    return <button onClick={() => navigate(-1)}>Back from NBA My Career</button>;
+  }
+  const { container } = render(<MemoryRouter initialEntries={[{ pathname: '/', key: 'nba-sport-preview' }]}><Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="/nba-my-career" element={<Game />} />
+  </Routes></MemoryRouter>);
+  const sport = () => container.querySelector<HTMLElement>('section[data-sport="basketball"]')!;
+  const links = () => [...sport().querySelectorAll<HTMLAnchorElement>('[data-catalog-card] a[href]')];
+  const paths = () => links().map(link => link.getAttribute('href'));
+  const gamePaths = VISIBLE_CATEGORIES.find(category => category.title === 'Pro Basketball')!.games.map(game => game.path);
+  const preview = [...gamePaths.slice(0, 10), '/nba-front-office', '/nba-my-career'];
+  const more = () => within(sport()).getByRole('button', { name: 'Show 5 more NBA games' });
+  const career = () => links().find(link => link.getAttribute('href') === '/nba-my-career')!;
+  expect(paths()).toEqual(preview);
+  expect(more()).toHaveAttribute('aria-expanded', 'false');
+
+  fireEvent.click(career());
+  fireEvent.click(screen.getByRole('button', { name: 'Back from NBA My Career' }));
+  expect(career()).toHaveFocus();
+  expect(more()).toHaveAttribute('aria-expanded', 'false');
+
+  fireEvent.click(more());
+  expect(paths()).toEqual(gamePaths);
+  fireEvent.click(within(sport()).getByRole('button', { name: 'Show fewer NBA games' }));
+  expect(paths()).toEqual(preview);
+});
+
+it('includes Aussie Rules Manager in Home career sims', () => {
+  home();
+  const careers = screen.getByRole('region', { name: 'Dynasty & Career Sims' });
+  expect(within(careers).getByRole('link', { name: /Aussie Rules Manager/ })).toHaveAttribute('href', '/aussie-rules-manager');
 });
 
 it('opens the settled best match with Enter and reaches it with ArrowDown', async () => {
