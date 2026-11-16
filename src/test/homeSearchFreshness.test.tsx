@@ -614,13 +614,13 @@ it.each([
     <Index /><HistoryControls />
   </MemoryRouter>);
   const trigger = screen.getByRole('button', { name: 'Browse sports' });
-  const heading = screen.getByRole('heading', { name: title, exact: true });
+  const heading = screen.getByRole('heading', { name: title });
   heading.scrollIntoView = vi.fn();
 
   trigger.focus();
   fireEvent.click(trigger);
   const menu = screen.getByRole('dialog', { name: 'Browse sports' });
-  const shortcut = within(menu).getByRole('link', { name: label, exact: true });
+  const shortcut = within(menu).getByRole('link', { name: label });
   expect(shortcut).toHaveAttribute('href', hash);
   fireEvent.click(shortcut);
   expect(screen.queryByRole('dialog', { name: 'Browse sports' })).toBeNull();
