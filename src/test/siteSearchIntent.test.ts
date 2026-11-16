@@ -13,6 +13,21 @@ describe('game search for common intent phrases', () => {
     ['stadium builder', '/stadium-tycoon'],
     ['soccer career mode', '/soccer-career'],
     ['basketball career mode', '/nba-my-career'],
+    ['nba career mode', '/nba-my-career'],
+    ['nfl career mode', '/nfl-my-career'],
+    ['mlb career mode', '/mlb-my-career'],
+    ['nhl career mode', '/nhl-my-career'],
+    ['baseball career mode', '/mlb-my-career'],
+    ['hockey player career mode', '/nhl-my-career'],
+    ['american football player career mode', '/nfl-my-career'],
+    ['manage an nba team', '/nba-front-office'],
+    ['manage an mlb team', '/mlb-front-office'],
+    ['manage an nhl team', '/nhl-front-office'],
+    ['basketball manager', '/nba-front-office'],
+    ['baseball manager', '/mlb-front-office'],
+    ['soccer manager', '/club-manager'],
+    ['aussie rules management', '/aussie-rules-manager'],
+    ['nrl management', '/nrl-team-manager'],
   ])('finds %s without another sport leaking in', (phrase, path) => {
     expect(paths(phrase)).toEqual([path]);
     expect(searchSite(phrase.toUpperCase() + '?')[0].game.path).toBe(path);
@@ -35,8 +50,14 @@ describe('game search for common intent phrases', () => {
 
   it('keeps normal title and typo results and misses unrelated or mixed-code phrasing', () => {
     expect(searchSite('NFL Front Office')[0]).toMatchObject({ game: { path: '/front-office' }, matchedOn: 'label' });
+    expect(searchSite('MLB Career Path')[0]).toMatchObject({ game: { path: '/baseball-career' }, matchedOn: 'label' });
+    expect(searchSite('NBA Franchise Grid')[0]).toMatchObject({ game: { path: '/nba-grid' }, matchedOn: 'label' });
+    expect(paths('rugby manager')).toEqual(['/nrl-team-manager']);
     expect(searchSite('stadum tycoon')[0].game.path).toBe('/stadium-tycoon');
-    for (const phrase of ['stadium builder fixtures', 'American football rugby league', 'tennis career mode', '*(']) {
+    for (const phrase of [
+      'stadium builder fixtures', 'American football rugby league', 'tennis career mode', 'nba nhl career mode',
+      'manage an nfl nba team', 'afl player career mode', 'nrl player career mode', '*(',
+    ]) {
       expect(paths(phrase)).toEqual([]);
     }
     expect(paths('')).toEqual(browseAll().map(row => row.game.path));
