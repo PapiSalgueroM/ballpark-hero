@@ -216,11 +216,10 @@ const SoccerGrid = () => {
                   Find a player who: <span className="text-primary font-semibold">{puzzle.rows[Math.floor(activeCell / 3)].label}</span>{' '}
                   + <span className="text-primary font-semibold">{puzzle.cols[activeCell % 3].label}</span>
                 </p>
-                {checkingDown ? (
-                  <p className="text-center text-sm text-muted-foreground">Answer checking has used up its allowance for today. Your board is saved; come back tomorrow.</p>
-                ) : (
-                  <SoccerGridSearch onSelect={submitGuess} disabled={validating} players={careerPlayerList} />
+                {checkingDown && (
+                  <p role="status" className="mb-2 text-center text-sm text-muted-foreground">This answer could not be checked, so no guess was used. Try another player or try again later.</p>
                 )}
+                <SoccerGridSearch onSelect={submitGuess} disabled={validating} players={careerPlayerList} />
               </div>
             )}
 

@@ -342,6 +342,7 @@ export function useSoccerGrid() {
       if (gameStatus === 'playing') startTimerIfNeeded();
 
       setValidating(true);
+      setCheckingDown(false);
       const { rowAttr, colAttr } = getRowCol(activeCell);
       const capturedCell = activeCell;
 
@@ -381,12 +382,11 @@ export function useSoccerGrid() {
             recordMainGuess({ t: 'ok', cellIndex: capturedCell, playerName: displayName, rarity });
           }
         } else if (data?.unverified) {
-          /* Round 407: the validator says which it was. A blip is worth a
-             retry; the day's allowance is not, and the guess was never
-             counted either way. */
+          // A quota failure affects this pick. Other names can still be
+          // checked against the server's records without its AI allowance.
           if (data?.exhausted) {
             setCheckingDown(true);
-            toast.error('Answer checking has used up its allowance for today. This guess was not counted; your board is saved, come back tomorrow.');
+            toast.error('This answer could not be checked, so no guess was used. Try another player or try again later.');
           } else {
             toast.error("Couldn't verify that answer, please try again.");
           }
