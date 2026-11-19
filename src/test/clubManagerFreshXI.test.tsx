@@ -143,6 +143,28 @@ describe('Club Manager fresh XI', () => {
     expect(new Set(effective.map(row => row.p.id)).size).toBe(10);
   });
 
+  it.each([2, 5])('uses reserve cover for unavailable slot %i and keeps the captain up front', async index => {
+    const { E, c, player, formation } = await fixture();
+    c.squad[index].injuryWeeks = 2;
+    c.squad[9].rating = 98;
+    c.setPieces = { ...c.setPieces, captain: 'p9' };
+    c.squad.push(player('reserve-cover', POSITIONS[index], 72));
+    const expected = [...c.xiIds];
+    expected[index] = 'reserve-cover';
+    const before = JSON.stringify(c);
+
+    const effective = E.effectiveXIWithSlots(c);
+
+    expect(effective.map(row => row.p.id)).toEqual(expected);
+    expect(effective.map(row => row.slot)).toEqual(formation.slots);
+    expect(JSON.stringify(c)).toBe(before);
+    const reopened = E.loadCareer(before)!;
+    const kickedOff = E.playNextEntry(reopened, { noCoach: true });
+    expect(kickedOff.kind).toBe('halftime');
+    expect(kickedOff.state.live?.startXi).toEqual(expected);
+    expect(kickedOff.state.xiIds).toEqual(c.xiIds);
+  });
+
   it('prioritizes eighty-fit eligible players without crossing availability or position rules', async () => {
     const { E, player, formation } = await fixture();
     const one = { ...formation, slots: [formation.slots[1]] };

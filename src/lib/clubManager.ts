@@ -16943,10 +16943,9 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
     const id = state.xiIds[i];
     let p = id ? state.squad.find(x => x.id === id) : undefined;
     if (!p || !isAvailable(p) || used.has(p.id)) {
-      /* Use the match's fit-adjusted rating after preferring a fullback
-         specialist. Keep later manual assignments when covering a fullback. */
+      /* Cover from the bench before moving another selected starter. */
       const fullback = !legacyFullbackSelection && (slot.label === 'RB' || slot.label === 'LB');
-      const assigned = fullback ? new Set(state.xiIds.slice(i + 1, formation.slots.length)) : null;
+      const assigned = !legacyFullbackSelection ? new Set(state.xiIds.slice(i + 1, formation.slots.length)) : null;
       const worth = (x: CMPlayer) => x.rating - fitPenalty(x, slot);
       const open = state.squad.filter(x => isAvailable(x) && !used.has(x.id));
       const free = assigned ? open.filter(x => !assigned.has(x.id)) : open;
@@ -16954,7 +16953,10 @@ export function effectiveXIWithSlots(state: CareerState): XiSlot[] {
       const hasFreeCover = free.length > 0;
       const pool = hasFreeCover ? free : open;
       const best = (candidates: CMPlayer[]) => candidates
-        .sort((a, b) => (fullback && hasFreeCover ? compareFullbackFit(a, b, slot) : 0) || worth(b) - worth(a) || b.rating - a.rating)[0];
+        .sort((a, b) => {
+          const fit = fullback ? compareFullbackFit(a, b, slot) : fitPenalty(a, slot) - fitPenalty(b, slot);
+          return (!legacyFullbackSelection && hasFreeCover ? fit : 0) || worth(b) - worth(a) || b.rating - a.rating;
+        })[0];
       p = best(pool.filter(x => !resting.has(x.id))) ?? best(pool);
     }
     if (p) {
