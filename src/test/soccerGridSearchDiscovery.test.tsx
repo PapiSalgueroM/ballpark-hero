@@ -7,12 +7,17 @@ import path from 'node:path';
 import { SoccerGridSearch } from '@/components/soccer-grid/SoccerGridSearch';
 import SoccerGrid from '@/pages/SoccerGrid';
 
-const io = vi.hoisted(() => ({ players: vi.fn(), seasons: vi.fn(), puzzles: vi.fn(), invoke: vi.fn(), select: vi.fn(),
+const io = vi.hoisted(() => ({ players: vi.fn(), seasons: vi.fn(), puzzles: vi.fn(), invoke: vi.fn(), select: vi.fn(), insert: vi.fn(),
   tables: [] as { table: string; columns: string }[] }));
 vi.mock('@/integrations/supabase/client', () => ({ supabase: {
   functions: { invoke: io.invoke },
   from: (table: string) => ({ select: (columns: string) => {
     io.tables.push({ table, columns });
+    if (table === 'soccer_grid_selections') {
+      const count = Promise.resolve({ count: 0, error: null });
+      const query = { eq: () => query, then: count.then.bind(count) };
+      return query;
+    }
     if (table === 'career_players') {
       expect(columns).toBe('id, player_name, nationality, position');
       return { order: (column: string, options: unknown) => { expect(column).toBe('player_name'); expect(options).toEqual({ ascending: true }); return io.players(); } };
@@ -27,7 +32,7 @@ vi.mock('@/integrations/supabase/client', () => ({ supabase: {
     const query = { order: (column: string, options: unknown) => { expect(options).toEqual({ ascending: true }); orders.push(column); return query; },
       range: (from: number, to: number) => { expect(orders).toEqual(['player_id', 'sort_order']); expect([from, to]).toEqual([0, 999]); return io.seasons(from, to); } };
     return query;
-  } }),
+  }, insert: (body: unknown) => { expect(table).toBe('soccer_grid_selections'); return io.insert(body); } }),
 } }));
 // The actual page, board, search, grid hook, daily hook and career loader run.
 // These seams remove unrelated outer UI and the guest account, not game state.
@@ -91,6 +96,7 @@ beforeEach(() => {
   io.seasons.mockReset().mockResolvedValue(seasonReply);
   io.puzzles.mockReset().mockResolvedValue({ data: [{ puzzle_id: 'fixture-grid-discovery', rows_json: [1, 2, 3].map(i => ({ label: 'Fixture Club ' + i, type: 'club' })), cols_json: [1, 2, 3].map(i => ({ label: 'Fixture Position ' + i, type: 'position' })) }], error: null });
   io.invoke.mockReset().mockResolvedValue({ data: { valid: false, unverified: true, reason: 'Synthetic no-penalty retry' }, error: null }); io.select.mockReset();
+  io.insert.mockReset().mockResolvedValue({ error: null });
   localStorage.clear(); sessionStorage.clear(); localStorage.setItem('sg-rules-seen', '1'); localStorage.setItem('grid-search-held-save', '{"held":true}'); sessionStorage.setItem('grid-search-held-session', 'held'); heldStores = stores();
 });
 afterEach(async context => {
@@ -181,6 +187,41 @@ describe('Soccer Grid search discovery', () => {
     expect(io.invoke).toHaveBeenCalledExactlyOnceWith('soccer-grid-validate', { body: { playerName: names[2], rowAttribute: 'Fixture Club 1', colAttribute: 'Fixture Position 1' } });
     expect(before).toBeNull(); expect(dailySave()).toBeNull(); expect(view!.getByText('15')).toBeVisible(); expect(view!.queryByRole('combobox', { name: 'Search for a player' })).toBeNull();
     expect(io.tables.map(row => row.table)).toEqual(['soccer_grid_puzzles', 'career_players', 'career_seasons']);
+  });
+  it('keeps the answer input available after one exhausted check and counts later confirmed answers', async () => {
+    io.invoke
+      .mockResolvedValueOnce({ data: { valid: true, fullName: names[0] }, error: null })
+      .mockResolvedValueOnce({ data: { valid: false, unverified: true, exhausted: true }, error: null })
+      .mockResolvedValueOnce({ data: { valid: false }, error: null })
+      .mockResolvedValueOnce({ data: { valid: true, fullName: names[3] }, error: null });
+    await parent(); query(names[0]); await formSubmit();
+    const first = dailySave();
+    expect(first.guesses).toHaveLength(1);
+    expect(view!.getByText('14', { exact: true })).toBeVisible();
+    heldStores = stores();
+
+    await act(async () => { fireEvent.click(view!.container.querySelectorAll('[data-grid-cell-status]')[1]); });
+    query(names[1]); await formSubmit();
+    expect(dailySave()).toEqual(first);
+    expect(io.insert).toHaveBeenCalledTimes(1);
+
+    await act(async () => { fireEvent.click(view!.container.querySelectorAll('[data-grid-cell-status]')[1]); });
+    expect(input()).toBeEnabled();
+    expect(view!.getByRole('status')).toHaveTextContent('Try another player');
+    query(names[2]); await formSubmit();
+    expect(io.invoke).toHaveBeenCalledTimes(3);
+    expect(dailySave().guesses).toEqual([...first.guesses, { t: 'x' }]);
+    expect(view!.getByText('13', { exact: true })).toBeVisible();
+    heldStores = stores();
+
+    await act(async () => { fireEvent.click(view!.container.querySelectorAll('[data-grid-cell-status]')[1]); });
+    query(names[3]); await formSubmit();
+    expect(io.invoke).toHaveBeenCalledTimes(4);
+    expect(io.insert).toHaveBeenCalledTimes(2);
+    expect(dailySave().guesses).toHaveLength(3);
+    expect(dailySave().guesses[2]).toMatchObject({ t: 'ok', cellIndex: 1, playerName: names[3] });
+    expect(view!.getByText('12', { exact: true })).toBeVisible();
+    heldStores = stores();
   });
   it('keeps the raw one-character query gate', async () => {
     leaf(); query('F'); expect(visibleNames()).toEqual([]); expect(view!.getByRole('button', { name: 'Submit' })).toBeDisabled(); await formSubmit(); expect(io.select).not.toHaveBeenCalled(); expect(input()).toHaveValue('F');
