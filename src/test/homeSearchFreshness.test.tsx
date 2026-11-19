@@ -258,6 +258,35 @@ it('finds the right game from a first-time visitor’s description', async () =>
   expect(results[0]).toHaveFocus();
 });
 
+it('opens a league career by intent on narrow Home and restores the filtered result on Back', async () => {
+  catalogueViewport(false);
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  function Game() {
+    const navigate = useNavigate();
+    return <button onClick={() => navigate(-1)}>Back from NBA My Career</button>;
+  }
+  const { container } = render(<MemoryRouter initialEntries={[{ pathname: '/', key: 'league-career-search' }]}><Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="/nba-my-career" element={<Game />} />
+  </Routes></MemoryRouter>);
+  const field = () => screen.getByRole('textbox', { name: 'Search games' });
+  const filter = () => screen.getByRole('combobox', { name: 'Filter by sport' });
+  const results = () => [...container.querySelectorAll<HTMLAnchorElement>('[data-home-game-card] a[href]')]
+    .filter(link => !link.closest('[hidden]'));
+  fireEvent.change(field(), { target: { value: 'NBA career mode' } });
+  await act(async () => { await vi.dynamicImportSettled(); });
+  expect(screen.getByRole('status', { name: 'Search results' })).toHaveTextContent('1 game found for NBA career mode');
+  expect(results().map(link => link.getAttribute('href'))).toEqual(['/nba-my-career']);
+  fireEvent.change(filter(), { target: { value: 'basketball' } });
+  field().focus();
+  fireEvent.keyDown(field(), { key: 'Enter' });
+  fireEvent.click(screen.getByRole('button', { name: 'Back from NBA My Career' }));
+  await act(async () => { await vi.dynamicImportSettled(); });
+  expect(field()).toHaveValue('NBA career mode');
+  expect(filter()).toHaveValue('basketball');
+  expect(results()[0]).toHaveFocus();
+});
+
 it('narrows Home search by sport and restores that search after playing', async () => {
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
   function Game() {

@@ -21,6 +21,9 @@ import {
   deepRosterRefusal, promoteFromPractice, practicePromotionRefusal, DEEP_ROSTER_MAX, STARTER_SLOTS, tradeProbeCopy, type GmPlayer,
   cleanPracticeElevations, NFL_ELEVATIONS_PER_GAME, NFL_ELEVATIONS_PER_PLAYER,
   practiceElevationCost, practiceElevationRefusal, setPracticeElevation, withPracticeElevations,
+  activateFromInjuredReserve, injuredReserveActivationRefusal, injuredReserveEntry, injuredReserveMissedGames,
+  injuredReservePlacementRefusal, NFL_IR_MIN_GAMES, NFL_IR_PLAYER_RETURNS, NFL_IR_TEAM_RETURNS, nflActiveRoster,
+  nflInjuredReserveReturns, placeOnInjuredReserve, validNflInjuredReserve,
   /* Round 828 follow up: men to cut before Play, the MLB and NHL shape. */
   deepOverLimit,
 } from '@/lib/frontOffice';
@@ -201,6 +204,9 @@ export default function FrontOfficeBoard() {
   const [saveError, setSaveError] = useState(false);
   const [saveWriteFailed, setSaveWriteFailed] = useState(false);
   const pendingSave = useRef<string | null>(null);
+  const savedBytes = useRef<string | null>(null);
+  const reserveSaveBase = useRef<string | null>(null);
+  const [reserveSaveChanged, setReserveSaveChanged] = useState(false);
   /* Round 204: the hub is tiles now, so null means the hub itself and a
      tab key means you have opened that box. Club Manager's Round 74 rule,
      brought to the four GM games. */
@@ -278,7 +284,7 @@ export default function FrontOfficeBoard() {
      per position group (and one for the practice squad), and the trade lists
      filter by group. Both transient. starting holds the club whose league is
      loading its bench, startError says the load failed. */
-  const [rosterGroup, setRosterGroup] = useState<DepthPos | 'practice' | null>(null);
+  const [rosterGroup, setRosterGroup] = useState<DepthPos | 'practice' | 'reserve' | null>(null);
   /* Round 1542: the Standings box's two faces, the table and the season in numbers (transient, opens on the table) */
   const [standingsFace, setStandingsFace] = useState<'table' | 'season'>('table');
   const [tradeGroup, setTradeGroup] = useState<DepthPos | 'starters'>('starters');
@@ -415,6 +421,8 @@ export default function FrontOfficeBoard() {
          id fix can hold two men under one. The draft class is passed too: it
          is minted from the same counter, so it shares the id space. */
       ensureFoLeagueIds(s.league, s.draftClass);
+      if (!validNflInjuredReserve(s.league)) { setSaveError(true); return; }
+      savedBytes.current = raw;
       /* Round 1542: a season block, an award history, a man's awards or first year that does not read whole is
          deleted from the stored league ITSELF, here, before any restore path below hands the stored save back to
          persist (openDraft's restore and a rebuilt bracket both do): the save then loads as it would without it. */
@@ -489,9 +497,23 @@ export default function FrontOfficeBoard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const reserveSaveUnchanged = useCallback(() => {
+    const expected = reserveSaveBase.current;
+    if (expected === null) return true;
+    try {
+      if (localStorage.getItem(SAVE_KEY) === expected) return true;
+    } catch {
+      // A reserve move needs a readable base so it cannot replace a newer franchise.
+    }
+    pendingSave.current = null;
+    setSaveWriteFailed(false);
+    setReserveSaveChanged(true);
+    return false;
+  }, []);
+
   const persist = useCallback((patch: Partial<SaveShape>, lg: LeagueState | null, team: string) => {
     try {
-      if (!lg) return;
+      if (!lg || !reserveSaveUnchanged()) return;
       const base: SaveShape = {
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
         ...(draftBatchesLeft !== null ? { draftBatchesLeft } : {}),
@@ -511,20 +533,24 @@ export default function FrontOfficeBoard() {
       if (!playoffsLive.current) delete base.playoffs;
       pendingSave.current = JSON.stringify(base);
       localStorage.setItem(SAVE_KEY, pendingSave.current);
+      savedBytes.current = pendingSave.current;
       pendingSave.current = null;
+      reserveSaveBase.current = null;
       setSaveWriteFailed(false);
     } catch { setSaveWriteFailed(true); }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine, reserveSaveUnchanged]);
 
   const retrySave = useCallback(() => {
     const bytes = pendingSave.current;
-    if (bytes === null) return;
+    if (bytes === null || !reserveSaveUnchanged()) return;
     try {
       localStorage.setItem(SAVE_KEY, bytes);
+      savedBytes.current = bytes;
       pendingSave.current = null;
+      reserveSaveBase.current = null;
       setSaveWriteFailed(false);
     } catch { setSaveWriteFailed(true); }
-  }, []);
+  }, [reserveSaveUnchanged]);
 
   useEffect(() => {
     if (!saveWriteFailed || pendingSave.current === null) return;
@@ -572,7 +598,7 @@ export default function FrontOfficeBoard() {
     setTab(null);
     setNewsFeed([
       `Welcome to the ${label(abbr)} front office. The ${lg.season} season starts now.`,
-      ...(owed > 0 ? [`✂️ ${overLimitLine(lg.teams[abbr].players.length, owed)}`] : []),
+      ...(owed > 0 ? [`✂️ ${overLimitLine(nflActiveRoster(lg.teams[abbr]).length, owed)}`] : []),
       `🏛️ The ownership mandate: ${m.text}`,
     ]);
     setChampion('');
@@ -1013,7 +1039,7 @@ export default function FrontOfficeBoard() {
          took it past 53 the feed says so first, and Play waits for the cut. */
       const owed = deepOverLimit(lg.teams[myTeam]);
       const feed = [
-        ...(owed > 0 ? [`✂️ ${overLimitLine(lg.teams[myTeam].players.length, owed)}`] : []),
+        ...(owed > 0 ? [`✂️ ${overLimitLine(nflActiveRoster(lg.teams[myTeam]).length, owed)}`] : []),
         note,
         ...deskSummerLines,
         `🏛️ The new mandate: ${m.text}`,
@@ -1159,13 +1185,14 @@ export default function FrontOfficeBoard() {
     if (!league) return null;
     const my = league.teams[myTeam];
     const their = league.teams[partner];
-    const mine = my.players.find(p => p.id === myPieceId);
-    const want = their.players.find(p => p.id === wantId);
+    const theirRoster = nflActiveRoster(their);
+    const mine = nflActiveRoster(my).find(p => p.id === myPieceId);
+    const want = theirRoster.find(p => p.id === wantId);
     if (!mine || !want) return null;
     return {
-      mine, want, theirRoster: their.players,
+      mine, want, theirRoster,
       myPickCount: my.picks.length, pickValue: 14, value: tradeValue,
-      theirCoverAtMyPos: their.players.filter(p => p.pos === mine.pos && p.ovr >= mine.ovr - 2).length,
+      theirCoverAtMyPos: theirRoster.filter(p => p.pos === mine.pos && p.ovr >= mine.ovr - 2).length,
       openPremium: 1.08,
     };
   };
@@ -1283,6 +1310,9 @@ export default function FrontOfficeBoard() {
   const reset = () => {
     localStorage.removeItem(SAVE_KEY);
     pendingSave.current = null;
+    savedBytes.current = null;
+    reserveSaveBase.current = null;
+    setReserveSaveChanged(false);
     setSaveWriteFailed(false);
     setPhase('pick');
     setLeague(null);
@@ -1431,6 +1461,15 @@ export default function FrontOfficeBoard() {
     career: careerOf(league),
   } : null;
 
+  if (reserveSaveChanged) return (
+    <div role="alert" className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-sm">
+      <p>This franchise save changed or could not be read. Reload before making more moves.</p>
+      <button type="button" onClick={() => window.location.reload()} className="mt-2 min-h-11 rounded-full border border-destructive/50 px-3 font-bold">
+        Reload franchise
+      </button>
+    </div>
+  );
+
   const saveNotice = saveWriteFailed && (
     <div role="alert" data-no-prerender className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
       <p>Franchise progress is not saved on this device. Keep this page open and retry.</p>
@@ -1504,10 +1543,15 @@ export default function FrontOfficeBoard() {
   /* Round 828: on a full roster the men on the chart's starting lines, hurt or
      not, are the ones the boxes talk about; the bench is counted, not quoted. */
   const deep = my.rosterDepth === 2;
+  const activeRoster = nflActiveRoster(my);
   const chartNow = depthChart(my);
+  const reserveCount = my.players.length - activeRoster.length;
+  if (reserveCount > 0) {
+    for (const pos of DEPTH_GROUPS) chartNow[pos] = chartNow[pos].filter(player => !injuredReserveEntry(my, player.id));
+  }
   const chartStarters = deep ? DEPTH_GROUPS.flatMap(g => chartNow[g].slice(0, STARTER_SLOTS[g])) : null;
   const hubFacts: NflDeskFacts['hub'] = {
-    roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    roster: activeRoster.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
     starters: chartStarters?.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
     rosterMax: deep ? DEEP_ROSTER_MAX : undefined,
     freeAgents: league.freeAgents.map(p => ({ id: p.id, name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
@@ -1858,7 +1902,9 @@ export default function FrontOfficeBoard() {
 
   /* -------------------------------- hub -------------------------------- */
   const t = FO_TEAM_MAP.get(myTeam)!;
-  const tiles = foHubTiles(hubFacts);
+  const tiles = foHubTiles(hubFacts).map(tile => reserveCount > 0 && tile.key === 'team'
+    ? { ...tile, value: `${activeRoster.length} active · ${reserveCount} on IR` }
+    : tile);
   /* Round 1019: the desk's boxes sit under the board's own; a desk panel open hides the board's boxes. */
   const hubDesk = deskFacts(hubFacts);
   const deskPanelOpen = gmPanelFor(NFL_HUB_PANELS, gmOpen) !== null;
@@ -1871,6 +1917,10 @@ export default function FrontOfficeBoard() {
   /* Round 828 follow up: men to cut before Play, 0 unless a full roster is over 53. */
   const overLimit = deepOverLimit(my);
   const practice = my.practice ?? [];
+  const injured = my.players.flatMap(player => {
+    const entry = injuredReserveEntry(my, player.id);
+    return entry ? [{ player, entry }] : [];
+  });
   const openingEvidence = (p?: Partial<GmPlayer> | null) => {
     const e = p?.openingRatingEvidence;
     return e && typeof e.modelVersion === 'string' && Number.isFinite(e.openingOvr)
@@ -1910,7 +1960,8 @@ export default function FrontOfficeBoard() {
     ? <p data-draft-legend className="text-center text-[10px] text-muted-foreground">d: no 2025 season to rate him on, so that number is where he was drafted.</p>
     : null);
   /* Round 828: the trade lists on a full roster, one group at a time, or the men the chart starts. */
-  const tradeFilter = (team: typeof my, list: GmPlayer[]) => {
+  const tradeFilter = (team: typeof my) => {
+    const list = [...nflActiveRoster(team)];
     if (team.rosterDepth !== 2) return list;
     if (tradeGroup === 'starters') {
       const ch = depthChart(team);
@@ -1953,6 +2004,23 @@ export default function FrontOfficeBoard() {
     setLeague(lg);
     persist({}, lg, myTeam);
   };
+  const doInjuredReserve = (player: GmPlayer, activate: boolean) => {
+    if (pendingSave.current || savedBytes.current === null) return;
+    const next: LeagueState = JSON.parse(JSON.stringify(league));
+    const update = activate ? activateFromInjuredReserve : placeOnInjuredReserve;
+    if (!update(next, myTeam, player.id)) return;
+    reserveSaveBase.current = savedBytes.current;
+    if (!reserveSaveUnchanged()) return;
+    setCutArmed(null);
+    if (!activate) {
+      if (myTradePiece === player.id) { setMyTradePiece(''); setShopOffers([]); setShopTried(false); }
+      if (talks?.myPieceId === player.id) setTalks(null);
+      setRosterGroup('reserve');
+    }
+    slamFeed(activate ? `🏈 ${player.name} returns to the active roster.` : `🚑 ${player.name} moves to injured reserve.`);
+    setLeague(next);
+    persist({}, next, myTeam);
+  };
   const elevations = my.practiceElevations ?? [];
   const pendingElevations = elevations.filter(entry => !entry.played && entry.week === league.week);
   const paidElevations = elevations.filter(entry => entry.played);
@@ -1961,7 +2029,7 @@ export default function FrontOfficeBoard() {
   /* Round 631: dead money on the cap line, only when there is any. */
   const dead = deadCapUsed(my);
   /* Round 631: at the roster floor the engine refuses every cut, so every Cut says why and waits. */
-  const cutBlock = cutRefusal(my, NFL_ROSTER_MIN);
+  const cutBlock = cutRefusal({ players: activeRoster }, NFL_ROSTER_MIN);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'week' : x.key) === tab)?.title ?? '';
 
   /* Round 631 and 828: one roster row, with its Cut button, shared by the
@@ -1970,6 +2038,8 @@ export default function FrontOfficeBoard() {
     /* Round 631: the cost is on screen before the second tap. */
     const cost = deadMoneyFor(p);
     const arming = cutArmed === p.id;
+    const canReviewReserve = deep && p.out >= NFL_IR_MIN_GAMES && league.week <= REGULAR_WEEKS;
+    const reserveRefusal = canReviewReserve ? injuredReservePlacementRefusal(league, my, p.id) : null;
     return (
     <div key={p.id} data-roster-row={p.id} className="rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
       <div className="flex items-center justify-between">
@@ -1994,6 +2064,15 @@ export default function FrontOfficeBoard() {
         </button>
       </span>
       </div>
+      {canReviewReserve && <div className="mt-2 border-t border-border pt-2">
+        <p className="mb-1 text-[11px] text-muted-foreground">
+          {reserveRefusal ?? `Frees an active spot. His salary stays on the cap and he must miss ${NFL_IR_MIN_GAMES} team games.`}
+        </p>
+        <button type="button" disabled={saveWriteFailed || !!reserveRefusal} onClick={() => doInjuredReserve(p, false)}
+          className="min-h-11 rounded-full border border-primary px-3 text-xs font-bold text-primary disabled:opacity-40">
+          Place on injured reserve
+        </button>
+      </div>}
       {arming && (
         <div className="mt-1.5 rounded-lg border border-destructive/50 bg-destructive/10 p-2 space-y-1.5" data-cut-confirm>
           <p className="text-[10px] text-foreground">
@@ -2289,17 +2368,18 @@ export default function FrontOfficeBoard() {
             </p>
           )}
           {depthView === null && !deep && <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
-            {[...my.players].sort((a, b) => b.ovr - a.ovr).map(rosterRow)}
+            {[...activeRoster].sort((a, b) => b.ovr - a.ovr).map(rosterRow)}
           </div>}
           {/* Round 828: a full roster opens on one tile per group and one for the practice squad. */}
           {depthView === null && deep && rosterGroup === null && (
             <div data-roster-groups className="space-y-2">
               <p className="text-center text-[10px] text-muted-foreground">
-                {my.players.length} of {DEEP_ROSTER_MAX} on the roster{fullBlock ? ', so signing anybody means a cut first' : ''}. Tap a group to see its men.
+                {activeRoster.length} of {DEEP_ROSTER_MAX} on the roster{fullBlock ? ', so signing anybody means a cut first' : ''}.
+                {injured.length > 0 && ` ${injured.length} on injured reserve still count against the cap.`} Tap a group to see its men.
               </p>
               <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
                 {DEPTH_GROUPS.map(pos => {
-                  const men = my.players.filter(p => p.pos === pos);
+                  const men = activeRoster.filter(p => p.pos === pos);
                   const hurt = men.filter(p => p.out > 0).length;
                   const top = chart[pos][0];
                   return (
@@ -2324,6 +2404,15 @@ export default function FrontOfficeBoard() {
                   <span className="block text-xs font-bold text-foreground">Practice squad <span className="font-normal text-muted-foreground">· {practice.length}</span></span>
                   <span className="block truncate text-[10px] text-muted-foreground">{pendingElevations.length ? `${pendingElevations.length} elevated for Week ${league.week}` : 'Elevations and permanent call-ups'}</span>
                 </button>
+                {injured.length > 0 && <button
+                  type="button"
+                  data-roster-group="reserve"
+                  onClick={() => { setRosterGroup('reserve'); setCutArmed(null); }}
+                  className="min-h-11 rounded-lg border border-border bg-background px-2 py-1.5 text-left hover:border-primary/60"
+                >
+                  <span className="block text-xs font-bold text-foreground">Injured reserve <span className="font-normal text-muted-foreground">· {injured.length}</span></span>
+                  <span className="block text-[10px] text-muted-foreground">Eligibility and activation</span>
+                </button>}
               </div>
             </div>
           )}
@@ -2334,10 +2423,40 @@ export default function FrontOfficeBoard() {
                   <ChevronLeft className="h-3.5 w-3.5" /> Groups
                 </button>
                 <span className="font-display text-sm font-bold text-foreground">
-                  {rosterGroup === 'practice' ? `Practice squad, ${practice.length}` : `${rosterGroup}, ${my.players.filter(p => p.pos === rosterGroup).length} men`}
+                  {rosterGroup === 'practice' ? `Practice squad, ${practice.length}`
+                    : rosterGroup === 'reserve' ? 'Injured reserve'
+                    : `${rosterGroup}, ${activeRoster.filter(p => p.pos === rosterGroup).length} men`}
                 </span>
               </div>
-              {rosterGroup === 'practice' ? (
+              {rosterGroup === 'reserve' ? (
+                <section aria-label="Injured reserve" className="space-y-2 text-xs">
+                  <p className="text-muted-foreground">
+                    Activate a player after {NFL_IR_MIN_GAMES} missed team games when he is medically cleared and you have an active spot.
+                    Each player can return {NFL_IR_PLAYER_RETURNS} times in a regular season.
+                  </p>
+                  <p className="font-semibold">{my.injuredReserve?.filter(entry => entry.returnedWeek !== undefined).length ?? 0} of {NFL_IR_TEAM_RETURNS} team returns used</p>
+                  {injured.length === 0 && <p className="text-muted-foreground">No players on injured reserve.</p>}
+                  {injured.map(({ player, entry }) => {
+                    const refusal = injuredReserveActivationRefusal(league, my, player.id);
+                    const games = injuredReserveMissedGames(league, myTeam, entry);
+                    return (
+                      <div key={player.id} className="space-y-1 rounded-lg border border-border bg-background p-2.5">
+                        <p className="break-words font-bold">{player.name}</p>
+                        <p className="text-muted-foreground">{player.pos} · ${player.salary}M on the cap · Placed Week {entry.placedWeek}</p>
+                        <p className="text-muted-foreground">
+                          {Math.min(games, NFL_IR_MIN_GAMES)} of {NFL_IR_MIN_GAMES} team games missed · {player.out > 0 ? `Out ${player.out}w` : 'Medically cleared'}
+                        </p>
+                        <p className="text-muted-foreground">{nflInjuredReserveReturns(league, player.id)} of {NFL_IR_PLAYER_RETURNS} player returns used</p>
+                        {refusal && <p className="text-muted-foreground">{refusal}</p>}
+                        <button type="button" disabled={saveWriteFailed || !!refusal} onClick={() => doInjuredReserve(player, true)}
+                          className="min-h-11 rounded-full bg-primary px-3 text-xs font-bold text-primary-foreground disabled:opacity-40">
+                          Activate {player.name}
+                        </button>
+                      </div>
+                    );
+                  })}
+                </section>
+              ) : rosterGroup === 'practice' ? (
                 <>
                   <p className="text-center text-[10px] text-muted-foreground">
                     Elevate up to {NFL_ELEVATIONS_PER_GAME} players for a regular-season game. Each returns to practice afterward. A player can be elevated {NFL_ELEVATIONS_PER_PLAYER} times per season.
@@ -2393,12 +2512,12 @@ export default function FrontOfficeBoard() {
                 </>
               ) : (
                 <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
-                  {[...my.players].filter(p => p.pos === rosterGroup).sort((a, b) => b.ovr - a.ovr).map(rosterRow)}
+                  {activeRoster.filter(p => p.pos === rosterGroup).sort((a, b) => b.ovr - a.ovr).map(rosterRow)}
                 </div>
               )}
             </div>
           )}
-          {depthView === null && draftLegend(rosterGroup === 'practice' ? practice : my.players)}
+          {depthView === null && rosterGroup !== 'reserve' && draftLegend(rosterGroup === 'practice' ? practice : activeRoster)}
         </div>
       )}
 
@@ -2443,7 +2562,7 @@ export default function FrontOfficeBoard() {
           {gm && nflDeadlineRefusal(league) && <p data-nfl-deadline className="rounded-lg border border-destructive/40 bg-destructive/5 p-2 text-center text-xs font-semibold">🔒 {nflDeadlineRefusal(league)}</p>}
           {gm && !nflDeadlineRefusal(league) && <p data-nfl-deadline className="text-center text-[11px] text-muted-foreground">Trade deadline: the break after Week {nflTradeWindow(league).deadlineAfter} is the last chance, and deals shut once Week {nflTradeWindow(league).deadlineAfter + 1} is played. Packages with picks are on the Trade desk box.</p>}
           {gm && myTradePiece && (() => {
-            const p = my.players.find(x => x.id === myTradePiece);
+            const p = activeRoster.find(x => x.id === myTradePiece);
             const dead = p ? nflTradeDeadMoney(p) : 0;
             return p ? <p data-nfl-trade-dead className="text-center text-[11px] text-muted-foreground">Trading {p.name} leaves {dead > 0 ? `$${dead}M of dead money on your cap this season` : 'no dead money behind because his guaranteed salary moves with him'}.</p> : null;
           })()}
@@ -2453,13 +2572,13 @@ export default function FrontOfficeBoard() {
             <p className="text-center text-[10px] text-muted-foreground">Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked.</p>
             {tradeChips}
             <div className="grid grid-cols-2 gap-1">
-              {tradeFilter(my, [...my.players]).sort((a, b) => b.ovr - a.ovr).map(p => (
+              {tradeFilter(my).sort((a, b) => b.ovr - a.ovr).map(p => (
                 <button key={p.id} onClick={() => { setMyTradePiece(p.id); setShopOffers([]); setShopTried(false); }} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
                   <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}{draftMark(p)}</b>
                 </button>
               ))}
             </div>
-            {draftLegend(tradeFilter(my, [...my.players]))}
+            {draftLegend(tradeFilter(my))}
             <button onClick={doShop} disabled={!myTradePiece} className="w-full rounded-full bg-primary px-4 py-1.5 text-[11px] font-bold text-primary-foreground disabled:opacity-40">
               Shop him around the league
             </button>
@@ -2493,7 +2612,7 @@ export default function FrontOfficeBoard() {
           </div>
           {/* Round 190: an open call takes over the desk until it ends. */}
           {talks && (() => {
-            const mine = my.players.find(p => p.id === talks.myPieceId);
+            const mine = activeRoster.find(p => p.id === talks.myPieceId);
             return mine ? (
               <TradeTalksCard
                 talks={talks.state}
@@ -2511,7 +2630,7 @@ export default function FrontOfficeBoard() {
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You send</p>
-                  {tradeFilter(my, [...my.players]).sort((a, b) => b.ovr - a.ovr).map(p => (
+                  {tradeFilter(my).sort((a, b) => b.ovr - a.ovr).map(p => (
                     <button
                       key={p.id}
                       onClick={() => setMyTradePiece(p.id)}
@@ -2526,7 +2645,7 @@ export default function FrontOfficeBoard() {
                 </div>
                 <div className="space-y-1">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You get ({tradePartner})</p>
-                  {tradeFilter(league.teams[tradePartner], [...league.teams[tradePartner].players]).sort((a, b) => b.ovr - a.ovr).map(p => {
+                  {tradeFilter(league.teams[tradePartner]).sort((a, b) => b.ovr - a.ovr).map(p => {
                     /* Round 631: the trade paths refuse a man you cut this season, so the screen says so. */
                     const back = tradeRefusal(my, p.id);
                     return (
@@ -2541,7 +2660,7 @@ export default function FrontOfficeBoard() {
                   })}
                 </div>
               </div>
-              {draftLegend([...tradeFilter(my, [...my.players]), ...tradeFilter(league.teams[tradePartner], [...league.teams[tradePartner].players])])}
+              {draftLegend([...tradeFilter(my), ...tradeFilter(league.teams[tradePartner])])}
             </>
           )}
         </div>
@@ -2563,7 +2682,7 @@ export default function FrontOfficeBoard() {
           )}
           {overLimit > 0 && (
             <p data-over-limit className="text-xs text-destructive">
-              {overLimitLine(my.players.length, overLimit, 'before you play')}
+              {overLimitLine(activeRoster.length, overLimit, 'before you play')}
             </p>
           )}
           {!hold && !bracketOpen && seenGame && !seenGame.winner && seenMy.rosterDepth === 2 && (

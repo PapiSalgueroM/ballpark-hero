@@ -31,6 +31,7 @@ import { bindUsProgrammeSeason } from '@/lib/usCareerProgramme';
 import { repairBankOnLoad, withBankFloor } from '@/lib/usCareerBank';
 import { NHL_CAREER_HALL } from '@/lib/nhlCareerHall';
 import { nhlSeasonReview } from '@/lib/usCareerSeasonReview';
+import { nhlTradeDestinations, nhlTradeRequestAvailable, nhlTradeRequestReceipt, settleNhlTradeRequest } from '@/lib/nhlCareerLifeC';
 
 /* Release AV: the planning panel's games and counting targets follow the season this engine plays (the
    ProgrammeSeasonShape of src/lib/usCareerProgramme.ts): the same reader of the ledger and the same
@@ -84,6 +85,7 @@ export const NHL_CAREER_SPORT: UsCareerSport<NhlCareerState, NhlSeasonLine> = wi
   assignRole: nhlAssignRole,
   campBattle: nhlCampBattle,
   simSeason: simNhlSeason,
+  tradeRequest: { available: nhlTradeRequestAvailable, receipt: nhlTradeRequestReceipt, destinations: nhlTradeDestinations, settle: settleNhlTradeRequest },
   goalieTandem: { available: nhlTandemAvailable, current: nhlTandemActive, set: setNhlTandem },
   progress: nhlProgress,
   drawEvent: drawNhlEvent,

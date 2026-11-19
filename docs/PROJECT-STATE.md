@@ -1,4 +1,17 @@
+## 2026-11-16 — Career search, NHL trades and NFL injured reserve
+
+- Home recognizes explicit requests such as “NBA career mode” and “manage an MLB team.” Both mobile widths verified nine supported queries, five misses, the existing title shortcuts and return focus. The NBA result opened with Enter and the MLB result opened by touch. Back restored the search filters and saved games.
+- Signed NHL My Career players can request one trade each season after their first played year. The Seattle and historical Atlanta fixtures took the same salary and remaining year into the next club’s season. Both named offers showed 28% in their fixtures. A separate Seattle refusal kept Toronto’s workload plan and blocked a second request from a stale tab.
+- NFL Front Office adds regular-season Reserve/Injured for a modeled four-game injury. Detroit kept 53 players under contract and $237.9 million on the cap while Goff’s assignment opened one active spot. Luke Altmyer joined and received game credit. Four settled games and a normal roster cut let Goff return as the Week 6 starter. Eight team returns and two returns per player are enforced, including across trades.
+
+The integrated candidate passed 98 focused tests across six suites, full application types, the production build and seven browser profiles. Search recovery passed all ten cases and its copied terminal-failure control. The NHL and NFL guides, search index and sitemap ledger were refreshed. The guide, search, static page and Home checks and all 16 download budgets passed.
+
+Hosted CI initially classified a read-only NFL roster check as a separate cut path. The single-use guard now runs in the existing cut function. All 1,187 cut harness checks and ten Reserve/Injured tests passed on the revision. The separate NHL Front Office waiver fixture and native comparison reproduced their previous failures on the hosted logs.
+
+
 ## 2026-11-16 — NRL league player scores and scouting
+
+[PR #1014](https://github.com/PapiSalgueroM/ballpark-hero/pull/1014) published exact main `188b189dcf164003b8b1220514a69d80498cafb5`, deployment `9bca0e3b-20a1-49cf-9605-5818c5fa06f9` and canonical entry `/assets/index-DPSVI8d-.js`. The squash tree matched tested head `3c7feea96`. Three pinned live browser profiles, 20 control endpoints, the live NRL guide and all 174 sitemap routes passed. IndexNow accepted the NRL guide. Hosted types, build, guide checks and native career controls also passed.
 
 - Season fixtures shows both starting 13s and each side’s scoring in settled league matches. The 50–8 Storm–Knights fixture recorded 26 starters and every try and kick. Scouting and the ladder show named starts and tries. The latest completed season stays available after rollover, and the report identifies which seasons have player scores.
 - The book keeps the league together across a caretaker move. Both phone widths preserved 98 prior results and archived the same 213-match season. An older save kept its original Storm–Sharks score and recorded named players in seven fixtures on its first round of 2027. New careers record from their first match.

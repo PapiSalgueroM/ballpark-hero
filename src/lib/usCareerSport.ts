@@ -363,6 +363,7 @@ export interface UsCareerSport<C extends UsCareerCore = any, L extends UsCareerS
 
   /* Contracts. */
   tradeRequest?: {
+    allowRelease?: true;
     available(c: C): boolean;
     receipt(c: C): string | null;
     destinations(c: C): UsCareerTradeDestination[];

@@ -910,6 +910,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         heading: "Play seasons, offseasons and free agency",
         items: [
           "Play each season: skaters post goals, assists and points, goalies post wins and save percentage.",
+          "After playing an NHL season, a signed player can request one trade before playing the next season. Choose Any team or a club from your era. A named request shows the simulated odds and receiving roster quality. If it succeeds, your salary and contract term carry over and any workload plan for the old crease clears.",
           "Select Week by week to watch simulated regular-season games built from your saved totals. Open a finished fixture for its game report and any OVR change. You can also replay older seasons through the Regular season tab in Career Log.",
           "The current 84-game schedule uses the verified opponent and home and away counts. Other saved schedules keep their original length and can use unnamed opponents.",
           "Starting goalies can choose Share the crease before playing a season. Camp still decides who starts. Sharing gives about 20% fewer planned starts and a 20% lower simulated injury chance. For example, the usual draw of 60 starts becomes 48 before injuries. Career Log keeps the plan and actual starts for that year.",

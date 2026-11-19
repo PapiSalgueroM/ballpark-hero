@@ -27,8 +27,9 @@
  * the whole query matching a label beats a label word, which beats the path
  * or the sport, which beats a generated keyword, which beats the one line
  * description, which beats a typo corrected match. A few whole-query intents
- * can also suggest matching games after the ordinary results. Every result
- * carries its strongest match field.
+ * can also suggest matching games after the ordinary results. A phrase that
+ * names a league and a mode scopes those results to the matching game.
+ * Every result carries its strongest match field.
  *
  * WHAT IT REFUSES TO DO. It never builds a RegExp out of anything a person
  * typed, so a query of "*(" or "\" is a query and not a crash, and the term
@@ -178,17 +179,33 @@ const playerCareers = ['/soccer-career', '/nba-my-career', '/nfl-my-career', '/m
 type SearchIntent = { category?: CategoryTitle; paths?: readonly string[] };
 const SEARCH_INTENTS = new Map<string, SearchIntent>([
   ['american football', { category: 'Pro Football' }],
-  ['manage an nfl team', { category: 'Pro Football', paths: ['/front-office'] }],
-  ['nfl management', { category: 'Pro Football', paths: ['/front-office'] }],
-  ['manage an afl team', { category: 'Aussie Rules', paths: ['/aussie-rules-manager'] }],
-  ['manage a rugby league team', { category: 'Rugby League', paths: ['/nrl-team-manager'] }],
   ['build a stadium', { paths: ['/stadium-tycoon'] }],
   ['stadium builder', { paths: ['/stadium-tycoon'] }],
   ['career mode', { paths: playerCareers }],
   ['career sims', { paths: playerCareers }],
-  ['soccer career mode', { category: 'Soccer', paths: ['/soccer-career'] }],
-  ['basketball career mode', { category: 'Pro Basketball', paths: ['/nba-my-career'] }],
 ]);
+
+const LEAGUE_INTENTS: readonly { category: CategoryTitle; aliases: readonly string[]; manager: string; player?: string }[] = [
+  { category: 'Soccer', aliases: ['soccer', 'futbol'], manager: '/club-manager', player: '/soccer-career' },
+  { category: 'Pro Football', aliases: ['nfl', 'american football', 'pro football'], manager: '/front-office', player: '/nfl-my-career' },
+  { category: 'Pro Basketball', aliases: ['nba', 'basketball', 'pro basketball'], manager: '/nba-front-office', player: '/nba-my-career' },
+  { category: 'Baseball', aliases: ['mlb', 'baseball'], manager: '/mlb-front-office', player: '/mlb-my-career' },
+  { category: 'Hockey', aliases: ['nhl', 'hockey', 'ice hockey'], manager: '/nhl-front-office', player: '/nhl-my-career' },
+  { category: 'Aussie Rules', aliases: ['afl', 'aussie rules', 'australian rules'], manager: '/aussie-rules-manager' },
+  { category: 'Rugby League', aliases: ['nrl', 'rugby league'], manager: '/nrl-team-manager' },
+];
+
+/** Whole phrases scoped to one league and the mode the player asked to open. */
+function leagueIntent(whole: string): SearchIntent | undefined {
+  const career = /^(.+?) (?:player )?career mode$/.exec(whole);
+  const team = career ? null : /^(?:manage (?:an? )?(.+) team|(.+) (?:manager|management|gm))$/.exec(whole);
+  const name = career?.[1] ?? team?.[1] ?? team?.[2];
+  if (!name) return undefined;
+  const league = LEAGUE_INTENTS.find(({ aliases }) => aliases.includes(name));
+  if (!league) return undefined;
+  const path = career ? league.player : league.manager;
+  return { category: league.category, paths: path ? [path] : [] };
+}
 
 interface Entry {
   game: GameDef;
@@ -438,7 +455,7 @@ export function searchSite(raw: string, options?: { limit?: number }): SearchRes
 
   const whole = terms.join(' ');
   const intent = terms.length < MAX_TERMS && raw.length <= MAX_QUERY_CHARS
-    ? SEARCH_INTENTS.get(whole) : undefined;
+    ? SEARCH_INTENTS.get(whole) ?? leagueIntent(whole) : undefined;
   const expanded = terms.map(t => {
     const aliases = aliasesFor(t).map(a => normalizeQuery(a)).filter(a => a && a !== t);
     return { term: t, aliases };
@@ -447,7 +464,8 @@ export function searchSite(raw: string, options?: { limit?: number }): SearchRes
   const out: SearchResult[] = [];
   for (const e of searchIndex()) {
     const exact = e.labelKey === whole || e.pathKey === whole;
-    if (intent?.category && e.category !== intent.category && !exact) continue;
+    if (!exact && intent?.category
+      && (e.category !== intent.category || (intent.paths && !intent.paths.includes(e.game.path)))) continue;
     let total = 0;
     let best: Hit = NONE;
     let missed = false;
