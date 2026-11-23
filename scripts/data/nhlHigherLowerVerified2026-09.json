@@ -1,8 +1,8 @@
 {
- "about": "NHL Higher or Lower career points, Round 662. Values for skaters come from public.nhl_player_stats (goals plus assists) read on 2026-09-21, through the year_to recorded per player. scripts/simHockeyHigherLower.mjs holds the shipped file to this record.",
+ "about": "NHL Higher or Lower career points, Round 662. Values for skaters come from public.nhl_player_stats (goals plus assists) read on 2026-09-21, through the year_to recorded per player. scripts/simHigherLowerFacts.mjs holds the shipped file to this record.",
  "read": "2026-09-21",
  "source": "public.nhl_player_stats",
- "note": "The table truncates careers that began before 1967-68. Gordie Howe is the proven case: it reports 349 points against a real 1,850, so his row is held from the file, not the table, and is listed under heldFromFile. No goalie exists in this table, so the two goalies are listed under unverified and their shipped values were not touched.",
+ "note": "The table truncates careers that began before 1967-68. Gordie Howe is the proven case: it reports 349 points against a real 1,850, so his row is held from the file, not the table, and is listed under heldFromFile. The two goaltenders use NHL regular-season records and StatMuse, checked 2026-11-23. Shesterkin's total stops at the end of 2025-26.",
  "players": {
   "Sidney Crosby": {
    "points": 1761,
@@ -171,6 +171,22 @@
   "Pavel Bure": {
    "points": 779,
    "lastSeason": "2002-03"
+  },
+  "Henrik Lundqvist": {
+   "points": 27,
+   "lastSeason": "2019-20",
+   "src": [
+    "https://www.nhl.com/news/henrik-lundqvist-retires-326000932",
+    "https://www.statmuse.com/nhl/ask/has-henrik-lundqvist-scored-a-assist"
+   ]
+  },
+  "Igor Shesterkin": {
+   "points": 3,
+   "lastSeason": "2025-26",
+   "src": [
+    "https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&limit=50&cayenneExp=gameTypeId%3D2%20and%20playerId%3D8478048%20and%20seasonId%3C%3D20252026",
+    "https://www.statmuse.com/nhl/ask?q=how+many+assists+does+igor+shesterkin+have+all-time"
+   ]
   }
  },
  "heldFromFile": {
@@ -180,8 +196,5 @@
    "why": "nhl_player_stats truncates his pre-1967-68 seasons and reports 349"
   }
  },
- "unverified": [
-  "Henrik Lundqvist",
-  "Igor Shesterkin"
- ]
+ "unverified": []
 }
