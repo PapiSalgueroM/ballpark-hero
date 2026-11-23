@@ -1989,7 +1989,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     faqs: [
       {
         q: "How do I save my career?",
-        a: "Each career saves in this browser after every decision. Open Career saves to resume a player, start in an empty slot, or download a backup. For example, download your ten-season career from Slot 1 and import the file into an empty slot on another device.",
+        a: "Each career saves in this browser after every decision. Open Career saves to resume a player, restore your last season checkpoint, or download a backup. For example, download your ten-season career from Slot 1 and import the file into an empty slot on another device.",
       },
       {
         q: "How do I win the Ballon d'Or?",

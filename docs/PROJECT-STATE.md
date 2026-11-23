@@ -1,3 +1,13 @@
+## 2026-11-23, Soccer Career season checkpoints
+
+**PL-03 is partly implemented.** Career saves shows one automatic checkpoint per slot. A completed player, manager, owner or pundit season keeps the prior verified save after the new save succeeds. Opening the game and ordinary choices leave the checkpoint alone. If storage refuses a checkpoint write, the main save can still finish.
+
+Restoring a checkpoint keeps the current bytes in the recovery list, including damaged saves. It checks that the checkpoint and destination still match the confirmation and preserves the checkpoint itself. Restored careers remain playable and keep local records. Their retirement scores stay off the public leaderboard.
+
+Optional account sync and explicit device conflict handling remain open for PL-03. The first Soccer Career format migration still uses its own checked before-image under PL-04. Shared migration coverage in the other long games remains open.
+
+The 293 focused tests, application typecheck, production build and all 20 scoped harnesses passed, including all 15 built-site checks. The save retry harness passed 14 mounted outcomes and 17 copied faults. At 320 and 390 pixels, Chromium refused a season save, retried it, restored the exact prior progress and blocked the stale tab’s controls. The chooser preserved recovery bytes and passed reload at 320, 390, 430 and 1440 pixels. A repeated retirement after a restore posted no second score. The source control failed when the restore’s strict generation requirement was removed.
+
 ## 2026-11-23, Soccer Career portable saves and migration protection
 
 **PL-03 is partly implemented.** Career saves downloads a portable JSON file and imports it into an empty slot. The download carries the original save text. Import preserves its career data and adds a marker to keep edited or copied files from posting a public retirement score. The slot shows the last verified local save time when available. Keep Copy & Start Over preserves a checked playable backup before freeing the slot. A refused save or backup leaves the current career open.

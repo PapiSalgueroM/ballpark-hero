@@ -50,6 +50,7 @@
  *                                 copy of SoccerCareer.tsx: source red.
  *   SAVE_FENCE_CONTROL=rawguard  the active-byte check is removed from saveCareer: source red.
  *   SAVE_FENCE_CONTROL=importloose  a portable import no longer requires a generation: source red.
+ *   SAVE_FENCE_CONTROL=checkpointloose  restoring a checkpoint no longer requires a generation: source red.
  *   SAVE_FENCE_CONTROL=unkeyed   the slot component loses its React key: source red.
  *   SAVE_FENCE_CONTROL=adoptlate (Round 1330) the page's adopt moved below its
  *                                read of the save, in memory: source red (the
@@ -92,7 +93,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SAVE_KEY = 'dukb-club-manager-save';
 const FENCE_KEY = 'dukb-fence:dukb-club-manager-save';
 const CONTROL = process.env.SAVE_FENCE_CONTROL || '';
-const CONTROLS = { nofence: 'tabs', rawwrite: 'source', rawsoccer: 'source', rawguard: 'source', importloose: 'source', unkeyed: 'source', adoptlate: 'source', loaddraw: 'fleet', repairall: 'fleet', squadline: 'fleet', budgetneg: 'fleet' };
+const CONTROLS = { nofence: 'tabs', rawwrite: 'source', rawsoccer: 'source', rawguard: 'source', importloose: 'source', checkpointloose: 'source', unkeyed: 'source', adoptlate: 'source', loaddraw: 'fleet', repairall: 'fleet', squadline: 'fleet', budgetneg: 'fleet' };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`SAVE_FENCE_CONTROL=${CONTROL} is not a control here (${Object.keys(CONTROLS).join(', ')})`); process.exit(1); }
 if (CONTROLS[CONTROL] === 'fleet' && !process.env.FENCE_BASE) { console.error(`control cannot run: SAVE_FENCE_CONTROL=${CONTROL} is judged against the base commit, set FENCE_BASE`); process.exit(1); }
 const WANT = (process.env.SAVE_FENCE_SECTIONS || (CONTROL ? CONTROLS[CONTROL] : 'tabs,source,fleet')).split(',').map(s => s.trim()).filter(Boolean);
@@ -336,6 +337,8 @@ const SOCCER_RAW_PLANT = "    try { localStorage.setItem(saveKey, '{}'); } catch
 const SOCCER_RAW_GUARD = '        if (localStorage.getItem(saveKey) !== expectedRaw.current) { sourceChanged = true; return false; }\n        localStorage.setItem(saveKey, raw);\n';
 const SOCCER_IMPORT_FILE = 'src/lib/soccerCareerPortable.ts';
 const SOCCER_IMPORT_GUARD = '      return storage.getItem(saveKey) === raw;\n    }, true);';
+const SOCCER_CHECKPOINT_FILE = 'src/lib/soccerCareerCheckpoint.ts';
+const SOCCER_CHECKPOINT_GUARD = '      return storage.getItem(saveKey) === restored;\n    }, true);';
 const SOCCER_ADOPT_FILE = 'src/lib/soccerCareerSaveEntry.ts';
 const SOCCER_ENTRY_FILE = 'src/pages/SoccerCareerEntry.tsx';
 const SOCCER_KEYED = '<SoccerCareerSlot key={slot.saveKey} slot={slot} />';
@@ -451,6 +454,11 @@ function sectionSource() {
       text = text.replace(SOCCER_IMPORT_GUARD, SOCCER_IMPORT_GUARD.replace('}, true);', '});'));
       fired += 1;
     }
+    if (CONTROL === 'checkpointloose' && rel === SOCCER_CHECKPOINT_FILE) {
+      once(text, SOCCER_CHECKPOINT_GUARD, rel);
+      text = text.replace(SOCCER_CHECKPOINT_GUARD, SOCCER_CHECKPOINT_GUARD.replace('}, true);', '});'));
+      fired += 1;
+    }
     if (CONTROL === 'unkeyed' && rel === SOCCER_ENTRY_FILE) {
       once(text, SOCCER_KEYED, rel);
       text = text.replace(SOCCER_KEYED, '<SoccerCareerSlot slot={slot} />');
@@ -486,8 +494,8 @@ function sectionSource() {
         const arg = node.arguments[0];
         const key = arg.getText(sf);
         const cm = (ts.isIdentifier(arg) && cmIds.has(key)) || key === `'${SAVE_KEY}'`;
-        const portable = rel === SOCCER_IMPORT_FILE && key === 'saveKey';
-        const sc = portable || (ts.isIdentifier(arg) && scIds.has(key)) || (ts.isStringLiteralLike(arg) && SOCCER_KEYS.has(arg.text));
+        const strictSlotWrite = (rel === SOCCER_IMPORT_FILE || rel === SOCCER_CHECKPOINT_FILE) && key === 'saveKey';
+        const sc = strictSlotWrite || (ts.isIdentifier(arg) && scIds.has(key)) || (ts.isStringLiteralLike(arg) && SOCCER_KEYS.has(arg.text));
         /* A generic writer: a game's saveKey in a module that walks the
            registered long games (src/data/continueSaves.ts), Club Manager
            and Soccer Career among them. */
@@ -499,7 +507,7 @@ function sectionSource() {
           for (let a = node.parent; a; a = a.parent) {
             if ((ts.isArrowFunction(a) || ts.isFunctionExpression(a)) && a.parent && ts.isCallExpression(a.parent)) {
               const call = a.parent.expression.getText(sf);
-              if (call === 'saveFence.write' || (portable && call === 'fence.write' && a.parent.arguments[2]?.kind === ts.SyntaxKind.TrueKeyword)) {
+              if (call === 'saveFence.write' || (strictSlotWrite && call === 'fence.write' && a.parent.arguments[2]?.kind === ts.SyntaxKind.TrueKeyword)) {
                 isFenced = true;
                 if (a.parent.arguments[1] === a && a.parent.arguments[0]?.getText(sf) === key) sameSoccerFence = true;
               }
@@ -546,7 +554,7 @@ function sectionSource() {
   console.log(`  ${scanned} files write storage; ${fenced} writes of the save inside saveFence.write, ${generic} on the allowed list (${ALLOWED.length} entries, each still there)`);
   console.log(`  Soccer Career: ${scFenced} fenced slot writes, ${scGeneric} on the allowed list (${SOCCER_ALLOWED.length} entries, each still there)`);
   if (fenced < 5) fail('source', `only ${fenced} fenced writes found; saveCareer (2), clearCareer, the swap and deleteSlot make 5`);
-  if (scFenced < 4) fail('source', `only ${scFenced} fenced Soccer Career writes found; saveCareer, clearCareer, deleteUnusableSave and portable import make 4`);
+  if (scFenced < 5) fail('source', `only ${scFenced} fenced Soccer Career writes found; saveCareer, clearCareer, deleteUnusableSave, portable import and checkpoint restore make 5`);
 }
 
 /* ---------- fleet: the save's bytes and the stream do not move ---------- */

@@ -17,7 +17,11 @@ const cases = {
   automatic: 'clears a failed save on the next successful automatic save and alerts again on a later refusal',
   reset: 'keeps unsaved progress open until it can start over with a checked copy',
   retirement: 'persists the finished retirement on retry without recording its completion a second time',
-  imported: 'keeps an imported retirement playable without posting a public score',
+  imported: 'keeps a career marked importedFromFile playable without posting a public score',
+  checkpoint: 'keeps the last verified season only when a newer season save succeeds',
+  checkpointQuota: 'keeps the held checkpoint if the browser refuses its replacement after a later season',
+  restored: 'keeps a career marked restoredFromCheckpoint playable without posting a public score',
+  restoredRetirement: 'preserves the first earned finish when the player restores and retires again',
   independent: 'retains an independent valid restore and earned engine baseline without mounting the page',
 };
 const controls = {
@@ -85,7 +89,8 @@ try {
   assert(!run.error && !run.signal, 'Actual career save retry runner completed');
   assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|Failed to (?:resolve import|load)|Cannot find module|No test files found|SyntaxError|Transform failed/, 'Runtime failures earn no fault credit');
   const report = JSON.parse(await readFile(reportFile, 'utf8')), rows = report.testResults.flatMap(file => file.assertionResults);
-  assert.equal(rows.length, count); assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
+  assert.deepEqual(rows.map(row => row.title).sort(), Object.values(cases).sort());
+  assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
   assert.deepEqual(rows.map(row => row.title).sort(), Object.values(cases).sort(), 'The retry outcome manifest matches the actual component tests');
   if (control) {
     assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, count - 2);
