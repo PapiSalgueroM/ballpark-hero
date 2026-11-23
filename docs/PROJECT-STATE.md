@@ -1,3 +1,11 @@
+## 2026-11-23, World XI roster dates and Kimmich's position
+
+World XI keeps verified namesakes distinct, restores two eligible cards missed by the snapshot matching rules and removes four exact stale records. Rafinha's 2024/25 Brazil card uses Without Club. A shared Without Club or Retired label earns no club chemistry. The Argentina archive still accepts Marcos Acuña only in eligible roles.
+
+The same 17 recorded responses produced 7,069 cards before and 7,067 after. All 99 formation slots retained their eligible country sets in each of three presets. Four copied data faults fired. Chromium at 320 and 390 pixels completed a lineup with both Rafinhas and checked Acuña eligibility. The roster evidence is listed beside the exact source rows.
+
+Joshua Kimmich's Bayern role history also allows him at right-back in Build Your XI even when the curated secondary position response is empty. The targeted hook test reproduced the refused pick before the fix. [Bayern match report](https://fcbayern.com/en/news/matchreports/2020/08/match-report-champions-league-r16-fc-bayern-vs-chelsea), [UEFA match record](https://www.uefa.com/newsfiles/UCL/2020/2027132_LU.pdf).
+
 ## 2026-11-23, Build Your XI historical club picks
 
 The Mixed picker accepts Richard Ríos for Benfica and Casemiro for Manchester United. Their live market rows reflect later moves, and the two club-specific cards use dated estimates. Mixed also offers nine source-verified split-club records across Benfica, Celtic, Chelsea, Galatasaray, Inter, Juventus and Sporting. Each split pick requires its exact stored ID, name and club string. A different club and the recorded-year pool retain their eligibility rules.

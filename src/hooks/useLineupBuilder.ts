@@ -10,6 +10,7 @@ import type { Position } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
 import { clubPickVerifies, isCurrentBuildXiDraft, loadBuildXiDraft, recordedPickVerifies, writeBuildXiDraft } from '@/lib/buildXiDraft';
 import { normalizeName } from '@/lib/playerSearch';
+import { verifiedPositionFallback } from '@/data/verifiedSoccerPositions';
 
 /* The project URL and public key are hardcoded on purpose: CLAUDE.md records
    that Lovable injects VITE_SUPABASE_* pointing at a DELETED project, so these
@@ -39,8 +40,9 @@ const SUPABASE_ANON = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFz
    the plain rule answers, exactly as a failed read always has. */
 export const HISTORY_WAIT_MS = 4000;
 
-async function verifiedSecondaries(name: string, primary: Position | null): Promise<Position[]> {
+async function verifiedSecondaries(name: string, primary: Position | null, club: string | null | undefined): Promise<Position[]> {
   if (!name || !primary) return [];
+  const fallback = verifiedPositionFallback(name, primary, club);
   const stop = new AbortController();
   const timer = setTimeout(() => stop.abort(), HISTORY_WAIT_MS);
   try {
@@ -54,17 +56,17 @@ async function verifiedSecondaries(name: string, primary: Position | null): Prom
       `${SUPABASE_REST}/player_verified_positions?select=primary_position,secondary_positions&player_name=ilike.${encodeURIComponent(name)}&limit=1`,
       { headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` }, signal: stop.signal },
     );
-    if (!res.ok) return [];
+    if (!res.ok) return fallback;
     const rows = (await res.json()) as { primary_position: string | null; secondary_positions: unknown }[];
     const row = rows[0];
-    if (!row?.primary_position) return [];
-    if (normalizePosition(String(row.primary_position).trim()) !== primary) return [];
+    if (!row?.primary_position || normalizePosition(String(row.primary_position).trim()) !== primary) return fallback;
     const raw = Array.isArray(row.secondary_positions)
       ? row.secondary_positions
       : String(row.secondary_positions ?? '').split(/[;,/]/);
-    return raw.map((x) => String(x).trim()).filter(Boolean) as Position[];
+    const positions = raw.map((x) => String(x).trim()).filter(Boolean) as Position[];
+    return [...new Set([...positions, ...fallback])];
   } catch {
-    return [];
+    return fallback;
   } finally {
     clearTimeout(timer);
   }
@@ -307,11 +309,11 @@ export function useLineupBuilder() {
            pick could be sent into the same slot (review, Round 825). */
         setIsValidating(true);
         setValidationError(null);
-        played = await verifiedSecondaries(playerName.trim(), primary);
+        played = await verifiedSecondaries(playerName.trim(), primary, pickMeta?.club);
       }
       if (!positionCheck.ok) {
         setIsValidating(true);
-        played = await verifiedSecondaries(playerName.trim(), primary);
+        played = await verifiedSecondaries(playerName.trim(), primary, pickMeta?.club);
         if (played.length > 0) {
           positionCheck = checkLineupPick(
             playerName.trim(),
