@@ -9,7 +9,7 @@ import FormationPitch from '@/components/lineup/FormationPitch';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
 import { clubTableNames, nationSearchTerm, nationSquadTerm } from '@/data/lineupTeams';
-import { BUILD_XI_VERIFIED_CLUB_ROWS } from '@/data/buildXiVerifiedClubRows';
+import { BUILD_XI_VERIFIED_CLUB_ROWS, BUILD_XI_VERIFIED_SPLIT_ROWS } from '@/data/buildXiVerifiedClubRows';
 import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
@@ -187,6 +187,9 @@ const LineupBuilder = () => {
      shared search config cannot express today. */
   const teamScopedSource: PlayerSourceConfig | null = useMemo(() => {
     if (!currentTeam) return null;
+    const clubNames = clubTableNames(currentTeam.name);
+    const mixedClub = draftChoice.mode === 'mixed' && !currentTeam.isNation;
+    const split = mixedClub ? BUILD_XI_VERIFIED_SPLIT_ROWS[currentTeam.name] : undefined;
     const source: PlayerSourceConfig = {
       ...SOCCER_MARKET_VALUE_SOURCE,
       ...(draftChoice.mode === 'club-era' ? {
@@ -195,8 +198,9 @@ const LineupBuilder = () => {
       } : {}),
       filters: currentTeam.isNation
         ? [{ column: 'nationality', op: 'eq', value: nationSearchTerm(currentTeam.name) }]
-        : [{ column: 'club', op: 'in', value: clubTableNames(currentTeam.name) }],
-      ...(draftChoice.mode === 'mixed' && !currentTeam.isNation ? {
+        : split ? [{ op: 'or', value: `club.in.(${clubNames.map(name => JSON.stringify(name)).join(',')}),and(id.eq.${split.id},name_folded.eq.${JSON.stringify(split.foldedName)},club.eq.${JSON.stringify(split.clubs)})` }]
+        : [{ column: 'club', op: 'in', value: clubNames }],
+      ...(mixedClub ? {
         fallbackRows: BUILD_XI_VERIFIED_CLUB_ROWS[currentTeam.name],
       } : {}),
     };

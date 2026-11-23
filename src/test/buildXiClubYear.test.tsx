@@ -26,7 +26,7 @@ vi.mock('@/integrations/supabase/client', () => ({
         return io.rest(query).then(resolve, reject);
       },
     };
-    for (const method of ['select', 'ilike', 'eq', 'in', 'order', 'limit', 'range', 'abortSignal']) {
+    for (const method of ['select', 'ilike', 'eq', 'in', 'or', 'order', 'limit', 'range', 'abortSignal']) {
       builder[method] = (...args: unknown[]) => {
         if (method === 'abortSignal') query.signal = args[0] as AbortSignal;
         else query.operations.push([method, args]);
@@ -280,15 +280,16 @@ describe('Build Your XI draws under a seeded generator', () => {
 });
 
 describe('Build Your XI historical club picks', () => {
-  function openSavedDraft(draftChoice: DraftChoice, finalClubs: string[]) {
+  function openSavedDraft(draftChoice: DraftChoice, finalClubs: string[], openPositions = [5, 6]) {
     const formation = '4-2-3-1';
-    const teams = clubYearClubs.filter(club => !finalClubs.includes(club)).slice(0, 9).concat(finalClubs);
+    const teams = clubYearClubs.filter(club => !finalClubs.includes(club)).slice(0, 11 - openPositions.length).concat(finalClubs);
     const teamAssignments = teams.map(name => ({ name, isNation: false }));
-    const slots = FORMATIONS[formation].flatMap((slot, index) => {
-      if (slot.role === 'CDM') return [];
-      const team = teams[index < 5 ? index : index - 2];
+    const positions = FORMATIONS[formation].map((slot, index) => ({ slot, index })).filter(({ index }) => !openPositions.includes(index));
+    const slots = positions.map(({ slot, index }, pickIndex) => {
+      const team = teams[pickIndex];
       const name = `Fixture historical draft ${index}`;
-      return [[index, { ...slot, playerName: name, assignedTeam: team, isNation: false, pick: meta(team, 2026, slot.role, name) }]];
+      const year = draftChoice.mode === 'mixed' ? 2026 : draftChoice.year;
+      return [index, { ...slot, playerName: name, assignedTeam: team, isNation: false, pick: meta(team, year, slot.role, name) }];
     });
     const priorFetch = fetch;
     vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
@@ -301,8 +302,8 @@ describe('Build Your XI historical club picks', () => {
     return render(<MemoryRouter><LineupBuilder /></MemoryRouter>);
   }
 
-  async function searchClubPick(query: string) {
-    await chooseSlot('CDM');
+  async function searchClubPick(query: string, role: PositionRole = 'CDM') {
+    await chooseSlot(role);
     fireEvent.change(field(), { target: { value: query } });
     await advance(230); await flush();
   }
@@ -330,6 +331,53 @@ describe('Build Your XI historical club picks', () => {
     openSavedDraft(draftChoice, [...teams]);
     await searchClubPick('richard rios');
     expect(screen.queryByRole('option', { name: /Richard Ríos/ })).toBeNull();
+    expect(io.queries.length).toBeGreaterThan(0);
+  });
+
+  const splitRows = [
+    { id: 163068, player_name: 'Andrey Santos', name_folded: 'andrey santos', club: 'RC Strasbourg Alsace / Chelsea FC', nationality: 'Brazil', position: 'Central Midfield', year: 2025, age: 20, market_value_usd: 43_000_000 },
+    { id: 49328, player_name: 'João Cancelo', name_folded: 'joao cancelo', club: 'Juventus FC / Manchester City', nationality: 'Portugal', position: 'Right-Back', year: 2019, age: 24, market_value_usd: 59_000_000 },
+    { id: 49664, player_name: 'Luke Bolton', name_folded: 'luke bolton', club: 'Wycombe Wanderers / Manchester City / Luton Town', nationality: 'England', position: 'Right-Back', year: 2019 },
+  ];
+
+  function useSplitRows() {
+    io.rest = async query => {
+      io.queries.push(query);
+      const clubNames = operation(query, 'in', 'club') as string[] | undefined;
+      const group = String(query.operations.find(([method]) => method === 'or')?.[1][0] ?? '');
+      const includedClubs = clubNames ?? (group.match(/^club\.in\.\(([^)]*)\)/)?.[1]
+        .split(',').map(alias => alias.replace(/^"|"$/g, '')) ?? []);
+      const year = operation(query, 'eq', 'year');
+      const needle = String(operation(query, 'ilike', 'name_folded') ?? '').replace(/^%|%$/g, '');
+      return { data: splitRows.filter(row => row.name_folded.includes(needle) && (year === undefined || row.year === year)
+        && (includedClubs.includes(row.club) || group.includes(`and(id.eq.${row.id},name_folded.eq."${row.name_folded}",club.eq."${row.club}")`))), error: null };
+    };
+  }
+
+  it.each([
+    ['Chelsea', 'CDM', 5, 'Andrey Santos', 'RC Strasbourg Alsace / Chelsea FC', 43_000_000],
+    ['Juventus', 'RB', 4, 'João Cancelo', 'Juventus FC / Manchester City', 59_000_000],
+  ] as const)('finds and accepts the verified canonical split record for %s', async (team, role, index, name, club, value) => {
+    useSplitRows();
+    openSavedDraft({ mode: 'mixed' }, [team], [index]);
+    await searchClubPick(name, role);
+    fireEvent.click(option(name)); await flush();
+    expect(screen.getByRole('button', { name: 'Submit Team' })).toBeVisible();
+    expect(JSON.parse(localStorage.getItem(draftKey)!).slots.at(-1)[1]).toMatchObject({
+      playerName: name, assignedTeam: team, pick: { club, value },
+    });
+    expect(io.fetches.some(url => url.includes('validate-player'))).toBe(false);
+  });
+
+  it.each([
+    ['Liverpool', 'Andrey Santos', { mode: 'mixed' }],
+    ['Manchester City', 'Luke Bolton', { mode: 'mixed' }],
+    ['Chelsea', 'Andrey Santos', { mode: 'club-year', year: 2025 }],
+  ] as const)('does not surface %s’s unadmitted split record for %s', async (team, name, choice) => {
+    useSplitRows();
+    openSavedDraft(choice, [team], [5]);
+    await searchClubPick(name);
+    expect(screen.queryByRole('option')).toBeNull();
     expect(io.queries.length).toBeGreaterThan(0);
   });
 });

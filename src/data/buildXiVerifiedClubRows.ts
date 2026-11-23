@@ -27,3 +27,16 @@ export const BUILD_XI_VERIFIED_CLUB_ROWS: Partial<Record<string, Record<string, 
     position: 'Defensive Midfield', age: 34, market_value_usd: 8_640_000,
   }],
 };
+
+/** Exact stored identities for verified all-time club picks on split rows. */
+export const BUILD_XI_VERIFIED_SPLIT_ROWS: Partial<Record<string, { id: number; foldedName: string; clubs: string }>> = {
+  // Chelsea's debut report and Manchester United's record of his Chelsea spell.
+  // https://www.chelseafc.com/en/news/article/match-report-es-tunis-0-3-chelsea
+  // https://www.manutd.com/en/teams/mens-team/andrey-santos
+  Chelsea: { id: 163068, foldedName: 'andrey santos', clubs: 'RC Strasbourg Alsace / Chelsea FC' },
+
+  // Juventus's 2018/19 first team before the transfer to Manchester City.
+  // https://www.juventus.com/en/news/articles/thank-you-for-everything-joao
+  // https://www.mancity.com/news/first-team/first-team-news/2019/august/man-city-joao-cancelo-squad-number-confirmation
+  Juventus: { id: 49328, foldedName: 'joao cancelo', clubs: 'Juventus FC / Manchester City' },
+};

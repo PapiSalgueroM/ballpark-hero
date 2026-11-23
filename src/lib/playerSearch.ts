@@ -332,7 +332,7 @@ export function isSameMan(
   return Math.abs((ref.age - row.age) - (ref.year - row.year)) <= 1;
 }
 
-export interface PlayerSourceFilter {
+export type PlayerSourceFilter = {
   column: string;
   /**
    * Round 483 added 'in'. A substring `ilike` on a club name is how Build Your
@@ -343,7 +343,7 @@ export interface PlayerSourceFilter {
    */
   op: 'eq' | 'ilike' | 'in';
   value: string | number | boolean | (string | number)[];
-}
+} | { op: 'or'; value: string };
 
 export interface SearchPlayersOptions {
   source: PlayerSourceConfig;
@@ -399,7 +399,8 @@ function applyFilters(builder: any, filters: PlayerSourceFilter[] | undefined) {
   if (!filters) return builder;
   let b = builder;
   for (const f of filters) {
-    if (f.op === 'eq') b = b.eq(f.column, f.value);
+    if (f.op === 'or') b = b.or(f.value);
+    else if (f.op === 'eq') b = b.eq(f.column, f.value);
     else if (f.op === 'in') b = b.in(f.column, Array.isArray(f.value) ? f.value : [f.value]);
     else b = b.ilike(f.column, `%${f.value}%`);
   }
