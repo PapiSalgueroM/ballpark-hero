@@ -1,3 +1,9 @@
+## 2026-11-23, Wonderkid Factory save protection
+
+PL-04 keeps an exact copy before Wonderkid Factory or Stadium Tycoon's Academy replaces a save it cannot load or an academy with damaged roster data. Retry academy save resumes after a storage refusal. A newer tab keeps control, and a write that could not be confirmed asks for a reload. Pack delivery and equipment changes wait for the academy to reopen.
+
+The mounted tests used an evolved academy with $5,000, two reputation stars and six prospects. The previous build overwrote a newer-version save and a same-version save with a damaged roster. The fix kept exact copies through autosave, tab close and retry. The 40 focused tests checked both doors, a reused boot copy, a refused readback, an active save from another tab and one-time pack delivery. The scoped SaveKeeper passed.
+
 ## 2026-11-23, NRL Team Manager automatic season checkpoints
 
 PL-03 adds a season checkpoint beside the manual checkpoint in each slot. Starting a later season keeps the exact completed save after the new progress lands. Career saves can restore it after keeping a copy of the current career. Deleting a career files its automatic checkpoint in recovery so the slot can be reused. Imported careers remain local, and replayed seasons avoid duplicate completion credit. The 83 focused tests and all 22 Chromium cases at 320 and 390 pixels passed. An actual 12-season career kept its manual checkpoint and exact review after rollover, restore and reload. The tests also checked legacy v1, import after a slot deletion, refusal to save or archive, stale tabs and an automatic checkpoint from a different career. The previous build produced the same active successor with no automatic point at either width.

@@ -53,7 +53,10 @@ export const WRITERS = {
     'const bytes = serializeTycoon(next, now);',
     'localStorage.setItem(TYCOON_SAVE_KEY, bytes);',
   ] },
-  '/wonderkid-factory': { kind: 'serializer', file: 'src/hooks/useWonderkidFactory.ts', fn: 'serialize' },
+  '/wonderkid-factory': { kind: 'serializer', file: 'src/hooks/useWonderkidFactory.ts', fn: 'serialize', indirect: [
+    'const bytes = serialize(next);',
+    'localStorage.setItem(SAVE_KEY, bytes);',
+  ] },
   '/rebuild': { kind: 'engine', file: 'src/lib/rebuildSave.ts', fn: 'writeRebuildSave' },
   '/front-office': { kind: 'literal', file: 'src/components/front-office/FrontOfficeBoard.tsx' },
   '/nfl-my-career': { kind: 'literal', file: 'src/components/us-career/UsCareerBoard.tsx', indirect: ['saveValue(JSON.stringify(', 'localStorage.setItem(pending.key, pending.value)'] },

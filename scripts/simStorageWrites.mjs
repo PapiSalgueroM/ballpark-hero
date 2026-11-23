@@ -613,8 +613,8 @@ const NOTHING_HELD = [
     why: 'a goal that cannot be saved is not awarded: "save-failed" is answered before commit' },
   { file: 'src/components/tycoon/TycoonSaleReview.tsx', keys: ['state:saveFailed'],
     why: 'the sale was refused (doPrestige answered false): the notice says so and the ground is as it was' },
-  { file: 'src/hooks/useWonderkidFactory.ts', keys: ['state:academySaveBlocked', 'state:packSaveBlocked', 'state:gearSaveBlocked', 'keeps:commitAcademy', 'keeps:deliverWaiting'],
-    why: 'a move only reaches the screen after the whole academy is saved (commitAcademy, deliverWaiting, doDismissPack): refused, the move does not happen' },
+  { file: 'src/hooks/useWonderkidFactory.ts', keys: ['state:academySaveBlocked', 'state:packSaveBlocked', 'state:gearSaveBlocked', 'write:persist', 'keeps:persist'],
+    why: 'a refused academy replacement keeps the original and a protected recovery can retry from disk; a refused action keeps its previous players and ledger' },
   /* Round 1570: a Hall wall plaque is derived from the retired career's own save, never progress of its own */
   { file: 'src/components/us-career/UsCareerBoard.tsx', keys: ['state:wallRefused'],
     why: 'the Hall wall plaque the browser refused: it is built from the retired career, which is still on its own save, so the next load puts it up again; the state only lets the wall say this player was not kept' },
