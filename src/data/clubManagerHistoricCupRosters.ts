@@ -50,6 +50,7 @@ const OLYMPIACOS_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
   { name: 'Ioannis Okkas', line: 'ATT' },
   { name: 'Michalis Konstantinou', line: 'ATT' },
   { name: 'Haruna Babangida', line: 'ATT' },
+  { name: 'Dani García', line: 'ATT' },
 ];
 
 // Partial Fenerbahçe first-team roster at the August 2005 opening.

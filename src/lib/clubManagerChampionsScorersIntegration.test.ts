@@ -1,13 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   championsLeagueScorerRace, engineRegistrations, finishSeason, loadCareer, playNextEntry, REAL_LEAGUES,
-  restoreEngineRegistrations, resumeMatch, saveCareer, startCareer, startNextSeason, uclHolderOf,
+  restoreEngineRegistrations, resumeMatch, saveCareer, startCareer, startNextSeason, uclHolderOf, worldRosterFor,
   type CareerState, type MatchWeekReport,
 } from './clubManager';
 import { joinClubNow } from './clubManagerCalendar';
 import { ensureEraRosters } from './clubManagerEras';
 import { UCL_GROUP_LEDGER } from './clubManagerUclGroups';
 import { serializeParkedCareer } from './clubManagerParkedSave';
+import { recordWorldRosterTransfer, worldRosterOwner } from './clubManagerWorldRoster';
 import { HISTORIC_2005_CUP_ROSTERS } from '@/data/clubManagerHistoricCupRosters';
 
 const BRUGGE = 115366;
@@ -317,6 +318,14 @@ describe('Owned Champions League scorer settlement', () => {
     expect(tape(MADRID + 0xa01, () => finishSeason(old!)).value.summary.uclScorerAward).toBeUndefined();
   });
 
+  it('opens 2005-06 with Dani García outside the Espanyol squad and transfer supply', async () => {
+    await ensureEraRosters('era2005');
+    const espanyol = tape(MADRID, () => startCareer('Espanyol', 'era2005')).value;
+    const madrid = tape(MADRID, () => startCareer('Real Madrid', 'era2005')).value;
+    expect(espanyol.squad.some(player => player.name === 'Dani García')).toBe(false);
+    expect(worldRosterFor(madrid, 'Espanyol').some(player => player.n === 'Dani García')).toBe(false);
+  });
+
   it('credits verified background squads in the 2005 opening campaign', async () => {
     await ensureEraRosters('era2005');
     const madrid = tape(MADRID, () => startCareer('Real Madrid', 'era2005')).value;
@@ -350,8 +359,31 @@ describe('Owned Champions League scorer settlement', () => {
         expect(generated).toBeUndefined();
       }
     }
+    const olympiacos = final.state.uclScorers!.players.filter(row => row[2] === 'Olympiacos');
+    const scorerNames = olympiacos.map(row => row[1]);
+    expect(scorerNames).toEqual(expect.arrayContaining(['Dani García', 'Haruna Babangida']));
     expect(final.state.uclScorers?.unresolved).toBe(before.uclScorers?.unresolved);
     expect(JSON.stringify(reopened!.uclScorers)).toBe(snapshot);
+  });
+
+  it('respects a 2005 save that already moved Dani García to another club', async () => {
+    await ensureEraRosters('era2005');
+    const madrid = tape(MADRID, () => startCareer('Real Madrid', 'era2005')).value;
+    const striker = madrid.squad.find(player => player.position === 'ST')!;
+    const dani = { ...striker, id: 'p-dani-garcia', name: 'Dani García', age: 30, rating: 68, value: 1.5 };
+    const legacy = recordWorldRosterTransfer(madrid, {
+      player: dani, from: 'Espanyol', to: 'Sevilla', kind: 'permanent', since: 0,
+    });
+    const key = JSON.stringify(['era2005', 'Espanyol', 'Dani García', 'ST', 1975, 0]);
+    const reopened = loadCareer(serializeParkedCareer(legacy))!;
+    expect(worldRosterOwner(reopened, key)).toBe('Sevilla');
+
+    const beforeFinal = playTo(reopened, MADRID, 55).state;
+    const { value: final } = next(beforeFinal, MADRID);
+    const olympiacos = final.state.uclScorers!.players.filter(row => row[2] === 'Olympiacos');
+    expect(olympiacos.some(row => row[1] === 'Haruna Babangida')).toBe(true);
+    expect(olympiacos.some(row => row[1] === 'Dani García')).toBe(false);
+    expect(olympiacos.reduce((goals, row) => goals + row[3], 0)).toBe(14);
   });
 
   it('keeps a decisive award in the review and past season after normal rollover', () => {

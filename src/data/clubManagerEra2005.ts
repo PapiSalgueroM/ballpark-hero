@@ -6,7 +6,7 @@
 // leagues from an offline pull of the base table, the lines already shipped
 // carried through as bytes). Memberships and sources are in the script
 // header. The verified summer 2005 window corrections are applied across
-// all five leagues (385 rows moved, removed, arrived or folded in
+// all five leagues (386 rows moved, removed, arrived or folded in
 // total). Values in £m at the year-2005 snapshot, ratings 48-94 on the
 // same curve as the 2026 bake. Regenerate per the header of
 // scripts/bakeEra2005.mjs.
@@ -15,9 +15,9 @@ import type { BakedPlayer } from '@/data/clubManagerRosters';
 
 export const ERA2005_META = {
   year: 2005,
-  players: 1727,
+  players: 1726,
   clubs: 98,
-  moves: 385,
+  moves: 386,
 };
 
 /** 2005 clubs where the year-2005 table runs thin (under 8 real players);
@@ -569,7 +569,6 @@ export const ERA2005_ROSTERS: Record<string, BakedPlayer[]> = {
     { n: 'Eduardo Costa', p: 'CDM', a: 22, v: 2.3, r: 70 },
     { n: 'Hugo Ibarra', p: 'RB', a: 30, v: 2.3, r: 70 },
     { n: 'Alberto Lopo', p: 'CB', a: 24, v: 1.5, r: 68 },
-    { n: 'Dani García', p: 'ST', a: 30, v: 1.5, r: 68 },
     { n: 'Mauricio Pochettino', p: 'CB', a: 32, v: 1.5, r: 68 },
     { n: 'Álex Fernández', p: 'CDM', a: 30, v: 0.8, r: 64 },
     { n: 'Borja Criado', p: 'RM', a: 22, v: 0.8, r: 64 },

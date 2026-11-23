@@ -15664,13 +15664,25 @@ function cupFixtureScorerCredits(
       const verified = !own && !roster.length && state.eraId === 'era2005' && worldYear(state) === 2005
         ? HISTORIC_2005_CUP_ROSTERS.get(club)
         : undefined;
-      const strength = verified ? strengthOf(state, club) : 0;
-      const eleven = verified
-        ? partialEleven(verified.map(({ name, line }) => ({ n: name, p: CUP_LINE_POSITION[line], r: strength })),
-          strength, groupOf)?.outfield ?? []
-        : pickOppSquad(roster)?.xi ?? thinBookEleven(state, club, roster)?.outfield ?? [];
+      let candidates: BookMan[];
+      if (verified) {
+        const unavailable = new Set([...excludes, ...(state.goneNames ?? [])]);
+        for (const loan of state.loanedOut ?? []) unavailable.add(loan.player.name);
+        for (const record of worldRosterView(state)?.records ?? []) {
+          if (record.owner !== club) unavailable.add(record.player.name);
+        }
+        const strength = strengthOf(state, club);
+        const pool = verified.filter(({ name }) => !unavailable.has(name))
+          .map(({ name, line }) => ({ n: name, p: CUP_LINE_POSITION[line], r: strength }));
+        const starters = partialEleven(pool, strength, groupOf)?.outfield ?? [];
+        const startingNames = new Set(starters.map(player => player.n));
+        // Verified substitutes can score too. Keep the starting order for the keyed draw.
+        candidates = [...starters, ...pool.filter(player => player.p !== 'GK' && !startingNames.has(player.n))];
+      } else {
+        candidates = pickOppSquad(roster)?.xi ?? thinBookEleven(state, club, roster)?.outfield ?? [];
+      }
       const key = `${roundKey}|${home}|${away}|${club}`;
-      for (const { kind, scorer } of dealGoals(key, score, eleven, verified ? { ...rules, taker: false } : rules)) {
+      for (const { kind, scorer } of dealGoals(key, score, candidates, verified ? { ...rules, taker: false } : rules)) {
         if (kind === 'og') credits.push('own-goal');
         else if (!scorer || scorer.e) credits.push(null);
         else if (verified) credits.push({ id: JSON.stringify(['era2005', club, scorer.n]), name: scorer.n, club });

@@ -1,6 +1,6 @@
 # Olympiacos and Fenerbahçe 2005-06 Club Manager roster sources
 
-Each club has a partial opening roster of 11 players. UEFA's 2005-06 Champions League technical report supplies the broad roles. Club and federation records corroborate opening-season membership. [Olympiacos on printed page 93](https://www.uefa.com/newsfiles/458764.pdf#page=93), [Fenerbahçe on printed page 90](https://www.uefa.com/newsfiles/458764.pdf#page=90)
+Olympiacos has a partial opening roster of 12 players, and Fenerbahçe has 11. UEFA's 2005-06 Champions League technical report supplies the broad roles. Club and federation records corroborate opening-season membership. [Olympiacos on printed page 93](https://www.uefa.com/newsfiles/458764.pdf#page=93), [Fenerbahçe on printed page 90](https://www.uefa.com/newsfiles/458764.pdf#page=90)
 
 ## Olympiacos
 
@@ -19,10 +19,11 @@ The cutoff is the August 28, 2005 league opener at Panathinaikos. The May and Se
 | Ioannis Okkas | ATT | [May 21 cup final][may-final], [September 13 lineup][rosenborg-match] |
 | Michalis Konstantinou | ATT | [July 13 signing][toure-konstantinou], [September 13 lineup][rosenborg-match] |
 | Haruna Babangida | ATT | [August 18 signing][babangida], [September 13 lineup][rosenborg-match], [Barcelona profile][barcelona-babangida] |
+| Dani García | ATT | [August 11 signing][dani], [September 13 appearance][rosenborg-match], [Barcelona profile][barcelona-dani] |
 
 UEFA's season report lists Rivaldo and Grigorios Georgatos as midfielders. UEFA's next-season media kit lists Rivaldo as a forward, and Olympiacos's profile calls Georgatos a left-back. Both are omitted from this partial pool. Michał Żewłakow finished 2005-06 at Anderlecht and moved to Olympiacos the following summer. [UEFA media kit](https://www.uefa.com/newsfiles/461350.pdf), [Olympiacos Georgatos profile](https://www.olympiacos.org/2015/06/15/to-magiko-aristero-podi-toy-thryloy/), [UEFA Żewłakow transfer history](https://www.uefa.com/uefachampionsleague/news/01de-0e731f1fde20-7bd8b781d316-1000--standard-in-need-of-olympiacos-boost/), [Legia Żewłakow profile](https://legia.com/articles/historia-kalendarium-legii-28-lipca-piekna-kariera-warszawiaka)
 
-Dani García Lara joined Olympiacos on August 11, 2005 after playing for Espanyol. The full historical Espanyol squad in the game still includes him. The partial Olympiacos pool uses Babangida to avoid creating a second entry for the same player while the full squad awaits a save-safe correction. [UEFA transfer report][dani], [Barcelona profile][barcelona-dani]
+Dani García Lara joined Olympiacos on August 11, 2005. Espanyol played Getafe in its league opener on August 28. Fresh saves use the corrected opening squad and can credit Dani and Babangida in Olympiacos matches. Existing saves keep their stored players, transfers and settled goals. The Olympiacos pool defers to those saves' current player assignments. [UEFA transfer report][dani], [Olympiacos match archive][rosenborg-match], [Spanish opening weekend](https://www.uefa.com/news/01ac-0e6cfce014ab-0698104009c5-1000--madrid-rely-on-raul-again/)
 
 [olympiacos-opener]: https://www.olympiacos.org/2014/02/28/epta-magikes-aionies-vradies/
 [may-final]: https://www.olympiacos.org/sites/default/files/OSFP_PANIONIOS_25012012.pdf

@@ -435,7 +435,6 @@ console.log('2) Five worlds (2026, 2020, 2015, 2010, 2005), and none of them lea
       'Rafinha': 'PSG\'s Rafael Alcântara (b. 1993-02-12: playmakerstats, fbref) and Genoa\'s 2010 right-back Márcio Rafael Ferreira de Souza (b. 1985-09-07: fcbayern.com, national-football-teams.com)',
     },
     era2005: {
-      'Dani García': 'Athletic\'s Daniel García Carrillo (b. 1990-05-24: ESPN, athletic-club.eus) and Espanyol\'s 2005 striker Daniel García Lara (b. 1974-12-22: national-football-teams.com, playmakerstats)',
       'Manu Sánchez': 'Atletico\'s Manuel Sánchez de la Peña (b. 2000-08-24: ESPN, playmakerstats) and Malaga\'s 2005 Antonio Manuel Sánchez Gómez (b. 1979-01-25: ESPN, bdfutbol)',
       'José Izquierdo': 'Brighton\'s José Heriberto Izquierdo Mena (b. 1992-07-07: ESPN, besoccer) and Osasuna\'s 2005 right-back José Izquierdo Martínez (b. 1980-08-03: bdfutbol, ceroacero)',
       'Álex Fernández': 'Cadiz\'s Alejandro Fernández Iglesias (b. 1992-10-15: ESPN, cadizcf.com) and Espanyol\'s 2005 Àlex Fernández Sánchez (b. 1974-02-14: ESPN, playmakerstats)',

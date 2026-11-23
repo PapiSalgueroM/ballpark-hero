@@ -1,8 +1,14 @@
+## 2026-11-23, Club Manager 2005-06 Dani García roster correction
+
+Dani García Lara moved from Espanyol to Olympiacos before the 2005-06 opener. The corrected bake removes his stale Espanyol row, and Olympiacos's partial cup scorer pool includes him alongside Haruna Babangida. The cup pool respects saved ownership. [Transfer and roster audit](audits/club-manager-olympiacos-fenerbahce-2005-rosters.md)
+
+Fresh-career, active-save and parked-save checks cover the correct roster, Spain flag, persistent IDs and transfer records. The 125-match historical replay checks both forwards can score and a second replay checks that a save already holding Dani at Sevilla cannot credit him to Olympiacos. CM-03 remains partial. The Olympiacos and Fenerbahçe update in PR #1063 was verified live at 320 and 390 px.
+
 ## 2026-11-23, Club Manager 2005-06 Olympiacos and Fenerbahçe scorer coverage
 
 Two verified 11-player opening pools extend newly played background cup scoring in 2005-06. The source audit records club membership, roles, and dated transfer cutoffs. [Olympiacos and Fenerbahçe roster sources](audits/club-manager-olympiacos-fenerbahce-2005-rosters.md)
 
-The historical replay now covers 19 Ajax, 17 Rosenborg, 14 Olympiacos, and 13 Fenerbahçe goals. The 125-match campaign still reconciles to 335 total goals. A saved matchday checks Olympiacos at home to Inter and Fenerbahçe away at Barcelona in one Quick Sim, including exact reopen behavior for the pending and already-settled saves. The full 2005-06 Espanyol squad still needs a save-safe correction for Dani García Lara, who joined Olympiacos before the opener.
+The historical replay covers 19 Ajax, 17 Rosenborg, 14 Olympiacos, and 13 Fenerbahçe goals. The 125-match campaign reconciles to 335 total goals. A saved matchday checks Olympiacos at home to Inter and Fenerbahçe away at Barcelona in one Quick Sim, including exact reopen behavior for the pending and already-settled saves.
 
 CM-03 remains partial. Four of the 15 missing outside-league squads in the original replay now have verified opening pools. Rosenborg’s release was published in PR #1062 and passed all four published browser checks.
 
