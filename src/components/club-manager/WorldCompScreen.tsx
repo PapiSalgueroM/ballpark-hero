@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { CareerState, CupRound, TableRow } from '@/lib/clubManager';
-import { careerLeagueOf, cupSatOutBy, uclGroupRule, worldUclFormatOf } from '@/lib/clubManager';
+import { careerLeagueOf, cupSatOutBy, domesticCupScorerRace, uclGroupRule, worldUclFormatOf } from '@/lib/clubManager';
 import { shortDate, worldYearOf, type CalDate } from '@/lib/clubManagerCalendar';
 import { uclGroupFootnote } from '@/lib/clubManagerUclGroups';
 import { leaguePhaseFootnote } from '@/lib/uclLeaguePhase';
@@ -11,8 +11,8 @@ import type { WorldCompKey, WorldKoRound } from '@/lib/worldCompetition';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { ClubWorldCupCard } from '@/components/club-manager/ClubWorldCupCard';
 import { IntercontinentalCupCard } from '@/components/club-manager/IntercontinentalCupCard';
-import { EUROPA_SCORER_STATUS, EuropaScorersCard } from '@/components/club-manager/EuropaScorersCard';
-import { europaScorerRace } from '@/lib/clubManagerEuropaScorers';
+import { CupScorersCard, cupScorerStatusLabel } from '@/components/club-manager/CupScorersCard';
+import { cupScorerRace, type CupScorerRace } from '@/lib/clubManagerCupScorers';
 import { INTERCONTINENTAL_CUP_SCHEDULE, INTERCONTINENTAL_CUP_YEAR } from '@/lib/clubIntercontinentalCup';
 import {
   clubRun, firstStageNights, nextNight, nightLabel, ordinal, realFifthNation, roundPlural, routeWords, worldCompView, worldUclStatus, worldUelStatus,
@@ -72,6 +72,29 @@ function Back({ label, onClick }: { label: string; onClick: () => void }) {
     <button type="button" onClick={onClick} className={backClass} data-cm-world-back>
       <ChevronLeft className="w-3.5 h-3.5" /> {label}
     </button>
+  );
+}
+
+function ScorersTile({ race, scope, onClick }: { race: CupScorerRace; scope: 'uel' | 'cup'; onClick: () => void }) {
+  const top = race.rows[0];
+  return (
+    <div className="grid">
+      <Tile icon="⚽" title="Top scorers" testId="scorers" onClick={onClick}
+        value={cupScorerStatusLabel(race.status, scope)}
+        sub={top ? `${top.name}, ${top.goals} ${top.goals === 1 ? 'goal' : 'goals'}` : undefined} />
+    </div>
+  );
+}
+
+function ScorersView({ race, scope, myClub, competition, onBack }: {
+  race: CupScorerRace; scope: 'uel' | 'cup'; myClub: string; competition: string; onBack: () => void;
+}) {
+  return (
+    <div className="space-y-2" data-cm-world-view="scorers">
+      <Back label={competition} onClick={onBack} />
+      <div className="text-sm font-bold text-foreground">Top scorers</div>
+      <CupScorersCard race={race} myClub={myClub} competition={competition} scope={scope} />
+    </div>
   );
 }
 
@@ -487,7 +510,7 @@ export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCa
   const props: ViewProps | null = view ? { career, comp, view, nav, go, onClub: openRun, groupsCard, bracketCard } : null;
   const europa = comp === 'uel' ? career.worldComps?.uel : undefined;
   const race = view && (europa?.me || europa?.scorers)
-    ? europaScorerRace(europa.scorers, view.nightsDone, Boolean(view.winner)) : null;
+    ? cupScorerRace(europa.scorers, view.nightsDone, Boolean(view.winner)) : null;
 
   if (nav.run && props) {
     return (
@@ -498,13 +521,8 @@ export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCa
     );
   }
   if (nav.tab === 'scorers' && race) {
-    return (
-      <div className="space-y-2" data-cm-world-view="scorers">
-        <Back label={name} onClick={() => back({ ...nav, tab: null, run: null })} />
-        <div className="text-sm font-bold text-foreground">Top scorers</div>
-        <EuropaScorersCard race={race} myClub={career.clubName} />
-      </div>
-    );
+    return <ScorersView race={race} scope="uel" myClub={career.clubName} competition={name}
+      onBack={() => back({ ...nav, tab: null, run: null })} />;
   }
   if (nav.tab && nav.tab !== 'scorers' && props) {
     const View = { table: TableView, matchdays: MatchdaysView, knockouts: KnockoutsView, final: FinalView }[nav.tab];
@@ -566,11 +584,7 @@ export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCa
         <Tile icon="🏆" title="Final" testId="final" onClick={() => go({ ...nav, tab: 'final' })}
           value={view.winner ? `Won by ${view.winner}` : finalNight?.date ? `On ${shortDate(finalNight.date)}` : 'To come'} />
       </div>
-      {race && <div className="grid">
-        <Tile icon="⚽" title="Top scorers" testId="scorers" onClick={() => go({ ...nav, tab: 'scorers' })}
-          value={EUROPA_SCORER_STATUS[race.status]}
-          sub={race.rows[0] ? `${race.rows[0].name}, ${race.rows[0].goals} ${race.rows[0].goals === 1 ? 'goal' : 'goals'}` : undefined} />
-      </div>}
+      {race && <ScorersTile race={race} scope="uel" onClick={() => go({ ...nav, tab: 'scorers' })} />}
       {link}
     </div>
   );
@@ -695,10 +709,11 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
 
   let body: ReactNode;
   if (nav.at === 'cup') {
+    const cupName = careerLeagueOf(career).cupName;
+    const race = cupName !== null ? domesticCupScorerRace(career) : null;
     let line = cupLine;
     if (line === undefined) {
       const c = career;
-      const cupName = careerLeagueOf(c).cupName;
       const cupSatOut = cupSatOutBy(c);
       const cupAlive = cupName !== null && c.cupRound !== 'out' && c.cupRound !== 'won';
       line = cupName === null ? (
@@ -722,10 +737,16 @@ export function CupsPanel({ career, onClubClick, cupTitle, cupValue, cupSub, cup
       </div>
       </>);
     }
-    body = (
+    body = nav.tab === 'scorers' && race && cupName ? (
+      <div data-cm-cups-view="cup">
+        <ScorersView race={race} scope="cup" myClub={career.clubName} competition={cupName}
+          onBack={() => go({ ...nav, tab: null })} />
+      </div>
+    ) : (
       <div className="space-y-2" data-cm-cups-view="cup">
         <Back label="Cups" onClick={() => go(HOME)} />
         {line}
+        {race && <ScorersTile race={race} scope="cup" onClick={() => go({ ...nav, tab: 'scorers' })} />}
         {cupBracket && isValidElement(cupBracket) && (
           <Suspense fallback={<Loading />}>{cloneElement(cupBracket as ReactElement<{ onClubClick?: (c: string) => void }>, { onClubClick: clubPage })}</Suspense>
         )}

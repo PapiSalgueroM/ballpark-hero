@@ -6,7 +6,7 @@ import {
   worldCompNightsDone, worldRosterFor, type CareerState,
 } from './clubManager';
 import { joinClubNow } from './clubManagerCalendar';
-import { europaScorerRace } from './clubManagerEuropaScorers';
+import { cupScorerRace } from './clubManagerCupScorers';
 import { serializeParkedCareer } from './clubManagerParkedSave';
 
 const quick = { skipHalftime: true, noCoach: true };
@@ -296,7 +296,7 @@ describe('Europa League scorer settlement', () => {
     const result = evalWorldComp(state, 'uel');
     expect(result).toMatchObject({ winner: 'Everton', done: true });
     expectReconciled(state);
-    const race = europaScorerRace(state.worldComps?.uel?.scorers, 17, true);
+    const race = cupScorerRace(state.worldComps?.uel?.scorers, 17, true);
     expect(race.status).toBe('winner');
     const leader = race.leaders[0];
     expect(leader.club).toBe('Everton');

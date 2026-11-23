@@ -8,7 +8,8 @@
 import { cn } from '@/lib/utils';
 import type { AwardMan, SeasonAwards, TeamMan } from '@/lib/clubManagerLeagueBoards';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
-import type { ClubSeasonAward, LeagueCoachAward, SeasonSummary } from '@/lib/clubManager';
+import type { ClubSeasonAward, LeagueCoachAward } from '@/lib/clubManager';
+import type { CupScorerWinner } from '@/lib/clubManagerCupScorers';
 
 const isMine = (flags: number) => (flags & 2) !== 0;
 const madeUp = (flags: number) => (flags & 1) !== 0;
@@ -31,12 +32,15 @@ export function WinnerLine({ label, icon, m }: { label: string; icon: string; m:
   );
 }
 
-export function EuropaScorerHonour({ award, myClub }: { award: SeasonSummary['uelScorerAward']; myClub: string }) {
-  if (!Array.isArray(award) || !award.length || award.some(row => !row || typeof row.name !== 'string'
+export function CupScorerHonour({ award, myClub, competition, scope }: {
+  award?: CupScorerWinner[]; myClub: string; competition: string; scope: 'uel' | 'cup';
+}) {
+  if (typeof competition !== 'string' || !competition.trim() || !Array.isArray(award) || !award.length
+    || award.some(row => !row || typeof row.name !== 'string'
     || typeof row.club !== 'string' || !Number.isSafeInteger(row.goals) || row.goals <= 0 || row.goals !== award[0].goals)) return null;
   return (
-    <div className="space-y-0.5 text-foreground" data-cm-uel-award={award.length > 1 ? 'shared' : 'winner'}>
-      <p className="text-xs font-bold">{award.length > 1 ? 'Shared Europa League Golden Boot' : 'Europa League Golden Boot'}</p>
+    <div className="space-y-0.5 text-foreground" {...{ ['data-cm-' + scope + '-award']: award.length > 1 ? 'shared' : 'winner' }}>
+      <p className="text-xs font-bold">{award.length > 1 ? 'Shared ' : ''}{competition} Golden Boot</p>
       {award.map((row, index) => (
         <p key={index} className="text-xs break-words">
           <Name name={row.name} flags={(row.generated ? 1 : 0) | (row.club === myClub ? 2 : 0)} />

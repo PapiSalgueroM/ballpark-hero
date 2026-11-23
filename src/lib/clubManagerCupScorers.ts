@@ -1,4 +1,4 @@
-export type EuropaScorerCredit = {
+export type CupScorerCredit = {
   id: string;
   name: string;
   club: string;
@@ -7,15 +7,16 @@ export type EuropaScorerCredit = {
 
 type PlayerRow = [id: string, name: string, club: string, goals: number, generated?: true];
 
-export interface EuropaScorerLedger {
+export interface CupScorerLedger {
   v: 1;
+  /** Retain the stored field name for Europa League saves. Domestic cups count rounds here. */
   nights: number;
   unresolved: number;
   ownGoals: number;
   players: PlayerRow[];
 }
 
-export interface EuropaScorerRow {
+export interface CupScorerRow {
   id: string;
   name: string;
   club: string;
@@ -23,10 +24,12 @@ export interface EuropaScorerRow {
   generated?: true;
 }
 
-export interface EuropaScorerRace {
+export type CupScorerWinner = Pick<CupScorerRow, 'name' | 'club' | 'goals' | 'generated'>;
+
+export interface CupScorerRace {
   status: 'ahead' | 'racing' | 'winner' | 'shared' | 'undecided' | 'no-goals' | 'unavailable';
-  rows: EuropaScorerRow[];
-  leaders: EuropaScorerRow[];
+  rows: CupScorerRow[];
+  leaders: CupScorerRow[];
   unresolved: number;
   ownGoals: number;
 }
@@ -35,9 +38,9 @@ const count = (value: unknown): value is number => typeof value === 'number' && 
 const label = (value: unknown): value is string => typeof value === 'string' && value.trim().length > 0;
 const byText = (a: string, b: string) => a < b ? -1 : a > b ? 1 : 0;
 
-export function isEuropaScorerLedger(value: unknown): value is EuropaScorerLedger {
+export function isCupScorerLedger(value: unknown): value is CupScorerLedger {
   if (!value || typeof value !== 'object') return false;
-  const ledger = value as Partial<EuropaScorerLedger>;
+  const ledger = value as Partial<CupScorerLedger>;
   if (ledger.v !== 1 || !count(ledger.nights) || !count(ledger.unresolved) || !count(ledger.ownGoals)
     || !Array.isArray(ledger.players)) return false;
   if (ledger.nights === 0 && (ledger.players.length || ledger.unresolved || ledger.ownGoals)) return false;
@@ -51,17 +54,17 @@ export function isEuropaScorerLedger(value: unknown): value is EuropaScorerLedge
   return true;
 }
 
-export function newEuropaScorerLedger(): EuropaScorerLedger {
+export function newCupScorerLedger(): CupScorerLedger {
   return { v: 1, nights: 0, unresolved: 0, ownGoals: 0, players: [] };
 }
 
-/** Settle exactly one complete night. Repeating a write or leaving a gap changes nothing. */
-export function recordEuropaScorerNight(
-  ledger: EuropaScorerLedger,
-  night: number,
-  credits: readonly EuropaScorerCredit[],
-): EuropaScorerLedger {
-  if (night !== ledger.nights) return ledger;
+/** Settle exactly one complete round. Repeating a write or leaving a gap changes nothing. */
+export function recordCupScorerRound(
+  ledger: CupScorerLedger,
+  round: number,
+  credits: readonly CupScorerCredit[],
+): CupScorerLedger {
+  if (round !== ledger.nights) return ledger;
   const players = new Map(ledger.players.map(row => [row[0], row]));
   let { unresolved, ownGoals } = ledger;
   for (const credit of credits) {
@@ -76,18 +79,18 @@ export function recordEuropaScorerNight(
       players.set(credit.id, next);
     }
   }
-  return { v: 1, nights: night + 1, unresolved, ownGoals, players: [...players.values()] };
+  return { v: 1, nights: round + 1, unresolved, ownGoals, players: [...players.values()] };
 }
 
-export function europaScorerRace(saved: unknown, nightsDone: number, done: boolean): EuropaScorerRace {
-  if (!isEuropaScorerLedger(saved)) {
-    return { status: !done && nightsDone === 0 ? 'ahead' : 'unavailable', rows: [], leaders: [], unresolved: 0, ownGoals: 0 };
+export function cupScorerRace(saved: unknown, roundsDone: number, done: boolean): CupScorerRace {
+  if (!isCupScorerLedger(saved)) {
+    return { status: !done && roundsDone === 0 ? 'ahead' : 'unavailable', rows: [], leaders: [], unresolved: 0, ownGoals: 0 };
   }
   const rows = saved.players.map(([id, name, club, goals, generated]) => ({ id, name, club, goals, generated }));
   rows.sort((a, b) => b.goals - a.goals || byText(a.name, b.name) || byText(a.club, b.club) || byText(a.id, b.id));
   const race = { rows, leaders: [], unresolved: saved.unresolved, ownGoals: saved.ownGoals };
-  if (saved.nights !== nightsDone) return { ...race, status: 'unavailable' };
-  if (!done) return { ...race, status: nightsDone ? 'racing' : 'ahead' };
+  if (saved.nights !== roundsDone) return { ...race, status: 'unavailable' };
+  if (!done) return { ...race, status: roundsDone ? 'racing' : 'ahead' };
   if (!rows.length) return { ...race, status: saved.unresolved ? 'undecided' : 'no-goals' };
 
   const leaders = rows.filter(row => row.goals === rows[0].goals);
