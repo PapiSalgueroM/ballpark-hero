@@ -6,7 +6,7 @@ import type { WorldXiData, WxPlayer } from '@/lib/worldXi';
 import type { Position } from '@/types/game';
 import { selectWorldXiNationPool } from '@/lib/worldXiNationPools';
 
-// Every player and club in this file is fictional.
+// Generic pool fixtures are fictional. The Jordan cases use the two existing market rows.
 function rows(country: string): WxPlayer[] {
   const positions: Position[] = ['GK', 'CB', 'RB', 'LB', 'CDM', 'CM', 'CAM', 'RM', 'LM', 'RW', 'LW', 'ST', 'CF', 'LWB', 'RWB'];
   return positions.map((position, index) => ({
@@ -80,6 +80,39 @@ describe('World XI nation pools', () => {
     ];
     expect([...selected.countries].sort()).toEqual([...expected].sort());
     expect(selected.players).toBe(data.players);
+  });
+
+  it('finds the existing Jordan winger by his club and tournament spellings', () => {
+    const winger: WxPlayer = {
+      name: 'Mousa Tamari', country: 'Jordan', position: 'RW', club: 'Stade Rennais FC', age: 28, value: 9_000_000,
+    };
+    const data = pool([['Jordan', [winger]]]);
+    for (const mode of ['expanded', '2026'] as const) {
+      const selected = selectWorldXiNationPool(data, mode);
+      expect(suggestCountryPlayers(selected, 'Jordan', 'Mousa Tamari')).toEqual([winger]);
+      for (const query of ['Mousa Al-Tamari', 'Musa Al-Taamari', 'Mousa Al-Taamari', 'Mousa Al Tamari']) {
+        const suggestions = suggestCountryPlayers(selected, 'Jordan', query);
+        expect(suggestions).toHaveLength(1);
+        expect(suggestions[0]).toBe(winger);
+      }
+      expect(fitsSlot(winger, { label: 'RW', allowed: ['RW'], x: 0, y: 0 })).toBe(true);
+      expect(fitsSlot(winger, { label: 'GK', allowed: ['GK'], x: 0, y: 0 })).toBe(false);
+      expect(suggestCountryPlayers(selected, 'Jordan', 'Musa Al-Taamari', new Set([winger.name]))).toEqual([]);
+      expect(suggestCountryPlayers(selected, 'France', 'Musa Al-Taamari')).toEqual([]);
+    }
+  });
+
+  it('keeps the alias off a different row and leaves ordinary search order intact', () => {
+    const winger: WxPlayer = {
+      name: 'Mousa Tamari', country: 'Jordan', position: 'RW', club: 'Montpellier HSC', age: 27, value: 6_000_000,
+    };
+    const namesake: WxPlayer = { ...winger, club: 'Fictional Oak Club', value: 7_000_000 };
+    const keeper: WxPlayer = { ...winger, position: 'GK', value: 6_500_000 };
+    const other: WxPlayer = { ...winger, name: 'Musa Fixture', club: 'Fictional Elm Club', value: 5_000_000 };
+    const data = selectWorldXiNationPool(pool([['Jordan', [winger, namesake, keeper, other]]]), '2026');
+    expect(suggestCountryPlayers(data, 'Jordan', 'Mousa')).toEqual([namesake, keeper, winger]);
+    expect(suggestCountryPlayers(data, 'Jordan', 'Musa Al-Taamari')).toEqual([winger]);
+    expect(suggestCountryPlayers(data, 'Jordan', 'Musa')).toEqual([other, winger]);
   });
 
   it('merges only the five known aliases and keeps North Korea and Congo separate', () => {

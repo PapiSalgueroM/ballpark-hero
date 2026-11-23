@@ -138,6 +138,49 @@ async function emptyStriker(noAlternative: boolean) {
 }
 
 describe('World XI stored spelling and unused-answer recovery', () => {
+  it('accepts both verified namesake pairs in one actual 2026 lineup', async () => {
+    const pool = fixture();
+    const real = [
+      row('Alan Franco', 'Argentina', 'CB', 'São Paulo Futebol Clube', 5_000_000),
+      row('Alan Franco', 'Ecuador', 'CM', 'Clube Atlético Mineiro', 5_000_000),
+      row('José Luis Rodríguez', 'Panama', 'LW', 'FC Juárez', 2_000_000),
+      row('José Luis Rodríguez', 'Uruguay', 'RB', 'Clube de Regatas Vasco da Gama', 2_000_000),
+    ];
+    const fillers = ([['France', 'GK'], ['Germany', 'CB'], ['Japan', 'LB'], ['England', 'CM'], ['Mexico', 'CM'], ['Portugal', 'RW'], ['Spain', 'ST']] as const)
+      .map(([country, position]) => row(`Fixture ${country} Player`, country, position, country === 'France' ? real[1].club : `Fixture ${country} Club`));
+    const field = [...real, ...fillers];
+    for (const player of field) pool.byCountry.set(player.country, [player]);
+    pool.players.push(...field);
+
+    const view = await mount(pool);
+    fireEvent.click(view.getByRole('button', { name: /^2026 Nations/ }));
+    fireEvent.click(view.getByRole('button', { name: /Draw my 11 nations/ }));
+
+    for (let index = 0; index < field.length; index++) {
+      const current = prompt(view);
+      const player = field.find(candidate => candidate.country === current.country);
+      expect(player).toBeDefined();
+      expect(view.queryByText('1 unused player name fits this slot.'), current.country).toBeVisible();
+      pick(view, player!);
+    }
+    expect(view.getByText('World XI complete!')).toBeVisible();
+    for (const player of real) {
+      expect(view.getAllByText(player.club, { exact: true }).length).toBeGreaterThan(0);
+    }
+    expect(H.record.mock.calls).toEqual([['/world-xi', 11, 'Fixture Recovery Tester']]);
+    fireEvent.click(view.getByRole('button', { name: /Club chemistry: 1 link/ }));
+    const link = view.getByRole('region', { name: 'Club chemistry details' }).querySelector('li');
+    expect(link).toHaveTextContent('Alan Franco (Ecuador)');
+    expect(link).toHaveTextContent('Clube Atlético Mineiro');
+    fireEvent.click(view.getByRole('button', { name: /Simulate Season/ }));
+    fireEvent.click(view.getByRole('button', { name: 'Player stats' }));
+    for (const player of real) {
+      const label = `${player.name} (${player.country})`;
+      expect(view.getByText(label, { exact: true })).toBeVisible();
+      expect(view.getByLabelText(`Overall for ${label}`)).toBeVisible();
+    }
+  });
+
   it('WX_CURACAO: includes the literal stored spelling without rewriting players or identities', () => {
     const players = Array.from({ length: 8 }, (_, index) => row('Fixture Curacao Player ' + index, 'Curacao', POSITIONS[index], 'Fixture Curacao Club ' + index));
     const data: WorldXiData = { players, countries: ['Curacao'], byCountry: new Map([['Curacao', players]]) };

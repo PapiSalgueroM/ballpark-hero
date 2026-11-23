@@ -2,7 +2,15 @@
 
 An improved bid stays on the table after a match while the transfer window is open. You can accept the final price under the usual squad and deadline rules.
 
-The new regression failed on 4f2468b. Against Build Your XI main d2d4ccad, all 78 focused tests, application types, the production build and all 15 built-site checks passed. Chromium at 320 and 390 pixels kept the same £53m offer for Eberechi Eze after a match, credited the full fee on acceptance and kept the sale after reload.
+The new regression failed on 4f2468b. Against World XI main cb31d84, all 78 focused tests, application types, the production build and all 15 built-site checks passed. Chromium at 320 and 390 pixels kept the same £53m offer for Eberechi Eze after a match, credited the full fee on acceptance and kept the sale after reload.
+
+## 2026-11-23, World XI roster dates and Kimmich's position
+
+World XI keeps verified namesakes distinct, restores two eligible cards missed by the snapshot matching rules and removes four exact stale records. Rafinha's 2024/25 Brazil card uses Without Club. A shared Without Club or Retired label earns no club chemistry. The Argentina archive still accepts Marcos Acuña only in eligible roles.
+
+The same 17 recorded responses produced 7,069 cards before and 7,067 after. All 99 formation slots retained their eligible country sets in each of three presets. Four copied data faults fired. Chromium at 320 and 390 pixels completed a lineup with both Rafinhas and checked Acuña eligibility. The roster evidence is listed beside the exact source rows.
+
+Joshua Kimmich's Bayern role history also allows him at right-back in Build Your XI even when the curated secondary position response is empty. The targeted hook test reproduced the refused pick before the fix. [Bayern match report](https://fcbayern.com/en/news/matchreports/2020/08/match-report-champions-league-r16-fc-bayern-vs-chelsea), [UEFA match record](https://www.uefa.com/newsfiles/UCL/2020/2027132_LU.pdf).
 
 ## 2026-11-23, Build Your XI historical club picks
 
