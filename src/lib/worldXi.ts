@@ -6,6 +6,7 @@ import { rng, winProbability } from '@/lib/perfectSeason';
 import { ALL_POSITIONS, allowedLabelFor, eligiblePositions, fitsAllowed, slotAllowedPositions } from '@/lib/positionFit';
 import type { XiFitAdjust } from '@/lib/xiFit';
 import { verifiedPositionFallback } from '@/data/verifiedSoccerPositions';
+import { WORLD_XI_CROSS_SNAPSHOT_NAMESAKES } from '@/data/worldXiVerifiedNamesakes';
 
 /**
  * World XI (build an XI, one slot at a time)
@@ -17,7 +18,7 @@ import { verifiedPositionFallback } from '@/data/verifiedSoccerPositions';
  *   - Every positive-value row from the 2026 and 2025 snapshots, paged 1000
  *     at a time by id. Both snapshots must load completely within their bounds.
  *   - Deduped by player name keeping the newest year (value breaks ties),
- *     with same-year rows at different clubs kept apart as namesakes.
+ *     with distinct club records in one year and verified namesakes across years retained.
  *   - Positions mapped through normalizePosition, primary nationality only.
  *     Club, age and value stay those of the stored row, including older rows.
  *
@@ -55,6 +56,12 @@ export interface WorldXiData {
   players: WxPlayer[];
   byCountry: Map<string, WxPlayer[]>; // value-sorted per country
   countries: string[]; // qualifying countries, alphabetical
+}
+
+export function worldXiPlayerKey({ name, country, position }: WxPlayer): string {
+  const separate = WORLD_XI_CROSS_SNAPSHOT_NAMESAKES.some(pair =>
+    pair.name === name && pair.earlier.country === country && pair.earlier.position === position);
+  return separate ? `${name}|${country}` : name;
 }
 
 export interface TimerMode {
@@ -287,15 +294,16 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
        two rows sharing a name in the SAME year at DIFFERENT clubs are two
        people (PSG's Vitinha, a defensive mid, and Genoa's Vitinha, a centre
        forward, both in 2026). They are kept apart by club instead of the
-       more valuable one swallowing the other. Across years a name is still
-       one career, exactly as before. */
+       more valuable one swallowing the other. Verified cross-year namesakes
+       get separate keys, each retaining the newest dated row for that player. */
     const byName = new Map<string, { year: number; byClub: Map<string, WxPlayer> }>();
     for (const r of rows) {
       const rowPlayer = playerFromPoolRow(r);
       if (!rowPlayer) continue;
       const { name, position, value, club } = rowPlayer;
+      const key = worldXiPlayerKey(rowPlayer);
       const year = Number(r.year) || 0;
-      const prev = byName.get(name);
+      const prev = byName.get(key);
       const sameClub = prev && year === prev.year ? prev.byClub.get(club) : undefined;
       if (!prev || year > prev.year || (year === prev.year && (!sameClub || value > sameClub.value))) {
         /* Identity guard: the curated history belongs to the human whose
@@ -313,7 +321,7 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
           ...(played.some(p => p !== position) ? { positionsPlayed: played } : {}),
         };
         if (prev && year === prev.year) prev.byClub.set(club, player);
-        else byName.set(name, { year, byClub: new Map([[club, player]]) });
+        else byName.set(key, { year, byClub: new Map([[club, player]]) });
       }
     }
 
@@ -443,7 +451,7 @@ export function suggestCountryPlayers(
   const tamariAlias = country === 'Jordan'
     && ['mousa al tamari', 'musa al taamari', 'mousa al taamari'].some(name => name.includes(aliasQuery));
   for (const p of list) {
-    if (exclude && exclude.has(p.name)) continue;
+    if (exclude?.has(worldXiPlayerKey(p))) continue;
     const n = normalizeName(p.name);
     if (!n.includes(q)) {
       if (tamariAlias && p.name === 'Mousa Tamari' && p.country === 'Jordan' && p.position === 'RW'

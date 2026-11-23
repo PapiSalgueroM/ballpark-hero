@@ -136,6 +136,7 @@
  *     reposition      the subject served at central midfield, no later check    cdm
  *   section 4:
  *     namesake        the Round 669 same year keying by club undone in worldXi  namesake
+ *     crossnamesake   the verified cross-snapshot identity key is dropped      crossnamesake
  *     dupname         a second 2026 row of the subject, at another club, served  declared
  * POSITIVE CONTROLS prove a rule lets through what it must, so the pins above
  * can be lived with. Each must leave every section green AND show that its
@@ -183,7 +184,7 @@ const CONTROLS = {
   moved: [2, ['moved']], recountry: [2, ['differs']],
   latestale: [2, ['laterentry']], latefuture: [2, ['laterentry']], lateonehost: [2, ['laterentry']], lateorphan: [2, ['laterentry']],
   normalize: [3, ['cdm']], cmslot: [3, ['slots']], reposition: [3, ['cdm']],
-  namesake: [4, ['namesake']], dupname: [4, ['declared']],
+  namesake: [4, ['namesake']], crossnamesake: [4, ['crossnamesake']], dupname: [4, ['declared']],
 };
 /* the one later check rule each laterentry control breaks: it must be the only
    rule that fires, or the control proves some other rule and not its own */
@@ -726,7 +727,7 @@ const MOVES_SUBJECT = CONTROL === 'moved' || CONTROL === 'movedsourced';
 const RECOUNTRIES_SUBJECT = CONTROL === 'recountry' || CONTROL === 'recountrysourced';
 const REPOSITIONS_SUBJECT = CONTROL === 'reposition' || CONTROL === 'repositionsourced';
 globalThis.fetch = async (input, init) => {
-  const url = new URL(typeof input === 'string' ? input : input.url);
+  const url = input instanceof URL ? input : new URL(typeof input === 'string' ? input : input.url);
   if (!url.pathname.endsWith('/rest/v1/player_market_values')) return realFetch(input, init);
   const is2026 = url.searchParams.get('year') === 'eq.2026';
   const off = Number(url.searchParams.get('offset') || 0);
@@ -797,6 +798,9 @@ if (CONTROL === 'namesake') {
     ['new Map([[club, player]])', "new Map([['', player]])"],
   ]);
 }
+if (CONTROL === 'crossnamesake') {
+  swapSource('src/lib/worldXi.ts', [['const key = worldXiPlayerKey(rowPlayer);', 'const key = name;']]);
+}
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simWxiDm-'));
 const ENTRY = path.join(TMP, 'entry.mjs');
 const BUNDLE = path.join(TMP, 'bundle.mjs');
@@ -804,7 +808,8 @@ fs.writeFileSync(ENTRY, [
   'globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };',
   `const w = await import('${ROOT.replaceAll('\\', '/')}/src/lib/worldXi.ts');`,
   `const s = await import('${ROOT.replaceAll('\\', '/')}/src/lib/squadDeal.ts');`,
-  'export const { fetchWorldXiPool, fitsSlot, suggestCountryPlayers, primaryCountry } = w;',
+  'export const { fetchWorldXiPool, fitsSlot, suggestCountryPlayers, primaryCountry, worldXiPlayerKey } = w;',
+  `export { WORLD_XI_CROSS_SNAPSHOT_NAMESAKES } from '${ROOT.replaceAll('\\', '/')}/src/data/worldXiVerifiedNamesakes.ts';`,
   'export const { FORMATIONS, normalizePosition } = s;',
 ].join('\n'));
 let swapped = 0;
@@ -824,7 +829,7 @@ await build({
   }],
 });
 if (swaps.size && swapped !== swaps.size) refuse(`${swaps.size} source swaps prepared, ${swapped} reached the bundle`);
-const { fetchWorldXiPool, fitsSlot, suggestCountryPlayers, primaryCountry, normalizePosition, FORMATIONS } = await import(pathToFileURL(BUNDLE).href);
+const { fetchWorldXiPool, fitsSlot, suggestCountryPlayers, primaryCountry, worldXiPlayerKey, WORLD_XI_CROSS_SNAPSHOT_NAMESAKES, normalizePosition, FORMATIONS } = await import(pathToFileURL(BUNDLE).href);
 const data = await fetchWorldXiPool();
 fs.rmSync(TMP, { recursive: true, force: true });
 if (!data) {
@@ -1056,6 +1061,23 @@ console.log('\n4) namesakes stay two people, and every name in the pool twice is
     clubsOf.get(p.name).push(p.club);
   }
   const declared = new Map(NAMESAKES.map(([name, a, b]) => [name, [expectedOf(name, a).club, expectedOf(name, b).club].sort().join(' and ')]));
+  for (const { name, earlier, other } of WORLD_XI_CROSS_SNAPSHOT_NAMESAKES) {
+    const find = ({ country, club, position }) => (data.byCountry.get(country) ?? [])
+      .find(player => player.name === name && player.club === club && player.position === position);
+    const a = find(earlier);
+    const b = find(other);
+    declared.set(name, [earlier.club, other.club].sort().join(' and '));
+    if (!a || !b) {
+      fail('crossnamesake', `${name}: missing ${!a ? earlier.country : other.country}'s verified card`);
+      continue;
+    }
+    for (const [player, picked] of [[a, b], [b, a]]) {
+      if (!suggestCountryPlayers(data, player.country, name, new Set([worldXiPlayerKey(picked)])).includes(player)) {
+        fail('crossnamesake', `${name}: choosing ${picked.country}'s player blocked the ${player.country} pick`);
+      }
+    }
+    console.log(`   ${name}: ${a.country} (${a.club}) and ${b.country} (${b.club})`);
+  }
   let twice = 0;
   for (const [name, clubs] of clubsOf) {
     if (clubs.length < 2) continue;

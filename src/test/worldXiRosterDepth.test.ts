@@ -128,6 +128,57 @@ describe('World XI recent snapshot depth', () => {
     expect(data!.players.filter(player => player.name === 'Fixture shared name').map(player => player.club).sort()).toEqual(['Fixture North', 'Fixture South']);
   });
 
+  it('keeps verified cross-country namesakes from both dated snapshots', async () => {
+    // Exact market rows 24289, 162897, 100079 and 46020. The two extra rows are controls.
+    H.current.push(
+      row(162897, 'Alan Franco', 2026, { nationality: 'Ecuador', position: 'Central Midfield', club: 'Clube Atlético Mineiro', age: 27 }),
+      row(46020, 'José Luis Rodríguez', 2026, { nationality: 'Uruguay', position: 'Right-Back', club: 'Clube de Regatas Vasco da Gama', market_value_usd: 2_000_000, age: 28 }),
+    );
+    H.previous = [
+      row(24289, 'Alan Franco', 2025, { nationality: 'Argentina', club: 'São Paulo Futebol Clube', age: 28 }),
+      row(100079, 'José Luis Rodríguez', 2025, { nationality: 'Panama', position: 'Left Winger', club: 'FC Juárez', market_value_usd: 2_000_000, age: 26 }),
+      row(200_001, 'Alan Franco', 2025, { nationality: 'Argentina', position: 'Goalkeeper', market_value_usd: 90_000_000 }),
+      row(200_002, 'José Luis Rodríguez', 2025, { nationality: 'Fixture Other Country', position: 'Left Winger', market_value_usd: 90_000_000 }),
+    ];
+    const data = await fetchWorldXiPool();
+    expect(data).not.toBeNull();
+    for (const [name, country, position, club, value, age] of [
+      ['Alan Franco', 'Argentina', 'CB', 'São Paulo Futebol Clube', 5_000_000, 28],
+      ['Alan Franco', 'Ecuador', 'CM', 'Clube Atlético Mineiro', 5_000_000, 27],
+      ['José Luis Rodríguez', 'Panama', 'LW', 'FC Juárez', 2_000_000, 26],
+      ['José Luis Rodríguez', 'Uruguay', 'RB', 'Clube de Regatas Vasco da Gama', 2_000_000, 28],
+    ] as const) {
+      const found = suggestCountryPlayers(data!, country, name);
+      expect(found, country).toHaveLength(1);
+      expect(found[0]).toMatchObject({ name, country, position, club, value, age });
+      expect(fitsSlot(found[0], { label: position, allowed: [position], x: 50, y: 50 })).toBe(true);
+      expect(fitsSlot(found[0], { label: 'GK', allowed: ['GK'], x: 50, y: 50 })).toBe(false);
+    }
+    expect(suggestCountryPlayers(data!, 'Fixture Other Country', 'José Luis Rodríguez')).toEqual([]);
+  });
+
+  it('keeps one card for a verified namesake when the same identity has two dated rows', async () => {
+    // Synthetic newer update to the existing 2025 Argentina identity.
+    H.current.push(
+      row(200_001, 'Alan Franco', 2026, { nationality: 'Argentina', club: 'Fixture Later Club', age: 29 }),
+      row(162897, 'Alan Franco', 2026, { nationality: 'Ecuador', position: 'Central Midfield', club: 'Clube Atlético Mineiro', age: 27 }),
+    );
+    H.previous = [row(24289, 'Alan Franco', 2025, { nationality: 'Argentina', club: 'São Paulo Futebol Clube', age: 28, market_value_usd: 90_000_000 })];
+    const data = await fetchWorldXiPool();
+    expect(data).not.toBeNull();
+    expect(suggestCountryPlayers(data!, 'Argentina', 'Alan Franco')).toEqual([
+      expect.objectContaining({ club: 'Fixture Later Club', age: 29, value: 5_000_000, position: 'CB' }),
+    ]);
+    expect(suggestCountryPlayers(data!, 'Ecuador', 'Alan Franco')).toHaveLength(1);
+  });
+
+  it('keeps original newest-name deduplication for an unverified country change', async () => {
+    H.current.push(row(200_001, 'Fixture Dual National', 2026, { nationality: 'Fixture New Nation' }));
+    H.previous.push(row(200_002, 'Fixture Dual National', 2025, { nationality: 'Fixture Old Nation' }));
+    const data = await fetchWorldXiPool();
+    expect(data?.players.filter(player => player.name === 'Fixture Dual National').map(player => player.country)).toEqual(['Fixture New Nation']);
+  });
+
   it('rejects a failed current-snapshot page instead of silently using the other pages', async () => {
     H.fault = { year: 2026, from: 1000, kind: 'error' };
     expect(await fetchWorldXiPool()).toBeNull();
