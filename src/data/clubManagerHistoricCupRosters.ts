@@ -36,7 +36,41 @@ const ROSENBORG_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
   { name: 'Thorstein Helstad', line: 'ATT' },
 ];
 
+// Partial Olympiacos first-team roster at the August 2005 opening.
+// Sources and cutoff are recorded in docs/audits/club-manager-olympiacos-fenerbahce-2005-rosters.md.
+const OLYMPIACOS_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
+  { name: 'Antonios Nikopolidis', line: 'GK' },
+  { name: 'Dimitrios Mavrogenidis', line: 'DEF' },
+  { name: 'Georgios Anatolakis', line: 'DEF' },
+  { name: 'Michalis Kapsis', line: 'DEF' },
+  { name: 'Erol Bulut', line: 'DEF' },
+  { name: 'Ieroklis Stoltidis', line: 'MID' },
+  { name: 'Predrag Djordjević', line: 'MID' },
+  { name: 'Yaya Touré', line: 'MID' },
+  { name: 'Ioannis Okkas', line: 'ATT' },
+  { name: 'Michalis Konstantinou', line: 'ATT' },
+  { name: 'Dani García', line: 'ATT' },
+];
+
+// Partial Fenerbahçe first-team roster at the August 2005 opening.
+// Sources and cutoff are recorded in docs/audits/club-manager-olympiacos-fenerbahce-2005-rosters.md.
+const FENERBAHCE_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
+  { name: 'Volkan Demirel', line: 'GK' },
+  { name: 'Fábio Luciano', line: 'DEF' },
+  { name: 'Ümit Özat', line: 'DEF' },
+  { name: 'Önder Turacı', line: 'DEF' },
+  { name: 'Deniz Barış', line: 'DEF' },
+  { name: 'Stephen Appiah', line: 'MID' },
+  { name: 'Marco Aurélio', line: 'MID' },
+  { name: 'Alex de Souza', line: 'MID' },
+  { name: 'Tuncay Şanlı', line: 'ATT' },
+  { name: 'Márcio Nobre', line: 'ATT' },
+  { name: 'Nicolas Anelka', line: 'ATT' },
+];
+
 export const HISTORIC_2005_CUP_ROSTERS: ReadonlyMap<string, readonly HistoricCupRosterPlayer[]> = new Map([
   ['Ajax', AJAX_2005_CUP_ROSTER],
   ['Rosenborg', ROSENBORG_2005_CUP_ROSTER],
+  ['Olympiacos', OLYMPIACOS_2005_CUP_ROSTER],
+  ['Fenerbahçe', FENERBAHCE_2005_CUP_ROSTER],
 ]);

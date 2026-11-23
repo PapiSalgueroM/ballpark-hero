@@ -1,3 +1,11 @@
+## 2026-11-23, Club Manager 2005-06 Olympiacos and Fenerbahçe scorer coverage
+
+Two verified 11-player opening pools extend newly played background cup scoring in 2005-06. The source audit records club membership, roles, and dated transfer cutoffs. [Olympiacos and Fenerbahçe roster sources](audits/club-manager-olympiacos-fenerbahce-2005-rosters.md)
+
+The historical replay now covers 19 Ajax, 17 Rosenborg, 14 Olympiacos, and 13 Fenerbahçe goals. The 125-match campaign still reconciles to 335 total goals. A saved matchday checks Olympiacos at home to Inter and Fenerbahçe away at Barcelona in one Quick Sim, including exact reopen behavior for the pending and already-settled saves.
+
+CM-03 remains partial. Four of the 15 missing outside-league squads in the original replay now have verified opening pools. Rosenborg’s release was published in PR #1062 and passed all four published browser checks.
+
 ## 2026-11-23, Club Manager 2005-06 Rosenborg scorer coverage
 
 Eleven players from Rosenborg’s verified opening squad now supply names and broad roles for newly played background cup matches in 2005-06. The existing scoring model uses the game’s club strength for those roles. The squad sources establish membership by the July 31 match and exclude the later return of Steffen Iversen. [Rosenborg roster sources](audits/club-manager-rosenborg-2005-roster.md)

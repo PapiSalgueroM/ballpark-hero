@@ -317,7 +317,7 @@ describe('Owned Champions League scorer settlement', () => {
     expect(tape(MADRID + 0xa01, () => finishSeason(old!)).value.summary.uclScorerAward).toBeUndefined();
   });
 
-  it('credits verified Ajax and Rosenborg goals in the 2005 opening campaign', async () => {
+  it('credits verified background squads in the 2005 opening campaign', async () => {
     await ensureEraRosters('era2005');
     const madrid = tape(MADRID, () => startCareer('Real Madrid', 'era2005')).value;
     const before = playTo(madrid, MADRID, 55).state;
@@ -334,13 +334,15 @@ describe('Owned Champions League scorer settlement', () => {
     const goalsForClub = (state: CareerState, club: string) => state.uclScorers!.players
       .filter(row => row[2] === club).reduce((sum, row) => sum + row[3], 0);
     expect(goalsForClub(final.state, 'Ajax') - goalsForClub(before, 'Ajax')).toBe(2);
-    for (const [club, count, winterSigning] of [
+    for (const [club, count, laterArrival] of [
       ['Ajax', 19, 'Klaas-Jan Huntelaar'],
       ['Rosenborg', 17, 'Steffen Iversen'],
+      ['Olympiacos', 14, 'Michał Żewłakow'],
+      ['Fenerbahçe', 13, 'Zafer Biryol'],
     ] as const) {
       expect(goalsForClub(final.state, club)).toBe(count);
       const roster = HISTORIC_2005_CUP_ROSTERS.get(club)!;
-      expect(roster.some(player => player.name === winterSigning)).toBe(false);
+      expect(roster.some(player => player.name === laterArrival)).toBe(false);
       const eligible = new Set(roster.filter(player => player.line !== 'GK').map(player => player.name));
       for (const [, name, recordedClub, , generated] of final.state.uclScorers!.players) {
         if (recordedClub !== club) continue;
