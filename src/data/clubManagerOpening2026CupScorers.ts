@@ -13,4 +13,16 @@ export const OPENING_2026_CUP_SCORERS: ReadonlyMap<string, readonly OpeningCupSc
     { name: 'Samuel Adeniran', line: 'ATT' },
     { name: 'Moses Usor', line: 'ATT' },
   ]],
+  ['Thun', [
+    { name: 'Jan Bamert', line: 'DEF' },
+    { name: 'Marco Bürki', line: 'DEF' },
+    { name: 'Nicolas Bürgy', line: 'DEF' },
+    { name: 'Lucien Dähler', line: 'DEF' },
+    { name: 'Justin Roth', line: 'MID' },
+    { name: 'Nico Maier', line: 'MID' },
+    { name: 'Nassim Zoukit', line: 'MID' },
+    { name: 'Nils Reichmuth', line: 'MID' },
+    { name: 'Brighton Labeau', line: 'ATT' },
+    { name: 'Marc Gutbub', line: 'ATT' },
+  ]],
 ]);
