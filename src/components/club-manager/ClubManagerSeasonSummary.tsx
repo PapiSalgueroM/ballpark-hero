@@ -7,7 +7,7 @@ import { dealAnswers, ExpiringDealsCheckpoint } from '@/components/club-manager/
 import { bookAwardsState, evalWorldUcl, expiringDeals, money, worldYear } from '@/lib/clubManager';
 import { BOOK_FULL_SHARE, type AwardMan } from '@/lib/clubManagerLeagueBoards';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
-import { ClubSeasonHonour, LeagueCoachHonour, LeagueKeeperShortlist, TeamLines } from '@/components/club-manager/SeasonHonoursCard';
+import { ClubSeasonHonour, EuropaScorerHonour, LeagueCoachHonour, LeagueKeeperShortlist, TeamLines } from '@/components/club-manager/SeasonHonoursCard';
 import { BallonDorShortlist } from '@/components/club-manager/BallonDorShortlist';
 import type { CareerState, SeasonSummary } from '@/lib/clubManager';
 import type { SeasonFate } from '@/lib/clubManagerBoardVerdict';
@@ -353,6 +353,7 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
                 <span className="shrink-0">🟠</span>Europa League: {sm.uelRun}
               </p>
             )}
+            <EuropaScorerHonour award={sm.uelScorerAward} myClub={c.clubName} />
             {c.clubWorldCup2025 && worldYear(c) === 2024 && (
               <details className="rounded-xl border border-border px-2">
                 <summary className="min-h-11 cursor-pointer py-3 text-xs font-semibold">2025 Club World Cup: {c.clubWorldCup2025.result}</summary>

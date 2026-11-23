@@ -48,6 +48,7 @@ import {
   type LeaguePhaseRow, type UclLeagueSlate,
 } from './uclLeaguePhase';
 import type { TableRow } from './clubManager';
+import type { EuropaScorerLedger } from './clubManagerEuropaScorers';
 
 /** Ledger rows this module could not stand on (the CM_PARTIAL shape): each is recorded, marked and unused. */
 export const WORLD_COMP_PARTIAL: readonly string[] = ['G2-2005', 'G2-2010', 'G4-early', 'G5-2015-ko', 'G5-2020-ko', 'G8'];
@@ -128,6 +129,8 @@ export interface WorldCompSlice {
   /** Round 1593: `me`'s own result of night n (the nightsOf index), in that fixture's orientation, home first,
    *  after any extra time. Read by the evaluation in place of the draw. */
   mine?: Record<number, NightResult>;
+  /** Scorers recorded as this manager's Europa League edition plays. */
+  scorers?: EuropaScorerLedger;
 }
 
 /** One night of the season, in order. */

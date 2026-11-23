@@ -1,10 +1,20 @@
+## 2026-11-23, Club Manager Europa League Golden Boot
+
+The Europa League Top scorers tile follows a competition your club entered, including the matches after elimination. It uses the actual scorer lines for managed matches and the existing keyed scorer allocation for settled background scores. Extra-time goals enter the race. Shootout kicks and own goals stay out of player totals. Named goals, own goals and unresolved goals always account for the score.
+
+The Golden Boot settles after the final. Named players can share a tie. An award stays unconfirmed if the unresolved goals could change the result. Confirmed winners stay in the season review and Stats → Past winners after rollover. Older score-only editions keep their results and show the scorer coverage gap.
+
+In the saved Betis replay, background nights continued after a quarter-final exit. A January transfer replay kept Antony's four Betis goals and one Real Sociedad goal in a single row. The controlled title replay credited the extra-time substitute and kept own goals out of the player totals. The old save and the current engine both finished the same matches.
+
+The report asking for the Golden Boot after elimination or a title win remains open for the other cups. The exact report never named a competition. Owned Champions League and the domestic bracket have separate match settlement paths.
+
 ## 2026-11-23, Build Your XI verified namesakes
 
 Build Your XI lets two verified people sharing a name play in the same lineup. The picker and both admission checks still block the same player across clubs and years. Mixed and recorded drafts keep using their existing save format. The season report distinguishes the two players, and Mixed evaluations use the selected market record when it can be verified. A national-team pick must be checked under that person's verified full name.
 
 With the old app, the exact Marseille Vitinha row appeared when picked alone but disappeared after PSG's Vitinha was picked, in both Mixed and Club Era at 320 and 390 pixels. The two Nico González records reproduced the same problem. The 32 phone cases passed both modes, reload, separate reports and ordinary duplicate controls. The previous evaluator counted four of five players and averaged $181M on the replay. The fix counts all five at $149M. The app and evaluator keep the two values separate when the model is unavailable. The national-team replay reproduced a short-name request for the forward after the PSG midfielder was picked. Verified Portugal senior appearances belong to the latter. [Identity and senior-team records](audits/soccer-grid-namesakes-2026-11-23.md)
 
-All 185 focused app tests passed. The offline evaluator passed 12 checks. Six national validator checks covered the old shared-name acceptance, true Portugal and Argentina senior records, unverified picks and a stale positive. All nine existing validator suites and both cached Deno checks passed. The existing position harness loaded its exact historical validator, passed 1,920 current requests and still caught all three copied faults.
+All 185 focused app tests passed. The offline evaluator passed 12 checks. Six national validator checks covered the old shared-name acceptance, true Portugal and Argentina senior records, unverified picks and a stale positive. All nine existing validator suites and both cached Deno checks passed. The existing position harness loaded its exact historical validator, passed 1,920 current requests and still caught all three copied faults. PR #1057 is live. All 38 published phone cases passed.
 
 The admin report asking to see a Golden Boot after elimination or a title win is for Club Manager. It does not name a competition. Tournament-wide awards remain open there. Soccer Career's separate European cup award passed its early-elimination and tie checks again.
 
