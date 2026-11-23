@@ -72,7 +72,8 @@ export const WRITERS = {
     roundHistory: 'written when the franchise has a round history',
     draftShortlist: 'written when the shortlist holds prospects',
   } },
-  '/aussie-rules-manager': { kind: 'whole', file: 'src/hooks/useAussieRulesLeague.ts' },
+  '/aussie-rules-manager': { kind: 'whole', file: 'src/hooks/useAussieRulesLeague.ts',
+    indirect: ['const bytes = next ? JSON.stringify(next) : null;', 'else localStorage.setItem(SAVE_KEY, bytes);'] },
   '/nrl-team-manager': { kind: 'whole', file: 'src/pages/NrlTeamManager.tsx', indirect: [
     'resolveContinueSave(NRL_SAVE_ENTRY, search)', 'const raw = JSON.stringify(next);',
     'writeNrlSaveSlot(entry.saveKey, committed.current, raw)',
