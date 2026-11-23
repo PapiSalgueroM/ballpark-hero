@@ -109,13 +109,11 @@ for (const c of cases) describe(`${c.sport} actual save recovery`, () => {
     const next = JSON.parse(localStorage.getItem(c.key)!);
     expect(next.phase).toBe('draft'); expect(next.league).toEqual(saved.league);
     expect(next.titles).toBe(2); expect(next.seasonsPlayed).toBe(3);
-    if (c.sport === 'NHL') {
-      expect(writes).toHaveBeenCalledTimes(2);
-      const [[backupKey], [activeKey]] = writes.mock.calls;
-      expect(backupKey.startsWith(c.key + '.broken-')).toBe(true);
-      expect(localStorage.getItem(backupKey) === raw).toBe(true);
-      expect(activeKey).toBe(c.key);
-    } else expect(writes).toHaveBeenCalledTimes(1);
+    expect(writes).toHaveBeenCalledTimes(2);
+    const [[backupKey], [activeKey]] = writes.mock.calls;
+    expect(backupKey.startsWith(c.key + '.broken-')).toBe(true);
+    expect(localStorage.getItem(backupKey) === raw).toBe(true);
+    expect(activeKey).toBe(c.key);
   });
   it('restores the saved postseason recap without replaying or replacing it', () => {
     const saved = save(c.sport, c.team); saved.phase = 'recap'; saved.league[c.period] = c.sport === 'NFL' ? 17 : 20;
