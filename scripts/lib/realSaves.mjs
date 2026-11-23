@@ -76,7 +76,7 @@ export const WRITERS = {
     indirect: ['const bytes = next ? JSON.stringify(next) : null;', 'else localStorage.setItem(SAVE_KEY, bytes);'] },
   '/nrl-team-manager': { kind: 'whole', file: 'src/pages/NrlTeamManager.tsx', indirect: [
     'resolveContinueSave(NRL_SAVE_ENTRY, search)', 'const raw = JSON.stringify(next);',
-    'writeNrlSaveSlot(entry.saveKey, committed.current, raw)',
+    'const before = committed.current;', 'writeNrlSaveSlot(entry.saveKey, before, raw)',
   ] },
   '/fight-career': { kind: 'literal', file: 'src/components/fight-career/FightCareerBoard.tsx', unset: { offerId: 'only set while a camp is being run for one fight (SaveShape, Round 916)' } },
   '/fight-promoter': { kind: 'literal', file: 'src/components/fight-promoter/FightPromoterBoard.tsx' },
