@@ -29,7 +29,7 @@ export const hockeyHLPlayers: HockeyHLPlayer[] = [
   { name: 'Nikita Kucherov', position: 'Forward', country: 'Russia', countryFlag: '🇷🇺', careerPoints: 1122, teams: 'Tampa Bay', lastSeason: '2025-26' },
   { name: 'Leon Draisaitl', position: 'Forward', country: 'Germany', countryFlag: '🇩🇪', careerPoints: 1053, teams: 'Edmonton', lastSeason: '2025-26' },
   { name: 'Cale Makar', position: 'Defense', country: 'Canada', countryFlag: '🇨🇦', careerPoints: 503, teams: 'Colorado', lastSeason: '2025-26' },
-  { name: 'Henrik Lundqvist', position: 'Goalie', country: 'Sweden', countryFlag: '🇸🇪', careerPoints: 46, teams: 'New York Rangers', lastSeason: 'unverified' },
+  { name: 'Henrik Lundqvist', position: 'Goalie', country: 'Sweden', countryFlag: '🇸🇪', careerPoints: 27, teams: 'New York Rangers', lastSeason: '2019-20' },
   { name: 'Mats Sundin', position: 'Forward', country: 'Sweden', countryFlag: '🇸🇪', careerPoints: 1349, teams: 'Quebec, Toronto, Vancouver', lastSeason: '2008-09' },
   { name: 'Teemu Selanne', position: 'Forward', country: 'Finland', countryFlag: '🇫🇮', careerPoints: 1457, teams: 'Winnipeg, Anaheim, San Jose, Colorado', lastSeason: '2013-14' },
   { name: 'Peter Forsberg', position: 'Forward', country: 'Sweden', countryFlag: '🇸🇪', careerPoints: 885, teams: 'Quebec, Colorado, Philadelphia, Nashville', lastSeason: '2010-11' },
@@ -54,5 +54,5 @@ export const hockeyHLPlayers: HockeyHLPlayer[] = [
   { name: 'Jason Robertson', position: 'Forward', country: 'United States', countryFlag: '🇺🇸', careerPoints: 486, teams: 'Dallas', lastSeason: '2025-26' },
   { name: 'Matthew Tkachuk', position: 'Forward', country: 'United States', countryFlag: '🇺🇸', careerPoints: 668, teams: 'Calgary, Florida', lastSeason: '2025-26' },
   { name: 'Brady Tkachuk', position: 'Forward', country: 'United States', countryFlag: '🇺🇸', careerPoints: 463, teams: 'Ottawa', lastSeason: '2025-26' },
-  { name: 'Igor Shesterkin', position: 'Goalie', country: 'Russia', countryFlag: '🇷🇺', careerPoints: 18, teams: 'New York Rangers', lastSeason: 'unverified' },
+  { name: 'Igor Shesterkin', position: 'Goalie', country: 'Russia', countryFlag: '🇷🇺', careerPoints: 3, teams: 'New York Rangers', lastSeason: '2025-26' },
 ];

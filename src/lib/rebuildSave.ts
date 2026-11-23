@@ -1,9 +1,11 @@
 import type { RebuildClub } from '@/lib/fetchRebuild';
+import { backupKeysOf, copyAside, dismissBackup, routeSaveEntry } from '@/lib/brokenSaveRecovery';
 import { CURRENT_DECK, type DeckVersion, type RebuildPreset } from '@/lib/rebuildDeck';
 import * as loop from '@/lib/rebuildLoop';
 import type { RunState } from '@/lib/rebuildLoop';
 import * as table from '@/lib/rebuildTable';
 import type { SeatKind, TableData, TablePhase, TableState } from '@/lib/rebuildTable';
+import { saveFence } from '@/lib/saveFence';
 
 /**
  * Rebuild Challenge: the run, kept across a refresh. Round 477.
@@ -243,19 +245,42 @@ export function toSave(session: RebuildSession, preset: RebuildPreset): RebuildS
   };
 }
 
-export function writeRebuildSave(save: RebuildSave): void {
-  try {
-    localStorage.setItem(REBUILD_SAVE_KEY, JSON.stringify(save));
-  } catch {
-    /* storage full or blocked: the run still plays, it just will not survive a refresh */
-  }
+function rawVersion(raw: string): unknown {
+  try { return JSON.parse(raw)?.v; } catch { return undefined; }
 }
 
-export function clearRebuildSave(): void {
+/** Replaces the bytes the page actually loaded or last wrote. Null is an explicit reset. */
+export function writeRebuildSave(save: RebuildSave | null, expected: string | null = null, preserve = false):
+  { outcome: 'written'; raw: string | null } | { outcome: 'moved' | 'failed' } {
+  let backupKey: string | undefined;
+  let sourceChanged = false;
+  const moved = () => localStorage.getItem(REBUILD_SAVE_KEY) !== expected || saveFence.moved(REBUILD_SAVE_KEY);
   try {
-    localStorage.removeItem(REBUILD_SAVE_KEY);
+    if (moved()) return { outcome: 'moved' };
+    const raw = save === null ? null : JSON.stringify(save);
+    if (raw === expected) return { outcome: 'written', raw };
+    if (expected !== null && save !== null && (preserve || rawVersion(expected) !== save.v)) {
+      const entry = routeSaveEntry('/rebuild')!;
+      backupKey = backupKeysOf(entry, localStorage).find(key => localStorage.getItem(key) === expected);
+      if (!backupKey) {
+        const copied = copyAside(entry, localStorage);
+        if (moved()) return { outcome: 'moved' };
+        if (!copied.ok || !copied.backupKey) return { outcome: 'failed' };
+        backupKey = copied.backupKey;
+        dismissBackup(entry, backupKey, localStorage);
+      }
+    }
+    const outcome = saveFence.write(REBUILD_SAVE_KEY, () => {
+      if (backupKey !== undefined && localStorage.getItem(backupKey) !== expected) return false;
+      if (localStorage.getItem(REBUILD_SAVE_KEY) !== expected) { sourceChanged = true; return false; }
+      if (raw === null) localStorage.removeItem(REBUILD_SAVE_KEY);
+      else localStorage.setItem(REBUILD_SAVE_KEY, raw);
+      return localStorage.getItem(REBUILD_SAVE_KEY) === raw;
+    }, backupKey !== undefined);
+    if (sourceChanged) return { outcome: 'moved' };
+    return outcome === 'written' ? { outcome, raw } : { outcome };
   } catch {
-    /* nothing to do */
+    return { outcome: 'failed' };
   }
 }
 
@@ -373,12 +398,16 @@ export function parseRebuildSave(raw: string | null): RebuildSave | null {
   return { v: REBUILD_SAVE_VERSION, salt: o.salt as number, preset: o.preset as RebuildPreset, phase: o.phase as TablePhase, turn, seats };
 }
 
-export function readRebuildSave(): RebuildSave | null {
+export function readRebuildSaveRaw(): string | null | undefined {
   try {
-    return parseRebuildSave(localStorage.getItem(REBUILD_SAVE_KEY));
+    return localStorage.getItem(REBUILD_SAVE_KEY);
   } catch {
-    return null;
+    return undefined;
   }
+}
+
+export function readRebuildSave(): RebuildSave | null {
+  return parseRebuildSave(readRebuildSaveRaw() ?? null);
 }
 
 /* ---------------- restoring ---------------- */

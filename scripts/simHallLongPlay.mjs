@@ -65,7 +65,7 @@
  *      1 (the 10 s gap paid as watched).
  *   3. 8 of 8 labels exact, the longest under 1e21 five characters ("1.6Qa").
  *      Control fmtstop: "90000000T" for the last AFL exhibit, five failures.
- *   4. 8 of 8 hook tests green: the glance paid x0.500000 of thirty watched
+ *   4. 16 of 16 hook tests green: the glance paid x0.500000 of thirty watched
  *      seconds with the meter at 30,000 ms, both notes x1.000000 of what the
  *      absence paid, the stamp 0 ms from the paid through time. hookfixed
  *      turns tests 2, 3, 6, 7 and 8 red; hooknocopy test 4; hooknote tests 3
@@ -137,8 +137,8 @@ const HOOK_CONTROLS = {
   },
   /* every save stamps the time it is written, not the time the museum was paid through */
   hookstampnow: {
-    from: '      try { localStorage.setItem(SAVE_KEY, serialize(s, lastTickRef.current)); } catch { /* storage full or blocked */ }',
-    to: '      try { localStorage.setItem(SAVE_KEY, serialize(s, Date.now())); } catch { /* storage full or blocked */ }',
+    from: '        localStorage.setItem(SAVE_KEY, (written = serialize(s, lastTickRef.current)));',
+    to: '        localStorage.setItem(SAVE_KEY, (written = serialize(s, Date.now())));',
   },
   /* the crash path's own control: a hook that does not compile must read CRASHED, exit 2 */
   hookcrash: {
@@ -146,8 +146,8 @@ const HOOK_CONTROLS = {
     to: 'export function useHallOfChampions() { const broken = ;',
   },
   hooknocopy: {
-    from: '          keepRefusedSave();\n',
-    to: '',
+    from: '            recoveryCopy.current = keepRefusedSave(raw);',
+    to: '            recoveryCopy.current = null;',
   },
   /* the load's note back to the closed part alone, the pre fix hook */
   hooknote: {
@@ -378,7 +378,7 @@ if (run(3)) {
 /* ------------------------------------------------------ 4: the real hook */
 /* Which tests each hook control must turn red; every other test must stay green. */
 const HOOK_RED = { hookfixed: [2, 3, 6, 7, 8], hooknocopy: [4], hooknote: [3, 7], hookvisible: [6], hookstampnow: [8] };
-const HOOK_TESTS = 8;
+const HOOK_TESTS = 16;
 function findUp(rel) {
   for (let dir = ROOT; ; dir = path.dirname(dir)) {
     const p = path.join(dir, rel);
