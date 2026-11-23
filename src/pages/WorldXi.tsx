@@ -18,11 +18,12 @@ import {
   WorldXiData,
   TimerMode,
   TIMER_MODES,
-  PARAGUAY,
-  fetchParaguayArchive,
+  WORLD_XI_ARCHIVES,
+  fetchWorldXiArchive,
   fetchWorldXiPool,
   drawCountries,
   suggestCountryPlayers,
+  worldXiPlayerKey,
   fitsSlot,
   allowedLabel,
   wrongPositionMessage,
@@ -43,7 +44,7 @@ import { SlotReel } from '@/components/world-xi/SlotReel';
 import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
 
 type Phase = 'boot' | 'error' | 'setup' | 'playing' | 'won' | 'lost';
-type ParaguayArchive = { status: 'loading' | 'unavailable' } | { status: 'loaded'; players: WxPlayer[] };
+type ArchiveState = { status: 'loading' | 'unavailable' } | { status: 'loaded'; players: WxPlayer[] };
 
 // Slot-machine reel durations. The reel decelerates like a real machine, so it
 // needs enough runway to read as a spin; timed modes get a shorter one so the
@@ -87,7 +88,7 @@ const WorldXi = () => {
   const [seasonReport, setSeasonReport] = useState<SeasonReport | null>(null);
   const [seasonApproach, setSeasonApproach] = useState<WorldXiSeasonApproach>('balanced');
   const [showClubChemistry, setShowClubChemistry] = useState(false);
-  const [paraguayArchive, setParaguayArchive] = useState<ParaguayArchive | null>(null);
+  const [archives, setArchives] = useState<Partial<Record<string, ArchiveState>>>({});
   const inputRef = useRef<HTMLInputElement>(null);
   const prevStepRef = useRef<number>(-1);
   const reducedMotionRef = useRef<boolean>(
@@ -121,14 +122,18 @@ const WorldXi = () => {
     boot();
   }, [boot]);
 
-  const hasParaguay = countries.includes(PARAGUAY);
   useEffect(() => {
-    if (!hasParaguay || paraguayArchive) return;
-    setParaguayArchive({ status: 'loading' });
-    void fetchParaguayArchive().then(players => setParaguayArchive(
-      players ? { status: 'loaded', players } : { status: 'unavailable' },
-    ));
-  }, [hasParaguay, paraguayArchive]);
+    for (const archive of WORLD_XI_ARCHIVES) {
+      const { country, playerName } = archive;
+      if (!countries.includes(country) || archives[country]) continue;
+      if (playerName && data?.byCountry.get(country)?.some(player => player.name === playerName)) continue;
+      setArchives(prev => ({ ...prev, [country]: { status: 'loading' } }));
+      void fetchWorldXiArchive(archive).then(players => setArchives(prev => ({
+        ...prev,
+        [country]: players ? { status: 'loaded', players } : { status: 'unavailable' },
+      })));
+    }
+  }, [archives, countries, data]);
 
   const start = useCallback(() => {
     if (!selectedData) return;
@@ -194,35 +199,37 @@ const WorldXi = () => {
   const slot = slotIndex >= 0 ? formation.slots[slotIndex] : null;
   const country = slotIndex >= 0 ? countries[slotIndex] : '';
 
-  const usedNames = useMemo(
-    () => new Set(filled.filter((p): p is WxPlayer => p !== null).map(p => p.name)),
+  const usedPlayers = useMemo(
+    () => new Set(filled.filter((p): p is WxPlayer => p !== null).map(worldXiPlayerKey)),
     [filled],
   );
-  const archivedPlayers = paraguayArchive?.status === 'loaded' ? paraguayArchive.players : undefined;
+  const archive = archives[country];
+  const archivedPlayers = archive?.status === 'loaded' ? archive.players : undefined;
   const suggestionData = useMemo(() => {
     if (!selectedData || !archivedPlayers?.length) return selectedData;
     // The extra choices never feed the draw or respin eligibility.
-    const current = selectedData.byCountry.get(PARAGUAY) ?? [];
+    const current = selectedData.byCountry.get(country) ?? [];
     const currentNames = new Set(current.map(player => player.name));
     const byCountry = new Map(selectedData.byCountry);
-    byCountry.set(PARAGUAY, [...current, ...archivedPlayers.filter(player => !currentNames.has(player.name))]
+    byCountry.set(country, [...current, ...archivedPlayers.filter(player => !currentNames.has(player.name))]
       .sort((a, b) => b.value - a.value));
     return { ...selectedData, byCountry };
-  }, [selectedData, archivedPlayers]);
+  }, [selectedData, country, archivedPlayers]);
   const unusedFittingCount = useMemo(() => {
     if (!suggestionData || !slot) return 0;
     const names = new Set<string>();
     for (const player of suggestionData.byCountry.get(country) ?? []) {
-      if (!usedNames.has(player.name) && fitsSlot(player, slot)) names.add(player.name);
+      const key = worldXiPlayerKey(player);
+      if (!usedPlayers.has(key) && fitsSlot(player, slot)) names.add(key);
     }
     return names.size;
-  }, [suggestionData, slot, country, usedNames]);
+  }, [suggestionData, slot, country, usedPlayers]);
   const suggestions = useMemo(
-    () => (suggestionData && slot && country ? suggestCountryPlayers(suggestionData, country, query, usedNames) : []),
-    [suggestionData, slot, country, query, usedNames],
+    () => (suggestionData && slot && country ? suggestCountryPlayers(suggestionData, country, query, usedPlayers) : []),
+    [suggestionData, slot, country, query, usedPlayers],
   );
-  const searchingArchive = country === PARAGUAY && paraguayArchive?.status === 'loading';
-  const archiveUnavailable = country === PARAGUAY && paraguayArchive?.status === 'unavailable';
+  const searchingArchive = archive?.status === 'loading';
+  const archiveUnavailable = archive?.status === 'unavailable';
 
   const filledCount = filled.filter(Boolean).length;
   const timedOut = timerMode.seconds > 0 && timeLeft <= 0;
@@ -247,7 +254,7 @@ const WorldXi = () => {
   }, [phase, filledCount]);
 
   const pick = (p: WxPlayer) => {
-    if (phase !== 'playing' || !slot || slotIndex < 0) return;
+    if (phase !== 'playing' || !slot || slotIndex < 0 || usedPlayers.has(worldXiPlayerKey(p))) return;
     if (!fitsSlot(p, slot)) {
       setFeedback(wrongPositionMessage(p, slot));
       return;
@@ -303,7 +310,7 @@ const WorldXi = () => {
   const replaceEmptyNation = () => {
     if (phase !== 'playing' || !selectedData || !slot || slotIndex < 0 || spinning || unusedFittingCount !== 0 || searchingArchive) return;
     const available = selectedData.countries.filter(c => (selectedData.byCountry.get(c) ?? [])
-      .some(player => !usedNames.has(player.name) && fitsSlot(player, slot)));
+      .some(player => !usedPlayers.has(worldXiPlayerKey(player)) && fitsSlot(player, slot)));
     const next = respinSlotCountry(formation, { ...selectedData, countries: available }, slotIndex, countries);
     if (next === country) {
       setFeedback('No unused nation has a fitting player left. Your squad stays as it is.');
@@ -319,7 +326,11 @@ const WorldXi = () => {
     setSpinKey(k => k + 1);
   };
 
-  const seasonPlayers = useMemo(() => filled.filter((p): p is WxPlayer => p !== null), [filled]);
+  const picks = useMemo(() => filled.filter((p): p is WxPlayer => p !== null), [filled]);
+  // The season report and club links use these labels for each player’s totals.
+  const seasonPlayers = useMemo(() => picks.map(p => picks.some(other => other !== p && other.name === p.name)
+    ? { ...p, name: `${p.name} (${displayCountry(p.country)})` }
+    : p), [picks]);
   const previewOdds = phase === 'won' && !seasonReport ? worldXiMatchOdds(seasonPlayers, seasonApproach) : null;
   const simulateSeason = () => {
     if (phase !== 'won' || seasonReport || seasonPlayers.length !== formation.slots.length) return;
@@ -328,19 +339,17 @@ const WorldXi = () => {
 
   const squadValue = filled.reduce((sum, p) => sum + (p ? p.value : 0), 0);
   const chemistry = useMemo(
-    () =>
-      computeChemistry(
-        filled
-          .filter((p): p is WxPlayer => p !== null)
-          .map(p => ({ name: p.name, club: p.club, nationality: p.country })),
-      ),
-    [filled],
+    () => computeChemistry(seasonPlayers.map(p => ({
+      name: p.name, nationality: p.country,
+      club: /^(?:Without Club|Retired)$/i.test(p.club?.trim() ?? '') ? undefined : p.club,
+    }))),
+    [seasonPlayers],
   );
   const clubLinks = chemistry.links.filter(link => link.type === 'club');
   const playerOveralls = useMemo(() => {
     const ratings = ratingsFor(seasonPlayers);
-    return new Map(seasonPlayers.map((p, i) => [p.name, ratings[i]]));
-  }, [seasonPlayers]);
+    return new Map(picks.map((p, i) => [worldXiPlayerKey(p), { name: seasonPlayers[i].name, rating: ratings[i] }]));
+  }, [picks, seasonPlayers]);
   const flagRow = countries.map(c => flagFor(c)).join('');
   const emojiGrid = [
     `🌍 World XI ${formation.name}${timerMode.seconds > 0 ? ' ⏱️ ' + timerMode.label : ''}`,
@@ -642,9 +651,9 @@ const WorldXi = () => {
               {!feedback && query.trim().length >= 2 && suggestions.length === 0 && (
                   <p className="text-muted-foreground text-sm mt-2" role={searchingArchive ? 'status' : undefined}>
                     {searchingArchive
-                      ? 'Checking more Paraguay players…'
+                      ? `Checking more ${displayCountry(country)} players…`
                       : archiveUnavailable
-                        ? 'Extra Paraguay records are unavailable. Try another name.'
+                        ? `Extra ${displayCountry(country)} records are unavailable. Try another name.`
                         : `Nobody from ${displayCountry(country)} matches that. Only players from ${displayCountry(country)} can fill this slot, so try another name.`}
                 </p>
               )}
@@ -688,7 +697,7 @@ const WorldXi = () => {
                       {clubLinks.map((link, i) => (
                         <li key={i} className="rounded-lg border border-border/50 px-3 py-2 text-xs">
                           <span className="block font-semibold text-foreground break-words">{link.a} + {link.b}</span>
-                          <span className="block text-muted-foreground break-words">{filled.find(p => p?.name === link.a)?.club}</span>
+                          <span className="block text-muted-foreground break-words">{seasonPlayers.find(p => p.name === link.a)?.club}</span>
                         </li>
                       ))}
                     </ul>
@@ -714,6 +723,7 @@ const WorldXi = () => {
             <div className="mt-4 grid gap-1.5">
               {formation.slots.map((s, i) => {
                 const p = filled[i];
+                const overall = p && playerOveralls.get(worldXiPlayerKey(p));
                 return (
                   <div key={i} className="flex items-center gap-2 text-sm bg-background/60 border border-border/50 rounded-lg px-3 py-1.5">
                     <span className="text-[10px] font-bold text-muted-foreground w-8 shrink-0">{s.label}</span>
@@ -726,9 +736,9 @@ const WorldXi = () => {
                             {p.club}{p.archiveYear && ` (${p.archiveYear})`}
                           </span>
                         </span>
-                        {seasonReport && (
-                          <span aria-label={`Overall for ${p.name}`} className="text-[11px] font-bold text-gold shrink-0 tabular-nums whitespace-nowrap">
-                            {playerOveralls.get(p.name)} OVR
+                        {seasonReport && overall && (
+                          <span aria-label={`Overall for ${overall.name}`} className="text-[11px] font-bold text-gold shrink-0 tabular-nums whitespace-nowrap">
+                            {overall.rating} OVR
                           </span>
                         )}
                       </>

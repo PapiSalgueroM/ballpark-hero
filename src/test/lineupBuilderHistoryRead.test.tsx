@@ -12,9 +12,10 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 vi.mock('@/integrations/supabase/client', () => ({ supabase: {}, SUPABASE_URL: 'http://stub', SUPABASE_PUBLISHABLE_KEY: 'stub' }));
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: vi.fn() }));
 vi.mock('@/lib/localLineupEval', () => ({ localEvaluateSoccerXI: vi.fn() }));
+const H = vi.hoisted(() => ({ firstClub: 'Real Madrid' }));
 vi.mock('@/data/lineupTeams', async (importOriginal) => {
   const real = await importOriginal<typeof import('@/data/lineupTeams')>();
-  return { ...real, getRandomTeamAssignments: () => real.clubs.slice(0, 11).map((name) => ({ name, isNation: false })) };
+  return { ...real, getRandomTeamAssignments: () => [H.firstClub, ...real.clubs.filter(club => club !== H.firstClub)].slice(0, 11).map((name) => ({ name, isNation: false })) };
 });
 
 import { HISTORY_WAIT_MS, useLineupBuilder } from '@/hooks/useLineupBuilder';
@@ -39,7 +40,7 @@ function stubFetch(history: 'hold' | 'hang') {
 }
 
 describe('Build Your XI: the history read for a next door pick', () => {
-  beforeEach(() => { vi.useRealTimers(); });
+  beforeEach(() => { vi.useRealTimers(); H.firstClub = 'Real Madrid'; });
   afterEach(() => { vi.unstubAllGlobals(); vi.useRealTimers(); });
 
   it('is busy while the history is read, and the pick lands once it answers', async () => {
@@ -89,5 +90,26 @@ describe('Build Your XI: the history read for a next door pick', () => {
     await act(async () => { await result.current.submitPlayer('Trent Alexander-Arnold', TRENT); });
     expect(calls.some((u) => u.includes('player_verified_positions'))).toBe(false);
     expect(result.current.filledSlots.get(4)?.playerName).toBe('Trent Alexander-Arnold');
+  });
+
+  it('accepts Kimmich at Bayern right-back when his curated table row is missing', async () => {
+    H.firstClub = 'Bayern Munich';
+    const { pending, calls } = stubFetch('hold');
+    const { result } = renderHook(() => useLineupBuilder());
+    act(() => result.current.selectFormation('4-3-3'));
+    act(() => result.current.selectPosition(4));
+    let done: Promise<void> | undefined;
+    act(() => {
+      done = result.current.submitPlayer('Joshua Kimmich', {
+        rawPosition: 'Defensive Midfield', position: 'CDM', club: 'Bayern Munich', nationality: 'Germany',
+      });
+    });
+    await waitFor(() => expect(pending).toHaveLength(1));
+    await act(async () => {
+      pending[0].resolve({ ok: true, json: async () => [] });
+      await done;
+    });
+    expect(result.current.filledSlots.get(4)).toMatchObject({ playerName: 'Joshua Kimmich', pick: { played: ['RB'] } });
+    expect(calls.some(url => url.includes('validate-player'))).toBe(false);
   });
 });

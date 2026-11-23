@@ -98,4 +98,16 @@ describe('Player Bingo club additions, through fetchBingoData', () => {
     const data = await load(morton);
     expect(data.clubHistory.get('Qzx Bingo Fixture 3')).toEqual(new Set(['qzx fixture club 3']));
   });
+
+  it.each([
+    [{ id: 1, player_name: 'Kevin De Bruyne', nationality: 'Belgium', position: 'Attacking Midfield', club: 'SSC Napoli', year: 2026, age: 34, market_value_usd: 11_000_000 }, 'club-chelsea-fc'],
+    [{ id: 2, player_name: 'Andrey Santos', nationality: 'Brazil', position: 'Central Midfield', club: 'Manchester United', year: 2026, age: 21, market_value_usd: 49_000_000 }, 'club-chelsea-fc'],
+    [{ id: 3, player_name: 'Mykhaylo Mudryk', nationality: 'Ukraine', position: 'Left Winger', club: 'Chelsea FC', year: 2025, age: 23, market_value_usd: 19_000_000 }, 'club-tottenham-hotspur'],
+  ] as const)('accepts the reported club for $player_name even when the history row is missing', async (row, criterion) => {
+    const data = await load([{ ...nulls, ...row }]);
+    const player = data.pool.find(p => p.name === row.player_name)!;
+    expect(player.club).toBe(row.club);
+    expect(buildCriteria(data).find(c => c.id === criterion)!.test(player, data)).toBe(true);
+    expect(data.clubYears.get(player.name)).toEqual([{ key: row.club.toLowerCase(), year: row.year }]);
+  });
 });

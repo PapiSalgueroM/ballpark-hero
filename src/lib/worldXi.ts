@@ -5,6 +5,8 @@ import { normalizeName } from '@/lib/whoAmI';
 import { rng, winProbability } from '@/lib/perfectSeason';
 import { ALL_POSITIONS, allowedLabelFor, eligiblePositions, fitsAllowed, slotAllowedPositions } from '@/lib/positionFit';
 import type { XiFitAdjust } from '@/lib/xiFit';
+import { verifiedPositionFallback } from '@/data/verifiedSoccerPositions';
+import { WORLD_XI_CROSS_SNAPSHOT_NAMESAKES, WORLD_XI_RAFINHA_2025, WORLD_XI_STALE_SNAPSHOT_DUPLICATES } from '@/data/worldXiVerifiedNamesakes';
 
 /**
  * World XI (build an XI, one slot at a time)
@@ -16,9 +18,10 @@ import type { XiFitAdjust } from '@/lib/xiFit';
  *   - Every positive-value row from the 2026 and 2025 snapshots, paged 1000
  *     at a time by id. Both snapshots must load completely within their bounds.
  *   - Deduped by player name keeping the newest year (value breaks ties),
- *     with same-year rows at different clubs kept apart as namesakes.
+ *     with distinct club records in one year and verified namesakes across years retained.
  *   - Positions mapped through normalizePosition, primary nationality only.
- *     Club, age and value stay those of the stored row, including older rows.
+ *     Age and value stay those of the stored row. A verified club status can
+ *     be corrected to match the date of the snapshot.
  *
  * COUNTRY ELIGIBILITY:
  *   at least 2 GK, 2 CB, 3 defenders, 3 central or wide midfielders and
@@ -56,6 +59,14 @@ export interface WorldXiData {
   countries: string[]; // qualifying countries, alphabetical
 }
 
+export function worldXiPlayerKey({ name, country, position }: WxPlayer): string {
+  const { name: rafinha, brazil } = WORLD_XI_RAFINHA_2025;
+  const separate = (name === rafinha && country === brazil.country && position === normalizePosition(brazil.position))
+    || WORLD_XI_CROSS_SNAPSHOT_NAMESAKES.some(pair =>
+    pair.name === name && pair.earlier.country === country && pair.earlier.position === position);
+  return separate ? `${name}|${country}` : name;
+}
+
 export interface TimerMode {
   key: 'none' | '90' | '60';
   label: string;
@@ -78,7 +89,15 @@ const PREV_PAGES = 8; // 8000-row capacity for the previous-year snapshot
 const MIN_POOL = 800; // sanity floor before we trust the pool
 const MIN_COUNTRIES = 12;
 const POOL_COLUMNS = 'player_name, nationality, position, club, market_value_usd, year, age';
-export const PARAGUAY = 'Paraguay';
+type WorldXiArchive = { country: string; year: number; playerName?: string };
+
+export const WORLD_XI_ARCHIVES: readonly WorldXiArchive[] = [
+  { country: 'Paraguay', year: PREV_YEAR },
+  // Argentina's capped left-back is missing from the two newest market snapshots.
+  // https://www.afa.com.ar/es/posts/marcos-acuna-cumple-35-anos-del-nacimiento-en-zapala-a-la-gloria-con-la-seleccion-argentina
+  // https://www.fifa.com/en/articles/argentina-squad-announced
+  { country: 'Argentina', year: 2024, playerName: 'Marcos Acuña' },
+];
 
 /* ---------------- Eligibility thresholds (SQL-verified) ---------------- */
 const GK_MIN = 2; // goalkeepers are the scarce resource
@@ -183,28 +202,33 @@ function playerFromPoolRow(row: PoolRow): WxPlayer | null {
   const position = normalizePosition((row.position ?? '').trim());
   const value = Number(row.market_value_usd) || 0;
   if (!name || !country || !position || value <= 0) return null;
-  return { name, country, position, value, club: (row.club ?? '').trim(), age: Number(row.age) || undefined };
+  const { name: rafinha, year, brazil } = WORLD_XI_RAFINHA_2025;
+  const correctClub = row.player_name === rafinha && row.year === year && row.nationality === brazil.country
+    && row.position === brazil.position && row.club === brazil.sourceClub && row.age === brazil.age && row.market_value_usd === brazil.value;
+  const club = correctClub ? brazil.club : (row.club ?? '').trim();
+  return { name, country, position, value, club, age: Number(row.age) || undefined };
 }
 
-/** Optional 2025 suggestions for Paraguay, whose older players miss the global value cap. */
-export async function fetchParaguayArchive(): Promise<WxPlayer[] | null> {
+/** Optional, dated suggestions when the main pool is missing verified players. */
+export async function fetchWorldXiArchive({ country, year, playerName }: WorldXiArchive): Promise<WxPlayer[] | null> {
   try {
-    const { data, error } = await supabase
+    const request = supabase
       .from('player_market_values')
       .select(POOL_COLUMNS)
-      .eq('year', PREV_YEAR)
-      .eq('nationality', PARAGUAY)
+      .eq('year', year)
+      .eq('nationality', country)
       .gt('market_value_usd', 0)
       .order('id', { ascending: true });
+    const { data, error } = await (playerName ? request.eq('player_name', playerName) : request);
     if (error || !data) return null;
 
     const players = new Map<string, WxPlayer>();
     for (const row of data) {
       const player = playerFromPoolRow(row);
-      if (!player || player.country !== PARAGUAY) continue;
+      if (!player || player.country !== country || (playerName && player.name !== playerName)) continue;
       const key = `${player.name}|${player.club}`;
       if (player.value > (players.get(key)?.value ?? 0)) {
-        players.set(key, { ...player, archiveYear: PREV_YEAR });
+        players.set(key, { ...player, archiveYear: year });
       }
     }
     return [...players.values()];
@@ -277,15 +301,23 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
        two rows sharing a name in the SAME year at DIFFERENT clubs are two
        people (PSG's Vitinha, a defensive mid, and Genoa's Vitinha, a centre
        forward, both in 2026). They are kept apart by club instead of the
-       more valuable one swallowing the other. Across years a name is still
-       one career, exactly as before. */
+       more valuable one swallowing the other. Verified cross-year namesakes
+       get separate keys, each retaining the newest dated row for that player. */
     const byName = new Map<string, { year: number; byClub: Map<string, WxPlayer> }>();
     for (const r of rows) {
       const rowPlayer = playerFromPoolRow(r);
       if (!rowPlayer) continue;
       const { name, position, value, club } = rowPlayer;
+      const key = worldXiPlayerKey(rowPlayer);
       const year = Number(r.year) || 0;
-      const prev = byName.get(name);
+      const prev = byName.get(key);
+      if (WORLD_XI_STALE_SNAPSHOT_DUPLICATES.some(entry => entry.year === year && entry.name === name
+        && entry.country === rowPlayer.country && entry.position === position
+        && entry.stale.club === club && entry.stale.age === rowPlayer.age)) {
+        // Reserve the same position for tied values without admitting a dated row.
+        if (!prev) byName.set(key, { year: 0, byClub: new Map() });
+        continue;
+      }
       const sameClub = prev && year === prev.year ? prev.byClub.get(club) : undefined;
       if (!prev || year > prev.year || (year === prev.year && (!sameClub || value > sameClub.value))) {
         /* Identity guard: the curated history belongs to the human whose
@@ -294,15 +326,16 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
            it: even a matched history never lets a keeper earn an outfield
            slot or an outfielder earn goal. */
         const playedRaw = playedByName.get(name);
+        const fallback = verifiedPositionFallback(name, position, club);
         const played = playedRaw && playedRaw.primary === position
-          ? playedRaw.secs.filter(p => (position === 'GK') === (p === 'GK'))
-          : undefined;
+          ? [...new Set([...playedRaw.secs.filter(p => (position === 'GK') === (p === 'GK')), ...fallback])]
+          : fallback;
         const player: WxPlayer = {
           ...rowPlayer,
-          ...(played && played.some(p => p !== position) ? { positionsPlayed: played } : {}),
+          ...(played.some(p => p !== position) ? { positionsPlayed: played } : {}),
         };
         if (prev && year === prev.year) prev.byClub.set(club, player);
-        else byName.set(name, { year, byClub: new Map([[club, player]]) });
+        else byName.set(key, { year, byClub: new Map([[club, player]]) });
       }
     }
 
@@ -423,16 +456,28 @@ export function suggestCountryPlayers(
   const starts: WxPlayer[] = [];
   const wordStarts: WxPlayer[] = [];
   const contains: WxPlayer[] = [];
+  const alternate: WxPlayer[] = [];
+  // The market rows omit Al. The club and the World Cup use different spellings.
+  // https://www.staderennais.com/equipe-pro/mousa-al-tamari
+  // https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/ten-asian-stars-ready-to-shine
+  // https://ligue1.com/en/articles/l1_article_1696-
+  const aliasQuery = q.replace(/-/g, ' ');
+  const tamariAlias = country === 'Jordan'
+    && ['mousa al tamari', 'musa al taamari', 'mousa al taamari'].some(name => name.includes(aliasQuery));
   for (const p of list) {
-    if (exclude && exclude.has(p.name)) continue;
+    if (exclude?.has(worldXiPlayerKey(p))) continue;
     const n = normalizeName(p.name);
-    if (!n.includes(q)) continue;
+    if (!n.includes(q)) {
+      if (tamariAlias && p.name === 'Mousa Tamari' && p.country === 'Jordan' && p.position === 'RW'
+        && (p.club === 'Stade Rennais FC' || p.club === 'Montpellier HSC')) alternate.push(p);
+      continue;
+    }
     if (n.startsWith(q)) starts.push(p);
     else if (n.split(' ').some(w => w.startsWith(q))) wordStarts.push(p);
     else contains.push(p);
     if (starts.length >= limit) break;
   }
-  return [...starts, ...wordStarts, ...contains].slice(0, limit);
+  return [...starts, ...wordStarts, ...contains, ...alternate].slice(0, limit);
 }
 
 /* ---------------- Season simulation ---------------- */

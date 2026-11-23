@@ -258,6 +258,8 @@ export interface PlayerSourceConfig {
    * PlayerAutocomplete skips it.
    */
   local?: (normalizedQuery: string) => Promise<Record<string, unknown>[] | null>;
+  /** Extra records already verified to match this source's filters. Table rows win for the same spelling. */
+  fallbackRows?: Record<string, unknown>[];
 }
 
 export interface PlayerIdentityConfig {
@@ -330,7 +332,7 @@ export function isSameMan(
   return Math.abs((ref.age - row.age) - (ref.year - row.year)) <= 1;
 }
 
-export interface PlayerSourceFilter {
+export type PlayerSourceFilter = {
   column: string;
   /**
    * Round 483 added 'in'. A substring `ilike` on a club name is how Build Your
@@ -341,7 +343,7 @@ export interface PlayerSourceFilter {
    */
   op: 'eq' | 'ilike' | 'in';
   value: string | number | boolean | (string | number)[];
-}
+} | { op: 'or'; value: string };
 
 export interface SearchPlayersOptions {
   source: PlayerSourceConfig;
@@ -397,7 +399,8 @@ function applyFilters(builder: any, filters: PlayerSourceFilter[] | undefined) {
   if (!filters) return builder;
   let b = builder;
   for (const f of filters) {
-    if (f.op === 'eq') b = b.eq(f.column, f.value);
+    if (f.op === 'or') b = b.or(f.value);
+    else if (f.op === 'eq') b = b.eq(f.column, f.value);
     else if (f.op === 'in') b = b.in(f.column, Array.isArray(f.value) ? f.value : [f.value]);
     else b = b.ilike(f.column, `%${f.value}%`);
   }
@@ -740,8 +743,12 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
       return { results: [], error: ilikeRes.error.message || 'Search failed' };
     }
 
+    const remoteRows = [ilikeRes.data as RawRow[] | null, prominenceRes.data as RawRow[] | null];
+    const fallbackRows = source.fallbackRows?.filter(row => !remoteRows.some(rows => rows?.some(
+      remote => remote[source.nameColumn] === row[source.nameColumn],
+    )));
     const results = dedupeAndRank(
-      [ilikeRes.data as RawRow[] | null, prominenceRes.data as RawRow[] | null],
+      [...remoteRows, fallbackRows],
       source,
       normalizedQuery,
       { exclude, boostNames: options.boostNames, limit },
