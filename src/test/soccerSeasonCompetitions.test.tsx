@@ -187,10 +187,13 @@ describe('Soccer Career competition navigation keeps the actual league view', ()
     if (withPath) row.ratingPath = [70, 82, 94, 82, 70];
     const career = centreCareer(row, { lastUCLResult: null });
     const before = JSON.stringify(career);
-    localStorage.setItem('seasonCentre:v1:soccer', JSON.stringify({
+    const resume = {
       key: soccerSeasonKey(career.playerName, row), year: row.year, md: 25, speed: 'results', stable: true,
-    }));
-    const view = render(<MemoryRouter><SoccerSeasonCentre career={career} clubs={FALLBACK_CLUBS} row={row} mode="watch" offer={false} onClose={() => {}} /></MemoryRouter>);
+    };
+    const resumeGame = withPath ? 'soccerCareerSave-slot-2' : 'soccer';
+    localStorage.setItem('seasonCentre:v1:soccer', JSON.stringify({ ...resume, md: 1 }));
+    localStorage.setItem(`seasonCentre:v1:${resumeGame}`, JSON.stringify(resume));
+    const view = render(<MemoryRouter><SoccerSeasonCentre career={career} clubs={FALLBACK_CLUBS} row={row} mode="watch" resumeGame={resumeGame} offer={false} onClose={() => {}} /></MemoryRouter>);
     fireEvent.click(view.container.querySelector('[data-kickoff] button.bg-emerald-600')!);
     const calendar = view.container.querySelector('[data-centre-calendar-cup="domestic:1"]');
     expect(calendar).not.toBeNull();

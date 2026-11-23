@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, within } from '@testing-library/react';
 import TrophyCabinet, { TrophyClubCampaign } from '@/components/soccer-career/TrophyCabinet';
 import type { CareerState, SeasonRecord, UCLResult } from '@/lib/soccerCareerEngine';
+import { clubWorldCup2025Campaign } from '@/lib/soccerClubWorldCup';
 import { cupSeason, neutralFinalCampaign, twoLegFinalCampaign, twoLegFinalSeason } from './fixtures/soccerSeasonCompetitions1173';
 
 // Fictional saved career outcomes, not historical match results.
@@ -54,6 +55,25 @@ describe('recorded club trophy campaigns', () => {
       ['Final', 'Liverpool', '2-2', null, 'Your goals in this game: 1'],
     ]);
     expect(games.map(game => game.getAttribute('data-trophy-campaign-match'))).toEqual(['0', '1', '2', '3', '4', '5', '6']);
+  });
+
+  it('shows the saved player goals per Club World Cup fixture alongside assists and absences', () => {
+    const form = { overall: 94, lastRating: 8, lastGoals: 30, position: 'ST', age: 26, isCaptain: false };
+    const clubWorldCup = clubWorldCup2025Campaign('Chelsea', 'trophy fixture 9', () => 3, form, 0.7);
+    expect(clubWorldCup?.result).toBe('Winner');
+    const row: SeasonRecord = { ...cupSeason, year: 2024, club: 'Chelsea', clubWorldCup };
+    const view = render(<TrophyCabinet career={careerWith([row])} category="club-world-cup" onClose={vi.fn()} />);
+    open(view.container, 2024);
+
+    const scope = within(view.getByRole('region', { name: 'Saved 2025 Club World Cup campaign' }));
+    expect(scope.getByText(/Your campaign: 5 apps, 4 goals and 1 assists/)).toBeVisible();
+    const games = scope.getAllByRole('listitem');
+    expect(games.map(game => within(game).queryByText(/^Your goals in this game:/)?.textContent)).toEqual([
+      'Your goals in this game: 0', undefined, 'Your goals in this game: 1', undefined,
+      'Your goals in this game: 1', 'Your goals in this game: 1', 'Your goals in this game: 1',
+    ]);
+    expect(within(games[1]).getByText('You did not play.')).toBeVisible();
+    expect(within(games[6]).getByText(/1 assists and/)).toBeVisible();
   });
 
   it('keeps away-goals, aggregate, extra-time goals and penalties separate from the saved match score', () => {

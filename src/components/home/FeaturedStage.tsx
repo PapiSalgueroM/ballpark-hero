@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ALL_GAMES, type GameDef } from '@/data/gameRegistry';
 import { HOME_STAGE, sportOf, type StageEntry } from '@/data/homeFront';
+import { SOCCER_CAREER_SAVE, continueSaveEntries } from '@/data/continueSaves';
 import { CLUB_MANAGER_ACTIVE_RESUME_QUERY } from '@/lib/clubManagerSaveKeys';
 import { homeSaveStorage, useHomeSaveRefresh } from './homeSaveRefresh';
 import { SportGlyph, sportStyle } from './SportGlyph';
@@ -14,7 +15,11 @@ import styles from './HomeLaunchDeck.module.css';
 const HomeArt = lazy(() => import('./art/HomeArt'));
 
 /** Save existence changes the invitation, never opens or rewrites a save. */
-const stageSaveKeys = new Set(HOME_STAGE.flatMap(entry => entry.saveKey ? [entry.saveKey] : []));
+const soccerSlots = continueSaveEntries(SOCCER_CAREER_SAVE);
+const stageSaveKeys = new Set([
+  ...HOME_STAGE.flatMap(entry => entry.saveKey ? [entry.saveKey] : []),
+  ...soccerSlots.map(entry => entry.saveKey),
+]);
 const managerLinks = [
   { path: '/nrl-team-manager', sport: 'rugby' },
   { path: '/aussie-rules-manager', sport: 'aussie' },
@@ -41,6 +46,7 @@ export function FeaturedStage() {
   }, []);
   useHomeSaveRefresh(stageSaveKeys, refresh);
   if (cards.length === 0) return null;
+  const soccerResumeTo = soccerSlots.find(slot => saved.includes(slot.saveKey))?.path;
 
   return (
     <section aria-labelledby="home-stage-title" data-home-stage="" className={styles.deck}>
@@ -48,7 +54,8 @@ export function FeaturedStage() {
       <div className={styles.games}>
         {cards.map((card, index) => (
           <Fragment key={card.game.path}>
-            <StageCard card={card} lead={index === 0} saved={!!card.entry.saveKey && saved.includes(card.entry.saveKey)} />
+            <StageCard card={card} lead={index === 0} resumeTo={card.game.path === SOCCER_CAREER_SAVE.path ? soccerResumeTo
+              : card.entry.saveKey && saved.includes(card.entry.saveKey) ? card.game.path : undefined} />
             {index === 0 && (
               <div className={styles.managers}>
                 {managerLinks.map(({ path, sport }) => {
@@ -71,12 +78,12 @@ export function FeaturedStage() {
   );
 }
 
-function StageCard({ card, lead, saved }: { card: Card; lead: boolean; saved: boolean }) {
+function StageCard({ card, lead, resumeTo }: { card: Card; lead: boolean; resumeTo?: string }) {
   const { entry, game } = card;
   const sport = sportOf(game.path);
-  const resuming = saved && !!entry.continueCta;
+  const resuming = !!resumeTo && !!entry.continueCta;
   const cta = resuming ? entry.continueCta : entry.cta;
-  const to = resuming && game.path === '/club-manager' ? game.path + CLUB_MANAGER_ACTIVE_RESUME_QUERY : game.path;
+  const to = resuming && game.path === '/club-manager' ? game.path + CLUB_MANAGER_ACTIVE_RESUME_QUERY : resumeTo ?? game.path;
 
   return (
     <Link to={to} style={sportStyle(sport)} data-stage-card={game.path}

@@ -27,11 +27,14 @@ export function filterHubGames(games: GameDef[], filter: HubFilter, query: strin
     && (!needle || `${game.label} ${game.description}`.toLocaleLowerCase().includes(needle)));
 }
 
-function readContinuations(games: GameDef[]) {
+function readContinuations(games: GameDef[]): Record<string, { path: string; line: string }> {
   try {
     return Object.fromEntries(savedGames(window.localStorage)
       .filter(({ game }) => games.some(item => item.path === game.path))
-      .map(({ entry }) => [entry.path, describeSave(entry, window.localStorage.getItem(entry.saveKey)) || 'Saved in this browser']));
+      .map(({ entry, game }) => [game.path, {
+        path: entry.path,
+        line: describeSave(entry, window.localStorage.getItem(entry.saveKey)) || 'Saved in this browser',
+      }]));
   } catch { return {}; }
 }
 
@@ -86,6 +89,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
   const quick = visible.filter(game => !game.featured).sort((a, b) => Number(!!b.daily) - Number(!!a.daily));
   const first = games.find(game => game.featured) ?? games[0];
   const saved = games.filter(game => continuations[game.path]);
+  const firstSaved = saved[0];
   const dailyCount = games.filter(game => game.daily).length;
   const filters: { id: HubFilter; label: string; count: number }[] = [
     { id: 'all', label: 'All games', count: games.length },
@@ -98,11 +102,11 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
     <article key={game.path} data-hub-game={game.path} className={featured ? styles.featuredCard : styles.gameCard}>
       <span aria-hidden="true" className={styles.gameIcon}>{game.emoji}</span>
       <div className={styles.gameCopy}>
-        <h3><Link className={styles.gameLink} to={game.path}>{game.label}</Link></h3>
+        <h3><Link className={styles.gameLink} to={continuations[game.path]?.path ?? game.path}>{game.label}</Link></h3>
         <p>{game.description}</p>
         <div className={styles.cardActions}>
           {continuations[game.path] ? (
-            <span data-no-prerender data-hub-resume className={styles.resumeLine}>Resume: {continuations[game.path]}</span>
+            <span data-no-prerender data-hub-resume className={styles.resumeLine}>Resume: {continuations[game.path].line}</span>
           ) : <span className={styles.gameAction}>{game.daily ? 'Daily challenge' : featured ? 'Start playing' : 'Play now'} <ArrowUpRight aria-hidden="true" /></span>}
           <GamePickButton game={game} pinned={picks.paths.includes(game.path)} onToggle={picks.toggle} className={styles.pickButton} />
         </div>
@@ -131,8 +135,8 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
           <p className={styles.tagline}>{arena.line}</p>
           <p className={styles.welcome}>All {games.length} of them in one place. Every one is free with no sign-up.</p>
           <div className={styles.arenaActions}>
-            {first && <Link to={saved[0]?.path ?? first.path} className={styles.heroPlay}>
-              <Gamepad2 aria-hidden="true" />{saved[0] ? `Resume ${saved[0].label}` : `Play ${first.label}`}<ArrowUpRight aria-hidden="true" />
+            {first && <Link to={firstSaved ? continuations[firstSaved.path].path : first.path} className={styles.heroPlay}>
+              <Gamepad2 aria-hidden="true" />{firstSaved ? `Resume ${firstSaved.label}` : `Play ${first.label}`}<ArrowUpRight aria-hidden="true" />
             </Link>}
             <button type="button" className={styles.heroBrowse} onClick={() => {
               libraryHeadingRef.current?.focus({ preventScroll: true });
@@ -147,8 +151,8 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
 
       {saved.length > 0 && <section data-no-prerender aria-label="Your saved games" className={styles.saved}>
         <h2>Pick up where you left off</h2>
-        <div>{saved.map(game => <Link key={game.path} to={game.path} data-hub-saved={game.path}>
-          <span aria-hidden="true">{game.emoji}</span><span><b>{game.label}</b><small>{continuations[game.path]}</small></span><ArrowUpRight aria-hidden="true" />
+        <div>{saved.map(game => <Link key={game.path} to={continuations[game.path].path} data-hub-saved={game.path}>
+          <span aria-hidden="true">{game.emoji}</span><span><b>{game.label}</b><small>{continuations[game.path].line}</small></span><ArrowUpRight aria-hidden="true" />
         </Link>)}</div>
       </section>}
 
@@ -157,7 +161,7 @@ export default function HubExperience({ hub, games }: { hub: SportHub; games: Ga
           <div><h2 ref={libraryHeadingRef} tabIndex={-1} className="font-display">What are you playing?</h2><p>{hub.intro}</p></div>
           <button className={styles.shuffle} disabled={visible.length === 0} onClick={() => {
             const game = visible[Math.floor(Math.random() * visible.length)];
-            if (game) navigate(game.path);
+            if (game) navigate(continuations[game.path]?.path ?? game.path);
           }}><Shuffle aria-hidden="true" />Pick a game for me</button>
         </div>
         <div className={styles.controls}>

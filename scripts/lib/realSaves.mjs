@@ -43,7 +43,11 @@ import { pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 
 export const WRITERS = {
-  '/soccer-career': { kind: 'serializer', file: 'src/pages/SoccerCareer.tsx', fn: 'serializeSoccerCareerSave' },
+  '/soccer-career': { kind: 'serializer', file: 'src/pages/SoccerCareer.tsx', fn: 'serializeSoccerCareerSave', indirect: [
+    'const saveKey = entry?.saveKey ?? SAVE_KEY;',
+    'const raw = serializeSoccerCareerSave(career);',
+    'localStorage.setItem(saveKey, raw);',
+  ] },
   '/club-manager': { kind: 'engine', file: 'src/lib/clubManager.ts', fn: 'saveCareer' },
   '/stadium-tycoon': { kind: 'serializer', file: 'src/hooks/useStadiumTycoon.ts', fn: 'serializeTycoon' },
   '/wonderkid-factory': { kind: 'serializer', file: 'src/hooks/useWonderkidFactory.ts', fn: 'serialize' },
@@ -76,6 +80,7 @@ export const PURE_LOADERS = ['/soccer-career', '/stadium-tycoon', '/wonderkid-fa
 const ENTRY = `
 import * as SOC from './src/lib/soccerCareerEngine';
 import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave } from './src/lib/soccerCareerSave';
+import { playCommunityShield, playGermanSupercup } from './src/lib/soccerCareerExtraCups';
 import * as PROG from './src/lib/soccerCareerProgramme';
 import * as BRIEF from './src/lib/soccerCareerTransferBrief';
 import * as AGENT from './src/lib/soccerAgentReview';
@@ -397,6 +402,12 @@ export const accepts = {
 const prospectRead = sport => raw => { try { return loadUsCareerProspect(sport, JSON.parse(raw).prospect) !== null; } catch { return false; } };
 const parsed = (raw, fn) => { try { return fn(JSON.parse(raw)); } catch { return false; } };
 const soccerParsed = (raw, fn) => { try { return fn(parseSoccerCareerSave(raw)); } catch { return false; } };
+const opensWithQualification = (s, qualification, play, clubCountry) =>
+  play({
+    qualification, eventYear: qualification.eventYear, club: qualification.entrants[0].club,
+    playerName: s.playerName, position: s.position, overall: s.overall,
+    selectionChance: 1, unavailableReason: null, teamStrengths: [3, 3], clubCountry, englishOpening: null,
+  }) !== null;
 /* Round 1309: the NFL board's load of the playoffs, asked exactly as FrontOfficeBoard.tsx asks it */
 const bracketLoad = s => GPOST.loadGmPostseason(NFLPOST.NFL_POSTSEASON, s.league, s.league.season, GPOST.inGmPostseason({
   period: s.league.week, phase: s.phase, seasonHasChampion: s.league.champions.some(c => c.season === s.league.season),
@@ -412,6 +423,8 @@ export const partReads = {
     'farewellSeason.version': raw => soccerParsed(raw, s => FARE.readSoccerFarewell(s) !== null),
     'pressRoom.version': raw => soccerParsed(raw, s => PRESS.pressRoomView(s).history.length > 0),
     'generatedBallonPool.version': raw => soccerParsed(raw, s => SOC.isGeneratedBallonPool(s.generatedBallonPool, s.seasons.at(-1).year)),
+    'extraCupQualification.version': raw => soccerParsed(raw, s => opensWithQualification(s, s.extraCupQualification, playCommunityShield, 'England')),
+    'germanSupercupQualification.version': raw => soccerParsed(raw, s => opensWithQualification(s, s.germanSupercupQualification, playGermanSupercup, 'Germany')),
   },
   '/front-office': {
     'gameLog.v': raw => parsed(raw, s => logOf(s) !== null),

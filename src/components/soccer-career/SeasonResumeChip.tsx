@@ -25,14 +25,15 @@ import { careerOpeningAnnualStats } from '@/lib/soccerCareerExtraCups';
 
 interface Props {
   career: CareerState;
+  resumeGame?: string;
   /** Changes whenever the page wants the record read again (the Season Centre just closed). */
   at: number;
   onOpen: (row: SeasonRecord, opener?: HTMLButtonElement) => void;
 }
 
-export default function SeasonResumeChip({ career, at, onOpen }: Props) {
-  const [resume, setResume] = useState(() => readResume('soccer'));
-  useEffect(() => { setResume(readResume('soccer')); }, [at]);
+export default function SeasonResumeChip({ career, at, onOpen, resumeGame = 'soccer' }: Props) {
+  const [resume, setResume] = useState(() => readResume(resumeGame));
+  useEffect(() => { setResume(readResume(resumeGame)); }, [at, resumeGame]);
   const row = career.seasons[resumeRowIndex(resume, career.seasons, r => {
     const annual = careerOpeningAnnualStats(r);
     return r.type === 'playing' && annual && annual.apps > 0

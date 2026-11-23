@@ -88,6 +88,9 @@
  *   assign        reopenGame uses window.location.assign               (6)
  *   partrow       Soccer Career's season plan row is left out of
  *                 PART_VERSIONS                                        (1)
+ *   soccerslot    Soccer Career writes to its legacy key from each slot (0)
+ *   partshield    the Community Shield qualification row is left out   (1)
+ *   partgerman    the German Supercup qualification row is left out     (1)
  *   partrowus     the NFL career's row is left out of PART_VERSIONS    (1)
  *   partbrief     the transferBrief row is left out of PART_VERSIONS   (1)
  *   partagent     the agentReview row is left out                      (1)
@@ -172,6 +175,7 @@
  *
  * Reads no network and no database. Each run bundles into its own temp
  * folder, so two runs at once cannot mix trees.
+ * SIM_SAVE_KEEPER_WRITER_ROUTE limits section 0's writer check to one game.
  */
 import fs from 'node:fs';
 import os from 'node:os';
@@ -185,10 +189,13 @@ import { noteNbaSaves } from './lib/intlCallNote.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_SAVE_KEEPER_CONTROL || '';
+const WRITER_ROUTE = process.env.SIM_SAVE_KEEPER_WRITER_ROUTE || '';
 const CONTROLS = ['dropkey', 'versiontable', 'norow', 'onebyte', 'bootwrite', 'noaside', 'journalfirst', 'pileup',
   'nocopycheck', 'hidebehind', 'twins', 'numberonly', 'nomaincall', 'assign', 'partrow', 'partrowus',
-  'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress', 'partgamelog', 'partballon', 'partplayoffs'];
+  'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress', 'partgamelog', 'partballon', 'partplayoffs',
+  'soccerslot', 'partshield', 'partgerman'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`SIM_SAVE_KEEPER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
+if (WRITER_ROUTE && !Object.hasOwn(WRITERS, WRITER_ROUTE)) { console.error(`SIM_SAVE_KEEPER_WRITER_ROUTE=${WRITER_ROUTE} is not a writer this harness knows`); process.exit(2); }
 const SEEDS = [0, 1, 2, 3];
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simSaveKeeper-'));
 
@@ -207,6 +214,7 @@ const readLF = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8').replace(/\r\
 const KEEPER = 'src/lib/saveKeeper.ts';
 const RECOVERY = 'src/lib/brokenSaveRecovery.ts';
 const MAIN = 'src/main.tsx';
+const SOCCER_CAREER_WRITER = WRITERS['/soccer-career'].file;
 const SWAPS = {
   versiontable: ["'/club-manager': { at: ['saveVersion'], current: 3, oldest: 3, other: 'refuses' },", "'/club-manager': { at: ['saveVersion'], current: 4, oldest: 4, other: 'refuses' },"],
   norow: ["  '/stadium-tycoon': { at: ['v'], current: 1, oldest: 1, other: 'refuses' },\n", ''],
@@ -219,14 +227,15 @@ const SWAPS = {
   numberonly: ['      if (versionIn(raw, row.at) === row.current) continue;\n', '      const heldNumber = versionIn(raw, row.at);\n      if (heldNumber === null || heldNumber === row.current) continue;\n'],
   assign: ['  window.location.replace(path);\n', '  window.location.assign(path);\n'],
 };
-/* The same, for the two controls that rewrite another file. */
+/* The same, for the controls that rewrite another file. */
 const SWAPS_ELSEWHERE = {
   hidebehind: [RECOVERY, '      if (playing !== null && storage.getItem(k) === playing) continue;\n', '      if (playing !== null && storage.getItem(k) === playing) return null;\n'],
   twins: [RECOVERY, '      if (kept !== null && storage.getItem(k) === kept) storage.removeItem(k);\n      else others.push(k);\n', '      others.push(k);\n'],
   nomaincall: [MAIN, 'runSaveKeeper();\n', ''],
+  soccerslot: [SOCCER_CAREER_WRITER, 'localStorage.setItem(saveKey, raw);', 'localStorage.setItem(SAVE_KEY, raw);'],
 };
 /* Every source file a section reads or the bundle loads, as the control left it. */
-const sources = { [KEEPER]: readLF(KEEPER), [RECOVERY]: readLF(RECOVERY), [MAIN]: readLF(MAIN) };
+const sources = { [KEEPER]: readLF(KEEPER), [RECOVERY]: readLF(RECOVERY), [MAIN]: readLF(MAIN), [SOCCER_CAREER_WRITER]: readLF(SOCCER_CAREER_WRITER) };
 if (CONTROL in SWAPS || CONTROL in SWAPS_ELSEWHERE) {
   const [file, from, to] = CONTROL in SWAPS ? [KEEPER, ...SWAPS[CONTROL]] : SWAPS_ELSEWHERE[CONTROL];
   if (!sources[file].includes(from)) { console.error(`simSaveKeeper control ${CONTROL}: CANNOT RUN. The text it rewrites is not in ${file}, so the control would change nothing.`); process.exit(2); }
@@ -422,21 +431,34 @@ function stringifiedLiterals(rel) {
   const writersByKey = new Map();
   for (const rel of srcFiles) for (const w of setItemKeys(rel)) { if (!writersByKey.has(w.key)) writersByKey.set(w.key, []); writersByKey.get(w.key).push({ rel, value: w.value }); }
   let held = 0;
-  for (const e of ENTRIES) {
+  const writerEntries = WRITER_ROUTE ? ENTRIES.filter(e => e.path === WRITER_ROUTE) : ENTRIES;
+  for (const e of writerEntries) {
     const row = WRITERS[e.path];
     if (!row) { fail(`${e.path}: no row in WRITERS (scripts/lib/realSaves.mjs), so nothing says how its save is written`); continue; }
     const found = writersByKey.get(e.saveKey) ?? [];
     const here = found.filter(w => w.rel === row.file);
     if (row.indirect) {
-      const code = stripComments(readLF(row.file));
+      const code = stripComments(sources[row.file] ?? readLF(row.file));
       const gone = row.indirect.filter(a => !code.includes(a));
       if (gone.length) { fail(`${e.path}: its writer reaches the key through a binding, and the anchor(s) that show it are gone from ${row.file}: ${gone.join(' | ')}`); continue; }
     } else if (here.length === 0) {
       fail(`${e.path}: no .setItem( in ${row.file} names the key ${e.saveKey} (writers found for that key: ${found.map(w => w.rel).join(', ') || 'none anywhere in src'})`);
       continue;
     }
-    if (row.kind === 'serializer' && !here.some(w => w.value.includes(`${row.fn}(`))) { fail(`${e.path}: ${row.file} writes ${e.saveKey} but not with ${row.fn}(...), so the fixture is not the writer's own output`); continue; }
+    if (row.kind === 'serializer' && !row.indirect && !here.some(w => w.value.includes(`${row.fn}(`))) { fail(`${e.path}: ${row.file} writes ${e.saveKey} but not with ${row.fn}(...), so the fixture is not the writer's own output`); continue; }
     if (row.kind === 'whole' && !row.indirect && !here.some(w => /^JSON\.stringify\(\s*[A-Za-z_$][\w$]*\s*\)$/.test(w.value))) { fail(`${e.path}: ${row.file} no longer writes ${e.saveKey} as JSON.stringify of one state object`); continue; }
+    if (e.path === '/soccer-career') {
+      const entry = stripComments(readLF('src/pages/SoccerCareerEntry.tsx'));
+      const anchors = [
+        'const slot = resolveContinueSave(SOCCER_CAREER_SAVE, search);',
+        '<SoccerCareerSlot key={slot.saveKey} slot={slot} />',
+        'const { saveKey } = slot;',
+        '<SavedSoccerCareer entry={{ saved, saveKey, savesPath }} />',
+        '<loaded.default entry={{ started, saveKey, savesPath }} />',
+      ];
+      const gone = anchors.filter(anchor => !entry.includes(anchor));
+      if (gone.length) { fail(`Soccer Career no longer passes the selected save key to both entry paths: ${gone.join(' | ')}`); continue; }
+    }
     if (e.path === '/nrl-team-manager' && !stripComments(readLF('src/lib/nrlSaveSlots.ts')).includes('localStorage.setItem(key, next)')) {
       fail('NRL no longer writes the whole save at the selected slot key');
       continue;
@@ -460,7 +482,7 @@ function stringifiedLiterals(rel) {
     }
     held += 1;
   }
-  check(held === ENTRIES.length, `${held} of ${ENTRIES.length} games: the writer is found by its setItem (or its named binding) and the fixture is shaped as it writes`);
+  check(held > 0 && held === writerEntries.length, `${held} of ${writerEntries.length} games: the writer is found by its setItem (or its named binding) and the fixture is shaped as it writes`);
   let accepted = 0;
   const refused = [];
   for (const r of PURE_LOADERS) for (const raw of fleet[r] ?? []) { if (accepts[r](raw)) accepted += 1; else refused.push(r); }
@@ -513,6 +535,8 @@ const PART_VERSIONS = {
     /* Round 1318: the Ballon d'Or pool of generated rivals. With another number the save still opens, the reader
        refuses the part, the next night is the night of the same save without it and writes a fresh pool. */
     { at: ['generatedBallonPool', 'version'], current: 1, other: 'absent', reader: 'isGeneratedBallonPool, read in calculateBallonDor (src/lib/soccerCareerEngine.ts)' },
+    { at: ['extraCupQualification', 'version'], current: 1, other: 'refuses', reader: 'playCommunityShield (src/lib/soccerCareerExtraCups.ts)' },
+    { at: ['germanSupercupQualification', 'version'], current: 1, other: 'refuses', reader: 'playGermanSupercup (src/lib/soccerCareerExtraCups.ts)' },
   ],
   '/front-office': [
     { at: ['gameLog', 'v'], current: 1, other: 'absent', reader: 'readGmGameLog (src/lib/gmGameLog.ts)' },
@@ -533,6 +557,8 @@ const PART_CONTROLS = {
   partpress: ['/soccer-career', 'pressRoom.version'],
   partgamelog: ['/front-office', 'gameLog.v'],
   partballon: ['/soccer-career', 'generatedBallonPool.version'],
+  partshield: ['/soccer-career', 'extraCupQualification.version'],
+  partgerman: ['/soccer-career', 'germanSupercupQualification.version'],
   partplayoffs: ['/front-office', 'playoffs.v'],
 };
 if (PART_CONTROLS[CONTROL]) {
@@ -920,7 +946,8 @@ console.log('\n6. the wiring: the boot call, and the load that leaves no way bac
 const red = [...failed].sort();
 console.log('');
 const OWN = { dropkey: '0', versiontable: '1', norow: '1', onebyte: '2', bootwrite: '2', noaside: '3', journalfirst: '3', pileup: '4',
-  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1', partgamelog: '1', partballon: '1', partplayoffs: '1' };
+  nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1', partgamelog: '1', partballon: '1', partplayoffs: '1',
+  soccerslot: '0', partshield: '1', partgerman: '1' };
 /* A lie in the table or a write on every boot is also seen by the sections that boot the keeper. A card that hides
    behind the save being played is also seen where the quiet copy sits in front of older backups. */
 const ALSO = { versiontable: ['2', '3', '4', '5'], bootwrite: ['3', '4', '5'], norow: ['4'], hidebehind: ['4'] };

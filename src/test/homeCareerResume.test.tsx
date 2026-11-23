@@ -47,7 +47,7 @@ describe('Home career resume links', () => {
     announce(soccer, example);
     expect(stage).toHaveTextContent('Continue your career');
     expect(stage).toHaveFocus();
-    expect(screen.getByRole('link', { name: /Soccer Career Arsenal, age 23/ })).toHaveAttribute('href', '/soccer-career');
+    expect(screen.getByRole('link', { name: /Soccer Career Slot 1.*Arsenal, age 23/ })).toHaveAttribute('href', '/soccer-career');
     localStorage.removeItem(soccer);
     announce(soccer);
     expect(stage).toHaveTextContent('Start your career');
@@ -63,9 +63,35 @@ describe('Home career resume links', () => {
     announce('other');
     announce(soccer, example, sessionStorage);
     expect(read).not.toHaveBeenCalled();
-    expect(screen.getByText('Arsenal, age 23')).toBeInTheDocument();
+    expect(screen.getByText(/Arsenal, age 23/)).toBeInTheDocument();
     announce(soccer, example);
-    expect(screen.getByText('Ajax, age 24')).toBeInTheDocument();
+    expect(screen.getByText(/Ajax, age 24/)).toBeInTheDocument();
+  });
+
+  it('opens the actual Soccer Career slots from Home and updates the lead link when a slot is removed', () => {
+    const secondKey = 'soccerCareerSave-slot-2';
+    const thirdKey = 'soccerCareerSave-slot-3';
+    const second = '{"currentClub":"Benfica","age":25}';
+    const third = '{"currentClub":"Ajax","age":28}';
+    localStorage.setItem(secondKey, second);
+    localStorage.setItem(thirdKey, third);
+    mount();
+
+    const stage = screen.getByRole('link', { name: /Soccer Career.*Continue your career/ });
+    expect(stage).toHaveAttribute('href', '/soccer-career?slot=2');
+    const two = screen.getByRole('link', { name: /Soccer Career Slot 2.*Benfica, age 25/ });
+    const three = screen.getByRole('link', { name: /Soccer Career Slot 3.*Ajax, age 28/ });
+    expect(two).toHaveAttribute('href', '/soccer-career?slot=2');
+    expect(three).toHaveAttribute('href', '/soccer-career?slot=3');
+    three.focus();
+
+    localStorage.removeItem(secondKey);
+    announce(secondKey);
+    expect(two).not.toBeInTheDocument();
+    expect(three).toHaveFocus();
+    expect(stage).toHaveAttribute('href', '/soccer-career?slot=3');
+    expect(localStorage.getItem(thirdKey)).toBe(third);
+    expect(localStorage.getItem(soccer)).toBeNull();
   });
 
   it('updates an alternate NRL slot after browser restore and handles clearing all saves', () => {

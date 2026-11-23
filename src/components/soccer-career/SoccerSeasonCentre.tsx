@@ -74,6 +74,7 @@ import type { DerivedGame, DerivedSeason, SeasonEvent } from '@/lib/season/core'
 
 export interface SoccerSeasonCentreProps {
   career: CareerState;
+  resumeGame?: string;
   clubs: ClubData[];
   /** The season to show. Round 1046: null opens the list of seasons he can watch again. */
   row: SeasonRecord | null;
@@ -316,7 +317,7 @@ function Replays({ career, clubs, onPick, onClose }: { career: CareerState; club
   return <SeasonPicker title="📺 Season replays" rows={rows} exitLabel="Back to your career" onPick={id => onPick(career.seasons[Number(id)])} onClose={onClose} />;
 }
 
-function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: SoccerSeasonCentreProps & { row: SeasonRecord }) {
+function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer, resumeGame = RESUME_GAME }: SoccerSeasonCentreProps & { row: SeasonRecord }) {
   const exitLabel = exitLabelOf(mode, career.phase);
   /* the season's facts come from fields a moment never writes, so the plan is
      derived once for the row and not again on every ledger entry */
@@ -355,16 +356,16 @@ function CentreBody({ career, clubs, row, mode, onClose, onCareer, offer }: Socc
   /* Round 1046: his place in this season. Read once when the season opens; a
      table season he did not win replays the same only while the save still
      holds that year's league (the record says so with `stable`). */
-  const [stored] = useState(() => readResume(RESUME_GAME));
+  const [stored] = useState(() => readResume(resumeGame));
   useEffect(() => {
     document.querySelector<HTMLButtonElement>('[data-season-centre]:not([aria-hidden="true"]) [data-centre-competition][aria-pressed="true"]')?.focus({ preventScroll: true });
   }, [screen]);
   const stable = seasonStable(ctx.mode, ctx.finish?.finish);
   const onProgress = useCallback((at: CentrePlace | null) => {
     if (!key) return;
-    if (at) writeResume(RESUME_GAME, { key, year: row.year, md: at.md, speed: at.speed, stable, round: at.round });
-    else if (readResume(RESUME_GAME)?.key === key) clearResume(RESUME_GAME);
-  }, [key, row.year, stable]);
+    if (at) writeResume(resumeGame, { key, year: row.year, md: at.md, speed: at.speed, stable, round: at.round });
+    else if (readResume(resumeGame)?.key === key) clearResume(resumeGame);
+  }, [key, row.year, stable, resumeGame]);
   const navigation = <CompetitionNavigation league={ctx.league?.name ?? 'League'} competitions={competitions} screen={screen} onSelect={select} />;
   const leave = () => { moments?.bank(false); onClose(); };
   if (!model && screen === 'league') return <SeasonCompetitionPanel key="unavailable" career={career} row={row} competition={null} navigation={navigation} exitLabel={exitLabel} onClose={leave}

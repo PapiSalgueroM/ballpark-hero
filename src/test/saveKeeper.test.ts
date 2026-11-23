@@ -34,8 +34,8 @@ vi.mock('@/lib/safeStorage', async (importOriginal) => {
   return { ...real, getStorageTrouble: () => seam.trouble ?? real.getStorageTrouble() };
 });
 
-import { CONTINUE_SAVES } from '@/data/continueSaves';
-import { BROKEN_SAVE_MARK, SET_ASIDE_SEEN_KEY, backupKeysOf, offeredBackup, type ListableStorage } from '@/lib/brokenSaveRecovery';
+import { CONTINUE_SAVES, SOCCER_CAREER_SAVE, continueSaveEntries } from '@/data/continueSaves';
+import { BROKEN_SAVE_MARK, SET_ASIDE_SEEN_KEY, backupKeysOf, offeredBackup, routeSaveEntry, type ListableStorage } from '@/lib/brokenSaveRecovery';
 import { holdPendingSave } from '@/lib/safeStorage';
 import { createSaveFence, fenceKeyOf } from '@/lib/saveFence';
 import {
@@ -438,6 +438,64 @@ describe('Club Manager restore generation', () => {
       expect(dying.m.has(PENDING_RESTORE_KEY), 'crash at ' + call).toBe(false);
       expect(backups(dying.m, key).filter(copy => dying.m.get(copy) === laterCareer)).toHaveLength(1);
     }
+  });
+});
+
+describe('Soccer Career restore generation', () => {
+  const older = '{"currentClub":"Everton","age":23}';
+  const current = '{"currentClub":"Everton","age":24}';
+  const newer = '{"currentClub":"Everton","age":25}';
+
+  it.each(continueSaveEntries(SOCCER_CAREER_SAVE))('fences live tabs when loading $path', entry => {
+    const key = entry.saveKey;
+    const source = bk(key, '2026-10-04T09-00-00');
+    const { api, m } = store({ [key]: current, [source]: older, [fenceKeyOf(key)]: '7' });
+    const live = createSaveFence(api);
+    live.adopt(key);
+    expect(stageRestore(entry, source, api, T0)).toEqual({ ok: true });
+    expect(applyPending(api, later(1000))).toMatchObject({ ok: true, path: entry.path, kept: true });
+    expect(m.get(key)).toBe(older);
+    expect(m.get(fenceKeyOf(key))).toBe('8');
+    expect(live.write(key, () => { api.setItem(key, current); return true; })).toBe('moved');
+    expect(m.get(source)).toBe(older);
+  });
+
+  it('preserves both the newer career and the target backup when another tab plays during the recovery copy', () => {
+    const entry = routeSaveEntry('/soccer-career?slot=2')!;
+    const key = entry.saveKey;
+    const fence = fenceKeyOf(key);
+    const source = bk(key, '2026-10-04T09-00-00');
+    const { api, m } = store({ [key]: current, [source]: older, [fence]: '7',
+      soccerCareerSave: 'slot one', 'soccerCareerSave-slot-3': 'slot three' });
+    expect(stageRestore(entry, source, api, T0)).toEqual({ ok: true });
+    const write = api.setItem;
+    api.setItem = (name, value) => {
+      write(name, value);
+      if (name.startsWith(key + BROKEN_SAVE_MARK) && value === current) {
+        write(key, newer);
+        write(fence, '8');
+      }
+    };
+    expect(applyPending(api, later(1000))).toEqual({ ok: false, path: entry.path, why: 'moved' });
+    expect(m.get(key)).toBe(newer);
+    expect(m.get(source)).toBe(older);
+    expect(m.get(fence)).toBe('8');
+    expect(m.get('soccerCareerSave')).toBe('slot one');
+    expect(m.get('soccerCareerSave-slot-3')).toBe('slot three');
+  });
+
+  it('keeps the current save and backup when the slot generation cannot be written', () => {
+    const entry = routeSaveEntry('/soccer-career?slot=3')!;
+    const key = entry.saveKey;
+    const fence = fenceKeyOf(key);
+    const source = bk(key, '2026-10-04T09-00-00');
+    const { api, m, s } = store({ [key]: current, [source]: older, [fence]: '7' });
+    expect(stageRestore(entry, source, api, T0)).toEqual({ ok: true });
+    s.refuse = name => name === fence;
+    expect(applyPending(api, later(1000))).toEqual({ ok: false, path: entry.path, why: 'no-room' });
+    expect(m.get(key)).toBe(current);
+    expect(m.get(fence)).toBe('7');
+    expect(backups(m, key)).toEqual([source]);
   });
 });
 

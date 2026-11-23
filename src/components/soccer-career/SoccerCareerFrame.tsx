@@ -48,7 +48,8 @@ export function SoccerCareerFrame({ active = false, children, reportGameContext 
             'When two clubs bid for you, compare weekly pay, contract length and estimated league games before you review and sign an offer.',
             ...STORY_ROLE_HELP_RULES,
             ...SOCCER_DECK_HELP_RULES,
-            'One tab at a time: the career plays in the newest tab you opened. An older tab asks you to reload. Example: open it in two tabs and play a season in the second; the first asks you to reload, and the reload shows that season.',
+            'Career saves holds up to three careers in this browser. To keep your first player and start another, choose an empty slot.',
+            'If two tabs open the same slot, the tab with older progress asks you to reload. Example: play a season in the second tab, then reload the first to see that season.',
           ]} className={active ? "h-11 w-11 sm:h-auto sm:w-auto" : undefined} />
         </div>
         {children}
