@@ -1,6 +1,10 @@
+## 2026-11-23, NRL Team Manager save file imports
+
+PL-03 adds file import to an empty slot in Career saves. The chooser shows the club and season before confirmation. The original file stays available, and a slot with an existing career or checkpoint is protected. Imported careers are local play and keep their fixture and season records, including older v1 saves.
+
 ## 2026-11-23, NRL Team Manager save downloads
 
-PL-03 adds Download slot to Career saves. Each download contains the exact saved career, including older saves and their match and season history. Import, verified save times and account copies remain future work for NRL Team Manager.
+PL-03 adds Download slot to Career saves. Each download contains the exact saved career, including older saves and their match and season history. Verified save times and account copies remain future work for NRL Team Manager.
 
 The 37 focused tests covered a 12-season Storm career, an older v1 save, a slot updated while the chooser was open, and empty, corrupt and newer-format saves. Downloading changed no career, checkpoint or write fence. Twelve Chromium cases at 320 and 390 pixels verified the real files, including 237 settled fixtures in the final year of the 12-season career. The previous build had no download control at either width.
 

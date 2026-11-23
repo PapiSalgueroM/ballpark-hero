@@ -232,6 +232,7 @@ interface NrlSavedMatchPlan { attackPlan: NrlAttackPlan; kickingPlan: NrlKicking
 
 export interface NrlCareerState {
   version: 2;
+  importedFromFile?: true;
   openingYear: NrlYear;
   openingRoster?: 'matchday-2026' | 'perth-signings-2027';
   customClub?: NrlCustomClub;
@@ -2572,6 +2573,7 @@ function acceptCaretakerJob(state: NrlCareerState, action: Extract<NrlCareerActi
   }, true);
   return {
     version: state.version, openingYear: state.openingYear, openingRoster: state.openingRoster, customClub: state.customClub,
+    ...(state.importedFromFile && { importedFromFile: true as const }),
     season: next, players, history: state.history, finance: returningClubBook(state.history, clubId, year, round), legacySeason: false,
     caretakerJobs: true, caretakerDeparture: { clubId: season.clubId, ...nrlCoachingRecord(season), finance: nrlCareerFinance(state) },
     boardChallenge: state.boardChallenge, origin: state.origin, originHistory: state.originHistory, worldCup: state.worldCup,
@@ -4845,6 +4847,7 @@ function validIndividualSkillWork({ season, players }: NrlCareerState): boolean 
 
 export function isNrlCareerState(value: unknown): value is NrlCareerState {
   if (!record(value) || value.version !== 2 || !isNrlOpeningYear(value.openingYear)
+    || (value.importedFromFile !== undefined && value.importedFromFile !== true)
     || !isNrlSeasonProgress(value.season) || value.season.year < value.openingYear
     || typeof value.legacySeason !== 'boolean'
     || (value.caretakerJobs !== undefined && (value.caretakerJobs !== true || value.legacySeason))
@@ -4998,9 +5001,12 @@ export function readNrlCareerSave(raw: string | null): NrlCareerState | null {
     if (isNrlCareerState(value)) {
       return value.season.bench ? value : { ...value, season: { ...value.season, bench: nrlBench(value.season) } };
     }
-    return isNrlManagerState(value) && isNrlOpeningYear(value.year) && value.intensivePositionTrainingId === undefined
-      && value.individualSkillWorkId === undefined && !value.results.some(match => match.individualSkillWorkId)
-      ? careerFrom(value, value.year, true) : null;
+    if (!isNrlManagerState(value) || !isNrlOpeningYear(value.year) || value.intensivePositionTrainingId !== undefined
+      || value.individualSkillWorkId !== undefined || value.results.some(match => match.individualSkillWorkId)) return null;
+    const imported = 'importedFromFile' in value ? value.importedFromFile : undefined;
+    if (imported !== undefined && imported !== true) return null;
+    const career = careerFrom(value, value.year, true);
+    return imported ? { ...career, importedFromFile: true } : career;
   } catch {
     return null;
   }

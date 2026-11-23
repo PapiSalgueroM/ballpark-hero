@@ -582,6 +582,8 @@ const NOTHING_HELD = [
     why: 'the packed write verifies the original and its copy, answers false on refusal, and leaves retry to the same saveCareer callers' },
   { file: 'src/lib/clubManagerPortable.ts', keys: ['write:commitPortableFile', 'keeps:commitPortableFile'],
     why: 'the selected file holds the original career, and retry checks an empty slot again before starting the import' },
+  { file: 'src/lib/nrlPortable.ts', keys: ['write:commitImportedCareer'],
+    why: 'the selected file holds the original career, and retry checks the empty slot, checkpoint and fence again' },
   { file: 'src/lib/clubManagerCheckpoint.ts', keys: ['write:keepClubManagerCheckpoint', 'write:replaceWithCheckpoint'],
     why: 'the completed rollover is verified before the optional checkpoint write; a refused restore already has a saved checkpoint and requires new confirmation' },
   { file: 'src/lib/clubManagerHandOver.ts', keys: ['write:writeParked', 'keeps:saveCareer', 'keeps:writeParked', 'keeps:switchSlot'],

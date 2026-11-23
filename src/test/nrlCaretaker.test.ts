@@ -6,7 +6,7 @@ import {
 } from '@/lib/nrlCareer';
 import { nrlJudiciaryBans, nrlJudiciaryCase } from '@/lib/nrlJudiciary';
 import { nrlLadder, nrlRoundFixtures } from '@/lib/nrlManager';
-import { sameNrlCareer } from '@/lib/nrlSaveSlots';
+import { nrlSeasonCanCredit, sameNrlCareer } from '@/lib/nrlSaveSlots';
 
 const year = 2026;
 const round = 14;
@@ -25,6 +25,15 @@ function atTheVacancy() {
 }
 
 describe('NRL same-season caretaker appointment', () => {
+  it('keeps an imported branch local after an appointment and season finish', () => {
+    const imported = reload({ ...atTheVacancy(), importedFromFile: true })!;
+    let accepted = reduceNrlCareer(imported, appointment);
+    expect(accepted.season.clubId).toBe(destinationId);
+    while (accepted.season.phase !== 'complete') accepted = advance(accepted);
+    expect(reload(accepted)?.importedFromFile).toBe(true);
+    expect(nrlSeasonCanCredit(accepted, null)).toBe(false);
+  });
+
   it('appoints the next coach once in the same league before the Dragons’ Round 14 match', () => {
     const before = atTheVacancy();
     const previousResults = before.season.results;
