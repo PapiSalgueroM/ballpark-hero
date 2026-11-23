@@ -1,3 +1,7 @@
+## 2026-11-23, NBA Front Office statistics migration protection
+
+PL-04 is partly implemented. NBA Front Office keeps a verified copy before its first write of an older franchise with named season statistics. A refused copy or replacement keeps the original save and allows a retry. A newer franchise save in another tab takes precedence. The recorded 283-player, 30-club statistics match the compact format after a rest booking. A refused round write retries the same result without replaying the round.
+
 ## 2026-11-23, Club Manager active save protection
 
 PL-04 is partly implemented. Club Manager can compact oversized active saves when the existing pair-results format makes them smaller. The first conversion checks an exact recovery copy of the prior bytes for that slot. If storage refuses the copy or write, the previous save stays available and the player can retry. A compact career keeps its format through season rollover and uses the same recovery copy. Ordinary plain saves keep their existing writer.
