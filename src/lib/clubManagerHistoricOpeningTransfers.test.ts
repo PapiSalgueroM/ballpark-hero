@@ -18,6 +18,7 @@ const openingTransfers = [
   { name: 'Dani García', slug: 'dani-garcia', from: 'Espanyol', position: 'ST', age: 30, rating: 68, value: 1.5, nation: 'Spain' },
   { name: 'Barry Ferguson', slug: 'barry-ferguson', from: 'Blackburn Rovers', position: 'CDM', age: 26, rating: 76, value: 6.8, nation: 'Scotland' },
   { name: 'Ivan Leko', slug: 'ivan-leko', from: 'Málaga', position: 'CAM', age: 26, rating: 70, value: 2.3, nation: 'Croatia' },
+  { name: 'Igor Biscan', slug: 'igor-biscan', from: 'Liverpool', position: 'CDM', age: 26, rating: 73, value: 3.8, nation: 'Croatia' },
 ] as const;
 
 const careerCases = openingTransfers.flatMap(transfer => ['Real Madrid', 'Sevilla'].map(club => ({ ...transfer, club })));

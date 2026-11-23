@@ -1,3 +1,9 @@
+## 2026-11-23, Club Manager 2005-06 Porto and Panathinaikos scorer coverage
+
+Two verified 11-player opening pools give Porto and Panathinaikos named scorers for newly played background cup matches. Igor Bišćan joined Panathinaikos in July 2005. Fresh starts drop his outdated Liverpool row. Existing saves keep the stored Igor Biscan spelling, player ID, nationality and ownership, and the opening scorer list respects that ownership under either spelling. [Porto and Panathinaikos source audit](audits/club-manager-porto-panathinaikos-2005-rosters.md)
+
+The 125-match Champions League replay credits seven Porto and six Panathinaikos goals. Matchday one verifies both pools, and a separate replay checks ownership with the older spelling. CM-03 remains partial, with 12 of the original 15 missing outside-league scorer pools covered. The Sparta Prague and Anderlecht release in PR #1067 passed all four live browser checks.
+
 ## 2026-11-23, Club Manager 2005-06 Sparta Prague and Anderlecht scorer coverage
 
 Two verified 11-player opening pools give Sparta Prague and Anderlecht named scorers in newly played background cup matches. The source record uses Sparta's August 6 domestic opener and Anderlecht's July 26 opening qualifier. The new pool names do not overlap the 98 playable historical clubs or the prior eight scorer pools. [Sparta Prague and Anderlecht source audit](audits/club-manager-sparta-anderlecht-2005-rosters.md)

@@ -15672,7 +15672,9 @@ function cupFixtureScorerCredits(
           if (record.owner !== club) unavailable.add(record.player.name);
         }
         const strength = strengthOf(state, club);
-        const pool = verified.filter(({ name }) => !unavailable.has(name))
+        // A verified scorer can have an earlier spelling in the saved roster.
+        const pool = verified.filter(({ name, legacyName }) =>
+          !unavailable.has(name) && (legacyName === undefined || !unavailable.has(legacyName)))
           .map(({ name, line }) => ({ n: name, p: CUP_LINE_POSITION[line], r: strength }));
         const starters = partialEleven(pool, strength, groupOf)?.outfield ?? [];
         const startingNames = new Set(starters.map(player => player.n));
