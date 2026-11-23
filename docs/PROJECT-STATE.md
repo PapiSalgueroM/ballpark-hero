@@ -1,3 +1,9 @@
+## 2026-11-23, Club Manager AGF opening cup scorers
+
+Five verified 2026-27 AGF players cover anonymous defender and midfield goals in newly simulated background cup matches. Two Champions League replays credit Frederik Tingager in a 2-0 win at Club Brugge and Magnus Knudsen in a 3-2 home loss to AEK Athens. The result and existing scorer credits stay as played after reload. A separate managed 2-2 keeps both goals for Gift Links on his original player key. [AGF scorer audit](audits/club-manager-agf-2026-scorers.md)
+
+Both background replays reproduce the missing credits when the pool is removed. A separate replay keeps Knudsen's goal anonymous when he is unavailable in the save. The Thun scorer release in PR #1073 passed all eight live mobile checks. The complete new-career replay accounts for all 295 goals across 109 matches, with six own goals and the same match results. CM-03 remains partial across other squads, eras and watched competitions. The next P0 check is the Transfer Path and Career Quiz alias gap for Alisson Becker.
+
 ## 2026-11-23, Club Manager Thun opening cup scorers
 
 Ten verified 2026-27 Thun players now cover anonymous goals in new background cup simulations and matches against the managed club. This applies to careers using the corrected opening Thun registrations. The same scorer appears on the live goal, match report and cup table. The engine keeps the original result, goal time, VAR decision and own-goal decision. Settled scorer records stay as played. [Thun cup scorer audit](audits/club-manager-thun-2026-scorers.md)

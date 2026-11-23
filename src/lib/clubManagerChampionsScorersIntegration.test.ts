@@ -242,8 +242,8 @@ describe('Owned Champions League scorer settlement', () => {
     expect(lask.every(([id, name, club, , generated]) => verified.includes(name)
       && id === JSON.stringify(['now', club, name]) && generated === undefined)).toBe(true);
     expect(ledger.players.filter(([, , club]) => club !== 'LASK')).toEqual(controlLedger.players);
-    expect(ledger).toMatchObject({ unresolved: 1, ownGoals: 1 });
-    expect(controlLedger).toMatchObject({ unresolved: 3, ownGoals: 1 });
+    expect(ledger).toMatchObject({ unresolved: 0, ownGoals: 1 });
+    expect(controlLedger).toMatchObject({ unresolved: 2, ownGoals: 1 });
     expect(loadCareer(serializeParkedCareer(tracked.value.state))?.uclScorers).toEqual(ledger);
     expect(loadCareer(serializeParkedCareer(control.value.state))?.uclScorers).toEqual(controlLedger);
   });
@@ -358,11 +358,12 @@ describe('Owned Champions League scorer settlement', () => {
     expect(final.state.uclScorers?.players.filter(([, , club]) => club === 'Porto'))
       .toEqual(before.uclScorers?.players.filter(([, , club]) => club === 'Porto'));
     expectReconciled(final.state, 109, 273);
+    const winner = { name: 'Samu Aghehowa', club: 'Porto', goals: 8 };
     expect(championsLeagueScorerRace(final.state)).toMatchObject({
-      status: 'undecided', leaders: [], unresolved: 2,
-      rows: expect.arrayContaining([expect.objectContaining({ name: 'Samu Aghehowa', club: 'Porto', goals: 8 })]),
+      status: 'winner', leaders: [winner], unresolved: 1,
     });
-    expect(tape(MADRID + 0xa01, () => finishSeason(final.state)).value.summary.uclScorerAward).toBeUndefined();
+    expect(tape(MADRID + 0xa01, () => finishSeason(final.state)).value.summary.uclScorerAward)
+      .toMatchObject([winner]);
 
     const old = loadCareer(JSON.stringify(scoreOnly(final.state)));
     expect(uclHolderOf(old!)).toBe('Real Madrid');
