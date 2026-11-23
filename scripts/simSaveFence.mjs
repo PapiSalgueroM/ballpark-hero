@@ -46,8 +46,10 @@
  *                                and the replays come back, tabs goes red.
  *   SAVE_FENCE_CONTROL=rawwrite  a raw SAVE_KEY setItem planted in an in memory
  *                                copy of clubManagerSlots.ts: source goes red.
- *   SAVE_FENCE_CONTROL=rawsoccer (Round 1330) a raw SAVE_KEY setItem planted in an
- *                                in memory copy of SoccerCareer.tsx: source red.
+ *   SAVE_FENCE_CONTROL=rawsoccer  a raw slot-key setItem planted in an in memory
+ *                                 copy of SoccerCareer.tsx: source red.
+ *   SAVE_FENCE_CONTROL=rawguard  the active-byte check is removed from saveCareer: source red.
+ *   SAVE_FENCE_CONTROL=unkeyed   the slot component loses its React key: source red.
  *   SAVE_FENCE_CONTROL=adoptlate (Round 1330) the page's adopt moved below its
  *                                read of the save, in memory: source red (the
  *                                adopt must be the first statement of the
@@ -89,7 +91,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SAVE_KEY = 'dukb-club-manager-save';
 const FENCE_KEY = 'dukb-fence:dukb-club-manager-save';
 const CONTROL = process.env.SAVE_FENCE_CONTROL || '';
-const CONTROLS = { nofence: 'tabs', rawwrite: 'source', rawsoccer: 'source', adoptlate: 'source', loaddraw: 'fleet', repairall: 'fleet', squadline: 'fleet', budgetneg: 'fleet' };
+const CONTROLS = { nofence: 'tabs', rawwrite: 'source', rawsoccer: 'source', rawguard: 'source', unkeyed: 'source', adoptlate: 'source', loaddraw: 'fleet', repairall: 'fleet', squadline: 'fleet', budgetneg: 'fleet' };
 if (CONTROL && !(CONTROL in CONTROLS)) { console.error(`SAVE_FENCE_CONTROL=${CONTROL} is not a control here (${Object.keys(CONTROLS).join(', ')})`); process.exit(1); }
 if (CONTROLS[CONTROL] === 'fleet' && !process.env.FENCE_BASE) { console.error(`control cannot run: SAVE_FENCE_CONTROL=${CONTROL} is judged against the base commit, set FENCE_BASE`); process.exit(1); }
 const WANT = (process.env.SAVE_FENCE_SECTIONS || (CONTROL ? CONTROLS[CONTROL] : 'tabs,source,fleet')).split(',').map(s => s.trim()).filter(Boolean);
@@ -321,23 +323,26 @@ const RAW_PLANT = "  try { localStorage.setItem(SAVE_KEY, '{}'); } catch { /* pl
 /* Round 1330: Soccer Career's save is fenced too. The same generic writers
    reach it by entry.saveKey (it is a registered long game in
    src/data/continueSaves.ts), each safe for its own reason here. */
-const SOCCER_KEY = 'soccerCareerSave';
+const SOCCER_KEYS = new Set(['soccerCareerSave', 'soccerCareerSave-slot-2', 'soccerCareerSave-slot-3']);
 const SOCCER_ALLOWED = [
   { file: 'src/lib/brokenSaveRecovery.ts', fn: 'moveAside', reason: 'the error boundary\'s fresh start and the damaged tile\'s Clear: the bytes are copied aside first, then the page reloads or opens on the creation screen with no career in memory, and its next Begin Career writes through the fence (saveCareer) and stales every other tab' },
   { file: 'src/lib/brokenSaveRecovery.ts', fn: 'restoreBackup', reason: 'a put back swaps before any career is in the page\'s memory; the next mount adopts, reads, and its mount write goes through the fence and stales every other tab' },
-  { file: 'src/lib/saveKeeper.ts', fn: 'applyPending', reason: 'the keeper applies a staged put back in main.tsx before React mounts; the page\'s mount write right after moves the generation' },
+  { file: 'src/lib/saveKeeper.ts', fn: 'applyPending', reason: 'the keeper applies a staged put back before React mounts with a strict fresh claim and a check of the current bytes' },
 ];
 const SOCCER_RAW_FILE = 'src/pages/SoccerCareer.tsx';
 const SOCCER_RAW_ANCHOR = '  const handleBeginCareer = (draft: SoccerCareerDraft) => {\n';
-const SOCCER_RAW_PLANT = "    try { localStorage.setItem(SAVE_KEY, '{}'); } catch { /* planted */ }\n";
+const SOCCER_RAW_PLANT = "    try { localStorage.setItem(saveKey, '{}'); } catch { /* planted */ }\n";
+const SOCCER_RAW_GUARD = '        const raw = serializeSoccerCareerSave(career);\n        if (localStorage.getItem(saveKey) !== expectedRaw.current) { sourceChanged = true; return false; }\n';
 const SOCCER_ADOPT_FILE = 'src/lib/soccerCareerSaveEntry.ts';
+const SOCCER_ENTRY_FILE = 'src/pages/SoccerCareerEntry.tsx';
+const SOCCER_KEYED = '<SoccerCareerSlot key={slot.saveKey} slot={slot} />';
 /* Round 1330 review (mutation M6 survived): the page adopts the generation
    BEFORE it reads the save, so a write another tab lands between the two
    leaves this page stale, never the other one. Read from the code (the AST),
-   never the comments: the shared entry helper starts with saveFence.adopt(SAVE_KEY)
-   and every getItem in it comes after. adoptlate moves the adopt below the read. */
-const SOCCER_ADOPT = '  saveFence.adopt(SAVE_KEY);\n';
-const SOCCER_READ = '  try { return localStorage.getItem(SAVE_KEY); } catch { return null; }\n';
+   never the comments: the shared helper adopts the selected key before reading
+   it. adoptlate moves the adopt below the read. */
+const SOCCER_ADOPT = '  saveFence.adopt(saveKey);\n';
+const SOCCER_READ = '  try { return localStorage.getItem(saveKey); } catch { return null; }\n';
 function checkSoccerAdopt(text, rel) {
   tick('source');
   const sf = ts.createSourceFile(rel, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
@@ -357,20 +362,52 @@ function checkSoccerAdopt(text, rel) {
   const reads = [];
   const findReads = n => { if (ts.isCallExpression(n) && ts.isPropertyAccessExpression(n.expression) && n.expression.name.text === 'getItem') reads.push(n); ts.forEachChild(n, findReads); };
   findReads(init.body);
-  if (firstText !== 'saveFence.adopt(SAVE_KEY);') fail('source', `${rel}: expected saveFence.adopt(SAVE_KEY) before reading the save; first statement is "${firstText}"`);
+  if (firstText !== SOCCER_ADOPT.trim()) fail('source', `${rel}: expected saveFence.adopt(saveKey) before reading the save; first statement is "${firstText}"`);
   else if (!reads.length) fail('source', `${rel}: the entry helper reads no save, so the order cannot be checked`);
   else if (reads.some(r => r.getStart(sf) < first.getEnd())) fail('source', `${rel}: a getItem in the entry helper runs before the adopt`);
+  if (reads.some(r => r.arguments[0]?.getText(sf) !== 'saveKey')) fail('source', `${rel}: entry helper reads a different key from the one it adopted`);
   if (adopts.length !== 1) fail('source', `${rel}: the entry helper adopts the save ${adopts.length} times; expected one`);
-  console.log(`  Soccer Career: the entry helper starts with ${firstText}; ${reads.length} save read(s), ${adopts.length} adopt call(s)`);
-  const entryFile = 'src/pages/SoccerCareerEntry.tsx';
-  const entry = ts.createSourceFile(entryFile, lf(path.join(ROOT, entryFile)), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  console.log(`  Soccer Career: the entry helper starts with ${firstText} ${reads.length} save read(s), ${adopts.length} adopt call(s)`);
+}
+
+function checkSoccerEntry(text) {
+  const entry = ts.createSourceFile(SOCCER_ENTRY_FILE, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const slot = entry.statements.find(n => ts.isFunctionDeclaration(n) && n.name?.text === 'SoccerCareerSlot');
   let adopters = 0;
   const findAdopters = n => {
-    if (ts.isCallExpression(n) && n.expression.getText(entry) === 'useState' && n.arguments[0]?.getText(entry) === 'adoptSoccerCareerSave') adopters++;
+    if (ts.isCallExpression(n) && n.expression.getText(entry) === 'useState' && n.arguments[0]?.getText(entry) === '() => adoptSoccerCareerSave(saveKey)') adopters++;
     ts.forEachChild(n, findAdopters);
   };
-  findAdopters(entry);
-  if (adopters !== 1) fail('source', `${entryFile}: expected one useState initialiser that adopts and reads the save`);
+  if (slot?.body) findAdopters(slot.body);
+  tick('source');
+  if (adopters !== 1) fail('source', `${SOCCER_ENTRY_FILE}: expected one slot useState initialiser that adopts and reads its save`);
+
+  const keyedSlots = [];
+  const findSlots = n => {
+    if (ts.isJsxSelfClosingElement(n) && n.tagName.getText(entry) === 'SoccerCareerSlot') keyedSlots.push(n);
+    ts.forEachChild(n, findSlots);
+  };
+  findSlots(entry);
+  const attributeOf = name => keyedSlots[0]?.attributes.properties.find(a => ts.isJsxAttribute(a) && a.name.getText(entry) === name)?.initializer?.getText(entry);
+  tick('source');
+  if (keyedSlots.length !== 1 || attributeOf('key') !== '{slot.saveKey}' || attributeOf('slot') !== '{slot}') {
+    fail('source', `${SOCCER_ENTRY_FILE}: the selected slot must remount by its storage key`);
+  }
+}
+
+function checksSoccerRawBeforeWrite(node, key, sf) {
+  const write = node.parent;
+  const block = write.parent;
+  if (!ts.isExpressionStatement(write) || !ts.isBlock(block)) return false;
+  return block.statements.slice(0, block.statements.indexOf(write)).some(statement => {
+    if (!ts.isIfStatement(statement) || !ts.isBlock(statement.thenStatement)) return false;
+    const test = statement.expression;
+    if (!ts.isBinaryExpression(test) || test.operatorToken.kind !== ts.SyntaxKind.ExclamationEqualsEqualsToken
+      || test.right.getText(sf) !== 'expectedRaw.current') return false;
+    const read = test.left;
+    return ts.isCallExpression(read) && read.expression.getText(sf) === 'localStorage.getItem' && read.arguments[0]?.getText(sf) === key
+      && statement.thenStatement.statements.some(n => ts.isReturnStatement(n) && n.expression?.kind === ts.SyntaxKind.FalseKeyword);
+  });
 }
 function walkSrc(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -401,24 +438,35 @@ function sectionSource() {
       text = text.replace(SOCCER_RAW_ANCHOR, SOCCER_RAW_ANCHOR + SOCCER_RAW_PLANT);
       fired += 1;
     }
+    if (CONTROL === 'rawguard' && rel === SOCCER_RAW_FILE) {
+      once(text, SOCCER_RAW_GUARD, rel);
+      text = text.replace(SOCCER_RAW_GUARD, SOCCER_RAW_GUARD.split('\n')[0] + '\n');
+      fired += 1;
+    }
+    if (CONTROL === 'unkeyed' && rel === SOCCER_ENTRY_FILE) {
+      once(text, SOCCER_KEYED, rel);
+      text = text.replace(SOCCER_KEYED, '<SoccerCareerSlot slot={slot} />');
+      fired += 1;
+    }
     if (CONTROL === 'adoptlate' && rel === SOCCER_ADOPT_FILE) {
       once(text, SOCCER_ADOPT + SOCCER_READ, rel);
       text = text.replace(SOCCER_ADOPT + SOCCER_READ, SOCCER_READ + SOCCER_ADOPT);
       fired += 1;
     }
     if (rel === SOCCER_ADOPT_FILE) checkSoccerAdopt(text, rel);
+    if (rel === SOCCER_ENTRY_FILE) checkSoccerEntry(text);
     if (!/\.(setItem|removeItem)\(/.test(text)) continue;
     scanned += 1;
     const sf = ts.createSourceFile(file, text, ts.ScriptTarget.Latest, true, rel.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS);
     const cmIds = new Set();
-    if (/import\s*\{[^}]*\bSAVE_KEY\b[^}]*\}\s*from\s*'(@\/lib\/clubManager|\.\/clubManager)'/.test(text)) cmIds.add('SAVE_KEY');
+    if (/import\s*\{[^}]*\bSAVE_KEY\b[^}]*\}\s*from\s*['"](?:@\/lib\/|\.\/)clubManager(?:SaveKeys)?['"]/.test(text)) cmIds.add('SAVE_KEY');
     const scIds = new Set();
     if (/import\s*\{[^}]*\bSAVE_KEY\b[^}]*\}\s*from\s*['"]@\/lib\/soccerCareerSaveEntry['"]/.test(text)) scIds.add('SAVE_KEY');
     const decls = [];
     const collect = n => { if (ts.isVariableDeclaration(n) && ts.isIdentifier(n.name) && n.initializer) decls.push(n); ts.forEachChild(n, collect); };
     collect(sf);
     for (const d of decls) if (d.initializer.getText(sf) === `'${SAVE_KEY}'`) cmIds.add(d.name.text);
-    for (const d of decls) if (ts.isStringLiteralLike(d.initializer) && d.initializer.text === SOCCER_KEY) scIds.add(d.name.text);
+    for (const d of decls) if (ts.isStringLiteralLike(d.initializer) && SOCCER_KEYS.has(d.initializer.text)) scIds.add(d.name.text);
     for (const d of decls) {
       if (ts.isCallExpression(d.initializer) || ts.isArrowFunction(d.initializer) || ts.isFunctionExpression(d.initializer)) continue;
       if ([...cmIds].some(id => new RegExp(`\\b${id}\\b`).test(d.initializer.getText(sf)))) cmIds.add(d.name.text);
@@ -430,7 +478,7 @@ function sectionSource() {
         const arg = node.arguments[0];
         const key = arg.getText(sf);
         const cm = (ts.isIdentifier(arg) && cmIds.has(key)) || key === `'${SAVE_KEY}'`;
-        const sc = (ts.isIdentifier(arg) && scIds.has(key)) || (ts.isStringLiteralLike(arg) && arg.text === SOCCER_KEY);
+        const sc = (ts.isIdentifier(arg) && scIds.has(key)) || (ts.isStringLiteralLike(arg) && SOCCER_KEYS.has(arg.text));
         /* A generic writer: a game's saveKey in a module that walks the
            registered long games (src/data/continueSaves.ts), Club Manager
            and Soccer Career among them. */
@@ -438,9 +486,13 @@ function sectionSource() {
         if (cm || sc || gen) {
           const names = [];
           let isFenced = false;
+          let sameSoccerFence = false;
           for (let a = node.parent; a; a = a.parent) {
             if ((ts.isArrowFunction(a) || ts.isFunctionExpression(a)) && a.parent && ts.isCallExpression(a.parent)
-              && a.parent.expression.getText(sf) === 'saveFence.write') isFenced = true;
+              && a.parent.expression.getText(sf) === 'saveFence.write') {
+              isFenced = true;
+              if (a.parent.arguments[1] === a && a.parent.arguments[0]?.getText(sf) === key) sameSoccerFence = true;
+            }
             if ((ts.isArrowFunction(a) || ts.isFunctionExpression(a)) && a.parent && ts.isVariableDeclaration(a.parent) && ts.isIdentifier(a.parent.name)) {
               names.push(a.parent.name.text);
               if (new RegExp(`saveFence\\.write\\(SAVE_KEY, ${a.parent.name.text}\\)`).test(text)) isFenced = true;
@@ -460,7 +512,12 @@ function sectionSource() {
           }
           if (sc || gen) {
             tick('source');
-            if (isFenced) scFenced += 1;
+            if (sc && sameSoccerFence) {
+              scFenced += 1;
+              if (rel === SOCCER_RAW_FILE && !checksSoccerRawBeforeWrite(node, key, sf)) {
+                fail('source', `the Soccer Career write needs an active-byte check before changing its slot: ${where}`);
+              }
+            } else if (gen && isFenced) scFenced += 1;
             else {
               const allow = SOCCER_ALLOWED.find(e => e.file === rel && names.includes(e.fn));
               if (allow) { scGeneric += 1; seenSoccerAllowed.add(allow); }
@@ -476,7 +533,7 @@ function sectionSource() {
   for (const e of ALLOWED) if (!seenAllowed.has(e)) fail('source', `allowed entry ${e.file} ${e.fn} no longer writes the save: take it off the list`);
   for (const e of SOCCER_ALLOWED) if (!seenSoccerAllowed.has(e)) fail('source', `Soccer Career allowed entry ${e.file} ${e.fn} no longer writes the save: take it off the list`);
   console.log(`  ${scanned} files write storage; ${fenced} writes of the save inside saveFence.write, ${generic} on the allowed list (${ALLOWED.length} entries, each still there)`);
-  console.log(`  Soccer Career: ${scFenced} writes of soccerCareerSave inside saveFence.write, ${scGeneric} on the allowed list (${SOCCER_ALLOWED.length} entries, each still there)`);
+  console.log(`  Soccer Career: ${scFenced} fenced slot writes, ${scGeneric} on the allowed list (${SOCCER_ALLOWED.length} entries, each still there)`);
   if (fenced < 5) fail('source', `only ${fenced} fenced writes found; saveCareer (2), clearCareer, the swap and deleteSlot make 5`);
   if (scFenced < 3) fail('source', `only ${scFenced} fenced Soccer Career writes found; saveCareer, clearCareer and deleteUnusableSave make 3`);
 }

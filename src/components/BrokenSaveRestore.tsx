@@ -68,6 +68,7 @@ function outcomeWords(o: KeeperOutcome): string {
   if (o.why === 'no-room') return 'Your browser is out of room, so the save could not be put back. It is still kept aside.';
   if (o.why === 'gone') return 'That kept aside save is not in this browser any more, so nothing was put back.';
   if (o.why === 'stale') return 'The page took too long to load, so the save was not put back. It is still kept aside, and you can press the button again.';
+  if (o.why === 'moved') return 'Your career changed in another tab. The recovery copy is still kept aside.';
   return 'This browser would not let the site read its storage, so nothing was put back.';
 }
 

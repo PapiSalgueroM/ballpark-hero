@@ -5,6 +5,7 @@ import { SoccerCareerCreator, POSITIONS, FAMILY_COLORS, getPositionStatBars, Sta
 import { acknowledgeChanceWheel, validChanceWheel } from '@/lib/careerChanceWheel';
 import { soccerEventChoiceConsequence } from '@/lib/soccerCareerContracts';
 import { Fragment, lazy, Suspense, useState, useCallback, useRef, useEffect, useLayoutEffect, useMemo, type ComponentType, type ComponentProps, type ReactNode, type RefObject } from "react";
+import { useNavigate } from "react-router-dom";
 import { formatNumber } from '@/lib/formatNumber';
 import { completedRecordCandidate, readCompletedRecords, retainCompletedRecord, recordRetentionStatus, type CompletedRecordCandidate, type RetainResult } from '@/lib/soccerCareerCompletedRecords';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
@@ -764,21 +765,23 @@ export function startSoccerCareer(draft: SoccerCareerDraft): CareerState {
   return career;
 }
 
-export type SoccerCareerAdmission = { saved: string } | { started: CareerState };
+type SoccerCareerAdmission = ({ saved: string } | { started: CareerState }) & { saveKey?: string; savesPath?: string };
 
 export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission } = {}) {
+  const saveKey = entry?.saveKey ?? SAVE_KEY;
+  const navigate = useNavigate();
   /* Round 258: the display currency is a preference in its own storage key,
      not save data, so nothing here needs to know what it is. Bumping this
      counter is all that is needed to redraw every money figure after the
      picker changes, and it costs nothing when nobody touches it. */
   const [, setCurrencyTick] = useState(0);
   const [restoredSave] = useState(() => {
-    if (entry && "started" in entry) return { career: entry.started, invalid: false };
-    const saved = entry && "saved" in entry ? entry.saved : adoptSoccerCareerSave();
-    if (saved === null) return { career: null, invalid: false };
+    if (entry && "started" in entry) return { career: entry.started, invalid: false, raw: null };
+    const saved = entry && "saved" in entry ? entry.saved : adoptSoccerCareerSave(saveKey);
+    if (saved === null) return { career: null, invalid: false, raw: null };
     try {
       const parsed: unknown = parseSoccerCareerSave(saved);
-      if (!isSoccerCareerSave(parsed)) return { career: null, invalid: true };
+      if (!isSoccerCareerSave(parsed)) return { career: null, invalid: true, raw: saved };
       /* Round 127's lesson, and Round 131 keeps learning it: repairing a save
          only inside the step function is not enough, because the player can
          open the training ground, the phone or the attributes screen before
@@ -789,10 +792,11 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
       /* Round 985: a moment this save already holds was seen; it never replays.
          Its own try, so an odd save can only cost a moment, never the save. */
       try { settleLoadedMoments(loaded); } catch { /* the card plays; nothing else changes */ }
-      return { career: loaded, invalid: false };
-    } catch { return { career: null, invalid: true }; }
+      return { career: loaded, invalid: false, raw: saved };
+    } catch { return { career: null, invalid: true, raw: saved }; }
   });
   const [career, setCareer] = useState<CareerState | null>(restoredSave.career);
+  const expectedRaw = useRef(restoredSave.raw);
   const agentReviewAttempt = useRef<CareerState | null>(null);
   const [saveError, setSaveError] = useState(restoredSave.invalid);
   const [saveFailed, setSaveFailed] = useState(false);
@@ -892,32 +896,40 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
      is refused from then on and the page covers itself with a notice that
      asks for a reload. Never saveFailed for it: the browser is fine, the
      career is just newer somewhere else. */
-  const { moved: saveMoved, check: checkSaveMoved } = useSaveFenceWatch(SAVE_KEY);
+  const { moved: fenceMoved, check: checkSaveMoved } = useSaveFenceWatch(saveKey);
+  const [rawMoved, setRawMoved] = useState(false);
+  const saveMoved = fenceMoved || rawMoved;
   const { openPastCareers, pastCareersTrigger, pastCareersOverlay } = useSoccerPastCareers(saveMoved, saveFailed);
   const sourceIsCurrent = useCallback((ack: CareerSaveAcknowledgement) => {
     try {
-      return !!career && ack.career === career && !saveFence.moved(SAVE_KEY)
+      return !!career && ack.career === career && !saveFence.moved(saveKey)
         && serializeSoccerCareerSave(career) === ack.raw
-        && localStorage.getItem(SAVE_KEY) === ack.raw;
+        && localStorage.getItem(saveKey) === ack.raw;
     } catch { return false; }
-  }, [career]);
+  }, [career, saveKey]);
   const saveCurrentCareer = useCallback((): CareerSaveAcknowledgement | null => {
     acknowledgedCareer.current = null;
     discardRecordAcknowledgement.current = null;
     setShowRecordDiscard(false);
     if (!career) { setSaveFailed(false); setRecordOutcome(null); return null; }
     let writtenRaw: string | null = null;
-    const saved = saveFence.write(SAVE_KEY, function saveCareer() {
+    let sourceChanged = false;
+    const saved = saveFence.write(saveKey, function saveCareer() {
       try {
-        localStorage.setItem(SAVE_KEY, (writtenRaw = serializeSoccerCareerSave(career)));
+        const raw = serializeSoccerCareerSave(career);
+        if (localStorage.getItem(saveKey) !== expectedRaw.current) { sourceChanged = true; return false; }
+        localStorage.setItem(saveKey, raw);
+        if (localStorage.getItem(saveKey) !== raw) return false;
+        writtenRaw = expectedRaw.current = raw;
         return true;
       } catch { return false; }
     });
     if (saved === 'moved') { checkSaveMoved(); return null; }
+    if (sourceChanged) { setRawMoved(true); return null; }
     if (saved === 'failed') { setSaveFailed(true); setRecordOutcome(null); return null; }
     const ack: CareerSaveAcknowledgement = { career, raw: writtenRaw ?? '', candidate: null };
     if (writtenRaw === null || !sourceIsCurrent(ack)) {
-      if (saveFence.moved(SAVE_KEY)) checkSaveMoved();
+      if (saveFence.moved(saveKey)) checkSaveMoved();
       else setSaveFailed(true);
       setRecordOutcome(null);
       return null;
@@ -939,7 +951,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
         : { status: 'blocked', reason: 'unsupported-record' });
     } else setRecordOutcome(null);
     return ack;
-  }, [career, sourceIsCurrent]);
+  }, [career, saveKey, sourceIsCurrent, checkSaveMoved]);
   useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);
   useEffect(() => {
     if (career && saveFailed && !saveMoved) {
@@ -952,13 +964,19 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
     setShowRecordDiscard(false);
     const ack = acknowledgedCareer.current;
     if (!ack || !sourceIsCurrent(ack)) {
-      if (saveFence.moved(SAVE_KEY)) checkSaveMoved();
+      if (saveFence.moved(saveKey)) checkSaveMoved();
       else setSaveFailed(true);
       return;
     }
     setRecordOutcome(ack.candidate
       ? retainCompletedRecord(ack.candidate, completedRecordsStorage, () => sourceIsCurrent(ack))
       : { status: 'blocked', reason: 'unsupported-record' });
+  };
+
+  const openCareerSaves = () => {
+    const ack = acknowledgedCareer.current;
+    if (saveMoved || (career && (!ack || !sourceIsCurrent(ack)) && !saveCurrentCareer())) return;
+    navigate(entry?.savesPath ?? '/soccer-career?view=saves');
   };
   useEffect(() => {
     if (saveFailed) toast.error("Your latest progress could not be saved. Keep this tab open, then try again.", PAGE_TOAST);
@@ -1400,7 +1418,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
       if (ack && ack.career === career && !sourceIsCurrent(ack)) {
         discardRecordAcknowledgement.current = null;
         setShowRecordDiscard(false);
-        if (saveFence.moved(SAVE_KEY)) checkSaveMoved();
+        if (saveFence.moved(saveKey)) checkSaveMoved();
         else setSaveFailed(true);
         return;
       }
@@ -1408,7 +1426,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
       if (!ack || !sourceIsCurrent(ack)) {
         discardRecordAcknowledgement.current = null;
         setShowRecordDiscard(false);
-        if (saveFence.moved(SAVE_KEY)) checkSaveMoved();
+        if (saveFence.moved(saveKey)) checkSaveMoved();
         else setSaveFailed(true);
         return;
       }
@@ -1429,25 +1447,28 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
       }
     }
     let recordBarrierRefused = false;
+    let sourceChanged = false;
     /* The fence checks staleness before this synchronous callback. Its own new
        generation is in storage here, so do not call moved() or nest a write. */
-    const cleared = saveFence.write(SAVE_KEY, function clearCareer() {
+    const cleared = saveFence.write(saveKey, function clearCareer() {
       try {
+        if (localStorage.getItem(saveKey) !== expectedRaw.current) { sourceChanged = true; return false; }
         if (needsRecord) {
           if (!ack || !career || ack.career !== career || serializeSoccerCareerSave(career) !== ack.raw
-            || localStorage.getItem(SAVE_KEY) !== ack.raw) return false;
+            || localStorage.getItem(saveKey) !== ack.raw) return false;
           if (!discardRecord && (!ack.candidate
             || recordRetentionStatus(ack.candidate, readCompletedRecords(completedRecordsStorage)) === null)) {
             recordBarrierRefused = true;
             return false;
           }
-          if (localStorage.getItem(SAVE_KEY) !== ack.raw) return false;
+          if (localStorage.getItem(saveKey) !== ack.raw) return false;
         }
-        localStorage.removeItem(SAVE_KEY);
-        return localStorage.getItem(SAVE_KEY) === null;
+        localStorage.removeItem(saveKey);
+        return localStorage.getItem(saveKey) === null;
       } catch { return false; }
     });
     if (cleared === 'moved') { checkSaveMoved(); return; }
+    if (sourceChanged) { setRawMoved(true); return; }
     if (cleared === 'failed') {
       if (recordBarrierRefused) {
         setRecordOutcome({ status: 'blocked', reason: 'unsupported-store' });
@@ -1458,6 +1479,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
       toast.error('Could not delete the save. Try again.', PAGE_TOAST);
       return;
     }
+    expectedRaw.current = null;
     acknowledgedCareer.current = null;
     discardRecordAcknowledgement.current = null;
     setRecordOutcome(null);
@@ -1495,7 +1517,9 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
           }}
       >
         <main ref={mainRef} id="dukb-main" tabIndex={-1} className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
-          {saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
+          {saveMoved && <Suspense fallback={null}><SaveMovedNotice message={rawMoved
+            ? "This slot changed. Reload to open the saved career."
+            : "This career moved on in another tab. Reload to carry on."} /></Suspense>}
           {career && saveFailed && (
             <div role="alert" data-soccer-save-status="failed" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-3 text-sm sm:flex sm:items-center sm:gap-4">
               <p className="flex-1">Your latest progress could not be saved. Keep this tab open, then try again.</p>
@@ -1506,11 +1530,17 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
             <div role="alert" className="mb-4 rounded-xl border border-amber-500/40 bg-amber-500/10 p-4 space-y-3 text-sm">
               <p>We couldn't open this save. You can create a new player below. Your old save stays here until you begin a new career or delete it.</p>
               <Button variant="outline" onClick={() => {
-                const deleted = saveFence.write(SAVE_KEY, function deleteUnusableSave() {
-                  try { localStorage.removeItem(SAVE_KEY); return true; } catch { return false; }
+                let sourceChanged = false;
+                const deleted = saveFence.write(saveKey, function deleteUnusableSave() {
+                  try {
+                    if (localStorage.getItem(saveKey) !== expectedRaw.current) { sourceChanged = true; return false; }
+                    localStorage.removeItem(saveKey);
+                    return localStorage.getItem(saveKey) === null;
+                  } catch { return false; }
                 });
                 if (deleted === 'moved') checkSaveMoved();
-                else if (deleted === 'written') setSaveError(false);
+                else if (sourceChanged) setRawMoved(true);
+                else if (deleted === 'written') { expectedRaw.current = null; setSaveError(false); }
                 else toast.error('Could not delete the save. Try again.', PAGE_TOAST);
               }}>Delete unusable save</Button>
             </div>
@@ -1550,15 +1580,19 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
               )}
             </div>
           )}
-          {(!career || isRetired) && (
-            <Button ref={pastCareersTrigger} variant="outline" className="mb-3 min-h-11 w-full whitespace-normal" onClick={openPastCareers}>Past careers</Button>
-          )}
+          <div className={`mb-3 grid gap-2 ${!career || isRetired ? 'grid-cols-2' : ''}`}>
+            <Button type="button" variant="outline" className="min-h-11 whitespace-normal" onClick={openCareerSaves}>Career saves</Button>
+            {(!career || isRetired) && (
+              <Button ref={pastCareersTrigger} variant="outline" className="min-h-11 whitespace-normal" onClick={openPastCareers}>Past careers</Button>
+            )}
+          </div>
           {!career ? (
             <SoccerCareerCreator initialSupport={getCreationSupport()} onBegin={handleBeginCareer} />
           ) : (
             <GameScreen
               career={career}
               clubs={clubs}
+              resumeGame={saveKey === SAVE_KEY ? 'soccer' : saveKey}
               arrival={arrivalCount > 0 ? `begin-${arrivalCount}` : null}
               signedNote={signedNote && signedNote.forCareer === career ? signedNote : null}
               onAcademyFocus={handleAcademyFocus}
@@ -1653,8 +1687,9 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4" onClick={() => setShowNewCareerConfirm(false)}>
           <div role="dialog" aria-modal="true" aria-label="Start a new career?" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(() => setShowNewCareerConfirm(false))} className="bg-card border-2 border-border rounded-xl p-6 max-w-sm w-full space-y-4" onClick={e => e.stopPropagation()}>
             <h3 className="text-lg font-black text-center">⚠️ Start New Career?</h3>
+            <Button type="button" onClick={openCareerSaves} variant="outline" className="min-h-11 w-full whitespace-normal">Keep this career and choose a slot</Button>
             <p className="text-sm text-muted-foreground text-center">{!isRetired
-              ? 'Are you sure? This will delete your current career. All progress will be lost forever.'
+              ? 'Delete & Start Over clears this slot. Choose an empty slot to start another player and keep this career.'
               : saveFailed
                 ? 'Your latest progress is not confirmed saved. Retry save before starting over.'
                 : recordOutcome?.status === 'kept'
@@ -3190,11 +3225,12 @@ function SocialMediaActionCard({ career, onAction, onCoverAthlete, onDismiss }: 
 }
 
 /* ─── Game Screen ─── */
-function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onCoachingStart, onAdvanceManager, onManagerReviewModeChange, onManagerJobResolve, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, onAcademyFocus, onCareerPatch, arrival }: {
+function GameScreen({ career, clubs, resumeGame, onNextSeason, onAcceptOffer, onDismissSummary, onDismissNewspaper, onStay, onSignExtension, onRequestTransfer, onAcceptLoan, onEventChoice, onDismissDebut, onDismissWorldCup, onWorldCupSpeech, onRetireInternational, onReturnInternational, onDismissRivalryEvent, onDismissBallonDor, onBdorSpeech, onManualRetire, onPostRetirement, onCoachingStart, onAdvanceManager, onManagerReviewModeChange, onManagerJobResolve, onAcceptManagerOffer, onEndManager, onShare, onNewCareer, onOpenPhone, onSocialMediaAction, onCoverAthlete, onDismissSocialMedia, onMoralDilemmaChoice, onRehabChoice, onDismissMoralDilemma, onDismissAppeal, onAcceptRetirement, onDeclineRetirement, onAnnounceFarewell, onPunditAction, onEndPundit, onAdvanceOwner, onEndOwner, onCurrencyChange, onAgentChange, timelineRef, signedNote, onAcademyFocus, onCareerPatch, arrival }: {
   /** Round 1330: set once per Begin Career ("begin-" and a count), null otherwise; the hub lands on the player card when it changes. */
   arrival?: string | null;
   career: CareerState;
   clubs: ClubData[];
+  resumeGame: string;
   /** Round 530: the deal slip under the toast, already scoped to this career object by the page. */
   signedNote?: SignedNote | null;
   onAcademyFocus?: (focus: AcademyFocus | null) => void;
@@ -3284,12 +3320,12 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
   const onWeekByWeek = () => { const at = career.seasons.length; onNextSeason(); setCentreFor(at); };
   /* Round 1046: where he stopped watching a season is kept in this browser only, never in the save. The Resume chip
      (and the rule for whose season a kept place is) loads only when a place is kept at all: one storage read here. */
-  const [Chip, setChip] = useState<ComponentType<{ career: CareerState; at: number; onOpen: (row: SeasonRecord, opener?: HTMLButtonElement) => void }> | null>(null);
+  const [Chip, setChip] = useState<typeof import("@/components/soccer-career/SeasonResumeChip").default | null>(null);
   const [chipAt, setChipAt] = useState(0);
   const peekResume = () => {
     setChipAt(n => n + 1);
     try {
-      if (localStorage.getItem("seasonCentre:v1:soccer")) import("@/components/soccer-career/SeasonResumeChip").then(m => setChip(() => m.default), () => undefined);
+      if (localStorage.getItem(`seasonCentre:v1:${resumeGame}`)) import("@/components/soccer-career/SeasonResumeChip").then(m => setChip(() => m.default), () => undefined);
     } catch { /* storage refused: no chip */ }
   };
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -4057,7 +4093,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                 className="text-[11px] font-bold text-sky-400 px-2 py-1 rounded hover:bg-white/5 min-h-11">📺 Season replays</button>}
             </div>
           </div>
-          {Chip && <Chip career={career} at={chipAt} onOpen={(row, opener) => { centreOpener.current = opener ?? null; setWatchRow(row); }} />}
+          {Chip && <Chip career={career} resumeGame={resumeGame} at={chipAt} onOpen={(row, opener) => { centreOpener.current = opener ?? null; setWatchRow(row); }} />}
           <div className="mt-2 space-y-1">
             {visibleCareer.events.slice(-3).map((e, i) => (
               <div key={i} className="text-xs text-foreground/80 flex items-start gap-2">
@@ -4096,7 +4132,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                   </div>
                 </div>
               }>
-                <SoccerSeasonCentre career={career} clubs={clubs} row={row} mode={watchRow || replaysOpen ? "watch" : "live"} onClose={closeCentre} onCareer={onCareerPatch} offer={offer} />
+                <SoccerSeasonCentre career={career} resumeGame={resumeGame} clubs={clubs} row={row} mode={watchRow || replaysOpen ? "watch" : "live"} onClose={closeCentre} onCareer={onCareerPatch} offer={offer} />
               </Suspense>
             </CentreMountBoundary>
           </div>

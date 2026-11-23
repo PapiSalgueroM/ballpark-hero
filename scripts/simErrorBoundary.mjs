@@ -114,7 +114,7 @@ if (CONTROL === 'rename') {
 
 let appSrc = fs.readFileSync(path.join(ROOT, 'src/App.tsx'), 'utf8').replaceAll('\r\n', '\n');
 if (CONTROL === 'unwrapped') {
-  const open = /\s*<RouteErrorBoundary resetKey=\{pathname\}>\n/;
+  const open = /\s*<RouteErrorBoundary\b[^>\n]*>\n/;
   const close = /\s*<\/RouteErrorBoundary>\n/;
   if (!open.test(appSrc) || !close.test(appSrc)) {
     console.error('CONTROL unwrapped cannot find the boundary in App.tsx, so it would change nothing');

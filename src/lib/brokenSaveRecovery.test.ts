@@ -4,10 +4,11 @@
 import { beforeEach, describe, expect, it } from 'vitest';
 import { CONTINUE_SAVES, type ContinueSave } from '@/data/continueSaves';
 import {
-  BROKEN_SAVE_MARK, SET_ASIDE_SLOT_KEY, copyAside, offeredBackup, setAsideSave, slotMarks, type ListableStorage,
+  BROKEN_SAVE_MARK, SET_ASIDE_SLOT_KEY, copyAside, heldSaveEntry, offeredBackup, routeSaveEntry, setAsideSave, slotMarks, type ListableStorage,
 } from '@/lib/brokenSaveRecovery';
 import { SLOT_COUNT, SLOTS_INDEX_KEY, activeSlot } from '@/lib/clubManagerSlots';
 import { SAVE_KEY } from '@/lib/clubManager';
+import { applyPending, stageRestore } from '@/lib/saveKeeper';
 
 const CM = CONTINUE_SAVES.find(e => e.path === '/club-manager') as ContinueSave;
 const OTHER = CONTINUE_SAVES.find(e => e.path === '/soccer-career') as ContinueSave;
@@ -29,6 +30,41 @@ function memStore(): ListableStorage & { map: Map<string, string>; log: string[]
 const at = (s: number) => new Date(Date.UTC(2026, 9, 19, 10, 0, s));
 const inSlot = (st: ReturnType<typeof memStore>, n: number) => st.map.set(SLOTS_INDEX_KEY, JSON.stringify({ active: n }));
 const marks = (st: ReturnType<typeof memStore>) => JSON.parse(st.map.get(SET_ASIDE_SLOT_KEY) ?? '{}');
+
+describe('Soccer Career slot recovery addresses', () => {
+  it('uses the legacy slot and rejects ambiguous or out-of-range selectors', () => {
+    for (const path of ['/soccer-career', '/soccer-career/?slot=1']) {
+      expect(routeSaveEntry(path)?.saveKey).toBe('soccerCareerSave');
+    }
+    for (const query of ['slot=0', 'slot=02', 'slot=2&slot=3', 'slot=4']) {
+      expect(routeSaveEntry('/soccer-career?' + query)).toBeNull();
+    }
+  });
+
+  it('keeps backups in their own slot when the legacy career and other slots are present', () => {
+    const st = memStore();
+    const path = '/soccer-career/?slot=2';
+    const key = 'soccerCareerSave-slot-2';
+    st.map.set('soccerCareerSave', '{"career":"first"}');
+    st.map.set(key, '{"career":"second"}');
+    st.map.set('soccerCareerSave-slot-3', '{"career":"third"}');
+    const entry = heldSaveEntry(path, st)!;
+    expect(entry).toMatchObject({ path: '/soccer-career?slot=2', saveKey: key });
+    const copy = copyAside(entry, st, at(1));
+    expect(copy).toEqual({ ok: true, backupKey: key + BROKEN_SAVE_MARK + '2026-10-19T10-00-01' });
+    if (!copy.ok || copy.backupKey === null) throw new Error('Expected a slot 2 backup');
+    st.map.set(key, '{"career":"second continued"}');
+    expect(offeredBackup(entry, st)).toBe(copy.backupKey);
+    expect(offeredBackup(OTHER, st)).toBeNull();
+    expect(offeredBackup(routeSaveEntry('/soccer-career?slot=3')!, st)).toBeNull();
+    expect(stageRestore(OTHER, copy.backupKey, st, at(2))).toEqual({ ok: false, why: 'gone' });
+    expect(stageRestore(entry, copy.backupKey, st, at(2))).toEqual({ ok: true });
+    expect(applyPending(st, at(3))).toMatchObject({ ok: true, path: '/soccer-career?slot=2', kept: true });
+    expect(st.map.get(key)).toBe('{"career":"second"}');
+    expect(st.map.get('soccerCareerSave')).toBe('{"career":"first"}');
+    expect(st.map.get('soccerCareerSave-slot-3')).toBe('{"career":"third"}');
+  });
+});
 
 describe('Round 1515: the kept aside copy carries its slot', () => {
   beforeEach(() => localStorage.clear());

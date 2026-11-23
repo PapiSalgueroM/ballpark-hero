@@ -1,4 +1,4 @@
-import { CONTINUE_SAVES, continueSaveEntries, type ContinueSave, type SavePath } from '@/data/continueSaves';
+import { CONTINUE_SAVES, SOCCER_CAREER_SAVE, continueSaveEntries, type ContinueSave, type SavePath } from '@/data/continueSaves';
 import {
   BACKUPS_KEPT, BROKEN_SAVE_MARK, backupKeysOf, browserStorage, copyAside, dismissBackup, routeSaveEntry, type ListableStorage,
 } from '@/lib/brokenSaveRecovery';
@@ -32,8 +32,8 @@ import { createSaveFence } from '@/lib/saveFence';
  *   - The game's key is never emptied. The old save is COPIED aside
  *     (copyAside), the copy is read back, and only then is the key written
  *     over. If the copy cannot be written the key is left exactly as it was
- *     and the card says so. Club Manager also needs a new save generation
- *     before replacement so other open tabs cannot write back their old career.
+ *     and the card says so. Club Manager and Soccer Career also need a new
+ *     save generation and unchanged active bytes before replacement.
  *   - Nothing is deleted to make room, and the backup a put back came from is
  *     NOT removed: with the same game open in a second tab, that tab's own
  *     timer can write over the key after the swap, and the backup is then the
@@ -103,7 +103,7 @@ export const STAGED_FOR_MS = 5 * 60 * 1000;
 /** A clock that stepped back between the press and the load is forgiven this much. */
 const CLOCK_SLACK_MS = 60 * 1000;
 
-export type KeeperRefusal = 'blocked' | 'no-room' | 'gone' | 'stale';
+export type KeeperRefusal = 'blocked' | 'no-room' | 'gone' | 'stale' | 'moved';
 /**
  * What the last staged put back did, for the card on that game's page. `kept`
  * says the save he had was kept aside; `dropped` is how many older kept aside
@@ -309,13 +309,19 @@ export function applyPending(storage: ListableStorage | null, now: Date = new Da
   }
   try {
     /* Written OVER the old save: the key is never removed, so it is never empty. */
-    if (entry.saveKey === CLUB_MANAGER_SAVE_KEY) {
+    if (entry.saveKey === CLUB_MANAGER_SAVE_KEY || entry.saveKey === SOCCER_CAREER_SAVE.saveKey
+      || SOCCER_CAREER_SAVE.alternateSaveKeys?.includes(entry.saveKey)) {
       // A fresh claim stales other tabs without adopting their generation.
       const claim = createSaveFence(storage);
-      if (claim.write(entry.saveKey, () => {
+      let moved = false;
+      const wrote = claim.write(entry.saveKey, () => {
+        moved = storage.getItem(entry.saveKey) !== cur;
+        if (moved) return false;
         storage.setItem(entry.saveKey, incoming);
         return true;
-      }, true) !== 'written') throw new Error('put back could not claim the career');
+      }, true);
+      if (moved) return done(false, { why: 'moved' });
+      if (wrote !== 'written') throw new Error('put back could not claim the career');
     } else {
       storage.setItem(entry.saveKey, incoming);
     }
@@ -326,7 +332,9 @@ export function applyPending(storage: ListableStorage | null, now: Date = new Da
        really still there is the copy just made taken back out. */
     let still: string | null = null;
     try { still = storage.getItem(entry.saveKey); } catch { still = null; }
-    if (made && still === cur) { try { storage.removeItem(made); } catch { /* a spare copy is harmless */ } }
+    if (made && still === cur) {
+      try { if (storage.getItem(made) === cur) storage.removeItem(made); } catch { /* a spare copy is harmless */ }
+    }
     return done(false, { why: 'no-room' });
   }
   const dropped = tidy(entry, storage, made, incoming);

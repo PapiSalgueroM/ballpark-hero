@@ -1762,7 +1762,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     intro: [
       "Every soccer career simulator promises the same fantasy: start as a nobody, retire as a legend. This one makes the middle the good part. You begin at 16 in a youth academy and live season by season through contracts, transfers, injuries, feuds, trophies, and increasingly questionable purchases, until the game hands down a legacy verdict. For scouting and development, try Wonderkid Factory.",
       "It is the most played game on DoUKnowBall, and it sits closer to a life sim than to a match engine. You never dribble anyone. You make decisions, and the sim turns them into a story that is different every run. Compare offers as the agent in Contract Chaos.",
-      "Your save lives in your browser, one career at a time, so choices carry weight into the years that follow them.",
+      "Use Career saves to keep up to three players in this browser. Each slot has its own seasons, clubs and choices.",
       "You build your player's actual face before kickoff: skin tone, hairstyle and colour, facial hair, a boot line, an accessory, and a signature celebration that gets described every time you score. That look follows you onto the Ballon d'Or stage and into your retirement send off.",
       "There is a dirty side too. Bent officials, betting syndicates, kickbacks, offshore accounts and laundering fronts all sit there waiting, each one heating up a hidden investigation meter. Take enough envelopes and the dawn raid comes, then the trial, then a season inside and a comeback from nothing.",
       "Your first pro offer sets the next few seasons up. If you want to be playing every week, compare the role and the club before you sign. When Set transfer priority is available, choose minutes, club level or home country, then save the brief and request the move. You can set that priority without hiring an agent.",
@@ -1989,7 +1989,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     faqs: [
       {
         q: "How do I save my career?",
-        a: "Automatically, in your browser, after every decision. There is one career per browser, and starting fresh permanently deletes the old save. An optional account adds site stats and leaderboards, but the career lives on your device.",
+        a: "Each career saves in this browser after every decision. Open Career saves to resume a player or start in an empty slot. For example, you can keep a ten-season career in Slot 1 and create a new player in Slot 2.",
       },
       {
         q: "How do I win the Ballon d'Or?",

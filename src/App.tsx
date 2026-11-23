@@ -372,6 +372,7 @@ const AppContent = () => {
   const gameRoute = isGameRoute(pathname);
   const opensCareerRules = /^\/(?:nba|nfl|mlb|nhl)-my-career\/?$/.test(pathname);
   const nrlOwnsConsent = normalizeRoutePath(pathname) === "/nrl-team-manager";
+  const boundaryKey = normalizeRoutePath(pathname) === "/soccer-career" ? pathname + search : pathname;
   return (
     <SiteMenuProvider>
       {/* Round 215: the first tab stop on every page jumps a keyboard player
@@ -394,9 +395,9 @@ const AppContent = () => {
           game now costs that game and nothing else: the header above and the
           global footer below both survive, and the footer is where the report a
           bug button lives. Before this, a throw anywhere unmounted the whole
-          root and the visitor got a white page with no way off it. Keyed on the
-          path so navigating away clears it. */}
-      <RouteErrorBoundary resetKey={pathname}>
+          root and the visitor got a white page with no way off it. Changing
+          routes or switching Soccer Career slots clears it. */}
+      <RouteErrorBoundary resetKey={boundaryKey}>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/footle" element={<Footle />} />
@@ -619,7 +620,7 @@ const AppContent = () => {
       {/* Round 958: the way back from a fresh start. On a long game's page,
           while a save it set aside exists, offers to put it back. Inside the
           boundary, so a throw here costs the page and not the site. */}
-      <BrokenSaveRestore pathname={/^\/(?:nrl-team-manager|fight-promoter)\/*$/.test(pathname) ? pathname + search : pathname} />
+      <BrokenSaveRestore pathname={/^\/(?:soccer-career|nrl-team-manager|fight-promoter)\/*$/.test(pathname) ? pathname + search : pathname} />
       {/* Round 49: one global footer on every page (legal disclaimer, About/Contact/
           What's New links, and the Report a bug button), instead of 33 pages
           importing their own copy and 95 pages having none.

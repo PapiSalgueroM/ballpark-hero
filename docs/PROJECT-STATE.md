@@ -1,3 +1,15 @@
+## 2026-11-23, Soccer Career save slots
+
+**PL-03 is partly implemented.** Soccer Career has three independent local slots labeled by player. The legacy key is slot 1, so an existing bookmark or Home link still opens that player. Career saves lets a player resume any slot or start in an empty one. If the current slot has an interrupted write, the in-game switch retries that write first. Home, Profile, the Soccer hub and recovery use the selected slot. Each slot has its own Season Centre replay position.
+
+**PL-04 is partly implemented.** A restore takes a fresh save generation and checks the current slot bytes again before replacing them. If another tab wrote newer progress after the recovery copy, both that progress and the recovery source remain available. The chooser and the other slots open from browser history even after a slot raised a route error. The existing codec keeps complete history, but Soccer Career's shape repairs still need an explicit version and a checked pre-migration copy.
+
+The audit found reusable three-slot patterns in NRL and Club Manager. NRL uses separate keys and manual checkpoints, and Club Manager uses an active key and parked slots. Both have recovery flows. Portable files, automatic restore points, last-successful-save receipts and optional account sync still need implementation for Soccer Career.
+
+The integrated unit run passed 249 tests. It covered starting and advancing a second player while a packed ten-season legacy save stayed byte-identical, retrying a refused write before switching, and restoring into the right slot against a competing write. Four Chromium widths passed chooser, resume, reload and empty-slot checks. The production build, flagship download check and all 15 built-site checks passed.
+
+All 40 save-fence checks passed across 2,010 simulated saves. The Soccer Career save-keeper checks and all 15 nested version checks passed, including the existing Community Shield and German Supercup qualification receipts. The five remaining save-keeper writer findings and three wider Soccer Career unit failures also reproduced on unchanged main.
+
 ## 2026-11-16 — Career search, NHL trades and NFL injured reserve
 
 - Home recognizes explicit requests such as “NBA career mode” and “manage an MLB team.” Both mobile widths verified nine supported queries, five misses, the existing title shortcuts and return focus. The NBA result opened with Enter and the MLB result opened by touch. Back restored the search filters and saved games.
