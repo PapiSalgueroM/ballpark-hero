@@ -2,6 +2,16 @@
 
 PL-04 adds a verified copy of the original NHL Front Office recap before the draft opens on an older franchise. If storage refuses the copy or the draft, Retry save keeps the same prospects and already counted season. A newer franchise saved in another tab takes precedence. Current recaps and drafts with saved shortlists keep their normal flow.
 
+## 2026-11-23, MLB Front Office recap migration protection
+
+PL-04 is partly implemented. An older MLB Front Office recap keeps an exact recovery copy before opening the next draft. If storage refuses the copy or the draft, the previous recap stays saved and Retry save writes the same generated class. The season and title totals stay counted once. A newer save in another tab takes precedence. The 167 focused tests and all 25 Front Office season close cases passed.
+
+The scoped SaveKeeper test now recognizes that the MLB writer includes round history only after a played round for the same team and season. The test passed with the current writer and the existing starting-franchise fixture.
+
+Twelve Chromium cases at 320 and 390 pixels verified the legacy and current recaps, active-write and backup refusals, retry, a newer save in another tab, and reload. The migrated draft kept 24 prospects, two picks, one recorded title and one finished season. The neighboring NHL franchise stayed intact.
+
+PR #1045 is live. All 12 published phone cases passed against the exact deployment. The previous build also reopened the migrated draft in both rollback cases.
+
 ## 2026-11-23, Club Manager portable save files
 
 PL-03 is partly implemented across the site. Club Manager offers Save files in the manager chooser. A fresh browser can open Import a career before picking an era, then load the file into an empty slot. The download keeps the original save bytes, and import preserves the career's data with an unranked marker. The original file remains available if storage refuses the import or another tab fills the slot first.
@@ -9,6 +19,8 @@ PL-03 is partly implemented across the site. Club Manager offers Save files in t
 The candidate passed 120 focused tests. Ten Chromium cases at 320 and 390 pixels used real downloaded files in fresh contexts. The plain and compact versions of a 12-season Everton career kept all saved fields, including the budget, 12 season records and packed results. Opening and reloading kept the same club and history. An incompatible file, damaged compressed data, a refused write and a slot claimed in a second tab left the other careers intact.
 
 All 20 selected release harnesses passed across the scoped runs. The opening layout harness checks the import action at 320 and 412 pixels with and without a saved cookie choice. The prior build failed that action check as expected.
+
+PR #1044 is live. All ten published phone cases passed. The downloaded plain and compact files matched the local copies, and both full Season 12 careers survived opening and reload.
 
 ## 2026-11-23, NBA Front Office statistics migration protection
 

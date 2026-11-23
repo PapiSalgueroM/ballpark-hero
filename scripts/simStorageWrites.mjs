@@ -543,6 +543,8 @@ const NAMED = [
     why: 'the active board retries its most recent serialized save before an app refresh while the save warning is active' },
   { file: 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', keys: ['state:recapWrite', 'keeps:retryLegacyDraft'],
     why: 'the effect holds the first draft save from an older recap until it can keep the verified original and save the draft' },
+  { file: 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', keys: ['state:recapWrite', 'keeps:retryLegacyDraft'],
+    why: 'the effect holds the first draft save from an older recap until the verified original and the pending draft can both be saved' },
   { file: 'src/components/nrl-manager/NrlWorldCup.tsx', keys: ['state:saveFailed', 'keeps:safeSetItem'],
     why: 'the effect holds refused World Cup progress and retries the current run before reload or returning to the club screen' },
 ];
