@@ -26,6 +26,21 @@ const ALISSON_APPEARANCE_CORRECTIONS = new Map([
   ]],
 ]);
 
+// All three Liverpool assists through 2024-25 were Premier League goals for Salah.
+const ALISSON_LIVERPOOL_ASSIST_CORRECTIONS = new Map([
+  ['a0000001-0000-0000-0000-000000000040', [
+    { season: '2018-2019', before: 1, after: 0 },
+    { season: '2019-2020', before: 0, after: 1 },
+    { season: '2022-2023', before: 0, after: 1 },
+  ]],
+  ['a0000001-0000-0000-0000-000000000066', [
+    { season: '2018-2019', before: 1, after: 0 },
+    { season: '2019-2020', before: 0, after: 1 },
+    { season: '2021-2022', before: 0, after: 1 },
+    { season: '2022-2023', before: 0, after: 1 },
+  ]],
+]);
+
 function hasSeasonTotals(stint: CareerStint, totals: SeasonTotals): boolean {
   return stint.goals === totals.goals && stint.assists === totals.assists && stint.appearances === totals.appearances;
 }
@@ -33,11 +48,16 @@ function hasSeasonTotals(stint: CareerStint, totals: SeasonTotals): boolean {
 /** Reconcile dated stints before each reader formats the career rows. */
 export function reconcileCareerSeasons(playerId: string, source: CareerStint[]): CareerStint[] {
   const appearanceCorrections = ALISSON_APPEARANCE_CORRECTIONS.get(playerId);
-  if (appearanceCorrections) {
+  const assistCorrections = ALISSON_LIVERPOOL_ASSIST_CORRECTIONS.get(playerId);
+  if (appearanceCorrections || assistCorrections) {
     source = source.map(stint => {
-      const fix = appearanceCorrections.find(row =>
+      const appearance = appearanceCorrections?.find(row =>
         row.club === stint.club && row.season === stint.season && row.before === stint.appearances);
-      return fix ? { ...stint, appearances: fix.after } : stint;
+      const assist = stint.club === 'Liverpool' ? assistCorrections?.find(row =>
+        row.season === stint.season && row.before === stint.assists) : undefined;
+      return appearance || assist ? {
+        ...stint, appearances: appearance?.after ?? stint.appearances, assists: assist?.after ?? stint.assists,
+      } : stint;
     });
   }
 

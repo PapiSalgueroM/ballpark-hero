@@ -201,35 +201,36 @@ describe('Alisson’s verified Roma appearances', () => {
   });
 });
 
-describe('Alisson’s verified Liverpool appearances', () => {
+describe('Alisson’s verified Liverpool appearances and assists', () => {
   const seasons = [
-    ['2018-2019', 51],
-    ['2019-2020', 37],
-    ['2020-2021', 42],
-    ['2021-2022', 54],
-    ['2022-2023', 47],
-    ['2023-2024', 32],
-    ['2024-2025', 35],
+    ['2018-2019', 51, 0],
+    ['2019-2020', 37, 1],
+    ['2020-2021', 42, 0],
+    ['2021-2022', 54, 1],
+    ['2022-2023', 47, 1],
+    ['2023-2024', 32, 0],
+    ['2024-2025', 35, 0],
   ] as const;
   const sources = [
-    { id: ALISSON, name: 'Alisson', appearances: [47, 37, 44, 55, 44, 42, 22] },
-    { id: ALISSON_BECKER, name: 'Alisson Becker', appearances: [51, 29, 44, 46, 37, 41, 28] },
+    { id: ALISSON, name: 'Alisson', appearances: [47, 37, 44, 55, 44, 42, 22], assists: [1, 0, 0, 1, 0, 0, 0] },
+    { id: ALISSON_BECKER, name: 'Alisson Becker', appearances: [51, 29, 44, 46, 37, 41, 28], assists: [1, 0, 0, 0, 0, 0, 0] },
   ];
 
-  it.each(sources)('corrects $name in both readers and retains each stint’s other fields', async ({ id, name, appearances }) => {
+  it.each(sources)('corrects $name in both readers and retains each stint’s other fields', async ({ id, name, appearances, assists }) => {
     rows.players = [{ id, player_name: name, nationality: 'Brazil', position: 'GK' }];
     rows.seasons = seasons.map(([season], index) => ({
-      player_id: id, season, club: 'Liverpool', goals: Number(index === 2), assists: 0,
+      player_id: id, season, club: 'Liverpool', goals: Number(index === 2), assists: assists[index],
       appearances: appearances[index], market_value: 60 - index, sort_order: 6 + index,
     }));
-    const expected = seasons.map(([season, apps], index) => ({
-      season, club: 'Liverpool', goals: Number(index === 2), assists: 0,
+    const expected = seasons.map(([season, apps, goalAssists], index) => ({
+      season, club: 'Liverpool', goals: Number(index === 2), assists: goalAssists,
       appearances: apps, marketValue: 60 - index,
     }));
     const [ladder, quiz] = await Promise.all([fetchCareerPool(), fetchCareerPlayers()]);
     expect(ladder?.find(player => player.id === id)?.seasons).toEqual(expected.map((row, index) => ({ ...row, sortOrder: 6 + index })));
     expect(quiz.find(player => player.id === id)?.career).toEqual(expected);
     expect(rows.seasons.map(stint => stint.appearances)).toEqual(appearances);
+    expect(rows.seasons.map(stint => stint.assists)).toEqual(assists);
   });
 
   it('does not correct another player, club, year, or unmapped source count', async () => {
@@ -238,23 +239,35 @@ describe('Alisson’s verified Liverpool appearances', () => {
       { id: ALISSON, player_name: 'Alisson', nationality: 'Brazil', position: 'GK' },
       { id: namesake, player_name: 'Alisson', nationality: 'Brazil', position: 'GK' },
     ];
-    const liverpool = { player_id: ALISSON, club: 'Liverpool', season: '2018-2019', appearances: 47, goals: 0, assists: 0, market_value: 60 };
+    const liverpool = { player_id: ALISSON, club: 'Liverpool', season: '2018-2019', appearances: 47, goals: 0, assists: 1, market_value: 60 };
     rows.seasons = [
-      { ...liverpool, appearances: 50, sort_order: 6 },
+      { ...liverpool, appearances: 50, assists: 2, sort_order: 6 },
       { ...liverpool, club: 'Roma', sort_order: 7 },
       { ...liverpool, season: '2025-2026', sort_order: 8 },
       { ...liverpool, player_id: namesake, sort_order: 6 },
     ];
     const [ladder, quiz] = await Promise.all([fetchCareerPool(), fetchCareerPlayers()]);
-    for (const [id, appearances] of [[ALISSON, [50, 47, 47]], [namesake, [47]]] as const) {
-      expect(ladder?.find(player => player.id === id)?.seasons.map(stint => stint.appearances)).toEqual(appearances);
-      expect(quiz.find(player => player.id === id)?.career.map(stint => stint.appearances)).toEqual(appearances);
+    for (const [id, totals] of [[ALISSON, [[50, 2], [47, 1], [47, 1]]], [namesake, [[47, 1]]]] as const) {
+      expect(ladder?.find(player => player.id === id)?.seasons.map(stint => [stint.appearances, stint.assists])).toEqual(totals);
+      expect(quiz.find(player => player.id === id)?.career.map(stint => [stint.appearances, stint.assists])).toEqual(totals);
     }
   });
 
-  it.each(sources)('shows the verified Liverpool appearances offline for $name', ({ name }) => {
+  it('applies each correction independently of the other field', async () => {
+    rows.players = [{ id: ALISSON, player_name: 'Alisson', nationality: 'Brazil', position: 'GK' }];
+    const liverpool = { player_id: ALISSON, club: 'Liverpool', goals: 0, market_value: 60 };
+    rows.seasons = [
+      { ...liverpool, season: '2018-2019', appearances: 51, assists: 1, sort_order: 6 },
+      { ...liverpool, season: '2022-2023', appearances: 44, assists: null, sort_order: 10 },
+    ];
+    const [ladder, quiz] = await Promise.all([fetchCareerPool(), fetchCareerPlayers()]);
+    expect(ladder?.[0].seasons.map(stint => [stint.appearances, stint.assists])).toEqual([[51, 0], [47, null]]);
+    expect(quiz[0].career.map(stint => [stint.appearances, careerCellValue(stint, 'assists')])).toEqual([[51, '0'], [47, 'n/a']]);
+  });
+
+  it.each(sources)('shows the verified Liverpool appearances and assists offline for $name', ({ name }) => {
     const fallback = careerPlayers.find(player => player.name === name);
     const liverpool = fallback?.career.filter(stint => stint.club === 'Liverpool' && seasons.some(([season]) => season === stint.season));
-    expect(liverpool?.map(stint => [stint.season, stint.appearances])).toEqual(seasons);
+    expect(liverpool?.map(stint => [stint.season, stint.appearances, stint.assists])).toEqual(seasons);
   });
 });
