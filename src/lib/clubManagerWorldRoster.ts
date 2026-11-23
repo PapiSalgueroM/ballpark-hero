@@ -169,7 +169,7 @@ function decodeRows(saved: unknown): unknown[] | null {
 }
 
 /** Missing or malformed optional data stays inactive and is never repaired by a read. */
-export function readWorldRoster(career: WorldRosterContext): WorldRosterState | null {
+export function readWorldRoster<T extends WorldRosterContext>(career: T): WorldRosterState | null {
   const year = yearOf(career);
   const raw: unknown = career.worldRoster;
   if (year === null || !object(raw) || raw.version !== 1 || raw.eraId !== (career.eraId ?? 'now') || !Array.isArray(raw.records)) return null;
@@ -354,7 +354,9 @@ export function snapshotWorldRosterClub(career: CareerState, club: string, playe
 }
 
 /** Older records retain ownership, but their old payloads are not presented as current-year players. */
-export function worldRosterClub(career: WorldRosterContext, club: string, fallback: readonly WorldRosterPlayer[], year = yearOf(career)): readonly WorldRosterPlayer[] {
+export function worldRosterClub<T extends WorldRosterContext>(
+  career: T, club: string, fallback: readonly WorldRosterPlayer[], year = yearOf(career),
+): readonly WorldRosterPlayer[] {
   const held = worldRosterView(career);
   if (!held || year === null || year !== yearOf(career) || !text(club)) return fallback;
   const records = held.records;
