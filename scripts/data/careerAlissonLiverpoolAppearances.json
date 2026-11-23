@@ -1,0 +1,108 @@
+{
+  "checked": "2026-11-23",
+  "rule": "Competitive first-team Liverpool appearances include Community Shield and Club World Cup outings.",
+  "sources": {
+    "matchArchive": "https://www.lfchistory.net/players/1330",
+    "secondArchive": "https://www.11v11.com/players/alisson-becker-250168/",
+    "liverpool": "https://www.liverpoolfc.com/news/alisson-becker-becomes-seventh-liverpool-goalkeeper-reach-300-appearances/"
+  },
+  "added": [],
+  "changed": [
+    {
+      "player": "Alisson",
+      "season": "2018-2019",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 47,
+      "to": 51
+    },
+    {
+      "player": "Alisson",
+      "season": "2020-2021",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 44,
+      "to": 42
+    },
+    {
+      "player": "Alisson",
+      "season": "2021-2022",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 55,
+      "to": 54
+    },
+    {
+      "player": "Alisson",
+      "season": "2022-2023",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 44,
+      "to": 47
+    },
+    {
+      "player": "Alisson",
+      "season": "2023-2024",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 42,
+      "to": 32
+    },
+    {
+      "player": "Alisson",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 22,
+      "to": 35
+    },
+    {
+      "player": "Alisson Becker",
+      "season": "2019-2020",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 29,
+      "to": 37
+    },
+    {
+      "player": "Alisson Becker",
+      "season": "2020-2021",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 44,
+      "to": 42
+    },
+    {
+      "player": "Alisson Becker",
+      "season": "2021-2022",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 46,
+      "to": 54
+    },
+    {
+      "player": "Alisson Becker",
+      "season": "2022-2023",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 37,
+      "to": 47
+    },
+    {
+      "player": "Alisson Becker",
+      "season": "2023-2024",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 41,
+      "to": 32
+    },
+    {
+      "player": "Alisson Becker",
+      "season": "2024-2025",
+      "club": "Liverpool",
+      "field": "appearances",
+      "from": 28,
+      "to": 35
+    }
+  ]
+}

@@ -3,13 +3,26 @@ import type { CareerStint } from '@/lib/careerLadder';
 
 // Alisson's 64 competitive appearances for Roma split into 15 and 49.
 // His first season includes the Champions League qualifier against Porto.
-const ROMA_APPEARANCE_CORRECTIONS = new Map([
+// The Liverpool totals include his Community Shield and Club World Cup games.
+const ALISSON_APPEARANCE_CORRECTIONS = new Map([
   ['a0000001-0000-0000-0000-000000000040', [
-    { season: '2016-2017', before: 40, after: 15 },
-    { season: '2017-2018', before: 48, after: 49 },
+    { club: 'Roma', season: '2016-2017', before: 40, after: 15 },
+    { club: 'Roma', season: '2017-2018', before: 48, after: 49 },
+    { club: 'Liverpool', season: '2018-2019', before: 47, after: 51 },
+    { club: 'Liverpool', season: '2020-2021', before: 44, after: 42 },
+    { club: 'Liverpool', season: '2021-2022', before: 55, after: 54 },
+    { club: 'Liverpool', season: '2022-2023', before: 44, after: 47 },
+    { club: 'Liverpool', season: '2023-2024', before: 42, after: 32 },
+    { club: 'Liverpool', season: '2024-2025', before: 22, after: 35 },
   ]],
   ['a0000001-0000-0000-0000-000000000066', [
-    { season: '2016-2017', before: 37, after: 15 },
+    { club: 'Roma', season: '2016-2017', before: 37, after: 15 },
+    { club: 'Liverpool', season: '2019-2020', before: 29, after: 37 },
+    { club: 'Liverpool', season: '2020-2021', before: 44, after: 42 },
+    { club: 'Liverpool', season: '2021-2022', before: 46, after: 54 },
+    { club: 'Liverpool', season: '2022-2023', before: 37, after: 47 },
+    { club: 'Liverpool', season: '2023-2024', before: 41, after: 32 },
+    { club: 'Liverpool', season: '2024-2025', before: 28, after: 35 },
   ]],
 ]);
 
@@ -19,10 +32,11 @@ function hasSeasonTotals(stint: CareerStint, totals: SeasonTotals): boolean {
 
 /** Reconcile dated stints before each reader formats the career rows. */
 export function reconcileCareerSeasons(playerId: string, source: CareerStint[]): CareerStint[] {
-  const roma = ROMA_APPEARANCE_CORRECTIONS.get(playerId);
-  if (roma) {
+  const appearanceCorrections = ALISSON_APPEARANCE_CORRECTIONS.get(playerId);
+  if (appearanceCorrections) {
     source = source.map(stint => {
-      const fix = stint.club === 'Roma' && roma.find(row => row.season === stint.season && row.before === stint.appearances);
+      const fix = appearanceCorrections.find(row =>
+        row.club === stint.club && row.season === stint.season && row.before === stint.appearances);
       return fix ? { ...stint, appearances: fix.after } : stint;
     });
   }
