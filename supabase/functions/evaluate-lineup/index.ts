@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { resolveSoccerNamesakeRecord, soccerNamesakeGroup } from "../_shared/soccerNamesakeRecord.ts";
 
 /* Build Your XI's verdict screen.
  *
@@ -100,10 +101,95 @@ interface PlayerPick {
   playerName: string;
   assignedTeam: string;
   isNation?: boolean;
+  pick?: {
+    recordId?: number;
+    rawName?: string;
+    club?: string;
+    nationality?: string;
+    year?: number;
+    rawPosition?: string;
+  };
 }
 
 function sanitizeName(n: string): string {
   return String(n || "").replace(/[(),*%\n\r]/g, " ").replace(/\s+/g, " ").trim();
+}
+
+type NamesakeGroup = NonNullable<ReturnType<typeof soccerNamesakeGroup>>;
+type MarketRow = {
+  id: number;
+  player_name: string;
+  club: string | null;
+  nationality: string | null;
+  position: string | null;
+  year: number;
+  market_value_usd: number;
+};
+type Price = { name: string; value: number };
+type ReviewedPrices = Map<number, { person: string; price: Price | null } | null>;
+type ReviewedIdentities = Record<number, string>;
+
+const normalizeField = (value: string | null) => typeof value === "string"
+  ? value.normalize("NFD").replace(/\p{M}/gu, "").trim().replace(/\s+/g, " ").toLowerCase()
+  : "";
+
+function matchesPickedRecord(row: MarketRow, pick: NonNullable<PlayerPick["pick"]>) {
+  return (pick.recordId === undefined || row.id === pick.recordId)
+    && (pick.rawName === undefined || normalizeField(row.player_name) === normalizeField(pick.rawName))
+    && (pick.club === undefined || normalizeField(row.club) === normalizeField(pick.club))
+    && (pick.nationality === undefined || normalizeField(row.nationality) === normalizeField(pick.nationality))
+    && (pick.year === undefined || row.year === pick.year)
+    && (pick.rawPosition === undefined || normalizeField(row.position) === normalizeField(pick.rawPosition));
+}
+
+function reviewedPick(group: NamesakeGroup, player: PlayerPick, rows: MarketRow[]) {
+  const relevant = rows.flatMap(row => {
+    if (typeof row.club !== "string" || !row.club || typeof row.nationality !== "string" || !row.nationality
+      || typeof row.player_name !== "string" || soccerNamesakeGroup(row.player_name) !== group) return [];
+    const person = resolveSoccerNamesakeRecord(row.player_name, { club: row.club, nationality: row.nationality });
+    return person ? [{ person, row }] : [];
+  });
+  const named = resolveSoccerNamesakeRecord(player.playerName, {});
+  const assigned = player.isNation ? null : resolveSoccerNamesakeRecord(group.name, { club: player.assignedTeam });
+  const pick = player.pick;
+  const hasRecord = pick && (pick.recordId !== undefined || typeof pick.club === "string" && Boolean(pick.club.trim()));
+  const selected = hasRecord ? relevant.filter(({ row }) => matchesPickedRecord(row, pick)) : [];
+  if (hasRecord && selected.length === 0) return null;
+
+  const owners = new Set(selected.map(({ person }) => person));
+  if (named) owners.add(named);
+  if (assigned) owners.add(assigned);
+  if (owners.size !== 1) return null;
+  const [person] = owners;
+  const evidence = hasRecord ? selected : relevant.filter(candidate => candidate.person === person);
+  const value = Math.max(0, ...evidence.map(({ row }) => Number(row.market_value_usd) || 0));
+  return { person, price: value > 0 ? { name: person, value } : null };
+}
+
+async function readMarketRows(players: PlayerPick[], groups: (NamesakeGroup | undefined)[]): Promise<MarketRow[]> {
+  if (!SUPABASE_URL || !SUPABASE_ANON_KEY) return [];
+  const names = new Set(players.flatMap((player, i) => {
+    const group = groups[i];
+    return group ? [group.name, ...group.aliases, ...group.people.flatMap(person => [person.name, ...person.aliases])]
+      : [sanitizeName(player.playerName)];
+  }).filter(Boolean));
+  const filters = [...names].map(name => `player_name.ilike.${encodeURIComponent(name)}`);
+  for (const [i, player] of players.entries()) {
+    const id = player.pick?.recordId;
+    if (groups[i] && typeof id === "number" && Number.isSafeInteger(id) && id > 0) filters.push(`id.eq.${id}`);
+  }
+  if (!filters.length) return [];
+  try {
+    const select = groups.some(Boolean) ? "id,player_name,club,nationality,position,year,market_value_usd" : "player_name,market_value_usd";
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/player_market_values?select=${select}&or=(${filters.join(",")})`, {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+    });
+    if (!r.ok) return [];
+    const rows = await r.json();
+    return Array.isArray(rows) ? rows : [];
+  } catch {
+    return [];
+  }
 }
 
 const SYSTEM_PROMPT = (formation: string) => `You are a soccer expert and pundit. The user has built a starting XI using a ${formation} formation. Each player was assigned a random club or national team they had to pick a player from.
@@ -130,12 +216,18 @@ Respond with ONLY a JSON object with these fields:
 - "headline": A punchy one-liner about the team (max 10 words)
 - "analysis": A 3-4 sentence detailed analysis explaining your verdict`;
 
-async function tryAI(formation: string, players: PlayerPick[]) {
+async function tryAI(formation: string, players: PlayerPick[], identities: ReviewedIdentities) {
   if (!AI_KEY) return null;
   try {
     const playerList = players
-      .map((p, i) => `${i + 1}. ${p.label} – ${p.playerName} (from ${p.assignedTeam}, ${p.isNation ? "national team" : "club"})`)
+      .map((p, i) => identities[i + 1]
+        ? `${i + 1}. ${p.label}, ${identities[i + 1]} (draft assignment: ${p.assignedTeam}, ${p.isNation ? "country" : "club"})`
+        : `${i + 1}. ${p.label} – ${p.playerName} (from ${p.assignedTeam}, ${p.isNation ? "national team" : "club"})`)
       .join("\n");
+    const reviewedSlots = Object.entries(identities);
+    const review = reviewedSlots.length
+      ? `\nKeep the named players distinct. Treat draft assignments as game clues and verify club appearances and international caps independently. Include a "reviewedIdentities" object with these exact numbered names: ${JSON.stringify(identities)}.`
+      : "";
     const resp = await fetch(AI_URL, {
       method: "POST",
       headers: { Authorization: `Bearer ${AI_KEY}`, "Content-Type": "application/json" },
@@ -143,7 +235,7 @@ async function tryAI(formation: string, players: PlayerPick[]) {
         model: AI_MODEL,
         messages: [
           { role: "system", content: SYSTEM_PROMPT(formation) },
-          { role: "user", content: `Here is my ${formation} starting XI:\n\n${playerList}\n\nEvaluate this team. Respond with ONLY valid JSON, no markdown fences.` },
+          { role: "user", content: `Here is my ${formation} starting XI:\n\n${playerList}\n\nEvaluate this team. Respond with ONLY valid JSON, no markdown fences.${review}` },
         ],
       }),
     });
@@ -158,6 +250,13 @@ async function tryAI(formation: string, players: PlayerPick[]) {
       if (obj) jsonStr = obj[0];
     }
     const parsed = JSON.parse(jsonStr);
+    if (reviewedSlots.length) {
+      const echoed = parsed?.reviewedIdentities;
+      if (!echoed || typeof echoed !== "object" || Array.isArray(echoed)
+        || Object.keys(echoed).length !== reviewedSlots.length
+        || reviewedSlots.some(([slot, name]) => echoed[slot] !== name)
+        || typeof parsed.rating !== "string" || typeof parsed.analysis !== "string") return null;
+    }
     if (parsed && parsed.rating && parsed.analysis) {
       return {
         rating: String(parsed.rating),
@@ -173,48 +272,35 @@ async function tryAI(formation: string, players: PlayerPick[]) {
   }
 }
 
-async function marketValueFallback(players: PlayerPick[]) {
+function marketValueFallback(players: PlayerPick[], rows: MarketRow[], reviewed: ReviewedPrices) {
   const names = players.map((p) => sanitizeName(p.playerName)).filter(Boolean);
-  const values: number[] = [];
-  let topName = "";
-  let topVal = 0;
-  try {
-    if (SUPABASE_URL && SUPABASE_ANON_KEY && names.length) {
-      const orExpr = names.map((n) => `player_name.ilike.${encodeURIComponent(n)}`).join(",");
-      const url = `${SUPABASE_URL}/rest/v1/player_market_values?select=player_name,market_value_usd&or=(${orExpr})`;
-      const r = await fetch(url, {
-        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
-      });
-      if (r.ok) {
-        const rows = await r.json();
-        const best = new Map<string, number>();
-        for (const row of rows) {
-          const nm = String(row.player_name || "").toLowerCase();
-          const v = Number(row.market_value_usd) || 0;
-          if (!best.has(nm) || v > (best.get(nm) as number)) best.set(nm, v);
-        }
-        for (const [nm, v] of best) {
-          values.push(v);
-          if (v > topVal) {
-            topVal = v;
-            topName = nm;
-          }
-        }
-      }
+  const ordinary = new Set(players.flatMap((player, i) =>
+    reviewed.has(i) ? [] : [sanitizeName(player.playerName).toLowerCase()]));
+  const best = new Map<string, Price>();
+  for (const row of rows) {
+    const name = String(row.player_name ?? "").toLowerCase();
+    if (!ordinary.has(name)) continue;
+    const value = Number(row.market_value_usd) || 0;
+    if (!best.has(name) || value > best.get(name)!.value) {
+      best.set(name, { name: name.replace(/\b\w/g, (c) => c.toUpperCase()), value });
     }
-  } catch (_e) {
-    // fall through to low-coverage handling
   }
-
-  const matched = values.length;
+  for (const result of reviewed.values()) {
+    if (!result?.price) continue;
+    const key = `person:${result.person}`;
+    const previous = best.get(key);
+    if (!previous || previous.value < result.price.value) best.set(key, result.price);
+  }
+  const prices = [...best.values()];
+  const matched = prices.length;
   const total = names.length || 11;
   const M = 1_000_000;
-  const avg = matched ? values.reduce((a, b) => a + b, 0) / matched : 0;
+  const avg = matched ? prices.reduce((sum, price) => sum + price.value, 0) / matched : 0;
   const fmt = (v: number) => `$${Math.round(v / M)}M`;
-  const pretty = topName ? topName.replace(/\b\w/g, (c) => c.toUpperCase()) : "your XI";
+  const pretty = prices.reduce((top, price) => price.value > top.value ? price : top, { name: "your XI", value: 0 }).name;
 
   let rating: string;
-  if (matched < 4) rating = "Top 4 Finish 📈";
+  if (matched < 4) rating = reviewed.size ? "Unrated XI" : "Top 4 Finish 📈";
   else if (avg >= 80 * M) rating = "Champions League Winners 🏆";
   else if (avg >= 50 * M) rating = "League Champions 🥇";
   else if (avg >= 28 * M) rating = "Top 4 Finish 📈";
@@ -222,9 +308,12 @@ async function marketValueFallback(players: PlayerPick[]) {
   else if (avg >= 4 * M) rating = "Mid-Table 😐";
   else rating = "Relegation Battle 😰";
 
-  const headline = matched >= 4 ? `Squad value reads like a ${rating.replace(/\s*[^A-Za-z0-9 ].*$/, "").trim()} side` : "A squad stacked with legends";
+  const headline = matched >= 4 ? `Squad value reads like a ${rating.replace(/\s*[^A-Za-z0-9 ].*$/, "").trim()} side`
+    : reviewed.size ? "Limited valuation data" : "A squad stacked with legends";
   const analysis = matched >= 4
-    ? `Quick market-value read while our pundit's offline: this XI averages about ${fmt(avg)} per priced player across ${matched}/${total} names, with ${pretty} the standout. On today's valuations that lands around "${rating}". Play again for a full AI verdict once it's back.`
+    ? `Quick market-value read while our pundit's offline: this XI averages about ${fmt(avg)} per priced player across ${matched}/${total} names, with ${pretty} the standout. On ${reviewed.size ? "these recorded valuations" : "today's valuations"} that lands around "${rating}". Play again for a full AI verdict once it's back.`
+    : reviewed.size
+    ? `Our pundit is offline. We found market values for ${matched}/${total} picks.${matched ? ` The priced picks average about ${fmt(avg)}, with ${pretty} highest.` : ""} There is too little verified pricing for a full squad verdict.`
     : `Our AI pundit is taking a short break, so here's a quick take: several of your picks look like all-time names our current-season valuation table doesn't price, so you get the benefit of the doubt. Your XI is locked in — try again shortly for the full verdict.`;
 
   return { rating, headline, analysis };
@@ -266,10 +355,22 @@ serve(async (req) => {
       }
     }
 
-    const ai = await tryAI(formation, players as PlayerPick[]);
+    const picks: PlayerPick[] = players;
+    const groups = picks.map(player => soccerNamesakeGroup(player.playerName));
+    const hasNamesakes = groups.some(Boolean);
+    const rows = hasNamesakes ? await readMarketRows(picks, groups) : [];
+    const reviewed: ReviewedPrices = new Map();
+    const identities: ReviewedIdentities = {};
+    for (const [i, group] of groups.entries()) {
+      if (!group) continue;
+      const result = reviewedPick(group, picks[i], rows);
+      reviewed.set(i, result);
+      if (result) identities[i + 1] = result.person;
+    }
+    const ai = [...reviewed.values()].every(Boolean) ? await tryAI(formation, picks, identities) : null;
     if (ai) return json(ai);
 
-    const fb = await marketValueFallback(players as PlayerPick[]);
+    const fb = marketValueFallback(picks, hasNamesakes ? rows : await readMarketRows(picks, groups), reviewed);
     return json(fb);
   } catch (_e) {
     return json({

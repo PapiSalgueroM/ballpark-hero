@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { resolveSoccerNamesakeRecord, soccerNamesakeGroup } from "../_shared/soccerNamesakeRecord.ts";
 
 /* Soccer player/team validator. FREE Gemini key -> gemini-2.5-flash (2.0-flash
  * has no free quota on this key). Falls back to the Lovable gateway.
@@ -196,6 +197,48 @@ const POSITION_ROLES: Record<string, string[]> = {
   "striker": ["ST", "CF"],
 };
 
+// Senior caps for these exact reviewed identities. Portugal: FPF senior AA
+// caps table (Internaciolaizacoes_Novembro.pdf) and the PSG Vitinha profile.
+// Argentina: AFA club World Cup profile of Nico and the RFEF senior match
+// archive against Argentina. The other reviewed namesakes lack senior proof.
+const REVIEWED_SENIOR_NATION: Record<string, string> = {
+  "Vítor Machado Ferreira": "Portugal",
+  "Nicolás Iván González": "Argentina",
+};
+
+async function reviewedNationalPick(
+  group: NonNullable<ReturnType<typeof soccerNamesakeGroup>>,
+  playerName: string,
+  teamName: string,
+  position: string | null,
+): Promise<string | null> {
+  const exact = resolveSoccerNamesakeRecord(playerName, {});
+  const country = flat(teamName);
+  const senior = group.people.filter(person => {
+    const proven = REVIEWED_SENIOR_NATION[person.name];
+    return proven && flat(proven) === country && (!exact || person.name === exact);
+  });
+  if (!senior.length) return null;
+  if (!position) return senior.length === 1 ? senior[0].name : null;
+
+  try {
+    const names = [...new Set([group.name, ...group.aliases, ...senior.flatMap(person => [person.name, ...person.aliases])].map(dbFold))];
+    const { data, error } = await sb.from("player_market_values").select("player_name, club, position, nationality")
+      .in("name_folded", names).limit(200);
+    if (error || !data) return null;
+    const fitting = new Set<string>();
+    for (const row of data) {
+      if (typeof row.player_name !== "string" || !row.club || !row.nationality
+        || !(POSITION_ROLES[flat(row.position ?? "")] ?? []).includes(position)) continue;
+      const person = resolveSoccerNamesakeRecord(row.player_name, { club: row.club, nationality: row.nationality });
+      if (person && senior.some(candidate => candidate.name === person)) fitting.add(person);
+    }
+    return fitting.size === 1 ? [...fitting][0] : null;
+  } catch {
+    return null;
+  }
+}
+
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
@@ -223,6 +266,15 @@ serve(async (req) => {
       ? "Answer checking has used up its allowance for today, so this answer was not counted. Please come back tomorrow."
       : "Couldn't verify that answer. Try again in a second.",
   });
+
+  const reviewedName = flat(playerName);
+  const group = isNation ? soccerNamesakeGroup(reviewedName) : undefined;
+  if (group) {
+    const fullName = await reviewedNationalPick(group, reviewedName, teamName, pos);
+    return fullName
+      ? json({ valid: true, fullName, reason: `Verified senior national record for ${fullName}.`, source: "records" })
+      : json({ valid: false, unverified: true, reason: "We couldn't verify this player's senior record for that country and position." });
+  }
 
   const cacheKey = `${flat(playerName)}|${flat(teamName)}|${pos ?? ""}|${isNation ? "n" : "c"}`;
   /* ROUND 703: a stored YES answers at once. A stored NO is HELD until the

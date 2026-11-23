@@ -853,6 +853,111 @@ describe('Build Your XI unfinished draft', () => {
   });
 });
 
+describe('Build Your XI verified namesakes', () => {
+  // Exact rows from scripts/data/bingoPoolHistory-2026-10-29.json.
+  const psg = {
+    id: 177617, player_name: 'Vitinha', name_folded: 'vitinha', club: 'Paris Saint-Germain', nationality: 'Portugal',
+    position: 'Defensive Midfield', age: 25, year: 2026, market_value_usd: 151_200_000,
+  };
+  const marseille = {
+    id: 166895, player_name: 'Vitinha', name_folded: 'vitinha', club: 'Olympique Marseille', nationality: 'Portugal',
+    position: 'Centre-Forward', age: 23, year: 2024, market_value_usd: 15_000_000,
+  };
+  const porto = {
+    id: 167401, player_name: 'Vitinha', name_folded: 'vitinha', club: 'FC Porto', nationality: 'Portugal',
+    position: 'Defensive Midfield', age: 21, year: 2022, market_value_usd: 49_000_000,
+  };
+  const asPick = (row: typeof psg, position: PositionRole): PickMeta => ({
+    rawName: row.player_name, rawPosition: row.position, position, club: row.club, nationality: row.nationality,
+    value: row.market_value_usd, age: row.age, year: row.year, recordId: row.id,
+  });
+  const formation = '4-2-3-1';
+  const positions = FORMATIONS[formation];
+  const clubEra = { mode: 'club-era', year: 2022 } as const;
+  function lineup(nextTeam = 'Marseille') {
+    return ['PSG', nextTeam, ...clubYearClubs.filter(club => club !== 'PSG' && club !== nextTeam).slice(0, 9)]
+      .map(name => ({ name, isNation: false }));
+  }
+  const firstPick = {
+    ...positions[5], playerName: 'Vitinha', assignedTeam: 'PSG', isNation: false,
+    pick: { ...asPick(psg, 'CDM'), recordId: undefined },
+  };
+
+  it.each([
+    { mode: 'mixed' } as const, clubEra,
+  ])('offers and saves the second Vitinha in $mode with the first already picked', async draftChoice => {
+    localStorage.setItem(draftKey, JSON.stringify({ formation, draftChoice, teamAssignments: lineup(), slots: [[5, firstPick]] }));
+    io.rest = async () => ({ data: [marseille], error: null });
+    const open = () => render(<MemoryRouter><LineupBuilder /></MemoryRouter>);
+    const view = open();
+    await chooseSlot('ST');
+    fireEvent.change(field(), { target: { value: 'Vitinha' } });
+    await advance(230); await flush();
+    fireEvent.click(screen.getByRole('option', { name: /Vitinha.*Olympique Marseille/i }));
+    await flush();
+    const raw = localStorage.getItem(draftKey)!;
+    expect(JSON.parse(raw).slots).toMatchObject([
+      [5, { playerName: 'Vitinha', pick: { club: psg.club, value: psg.market_value_usd } }],
+      [10, { playerName: 'Vitinha', pick: { club: marseille.club, value: marseille.market_value_usd, recordId: marseille.id } }],
+    ]);
+    view.unmount();
+    open();
+    expect(screen.getAllByText('Vitinha')).toHaveLength(2);
+    expect(localStorage.getItem(draftKey)).toBe(raw);
+  });
+
+  it('rejects a different verified record of the same person across club and year', async () => {
+    const raw = JSON.stringify({ formation, draftChoice: clubEra, teamAssignments: lineup('Porto'), slots: [[5, firstPick]] });
+    localStorage.setItem(draftKey, raw);
+    const view = renderHook(useLineupBuilder);
+    act(() => { api(view).finishSpin(); api(view).selectPosition(6); });
+    await act(async () => api(view).submitPlayer('Vitinha', asPick(porto, 'CDM')));
+    expect(api(view).validationError).toMatch(/already in your lineup/);
+    expect(api(view).filledCount).toBe(1);
+    expect(localStorage.getItem(draftKey)).toBe(raw);
+  });
+
+  it('checks the exact selected Vitinha for a nation and holds a mismatched full name', async () => {
+    const teamAssignments = lineup('Portugal');
+    teamAssignments[1].isNation = true;
+    const raw = JSON.stringify({ formation, draftChoice: { mode: 'mixed' }, teamAssignments, slots: [[5, firstPick]] });
+    localStorage.setItem(draftKey, raw);
+    const validate = vi.fn((_url: RequestInfo | URL, _options?: RequestInit) => Promise.resolve(
+      new Response(JSON.stringify({ valid: true, fullName: 'Vítor Machado Ferreira' }), { status: 200 }),
+    ));
+    vi.stubGlobal('fetch', validate);
+    const view = renderHook(useLineupBuilder);
+    act(() => { api(view).finishSpin(); api(view).selectPosition(10); });
+    await act(async () => api(view).submitPlayer('Vitinha', asPick(marseille, 'ST')));
+    expect(JSON.parse(String(validate.mock.calls[0][1]?.body))).toMatchObject({
+      playerName: 'Vítor Manuel Carvalho Oliveira', teamName: 'Portugal', isNation: true, position: 'ST',
+    });
+    expect(api(view).filledCount).toBe(1);
+    expect(localStorage.getItem(draftKey)).toBe(raw);
+  });
+
+  it('finishes a full recorded draft without merging the two players in the season report', async () => {
+    const teamAssignments = lineup();
+    const slots = [[5, firstPick], [10, {
+      ...positions[10], playerName: 'Vitinha', assignedTeam: 'Marseille', isNation: false, pick: asPick(marseille, 'ST'),
+    }], ...positions.flatMap((slot, index) => {
+      if (index === 5 || index === 10) return [];
+      const assignedTeam = teamAssignments[2 + (index < 5 ? index : index - 1)].name;
+      const playerName = 'Recorded Fixture ' + index;
+      return [[index, { ...slot, playerName, assignedTeam, isNation: false, pick: meta(assignedTeam, 2024, slot.role, playerName) }]];
+    })];
+    localStorage.setItem(draftKey, JSON.stringify({ formation, draftChoice: clubEra, teamAssignments, slots }));
+    render(<MemoryRouter><LineupBuilder /></MemoryRouter>);
+    expect(io.simulate.mock.lastCall?.[0]).toEqual(expect.arrayContaining([
+      expect.objectContaining({ name: 'Vítor Machado Ferreira', value: psg.market_value_usd }),
+      expect.objectContaining({ name: 'Vítor Manuel Carvalho Oliveira', value: marseille.market_value_usd }),
+    ]));
+    fireEvent.click(screen.getByRole('button', { name: 'Submit Team' }));
+    await flush();
+    expect(screen.getByText(/Your XI finished/)).toBeVisible();
+  });
+});
+
 describe('Build Your XI Club year Browse on the real page', () => {
   it('shows separate Club era records and can switch the existing keeper to a lower-value season', async () => {
     const teamAssignments = clubEraClubs.slice(0, 11).map(name => ({ name, isNation: false }));

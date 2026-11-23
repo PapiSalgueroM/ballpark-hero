@@ -1,8 +1,9 @@
 /** Execute the real Build Your XI record handler against generated fixtures.
  * This is an offline policy proof, not a live database or provider probe.
- * The original edge source is reconstructed only by reversing its position map.
+ * The original edge source comes from its pinned Git commit and is checked by hash.
  */
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
@@ -21,7 +22,8 @@ const json = value => JSON.stringify(value);
 const clone = value => structuredClone(value);
 const lf = value => value.replace(/\r\n/g, '\n');
 const read = relative => fs.readFileSync(path.join(ROOT, relative));
-const HELD = [EDGE, 'src/lib/positionFit.ts', 'src/lib/squadShape.ts', 'scripts/simLineupRecordPositions.mjs', 'package.json', 'package-lock.json', 'tsconfig.app.json'];
+const HELD = [EDGE, 'supabase/functions/_shared/soccerNamesakeRecord.ts', 'supabase/functions/_shared/soccerGridNamesakes.json',
+  'src/lib/positionFit.ts', 'src/lib/squadShape.ts', 'scripts/simLineupRecordPositions.mjs', 'package.json', 'package-lock.json', 'tsconfig.app.json'];
 const heldBefore = HELD.map(file => ({ file, bytes: read(file).length, sha256: sha(read(file)) }));
 fs.mkdirSync(OUT, { recursive: true });
 function save(file, body) {
@@ -42,26 +44,13 @@ function replaceOne(body, from, to, label) {
   assert.equal(changed.replace(to, from), body, `${label}: whole source undo`);
   return changed;
 }
-const ORIGINAL_MAP = `const POSITION_ROLES: Record<string, string[]> = {
-  "goalkeeper": ["GK"],
-  "centre back": ["CB"],
-  "right back": ["RB", "RWB"],
-  "left back": ["LB", "LWB"],
-  "defensive midfield": ["CDM", "CM"],
-  "central midfield": ["CM", "CDM", "CAM"],
-  "attacking midfield": ["CAM", "CM"],
-  "right midfield": ["RM", "RW"],
-  "left midfield": ["LM", "LW"],
-  "right winger": ["RW", "RM"],
-  "left winger": ["LW", "LM"],
-  "second striker": ["ST", "CF", "CAM"],
-  "centre forward": ["ST", "CF"],
-};`;
 const current = lf(read(EDGE).toString('utf8'));
 const mapBlocks = current.match(/const POSITION_ROLES: Record<string, string\[\]> = \{[\s\S]*?\n\};/g);
 assert.equal(mapBlocks?.length, 1, 'one actual position map');
-const original = current.replace(mapBlocks[0], ORIGINAL_MAP);
-assert.equal(sha(original), BASE_SHA, 'complete reconstructed original aa564 edge source');
+const original = lf(execFileSync('git', ['show', '--no-textconv', `${BASE}:${EDGE}`], {
+  cwd: ROOT, encoding: 'utf8', env: { ...process.env, GIT_NO_LAZY_FETCH: '1' },
+}));
+assert.equal(sha(original), BASE_SHA, 'complete pinned original aa564 edge source');
 const FAULTS = [
   { id: 'narrow-wing', from: '  "left winger": ["LW", "LM", "RW", "RM", "LWB", "RWB"],', to: '  "left winger": ["LW", "LM"],' },
   { id: 'keeper-cross', from: '  "goalkeeper": ["GK"],', to: '  "goalkeeper": ["GK", "CM"],' },
@@ -90,8 +79,18 @@ async function bundle(id, subject) {
       if (args.path === 'https://esm.sh/@supabase/supabase-js@2') return { path: 'client', namespace: 'proof' };
       throw new Error(`unprovided remote import ${args.path}`);
     });
-    b.onLoad({ filter: /.*/, namespace: 'proof' }, args => ({ contents: record(`proof:${args.path}`, args.path === 'edge' ? subject : args.path === 'serve' ? stubServe : stubClient, args.path === 'edge' ? 'actual-edge' : 'explicit-stub'), loader: 'ts' }));
-    b.onLoad({ filter: /\.[cm]?[jt]sx?$/, namespace: 'file' }, args => ({ contents: record(path.relative(ROOT, args.path).split(path.sep).join('/'), fs.readFileSync(args.path, 'utf8'), 'actual-file'), loader: args.path.endsWith('tsx') ? 'tsx' : args.path.endsWith('ts') ? 'ts' : 'js', resolveDir: path.dirname(args.path) }));
+    b.onLoad({ filter: /.*/, namespace: 'proof' }, args => ({
+      contents: record(`proof:${args.path}`, args.path === 'edge' ? subject : args.path === 'serve' ? stubServe : stubClient, args.path === 'edge' ? 'actual-edge' : 'explicit-stub'),
+      loader: 'ts', resolveDir: args.path === 'edge' ? path.dirname(path.join(ROOT, EDGE)) : undefined,
+    }));
+    b.onLoad({ filter: /\.(?:[cm]?[jt]sx?|json)$/, namespace: 'file' }, args => {
+      const extension = path.extname(args.path);
+      return {
+        contents: record(path.relative(ROOT, args.path).split(path.sep).join('/'), fs.readFileSync(args.path, 'utf8'), 'actual-file'),
+        loader: ['.json', '.tsx', '.ts'].includes(extension) ? extension.slice(1) : 'js',
+        resolveDir: path.dirname(args.path),
+      };
+    });
   } }];
   const result = await build({ stdin: { contents: entry, sourcefile: 'record-position-entry.ts', resolveDir: ROOT, loader: 'ts' }, bundle: true, write: false, metafile: true, platform: 'node', target: 'node22', format: 'cjs', outfile: path.join(OUT, dir, 'compiled.cjs'), plugins, logLevel: 'silent' });
   assert.equal(result.outputFiles.length, 1, `${id}: one complete bundle`);

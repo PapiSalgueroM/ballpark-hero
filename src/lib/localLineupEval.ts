@@ -1,4 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
+import { buildXiNamesake } from '@/lib/buildXiPlayers';
+import type { FilledSlot } from '@/types/lineupBuilder';
 
 /**
  * Offline judge (2026-07-10). The AI referee (Gemini free tier) has a daily
@@ -42,15 +44,28 @@ async function lookupMarketValue(name: string): Promise<{ name: string; mv: numb
   }
 }
 
-export async function localEvaluateSoccerXI(playerNames: string[]): Promise<LocalVerdict> {
-  const found = await Promise.all(playerNames.map(lookupMarketValue));
-  const rated = found
-    .map((f, i) => ({ input: playerNames[i], hit: f }))
-    .map(x => ({
-      name: x.hit?.name ?? x.input,
-      rating: x.hit ? soccerRating(x.hit.mv) : 64, // unknown = decent squad player benefit-of-doubt
-      known: !!x.hit,
-    }));
+export async function localEvaluateSoccerXI(slots: FilledSlot[]): Promise<LocalVerdict> {
+  const rated = await Promise.all(slots.map(async slot => {
+    const scope = buildXiNamesake(slot.playerName, slot.pick);
+    const value = slot.pick?.value;
+    const picked = Boolean(scope?.person && typeof value === 'number' && Number.isFinite(value) && value > 0);
+    const current = scope ? null : await lookupMarketValue(slot.playerName);
+    const marketValue = picked ? value : current?.mv;
+    return {
+      name: scope?.person ?? current?.name ?? slot.playerName,
+      rating: marketValue === undefined ? 64 : soccerRating(marketValue),
+      known: marketValue !== undefined,
+      picked,
+      reviewed: Boolean(scope),
+    };
+  }));
+  if (rated.some(row => row.reviewed && !row.known)) {
+    return {
+      rating: 'Unrated XI',
+      headline: 'Missing player values',
+      analysis: 'We could not match a selected player to a verified value for this lineup.',
+    };
+  }
   const avg = Math.round(rated.reduce((s, r) => s + r.rating, 0) / Math.max(1, rated.length));
   const sorted = [...rated].sort((a, b) => b.rating - a.rating);
   const star = sorted[0];
@@ -65,10 +80,12 @@ export async function localEvaluateSoccerXI(playerNames: string[]): Promise<Loca
                 { rating: 'Relegation Scrap 😬', headline: 'This squad needs January signings' };
 
   const lines = [
-    `Squad average ${avg} on current 2026 market values.`,
+    rated.some(row => row.picked) ? `Squad average ${avg} using available market values for your picks.`
+      : `Squad average ${avg} on current 2026 market values.`,
     star ? `Star man: ${star.name} (${star.rating}).` : '',
     weakest && weakest !== star ? `Weak link: ${weakest.name} (${weakest.rating}).` : '',
-    unknowns > 0 ? `${unknowns} pick${unknowns === 1 ? '' : 's'} weren't in the value database, rated on trust.` : '',
+    unknowns === 1 ? "1 pick wasn't in the value database, rated on trust."
+      : unknowns > 1 ? `${unknowns} picks weren't in the value database, rated on trust.` : '',
     'Verdict by the offline judge (AI referee back soon).',
   ].filter(Boolean);
 

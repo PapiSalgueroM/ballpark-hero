@@ -8,6 +8,7 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import FormationPitch from '@/components/lineup/FormationPitch';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
+import { buildXiExclusions, buildXiReportName, buildXiSearchExclusionKeys } from '@/lib/buildXiPlayers';
 import { clubTableNames, nationSearchTerm, nationSquadTerm } from '@/data/lineupTeams';
 import { BUILD_XI_VERIFIED_CLUB_ROWS, BUILD_XI_VERIFIED_SPLIT_ROWS } from '@/data/buildXiVerifiedClubRows';
 import TeamSpinner from '@/components/lineup/TeamSpinner';
@@ -126,9 +127,7 @@ const LineupBuilder = () => {
   }, []);
 
   const excludedPlayers = useMemo(
-    () => new Set(filledSlotsArray
-      .filter(slot => draftChoice.mode !== 'club-era' || slot !== replacingSlot)
-      .map(slot => normalizeName(slot.playerName))),
+    () => buildXiExclusions(filledSlotsArray.filter(slot => draftChoice.mode !== 'club-era' || slot !== replacingSlot)),
     [draftChoice.mode, filledSlotsArray, replacingSlot]
   );
 
@@ -197,9 +196,10 @@ const LineupBuilder = () => {
     ].join(',') : null;
     const source: PlayerSourceConfig = {
       ...SOCCER_MARKET_VALUE_SOURCE,
+      metaColumns: { ...SOCCER_MARKET_VALUE_SOURCE.metaColumns, recordId: 'id' },
+      exclusionKeys: buildXiSearchExclusionKeys,
       ...(draftChoice.mode === 'club-era' ? {
         identity: { personKeyColumn: 'id' },
-        metaColumns: { ...SOCCER_MARKET_VALUE_SOURCE.metaColumns, recordId: 'id' },
       } : {}),
       filters: currentTeam.isNation
         ? [{ column: 'nationality', op: 'eq', value: nationSearchTerm(currentTeam.name) }]
@@ -325,7 +325,7 @@ const LineupBuilder = () => {
     if (!canShowSeasonReport || ratedXi.length !== 11 || ratedXi.some((r) => r.value <= 0)
       || (isClubYear && ratedXi.some((r) => r.rating === null))) return null;
     const squad: WxPlayer[] = ratedXi.map(({ slot, value }) => ({
-      name: slot.playerName,
+      name: buildXiReportName(slot, filledSlotsArray),
       country: slot.pick?.nationality ?? '',
       position: slot.pick?.position ?? slot.role,
       club: slot.pick?.club ?? '',
@@ -333,7 +333,7 @@ const LineupBuilder = () => {
       age: slot.pick?.age,
     }));
     return simulateWorldXiSeason(squad, formation ?? '4-3-3', seasonAdjust(fitBreakdown));
-  }, [canShowSeasonReport, ratedXi, formation, fitBreakdown, isClubYear]);
+  }, [canShowSeasonReport, ratedXi, filledSlotsArray, formation, fitBreakdown, isClubYear]);
 
   const recordedYearVerdict = useMemo<AIVerdict | null>(() => {
     if (recordedYear === null) return null;

@@ -9,6 +9,7 @@ import { checkLineupPick, gradeFit, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionF
 import type { Position } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
 import { clubPickVerifies, isCurrentBuildXiDraft, loadBuildXiDraft, recordedPickVerifies, writeBuildXiDraft } from '@/lib/buildXiDraft';
+import { buildXiAlreadyPicked, buildXiExclusions, buildXiNamesake, buildXiReviewedName } from '@/lib/buildXiPlayers';
 import { normalizeName } from '@/lib/playerSearch';
 import { verifiedPositionFallback } from '@/data/verifiedSoccerPositions';
 
@@ -269,11 +270,9 @@ export function useLineupBuilder() {
         return;
       }
 
-      const trimmedName = normalizeName(playerName);
-      const names = new Set(Array.from(filledSlots.values())
-        .filter(slot => draftChoice.mode !== 'club-era' || slot !== replacingSlot)
-        .map(slot => normalizeName(slot.playerName)));
-      if (names.has(trimmedName)) {
+      const exclusions = buildXiExclusions(Array.from(filledSlots.values())
+        .filter(slot => draftChoice.mode !== 'club-era' || slot !== replacingSlot));
+      if (buildXiAlreadyPicked(exclusions, playerName, pickMeta)) {
         setValidationError(`${playerName.trim()} is already in your lineup!`);
         return;
       }
@@ -349,6 +348,12 @@ export function useLineupBuilder() {
         // Our own record settles it: no request, no model, nothing to wait for.
         playerName = pickMeta?.rawName?.trim() || typed;
       } else {
+        const reviewed = buildXiNamesake(typed, pickMeta);
+        if (reviewed && !reviewed.person) {
+          setIsValidating(false);
+          setValidationError('Could not identify this player. Try another record or reroll the team.');
+          return;
+        }
         setIsValidating(true);
         const call = new AbortController();
         validatorCall.current = call;
@@ -357,7 +362,7 @@ export function useLineupBuilder() {
           {
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}` },
             body: JSON.stringify({
-              playerName: typed,
+              playerName: reviewed?.person ?? typed,
               teamName: currentTeam.name,
               isNation: currentTeam.isNation,
               /* Round 315: the slot's role rides along, so the validator can
@@ -379,10 +384,18 @@ export function useLineupBuilder() {
           else if (answer.why !== 'cancelled') setValidationError(unverifiedLine(answer));
           return;
         }
-        if (answer.fullName) playerName = answer.fullName;
+        if (reviewed?.person) {
+          if (normalizeName(answer.fullName) !== normalizeName(reviewed.person)) {
+            setIsValidating(false);
+            setValidationError('Could not verify the selected player. Try again or pick someone else.');
+            return;
+          }
+        } else if (answer.fullName) {
+          playerName = answer.fullName;
+        }
       }
 
-      if (names.has(normalizeName(playerName))) {
+      if (buildXiAlreadyPicked(exclusions, playerName, pickMeta)) {
         setIsValidating(false);
         setValidationError(`${playerName.trim()} is already in your lineup!`);
         return;
@@ -430,7 +443,8 @@ export function useLineupBuilder() {
 
   const completeRecordedYearDraft = useCallback((nextVerdict: AIVerdict) => {
     if (draftChoice.mode === 'mixed' || phase !== 'reviewing' || replacingSlot || filledSlotsArray.length !== 11
-      || new Set(filledSlotsArray.map(slot => slot.playerName.trim().toLowerCase())).size !== 11
+      || filledSlotsArray.some((slot, index) =>
+        buildXiAlreadyPicked(buildXiExclusions(filledSlotsArray.slice(0, index)), slot.playerName, slot.pick))
       || filledSlotsArray.some(slot => !recordedPickVerifies(
         { name: slot.assignedTeam, isNation: slot.isNation }, slot.role, slot.pick, draftChoice,
       ))) return;
@@ -446,14 +460,20 @@ export function useLineupBuilder() {
     setIsEvaluating(true);
     try {
       const resp = await fetch(
-        `${"https://flawuiqbvjobmkfkauhw.supabase.co"}/functions/v1/evaluate-lineup`,
+        `${SUPABASE_URL}/functions/v1/evaluate-lineup`,
         {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y"}`,
+            Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
           },
-          body: JSON.stringify({ formation, players: filledSlotsArray }),
+          body: JSON.stringify({
+            formation,
+            players: filledSlotsArray.map(slot => ({
+              ...slot,
+              playerName: buildXiReviewedName(slot.playerName, slot.pick) ?? slot.playerName,
+            })),
+          }),
         }
       );
       if (run !== evaluationRun.current) return;
@@ -462,7 +482,7 @@ export function useLineupBuilder() {
       
       if (!resp.ok) {
         // AI referee down/out of quota -> offline judge, never a dead-end
-        const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
+        const local = await localEvaluateSoccerXI(filledSlotsArray);
         if (run !== evaluationRun.current) return;
         setVerdict(local);
         setPhase('result');
@@ -483,7 +503,7 @@ export function useLineupBuilder() {
       if (run !== evaluationRun.current) return;
       console.error('Evaluation error:', err);
       try {
-        const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
+        const local = await localEvaluateSoccerXI(filledSlotsArray);
         if (run !== evaluationRun.current) return;
         setVerdict(local);
       } catch {

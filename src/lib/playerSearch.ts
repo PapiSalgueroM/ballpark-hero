@@ -260,6 +260,8 @@ export interface PlayerSourceConfig {
   local?: (normalizedQuery: string) => Promise<Record<string, unknown>[] | null>;
   /** Extra records already verified to match this source's filters. Table rows win for the same spelling. */
   fallbackRows?: Record<string, unknown>[];
+  /** Additional exclusion keys for a row, independent of how its results are grouped. */
+  exclusionKeys?: (name: string, meta: PlayerEntityMeta) => string[];
 }
 
 export interface PlayerIdentityConfig {
@@ -569,6 +571,7 @@ export function dedupeAndRank(
       const rank = classifyMatch(normalized, normalizedQuery);
       if (rank === null) continue;
       if (exclude?.has(normalized)) continue;
+      if (exclude && source.exclusionKeys?.(parsed.name, parsed.meta).some(key => exclude.has(key))) continue;
       const personKey = personKeyOf(source.identity, parsed.name, parsed.personKeyValue);
       if (personKey !== undefined && exclude?.has(personKey)) continue;
       const dedupeKey = personKey ?? normalized;
