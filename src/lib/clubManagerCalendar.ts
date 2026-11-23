@@ -1020,7 +1020,8 @@ export function joinClubNow(career: CareerState): CareerState | null {
   const club = open.club;
   if (!clubAvailableInCareer(career, club)) return null;
   const from = career.clubName;
-  const pendingDomesticScorerAward = completedDomesticScorerAward(career);
+  const award = completedDomesticScorerAward(career);
+  const pendingDomesticScorerAward = career.pendingDomesticScorerAward ?? (award ? { club: from, award } : undefined);
   const departed = refreshWorldRoster(snapshotRatingDeparture(career));
   const eraId = career.eraId ?? DEFAULT_ERA_ID;
   const historic = isHistoricEra(eraId);
@@ -1111,6 +1112,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
     history: career.history,
     domesticCupScorers: undefined,
     pendingDomesticScorerAward,
+    ...(career.unreviewedDomesticScorerAwards ? { unreviewedDomesticScorerAwards: career.unreviewedDomesticScorerAwards } : {}),
     leagueCoachBook: undefined,
     careerStats: { ...career.careerStats, clubsManaged: [...managed] },
     manager: career.manager,

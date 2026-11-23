@@ -3244,7 +3244,9 @@ export interface CareerState {
   cupDraw: Partial<Record<CupRound, string>>;
   domesticCupScorers?: CupScorerLedger;
   /** A confirmed cup award kept through a job move before the season review. */
-  pendingDomesticScorerAward?: SeasonSummary['domesticScorerAward'];
+  pendingDomesticScorerAward?: { club: string; award: NonNullable<SeasonSummary['domesticScorerAward']> };
+  /** Confirmed cup awards from seasons that ended without a league review. */
+  unreviewedDomesticScorerAwards?: { season: number; club: string; award: NonNullable<SeasonSummary['domesticScorerAward']> }[];
   uclGroup: UclGroupState | null;
   uclKoRound: UclKoState;
   uclDraw: Partial<Record<UclKoRound, string>>;
@@ -16195,7 +16197,7 @@ export function domesticCupScorerRace(state: CareerState): CupScorerRace {
 }
 
 export function completedDomesticScorerAward(state: CareerState): SeasonSummary['domesticScorerAward'] {
-  const held = state.history.find(row => row.season === state.season)?.domesticScorerAward ?? state.pendingDomesticScorerAward;
+  const held = state.history.find(row => row.season === state.season)?.domesticScorerAward ?? state.pendingDomesticScorerAward?.award;
   if (held) return held;
   const competition = careerLeagueOf(state).cupName;
   if (!competition || !state.domesticCupScorers) return undefined;
@@ -24604,6 +24606,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   if (playedFinals?.played.length && playedFinals.next) return career;
   const requestedClub = career.jobHunt?.summerMove?.club ?? acceptOfferClub;
   if (requestedClub && requestedClub !== career.clubName && !clubAvailableInCareer(career, requestedClub)) return career;
+  const unreviewedCupAward = !career.history.some(row => row.season === career.season)
+    && !career.unreviewedDomesticScorerAwards?.some(row => row.season === career.season)
+    ? completedDomesticScorerAward(career) : undefined;
+  const unreviewedCupClub = career.pendingDomesticScorerAward?.club ?? career.clubName;
   const kLeagueActive = careerHasKLeagueWorld(career);
   const scopedLeagueId = careerScopedLeagueId(career);
   /* Round 1508: a career with no world seed joins the living world here, at its first summer on this engine, before
@@ -25048,6 +25054,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     cupBracket: undefined,
     domesticCupScorers: undefined,
     pendingDomesticScorerAward: undefined,
+    ...(unreviewedCupAward ? { unreviewedDomesticScorerAwards: [
+      ...(career.unreviewedDomesticScorerAwards ?? []),
+      { season: career.season, club: unreviewedCupClub, award: unreviewedCupAward },
+    ] } : {}),
     world: initWorld(clubName, eraId, league.id, kLeagueActive, scopedLeagueId),
     pendingSummary: null,
     cupExit: null,

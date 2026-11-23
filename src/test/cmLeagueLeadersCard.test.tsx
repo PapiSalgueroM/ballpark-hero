@@ -393,6 +393,27 @@ describe('past winners', () => {
     noDash(p.container);
   });
 
+  it('shows a settled cup award when taking a new job skipped the league review', () => {
+    const s = everton();
+    s.season = 2;
+    s.history = [];
+    s.unreviewedDomesticScorerAwards = [{
+      season: 1, club: 'Everton',
+      award: { competition: 'FA Cup', winners: [{ name: 'Alexander Isak', club: 'Liverpool', goals: 4 }] },
+    }];
+    const tiles = draw(s);
+    const past = tiles.q('[data-cm-leaders-tile="past"]');
+    expect(past).not.toBeNull();
+    fireEvent.click(past!);
+    expect(tiles.onBoard).toHaveBeenLastCalledWith('past');
+    cleanup();
+    const p = draw(s, 'past');
+    expect(p.q('[data-cm-past-season="1"]')?.textContent).toContain('Everton');
+    expect(p.q('[data-cm-cup-award="winner"]')?.textContent).toContain('FA Cup Golden Boot');
+    expect(p.q('[data-cm-cup-award="winner"]')?.textContent).toContain('Alexander Isak');
+    expect(p.q('[data-cm-past-league]')).toBeNull();
+  });
+
   it('offers no Past winners tile before any season has closed with awards', () => {
     const s = everton();
     s.history = s.history.map(h => { const { awards, ...rest } = h; void awards; return rest; });

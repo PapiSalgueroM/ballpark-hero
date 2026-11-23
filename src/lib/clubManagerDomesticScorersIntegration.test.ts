@@ -1,7 +1,8 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import {
-  applyForJob, careerLeagueOf, domesticCupScorerRace, engineRegistrations, finishSeason, loadCareer, playNextEntry,
-  REAL_LEAGUES, restoreEngineRegistrations, saveCareer, startCareer, startNextSeason,
+  acceptWildernessJob, applyForJob, careerLeagueOf, domesticCupScorerRace, engineRegistrations,
+  enterWilderness, finishSeason, loadCareer, playNextEntry, REAL_LEAGUES, restoreEngineRegistrations,
+  saveCareer, startCareer, startNextSeason, wildernessWeek,
   type CareerState, type MatchWeekReport,
 } from './clubManager';
 import { joinClubNow, startMidSeason } from './clubManagerCalendar';
@@ -183,10 +184,10 @@ describe('Domestic cup scorer settlement', () => {
     expect(moved?.clubName).toBe('Bayern Munich');
     expect(domesticCupScorerRace(moved!).status).toBe('unavailable');
     const award = { competition: 'FA Cup', winners: [{ name: 'Brian Brobbey', club: 'Sunderland', goals: 4 }] };
-    expect(moved?.pendingDomesticScorerAward).toEqual(award);
+    expect(moved?.pendingDomesticScorerAward).toEqual({ club: 'Liverpool', award });
     expect(moved?.domesticCupScorers).toBeUndefined();
     const stored = loadCareer(JSON.stringify(moved));
-    expect(stored?.pendingDomesticScorerAward).toEqual(award);
+    expect(stored?.pendingDomesticScorerAward).toEqual({ club: 'Liverpool', award });
     const season = playTo(stored!, seed + 222, stored!.calendar.length).state;
     const finish = tape(seed + 200, () => finishSeason(season)).value;
     expect(finish.summary.domesticScorerAward).toEqual(award);
@@ -206,5 +207,50 @@ describe('Domestic cup scorer settlement', () => {
     expectReconciled(finished);
     expect(domesticCupScorerRace(finished)).toMatchObject({ status: 'undecided', leaders: [] });
     expect(tape(seed + 200, () => finishSeason(finished)).value.summary.domesticScorerAward).toBeUndefined();
+  });
+
+  it('preserves the confirmed cup award when a sacking skips the league season review', () => {
+    const seed = 982022;
+    const initial = tape(seed, () => startCareer('Everton')).value;
+    const final = playTo(initial, seed, 49).state;
+    expect(domesticCupScorerRace(final)).toMatchObject({
+      status: 'winner', leaders: [expect.objectContaining({ name: 'Alexander Isak', goals: 4 })],
+    });
+    let dismissed = final;
+    while (!dismissed.sacked && dismissed.week < dismissed.calendar.length) {
+      dismissed = next(dismissed, seed + 1).value.state;
+    }
+    expect(dismissed).toMatchObject({ week: 53, sacked: true, pendingSummary: null });
+    const original = JSON.stringify(dismissed);
+    let out = enterWilderness(dismissed);
+    for (let week = 0; week < 12 && !out.wilderness?.offers.length; week++) {
+      out = tape(seed + 1500 + week, () => wildernessWeek(out)).value;
+    }
+    expect(out.wilderness?.offers[0]?.club).toBe('QPR');
+    const hired = tape(seed + 2000, () => acceptWildernessJob(out, 'QPR')).value;
+    const award = { competition: 'FA Cup', winners: [{ name: 'Alexander Isak', club: 'Liverpool', goals: 4 }] };
+    const receipt = { season: 1, club: 'Everton', award };
+    expect(hired).toMatchObject({ season: 2, clubName: 'QPR', pendingSummary: null });
+    expect(hired?.history.some(row => row.season === 1)).toBe(false);
+    expect(hired?.domesticCupScorers?.nights).toBe(0);
+    expect(hired?.unreviewedDomesticScorerAwards).toEqual([receipt]);
+    expect(JSON.stringify(dismissed)).toBe(original);
+    expect(saveCareer(hired!)).toBe(true);
+    const reloaded = loadCareer();
+    expect(reloaded?.unreviewedDomesticScorerAwards).toEqual([receipt]);
+    expect(loadCareer(serializeParkedCareer(hired!))?.unreviewedDomesticScorerAwards).toEqual([receipt]);
+    const readAlready = { ...out, unreviewedDomesticScorerAwards: [receipt] };
+    expect(tape(seed + 2000, () => acceptWildernessJob(readAlready, 'QPR')).value?.unreviewedDomesticScorerAwards)
+      .toEqual([receipt]);
+    const later = tape(seed + 2001, () => startNextSeason(reloaded!)).value;
+    expect(later.season).toBe(3);
+    expect(later.unreviewedDomesticScorerAwards).toEqual([receipt]);
+    const league = REAL_LEAGUES.find(item => item.clubs.includes('Bayern Munich'));
+    if (!league) throw new Error('The fixture needs a second country');
+    reloaded!.jobHunt = { open: { club: 'Bayern Munich', league: league.id, tier: 1,
+      season: 2, week: 0, matchesLeft: 0, roll: 0, status: 'accepted' },
+      cooldowns: [], sentSeason: 2, sent: 1, summerMove: null };
+    expect(tape(seed + 2002, () => joinClubNow(reloaded!)).value?.unreviewedDomesticScorerAwards)
+      .toEqual([receipt]);
   });
 });
