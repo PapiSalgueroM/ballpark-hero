@@ -11,6 +11,7 @@ export interface PrivacyUser {
 export interface PrivacyServices {
   getUser: (jwt: string) => Promise<PrivacyUser | null>;
   exportData: (userId: string) => Promise<unknown>;
+  exportSoccerCareerSaves?: (userId: string) => Promise<unknown[]>;
   deletionBlockers: (userId: string) => Promise<{ admin: boolean; storage: boolean }>;
   confirmPassword: (email: string, password: string) => Promise<string | null>;
   deleteUser: (userId: string) => Promise<void>;
@@ -72,13 +73,16 @@ export async function handleAccountPrivacy(request: Request, services: PrivacySe
     const fields = body.action === 'export' ? ['action'] : ['action', 'confirmation', 'password'];
     if (Object.keys(body).some(key => !fields.includes(key))) return json({ ok: false, error: 'invalid_request' }, 400);
     if (body.action === 'export') {
-      const data = await services.exportData(user.id);
+      const [data, careerSaves] = await Promise.all([
+        services.exportData(user.id), services.exportSoccerCareerSaves?.(user.id),
+      ]);
       if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error();
+      if (careerSaves !== undefined && !Array.isArray(careerSaves)) throw new Error();
       return json({ ok: true, export: {
         version: 1, generated_at: new Date().toISOString(),
         account: { id: user.id, email: user.email ?? null, phone: user.phone ?? null,
           created_at: user.created_at ?? null, email_confirmed_at: user.email_confirmed_at ?? null },
-        data,
+        data: careerSaves === undefined ? data : { ...data, soccer_career_account_saves: careerSaves },
       } });
     }
     if (body.action !== 'delete' || body.confirmation !== 'DELETE MY ACCOUNT'

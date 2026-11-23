@@ -855,7 +855,8 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
      from 55. scripts/simScoreShown.mjs holds both halves. */
   const isRetired = career?.retired === true && career?.phase === "retired";
   const legacyScore = isRetired && career?.legacy ? career.legacy.score : 0;
-  useGameCompletion('soccer-career', isRetired && !career?.importedFromFile && !career?.restoredFromCheckpoint, legacyScore);
+  const canPostScore = isRetired && !career?.importedFromFile && !career?.restoredFromCheckpoint && !career?.restoredFromAccount;
+  useGameCompletion('soccer-career', canPostScore, legacyScore);
 
   // Club roster comes from the bundled FALLBACK_CLUBS list, deliberately.
   //

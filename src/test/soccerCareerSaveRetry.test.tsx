@@ -266,7 +266,7 @@ describe('Soccer Career failed write recovery', () => {
     clearReplayCounts(); m.refuse(false); retry(m.view); await act(async () => { await Promise.resolve(); });
     expect(read()).toEqual(earned); expect(recordCompletion).toHaveBeenCalledTimes(1); noReplay(); expect(warning(m.view)).toBeNull();
   });
-  it.each(['importedFromFile', 'restoredFromCheckpoint'] as const)('keeps a career marked %s playable without posting a public score', async marker => {
+  it.each(['importedFromFile', 'restoredFromCheckpoint', 'restoredFromAccount'] as const)('keeps a career marked %s playable without posting a public score', async marker => {
     const ceremony: E.CareerState = { ...E.manualRetire(nativeCareer()), [marker]: true };
     const m = mount(ceremony);
     fireEvent.click(m.view.getByRole('button', { name: /Retire and Enjoy Life/ }));
