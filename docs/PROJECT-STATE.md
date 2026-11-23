@@ -1,3 +1,7 @@
+## 2026-11-23, NRL Team Manager automatic season checkpoints
+
+PL-03 adds a season checkpoint beside the manual checkpoint in each slot. Starting a later season keeps the exact completed save after the new progress lands. Career saves can restore it after keeping a copy of the current career. Imported careers remain local, and replayed seasons avoid duplicate completion credit.
+
 ## 2026-11-23, NRL Team Manager save file imports
 
 PL-03 adds file import to an empty slot in Career saves. The chooser shows the club and season before confirmation. The original file stays available, and a slot with an existing career or checkpoint is protected. Imported careers are local play and keep their fixture and season records, including older v1 saves. The 61 focused tests and all 20 Chromium cases at 320 and 390 pixels passed. The actual downloaded 12-season career kept its records and 237 latest-year fixtures after import, resume and reload. The original v1 file kept an exact checked migration copy. A normal Grand Final registered one completion in an isolated test, and the imported career completed the same final without registering a duplicate.

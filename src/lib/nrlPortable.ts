@@ -1,5 +1,5 @@
 import { NRL_SAVE_MAX_CHARS, readNrlCareerSave, type NrlCareerState } from '@/lib/nrlCareer';
-import { nrlCheckpointKey } from '@/lib/nrlSaveSlots';
+import { nrlCheckpointKey, nrlSeasonCheckpointKey } from '@/lib/nrlSaveSlots';
 import { createSaveFence, fenceKeyOf, type FenceStore, type FenceWrite } from '@/lib/saveFence';
 
 const FORMAT = 'douknowball-nrl-team-manager';
@@ -44,8 +44,12 @@ export async function readNrlCareerFile(file: File): Promise<NrlCareerFile | nul
   }
 }
 
+function noCheckpoints(storage: FenceStore, key: string): boolean {
+  return storage.getItem(nrlCheckpointKey(key)) === null && storage.getItem(nrlSeasonCheckpointKey(key)) === null;
+}
+
 function emptyTarget(storage: FenceStore, key: string): boolean {
-  return storage.getItem(key) === null && storage.getItem(nrlCheckpointKey(key)) === null;
+  return storage.getItem(key) === null && noCheckpoints(storage, key);
 }
 
 export function captureNrlImportTarget(storage: FenceStore, key: string): NrlImportTarget | null {
@@ -84,7 +88,7 @@ export function importNrlCareerFile(storage: FenceStore, target: NrlImportTarget
     // The write landed. A refused read must not put the old fence back over it.
     try {
       const active = storage.getItem(key);
-      if (storage.getItem(generationKey) !== claimed || storage.getItem(nrlCheckpointKey(key)) !== null) return 'moved';
+      if (storage.getItem(generationKey) !== claimed || !noCheckpoints(storage, key)) return 'moved';
       return active === file.raw ? 'written' : 'unverified';
     } catch {
       return 'unverified';

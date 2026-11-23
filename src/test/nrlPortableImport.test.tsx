@@ -145,12 +145,13 @@ describe('NRL career file import', () => {
     expect(JSON.parse(localStorage.getItem(second)!)).toEqual({ ...JSON.parse(raw), importedFromFile: true });
   });
 
-  it.each(['career', 'checkpoint', 'fence'] as const)('keeps a %s written by a racing tab after review', async kind => {
+  it.each(['career', 'checkpoint', 'season checkpoint', 'fence'] as const)('keeps a %s written by a racing tab after review', async kind => {
     localStorage.setItem(secondFence, '3');
     localStorage.setItem(third, neighboring());
     open();
     await stage(bytes(JSON.stringify(ordinary())));
-    const held = kind === 'career' ? second : kind === 'checkpoint' ? secondCheckpoint : secondFence;
+    const held = kind === 'career' ? second : kind === 'checkpoint' ? secondCheckpoint
+      : kind === 'season checkpoint' ? 'dukb-nrl-season-checkpoint:' + second : secondFence;
     localStorage.setItem(held, kind === 'fence' ? '4' : neighboring());
     const before = storage();
     const writes = vi.spyOn(Storage.prototype, 'setItem');

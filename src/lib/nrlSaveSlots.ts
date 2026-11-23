@@ -1,7 +1,7 @@
 import { CONTINUE_SAVES, continueSaveEntries, type ContinueSave } from '@/data/continueSaves';
 import { backupKeysOf, browserStorage, copyAside, dismissBackup, pruneBackups } from '@/lib/brokenSaveRecovery';
 import { NRL_SAVE_MAX_CHARS, nrlOpeningClubId, readNrlCareerSave, type NrlCareerState } from '@/lib/nrlCareer';
-import { saveFence, type FenceWrite } from '@/lib/saveFence';
+import { fenceKeyOf, saveFence, type FenceWrite } from '@/lib/saveFence';
 
 export const NRL_SAVE_ENTRY = CONTINUE_SAVES.find(entry => entry.path === '/nrl-team-manager')!;
 export const NRL_SAVE_SLOTS = continueSaveEntries(NRL_SAVE_ENTRY);
@@ -55,6 +55,7 @@ export function writeNrlSaveSlot(key: string, expected: string | null, next: str
 }
 
 export const nrlCheckpointKey = (key: string) => 'dukb-nrl-checkpoint:' + key;
+export const nrlSeasonCheckpointKey = (key: string) => 'dukb-nrl-season-checkpoint:' + key;
 const replayKey = (key: string) => 'dukb-nrl-checkpoint-replay:' + key;
 
 function careerId(career: NrlCareerState): string {
@@ -68,6 +69,54 @@ function careerId(career: NrlCareerState): string {
 
 export function sameNrlCareer(first: NrlCareerState, second: NrlCareerState): boolean {
   return careerId(first) === careerId(second);
+}
+
+function sameCheckpointCareer(first: NrlCareerState, second: NrlCareerState): boolean {
+  return sameNrlCareer(first, second) && first.importedFromFile === second.importedFromFile;
+}
+
+export function canRestoreNrlSeasonCheckpoint(current: NrlCareerState, saved: NrlCareerState): boolean {
+  return saved.season.phase === 'complete' && saved.season.year < current.season.year && sameCheckpointCareer(current, saved);
+}
+
+interface NrlSeasonCheckpointSource {
+  key: string;
+  raw: string;
+  prior: string | null;
+  nextGeneration: string;
+}
+
+export function captureNrlSeasonCheckpoint(key: string, raw: string, next: NrlCareerState): NrlSeasonCheckpointSource | null {
+  const storage = browserStorage();
+  if (!storage) return null;
+  try {
+    const closed = readNrlCareerSave(raw);
+    if (!closed || !canRestoreNrlSeasonCheckpoint(next, closed)) return null;
+    const storedGeneration = storage.getItem(fenceKeyOf(key));
+    const nextGeneration = Number(storedGeneration) + 1;
+    if ((storedGeneration !== null && !/^\d+$/.test(storedGeneration)) || !Number.isSafeInteger(nextGeneration)) return null;
+    const prior = storage.getItem(nrlSeasonCheckpointKey(key));
+    if (prior !== null) {
+      const previous = readNrlCareerSave(prior);
+      if (!previous || !canRestoreNrlSeasonCheckpoint(closed, previous)) return null;
+    }
+    if (storage.getItem(key) !== raw || storage.getItem(fenceKeyOf(key)) !== storedGeneration || saveFence.moved(key)) return null;
+    return { key, raw, prior, nextGeneration: String(nextGeneration) };
+  } catch {
+    return null;
+  }
+}
+
+/** A checkpoint is optional once the new season has been written. */
+export function keepNrlSeasonCheckpoint(source: NrlSeasonCheckpointSource, successor: string): void {
+  const storage = browserStorage();
+  if (!storage) return;
+  const destination = nrlSeasonCheckpointKey(source.key);
+  try {
+    if (storage.getItem(source.key) !== successor || storage.getItem(fenceKeyOf(source.key)) !== source.nextGeneration
+      || saveFence.moved(source.key) || storage.getItem(destination) !== source.prior) return;
+    storage.setItem(destination, source.raw);
+  } catch { /* The saved new season is still playable. */ }
 }
 
 interface ReplayCutoff { career: string; through: number }
@@ -107,11 +156,11 @@ export function saveNrlCheckpoint(key: string, active: string, checkpoint: strin
   }
 }
 
-export function restoreNrlCheckpoint(entry: ContinueSave, active: string, checkpoint: string): FenceWrite {
+export function restoreNrlCheckpoint(entry: ContinueSave, active: string, checkpoint: string, kind: 'manual' | 'season' = 'manual'): FenceWrite {
   const storage = browserStorage();
   if (!storage) return 'failed';
   const key = entry.saveKey;
-  const source = nrlCheckpointKey(key);
+  const source = kind === 'season' ? nrlSeasonCheckpointKey(key) : nrlCheckpointKey(key);
   const receipt = replayKey(key);
   const unchanged = () => storage.getItem(key) === active && storage.getItem(source) === checkpoint && !saveFence.moved(key);
   let made: string | null = null;
@@ -122,7 +171,8 @@ export function restoreNrlCheckpoint(entry: ContinueSave, active: string, checkp
     if (!unchanged()) return 'moved';
     const current = readNrlCareerSave(active);
     const incoming = readNrlCareerSave(checkpoint);
-    if (!current || !incoming || !sameNrlCareer(current, incoming)) return 'failed';
+    if (!current || !incoming || (kind === 'season'
+      ? !canRestoreNrlSeasonCheckpoint(current, incoming) : !sameCheckpointCareer(current, incoming))) return 'failed';
     if (active === checkpoint) return 'written';
 
     let kept = backupKeysOf(entry, storage).find(backup => storage.getItem(backup) === active);
