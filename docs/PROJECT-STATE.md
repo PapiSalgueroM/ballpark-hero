@@ -1,3 +1,9 @@
+## 2026-11-23, Club Manager 2026-27 LASK scorer coverage
+
+Six verified LASK players can take the scorer credit when a simulated background cup goal lands on an empty lineup slot. The slot's position determines which players are eligible, and the same player represents the slot throughout the match. The scorer-only list leaves the playable squad, market and settled match records as saved. It respects player ownership in the save. [LASK opening squad source audit](audits/club-manager-lask-2026-scorer-pool.md)
+
+The 109-match Real Madrid replay accounts for all 273 goals. Four LASK credits bring the unresolved count from six to two. The first matchday gives Sascha Horvath and Samuel Adeniran one goal each in the simulated 2-0 win at Galatasaray. A separate seed credits Andrés Andrade in the 1-1 draw with Sporting CP. CM-03 remains partial. AGF and Thun still have anonymous scorer credits in the modern replays. The 2005-06 release in PR #1069 passed all eight published browser checks.
+
 ## 2026-11-23, Club Manager 2005-06 opening Champions League scorer pools
 
 The verified PSV, Artmedia Bratislava and Thun pools cover the last three missing clubs in the opening 2005-06 Champions League field. Newly played matches also use the verified pools to name opponent goals when there is no full opponent squad. The match report, in-game events and cup table share the resulting name. Already-played matches keep their original scorer records. [PSV, Artmedia and Thun source audit](audits/club-manager-psv-artmedia-thun-2005-rosters.md)

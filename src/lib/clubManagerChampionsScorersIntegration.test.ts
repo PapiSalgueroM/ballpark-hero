@@ -11,6 +11,8 @@ import { serializeParkedCareer } from './clubManagerParkedSave';
 import { recordWorldRosterTransfer, worldRosterOwner } from './clubManagerWorldRoster';
 import { HISTORIC_2005_CUP_ROSTERS } from '@/data/clubManagerHistoricCupRosters';
 import { ERA2005_ROSTERS } from '@/data/clubManagerEra2005';
+import { OPENING_2026_CUP_SCORERS } from '@/data/clubManagerOpening2026CupScorers';
+import { CM_ROSTERS } from '@/data/clubManagerRosters';
 
 const BRUGGE = 115366;
 const MADRID = 116137;
@@ -220,6 +222,55 @@ describe('Owned Champions League scorer settlement', () => {
     expectReconciled(finished, 109, 281);
   });
 
+  it('fills only anonymous LASK goals from verified players available in the opening season', () => {
+    const madrid = tape(MADRID, () => startCareer('Real Madrid')).value;
+    const pending = playTo(madrid, MADRID, 3).state;
+    const verified = ['Samuel Adeniran', 'Moses Usor', 'Sascha Horvath', 'Alessandro Schöpf'];
+    const goneNames = [...(pending.goneNames ?? []), ...verified.map(name => name.replace('ö', 'o'))];
+    const control = next({ ...pending, goneNames }, MADRID);
+    const tracked = next(pending, MADRID);
+    const results = tracked.value.state.pairResults?.[UCL_GROUP_LEDGER];
+    expect(results?.['Galatasaray|LASK']).toEqual([0, 2]);
+    expect(results).toEqual(control.value.state.pairResults?.[UCL_GROUP_LEDGER]);
+    expect(tracked.draws).toEqual(control.draws);
+    expect(tracked.value.report).toEqual(control.value.report);
+    const ledger = tracked.value.state.uclScorers!;
+    const controlLedger = control.value.state.uclScorers!;
+    const lask = ledger.players.filter(([, , club]) => club === 'LASK');
+    expect(lask.reduce((goals, row) => goals + row[3], 0)).toBe(2);
+    expect(lask.map(([, name]) => name).sort()).toEqual(['Samuel Adeniran', 'Sascha Horvath']);
+    expect(lask.every(([id, name, club, , generated]) => verified.includes(name)
+      && id === JSON.stringify(['now', club, name]) && generated === undefined)).toBe(true);
+    expect(ledger.players.filter(([, , club]) => club !== 'LASK')).toEqual(controlLedger.players);
+    expect(ledger).toMatchObject({ unresolved: 1, ownGoals: 1 });
+    expect(controlLedger).toMatchObject({ unresolved: 3, ownGoals: 1 });
+    expect(loadCareer(serializeParkedCareer(tracked.value.state))?.uclScorers).toEqual(ledger);
+    expect(loadCareer(serializeParkedCareer(control.value.state))?.uclScorers).toEqual(controlLedger);
+  });
+
+  it('credits a verified LASK defender when an anonymous centre-back scores', () => {
+    const seed = 119735;
+    const madrid = tape(seed, () => startCareer('Real Madrid')).value;
+    const pending = playTo(madrid, seed, 3).state;
+    const settled = next(pending, seed).value.state;
+    expect(settled.pairResults?.[UCL_GROUP_LEDGER]?.['LASK|Sporting CP']).toEqual([1, 1]);
+    const lask = settled.uclScorers?.players.filter(([, , club]) => club === 'LASK');
+    expect(lask).toHaveLength(1);
+    const [id, name, club, goals] = lask![0];
+    expect(name).toBe('Andrés Andrade');
+    expect(id).toBe(JSON.stringify(['now', club, name]));
+    expect(goals).toBe(1);
+  });
+
+  it('keeps the opening cup additions separate from playable modern roster names', () => {
+    const identity = (name: string) => name.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+    const playable = new Set(Object.values(CM_ROSTERS).flatMap(roster => roster.map(player => identity(player.n))));
+    const additions = [...OPENING_2026_CUP_SCORERS.values()].flatMap(pool => pool.map(player => identity(player.name)));
+    expect(OPENING_2026_CUP_SCORERS.get('LASK')).toHaveLength(6);
+    expect(new Set(additions).size).toBe(additions.length);
+    expect(additions.filter(name => playable.has(name))).toEqual([]);
+  });
+
   it('keeps the Roma first-leg credits through active and parked reloads without changing either leg', () => {
     const madrid = tape(MADRID, () => startCareer('Real Madrid')).value;
     const before = playTo(madrid, MADRID, 32).state;
@@ -308,7 +359,7 @@ describe('Owned Champions League scorer settlement', () => {
       .toEqual(before.uclScorers?.players.filter(([, , club]) => club === 'Porto'));
     expectReconciled(final.state, 109, 273);
     expect(championsLeagueScorerRace(final.state)).toMatchObject({
-      status: 'undecided', leaders: [], unresolved: 6,
+      status: 'undecided', leaders: [], unresolved: 2,
       rows: expect.arrayContaining([expect.objectContaining({ name: 'Samu Aghehowa', club: 'Porto', goals: 8 })]),
     });
     expect(tape(MADRID + 0xa01, () => finishSeason(final.state)).value.summary.uclScorerAward).toBeUndefined();
