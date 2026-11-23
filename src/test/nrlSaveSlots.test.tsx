@@ -4,12 +4,12 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ContinueRow } from '@/components/home/ContinueRow';
 import { savedGames } from '@/data/continueSaves';
-import { BROKEN_SAVE_MARK, heldSaveEntry, routeSaveEntry } from '@/lib/brokenSaveRecovery';
+import { backupKeysOf, BROKEN_SAVE_MARK, brokenSaveKey, heldSaveEntry, routeSaveEntry } from '@/lib/brokenSaveRecovery';
 import { createNrlCareer, NRL_SAVE_MAX_CHARS, readNrlCareerSave, reduceNrlCareer } from '@/lib/nrlCareer';
-import { createNrlSeason, NRL_SAVE_KEY } from '@/lib/nrlManager';
+import { createNrlSeason, NRL_SAVE_KEY, reduceNrlSeason } from '@/lib/nrlManager';
 import { writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
 import { createSaveFence, fenceKeyOf, saveFence } from '@/lib/saveFence';
-import { applyPending, keepUpdateCopies, PENDING_RESTORE_KEY, stageRestore } from '@/lib/saveKeeper';
+import { applyPending, keepUpdateCopies, PENDING_RESTORE_KEY, runSaveKeeper, stageRestore, takeCopyTrouble } from '@/lib/saveKeeper';
 import NrlTeamManager from '@/pages/NrlTeamManager';
 
 vi.mock('@/components/game/GameNav', () => ({ GameNav: () => null }));
@@ -124,6 +124,72 @@ describe('NRL career slots', () => {
     expect(read(NRL_SAVE_KEY)).toMatchObject({ version: 2, openingYear: 2026, legacySeason: true });
     expect(read(NRL_SAVE_KEY)).toEqual(reduceNrlCareer(readNrlCareerSave(legacy)!, { type: 'advance' }));
     expect(raw(secondKey)).toBe(perthBytes);
+  });
+
+  it.each(['full', 'wrong bytes'])('keeps a v1 season in its slot if the migration copy gets %s', failure => {
+    const season = reduceNrlSeason(createNrlSeason('storm', 17), { type: 'advance' });
+    const legacy = JSON.stringify(season);
+    const first = JSON.stringify(storm());
+    const third = JSON.stringify(perth());
+    const entry = routeSaveEntry(path + '?slot=2')!;
+    const otherSlotCopy = brokenSaveKey(NRL_SAVE_KEY, now);
+    const differentCopy = brokenSaveKey(secondKey, now);
+    localStorage.setItem(NRL_SAVE_KEY, first);
+    localStorage.setItem(secondKey, legacy);
+    localStorage.setItem(thirdKey, third);
+    localStorage.setItem(otherSlotCopy, legacy);
+    localStorage.setItem(differentCopy, legacy + ' ');
+    localStorage.setItem(fenceKeyOf(secondKey), '4');
+    const set = Storage.prototype.setItem;
+    const quota = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key.startsWith(secondKey + BROKEN_SAVE_MARK)) {
+        if (failure === 'full') throw new DOMException('Storage full', 'QuotaExceededError');
+        return set.call(this, key, value + ' ');
+      }
+      set.call(this, key, value);
+    });
+    runSaveKeeper();
+    expect(takeCopyTrouble(entry.path)).toBe(true);
+    const view = open('?slot=2');
+    click('Quick Sim');
+    expect(raw(secondKey)).toBe(legacy);
+    expect(raw(fenceKeyOf(secondKey))).toBe('4');
+    expect(backupKeysOf(entry, localStorage)).toEqual([differentCopy]);
+
+    quota.mockRestore();
+    click('Retry save');
+    view.unmount();
+    runSaveKeeper();
+    open('?slot=2');
+    expect(read(secondKey)).toMatchObject({ version: 2, legacySeason: true, history: [] });
+    expect(read(secondKey)?.season.round).toBe(season.round + 1);
+    expect(read(secondKey)?.season.results.slice(0, season.results.length)).toEqual(season.results);
+    expect(read(secondKey)?.season.domesticScoringModel).toBe(season.domesticScoringModel);
+    expect(backupKeysOf(entry, localStorage).map(raw)).toEqual([legacy, legacy + ' ']);
+    expect(raw(otherSlotCopy)).toBe(legacy);
+    expect(raw(NRL_SAVE_KEY)).toBe(first);
+    expect(raw(thirdKey)).toBe(third);
+  });
+
+  it('preserves a newer slot write made while the migration copy is being created', () => {
+    const legacy = JSON.stringify(createNrlSeason('storm', 17));
+    const newer = JSON.stringify(perth());
+    const entry = routeSaveEntry(path + '?slot=2')!;
+    localStorage.setItem(secondKey, legacy);
+    open('?slot=2');
+    const other = createSaveFence(localStorage);
+    other.adopt(secondKey);
+    const set = Storage.prototype.setItem;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      set.call(this, key, value);
+      if (key.startsWith(secondKey + BROKEN_SAVE_MARK)) {
+        expect(other.write(secondKey, () => { set.call(this, secondKey, newer); return true; })).toBe('written');
+      }
+    });
+    click('Quick Sim');
+    expect(raw(secondKey)).toBe(newer);
+    expect(backupKeysOf(entry, localStorage).map(raw)).toEqual([legacy]);
+    expect(screen.getByRole('button', { name: 'Reload your season' })).toBeVisible();
   });
 
   it('reopens a saved half in slot 2 and isolates writes and stale fences by key', () => {

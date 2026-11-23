@@ -1,5 +1,5 @@
 import { CONTINUE_SAVES, continueSaveEntries, type ContinueSave } from '@/data/continueSaves';
-import { backupKeysOf, browserStorage, copyAside, pruneBackups } from '@/lib/brokenSaveRecovery';
+import { backupKeysOf, browserStorage, copyAside, dismissBackup, pruneBackups } from '@/lib/brokenSaveRecovery';
 import { NRL_SAVE_MAX_CHARS, nrlOpeningClubId, readNrlCareerSave, type NrlCareerState } from '@/lib/nrlCareer';
 import { saveFence, type FenceWrite } from '@/lib/saveFence';
 
@@ -15,19 +15,43 @@ export function readNrlSaveSlot(key: string) {
   }
 }
 
+function saveVersion(raw: string): unknown {
+  try { return JSON.parse(raw)?.version; } catch { return null; }
+}
+
 /** The receipt also catches a restore performed by the shared keeper, which writes raw bytes. */
 export function writeNrlSaveSlot(key: string, expected: string | null, next: string | null): FenceWrite {
+  let backupKey: string | undefined;
   try {
-    if (localStorage.getItem(key) !== expected) return 'moved';
+    if (localStorage.getItem(key) !== expected || saveFence.moved(key)) return 'moved';
+    if (next !== null && next.length > NRL_SAVE_MAX_CHARS) return 'failed';
+    if (expected !== null && next !== null && saveVersion(expected) === 1 && saveVersion(next) === 2) {
+      // Boot may have kept this slot already. Reuse only an exact copy within the same slot.
+      const entry = NRL_SAVE_SLOTS.find(slot => slot.saveKey === key);
+      if (!entry) return 'failed';
+      backupKey = backupKeysOf(entry, localStorage).find(backup => localStorage.getItem(backup) === expected);
+      if (!backupKey) {
+        const copied = copyAside(entry, localStorage);
+        if (localStorage.getItem(key) !== expected || saveFence.moved(key)) return 'moved';
+        if (!copied.ok || !copied.backupKey) return 'failed';
+        backupKey = copied.backupKey;
+        dismissBackup(entry, backupKey, localStorage);
+      }
+    }
   } catch {
     return 'failed';
   }
-  if (next !== null && next.length > NRL_SAVE_MAX_CHARS) return saveFence.moved(key) ? 'moved' : 'failed';
-  return saveFence.write(key, () => {
+  let sourceChanged = false;
+  const written = saveFence.write(key, () => {
+    if (backupKey !== undefined) {
+      if (localStorage.getItem(backupKey) !== expected) return false;
+      if (localStorage.getItem(key) !== expected) { sourceChanged = true; return false; }
+    }
     if (next === null) localStorage.removeItem(key);
     else localStorage.setItem(key, next);
-    return true;
-  });
+    return backupKey === undefined || localStorage.getItem(key) === next;
+  }, backupKey !== undefined);
+  return sourceChanged ? 'moved' : written;
 }
 
 export const nrlCheckpointKey = (key: string) => 'dukb-nrl-checkpoint:' + key;

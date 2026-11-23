@@ -1,12 +1,18 @@
+## 2026-11-23, NRL Team Manager legacy save backup
+
+**PL-04 is partly implemented.** A version 1 season still opens without rewriting the slot. Before its first version 2 save, NRL checks for an exact backup in that same slot. If storage refuses the copy or returns different bytes, the old save stays on disk and Retry save remains available. A newer write made while the copy is being created keeps control of the slot.
+
+Against account main 2902c4b, all 130 focused tests, application types, the production build and all 15 built-site checks passed. The NRL save keeper simulation passed on main and the candidate. Three regression cases failed on the unchanged writer. Chromium at 320 and 390 pixels refused the backup in slot 2, kept the 5,084 original bytes, retried round 3 and reloaded the same career with an exact backup. The verified save in slot 1 stayed byte-for-byte.
+
 ## 2026-11-23, Soccer Career account saves
 
-**PL-03's Soccer Career account flow is implemented in this draft.** Account saves is opt-in. The panel compares the browser and account copies for each slot. Upload, restore and removal each require a choice. A competing update rejects the reviewed older revision. A failed upload leaves the playable local copy, and a local restore keeps a checked copy of the displaced save. Account restores remain playable and stay off the public retirement leaderboard.
+**PL-03's Soccer Career account flow is live.** Account saves is opt-in. The panel compares the browser and account copies for each slot. Upload, restore and removal each require a choice. A competing update rejects the reviewed older revision. A failed upload leaves the playable local copy, and a local restore keeps a checked copy of the displaced save. Account restores remain playable and stay off the public retirement leaderboard.
 
 The new table gives a signed-in owner three private copies, caps each at 2,000,000 UTF-8 bytes, and issues revisions and timestamps in the database. Account-data export includes these copies, and deletion cascades only to the deleted owner's rows. Isolated PostgreSQL 17.5 and 18.7 passed the five database checks. Removing row-level security or revision rotation fired the negative controls. Production inspection was read-only.
 
 Against checkpoint main 03888f0, all 301 focused tests, application types, the Deno edge check, the production build and all 23 scoped harnesses passed. Chromium checked the built UI at 320, 390, 430 and 1440 pixels with the real client and isolated account fixtures. Two independent contexts checked stale-revision refusal and restored the winning copy with a checked backup. An HTTP 503 kept both copies. Copied faults caught a public score posted after account restore and cross-account exports. The privacy and Soccer Career snapshots were regenerated and matched the draft.
 
-Hosted rollout still needs the database migration and the updated account-privacy function before the site publishes. The Soccer Career save schema migration remains covered under PL-04. The shared save protection cards still need coverage in other career games.
+The production table migration 20261123103747 landed before JWT-gated account-privacy v2. The site published #1020 as fa229d8b-1e93-4ee9-9002-9d49456749f8. Both live bundle fixture replays passed at 320 and 390 pixels, covering a failed upload, a competing revision, an exact recovery copy and an unchanged neighboring slot. The Soccer Career save schema migration remains covered under PL-04. The shared save protection cards still need coverage in other career games.
 
 ## 2026-11-23, Soccer Career season checkpoints
 
