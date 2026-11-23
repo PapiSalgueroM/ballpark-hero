@@ -4,6 +4,7 @@ import { foldSpecialLatin } from '@/lib/nameFold';
 import { supabase } from '@/integrations/supabase/client';
 import { dailyPrngSeed, dateSeed, dayNumber } from '@/lib/dateUtils';
 import { storedSpelling, type PlayerEntity } from '@/lib/playerSearch';
+import { CAREER_LADDER_VERIFIED_SEASONS, type SeasonTotals } from '@/data/careerLadderVerifiedSeasons';
 
 export interface CareerStint {
   season: string;
@@ -699,6 +700,33 @@ export function fmtMarketValue(value: number | null): string {
 const SEASON_COLS = 'player_id, season, club, goals, assists, appearances, market_value, sort_order';
 const PAGE_SIZE = 1000;
 
+function hasSeasonTotals(stint: CareerStint, totals: SeasonTotals): boolean {
+  return stint.goals === totals.goals && stint.assists === totals.assists && stint.appearances === totals.appearances;
+}
+
+function addVerifiedSeasons(player: CareerPlayer): CareerPlayer {
+  const correction = CAREER_LADDER_VERIFIED_SEASONS[player.id];
+  if (!correction) return player;
+
+  const { added, addedPartialTotals, previousClub, previousTotals } = correction;
+  const previous = player.seasons.find(stint => stint.season === '2024-2025'
+    && stint.club === previousClub && stint.sortOrder === added.sortOrder - 1);
+  const matching = player.seasons.find(stint => stint.season === added.season
+    && stint.club === added.club && stint.sortOrder === added.sortOrder);
+
+  let seasons = player.seasons;
+  if (previous && previousTotals && hasSeasonTotals(previous, previousTotals.before)) {
+    seasons = seasons.map(stint => stint === previous ? { ...stint, ...previousTotals.after } : stint);
+  }
+  if (matching && hasSeasonTotals(matching, addedPartialTotals)) {
+    const { goals, assists, appearances } = added;
+    seasons = seasons.map(stint => stint === matching ? { ...stint, goals, assists, appearances } : stint);
+  } else if (previous && !seasons.some(stint => stint.season === added.season || stint.sortOrder >= added.sortOrder)) {
+    seasons = [...seasons, added];
+  }
+  return seasons === player.seasons ? player : { ...player, seasons };
+}
+
 /**
  * Loads the whole pool: one query for players, plus paged queries for the
  * ~1726 season rows (PostgREST caps a single response at 1000 rows, so a lone
@@ -754,7 +782,8 @@ export async function fetchCareerPool(): Promise<CareerPlayer[] | null> {
           (a, b) => a.sortOrder - b.sortOrder,
         ),
       }))
-      .filter(p => p.name.length > 0);
+      .filter(p => p.name.length > 0)
+      .map(addVerifiedSeasons);
 
     return players;
   } catch {

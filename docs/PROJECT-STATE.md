@@ -1,3 +1,9 @@
+## 2026-11-23, Career Ladder completed seasons
+
+Career Ladder fills the missing 2025/26 Liverpool and Barcelona seasons for Alexander Isak and Marcus Rashford. It repairs the exact partial Newcastle, Liverpool and Barcelona count rows from the original seed when they are present. Isak has 42 appearances, 27 goals and six assists for Newcastle in 2024/25, then 22 appearances, four goals and one assist for Liverpool. Newcastle confirmed the September 2025 transfer. [Newcastle](https://www.newcastleunited.com/en/news/newcastle-united-sell-alexander-isak), [Opta](https://theanalyst.com/players/4199/alexander-isak/career), [Newcastle season record](https://www.playmakerstats.com/player/alexander-isak/509348?epoca_id=154), [Liverpool season record](https://www.playmakerstats.com/player/alexander-isak/509348?epoca_id=155).
+
+Barcelona and Manchester United confirmed Rashford's loan. His Barcelona season has 49 appearances and 14 goals. The sources credit 11 or 12 assists, so the fallback leaves the assist field unavailable. The missing seasons use the existing unavailable market-value field. Refreshed records from the feed keep their supplied values. [Barcelona](https://www.fcbarcelona.com/en/news/4319297/agreement-between-fc-barcelona-and-manchester-united-for-the-loan-of-marcus-rashford), [Manchester United](https://www.manutd.com/en/news/manchester-united-transfer-ins-and-outs-summer-window-2025), [Opta](https://theanalyst.com/players/4159/marcus-rashford/career), [FootballAN](https://footballan.com/player/m-rashford/?season=2025-2026).
+
 ## 2026-11-23, World XI roster dates and Kimmich's position
 
 World XI keeps verified namesakes distinct, restores two eligible cards missed by the snapshot matching rules and removes four exact stale records. Rafinha's 2024/25 Brazil card uses Without Club. A shared Without Club or Retired label earns no club chemistry. The Argentina archive still accepts Marcos Acuña only in eligible roles.
