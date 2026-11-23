@@ -523,6 +523,7 @@ const B5_REMOVALS = [
   { n: 'Cristian Bucchi', why: 'Ascoli sold their half of him to Modena in the summer of 2005, 41 Serie B games for Modena in 2005-06 (en.wikipedia, Cristian Bucchi); his year 2006 row is Modena' },
   { n: 'Cristian Raimondi', why: 'Palermo to Arezzo, 1 Jul 2005 (soccerway transfers, Cristian Raimondi)' },
   { n: 'Cristiano Lupatelli', why: 'Fiorentina to Parma for the autumn (FBref 2005-06: 8 games for Parma, then 5 for Palermo, none for Fiorentina); his year 2006 row is Palermo, reached in January 2006', later: true },
+  { n: 'Dani García', why: 'Espanyol to Olympiacos, 11 Aug 2005 (UEFA transfer report and Olympiacos 13 Sep 2005 match archive); no year 2006 row', single: true },
   { n: 'Daniele Corvia', why: 'Roma loaned him to Ternana for the season, 1 Jul 2005 (soccerway transfers, Daniele Corvia)' },
   { n: 'Daniele Di Donato', why: 'Siena to Arezzo, 1 Jul 2005 (soccerway transfers, Daniele Di Donato)' },
   { n: 'David Suarez', why: 'Toulouse to Guingamp, listed among Toulouse\'s departures on 22 Jun 2005 (LEQ 20050622_183836)' },

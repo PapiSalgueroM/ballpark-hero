@@ -52,7 +52,7 @@
  *      three measurements) and the thin club 11 or worse (6.33 places of
  *      headroom over its best mean, and its best single seed of 12 is still
  *      above the band). No band reads a single worst seed.
- *   5. The extension's accounting: 98 clubs, 1,727 players, 385
+ *   5. The extension's accounting: 98 clubs, 1,726 players, 386
  *      corrections, 294 Serie A, 332 Bundesliga and 341 Ligue 1 players, the
  *      five thin clubs by name, one man at one club in the whole world, the
  *      three men Round 176 removed who are home now, the two folds, a sample
@@ -305,8 +305,7 @@ console.log('2) Four worlds, and none of them leak');
      Atletico's 2005 Pablo Ibanez (b. 1981) vs the modern one; Deportivo's
      2005 Manu Sanchez (b. 1979 vintage) vs the modern left back (b. 2000);
      Uruguay's Pablo Garcia (b. 1977) vs the modern teenager; Victor Sanchez
-     del Amo (b. 1976) vs Espanyol's 2015 Victor Sanchez (b. 1987); the
-     1970s-born Dani Garcia vs Eibar's 2015 one (b. 1990); Liverpool's Luis
+     del Amo (b. 1976) vs Espanyol's 2015 Victor Sanchez (b. 1987); Liverpool's Luis
      Garcia (b. 1978, the byPlayer merge keeps him over Mallorca's cheaper
      namesake) vs the 2010 bake's Luis Garcia (b. 1981); West Brom's Andy
      Johnson (b. 1974) vs the striker (b. 1981). Fernando carries over from
@@ -352,7 +351,7 @@ console.log('2) Four worlds, and none of them leak');
   const pairs = [
     { label: '2005 vs 2026', other: null, lo: 19, hi: 23, minShared: 2, namesakes: new Set(['Pablo Ibáñez', 'Manu Sánchez', 'Pablo García',
       'André Luiz', 'Serginho', 'Diego León', 'Juan', 'Gilberto', 'Emerson', 'Fred', 'Koke', 'Ederson', 'Lincoln', 'Ronaldo']) },
-    { label: '2005 vs 2015', other: ERA2015_ROSTERS, lo: 8, hi: 12, minShared: 25, namesakes: new Set(['Fernando', 'Víctor Sánchez', 'Dani García',
+    { label: '2005 vs 2015', other: ERA2015_ROSTERS, lo: 8, hi: 12, minShared: 25, namesakes: new Set(['Fernando', 'Víctor Sánchez',
       'Rafael', 'Koke', 'Rafinha']) },
     { label: '2005 vs 2010', other: ERA2010_ROSTERS, lo: 3, hi: 7, minShared: 60, namesakes: new Set(['Luis García', 'Andy Johnson',
       'Rafael', 'Henrique', 'André Luiz']) },
@@ -554,6 +553,7 @@ console.log('5) The bake file tells the truth about itself');
      Inter. Anelka's Fenerbahce is still outside the world. */
   for (const roster of Object.values(ERA2005_ROSTERS)) {
     if (roster.some(p => p.n === 'Nicolas Anelka')) fail('Anelka is in this world, his Fenerbahce is not');
+    if (roster.some(p => p.n === 'Dani García')) fail('Dani García moved to Olympiacos before the 2005-06 opener');
   }
 
   /* Round 902: the accounting of the big five extension (the numbers are the
@@ -562,8 +562,8 @@ console.log('5) The bake file tells the truth about itself');
   const at = (club, name) => (R[club] ?? []).some(p => p.n === name);
   const clubsOf = name => Object.entries(R).filter(([, list]) => list.some(p => p.n === name)).map(([c]) => c);
   if (ERA2005_META.clubs !== 98) fail(`meta clubs ${ERA2005_META.clubs}, the big five of 2005-06 are 98`);
-  if (ERA2005_META.players !== 1727) fail(`meta players ${ERA2005_META.players}, the Round 902 bake wrote 1727`);
-  if (ERA2005_META.moves !== 385) fail(`meta moves ${ERA2005_META.moves}: 26 before Round 902 plus 150 moved, 135 removed, 72 arrived and 2 folded is 385`);
+  if (ERA2005_META.players !== 1726) fail(`meta players ${ERA2005_META.players}, the corrected bake wrote 1726`);
+  if (ERA2005_META.moves !== 386) fail(`meta moves ${ERA2005_META.moves}: 26 before Round 902 plus 150 moved, 136 removed, 72 arrived and 2 folded is 386`);
   /* Serie A, Bundesliga and Ligue 1, as the bake wrote them. */
   const LEAGUE_TOTALS = '294,332,341';
   const leagueTotal = id => (ERA_LEAGUES['era2005'].find(l => l.id === id)?.clubs ?? []).reduce((s, c) => s + (R[c]?.length ?? 0), 0);

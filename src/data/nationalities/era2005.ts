@@ -332,7 +332,6 @@ era2005: {
   'Damien Johnson': 'Northern Ireland',
   'Damià Abella': 'Spain',
   'Dani Alves': 'Brazil',
-  'Dani García': 'Spain',
   'Dani Mallo': 'Spain',
   'Daniel Aranzubia': 'Spain',
   'Daniel Bierofka': 'Germany',
