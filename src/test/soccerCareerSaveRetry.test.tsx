@@ -50,11 +50,13 @@ vi.mock('@/components/ui/select', () => ({
 import * as E from '@/lib/soccerCareerEngine';
 import { settlePendingSaves } from '@/lib/safeStorage';
 import { isSoccerCareerSave } from '@/lib/soccerCareerSave';
+import { restoreSoccerCareerCheckpoint } from '@/lib/soccerCareerCheckpoint';
 import { recordCompletion, recordActivity, recordStreakDay } from '@/lib/completions';
 import { toast } from 'sonner';
 import SoccerCareer from '@/pages/SoccerCareer';
 
 const KEY = 'soccerCareerSave', OTHER = 'other-career-save';
+const CHECKPOINT = `dukb-soccer-checkpoint:${KEY}`;
 /* Round 1330: the save fence's own key. A refused save puts it back as it was
    (a removeItem when it was absent), so the removes below are narrowed to the
    save's key and the fence key is checked to read what it read before. */
@@ -72,14 +74,17 @@ function mount(saved = nativeCareer(), refused = false) {
   const raw = JSON.stringify(saved), originalSet = Storage.prototype.setItem;
   localStorage.setItem(KEY, raw); localStorage.setItem(OTHER, 'untouched progress');
   let blocked = refused;
+  let checkpointBlocked = false;
   const attempts: string[] = [];
   const writes = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (key, value) {
     if (key === KEY) { attempts.push(value); if (blocked) throw new DOMException('Save refused', 'QuotaExceededError'); }
+    if (key === CHECKPOINT && checkpointBlocked) throw new DOMException('Checkpoint refused', 'QuotaExceededError');
     originalSet.call(this, key, value);
   });
   const removes = vi.spyOn(Storage.prototype, 'removeItem');
   const view = render(<HelmetProvider><MemoryRouter><Boundary><SoccerCareer /></Boundary></MemoryRouter></HelmetProvider>);
-  return { view, raw, attempts, writes, removes, refuse: (value: boolean) => { blocked = value; } };
+  return { view, raw, attempts, writes, removes, refuse: (value: boolean) => { blocked = value; },
+    refuseCheckpoint: () => { checkpointBlocked = true; } };
 }
 const warning = (view: ReturnType<typeof render>) => view.container.querySelector('[data-soccer-save-status="failed"]');
 function assertWarning(view: ReturnType<typeof render>) {
@@ -125,6 +130,39 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.useRealTimers(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('Soccer Career failed write recovery', () => {
+  it('keeps the last verified season only when a newer season save succeeds', async () => {
+    const m = mount();
+    expect(localStorage.getItem(CHECKPOINT)).toBeNull();
+    await bankSprint(m.view);
+    const before = localStorage.getItem(KEY);
+    expect(before).not.toBeNull();
+    expect(localStorage.getItem(CHECKPOINT)).toBeNull();
+    m.refuse(true);
+    pressNext(m.view);
+    assertWarning(m.view);
+    expect(localStorage.getItem(KEY)).toBe(before);
+    expect(localStorage.getItem(CHECKPOINT)).toBeNull();
+    m.refuse(false);
+    retry(m.view);
+    expect(read().age).toBe(17);
+    expect(localStorage.getItem(CHECKPOINT)).toBe(before);
+    expect(warning(m.view)).toBeNull();
+  }, 20000);
+
+  it('keeps the held checkpoint if the browser refuses its replacement after a later season', () => {
+    const started = E.choosePostRetirement(E.manualRetire(nativeCareer()), 'pundit', E.FALLBACK_CLUBS);
+    const m = mount(started), first = localStorage.getItem(KEY);
+    const advance = () => fireEvent.click(m.view.getByRole('button', { name: /Praise a Rising Star/ }));
+    advance();
+    expect(read().punditState).toMatchObject({ season: 1, predictions: [] });
+    expect(localStorage.getItem(CHECKPOINT)).toBe(first);
+    m.refuseCheckpoint();
+    advance();
+    expect(read().punditState?.season).toBe(2);
+    expect(localStorage.getItem(CHECKPOINT)).toBe(first);
+    expect(warning(m.view)).toBeNull();
+  });
+
   it('keeps the restored career and old bytes while showing a persistent save warning and one toast', () => {
     const m = mount(nativeCareer(), true); assertWarning(m.view);
     expect(m.view.container.textContent).toContain('Write Tester'); expect(m.view.queryByText('Create Your Player')).toBeNull();
@@ -195,11 +233,20 @@ describe('Soccer Career failed write recovery', () => {
     m.refuse(true); pressNext(m.view); assertWarning(m.view);
     expect(localStorage.getItem(KEY)).toBe(saved); expect(toast.error).toHaveBeenCalledTimes(2);
   }, 20000);
-  it('clears the old failure after explicit reset and saves the replacement career without old progress', () => {
-    const m = mount(nativeCareer(), true); assertWarning(m.view);
+  it('keeps unsaved progress open until it can start over with a checked copy', () => {
+    const m = mount(), before = localStorage.getItem(KEY);
+    m.refuse(true); pressNext(m.view); assertWarning(m.view);
+    const latest = m.attempts.at(-1);
+    expect(latest).toBeDefined(); expect(latest).not.toBe(before);
     fireEvent.click(m.view.getByRole('button', { name: /New Career/ }));
-    fireEvent.click(m.view.getByRole('button', { name: 'Delete & Start Over' }));
+    fireEvent.click(m.view.getByRole('button', { name: 'Keep Copy & Start Over' }));
+    expect(warning(m.view)).not.toBeNull(); expect(localStorage.getItem(KEY)).toBe(before);
+    expect(m.removes).not.toHaveBeenCalledWith(KEY);
+    m.refuse(false);
+    fireEvent.click(m.view.getByRole('button', { name: 'Keep Copy & Start Over' }));
     expect(warning(m.view)).toBeNull(); expect(localStorage.getItem(KEY)).toBeNull(); expect(m.removes.mock.calls.filter(call => call[0] !== FENCE)).toEqual([[KEY]]); expect(localStorage.getItem(FENCE)).not.toBeNull();
+    expect(Object.keys(localStorage).some(key => key.startsWith(KEY + '.broken-') && localStorage.getItem(key) === latest)).toBe(true);
+    m.refuse(true);
     fireEvent.change(m.view.getByPlaceholderText('Enter your player name...'), { target: { value: 'Replacement Tester' } });
     const selectors = m.view.container.querySelectorAll('select');
     for (const [index, value] of ['England', 'CM', '2020-24'].entries()) fireEvent.change(selectors[index], { target: { value } });
@@ -218,6 +265,34 @@ describe('Soccer Career failed write recovery', () => {
     const earned = JSON.parse(m.attempts[m.attempts.length - 1]); expect(earned.phase).toBe('retired'); expect(earned.legacy.score).toBe(ceremony.legacy!.score);
     clearReplayCounts(); m.refuse(false); retry(m.view); await act(async () => { await Promise.resolve(); });
     expect(read()).toEqual(earned); expect(recordCompletion).toHaveBeenCalledTimes(1); noReplay(); expect(warning(m.view)).toBeNull();
+  });
+  it.each(['importedFromFile', 'restoredFromCheckpoint'] as const)('keeps a career marked %s playable without posting a public score', async marker => {
+    const ceremony: E.CareerState = { ...E.manualRetire(nativeCareer()), [marker]: true };
+    const m = mount(ceremony);
+    fireEvent.click(m.view.getByRole('button', { name: /Retire and Enjoy Life/ }));
+    await act(async () => { await Promise.resolve(); });
+    expect(read()).toMatchObject({ phase: 'retired', legacy: ceremony.legacy, [marker]: true });
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+  it('preserves the first earned finish when the player restores and retires again', async () => {
+    const first = mount(E.manualRetire(nativeCareer()));
+    const checkpoint = localStorage.getItem(KEY)!;
+    localStorage.setItem(CHECKPOINT, checkpoint);
+    fireEvent.click(first.view.getByRole('button', { name: /Retire and Enjoy Life/ }));
+    await act(async () => { await Promise.resolve(); });
+    const completed = localStorage.getItem(KEY)!;
+    expect(read().phase).toBe('retired');
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+    first.view.unmount();
+    first.writes.mockRestore(); first.removes.mockRestore();
+
+    expect(restoreSoccerCareerCheckpoint(localStorage, KEY, completed, checkpoint)).toBe('restored');
+    const restored = mount(read());
+    fireEvent.click(restored.view.getByRole('button', { name: /Retire and Enjoy Life/ }));
+    await act(async () => { await Promise.resolve(); });
+    expect(read()).toMatchObject({ phase: 'retired', restoredFromCheckpoint: true });
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+    expect(localStorage.getItem(CHECKPOINT)).toBe(checkpoint);
   });
   it('retains an independent valid restore and earned engine baseline without mounting the page', () => {
     const saved = copy(nativeCareer()), raw = JSON.stringify(saved); expect(isSoccerCareerSave(saved)).toBe(true);

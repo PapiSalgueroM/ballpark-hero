@@ -1,6 +1,15 @@
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import type { CareerState } from './soccerCareerEngine';
 
+/** Version 0 is the earlier untagged save. Version 1 records the existing
+ * load repair as a checked migration while keeping the same career fields. */
+export const SOCCER_CAREER_SAVE_VERSION = 1;
+type SaveVersion = 0 | typeof SOCCER_CAREER_SAVE_VERSION;
+
+export class UnsupportedSoccerCareerSaveVersion extends Error {
+  constructor() { super('Unsupported Soccer Career save version'); }
+}
+
 const record = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
 const text = (v: unknown) => typeof v === 'string';
 const number = (v: unknown) => typeof v === 'number' && Number.isFinite(v);
@@ -18,33 +27,54 @@ const event = (v: unknown) => record(v) && number(v.id) && fields(v, ['title', '
   && list(v.choices, choice => record(choice) && fields(choice, ['label', 'consequence'], text)) && v.choices.length > 0;
 
 /* Keep small saves literal. Pack complete histories, including unknown fields. */
-export function serializeSoccerCareerSave(value: CareerState): string {
-  const raw = JSON.stringify(value);
+export function serializeSoccerCareerSave(value: CareerState, saveVersion: SaveVersion = 0): string {
+  const header = saveVersion === 0 ? {} : { saveVersion };
+  const raw = JSON.stringify(saveVersion === 0 ? value : { ...value, ...header });
   if (raw.length <= 60000) return raw;
-  const stored: Record<string, unknown> = { ...value };
+  const stored: Record<string, unknown> = { ...value, ...header };
   for (const key of ['seasons', 'story'] as const) {
     if (Array.isArray(value[key])) stored[key] = { format: 'lz-string-utf16', data: compressToUTF16(JSON.stringify(value[key])) };
   }
   let packed = JSON.stringify(stored);
   if (packed.length > 60000) {
-    const complete = JSON.stringify({ currentClub: value.currentClub, age: value.age, retired: value.retired,
+    const complete = JSON.stringify({ ...header, currentClub: value.currentClub, age: value.age, retired: value.retired,
       seasons: { format: 'lz-string-utf16-career', data: compressToUTF16(raw) } });
     if (complete.length < packed.length) packed = complete;
   }
   return packed.length < raw.length ? packed : raw;
 }
 
-export function parseSoccerCareerSave(raw: string): unknown {
-  let value: unknown = JSON.parse(raw);
-  if (!record(value)) return value;
+const hasSaveVersion = (value: Record<string, unknown>) => Object.prototype.hasOwnProperty.call(value, 'saveVersion');
+
+function readSaveVersion(value: Record<string, unknown>): SaveVersion {
+  if (!hasSaveVersion(value) || value.saveVersion === 0) return 0;
+  if (value.saveVersion === SOCCER_CAREER_SAVE_VERSION) return SOCCER_CAREER_SAVE_VERSION;
+  throw new UnsupportedSoccerCareerSaveVersion();
+}
+
+export function decodeSoccerCareerSave(raw: string): { version: SaveVersion; value: unknown } {
+  const parsed: unknown = JSON.parse(raw);
+  if (!record(parsed)) return { version: 0, value: parsed };
+  let value = parsed;
+  let version = readSaveVersion(value);
+  const imported = value.importedFromFile === true;
+  const restored = value.restoredFromCheckpoint === true;
   const complete = value.seasons;
   if (record(complete) && complete.format === 'lz-string-utf16-career') {
     if (!text(complete.data)) throw new Error('Invalid saved career');
     const decoded = decompressFromUTF16(complete.data as string);
     const career: unknown = decoded === null ? null : JSON.parse(decoded);
     if (!record(career)) throw new Error('Invalid saved career');
+    const innerVersion = readSaveVersion(career);
+    if (hasSaveVersion(career)) {
+      if (hasSaveVersion(value) && innerVersion !== version) throw new UnsupportedSoccerCareerSaveVersion();
+      version = innerVersion;
+    }
     value = career;
   }
+  delete value.saveVersion;
+  if (imported) value.importedFromFile = true;
+  if (restored) value.restoredFromCheckpoint = true;
   for (const key of ['seasons', 'story']) {
     const history = value[key];
     if (!record(history) || (!('format' in history) && !('data' in history))) continue;
@@ -54,7 +84,11 @@ export function parseSoccerCareerSave(raw: string): unknown {
     if (!Array.isArray(rows)) throw new Error('Invalid saved history');
     value[key] = rows;
   }
-  return value;
+  return { version, value };
+}
+
+export function parseSoccerCareerSave(raw: string): unknown {
+  return decodeSoccerCareerSave(raw).value;
 }
 
 /* Check the core data the page reads before its optional-field migration.

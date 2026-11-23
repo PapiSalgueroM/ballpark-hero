@@ -39,6 +39,8 @@ vi.mock('@/components/ui/select', () => ({
 }));
 
 import * as E from '@/lib/soccerCareerEngine';
+import { backupKeysOf, offeredBackup } from '@/lib/brokenSaveRecovery';
+import { SOCCER_CAREER_SAVE } from '@/data/continueSaves';
 import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave } from '@/lib/soccerCareerSave';
 import SoccerCareer from '@/pages/SoccerCareer';
 
@@ -47,6 +49,7 @@ const EMPTY_BOOK = '{"version":1,"nextSequence":1,"records":[]}';
 const club: E.ClubData = { id: 'boundary-fiction', name: 'Boundary Fixture FC', country: 'England',
   tier: 1, color: '#123456', league: 'Boundary Fixture League' };
 let mainFault: 'none' | 'ignore' | 'alter' | 'throw' = 'none', recordsRefuse = false, removalIgnored = false;
+let copyRefused = false;
 let attempts: string[] = [], writes = 0, mainFaults = 0, recordAttempts = 0, recordRefusals = 0, removeAttempts = 0;
 let nativeSet: typeof Storage.prototype.setItem;
 
@@ -71,7 +74,7 @@ function completed(): E.CareerState {
 function resetCounters() { attempts = []; writes = 0; mainFaults = 0; recordAttempts = 0; recordRefusals = 0; removeAttempts = 0; }
 function mount(raw: string, mode: typeof mainFault = 'none', refuseRecords = false) {
   expect(isSoccerCareerSave(parseSoccerCareerSave(raw)), 'SC_RECORD_BOUNDARY_REAL_SOURCE').toBe(true);
-  mainFault = 'none'; recordsRefuse = false; removalIgnored = false;
+  mainFault = 'none'; recordsRefuse = false; removalIgnored = false; copyRefused = false;
   nativeSet.call(localStorage, KEY, raw); nativeSet.call(localStorage, RECORDS, EMPTY_BOOK);
   resetCounters(); mainFault = mode; recordsRefuse = refuseRecords;
   return render(<HelmetProvider><MemoryRouter initialEntries={['/soccer-career']}><SoccerCareer /></MemoryRouter></HelmetProvider>);
@@ -82,10 +85,10 @@ async function attempted() {
 function ordinaryConfirm(view: ReturnType<typeof render>) {
   fireEvent.click(view.getAllByRole('button', { name: /New Career$/ })[0]);
   const dialog = within(document.body).getByRole('dialog', { name: 'Start a new career?' });
-  fireEvent.click(within(dialog).getByRole('button', { name: 'Delete & Start Over' }));
+  fireEvent.click(within(dialog).getByRole('button', { name: 'Keep Copy & Start Over' }));
   return dialog;
 }
-const discardButton = (dialog: HTMLElement) => within(dialog).queryByRole('button', { name: 'Delete without keeping this record' });
+const discardButton = (dialog: HTMLElement) => within(dialog).queryByRole('button', { name: 'Start over without the summary' });
 const stillCareer = (view: ReturnType<typeof render>) => view.queryAllByRole('button', { name: /New Career$/ }).length > 0;
 function raw(name: string, observations: unknown) {
   const value = { case: name, fixture: 'Real Page/engine/codec/fence; explicit fictional completed career and declared Storage faults, not natural gameplay', observations };
@@ -121,6 +124,7 @@ beforeEach(() => {
       recordAttempts++;
       if (recordsRefuse) { recordRefusals++; throw new DOMException('Controlled records refusal', 'QuotaExceededError'); }
     }
+    if (copyRefused && key.startsWith(KEY + '.broken-')) throw new DOMException('Controlled backup refusal', 'QuotaExceededError');
     nativeSet.call(this, key, value);
     if (key === KEY) writes++;
   });
@@ -176,6 +180,32 @@ describe('Soccer Career completed record storage boundaries', () => {
     raw('ignored-removal', observations);
     expect(removeAttempts, 'SC_RECORD_BOUNDARY_REAL_REMOVE_FAULT').toBeGreaterThan(0); otherHeld();
     expect(observations, 'SC_RECORD_BOUNDARY_REMOVAL_READBACK').toMatchObject({ sourceHeld: true, careerStillVisible: true, creationVisible: false });
+  });
+
+  it('keeps the exact playable career in the recovery list when starting over', async () => {
+    const view = mount(serializeSoccerCareerSave(completed()));
+    await attempted();
+    const before = localStorage.getItem(KEY);
+    expect(before).not.toBeNull();
+    ordinaryConfirm(view);
+    expect(localStorage.getItem(KEY)).toBeNull();
+    const backup = offeredBackup(SOCCER_CAREER_SAVE, localStorage);
+    expect(backup).not.toBeNull();
+    expect(localStorage.getItem(backup!)).toBe(before);
+  });
+
+  it('refuses to clear the career when the browser rejects its recovery copy', async () => {
+    const view = mount(serializeSoccerCareerSave(completed()));
+    await attempted();
+    const before = localStorage.getItem(KEY);
+    expect(before).not.toBeNull();
+    const existing = backupKeysOf(SOCCER_CAREER_SAVE, localStorage);
+    copyRefused = true;
+    ordinaryConfirm(view);
+    expect(localStorage.getItem(KEY)).toBe(before);
+    expect(stillCareer(view)).toBe(true);
+    expect(backupKeysOf(SOCCER_CAREER_SAVE, localStorage)).toEqual(existing);
+    expect(removeAttempts).toBe(0);
   });
 
   it('allows explicit archive discard only after refusal with a valid current acknowledgement', async () => {

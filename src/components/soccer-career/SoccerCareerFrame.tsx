@@ -49,6 +49,10 @@ export function SoccerCareerFrame({ active = false, children, reportGameContext 
             ...STORY_ROLE_HELP_RULES,
             ...SOCCER_DECK_HELP_RULES,
             'Career saves holds up to three careers in this browser. To keep your first player and start another, choose an empty slot.',
+            'To move a career to another device, choose Download save, then Import save in an empty slot on the other device. Keep the file as a backup.',
+            'Imported careers keep their progress and play normally. Their retirement scores stay off the public leaderboard.',
+            'Keep Copy & Start Over puts your playable career in recovery before clearing its slot. The slot stays occupied if the copy cannot be kept.',
+            'When a season saves, Career saves keeps a checkpoint from just before it. For example, after playing 2030 you can restore the position you had before that season. The game keeps your newer save aside, and the restored run stays off the public leaderboard.',
             'If two tabs open the same slot, the tab with older progress asks you to reload. Example: play a season in the second tab, then reload the first to see that season.',
           ]} className={active ? "h-11 w-11 sm:h-auto sm:w-auto" : undefined} />
         </div>

@@ -4,6 +4,28 @@
 
 The 35 focused tests passed, along with application types, the production build and all 15 built-site checks. Three regression cases failed on the unchanged writer. Chromium at 320 and 390 pixels refused the backup in slot 2, kept the 5,084 original characters, retried round 3 and reloaded the same career with an exact backup. The verified save in slot 1 stayed byte-for-byte. The shared save keeper sim still reports pre-existing source and fixture differences in other games. Its NRL checks passed.
 
+## 2026-11-23, Soccer Career season checkpoints
+
+**PL-03 is partly implemented.** Career saves shows one automatic checkpoint per slot. A completed player, manager, owner or pundit season keeps the prior verified save after the new save succeeds. Opening the game and ordinary choices leave the checkpoint alone. If storage refuses a checkpoint write, the main save can still finish.
+
+Restoring a checkpoint keeps the current bytes in the recovery list, including damaged saves. It checks that the checkpoint and destination still match the confirmation and preserves the checkpoint itself. Restored careers remain playable and keep local records. Their retirement scores stay off the public leaderboard.
+
+Optional account sync and explicit device conflict handling remain open for PL-03. The first Soccer Career format migration still uses its own checked before-image under PL-04. Shared migration coverage in the other long games remains open.
+
+The 293 focused tests, application typecheck, production build and all 20 scoped harnesses passed, including all 15 built-site checks. The save retry harness passed 14 mounted outcomes and 17 copied faults. At 320 and 390 pixels, Chromium refused a season save, retried it, restored the exact prior progress and blocked the stale tab’s controls. The chooser preserved recovery bytes and passed reload at 320, 390, 430 and 1440 pixels. A repeated retirement after a restore posted no second score. The source control failed when the restore’s strict generation requirement was removed.
+
+## 2026-11-23, Soccer Career portable saves and migration protection
+
+**PL-03 is partly implemented.** Career saves downloads a portable JSON file and imports it into an empty slot. The download carries the original save text. Import preserves its career data and adds a marker to keep edited or copied files from posting a public retirement score. The slot shows the last verified local save time when available. Keep Copy & Start Over preserves a checked playable backup before freeing the slot. A refused save or backup leaves the current career open.
+
+**PL-04 is partly implemented.** Soccer Career now writes version 1 and reads older versionless saves. The selected slot keeps a checked byte-for-byte copy of the original before replacing it. The migration reuses a previously verified copy and checks the original again before writing. Future versions stay in place with a route to other slots. Old season detail stays limited to what the save actually held.
+
+Periodic season checkpoints and optional account sync remain open. A checkpoint restore needs to preserve the current career and keep public score tracking outside the rewound state. No Soccer Career client currently uses the old account table for save sync.
+
+The 240 focused tests and all 20 scoped harnesses passed, including the 15 built-site checks. Chromium used separate contexts and the native file chooser at 320, 390, 430 and 1440 pixels. At 390 pixels, a restart and restore preserved the second slot and left the first slot byte-for-byte intact. The stale-tab browser control also preserved the newer save. The broader packed unit run still showed the two previously reproduced academy fixture differences.
+
+The integration on slots main passed 230 focused tests and reproduced the Soccer Career snapshot with no extra changes. The recovery wrapper had expected 39 cases even though the same suite on slots main contained 46. The corrected wrapper ran all 46 and both copied controls failed only their intended checks. The retry wrapper ran all 10 current outcomes and its 17 copied faults. A separate 390px Chromium replay refused the migration copy, held the exact packed legacy save, then kept an exact copy and preserved its ten seasons, identity, money, contract and awards through retry and reload.
+
 ## 2026-11-23, Soccer Career save slots
 
 **PL-03 is partly implemented.** Soccer Career has three independent local slots labeled by player. The legacy key is slot 1, so an existing bookmark or Home link still opens that player. Career saves lets a player resume any slot or start in an empty one. If the current slot has an interrupted write, the in-game switch retries that write first. Home, Profile, the Soccer hub and recovery use the selected slot. Each slot has its own Season Centre replay position.
