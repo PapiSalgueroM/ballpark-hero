@@ -260,7 +260,7 @@ function FinalsPanel({ state }: { state: LeagueState }) {
   </div>;
 }
 
-function ClubPanel({ state, onSwitch }: { state: LeagueState; onSwitch: () => void }) {
+function ClubPanel({ state, onSwitch }: { state: LeagueState; onSwitch: () => boolean }) {
   const [asking, setAsking] = useState(false);
   const rows = [...state.history].reverse();
   return <div className={styles.card}>
@@ -270,7 +270,7 @@ function ClubPanel({ state, onSwitch }: { state: LeagueState; onSwitch: () => vo
       <p className={styles.muted}>Play on with the real AFL club names? {state.clubName} become {clubFull({ clubSet: 'afl2026' }, state.myClub)}. Players, results and your history stay exactly as they are.</p>
       {asking ? <div className={styles.actions}>
         <button className={styles.secondary} data-arl-switchkeep onClick={() => setAsking(false)}>Keep these names</button>
-        <button className={styles.action} data-arl-switchconfirm onClick={() => { onSwitch(); setAsking(false); }}>Switch</button></div>
+        <button className={styles.action} data-arl-switchconfirm onClick={() => { if (onSwitch()) setAsking(false); }}>Switch</button></div>
         : <button className={styles.secondary} data-arl-switchask onClick={() => setAsking(true)}>Switch to the real names</button>}
     </div>}
     <h3>Honour board</h3>
