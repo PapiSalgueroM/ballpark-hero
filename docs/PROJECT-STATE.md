@@ -6,6 +6,42 @@ All 16 long-play hook tests, the application typecheck, the production build and
 
 Chromium at 320 and 390 pixels bought Guided tours in a second tab and kept the exact level 1 save after the older tab exited. Both widths held the exact prior museum when the backup was refused, then kept one byte-exact backup on Retry save. Reload opened the new museum and retained the backup.
 
+## 2026-11-23, Rebuild migration safety
+
+**PL-04 is partly implemented.** Rebuild checks a byte-exact copy before writing a migrated v1 save. When a browser refuses the copy, it keeps the original and offers Retry save. A missing squad, failed replay, or unsupported version leaves the original bytes in place. A newer save written during a delayed load or backup stays active. Starting over explicitly still works from the save the player opened.
+
+Seven regression cases reproduced on the unchanged writer. All 20 focused tests, application types, the production build and all 15 built-site checks passed. The version replay checked 144 archived v1 saves, including 89 with old perks, and a copied wrong-deck control failed as expected. The shared keeper recognized the Rebuild fixtures and version behavior. Its existing unrelated findings still appear in sections 0 and 1.
+
+Chromium at 320 and 390 pixels refused the backup, kept exact v1 bytes, recovered one checked backup on retry and reloaded with the same v2 finance card. At 390 pixels a separate failed squad request preserved v1 and reconnected successfully.
+
+## 2026-11-23, Soccer Career missing Ballon d'Or ballot
+
+A career that reloads on the Ballon d'Or screen with its ballot missing now offers Continue career. It resumes the existing season flow and keeps the player's completed season and awards.
+
+The regression test played a first senior season to an award at age 18 in 2007, then reloaded with and without the ballot. The intact save kept its ceremony and the incomplete save could continue. All 95 focused ceremony and save tests passed.
+
+## 2026-11-23, Club World Cup match goals and World XI Argentina
+
+Soccer Career's Trophy Cabinet now shows the player's saved goals in each Club World Cup appearance alongside assists and rating. Games the player missed still show that they did not play.
+
+World XI can use Marcos Acuña's 2024 Sevilla record when Argentina is drawn and his card is missing from the current pool. The Argentine FA confirms his Argentina career and Sevilla confirms that he started at left-back for Argentina in the 2024 Copa América opener. [Argentine FA](https://www.afa.com.ar/es/posts/marcos-acuna-cumple-35-anos-del-nacimiento-en-zapala-a-la-gloria-con-la-seleccion-argentina), [Sevilla FC](https://sevillafc.es/actualidad/noticias/estreno-argentina-copa-america-canada-2024).
+
+## 2026-11-23, Perfect Season NHL draft dates
+
+The squad reader uses the same career date checks as the era wheel. In a replay of the old import, Anaheim's 1990s stop offered Giovanni Fiore, Jacob Perreault and Jesse Blacker because their first NHL season was stored as `1`. The guard keeps the other 31 offers in the same order. Valid single-season records, careers spanning decades and saved Daily wheels still work.
+
+The source migrations below corrected 69 records in production. The date guard protects new drafts if a future import repeats that failure. Existing Daily drafts resume with their saved roster and wheel.
+
+The synced branch passed 44 focused tests, the app typecheck, the production build, all 15 built-site checks and the NHL import harness. The old route let a phone browser draft Blacker into defense. The guarded route at 320 and 390 pixels offered the 31 valid cards and drafted Teemu Selänne at the same stop. The broader multi-sport simulation's live squad section was skipped by the offline runner.
+
+## 2026-11-23, Bobby Robins autocomplete position
+
+Bobby Robins played right wing in all three NHL games with Boston in 2014-15. The position migration corrects his autocomplete label from C to RW after verifying his repaired regular-season totals. Its rollback comes before either earlier import rollback. Giovanni Fiore and Michael Keränen retain documented career positions. [NHL box score](https://api-web.nhle.com/v1/gamecenter/2014020002/boxscore), [Bobby Robins profile](https://www.eliteprospects.com/player/10502/bobby-robins), [Fiore's Anaheim roster report](https://www.nhl.com/ducks/news/ducks-reassign-four-to-san-diego-291516602), [Minnesota's 2015-16 roster](https://www.eliteprospects.com/team/63/minnesota-wild/2015-2016).
+
+Isolated PostgreSQL applied all three migrations to 6,353 captured rows. This migration wrote exactly one column on one row, made no writes on rerun and reversed cleanly. The prior two repairs then rolled back to the exact original fixture. Missing, duplicate and altered source rows failed without writes.
+
+Chromium at 320 and 390 pixels showed one suggestion with the corrected position in Hockey Grid and NHL Connect 4. The Grid rejected the same ineligible franchise pair. The Connect 4 handler accepted the same name for Bruins and Played in the 2010s. The import harness exercises the shared autocomplete adapter and rejects the copied center label.
+
 ## 2026-11-23, NHL plus-minus and penalty minutes
 
 The NHL regular-season summary covers all 69 repaired imports at their original team and season cutoffs. Independent season lines confirmed both fields on all 42 rows that needed changes. The second migration corrects 33 plus-minus values and 40 penalty-minute values, including 21 negative penalty totals from the old import. Each ledger row records the independent source. Hunter Drew's five penalty minutes also match the official game log and box score. [NHL skater stats](https://www.nhl.com/stats/skaters), [Drew's game log](https://api-web.nhle.com/v1/player/8481003/game-log/20212022/2), [San Jose box score](https://api-web.nhle.com/v1/gamecenter/2021021285/boxscore).
