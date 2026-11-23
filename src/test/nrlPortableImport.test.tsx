@@ -12,8 +12,8 @@ const secondCheckpoint = nrlCheckpointKey(second);
 const secondFence = fenceKeyOf(second);
 const ordinary = () => createNrlCareer('storm', 620);
 const neighboring = () => JSON.stringify(createNrlCareer('bears', 19, 2027));
-const slotAction = (slot: number) => screen.getByRole('button', { name: 'Import into slot ' + slot, exact: true });
-const confirm = () => screen.getByRole('button', { name: 'Import career', exact: true });
+const slotAction = (slot: number) => screen.getByRole('button', { name: new RegExp('^Import into slot ' + slot + '$') });
+const confirm = () => screen.getByRole('button', { name: /^Import career$/ });
 const bytes = (raw: string, format = 'douknowball-nrl-team-manager', version = 1) => new File(
   [JSON.stringify({ format, version, save: raw })], 'nrl-team-manager-save.json', { type: 'application/json' },
 );
@@ -32,7 +32,7 @@ function choose(file: File, slot = 2) {
 
 async function stage(file: File, slot = 2) {
   choose(file, slot);
-  await screen.findByRole('button', { name: 'Import career', exact: true });
+  await screen.findByRole('button', { name: /^Import career$/ });
 }
 
 function storage() {
@@ -158,7 +158,7 @@ describe('NRL career file import', () => {
     expect(screen.getByRole('status')).toHaveTextContent('This slot changed. Choose an empty slot to import.');
     expect(storage()).toEqual(before);
     expect(writes).not.toHaveBeenCalled();
-    expect(screen.queryByRole('button', { name: 'Import career', exact: true })).toBeNull();
+    expect(screen.queryByRole('button', { name: /^Import career$/ })).toBeNull();
   });
 
   it('keeps the claimed fence when a landed import cannot be read back immediately', async () => {
@@ -188,7 +188,7 @@ describe('NRL career file import', () => {
     expect(localStorage.getItem(first)).toBe(peer);
     expect(screen.getByRole('status')).toHaveTextContent('Could not verify the import. Check the slot before trying again.');
     expect(screen.getByRole('button', { name: 'Resume slot 2' })).toBeVisible();
-    expect(screen.queryByRole('button', { name: 'Import career', exact: true })).toBeNull();
+    expect(screen.queryByRole('button', { name: /^Import career$/ })).toBeNull();
   });
 
   it('reports a newer confirmed save when another tab wins after the import write lands', async () => {
@@ -208,7 +208,7 @@ describe('NRL career file import', () => {
     expect(localStorage.getItem(secondFence)).toBe('9');
     expect(localStorage.getItem(second)).toBe(peer);
     expect(screen.getByRole('status')).toHaveTextContent('This slot changed. Choose an empty slot to import.');
-    expect(screen.queryByRole('button', { name: 'Import career', exact: true })).toBeNull();
+    expect(screen.queryByRole('button', { name: /^Import career$/ })).toBeNull();
   });
 
   it('keeps an orphan checkpoint and refuses a race during strict fence acquisition', async () => {
@@ -246,7 +246,7 @@ describe('NRL career file import', () => {
     const before = storage();
     choose(file());
     await waitFor(() => expect(screen.getByRole('status')).toHaveTextContent(/could not use this NRL career file/i));
-    expect(screen.queryByRole('button', { name: 'Import career', exact: true })).toBeNull();
+    expect(screen.queryByRole('button', { name: /^Import career$/ })).toBeNull();
     expect(storage()).toEqual(before);
   });
 });
