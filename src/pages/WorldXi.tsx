@@ -339,7 +339,10 @@ const WorldXi = () => {
 
   const squadValue = filled.reduce((sum, p) => sum + (p ? p.value : 0), 0);
   const chemistry = useMemo(
-    () => computeChemistry(seasonPlayers.map(p => ({ name: p.name, club: p.club, nationality: p.country }))),
+    () => computeChemistry(seasonPlayers.map(p => ({
+      name: p.name, nationality: p.country,
+      club: /^(?:Without Club|Retired)$/i.test(p.club?.trim() ?? '') ? undefined : p.club,
+    }))),
     [seasonPlayers],
   );
   const clubLinks = chemistry.links.filter(link => link.type === 'club');

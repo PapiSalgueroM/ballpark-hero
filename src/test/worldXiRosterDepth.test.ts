@@ -66,7 +66,7 @@ vi.mock('@/integrations/supabase/client', () => ({
   },
 }));
 
-import { fetchWorldXiPool, fitsSlot, suggestCountryPlayers, type WxPlayer } from '@/lib/worldXi';
+import { fetchWorldXiPool, fitsSlot, suggestCountryPlayers, worldXiPlayerKey, type WxPlayer } from '@/lib/worldXi';
 import { FORMATIONS } from '@/lib/squadShape';
 
 // Pool fillers use fictional players. Individual regression cases carry their own rows.
@@ -129,6 +129,34 @@ describe('World XI recent snapshot depth', () => {
     expect(data!.players.filter(player => player.name === 'Fixture shared name').map(player => player.club).sort()).toEqual(['Fixture North', 'Fixture South']);
   });
 
+  it('offers Brazil and Spain separate Rafinha cards from their 2025 records', async () => {
+    H.previous = [
+      row(76_721, 'Rafinha', 2025, { nationality: 'Brazil', position: 'Attacking Midfield', club: 'Retired', market_value_usd: 2_000_000, age: 31 }),
+      row(164_780, 'Rafinha', 2025, { nationality: 'Spain', position: 'Second Striker', club: "Inter Club d'Escaldes", market_value_usd: 1_000_000, age: 27 }),
+    ];
+    const data = await fetchWorldXiPool();
+    expect(data).not.toBeNull();
+    const brazil = suggestCountryPlayers(data!, 'Brazil', 'Rafinha')[0];
+    const spain = suggestCountryPlayers(data!, 'Spain', 'Rafinha')[0];
+    expect(brazil).toEqual({ name: 'Rafinha', country: 'Brazil', position: 'CAM', club: 'Without Club', value: 2_000_000, age: 31 });
+    expect(spain).toEqual({ name: 'Rafinha', country: 'Spain', position: 'CF', club: "Inter Club d'Escaldes", value: 1_000_000, age: 27 });
+    expect(suggestCountryPlayers(data!, 'Brazil', 'Rafinha', new Set([worldXiPlayerKey(spain)]))).toEqual([brazil]);
+    expect(suggestCountryPlayers(data!, 'Spain', 'Rafinha', new Set([worldXiPlayerKey(brazil)]))).toEqual([spain]);
+  });
+
+  it.each([
+    [2026, 'Brazil', 'Attacking Midfield', 31, 2_000_000],
+    [2025, 'Fixture Country', 'Attacking Midfield', 31, 2_000_000],
+    [2025, 'Brazil', 'CAM', 31, 2_000_000],
+    [2025, 'Brazil', 'Attacking Midfield', 32, 2_000_000],
+    [2025, 'Brazil', 'Attacking Midfield', 31, 3_000_000],
+  ] as const)('preserves status on a different Rafinha source row %#', async (year, nationality, position, age, value) => {
+    const other = row(300_001, 'Rafinha', year, { nationality, position, club: 'Retired', age, market_value_usd: value });
+    (year === 2025 ? H.previous : H.current).push(other);
+    const data = await fetchWorldXiPool();
+    expect(suggestCountryPlayers(data!, nationality, 'Rafinha')[0]?.club).toBe('Retired');
+  });
+
   it('keeps the dated Sibir card and drops the stale age-21 Salyut card for the same player', async () => {
     H.previous = [
       row(122337, 'Nikolay Boyarkin', 2025, { nationality: 'Russia', position: 'Left Midfield', club: 'Salyut Belgorod', age: 21, market_value_usd: 1_000_000 }),
@@ -151,6 +179,28 @@ describe('World XI recent snapshot depth', () => {
     expect(suggestCountryPlayers(data!, 'United States', 'Avionne Flanagan')).toEqual([
       { name: 'Avionne Flanagan', country: 'United States', position: 'LM', club: 'Without Club', value: 1_000_000, age: 25 },
     ]);
+  });
+
+  it.each([
+    { label: 'excludes both stale rows', corrected: undefined },
+    { label: 'keeps the corrected 2025 club', corrected: { year: 2025, club: 'Inter San Carlos', age: 25 } },
+    { label: 'keeps the correctly dated 2026 club', corrected: { year: 2026, club: 'Santa Ana FC', age: 26 } },
+  ])('$label for Christian Flores', async ({ corrected }) => {
+    H.previous = [
+      row(122400, 'Christian Flores', 2025, { nationality: 'Venezuela', position: 'Left Midfield', club: 'Estudiantes de Mérida', age: 34, market_value_usd: 1_000_000 }),
+      row(164921, 'Christian Flores', 2025, { nationality: 'Cuba', position: 'Second Striker', club: 'Santa Ana FC', age: 25, market_value_usd: 1_000_000 }),
+    ];
+    if (corrected) {
+      const source = corrected.year === 2026 ? H.current : H.previous;
+      source.push(row(200_000, 'Christian Flores', corrected.year, {
+        nationality: 'Cuba', position: 'Second Striker', club: corrected.club, age: corrected.age,
+      }));
+    }
+    const data = await fetchWorldXiPool();
+    expect(suggestCountryPlayers(data!, 'Venezuela', 'Christian Flores')).toEqual([]);
+    expect(suggestCountryPlayers(data!, 'Cuba', 'Christian Flores')).toEqual(corrected ? [
+      expect.objectContaining({ club: corrected.club, position: 'CF', age: corrected.age }),
+    ] : []);
   });
 
   it.each([

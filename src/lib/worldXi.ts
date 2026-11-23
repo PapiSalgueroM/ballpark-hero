@@ -6,7 +6,7 @@ import { rng, winProbability } from '@/lib/perfectSeason';
 import { ALL_POSITIONS, allowedLabelFor, eligiblePositions, fitsAllowed, slotAllowedPositions } from '@/lib/positionFit';
 import type { XiFitAdjust } from '@/lib/xiFit';
 import { verifiedPositionFallback } from '@/data/verifiedSoccerPositions';
-import { WORLD_XI_CROSS_SNAPSHOT_NAMESAKES, WORLD_XI_STALE_SNAPSHOT_DUPLICATES } from '@/data/worldXiVerifiedNamesakes';
+import { WORLD_XI_CROSS_SNAPSHOT_NAMESAKES, WORLD_XI_RAFINHA_2025, WORLD_XI_STALE_SNAPSHOT_DUPLICATES } from '@/data/worldXiVerifiedNamesakes';
 
 /**
  * World XI (build an XI, one slot at a time)
@@ -20,7 +20,8 @@ import { WORLD_XI_CROSS_SNAPSHOT_NAMESAKES, WORLD_XI_STALE_SNAPSHOT_DUPLICATES }
  *   - Deduped by player name keeping the newest year (value breaks ties),
  *     with distinct club records in one year and verified namesakes across years retained.
  *   - Positions mapped through normalizePosition, primary nationality only.
- *     Club, age and value stay those of the stored row, including older rows.
+ *     Age and value stay those of the stored row. A verified club status can
+ *     be corrected to match the date of the snapshot.
  *
  * COUNTRY ELIGIBILITY:
  *   at least 2 GK, 2 CB, 3 defenders, 3 central or wide midfielders and
@@ -59,7 +60,9 @@ export interface WorldXiData {
 }
 
 export function worldXiPlayerKey({ name, country, position }: WxPlayer): string {
-  const separate = WORLD_XI_CROSS_SNAPSHOT_NAMESAKES.some(pair =>
+  const { name: rafinha, brazil } = WORLD_XI_RAFINHA_2025;
+  const separate = (name === rafinha && country === brazil.country && position === normalizePosition(brazil.position))
+    || WORLD_XI_CROSS_SNAPSHOT_NAMESAKES.some(pair =>
     pair.name === name && pair.earlier.country === country && pair.earlier.position === position);
   return separate ? `${name}|${country}` : name;
 }
@@ -199,7 +202,11 @@ function playerFromPoolRow(row: PoolRow): WxPlayer | null {
   const position = normalizePosition((row.position ?? '').trim());
   const value = Number(row.market_value_usd) || 0;
   if (!name || !country || !position || value <= 0) return null;
-  return { name, country, position, value, club: (row.club ?? '').trim(), age: Number(row.age) || undefined };
+  const { name: rafinha, year, brazil } = WORLD_XI_RAFINHA_2025;
+  const correctClub = row.player_name === rafinha && row.year === year && row.nationality === brazil.country
+    && row.position === brazil.position && row.club === brazil.sourceClub && row.age === brazil.age && row.market_value_usd === brazil.value;
+  const club = correctClub ? brazil.club : (row.club ?? '').trim();
+  return { name, country, position, value, club, age: Number(row.age) || undefined };
 }
 
 /** Optional, dated suggestions when the main pool is missing verified players. */

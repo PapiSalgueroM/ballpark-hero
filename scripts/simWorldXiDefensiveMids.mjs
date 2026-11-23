@@ -139,6 +139,7 @@
  *     crossnamesake   the verified cross-snapshot identity key is dropped      crossnamesake
  *     snapshotnamesake one verified 2025 card changes its raw position label   snapshotnamesake
  *     staleduplicate  the exact stale snapshot record is admitted              staleduplicate
+ *     rafinhaage      Brazil Rafinha's age at retirement replaces Jan 1 age    rafinha
  *     dupname         a second 2026 row of the subject, at another club, served  declared
  * POSITIVE CONTROLS prove a rule lets through what it must, so the pins above
  * can be lived with. Each must leave every section green AND show that its
@@ -187,7 +188,7 @@ const CONTROLS = {
   latestale: [2, ['laterentry']], latefuture: [2, ['laterentry']], lateonehost: [2, ['laterentry']], lateorphan: [2, ['laterentry']],
   normalize: [3, ['cdm']], cmslot: [3, ['slots']], reposition: [3, ['cdm']],
   namesake: [4, ['namesake']], crossnamesake: [4, ['crossnamesake']], staleduplicate: [4, ['staleduplicate']], dupname: [4, ['declared']],
-  snapshotnamesake: [4, ['snapshotnamesake']],
+  snapshotnamesake: [4, ['snapshotnamesake']], rafinhaage: [4, ['rafinha']],
 };
 /* the one later check rule each laterentry control breaks: it must be the only
    rule that fires, or the control proves some other rule and not its own */
@@ -738,7 +739,7 @@ globalThis.fetch = async (input, init) => {
   const url = input instanceof URL ? input : new URL(typeof input === 'string' ? input : input.url);
   if (!url.pathname.endsWith('/rest/v1/player_market_values')) return realFetch(input, init);
   const is2026 = url.searchParams.get('year') === 'eq.2026';
-  const changeSnapshot = CONTROL === 'snapshotnamesake' && url.searchParams.get('year') === 'eq.2025';
+  const changeSnapshot = (CONTROL === 'snapshotnamesake' || CONTROL === 'rafinhaage') && url.searchParams.get('year') === 'eq.2025';
   const off = Number(url.searchParams.get('offset') || 0);
   let rows;
   if (PROJECT && is2026) {
@@ -755,6 +756,12 @@ globalThis.fetch = async (input, init) => {
   }
   if (changeSnapshot) {
     rows = rows.map(row => {
+      if (CONTROL === 'rafinhaage') {
+        if (row.player_name !== 'Rafinha' || row.nationality !== 'Brazil' || row.club !== 'Retired'
+          || row.position !== 'Attacking Midfield' || row.year !== 2025 || row.age !== 31 || row.market_value_usd !== 2_000_000) return row;
+        controlSnapshotChanged += 1;
+        return { ...row, age: 32 };
+      }
       if (row.player_name !== 'Matteo Cortesi' || row.nationality !== 'Italy' || row.club !== 'AC Carpi'
         || row.position !== 'Second Striker' || row.year !== 2025 || row.age !== 26) return row;
       controlSnapshotChanged += 1;
@@ -834,7 +841,7 @@ fs.writeFileSync(ENTRY, [
   `const w = await import('${ROOT.replaceAll('\\', '/')}/src/lib/worldXi.ts');`,
   `const s = await import('${ROOT.replaceAll('\\', '/')}/src/lib/squadDeal.ts');`,
   'export const { fetchWorldXiPool, fitsSlot, suggestCountryPlayers, primaryCountry, worldXiPlayerKey } = w;',
-  `export { WORLD_XI_CROSS_SNAPSHOT_NAMESAKES, WORLD_XI_SAME_SNAPSHOT_NAMESAKES, WORLD_XI_STALE_SNAPSHOT_DUPLICATES } from '${ROOT.replaceAll('\\', '/')}/src/data/worldXiVerifiedNamesakes.ts';`,
+  `export { WORLD_XI_CROSS_SNAPSHOT_NAMESAKES, WORLD_XI_RAFINHA_2025, WORLD_XI_SAME_SNAPSHOT_NAMESAKES, WORLD_XI_STALE_SNAPSHOT_DUPLICATES } from '${ROOT.replaceAll('\\', '/')}/src/data/worldXiVerifiedNamesakes.ts';`,
   'export const { FORMATIONS, normalizePosition } = s;',
 ].join('\n'));
 let swapped = 0;
@@ -854,8 +861,8 @@ await build({
   }],
 });
 if (swaps.size && swapped !== swaps.size) refuse(`${swaps.size} source swaps prepared, ${swapped} reached the bundle`);
-const { fetchWorldXiPool, fitsSlot, suggestCountryPlayers, primaryCountry, worldXiPlayerKey, WORLD_XI_CROSS_SNAPSHOT_NAMESAKES, WORLD_XI_SAME_SNAPSHOT_NAMESAKES, WORLD_XI_STALE_SNAPSHOT_DUPLICATES, normalizePosition, FORMATIONS } = await import(pathToFileURL(BUNDLE).href);
-const snapshotNamesakeNames = new Set(WORLD_XI_SAME_SNAPSHOT_NAMESAKES.map(pair => pair.name));
+const { fetchWorldXiPool, fitsSlot, suggestCountryPlayers, primaryCountry, worldXiPlayerKey, WORLD_XI_CROSS_SNAPSHOT_NAMESAKES, WORLD_XI_RAFINHA_2025, WORLD_XI_SAME_SNAPSHOT_NAMESAKES, WORLD_XI_STALE_SNAPSHOT_DUPLICATES, normalizePosition, FORMATIONS } = await import(pathToFileURL(BUNDLE).href);
+const snapshotNamesakeNames = new Set([WORLD_XI_RAFINHA_2025.name, ...WORLD_XI_SAME_SNAPSHOT_NAMESAKES.map(pair => pair.name)]);
 const data = await fetchWorldXiPool();
 fs.rmSync(TMP, { recursive: true, force: true });
 if (!data) {
@@ -868,6 +875,7 @@ if (MOVES_SUBJECT && controlMoved !== 1) refuse(`it should move exactly one ${SU
 if (RECOUNTRIES_SUBJECT && controlRecountried !== 1) refuse(`it should change the country of exactly one ${SUBJECT.name} row in what the game is served, it changed ${controlRecountried}`);
 if (REPOSITIONS_SUBJECT && controlRepositioned !== 1) refuse(`it should change the position of exactly one ${SUBJECT.name} row in what the game is served, it changed ${controlRepositioned}`);
 if (CONTROL === 'snapshotnamesake' && controlSnapshotChanged !== 1) refuse(`it should change exactly one Carpi Cortesi row, it changed ${controlSnapshotChanged}`);
+if (CONTROL === 'rafinhaage' && controlSnapshotChanged !== 1) refuse(`it should change exactly one Brazil Rafinha age, it changed ${controlSnapshotChanged}`);
 
 const at = (name, club) => data.players.filter(p => p.name === name && p.club === club);
 
@@ -1125,12 +1133,37 @@ console.log('\n4) namesakes stay two people, and every name in the pool twice is
     }
     console.log(`   ${name}: ${year} ${country} cards for ${cards.map(card => card.club).join(' and ')}`);
   }
+  {
+    const { name, year, brazil, spain } = WORLD_XI_RAFINHA_2025;
+    const cards = [brazil, spain];
+    declared.set(name, cards.map(card => card.club).sort().join(' and '));
+    const records = servedNamesakeRows.filter(row => row.player_name === name);
+    if (records.length !== cards.length || !cards.every(card => records.filter(row =>
+      row.nationality === card.country && row.year === year && row.club === (card.sourceClub ?? card.club)
+      && row.position === card.position && row.age === card.age && row.market_value_usd === card.value).length === 1)) {
+      fail('rafinha', `${name}: the exact ${year} Brazil and Spain source rows did not match`);
+    }
+    const players = cards.map(card => suggestCountryPlayers(data, card.country, name).find(player =>
+      player.name === name && player.club === card.club && player.position === normalizePosition(card.position)
+      && player.age === card.age && player.value === card.value));
+    if (players.every(Boolean)) {
+      for (const [a, b] of [players, players.slice().reverse()]) {
+        if (!suggestCountryPlayers(data, a.country, name, new Set([worldXiPlayerKey(b)])).includes(a)
+          || !FORMATIONS.some(formation => formation.slots.some(slot => fitsSlot(a, slot)))) {
+          fail('rafinha', `${name}: the ${a.country} card is unavailable after picking the ${b.country} card`);
+        }
+      }
+      console.log(`   ${name}: Brazil (${players[0].club}, ${players[0].age}) and Spain (${players[1].club}, ${players[1].age})`);
+    } else {
+      fail('rafinha', `${name}: the two exact cards did not reach the picker`);
+    }
+  }
   for (const { name, country, position, stale, kept } of WORLD_XI_STALE_SNAPSHOT_DUPLICATES) {
     const options = suggestCountryPlayers(data, country, name).filter(p => p.name === name && p.position === position);
     if (options.some(p => p.club === stale.club && p.age === stale.age)) {
       fail('staleduplicate', `${name} is offered on the stale ${stale.club} card`);
     }
-    if (!options.some(p => p.club === kept.club && p.age === kept.age)) {
+    if (kept && !options.some(p => p.club === kept.club && p.age === kept.age)) {
       fail('staleduplicate', `${name} is missing the verified ${kept.club} card`);
     }
   }

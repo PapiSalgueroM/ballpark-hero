@@ -66,7 +66,7 @@ export const WORLD_XI_SAME_SNAPSHOT_NAMESAKES = [
   },
 ] as const;
 
-/** Earlier club records mistakenly given the same date as a verified snapshot. */
+/** Exact stale rows, with a verified card to retain when the same snapshot has one. */
 export const WORLD_XI_STALE_SNAPSHOT_DUPLICATES = [
   {
     // Sibir records the July 2025 transfer at age 23. Salyut confirms his birth date
@@ -87,4 +87,38 @@ export const WORLD_XI_STALE_SNAPSHOT_DUPLICATES = [
     stale: { club: 'Charlotte Independence', age: 23 },
     kept: { club: 'Without Club', age: 25 },
   },
+  {
+    // The official league guide and Caracas's signing release give the same
+    // birth date. He was 36 on 2025-01-01. His last Estudiantes season was 2023.
+    // https://ligafutve.org/wp-content/uploads/2022/03/GUIA-OFICIAL-LIGA-FUTVE-2022.pdf
+    // https://gradadigital.com/home/christian-flores-es-del-caracas-fc/
+    // https://www.transfermarkt.es/christian-flores/profil/spieler/308744
+    // https://www.playmakerstats.com/player/christian-flores/111021
+    name: 'Christian Flores', country: 'Venezuela', position: 'LM', year: 2025,
+    stale: { club: 'Estudiantes de Mérida', age: 34 },
+  },
+  {
+    // The Cuban second striker played for Inter San Carlos in 2024/25.
+    // He joined Santa Ana in July 2025, for the 2025/26 season.
+    // https://gammadigital.uia.ac.cr/futbol-consultants-y-guadalupe-fc-disputaran-el-ascenso-a-primera-division/
+    // https://www.national-football-teams.com/player/87797/Christian_Flores.html
+    // https://www.transfermarkt.com/christian-flores/profil/spieler/628735
+    name: 'Christian Flores', country: 'Cuba', position: 'CF', year: 2025,
+    stale: { club: 'Santa Ana FC', age: 25 },
+  },
 ] as const;
+
+export const WORLD_XI_RAFINHA_2025 = {
+  name: 'Rafinha', year: 2025,
+  // Rafael Alcântara do Nascimento, born February 12, 1993. Al-Arabi confirmed his
+  // departure in June 2024. He was still without a club in March 2025 and retired in December.
+  // https://players.fcbarcelona.com/en/player/715-rafinha-rafael-alcantara-nascimento
+  // https://www.qsl.qa/en/news/al-arabi-announce-departure-brazilian-rafinha-alcantara
+  // https://as.com/futbol/primera/los-alcantara-por-fin-juntos-en-el-celta-n/
+  // https://www.fcbarcelona.com/en/news/4423670/rafinha-announces-retirement
+  brazil: { country: 'Brazil', position: 'Attacking Midfield', age: 31, value: 2_000_000, sourceClub: 'Retired', club: 'Without Club' },
+  // Rafael Baldrés Hermann, born December 29, 1997, played for Inter Escaldes in 2024/25.
+  // https://fcpetrolul.ro/oficial-rafael-baldres-hermann-rafinha-a-semnat-cu-fc-petrolul-ploiesti/
+  // https://www.uefa.com/news-media/mediaservices/informationkits/competitions/uefaconferenceleague/2027/match/2049147/
+  spain: { country: 'Spain', position: 'Second Striker', age: 27, value: 1_000_000, club: "Inter Club d'Escaldes" },
+} as const;
