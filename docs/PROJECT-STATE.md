@@ -2,7 +2,7 @@
 
 PL-04 protects the switch from fictional to real club names. The game keeps an exact copy of the original save and checks that it still owns the active bytes before installing the new names. A refused write leaves the switch available to retry. The latest save from another tab takes precedence.
 
-Two archived v2 careers came from the writer before club sets. One was at a match break with a recorded swap and the other was in season three with two completed years. The switch changed only club names and the club-set field. The older build rejected the converted bytes and restored both original careers through its own SaveKeeper, while keeping a copy of the displaced save.
+Two archived v2 careers came from the writer before club sets. One was at a match break with a recorded swap and the other was in season three with two completed years. The switch changed only club names and the club-set field. The older build rejected the converted bytes and restored both original careers through its own SaveKeeper, while keeping a copy of the displaced save. All 129 focused tests, 14 native cases at both phone widths, 36 existing club-name browser checks and the scoped SaveKeeper passed. The wider club-names engine harness reported the same 124 historical digest failures as the previous build, with identical assertion text. Its save round trip and corruption sections passed.
 
 ## 2026-11-23, NRL Team Manager save file imports
 
