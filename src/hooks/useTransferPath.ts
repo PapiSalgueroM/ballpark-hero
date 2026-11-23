@@ -3,6 +3,7 @@ import fallbackPuzzles from '@/data/transferPathPuzzles';
 import type { TransferPathPuzzle, TransferPathRuleHint } from '@/data/transferPathPuzzles';
 import { careerPlayers as fallbackPlayers } from '@/data/careerPlayers';
 import type { CareerPlayer } from '@/types/career';
+import { careerPlayerIdentityKey } from '@/lib/careerPlayerIdentity';
 import { fetchTransferPathPuzzles } from '@/lib/fetchTransferPathPuzzles';
 import { fetchCareerPlayers } from '@/lib/fetchCareerPlayers';
 import {
@@ -93,6 +94,7 @@ export interface TransferPathState {
   switchToUnlimited: () => void;
   nextPuzzle: () => void;
   getAllPlayerNames: () => string[];
+  getPlayerAliasNames: (name: string) => string[];
   getPlayerNationality: (name: string) => string;
   getPlayerClubs: (name: string) => Set<string>;
 }
@@ -226,6 +228,17 @@ export function useTransferPath(): TransferPathState {
   /* The everyday graph, kept beside the rule graph so a refusal can say why:
      a name the rule removed, or a link the rule does not allow. */
   const everydayClubSeasons = useMemo(() => clubSeasonsOf(playerPool, 'classic'), [playerPool]);
+  const verifiedIdentityKeys = useMemo(() => {
+    const keys = new Map<string, string | undefined>();
+    for (const player of playerPool) {
+      const name = player.name.trim().toLowerCase();
+      // A case-folded collision cannot borrow another row’s verified identity.
+      keys.set(name, keys.has(name) ? undefined : careerPlayerIdentityKey(player));
+    }
+    return keys;
+  }, [playerPool]);
+  const verifiedIdentityOf = useCallback((name: string) => verifiedIdentityKeys.get(name.trim().toLowerCase()), [verifiedIdentityKeys]);
+  const identityOf = useCallback((name: string) => verifiedIdentityOf(name) ?? name, [verifiedIdentityOf]);
   const activeNames = useMemo(
     () => new Set(playerPool.filter(isActivePlayer).map(p => p.name)),
     [playerPool],
@@ -249,16 +262,19 @@ export function useTransferPath(): TransferPathState {
     () => (from: string, to: string, skip: readonly string[] = []): RevealStep[] | null => {
       if (!playerToClubSeasons.has(from) || !playerToClubSeasons.has(to)) return null;
       if (from === to) return [{ player: from, club: null }];
+      const targetIdentity = identityOf(to);
       const prev = new Map<string, { via: string; club: string }>();
-      const seen = new Set<string>([from, ...skip]);
+      const seen = new Set([from, ...skip].map(identityOf));
       const queue: string[] = [from];
       while (queue.length > 0) {
         const cur = queue.shift()!;
         const keys = playerToClubSeasons.get(cur);
         if (!keys) continue;
         for (const { name: nb, club } of linkedFrom(seasonIndex, keys)) {
-          if (seen.has(nb)) continue;
-          seen.add(nb);
+          const identity = identityOf(nb);
+          // Keep the puzzle's exact endpoint and reject paths through a second label for it.
+          if (seen.has(identity) || (identity === targetIdentity && nb !== to)) continue;
+          seen.add(identity);
           prev.set(nb, { via: cur, club });
           if (nb === to) {
             const path: RevealStep[] = [];
@@ -275,7 +291,7 @@ export function useTransferPath(): TransferPathState {
       }
       return null;
     },
-    [playerToClubSeasons, seasonIndex],
+    [playerToClubSeasons, seasonIndex, identityOf],
   );
 
   // Helpers returned to board.
@@ -283,6 +299,11 @@ export function useTransferPath(): TransferPathState {
     () => () => playerPool.map(p => p.name),
     [playerPool],
   );
+  const getPlayerAliasNames = useCallback((name: string) => {
+    const key = verifiedIdentityOf(name);
+    if (!key) return [];
+    return playerPool.filter(player => player.name !== name && verifiedIdentityOf(player.name) === key).map(player => player.name);
+  }, [playerPool, verifiedIdentityOf]);
   const getPlayerNationality = useMemo(
     () => (name: string) => playerPool.find(p => p.name === name)?.nationality ?? '',
     [playerPool],
@@ -403,10 +424,10 @@ export function useTransferPath(): TransferPathState {
   const moreHelp = useMemo(() => {
     if (status !== 'building' || stranded) return null;
     const head = chain[chain.length - 1];
-    const doors = doorsFrom(seasonIndex, playerToClubSeasons, head, puzzle.playerB, chain);
+    const doors = doorsFrom(seasonIndex, playerToClubSeasons, head, puzzle.playerB, chain, identityOf);
     if (!doors) return null;
     return { doors, lines: moreHelpLines(doors, head, puzzle.playerB) };
-  }, [status, stranded, chain, puzzle, seasonIndex, playerToClubSeasons]);
+  }, [status, stranded, chain, puzzle, seasonIndex, playerToClubSeasons, identityOf]);
 
   // ── useGameCompletion ──────────────────────────────────────────────────────
   // A surrendered daily still counts as "played today" (score 0, no win).
@@ -432,25 +453,30 @@ export function useTransferPath(): TransferPathState {
   const addPlayer = useCallback((name: string): { ok: boolean; club: string | null; reason?: TransferPathRefusal } => {
     if (status !== 'building') return { ok: false, club: null };
 
-    if (chain.some(player => player.toLowerCase() === name.toLowerCase())) {
+    const verifiedIdentity = verifiedIdentityOf(name);
+    if (chain.some(player => player.toLowerCase() === name.toLowerCase()
+      || (verifiedIdentity !== undefined && verifiedIdentityOf(player) === verifiedIdentity))) {
       return { ok: false, club: null, reason: 'duplicate' };
     }
 
     const lastInChain = chain[chain.length - 1];
-    const sharedClub = playersShareClub(lastInChain, name);
+    const isTargetAlias = verifiedIdentity !== undefined && verifiedIdentityOf(puzzle.playerB) === verifiedIdentity;
+    const picked = isTargetAlias ? puzzle.playerB : name;
+    // A spelling still needs its own place in the current rule graph.
+    const sharedClub = picked !== name && !playerToClubSeasons.has(name) ? null : playersShareClub(lastInChain, picked);
     if (!sharedClub) {
       if (activeRule === 'active' && everydayClubSeasons.has(name) && !activeNames.has(name)) {
         return { ok: false, club: null, reason: 'unverified-active' };
       }
-      if (activeRule === 'europe' && shareClub(everydayClubSeasons, lastInChain, name)) {
+      if (activeRule === 'europe' && shareClub(everydayClubSeasons, lastInChain, picked)) {
         return { ok: false, club: null, reason: 'outside-europe' };
       }
       return { ok: false, club: null };
     }
 
     if (mode === 'daily') {
-      addDailyAction({ t: 'step', player: name, club: sharedClub, ...(openingSpecialRule ? { rule: openingSpecialRule } : {}) });
-      if (name === puzzle.playerB) {
+      addDailyAction({ t: 'step', player: picked, club: sharedClub, ...(openingSpecialRule ? { rule: openingSpecialRule } : {}) });
+      if (picked === puzzle.playerB) {
         addDailyAction({ t: 'won' });
       } else {
         const finalClub = playersShareClub(name, puzzle.playerB);
@@ -460,11 +486,11 @@ export function useTransferPath(): TransferPathState {
         }
       }
     } else {
-      const newChain = [...chain, name];
+      const newChain = [...chain, picked];
       const newConn = [...connections, sharedClub];
       let finalChain = newChain;
       let finalConn = newConn;
-      let won = name === puzzle.playerB;
+      let won = picked === puzzle.playerB;
       if (!won) {
         const finalClub = playersShareClub(name, puzzle.playerB);
         if (finalClub) {
@@ -483,7 +509,8 @@ export function useTransferPath(): TransferPathState {
     }
 
     return { ok: true, club: sharedClub };
-  }, [mode, status, chain, connections, puzzle, optimal, activeRule, playersShareClub, everydayClubSeasons, activeNames, addDailyAction, openingSpecialRule]);
+  }, [mode, status, chain, connections, puzzle, optimal, activeRule, playersShareClub, playerToClubSeasons,
+    everydayClubSeasons, activeNames, addDailyAction, openingSpecialRule, verifiedIdentityOf]);
 
   // ── unlimited resets ───────────────────────────────────────────────────────
   const startUnlimited = useCallback((index: number, pool: TransferPathPuzzle[]) => {
@@ -547,6 +574,7 @@ export function useTransferPath(): TransferPathState {
     switchToUnlimited,
     nextPuzzle,
     getAllPlayerNames,
+    getPlayerAliasNames,
     getPlayerNationality,
     getPlayerClubs,
   };

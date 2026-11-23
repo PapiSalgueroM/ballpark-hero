@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { dailyPrngSeed, dateSeed, dayNumber } from '@/lib/dateUtils';
 import { storedSpelling, type PlayerEntity } from '@/lib/playerSearch';
 import { reconcileCareerSeasons } from '@/lib/careerSeasonCorrections';
+import { sameCareerPlayerIdentity } from '@/lib/careerPlayerIdentity';
 
 export interface CareerStint {
   season: string;
@@ -375,13 +376,16 @@ export function ladderSuggestions(
 }
 
 /**
- * Whether a pick is the answer (Round 668 fix). Every answer is a pool man
- * and picking a pool man submits his pool spelling, so a name the pool does
- * not hold (a namesake the search offered) never wins, even when it folds to
- * the answer's letters.
+ * Every accepted pick must use a spelling held by the ladder pool. The
+ * verified keeper identity can match two pool rows with different names.
  */
-export function ladderGuessWins(name: string, answer: string, poolNames: string[]): boolean {
-  return normalizeName(name) === normalizeName(answer) && poolNames.includes(name);
+export function ladderGuessWins(name: string, answer: string | CareerPlayer, pool: readonly (string | CareerPlayer)[]): boolean {
+  const answerName = typeof answer === 'string' ? answer : answer.name;
+  const sameName = normalizeName(name) === normalizeName(answerName);
+  return pool.some(candidate => {
+    if (typeof candidate === 'string') return sameName && candidate === name;
+    return candidate.name === name && (sameName || (typeof answer !== 'string' && sameCareerPlayerIdentity(candidate, answer)));
+  });
 }
 
 /**

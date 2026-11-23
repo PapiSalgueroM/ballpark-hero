@@ -109,6 +109,7 @@ describe('Career Ladder verified completed seasons', () => {
     rows.seasons.push({ ...UNITED, player_id: 'test-teammate', goals: 0, assists: null, appearances: 1, sort_order: 0 });
     const shared = await fetchCareerPlayers();
     const rashford = shared.find(player => player.name === 'Marcus Rashford')!;
+    expect(rashford.id).toBe(RASHFORD);
     expect(rashford.career.map(stint => stint.club)).toEqual(['Manchester United', 'Aston Villa', 'Barcelona']);
     expect(careerCellValue(rashford.career[0], 'assists')).toBe('3');
     expect(careerCellValue(rashford.career[1], 'appearances')).toBe('17');

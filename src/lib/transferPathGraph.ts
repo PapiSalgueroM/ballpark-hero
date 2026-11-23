@@ -196,13 +196,14 @@ const byPlayersThenClub = (x: { club: string; players: number }, y: { club: stri
   y.players - x.players || x.club.localeCompare(y.club);
 
 /** Linked players with every club the link runs through, the man himself and `skip` left out. */
-function doorMap(index: SeasonIndex, keys: ClubSeasonKeys, self: string, skip: ReadonlySet<string>): Map<string, Set<string>> {
+function doorMap(index: SeasonIndex, keys: ClubSeasonKeys, self: string, skip: ReadonlySet<string>, identityOf: (name: string) => string): Map<string, Set<string>> {
   const out = new Map<string, Set<string>>();
   for (const { name, club } of linkedFrom(index, keys)) {
-    if (name === self || skip.has(name)) continue;
-    const clubs = out.get(name);
+    const identity = identityOf(name);
+    if (identity === self || skip.has(identity)) continue;
+    const clubs = out.get(identity);
     if (clubs) clubs.add(club);
-    else out.set(name, new Set([club]));
+    else out.set(identity, new Set([club]));
   }
   return out;
 }
@@ -219,11 +220,8 @@ function doorMap(index: SeasonIndex, keys: ClubSeasonKeys, self: string, skip: R
  * (the head excepted): a neighbour is on a route when his distance is the
  * head's minus one, the same search findPath runs.
  *
- * Measured on the bake (2026-10-05, Round 475 rule graph) for tpa-762, Alisson
- * Becker to Mikel Oyarzabal: 19 pool players, Liverpool 17, Roma 3,
- * Internacional 2, 1 on a shortest route; into the target 3, all through Real
- * Sociedad. Until Round 1010b removes the twin, "Alisson" counts as Alisson
- * Becker's own teammate.
+ * A verified identity key prevents two spellings of the same player from
+ * inflating these counts. Link membership still uses the rule graph's names.
  *
  * null when either end is not in the graph, the head is the target, or no
  * route is left from the head (the stranded state says that instead).
@@ -234,30 +232,34 @@ export function doorsFrom(
   head: string,
   target: string,
   played: readonly string[],
+  identityOf = (name: string) => name,
 ): TransferPathDoors | null {
   const headKeys = keys.get(head);
   const targetKeys = keys.get(target);
-  if (!headKeys || !targetKeys || head === target) return null;
-  const skip = new Set(played);
-  skip.delete(head);
+  const headIdentity = identityOf(head);
+  const targetIdentity = identityOf(target);
+  if (!headKeys || !targetKeys || headIdentity === targetIdentity) return null;
+  const playedSet = new Set(played.map(identityOf));
+  const skip = new Set(playedSet);
+  skip.delete(headIdentity);
 
-  const dist = new Map<string, number>([[target, 0]]);
+  const dist = new Map<string, number>([[targetIdentity, 0]]);
   const queue = [target];
-  for (let i = 0; i < queue.length && !dist.has(head); i += 1) {
+  for (let i = 0; i < queue.length && !dist.has(headIdentity); i += 1) {
     const cur = queue[i];
     const curKeys = keys.get(cur);
     if (!curKeys) continue;
     for (const { name } of linkedFrom(index, curKeys)) {
-      if (dist.has(name) || skip.has(name)) continue;
-      dist.set(name, dist.get(cur)! + 1);
+      const identity = identityOf(name);
+      if (dist.has(identity) || skip.has(identity) || (identity === headIdentity && name !== head)) continue;
+      dist.set(identity, dist.get(identityOf(cur))! + 1);
       queue.push(name);
     }
   }
-  const headDist = dist.get(head);
+  const headDist = dist.get(headIdentity);
   if (headDist === undefined) return null;
 
-  const playedSet = new Set(played);
-  const out = doorMap(index, headKeys, head, playedSet);
+  const out = doorMap(index, headKeys, headIdentity, playedSet, identityOf);
   const clubs = new Map<string, { club: string; players: number; onRoute: number }>();
   let onRoute = 0;
   for (const [name, via] of out) {
@@ -271,7 +273,7 @@ export function doorsFrom(
     }
   }
 
-  const inward = doorMap(index, targetKeys, target, playedSet);
+  const inward = doorMap(index, targetKeys, targetIdentity, playedSet, identityOf);
   const intoClubs = new Map<string, number>();
   for (const via of inward.values()) for (const club of via) intoClubs.set(club, (intoClubs.get(club) ?? 0) + 1);
 

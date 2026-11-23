@@ -1,3 +1,9 @@
+## 2026-11-23, Career games recognize both Alisson spellings
+
+Career Quiz and Career Ladder accept verified Alisson and Alisson Becker guesses in either direction. Career Ladder counts the goalkeeper once per Unlimited rotation. Transfer Path prevents both spellings from counting as separate links and retains the archived endpoint label when the alternate reaches it. The checks reopen older Daily saves and exercise the existing Active Players Only rule. [Alisson identity audit](audits/alisson-career-identity.md)
+
+Supabase confirms the two public IDs and the goalkeeper metadata. Nine season rows disagree on appearances, assists or listed value, so the next P0 source check starts with the Roma appearance totals. The AGF release in PR #1074 passed all ten live phone checks.
+
 ## 2026-11-23, Club Manager AGF opening cup scorers
 
 Five verified 2026-27 AGF players cover anonymous defender and midfield goals in newly simulated background cup matches. Two Champions League replays credit Frederik Tingager in a 2-0 win at Club Brugge and Magnus Knudsen in a 3-2 home loss to AEK Athens. The result and existing scorer credits stay as played after reload. A separate managed 2-2 keeps both goals for Gift Links on his original player key. [AGF scorer audit](audits/club-manager-agf-2026-scorers.md)

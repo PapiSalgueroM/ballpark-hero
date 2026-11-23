@@ -61,6 +61,7 @@ const board = {
     'Trent Alexander-Arnold', "N'Golo Kanté", "Samuel Eto'o", 'Son Heung-min', 'Vinícius Júnior',
     'Neymar', 'Lionel Messi', 'Warren Zaïre-Emery', 'Mohamed Salah',
   ],
+  getPlayerAliasNames: vi.fn<(name: string) => string[]>(() => []),
   getPlayerNationality: () => '', getPlayerClubs: () => new Set<string>(),
   isLoading: false, isLoadingPool: false,
 };
@@ -184,6 +185,17 @@ describe('Transfer Path board: the empty list says why', () => {
       expect(await screen.findByRole('option', { name: 'Mikel Oyarzabal' })).toBeTruthy();
     } finally {
       board.optimal = 3;
+    }
+  });
+
+  it('keeps a selected keeper out of the picker under his other verified label', async () => {
+    board.getPlayerAliasNames.mockImplementation(name => name === 'Alisson Becker' ? ['Alisson'] : []);
+    replies.set('alisson', { results: [entity('Alisson'), entity('Alisson Becker')], error: null });
+    try {
+      expect((await typeIntoBoard('alisson')).textContent).toBe(CHAIN_TEXT);
+      expect(screen.queryByRole('option')).toBeNull();
+    } finally {
+      board.getPlayerAliasNames.mockImplementation(() => []);
     }
   });
 

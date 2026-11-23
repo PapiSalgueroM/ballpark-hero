@@ -22,7 +22,7 @@ export function TransferPathBoard() {
     puzzle, chain, connections, status, score, mode, unlimitedIndex,
     rule, activeRule, setRule, ruleLocked, dailyRuleBlocked, ruleAvailability, optimal, hint, stranded, moreHelp,
     addPlayer, giveUp, revealPath, canBacktrack, backtrack, switchToUnlimited, nextPuzzle,
-    getAllPlayerNames, getPlayerNationality,
+    getAllPlayerNames, getPlayerAliasNames, getPlayerNationality,
     isLoadingPool, isLoading,
   } = useTransferPath();
 
@@ -44,8 +44,8 @@ export function TransferPathBoard() {
   /* normalizeName, not toLowerCase: searchPlayers compares normalized names,
      so an accented chain name (Martin Ødegaard) was never left out before. */
   const excludedPlayers = useMemo(
-    () => optimal === 1 ? chain : [...chain, puzzle.playerB],
-    [chain, puzzle.playerB, optimal],
+    () => (optimal === 1 ? chain : [...chain, puzzle.playerB]).flatMap(name => [name, ...getPlayerAliasNames(name)]),
+    [chain, puzzle.playerB, optimal, getPlayerAliasNames],
   );
   const excludeNames = useMemo(
     () => new Set(excludedPlayers.map(normalizeName)),

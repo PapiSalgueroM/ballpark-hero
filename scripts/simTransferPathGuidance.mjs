@@ -171,15 +171,15 @@ if (!PULL_CONTROLS.includes(CONTROL)) try {
       frozen: [['  const hint = useMemo(() => {\n    if (fromHere === null) return inForce.hint;', '  const hint = useMemo(() => {\n    return inForce.hint;\n    if (fromHere === null) return inForce.hint;']],
       noskip: [
         ['findPath(head, puzzle.playerB, chain.slice(0, -1))', 'findPath(head, puzzle.playerB)'],
-        ['doorsFrom(seasonIndex, playerToClubSeasons, head, puzzle.playerB, chain)', 'doorsFrom(seasonIndex, playerToClubSeasons, head, puzzle.playerB, [head])'],
+        ['doorsFrom(seasonIndex, playerToClubSeasons, head, puzzle.playerB, chain, identityOf)', 'doorsFrom(seasonIndex, playerToClubSeasons, head, puzzle.playerB, [head], identityOf)'],
       ],
       leak: [[
         'return { doors, lines: moreHelpLines(doors, head, puzzle.playerB) };',
         'const lines = moreHelpLines(doors, head, puzzle.playerB);\n    const middle = findPath(head, puzzle.playerB, chain.slice(0, -1))?.[1]?.player ?? \'\';\n    return { doors, lines: [`${lines[0]} ${middle}`, ...lines.slice(1)] };',
       ]],
       everyday: [[
-        'doorsFrom(seasonIndex, playerToClubSeasons, head, puzzle.playerB, chain)',
-        'doorsFrom(buildSeasonIndex(everydayClubSeasons), everydayClubSeasons, head, puzzle.playerB, chain)',
+        'doorsFrom(seasonIndex, playerToClubSeasons, head, puzzle.playerB, chain, identityOf)',
+        'doorsFrom(buildSeasonIndex(everydayClubSeasons), everydayClubSeasons, head, puzzle.playerB, chain, identityOf)',
       ]],
       overflow: [['const more = rows.length - TOP_CLUBS;', 'const more = rows.length - TOP_CLUBS - 1;']],
     }[CONTROL];

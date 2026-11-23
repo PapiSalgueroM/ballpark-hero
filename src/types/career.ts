@@ -10,6 +10,7 @@ export interface CareerSeason {
 }
 
 export interface CareerPlayer {
+  id?: string;
   name: string;
   nationality: string;
   position: string;

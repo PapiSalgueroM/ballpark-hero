@@ -7,6 +7,7 @@ import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed, getTodayET } from '@/lib/dateUtils';
+import { sameCareerPlayerIdentity } from '@/lib/careerPlayerIdentity';
 
 /** One recorded action in a daily Career Path run. Round 55: this type was
     USED in three places but never actually defined or imported, so the daily
@@ -203,7 +204,10 @@ export function useCareerGame() {
     // Round 848 review: another tab already moved the daily; jump to it, no verdict.
     if (mode === 'daily' && takeNewerDailySave()) return false;
 
-    if (name.toLowerCase().trim() === targetPlayer.name.toLowerCase().trim()) {
+    const normalized = name.toLowerCase().trim();
+    const hasName = (player: CareerPlayer) => player.name.toLowerCase().trim() === normalized;
+    const guessedPlayer = playerPool.find(hasName) ?? fallbackPlayers.find(hasName);
+    if (hasName(targetPlayer) || (guessedPlayer && sameCareerPlayerIdentity(guessedPlayer, targetPlayer))) {
       if (mode === 'daily') {
         addDailyAction({ t: 'won' });
       } else {
@@ -233,7 +237,7 @@ export function useCareerGame() {
       }
     }
     return false;
-  }, [mode, gameStatus, targetPlayer, dailyWrongCount, unlimitedGuessesUsed, addDailyAction, takeNewerDailySave]);
+  }, [mode, gameStatus, targetPlayer, playerPool, dailyWrongCount, unlimitedGuessesUsed, addDailyAction, takeNewerDailySave]);
 
   const giveUp = useCallback(() => {
     if (gameStatus !== 'playing') return;
