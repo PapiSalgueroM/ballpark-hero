@@ -90,7 +90,7 @@ export function readNrlReplayCutoff(key: string): ReplayCutoff | null {
 }
 
 export function nrlSeasonCanCredit(career: NrlCareerState, cutoff: ReplayCutoff | null): boolean {
-  return !cutoff || cutoff.career !== careerId(career) || career.season.year > cutoff.through;
+  return !career.importedFromFile && (!cutoff || cutoff.career !== careerId(career) || career.season.year > cutoff.through);
 }
 
 export function saveNrlCheckpoint(key: string, active: string, checkpoint: string | null): FenceWrite {

@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState, type ChangeEvent } from 'react';
 import { Button } from '@/components/ui/button';
 import { nrlClubName } from '@/lib/nrlClubIdentity';
 import { NrlCustomBadge } from '@/components/nrl-manager/NrlClubIdentity';
-import { BACKUPS_KEPT } from '@/lib/brokenSaveRecovery';
+import { BACKUPS_KEPT, browserStorage } from '@/lib/brokenSaveRecovery';
+import {
+  captureNrlImportTarget, importNrlCareerFile, nrlCareerDownload, readNrlCareerFile, type NrlCareerFile, type NrlImportTarget,
+} from '@/lib/nrlPortable';
 import {
   NRL_SAVE_SLOTS, nrlCheckpointKey, readNrlSaveSlot, restoreNrlCheckpoint, sameNrlCareer, saveNrlCheckpoint, writeNrlSaveSlot,
 } from '@/lib/nrlSaveSlots';
@@ -21,6 +24,10 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
   const [slots, setSlots] = useState(readSlots);
   const [confirm, setConfirm] = useState<Confirmation | null>(null);
   const [notice, setNotice] = useState('');
+  const [reading, setReading] = useState(false);
+  const [review, setReview] = useState<{ target: NrlImportTarget; file: NrlCareerFile } | null>(null);
+  const picker = useRef<HTMLInputElement>(null);
+  const pendingTarget = useRef<NrlImportTarget | null>(null);
 
   useEffect(() => {
     const refresh = () => setSlots(readSlots());
@@ -56,10 +63,7 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
       return;
     }
     try {
-      const file = new Blob([JSON.stringify({ format: 'douknowball-nrl-team-manager', version: 1, save: raw })], {
-        type: 'application/json',
-      });
-      const url = URL.createObjectURL(file);
+      const url = URL.createObjectURL(nrlCareerDownload(raw));
       const link = document.createElement('a');
       link.href = url;
       link.download = `nrl-team-manager-slot-${number}.json`;
@@ -72,6 +76,47 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
     } catch {
       setNotice('Could not download this save. Try again.');
     }
+  }
+
+  function chooseImport(saveKey: string) {
+    const storage = browserStorage();
+    const target = storage && captureNrlImportTarget(storage, saveKey);
+    if (!target) {
+      setNotice('This slot changed. Choose an empty slot to import.');
+      setSlots(readSlots());
+      return;
+    }
+    pendingTarget.current = target;
+    setNotice('');
+    picker.current?.click();
+  }
+
+  async function loadImport(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.currentTarget.files?.[0];
+    event.currentTarget.value = '';
+    const target = pendingTarget.current;
+    pendingTarget.current = null;
+    if (!file || !target) return;
+    setReading(true);
+    const checked = await readNrlCareerFile(file);
+    setReading(false);
+    if (checked) setReview({ target, file: checked });
+    else setNotice('Could not use this NRL career file.');
+  }
+
+  function confirmImport(number: number) {
+    const storage = browserStorage();
+    if (!review) return;
+    const outcome = storage ? importNrlCareerFile(storage, review.target, review.file) : 'failed';
+    if (outcome === 'failed') {
+      setNotice('The browser could not save this career. Try again.');
+      return;
+    }
+    setReview(null);
+    setNotice(outcome === 'moved' ? 'This slot changed. Choose an empty slot to import.'
+      : outcome === 'unverified' ? 'Could not verify the import. Check the slot before trying again.'
+      : 'Career imported into slot ' + number + '.');
+    setSlots(readSlots());
   }
 
   function confirmAction() {
@@ -102,6 +147,7 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
         </div>
         <Button type="button" size="lg" variant="ghost" className="px-3" onClick={onBack}>Back</Button>
       </div>
+      <input ref={picker} type="file" accept=".json,application/json" hidden aria-label="NRL career file" onChange={loadImport} />
       {notice && <p role="status" className="rounded-xl border border-border bg-card p-3 text-sm">{notice}</p>}
       <ul className="grid gap-3 sm:grid-cols-3">
         {slots.map(({ raw, career, available, checkpoint }, index) => {
@@ -115,6 +161,7 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
           const ownCheckpoint = career && checkpoint.career && sameNrlCareer(career, checkpoint.career);
           const checkpointRaw = checkpoint.raw;
           const pending = confirm?.index === index ? confirm : null;
+          const incoming = review?.target.key === entry.saveKey ? review.file.career : null;
           return (
             <li key={entry.saveKey} className="flex min-w-0 flex-col rounded-xl border border-border bg-card p-3">
               <h3 className="text-sm font-semibold">Slot {number}</h3>
@@ -125,6 +172,7 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
               {career && <p className="text-sm text-muted-foreground">
                 Started in {career.openingYear} · {career.season.year + Number(career.satOutSeason === true)} season{career.retired ? ' · Retired' : career.outOfWork ? ' · Out of work' : season.live ? ' · Match at half time' : season.phase === 'complete' ? ' · Season complete' : ''}
                 {career.openingRoster && ' · Opening matchday names'}
+                {career.importedFromFile && ' · Local play'}
               </p>}
               {savedSeason && <p className="mt-2 break-words text-sm text-muted-foreground">
                 Checkpoint · {savedClub} · {savedSeason.year} · Round {savedSeason.round}
@@ -133,7 +181,18 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
               {checkpoint.raw !== null && !savedSeason && <p className="mt-2 text-sm text-muted-foreground">Unreadable checkpoint</p>}
               {savedSeason && !ownCheckpoint && <p className="text-sm text-muted-foreground">Checkpoint belongs to another career.</p>}
               <div className="mt-auto pt-3">
-                {pending ? (
+                {incoming ? (
+                  <>
+                    <h4 className="text-sm font-bold">Import career into slot {number}</h4>
+                    <p className="mb-2 text-sm text-muted-foreground">
+                      {nrlClubName(incoming.season.year, incoming.season.clubId, incoming.customClub, 'full')} · {incoming.season.year} season. Imported careers are for local play.
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      <Button type="button" size="lg" variant="outline" className="px-3" onClick={() => { setReview(null); setNotice(''); }}>Cancel</Button>
+                      <Button type="button" size="lg" className="px-3" onClick={() => confirmImport(number)}>Import career</Button>
+                    </div>
+                  </>
+                ) : pending ? (
                   <>
                     <p className="mb-2 text-sm">
                       {pending.kind === 'delete' ? (pending.club ? 'Delete ' + pending.club + ' from this slot?' : 'Delete the unreadable career from this slot?')
@@ -158,8 +217,10 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
                       onClick={() => downloadSlot(entry.saveKey, number)}>Download slot {number}</Button>}
                     {raw === null && <Button type="button" size="lg" className="px-3" variant="outline" disabled={!available}
                       onClick={() => onOpen(entry.path)}>New career in slot {number}</Button>}
+                    {raw === null && available && checkpointRaw === null && checkpoint.available && <Button type="button" size="lg" className="px-3" variant="outline"
+                      disabled={reading || review !== null || confirm !== null} onClick={() => chooseImport(entry.saveKey)}>Import into slot {number}</Button>}
                     {career && raw !== null && <Button type="button" size="lg" className="px-3" variant="outline"
-                      disabled={confirm !== null || !checkpoint.available || checkpointRaw === raw} onClick={() => {
+                      disabled={confirm !== null || review !== null || reading || !checkpoint.available || checkpointRaw === raw} onClick={() => {
                         if (checkpointRaw !== null) ask({ kind: 'replace', index, raw, checkpoint: checkpointRaw });
                         else {
                           saveFence.adopt(entry.saveKey);
@@ -168,9 +229,9 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
                         }
                       }}>{checkpointRaw === null ? 'Save checkpoint' : 'Replace checkpoint'}</Button>}
                     {ownCheckpoint && raw !== null && checkpointRaw !== null && checkpointRaw !== raw && <Button type="button" size="lg" className="px-3"
-                      variant="outline" disabled={confirm !== null}
+                      variant="outline" disabled={confirm !== null || review !== null || reading}
                       onClick={() => ask({ kind: 'restore', index, raw, checkpoint: checkpointRaw })}>Restore checkpoint</Button>}
-                    {raw !== null && <Button type="button" size="lg" className="px-3" variant="ghost" disabled={confirm !== null}
+                    {raw !== null && <Button type="button" size="lg" className="px-3" variant="ghost" disabled={confirm !== null || review !== null || reading}
                       onClick={() => ask({ kind: 'delete', index, raw, club })}>Delete slot {number}</Button>}
                   </div>
                 )}
