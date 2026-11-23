@@ -1,3 +1,11 @@
+## 2026-11-23, Club Manager 2005-06 Rosenborg scorer coverage
+
+Eleven players from Rosenborg’s verified opening squad now supply names and broad roles for newly played background cup matches in 2005-06. The existing scoring model uses the game’s club strength for those roles. The squad sources establish membership by the July 31 match and exclude the later return of Steffen Iversen. [Rosenborg roster sources](audits/club-manager-rosenborg-2005-roster.md)
+
+The historical Real Madrid replay credits all 17 Rosenborg goals alongside the 19 previously named Ajax goals. The same routine keeps saved credits and only adds credits for matches that still have to settle. The underlying matches remain reconciled to 335 total goals.
+
+CM-03 remains partial. This covers two of the 15 previously missing outside-league squads in that replay. Ajax’s update in PR #1061 is live, with six published browser checks passed on old and fresh saves.
+
 ## 2026-11-23, Club Manager 2005-06 Ajax scorer coverage
 
 Twelve verified Ajax players from the August 2005 opening can now receive goals in newly played background cup matches in that era. The simulation uses their verified position groups and the game’s existing club strength for goal allocation. The source record contains the names and roles. It adds no player values, real match statistics or winter arrivals. [Ajax source audit](audits/club-manager-ajax-2005-roster.md)

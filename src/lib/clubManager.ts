@@ -78,7 +78,7 @@ import {
   cupScorerRace, isCupScorerLedger, newCupScorerLedger, recordCupScorerRound,
   type CupScorerCredit, type CupScorerLedger, type CupScorerRace, type CupScorerWinner,
 } from '@/lib/clubManagerCupScorers';
-import { AJAX_2005_CUP_ROSTER } from '@/data/clubManagerHistoricCupRosters';
+import { HISTORIC_2005_CUP_ROSTERS } from '@/data/clubManagerHistoricCupRosters';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -15661,10 +15661,12 @@ function cupFixtureScorerCredits(
       }
       // Verified roles fill the background scorer book for the opening snapshot.
       // The existing club strength weights each place, with set pieces shared by role.
-      const verified = !own && !roster.length && club === 'Ajax' && state.eraId === 'era2005' && worldYear(state) === 2005;
+      const verified = !own && !roster.length && state.eraId === 'era2005' && worldYear(state) === 2005
+        ? HISTORIC_2005_CUP_ROSTERS.get(club)
+        : undefined;
       const strength = verified ? strengthOf(state, club) : 0;
       const eleven = verified
-        ? partialEleven(AJAX_2005_CUP_ROSTER.map(({ name, line }) => ({ n: name, p: CUP_LINE_POSITION[line], r: strength })),
+        ? partialEleven(verified.map(({ name, line }) => ({ n: name, p: CUP_LINE_POSITION[line], r: strength })),
           strength, groupOf)?.outfield ?? []
         : pickOppSquad(roster)?.xi ?? thinBookEleven(state, club, roster)?.outfield ?? [];
       const key = `${roundKey}|${home}|${away}|${club}`;
