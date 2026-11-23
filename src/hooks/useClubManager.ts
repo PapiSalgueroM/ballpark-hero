@@ -72,7 +72,7 @@ export function phaseFor(c: CareerState): CMPhase {
 }
 export type HubTab = 'overview' | 'squad' | 'tactics' | 'table' | 'transfers';
 
-const CAREER_RULES = { championshipPlayoffs: true, bundesligaPlayoff: true, frenchPlayoffs: true, inSeasonRatings: true, worldRatingTiming: true } as const;
+const CAREER_RULES = { championshipPlayoffs: true, bundesligaPlayoff: true, frenchPlayoffs: true, inSeasonRatings: true, worldRatingTiming: true, opening2026Loans: true } as const;
 
 function beginClubManagerSeason(state: CareerState): CareerState {
   return beginLeagueCoachSeason({ ...state, worldRatingSeason: state.season });
