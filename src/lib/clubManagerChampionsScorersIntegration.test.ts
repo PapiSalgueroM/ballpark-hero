@@ -8,7 +8,7 @@ import { joinClubNow } from './clubManagerCalendar';
 import { ensureEraRosters } from './clubManagerEras';
 import { UCL_GROUP_LEDGER } from './clubManagerUclGroups';
 import { serializeParkedCareer } from './clubManagerParkedSave';
-import { AJAX_2005_CUP_ROSTER } from '@/data/clubManagerHistoricCupRosters';
+import { HISTORIC_2005_CUP_ROSTERS } from '@/data/clubManagerHistoricCupRosters';
 
 const BRUGGE = 115366;
 const MADRID = 116137;
@@ -317,7 +317,7 @@ describe('Owned Champions League scorer settlement', () => {
     expect(tape(MADRID + 0xa01, () => finishSeason(old!)).value.summary.uclScorerAward).toBeUndefined();
   });
 
-  it('credits settled 2005 Ajax goals without changing the score, earlier credits or managed fixtures', async () => {
+  it('credits verified Ajax and Rosenborg goals in the 2005 opening campaign', async () => {
     await ensureEraRosters('era2005');
     const madrid = tape(MADRID, () => startCareer('Real Madrid', 'era2005')).value;
     const before = playTo(madrid, MADRID, 55).state;
@@ -331,16 +331,22 @@ describe('Owned Champions League scorer settlement', () => {
       home: 'Arsenal', away: 'Ajax', homeGoals: 4, awayGoals: 2, winner: 'Arsenal', mine: false,
     });
     expectReconciled(final.state, 125, 335);
-    const ajaxGoals = (state: CareerState) => state.uclScorers!.players
-      .filter(row => row[2] === 'Ajax').reduce((sum, row) => sum + row[3], 0);
-    expect(ajaxGoals(final.state) - ajaxGoals(before)).toBe(2);
-    expect(ajaxGoals(final.state)).toBe(19);
-    const eligible = new Set(AJAX_2005_CUP_ROSTER.filter(player => player.line !== 'GK').map(player => player.name));
-    expect(eligible.has('Klaas-Jan Huntelaar')).toBe(false);
-    for (const [, name, club, , generated] of final.state.uclScorers!.players) {
-      if (club !== 'Ajax') continue;
-      expect(eligible.has(name)).toBe(true);
-      expect(generated).toBeUndefined();
+    const goalsForClub = (state: CareerState, club: string) => state.uclScorers!.players
+      .filter(row => row[2] === club).reduce((sum, row) => sum + row[3], 0);
+    expect(goalsForClub(final.state, 'Ajax') - goalsForClub(before, 'Ajax')).toBe(2);
+    for (const [club, count, winterSigning] of [
+      ['Ajax', 19, 'Klaas-Jan Huntelaar'],
+      ['Rosenborg', 17, 'Steffen Iversen'],
+    ] as const) {
+      expect(goalsForClub(final.state, club)).toBe(count);
+      const roster = HISTORIC_2005_CUP_ROSTERS.get(club)!;
+      expect(roster.some(player => player.name === winterSigning)).toBe(false);
+      const eligible = new Set(roster.filter(player => player.line !== 'GK').map(player => player.name));
+      for (const [, name, recordedClub, , generated] of final.state.uclScorers!.players) {
+        if (recordedClub !== club) continue;
+        expect(eligible.has(name)).toBe(true);
+        expect(generated).toBeUndefined();
+      }
     }
     expect(final.state.uclScorers?.unresolved).toBe(before.uclScorers?.unresolved);
     expect(JSON.stringify(reopened!.uclScorers)).toBe(snapshot);
