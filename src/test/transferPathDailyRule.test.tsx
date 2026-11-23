@@ -19,10 +19,12 @@ const players = [
 const special = { minSteps: 3, hint: 'Use Arsenal first, then Chelsea and Real Madrid.' };
 const puzzle: TransferPathPuzzle = { id: 'tp-daily-rule', playerA: 'Fixture Start', playerB: 'Fixture Target',
   minSteps: 2, hint: 'Two steps with Santos and Real Madrid.', europe: special, active: special };
-const io = vi.hoisted(() => ({ blocked: false }));
+const io = vi.hoisted(() => ({ blocked: false, staleActive: false, unavailablePlayers: false }));
+const staleActive = { minSteps: 5, hint: 'Stored Active route before the career correction.' };
 
-vi.mock('@/lib/fetchCareerPlayers', () => ({ fetchCareerPlayers: async () => players }));
+vi.mock('@/lib/fetchCareerPlayers', () => ({ fetchCareerPlayers: async () => io.unavailablePlayers ? [] : players }));
 vi.mock('@/lib/fetchTransferPathPuzzles', () => ({ fetchTransferPathPuzzles: async () => {
+  if (io.staleActive) return [{ ...puzzle, active: staleActive }];
   if (!io.blocked) return [puzzle];
   const blocked: TransferPathPuzzle = { ...puzzle, europe: null };
   const other: TransferPathPuzzle = { ...puzzle, id: 'tp-another-puzzle' };
@@ -51,11 +53,41 @@ async function mount() {
 
 beforeEach(() => {
   io.blocked = false;
+  io.staleActive = false;
+  io.unavailablePlayers = false;
   localStorage.clear();
   vi.clearAllMocks();
 });
 
 describe('Transfer Path saved Daily rule', () => {
+  it('derives the opening Active minimum and hint from a complete graph without changing the Daily score', async () => {
+    io.staleActive = true;
+    const game = await mount();
+    act(() => game.result.current.setRule('active'));
+    expect(game.result.current).toMatchObject({
+      optimal: 3,
+      hint: 'Two middle men at least. The first was at Arsenal with Fixture Start; the last was at Real Madrid with Fixture Target.',
+    });
+    act(() => expect(game.result.current.addPlayer('Fixture Bridge').ok).toBe(true));
+    act(() => expect(game.result.current.addPlayer('Fixture Closer').ok).toBe(true));
+    expect(game.result.current).toMatchObject({ status: 'won', score: 900 });
+    expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/transfer-path', 900, 'tester', 1);
+    const finished = read();
+    game.unmount();
+    const replay = await mount();
+    expect(replay.result.current).toMatchObject({ status: 'won', score: 900, rule: 'active' });
+    expect(read()).toBe(finished);
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not derive a replacement Active hint when the career feed is unavailable', async () => {
+    io.staleActive = true;
+    io.unavailablePlayers = true;
+    const game = await mount();
+    act(() => game.result.current.setRule('active'));
+    expect(game.result.current).toMatchObject({ optimal: staleActive.minSteps, hint: staleActive.hint });
+  });
+
   it.each([['europe', 'outside-europe'], ['active', 'unverified-active']] as const)(
     'restores %s after a step, rejects an otherwise valid link and scores the same Daily', async (rule, refusal) => {
       const first = await mount();

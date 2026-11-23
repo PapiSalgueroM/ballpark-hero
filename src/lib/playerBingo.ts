@@ -4,6 +4,7 @@ import { clubKey, isSameMan, normalizeName, positionGroup, primaryNationality } 
 import type { PositionGroup } from '@/lib/whoAmI';
 import { applyClubAdditions, careerClubs, type CareerClubRules, type ClubAddition } from '@/lib/clubCareerAdditions';
 import clubAdditions from '@/data/bingoClubAdditions.json';
+import { BINGO_REPORTED_CLUB_SPELLS } from '@/data/bingoReportedClubSpells';
 
 /* Round 668: isSameMan moved out of this file so Who Am I's club history (and,
    since the re-review, the search's namesake line) shares the one rule. It
@@ -613,6 +614,7 @@ export async function fetchBingoData(signal?: AbortSignal): Promise<BingoData | 
     // Midfield hole), from the two source record scripts/data/bingoClubAdditions-2026-10.json.
     // Union only, guarded by name, nationality, role and birth year; clubYears is never touched.
     applyClubAdditions(clubHistory, pool, clubAdditions.add as ClubAddition[], { norm: normalizeName, nat: primaryNationality, role: positionGroup, club: clubKey });
+    applyClubAdditions(clubHistory, pool, BINGO_REPORTED_CLUB_SPELLS, { norm: normalizeName, nat: primaryNationality, role: positionGroup, club: clubKey });
     // Round 1571: count clubs the way the "?" states the rule. A mid season "Club A / Club B" row is
     // both clubs, two spellings of one club are one, and youth, reserve and B sides are no club at all.
     for (const [name, set] of clubHistory) clubHistory.set(name, careerClubs(set, clubAdditions.rules as CareerClubRules, clubKey));

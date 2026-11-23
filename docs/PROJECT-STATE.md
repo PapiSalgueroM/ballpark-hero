@@ -6,6 +6,26 @@ Old Korean, Japanese and Chinese jobs retain the appropriate generated market af
 
 The paired 15-season England save budget reproduced the published baseline exactly. Everton and Lincoln City exceeded the 234,000-character test budget in both builds, and both saves still wrote successfully. That older capacity issue remains open. This slice changes no limit or historical record to satisfy that check.
 
+## 2026-11-23, Career Ladder completed seasons
+
+Career Ladder fills the missing 2025/26 Liverpool and Barcelona seasons for Alexander Isak and Marcus Rashford. It repairs the exact partial Newcastle, Liverpool and Barcelona count rows from the original seed when they are present. Isak has 42 appearances, 27 goals and six assists for Newcastle in 2024/25, then 22 appearances, four goals and one assist for Liverpool. Newcastle confirmed the September 2025 transfer. [Newcastle](https://www.newcastleunited.com/en/news/newcastle-united-sell-alexander-isak), [Opta](https://theanalyst.com/players/4199/alexander-isak/career), [Newcastle season record](https://www.playmakerstats.com/player/alexander-isak/509348?epoca_id=154), [Liverpool season record](https://www.playmakerstats.com/player/alexander-isak/509348?epoca_id=155).
+
+Barcelona and Manchester United confirmed Rashford's loan. His Barcelona season has 49 appearances and 14 goals. The sources credit 11 or 12 assists, so the fallback leaves the assist field unavailable. The missing seasons use the existing unavailable market-value field. Refreshed records from the feed keep their supplied values. [Barcelona](https://www.fcbarcelona.com/en/news/4319297/agreement-between-fc-barcelona-and-manchester-united-for-the-loan-of-marcus-rashford), [Manchester United](https://www.manutd.com/en/news/manchester-united-transfer-ins-and-outs-summer-window-2025), [Opta](https://theanalyst.com/players/4159/marcus-rashford/career), [FootballAN](https://footballan.com/player/m-rashford/?season=2025-2026).
+
+Rashford's 2024/25 Manchester United stint has 24 appearances, seven goals and three assists. His Aston Villa loan has 17 appearances and four goals. Published Villa assist totals differ, so the correction leaves them unavailable. Career Quiz and Transfer Path use the same corrections as Career Ladder. The shared Soccer Grid search continues to use the same player identities. [Manchester United loan announcement](https://www.manutd.com/en/news/loan-news-marcus-rashford-joins-aston-villa-from-man-utd), [Aston Villa](https://next.avfc.co.uk/news/2026/november/02/prematch-barcelona-connections/), [PlaymakerStats](https://www.playmakerstats.com/player/marcus-rashford/434080?epoca_id=154), [Statbunker](https://statbunker.com/players/GetHistoryStats?comps_type=-1&dates=2024&player_id=52719), [Aston Villa loan account](https://www.fourfourtwo.com/news/manchester-united-star-marcus-rashford-given-green-light-for-barcelona-move-report).
+
+Transfer Path Active uses the fetched graph for its opening hint and minimum when the stored and calculated lengths differ. The 885-puzzle archive replay found four shorter Active paths once Isak's Liverpool stint entered the graph. Daily settlement continues to use the Classic minimum. The route test reloads a completed Active game and compares its saved bytes and score.
+
+## 2026-11-23, Player Bingo verified club appearances
+
+Player Bingo credits Kevin De Bruyne and Andrey Santos for Chelsea and Mykhaylo Mudryk for Tottenham. The three senior appearances are bound to the market player's name, nationality, role and birth year. The corrections feed career club squares. Season-specific squares still read the original dated rows.
+
+- Kevin De Bruyne played for Chelsea's first team in 2013/14. [Chelsea's Belgian players](https://www.chelseafc.com/en/news/article/every-belgian-blue) and [UEFA match statistics](https://www.uefa.com/newsfiles/UCL/2014/2011808_SPS.pdf).
+- Andrey Santos played for Chelsea at the 2025 Club World Cup. [Chelsea's transfer statement](https://www.chelseafc.com/en/news/article/andrey-santos-moves-to-manchester-united) and [FIFA match report](https://fdp.fifa.org/assetspublic/ce233/r10591/pdf/FullTimeMatchReport-English.pdf).
+- Mykhaylo Mudryk made his Tottenham debut on 5 September 2026 against Nottingham Forest. [Tottenham match report](https://www.tottenhamhotspur.com/news/1088632/stalemate-at-the-city-ground) and [Opta appearance record](https://theanalyst.com/players/3923/mykhailo-mudryk/career).
+
+All three criteria failed before the correction, and the 114 focused tests passed afterward. The frozen October comparison reports the same four inherited findings for Cole Palmer's already-verified red card on both main 1c85db5 and the Bingo candidate.
+
 ## 2026-11-23, Club Manager improved transfer bids
 
 An improved bid stays on the table after a match while the transfer window is open. You can accept the final price under the usual squad and deadline rules.
