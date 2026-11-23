@@ -12769,7 +12769,8 @@ export function recallLoanedPlayer(career: CareerState, playerId: string): Caree
    calling it through the window lifecycle only. */
 export function generateIncomingBids(state: CareerState, topUp = false): void {
   const surviving = topUp
-    ? (state.incomingBids ?? []).filter(b => b.status === 'open' && state.squad.some(p => p.id === b.playerId))
+    ? (state.incomingBids ?? []).filter(b => (b.status === 'open' || b.status === 'improved')
+      && state.squad.some(p => p.id === b.playerId))
     : [];
   const bids: IncomingBid[] = [...surviving];
   const buyerClubs = buyerPool(state);

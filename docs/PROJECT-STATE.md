@@ -6,6 +6,12 @@ Old Korean, Japanese and Chinese jobs retain the appropriate generated market af
 
 The paired 15-season England save budget reproduced the published baseline exactly. Everton and Lincoln City exceeded the 234,000-character test budget in both builds, and both saves still wrote successfully. That older capacity issue remains open. This slice changes no limit or historical record to satisfy that check.
 
+## 2026-11-23, Club Manager improved transfer bids
+
+An improved bid stays on the table after a match while the transfer window is open. You can accept the final price under the usual squad and deadline rules.
+
+The new regression failed on 4f2468b. Against World XI main cb31d84, all 78 focused tests, application types, the production build and all 15 built-site checks passed. Chromium at 320 and 390 pixels kept the same £53m offer for Eberechi Eze after a match, credited the full fee on acceptance and kept the sale after reload.
+
 ## 2026-11-23, World XI roster dates and Kimmich's position
 
 World XI keeps verified namesakes distinct, restores two eligible cards missed by the snapshot matching rules and removes four exact stale records. Rafinha's 2024/25 Brazil card uses Without Club. A shared Without Club or Retired label earns no club chemistry. The Argentina archive still accepts Marcos Acuña only in eligible roles.
