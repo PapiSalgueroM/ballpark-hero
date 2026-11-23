@@ -8,7 +8,12 @@ const PAIR_PACK_THRESHOLD = 234_000;
 
 /** null leaves the ordinary full/lean write in charge. Once a slot uses
  *  compact bytes it keeps that format through the next season's empty ledger. */
-export function writeActivePairSave(career: CareerState, plain: string): boolean | null {
+export interface ClubManagerSaveReceipt {
+  ownsClaim(): boolean;
+  acknowledge(raw: string): void;
+}
+
+export function writeActivePairSave(career: CareerState, plain: string, receipt?: ClubManagerSaveReceipt): boolean | null {
   const oversized = plain.length > PAIR_PACK_THRESHOLD;
   let initial: string | null;
   let current: unknown;
@@ -52,13 +57,16 @@ export function writeActivePairSave(career: CareerState, plain: string): boolean
     const wrote = saveFence.write(SAVE_KEY, function saveCareer() {
       try {
         if (!unchanged() || (kept !== null && storage.getItem(kept) !== initial)) return false;
+        if (receipt && !receipt.ownsClaim()) return false;
         storage.setItem(SAVE_KEY, packed);
         return true;
       } catch {
         return false;
       }
     }, typeof window !== 'undefined');
-    return wrote === 'written' && storage.getItem(SAVE_KEY) === packed;
+    if (wrote !== 'written' || storage.getItem(SAVE_KEY) !== packed) return false;
+    receipt?.acknowledge(packed);
+    return true;
   } catch {
     return false;
   }

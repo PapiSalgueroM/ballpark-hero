@@ -89,7 +89,7 @@ import { CM_AGE_CURVE, ageRead } from '@/lib/cmAgeRead';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 import { SAVE_KEY } from '@/lib/clubManagerSaveKeys';
 import { isPackedParkedCareer, restoreParkedCareer } from '@/lib/clubManagerParkedSave';
-import { writeActivePairSave } from '@/lib/clubManagerActiveSave';
+import { writeActivePairSave, type ClubManagerSaveReceipt } from '@/lib/clubManagerActiveSave';
 // Round 1035: the modern squads are the baked file joined with the A-League
 // Men's generated one, in one place both engine files read.
 import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL, cmWorldReadsAge, cmWorldTag } from '@/data/clubManagerWorldRosters';
@@ -3148,6 +3148,7 @@ export interface CareerState {
   saveVersion: number;
   /** A career opened from a portable file keeps playing without posting scores. */
   importedFromFile?: true;
+  restoredFromCheckpoint?: true;
   clubName: string;
   season: number;
   inSeasonRatings?: true;
@@ -25373,26 +25374,37 @@ export function leanCareer(state: CareerState): CareerState {
  * answering false, and scripts/simStorageWrites.mjs follows it by that name
  * to every caller that keeps the answer.
  */
-export function saveCareer(career: CareerState): boolean {
+export function saveCareer(career: CareerState, receipt?: ClubManagerSaveReceipt): boolean {
   const full = trimCareer(career);
   let plain: string;
   try { plain = JSON.stringify(full); } catch { return false; }
-  const packed = writeActivePairSave(full, plain);
+  const packed = writeActivePairSave(full, plain, receipt);
   if (packed !== null) return packed;
-  return saveFence.write(SAVE_KEY, function saveCareer() {
+  let writtenRaw = plain;
+  const saved = saveFence.write(SAVE_KEY, function saveCareer() {
+    if (receipt && !receipt.ownsClaim()) return false;
     try {
       localStorage.setItem(SAVE_KEY, plain);
       return true;
     } catch {
       /* quota, or a blocked store: once more, lean */
     }
+    if (receipt && !receipt.ownsClaim()) return false;
     try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify(leanCareer(full)));
+      const lean = JSON.stringify(leanCareer(full));
+      localStorage.setItem(SAVE_KEY, lean);
+      writtenRaw = lean;
       return true;
     } catch {
       return false;
     }
-  }) === 'written';
+  }, !!receipt) === 'written';
+  if (!saved || !receipt) return saved;
+  try {
+    if (localStorage.getItem(SAVE_KEY) !== writtenRaw) return false;
+    receipt.acknowledge(writtenRaw);
+    return true;
+  } catch { return false; }
 }
 import { saveFence } from '@/lib/saveFence';
 

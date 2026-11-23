@@ -21,6 +21,7 @@ export const POINT_NAME_MAX = 24;
 export const pointsIndexKey = (slot: number): string => `dukb-cm-points-${slot}`;
 export const pointKeyPrefix = (slot: number): string => `dukb-cm-point-${slot}-`;
 export const pointKey = (slot: number, id: string): string => `${pointKeyPrefix(slot)}${id}`;
+export const clubManagerCheckpointKey = (slot: number): string => `dukb-cm-checkpoint:${slot}`;
 
 export interface PointMeta {
   id: string;
@@ -101,15 +102,16 @@ export function noteSeasonCredited(slot: number, season: number, storage: Listab
 export function clearSlotPoints(slot: number, storage: ListableStorage | null = browserStorage()): void {
   if (!storage) return;
   const prefix = pointKeyPrefix(slot);
+  const automatic = clubManagerCheckpointKey(slot);
   const keys: string[] = [];
   try {
     for (let i = 0; i < storage.length; i += 1) {
       const k = storage.key(i);
-      if (k && (k.startsWith(prefix) || k === pointsIndexKey(slot))) keys.push(k);
+      if (k && (k.startsWith(prefix) || k === pointsIndexKey(slot) || k === automatic)) keys.push(k);
     }
   } catch {
     /* A store that will not list: the index still goes, so nothing is offered. */
-    keys.push(pointsIndexKey(slot));
+    keys.push(pointsIndexKey(slot), automatic);
   }
   for (const k of keys) {
     try { storage.removeItem(k); } catch { /* a removal is not refused for space */ }
