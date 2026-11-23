@@ -60,7 +60,7 @@ it('submits the two Nico club choices separately and leaves a wrong square open'
   });
   vi.stubGlobal('fetch', validate);
   render(<FootballConnect4 />);
-  fireEvent.click(screen.getByRole('button', { name: 'Spanish', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'Spanish' }));
   enter('Nicolás González');
   const spanish = await screen.findByRole('option', { name: /Nicolás González Iglesias/i });
   expect(screen.getByRole('option', { name: /Nicolás Iván González/i })).toBeTruthy();
@@ -72,13 +72,13 @@ it('submits the two Nico club choices separately and leaves a wrong square open'
   });
   expect(screen.getByRole('button', { name: 'Empty square, Played for Atletico Madrid and Spanish' })).toBeTruthy();
 
-  fireEvent.click(screen.getByRole('button', { name: 'Argentine', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'Argentine' }));
   enter('Nico González');
   fireEvent.click(await screen.findByRole('option', { name: /Nicolás Iván González/i }));
   await screen.findByRole('button', { name: 'Nicolás Iván González, Played for Atletico Madrid and Argentine' });
   expect(JSON.parse(validate.mock.calls[1][1].body).playerName).toBe('Nicolás Iván González');
 
-  fireEvent.click(screen.getByRole('button', { name: 'Spanish', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'Spanish' }));
   enter('Nico González');
   await screen.findByRole('option', { name: /Nicolás González Iglesias/i });
   expect(screen.queryByRole('option', { name: /Nicolás Iván González/i })).toBeNull();
@@ -86,7 +86,7 @@ it('submits the two Nico club choices separately and leaves a wrong square open'
 
 it('displays distinct Vitinhas and keeps ordinary remote results selectable', async () => {
   render(<FootballConnect4 />);
-  fireEvent.click(screen.getByRole('button', { name: 'Portuguese', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'Portuguese' }));
   enter('Vitinha');
   await screen.findByRole('option', { name: /Vítor Machado Ferreira.*Paris Saint-Germain/i });
   expect(screen.getByRole('option', { name: /Vítor Manuel Carvalho Oliveira.*Genoa CFC/i })).toBeTruthy();
@@ -101,7 +101,7 @@ it('keeps a legacy ambiguous move and avoids offering it again on the same board
   archived.oldMoves = [{ t: 'move', col: 4, row: 5, team: 'blue', playerName: 'Vitinha' }];
   render(<FootballConnect4 />);
   expect(screen.getByRole('button', { name: 'Vitinha, Played for Atletico Madrid and Portuguese' })).toBeTruthy();
-  fireEvent.click(screen.getByRole('button', { name: 'Portuguese', exact: true }));
+  fireEvent.click(screen.getByRole('button', { name: 'Portuguese' }));
   enter('Vitinha');
   await waitFor(() => expect(screen.getByText('No players found')).toBeTruthy());
   expect(screen.queryByRole('option')).toBeNull();
