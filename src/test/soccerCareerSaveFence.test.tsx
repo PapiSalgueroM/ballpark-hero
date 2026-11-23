@@ -54,8 +54,11 @@ vi.mock('@/components/ui/select', () => ({
 import * as E from '@/lib/soccerCareerEngine';
 import { toast } from 'sonner';
 import SoccerCareer from '@/pages/SoccerCareer';
+import SoccerCareerEntry from '@/pages/SoccerCareerEntry';
+import { parseSoccerCareerSave, serializeSoccerCareerSave } from '@/lib/soccerCareerSave';
 
 const KEY = 'soccerCareerSave', FENCE = 'dukb-fence:soccerCareerSave';
+const SECOND_KEY = 'soccerCareerSave-slot-2';
 const copy = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const read = (): E.CareerState => JSON.parse(localStorage.getItem(KEY)!);
 const nativeCareer = () => E.initCareer('Fence Tester', 'England', 'CM', '2020-24', { pace: 70, shooting: 70, passing: 70, dribbling: 70, defending: 70, physical: 70, reflexes: 70 }, 70, 2020, E.FALLBACK_CLUBS, null, 88);
@@ -67,6 +70,9 @@ class Boundary extends Component<{ children: ReactNode }, { failed: boolean }> {
 function mount(raw: string | null) {
   if (raw !== null) localStorage.setItem(KEY, raw);
   return render(<HelmetProvider><MemoryRouter><Boundary><SoccerCareer /></Boundary></MemoryRouter></HelmetProvider>);
+}
+function openSlot(path: string) {
+  return render(<HelmetProvider><MemoryRouter initialEntries={[path]}><Boundary><SoccerCareerEntry /></Boundary></MemoryRouter></HelmetProvider>);
 }
 /* Another tab plays two seasons on and writes through its own fence. Two, so
    its bytes can never equal what this page would write with one press. */
@@ -88,9 +94,9 @@ function pressNext(view: ReturnType<typeof render>) {
   expect(button).toBeInstanceOf(HTMLButtonElement);
   act(() => { fireEvent.click(button!); });
 }
-async function noticeShows() {
+async function noticeShows(message = 'This career moved on in another tab. Reload to carry on.') {
   const shown = await screen.findByTestId('save-moved-notice');
-  expect(shown).toHaveTextContent('This career moved on in another tab. Reload to carry on.');
+  expect(shown).toHaveTextContent(message);
 }
 
 beforeEach(() => {
@@ -103,6 +109,77 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('Soccer Career save fence', () => {
+  it('starts and progresses a second career while preserving the legacy slot bytes', async () => {
+    const legacy = { ...nativeCareer(), oldStoryNotes: 'One more old story. '.repeat(3500) };
+    legacy.playerName = 'Long Career';
+    legacy.seasons = Array.from({ length: 10 }, (_, index) => ({ ...legacy.seasons[0], year: 2020 + index }));
+    const legacyRaw = serializeSoccerCareerSave(legacy);
+    expect(legacyRaw).toContain('lz-string-utf16-career');
+    localStorage.setItem(KEY, legacyRaw);
+    const view = openSlot('/soccer-career?slot=2');
+
+    await view.findByText('Create Your Player');
+    fireEvent.change(view.getByPlaceholderText('Enter your player name...'), { target: { value: 'Second Career' } });
+    const selects = view.container.querySelectorAll('select');
+    for (const [index, value] of ['England', 'ST', '2020-24'].entries()) fireEvent.change(selects[index], { target: { value } });
+    fireEvent.click(view.getByRole('button', { name: /Generate Starting Potential/ }));
+    await view.findByRole('heading', { name: 'Starting Stats' }, { timeout: 4000 });
+    fireEvent.click(view.getByRole('button', { name: /Begin Career/ }));
+    const second = () => parseSoccerCareerSave(localStorage.getItem(SECOND_KEY)!) as E.CareerState;
+    expect(second()).toMatchObject({ playerName: 'Second Career', age: 16 });
+    pressNext(view);
+    expect(second()).toMatchObject({ playerName: 'Second Career', age: 17 });
+    expect(localStorage.getItem(KEY)).toBe(legacyRaw);
+    expect(localStorage.getItem(FENCE)).toBeNull();
+
+    const secondRaw = localStorage.getItem(SECOND_KEY);
+    fireEvent.click(view.getByRole('button', { name: 'Career saves' }));
+    fireEvent.click(await view.findByRole('link', { name: 'Resume slot 1' }));
+    await view.findByText('Long Career', { exact: true });
+    expect(parseSoccerCareerSave(localStorage.getItem(KEY)!)).toMatchObject({ seasons: legacy.seasons, oldStoryNotes: legacy.oldStoryNotes });
+    expect(localStorage.getItem(SECOND_KEY)).toBe(secondRaw);
+  }, 15000);
+
+  it('refuses to overwrite a slot whose saved bytes changed without an event', async () => {
+    const career = nativeCareer();
+    localStorage.setItem(SECOND_KEY, serializeSoccerCareerSave(career));
+    const view = openSlot('/soccer-career?slot=2');
+    await view.findByRole('button', { name: 'Career saves' });
+    const newer = serializeSoccerCareerSave(E.advanceYouthYear(career, E.FALLBACK_CLUBS));
+    localStorage.setItem(SECOND_KEY, newer);
+    pressNext(view);
+    await noticeShows('This slot changed. Reload to open the saved career.');
+    expect(localStorage.getItem(SECOND_KEY)).toBe(newer);
+    expect(localStorage.getItem(KEY)).toBeNull();
+  });
+
+  it('keeps a career with an interrupted save open until its progress can be written', async () => {
+    const legacyRaw = serializeSoccerCareerSave(nativeCareer());
+    localStorage.setItem(KEY, legacyRaw);
+    localStorage.setItem(SECOND_KEY, serializeSoccerCareerSave({ ...nativeCareer(), playerName: 'Second Career' }));
+    const view = openSlot('/soccer-career?slot=2');
+    const saves = await view.findByRole('button', { name: 'Career saves' });
+    const previous = localStorage.getItem(SECOND_KEY);
+    const setItem = Storage.prototype.setItem;
+    let blocked = true;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key === SECOND_KEY && blocked) throw new DOMException('Storage full', 'QuotaExceededError');
+      setItem.call(this, key, value);
+    });
+    pressNext(view);
+    expect(failedBanner(view)).not.toBeNull();
+    fireEvent.click(saves);
+    expect(view.queryByRole('heading', { name: 'Career saves' })).toBeNull();
+    expect(localStorage.getItem(SECOND_KEY)).toBe(previous);
+    expect(localStorage.getItem(KEY)).toBe(legacyRaw);
+
+    blocked = false;
+    fireEvent.click(saves);
+    expect(await view.findByRole('link', { name: 'Resume slot 2' })).toHaveAttribute('href', '/soccer-career?slot=2');
+    expect(parseSoccerCareerSave(localStorage.getItem(SECOND_KEY)!)).toMatchObject({ playerName: 'Second Career', age: 17 });
+    expect(localStorage.getItem(KEY)).toBe(legacyRaw);
+  });
+
   it('an old save with no fence key opens, plays, and is fenced from its first write', () => {
     const view = mount(JSON.stringify(nativeCareer()));
     expect(view.queryByText('TEST: route crashed')).toBeNull();
@@ -196,15 +273,16 @@ describe('Soccer Career save fence', () => {
     expect(notice()).toBeNull();
   });
 
-  it('a hand edit of the save moves no generation: no notice, and the next press writes', () => {
+  it('keeps a legacy slot replacement even when it has no new generation', async () => {
     const view = mount(JSON.stringify(nativeCareer()));
     const edited = { ...read(), netWorth: 12345 };
-    localStorage.setItem(KEY, JSON.stringify(edited));
+    const replacement = JSON.stringify(edited);
+    localStorage.setItem(KEY, replacement);
     storageEvent(KEY);
     storageEvent(null);
     expect(notice()).toBeNull();
     pressNext(view);
-    expect(read().age).toBe(17);
-    expect(notice()).toBeNull();
+    await noticeShows('This slot changed. Reload to open the saved career.');
+    expect(localStorage.getItem(KEY)).toBe(replacement);
   });
 });

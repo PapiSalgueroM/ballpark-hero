@@ -245,4 +245,11 @@ describe('Your careers on the profile', () => {
     await waitFor(() => expect(document.querySelector('[data-profile-careers-empty]')).toBeTruthy(), WAIT);
     expect(screen.getByText(/Careers live in the browser you play them in/)).toBeTruthy();
   });
+
+  it('links to the displayed Soccer Career when only an alternate slot is occupied', async () => {
+    localStorage.setItem('soccerCareerSave-slot-3', JSON.stringify({ currentClub: 'Test Town FC', age: 21 }));
+    render(<MemoryRouter initialEntries={['/profile']}><Profile /></MemoryRouter>);
+    await waitFor(() => expect(screen.getByText('Test Town FC, age 21')).toBeTruthy(), WAIT);
+    expect(document.querySelector('[data-profile-career="/soccer-career"]')).toHaveAttribute('href', '/soccer-career?slot=3');
+  });
 });

@@ -51,8 +51,17 @@ export interface ContinueSave {
   ended?: { at: SavePath; say: string };
 }
 
+export const SOCCER_CAREER_SAVE: ContinueSave = {
+  path: '/soccer-career',
+  saveKey: 'soccerCareerSave',
+  alternateSaveKeys: ['soccerCareerSave-slot-2', 'soccerCareerSave-slot-3'],
+  name: ['currentClub'],
+  count: { at: ['age'], say: 'age {n}' },
+  ended: { at: ['retired'], say: 'retired' },
+};
+
 export const CONTINUE_SAVES: readonly ContinueSave[] = [
-  { path: '/soccer-career', saveKey: 'soccerCareerSave', name: ['currentClub'], count: { at: ['age'], say: 'age {n}' }, ended: { at: ['retired'], say: 'retired' } },
+  SOCCER_CAREER_SAVE,
   { path: '/club-manager', saveKey: 'dukb-club-manager-save', slots: 'dukb-cm-slots', name: ['clubName'], count: { at: ['season'], say: 'season {n}' }, ended: { at: ['sacked'], say: 'sacked' } },
   { path: '/stadium-tycoon', saveKey: 'stadiumTycoonSaveV1', name: ['clubName'], count: { at: ['matchNo'], say: '{n} matches played', one: '1 match played' } },
   { path: '/wonderkid-factory', saveKey: 'wonderkidFactoryV1', count: { at: ['prospects'], say: '{n} kids in the academy', one: '1 kid in the academy' } },

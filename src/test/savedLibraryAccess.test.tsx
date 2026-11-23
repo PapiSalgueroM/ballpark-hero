@@ -64,6 +64,19 @@ describe('Saved game access on Home and sport hubs', () => {
     expect(bytes()).toEqual(before);
   });
 
+  it('includes an alternate-only Soccer Career in the saved filter and opens its actual slot', () => {
+    localStorage.setItem('soccerCareerSave-slot-3', JSON.stringify(fixtures[0].save));
+    const before = bytes();
+    const view = render(<MemoryRouter initialEntries={['/soccer']}><CurrentHub /></MemoryRouter>);
+    fireEvent.click(view.getByRole('button', { name: /^Saved games/ }));
+    expect(paths(view)).toEqual(['/soccer-career']);
+    const address = '/soccer-career?slot=3';
+    expect(view.getByRole('link', { name: 'Resume Soccer Career' })).toHaveAttribute('href', address);
+    expect(view.container.querySelector('[data-hub-saved="/soccer-career"]')).toHaveAttribute('href', address);
+    expect(view.container.querySelector('[data-hub-game="/soccer-career"] h3 a')).toHaveAttribute('href', address);
+    expect(bytes()).toEqual(before);
+  });
+
   it('refreshes an existing Home career line after another tab saves progress without changing its cards', () => {
     const fixture = fixtures[0];
     localStorage.setItem(fixture.key, JSON.stringify(fixture.save));
