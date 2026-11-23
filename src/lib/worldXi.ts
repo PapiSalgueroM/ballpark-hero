@@ -78,7 +78,15 @@ const PREV_PAGES = 8; // 8000-row capacity for the previous-year snapshot
 const MIN_POOL = 800; // sanity floor before we trust the pool
 const MIN_COUNTRIES = 12;
 const POOL_COLUMNS = 'player_name, nationality, position, club, market_value_usd, year, age';
-export const PARAGUAY = 'Paraguay';
+type WorldXiArchive = { country: string; year: number; playerName?: string };
+
+export const WORLD_XI_ARCHIVES: readonly WorldXiArchive[] = [
+  { country: 'Paraguay', year: PREV_YEAR },
+  // Argentina's capped left-back is missing from the two newest market snapshots.
+  // https://www.afa.com.ar/es/posts/marcos-acuna-cumple-35-anos-del-nacimiento-en-zapala-a-la-gloria-con-la-seleccion-argentina
+  // https://www.fifa.com/en/articles/argentina-squad-announced
+  { country: 'Argentina', year: 2024, playerName: 'Marcos Acuña' },
+];
 
 /* ---------------- Eligibility thresholds (SQL-verified) ---------------- */
 const GK_MIN = 2; // goalkeepers are the scarce resource
@@ -186,25 +194,26 @@ function playerFromPoolRow(row: PoolRow): WxPlayer | null {
   return { name, country, position, value, club: (row.club ?? '').trim(), age: Number(row.age) || undefined };
 }
 
-/** Optional 2025 suggestions for Paraguay, whose older players miss the global value cap. */
-export async function fetchParaguayArchive(): Promise<WxPlayer[] | null> {
+/** Optional, dated suggestions when the main pool is missing verified players. */
+export async function fetchWorldXiArchive({ country, year, playerName }: WorldXiArchive): Promise<WxPlayer[] | null> {
   try {
-    const { data, error } = await supabase
+    const request = supabase
       .from('player_market_values')
       .select(POOL_COLUMNS)
-      .eq('year', PREV_YEAR)
-      .eq('nationality', PARAGUAY)
+      .eq('year', year)
+      .eq('nationality', country)
       .gt('market_value_usd', 0)
       .order('id', { ascending: true });
+    const { data, error } = await (playerName ? request.eq('player_name', playerName) : request);
     if (error || !data) return null;
 
     const players = new Map<string, WxPlayer>();
     for (const row of data) {
       const player = playerFromPoolRow(row);
-      if (!player || player.country !== PARAGUAY) continue;
+      if (!player || player.country !== country || (playerName && player.name !== playerName)) continue;
       const key = `${player.name}|${player.club}`;
       if (player.value > (players.get(key)?.value ?? 0)) {
-        players.set(key, { ...player, archiveYear: PREV_YEAR });
+        players.set(key, { ...player, archiveYear: year });
       }
     }
     return [...players.values()];

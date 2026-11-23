@@ -223,6 +223,46 @@ describe('Soccer Career: the Ballon d\'Or ceremony card', () => {
     expect(JSON.stringify({ ...after, revealed: undefined })).toBe(ballot);
     expect(view.container.querySelector('[data-trophy-category="ballon"]')!.getAttribute('aria-label')).toContain(`Ballon d'Or: ${priorWins + (won ? 1 : 0)}.`);
   });
+  it.each([true, false])('continues a first-season award at age 18 after reload (ballot available: %s)', async hasBallot => {
+    const clubs = E.FALLBACK_CLUBS;
+    const attrs = { pace: 99, shooting: 99, passing: 99, dribbling: 99, defending: 99, physical: 99, reflexes: 99 };
+    const rng = vi.spyOn(Math, 'random').mockImplementation(seeded(1));
+    let start: CareerState;
+    try {
+      const youth = E.initCareer('First season award', 'Brazil', 'LW', '2005-09', attrs, 99, 2005, clubs, null, 99, null, null, 'Barcelona');
+      const ready = E.advanceYouthYear(youth, clubs, true);
+      const signed = E.acceptOffer(ready, ready.pendingOffers.find(offer => offer.isHomegrown)!);
+      let first = E.advanceProSeason(signed, clubs, true);
+      if (first.phase === 'rehab_choice') first = E.applyRehabChoice(first, 1);
+      if (first.phase === 'newspaper') first = E.dismissNewspaper(first);
+      start = E.dismissSummary(first, clubs);
+    } finally {
+      rng.mockRestore();
+    }
+    expect(start).toMatchObject({ age: 18, overall: 99, phase: 'ballon_dor', pendingBallonDor: { year: 2007, playerRank: 1 } });
+    expect(start.seasons).toHaveLength(3);
+    const saved = hasBallot ? start : { ...start, pendingBallonDor: null };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(saved));
+    const view = mount(<SoccerCareer />);
+    await tick(60);
+    if (hasBallot) {
+      const card = ceremony(view.container);
+      expect(card).toHaveAttribute('data-award-result', 'revealed');
+      const tears = E.SOCCER_BDOR_SPEECHES.find(speech => speech.id === 'tears')!;
+      // jsdom cannot play the entrance animation on the speech buttons.
+      const speech = buttons(card!).find(button => button.textContent?.includes(tears.label));
+      expect(speech).toBeDefined();
+      fireEvent.click(speech!);
+    } else {
+      expect(view.getByRole('heading', { name: "Ballon d'Or ballot unavailable" })).toBeVisible();
+      expect(readSave()!.phase).toBe('ballon_dor');
+    }
+    const action = hasBallot ? 'Continue →' : 'Continue career';
+    fireEvent.click(view.getByRole('button', { name: action }));
+    expect(readSave()!.phase).not.toBe('ballon_dor');
+    expect(readSave()).toMatchObject({ age: 18, seasons: start.seasons, awards: start.awards, pendingBallonDor: null });
+  });
+
   it('a win offers the speech once, then shows what it did, and Continue leaves', async () => {
     const start = saveOnCeremony(true);
     expect(E.bdorSpeechOpen(start)).toBe(true);

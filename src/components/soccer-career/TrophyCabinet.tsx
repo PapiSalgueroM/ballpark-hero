@@ -215,6 +215,7 @@ export default function TrophyCabinet({ career, category, onClose }: {
                 <p>{clubWorldCup.note}</p>
                 <ol className="space-y-1">{clubWorldCup.matches.map((match, index) => <li key={index} className="rounded-lg bg-muted/20 p-2">
                   <p className="font-bold">{match.round} · {match.opponent} · {match.goalsFor}-{match.goalsAgainst}</p>
+                  {match.playerGoals !== undefined && <p>Your goals in this game: {match.playerGoals}</p>}
                   <p className="text-muted-foreground">{match.note}</p>
                 </li>)}</ol>
               </section>}

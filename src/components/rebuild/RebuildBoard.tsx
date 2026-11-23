@@ -5,7 +5,7 @@ import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, playerRating } from '@/lib/squadDeal';
 import { nextRaise, OVERDRAFT_LIMIT, REBUILD_PRESETS, TIER_BUDGET, PERK_LABEL, SWAP_DISCOUNT, type ManagerProfile } from '@/lib/rebuildDeck';
 import { MAX_SEATS, type SeatKind } from '@/lib/rebuildTable';
-import { useRebuild } from '@/hooks/useRebuild';
+import { useRebuild, type RebuildState } from '@/hooks/useRebuild';
 import type { ClubTier } from '@/lib/fetchRebuild';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { CelebrationStyles, revealAfter, revealDelay } from '@/components/club-manager/Celebration';
@@ -46,6 +46,23 @@ function potLine(delta: number): string {
 const SEAT_COUNTS = Array.from({ length: MAX_SEATS }, (_, i) => i + 1);
 
 export function RebuildBoard() {
+  const game = useRebuild();
+  const { saveIssue, retrySave } = game;
+  return <>
+    {saveIssue && <div role="status" className="mx-auto mt-4 max-w-2xl rounded-xl border border-amber-500/50 bg-card p-3 text-sm">
+      {saveIssue === 'failed' ? 'Your browser could not save this change. Keep this tab open and try again.'
+        : saveIssue === 'moved' ? 'This save changed in another tab. Reload to continue from the latest run.'
+          : 'Your saved run could not be restored. Reload to try again, or pick a club to start a new run.'}{' '}
+      <button type="button" className="min-h-11 font-bold underline"
+        onClick={saveIssue === 'failed' ? retrySave : () => window.location.reload()}>
+        {saveIssue === 'failed' ? 'Retry save' : 'Reload saved run'}
+      </button>
+    </div>}
+    <RebuildPlay game={game} />
+  </>;
+}
+
+function RebuildPlay({ game }: { game: RebuildState }) {
   const {
     phase, loading, clubs, club, preset, setPreset, chooseClub, reset,
     run,
@@ -57,7 +74,7 @@ export function RebuildBoard() {
     spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun, scoutWithinBudget,
     thinking, raiseWar, walkAway,
     finish, rivals, rivalsLoading, season,
-  } = useRebuild();
+  } = game;
   // Round 61: the owner's no scroll rule. Every phase change (envelopes, spin,
   // results) pulls the new screen into view instead of leaving the player
   // looking at the old one. Round 461: a hand over is a phase change too, and

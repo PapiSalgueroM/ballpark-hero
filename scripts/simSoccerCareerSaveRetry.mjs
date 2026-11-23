@@ -15,19 +15,20 @@ const cases = {
   latest: 'retries the latest earned season after more than one failed career change without rerunning its engine',
   refresh: 'blocks an app refresh until the latest unsaved career can be written',
   automatic: 'clears a failed save on the next successful automatic save and alerts again on a later refusal',
-  reset: 'clears the old failure after explicit reset and saves the replacement career without old progress',
+  reset: 'keeps unsaved progress open until it can start over with a checked copy',
   retirement: 'persists the finished retirement on retry without recording its completion a second time',
+  imported: 'keeps an imported retirement playable without posting a public score',
   independent: 'retains an independent valid restore and earned engine baseline without mounting the page',
 };
 const controls = {
   /* Round 1330: the page writes through the save fence, so the failure branch is the fenced write's 'failed' answer. */
   warning: { from: "if (saved === 'failed') { setSaveFailed(true); setRecordOutcome(null); return null; }", to: "if (saved === 'failed') { setSaveFailed(false); setRecordOutcome(null); return null; }", test: cases.initial },
   memory: { from: "if (saved === 'failed') { setSaveFailed(true); setRecordOutcome(null); return null; }", to: "if (saved === 'failed') { setCareer(null); setSaveFailed(true); setRecordOutcome(null); return null; }", test: cases.initial },
-  disk: { from: "if (saved === 'failed') { setSaveFailed(true); setRecordOutcome(null); return null; }", to: "if (saved === 'failed') { localStorage.removeItem(SAVE_KEY); setSaveFailed(true); setRecordOutcome(null); return null; }", test: cases.initial },
+  disk: { from: "if (saved === 'failed') { setSaveFailed(true); setRecordOutcome(null); return null; }", to: "if (saved === 'failed') { localStorage.removeItem(saveKey); setSaveFailed(true); setRecordOutcome(null); return null; }", test: cases.initial },
   toast: { from: 'if (saveFailed) toast.error(', to: 'if (false) toast.error(', test: cases.initial },
   repeatedToast: { from: "if (saved === 'failed') { setSaveFailed(true); setRecordOutcome(null); return null; }", to: "if (saved === 'failed') { toast.error(\"Save refused\"); setSaveFailed(true); setRecordOutcome(null); return null; }", test: cases.repeat },
-  stale: { from: "localStorage.setItem(SAVE_KEY, (writtenRaw = serializeSoccerCareerSave(career)));", to: "localStorage.setItem(SAVE_KEY, (writtenRaw = serializeSoccerCareerSave(restoredSave.career)));", test: cases.latest },
-  staleCallback: { from: "  }, [career, sourceIsCurrent]);\n  useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);", to: "  }, []);\n  useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);", test: cases.training },
+  stale: { from: "const raw = serializeSoccerCareerSave(career, SOCCER_CAREER_SAVE_VERSION);", to: "const raw = serializeSoccerCareerSave(restoredSave.career!, SOCCER_CAREER_SAVE_VERSION);", test: cases.latest },
+  staleCallback: { from: "  }, [career, saveKey, sourceIsCurrent, checkSaveMoved]);\n  useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);", to: "  }, []);\n  useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);", test: cases.training },
   automatic: { from: 'useEffect(() => { saveCurrentCareer(); }, [saveCurrentCareer]);', to: 'useEffect(() => {}, [saveCurrentCareer]);', test: cases.initial },
   retry: { from: "<Button variant=\"outline\" className=\"mt-2 min-h-11 shrink-0 sm:mt-0\" onClick={saveCurrentCareer}>Retry save</Button>", to: "<Button variant=\"outline\" className=\"mt-2 min-h-11 shrink-0 sm:mt-0\" onClick={() => {}}>Retry save</Button>", test: cases.training },
   retryRng: { from: "<Button variant=\"outline\" className=\"mt-2 min-h-11 shrink-0 sm:mt-0\" onClick={saveCurrentCareer}>Retry save</Button>", to: "<Button variant=\"outline\" className=\"mt-2 min-h-11 shrink-0 sm:mt-0\" onClick={() => { Math.random(); saveCurrentCareer(); }}>Retry save</Button>", test: cases.repeat },
@@ -35,8 +36,8 @@ const controls = {
   refresh: { from: "return holdPendingSave(() => saveCurrentCareer() !== null);", to: "return holdPendingSave(() => true);", test: cases.refresh },
   retryCompletion: { from: "<Button variant=\"outline\" className=\"mt-2 min-h-11 shrink-0 sm:mt-0\" onClick={saveCurrentCareer}>Retry save</Button>", to: "<Button variant=\"outline\" className=\"mt-2 min-h-11 shrink-0 sm:mt-0\" onClick={() => { recordCompletion(\"/soccer-career\", legacyScore); saveCurrentCareer(); }}>Retry save</Button>", test: cases.retirement },
   clear: { from: "    setSaveFailed(false);\n    if (career.retired === true && career.phase === 'retired') {", to: "    setSaveFailed(true);\n    if (career.retired === true && career.phase === 'retired') {", test: cases.training },
-  reset: { from: "if (!career) { setSaveFailed(false); setRecordOutcome(null); return null; }", to: "if (!career) { setRecordOutcome(null); return null; }", test: cases.reset },
-  notice: { from: '<p className="flex-1">Your latest progress could not be saved. Keep this tab open, then try again.</p>', to: '<p className="flex-1">Saved.</p>', test: cases.initial },
+  reset: { from: "if (career && !needsRecord && (!ack || ack.career !== career) && !saveCurrentCareer()) return;", to: "if (career && !needsRecord && (!ack || ack.career !== career)) saveCurrentCareer();", test: cases.reset },
+  notice: { from: "'Your latest progress could not be saved. Keep this tab open, then try again.'}</p>", to: "'Saved.'}</p>", test: cases.initial },
   role: { from: 'role="alert" data-soccer-save-status="failed"', to: 'role="status" data-soccer-save-status="failed"', test: cases.initial },
 };
 const control = process.env.SOCCER_CAREER_SAVE_RETRY_CONTROL || '', count = Object.keys(cases).length;
@@ -85,6 +86,7 @@ try {
   assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|Failed to (?:resolve import|load)|Cannot find module|No test files found|SyntaxError|Transform failed/, 'Runtime failures earn no fault credit');
   const report = JSON.parse(await readFile(reportFile, 'utf8')), rows = report.testResults.flatMap(file => file.assertionResults);
   assert.equal(rows.length, count); assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
+  assert.deepEqual(rows.map(row => row.title).sort(), Object.values(cases).sort(), 'The retry outcome manifest matches the actual component tests');
   if (control) {
     assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, 1); assert.equal(report.numPendingTests, count - 2);
     const intended = rows.find(row => row.title === controls[control].test); assert.equal(intended?.status, 'failed');

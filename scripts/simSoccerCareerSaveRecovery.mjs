@@ -16,6 +16,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const test = 'src/test/soccerCareerSaveRecovery.test.tsx';
+const focusedCases = 46;
 const controlParent = path.join(root, '.sim-control');
 fs.mkdirSync(controlParent, { recursive: true });
 const dir = fs.mkdtempSync(path.join(controlParent, 'career-save857-'));
@@ -58,24 +59,24 @@ function run(control = '') {
   const json = JSON.parse(fs.readFileSync(report, 'utf8'));
   assert.equal(Number(json.numUnhandledErrors ?? 0), 0, 'The component run must have no unhandled errors.');
   assert.equal(json.numPendingTests, 0, 'The component run must not skip focused cases.');
-  assert.equal(json.numTotalTests, 39, `All focused component tests must run. ${json.testResults.map(file => file.message || '').join('\n')}`);
+  assert.equal(json.numTotalTests, focusedCases, `All focused component tests must run. ${json.testResults.map(file => file.message || '').join('\n')}`);
   const failed = json.testResults.flatMap(file => file.assertionResults).filter(row => row.status === 'failed');
   if (!control) {
     assert.equal(result.status, 0, failed.map(row => row.fullName + ': ' + row.failureMessages[0]).join('\n'));
-    assert.equal(json.numPassedTests, 39); assert.equal(failed.length, 0);
-    console.log('Soccer Career save recovery: 39/39 actual component checks passed.');
-    console.log('Soccer Career save recovery: 12 current, older, event, international, post-retirement and completion baselines passed.');
+    assert.equal(json.numPassedTests, focusedCases); assert.equal(failed.length, 0);
+    console.log(`Soccer Career save recovery: ${focusedCases}/${focusedCases} actual component checks passed.`);
+    console.log('Soccer Career save recovery: current, older, transfer, event, international, post-retirement and completion baselines passed.');
     console.log('Soccer Career save recovery: 23 malformed core saves retain raw bytes, recover before render and delete only their own key on request.');
     console.log('Soccer Career save recovery: malformed and primitive JSON, explicit new-career replacement and the clean creator passed.');
     console.log('Soccer Career save recovery: restored retirements record zero completions; finishing a ceremony records once and stays once after reload.');
   } else {
     assert.notEqual(result.status, 0, 'The control must make the component run fail.');
     assert.deepEqual(failed.map(row => row.fullName).sort(), [...targets[control]].sort(), 'Only intended control assertions may fail.');
-    assert.equal(json.numPassedTests, 39 - targets[control].length);
+    assert.equal(json.numPassedTests, focusedCases - targets[control].length);
     assert.ok(failed.every(row => row.failureMessages.some(message => /AssertionError|TestingLibraryElementError/.test(message))), 'Each control must fail on a real assertion.');
     console.log(`Soccer Career save recovery control ${control}: ${failed.length} intended component assertions failed.`);
     for (const row of failed) console.log(`Soccer Career save recovery control ${control}: rejected ${row.fullName}: ${row.failureMessages[0].split('\n')[0]}`);
-    console.log(`Soccer Career save recovery control ${control}: ${json.numPassedTests}/39 unaffected checks passed.`);
+    console.log(`Soccer Career save recovery control ${control}: ${json.numPassedTests}/${focusedCases} unaffected checks passed.`);
   }
   fs.unlinkSync(report);
 }
