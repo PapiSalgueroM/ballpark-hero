@@ -98,6 +98,13 @@ const INDEX_PAGES = 6;
 /* What the old single read got back: the server's 1,000 row cap. */
 const OLD_WHEEL_ROWS = 1000;
 
+function careerSpan(row: { year_from: unknown; year_to: unknown }): { from: number; to: number } | null {
+  const from = parseInt(String(row.year_from), 10);
+  const to = parseInt(String(row.year_to), 10);
+  if (!Number.isFinite(from) || !Number.isFinite(to) || from < 1900 || to < from) return null;
+  return { from, to };
+}
+
 /**
  * Every franchise-decade pair with enough skaters to draft from, cached by
  * the page.
@@ -122,16 +129,15 @@ export async function fetchTeamEraIndex(opts: { oldWheel?: boolean } = {}): Prom
 
     const counts = new Map<string, number>();
     for (const r of (opts.oldWheel ? data.slice(0, OLD_WHEEL_ROWS) : data) as any[]) {
-      const yf = parseInt(String(r.year_from), 10);
-      const yt = parseInt(String(r.year_to), 10);
-      if (!Number.isFinite(yf) || !Number.isFinite(yt) || yf < 1900 || yt < yf) continue;
+      const span = careerSpan(r);
+      if (!span) continue;
       const abbrs = String(r.teams ?? '')
         .split(',')
         .map(a => a.trim())
         .filter(a => NHL_TEAMS[a]);
       for (const abbr of new Set(abbrs)) {
         for (const dec of DECADES) {
-          if (yf <= dec + 9 && yt >= dec) {
+          if (span.from <= dec + 9 && span.to >= dec) {
             const key = `${abbr}|${dec}`;
             counts.set(key, (counts.get(key) ?? 0) + 1);
           }
@@ -261,10 +267,8 @@ export async function fetchSquad(entry: TeamEraIndexEntry): Promise<SpinSquad | 
       const name = String(raw.player_name ?? '').trim();
       const games = Number(raw.games) || 0;
       if (!name || games < MIN_GAMES || players.has(name)) return;
-      const yf = parseInt(String(raw.year_from), 10);
-      const yt = parseInt(String(raw.year_to), 10);
-      if (!Number.isFinite(yf) || !Number.isFinite(yt)) return;
-      if (yf > entry.eraEnd || yt < entry.eraStart) return;
+      const span = careerSpan(raw);
+      if (!span || span.from > entry.eraEnd || span.to < entry.eraStart) return;
       const eligible = skaterEligible(String(raw.position ?? '').trim());
       if (eligible.length === 0) return;
       const points = Number(raw.points) || 0;

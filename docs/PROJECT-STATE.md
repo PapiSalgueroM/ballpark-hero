@@ -1,3 +1,11 @@
+## 2026-11-23, Perfect Season NHL draft dates
+
+The squad reader now uses the same career date checks as the era wheel. Anaheim's 1990s stop previously offered Giovanni Fiore, Jacob Perreault and Jesse Blacker because the source gave their first NHL season as `1`. Exact replay kept the other 31 offers in the same order. Valid single-season records, careers spanning decades and previous Daily wheel saves passed.
+
+A bounded read found the same 69 suspect source rows as the October audit. Fifteen stop and player pairs were guaranteed to make an offer under at least one current squad query regardless of ties in the source ranking. Hockey Grid's own matcher admitted none of the 69 across 171 criterion pairs, and Puck Detective's current paths use the roster data instead. The malformed source rows still need a separate factual repair. [Ducks on Fiore's debut](https://www.nhl.com/ducks/news/ducks-acquire-murphy-from-coyotes-in-exchange-for-fiore-303310118), [AHL on Fiore](https://theahl.com/news/ducks-coyotes-trade-prospects), [Montréal on Perreault's debut](https://www.nhl.com/canadiens/news/canadiens-acquire-forward-jacob-perreault-from-the-anaheim-ducks), [Ducks media guide](https://media.d3.nhle.com/image/private/t_document/prd/sfpgokhayv3na9l383jq.pdf), [Anaheim career totals](https://www.eliteprospects.com/team/1580/anaheim-ducks/stats/all-time/total?nation=CAN&page=3).
+
+All 33 focused tests, application types, the production build and all 15 built-site checks passed. The old built route let a phone browser draft Blacker into defense. At 320 and 390 pixels the fixed route offered only the 31 surviving cards and drafted Teemu Selänne on the same wheel stop. The broader multi-sport simulation's live squad section was excluded by the offline runner.
+
 ## 2026-11-16 — Career search, NHL trades and NFL injured reserve
 
 - Home recognizes explicit requests such as “NBA career mode” and “manage an MLB team.” Both mobile widths verified nine supported queries, five misses, the existing title shortcuts and return focus. The NBA result opened with Enter and the MLB result opened by touch. Back restored the search filters and saved games.
