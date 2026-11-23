@@ -1,8 +1,14 @@
+## 2026-11-23, Club Manager season checkpoints
+
+PL-03 adds one automatic checkpoint per Club Manager slot. When the next season saves successfully, the game keeps the previous settled season review. The checkpoint is available in Save Points alongside the three manual points. Restoring it keeps an exact copy of current progress and resumes the season review with leaderboard scoring disabled for that branch.
+
+The 145 focused tests checked a job move, storage refusal and retry, a competing tab and preservation of another slot. Four Chromium cases at 320 and 390 pixels used plain and compact saves from a 12-season Everton career. The previous build kept no automatic checkpoint in all four controls. The candidate kept the exact season 12 review, preserved all three manual Save Points when storage refused a recovery copy, then restored and reloaded the review with the displaced season 13 save kept aside.
+
 ## 2026-11-23, NHL Front Office recap save protection
 
 PL-04 adds a verified copy of the original NHL Front Office recap before the draft opens on an older franchise. If storage refuses the copy or the draft, Retry save keeps the same prospects and already counted season. A newer franchise saved in another tab takes precedence. Current recaps and drafts with saved shortlists keep their normal flow.
 
-The 164 focused tests, 25 Front Office season-close cases and the NHL-scoped SaveKeeper harness passed. Twelve Chromium cases at 320 and 390 pixels kept the legacy results, one title, one finished season, board trust and a neighboring MLB save. Four rollback cases opened the actual migrated draft and the saved shortlist in the previous build.
+The 164 focused tests, 25 Front Office season-close cases and the NHL-scoped SaveKeeper harness passed. Twelve Chromium cases at 320 and 390 pixels kept the legacy results, one title, one finished season, board trust and a neighboring MLB save. Four rollback cases opened the actual migrated draft and the saved shortlist in the previous build. PR #1046 is live. All 12 public bundle cases passed at both phone widths, and NHL Front Office, MLB Front Office and Club Manager answered cleanly.
 
 ## 2026-11-23, MLB Front Office recap migration protection
 

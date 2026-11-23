@@ -16,11 +16,17 @@ import {
 } from '@/lib/cmSavePoints';
 import { reopenGame } from '@/lib/saveKeeper';
 import { markLandOnHub } from '@/lib/clubManagerLanding';
+import { browserStorage } from '@/lib/brokenSaveRecovery';
+import { settlePendingSaves } from '@/lib/safeStorage';
+import {
+  captureClubManagerCheckpointRestore, readClubManagerCheckpoint, restoreClubManagerCheckpoint, type ClubManagerCheckpointTarget,
+} from '@/lib/clubManagerCheckpoint';
 
 interface Props {
   career: CareerState;
   /** The manager slot this career is in. */
   slot: number;
+  allowCheckpointRestore?: boolean;
 }
 
 const WHY: Record<PointRefusal, string> = {
@@ -46,8 +52,10 @@ const madeOn = (at: number): string => new Date(at).toLocaleDateString(undefined
 
 type Ask = { id: string; kind: 'restore' | 'delete' | 'rename' } | null;
 
-export function SavePointsScreen({ career, slot }: Props) {
+export function SavePointsScreen({ career, slot, allowCheckpointRestore = true }: Props) {
   const [points, setPoints] = useState<PointMeta[]>(() => readPointsIndex(slot)?.points ?? []);
+  const [automatic, setAutomatic] = useState(() => readClubManagerCheckpoint(browserStorage(), slot));
+  const [checkpointTarget, setCheckpointTarget] = useState<ClubManagerCheckpointTarget | null>(null);
   const [name, setName] = useState('');
   const [ask, setAsk] = useState<Ask>(null);
   const [newName, setNewName] = useState('');
@@ -93,6 +101,30 @@ export function SavePointsScreen({ career, slot }: Props) {
     if ('why' in r) say(whyFor(r.why, p, true), true);
   };
 
+  const askForCheckpoint = () => {
+    if (!allowCheckpointRestore || !automatic) return;
+    setNote(null);
+    setAsk(null);
+    const storage = browserStorage();
+    const target = captureClubManagerCheckpointRestore(storage, slot, automatic);
+    if (target) { setCheckpointTarget(target); return; }
+    setAutomatic(readClubManagerCheckpoint(storage, slot));
+    say('This checkpoint or manager slot changed. Check the latest save before trying again.', true);
+  };
+
+  const restoreCheckpoint = () => {
+    if (!checkpointTarget) return;
+    const storage = browserStorage();
+    const result = allowCheckpointRestore && settlePendingSaves()
+      ? restoreClubManagerCheckpoint(storage, checkpointTarget) : 'failed';
+    if (result === 'restored') { markLandOnHub(); reopenGame('/club-manager'); return; }
+    setCheckpointTarget(null);
+    setAutomatic(readClubManagerCheckpoint(storage, slot));
+    say(result === 'moved'
+      ? 'This checkpoint or manager slot changed. Check the latest save before trying again.'
+      : 'Could not restore this checkpoint. Check your saved career before trying again.', true);
+  };
+
   const small = 'min-h-[44px] px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors';
   const plain = `${small} bg-secondary text-foreground hover:bg-muted`;
   const main = `${small} bg-primary text-primary-foreground hover:opacity-90`;
@@ -109,6 +141,24 @@ export function SavePointsScreen({ career, slot }: Props) {
         <p role={note.bad ? 'alert' : 'status'} data-testid="cm-point-note" className={`text-xs ${note.bad ? 'text-destructive' : 'text-foreground'}`}>
           {note.text}
         </p>
+      )}
+      {automatic && (
+        <div className="my-3 rounded-lg border border-border p-2.5 space-y-2">
+          <h4 className="font-semibold text-sm">Last season checkpoint</h4>
+          <p className="text-xs text-muted-foreground">{automatic.club} · Season {automatic.season} review</p>
+          {checkpointTarget ? (
+            <>
+              <p className="text-xs text-muted-foreground">Your current career will be kept aside. The restored career will play without leaderboard scores.</p>
+              <p className="text-xs text-muted-foreground">Club Manager keeps the three most recent kept-aside saves.</p>
+              <div className="flex flex-wrap gap-2">
+                <button type="button" disabled={!allowCheckpointRestore} onClick={restoreCheckpoint} className={main}>Restore season review</button>
+                <button type="button" onClick={() => setCheckpointTarget(null)} className={plain}>Cancel</button>
+              </div>
+            </>
+          ) : (
+            <button type="button" disabled={!allowCheckpointRestore} onClick={askForCheckpoint} className={main}>Restore checkpoint</button>
+          )}
+        </div>
       )}
       {full ? (
         <p className="text-xs text-muted-foreground" data-testid="cm-points-full">{WHY.full}</p>

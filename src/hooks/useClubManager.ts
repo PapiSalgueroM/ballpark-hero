@@ -40,6 +40,10 @@ import { kLeagueMember } from '@/data/kLeague2026';
 import { readSlotSave, readSlots, summarize as summarizeSlotSave, switchSlot, deleteSlot, activeSlot, activeResumeSlot, type SlotView } from '@/lib/clubManagerSlots';
 import type { ClubManagerSlotRequest } from '@/lib/clubManagerSaveKeys';
 import { clearSlotPoints, noteSeasonCredited, seasonPosts } from '@/lib/cmSavePointsStore';
+import { holdPendingSave } from '@/lib/safeStorage';
+import {
+  captureClubManagerCheckpoint, checkpointClaimIsCurrent, checkpointSourceIsCurrent, keepClubManagerCheckpoint, type ClubManagerCheckpointSource,
+} from '@/lib/clubManagerCheckpoint';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
@@ -141,7 +145,7 @@ function postsScore(s: CareerState): boolean {
   return careerPostsScore(s) && seasonPosts(activeSlot(), s.season);
 }
 function creditSeason(s: CareerState): void {
-  noteSeasonCredited(activeSlot(), s.season);
+  if (s.restoredFromCheckpoint !== true) noteSeasonCredited(activeSlot(), s.season);
 }
 
 export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
@@ -322,14 +326,45 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
      2026-09-13). True from the first refused write until one succeeds, and
      the page shows a plain banner while it is true. */
   const [saveFailed, setSaveFailed] = useState(false);
+  const rollover = useRef<{ next: CareerState; source: ClubManagerCheckpointSource; release?: () => void } | null>(null);
+  const forgetRollover = useCallback(() => {
+    rollover.current?.release?.();
+    rollover.current = null;
+  }, []);
+  const careerRef = useRef<CareerState | null>(null);
   const note = useCallback((ok: boolean) => setSaveFailed(!ok), []);
   /* Round 1323: the write, reported: a refusal because another tab moved the
      career on raises the notice and leaves saveFailed as it was. */
   const persist = useCallback((c: CareerState): boolean => {
-    const ok = saveCareer(c);
+    const pending = rollover.current;
+    const source = pending && pending.source.slot === ownSlot.current && c.season === pending.next.season
+      && c.worldSeed === pending.next.worldSeed && c.startYear === pending.next.startYear && c.eraId === pending.next.eraId
+      ? pending.source : null;
+    const storage = source ? browserStorage() : null;
+    if (storage && source && !checkpointSourceIsCurrent(storage, source)) {
+      pending?.release?.();
+      setSaveMoved(true);
+      return false;
+    }
+    const ok = source ? !!storage && saveCareer(c, {
+      ownsClaim: () => checkpointClaimIsCurrent(storage, source),
+      acknowledge: raw => { keepClubManagerCheckpoint(storage, source, raw); },
+    }) : saveCareer(c);
+    if (ok && source) forgetRollover();
+    if (!ok && storage && source && !checkpointSourceIsCurrent(storage, source)) {
+      pending?.release?.();
+      setSaveMoved(true);
+      return false;
+    }
+    if (!ok && pending && source && !pending.release) {
+      pending.release = holdPendingSave(() => {
+        const latest = careerRef.current;
+        return !!latest && holdsActiveSlot() && persist(latest);
+      });
+    }
     if (ok || !movedOn()) note(ok);
     return ok;
-  }, [note, movedOn]);
+  }, [note, movedOn, forgetRollover, holdsActiveSlot]);
   /* Round 634 review: why the last press on the transfer desk did nothing, in
      the engine's own words (doorRefusal, loanOutRefusal), or null when it went
      through. A refused press used to be a dead button. */
@@ -387,7 +422,6 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
    * So the career is readable synchronously here, and the write at that moment
    * goes straight to localStorage rather than through a render.
    */
-  const careerRef = useRef<CareerState | null>(null);
   useEffect(() => { careerRef.current = career; }, [career]);
   const recruitmentCurrent = useRef<CareerState | null>(null);
   useLayoutEffect(() => {
@@ -418,6 +452,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
          career it is holding costs one localStorage write and closes the gap
          between a commit and the passive effect that would have saved it. */
       write();
+      forgetRollover();
       /* Round 1323: the last write is done, so this page holds nothing now.
          Review: except a page another tab has moved on. React runs this
          cleanup before its children's, and the live viewer's own unmount
@@ -526,13 +561,16 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     /* Round 1323: a stale page swaps nothing; the notice says why. */
     if (movedOn()) return false;
     const out = holdsActiveSlot() ? careerRef.current : null;
-    if (out) saveCareer(out);
-    if (!switchSlot(slot, out)) {
+    const expectingCheckpoint = rollover.current !== null;
+    const pendingSaveFailed = out && expectingCheckpoint ? !persist(out) : false;
+    if (out && !expectingCheckpoint) saveCareer(out);
+    if (pendingSaveFailed || !switchSlot(slot, out)) {
       setSlotNote('This browser would not save the switch, so nothing moved. Your managers are all where they were. Free up some site storage and try again.');
       setSlots(readSlots());
       return false;
     }
     ownSlot.current = slot;
+    forgetRollover();
     /* Round 1515: the kept aside card asks its offer again, for this slot (the slot marks key is the event's name). */
     dispatchEvent(new Event(SET_ASIDE_SLOT_KEY));
     setSlotNote(null);
@@ -544,18 +582,19 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     /* Review: the transfer desk's last refusal was about the outgoing club. */
     setDeskNote(null);
     return true;
-  }, [holdsActiveSlot, movedOn]);
+  }, [holdsActiveSlot, movedOn, persist, forgetRollover]);
 
   /* Review: once another tab has switched managers, the career this page
      holds sits parked in its slot as of its last write, so the copy in memory
      is let go. Kept, its week and board were shown on the other career's tile. */
   const letGoIfStale = useCallback(() => {
     if (!careerRef.current || holdsActiveSlot()) return;
+    forgetRollover();
     careerRef.current = null;
     setCareer(null);
     setReport(null);
     setSummary(null);
-  }, [holdsActiveSlot]);
+  }, [holdsActiveSlot, forgetRollover]);
 
   /* Review: the managers screen follows a change another tab makes to the
      slots, so its tiles never offer what is no longer there. Only while it is
@@ -632,18 +671,20 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     clearCareer();
     /* Round 1513: a new career never finds an old one's save points. */
     clearSlotPoints(slot);
+    forgetRollover();
     ownSlot.current = slot;
     careerRef.current = null;
     setCareer(null);
     setDeskNote(null);
     setSlots(readSlots());
     setPhase('clubSelect');
-  }, [leaveActive, movedOn]);
+  }, [leaveActive, movedOn, forgetRollover]);
 
   /** Delete one slot's career for good (the screen asks first). */
   const removeSlot = useCallback((slot: number) => {
     if (slot === activeSlot()) {
       clearCareer();
+      forgetRollover();
       ownSlot.current = slot;
       careerRef.current = null;
       setCareer(null);
@@ -658,7 +699,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     setSlots(views);
     setSlotNote(null);
     if (!views.some(v => v.summary || v.damaged)) setPhase('clubSelect');
-  }, []);
+  }, [forgetRollover]);
 
   /** Back to the slots screen from inside a career, or from an era whose
    *  squads would not load (review: that screen had no way back). */
@@ -666,13 +707,14 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
 
   const showSlots = useCallback(() => {
     incomingSlot.current = undefined;
-    if (careerRef.current && holdsActiveSlot() && !saveCareer(careerRef.current)) movedOn();
+    const write = rollover.current ? persist : saveCareer;
+    if (careerRef.current && holdsActiveSlot() && !write(careerRef.current)) movedOn();
     letGoIfStale();
     setBootError(null);
     setSlots(readSlots());
     setSlotNote(null);
     setPhase('resume');
-  }, [holdsActiveSlot, letGoIfStale, movedOn]);
+  }, [holdsActiveSlot, letGoIfStale, movedOn, persist]);
 
   /* Start a new manager: from the season's end, from Start New Career once
      sacked, and from the farewell. Before Round 928 the first two wiped the
@@ -1107,14 +1149,20 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
 
   const nextSeason = useCallback((acceptOfferClub?: string) => {
     if (!career) return;
+    const source = !movedOn() && career.pendingSummary
+      ? captureClubManagerCheckpoint(browserStorage(), ownSlot.current, career)
+      : null;
     const s = startNextSeason(career, acceptOfferClub);
     if (s === career) return;
-    setCareer(beginClubManagerSeason(s));
+    const next = beginClubManagerSeason(s);
+    forgetRollover();
+    rollover.current = source && next.season === source.season + 1 ? { next, source } : null;
+    setCareer(next);
     setSummary(null);
     setReport(null);
     setActiveTab('overview');
     setPhase('hub');
-  }, [career]);
+  }, [career, movedOn, forgetRollover]);
 
   const playNextNationalQualifier = useCallback((fixtureId: string): boolean => {
     const now = careerRef.current;
@@ -1528,9 +1576,12 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     careerRef.current = next;
     /* Round 928 review: the live clock of a page whose slot another tab has
        switched must not write over the career that tab switched in. */
-    if (holdsActiveSlot()) saveCareer(next);
+    if (holdsActiveSlot()) {
+      const write = rollover.current ? persist : saveCareer;
+      write(next);
+    }
     setCareer(prev => (prev ? markLiveMinute(prev, minute) : prev));
-  }, [holdsActiveSlot]);
+  }, [holdsActiveSlot, persist]);
 
   /* ---------- Round 135: the microphone and the dressing room ---------- */
   /* Tapping the tone you already picked takes it back, so a mis-tap is not a
