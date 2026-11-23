@@ -1,3 +1,11 @@
+## 2026-11-23, Perfect Season NHL draft dates
+
+The squad reader uses the same career date checks as the era wheel. In a replay of the old import, Anaheim's 1990s stop offered Giovanni Fiore, Jacob Perreault and Jesse Blacker because their first NHL season was stored as `1`. The guard keeps the other 31 offers in the same order. Valid single-season records, careers spanning decades and saved Daily wheels still work.
+
+The source migrations below corrected 69 records in production. The date guard protects new drafts if a future import repeats that failure. Existing Daily drafts resume with their saved roster and wheel.
+
+The synced branch passed 44 focused tests, the app typecheck, the production build, all 15 built-site checks and the NHL import harness. The old route let a phone browser draft Blacker into defense. The guarded route at 320 and 390 pixels offered the 31 valid cards and drafted Teemu Selänne at the same stop. The broader multi-sport simulation's live squad section was skipped by the offline runner.
+
 ## 2026-11-23, Bobby Robins autocomplete position
 
 Bobby Robins played right wing in all three NHL games with Boston in 2014-15. The position migration corrects his autocomplete label from C to RW after verifying his repaired regular-season totals. Its rollback comes before either earlier import rollback. Giovanni Fiore and Michael Keränen retain documented career positions. [NHL box score](https://api-web.nhle.com/v1/gamecenter/2014020002/boxscore), [Bobby Robins profile](https://www.eliteprospects.com/player/10502/bobby-robins), [Fiore's Anaheim roster report](https://www.nhl.com/ducks/news/ducks-reassign-four-to-san-diego-291516602), [Minnesota's 2015-16 roster](https://www.eliteprospects.com/team/63/minnesota-wild/2015-2016).
