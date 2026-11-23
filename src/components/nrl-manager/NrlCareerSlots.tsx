@@ -48,6 +48,32 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
     setSlots(readSlots());
   }
 
+  function downloadSlot(saveKey: string, number: number) {
+    const { raw, career } = readNrlSaveSlot(saveKey);
+    if (raw === null || !career) {
+      setNotice('A readable career could not be downloaded from this slot.');
+      setSlots(readSlots());
+      return;
+    }
+    try {
+      const file = new Blob([JSON.stringify({ format: 'douknowball-nrl-team-manager', version: 1, save: raw })], {
+        type: 'application/json',
+      });
+      const url = URL.createObjectURL(file);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `nrl-team-manager-slot-${number}.json`;
+      document.body.appendChild(link);
+      try { link.click(); } finally {
+        link.remove();
+        setTimeout(URL.revokeObjectURL.bind(URL, url), 1000);
+      }
+      setNotice('Save download started.');
+    } catch {
+      setNotice('Could not download this save. Try again.');
+    }
+  }
+
   function confirmAction() {
     if (!confirm) return;
     const entry = NRL_SAVE_SLOTS[confirm.index];
@@ -72,6 +98,7 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
           <h2 id="nrl-save-slots" className="text-xl font-bold">Career saves</h2>
           <p className="text-sm text-muted-foreground">Keep up to three careers in this browser.</p>
           <p className="mt-1 text-sm text-muted-foreground">Each slot holds one checkpoint for its current career.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Download a copy to keep outside this browser.</p>
         </div>
         <Button type="button" size="lg" variant="ghost" className="px-3" onClick={onBack}>Back</Button>
       </div>
@@ -127,6 +154,8 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
                 ) : (
                   <div className="flex flex-wrap gap-2">
                     {career && <Button type="button" size="lg" className="px-3" onClick={() => onOpen(entry.path)}>{career.retired ? 'View' : 'Resume'} slot {number}</Button>}
+                    {career && <Button type="button" size="lg" variant="outline" className="px-3"
+                      onClick={() => downloadSlot(entry.saveKey, number)}>Download slot {number}</Button>}
                     {raw === null && <Button type="button" size="lg" className="px-3" variant="outline" disabled={!available}
                       onClick={() => onOpen(entry.path)}>New career in slot {number}</Button>}
                     {career && raw !== null && <Button type="button" size="lg" className="px-3" variant="outline"

@@ -1,3 +1,9 @@
+## 2026-11-23, NRL Team Manager save downloads
+
+PL-03 adds Download slot to Career saves. Each download contains the exact saved career, including older saves and their match and season history. Import, verified save times and account copies remain future work for NRL Team Manager.
+
+The 37 focused tests covered a 12-season Storm career, an older v1 save, a slot updated while the chooser was open, and empty, corrupt and newer-format saves. Downloading changed no career, checkpoint or write fence.
+
 ## 2026-11-23, Club Manager season checkpoints
 
 PL-03 adds one automatic checkpoint per Club Manager slot. When the next season saves successfully, the game keeps the previous settled season review. The checkpoint is available in Save Points alongside the three manual points. Restoring it keeps an exact copy of current progress and resumes the season review with leaderboard scoring disabled for that branch.
