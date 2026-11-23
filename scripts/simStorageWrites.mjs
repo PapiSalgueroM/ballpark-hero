@@ -586,6 +586,8 @@ const NOTHING_HELD = [
     why: 'the selected file holds the original career, and retry checks an empty slot again before starting the import' },
   { file: 'src/lib/nrlPortable.ts', keys: ['write:commitImportedCareer'],
     why: 'the selected file holds the original career, and retry checks the empty slot, checkpoint and fence again' },
+  { file: 'src/lib/nrlSaveSlots.ts', keys: ['write:replaceWithSeasonCheckpoint'],
+    why: 'the saved season point and verified recovery copy stay available while the slot is checked again' },
   { file: 'src/lib/clubManagerCheckpoint.ts', keys: ['write:keepClubManagerCheckpoint', 'write:replaceWithCheckpoint'],
     why: 'the completed rollover is verified before the optional checkpoint write; a refused restore already has a saved checkpoint and requires new confirmation' },
   { file: 'src/hooks/useAussieRulesLeague.ts', keys: ['write:switchNames'],
