@@ -50,9 +50,13 @@ export function writeActivePairSave(career: CareerState, plain: string): boolean
 
     if (!unchanged()) return false;
     const wrote = saveFence.write(SAVE_KEY, function saveCareer() {
-      if (!unchanged() || (kept !== null && storage.getItem(kept) !== initial)) return false;
-      storage.setItem(SAVE_KEY, packed);
-      return true;
+      try {
+        if (!unchanged() || (kept !== null && storage.getItem(kept) !== initial)) return false;
+        storage.setItem(SAVE_KEY, packed);
+        return true;
+      } catch {
+        return false;
+      }
     }, typeof window !== 'undefined');
     return wrote === 'written' && storage.getItem(SAVE_KEY) === packed;
   } catch {
