@@ -1,6 +1,6 @@
 ## 2026-11-23, NRL Team Manager automatic season checkpoints
 
-PL-03 adds a season checkpoint beside the manual checkpoint in each slot. Starting a later season keeps the exact completed save after the new progress lands. Career saves can restore it after keeping a copy of the current career. Imported careers remain local, and replayed seasons avoid duplicate completion credit.
+PL-03 adds a season checkpoint beside the manual checkpoint in each slot. Starting a later season keeps the exact completed save after the new progress lands. Career saves can restore it after keeping a copy of the current career. Deleting a career files its automatic checkpoint in recovery so the slot can be reused. Imported careers remain local, and replayed seasons avoid duplicate completion credit.
 
 ## 2026-11-23, NRL Team Manager save file imports
 

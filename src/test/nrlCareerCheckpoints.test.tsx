@@ -263,6 +263,124 @@ describe('NRL career checkpoints', () => {
 });
 
 describe('NRL automatic season checkpoint', () => {
+  it('backs up a season checkpoint before deletion, rolls back a refused delete, and reuses one backup on retry', () => {
+    const review = closedSeason(createNrlCareer('storm', 620));
+    const checkpoint = ' ' + bytes(review);
+    const active = bytes(reduceNrlCareer(review, { type: 'startNextSeason' }));
+    const key = seasonPointKey(secondKey);
+    const manual = bytes(review);
+    put(secondKey, active);
+    put(key, checkpoint);
+    put(fenceKeyOf(secondKey), '7');
+    put(pointKey(secondKey), manual);
+    put(firstKey, bytes(createNrlCareer('bears', 19, 2027)));
+    const peer = raw(firstKey);
+    open('?slot=2&view=saves');
+    const set = Storage.prototype.setItem;
+    const remove = Storage.prototype.removeItem;
+    let blocked = 'archive';
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, name, value) {
+      if (blocked === 'archive' && name.startsWith(secondKey + BROKEN_SAVE_MARK)) throw new DOMException('Fixture quota', 'QuotaExceededError');
+      set.call(this, name, value);
+    });
+    vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(function (this: Storage, name) {
+      if (blocked === 'delete' && name === secondKey) throw new Error('Fixture refused active deletion');
+      remove.call(this, name);
+    });
+    for (const failure of ['archive', 'delete']) {
+      blocked = failure;
+      slotClick(2, 'Delete slot 2');
+      click('Delete career');
+      expect(raw(secondKey) === active).toBe(true);
+      expect(raw(key) === checkpoint).toBe(true);
+      expect(raw(fenceKeyOf(secondKey))).toBe('7');
+    }
+    blocked = '';
+    slotClick(2, 'Delete slot 2');
+    click('Delete career');
+    const copies = backupKeysOf(NRL_SAVE_SLOTS[1], localStorage);
+    expect(copies).toHaveLength(1);
+    expect(raw(copies[0]) === checkpoint).toBe(true);
+    expect(raw(secondKey)).toBeNull();
+    expect(raw(key)).toBeNull();
+    expect(raw(pointKey(secondKey)) === manual).toBe(true);
+    expect(raw(firstKey) === peer).toBe(true);
+  });
+
+  it('preserves a replaced automatic checkpoint while the deletion confirmation is open', () => {
+    const review = closedSeason(createNrlCareer('storm', 620));
+    const active = bytes(reduceNrlCareer(review, { type: 'startNextSeason' }));
+    const key = seasonPointKey(secondKey);
+    const newer = ' ' + bytes(review);
+    put(secondKey, active);
+    put(key, bytes(review));
+    open('?slot=2&view=saves');
+    slotClick(2, 'Delete slot 2');
+    put(key, newer);
+    click('Delete career');
+    expect(raw(secondKey) === active).toBe(true);
+    expect(raw(key) === newer).toBe(true);
+    expect(backupKeysOf(NRL_SAVE_SLOTS[1], localStorage)).toEqual([]);
+  });
+
+  it('archives a valid checkpoint from a displaced lineage before storing the new career’s first', () => {
+    const old = closedSeason(createNrlCareer('storm', 620));
+    const own = closedSeason(createNrlCareer('storm', 621));
+    const key = seasonPointKey(secondKey);
+    put(secondKey, bytes(own));
+    put(key, bytes(old));
+    open('?slot=2');
+    keepPlaying(2026);
+    expect(raw(key) === bytes(own)).toBe(true);
+    const [held] = backupKeysOf(NRL_SAVE_SLOTS[1], localStorage);
+    expect(raw(held) === bytes(old)).toBe(true);
+  });
+
+  it('keeps a newer generation and active save written just after an automatic restore lands', () => {
+    const review = closedSeason(createNrlCareer('storm', 620));
+    const active = bytes(reduceNrlCareer(review, { type: 'startNextSeason' }));
+    const checkpoint = bytes(review);
+    const newer = ' ' + active;
+    const generation = fenceKeyOf(secondKey);
+    put(secondKey, active);
+    put(seasonPointKey(secondKey), checkpoint);
+    put(generation, '7');
+    open('?slot=2&view=saves');
+    slotClick(2, 'Restore season checkpoint');
+    const set = Storage.prototype.setItem;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, name, value) {
+      set.call(this, name, value);
+      if (name === secondKey) {
+        set.call(this, name, newer);
+        set.call(this, generation, '9');
+      }
+    });
+    confirmRestore();
+    expect(raw(secondKey) === newer).toBe(true);
+    expect(raw(generation)).toBe('9');
+    expect(raw(seasonPointKey(secondKey)) === checkpoint).toBe(true);
+    expect(screen.getByRole('status')).toHaveTextContent('This slot changed in another tab.');
+  });
+
+  it('suppresses replay credit for a completed active year when the previous season point is restored', () => {
+    const previous = closedSeason(createNrlCareer('storm', 620));
+    const final = beforeGrandFinal(reduceNrlCareer(previous, { type: 'startNextSeason' }));
+    const active = advance(final);
+    const settled = bytes(active);
+    expect(readNrlCareerSave(settled)?.season).toMatchObject({ phase: 'complete', year: 2027 });
+    expect(readNrlCareerSave(bytes({ ...active, history: previous.history }))).toBeNull();
+    put(secondKey, settled);
+    put(seasonPointKey(secondKey), bytes(previous));
+    const chooser = open('?slot=2&view=saves');
+    slotClick(2, 'Restore season checkpoint');
+    confirmRestore();
+    chooser.unmount();
+    put(secondKey, bytes(final));
+    const view = open('?slot=2');
+    finishDisplayed(view);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
   it('waits at season completion and does not add credit when a finished checkpoint is restored', async () => {
     put(firstKey, bytes(beforeGrandFinal(createNrlCareer('storm', 620))));
     let view = open('');
@@ -478,5 +596,14 @@ describe('NRL automatic season checkpoint', () => {
     expect(readNrlCareerSave(raw(firstKey))?.season).toMatchObject({ year: 2027, clubId: 'bears' });
     expect(raw(seasonPointKey(firstKey)) === before).toBe(true);
     expect(backupKeysOf(NRL_SAVE_SLOTS[0], localStorage).some(key => raw(key) === before)).toBe(true);
+    click('Career saves');
+    slotClick(1, 'Delete slot 1');
+    click('Delete career');
+    expect(raw(firstKey)).toBeNull();
+    expect(raw(seasonPointKey(firstKey))).toBeNull();
+    const copies = backupKeysOf(NRL_SAVE_SLOTS[0], localStorage);
+    expect(copies).toHaveLength(1);
+    expect(raw(copies[0]) === before).toBe(true);
+    expect(slot(1).getByRole('button', { name: 'Import into slot 1' })).toBeVisible();
   });
 });

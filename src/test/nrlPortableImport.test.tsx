@@ -63,6 +63,27 @@ afterEach(() => {
 });
 
 describe('NRL career file import', () => {
+  it('reuses a deleted slot without losing its automatic checkpoint', async () => {
+    let season = ordinary();
+    for (let round = 0; round < 45 && season.season.phase !== 'complete'; round++) season = reduceNrlCareer(season, { type: 'advance' });
+    expect(season.season.phase).toBe('complete');
+    const checkpoint = JSON.stringify(season);
+    const auto = 'dukb-nrl-season-checkpoint:' + second;
+    localStorage.setItem(second, JSON.stringify(reduceNrlCareer(season, { type: 'startNextSeason' })));
+    localStorage.setItem(auto, checkpoint);
+    open();
+    fireEvent.click(screen.getByRole('button', { name: /^Delete slot 2$/ }));
+    fireEvent.click(screen.getByRole('button', { name: /^Delete career$/ }));
+    expect(localStorage.getItem(auto)).toBeNull();
+    expect(localStorage.getItem(second)).toBeNull();
+    const [recovery] = backupKeysOf(NRL_SAVE_SLOTS[1], localStorage);
+    expect(localStorage.getItem(recovery)).toBe(checkpoint);
+    await stage(bytes(neighboring()));
+    fireEvent.click(confirm());
+    expect(screen.getByRole('status')).toHaveTextContent('Career imported into slot 2.');
+    expect(localStorage.getItem(recovery)).toBe(checkpoint);
+  });
+
   it('previews and only imports an exact 12-season career into the chosen empty slot as local play', async () => {
     const career = twelveSeasons();
     const source = { ...career, savedNote: 'Māori 🏉' };

@@ -8,7 +8,7 @@ import {
 } from '@/lib/nrlPortable';
 import {
   NRL_SAVE_SLOTS, canRestoreNrlSeasonCheckpoint, nrlCheckpointKey, nrlSeasonCheckpointKey, readNrlSaveSlot,
-  restoreNrlCheckpoint, sameNrlCareer, saveNrlCheckpoint, writeNrlSaveSlot,
+  deleteNrlCareerSlot, restoreNrlCheckpoint, sameNrlCareer, saveNrlCheckpoint,
 } from '@/lib/nrlSaveSlots';
 import { fenceKeyOf, saveFence, type FenceWrite } from '@/lib/saveFence';
 
@@ -19,7 +19,7 @@ const readSlots = () => NRL_SAVE_SLOTS.map(entry => ({
 }));
 
 type Confirmation = { index: number; raw: string } & (
-  { kind: 'delete'; club?: string } | { kind: 'replace' | 'restore' | 'restore-season'; checkpoint: string }
+  { kind: 'delete'; club?: string; seasonCheckpoint: string | null } | { kind: 'replace' | 'restore' | 'restore-season'; checkpoint: string }
 );
 
 export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: string) => void; onBack: () => void }) {
@@ -127,15 +127,16 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
     const entry = NRL_SAVE_SLOTS[confirm.index];
     const { saveKey } = entry;
     if (confirm.kind === 'delete') {
-      const result = writeNrlSaveSlot(saveKey, confirm.raw, null);
-      finish(saveKey, result, '', 'This browser could not delete the career. The save is still in its slot.');
+      const result = deleteNrlCareerSlot(entry, confirm.raw, confirm.seasonCheckpoint);
+      finish(saveKey, result, '', 'This browser could not finish deleting the career.');
     } else if (confirm.kind === 'replace') {
       const result = saveNrlCheckpoint(saveKey, confirm.raw, confirm.checkpoint);
       finish(saveKey, result, 'Checkpoint replaced.', 'This browser could not replace the checkpoint.');
     } else {
       const result = restoreNrlCheckpoint(entry, confirm.raw, confirm.checkpoint, confirm.kind === 'restore-season' ? 'season' : 'manual');
       finish(saveKey, result, 'Checkpoint restored. Your previous progress is in recovery.',
-        'This browser could not restore the checkpoint. The career is still in its slot.');
+        confirm.kind === 'restore-season' ? 'Could not verify the restore. Check the career in this slot.'
+          : 'This browser could not restore the checkpoint. The career is still in its slot.');
     }
   }
 
@@ -205,6 +206,8 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
                   </>
                 ) : pending ? (
                   <>
+                    {pending.kind === 'delete' && pending.seasonCheckpoint !== null
+                      && <p className="mb-2 text-sm">The season checkpoint moves to recovery.</p>}
                     <p className="mb-2 text-sm">
                       {pending.kind === 'delete' ? (pending.club ? 'Delete ' + pending.club + ' from this slot?' : 'Delete the unreadable career from this slot?')
                         : pending.kind === 'replace' ? 'Replace the saved checkpoint with your current progress?'
@@ -246,7 +249,7 @@ export default function NrlCareerSlots({ onOpen, onBack }: { onOpen: (path: stri
                       variant="outline" disabled={confirm !== null || review !== null || reading}
                       onClick={() => ask({ kind: 'restore-season', index, raw, checkpoint: lastRaw })}>Restore season checkpoint</Button>}
                     {raw !== null && <Button type="button" size="lg" className="px-3" variant="ghost" disabled={confirm !== null || review !== null || reading}
-                      onClick={() => ask({ kind: 'delete', index, raw, club })}>Delete slot {number}</Button>}
+                      onClick={() => ask({ kind: 'delete', index, raw, club, seasonCheckpoint: lastRaw })}>Delete slot {number}</Button>}
                   </div>
                 )}
               </div>
