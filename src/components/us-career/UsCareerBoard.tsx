@@ -36,6 +36,7 @@ import USCareerActionConfirm from '@/components/us-career/USCareerActionConfirm'
 import UsCareerStartOver from '@/components/us-career/UsCareerStartOver';
 import { noOfferWhy, seasonAheadIsLast } from '@/lib/usCareerNoOffer';
 import UsCareerSaveNotice from '@/components/us-career/UsCareerSaveNotice';
+import SaveMovedNotice from '@/components/SaveMovedNotice';
 import { CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import PlayerAvatar from '@/components/soccer-career/PlayerAvatar';
 import UsCareerCreator, { emptyUsCareerDraft, type UsCareerDraft } from '@/components/us-career/UsCareerCreator';
@@ -164,6 +165,9 @@ export interface UsCareerStart {
 export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: { sport: UsCareerSport; entry?: UsCareerStart; inSeasonRating?: boolean }) {
   const pendingSave = useRef<{ key: string; value: string | null } | null>(null);
   const savedBytes = useRef<string | null>(null);
+  const unconfirmedWrite = useRef<{ key: string; value: string | null } | null>(null);
+  const saveOwnerLost = useRef(false);
+  const [writeMoved, setWriteMoved] = useState(false);
   const [tradeSaveMoved, setTradeSaveMoved] = useState(false);
   const onEntrySaved = useRef(entry?.onSaved);
   const [saveFailure, setSaveFailure] = useState<'write' | 'remove' | null>(null);
@@ -405,8 +409,10 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
      finished playing career. With done on the retired screen alone, every
      Resume coaching then Back went false then true and paid the whole legacy
      again. The same shape in all four My Career boards. */
-  const done = phase === 'retired' || phase === 'coach';
+  const lastFinish = useRef(false);
+  const done = (phase === 'retired' || phase === 'coach') && !writeMoved && (!saveFailure || lastFinish.current);
   useGameCompletion(sport.gameSlug, done, career ? sport.legacyOf(career).score : 0);
+  useEffect(() => { lastFinish.current = done; }, [done]);
   /* Round 1039: the Hall record is derived (src/lib/careerHallOfFame.ts says
      why), so a retired save from before the bind gets its ballot on its next
      visit. hallLanded holds the Hall pill and the confetti until the card's
@@ -449,7 +455,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
      lifts in the render that holds the face, with the repaired copy when the repair changed anything. */
   const intlRepairPending = !!sport.intl && (career as { intl?: unknown } | null)?.intl !== undefined && !intl;
   useEffect(() => {
-    if (!sport.hall || !career?.retired || saveFailure || intlRepairPending) return;
+    if (!sport.hall || !career?.retired || writeMoved || saveFailure || intlRepairPending) return;
     const retired = career, mine = wallKeyOf(career, sport.hall);
     let live = true;
     import('@/lib/usCareerHallWall').then(m => {
@@ -468,10 +474,13 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       } catch { setWallRefused(mine); /* the career is still on its save, and the prompt keeps saying the card goes */ }
     }).catch(() => { /* a chunk that fails to load: the site's preloadError listener reloads once */ });
     return () => { live = false; };
-  }, [career, sport, saveFailure, intlRepairPending]);
+  }, [career, sport, writeMoved, saveFailure, intlRepairPending]);
 
   useEffect(() => {
     pendingSave.current = null;
+    unconfirmedWrite.current = null;
+    saveOwnerLost.current = false;
+    setWriteMoved(false);
     setSaveFailure(null);
     setDecisionOutcome(null);
     consumedEvent.current = null;
@@ -568,13 +577,39 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     } catch { /* fresh */ }
   }, [sport, entry]);
 
+  const ownsSave = useCallback((key: string, current: string | null) => {
+    const unconfirmed = unconfirmedWrite.current;
+    return current === savedBytes.current || (unconfirmed?.key === key && unconfirmed.value === current);
+  }, []);
+
+  const refuseMovedSave = useCallback(() => {
+    saveOwnerLost.current = true;
+    pendingSave.current = null;
+    unconfirmedWrite.current = null;
+    setSaveFailure(null);
+    setWriteMoved(true);
+  }, []);
+
   const retrySave = useCallback(() => {
     const pending = pendingSave.current;
-    if (!pending || pending.key !== sport.saveKey) return;
+    if (saveOwnerLost.current || !pending || pending.key !== sport.saveKey) return;
     try {
-      if (pending.value === null) localStorage.removeItem(pending.key);
-      else localStorage.setItem(pending.key, pending.value);
+      const current = localStorage.getItem(pending.key);
+      if (!ownsSave(pending.key, current)) { refuseMovedSave(); return; }
+      const earlier = unconfirmedWrite.current;
+      const acknowledged = earlier?.key === pending.key && earlier.value === current;
+      savedBytes.current = current;
+      unconfirmedWrite.current = null;
+      if (!acknowledged || current !== pending.value) {
+        if (pending.value === null) localStorage.removeItem(pending.key);
+        else localStorage.setItem(pending.key, pending.value);
+        /* If the receipt is refused, only this exact attempted value can be
+           recognized as ours on a later press. */
+        unconfirmedWrite.current = pending;
+        if (localStorage.getItem(pending.key) !== pending.value) throw new Error('career save did not read back');
+      }
       savedBytes.current = pending.value;
+      unconfirmedWrite.current = null;
       pendingSave.current = null;
       setSaveFailure(null);
     } catch {
@@ -590,7 +625,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
       onEntrySaved.current = undefined;
       onSaved();
     }
-  }, [sport.saveKey, creatorSport]);
+  }, [sport.saveKey, creatorSport, ownsSave, refuseMovedSave]);
   /* Round 1144: while a save is refused the storage seam knows one is
      waiting here, so a reload the app makes on its own account (a new build,
      a stale chunk, the Season Center tile's Reload) retries it once first and
@@ -601,6 +636,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     return holdPendingSave(() => { retrySave(); return pendingSave.current === null; });
   }, [saveFailed, retrySave]);
   const saveValue = useCallback((value: string | null) => {
+    if (saveOwnerLost.current) return;
     pendingSave.current = { key: sport.saveKey, value };
     retrySave();
   }, [sport.saveKey, retrySave]);
@@ -777,7 +813,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
 
   const playSeason = () => {
     playedRef.current = null;
-    if (!career || teamQuality == null || practiceOpen || tradeSaveMoved || teamPlanSaveChanged(false)) return;
+    if (!career || teamQuality == null || practiceOpen || tradeSaveMoved || teamPlanSaveChanged(false) || careerSaveMoved(true)) return;
     /* Round 195: a played season counts as playing TODAY, the Round 159
        soccer rule reaching the American careers. Unscored on purpose: the
        scored completion stays the retirement legacy. */
@@ -1008,8 +1044,14 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     if (!career || !held || pendingSave.current) return false;
     try {
       const raw = localStorage.getItem(sport.saveKey);
-      const stored = raw ? restoreMarketTalk((JSON.parse(raw) as SaveShape).contractTalk, career, sport.slug, sport.freeAgencyContact?.teams(career).map(t => t.id)) : null;
+      if (!raw || !savedBytes.current || raw === savedBytes.current) return false;
+      const { contractTalk, phase: _phase, ...core } = JSON.parse(raw) as SaveShape;
+      const { contractTalk: _oldTalk, phase: _oldPhase, ...oldCore } = JSON.parse(savedBytes.current) as SaveShape;
+      /* A market can be picked up in another tab while the career itself stays put. */
+      if (JSON.stringify(core) !== JSON.stringify(oldCore)) return false;
+      const stored = restoreMarketTalk(contractTalk, career, sport.slug, sport.freeAgencyContact?.teams(career).map(t => t.id));
       if (!stored || JSON.stringify(stored) === JSON.stringify(held)) return false;
+      savedBytes.current = raw;
       setMarketTalk(stored);
       setPhase(stored.kind === 'freeagency' ? 'freeagency' : stored.declined ? 'season' : 'extension');
       return true;
@@ -1182,12 +1224,13 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     persist(state, phase, teamQuality);
   };
 
-  const careerSaveMoved = () => {
-    if (tradeSaveMoved) return true;
+  const careerSaveMoved = (showConflict = false) => {
+    if (saveOwnerLost.current || tradeSaveMoved) return true;
     try {
-      if (localStorage.getItem(sport.saveKey) === savedBytes.current) return false;
+      if (ownsSave(sport.saveKey, localStorage.getItem(sport.saveKey))) return false;
     } catch { return false; /* The existing save retry will handle storage refusal. */ }
-    setTradeSaveMoved(true);
+    if (showConflict) refuseMovedSave();
+    else setTradeSaveMoved(true);
     return true;
   };
 
@@ -1279,6 +1322,7 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
   );
 
   const reset = () => {
+    if (careerSaveMoved(true)) return;
     setMarketTalk(null);
     extDeclinedRef.current = false;
     setCreatorReturnRefused(false);
@@ -1382,11 +1426,13 @@ export default function UsCareerBoard({ sport, entry, inSeasonRating = false }: 
     {content}
   </div>;
 
+  if (writeMoved) return <SaveMovedNotice message="This career changed in another tab. Reload to continue." />;
+
   if (phase === 'prospect' && prospect) {
     return withSaveStatus(<>
       {creatorReturnRefused && <p role="alert" className="mb-2 text-sm text-destructive">Your setup could not be saved. Try Back to player again.</p>}
       <ProspectJourney sport={sport} prospect={prospect} onChange={advanceProspect} onJoin={joinCareer} onBack={() => {
-        if (prospect.state) return;
+        if (prospect.state || careerSaveMoved(true)) return;
         const next = { nameInput: prospect.name, pos: prospect.pos, archetypeId: prospect.archetypeId, eraId: prospect.eraId, appearance: prospect.appearance };
         if (creatorSport) {
           const bytes = JSON.stringify(next);

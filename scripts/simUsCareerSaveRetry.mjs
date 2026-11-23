@@ -24,7 +24,10 @@ const REMOVE = 'refused occupied reset queues removal and Retry really deletes o
 const REPLACE = 'a new actual draft supersedes queued deletion with the latest career';
 const BACK = 'Back from an unsaved prospect queues an honest empty-key removal';
 const ORDINARY = 'a later ordinary prospect save clears refusal using the newest progress';
-const COUNT = 33;
+const MOVED = 'does not retry a refused write over a newer save or let a third stale tab take it';
+const RECEIPT = 'checks the write receipt and acknowledges the exact landed bytes without replay';
+const STALE_SEASON = 'keeps a verified newer career on an ordinary stale season press without drawing a season';
+const COUNT = 53;
 const sha = value => crypto.createHash('sha256').update(value).digest('hex');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n');
 const unix = value => value.replaceAll('\\', '/');
@@ -65,6 +68,9 @@ const controls = [
   ['back', BOARD, "        prospectRef.current = null;\n        setProspect(null);\n        setPhase('create');\n        saveValue(null);", "        prospectRef.current = null;\n        setProspect(null);\n        setPhase('create');", BACK],
   ['replacement', BOARD, 'pendingSave.current = { key: sport.saveKey, value };', 'if (pendingSave.current?.value === null && value !== null) return;\n    pendingSave.current = { key: sport.saveKey, value };', REPLACE],
   ['ordinary', BOARD, 'pendingSave.current = { key: sport.saveKey, value };', 'if (pendingSave.current) { retrySave(); return; }\n    pendingSave.current = { key: sport.saveKey, value };', ORDINARY],
+  ['owner', BOARD, 'if (!ownsSave(pending.key, current)) { refuseMovedSave(); return; }', 'void current;', MOVED],
+  ['receipt', BOARD, "if (localStorage.getItem(pending.key) !== pending.value) throw new Error('career save did not read back');", 'void pending.value;', RECEIPT],
+  ['staleSeason', BOARD, 'teamPlanSaveChanged(false) || careerSaveMoved(true)) return;', 'teamPlanSaveChanged(false)) return;', STALE_SEASON],
   ['protected', BOARD, 'else localStorage.setItem(pending.key, pending.value);', "else { localStorage.setItem(pending.key, pending.value); localStorage.removeItem('nba-my-career-save-v1'); }", PRACTICE],
   ['rng', BOARD, 'const pending = pendingSave.current;', 'Math.random(); const pending = pendingSave.current;', PRACTICE],
   ['replay', BOARD, 'pendingSave.current = null;\n      setSaveFailure(null);', "pendingSave.current = null;\n      setSaveFailure(null); setPhase('create');", PRACTICE],
