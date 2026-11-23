@@ -4,7 +4,8 @@
  * file holds the storage rules one at a time.
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { SAVE_KEY, startCareer, leanCareer, trimCareer, worldSeasonLabel, loadCareer, sortedWorldTable } from '@/lib/clubManager';
+import { SAVE_KEY, startCareer, leanCareer, trimCareer, worldSeasonLabel, loadCareer, saveCareer, sortedWorldTable, type H2HEntry } from '@/lib/clubManager';
+import { highestScoringOf } from '@/lib/clubManagerRecords';
 import { fenceKeyOf } from '@/lib/saveFence';
 import { compressToUTF16 } from 'lz-string';
 import { PARKED_PAIR_SAVE_VERSION, pairLedgerSignature, readableClubManagerSave } from '@/lib/clubManagerSaveKeys';
@@ -73,6 +74,81 @@ describe('switching', () => {
   });
 });
 
+
+describe('the highest scoring game in a legacy career', () => {
+  const record = { opp: 'Liverpool', score: '5-4', res: 'W', season: 1 } as const;
+  const legacy = (newer: H2HEntry[]) => {
+    const c = career('Everton');
+    c.season = 5;
+    c.h2h = [{ ...record, comp: 'league', home: true }, ...newer];
+    c.careerStats.played = c.h2h.length + 4;
+    return c;
+  };
+  const recentMeetings: H2HEntry[] = Array.from({ length: 6 }, (_, i) => ({
+    opp: 'Liverpool', score: '2-1', res: 'W', season: 2 + Math.floor(i / 2), comp: 'league', home: i % 2 === 0,
+  }));
+
+  it('keeps the record when a parked career drops older meetings', () => {
+    const c = legacy(recentMeetings);
+    localStorage.setItem(SAVE_KEY, JSON.stringify(c));
+    expect(highestScoringOf(loadCareer()!)).toEqual({ ...record, missed: 4 });
+
+    expect(switchSlot(2)).toBe(true);
+    expect(switchSlot(1)).toBe(true);
+    const reopened = loadCareer()!;
+    expect(reopened.h2h).toEqual(recentMeetings);
+    expect(highestScoringOf(reopened)).toEqual({ ...record, missed: 4 });
+  });
+
+  it('keeps the record when the first save write hits the quota', () => {
+    const c = legacy([{ ...recentMeetings[0], season: 1, home: false }, ...recentMeetings]);
+    const limit = JSON.stringify(c).length - 1;
+    const write = Storage.prototype.setItem;
+    let refused = false;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key: string, bytes: string) {
+      if (key === SAVE_KEY && bytes.length > limit) {
+        refused = true;
+        throw new DOMException('quota', 'QuotaExceededError');
+      }
+      write.call(this, key, bytes);
+    });
+
+    expect(saveCareer(c)).toBe(true);
+    expect(refused).toBe(true);
+    const reopened = loadCareer()!;
+    expect(reopened.h2h).toEqual(recentMeetings);
+    expect(highestScoringOf(reopened)).toEqual({ ...record, missed: 4 });
+    expect(c.careerStats.highestScoring).toBeUndefined();
+  });
+
+  it('keeps the record when opening an older save over the match cap', () => {
+    const opponents = career('Everton').leagueClubs.filter(club => club !== 'Everton');
+    const newer: H2HEntry[] = Array.from({ length: 300 }, (_, i) => ({
+      opp: opponents[i % opponents.length], score: '1-0', res: 'W', season: 2 + Math.floor(i / 50), comp: 'league', home: i % 2 === 0,
+    }));
+    const c = legacy(newer);
+    c.season = 7;
+    const bytes = JSON.stringify(c);
+    localStorage.setItem(SAVE_KEY, bytes);
+
+    const reopened = loadCareer()!;
+    expect(localStorage.getItem(SAVE_KEY)).toBe(bytes);
+    expect(reopened.h2h).toEqual(newer);
+    expect(highestScoringOf(reopened)).toEqual({ ...record, missed: 4 });
+    expect(saveCareer(reopened)).toBe(true);
+    expect(highestScoringOf(loadCareer()!)).toEqual({ ...record, missed: 4 });
+  });
+
+  it.each([null, { opp: 'Brighton', score: '3-2', res: 'W', season: 4 }] as const)('keeps an existing record of %j', stored => {
+    const c = legacy(recentMeetings);
+    c.careerStats.highestScoring = stored;
+    localStorage.setItem(SAVE_KEY, JSON.stringify(c));
+
+    expect(switchSlot(2, c)).toBe(true);
+    expect(switchSlot(1)).toBe(true);
+    expect(highestScoringOf(loadCareer()!)).toEqual(stored);
+  });
+});
 
 describe('lossless pair storage for parked careers', () => {
   const fullLedger = () => {

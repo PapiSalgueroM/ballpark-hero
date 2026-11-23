@@ -9,8 +9,9 @@
    biggest win and the worst defeat. A save from before this round has no
    stored record, so highestScoringOf works it out from the head to head book,
    which holds every match the manager played until it is trimmed: the last 300
-   by SAVE_CAPS, and six per opponent by leanCareer on every parked slot. When
-   the book no longer holds every match, `missed` says how many it lost.
+   by SAVE_CAPS, and six per opponent by leanCareer on every parked slot. The
+   save keeps this result before trimming. For a book already missing games,
+   `missed` counts the matches unavailable when the record was calculated.
 
    Stored value: absent means never counted, so it is derived from the book.
    null means counted from here with no game yet, so it is never derived (a

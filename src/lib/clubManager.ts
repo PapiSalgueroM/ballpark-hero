@@ -3,7 +3,7 @@ import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
 import { clubWorldCup2025TeamCampaign } from '@/lib/soccerClubWorldCup';
 import { INTERCONTINENTAL_CUP_SCHEDULE, INTERCONTINENTAL_CUP_YEAR, intercontinentalCupDate, simIntercontinentalCupMatch, type IntercontinentalCupMatch } from '@/lib/clubIntercontinentalCup';
-import { noteHighestScoring } from '@/lib/clubManagerRecords';
+import { highestScoringOf, noteHighestScoring } from '@/lib/clubManagerRecords';
 import { settleGoalReviews, penaltyReviews, awardReviewedPenalties, cmVarCovers, cmVarKindsAsked, cmVarKindsOf, cmVarGoalLift, type CmVarDecision, type CmVarKind, type CmVarAsk } from '@/lib/clubManagerVar';
 /* Round 201: the wilderness reuses the manager job market the retired
    player path already had, so a sacked manager gets real clubs with real
@@ -25169,19 +25169,28 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
  */
 export const SAVE_CAPS = { h2h: 300, transferLog: 80, resultLog: 60, inbox: 8, aiHeadlines: 8 } as const;
 
+/** Keep a legacy record from all games still available before shortening the book. */
+function keepHighestScoring(state: CareerState): CareerState {
+  if (!state.careerStats || state.careerStats.highestScoring !== undefined) return state;
+  const highestScoring = highestScoringOf(state);
+  return highestScoring ? { ...state, careerStats: { ...state.careerStats, highestScoring } } : state;
+}
+
 /**
  * Round 634: the save held to SAVE_CAPS. Newest-last lists keep their tail,
  * newest-first lists keep their head, and a save already inside every cap
  * comes back as the same object, so a caller can tell a no-op from a trim.
- * Nothing a screen reads is cut: the calendar and the meters read this
- * season's results (at most 55 entries), the pre match facts read the last
- * six meetings with the next opponent, the transfer desk shows the last 50
- * lines of the feed, the hub reads the inbox and the headlines whole.
+ * The calendar and the meters read this season's results (at most 55
+ * entries), the pre match facts read the last six meetings with the next
+ * opponent, the transfer desk shows the last 50 lines of the feed, and the
+ * hub reads the inbox and the headlines whole.
  */
 export function trimCareer(state: CareerState): CareerState {
   if (!state || typeof state !== 'object') return state;
   let out = state;
-  if (Array.isArray(out.h2h) && out.h2h.length > SAVE_CAPS.h2h) out = { ...out, h2h: out.h2h.slice(-SAVE_CAPS.h2h) };
+  if (Array.isArray(out.h2h) && out.h2h.length > SAVE_CAPS.h2h) {
+    out = { ...keepHighestScoring(out), h2h: out.h2h.slice(-SAVE_CAPS.h2h) };
+  }
   if (Array.isArray(out.transferLog) && out.transferLog.length > SAVE_CAPS.transferLog) out = { ...out, transferLog: out.transferLog.slice(-SAVE_CAPS.transferLog) };
   if (Array.isArray(out.resultLog) && out.resultLog.length > SAVE_CAPS.resultLog) out = { ...out, resultLog: out.resultLog.slice(-SAVE_CAPS.resultLog) };
   if (Array.isArray(out.inbox) && out.inbox.length > SAVE_CAPS.inbox) out = { ...out, inbox: out.inbox.slice(0, SAVE_CAPS.inbox) };
@@ -25191,10 +25200,9 @@ export function trimCareer(state: CareerState): CareerState {
 
 /**
  * Round 634: the shape a save is retried in when the browser refuses the
- * full one. Only what no screen reads is cut: the head to head is kept to the
- * last six meetings per opponent, which is exactly what the pre match facts
- * show (matchFacts slices six), so the career plays and reads the same from
- * here. It is a last resort rather than a diet: measured on the shipped
+ * full one. The head to head is kept to the last six meetings per opponent,
+ * which is exactly what the pre match facts show (matchFacts slices six).
+ * Measured on the shipped
  * engine it takes roughly 10 KB off a 165 KB save, which covers a quota
  * missed by a hair and nothing more, and the honest report of a refused write
  * below is what handles the rest.
@@ -25213,7 +25221,7 @@ export function leanCareer(state: CareerState): CareerState {
   }
   if (keep.length === h2h.length) return out;
   keep.reverse();
-  return { ...out, h2h: keep };
+  return { ...keepHighestScoring(out), h2h: keep };
 }
 
 /**

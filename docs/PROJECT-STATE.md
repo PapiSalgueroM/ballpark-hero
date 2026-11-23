@@ -1,3 +1,9 @@
+## 2026-11-23, Club Manager legacy career record
+
+**PL-04 is partly implemented.** Club Manager keeps the highest-scoring match from an older career before shortening its match book during a slot swap, a storage quota retry or a load that exceeds the history cap. It keeps the original coverage count where some results were already missing. Existing stored records and a recorded fresh start retain their meaning.
+
+All 41 targeted tests passed on the final fixture, along with application types, the production build and all 15 built-site checks. The unchanged code failed on all three save paths. The retirement harness passed all eight old-save checks, and its copied fault failed the record preservation check. At 320 and 390 pixels, Chromium moved Everton into a parked slot and resumed it after opening Lincoln City. The archived 5-4 still appeared in Manager career with seven of nine games counted after the match book dropped to six entries. Detail already discarded by an earlier version remains unavailable.
+
 ## 2026-11-16 — Career search, NHL trades and NFL injured reserve
 
 - Home recognizes explicit requests such as “NBA career mode” and “manage an MLB team.” Both mobile widths verified nine supported queries, five misses, the existing title shortcuts and return focus. The NBA result opened with Enter and the MLB result opened by touch. Back restored the search filters and saved games.

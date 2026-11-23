@@ -4,9 +4,9 @@
      record   fresh careers (Everton 2005-06, Barcelona 2015-16, Liverpool now, seeds 0 to 4, two seasons):
               after every match the stored record equals an independent oracle (each match's goals read off
               its MatchWeekReport, the first of the most goals kept) and highestFromBook over the whole book.
-     oldsave  a four season Everton career saved without the field (built on RETIRE_BASE when set, else head
-              built with the field taken off): exact on the whole book; leaned, `missed` is played minus the
-              book; one more match on head stores the seed or that match and carries `missed`.
+     oldsave  a five season Everton career saved without the field (built on RETIRE_BASE when set, else head
+              built with the field taken off): exact on the whole book and preserved when leaned. On an
+              already leaned old save, one more match stores the seed or that match and carries `missed`.
      pens     every single leg tie of the record fleet settled on penalties, fed through noteHighestScoring
               with a prev of fewer goals: the level score with res W or L, onPenalties true, goals equal to the
               report's goals with no kick. Exit 2 when the fleet held no shootout, or none in a single leg tie.
@@ -33,6 +33,7 @@
      tielast     the update takes >= : record red (exit 2 if the fleet held no tie, never green)
      skipgame    the update ignores the match just played: record red
      nomissed    missed is never stored: oldsave red
+     droprecord  shortening the book drops the legacy record: oldsave red
      basewrites  the 'base' gate off: base red
      hotseatwrites  the same gate off, run on hotseat (needs RETIRE_BASE): the dailies before the cutover red
      pensdrawn   the engine leaves a single leg shootout drawn (res D): pens red
@@ -77,6 +78,7 @@ const CONTROLS = {
   tielast: { part: 'record', file: RECORDS, from: '  const best = !prev || goalsIn(game.score) > goalsIn(prev.score) ? game : prev;', to: '  const best = !prev || goalsIn(game.score) >= goalsIn(prev.score) ? game : prev;' },
   skipgame: { part: 'record', file: RECORDS, from: '  const best = !prev || goalsIn(game.score) > goalsIn(prev.score) ? game : prev;', to: '  const best = prev ?? game;' },
   nomissed: { part: 'oldsave', file: RECORDS, from: '  return missed > 0 ? { ...rest, missed } : rest;', to: '  return rest;' },
+  droprecord: { part: 'oldsave', file: ENGINE, from: '  return { ...keepHighestScoring(out), h2h: keep };', to: '  return { ...out, h2h: keep };' },
   basewrites: { part: 'base', file: ENGINE, from: "  if (state.matchRules !== 'base') {", to: '  if (true) {' },
   /* Review fix: the checks below had no control of their own. */
   hotseatwrites: { part: 'hotseat', file: ENGINE, from: "  if (state.matchRules !== 'base') {", to: '  if (true) {' },
@@ -279,7 +281,7 @@ async function pensSection(cm, ctx) {
 }
 
 /* ---------------- section oldsave ---------------- */
-const OLD_SEASONS = 4;
+const OLD_SEASONS = 5;
 async function oldsaveSection(cm, ctx) {
   const P = 'oldsave';
   const rec = REC.get(cm);
@@ -296,16 +298,18 @@ async function oldsaveSection(cm, ctx) {
   const whole = rec.highestScoringOf(old);
   check(P, 'on the whole book the derived record is the reports\' first of the most goals, with no missed', !!whole && !!best && whole.opp === best.opp && whole.score === best.score && whole.season === best.season && !('missed' in whole),
     `${show(whole)}; reports ${best ? `${best.score} vs ${best.opp}, S${best.season}` : 'none'}`);
-  const lean = maker.leanCareer(clone(old));
+  const lean = cm.leanCareer(clone(old));
   const lost = lean.careerStats.played - lean.h2h.length;
   if (lost <= 0) { console.log('oldsave: leanCareer dropped no meeting from the book, so the leaned case proves nothing; could not run'); process.exit(2); }
-  const leaned = rec.highestScoringOf(lean);
-  check(P, `leaned, the derived record says the book lost ${lost} matches`, !!leaned && leaned.missed === lost, show(leaned));
-  const frozen = JSON.stringify(lean);
-  rec.highestScoringOf(lean);
-  check(P, 'reading the record writes nothing', JSON.stringify(lean) === frozen);
+  check(P, `shortening the book by ${lost} games preserves the derived record`, !!whole && JSON.stringify(lean.careerStats.highestScoring) === JSON.stringify(whole), show(lean.careerStats.highestScoring));
+  const oldLean = stripRecord(lean);
+  const leaned = rec.highestScoringOf(oldLean);
+  check(P, `an already shortened legacy book reports ${lost} unavailable matches`, !!leaned && leaned.missed === lost, show(leaned));
+  const frozen = JSON.stringify(oldLean);
+  rec.highestScoringOf(oldLean);
+  check(P, 'reading the record writes nothing', JSON.stringify(oldLean) === frozen);
   /* One more match on head, from the leaned save. */
-  let s = clone(lean), night = null;
+  let s = clone(oldLean), night = null;
   for (let i = 0; i < 40 && !night; i++) {
     const before = s;
     const r = withSeed(9100 + i, () => cm.playNextEntry(s, QUICK.coach));
