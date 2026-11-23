@@ -52,7 +52,7 @@
  *      three measurements) and the thin club 11 or worse (6.33 places of
  *      headroom over its best mean, and its best single seed of 12 is still
  *      above the band). No band reads a single worst seed.
- *   5. The extension's accounting: 98 clubs, 1,725 players, 387
+ *   5. The extension's accounting: 98 clubs, 1,724 players, 388
  *      corrections, 294 Serie A, 332 Bundesliga and 341 Ligue 1 players, the
  *      five thin clubs by name, one man at one club in the whole world, the
  *      three men Round 176 removed who are home now, the two folds, a sample
@@ -555,6 +555,7 @@ console.log('5) The bake file tells the truth about itself');
     if (roster.some(p => p.n === 'Nicolas Anelka')) fail('Anelka is in this world, his Fenerbahce is not');
     if (roster.some(p => p.n === 'Dani García')) fail('Dani García moved to Olympiacos before the 2005-06 opener');
     if (roster.some(p => p.n === 'Barry Ferguson')) fail('Barry Ferguson returned to Rangers before the 2005-06 opener');
+    if (roster.some(p => p.n === 'Ivan Leko')) fail('Ivan Leko joined Club Brugge before the 2005-06 opener');
   }
 
   /* Round 902: the accounting of the big five extension (the numbers are the
@@ -563,8 +564,8 @@ console.log('5) The bake file tells the truth about itself');
   const at = (club, name) => (R[club] ?? []).some(p => p.n === name);
   const clubsOf = name => Object.entries(R).filter(([, list]) => list.some(p => p.n === name)).map(([c]) => c);
   if (ERA2005_META.clubs !== 98) fail(`meta clubs ${ERA2005_META.clubs}, the big five of 2005-06 are 98`);
-  if (ERA2005_META.players !== 1725) fail(`meta players ${ERA2005_META.players}, the corrected bake wrote 1725`);
-  if (ERA2005_META.moves !== 387) fail(`meta moves ${ERA2005_META.moves}: 26 before Round 902 plus 150 moved, 137 removed, 72 arrived and 2 folded is 387`);
+  if (ERA2005_META.players !== 1724) fail(`meta players ${ERA2005_META.players}, the corrected bake wrote 1724`);
+  if (ERA2005_META.moves !== 388) fail(`meta moves ${ERA2005_META.moves}: 26 before Round 902 plus 150 moved, 138 removed, 72 arrived and 2 folded is 388`);
   /* Serie A, Bundesliga and Ligue 1, as the bake wrote them. */
   const LEAGUE_TOTALS = '294,332,341';
   const leagueTotal = id => (ERA_LEAGUES['era2005'].find(l => l.id === id)?.clubs ?? []).reduce((s, c) => s + (R[c]?.length ?? 0), 0);

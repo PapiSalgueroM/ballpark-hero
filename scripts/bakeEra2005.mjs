@@ -556,6 +556,7 @@ const B5_REMOVALS = [
   { n: 'Ibrahim Tall', why: 'Sochaux to Hearts on a free, 1 Jul 2005 (soccerway transfers, Ibrahim Tall); no year 2006 row', single: true },
   { n: 'Igor Demo', why: 'left Gladbach in the summer of 2005 (KI 26 Jun 2005)' },
   { n: 'Ivan Gvozdenovic', why: 'his Metz loan ended on 30 Jun 2005 and he went back to Club Brugge (soccerway transfers, Ivan Gvozdenovic)' },
+  { n: 'Ivan Leko', why: 'left Málaga for Hajduk Split in January, then joined Club Brugge on 20 Jun 2005 (UEFA transfer report and Hajduk club archive); his year 2006 row is Club Brugge KV' },
   { n: 'Ivo Ulich', why: 'left Gladbach in the summer of 2005 (KI 11 Aug 2005, Mittelfeldspieler wechselt zu Vissel Kobe)' },
   { n: 'Jacek Bak', why: 'released by Lens to join Al-Rayyan, 2 Aug 2005 (LEQ 20050802_233832)' },
   { n: 'Javier Portillo', why: 'Real Madrid, back from his Fiorentina loan, loaned him to Club Brugge on 31 Aug 2005 (LEQ 20050831_203734)' },

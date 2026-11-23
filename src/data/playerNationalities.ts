@@ -4457,6 +4457,7 @@ const ARRIVED: Record<string, Record<string, string>> = {};
 const ERA2005_SAVED_NATIONALITIES = new Map([
   ['Barry Ferguson', 'Scotland'],
   ['Dani García', 'Spain'],
+  ['Ivan Leko', 'Croatia'],
 ]);
 
 /** Fetches one past world's map. A key with no row above rejects, naming the key. */
