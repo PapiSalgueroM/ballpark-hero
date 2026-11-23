@@ -137,6 +137,7 @@
  *   section 4:
  *     namesake        the Round 669 same year keying by club undone in worldXi  namesake
  *     crossnamesake   the verified cross-snapshot identity key is dropped      crossnamesake
+ *     staleduplicate  the exact stale snapshot record is admitted              staleduplicate
  *     dupname         a second 2026 row of the subject, at another club, served  declared
  * POSITIVE CONTROLS prove a rule lets through what it must, so the pins above
  * can be lived with. Each must leave every section green AND show that its
@@ -184,7 +185,7 @@ const CONTROLS = {
   moved: [2, ['moved']], recountry: [2, ['differs']],
   latestale: [2, ['laterentry']], latefuture: [2, ['laterentry']], lateonehost: [2, ['laterentry']], lateorphan: [2, ['laterentry']],
   normalize: [3, ['cdm']], cmslot: [3, ['slots']], reposition: [3, ['cdm']],
-  namesake: [4, ['namesake']], crossnamesake: [4, ['crossnamesake']], dupname: [4, ['declared']],
+  namesake: [4, ['namesake']], crossnamesake: [4, ['crossnamesake']], staleduplicate: [4, ['staleduplicate']], dupname: [4, ['declared']],
 };
 /* the one later check rule each laterentry control breaks: it must be the only
    rule that fires, or the control proves some other rule and not its own */
@@ -801,6 +802,9 @@ if (CONTROL === 'namesake') {
 if (CONTROL === 'crossnamesake') {
   swapSource('src/lib/worldXi.ts', [['const key = worldXiPlayerKey(rowPlayer);', 'const key = name;']]);
 }
+if (CONTROL === 'staleduplicate') {
+  swapSource('src/lib/worldXi.ts', [['&& entry.stale.club === club && entry.stale.age === rowPlayer.age)) {', '&& false)) {']]);
+}
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'simWxiDm-'));
 const ENTRY = path.join(TMP, 'entry.mjs');
 const BUNDLE = path.join(TMP, 'bundle.mjs');
@@ -809,7 +813,7 @@ fs.writeFileSync(ENTRY, [
   `const w = await import('${ROOT.replaceAll('\\', '/')}/src/lib/worldXi.ts');`,
   `const s = await import('${ROOT.replaceAll('\\', '/')}/src/lib/squadDeal.ts');`,
   'export const { fetchWorldXiPool, fitsSlot, suggestCountryPlayers, primaryCountry, worldXiPlayerKey } = w;',
-  `export { WORLD_XI_CROSS_SNAPSHOT_NAMESAKES } from '${ROOT.replaceAll('\\', '/')}/src/data/worldXiVerifiedNamesakes.ts';`,
+  `export { WORLD_XI_CROSS_SNAPSHOT_NAMESAKES, WORLD_XI_STALE_SNAPSHOT_DUPLICATES } from '${ROOT.replaceAll('\\', '/')}/src/data/worldXiVerifiedNamesakes.ts';`,
   'export const { FORMATIONS, normalizePosition } = s;',
 ].join('\n'));
 let swapped = 0;
@@ -829,7 +833,7 @@ await build({
   }],
 });
 if (swaps.size && swapped !== swaps.size) refuse(`${swaps.size} source swaps prepared, ${swapped} reached the bundle`);
-const { fetchWorldXiPool, fitsSlot, suggestCountryPlayers, primaryCountry, worldXiPlayerKey, WORLD_XI_CROSS_SNAPSHOT_NAMESAKES, normalizePosition, FORMATIONS } = await import(pathToFileURL(BUNDLE).href);
+const { fetchWorldXiPool, fitsSlot, suggestCountryPlayers, primaryCountry, worldXiPlayerKey, WORLD_XI_CROSS_SNAPSHOT_NAMESAKES, WORLD_XI_STALE_SNAPSHOT_DUPLICATES, normalizePosition, FORMATIONS } = await import(pathToFileURL(BUNDLE).href);
 const data = await fetchWorldXiPool();
 fs.rmSync(TMP, { recursive: true, force: true });
 if (!data) {
@@ -1077,6 +1081,15 @@ console.log('\n4) namesakes stay two people, and every name in the pool twice is
       }
     }
     console.log(`   ${name}: ${a.country} (${a.club}) and ${b.country} (${b.club})`);
+  }
+  for (const { name, country, position, stale, kept } of WORLD_XI_STALE_SNAPSHOT_DUPLICATES) {
+    const options = suggestCountryPlayers(data, country, name).filter(p => p.name === name && p.position === position);
+    if (options.some(p => p.club === stale.club && p.age === stale.age)) {
+      fail('staleduplicate', `${name} is offered on the stale ${stale.club} card`);
+    }
+    if (!options.some(p => p.club === kept.club && p.age === kept.age)) {
+      fail('staleduplicate', `${name} is missing the verified ${kept.club} card`);
+    }
   }
   let twice = 0;
   for (const [name, clubs] of clubsOf) {

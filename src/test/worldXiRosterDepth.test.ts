@@ -128,6 +128,43 @@ describe('World XI recent snapshot depth', () => {
     expect(data!.players.filter(player => player.name === 'Fixture shared name').map(player => player.club).sort()).toEqual(['Fixture North', 'Fixture South']);
   });
 
+  it('keeps the dated Sibir card and drops the stale age-21 Salyut card for the same player', async () => {
+    H.previous = [
+      row(122337, 'Nikolay Boyarkin', 2025, { nationality: 'Russia', position: 'Left Midfield', club: 'Salyut Belgorod', age: 21, market_value_usd: 1_000_000 }),
+      row(123000, 'Fixture tied midfielder', 2025, { nationality: 'Russia', position: 'Left Midfield', market_value_usd: 1_000_000 }),
+      row(125551, 'Nikolay Boyarkin', 2025, { nationality: 'Russia', position: 'Left Midfield', club: 'Sibir Novosibirsk', age: 23, market_value_usd: 1_000_000 }),
+    ];
+    const data = await fetchWorldXiPool();
+    expect(suggestCountryPlayers(data!, 'Russia', 'Nikolay Boyarkin')).toEqual([
+      { name: 'Nikolay Boyarkin', country: 'Russia', position: 'LM', club: 'Sibir Novosibirsk', value: 1_000_000, age: 23 },
+    ]);
+    expect(data!.byCountry.get('Russia')?.map(player => player.name)).toEqual(['Nikolay Boyarkin', 'Fixture tied midfielder']);
+  });
+
+  it('keeps the free-agent card and drops the stale Charlotte card from the 2025 pool', async () => {
+    H.previous = [
+      row(122396, 'Avionne Flanagan', 2025, { nationality: 'United States', position: 'Left Midfield', club: 'Charlotte Independence', age: 23, market_value_usd: 1_000_000 }),
+      row(125553, 'Avionne Flanagan', 2025, { nationality: 'United States', position: 'Left Midfield', club: 'Without Club', age: 25, market_value_usd: 1_000_000 }),
+    ];
+    const data = await fetchWorldXiPool();
+    expect(suggestCountryPlayers(data!, 'United States', 'Avionne Flanagan')).toEqual([
+      { name: 'Avionne Flanagan', country: 'United States', position: 'LM', club: 'Without Club', value: 1_000_000, age: 25 },
+    ]);
+  });
+
+  it.each([
+    { nationality: 'Fixture Other Country' },
+    { position: 'Goalkeeper' },
+    { club: 'Fixture Other Club' },
+    { age: 23 },
+  ])('keeps a changed same-name row outside the stale record boundary %#', async difference => {
+    H.previous = [row(300_000, 'Nikolay Boyarkin', 2025, {
+      nationality: 'Russia', position: 'Left Midfield', club: 'Salyut Belgorod', age: 21, ...difference,
+    })];
+    const data = await fetchWorldXiPool();
+    expect(data?.players.filter(player => player.name === 'Nikolay Boyarkin')).toHaveLength(1);
+  });
+
   it('keeps verified cross-country namesakes from both dated snapshots', async () => {
     // Exact market rows 24289, 162897, 100079 and 46020. The two extra rows are controls.
     H.current.push(

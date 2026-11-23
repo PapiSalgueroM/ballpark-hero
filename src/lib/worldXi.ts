@@ -6,7 +6,7 @@ import { rng, winProbability } from '@/lib/perfectSeason';
 import { ALL_POSITIONS, allowedLabelFor, eligiblePositions, fitsAllowed, slotAllowedPositions } from '@/lib/positionFit';
 import type { XiFitAdjust } from '@/lib/xiFit';
 import { verifiedPositionFallback } from '@/data/verifiedSoccerPositions';
-import { WORLD_XI_CROSS_SNAPSHOT_NAMESAKES } from '@/data/worldXiVerifiedNamesakes';
+import { WORLD_XI_CROSS_SNAPSHOT_NAMESAKES, WORLD_XI_STALE_SNAPSHOT_DUPLICATES } from '@/data/worldXiVerifiedNamesakes';
 
 /**
  * World XI (build an XI, one slot at a time)
@@ -304,6 +304,13 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
       const key = worldXiPlayerKey(rowPlayer);
       const year = Number(r.year) || 0;
       const prev = byName.get(key);
+      if (WORLD_XI_STALE_SNAPSHOT_DUPLICATES.some(entry => entry.year === year && entry.name === name
+        && entry.country === rowPlayer.country && entry.position === position
+        && entry.stale.club === club && entry.stale.age === rowPlayer.age)) {
+        // Reserve the same position for tied values without admitting a dated row.
+        if (!prev) byName.set(key, { year: 0, byClub: new Map() });
+        continue;
+      }
       const sameClub = prev && year === prev.year ? prev.byClub.get(club) : undefined;
       if (!prev || year > prev.year || (year === prev.year && (!sameClub || value > sameClub.value))) {
         /* Identity guard: the curated history belongs to the human whose
