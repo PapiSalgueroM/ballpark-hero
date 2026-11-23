@@ -198,6 +198,54 @@ const PANATHINAIKOS_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
   { name: 'Dimitrios Papadopoulos', line: 'ATT' },
 ];
 
+// Partial PSV first-team roster at the August 2005 opening.
+// Sources and cutoff are recorded in docs/audits/club-manager-psv-artmedia-thun-2005-rosters.md.
+const PSV_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
+  { name: 'Heurelho Gomes', line: 'GK' },
+  { name: 'André Ooijer', line: 'DEF' },
+  { name: 'Alex', line: 'DEF' },
+  { name: 'Wilfred Bouma', line: 'DEF' },
+  { name: 'Young-Pyo Lee', line: 'DEF' },
+  { name: 'Theo Lucius', line: 'MID' },
+  { name: 'Timmy Simons', line: 'MID' },
+  { name: 'Phillip Cocu', line: 'MID' },
+  { name: 'Ibrahim Afellay', line: 'MID' },
+  { name: 'Jefferson Farfán', line: 'ATT' },
+  { name: 'Jan Vennegoor of Hesselink', line: 'ATT' },
+];
+
+// Partial Artmedia Bratislava first-team roster at the July 2005 opening.
+// Sources and cutoff are recorded in docs/audits/club-manager-psv-artmedia-thun-2005-rosters.md.
+const ARTMEDIA_BRATISLAVA_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
+  { name: 'Juraj Čobej', line: 'GK' },
+  { name: 'Ondrej Debnár', line: 'DEF' },
+  { name: 'Ján Ďurica', line: 'DEF' },
+  { name: 'Daniel Tchuř', line: 'DEF' },
+  { name: 'Peter Burák', line: 'DEF' },
+  { name: 'Pavol Staňo', line: 'MID' },
+  { name: 'Vratislav Gajdoš', line: 'MID' },
+  { name: 'Balázs Borbély', line: 'MID' },
+  { name: 'Ján Kozák', line: 'MID' },
+  { name: 'Branislav Obžera', line: 'ATT' },
+  { name: 'Martin Mikulič', line: 'ATT' },
+];
+
+// Partial Thun first-team roster at the July 2005 opening.
+// Sources and cutoff are recorded in docs/audits/club-manager-psv-artmedia-thun-2005-rosters.md.
+const THUN_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
+  { name: 'Eldin Jakupović', line: 'GK' },
+  { name: 'Leandro Vieira', line: 'DEF' },
+  { name: 'Ljubo Miličević', line: 'DEF' },
+  { name: 'Armand Deumi', line: 'DEF' },
+  { name: 'David Pallas', line: 'DEF' },
+  { name: 'Selver Hodžić', line: 'DEF' },
+  { name: 'Adriano Pimenta', line: 'MID' },
+  { name: 'Andres Gerber', line: 'MID' },
+  { name: 'Silvan Aegerter', line: 'MID' },
+  { name: 'Nelson Ferreira', line: 'MID' },
+  { name: 'Mauro Lustrinelli', line: 'ATT' },
+];
+
 export const HISTORIC_2005_CUP_ROSTERS: ReadonlyMap<string, readonly HistoricCupRosterPlayer[]> = new Map([
   ['Ajax', AJAX_2005_CUP_ROSTER],
   ['Rosenborg', ROSENBORG_2005_CUP_ROSTER],
@@ -211,4 +259,7 @@ export const HISTORIC_2005_CUP_ROSTERS: ReadonlyMap<string, readonly HistoricCup
   ['Anderlecht', ANDERLECHT_2005_CUP_ROSTER],
   ['Porto', PORTO_2005_CUP_ROSTER],
   ['Panathinaikos', PANATHINAIKOS_2005_CUP_ROSTER],
+  ['PSV', PSV_2005_CUP_ROSTER],
+  ['Artmedia Bratislava', ARTMEDIA_BRATISLAVA_2005_CUP_ROSTER],
+  ['Thun', THUN_2005_CUP_ROSTER],
 ]);

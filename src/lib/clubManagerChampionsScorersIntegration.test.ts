@@ -340,10 +340,23 @@ describe('Owned Champions League scorer settlement', () => {
     expect(cupNames.filter(name => leagueNames.has(name))).toEqual([]);
   });
 
-  it('credits verified background squads in the 2005 opening campaign', async () => {
+  it('reconciles every goal in the seeded 2005 opening campaign', async () => {
     await ensureEraRosters('era2005');
     const madrid = tape(MADRID, () => startCareer('Real Madrid', 'era2005')).value;
-    const before = playTo(madrid, MADRID, 55).state;
+    const throughGroup = playTo(madrid, MADRID, 16);
+    const managedScorers = [
+      { home: 'Real Madrid', away: 'Benfica', club: 'Benfica', goals: [{ name: 'Simão Sabrosa', minute: 75 }] },
+      { home: 'PSV', away: 'Real Madrid', club: 'PSV', goals: [{ name: 'Jefferson Farfán', minute: 40 }, { name: 'Alex', minute: 85 }] },
+    ];
+    for (const { home, away, club, goals } of managedScorers) {
+      const report = throughGroup.reports.find(match => match.home === home && match.away === away);
+      expect(report?.oppScorers).toEqual(goals);
+      const goalShots = report?.detail?.play.filter(event => event.side === 'opp' && event.goal)
+        .map(event => ({ name: event.who, minute: event.minute }));
+      expect(goalShots).toEqual(goals);
+      for (const { name } of goals) expect(goalsFor(throughGroup.state, club, name)).toBeGreaterThan(0);
+    }
+    const before = playTo(throughGroup.state, MADRID, 55).state;
     expect(before.uclExit).toBe('R16');
     const reopened = loadCareer(serializeParkedCareer(before));
     expect(reopened?.uclScorers).toEqual(before.uclScorers);
@@ -362,7 +375,7 @@ describe('Owned Champions League scorer settlement', () => {
       ['Rosenborg', 17, 'Steffen Iversen'],
       ['Olympiacos', 14, 'Michał Żewłakow'],
       ['Fenerbahçe', 13, 'Zafer Biryol'],
-      ['Benfica', 11, 'Fabrizio Miccoli'],
+      ['Benfica', 12, 'Fabrizio Miccoli'],
       ['Rangers', 11, 'Kris Boyd'],
       ['Rapid Vienna', 11, 'Mario Bazina'],
       ['Club Brugge', 9, 'Javier Portillo'],
@@ -370,6 +383,9 @@ describe('Owned Champions League scorer settlement', () => {
       ['Anderlecht', 8, 'Roland Juhász'],
       ['Porto', 7, 'Marek Čech'],
       ['Panathinaikos', 6, 'Sándor Torghelle'],
+      ['PSV', 4, 'Arouna Koné'],
+      ['Artmedia Bratislava', 6, 'Peter Petráš'],
+      ['Thun', 4, 'Grégory Duruz'],
     ] as const) {
       expect(goalsForClub(final.state, club), club).toBe(count);
       const roster = HISTORIC_2005_CUP_ROSTERS.get(club)!;
@@ -385,7 +401,11 @@ describe('Owned Champions League scorer settlement', () => {
     const scorerNames = olympiacos.map(row => row[1]);
     expect(scorerNames).toEqual(expect.arrayContaining(['Dani García', 'Haruna Babangida']));
     expect(final.state.uclScorers?.players.some(row => row[1] === 'Barry Ferguson' && row[2] === 'Rangers')).toBe(true);
-    expect(final.state.uclScorers?.unresolved).toBe(before.uclScorers?.unresolved);
+    expect(final.state.uclScorers?.unresolved).toBe(0);
+    expect(final.state.uclScorers?.ownGoals).toBe(12);
+    expect(championsLeagueScorerRace(final.state)).toMatchObject({
+      status: 'winner', leaders: [{ name: 'Fernando Morientes', club: 'Liverpool', goals: 7 }],
+    });
     expect(JSON.stringify(reopened!.uclScorers)).toBe(snapshot);
   });
 
