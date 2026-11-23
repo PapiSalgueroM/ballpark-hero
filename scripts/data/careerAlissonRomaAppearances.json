@@ -1,0 +1,37 @@
+{
+  "checked": "2026-11-23",
+  "rule": "Appearances include all competitive first-team matches for Roma, including the Champions League qualifying round.",
+  "sources": {
+    "roma": "https://www.asroma.com/en/news/41269/transfer-agreed-for-alisson-to-join-liverpool",
+    "portoQualifier": "https://www.asroma.com/en/news/43033/porto-1-1-roma-giallorossi-grab-away-goal-in-hard-fought-draw",
+    "europaLeague": "https://www.uefa.com/MultimediaFiles/Download/uefaorg/General/02/49/98/08/2499808_DOWNLOAD.pdf",
+    "championsLeague": "https://www.uefa.com/MultimediaFiles/Download/Publications/uefaorg/General/02/56/86/48/2568648_DOWNLOAD.pdf"
+  },
+  "changed": [
+    {
+      "player": "Alisson",
+      "season": "2016-2017",
+      "club": "Roma",
+      "field": "appearances",
+      "from": 40,
+      "to": 15
+    },
+    {
+      "player": "Alisson",
+      "season": "2017-2018",
+      "club": "Roma",
+      "field": "appearances",
+      "from": 48,
+      "to": 49
+    },
+    {
+      "player": "Alisson Becker",
+      "season": "2016-2017",
+      "club": "Roma",
+      "field": "appearances",
+      "from": 37,
+      "to": 15
+    }
+  ],
+  "added": []
+}

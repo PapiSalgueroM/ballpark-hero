@@ -26,9 +26,12 @@ import { careerCellValue } from '@/lib/careerBoardCells';
 import { fetchCareerPlayers } from '@/lib/fetchCareerPlayers';
 import { clubSeasonsOf, shareClub } from '@/lib/transferPathGraph';
 import { SoccerGridSearch } from '@/components/soccer-grid/SoccerGridSearch';
+import { careerPlayers } from '@/data/careerPlayers';
 
 const ISAK = 'a0000001-0000-0000-0000-000000000060';
 const RASHFORD = 'a0000001-0000-0000-0000-000000000024';
+const ALISSON = 'a0000001-0000-0000-0000-000000000040';
+const ALISSON_BECKER = 'a0000001-0000-0000-0000-000000000066';
 const LIVERPOOL = { player_id: ISAK, season: '2025-2026', club: 'Liverpool', goals: 18, assists: 4, appearances: 25, market_value: 120, sort_order: 8 };
 const BARCELONA = { player_id: RASHFORD, season: '2025-2026', club: 'Barcelona', goals: 5, assists: 3, appearances: 18, market_value: 35, sort_order: 10 };
 const UNITED = { player_id: RASHFORD, season: '2024-2025', club: 'Manchester United', goals: 7, assists: 3, appearances: 24, market_value: 0, sort_order: 8 };
@@ -143,5 +146,57 @@ describe('Career Ladder verified completed seasons', () => {
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'isak' } });
     fireEvent.click(screen.getByRole('option', { name: /Alexander Isak/i }));
     expect(onSelect).toHaveBeenCalledWith('Alexander Isak');
+  });
+});
+
+describe('Alisson’s verified Roma appearances', () => {
+  it('corrects both known player IDs in Career Quiz and Career Ladder', async () => {
+    rows.players = [
+      { id: ALISSON, player_name: 'Alisson', nationality: 'Brazil', position: 'GK' },
+      { id: ALISSON_BECKER, player_name: 'Alisson Becker', nationality: 'Brazil', position: 'GK' },
+    ];
+    const roma = { club: 'Roma', goals: 0, assists: null, market_value: 18 };
+    rows.seasons = [
+      { ...roma, player_id: ALISSON, season: '2016-2017', appearances: 40, sort_order: 4 },
+      { ...roma, player_id: ALISSON, season: '2017-2018', appearances: 48, sort_order: 5 },
+      { ...roma, player_id: ALISSON_BECKER, season: '2016-2017', appearances: 37, sort_order: 4 },
+      { ...roma, player_id: ALISSON_BECKER, season: '2017-2018', appearances: 49, sort_order: 5 },
+    ];
+    const [ladder, quiz] = await Promise.all([fetchCareerPool(), fetchCareerPlayers()]);
+    for (const id of [ALISSON, ALISSON_BECKER]) {
+      const ladderRows = ladder?.find(player => player.id === id)?.seasons;
+      expect(ladderRows).toEqual([
+        { season: '2016-2017', club: 'Roma', goals: 0, assists: null, appearances: 15, marketValue: 18, sortOrder: 4 },
+        { season: '2017-2018', club: 'Roma', goals: 0, assists: null, appearances: 49, marketValue: 18, sortOrder: 5 },
+      ]);
+      const quizRows = quiz.find(player => player.id === id)?.career;
+      expect(quizRows?.map(stint => careerCellValue(stint, 'appearances'))).toEqual(['15', '49']);
+    }
+    expect(rows.seasons.map(stint => stint.appearances)).toEqual([40, 48, 37, 49]);
+  });
+
+  it('preserves other IDs, clubs, years and source totals outside the verified corrections', async () => {
+    const namesake = 'fixture-alisson-id';
+    rows.players = [
+      { id: ALISSON, player_name: 'Alisson', nationality: 'Brazil', position: 'GK' },
+      { id: namesake, player_name: 'Alisson', nationality: 'Brazil', position: 'GK' },
+    ];
+    const roma = { player_id: ALISSON, club: 'Roma', goals: 0, assists: 0, market_value: 18, sort_order: 0 };
+    rows.seasons = [
+      { ...roma, season: '2016-2017', appearances: 14 },
+      { ...roma, club: 'Liverpool', season: '2016-2017', appearances: 40, sort_order: 1 },
+      { ...roma, season: '2018-2019', appearances: 40, sort_order: 2 },
+      { ...roma, player_id: namesake, season: '2016-2017', appearances: 40 },
+    ];
+    const [ladder, quiz] = await Promise.all([fetchCareerPool(), fetchCareerPlayers()]);
+    for (const [id, appearances] of [[ALISSON, [14, 40, 40]], [namesake, [40]]] as const) {
+      expect(ladder?.find(player => player.id === id)?.seasons.map(stint => stint.appearances)).toEqual(appearances);
+      expect(quiz.find(player => player.id === id)?.career.map(stint => stint.appearances)).toEqual(appearances);
+    }
+  });
+
+  it.each(['Alisson', 'Alisson Becker'])('shows the verified appearances offline for %s', (name) => {
+    const fallback = careerPlayers.find(player => player.name === name);
+    expect(fallback?.career.filter(stint => stint.club === 'Roma').map(stint => stint.appearances)).toEqual([15, 49]);
   });
 });
