@@ -4,6 +4,7 @@
  * admission offline. NHL_IMPORT_REPAIR_CONTROL=games raises one repaired
  * player's games to the draft cutoff in memory and must fail admission.
  * NHL_IMPORT_REPAIR_CONTROL=pim restores a negative penalty total in memory.
+ * NHL_IMPORT_REPAIR_CONTROL=position restores an incorrect autocomplete position.
  */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -15,7 +16,7 @@ import { build } from 'esbuild';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = relative => fs.readFileSync(path.join(root, relative), 'utf8');
 const control = process.env.NHL_IMPORT_REPAIR_CONTROL;
-assert.ok(!control || control === 'games' || control === 'pim', 'Unknown NHL_IMPORT_REPAIR_CONTROL');
+assert.ok(!control || ['games', 'pim', 'position'].includes(control), 'Unknown NHL_IMPORT_REPAIR_CONTROL');
 const recipe = read('supabase/migrations/20261123083647_repair_nhl_skater_import.sql');
 const blocks = [...recipe.matchAll(/^\s*records constant jsonb := \$rows\$\s*(\[[\s\S]*?\])\s*\$rows\$\s*::jsonb;/gm)];
 assert.equal(blocks.length, 1, 'Exactly one SQL repair ledger must be present');
@@ -91,14 +92,22 @@ if (control === 'pim') {
 }
 console.log('42 source-linked discipline rows correct 33 plus-minus values and 40 penalty totals');
 
+const positionRepair = read('supabase/migrations/20261123090231_repair_bobby_robins_nhl_position.sql');
+const priorPosition = positionRepair.match(/prior_position constant text := '(\w+)';/)?.[1];
+const verifiedPosition = positionRepair.match(/verified_position constant text := '(\w+)';/)?.[1];
+const robins = rows.find(row => row.name === 'Bobby Robins');
+assert.equal(priorPosition, robins.position, 'The position repair follows the original audited row');
+assert.equal(verifiedPosition, 'RW', 'The three NHL game records list Bobby Robins at right wing');
+
 const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'simNhlImportRepair-'));
 const bundle = path.join(scratch, 'games.mjs');
 try {
   await build({
     stdin: {
       contents: [
-        "export { ACHIEVEMENT_POOL, FRANCHISE_POOL, playerMatchesCell } from './src/lib/hockeyGrid.ts';",
+        "export { ACHIEVEMENT_POOL, FRANCHISE_POOL, NHL_STATS_PLAYER_SOURCE, playerMatchesCell } from './src/lib/hockeyGrid.ts';",
         "export { fetchSquad } from './src/lib/perfectSeasonNhl.ts';",
+        "export { searchPlayers } from './src/lib/playerSearch.ts';",
       ].join('\n'),
       resolveDir: root,
     },
@@ -115,11 +124,18 @@ try {
     player_name: name, position, year_from, year_to: season, games, goals, assists, points,
   }));
   const cutoffs = [];
+  let autocompletePosition = verifiedPosition;
   globalThis.localStorage = { getItem: () => null, setItem() {}, removeItem() {} };
   globalThis.fetch = async input => {
     const url = new URL(typeof input === 'string' ? input : input.url);
     const table = url.pathname.split('/').at(-1);
     assert.ok(table === 'nhl_player_stats' || table === 'nhl_draft', `Unexpected request ${url.pathname}`);
+    if (table === 'nhl_player_stats' && url.searchParams.get('select') === 'player_name,points,position') {
+      const data = url.searchParams.has('player_name')
+        ? [{ player_name: robins.name, points: robins.fixed[4], position: autocompletePosition }]
+        : [];
+      return Response.json(data);
+    }
     if (table === 'nhl_player_stats') {
       const cutoff = url.searchParams.get('games');
       assert.match(cutoff ?? '', /^gte\.[1-9]\d*$/, 'NHL draft query uses a games floor');
@@ -129,7 +145,22 @@ try {
       headers: { 'content-type': 'application/json' },
     });
   };
-  const { ACHIEVEMENT_POOL, FRANCHISE_POOL, playerMatchesCell, fetchSquad } = await import(pathToFileURL(bundle).href);
+  const { ACHIEVEMENT_POOL, FRANCHISE_POOL, NHL_STATS_PLAYER_SOURCE, playerMatchesCell, fetchSquad, searchPlayers } = await import(pathToFileURL(bundle).href);
+  const verifyAutocomplete = async () => {
+    const { results, error } = await searchPlayers({ query: robins.name, source: NHL_STATS_PLAYER_SOURCE });
+    assert.equal(error, null);
+    assert.deepEqual(results.map(({ rawName }) => rawName), [robins.name], 'Same unique player in autocomplete');
+    assert.equal(results[0].meta.position, 'RW', 'Bobby Robins autocomplete position must be RW');
+  };
+  await verifyAutocomplete();
+  console.log('Hockey autocomplete: Bobby Robins resolves once, with RW metadata');
+  if (control === 'position') {
+    assert.notEqual(priorPosition, autocompletePosition, 'The control must replace the verified metadata');
+    autocompletePosition = priorPosition;
+    await assert.rejects(verifyAutocomplete, { message: /^Bobby Robins autocomplete position must be RW/ });
+    console.error('CONTROL BEHAVED: the captured center label fails the autocomplete guard');
+    process.exitCode = 1;
+  }
   const categories = [...FRANCHISE_POOL, ...ACHIEVEMENT_POOL];
   const cells = categories.flatMap((row, i) => categories.slice(i + 1).map(col => ({ row, col })));
   for (const { name, team, old, fixed } of rows) {
@@ -161,7 +192,7 @@ try {
     console.error('CONTROL BEHAVED: the changed games value admits Bobby Robins to the NHL draft');
     process.exitCode = 1;
   } else if (!control) {
-    console.log('simNhlImportRepair: green. Verified both repair ledgers, Grid answers and draft eligibility.');
+    console.log('simNhlImportRepair: green. Verified repair ledgers, autocomplete, Grid answers and draft eligibility.');
   }
 } finally {
   if (fs.existsSync(bundle)) fs.unlinkSync(bundle);
