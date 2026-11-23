@@ -4,6 +4,7 @@ import { foldSpecialLatin } from '@/lib/nameFold';
 import { supabase } from '@/integrations/supabase/client';
 import { dailyPrngSeed, dateSeed, dayNumber } from '@/lib/dateUtils';
 import { storedSpelling, type PlayerEntity } from '@/lib/playerSearch';
+import { reconcileCareerSeasons } from '@/lib/careerSeasonCorrections';
 
 export interface CareerStint {
   season: string;
@@ -750,9 +751,7 @@ export async function fetchCareerPool(): Promise<CareerPlayer[] | null> {
         name: String(p.player_name ?? ''),
         nationality: String(p.nationality ?? ''),
         position: String(p.position ?? ''),
-        seasons: (stintsByPlayer.get(String(p.id)) ?? []).sort(
-          (a, b) => a.sortOrder - b.sortOrder,
-        ),
+        seasons: reconcileCareerSeasons(String(p.id), (stintsByPlayer.get(String(p.id)) ?? []).sort((a, b) => a.sortOrder - b.sortOrder)),
       }))
       .filter(p => p.name.length > 0);
 
