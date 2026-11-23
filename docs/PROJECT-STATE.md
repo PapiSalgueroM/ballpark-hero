@@ -1,3 +1,9 @@
+## 2026-11-23, NFL Front Office recap save protection
+
+PL-04 protects the first draft write for an older NFL Front Office recap. It verifies an exact copy of the original save and checks that the active franchise still owns those bytes. Retry save keeps the same draft class. If another tab saves newer progress first, that franchise stays in control.
+
+The archived September 4 writer captured a Seattle franchise after all 17 weeks and the playoffs. Its 76,841-byte recap records one finished season, trust 44 and zero titles. That format saved no postseason or champion entry for the closed season. The draft kept Seattle's league schedule, roster, counters, 40 prospects and three picks. The copied backup control failed both refusal cases as expected.
+
 ## 2026-11-23, NHL Front Office recap save protection
 
 PL-04 adds a verified copy of the original NHL Front Office recap before the draft opens on an older franchise. If storage refuses the copy or the draft, Retry save keeps the same prospects and already counted season. A newer franchise saved in another tab takes precedence. Current recaps and drafts with saved shortlists keep their normal flow.
