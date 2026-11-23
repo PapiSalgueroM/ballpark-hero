@@ -1,3 +1,9 @@
+## 2026-11-23, NRL Team Manager legacy save backup
+
+**PL-04 is partly implemented.** A version 1 season still opens without rewriting the slot. Before its first version 2 save, NRL checks for an exact backup in that same slot. If storage refuses the copy or returns different bytes, the old save stays on disk and Retry save remains available. A newer write made while the copy is being created keeps control of the slot.
+
+The 35 focused tests passed, along with application types, the production build and all 15 built-site checks. Three regression cases failed on the unchanged writer. Chromium at 320 and 390 pixels refused the backup in slot 2, kept the 5,084 original characters, retried round 3 and reloaded the same career with an exact backup. The verified save in slot 1 stayed byte-for-byte. The shared save keeper sim still reports pre-existing source and fixture differences in other games. Its NRL checks passed.
+
 ## 2026-11-16 — Career search, NHL trades and NFL injured reserve
 
 - Home recognizes explicit requests such as “NBA career mode” and “manage an MLB team.” Both mobile widths verified nine supported queries, five misses, the existing title shortcuts and return focus. The NBA result opened with Enter and the MLB result opened by touch. Back restored the search filters and saved games.
