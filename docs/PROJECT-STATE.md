@@ -2,7 +2,7 @@
 
 Two verified 11-player opening pools extend newly played background cup scoring in 2005-06. The source audit records club membership, roles, and dated transfer cutoffs. [Olympiacos and Fenerbahçe roster sources](audits/club-manager-olympiacos-fenerbahce-2005-rosters.md)
 
-The historical replay now covers 19 Ajax, 17 Rosenborg, 14 Olympiacos, and 13 Fenerbahçe goals. The 125-match campaign still reconciles to 335 total goals. A saved matchday checks Olympiacos at home to Inter and Fenerbahçe away at Barcelona in one Quick Sim, including exact reopen behavior for the pending and already-settled saves.
+The historical replay now covers 19 Ajax, 17 Rosenborg, 14 Olympiacos, and 13 Fenerbahçe goals. The 125-match campaign still reconciles to 335 total goals. A saved matchday checks Olympiacos at home to Inter and Fenerbahçe away at Barcelona in one Quick Sim, including exact reopen behavior for the pending and already-settled saves. The full 2005-06 Espanyol squad still needs a save-safe correction for Dani García Lara, who joined Olympiacos before the opener.
 
 CM-03 remains partial. Four of the 15 missing outside-league squads in the original replay now have verified opening pools. Rosenborg’s release was published in PR #1062 and passed all four published browser checks.
 

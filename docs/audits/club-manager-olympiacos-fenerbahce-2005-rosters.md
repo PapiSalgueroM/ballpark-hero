@@ -18,9 +18,11 @@ The cutoff is the August 28, 2005 league opener at Panathinaikos. The May and Se
 | Yaya Touré | MID | [July signing][toure-konstantinou], [August 6 friendly][man-city-match] |
 | Ioannis Okkas | ATT | [May 21 cup final][may-final], [September 13 lineup][rosenborg-match] |
 | Michalis Konstantinou | ATT | [July 13 signing][toure-konstantinou], [September 13 lineup][rosenborg-match] |
-| Dani García | ATT | [August 11 signing][dani], [September 13 lineup][rosenborg-match], [Barcelona profile][barcelona-dani] |
+| Haruna Babangida | ATT | [August 18 signing][babangida], [September 13 lineup][rosenborg-match], [Barcelona profile][barcelona-babangida] |
 
 UEFA's season report lists Rivaldo and Grigorios Georgatos as midfielders. UEFA's next-season media kit lists Rivaldo as a forward, and Olympiacos's profile calls Georgatos a left-back. Both are omitted from this partial pool. Michał Żewłakow finished 2005-06 at Anderlecht and moved to Olympiacos the following summer. [UEFA media kit](https://www.uefa.com/newsfiles/461350.pdf), [Olympiacos Georgatos profile](https://www.olympiacos.org/2015/06/15/to-magiko-aristero-podi-toy-thryloy/), [UEFA Żewłakow transfer history](https://www.uefa.com/uefachampionsleague/news/01de-0e731f1fde20-7bd8b781d316-1000--standard-in-need-of-olympiacos-boost/), [Legia Żewłakow profile](https://legia.com/articles/historia-kalendarium-legii-28-lipca-piekna-kariera-warszawiaka)
+
+Dani García Lara joined Olympiacos on August 11, 2005 after playing for Espanyol. The full historical Espanyol squad in the game still includes him. The partial Olympiacos pool uses Babangida to avoid creating a second entry for the same player while the full squad awaits a save-safe correction. [UEFA transfer report][dani], [Barcelona profile][barcelona-dani]
 
 [olympiacos-opener]: https://www.olympiacos.org/2014/02/28/epta-magikes-aionies-vradies/
 [may-final]: https://www.olympiacos.org/sites/default/files/OSFP_PANIONIOS_25012012.pdf
@@ -31,6 +33,8 @@ UEFA's season report lists Rivaldo and Grigorios Georgatos as midfielders. UEFA'
 [djordjevic]: https://www.uefa.com/uefachampionsleague/news/01c9-0e6ef044b972-92818e327912-1000--veterans-extend-olympiacos-stays/
 [toure-konstantinou]: https://www.uefa.com/uefachampionsleague/news/025a-0eaa08049627-3d5a57c083e6-1000--konstantinou-crosses-great-divide/
 [man-city-match]: https://www.mancity.com/features/city-v-olympiakos-match-prog-ucl-2020/
+[babangida]: https://www.uefa.com/uefachampionsleague/news/01ac-0ea7ff95dd01-0c269a06bf48-1000--babangida-wins-over-olympiacos/
+[barcelona-babangida]: https://www.fcbarcelona.com/en/news/4386603/second-bara-legends-game-of-the-season
 [dani]: https://www.uefa.com/uefachampionsleague/news/01ac-0ea7e0a37df7-b5f965122508-1000--olympiacos-complete-dani-deal/
 [barcelona-dani]: https://www.fcbarcelona.com/en/football/barca-legends/players/1082215/dani
 
