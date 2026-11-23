@@ -3,6 +3,7 @@
  * Check the migration's data and replay the real Grid matcher and NHL draft
  * admission offline. NHL_IMPORT_REPAIR_CONTROL=games raises one repaired
  * player's games to the draft cutoff in memory and must fail admission.
+ * NHL_IMPORT_REPAIR_CONTROL=pim restores a negative penalty total in memory.
  */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -14,7 +15,7 @@ import { build } from 'esbuild';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = relative => fs.readFileSync(path.join(root, relative), 'utf8');
 const control = process.env.NHL_IMPORT_REPAIR_CONTROL;
-assert.ok(!control || control === 'games', 'Unknown NHL_IMPORT_REPAIR_CONTROL');
+assert.ok(!control || control === 'games' || control === 'pim', 'Unknown NHL_IMPORT_REPAIR_CONTROL');
 const recipe = read('supabase/migrations/20261123083647_repair_nhl_skater_import.sql');
 const blocks = [...recipe.matchAll(/^\s*records constant jsonb := \$rows\$\s*(\[[\s\S]*?\])\s*\$rows\$\s*::jsonb;/gm)];
 assert.equal(blocks.length, 1, 'Exactly one SQL repair ledger must be present');
@@ -27,8 +28,12 @@ const byName = new Map(captured.map(row => [row.player_name, row]));
 const sourceHosts = new Set([
   'dobberprospects.com', 'insidetherink.com', 'pucksandstats.com',
   'www.eliteprospects.com', 'www.hockey-reference.com', 'www.quanthockey.com',
-  'www.statscrew.com',
+  'www.statmuse.com', 'www.statscrew.com',
 ]);
+function assertSource(source, name) {
+  const url = new URL(source);
+  assert.ok(url.protocol === 'https:' && !url.username && !url.password && sourceHosts.has(url.host) && url.pathname.length > 1, `${name} independent source`);
+}
 for (const key of ['id', 'name', 'nhlId']) {
   assert.equal(new Set(rows.map(row => row[key])).size, rows.length, `Unique ${key}`);
 }
@@ -39,8 +44,7 @@ for (const { id, name, team, position, season, nhlId, source, old, fixed } of ro
   assert.deepEqual(old, [original.year_from, original.games, original.goals, original.assists, original.points], `${name} original values`);
   assert.ok(Number.isSafeInteger(id) && id > 0, `${name} database row ID`);
   assert.ok(Number.isSafeInteger(nhlId) && /^84\d{5}$/.test(String(nhlId)), `${name} NHL source ID`);
-  const url = new URL(source);
-  assert.ok(url.protocol === 'https:' && !url.username && !url.password && sourceHosts.has(url.host) && url.pathname.length > 1, `${name} independent source`);
+  assertSource(source, name);
   assert.equal(fixed.length, 5, `${name} repaired tuple length`);
   const [first, games, goals, assists, points] = fixed;
   const year = Number(season.slice(0, 4));
@@ -51,6 +55,41 @@ for (const { id, name, team, position, season, nhlId, source, old, fixed } of ro
   assert.notDeepEqual(fixed, old, `${name} repairs at least one field`);
 }
 console.log('69 exact October rows, unique identities, dated independent sources and valid repaired totals');
+
+const discipline = read('supabase/migrations/20261123085043_repair_nhl_skater_discipline.sql');
+const disciplineRows = JSON.parse(discipline.match(/\$rows\$\s*(\[[\s\S]*?\])\s*\$rows\$/)[1]);
+const coreById = new Map(rows.map(row => [row.id, row]));
+assert.equal(disciplineRows.length, 42, 'Number of corrected discipline rows');
+assert.equal(new Set(disciplineRows.map(row => row.id)).size, disciplineRows.length, 'Unique discipline row IDs');
+assert.equal(disciplineRows.filter(({ old, fixed }) => old[0] !== fixed[0]).length, 33, 'Number of changed plus-minus values');
+assert.equal(disciplineRows.filter(({ old, fixed }) => old[1] !== fixed[1]).length, 40, 'Number of changed penalty totals');
+function assertDiscipline({ id, name, team, position, season, games, nhlId, source, old, fixed }) {
+  const core = coreById.get(id);
+  assert.ok(core, `${name} is part of the core repair`);
+  assert.deepEqual([name, team, position, season, games, nhlId], [core.name, core.team, core.position, core.season, core.fixed[1], core.nhlId]);
+  assertSource(source, name);
+  for (const values of [old, fixed]) {
+    assert.equal(values.length, 2, `${name} discipline tuple`);
+    assert.ok(values.every(Number.isSafeInteger), `${name} discipline stats must be integers`);
+  }
+  assert.ok(fixed[1] >= 0, `${name} has negative penalty minutes`);
+  assert.notDeepEqual(fixed, old, `${name} repairs at least one discipline value`);
+}
+for (const row of disciplineRows) assertDiscipline(row);
+const drew = disciplineRows.find(row => row.name === 'Hunter Drew');
+assert.deepEqual(drew.fixed, [0, 5], 'Hunter Drew earned five PIM in two games');
+const blacker = disciplineRows.find(row => row.name === 'Jesse Blacker');
+assert.deepEqual(blacker.fixed, [-2, 0], 'Jesse Blacker recorded minus two and zero PIM');
+if (control === 'pim') {
+  assert.equal(blacker.old[1], -2, 'The control must restore the captured negative PIM');
+  assert.notEqual(blacker.old[1], blacker.fixed[1], 'The control must change the verified PIM');
+  assert.throws(() => assertDiscipline({ ...blacker, fixed: [blacker.fixed[0], blacker.old[1]] }), {
+    message: 'Jesse Blacker has negative penalty minutes',
+  });
+  console.error('CONTROL BEHAVED: the captured negative penalty total fails the repair guard');
+  process.exitCode = 1;
+}
+console.log('42 source-linked discipline rows correct 33 plus-minus values and 40 penalty totals');
 
 const scratch = fs.mkdtempSync(path.join(os.tmpdir(), 'simNhlImportRepair-'));
 const bundle = path.join(scratch, 'games.mjs');
@@ -121,8 +160,8 @@ try {
     await assert.rejects(verifyDraft, { message: /^Unexpected NHL draft admissions: Bobby Robins/ });
     console.error('CONTROL BEHAVED: the changed games value admits Bobby Robins to the NHL draft');
     process.exitCode = 1;
-  } else {
-    console.log('simNhlImportRepair: green. Verified the repair ledger, Grid answers and draft eligibility.');
+  } else if (!control) {
+    console.log('simNhlImportRepair: green. Verified both repair ledgers, Grid answers and draft eligibility.');
   }
 } finally {
   if (fs.existsSync(bundle)) fs.unlinkSync(bundle);
