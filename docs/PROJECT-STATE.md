@@ -1,3 +1,9 @@
+## 2026-11-23, Hockey Higher or Lower goalie points
+
+Henrik Lundqvist's card now shows 27 NHL regular-season points through 2019-20. Igor Shesterkin's card shows three through 2025-26. Both totals consist of assists. The Hockey Higher or Lower facts record now includes both goalies with two sources each. [NHL on Lundqvist](https://www.nhl.com/news/henrik-lundqvist-retires-326000932), [StatMuse on Lundqvist](https://www.statmuse.com/nhl/ask/has-henrik-lundqvist-scored-a-assist), [NHL season records for Shesterkin](https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&limit=50&cayenneExp=gameTypeId%3D2%20and%20playerId%3D8478048%20and%20seasonId%3C%3D20252026), [StatMuse season breakdown for Shesterkin](https://www.statmuse.com/nhl/ask?q=how+many+assists+does+igor+shesterkin+have+all-time).
+
+The corrected totals leave all 990 matchup verdicts intact. They change the matchups for 211 of 100,000 possible new Hard seeds. The original matchups still resume for all 100,000 old seeds in both practice modes. Three Chromium cases at 320 or 390 pixels showed the correct points and cutoff and kept accepted progress after reloading during the reveal. All 73 focused tests, application types, the production build and 15 built-site checks passed. The facts harness passed 64 checks and caught both old totals and a missing season cutoff in separate controls.
+
 ## 2026-11-16 — Career search, NHL trades and NFL injured reserve
 
 - Home recognizes explicit requests such as “NBA career mode” and “manage an MLB team.” Both mobile widths verified nine supported queries, five misses, the existing title shortcuts and return focus. The NBA result opened with Enter and the MLB result opened by touch. Back restored the search filters and saved games.

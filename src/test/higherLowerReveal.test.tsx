@@ -177,3 +177,30 @@ for (const row of cases) describe(row.name + ' Higher or Lower reveal ownership'
     expect(localStorage.getItem(key)).toBe(raw); expect(timers.live.size).toBe(0); expect(fixture.record).not.toHaveBeenCalled();
   });
 });
+
+it('resumes the original Hockey Hard matchups while scoring with the corrected goalie cards', () => {
+  const key = 'dukb-hockey-hl-unlimited-v1';
+  const oldSave = { pool: 0.3399896996561438, seed: 160, hard: true, answers: Array(5).fill(true), active: true };
+  localStorage.setItem(key, JSON.stringify(oldSave));
+
+  const view = renderHook(() => useHockeyHL());
+  expect(view.result.current.currentRound).toBe(5);
+  expect(view.result.current.totalScore).toBe(100);
+  expect(view.result.current.currentPair?.map(p => p.name)).toEqual(['Kirill Kaprizov', 'Henrik Lundqvist']);
+  expect(view.result.current.currentPair?.[1]).toMatchObject({ careerPoints: 27, lastSeason: '2019-20' });
+  act(() => { view.result.current.makeGuess('left'); });
+  view.unmount();
+
+  expect(JSON.parse(localStorage.getItem(key)!)).toEqual({ ...oldSave, answers: Array(6).fill(true) });
+  const resumed = renderHook(() => useHockeyHL());
+  expect(resumed.result.current.currentRound).toBe(6);
+  expect(resumed.result.current.results[5].player2).toMatchObject({ name: 'Henrik Lundqvist', careerPoints: 27 });
+  vi.mocked(Math.random).mockReturnValue(.0016);
+  act(() => { resumed.result.current.restartUnlimited(); });
+  expect(JSON.parse(localStorage.getItem(key)!).pool).not.toBe(oldSave.pool);
+  for (let round = 0; round < 5; round++) {
+    act(() => { resumed.result.current.makeGuess(choose(resumed.result.current)); });
+    act(() => { vi.advanceTimersByTime(2000); });
+  }
+  expect(resumed.result.current.currentPair?.map(p => p.name)).toEqual(['Kirill Kaprizov', 'Jonathan Toews']);
+});
