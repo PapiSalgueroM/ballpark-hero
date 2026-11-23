@@ -32,7 +32,7 @@ type Panel = 'tours' | 'network' | 'shop' | 'archive' | 'renown' | null;
 
 const HallOfChampions = () => {
   const {
-    loadState, wings, state: s, floaters, offlineEarned, dismissOffline,
+    loadState, wings, state: s, floaters, offlineEarned, dismissOffline, saveIssue, retrySave,
     doBuyArtifact, doOpenWing, doBuyUpgrade, doRush, doRededicate,
   } = useHallOfChampions();
   const [panel, setPanel] = useState<Panel>(null);
@@ -157,6 +157,16 @@ const HallOfChampions = () => {
             </button>
           </div>
         </header>
+
+        {saveIssue && <div role="status" className="mb-3 rounded-xl border border-amber-500/50 bg-card p-3 text-sm">
+          {saveIssue === 'moved' ? 'This museum changed in another tab. Reload to open the latest save.'
+            : saveIssue === 'backup-failed' ? 'Your previous museum is still here. Free up some space to keep a copy before saving this one.'
+              : 'Your browser could not save this museum. Keep this tab open and try again.'}{' '}
+          <button type="button" className="min-h-11 font-bold underline"
+            onClick={() => saveIssue === 'moved' ? window.location.reload() : retrySave()}>
+            {saveIssue === 'moved' ? 'Reload museum' : 'Retry save'}
+          </button>
+        </div>}
 
         {offlineEarned !== null && (
           <div className="mb-2 rounded-xl border border-gold/60 bg-gold/10 px-3 py-2 flex items-center justify-between gap-3">

@@ -10,6 +10,14 @@ The integrated unit run passed 249 tests. It covered starting and advancing a se
 
 All 40 save-fence checks passed across 2,010 simulated saves. The Soccer Career save-keeper checks and all 15 nested version checks passed, including the existing Community Shield and German Supercup qualification receipts. The five remaining save-keeper writer findings and three wider Soccer Career unit failures also reproduced on unchanged main.
 
+## 2026-11-23, Hall of Champions save protection
+
+**PL-04 is partly implemented.** The five-second autosave, tab exit and Rededicate all check the exact save the museum opened. An older tab keeps a newer museum intact and can reload it. If the game cannot open the current save, it must verify an exact recovery copy before writing a playable museum. A refused copy leaves the original in place and offers Retry save.
+
+All 16 long-play hook tests, the application typecheck, the production build and 15 built-site checks passed. Eight regression cases failed on the unchanged hook. The long-play simulation loaded 75,646 high-value save fixtures, and its old-copy and timestamp controls both failed as expected. The shared keeper ticked the Hall fixtures and still reported unrelated differences in other games.
+
+Chromium at 320 and 390 pixels bought Guided tours in a second tab and kept the exact level 1 save after the older tab exited. Both widths held the exact prior museum when the backup was refused, then kept one byte-exact backup on Retry save. Reload opened the new museum and retained the backup.
+
 ## 2026-11-23, Rebuild migration safety
 
 **PL-04 is partly implemented.** Rebuild checks a byte-exact copy before writing a migrated v1 save. When a browser refuses the copy, it keeps the original and offers Retry save. A missing squad, failed replay, or unsupported version leaves the original bytes in place. A newer save written during a delayed load or backup stays active. Starting over explicitly still works from the save the player opened.
