@@ -434,16 +434,28 @@ export function suggestCountryPlayers(
   const starts: WxPlayer[] = [];
   const wordStarts: WxPlayer[] = [];
   const contains: WxPlayer[] = [];
+  const alternate: WxPlayer[] = [];
+  // The market rows omit Al. The club and the World Cup use different spellings.
+  // https://www.staderennais.com/equipe-pro/mousa-al-tamari
+  // https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/articles/ten-asian-stars-ready-to-shine
+  // https://ligue1.com/en/articles/l1_article_1696-
+  const aliasQuery = q.replace(/-/g, ' ');
+  const tamariAlias = country === 'Jordan'
+    && ['mousa al tamari', 'musa al taamari', 'mousa al taamari'].some(name => name.includes(aliasQuery));
   for (const p of list) {
     if (exclude && exclude.has(p.name)) continue;
     const n = normalizeName(p.name);
-    if (!n.includes(q)) continue;
+    if (!n.includes(q)) {
+      if (tamariAlias && p.name === 'Mousa Tamari' && p.country === 'Jordan' && p.position === 'RW'
+        && (p.club === 'Stade Rennais FC' || p.club === 'Montpellier HSC')) alternate.push(p);
+      continue;
+    }
     if (n.startsWith(q)) starts.push(p);
     else if (n.split(' ').some(w => w.startsWith(q))) wordStarts.push(p);
     else contains.push(p);
     if (starts.length >= limit) break;
   }
-  return [...starts, ...wordStarts, ...contains].slice(0, limit);
+  return [...starts, ...wordStarts, ...contains, ...alternate].slice(0, limit);
 }
 
 /* ---------------- Season simulation ---------------- */
