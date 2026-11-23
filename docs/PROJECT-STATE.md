@@ -1,3 +1,9 @@
+## 2026-11-23, Soccer Career missing Ballon d'Or ballot
+
+A career that reloads on the Ballon d'Or screen with its ballot missing now offers Continue career. It resumes the existing season flow and keeps the player's completed season and awards.
+
+The regression test played a first senior season to an award at age 18 in 2007, then reloaded with and without the ballot. The intact save kept its ceremony and the incomplete save could continue. All 95 focused ceremony and save tests passed.
+
 ## 2026-11-23, Club World Cup match goals and World XI Argentina
 
 Soccer Career's Trophy Cabinet now shows the player's saved goals in each Club World Cup appearance alongside assists and rating. Games the player missed still show that they did not play.
