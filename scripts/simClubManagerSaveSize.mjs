@@ -36,18 +36,18 @@
  * slope.
  *
  * Sections, all on the real engine:
- *   1) Fifteen seasons at three clubs. Every club ends under SIZE_BUDGET, the
- *      least squares slope of the save size over seasons 4 to 15 is under
- *      SLOPE_CAP bytes per season (the slope, never a max), and every ledger
- *      is inside SAVE_CAPS at every season's end.
+ *   1) Fifteen seasons at three clubs. The active save is read back on each
+ *      write and decoded to the exact trimmed career. Every club ends under
+ *      SIZE_BUDGET on disk. Before encoding, the least squares slope over
+ *      seasons 4 to 15 stays under SLOPE_CAP and every ledger stays under its cap.
  *   2) A save inflated the way a pre cap build could have left it (2,700
  *      extra head to head rows, 720 extra transfer lines, 40 old inbox rows,
  *      20 old headlines) shrinks on load to the caps, the trim is a fixed
  *      point, and a season played from the trimmed save under a reseeded
  *      stream is identical to one played from the oversized save.
- *   3) saveCareer reports false when the store throws twice, reports true
- *      and writes the lean shape when only the first write throws, and two
- *      writes of one career are the same bytes.
+ *   3) On the ordinary plain path, saveCareer reports false when the store
+ *      throws twice, writes the lean shape if only the first write throws,
+ *      and writes identical bytes for the same career twice.
  *   4) The hook, rendered: src/test/clubManagerSaveSize.test.tsx under
  *      vitest. The pagehide write, the hidden tab write, the idempotent
  *      bytes, and saveFailed up under a throwing store and down after a
@@ -86,8 +86,10 @@
  * a copy of the source in memory, refuses to run unless its anchor appears
  * exactly once, and must turn exactly its own section red:
  *   SAVE_SIZE_CONTROL=uncapped    the head to head ledger loses its slice(-300).
- *                                 Section 1 must go red on the SIZE BUDGET and
- *                                 the SLOPE, not only on the ledger caps.
+ *                                 Section 1 must go red on the raw growth slope
+ *                                 even if caps on write keep disk use bounded.
+ *   SAVE_SIZE_CONTROL=nocodec    the active writer skips pair encoding.
+ *                                 Section 1 must go red on stored SIZE_BUDGET.
  *   SAVE_SIZE_CONTROL=unbounded   trimCareer returns its input untouched.
  *                                 Section 2 must go red (the oversized save
  *                                 does not shrink); section 1 measures the
@@ -288,7 +290,7 @@ const SAVE_KEY = 'dukb-club-manager-save';
 
 const CONTROL = process.env.SAVE_SIZE_CONTROL || '';
 /* The section each control must turn red, and nothing else. */
-const OWN = { uncapped: 1, unbounded: 2, silent: 3, noleave: 4, namekey: 5, norepair: 6, pump: 7, deaddoor: 8 };
+const OWN = { uncapped: 1, nocodec: 1, unbounded: 2, silent: 3, noleave: 4, namekey: 5, norepair: 6, pump: 7, deaddoor: 8 };
 if (CONTROL && !(CONTROL in OWN)) {
   console.error(`SAVE_SIZE_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(OWN).join(', ')})`);
   process.exit(1);
@@ -329,12 +331,17 @@ const VITEST = findUp(path.join('node_modules', 'vitest', 'vitest.mjs'));
 let enginePath = `${ROOT_URL}/src/lib/clubManager.ts`;
 const TRIM_HEAD = 'export function trimCareer(state: CareerState): CareerState {\n  if (!state || typeof state !== \'object\') return state;\n';
 const TRIM_NOOP = 'export function trimCareer(state: CareerState): CareerState {\n  return state;\n';
-const SAVE_TAIL = '    localStorage.setItem(SAVE_KEY, JSON.stringify(leanCareer(full)));\n    return true;\n  } catch {\n    return false;\n  }\n}\n';
-const SAVE_LIES = '    localStorage.setItem(SAVE_KEY, JSON.stringify(leanCareer(full)));\n    return true;\n  } catch {\n    return true;\n  }\n}\n';
+const SAVE_TAIL = "      localStorage.setItem(SAVE_KEY, JSON.stringify(leanCareer(full)));\n      return true;\n    } catch {\n      return false;\n    }\n  }) === 'written';\n}\n";
+const SAVE_LIES = SAVE_TAIL.replace('return false;', 'return true;');
 const ENGINE_SWAPS = {
   unbounded: [TRIM_HEAD, TRIM_NOOP, 'trimCareer'],
   silent: [SAVE_TAIL, SAVE_LIES, 'the final catch of saveCareer'],
   uncapped: ['  state.h2h = h2hLog.slice(-300);\n', '  state.h2h = h2hLog;\n', 'the head to head slice'],
+  nocodec: [
+    '  const packed = writeActivePairSave(full, plain);\n  if (packed !== null) return packed;\n',
+    '',
+    'the active pair write in saveCareer',
+  ],
   namekey: ['  return `${p.name}|${p.position}|${p.age}`;\n', '  return p.name;\n', 'the body of sameManKey'],
   norepair: [
     'export function ensureOneOfEach(state: CareerState): void {\n  if (!Array.isArray(state.squad)) return;\n',
@@ -369,14 +376,19 @@ globalThis.localStorage = {
   setItem: (k, v) => { slot[k] = String(v); },
   removeItem: k => { delete slot[k]; },
   clear: () => { slot = {}; },
+  get length() { return Object.keys(slot).length; },
+  key: i => Object.keys(slot)[i] ?? null,
 };
 export const cm = await import('${enginePath}');
+export { unpackParkedCareer } from '${ROOT_URL}/src/lib/clubManagerParkedSave.ts';
 `);
 execSync(
   `"${ESBUILD}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`,
   { stdio: 'inherit' },
 );
-const { cm } = await import(pathToFileURL(BUNDLE).href);
+const realNow = Date.now;
+Date.now = () => 1795429990000;
+const { cm, unpackParkedCareer } = await import(pathToFileURL(BUNDLE).href);
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason, saveCareer, loadCareer,
   trimCareer, leanCareer, SAVE_CAPS, sortedTable,
@@ -459,19 +471,31 @@ function slopeOf(points) {
 }
 
 /* ================================================================== */
-console.log(`1) Fifteen seasons at three clubs: under ${SIZE_BUDGET} bytes, slope under ${SLOPE_CAP} bytes a season, every ledger inside its cap`);
+console.log(`1) Fifteen seasons at three clubs: stored under ${SIZE_BUDGET} code units, raw growth under ${SLOPE_CAP} units a season, every ledger inside its cap`);
 /* ================================================================== */
 section = 1;
 let snapForSection2 = null;
 let snapForSection3 = null;
+function storedSize(career, label) {
+  if (!saveCareer(career)) { fail(`${label}: the writer refused a save in a working store`); return NaN; }
+  const raw = localStorage.getItem(SAVE_KEY);
+  if (raw === null || unpackParkedCareer(raw) !== JSON.stringify(trimCareer(career))) {
+    fail(`${label}: disk did not return the exact trimmed career`);
+    return NaN;
+  }
+  return raw.length;
+}
 for (const club of CLUBS) {
+  localStorage.clear();
   let s = startCareer(club);
+  const stored = [storedSize(s, `${club} day one`)];
   const sizes = [bytes(s)];
   let reached = 0;
   for (let season = 1; season <= SEASONS; season++) {
     s = playSeason(s);
     if (s.sacked) { fail(`${club}: sacked in season ${season} despite the nudge, so the run stopped early`); break; }
     const fin = finishSeason(s).state;
+    stored.push(storedSize(fin, `${club} season ${season}`));
     sizes.push(bytes(fin));
     capsOk(fin, `${club} season ${season}`);
     reached = season;
@@ -483,16 +507,17 @@ for (const club of CLUBS) {
     if (club === 'Everton' && season === SEASONS) snapForSection3 = JSON.parse(JSON.stringify(fin));
     s = startNextSeason(fin);
   }
-  const last = sizes[sizes.length - 1];
+  const last = stored.at(-1);
   const pts = sizes.map((b, i) => [i, b]).filter(([i]) => i >= 4);
   const slope = pts.length >= 3 ? slopeOf(pts) : NaN;
-  console.log(`   ${club.padEnd(13)} seasons ${reached}, day one ${sizes[0]}, season 1 ${sizes[1] ?? '-'}, season ${reached} ${last}, slope after season 3 ${Number.isFinite(slope) ? slope.toFixed(0) : 'n/a'} bytes a season`);
-  console.log(`   ${''.padEnd(13)} sizes: ${sizes.join(' ')}`);
+  console.log(`   ${club.padEnd(13)} seasons ${reached}, day one ${stored[0]}, final stored ${last}, final plain ${sizes.at(-1)}, raw slope after season 3 ${Number.isFinite(slope) ? slope.toFixed(0) : 'n/a'} code units a season`);
+  console.log(`   ${''.padEnd(13)} stored: ${stored.join(' ')}`);
   if (reached < SEASONS) fail(`${club}: only ${reached} of ${SEASONS} seasons were measured`, 'short');
-  if (last > SIZE_BUDGET) fail(`${club}: the save is ${last} bytes after ${reached} seasons, over the ${SIZE_BUDGET} budget`, 'budget');
+  if (last > SIZE_BUDGET) fail(`${club}: the stored save is ${last} code units after ${reached} seasons, over the ${SIZE_BUDGET} budget`, 'budget');
   if (!Number.isFinite(slope)) fail(`${club}: not enough seasons to fit a slope`, 'short');
-  else if (slope > SLOPE_CAP) fail(`${club}: the save grows ${slope.toFixed(0)} bytes a season over seasons 4 to ${reached}, over the ${SLOPE_CAP} cap`, 'slope');
+  else if (slope > SLOPE_CAP) fail(`${club}: the plain state grows ${slope.toFixed(0)} code units a season over seasons 4 to ${reached}, over the ${SLOPE_CAP} cap`, 'slope');
 }
+Date.now = realNow;
 console.log(`   board nudges over the whole run: ${nudges}`);
 if (!snapForSection2) abort('section 1 never reached Everton season 2, so section 2 has nothing to inflate');
 if (!snapForSection3) abort(`section 1 never reached Everton season ${SEASONS}, so section 3 has no save to measure the lean retry on`);
@@ -576,9 +601,11 @@ console.log('3) saveCareer says whether it wrote: false when refused twice, lean
 /* ================================================================== */
 section = 3;
 {
-  /* The fifteen season save, where the lean shape actually cuts. */
-  const s = snapForSection3;
+  /* Preserve the late career's head-to-head ledger and test the ordinary
+     plain write, below the threshold that opts into the active codec. */
+  const s = { ...snapForSection3, pairResults: {} };
   const fullBytes = bytes(trimCareer(s));
+  if (fullBytes >= SIZE_BUDGET) fail('the legacy lean fixture is too large to test the ordinary plain write');
   const perOppOf = h2h => {
     const m = new Map();
     for (const h of h2h ?? []) m.set(h.opp, (m.get(h.opp) ?? 0) + 1);
@@ -1022,13 +1049,13 @@ const total = SECTIONS.reduce((n, k) => n + failures[k], 0);
 const redSections = SECTIONS.filter(k => failures[k] > 0);
 if (CONTROL) {
   const own = OWN[CONTROL];
-  /* The uncapped control has to be caught by the numbers, not by the ledger
-     cap check alone, or the fences are decoration. */
-  if (CONTROL === 'uncapped') {
+  /* The controls must hit their own numeric fence, separate from ledger caps. */
+  const fence = { uncapped: 'slope', nocodec: 'budget' }[CONTROL];
+  if (fence) {
     const fired = [...(tags[1] ?? [])];
-    console.error(`   section 1 checks that fired under uncapped: ${fired.join(', ') || 'none'}`);
-    if (!(tags[1]?.has('budget') && tags[1]?.has('slope'))) {
-      console.error(`\nsimClubManagerSaveSize: SAVE_SIZE_CONTROL=uncapped was not caught by BOTH numeric fences (fired: ${fired.join(', ') || 'none'}), so the size budget or the slope cap is not set from headroom`);
+    console.error(`   section 1 checks that fired under ${CONTROL}: ${fired.join(', ') || 'none'}`);
+    if (!tags[1]?.has(fence)) {
+      console.error(`\nsimClubManagerSaveSize: SAVE_SIZE_CONTROL=${CONTROL} did not reach its ${fence} fence`);
       process.exit(1);
     }
   }

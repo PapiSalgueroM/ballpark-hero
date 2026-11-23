@@ -1,8 +1,14 @@
+## 2026-11-23, Club Manager active save protection
+
+PL-04 is partly implemented. Club Manager can compact oversized active saves when the existing pair-results format makes them smaller. The first conversion checks an exact recovery copy of the prior bytes for that slot. If storage refuses the copy or write, the previous save stays available and the player can retry. A compact career keeps its format through season rollover and uses the same recovery copy. Ordinary plain saves keep their existing writer.
+
+The candidate passed 226 focused tests. The 45-season replay compared the entire decoded state with the intended save after every write. Season 15 occupied 189,240 characters for Real Madrid, 201,460 for Everton and 201,853 for Lincoln City under the existing 234,000-character diagnostic budget. The harness detected disabled compression, uncapped ledger growth and a falsely successful write.
+
+Chromium at 320 and 390 pixels finished a real Everton season. The new 234,464-character state stored in 193,120 characters after an exact backup. Refusing the backup or the compact write kept the earlier career. A retry after the write refusal used the existing backup. The next season and reload kept the prior history and both other slots.
+
 ## 2026-11-23, Club Manager compact save compatibility
 
 Home and the manager chooser can resume a career whose pair results use the existing compact format. Changing slots keeps the incoming save's exact bytes, so a browser can open a career with room for the compressed copy alone. SaveKeeper recognizes readable compact careers and keeps one exact recovery copy of damaged ones.
-
-PL-04 is partly implemented. Existing plain saves remain readable. Compaction of oversized active writes needs a checked recovery copy and write refusal tests.
 
 The reader passed 202 focused tests, all 18 selected harnesses and the existing page download budgets. At 320 and 390 pixels, the older build skipped a valid compact career on Home and could not activate it under a 90,326-character write cap. The reader resumed it from Home and moved the exact compact bytes into the active slot. Other slots kept their saves. With the cap lifted, the next league result and all 160 earlier pair results survived reload.
 
@@ -12,7 +18,7 @@ Prepared the Club Manager part of the weekly review as its own branch. Generated
 
 Old Korean, Japanese and Chinese jobs retain the appropriate generated market after a club move. An England-only save does not activate the Korean market. An academy graduate's qualifying league appearances still count for the club's objective if that player is loaned, sold, or released. IDs count once per club and league. The isolated engine and game fixtures passed 321 focused tests and seven copied faults, including moves between Asian leagues and a neutral England save.
 
-The paired 15-season England save budget reproduced the published baseline exactly. Everton and Lincoln City exceeded the 234,000-character test budget in both builds, and both saves still wrote successfully. That older capacity issue remains open.
+The paired 15-season England save budget reproduced the published baseline exactly. Everton and Lincoln City exceeded the 234,000-character test budget in both builds, and both saves still wrote successfully. The active save protection above addresses that capacity issue.
 
 The combined #1036 candidate passed 258 focused tests. Chromium at 320 and 390 pixels showed 21 local market cards per league, blocked a sixth foreign signing and preserved a local signing at the limit through reload. A qualifying graduate's appearances still counted after a sale and reload. The league tile showed PSG gaining three points while staying third, and the Stats screen kept the squad's goals available after Champions League and Europa League exits. A tournament-wide Golden Boot still needs all clubs' scorers.
 

@@ -6,18 +6,22 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value);
 }
 
-/** Keep the full pair ledger. Apply its storage encoding only to parked careers. */
-export function serializeParkedCareer(career: CareerState): string {
-  const plain = JSON.stringify(career);
-  if (career.saveVersion !== READABLE_SAVE_VERSION || !isRecord(career.pairResults)) return plain;
+/** Encode the full pair ledger using the existing on-disk shape. */
+export function packCareerPairs(career: CareerState): string | null {
+  if (career.saveVersion !== READABLE_SAVE_VERSION || !isRecord(career.pairResults)) return null;
   const pairs = compressToUTF16(JSON.stringify(career.pairResults));
-  const packed = JSON.stringify({
+  return JSON.stringify({
     ...career,
     saveVersion: PARKED_PAIR_SAVE_VERSION,
     pairResults: pairs,
     pairSignature: pairLedgerSignature(pairs),
   });
-  return packed.length < plain.length ? packed : plain;
+}
+
+export function serializeParkedCareer(career: CareerState): string {
+  const plain = JSON.stringify(career);
+  const packed = packCareerPairs(career);
+  return packed && packed.length < plain.length ? packed : plain;
 }
 
 export function isPackedParkedCareer(value: unknown): value is Record<string, unknown> {
