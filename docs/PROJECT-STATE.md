@@ -1,3 +1,11 @@
+## 2026-11-23, Hall of Champions save protection
+
+**PL-04 is partly implemented.** The five-second autosave, tab exit and Rededicate all check the exact save the museum opened. An older tab keeps a newer museum intact and can reload it. If the game cannot open the current save, it must verify an exact recovery copy before writing a playable museum. A refused copy leaves the original in place and offers Retry save.
+
+All 16 long-play hook tests, the application typecheck, the production build and 15 built-site checks passed. Eight regression cases failed on the unchanged hook. The long-play simulation loaded 75,646 high-value save fixtures, and its old-copy and timestamp controls both failed as expected. The shared keeper ticked the Hall fixtures and still reported unrelated differences in other games.
+
+Chromium at 320 and 390 pixels bought Guided tours in a second tab and kept the exact level 1 save after the older tab exited. Both widths held the exact prior museum when the backup was refused, then kept one byte-exact backup on Retry save. Reload opened the new museum and retained the backup.
+
 ## 2026-11-16 — Career search, NHL trades and NFL injured reserve
 
 - Home recognizes explicit requests such as “NBA career mode” and “manage an MLB team.” Both mobile widths verified nine supported queries, five misses, the existing title shortcuts and return focus. The NBA result opened with Enter and the MLB result opened by touch. Back restored the search filters and saved games.
