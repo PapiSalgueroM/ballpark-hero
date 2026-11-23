@@ -485,7 +485,7 @@ async function sectionLanding(ctx, arm, size, w, judge = SECTIONS) {
     if (i === 0 && judge.includes('landing')) {
       /* New Career, then Begin again: lands again. */
       await p.getByRole('button', { name: /New Career/ }).first().click({ timeout: 5000 }).catch(() => {});
-      await p.getByRole('button', { name: 'Delete & Start Over' }).click({ timeout: 5000 }).catch(() => {});
+      await p.getByRole('button', { name: 'Keep Copy & Start Over' }).click({ timeout: 5000 }).catch(() => {});
       await p.waitForTimeout(600);
       await fillCreation(p, name);
       const again = await beginAndMeasure(p);

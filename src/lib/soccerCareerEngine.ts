@@ -943,6 +943,7 @@ export interface CareerStorySeason {
 }
 
 export interface CareerState {
+  importedFromFile?: true;
   inSeasonRatings?: true;
   historicalArrivals?: SoccerHistoricalArrivals;
   extraCupQualification?: ExtraCupQualification;

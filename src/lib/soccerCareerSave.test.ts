@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { compressToUTF16 } from 'lz-string';
 import { initCareer, FALLBACK_CLUBS } from './soccerCareerEngine';
-import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave } from './soccerCareerSave';
+import { decodeSoccerCareerSave, isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave, SOCCER_CAREER_SAVE_VERSION, UnsupportedSoccerCareerSaveVersion } from './soccerCareerSave';
 import { CONTINUE_SAVES, describeSave } from '@/data/continueSaves';
 
 function fixture() {
@@ -11,6 +11,26 @@ function fixture() {
 }
 
 describe('Soccer Career storage', () => {
+  it('reads the version separately from the career in the saves a player writes', () => {
+    const value = fixture();
+    const legacy = serializeSoccerCareerSave(value);
+    const versioned = serializeSoccerCareerSave(value, SOCCER_CAREER_SAVE_VERSION);
+    expect(decodeSoccerCareerSave(legacy)).toEqual({ version: 0, value: JSON.parse(legacy) });
+    expect(decodeSoccerCareerSave(versioned)).toEqual({ version: 1, value: JSON.parse(legacy) });
+  });
+
+  it('reads the inner version after an older game repacks a save and refuses future or conflicting versions', () => {
+    const value = fixture();
+    const packed = (outerVersion?: number, innerVersion?: number) => JSON.stringify({
+      saveVersion: outerVersion,
+      seasons: { format: 'lz-string-utf16-career', data: compressToUTF16(JSON.stringify({ ...value, saveVersion: innerVersion })) },
+    });
+    expect(decodeSoccerCareerSave(packed(undefined, 1))).toEqual({ version: 1, value: JSON.parse(JSON.stringify(value)) });
+    for (const raw of [packed(2, 1), packed(1, 2), packed(undefined, 2), packed(1, 0)]) {
+      expect(() => decodeSoccerCareerSave(raw)).toThrow(UnsupportedSoccerCareerSaveVersion);
+    }
+  });
+
   it('keeps small and legacy saves in their original JSON format', () => {
     const career = fixture();
     delete career.physique;

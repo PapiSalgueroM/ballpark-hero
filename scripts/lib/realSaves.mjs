@@ -45,7 +45,7 @@ import { build } from 'esbuild';
 export const WRITERS = {
   '/soccer-career': { kind: 'serializer', file: 'src/pages/SoccerCareer.tsx', fn: 'serializeSoccerCareerSave', indirect: [
     'const saveKey = entry?.saveKey ?? SAVE_KEY;',
-    'const raw = serializeSoccerCareerSave(career);',
+    'const raw = serializeSoccerCareerSave(career, SOCCER_CAREER_SAVE_VERSION);',
     'localStorage.setItem(saveKey, raw);',
   ] },
   '/club-manager': { kind: 'engine', file: 'src/lib/clubManager.ts', fn: 'saveCareer' },
@@ -79,7 +79,7 @@ export const PURE_LOADERS = ['/soccer-career', '/stadium-tycoon', '/wonderkid-fa
 
 const ENTRY = `
 import * as SOC from './src/lib/soccerCareerEngine';
-import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave } from './src/lib/soccerCareerSave';
+import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave, SOCCER_CAREER_SAVE_VERSION } from './src/lib/soccerCareerSave';
 import { playCommunityShield, playGermanSupercup } from './src/lib/soccerCareerExtraCups';
 import * as PROG from './src/lib/soccerCareerProgramme';
 import * as BRIEF from './src/lib/soccerCareerTransferBrief';
@@ -167,7 +167,7 @@ const soccerPlayed = seed => {
   if (!pick) throw new Error('Soccer Career seed ' + seed + ' never reached a hub that offers a tactical role (phase ' + c.phase + ', ' + played(c) + ' seasons played)');
   c = PROG.chooseProgramme(c, 'tactics', pick.id);
   if (!c.programme || !c.programme.plan) throw new Error('Soccer Career seed ' + seed + ': chooseProgramme did not keep the plan on the save');
-  return serializeSoccerCareerSave(c);
+  return serializeSoccerCareerSave(c, SOCCER_CAREER_SAVE_VERSION);
 };
 /* Release AW closing pass (ruling C4). Four more parts of the Soccer Career save carry a version number one
    level down (transferBrief, agentReview, internationalReturn, farewellSeason) and no save above holds one:
@@ -212,7 +212,7 @@ const soccerVeteran = seed => {
     for (let g = 0; g < 2500 && !c.retired; g += 1) {
       if (c.phase === 'playing' && c.age >= 30) {
         const held = veteranParts(c, clubs);
-        if (held) return serializeSoccerCareerSave(held);
+        if (held) return serializeSoccerCareerSave(held, SOCCER_CAREER_SAVE_VERSION);
       }
       c = careerStep(SOC, c, clubs);
     }
@@ -228,7 +228,7 @@ const soccerWindow = seed => {
     for (let g = 0; g < 2500 && !c.retired; g += 1) {
       if (c.phase === 'transfer_window' && played(c) >= SOCCER_SEASONS) {
         const filed = BRIEF.setTransferBrief(c, 'minutes');
-        if (filed !== c && BRIEF.readTransferBrief(filed, SOC.projectLeagueApps)) return serializeSoccerCareerSave(filed);
+        if (filed !== c && BRIEF.readTransferBrief(filed, SOC.projectLeagueApps)) return serializeSoccerCareerSave(filed, SOCCER_CAREER_SAVE_VERSION);
       }
       c = careerStep(SOC, c, clubs);
     }
@@ -236,6 +236,7 @@ const soccerWindow = seed => {
   throw new Error('Soccer Career seed ' + seed + ': no career of ' + SOCCER_PART_TRIES + ' reached a transfer window that takes a brief, so the fixture holds no transferBrief');
 };
 const soccerSave = seed => (seed % 4 === 2 ? soccerVeteran(seed) : seed % 4 === 3 ? soccerWindow(seed) : soccerPlayed(seed));
+export const soccerLegacySave = raw => serializeSoccerCareerSave(parseSoccerCareerSave(raw));
 const US_SEASONS = 2;
 const usPick = (sport, seed) => {
   const pos = sport.create.positions[seed % sport.create.positions.length];
@@ -625,5 +626,6 @@ export async function buildRealSaves({ root, tmpDir, seeds = [0, 1, 2, 3] }) {
     const one = mod.makeSaves(seed, rebuildClubs);
     for (const [route, raw] of Object.entries(one)) (fleet[route] ??= []).push(raw);
   }
-  return { fleet, accepts: mod.accepts, partReads: mod.partReads, partAbsent: mod.partAbsent, partPreserved: mod.partPreserved, nrlLegacySave: mod.nrlLegacySave };
+  return { fleet, accepts: mod.accepts, partReads: mod.partReads, partAbsent: mod.partAbsent, partPreserved: mod.partPreserved,
+    nrlLegacySave: mod.nrlLegacySave, soccerLegacySave: mod.soccerLegacySave };
 }

@@ -1,3 +1,13 @@
+## 2026-11-23, Soccer Career portable saves and migration protection
+
+**PL-03 is partly implemented.** Career saves downloads a portable JSON file and imports it into an empty slot. The download carries the original save text. Import preserves its career data and adds a marker to keep edited or copied files from posting a public retirement score. The slot shows the last verified local save time when available. Keep Copy & Start Over preserves a checked playable backup before freeing the slot. A refused save or backup leaves the current career open.
+
+**PL-04 is partly implemented.** Soccer Career now writes version 1 and reads older versionless saves. The selected slot keeps a checked byte-for-byte copy of the original before replacing it. The migration reuses a previously verified copy and checks the original again before writing. Future versions stay in place with a route to other slots. Old season detail stays limited to what the save actually held.
+
+Periodic season checkpoints and optional account sync remain open. A checkpoint restore needs to preserve the current career and keep public score tracking outside the rewound state. No Soccer Career client currently uses the old account table for save sync.
+
+The 240 focused tests and all 20 scoped harnesses passed, including the 15 built-site checks. Chromium used separate contexts and the native file chooser at 320, 390, 430 and 1440 pixels. At 390 pixels, a restart and restore preserved the second slot and left the first slot byte-for-byte intact. The stale-tab browser control also preserved the newer save. The broader packed unit run still showed the two previously reproduced academy fixture differences.
+
 ## 2026-11-23, Soccer Career save slots
 
 **PL-03 is partly implemented.** Soccer Career has three independent local slots labeled by player. The legacy key is slot 1, so an existing bookmark or Home link still opens that player. Career saves lets a player resume any slot or start in an empty one. If the current slot has an interrupted write, the in-game switch retries that write first. Home, Profile, the Soccer hub and recovery use the selected slot. Each slot has its own Season Centre replay position.

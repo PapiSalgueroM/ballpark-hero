@@ -58,7 +58,7 @@ import { createSaveFence } from '@/lib/saveFence';
  *     changed: a put back landing over days of newer play is not what was
  *     asked for.
  *
- * THE COPY BEFORE A VERSION STEP. Ten of the long games write a version
+ * THE COPY BEFORE A VERSION STEP. Several long games write a version
  * number inside the save (SAVE_VERSIONS below says where, and what the game
  * does with another number). At boot, a held save of a game that REFUSES or
  * MIGRATES another version, whose own number is not the one this build
@@ -66,14 +66,10 @@ import { createSaveFence } from '@/lib/saveFence';
  * whole number there counts: those games refuse it just the same). Three of those
  * games then write a fresh game over a save they refused, with no press, so
  * without the copy the old bytes were gone five seconds after the page
- * opened. What this does NOT cover, said plainly: the eleven games with no
- * version for the whole save (Soccer Career among them) change their saves
- * by repair on load and get no copy here, and a game's parked or second keys
- * are not looked at. Five of those eleven do hold a version number on a PART
- * of the save (Soccer Career's season plan at programme.version, the four US
- * careers' road to the draft at prospect.v); that part's own reader refuses
- * another number, and no copy is made before a step of it. They are listed,
- * with what each reader does, in scripts/simSaveKeeper.mjs (PART_VERSIONS).
+ * opened. Soccer Career keeps an exact copy inside its selected slot's
+ * migration write flow, since the game can leave the old career playable
+ * when this copy fails. Games can also hold versions on individual parts.
+ * The part readers are listed in scripts/simSaveKeeper.mjs (PART_VERSIONS).
  *
  * AN ORDINARY BOOT WRITES NOTHING. With no journal and every held save at its
  * current version the keeper reads the journal key and the keys of the games
@@ -127,23 +123,24 @@ export interface SaveVersionRow {
   /** The oldest number the game's own loader still opens. */
   oldest: number;
   other: OtherVersion;
+  /** The game checks and copies the active save before its own migration write. */
+  backupAtWrite?: true;
 }
 
 /**
- * The ten long games whose WHOLE save holds its own version, keyed by route.
+ * The long games whose whole save holds its own version, keyed by route.
  * Read in each engine and held to it by scripts/simSaveKeeper.mjs on saves
  * that have been played: a real save of every row holds exactly `current` at
  * `at`, and where the game exports a pure loader the row's `other` and
  * `oldest` must agree with what that loader answers for a save one version
- * down. A real save of any other long game holds no version number at its
- * top level or one level down EXCEPT the part versions that harness names
- * one by one (PART_VERSIONS: five games, see the header above); a number it
- * finds that neither table names turns it red. Club Manager's
+ * down. The harness checks part versions in both versioned and unversioned
+ * games and reports an unknown number at either level. Club Manager's
  * number also lives in src/lib/clubManager.ts (SAVE_VERSION) and in
  * src/lib/clubManagerSlots.ts; this table is the third place, and the
  * harness is what holds it to the first.
  */
 export const SAVE_VERSIONS: Readonly<Record<string, SaveVersionRow>> = {
+  '/soccer-career': { at: ['saveVersion'], current: 1, oldest: 0, other: 'migrates', backupAtWrite: true },
   '/club-manager': { at: ['saveVersion'], current: 3, oldest: 3, other: 'refuses' },
   '/rebuild': { at: ['v'], current: 2, oldest: 1, other: 'migrates' },
   '/stadium-tycoon': { at: ['v'], current: 1, oldest: 1, other: 'refuses' },
@@ -361,7 +358,7 @@ export function keepUpdateCopies(storage: ListableStorage | null, now: Date = ne
   let made = 0;
   for (const game of CONTINUE_SAVES) {
     const row = Object.prototype.hasOwnProperty.call(SAVE_VERSIONS, game.path) ? SAVE_VERSIONS[game.path] : undefined;
-    if (!row || row.other === 'ignores') continue;
+    if (!row || row.other === 'ignores' || row.backupAtWrite) continue;
     for (const entry of continueSaveEntries(game)) {
       let raw: string | null;
       try { raw = storage.getItem(entry.saveKey); } catch { continue; }

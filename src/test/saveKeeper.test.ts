@@ -522,7 +522,7 @@ describe('the copy before a version step (Round 1219)', () => {
     expect(applyPending(api, T0)).toBeNull();
     expect(keepUpdateCopies(api, T0)).toBe(0);
     expect(s.sets + s.removes).toBe(0);
-    const acting = CONTINUE_SAVES.filter(e => SAVE_VERSIONS[e.path] && SAVE_VERSIONS[e.path].other !== 'ignores')
+    const acting = CONTINUE_SAVES.filter(e => SAVE_VERSIONS[e.path] && SAVE_VERSIONS[e.path].other !== 'ignores' && !SAVE_VERSIONS[e.path].backupAtWrite)
       .flatMap(e => [e.saveKey, ...(e.alternateSaveKeys ?? [])]);
     expect(acting).toHaveLength(9);
     expect([...s.read].sort()).toEqual([PENDING_RESTORE_KEY, ...acting].sort());

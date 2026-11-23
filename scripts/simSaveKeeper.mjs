@@ -28,13 +28,13 @@
  *      neither table is red. (Release AU fix pass: the fixtures are played
  *      saves now. As start states they held no parts, and this section said
  *      "none" over five games that had one.)
- *      (Release AZ: a game WITH a row in SAVE_VERSIONS is never searched for
- *      a part's number. '/club-manager' is such a row, the whole save at
- *      saveVersion 3, so the version of the world ledger Round 1250 added
+ *      Soccer Career's part checks still run alongside its whole-save version.
+ *      Whole-save rows without a part table retain their previous scope. The
+ *      Club Manager ledger added in Round 1250
  *      (worldRoster.version, read by readWorldRoster in
  *      src/lib/clubManagerWorldRoster.ts) is invisible here. That reader holds
  *      its own number: a ledger of another version reads as no ledger, held
- *      by src/lib/clubManagerWorldRoster.test.ts.)
+ *      by src/lib/clubManagerWorldRoster.test.ts.
  *   2  an ordinary boot writes nothing. A fixture of every game planted,
  *      runSaveKeeper through the real seam: zero writes, zero removes, the
  *      exact set of keys read, and every stored save byte equal before and
@@ -89,6 +89,7 @@
  *   partrow       Soccer Career's season plan row is left out of
  *                 PART_VERSIONS                                        (1)
  *   soccerslot    Soccer Career writes to its legacy key from each slot (0)
+ *   soccerversion Soccer Career drops the version on writes            (0)
  *   partshield    the Community Shield qualification row is left out   (1)
  *   partgerman    the German Supercup qualification row is left out     (1)
  *   partrowus     the NFL career's row is left out of PART_VERSIONS    (1)
@@ -193,7 +194,7 @@ const WRITER_ROUTE = process.env.SIM_SAVE_KEEPER_WRITER_ROUTE || '';
 const CONTROLS = ['dropkey', 'versiontable', 'norow', 'onebyte', 'bootwrite', 'noaside', 'journalfirst', 'pileup',
   'nocopycheck', 'hidebehind', 'twins', 'numberonly', 'nomaincall', 'assign', 'partrow', 'partrowus',
   'partbrief', 'partagent', 'partreturn', 'partfarewell', 'partpress', 'partgamelog', 'partballon', 'partplayoffs',
-  'soccerslot', 'partshield', 'partgerman'];
+  'soccerslot', 'soccerversion', 'partshield', 'partgerman'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`SIM_SAVE_KEEPER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(2); }
 if (WRITER_ROUTE && !Object.hasOwn(WRITERS, WRITER_ROUTE)) { console.error(`SIM_SAVE_KEEPER_WRITER_ROUTE=${WRITER_ROUTE} is not a writer this harness knows`); process.exit(2); }
 const SEEDS = [0, 1, 2, 3];
@@ -233,6 +234,7 @@ const SWAPS_ELSEWHERE = {
   twins: [RECOVERY, '      if (kept !== null && storage.getItem(k) === kept) storage.removeItem(k);\n      else others.push(k);\n', '      others.push(k);\n'],
   nomaincall: [MAIN, 'runSaveKeeper();\n', ''],
   soccerslot: [SOCCER_CAREER_WRITER, 'localStorage.setItem(saveKey, raw);', 'localStorage.setItem(SAVE_KEY, raw);'],
+  soccerversion: [SOCCER_CAREER_WRITER, 'const raw = serializeSoccerCareerSave(career, SOCCER_CAREER_SAVE_VERSION);', 'const raw = serializeSoccerCareerSave(career);'],
 };
 /* Every source file a section reads or the bundle loads, as the control left it. */
 const sources = { [KEEPER]: readLF(KEEPER), [RECOVERY]: readLF(RECOVERY), [MAIN]: readLF(MAIN), [SOCCER_CAREER_WRITER]: readLF(SOCCER_CAREER_WRITER) };
@@ -590,10 +592,14 @@ const withVersion = (raw, at, n) => {
   const parts = [];
   const partRows = Object.values(PART_VERSIONS).reduce((n, list) => n + list.length, 0);
   let heldRows = 0;
-  const strayParts = Object.keys(PART_VERSIONS).filter(r => !byPath[r] || V[r]);
-  check(strayParts.length === 0, `all ${Object.keys(PART_VERSIONS).length} games of PART_VERSIONS (${partRows} rows) are long games with no row in SAVE_VERSIONS`, `a game of PART_VERSIONS is not a long game, or it already has a row in SAVE_VERSIONS: ${strayParts.join(', ')}`);
+  let covered = 0;
+  const strayParts = Object.keys(PART_VERSIONS).filter(r => !byPath[r]);
+  check(strayParts.length === 0, `all ${Object.keys(PART_VERSIONS).length} games of PART_VERSIONS (${partRows} rows) are long games`, `a game of PART_VERSIONS is not a long game: ${strayParts.join(', ')}`);
   for (const e of ENTRIES) {
-    if (V[e.path]) continue;
+    const version = V[e.path];
+    const here = PART_VERSIONS[e.path] ?? [];
+    /* Soccer already had part-version coverage before its whole-save version. */
+    if (version && !version.backupAtWrite && !here.length) { covered += 1; continue; }
     /* where -> the numbers found there, over every real save of the game */
     const hits = new Map();
     for (const raw of fleet[e.path] ?? []) {
@@ -602,11 +608,15 @@ const withVersion = (raw, at, n) => {
       look(o, '');
       for (const [k, v] of Object.entries(o)) if (v && typeof v === 'object' && !Array.isArray(v)) look(v, `${k}.`);
     }
-    const here = PART_VERSIONS[e.path] ?? [];
     const named = new Set(here.map(part => part.at.join('.')));
+    if (version) named.add(version.at.join('.'));
     const unknown = [...hits.entries()].filter(([where]) => !named.has(where));
     if (unknown.length) { fail(`${e.path}: its real save holds a version number (${unknown.map(([where, ns]) => `${where}=${[...new Set(ns)].join('/')}`).join(', ')}) and neither SAVE_VERSIONS nor PART_VERSIONS has a row for it`); continue; }
-    if (!here.length) { clean.push(e.path); continue; }
+    if (!here.length) {
+      if (!version) clean.push(e.path);
+      covered += 1;
+      continue;
+    }
     let heldHere = 0;
     for (const part of here) {
       const known = part.at.join('.');
@@ -645,17 +655,19 @@ const withVersion = (raw, at, n) => {
       heldHere += 1;
     }
     heldRows += heldHere;
-    if (heldHere === here.length) parts.push(e.path);
+    if (heldHere === here.length) { parts.push(e.path); covered += 1; }
   }
-  check(clean.length + parts.length === ENTRIES.length - rows.length && parts.length === Object.keys(PART_VERSIONS).length && heldRows === partRows,
-    `of the other ${ENTRIES.length - rows.length} games, ${clean.length} hold no whole number named v, version or saveVersion at the top level or one level down, and ${parts.length} hold one on a part of the save that PART_VERSIONS names (${heldRows} of its ${partRows} rows held)`,
-    `${ENTRIES.length - rows.length} games have no row in SAVE_VERSIONS; only ${clean.length} are clean and ${parts.length} of the ${Object.keys(PART_VERSIONS).length} games of PART_VERSIONS held (${heldRows} of ${partRows} rows)`);
+  check(covered === ENTRIES.length && parts.length === Object.keys(PART_VERSIONS).length && heldRows === partRows,
+    `all ${covered} games hold only known versions: ${clean.length} hold no whole or part number, and ${parts.length} hold one on a part named in PART_VERSIONS (${heldRows} of ${partRows} rows held)`,
+    `${covered} of ${ENTRIES.length} games hold only known versions; ${parts.length} of the ${Object.keys(PART_VERSIONS).length} games of PART_VERSIONS held (${heldRows} of ${partRows} rows)`);
   for (const r of rows) {
     const row = V[r];
     const load = accepts[r];
     if (!load) { console.log(`         ${r}: no pure loader is exported, so "${row.other}" is held by reading its engine only`); continue; }
     const same = load(withVersion(fleet[r][0], row.at, row.current));
-    const down = load(r === '/nrl-team-manager' ? real.nrlLegacySave() : withVersion(fleet[r][0], row.at, row.current - 1));
+    const legacy = r === '/soccer-career' ? real.soccerLegacySave(fleet[r][0])
+      : r === '/nrl-team-manager' ? real.nrlLegacySave() : withVersion(fleet[r][0], row.at, row.current - 1);
+    const down = load(legacy);
     const up = load(withVersion(fleet[r][0], row.at, row.current + 1));
     const wantDown = row.other === 'ignores' || (row.other === 'migrates' && row.current - 1 >= row.oldest);
     const wantUp = row.other === 'ignores';
@@ -669,7 +681,7 @@ const withVersion = (raw, at, n) => {
 section = '2';
 console.log('\n2. an ordinary boot writes nothing');
 const PENDING = K.PENDING_RESTORE_KEY;
-const acting = ENTRIES.filter(e => V[e.path] && V[e.path].other !== 'ignores');
+const acting = ENTRIES.filter(e => V[e.path] && V[e.path].other !== 'ignores' && !V[e.path].backupAtWrite);
 {
   const trouble = K.getStorageTrouble();
   check(trouble === null, 'the seam reads the page storage as ok, so the keeper really runs', `the seam answers "${trouble}": the keeper returns at once and every check below would pass by doing nothing`);
@@ -947,7 +959,7 @@ const red = [...failed].sort();
 console.log('');
 const OWN = { dropkey: '0', versiontable: '1', norow: '1', onebyte: '2', bootwrite: '2', noaside: '3', journalfirst: '3', pileup: '4',
   nocopycheck: '3', hidebehind: '3', twins: '3', numberonly: '4', nomaincall: '6', assign: '6', partrow: '1', partrowus: '1', partbrief: '1', partagent: '1', partreturn: '1', partfarewell: '1', partpress: '1', partgamelog: '1', partballon: '1', partplayoffs: '1',
-  soccerslot: '0', partshield: '1', partgerman: '1' };
+  soccerslot: '0', soccerversion: '0', partshield: '1', partgerman: '1' };
 /* A lie in the table or a write on every boot is also seen by the sections that boot the keeper. A card that hides
    behind the save being played is also seen where the quiet copy sits in front of older backups. */
 const ALSO = { versiontable: ['2', '3', '4', '5'], bootwrite: ['3', '4', '5'], norow: ['4'], hidebehind: ['4'] };

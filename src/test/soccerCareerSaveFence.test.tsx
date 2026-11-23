@@ -1,5 +1,5 @@
 import { Component, type ReactNode } from 'react';
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter } from 'react-router-dom';
@@ -56,9 +56,11 @@ import { toast } from 'sonner';
 import SoccerCareer from '@/pages/SoccerCareer';
 import SoccerCareerEntry from '@/pages/SoccerCareerEntry';
 import { parseSoccerCareerSave, serializeSoccerCareerSave } from '@/lib/soccerCareerSave';
+import { BROKEN_SAVE_MARK, offeredBackup, routeSaveEntry } from '@/lib/brokenSaveRecovery';
 
 const KEY = 'soccerCareerSave', FENCE = 'dukb-fence:soccerCareerSave';
 const SECOND_KEY = 'soccerCareerSave-slot-2';
+const backupsFor = (key: string) => Object.keys(localStorage).filter(name => name.startsWith(`${key}${BROKEN_SAVE_MARK}`));
 const copy = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const read = (): E.CareerState => JSON.parse(localStorage.getItem(KEY)!);
 const nativeCareer = () => E.initCareer('Fence Tester', 'England', 'CM', '2020-24', { pace: 70, shooting: 70, passing: 70, dribbling: 70, defending: 70, physical: 70, reflexes: 70 }, 70, 2020, E.FALLBACK_CLUBS, null, 88);
@@ -109,6 +111,124 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
 describe('Soccer Career save fence', () => {
+  it.each([false, true])('keeps the old career before the first versioned write (packed: %s)', async packed => {
+    const old = { ...nativeCareer(), playerName: 'Older Career', weeklyWage: 17500, contractYearsLeft: 3, netWorth: 34123 };
+    old.seasons = Array.from({ length: 10 }, (_, n) => ({ ...old.seasons[0], year: 2020 + n }));
+    old.seasons[8].clubCupTitle = 'FA Cup';
+    old.awards = [{ year: 2028, name: 'Golden Boot', emoji: '🏆' }];
+    delete old.loan;
+    delete old.pendingLoanOffers;
+    if (packed) old.events = Array.from({ length: 1600 }, (_, n) => `Career history entry ${n} with season details.`);
+    const legacy = serializeSoccerCareerSave(old);
+    if (packed) expect(legacy).toContain('lz-string-utf16-career');
+    localStorage.setItem(SECOND_KEY, legacy);
+    localStorage.setItem(KEY, 'independent slot');
+    const setItem = Storage.prototype.setItem;
+    const beforeImages: (string | null)[] = [];
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key === SECOND_KEY) beforeImages.push(this.getItem(backupsFor(SECOND_KEY)[0]));
+      setItem.call(this, key, value);
+    });
+
+    const view = openSlot('/soccer-career?slot=2');
+    await view.findByRole('button', { name: 'Career saves' });
+    await waitFor(() => expect(JSON.parse(localStorage.getItem(SECOND_KEY)!).saveVersion).toBe(1));
+    const migrated = localStorage.getItem(SECOND_KEY)!;
+    expect(beforeImages).toEqual([legacy]);
+    expect(backupsFor(SECOND_KEY)).toHaveLength(1);
+    expect(offeredBackup(routeSaveEntry('/soccer-career?slot=2')!, localStorage)).toBe(backupsFor(SECOND_KEY)[0]);
+    expect(localStorage.getItem(KEY)).toBe('independent slot');
+    expect(parseSoccerCareerSave(migrated)).toMatchObject({
+      playerName: old.playerName, nationality: old.nationality, weeklyWage: old.weeklyWage,
+      contractYearsLeft: old.contractYearsLeft, netWorth: old.netWorth, awards: old.awards,
+      seasons: old.seasons, events: old.events, loan: null, pendingLoanOffers: null,
+    });
+    expect((parseSoccerCareerSave(migrated) as E.CareerState).seasons).toEqual(old.seasons);
+    view.unmount();
+    const reopened = openSlot('/soccer-career?slot=2');
+    await reopened.findByRole('button', { name: 'Career saves' });
+    expect(backupsFor(SECOND_KEY)).toHaveLength(1);
+  });
+
+  it('keeps old bytes if the migration backup or replacement cannot be written, then retries safely', () => {
+    const old = JSON.stringify(nativeCareer());
+    localStorage.setItem(KEY, old);
+    const setItem = Storage.prototype.setItem;
+    let blocked: 'backup' | 'career' | null = 'backup';
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if ((blocked === 'backup' && key.startsWith(`${KEY}${BROKEN_SAVE_MARK}`)) || (blocked === 'career' && key === KEY)) {
+        throw new DOMException('Storage full', 'QuotaExceededError');
+      }
+      setItem.call(this, key, value);
+    });
+    const view = mount(null);
+    const retry = view.getByRole('button', { name: 'Retry save' });
+    expect(localStorage.getItem(KEY)).toBe(old);
+    expect(backupsFor(KEY)).toHaveLength(0);
+
+    blocked = 'career';
+    fireEvent.click(retry);
+    expect(localStorage.getItem(KEY)).toBe(old);
+    expect(backupsFor(KEY)).toHaveLength(1);
+    expect(localStorage.getItem(backupsFor(KEY)[0])).toBe(old);
+
+    blocked = null;
+    fireEvent.click(retry);
+    expect(JSON.parse(localStorage.getItem(KEY)!).saveVersion).toBe(1);
+    expect(backupsFor(KEY)).toHaveLength(1);
+    expect(localStorage.getItem(backupsFor(KEY)[0])).toBe(old);
+  });
+
+  it('keeps competing bytes written while the migration backup is being copied', async () => {
+    const old = JSON.stringify(nativeCareer());
+    const other = JSON.stringify({ ...nativeCareer(), playerName: 'Another Tab' });
+    localStorage.setItem(KEY, old);
+    const setItem = Storage.prototype.setItem;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      setItem.call(this, key, value);
+      if (key.startsWith(`${KEY}${BROKEN_SAVE_MARK}`)) setItem.call(this, KEY, other);
+    });
+    mount(null);
+    await noticeShows('This slot changed. Reload to open the saved career.');
+    expect(localStorage.getItem(KEY)).toBe(other);
+    expect(localStorage.getItem(backupsFor(KEY)[0])).toBe(old);
+  });
+
+  it('refuses the migration if its checked backup disappears before replacement', () => {
+    const old = JSON.stringify(nativeCareer());
+    localStorage.setItem(KEY, old);
+    const setItem = Storage.prototype.setItem;
+    let spoilBackup = true;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key === FENCE && spoilBackup) {
+        const backup = backupsFor(KEY)[0];
+        if (backup) this.removeItem(backup);
+      }
+      setItem.call(this, key, value);
+    });
+
+    const view = mount(null);
+    expect(localStorage.getItem(KEY)).toBe(old);
+    expect(backupsFor(KEY)).toHaveLength(0);
+    expect(view.getByText(/couldn’t keep a backup before updating/)).toBeInTheDocument();
+    spoilBackup = false;
+    fireEvent.click(view.getByRole('button', { name: 'Retry save' }));
+    expect(JSON.parse(localStorage.getItem(KEY)!).saveVersion).toBe(1);
+    expect(localStorage.getItem(backupsFor(KEY)[0])).toBe(old);
+  });
+
+  it('leaves a future career intact and offers another slot instead', async () => {
+    const future = JSON.stringify({ ...nativeCareer(), saveVersion: 7 });
+    localStorage.setItem(SECOND_KEY, future);
+    const view = openSlot('/soccer-career?slot=2');
+    const choose = await view.findByRole('button', { name: 'Choose another slot' });
+    expect(view.queryByRole('button', { name: 'Delete unusable save' })).toBeNull();
+    fireEvent.click(choose);
+    expect(await view.findByRole('link', { name: 'New career in slot 3' })).toBeInTheDocument();
+    expect(localStorage.getItem(SECOND_KEY)).toBe(future);
+    expect(backupsFor(SECOND_KEY)).toHaveLength(0);
+  });
+
   it('starts and progresses a second career while preserving the legacy slot bytes', async () => {
     const legacy = { ...nativeCareer(), oldStoryNotes: 'One more old story. '.repeat(3500) };
     legacy.playerName = 'Long Career';
@@ -220,7 +340,7 @@ describe('Soccer Career save fence', () => {
     const view = mount(JSON.stringify(nativeCareer()));
     const theirs = otherTabPlays();
     fireEvent.click(view.getByRole('button', { name: /New Career/ }));
-    act(() => { fireEvent.click(view.getByRole('button', { name: 'Delete & Start Over' })); });
+    act(() => { fireEvent.click(view.getByRole('button', { name: 'Keep Copy & Start Over' })); });
     await noticeShows();
     expect(localStorage.getItem(KEY)).toBe(theirs);
     expect(view.queryByText('Create Your Player')).toBeNull();
@@ -254,8 +374,8 @@ describe('Soccer Career save fence', () => {
     const fence = localStorage.getItem(FENCE);
     refuseSaveRemoval();
     fireEvent.click(view.getByRole('button', { name: /New Career/ }));
-    act(() => { fireEvent.click(view.getByRole('button', { name: 'Delete & Start Over' })); });
-    expect(toast.error).toHaveBeenCalledWith('Could not delete the save. Try again.', expect.objectContaining({ position: 'top-center' }));
+    act(() => { fireEvent.click(view.getByRole('button', { name: 'Keep Copy & Start Over' })); });
+    expect(toast.error).toHaveBeenCalledWith('Could not clear the slot. Try again.', expect.objectContaining({ position: 'top-center' }));
     expect(localStorage.getItem(KEY)).toBe(before);
     expect(localStorage.getItem(FENCE)).toBe(fence);
     expect(view.queryByText('Create Your Player')).toBeNull();
