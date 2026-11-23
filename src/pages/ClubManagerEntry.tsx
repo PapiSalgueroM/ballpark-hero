@@ -1,7 +1,7 @@
 import { lazy, Suspense, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { ClubManagerEraPicker, ClubManagerPickerHeading } from '@/components/club-manager/ClubManagerEraPicker';
-import { ClubManagerFrame, ClubManagerStartup } from '@/components/club-manager/ClubManagerFrame';
+import { ClubManagerFrame, ClubManagerStartup, ManagerSaveFilesButton } from '@/components/club-manager/ClubManagerFrame';
 import { hasClubManagerBootData } from '@/lib/clubManagerOpening';
 import { clubManagerRequestedSlot } from '@/lib/clubManagerSaveKeys';
 
@@ -26,6 +26,9 @@ export default function ClubManagerEntry() {
       pendingEra={pickedEra?.id}
       preserveFocus={pickedEra?.wasFocused}
     />
+    {!pickedEra && <div className="mt-3 text-center" data-no-prerender>
+      <ManagerSaveFilesButton>Import a career</ManagerSaveFilesButton>
+    </div>}
   </>;
 
   return (
