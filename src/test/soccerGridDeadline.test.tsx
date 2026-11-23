@@ -32,7 +32,7 @@ type Gate = { name: string; settled: boolean; promise: Promise<Reply>; resolve: 
 const NOW = Date.parse('2026-10-17T12:00:00.000Z');
 const VALID = (name: string): Reply => ({ data: { valid: true, fullName: name }, error: null });
 const RETRY = "Couldn't verify that answer, please try again.";
-const EXHAUSTED = 'Answer checking has used up its allowance for today. This guess was not counted; your board is saved, come back tomorrow.';
+const EXHAUSTED = 'The fallback checker has used its allowance for today. This guess was not counted. You can try another player.';
 const raw = { version: 1, caseTitles: Object.values(TITLES), cases: {} as Record<string, unknown> };
 let requests: Record<string, unknown>[];
 let deferred: Gate[];
