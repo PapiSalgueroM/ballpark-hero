@@ -337,8 +337,8 @@ const SOCCER_RAW_PLANT = "    try { localStorage.setItem(saveKey, '{}'); } catch
 const SOCCER_RAW_GUARD = '        if (localStorage.getItem(saveKey) !== expectedRaw.current) { sourceChanged = true; return false; }\n        localStorage.setItem(saveKey, raw);\n';
 const SOCCER_IMPORT_FILE = 'src/lib/soccerCareerPortable.ts';
 const SOCCER_IMPORT_GUARD = '      return storage.getItem(saveKey) === raw;\n    }, true);';
-const SOCCER_CHECKPOINT_FILE = 'src/lib/soccerCareerCheckpoint.ts';
-const SOCCER_CHECKPOINT_GUARD = '      return storage.getItem(saveKey) === restored;\n    }, true);';
+const SOCCER_REPLACEMENT_FILE = 'src/lib/soccerCareerSaveReplacement.ts';
+const SOCCER_CHECKPOINT_GUARD = '      return storage.getItem(saveKey) === replacement;\n    }, true);';
 const SOCCER_ADOPT_FILE = 'src/lib/soccerCareerSaveEntry.ts';
 const SOCCER_ENTRY_FILE = 'src/pages/SoccerCareerEntry.tsx';
 const SOCCER_KEYED = '<SoccerCareerSlot key={slot.saveKey} slot={slot} />';
@@ -454,7 +454,7 @@ function sectionSource() {
       text = text.replace(SOCCER_IMPORT_GUARD, SOCCER_IMPORT_GUARD.replace('}, true);', '});'));
       fired += 1;
     }
-    if (CONTROL === 'checkpointloose' && rel === SOCCER_CHECKPOINT_FILE) {
+    if (CONTROL === 'checkpointloose' && rel === SOCCER_REPLACEMENT_FILE) {
       once(text, SOCCER_CHECKPOINT_GUARD, rel);
       text = text.replace(SOCCER_CHECKPOINT_GUARD, SOCCER_CHECKPOINT_GUARD.replace('}, true);', '});'));
       fired += 1;
@@ -494,7 +494,7 @@ function sectionSource() {
         const arg = node.arguments[0];
         const key = arg.getText(sf);
         const cm = (ts.isIdentifier(arg) && cmIds.has(key)) || key === `'${SAVE_KEY}'`;
-        const strictSlotWrite = (rel === SOCCER_IMPORT_FILE || rel === SOCCER_CHECKPOINT_FILE) && key === 'saveKey';
+        const strictSlotWrite = (rel === SOCCER_IMPORT_FILE || rel === SOCCER_REPLACEMENT_FILE) && key === 'saveKey';
         const sc = strictSlotWrite || (ts.isIdentifier(arg) && scIds.has(key)) || (ts.isStringLiteralLike(arg) && SOCCER_KEYS.has(arg.text));
         /* A generic writer: a game's saveKey in a module that walks the
            registered long games (src/data/continueSaves.ts), Club Manager

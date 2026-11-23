@@ -21,6 +21,7 @@ const cases = {
   checkpoint: 'keeps the last verified season only when a newer season save succeeds',
   checkpointQuota: 'keeps the held checkpoint if the browser refuses its replacement after a later season',
   restored: 'keeps a career marked restoredFromCheckpoint playable without posting a public score',
+  restoredAccount: 'keeps a career marked restoredFromAccount playable without posting a public score',
   restoredRetirement: 'preserves the first earned finish when the player restores and retires again',
   independent: 'retains an independent valid restore and earned engine baseline without mounting the page',
 };
@@ -39,6 +40,7 @@ const controls = {
   retryReplay: { from: "<Button variant=\"outline\" className=\"mt-2 min-h-11 shrink-0 sm:mt-0\" onClick={saveCurrentCareer}>Retry save</Button>", to: "<Button variant=\"outline\" className=\"mt-2 min-h-11 shrink-0 sm:mt-0\" onClick={() => { setCareer(advanceYouthYear(career!, clubs)); }}>Retry save</Button>", test: cases.latest },
   refresh: { from: "return holdPendingSave(() => saveCurrentCareer() !== null);", to: "return holdPendingSave(() => true);", test: cases.refresh },
   retryCompletion: { from: "<Button variant=\"outline\" className=\"mt-2 min-h-11 shrink-0 sm:mt-0\" onClick={saveCurrentCareer}>Retry save</Button>", to: "<Button variant=\"outline\" className=\"mt-2 min-h-11 shrink-0 sm:mt-0\" onClick={() => { recordCompletion(\"/soccer-career\", legacyScore); saveCurrentCareer(); }}>Retry save</Button>", test: cases.retirement },
+  accountScore: { from: "const canPostScore = isRetired && !career?.importedFromFile && !career?.restoredFromCheckpoint && !career?.restoredFromAccount;", to: "const canPostScore = isRetired && !career?.importedFromFile && !career?.restoredFromCheckpoint;", test: cases.restoredAccount },
   clear: { from: "    setSaveFailed(false);\n    if (career.retired === true && career.phase === 'retired') {", to: "    setSaveFailed(true);\n    if (career.retired === true && career.phase === 'retired') {", test: cases.training },
   reset: { from: "if (career && !needsRecord && (!ack || ack.career !== career) && !saveCurrentCareer()) return;", to: "if (career && !needsRecord && (!ack || ack.career !== career)) saveCurrentCareer();", test: cases.reset },
   notice: { from: "'Your latest progress could not be saved. Keep this tab open, then try again.'}</p>", to: "'Saved.'}</p>", test: cases.initial },

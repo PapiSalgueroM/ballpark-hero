@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -252,11 +284,12 @@
 <div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
 <div id="dukb-snapshot">
 <h1>Privacy Policy</h1>
-<p>Last updated: November 13, 2026</p>
+<p>Last updated: November 23, 2026</p>
 <h2>1. Information We Collect</h2>
 <p>DoUKnowBall is completely free. There are no subscriptions, no paid features, and no in-app purchases, so we never collect or store payment information of any kind. You can also play every game without an account. If you choose to use certain features, here is what we collect:</p>
 <li>Local storage data: Game progress, scores, streaks, and preferences are stored in your browser's local storage on your own device and are not sent to our servers unless described below.</li>
 <li>Account data (optional): You can create an account with an email address and password. If you do, we store your email address, display name or username, avatar (if you set one), and your game scores and streaks so we can show them back to you and on leaderboards. You never need an account to play.</li>
+<li>Soccer Career account saves (optional). If you choose Save to account, we store that slot's career data, including the player name and history, so you can open it on another device. These copies are private to your account. You can remove a copy from Career saves or download it with your account data.</li>
 <li>Gameplay and leaderboard data: Certain game modes submit gameplay data (e.g., number of clues used, final score, puzzle date) to our database. When you are not signed in, this data is not linked to your name or email. Each row does carry a display name: your profile name if you are signed in, or a random sports themed handle your browser generates and keeps in local storage (something like "IcyPoacher-42") so your scores stay yours on leaderboards. Clearing your browser's site data mints a fresh handle.</li>
 <li>Grid selection data: In grid-based games, player name selections are stored to calculate rarity scores. This is not linked to your identity unless you are signed in.</li>
 <li>Reported issues: If you use a Report button, we store the selected report category, the text you typed, the page, the date in Eastern Time, and limited in-game details supplied by that game, such as its puzzle, mode, target, lineup, current path, or last rejected answer. We record the report time in UTC. Where space allows, reports also include timezone, your browser's user agent string (its name, version and operating system) and language, viewport size and screen pixel ratio, and the loaded build filename when available. Each report also notes which Report button sent it (the game's own or the one in the footer) and whether the game details were shortened to fit. These small diagnostics help us reproduce the issue. The report payload does not automatically attach your account, email address, a screenshot, or whole browser storage. Anything you type into the report is included, so please leave out passwords and other personal or confidential information.</li>

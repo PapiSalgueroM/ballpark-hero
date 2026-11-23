@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription,
@@ -75,10 +75,12 @@ const RESTORE_MESSAGES = {
 
 const slotLinkId = (number: number) => `soccer-career-slot-${number}-link`;
 const checkpointLabel = ({ playerName, year }: Checkpoint) => `${playerName.trim() || 'Unnamed player'} · ${year}`;
+const SoccerCareerAccountSaves = lazy(() => import('./SoccerCareerAccountSaves'));
 
 export default function SoccerCareerSlots({ slots, backPath }: { slots: readonly ContinueSave[]; backPath: string }) {
   const [summaries, setSummaries] = useState(() => slots.map(slot => readSlot(slot.saveKey)));
   const [importing, setImporting] = useState(false);
+  const [accountOpen, setAccountOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [restoreRequest, setRestoreRequest] = useState<CheckpointRestore | null>(null);
   const heading = useRef<HTMLHeadingElement>(null);
@@ -184,7 +186,23 @@ export default function SoccerCareerSlots({ slots, backPath }: { slots: readonly
           <Link to={backPath}>Back</Link>
         </Button>
       </div>
-      <ul className="grid gap-3 sm:grid-cols-3">
+      <Button id="soccer-career-account-toggle" type="button" variant="outline" size="lg" className="w-full sm:w-auto"
+        aria-expanded={accountOpen} aria-controls="soccer-career-account-saves" disabled={importing}
+        onClick={() => setAccountOpen(open => !open)}>
+        {accountOpen ? 'Back to browser saves' : 'Account saves'}
+      </Button>
+      <div id="soccer-career-account-saves" hidden={!accountOpen}>
+        {accountOpen && (
+          <Suspense fallback={<p role="status" className="text-sm text-muted-foreground">Opening account saves...</p>}>
+            <SoccerCareerAccountSaves slots={slots} locals={summaries.map(slot => !('raw' in slot) ? null : {
+              raw: slot.raw,
+              summary: slot.kind === 'saved' ? slot : null,
+              savedAt: slot.kind === 'saved' ? slot.savedAt : null,
+            })} onLocalChange={refresh} />
+          </Suspense>
+        )}
+      </div>
+      {!accountOpen && <ul className="grid gap-3 sm:grid-cols-3">
         {slots.map(({ path, saveKey }, index) => {
           const slot = summaries[index];
           const number = index + 1;
@@ -251,8 +269,8 @@ export default function SoccerCareerSlots({ slots, backPath }: { slots: readonly
             </li>
           );
         })}
-      </ul>
-      <p role="status" className="text-sm text-muted-foreground">{message}</p>
+      </ul>}
+      {!accountOpen && <p role="status" className="text-sm text-muted-foreground">{message}</p>}
       <AlertDialog open={restoreRequest !== null} onOpenChange={open => { if (!open) setRestoreRequest(null); }}>
         <AlertDialogContent className="max-h-[calc(100dvh-2rem)] w-[calc(100%-2rem)] overflow-y-auto rounded-xl" onCloseAutoFocus={event => {
           event.preventDefault();
