@@ -1,3 +1,9 @@
+## 2026-11-23, Club Manager Thun opening cup scorers
+
+Ten verified 2026-27 Thun players now cover anonymous goals in new background cup simulations and matches against the managed club. This applies to careers using the corrected opening Thun registrations. The same scorer appears on the live goal, match report and cup table. The engine keeps the original result, goal time, VAR decision and own-goal decision. Settled scorer records stay as played. [Thun cup scorer audit](audits/club-manager-thun-2026-scorers.md)
+
+Five native replay checkpoints cover a defender, midfielder, forward, a brace and a managed match. The managed 3-3 against Club Brugge names Nicolas Bürgy, Marc Gutbub and Nils Reichmuth at 2, 49 and 78 minutes. A separate live path resumes the saved first half and retains the scorer. The VAR check preserves a disallowed goal and its original review ID. CM-03 remains partial, with the verified modern AGF gap next. The Thun departures release in PR #1072 passed all eight published mobile checks. The separate narrow-screen market-name issue remains open.
+
 ## 2026-11-23, Club Manager Thun opening departures
 
 New 2026-27 Club Manager careers start with Franz-Ethan Meichtry at Genoa and Uroš Vasić registered with Biel-Bienne in the ownership ledger. Vasić is absent from the transfer market because Biel-Bienne plays outside the modeled Swiss league. The starting rosters and market use the same player keys, and opening ownership records do not create in-game transfer fees or news. [Thun departures source audit](audits/club-manager-thun-2026-opening-departures.md)
