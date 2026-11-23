@@ -18,7 +18,8 @@ import {
 import type { PackId } from '@/lib/wonderkidFactory';
 import { commitOpenPack, clearPendingPack, loadLedger, commitUpgradeBoot } from '@/lib/tycoonRewards';
 import { recordCompletion } from '@/lib/completions';
-import { createSaveFence, type FenceWrite } from '@/lib/saveFence';
+import { backupKeysOf, copyAside, dismissBackup, routeSaveEntry } from '@/lib/brokenSaveRecovery';
+import { createSaveFence, fenceKeyOf, type FenceWrite } from '@/lib/saveFence';
 
 export interface Floater {
   id: number;
@@ -30,13 +31,33 @@ function readAcademyBytes(): string | null | undefined {
   try { return localStorage.getItem(SAVE_KEY); } catch { return undefined; }
 }
 
-function readAcademy(raw: string | null | undefined): FactoryState {
+function hasAcademyContainers(raw: string): boolean {
+  // Every writer including the first v1 wrote these containers. The engine
+  // can still repair individual fields within them or salvage other fields.
+  const { levels, prospects, firstTeam } = JSON.parse(raw) as Partial<FactoryState>;
+  return Boolean(levels && typeof levels === 'object' && !Array.isArray(levels))
+    && Array.isArray(prospects)
+    && (firstTeam === undefined || Array.isArray(firstTeam));
+}
+
+function readAcademy(raw: string | null | undefined) {
   const now = Date.now();
   const loaded = deserialize(raw ?? null, now, loadLedger().gearLevel);
   const s = loaded ?? newFactory(now);
   const applied = applyOffline(s, now);
   if (applied > 60) s.scoutProgress = Math.max(s.scoutProgress, 0);
-  return s;
+  return { state: s, needsCopy: typeof raw === 'string' && (!loaded || !hasAcademyContainers(raw)) };
+}
+
+function keepAcademyCopy(raw: string): string | undefined {
+  const entry = routeSaveEntry('/wonderkid-factory');
+  if (!entry) return;
+  const kept = backupKeysOf(entry, localStorage).find(key => localStorage.getItem(key) === raw);
+  if (kept) return kept;
+  const copy = copyAside(entry, localStorage, new Date(), false, { raw, slot: 1 });
+  if (!copy.ok || !copy.backupKey) return;
+  dismissBackup(entry, copy.backupKey, localStorage);
+  return copy.backupKey;
 }
 
 export function useWonderkidFactory() {
@@ -47,10 +68,15 @@ export function useWonderkidFactory() {
   });
   const savedAcademyBytes = useRef<string | null | undefined>(undefined);
   const stateRef = useRef<FactoryState | null>(null);
-  if (stateRef.current === null) {
-    savedAcademyBytes.current = readAcademyBytes();
-    stateRef.current = readAcademy(savedAcademyBytes.current);
-  }
+  const needsCopy = useRef(false);
+  const unconfirmed = useRef(false);
+  const loadAcademy = useCallback((raw: string | null | undefined) => {
+    const loaded = readAcademy(raw);
+    savedAcademyBytes.current = raw;
+    stateRef.current = loaded.state;
+    needsCopy.current = loaded.needsCopy;
+  }, []);
+  if (stateRef.current === null) loadAcademy(readAcademyBytes());
   const [, setVersion] = useState(0);
   const bump = useCallback(() => setVersion(v => v + 1), []);
   const [packSaveBlocked, setPackSaveBlocked] = useState(false);
@@ -58,32 +84,105 @@ export function useWonderkidFactory() {
   const [gearSaveBlocked, setGearSaveBlocked] = useState(false);
 
   const saveMoved = useRef(false);
-  const checkMoved = useCallback(() => {
-    if (!saveMoved.current && fence.moved(SAVE_KEY)) {
+  const markMoved = useCallback(() => {
+    if (!saveMoved.current) {
       saveMoved.current = true;
       bump();
     }
+  }, [bump]);
+  const checkMoved = useCallback((raw?: string | null) => {
+    if (saveMoved.current) return true;
+    const expected = savedAcademyBytes.current;
+    if (fence.moved(SAVE_KEY) || (raw !== undefined && expected !== undefined && raw !== expected)) markMoved();
     return saveMoved.current;
-  }, [bump, fence]);
+  }, [fence, markMoved]);
 
   const readOwnedSnapshot = useCallback(() => {
-    if (saveMoved.current || fence.moved(SAVE_KEY)) return null;
-    const bytes = readAcademyBytes();
-    return bytes !== undefined && bytes === savedAcademyBytes.current ? stateRef.current : null;
+    if (unconfirmed.current || needsCopy.current || saveMoved.current || fence.moved(SAVE_KEY)) return null;
+    const raw = readAcademyBytes();
+    return raw !== undefined && raw === savedAcademyBytes.current ? stateRef.current : null;
   }, [fence]);
 
+  const actionsBlocked = useCallback(() => {
+    if (unconfirmed.current) return true;
+    const raw = readAcademyBytes();
+    return checkMoved(raw) || needsCopy.current || raw === undefined || savedAcademyBytes.current === undefined;
+  }, [checkMoved]);
+
   const writeAcademy = useCallback((next: FactoryState, verifyWrite = false): FenceWrite => {
+    if (unconfirmed.current || savedAcademyBytes.current === undefined) return 'failed';
     if (checkMoved()) return 'moved';
+    const expected = savedAcademyBytes.current;
     const bytes = serialize(next);
-    const persist = () => {
-      try { localStorage.setItem(SAVE_KEY, bytes); return true; } catch { return false; }
-    };
-    const saved = readAcademyBytes();
-    const result = saved === bytes ? (!verifyWrite || persist() ? 'written' : 'failed') : fence.write(SAVE_KEY, persist);
-    if (result === 'written') savedAcademyBytes.current = bytes;
-    if (result === 'moved') checkMoved();
-    return result;
-  }, [checkMoved, fence]);
+    try {
+      let backupKey: string | undefined;
+      if (needsCopy.current && expected !== null) {
+        backupKey = keepAcademyCopy(expected);
+        if (checkMoved(readAcademyBytes())) return 'moved';
+        if (!backupKey) return 'failed';
+      }
+      if (localStorage.getItem(SAVE_KEY) !== expected) {
+        markMoved();
+        return 'moved';
+      }
+      const sameBytes = expected === bytes && !backupKey;
+      if (sameBytes && !verifyWrite) return 'written';
+      const generationKey = fenceKeyOf(SAVE_KEY);
+      const generation = backupKey ? Number(localStorage.getItem(generationKey)) : 0;
+      const claimed = String((Number.isSafeInteger(generation) && generation >= 0 ? generation : 0) + 1);
+      let moved = false;
+      const persist = () => {
+        try {
+          if (backupKey) {
+            if (localStorage.getItem(SAVE_KEY) !== expected || localStorage.getItem(generationKey) !== claimed) {
+              moved = true;
+              return false;
+            }
+            if (localStorage.getItem(backupKey) !== expected) return false;
+          }
+          localStorage.setItem(SAVE_KEY, bytes);
+          return true;
+        } catch { return false; }
+      };
+      const result = sameBytes ? (persist() ? 'written' : 'failed') : fence.write(SAVE_KEY, persist, backupKey !== undefined);
+      if (moved || result === 'moved') {
+        markMoved();
+        return 'moved';
+      }
+      if (result !== 'written') return result;
+      if (backupKey) {
+        // Never roll back an acknowledged claim because its receipt cannot be read.
+        const written = readAcademyBytes();
+        if (fence.moved(SAVE_KEY)) {
+          markMoved();
+          return 'moved';
+        }
+        let claimReadBack: string | null | undefined;
+        try { claimReadBack = localStorage.getItem(generationKey); } catch { /* report an unconfirmed write */ }
+        if (written !== bytes || claimReadBack !== claimed) {
+          unconfirmed.current = true;
+          bump();
+          return 'failed';
+        }
+        needsCopy.current = false;
+        bump();
+      }
+      savedAcademyBytes.current = bytes;
+      return 'written';
+    } catch { return 'failed'; }
+  }, [bump, checkMoved, fence, markMoved]);
+
+  const retryAcademySave = useCallback(() => {
+    if (savedAcademyBytes.current === undefined) {
+      if (checkMoved()) return;
+      const raw = readAcademyBytes();
+      if (raw === undefined) return;
+      loadAcademy(raw);
+      bump();
+      if (!needsCopy.current) return;
+    }
+    writeAcademy(stateRef.current!);
+  }, [bump, checkMoved, loadAcademy, writeAcademy]);
 
   /* Moving a player only reaches the screen after the whole academy is saved. */
   const commitAcademy = useCallback((next: FactoryState): boolean => {
@@ -136,14 +235,14 @@ export function useWonderkidFactory() {
      still a visible page, so it keeps its watched clock. */
   useEffect(() => {
     // A route leaving in this tab can save after the next panel's first render.
-    if (fence.moved(SAVE_KEY)) {
+    const raw = readAcademyBytes();
+    if (fence.moved(SAVE_KEY) || (raw !== undefined && raw !== savedAcademyBytes.current)) {
       fence.adopt(SAVE_KEY);
-      savedAcademyBytes.current = readAcademyBytes();
-      stateRef.current = readAcademy(savedAcademyBytes.current);
+      loadAcademy(raw);
       bump();
     }
     const iv = window.setInterval(() => {
-      if (checkMoved()) return;
+      if (unconfirmed.current || checkMoved() || needsCopy.current || savedAcademyBytes.current === undefined) return;
       const s = stateRef.current!;
       const before = s.prospects.length;
       const now = Date.now();
@@ -169,7 +268,7 @@ export function useWonderkidFactory() {
       window.removeEventListener('pagehide', save);
       save();
     };
-  }, [bump, checkMoved, deliverWaiting, fence, pushFloater, writeAcademy]);
+  }, [bump, checkMoved, deliverWaiting, fence, loadAcademy, pushFloater, writeAcademy]);
 
   /* Round 195's S-1 rule, the tycoon shape exactly: one unscored mark per
      sitting, on the first meaningful action, behind a ref so marking never
@@ -182,13 +281,13 @@ export function useWonderkidFactory() {
   }, []);
 
   const doBuy = useCallback((id: FacilityId) => {
-    if (checkMoved()) return;
+    if (actionsBlocked()) return;
     markSessionPlay();
     if (buyFacility(stateRef.current!, id)) bump();
-  }, [bump, checkMoved, markSessionPlay]);
+  }, [actionsBlocked, bump, markSessionPlay]);
 
   const doSell = useCallback((id: number, minimumPrice: number): 'price-changed' | undefined => {
-    if (checkMoved()) return;
+    if (actionsBlocked()) return;
     const current = stateRef.current!;
     const kid = current.prospects.find(p => p.id === id);
     if (!kid) return;
@@ -199,44 +298,44 @@ export function useWonderkidFactory() {
       markSessionPlay();
       pushFloater(`💵 ${kid.name} sold for $${price.toLocaleString('en-US')}`, 'sale');
     }
-  }, [checkMoved, commitAcademy, markSessionPlay, pushFloater]);
+  }, [actionsBlocked, commitAcademy, markSessionPlay, pushFloater]);
 
   const doShowcase = useCallback(() => {
-    if (checkMoved()) return;
+    if (actionsBlocked()) return;
     markSessionPlay();
     if (startShowcase(stateRef.current!)) {
       pushFloater('🎪 showcase day: training x3', 'win');
       bump();
     }
-  }, [bump, checkMoved, markSessionPlay, pushFloater]);
+  }, [actionsBlocked, bump, markSessionPlay, pushFloater]);
 
   const doSetCoachingFocus = useCallback((id: number | null) => {
-    if (checkMoved()) return;
+    if (actionsBlocked()) return;
     const next = { ...stateRef.current! };
     if (setCoachingFocus(next, id) && commitAcademy(next)) markSessionPlay();
-  }, [checkMoved, commitAcademy, markSessionPlay]);
+  }, [actionsBlocked, commitAcademy, markSessionPlay]);
 
   const doMoveUp = useCallback(() => {
-    if (checkMoved()) return;
+    if (actionsBlocked()) return;
     const next = copyAcademy(stateRef.current!);
     if (moveUp(next) && commitAcademy(next)) {
       markSessionPlay();
       pushFloater('⭐ the academy moves up in the world', 'win');
     }
-  }, [checkMoved, commitAcademy, markSessionPlay, pushFloater]);
+  }, [actionsBlocked, commitAcademy, markSessionPlay, pushFloater]);
 
   const doPromote = useCallback((id: number) => {
-    if (checkMoved()) return;
+    if (actionsBlocked()) return;
     const next = copyAcademy(stateRef.current!);
     const kid = next.prospects.find(p => p.id === id);
     if (kid && promote(next, id) && commitAcademy(next)) {
       markSessionPlay();
       pushFloater(`⚽ ${kid.name} joined the first team`, 'win');
     }
-  }, [checkMoved, commitAcademy, markSessionPlay, pushFloater]);
+  }, [actionsBlocked, commitAcademy, markSessionPlay, pushFloater]);
 
   const doSellSenior = useCallback((id: string) => {
-    if (checkMoved()) return;
+    if (actionsBlocked()) return;
     const next = copyAcademy(stateRef.current!);
     const player = next.firstTeam?.find(p => p.id === id);
     const price = sellSenior(next, id);
@@ -244,31 +343,31 @@ export function useWonderkidFactory() {
       markSessionPlay();
       pushFloater(`💵 ${player.name} sold for $${price.toLocaleString('en-US')}`, 'sale');
     }
-  }, [checkMoved, commitAcademy, markSessionPlay, pushFloater]);
+  }, [actionsBlocked, commitAcademy, markSessionPlay, pushFloater]);
 
   const doEquipBoot = useCallback((seniorId: string, bootId: string | null) => {
-    if (checkMoved()) return;
+    if (actionsBlocked()) return;
     const next = copyAcademy(stateRef.current!);
     if (!equipBoot(next, seniorId, bootId, loadLedger().gearLevel ?? {})) return;
     setGearSaveBlocked(!commitAcademy(next));
-  }, [checkMoved, commitAcademy]);
+  }, [actionsBlocked, commitAcademy]);
 
   const doUpgradeBoot = useCallback((bootId: string) => {
-    if (checkMoved()) return;
+    if (actionsBlocked()) return;
     try {
       if (commitUpgradeBoot(bootId)) {
         setGearSaveBlocked(false);
         bump();
       }
     } catch { setGearSaveBlocked(true); }
-  }, [bump, checkMoved]);
+  }, [actionsBlocked, bump]);
 
   /* Round 585: open a pack. The ledger stores the draw first, then the kid moves
      into a free bed and the academy is saved, all before anything is shown. */
   /* Review: no session mark here. Safeguard 2 keeps packs and gems away from
      streaks, and a mark is what a streak counts. */
   const doOpenPack = useCallback((id: PackId) => {
-    if (checkMoved()) return;
+    if (actionsBlocked()) return;
     const s = stateRef.current!;
     let pending;
     try {
@@ -284,9 +383,10 @@ export function useWonderkidFactory() {
     if (!pending) return;
     deliverWaiting(s);
     bump();
-  }, [bump, checkMoved, deliverWaiting]);
+  }, [actionsBlocked, bump, deliverWaiting]);
 
   const doDismissPack = useCallback(() => {
+    if (actionsBlocked()) return;
     const s = stateRef.current!;
     // Keep the pending draw until the academy accepts a write.
     const result = writeAcademy(s, true);
@@ -296,11 +396,13 @@ export function useWonderkidFactory() {
     }
     setPackSaveBlocked(false);
     if (clearPendingPack(s.packsDelivered ?? 0)) bump();
-  }, [bump, writeAcademy]);
+  }, [actionsBlocked, bump, writeAcademy]);
 
   return {
     saveMoved: saveMoved.current,
-    state: stateRef.current,
+    recovery: unconfirmed.current ? 'reload' : (needsCopy.current || savedAcademyBytes.current === undefined) ? 'retry' : null,
+    retryAcademySave,
+    state: stateRef.current!,
     readOwnedSnapshot,
     floaters,
     doBuy,
