@@ -4,6 +4,8 @@ Build Your XI lets two verified people sharing a name play in the same lineup. T
 
 With the old app, the exact Marseille Vitinha row appeared when picked alone but disappeared after PSG's Vitinha was picked, in both Mixed and Club Era at 320 and 390 pixels. The two Nico González records reproduced the same problem. The 32 phone cases passed both modes, reload, separate reports and ordinary duplicate controls. The previous evaluator counted four of five players and averaged $181M on the replay. The fix counts all five at $149M. The app and evaluator keep the two values separate when the model is unavailable. The national-team replay reproduced a short-name request for the forward after the PSG midfielder was picked. Verified Portugal senior appearances belong to the latter. [Identity and senior-team records](audits/soccer-grid-namesakes-2026-11-23.md)
 
+All 185 focused app tests passed. The offline evaluator passed 12 checks. Six national validator checks covered the old shared-name acceptance, true Portugal and Argentina senior records, unverified picks and a stale positive. All nine existing validator suites and both cached Deno checks passed.
+
 The admin report asking to see a Golden Boot after elimination or a title win is for Club Manager. It does not name a competition. Tournament-wide awards remain open there. Soccer Career's separate European cup award passed its early-elimination and tie checks again.
 
 ## 2026-11-23, Soccer Grid verified namesakes

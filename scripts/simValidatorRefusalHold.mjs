@@ -227,13 +227,24 @@ const quiet = { log() {}, error() {}, warn() {}, info() {} };
 async function load(name, raw) {
   const stripped = raw.replace(/^import\s[^\n]*?from\s+"https:\/\/[^"]+";[ \t]*$/gm, '');
   const namesakeImport = 'import verifiedNamesakes from "../_shared/soccerGridNamesakes.json" with { type: "json" };';
+  const resolverImport = 'import { resolveSoccerNamesakeRecord, soccerNamesakeGroup } from "../_shared/soccerNamesakeRecord.ts";';
+  const usesLeaf = ['soccer-grid-validate', 'football-connect4-validate'].includes(name) && stripped.includes(namesakeImport);
+  const usesResolver = name === 'validate-player' && stripped.includes(resolverImport);
   let verifiedNamesakes;
   let input = stripped;
-  if (['soccer-grid-validate', 'football-connect4-validate'].includes(name) && stripped.includes(namesakeImport)) {
-    const file = 'supabase/functions/_shared/soccerGridNamesakes.json';
-    const facts = REF ? execFileSync('git', ['show', REF + ':' + file], { cwd: ROOT, encoding: 'utf8' }) : read(path.join(ROOT, file));
-    verifiedNamesakes = JSON.parse(facts);
-    input = stripped.replace(namesakeImport, '');
+  if (usesLeaf || usesResolver) {
+    const shared = (file) => {
+      const relative = 'supabase/functions/_shared/' + file;
+      return REF ? execFileSync('git', ['show', REF + ':' + relative], { cwd: ROOT, encoding: 'utf8' }) : read(path.join(ROOT, relative));
+    };
+    verifiedNamesakes = JSON.parse(shared('soccerGridNamesakes.json'));
+    if (usesLeaf) input = stripped.replace(namesakeImport, '');
+    else {
+      const resolver = shared('soccerNamesakeRecord.ts')
+        .replace('import groups from "./soccerGridNamesakes.json" with { type: "json" };', 'const groups = verifiedNamesakes;')
+        .replace(/^export /gm, '');
+      input = stripped.replace(resolverImport, () => resolver);
+    }
   }
   if (/^\s*import\s/m.test(input)) throw new Error('an import this harness cannot stand in for');
   const { code } = await transform(input, { loader: 'ts', target: 'es2022' });
