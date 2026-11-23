@@ -1,3 +1,9 @@
+## 2026-11-23, Club Manager 2005-06 opening Champions League scorer pools
+
+The verified PSV, Artmedia Bratislava and Thun pools cover the last three missing clubs in the opening 2005-06 Champions League field. Newly played matches also use the verified pools to name opponent goals when there is no full opponent squad. The match report, in-game events and cup table share the resulting name. Already-played matches keep their original scorer records. [PSV, Artmedia and Thun source audit](audits/club-manager-psv-artmedia-thun-2005-rosters.md)
+
+The 125-match replay accounts for 335 goals, including 323 named goals and 12 own goals. The prior release left 15 unresolved. The game confirms Fernando Morientes as the replay's top scorer with seven. CM-03 remains partial because other eras and watched competitions still have scorer gaps. The Porto and Panathinaikos update in PR #1068 passed all eight published browser checks.
+
 ## 2026-11-23, Club Manager 2005-06 Porto and Panathinaikos scorer coverage
 
 Two verified 11-player opening pools give Porto and Panathinaikos named scorers for newly played background cup matches. Igor Bišćan joined Panathinaikos in July 2005. Fresh starts drop his outdated Liverpool row. Existing saves keep the stored Igor Biscan spelling, player ID, nationality and ownership, and the opening scorer list respects that ownership under either spelling. [Porto and Panathinaikos source audit](audits/club-manager-porto-panathinaikos-2005-rosters.md)

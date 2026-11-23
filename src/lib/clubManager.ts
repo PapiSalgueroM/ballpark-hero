@@ -15614,6 +15614,26 @@ function cupScorerCredit(state: CareerState, club: string, player: CMPlayer, pro
 }
 
 /** Read the managed report's scorers and assign the background fixtures' fixed scores on separate keys. */
+function historicCupScorerPool(state: CareerState, club: string, excludes: ReadonlySet<string>): BookMan[] | undefined {
+  if (state.eraId !== 'era2005' || worldYear(state) !== 2005) return undefined;
+  const verified = HISTORIC_2005_CUP_ROSTERS.get(club);
+  if (!verified) return undefined;
+  const unavailable = new Set([...excludes, ...(state.goneNames ?? [])]);
+  for (const loan of state.loanedOut ?? []) unavailable.add(loan.player.name);
+  for (const record of worldRosterView(state)?.records ?? []) {
+    if (record.owner !== club) unavailable.add(record.player.name);
+  }
+  const strength = strengthOf(state, club);
+  // A verified scorer can have an earlier spelling in the saved roster.
+  return verified.filter(({ name, legacyName }) =>
+    !unavailable.has(name) && (legacyName === undefined || !unavailable.has(legacyName)))
+    .map(({ name, line }) => ({ n: name, p: CUP_LINE_POSITION[line], r: strength }));
+}
+
+function historicCupScorerCredit(club: string, name: string): CupScorerCredit {
+  return { id: JSON.stringify(['era2005', club, name]), name, club };
+}
+
 function cupFixtureScorerCredits(
   state: CareerState, fixtures: readonly { home: string; away: string; hg?: number | null; ag?: number | null }[],
   roundKey: string, managed?: ManagedCupScorers,
@@ -15646,11 +15666,16 @@ function cupFixtureScorerCredits(
         const player = own?.find(item => item.name === p.n && item.position === p.p) ?? bakedToCMPlayer(p);
         return cupScorerCredit(state, club, player, own ? undefined : p);
       };
+      const verified = !own && !roster.length ? historicCupScorerPool(state, club, excludes) : undefined;
       if (controlledMatch) {
         for (let i = 0; i < score; i++) {
           const line = controlledMatch.theirs[i];
           if (!line) { credits.push(null); continue; }
           if (line.og) { credits.push('own-goal'); continue; }
+          if (verified?.some(p => p.n === line.name && p.p !== 'GK')) {
+            credits.push(historicCupScorerCredit(club, line.name));
+            continue;
+          }
           const named = (p: OppXiLine) => p.n === line.name && p.p !== 'GK';
           const atGoal = (oppAt(controlledMatch.live, line.minute) ?? []).filter(named);
           const candidates = atGoal.length ? atGoal
@@ -15661,25 +15686,12 @@ function cupFixtureScorerCredits(
       }
       // Verified roles fill the background scorer book for the opening snapshot.
       // The existing club strength weights each place, with set pieces shared by role.
-      const verified = !own && !roster.length && state.eraId === 'era2005' && worldYear(state) === 2005
-        ? HISTORIC_2005_CUP_ROSTERS.get(club)
-        : undefined;
       let candidates: BookMan[];
       if (verified) {
-        const unavailable = new Set([...excludes, ...(state.goneNames ?? [])]);
-        for (const loan of state.loanedOut ?? []) unavailable.add(loan.player.name);
-        for (const record of worldRosterView(state)?.records ?? []) {
-          if (record.owner !== club) unavailable.add(record.player.name);
-        }
-        const strength = strengthOf(state, club);
-        // A verified scorer can have an earlier spelling in the saved roster.
-        const pool = verified.filter(({ name, legacyName }) =>
-          !unavailable.has(name) && (legacyName === undefined || !unavailable.has(legacyName)))
-          .map(({ name, line }) => ({ n: name, p: CUP_LINE_POSITION[line], r: strength }));
-        const starters = partialEleven(pool, strength, groupOf)?.outfield ?? [];
+        const starters = partialEleven(verified, strengthOf(state, club), groupOf)?.outfield ?? [];
         const startingNames = new Set(starters.map(player => player.n));
         // Verified substitutes can score too. Keep the starting order for the keyed draw.
-        candidates = [...starters, ...pool.filter(player => player.p !== 'GK' && !startingNames.has(player.n))];
+        candidates = [...starters, ...verified.filter(player => player.p !== 'GK' && !startingNames.has(player.n))];
       } else {
         candidates = pickOppSquad(roster)?.xi ?? thinBookEleven(state, club, roster)?.outfield ?? [];
       }
@@ -15687,7 +15699,7 @@ function cupFixtureScorerCredits(
       for (const { kind, scorer } of dealGoals(key, score, candidates, verified ? { ...rules, taker: false } : rules)) {
         if (kind === 'og') credits.push('own-goal');
         else if (!scorer || scorer.e) credits.push(null);
-        else if (verified) credits.push({ id: JSON.stringify(['era2005', club, scorer.n]), name: scorer.n, club });
+        else if (verified) credits.push(historicCupScorerCredit(club, scorer.n));
         else credits.push(byName(scorer.n, scorer.p));
       }
     }
@@ -17821,12 +17833,12 @@ const throwWeightPos = (pos: Position): number =>
   pos === 'LB' || pos === 'RB' || pos === 'LWB' || pos === 'RWB' ? 4 : groupOf(pos) === 'DEF' ? 2 : groupOf(pos) === 'MID' ? 1 : pos === 'GK' ? 0 : 0.3;
 
 /** weightedPick for anything with a weight, the same draw shape. */
-function weightedPickAny<T>(items: T[], weight: (t: T) => number): T | null {
+function weightedPickAny<T>(items: T[], weight: (t: T) => number, random = Math.random): T | null {
   if (!items.length) return null;
   const weights = items.map(weight);
   const total = weights.reduce((s, w) => s + w, 0);
-  if (total <= 0) return pick(items);
-  let roll = Math.random() * total;
+  if (total <= 0) return items[Math.floor(random() * items.length)];
+  let roll = random() * total;
   for (let i = 0; i < items.length; i++) {
     roll -= weights[i];
     if (roll <= 0) return items[i];
@@ -19392,6 +19404,23 @@ function drawSegment(
   /* Round 1146: own goals, last, on the goals this stretch placed. A keyed
      re-label and no draw, so everything above read the stream it always read. */
   tagOwnGoals(state, live, fx, half, me.goals, oppGoals);
+  if (!oppStart && oppGoals.length && (fx.competition === 'uclGroup' || fx.competition === 'uclKo')) {
+    const excludes = mySquadNames(state);
+    const pool = historicCupScorerPool(state, fx.opponent, excludes);
+    if (!pool || oppRosterFor(state, fx.opponent, excludes).length) return;
+    const outfield = pool.filter(player => player.p !== 'GK');
+    // Name the committed goal after own-goal and review decisions have read the original line.
+    for (const goal of oppGoals) {
+      if (goal.og || !goal.name.startsWith(`${fx.opponent} No. `)) continue;
+      const key = `historic-cup-goal|${worldCompSeed(state, 'ucl')}|${live.week}|${state.clubName}|${fx.opponent}|${goal.minute}|${goal.plus ?? 0}`;
+      const scorer = weightedPickAny(outfield, oppShotWeight, keyedRng(key));
+      if (!scorer) continue;
+      const shot = play.find(event => event.side === 'opp' && event.goal && event.minute === goal.minute
+        && event.plus === goal.plus && event.who === goal.name);
+      if (shot) shot.who = scorer.n;
+      goal.name = scorer.n;
+    }
+  }
 }
 
 /**
