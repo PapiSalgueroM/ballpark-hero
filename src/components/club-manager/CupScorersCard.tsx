@@ -11,13 +11,13 @@ const SCORER_STATUS: Record<CupScorerRace['status'], string> = {
   unavailable: 'Scorer records unavailable',
 };
 
-type Scope = 'uel' | 'cup';
+export type CupScorerScope = 'ucl' | 'uel' | 'cup';
 
-export function cupScorerStatusLabel(status: CupScorerRace['status'], scope: Scope) {
+export function cupScorerStatusLabel(status: CupScorerRace['status'], scope: CupScorerScope) {
   return scope === 'cup' && status === 'ahead' ? 'Waiting for the first round' : SCORER_STATUS[status];
 }
 
-function ScorerLine({ row, scope, rank }: { row: CupScorerRow; scope: Scope; rank?: number }) {
+function ScorerLine({ row, scope, rank }: { row: CupScorerRow; scope: CupScorerScope; rank?: number }) {
   return (
     <li className="flex items-center gap-2 py-2" {...{ ['data-cm-' + scope + '-scorer']: true }}>
       {rank !== undefined && <span className="w-5 shrink-0 text-xs tabular-nums text-muted-foreground">{rank}</span>}
@@ -36,7 +36,7 @@ function ScorerLine({ row, scope, rank }: { row: CupScorerRow; scope: Scope; ran
 }
 
 export function CupScorersCard({ race, myClub, competition, scope }: {
-  race: CupScorerRace; myClub: string; competition: string; scope: Scope;
+  race: CupScorerRace; myClub: string; competition: string; scope: CupScorerScope;
 }) {
   const rows = race.rows.slice(0, 8);
   const clubLeader = race.rows.find(row => row.club === myClub);

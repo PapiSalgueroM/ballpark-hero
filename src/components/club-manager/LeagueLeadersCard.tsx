@@ -95,15 +95,22 @@ const stepButton = 'inline-flex items-center justify-center gap-1 min-h-[44px] m
 /** Round 1311: the past winners, one season at a time, newest first, read from the save's own records. */
 function PastWinners({ career, onBack }: { career: CareerState; onBack: () => void }) {
   const seasons = useMemo(() => {
+    type AwardRecord = Pick<SeasonRecord, 'season' | 'club'> & Partial<SeasonRecord> & {
+      domesticAwardClub?: string; uclAwardClub?: string;
+    };
     const reviewed = career.history.filter(h => h.awards || h.ballonDor || h.leagueCoachAward || h.clubSeasonAward
-      || h.uelScorerAward?.length || h.domesticScorerAward?.winners?.length);
-    const unreviewed: Pick<SeasonRecord, 'season' | 'club' | 'domesticScorerAward'>[] =
-      Array.isArray(career.unreviewedDomesticScorerAwards)
-        ? career.unreviewedDomesticScorerAwards.map(({ season, club, award }) => ({ season, club, domesticScorerAward: award }))
-        : [];
-    const records: (Pick<SeasonRecord, 'season' | 'club'> & Partial<SeasonRecord>)[] = [...reviewed, ...unreviewed];
-    return records.sort((a, b) => b.season - a.season);
-  }, [career.history, career.unreviewedDomesticScorerAwards]);
+      || h.uclScorerAward?.length || h.uelScorerAward?.length || h.domesticScorerAward?.winners?.length);
+    const records = new Map<number, AwardRecord>(reviewed.map(rec => [rec.season, rec]));
+    for (const { season, club, award } of Array.isArray(career.unreviewedDomesticScorerAwards) ? career.unreviewedDomesticScorerAwards : []) {
+      const rec = records.get(season) ?? { season, club };
+      if (!rec.domesticScorerAward) records.set(season, { ...rec, domesticScorerAward: award, domesticAwardClub: club });
+    }
+    for (const { season, club, winners } of Array.isArray(career.unreviewedUclScorerAwards) ? career.unreviewedUclScorerAwards : []) {
+      const rec = records.get(season) ?? { season, club };
+      if (!rec.uclScorerAward?.length) records.set(season, { ...rec, uclScorerAward: winners, uclAwardClub: club });
+    }
+    return [...records.values()].sort((a, b) => b.season - a.season);
+  }, [career.history, career.unreviewedDomesticScorerAwards, career.unreviewedUclScorerAwards]);
   const [at, setAt] = useState(0);
   const i = Math.min(at, Math.max(0, seasons.length - 1));
   const rec = seasons[i];
@@ -124,8 +131,9 @@ function PastWinners({ career, onBack }: { career: CareerState; onBack: () => vo
           <div data-cm-past-season={rec.season} className="space-y-1">
             <div className="text-xs text-muted-foreground">Season {rec.season} · {rec.club}{leagueName && <span data-cm-past-league> · {leagueName}</span>}</div>
             {aw && <SeasonHonoursCard awards={aw} recent={career.history.filter(h => h.awards && h.season > rec.season).length < TEAMS_KEPT} />}
+            <CupScorerHonour award={rec.uclScorerAward} myClub={rec.uclAwardClub ?? rec.club} competition="Champions League" scope="ucl" />
             <CupScorerHonour award={rec.uelScorerAward} myClub={rec.club} competition="Europa League" scope="uel" />
-            {rec.domesticScorerAward && <CupScorerHonour award={rec.domesticScorerAward.winners} myClub={rec.club}
+            {rec.domesticScorerAward && <CupScorerHonour award={rec.domesticScorerAward.winners} myClub={rec.domesticAwardClub ?? rec.club}
               competition={rec.domesticScorerAward.competition} scope="cup" />}
             {aw && aw.cov < BOOK_FULL_SHARE && <p className="text-[9px] text-yellow-500/80">The data covered only part of that league: {aw.cov} in 100 of the other clubs' goals had a name on them.</p>}
             {rec.ballonDor && <p className="text-sm">Ballon d'Or: <strong>{rec.ballonDor.name}</strong> ({rec.ballonDor.club})</p>}
@@ -191,7 +199,8 @@ export function LeagueLeadersCard({ career, board, onBoard }: CardProps) {
   /* E. The past winners, whatever this season's book holds. */
   if (board === 'past') return <PastWinners career={career} onBack={() => onBoard(null)} />;
   const hasPast = (Array.isArray(career.unreviewedDomesticScorerAwards) && career.unreviewedDomesticScorerAwards.length > 0)
-    || career.history.some(h => h.awards || h.ballonDor || h.leagueCoachAward || h.uelScorerAward?.length
+    || (Array.isArray(career.unreviewedUclScorerAwards) && career.unreviewedUclScorerAwards.length > 0)
+    || career.history.some(h => h.awards || h.ballonDor || h.leagueCoachAward || h.uclScorerAward?.length || h.uelScorerAward?.length
       || h.domesticScorerAward?.winners?.length);
   const pastTile = hasPast && (
     <button type="button" data-cm-leaders-tile="past" onClick={() => onBoard('past')}

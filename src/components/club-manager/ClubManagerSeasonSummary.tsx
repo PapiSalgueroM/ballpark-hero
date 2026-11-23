@@ -353,6 +353,7 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
                 <span className="shrink-0">🟠</span>Europa League: {sm.uelRun}
               </p>
             )}
+            <CupScorerHonour award={sm.uclScorerAward} myClub={c.clubName} competition="Champions League" scope="ucl" />
             <CupScorerHonour award={sm.uelScorerAward} myClub={c.clubName} competition="Europa League" scope="uel" />
             {sm.domesticScorerAward && <CupScorerHonour award={sm.domesticScorerAward.winners} myClub={c.clubName}
               competition={sm.domesticScorerAward.competition} scope="cup" />}
