@@ -8,15 +8,16 @@ const H = vi.hoisted(() => {
   const countries = ['Argentina', 'Belgium', 'Brazil', 'Colombia', 'Croatia', 'England', 'France', 'Germany', 'Italy', 'Japan', 'Mexico'];
   const positions = ['GK', 'RB', 'CB', 'LB', 'CM', 'CDM', 'CAM', 'RW', 'ST', 'LW'] as const;
   const values = [500000, 5000000, 15000000, 40000000, 80000000, 200000000, 0, 1000000, 3000000, 10000000, 60000000];
+  const clubOverrides = new Map<string, string>();
   const pool = () => {
     const players = countries.flatMap((country, index) => ['Linked', 'Solo'].flatMap(kind => positions.map(position => ({
       name: `${kind} ${position} Tester ${index + 1}`, country, position,
-      club: kind === 'Linked' && index < 3 ? 'Fixture United' : `${kind} Club ${index + 1}`,
+      club: clubOverrides.get(country) ?? (kind === 'Linked' && index < 3 ? 'Fixture United' : `${kind} Club ${index + 1}`),
       value: values[index], age: index === 1 ? undefined : index === 2 ? 37 : 25,
     }))));
     return { players, countries: [...countries], byCountry: new Map(countries.map(country => [country, players.filter(p => p.country === country)])) };
   };
-  return { pool, simulate: vi.fn() };
+  return { pool, clubOverrides, simulate: vi.fn() };
 });
 
 // The page, card curve, chemistry and season simulation are real. Only transport
@@ -42,6 +43,7 @@ vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
 import WorldXi from '@/pages/WorldXi';
 
 beforeEach(async () => {
+  H.clubOverrides.clear();
   const actual = await vi.importActual<typeof import('@/lib/worldXi')>('@/lib/worldXi');
   H.simulate.mockReset().mockImplementation(actual.simulateWorldXiSeason);
   vi.spyOn(window, 'matchMedia').mockImplementation(query => ({
@@ -148,6 +150,23 @@ describe('World XI ratings and club chemistry display', () => {
     expect(within(detail).getByText('No shared clubs in this XI.')).toBeTruthy();
     expect(within(detail).queryAllByRole('listitem')).toHaveLength(0);
     expect(within(detail).queryByText('Fixture United')).toBeNull();
+  });
+
+  it('counts real clubs but never counts matching Without Club or Retired statuses as clubs', async () => {
+    for (const country of ['Colombia', 'Croatia']) H.clubOverrides.set(country, 'Without Club');
+    for (const country of ['England', 'France']) H.clubOverrides.set(country, 'Retired');
+    const withStatuses = await mount();
+    const selected = await complete(withStatuses);
+    expect(selected.filter(player => player.club === 'Without Club')).toHaveLength(2);
+    expect(selected.filter(player => player.club === 'Retired')).toHaveLength(2);
+    simulate(withStatuses);
+
+    const button = withStatuses.getByRole('button', { name: /Club chemistry:/ });
+    expect(button).toHaveTextContent('Club chemistry: 3 links');
+    fireEvent.click(button);
+    const detail = withStatuses.getByRole('region', { name: 'Club chemistry details' });
+    expect(within(detail).getAllByRole('listitem')).toHaveLength(3);
+    expect(within(detail).getAllByText('Fixture United')).toHaveLength(3);
   });
 
   it('keeps the real season inputs and match average distinct from card overall', async () => {
