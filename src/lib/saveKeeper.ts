@@ -4,6 +4,7 @@ import {
 } from '@/lib/brokenSaveRecovery';
 import { getStorageTrouble, settlePendingSaves } from '@/lib/safeStorage';
 import { SAVE_KEY as CLUB_MANAGER_SAVE_KEY } from '@/lib/clubManagerSaveKeys';
+import { restoreParkedCareer } from '@/lib/clubManagerParkedSave';
 import { createSaveFence } from '@/lib/saveFence';
 
 /**
@@ -363,8 +364,12 @@ export function keepUpdateCopies(storage: ListableStorage | null, now: Date = ne
       let raw: string | null;
       try { raw = storage.getItem(entry.saveKey); } catch { continue; }
       if (raw === null) continue;
-      /* An older, future or unreadable version gets one exact copy. */
+      /* An older, future or unreadable version gets one exact copy. Club Manager's
+         checked pair encoding represents the same current career as plain JSON. */
       if (versionIn(raw, row.at) === row.current) continue;
+      if (entry.saveKey === CLUB_MANAGER_SAVE_KEY) {
+        try { if (restoreParkedCareer(JSON.parse(raw))) continue; } catch { /* keep the unreadable bytes */ }
+      }
       if (heldAside(entry, storage, raw)) continue;
       const copied = copyAside(entry, storage, now);
       if (copied.ok && copied.backupKey) {
