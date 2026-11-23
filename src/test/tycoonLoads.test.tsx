@@ -27,6 +27,7 @@ import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import {
   TRACKS, TYCOON_SAVE_KEY, goalChancePerMin, prestigeThreshold, canPrestige,
 } from '@/lib/stadiumTycoon';
+import { SAVE_KEY as ACADEMY_SAVE_KEY } from '@/lib/wonderkidFactory';
 import corpus from './fixtures/tycoonSaves.json';
 
 const FRAME_MS = 16;
@@ -177,4 +178,126 @@ describe('Stadium Tycoon loads and writes', () => {
     expect(ticked, `the tap landed in the frame that ticked and the tick's ${RESIDUE_SEC}s of match clock was erased (moved ${ticked.toFixed(3)}s)`).toBeGreaterThan(0.19);
     measured(`same frame: the tap counted and the tick moved the clock ${ticked.toFixed(3)}s`);
   }, TEST_MS);
+});
+
+describe('Stadium Tycoon pre-league save protection', () => {
+  const academy = corpus.entries.find(e => e.key === 'academy' && e.name === 'midAcademy')!.raw;
+  const backupPrefix = TYCOON_SAVE_KEY + '.broken-';
+  const backupKeys = () => Object.keys(localStorage).filter(key => key.startsWith(backupPrefix));
+  const pagehide = () => act(() => { window.dispatchEvent(new Event('pagehide')); });
+
+  function startPreLeague() {
+    const raw = entry('midGame').raw;
+    expect(JSON.parse(raw)).toMatchObject({ v: 1, savedAt: EPOCH, money: 5200, minute: 52 });
+    expect(JSON.parse(raw)).not.toHaveProperty('league');
+    localStorage.setItem(TYCOON_SAVE_KEY, raw);
+    localStorage.setItem(ACADEMY_SAVE_KEY, academy);
+    const mounted = render(<Probe />);
+    expect(g().state).toMatchObject({ minute: 52, league: { division: 2 } });
+    expect(localStorage.getItem(TYCOON_SAVE_KEY)).toBe(raw);
+    return { raw, mounted };
+  }
+
+  it.each(['copy quota', 'copy readback'] as const)('keeps the original, then retries after %s', failure => {
+    const { raw, mounted } = startPreLeague();
+    const originalSet = Storage.prototype.setItem;
+    const originalGet = Storage.prototype.getItem;
+    const set = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key.startsWith(backupPrefix) && failure === 'copy quota') throw new DOMException('quota', 'QuotaExceededError');
+      originalSet.call(this, key, value);
+    });
+    const get = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(function (this: Storage, key) {
+      const value = originalGet.call(this, key);
+      return key.startsWith(backupPrefix) && value !== null && failure === 'copy readback' ? 'unexpected copy bytes' : value;
+    });
+
+    pagehide();
+    expect(g().ticketSaveFailed).toBe(true);
+    expect(g().saveMoved).toBe(false);
+    expect(localStorage.getItem(TYCOON_SAVE_KEY)).toBe(raw);
+    expect(localStorage.getItem(ACADEMY_SAVE_KEY)).toBe(academy);
+    expect(backupKeys()).toEqual([]);
+
+    get.mockRestore();
+    set.mockRestore();
+    act(() => { expect(g().retryTicketSave()).toBe('written'); });
+    expect(g().ticketSaveFailed).toBe(false);
+    const migrated = localStorage.getItem(TYCOON_SAVE_KEY)!;
+    expect(JSON.parse(migrated)).toMatchObject({
+      v: 1, money: 5200, lifetime: 152000, rep: 1, groundWins: 22, legacyPoints: 3, totalTaps: 340,
+      matchNo: 37, minute: 52, matchSec: 0.9, goalsFor: 2, goalsAgainst: 1,
+      league: { division: 2, season: 0, matchday: 0, carryover: 'Quarryside Albion' },
+    });
+    const kept = backupKeys();
+    expect(kept.map(key => localStorage.getItem(key))).toEqual([raw]);
+    expect(migrated).not.toBe(raw);
+
+    mounted.unmount();
+    render(<Probe />);
+    pagehide();
+    expect(localStorage.getItem(TYCOON_SAVE_KEY)).toBe(migrated);
+    expect(backupKeys()).toEqual(kept);
+    expect(localStorage.getItem(ACADEMY_SAVE_KEY)).toBe(academy);
+  });
+
+  it('reuses the exact copy after the active write itself is refused', () => {
+    const { raw } = startPreLeague();
+    const originalSet = Storage.prototype.setItem;
+    const writer = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key === TYCOON_SAVE_KEY) throw new DOMException('quota', 'QuotaExceededError');
+      originalSet.call(this, key, value);
+    });
+
+    pagehide();
+    expect(g().ticketSaveFailed).toBe(true);
+    expect(localStorage.getItem(TYCOON_SAVE_KEY)).toBe(raw);
+    const kept = backupKeys();
+    expect(kept.map(key => localStorage.getItem(key))).toEqual([raw]);
+
+    writer.mockRestore();
+    act(() => { expect(g().retryTicketSave()).toBe('written'); });
+    expect(backupKeys()).toEqual(kept);
+    expect(localStorage.getItem(ACADEMY_SAVE_KEY)).toBe(academy);
+  });
+
+  it('leaves a newer stadium untouched if another tab saves during the backup', () => {
+    const { raw } = startPreLeague();
+    const newer = JSON.stringify({ ...JSON.parse(entry('midGame').current!), money: 5342 });
+    const originalSet = Storage.prototype.setItem;
+    let peerWrote = false;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      originalSet.call(this, key, value);
+      if (key.startsWith(backupPrefix) && !peerWrote) {
+        peerWrote = true;
+        originalSet.call(this, TYCOON_SAVE_KEY, newer);
+      }
+    });
+
+    pagehide();
+    expect(peerWrote).toBe(true);
+    expect(g().saveMoved).toBe(true);
+    expect(g().ticketSaveFailed).toBe(false);
+    expect(localStorage.getItem(TYCOON_SAVE_KEY)).toBe(newer);
+    expect(backupKeys().map(key => localStorage.getItem(key))).toEqual([raw]);
+    act(() => { expect(g().retryTicketSave()).toBe('moved'); });
+    expect(localStorage.getItem(TYCOON_SAVE_KEY)).toBe(newer);
+    expect(localStorage.getItem(ACADEMY_SAVE_KEY)).toBe(academy);
+  });
+
+  it('writes an existing v1 league without asking for a backup', () => {
+    const current = entry('midGame').current!;
+    localStorage.setItem(TYCOON_SAVE_KEY, current);
+    const originalSet = Storage.prototype.setItem;
+    const writer = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key.startsWith(backupPrefix)) throw new Error('unneeded copy');
+      originalSet.call(this, key, value);
+    });
+
+    render(<Probe />);
+    pagehide();
+    expect(writer.mock.calls.map(([key]) => key)).toEqual([TYCOON_SAVE_KEY]);
+    expect(g().ticketSaveFailed).toBe(false);
+    expect(JSON.parse(localStorage.getItem(TYCOON_SAVE_KEY)!).league).toEqual(JSON.parse(current).league);
+    expect(backupKeys()).toEqual([]);
+  });
 });
