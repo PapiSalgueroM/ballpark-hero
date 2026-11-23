@@ -44,8 +44,10 @@ vi.mock('@/components/ui/select', () => ({
 }));
 
 import * as E from '@/lib/soccerCareerEngine';
+import { backupKeysOf, routeSaveEntry } from '@/lib/brokenSaveRecovery';
 import { recordCompletion } from '@/lib/completions';
 import { keyedRng } from '@/lib/keyedRng';
+import { serializeSoccerCareerSave, SOCCER_CAREER_SAVE_VERSION } from '@/lib/soccerCareerSave';
 import SoccerCareer from '@/pages/SoccerCareer';
 
 /* The page, its creator, actual engine and completion hook run here. Only
@@ -83,6 +85,12 @@ function assertPlayable(view: ReturnType<typeof render>) {
   expect(view.queryByRole('alert')).toBeNull();
   expect(view.queryByText('Create Your Player')).toBeNull();
   expect(view.container.textContent).toContain('Save Tester');
+}
+function expectVersionedCopyOnly(raw: string) {
+  const original = JSON.parse(raw) as E.CareerState;
+  expect(localStorage.getItem(KEY)).toBe(serializeSoccerCareerSave(original, SOCCER_CAREER_SAVE_VERSION));
+  const backups = backupKeysOf(routeSaveEntry('/soccer-career')!, localStorage);
+  expect(backups.map(key => localStorage.getItem(key))).toEqual([raw]);
 }
 function pressNext(view: ReturnType<typeof render>) {
   const button = view.container.querySelector('[data-career-action-bar] button');
@@ -181,7 +189,7 @@ describe('Soccer Career actual save recovery', () => {
     const raw = JSON.stringify(saved);
     const { view } = mount(raw);
     assertPlayable(view);
-    expect(localStorage.getItem(KEY)).toBe(raw);
+    expectVersionedCopyOnly(raw);
     expect(view.queryByRole('button', { name: 'Next Season' })).toBeNull();
     expect(view.queryByRole('button', { name: /Request Transfer/i })).toBeNull();
     fireEvent.click(view.getByRole('button', { name: action }));
@@ -209,7 +217,7 @@ describe('Soccer Career actual save recovery', () => {
     const raw = JSON.stringify(transferCareer());
     const { view } = mount(raw);
     assertPlayable(view);
-    expect(localStorage.getItem(KEY)).toBe(raw);
+    expectVersionedCopyOnly(raw);
     expect(view.getByText('No clubs have made an offer. Your club wants to keep you.')).toBeVisible();
     expect(view.getByRole('button', { name: /Stay and fight for place/ })).toBeEnabled();
     expect(view.getByRole('button', { name: /Request transfer/ })).toBeEnabled();

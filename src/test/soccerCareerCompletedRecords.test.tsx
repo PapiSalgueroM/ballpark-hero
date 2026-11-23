@@ -128,7 +128,7 @@ function openNew(view: ReturnType<typeof render>) {
 }
 function confirmNew(view: ReturnType<typeof render>) {
   const dialog = openNew(view);
-  fireEvent.click(within(dialog).getByRole('button', { name: 'Delete & Start Over' }));
+  fireEvent.click(within(dialog).getByRole('button', { name: 'Keep Copy & Start Over' }));
 }
 function cancelNew() {
   const dialog = within(document.body).queryByRole('dialog', { name: 'Start a new career?' });
@@ -306,7 +306,7 @@ describe('Soccer Career completed record retention', () => {
     let written: ReturnType<typeof otherTab.write> | null = null;
     act(() => { written = otherTab.write(KEY, () => { localStorage.setItem(KEY, newerRaw); return true; }); });
     expect(written).toBe('written');
-    fireEvent.click(within(dialog).getByRole('button', { name: 'Delete & Start Over' }));
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Keep Copy & Start Over' }));
     await waitFor(() => expect(within(document.body).getByText('This career moved on in another tab. Reload to carry on.')).toBeVisible());
     retain('moved', { sourceHeld: localStorage.getItem(KEY) === newerRaw, archiveHeld: localStorage.getItem(RECORDS) === archiveBefore,
       newerSource: safeSource(), fenceOutcome: written });

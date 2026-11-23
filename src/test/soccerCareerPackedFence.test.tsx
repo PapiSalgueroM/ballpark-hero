@@ -113,7 +113,7 @@ function opened(m: ReturnType<typeof mount>) {
   expect(m.attempts).toHaveLength(1);
   expect(m.attempts[0].length).toBeLessThanOrEqual(LIMIT);
   pair('restored', read(), expected);
-  expect(localStorage.getItem(KEY)).toBe(S.serializeSoccerCareerSave(expected));
+  expect(localStorage.getItem(KEY)).toBe(S.serializeSoccerCareerSave(expected, S.SOCCER_CAREER_SAVE_VERSION));
   expect(JSON.parse(localStorage.getItem(KEY)!)).toEqual(expect.objectContaining({ currentClub: expected.currentClub, age: expected.age, retired: expected.retired }));
   expect(localStorage.getItem(FENCE)).toBe('1');
   return expected;
@@ -154,7 +154,7 @@ describe('Soccer Career packed save and fence seam', () => {
     clearReplayCounts(); pressNext(m.view);
     pair('earned', read(), expected); expect(Math.random).toHaveBeenCalled();
     expect(expected.age).toBe(before.age + 1); expect(expected.seasons).toHaveLength(before.seasons.length + 1);
-    expect(localStorage.getItem(KEY)).toBe(S.serializeSoccerCareerSave(expected)); expect(localStorage.getItem(KEY)!.length).toBeLessThanOrEqual(LIMIT);
+    expect(localStorage.getItem(KEY)).toBe(S.serializeSoccerCareerSave(expected, S.SOCCER_CAREER_SAVE_VERSION)); expect(localStorage.getItem(KEY)!.length).toBeLessThanOrEqual(LIMIT);
     expect(localStorage.getItem(FENCE)).toBe('2'); expect(localStorage.getItem(OTHER)).toBe('unchanged unrelated bytes');
   });
   it('a refused packed action rolls the fence back and retries the exact earned state without replay', () => {

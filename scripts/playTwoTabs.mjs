@@ -844,7 +844,7 @@ async function caseSoccerNewCareer(ctx, tag) {
   const up = await waitNotice(A, 4000);
   const aBefore = await scWrites(A);
   const opened = await forceClickText(A, /New Career$/);
-  const confirmed = await forceClickText(A, /^Delete & Start Over$/);
+  const confirmed = await forceClickText(A, /^Keep Copy & Start Over$/);
   await A.waitForTimeout(800);
   const aAfter = await scWrites(A);
   const onDisk = await sRaw(A);

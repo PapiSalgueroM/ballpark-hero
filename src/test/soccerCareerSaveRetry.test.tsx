@@ -195,11 +195,20 @@ describe('Soccer Career failed write recovery', () => {
     m.refuse(true); pressNext(m.view); assertWarning(m.view);
     expect(localStorage.getItem(KEY)).toBe(saved); expect(toast.error).toHaveBeenCalledTimes(2);
   }, 20000);
-  it('clears the old failure after explicit reset and saves the replacement career without old progress', () => {
-    const m = mount(nativeCareer(), true); assertWarning(m.view);
+  it('keeps unsaved progress open until it can start over with a checked copy', () => {
+    const m = mount(), before = localStorage.getItem(KEY);
+    m.refuse(true); pressNext(m.view); assertWarning(m.view);
+    const latest = m.attempts.at(-1);
+    expect(latest).toBeDefined(); expect(latest).not.toBe(before);
     fireEvent.click(m.view.getByRole('button', { name: /New Career/ }));
-    fireEvent.click(m.view.getByRole('button', { name: 'Delete & Start Over' }));
+    fireEvent.click(m.view.getByRole('button', { name: 'Keep Copy & Start Over' }));
+    expect(warning(m.view)).not.toBeNull(); expect(localStorage.getItem(KEY)).toBe(before);
+    expect(m.removes).not.toHaveBeenCalledWith(KEY);
+    m.refuse(false);
+    fireEvent.click(m.view.getByRole('button', { name: 'Keep Copy & Start Over' }));
     expect(warning(m.view)).toBeNull(); expect(localStorage.getItem(KEY)).toBeNull(); expect(m.removes.mock.calls.filter(call => call[0] !== FENCE)).toEqual([[KEY]]); expect(localStorage.getItem(FENCE)).not.toBeNull();
+    expect(Object.keys(localStorage).some(key => key.startsWith(KEY + '.broken-') && localStorage.getItem(key) === latest)).toBe(true);
+    m.refuse(true);
     fireEvent.change(m.view.getByPlaceholderText('Enter your player name...'), { target: { value: 'Replacement Tester' } });
     const selectors = m.view.container.querySelectorAll('select');
     for (const [index, value] of ['England', 'CM', '2020-24'].entries()) fireEvent.change(selectors[index], { target: { value } });
@@ -218,6 +227,14 @@ describe('Soccer Career failed write recovery', () => {
     const earned = JSON.parse(m.attempts[m.attempts.length - 1]); expect(earned.phase).toBe('retired'); expect(earned.legacy.score).toBe(ceremony.legacy!.score);
     clearReplayCounts(); m.refuse(false); retry(m.view); await act(async () => { await Promise.resolve(); });
     expect(read()).toEqual(earned); expect(recordCompletion).toHaveBeenCalledTimes(1); noReplay(); expect(warning(m.view)).toBeNull();
+  });
+  it('keeps an imported retirement playable without posting a public score', async () => {
+    const ceremony: E.CareerState = { ...E.manualRetire(nativeCareer()), importedFromFile: true };
+    const m = mount(ceremony);
+    fireEvent.click(m.view.getByRole('button', { name: /Retire and Enjoy Life/ }));
+    await act(async () => { await Promise.resolve(); });
+    expect(read()).toMatchObject({ phase: 'retired', legacy: ceremony.legacy, importedFromFile: true });
+    expect(recordCompletion).not.toHaveBeenCalled();
   });
   it('retains an independent valid restore and earned engine baseline without mounting the page', () => {
     const saved = copy(nativeCareer()), raw = JSON.stringify(saved); expect(isSoccerCareerSave(saved)).toBe(true);
