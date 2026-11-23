@@ -55,6 +55,11 @@ const archiveRows = [
   { player_name: 'Gustavo Gómez', nationality: 'Argentina', position: 'Right Midfield', club: 'Fixture Argentine Club', market_value_usd: 1_000_000, age: 25, year: 2025 },
   { player_name: 'Paraguay CB Fixture', nationality: 'Paraguay', position: 'Centre-Back', club: 'Fixture Previous Club', market_value_usd: 25_000_000, age: 24, year: 2025 },
 ];
+const acunaRecord = { player_name: 'Marcos Acuña', nationality: 'Argentina', position: 'Left-Back', club: 'Sevilla FC', market_value_usd: 5_000_000, age: 32, year: 2024 };
+
+function paraguayReads() {
+  return H.archiveRead.mock.calls.filter(([, filters]) => filters.nationality === 'Paraguay');
+}
 
 function pool(paraguaySlot: number): WorldXiData {
   const deck = [...countries];
@@ -71,7 +76,7 @@ async function setup(paraguaySlot: number) {
   const view = render(<MemoryRouter initialEntries={['/world-xi']}><WorldXi /></MemoryRouter>);
   const draw = await view.findByRole('button', { name: /Draw my 11 nations/ });
   expect(H.archiveRead).not.toHaveBeenCalled();
-  fireEvent.click(draw);
+  await act(async () => { fireEvent.click(draw); });
   return { view, data };
 }
 
@@ -97,7 +102,10 @@ function pickCurrentPlayer(view: View, data: WorldXiData) {
 beforeEach(() => {
   H.currentPool.mockReset();
   H.archivePicks.mockClear();
-  H.archiveRead.mockReset().mockReturnValue({ data: archiveRows, error: null });
+  H.archiveRead.mockReset().mockImplementation((_, filters) => ({
+    data: filters.nationality === 'Argentina' ? [acunaRecord, acunaRecord] : archiveRows,
+    error: null,
+  }));
   vi.spyOn(Math, 'random').mockReturnValue(0.999999);
   vi.spyOn(window, 'matchMedia').mockReturnValue({ matches: true } as MediaQueryList);
 });
@@ -119,7 +127,7 @@ describe('World XI Paraguay archive', () => {
     search(view, query);
     const pick = await view.findByRole('button', { name: new RegExp(`${name}.*2025.*${club}`) });
     expect(view.queryByText('Fixture Argentine Club')).toBeNull();
-    expect(H.archiveRead).toHaveBeenCalledExactlyOnceWith('player_market_values', { year: 2025, nationality: 'Paraguay', market_value_usd: 0 });
+    expect(paraguayReads()).toEqual([['player_market_values', { year: 2025, nationality: 'Paraguay', market_value_usd: 0 }]]);
     fireEvent.click(pick);
     expect(view.getByText(/^Name a player from /)).not.toHaveTextContent('from Paraguay');
     for (let step = index + 1; step < 11; step++) pickCurrentPlayer(view, data);
@@ -134,22 +142,22 @@ describe('World XI Paraguay archive', () => {
   it('never requests the archive for a draw without Paraguay', async () => {
     const { view } = await setup(-1);
     expect(view.getByText(/^Name a player from Argentina/)).toBeInTheDocument();
-    expect(H.archiveRead).not.toHaveBeenCalled();
+    expect(paraguayReads()).toHaveLength(0);
   });
 
   it('fetches once when a respin first adds Paraguay and reuses it on replay', async () => {
     const { view } = await setup(11);
     expect(view.getByText(/^Name a player from Argentina/)).toBeInTheDocument();
-    expect(H.archiveRead).not.toHaveBeenCalled();
+    expect(paraguayReads()).toHaveLength(0);
     fireEvent.click(view.getByRole('button', { name: /Respin nation/ }));
     expect(view.getByText(/^Name a player from Paraguay/)).toBeInTheDocument();
-    await waitFor(() => expect(H.archiveRead).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(paraguayReads()).toHaveLength(1));
     fireEvent.click(view.getByRole('button', { name: 'Give up' }));
     fireEvent.click(view.getByRole('button', { name: /Play again/ }));
     fireEvent.click(view.getByRole('button', { name: /Draw my 11 nations/ }));
     fireEvent.click(view.getByRole('button', { name: /Respin nation/ }));
     expect(view.getByText(/^Name a player from Paraguay/)).toBeInTheDocument();
-    expect(H.archiveRead).toHaveBeenCalledTimes(1);
+    expect(paraguayReads()).toHaveLength(1);
   });
 
   it('keeps current Paraguay picks available during a delayed or failed archive request', async () => {
@@ -167,6 +175,26 @@ describe('World XI Paraguay archive', () => {
     search(view, 'Paraguay GK Fixture');
     fireEvent.click(view.getByRole('button', { name: /Paraguay GK Fixture/ }));
     expect(view.getByText(/^Name a player from /)).not.toHaveTextContent('from Paraguay');
-    expect(H.archiveRead).toHaveBeenCalledTimes(1);
+    expect(paraguayReads()).toHaveLength(1);
+  });
+});
+
+describe('World XI Argentina archive', () => {
+  it('accepts Marcos Acuña in an Argentina fullback slot from his dated market record', async () => {
+    // Put Argentina at right-back. World XI accepts opposite-side fullbacks.
+    const data = pool(-1);
+    [data.countries[0], data.countries[1]] = [data.countries[1], data.countries[0]];
+    H.currentPool.mockResolvedValue(data);
+    const view = render(<MemoryRouter initialEntries={['/world-xi']}><WorldXi /></MemoryRouter>);
+    fireEvent.click(await view.findByRole('button', { name: /Draw my 11 nations/ }));
+    pickCurrentPlayer(view, data);
+    expect(currentSlot(view)).toEqual(['Argentina', 'RB']);
+    search(view, 'acuna');
+    const pick = await view.findByRole('button', { name: /Marcos Acuña.*2024.*Sevilla FC/ });
+    expect(H.archiveRead).toHaveBeenCalledExactlyOnceWith('player_market_values', {
+      year: 2024, nationality: 'Argentina', player_name: 'Marcos Acuña', market_value_usd: 0,
+    });
+    fireEvent.click(pick);
+    expect(view.getByText(/^Name a player from /)).not.toHaveTextContent('from Argentina');
   });
 });
