@@ -4,11 +4,17 @@ PL-04 protects the first draft write for an older NFL Front Office recap. It ver
 
 The archived September 4 writer captured a Seattle franchise after all 17 weeks and the playoffs. Its 76,841-byte recap records one finished season, trust 44 and zero titles. That format saved no postseason or champion entry for the closed season. The draft kept Seattle's league schedule, roster, counters, 40 prospects and three picks. The copied backup control failed both refusal cases as expected.
 
+## 2026-11-23, NRL Team Manager save downloads
+
+PL-03 adds Download slot to Career saves. Each download contains the exact saved career, including older saves and their match and season history. Import, verified save times and account copies remain future work for NRL Team Manager.
+
+The 37 focused tests covered a 12-season Storm career, an older v1 save, a slot updated while the chooser was open, and empty, corrupt and newer-format saves. Downloading changed no career, checkpoint or write fence. Twelve Chromium cases at 320 and 390 pixels verified the real files, including 237 settled fixtures in the final year of the 12-season career. The previous build had no download control at either width.
+
 ## 2026-11-23, Club Manager season checkpoints
 
 PL-03 adds one automatic checkpoint per Club Manager slot. When the next season saves successfully, the game keeps the previous settled season review. The checkpoint is available in Save Points alongside the three manual points. Restoring it keeps an exact copy of current progress and resumes the season review with leaderboard scoring disabled for that branch.
 
-The 145 focused tests checked a job move, storage refusal and retry, a competing tab and preservation of another slot. Four Chromium cases at 320 and 390 pixels used plain and compact saves from a 12-season Everton career. The previous build kept no automatic checkpoint in all four controls. The candidate kept the exact season 12 review, preserved all three manual Save Points when storage refused a recovery copy, then restored and reloaded the review with the displaced season 13 save kept aside.
+The 145 focused tests checked a job move, storage refusal and retry, a competing tab and preservation of another slot. Four Chromium cases at 320 and 390 pixels used plain and compact saves from a 12-season Everton career. The previous build kept no automatic checkpoint in all four controls. The candidate kept the exact season 12 review, preserved all three manual Save Points when storage refused a recovery copy, then restored and reloaded the review with the displaced season 13 save kept aside. PR #1047 is live. All four exact public bundle replays passed and three nearby routes answered cleanly.
 
 ## 2026-11-23, NHL Front Office recap save protection
 
