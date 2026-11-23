@@ -4,6 +4,8 @@ Home and the manager chooser can resume a career whose pair results use the exis
 
 PL-04 is partly implemented. Existing plain saves remain readable. Compaction of oversized active writes needs a checked recovery copy and write refusal tests.
 
+The reader passed 202 focused tests, all 18 selected harnesses and the existing page download budgets. At 320 and 390 pixels, the older build skipped a valid compact career on Home and could not activate it under a 90,326-character write cap. The reader resumed it from Home and moved the exact compact bytes into the active slot. Other slots kept their saves. With the cap lifted, the next league result and all 160 earlier pair results survived reload.
+
 ## 2026-11-23, Club Manager Asian markets and academy targets
 
 Prepared the Club Manager part of the weekly review as its own branch. Generated squads in South Korea, Japan and China have different starting ratings. Their local players appear in Transfers. Club Manager models five foreign squad places per club across these leagues, counting loans and unknown nationalities. It checks the cap before accepting transfers, loans, free agents and academy promotions. Older careers keep their recorded squads and results.
@@ -13,6 +15,8 @@ Old Korean, Japanese and Chinese jobs retain the appropriate generated market af
 The paired 15-season England save budget reproduced the published baseline exactly. Everton and Lincoln City exceeded the 234,000-character test budget in both builds, and both saves still wrote successfully. That older capacity issue remains open.
 
 The combined #1036 candidate passed 258 focused tests. Chromium at 320 and 390 pixels showed 21 local market cards per league, blocked a sixth foreign signing and preserved a local signing at the limit through reload. A qualifying graduate's appearances still counted after a sale and reload. The league tile showed PSG gaining three points while staying third, and the Stats screen kept the squad's goals available after Champions League and Europa League exits. A tournament-wide Golden Boot still needs all clubs' scorers.
+
+PR #1036 is live. All 21 selected harnesses passed and the published Chromium runs repeated the 14 cases with the same outcomes. The Asian market, academy and league points reports were closed. The cup Golden Boot report remains open.
 
 ## 2026-11-23, Soccer Grid allowance recovery
 
