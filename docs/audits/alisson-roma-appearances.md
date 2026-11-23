@@ -1,0 +1,14 @@
+# Alisson Roma appearances audit
+
+Roma records 64 first-team appearances across two seasons. The season totals count competitive matches, including the Champions League qualifier in Porto. Both career records use the same totals. [Roma transfer announcement](https://www.asroma.com/en/news/41269/transfer-agreed-for-alisson-to-join-liverpool) · [Porto qualifier match report](https://www.asroma.com/en/news/43033/porto-1-1-roma-giallorossi-grab-away-goal-in-hard-fought-draw)
+
+| Season | Serie A | Coppa Italia | Europa League | Champions League | Total |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 2016-17 | 0 | 4 | 10 | 1 qualifier | 15 |
+| 2017-18 | 37 | 0 | 0 | 12 | 49 |
+
+In 2016-17, UEFA lists ten Europa League appearances and reports the one Champions League appearance and four cup appearances. In 2017-18, Roma's squad announcement confirms he played every league minute through the penultimate round. The Champions League technical report records twelve appearances. Roma listed Łukasz Skorupski in goal for its only Italian Cup match that season. [2016-17 UEFA Europa League report](https://www.uefa.com/MultimediaFiles/Download/uefaorg/General/02/49/98/08/2499808_DOWNLOAD.pdf) · [2016-17 UEFA cup and qualifier appearance summary](https://www.uefa.com/uefachampionsleague/news/023d-0e97b55ec3e4-6a8d5cb5df8d-1000--uclfantasy-goalkeepers/) · [Roma's last league round](https://www.asroma.com/en/news/39669/squad-list-alisson-out-but-karsdorp-returns-after-knee-injury) · [2017-18 UEFA Champions League report](https://www.uefa.com/MultimediaFiles/Download/Publications/uefaorg/General/02/56/86/48/2568648_DOWNLOAD.pdf) · [Roma's Italian Cup match](https://www.asroma.com/en/news/40457/roma-1-2-torino-match-report-reaction-and-key-statistics)
+
+The original live counts were 40 and 48 under Alisson, and 37 and 49 under Alisson Becker. The migration identifies both Brazilian goalkeeper rows and their unique Roma stints by season. It checks the row position and prior count, then updates three appearance cells. The PostgreSQL fixture used generated stint IDs and reproduced five failure cases with a full rollback on each. The bundled values and both live readers share dedicated regressions. A correction ledger also checks future fallback bakes.
+
+The archived alternate-project career export contains the old counts and upserts existing rows. Current fallbacks are generated from live data and checked against the correction ledger. Opta credits zero assists in Roma's 2017-18 competition rows. Inter's match report describes a defender intervening on the long pass before the goal. The other season discrepancies remain part of the source audit. [Opta career record](https://theanalyst.com/players/4096/alisson-becker/career) · [Inter match report](https://www.inter.it/en/match_center/4305)

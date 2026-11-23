@@ -1,3 +1,9 @@
+## 2026-11-23, Alisson's Roma appearances in both career records
+
+Career Quiz and Career Ladder use 15 appearances for Roma in 2016-17 and 49 in 2017-18 under both Alisson spellings. The bundled Quiz data carries the same counts. The first total includes the qualifying match in Porto. The migration checks the existing stint positions and only updates the three incorrect appearance cells. [Roma appearance audit](audits/alisson-roma-appearances.md)
+
+The SQL controls rejected an unexpected count, a wrong sort position, a missing stint, a duplicate stint and incorrect goalkeeper metadata with no partial changes. The rebake check rejects the three earlier counts. The identity release in PR #1075 passed all 12 published phone replays. Other season and assist totals still need source verification.
+
 ## 2026-11-23, Career games recognize both Alisson spellings
 
 Career Quiz and Career Ladder accept verified Alisson and Alisson Becker guesses in either direction. Career Ladder counts the goalkeeper once per Unlimited rotation. Transfer Path prevents both spellings from counting as separate links and retains the archived endpoint label when the alternate reaches it. The checks reopen older Daily saves and exercise the existing Active Players Only rule. [Alisson identity audit](audits/alisson-career-identity.md)
