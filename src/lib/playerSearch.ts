@@ -258,6 +258,8 @@ export interface PlayerSourceConfig {
    * PlayerAutocomplete skips it.
    */
   local?: (normalizedQuery: string) => Promise<Record<string, unknown>[] | null>;
+  /** Extra records already verified to match this source's filters. Table rows win for the same spelling. */
+  fallbackRows?: Record<string, unknown>[];
 }
 
 export interface PlayerIdentityConfig {
@@ -740,8 +742,12 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
       return { results: [], error: ilikeRes.error.message || 'Search failed' };
     }
 
+    const remoteRows = [ilikeRes.data as RawRow[] | null, prominenceRes.data as RawRow[] | null];
+    const fallbackRows = source.fallbackRows?.filter(row => !remoteRows.some(rows => rows?.some(
+      remote => remote[source.nameColumn] === row[source.nameColumn],
+    )));
     const results = dedupeAndRank(
-      [ilikeRes.data as RawRow[] | null, prominenceRes.data as RawRow[] | null],
+      [...remoteRows, fallbackRows],
       source,
       normalizedQuery,
       { exclude, boostNames: options.boostNames, limit },

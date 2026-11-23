@@ -481,7 +481,9 @@ section = '2';
 console.log('2) Identity, BASE against the tree');
 const APPLY_ANCHOR = '    applyClubAdditions(clubHistory, pool, clubAdditions.add as ClubAddition[],';
 let headSource = read('src/lib/playerBingo.ts');
-const headExtra = {};
+// This comparison audits the October record against its October fixture.
+// The November report spells are exercised through fetchBingoData in the unit suite.
+const headExtra = { '@/data/bingoReportedClubSpells': 'export const BINGO_REPORTED_CLUB_SPELLS = [];' };
 if (CONTROL === 'noapply') {
   const lines = headSource.split('\n');
   const at = lines.findIndex(l => l.startsWith(APPLY_ANCHOR));
@@ -565,6 +567,9 @@ for (const p of baseData.pool) {
   if (JSON.stringify(got) !== JSON.stringify([...(baseData.clubHistory.get(p.name) ?? [])].sort())) movedHistories += 1;
 }
 const CLUB_SQUARES = id => id === 'one-club-man' || id === 'journeyman-4-clubs' || id.startsWith('club-');
+// PR #813 confirmed Palmer's dismissal after both reference snapshots were taken.
+const verifiedRedCardChange = (id, gained, lost) =>
+  id === 'season-red-card' && gained.length === 1 && gained[0] === 'Cole Palmer' && lost.length === 0;
 const baseCriteria = base.buildCriteria(baseData);
 const headCriteria = head.buildCriteria(headData);
 const verdictMoves = [];
@@ -575,6 +580,7 @@ for (const hc of headCriteria) {
   const gained = hc.support.filter(n => !bc.support.includes(n));
   const lost = bc.support.filter(n => !hc.support.includes(n));
   if (!gained.length && !lost.length) continue;
+  if (verifiedRedCardChange(hc.id, gained, lost)) continue;
   if (!CLUB_SQUARES(hc.id)) fail(`${hc.id} support moved though it is not a club square (gained ${gained.join(', ')}; lost ${lost.join(', ')})`);
   for (const n of [...gained, ...lost]) {
     if (!judged.has(n)) fail(`${hc.id}: ${n} moved but is not judged in the record (additions or agrees)`);
@@ -1131,6 +1137,7 @@ for (const hc of headCriteria) {
   const gained = hc.support.filter(n => !pc.support.includes(n));
   const lost = pc.support.filter(n => !hc.support.includes(n));
   if (!gained.length && !lost.length) continue;
+  if (verifiedRedCardChange(hc.id, gained, lost)) continue;
   if (!CLUB_SQUARES(hc.id)) fail(`${hc.id} support moved against PREV though it is not a club square`);
   for (const n of [...gained, ...lost]) {
     if (!roundNames.has(n)) fail(`${hc.id}: ${n} moved against PREV but has no round ${ROUND} entry`);

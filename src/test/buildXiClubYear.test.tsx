@@ -279,6 +279,61 @@ describe('Build Your XI draws under a seeded generator', () => {
   });
 });
 
+describe('Build Your XI historical club picks', () => {
+  function openSavedDraft(draftChoice: DraftChoice, finalClubs: string[]) {
+    const formation = '4-2-3-1';
+    const teams = clubYearClubs.filter(club => !finalClubs.includes(club)).slice(0, 9).concat(finalClubs);
+    const teamAssignments = teams.map(name => ({ name, isNation: false }));
+    const slots = FORMATIONS[formation].flatMap((slot, index) => {
+      if (slot.role === 'CDM') return [];
+      const team = teams[index < 5 ? index : index - 2];
+      const name = `Fixture historical draft ${index}`;
+      return [[index, { ...slot, playerName: name, assignedTeam: team, isNation: false, pick: meta(team, 2026, slot.role, name) }]];
+    });
+    const priorFetch = fetch;
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      if (String(input).includes('evaluate-lineup')) {
+        return Promise.resolve(new Response(JSON.stringify(VERDICT), { status: 200 }));
+      }
+      return priorFetch(input, init);
+    }));
+    localStorage.setItem(draftKey, JSON.stringify({ formation, draftChoice, teamAssignments, slots }));
+    return render(<MemoryRouter><LineupBuilder /></MemoryRouter>);
+  }
+
+  async function searchClubPick(query: string) {
+    await chooseSlot('CDM');
+    fireEvent.change(field(), { target: { value: query } });
+    await advance(230); await flush();
+  }
+
+  it('carries both sourced club picks through submission and the season rating', async () => {
+    openSavedDraft({ mode: 'mixed' }, ['Benfica', 'Manchester United']);
+    await searchClubPick('richard rios');
+    fireEvent.click(option('Richard Ríos')); await flush();
+    await searchClubPick('casemiro');
+    fireEvent.click(option('Casemiro')); await flush();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Submit Team' })); await flush();
+    expect(io.simulate).toHaveBeenCalledTimes(1);
+    expect(io.simulate.mock.calls[0][0]).toEqual(expect.arrayContaining([
+      expect.objectContaining({ name: 'Richard Ríos', club: 'SL Benfica', age: 25, value: 27_000_000 }),
+      expect.objectContaining({ name: 'Casemiro', club: 'Manchester United', age: 34, value: 8_640_000 }),
+    ]));
+    expect(io.fetches.some(url => url.includes('validate-player'))).toBe(false);
+  });
+
+  it.each([
+    ['the wrong Mixed club', { mode: 'mixed' }, ['Chelsea', 'Manchester United']],
+    ['a recorded year at Benfica', { mode: 'club-year', year: 2026 }, ['Benfica', 'Manchester United']],
+  ] as const)('does not add an all-time result for %s', async (_, draftChoice, teams) => {
+    openSavedDraft(draftChoice, [...teams]);
+    await searchClubPick('richard rios');
+    expect(screen.queryByRole('option', { name: /Richard Ríos/ })).toBeNull();
+    expect(io.queries.length).toBeGreaterThan(0);
+  });
+});
+
 describe('Build Your XI recorded year admissions', () => {
   it('deals the expanded era pool, validates each source year and completes a mixed-year XI', async () => {
     const era = { mode: 'club-era', year: 2010 } as const;

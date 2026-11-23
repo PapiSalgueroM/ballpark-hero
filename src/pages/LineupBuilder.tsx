@@ -9,6 +9,7 @@ import FormationPitch from '@/components/lineup/FormationPitch';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity, type PlayerSourceConfig } from '@/lib/playerSearch';
 import { clubTableNames, nationSearchTerm, nationSquadTerm } from '@/data/lineupTeams';
+import { BUILD_XI_VERIFIED_CLUB_ROWS } from '@/data/buildXiVerifiedClubRows';
 import TeamSpinner from '@/components/lineup/TeamSpinner';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Send, Trophy, Loader2, AlertCircle, Shuffle, HelpCircle } from 'lucide-react';
@@ -195,6 +196,9 @@ const LineupBuilder = () => {
       filters: currentTeam.isNation
         ? [{ column: 'nationality', op: 'eq', value: nationSearchTerm(currentTeam.name) }]
         : [{ column: 'club', op: 'in', value: clubTableNames(currentTeam.name) }],
+      ...(draftChoice.mode === 'mixed' && !currentTeam.isNation ? {
+        fallbackRows: BUILD_XI_VERIFIED_CLUB_ROWS[currentTeam.name],
+      } : {}),
     };
     if (recordedYear === null || lastYear === null) return source;
     const years = Array.from({ length: lastYear - recordedYear + 1 }, (_, offset) => recordedYear + offset);

@@ -1,5 +1,8 @@
 import type { GameContentMap } from './types';
 
+const BALLON_DOR_ELIGIBILITY = "At a tier 3 or 4 club, you need at least 40 goals and a league title, Champions League title or World Cup win to contend.";
+const BALLON_DOR_PODIUM = "If you qualify, reaching 45 goals or 55 goal involvements guarantees a top-three finish.";
+
 // Soccer game guides, batch 2. Casual human tone, no em dashes anywhere.
 export const SOCCER_CONTENT_2: GameContentMap = {
   '/manager-hot-seat': {
@@ -1905,7 +1908,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
           {
             heading: "A pay cut, an injury and a rival's Ballon d'Or",
             items: [
-              "A statistically dominant season cannot be snubbed at the Ballon d'Or. Outscore the whole shortlist while winning a major and the trophy is yours, and any 45 goal or 55 goal involvement season finishes on the podium at worst.",
+              `${BALLON_DOR_ELIGIBILITY} ${BALLON_DOR_PODIUM} Outscore everyone else on the shortlist and win a major trophy to take the award.`,
               "After a settled senior season, ages 19 to 44 can change representation once per recorded season. Agents and No Agent affect future signings and income fees; your current wage, savings and already-paid fees stay the same.",
               "A transfer priority searches the clubs already eligible for your age and rating. The usual response chance is 50%; a broken appearance promise guarantees a response, but not an offer. The response is saved for that window and cannot be rerolled by reloading. Projected minutes are not guaranteed starts, and club-arranged sales and loans keep their own flow.",
             ],
@@ -1993,7 +1996,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "How do I win the Ballon d'Or?",
-        a: "Post the best season in the world and the voters have to give it to you. If you outscore every player on the shortlist and win a league, Champions League, or World Cup, you win it outright, and any season of 45 goals or 55 goal involvements finishes top 3 at worst. Trophies still decide the close years, and a second place finish becomes next season's fuel.",
+        a: `${BALLON_DOR_ELIGIBILITY} Outscore everyone else on the shortlist and win a major trophy to take the award. ${BALLON_DOR_PODIUM} Trophies can decide close years, and a second place finish becomes next season's fuel.`,
       },
       {
         q: "What happens after retirement?",

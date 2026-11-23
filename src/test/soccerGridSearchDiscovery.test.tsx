@@ -182,6 +182,23 @@ describe('Soccer Grid search discovery', () => {
     expect(before).toBeNull(); expect(dailySave()).toBeNull(); expect(view!.getByText('15')).toBeVisible(); expect(view!.queryByRole('combobox', { name: 'Search for a player' })).toBeNull();
     expect(io.tables.map(row => row.table)).toEqual(['soccer_grid_puzzles', 'career_players', 'career_seasons']);
   });
+  it('lets a player submit another answer after one guess hits the AI allowance', async () => {
+    io.invoke.mockResolvedValueOnce({ data: { valid: false, unverified: true, exhausted: true }, error: null });
+    await parent();
+    query(names[0]);
+    await formSubmit();
+    expect(dailySave()).toBeNull();
+    expect(view!.getByText('15')).toBeVisible();
+
+    await act(async () => { fireEvent.click(view!.container.querySelectorAll('[data-grid-cell-status]')[1]); });
+    expect(input()).toBeEnabled();
+    query(names[1]);
+    await formSubmit();
+    expect(io.invoke).toHaveBeenNthCalledWith(2, 'soccer-grid-validate', {
+      body: { playerName: names[1], rowAttribute: 'Fixture Club 1', colAttribute: 'Fixture Position 2' },
+    });
+    expect(dailySave()).toBeNull();
+  });
   it('keeps the raw one-character query gate', async () => {
     leaf(); query('F'); expect(visibleNames()).toEqual([]); expect(view!.getByRole('button', { name: 'Submit' })).toBeDisabled(); await formSubmit(); expect(io.select).not.toHaveBeenCalled(); expect(input()).toHaveValue('F');
   });

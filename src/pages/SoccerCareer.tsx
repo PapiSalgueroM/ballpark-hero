@@ -3738,6 +3738,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
             </div>
           )}
 
+          {career.phase === "ballon_dor" && !career.pendingBallonDor && (
+            <div className="bg-card border border-border rounded-xl p-4 space-y-3">
+              <h2 className="font-bold">Ballon d'Or ballot unavailable</h2>
+              <p className="text-sm text-muted-foreground">This save is missing the ballot for the ceremony.</p>
+              <Button type="button" onClick={onDismissBallonDor} className="min-h-11">Continue career</Button>
+            </div>
+          )}
+
           {/* OVERLAY: Transfer Window */}
           {career.phase === "transfer_window" && career.transferSituation && (
             <TransferWindowCard

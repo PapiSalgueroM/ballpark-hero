@@ -4,6 +4,7 @@ import { foldSpecialLatin } from '@/lib/nameFold';
 import { supabase } from '@/integrations/supabase/client';
 import { dailyPrngSeed, dateSeed, dayNumber } from '@/lib/dateUtils';
 import { storedSpelling, type PlayerEntity } from '@/lib/playerSearch';
+import { CAREER_LADDER_VERIFIED_SEASONS } from '@/data/careerLadderVerifiedSeasons';
 
 export interface CareerStint {
   season: string;
@@ -699,6 +700,26 @@ export function fmtMarketValue(value: number | null): string {
 const SEASON_COLS = 'player_id, season, club, goals, assists, appearances, market_value, sort_order';
 const PAGE_SIZE = 1000;
 
+function addVerifiedSeasons(player: CareerPlayer): CareerPlayer {
+  const correction = CAREER_LADDER_VERIFIED_SEASONS[player.id];
+  if (!correction) return player;
+
+  const { added, previousClub, previousTotals } = correction;
+  const previous = player.seasons.find(stint => stint.season === '2024-2025'
+    && stint.club === previousClub && stint.sortOrder === added.sortOrder - 1);
+  if (!previous) return player;
+
+  let seasons = player.seasons;
+  if (previousTotals && previous.goals === previousTotals.before.goals
+    && previous.assists === previousTotals.before.assists && previous.appearances === previousTotals.before.appearances) {
+    seasons = seasons.map(stint => stint === previous ? { ...stint, ...previousTotals.after } : stint);
+  }
+  if (!seasons.some(stint => stint.season === added.season || stint.sortOrder >= added.sortOrder)) {
+    seasons = [...seasons, added];
+  }
+  return { ...player, seasons };
+}
+
 /**
  * Loads the whole pool: one query for players, plus paged queries for the
  * ~1726 season rows (PostgREST caps a single response at 1000 rows, so a lone
@@ -754,7 +775,8 @@ export async function fetchCareerPool(): Promise<CareerPlayer[] | null> {
           (a, b) => a.sortOrder - b.sortOrder,
         ),
       }))
-      .filter(p => p.name.length > 0);
+      .filter(p => p.name.length > 0)
+      .map(addVerifiedSeasons);
 
     return players;
   } catch {

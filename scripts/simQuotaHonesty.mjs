@@ -1,4 +1,4 @@
-/* Quota honesty harness: when the day's AI allowance is gone, the two AI grids say so and stop inviting retries.
+/* Quota honesty harness: the game reports a spent AI allowance without hiding record-backed guesses.
 
    Round 407, Round 379's third option. The soccer and college grids validate
    through a free tier AI. Round 378 measured the daily quota running out
@@ -7,7 +7,8 @@
    for the rest of the day, and a player kept clicking into a wall. Now a
    refusal says which it was: the validator returns exhausted: true when the
    AI answered 429 twice, and the hook shows one honest message, remembers
-   it for the session, and stops offering the search box.
+   it for the session. Soccer Grid keeps the search box because its records
+   and cache can still judge answers before the AI fallback is reached.
 
    WHAT THIS HOLDS, all as code with comments stripped:
      1. THE VALIDATORS SAY WHICH. supabase/functions/soccer-grid-validate and
@@ -18,13 +19,13 @@
         Round 611 moved College Grid off the validator) read
         data.exhausted, set checkingDown, and show the allowance message
         rather than the retry one; the guess is never counted either way.
-     3. THE PAGES STOP INVITING. SoccerGrid.tsx renders the notice in place
-        of the search box when checkingDown is set.
+     3. THE PAGES SHOW THE NOTICE. SoccerGrid.tsx keeps search available below
+        the notice. The mounted soccerGridSearchDiscovery test proves the retry.
      4. THE NFL GRID IS NOT IN THIS. useFootballGrid.ts invokes no edge
         function at all (Round 406), so it needs none of the above.
      5. BUILD YOUR XI BLOCKS THE ONE PICK AND KEEPS THE BOX (Round 1138).
-        Sections 2 and 3 are Soccer Grid's shape: say so, remember it for the
-        session, take the search box away. In Build Your XI that was wrong
+        The previous Soccer Grid shape was to remember the allowance and
+        take the search box away. In Build Your XI that was wrong
         twice over. One "allowance used up" answer took the box away for the
         rest of the session, when a club pick from the list needs no
         validator at all and the allowance can come back (it is a day's
@@ -50,6 +51,8 @@
                                 validator in memory; section 1 must go red.
      SIM_QUOTA_CONTROL=mute     removes the exhausted branch from the soccer
                                 hook in memory; section 2 must go red.
+     SIM_QUOTA_CONTROL=gridwall hides Soccer Grid search after exhaustion;
+                                section 3 must go red.
      SIM_QUOTA_CONTROL=wall     plants setCheckingDown(true) on the Build
                                 Your XI hook's unverified branch in memory
                                 (the wall coming back); section 5 must go red.
@@ -166,10 +169,18 @@ for (const f of HOOKS) {
 console.log(`   ${HOOKS.length} hooks read`);
 
 section = 3;
-console.log('3) The pages stop inviting: the notice replaces the search box');
+console.log('3) Soccer Grid shows an allowance notice and keeps the search box');
 for (const f of PAGES) {
-  const code = stripComments(read(f));
-  if (!/checkingDown \? \(|!checkingDown/.test(code)) fail(`${f}: the page does not gate its search box on checkingDown`);
+  let code = stripComments(read(f));
+  if (f.includes('SoccerGrid')) {
+    if (CONTROL === 'gridwall') {
+      const blocked = code.replace(/<SoccerGridSearch\b[^>]*\/>/, search => '{!checkingDown && ' + search + '}');
+      if (blocked === code) abort('control cannot run: Soccer Grid search anchor is missing');
+      code = blocked;
+      console.log('   NEGATIVE CONTROL ON: Soccer Grid search hidden after a spent allowance, in memory');
+    }
+    if (!/\{checkingDown && \([\s\S]*?\)\}\s*<SoccerGridSearch\b/.test(code)) fail(`${f}: search must stay available below the allowance notice`);
+  } else if (!/checkingDown \? \(|!checkingDown/.test(code)) fail(`${f}: the page does not gate its search box on checkingDown`);
   if (!/allowance for today/.test(code)) fail(`${f}: the page carries no allowance notice`);
 }
 console.log(`   ${PAGES.length} pages read`);
@@ -200,12 +211,12 @@ console.log('5) Build Your XI: an allowance answer blocks only that pick');
   console.log('   useLineupBuilder read');
 }
 
-const own = { blind: 1, lenient: 1, mute: 2, wall: 5 }[CONTROL];
+const own = { blind: 1, lenient: 1, mute: 2, gridwall: 3, wall: 5 }[CONTROL];
 const total = failures[1] + failures[2] + failures[3] + failures[4] + failures[5];
 if (CONTROL) {
-  if (!own) abort(`unknown control "${CONTROL}" (blind, lenient, mute, wall)`);
+  if (!own) abort(`unknown control "${CONTROL}" (blind, lenient, mute, gridwall, wall)`);
   if (failures[own] > 0) { console.log(`\ncontrol "${CONTROL}": ${failures[own]} failure(s) fired in section ${own} as expected, the check works`); process.exit(0); }
   abort(`\ncontrol "${CONTROL}": changed NOTHING in section ${own}, the check is dead`);
 }
 if (total > 0) { console.error(`\nsimQuotaHonesty: ${total} failure(s)`); process.exit(1); }
-console.log('\nsimQuotaHonesty: green. When the allowance is gone, Soccer Grid says so and stops asking for retries; Build Your XI blocks the one pick, keeps the search box and never says the lineup is saved.');
+console.log('\nsimQuotaHonesty: green. Soccer Grid and Build Your XI keep search available when the AI allowance is gone.');
