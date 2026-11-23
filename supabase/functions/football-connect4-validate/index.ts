@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import verifiedNamesakes from "../_shared/soccerGridNamesakes.json" with { type: "json" };
 // Free-AI shim: prefer a free Google Gemini API key (GEMINI_API_KEY secret).
 const __GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
 const __AI_URL = __GEMINI_KEY ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions" : "https://ai.gateway.lovable.dev/v1/chat/completions";
@@ -9,6 +10,7 @@ const __AI_URL = __GEMINI_KEY ? "https://generativelanguage.googleapis.com/v1bet
 // SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are auto-injected in edge runtime.
 const sb = createClient(Deno.env.get("SUPABASE_URL") ?? "", Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "");
 const CACHE_GAME = "football-connect4";
+const NAMESAKE_CACHE_GAME = "football-connect4-namesakes";
 const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
 const cacheKeyOf = (p: string, r: string, c: string) => norm(`${p}|${r}|${c}`);
 
@@ -121,6 +123,37 @@ const C4_CLUB_STRINGS: Record<string, string[]> = {
   "villarreal": ["Villarreal CF"],
   "wolfsburg": ["VfL Wolfsburg"],
 };
+
+type NamesakeGroup = typeof verifiedNamesakes[number];
+type Namesake = NamesakeGroup["people"][number];
+const hasName = (person: { name: string; aliases: string[] }, name: string) =>
+  [person.name, ...person.aliases].some(spelling => foldName(spelling) === name);
+
+function verifiedIdentity(playerName: string) {
+  const name = foldName(playerName);
+  for (const group of verifiedNamesakes) {
+    if (hasName(group, name)) return { group, person: null };
+    const person = group.people.find(candidate => hasName(candidate, name));
+    if (person) return { group, person };
+  }
+  return null;
+}
+
+const NAMESAKE_NATIONALITY: Record<string, string> = {
+  argentine: "Argentina", brazilian: "Brazil", portuguese: "Portugal", spanish: "Spain",
+};
+
+function namesakeProof(group: NamesakeGroup, person: Namesake, attribute: string): boolean | "other-player" | null {
+  const nationality = NAMESAKE_NATIONALITY[norm(attribute)];
+  if (nationality) return person.nationality === nationality;
+  const club = /^\s*played\s+for\s+(.+?)\s*$/i.exec(attribute)?.[1];
+  const wanted = club ? C4_CLUB_STRINGS[norm(club)]?.map(foldName) : undefined;
+  if (!wanted) return null;
+  const playedThere = (candidate: Namesake) => candidate.clubs.some(value => wanted.includes(foldName(value)));
+  if (playedThere(person)) return true;
+  // The other player's record is no proof either way for the selected person.
+  return group.people.some(playedThere) ? "other-player" : null;
+}
 
 /* ROUND 707: THE VERIFIED 2026 MOVES COUNT AS STINTS HERE TOO. The same list
    soccer-grid-validate carries, under the same name, for the same reason: the
@@ -407,6 +440,11 @@ async function confirmClubAttribute(
   playerName: string,
   attribute: string,
 ): Promise<string | null> {
+  const identity = verifiedIdentity(playerName);
+  if (identity) {
+    const { group, person } = identity;
+    return person && namesakeProof(group, person, attribute) === true ? person.name : null;
+  }
   const m = /^\s*played\s+for\s+(.+?)\s*$/i.exec(attribute);
   if (!m) return null;
   const want = C4_CLUB_STRINGS[norm(m[1])];
@@ -498,10 +536,10 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { playerName, columnAttribute, rowAttribute, cacheOnly = false } = body;
+    const { playerName: enteredName, columnAttribute, rowAttribute, cacheOnly = false } = body;
 
     if (
-      !playerName || typeof playerName !== "string" || playerName.length > 100 ||
+      !enteredName || typeof enteredName !== "string" || enteredName.length > 100 ||
       !columnAttribute || typeof columnAttribute !== "string" || columnAttribute.length > 200 ||
       !rowAttribute || typeof rowAttribute !== "string" || rowAttribute.length > 200
     ) {
@@ -511,6 +549,36 @@ serve(async (req) => {
       });
     }
 
+    const identity = verifiedIdentity(enteredName);
+    const person = identity?.person;
+    const json = (value: unknown) => new Response(JSON.stringify(value), {
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+    if (identity && !person) {
+      const { group } = identity;
+      const matches = group.people.filter(candidate =>
+        namesakeProof(group, candidate, rowAttribute) === true && namesakeProof(group, candidate, columnAttribute) === true);
+      if (matches.length === 1) {
+        return json({
+          valid: true, matchesRow: true, matchesColumn: true, fullName: matches[0].name,
+          reason: "Both clues match one player in our records.", source: "records",
+        });
+      }
+      return json({ valid: false, unverified: true, reason: "More than one player has that name. Choose a full name from the search results." });
+    }
+    if (identity && person) {
+      for (const attribute of [rowAttribute, columnAttribute]) {
+        const proof = namesakeProof(identity.group, person, attribute);
+        if (proof === false) return json({ valid: false, reason: `${person.name} does not match "${attribute}".` });
+        if (proof === "other-player") {
+          return json({ valid: false, unverified: true, reason: `Could not verify "${attribute}" for ${person.name}.` });
+        }
+      }
+    }
+
+    const playerName = person?.name ?? enteredName;
+    const cacheGame = person ? NAMESAKE_CACHE_GAME : CACHE_GAME;
+    const recordReason = person ? "Verified from our player records." : "Verified from our club records.";
     const cacheKey = cacheKeyOf(playerName, rowAttribute, columnAttribute);
     const rowKey = attrKeyOf(playerName, rowAttribute);
     const colKey = attrKeyOf(playerName, columnAttribute);
@@ -534,7 +602,7 @@ serve(async (req) => {
        rows were paid for and they keep answering until they age out. */
     try {
       const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
-        .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
+        .eq("game", cacheGame).eq("cache_key", cacheKey).maybeSingle();
       if (hit?.verdict) {
         const v = hit.verdict as Record<string, unknown>;
         if (v.valid === false) {
@@ -557,7 +625,7 @@ serve(async (req) => {
     let colKnown: boolean | null = null;
     try {
       const { data: facts } = await sb.from("ai_validation_cache").select("cache_key, verdict")
-        .eq("game", CACHE_GAME).in("cache_key", [rowKey, colKey]);
+        .eq("game", cacheGame).in("cache_key", [rowKey, colKey]);
       const byKey = new Map((facts ?? []).map((f: { cache_key: string; verdict: unknown }) => [f.cache_key, f.verdict as Record<string, unknown>]));
       const rowFact = byKey.get(rowKey);
       const colFact = byKey.get(colKey);
@@ -594,15 +662,15 @@ serve(async (req) => {
     const determined: Array<{ game: string; cache_key: string; verdict: unknown }> = [];
     /* Round 707: a half the records proved over a cached no is written back as
        the fact it is, so the stale no is replaced rather than re-read forever. */
-    if (provedRow) determined.push({ game: CACHE_GAME, cache_key: rowKey, verdict: { match: true, fullName: provedRow } });
-    if (provedCol) determined.push({ game: CACHE_GAME, cache_key: colKey, verdict: { match: true, fullName: provedCol } });
+    if (provedRow) determined.push({ game: cacheGame, cache_key: rowKey, verdict: { match: true, fullName: provedRow } });
+    if (provedCol) determined.push({ game: cacheGame, cache_key: colKey, verdict: { match: true, fullName: provedCol } });
     if (rowKnown === null) {
       const proved = await confirmClubAttribute(playerName, rowAttribute);
       if (proved) {
         rowKnown = true;
         knownFullName = proved;
         provedRow = proved;
-        determined.push({ game: CACHE_GAME, cache_key: rowKey, verdict: { match: true, fullName: proved } });
+        determined.push({ game: cacheGame, cache_key: rowKey, verdict: { match: true, fullName: proved } });
       }
     }
     if (colKnown === null) {
@@ -611,7 +679,7 @@ serve(async (req) => {
         colKnown = true;
         knownFullName = proved;
         provedCol = proved;
-        determined.push({ game: CACHE_GAME, cache_key: colKey, verdict: { match: true, fullName: proved } });
+        determined.push({ game: cacheGame, cache_key: colKey, verdict: { match: true, fullName: proved } });
       }
     }
     if (determined.length > 0) {
@@ -627,8 +695,8 @@ serve(async (req) => {
         matchesRow: rowKnown,
         matchesColumn: colKnown,
         reason: {
-          [rowAttribute]: rowKnown ? "Verified from our club records." : "This player does not match this attribute.",
-          [columnAttribute]: colKnown ? "Verified from our club records." : "This player does not match this attribute.",
+          [rowAttribute]: rowKnown ? recordReason : "This player does not match this attribute.",
+          [columnAttribute]: colKnown ? recordReason : "This player does not match this attribute.",
         },
         fullName: knownFullName,
         source: "records",
@@ -638,7 +706,7 @@ serve(async (req) => {
          Round 703: the same write when the records decided a half of a pair
          that had no cached row, so the next ask is served as cached. */
       if (provedRow || provedCol) {
-        try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
+        try { await sb.from("ai_validation_cache").upsert({ game: cacheGame, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
       }
       return new Response(JSON.stringify(verdict), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
@@ -768,7 +836,8 @@ times over.`,
             },
             {
               role: "user",
-              content: `Does the soccer player "${playerName}" match BOTH: "${columnAttribute}" AND "${rowAttribute}"? Think carefully about each attribute before answering.`,
+              content: `Does the soccer player "${playerName}" match BOTH: "${columnAttribute}" AND "${rowAttribute}"? Think carefully about each attribute before answering.`
+                + (person ? ` Check only "${person.name}", the ${person.nationality} player known as "${identity?.group.name}". Do not use any namesake. State this player's full name and both clue verdicts, or say you could not verify them.` : ""),
             },
           ],
         }),
@@ -816,6 +885,18 @@ times over.`,
       parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again." };
     }
 
+    if (person && aiVerdict) {
+      if (parsed?.unverified === true || typeof parsed?.fullName !== "string"
+        || !hasName(person, foldName(parsed.fullName))
+        || typeof parsed.matchesRow !== "boolean" || typeof parsed.matchesColumn !== "boolean") {
+        aiVerdict = false;
+        parsed = { valid: false, unverified: true, reason: "Couldn't verify the selected player. Try again." };
+      } else {
+        parsed.fullName = person.name;
+        parsed.valid = parsed.matchesRow && parsed.matchesColumn;
+      }
+    }
+
     /* ROUND 703: the model never outvotes the club records on a half they
        proved. Before this, a proved half could reach this point with the other
        half unknown, and the model's "no" on the proved half was returned and
@@ -829,8 +910,8 @@ times over.`,
       if (typeof rec.matchesRow === "boolean" && typeof rec.matchesColumn === "boolean") {
         rec.valid = rec.matchesRow && rec.matchesColumn;
         rec.reason = {
-          [rowAttribute]: provedRow ? "Verified from our club records." : rec.matchesRow ? "Verified." : "This player does not match this attribute.",
-          [columnAttribute]: provedCol ? "Verified from our club records." : rec.matchesColumn ? "Verified." : "This player does not match this attribute.",
+          [rowAttribute]: provedRow ? recordReason : rec.matchesRow ? "Verified." : "This player does not match this attribute.",
+          [columnAttribute]: provedCol ? recordReason : rec.matchesColumn ? "Verified." : "This player does not match this attribute.",
         };
       } else if (rec.valid !== true) {
         /* A bare "no" that never says which half it meant cannot be read
@@ -844,7 +925,7 @@ times over.`,
     // cache VERIFIED verdicts only, never the unverified fallbacks
     if (aiVerdict && parsed && typeof parsed === "object") {
       const rows: Array<{ game: string; cache_key: string; verdict: unknown }> = [
-        { game: CACHE_GAME, cache_key: cacheKey, verdict: parsed },
+        { game: cacheGame, cache_key: cacheKey, verdict: parsed },
       ];
       /* ROUND 379: KEEP THE TWO HALVES SEPARATELY, which is the whole round.
          Only written when the model actually answered each attribute on its
@@ -855,10 +936,10 @@ times over.`,
       const r = parsed as Record<string, unknown>;
       const fullName = typeof r.fullName === "string" ? r.fullName : playerName;
       if (typeof r.matchesRow === "boolean") {
-        rows.push({ game: CACHE_GAME, cache_key: rowKey, verdict: { match: r.matchesRow, fullName } });
+        rows.push({ game: cacheGame, cache_key: rowKey, verdict: { match: r.matchesRow, fullName } });
       }
       if (typeof r.matchesColumn === "boolean") {
-        rows.push({ game: CACHE_GAME, cache_key: colKey, verdict: { match: r.matchesColumn, fullName } });
+        rows.push({ game: cacheGame, cache_key: colKey, verdict: { match: r.matchesColumn, fullName } });
       }
       try { await sb.from("ai_validation_cache").upsert(rows); } catch { /* non-fatal */ }
     }

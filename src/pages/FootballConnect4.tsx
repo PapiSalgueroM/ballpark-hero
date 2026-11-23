@@ -6,8 +6,9 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import { FootballConnect4Board } from '@/components/football-connect4/FootballConnect4Board';
 import { FootballConnect4HowToPlay } from '@/components/football-connect4/FootballConnect4HowToPlay';
 import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
-import { SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
+import { normalizeName, SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { cn } from '@/lib/utils';
+import verifiedSoccerNamesakes from '../../supabase/functions/_shared/soccerGridNamesakes.json';
 import {
   Loader2,
   AlertCircle,
@@ -18,6 +19,23 @@ import {
 import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+
+const namesakeSearchKeys = verifiedSoccerNamesakes.flatMap(({ name, aliases, people }) =>
+  [name, ...aliases, ...people.flatMap(person => [person.name, ...person.aliases])].map(normalizeName),
+);
+
+function namesakeChoices(input: string, used: Set<string>) {
+  const query = normalizeName(input);
+  return verifiedSoccerNamesakes.flatMap(({ name, aliases, people }) => {
+    if ([name, ...aliases].some(alias => used.has(normalizeName(alias)))) return [];
+    const nickname = [name, ...aliases].find(alias => normalizeName(alias).includes(query)) ?? name;
+    return people.filter(person => ![person.name, ...person.aliases].some(alias => used.has(normalizeName(alias))))
+      .map(person => {
+        const fullName = [person.name, ...person.aliases].find(alias => normalizeName(alias).includes(query)) ?? person.name;
+        return { label: `${nickname} (${fullName}, ${person.clubs[person.clubs.length - 1]})`, name: person.name };
+      });
+  });
+}
 
 const FootballConnect4 = () => {
   const {
@@ -43,10 +61,11 @@ const FootballConnect4 = () => {
 
   const [playerInput, setPlayerInput] = useState('');
   const [showHowToPlay, setShowHowToPlay] = useState(false);
+  const choices = namesakeChoices(playerInput, usedPlayers);
 
   const handleSelectPlayer = async (entity: PlayerEntity) => {
     if (isValidating) return;
-    await submitPlayer(entity.name);
+    await submitPlayer(choices.find(choice => choice.label === entity.name)?.name ?? entity.name);
     setPlayerInput('');
   };
 
@@ -159,7 +178,8 @@ const FootballConnect4 = () => {
                       value={playerInput}
                       onChange={setPlayerInput}
                       onSelect={handleSelectPlayer}
-                      searchOptions={{ source: SOCCER_MARKET_VALUE_SOURCE, exclude: usedPlayers }}
+                      searchOptions={{ source: SOCCER_MARKET_VALUE_SOURCE, exclude: new Set([...usedPlayers, ...namesakeSearchKeys]) }}
+                      localNames={choices.map(choice => choice.label)}
                       placeholder="Enter soccer player name..."
                       disabled={isValidating}
                       autoFocus

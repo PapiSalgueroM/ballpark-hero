@@ -226,13 +226,22 @@ const quiet = { log() {}, error() {}, warn() {}, info() {} };
 
 async function load(name, raw) {
   const stripped = raw.replace(/^import\s[^\n]*?from\s+"https:\/\/[^"]+";[ \t]*$/gm, '');
-  if (/^\s*import\s/m.test(stripped)) throw new Error('an import this harness cannot stand in for');
-  const { code } = await transform(stripped, { loader: 'ts', target: 'es2022' });
+  const namesakeImport = 'import verifiedNamesakes from "../_shared/soccerGridNamesakes.json" with { type: "json" };';
+  let verifiedNamesakes;
+  let input = stripped;
+  if (['soccer-grid-validate', 'football-connect4-validate'].includes(name) && stripped.includes(namesakeImport)) {
+    const file = 'supabase/functions/_shared/soccerGridNamesakes.json';
+    const facts = REF ? execFileSync('git', ['show', REF + ':' + file], { cwd: ROOT, encoding: 'utf8' }) : read(path.join(ROOT, file));
+    verifiedNamesakes = JSON.parse(facts);
+    input = stripped.replace(namesakeImport, '');
+  }
+  if (/^\s*import\s/m.test(input)) throw new Error('an import this harness cannot stand in for');
+  const { code } = await transform(input, { loader: 'ts', target: 'es2022' });
   let handler = null;
   const serve = (h) => { handler = h; };
   const createClient = () => fakeClient;
-  new Function('serve', 'createClient', 'Deno', 'fetch', 'setInterval', 'console', code)(
-    serve, createClient, fakeDeno, fakeFetch, () => 0, quiet);
+  new Function('serve', 'createClient', 'Deno', 'fetch', 'setInterval', 'console', 'verifiedNamesakes', code)(
+    serve, createClient, fakeDeno, fakeFetch, () => 0, quiet, verifiedNamesakes);
   if (!handler) throw new Error('the module never called serve');
   return handler;
 }
