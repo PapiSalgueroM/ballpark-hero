@@ -6,6 +6,12 @@ Seven regression cases reproduced on the unchanged writer. All 20 focused tests,
 
 Chromium at 320 and 390 pixels refused the backup, kept exact v1 bytes, recovered one checked backup on retry and reloaded with the same v2 finance card. At 390 pixels a separate failed squad request preserved v1 and reconnected successfully.
 
+## 2026-11-23, Soccer Career missing Ballon d'Or ballot
+
+A career that reloads on the Ballon d'Or screen with its ballot missing now offers Continue career. It resumes the existing season flow and keeps the player's completed season and awards.
+
+The regression test played a first senior season to an award at age 18 in 2007, then reloaded with and without the ballot. The intact save kept its ceremony and the incomplete save could continue. All 95 focused ceremony and save tests passed.
+
 ## 2026-11-23, Club World Cup match goals and World XI Argentina
 
 Soccer Career's Trophy Cabinet now shows the player's saved goals in each Club World Cup appearance alongside assists and rating. Games the player missed still show that they did not play.
