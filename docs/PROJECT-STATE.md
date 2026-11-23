@@ -1,3 +1,9 @@
+## 2026-11-23, Stadium Tycoon legacy save protection
+
+PL-04 is partly implemented. Stadium Tycoon now keeps an exact copy of a readable pre-league v1 save before the first write that adds its league. A refused backup leaves the original save in place and offers Retry save. A later retry reuses a verified copy, and a more recent stadium saved by another tab keeps control. Existing v1 stadiums with leagues use their ordinary save path.
+
+The committed 638-character mid-match save kept its cash, legacy points, division, match clock and 2-1 score. The replay checked backup refusal, incorrect backup readback, an active write refused after a successful backup, a newer write during backup, and unchanged Academy bytes.
+
 ## 2026-11-23, Club Manager active save protection
 
 PL-04 is partly implemented. Club Manager can compact oversized active saves when the existing pair-results format makes them smaller. The first conversion checks an exact recovery copy of the prior bytes for that slot. If storage refuses the copy or write, the previous save stays available and the player can retry. A compact career keeps its format through season rollover and uses the same recovery copy. Ordinary plain saves keep their existing writer.
