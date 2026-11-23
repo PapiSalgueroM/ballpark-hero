@@ -226,6 +226,64 @@ describe('Hall of Champions long play', () => {
     measured(`refused: the bytes were kept aside once, ${bad.length} characters`);
   }, TEST_MS);
 
+  it.each(['quota refusal', 'mismatched readback'])('keeps refused museum bytes active after backup %s', async failure => {
+    const old = JSON.stringify({ ...midMuseum(), v: 2, lastSeen: EPOCH }) + ' ';
+    localStorage.setItem(SAVE_KEY, old);
+    const set = Storage.prototype.setItem;
+    const blocked = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key.startsWith(SAVE_KEY + '.broken-')) {
+        if (failure === 'quota refusal') throw new DOMException('Storage full', 'QuotaExceededError');
+        return set.call(this, key, value + ' ');
+      }
+      set.call(this, key, value);
+    });
+    await mount();
+    watch(6_000);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(old);
+    expect(keptAside()).toEqual([]);
+    expect(hook().saveIssue).toBe('backup-failed');
+
+    blocked.mockRestore();
+    act(() => { hook().retrySave(); });
+    expect(loadSave(localStorage.getItem(SAVE_KEY))?.state.owned).toEqual({});
+    expect(keptAside()).toEqual([old]);
+    expect(hook().saveIssue).toBeNull();
+    watch(6_000);
+    expect(keptAside()).toEqual([old]);
+  }, TEST_MS);
+
+  it.each(['timer', 'visibilitychange', 'pagehide', 'rededication', 'unmount'])('keeps the latest playable museum during stale %s', async path => {
+    const museum = midMuseum();
+    localStorage.setItem(SAVE_KEY, serialize(museum, EPOCH));
+    await mount();
+    const newest = serialize({ ...museum, levels: { ...museum.levels, tours: 1 } }, EPOCH);
+    localStorage.setItem(SAVE_KEY, newest);
+    switch (path) {
+      case 'timer': watch(6_000); break;
+      case 'visibilitychange': setVisible(false); break;
+      case 'pagehide': act(() => { window.dispatchEvent(new Event('pagehide')); }); break;
+      case 'rededication': act(() => { hook().doRededicate(); }); break;
+      case 'unmount': cleanup(); break;
+    }
+    expect(localStorage.getItem(SAVE_KEY)).toBe(newest);
+  }, TEST_MS);
+
+  it('leaves a newer playable museum in place when it arrives during the refused copy', async () => {
+    const museum = midMuseum();
+    const old = JSON.stringify({ ...museum, v: 2, lastSeen: EPOCH });
+    const newer = serialize(museum, EPOCH);
+    localStorage.setItem(SAVE_KEY, old);
+    const set = Storage.prototype.setItem;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      set.call(this, key, value);
+      if (key.startsWith(SAVE_KEY + '.broken-')) set.call(this, SAVE_KEY, newer);
+    });
+    await mount();
+    watch(6_000);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(newer);
+    expect(keptAside()).toEqual([old]);
+  }, TEST_MS);
+
   it('5 a watched minute is paid at full rate and closes an absence', async () => {
     const s0 = midMuseum();
     s0.awayMs = 3 * HOUR;

@@ -22,6 +22,8 @@ import {
 import { recordCompletion } from '@/lib/completions';
 import { CONTINUE_SAVES } from '@/data/continueSaves';
 import { backupKeysOf, browserStorage, copyAside, dismissBackup } from '@/lib/brokenSaveRecovery';
+import { holdPendingSave } from '@/lib/safeStorage';
+import { createSaveFence } from '@/lib/saveFence';
 
 /** Round 1548: a hidden spell shorter than this pays but shows no welcome, the load path's own bar. */
 const WELCOME_AFTER_MS = 60_000;
@@ -35,20 +37,22 @@ const WELCOME_AFTER_MS = 60_000;
  * answered so the card does not offer back bytes this build refuses again,
  * and skipped when the same bytes are already kept aside. Never throws.
  */
-function keepRefusedSave(): void {
+function keepRefusedSave(raw: string): string | null {
   const entry = CONTINUE_SAVES.find(e => e.saveKey === SAVE_KEY);
   const storage = browserStorage();
-  if (!entry || !storage) return;
+  if (!entry || !storage) return null;
   try {
-    const raw = storage.getItem(SAVE_KEY);
-    if (raw === null) return;
-    for (const k of backupKeysOf(entry, storage)) if (storage.getItem(k) === raw) return;
+    if (storage.getItem(SAVE_KEY) !== raw) return null;
+    for (const k of backupKeysOf(entry, storage)) if (storage.getItem(k) === raw) return k;
     const copied = copyAside(entry, storage);
-    if (copied.ok && copied.backupKey) dismissBackup(entry, copied.backupKey, storage);
-  } catch { /* storage that stopped answering: nothing more to do */ }
+    if (!copied.ok || !copied.backupKey || storage.getItem(copied.backupKey) !== raw) return null;
+    dismissBackup(entry, copied.backupKey, storage);
+    return copied.backupKey;
+  } catch { return null; }
 }
 
 export type LoadState = 'loading' | 'ready' | 'error';
+type SaveIssue = 'backup-failed' | 'failed' | 'moved';
 
 export interface Floater {
   id: number;
@@ -61,11 +65,54 @@ export function useHallOfChampions() {
   const [loadState, setLoadState] = useState<LoadState>('loading');
   const [wings, setWings] = useState<Wing[]>([]);
   const [offlineEarned, setOfflineEarned] = useState<number | null>(null);
+  const [saveIssue, setSaveIssue] = useState<SaveIssue | null>(null);
+  const [fence] = useState(() => createSaveFence(() => localStorage));
+  const savedBytes = useRef<string | null>();
+  // Undefined needs no copy. Null means the refused bytes still need a verified copy.
+  const recoveryCopy = useRef<string | null>();
   const [, setVersion] = useState(0);
   const bump = useCallback(() => setVersion(v => v + 1), []);
   /* Round 1548: the wall time the museum has been paid through. Every save
      stamps this as lastSeen, so the next load pays from exactly here. */
   const lastTickRef = useRef(0);
+
+  const retrySave = useCallback((): boolean => {
+    const s = stateRef.current;
+    if (!s) return true;
+    const expected = savedBytes.current;
+    const refuse = (issue: SaveIssue) => { setSaveIssue(issue); return false; };
+    const moved = () => localStorage.getItem(SAVE_KEY) !== expected || fence.moved(SAVE_KEY);
+    let receiptIssue: SaveIssue | null = null;
+    try {
+      if (expected === undefined) return refuse('failed');
+      if (moved()) return refuse('moved');
+      let protectedKey = recoveryCopy.current;
+      if (protectedKey !== undefined && expected !== null) {
+        if (protectedKey === null || localStorage.getItem(protectedKey) !== expected) {
+          protectedKey = recoveryCopy.current = keepRefusedSave(expected);
+        }
+        if (moved()) return refuse('moved');
+        if (protectedKey === null) return refuse('backup-failed');
+      }
+      const result = fence.write(SAVE_KEY, () => {
+        if (localStorage.getItem(SAVE_KEY) !== expected) { receiptIssue = 'moved'; return false; }
+        if (protectedKey && localStorage.getItem(protectedKey) !== expected) { receiptIssue = 'backup-failed'; return false; }
+        let written: string;
+        localStorage.setItem(SAVE_KEY, (written = serialize(s, lastTickRef.current)));
+        if (localStorage.getItem(SAVE_KEY) !== written) return false;
+        savedBytes.current = written;
+        recoveryCopy.current = undefined;
+        return true;
+      }, protectedKey !== undefined);
+      if (result !== 'written') return refuse(receiptIssue ?? result);
+      setSaveIssue(null);
+      return true;
+    } catch { return refuse('failed'); }
+  }, [fence]);
+
+  useEffect(() => {
+    if (saveIssue === 'failed' || saveIssue === 'backup-failed') return holdPendingSave(retrySave);
+  }, [retrySave, saveIssue]);
 
   const [floaters, setFloaters] = useState<Floater[]>([]);
   const floaterId = useRef(1);
@@ -95,13 +142,19 @@ export function useHallOfChampions() {
         const now = Date.now();
         let s: HallState;
         let away = 0;
-        let loaded: { state: HallState; lastSeen: number } | null = null;
-        try { loaded = loadSave(localStorage.getItem(SAVE_KEY)); } catch { loaded = null; }
+        let raw: string | null | undefined;
+        fence.adopt(SAVE_KEY);
+        try { raw = localStorage.getItem(SAVE_KEY); } catch { raw = undefined; }
+        savedBytes.current = raw;
+        const loaded = loadSave(raw ?? null);
         if (loaded) {
           s = loaded.state;
           away = Math.max(0, Math.floor((now - loaded.lastSeen) / 1000));
         } else {
-          keepRefusedSave();
+          if (typeof raw === 'string') {
+            recoveryCopy.current = keepRefusedSave(raw);
+            if (recoveryCopy.current === null) setSaveIssue('backup-failed');
+          }
           s = freshState(now % 2147483647);
         }
         /* Round 1548: the note tells the whole absence, the part a hidden tab
@@ -118,7 +171,7 @@ export function useHallOfChampions() {
       }
     })();
     return () => { alive = false; window.clearTimeout(watchdog); };
-  }, []);
+  }, [fence]);
 
   /* the clock and the save that survives a closed lid.
      Round 1548: each callback pays the wall time since the last one, not a
@@ -146,11 +199,7 @@ export function useHallOfChampions() {
       if (!step.away && !s.awayMs && absence > WELCOME_AFTER_MS && took > 1) setOfflineEarned(took);
       bump();
     }, 250);
-    const save = () => {
-      const s = stateRef.current;
-      if (!s) return;
-      try { localStorage.setItem(SAVE_KEY, serialize(s, lastTickRef.current)); } catch { /* storage full or blocked */ }
-    };
+    const save = () => { retrySave(); };
     const saver = window.setInterval(save, 5000);
     document.addEventListener('visibilitychange', save);
     window.addEventListener('pagehide', save);
@@ -161,7 +210,7 @@ export function useHallOfChampions() {
       window.removeEventListener('pagehide', save);
       save();
     };
-  }, [loadState, wings, bump]);
+  }, [loadState, wings, bump, retrySave]);
 
   /* Round 195's rule, the tycoon shape: one unscored mark per sitting, on
      the first meaningful action, behind a ref so marking never re-renders
@@ -218,17 +267,17 @@ export function useHallOfChampions() {
     markSessionPlay();
     const s = stateRef.current;
     if (s && rededicate(s)) {
-      try { localStorage.setItem(SAVE_KEY, serialize(s, lastTickRef.current)); } catch { /* ignore */ }
+      retrySave();
       pushFloater('⭐ the hall reopens with its reputation intact', 'star');
       bump();
     }
-  }, [bump, markSessionPlay, pushFloater]);
+  }, [bump, markSessionPlay, pushFloater, retrySave]);
 
   const dismissOffline = useCallback(() => setOfflineEarned(null), []);
 
   return {
     loadState, wings, state: stateRef.current, floaters,
-    offlineEarned, dismissOffline,
+    offlineEarned, dismissOffline, saveIssue, retrySave,
     doBuyArtifact, doOpenWing, doBuyUpgrade, doRush, doRededicate,
   };
 }

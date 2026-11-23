@@ -18,8 +18,8 @@ import {
   WorldXiData,
   TimerMode,
   TIMER_MODES,
-  PARAGUAY,
-  fetchParaguayArchive,
+  WORLD_XI_ARCHIVES,
+  fetchWorldXiArchive,
   fetchWorldXiPool,
   drawCountries,
   suggestCountryPlayers,
@@ -43,7 +43,7 @@ import { SlotReel } from '@/components/world-xi/SlotReel';
 import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
 
 type Phase = 'boot' | 'error' | 'setup' | 'playing' | 'won' | 'lost';
-type ParaguayArchive = { status: 'loading' | 'unavailable' } | { status: 'loaded'; players: WxPlayer[] };
+type ArchiveState = { status: 'loading' | 'unavailable' } | { status: 'loaded'; players: WxPlayer[] };
 
 // Slot-machine reel durations. The reel decelerates like a real machine, so it
 // needs enough runway to read as a spin; timed modes get a shorter one so the
@@ -87,7 +87,7 @@ const WorldXi = () => {
   const [seasonReport, setSeasonReport] = useState<SeasonReport | null>(null);
   const [seasonApproach, setSeasonApproach] = useState<WorldXiSeasonApproach>('balanced');
   const [showClubChemistry, setShowClubChemistry] = useState(false);
-  const [paraguayArchive, setParaguayArchive] = useState<ParaguayArchive | null>(null);
+  const [archives, setArchives] = useState<Partial<Record<string, ArchiveState>>>({});
   const inputRef = useRef<HTMLInputElement>(null);
   const prevStepRef = useRef<number>(-1);
   const reducedMotionRef = useRef<boolean>(
@@ -121,14 +121,18 @@ const WorldXi = () => {
     boot();
   }, [boot]);
 
-  const hasParaguay = countries.includes(PARAGUAY);
   useEffect(() => {
-    if (!hasParaguay || paraguayArchive) return;
-    setParaguayArchive({ status: 'loading' });
-    void fetchParaguayArchive().then(players => setParaguayArchive(
-      players ? { status: 'loaded', players } : { status: 'unavailable' },
-    ));
-  }, [hasParaguay, paraguayArchive]);
+    for (const archive of WORLD_XI_ARCHIVES) {
+      const { country, playerName } = archive;
+      if (!countries.includes(country) || archives[country]) continue;
+      if (playerName && data?.byCountry.get(country)?.some(player => player.name === playerName)) continue;
+      setArchives(prev => ({ ...prev, [country]: { status: 'loading' } }));
+      void fetchWorldXiArchive(archive).then(players => setArchives(prev => ({
+        ...prev,
+        [country]: players ? { status: 'loaded', players } : { status: 'unavailable' },
+      })));
+    }
+  }, [archives, countries, data]);
 
   const start = useCallback(() => {
     if (!selectedData) return;
@@ -198,17 +202,18 @@ const WorldXi = () => {
     () => new Set(filled.filter((p): p is WxPlayer => p !== null).map(p => p.name)),
     [filled],
   );
-  const archivedPlayers = paraguayArchive?.status === 'loaded' ? paraguayArchive.players : undefined;
+  const archive = archives[country];
+  const archivedPlayers = archive?.status === 'loaded' ? archive.players : undefined;
   const suggestionData = useMemo(() => {
     if (!selectedData || !archivedPlayers?.length) return selectedData;
     // The extra choices never feed the draw or respin eligibility.
-    const current = selectedData.byCountry.get(PARAGUAY) ?? [];
+    const current = selectedData.byCountry.get(country) ?? [];
     const currentNames = new Set(current.map(player => player.name));
     const byCountry = new Map(selectedData.byCountry);
-    byCountry.set(PARAGUAY, [...current, ...archivedPlayers.filter(player => !currentNames.has(player.name))]
+    byCountry.set(country, [...current, ...archivedPlayers.filter(player => !currentNames.has(player.name))]
       .sort((a, b) => b.value - a.value));
     return { ...selectedData, byCountry };
-  }, [selectedData, archivedPlayers]);
+  }, [selectedData, country, archivedPlayers]);
   const unusedFittingCount = useMemo(() => {
     if (!suggestionData || !slot) return 0;
     const names = new Set<string>();
@@ -221,8 +226,8 @@ const WorldXi = () => {
     () => (suggestionData && slot && country ? suggestCountryPlayers(suggestionData, country, query, usedNames) : []),
     [suggestionData, slot, country, query, usedNames],
   );
-  const searchingArchive = country === PARAGUAY && paraguayArchive?.status === 'loading';
-  const archiveUnavailable = country === PARAGUAY && paraguayArchive?.status === 'unavailable';
+  const searchingArchive = archive?.status === 'loading';
+  const archiveUnavailable = archive?.status === 'unavailable';
 
   const filledCount = filled.filter(Boolean).length;
   const timedOut = timerMode.seconds > 0 && timeLeft <= 0;
@@ -642,9 +647,9 @@ const WorldXi = () => {
               {!feedback && query.trim().length >= 2 && suggestions.length === 0 && (
                   <p className="text-muted-foreground text-sm mt-2" role={searchingArchive ? 'status' : undefined}>
                     {searchingArchive
-                      ? 'Checking more Paraguay players…'
+                      ? `Checking more ${displayCountry(country)} players…`
                       : archiveUnavailable
-                        ? 'Extra Paraguay records are unavailable. Try another name.'
+                        ? `Extra ${displayCountry(country)} records are unavailable. Try another name.`
                         : `Nobody from ${displayCountry(country)} matches that. Only players from ${displayCountry(country)} can fill this slot, so try another name.`}
                 </p>
               )}

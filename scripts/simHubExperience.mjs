@@ -12,7 +12,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const component = path.join(root, 'src/components/hub/HubExperience.tsx');
 const bytes = await readFile(component), source = bytes.toString('utf8').replaceAll('\r\n', '\n');
 const controls = {
-  catalog: ['to={game.path}', 'to="/fixture-missing-game"', [0]],
+  catalog: ['to={continuations[game.path]?.path ?? game.path}', 'to="/fixture-missing-game"', [0]],
   daily: ["filter === 'daily' ? game.daily : game.featured", "filter === 'daily' ? !game.daily : game.featured", [1]],
   sim: ["filter === 'daily' ? game.daily : game.featured", "filter === 'daily' ? game.daily : !game.featured", [2]],
   search: ['const needle = query.trim().toLocaleLowerCase();', "const needle = '';", [3, 4, 5]],
