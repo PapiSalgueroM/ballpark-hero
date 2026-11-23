@@ -1,3 +1,9 @@
+## 2026-11-23, Club World Cup match goals and World XI Argentina
+
+Soccer Career's Trophy Cabinet now shows the player's saved goals in each Club World Cup appearance alongside assists and rating. Games the player missed still show that they did not play.
+
+World XI can use Marcos Acuña's 2024 Sevilla record when Argentina is drawn and his card is missing from the current pool. The Argentine FA confirms his Argentina career and Sevilla confirms that he started at left-back for Argentina in the 2024 Copa América opener. [Argentine FA](https://www.afa.com.ar/es/posts/marcos-acuna-cumple-35-anos-del-nacimiento-en-zapala-a-la-gloria-con-la-seleccion-argentina), [Sevilla FC](https://sevillafc.es/actualidad/noticias/estreno-argentina-copa-america-canada-2024).
+
 ## 2026-11-23, Perfect Season NHL draft dates
 
 The squad reader uses the same career date checks as the era wheel. In a replay of the old import, Anaheim's 1990s stop offered Giovanni Fiore, Jacob Perreault and Jesse Blacker because their first NHL season was stored as `1`. The guard keeps the other 31 offers in the same order. Valid single-season records, careers spanning decades and saved Daily wheels still work.
