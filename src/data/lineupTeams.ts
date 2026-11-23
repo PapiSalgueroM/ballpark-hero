@@ -51,9 +51,8 @@ export function getRandomTeamAssignments(count = 11): TeamAssignment[] {
  * Porto B, Ajax Amsterdam U21, Juventus Next Gen, FC Barcelona Atletic): they
  * are different teams. Five clubs are stored under two names and both are
  * listed. A season split between two clubs is stored as "A / B" and an exact
- * match misses those, which costs 37 rows out of 15,444 (0.24 percent): those
- * men can still be typed in full and the validator still accepts them, they
- * are simply not suggested.
+ * match misses those. Mixed admits individually verified split rows from
+ * buildXiVerifiedClubRows because the picker requires selecting a result.
  *
  * THIS LIST IS DUPLICATED in supabase/functions/validate-player/index.ts,
  * which cannot import from src. simValidatePlayerRecords section 7 holds the
