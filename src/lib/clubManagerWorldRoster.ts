@@ -33,6 +33,8 @@ export interface WorldRosterState {
   curve?: number;
 }
 export type WorldRosterCareer = CareerState & { squad: WorldRosterPlayer[]; worldRoster?: WorldRosterState };
+export type WorldRosterContext = Pick<WorldRosterCareer, 'eraId' | 'startYear' | 'season' | 'worldRoster'>;
+type WorldRosterWriteContext = WorldRosterContext & Pick<WorldRosterCareer, 'clubName' | 'squad'>;
 export interface WorldRosterTransfer {
   player: WorldRosterPlayer;
   from: string | null;
@@ -70,7 +72,7 @@ export function plainCopy<T>(value: T): T {
   }
   return value;
 }
-function yearOf(career: CareerState): number | null {
+function yearOf(career: WorldRosterContext): number | null {
   const start = career.startYear === undefined ? 2026 : career.startYear;
   if (!count(start) || !count(career.season) || career.season < 1) return null;
   const year = start + career.season - 1;
@@ -167,9 +169,9 @@ function decodeRows(saved: unknown): unknown[] | null {
 }
 
 /** Missing or malformed optional data stays inactive and is never repaired by a read. */
-export function readWorldRoster(career: CareerState): WorldRosterState | null {
+export function readWorldRoster(career: WorldRosterContext): WorldRosterState | null {
   const year = yearOf(career);
-  const raw: unknown = (career as WorldRosterCareer).worldRoster;
+  const raw: unknown = career.worldRoster;
   if (year === null || !object(raw) || raw.version !== 1 || raw.eraId !== (career.eraId ?? 'now') || !Array.isArray(raw.records)) return null;
   if (raw.packedFormat !== undefined && (raw.packedFormat !== 'rows-v1' || raw.packedRecords === undefined)) return null;
   let records: unknown[] = raw.records;
@@ -223,8 +225,8 @@ interface ViewHit {
 const viewCache = new WeakMap<object, ViewHit>();
 
 /** The verified ledger for read only engine paths, shared between calls: never mutate what it returns. */
-export function worldRosterView(career: CareerState): WorldRosterState | null {
-  const raw: unknown = (career as WorldRosterCareer).worldRoster;
+export function worldRosterView(career: WorldRosterContext): WorldRosterState | null {
+  const raw: unknown = career.worldRoster;
   if (!object(raw)) return null;
   const year = yearOf(career);
   const hit = viewCache.get(raw);
@@ -259,7 +261,7 @@ export function compactWorldRoster(state: WorldRosterState): WorldRosterState {
 }
 
 /** Fresh transactions supply their actual source club; later moves carry this key unchanged. */
-export function worldRosterKey(career: CareerState, originClub: string, player: CMPlayer, since?: number): string | null {
+export function worldRosterKey(career: WorldRosterContext, originClub: string, player: CMPlayer, since?: number): string | null {
   const year = yearOf(career);
   if (year === null || !text(originClub) || !validPlayer(player) || year < player.age || (since !== undefined && (!count(since) || since > year - (career.startYear ?? 2026)))) return null;
   const carried = (player as WorldRosterPlayer).worldRosterKey;
@@ -279,7 +281,9 @@ export function worldRosterKey(career: CareerState, originClub: string, player: 
 /* Round 1344, the lead's ruling 4: `pack` false hands the ledger back unpacked, so a window that records several
    deals between other clubs packs it once at the end (recordAiDeals in clubManager.ts) instead of once a deal. The
    rules are the same either way; only the last step is left to the caller. */
-export function recordWorldRosterTransfer(career: CareerState, transfer: WorldRosterTransfer, pack = true): WorldRosterCareer {
+export function recordWorldRosterTransfer<T extends WorldRosterWriteContext>(
+  career: T, transfer: WorldRosterTransfer, pack = true,
+): T & Pick<WorldRosterCareer, 'worldRoster'> {
   const year = yearOf(career);
   const held = worldRosterView(career);
   /* Release AZ, the lead's ruling Y2 (ruling C3 of Release AW): a ledger the reader cannot verify reads as
@@ -350,7 +354,7 @@ export function snapshotWorldRosterClub(career: CareerState, club: string, playe
 }
 
 /** Older records retain ownership, but their old payloads are not presented as current-year players. */
-export function worldRosterClub(career: CareerState, club: string, fallback: readonly WorldRosterPlayer[], year = yearOf(career)): readonly WorldRosterPlayer[] {
+export function worldRosterClub(career: WorldRosterContext, club: string, fallback: readonly WorldRosterPlayer[], year = yearOf(career)): readonly WorldRosterPlayer[] {
   const held = worldRosterView(career);
   if (!held || year === null || year !== yearOf(career) || !text(club)) return fallback;
   const records = held.records;
