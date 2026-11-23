@@ -62,9 +62,16 @@ export const WRITERS = {
   '/nba-front-office': { kind: 'literal', file: 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx' },
   '/nba-my-career': { kind: 'literal', file: 'src/components/us-career/UsCareerBoard.tsx', indirect: ['saveValue(JSON.stringify(', 'localStorage.setItem(pending.key, pending.value)'] },
   '/mlb-my-career': { kind: 'literal', file: 'src/components/us-career/UsCareerBoard.tsx', indirect: ['saveValue(JSON.stringify(', 'localStorage.setItem(pending.key, pending.value)'] },
-  '/mlb-front-office': { kind: 'literal', file: 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', unset: { draftBatchesLeft: 'written as undefined outside a draft, which JSON drops' } },
+  '/mlb-front-office': { kind: 'literal', file: 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', unset: {
+    draftBatchesLeft: 'written as undefined outside a draft, which JSON drops',
+    roundHistory: 'written after a played round for the same team and season',
+  } },
   '/nhl-my-career': { kind: 'literal', file: 'src/components/us-career/UsCareerBoard.tsx', indirect: ['saveValue(JSON.stringify(', 'localStorage.setItem(pending.key, pending.value)'] },
-  '/nhl-front-office': { kind: 'literal', file: 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx' },
+  '/nhl-front-office': { kind: 'literal', file: 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', unset: {
+    lastRound: 'written after a round has a held result',
+    roundHistory: 'written when the franchise has a round history',
+    draftShortlist: 'written when the shortlist holds prospects',
+  } },
   '/aussie-rules-manager': { kind: 'whole', file: 'src/hooks/useAussieRulesLeague.ts' },
   '/nrl-team-manager': { kind: 'whole', file: 'src/pages/NrlTeamManager.tsx', indirect: [
     'resolveContinueSave(NRL_SAVE_ENTRY, search)', 'const raw = JSON.stringify(next);',

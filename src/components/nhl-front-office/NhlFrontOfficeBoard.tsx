@@ -4,6 +4,9 @@ import { buildDraftNight } from '@/lib/draftNight';
 import type { DraftNight } from '@/lib/draftNight';
 import { Briefcase, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
+import SaveMovedNotice from '@/components/SaveMovedNotice';
+import { backupKeysOf, copyAside, routeSaveEntry } from '@/lib/brokenSaveRecovery';
+import { holdPendingSave } from '@/lib/safeStorage';
 import { NHL_TEAMS, NHL_TEAM_MAP } from '@/data/conquestDataNhl';
 import {
   initNhlLeague, simNhlRound, nhlFoStandings, runNhlFoPlayoffs, nhlOffseason,
@@ -355,6 +358,8 @@ export default function NhlFrontOfficeBoard() {
   const [draftNight, setDraftNight] = useState<DraftNight | null>(null);
   const [picksLeft, setPicksLeft] = useState(0);
   const [draftBatchesLeft, setDraftBatchesLeft] = useState<number | null>(null);
+  const legacyRecap = useRef<{ raw: string; draft: string | null } | null>(null);
+  const [recapWrite, setRecapWrite] = useState<'failed' | 'moved' | null>(null);
   const draftAction = useRef(false);
   useEffect(() => { draftAction.current = false; }, [league, draftClass, picksLeft, draftBatchesLeft]);
   const [tradePartner, setTradePartner] = useState('');
@@ -481,6 +486,7 @@ export default function NhlFrontOfficeBoard() {
          save from before this round has nothing to draw, so it opens on the
          draft, which is where the recap's only button leads. */
       if (s.postseason) { setSeries(s.postseason.series); setChampion(s.postseason.champion); setGradeLine(s.postseason.gradeLine ?? null); }
+      if (!s.fired && s.phase === 'recap' && !s.postseason) legacyRecap.current = { raw, draft: null };
       if (s.fired) setPhase('fired');
       else if (s.phase !== 'recap') setPhase(s.phase);
       else if (s.postseason) setPhase('recap');
@@ -489,6 +495,41 @@ export default function NhlFrontOfficeBoard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const retryLegacyDraft = useCallback(() => {
+    const pending = legacyRecap.current;
+    if (!pending?.draft) return true;
+    const { raw, draft } = pending;
+    const refuse = (status: 'failed' | 'moved') => {
+      setRecapWrite(status);
+      return false;
+    };
+    try {
+      if (localStorage.getItem(SAVE_KEY) !== raw) return refuse('moved');
+      const entry = routeSaveEntry('/nhl-front-office');
+      if (!entry) return refuse('failed');
+      let backup = backupKeysOf(entry, localStorage).find(key => localStorage.getItem(key) === raw);
+      if (backup === undefined) {
+        const copy = copyAside(entry, localStorage, undefined, false, { raw, slot: 1 });
+        if (copy.ok && copy.backupKey) backup = copy.backupKey;
+      }
+      const kept = backup !== undefined && localStorage.getItem(backup) === raw;
+      if (localStorage.getItem(SAVE_KEY) !== raw) return refuse('moved');
+      if (!kept) return refuse('failed');
+      localStorage.setItem(SAVE_KEY, draft);
+      if (localStorage.getItem(SAVE_KEY) !== draft) return refuse('failed');
+      legacyRecap.current = null;
+      setRecapWrite(null);
+      return true;
+    } catch {
+      setRecapWrite('failed');
+      return false;
+    }
+  }, []);
+
+  useEffect(() => {
+    if (recapWrite === 'failed') return holdPendingSave(retryLegacyDraft);
+  }, [recapWrite, retryLegacyDraft]);
+
   const persist = useCallback((patch: Partial<SaveShape>, lg: NhlLeague | null, team: string) => {
     try {
       if (!lg) return false;
@@ -496,17 +537,23 @@ export default function NhlFrontOfficeBoard() {
       const history = readFoRoundHistory(roundHistory.current, lg, team, NHL_FO_ROUNDS);
       const canPin = (patch.phase ?? phase) === 'draft' && (patch.picksLeft ?? picksLeft) > 0;
       const shortlist = canPin ? validDraftShortlist(patch.draftShortlist ?? draftShortlist, patch.draftClass === undefined ? draftClass : patch.draftClass) : [];
-      localStorage.setItem(SAVE_KEY, JSON.stringify({
+      const bytes = JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
         ...(draftBatchesLeft !== null ? { draftBatchesLeft } : {}),
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { series, champion, gradeLine } : null,
         ...(gmLive.current ? { gm: gmLive.current } : {}), ...patch, lastRound: result ?? undefined, roundHistory: history ?? undefined,
         draftShortlist: shortlist.length ? shortlist : undefined,
-      } satisfies SaveShape));
+      } satisfies SaveShape);
+      const legacy = legacyRecap.current;
+      if (legacy) {
+        legacy.draft ??= bytes;
+        return retryLegacyDraft();
+      }
+      localStorage.setItem(SAVE_KEY, bytes);
       return true;
     } catch { return false; }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, draftShortlist]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, draftShortlist, retryLegacyDraft]);
 
   const label = (abbr: string) => {
     const t = NHL_TEAM_MAP.get(abbr);
@@ -1169,6 +1216,14 @@ export default function NhlFrontOfficeBoard() {
     },
     career: careerOf(league),
   } : null;
+
+  if (recapWrite === 'moved') return <SaveMovedNotice message="This franchise changed in another tab. Reload to continue." />;
+  if (recapWrite === 'failed') return (
+    <div role="alert" className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
+      <p>Your season recap is still saved. Keep this page open and retry saving the draft.</p>
+      <button type="button" onClick={retryLegacyDraft} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
+    </div>
+  );
 
   if (phase === 'pick' || !league || !my) {
     return (
