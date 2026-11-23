@@ -1,10 +1,28 @@
 ## 2026-11-23, Perfect Season NHL draft dates
 
-The squad reader now uses the same career date checks as the era wheel. Anaheim's 1990s stop previously offered Giovanni Fiore, Jacob Perreault and Jesse Blacker because the source gave their first NHL season as `1`. Exact replay kept the other 31 offers in the same order. Valid single-season records, careers spanning decades and previous Daily wheel saves passed.
+The squad reader uses the same career date checks as the era wheel. In a replay of the old import, Anaheim's 1990s stop offered Giovanni Fiore, Jacob Perreault and Jesse Blacker because their first NHL season was stored as `1`. The guard keeps the other 31 offers in the same order. Valid single-season records, careers spanning decades and saved Daily wheels still work.
 
-A bounded read found the same 69 suspect source rows as the October audit. Fifteen stop and player pairs were guaranteed to make an offer under at least one current squad query regardless of ties in the source ranking. Hockey Grid's own matcher admitted none of the 69 across 171 criterion pairs, and Puck Detective's current paths use the roster data instead. The malformed source rows still need a separate factual repair. [Ducks on Fiore's debut](https://www.nhl.com/ducks/news/ducks-acquire-murphy-from-coyotes-in-exchange-for-fiore-303310118), [AHL on Fiore](https://theahl.com/news/ducks-coyotes-trade-prospects), [Montréal on Perreault's debut](https://www.nhl.com/canadiens/news/canadiens-acquire-forward-jacob-perreault-from-the-anaheim-ducks), [Ducks media guide](https://media.d3.nhle.com/image/private/t_document/prd/sfpgokhayv3na9l383jq.pdf), [Anaheim career totals](https://www.eliteprospects.com/team/1580/anaheim-ducks/stats/all-time/total?nation=CAN&page=3).
+The two migrations below corrected 69 source records in production. The date guard protects new drafts if a future import repeats that failure. Existing Daily drafts resume with their saved roster and wheel.
 
-All 33 focused tests, application types, the production build and all 15 built-site checks passed. The old built route let a phone browser draft Blacker into defense. At 320 and 390 pixels the fixed route offered only the 31 surviving cards and drafted Teemu Selänne on the same wheel stop. The broader multi-sport simulation's live squad section was excluded by the offline runner.
+After syncing both migrations, 44 focused tests, the app typecheck, the production build, all 15 built-site checks and the NHL import harness passed. The old route let a phone browser draft Blacker into defense. The guarded route at 320 and 390 pixels offered the 31 valid cards and drafted Teemu Selänne at the same stop. The broader multi-sport simulation's live squad section was skipped by the offline runner.
+
+## 2026-11-23, NHL plus-minus and penalty minutes
+
+The NHL regular-season summary covers all 69 repaired imports at their original team and season cutoffs. Independent season lines confirmed both fields on all 42 rows that needed changes. The second migration corrects 33 plus-minus values and 40 penalty-minute values, including 21 negative penalty totals from the old import. Each ledger row records the independent source. Hunter Drew's five penalty minutes also match the official game log and box score. [NHL skater stats](https://www.nhl.com/stats/skaters), [Drew's game log](https://api-web.nhle.com/v1/player/8481003/game-log/20212022/2), [San Jose box score](https://api-web.nhle.com/v1/gamecenter/2021021285/boxscore).
+
+The replay applied the original migration to all 6,353 captured source rows before comparing the second migration. Both wheel orders, 222 draft squads and 7,666 offers, their ratings, all 171 Grid criterion pairs and all 98 published boards matched. A control changed an eligible defenseman's rating through plus-minus and held it steady when only penalty minutes changed. All 42 corrected players remain below the draft's 15-game minimum.
+
+Isolated PostgreSQL 18.7 checked the exact 42 changed rows and preserved every other column. The forward and reverse reruns made no writes, six changed source controls rolled back the whole transaction, and a relocated source row corrected without touching the record that reused its old ID. The NHL import harness catches both a copied negative penalty total and a false draft admission.
+
+## 2026-11-23, NHL skater import repair
+
+All 69 rows flagged in the October audit now have a matching official NHL player ID and an independent regular-season source. The migration corrects the first season, games, goals, assists and points using the season already recorded on each row. The official player IDs and independent sources are in the migration ledger. A few of these players have appearances in later seasons, and the repaired rows use their original cutoff.
+
+A replay of all 6,353 source rows preserved the 222 full and 194 legacy wheel stops in order, the first 1,000 eligible wheel rows, all 171 Hockey Grid answer lists and their rarity ordering, and all 98 published NHL boards. The skater replay found 15 incorrect draft offers across 10 stops and removed them. All repaired players had between one and six NHL games at the recorded cutoff.
+
+The exact SQL passed on isolated PostgreSQL 18.7. It repaired all 69, preserved other columns, made no writes on a second run and reversed exactly. A changed generated ID still resolved the correct natural identity. Eleven changed, missing or duplicate record controls rejected the whole transaction. The app typecheck, build, 15 built-site checks and the NHL import harness passed. Its copied 15-game row triggered draft eligibility.
+
+The original row values are embedded in the repair ledger for rollback. The official comparison also surfaced 33 plus-minus differences and 40 penalty-minute differences. Those fields still need independent review.
 
 ## 2026-11-23, Hockey Higher or Lower goalie points
 
