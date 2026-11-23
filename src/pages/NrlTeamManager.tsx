@@ -44,7 +44,9 @@ import {
 import { judiciaryNeedsResponse, nrlJudiciaryBans, nrlJudiciaryCase } from '@/lib/nrlJudiciary';
 import { nrlLeagueFixtures, nrlLeagueLeaders, nrlLeagueMatch } from '@/lib/nrlLeagueBook';
 import { nrlScorePoints, nrlScoringLeaders, nrlSquadSeasonStats, nrlTryLeaders, type NrlSquadStatsScope } from '@/lib/nrlPlayerScoring';
-import { NRL_SAVE_ENTRY, nrlSeasonCanCredit, readNrlReplayCutoff, readNrlSaveSlot, writeNrlSaveSlot } from '@/lib/nrlSaveSlots';
+import {
+  NRL_SAVE_ENTRY, captureNrlSeasonCheckpoint, keepNrlSeasonCheckpoint, nrlSeasonCanCredit, readNrlReplayCutoff, readNrlSaveSlot, writeNrlSaveSlot,
+} from '@/lib/nrlSaveSlots';
 import { saveFence } from '@/lib/saveFence';
 import { reloadToRetryChunk } from '@/lib/freshBuild';
 import { holdPendingSave } from '@/lib/safeStorage';
@@ -2977,6 +2979,7 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
   const outOfWork = career?.outOfWork === true;
   const current = useRef(career);
   const committed = useRef(initial?.raw ?? null);
+  const committedSeason = useRef(initial?.career?.season ?? null);
   const [year, setYear] = useState<NrlYear>(initial?.career?.openingYear ?? 2026);
   const invalid = initial?.raw != null && initial.career === null;
   const arrival = useArrivalTop<HTMLHeadingElement>(showSlots ? 'slots' : !season ? 'choose' : outOfWork ? 'job-market' : `club-${season.year}`);
@@ -3015,7 +3018,11 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
 
   const persist = useCallback((next: NrlCareerState) => {
     const raw = JSON.stringify(next);
-    const outcome = writeNrlSaveSlot(entry.saveKey, committed.current, raw);
+    const prior = committedSeason.current;
+    const before = committed.current;
+    const checkpoint = before !== null && prior?.phase === 'complete' && prior.year < next.season.year
+      ? captureNrlSeasonCheckpoint(entry.saveKey, before, next) : null;
+    const outcome = writeNrlSaveSlot(entry.saveKey, before, raw);
     if (outcome === 'moved') {
       setChanged(true);
       return outcome;
@@ -3025,7 +3032,11 @@ function NrlManagerScreen({ entry, showSlots, rules }: {
       return 'too-large';
     }
     setSaveTooLarge(false);
-    if (outcome === 'written') committed.current = raw;
+    if (outcome === 'written') {
+      committed.current = raw;
+      committedSeason.current = next.season;
+      if (checkpoint) keepNrlSeasonCheckpoint(checkpoint, raw);
+    }
     setSaveFailed(outcome === 'failed');
     current.current = next;
     setCareer(next);
