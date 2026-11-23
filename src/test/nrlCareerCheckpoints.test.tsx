@@ -336,6 +336,21 @@ describe('NRL automatic season checkpoint', () => {
     expect(raw(held) === bytes(old)).toBe(true);
   });
 
+  it.each(['an unreadable point', 'a future point'] as const)('archives the exact bytes of %s before keeping a healthy checkpoint', fault => {
+    const review = closedSeason(createNrlCareer('storm', 620));
+    const before = bytes(review);
+    const prior = fault === 'an unreadable point' ? '{partial' : ' ' + bytes({ ...review, version: 3 });
+    const key = seasonPointKey(secondKey);
+    put(secondKey, before);
+    put(key, prior);
+    open('?slot=2');
+    keepPlaying(2026);
+    expect(readNrlCareerSave(raw(secondKey))?.season.year).toBe(2027);
+    expect(raw(key) === before).toBe(true);
+    const [archive] = backupKeysOf(NRL_SAVE_SLOTS[1], localStorage);
+    expect(raw(archive) === prior).toBe(true);
+  });
+
   it('keeps a newer generation and active save written just after an automatic restore lands', () => {
     const review = closedSeason(createNrlCareer('storm', 620));
     const active = bytes(reduceNrlCareer(review, { type: 'startNextSeason' }));

@@ -117,9 +117,8 @@ export function captureNrlSeasonCheckpoint(key: string, raw: string, next: NrlCa
     let archivePrior = false;
     if (prior !== null) {
       const previous = readNrlCareerSave(prior);
-      if (!previous || previous.season.phase !== 'complete') return null;
-      archivePrior = !sameCheckpointCareer(previous, closed);
-      if (!archivePrior && previous.season.year >= closed.season.year) return null;
+      archivePrior = !previous || previous.season.phase !== 'complete' || !sameCheckpointCareer(previous, closed);
+      if (previous && !archivePrior && previous.season.year >= closed.season.year) return null;
     }
     if (storage.getItem(key) !== raw || storage.getItem(fenceKeyOf(key)) !== storedGeneration || saveFence.moved(key)) return null;
     return { key, raw, prior, nextGeneration, archivePrior };
@@ -276,9 +275,7 @@ export function restoreNrlCheckpoint(entry: ContinueSave, active: string, checkp
     if (!unchanged()) return 'moved';
 
     const career = careerId(current);
-    const latestHistory = current.history.at(-1)?.year;
-    const completed = kind === 'season' && current.season.phase === 'complete'
-      ? Math.max(latestHistory ?? 0, current.season.year) : latestHistory;
+    const completed = current.history.at(-1)?.year;
     if (completed !== undefined) {
       previous = storage.getItem(receipt);
       const prior = replayCutoff(previous);
