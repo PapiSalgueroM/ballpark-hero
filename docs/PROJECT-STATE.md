@@ -1,3 +1,11 @@
+## 2026-11-23, NHL plus-minus and penalty minutes
+
+The NHL regular-season summary covers all 69 repaired imports at their original team and season cutoffs. Independent season lines confirmed both fields on all 42 rows that needed changes. The second migration corrects 33 plus-minus values and 40 penalty-minute values, including 21 negative penalty totals from the old import. Each ledger row records the independent source. Hunter Drew's five penalty minutes also match the official game log and box score. [NHL skater stats](https://www.nhl.com/stats/skaters), [Drew's game log](https://api-web.nhle.com/v1/player/8481003/game-log/20212022/2), [San Jose box score](https://api-web.nhle.com/v1/gamecenter/2021021285/boxscore).
+
+The replay applied the original migration to all 6,353 captured source rows before comparing the second migration. Both wheel orders, 222 draft squads and 7,666 offers, their ratings, all 171 Grid criterion pairs and all 98 published boards matched. A control changed an eligible defenseman's rating through plus-minus and held it steady when only penalty minutes changed. All 42 corrected players remain below the draft's 15-game minimum.
+
+Isolated PostgreSQL 18.7 checked the exact 42 changed rows and preserved every other column. The forward and reverse reruns made no writes, six changed source controls rolled back the whole transaction, and a relocated source row corrected without touching the record that reused its old ID. The NHL import harness catches both a copied negative penalty total and a false draft admission.
+
 ## 2026-11-23, NHL skater import repair
 
 All 69 rows flagged in the October audit now have a matching official NHL player ID and an independent regular-season source. The migration corrects the first season, games, goals, assists and points using the season already recorded on each row. The official player IDs and independent sources are in the migration ledger. A few of these players have appearances in later seasons, and the repaired rows use their original cutoff.
