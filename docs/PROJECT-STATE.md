@@ -4,13 +4,15 @@ Prepared the Club Manager part of the weekly review as its own branch. Generated
 
 Old Korean, Japanese and Chinese jobs retain the appropriate generated market after a club move. An England-only save does not activate the Korean market. An academy graduate's qualifying league appearances still count for the club's objective if that player is loaned, sold, or released. IDs count once per club and league. The isolated engine and game fixtures passed 321 focused tests and seven copied faults, including moves between Asian leagues and a neutral England save.
 
-The paired 15-season England save budget reproduced the published baseline exactly. Everton and Lincoln City exceeded the 234,000-character test budget in both builds, and both saves still wrote successfully. That older capacity issue remains open. This slice changes no limit or historical record to satisfy that check.
+The paired 15-season England save budget reproduced the published baseline exactly. Everton and Lincoln City exceeded the 234,000-character test budget in both builds, and both saves still wrote successfully. That older capacity issue remains open.
+
+The combined #1036 candidate passed 258 focused tests. Chromium at 320 and 390 pixels showed 21 local market cards per league, blocked a sixth foreign signing and preserved a local signing at the limit through reload. A qualifying graduate's appearances still counted after a sale and reload. The league tile showed PSG gaining three points while staying third, and the Stats screen kept the squad's goals available after Champions League and Europa League exits. A tournament-wide Golden Boot still needs all clubs' scorers.
 
 ## 2026-11-23, Soccer Grid allowance recovery
 
 Soccer Grid keeps its player search when the AI fallback runs out of daily checks. Existing career-record and cached verdicts can still settle a guess. An unverified check leaves the saved board and guess count alone.
 
-PR #1039 passed 65 focused tests, all 15 built-site checks, five quota controls and nine offline validator checks. At 320 and 390 pixels, Chromium kept 14 guesses through the exhausted response. A later record-backed answer and a cached answer each counted once and survived reload. The backend and its rate limits are unchanged.
+PR #1039 passed 65 focused tests, all 15 built-site checks, five quota controls and nine offline validator checks. The live Chromium replay at 320 and 390 pixels kept 14 guesses and the exact saved board through the exhausted response. A later record-backed answer and a cached answer each counted once and survived reload. The browser continues to respect the validator's daily allowance and rate limits. The matching report was closed after the live replay.
 
 ## 2026-11-23, Career Ladder completed seasons
 
