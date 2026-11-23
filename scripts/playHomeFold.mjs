@@ -401,7 +401,7 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
     },
     soccerCareerSave: { currentClub: 'Planted Town', age: 24, retired: false },
   };
-  const WANT_LINES = { '/club-manager?slot=1': 'Slot 1 · Planted FC, season 3', '/soccer-career': 'Planted Town, age 24' };
+  const WANT_LINES = { '/club-manager?slot=1': 'Slot 1 · Planted FC, season 3', '/soccer-career': 'Slot 1 · Planted Town, age 24' };
 
   const visit = async ({ saves = false, fav = null, choose = null }) => {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
