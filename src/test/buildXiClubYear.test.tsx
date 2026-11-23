@@ -334,9 +334,22 @@ describe('Build Your XI historical club picks', () => {
     expect(io.queries.length).toBeGreaterThan(0);
   });
 
+  const splitPicks = [
+    ['Chelsea', 'Andrey Santos', 163068, 'andrey santos', 'RC Strasbourg Alsace / Chelsea FC', 'Brazil', 'Central Midfield', 2025, 20, 43_000_000],
+    ['Juventus', 'João Cancelo', 49328, 'joao cancelo', 'Juventus FC / Manchester City', 'Portugal', 'Right-Back', 2019, 24, 59_000_000],
+    ['Benfica', 'Sébastien Corchia', 49525, 'sebastien corchia', 'SL Benfica / RCD Espanyol Barcelona', 'France', 'Right-Back', 2019, 28, 3_000_000],
+    ['Celtic', 'Jeremy Toljan', 49458, 'jeremy toljan', 'Celtic FC / US Sassuolo', 'Germany', 'Right-Back', 2019, 24, 5_000_000],
+    ['Galatasaray', 'Şener Özbayraklı', 49713, 'sener ozbayrakli', 'Fenerbahce / Galatasaray', 'Türkiye', 'Right-Back', 2019, 28, 2_000_000],
+    ['Inter Milan', 'Cédric Soares', 49384, 'cedric soares', 'Southampton FC / Inter Milan', 'Portugal', 'Right-Back', 2019, 27, 13_000_000],
+    ['Inter Milan', 'Sime Vrsaljko', 50341, 'sime vrsaljko', 'Atlético de Madrid / Inter Milan', 'Croatia', 'Right-Back', 2018, 25, 27_000_000],
+    ['Sporting CP', 'Bruno Gaspar', 49454, 'bruno gaspar', 'Sporting CP / Olympiacos Piraeus', 'Angola', 'Right-Back', 2019, 25, 5_000_000],
+    ['Sporting CP', 'Thierry Correia', 49423, 'thierry correia', 'Sporting CP / Valencia CF', 'Portugal', 'Right-Back', 2019, 19, 6_000_000],
+  ] as const;
+
   const splitRows = [
-    { id: 163068, player_name: 'Andrey Santos', name_folded: 'andrey santos', club: 'RC Strasbourg Alsace / Chelsea FC', nationality: 'Brazil', position: 'Central Midfield', year: 2025, age: 20, market_value_usd: 43_000_000 },
-    { id: 49328, player_name: 'João Cancelo', name_folded: 'joao cancelo', club: 'Juventus FC / Manchester City', nationality: 'Portugal', position: 'Right-Back', year: 2019, age: 24, market_value_usd: 59_000_000 },
+    ...splitPicks.map(([, name, id, foldedName, club, nationality, position, year, age, value]) => ({
+      id, player_name: name, name_folded: foldedName, club, nationality, position, year, age, market_value_usd: value,
+    })),
     { id: 49664, player_name: 'Luke Bolton', name_folded: 'luke bolton', club: 'Wycombe Wanderers / Manchester City / Luton Town', nationality: 'England', position: 'Right-Back', year: 2019 },
   ];
 
@@ -354,18 +367,19 @@ describe('Build Your XI historical club picks', () => {
     };
   }
 
-  it.each([
-    ['Chelsea', 'CDM', 5, 'Andrey Santos', 'RC Strasbourg Alsace / Chelsea FC', 43_000_000],
-    ['Juventus', 'RB', 4, 'João Cancelo', 'Juventus FC / Manchester City', 59_000_000],
-  ] as const)('finds and accepts the verified canonical split record for %s', async (team, role, index, name, club, value) => {
+  it.each(splitPicks)('finds and accepts the verified canonical split record for %s, %s', async (team, name, id, foldedName, club, nationality, position, year, age, value) => {
     useSplitRows();
+    const [role, index] = position === 'Right-Back' ? ['RB', 4] as const : ['CDM', 5] as const;
     openSavedDraft({ mode: 'mixed' }, [team], [index]);
-    await searchClubPick(name, role);
+    await searchClubPick(foldedName, role);
     fireEvent.click(option(name)); await flush();
     expect(screen.getByRole('button', { name: 'Submit Team' })).toBeVisible();
     expect(JSON.parse(localStorage.getItem(draftKey)!).slots.at(-1)[1]).toMatchObject({
-      playerName: name, assignedTeam: team, pick: { club, value },
+      playerName: name, assignedTeam: team, pick: { age, club, nationality, rawPosition: position, value, year },
     });
+    const proof = `and(id.eq.${id},name_folded.eq.${JSON.stringify(foldedName)},club.eq.${JSON.stringify(club)})`;
+    expect(io.queries).toHaveLength(2);
+    expect(io.queries.every(query => query.operations.some(([method, args]) => method === 'or' && String(args[0]).includes(proof)))).toBe(true);
     expect(io.fetches.some(url => url.includes('validate-player'))).toBe(false);
   });
 

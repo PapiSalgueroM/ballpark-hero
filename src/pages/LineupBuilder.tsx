@@ -189,7 +189,12 @@ const LineupBuilder = () => {
     if (!currentTeam) return null;
     const clubNames = clubTableNames(currentTeam.name);
     const mixedClub = draftChoice.mode === 'mixed' && !currentTeam.isNation;
-    const split = mixedClub ? BUILD_XI_VERIFIED_SPLIT_ROWS[currentTeam.name] : undefined;
+    const splitRows = mixedClub ? BUILD_XI_VERIFIED_SPLIT_ROWS[currentTeam.name] : undefined;
+    const combinedClubFilter = splitRows?.length ? [
+      `club.in.(${clubNames.map(name => JSON.stringify(name)).join(',')})`,
+      ...splitRows.map(({ id, foldedName, clubs }) =>
+        `and(id.eq.${id},name_folded.eq.${JSON.stringify(foldedName)},club.eq.${JSON.stringify(clubs)})`),
+    ].join(',') : null;
     const source: PlayerSourceConfig = {
       ...SOCCER_MARKET_VALUE_SOURCE,
       ...(draftChoice.mode === 'club-era' ? {
@@ -198,7 +203,7 @@ const LineupBuilder = () => {
       } : {}),
       filters: currentTeam.isNation
         ? [{ column: 'nationality', op: 'eq', value: nationSearchTerm(currentTeam.name) }]
-        : split ? [{ op: 'or', value: `club.in.(${clubNames.map(name => JSON.stringify(name)).join(',')}),and(id.eq.${split.id},name_folded.eq.${JSON.stringify(split.foldedName)},club.eq.${JSON.stringify(split.clubs)})` }]
+        : combinedClubFilter ? [{ op: 'or', value: combinedClubFilter }]
         : [{ column: 'club', op: 'in', value: clubNames }],
       ...(mixedClub ? {
         fallbackRows: BUILD_XI_VERIFIED_CLUB_ROWS[currentTeam.name],

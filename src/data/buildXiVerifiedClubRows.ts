@@ -29,14 +29,48 @@ export const BUILD_XI_VERIFIED_CLUB_ROWS: Partial<Record<string, Record<string, 
 };
 
 /** Exact stored identities for verified all-time club picks on split rows. */
-export const BUILD_XI_VERIFIED_SPLIT_ROWS: Partial<Record<string, { id: number; foldedName: string; clubs: string }>> = {
+export const BUILD_XI_VERIFIED_SPLIT_ROWS: Partial<Record<string, { id: number; foldedName: string; clubs: string }[]>> = {
+  // Corchia started for Benfica against Galatasaray in the Europa League.
+  // https://www.slbenfica.pt/en-us/agora/noticias/2018-2019/02/14/direto-futebol-galatasaray-benfica-16-avos-final-liga-europa
+  // https://www.uefa.com/MultimediaFiles/Download/Publications/uefaorg/General/02/61/96/23/2619623_DOWNLOAD.pdf
+  Benfica: [{ id: 49525, foldedName: 'sebastien corchia', clubs: 'SL Benfica / RCD Espanyol Barcelona' }],
+
+  // Toljan played for Celtic against Valencia in the Europa League.
+  // https://www.valenciacf.com/en-match-report-kevin-gameiro-fires-valencia-cf-into-the-uel-last-16-1-0-2019-02-21
+  // https://www.uefa.com/uefaeuropaleague/match/2026893--valencia-vs-celtic/
+  Celtic: [{ id: 49458, foldedName: 'jeremy toljan', clubs: 'Celtic FC / US Sassuolo' }],
+
   // Chelsea's debut report and Manchester United's record of his Chelsea spell.
   // https://www.chelseafc.com/en/news/article/match-report-es-tunis-0-3-chelsea
   // https://www.manutd.com/en/teams/mens-team/andrey-santos
-  Chelsea: { id: 163068, foldedName: 'andrey santos', clubs: 'RC Strasbourg Alsace / Chelsea FC' },
+  Chelsea: [{ id: 163068, foldedName: 'andrey santos', clubs: 'RC Strasbourg Alsace / Chelsea FC' }],
+
+  // Özbayraklı came on for Galatasaray against Paris Saint-Germain.
+  // https://www.galatasaray.org/haber/futbol/sampiyonlar%3Dligi/paris-saint-germain-5-0-galatasaray/45687
+  // https://www.uefa.com/newsfiles/UCL/2020/2027105_FR.pdf
+  Galatasaray: [{ id: 49713, foldedName: 'sener ozbayrakli', clubs: 'Fenerbahce / Galatasaray' }],
+
+  'Inter Milan': [
+    // Soares started against Rapid Wien in the Europa League.
+    // https://www.inter.it/en/match_center/4439
+    // https://www.skysports.com/football/inter-milan-vs-sk-rapid-wien/teams/403957
+    { id: 49384, foldedName: 'cedric soares', clubs: 'Southampton FC / Inter Milan' },
+    // Vrsaljko played for Inter against Torino and in the Champions League.
+    // https://www.torinofc.it/sites/default/files/pdf/match_report/preview/2018/2018-19_A_UNICO_UNI_2_INTTOR.pdf
+    // https://www.uefa.com/MultimediaFiles/Download/Publications/uefaorg/General/02/61/96/22/2619622_DOWNLOAD.pdf
+    { id: 50341, foldedName: 'sime vrsaljko', clubs: 'Atlético de Madrid / Inter Milan' },
+  ],
 
   // Juventus's 2018/19 first team before the transfer to Manchester City.
   // https://www.juventus.com/en/news/articles/thank-you-for-everything-joao
   // https://www.mancity.com/news/first-team/first-team-news/2019/august/man-city-joao-cancelo-squad-number-confirmation
-  Juventus: { id: 49328, foldedName: 'joao cancelo', clubs: 'Juventus FC / Manchester City' },
+  Juventus: [{ id: 49328, foldedName: 'joao cancelo', clubs: 'Juventus FC / Manchester City' }],
+
+  // Correia replaced Gaspar for Sporting against Qarabağ in the Europa League.
+  // https://www.sporting.pt/pt/node/69397
+  // https://www.uefa.com/uefaeuropaleague/match/2025265--qarabag-vs-sporting-cp/
+  'Sporting CP': [
+    { id: 49454, foldedName: 'bruno gaspar', clubs: 'Sporting CP / Olympiacos Piraeus' },
+    { id: 49423, foldedName: 'thierry correia', clubs: 'Sporting CP / Valencia CF' },
+  ],
 };
