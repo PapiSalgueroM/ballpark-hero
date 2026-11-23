@@ -2,9 +2,9 @@
 
 A Champions League your club entered has a Top scorers tile from the group stage through the final. After elimination, the race still follows the other clubs. First-leg goals appear as soon as that match ends and stay on the board after reload. The return leg credits the rest of the round once. Extra-time goals count, while shootout kicks and own goals stay outside player totals.
 
-The Club Brugge replay went out in the group stage, then Arsenal beat Real Madrid 2–1 after extra time. In the Madrid replay, Vinicius Junior and Donyell Malen scored in the 1–1 first leg. Madrid won the second leg 1–0 and beat Porto 2–1 in the final with goals from Jude Bellingham and Rodrygo. Porto’s goal came from an own goal.
+The Club Brugge replay went out in the group stage, then Arsenal beat Real Madrid 2-1 after extra time. In the Madrid replay, Vinicius Junior and Donyell Malen scored in the 1-1 first leg. Madrid won the second leg 1-0 and beat Porto 2-1 in the final with goals from Jude Bellingham and Rodrygo. Porto’s goal came from an own goal. In another natural season, Madrid beat PSG on penalties after a 2-2 final and Kylian Mbappé won the scorer race with nine goals. The 2005-06 replay accounted for all 335 goals and left the award open because 150 had no recorded scorer.
 
-The season review and Past winners keep a confirmed award. A rollover that skips the league review keeps a finished Champions League award without adding a league finish to history. Older score-only editions still open and show that scorer records are unavailable. The separately simulated Champions League you watch from outside still has score and bracket coverage.
+The season review and Past winners keep a confirmed award. A rollover that skips the league review keeps a finished Champions League award without adding a league finish to history. Older score-only editions still open and show that scorer records are unavailable. Older careers at the first untouched group kickoff can start recording when their other groups are drawn. The separately simulated Champions League you watch from outside still has score and bracket coverage.
 
 Domestic cup PR #1059 is live with all 19 published browser checks green. It covers the award after elimination, a title win, and the firing-to-QPR rollover.
 

@@ -15432,13 +15432,17 @@ type SettledCupMatch = { home: string; away: string; hg: number; ag: number };
 function openChampionsLeagueScorers(state: CareerState): void {
   const group = state.uclGroup;
   const world = state.uclWorld;
-  const pristineTable = (table: readonly TableRow[]) => table.every(row => !row.w && !row.d && !row.l && !row.gf && !row.ga);
+  const pristineTable = (table: readonly TableRow[]) => Array.isArray(table)
+    && table.every(row => row && !row.w && !row.d && !row.l && !row.gf && !row.ga);
+  // An untouched older save can draw the other groups when this matchday settles.
+  const pristineWorld = world === undefined || (Array.isArray(world) && world.length > 0 && world.every(g =>
+    g?.matchday === 0 && Array.isArray(g.clubs) && g.clubs.length === 4 && pristineTable(g.table)));
   if (!group || group.matchday !== 0 || group.opponents.length !== 3 || !pristineTable(group.table)
-    || !world?.length || world.some(g => g.matchday !== 0 || g.clubs.length !== 4 || !pristineTable(g.table))
+    || !pristineWorld
     || state.uclScorers !== undefined || state.uclBracket?.length || state.worldComps?.ucl
     || state.handover || (state.season === 1 && state.midSeasonStart) || state.worldRatingRunIn
     || Object.keys(state.pairResults?.[UCL_GROUP_LEDGER] ?? {}).length) return;
-  const field = [state.clubName, ...group.opponents, ...world.flatMap(g => g.clubs)];
+  const field = [state.clubName, ...group.opponents, ...(world ?? []).flatMap(g => g.clubs)];
   if (new Set(field).size !== field.length) return;
   const fixtures = state.calendar.slice(state.week).filter(entry => entry.type === 'uclGroup' || entry.type === 'uclKo');
   const knockout = UCL_ORDER.slice(eraUclHasR16(state.eraId) ? 0 : 1);
@@ -15457,11 +15461,13 @@ function championsLeagueGroupScores(state: CareerState, md: number): SettledCupM
   const world = state.uclWorld;
   const scores = state.pairResults?.[UCL_GROUP_LEDGER];
   if (!group || group.matchday <= md || group.opponents.length !== 3 || !scores
-    || !world?.length || world.some(g => g.matchday <= md || g.clubs.length !== 4)) return null;
+    || !Array.isArray(world) || !world.length || world.some(g =>
+      !Number.isInteger(g?.matchday) || g.matchday <= md || !Array.isArray(g.clubs) || g.clubs.length !== 4)) return null;
   const pairs = [
     ...groupFixtures([state.clubName, ...group.opponents], md),
     ...world.flatMap(g => groupFixtures(g.clubs, md)),
   ];
+  if (new Set(pairs.flat()).size !== pairs.length * 2) return null;
   const matches: SettledCupMatch[] = [];
   for (const [home, away] of pairs) {
     const score = scores[`${home}|${away}`];

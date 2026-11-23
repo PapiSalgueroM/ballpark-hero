@@ -133,6 +133,65 @@ describe('Owned Champions League scorer settlement', () => {
     expectReconciled(opener.state, 16, 44);
   });
 
+  it('starts a pristine older draw whose other groups are created at the opening whistle', () => {
+    const fresh = tape(BRUGGE, () => startCareer('Club Brugge')).value;
+    const legacy = playTo(fresh, BRUGGE, 3).state;
+    delete legacy.uclWorld;
+    const loaded = loadCareer(JSON.stringify(legacy))!;
+    expect(loaded.uclGroup?.matchday).toBe(0);
+    expect(loaded.uclWorld).toBeUndefined();
+
+    const tracked = next(loaded, BRUGGE);
+    // Keep normal career kickoff rules active while holding scorer recording off.
+    const disabled = { ...loaded, uclScorers: null as unknown as CareerState['uclScorers'] };
+    const control = next(disabled, BRUGGE);
+    expect(tracked.draws).toEqual(control.draws);
+    expect(tracked.value.report).toEqual(control.value.report);
+    expect(scoreOnly(tracked.value.state)).toEqual(scoreOnly(control.value.state));
+    expect(tracked.value.state.uclWorld).toHaveLength(7);
+    expect(control.value.state.uclScorers).toBeNull();
+
+    const actualGoals = Object.values(tracked.value.state.pairResults?.[UCL_GROUP_LEDGER] ?? {})
+      .reduce((total, [home, away]) => total + home + away, 0);
+    expect(actualGoals).toBeGreaterThan(tracked.value.report!.homeGoals + tracked.value.report!.awayGoals);
+    expect(tracked.value.state.uclScorers?.nights).toBe(1);
+    const { home, away } = tracked.value.report!;
+    expect(tracked.value.state.uclScorers?.players.some(([, , club]) => club !== home && club !== away)).toBe(true);
+    expectReconciled(tracked.value.state, 16, actualGoals);
+    expect(championsLeagueScorerRace(tracked.value.state).status).toBe('racing');
+  });
+
+  it('keeps an older campaign score-only when its background groups need a midseason rebuild', () => {
+    const brugge = tape(BRUGGE, () => startCareer('Club Brugge')).value;
+    const legacy = scoreOnly(playTo(brugge, BRUGGE, 6).state);
+    delete legacy.uclWorld;
+    const loaded = loadCareer(JSON.stringify(legacy))!;
+    expect(loaded.uclGroup?.matchday).toBe(1);
+
+    const resumed = next(loaded, BRUGGE).value;
+    expect(resumed.report?.competition).toBe('uclGroup');
+    expect(resumed.state.uclGroup?.matchday).toBe(2);
+    expect(resumed.state.uclWorld).toHaveLength(7);
+    expect(resumed.state.uclScorers).toBeUndefined();
+    expect(championsLeagueScorerRace(resumed.state)).toMatchObject({ status: 'unavailable', leaders: [] });
+  });
+
+  it('reopens an old watched draw without opening an owned scorer ledger', () => {
+    const observer = tape(BRUGGE, () => startCareer('Everton')).value;
+    expect(observer.uclGroup).toBeNull();
+    expect(observer.worldComps?.ucl?.clubs).toHaveLength(36);
+    const legacy = playTo(observer, BRUGGE, 3).state;
+    delete legacy.worldComps!.ucl;
+    const reopened = loadCareer(JSON.stringify(legacy))!;
+    expect(reopened.worldComps?.ucl).toEqual(observer.worldComps?.ucl);
+
+    const skipped = next(reopened, BRUGGE).value.state;
+    expect(skipped.uclGroup).toBeNull();
+    expect(skipped.worldComps?.ucl).toEqual(reopened.worldComps?.ucl);
+    expect(skipped.uclScorers).toBeUndefined();
+    expect(championsLeagueScorerRace(skipped)).toMatchObject({ status: 'unavailable', leaders: [] });
+  });
+
   it('settles all 109 matches after Club Brugge leaves at the group stage', () => {
     const brugge = tape(BRUGGE, () => startCareer('Club Brugge')).value;
     const exit = playTo(brugge, BRUGGE, 21).state;
