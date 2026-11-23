@@ -393,7 +393,8 @@ export default function NbaFrontOfficeBoard() {
       setSaveWriteFailed(false);
       return true;
     } catch {
-      return refuse();
+      setSaveWriteFailed(true);
+      return false;
     }
   }, [markSaveMoved]);
 
