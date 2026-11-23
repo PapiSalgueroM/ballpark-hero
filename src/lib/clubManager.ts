@@ -79,6 +79,7 @@ import {
   type CupScorerCredit, type CupScorerLedger, type CupScorerRace, type CupScorerWinner,
 } from '@/lib/clubManagerCupScorers';
 import { HISTORIC_2005_CUP_ROSTERS } from '@/data/clubManagerHistoricCupRosters';
+import { OPENING_2026_CUP_SCORERS } from '@/data/clubManagerOpening2026CupScorers';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -15613,16 +15614,20 @@ function cupScorerCredit(state: CareerState, club: string, player: CMPlayer, pro
   };
 }
 
-/** Read the managed report's scorers and assign the background fixtures' fixed scores on separate keys. */
-function historicCupScorerPool(state: CareerState, club: string, excludes: ReadonlySet<string>): BookMan[] | undefined {
-  if (state.eraId !== 'era2005' || worldYear(state) !== 2005) return undefined;
-  const verified = HISTORIC_2005_CUP_ROSTERS.get(club);
-  if (!verified) return undefined;
+function unavailableCupScorers(state: CareerState, club: string, excludes: ReadonlySet<string>): Set<string> {
   const unavailable = new Set([...excludes, ...(state.goneNames ?? [])]);
   for (const loan of state.loanedOut ?? []) unavailable.add(loan.player.name);
   for (const record of worldRosterView(state)?.records ?? []) {
     if (record.owner !== club) unavailable.add(record.player.name);
   }
+  return unavailable;
+}
+
+function historicCupScorerPool(state: CareerState, club: string, excludes: ReadonlySet<string>): BookMan[] | undefined {
+  if (state.eraId !== 'era2005' || worldYear(state) !== 2005) return undefined;
+  const verified = HISTORIC_2005_CUP_ROSTERS.get(club);
+  if (!verified) return undefined;
+  const unavailable = unavailableCupScorers(state, club, excludes);
   const strength = strengthOf(state, club);
   // A verified scorer can have an earlier spelling in the saved roster.
   return verified.filter(({ name, legacyName }) =>
@@ -15630,10 +15635,11 @@ function historicCupScorerPool(state: CareerState, club: string, excludes: Reado
     .map(({ name, line }) => ({ n: name, p: CUP_LINE_POSITION[line], r: strength }));
 }
 
-function historicCupScorerCredit(club: string, name: string): CupScorerCredit {
-  return { id: JSON.stringify(['era2005', club, name]), name, club };
+function verifiedCupScorerCredit(era: string, club: string, name: string): CupScorerCredit {
+  return { id: JSON.stringify([era, club, name]), name, club };
 }
 
+/** Read the managed report's scorers and assign the background fixtures' fixed scores on separate keys. */
 function cupFixtureScorerCredits(
   state: CareerState, fixtures: readonly { home: string; away: string; hg?: number | null; ag?: number | null }[],
   roundKey: string, managed?: ManagedCupScorers,
@@ -15673,7 +15679,7 @@ function cupFixtureScorerCredits(
           if (!line) { credits.push(null); continue; }
           if (line.og) { credits.push('own-goal'); continue; }
           if (verified?.some(p => p.n === line.name && p.p !== 'GK')) {
-            credits.push(historicCupScorerCredit(club, line.name));
+            credits.push(verifiedCupScorerCredit('era2005', club, line.name));
             continue;
           }
           const named = (p: OppXiLine) => p.n === line.name && p.p !== 'GK';
@@ -15696,10 +15702,28 @@ function cupFixtureScorerCredits(
         candidates = pickOppSquad(roster)?.xi ?? thinBookEleven(state, club, roster)?.outfield ?? [];
       }
       const key = `${roundKey}|${home}|${away}|${club}`;
+      const opening = !own && state.eraId === DEFAULT_ERA_ID && state.season === 1 && worldYear(state) === 2026
+        ? OPENING_2026_CUP_SCORERS.get(club) : undefined;
+      const shirtNames = new Map<string, string>();
+      if (opening && candidates.some(player => player.e)) {
+        const unavailable = new Set([...unavailableCupScorers(state, club, excludes), ...roster.map(player => player.n)].map(slug));
+        // A shirt keeps one name for the match. The existing deal still weighs the original slots.
+        for (const shirt of candidates.filter(player => player.e)) {
+          const eligible = opening.filter(player => player.line === groupOf(shirt.p) && !unavailable.has(slug(player.name)));
+          if (!eligible.length) continue;
+          const pick = keyedRng(`${key}|cup-shirt|${shirt.n}`)();
+          const { name } = eligible[Math.floor(pick * eligible.length)];
+          shirtNames.set(shirt.n, name);
+          unavailable.add(slug(name));
+        }
+      }
       for (const { kind, scorer } of dealGoals(key, score, candidates, verified ? { ...rules, taker: false } : rules)) {
         if (kind === 'og') credits.push('own-goal');
-        else if (!scorer || scorer.e) credits.push(null);
-        else if (verified) credits.push(historicCupScorerCredit(club, scorer.n));
+        else if (!scorer) credits.push(null);
+        else if (scorer.e) {
+          const name = shirtNames.get(scorer.n);
+          credits.push(name ? verifiedCupScorerCredit(DEFAULT_ERA_ID, club, name) : null);
+        } else if (verified) credits.push(verifiedCupScorerCredit('era2005', club, scorer.n));
         else credits.push(byName(scorer.n, scorer.p));
       }
     }
