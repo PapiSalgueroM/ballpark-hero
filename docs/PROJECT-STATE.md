@@ -1,3 +1,9 @@
+## 2026-11-23, Club Manager season checkpoints
+
+PL-03 adds one automatic checkpoint per Club Manager slot. When the next season saves successfully, the game keeps the previous settled season review. The checkpoint is available in Save Points alongside the three manual points. Restoring it keeps an exact copy of current progress and resumes the season review with leaderboard scoring disabled for that branch.
+
+The local replay uses plain and compact saves from a 12-season Everton career. It checks a job move, storage refusal and retry, a competing tab, and preservation of other slots and manual points.
+
 ## 2026-11-23, Club Manager portable save files
 
 PL-03 is partly implemented across the site. Club Manager offers Save files in the manager chooser. A fresh browser can open Import a career before picking an era, then load the file into an empty slot. The download keeps the original save bytes, and import preserves the career's data with an unranked marker. The original file remains available if storage refuses the import or another tab fills the slot first.

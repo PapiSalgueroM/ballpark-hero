@@ -1298,7 +1298,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                 const slot = g.pointsSlot();
                 return slot === null
                   ? <p className="text-sm text-muted-foreground">Reload the page to use your save points.</p>
-                  : <ScreenLoading><SavePointsScreen career={c} slot={slot} /></ScreenLoading>;
+                  : <ScreenLoading><SavePointsScreen career={c} slot={slot} allowCheckpointRestore={!g.saveFailed && !g.saveMoved} /></ScreenLoading>;
               })()}
 
               {hubPanel === 'trophies' && (
