@@ -1,14 +1,22 @@
+## 2026-11-23, Build Your XI verified namesakes
+
+Build Your XI lets two verified people sharing a name play in the same lineup. The picker and both admission checks still block the same player across clubs and years. Mixed and recorded drafts keep using their existing save format. The season report distinguishes the two players, and Mixed evaluations use the selected market record when it can be verified.
+
+With the old app, the exact Marseille Vitinha row appeared when picked alone but disappeared after PSG's Vitinha was picked, in both Mixed and Club Era at 320 and 390 pixels. The two Nico González records reproduced the same problem in Mixed. The fixture uses the [verified namesake records](audits/soccer-grid-namesakes-2026-11-23.md) and archived market rows. The previous evaluator counted four of five players and averaged $181M on the replay. The fix counts all five at $149M. The app and evaluator keep the two values separate when the model is unavailable.
+
+The admin report asking to see a Golden Boot after elimination or a title win is for Club Manager. It does not name a competition. Tournament-wide awards remain open there. Soccer Career's separate European cup award passed its early-elimination and tie checks again.
+
 ## 2026-11-23, Soccer Grid verified namesakes
 
 Soccer Grid distinguishes the verified players called Vitinha and Nico González. Search shows their full names, countries and positions. Both clues must match the selected player, and the correct cell keeps that player's name. The verified PSG midfielder can answer PSG and Midfielder. A clue outside the verified records leaves the guess count alone.
 
-The deployed v26 handler reproduced the false confirmations on archived Porto and Juventus cells. The candidate passed 60 isolated handler cases, 43 focused app tests and the nine-validator offline harness. The Deno check passed. Eighteen Chromium actions across three archived boards at 320 and 390 pixels confirmed that the picker sends the chosen name, correct cells survive reload and uncertain answers leave the saved game alone. The [namesake audit](audits/soccer-grid-namesakes-2026-11-23.md) includes the sources and the edge-first release order.
+The deployed v26 handler reproduced the false confirmations on archived Porto and Juventus cells. The candidate passed 60 isolated handler cases, 43 focused app tests and the nine-validator offline harness. The Deno check passed. Eighteen Chromium actions across three archived boards at 320 and 390 pixels confirmed that the picker sends the chosen name, correct cells survive reload and uncertain answers leave the saved game alone. PR #1056 is live. All 18 cases passed on the published bundle with the verified v27 validator fixture. [Namesake audit](audits/soccer-grid-namesakes-2026-11-23.md)
 
 ## 2026-11-23, Soccer Connect 4 verified namesakes
 
 Soccer Connect 4 shows separate choices for the audited players called Nico González and Vitinha. Its validator checks the chosen person's records and uses separate cache entries for those exact identities. An older app can still submit a nickname when one verified player matches both clues. An ambiguous guess stays available to retry.
 
-Five controls against the previous handler reproduced wrong or missing verdicts. Eight exact handler checks and 25 focused app tests passed. At 320 and 390 pixels, private Chromium accepted the verified Nico on the real Atlético Madrid and Argentine clues, held the other Nico with no saved move, and restored the accepted canonical name after reload. Both games use the same [verified player records](audits/soccer-grid-namesakes-2026-11-23.md).
+Five controls against the previous handler reproduced wrong or missing verdicts. Eight exact handler checks and 25 focused app tests passed. At 320 and 390 pixels, private Chromium accepted the verified Nico on the real Atlético Madrid and Argentine clues, held the other Nico with no saved move, and restored the accepted canonical name after reload. PR #1056 is live. Both phone checks passed on the published bundle with the verified v15 validator fixture. [Verified player records](audits/soccer-grid-namesakes-2026-11-23.md)
 
 ## 2026-11-23, US My Career save ownership
 
