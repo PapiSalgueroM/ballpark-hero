@@ -10,6 +10,7 @@ import { compressToUTF16 } from 'lz-string';
 import { PARKED_PAIR_SAVE_VERSION, pairLedgerSignature, readableClubManagerSave } from '@/lib/clubManagerSaveKeys';
 import { serializeParkedCareer, unpackParkedCareer } from '@/lib/clubManagerParkedSave';
 import { savedGames } from '@/data/continueSaves';
+import { keepUpdateCopies } from '@/lib/saveKeeper';
 import { LAND_ON_HUB_KEY, markLandOnHub, takeLandOnHub } from '@/lib/clubManagerLanding';
 import {
   SLOTS_INDEX_KEY, parkedKey, activeSlot, readSlots, switchSlot, deleteSlot, slotEraId, summarize,
@@ -85,7 +86,7 @@ describe('lossless pair storage for parked careers', () => {
     return c;
   };
 
-  it('packs only parked ledgers, keeps all directed results and restores exact plain bytes', () => {
+  it('packs a parked ledger and restores every result without expanding its active bytes', () => {
     const original = fullLedger();
     const plain = JSON.stringify(leanCareer(original));
     localStorage.setItem(SAVE_KEY, plain);
@@ -103,8 +104,69 @@ describe('lossless pair storage for parked careers', () => {
     expect(loadCareer(raw)?.pairResults).toEqual(original.pairResults);
 
     expect(switchSlot(1)).toBe(true);
-    expect(localStorage.getItem(SAVE_KEY)).toBe(plain);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(raw);
     expect(sortedWorldTable(loadCareer()!, 'premier', original.table)).toEqual(table);
+  });
+
+  it('offers an active packed manager from Home without changing the save', () => {
+    const c = fullLedger();
+    const raw = serializeParkedCareer(c);
+    expect(JSON.parse(raw).saveVersion).toBe(PARKED_PAIR_SAVE_VERSION);
+    localStorage.setItem(SAVE_KEY, raw);
+    localStorage.setItem(SLOTS_INDEX_KEY, JSON.stringify({ v: 1, active: 3 }));
+
+    expect(savedGames(localStorage, true).map(({ entry }) => entry.path)).toContain('/club-manager?slot=3');
+    expect(readSlots()[2]).toMatchObject({ active: true, damaged: false, summary: { clubName: 'Everton' } });
+    expect(loadCareer()?.pairResults).toEqual(c.pairResults);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(raw);
+  });
+
+  it('does not make update copies of a readable active packed manager on boot', () => {
+    const raw = serializeParkedCareer(fullLedger());
+    expect(JSON.parse(raw).saveVersion).toBe(PARKED_PAIR_SAVE_VERSION);
+    localStorage.setItem(SAVE_KEY, raw);
+    expect(keepUpdateCopies(localStorage)).toBe(0);
+    expect(keepUpdateCopies(localStorage)).toBe(0);
+    expect(keys()).toEqual([SAVE_KEY]);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(raw);
+  });
+
+  it('refuses a checksum-valid but invalid active pair ledger and keeps its exact recovery bytes', () => {
+    const raw = JSON.parse(serializeParkedCareer(fullLedger()));
+    const wrongShape = compressToUTF16('{"wrong":{"A|B":[3,-1]}}');
+    const damaged = JSON.stringify({ ...raw, pairResults: wrongShape, pairSignature: pairLedgerSignature(wrongShape) });
+    localStorage.setItem(SAVE_KEY, damaged);
+    expect(savedGames(localStorage, true).map(({ entry }) => entry.path)).not.toContain('/club-manager?slot=1');
+    expect(readSlots()[0]).toMatchObject({ summary: null, damaged: true });
+    expect(loadCareer()).toBeNull();
+    expect(keepUpdateCopies(localStorage)).toBe(1);
+    expect(keepUpdateCopies(localStorage)).toBe(0);
+    const backups = keys().filter(key => key.startsWith(SAVE_KEY + '.broken-'));
+    expect(backups).toHaveLength(1);
+    expect(localStorage.getItem(backups[0])).toBe(damaged);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(damaged);
+  });
+
+  it('switches to a packed career when the corresponding plain write would hit quota', () => {
+    const raw = serializeParkedCareer(fullLedger());
+    const plain = unpackParkedCareer(raw)!;
+    expect(plain.length - raw.length).toBeGreaterThan(5_000);
+    localStorage.setItem(parkedKey(2), raw);
+    const set = Storage.prototype.setItem;
+    const attempts: string[] = [];
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (key === SAVE_KEY) {
+        attempts.push(value);
+        if (value.length > raw.length) throw new DOMException('quota', 'QuotaExceededError');
+      }
+      return set.call(this, key, value);
+    });
+
+    expect(switchSlot(2)).toBe(true);
+    expect(activeSlot()).toBe(2);
+    expect(attempts).toEqual([raw]);
+    expect(localStorage.getItem(SAVE_KEY)).toBe(raw);
+    expect(localStorage.getItem(parkedKey(2))).toBeNull();
   });
 
   it('keeps small saves plain and leaves old pre-codec parked bytes unchanged when opened', () => {

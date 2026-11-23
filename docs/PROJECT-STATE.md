@@ -1,3 +1,9 @@
+## 2026-11-23, Club Manager compact save compatibility
+
+Home and the manager chooser can resume a career whose pair results use the existing compact format. Changing slots keeps the incoming save's exact bytes, so a browser can open a career with room for the compressed copy alone. SaveKeeper recognizes readable compact careers and keeps one exact recovery copy of damaged ones.
+
+PL-04 is partly implemented. Existing plain saves remain readable. Compaction of oversized active writes needs a checked recovery copy and write refusal tests.
+
 ## 2026-11-23, Club Manager Asian markets and academy targets
 
 Prepared the Club Manager part of the weekly review as its own branch. Generated squads in South Korea, Japan and China have different starting ratings. Their local players appear in Transfers. Club Manager models five foreign squad places per club across these leagues, counting loans and unknown nationalities. It checks the cap before accepting transfers, loans, free agents and academy promotions. Older careers keep their recorded squads and results.

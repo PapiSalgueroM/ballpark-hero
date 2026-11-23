@@ -2,10 +2,9 @@
  * Round 928: three manager slots for Club Manager.
  *
  * The engine keeps exactly one career under SAVE_KEY and nothing here changes
- * that: the career being played always lives at SAVE_KEY, so the engine, the
- * home page's continue row and every harness that reads that key see what
- * they always saw. The other two careers use the engine's lean save shape
- * with a compact pair ledger when it saves room, under keys of their own. A small index says which slot number
+ * that: the career being played always lives at SAVE_KEY. The other two
+ * careers use the engine's lean save shape with a compact pair ledger when
+ * it saves room. Activating a compact career keeps its stored bytes. A small index says which slot number
  * the career at SAVE_KEY belongs to. No index means slot 1, so a player with
  * one career today finds it in slot 1 without a single byte of it moved.
  *
@@ -23,7 +22,7 @@ import { eraById, isHistoricEra } from './clubManagerEras';
 import { levelFrom, noSackFrom } from '@/lib/clubManagerStart';
 import type { DifficultyLevel } from '@/lib/managerDifficulty';
 import { saveFence } from '@/lib/saveFence';
-import { isPackedParkedCareer, restoreParkedCareer, serializeParkedCareer, unpackParkedCareer } from './clubManagerParkedSave';
+import { isPackedParkedCareer, restoreParkedCareer, serializeParkedCareer } from './clubManagerParkedSave';
 
 export { SLOT_COUNT, SLOTS_INDEX_KEY, parkedKey, READABLE_SAVE_VERSION } from './clubManagerSaveKeys';
 
@@ -172,9 +171,8 @@ export function switchSlot(slot: number, outgoing?: CareerState | null): boolean
   /* Round 1323: a page whose career another tab has played on since touches
      nothing, not even the parked key (src/lib/saveFence.ts). */
   if (saveFence.moved(SAVE_KEY)) return false;
-  const parked = get(parkedKey(slot));
-  // A damaged save follows the existing copy-before-clear path when explicitly selected.
-  const target = parked === null ? null : unpackParkedCareer(parked) ?? parked;
+  // Preserve the target bytes, including any damaged save requiring recovery.
+  const target = get(parkedKey(slot));
   const park = parkedBytes(outgoing);
   /* 1. Park the outgoing career. Nothing has been removed yet. */
   try {

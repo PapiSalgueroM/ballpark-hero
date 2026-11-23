@@ -24,8 +24,8 @@ export function isPackedParkedCareer(value: unknown): value is Record<string, un
   return isRecord(value) && value.saveVersion === PARKED_PAIR_SAVE_VERSION;
 }
 
-export function restoreParkedCareer(career: Record<string, unknown>): CareerState | null {
-  if (!readableClubManagerSave(career, true) || typeof career.pairResults !== 'string') return null;
+export function restoreParkedCareer(career: unknown): CareerState | null {
+  if (!isPackedParkedCareer(career) || !readableClubManagerSave(career, true) || typeof career.pairResults !== 'string') return null;
   try {
     const text = decompressFromUTF16(career.pairResults);
     if (!text) return null;
