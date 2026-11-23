@@ -1,3 +1,9 @@
+## 2026-11-23, Club Manager 2005-06 Rapid Vienna and Club Brugge scorer coverage
+
+Two verified 11-player opening pools give Rapid Vienna and Club Brugge named scorers in newly played background cup matches. Ivan Leko left Málaga before the season and joined Club Brugge in June. Fresh careers use that correction, while earlier saves retain his player identity, club, transfers and Croatia flag. [Rapid Vienna and Club Brugge source audit](audits/club-manager-rapid-brugge-2005-rosters.md)
+
+The 125-match Champions League replay credits 11 Rapid Vienna and nine Club Brugge goals. The matchday two fixture checks both clubs together. A separate seeded replay checks that Leko can score for Club Brugge and respects an older save with a different owner. CM-03 remains partial, with eight of the original 15 missing outside-league pools covered. The Benfica and Rangers release in PR #1065 passed all eight live browser checks.
+
 ## 2026-11-23, Club Manager 2005-06 Benfica and Rangers scorer coverage
 
 Two verified 11-player opening pools give Benfica and Rangers named scorers in newly played background cup matches. Barry Ferguson returned to Rangers in January 2005. The corrected Blackburn Rovers bake drops his stale row, and the save checks preserve his stored identity, club and Scotland flag. [Benfica and Rangers roster audit](audits/club-manager-benfica-rangers-2005-rosters.md)

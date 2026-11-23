@@ -101,6 +101,38 @@ const RANGERS_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
   { name: 'Ross McCormack', line: 'ATT' },
 ];
 
+// Partial Rapid Vienna first-team roster at the July 2005 opening.
+// Sources and cutoff are recorded in docs/audits/club-manager-rapid-brugge-2005-rosters.md.
+const RAPID_VIENNA_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
+  { name: 'Helge Payer', line: 'GK' },
+  { name: 'Marcin Adamski', line: 'DEF' },
+  { name: 'Radek Bejbl', line: 'DEF' },
+  { name: 'Jozef Valachovič', line: 'DEF' },
+  { name: 'György Korsós', line: 'MID' },
+  { name: 'Peter Hlinka', line: 'MID' },
+  { name: 'Andreas Ivanschitz', line: 'MID' },
+  { name: 'Steffen Hofmann', line: 'MID' },
+  { name: 'Sebastian Martinez', line: 'MID' },
+  { name: 'Axel Lawarée', line: 'ATT' },
+  { name: 'Marek Kincl', line: 'ATT' },
+];
+
+// Partial Club Brugge first-team roster at the August 2005 opening.
+// Sources and cutoff are recorded in docs/audits/club-manager-rapid-brugge-2005-rosters.md.
+const CLUB_BRUGGE_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
+  { name: 'Tomislav Butina', line: 'GK' },
+  { name: 'Olivier De Cock', line: 'DEF' },
+  { name: 'Birger Maertens', line: 'DEF' },
+  { name: 'Philippe Clement', line: 'DEF' },
+  { name: 'Michael Klukowski', line: 'DEF' },
+  { name: 'Gaëtan Englebert', line: 'MID' },
+  { name: 'Sven Vermant', line: 'MID' },
+  { name: 'Ivan Leko', line: 'MID' },
+  { name: 'Gert Verheyen', line: 'ATT' },
+  { name: 'Boško Balaban', line: 'ATT' },
+  { name: 'Manasseh Ishiaku', line: 'ATT' },
+];
+
 export const HISTORIC_2005_CUP_ROSTERS: ReadonlyMap<string, readonly HistoricCupRosterPlayer[]> = new Map([
   ['Ajax', AJAX_2005_CUP_ROSTER],
   ['Rosenborg', ROSENBORG_2005_CUP_ROSTER],
@@ -108,4 +140,6 @@ export const HISTORIC_2005_CUP_ROSTERS: ReadonlyMap<string, readonly HistoricCup
   ['Fenerbahçe', FENERBAHCE_2005_CUP_ROSTER],
   ['Benfica', BENFICA_2005_CUP_ROSTER],
   ['Rangers', RANGERS_2005_CUP_ROSTER],
+  ['Rapid Vienna', RAPID_VIENNA_2005_CUP_ROSTER],
+  ['Club Brugge', CLUB_BRUGGE_2005_CUP_ROSTER],
 ]);

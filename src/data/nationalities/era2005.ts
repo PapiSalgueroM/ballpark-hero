@@ -719,7 +719,6 @@ era2005: {
   'Israel Bascón': 'Spain',
   'Ito': 'Spain',
   'Ivan Klasnic': 'Croatia',
-  'Ivan Leko': 'Croatia',
   'Ivan Pelizzoli': 'Italy',
   'Ivan Saenko': 'Russia',
   'Ivica Banovic': 'Croatia',
