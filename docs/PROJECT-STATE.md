@@ -1,3 +1,11 @@
+## 2026-11-23, Bobby Robins autocomplete position
+
+Bobby Robins played right wing in all three NHL games with Boston in 2014-15. The position migration corrects his autocomplete label from C to RW after verifying his repaired regular-season totals. Its rollback comes before either earlier import rollback. Giovanni Fiore and Michael Keränen retain documented career positions. [NHL box score](https://api-web.nhle.com/v1/gamecenter/2014020002/boxscore), [Bobby Robins profile](https://www.eliteprospects.com/player/10502/bobby-robins), [Fiore's Anaheim roster report](https://www.nhl.com/ducks/news/ducks-reassign-four-to-san-diego-291516602), [Minnesota's 2015-16 roster](https://www.eliteprospects.com/team/63/minnesota-wild/2015-2016).
+
+Isolated PostgreSQL applied all three migrations to 6,353 captured rows. This migration wrote exactly one column on one row, made no writes on rerun and reversed cleanly. The prior two repairs then rolled back to the exact original fixture. Missing, duplicate and altered source rows failed without writes.
+
+Chromium at 320 and 390 pixels showed one suggestion with the corrected position in Hockey Grid and NHL Connect 4. The Grid rejected the same ineligible franchise pair. The Connect 4 handler accepted the same name for Bruins and Played in the 2010s. The import harness exercises the shared autocomplete adapter and rejects the copied center label.
+
 ## 2026-11-23, NHL plus-minus and penalty minutes
 
 The NHL regular-season summary covers all 69 repaired imports at their original team and season cutoffs. Independent season lines confirmed both fields on all 42 rows that needed changes. The second migration corrects 33 plus-minus values and 40 penalty-minute values, including 21 negative penalty totals from the old import. Each ledger row records the independent source. Hunter Drew's five penalty minutes also match the official game log and box score. [NHL skater stats](https://www.nhl.com/stats/skaters), [Drew's game log](https://api-web.nhle.com/v1/player/8481003/game-log/20212022/2), [San Jose box score](https://api-web.nhle.com/v1/gamecenter/2021021285/boxscore).
