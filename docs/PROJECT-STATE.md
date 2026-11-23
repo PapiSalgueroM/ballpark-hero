@@ -1,3 +1,7 @@
+## 2026-11-23, NHL Front Office recap save protection
+
+PL-04 adds a verified copy of the original NHL Front Office recap before the draft opens on an older franchise. If storage refuses the copy or the draft, Retry save keeps the same prospects and already counted season. A newer franchise saved in another tab takes precedence. Current recaps and drafts with saved shortlists keep their normal flow.
+
 ## 2026-11-23, Club Manager portable save files
 
 PL-03 is partly implemented across the site. Club Manager offers Save files in the manager chooser. A fresh browser can open Import a career before picking an era, then load the file into an empty slot. The download keeps the original save bytes, and import preserves the career's data with an unranked marker. The original file remains available if storage refuses the import or another tab fills the slot first.
