@@ -5,6 +5,13 @@ interface OpeningCupScorer {
 
 // Opening squad members missing from the playable roster bake. See the source audit.
 export const OPENING_2026_CUP_SCORERS: ReadonlyMap<string, readonly OpeningCupScorer[]> = new Map([
+  ['AGF', [
+    { name: 'Frederik Tingager', line: 'DEF' },
+    { name: 'Tobias Mølgaard', line: 'DEF' },
+    { name: 'Eric Kahl', line: 'DEF' },
+    { name: 'Colin Rösler', line: 'DEF' },
+    { name: 'Magnus Knudsen', line: 'MID' },
+  ]],
   ['LASK', [
     { name: 'Xavier Mbuyamba', line: 'DEF' },
     { name: 'Andrés Andrade', line: 'DEF' },
