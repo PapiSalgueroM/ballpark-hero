@@ -1,3 +1,9 @@
+## 2026-11-23, Alisson's first seven Liverpool appearance totals
+
+Career Quiz and Career Ladder show 51, 37, 42, 54, 47, 32 and 35 appearances for Liverpool from 2018-19 through 2024-25 under both Alisson spellings. The seven seasons reconcile to 298 competitive games. The guarded migration covers fourteen stints and corrects twelve appearance cells. The Quiz fallback carries the same totals and its rebake guard detects stale counts. [Liverpool appearance audit](audits/alisson-liverpool-appearances.md)
+
+The Roma release in PR #1076 passed all ten published phone replays. Liverpool assist discrepancies and the missing completed 2025-26 season are open. Adding a season requires a replay of the Daily point scale and any changed Transfer Path hints.
+
 ## 2026-11-23, Alisson's Roma appearances in both career records
 
 Career Quiz and Career Ladder use 15 appearances for Roma in 2016-17 and 49 in 2017-18 under both Alisson spellings. The bundled Quiz data carries the same counts. The first total includes the qualifying match in Porto. The migration checks the existing stint positions and only updates the three incorrect appearance cells. [Roma appearance audit](audits/alisson-roma-appearances.md)
