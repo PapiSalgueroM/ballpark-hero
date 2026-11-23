@@ -704,7 +704,6 @@ era2005: {
   'Ibrahima Bakayoko': 'Cote d\'Ivoire',
   'Ibrahima Camara': 'Guinea',
   'Ighli Vannucchi': 'Italy',
-  'Igor Biscan': 'Croatia',
   'Igor Gabilondo': 'Spain',
   'Igor Tudor': 'Croatia',
   'Iker Casillas': 'Spain',

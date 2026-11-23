@@ -1,5 +1,6 @@
 interface HistoricCupRosterPlayer {
   name: string;
+  legacyName?: string;
   line: 'GK' | 'DEF' | 'MID' | 'ATT';
 }
 
@@ -165,6 +166,38 @@ const ANDERLECHT_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
   { name: 'Mbo Mpenza', line: 'ATT' },
 ];
 
+// Partial Porto first-team roster at the August 2005 opening.
+// Sources and cutoff are recorded in docs/audits/club-manager-porto-panathinaikos-2005-rosters.md.
+const PORTO_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
+  { name: 'Vítor Baía', line: 'GK' },
+  { name: 'Fatih Sonkaya', line: 'DEF' },
+  { name: 'Ricardo Costa', line: 'DEF' },
+  { name: 'Pedro Emanuel', line: 'DEF' },
+  { name: 'César Peixoto', line: 'DEF' },
+  { name: 'Raul Meireles', line: 'MID' },
+  { name: 'Lucho González', line: 'MID' },
+  { name: 'Diego', line: 'MID' },
+  { name: 'Jorginho', line: 'ATT' },
+  { name: 'Hélder Postiga', line: 'ATT' },
+  { name: 'Lisandro López', line: 'ATT' },
+];
+
+// Partial Panathinaikos first-team roster at the August 2005 opening.
+// Sources and cutoff are recorded in docs/audits/club-manager-porto-panathinaikos-2005-rosters.md.
+const PANATHINAIKOS_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
+  { name: 'Mario Galinović', line: 'GK' },
+  { name: 'Elias Kotsios', line: 'DEF' },
+  { name: 'Nasief Morris', line: 'DEF' },
+  { name: 'Anthony Šerić', line: 'DEF' },
+  { name: 'Loukas Vyntra', line: 'DEF' },
+  { name: 'Flávio Conceição', line: 'MID' },
+  { name: 'Nordin Wooter', line: 'MID' },
+  { name: 'Igor Bišćan', line: 'MID', legacyName: 'Igor Biscan' },
+  { name: 'Theofanis Gekas', line: 'ATT' },
+  { name: 'Emmanuel Olisadebe', line: 'ATT' },
+  { name: 'Dimitrios Papadopoulos', line: 'ATT' },
+];
+
 export const HISTORIC_2005_CUP_ROSTERS: ReadonlyMap<string, readonly HistoricCupRosterPlayer[]> = new Map([
   ['Ajax', AJAX_2005_CUP_ROSTER],
   ['Rosenborg', ROSENBORG_2005_CUP_ROSTER],
@@ -176,4 +209,6 @@ export const HISTORIC_2005_CUP_ROSTERS: ReadonlyMap<string, readonly HistoricCup
   ['Club Brugge', CLUB_BRUGGE_2005_CUP_ROSTER],
   ['Sparta Prague', SPARTA_PRAGUE_2005_CUP_ROSTER],
   ['Anderlecht', ANDERLECHT_2005_CUP_ROSTER],
+  ['Porto', PORTO_2005_CUP_ROSTER],
+  ['Panathinaikos', PANATHINAIKOS_2005_CUP_ROSTER],
 ]);

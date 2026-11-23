@@ -323,6 +323,7 @@ describe('Owned Champions League scorer settlement', () => {
     ['Espanyol', 'Dani García'],
     ['Blackburn Rovers', 'Barry Ferguson'],
     ['Málaga', 'Ivan Leko'],
+    ['Liverpool', 'Igor Biscan'],
   ])('opens 2005-06 without %s retaining %s', async (club, name) => {
     await ensureEraRosters('era2005');
     const fresh = tape(MADRID, () => startCareer(club, 'era2005')).value;
@@ -367,6 +368,8 @@ describe('Owned Champions League scorer settlement', () => {
       ['Club Brugge', 9, 'Javier Portillo'],
       ['Sparta Prague', 9, 'Tomáš Poláček'],
       ['Anderlecht', 8, 'Roland Juhász'],
+      ['Porto', 7, 'Marek Čech'],
+      ['Panathinaikos', 6, 'Sándor Torghelle'],
     ] as const) {
       expect(goalsForClub(final.state, club), club).toBe(count);
       const roster = HISTORIC_2005_CUP_ROSTERS.get(club)!;
@@ -390,13 +393,16 @@ describe('Owned Champions League scorer settlement', () => {
     { name: 'Dani García', id: 'p-dani-garcia', from: 'Espanyol', cupClub: 'Olympiacos', position: 'ST', age: 30, rating: 68, value: 1.5, seed: MADRID, week: 3 },
     { name: 'Barry Ferguson', id: 'p-barry-ferguson', from: 'Blackburn Rovers', cupClub: 'Rangers', position: 'CDM', age: 26, rating: 76, value: 6.8, seed: MADRID, week: 3 },
     { name: 'Ivan Leko', id: 'p-ivan-leko', from: 'Málaga', cupClub: 'Club Brugge', position: 'CAM', age: 26, rating: 70, value: 2.3, seed: 116148, week: 7 },
-  ] as const)('respects a 2005 save that already moved $name to another club', async ({ name, id, from, cupClub, position, age, rating, value, seed, week }) => {
+    { name: 'Igor Biscan', scorerName: 'Igor Bišćan', id: 'p-igor-biscan', from: 'Liverpool', cupClub: 'Panathinaikos', position: 'CDM', age: 26, rating: 73, value: 3.8, seed: MADRID, week: 3 },
+  ] as const)('respects a 2005 save that already moved $name to another club', async (fixture) => {
+    const { name, id, from, cupClub, position, age, rating, value, seed, week } = fixture;
+    const scorerName = 'scorerName' in fixture ? fixture.scorerName : name;
     await ensureEraRosters('era2005');
     const madrid = tape(seed, () => startCareer('Real Madrid', 'era2005')).value;
     const samePosition = madrid.squad.find(player => player.position === position)!;
     const player = { ...samePosition, id, name, position, age, rating, value };
     const pending = playTo(madrid, seed, week).state;
-    const hasCredit = (state: CareerState) => state.uclScorers?.players.some(row => row[1] === name && row[2] === cupClub);
+    const hasCredit = (state: CareerState) => state.uclScorers?.players.some(row => row[1] === scorerName && row[2] === cupClub);
     const available = next(pending, seed).value.state;
     expect(hasCredit(available)).toBe(true);
 
@@ -410,6 +416,7 @@ describe('Owned Champions League scorer settlement', () => {
     const replayed = next(reopened, seed).value.state;
     expect(replayed.pairResults?.[UCL_GROUP_LEDGER]).toEqual(available.pairResults?.[UCL_GROUP_LEDGER]);
     expect(hasCredit(replayed)).toBe(false);
+    expect(replayed.uclScorers?.players.some(row => row[1] === name && row[2] === cupClub)).toBe(false);
   });
 
   it('keeps a decisive award in the review and past season after normal rollover', () => {

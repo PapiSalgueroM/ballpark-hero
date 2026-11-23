@@ -554,6 +554,7 @@ const B5_REMOVALS = [
   { n: 'Gustavo Nery', why: 'left Werder Bremen in the summer of 2005 (KI 25 May 2005)' },
   { n: 'Holger Wehlage', why: 'left Duisburg in the summer of 2005 (KI 25 May 2005, Mittelfeldspieler ist ablösefrei)' },
   { n: 'Ibrahim Tall', why: 'Sochaux to Hearts on a free, 1 Jul 2005 (soccerway transfers, Ibrahim Tall); no year 2006 row', single: true },
+  { n: 'Igor Biscan', why: 'Liverpool to Panathinaikos, announced 16 Jul 2005 (UEFA transfer report and Panathinaikos club archive); his year 2006 row is Panathinaikos' },
   { n: 'Igor Demo', why: 'left Gladbach in the summer of 2005 (KI 26 Jun 2005)' },
   { n: 'Ivan Gvozdenovic', why: 'his Metz loan ended on 30 Jun 2005 and he went back to Club Brugge (soccerway transfers, Ivan Gvozdenovic)' },
   { n: 'Ivan Leko', why: 'left Málaga for Hajduk Split in January, then joined Club Brugge on 20 Jun 2005 (UEFA transfer report and Hajduk club archive); his year 2006 row is Club Brugge KV' },

@@ -4457,6 +4457,7 @@ const ARRIVED: Record<string, Record<string, string>> = {};
 const ERA2005_SAVED_NATIONALITIES = new Map([
   ['Barry Ferguson', 'Scotland'],
   ['Dani García', 'Spain'],
+  ['Igor Biscan', 'Croatia'],
   ['Ivan Leko', 'Croatia'],
 ]);
 
