@@ -175,9 +175,10 @@ export function pruneBackups(entry: ContinueSave, storage: SaveStorage | null, k
  * told is kept). backupKey is null when there was no save to copy. This is
  * the first half of moveAside, split out for src/lib/saveKeeper.ts, which
  * copies a save before it is replaced or refused instead of moving it: a key
- * that is never emptied is never lost to a crash between two writes.
+ * that is never emptied is never lost to a crash between two writes. An
+ * expected save limits the copy to bytes already checked for that slot.
  */
-export function copyAside(entry: ContinueSave, storage: SaveStorage | null, now: Date = new Date(), unmarked?: boolean): SetAsideResult {
+export function copyAside(entry: ContinueSave, storage: SaveStorage | null, now: Date = new Date(), unmarked?: boolean, expected?: { raw: string; slot: number }): SetAsideResult {
   if (!storage) return { ok: false };
   let raw: string | null;
   try {
@@ -185,6 +186,7 @@ export function copyAside(entry: ContinueSave, storage: SaveStorage | null, now:
   } catch {
     return { ok: false };
   }
+  if (expected && raw !== expected.raw) return { ok: false };
   if (raw === null) return { ok: true, backupKey: null };
 
   /* Two clicks in the same second must not overwrite the first backup. */
@@ -204,7 +206,7 @@ export function copyAside(entry: ContinueSave, storage: SaveStorage | null, now:
     return { ok: false };
   }
   /* moveAside marks its copy only once the original is gone, so a refused move leaves nothing behind. */
-  if (!unmarked) slotMarks(entry, storage, backupKey);
+  if (!unmarked) slotMarks(entry, storage, backupKey, expected?.slot);
   return { ok: true, backupKey };
 }
 
@@ -236,10 +238,11 @@ export const SET_ASIDE_SLOT_KEY = 'dukb-set-aside-slot';
  * refuses leaves the copy unmarked, offered in every slot as before; the copy
  * itself stands either way.
  */
-export function slotMarks(entry: ContinueSave, storage: SaveStorage, mark?: string): [number, Record<string, number>] {
+export function slotMarks(entry: ContinueSave, storage: SaveStorage, mark?: string, sourceSlot?: number): [number, Record<string, number>] {
   try {
     if (entry.slots) {
-      const a = JSON.parse(storage.getItem(entry.slots) as string)?.active, slot = a === 2 || a === 3 ? a : 1;
+      const a = sourceSlot ?? JSON.parse(storage.getItem(entry.slots) as string)?.active;
+      const slot = a === 2 || a === 3 ? a : 1;
       const marks = JSON.parse(storage.getItem(SET_ASIDE_SLOT_KEY) as string) || {};
       if (mark) {
         for (const k in marks) storage.getItem(k) ?? delete marks[k];

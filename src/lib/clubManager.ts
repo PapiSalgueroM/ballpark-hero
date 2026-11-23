@@ -89,6 +89,7 @@ import { CM_AGE_CURVE, ageRead } from '@/lib/cmAgeRead';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
 import { SAVE_KEY } from '@/lib/clubManagerSaveKeys';
 import { isPackedParkedCareer, restoreParkedCareer } from '@/lib/clubManagerParkedSave';
+import { writeActivePairSave } from '@/lib/clubManagerActiveSave';
 // Round 1035: the modern squads are the baked file joined with the A-League
 // Men's generated one, in one place both engine files read.
 import { CM_WORLD_ROSTERS as CM_ROSTERS, CM_WORLD_PARTIAL as CM_PARTIAL, cmWorldReadsAge, cmWorldTag } from '@/data/clubManagerWorldRosters';
@@ -25372,9 +25373,13 @@ export function leanCareer(state: CareerState): CareerState {
  */
 export function saveCareer(career: CareerState): boolean {
   const full = trimCareer(career);
+  let plain: string;
+  try { plain = JSON.stringify(full); } catch { return false; }
+  const packed = writeActivePairSave(full, plain);
+  if (packed !== null) return packed;
   return saveFence.write(SAVE_KEY, function saveCareer() {
     try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify(full));
+      localStorage.setItem(SAVE_KEY, plain);
       return true;
     } catch {
       /* quota, or a blocked store: once more, lean */

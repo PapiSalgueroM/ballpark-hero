@@ -1,8 +1,10 @@
+## 2026-11-23, Club Manager active save protection
+
+PL-04 is partly implemented. Club Manager can compact oversized active saves when the existing pair-results format makes them smaller. The first conversion checks an exact recovery copy of the prior bytes for that slot. If storage refuses the copy or write, the previous save stays available and the player can retry. A compact career keeps its format through season rollover and uses the same recovery copy. Ordinary plain saves keep their existing writer.
+
 ## 2026-11-23, Club Manager compact save compatibility
 
 Home and the manager chooser can resume a career whose pair results use the existing compact format. Changing slots keeps the incoming save's exact bytes, so a browser can open a career with room for the compressed copy alone. SaveKeeper recognizes readable compact careers and keeps one exact recovery copy of damaged ones.
-
-PL-04 is partly implemented. Existing plain saves remain readable. Compaction of oversized active writes needs a checked recovery copy and write refusal tests.
 
 The reader passed 202 focused tests, all 18 selected harnesses and the existing page download budgets. At 320 and 390 pixels, the older build skipped a valid compact career on Home and could not activate it under a 90,326-character write cap. The reader resumed it from Home and moved the exact compact bytes into the active slot. Other slots kept their saves. With the cap lifted, the next league result and all 160 earlier pair results survived reload.
 

@@ -58,7 +58,7 @@ export function readableClubManagerSave(value: unknown, includeParked = false): 
     && Array.isArray(c.squad) && Array.isArray(c.calendar) && Array.isArray(c.xiIds) && Array.isArray(c.table);
 }
 
-/** Check packed bytes without loading the codec on Home. */
+/** Check the stored pair bytes before decompressing them. */
 export function pairLedgerSignature(text: string): number {
   let hash = 0x811c9dc5;
   for (let i = 0; i < text.length; i++) hash = Math.imul(hash ^ text.charCodeAt(i), 0x01000193);
