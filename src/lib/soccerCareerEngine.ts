@@ -944,6 +944,7 @@ export interface CareerStorySeason {
 
 export interface CareerState {
   importedFromFile?: true;
+  restoredFromCheckpoint?: true;
   inSeasonRatings?: true;
   historicalArrivals?: SoccerHistoricalArrivals;
   extraCupQualification?: ExtraCupQualification;

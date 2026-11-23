@@ -134,6 +134,7 @@ import { saveFence } from '@/lib/saveFence';
 import { browserStorage, SET_ASIDE_SLOT_KEY } from '@/lib/brokenSaveRecovery';
 import { keepSoccerCareerBeforeImage } from '@/lib/soccerCareerMigration';
 import { readSoccerCareerSavedAt, recordSoccerCareerSavedAt } from '@/lib/soccerCareerSaveReceipt';
+import { keepSoccerCareerCheckpoint } from '@/lib/soccerCareerCheckpoint';
 import { holdPendingSave } from '@/lib/safeStorage';
 import { useSaveFenceWatch } from '@/hooks/useSaveFenceWatch';
 import { useArrivalTop } from '@/hooks/useArrivalTop';
@@ -770,6 +771,11 @@ export function startSoccerCareer(draft: SoccerCareerDraft): CareerState {
 
 type SoccerCareerAdmission = ({ saved: string } | { started: CareerState }) & { saveKey?: string; savesPath?: string };
 
+function savedSeasonCounts(career: CareerState | null) {
+  return [career?.seasons.length ?? 0, career?.managerState?.season ?? 0,
+    career?.punditState?.season ?? 0, career?.ownerState?.season ?? 0];
+}
+
 export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission } = {}) {
   const saveKey = entry?.saveKey ?? SAVE_KEY;
   const navigate = useNavigate();
@@ -802,6 +808,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
   });
   const [career, setCareer] = useState<CareerState | null>(restoredSave.career);
   const expectedRaw = useRef(restoredSave.raw);
+  const lastSavedCounts = useRef(savedSeasonCounts(restoredSave.career));
   const pendingMigration = useRef(restoredSave.needsMigration ?? false);
   const [migrationCopyFailed, setMigrationCopyFailed] = useState(false);
   const agentReviewAttempt = useRef<CareerState | null>(null);
@@ -848,7 +855,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
      from 55. scripts/simScoreShown.mjs holds both halves. */
   const isRetired = career?.retired === true && career?.phase === "retired";
   const legacyScore = isRetired && career?.legacy ? career.legacy.score : 0;
-  useGameCompletion('soccer-career', isRetired && career?.importedFromFile !== true, legacyScore);
+  useGameCompletion('soccer-career', isRetired && !career?.importedFromFile && !career?.restoredFromCheckpoint, legacyScore);
 
   // Club roster comes from the bundled FALLBACK_CLUBS list, deliberately.
   //
@@ -964,6 +971,12 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
       setRecordOutcome(null);
       return null;
     }
+    const savedCounts = savedSeasonCounts(career);
+    if (previousRaw !== null && savedCounts.some((count, index) => count > lastSavedCounts.current[index])) {
+      const storage = browserStorage();
+      if (storage) keepSoccerCareerCheckpoint(storage, saveKey, previousRaw, writtenRaw);
+    }
+    lastSavedCounts.current = savedCounts;
     if (writtenRaw !== previousRaw || !readSoccerCareerSavedAt(localStorage, saveKey, writtenRaw)) {
       recordSoccerCareerSavedAt(localStorage, saveKey, writtenRaw);
     }
