@@ -19,6 +19,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { isTransferPathLog } from '@/lib/dailySaveShapes';
 import { dateSeed, getTodayET } from '@/lib/dateUtils';
+import { hintText } from '../../scripts/lib/transferPathHints.mjs';
 import {
   TRANSFER_PATH_RULES,
   isActivePlayer,
@@ -327,13 +328,18 @@ export function useTransferPath(): TransferPathState {
     setUnlimitedConnections(current => current.length > 1 ? current.slice(0, -1) : current);
   }, [canBacktrack]);
 
-  /* The minimum and hint under the rule in force. On the daily the everyday
-     pair is the fallback (the rule is blocked or classic); in unlimited the
-     pool is already filtered, so the rule's pair is always there. */
+  /* Active uses the loaded career graph when its opening route changes. The
+     stored minimum remains the fallback when the career read cannot supply a path. */
   const inForce: TransferPathRuleHint = useMemo(() => {
-    const under = puzzleUnderRule(puzzle, activeRule);
-    return under ?? { minSteps: puzzle.minSteps, hint: puzzle.hint };
-  }, [puzzle, activeRule]);
+    const stored = puzzleUnderRule(puzzle, activeRule) ?? { minSteps: puzzle.minSteps, hint: puzzle.hint };
+    if (activeRule !== 'active' || isLoadingPool || playerPool === fallbackPlayers) return stored;
+    const path = findPath(puzzle.playerA, puzzle.playerB);
+    const first = path?.[1]?.club;
+    const last = path?.at(-1)?.club;
+    if (!path || !first || !last || path.length - 1 === stored.minSteps) return stored;
+    const minSteps = path.length - 1;
+    return { minSteps, hint: hintText(puzzle.playerA, puzzle.playerB, minSteps, first, last) };
+  }, [puzzle, activeRule, isLoadingPool, playerPool, findPath]);
   const optimal = inForce.minSteps;
 
   /* ROUND 536: the hint speaks from where the player actually is.
@@ -354,9 +360,8 @@ export function useTransferPath(): TransferPathState {
 
      So once the chain has moved, the hint is derived from the head, over the
      rule's own graph, skipping every name already played (offering one would
-     be a refusal too). The stored hint is still what a player sees before
-     their first move: it is richer, it is derived, and simTransferPathHints
-     holds it to the search. Nothing here touches a stored row.
+     be a refusal too). Before the first move, the hint uses the opening route
+     for the rule in force. simTransferPathHints holds stored hints to the search.
 
      The other half is the stranded case. Adding any teammate of the target
      wins on the spot, so the chain can never eat the target's last neighbour,

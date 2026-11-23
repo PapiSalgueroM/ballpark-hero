@@ -1,6 +1,8 @@
 import { supabase } from "@/integrations/supabase/client";
 import { fetchAllRows } from "@/lib/fetchAllRows";
-import type { CareerPlayer, CareerSeason } from "@/types/career";
+import { reconcileCareerSeasons } from "@/lib/careerSeasonCorrections";
+import type { CareerStint } from "@/lib/careerLadder";
+import type { CareerPlayer } from "@/types/career";
 
 interface SeasonRow {
   player_id: string;
@@ -45,15 +47,16 @@ export async function fetchCareerPlayers(): Promise<CareerPlayer[]> {
     }
 
     // Group seasons by player_id, rows arrive pre-sorted by (player_id, sort_order)
-    const seasonsByPlayer = new Map<string, CareerSeason[]>();
+    const seasonsByPlayer = new Map<string, CareerStint[]>();
     for (const row of seasonsResult.data) {
-      const season: CareerSeason = {
+      const season: CareerStint = {
         season: row.season,
         club: row.club,
         goals: row.goals,
         assists: row.assists,
         appearances: row.appearances,
         marketValue: row.market_value,
+        sortOrder: row.sort_order,
       };
       const existing = seasonsByPlayer.get(row.player_id);
       if (existing) {
@@ -68,7 +71,14 @@ export async function fetchCareerPlayers(): Promise<CareerPlayer[]> {
       name: p.player_name,
       nationality: p.nationality,
       position: p.position,
-      career: seasonsByPlayer.get(p.id) ?? [],
+      career: reconcileCareerSeasons(p.id, seasonsByPlayer.get(p.id) ?? []).map(stint => ({
+        season: stint.season,
+        club: stint.club,
+        goals: stint.goals,
+        assists: stint.assists,
+        appearances: stint.appearances,
+        marketValue: stint.marketValue ?? 0,
+      })),
     }));
 
     return players;
