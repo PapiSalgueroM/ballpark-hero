@@ -1,3 +1,11 @@
+## 2026-11-23, Rebuild migration safety
+
+**PL-04 is partly implemented.** Rebuild checks a byte-exact copy before writing a migrated v1 save. When a browser refuses the copy, it keeps the original and offers Retry save. A missing squad, failed replay, or unsupported version leaves the original bytes in place. A newer save written during a delayed load or backup stays active. Starting over explicitly still works from the save the player opened.
+
+Seven regression cases reproduced on the unchanged writer. All 20 focused tests, application types, the production build and all 15 built-site checks passed. The version replay checked 144 archived v1 saves, including 89 with old perks, and a copied wrong-deck control failed as expected. The shared keeper recognized the Rebuild fixtures and version behavior. Its existing unrelated findings still appear in sections 0 and 1.
+
+Chromium at 320 and 390 pixels refused the backup, kept exact v1 bytes, recovered one checked backup on retry and reloaded with the same v2 finance card. At 390 pixels a separate failed squad request preserved v1 and reconnected successfully.
+
 ## 2026-11-23, Soccer Career missing Ballon d'Or ballot
 
 A career that reloads on the Ballon d'Or screen with its ballot missing now offers Continue career. It resumes the existing season flow and keeps the player's completed season and awards.
