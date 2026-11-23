@@ -73,7 +73,7 @@ import { archiveCareerSeason } from '@/lib/clubManagerCareerLines';
 /* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
 import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardDeparted, type BoardInput, type BoardMine, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
 import { bornNear, compactWorldRoster, nearAges, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterKey, worldRosterOwner, worldRosterView } from '@/lib/clubManagerWorldRoster';
-import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';
+import type { WorldRosterContext, WorldRosterState } from '@/lib/clubManagerWorldRoster';
 import {
   cupScorerRace, isCupScorerLedger, newCupScorerLedger, recordCupScorerRound,
   type CupScorerCredit, type CupScorerLedger, type CupScorerRace, type CupScorerWinner,
@@ -555,6 +555,38 @@ const LJUBICIC_LOAN = {
   contractUntil: 2029,
 } as const;
 
+// Verified pre-career moves from the 2026 Thun roster. See the opening-departures audit.
+const THUN_OPENING_DEPARTURES = [
+  { name: 'Franz-Ethan Meichtry', position: 'CM', birthYear: 2005, owner: 'Genoa' },
+  { name: 'Uros Vasic', position: 'LM', birthYear: 2003, owner: 'Biel-Bienne' },
+] as const;
+const VASIC_ORIGIN = JSON.stringify(['now', 'Thun', 'Uros Vasic', 'LM', 2003, 0]);
+
+function opening2026Roster(clubName: string): WorldRosterContext {
+  let roster: WorldRosterContext & Pick<CareerState, 'clubName' | 'squad'> = {
+    clubName, eraId: 'now', startYear: 2026, season: 1, squad: [],
+    worldRoster: { version: 1, eraId: 'now', records: [], curve: CM_AGE_CURVE },
+  };
+  const source = projectedRoster('Thun', 0, 'now');
+  for (const move of THUN_OPENING_DEPARTURES) {
+    const row = source.find(p => p.n === move.name && p.p === move.position && p.a === 2026 - move.birthYear);
+    if (row) roster = recordWorldRosterTransfer(roster, {
+      player: bakedToCMPlayer(row), from: 'Thun', to: move.owner, kind: 'permanent', since: row.since,
+    });
+  }
+  return roster;
+}
+
+function openingDepartureRefusal(career: CareerState, mp: MarketPlayer): string | null {
+  const move = THUN_OPENING_DEPARTURES.find(row => row.name === mp.name);
+  if (!move) return null;
+  const key = JSON.stringify(['now', 'Thun', move.name, move.position, move.birthYear, 0]);
+  if (mp.worldRosterKey && mp.worldRosterKey !== key) return null;
+  const owner = worldRosterOwner(career, key);
+  if (key === VASIC_ORIGIN && owner === 'Biel-Bienne') return `${mp.name} plays for ${owner}, outside the playable leagues.`;
+  return owner && owner !== mp.club ? `${mp.name} is registered with ${owner}.` : null;
+}
+
 function openingLoanActive(career: CareerState, onYears = yearsOn(career)): boolean {
   if (career.opening2026Loans !== true || career.eraId !== 'now' || career.season !== 1
     || worldYear(career) !== 2026 || onYears !== 0) return false;
@@ -678,6 +710,7 @@ function worldMarket(career: CareerState): MarketPlayer[] {
     if (club === current.clubName) continue;
     for (const p of worldRosterFor(current, club, years, progress)) {
       if (openingLoan && p.n === LJUBICIC_LOAN.name) continue;
+      if (club === 'Biel-Bienne' && p.worldRosterKey === VASIC_ORIGIN) continue;
       out.push({ name: p.n, club, position: p.p, age: p.a, rating: p.r,
         price: askingPrice(p.v, p.a), value: p.v, generated: p.g || undefined, ...listedNation(p, club, current.eraId),
         ...(progress && p.lv !== undefined ? { lv: p.lv } : {}),
@@ -770,7 +803,7 @@ function aiBidderClub(career: CareerState, name: string): ClubDef | undefined {
    deal runs down (refreshWorldRosterOnce), so no AI club takes him while he is there. Pure, no draw.
    scripts/simCmWorldMoves.mjs and scripts/simCmLedgerBound.mjs (section 4) hold it. */
 export function aiDealPlayer(state: CareerState, mp: MarketPlayer): CMPlayer | null {
-  if (mp.name === LJUBICIC_LOAN.name && openingLoanActive(state)) return null;
+  if ((mp.name === LJUBICIC_LOAN.name && openingLoanActive(state)) || openingDepartureRefusal(state, mp)) return null;
   const current = refreshWorldRoster(state);
   const found = worldRosterFor(current, mp.club).filter(p => mp.worldRosterKey ? p.worldRosterKey === mp.worldRosterKey
     : p.n === mp.name && p.a === mp.age && p.p === mp.position);
@@ -7609,7 +7642,9 @@ export function customBoardPreview(spec: Omit<CustomClubSpec, 'replacedClub'>, e
   return { label: demand.label, replaced };
 }
 
-function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now', career?: CareerState, openingLoan = false): CMPlayer[] {
+function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now', career?: CareerState,
+  opening?: { loan: boolean; roster?: WorldRosterContext },
+): CMPlayer[] {
   // Round 70: baked real rosters first (with real market values); the old
   // static pool only backs up clubs outside the bake. Round 72: cap the
   // start at the 26 most valuable so deep baked squads (Real Madrid has 29
@@ -7623,11 +7658,12 @@ function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now', car
   const real = baked.length
     ? baked.slice(0, 26).map(bakedToCMPlayer)
     : getPool().filter(p => p.club === clubName).map(toCMPlayer);
-  const owned = career ? [...worldRosterClub(refreshWorldRoster(career), clubName, real)] : real;
-  if (openingLoan && clubName === LJUBICIC_LOAN.parent) {
+  const ledger = career ? refreshWorldRoster(career) : opening?.roster;
+  const owned = ledger ? [...worldRosterClub(ledger, clubName, real)] : real;
+  if (opening?.loan && clubName === LJUBICIC_LOAN.parent) {
     return ensureSquadCoverage(owned.filter(p => p.name !== LJUBICIC_LOAN.name));
   }
-  if (openingLoan && clubName === LJUBICIC_LOAN.borrower) {
+  if (opening?.loan && clubName === LJUBICIC_LOAN.borrower) {
     const row = openingLoanPlayer(career);
     if (row) owned.push({ ...bakedToCMPlayer(row), onLoan: true, loanFrom: LJUBICIC_LOAN.parent, contractYears: 1 });
   }
@@ -11067,8 +11103,8 @@ function openingLoanRefusal(career: CareerState, name: string): string | null {
  * own reason rather than a guess made beside it.
  */
 export function signingRefusal(career: CareerState, mp: MarketPlayer, fee: number): string | null {
-  const existingLoan = openingLoanRefusal(career, mp.name);
-  if (existingLoan) return existingLoan;
+  const registration = openingLoanRefusal(career, mp.name) ?? openingDepartureRefusal(career, mp);
+  if (registration) return registration;
   if (career.transferWindow === null) return 'The transfer window is shut.';
   if (fee > career.budget) return `That costs ${money(fee, career)} and you have ${money(career.budget, career)}.`;
   if (career.squad.length >= 30) return 'Your squad is full at 30. Somebody has to leave first.';
@@ -11095,8 +11131,8 @@ export type MarketDoor = 'buy' | 'clause' | 'loan' | 'talk';
  * that is refused always has a reason on screen instead of a dead button.
  */
 export function doorRefusal(career: CareerState, mp: MarketPlayer, door: MarketDoor): string | null {
-  const existingLoan = openingLoanRefusal(career, mp.name);
-  if (existingLoan) return existingLoan;
+  const registration = openingLoanRefusal(career, mp.name) ?? openingDepartureRefusal(career, mp);
+  if (registration) return registration;
   if (door === 'buy') return signingRefusal(career, mp, mp.price);
   if (door === 'clause') {
     const clause = releaseClauseOf(mp, career.season);
@@ -15033,7 +15069,7 @@ function worldUelField(state: CareerState, tables: { league: Pick<LeagueDef, 'id
  * stripped of worldComps anyway; this skips opening them, which cost a daily start a median of 55 ms a date on a
  * runner (simWorldEuro section 6). Opening draws nothing, so no deal moves either way.
  */
-export interface StartCareerOptions { noWorldComps?: boolean; kLeagueActive?: boolean; championshipPlayoffs?: true; bundesligaPlayoff?: true; frenchPlayoffs?: true; inSeasonRatings?: true; worldRatingTiming?: true; opening2026Loans?: true }
+export interface StartCareerOptions { noWorldComps?: boolean; kLeagueActive?: boolean; championshipPlayoffs?: true; bundesligaPlayoff?: true; frenchPlayoffs?: true; inSeasonRatings?: true; worldRatingTiming?: true; opening2026Loans?: true; opening2026Transfers?: true }
 /** The options both dailies start a career with. */
 export const DAILY_START: StartCareerOptions = { noWorldComps: true };
 /* The states a start was asked to open nothing on, read by openWorldUclOnStart (a set of objects, never saved). */
@@ -22338,7 +22374,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     : opts?.opening2026Loans === true && !opts.noWorldComps && era.id === 'now' && era.startYear === 2026;
   const openingLoan = world?.rosterCareer ? openingLoanActive(world.rosterCareer, startYearsOn)
     : opening2026Loans === true && startYearsOn === 0;
-  const squad = custom ? buildCustomSquad(custom, era.id) : buildSquad(club.name, startYearsOn, era.id, world?.rosterCareer, openingLoan);
+  const openingRoster = !world && opts?.opening2026Transfers === true && !opts.noWorldComps
+    && era.id === 'now' && era.startYear === 2026 && cmWorldReadsAge() ? opening2026Roster(club.name) : undefined;
+  const squad = custom ? buildCustomSquad(custom, era.id)
+    : buildSquad(club.name, startYearsOn, era.id, world?.rosterCareer, { loan: openingLoan, roster: openingRoster });
   const awayOnLoan = openingLoan && !custom && club.name === LJUBICIC_LOAN.parent
     ? openingLoanPlayer(world?.rosterCareer) : undefined;
   const inheritedLoan = awayOnLoan && world?.rosterCareer
@@ -22387,6 +22426,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     clubName: club.name,
     season: 1,
     ...(opening2026Loans ? { opening2026Loans: true } : {}),
+    ...(openingRoster?.worldRoster ? { worldRoster: openingRoster.worldRoster } : {}),
     ...(!historic && (world?.rosterCareer?.asianSquadLeague || isAsianSquadLeague(league.id))
       ? { asianSquadLeague: world?.rosterCareer?.asianSquadLeague ?? league.id } : {}),
     ...(opts?.inSeasonRatings ? { inSeasonRatings: true } : {}),
@@ -22562,9 +22602,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     state.windowWeeksLeft = lateWeeks;
     state.summerWindow = { season: state.season, matchWeeks: lateWeeks };
   }
-  /* Round 1344: a fresh career has no seed yet, so its opening window's deals come back and are recorded by the
-     last line, once the seed block below has drawn one (the post seed flush; the year 0 projection ignores the
-     seed, so the keys are the ones the seeded world gives these men). A job move is seeded already: nothing comes back. */
+  /* A fresh career without opening ownership records defers its window deals until it has a seed.
+     An existing ledger can settle them now. Year zero uses the same identity keys either way. */
   const unrecorded = generateHeadlines(state);
   /* Round 1021 review: a late season can meet its first international window
      before a ball is kicked (2020-21's September window opened five days
@@ -22589,7 +22628,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   /* Round 1510: the country's super cup, season one's edition, followed, opened after the seed it is keyed on. */
   openOneOffsOnStart(state, world);
   /* Round 1600 fix: a new seeded career on today's world as it reads now (never the dailies' curve 1 view) starts a stamped ledger, so its identity stays exact (nearAges). */
-  if (!world && state.worldSeed !== undefined && (state.eraId ?? 'now') === 'now' && cmWorldReadsAge()) state.worldRoster = { version: 1, eraId: 'now', records: [], curve: CM_AGE_CURVE };
+  if (!world && state.worldRoster === undefined && state.worldSeed !== undefined && (state.eraId ?? 'now') === 'now' && cmWorldReadsAge()) state.worldRoster = { version: 1, eraId: 'now', records: [], curve: CM_AGE_CURVE };
   if (awayOnLoan && worldRosterOwner(state, LJUBICIC_LOAN.key) === undefined) {
     const player = state.loanedOut?.find(loan => loan.player.worldRosterKey === LJUBICIC_LOAN.key)?.player;
     if (player) state.worldRoster = recordWorldRosterTransfer(state, {

@@ -1,3 +1,9 @@
+## 2026-11-23, Club Manager Thun opening departures
+
+New 2026-27 Club Manager careers start with Franz-Ethan Meichtry at Genoa and Uroš Vasić registered with Biel-Bienne in the ownership ledger. Vasić is absent from the transfer market because Biel-Bienne plays outside the modeled Swiss league. The starting rosters and market use the same player keys, and opening ownership records do not create in-game transfer fees or news. [Thun departures source audit](audits/club-manager-thun-2026-opening-departures.md)
+
+The checks cover fresh Thun, Genoa and Madrid careers, a Genoa market purchase, the summer rollover, active and parked reloads, the shared daily roster, and an older save that still places both players at Porto. CM-03 remains partial. Thun still needs verified scorer cover for its thin playing roster, and the remaining modern AGF credit is unresolved. The Ljubičić loan release in PR #1071 passed all six published mobile checks.
+
 ## 2026-11-23, Club Manager Robert Ljubičić opening loan
 
 Fresh 2026-27 Club Manager careers register Robert Ljubičić at LASK on loan from AEK Athens. LASK can play him and AEK lists him under its players out on loan. His original AEK player key stays attached to his LASK goals, and the loan follows the game's season-end return. The opening roster uses the known AEK contract through 2029 and leaves the unpublished purchase and recall fees unset. [Loan and identity audit](audits/club-manager-ljubicic-2026-opening-loan.md)
