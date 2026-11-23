@@ -4,6 +4,8 @@ Henrik Lundqvist's card now shows 27 NHL regular-season points through 2019-20. 
 
 The corrected totals leave all 990 matchup verdicts intact. They change the matchups for 211 of 100,000 possible new Hard seeds. The original matchups still resume for all 100,000 old seeds in both practice modes. Three Chromium cases at 320 or 390 pixels showed the correct points and cutoff and kept accepted progress after reloading during the reveal. All 73 focused tests, application types, the production build and 15 built-site checks passed. The facts harness passed 64 checks and caught both old totals and a missing season cutoff in separate controls.
 
+The release archive refresh added seven days to each of NBA, MLB, NHL and college basketball. All 364 previously published boards stayed identical, and each sport now has 98 boards through November 22 Eastern. The release SEO build refreshed the four archive pages and their sitemap dates. The archive harness checked all 3,528 cells against the current game answer path and both builds and all 15 built-site checks passed.
+
 ## 2026-11-16 — Career search, NHL trades and NFL injured reserve
 
 - Home recognizes explicit requests such as “NBA career mode” and “manage an MLB team.” Both mobile widths verified nine supported queries, five misses, the existing title shortcuts and return focus. The NBA result opened with Enter and the MLB result opened by touch. Back restored the search filters and saved games.
