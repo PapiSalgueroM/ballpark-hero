@@ -20,6 +20,52 @@ export const WORLD_XI_CROSS_SNAPSHOT_NAMESAKES = [
   },
 ] as const;
 
+/** Different players with the same name and country in one dated snapshot. */
+export const WORLD_XI_SAME_SNAPSHOT_NAMESAKES = [
+  {
+    // LaLiga's 2024/25 opener lists both. Osasuna's left-back is Álvaro Juan Cruz
+    // Armada; Leganés' winger is Juan Cruz Díaz Espósito, a Spain youth international.
+    // https://www.laliga.com/partido/temporada-2024-2025-laliga-ea-sports-ca-osasuna-cd-leganes-1
+    // https://www.osasuna.es/juan-cruz-ha-sido-un-orgullo-y-un-honor-poder-defender-este-escudo
+    // https://www.cdleganes.com/en/news/cd-leganes-signs-juan-cruz-for-the-next-four-seasons
+    // https://www.malagacf.com/en/players/juan-cruz-diaz-esposito
+    name: 'Juan Cruz', country: 'Spain', year: 2025,
+    cards: [
+      { club: 'CA Osasuna', position: 'Left-Back', age: 32 },
+      { club: 'CD Leganés', position: 'Left Winger', age: 24 },
+    ],
+  },
+  {
+    // Carpi's 1998-born second striker and Crema's 1997-born second striker.
+    // https://www.carpicalcio.it/prima-squadra/
+    // https://www.carpicalcio.it/comunicati/mercato-matteo-cortesi-e-un-nuovo-calciatore-dellac-carpi/
+    // https://ssarezzo.it/matteo-cortesi-e-un-nuovo-calciatore-dellarezzo/
+    // https://www.bergamoesport.it/ufficiale-matteo-cortesi-e-un-nuovo-giocatore-della-real-calepina/
+    // https://www.soccerway.com/player/cortesi-matteo/I1PfYqgq/transfers/
+    name: 'Matteo Cortesi', country: 'Italy', year: 2025,
+    cards: [
+      { club: 'AC Carpi', position: 'Second Striker', age: 26 },
+      { club: 'AC Crema 1908', position: 'Second Striker', age: 27 },
+    ],
+  },
+  {
+    // Ascoli's 2004-born winger also plays second striker. Scafatese's 1993-born
+    // forward played behind the striker. These cards retain their snapshot roles.
+    // https://www.youtube.com/watch?v=40JnrT8g0hk
+    // https://www.transfermarkt.it/ascoli-calcio/startseite/verein/408/saison_id/2024
+    // https://fcpistoiese1921.com/mattia-gagliardi-e-un-nuovo-giocatore-arancione/
+    // https://www.scafatesecalcio.it/2024/07/24/il-gruppo-a-disposizione-di-mister-fabiano/
+    // https://www.scafatesecalcio.it/2025/03/30/la-scafatese-torna-al-successo-al-vitiello-tris-in-rimonta-al-locri/
+    // https://lnd.it/it/seried/maglie-personalizzate-2024-2025/girone-i-8/13450-scafatese-integrazione/file
+    // https://www.transfermarkt.it/scafatese-calcio-1922/kader/verein/22048/saison_id/2024
+    name: 'Mattia Gagliardi', country: 'Italy', year: 2025,
+    cards: [
+      { club: 'Ascoli Calcio', position: 'Second Striker', age: 20 },
+      { club: 'Scafatese Calcio 1922', position: 'Second Striker', age: 31 },
+    ],
+  },
+] as const;
+
 /** Earlier club records mistakenly given the same date as a verified snapshot. */
 export const WORLD_XI_STALE_SNAPSHOT_DUPLICATES = [
   {

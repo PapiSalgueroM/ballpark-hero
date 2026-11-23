@@ -67,8 +67,9 @@ vi.mock('@/integrations/supabase/client', () => ({
 }));
 
 import { fetchWorldXiPool, fitsSlot, suggestCountryPlayers, type WxPlayer } from '@/lib/worldXi';
+import { FORMATIONS } from '@/lib/squadShape';
 
-// Every name, country other than Paraguay, club, age and value below is a fictional test sentinel.
+// Pool fillers use fictional players. Individual regression cases carry their own rows.
 const roles = ['Goalkeeper', 'Goalkeeper', 'Centre-Back', 'Centre-Back', 'Right-Back', 'Defensive Midfield', 'Central Midfield', 'Attacking Midfield', 'Centre-Forward', 'Centre-Forward'];
 function row(id: number, name: string, year: number, patch: Record<string, unknown> = {}): Record<string, unknown> {
   return { id, player_name: name, nationality: 'Paraguay', position: 'Centre-Back', club: 'Fixture Archive Club', market_value_usd: 5_000_000, year, age: 25, ...patch };
@@ -150,6 +151,33 @@ describe('World XI recent snapshot depth', () => {
     expect(suggestCountryPlayers(data!, 'United States', 'Avionne Flanagan')).toEqual([
       { name: 'Avionne Flanagan', country: 'United States', position: 'LM', club: 'Without Club', value: 1_000_000, age: 25 },
     ]);
+  });
+
+  it.each([
+    { name: 'Juan Cruz', country: 'Spain', cards: [
+      { id: 30256, club: 'CA Osasuna', role: 'Left-Back', position: 'LB', slotLabel: 'LB', age: 32, value: 2_000_000 },
+      { id: 99819, club: 'CD Leganés', role: 'Left Winger', position: 'LW', slotLabel: 'LW', age: 24, value: 5_000_000 },
+    ] },
+    { name: 'Matteo Cortesi', country: 'Italy', cards: [
+      { id: 164736, club: 'AC Carpi', role: 'Second Striker', position: 'CF', slotLabel: 'ST', age: 26, value: 1_000_000 },
+      { id: 165136, club: 'AC Crema 1908', role: 'Second Striker', position: 'CF', slotLabel: 'ST', age: 27, value: 1_000_000 },
+    ] },
+    { name: 'Mattia Gagliardi', country: 'Italy', cards: [
+      { id: 164998, club: 'Ascoli Calcio', role: 'Second Striker', position: 'CF', slotLabel: 'ST', age: 20, value: 1_000_000 },
+      { id: 165131, club: 'Scafatese Calcio 1922', role: 'Second Striker', position: 'CF', slotLabel: 'ST', age: 31, value: 1_000_000 },
+    ] },
+  ])('offers both $name cards for individual picks from the same country', async ({ name, country, cards }) => {
+    H.previous = cards.map(({ id, club, role, age, value }) =>
+      row(id, name, 2025, { nationality: country, club, position: role, age, market_value_usd: value }));
+    const data = await fetchWorldXiPool();
+    const options = suggestCountryPlayers(data!, country, name);
+    expect(options).toHaveLength(2);
+    const formation = FORMATIONS.find(shape => shape.name === '4-3-3')!;
+    for (const { club, position, slotLabel, age, value } of cards) {
+      const option = options.find(player => player.club === club)!;
+      expect(option).toMatchObject({ name, country, position, club, age, value });
+      expect(fitsSlot(option, formation.slots.find(slot => slot.label === slotLabel)!)).toBe(true);
+    }
   });
 
   it.each([
