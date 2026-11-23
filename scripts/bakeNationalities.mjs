@@ -207,6 +207,12 @@ ${eraIds.map(id => `  ${id}: () => import('@/data/nationalities/${id}').then(m =
    gate (ensureEraRosters in src/lib/clubManagerEras.ts) calls before it hands out the squads. */
 const ARRIVED: Record<string, Record<string, string>> = {};
 
+// Historical saves can still hold players removed from the 2005-06 opening roster.
+const ERA2005_SAVED_NATIONALITIES = new Map([
+  ['Barry Ferguson', 'Scotland'],
+  ['Dani García', 'Spain'],
+]);
+
 /** Fetches one past world's map. A key with no row above rejects, naming the key. */
 export function loadNationalityWorld(key: string): Promise<Record<string, string>> {
   if (!Object.prototype.hasOwnProperty.call(NATIONALITY_WORLD_LOADERS, key)) {
@@ -242,8 +248,7 @@ export function registerNationalityWorld(key: string, world: Record<string, stri
 export function nationalityOf(eraId: string | undefined, name: string): string | null {
   const key = eraId ?? 'now';
   const sealed = ARRIVED[key];
-  // Existing 2005-06 saves can still hold this player from the old Espanyol squad.
-  if (sealed) return sealed[name] ?? (key === 'era2005' && name === 'Dani García' ? 'Spain' : null);
+  if (sealed) return sealed[name] ?? (key === 'era2005' ? ERA2005_SAVED_NATIONALITIES.get(name) ?? null : null);
   if (Object.prototype.hasOwnProperty.call(NATIONALITY_WORLD_LOADERS, key)) return null;
   return NATIONALITY_WORLD_NOW.now[name] ?? CM_ALEAGUE_NATIONALITIES[name] ?? CM_RUSSIA_NATIONALITIES[name] ?? null;
 }

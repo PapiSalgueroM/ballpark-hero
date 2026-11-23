@@ -177,7 +177,6 @@ era2005: {
   'Bacary Sagna': 'France',
   'Bakari Koné': 'Cote d\'Ivoire',
   'Barreto': 'Brazil',
-  'Barry Ferguson': 'Scotland',
   'Bastian Reinhardt': 'Germany',
   'Bastian Schweinsteiger': 'Germany',
   'Ben Thatcher': 'Wales',

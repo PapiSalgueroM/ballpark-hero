@@ -69,9 +69,43 @@ const FENERBAHCE_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
   { name: 'Nicolas Anelka', line: 'ATT' },
 ];
 
+// Partial Benfica first-team roster at the August 2005 opening.
+// Sources and cutoff are recorded in docs/audits/club-manager-benfica-rangers-2005-rosters.md.
+const BENFICA_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
+  { name: 'José Moreira', line: 'GK' },
+  { name: 'Anderson', line: 'DEF' },
+  { name: 'Luisão', line: 'DEF' },
+  { name: 'João Pereira', line: 'DEF' },
+  { name: 'Ricardo Rocha', line: 'DEF' },
+  { name: 'Petit', line: 'MID' },
+  { name: 'Manuel Fernandes', line: 'MID' },
+  { name: 'Beto', line: 'MID' },
+  { name: 'Geovanni', line: 'ATT' },
+  { name: 'Simão Sabrosa', line: 'ATT' },
+  { name: 'Nuno Gomes', line: 'ATT' },
+];
+
+// Partial Rangers first-team roster at the July 2005 opening.
+// Sources and cutoff are recorded in docs/audits/club-manager-benfica-rangers-2005-rosters.md.
+const RANGERS_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
+  { name: 'Ronald Waterreus', line: 'GK' },
+  { name: 'Marvin Andrews', line: 'DEF' },
+  { name: 'José Pierre-Fanfan', line: 'DEF' },
+  { name: 'Ian Murray', line: 'DEF' },
+  { name: 'Steven Smith', line: 'DEF' },
+  { name: 'Barry Ferguson', line: 'MID' },
+  { name: 'Alex Rae', line: 'MID' },
+  { name: 'Chris Burke', line: 'MID' },
+  { name: 'Dado Pršo', line: 'ATT' },
+  { name: 'Steven Thompson', line: 'ATT' },
+  { name: 'Ross McCormack', line: 'ATT' },
+];
+
 export const HISTORIC_2005_CUP_ROSTERS: ReadonlyMap<string, readonly HistoricCupRosterPlayer[]> = new Map([
   ['Ajax', AJAX_2005_CUP_ROSTER],
   ['Rosenborg', ROSENBORG_2005_CUP_ROSTER],
   ['Olympiacos', OLYMPIACOS_2005_CUP_ROSTER],
   ['Fenerbahçe', FENERBAHCE_2005_CUP_ROSTER],
+  ['Benfica', BENFICA_2005_CUP_ROSTER],
+  ['Rangers', RANGERS_2005_CUP_ROSTER],
 ]);
