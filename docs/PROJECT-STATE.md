@@ -1,3 +1,7 @@
+## 2026-11-23, MLB Front Office recap migration protection
+
+PL-04 is partly implemented. An older MLB Front Office recap keeps an exact recovery copy before opening the next draft. If storage refuses the copy or the draft, the previous recap stays saved and Retry save writes the same generated class. The season and title totals stay counted once. A newer save in another tab takes precedence. The 167 focused tests and all 25 Front Office season close cases passed.
+
 ## 2026-11-23, Club Manager portable save files
 
 PL-03 is partly implemented across the site. Club Manager offers Save files in the manager chooser. A fresh browser can open Import a career before picking an era, then load the file into an empty slot. The download keeps the original save bytes, and import preserves the career's data with an unranked marker. The original file remains available if storage refuses the import or another tab fills the slot first.
