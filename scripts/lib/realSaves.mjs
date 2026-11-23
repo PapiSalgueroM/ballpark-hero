@@ -49,7 +49,10 @@ export const WRITERS = {
     'localStorage.setItem(saveKey, raw);',
   ] },
   '/club-manager': { kind: 'engine', file: 'src/lib/clubManager.ts', fn: 'saveCareer' },
-  '/stadium-tycoon': { kind: 'serializer', file: 'src/hooks/useStadiumTycoon.ts', fn: 'serializeTycoon' },
+  '/stadium-tycoon': { kind: 'serializer', file: 'src/hooks/useStadiumTycoon.ts', fn: 'serializeTycoon', indirect: [
+    'const bytes = serializeTycoon(next, now);',
+    'localStorage.setItem(TYCOON_SAVE_KEY, bytes);',
+  ] },
   '/wonderkid-factory': { kind: 'serializer', file: 'src/hooks/useWonderkidFactory.ts', fn: 'serialize' },
   '/rebuild': { kind: 'engine', file: 'src/lib/rebuildSave.ts', fn: 'writeRebuildSave' },
   '/front-office': { kind: 'literal', file: 'src/components/front-office/FrontOfficeBoard.tsx' },
