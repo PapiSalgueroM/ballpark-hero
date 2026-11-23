@@ -40,8 +40,8 @@
  *               nothing reorders
  *   inversion   hockey: MacKinnon and Draisaitl swapped                   2, 3
  *   nolast      hockey: one player loses lastSeason                       4
- *   goalieok    hockey: a goalie is given a real season, so an            5
- *               unchecked figure reads as a checked one
+ *   goalieok    hockey: a verified goalie loses its season cutoff        2
+ *   goaliestale hockey: both goaltenders get their old wrong totals       2
  *   heldfix     hockey: Gordie Howe set to the table's truncated 349      3, 6
  *   nbastale    nba: Kevin Durant put back to his 2024-25 total           2, 3
  *   mlbstale    mlb: Bonds nudged 2, and he is 7 clear of Aaron           2
@@ -69,7 +69,7 @@ import { loadSport, readSource, rewrite, checkSport } from './lib/higherLowerFen
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.HL_FACTS_CONTROL || '';
-const EXPECT = { stale: [2], inversion: [2, 3], nolast: [4], goalieok: [5], heldfix: [3, 6], nbastale: [2, 3], mlbstale: [2], nflstale: [2, 3], tennismerge: [2, 3], playeduntil: [7], henrystale: [2, 3], apmerge: [2, 3], durantteam: [8], curryshort: [2, 3], nbaonesource: [1], flagless: [1], throughprop: [7], componentuntil: [7], examplestale: [9] };
+const EXPECT = { stale: [2], inversion: [2, 3], nolast: [4], goalieok: [2], goaliestale: [2], heldfix: [3, 6], nbastale: [2, 3], mlbstale: [2], nflstale: [2, 3], tennismerge: [2, 3], playeduntil: [7], henrystale: [2, 3], apmerge: [2, 3], durantteam: [8], curryshort: [2, 3], nbaonesource: [1], flagless: [1], throughprop: [7], componentuntil: [7], examplestale: [9] };
 /* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
 if (CONTROL && !(CONTROL in EXPECT)) {
   console.log(`   FAIL unknown control ${CONTROL} (known: ${Object.keys(EXPECT).join(', ')})`);
@@ -89,9 +89,8 @@ const SPORTS = [
     metric: 'careerPoints', asOf: 'lastSeason',
     record: 'scripts/data/nhlHigherLowerVerified2026-09.json',
     unverifiedMarker: 'unverified',
-    /* nhl_player_stats holds no goalie, so a goalie total here cannot have been
-       checked against it and must be flagged rather than quietly trusted. */
-    cannotBeChecked: (p) => p.position === 'Goalie',
+    // The goalie entries in the record use their own NHL and StatMuse sources.
+    cannotBeChecked: null,
   },
   {
     key: 'nba', label: 'NBA Higher or Lower',
@@ -182,7 +181,11 @@ for (const cfg of SPORTS.filter(s => s.record)) {
         source = rewrite(source, "country: 'Germany', countryFlag: '\u{1F1E9}\u{1F1EA}', careerPoints: 1053", "country: 'Germany', countryFlag: '\u{1F1E9}\u{1F1EA}', careerPoints: 1141", 'inversion lifts Draisaitl');
       }
       else if (CONTROL === 'nolast') source = rewrite(source, ", lastSeason: '1979-80'", '', 'nolast strips one lastSeason');
-      else if (CONTROL === 'goalieok') source = rewrite(source, "careerPoints: 46, teams: 'New York Rangers', lastSeason: 'unverified'", "careerPoints: 46, teams: 'New York Rangers', lastSeason: '2019-20'", 'goalieok dresses a goalie up as checked');
+      else if (CONTROL === 'goalieok') source = rewrite(source, "careerPoints: 27, teams: 'New York Rangers', lastSeason: '2019-20'", "careerPoints: 27, teams: 'New York Rangers', lastSeason: 'unverified'", 'goalieok removes the verified cutoff');
+      else if (CONTROL === 'goaliestale') {
+        source = rewrite(source, "careerPoints: 27, teams: 'New York Rangers'", "careerPoints: 46, teams: 'New York Rangers'", "goaliestale restores Lundqvist's old total");
+        source = rewrite(source, "careerPoints: 3, teams: 'New York Rangers'", "careerPoints: 18, teams: 'New York Rangers'", "goaliestale restores Shesterkin's old total");
+      }
       else if (CONTROL === 'heldfix') source = rewrite(source, 'careerPoints: 1850', 'careerPoints: 349', 'heldfix uses the truncated table value');
     } else if (cfg.key === 'nba' && CONTROL === 'nbastale') {
       source = rewrite(source, 'careerPoints: 32597', 'careerPoints: 30571', 'nbastale puts Durant back a season');

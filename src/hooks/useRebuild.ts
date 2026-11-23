@@ -15,10 +15,12 @@ import type { RunState, ObjectiveView } from '@/lib/rebuildLoop';
 import * as table from '@/lib/rebuildTable';
 import type { TableState, TableData, SeatView, SeatKind } from '@/lib/rebuildTable';
 import {
-  clearRebuildSave, isFinishedTable, readRebuildSave, restoreTable, savedClubNames,
-  toSave, writeRebuildSave, type RebuildMove, type RebuildSession,
+  isFinishedTable, parseRebuildSave, readRebuildSaveRaw, REBUILD_SAVE_KEY, restoreTable, savedClubNames,
+  toSave, writeRebuildSave, type RebuildMove, type RebuildSave, type RebuildSession,
 } from '@/lib/rebuildSave';
 import { markRestoredFinish } from '@/lib/restoredFinish';
+import { holdPendingSave } from '@/lib/safeStorage';
+import { saveFence } from '@/lib/saveFence';
 
 /**
  * Round 456: the hook is a thin wrapper now. Every rule lives in
@@ -60,6 +62,8 @@ export interface SeatScore {
 export interface RebuildState {
   phase: Phase;
   loading: boolean;
+  saveIssue: 'unreadable' | 'failed' | 'moved' | null;
+  retrySave: () => boolean;
   clubs: RebuildClub[];
   club: RebuildClub | null;
   preset: RebuildPreset;
@@ -152,6 +156,9 @@ export function useRebuild(): RebuildState {
      render would overwrite the save with an empty table. */
   const [restored, setRestored] = useState(false);
   const restoreTried = useRef(false);
+  const expectedSave = useRef<string | null>();
+  const preserveSave = useRef(false);
+  const [saveIssue, setSaveIssue] = useState<RebuildState['saveIssue']>(null);
   const [spinning, setSpinning] = useState(false);
   const [thinking, setThinking] = useState(false);
   const [rivals, setRivals] = useState<RivalResult[] | null>(null);
@@ -260,13 +267,20 @@ export function useRebuild(): RebuildState {
      rivals and the season's neutral clubs all come from there), fetches the
      same squads and markets a fresh pick would, and hands the whole thing to
      src/lib/rebuildSave.ts, which returns null on anything it cannot replay
-     exactly. Null means a fresh run and a cleared key, never a half restored
-     board. */
+     exactly. Keep unreadable bytes available while opening the club picker. */
   useEffect(() => {
     if (restoreTried.current || clubs.length === 0) return;
     restoreTried.current = true;
-    const saved = readRebuildSave();
-    if (!saved) { setRestored(true); return; }
+    saveFence.adopt(REBUILD_SAVE_KEY);
+    const raw = readRebuildSaveRaw();
+    expectedSave.current = raw;
+    const markUnreadable = () => { preserveSave.current = true; setSaveIssue('unreadable'); };
+    const saved = parseRebuildSave(raw ?? null);
+    if (!saved) {
+      if (typeof raw === 'string') markUnreadable();
+      setRestored(true);
+      return;
+    }
     let cancelled = false;
     setLoading(true);
     (async () => {
@@ -279,7 +293,7 @@ export function useRebuild(): RebuildState {
         if (cancelled) return;
         const back = restoreTable(saved, clubs, value);
         if (!back) {
-          clearRebuildSave();
+          markUnreadable();
         } else {
           /* A finish read back from storage is not a new finish (Round 399). */
           if (isFinishedTable(back.table)) markRestoredFinish('rebuild');
@@ -288,7 +302,7 @@ export function useRebuild(): RebuildState {
           setSession(back);
         }
       } catch {
-        if (!cancelled) clearRebuildSave();
+        if (!cancelled) markUnreadable();
       } finally {
         if (!cancelled) { setRestored(true); setLoading(false); }
       }
@@ -296,13 +310,30 @@ export function useRebuild(): RebuildState {
     return () => { cancelled = true; };
   }, [clubs, loadTableData]);
 
-  /* Written after every move that changed something, not at the end: an
-     interruption costs a spin and not a session. */
-  useEffect(() => {
-    if (!restored) return;
+  const persist = useCallback((save: RebuildSave | null) => {
+    const expected = expectedSave.current;
+    if (expected === undefined) { setSaveIssue('failed'); return false; }
+    const result = writeRebuildSave(save, expected, preserveSave.current);
+    if (result.outcome !== 'written') { setSaveIssue(result.outcome); return false; }
+    expectedSave.current = result.raw;
+    preserveSave.current = false;
+    setSaveIssue(null);
+    return true;
+  }, []);
+
+  const retrySave = useCallback(() => {
     const save = toSave(session, preset);
-    if (save) writeRebuildSave(save); else clearRebuildSave();
-  }, [restored, session, preset]);
+    return save !== null && persist(save);
+  }, [persist, preset, session]);
+
+  /* Only a deliberate reset clears the key. An empty or refused load writes nothing. */
+  useEffect(() => {
+    if (restored) retrySave();
+  }, [restored, retrySave]);
+
+  useEffect(() => {
+    if (saveIssue === 'failed') return holdPendingSave(retrySave);
+  }, [saveIssue, retrySave]);
 
   /* A one seat table opens the moment its squad is in; so does a CPU seat,
      which plays its whole window in that same call. A human seat waits for
@@ -441,11 +472,11 @@ export function useRebuild(): RebuildState {
   }, [solo, run, clubs]);
 
   const reset = useCallback(() => {
+    if (!persist(null)) return;
     setSession(s => {
       const t = table.createTable(table.seatKindsOf(s.table), s.table.salt);
       return { table: t, moves: t.seats.map(() => []) };
     });
-    clearRebuildSave();
     setData(null);
     setSpinning(false);
     setThinking(false);
@@ -454,7 +485,7 @@ export function useRebuild(): RebuildState {
     seasonFor.current = null;
     if (warTimer.current) window.clearTimeout(warTimer.current);
     if (spinTimer.current) window.clearTimeout(spinTimer.current);
-  }, []);
+  }, [persist]);
 
   // readings
   const startingXi = useMemo(() => (run ? loop.xiOf(run) : []), [run]);
@@ -521,7 +552,7 @@ export function useRebuild(): RebuildState {
   }, [solo, tbl, run, startRating, currentRating, target, grade, finalFunds, rivals, season]);
 
   return {
-    phase, loading, clubs, club: seat?.club ?? null, preset, setPreset, chooseClub, reset,
+    phase, loading, saveIssue, retrySave, clubs, club: seat?.club ?? null, preset, setPreset, chooseClub, reset,
     run,
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason: tbl.season,
     startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
