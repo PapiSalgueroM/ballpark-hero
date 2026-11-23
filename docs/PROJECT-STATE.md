@@ -6,6 +6,24 @@ All 16 long-play hook tests, the application typecheck, the production build and
 
 Chromium at 320 and 390 pixels bought Guided tours in a second tab and kept the exact level 1 save after the older tab exited. Both widths held the exact prior museum when the backup was refused, then kept one byte-exact backup on Retry save. Reload opened the new museum and retained the backup.
 
+## 2026-11-23, NHL plus-minus and penalty minutes
+
+The NHL regular-season summary covers all 69 repaired imports at their original team and season cutoffs. Independent season lines confirmed both fields on all 42 rows that needed changes. The second migration corrects 33 plus-minus values and 40 penalty-minute values, including 21 negative penalty totals from the old import. Each ledger row records the independent source. Hunter Drew's five penalty minutes also match the official game log and box score. [NHL skater stats](https://www.nhl.com/stats/skaters), [Drew's game log](https://api-web.nhle.com/v1/player/8481003/game-log/20212022/2), [San Jose box score](https://api-web.nhle.com/v1/gamecenter/2021021285/boxscore).
+
+The replay applied the original migration to all 6,353 captured source rows before comparing the second migration. Both wheel orders, 222 draft squads and 7,666 offers, their ratings, all 171 Grid criterion pairs and all 98 published boards matched. A control changed an eligible defenseman's rating through plus-minus and held it steady when only penalty minutes changed. All 42 corrected players remain below the draft's 15-game minimum.
+
+Isolated PostgreSQL 18.7 checked the exact 42 changed rows and preserved every other column. The forward and reverse reruns made no writes, six changed source controls rolled back the whole transaction, and a relocated source row corrected without touching the record that reused its old ID. The NHL import harness catches both a copied negative penalty total and a false draft admission.
+
+## 2026-11-23, NHL skater import repair
+
+All 69 rows flagged in the October audit now have a matching official NHL player ID and an independent regular-season source. The migration corrects the first season, games, goals, assists and points using the season already recorded on each row. The official player IDs and independent sources are in the migration ledger. A few of these players have appearances in later seasons, and the repaired rows use their original cutoff.
+
+A replay of all 6,353 source rows preserved the 222 full and 194 legacy wheel stops in order, the first 1,000 eligible wheel rows, all 171 Hockey Grid answer lists and their rarity ordering, and all 98 published NHL boards. The skater replay found 15 incorrect draft offers across 10 stops and removed them. All repaired players had between one and six NHL games at the recorded cutoff.
+
+The exact SQL passed on isolated PostgreSQL 18.7. It repaired all 69, preserved other columns, made no writes on a second run and reversed exactly. A changed generated ID still resolved the correct natural identity. Eleven changed, missing or duplicate record controls rejected the whole transaction. The app typecheck, build, 15 built-site checks and the NHL import harness passed. Its copied 15-game row triggered draft eligibility.
+
+The original row values are embedded in the repair ledger for rollback. The official comparison also surfaced 33 plus-minus differences and 40 penalty-minute differences. Those fields still need independent review.
+
 ## 2026-11-23, Hockey Higher or Lower goalie points
 
 Henrik Lundqvist's card now shows 27 NHL regular-season points through 2019-20. Igor Shesterkin's card shows three through 2025-26. Both totals consist of assists. The Hockey Higher or Lower facts record now includes both goalies with two sources each. [NHL on Lundqvist](https://www.nhl.com/news/henrik-lundqvist-retires-326000932), [StatMuse on Lundqvist](https://www.statmuse.com/nhl/ask/has-henrik-lundqvist-scored-a-assist), [NHL season records for Shesterkin](https://api.nhle.com/stats/rest/en/goalie/summary?isAggregate=false&isGame=false&limit=50&cayenneExp=gameTypeId%3D2%20and%20playerId%3D8478048%20and%20seasonId%3C%3D20252026), [StatMuse season breakdown for Shesterkin](https://www.statmuse.com/nhl/ask?q=how+many+assists+does+igor+shesterkin+have+all-time).
