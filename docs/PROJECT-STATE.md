@@ -1,3 +1,9 @@
+## 2026-11-23, Club Manager 2005-06 Benfica and Rangers scorer coverage
+
+Two verified 11-player opening pools give Benfica and Rangers named scorers in newly played background cup matches. Barry Ferguson returned to Rangers in January 2005. The corrected Blackburn Rovers bake drops his stale row, and the save checks preserve his stored identity, club and Scotland flag. [Benfica and Rangers roster audit](audits/club-manager-benfica-rangers-2005-rosters.md)
+
+The 125-match Champions League replay credits 11 Benfica and 11 Rangers goals. The opening matchday fixture tests both clubs away in one Quick Sim. CM-03 remains partial, with six of the original 15 missing outside-league squads now covered. PR #1064's Dani García correction was verified live in six browser cases.
+
 ## 2026-11-23, Club Manager 2005-06 Dani García roster correction
 
 Dani García Lara moved from Espanyol to Olympiacos before the 2005-06 opener. The corrected bake removes his stale Espanyol row, and Olympiacos's partial cup scorer pool includes him alongside Haruna Babangida. The cup pool respects saved ownership. [Transfer and roster audit](audits/club-manager-olympiacos-fenerbahce-2005-rosters.md)

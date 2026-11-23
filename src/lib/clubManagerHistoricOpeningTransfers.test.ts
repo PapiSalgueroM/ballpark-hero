@@ -14,19 +14,25 @@ afterEach(() => {
   saveFence.release(SAVE_KEY);
 });
 
-it.each(['Real Madrid', 'Sevilla'])('preserves Dani García in a 2005 save managed by %s', async club => {
+const openingTransfers = [
+  { name: 'Dani García', slug: 'dani-garcia', from: 'Espanyol', position: 'ST', age: 30, rating: 68, value: 1.5, nation: 'Spain' },
+  { name: 'Barry Ferguson', slug: 'barry-ferguson', from: 'Blackburn Rovers', position: 'CDM', age: 26, rating: 76, value: 6.8, nation: 'Scotland' },
+] as const;
+
+const careerCases = openingTransfers.flatMap(transfer => ['Real Madrid', 'Sevilla'].map(club => ({ ...transfer, club })));
+
+it.each(careerCases)('preserves $name in a 2005 save managed by $club', async ({ name, slug, from, position, age, rating, value, nation, club }) => {
   await ensureEraRosters('era2005');
-  const name = 'Dani García';
   const owner = 'Real Madrid';
   const base = startCareer(club, 'era2005');
   const managed = club === owner;
   const player: CMPlayer = {
-    id: managed ? 'sign-dani-garcia-s1' : 'p-dani-garcia',
+    id: managed ? `sign-${slug}-s1` : `p-${slug}`,
     name,
-    position: 'ST',
-    rating: 68,
-    age: 30,
-    value: 1.5,
+    position,
+    rating,
+    age,
+    value,
     fitness: 100,
     morale: 70,
     injuryWeeks: 0,
@@ -36,7 +42,7 @@ it.each(['Real Madrid', 'Sevilla'])('preserves Dani García in a 2005 save manag
     seasonAssists: 0,
   };
   const transfer: TransferNews = {
-    name, from: 'Espanyol', to: owner, fee: 1.5, season: 1, week: base.week,
+    name, from, to: owner, fee: value, season: 1, week: base.week,
   };
   const legacy = recordWorldRosterTransfer({
     ...base,
@@ -44,7 +50,7 @@ it.each(['Real Madrid', 'Sevilla'])('preserves Dani García in a 2005 save manag
     goneNames: [...base.goneNames, name],
     transferLog: [...(base.transferLog ?? []), transfer],
   }, { player, from: transfer.from, to: transfer.to, kind: 'permanent', since: 0 });
-  const key = JSON.stringify(['era2005', 'Espanyol', name, 'ST', 1975, 0]);
+  const key = JSON.stringify(['era2005', from, name, position, 2005 - age, 0]);
 
   expect(worldRosterOwner(legacy, key)).toBe(owner);
   expect(saveCareer(legacy)).toBe(true);
@@ -53,8 +59,8 @@ it.each(['Real Madrid', 'Sevilla'])('preserves Dani García in a 2005 save manag
     expect(loaded).not.toBeNull();
     const reloaded = loaded!;
     const savedPlayer = readWorldRoster(reloaded)?.records.find(record => record.key === key)?.player;
-    expect(savedPlayer).toMatchObject({ id: player.id, name, position: 'ST', age: 30, worldRosterKey: key });
-    expect(shownNation(reloaded.eraId, savedPlayer!)).toBe('Spain');
+    expect(savedPlayer).toMatchObject({ id: player.id, name, position, age, worldRosterKey: key });
+    expect(shownNation(reloaded.eraId, savedPlayer!)).toBe(nation);
     expect(worldRosterOwner(reloaded, key)).toBe(owner);
     expect(reloaded.squad.filter(row => row.id === player.id).map(row => row.worldRosterKey))
       .toEqual(managed ? [key] : []);
@@ -62,7 +68,7 @@ it.each(['Real Madrid', 'Sevilla'])('preserves Dani García in a 2005 save manag
     expect(reloaded.goneNames).toContain(name);
     expect(worldRosterFor(reloaded, owner).filter(row => row.n === name).map(row => row.worldRosterKey))
       .toEqual([key]);
-    expect(worldRosterFor(reloaded, 'Espanyol').some(row => row.n === name)).toBe(false);
+    expect(worldRosterFor(reloaded, from).some(row => row.n === name)).toBe(false);
   }
-  expect(projectedRoster('Espanyol', 0, 'era2005').some(row => row.n === name)).toBe(false);
+  expect(projectedRoster(from, 0, 'era2005').some(row => row.n === name)).toBe(false);
 });

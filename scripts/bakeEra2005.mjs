@@ -510,6 +510,7 @@ const B5_REMOVALS = [
   { n: 'Anthony Braizat', why: 'Toulouse to Cannes, listed among Toulouse\'s departures on 22 Jun 2005 (LEQ 20050622_183836)' },
   { n: 'Anthony Seric', why: 'Lazio to Panathinaikos, 1 Jul 2005 (soccerway transfers, Anthony Seric)' },
   { n: 'Arnaud Le Lan', why: 'Rennes to Guingamp, 1 Jul 2005 (soccerway transfers, Arnaud Le Lan)' },
+  { n: 'Barry Ferguson', why: 'Blackburn Rovers to Rangers, 31 Jan 2005 (UEFA transfer report and Rangers opening lineup); his year 2006 row is Rangers FC' },
   { n: 'Benjamin Nicaise', why: 'Metz to Amiens on a free, 1 Jul 2005 (soccerway transfers, Benjamin Nicaise)' },
   { n: 'Björn Schlicke', why: 'Hamburg to Koln, 17 Jun 2005 (KI 17 Jun 2005, Schlicke wechselt zum FC); no year 2006 row, so the table cannot place him at Koln', single: true },
   { n: 'Brahim Hemdani', why: 'Marseille to Rangers, one of Rangers\' summer signings by 6 Jul 2005 (LEQ 20050706_082357)' },
