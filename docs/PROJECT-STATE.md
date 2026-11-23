@@ -1,3 +1,11 @@
+## 2026-11-23, Club Manager domestic cup Golden Boot
+
+The domestic cup now has a Top scorers tile. The race follows every settled bracket round, including byes and matches played after your club goes out. Managed goals follow the actual scorer report and the bracket clubs, even when the report shows the opposite home side. Background goals use the game’s existing scorer allocation. Own goals and shootout kicks stay out of the race. If missing scorer identities could change the winner, the award stays unconfirmed.
+
+Everton’s saved first-round FA Cup exit still led to the same shootout final between Manchester City and Liverpool. Liverpool’s saved title run still finished 1–0 against Newcastle with Víctor Muñoz scoring. Confirmed awards appear in the season review and Stats → Past winners. A move to Bayern after the FA Cup final kept the original award through review and rollover. When Everton fired the manager after the final, taking the QPR job also kept the finished cup award in Past winners. That move still skips the unfinished league review. Older brackets with already-settled score-only rounds show that scorer history is unavailable.
+
+The Europa League release in PR #1058 passed 14 published browser replays. The admin report remains open for the managed Champions League, which has its own group and knockout settlement paths.
+
 ## 2026-11-23, Club Manager Europa League Golden Boot
 
 The Europa League Top scorers tile follows a competition your club entered, including the matches after elimination. It uses the actual scorer lines for managed matches and the existing keyed scorer allocation for settled background scores. Extra-time goals enter the race. Shootout kicks and own goals stay out of player totals. Named goals, own goals and unresolved goals always account for the score.
