@@ -1,3 +1,13 @@
+## 2026-11-23, Player Bingo verified club appearances
+
+Player Bingo credits Kevin De Bruyne and Andrey Santos for Chelsea and Mykhaylo Mudryk for Tottenham. The three senior appearances are bound to the market player's name, nationality, role and birth year. The corrections feed career club squares. Season-specific squares still read the original dated rows.
+
+- Kevin De Bruyne played for Chelsea's first team in 2013/14. [Chelsea's Belgian players](https://www.chelseafc.com/en/news/article/every-belgian-blue) and [UEFA match statistics](https://www.uefa.com/newsfiles/UCL/2014/2011808_SPS.pdf).
+- Andrey Santos played for Chelsea at the 2025 Club World Cup. [Chelsea's transfer statement](https://www.chelseafc.com/en/news/article/andrey-santos-moves-to-manchester-united) and [FIFA match report](https://fdp.fifa.org/assetspublic/ce233/r10591/pdf/FullTimeMatchReport-English.pdf).
+- Mykhaylo Mudryk made his Tottenham debut on 5 September 2026 against Nottingham Forest. [Tottenham match report](https://www.tottenhamhotspur.com/news/1088632/stalemate-at-the-city-ground) and [Opta appearance record](https://theanalyst.com/players/3923/mykhailo-mudryk/career).
+
+All three criteria failed before the correction, and the 114 focused tests passed afterward. The frozen October comparison reports the same four inherited findings for Cole Palmer's already-verified red card on both main 1c85db5 and the Bingo candidate.
+
 ## 2026-11-23, Club Manager improved transfer bids
 
 An improved bid stays on the table after a match while the transfer window is open. You can accept the final price under the usual squad and deadline rules.
