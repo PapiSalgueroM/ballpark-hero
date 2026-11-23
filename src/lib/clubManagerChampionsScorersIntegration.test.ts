@@ -365,8 +365,10 @@ describe('Owned Champions League scorer settlement', () => {
       ['Rangers', 11, 'Kris Boyd'],
       ['Rapid Vienna', 11, 'Mario Bazina'],
       ['Club Brugge', 9, 'Javier Portillo'],
+      ['Sparta Prague', 9, 'Tomáš Poláček'],
+      ['Anderlecht', 8, 'Roland Juhász'],
     ] as const) {
-      expect(goalsForClub(final.state, club)).toBe(count);
+      expect(goalsForClub(final.state, club), club).toBe(count);
       const roster = HISTORIC_2005_CUP_ROSTERS.get(club)!;
       expect(roster.some(player => player.name === laterArrival)).toBe(false);
       const eligible = new Set(roster.filter(player => player.line !== 'GK').map(player => player.name));

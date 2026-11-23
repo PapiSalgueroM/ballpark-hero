@@ -1,3 +1,9 @@
+## 2026-11-23, Club Manager 2005-06 Sparta Prague and Anderlecht scorer coverage
+
+Two verified 11-player opening pools give Sparta Prague and Anderlecht named scorers in newly played background cup matches. The source record uses Sparta's August 6 domestic opener and Anderlecht's July 26 opening qualifier. The new pool names do not overlap the 98 playable historical clubs or the prior eight scorer pools. [Sparta Prague and Anderlecht source audit](audits/club-manager-sparta-anderlecht-2005-rosters.md)
+
+The 125-match Champions League replay credits nine Sparta Prague and eight Anderlecht goals. The matchday five fixture tests both clubs together. Settled saves keep their original scorer records. CM-03 remains partial, with ten of the original 15 missing outside-league pools covered. The Rapid Vienna and Club Brugge release in PR #1066 passed all eight live browser checks.
+
 ## 2026-11-23, Club Manager 2005-06 Rapid Vienna and Club Brugge scorer coverage
 
 Two verified 11-player opening pools give Rapid Vienna and Club Brugge named scorers in newly played background cup matches. Ivan Leko left Málaga before the season and joined Club Brugge in June. Fresh careers use that correction, while earlier saves retain his player identity, club, transfers and Croatia flag. [Rapid Vienna and Club Brugge source audit](audits/club-manager-rapid-brugge-2005-rosters.md)

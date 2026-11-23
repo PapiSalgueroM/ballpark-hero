@@ -133,6 +133,38 @@ const CLUB_BRUGGE_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
   { name: 'Manasseh Ishiaku', line: 'ATT' },
 ];
 
+// Partial Sparta Prague first-team roster at the August 2005 opening.
+// Sources and cutoff are recorded in docs/audits/club-manager-sparta-anderlecht-2005-rosters.md.
+const SPARTA_PRAGUE_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
+  { name: 'Jaromír Blažek', line: 'GK' },
+  { name: 'Zdeněk Pospěch', line: 'DEF' },
+  { name: 'Adam Petrouš', line: 'DEF' },
+  { name: 'Petr Lukáš', line: 'DEF' },
+  { name: 'Michal Kadlec', line: 'DEF' },
+  { name: 'Martin Hašek', line: 'MID' },
+  { name: 'Tomáš Sivok', line: 'MID' },
+  { name: 'Karel Poborský', line: 'MID' },
+  { name: 'Lukáš Zelenka', line: 'MID' },
+  { name: 'Karol Kisel', line: 'MID' },
+  { name: 'Miroslav Slepička', line: 'ATT' },
+];
+
+// Partial Anderlecht first-team roster at the July 2005 opening.
+// Sources and cutoff are recorded in docs/audits/club-manager-sparta-anderlecht-2005-rosters.md.
+const ANDERLECHT_2005_CUP_ROSTER: readonly HistoricCupRosterPlayer[] = [
+  { name: 'Daniel Zítka', line: 'GK' },
+  { name: 'Anthony Vanden Borre', line: 'DEF' },
+  { name: 'Hannu Tihinen', line: 'DEF' },
+  { name: 'Vincent Kompany', line: 'DEF' },
+  { name: 'Olivier Deschacht', line: 'DEF' },
+  { name: 'Yves Vanderhaeghe', line: 'MID' },
+  { name: 'Christian Wilhelmsson', line: 'MID' },
+  { name: 'Pär Zetterberg', line: 'MID' },
+  { name: 'Bart Goor', line: 'MID' },
+  { name: 'Nenad Jestrović', line: 'ATT' },
+  { name: 'Mbo Mpenza', line: 'ATT' },
+];
+
 export const HISTORIC_2005_CUP_ROSTERS: ReadonlyMap<string, readonly HistoricCupRosterPlayer[]> = new Map([
   ['Ajax', AJAX_2005_CUP_ROSTER],
   ['Rosenborg', ROSENBORG_2005_CUP_ROSTER],
@@ -142,4 +174,6 @@ export const HISTORIC_2005_CUP_ROSTERS: ReadonlyMap<string, readonly HistoricCup
   ['Rangers', RANGERS_2005_CUP_ROSTER],
   ['Rapid Vienna', RAPID_VIENNA_2005_CUP_ROSTER],
   ['Club Brugge', CLUB_BRUGGE_2005_CUP_ROSTER],
+  ['Sparta Prague', SPARTA_PRAGUE_2005_CUP_ROSTER],
+  ['Anderlecht', ANDERLECHT_2005_CUP_ROSTER],
 ]);
