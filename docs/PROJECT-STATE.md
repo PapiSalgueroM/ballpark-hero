@@ -1,3 +1,9 @@
+## 2026-11-23, College Dynasty recap save protection
+
+PL-04 protects older CFB and CBB Dynasty recaps before recruiting can replace them. The game checks an exact copy of the old save. Retry keeps the same recruits and transfer portal, and a newer save from another tab takes precedence. The same check protects the recruiting route from a stored job market that cannot reopen.
+
+Both original writers produced valid season-one Alabama recaps with one completed season and no stored postseason details. Ten regression cases failed on the previous code and passed with the fix. In 20 Chromium cases at 320 and 390 pixels, the original recap and the other college career stayed intact through refusal and retry. The previous build reopened all four newly saved recruiting classes. All 97 focused tests, scoped SaveKeeper checks and 16 selected site checks passed. All 204 paired gameplay steps had identical recorded outcomes on the two builds. The older checked-in fixture still differs from the baseline's first week and round.
+
 ## 2026-11-23, NRL Team Manager automatic season checkpoints
 
 PL-03 adds a season checkpoint beside the manual checkpoint in each slot. Starting a later season keeps the exact completed save after the new progress lands. Career saves can restore it after keeping a copy of the current career. Deleting a career files its automatic checkpoint in recovery so the slot can be reused. Imported careers remain local, and replayed seasons avoid duplicate completion credit. The 83 focused tests and all 22 Chromium cases at 320 and 390 pixels passed. An actual 12-season career kept its manual checkpoint and exact review after rollover, restore and reload. The tests also checked legacy v1, import after a slot deletion, refusal to save or archive, stale tabs and an automatic checkpoint from a different career. The previous build produced the same active successor with no automatic point at either width.
