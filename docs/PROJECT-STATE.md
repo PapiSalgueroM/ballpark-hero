@@ -1,3 +1,9 @@
+## 2026-11-23, Build Your XI historical club picks
+
+The Mixed picker accepts Richard Ríos for Benfica and Casemiro for Manchester United. Their live market rows reflect later moves, and the two club-specific cards use dated estimates. Mixed also offers nine source-verified split-club records across Benfica, Celtic, Chelsea, Galatasaray, Inter, Juventus and Sporting. Each split pick requires its exact stored ID, name and club string. A different club and the recorded-year pool retain their eligibility rules.
+
+Confirmed the nine existing rows and the exact grouped filters against the public market API. The mounted baseline lost all ten positive cases. Sources for each admitted row are recorded beside the data. [Benfica](https://www.slbenfica.pt/en-us/agora/noticias/2025/07/22/futebol-benfica-richard-rios-contratacao), [Liga Portugal](https://www.ligaportugal.pt/player/84101/richard-rios/20252026/278), [Manchester United](https://www.manutd.com/en/news/casemiro-to-leave-man-utd-at-the-end-of-the-2025-26-season), [Premier League](https://www.premierleague.com/en/news/4456132/casemiro-revival-proving-key-to-man-utds-upturn-in-form).
+
 ## 2026-11-23, NRL Team Manager legacy save backup
 
 **PL-04 is partly implemented.** A version 1 season still opens without rewriting the slot. Before its first version 2 save, NRL checks for an exact backup in that same slot. If storage refuses the copy or returns different bytes, the old save stays on disk and Retry save remains available. A newer write made while the copy is being created keeps control of the slot.

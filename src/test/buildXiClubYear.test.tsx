@@ -26,7 +26,7 @@ vi.mock('@/integrations/supabase/client', () => ({
         return io.rest(query).then(resolve, reject);
       },
     };
-    for (const method of ['select', 'ilike', 'eq', 'in', 'order', 'limit', 'range', 'abortSignal']) {
+    for (const method of ['select', 'ilike', 'eq', 'in', 'or', 'order', 'limit', 'range', 'abortSignal']) {
       builder[method] = (...args: unknown[]) => {
         if (method === 'abortSignal') query.signal = args[0] as AbortSignal;
         else query.operations.push([method, args]);
@@ -276,6 +276,123 @@ describe('Build Your XI draws under a seeded generator', () => {
     expect(nations, 'XI_MIXED_NATIONS: Mixed deals nations').toBeGreaterThan(0);
     expect(clubsDealt, 'XI_MIXED_CLUBS: Mixed deals clubs').toBeGreaterThan(0);
     legacyQuiet();
+  });
+});
+
+describe('Build Your XI historical club picks', () => {
+  function openSavedDraft(draftChoice: DraftChoice, finalClubs: string[], openPositions = [5, 6]) {
+    const formation = '4-2-3-1';
+    const teams = clubYearClubs.filter(club => !finalClubs.includes(club)).slice(0, 11 - openPositions.length).concat(finalClubs);
+    const teamAssignments = teams.map(name => ({ name, isNation: false }));
+    const positions = FORMATIONS[formation].map((slot, index) => ({ slot, index })).filter(({ index }) => !openPositions.includes(index));
+    const slots = positions.map(({ slot, index }, pickIndex) => {
+      const team = teams[pickIndex];
+      const name = `Fixture historical draft ${index}`;
+      const year = draftChoice.mode === 'mixed' ? 2026 : draftChoice.year;
+      return [index, { ...slot, playerName: name, assignedTeam: team, isNation: false, pick: meta(team, year, slot.role, name) }];
+    });
+    const priorFetch = fetch;
+    vi.stubGlobal('fetch', vi.fn((input: RequestInfo | URL, init?: RequestInit) => {
+      if (String(input).includes('evaluate-lineup')) {
+        return Promise.resolve(new Response(JSON.stringify(VERDICT), { status: 200 }));
+      }
+      return priorFetch(input, init);
+    }));
+    localStorage.setItem(draftKey, JSON.stringify({ formation, draftChoice, teamAssignments, slots }));
+    return render(<MemoryRouter><LineupBuilder /></MemoryRouter>);
+  }
+
+  async function searchClubPick(query: string, role: PositionRole = 'CDM') {
+    await chooseSlot(role);
+    fireEvent.change(field(), { target: { value: query } });
+    await advance(230); await flush();
+  }
+
+  it('carries both sourced club picks through submission and the season rating', async () => {
+    openSavedDraft({ mode: 'mixed' }, ['Benfica', 'Manchester United']);
+    await searchClubPick('richard rios');
+    fireEvent.click(option('Richard Ríos')); await flush();
+    await searchClubPick('casemiro');
+    fireEvent.click(option('Casemiro')); await flush();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Submit Team' })); await flush();
+    expect(io.simulate).toHaveBeenCalledTimes(1);
+    expect(io.simulate.mock.calls[0][0]).toEqual(expect.arrayContaining([
+      expect.objectContaining({ name: 'Richard Ríos', club: 'SL Benfica', age: 25, value: 27_000_000 }),
+      expect.objectContaining({ name: 'Casemiro', club: 'Manchester United', age: 34, value: 8_640_000 }),
+    ]));
+    expect(io.fetches.some(url => url.includes('validate-player'))).toBe(false);
+  });
+
+  it.each([
+    ['the wrong Mixed club', { mode: 'mixed' }, ['Chelsea', 'Manchester United']],
+    ['a recorded year at Benfica', { mode: 'club-year', year: 2026 }, ['Benfica', 'Manchester United']],
+  ] as const)('does not add an all-time result for %s', async (_, draftChoice, teams) => {
+    openSavedDraft(draftChoice, [...teams]);
+    await searchClubPick('richard rios');
+    expect(screen.queryByRole('option', { name: /Richard Ríos/ })).toBeNull();
+    expect(io.queries.length).toBeGreaterThan(0);
+  });
+
+  const splitPicks = [
+    ['Chelsea', 'Andrey Santos', 163068, 'andrey santos', 'RC Strasbourg Alsace / Chelsea FC', 'Brazil', 'Central Midfield', 2025, 20, 43_000_000],
+    ['Juventus', 'João Cancelo', 49328, 'joao cancelo', 'Juventus FC / Manchester City', 'Portugal', 'Right-Back', 2019, 24, 59_000_000],
+    ['Benfica', 'Sébastien Corchia', 49525, 'sebastien corchia', 'SL Benfica / RCD Espanyol Barcelona', 'France', 'Right-Back', 2019, 28, 3_000_000],
+    ['Celtic', 'Jeremy Toljan', 49458, 'jeremy toljan', 'Celtic FC / US Sassuolo', 'Germany', 'Right-Back', 2019, 24, 5_000_000],
+    ['Galatasaray', 'Şener Özbayraklı', 49713, 'sener ozbayrakli', 'Fenerbahce / Galatasaray', 'Türkiye', 'Right-Back', 2019, 28, 2_000_000],
+    ['Inter Milan', 'Cédric Soares', 49384, 'cedric soares', 'Southampton FC / Inter Milan', 'Portugal', 'Right-Back', 2019, 27, 13_000_000],
+    ['Inter Milan', 'Sime Vrsaljko', 50341, 'sime vrsaljko', 'Atlético de Madrid / Inter Milan', 'Croatia', 'Right-Back', 2018, 25, 27_000_000],
+    ['Sporting CP', 'Bruno Gaspar', 49454, 'bruno gaspar', 'Sporting CP / Olympiacos Piraeus', 'Angola', 'Right-Back', 2019, 25, 5_000_000],
+    ['Sporting CP', 'Thierry Correia', 49423, 'thierry correia', 'Sporting CP / Valencia CF', 'Portugal', 'Right-Back', 2019, 19, 6_000_000],
+  ] as const;
+
+  const splitRows = [
+    ...splitPicks.map(([, name, id, foldedName, club, nationality, position, year, age, value]) => ({
+      id, player_name: name, name_folded: foldedName, club, nationality, position, year, age, market_value_usd: value,
+    })),
+    { id: 49664, player_name: 'Luke Bolton', name_folded: 'luke bolton', club: 'Wycombe Wanderers / Manchester City / Luton Town', nationality: 'England', position: 'Right-Back', year: 2019 },
+  ];
+
+  function useSplitRows() {
+    io.rest = async query => {
+      io.queries.push(query);
+      const clubNames = operation(query, 'in', 'club') as string[] | undefined;
+      const group = String(query.operations.find(([method]) => method === 'or')?.[1][0] ?? '');
+      const includedClubs = clubNames ?? (group.match(/^club\.in\.\(([^)]*)\)/)?.[1]
+        .split(',').map(alias => alias.replace(/^"|"$/g, '')) ?? []);
+      const year = operation(query, 'eq', 'year');
+      const needle = String(operation(query, 'ilike', 'name_folded') ?? '').replace(/^%|%$/g, '');
+      return { data: splitRows.filter(row => row.name_folded.includes(needle) && (year === undefined || row.year === year)
+        && (includedClubs.includes(row.club) || group.includes(`and(id.eq.${row.id},name_folded.eq."${row.name_folded}",club.eq."${row.club}")`))), error: null };
+    };
+  }
+
+  it.each(splitPicks)('finds and accepts the verified canonical split record for %s, %s', async (team, name, id, foldedName, club, nationality, position, year, age, value) => {
+    useSplitRows();
+    const [role, index] = position === 'Right-Back' ? ['RB', 4] as const : ['CDM', 5] as const;
+    openSavedDraft({ mode: 'mixed' }, [team], [index]);
+    await searchClubPick(foldedName, role);
+    fireEvent.click(option(name)); await flush();
+    expect(screen.getByRole('button', { name: 'Submit Team' })).toBeVisible();
+    expect(JSON.parse(localStorage.getItem(draftKey)!).slots.at(-1)[1]).toMatchObject({
+      playerName: name, assignedTeam: team, pick: { age, club, nationality, rawPosition: position, value, year },
+    });
+    const proof = `and(id.eq.${id},name_folded.eq.${JSON.stringify(foldedName)},club.eq.${JSON.stringify(club)})`;
+    expect(io.queries).toHaveLength(2);
+    expect(io.queries.every(query => query.operations.some(([method, args]) => method === 'or' && String(args[0]).includes(proof)))).toBe(true);
+    expect(io.fetches.some(url => url.includes('validate-player'))).toBe(false);
+  });
+
+  it.each([
+    ['Liverpool', 'Andrey Santos', { mode: 'mixed' }],
+    ['Manchester City', 'Luke Bolton', { mode: 'mixed' }],
+    ['Chelsea', 'Andrey Santos', { mode: 'club-year', year: 2025 }],
+  ] as const)('does not surface %s’s unadmitted split record for %s', async (team, name, choice) => {
+    useSplitRows();
+    openSavedDraft(choice, [team], [5]);
+    await searchClubPick(name);
+    expect(screen.queryByRole('option')).toBeNull();
+    expect(io.queries.length).toBeGreaterThan(0);
   });
 });
 
