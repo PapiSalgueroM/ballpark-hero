@@ -67,7 +67,11 @@ export const WRITERS = {
     roundHistory: 'written after a played round for the same team and season',
   } },
   '/nhl-my-career': { kind: 'literal', file: 'src/components/us-career/UsCareerBoard.tsx', indirect: ['saveValue(JSON.stringify(', 'localStorage.setItem(pending.key, pending.value)'] },
-  '/nhl-front-office': { kind: 'literal', file: 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx' },
+  '/nhl-front-office': { kind: 'literal', file: 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', unset: {
+    lastRound: 'written after a round has a held result',
+    roundHistory: 'written when the franchise has a round history',
+    draftShortlist: 'written when the shortlist holds prospects',
+  } },
   '/aussie-rules-manager': { kind: 'whole', file: 'src/hooks/useAussieRulesLeague.ts' },
   '/nrl-team-manager': { kind: 'whole', file: 'src/pages/NrlTeamManager.tsx', indirect: [
     'resolveContinueSave(NRL_SAVE_ENTRY, search)', 'const raw = JSON.stringify(next);',

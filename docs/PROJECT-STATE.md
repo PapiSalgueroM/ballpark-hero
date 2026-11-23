@@ -1,3 +1,9 @@
+## 2026-11-23, NHL Front Office recap save protection
+
+PL-04 adds a verified copy of the original NHL Front Office recap before the draft opens on an older franchise. If storage refuses the copy or the draft, Retry save keeps the same prospects and already counted season. A newer franchise saved in another tab takes precedence. Current recaps and drafts with saved shortlists keep their normal flow.
+
+The 164 focused tests, 25 Front Office season-close cases and the NHL-scoped SaveKeeper harness passed. Twelve Chromium cases at 320 and 390 pixels kept the legacy results, one title, one finished season, board trust and a neighboring MLB save. Four rollback cases opened the actual migrated draft and the saved shortlist in the previous build.
+
 ## 2026-11-23, MLB Front Office recap migration protection
 
 PL-04 is partly implemented. An older MLB Front Office recap keeps an exact recovery copy before opening the next draft. If storage refuses the copy or the draft, the previous recap stays saved and Retry save writes the same generated class. The season and title totals stay counted once. A newer save in another tab takes precedence. The 167 focused tests and all 25 Front Office season close cases passed.
@@ -5,6 +11,8 @@ PL-04 is partly implemented. An older MLB Front Office recap keeps an exact reco
 The scoped SaveKeeper test now recognizes that the MLB writer includes round history only after a played round for the same team and season. The test passed with the current writer and the existing starting-franchise fixture.
 
 Twelve Chromium cases at 320 and 390 pixels verified the legacy and current recaps, active-write and backup refusals, retry, a newer save in another tab, and reload. The migrated draft kept 24 prospects, two picks, one recorded title and one finished season. The neighboring NHL franchise stayed intact.
+
+PR #1045 is live. All 12 published phone cases passed against the exact deployment. The previous build also reopened the migrated draft in both rollback cases.
 
 ## 2026-11-23, Club Manager portable save files
 

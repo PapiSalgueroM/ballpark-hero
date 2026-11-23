@@ -103,11 +103,19 @@ for (const c of cases) describe(`${c.sport} actual save recovery`, () => {
   it('keeps the older recap-to-draft migration without replaying a closed season', () => {
     const saved = save(c.sport, c.team); saved.phase = 'recap'; saved.league[c.period] = c.sport === 'NFL' ? 17 : 20;
     saved.league.champions.push({ season: saved.league.season, team: c.team }); delete saved.postseason;
-    const { view, writes } = mount(JSON.stringify(saved));
+    const raw = JSON.stringify(saved);
+    const { view, writes } = mount(raw);
     expect(view.getByText(/You hold/)).toHaveTextContent(c.sport === 'NFL' ? '3 picks' : '2 picks');
     const next = JSON.parse(localStorage.getItem(c.key)!);
     expect(next.phase).toBe('draft'); expect(next.league).toEqual(saved.league);
-    expect(next.titles).toBe(2); expect(next.seasonsPlayed).toBe(3); expect(writes).toHaveBeenCalledTimes(1);
+    expect(next.titles).toBe(2); expect(next.seasonsPlayed).toBe(3);
+    if (c.sport === 'NHL') {
+      expect(writes).toHaveBeenCalledTimes(2);
+      const [[backupKey], [activeKey]] = writes.mock.calls;
+      expect(backupKey.startsWith(c.key + '.broken-')).toBe(true);
+      expect(localStorage.getItem(backupKey) === raw).toBe(true);
+      expect(activeKey).toBe(c.key);
+    } else expect(writes).toHaveBeenCalledTimes(1);
   });
   it('restores the saved postseason recap without replaying or replacing it', () => {
     const saved = save(c.sport, c.team); saved.phase = 'recap'; saved.league[c.period] = c.sport === 'NFL' ? 17 : 20;
