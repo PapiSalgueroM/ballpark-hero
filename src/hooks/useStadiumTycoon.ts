@@ -7,6 +7,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { recordCompletion } from '@/lib/completions';
+import { backupKeysOf, copyAside, routeSaveEntry } from '@/lib/brokenSaveRecovery';
 import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import { recordFullTimes } from '@/lib/tycoonRewards';
 import type { FullTime } from '@/lib/tycoonRewards';
@@ -84,14 +85,23 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
   getAttackOptionsRef.current = getAttackOptions;
   const resolveGraduate = useCallback((id: string) => getAttackOptionsRef.current?.().find(option => option.playerId === id), []);
   const savedBytes = useRef<string | null>(null);
+  const preLeagueBytes = useRef<string | null>(null);
   const [state, setState] = useState<TycoonState>(() => {
     const now = Date.now();
-    savedBytes.current = typeof localStorage !== 'undefined' ? localStorage.getItem(TYCOON_SAVE_KEY) : null;
-    const loaded = deserializeTycoon(savedBytes.current, now);
+    const raw = typeof localStorage !== 'undefined' ? localStorage.getItem(TYCOON_SAVE_KEY) : null;
+    savedBytes.current = raw;
+    const loaded = deserializeTycoon(raw, now);
+    // This structural transition kept v1. Read the original shape before the
+    // loader's seeded league is written back the first time.
+    if (loaded && raw !== null && JSON.parse(raw).league === undefined) preLeagueBytes.current = raw;
     return loaded ?? newTycoon(now);
   });
   const [saveMoved, setSaveMoved] = useState(false);
   const saveMovedRef = useRef(false);
+  const markSaveMoved = useCallback(() => {
+    saveMovedRef.current = true;
+    setSaveMoved(true);
+  }, []);
   // Pause on a newer write from another tab before advancing the economy.
   const checkSaveMoved = useCallback(() => {
     if (saveMovedRef.current) return true;
@@ -100,10 +110,9 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
     } catch {
       return false; // Let the existing storage failure path handle unavailable storage.
     }
-    saveMovedRef.current = true;
-    setSaveMoved(true);
+    markSaveMoved();
     return true;
-  }, []);
+  }, [markSaveMoved]);
   const [floaters, setFloaters] = useState<Floater[]>([]);
   const [awayPay, setAwayPay] = useState<number | null>(null);
   /* Round 584: the matchdays played while you were away, for the away card. */
@@ -145,15 +154,40 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
   }, []);
   const writeStadium = useCallback((next: TycoonState, now = Date.now()): 'written' | 'moved' | 'failed' => {
     if (checkSaveMoved()) return 'moved';
+    const legacy = preLeagueBytes.current;
+    const refuse = () => {
+      if (legacy !== null) setTicketSaveFailed(true);
+      return 'failed' as const;
+    };
     try {
       const bytes = serializeTycoon(next, now);
+      if (legacy !== null) {
+        const entry = routeSaveEntry('/stadium-tycoon');
+        if (!entry) return refuse();
+        let backupKey = backupKeysOf(entry, localStorage).find(key => localStorage.getItem(key) === legacy);
+        if (!backupKey) {
+          const copy = copyAside(entry, localStorage, new Date(now), false, { raw: legacy, slot: 1 });
+          if (copy.ok && copy.backupKey) backupKey = copy.backupKey;
+        }
+        const kept = backupKey !== undefined && localStorage.getItem(backupKey) === legacy;
+        if (localStorage.getItem(TYCOON_SAVE_KEY) !== legacy) {
+          markSaveMoved();
+          return 'moved';
+        }
+        if (!kept) return refuse();
+      }
       localStorage.setItem(TYCOON_SAVE_KEY, bytes);
+      if (legacy !== null) {
+        if (localStorage.getItem(TYCOON_SAVE_KEY) !== bytes) return refuse();
+        preLeagueBytes.current = null;
+        setTicketSaveFailed(false);
+      }
       savedBytes.current = bytes;
       return 'written';
     } catch {
-      return 'failed';
+      return refuse();
     }
-  }, [checkSaveMoved]);
+  }, [checkSaveMoved, markSaveMoved]);
   const saveTicketState = useCallback((next: TycoonState, now?: number) => {
     const result = writeStadium(next, now);
     if (result !== 'moved') setTicketSaveFailed(result === 'failed');

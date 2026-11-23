@@ -883,10 +883,8 @@ console.log('8) The copy says what the engine does');
     return swaps ? rewrite(rel, text, swaps) : text;
   };
   const stripComments = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/\{\s*\}/g, '');
-  const guide = read('src/data/gameContent/basketball.ts');
-  const start = guide.indexOf("'/nba-front-office': {");
-  const end = guide.indexOf("'/nba-my-career': {");
-  const entry = start >= 0 && end > start ? guide.slice(start, end) : '';
+  const guide = stripComments(read('src/data/gameContent/basketball.ts'));
+  const entry = /\n {2}'\/nba-front-office': \{[\s\S]*?\n {2}\},/.exec(guide)?.[0] ?? '';
   ok(8, 'the guide has its NBA Front Office entry', entry.length > 0);
   for (const [k, rule] of Object.entries(st.NBA_AWARD_RULE)) {
     ok(8, `the guide states the ${st.NBA_AWARD_LABEL[k]} rule as the engine does`, entry.includes(rule), rule);
