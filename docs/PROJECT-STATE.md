@@ -1,3 +1,11 @@
+## 2026-11-23, Club Manager Asian markets and academy targets
+
+Prepared the Club Manager part of the weekly review as its own branch. Generated squads in South Korea, Japan and China have different starting ratings. Their local players appear in Transfers. Club Manager models five foreign squad places per club across these leagues, counting loans and unknown nationalities. It checks the cap before accepting transfers, loans, free agents and academy promotions. Older careers keep their recorded squads and results.
+
+Old Korean, Japanese and Chinese jobs retain the appropriate generated market after a club move. An England-only save does not activate the Korean market. An academy graduate's qualifying league appearances still count for the club's objective if that player is loaned, sold, or released. IDs count once per club and league. The isolated engine and game fixtures passed 321 focused tests and seven copied faults, including moves between Asian leagues and a neutral England save.
+
+The paired 15-season England save budget reproduced the published baseline exactly. Everton and Lincoln City exceeded the 234,000-byte check in both builds. That older capacity issue remains open. This slice changes no limit or historical record to satisfy that check.
+
 ## 2026-11-23, NRL Team Manager legacy save backup
 
 **PL-04 is partly implemented.** A version 1 season still opens without rewriting the slot. Before its first version 2 save, NRL checks for an exact backup in that same slot. If storage refuses the copy or returns different bytes, the old save stays on disk and Retry save remains available. A newer write made while the copy is being created keeps control of the slot.

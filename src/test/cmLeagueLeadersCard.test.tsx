@@ -149,6 +149,27 @@ describe('the league leaders card', () => {
 });
 
 describe('the Stats screen with a board open', () => {
+  it('labels the club top scorer for recorded European games after the campaign has closed', () => {
+    const career = everton();
+    career.uclGroup = null;
+    career.uclKoRound = null;
+    career.resultLog = [
+      { week: 10, opp: 'Bayern Munich', comp: 'Champions League', competition: 'uclKo', home: true, score: '1-2', res: 'L' },
+      { week: 12, opp: 'Roma', comp: 'Europa League', competition: 'uel', home: false, score: '2-3', res: 'L' },
+    ];
+    const line = (goals: number) => ({ apps: 1, goals, assists: 0, yellows: 0, reds: 0, ratingSum: 7 });
+    career.squad[0] = { ...career.squad[0], name: 'Fixture Scorer', comp: { ucl: line(1), uel: line(2) } };
+    const view = render(<StatsScreen career={career} />);
+    for (const [competition, count] of [['Champions League', '1 goal'], ['Europa League', '2 goals']]) {
+      fireEvent.click(view.getByRole('button', { name: competition }));
+      expect(view.getByText('📊 Everton · ' + competition)).toBeVisible();
+      const scorer = view.getByRole('group', { name: 'Squad top scorer in ' + competition });
+      expect(scorer).toHaveTextContent('Fixture Scorer');
+      expect(scorer).toHaveTextContent(count);
+      expect(view.queryByText(/golden boot/i)).toBeNull();
+    }
+  });
+
   it('draws the board alone and Back brings the tiles and the table back', () => {
     /* jsdom has no scrolling: Back's scroll back is measured by scripts/playCmLeagueLeaders.mjs instead. */
     const scrolled = vi.spyOn(window, 'scrollTo').mockImplementation(() => {});

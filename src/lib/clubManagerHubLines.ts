@@ -46,12 +46,11 @@ export function recordLine(s: Partial<Pick<CareerStats, 'wins' | 'draws' | 'loss
   return `${formatNumber(s?.wins ?? 0)}W ${formatNumber(s?.draws ?? 0)}D ${formatNumber(s?.losses ?? 0)}L`;
 }
 
-/** The League tile's value: the header's words before a ball is kicked
- *  (every club is on zero points, so a rank would be the shuffle's), the
- *  league position after. */
-export function leagueTileValue(week: number, position: number | null | undefined): string {
+/** Show the league position and settled points once league play starts. */
+export function leagueTileValue(week: number, position: number | null | undefined, points?: number): string {
   if (week === 0) return 'Not started';
-  return `#${position || '-'}`;
+  const rank = `#${position || '-'}`;
+  return points === undefined ? rank : `${rank} · ${formatNumber(points)} pts`;
 }
 
 /**

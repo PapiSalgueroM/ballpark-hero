@@ -110,7 +110,7 @@ import {
   projectedRatingAt, projectedRatingValue, projectedRoster, projectedRosterAtProgress, projectedWorld, projectedXIAvg, projectedWorldFor, projectedClubXIAvg,
   ageDriftBand, declineScale, retireChance, is2015Messi,
   isHistoricEra, eraRosters, eraRostersRaw, eraUpliftRating, HISTORIC_PARTIAL,
-  makeGeneratedName, eraBakeRating, bakedValueForRating,
+  makeGeneratedName, eraBakeRating, bakedValueForRating, asianSquadRoster,
   eraRostersLoaded,
   // Round 1600: a man's level beside his shown rating (one holder, in the file that imports nothing of this one).
   levelOf, levelForShown,
@@ -520,7 +520,8 @@ function pruneWorldRoster(career: CareerState): CareerState {
   const year = worldYear(career), years = yearsOn(career), seed = worldSeedOf(career), era = career.eraId ?? 'now';
   /* Round 1600 fix: a ledger from before the age read matches a year either side, as worldRosterClub does (nearAges). */
   const near = nearAges(held);
-  const listed = (record: WorldRosterState['records'][number]): boolean => projectedRoster(record.origin.club, years, era, seed)
+  const listed = (record: WorldRosterState['records'][number]): boolean =>
+    (modelAsianRoster(career, record.origin.club, years) ?? projectedRoster(record.origin.club, years, era, seed))
     .some(p => p.worldRosterKey === record.key || p.p === record.origin.position && p.n === record.origin.name && bornNear(year - p.a, record.origin.birthYear, near));
   const referenced = new Set((career.freeAgents ?? []).map(f => f.worldRosterKey).filter((key): key is string => typeof key === 'string'));
   const kept = held.records.filter(record => record.status === 'owned' || record.status === 'retired' && record.year >= year
@@ -542,7 +543,9 @@ function withoutRetiredMessi(roster: ProjectedPlayer[], club: string, career?: C
 export function worldRosterFor(career: CareerState, club: string, onYears = yearsOn(career), progress = worldRatingProgress(career)): ProjectedPlayer[] {
   const era = career.eraId ?? 'now', seed = worldSeedOf(career);
   const preview = timedWorldRatings(career) && onYears === yearsOn(career) && club !== career.clubName;
-  const fallback = withoutRetiredMessi(preview
+  const model = modelAsianRoster(career, club, onYears);
+  const fallback = model && preview ? projectedRosterAtProgress(club, onYears, era, seed, progress, true, true)
+    : model ?? withoutRetiredMessi(preview
     ? projectedRosterAtProgress(club, onYears, era, seed, progress, true)
     : projectedRoster(club, onYears, era, seed), club, career);
   const current = refreshWorldRoster(career);
@@ -592,6 +595,8 @@ function rosterXIAvg(roster: readonly ProjectedPlayer[]): number | null {
    projectedClubXIAvg is projectedXIAvg taken for the one club, so a seeded career never builds a second whole
    world for it. src/lib/clubManagerOwnClubLevel.test.ts holds it. */
 export function worldRosterXIAvg(career: CareerState, club: string): number | null {
+  const modeled = modelAsianRoster(career, club, yearsOn(career));
+  if (modeled) return rosterXIAvg(club === career.clubName ? modeled : worldRosterFor(career, club));
   if (!worldRosterView(career) && worldSeedOf(career) === undefined) return projectedXIAvg(club, yearsOn(career), career.eraId);
   return club === career.clubName ? projectedClubXIAvg(club, yearsOn(career), career.eraId) : rosterXIAvg(worldRosterFor(career, club));
 }
@@ -599,7 +604,7 @@ export function worldRosterXIAvg(career: CareerState, club: string): number | nu
 /* Release AZ fix (reviewer 1, MAJOR 1): buildMarket runs on every change of the save, and with a ledger this
    walked every club of the world each time. The list is kept per ledger object and world year, so a tap that
    changes no deal reads it back; it is shared like marketBase's, and buildMarket only ever filters it. */
-const WORLD_MARKET_MEMO = new WeakMap<object, { years: number; year: number; start: unknown; era: unknown; seed: number | undefined; club: string; progress: number; timed: boolean; out: MarketPlayer[] }>();
+const WORLD_MARKET_MEMO = new WeakMap<object, { years: number; year: number; start: unknown; era: unknown; seed: number | undefined; club: string; asianLeague: string | undefined; progress: number; timed: boolean; out: MarketPlayer[] }>();
 
 /* Release AZ fix pass 4, the lead's ruling (the manager's own club is read from his squad, never the world
    roster), and since Round 1339 in every career, seeded or not: the market lists nobody at my own club. My club is
@@ -615,11 +620,12 @@ function worldMarket(career: CareerState): MarketPlayer[] {
   const held = worldRosterView(current);
   const progress = worldRatingProgress(current);
   const timed = timedWorldRatings(current);
-  if (!held && !timed) return fallback.filter(p => p.club !== career.clubName);
+  const modeledClubs = modelAsianClubs(current);
+  if (!held && !timed && !modeledClubs.length) return fallback.filter(p => p.club !== career.clubName);
   const raw = (held ? current.worldRoster : fallback) as object, years = yearsOn(current), year = worldYear(current), seed = worldSeedOf(current);
   const hit = WORLD_MARKET_MEMO.get(raw);
-  if (hit && hit.years === years && hit.year === year && hit.start === current.startYear && hit.era === current.eraId && hit.seed === seed && hit.club === current.clubName && hit.progress === progress && hit.timed === timed) return hit.out;
-  const clubs = new Set(fallback.map(p => p.club));
+  if (hit && hit.years === years && hit.year === year && hit.start === current.startYear && hit.era === current.eraId && hit.seed === seed && hit.club === current.clubName && hit.asianLeague === current.asianSquadLeague && hit.progress === progress && hit.timed === timed) return hit.out;
+  const clubs = new Set([...fallback.map(p => p.club), ...modeledClubs]);
   for (const record of held?.records ?? []) if (record.owner) clubs.add(record.owner);
   const out: MarketPlayer[] = [];
   for (const club of clubs) {
@@ -642,7 +648,8 @@ function worldMarket(career: CareerState): MarketPlayer[] {
     if (!had || (had.club !== baseClub.get(p.name) && p.club === baseClub.get(p.name))) chosen.set(p.name, p);
   }
   const once = chosen.size === out.length ? out : out.filter(p => chosen.get(p.name) === p);
-  WORLD_MARKET_MEMO.set(raw, { years, year, start: current.startYear, era: current.eraId, seed, club: current.clubName, progress, timed, out: once });
+  WORLD_MARKET_MEMO.set(raw, { years, year, start: current.startYear, era: current.eraId, seed, club: current.clubName,
+    asianLeague: current.asianSquadLeague, progress, timed, out: once });
   return once;
 }
 
@@ -667,7 +674,7 @@ function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: 
     player = { ...player, worldRatingStart: [year, Math.max(worldRatingProgress(state), worldRatingStart(player, year))] };
     delete player.worldRatingForecast;
   }
-  const projected = projectedRoster(from, yearsOn(state), state.eraId ?? 'now', worldSeedOf(state));
+  const projected = modelAsianRoster(state, from, yearsOn(state)) ?? projectedRoster(from, yearsOn(state), state.eraId ?? 'now', worldSeedOf(state));
   let sources = projected.filter(p => player.worldRosterKey ? p.worldRosterKey === player.worldRosterKey : p.n === player.name && p.a === player.age);
   /* Round 1600 fix: in a ledger from before the age read (nearAges), a man of mine from my own club's squad carries
      the key his old age gave, which today's projection no longer gives anyone, so selling him recorded nothing and
@@ -726,6 +733,7 @@ export function aiDealPlayer(state: CareerState, mp: MarketPlayer): CMPlayer | n
    unpacked (`seen` is the state the window read its market from, so every lookup of a window shares one refreshed
    read). The same state comes back when the deal is refused. */
 function recordAiDeal(state: CareerState, deal: AiDeal, seen: CareerState): CareerState {
+  if (!rivalHasForeignRoom(state, deal.to, deal.mp)) return state;
   const player = aiDealPlayer(seen, deal.mp);
   return player ? recordActualRosterTransfer(state, player, deal.mp.club, deal.to, 'permanent', false) : state;
 }
@@ -896,6 +904,7 @@ export function leagueBookOf(state: CareerState): LeagueBook | null {
 
 interface DepartedLeagueLine extends BoardDeparted {
   leagueId: string;
+  academyGrad?: true;
   /** Null for a full book. Absent when no readable book was open. */
   bookRound?: number | null;
 }
@@ -919,7 +928,9 @@ function recordLeagueDeparture(state: CareerState, player: CMPlayer): DepartedLe
   const club = state.clubName;
   const leagueId = careerLeagueOf(state).id;
   const remaining = departedLeagueLines(state).filter(p => p.id !== player.id || p.club !== club || p.leagueId !== leagueId);
-  return [...remaining, { ...line, club, leagueId, sheets, bookRound: book ? book.r0 ?? null : undefined }];
+  return [...remaining, { ...line, club, leagueId, sheets, bookRound: book ? book.r0 ?? null : undefined,
+    ...(player.academyGrad ? { academyGrad: true } : {}),
+  }];
 }
 
 /** What the league leaders card and the awards read: the reader's input, how much of the league is on
@@ -1806,7 +1817,7 @@ export interface TrainingExposure {
  *  every objective shape shares this one record. */
 export interface BoardObjective {
   id: 'league' | 'cup' | 'ucl' | 'rival' | 'goals' | 'defence' | 'youth' | 'points' | 'double' | 'netSpend'
-    | 'natQuota' | 'veterans' | 'posGap' | 'youngStar' | 'marquee'
+    | 'natQuota' | 'veterans' | 'posGap' | 'youngStar' | 'marquee' | 'academyRegulars'
     /* Round 1593: the Europa League, for a club that plays it this season. */
     | 'uel';
   /** What the board wants, e.g. "Qualify for the Europa League". */
@@ -3137,6 +3148,8 @@ export interface CareerState {
   clubName: string;
   season: number;
   inSeasonRatings?: true;
+  /** Retain the generated league in this career's market when taking another job. */
+  asianSquadLeague?: string;
   /** Opts one career season into timed rival projection reads. */
   worldRatingSeason?: number;
   /** Continuity floor when a midseason appointment rebuilds a shorter calendar. */
@@ -5691,6 +5704,72 @@ export function usesGeneratedOpeningSquad(clubName: string): boolean {
   return isScopedStarterClub(clubName) || (K_LEAGUE_2026.modelOnlyRoster && !!kLeagueMember(clubName));
 }
 
+function isAsianSquadLeague(id: string): boolean {
+  return id === K_LEAGUE_2026.id || isScopedStartLeague(id);
+}
+
+function legacyAsianSquadLeague(career: CareerState): string | undefined {
+  if (isHistoricEra(career.eraId)) return undefined;
+  const scoped = SCOPED_START_LEAGUES.filter(league => career.world?.[league.id]);
+  if (scoped.length === 1) return scoped[0].id;
+  const current = careerLeagueOf(career).id;
+  if (isAsianSquadLeague(current)) return current;
+  const korean = K_LEAGUE_2026.id;
+  if (Array.isArray(career.history) && career.history.some(row => row?.leagueId === korean)) return korean;
+  // The Korean world also appears in ordinary English saves. Check who the manager actually coached.
+  const managed = career.careerStats?.clubsManaged;
+  const table = career.world?.[korean]?.table;
+  if (Array.isArray(managed) && Array.isArray(table) && table.some(row => row
+    && managed.includes(row.club) && !!kLeagueMember(row.club) && ordinaryClubAllowed(row.club))) return korean;
+  return undefined;
+}
+
+function modelAsianClubs(career: Pick<CareerState, 'eraId' | 'clubName' | 'customClub' | 'asianSquadLeague'>): readonly string[] {
+  if (isHistoricEra(career.eraId)) return [];
+  const current = careerLeagueOf(career).id;
+  const retained = career.asianSquadLeague;
+  const clubsOf = (league: string | undefined): readonly string[] =>
+    league === K_LEAGUE_2026.id ? K_LEAGUE_2026.clubs.filter(club => !club.accessHeld).map(club => club.name)
+      : SCOPED_START_LEAGUES.find(item => item.id === league)?.clubs ?? [];
+  return current === retained || !isAsianSquadLeague(current) ? clubsOf(retained)
+    : [...clubsOf(current), ...clubsOf(retained)];
+}
+
+function modelAsianRoster(career: CareerState, club: string, years: number): ProjectedPlayer[] | undefined {
+  if (!usesGeneratedOpeningSquad(club) || !modelAsianClubs(career).includes(club)) return undefined;
+  return asianSquadRoster(club, years, worldSeedOf(career));
+}
+
+// A single roster rule for these generated leagues, including incoming loans.
+const ASIAN_FOREIGN_LIMIT = 5;
+
+export function foreignRosterSlots(career: CareerState): { home: string; used: number; limit: number } | null {
+  if (isHistoricEra(career.eraId)) return null;
+  const leagueId = careerLeagueOf(career).id;
+  const home = isAsianSquadLeague(leagueId) ? placeIn(leagueId, career.clubName)?.home : undefined;
+  if (!home) return null;
+  const count = (p: { name: string; nation?: string }) => shownNation(career.eraId, p) !== home;
+  const used = career.squad.filter(count).length + (career.loanedOut ?? []).filter(entry => count(entry.player)).length;
+  return { home, used, limit: ASIAN_FOREIGN_LIMIT };
+}
+
+export function foreignRegistrationRefusal(career: CareerState, player: { name: string; nation?: string }): string | null {
+  const slots = foreignRosterSlots(career);
+  if (!slots || slots.used < slots.limit || shownNation(career.eraId, player) === slots.home) return null;
+  return `Your ${slots.limit} foreign player slots are full. Make room or sign a player from ${slots.home}.`;
+}
+
+function rivalHasForeignRoom(career: CareerState, club: string, player: { name: string; nation?: string },
+  replaced?: { name: string; nation?: string }): boolean {
+  if (!usesGeneratedOpeningSquad(club) || !modelAsianClubs(career).includes(club)) return true;
+  const home = clubPlace(club, career.eraId)?.home;
+  if (!home || shownNation(career.eraId, player) === home) return true;
+  const incoming = (career.loanedOut ?? []).filter(entry => entry.club === club && shownNation(career.eraId, entry.player) !== home);
+  const registered = worldRosterFor(career, club).filter(p => p.n !== replaced?.name
+    && shownNation(career.eraId, { name: p.n, nation: p.nation }) !== home);
+  return incoming.length + registered.length < ASIAN_FOREIGN_LIMIT;
+}
+
 /** Round 72: mark youth-padded clubs and clubs that use fully generated opening squads. */
 export function isPartialClub(clubName: string, eraId?: string): boolean {
   // Round 146: each era carries its own thin list. 2010 Blackpool is thin in
@@ -6069,7 +6148,7 @@ export function clubByName(name: string): ClubDef | null {
 
 /** Average rating of the club's best XI (baked rosters first, then pool). */
 export function clubPreviewRating(clubName: string): number {
-  if (usesGeneratedOpeningSquad(clubName) && activeCustomClub()?.name !== clubName) return 66;
+  if (usesGeneratedOpeningSquad(clubName) && activeCustomClub()?.name !== clubName) return Math.round(rosterXIAvg(asianSquadRoster(clubName, 0)) ?? 66);
   const baked = bakedXIAvg(clubName);
   if (baked !== null) return Math.round(baked);
   const ratings = getPool()
@@ -7459,9 +7538,10 @@ function buildSquad(clubName: string, yearsOnNow = 0, eraId: string = 'now', car
   // people. Round 132: at yearsOn 0 the projection IS the bake, so a career
   // in the current era gets exactly the squad it always got. Round 146: the
   // era picks the bake, so a 2010 save is handed the real 2010 squad.
-  const baked = withoutRetiredMessi(projectedRoster(clubName, yearsOnNow, eraId, career ? worldSeedOf(career) : undefined), clubName, career);
   const modelOnly = !isHistoricEra(eraId) && usesGeneratedOpeningSquad(clubName);
-  const real = modelOnly ? [] : baked.length
+  const baked = modelOnly ? asianSquadRoster(clubName, yearsOnNow, career ? worldSeedOf(career) : undefined)
+    : withoutRetiredMessi(projectedRoster(clubName, yearsOnNow, eraId, career ? worldSeedOf(career) : undefined), clubName, career);
+  const real = baked.length
     ? baked.slice(0, 26).map(bakedToCMPlayer)
     : getPool().filter(p => p.club === clubName).map(toCMPlayer);
   return ensureSquadCoverage(career ? [...worldRosterClub(refreshWorldRoster(career), clubName, real)] : real);
@@ -8962,7 +9042,7 @@ export function releasedByYou(fa: FreeAgent): boolean {
 }
 
 /** Why a free agent signing would be refused. The card shows the same reason the engine uses. */
-export type FreeAgentBlock = 'notInPool' | 'inSquad' | 'releasedByYou' | 'justLeft' | 'notInterested' | 'squadFull' | 'overCap' | 'cantAfford';
+export type FreeAgentBlock = 'notInPool' | 'inSquad' | 'releasedByYou' | 'justLeft' | 'notInterested' | 'squadFull' | 'foreignLimit' | 'overCap' | 'cantAfford';
 
 /** Round 619 review: the one place that decides whether a free agent signs. Null means he does. */
 export function freeAgentBlock(career: CareerState, fa: FreeAgent): FreeAgentBlock | null {
@@ -8976,6 +9056,7 @@ export function freeAgentBlock(career: CareerState, fa: FreeAgent): FreeAgentBlo
     || canonical && (canonical.status !== 'released' || canonical.owner !== null)
     || (career.retiredNames ?? []).includes(fa.name)) return 'notInPool';
   if (fa.fromMyClub && fa.since === career.season && !(fa.reason === 'expired' && canonical)) return 'justLeft';
+  if (foreignRegistrationRefusal(career, fa)) return 'foreignLimit';
   // Let Barcelona recover the verified Messi from saves with the old one-season opening deal.
   const expiredOpeningDeal = fa.reason === 'expired' && fa.fromMyClub === true && fa.since === 2 && !fa.generated
     && is2015Messi(career.eraId, fa.name) && career.clubName === 'Barcelona'
@@ -10905,7 +10986,7 @@ export function signingRefusal(career: CareerState, mp: MarketPlayer, fee: numbe
      be pressed, and the summer return would make two of him. */
   const away = (career.loanedOut ?? []).find(l => sameManNearAge(l.player, mp));
   if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
-  return joinedThisSeasonRefusal(career, mp);
+  return joinedThisSeasonRefusal(career, mp) ?? foreignRegistrationRefusal(career, mp);
 }
 
 /** Round 634 review: the four ways a market card can be pressed. */
@@ -10941,7 +11022,7 @@ export function doorRefusal(career: CareerState, mp: MarketPlayer, door: MarketD
   if (releasedByYouNames(career).has(mp.name)) return `You released ${mp.name}. He will not sign for you again.`;
   const away = (career.loanedOut ?? []).find(l => sameManNearAge(l.player, mp));
   if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
-  return joinedThisSeasonRefusal(career, mp);
+  return joinedThisSeasonRefusal(career, mp) ?? foreignRegistrationRefusal(career, mp);
 }
 
 function completeSigning(
@@ -12205,7 +12286,7 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
      floor, the last keeper, and a man who is somebody else's. Dropping this
      check is how the settlement briefly became able to send your only
      goalkeeper. */
-  if (swap && !squadCanSpare(career, swap)) return null;
+  if (swap && (!squadCanSpare(career, swap) || !rivalHasForeignRoom(career, neg.player.club, swap, neg.player))) return null;
   const signed = completeSigning(career, neg.player, amount, false, terms);
   if (!signed) return null;
   if (terms.bonus > 0) {
@@ -12293,6 +12374,7 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
   const p = career.squad.find(x => x.id === playerId);
   if (!p) return null;
   if (!canLeaveSquad(career, p)) return null;
+  if (incomingBidRegistrationRefusal(career, bid, p)) return null;
   // Round 94: a loan approach sends him out for the season instead of selling.
   if (bid.loan) {
     const loaned = loanOutPlayer(career, playerId, bid.club, bid.offer);
@@ -12334,6 +12416,10 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
   }
   trackDealExtremes(state, 'out', p.name, netFee);
   return recordActualRosterTransfer(state, p, career.clubName, bid.club, 'permanent');
+}
+
+export function incomingBidRegistrationRefusal(career: CareerState, bid: IncomingBid, player: CMPlayer): string | null {
+  return rivalHasForeignRoom(career, bid.club, player) ? null : `${bid.club} have no foreign player slots left.`;
 }
 
 /**
@@ -12527,8 +12613,10 @@ export function loanOutPlayer(
      November); what it cannot be is the start of a second paid trip. Checked
      before the pick below, so the refused path draws nothing. */
   if (p.loanOutSeason === career.season) return null;
-  const pool = buyerPool(career).map(club => club.name);
+  const pool = buyerPool(career).map(club => club.name).filter(name => rivalHasForeignRoom(career, name, p));
+  if (!(toClub && toClub !== career.clubName) && !pool.length) return null;
   const club = toClub && toClub !== career.clubName ? toClub : pick(pool);
+  if (!rivalHasForeignRoom(career, club, p)) return null;
   /* Round 508: honour the number that was actually agreed. acceptBid used to
      recompute this from loanOutFee and throw bid.offer away, which was harmless
      only because generateBids happened to set the two to the same figure. The
@@ -12685,7 +12773,7 @@ export function generateIncomingBids(state: CareerState, topUp = false): void {
     : [];
   const bids: IncomingBid[] = [...surviving];
   const buyerClubs = buyerPool(state);
-  const buyers = buyerClubs.map(club => club.name);
+  const buyersFor = (p: CMPlayer) => buyerClubs.filter(club => rivalHasForeignRoom(state, club.name, p));
   const taken = new Set<string>(surviving.map(b => b.playerId));
   const available = state.squad.filter(p => !p.onLoan && p.transferStatus !== 'blocked');
 
@@ -12702,10 +12790,12 @@ export function generateIncomingBids(state: CareerState, topUp = false): void {
     const ratio = sellValue(p) / (p.releaseClause as number);
     const shot = Math.min(0.75, Math.max(0.03, 0.9 * (ratio - 0.6)));
     if (Math.random() > (topUp ? shot / 3 : shot)) continue;
+    const buyers = buyersFor(p);
+    if (!buyers.length) continue;
     bids.push({
       playerId: p.id,
       playerName: p.name,
-      club: pick(buyers),
+      club: pick(buyers).name,
       offer: p.releaseClause as number,
       status: 'open',
       clauseMet: true,
@@ -12720,8 +12810,10 @@ export function generateIncomingBids(state: CareerState, topUp = false): void {
   for (const p of available.filter(x => x.wantsOut && x.transferStatus !== 'listed' && x.transferStatus !== 'loanListed')) {
     if (taken.has(p.id)) continue;
     if (Math.random() > (topUp ? 0.25 : 0.6)) continue;
+    const buyers = buyersFor(p);
+    if (!buyers.length) continue;
     const base = sellValue(p);
-    const club = pick(buyers);
+    const club = pick(buyers).name;
     bids.push({
       playerId: p.id,
       playerName: p.name,
@@ -12751,10 +12843,11 @@ export function generateIncomingBids(state: CareerState, topUp = false): void {
     const spread = Math.random() * 0.3;
     const offerAt = (multiplier: number) => Math.max(0.3, Math.round(base * (multiplier + spread) * 10) / 10);
     const premiumOffer = offerAt(1.05);
-    const premiumBuyers = contestRoll ? buyerClubs.filter(club => club.budget >= premiumOffer) : [];
+    const buyers = buyersFor(p);
+    const premiumBuyers = contestRoll ? buyers.filter(club => club.budget >= premiumOffer) : [];
     const contested = premiumBuyers.length >= 2;
     const offer = contested ? premiumOffer : offerAt(0.85);
-    const pool = contested ? premiumBuyers : buyerClubs.filter(club => club.budget >= offer);
+    const pool = contested ? premiumBuyers : buyers.filter(club => club.budget >= offer);
     if (!pool.length) continue;
     const club = pool[Math.floor(buyerRoll * pool.length)].name;
     const rivals = contested ? pool.filter(candidate => candidate.name !== club) : [];
@@ -12776,10 +12869,12 @@ export function generateIncomingBids(state: CareerState, topUp = false): void {
   for (const p of available.filter(x => x.transferStatus === 'loanListed')) {
     if (taken.has(p.id)) continue;
     if (Math.random() > (topUp ? 0.2 : 0.6)) continue;
+    const buyers = buyersFor(p);
+    if (!buyers.length) continue;
     bids.push({
       playerId: p.id,
       playerName: p.name,
-      club: pick(buyers),
+      club: pick(buyers).name,
       offer: loanOutFee(p),
       status: 'open',
       loan: true,
@@ -12797,11 +12892,13 @@ export function generateIncomingBids(state: CareerState, topUp = false): void {
     .slice(0, 8);
   const count = Math.random() < (topUp ? 0.8 : 0.45) ? 0 : ri(1, 2);
   for (const p of shuffle(targets).slice(0, count)) {
+    const buyers = buyersFor(p);
+    if (!buyers.length) continue;
     const base = sellValue(p);
     bids.push({
       playerId: p.id,
       playerName: p.name,
-      club: pick(buyers),
+      club: pick(buyers).name,
       offer: Math.round(base * (1.15 + Math.random() * 0.35) * 10) / 10,
       status: 'open',
     });
@@ -12937,7 +13034,8 @@ function generateHeadlines(state: CareerState): AiDeal[] {
     // Who could actually afford him. One player can eat a club's entire
     // transfer budget for the season if he is the marquee signing, but not
     // more than that, which is what keeps Brentford out of the Osimhen race.
-    const affordable = allClubs.filter(c => c.name !== state.clubName && c.name !== mp.club && c.budget >= fee);
+    const affordable = allClubs.filter(c => c.name !== state.clubName && c.name !== mp.club && c.budget >= fee
+      && rivalHasForeignRoom(working ?? state, c.name, mp));
     // Weight toward my own league so the feed still feels local, but only
     // among the clubs that could really do the deal.
     const local = affordable.filter(c => myLeagueNames.includes(c.name));
@@ -12991,10 +13089,13 @@ function genClubStrengths(myLeague: LeagueDef, yearsOnNow = 0, eraId: string = '
      mid season (joinClubNow) still carries the club I just left, which is another club from now on. */
   const seededWorld = !!career && (worldRosterView(career) || worldSeedOf(career) !== undefined);
   const baseFor = (name: string): number =>
-    (!seededWorld ? projectedXIAvg(name, yearsOnNow, eraId)
+    (usesGeneratedOpeningSquad(name) && !isHistoricEra(eraId) && isAsianSquadLeague(myLeague.id)
+      ? rosterXIAvg(career && name !== myClub && modelAsianRoster(career, name, yearsOnNow)
+        ? worldRosterFor(career, name, yearsOnNow, 0) : asianSquadRoster(name, yearsOnNow))
+      : !seededWorld ? projectedXIAvg(name, yearsOnNow, eraId)
       : name === myClub ? projectedClubXIAvg(name, yearsOnNow, eraId)
         : rosterXIAvg(worldRosterFor(career!, name, yearsOnNow, 0)))
-      ?? STRENGTH_PRIORS[name] ?? Math.max(clubPreviewRating(name), 66);
+      ?? STRENGTH_PRIORS[name] ?? (usesGeneratedOpeningSquad(name) ? 66 : Math.max(clubPreviewRating(name), 66));
   for (const name of myLeague.clubs) {
     out[name] = clamp(baseFor(name) + ri(-2, 2), 52, 95);
   }
@@ -16664,6 +16765,14 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
         const pace = played > 0 ? (pts / played) * roundsTotal : objective.target;
         status = pace >= objective.target * 0.92 ? 'onTrack' : 'behind';
       }
+    } else if (objective.id === 'academyRegulars') {
+      const regulars = new Set(career.squad.filter(p => p.academyGrad && (p.comp?.league?.apps ?? 0) >= objective.target).map(p => p.id));
+      const leagueId = careerLeagueOf(career).id;
+      for (const p of departedLeagueLines(career)) {
+        if (p.academyGrad && p.club === career.clubName && p.leagueId === leagueId && p.apps >= objective.target) regulars.add(p.id);
+      }
+      status = regulars.size >= 2 ? 'done' : seasonDone ? 'failed' : 'onTrack';
+      return { objective, status, why: `${Math.min(2, regulars.size)}/2 graduates reached the target` };
     } else if (objective.id === 'double') {
       /* Round 140: both trophies or nothing. Alive while both are alive. */
       const cup = cupProgressRank(career);
@@ -21391,6 +21500,8 @@ export function promoteProspect(career: CareerState, prospectId: string): Career
   const pr = a.prospects[idx];
   if (next.squad.length >= 30) return null;
   if (pr.fee > next.budget) return null;
+  const nation = prospectNation(next, pr);
+  if (foreignRegistrationRefusal(next, { name: pr.name, nation })) return null;
   a.prospects.splice(idx, 1);
   next.budget = Math.round((next.budget - pr.fee) * 10) / 10;
   const player: CMPlayer = {
@@ -21418,7 +21529,6 @@ export function promoteProspect(career: CareerState, prospectId: string): Career
   };
   /* Round 1520: a boy a scout found abroad keeps that trip's country; a boy of the home intake is from the club's
      own country (madeUpNationAt's local rule). */
-  const nation = pr.source !== 'Academy' && pr.source ? mapSpelling(pr.source) : madeUpNationAt(pr.name, careerPlace(next), next.eraId, true);
   if (nation) player.nation = nation;
   player.wage = wageFor(player);
   next.squad = [...next.squad, player];
@@ -21428,6 +21538,15 @@ export function promoteProspect(career: CareerState, prospectId: string): Career
     ...next.aiHeadlines,
   ].slice(0, 8);
   return next;
+}
+
+function prospectNation(career: CareerState, prospect: Prospect): string | undefined {
+  return prospect.source !== 'Academy' && prospect.source ? mapSpelling(prospect.source)
+    : madeUpNationAt(prospect.name, careerPlace(career), career.eraId, true);
+}
+
+export function prospectRegistrationRefusal(career: CareerState, prospect: Prospect): string | null {
+  return foreignRegistrationRefusal(career, { name: prospect.name, nation: prospectNation(career, prospect) });
 }
 
 /** Let one go. Frees a slot on the books. */
@@ -21743,6 +21862,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     saveVersion: SAVE_VERSION,
     clubName: club.name,
     season: 1,
+    ...(!historic && (world?.rosterCareer?.asianSquadLeague || isAsianSquadLeague(league.id))
+      ? { asianSquadLeague: world?.rosterCareer?.asianSquadLeague ?? league.id } : {}),
     ...(opts?.inSeasonRatings ? { inSeasonRatings: true } : {}),
     ...(opts?.worldRatingTiming && opts.inSeasonRatings && !opts.noWorldComps ? { worldRatingSeason: world?.rosterCareer?.season ?? 1 } : {}),
     week: 0,
@@ -24001,6 +24122,7 @@ function fillSquadGaps(
   retiredNames: string[], eraId: string = 'now', realPool: FreeAgent[] = [],
   released: string[] = [],
   worldSeed?: number,
+  career?: CareerState,
 ): { squad: CMPlayer[]; signed: string[]; from: Map<string, string> } {
   const seniors = squad.filter(p => !p.isYouth && p.age >= 20).length;
   if (seniors >= SENIOR_FLOOR) return { squad, signed: [], from: new Map() };
@@ -24057,8 +24179,10 @@ function fillSquadGaps(
     const needs: Record<PosGroup, number> = { GK: 2, DEF: 6, MID: 6, ATT: 4 };
     const thin = (['GK', 'DEF', 'MID', 'ATT'] as PosGroup[])
       .sort((a, b) => (counts[a] - needs[a]) - (counts[b] - needs[b]))[0];
-    const fits = pool.filter(p => groupOf(p.position) === thin && !signed.includes(p.name));
-    const mp = (fits.length ? fits : pool.filter(p => !signed.includes(p.name)))[0];
+    const slots = career ? foreignRosterSlots({ ...career, squad: out, loanedOut: [] }) : null;
+    const remaining = pool.filter(p => !signed.includes(p.name)
+      && (!slots || slots.used < slots.limit || shownNation(eraId, p) === slots.home));
+    const mp = remaining.find(p => groupOf(p.position) === thin) ?? remaining[0];
     if (!mp) break;
     signed.push(mp.name);
     if (mp.club) from.set(mp.name, mp.club);
@@ -24340,7 +24464,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const pr = runPromotionRelegation(career);
   /* Round 543: uclPlacesIn returns 0 for a non-European league, so this one
      value carries both halves of what Round 310 added here. */
-  const playedLeagueUclPlaces = uclPlacesIn(careerLeagueOf(career));
+  const playedLeague = careerLeagueOf(career);
+  const playedLeagueUclPlaces = uclPlacesIn(playedLeague);
   /* Round 547: read the Champions League field off the season that has just
      finished, while its tables are still on `career`. Round 964: and before
      next season's memberships register, because uclQualifiersFrom finds MY
@@ -24504,6 +24629,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       career.freeAgents ?? [],
       [...releasedByYouNames(career)],
       worldSeedOf(career),
+      isAsianSquadLeague(careerLeagueOf(career).id) ? career : undefined,
     );
     squad = emergency.squad;
     freeAgentsIn.push(...emergency.signed);
@@ -24691,6 +24817,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     ...JSON.parse(JSON.stringify(career)) as CareerState,
     clubName,
     season,
+    ...(career.asianSquadLeague === undefined && isAsianSquadLeague(playedLeague.id) && !historic
+      ? { asianSquadLeague: playedLeague.id } : {}),
     week: 0,
     ...(timedWorldRatings(career) ? { worldRatingSeason: season, worldRatingFloor: undefined } : {}),
     budget,
@@ -24908,6 +25036,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   if (state.bundesligaPlayoff) delete state.bundesligaPlayoff;
   if (state.frenchPlayoffs) delete state.frenchPlayoffs;
   state.boardObjectives = buildBoardObjectives(clubName, state.uclGroup !== null, league.clubs.length, eraId, nextCustom ? leagueClubs : undefined);
+  if (!moving && [season - 1, season - 2].every(year => state.history.some(row => row.season === year
+    && row.club === clubName && (!row.leagueId || row.leagueId === league.id) && row.trophies.includes(LEAGUE_TITLE_NAME)))) {
+    const target = Math.ceil(state.calendar.filter(entry => entry.type === 'league').length / 2);
+    state.boardObjectives.push({ id: 'academyRegulars', target, label: `Give 2 academy graduates ${target} league appearances each` });
+  }
   // Round 163: a fresh Champions League draw for the new season.
   state.uclWorld = initUclWorld(state);
   /* Round 1502: and the season's watched one when my club is not in it. The spread of the old career copied
@@ -25483,6 +25616,10 @@ export function loadCareer(slotSave?: string): CareerState | null {
     } else {
       if (parsed.customClub) delete parsed.customClub;
       registerCustomClub(null);
+    }
+    if (parsed.asianSquadLeague === undefined) {
+      const retained = legacyAsianSquadLeague(parsed);
+      if (retained) parsed.asianSquadLeague = retained;
     }
     /* Round 1344: a seeded save written before this round may hold this season's deals between other clubs that
        never reached the ledger; they are mended here, inside their own fail safe. Before the asks, which read

@@ -834,6 +834,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
   const lastRes = (c.resultLog ?? []).slice(-1)[0];
   const rivalName = c.boardObjectives?.find(o => o.id === 'rival')?.rivalName ?? null;
   const rivalIdx = rivalName ? g.tableRows.findIndex(r => r.club === rivalName) : -1;
+  const leaguePoints = g.tableRows.find(row => row.club === c.clubName)?.pts;
   const bidsCount = (c.incomingBids ?? []).length;
   /* Round 832: null in a league with no domestic cup; every cup line below
      then says there is none rather than "Knocked out". */
@@ -990,7 +991,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                 onClick: () => setHubPanel('calendar'),
               },
               {
-                value: leagueTileValue(leagueStarted(c) ? c.week : 0, g.myPosition),
+                value: leagueTileValue(leagueStarted(c) ? c.week : 0, g.myPosition, leaguePoints),
                 sub: c.form.length ? `Form: ${c.form.join(' ')}` : careerLeagueOf(c).name,
                 onClick: () => g.setActiveTab('table'),
               },
