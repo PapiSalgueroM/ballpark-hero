@@ -2471,6 +2471,7 @@ export interface SeasonRecord {
    *  season the book decided. Kept on the record, so a manager who moves club takes his past winners
    *  with him (joinClubNow copies the history). An older record has none. */
   awards?: SeasonAwards;
+  uclScorerAward?: CupScorerWinner[];
   uelScorerAward?: SeasonSummary['uelScorerAward'];
   domesticScorerAward?: SeasonSummary['domesticScorerAward'];
   ballonDor?: NonNullable<SeasonSummary['ballonDor']>;
@@ -3133,6 +3134,8 @@ export interface SeasonSummary {
   qualifiedUcl: boolean;
   /** Round 1593: my club's Europa League season in words, only in a season it played one. */
   uelRun?: string;
+  /** Confirmed top scorers of the owned Champions League edition. */
+  uclScorerAward?: CupScorerWinner[];
   /** Confirmed top scorers of this save's Europa League edition. */
   uelScorerAward?: Array<{ name: string; club: string; goals: number; generated?: true }>;
   domesticScorerAward?: { competition: string; winners: CupScorerWinner[] };
@@ -3243,6 +3246,9 @@ export interface CareerState {
   cupRound: CupState;
   cupDraw: Partial<Record<CupRound, string>>;
   domesticCupScorers?: CupScorerLedger;
+  pendingUclScorerAward?: { club: string; winners: CupScorerWinner[] };
+  /** Confirmed Champions League awards from seasons with no league review. */
+  unreviewedUclScorerAwards?: { season: number; club: string; winners: CupScorerWinner[] }[];
   /** A confirmed cup award kept through a job move before the season review. */
   pendingDomesticScorerAward?: { club: string; award: NonNullable<SeasonSummary['domesticScorerAward']> };
   /** Confirmed cup awards from seasons that ended without a league review. */
@@ -3250,6 +3256,7 @@ export interface CareerState {
   uclGroup: UclGroupState | null;
   uclKoRound: UclKoState;
   uclDraw: Partial<Record<UclKoRound, string>>;
+  uclScorers?: ChampionsLeagueScorerLedger;
   trophies: Trophy[];
   history: SeasonRecord[];
   careerStats: CareerStats;
@@ -14327,7 +14334,7 @@ function buildUclBracket(state: CareerState, includeMe: boolean): UclTie[] {
 }
 
 /** Settle every tie in a round that is not mine, then seed the next round. */
-function advanceUclBracket(state: CareerState, round: UclKoRound): void {
+function advanceUclBracket(state: CareerState, round: UclKoRound, managed?: ManagedCupScorers): void {
   const bracket = state.uclBracket;
   if (!bracket) return;
   for (const t of bracket) {
@@ -14348,6 +14355,7 @@ function advanceUclBracket(state: CareerState, round: UclKoRound): void {
     settleTie(t, { legs, awayGoals: uclAwayGoalsApply(state.eraId), deciderScale: ET_DEFLATOR, etScale: ET_DEFLATOR * ET_MINUTES / 90 },
       (home, away, scale) => simAiMatch(state, home, away, scale), () => Math.random());
   }
+  recordChampionsLeagueKnockoutScorers(state, round, managed);
   const next: UclKoRound | null = round === 'R16' ? 'QF' : round === 'QF' ? 'SF' : round === 'SF' ? 'F' : null;
   if (!next) return;
   if (bracket.some(t => t.round === next)) return;
@@ -15409,6 +15417,189 @@ interface ManagedCupScorers {
   theirs: readonly ScorerLine[];
 }
 
+interface ChampionsLeagueScorerLeg {
+  round: UclKoRound;
+  home: string;
+  away: string;
+  homeGoals: number;
+  awayGoals: number;
+  credits: CupScorerCredit[];
+}
+
+type ChampionsLeagueScorerLedger = CupScorerLedger & { firstLeg?: ChampionsLeagueScorerLeg };
+type SettledCupMatch = { home: string; away: string; hg: number; ag: number };
+
+function openChampionsLeagueScorers(state: CareerState): void {
+  const group = state.uclGroup;
+  const world = state.uclWorld;
+  const pristineTable = (table: readonly TableRow[]) => Array.isArray(table)
+    && table.every(row => row && !row.w && !row.d && !row.l && !row.gf && !row.ga);
+  // An untouched older save can draw the other groups when this matchday settles.
+  const pristineWorld = world === undefined || (Array.isArray(world) && world.length > 0 && world.every(g =>
+    g?.matchday === 0 && Array.isArray(g.clubs) && g.clubs.length === 4 && pristineTable(g.table)));
+  if (!group || group.matchday !== 0 || group.opponents.length !== 3 || !pristineTable(group.table)
+    || !pristineWorld
+    || state.uclScorers !== undefined || state.uclBracket?.length || state.worldComps?.ucl
+    || state.handover || (state.season === 1 && state.midSeasonStart) || state.worldRatingRunIn
+    || Object.keys(state.pairResults?.[UCL_GROUP_LEDGER] ?? {}).length) return;
+  const field = [state.clubName, ...group.opponents, ...(world ?? []).flatMap(g => g.clubs)];
+  if (new Set(field).size !== field.length) return;
+  const fixtures = state.calendar.slice(state.week).filter(entry => entry.type === 'uclGroup' || entry.type === 'uclKo');
+  const knockout = UCL_ORDER.slice(eraUclHasR16(state.eraId) ? 0 : 1);
+  const shape = [
+    ...Array.from({ length: G8_SHAPE.games }, (_, i) => `G${i}`),
+    ...knockout.flatMap(round => uclLegsFor(state.eraId, round) === 2 ? [`${round}1`, `${round}2`] : [`${round}1`]),
+  ];
+  if (fixtures.length === shape.length && fixtures.every((entry, i) =>
+    (entry.type === 'uclGroup' ? `G${entry.round}` : `${entry.uclRound}${entry.uclLeg ?? 1}`) === shape[i])) {
+    state.uclScorers = newCupScorerLedger();
+  }
+}
+
+function championsLeagueGroupScores(state: CareerState, md: number): SettledCupMatch[] | null {
+  const group = state.uclGroup;
+  const world = state.uclWorld;
+  const scores = state.pairResults?.[UCL_GROUP_LEDGER];
+  if (!group || group.matchday <= md || group.opponents.length !== 3 || !scores
+    || !Array.isArray(world) || !world.length || world.some(g =>
+      !Number.isInteger(g?.matchday) || g.matchday <= md || !Array.isArray(g.clubs) || g.clubs.length !== 4)) return null;
+  const pairs = [
+    ...groupFixtures([state.clubName, ...group.opponents], md),
+    ...world.flatMap(g => groupFixtures(g.clubs, md)),
+  ];
+  if (new Set(pairs.flat()).size !== pairs.length * 2) return null;
+  const matches: SettledCupMatch[] = [];
+  for (const [home, away] of pairs) {
+    const score = scores[`${home}|${away}`];
+    if (!Array.isArray(score) || score.length !== 2 || !score.every(goals => Number.isSafeInteger(goals) && goals >= 0)) return null;
+    matches.push({ home, away, hg: score[0], ag: score[1] });
+  }
+  return matches;
+}
+
+function championsLeagueScorerKey(state: CareerState, round: string): string {
+  return `cm-owned-ucl-scorers|${state.eraId ?? 'now'}|${worldSeedOf(state) ?? state.clubName}|${state.season}|${round}`;
+}
+
+function recordChampionsLeagueGroupScorers(state: CareerState, md: number, managed: ManagedCupScorers): void {
+  const ledger = state.uclScorers;
+  if (ledger?.nights !== md || ledger.firstLeg || !isCupScorerLedger(ledger)) return;
+  const matches = championsLeagueGroupScores(state, md);
+  const credits = matches && cupFixtureScorerCredits(state, matches, championsLeagueScorerKey(state, `G${md}`), managed);
+  if (credits) state.uclScorers = recordCupScorerRound(ledger, md, credits);
+}
+
+function championsLeagueKnockoutOrder(state: CareerState): UclKoRound[] {
+  return UCL_ORDER.slice(state.uclBracket?.some(tie => tie.round === 'R16') ? 0 : 1);
+}
+
+function championsLeagueKnockoutScores(state: CareerState, round: UclKoRound): { first: SettledCupMatch[]; decisive: SettledCupMatch[] } | null {
+  const ties = state.uclBracket?.filter(tie => tie.round === round);
+  if (!ties?.length || !ties.every(settledCupTie)) return null;
+  const first: SettledCupMatch[] = [];
+  const decisive: SettledCupMatch[] = [];
+  const legs = uclLegsFor(state.eraId, round);
+  for (const tie of ties) {
+    const { home, away, homeGoals, awayGoals, leg1, leg2 } = tie;
+    if (legs === 2) {
+      if (!leg1 || !leg2 || homeGoals !== leg1.homeGoals + leg2.homeGoals || awayGoals !== leg1.awayGoals + leg2.awayGoals
+        || [leg1.homeGoals, leg1.awayGoals, leg2.homeGoals, leg2.awayGoals].some(goals => !Number.isSafeInteger(goals) || goals < 0)) return null;
+      first.push({ home, away, hg: leg1.homeGoals, ag: leg1.awayGoals });
+      decisive.push({ home: away, away: home, hg: leg2.awayGoals, ag: leg2.homeGoals });
+    } else {
+      decisive.push({ home, away, hg: homeGoals, ag: awayGoals });
+    }
+  }
+  return { first, decisive };
+}
+
+function stageChampionsLeagueFirstLeg(state: CareerState, round: UclKoRound, managed: ManagedCupScorers): void {
+  const ledger = state.uclScorers;
+  if (!ledger) return;
+  const index = championsLeagueKnockoutOrder(state).indexOf(round);
+  if (index < 0 || ledger?.nights !== G8_SHAPE.games + index || ledger.firstLeg || !isCupScorerLedger(ledger)) return;
+  const tie = state.uclBracket?.find(t => t.round === round && t.mine);
+  if (!tie?.leg1 || tie.winner) return;
+  const { home, away, leg1: { homeGoals, awayGoals } } = tie;
+  const credits = cupFixtureScorerCredits(state, [{ home, away, hg: homeGoals, ag: awayGoals }],
+    championsLeagueScorerKey(state, `${round}|L1`), managed);
+  if (credits) state.uclScorers = { ...ledger, firstLeg: { round, home, away, homeGoals, awayGoals, credits } };
+}
+
+function savedChampionsLeagueFirstLeg(
+  saved: ChampionsLeagueScorerLeg | undefined, round: UclKoRound, match: SettledCupMatch,
+): CupScorerCredit[] | null {
+  if (!saved || saved.round !== round || saved.home !== match.home || saved.away !== match.away
+    || saved.homeGoals !== match.hg || saved.awayGoals !== match.ag
+    || !Array.isArray(saved.credits) || saved.credits.length !== match.hg + match.ag) return null;
+  return saved.credits.every(credit => credit === null || credit === 'own-goal'
+    || (!!credit && typeof credit.name === 'string' && !!credit.name.trim() && typeof credit.id === 'string' && !!credit.id.trim()
+      && (credit.club === match.home || credit.club === match.away) && (credit.generated === undefined || credit.generated === true)))
+    ? saved.credits : null;
+}
+
+function recordChampionsLeagueKnockoutScorers(state: CareerState, round: UclKoRound, managed?: ManagedCupScorers): void {
+  const ledger = state.uclScorers;
+  if (!ledger) return;
+  const index = championsLeagueKnockoutOrder(state).indexOf(round);
+  const n = G8_SHAPE.games + index;
+  if (index < 0 || ledger?.nights !== n || !isCupScorerLedger(ledger)) return;
+  const scores = championsLeagueKnockoutScores(state, round);
+  if (!scores) return;
+  const playedFirst = managed ? scores.first.find(match => match.home === state.clubName || match.away === state.clubName) : undefined;
+  const playerCredits = playedFirst ? savedChampionsLeagueFirstLeg(ledger.firstLeg, round, playedFirst) : [];
+  if (!playerCredits || (!playedFirst && ledger.firstLeg)) return;
+  const first = cupFixtureScorerCredits(state, scores.first.filter(match => match !== playedFirst), championsLeagueScorerKey(state, `${round}|L1`));
+  const decisive = cupFixtureScorerCredits(state, scores.decisive, championsLeagueScorerKey(state, `${round}|last`), managed);
+  if (first && decisive) state.uclScorers = recordCupScorerRound(ledger, n, [...playerCredits, ...first, ...decisive]);
+}
+
+/** The owned tournament follows the settled group scores and complete knockout rounds. */
+export function championsLeagueScorerRace(state: CareerState): CupScorerRace {
+  const unavailable = { ...cupScorerRace(undefined, 0, false), status: 'unavailable' as const };
+  const played = state.uclGroup?.matchday;
+  if (played === undefined || !Number.isInteger(played) || played < 0 || played > G8_SHAPE.games) return unavailable;
+  const goals = (matches: SettledCupMatch[]) => matches.reduce((sum, match) => sum + match.hg + match.ag, 0);
+  let rounds = played;
+  let scored = 0;
+  for (let md = 0; md < played; md++) {
+    const matches = championsLeagueGroupScores(state, md);
+    if (!matches) return unavailable;
+    scored += goals(matches);
+  }
+  let done = false;
+  if (played === G8_SHAPE.games) {
+    for (const round of championsLeagueKnockoutOrder(state)) {
+      const matches = championsLeagueKnockoutScores(state, round);
+      if (!matches) break;
+      rounds++;
+      scored += goals(matches.first) + goals(matches.decisive);
+      done = round === 'F';
+    }
+  }
+  const ledger = state.uclScorers;
+  const credited = isCupScorerLedger(ledger)
+    ? ledger.players.reduce((sum, row) => sum + row[3], ledger.ownGoals + ledger.unresolved) : null;
+  if (!done && ledger?.firstLeg && ledger.nights === rounds && credited === scored && played === G8_SHAPE.games) {
+    const round = championsLeagueKnockoutOrder(state)[rounds - G8_SHAPE.games];
+    const tie = state.uclBracket?.find(t => t.round === round && t.mine);
+    if (tie?.leg1 && !tie.leg2 && !tie.winner) {
+      const { home, away, leg1: { homeGoals: hg, awayGoals: ag } } = tie;
+      const credits = savedChampionsLeagueFirstLeg(ledger.firstLeg, round, { home, away, hg, ag });
+      // The played leg can appear in the race before the other ties settle.
+      if (credits) return cupScorerRace(recordCupScorerRound(ledger, rounds, credits), rounds + 1, false);
+    }
+  }
+  return cupScorerRace(credited === scored ? ledger : undefined, rounds, done);
+}
+
+export function completedChampionsLeagueScorerAward(state: CareerState): CupScorerWinner[] | undefined {
+  const { leaders } = championsLeagueScorerRace(state);
+  if (leaders.length) return leaders.map(({ name, club, goals, generated }) => ({
+    name, club, goals, ...(generated ? { generated: true } : {}),
+  }));
+}
+
 function cupScorerCredit(state: CareerState, club: string, player: CMPlayer, projected?: ProjectedPlayer): CupScorerCredit {
   const source = projected ? { since: projected.since, originPosition: projected.p } : actualRosterTransferSource(state, player, club);
   if (!source) return null;
@@ -16141,7 +16332,7 @@ function advanceCupBracket(state: CareerState, round: CupRound, managed?: Manage
   const thisRound = bracket.filter(t => t.round === round).sort((a, b) => a.slot - b.slot);
   const n = CUP_ORDER.indexOf(round);
   const ledger = state.domesticCupScorers;
-  if (ledger?.nights === n && isCupScorerLedger(ledger) && thisRound.length && thisRound.every(settledDomesticCupTie)) {
+  if (ledger?.nights === n && isCupScorerLedger(ledger) && thisRound.length && thisRound.every(settledCupTie)) {
     const fixtures = thisRound.map(({ home, away, homeGoals: hg, awayGoals: ag }) => ({ home, away, hg, ag }));
     const key = `cm-domestic-scorers|${state.eraId ?? 'now'}|${worldSeedOf(state) ?? state.clubName}|${state.season}|${round}`;
     const credits = cupFixtureScorerCredits(state, fixtures, key, managed);
@@ -16174,7 +16365,7 @@ function advanceCupBracket(state: CareerState, round: CupRound, managed?: Manage
   }
 }
 
-function settledDomesticCupTie(tie: CupTie): tie is CupTie & { homeGoals: number; awayGoals: number } {
+function settledCupTie(tie: CupTie): tie is CupTie & { homeGoals: number; awayGoals: number } {
   return (tie.winner === tie.home || tie.winner === tie.away)
     && tie.homeGoals != null && Number.isSafeInteger(tie.homeGoals) && tie.homeGoals >= 0
     && tie.awayGoals != null && Number.isSafeInteger(tie.awayGoals) && tie.awayGoals >= 0;
@@ -16186,7 +16377,7 @@ export function domesticCupScorerRace(state: CareerState): CupScorerRace {
   let scored = 0;
   for (const round of CUP_ORDER) {
     const ties = state.cupBracket?.filter(tie => tie.round === round);
-    if (!ties?.length || !ties.every(settledDomesticCupTie)) break;
+    if (!ties?.length || !ties.every(settledCupTie)) break;
     rounds++;
     scored += ties.reduce((sum, tie) => sum + tie.homeGoals + tie.awayGoals, 0);
   }
@@ -20521,6 +20712,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     group.matchday = Math.min(6, group.matchday + 1);
     // Round 163: the other seven groups play their matchday the same night.
     advanceUclWorld(state);
+    recordChampionsLeagueGroupScorers(state, entry.round, { live, played: xi, mine: myLines, theirs: oppScorers });
     if (group.matchday >= 6) {
       const pos = sortedUclGroup(state, group.table).findIndex(r => r.club === state.clubName) + 1;
       if (pos <= 2) {
@@ -20584,7 +20776,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
        so the bracket does not show every other club through while my own tie is
        still one match old, which is also how the real weeks run. */
     const halfWayThrough = twoLegs && uclLeg.leg === 1;
-    if (!halfWayThrough) advanceUclBracket(state, koRound);
+    const managedScorers = { live, played: xi, mine: myLines, theirs: oppScorers };
+    if (halfWayThrough) stageChampionsLeagueFirstLeg(state, koRound, managedScorers);
+    else advanceUclBracket(state, koRound, managedScorers);
     if (halfWayThrough) {
       const tie = state.uclBracket?.find(t => t.round === koRound && t.mine);
       const iAmHome = tie ? tie.home === state.clubName : true;
@@ -22413,6 +22607,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       && state.cupBracket.every(tie => tie.round === 'R16' && tie.winner === null && tie.homeGoals === null && tie.awayGoals === null)) {
       state.domesticCupScorers = newCupScorerLedger();
     }
+    if (!opts?.noBook && entry.type === 'uclGroup' && entry.round === 0) openChampionsLeagueScorers(state);
     const live = kickOff(state, entry, opts?.varReviews, !opts?.noBook);
     if (!opts?.skipHalftime) {
       state.live = live;
@@ -24116,7 +24311,10 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
      a season the book decides; any other season writes nothing new, so its summary and its record are
      exactly what they were before the book was read. */
   const awards = bookBoards ? seasonAwards(bookBoards.input) : null;
-  let uelScorerAward = state.history.find(row => row.season === state.season)?.uelScorerAward;
+  const reviewed = state.history.find(row => row.season === state.season);
+  const uclScorerAward = reviewed?.uclScorerAward ?? state.pendingUclScorerAward?.winners
+    ?? completedChampionsLeagueScorerAward(state);
+  let uelScorerAward = reviewed?.uelScorerAward;
   const uelScorers = state.worldComps?.uel?.scorers;
   if (!uelScorerAward?.length && isCupScorerLedger(uelScorers)) {
     const result = evalWorldComp(state, 'uel');
@@ -24150,6 +24348,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     qualifiedUcl: position <= uclPlacesIn(careerLeagueOf(state)) || wonUelThisSeason(state),
     /* Round 1593: the Europa League season in words, a key only a season that played one carries. */
     ...(uelRunWords(state) ? { uelRun: uelRunWords(state) as string } : {}),
+    ...(uclScorerAward?.length ? { uclScorerAward } : {}),
     ...(uelScorerAward?.length ? { uelScorerAward } : {}),
     ...(domesticScorerAward ? { domesticScorerAward } : {}),
     signings: state.seasonSignings,
@@ -24191,6 +24390,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
       ...(ballonDor ? { ballonDor, ballonDorShortlist: shortlist } : {}),
       ...(leagueCoachAward ? { leagueCoachAward } : {}),
       ...(clubSeasonAward ? { clubSeasonAward } : {}),
+      ...(uclScorerAward?.length ? { uclScorerAward } : {}),
       ...(uelScorerAward?.length ? { uelScorerAward } : {}),
       ...(domesticScorerAward ? { domesticScorerAward } : {}),
       ...(awards ? { awards } : {}), ...(fate ? { fate } : {}) },
@@ -24606,7 +24806,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   if (playedFinals?.played.length && playedFinals.next) return career;
   const requestedClub = career.jobHunt?.summerMove?.club ?? acceptOfferClub;
   if (requestedClub && requestedClub !== career.clubName && !clubAvailableInCareer(career, requestedClub)) return career;
-  const unreviewedCupAward = !career.history.some(row => row.season === career.season)
+  const reviewedThisSeason = career.history.some(row => row.season === career.season);
+  const unreviewedUclAward = !reviewedThisSeason
+    && !career.unreviewedUclScorerAwards?.some(row => row.season === career.season)
+    ? career.pendingUclScorerAward?.winners ?? completedChampionsLeagueScorerAward(career) : undefined;
+  const unreviewedUclClub = career.pendingUclScorerAward?.club ?? career.clubName;
+  const unreviewedCupAward = !reviewedThisSeason
     && !career.unreviewedDomesticScorerAwards?.some(row => row.season === career.season)
     ? completedDomesticScorerAward(career) : undefined;
   const unreviewedCupClub = career.pendingDomesticScorerAward?.club ?? career.clubName;
@@ -25053,6 +25258,12 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     uclBracket: undefined,
     cupBracket: undefined,
     domesticCupScorers: undefined,
+    uclScorers: undefined,
+    pendingUclScorerAward: undefined,
+    ...(unreviewedUclAward?.length ? { unreviewedUclScorerAwards: [
+      ...(career.unreviewedUclScorerAwards ?? []),
+      { season: career.season, club: unreviewedUclClub, winners: unreviewedUclAward },
+    ] } : {}),
     pendingDomesticScorerAward: undefined,
     ...(unreviewedCupAward ? { unreviewedDomesticScorerAwards: [
       ...(career.unreviewedDomesticScorerAwards ?? []),

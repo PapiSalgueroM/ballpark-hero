@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import type { AwardMan, SeasonAwards, TeamMan } from '@/lib/clubManagerLeagueBoards';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import type { ClubSeasonAward, LeagueCoachAward } from '@/lib/clubManager';
+import type { CupScorerScope } from '@/components/club-manager/CupScorersCard';
 import type { CupScorerWinner } from '@/lib/clubManagerCupScorers';
 
 const isMine = (flags: number) => (flags & 2) !== 0;
@@ -33,7 +34,7 @@ export function WinnerLine({ label, icon, m }: { label: string; icon: string; m:
 }
 
 export function CupScorerHonour({ award, myClub, competition, scope }: {
-  award?: CupScorerWinner[]; myClub: string; competition: string; scope: 'uel' | 'cup';
+  award?: CupScorerWinner[]; myClub: string; competition: string; scope: CupScorerScope;
 }) {
   if (typeof competition !== 'string' || !competition.trim() || !Array.isArray(award) || !award.length
     || award.some(row => !row || typeof row.name !== 'string'

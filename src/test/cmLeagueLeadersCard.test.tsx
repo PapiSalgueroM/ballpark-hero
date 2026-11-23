@@ -414,6 +414,30 @@ describe('past winners', () => {
     expect(p.q('[data-cm-past-league]')).toBeNull();
   });
 
+  it('lists both finished cups together for a season that skipped league review', () => {
+    const s = everton();
+    s.season = 2;
+    s.history = [];
+    s.unreviewedUclScorerAwards = [{
+      season: 1, club: 'Real Madrid',
+      winners: [{ name: 'Vinicius Junior', club: 'Real Madrid', goals: 8 }],
+    }];
+    const tiles = draw(s);
+    expect(tiles.q('[data-cm-leaders-tile="past"]')).not.toBeNull();
+    cleanup();
+    s.unreviewedDomesticScorerAwards = [{
+      season: 1, club: 'Real Madrid',
+      award: { competition: 'Copa del Rey', winners: [{ name: 'Kylian Mbappé', club: 'Real Madrid', goals: 4 }] },
+    }];
+    const p = draw(s, 'past');
+    expect(p.q('[data-cm-past-season="1"]')?.textContent).toContain('Real Madrid');
+    expect(p.q('[data-cm-cup-award="winner"]')?.textContent).toContain('Copa del Rey Golden Boot');
+    expect(p.q('[data-cm-ucl-award="winner"]')?.textContent).toContain('Champions League Golden Boot');
+    expect(p.q('[data-cm-ucl-award="winner"]')?.textContent).toContain('Vinicius Junior');
+    expect(p.q('[data-cm-past-count]')).toBeNull();
+    expect(p.q('[data-cm-past-league]')).toBeNull();
+  });
+
   it('offers no Past winners tile before any season has closed with awards', () => {
     const s = everton();
     s.history = s.history.map(h => { const { awards, ...rest } = h; void awards; return rest; });

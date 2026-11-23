@@ -30,7 +30,7 @@ import {
   cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives, seasonScoreLeaguePoints,
   /* Round 783: the mid season takeover an accepted application walks into. */
   startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, livingWorldOf, customExitUclField, SAVE_CAPS,
-  completedDomesticScorerAward,
+  completedChampionsLeagueScorerAward, completedDomesticScorerAward,
   clubAvailableInCareer, careerHasKLeagueWorld, careerScopedLeagueId, promotionAppointmentHeld, promotionEntryLabel,
   /* Round 1335: the old season rules' switch, read by both handovers. */
   legacySeason,
@@ -916,6 +916,7 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
        break, so the break and any rest stay behind with it. */
     ...(s.intl ? { intl: { season: s.season, fired: [...s.intl.fired] } } : {}),
     midSeasonStart: entry,
+    uclScorers: undefined,
     domesticCupScorers: undefined,
     leagueCoachBook: undefined,
     /* Round 1335: the card without what the last manager had already failed. */
@@ -1020,6 +1021,8 @@ export function joinClubNow(career: CareerState): CareerState | null {
   const club = open.club;
   if (!clubAvailableInCareer(career, club)) return null;
   const from = career.clubName;
+  const uclWinners = completedChampionsLeagueScorerAward(career);
+  const pendingUclScorerAward = career.pendingUclScorerAward ?? (uclWinners?.length ? { club: from, winners: uclWinners } : undefined);
   const award = completedDomesticScorerAward(career);
   const pendingDomesticScorerAward = career.pendingDomesticScorerAward ?? (award ? { club: from, award } : undefined);
   const departed = refreshWorldRoster(snapshotRatingDeparture(career));
@@ -1110,6 +1113,9 @@ export function joinClubNow(career: CareerState): CareerState | null {
     eraId: career.eraId,
     trophies: career.trophies,
     history: career.history,
+    uclScorers: undefined,
+    pendingUclScorerAward,
+    ...(career.unreviewedUclScorerAwards ? { unreviewedUclScorerAwards: career.unreviewedUclScorerAwards } : {}),
     domesticCupScorers: undefined,
     pendingDomesticScorerAward,
     ...(career.unreviewedDomesticScorerAwards ? { unreviewedDomesticScorerAwards: career.unreviewedDomesticScorerAwards } : {}),

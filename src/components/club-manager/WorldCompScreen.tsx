@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, HelpCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { CareerState, CupRound, TableRow } from '@/lib/clubManager';
-import { careerLeagueOf, cupSatOutBy, domesticCupScorerRace, uclGroupRule, worldUclFormatOf } from '@/lib/clubManager';
+import { careerLeagueOf, championsLeagueScorerRace, cupSatOutBy, domesticCupScorerRace, uclGroupRule, worldUclFormatOf } from '@/lib/clubManager';
 import { shortDate, worldYearOf, type CalDate } from '@/lib/clubManagerCalendar';
 import { uclGroupFootnote } from '@/lib/clubManagerUclGroups';
 import { leaguePhaseFootnote } from '@/lib/uclLeaguePhase';
@@ -11,7 +11,7 @@ import type { WorldCompKey, WorldKoRound } from '@/lib/worldCompetition';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { ClubWorldCupCard } from '@/components/club-manager/ClubWorldCupCard';
 import { IntercontinentalCupCard } from '@/components/club-manager/IntercontinentalCupCard';
-import { CupScorersCard, cupScorerStatusLabel } from '@/components/club-manager/CupScorersCard';
+import { CupScorersCard, cupScorerStatusLabel, type CupScorerScope } from '@/components/club-manager/CupScorersCard';
 import { cupScorerRace, type CupScorerRace } from '@/lib/clubManagerCupScorers';
 import { INTERCONTINENTAL_CUP_SCHEDULE, INTERCONTINENTAL_CUP_YEAR } from '@/lib/clubIntercontinentalCup';
 import {
@@ -75,7 +75,7 @@ function Back({ label, onClick }: { label: string; onClick: () => void }) {
   );
 }
 
-function ScorersTile({ race, scope, onClick }: { race: CupScorerRace; scope: 'uel' | 'cup'; onClick: () => void }) {
+function ScorersTile({ race, scope, onClick }: { race: CupScorerRace; scope: CupScorerScope; onClick: () => void }) {
   const top = race.rows[0];
   return (
     <div className="grid">
@@ -87,7 +87,7 @@ function ScorersTile({ race, scope, onClick }: { race: CupScorerRace; scope: 'ue
 }
 
 function ScorersView({ race, scope, myClub, competition, onBack }: {
-  race: CupScorerRace; scope: 'uel' | 'cup'; myClub: string; competition: string; onBack: () => void;
+  race: CupScorerRace; scope: CupScorerScope; myClub: string; competition: string; onBack: () => void;
 }) {
   return (
     <div className="space-y-2" data-cm-world-view="scorers">
@@ -509,8 +509,9 @@ export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCa
   const openRun = (club: string): void => go({ ...nav, run: club });
   const props: ViewProps | null = view ? { career, comp, view, nav, go, onClub: openRun, groupsCard, bracketCard } : null;
   const europa = comp === 'uel' ? career.worldComps?.uel : undefined;
-  const race = view && (europa?.me || europa?.scorers)
-    ? cupScorerRace(europa.scorers, view.nightsDone, Boolean(view.winner)) : null;
+  const race = comp === 'ucl' && view?.mode === 'in' ? championsLeagueScorerRace(career)
+    : view && (europa?.me || europa?.scorers)
+      ? cupScorerRace(europa.scorers, view.nightsDone, Boolean(view.winner)) : null;
 
   if (nav.run && props) {
     return (
@@ -521,7 +522,7 @@ export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCa
     );
   }
   if (nav.tab === 'scorers' && race) {
-    return <ScorersView race={race} scope="uel" myClub={career.clubName} competition={name}
+    return <ScorersView race={race} scope={comp} myClub={career.clubName} competition={name}
       onBack={() => back({ ...nav, tab: null, run: null })} />;
   }
   if (nav.tab && nav.tab !== 'scorers' && props) {
@@ -584,7 +585,7 @@ export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCa
         <Tile icon="🏆" title="Final" testId="final" onClick={() => go({ ...nav, tab: 'final' })}
           value={view.winner ? `Won by ${view.winner}` : finalNight?.date ? `On ${shortDate(finalNight.date)}` : 'To come'} />
       </div>
-      {race && <ScorersTile race={race} scope="uel" onClick={() => go({ ...nav, tab: 'scorers' })} />}
+      {race && <ScorersTile race={race} scope={comp} onClick={() => go({ ...nav, tab: 'scorers' })} />}
       {link}
     </div>
   );
