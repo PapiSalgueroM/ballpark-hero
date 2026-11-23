@@ -269,7 +269,7 @@ export function boardMaySack(state: CareerState): boolean {
 /** Whether this career's pings carry a score to the leaderboards. Round 1512: nor does a career that
     has ever been on Very Easy or Easy, from the season it first went there. */
 export function postsScore(state: CareerState): boolean {
-  return noSackFrom(state) === null && easyFrom(state) === null;
+  return state.importedFromFile !== true && noSackFrom(state) === null && easyFrom(state) === null;
 }
 
 /** Switch No sacking on for good. Null when it is already on, or the manager is sacked or out of work. */

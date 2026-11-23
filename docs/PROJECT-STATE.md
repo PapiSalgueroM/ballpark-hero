@@ -1,8 +1,18 @@
+## 2026-11-23, Club Manager portable save files
+
+PL-03 is partly implemented across the site. Club Manager offers Save files in the manager chooser. A fresh browser can open Import a career before picking an era, then load the file into an empty slot. The download keeps the original save bytes, and import preserves the career's data with an unranked marker. The original file remains available if storage refuses the import or another tab fills the slot first.
+
+The candidate passed 120 focused tests. Ten Chromium cases at 320 and 390 pixels used real downloaded files in fresh contexts. The plain and compact versions of a 12-season Everton career kept all saved fields, including the budget, 12 season records and packed results. Opening and reloading kept the same club and history. An incompatible file, damaged compressed data, a refused write and a slot claimed in a second tab left the other careers intact.
+
+All 20 selected release harnesses passed across the scoped runs. The opening layout harness checks the import action at 320 and 412 pixels with and without a saved cookie choice. The prior build failed that action check as expected.
+
 ## 2026-11-23, NBA Front Office statistics migration protection
 
 PL-04 is partly implemented. NBA Front Office keeps a verified copy before its first write of an older franchise with named season statistics. A refused copy or replacement keeps the original save and allows a retry. A newer franchise save in another tab takes precedence. The recorded 283-player, 30-club statistics match the compact format after a rest booking. A refused round write retries the same result without replaying the round.
 
 Eight Chromium cases at 320 and 390 pixels kept every recorded stat and a neighboring save through recovery and reload. The older build also reopened the actual updated save at both widths. The statistics harness found the guide under its current entry boundary. Its Sixth Man copy control still failed as expected.
+
+PR #1043 is live. All eight published cases passed on pinned bundles, and all three public routes answered cleanly.
 
 ## 2026-11-23, Stadium Tycoon legacy save protection
 

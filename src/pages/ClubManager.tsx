@@ -403,6 +403,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
           onContinue={g.openSlot}
           onNew={g.newInSlot}
           onDelete={g.removeSlot}
+          onImported={g.refreshSlots}
         />
       </Suspense>
     );

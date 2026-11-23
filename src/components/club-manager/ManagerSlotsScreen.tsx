@@ -9,6 +9,7 @@
 import { useState } from 'react';
 import type { SlotView } from '@/lib/clubManagerSlots';
 import { DIFFICULTY_INFO } from '@/lib/managerDifficulty';
+import { ManagerSaveFilesButton } from './ClubManagerFrame';
 
 interface Props {
   slots: SlotView[];
@@ -19,15 +20,17 @@ interface Props {
   onContinue: (slot: number) => void;
   onNew: (slot: number) => void;
   onDelete: (slot: number) => void;
+  onImported?: () => void;
 }
 
-export default function ManagerSlotsScreen({ slots, activeDetail, note, onContinue, onNew, onDelete }: Props) {
+export default function ManagerSlotsScreen({ slots, activeDetail, note, onContinue, onNew, onDelete, onImported }: Props) {
   const [confirming, setConfirming] = useState<number | null>(null);
   return (
     <div className="max-w-3xl mx-auto" data-testid="cm-slots">
       <header className="text-center mb-6">
         <h1 className="text-4xl md:text-6xl font-bold tracking-[0.1em] text-primary font-display mb-1">CLUB MANAGER</h1>
         <p className="text-muted-foreground text-sm">Your managers on this device. Up to three careers, each one saved on its own.</p>
+        <ManagerSaveFilesButton onImported={onImported}>Save files</ManagerSaveFilesButton>
       </header>
       {note && (
         <div role="alert" className="mb-4 rounded-xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-sm text-foreground">

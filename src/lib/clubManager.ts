@@ -3146,6 +3146,8 @@ export interface SeasonSummary {
 
 export interface CareerState {
   saveVersion: number;
+  /** A career opened from a portable file keeps playing without posting scores. */
+  importedFromFile?: true;
   clubName: string;
   season: number;
   inSeasonRatings?: true;

@@ -7,7 +7,8 @@
  * scripts/simClubManagerSlots.mjs plays whole careers through the swap.
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, act, waitFor } from '@testing-library/react';
+import { render, act, fireEvent, waitFor, within } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import { SAVE_KEY, leanCareer, startCareer } from '@/lib/clubManager';
 import { parkedKey, readSlots, activeSlot, SLOTS_INDEX_KEY } from '@/lib/clubManagerSlots';
 import { clubManagerRequestedSlot, type ClubManagerSlotRequest } from '@/lib/clubManagerSaveKeys';
@@ -121,6 +122,33 @@ describe('Club Manager: three manager slots', () => {
     act(() => { r.getByRole('button', { name: 'Clear it' }).click(); });
     expect(onNew).toHaveBeenCalledWith(3);
     r.unmount();
+  });
+
+  it('imports a career from the save files dialog into the chosen empty slot', async () => {
+    const { ManagerSaveFilesButton } = await import('@/components/club-manager/ClubManagerFrame');
+    const { clubManagerDownload } = await import('@/lib/clubManagerPortable');
+    const original = leanCareer(startCareer('Everton'));
+    const peer = JSON.stringify(leanCareer(startCareer('Lincoln City')));
+    localStorage.setItem(parkedKey(3), peer);
+    const download = clubManagerDownload(JSON.stringify(original));
+    expect(download).not.toBeNull();
+    const file = new File([download!], 'club-manager-slot-1.json', { type: 'application/json' });
+    const onImported = vi.fn();
+    const r = render(<MemoryRouter><ManagerSaveFilesButton onImported={onImported}>Import a career</ManagerSaveFilesButton></MemoryRouter>);
+    const opener = r.getByRole('button', { name: 'Import a career' });
+    fireEvent.click(opener);
+    const dialog = within(await r.findByRole('dialog', { name: 'Save files' }));
+    expect(dialog.queryByRole('button', { name: 'Import into slot 3' })).toBeNull();
+    fireEvent.click(dialog.getByRole('button', { name: 'Import into slot 2' }));
+    fireEvent.change(dialog.getByLabelText('Club Manager save file'), { target: { files: [file] } });
+    await dialog.findByText('Career imported into slot 2.');
+    expect(onImported).toHaveBeenCalledOnce();
+    expect(JSON.parse(localStorage.getItem(parkedKey(2))!)).toEqual({ ...original, importedFromFile: true });
+    expect(localStorage.getItem(parkedKey(3))).toBe(peer);
+    expect(localStorage.getItem(SAVE_KEY)).toBeNull();
+    expect(dialog.getByRole('link', { name: 'Open slot 2' })).toHaveAttribute('href', '/club-manager?slot=2');
+    fireEvent.click(dialog.getByRole('button', { name: 'Close' }));
+    await waitFor(() => expect(opener).toHaveFocus());
   });
 
   it('delete takes one career and leaves the other', async () => {

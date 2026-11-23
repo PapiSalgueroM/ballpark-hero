@@ -576,6 +576,8 @@ const NOTHING_HELD = [
     why: 'answers false and holds nothing itself; the callers that keep the answer are listed under keeps:saveCareer' },
   { file: 'src/lib/clubManagerActiveSave.ts', keys: ['write:saveCareer'],
     why: 'the packed write verifies the original and its copy, answers false on refusal, and leaves retry to the same saveCareer callers' },
+  { file: 'src/lib/clubManagerPortable.ts', keys: ['write:commitPortableFile', 'keeps:commitPortableFile'],
+    why: 'the selected file holds the original career, and retry checks an empty slot again before starting the import' },
   { file: 'src/lib/clubManagerHandOver.ts', keys: ['write:writeParked', 'keeps:saveCareer', 'keeps:writeParked', 'keeps:switchSlot'],
     why: 'handOverCareer, Hot Seat\'s hand over to Club Manager (Round 1592): a refused write answers "failed" with every career where it was (the parked write is taken back out, a refused swap rolls itself back, a replaced career\'s kept aside copy is removed), and the run stays in the hot seat save' },
   { file: 'src/lib/rankEmCircuit.ts', keys: ['write:saveCircuit'],

@@ -1,4 +1,4 @@
-import { lazy, Suspense, type ReactNode } from 'react';
+import { lazy, Suspense, useRef, useState, type ReactNode } from 'react';
 import AdBanner from '@/components/ads/AdBanner';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
@@ -7,6 +7,24 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import PageSeo from '@/components/seo/PageSeo';
 
 const ClubManagerHelp = lazy(() => import('@/components/club-manager/ClubManagerHelp'));
+const ManagerSaveFiles = lazy(() => import('@/components/club-manager/ManagerSaveFiles'));
+
+export function ManagerSaveFilesButton({ children, onImported }: { children: ReactNode; onImported?: () => void }) {
+  const [open, setOpen] = useState(false);
+  const opener = useRef<HTMLButtonElement>(null);
+  return <>
+    <button ref={opener} type="button" className="min-h-11 px-3 text-sm font-semibold text-primary underline" onClick={() => setOpen(true)}>
+      {children}
+    </button>
+    {open && <Suspense fallback={<span role="status" className="text-sm text-muted-foreground">Loading save files...</span>}>
+      <ManagerSaveFiles
+        onClose={() => setOpen(false)}
+        onImported={onImported}
+        restoreFocus={() => opener.current?.focus({ preventScroll: true })}
+      />
+    </Suspense>}
+  </>;
+}
 
 /** Keep the guide below the fold while the stacked phone slots load. */
 export function ClubManagerStartup({ className = "", children }: { className?: string; children: ReactNode }) {

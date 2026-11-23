@@ -662,6 +662,8 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
 
   /** Back to the slots screen from inside a career, or from an era whose
    *  squads would not load (review: that screen had no way back). */
+  const refreshSlots = useCallback(() => setSlots(readSlots()), []);
+
   const showSlots = useCallback(() => {
     incomingSlot.current = undefined;
     if (careerRef.current && holdsActiveSlot() && !saveCareer(careerRef.current)) movedOn();
@@ -1579,7 +1581,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     tacticsFailed, retryTactics: () => { reloadToRetryChunk(); },
     bootError, bootNoun, retryBoot,
     startWait, retryStart, startWithoutList,
-    slots, slotNote, openSlot, newInSlot, removeSlot, showSlots,
+    slots, slotNote, openSlot, newInSlot, removeSlot, refreshSlots, showSlots,
     /* Round 1513: the slot whose save points this page may touch; null on a page another tab has moved on from. */
     pointsSlot: (): number | null => (holdsActiveSlot() ? ownSlot.current : null),
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
