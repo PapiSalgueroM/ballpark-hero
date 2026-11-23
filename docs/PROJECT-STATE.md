@@ -1,3 +1,11 @@
+## 2026-11-23, Club Manager 2005-06 Ajax scorer coverage
+
+Twelve verified Ajax players from the August 2005 opening can now receive goals in newly played background cup matches in that era. The simulation uses their verified position groups and the game’s existing club strength for goal allocation. The source record contains the names and roles. It adds no player values, real match statistics or winter arrivals. [Ajax source audit](audits/club-manager-ajax-2005-roster.md)
+
+In the saved 2005-06 Real Madrid replay, Arsenal still beat Ajax 4-2. The two Ajax goals in that final now go to named players when the final is played on the updated build. The full replay starts crediting Ajax at the first group match and reconciles all 335 goals. Settled match records and prior credits stay in the save.
+
+CM-03 remains partial. The Ajax evidence covers one of the 15 missing outside-league squads in that replay. Other missing squads and the roster-update preview remain open. The preceding Champions League change is live in PR #1060, with all 27 published browser checks green.
+
 ## 2026-11-23, Club Manager Champions League Golden Boot
 
 A Champions League your club entered has a Top scorers tile from the group stage through the final. After elimination, the race still follows the other clubs. First-leg goals appear as soon as that match ends and stay on the board after reload. The return leg credits the rest of the round once. Extra-time goals count, while shootout kicks and own goals stay outside player totals.

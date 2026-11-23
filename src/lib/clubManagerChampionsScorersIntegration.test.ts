@@ -5,8 +5,10 @@ import {
   type CareerState, type MatchWeekReport,
 } from './clubManager';
 import { joinClubNow } from './clubManagerCalendar';
+import { ensureEraRosters } from './clubManagerEras';
 import { UCL_GROUP_LEDGER } from './clubManagerUclGroups';
 import { serializeParkedCareer } from './clubManagerParkedSave';
+import { AJAX_2005_CUP_ROSTER } from '@/data/clubManagerHistoricCupRosters';
 
 const BRUGGE = 115366;
 const MADRID = 116137;
@@ -313,6 +315,35 @@ describe('Owned Champions League scorer settlement', () => {
     expect(uclHolderOf(old!)).toBe('Real Madrid');
     expect(championsLeagueScorerRace(old!)).toMatchObject({ status: 'unavailable', leaders: [] });
     expect(tape(MADRID + 0xa01, () => finishSeason(old!)).value.summary.uclScorerAward).toBeUndefined();
+  });
+
+  it('credits settled 2005 Ajax goals without changing the score, earlier credits or managed fixtures', async () => {
+    await ensureEraRosters('era2005');
+    const madrid = tape(MADRID, () => startCareer('Real Madrid', 'era2005')).value;
+    const before = playTo(madrid, MADRID, 55).state;
+    expect(before.uclExit).toBe('R16');
+    const reopened = loadCareer(serializeParkedCareer(before));
+    expect(reopened?.uclScorers).toEqual(before.uclScorers);
+    const snapshot = JSON.stringify(reopened!.uclScorers);
+    const { value: final } = next(reopened!, MADRID);
+    expect(final.report).toBeUndefined();
+    expect(final.state.uclBracket?.find(tie => tie.round === 'F')).toMatchObject({
+      home: 'Arsenal', away: 'Ajax', homeGoals: 4, awayGoals: 2, winner: 'Arsenal', mine: false,
+    });
+    expectReconciled(final.state, 125, 335);
+    const ajaxGoals = (state: CareerState) => state.uclScorers!.players
+      .filter(row => row[2] === 'Ajax').reduce((sum, row) => sum + row[3], 0);
+    expect(ajaxGoals(final.state) - ajaxGoals(before)).toBe(2);
+    expect(ajaxGoals(final.state)).toBe(19);
+    const eligible = new Set(AJAX_2005_CUP_ROSTER.filter(player => player.line !== 'GK').map(player => player.name));
+    expect(eligible.has('Klaas-Jan Huntelaar')).toBe(false);
+    for (const [, name, club, , generated] of final.state.uclScorers!.players) {
+      if (club !== 'Ajax') continue;
+      expect(eligible.has(name)).toBe(true);
+      expect(generated).toBeUndefined();
+    }
+    expect(final.state.uclScorers?.unresolved).toBe(before.uclScorers?.unresolved);
+    expect(JSON.stringify(reopened!.uclScorers)).toBe(snapshot);
   });
 
   it('keeps a decisive award in the review and past season after normal rollover', () => {

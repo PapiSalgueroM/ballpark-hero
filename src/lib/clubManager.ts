@@ -78,6 +78,7 @@ import {
   cupScorerRace, isCupScorerLedger, newCupScorerLedger, recordCupScorerRound,
   type CupScorerCredit, type CupScorerLedger, type CupScorerRace, type CupScorerWinner,
 } from '@/lib/clubManagerCupScorers';
+import { AJAX_2005_CUP_ROSTER } from '@/data/clubManagerHistoricCupRosters';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -15428,6 +15429,7 @@ interface ChampionsLeagueScorerLeg {
 
 type ChampionsLeagueScorerLedger = CupScorerLedger & { firstLeg?: ChampionsLeagueScorerLeg };
 type SettledCupMatch = { home: string; away: string; hg: number; ag: number };
+const CUP_LINE_POSITION = { GK: 'GK', DEF: 'CB', MID: 'CM', ATT: 'ST' } as const;
 
 function openChampionsLeagueScorers(state: CareerState): void {
   const group = state.uclGroup;
@@ -15657,10 +15659,20 @@ function cupFixtureScorerCredits(
         }
         continue;
       }
-      const eleven = pickOppSquad(roster)?.xi ?? thinBookEleven(state, club, roster)?.outfield ?? [];
+      // Verified roles fill the background scorer book for the opening snapshot.
+      // The existing club strength weights each place, with set pieces shared by role.
+      const verified = !own && !roster.length && club === 'Ajax' && state.eraId === 'era2005' && worldYear(state) === 2005;
+      const strength = verified ? strengthOf(state, club) : 0;
+      const eleven = verified
+        ? partialEleven(AJAX_2005_CUP_ROSTER.map(({ name, line }) => ({ n: name, p: CUP_LINE_POSITION[line], r: strength })),
+          strength, groupOf)?.outfield ?? []
+        : pickOppSquad(roster)?.xi ?? thinBookEleven(state, club, roster)?.outfield ?? [];
       const key = `${roundKey}|${home}|${away}|${club}`;
-      for (const { kind, scorer } of dealGoals(key, score, eleven, rules)) {
-        credits.push(kind === 'og' ? 'own-goal' : scorer && !scorer.e ? byName(scorer.n, scorer.p) : null);
+      for (const { kind, scorer } of dealGoals(key, score, eleven, verified ? { ...rules, taker: false } : rules)) {
+        if (kind === 'og') credits.push('own-goal');
+        else if (!scorer || scorer.e) credits.push(null);
+        else if (verified) credits.push({ id: JSON.stringify(['era2005', club, scorer.n]), name: scorer.n, club });
+        else credits.push(byName(scorer.n, scorer.p));
       }
     }
   }
