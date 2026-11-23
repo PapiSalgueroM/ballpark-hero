@@ -1,18 +1,18 @@
 ## 2026-11-23, NRL Team Manager save file imports
 
-PL-03 adds file import to an empty slot in Career saves. The chooser shows the club and season before confirmation. The original file stays available, and a slot with an existing career or checkpoint is protected. Imported careers are local play and keep their fixture and season records, including older v1 saves.
+PL-03 adds file import to an empty slot in Career saves. The chooser shows the club and season before confirmation. The original file stays available, and a slot with an existing career or checkpoint is protected. Imported careers are local play and keep their fixture and season records, including older v1 saves. The 61 focused tests and all 20 Chromium cases at 320 and 390 pixels passed. The actual downloaded 12-season career kept its records and 237 latest-year fixtures after import, resume and reload. The original v1 file kept an exact checked migration copy. A normal Grand Final registered one completion in an isolated test, and the imported career completed the same final without registering a duplicate.
 
 ## 2026-11-23, NFL Front Office recap save protection
 
 PL-04 protects the first draft write for an older NFL Front Office recap. It verifies an exact copy of the original save and checks that the active franchise still owns those bytes. Retry save keeps the same draft class. If another tab saves newer progress first, that franchise stays in control.
 
-The archived September 4 writer captured a Seattle franchise after all 17 weeks and the playoffs. Its 76,841-byte recap records one finished season, trust 44 and zero titles. That format saved no postseason or champion entry for the closed season. The draft kept Seattle's league schedule, roster, counters, 40 prospects and three picks. The copied backup control failed both refusal cases as expected. All 38 shared recovery checks and the scoped SaveKeeper harness passed. The ten separate historical digest and draft failures reproduced with identical assertions on the baseline. Ten Chromium cases at 320 and 390 pixels verified the built app. The previous build opened the recovered draft at both widths.
+The archived September 4 writer captured a Seattle franchise after all 17 weeks and the playoffs. Its 76,841-byte recap records one finished season, trust 44 and zero titles. That format saved no postseason or champion entry for the closed season. The draft kept Seattle's league schedule, roster, counters, 40 prospects and three picks. The copied backup control failed both refusal cases as expected. All 38 shared recovery checks and the scoped SaveKeeper harness passed. The ten separate historical digest and draft failures reproduced with identical assertions on the baseline. Ten Chromium cases at 320 and 390 pixels verified the built app. The previous build opened the recovered draft at both widths. PR #1049 is live and all 12 public cases passed.
 
 ## 2026-11-23, NRL Team Manager save downloads
 
 PL-03 adds Download slot to Career saves. Each download contains the exact saved career, including older saves and their match and season history. Verified save times and account copies remain future work for NRL Team Manager.
 
-The 37 focused tests covered a 12-season Storm career, an older v1 save, a slot updated while the chooser was open, and empty, corrupt and newer-format saves. Downloading changed no career, checkpoint or write fence. Twelve Chromium cases at 320 and 390 pixels verified the real files, including 237 settled fixtures in the final year of the 12-season career. The previous build had no download control at either width.
+The 37 focused tests covered a 12-season Storm career, an older v1 save, a slot updated while the chooser was open, and empty, corrupt and newer-format saves. Downloading changed no career, checkpoint or write fence. Twelve Chromium cases at 320 and 390 pixels verified the real files, including 237 settled fixtures in the final year of the 12-season career. The previous build had no download control at either width. PR #1048 is live and all 12 public cases passed.
 
 ## 2026-11-23, Club Manager season checkpoints
 
