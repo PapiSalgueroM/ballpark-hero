@@ -1,8 +1,14 @@
+## 2026-11-23, US My Career save ownership
+
+PL-04 protects active saves in NFL, NBA, MLB and NHL My Career. Before it advances a season or retries an interrupted write, the game checks that the tab still owns the active save. If another tab saved newer progress, the older tab asks for a reload. A retry can finish a write that already landed without replaying the season or counting the finish twice.
+
+Two browser controls reproduced an overwrite of an actual NFL career with the previous build, once on normal play and once on Retry. The 191 focused tests, 53 existing checks, four scoped SaveKeeper runs and all 24 signed Chromium cases passed. The browser checks covered both paths at 320 and 390 pixels across all four sports, including a newer third tab and a write that landed despite reporting a failure.
+
 ## 2026-11-23, Wonderkid Factory save protection
 
 PL-04 keeps an exact copy before Wonderkid Factory or Stadium Tycoon's Academy replaces a save it cannot load or an academy with damaged roster data. Retry academy save resumes after a storage refusal. A newer tab keeps control, and a write that could not be confirmed asks for a reload. Pack delivery and equipment changes wait for the academy to reopen.
 
-The mounted tests used an evolved academy with $5,000, two reputation stars and six prospects. The previous build overwrote a newer-version save and a same-version save with a damaged roster. The fix kept exact copies through autosave, tab close and retry. The 40 focused tests checked both doors, a reused boot copy, a refused readback, an active save from another tab and one-time pack delivery. The scoped SaveKeeper passed. On the integrated build, 43 combined academy and pack tests and all 16 Chromium cases at 320 and 390 pixels passed. The old app overwrote the original in all four browser controls. Both production entry paths kept the verified copy and healthy saves still used the old writer. These browser checks ran against the release candidate.
+The mounted tests used an evolved academy with $5,000, two reputation stars and six prospects. The previous build overwrote a newer-version save and a same-version save with a damaged roster. The fix kept exact copies through autosave, tab close and retry. The 40 focused tests checked both doors, a reused boot copy, a refused readback, an active save from another tab and one-time pack delivery. The scoped SaveKeeper passed. On the integrated build, 43 combined academy and pack tests and all 16 Chromium cases at 320 and 390 pixels passed. The old app overwrote the original in all four browser controls. PR #1054 is live. All 16 published cases passed, and both production entry paths kept the verified copy.
 
 ## 2026-11-23, College Dynasty recap save protection
 

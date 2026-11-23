@@ -20,6 +20,7 @@ import { talkDeckFilter } from '@/lib/usCareerRetirementFlow';
 import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 import { noteIntlCalls } from '@/test/helpers/intlCallNote';
 import { hallWallKey, wallKeyOf } from '@/lib/usCareerHallWall';
+import { settlePendingSaves } from '@/lib/safeStorage';
 
 /* Round 1557 (critic-1541 correction 9): the file prints whether its NBA saves meet the national team's call
    (simUsCareerSaveRetry passes the line on). */
@@ -44,7 +45,7 @@ type Attempt = { method: 'setItem' | 'removeItem'; key: string; value: string | 
 const BASELINE = 'unchanged training rule preserves complete engine-created careers';
 const clone = <T,>(value: T): T => JSON.parse(JSON.stringify(value));
 const encoded = (value: Save) => JSON.stringify(value);
-const nativeSet = Storage.prototype.setItem, nativeRemove = Storage.prototype.removeItem;
+const nativeSet = Storage.prototype.setItem, nativeRemove = Storage.prototype.removeItem, nativeGet = Storage.prototype.getItem;
 let attempts: Attempt[] = [], refusedKey = '', refusing = false, rngState = 1084, rngDraws = 0;
 const stepRng = (state: number) => (Math.imul(1664525, state) + 1013904223) >>> 0;
 function rngFrom(seed: number) { let state = seed; return () => { state = stepRng(state); return state / 4294967296; }; }
@@ -161,6 +162,132 @@ it(BASELINE, () => {
 });
 
 describe.each(SPORTS)('$label save recovery on the actual board', row => {
+  it('does not retry a refused write over a newer save or let a third stale tab take it', () => {
+    const initial = prospect(row), original = prospectSave(initial);
+    const key = row.sport.saveKey;
+    seed(row, original);
+    const a = mount(row);
+    const third = mount(row);
+    const desc = row.sport.preDraft(initial.eraId);
+    const firstRoute = { name: new RegExp(desc.routes[0].label) };
+    refusing = true;
+    fireEvent.click(within(a.container).getByRole('button', firstRoute));
+    expect(nativeGet.call(localStorage, key)).toBe(encoded(original));
+    const b = mount(row);
+    refusing = false;
+    fireEvent.click(within(b.container).getByRole('button', firstRoute));
+    fireEvent.click(within(b.container).getByRole('button', { name: /Play (your first|the next) season/ }));
+    const newest = nativeGet.call(localStorage, key);
+    expect(newest).not.toBe(encoded(original));
+    const otherSaves = values();
+    const count = attempts.length;
+    fireEvent.click(within(a.container).getByRole('button', { name: 'Retry save' }));
+    check(row.label + ': stale retry keeps the peer', values(), otherSaves);
+    expect(attempts).toHaveLength(count);
+    fireEvent.click(within(third.container).getByRole('button', firstRoute));
+    expect(values()).toEqual(otherSaves);
+    expect(attempts).toHaveLength(count);
+    expect(spies.completion).not.toHaveBeenCalled();
+    expect(settlePendingSaves()).toBe(true);
+  });
+
+  it('checks the write receipt and acknowledges the exact landed bytes without replay', () => {
+    const initial = prospect(row), original = prospectSave(initial);
+    const key = row.sport.saveKey;
+    seed(row, original);
+    const view = mount(row);
+    const desc = row.sport.preDraft(initial.eraId);
+    let sawSuspectRead = false;
+    const get = vi.spyOn(Storage.prototype, 'getItem').mockImplementation(function (this: Storage, queried) {
+      const actual = nativeGet.call(this, queried);
+      if (queried === key && actual !== encoded(original) && !sawSuspectRead) {
+        sawSuspectRead = true;
+        return encoded(original);
+      }
+      return actual;
+    });
+    fireEvent.click(view.getByRole('button', { name: new RegExp(desc.routes[0].label) }));
+    check(row.label + ': suspect active receipt checked', sawSuspectRead, true);
+    const afterWrite = nativeGet.call(localStorage, key);
+    expect(afterWrite).not.toBe(encoded(original));
+    expect(view.getByRole('button', { name: 'Retry save' })).toBeTruthy();
+    get.mockRestore();
+    const attemptCount = attempts.length;
+    const before = observe();
+    fireEvent.click(view.getByRole('button', { name: 'Retry save' }));
+    expect(attempts).toHaveLength(attemptCount);
+    expect(observe().values).toEqual(before.values);
+    expect(rng()).toEqual(before.rng);
+    expect(view.queryByRole('button', { name: 'Retry save' })).toBeNull();
+  });
+
+  it('holds a newer career when the refused reset retries', async () => {
+    const original = fixture(row, true);
+    seed(row, original);
+    const view = mount(row);
+    await waitFor(() => expect(attempts.some(attempt => attempt.key === hallWallKey(row.sport.slug))).toBe(true));
+    const key = row.sport.saveKey;
+    refusing = true;
+    reset(view);
+    expect(nativeGet.call(localStorage, key)).toBe(encoded(original));
+    const newer = fixture(row);
+    nativeSet.call(localStorage, key, encoded(newer));
+    const before = observe();
+    refusing = false;
+    fireEvent.click(view.getByRole('button', { name: 'Retry save' }));
+    expect(observe()).toEqual(before);
+    expect(view.getByRole('alertdialog', { name: /changed in another tab/i })).toBeTruthy();
+  });
+
+  it('keeps a verified newer career on an ordinary stale season press without drawing a season', () => {
+    const original = fixture(row);
+    seed(row, original);
+    const a = mount(row);
+    const b = mount(row);
+    const play = { name: /^Play the \d+ season$/ };
+    fireEvent.click(within(b.container).getByRole('button', play));
+    const before = observe();
+    expect(before.values[row.sport.saveKey]).not.toBe(encoded(original));
+    fireEvent.click(within(a.container).getByRole('button', play));
+    check(row.label + ': ordinary stale season keeps saved bytes and draws', observe(), before);
+    expect(spies.activity).toHaveBeenCalledTimes(1);
+  });
+
+  it('records retirement only after the save is kept and never credits a later coaching retry', () => {
+    const original = fixture(row);
+    const c = original.c!;
+    const random = rngFrom(85641);
+    for (let year = 0; year < 6; year++) {
+      row.sport.simSeason(c, 75, random);
+      row.sport.progress(c, random);
+    }
+    c.pendingRivalryEvent = null;
+    c.pendingRivalryChoice = null;
+    seed(row, original);
+    const view = mount(row);
+    const key = row.sport.saveKey;
+    refusing = true;
+    fireEvent.click(view.getByRole('button', { name: 'Hang them up now' }));
+    const dialog = view.getByRole('alertdialog', { name: 'Retire this player?' });
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Retire this player' }));
+    expect(spies.completion).not.toHaveBeenCalled();
+    expect(localStorage.getItem(hallWallKey(row.sport.slug))).toBeNull();
+    expect(nativeGet.call(localStorage, key)).toBe(encoded(original));
+    const retirement = attempts.at(-1)?.value;
+    expect(JSON.parse(retirement!).phase).toBe('retired');
+    refusing = false;
+    fireEvent.click(view.getByRole('button', { name: 'Retry save' }));
+    expect(nativeGet.call(localStorage, key)).toBe(retirement);
+    expect(spies.completion).toHaveBeenCalledTimes(1);
+    refusing = true;
+    fireEvent.click(view.getByRole('button', { name: 'Go after a coaching job' }));
+    expect(nativeGet.call(localStorage, key)).toBe(retirement);
+    refusing = false;
+    fireEvent.click(view.getByRole('button', { name: 'Retry save' }));
+    expect(JSON.parse(nativeGet.call(localStorage, key)!).phase).toBe('coach');
+    expect(spies.completion).toHaveBeenCalledTimes(1);
+  });
+
   it('quiet restore preserves all four save keys without claiming failure', () => {
     const original = fixture(row); seed(row, original); const before = observe(), view = mount(row);
     check(row.label + ': quiet restore', { bytes: localStorage.getItem(row.sport.saveKey), values: values(), attempts, notice: !!notice(view), errors: spies.error.mock.calls.length }, { bytes: encoded(original), values: before.values, attempts: [], notice: false, errors: 0 });
