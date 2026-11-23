@@ -68,6 +68,7 @@ export async function fetchCareerPlayers(): Promise<CareerPlayer[]> {
 
     // Map player rows to CareerPlayer objects
     const players: CareerPlayer[] = playersResult.data.map((p) => ({
+      id: p.id,
       name: p.player_name,
       nationality: p.nationality,
       position: p.position,

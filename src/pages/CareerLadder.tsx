@@ -35,6 +35,7 @@ import {
   pickDailyPlayer,
 } from '@/lib/careerLadder';
 import { flagForClub } from '@/lib/careerLadder';
+import { careerPlayerIdentityKey } from '@/lib/careerPlayerIdentity';
 import ladderRoster from '@/data/careerLadderRoster.json';
 import { searchPlayers, SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 
@@ -55,7 +56,7 @@ const CareerLadder = () => {
   // (the React error #310 trap that bit TransferPathBoard).
   const [phase, setPhase] = useState<Phase>('boot');
   const [pool, setPool] = useState<CareerPlayer[]>([]);
-  const [usedIds, setUsedIds] = useState<string[]>([]);
+  const [usedPlayerKeys, setUsedPlayerKeys] = useState<string[]>([]);
   const [player, setPlayer] = useState<CareerPlayer | null>(null);
   const [revealed, setRevealed] = useState(1);
   const [wrongGuesses, setWrongGuesses] = useState<string[]>([]);
@@ -150,7 +151,7 @@ const CareerLadder = () => {
       setPhase('error');
       return;
     }
-    let fresh = eligible.filter(p => !used.includes(p.id));
+    let fresh = eligible.filter(p => !used.includes(careerPlayerIdentityKey(p) ?? p.id));
     let carriedUsed = used;
     if (fresh.length === 0) {
       // Pool exhausted: start excluding repeats from scratch.
@@ -158,7 +159,7 @@ const CareerLadder = () => {
       carriedUsed = [];
     }
     const pick = fresh[Math.floor(Math.random() * fresh.length)];
-    setUsedIds([...carriedUsed, pick.id]);
+    setUsedPlayerKeys([...carriedUsed, careerPlayerIdentityKey(pick) ?? pick.id]);
     setPlayer(pick);
     setRevealed(1);
     setWrongGuesses([]);
@@ -181,13 +182,13 @@ const CareerLadder = () => {
   useEffect(() => { boot(); }, [boot]);
 
   // Switching difficulty mid-session immediately deals a new unlimited round
-  // from the matching pool (usedIds carry over so repeats stay excluded).
+  // from the matching pool (usedPlayerKeys carry over so repeats stay excluded).
   const switchDifficulty = useCallback((d: LadderDifficulty) => {
     setDifficulty(d);
     if (mode === 'unlimited' && pool.length > 0) {
-      startRound(d === 'legend' ? legendPool(pool) : pool, usedIds);
+      startRound(d === 'legend' ? legendPool(pool) : pool, usedPlayerKeys);
     }
-  }, [mode, pool, usedIds, startRound]);
+  }, [mode, pool, usedPlayerKeys, startRound]);
 
   const allNames = useMemo(() => pool.map(p => p.name), [pool]);
 
@@ -235,14 +236,16 @@ const CareerLadder = () => {
   const potential = careerScore(Math.max(1, Math.min(activeRevealed, total)), activeWrongGuesses.length, total);
 
   const query = normalizeName(input);
-  const suggestions = activePhase === 'playing' ? ladderSuggestions(allNames, dbFound, input, activeWrongGuesses) : [];
+  // A saved miss can become a valid guess once its identity is verified.
+  const rejectedNames = activePlayer && careerPlayerIdentityKey(activePlayer)
+    ? activeWrongGuesses.filter(name => !ladderGuessWins(name, activePlayer, pool))
+    : activeWrongGuesses;
+  const suggestions = activePhase === 'playing' ? ladderSuggestions(allNames, dbFound, input, rejectedNames) : [];
 
-  const handleGuess = (name: string) => {
+  const handleGuess = (name: string, selectedFromPool = true) => {
     if (activePhase !== 'playing' || !activePlayer) return;
     setInput('');
-    if (activeWrongGuesses.includes(name)) return;
-
-    if (ladderGuessWins(name, activePlayer.name, allNames)) {
+    if (ladderGuessWins(name, activePlayer, selectedFromPool ? pool : allNames)) {
       const score = careerScore(Math.min(activeRevealed, total), activeWrongGuesses.length, total);
       if (mode === 'daily') {
         addDailyAction({ t: 'won', score });
@@ -254,6 +257,7 @@ const CareerLadder = () => {
       return;
     }
 
+    if (activeWrongGuesses.includes(name)) return;
     if (mode === 'daily') {
       // A single action; isLost (wrong-count >= MAX_GUESSES) derives the loss
       // state from the updated log, so no separate 'lost' dispatch is needed.
@@ -543,7 +547,7 @@ const CareerLadder = () => {
                         <button
                           key={s.key}
                           type="button"
-                          onClick={() => handleGuess(s.name)}
+                          onClick={() => handleGuess(s.name, s.key.startsWith('pool:'))}
                           className="w-full text-left px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-muted/50 transition-colors border-b border-border last:border-0"
                         >
                           {s.name}
@@ -602,7 +606,7 @@ const CareerLadder = () => {
                     gameName: 'Career Ladder',
                     gamePath: '/career-ladder',
                   }}
-                  onPlayAgain={mode === 'unlimited' ? () => startRound(difficulty === 'legend' ? legendPool(pool) : pool, usedIds) : undefined}
+                  onPlayAgain={mode === 'unlimited' ? () => startRound(difficulty === 'legend' ? legendPool(pool) : pool, usedPlayerKeys) : undefined}
                   playAgainLabel="Next player"
                   playNext={mode === 'daily' ? 'Come back tomorrow for a new ladder!' : undefined}
                 >

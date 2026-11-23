@@ -64,7 +64,7 @@ try {
        never been verified here. Round 629, same cause as the two dead fight
        career controls. */
     const source = fs.readFileSync(path.join(ROOT, 'src', 'hooks', 'useTransferPath.ts'), 'utf8').replaceAll('\r\n', '\n');
-    const guard = "\n    if (chain.some(player => player.toLowerCase() === name.toLowerCase())) {\n      return { ok: false, club: null, reason: 'duplicate' };\n    }\n";
+    const guard = "\n    if (chain.some(player => player.toLowerCase() === name.toLowerCase()\n      || (verifiedIdentity !== undefined && verifiedIdentityOf(player) === verifiedIdentity))) {\n      return { ok: false, club: null, reason: 'duplicate' };\n    }\n";
     const regressed = source.replace(guard, '\n');
     if (regressed === source) {
       console.error('control cannot run: useTransferPath.ts has no duplicate guard to remove');
