@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
-  SAVE_KEY, acceptBid, eraPlayableClubs, generateIncomingBids, loadCareer, playableClubs, rejectBid,
+  SAVE_KEY, acceptBid, eraPlayableClubs, generateIncomingBids, loadCareer, playNextEntry, playableClubs, rejectBid,
   saveCareer, setTransferStatus, startCareer, worldLeagueDefs,
   type CareerState,
 } from '@/lib/clubManager';
@@ -103,6 +103,24 @@ describe('Club Manager listed player bids', () => {
     const accepted = acceptBid(state, existing.playerId);
     expect(accepted?.squad.some(player => player.id === existing.playerId)).toBe(false);
     expect(accepted?.budget).toBeCloseTo(state.budget + existing.offer);
+  });
+
+  it('keeps an improved bid available after a match inside the same transfer window', () => {
+    const state = listedCareer(150);
+    const [opening] = makeBids(state, [0, 0, 0.99, 0]);
+    const pending = withDraws([0], () => rejectBid(state, opening.playerId));
+    const [improved] = pending.incomingBids ?? [];
+    expect(improved).toMatchObject({ playerId: opening.playerId, status: 'improved' });
+    expect(improved.offer).toBeGreaterThan(opening.offer);
+
+    const after = playNextEntry(pending, { skipHalftime: true, noCoach: true }).state;
+    expect(after.transferWindow).toBe('summer');
+    expect(after.windowWeeksLeft).toBe(pending.windowWeeksLeft! - 1);
+    expect(after.incomingBids?.find(bid => bid.playerId === improved.playerId)).toEqual(improved);
+
+    const sold = acceptBid(after, improved.playerId);
+    expect(sold?.squad.some(player => player.id === improved.playerId)).toBe(false);
+    expect(sold?.budget).toBeGreaterThan(after.budget);
   });
 
   it.each([false, true])('declines instead of raising a £191.3m bid above its buyer budget (unlisted: %s)', unlist => {

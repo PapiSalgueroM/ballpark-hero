@@ -481,7 +481,9 @@ section = '2';
 console.log('2) Identity, BASE against the tree');
 const APPLY_ANCHOR = '    applyClubAdditions(clubHistory, pool, clubAdditions.add as ClubAddition[],';
 let headSource = read('src/lib/playerBingo.ts');
-const headExtra = {};
+// This comparison audits the October record against its October fixture.
+// The November report spells are exercised through fetchBingoData in the unit suite.
+const headExtra = { '@/data/bingoReportedClubSpells': 'export const BINGO_REPORTED_CLUB_SPELLS = [];' };
 if (CONTROL === 'noapply') {
   const lines = headSource.split('\n');
   const at = lines.findIndex(l => l.startsWith(APPLY_ANCHOR));

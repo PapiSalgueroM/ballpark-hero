@@ -138,7 +138,7 @@ describe('Career Ladder verified completed seasons', () => {
     const players = shared.map(({ name, nationality, position }) => ({ name, nationality, position }));
     expect(players).toEqual(rows.players.map(({ player_name: name, nationality, position }) => ({ name, nationality, position })));
     const onSelect = vi.fn();
-    render(createElement(SoccerGridSearch, { players, onSelect }));
+    render(createElement(SoccerGridSearch, { players, onSelect, disabled: false }));
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'isak' } });
     fireEvent.click(screen.getByRole('option', { name: /Alexander Isak/i }));
     expect(onSelect).toHaveBeenCalledWith('Alexander Isak');
