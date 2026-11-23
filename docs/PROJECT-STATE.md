@@ -1,3 +1,9 @@
+## 2026-11-23, Club Manager Robert Ljubičić opening loan
+
+Fresh 2026-27 Club Manager careers register Robert Ljubičić at LASK on loan from AEK Athens. LASK can play him and AEK lists him under its players out on loan. His original AEK player key stays attached to his LASK goals, and the loan follows the game's season-end return. The opening roster uses the known AEK contract through 2029 and leaves the unpublished purchase and recall fees unset. [Loan and identity audit](audits/club-manager-ljubicic-2026-opening-loan.md)
+
+The regression checks cover both clubs, a third club, both directions of a job change, ratings and contract continuity on handover, market and transfer refusals, the summer return, a later release and a seeded Champions League goal. The saved Porto transfer remains a single Porto player after reload. Manager Hot Seat and Deadline Day continue using their shared roster snapshot. CM-03 remains partial. The LASK scorer release in PR #1070 passed all four published browser checks.
+
 ## 2026-11-23, Club Manager 2026-27 LASK scorer coverage
 
 Six verified LASK players can take the scorer credit when a simulated background cup goal lands on an empty lineup slot. The slot's position determines which players are eligible, and the same player represents the slot throughout the match. The scorer-only list leaves the playable squad, market and settled match records as saved. It respects player ownership in the save. [LASK opening squad source audit](audits/club-manager-lask-2026-scorer-pool.md)
