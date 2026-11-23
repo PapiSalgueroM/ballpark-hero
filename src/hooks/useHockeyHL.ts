@@ -33,26 +33,33 @@ type HLAction = { t: 'result'; correct: boolean };
 
 const ROUNDS = 10;
 const PRACTICE_KEY = 'dukb-hockey-hl-unlimited-v1';
-type Practice = { seed: number; hard: boolean; answers: boolean[] };
+type Practice = { pool: number; seed: number; hard: boolean; answers: boolean[] };
 
 // A changed pool invalidates old pair seeds because it can change the matchups.
 const poolRevision = keyedRng(JSON.stringify(hockeyHLPlayers))();
+// Existing Hard rounds used the old card gaps to pick opponents. Keep those
+// pairings on resume while using the corrected cards for display and scoring.
+const previousGoaliePoints = new Map([['Henrik Lundqvist', 46], ['Igor Shesterkin', 18]]);
+const previousGoalieRevision = keyedRng(JSON.stringify(hockeyHLPlayers.map(player => {
+  const points = previousGoaliePoints.get(player.name);
+  return points === undefined ? player : { ...player, careerPoints: points, lastSeason: 'unverified' };
+})))();
 function loadPractice(): { raw: string | null; practice: Practice | null; active: boolean } {
   const raw = safeLocalStorage.getItem(PRACTICE_KEY);
   try {
     const value = raw ? JSON.parse(raw) : null;
-    if (value && value.pool === poolRevision && typeof value.active === 'boolean'
+    if (value && (value.pool === poolRevision || value.pool === previousGoalieRevision) && typeof value.active === 'boolean'
       && Number.isInteger(value.seed) && value.seed >= 0 && value.seed < 100000
       && typeof value.hard === 'boolean' && Array.isArray(value.answers) && value.answers.length < ROUNDS
       && value.answers.every((answer: unknown) => typeof answer === 'boolean')) {
-      return { raw, active: value.active, practice: { seed: value.seed, hard: value.hard, answers: value.answers } };
+      return { raw, active: value.active, practice: { pool: value.pool, seed: value.seed, hard: value.hard, answers: value.answers } };
     }
   } catch { /* Start on Daily when the practice draft is unreadable. */ }
   return { raw, practice: null, active: false };
 }
 
 const encodePractice = (practice: Practice, active: boolean) =>
-  JSON.stringify({ pool: poolRevision, seed: practice.seed, hard: practice.hard, answers: practice.answers, active });
+  JSON.stringify({ ...practice, active });
 
 // Sentinel puzzle array, useDailyPuzzle needs at least one element.
 // The hook ignores the puzzle data and uses todayStr for seeding instead.
@@ -68,7 +75,7 @@ function getDailyPairs(todayStr: string): [HockeyHLPlayer, HockeyHLPlayer][] {
   return result;
 }
 
-function getPracticePairs(seed: number, hard = false): [HockeyHLPlayer, HockeyHLPlayer][] {
+function getPracticePairs(seed: number, hard = false, previousGoaliePairing = false): [HockeyHLPlayer, HockeyHLPlayer][] {
   const shuffled = seededShuffle(hockeyHLPlayers, seed);
   if (!hard) {
     const result: [HockeyHLPlayer, HockeyHLPlayer][] = [];
@@ -81,12 +88,15 @@ function getPracticePairs(seed: number, hard = false): [HockeyHLPlayer, HockeyHL
   // shuffle window, selection-only, scoring untouched. Unlimited-only:
   // daily pairs stay canonical so stored daily actions replay correctly.
   const pool = [...shuffled];
+  const points = (player: HockeyHLPlayer) => previousGoaliePairing
+    ? previousGoaliePoints.get(player.name) ?? player.careerPoints : player.careerPoints;
   const result: [HockeyHLPlayer, HockeyHLPlayer][] = [];
   while (result.length < ROUNDS && pool.length >= 2) {
     const a = pool.shift()!;
+    const anchorPoints = points(a);
     let bestI = 0, bestGap = Infinity;
     for (let i = 0; i < Math.min(pool.length, 12); i++) {
-      const gap = Math.abs(pool[i].careerPoints - a.careerPoints);
+      const gap = Math.abs(points(pool[i]) - anchorPoints);
       if (gap < bestGap) { bestGap = gap; bestI = i; }
     }
     result.push([a, pool.splice(bestI, 1)[0]]);
@@ -143,7 +153,8 @@ export function useHockeyHL() {
   const [initialSeed] = useState(firstUnlimited.get);
   useEffect(firstUnlimited.release, []);
   const unlimitedSeed = practice?.seed ?? initialSeed;
-  const unlimitedPairs = useMemo(() => getPracticePairs(unlimitedSeed, hard), [unlimitedSeed, hard]);
+  const previousGoaliePairing = practice?.pool === previousGoalieRevision;
+  const unlimitedPairs = useMemo(() => getPracticePairs(unlimitedSeed, hard, previousGoaliePairing), [unlimitedSeed, hard, previousGoaliePairing]);
   const unlimitedResults = useMemo<RoundResult[]>(() => practice?.answers.map((correct, i) => ({
     player1: unlimitedPairs[i][0], player2: unlimitedPairs[i][1], correct,
   })) ?? [], [practice, unlimitedPairs]);
@@ -254,7 +265,7 @@ export function useHockeyHL() {
 
   const startUnlimited = useCallback((nextHard = hard) => {
     clearReveal();
-    setPractice({ seed: drawSeed(), hard: nextHard, answers: [] });
+    setPractice({ pool: poolRevision, seed: drawSeed(), hard: nextHard, answers: [] });
     setMode('unlimited');
   }, [hard, clearReveal]);
 
