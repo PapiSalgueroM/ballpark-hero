@@ -917,6 +917,25 @@ describe('Build Your XI verified namesakes', () => {
     expect(localStorage.getItem(draftKey)).toBe(raw);
   });
 
+  it('checks the exact selected Vitinha for a nation and holds a mismatched full name', async () => {
+    const teamAssignments = lineup('Portugal');
+    teamAssignments[1].isNation = true;
+    const raw = JSON.stringify({ formation, draftChoice: { mode: 'mixed' }, teamAssignments, slots: [[5, firstPick]] });
+    localStorage.setItem(draftKey, raw);
+    const validate = vi.fn((_url: RequestInfo | URL, _options?: RequestInit) => Promise.resolve(
+      new Response(JSON.stringify({ valid: true, fullName: 'Vítor Machado Ferreira' }), { status: 200 }),
+    ));
+    vi.stubGlobal('fetch', validate);
+    const view = renderHook(useLineupBuilder);
+    act(() => { api(view).finishSpin(); api(view).selectPosition(10); });
+    await act(async () => api(view).submitPlayer('Vitinha', asPick(marseille, 'ST')));
+    expect(JSON.parse(String(validate.mock.calls[0][1]?.body))).toMatchObject({
+      playerName: 'Vítor Manuel Carvalho Oliveira', teamName: 'Portugal', isNation: true, position: 'ST',
+    });
+    expect(api(view).filledCount).toBe(1);
+    expect(localStorage.getItem(draftKey)).toBe(raw);
+  });
+
   it('finishes a full recorded draft without merging the two players in the season report', async () => {
     const teamAssignments = lineup();
     const slots = [[5, firstPick], [10, {

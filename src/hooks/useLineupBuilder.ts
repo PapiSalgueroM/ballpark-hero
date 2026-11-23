@@ -9,7 +9,8 @@ import { checkLineupPick, gradeFit, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionF
 import type { Position } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
 import { clubPickVerifies, isCurrentBuildXiDraft, loadBuildXiDraft, recordedPickVerifies, writeBuildXiDraft } from '@/lib/buildXiDraft';
-import { buildXiAlreadyPicked, buildXiExclusions, buildXiReviewedName } from '@/lib/buildXiPlayers';
+import { buildXiAlreadyPicked, buildXiExclusions, buildXiNamesake, buildXiReviewedName } from '@/lib/buildXiPlayers';
+import { normalizeName } from '@/lib/playerSearch';
 import { verifiedPositionFallback } from '@/data/verifiedSoccerPositions';
 
 /* The project URL and public key are hardcoded on purpose: CLAUDE.md records
@@ -347,6 +348,12 @@ export function useLineupBuilder() {
         // Our own record settles it: no request, no model, nothing to wait for.
         playerName = pickMeta?.rawName?.trim() || typed;
       } else {
+        const reviewed = buildXiNamesake(typed, pickMeta);
+        if (reviewed && !reviewed.person) {
+          setIsValidating(false);
+          setValidationError('Could not identify this player. Try another record or reroll the team.');
+          return;
+        }
         setIsValidating(true);
         const call = new AbortController();
         validatorCall.current = call;
@@ -355,7 +362,7 @@ export function useLineupBuilder() {
           {
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}` },
             body: JSON.stringify({
-              playerName: typed,
+              playerName: reviewed?.person ?? typed,
               teamName: currentTeam.name,
               isNation: currentTeam.isNation,
               /* Round 315: the slot's role rides along, so the validator can
@@ -377,7 +384,15 @@ export function useLineupBuilder() {
           else if (answer.why !== 'cancelled') setValidationError(unverifiedLine(answer));
           return;
         }
-        if (answer.fullName) playerName = answer.fullName;
+        if (reviewed?.person) {
+          if (normalizeName(answer.fullName) !== normalizeName(reviewed.person)) {
+            setIsValidating(false);
+            setValidationError('Could not verify the selected player. Try again or pick someone else.');
+            return;
+          }
+        } else if (answer.fullName) {
+          playerName = answer.fullName;
+        }
       }
 
       if (buildXiAlreadyPicked(exclusions, playerName, pickMeta)) {
