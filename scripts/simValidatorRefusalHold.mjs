@@ -229,7 +229,7 @@ async function load(name, raw) {
   const namesakeImport = 'import verifiedNamesakes from "../_shared/soccerGridNamesakes.json" with { type: "json" };';
   let verifiedNamesakes;
   let input = stripped;
-  if (name === 'soccer-grid-validate' && stripped.includes(namesakeImport)) {
+  if (['soccer-grid-validate', 'football-connect4-validate'].includes(name) && stripped.includes(namesakeImport)) {
     const file = 'supabase/functions/_shared/soccerGridNamesakes.json';
     const facts = REF ? execFileSync('git', ['show', REF + ':' + file], { cwd: ROOT, encoding: 'utf8' }) : read(path.join(ROOT, file));
     verifiedNamesakes = JSON.parse(facts);
