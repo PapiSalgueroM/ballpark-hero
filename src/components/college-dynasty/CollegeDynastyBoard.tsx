@@ -17,6 +17,7 @@
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { CalendarDays, Crown, GraduationCap, ListOrdered, RotateCcw, ShieldHalf, Trophy, Users } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
+import SaveMovedNotice from '@/components/SaveMovedNotice';
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import {
   coordinatorEdge, VACANT_RATING, STAFF_ROLES,
@@ -25,6 +26,8 @@ import {
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { backupKeysOf, copyAside, routeSaveEntry } from '@/lib/brokenSaveRecovery';
+import { holdPendingSave } from '@/lib/safeStorage';
 import type { CollegeRatingReview, CollegeRoundRating } from '@/lib/collegeSeasonRating';
 /* Round 1320: the athletic director. Every write into the state is the glue's
    (src/lib/collegeSeatBind.ts), every word the seat's (src/lib/collegeSeat.ts),
@@ -251,6 +254,8 @@ export default function CollegeDynastyBoard<
   const [passedSeason, setPassedSeason] = useState<number | null>(null);
   /* The market a press already acted on, so a double tap in one render takes one job or one year out. */
   const marketActed = useRef('');
+  const recruitingLoad = useRef<{ raw: string; draft: string; attempted: boolean; show: () => void } | null>(null);
+  const [recruitingWrite, setRecruitingWrite] = useState<'failed' | 'moved' | null>(null);
 
   useGameCompletion(sport.completionId, wonNow, (st?.myTitles ?? 0) * 100 + (st?.seasonsPlayed ?? 0) * 5);
 
@@ -260,24 +265,72 @@ export default function CollegeDynastyBoard<
     } catch { /* full */ }
   }, [sport]);
 
+  const retryRecruitingLoad = useCallback(() => {
+    const pending = recruitingLoad.current;
+    if (!pending) return true;
+    const { raw, draft } = pending;
+    const refuse = (status: 'failed' | 'moved') => {
+      setRecruitingWrite(status);
+      return status === 'moved';
+    };
+    try {
+      const current = localStorage.getItem(sport.saveKey);
+      if (current !== raw && !(pending.attempted && current === draft)) return refuse('moved');
+      const entry = routeSaveEntry(`/${sport.completionId}`);
+      if (!entry) return refuse('failed');
+      let backup = backupKeysOf(entry, localStorage).find(key => localStorage.getItem(key) === raw);
+      if (backup === undefined && current === raw) {
+        const copy = copyAside(entry, localStorage, undefined, false, { raw, slot: 1 });
+        if (copy.ok && copy.backupKey) backup = copy.backupKey;
+      }
+      const kept = backup !== undefined && localStorage.getItem(backup) === raw;
+      const active = localStorage.getItem(sport.saveKey);
+      if (active !== raw && !(pending.attempted && active === draft)) return refuse('moved');
+      if (!kept) return refuse('failed');
+      if (active === raw) {
+        pending.attempted = true;
+        localStorage.setItem(sport.saveKey, draft);
+      }
+      if (localStorage.getItem(sport.saveKey) !== draft) return refuse('failed');
+    } catch { return refuse('failed'); }
+    recruitingLoad.current = null;
+    setRecruitingWrite(null);
+    pending.show();
+    return true;
+  }, [sport]);
+
+  useEffect(() => {
+    if (recruitingWrite === 'failed') return holdPendingSave(retryRecruitingLoad);
+  }, [recruitingWrite, retryRecruitingLoad]);
+
   /* The step after the recap: the budget, a recruiting class and a portal
      pool for the season just closed. Round 728 and 823: the budget, the
      coaching carousel and the staff's pay all happen in the engine, and a
      save from before it just gets the old NIL budget, same as ever. Shared by
      the recap's button and by the restore of an older save written on the recap. */
-  const openRecruiting = useCallback((source: S) => {
+  const openRecruiting = useCallback((source: S, loadedRaw?: string) => {
     const state: S = JSON.parse(JSON.stringify(source));
     const notes = sport.openOffseason(state, Math.random);
     const cls = sport.recruitClass(Math.random);
     const por = sport.portalPool(Math.random);
-    setSt(state); setRecruits(cls); setPortal(por); setPhase('recruit');
-    setFeed(state.depth && state.staffWindow
-      ? [sport.words.budgetDepth(state.staffWindow.budget, sport.payroll(state), state.nil), ...notes]
-      : [sport.words.budgetPlain(state.nil)]);
+    const show = () => {
+      setSt(state); setRecruits(cls); setPortal(por); setPhase('recruit');
+      setFeed(state.depth && state.staffWindow
+        ? [sport.words.budgetDepth(state.staffWindow.budget, sport.payroll(state), state.nil), ...notes]
+        : [sport.words.budgetPlain(state.nil)]);
+    };
+    if (loadedRaw !== undefined) {
+      /* One class per restore. Retrying a refused write keeps the exact pool. */
+      recruitingLoad.current = { raw: loadedRaw, draft: sport.encodeSave(state, 'recruit', cls, por, null), attempted: false, show };
+      retryRecruitingLoad();
+      return;
+    }
+    show();
     persist(state, 'recruit', cls, por);
-  }, [persist, sport]);
+  }, [persist, retryRecruitingLoad, sport]);
 
   useEffect(() => {
+    if (recruitingLoad.current) return;
     try {
       const raw = localStorage.getItem(sport.saveKey);
       if (!raw) return;
@@ -294,7 +347,7 @@ export default function CollegeDynastyBoard<
       setSt(s.st);
       setRecruits(s.recruits ?? null);
       setPortal(s.portal ?? null);
-      if (seatRule === 'recruit') { openRecruiting(s.st); return; }
+      if (seatRule === 'recruit') { openRecruiting(s.st, raw); return; }
       if (seatRule === 'season') { setPhase('season'); return; }
       if (seatRule === 'market') {
         const held = sport.recapOf(s);
@@ -311,7 +364,7 @@ export default function CollegeDynastyBoard<
       if (s.phase === 'recap') {
         const held = sport.recapOf(s);
         if (held) { setRecap(held); setPhase('recap'); }
-        else openRecruiting(s.st);
+        else openRecruiting(s.st, raw);
       } else {
         setPhase(s.phase);
       }
@@ -488,6 +541,14 @@ export default function CollegeDynastyBoard<
     marketActed.current = '';
     setPhase('pick'); setSt(null); setRecap(null);
   };
+
+  if (recruitingWrite === 'moved') return <SaveMovedNotice message="This dynasty changed in another tab. Reload to continue." />;
+  if (recruitingWrite === 'failed') return (
+    <div role="alert" data-no-prerender className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
+      <p>Your dynasty save could not open recruiting. Keep this page open and retry saving.</p>
+      <button type="button" onClick={retryRecruitingLoad} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
+    </div>
+  );
 
   if (phase === 'pick' || !st || !my) {
     return (
