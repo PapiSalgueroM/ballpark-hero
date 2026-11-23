@@ -6,6 +6,12 @@ Old Korean, Japanese and Chinese jobs retain the appropriate generated market af
 
 The paired 15-season England save budget reproduced the published baseline exactly. Everton and Lincoln City exceeded the 234,000-character test budget in both builds, and both saves still wrote successfully. That older capacity issue remains open. This slice changes no limit or historical record to satisfy that check.
 
+## 2026-11-23, Soccer Grid allowance recovery
+
+Soccer Grid keeps its player search when the AI fallback runs out of daily checks. Existing career-record and cached verdicts can still settle a guess. An unverified check leaves the saved board and guess count alone.
+
+PR #1039 passed 65 focused tests, all 15 built-site checks, five quota controls and nine offline validator checks. At 320 and 390 pixels, Chromium kept 14 guesses through the exhausted response. A later record-backed answer and a cached answer each counted once and survived reload. The backend and its rate limits are unchanged.
+
 ## 2026-11-23, Career Ladder completed seasons
 
 Career Ladder fills the missing 2025/26 Liverpool and Barcelona seasons for Alexander Isak and Marcus Rashford. It repairs the exact partial Newcastle, Liverpool and Barcelona count rows from the original seed when they are present. Isak has 42 appearances, 27 goals and six assists for Newcastle in 2024/25, then 22 appearances, four goals and one assist for Liverpool. Newcastle confirmed the September 2025 transfer. [Newcastle](https://www.newcastleunited.com/en/news/newcastle-united-sell-alexander-isak), [Opta](https://theanalyst.com/players/4199/alexander-isak/career), [Newcastle season record](https://www.playmakerstats.com/player/alexander-isak/509348?epoca_id=154), [Liverpool season record](https://www.playmakerstats.com/player/alexander-isak/509348?epoca_id=155).
