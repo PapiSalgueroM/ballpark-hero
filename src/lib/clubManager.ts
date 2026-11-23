@@ -72,8 +72,9 @@ import {
 import { archiveCareerSeason } from '@/lib/clubManagerCareerLines';
 /* Round 1311: the league book's pure reader (the boards). It imports the book module and one type, never this file. */
 import { TEAMS_KEPT, bookDecides, bookShare, keepersOnRecord, leaders, seasonAwards, type BoardClub, type BoardDeparted, type BoardInput, type BoardMine, type SeasonAwards } from '@/lib/clubManagerLeagueBoards';
-import { bornNear, compactWorldRoster, nearAges, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterOwner, worldRosterView } from '@/lib/clubManagerWorldRoster';
+import { bornNear, compactWorldRoster, nearAges, plainCopy, recordWorldRosterTransfer, snapshotWorldRosterClub, worldRosterClub, worldRosterKey, worldRosterOwner, worldRosterView } from '@/lib/clubManagerWorldRoster';
 import type { WorldRosterState } from '@/lib/clubManagerWorldRoster';
+import { europaScorerRace, isEuropaScorerLedger, newEuropaScorerLedger, recordEuropaScorerNight, type EuropaScorerCredit } from '@/lib/clubManagerEuropaScorers';
 import { players as RAW_POOL } from '@/data/players';
 // Round 70: real 2026 rosters for every club in the big five leagues, baked
 // from the Transfermarkt style market value data in Supabase. The bake file
@@ -655,6 +656,26 @@ function worldMarket(career: CareerState): MarketPlayer[] {
 }
 
 /** Only a projected source or an already certified ownership record supplies deal provenance. */
+function actualRosterTransferSource(state: CareerState, player: CMPlayer, from: string) {
+  const held = worldRosterView(state);
+  const carried = player.worldRosterKey && held?.records.find(record => record.key === player.worldRosterKey);
+  const projected = modelAsianRoster(state, from, yearsOn(state)) ?? projectedRoster(from, yearsOn(state), state.eraId ?? 'now', worldSeedOf(state));
+  let sources = projected.filter(p => player.worldRosterKey ? p.worldRosterKey === player.worldRosterKey : p.n === player.name && p.a === player.age);
+  /* Round 1600 fix: in a ledger from before the age read (nearAges), a man of mine from my own club's squad carries
+     the key his old age gave, which today's projection no longer gives anyone, so selling him recorded nothing and
+     he left the world. His row is found the way worldRosterClub finds it: his name, a year either side. */
+  if (!sources.length && !carried && held && nearAges(held)) {
+    sources = projected.filter(p => p.n === player.name && bornNear(player.age, p.a, true));
+  }
+  const source = sources.length === 1 ? sources[0] : undefined;
+  if (!carried && (sources.length > 1 || player.worldRosterKey && !source)) return null;
+  return {
+    since: carried?.origin.since ?? source?.since ?? player.worldRosterSince,
+    originPosition: carried?.origin.position ?? source?.p,
+    ...(carried ? { key: carried.key } : {}),
+  };
+}
+
 function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: string, to: string | null, kind: 'permanent' | 'release' | 'retire', pack = true): CareerState {
   /* Release AZ, the lead's ruling Y1: a career with no world seed (every save from before this release, and a
      Hot Seat day handed over) never writes a ledger, so it plays on exactly as it did. A readable ledger alone
@@ -668,27 +689,14 @@ function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: 
     const nation = madeUpNationAt(player.name, from === state.clubName ? careerPlace(state) : clubPlace(from, state.eraId), state.eraId);
     if (nation) player = { ...player, nation };
   }
-  const held = worldRosterView(state);
-  const carried = player.worldRosterKey && held?.records.find(record => record.key === player.worldRosterKey);
   if (timedWorldRatings(state) && (from === state.clubName || to === state.clubName)) {
     const year = worldYear(state);
     player = { ...player, worldRatingStart: [year, Math.max(worldRatingProgress(state), worldRatingStart(player, year))] };
     delete player.worldRatingForecast;
   }
-  const projected = modelAsianRoster(state, from, yearsOn(state)) ?? projectedRoster(from, yearsOn(state), state.eraId ?? 'now', worldSeedOf(state));
-  let sources = projected.filter(p => player.worldRosterKey ? p.worldRosterKey === player.worldRosterKey : p.n === player.name && p.a === player.age);
-  /* Round 1600 fix: in a ledger from before the age read (nearAges), a man of mine from my own club's squad carries
-     the key his old age gave, which today's projection no longer gives anyone, so selling him recorded nothing and
-     he left the world. His row is found the way worldRosterClub finds it: his name, a year either side. */
-  if (!sources.length && !carried && held && nearAges(held)) {
-    sources = projected.filter(p => p.n === player.name && bornNear(player.age, p.a, true));
-  }
-  const source = sources.length === 1 ? sources[0] : undefined;
-  if (!carried && (sources.length > 1 || player.worldRosterKey && !source)) return state;
-  return recordWorldRosterTransfer(state, { player, from, to, kind,
-    since: carried?.origin.since ?? source?.since ?? player.worldRosterSince,
-    originPosition: carried?.origin.position ?? source?.p,
-    ...(carried ? { key: carried.key } : {}) }, pack);
+  const source = actualRosterTransferSource(state, player, from);
+  if (!source) return state;
+  return recordWorldRosterTransfer(state, { player, from, to, kind, ...source }, pack);
 }
 
 /** Round 1344: one deal closed between two clubs that are not mine. `mp.club` is the seller. */
@@ -2460,6 +2468,7 @@ export interface SeasonRecord {
    *  season the book decided. Kept on the record, so a manager who moves club takes his past winners
    *  with him (joinClubNow copies the history). An older record has none. */
   awards?: SeasonAwards;
+  uelScorerAward?: SeasonSummary['uelScorerAward'];
   ballonDor?: NonNullable<SeasonSummary['ballonDor']>;
   ballonDorShortlist?: BallonDorCandidate[];
   leagueCoachAward?: LeagueCoachAward;
@@ -3120,6 +3129,8 @@ export interface SeasonSummary {
   qualifiedUcl: boolean;
   /** Round 1593: my club's Europa League season in words, only in a season it played one. */
   uelRun?: string;
+  /** Confirmed top scorers of this save's Europa League edition. */
+  uelScorerAward?: Array<{ name: string; club: string; goals: number; generated?: true }>;
   signings: TransferRecord[];
   offers: JobOffer[];
   /** Round 633: the ledger in clubManagerScore.ts, 0..130. Was league points
@@ -15052,6 +15063,7 @@ export function openWorldComp(state: CareerState, comp: WorldCompKey, field: str
   if (slice && comp === 'uel' && tagged.via) slice.via = slice.clubs.map(c => tagged.via![c] ?? 'F').join('');
   if (slice && comp === 'uel' && tagged.earned) slice.earned = tagged.earned;
   if (slice && plays) slice.me = state.clubName;
+  if (slice && plays) slice.scorers = newEuropaScorerLedger();
   if (slice) setWorldComp(state, comp, slice);
 }
 export function openWorldUcl(state: CareerState, field: string[] | null, holder?: string | null): void { openWorldComp(state, 'ucl', field, holder); }
@@ -15380,7 +15392,98 @@ function uelNightLabel(my: MyWorldNight): string {
  * bigger swing stays the Champions League's. The league phase moves the board by nothing, finishing in it or out
  * of it; only its target, graded at the season's end, reads how far the club went.
  */
-function completeWorldNight(state: CareerState, night: NightRef, mine: number, theirs: number, et: boolean, shootoutWon: boolean | null, events: string[]): { trophy: string | null; conf: number } {
+interface EuropaManagedScorers {
+  live: LiveMatch;
+  played: readonly CMPlayer[];
+  mine: readonly MyGoalLine[];
+  theirs: readonly ScorerLine[];
+}
+
+function europaScorerCredit(state: CareerState, club: string, player: CMPlayer, projected?: ProjectedPlayer): EuropaScorerCredit {
+  const source = projected ? { since: projected.since, originPosition: projected.p } : actualRosterTransferSource(state, player, club);
+  if (!source) return null;
+  const id = worldRosterKey(state, club, { ...player, position: source.originPosition ?? player.position }, source.since);
+  if (!id) return null;
+  return {
+    id, name: player.name, club,
+    ...(player.generated || player.isYouth || player.academyGrad ? { generated: true } : {}),
+  };
+}
+
+/** Credit the fixed scores of a newly settled night. The played match already has its own goals. */
+function recordEuropaScorers(state: CareerState, n: number, managed?: EuropaManagedScorers, firstNight = false): boolean {
+  const slice = state.worldComps?.uel;
+  const ledger = slice?.scorers ?? (firstNight ? newEuropaScorerLedger() : undefined);
+  if (!slice?.me || ledger?.nights !== n || !isEuropaScorerLedger(ledger)) return false;
+  const fixtures = evalWorldComp(state, 'uel', n + 1)?.nights[n]?.fixtures;
+  if (!fixtures?.length) return false;
+  const credits: EuropaScorerCredit[] = [];
+  const excludes = mySquadNames(state);
+  const rules = bookRules();
+  for (const { home, away, hg, ag } of fixtures) {
+    if (hg === undefined || ag === undefined) return false;
+    const controlledMatch = managed && (home === slice.me || away === slice.me) ? managed : undefined;
+    for (const [club, score] of [[home, hg], [away, ag]] as const) {
+      if (score === 0) continue;
+      if (controlledMatch && club === slice.me) {
+        for (let i = 0; i < score; i++) {
+          const line = controlledMatch.mine[i];
+          const player = line && controlledMatch.played.find(p => p.id === line.id);
+          credits.push(line?.og ? 'own-goal' : player ? europaScorerCredit(state, club, player) : null);
+        }
+        continue;
+      }
+      const own = club === state.clubName ? state.squad : undefined;
+      const roster = own ? own.map((p): ProjectedPlayer => ({
+        n: p.name, p: p.position, a: p.age, r: p.rating, v: p.value ?? 0, anchor: p.rating,
+        since: p.worldRosterSince ?? 0,
+      })) : oppRosterFor(state, club, excludes);
+      const byName = (name: string, position?: Position): EuropaScorerCredit => {
+        const matches = roster.filter(p => p.n === name && p.p !== 'GK' && (!position || p.p === position));
+        if (matches.length !== 1) return null;
+        const p = matches[0];
+        const player = own?.find(item => item.name === p.n && item.position === p.p) ?? bakedToCMPlayer(p);
+        return europaScorerCredit(state, club, player, own ? undefined : p);
+      };
+      if (controlledMatch) {
+        for (let i = 0; i < score; i++) {
+          const line = controlledMatch.theirs[i];
+          if (!line) { credits.push(null); continue; }
+          if (line.og) { credits.push('own-goal'); continue; }
+          const named = (p: OppXiLine) => p.n === line.name && p.p !== 'GK';
+          const atGoal = (oppAt(controlledMatch.live, line.minute) ?? []).filter(named);
+          const candidates = atGoal.length ? atGoal
+            : [...(controlledMatch.live.oppXi ?? []), ...(controlledMatch.live.oppBench ?? [])].filter(named);
+          credits.push(candidates.length > 1 ? null : byName(line.name, candidates[0]?.p));
+        }
+        continue;
+      }
+      const eleven = pickOppSquad(roster)?.xi ?? thinBookEleven(state, club, roster)?.outfield ?? [];
+      const key = `cm-europa-scorers|${slice.seed}|${n}|${home}|${away}|${club}`;
+      for (const { kind, scorer } of dealGoals(key, score, eleven, rules)) {
+        credits.push(kind === 'og' ? 'own-goal' : scorer && !scorer.e ? byName(scorer.n, scorer.p) : null);
+      }
+    }
+  }
+  const next = { ...slice, scorers: recordEuropaScorerNight(ledger, n, credits) };
+  // Scorer credits leave every result intact, so the score evaluation is still current.
+  const cached = WORLD_UCL_MEMO.get(slice);
+  if (cached) WORLD_UCL_MEMO.set(next, cached);
+  state.worldComps = { ...state.worldComps, uel: next };
+  return true;
+}
+
+/** After elimination, and after a job move, background nights still count when the calendar passes them. */
+function advanceEuropaScorers(state: CareerState, europaNight = false): void {
+  const slice = state.worldComps?.uel;
+  if (!slice?.me || !slice.scorers || (!europaNight && slice.me === state.clubName)) return;
+  const through = worldCompNightsDone(state, 'uel');
+  for (let n = slice.scorers.nights; n < through; n++) {
+    if (slice.mine?.[n] || !recordEuropaScorers(state, n)) break;
+  }
+}
+
+function completeWorldNight(state: CareerState, night: NightRef, mine: number, theirs: number, et: boolean, shootoutWon: boolean | null, events: string[], scorers?: EuropaManagedScorers): { trophy: string | null; conf: number } {
   const none = { trophy: null, conf: 0 };
   if (night.k !== 'uel' || !uelParticipant(state)) return none;
   const slice = state.worldComps?.uel as WorldCompSlice;
@@ -15392,7 +15495,10 @@ function completeWorldNight(state: CareerState, night: NightRef, mine: number, t
   const res: NightResult = { h: my.atHome ? mine : theirs, a: my.atHome ? theirs : mine };
   if (et) res.et = 1;
   if (shootoutWon !== null) res.pens = shootoutWon === my.atHome ? 'h' : 'a';
+  const firstRecordedNight = scorers && slice.scorers === undefined && n === 0 && !Object.keys(slice.mine ?? {}).length
+    && worldCompNightsDone(state, 'uel') === 0;
   setWorldComp(state, 'uel', { ...slice, mine: { ...(slice.mine ?? {}), [n]: res } });
+  if (scorers) recordEuropaScorers(state, n, scorers, firstRecordedNight);
   const stage = my.night.stage;
   if (stage === 'md') {
     if (my.night.md !== UCL_LEAGUE.games - 1) return none;
@@ -20488,7 +20594,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   /* Round 1593: a Europa League night writes my result into its slice; every other match of the night comes from
      the slice's own keyed streams. */
   if (fx.competition === 'uel' && entry.night) {
-    const got = completeWorldNight(state, entry.night, myGoals, oppGoals, etPlayed, shootoutWon, events);
+    const got = completeWorldNight(state, entry.night, myGoals, oppGoals, etPlayed, shootoutWon, events, {
+      live, played: xi, mine: myLines, theirs: oppScorers,
+    });
     if (got.trophy) trophyWon = got.trophy;
     confDelta += got.conf;
   }
@@ -22152,6 +22260,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
     const entry = state.calendar[state.week];
     if (entry.type === 'window') {
       state.week += 1;
+      advanceEuropaScorers(state);
       tickWeek(state, null);
       advanceIntercontinentalCup(state, state.week - 1);
       state.transferWindow = 'january';
@@ -22214,6 +22323,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       }
       if (entry.type === 'promotion') advanceChampionshipPlayoffs(state, entry.round);
       state.week += 1;
+      advanceEuropaScorers(state, entry.type === 'uel');
       /* Round 1510 (ruling 2a): a night I do not play (a semi final lost, a stub) moves the week on and ticks nothing. */
       if (!entry.night && entry.type !== 'promotion') tickWeek(state, null);
       advanceIntercontinentalCup(state, state.week - 1);
@@ -22904,6 +23014,7 @@ export function resumeMatch(career: CareerState): PlayResult {
   state.live = null;
   const report = playMyMatch(state, entry, live);
   state.week = live.week + 1;
+  advanceEuropaScorers(state);
   if (entry.type === 'league' && entry.round === leagueRounds(state.leagueClubs.length) - 1) {
     prepareChampionshipPlayoffs(state);
     prepareBundesligaPlayoff(state);
@@ -23937,6 +24048,17 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
      a season the book decides; any other season writes nothing new, so its summary and its record are
      exactly what they were before the book was read. */
   const awards = bookBoards ? seasonAwards(bookBoards.input) : null;
+  let uelScorerAward = state.history.find(row => row.season === state.season)?.uelScorerAward;
+  const uelScorers = state.worldComps?.uel?.scorers;
+  if (!uelScorerAward?.length && isEuropaScorerLedger(uelScorers)) {
+    const result = evalWorldComp(state, 'uel');
+    if (result?.done) {
+      const { leaders } = europaScorerRace(uelScorers, result.nightsDone, true);
+      uelScorerAward = leaders.map(({ name, club, goals, generated }) => ({
+        name, club, goals, ...(generated ? { generated: true } : {}),
+      }));
+    }
+  }
 
   const summary: SeasonSummary = {
     season: state.season,
@@ -23959,6 +24081,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     qualifiedUcl: position <= uclPlacesIn(careerLeagueOf(state)) || wonUelThisSeason(state),
     /* Round 1593: the Europa League season in words, a key only a season that played one carries. */
     ...(uelRunWords(state) ? { uelRun: uelRunWords(state) as string } : {}),
+    ...(uelScorerAward?.length ? { uelScorerAward } : {}),
     signings: state.seasonSignings,
     offers,
     /* Round 633: one function, two call sites, so the number the player
@@ -23998,6 +24121,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
       ...(ballonDor ? { ballonDor, ballonDorShortlist: shortlist } : {}),
       ...(leagueCoachAward ? { leagueCoachAward } : {}),
       ...(clubSeasonAward ? { clubSeasonAward } : {}),
+      ...(uelScorerAward?.length ? { uelScorerAward } : {}),
       ...(awards ? { awards } : {}), ...(fate ? { fate } : {}) },
   ];
   state.history = keepTeams(state.history);

@@ -11,6 +11,8 @@ import type { WorldCompKey, WorldKoRound } from '@/lib/worldCompetition';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { ClubWorldCupCard } from '@/components/club-manager/ClubWorldCupCard';
 import { IntercontinentalCupCard } from '@/components/club-manager/IntercontinentalCupCard';
+import { EUROPA_SCORER_STATUS, EuropaScorersCard } from '@/components/club-manager/EuropaScorersCard';
+import { europaScorerRace } from '@/lib/clubManagerEuropaScorers';
 import { INTERCONTINENTAL_CUP_SCHEDULE, INTERCONTINENTAL_CUP_YEAR } from '@/lib/clubIntercontinentalCup';
 import {
   clubRun, firstStageNights, nextNight, nightLabel, ordinal, realFifthNation, roundPlural, routeWords, worldCompView, worldUclStatus, worldUelStatus,
@@ -34,7 +36,7 @@ import {
  * here, and a club page opened from here comes back to the view it was opened from.
  */
 
-type Tab = 'table' | 'matchdays' | 'knockouts' | 'final';
+type Tab = 'table' | 'matchdays' | 'knockouts' | 'final' | 'scorers';
 interface Nav { at: 'tiles' | 'cup' | 'ucl' | 'uel' | 'dsc' | 'usc' | 'cwc' | 'icc'; tab: Tab | null; run: string | null; night: number | null; ko: WorldKoRound | null; group: string | null }
 const HOME: Nav = { at: 'tiles', tab: null, run: null, night: null, ko: null, group: null };
 /** Round 1509: the competitions this screen shows, by key. */
@@ -435,6 +437,7 @@ function UelHowItWorks() {
       <p>Your club: finish in a Europa League place, win your cup, or have your cup's place passed down to you, and next season you play it (never through the last places, which stand in for the qualifying rounds). Eight league phase nights against eight different clubs, four at home, then the knockouts if you finish in the top 24. Your first season's places were settled before you arrived, so that season you follow it. The board counts a place the same way: through the season it reads your league place and, once it is played, your cup final.</p>
       <p>Every one of your nights is a Thursday on your own calendar, between your league weekends; a short league season plays its last few after the league is done. The real 2026-27 nights are Thursdays too, except matchday 1 (a Wednesday and a Thursday) and the final (Wednesday 26 May 2027, in Frankfurt), so the game's dates are its own. For example: 16th of 36 sends you to the knockout play-off; win the first leg 1-0 away, draw the second 2-2 at home, and you are through 3-2 on aggregate to the round of 16.</p>
       <p>The board sets a Europa League target (the semi-finals for a big club, else the knockouts, and the knockout play-off counts as the knockouts), the gates and the trips are paid like any European night, there is no prize money for any European cup in the game, and the winner plays next season's Champions League. The Conference League and the qualifying rounds are not in the game yet.</p>
+      <p>Top scorers follows your edition through the final, even after your club goes out. Goals in regular play and extra time count toward the Golden Boot. The club beside a player is where they last scored. Two players tied on eight goals can share the award. Goals without a named scorer can leave it unconfirmed.</p>
     </div>
   );
 }
@@ -482,6 +485,9 @@ export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCa
   const back = (to: Nav): void => go(to);
   const openRun = (club: string): void => go({ ...nav, run: club });
   const props: ViewProps | null = view ? { career, comp, view, nav, go, onClub: openRun, groupsCard, bracketCard } : null;
+  const europa = comp === 'uel' ? career.worldComps?.uel : undefined;
+  const race = view && (europa?.me || europa?.scorers)
+    ? europaScorerRace(europa.scorers, view.nightsDone, Boolean(view.winner)) : null;
 
   if (nav.run && props) {
     return (
@@ -491,7 +497,16 @@ export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCa
       </div>
     );
   }
-  if (nav.tab && props) {
+  if (nav.tab === 'scorers' && race) {
+    return (
+      <div className="space-y-2" data-cm-world-view="scorers">
+        <Back label={name} onClick={() => back({ ...nav, tab: null, run: null })} />
+        <div className="text-sm font-bold text-foreground">Top scorers</div>
+        <EuropaScorersCard race={race} myClub={career.clubName} />
+      </div>
+    );
+  }
+  if (nav.tab && nav.tab !== 'scorers' && props) {
     const View = { table: TableView, matchdays: MatchdaysView, knockouts: KnockoutsView, final: FinalView }[nav.tab];
     return (
       <div className="space-y-2" data-cm-world-view={nav.tab}>
@@ -551,6 +566,11 @@ export function WorldCompScreen({ career, nav, go, onClubPage, heading, groupsCa
         <Tile icon="🏆" title="Final" testId="final" onClick={() => go({ ...nav, tab: 'final' })}
           value={view.winner ? `Won by ${view.winner}` : finalNight?.date ? `On ${shortDate(finalNight.date)}` : 'To come'} />
       </div>
+      {race && <div className="grid">
+        <Tile icon="⚽" title="Top scorers" testId="scorers" onClick={() => go({ ...nav, tab: 'scorers' })}
+          value={EUROPA_SCORER_STATUS[race.status]}
+          sub={race.rows[0] ? `${race.rows[0].name}, ${race.rows[0].goals} ${race.rows[0].goals === 1 ? 'goal' : 'goals'}` : undefined} />
+      </div>}
       {link}
     </div>
   );
@@ -561,6 +581,7 @@ const TAB_NAMES: Record<Tab, (v: WorldCompView) => string> = {
   matchdays: () => 'Matchdays',
   knockouts: () => 'Knockouts',
   final: () => 'The final',
+  scorers: () => 'Top scorers',
 };
 
 /** Round 1510: the domestic super cup's one card, behind the Cups panel's fourth tile. */
