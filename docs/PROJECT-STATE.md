@@ -1,3 +1,9 @@
+## 2026-11-23, Alisson's verified Liverpool assists
+
+Both Alisson spellings use 0, 1, 0, 1, 1, 0 and 0 Liverpool assists across 2018-19 through 2024-25. Career Quiz, Career Ladder and the Quiz fallback display the same counts. The migration checks fourteen stints and updates seven assist cells. The rebake ledger catches all seven stale values. [Liverpool assist audit](audits/alisson-liverpool-assists.md)
+
+The appearance release in PR #1077 passed all 12 published phone replays. The missing completed 2025-26 stint is next. Its checks need to cover saved Daily scoring and the new Transfer Path links.
+
 ## 2026-11-23, Alisson's first seven Liverpool appearance totals
 
 Career Quiz and Career Ladder show 51, 37, 42, 54, 47, 32 and 35 appearances for Liverpool from 2018-19 through 2024-25 under both Alisson spellings. The seven seasons reconcile to 298 competitive games. The guarded migration covers fourteen stints and corrects twelve appearance cells. The Quiz fallback carries the same totals and its rebake guard detects stale counts. [Liverpool appearance audit](audits/alisson-liverpool-appearances.md)

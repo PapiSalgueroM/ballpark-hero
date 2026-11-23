@@ -1,0 +1,67 @@
+{
+  "checked": "2026-11-23",
+  "rule": "Competitive first-team Liverpool assists, including domestic cups, European games, Community Shield and Club World Cup.",
+  "sources": {
+    "opta": "https://theanalyst.com/players/4096/alisson-becker/career",
+    "matchLog": "https://www.lfchistory.net/players/1330"
+  },
+  "added": [],
+  "changed": [
+    {
+      "player": "Alisson",
+      "season": "2018-2019",
+      "club": "Liverpool",
+      "field": "assists",
+      "from": 1,
+      "to": 0
+    },
+    {
+      "player": "Alisson",
+      "season": "2019-2020",
+      "club": "Liverpool",
+      "field": "assists",
+      "from": 0,
+      "to": 1
+    },
+    {
+      "player": "Alisson",
+      "season": "2022-2023",
+      "club": "Liverpool",
+      "field": "assists",
+      "from": 0,
+      "to": 1
+    },
+    {
+      "player": "Alisson Becker",
+      "season": "2018-2019",
+      "club": "Liverpool",
+      "field": "assists",
+      "from": 1,
+      "to": 0
+    },
+    {
+      "player": "Alisson Becker",
+      "season": "2019-2020",
+      "club": "Liverpool",
+      "field": "assists",
+      "from": 0,
+      "to": 1
+    },
+    {
+      "player": "Alisson Becker",
+      "season": "2021-2022",
+      "club": "Liverpool",
+      "field": "assists",
+      "from": 0,
+      "to": 1
+    },
+    {
+      "player": "Alisson Becker",
+      "season": "2022-2023",
+      "club": "Liverpool",
+      "field": "assists",
+      "from": 0,
+      "to": 1
+    }
+  ]
+}
