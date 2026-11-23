@@ -3,6 +3,7 @@ import { Loader2 } from 'lucide-react';
 import { toTitleCase } from '@/lib/smartSearch';
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { FlagImg } from '@/components/FlagImg';
+import verifiedNamesakes from '../../../supabase/functions/_shared/soccerGridNamesakes.json';
 
 const DIACRITICS = new RegExp('[' + String.fromCharCode(0x0300) + '-' + String.fromCharCode(0x036f) + ']', 'g');
 const FORMAT_CHARS = /\p{Cf}/gu;
@@ -23,12 +24,31 @@ interface PlayerSuggestion {
   name: string;
   nationality: string;
   position: string;
+  nickname?: string;
 }
 
 interface Props {
   onSelect: (name: string) => void;
   disabled: boolean;
   players: PlayerSuggestion[];
+}
+
+const reviewedNames = new Set(verifiedNamesakes.flatMap(group => [
+  group.name, ...group.aliases, ...group.people.flatMap(person => [person.name, ...person.aliases]),
+]).map(normalizeName));
+
+function findSuggestions(players: PlayerSuggestion[], query: string): PlayerSuggestion[] {
+  const matches = (names: string[]) => names.some(name => normalizeName(name).includes(query));
+  const reviewed = verifiedNamesakes.flatMap(group => {
+    const nicknameMatches = matches([group.name, ...group.aliases]);
+    return group.people.filter(person => nicknameMatches || matches([person.name, ...person.aliases])).map(person => ({
+      name: person.name, nationality: person.nationality, position: person.position === 'mid' ? 'Midfielder' : 'Forward', nickname: group.name,
+    }));
+  });
+  return [...reviewed, ...players.filter(player => {
+    const key = normalizeName(player.name);
+    return !reviewedNames.has(key) && key.includes(query);
+  })].slice(0, 8);
 }
 
 export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
@@ -42,9 +62,7 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
 
   const normalizedQuery = normalizeName(query);
   const suggestions = query.length >= 2 && normalizedQuery.length > 0
-    ? players
-        .filter(p => normalizeName(p.name).includes(normalizedQuery))
-        .slice(0, 8)
+    ? findSuggestions(players, normalizedQuery)
     : [];
   const popupOpen = showDropdown && suggestions.length > 0;
   const activeIndex = Math.min(highlightIndex, suggestions.length - 1);
@@ -151,7 +169,7 @@ export function SoccerGridSearch({ onSelect, disabled, players }: Props) {
                   i === activeIndex ? 'bg-accent text-accent-foreground' : 'text-foreground'
                 }`}
               >
-                <span className="font-medium">{p.name}</span>
+                <span className="font-medium">{p.name}{p.nickname && <span className="block text-xs text-muted-foreground">{p.nickname}</span>}</span>
                 <span className="text-xs text-muted-foreground truncate ml-2"><FlagImg name={p.nationality} size={12} showLabel /> · {p.position}</span>
               </li>
             ))}

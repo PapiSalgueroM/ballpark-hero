@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import verifiedNamesakes from "../_shared/soccerGridNamesakes.json" with { type: "json" };
 
 /**
  * Soccer 3x3 grid validator (2026-08-13 v13).
@@ -144,6 +145,43 @@ function positionBucket(pos: string | null): string | null {
   if (p === "df" || p.includes("back") || p.includes("defend")) return "def";
   if (p === "mf" || p.includes("midfield")) return "mid";
   if (p === "fw" || p.includes("forward") || p.includes("winger") || p.includes("striker")) return "fwd";
+  return null;
+}
+
+interface VerifiedNamesake {
+  nationality: string;
+  position: string;
+  uncertainPosition?: string;
+  clubs: string[];
+}
+
+function namesakeFact(person: VerifiedNamesake, criterion: Criterion): Verdict {
+  if (criterion.kind === "club") return person.clubs.some(club => norm(club) === norm(criterion.value));
+  if (criterion.kind === "position") return criterion.value === person.uncertainPosition ? "unknown" : criterion.value === person.position;
+  if (criterion.kind === "nationality") {
+    const want = norm(criterion.value);
+    return (DEMONYM[want] ?? want) === norm(person.nationality);
+  }
+  return "unknown";
+}
+
+function verifyNamesake(player: string, row: Criterion, col: Criterion) {
+  const key = norm(player);
+  for (const group of verifiedNamesakes) {
+    const picked = group.people.find(person => [person.name, ...person.aliases].some(name => norm(name) === key));
+    if (!picked && ![group.name, ...group.aliases].some(name => norm(name) === key)) continue;
+    const evidence = group.people.map(person => ({ person, row: namesakeFact(person, row), col: namesakeFact(person, col) }));
+    const candidates = picked ? evidence.filter(x => x.person === picked) : evidence;
+    const match = candidates.find(x => x.row === true && x.col === true);
+    if (match) return { valid: true, reason: "Verified from career records.", fullName: match.person.name };
+    // Missing facts do not settle a guess. Both halves must be covered before
+    // disjoint evidence can show that they belong to different people.
+    if (evidence.some(x => x.row === true) && evidence.some(x => x.col === true)
+      && !candidates.some(x => x.row !== false && x.col !== false)) {
+      return { valid: false, reason: "No reviewed player with that name matches both criteria.", fullName: picked?.name ?? null };
+    }
+    return { valid: false, unverified: true, reason: "Could not verify both criteria for this player.", fullName: null };
+  }
   return null;
 }
 
@@ -609,6 +647,11 @@ serve(async (req) => {
      Still fail closed either way: nothing unverified is ever accepted. */
   const unverified = (exhausted = false) =>
     json({ valid: false, unverified: true, exhausted, reason: exhausted ? "Answer checking has used up its allowance for today, so this guess was not counted. Please come back tomorrow." : "Couldn't verify your answer right now, please try again.", fullName: null });
+
+  // The old cache and model share a name-level key. Neither can prove that
+  // two facts under an audited nickname belong to the same player.
+  const namesake = verifyNamesake(sanitized.player, parseCriterion(sanitized.row), parseCriterion(sanitized.col));
+  if (namesake) return json(namesake);
 
   const cacheKey = cacheKeyOf(sanitized.player, sanitized.row, sanitized.col);
   /* ROUND 703: a stored YES answers at once. A stored NO is HELD until the

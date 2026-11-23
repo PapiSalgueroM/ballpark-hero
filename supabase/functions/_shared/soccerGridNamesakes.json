@@ -1,0 +1,50 @@
+[
+  {
+    "name": "Vitinha",
+    "aliases": [],
+    "people": [
+      {
+        "name": "Vítor Machado Ferreira",
+        "aliases": [],
+        "nationality": "Portugal",
+        "position": "mid",
+        "clubs": ["Porto", "FC Porto", "Wolves", "Wolverhampton", "Wolverhampton Wanderers", "PSG", "Paris Saint-Germain"]
+      },
+      {
+        "name": "Vítor Manuel Carvalho Oliveira",
+        "aliases": ["Vítor Manuel Carvalho de Oliveira"],
+        "nationality": "Portugal",
+        "position": "fwd",
+        "clubs": ["Braga", "SC Braga", "Sporting Braga", "Marseille", "Olympique Marseille", "Olympique de Marseille", "Genoa", "Genoa CFC"]
+      },
+      {
+        "name": "Josenaldo Vitor Santos",
+        "aliases": [],
+        "nationality": "Brazil",
+        "position": "fwd",
+        "clubs": ["Feirense", "CD Feirense"]
+      }
+    ]
+  },
+  {
+    "name": "Nico González",
+    "aliases": ["Nicolás González"],
+    "people": [
+      {
+        "name": "Nicolás Iván González",
+        "aliases": [],
+        "nationality": "Argentina",
+        "position": "fwd",
+        "uncertainPosition": "mid",
+        "clubs": ["Argentinos Juniors", "AA Argentinos Juniors", "Stuttgart", "VfB Stuttgart", "Fiorentina", "ACF Fiorentina", "Juventus", "Juventus FC", "Atlético Madrid", "Atlético de Madrid"]
+      },
+      {
+        "name": "Nicolás González Iglesias",
+        "aliases": [],
+        "nationality": "Spain",
+        "position": "mid",
+        "clubs": ["Barcelona", "FC Barcelona", "Valencia", "Valencia CF", "Porto", "FC Porto", "Manchester City", "Man City", "Newcastle", "Newcastle United"]
+      }
+    ]
+  }
+]

@@ -142,6 +142,35 @@ describe('Soccer Grid search discovery', () => {
   it('keeps ordinary case-insensitive canonical selection', async () => {
     leaf(); query('fIxTuRe PlAiN'); expect(visibleNames()).toEqual([names[2]]); await formSubmit(); expect(io.select).toHaveBeenCalledExactlyOnceWith(names[2]); expect(input()).toHaveValue('');
   });
+  it('lists the separately verified Vitinha identities and sends the forward selected by touch', () => {
+    leaf([{ name: 'Vitinha', nationality: 'Portugal', position: 'CM' }]);
+    query('Vitinha');
+    expect(view!.getByRole('option', { name: /Vítor Machado Ferreira.*Portugal.*Midfielder/ })).toBeVisible();
+    const forward = view!.getByRole('option', { name: /Vítor Manuel Carvalho Oliveira.*Portugal.*Forward/ });
+    fireEvent.click(forward);
+    expect(io.select).toHaveBeenCalledExactlyOnceWith('Vítor Manuel Carvalho Oliveira');
+  });
+  it('lists both Nico González records without a combined pool row and submits the highlighted player', async () => {
+    leaf([]);
+    query('nico gonzalez');
+    expect(view!.getByRole('option', { name: /Nicolás Iván González.*Argentina.*Forward/ })).toBeVisible();
+    expect(view!.getByRole('option', { name: /Nicolás González Iglesias.*Spain.*Midfielder/ })).toBeVisible();
+    fireEvent.keyDown(input(), { key: 'ArrowDown' });
+    await formSubmit();
+    expect(io.select).toHaveBeenCalledExactlyOnceWith('Nicolás González Iglesias');
+  });
+  it('keeps the selected named identity in the validator request and correct saved cell', async () => {
+    const forward = 'Vítor Manuel Carvalho Oliveira';
+    io.players.mockResolvedValueOnce({ data: [{ id: 'fixture-player-0', player_name: 'Vitinha', nationality: 'Portugal', position: 'CM' }], error: null });
+    io.invoke.mockResolvedValueOnce({ data: { valid: true, fullName: forward }, error: null });
+    await parent(); query('Vitinha');
+    await act(async () => { fireEvent.click(view!.getByRole('option', { name: /Vítor Manuel Carvalho Oliveira/ })); });
+    expect(io.invoke).toHaveBeenCalledExactlyOnceWith('soccer-grid-validate', { body: { playerName: forward, rowAttribute: 'Fixture Club 1', colAttribute: 'Fixture Position 1' } });
+    expect(dailySave().guesses).toHaveLength(1);
+    expect(dailySave().guesses[0]).toMatchObject({ t: 'ok', cellIndex: 0, playerName: forward });
+    expect(view!.container.querySelector('[data-grid-cell-status="correct"]')).toHaveTextContent(forward);
+    heldStores = stores();
+  });
   it('keeps the eight-result cap and bounded arrow selection', async () => {
     const pool = Array.from({ length: 10 }, (_, i) => ({ ...players[2], name: 'Fixture Cap ' + i })); leaf(pool); query('Fixture Cap'); expect(visibleNames()).toEqual(pool.slice(0, 8).map(p => p.name));
     for (let i = 0; i < 10; i++) fireEvent.keyDown(input(), { key: 'ArrowDown' }); fireEvent.keyDown(input(), { key: 'ArrowUp' });
