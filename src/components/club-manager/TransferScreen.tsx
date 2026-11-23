@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { currencySymbol } from '@/lib/clubManagerStart';
 import { FreeAgentPool } from '@/components/club-manager/FreeAgentPool';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
-import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, careerLeagueOf, loanOutRefusal, shownNation } from '@/lib/clubManager';
+import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, careerLeagueOf, loanOutRefusal, shownNation, foreignRosterSlots, incomingBidRegistrationRefusal } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } from '@/lib/clubManager';
 /* Round 506: the deal desk. The screen reads the SAME verdict and the SAME
    meter the engine judges with, so what the bar says while you are typing and
@@ -120,6 +120,7 @@ export function TransferScreen({
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(career);
+  const foreignSlots = foreignRosterSlots(career);
   const [filter, setFilter] = useState<PosFilter>('ALL');
   const [query, setQuery] = useState('');
   const [mode, setMode] = useState<'buy' | 'sell' | 'news' | 'free'>('buy');
@@ -415,6 +416,11 @@ export function TransferScreen({
               ? `${(career.windowWeeksLeft ?? 1) <= 1 ? 'DEADLINE: shuts after your next match' : `${career.windowWeeksLeft} match weeks until the deadline`} · offers can arrive any week · loans used ${loansUsed}/2`
               : 'Reopens in January / next summer · open Free agents here to sign without a window'}
           </div>
+          {foreignSlots && (
+            <p className="text-[10px] text-muted-foreground">
+              Foreign player slots {foreignSlots.used}/{foreignSlots.limit} · Club Manager rule
+            </p>
+          )}
         </div>
         <div className="text-right">
           <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Budget</div>
@@ -1050,7 +1056,8 @@ export function TransferScreen({
               <div className="text-[10px] text-gold uppercase tracking-wider font-bold">📥 Bids on the table</div>
               {bids.map(b => {
                 const p = career.squad.find(x => x.id === b.playerId);
-                const blocked = !p || !canSell(p);
+                const registration = p ? incomingBidRegistrationRefusal(career, b, p) : null;
+                const blocked = !p || !canSell(p) || !!registration;
                 return (
                   <div key={b.playerId} className={cn('flex items-center gap-2', b.clauseMet && 'rounded-lg border border-red-500/40 bg-red-500/5 px-2 py-1.5')}>
                     <div className="flex-1 min-w-0 text-xs text-foreground">
@@ -1064,7 +1071,8 @@ export function TransferScreen({
                         {b.status === 'improved' && <span className="text-[9px] text-emerald-400 ml-1">(improved, final)</span>}
                       </div>
                       {/* Round 193: a met clause is not a negotiation. */}
-                      {b.clauseMet && (
+                      {registration && <div className="text-[9px] text-muted-foreground">{registration}</div>}
+                      {b.clauseMet && !registration && (
                         <div className="text-[9px] text-red-400 truncate">You signed this exit door at his renewal. It cannot be rejected, and it executes itself on deadline day.</div>
                       )}
                       {b.rival && (
@@ -1079,7 +1087,7 @@ export function TransferScreen({
                     <button
                       onClick={() => onAcceptBid(b.playerId)}
                       disabled={blocked}
-                      title={blocked ? 'Squad rules block this sale right now' : b.clauseMet ? 'Shake his hand now instead of on deadline day' : 'Accept the bid'}
+                      title={registration ?? (blocked ? 'Squad rules block this sale right now' : b.clauseMet ? 'Shake his hand now instead of on deadline day' : 'Accept the bid')}
                       className={cn('shrink-0 px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all',
                         !blocked ? 'bg-emerald-600 text-black hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
                     >

@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { GraduationCap, Search, ArrowUpCircle } from 'lucide-react';
 import {
   SCOUT_REGIONS, SCOUT_TRIPS, MAX_SCOUTS, MAX_PROSPECTS,
-  academyUpgradeCost, tripCost, money, moneyIn,
+  academyUpgradeCost, tripCost, money, moneyIn, prospectRegistrationRefusal,
 } from '@/lib/clubManager';
 import { FACILITY_INFO } from '@/lib/clubManagerUiInfo';
 import type { CareerState, FacilityKind, Prospect, Scout } from '@/lib/clubManager';
@@ -44,9 +44,9 @@ function bandLabel(p: Prospect): string {
    this helper is outside the component and would otherwise keep printing
    pounds while the rest of the screen followed the setting. */
 function ProspectRow({
-  p, budget, squadFull, onPromote, onRelease, fmt,
+  p, budget, squadFull, registration, onPromote, onRelease, fmt,
 }: {
-  p: Prospect; budget: number; squadFull: boolean;
+  p: Prospect; budget: number; squadFull: boolean; registration: string | null;
   onPromote: (id: string) => void; onRelease: (id: string) => void;
   fmt: (n: number) => string;
 }) {
@@ -68,7 +68,8 @@ function ProspectRow({
           <button
             aria-label={`Sign him: ${p.name}`}
             onClick={() => onPromote(p.id)}
-            disabled={!affordable || squadFull}
+            disabled={!affordable || squadFull || !!registration}
+            title={registration ?? undefined}
             className="text-[9px] font-bold rounded-full px-2 py-0.5 border border-primary/50 text-primary hover:bg-primary/10 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
           >
             Sign him
@@ -319,7 +320,7 @@ export function AcademyScreen({ career, onUpgrade, onHire, onRecall, onPromote, 
         {prospects.map(p => (
           <ProspectRow
             fmt={money}
-            key={p.id} p={p} budget={career.budget} squadFull={squadFull}
+            key={p.id} p={p} budget={career.budget} squadFull={squadFull} registration={prospectRegistrationRefusal(career, p)}
             onPromote={promote} onRelease={onRelease}
           />
         ))}

@@ -1147,7 +1147,8 @@ async function partCountries(cm) {
   if (JSON.stringify(offered) !== JSON.stringify([...ru.clubs].sort())) fail(`H3: the job market's Russian clubs are ${offered.length} (${offered.slice(0, 4).join(', ')}...), not the league's sixteen`);
   for (const o of offers) if (o.league !== ru.name) fail(`H3: the job market files ${o.name ?? o.club} under ${o.league}`);
   if (cm.__scl.leagueSizeFor(ru.name, 2026, true) !== 16) fail(`H3: the dugout's table says ${cm.__scl.leagueSizeFor(ru.name, 2026, true)} for ${ru.name}, not 16`);
-  if (cm.__scl.leagueSizeFor(ru.name, 2026) !== null) fail(`H3: the playing career's table now sizes ${ru.name} (${cm.__scl.leagueSizeFor(ru.name, 2026)}); that table did not change`);
+  const playingSize = cm.__scl.leagueSizeFor(ru.name, 2026);
+  if (playingSize !== 16) fail(`H3: the playing career's table says ${playingSize} for ${ru.name}, expected 16`);
   /* The table a manager's season is played in, as the career builds it (soccerCareerEngine calls this with the
      career's club list and the job's league label): a job at Spartak Moscow under the label the market gives it.
      Control rulabel: the job's league label respelled, so the table finds no league under it and this goes red. */

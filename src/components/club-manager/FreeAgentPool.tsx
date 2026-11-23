@@ -10,6 +10,7 @@ const FREE_AGENT_BLOCK_COPY: Record<FreeAgentBlock, { face: string; title: strin
   justLeft: { face: 'No old deal', title: 'This older free-agent record has no verified past contract, so the same-season return is unavailable.' },
   notInterested: { face: 'Not interested', title: 'Too good to sign for your club as a free agent.' },
   squadFull: { face: 'Squad full', title: 'Make room below 30 players before signing.' },
+  foreignLimit: { face: 'Foreign slots full', title: 'Make room in your foreign player slots before signing.' },
   overCap: { face: 'Over the cap', title: 'His wage would take you over the wage cap.' },
   cantAfford: { face: 'Too dear', title: 'You cannot cover his signing on fee.' },
 };

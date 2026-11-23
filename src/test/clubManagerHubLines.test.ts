@@ -63,6 +63,12 @@ describe('leagueTileValue', () => {
     expect(leagueTileValue(0, 5)).toBe('Not started');
     expect(leagueTileValue(0, 0)).not.toMatch(/#/);
   });
+  it('shows updated points even when the league position stays the same', () => {
+    expect(leagueTileValue(0, 5, -3)).toBe('Not started');
+    expect(leagueTileValue(1, 5, 0)).toBe('#5 · 0 pts');
+    expect(leagueTileValue(2, 5, 3)).toBe('#5 · 3 pts');
+    expect(leagueTileValue(2, 18, -1)).toBe('#18 · -1 pts');
+  });
   it('after week 0 it is the position', () => {
     expect(leagueTileValue(1, 5)).toBe('#5');
     expect(leagueTileValue(3, 5)).toBe('#5');

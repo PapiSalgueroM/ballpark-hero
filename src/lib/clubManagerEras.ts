@@ -46,6 +46,9 @@ import type { Position } from '@/types/game';
 import { CM_BASE_YEAR, CM_ERA_CARDS, REAL_WITH_PADDING } from '@/lib/clubManagerEraCards';
 import { CM_ROSTER_META } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
+import { K_LEAGUE_2026 } from '@/data/kLeague2026';
+import { J1_LEAGUE_2026 } from '@/data/j1League2026';
+import { CSL_LEAGUE_2026 } from '@/data/cslLeague2026';
 import { advanceClubManagerTrajectory } from '@/lib/clubManagerTrajectory';
 // Round 1035: the modern squads, baked plus the A-League Men, joined once.
 import { CM_WORLD_ROSTERS as CM_ROSTERS, cmWorld, cmWorldTag, cmWorldReadsAge } from '@/data/clubManagerWorldRosters';
@@ -409,6 +412,28 @@ export function makeGeneratedName(seed: string): string {
   return `${GEN_FIRST[f0]} ${GEN_LAST[l0]}`;
 }
 
+const ASIAN_NAME_BANKS: Record<string, [string, string]> = {
+  'South Korea': ['Ji-ho Min-jae Jun-seo Do-hyun Si-woo Hyun-woo Ji-hun Tae-yun Seong-jin Jin-woo Sang-hyeok Yeon-u Jun-hyeok Min-su Ji-won Seung-min Hyeon-jun Dong-hyun Dae-hyeon Seung-hun', 'An Baek Bae Cha Cho Choi Eom Han Heo Hong Hwang Im Jeon Jeong Jin Jo Kang Kim Ko Kwon Lee Moon Nam Oh Park Seo Shin Song Yoon Yu'],
+  Japan: ['Akira Aoi Dai Daiki Haru Haruki Hayato Hiro Itsuki Jun Kaito Kaoru Kazuki Kei Keita Kenta Kenji Kohei Kotaro Makoto Minato Naoki Ren Riku Rikuto Ryo Ryota Shota Shun Sota Taku Taisei Toma Yuki Yuto', 'Abe Aoki Endo Fujii Fujita Goto Hara Hayashi Hoshino Ikeda Ishii Ito Kimura Kondo Matsuda Minami Miura Mori Nakamura Okada Okamoto Ono Saito Shimizu Suzuki Takeda Tanaka Ueda Wada Yamamoto'],
+  China: ['An Bin Bo Chao Chen Fan Feng Guan Hang Hao Jian Jie Jin Jun Kai Lei Ming Peng Rui Tao Wen Yi Yong Yu Zhi', 'Cai Cao Chen Deng Du Gao Guo Han He Hu Jiang Lei Li Lin Liu Lu Ma Meng Qiao Qiu Shen Su Sun Tan Wang Wei Wu Xu Yang Yu Zhang Zhao Zheng Zhou'],
+};
+
+function asianPlayerName(seed: string, nation: string, club: string, used: ReadonlySet<string>): string {
+  const [first, last] = ASIAN_NAME_BANKS[nation].map(bank => bank.split(' '));
+  const clubs = ASIAN_MODEL_CLUBS.find(league => league.country === nation)!.clubs;
+  // Each club owns a disjoint part of the bank, including in future seasons.
+  const offset = clubs.indexOf(club);
+  const capacity = Math.floor((first.length * last.length - 1 - offset) / clubs.length) + 1;
+  const start = hash32(seed) % capacity;
+  for (let step = 0; step < capacity; step++) {
+    const index = offset + ((start + step) % capacity) * clubs.length;
+    const given = first[index % first.length], family = last[Math.floor(index / first.length)];
+    const name = nation === 'Japan' ? `${given} ${family}` : `${family} ${given}`;
+    if (!used.has(name) && !realNames().has(name)) return name;
+  }
+  return `${makeGeneratedName(seed)} (${club})`;
+}
+
 /* ================================================================== */
 /* The projected world                                                */
 /* ================================================================== */
@@ -545,9 +570,10 @@ function ageOne(club: string, pl: ProjectedPlayer, year: number, scale: number, 
  * club actually signs or promotes players, a bit short of the slot's level,
  * with room to grow into it.
  */
-function generateFor(club: string, slot: ProjectedPlayer, year: number, idx: number, scale: number, trajectoryEra?: string): ProjectedPlayer {
+function generateFor(club: string, slot: ProjectedPlayer, year: number, idx: number, scale: number, trajectoryEra?: string, used?: Set<string>): ProjectedPlayer {
   const seed = `${club}|${year}|${idx}|${slot.p}`;
-  const name = makeGeneratedName(seed);
+  const name = slot.nation && used ? asianPlayerName(seed, slot.nation, club, used) : makeGeneratedName(seed);
+  used?.add(name);
   const age = entryAge(`${seed}|age`);
   // The slot drifts a little each generation so clubs are not frozen either,
   // but it is fenced so the drift is a wobble and not a trend.
@@ -561,6 +587,7 @@ function generateFor(club: string, slot: ProjectedPlayer, year: number, idx: num
     r,
     v: Math.max(0.2, Math.round(rawCurveValue(r, age) * scale * 10) / 10),
     g: true,
+    ...(slot.nation ? { nation: slot.nation } : {}),
     anchor,
     since: year,
     ...(trajectoryEra === undefined ? {} : { worldRosterKey: JSON.stringify([
@@ -850,7 +877,7 @@ function worldKeyOf(eraId: string, yearsOn: number, worldSeed?: number): { y: nu
 /* One club's projection. Every draw in it is keyed on the club (ageOne, generateFor) and nothing is shared
    between clubs, so projectedWorldFor is this, club by club, and projectedClubRoster below can take one club
    alone and get the same list. */
-function projectClub(club: string, baked: BakedPlayer[], y: number, seed: number | undefined, trajectoryEra: string): ProjectedPlayer[] {
+function projectClub(club: string, baked: BakedPlayer[], y: number, seed: number | undefined, trajectoryEra: string, model?: ProjectedPlayer[]): ProjectedPlayer[] {
   const scale = valueScaleFor(club, baked);
   /* Round 1600: dropOutChance's table was FITTED to the age column the bake shipped, each man's age on 1 January (its
      comment: "the ratio of one age band to the next IS the survival rate"). Today's world on curve 2 holds his age on
@@ -860,7 +887,7 @@ function projectClub(club: string, baked: BakedPlayer[], y: number, seed: number
      are anchored on real ages and read the age as it is everywhere. */
   const dropShift = trajectoryEra === 'now' && cmWorldReadsAge() ? 1 : 0;
   /* Round 1600: the slot's anchor is the man's level, and a row that carries one keeps it. */
-  let roster: ProjectedPlayer[] = baked.map(b => ({
+  let roster: ProjectedPlayer[] = model ?? baked.map(b => ({
     n: b.n, p: b.p, a: b.a, v: b.v, r: b.r, anchor: levelOf(b), since: 0,
     ...(b.lv === undefined ? {} : { lv: b.lv }),
     ...(seed === undefined ? {} : { worldRosterKey: JSON.stringify([
@@ -879,14 +906,54 @@ function projectClub(club: string, baked: BakedPlayer[], y: number, seed: number
     // not carry a hole in its squad for a decade, and "no club runs out of
     // players" is one of the things this round has to hold true twenty
     // seasons out.
-    emptied.forEach((slot, i) => kept.push(generateFor(club, slot, year, i, scale, seed === undefined ? undefined : trajectoryEra)));
+    const used = model ? new Set([...model, ...roster].map(p => p.n)) : undefined;
+    const keyEra = model || seed !== undefined ? trajectoryEra : undefined;
+    emptied.forEach((slot, i) => kept.push(generateFor(club, slot, year, i, scale, keyEra, used)));
     while (kept.length < target && emptied.length) {
-      kept.push(generateFor(club, emptied[kept.length % emptied.length], year, kept.length + 50, scale, seed === undefined ? undefined : trajectoryEra));
+      kept.push(generateFor(club, emptied[kept.length % emptied.length], year, kept.length + 50, scale, keyEra, used));
     }
     // Value descending, which is the order the bake itself is in, because
     // buildSquad takes the top 26 off the front of this list and a career in
     // the current era has to get byte for byte the squad it always got.
     roster = kept.sort((a, b) => b.v - a.v || b.r - a.r || a.n.localeCompare(b.n));
+  }
+  return roster;
+}
+
+const ASIAN_MODEL_CLUBS = [
+  { ...K_LEAGUE_2026, clubs: K_LEAGUE_2026.clubs.map(club => club.name) }, J1_LEAGUE_2026, CSL_LEAGUE_2026,
+];
+const ASIAN_POSITIONS: Position[] = ['GK', 'RB', 'CB', 'CB', 'LB', 'CDM', 'CM', 'CAM', 'RW', 'ST', 'LW',
+  'GK', 'CB', 'LB', 'RB', 'CM', 'CDM', 'CAM', 'RW', 'LW', 'ST'];
+const ASIAN_OPENING = new Map<string, ProjectedPlayer[]>();
+const ASIAN_PROJECTIONS = new Map<string, ProjectedPlayer[]>();
+
+export function asianSquadRoster(club: string, years: number, worldSeed?: number): ProjectedPlayer[] {
+  if (!ASIAN_OPENING.size) {
+    for (const league of ASIAN_MODEL_CLUBS) {
+      const used = new Set<string>();
+      for (const name of league.clubs) {
+        const level = rndInt(`asian-opening|${name}`, 62, 71);
+        ASIAN_OPENING.set(name, ASIAN_POSITIONS.map((position, index) => {
+          const seed = `asian-opening|${name}|${index}`;
+          const player = asianPlayerName(seed, league.country, name, used);
+          used.add(player);
+          const age = rndInt(`${seed}|age`, index < 11 ? 22 : 18, index < 11 ? 33 : 29);
+          const rating = level + rndInt(`${seed}|rating`, -3, 3) - (index < 11 ? 0 : 5);
+          return { n: player, p: position, a: age, r: rating, v: Math.round(rawCurveValue(rating, age) * 10) / 10,
+            g: true, anchor: rating, nation: league.country, since: 0,
+            worldRosterKey: JSON.stringify(['now', name, player, position, CM_BASE_YEAR - age, 0]) };
+        }));
+      }
+    }
+  }
+  const opening = ASIAN_OPENING.get(club);
+  if (!opening || years <= 0) return opening ?? [];
+  const key = `${club}|${years}|${worldSeed}`;
+  let roster = ASIAN_PROJECTIONS.get(key);
+  if (!roster) {
+    roster = projectClub(club, opening, years, worldSeed, 'now', opening);
+    ASIAN_PROJECTIONS.set(key, roster);
   }
   return roster;
 }
@@ -920,11 +987,11 @@ const SEASON_FORECASTS = new WeakMap<ProjectedPlayer[], { next: ProjectedPlayer[
 
 /** Spend the next projected rating change across this season while keeping today's squad and ages. */
 export function projectedRosterAtProgress(
-  club: string, yearsOn: number, eraId: string, worldSeed: number | undefined, progress: number, includeForecast = false,
+  club: string, yearsOn: number, eraId: string, worldSeed: number | undefined, progress: number, includeForecast = false, asianModel = false,
 ): ProjectedPlayer[] {
-  const opening = projectedRoster(club, yearsOn, eraId, worldSeed);
+  const opening = asianModel ? asianSquadRoster(club, yearsOn, worldSeed) : projectedRoster(club, yearsOn, eraId, worldSeed);
   if (!Number.isFinite(progress) || progress <= 0 && !includeForecast || !opening.length) return opening;
-  const next = projectedRoster(club, yearsOn + 1, eraId, worldSeed);
+  const next = asianModel ? asianSquadRoster(club, yearsOn + 1, worldSeed) : projectedRoster(club, yearsOn + 1, eraId, worldSeed);
   let schedule = SEASON_FORECASTS.get(opening);
   if (schedule?.next !== next) {
     const counts = new Map<string, number>();

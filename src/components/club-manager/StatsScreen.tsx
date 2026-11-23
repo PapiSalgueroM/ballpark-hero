@@ -32,7 +32,7 @@ const VIEW_LABELS: { key: View; label: string }[] = [
   { key: 'all', label: 'All comps' },
   { key: 'league', label: 'League' },
   { key: 'cup', label: 'Cup' },
-  { key: 'ucl', label: 'Europe' },
+  { key: 'ucl', label: 'Champions League' },
   /* Round 1510: every one match cup (a super cup), shown once the club has played one this season. */
   { key: 'other', label: 'Super cups' },
   /* Round 1593: the Europa League, shown once the club has played a night of it this season. */
@@ -179,7 +179,7 @@ export function StatsScreen({ career }: StatsScreenProps) {
 
   const cupName = careerLeagueOf(career).cupName;
   const team = useMemo(() => teamCompRecord(career, cupName), [career, cupName]);
-  const inEurope = career.uclGroup !== null || !!career.uclKoRound;
+  const inEurope = team.ucl.p > 0 || career.uclGroup != null || !!career.uclKoRound;
   const superCups = team.other.p > 0;
   const europaLeague = team.uel.p > 0;
 
@@ -208,6 +208,7 @@ export function StatsScreen({ career }: StatsScreenProps) {
   });
 
   const teamLine = team[view];
+  const competitionName = view === 'cup' ? cupName : view === 'all' ? 'all competitions' : VIEW_LABELS.find(tab => tab.key === view)!.label;
   const headerBtn = (k: SortKey, label: string) => (
     <button
       onClick={() => setSortKey(k)}
@@ -258,7 +259,7 @@ export function StatsScreen({ career }: StatsScreenProps) {
       {/* Team record in this view */}
       <div className="bg-card border border-border rounded-2xl p-3">
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">
-          📊 {career.clubName} · {view === 'all' ? 'all competitions' : view === 'ucl' ? 'Champions League' : view === 'cup' ? cupName : view === 'other' ? 'super cups' : 'league'}
+          📊 {career.clubName} · {competitionName}
         </div>
         {teamLine.p === 0 ? (
           <p className="text-xs text-muted-foreground">No matches in this competition yet this season.</p>
@@ -277,8 +278,8 @@ export function StatsScreen({ career }: StatsScreenProps) {
       {played.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
           {topScorer && topScorer.goals > 0 && (
-            <div className="bg-card border border-border rounded-xl p-2">
-              <div className="text-[9px] text-muted-foreground uppercase tracking-wider">⚽ Top scorer</div>
+            <div role="group" aria-label={`Squad top scorer in ${competitionName}`} className="bg-card border border-border rounded-xl p-2">
+              <div className="text-[9px] text-muted-foreground uppercase tracking-wider">⚽ Squad top scorer</div>
               <div className="text-xs font-bold text-foreground truncate">{topScorer.p.name}</div>
               <div className="text-[10px] text-muted-foreground">{topScorer.goals} goal{topScorer.goals === 1 ? '' : 's'}</div>
             </div>
