@@ -69,6 +69,8 @@ import { GmDeskMount } from '@/components/front-office-shared/GmDeskMount';
 import { type GmDesk, gmPanelFor, readGmDesk, withGmBlock } from '@/lib/gmDesk';
 import { gmStaffLevel } from '@/lib/gmStaff';
 import { holdPendingSave } from '@/lib/safeStorage';
+import { backupKeysOf, copyAside, routeSaveEntry } from '@/lib/brokenSaveRecovery';
+import SaveMovedNotice from '@/components/SaveMovedNotice';
 import {
   nbaDeadlineRefusal, nbaDeskAfterRound, nbaDeskEdges, nbaDeskOffseason, nbaDeskRoundOptions, nbaMirrorPickMove,
   nbaMirrorPickRefusal, nbaNoteArrivals, nbaPicksOf, nbaScoutRead, nbaSignDraftee, nbaStaffOf, nbaTradeWindow, openNbaDesk, syncNbaPicks, NBA_DESK_KEYS,
@@ -208,6 +210,8 @@ export default function NbaFrontOfficeBoard() {
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<NbaLeague | null>(null);
   const pendingSave = useRef<string | null>(null);
+  const namedStatsBytes = useRef<string | null>(null);
+  const [saveMoved, setSaveMoved] = useState(false);
   const [saveWriteFailed, setSaveWriteFailed] = useState(false);
   const [resetFailed, setResetFailed] = useState(false);
   const [rotationOpen, setRotationOpen] = useState(false);
@@ -314,7 +318,7 @@ export default function NbaFrontOfficeBoard() {
       ensureNbaLeagueIds(s.league, s.draftClass);
       /* Round 1566: the season's lines in the shared save shape; a save of named rows is turned into it here, before
          anything reads the league, so its next save writes the new shape. */
-      nbaCleanStats(s.league);
+      if (nbaCleanStats(s.league) === 'converted') namedStatsBytes.current = raw;
       if (!nbaRestPlan(s.league, s.myTeam)) delete s.league.restPlan;
       setLeague({ ...s.league, inSeasonRatings: true }); setMyTeam(s.myTeam);
       lastRound.current = readLastRound(s.lastRound, s.league, s.myTeam);
@@ -350,12 +354,41 @@ export default function NbaFrontOfficeBoard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const markSaveMoved = useCallback(() => {
+    pendingSave.current = null;
+    setSaveWriteFailed(false);
+    setSaveMoved(true);
+    return false;
+  }, []);
+
   const retrySave = useCallback(() => {
     const bytes = pendingSave.current;
     if (bytes === null) return true;
     setResetFailed(false);
+    const refuse = () => {
+      setSaveWriteFailed(true);
+      return false;
+    };
     try {
+      const legacy = namedStatsBytes.current;
+      if (legacy !== null) {
+        if (localStorage.getItem(SAVE_KEY) !== legacy) return markSaveMoved();
+        const entry = routeSaveEntry('/nba-front-office');
+        if (!entry) return refuse();
+        let backupKey = backupKeysOf(entry, localStorage).find(key => localStorage.getItem(key) === legacy);
+        if (backupKey === undefined) {
+          const copy = copyAside(entry, localStorage, undefined, false, { raw: legacy, slot: 1 });
+          if (copy.ok && copy.backupKey) backupKey = copy.backupKey;
+        }
+        const kept = backupKey !== undefined && localStorage.getItem(backupKey) === legacy;
+        if (localStorage.getItem(SAVE_KEY) !== legacy) return markSaveMoved();
+        if (!kept) return refuse();
+      }
       localStorage.setItem(SAVE_KEY, bytes);
+      if (legacy !== null) {
+        if (localStorage.getItem(SAVE_KEY) !== bytes) return refuse();
+        namedStatsBytes.current = null;
+      }
       pendingSave.current = null;
       setSaveWriteFailed(false);
       return true;
@@ -363,7 +396,7 @@ export default function NbaFrontOfficeBoard() {
       setSaveWriteFailed(true);
       return false;
     }
-  }, []);
+  }, [markSaveMoved]);
 
   useEffect(() => {
     if (saveWriteFailed) return holdPendingSave(retrySave);
@@ -936,6 +969,10 @@ export default function NbaFrontOfficeBoard() {
 
   const reset = () => {
     try {
+      if (namedStatsBytes.current !== null && localStorage.getItem(SAVE_KEY) !== namedStatsBytes.current) {
+        markSaveMoved();
+        return;
+      }
       localStorage.removeItem(SAVE_KEY);
     } catch {
       setResetFailed(true);
@@ -943,6 +980,7 @@ export default function NbaFrontOfficeBoard() {
     }
     setResetFailed(false);
     pendingSave.current = null;
+    namedStatsBytes.current = null;
     lastRound.current = null;
     roundHistory.current = null;
     setSaveWriteFailed(false);
@@ -981,6 +1019,8 @@ export default function NbaFrontOfficeBoard() {
       persist({}, lg, myTeam);
     },
   } : null;
+
+  if (saveMoved) return <SaveMovedNotice message="This franchise changed in another tab. Reload to continue." />;
 
   const saveNotice = (saveWriteFailed || resetFailed) && (
     <div role="alert" data-no-prerender className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
