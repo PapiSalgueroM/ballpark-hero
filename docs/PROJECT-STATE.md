@@ -2,7 +2,7 @@
 
 Soccer Grid distinguishes the verified players called Vitinha and Nico González. Search shows their full names, countries and positions. Both clues must match the selected player, and the correct cell keeps that player's name. The verified PSG midfielder can answer PSG and Midfielder. A clue outside the verified records leaves the guess count alone.
 
-The deployed v26 handler reproduced the false confirmations on archived Porto and Juventus cells. The candidate passed 58 isolated handler cases, 43 focused app tests and the nine-validator offline harness. The Deno check passed. The [namesake audit](audits/soccer-grid-namesakes-2026-11-23.md) includes the sources and the edge-first release order.
+The deployed v26 handler reproduced the false confirmations on archived Porto and Juventus cells. The candidate passed 60 isolated handler cases, 43 focused app tests and the nine-validator offline harness. The Deno check passed. The [namesake audit](audits/soccer-grid-namesakes-2026-11-23.md) includes the sources and the edge-first release order.
 
 ## 2026-11-23, Wonderkid Factory save protection
 

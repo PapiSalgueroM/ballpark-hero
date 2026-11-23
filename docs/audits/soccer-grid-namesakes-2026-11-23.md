@@ -12,6 +12,8 @@ The read-only 2026-11-23 capture lists the exact stints and published puzzle cel
 
 ## Answer behavior
 
+The Braga, Marseille and Genoa Vitinha has a verified forward role. FotMob also records attacking midfield as a secondary role, so this slice holds his Midfielder guesses for verification. [Existing source audit](RELEASE-BA-SOURCES.md), [FotMob player record](https://www.fotmob.com/players/1215057)
+
 For these scoped names, both clues must belong to the same verified player. A selected full name restricts the answer to that person, and the canonical name goes into the correct cell. A bare nickname still works for prior clients when one verified person matches both clues. Older cached answers and the AI fallback cannot combine the rows. An uncovered clue leaves the guess unverified and preserves the guess budget. Other names use the existing validator.
 
 Run `node scripts/simSoccerGridNamesakes.mjs` for the candidate and append `--v26` to reproduce the archived false verdicts. The tests capture response digests, cover both clue orders and replay a stale cached positive. The tests run locally with no validator, cache or model requests. Deploy the edge function with its shared JSON before rolling out the search choices, so the new canonical submissions reach the verified reader.

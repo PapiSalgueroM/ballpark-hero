@@ -147,6 +147,8 @@ if (deployed) {
     ['Vitinha', club('Something with Porto'), MID],
     ['Nico González', club('Juventus'), 'Played in Serie A'],
     ['Nico González', club('Juventus'), MID],
+    ['Vitinha', club('Genoa'), MID],
+    ['Vítor Manuel Carvalho Oliveira', MID, club('Braga')],
     ['Nico González', club('Arsenal'), MID],
     ['Nico González', club('CD Guadalajara'), club('Orihuela CF')],
   ]) await replay(name, a, b, 'hold', { ...namesake, cached: badCache });
