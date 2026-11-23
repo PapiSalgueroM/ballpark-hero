@@ -1,6 +1,8 @@
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Briefcase, ChevronLeft, Crown, RotateCcw, ShieldHalf } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
+import SaveMovedNotice from '@/components/SaveMovedNotice';
+import { backupKeysOf, copyAside, routeSaveEntry } from '@/lib/brokenSaveRecovery';
 import { FO_TEAMS, FO_TEAM_MAP } from '@/data/frontOfficePlayers';
 import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard';
 import { buildDraftNight } from '@/lib/draftNight';
@@ -203,6 +205,8 @@ export default function FrontOfficeBoard() {
   const [phase, setPhase] = useState<Phase>('pick');
   const [saveError, setSaveError] = useState(false);
   const [saveWriteFailed, setSaveWriteFailed] = useState(false);
+  const legacyRecap = useRef<{ raw: string; draft: string | null; attempted: boolean } | null>(null);
+  const [recapWrite, setRecapWrite] = useState<'failed' | 'moved' | null>(null);
   const pendingSave = useRef<string | null>(null);
   const savedBytes = useRef<string | null>(null);
   const reserveSaveBase = useRef<string | null>(null);
@@ -486,6 +490,7 @@ export default function FrontOfficeBoard() {
          this round has nothing to draw, so it opens on the draft, which is
          where the recap's only button leads. */
       if (s.postseason) { setPlayoffRounds(s.postseason.rounds); setChampion(s.postseason.champion); setGradeLine(s.postseason.gradeLine ?? null); }
+      if (!s.fired && s.phase === 'recap' && !s.postseason) legacyRecap.current = { raw, draft: null, attempted: false };
       if (s.fired) setPhase('fired');
       else if (s.phase !== 'recap') setPhase(s.phase);
       else if (s.postseason) setPhase('recap');
@@ -511,6 +516,44 @@ export default function FrontOfficeBoard() {
     return false;
   }, []);
 
+  const retryLegacyDraft = useCallback(() => {
+    const pending = legacyRecap.current;
+    if (!pending?.draft) return true;
+    const { raw, draft } = pending;
+    const refuse = (status: 'failed' | 'moved') => {
+      setRecapWrite(status);
+      return false;
+    };
+    try {
+      const current = localStorage.getItem(SAVE_KEY);
+      if (current !== raw && !(pending.attempted && current === draft)) return refuse('moved');
+      const entry = routeSaveEntry('/front-office');
+      if (!entry) return refuse('failed');
+      let backup = backupKeysOf(entry, localStorage).find(key => localStorage.getItem(key) === raw);
+      if (backup === undefined && current === raw) {
+        const copy = copyAside(entry, localStorage, undefined, false, { raw, slot: 1 });
+        if (copy.ok && copy.backupKey) backup = copy.backupKey;
+      }
+      const kept = backup !== undefined && localStorage.getItem(backup) === raw;
+      const active = localStorage.getItem(SAVE_KEY);
+      if (active !== raw && !(pending.attempted && active === draft)) return refuse('moved');
+      if (!kept) return refuse('failed');
+      if (active === raw) {
+        pending.attempted = true;
+        localStorage.setItem(SAVE_KEY, draft);
+      }
+      if (localStorage.getItem(SAVE_KEY) !== draft) return refuse('failed');
+      savedBytes.current = draft;
+      legacyRecap.current = null;
+      setRecapWrite(null);
+      return true;
+    } catch { return refuse('failed'); }
+  }, []);
+
+  useEffect(() => {
+    if (recapWrite === 'failed') return holdPendingSave(retryLegacyDraft);
+  }, [recapWrite, retryLegacyDraft]);
+
   const persist = useCallback((patch: Partial<SaveShape>, lg: LeagueState | null, team: string) => {
     try {
       if (!lg || !reserveSaveUnchanged()) return;
@@ -531,6 +574,12 @@ export default function FrontOfficeBoard() {
       if (!gameLogLive.current) delete base.gameLog;
       /* Round 1309: the same for the bracket: the key is the ref's, or absent */
       if (!playoffsLive.current) delete base.playoffs;
+      const legacy = legacyRecap.current;
+      if (legacy) {
+        legacy.draft ??= JSON.stringify(base);
+        retryLegacyDraft();
+        return;
+      }
       pendingSave.current = JSON.stringify(base);
       localStorage.setItem(SAVE_KEY, pendingSave.current);
       savedBytes.current = pendingSave.current;
@@ -538,7 +587,7 @@ export default function FrontOfficeBoard() {
       reserveSaveBase.current = null;
       setSaveWriteFailed(false);
     } catch { setSaveWriteFailed(true); }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine, reserveSaveUnchanged]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, draftBatchesLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine, reserveSaveUnchanged, retryLegacyDraft]);
 
   const retrySave = useCallback(() => {
     const bytes = pendingSave.current;
@@ -1474,6 +1523,14 @@ export default function FrontOfficeBoard() {
     <div role="alert" data-no-prerender className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
       <p>Franchise progress is not saved on this device. Keep this page open and retry.</p>
       <button type="button" onClick={retrySave} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
+    </div>
+  );
+
+  if (recapWrite === 'moved') return <SaveMovedNotice message="This franchise changed in another tab. Reload to continue." />;
+  if (recapWrite === 'failed') return (
+    <div role="alert" data-no-prerender className="rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">
+      <p>Your season recap was kept. Keep this page open and retry saving the draft.</p>
+      <button type="button" onClick={retryLegacyDraft} className="mt-2 min-h-11 min-w-11 rounded-full border border-destructive/50 px-3 font-bold">Retry save</button>
     </div>
   );
 

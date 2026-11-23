@@ -541,6 +541,8 @@ const NAMED = [
     why: 'the page retries the latest fenced career save before an app refresh while the save warning is active' },
   { file: 'src/components/front-office/FrontOfficeBoard.tsx', keys: ['state:saveWriteFailed'],
     why: 'the active board retries its most recent serialized save before an app refresh while the save warning is active' },
+  { file: 'src/components/front-office/FrontOfficeBoard.tsx', keys: ['write:retryLegacyDraft'],
+    why: 'the held legacy recap retries the same serialized draft after checking the original and its backup' },
   { file: 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', keys: ['state:recapWrite', 'keeps:retryLegacyDraft'],
     why: 'the effect holds the first draft save from an older recap until it can keep the verified original and save the draft' },
   { file: 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', keys: ['state:recapWrite', 'keeps:retryLegacyDraft'],
