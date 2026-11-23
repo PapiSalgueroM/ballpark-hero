@@ -19,7 +19,7 @@ const PrivacyPolicy = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: November 13, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: November 23, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -28,6 +28,7 @@ const PrivacyPolicy = () => {
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li><strong>Local storage data:</strong> Game progress, scores, streaks, and preferences are stored in your browser's local storage on your own device and are not sent to our servers unless described below.</li>
             <li><strong>Account data (optional):</strong> You can create an account with an email address and password{OAUTH_PROVIDERS.google ? ', or sign in with Google' : ''}. If you do, we store your email address, display name or username, avatar (if you set one), and your game scores and streaks so we can show them back to you and on leaderboards. You never need an account to play.</li>
+            <li><strong>Soccer Career account saves (optional).</strong> If you choose Save to account, we store that slot's career data, including the player name and history, so you can open it on another device. These copies are private to your account. You can remove a copy from Career saves or download it with your account data.</li>
             <li><strong>Gameplay and leaderboard data:</strong> Certain game modes submit gameplay data (e.g., number of clues used, final score, puzzle date) to our database. When you are not signed in, this data is not linked to your name or email. Each row does carry a display name: your profile name if you are signed in, or a random sports themed handle your browser generates and keeps in local storage (something like "IcyPoacher-42") so your scores stay yours on leaderboards. Clearing your browser's site data mints a fresh handle.</li>
             <li><strong>Grid selection data:</strong> In grid-based games, player name selections are stored to calculate rarity scores. This is not linked to your identity unless you are signed in.</li>
             <li><strong>Reported issues:</strong> If you use a Report button, we store the selected report category, the text you typed, the page, the date in Eastern Time, and limited in-game details supplied by that game, such as its puzzle, mode, target, lineup, current path, or last rejected answer. We record the report time in UTC. Where space allows, reports also include timezone, your browser's user agent string (its name, version and operating system) and language, viewport size and screen pixel ratio, and the loaded build filename when available. Each report also notes which Report button sent it (the game's own or the one in the footer) and whether the game details were shortened to fit. These small diagnostics help us reproduce the issue. The report payload does not automatically attach your account, email address, a screenshot, or whole browser storage. Anything you type into the report is included, so please leave out passwords and other personal or confidential information.</li>

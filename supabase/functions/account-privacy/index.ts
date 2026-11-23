@@ -16,6 +16,12 @@ const services: PrivacyServices = {
     if (error) throw new Error('export_failed');
     return data;
   },
+  async exportSoccerCareerSaves(userId) {
+    const { data, error } = await serviceClient().from('soccer_career_account_saves')
+      .select('slot,revision,save_text,saved_at').eq('user_id', userId).order('slot');
+    if (error || !data) throw new Error('export_failed');
+    return data;
+  },
   async deletionBlockers(userId) {
     const { data, error } = await serviceClient().rpc('account_privacy_deletion_blockers', { p_user_id: userId });
     if (error) throw new Error('preflight_failed');

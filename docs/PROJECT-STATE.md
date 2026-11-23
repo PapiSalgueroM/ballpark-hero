@@ -1,3 +1,13 @@
+## 2026-11-23, Soccer Career account saves
+
+**PL-03's Soccer Career account flow is implemented in this draft.** Account saves is opt-in. The panel compares the browser and account copies for each slot. Upload, restore and removal each require a choice. A competing update rejects the reviewed older revision. A failed upload leaves the playable local copy, and a local restore keeps a checked copy of the displaced save. Account restores remain playable and stay off the public retirement leaderboard.
+
+The new table gives a signed-in owner three private copies, caps each at 2,000,000 UTF-8 bytes, and issues revisions and timestamps in the database. Account-data export includes these copies, and deletion cascades only to the deleted owner's rows. Isolated PostgreSQL 17.5 and 18.7 passed the five database checks. Removing row-level security or revision rotation fired the negative controls. Production inspection was read-only.
+
+Against checkpoint main 03888f0, all 301 focused tests, application types, the Deno edge check, the production build and all 23 scoped harnesses passed. Chromium checked the built UI at 320, 390, 430 and 1440 pixels with the real client and isolated account fixtures. Two independent contexts checked stale-revision refusal and restored the winning copy with a checked backup. An HTTP 503 kept both copies. Copied faults caught a public score posted after account restore and cross-account exports. The privacy and Soccer Career snapshots were regenerated and matched the draft.
+
+Hosted rollout still needs the database migration and the updated account-privacy function before the site publishes. The Soccer Career save schema migration remains covered under PL-04. The shared save protection cards still need coverage in other career games.
+
 ## 2026-11-23, Soccer Career season checkpoints
 
 **PL-03 is partly implemented.** Career saves shows one automatic checkpoint per slot. A completed player, manager, owner or pundit season keeps the prior verified save after the new save succeeds. Opening the game and ordinary choices leave the checkpoint alone. If storage refuses a checkpoint write, the main save can still finish.

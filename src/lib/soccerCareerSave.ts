@@ -59,6 +59,7 @@ export function decodeSoccerCareerSave(raw: string): { version: SaveVersion; val
   let version = readSaveVersion(value);
   const imported = value.importedFromFile === true;
   const restored = value.restoredFromCheckpoint === true;
+  const fromAccount = value.restoredFromAccount === true;
   const complete = value.seasons;
   if (record(complete) && complete.format === 'lz-string-utf16-career') {
     if (!text(complete.data)) throw new Error('Invalid saved career');
@@ -75,6 +76,7 @@ export function decodeSoccerCareerSave(raw: string): { version: SaveVersion; val
   delete value.saveVersion;
   if (imported) value.importedFromFile = true;
   if (restored) value.restoredFromCheckpoint = true;
+  if (fromAccount) value.restoredFromAccount = true;
   for (const key of ['seasons', 'story']) {
     const history = value[key];
     if (!record(history) || (!('format' in history) && !('data' in history))) continue;

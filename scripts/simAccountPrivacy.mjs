@@ -16,7 +16,8 @@ const report = { sourceHash, cases: [], complete: false };
 const B = '22222222-2222-4222-8222-222222222222';
 const faults = [
   ['removed-current-auth', 'const user = await services.getUser(token);', "const user = { id: '11111111-1111-4111-8111-111111111111', email: 'a@example.test', created_at: '2026-01-01', factors: [] };"],
-  ['cross-account-export', 'const data = await services.exportData(user.id);', `const data = await services.exportData('${B}');`],
+  ['cross-account-export', 'services.exportData(user.id)', `services.exportData('${B}')`],
+  ['cross-account-career-export', 'services.exportSoccerCareerSaves?.(user.id)', `services.exportSoccerCareerSaves?.('${B}')`],
   ['ignored-password-confirmation', "if (confirmedId !== user.id) return json({ ok: false, error: 'password_not_confirmed' }, 403);", 'void confirmedId;'],
 ];
 function run(name, replacement) {

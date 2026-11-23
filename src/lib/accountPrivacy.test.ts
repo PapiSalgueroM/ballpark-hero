@@ -48,6 +48,15 @@ describe('account privacy server authorization', () => {
     expect(f.calls).toEqual([`export:${A}`]);
     expect(response.headers.get('cache-control')).toBe('no-store');
   });
+  it('includes account career backups for the authenticated export owner', async () => {
+    const saves = [{ slot: 2, revision: A, save_text: 'Career data', saved_at: '2026-11-23T00:00:00Z' }];
+    const exportSoccerCareerSaves = vi.fn(async (id: string) => id === A ? saves : []);
+    const f = fixture({ exportSoccerCareerSaves });
+    const response = await handleAccountPrivacy(request({ action: 'export' }), f.services);
+    expect(response.status).toBe(200);
+    expect((await response.json()).export.data.soccer_career_account_saves).toEqual(saves);
+    expect(exportSoccerCareerSaves).toHaveBeenCalledExactlyOnceWith(A);
+  });
   it('refuses client target IDs instead of redirecting export or deletion to B', async () => {
     for (const action of ['export', 'delete']) {
       const f = fixture();
@@ -92,6 +101,7 @@ describe('account privacy server authorization', () => {
     for (const overrides of [
       { deletionBlockers: async () => { throw new Error('SECRET'); } },
       { exportData: async () => { throw new Error('SECRET'); } },
+      { exportData: async () => ({ profiles: [] }), exportSoccerCareerSaves: async () => { throw new Error('SECRET'); } },
       { deleteUser: async () => { throw new Error('SECRET'); } },
     ]) {
       const f = fixture(overrides);

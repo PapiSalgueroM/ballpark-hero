@@ -1,16 +1,10 @@
-import { SOCCER_CAREER_SAVE } from '@/data/continueSaves';
 import type { ListableStorage } from '@/lib/brokenSaveRecovery';
-import { createSaveFence, fenceKeyOf, type FenceWrite } from '@/lib/saveFence';
-import { keepSoccerCareerBeforeImage } from '@/lib/soccerCareerMigration';
+import type { FenceWrite } from '@/lib/saveFence';
 import { isSoccerCareerSave, parseSoccerCareerSave, serializeSoccerCareerSave, SOCCER_CAREER_SAVE_VERSION } from '@/lib/soccerCareerSave';
-import { recordSoccerCareerSavedAt } from '@/lib/soccerCareerSaveReceipt';
+import { isSoccerCareerSaveKey, replaceSoccerCareerSave } from '@/lib/soccerCareerSaveReplacement';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 
 export const soccerCareerCheckpointKey = (saveKey: string) => `dukb-soccer-checkpoint:${saveKey}`;
-
-function isSlot(saveKey: string): boolean {
-  return saveKey === SOCCER_CAREER_SAVE.saveKey || SOCCER_CAREER_SAVE.alternateSaveKeys?.includes(saveKey) === true;
-}
 
 function readCareer(raw: string): CareerState | null {
   const value = parseSoccerCareerSave(raw);
@@ -20,7 +14,7 @@ function readCareer(raw: string): CareerState | null {
 export function readSoccerCareerCheckpoint(
   storage: Pick<Storage, 'getItem'> | null, saveKey: string,
 ): { raw: string; playerName: string; year: number } | null {
-  if (!storage || !isSlot(saveKey)) return null;
+  if (!storage || !isSoccerCareerSaveKey(saveKey)) return null;
   try {
     const raw = storage.getItem(soccerCareerCheckpointKey(saveKey));
     if (raw === null) return null;
@@ -36,7 +30,7 @@ export function readSoccerCareerCheckpoint(
 export function keepSoccerCareerCheckpoint(
   storage: Pick<Storage, 'getItem' | 'setItem'> | null, saveKey: string, previousRaw: string, verifiedRaw: string,
 ): FenceWrite {
-  if (!storage || !isSlot(saveKey) || previousRaw === verifiedRaw) return 'failed';
+  if (!storage || !isSoccerCareerSaveKey(saveKey) || previousRaw === verifiedRaw) return 'failed';
   try {
     if (!readCareer(previousRaw)) return 'failed';
     const key = soccerCareerCheckpointKey(saveKey);
@@ -51,43 +45,22 @@ export function keepSoccerCareerCheckpoint(
 export function restoreSoccerCareerCheckpoint(
   storage: ListableStorage | null, saveKey: string, expectedActive: string | null, checkpointRaw: string,
 ): 'restored' | 'moved' | 'failed' | 'current' {
-  if (!storage || !isSlot(saveKey)) return 'failed';
+  if (!storage || !isSoccerCareerSaveKey(saveKey)) return 'failed';
   const checkpointKey = soccerCareerCheckpointKey(saveKey);
-  const unchanged = () => storage.getItem(checkpointKey) === checkpointRaw && storage.getItem(saveKey) === expectedActive;
-  const fence = createSaveFence(storage);
-  fence.adopt(saveKey);
+  const checkpointIsCurrent = () => storage.getItem(checkpointKey) === checkpointRaw;
   try {
-    if (!unchanged()) return 'moved';
+    if (!checkpointIsCurrent() || storage.getItem(saveKey) !== expectedActive) return 'moved';
     const checkpoint = readCareer(checkpointRaw);
     if (!checkpoint) return 'failed';
     const restored = JSON.stringify({ ...JSON.parse(checkpointRaw), restoredFromCheckpoint: true });
     if (expectedActive === checkpointRaw || expectedActive === restored) return 'current';
 
-    let backupKey: string | null = null;
     if (expectedActive !== null) {
       // Resuming writes the same recovered career in the page's normal save format.
       const canonical = serializeSoccerCareerSave({ ...checkpoint, restoredFromCheckpoint: true }, SOCCER_CAREER_SAVE_VERSION);
       if (expectedActive === canonical) return 'current';
-      const kept = keepSoccerCareerBeforeImage(saveKey, expectedActive, storage);
-      if (kept.status !== 'kept') return kept.status;
-      backupKey = kept.backupKey;
     }
-
-    const generationKey = fenceKeyOf(saveKey);
-    const generation = storage.getItem(generationKey);
-    let moved = false;
-    const result = fence.write(saveKey, () => {
-      const claimed = storage.getItem(generationKey);
-      if (claimed === null || claimed === generation) return false;
-      if (backupKey !== null && storage.getItem(backupKey) !== expectedActive) return false;
-      moved = !unchanged();
-      if (moved) return false;
-      storage.setItem(saveKey, restored);
-      return storage.getItem(saveKey) === restored;
-    }, true);
-    if (moved || result === 'moved') return 'moved';
-    if (result !== 'written' || storage.getItem(saveKey) !== restored) return 'failed';
-    recordSoccerCareerSavedAt(storage, saveKey, restored);
-    return 'restored';
+    const result = replaceSoccerCareerSave(storage, saveKey, expectedActive, restored, checkpointIsCurrent);
+    return result === 'changed' ? 'moved' : result;
   } catch { return 'failed'; }
 }

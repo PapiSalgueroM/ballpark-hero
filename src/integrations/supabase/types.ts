@@ -7531,6 +7531,12 @@ export type Database = {
         }
         Relationships: []
       }
+      soccer_career_account_saves: {
+        Row: { user_id: string; slot: number; revision: string; save_text: string; saved_at: string }
+        Insert: { user_id: string; slot: number; save_text: string }
+        Update: { save_text?: string }
+        Relationships: []
+      }
       soccer_awards: {
         Row: {
           award_name: string
