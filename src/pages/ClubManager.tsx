@@ -105,6 +105,7 @@ const TransferScreen = lazy(() => import('@/components/club-manager/TransferScre
 const HalftimeScreen = lazy(() => import('@/components/club-manager/HalftimeScreen').then(m => ({ default: m.HalftimeScreen })));
 const MatchReportCard = lazy(() => import('@/components/club-manager/MatchReportCard').then(m => ({ default: m.MatchReportCard })));
 const AcademyScreen = lazy(() => import('@/components/club-manager/AcademyScreen').then(m => ({ default: m.AcademyScreen })));
+const YouthTeamPanel = lazy(() => import('@/components/club-manager/YouthTeamPanel'));
 const TrainingScreen = lazy(() => import('@/components/club-manager/TrainingScreen').then(m => ({ default: m.TrainingScreen })));
 const RolesScreen = lazy(() => import('@/components/club-manager/RolesScreen').then(m => ({ default: m.RolesScreen })));
 const XpScreen = lazy(() => import('@/components/club-manager/XpScreen').then(m => ({ default: m.XpScreen })));
@@ -1207,7 +1208,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                   onRecall={g.callScoutHome}
                   onPromote={g.promote}
                   onRelease={g.release}
-                /></ScreenLoading>
+                /><YouthTeamPanel career={c} onFound={g.openYouthTeam} onEnter={g.fundYouthTeam} /></ScreenLoading>
               )}
 
               {hubPanel === 'training' && (

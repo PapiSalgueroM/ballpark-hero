@@ -1,3 +1,4 @@
+import { playYouthFixture, restoreYouthTeam } from '@/lib/clubManagerYouthTeam';
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
@@ -1865,6 +1866,7 @@ export type FacilityKind = 'recruitment' | 'coaching' | 'facilities';
 
 /** The club's youth setup. Everything here is upgradable and everything bites. */
 export interface Academy {
+  youthTeam?: import('@/lib/clubManagerYouthTeam').YouthTeam;
   /** 1 to 20. How good the club is at getting the best juniors in the door. */
   recruitment: number;
   /** 1 to 20. Coaching quality, which drives development for the WHOLE squad. */
@@ -21520,6 +21522,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const tacticsDay = logEverSet(live.instrLog) ? tacticsImpl()?.day(state, fx, live, second, lastMinute) ?? null : null;
   if (entry.night) nightSquadTick(state, new Set(xi.map(p => p.id)));
   else tickWeek(state, new Set(xi.map(p => p.id)));
+  if (entry.type === 'league') playYouthFixture(state, entry.round, fx.opponent);
   const ratingsActive = state.inSeasonRatings && !state.worldRatingRunIn;
   if (ratingsActive && entry.type === 'league') {
     const ratingChanges = applyLeagueRatingChanges(state, events);
@@ -26121,6 +26124,7 @@ export function loadCareer(slotSave?: string): CareerState | null {
       return null;
     }
     parsed = restoreTrimmedContracts(parsed);
+    restoreYouthTeam(parsed);
     /* Round 127: repair the save the moment it is opened rather than on the
        first kick off. ensureRoles has always run at the top of playNextEntry,
        which is the house pattern and is enough for the engine, but it is NOT
