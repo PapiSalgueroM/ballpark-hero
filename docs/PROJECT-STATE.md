@@ -1,3 +1,7 @@
+## November 26 local Foundry Vale player loans
+
+Owners can give one eligible young parent player a full season at their second club. The boardroom tracks his starts, substitute appearances, minutes and rating through all 14 circuit dates and the summer return. Two signed-out production-browser runs from funded saves showed 1,080 and 1,084 minutes and a return from 87 to 89 OVR after reload. The assignment and existing second-club tests passed locally.
+
 ## November 26 local MLB postseason workload
 
 Relievers now log their own playoff outings, strikeouts and ERA beside the team schedule. A signed reliever can volunteer for one extra appearance for three health, charged once only when played. Historical saves retain their original pitching line. Local production Chromium on phone and laptop verified a ten-game playoff run, the extra outing, a missed postseason and saved results after reload. Eight focused tests passed, and 176 paired simulated careers retained the same underlying seasons and awards.

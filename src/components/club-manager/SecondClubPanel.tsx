@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { moneyIn, type CareerState } from '@/lib/clubManager';
 import {
-  buySeniorClub, chooseSeniorPlan, seniorClubOf, seniorMatchdays, seniorPreseason, seniorStandings,
+  buySeniorClub, chooseSeniorPlan, returnedSeniorPlayer, seniorCircuit, seniorClubOf, seniorLoanRating, seniorMatchdays, seniorPreseason,
   CIRCUIT_DATES, CIRCUIT_FINANCES, SECOND_CLUB_FACILITIES, SECOND_CLUB_PRICE, SECOND_CLUB_RESERVE, SECOND_CLUB_SQUAD_COST, SENIOR_CIRCUIT,
 } from '@/lib/clubManagerSecondClub';
+import { assignSeniorPlayer, seniorLoanCandidates } from '@/lib/clubManagerSeniorAssignment';
 import type { StandingRow } from '@/lib/season/core';
 
 function CircuitTable({ rows }: { rows: StandingRow[] }) {
@@ -21,6 +22,7 @@ export default function SecondClubPanel({ career, onCommit }: {
   career: CareerState; onCommit?: (make: (current: CareerState) => CareerState | null) => boolean;
 }) {
   const [notice, setNotice] = useState('');
+  const [playerId, setPlayerId] = useState('');
   const club = seniorClubOf(career), money = moneyIn(career), name = SENIOR_CIRCUIT[0];
   const preseason = seniorPreseason(career);
   const facility = career.academy?.facilities ?? 0;
@@ -32,6 +34,12 @@ export default function SecondClubPanel({ career, onCommit }: {
   const closed = club?.history.find(r => r.season === career.season);
   const plan = club?.order?.season === career.season ? club.order.plan : undefined;
   const dates = closed ? CIRCUIT_DATES : seniorMatchdays(career);
+  const circuit = club && !closed ? seniorCircuit(club, career.season, dates) : null;
+  const assignment = club?.assignment?.season === career.season ? club.assignment : undefined;
+  const playingTime = closed?.player ?? circuit?.playingTime;
+  const observed = closed?.player?.lastRating ?? (club && seniorLoanRating(career, club));
+  const candidates = actionable && club ? seniorLoanCandidates(career) : [];
+  const player = candidates.find(p => p.id === playerId) ?? candidates[0];
   const { operatingIncome, runningCosts, placeBonus } = CIRCUIT_FINANCES;
   if (!onCommit && !club) return null;
   return <details className="mt-3 rounded-xl border border-border bg-card px-3 text-left text-sm">
@@ -53,17 +61,38 @@ export default function SecondClubPanel({ career, onCommit }: {
             <button type="button" className={button} onClick={() => commit(c => chooseSeniorPlan(c, career.clubName, career.season, 'reserve'))}>Keep cash in reserve</button>
           </div>
         </> : <p>{plan === 'squad' ? 'Squad investment' : 'Cash in reserve'} · Season {career.season}{club.parent !== career.clubName && ' · Decisions belong to the parent club'}</p>}
+        <details><summary className="min-h-11 cursor-pointer py-3 font-semibold">Player development loan</summary>
+          {assignment && playingTime ? <>
+            <p><strong>{assignment.name}</strong> · {playingTime.starts} starts · {playingTime.subApps} sub appearances · {playingTime.minutes} minutes</p>
+            <p>Opening OVR {assignment.openingRating}{observed != null && ` · Last observed OVR ${observed}`}</p>
+            <p>He returns to {club.parent} when the new season starts.</p>
+          </> : <>
+            <p>Loan one fit outfield player aged 23 or younger with at least two seasons on his deal. Higher-rated players earn more starts and can improve results.</p>
+            <p>He plays the full season on a free loan and returns in summer. Early recall is unavailable.</p>
+            {player ? <div className="mt-2 space-y-2">
+              <label className="block font-semibold" htmlFor="second-club-player">Choose a player</label>
+              <select id="second-club-player" className="min-h-11 w-full rounded-md border border-border bg-card px-2" value={player.id} onChange={e => setPlayerId(e.target.value)}>
+                {candidates.map(p => <option key={p.id} value={p.id}>{p.name} · {p.position} · {p.age} · {p.rating} OVR</option>)}
+              </select>
+              <button type="button" className={button} onClick={() => commit(c => assignSeniorPlayer(c, career.clubName, career.season, player))}>Loan {player.name} to {name}</button>
+            </div> : <p className="mt-2">{actionable && club.parent === career.clubName ? 'No eligible player in your squad.' : `Loans open in preseason at ${club.parent}.`}</p>}
+          </>}
+        </details>
         <details><summary className="min-h-11 cursor-pointer py-3 font-semibold">Senior circuit · {dates}/{CIRCUIT_DATES} matchdays</summary>
           <p className="mb-2">Eight fictional clubs play home and away. See new results as the league calendar advances. The board closes its accounts at season end.</p>
-          <CircuitTable rows={closed?.table ?? seniorStandings(club, career.season, dates)} />
+          <CircuitTable rows={closed?.table ?? circuit!.table} />
         </details>
         {club.history.length > 0 && <details><summary className="min-h-11 cursor-pointer py-3 font-semibold">Season accounts ({club.history.length})</summary>
           {[...club.history].reverse().map(r => {
             const position = r.table.findIndex(t => t.slot === 0) + 1;
+            const returned = returnedSeniorPlayer(career, club, r.player);
             return <details className="border-t border-border" key={r.season}>
               <summary className="min-h-11 cursor-pointer py-3">Season {r.season} · #{position} · {r.table[position - 1].pts} pts</summary>
               <p>Opening cash {money(r.opening)} · Squad spend {money(r.spend)}</p>
               <p>Operating income and prize money {money(r.income)} · Running costs {money(r.runningCosts)}</p>
+              {r.player && <p>{r.player.name} · {r.player.starts} starts · {r.player.subApps} sub appearances · {r.player.minutes} minutes · Opening OVR {r.player.openingRating}
+                {r.player.lastRating !== undefined && ` · Last observed OVR ${r.player.lastRating}`}
+                {returned && ` · Back in your squad at ${returned.rating} OVR`}</p>}
               <p className="mb-2">Closing cash {money(r.closing)}</p><CircuitTable rows={r.table} />
             </details>;
           })}
