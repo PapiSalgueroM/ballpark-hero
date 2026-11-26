@@ -14,7 +14,7 @@ export interface ProgrammeChoices {
 }
 export interface UsCareerProgramme extends ProgrammeChoices { sport: UsSport; year: number; team: string }
 /* 'unused' (Release AU fix pass): the choice had nothing to add when the season began (its whole gain sat on a cap), so it changed nothing and cost nothing. */
-export interface ProgrammeDecision { section: ProgrammeSection; label: string; outcome: 'completed' | 'missed' | 'interrupted' | 'unused'; target?: number; actual?: number; unit?: string }
+export interface ProgrammeDecision { section: ProgrammeSection; label: string; outcome: 'completed' | 'missed' | 'interrupted' | 'unused'; target?: number; actual?: number; unit?: string; games?: { played: number; minimum: number } }
 export interface UsCareerProgrammeResult {
   sport: UsSport; year: number; team: string; outcome: 'completed' | 'interrupted';
   decisions: ProgrammeDecision[]; bonusGross: number; bonusNet: number; partnershipProgress: number;
@@ -150,7 +150,9 @@ function validResult(value: unknown): value is UsCareerProgrammeResult {
     && Number.isSafeInteger(r.partnershipProgress) && r.partnershipProgress >= 0 && r.partnershipProgress <= 3
     && Array.isArray(r.decisions) && r.decisions.every(d => !!d && sections.includes(d.section) && typeof d.label === 'string'
       && ['completed', 'missed', 'interrupted', 'unused'].includes(d.outcome) && (d.target === undefined || validNumber(d.target))
-      && (d.actual === undefined || validNumber(d.actual)) && (d.unit === undefined || typeof d.unit === 'string'));
+      && (d.actual === undefined || validNumber(d.actual)) && (d.unit === undefined || typeof d.unit === 'string')
+      && (d.games === undefined || (d.section === 'bonus' && d.games !== null && Number.isSafeInteger(d.games.played) && d.games.played >= 0
+        && Number.isSafeInteger(d.games.minimum) && d.games.minimum > 0)));
 }
 export function usProgrammeStateValid(c: ProgrammeCareer): boolean {
   const p = c.programmePartnership;
@@ -495,7 +497,8 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
       if (!target) continue;
       const actual = (line as unknown as Record<string, unknown>)[target.key];
       decision.target = target.target; decision.actual = validBonusActual(actual, target.key) ? actual : undefined; decision.unit = target.label;
-      decision.outcome = decision.actual !== undefined && decision.actual >= target.target && line.games >= gamesBase(then, sport) && validNumber(line.salary) ? 'completed' : 'missed';
+      decision.games = { played: line.games, minimum: gamesBase(then, sport) };
+      decision.outcome = decision.actual !== undefined && decision.actual >= target.target && line.games >= decision.games.minimum && validNumber(line.salary) ? 'completed' : 'missed';
       if (decision.outcome === 'completed') {
         /* Ruling R1: the share is banked in the bank's own unit, so what the card printed is what the bank still holds once the engine has rounded it again. */
         result.bonusGross = bonusGrossOf(line.salary, choice === 'stretch');

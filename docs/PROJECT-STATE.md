@@ -1,3 +1,7 @@
+## 2026-11-26, US player appearance requirements
+
+NBA, NFL, MLB and NHL My Career now retain the number of games played and the required minimum with each newly settled contract target. The review can explain why a strong rate or longest kick did not earn a bonus in a short season. Earlier receipts still use the figures they recorded.
+
 ## 2026-11-26, Fight Career scorecards
 
 Fight record now reopens the rounds from completed bouts at the gym, during between-fight decisions and at retirement. Each round shows both scores and punches landed. The totals come from the original bout, including fights stopped early. Older results still show the opponent, outcome and method.

@@ -73,8 +73,16 @@ describe.each(sports)('$label season programme', sport => {
     expect(settleUsCareerProgramme(c, row, sport.slug)).toBeNull();
   });
   it('requires games as well as the stat threshold for a bonus', () => {
-    const c = plan(fixture(sport), sport, { bonus: 'steady' }), row = heldLine(c, { games: 1, passTd: 50, apg: 20, hr: 50, goals: 60, assists: 90 });
-    expect(settleUsCareerProgramme(c, row, sport.slug)?.bonusGross).toBe(0);
+    const c = plan(fixture(sport), sport, { bonus: 'steady' });
+    const offer = usProgrammeMenus(c, sport.slug).find(m => m.id === 'bonus')!.options.find(o => o.id === 'steady')!;
+    const row = heldLine(c, { games: 1, passTd: 50, apg: 20, hr: 50, goals: 60, assists: 90 });
+    const result = settleUsCareerProgramme(c, row, sport.slug)!;
+    const bonus = result.decisions.find(d => d.section === 'bonus')!;
+    const minimum = Number(offer.effect.match(/and (\d+) games/)![1]);
+    expect(bonus.actual).toBeGreaterThanOrEqual(bonus.target!);
+    expect(bonus.games).toEqual({ played: 1, minimum });
+    expect(result.bonusGross).toBe(0);
+    expect(JSON.parse(JSON.stringify(result)).decisions).toEqual(result.decisions);
   });
   it('partnership builds three consecutive same-team partnership years and uses earned next-year morale', () => {
     let c = fixture(sport);

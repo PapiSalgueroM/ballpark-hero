@@ -56,7 +56,9 @@ export default function UsCareerProgramme({ career, sport, saveMoved = false, on
     <p className="mt-1 text-xs text-muted-foreground">{held ? 'Programme saved for ' + career.year + ' at ' + career.team + '.' : 'Choose how to approach the season. Your usual routine stays available.'}</p>
     {last && <div data-us-programme-result className="mt-2 text-xs">
       <p className="font-bold">{last.year}: {last.outcome === 'interrupted' ? 'Programme interrupted' : 'Programme completed'}</p>
-      {last.decisions.map(d => <p key={d.section}>{d.label}: {d.outcome === 'unused' ? 'not used, it had nothing to add and cost nothing' : d.outcome}{d.target !== undefined ? ' (' + (d.actual === undefined ? 'not recorded' : formatUsProgrammeValue(d.actual, d.unit)) + '/' + formatUsProgrammeValue(d.target, d.unit) + ' ' + d.unit + ')' : d.actual !== undefined && d.unit ? ' (' + d.actual.toFixed(1) + ' ' + d.unit + ')' : ''}.</p>)}
+      {last.decisions.map(d => <p key={d.section}>{d.label}: {d.outcome === 'unused' ? 'not used, it had nothing to add and cost nothing' : d.outcome}{d.target !== undefined ? ' (' + (d.actual === undefined ? 'not recorded' : formatUsProgrammeValue(d.actual, d.unit)) + '/' + formatUsProgrammeValue(d.target, d.unit) + ' ' + d.unit + ')' : d.actual !== undefined && d.unit ? ' (' + d.actual.toFixed(1) + ' ' + d.unit + ')' : ''}.
+        {d.games && <span className="block">{d.games.played} {d.games.played === 1 ? 'game' : 'games'} played, {d.games.minimum} required.</span>}
+      </p>)}
       {last.bonusGross > 0 && <p data-us-programme-bonus>Bonus: {grossMoney(last.bonusGross)} gross, {last.bonusNet >= 0.05 ? '$' + last.bonusNet.toFixed(1) + 'M banked.' : 'none of it banked (the 45% share was under the $0.1M the bank counts in).'}</p>}
       {last.partnershipProgress > 0 && <p>Partnership progress: {last.partnershipProgress}/3.</p>}
     </div>}

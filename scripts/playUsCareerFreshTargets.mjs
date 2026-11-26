@@ -86,9 +86,9 @@ async function replay(test) {
     await name.waitFor({ timeout: 30000 });
     assert.equal(await raw(), null);
     const guide = button(/Let.s Play/i);
-    if (await guide.count()) await click(guide, 'Read and close first-visit rules');
     const cookies = button(/Reject all|Essential only/i);
-    if (await cookies.count()) await click(cookies, 'Decline optional cookies');
+    await page.addLocatorHandler(guide, () => click(guide, 'Read and close first-visit rules'), { times: 1 });
+    await page.addLocatorHandler(cookies, () => click(cookies, 'Decline optional cookies'), { times: 1 });
     await name.fill(`${sport.toUpperCase()} Test Rookie`);
     await click(button(new RegExp(`^${position}$`)), `Select ${position}`);
     if (test.defense) await click(button(new RegExp(test.defense, 'i')), 'Choose defensive build');
@@ -126,6 +126,7 @@ async function replay(test) {
     const receipt = result.decisions.find(entry => entry.section === 'bonus');
     const met = line[key] >= target && line.games >= minimum;
     const gross = met ? Math.round(line.salary * 0.02 * 10000) / 10000 : 0;
+    assert.deepEqual(receipt.games, { played: line.games, minimum });
     assert.equal(receipt.target, target);
     assert.equal(receipt.actual, line[key]);
     assert.equal(receipt.unit, unit);
@@ -141,6 +142,7 @@ async function replay(test) {
     const resultText = (await visibleResult.innerText()).trim();
     const display = value => sport === 'nba' ? value.toFixed(1) : String(value);
     assert.ok(resultText.includes(`Chase a different stat: ${receipt.outcome} (${display(line[key])}/${display(target)} ${unit})`));
+    assert.ok(resultText.includes(`${line.games} ${line.games === 1 ? 'game' : 'games'} played, ${minimum} required.`));
     if (gross === 0) assert.equal(await page.locator('[data-us-programme-bonus]').count(), 0);
     else assert.ok(resultText.includes(`Bonus: $${Math.round(gross * 1000)}K gross`));
 
