@@ -2,6 +2,11 @@ import type { NrlOpeningMatchdayRoster } from '@/lib/nrlCareer';
 
 // Final opening team sheets. Paired positions map to the game's editable lineup roles.
 // The evidence and definition are in docs/audits/nrl-2026-opening-matchday-rosters.md.
+// The optional award records all men's Dally M halves winners in the two seasons before kickoff.
+// https://www.nrl.com/siteassets/about/annual-reports/nrl-2024-annual-report.pdf
+// https://www.nrl.com/news/2025/10/01/james-tedesco-and-tamika-upton-win-dally-m-medals/
+// https://www.rugbyleagueproject.org/calendar/2024/awards.html
+// https://www.rugbyleagueproject.org/calendar/2025/awards.html
 export const NRL_OPENING_MATCHDAY_2026: NrlOpeningMatchdayRoster = {
   "knights": [
     [504870, "Kalyn Ponga", 27, "Fullback"],
@@ -31,7 +36,7 @@ export const NRL_OPENING_MATCHDAY_2026: NrlOpeningMatchdayRoster = {
     [100004781, "Tom Chester", 24, "Right Centre"],
     [508443, "Murray Taulagi", 26, "Right Wing"],
     [505894, "Jake Clifford", 28, "Five-eighth"],
-    [506424, "Tom Dearden", 24, "Halfback"],
+    [506424, "Tom Dearden", 24, "Halfback", [2024, "Five-eighth"]],
     [500405, "Coen Hess", 29, "Prop 8"],
     [505460, "Reed Mahoney", 27, "Hooker"],
     [500301, "Jason Taumalolo", 32, "Prop 10"],
@@ -94,7 +99,7 @@ export const NRL_OPENING_MATCHDAY_2026: NrlOpeningMatchdayRoster = {
     [100018554, "Moses Leo", 28, "Right Centre"],
     [505537, "Nick Meaney", 28, "Right Wing"],
     [501459, "Cameron Munster", 31, "Five-eighth"],
-    [500826, "Jahrome Hughes", 31, "Halfback"],
+    [500826, "Jahrome Hughes", 31, "Halfback", [2024, "Halfback"]],
     [505628, "Stefano Utoikamanu", 25, "Prop 8"],
     [505904, "Harry Grant", 28, "Hooker"],
     [501247, "Josh King", 30, "Prop 10"],
@@ -199,7 +204,7 @@ export const NRL_OPENING_MATCHDAY_2026: NrlOpeningMatchdayRoster = {
     [100007927, "Thomas Jenkins", 24, "Right Centre"],
     [505410, "Brian To'o", 27, "Right Wing"],
     [100006848, "Blaize Talagi", 20, "Five-eighth"],
-    [504120, "Nathan Cleary", 28, "Halfback"],
+    [504120, "Nathan Cleary", 28, "Halfback", [2025, "Halfback"]],
     [501461, "Moses Leota", 30, "Prop 8"],
     [505414, "Mitch Kenny", 28, "Hooker"],
     [505555, "Lindsay Smith", 26, "Prop 10"],
@@ -282,7 +287,7 @@ export const NRL_OPENING_MATCHDAY_2026: NrlOpeningMatchdayRoster = {
     [100000129, "Simi Sasagi", 24, "Left Centre"],
     [504148, "Sebastian Kris", 26, "Right Centre"],
     [510220, "Xavier Savage", 23, "Right Wing"],
-    [100006524, "Ethan Strange", 21, "Five-eighth"],
+    [100006524, "Ethan Strange", 21, "Five-eighth", [2025, "Five-eighth"]],
     [100003925, "Ethan Sanders", 22, "Halfback"],
     [500973, "Josh Papalii", 33, "Prop 8"],
     [504072, "Tom Starling", 27, "Hooker"],

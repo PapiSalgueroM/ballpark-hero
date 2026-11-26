@@ -1,3 +1,7 @@
+Named NRL halves and five-eighth eligibility
+
+In the named 2026 opening squads, the game now recognises the four recipients of the previous two seasons of halves honours when generating initial abilities. Tom Dearden can play halfback or five-eighth. Across 256 fresh Cowboys saves his median simulated overall rose from 68 to 81. On phone and desktop, moving another player to halfback and starting Dearden at five-eighth survived reload. A saved 71-rated Dearden reopened unchanged. All 18 focused tests passed and all 4,352 sampled team lists retained their original salary cap.
+
 Stanley Cup finalists in Finals Sprint
 
 The optional Finals Sprint in Alphabet Sprint now has 12 verified NHL finals from 1967 through 2024. Each saved Daily keeps its deal, accepted names and score. Signed-out Chrome at 390 and 1366 pixels finished all six clues for 100, restored the same answers after reload and played a separate practice round. Three existing sports also passed phone and desktop checks. The NHL media guide and The Hockey Writers archive independently confirm the two finalists for each year. All 32 focused tests and eight browser journeys passed.
