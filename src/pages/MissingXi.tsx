@@ -1,4 +1,4 @@
-import { useState, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
+import { useState, useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -15,7 +15,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { encodeMissingXiUnlimitedDraft, loadMissingXiUnlimitedDraft, writeMissingXiUnlimitedDraft } from '@/lib/missingXiUnlimitedDraft';
-import { getTodayET } from '@/lib/dateUtils';
+import { getEasternDayRange, getTodayET } from '@/lib/dateUtils';
 import { flagForClub } from '@/lib/careerLadder';
 import { safeSessionStorage } from '@/lib/safeStorage';
 import FullXiRecall from '@/components/missing-xi/FullXiRecall';
@@ -74,13 +74,13 @@ const MissingXi = () => {
   const [playMode, setPlayMode] = useState<PlayMode>(saved.draft?.active ? 'unlimited' : 'daily');
   const [fullXi, setFullXi] = useState(() => safeSessionStorage.getItem('missing-xi-full-open') === '1');
 
-  const dailyPuzzle = useMemo<ActivePuzzle>(() => pickDailyPuzzle(), []);
   const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<ActivePuzzle | null>(saved.draft?.puzzle ?? null);
 
   const {
     guesses: dailyActions,
     addGuess: addDailyAction,
     gameStatus: rawDailyStatus,
+    todayStr: editionDate,
     isLoading,
   } = useDailyPuzzle<{ id: string }, XiAction>({
     gameSlug: 'missing-xi',
@@ -90,6 +90,13 @@ const MissingXi = () => {
     isLost: g => g.filter(a => a.t === 'miss').length >= MAX_GUESSES || g.some(a => a.t === 'give'),
     deserializeGuesses: raw => (Array.isArray(raw) ? raw.filter(isXiAction) : []),
   });
+  const dailyPuzzle = useMemo(() => pickDailyPuzzle(undefined, editionDate), [editionDate]);
+  const [nextEditionReady, setNextEditionReady] = useState(false);
+  useEffect(() => {
+    const midnight = Date.parse(getEasternDayRange(editionDate).end);
+    const timer = window.setTimeout(() => setNextEditionReady(true), Math.max(0, midnight - Date.now()));
+    return () => window.clearTimeout(timer);
+  }, [editionDate]);
 
   const [unlimitedActions, setUnlimitedActions] = useState<XiAction[]>(
     () => saved.draft?.misses.map(name => ({ t: 'miss', name })) ?? [],
@@ -285,7 +292,7 @@ const MissingXi = () => {
             </div>
 
             {!fullXi && playMode === 'daily' && (
-              <p className="text-xs text-muted-foreground mt-3">Today's lineup, {getTodayET()}. Same puzzle for everyone.</p>
+              <p data-no-prerender className="text-xs text-muted-foreground mt-3">Daily lineup, {editionDate}. Same puzzle for everyone.</p>
             )}
           </>
         }
@@ -425,7 +432,11 @@ const MissingXi = () => {
                   }}
                   onPlayAgain={() => startRun('unlimited', playMode === 'unlimited')}
                   playAgainLabel={playMode === 'daily' ? 'Play Unlimited' : 'New Lineup'}
-                  playNext={playMode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new lineup!</p> : undefined}
+                  playNext={playMode === 'daily' ? (
+                    nextEditionReady || editionDate !== getTodayET()
+                      ? <a href="/missing-xi" className="text-sm font-semibold text-primary underline">Play today's lineup</a>
+                      : <p className="text-sm text-muted-foreground">The next lineup opens at midnight Eastern.</p>
+                  ) : undefined}
                 />
               </div>
             )}

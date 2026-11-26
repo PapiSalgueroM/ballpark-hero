@@ -1,3 +1,7 @@
+### November 26, 2026. Missing XI across midnight Eastern
+
+Daily now deals the board, labels it and saves the result under a single Eastern edition date. When the next edition opens, the completed board offers a link to play it. The old screen reproduced the wrong date after the first missed guess following midnight. In a signed-out phone and laptop test the November 26 Croatia result stayed settled, then the link opened the November 27 Inter Milan lineup on guess one. The eight focused archive and Daily checks passed.
+
 ### November 26, 2026. Trade a current national draft pick in Aussie Rules Manager
 
 An eligible club can now exchange its own first available selection for a willing generated senior player. The selling club uses that exact pick. Both players and their clubs remain in the season history. Geelong traded pick two for a defender; the seller used it on a new prospect. At 390 and 1366 pixels both registrations and the second-season history survived reload. Passing kept the original pick. In 24 simulated summers passing reproduced the original drafts exactly; all 17 available accepted offers finished with 648 distinct senior players, 36 per club, and legal role coverage. The 48 focused checks passed.
