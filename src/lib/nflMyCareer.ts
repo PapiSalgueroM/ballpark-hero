@@ -228,6 +228,8 @@ export interface SeasonLine {
   fgMade?: number; fgAtt?: number; longFg?: number;
   /** The team's playoff game count and the player's postseason stats for display. */
   poGames?: number; poLine?: string;
+  poStats?: Partial<Record<'passYds' | 'passTd' | 'ints' | 'rushYds' | 'rushTd' | 'rec' | 'recYds' |
+    'fgMade' | 'fgAtt' | 'tackles' | 'passDef' | 'sacks', number>>;
   /** Player appearances for newly simulated backup QB playoff runs. poGames is the team count. */
   poPlayerGames?: number;
   awards: string[];
@@ -678,17 +680,23 @@ export function simSeason(
       const y = Math.max(0, Math.round((1900 + (pf - 62) * 92) * per));
       const td = Math.max(0, Math.round((6 + (pf - 62) * 0.95) * per));
       const ip = Math.max(0, Math.round((18.5 - (pf - 62) * 0.36) * per));
+      line.poStats = { passYds: y, passTd: td, ints: ip };
       line.poLine = `${y} yds, ${td} TD, ${ip} INT`;
     } else if (c.pos === 'RB') {
       const y = Math.max(0, Math.round((260 + (pf - 62) * 46) * per));
       const td = Math.max(0, Math.round((1 + (pf - 62) * 0.42) * per));
+      line.poStats = { rushYds: y, rushTd: td };
       line.poLine = `${y} rush yds, ${td} TD`;
     } else if (c.pos === 'WR' || c.pos === 'TE') {
       const rc = Math.max(0, Math.round((28 + (pf - 62) * 2.5) * per));
-      line.poLine = `${rc} rec, ${Math.round(rc * 11)} yds`;
+      const yards = Math.round(rc * 11);
+      line.poStats = { rec: rc, recYds: yards };
+      line.poLine = `${rc} rec, ${yards} yds`;
     } else if (c.pos === 'K') {
       const fg = Math.max(0, Math.round((22 + (pf - 62) * 0.5) * per));
-      line.poLine = `${fg} of ${fg + (rng() < 0.5 ? 0 : 1)} on field goals`;
+      const attempts = fg + (rng() < 0.5 ? 0 : 1);
+      line.poStats = { fgMade: fg, fgAtt: attempts };
+      line.poLine = `${fg} of ${attempts} on field goals`;
     } else {
       const tk = Math.max(0, Math.round((95 + (pf - 62) * 2.4) * per));
       const sk = Math.max(0, Math.round((3 + (pf - 62) * 0.35) * per * 2) / 2);
@@ -696,6 +704,7 @@ export function simSeason(
          January line is passes defended, on the regular season's own curve at
          its average draw. Derived, no extra rng call, so no draw moves. */
       const pd = Math.max(0, Math.round((11.5 + (pf - 62) * 0.5) * per));
+      line.poStats = c.pos === 'CB' ? { tackles: tk, passDef: pd } : { tackles: tk, sacks: sk };
       line.poLine = c.pos === 'CB'
         ? `${countOf(tk, 'tackle', 'tackles')}, ${countOf(pd, 'pass defended', 'passes defended')}`
         : `${countOf(tk, 'tackle', 'tackles')}, ${countOf(sk, 'sack', 'sacks')}`;

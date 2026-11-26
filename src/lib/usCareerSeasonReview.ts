@@ -39,6 +39,11 @@ export function nflSeasonReview(s: SeasonLine, pos: CareerPos): CareerReviewStat
     default: regular = [text('Performance', undefined)];
   }
   if (pos === 'RB' && s.passingDownRole === true) regular.push(text('Backfield role', 'Passing downs'));
+  if (pos === 'RB' && recorded(s.rushYds) && recorded(s.recYds)) {
+    regular.push(number('Yards from scrimmage', s.rushYds + s.recYds));
+  }
+  if ((pos === 'LB' || pos === 'CB') && recorded(s.forcedFum)) regular.push(number('Forced fumbles', s.forcedFum));
+  if (pos === 'EDGE' && recorded(s.passDef)) regular.push(number('Passes defended', s.passDef));
   if (pos === 'QB' && (recorded(s.rushYds) || recorded(s.rushTd))) {
     regular.push(number('Rushing yards', s.rushYds), number('Rushing touchdowns', s.rushTd));
   }
@@ -51,23 +56,53 @@ export function nflSeasonReview(s: SeasonLine, pos: CareerPos): CareerReviewStat
   }
   const appearances = s.poPlayerGames;
   const teamGames = s.poGames;
+  if ((s.teamResult === 'Missed the playoffs' || s.teamResult === 'Missed playoffs') &&
+    (teamGames === undefined || teamGames === 0) && !s.poLine && !s.poStats && !appearances) {
+    return stats(s.teamResult, regular, [text('Postseason', 'Your team missed the playoffs')]);
+  }
   const hasAppearances = pos === 'QB' && recorded(appearances) && Number.isInteger(appearances) && appearances >= 0
     && recorded(teamGames) && Number.isInteger(teamGames) && teamGames > 0 && appearances <= teamGames;
-  const postseason = hasAppearances ? [
-    number('Team games', teamGames), number('Appearances', appearances),
-    ...(appearances > 0 ? [text('Performance', s.poLine)] : []),
-  ] : [number('Games', teamGames), text('Performance', s.poLine)];
+  const postseason = [number('Team games', teamGames)];
+  if (hasAppearances) postseason.push(number('Appearances', appearances));
+  if (hasAppearances && appearances === 0) return stats(s.teamResult, regular, postseason);
+  const box = s.poStats;
+  const receiving = ['rec', 'recYds'] as const;
+  const defense = ['tackles', 'sacks'] as const;
+  const fields: Record<CareerPos, readonly (keyof NonNullable<SeasonLine['poStats']>)[]> = {
+    QB: ['passYds', 'passTd', 'ints'], RB: ['rushYds', 'rushTd'], WR: receiving, TE: receiving,
+    LB: defense, EDGE: defense, CB: ['tackles', 'passDef'], K: ['fgMade', 'fgAtt'],
+  };
+  const labels = { passYds: 'Passing yards', passTd: 'Passing touchdowns', ints: 'Interceptions thrown',
+    rushYds: 'Rushing yards', rushTd: 'Rushing touchdowns', rec: 'Receptions', recYds: 'Receiving yards',
+    tackles: 'Tackles', sacks: 'Sacks', passDef: 'Passes defended', fgMade: 'Field goals made', fgAtt: 'Field goals attempted' };
+  const keys = fields[pos];
+  if (box && keys?.every(key => recorded(box[key]) && box[key]! >= 0)) {
+    postseason.push(...keys.map(key => number(labels[key], box[key])));
+  } else {
+    postseason.push(text('Performance', s.poLine));
+  }
   return stats(s.teamResult, regular, postseason);
 }
 
 export function nbaSeasonReview(s: NbaSeasonLine): CareerReviewStats {
   const regular = [number('Points per game', s.ppg), number('Rebounds per game', s.rpg), number('Assists per game', s.apg)];
+  if (recorded(s.mpg)) regular.push(number('Minutes per game', s.mpg, 1));
+  if (recorded(s.spg)) regular.push(number('Steals per game', s.spg, 1));
+  if (recorded(s.bpg)) regular.push(number('Blocks per game', s.bpg, 1));
+  if (recorded(s.clubWins) && recorded(s.clubLosses)) {
+    regular.push(text('Team record', `${s.clubWins} wins, ${s.clubLosses} losses`));
+  }
   if (recorded(s.restGames) && s.restGames > 0) regular.push(text('Rest plan', `${s.restGames} planned games`));
   if (recorded(s.benchAppearances) && s.benchAppearances > 0) {
-    regular.push(number('Bench appearances', s.benchAppearances, 0), number('Minutes per game', s.mpg, 1));
+    regular.push(number('Bench appearances', s.benchAppearances, 0));
   }
-  const postseason = [number('Games', s.poGames), number('Points per game', s.poPpg), number('Rebounds per game', s.poRpg), number('Assists per game', s.poApg)];
+  if (s.teamResult === 'Missed the playoffs' && (s.poGames === undefined || s.poGames === 0)) {
+    return stats(s.teamResult, regular, [text('Postseason', 'Your team missed the playoffs')]);
+  }
+  const postseason = [number('Team games', s.poGames), number('Points per game', s.poPpg), number('Rebounds per game', s.poRpg), number('Assists per game', s.poApg)];
   if (recorded(s.poMpg)) postseason.push(number('Minutes per game', s.poMpg, 1));
+  if (recorded(s.poSpg)) postseason.push(number('Steals per game', s.poSpg, 1));
+  if (recorded(s.poBpg)) postseason.push(number('Blocks per game', s.poBpg, 1));
   return stats(s.teamResult, regular, postseason);
 }
 

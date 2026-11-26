@@ -17,9 +17,9 @@
    saved line, so it lands on every number the save holds and stores nothing.
    What is on the line decides everything: games played, the stat fields, and
    the team result, which is read by EXACT equality against the engine's own
-   exported words (never out of a sentence). The line holds no record and no
-   opponent, so his team's record is a band this career's rules give that
-   result, and opponents are named only from a two sourced league shape whose
+   exported words (never out of a sentence). NBA seasons can carry the team's
+   record. Otherwise the result supplies a range of wins. Opponents are named
+   only from a two sourced league shape whose
    team list is exactly the game's own for that era (otherwise "another team").
 
    Key streams added to the core's (each a suffix of the season key):
@@ -302,7 +302,12 @@ export function buildUsSeason(
     name: career.name, pos, eraId, team: row.team, teamLabel, year: row.year, length, shape, order, names,
     divSlots: slots ? slots.divSlots : 0, confSlots: slots ? slots.confSlots : 0,
   };
-  const band = usBandOf(usBindOf(bind, row.year), row.teamResult);
+  const resultBand = usBandOf(usBindOf(bind, row.year), row.teamResult);
+  const { clubWins, clubLosses } = row;
+  const hasClubRecord = bind.slug === 'nba' && resultBand
+    && typeof clubWins === 'number' && Number.isSafeInteger(clubWins) && clubWins >= resultBand[0] && clubWins <= resultBand[1]
+    && typeof clubLosses === 'number' && Number.isSafeInteger(clubLosses) && clubWins + clubLosses === length;
+  const band = hasClubRecord ? [clubWins, clubWins] : resultBand;
   const target: TeamTarget = band ? { kind: 'record', winsMin: band[0], winsMax: band[1] } : { kind: 'none' };
   const frame: Frame = { mode: 'record', teams, games: length, rule: null, cap: bind.cap };
   const sport: SeasonSport<UsRow, UsSeasonCtx> = {

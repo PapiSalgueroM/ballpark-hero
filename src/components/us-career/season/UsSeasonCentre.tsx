@@ -60,13 +60,18 @@ export function buildUsModel(sport: UsCareerSport, bind: UsSeasonSource, career:
   const path = 'prepare' in bind ? null : usPlayoffPath(bind, row, ctx, key);
   const noPath = !path && view.noPathNote ? view.noPathNote(row) : null;
   /* Round 1147: the NFL saves its playoff line as a sentence ("512 yds, 4 TD, 1 INT"), printed as it is, and one game is "1 game" */
-  const post = review.postseason.filter(x => x.value !== 'Not recorded')
+  const savedNflLine = bind.slug === 'nfl' && typeof row.poLine === 'string' && row.poLine.trim()
+    && !review.postseason.some(stat => stat.label === 'Appearances' && stat.numeric?.raw === 0)
+    ? row.poLine : null;
+  const pathStats = savedNflLine ? review.postseason.filter(stat => stat.label === 'Team games' || stat.label === 'Appearances') : review.postseason;
+  const post = pathStats.filter(x => x.value !== 'Not recorded')
     .map(x => {
-      if (x.label === 'Performance') return x.value;
+      if (x.label === 'Performance' || x.label === 'Postseason') return x.value;
       const unit = view.postLabels?.[x.label] ?? x.label.toLowerCase();
       const singular = x.value === '1' && ['Games', 'Team games', 'Appearances'].includes(x.label);
       return `${x.value} ${singular ? unit.slice(0, -1) : unit}`;
     });
+  if (savedNflLine) post.push(savedNflLine);
   /* the scoreboard and the phone's game log read the game's own ids in a named season */
   const idOf = new Map<string, string>();
   if (named) ctx.order.forEach((id, slot) => idOf.set(s.labels[slot]?.name ?? id, id));
