@@ -1,3 +1,9 @@
+## 2026-11-26, Build Your XI league standings
+
+Newly submitted lineups play in a 20-team simulated table. Every pair meets home and away. Managers can open League table to inspect the wins, draws, losses and points behind their finish. The saved table reopens with its XI. Existing completed results keep the originally saved finish. World XI's existing season format stays available.
+
+The same Mixed 4-3-3 which previously finished fifth on 104 points exposed the old independent rival totals. Engine checks account for all 380 matches, mirror results on both sides, and reconcile each finish to its standings and its alternate-formation replay.
+
 ## 2026-11-26, Soccer and NBA Finals Sprint preview
 
 A link inside Alphabet Sprint opens six typed Finals questions. Each board uses two clues at each editorial difficulty, and accepts either finalist until a team has been used. One clue can be deferred. The local Daily rolls over at Eastern midnight and Practice has unlimited rounds. The preview uses its own device saves. The score maxes out at 100.

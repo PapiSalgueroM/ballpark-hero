@@ -353,7 +353,7 @@ const LineupBuilder = () => {
       value,
       age: slot.pick?.age,
     }));
-    return simulateWorldXiSeason(squad, formation ?? '4-3-3', seasonAdjust(fitBreakdown));
+    return simulateWorldXiSeason(squad, formation ?? '4-3-3', seasonAdjust(fitBreakdown), 'balanced', 'round-robin');
   }, [phase, savedSeason, ratedXi, filledSlotsArray, formation, fitBreakdown, isClubYear]);
 
   const recordedYearVerdict = useMemo<AIVerdict | null>(() => {

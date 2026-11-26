@@ -134,7 +134,25 @@ try {
     const seasonStats = await panel.innerText();
     await players.click();
     const data = await page.evaluate(key => Object.fromEntries([key,'dukb-local-completions','dukb-streaks-v1'].map(k=>[k,localStorage.getItem(k)])),saveKey);
-    return { lineup, metrics, verdict, seasonStats, data };
+    let leagueTable;
+    if (process.env.XI_EXPECT_TABLE === '1') {
+      const toggle = panel.getByRole('button', { name: 'League table', exact: true });
+      await toggle.click();
+      const table = panel.getByRole('table');
+      assert.equal(await table.locator('tbody tr').count(), 20);
+      const own = table.getByRole('row', { name: /Your XI/ });
+      const cells = await own.locator('td, th').allTextContents();
+      assert.equal(Number(cells[0]), parseInt(metrics['League Finish']));
+      assert.equal(cells[5], metrics.Points);
+      assert.equal(Number(cells[2]) + Number(cells[3]) + Number(cells[4]), 38);
+      leagueTable = await table.innerText();
+      if (output) {
+        await mkdir(output, { recursive: true });
+        await table.screenshot({ path: path.join(output, nameStem + '-table.png') });
+      }
+      await toggle.click();
+    }
+    return { lineup, metrics, verdict, seasonStats, data, leagueTable };
   };
   report.before = await collect();
   await page.waitForLoadState('networkidle');

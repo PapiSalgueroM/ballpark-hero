@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { simulateWorldXiSeason, whatIfFinish, worldXiMatchOdds, type WxPlayer } from '@/lib/worldXi';
+import { simulateWorldXiSeason, whatIfFinish, worldXiMatchOdds, settleXiTable, tablePoints, type WxPlayer } from '@/lib/worldXi';
 
 const cards: [string, string, WxPlayer['position'], number, number][] = [
   ['Alisson', 'Brazil', 'GK', 31, 29],
@@ -89,5 +89,48 @@ describe('World XI season approach', () => {
     expect(simulateWorldXiSeason(players, shape, undefined, 'balanced')).toEqual(simulateWorldXiSeason(players, shape));
     const fit = { roleFit: -0.75, chemistry: 1.25, balance: 0.9 };
     expect(simulateWorldXiSeason(players, shape, fit, 'balanced')).toEqual(simulateWorldXiSeason(players, shape, fit));
+  });
+});
+
+describe('Build Your XI head-to-head standings', () => {
+  it('gives every rival the opposite result from each home and away game against your XI', () => {
+    const won = settleXiTable(17, Array(38).fill('W'));
+    const lost = settleXiTable(17, Array(38).fill('L'));
+    expect(won.sharedFixtures).toEqual(lost.sharedFixtures);
+    const teams = (league: typeof won) => [...league.leagueTable].sort((a, b) => a.team - b.team);
+    const wins = teams(won), losses = teams(lost);
+    expect(wins[0].wins).toBe(38);
+    expect(losses[0].losses).toBe(38);
+    for (let team = 1; team < 20; team++) {
+      expect(won.sharedFixtures.filter(f => f.rival === team - 1).map(f => f.home).sort()).toEqual([false, true]);
+      expect(losses[team].wins - wins[team].wins).toBe(2);
+      expect(wins[team].losses - losses[team].losses).toBe(2);
+      expect(wins[team].draws).toBe(losses[team].draws);
+    }
+  });
+
+  it('ranks all twenty teams using one set of 380 games and replays the same table for a what-if', () => {
+    for (const value of [2, 20, 29, 47, 70]) {
+      const players = squad(value);
+      const report = simulateWorldXiSeason(players, shape, undefined, 'balanced', 'round-robin');
+      const table = report.leagueTable!;
+      expect(new Set(table.map(row => row.team)).size).toBe(20);
+      expect(table[report.tablePosition - 1]).toMatchObject({ team: 0, ...report.record });
+      expect(table.map(tablePoints)).toEqual(table.map(tablePoints).sort((a, b) => b - a));
+      const wins = table.reduce((sum, row) => sum + row.wins, 0);
+      const losses = table.reduce((sum, row) => sum + row.losses, 0);
+      const draws = table.reduce((sum, row) => sum + row.draws, 0) / 2;
+      expect(wins).toBe(losses);
+      expect(wins + draws).toBe(380);
+      let leadingPoints = 0;
+      table.forEach((row, i) => {
+        expect(row.wins + row.draws + row.losses).toBe(38);
+        const k = i + 1;
+        leadingPoints += tablePoints(row);
+        expect(leadingPoints).toBeLessThanOrEqual(3 * k * (39 - k));
+      });
+      expect(whatIfFinish(players, shape, { table: 'round-robin' })).toEqual({ points: report.points, tablePosition: report.tablePosition });
+      expect(simulateWorldXiSeason(players, shape).points).toBe(report.points);
+    }
   });
 });

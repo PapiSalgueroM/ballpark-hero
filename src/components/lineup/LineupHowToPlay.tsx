@@ -101,6 +101,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
             <ul className="space-y-1.5 text-muted-foreground">
               <li>• Submit your finished team. Mixed uses its existing <span className="text-primary font-semibold">AI rating</span>; Club year draft uses its selected records</li>
               <li>• Then a <span className="text-foreground font-semibold">season report</span>: squad rating, where you finish, points, trophies and a top scorer</li>
+              <li>• Open League table to see every club's record. Each team plays the other 19 home and away. For example, a 2-1 win gives your XI three points and the opponent zero.</li>
               <li>• Under it, a month by month tab and a player stats tab (goals and assists add up to the team's, and clean sheets are the ones each man played in), young player and goal of the season, and one line on what a different shape or a stronger pick in your weakest slot would have changed on the same rolls</li>
               <li>• Mixed judges every player at his peak. Club year draft uses the selected recorded year for its simulated season</li>
               <li>• Share your lineup and challenge friends to beat it</li>

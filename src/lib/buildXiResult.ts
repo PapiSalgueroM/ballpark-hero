@@ -10,6 +10,8 @@ const number = z.number().finite();
 const string = z.string();
 const fit = z.object({ roleFit: number, chemistry: number, balance: number });
 const season = z.object({
+  leagueTable: z.array(z.object({ team: number.int().min(0).max(19), wins: number.int().nonnegative(),
+    draws: number.int().nonnegative(), losses: number.int().nonnegative() })).length(20).optional(),
   squadRating: number, tablePosition: number, points: number, topScorer: z.object({ name: string, goals: number }).nullable(),
   trophies: z.array(string), injuries: z.array(z.object({ name: string, weeksOut: number })), transferHeadline: string, narrative: z.array(string),
   record: z.object({ wins: number, draws: number, losses: number }), unbeatenRun: number, gapToTop: number, marginAsChampion: number,
