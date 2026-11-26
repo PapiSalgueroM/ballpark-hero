@@ -1,3 +1,9 @@
+## 2026-11-26, Club Manager season settlement
+
+Club Manager accepts a finished season once from the current screen before recording the result. Repeating See Season Review before the screen changes used to post two scored completions for an older career. Normal review, the calendar sim and the last match report use the same settlement check. The dismissal report also checks that it still owns the career before posting.
+
+The Everton regression reproduced two 9-point completion calls on the previous hook and one on the candidate. The 320px plain save and 1440px packed save opened the normal review, reloaded it without another completion and rolled over with one history row. The browser used only local fixtures. This is a local candidate.
+
 ## 2026-11-25, Quieter ads and career season comparisons
 
 AdSense anchor and vignette ads are off for douknowball.com. Home shows one in-page banner after the first sport on phones and above the footer on desktop. The phone slot uses a 100-pixel-tall display unit. AdSense allows desktop side rails on either edge. The homepage marks the game area with Google’s overlap protection. AdSense confirmed the save and says propagation can take up to an hour.
