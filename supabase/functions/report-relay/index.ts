@@ -30,6 +30,11 @@ function corsFor(req: Request): Record<string, string> {
   };
 }
 
+// Keep provider response bodies and report details out of runtime logs.
+function logEmailFailure(reason: string, httpStatus?: number) {
+  console.warn(JSON.stringify({ event: "report_relay_email_failure", reason, http_status: httpStatus }));
+}
+
 Deno.serve(async (req: Request) => {
   const cors = corsFor(req);
   const json = (body: unknown, status = 200): Response =>
@@ -69,57 +74,61 @@ Deno.serve(async (req: Request) => {
       .select("id")
       .single();
 
-    // 2) Email to the owner, best effort. Never fail the request over email.
-    let emailed = false;
-    try {
-      const resp = await fetch(`https://formsubmit.co/ajax/${REPORT_EMAIL}`, {
-        method: "POST",
-        /* Round 316: FormSubmit refuses AJAX calls that carry no web Origin
-           ("open this page through a web server"), which server side fetches
-           do not send by default, so every mail this relay ever sent was
-           being refused. The site's own origin satisfies it, measured
-           2026-08-29: without it success:"false" with the web server
-           message, with it the request proceeds to the activation check. */
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Origin: "https://douknowball.com",
-          Referer: "https://douknowball.com/",
-        },
-        body: JSON.stringify({
-          _subject: `DoUKnowBall report: ${gameType}`,
-          game: gameType,
-          report: desc,
-          context: JSON.stringify(ctx).slice(0, 1500),
-        }),
-        signal: AbortSignal.timeout(6000),
-      });
-      /* Round 316: FormSubmit answers 200 even when the destination inbox has
-         not clicked its one-time activation yet, so resp.ok alone claimed
-         delivery that never happened. Its AJAX body carries success as the
-         string "true" when the mail actually went; anything else is not
-         delivered, and the caller's response says so honestly. */
-      const body = await resp.json().catch(() => null) as { success?: unknown } | null;
-      emailed = resp.ok && String(body?.success) === "true";
-    } catch (_e) {
-      /* best effort only */
-    }
+    if (dbError || !inserted?.id) return json({ ok: false, emailed: false });
 
-    /* Round 446: record whether it actually reached him, on the row itself.
-       Before this, `emailed` was computed and handed to the browser, which
-       threw it away, so "have any of my reports ever reached my inbox" was an
-       unanswerable question about every row in the table. It is answerable now,
-       and the admin screen prints it. This write is best effort too: a report
-       already safely stored must never be lost over its own bookkeeping. */
-    if (inserted?.id) {
+    // The stored report can be acknowledged while the provider is still working.
+    EdgeRuntime.waitUntil((async () => {
+      let emailed = false;
+      let providerStatus: number | undefined;
       try {
-        await supabase.from("question_reports").update({ emailed }).eq("id", inserted.id);
-      } catch (_e) {
-        /* the report is already stored; the flag is a nice to have */
+        const resp = await fetch("https://formsubmit.co/ajax/" + REPORT_EMAIL, {
+          method: "POST",
+          /* FormSubmit rejects server-side posts without a web Origin. */
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Origin: "https://douknowball.com",
+            Referer: "https://douknowball.com/",
+          },
+          body: JSON.stringify({
+            _subject: "DoUKnowBall report: " + gameType,
+            game: gameType,
+            report: desc,
+            context: JSON.stringify(ctx).slice(0, 1500),
+          }),
+          signal: AbortSignal.timeout(12_000),
+        });
+        providerStatus = resp.status;
+        if (!resp.ok) {
+          logEmailFailure("http_rejected", providerStatus);
+        } else {
+          // FormSubmit can decline a message even when it returns HTTP 200.
+          const body = await resp.json() as { success?: unknown } | null;
+          const success = String(body?.success);
+          emailed = success === "true";
+          if (!emailed) {
+            logEmailFailure(success === "false" ? "provider_declined" : "malformed_response", providerStatus);
+          }
+        }
+      } catch (error) {
+        const timedOut = error instanceof DOMException
+          && (error.name === "TimeoutError" || error.name === "AbortError");
+        const reason = timedOut ? "timeout" : error instanceof SyntaxError ? "malformed_response" : "network_error";
+        logEmailFailure(reason, providerStatus);
       }
-    }
 
-    return json({ ok: !dbError, emailed });
+      let writeStatus: number | undefined;
+      try {
+        const { error, status } = await supabase.from("question_reports").update({ emailed }).eq("id", inserted.id);
+        if (!error) return;
+        writeStatus = status || undefined;
+      } catch {
+        /* The report is already stored. */
+      }
+      console.warn(JSON.stringify({ event: "report_relay_email_status_write_failure", http_status: writeStatus }));
+    })());
+
+    return json({ ok: true, emailed: null });
   } catch (e) {
     return json({ ok: false, error: String(e) }, 500);
   }

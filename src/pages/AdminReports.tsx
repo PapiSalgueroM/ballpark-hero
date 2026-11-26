@@ -36,9 +36,7 @@ import {
 } from '@/lib/reportTriage';
 
 type Report = Tables<'question_reports'> & {
-  /* Round 446: did the relay get a confirmed email delivery for this one?
-     null on every row written before that round, which is honest: unknown,
-     not false. */
+  // Provider acceptance recorded by the relay. Older and fallback rows may have no result.
   emailed?: boolean | null;
   /* Round 713: the triage columns. Absent until the migration is applied,
      which is why every read goes through statusOf and priorityOf. */
@@ -68,6 +66,30 @@ const PRIORITY_STYLE: Record<ReportPriority, string> = {
   low: 'bg-muted text-muted-foreground',
 };
 
+const EMAIL_STATES = {
+  accepted: {
+    option: 'Accepted',
+    label: 'Email accepted',
+    detail: 'The email provider accepted this report. Inbox delivery remains unverified.',
+    className: 'bg-primary/10 text-primary',
+  },
+  unconfirmed: {
+    option: 'Unconfirmed',
+    label: 'Email unconfirmed',
+    detail: 'Provider acceptance was not recorded for this report.',
+    className: 'bg-destructive/10 text-destructive',
+  },
+  unknown: {
+    option: 'Unknown',
+    label: 'Email status unknown',
+    detail: 'No email result was recorded for this report.',
+    className: 'bg-muted text-muted-foreground',
+  },
+} as const;
+
+const emailStatusOf = (emailed: Report['emailed']) =>
+  emailed === true ? 'accepted' : emailed === false ? 'unconfirmed' : 'unknown';
+
 const AdminReports = () => {
   const [reports, setReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
@@ -76,6 +98,8 @@ const AdminReports = () => {
   const [game, setGame] = useState<string>(ALL_GAMES);
   const [search, setSearch] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('all');
+  const [reportType, setReportType] = useState('all');
+  const [emailStatusFilter, setEmailStatusFilter] = useState('all');
   const [drafts, setDrafts] = useState<Record<string, { note: string; fixRef: string }>>({});
   const [savingNotes, setSavingNotes] = useState(() => new Set<string>());
   const triageInFlight = useRef(new Set<string>());
@@ -245,13 +269,15 @@ const AdminReports = () => {
     const words = search.toLowerCase().split(/\s+/).filter(Boolean);
     return reports.filter((report) => {
       if (priorityFilter !== 'all' && (priorityOf(report) ?? 'unranked') !== priorityFilter) return false;
+      if (reportType !== 'all' && report.description.startsWith('Idea:') !== (reportType === 'ideas')) return false;
+      if (emailStatusFilter !== 'all' && emailStatusOf(report.emailed) !== emailStatusFilter) return false;
       if (words.length === 0) return true;
       const text = [
         report.description, report.game_type, report.id, report.admin_note, report.fix_ref, JSON.stringify(report.game_context),
       ].join(' ').toLowerCase();
       return words.every((word) => text.includes(word));
     });
-  }, [reports, search, priorityFilter]);
+  }, [reports, search, priorityFilter, reportType, emailStatusFilter]);
   const counts = statusCounts(matchingReports, game);
   const games = useMemo(() => gameCounts(reports), [reports]);
   const filtered = reportId
@@ -268,7 +294,8 @@ const AdminReports = () => {
   });
   const critical = matchingReports.filter((r) => matchesGame(r, game) && priorityOf(r) === 'critical' && !isClosed(statusOf(r))).length;
   const filterLabel = FILTERS.find((f) => f.key === filter)?.label ?? '';
-  const hasRefinement = Boolean(search.trim()) || priorityFilter !== 'all';
+  const hasRefinement = Boolean(search.trim()) || priorityFilter !== 'all'
+    || reportType !== 'all' || emailStatusFilter !== 'all';
 
   return (
     <>
@@ -347,23 +374,48 @@ const AdminReports = () => {
           </label>
         </div>
 
-        {/* Game filter, busiest open queue first */}
-        <label className="block mb-3 text-xs font-medium text-muted-foreground">
-          Game
-          <select
-            value={game}
-            onChange={(e) => setGame(e.target.value)}
-            className="mt-1 block w-full sm:w-80 min-h-[36px] rounded-lg border border-border bg-card px-3 text-sm text-foreground"
-            data-testid="game-filter"
-          >
-            <option value={ALL_GAMES}>All games ({reports.length})</option>
-            {games.map((g) => (
-              <option key={g.game} value={g.game}>
-                {g.game} ({g.open} open of {g.total})
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="mb-3 grid grid-cols-2 gap-3 sm:grid-cols-[minmax(0,1fr)_12rem_12rem]">
+          {/* Game filter, busiest open queue first */}
+          <label className="col-span-2 block min-w-0 text-xs font-medium text-muted-foreground sm:col-span-1">
+            Game
+            <select
+              value={game}
+              onChange={(e) => setGame(e.target.value)}
+              className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-card px-3 text-sm text-foreground"
+              data-testid="game-filter"
+            >
+              <option value={ALL_GAMES}>All games ({reports.length})</option>
+              {games.map((g) => (
+                <option key={g.game} value={g.game}>
+                  {g.game} ({g.open} open of {g.total})
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="block min-w-0 text-xs font-medium text-muted-foreground">
+            Report type
+            <select
+              value={reportType}
+              onChange={(e) => setReportType(e.target.value)}
+              className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-card px-3 text-sm text-foreground"
+            >
+              <option value="all">All report types</option>
+              <option value="ideas">Ideas</option>
+              <option value="other">Other reports</option>
+            </select>
+          </label>
+          <label className="block min-w-0 text-xs font-medium text-muted-foreground">
+            Email status
+            <select
+              value={emailStatusFilter}
+              onChange={(e) => setEmailStatusFilter(e.target.value)}
+              className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-card px-3 text-sm text-foreground"
+            >
+              <option value="all">Any status</option>
+              {Object.entries(EMAIL_STATES).map(([key, { option }]) => <option key={key} value={key}>{option}</option>)}
+            </select>
+          </label>
+        </div>
 
         {/* Status filter, with a count on every chip */}
         <div className="flex flex-wrap gap-2 mb-6" role="group" aria-label="Filter by status">
@@ -426,10 +478,15 @@ const AdminReports = () => {
                 <p>No reports match these filters.</p>
                 <button
                   type="button"
-                  onClick={() => { setSearch(''); setPriorityFilter('all'); }}
+                  onClick={() => {
+                    setSearch('');
+                    setPriorityFilter('all');
+                    setReportType('all');
+                    setEmailStatusFilter('all');
+                  }}
                   className="mt-2 min-h-11 rounded-lg bg-secondary px-3 text-sm text-foreground"
                 >
-                  Clear search and priority
+                  Clear search and refinements
                 </button>
               </>
             ) : <>No {filter === 'all' ? '' : `${filterLabel.toLowerCase()} `}reports{game ? ` for ${game}` : ''}.</>}
@@ -439,6 +496,7 @@ const AdminReports = () => {
             {filtered.map((report) => {
               const status = statusOf(report);
               const priority = priorityOf(report);
+              const email = EMAIL_STATES[emailStatusOf(report.emailed)];
               const closed = isClosed(status);
               const draft = draftOf(report);
               const noteSaving = savingNotes.has(report.id);
@@ -477,23 +535,8 @@ const AdminReports = () => {
                   <span className="text-xs text-muted-foreground">
                     {new Date(report.created_at).toLocaleDateString()} {new Date(report.created_at).toLocaleTimeString()}
                   </span>
-                  {/* Round 446: whether this one reached the inbox, which
-                      is the half of "where do these go" that nothing used
-                      to record. */}
-                  <span
-                    className={cn(
-                      "text-xs px-2 py-0.5 rounded",
-                      report.emailed === true && "bg-primary/10 text-primary",
-                      report.emailed === false && "bg-destructive/10 text-destructive",
-                      report.emailed === null && "bg-muted text-muted-foreground",
-                    )}
-                    title={
-                      report.emailed === true ? "The relay confirmed delivery to douknowball1@gmail.com"
-                        : report.emailed === false ? "The relay tried and the mail provider did not confirm delivery. The inbox may still need its one time activation."
-                        : "Filed before Round 446 started recording delivery, so this is genuinely unknown"
-                    }
-                  >
-                    {report.emailed === true ? "emailed" : report.emailed === false ? "not emailed" : "delivery unknown"}
+                  <span className={cn('text-xs px-2 py-0.5 rounded', email.className)} title={email.detail}>
+                    {email.label}
                   </span>
                   {!reportId && (
                     <Link to={{ pathname: '/admin/reports', hash: `#report=${report.id}` }} className="inline-flex min-h-9 items-center px-1 text-xs font-medium text-primary hover:underline">
