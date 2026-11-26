@@ -5,6 +5,10 @@ on:
     paths:
       - .github/workflows/game-desktop-rails.yml
       - scripts/playGameDesktopRails.mjs
+      - scripts/playGameAutoRails.mjs
+      - scripts/simAdsense.mjs
+      - src/lib/consentedScripts.ts
+      - src/lib/consentPreferences.ts
       - src/App.tsx
       - src/components/ads/GameDesktopRails*
       - src/components/StorageNotice.tsx
@@ -48,3 +52,10 @@ jobs:
           done
           curl -fs -o /dev/null http://127.0.0.1:4173/
           node scripts/playGameDesktopRails.mjs
+          node scripts/playGameAutoRails.mjs
+      - name: Verify privacy and manual ad guards
+        run: |
+          node scripts/simAdsense.mjs
+          ADSENSE_CONTROL=script-without-slot node scripts/simAdsense.mjs
+          ADSENSE_CONTROL=noindex-guard node scripts/simAdsense.mjs
+          npx vitest run src/test/consentPurposeGates.test.ts src/test/consentPrivacy1442.test.ts src/test/consentWithdrawal1442.test.ts --maxWorkers=1
