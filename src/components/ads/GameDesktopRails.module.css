@@ -1,0 +1,21 @@
+.game {
+  display: contents;
+}
+
+@media (min-width: 1280px) {
+  .game {
+    --game-ad-rail: 160px;
+    display: block;
+    margin-inline: var(--game-ad-rail);
+  }
+
+  /* Viewport-fixed controls do not inherit the content column's width. */
+  .game :is([data-career-utility], [data-game-rail-dock="end"]) {
+    right: calc(var(--game-ad-rail) + 1rem);
+  }
+
+  .game :is([data-career-action-bar="floating"], [data-game-rail-dock="full"]) {
+    left: var(--game-ad-rail);
+    right: var(--game-ad-rail);
+  }
+}
