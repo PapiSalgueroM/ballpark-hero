@@ -632,6 +632,12 @@ export function dedupeAndRank(
   return ranked.slice(0, options.limit).map(r => r.entity);
 }
 
+function missingFallbackRows(source: PlayerSourceConfig, remoteRows: (RawRow[] | null)[]): RawRow[] {
+  return source.fallbackRows?.filter(row => !remoteRows.some(rows => rows?.some(
+    remote => remote[source.nameColumn] === row[source.nameColumn],
+  ))) ?? [];
+}
+
 /**
  * Searches a configured player source with accent-insensitive, surname-aware
  * matching. Two queries run in parallel (see module docstring for why): a
@@ -686,8 +692,9 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
       });
       if (signal?.aborted) return { results: [], error: null };
       if (error) return { results: [], error: 'Could not load players' };
+      const fallback = missingFallbackRows(source, [data]);
       return {
-        results: dedupeAndRank([data], source, normalizedQuery, { exclude, boostNames: options.boostNames, limit: data.length }),
+        results: dedupeAndRank([data, fallback], source, normalizedQuery, { exclude, boostNames: options.boostNames, limit: data.length + fallback.length }),
         error: null,
       };
     }
@@ -747,9 +754,7 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
     }
 
     const remoteRows = [ilikeRes.data as RawRow[] | null, prominenceRes.data as RawRow[] | null];
-    const fallbackRows = source.fallbackRows?.filter(row => !remoteRows.some(rows => rows?.some(
-      remote => remote[source.nameColumn] === row[source.nameColumn],
-    )));
+    const fallbackRows = missingFallbackRows(source, remoteRows);
     const results = dedupeAndRank(
       [...remoteRows, fallbackRows],
       source,

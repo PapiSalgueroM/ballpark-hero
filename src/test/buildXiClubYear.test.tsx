@@ -380,6 +380,37 @@ describe('Build Your XI historical club picks', () => {
     await advance(230); await flush();
   }
 
+  it.each([
+    ['Benfica', 'Richard Ríos', 'SL Benfica', 27_000_000],
+    ['Manchester United', 'Casemiro', 'Manchester United', 8_640_000],
+  ] as const)('offers the same sourced %s midfielder when browsing a completed Mixed XI replacement', async (club, name, recordedClub, value) => {
+    const formation = '4-2-3-1';
+    const position = 5;
+    const assigned = clubs.filter(team => team !== club).slice(0, 10);
+    assigned.splice(position, 0, club);
+    const teamAssignments = assigned.map(name => ({ name, isNation: false }));
+    const slots = FORMATIONS[formation].map((slot, i) => {
+      const playerName = `Fixture starter ${i}`;
+      return [i, { ...slot, playerName, assignedTeam: assigned[i], isNation: false, pick: meta(assigned[i], 2026, slot.role, playerName) }];
+    });
+    io.market = 'empty';
+    localStorage.setItem(draftKey, JSON.stringify({ formation, draftChoice: { mode: 'mixed' }, teamAssignments, slots }));
+    const open = () => render(<MemoryRouter><LineupBuilder /></MemoryRouter>);
+    const first = open();
+    fireEvent.click(screen.getByRole('button', { name: `Replace Fixture starter ${position} at ${FORMATIONS[formation][position].label}` }));
+    await flush(); await browse();
+    expect(playerOptions()).toHaveLength(1);
+    fireEvent.click(option(name)); await flush();
+    const saved = localStorage.getItem(draftKey)!;
+    const finalSlots = JSON.parse(saved).slots;
+    expect(finalSlots).toHaveLength(11);
+    expect(finalSlots.find(([i]: [number]) => i === position)[1]).toMatchObject({ playerName: name, assignedTeam: club, pick: { rawName: name, club: recordedClub, value } });
+    first.unmount(); open();
+    expect(screen.getByRole('button', { name: `Replace ${name} at ${FORMATIONS[formation][position].label}` })).toBeVisible();
+    expect(localStorage.getItem(draftKey)).toBe(saved);
+    expect(io.fetches.some(url => url.includes('/functions/v1/'))).toBe(false);
+  });
+
   it('carries both sourced club picks through submission and the season rating', async () => {
     openSavedDraft({ mode: 'mixed' }, ['Benfica', 'Manchester United']);
     await searchClubPick('richard rios');

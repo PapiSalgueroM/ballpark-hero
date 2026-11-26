@@ -1,3 +1,7 @@
+### November 26, 2026. Verified career cards in the XI bench browser
+
+Mixed mode replacement browsing now merges verified fallback cards alongside club market rows. Richard Ríos for Benfica and Casemiro for Manchester United were already available in typed search. A signed-out phone and desktop each drafted all eleven, replaced Kobbie Mainoo with Casemiro at CDM after the United market query returned no rows, and restored the identical saved XI after reload. Mounted regressions covered both replacements. Sixty-nine focused tests passed, including the Bayern right-back and Chelsea career cases.
+
 ### November 26, 2026. UFC division run
 
 Players choose a weight class and identify three fighters with eight guesses shared across the run. The recap keeps each guess and its exact clue count. Signed-out Chrome at 320 pixels ended on a miss with two fighters found. At 390 and 1366 pixels the final correct name landed on guess eight. Each result and its clue history survived reload with the prior Daily save intact. A denied save and a stale tab preserved the original run. Escape followed by Enter spends zero guesses, and the next round keeps keyboard focus. Six UFC tests, the standard production build, 16 site simulations and the browser snapshot startup passed.
