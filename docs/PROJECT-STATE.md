@@ -1,3 +1,9 @@
+## 2026-11-25, Club Manager market names on phones
+
+Club Manager Buy results give player names room to wrap on phones, with Save and negotiation controls on a second line. Desktop keeps the compact single-row layout.
+
+The browser replay found zero clipped names among 50 results at each of 320, 390 and 1280 pixels, and confirmed the Save panel returns focus to the same player. Talk opens negotiations for that player. The older layout triggers the clipping check at both phone widths. The generated-player replay also passed at 390 and 1280, including the flag, Made Up badge and stable scrolling. [Browser regression](../scripts/playCmMarketNames.mjs)
+
 ## 2026-11-23, Alisson's verified Liverpool assists
 
 Both Alisson spellings use 0, 1, 0, 1, 1, 0 and 0 Liverpool assists across 2018-19 through 2024-25. Career Quiz, Career Ladder and the Quiz fallback display the same counts. The migration checks fourteen stints and updates seven assist cells. The rebake ledger catches all seven stale values. [Liverpool assist audit](audits/alisson-liverpool-assists.md)
