@@ -1,3 +1,7 @@
+## November 26 local Player Bingo board recall
+
+A finished board now reopens with the original 24 tiles, placements, strikes and score. Players can answer up to three questions about their own placements, pause and resume. On phone and laptop, a seeded local production board accepted Kevin De Bruyne for Chelsea, banked one 100-point completion with zero strikes and restored a 2/3 recall after two reloads. The player pool and completion endpoint in these playthroughs used local fixtures. Mounted coverage also preserved a zero-point loss and 1,700-point blackout.
+
 ## November 26 verified cup scorer playthroughs and Lexar builds
 
 All 39 Club Manager scorer integration tests now pass on the current fixture calendar, including 23 Champions League, seven domestic and nine Europa cases. The test scenarios reach wins, exits, transfers and appointments through the game engine, preserve exact player and club attribution after reload and reconcile goals to the recorded matches. Reclassifying a managed own goal failed the Madrid final and splitting the January transfer's scorer identity failed the Europa check. The 17 previously failing tests used seeded results from before calendar-based recovery. Two consecutive plain npm production builds succeeded in the Lexar worktree, including the rebuild into an existing dist. Eighteen selected site and game simulations and the browser snapshot startup passed on the standard output.
