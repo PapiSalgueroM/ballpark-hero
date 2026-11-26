@@ -1,3 +1,7 @@
+Release browser fonts and career save fixtures
+
+The release browser verifier now checks the self-hosted font manifest, then verifies the bytes Chrome actually used. Three screen sizes passed. An empty receipt was rejected. Updated test fixtures cover the shared games-played bonus receipt, unchanged Season Centre markup and the expanded rival ballot.
+
 ### November 26, 2026. Verified deployed edge receipts
 
 A read-only comparison of six deployed function bundles found all thirteen bundled files match the repository after line-ending normalization. Updated only the version, date and hashes in the deployment ledger from those live records. The edge sync check passed, and deliberate edits to the entrypoint and its supporting file each failed.
