@@ -1,3 +1,4 @@
+import { fundSecondYouthPlace } from '@/lib/clubManagerYouthTeam';
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { MutableRefObject, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
@@ -1211,7 +1212,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                   onRecall={g.callScoutHome}
                   onPromote={g.promote}
                   onRelease={g.release}
-                /><YouthTeamPanel career={c} onFound={g.openYouthTeam} onEnter={g.fundYouthTeam} onRotate={g.rotateYouth} /></ScreenLoading>
+                /><YouthTeamPanel career={c} onFound={g.openYouthTeam} onEnter={g.fundYouthTeam} onRotate={g.rotateYouth} onSecondPlace={(club, season, id) => g.commitClubAction(c => fundSecondYouthPlace(c, club, season, id))} /></ScreenLoading>
               )}
 
               {hubPanel === 'training' && (

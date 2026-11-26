@@ -1,10 +1,11 @@
+import { closeLedger, projectFinances, rolloverBooks } from '@/lib/clubManagerFinances';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import YouthTeamPanel from '@/components/club-manager/YouthTeamPanel';
 import { ensureAcademy, loadCareer, playNextEntry, saveCareer, SAVE_KEY, startCareer } from '@/lib/clubManager';
 import { keyedRng } from '@/lib/keyedRng';
 import { saveFence } from '@/lib/saveFence';
-import { enterYouthCampaign, foundYouthTeam, playYouthFixture, rotateYouthProspect, youthDevelopment } from '@/lib/clubManagerYouthTeam';
+import { enterYouthCampaign, foundYouthTeam, fundSecondYouthPlace, secondPlaceRecord, playYouthFixture, rotateYouthProspect, youthDevelopment } from '@/lib/clubManagerYouthTeam';
 
 beforeEach(() => {
   localStorage.clear(); saveFence.release(SAVE_KEY);
@@ -119,6 +120,70 @@ describe('Club Manager U21 side', () => {
     const next = enterYouthCampaign({ ...returned, season: returned.season + 1 }, second.id);
     expect(saveCareer(next)).toBe(true);
     expect(loadCareer()!.academy!.youthTeam!.history).toEqual([campaign]);
+  });
+
+  it('charges both U21 places to the parent books and trains only the prospects who appear', () => {
+    const initial = setup();
+    initial.budget = 100.07;
+    const featured = initial.academy!.prospects[0];
+    const second = { ...featured, id: 'second-focus', name: 'Second prospect', rating: 56, potential: 58 };
+    initial.academy!.prospects.push(second, { ...featured, id: 'capped', name: 'At ceiling', potential: featured.rating });
+    const startingSpend = closeLedger(initial).spend;
+    const first = enterYouthCampaign(foundYouthTeam(initial), featured.id);
+    expect(first.budget).toBe(55.07);
+    expect(first.books!.season.youthProgramme).toBe(45);
+    expect(initial.books?.season.youthProgramme).toBeUndefined();
+    for (const [club, season, id] of [[first.clubName, 1, featured.id], [first.clubName, 1, 'capped'], ['other', 1, second.id], [first.clubName, 2, second.id]] as const) {
+      expect(fundSecondYouthPlace(first, club, season, id)).toBeNull();
+    }
+    expect(fundSecondYouthPlace({ ...first, budget: 17.99 }, first.clubName, 1, second.id)).toBeNull();
+    let funded = fundSecondYouthPlace(first, first.clubName, 1, second.id)!;
+    expect(funded.budget).toBe(37.07);
+    expect(fundSecondYouthPlace(funded, first.clubName, 1, second.id)).toBeNull();
+    expect(projectFinances(funded).spend.find(l => l.id === 'youthProgramme')).toMatchObject({ actual: 63, projected: 63 });
+    expect(closeLedger(funded).spend).toBeCloseTo(startingSpend + 63);
+    let plain = loadCareer(JSON.stringify(first))!;
+    function next(c: typeof first) {
+      vi.mocked(Math.random).mockImplementation(keyedRng('u21-two-deep|' + c.week));
+      return playNextEntry(c, { skipHalftime: true, noCoach: true, untilWeek: c.week + 1 }).state;
+    }
+    while (funded.academy!.youthTeam!.campaign!.fixtures.length < 6) {
+      funded = next(funded); plain = next(plain);
+      const campaign = funded.academy!.youthTeam!.campaign!;
+      if (campaign.fixtures.length === 2) {
+        expect(rotateYouthProspect(funded, 1, 2, second.id)).toBe(funded);
+        expect(fundSecondYouthPlace(plain, first.clubName, 1, second.id)).toBeNull();
+        funded = loadCareer(JSON.stringify(funded))!;
+      }
+    }
+    const finished = funded.academy!.youthTeam!.campaign!;
+    expect(finished.fixtures.map(m => m.secondGain)).toEqual([0,1,0,1,0,0]);
+    expect(finished.fixtures.map(({ secondGain, ...m }) => m)).toEqual(plain.academy!.youthTeam!.campaign!.fixtures);
+    expect(secondPlaceRecord(finished)).toEqual({ apps: 6, gain: 2 });
+    expect(funded.academy!.prospects[1].rating).toBe(58);
+    expect(plain.academy!.prospects[1].rating).toBe(56);
+    const nextSeason = { ...funded, season: 2 };
+    rolloverBooks(nextSeason, funded, false);
+    const reentered = enterYouthCampaign(nextSeason, featured.id);
+    expect(reentered.budget).toBeCloseTo(nextSeason.budget - 12);
+    expect(reentered.books!.lastSeason!.youthProgramme).toBe(63);
+    expect(reentered.books!.season.youthProgramme).toBe(12);
+    expect(loadCareer(JSON.stringify(reentered))!.academy!.youthTeam!.history).toEqual([finished]);
+  }, 20000);
+
+  it('stops crediting a departed holder and keeps old payments unknown on reload', () => {
+    const c = setup(), p = c.academy!.prospects[0];
+    c.academy!.prospects.push({ ...p, id: 'other', name: 'Other academy player' });
+    let s = enterYouthCampaign(foundYouthTeam(c), p.id);
+    delete s.books!.season.youthProgramme;
+    s = loadCareer(JSON.stringify(s))!;
+    expect(projectFinances(s).spend.some(l => l.id === 'youthProgramme')).toBe(false);
+    s = fundSecondYouthPlace(s, c.clubName, c.season, 'other')!;
+    expect(s.books!.season.youthProgramme).toBe(18);
+    playYouthFixture(s, 0, 'First'); playYouthFixture(s, 0, 'First');
+    s.academy!.prospects = [p];
+    playYouthFixture(s, 1, 'Second');
+    expect(secondPlaceRecord(s.academy!.youthTeam!.campaign!)).toEqual({ apps: 1, gain: 0 });
   });
 
   it('does not give missing or capped players development after a rotation', () => {

@@ -116,6 +116,8 @@ export interface SeasonLedger {
   playerWages: number;
   staffWages: number;
   travel: number;
+  /** U21 fees actually paid since the club started recording them. */
+  youthProgramme?: number;
   /** Absent on old saves; null means the retail record is unavailable. */
   shirts?: ShirtSalesLedger | null;
 }
@@ -253,6 +255,22 @@ export function booksOf(state: CareerState): ClubBooks {
 function cloneBooks(state: CareerState): ClubBooks {
   const b = booksOf(state);
   return { ...b, season: { ...b.season }, pushed: { ...b.pushed }, walked: [...b.walked], lastSeason: b.lastSeason ? { ...b.lastSeason } : null };
+}
+
+function youthProgrammeSpend(season: SeasonLedger): number {
+  const paid = season.youthProgramme;
+  return typeof paid === 'number' && Number.isSafeInteger(paid) && paid > 0 ? paid : 0;
+}
+
+/** Record the charge on the same copy as the transfer budget. Free entry preserves the full balance. */
+export function payYouthProgramme(state: CareerState, fee: number): CareerState | null {
+  if (!Number.isSafeInteger(fee) || fee < 0 || !Number.isFinite(state.budget) || state.budget < fee) return null;
+  if (fee === 0) return state;
+  const books = cloneBooks(state);
+  const previous = books.season.youthProgramme ?? 0;
+  if (!Number.isSafeInteger(previous) || previous < 0) return null;
+  books.season.youthProgramme = previous + fee;
+  return { ...state, budget: round2(state.budget - fee), books };
 }
 
 /* ---------- money a head ---------- */
@@ -573,6 +591,8 @@ export function projectFinances(state: CareerState): FinanceProjection {
   ];
   const roomSpend = wageRoomSpend(state);
   const acquisition = seniorClubSpend(state);
+  const youth = youthProgrammeSpend(s);
+  if (youth) spend.push({ id: 'youthProgramme', label: 'U21 programme', actual: youth, projected: youth, kitty: true });
   if (acquisition) spend.push({ id: 'secondClub', label: 'Second club purchase', actual: acquisition, projected: acquisition, kitty: true });
   if (roomSpend > 0) spend.push({ id: 'wageRoom', label: 'Extra wage room', actual: roomSpend, projected: roomSpend, kitty: true });
   const sum = (lines: ProjectionLine[], k: 'actual' | 'projected') => round2(lines.reduce((n, l) => n + l[k], 0));
@@ -611,7 +631,8 @@ export function closeLedger(state: CareerState): ClosedLedger {
   const staffFees = round2(staffOf(state).seasonSpend);
   const retail = readShirtSales(s.shirts);
   const income = round2(s.tickets + s.concessions + s.sponsor + transferIn + (retail ? retail.paidPence / SHIRT_PENCE_PER_M : 0));
-  const spend = round2(s.playerWages + s.staffWages + s.travel + transferOut + facilities + staffFees + wageRoomSpend(state) + seniorClubSpend(state));
+  const spend = round2(s.playerWages + s.staffWages + s.travel + transferOut + facilities + staffFees + wageRoomSpend(state) + seniorClubSpend(state)
+    + youthProgrammeSpend(s));
   return { ...s, shirts: retail, transferIn, transferOut, facilities, staffFees, income, spend, result: round2(income - spend) };
 }
 

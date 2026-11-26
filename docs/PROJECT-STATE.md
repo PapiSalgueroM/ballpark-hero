@@ -1,3 +1,7 @@
+### November 26, 2026. Fund a second U21 prospect
+
+Managers can buy an extra development place for 18m per six-game U21 campaign. Founding and renewal costs now reach Finances and a free entry preserves the exact balance. In both phone and laptop playthroughs a funded prospect rose from 65 to 68 over six U21 appearances. Reload kept the growth, fixtures and payment. Across thirty simulated club-seasons, eight funded campaigns produced 48 extra appearances and 24 rating points. All three comparison arms kept the same 461 senior results. The clubs could still accumulate large balances. Thirteen focused tests passed.
+
 ### November 26, 2026. Verified career cards in the XI bench browser
 
 Mixed mode replacement browsing now merges verified fallback cards alongside club market rows. Richard Ríos for Benfica and Casemiro for Manchester United were already available in typed search. A signed-out phone and desktop each drafted all eleven, replaced Kobbie Mainoo with Casemiro at CDM after the United market query returned no rows, and restored the identical saved XI after reload. Mounted regressions covered both replacements. Sixty-nine focused tests passed, including the Bayern right-back and Chelsea career cases.

@@ -1,16 +1,18 @@
 import type { CareerState } from '@/lib/clubManager';
+import { payYouthProgramme } from '@/lib/clubManagerFinances';
 import { keyedRng } from '@/lib/keyedRng';
 
 export const YOUTH_TEAM_COST = 45;
 export const YOUTH_ENTRY_COST = 12;
+export const YOUTH_SECOND_PLACE_COST = 18;
 export const YOUTH_MATCHES = 6;
 export const YOUTH_FACILITY_LEVEL = 12;
 
-interface YouthFixture { season: number; round: number; opponent: string; gf: number; ga: number; gain: number }
+interface YouthFixture { season: number; round: number; opponent: string; gf: number; ga: number; gain: number; secondGain?: number }
 type RotationBreak = 2 | 4;
 interface Nominee { prospectId: string; name: string }
 interface Rotation extends Nominee { after: RotationBreak }
-interface YouthCampaign extends Nominee { season: number; fixtures: YouthFixture[]; rotations?: Rotation[] }
+interface YouthCampaign extends Nominee { season: number; fixtures: YouthFixture[]; rotations?: Rotation[]; secondPlace?: Nominee & { fee: number } }
 
 export function youthNomineeAt(campaign: YouthCampaign, fixtureIndex: number): Nominee {
   let nominee: Nominee = campaign;
@@ -38,6 +40,11 @@ export function youthDevelopment(campaign: YouthCampaign) {
 
 export interface YouthTeam { club: string; campaign?: YouthCampaign; history?: YouthCampaign[] }
 
+export function secondPlaceRecord(campaign: YouthCampaign) {
+  const matches = campaign.fixtures.filter(m => m.secondGain !== undefined);
+  return { apps: matches.length, gain: matches.reduce((sum, m) => sum + m.secondGain!, 0) };
+}
+
 export function youthCampaignRecord(campaign: YouthCampaign) {
   const record = { wins: 0, draws: 0, losses: 0, gf: 0, ga: 0, gain: 0 };
   for (const match of campaign.fixtures) {
@@ -46,7 +53,7 @@ export function youthCampaignRecord(campaign: YouthCampaign) {
     else record.losses++;
     record.gf += match.gf;
     record.ga += match.ga;
-    record.gain += match.gain;
+    record.gain += match.gain + (match.secondGain ?? 0);
   }
   return record;
 }
@@ -54,12 +61,15 @@ export function youthCampaignRecord(campaign: YouthCampaign) {
 function isYouthCampaign(c: YouthCampaign | undefined): c is YouthCampaign {
   return !!c && Number.isInteger(c.season) && typeof c.prospectId === 'string' && typeof c.name === 'string' &&
     Array.isArray(c.fixtures) && c.fixtures.length <= YOUTH_MATCHES &&
+    (c.secondPlace === undefined || (c.secondPlace && typeof c.secondPlace.prospectId === 'string' && c.secondPlace.prospectId !== c.prospectId &&
+      typeof c.secondPlace.name === 'string' && Number.isSafeInteger(c.secondPlace.fee) && c.secondPlace.fee > 0)) &&
     (c.rotations === undefined || (Array.isArray(c.rotations) && c.rotations.length <= 2 &&
       c.rotations.every((r, index, all) => r && (r.after === 2 || r.after === 4) && r.after <= c.fixtures.length &&
         (!index || all[index - 1].after < r.after) && typeof r.prospectId === 'string' && typeof r.name === 'string'))) &&
     c.fixtures.every(m => m &&
       Number.isInteger(m.season) && Number.isInteger(m.round) && typeof m.opponent === 'string' &&
-      [m.gf, m.ga].every(g => Number.isInteger(g) && g >= 0 && g <= 4) && (m.gain === 0 || m.gain === 1));
+      [m.gf, m.ga].every(g => Number.isInteger(g) && g >= 0 && g <= 4) && (m.gain === 0 || m.gain === 1) &&
+      (m.secondGain === undefined || (!!c.secondPlace && (m.secondGain === 0 || m.secondGain === 1))));
 }
 
 export function restoreYouthTeam(career: CareerState): void {
@@ -76,7 +86,9 @@ export function restoreYouthTeam(career: CareerState): void {
 export function foundYouthTeam(career: CareerState): CareerState {
   const academy = career.academy;
   if (!academy || academy.youthTeam || academy.facilities < YOUTH_FACILITY_LEVEL || career.budget < YOUTH_TEAM_COST) return career;
-  return { ...career, budget: Math.round((career.budget - YOUTH_TEAM_COST) * 10) / 10,
+  const paid = payYouthProgramme(career, YOUTH_TEAM_COST);
+  if (!paid) return career;
+  return { ...paid,
     academy: { ...academy, youthTeam: { club: career.clubName } } };
 }
 
@@ -88,10 +100,23 @@ export function enterYouthCampaign(career: CareerState, prospectId: string): Car
   const last = team.campaign;
   if (last && (last.season >= career.season || last.fixtures.length < YOUTH_MATCHES)) return career;
   const cost = last ? YOUTH_ENTRY_COST : 0;
-  if (career.budget < cost) return career;
-  return { ...career, budget: Math.round((career.budget - cost) * 10) / 10, academy: { ...academy,
+  const paid = payYouthProgramme(career, cost);
+  if (!paid) return career;
+  return { ...paid, academy: { ...academy,
     youthTeam: { ...team, ...(last && { history: [...(team.history ?? []), last] }),
       campaign: { season: career.season, prospectId, name: prospect.name, fixtures: [] } } } };
+}
+
+export function fundSecondYouthPlace(c: CareerState, club: string, season: number, id: string): CareerState | null {
+  const academy = c.academy, team = academy?.youthTeam, campaign = team?.campaign;
+  if (!academy || !team || !campaign || c.clubName !== club || team.club !== club || c.season !== season ||
+    campaign.season !== season || campaign.fixtures.length || campaign.secondPlace || campaign.prospectId === id) return null;
+  const player = academy.prospects.find(p => p.id === id && p.age < 21 && p.rating < p.potential);
+  if (!player) return null;
+  const paid = payYouthProgramme(c, YOUTH_SECOND_PLACE_COST);
+  if (!paid) return null;
+  return { ...paid, academy: { ...academy, youthTeam: { ...team, campaign: { ...campaign,
+    secondPlace: { prospectId: player.id, name: player.name, fee: YOUTH_SECOND_PLACE_COST } } } } };
 }
 
 export function rotateYouthProspect(career: CareerState, season: number, after: RotationBreak, id: string): CareerState {
@@ -99,7 +124,7 @@ export function rotateYouthProspect(career: CareerState, season: number, after: 
   const team = academy?.youthTeam;
   const campaign = team?.campaign;
   if (!campaign || team.club !== career.clubName || campaign.season !== season || youthRotationBreak(campaign) !== after ||
-      youthNomineeAt(campaign, after).prospectId === id) return career;
+      youthNomineeAt(campaign, after).prospectId === id || campaign.secondPlace?.prospectId === id) return career;
   const next = academy.prospects.find(p => p.id === id && p.age < 21);
   if (!next) return career;
   const rotation = { after, prospectId: next.id, name: next.name };
@@ -125,5 +150,12 @@ export function playYouthFixture(career: CareerState, round: number, opponent: s
   }
   const gain = prospect && campaign.fixtures.length % 2 === 1 && prospect.rating < prospect.potential ? 1 : 0;
   if (prospect) prospect.rating += gain;
-  campaign.fixtures.push({ season: career.season, round, opponent, gf, ga, gain });
+  const match: YouthFixture = { season: career.season, round, opponent, gf, ga, gain };
+  const place = campaign.secondPlace;
+  const second = place && academy.prospects.find(p => p.id === place.prospectId && p.name === place.name && p.age < 21);
+  if (second && second.id !== nominee.prospectId) {
+    match.secondGain = secondPlaceRecord(campaign).apps % 2 === 1 && second.rating < second.potential ? 1 : 0;
+    second.rating += match.secondGain;
+  }
+  campaign.fixtures.push(match);
 }
