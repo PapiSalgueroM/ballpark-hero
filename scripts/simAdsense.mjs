@@ -416,21 +416,23 @@ console.log('6b) same-page consent reaches an already mounted ad');
   console.log('   either choice notifies the current page, and an ad exists only after Accept');
 }
 
-/* ── 6c: the AdSense script exists only beside a deliberate ad slot ───── */
+/* ── 6c: the manual loader still needs a deliberate ad slot ─────────── */
 console.log('6c) no global Auto Ads eligibility on non-content routes');
 {
   const bannerCode = codeOnly(banner);
   const sharedCode = codeOnly(consented + preferences);
-  const noindexGuard = sharedCode.indexOf('meta[name="robots"][content*="noindex"]');
-  const slotGuard = sharedCode.indexOf('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]');
-  const existingScript = sharedCode.indexOf('script[src*="adsbygoogle.js"]');
+  const manualLoader = sharedCode.slice(sharedCode.indexOf('export function loadAdSense('), sharedCode.indexOf('export function loadGameSideRailAds('));
+  const noindexGuard = manualLoader.indexOf('meta[name="robots"][content*="noindex"]');
+  const slotGuard = manualLoader.indexOf('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]');
+  const consentGuard = manualLoader.indexOf('if (!getEffectiveConsent().advertising) return false;');
+  const start = manualLoader.indexOf('return startAdSense()');
   if (!/if\s*\(\s*!document\.querySelector\(\s*['"]\[data-dukb-manual-ad\] ins\.adsbygoogle\[data-ad-slot\]['"]\s*\)\s*\)\s*return false/.test(sharedCode)) {
     fail('loadAdSense does not refuse pages with no explicit manual ad slot');
   }
   if (!/querySelector\(\s*['"]meta\[name=[\\'"]robots[\\'"]\]\[content\*=[\\'"]noindex[\\'"]\]['"]\s*\)\s*\)\s*return false/.test(sharedCode)) {
     fail('loadAdSense does not refuse a deliberate slot when the page is noindexed');
   }
-  if (noindexGuard < 0 || slotGuard < 0 || existingScript < 0 || !(noindexGuard < slotGuard && slotGuard < existingScript)) {
+  if (consentGuard < 0 || noindexGuard < 0 || slotGuard < 0 || start < 0 || !(consentGuard < noindexGuard && noindexGuard < slotGuard && slotGuard < start)) {
     fail('loadAdSense does not fail closed before reusing an existing script');
   }
   if (!/data-dukb-manual-ad/.test(bannerCode)) {
