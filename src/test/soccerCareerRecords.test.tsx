@@ -62,6 +62,7 @@ describe('Soccer Career record book', () => {
     fireEvent.click(screen.getByRole('button', { name: /Most goals/ }));
     expect(screen.getByText('2026/27 · Test City')).toBeInTheDocument();
     expect(screen.queryByText(/OVR/)).not.toBeInTheDocument();
+    expect(document.querySelector('[data-season-ambition-result]')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: /Back/ }));
     expect(screen.getByRole('button', { name: 'Club history' })).toBeInTheDocument();
   });
@@ -71,6 +72,30 @@ describe('Soccer Career record book', () => {
     fireEvent.click(screen.getByRole('button', { name: /loan from Parent United/ }));
     expect(screen.getByText('On loan from Parent United')).toBeInTheDocument();
     expect(screen.getByText('Rating 7.2 · OVR 81')).toBeInTheDocument();
+  });
+  it.each([
+    { outcome: 'achieved' as const, actual: 13, rewardStat: 'shooting' as const },
+    { outcome: 'missed' as const, actual: 11 },
+    { outcome: 'interrupted' as const, actual: 2 },
+  ])('reopens the $outcome target in its own season after reload', receipt => {
+    const saved = JSON.stringify(career([
+      row({ goals: receipt.actual, ambition: { label: 'Score 13 club goals', target: 13, ...receipt } }),
+      row({ year: 2027, goals: 0 }),
+    ]));
+    const book = render(<CareerRecordsSheet career={JSON.parse(saved)} onClose={() => {}} />);
+    fireEvent.click(screen.getByRole('button', { name: /Most goals/ }));
+    const resultText = `Score 13 club goals. Finished on ${receipt.actual}.`;
+    expect(screen.getByText(resultText)).toBeVisible();
+    expect(!!screen.queryByText(/Earned \+1 Shooting/)).toBe(receipt.outcome === 'achieved');
+    expect(book.container.querySelector(`[data-season-ambition-result="${receipt.outcome}"]`)).toBeInTheDocument();
+    book.unmount();
+    const restored = JSON.parse(saved);
+    const reopened = render(<CareerRecordsSheet career={restored} onClose={() => {}} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Club history' }));
+    fireEvent.click(screen.getByRole('button', { name: /Test City/ }));
+    expect(within(reopened.container.querySelector<HTMLElement>('[data-record-season="2026"]')!).getByText(resultText)).toBeVisible();
+    expect(reopened.container.querySelector('[data-record-season="2027"] [data-season-ambition-result]')).toBeNull();
+    expect(JSON.stringify(restored)).toBe(saved);
   });
   it('shows a zero league count and compares it with the last recorded senior season', () => {
     render(<CareerRecordsSheet career={career([

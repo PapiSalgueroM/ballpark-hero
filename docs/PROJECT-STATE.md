@@ -1,3 +1,7 @@
+## November 26 local Soccer Career season target archive
+
+A completed season now shows its saved personal target, actual result and recorded training reward in the Record Book. Missing targets stay blank. In two fresh signed-out production-browser careers Nottingham Forest's striker played 30 times, scored six against a five-goal target and retained the exact same save bytes and +1 Shooting after reopening club history on phone and laptop. A Millwall striker who scored twice missed the same target and received no reward. All 20 Record Book tests passed, including an interrupted season and an older season.
+
 ## November 26 local Build Your XI league approach
 
 Players can pick a balanced, attacking or protective approach before submitting their eleven. The choice survives draft reload, changes the simulated league and stays with the completed result. Home and away points are retained when recorded. Two signed-out local production-browser drafts finished with all eleven identities, 102 and 104 points, and one intercepted completion each after reload. No paid evaluator was called.

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { careerCompetitionRecords, careerRecordAppearances, careerRecordBook } from '@/lib/soccerCareerRecords';
 import { formatNumber } from '@/lib/formatNumber';
+import { SeasonAmbitionResult } from './SeasonAmbitionTile';
 
 const yearLabel = (year: number) => `${year}/${String((year + 1) % 100).padStart(2, '0')}`;
 const countStat = (count: number, stat: string) => `${formatNumber(count)} ${stat}${count === 1 ? '' : 's'}`;
@@ -17,6 +18,7 @@ function SeasonLine({ season, split }: { season: SeasonRecord; split: ReturnType
     <p className="text-xs mt-1">{split ? `${split.league} league apps · ${split.otherClub} other club apps` : 'League split not recorded'}</p>
     {prior && <p className="text-xs text-muted-foreground">{change} {yearLabel(prior.year)} · {prior.club}</p>}
     <p className="text-xs text-muted-foreground">Rating {season.apps > 0 ? season.rating.toFixed(1) : 'not recorded'}{season.ovr !== undefined ? ` · OVR ${season.ovr}` : ''}</p>
+    <SeasonAmbitionResult season={season} archived />
   </li>;
 }
 
