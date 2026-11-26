@@ -967,15 +967,15 @@ export function TransferScreen({
               const negBusy = !!(neg && neg.status === 'open');
               const cold = (career.coldNames ?? []).includes(m.name);
               return (
-                <div key={m.name} className="flex items-center gap-2 py-1.5 border-b border-border/30 last:border-0">
+                <div key={m.name} className="grid grid-cols-[2.75rem_minmax(0,1fr)_auto] items-center gap-2 py-1.5 border-b border-border/30 last:border-0 sm:flex">
                   <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{m.position}</span>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
+                    <div className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5 sm:flex-nowrap">
                       {/* Round 194: his real nationality's flag, from this
                           world's own map. Round 1520: a made up man shows his
                           own, and the MADE UP tag beside his name says so. */}
                       {(() => { const nat = shownNation(career.eraId, m); return nat ? <FlagImg name={nat} size={14} /> : null; })()}
-                      <span className="text-xs text-foreground truncate">{m.name}</span>
+                      <span className="min-w-0 break-words text-xs text-foreground sm:truncate">{m.name}</span>
                       {/* Round 132: you are about to spend real money on him, so
                           you get told whether he is a real person. */}
                       {m.generated && <MadeUpTag />}
@@ -988,10 +988,10 @@ export function TransferScreen({
                     </div>
                   </div>
                   {/* Release BS fix: Save sits at row level, a 44 px target whose negative margin
-                      fits the row's own padding, so a row is no taller than before it came */}
-                  {onCommitRecruitment && <button className="shrink-0 min-h-11 min-w-11 -my-1.5 rounded-lg border border-border px-2 text-xs font-bold" aria-label={`Save ${m.name}`} onClick={e => { shortlistOpener.current = e.currentTarget; marketPlace.current = { top: marketList.current?.scrollTop ?? 0, name: m.name }; setShortlist({ career, player: m }); }}>Save</button>}
-                  <span className={cn('text-sm font-bold font-display', ratingTint(m.rating))}>{m.rating}</span>
-                  <div className="shrink-0 flex flex-col gap-1 items-stretch">
+                      fits the row padding on wider screens */}
+                  {onCommitRecruitment && <button className="col-start-1 row-start-2 justify-self-start shrink-0 min-h-11 min-w-11 rounded-lg border border-border px-2 text-xs font-bold sm:-my-1.5" aria-label={`Save ${m.name}`} onClick={e => { shortlistOpener.current = e.currentTarget; marketPlace.current = { top: marketList.current?.scrollTop ?? 0, name: m.name }; setShortlist({ career, player: m }); }}>Save</button>}
+                  <span className={cn('col-start-3 row-start-1 justify-self-end text-sm font-bold font-display', ratingTint(m.rating))}>{m.rating}</span>
+                  <div className="col-span-2 col-start-2 row-start-2 justify-self-end shrink-0 flex flex-col gap-1 items-stretch">
                     <button
                       onClick={() => onNegotiate(m)}
                       disabled={negBusy || cold}
