@@ -11,10 +11,19 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const OUT = path.join(ROOT, 'free-kick-lab-artifacts/native');
 const CACHE = path.resolve(process.env.FREE_KICK_FONT_CACHE || path.join(ROOT, 'free-kick-lab-artifacts/font-cache'));
 const sheetURL = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(match => new URL(match[1]).href);
-assert.equal(sheetURL.length, 1, 'Read the actual template font stylesheet');
+assert(sheetURL.length <= 1, 'Expected at most one external font stylesheet');
+const shipped = sheetURL.length === 0 ? await import('../lib/captureShippedFonts.mjs') : null;
 if (process.argv.includes('--prefetch-fonts-only')) {
-  assert(process.env.CI, 'Font dependency downloads are remote CI only');
   fs.mkdirSync(CACHE, { recursive: true });
+  if (shipped) {
+    assert.match(fs.readFileSync(path.join(ROOT, 'src/index.css'), 'utf8'), /@import\s+['"]\.\/assets\/fonts\/fonts\.css['"]/);
+    const sources = shipped.shippedFontSources();
+    fs.writeFileSync(path.join(CACHE, 'shipped-fonts.json'), JSON.stringify(sources));
+    fs.writeFileSync(path.join(CACHE, 'manifest.json'), '[]');
+    console.log(`Verified ${sources.length} shipped font files. The app loads them from the same origin.`);
+    process.exit(0);
+  }
+  assert(process.env.CI, 'Font dependency downloads are remote CI only');
   const manifest = [];
   const download = async url => {
     assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(new URL(url).origin));
@@ -40,7 +49,12 @@ const fontCache = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.
   assert.equal(createHash('sha256').update(body).digest('hex'), entry.sha256);
   return [entry.url, { body, contentType: entry.contentType }];
 }));
-assert(fontCache.has(sheetURL[0]), 'Prepare current template fonts before guarded native run');
+if (shipped) {
+  assert.equal(fontCache.size, 0);
+  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(CACHE, 'shipped-fonts.json'), 'utf8')), shipped.shippedFontSources());
+} else {
+  assert(fontCache.has(sheetURL[0]), 'Prepare current template fonts before guarded native run');
+}
 const { chromium } = await import('../lib/playwrightLoader.mjs');
 const DATE = '2026-10-06', DAILY = `free-kick-daily-${DATE}`;
 const dailyBytes = JSON.stringify({ score: 173, goals: 4, v: 1, date: DATE });
@@ -134,6 +148,7 @@ try {
     });
     await context.routeWebSocket('**/*', socket => socket.close());
     const page = await context.newPage(); page.setDefaultTimeout(12000);
+    const verifyLocalFonts = shipped?.captureShippedFonts(page, BASE);
     await page.addInitScript(({ keys, date }) => {
       const OriginalDate = Date, now = new OriginalDate(date + 'T16:00:00Z').getTime();
       window.Date = class extends OriginalDate { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } };
@@ -194,6 +209,7 @@ try {
         } await document.fonts.ready; return result;
       });
       assert(row.fonts.length === 8 && row.fonts.every(face => face.loaded), 'Eight actual font faces loaded');
+      if (verifyLocalFonts) row.fontResponses = await verifyLocalFonts();
       const before = await protectedState(page);
       await activate(entry); const dialog = page.getByRole('dialog', { name: 'Shot lab rules', exact: true }); await dialogReady(dialog);
       assert(/example/i.test(await dialog.innerText()), 'Worked example appears before play');

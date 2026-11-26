@@ -50,7 +50,8 @@ describe('US career alternate performance bonus', () => {
       const [result] = usProgrammeResults(chosen.next);
       const actual = (chosen.line as unknown as Record<string, unknown>)[key];
       const earned = typeof actual === 'number' && actual >= floor && chosen.line.games >= games;
-      expect(result.decisions).toEqual([{ section: 'bonus', label: option?.label, target: floor, actual, unit, outcome: earned ? 'completed' : 'missed' }]);
+      expect(result.decisions).toEqual([{ section: 'bonus', label: option?.label, target: floor, actual, unit,
+        games: { played: chosen.line.games, minimum: games }, outcome: earned ? 'completed' : 'missed' }]);
       expect(result.bonusGross).toBe(earned ? 0.2 : 0);
       expect(chosen.next.earnings - usual.next.earnings).toBeCloseTo(result.bonusGross, 6);
       expect(chosen.next.programme).toBeUndefined();
@@ -83,15 +84,16 @@ describe('US career alternate performance bonus', () => {
       const menu = usProgrammeMenus(career, sport.slug).find(menu => menu.id === 'bonus');
       expect(menu?.options.find(o => o.id === 'alternate')?.effect).toContain(target + ' ' + unit);
       const saved = saveUsCareerProgramme(career, sport.slug, { ...usProgrammeDefaults(), bonus: 'alternate' });
-      for (const [actual, outcome] of [[below, 'missed'], [target, 'completed']] as const) {
+      const minimum = sport.slug === 'nba' ? 39 : 7;
+      for (const [actual, played, outcome] of [[below, minimum, 'missed'], [target, minimum - 1, 'missed'], [target, minimum, 'completed']] as const) {
         const reloaded: ProgrammeCareer = JSON.parse(JSON.stringify(saved));
         expect(currentUsCareerProgramme(reloaded, sport.slug)?.bonus).toBe('alternate');
-        const line = { ...recordedLine, year: career.year, team: career.team, games: sport.slug === 'nba' ? 55 : 10, salary: 10, [key]: actual };
+        const line = { ...recordedLine, year: career.year, team: career.team, games: played, salary: 10, [key]: actual };
         const preparation = prepareUsCareerProgramme(reloaded, sport.slug);
         reloaded.seasons.push(line);
         reloaded.year++;
         const result = settleUsCareerProgramme(reloaded, line, sport.slug, preparation);
-        expect(result?.decisions).toEqual([{ section: 'bonus', label: 'Chase a different stat', target, actual, unit, outcome }]);
+        expect(result?.decisions).toEqual([{ section: 'bonus', label: 'Chase a different stat', target, actual, unit, games: { played, minimum }, outcome }]);
         expect(result?.bonusGross).toBe(outcome === 'completed' ? 0.2 : 0);
         expect(settleUsCareerProgramme(reloaded, line, sport.slug, preparation)).toBeNull();
       }

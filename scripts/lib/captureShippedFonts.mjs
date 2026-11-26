@@ -10,6 +10,13 @@ const sources = [...stylesheet.matchAll(/url\(\.\/([a-z-]+)\.woff2\)/g)].map(([,
   name, sha256: sha256(readFileSync(new URL(`${name}.woff2`, directory))),
 }));
 
+export function shippedFontSources() {
+  for (const prefix of ['inter-', 'space-grotesk-']) {
+    assert(sources.some(source => source.name.startsWith(prefix)), `Missing shipped font family ${prefix}`);
+  }
+  return sources;
+}
+
 export function captureShippedFonts(page, origin) {
   const pending = [];
   page.on('response', response => {

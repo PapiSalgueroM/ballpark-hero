@@ -4,11 +4,15 @@ on:
   push:
     branches: [codex/verify-games-1090]
 
+concurrency:
+  group: verify-games-1090
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
 env:
-  RELEASE: 6ac84551f4f226b9053a61714fa3b9ed35aae816
+  RELEASE: edeb65ba0134e66765f6528fabff15c3f34e1fcf
   SIM_NETWORK: offline
   ENGINES: chromium
   TZ: UTC
@@ -20,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 6ac84551f4f226b9053a61714fa3b9ed35aae816
+          ref: edeb65ba0134e66765f6528fabff15c3f34e1fcf
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -58,7 +62,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: 6ac84551f4f226b9053a61714fa3b9ed35aae816
+          ref: edeb65ba0134e66765f6528fabff15c3f34e1fcf
           fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@v4

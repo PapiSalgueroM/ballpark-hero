@@ -2,19 +2,19 @@
   "_comment": "Round 485. The sha256 of each function's repo index.ts at the moment it was last deployed, line endings normalised. See scripts/simEdgeSync.mjs for why this exists: evaluate-lineup sat for months with a repo file that looked correct and a deployed file that did not. When you deploy a function, update its entry here in the same commit.",
   "synced": {
     "validate-player": {
-      "sha256": "dd0e02e9c9218f12455fe4efc685cb5a6b01fb6e119140e6717e2d9f37aa249d",
-      "version": 13,
-      "date": "2026-10-11"
+      "sha256": "b895827a0b15cc3cfb637bdefcd214554c973412d2d6e5502013366ae4e63fb3",
+      "version": 14,
+      "date": "2026-11-23"
     },
     "evaluate-lineup": {
-      "sha256": "f1dbebaa834bd88955888559cf76302aea16eb370f98d2c01c6775888fc4cbef",
-      "version": 5,
-      "date": "2026-09-06"
+      "sha256": "d933b02b33ba9331a06f76523a00a940b7121ef309ddd2bdb9c246ccd55b3dd1",
+      "version": 6,
+      "date": "2026-11-23"
     },
     "nba-chain-validate": {
-      "sha256": "ea05cc652d9e361e69f636feab23c96c594a20bc78955501615a69a65b7af6d5",
-      "version": 8,
-      "date": "2026-09-07"
+      "sha256": "82255207c5277518e78a6da3323c099fe2e4921795a5a32324d21d77742de68b",
+      "version": 9,
+      "date": "2026-11-13"
     },
     "tennis-chain-validate": {
       "sha256": "22fe873a5de546dd1db6a21261a62e47cdd039fe9de3cdc2d00d06228fb4090c",
@@ -27,9 +27,9 @@
       "date": "2026-09-07"
     },
     "soccer-grid-validate": {
-      "sha256": "cf122ea239b6c9e0102a403ec747cfed219ee8ad3413ecc41fc0cee64c8fc856",
-      "version": 26,
-      "date": "2026-10-31"
+      "sha256": "d776c419a859ee24d6cb2c5dcb958c0c34915f823d8f411a519c085bf0adb9d9",
+      "version": 27,
+      "date": "2026-11-23"
     },
     "college-grid-validate": {
       "sha256": "8dd6414f253d0c57af5b94e4ef9c55d38862bf1c600cb2e0ad1f00563156f7fc",
@@ -37,9 +37,9 @@
       "date": "2026-10-01"
     },
     "football-connect4-validate": {
-      "sha256": "de7ba71d255e2f3fa19acda2d420032e14667822d21971a16b579ed57578a53e",
-      "version": 14,
-      "date": "2026-10-01"
+      "sha256": "27b1a0cb1b8a0b2574e130ee2f5bdbc129154a9b0cc2e632534d4b6f8043225b",
+      "version": 15,
+      "date": "2026-11-23"
     },
     "scores-poll": {
       "sha256": "6ba6255c87b79861542a9521c45b19629ef4483d159d49485e9d12e4956283eb",
@@ -72,12 +72,12 @@
       "date": "2026-10-01"
     },
     "account-privacy": {
-      "sha256": "faa812c64d70a63a293af4745b4a86484a83677a3d0d0d8898cce439934e494f",
+      "sha256": "3c4b07f0c1b954c40cd91e698b7d66dbec8bd7c3415dda0c8ffac211a07bc919",
       "supportingFiles": {
-        "handler.ts": "c2a56aaa8da81ee46f3706fa530afaf9dd8e8baf14a4e7136675bde9bcc03662"
+        "handler.ts": "c9dfc86eaeb6f9b065feb0a8a85bb93deed4bf4dca4f5cf57b27577f9e745b76"
       },
-      "version": 1,
-      "date": "2026-10-21"
+      "version": 2,
+      "date": "2026-11-23"
     },
     "simulate-season": {
       "sha256": "c14abf75d2a33ae5530e896b82bbb44c75f6bb8f1b52a35e7735851ed87eb5d4",
