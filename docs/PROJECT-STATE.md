@@ -1,3 +1,11 @@
+## 2026-11-26, Soccer Career rival awards
+
+The rival's Ballon d'Or count now goes up only if that rival finishes first on the same ranked ballot the player sees. The comparison panel shows the new count once the list is revealed. Older saves keep their existing totals because they do not retain a ballot for every season. An older save paused on the rivalry card now shows the motivation it grants without claiming who won or where the player finished.
+
+The regression reproduced a season where the player finished first and the rival's lifetime count still rose from two to three. The replay now keeps it at two. The focused tests also cover a rival winning when the player finishes second or eleventh, another candidate winning, and the restored rivalry card applying its existing effect once. The production build and 32 focused tests passed. Local Chromium at 390px and 1440px followed the ranked ceremony into the rivalry card, reloaded there, and confirmed the same result and effect in the saved career.
+
+The full app typecheck, rivalry simulation and all 15 built-site checks passed. The separate historical awards-night replay stops at a stale source anchor in the Round 1334 inverse, which also fails on the base commit.
+
 ## 2026-11-25, Quieter ads and career season comparisons
 
 AdSense anchor and vignette ads are off for douknowball.com. Home shows one in-page banner after the first sport on phones and above the footer on desktop. The phone slot uses a 100-pixel-tall display unit. AdSense allows desktop side rails on either edge. The homepage marks the game area with Google’s overlap protection. AdSense confirmed the save and says propagation can take up to an hour.

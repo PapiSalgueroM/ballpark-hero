@@ -427,6 +427,7 @@ export interface BallonDorNominee extends AwardsCandidate {
   trophies: string[];
   generatedId?: number;
   generatedAge?: number;
+  isCareerRival?: true;
 }
 
 /** playerRank: 1-10 if nominated, 11-30 in the wider world ranking, else null. */
@@ -2909,6 +2910,13 @@ export function repairCareer<T extends CareerState>(state: T): T {
      it is in localStorage, and every reload restores the same blank screen.
      This is the only place that runs on load, so it is where they come back. */
   if (s.phase === "season_summary" && !s.pendingSummary) s.phase = "playing";
+  if (s.pendingRivalryEvent?.id === RIVAL_AWARD_MOTIVATION.id && s.rival) {
+    s.pendingRivalryEvent = {
+      ...s.pendingRivalryEvent,
+      title: RIVAL_AWARD_MOTIVATION.title,
+      description: RIVAL_AWARD_MOTIVATION.description(s, s.rival),
+    };
+  }
   reconcileRetirement(s);
   // No rehab card can render without the saved choice. Use the same fallback as dismissing it.
   if (s.phase === "rehab_choice" && s.pendingRehab == null) s.phase = applyRehabChoice(s, 1).phase;
@@ -6330,7 +6338,11 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   // Ballon d'Or calculation. Round 834: what the night writes on the save (the
   // staged ceremony, the place on the season, the cabinet, the winner's and the
   // podium's consequences) is the shared settle, bound by SOCCER_BALLON_DOR.
-  settleAwardsNight(SOCCER_BALLON_DOR, s, season, calculateBallonDor(s, season, thisYear, world));
+  const ballot = calculateBallonDor(s, season, thisYear, world);
+  settleAwardsNight(SOCCER_BALLON_DOR, s, season, ballot);
+  if (s.rival && ballot.nominees[0]?.isCareerRival) {
+    s.rival = { ...s.rival, ballonDors: s.rival.ballonDors + 1 };
+  }
 
   // International debut event
   if (s.intStats.debutYear === thisYear) {
@@ -7970,7 +7982,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     const rivalPts = calcBdorPoints(rivalGoals, rivalAssists, state.rival.overall, state.rival.clubTier, rivalTrophies, state.rival.club, eraTopClubs);
     allNomineeData.push({
       name: state.rival.name, nationality: state.rival.nationality, position: state.rival.position,
-      club: state.rival.club, points: rivalPts, goals: rivalGoals, trophies: rivalTrophies, isPlayer: false,
+      club: state.rival.club, points: rivalPts, goals: rivalGoals, trophies: rivalTrophies, isPlayer: false, isCareerRival: true,
     });
   }
 
@@ -8649,7 +8661,8 @@ function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[], year?: numbe
   if (clubTier <= 2 && Math.random() < 0.2 / clubTier) r.leagueTitles += 1;
   if (clubTier === 1 && r.overall >= 78 && Math.random() < 0.06) r.championsLeagues += 1;
   if (r.overall >= 80 && Math.random() < 0.04) r.worldCups += 1;
-  if (r.overall >= 88 && Math.random() < 0.08) r.ballonDors += 1;
+  // Consume the retired award roll to keep the season's random stream in order.
+  if (r.overall >= 88) Math.random();
   
   // International
   if (r.overall >= 72 && r.age <= 33) {
@@ -8666,21 +8679,19 @@ function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[], year?: numbe
   return r;
 }
 
-/* Round 521: the eighteen beats, lifted onto careerRivalryEvents.ts's
-   descriptor shape. Every `when`, every description and every mutation
-   below is the exact one the un-lifted switch statement had; only the
-   plumbing moved. */
-export const SOCCER_RIVALRY_EVENTS: RivalryEventDef<CareerState, RivalPlayer>[] = [
-  {
-    id: 101, emoji: "🏅", title: "Rival Wins Ballon d'Or",
-    description: (_s, r) => `${r.name} won the Ballon d'Or. You finished 3rd.`,
-    consequence: "Motivation boost: stats +1 next season",
-    when: (_s, r) => r.ballonDors > 0,
-    apply: s => {
-      s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1, dribbling: (s.statBoostNextSeason.dribbling || 0) + 1 };
-      s.morale = clamp(s.morale - 5, 0, 100);
-    },
+const RIVAL_AWARD_MOTIVATION: RivalryEventDef<CareerState, RivalPlayer> = {
+  id: 101, emoji: "🏅", title: "Rivalry Motivation",
+  description: (_s, r) => `Your rivalry with ${r.name} pushes you to work harder next season.`,
+  consequence: "Motivation boost: stats +1 next season",
+  when: (_s, r) => r.ballonDors > 0,
+  apply: s => {
+    s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1, dribbling: (s.statBoostNextSeason.dribbling || 0) + 1 };
+    s.morale = clamp(s.morale - 5, 0, 100);
   },
+};
+
+export const SOCCER_RIVALRY_EVENTS: RivalryEventDef<CareerState, RivalPlayer>[] = [
+  RIVAL_AWARD_MOTIVATION,
   {
     id: 102, emoji: "🏠", title: "Transfer Battle",
     description: (_s, r) => `You and ${r.name} both want to sign for the same club. The club chose your rival.`,

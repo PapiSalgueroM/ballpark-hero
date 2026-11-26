@@ -18,7 +18,7 @@
  *      rollRivalryEvent, forcedRetirementEvent and applyRivalryEvent, and
  *      the trigger's own rule (the coin flip, the no-repeat filter, the
  *      forced beat on retirement) lives nowhere else, comments stripped.
- *   2. Soccer unchanged. A hand written golden reimplementation of the
+ *   2. Soccer event mechanics. A hand written reference implementation of the
  *      exact pre-Round-521 getRivalryEvents and applyRivalryEvent bodies
  *      (all eighteen beats), run against the real careerRivalryEvents.ts
  *      functions bound through SOCCER_RIVALRY_EVENTS, across hundreds of
@@ -553,17 +553,17 @@ if (process.env.RIVALRY_PROVE || CONTROL === 'movedrift') {
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   2. Soccer unchanged: golden reimplementation vs the real lifted functions
+   2. Soccer event contract: reference implementation vs the lifted functions
    ═══════════════════════════════════════════════════════════════════════════ */
 
-console.log('2) Soccer unchanged: same facts in, same pool and same mutation out');
+console.log('2) Soccer event contract: same facts in, same pool and same mutation out');
 
-/** The exact pre-Round-521 getRivalryEvents body. */
+/** The pre-Round-521 event contract, with the current award motivation copy. */
 function goldenPool(state) {
   if (!state.rival) return [];
   const r = state.rival;
   const events = [];
-  if (r.ballonDors > 0) events.push({ id: 101, emoji: '🏅', title: "Rival Wins Ballon d'Or", description: `${r.name} won the Ballon d'Or. You finished 3rd.`, consequence: 'Motivation boost: stats +1 next season' });
+  if (r.ballonDors > 0) events.push({ id: 101, emoji: '🏅', title: 'Rivalry Motivation', description: `Your rivalry with ${r.name} pushes you to work harder next season.`, consequence: 'Motivation boost: stats +1 next season' });
   events.push({ id: 102, emoji: '🏠', title: 'Transfer Battle', description: `You and ${r.name} both want to sign for the same club. The club chose your rival.`, consequence: 'Morale -5' });
   events.push({ id: 103, emoji: '🤝', title: 'Rival Shows Respect', description: `${r.name} publicly says he respects you as the best player in the world.`, consequence: 'Popularity +5, Morale +5' });
   events.push({ id: 104, emoji: '⚽', title: 'Head to Head Victory!', description: `In a head-to-head match you scored twice against ${r.name}'s team.`, consequence: 'Popularity +5, Confidence boost' });

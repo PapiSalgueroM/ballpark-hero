@@ -76,6 +76,7 @@ import type { CareerState } from '@/lib/soccerCareerEngine';
 import { availableSpeeches, givenSpeechOf, type GivenSpeech } from '@/lib/careerAwardsNight';
 import { acknowledgeChanceWheel } from '@/lib/careerChanceWheel';
 import { localizeMoney } from '@/lib/soccerCurrency';
+import { decodeSoccerCareerSave } from '@/lib/soccerCareerSave';
 import SoccerCareer from '@/pages/SoccerCareer';
 
 const SAVE_KEY = 'soccerCareerSave';
@@ -261,6 +262,32 @@ describe('Soccer Career: the Ballon d\'Or ceremony card', () => {
     fireEvent.click(view.getByRole('button', { name: action }));
     expect(readSave()!.phase).not.toBe('ballon_dor');
     expect(readSave()).toMatchObject({ age: 18, seasons: start.seasons, awards: start.awards, pendingBallonDor: null });
+  });
+
+  it('resumes an older rivalry card without contradicting the finished ceremony', async () => {
+    const ceremonySave = saveWhere(1, s => s.pendingBallonDor?.playerRank === 1 && !!s.rival, null, 'no win with a rival');
+    const winner = ceremonySave.seasons[ceremonySave.seasons.length - 1];
+    const start: CareerState = {
+      ...ceremonySave, phase: 'rivalry_event', pendingBallonDor: null, morale: 60, statBoostNextSeason: {},
+      pendingRivalryEvent: {
+        id: 101, emoji: '🏅', title: "Rival Wins Ballon d'Or",
+        description: `${ceremonySave.rival!.name} won the Ballon d'Or. You finished 3rd.`,
+        consequence: 'Motivation boost: stats +1 next season',
+      },
+    };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(start));
+    const view = mount(<SoccerCareer />);
+    await tick(60);
+    expect(view.getByRole('heading', { name: 'Rivalry Motivation' })).toBeVisible();
+    expect(view.queryByText(/You finished 3rd/)).toBeNull();
+    fireEvent.click(view.getByRole('button', { name: 'Continue →' }));
+    expect(readSave()?.phase).not.toBe('rivalry_event');
+    expect(readSave()?.pendingRivalryEvent).toBeNull();
+    expect(readSave()?.statBoostNextSeason).toMatchObject({ shooting: 1, dribbling: 1 });
+    expect(readSave()?.morale).toBe(55);
+    const decoded = decodeSoccerCareerSave(localStorage.getItem(SAVE_KEY)!).value as CareerState;
+    expect(decoded.seasons.find(s => s.year === winner.year)?.ballonDorRank).toBe(1);
+    expect(readSave()?.rival?.ballonDors).toBe(start.rival?.ballonDors);
   });
 
   it('a win offers the speech once, then shows what it did, and Continue leaves', async () => {
