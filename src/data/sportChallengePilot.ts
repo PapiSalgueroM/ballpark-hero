@@ -1,4 +1,5 @@
-export type PilotSport = 'soccer' | 'nba';
+export const pilotSports = ['soccer', 'nba', 'nfl'] as const;
+export type PilotSport = typeof pilotSports[number];
 
 // The two names are the actual finalists, including the losing finalist.
 // The points are editorial difficulty. Freeze this bank for version 1.
@@ -32,15 +33,31 @@ export const finals: Record<PilotSport, readonly Final[]> = {
     [2004, 20, 'Detroit Pistons', 'Los Angeles Lakers'],
     [2009, 20, 'Los Angeles Lakers', 'Orlando Magic'],
   ],
+  nfl: [
+    [2014, 10, 'Seattle Seahawks', 'Denver Broncos'],
+    [2018, 10, 'Philadelphia Eagles', 'New England Patriots'],
+    [2021, 10, 'Tampa Bay Buccaneers', 'Kansas City Chiefs'],
+    [2022, 10, 'Los Angeles Rams', 'Cincinnati Bengals'],
+    [2008, 15, 'New York Giants', 'New England Patriots'],
+    [2009, 15, 'Pittsburgh Steelers', 'Arizona Cardinals'],
+    [2010, 15, 'New Orleans Saints', 'Indianapolis Colts'],
+    [2011, 15, 'Green Bay Packers', 'Pittsburgh Steelers'],
+    [1986, 20, 'Chicago Bears', 'New England Patriots'],
+    [1993, 20, 'Dallas Cowboys', 'Buffalo Bills'],
+    [1998, 20, 'Denver Broncos', 'Green Bay Packers'],
+    [2001, 20, 'Baltimore Ravens', 'New York Giants'],
+  ],
 };
 
 export const factCheckDate = '2026-11-26';
 export const independentSource: Record<PilotSport, string> = {
   soccer: 'https://www.rsssf.org/tablesw/worldcup.html',
   nba: 'https://www.ultimatenba.com/en/history/finals/',
+  nfl: 'https://static.www.nfl.com/league/apps/league-site/media-guides/2024/2024-Record-and-Fact-Book.pdf',
 };
 
 export function finalsSource(sport: PilotSport, year: number) {
+  if (sport === 'nfl') return 'https://www.foxsports.com/nfl-super-bowl-winners-and-results';
   if (sport === 'nba') return 'https://www.nba.com/news/history-nba-champions';
   const article = year <= 1978
     ? 'world-cup-champions-1930-1978-uruguay-italy-germany-brazil-england-argentina'
@@ -59,4 +76,10 @@ export const teamAliases: Record<string, string[]> = {
   'Denver Nuggets': ['DEN'], 'Miami Heat': ['MIA'], 'Phoenix Suns': ['PHX'],
   'Toronto Raptors': ['TOR'], 'Houston Rockets': ['HOU'], 'Orlando Magic': ['ORL'],
   'Indiana Pacers': ['IND'], 'Detroit Pistons': ['DET'],
+  'Seattle Seahawks': ['SEA'], 'Denver Broncos': ['DEN'], 'Philadelphia Eagles': ['PHI'],
+  'New England Patriots': ['NE', 'Pats'], 'Tampa Bay Buccaneers': ['TB', 'Bucs'],
+  'Kansas City Chiefs': ['KC'], 'Los Angeles Rams': ['LAR', 'LA Rams'], 'Cincinnati Bengals': ['CIN'],
+  'New York Giants': ['NYG', 'NY Giants'], 'Pittsburgh Steelers': ['PIT'], 'Arizona Cardinals': ['ARI'],
+  'New Orleans Saints': ['NO'], 'Indianapolis Colts': ['IND'], 'Green Bay Packers': ['GB'],
+  'Chicago Bears': ['CHI'], 'Dallas Cowboys': ['DAL'], 'Buffalo Bills': ['BUF'], 'Baltimore Ravens': ['BAL'],
 };

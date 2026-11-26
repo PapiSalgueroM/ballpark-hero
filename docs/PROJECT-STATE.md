@@ -1,3 +1,7 @@
+## 2026-11-26, NFL Finals Sprint preview
+
+The existing Finals Sprint now offers an NFL Daily and practice board with twelve Super Bowls. The year is when the game was played. The answer key was checked against the 2024 NFL Record and Fact Book and FOX Sports' Super Bowl results table. Six native phone and laptop runs, covering soccer, NBA and NFL, earned 100 after a defer, reopened the same recap after reload, then timed out and replayed practice. Each sport's 366-day rotation passed the two-clues-per-difficulty and distinct-answer checks. Sources: https://static.www.nfl.com/league/apps/league-site/media-guides/2024/2024-Record-and-Fact-Book.pdf and https://www.foxsports.com/nfl-super-bowl-winners-and-results
+
 ## 2026-11-26, Soccer Career cup campaigns in the record book
 
 After a senior season, Career Stats opens the record book even during headlines and transfers. Competitions now opens individual editions with the club or country, result, and any recorded player totals or continental top-scorer award. Domestic cups show the recorded round or club win without assigning team goals to the player. Fresh phone and laptop careers went from West Ham Youth to 22 senior appearances and an early 2022/23 FA Cup exit. Both opened the same record before advancing the headlines and after reload, with identical save bytes.

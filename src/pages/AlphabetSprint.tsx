@@ -430,7 +430,7 @@ const ClassicSprint = () => {
         {(phase === 'idle' || phase === 'error') && (
           <Link to="/alphabet-sprint?preview=finals" data-no-prerender=""
             className="mt-4 flex min-h-11 items-center justify-center rounded-xl border border-border px-3 py-2 text-sm font-semibold text-foreground hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
-            Try the Soccer and NBA Finals Sprint preview
+            Try the Finals Sprint preview
           </Link>
         )}
 

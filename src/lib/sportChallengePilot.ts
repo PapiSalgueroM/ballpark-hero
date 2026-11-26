@@ -26,11 +26,18 @@ export interface PilotRun {
 }
 type PilotAction = {type: 'answer'; text: string} | {type: 'tick'} | {type: 'defer'};
 
+function promptFor(sport: PilotSport, year: number) {
+  switch (sport) {
+    case 'soccer': return `Name either country in the ${year} men's World Cup final.`;
+    case 'nba': return `Name either team in the ${year} NBA Finals.`;
+    case 'nfl': return `Name either team in the Super Bowl played in ${year}.`;
+  }
+}
+
 function questions(sport: PilotSport): PilotPrompt[] {
   return finals[sport].map(([year, points, first, second]) => ({
     id: String(year), points, finalists: [first, second], sourceUrl: finalsSource(sport, year),
-    text: sport === 'nba' ? `Name either team in the ${year} NBA Finals.`
-      : `Name either country in the ${year} men's World Cup final.`,
+    text: promptFor(sport, year),
   }));
 }
 
@@ -89,10 +96,11 @@ function fold(text: string) {
 
 function accepts(team: string, input: string, sport: PilotSport) {
   const names = [team, ...(teamAliases[team] ?? [])];
-  if (sport === 'nba') {
+  if (sport !== 'soccer') {
     const words = team.split(' ');
     names.push(words[words.length - 1]);
-    if (team !== 'Los Angeles Lakers') names.push(words.slice(0, -1).join(' '));
+    const city = words.slice(0, -1).join(' ');
+    if (city !== 'Los Angeles' && city !== 'New York') names.push(city);
   }
   return names.some(name => fold(name) === input);
 }

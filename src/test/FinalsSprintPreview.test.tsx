@@ -71,7 +71,7 @@ describe('Alphabet Sprint Finals preview', () => {
 
     expect(await screen.findByRole('heading', { name: /^alphabet sprint$/i })).toBeVisible();
     expect(await screen.findByRole('button', { name: 'Try again' })).toBeVisible();
-    fireEvent.click(screen.getByRole('link', { name: 'Try the Soccer and NBA Finals Sprint preview' }));
+    fireEvent.click(screen.getByRole('link', { name: 'Try the Finals Sprint preview' }));
 
     expect(await screen.findByRole('heading', { name: 'Finals Sprint preview' })).toBeVisible();
     expect(external.pool).toHaveBeenCalledTimes(1);

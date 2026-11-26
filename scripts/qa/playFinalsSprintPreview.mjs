@@ -11,7 +11,7 @@ const data = buildSync({entryPoints: ['src/data/sportChallengePilot.ts'], write:
 const { finals } = await import('data:text/javascript;base64,' + Buffer.from(data.outputFiles[0].text).toString('base64'));
 const browser = await chromium.launch({args: ['--no-proxy-server', '--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1']});
 try {
-  for (const [width, sport] of [[320, 'soccer'], [390, 'nba'], [1366, 'soccer'], [1366, 'nba']]) {
+  for (const [width, sport] of [[320, 'soccer'], [390, 'nba'], [390, 'nfl'], [1366, 'soccer'], [1366, 'nba'], [1366, 'nfl']]) {
     const context = await browser.newContext({viewport: {width, height: 844}, reducedMotion: 'reduce', serviceWorkers: 'block'});
     await context.addInitScript(() => localStorage.setItem('cookie-consent-v2', JSON.stringify({
       version: 2, advertising: false, analytics: false, updatedAt: Date.now(),
@@ -29,10 +29,10 @@ try {
     const page = await context.newPage();
     await page.clock.install({time: new Date('2026-11-26T16:00:00Z')});
     await page.goto(base.origin + '/alphabet-sprint');
-    await page.getByRole('link', {name: /try the soccer and nba finals sprint preview/i}).click();
+    await page.getByRole('link', {name: /try the finals sprint preview/i}).click();
     await page.getByRole('button', {name: 'How to play Finals Sprint'}).click();
     await page.keyboard.press('Escape');
-    if (sport === 'nba') await page.getByRole('button', {name: 'NBA', exact: true}).click();
+    if (sport !== 'soccer') await page.getByRole('button', {name: sport.toUpperCase(), exact: true}).click();
     await page.getByRole('button', {name: 'Start daily preview'}).click();
     const current = page.getByRole('region', {name: 'Current round'});
     const clue = current.getByRole('heading');

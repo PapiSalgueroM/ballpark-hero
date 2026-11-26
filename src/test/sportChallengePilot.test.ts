@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { factCheckDate, finals, independentSource } from '@/data/sportChallengePilot';
+import { factCheckDate, finals, independentSource, pilotSports, type PilotSport } from '@/data/sportChallengePilot';
 import { createPilotRun, currentPilotPrompt, pilotRecap, pilotScore, pilotStorageKey, readPilotRun, updatePilotRun, type PilotRun } from '@/lib/sportChallengePilot';
 
 const start = Date.parse('2026-11-26T16:00:00Z');
@@ -19,7 +19,7 @@ function finish(run: PilotRun) {
   return run;
 }
 
-describe.each(['soccer', 'nba'] as const)('%s Finals preview', sport => {
+describe.each(pilotSports)('%s Finals preview', sport => {
   it('rotates six solvable questions with two of each difficulty, whatever previous finalists were chosen', () => {
     const seen = new Set<string>();
     const coverage = new Set<string>();
@@ -91,13 +91,24 @@ describe.each(['soccer', 'nba'] as const)('%s Finals preview', sport => {
 });
 
 it('accepts accents and common nicknames and rejects a repeat even when the team reached both finals', () => {
-  const locate = (sport: 'soccer' | 'nba', id: string) => {
+  const locate = (sport: PilotSport, id: string) => {
     for (let n = 0; n < 500; n++) {
       const run = createPilotRun(sport, 'practice', start + n);
       if (run.order[0] === id) return run;
     }
     throw Error('Missing opening prompt ' + id);
   };
+  const bucs = locate('nfl', '2021');
+  expect(currentPilotPrompt(bucs)!.text).toContain('played in 2021');
+  expect(play(bucs, 'Bucs').answers[0].answerId).toBe('Tampa Bay Buccaneers');
+  expect(play(bucs, 'Rams')).toBe(bucs);
+  const rams = locate('nfl', '2022');
+  expect(play(rams, 'Los Angeles')).toBe(rams);
+  expect(play(rams, 'LA Rams').answers[0].answerId).toBe('Los Angeles Rams');
+  const giants = locate('nfl', '2008');
+  expect(play(giants, 'NY')).toBe(giants);
+  expect(play(giants, 'New York')).toBe(giants);
+  expect(play(giants, 'NYG').answers[0].answerId).toBe('New York Giants');
   const spain = locate('soccer', '2010');
   expect(play(spain, ' ESpaÑa ').answers[0].answerId).toBe('Spain');
   const cavs = locate('nba', '2016');
