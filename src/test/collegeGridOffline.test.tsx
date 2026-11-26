@@ -245,7 +245,8 @@ describe('College Grid missed cells', () => {
     expect(game.result.current.correctCount).toBe(1);
     vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
     const misses = losingMoves(board)!.filter(move => move.cell !== 0).slice(0, 13);
-    for (const move of [...misses, misses[0]]) {
+    const playedMisses = [...misses, misses[0]];
+    for (const move of playedMisses) {
       act(() => game.result.current.setActiveCell(move.cell));
       await act(async () => { await game.result.current.submitGuess(move.name); });
     }
@@ -254,6 +255,7 @@ describe('College Grid missed cells', () => {
     const rows = game.result.current.missedExamples;
     expect(rows.map(row => row.index)).toEqual([1, 2, 3, 4, 5, 6, 7, 8]);
     for (const row of rows) {
+      expect(row.missedPicks).toEqual([...new Set(playedMisses.filter(move => move.cell === row.index).map(move => move.name))]);
       expect(row.names).not.toContain(answer);
       expect(row.names.length).toBeGreaterThan(0);
       expect(row.names.length).toBeLessThanOrEqual(3);
@@ -268,6 +270,16 @@ describe('College Grid missed cells', () => {
     vi.useRealTimers();
     const reopened = renderHook(() => useCollegeGrid());
     await waitFor(() => expect(reopened.result.current.missedExamples).toEqual(expected));
+    reopened.unmount();
+
+    const key = Object.keys(localStorage).find(key => key.startsWith('college-grid-daily-'))!;
+    const legacy = JSON.parse(localStorage.getItem(key)!);
+    expect(legacy.guesses.filter((g: { t: string }) => g.t === 'x')).toHaveLength(14);
+    legacy.guesses = legacy.guesses.map((g: { t: string; board: string }) => g.t === 'x' ? { t: g.t, board: g.board } : g);
+    localStorage.setItem(key, JSON.stringify(legacy));
+    const oldSave = renderHook(() => useCollegeGrid());
+    await waitFor(() => expect(oldSave.result.current.missedExamples).toEqual(expected.map(row => ({ ...row, missedPicks: [] }))));
+    expect(oldSave.result.current.guessesLeft).toBe(0);
   });
 });
 

@@ -45,7 +45,7 @@ import { COLLEGE_KEY_URLS } from '@/lib/collegeGridKey';
 
 type GridAction =
   | { t: 'ok'; cellIndex: number; playerName: string; rarity: number; board: string }
-  | { t: 'x'; board: string };
+  | { t: 'x'; board: string; cellIndex?: number; playerName?: string };
 
 const GUESS_LIMIT = 15;
 
@@ -213,9 +213,13 @@ export function useCollegeGrid() {
         names.push(player.name);
         if (names.length === 3) break;
       }
-      return { index, school: rowAttr.label, criterion: colAttr.label, names };
+      const missedPicks = new Set<string>();
+      for (const action of dailyActions) {
+        if (action.t === 'x' && action.cellIndex === index && action.playerName) missedPicks.add(action.playerName);
+      }
+      return { index, school: rowAttr.label, criterion: colAttr.label, names, missedPicks: [...missedPicks] };
     });
-  }, [correctActions, correctCount, getRowCol, gridData, guessesLeft, isLoading, rawDailyStatus]);
+  }, [correctActions, correctCount, dailyActions, getRowCol, gridData, guessesLeft, isLoading, rawDailyStatus]);
 
   const fetchRarity = useCallback(
     async (puzzleId: string, cellIndex: number, playerName: string): Promise<number> => {
@@ -329,7 +333,7 @@ export function useCollegeGrid() {
         } else {
           setWrongFlash({ cellIndex: capturedCell, playerName: player.name });
           setTimeout(() => setWrongFlash(null), 1500);
-          addDailyGuess({ t: 'x', board });
+          addDailyGuess({ t: 'x', board, cellIndex: capturedCell, playerName: player.name });
         }
       } catch {
         /* The verdict is already in hand; only the rarity write can fail,
@@ -340,7 +344,7 @@ export function useCollegeGrid() {
         setActiveCell(null);
       }
     },
-    [activeCell, gameStatus, validating, gridData, staleLog, cells, puzzle, getRowCol, fetchRarity, addDailyGuess, loadKey],
+    [activeCell, gameStatus, validating, gridData, staleLog, cells, puzzle, getRowCol, fetchRarity, addDailyGuess, loadKey, setActiveCell],
   );
 
   useGameCompletion('college-grid', rawDailyStatus !== 'playing', correctCount * 100);

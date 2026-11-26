@@ -1,3 +1,7 @@
+## 2026-11-26, College Grid missed picks
+
+At the end of a lost daily, College Grid now shows the names you tried on each open cell beside examples that fit its two clues. Repeat misses appear once in that cell. A save made before the update still shows the available examples. All 75 boards finished under both winning and losing play, and a fresh 15-guess board restored the original review and identical save bytes on phone and laptop.
+
 ## 2026-11-26, Cup Golden Boot on the full-time report
 
 Domestic and European full-time reports now show the club's scorer and whether the Golden Boot is still open, outright, shared or unconfirmed. In the local fresh-season replay, Everton's quarter-final exit kept the race open, and the final award was saved after the other sides played on. After Manchester City's 2-0 win in the Champions League final, the report named Erling Haaland as the simulated winner with ten goals. Both careers resumed their original season reviews after reload.
