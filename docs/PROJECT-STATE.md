@@ -1,3 +1,9 @@
+## 2026-11-26, Soccer Conquest call results
+
+The Soccer Conquest round recap shows the club you picked, the winner and the call points earned. A Daily reload rebuilds the same receipt from the saved calls and match results. The next fixture opens with a fresh choice.
+
+The previous build recorded a correct first call at 320 pixels but omitted the persistent receipt. Four offline browser cases played the actual first Daily fixture with correct and missed calls at 320 and 1440 pixels. Each kept the same pick, winner and +25 or +0 call points across reload and opened the next match from Continue. The Daily simulation restored all 13 Soccer rounds and found no score gain on reload. This is a local candidate.
+
 ## 2026-11-26, Stadium Tycoon matchday ticket history
 
 The ticket office shows the last three recorded offers alongside the seats filled at full time. League results keep the offer and capacity that applied to each fixture, including past seasons. Existing score and crowd history still loads when these two details were never recorded. Focused tests cover the switch from Premium to Community, seats opening after a fixture, sponsor results, the season boundary, and reload. An offline browser started a blank club, selected Premium, bought its first $30 stand, and switched to Community. The phone and desktop replays kept both crowds after reload, 67 of 120 seats and 90 of 160. This is a local review branch.

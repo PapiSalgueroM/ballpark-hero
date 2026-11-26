@@ -425,6 +425,7 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
   }
 
   const myStates = favorite ? statesOf(owners, favorite).length : 0;
+  const callReceipt = sport.key === 'soccer' ? run.lastCall : null;
   const toLive = () => setScrubIndex(null);
 
   return (
@@ -566,6 +567,17 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
         {phase === 'recap' && !sceneActive && run.lastRound && (
           <div data-conquest-recap className="rounded-2xl border border-border bg-card p-4">
             <p className="text-center text-sm font-bold text-foreground">{run.lastRound.label} results</p>
+            {callReceipt && (
+              <div data-conquest-call-receipt className="mt-3 rounded-xl border border-border bg-background px-3 py-2 text-sm">
+                <p className="flex flex-wrap items-baseline justify-between gap-x-3 font-semibold">
+                  <span>{callReceipt.points > 0 ? 'Correct call' : 'Missed the call'}</span>
+                  <span className={callReceipt.points > 0 ? 'text-gold' : 'text-muted-foreground'}>+{callReceipt.points} call points</span>
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Your pick {label(callReceipt.pick)} · Winner {label(callReceipt.winner)}
+                </p>
+              </div>
+            )}
             <div className="mt-2 space-y-1">
               {run.lastRound.headlines.map((h, i) => (
                 <p key={i} className="text-center text-xs text-muted-foreground">{h}</p>
