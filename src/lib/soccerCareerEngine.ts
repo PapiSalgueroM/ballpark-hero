@@ -425,6 +425,7 @@ export interface BallonDorNominee extends AwardsCandidate {
   club: string;
   position: string;
   goals: number;
+  assists?: number;
   trophies: string[];
   generatedId?: number;
   generatedAge?: number;
@@ -646,6 +647,7 @@ export interface RivalPlayer {
   careerGoals: number;
   careerAssists: number;
   careerApps: number;
+  lastSeason?: Pick<SeasonRecord, "year" | "club" | "apps" | "goals" | "assists">;
   leagueTitles: number;
   championsLeagues: number;
   worldCups: number;
@@ -7954,7 +7956,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
       const pts = calcBdorPoints(goals, assists, overall, 1, trophies, starClub, eraTopClubs) + star.power * rand(1, 3);
       allNomineeData.push({
         name: star.name, nationality: star.nationality, position: star.position,
-        club: starClub, points: pts, goals, trophies, isPlayer: false,
+        club: starClub, points: pts, goals, assists, trophies, isPlayer: false,
       });
     }
   }
@@ -7973,16 +7975,20 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
       const pts = calcBdorPoints(goals, assists, overall, 1, trophies, gen.club, eraTopClubs);
       allNomineeData.push({
         name: gen.name, nationality: gen.nationality, position: gen.position,
-        club: gen.club, points: pts, goals, trophies, isPlayer: false,
+        club: gen.club, points: pts, goals, assists, trophies, isPlayer: false,
         generatedId: gen.generatedId, generatedAge: gen.generatedAge,
       });
     }
   }
 
   // Add rival
-  if (state.rival && !state.rival.retired && state.rival.clubTier <= 2) {
-    const rivalGoals = state.rival.careerGoals > 0 ? rand(12, 30) : rand(5, 15);
-    const rivalAssists = rand(3, 12);
+  if (state.rival?.lastSeason?.year === year && state.rival.clubTier <= 2) {
+    const { goals: rivalGoals, assists: rivalAssists } = state.rival.lastSeason;
+    if (!state.rival.retired) {
+      // Keep later season events on their original random stream.
+      Math.random();
+      Math.random();
+    }
     // The rival holds whatever his club won this season, nothing rolled
     const rivalTrophies = clubHonours(state.rival.club);
     const rivalIntl = intlHonour(state.rival.nationality);
@@ -7990,7 +7996,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     const rivalPts = calcBdorPoints(rivalGoals, rivalAssists, state.rival.overall, state.rival.clubTier, rivalTrophies, state.rival.club, eraTopClubs);
     allNomineeData.push({
       name: state.rival.name, nationality: state.rival.nationality, position: state.rival.position,
-      club: state.rival.club, points: rivalPts, goals: rivalGoals, trophies: rivalTrophies, isPlayer: false, isCareerRival: true,
+      club: state.rival.club, points: rivalPts, goals: rivalGoals, assists: rivalAssists, trophies: rivalTrophies, isPlayer: false, isCareerRival: true,
     });
   }
 
@@ -8021,8 +8027,6 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     return p;
   };
   const playerProduction = productionScore(season.goals, season.assists, playerTrophies);
-  // Nominees do not expose assists, so give every one of them a generous
-  // benefit-of-the-doubt assist total (12) rather than assuming zero.
   /* Round 292: "the field" is the ten men the ceremony puts on screen, not
      every name the era pool produced. A 44 goal forward at a mid table club
      sits outside the shortlist on the points formula (goals are capped at 28
@@ -8046,7 +8050,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   const visibleField = allNomineeData.slice(0, SOCCER_BALLON_DOR.award.shortlistSize - 1);
   lastJudged = { year, names: visibleField.map(n => n.name) };
   const fieldBest = visibleField.reduce(
-    (mx, n) => Math.max(mx, productionScore(n.goals, 12, n.trophies)),
+    (mx, n) => Math.max(mx, productionScore(n.goals, n.assists ?? 0, n.trophies)),
     0,
   );
   const gaTotal = season.goals + season.assists;
@@ -8091,7 +8095,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     // Add player if nominated (or if the season was flat out dominant)
     player: playerInTop10 ? {
       name: state.playerName, nationality: state.nationality, position: state.position,
-      club: state.currentClub, points: playerPoints, goals: season.goals, trophies: playerTrophies, isPlayer: true,
+      club: state.currentClub, points: playerPoints, goals: season.goals, assists: season.assists, trophies: playerTrophies, isPlayer: true,
     } : null,
     playerPoints,
     // Filler nominees (only needed if the era pool somehow ran short)
@@ -8638,8 +8642,8 @@ function createRival(state: CareerState, clubs: ClubData[]): RivalPlayer {
   };
 }
 
-function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[], year?: number): RivalPlayer {
-  if (year !== undefined) clubs = adjustClubsForYear(clubs, year);
+function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[], year: number): RivalPlayer {
+  clubs = adjustClubsForYear(clubs, year);
   const r = { ...rival };
   if (r.retired) return r;
   r.age += 1;
@@ -8653,13 +8657,18 @@ function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[], year?: numbe
   if (Math.random() < 0.15) {
     const tiers = r.overall >= 82 ? [1] : r.overall >= 72 ? [1, 2] : r.overall >= 62 ? [2, 3] : [3, 4];
     const candidates = clubs.filter(c => tiers.includes(c.tier) && c.name !== r.club);
-    if (candidates.length > 0) r.club = pick(candidates).name;
+    if (candidates.length > 0) {
+      const destination = pick(candidates);
+      r.club = destination.name;
+      r.clubTier = destination.tier;
+    }
   }
   
   // Season stats
   const apps = rand(20, 36);
-  const goals = calcGoals(r.position, apps);
-  const assists = calcAssists(r.position, apps);
+  const goals = calcGoals(r.position, apps, r.overall);
+  const assists = calcAssists(r.position, apps, r.overall);
+  r.lastSeason = { year, club: r.club, apps, goals, assists };
   r.careerApps += apps;
   r.careerGoals += goals;
   r.careerAssists += assists;

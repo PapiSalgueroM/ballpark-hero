@@ -148,7 +148,7 @@ beforeAll(async () => {
   expect(frameworkSetup.draws).toHaveLength(1);
   expect(frameworkSetup.draws[0].value).toBe(.52);
   expect(frameworkSetup.draws[0].stack).toContain('at enqueueTask ');
-  expect(frameworkSetup.draws[0].stack).toContain('/node_modules/react/cjs/react.development.js:2458:45');
+  expect(frameworkSetup.draws[0].stack.replaceAll('\\', '/')).toContain('/node_modules/react/cjs/react.development.js:2458:45');
   expect(frameworkSetup.storageAfter).toEqual(frameworkSetup.storageBefore);
   const file = process.env.SOCCER_AWARD_GENERATIONS_FIXTURES;
   fixtures = file ? JSON.parse(fs.readFileSync(file, 'utf8')) : deriveFixtures();

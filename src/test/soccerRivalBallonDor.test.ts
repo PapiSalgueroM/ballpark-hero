@@ -35,6 +35,51 @@ function signedCareer(year = 2005): CareerState {
 afterEach(() => vi.restoreAllMocks());
 
 describe("Soccer Career rival Ballon d'Or", () => {
+  it.each(['GK', 'ST', 'CM'])('uses the same %s season on the ballot and in career totals after reload', position => {
+    const signed = signedCareer(2035);
+    const opponent = { ...rival, position };
+    let nominated = 0;
+    for (let seed = 1; seed <= 36; seed++) {
+      vi.mocked(Math.random).mockImplementation(seeded(seed));
+      const settled = advanceProSeason({ ...signed, rival: opponent }, clubs, true);
+      const saved = repairCareer(JSON.parse(JSON.stringify(settled)) as CareerState);
+      const current = saved.rival!;
+      const season = saved.seasons[saved.seasons.length - 1];
+      const goals = current.careerGoals - opponent.careerGoals;
+      const assists = current.careerAssists - opponent.careerAssists;
+      const apps = current.careerApps - opponent.careerApps;
+      const nominee = saved.pendingBallonDor?.nominees.find(n => n.isCareerRival);
+      if (apps === 0) {
+        expect(current.lastSeason).toBeUndefined();
+        expect(nominee).toBeUndefined();
+        continue;
+      }
+      if (nominee) {
+        nominated++;
+        expect(nominee).toMatchObject({ club: current.club, goals, assists });
+      }
+      expect(current.lastSeason).toEqual({ year: season.year, club: current.club, apps, goals, assists });
+      if (position === 'GK') expect(goals).toBe(0);
+    }
+    expect(nominated).toBeGreaterThan(0);
+  });
+
+  it('uses the new club tier for a rival moving up to an elite club', () => {
+    const signed = signedCareer(2035);
+    const lowerClub = clubs.find(club => club.tier === 3)!;
+    const opponent = { ...rival, club: lowerClub.name, clubTier: lowerClub.tier };
+    let moves = 0;
+    for (let seed = 1; seed <= 48; seed++) {
+      vi.mocked(Math.random).mockImplementation(seeded(seed));
+      const next = advanceProSeason({ ...signed, rival: opponent }, clubs, true).rival!;
+      if (next.club === lowerClub.name) continue;
+      moves++;
+      expect(next.clubTier).toBe(1);
+      expect(next.lastSeason?.club).toBe(next.club);
+    }
+    expect(moves).toBeGreaterThan(0);
+  });
+
   it.each([
     { year: 2005, seed: 21, rank: 1, winner: 'player' },
     { year: 2005, seed: 6, rank: null, winner: 'other' },

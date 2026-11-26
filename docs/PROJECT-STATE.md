@@ -1,3 +1,7 @@
+### November 26, 2026. Soccer Career rival season comparisons
+
+The rivalry screen compares the last shared club season by appearances, goals and assists. Future Ballon d'Or ballots read the rival's simulated club line, score recorded nominee assists and use the destination tier after a transfer. Existing ballots keep their recorded results. Offline Chrome at 390 and 1366 px showed the same keeper with 29 appearances, zero goals and two assists after reload. The fairness sim passed 134 required wins, 354 podiums and 1,382 seated-field checks.
+
 ### November 26, 2026. Baseline for seasonal awards by role and era
 
 A wider Soccer Career comparison covered 6,480 played seasons across 1995, 2005 and 2020 starts, starting ratings of 78, 90 and 94, and tier one and two clubs. Every combination used 12 common seeds and five consecutive senior seasons per position. Per 1,080 seasons, ST won 360 awards, CAM 126, CM 28, CDM zero, CB one and GK one. At the 90th percentile, centre-backs had 19 clean sheets, goalkeepers had 20 and defensive midfielders had zero recorded. The three defensive roles need distinct evidence for any future vote model. The measured baseline and paired pre-ceremony experiment are in the private batch audit.

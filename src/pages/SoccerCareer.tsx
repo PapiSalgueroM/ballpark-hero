@@ -2347,7 +2347,9 @@ function RivalComparisonPanel({ career }: { career: CareerState }) {
   const rival = career.rival;
   if (!rival) return null;
   const totals = getCareerTotals(career.seasons);
-  
+  const rivalSeason = rival.lastSeason;
+  const playerSeason = rivalSeason && career.seasons.find(s => s.year === rivalSeason.year);
+
   const rows = [
     { l: "Overall", p: career.overall, r: rival.overall },
     { l: "Career Goals", p: totals.goals, r: rival.careerGoals },
@@ -2376,6 +2378,18 @@ function RivalComparisonPanel({ career }: { career: CareerState }) {
       <div className="text-[10px] text-center text-muted-foreground mb-1">
         {rival.club} · OVR {rival.overall} · Age {rival.age}
       </div>
+      {rivalSeason && playerSeason && (
+        <details className="rounded-lg border border-border px-3 py-2 text-xs">
+          <summary className="cursor-pointer font-semibold">Compare the {rivalSeason.year}/{String(rivalSeason.year + 1).slice(-2)} season</summary>
+          <table className="mt-2 w-full text-center tabular-nums">
+            <thead className="text-muted-foreground"><tr><th scope="col" className="text-left">Player</th><th scope="col">Apps</th><th scope="col">Goals</th><th scope="col">Assists</th></tr></thead>
+            <tbody>
+              <tr><th scope="row" className="py-1 text-left">{career.playerName}</th><td>{playerSeason.apps}</td><td>{playerSeason.goals}</td><td>{playerSeason.assists}</td></tr>
+              <tr><th scope="row" className="text-left">{rival.name}</th><td>{rivalSeason.apps}</td><td>{rivalSeason.goals}</td><td>{rivalSeason.assists}</td></tr>
+            </tbody>
+          </table>
+        </details>
+      )}
       {rows.map(r => (
         <div key={r.l} className="flex items-center justify-between text-xs">
           <span className={`font-bold w-12 text-right ${r.p > r.r ? "text-emerald-400" : r.p < r.r ? "text-muted-foreground" : "text-foreground"}`}>
@@ -2650,7 +2664,7 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: 
       badge={n => <FlagImg name={n.nationality} size={14} />}
       detail={n => `${n.position} · ${n.club}`}
       score={n => `${n.points}pts`}
-      scoreDetail={n => `${n.goals}G${n.trophies.length > 0 ? ` · ${n.trophies.join(", ")}` : ""}`}
+      scoreDetail={n => `${n.goals}G${n.assists === undefined ? "" : ` · ${n.assists}A`}${n.trophies.length > 0 ? ` · ${n.trophies.join(", ")}` : ""}`}
       onDismiss={onDismiss}
       speech={{
         open: bdorSpeechOpen(career),
