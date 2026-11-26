@@ -1,3 +1,13 @@
+## 2026-11-26, Replay targets and better records in eight games
+
+The Nov 15 recorded-finishers sample set the remaining eight after Soccer Career and Club Manager. NBA, NFL, NHL and MLB My Career each add a position-specific alternate performance target in the Season Programme. Existing season results settle it through the normal in-game bonus. Career Log adds defensive and efficiency figures for NBA and NFL, plus position-aware hockey and baseball rates using saved appearances.
+
+Fresh 390px browser replays in `scripts/playUsCareerFreshTargets.mjs` go through quick draft and one complete season with each role. Memphis's point guard hit 1.3 steals per game against 0.8 and earned $50K gross. Denver's kicker made a 55-yard field goal against a 45-yard target and earned $24K gross. Neither bonus reached the bank's $0.1M increment. Indiana's center posted 0.4 blocks per game against 1.0 and earned no bonus. The Career Log figures, exact targets and outcomes, one saved result, and finances survived reload. The replay uses fixed seeds and blocks external requests.
+
+Soccer Perfect Season adds an optional No rerolls Unlimited run and longest streaks from the played matches. World XI adds Go for the win, a more volatile tactical choice that can turn draws into a win or a loss. Its report shows home and away points. All three World XI reports show goal difference.
+
+Stadium Tycoon tracks competitive home attendance and lets a manager record an expansion after the new stands open. Wonderkid Factory tracks academy rating and lets a manager pick a prospect for a development goal. These two achievements are career records.
+
 ## 2026-11-26, Soccer Career rival awards
 
 The rival's Ballon d'Or count now goes up only if that rival finishes first on the same ranked ballot the player sees. The comparison panel shows the new count once the list is revealed. Older saves keep their existing totals because they do not retain a ballot for every season. An older save paused on the rivalry card now shows the motivation it grants without claiming who won or where the player finished.

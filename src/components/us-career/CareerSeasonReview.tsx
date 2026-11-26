@@ -3,6 +3,7 @@ import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { cn } from '@/lib/utils';
 import { formatNumber } from '@/lib/formatNumber';
+import { careerSeasonOverviewStat } from '@/lib/usCareerSeasonReview';
 import CareerSeasonComparison from '@/components/us-career/CareerSeasonComparison';
 import CareerSeasonHighs from '@/components/us-career/CareerSeasonHighs';
 import SeasonRating from '@/components/us-career/SeasonRating';
@@ -43,6 +44,7 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
   const season = selected === null ? undefined : career.seasons[selected];
   const previous = selected !== null && selected > 0 ? career.seasons[selected - 1] : undefined;
   const detail = season ? sport.reviewStats(season, career.pos) : null;
+  const overviewStat = season && careerSeasonOverviewStat(season, sport.slug, career.pos);
   const openSeason = async (event: MouseEvent<HTMLButtonElement>, playoffsOnly = false) => {
     if (!centre || !season || loadingReplay) return;
     const from = event.currentTarget;
@@ -117,6 +119,7 @@ export default function CareerSeasonReview({ career, sport, onBack, backLabel }:
             <div className="rounded-xl bg-secondary/50 p-3"><dt className="text-xs text-muted-foreground">{detail.gamesLabel}</dt><dd data-season-games="" className="text-xl font-bold">{formatNumber(recorded(season.games))}</dd><dd data-season-games-change="" className="mt-1 text-xs">{difference(season.games, previous?.games, !!previous)}</dd></div>
             <div className="rounded-xl bg-secondary/50 p-3"><dt className="text-xs text-muted-foreground">Age that season</dt><dd data-season-age="" className="font-semibold">{recorded(season.age)}</dd></div>
             <div className="rounded-xl bg-secondary/50 p-3"><dt className="text-xs text-muted-foreground">Season salary</dt><dd data-season-pay="" className="break-words font-semibold">{finite(season.salary) ? `$${formatNumber(season.salary)}M` : 'Not recorded'}</dd></div>
+            {overviewStat && <div data-season-extra-stat className="col-span-2 rounded-xl bg-secondary/50 p-3"><dt className="text-xs text-muted-foreground">{overviewStat.label}</dt><dd className="font-semibold">{overviewStat.value}</dd></div>}
           </dl>
           <SeasonRating rating={season.seasonRating} />
           <div><h3 className="text-xs font-semibold text-muted-foreground">Team result</h3><p data-season-result="" className="mt-1 break-words text-sm font-semibold">{season.teamResult || 'Not recorded'}</p></div>

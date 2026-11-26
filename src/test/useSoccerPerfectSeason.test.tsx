@@ -48,6 +48,25 @@ describe('Soccer Perfect Season saves', () => {
   });
   afterEach(() => vi.restoreAllMocks());
 
+  it('resumes an Unlimited practice challenge and saves its finish without awarding site credit', () => {
+    const oldDaily = createSoccerRun('daily', '2026-11-12');
+    localStorage.setItem(dailyKey, JSON.stringify(oldDaily));
+    const first = renderHook(() => useSoccerPerfectSeason());
+    act(() => first.result.current.startUnlimited(true));
+    expect(first.result.current.run?.noRerolls).toBe(true);
+    const draw = first.result.current.run;
+    first.unmount();
+    const resumed = renderHook(() => useSoccerPerfectSeason());
+    act(() => resumed.result.current.resumeUnlimited());
+    expect(resumed.result.current.run).toEqual(draw);
+    act(() => { expect(resumed.result.current.reroll()).toBe(false); });
+    pickBestXI(resumed);
+    act(() => resumed.result.current.finishSeason());
+    expect(JSON.parse(localStorage.getItem(unlimitedKey)!)).toMatchObject({ noRerolls: true, revealed: 38, completionRecorded: true });
+    expect(localStorage.getItem(dailyKey)).toBe(JSON.stringify(oldDaily));
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
   it('resumes both modes and records only the first live finish after restoring a partial season', () => {
     const first = renderHook(() => useSoccerPerfectSeason());
     act(() => first.result.current.startDaily());

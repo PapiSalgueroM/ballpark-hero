@@ -19,9 +19,9 @@ import {
   awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
   setPieceOffer, beginSetPiece, awardSetPieceGoal,
   setTicketPolicy, setMatchPlan, matchPlanForecast, signStadiumSponsor, bookMatchScouting, bookStandsConstruction,
-  bookGraduateAttack, reserveSeasonTickets,
+  bookGraduateAttack, reserveSeasonTickets, updateExpansionTarget,
 } from '@/lib/stadiumTycoon';
-import type { GoldenKind, AwayMatch, SetPieceOffer, TicketPolicy, MatchPlanKind, StadiumSponsor, SeasonTicketAllocation } from '@/lib/stadiumTycoon';
+import type { GoldenKind, AwayMatch, SetPieceOffer, TicketPolicy, MatchPlanKind, StadiumSponsor, SeasonTicketAllocation, ExpansionTargetAction } from '@/lib/stadiumTycoon';
 import type { GraduateAttackOption } from '@/lib/wonderkidFactory';
 
 /** Round 162: a golden whistle drifting across the pitch, waiting to be
@@ -131,6 +131,7 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
   const [matchPlanError, setMatchPlanError] = useState<number | null>(null);
   const [scoutingSaveError, setScoutingSaveError] = useState<{ ground: number; match: number } | null>(null);
   const [standsConstructionSaveError, setStandsConstructionSaveError] = useState<number | null>(null);
+  const [expansionTargetSaveFailed, setExpansionTargetSaveFailed] = useState(false);
   const [promotion, setPromotion] = useState<Promotion | null>(null);
   /* Round 1543: badges earned together each get their own turn on the badge
      line. It used to hold one, so the last of a tick's badges wiped the rest. */
@@ -593,6 +594,18 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
     markSessionPlay();
   }, [commit, markSessionPlay, writeStadium, stadiumActionsBlocked]);
 
+  const doExpansionTarget = useCallback((action: ExpansionTargetAction) => {
+    if (document.hidden || stadiumActionsBlocked()) return;
+    const before = stateRef.current;
+    const next = updateExpansionTarget(before, action);
+    if (next === before) return;
+    const saved = writeStadium(next);
+    if (saved === 'failed') setExpansionTargetSaveFailed(true);
+    if (saved !== 'written') return;
+    setExpansionTargetSaveFailed(false);
+    commit(next);
+  }, [commit, writeStadium, stadiumActionsBlocked]);
+
   const doBuy = useCallback((id: string, amount: 1 | 5 = 1) => {
     if (stadiumActionsBlocked()) return;
     markSessionPlay();
@@ -746,6 +759,7 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
     graduateAttackError: graduateAttackError?.ground === state.rep && graduateAttackError.match === state.matchNo + 1 ? graduateAttackError.message : null,
     matchPlanForecast: (kind: MatchPlanKind) => matchPlanForecast(state, getEdgeRef.current?.() ?? 0, kind),
     doBookStandsConstruction, standsConstructionSaveFailed: standsConstructionSaveError === state.rep,
+    doExpansionTarget, expansionTargetSaveFailed,
     doBuy, doTap, doPrestige, doBoost,
     golden, doCatchGolden, doHire, doLegacyPerk,
     promotion, dismissPromotion, badge, dismissBadge, doSetClubName,

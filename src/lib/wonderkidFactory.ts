@@ -208,6 +208,8 @@ export interface FactoryState {
   levels: Record<FacilityId, number>;
   prospects: Prospect[];
   coachingFocusId?: number;
+  developmentTarget?: { id: number; rating: number };
+  developmentTargetsCompleted?: number;
   scoutProgress: number;
   showcaseCooldown: number;
   showcaseLeft: number;
@@ -535,12 +537,27 @@ export function setCoachingFocus(s: FactoryState, id: number | null): boolean {
   return true;
 }
 
+export type DevelopmentTargetAction = number | 'claim' | 'cancel';
+
+export function updateDevelopmentTarget(s: FactoryState, action: DevelopmentTargetAction): FactoryState {
+  if (action === 'claim') {
+    const target = s.developmentTarget;
+    if (!target || !s.prospects.some(p => p.id === target.id && p.rating >= target.rating)) return s;
+    return { ...s, developmentTarget: undefined, developmentTargetsCompleted: Math.min(Number.MAX_SAFE_INTEGER, (s.developmentTargetsCompleted ?? 0) + 1) };
+  }
+  if (action === 'cancel') return s.developmentTarget ? { ...s, developmentTarget: undefined } : s;
+  if (s.developmentTarget?.id === action) return s;
+  const player = s.prospects.find(p => p.id === action && p.rating < p.potential);
+  return player ? { ...s, developmentTarget: { id: player.id, rating: Math.floor(player.rating) + 1 } } : s;
+}
+
 export function sellProspect(s: FactoryState, id: number): number | null {
   const i = s.prospects.findIndex(p => p.id === id);
   if (i === -1) return null;
   const price = salePrice(s, s.prospects[i]);
   s.prospects.splice(i, 1);
   if (s.coachingFocusId === id) delete s.coachingFocusId;
+  if (s.developmentTarget?.id === id) delete s.developmentTarget;
   s.cash += price;
   s.lifetime += price;
   s.careerEarned += price;
@@ -575,6 +592,7 @@ export function promote(s: FactoryState, id: number): boolean {
   s.firstTeam = firstTeam;
   s.prospects.splice(i, 1);
   if (s.coachingFocusId === id) delete s.coachingFocusId;
+  if (s.developmentTarget?.id === id) delete s.developmentTarget;
   return true;
 }
 
@@ -620,6 +638,7 @@ export function moveUp(s: FactoryState): boolean {
   };
   Object.assign(s, newFactory(now), carried);
   delete s.coachingFocusId;
+  delete s.developmentTarget;
   if (carried.packsDelivered === undefined) delete s.packsDelivered;
   if (carried.firstTeam === undefined) delete s.firstTeam;
   if (carried.retired === undefined) delete s.retired;
@@ -711,6 +730,7 @@ export function tick(s: FactoryState, dt: number, opts?: { offline?: boolean }):
     const i = s.prospects.findIndex(p => p.id === id);
     if (i !== -1) {
       s.prospects.splice(i, 1);
+      if (s.developmentTarget?.id === id) delete s.developmentTarget;
       s.leftFree += 1;
     }
   }
@@ -893,6 +913,15 @@ export function deserialize(raw: string | null, now: number, gear: GearLevels = 
       if (clean.length >= cap) break;
     }
     s.prospects = clean;
+    if (s.developmentTarget !== undefined) {
+      const target = s.developmentTarget;
+      const player = target && s.prospects.find(p => p.id === target.id);
+      if (!player || !Number.isSafeInteger(target.rating) || target.rating < 31
+        || target.rating > Math.min(player.potential, Math.floor(player.rating) + 1)) delete s.developmentTarget;
+    }
+    if (s.developmentTargetsCompleted !== undefined && (!Number.isSafeInteger(s.developmentTargetsCompleted) || s.developmentTargetsCompleted < 0)) {
+      delete s.developmentTargetsCompleted;
+    }
     if (s.coachingFocusId !== undefined && !coachingFocus(s)) delete s.coachingFocusId;
     if (p.firstTeam !== undefined) {
       const seniors: Senior[] = [];

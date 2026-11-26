@@ -3,13 +3,13 @@ import type { UsSport } from './usCoachCareer';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 
 export type ProgrammeSection = 'workload' | 'tactics' | 'expectation' | 'partnership' | 'bonus' | 'reinvention';
-export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'steady' | 'stretch' | 'build' | 'maintain';
+export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain';
 export interface ProgrammeChoices {
   workload: 'normal' | 'push' | 'recover';
   tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts';
   expectation: 'normal' | 'steady' | 'stretch';
   partnership: 'normal' | 'build';
-  bonus: 'normal' | 'steady' | 'stretch';
+  bonus: 'normal' | 'steady' | 'stretch' | 'alternate';
   reinvention: 'normal' | 'maintain';
 }
 export interface UsCareerProgramme extends ProgrammeChoices { sport: UsSport; year: number; team: string }
@@ -223,6 +223,51 @@ function bonusTarget(c: UsCareerCore, sport: UsSport, stretch: boolean) {
   const held = recent ? fullOf(c, sport, recent, (recent as unknown as Record<string, number>)[stat.key]) : stat.initial;
   return { ...stat, target: carried(c, sport, Math.max(stat.initial, held) + (stretch ? stat.step : 0)) };
 }
+
+interface AlternateStat { key: string; label: string; initial: number; unscaled?: true }
+const NFL_ALTERNATE_BONUS: Partial<Record<string, AlternateStat>> = {
+  QB: { key: 'passYds', label: 'passing yards', initial: 2500 },
+  RB: { key: 'rec', label: 'receptions', initial: 20 },
+  WR: { key: 'rec', label: 'receptions', initial: 45 },
+  TE: { key: 'rec', label: 'receptions', initial: 35 },
+  LB: { key: 'sacks', label: 'sacks', initial: 2 },
+  CB: { key: 'passDef', label: 'passes defended', initial: 8 },
+  EDGE: { key: 'forcedFum', label: 'forced fumbles', initial: 2 },
+  K: { key: 'longFg', label: 'yards on your longest field goal', initial: 45, unscaled: true },
+};
+function alternateStat(c: UsCareerCore, sport: UsSport): AlternateStat | undefined {
+  switch (sport) {
+    case 'nba': {
+      const defense = nbaDefensiveAssignment(c.pos);
+      return { key: defense.stat, label: defense.unit, initial: defense.stat === 'bpg' ? 1 : 0.8, unscaled: true };
+    }
+    case 'nfl': return NFL_ALTERNATE_BONUS[c.pos];
+    case 'mlb': return c.pos === 'SP' ? { key: 'wins', label: 'wins', initial: 8 }
+      : c.pos === 'RP' ? { key: 'saves', label: 'saves', initial: 5 } : { key: 'doubles', label: 'doubles', initial: 15 };
+    case 'nhl': return c.pos === 'G' ? { key: 'svpct', label: 'save percentage', initial: 0.9, unscaled: true }
+      : c.pos === 'D' ? { key: 'points', label: 'points', initial: 25 } : { key: 'assists', label: 'assists', initial: 25 };
+  }
+}
+const validBonusActual = (value: unknown, key: string): value is number => validNumber(value) && (key !== 'svpct' || value <= 1);
+export function formatUsProgrammeValue(value: number, unit?: string) {
+  if (unit === 'save percentage') return value.toFixed(3);
+  if (unit === 'steals per game' || unit === 'blocks per game') return value.toFixed(1);
+  return String(value);
+}
+
+function alternateBonusTarget(c: UsCareerCore, sport: UsSport) {
+  const stat = alternateStat(c, sport);
+  if (!stat) return null;
+  const unscaled = stat.unscaled;
+  for (const line of [...c.seasons].reverse()) {
+    if (!(line.games > 0) || !(line.year < c.year) || line.teamResult === 'SUSPENDED') continue;
+    const value = (line as unknown as Record<string, unknown>)[stat.key];
+    if (!validBonusActual(value, stat.key)) continue;
+    const careerBenchmark = Math.max(stat.initial, unscaled ? value : fullOf(c, sport, line, value));
+    return { ...stat, target: unscaled ? careerBenchmark : carried(c, sport, careerBenchmark) };
+  }
+  return { ...stat, target: unscaled ? stat.initial : carried(c, sport, stat.initial) };
+}
 /** The cards. `chosen` is the plan held so far: a card is drawn against what the choices in the sections above it leave (see TRADE_ORDER). */
 export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partial<ProgrammeChoices> | null = null): ProgrammeMenu[] {
   const kind = tacticsKind(c, sport);
@@ -259,6 +304,7 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
   const supportEffect = kind === 'nba' ? 'Season ' + nbaSupport + ' multiplier +8%, scoring multiplier -8%. Your position stays the same.' : kind === 'nhl' ? 'Season scoring multiplier -0.08 (minimum 0.4), favoring assists over goals.' : tradeText('support', 'Less form, less injury risk.');
   const defence = sport === 'nba' ? nbaDefensiveAssignment(c.pos) : null;
   const steadyBonus = bonusTarget(c, sport, false), stretchBonus = bonusTarget(c, sport, true);
+  const alternateBonus = alternateBonusTarget(c, sport);
   return [
     { id: 'workload', label: 'Workload and recovery', options: [{ id: 'normal', label: 'Usual routine', effect: 'Keep your current inputs.' }, { id: 'push', label: 'Push the workload', effect: workloadText('push', 'More form, more injury risk.') }, { id: 'recover', label: 'Prioritize recovery', effect: workloadText('recover', 'Less injury risk, less form.') }] },
     { id: 'tactics', label: 'Tactical approach', options: [
@@ -298,7 +344,13 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
     ] },
     { id: 'expectation', label: 'Coach expectations', options: [{ id: 'normal', label: 'No extra target', effect: 'Keep the normal season.' }, { id: 'steady', label: 'Steady availability', effect: 'Play ' + gamesTarget(c, sport, false) + ' games: morale +3 (morale tops out at 100). Miss it: morale -3.' }, { id: 'stretch', label: 'Earn a bigger role', effect: 'Play ' + gamesTarget(c, sport, true) + ' games: morale +6 (morale tops out at 100). Miss it: morale -5. This does not guarantee a starting spot.' }] },
     { id: 'partnership', label: 'Teammate partnership', options: [{ id: 'normal', label: 'Keep your own routine', effect: 'No extra partnership input.' }, { id: 'build', label: sport === 'nba' ? 'Build a two-player rhythm' : sport === 'nhl' ? c.pos === 'G' ? 'Work with your defense pair' : 'Build line chemistry' : sport === 'mlb' ? c.pos === 'SP' || c.pos === 'RP' ? 'Work with your catcher' : 'Build a lineup partnership' : c.pos === 'QB' ? 'Work with your receivers' : 'Build unit chemistry', effect: 'A role-based teammate partnership, with no invented player. At least ' + gamesBase(c, sport) + ' games adds one year of progress. Consecutive years at this team give +2 season morale per completed year, capped at +6.' + partnerText }] },
-    { id: 'bonus', label: 'Performance bonus', options: [{ id: 'normal', label: 'No bonus challenge', effect: 'Keep the normal pay.' }, { id: 'steady', label: 'Match the benchmark', effect: steadyBonus.target + ' ' + steadyBonus.label + ' and ' + gamesBase(c, sport) + ' games: 2% of season salary as a gross bonus.' + bankText(false) }, { id: 'stretch', label: 'Stretch the benchmark', effect: stretchBonus.target + ' ' + stretchBonus.label + ' and ' + gamesBase(c, sport) + ' games: 5% of season salary as a gross bonus.' + bankText(true) }] },
+    { id: 'bonus', label: 'Performance bonus', options: [
+      { id: 'normal', label: 'No bonus challenge', effect: 'Keep the normal pay.' },
+      { id: 'steady', label: 'Match the benchmark', effect: steadyBonus.target + ' ' + steadyBonus.label + ' and ' + gamesBase(c, sport) + ' games: 2% of season salary as a gross bonus.' + bankText(false) },
+      { id: 'stretch', label: 'Stretch the benchmark', effect: stretchBonus.target + ' ' + stretchBonus.label + ' and ' + gamesBase(c, sport) + ' games: 5% of season salary as a gross bonus.' + bankText(true) },
+      ...(alternateBonus ? [{ id: 'alternate' as const, label: 'Chase a different stat',
+        effect: `${formatUsProgrammeValue(alternateBonus.target, alternateBonus.label)} ${alternateBonus.label} and ${gamesBase(c, sport)} games: 2% of season salary as a gross bonus.${bankText(false)}` }] : []),
+    ] },
     { id: 'reinvention', label: 'Veteran reinvention', options: [{ id: 'normal', label: 'Keep your usual routine', effect: 'No extra veteran input.' }, ...(c.age >= 30 ? [{ id: 'maintain' as const, label: sport === 'mlb' ? 'Rebuild your veteran routine' : sport === 'nhl' ? 'Adapt your veteran game' : sport === 'nba' ? 'Adapt your veteran rotation work' : 'Adapt your veteran preparation', effect: veteranText }] : [])] },
   ];
 }
@@ -438,10 +490,12 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
       c.morale = clamp(c.morale + (decision.outcome === 'completed' ? choice === 'stretch' ? 6 : 3 : choice === 'stretch' ? -5 : -3), 0, 100);
     }
     if (played && section === 'bonus') {
-      const target = bonusTarget({ ...c, year: plan.year, seasons: c.seasons.filter(s => s !== line) }, sport, choice === 'stretch');
+      const before = { ...c, year: plan.year, seasons: c.seasons.filter(s => s !== line) };
+      const target = choice === 'alternate' ? alternateBonusTarget(before, sport) : bonusTarget(before, sport, choice === 'stretch');
+      if (!target) continue;
       const actual = (line as unknown as Record<string, unknown>)[target.key];
-      decision.target = target.target; decision.actual = validNumber(actual) ? actual : undefined; decision.unit = target.label;
-      decision.outcome = validNumber(actual) && actual >= target.target && line.games >= gamesBase(then, sport) && validNumber(line.salary) ? 'completed' : 'missed';
+      decision.target = target.target; decision.actual = validBonusActual(actual, target.key) ? actual : undefined; decision.unit = target.label;
+      decision.outcome = decision.actual !== undefined && decision.actual >= target.target && line.games >= gamesBase(then, sport) && validNumber(line.salary) ? 'completed' : 'missed';
       if (decision.outcome === 'completed') {
         /* Ruling R1: the share is banked in the bank's own unit, so what the card printed is what the bank still holds once the engine has rounded it again. */
         result.bonusGross = bonusGrossOf(line.salary, choice === 'stretch');

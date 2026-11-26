@@ -321,12 +321,16 @@ describe('saved career season review', () => {
       { pos: 'CB', fields: { picks: 4, passDef: 17, tackles: 43 }, regular: { Interceptions: '4', 'Passes defended': '17', Tackles: '43' } },
       { pos: 'K', fields: { fgMade: 29, fgAtt: 32, longFg: 58 }, regular: { 'Field goals made': '29', 'Field goals attempted': '32', 'Longest field goal': '58' } },
     ];
-    for (const fixture of [...reviewFixtures, ...extraNfl.map(fixture => ({ ...fixture, slug: 'nfl', games: 16, gamesLabel: 'Games', postseason: {} }))]) {
+    const fixtures: ReviewFixture[] = [...reviewFixtures, ...extraNfl.map(fixture => ({ ...fixture, slug: 'nfl', games: 16, gamesLabel: 'Games', postseason: {} }))];
+    for (const fixture of fixtures) {
       const view = mountReview(fixture); click('Compare seasons');
       expect(comparisons()[fixture.gamesLabel]).toEqual([String(fixture.games), String(fixture.games - 1), '-1']);
       click('Regular season');
-      expect(comparisons()).toEqual(Object.fromEntries(Object.entries(fixture.regular).map(([label, value]) => [label,
-        [groupedReviewDisplay(value), groupedReviewDisplay(value), label === 'ERA' ? '0.00' : ['Batting average', 'On base percentage', 'Save percentage'].includes(label) ? '0.000' : '0']])));
+      expect(comparisons()).toEqual(Object.fromEntries(Object.entries(fixture.regular).map(([label, value]) => {
+        const [right, delta] = fixture.rateComparisons?.[label]?.latest ??
+          [value, label === 'ERA' ? '0.00' : ['Batting average', 'On base percentage', 'Save percentage'].includes(label) ? '0.000' : '0'];
+        return [label, [groupedReviewDisplay(value), groupedReviewDisplay(right), delta]];
+      })));
       expect(screen.queryByRole('button', { name: 'Postseason' })).toBeNull();
       expect(document.querySelector('[data-career-season-comparison]')?.textContent).not.toContain('Fixture conference final');
       view.unmount();

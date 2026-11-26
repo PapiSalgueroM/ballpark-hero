@@ -499,7 +499,7 @@ export interface SeasonInjury {
 }
 
 export type MatchResult = 'W' | 'D' | 'L';
-export type WorldXiSeasonApproach = 'balanced' | 'protect';
+export type WorldXiSeasonApproach = 'balanced' | 'protect' | 'attack';
 
 /* Round 726, the other half of his "more in the season report". Everything
    in these four shapes is read off the eleven's real positions, ages and card
@@ -577,6 +577,7 @@ export interface SeasonReport {
   playerStats?: PlayerSeasonStats[];
   awards?: SeasonAwards;
   whatIf?: WhatIf;
+  venuePoints?: { home: number; away: number };
   /** Round 825, Build Your XI only. Optional: World XI never passes a
    *  breakdown, and a report built before this round has none. */
   fit?: SeasonFit;
@@ -664,6 +665,11 @@ function leagueOdds(win: number, approach: WorldXiSeasonApproach) {
   const draw = (1 - win) * DRAW_SHARE;
   const loss = 1 - win - draw;
   if (approach === 'balanced') return { win, draw, loss };
+  if (approach === 'attack') {
+    // Three draws yield the same points as one win and two losses.
+    const trade = Math.min(0.035, draw / 3);
+    return { win: win + trade, draw: Math.max(0, draw - 3 * trade), loss: loss + 2 * trade };
+  }
   // Each win traded for a draw costs two points. Two losses traded for draws repay them.
   const trade = Math.min(0.035, win, loss / 2);
   return { win: win - trade, draw: draw + 3 * trade, loss: loss - 2 * trade };
@@ -979,6 +985,7 @@ interface SeasonExtras {
   playerStats: PlayerSeasonStats[];
   awards: SeasonAwards;
   whatIf: WhatIf;
+  venuePoints?: SeasonReport['venuePoints'];
 }
 
 /**
@@ -1063,6 +1070,12 @@ function buildSeasonExtras(
   const fixtureDeck = shuffleWith(rand, rivalPoints.flatMap((_, r) => [{ rival: r, home: true }, { rival: r, home: false }]));
   const fixtures = results.map((_, i) => fixtureDeck[i % Math.max(1, fixtureDeck.length)] ?? { rival: 0, home: true });
 
+  const venuePoints = approach === 'attack' ? { home: 0, away: 0 } : undefined;
+  if (venuePoints) {
+    results.forEach((result, i) => {
+      venuePoints[fixtures[i].home ? 'home' : 'away'] += result === 'W' ? 3 : result === 'D' ? 1 : 0;
+    });
+  }
   /* Scorelines consistent with the result, built from the scorers. Every win
      first gets one goal from a man who played in it, then each man's other
      goals land in matches he played, wins first. */
@@ -1325,6 +1338,7 @@ function buildSeasonExtras(
     playerStats,
     awards: { youngPlayer, goalOfSeason },
     whatIf,
+    venuePoints,
   };
 }
 
@@ -1459,7 +1473,7 @@ export function simulateWorldXiSeason(
     positionLine,
     `Finished ${ordinal(tablePosition)} with ${points} points (${wins}W ${draws}D ${losses}L).`,
   ];
-  if (approach === 'protect') {
+  if (approach !== 'balanced') {
     const balanced = playLeague(rng(seed), winP);
     narrative.push(`On the same rolls, Balanced would finish ${ordinal(balanced.tablePosition)} with ${counted(balanced.points, 'point')} and ${counted(balanced.draws, 'draw')}.`);
   }
@@ -1513,6 +1527,7 @@ export function simulateWorldXiSeason(
     playerStats: extras.playerStats,
     awards: extras.awards,
     whatIf: extras.whatIf,
+    ...(extras.venuePoints ? { venuePoints: extras.venuePoints } : {}),
     ...(seasonFit ? { fit: seasonFit } : {}),
   };
 }

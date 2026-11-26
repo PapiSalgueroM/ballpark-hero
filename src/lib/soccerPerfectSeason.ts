@@ -38,6 +38,7 @@ export interface SoccerPSRun {
   revealed: number;
   completionRecorded: boolean;
   oddsRule?: 'opening-draw';
+  noRerolls?: true;
 }
 
 interface SoccerPSCard {
@@ -166,11 +167,12 @@ function replayDraft(seed: number, actions: readonly SoccerPSAction[]): DraftSta
 }
 
 export function applySoccerAction(run: SoccerPSRun, action: SoccerPSAction): SoccerPSRun | null {
+  if (run.noRerolls && action.type === 'reroll') return null;
   const actions = [...run.actions, action];
   return replayDraft(run.seed, actions) ? { ...run, actions } : null;
 }
 
-export function createSoccerRun(mode: SoccerPSMode, date: string | null, nonce = 0): SoccerPSRun {
+export function createSoccerRun(mode: SoccerPSMode, date: string | null, nonce = 0, noRerolls = false): SoccerPSRun {
   if (mode === 'daily' ? !validDate(date) : date !== null || !validSeed(nonce)) throw new Error('Invalid season seed');
   const seed = mode === 'daily'
     ? dailySeed(date!)
@@ -178,6 +180,7 @@ export function createSoccerRun(mode: SoccerPSMode, date: string | null, nonce =
   return {
     version: SOCCER_PS_VERSION, mode, date, seed, actions: [], revealed: 0, completionRecorded: false,
     ...(mode === 'unlimited' ? { oddsRule: 'opening-draw' } : {}),
+    ...(mode === 'unlimited' && noRerolls ? { noRerolls: true } : {}),
   };
 }
 
@@ -192,6 +195,7 @@ export function restoreSoccerRun(raw: unknown): SoccerPSRun | null {
   if (run.mode === 'daily' ? !validDate(run.date) || run.seed !== dailySeed(run.date) : run.date !== null) return null;
   if (run.oddsRule !== undefined && (run.mode !== 'unlimited' || run.oddsRule !== 'opening-draw')) return null;
   if (!Array.isArray(run.actions) || run.actions.length > SOCCER_PS_SLOTS.length + SOCCER_PS_MAX_REROLLS) return null;
+  if (run.noRerolls !== undefined && (run.noRerolls !== true || run.mode !== 'unlimited' || run.actions.some(action => action?.type === 'reroll'))) return null;
   const state = replayDraft(run.seed, run.actions);
   if (!state || !Number.isInteger(run.revealed) || run.revealed < 0 || run.revealed > SOCCER_PS_GAMES) return null;
   if (state.open !== 0 && run.revealed !== 0) return null;
@@ -211,8 +215,15 @@ export function scoreSoccerMatches(games: readonly SoccerPSOutcome[]) {
   const draws = games.filter(game => game === 'D').length;
   const losses = games.length - wins - draws;
   const points = 3 * wins + draws;
+  let winRun = 0, unbeatenRun = 0, longestWinRun = 0, longestUnbeatenRun = 0;
+  for (const game of games) {
+    winRun = game === 'W' ? winRun + 1 : 0;
+    unbeatenRun = game === 'L' ? 0 : unbeatenRun + 1;
+    longestWinRun = Math.max(longestWinRun, winRun);
+    longestUnbeatenRun = Math.max(longestUnbeatenRun, unbeatenRun);
+  }
   return {
-    played: games.length, wins, draws, losses, points,
+    played: games.length, wins, draws, losses, points, longestWinRun, longestUnbeatenRun,
     score: Math.min(100, Math.round(100 * points / (3 * SOCCER_PS_GAMES))),
     perfect: games.length === SOCCER_PS_GAMES && wins === SOCCER_PS_GAMES,
     unbeaten: losses === 0,
@@ -270,7 +281,7 @@ export function deriveSoccerRun(run: SoccerPSRun) {
     upcoming: state.clubs.slice(state.turn + 1),
     picks: state.picks,
     offers, best, worst, odds, season, openingDrawOdds,
-    rerollsLeft: SOCCER_PS_MAX_REROLLS - state.skippedClubs.length,
+    rerollsLeft: run.noRerolls ? 0 : SOCCER_PS_MAX_REROLLS - state.skippedClubs.length,
     weightedStrength: state.strength,
     overall: state.strength / TOTAL_WEIGHT,
     bestOverall: bestStrength === null ? null : bestStrength / TOTAL_WEIGHT,

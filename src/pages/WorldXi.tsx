@@ -62,6 +62,7 @@ const PROTECT_THE_POINT = 'Protect the point';
 const SEASON_APPROACHES: { key: WorldXiSeasonApproach; label: string; hint: string }[] = [
   { key: 'balanced', label: 'Balanced', hint: 'Use the usual mix of wins, draws and losses.' },
   { key: 'protect', label: PROTECT_THE_POINT, hint: 'Trade some wins and losses for draws.' },
+  { key: 'attack', label: 'Go for the win', hint: 'Turn some draws into wins, at the risk of more defeats.' },
 ];
 
 const WorldXi = () => {
@@ -90,6 +91,7 @@ const WorldXi = () => {
   const [showClubChemistry, setShowClubChemistry] = useState(false);
   const [archives, setArchives] = useState<Partial<Record<string, ArchiveState>>>({});
   const inputRef = useRef<HTMLInputElement>(null);
+  const approachRef = useRef<HTMLFieldSetElement>(null);
   const prevStepRef = useRef<number>(-1);
   const reducedMotionRef = useRef<boolean>(
     typeof window !== 'undefined' && window.matchMedia
@@ -332,6 +334,7 @@ const WorldXi = () => {
     ? { ...p, name: `${p.name} (${displayCountry(p.country)})` }
     : p), [picks]);
   const previewOdds = phase === 'won' && !seasonReport ? worldXiMatchOdds(seasonPlayers, seasonApproach) : null;
+  const approachLabel = SEASON_APPROACHES.find(option => option.key === seasonApproach)?.label;
   const simulateSeason = () => {
     if (phase !== 'won' || seasonReport || seasonPlayers.length !== formation.slots.length) return;
     setSeasonReport(simulateWorldXiSeason(seasonPlayers, formation.name, undefined, seasonApproach));
@@ -758,9 +761,9 @@ const WorldXi = () => {
 
             {previewOdds && (
               <div className="text-center mt-4">
-                <fieldset className="mb-3 text-left">
+                <fieldset ref={approachRef} className="mb-3 text-left">
                   <legend className="mb-2 text-sm font-semibold">Season approach</legend>
-                  <div className="grid gap-2 sm:grid-cols-2">
+                  <div className="grid gap-2 sm:grid-cols-3">
                     {SEASON_APPROACHES.map(option => (
                       <label key={option.key} className="flex min-h-11 cursor-pointer items-start gap-2 rounded-lg border border-border p-2.5 has-[:checked]:border-primary">
                         <input
@@ -801,7 +804,7 @@ const WorldXi = () => {
                   <h3 className="text-lg font-bold text-primary font-display">Season Report</h3>
                   <p className="text-xs text-muted-foreground">
                     A simulated season for your {formation.name} World XI.
-                    {seasonApproach === 'protect' && ` ${PROTECT_THE_POINT}.`}
+                    {seasonApproach !== 'balanced' && ` ${approachLabel}.`}
                   </p>
                 </div>
 
@@ -820,6 +823,22 @@ const WorldXi = () => {
                   />
                 </div>
 
+                <p className="mb-3 flex flex-wrap justify-center gap-x-4 gap-y-1 text-sm">
+                  {seasonReport.goalsFor !== undefined && seasonReport.goalsAgainst !== undefined && (
+                    <span>Goal difference: <strong>{seasonReport.goalsFor - seasonReport.goalsAgainst}</strong></span>
+                  )}
+                  {seasonReport.venuePoints && <>
+                    <span>Home points: <strong>{seasonReport.venuePoints.home}</strong></span>
+                    <span>Away points: <strong>{seasonReport.venuePoints.away}</strong></span>
+                  </>}
+                </p>
+                <button type="button" className="mb-3 min-h-11 rounded-lg border border-border px-3 text-sm font-semibold hover:border-primary"
+                  onClick={() => {
+                    setSeasonReport(null);
+                    requestAnimationFrame(() => approachRef.current?.querySelector<HTMLInputElement>('input:checked')?.focus({ preventScroll: true }));
+                  }}>
+                  Try another approach
+                </button>
                 <div className="grid gap-1.5 text-sm">
                   {seasonReport.narrative.map((line, i) => (
                     <p key={i} className="bg-background/60 border border-border/50 rounded-lg px-3 py-2 text-foreground/90">
@@ -847,7 +866,7 @@ const WorldXi = () => {
                     ? [
                         emojiGrid,
                         `Season sim: rated ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)} with ${seasonReport.points} points`,
-                        ...(seasonApproach === 'protect' ? [`Simulated with ${PROTECT_THE_POINT}.`] : []),
+                        ...(seasonApproach !== 'balanced' ? [`Simulated with ${approachLabel}.`] : []),
                         /* Round 726: the share card carries the finish, the top
                            scorer and the player of the season, as text. */
                         ...(seasonReport.topScorer ? [`Top scorer: ${seasonReport.topScorer.name} (${seasonReport.topScorer.goals})`] : []),

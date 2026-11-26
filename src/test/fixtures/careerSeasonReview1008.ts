@@ -17,6 +17,7 @@ export interface ReviewFixture {
   fields: Record<string, number | string>;
   regular: Record<string, string>;
   postseason: Record<string, string>;
+  rateComparisons?: Record<string, { earliest: [string, string]; latest: [string, string] }>;
 }
 export const reviewFixtures: ReviewFixture[] = [
   { slug: 'nba', pos: 'PG', games: 76, gamesLabel: 'Games',
@@ -33,27 +34,36 @@ export const reviewFixtures: ReviewFixture[] = [
     postseason: { Games: '2', Performance: '3 sacks, 11 tackles' } },
   { slug: 'mlb', pos: 'CF', games: 151, gamesLabel: 'Games',
     fields: { avg: .287, hr: 29, rbi: 94, sb: 23, obp: .361, doubles: 37, era: 999, poGames: 8, poLine: '9 for 31 (0.290), 2 HR' },
-    regular: { 'Batting average': '0.287', 'Home runs': '29', 'Runs batted in': '94', 'Stolen bases': '23', 'On base percentage': '0.361', Doubles: '37' },
+    regular: { 'Batting average': '0.287', 'Home runs': '29', 'Runs batted in': '94', 'Stolen bases': '23', 'On base percentage': '0.361', Doubles: '37', 'Doubles per 100 games': '24.5' },
+    rateComparisons: { 'Doubles per 100 games': { earliest: ['25.2', '-0.7'], latest: ['24.7', '+0.2'] } },
     postseason: { 'Team postseason games': '8', Performance: '9 for 31 (0.290), 2 HR' } },
   { slug: 'mlb', pos: 'SP', games: 30, gamesLabel: 'Starts',
     fields: { wins: 16, lossesP: 7, era: 3.2, so: 211, hr: 999, poGames: 6, poLine: '2 appearances, 2.80 ERA, 19 K' },
-    regular: { Wins: '16', Losses: '7', ERA: '3.20', Strikeouts: '211' },
+    regular: { Wins: '16', Losses: '7', ERA: '3.20', Strikeouts: '211', 'Strikeouts per start': '7.03' },
+    rateComparisons: { 'Strikeouts per start': { earliest: ['8.12', '-1.08'], latest: ['7.28', '+0.24'] } },
     postseason: { 'Team postseason games': '6', Performance: '2 appearances, 2.80 ERA, 19 K' } },
   { slug: 'mlb', pos: 'RP', games: 61, gamesLabel: 'Appearances',
     fields: { saves: 27, holds: 6, era: 2.4, so: 83, wins: 4, lossesP: 3, hr: 999, poGames: 7, poLine: '4 appearances, 1.80 ERA, 8 K' },
-    regular: { Saves: '27', Holds: '6', ERA: '2.40', Strikeouts: '83', Wins: '4', Losses: '3' },
+    regular: { Saves: '27', Holds: '6', ERA: '2.40', Strikeouts: '83', Wins: '4', Losses: '3', 'Strikeouts per appearance': '1.36', 'Saves per 100 appearances': '44.3' },
+    rateComparisons: {
+      'Strikeouts per appearance': { earliest: ['1.46', '-0.10'], latest: ['1.38', '+0.02'] },
+      'Saves per 100 appearances': { earliest: ['47.4', '-3.1'], latest: ['45.0', '+0.7'] },
+    },
     postseason: { 'Team postseason games': '7', Performance: '4 appearances, 1.80 ERA, 8 K' } },
   { slug: 'nhl', pos: 'C', games: 78, gamesLabel: 'Games',
     fields: { goals: 34, assists: 51, points: 85, wins: 999, poGames: 13, poGoals: 5, poAssists: 9, poPoints: 14 },
-    regular: { Goals: '34', Assists: '51', Points: '85' },
+    regular: { Goals: '34', Assists: '51', Points: '85', 'Points per game': '1.09' },
+    rateComparisons: { 'Points per game': { earliest: ['1.15', '-0.06'], latest: ['1.10', '+0.01'] } },
     postseason: { Games: '13', Goals: '5', Assists: '9', Points: '14' } },
   { slug: 'nhl', pos: 'D', games: 79, gamesLabel: 'Games',
     fields: { goals: 11, assists: 38, points: 49, wins: 999, poGames: 12, poGoals: 2, poAssists: 6, poPoints: 8 },
-    regular: { Goals: '11', Assists: '38', Points: '49' },
+    regular: { Goals: '11', Assists: '38', Points: '49', 'Points per game': '0.62' },
+    rateComparisons: { 'Points per game': { earliest: ['0.65', '-0.03'], latest: ['0.63', '+0.01'] } },
     postseason: { Games: '12', Goals: '2', Assists: '6', Points: '8' } },
   { slug: 'nhl', pos: 'G', games: 53, gamesLabel: 'Games',
     fields: { wins: 32, svpct: .918, goals: 999, poGames: 11, poWins: 6, poSvpct: .926 },
-    regular: { Wins: '32', 'Save percentage': '0.918' },
+    regular: { Wins: '32', 'Save percentage': '0.918', 'Wins per 100 appearances': '60.4' },
+    rateComparisons: { 'Wins per 100 appearances': { earliest: ['65.3', '-4.9'], latest: ['61.5', '+1.2'] } },
     postseason: { Games: '11', Wins: '6', 'Save percentage': '0.926' } },
 ];
 

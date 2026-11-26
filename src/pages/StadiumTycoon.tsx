@@ -30,7 +30,8 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
-  TRACKS, levelOf, costOf, canBuy, upgradePurchase, standsConstructionQuote, STANDS_SEATS_PER_LEVEL, capacity, attendance, incomePerSec,
+  TRACKS, trackById, levelOf, costOf, canBuy, upgradePurchase, standsConstructionQuote, STANDS_SEATS_PER_LEVEL, capacity, attendance, incomePerSec,
+  recordedLeagueCrowd,
   ticketPolicyOf, TICKET_POLICIES,
   tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney as tycoonMoney,
   boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,
@@ -588,6 +589,10 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
 
   const fans = attendance(s);
   const cap = capacity(s);
+  const standLevel = levelOf(s, 'stands');
+  const openStandLevels = trackById('stands').maxLevel - standLevel;
+  const targetSeats = s.expansionTarget === undefined ? null : cap + (s.expansionTarget - standLevel) * STANDS_SEATS_PER_LEVEL;
+  const crowd = panel === 'stats' ? recordedLeagueCrowd(s) : null;
   const rate = incomePerSec(s);
   const div = divisionOf(s);
   /* Round 582: where this ground stands in its league. */
@@ -1106,6 +1111,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                 ['Career wins', s.totalWins.toLocaleString('en-US')],
                 ['Career goals', s.totalGoals.toLocaleString('en-US')],
                 ['Matches played', (s.totalMatches ?? 0).toLocaleString('en-US')],
+                ...(crowd ? [[`Avg. league crowd · ${formatNumber(crowd.matches)} ${crowd.matches === 1 ? 'match' : 'matches'}`, formatNumber(crowd.average)]] : []),
                 ['Taps', s.totalTaps.toLocaleString('en-US')],
                 ['Best division', `${DIVISIONS[Math.min(s.bestDivision ?? 0, DIVISIONS.length - 1)].emoji} ${DIVISIONS[Math.min(s.bestDivision ?? 0, DIVISIONS.length - 1)].name}`],
                 ['Golden whistles caught', (s.goldenCaught ?? 0).toLocaleString('en-US')],
@@ -1120,6 +1126,39 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                 </div>
               ))}
             </div>
+            <section aria-label="Expansion target" className="mt-3 space-y-2 border-t border-border pt-3 text-xs">
+              <p className="font-semibold">Expansion target</p>
+              {(s.expansionTargetsCompleted ?? 0) > 0 && (
+                <p className="text-muted-foreground">{formatNumber(s.expansionTargetsCompleted!)} recorded across your career</p>
+              )}
+              {g.expansionTargetSaveFailed && <p role="alert" className="text-destructive">Could not save your expansion target. Try again.</p>}
+              {targetSeats === null ? (
+                openStandLevels > 0 ? (
+                  <>
+                    <p className="text-muted-foreground">Pick how many seats to add next. The seats count once the stands open.</p>
+                    <div className="flex flex-wrap gap-2">
+                      <button type="button" className="min-h-11 rounded-lg border border-border px-3 font-semibold" onClick={() => g.doExpansionTarget(1)}>
+                        +{STANDS_SEATS_PER_LEVEL} seats
+                      </button>
+                      {openStandLevels >= 2 && (
+                        <button type="button" className="min-h-11 rounded-lg border border-border px-3 font-semibold" onClick={() => g.doExpansionTarget(2)}>
+                          +{STANDS_SEATS_PER_LEVEL * 2} seats
+                        </button>
+                      )}
+                    </div>
+                  </>
+                ) : <p className="text-muted-foreground">Your stands are fully built.</p>
+              ) : (
+                <>
+                  <p className="text-muted-foreground">{formatNumber(cap)} seats open · {formatNumber(targetSeats)} goal</p>
+                  <div className="flex flex-wrap gap-2">
+                    <button type="button" disabled={cap < targetSeats} className="min-h-11 rounded-lg border border-border px-3 font-semibold disabled:opacity-50"
+                      onClick={() => g.doExpansionTarget('claim')}>Record expansion</button>
+                    <button type="button" className="min-h-11 px-2 text-muted-foreground" onClick={() => g.doExpansionTarget('cancel')}>Cancel target</button>
+                  </div>
+                </>
+              )}
+            </section>
           </div>
         )}
 
