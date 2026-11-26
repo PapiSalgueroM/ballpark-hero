@@ -1,0 +1,55 @@
+.game {
+  display: contents;
+}
+
+@media (min-width: 1280px) {
+  .game {
+    --game-ad-rail: 160px;
+    display: block;
+    margin-inline: var(--game-ad-rail);
+  }
+
+  /* Viewport-fixed controls do not inherit the content column's width. */
+  .game :is([data-career-utility], [data-game-rail-dock="end"]) {
+    right: calc(var(--game-ad-rail) + 1rem);
+  }
+
+  /* A kept-aside save notice must not sit in a rail or cover the career tools. */
+  .game [data-dukb-set-aside] {
+    left: calc(var(--game-ad-rail) + 1rem);
+    right: auto;
+  }
+
+  .game :is([data-career-action-bar="floating"], [data-game-rail-dock="full"]) {
+    left: var(--game-ad-rail);
+    right: var(--game-ad-rail);
+  }
+}
+
+/* On a compact desktop the career bar already occupies the whole middle.
+   Use the same inline utility row as mobile rather than stacking two controls. */
+@media (1280px <= width < 1536px) {
+  .game [data-career-utilities] {
+    display: flex;
+  }
+
+  .game [data-career-utility] {
+    position: relative;
+    inset: auto;
+    flex: 1;
+    width: auto;
+    height: auto;
+    translate: none;
+    padding-inline: 0.75rem;
+    font-size: 0.875rem;
+    z-index: auto;
+  }
+
+  body[data-consent-pending] .game [data-career-utility] {
+    bottom: auto;
+  }
+
+  .game [data-career-utility] > span:nth-child(2) {
+    display: inline;
+  }
+}

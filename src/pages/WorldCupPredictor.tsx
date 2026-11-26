@@ -1301,6 +1301,7 @@ const WorldCupPredictor = () => {
       {!rankingsOpen && (
         <button
           onClick={() => setRankingsOpen(true)}
+          data-game-rail-dock="end"
           className="fixed top-4 right-4 z-50 flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold
             bg-[hsl(220,15%,15%)] border border-[hsl(220,15%,25%)] text-[hsl(45,90%,60%)]
             hover:bg-[hsl(220,15%,20%)] transition-colors shadow-lg"
@@ -1612,6 +1613,7 @@ const WorldCupPredictor = () => {
         {!viewingSharedBracket && (
           <button
             onClick={handleAutoFillEverything}
+            data-game-rail-dock="end"
             disabled={autoFillEverythingLoading}
             className="fixed bottom-6 [body[data-consent-pending]_&]:bottom-[calc(var(--dukb-consent-height,230px)_+_1.5rem)] right-6 z-50 flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm
               bg-gradient-to-r from-[hsl(45,90%,45%)] to-[hsl(35,90%,50%)] hover:from-[hsl(45,90%,50%)] hover:to-[hsl(35,90%,55%)]
