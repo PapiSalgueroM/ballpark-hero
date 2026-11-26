@@ -22,7 +22,7 @@ import {
   type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
   type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,
   type RivalPlayer, type RivalryEvent, type RivalrySummary,
-  type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,
+  type LifestyleLevel, type FamilyStatus, type BallonDorResult,
   type UCLResult, type UCLKnockoutMatch, type Award,
   type LegacyResult, type LegacyTier, type PostRetirementChoice, type ManagerState,
   type PunditState, type OwnerState, type PunditAction,
@@ -2637,7 +2637,7 @@ function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: C
 function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: { bdor: BallonDorResult; career: CareerState; onDismiss: () => void; onSpeech: (choice: BdorSpeechChoice) => void; onReveal?: () => void }) {
   const copy = SOCCER_BALLON_DOR.copy;
   return (
-    <AwardsNightCard<BallonDorNominee>
+    <AwardsNightCard
       key={bdor.year}
       night={bdor}
       reveal={{ complete: !!bdor.revealed || !!bdor.speech, onComplete: () => onReveal?.() }}

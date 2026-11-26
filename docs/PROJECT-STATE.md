@@ -1,3 +1,7 @@
+## November 26 local Soccer Career academy startup
+
+A development-only JSX tagger inserted attributes before an explicit component type on the awards card. The flagship module returned HTTP 500, which made the academy creator report that its clubs could not load. Type inference from the saved ballot supplies the same nominee type. The module now returns HTTP 200 locally. Fresh phone and laptop careers both reached the first senior season in development and retained their earned target after reload. All 27 focused awards tests passed.
+
 ## November 26 local Soccer Career season target archive
 
 A completed season now shows its saved personal target, actual result and recorded training reward in the Record Book. Missing targets stay blank. In two fresh signed-out production-browser careers Nottingham Forest's striker played 30 times, scored six against a five-goal target and retained the exact same save bytes and +1 Shooting after reopening club history on phone and laptop. A Millwall striker who scored twice missed the same target and received no reward. All 20 Record Book tests passed, including an interrupted season and an older season.
