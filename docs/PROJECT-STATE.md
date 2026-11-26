@@ -1,3 +1,7 @@
+### November 26, 2026. Name a full historical starting XI
+
+Missing XI has an optional Full XI archive. Choose a real match, name starters in any order and use individual hints. Each side keeps a separate unassisted best. All 2,277 published starter entries across 207 team sheets completed their XI, including 81 extra spellings from the two-source ledger. The 2011 Barcelona team was played at 320, 390 and 1366 pixels. A full game found all 11 with one hint for 10 unassisted. A partial game revealed the rest at five. Reload and a poorer second attempt retained the result and earlier best. The Daily receipt stayed unchanged and a stale tab and failed write preserved progress. Seven focused tests and both archive simulations passed.
+
 ### November 26, 2026. Keep a refused Daily Sprint answer on screen
 
 The local Finals Sprint daily was showing newly started rounds and points even when the browser rejected their saves. A failed start now leaves the start button available. A failed answer or defer keeps the same clue and input. A timed-out result can retry its save. Practice keeps its existing in-memory fallback. Chrome at 390 and 1366 pixels refused the start, first and sixth answer, then restored storage and saved all six once. Both expired a second daily, retried the failed result write, and persisted the finish. A baseline browser reproduced two losses. Five component tests passed.
