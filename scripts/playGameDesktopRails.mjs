@@ -81,22 +81,28 @@ try {
     assert.equal(await page.locator(key).count(), 0, 'A non-game received a game rail: ' + path);
   }
   await page.close();
-  const active = await ctx.newPage();
+  await ctx.close();
+
   const stats = { pace: 62, shooting: 62, passing: 62, dribbling: 62, defending: 62, physical: 62, reflexes: 62 };
   const career = initCareer('Rail Probe', 'England', 'ST', '2020s', stats, 62, 2020, FALLBACK_CLUBS, null);
   const bytes = serializeSoccerCareerSave(career);
-  await active.addInitScript(save => {
-    localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() }));
-    localStorage.setItem('rules-gate-seen:/soccer-career', '1');
-    localStorage.setItem('soccerCareerSave', save);
-  }, bytes);
-  await verify(active, '/soccer-career', 1280, 3);
-  const saveBefore = await active.evaluate(() => localStorage.getItem('soccerCareerSave'));
-  assert(saveBefore);
-  await active.locator('[data-career-utility="phone"]').click({ timeout: 5000 });
-  await active.getByRole('dialog').waitFor({ state: 'visible', timeout: 5000 });
-  assert.equal(await active.evaluate(() => localStorage.getItem('soccerCareerSave')), saveBefore);
-  await ctx.close();
+  for (const width of [1280, 1440, 1536]) {
+    const session = await context(width);
+    const active = await session.newPage();
+    await active.addInitScript(save => {
+      localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() }));
+      localStorage.setItem('rules-gate-seen:/soccer-career', '1');
+      localStorage.setItem('soccerCareerSave', save);
+    }, bytes);
+    await verify(active, '/soccer-career', width, 3);
+    const saveBefore = await active.evaluate(() => localStorage.getItem('soccerCareerSave'));
+    assert(saveBefore);
+    await active.locator('[data-career-utility="phone"]').click({ timeout: 5000 });
+    await active.getByRole('dialog', { name: 'Your phone', exact: true }).waitFor({ timeout: 5000 });
+    assert.equal(await active.evaluate(() => localStorage.getItem('soccerCareerSave')), saveBefore);
+    await session.close();
+    console.log(`Active Soccer Career at ${width}px: existing dock and phone survived`);
+  }
   console.log('Non-game exclusions and active Soccer Career controls passed');
 } finally {
   await browser.close();
