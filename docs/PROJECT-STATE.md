@@ -1,3 +1,9 @@
+## 2026-11-26, Build Your XI draft position picker
+
+Build Your XI now puts its open positions beside the assigned club or nation. Repeated roles have separate options, and the pitch can still select the same open positions. The search opens after a position is chosen, then keyboard focus returns to the picker after a successful pick. The draft saves and validates players through its existing rules.
+
+The 320-pixel first session put the goalkeeper button below the fold at y910 before the change. In the offline recorded-year replay, the new 44-pixel picker sat at y424 on the phone and y487 at 1366 pixels. Both replays selected a goalkeeper without a scroll jump, accepted the matching fixture record, and kept the filled slot after reload. The Mixed draft regression also covers duplicate roles, keyboard search and reload.
+
 ## 2026-11-25, Quieter ads and career season comparisons
 
 AdSense anchor and vignette ads are off for douknowball.com. Home shows one in-page banner after the first sport on phones and above the footer on desktop. The phone slot uses a 100-pixel-tall display unit. AdSense allows desktop side rails on either edge. The homepage marks the game area with Google’s overlap protection. AdSense confirmed the save and says propagation can take up to an hour.
