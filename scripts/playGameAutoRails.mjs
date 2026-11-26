@@ -17,7 +17,7 @@ const paths = [...new Set([...ALL_GAMES.map(game => game.path), ...HUB_NAV.map(h
 assert(paths.length > 100);
 const browser = await chromium.launch();
 
-async function check(path, { width = 1280, advertising = true, expected = 1, gpc = false, accept = false } = {}) {
+async function check(path, { width = 1280, advertising = true, expected = 1, gpc = false, accept = false, mobileSlot } = {}) {
   const context = await browser.newContext({ viewport: { width, height: 900 }, serviceWorkers: 'block' });
   try {
     await context.addInitScript(({ advertising, gpc }) => {
@@ -55,6 +55,16 @@ async function check(path, { width = 1280, advertising = true, expected = 1, gpc
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     }
     assert.equal(intercepted.length, expected, path);
+    if (mobileSlot !== undefined) {
+      const slot = page.locator('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot="7540487748"]');
+      assert.equal(await slot.count(), mobileSlot, path + ': manual mobile slot count');
+      if (mobileSlot) {
+        const box = await slot.boundingBox();
+        assert(box && box.x >= 0 && box.x + box.width <= width, path + ': slot stays within phone width');
+        const gap = await slot.locator('..').evaluate(el => parseFloat(getComputedStyle(el).paddingTop));
+        assert(gap >= 150, path + ': space between the ad and gameplay controls');
+      }
+    }
   } finally {
     await context.close();
   }
@@ -68,7 +78,15 @@ try {
   for (const path of ['/soccer-career', '/nba-my-career', '/nfl-my-career', '/stadium-tycoon', '/world-cup-bracket', '/soccer']) {
     await check(path, { advertising: false, expected: 0 });
   }
-  await check('/soccer-career', { width: 390, expected: 0 });
+  for (const width of [320, 390, 430]) {
+    await check('/soccer-career', { width, mobileSlot: 1 });
+  }
+  await check('/soccer-career', { width: 390, advertising: null, accept: true, mobileSlot: 1 });
+  await check('/soccer-career', { width: 390, advertising: false, expected: 0, mobileSlot: 0 });
+  await check('/soccer-career', { width: 390, gpc: true, expected: 0, mobileSlot: 0 });
+  await check('/soccer-career', { width: 640, expected: 0, mobileSlot: 0 });
+  await check('/soccer-career?view=saves', { width: 390, expected: 0, mobileSlot: 0 });
+  await check('/soccer-career', { width: 1366, mobileSlot: 0 });
   await check('/soccer-career', { width: 1279, expected: 0 });
   await check('/soccer-career?view=saves', { expected: 0 });
   await check('/soccer-career#shared', { expected: 0 });

@@ -1,4 +1,6 @@
-import type { ReactNode } from "react";
+import { useSyncExternalStore, type ReactNode } from "react";
+import { useLocation } from "react-router-dom";
+import AdBanner from "@/components/ads/AdBanner";
 import PageSeo from "@/components/seo/PageSeo";
 import GameSeoContent from "@/components/seo/GameSeoContent";
 import { GameNavbar } from "@/components/game/GameNavbar";
@@ -6,6 +8,15 @@ import { GameHelp } from "@/components/game/GameHelp";
 import { REDUCED_ROLE_GAMES } from "@/lib/soccerCareerRole";
 import { DERBY_HELP_RULES } from "@/lib/soccerCareerDerbyHelp";
 import { SOCCER_DECK_HELP_RULES } from "@/lib/soccerDeckGate";
+
+const PILOT_WIDTH = "(min-width: 320px) and (max-width: 639px)";
+function subscribeToPilotWidth(onChange: () => void) {
+  const query = window.matchMedia(PILOT_WIDTH);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+const readPilotWidth = () => window.matchMedia(PILOT_WIDTH).matches;
+const serverPilotWidth = () => false;
 
 const STORY_ROLE_HELP_RULES = [
   'Phone and Training sit above your player on a phone. Career Story opens your saved chapters; Previous and Next move between them, and All seasons returns to the tile you opened.',
@@ -18,6 +29,9 @@ export function SoccerCareerFrame({ active = false, children, reportGameContext 
   children: ReactNode;
   reportGameContext: Record<string, unknown>;
 }) {
+  const { search, hash } = useLocation();
+  const phoneWidth = useSyncExternalStore(subscribeToPilotWidth, readPilotWidth, serverPilotWidth);
+  const showLandingAd = phoneWidth && !active && !search && !hash;
   return (
     <>
       <PageSeo
@@ -58,6 +72,7 @@ export function SoccerCareerFrame({ active = false, children, reportGameContext 
           ]} className={active ? "h-11 w-11 sm:h-auto sm:w-auto" : undefined} />
         </div>
         {children}
+        {showLandingAd && <AdBanner slot="7540487748" mobileBanner />}
         <GameSeoContent
           pageHasOwnH1
           reportGameContext={reportGameContext}
