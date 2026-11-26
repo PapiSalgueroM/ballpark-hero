@@ -1,6 +1,8 @@
 // BASE must be a loopback build. Answer only local fixture prompts.
 import '../lib/offlineTransport.cjs';
 import assert from 'node:assert/strict';
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 import { buildSync } from 'esbuild';
 import { chromium } from '../lib/playwrightLoader.mjs';
 
@@ -11,7 +13,7 @@ const data = buildSync({entryPoints: ['src/data/sportChallengePilot.ts'], write:
 const { finals } = await import('data:text/javascript;base64,' + Buffer.from(data.outputFiles[0].text).toString('base64'));
 const browser = await chromium.launch({args: ['--no-proxy-server', '--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1']});
 try {
-  for (const [width, sport] of [[320, 'soccer'], [390, 'nba'], [390, 'nfl'], [1366, 'soccer'], [1366, 'nba'], [1366, 'nfl']]) {
+  for (const [width, sport] of [[320, 'soccer'], [390, 'nba'], [390, 'nfl'], [1366, 'soccer'], [1366, 'nba'], [1366, 'nfl'], [390, 'nhl'], [1366, 'nhl']]) {
     const context = await browser.newContext({viewport: {width, height: 844}, reducedMotion: 'reduce', serviceWorkers: 'block'});
     await context.addInitScript(() => localStorage.setItem('cookie-consent-v2', JSON.stringify({
       version: 2, advertising: false, analytics: false, updatedAt: Date.now(),
@@ -60,10 +62,25 @@ try {
     }
     const results = page.getByRole('region', {name: 'Round results'});
     assert.equal(await results.getByRole('heading').innerText(), '100 points');
+    const roundKey = 'dukb-finals-v1-' + sport + '-daily';
+    const settled = await page.evaluate(key => localStorage.getItem(key), roundKey);
+    assert.ok(settled);
     await page.reload();
     assert.equal(await results.getByRole('heading').innerText(), '100 points');
     await results.getByText('Show recap and sources').click();
     assert.equal(await results.getByRole('link', {name: /^Source for/}).count(), 6);
+    assert.equal(await page.evaluate(key => localStorage.getItem(key), roundKey), settled);
+    if (sport === 'nhl') {
+      const links = await results.getByRole('link', {name: /^Source for/}).evaluateAll(nodes => nodes.map(n => n.href));
+      assert.ok(links.every(link => link.includes('media.nhl.com/')));
+      if (process.env.OUTPUT) {
+        await mkdir(process.env.OUTPUT, {recursive: true});
+        const stem = path.join(process.env.OUTPUT, 'nhl-' + width);
+        await results.getByRole('heading').scrollIntoViewIfNeeded();
+        await page.screenshot({path: stem + '-recap.png'});
+        await writeFile(stem + '.json', JSON.stringify({width, base: base.origin, score: 100, afterReload: JSON.parse(settled), links, recap: await results.innerText()}, null, 2));
+      }
+    }
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1));
     await results.getByRole('button', {name: 'Switch to practice'}).click();
     await page.getByRole('button', {name: 'Start practice'}).click();

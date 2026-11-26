@@ -14,7 +14,7 @@ import {
 
 import { pilotSports } from '@/data/sportChallengePilot';
 
-const SPORTS = { soccer: 'Soccer', nba: 'NBA', nfl: 'NFL' } as const;
+const SPORTS = { soccer: 'Soccer', nba: 'NBA', nfl: 'NFL', nhl: 'NHL' } as const;
 const MODES = { daily: 'Daily preview', practice: 'Practice' } as const;
 const RULES = [
   'Type one finalist for each of six clues. A team can only count once.',
@@ -218,7 +218,7 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
         <div className="mb-4 grid gap-3 sm:grid-cols-2">
           <fieldset>
             <legend className="mb-1 text-sm font-semibold">Sport</legend>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 gap-2">
               {pilotSports.map(option => (
                 <button key={option} type="button" ref={sport === option ? sportRef : undefined}
                   aria-pressed={sport === option} onClick={() => choose(option, mode)}
@@ -341,7 +341,7 @@ export default function FinalsSprintPreview() {
 
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
-      <PageSeo title="Finals Sprint preview | DoUKnowBall" description="Type your way through six soccer, NBA or NFL finals clues."
+      <PageSeo title="Finals Sprint preview | DoUKnowBall" description="Type your way through six soccer, NBA, NFL or NHL finals clues."
         path="/alphabet-sprint" />
       <div className="mx-auto max-w-2xl px-3 py-4 sm:px-4 sm:py-6">
         <FinalsRound key={sport + ':' + mode} sport={sport} mode={mode} choose={choose} pickerToFocus={pickerToFocus} />

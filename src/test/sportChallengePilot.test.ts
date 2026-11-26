@@ -129,3 +129,37 @@ it('accepts accents and common nicknames and rejects a repeat even when the team
   }
   expect(found).toBe(true);
 });
+
+it.each([
+  ['soccer', ['1958','2002','2018','1930','1994','2010'], 'Sweden', 20],
+  ['nba', ['2014','2009','2022','2019','2004','2023'], 'Miami Heat', 15],
+  ['nfl', ['2010','2021','1993','2001','2022','2008'], 'Indianapolis Colts', 15],
+] as const)('reopens a frozen pre-hockey %s daily with an answer and a defer', (sport, order, answerId, points) => {
+  const saved = {version: 1, sport, mode: 'daily', day: '2026-11-26', startedAt: start,
+    deadline: start + 60000, order, answers: [{promptId: order[0], answerId, points}],
+    deferred: true, deferredAt: 1, completed: false};
+  expect(readPilotRun(JSON.stringify(saved), sport, 'daily', start + 12000)).toEqual(saved);
+  expect(pilotStorageKey(sport, 'daily')).toBe(`dukb-finals-v1-${sport}-daily`);
+});
+it('deals three weeks of distinct NHL question sets even before clue order is considered', () => {
+  const sets = Array.from({length: 21}, (_, i) => createPilotRun('nhl', 'daily', start + i * day).order.slice().sort().join('/'));
+  expect(new Set(sets).size).toBe(21);
+});
+it.each([
+  ['1967', 'Maple Leafs', 'Toronto Maple Leafs', ['Toronto Maple', 'Maple']],
+  ['1967', 'Habs', 'Montreal Canadiens', ['Canadians']],
+  ['1983', 'NY Islanders', 'New York Islanders', ['New York', 'NY Rangers']],
+  ['1991', 'North Stars', 'Minnesota North Stars', ['Stars', 'Dallas Stars', 'Minnesota North', 'Minnesota Wild']],
+  ['2003', 'Mighty Ducks', 'Mighty Ducks of Anaheim', ['Mighty Ducks of', 'Minnesota']],
+  ['2023', 'Golden Knights', 'Vegas Golden Knights', ['Vegas Golden', 'Golden']],
+] as const)('accepts the historical club for %s from %s', (id, alias, expected, invalid) => {
+  let run: PilotRun | undefined;
+  for (let i = 0; i < 1000; i++) {
+    const candidate = createPilotRun('nhl', 'practice', start + i);
+    if (candidate.order[0] === id) { run = candidate; break; }
+  }
+  if (!run) throw Error('No opening NHL clue for ' + id);
+  expect(currentPilotPrompt(run)!.text).toBe(`Name either team in the ${id} Stanley Cup Final.`);
+  for (const wrong of invalid) expect(play(run, wrong)).toBe(run);
+  expect(play(run, alias).answers[0].answerId).toBe(expected);
+});

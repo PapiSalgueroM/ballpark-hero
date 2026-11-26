@@ -1,3 +1,7 @@
+Stanley Cup finalists in Finals Sprint
+
+The optional Finals Sprint in Alphabet Sprint now has 12 verified NHL finals from 1967 through 2024. Each saved Daily keeps its deal, accepted names and score. Signed-out Chrome at 390 and 1366 pixels finished all six clues for 100, restored the same answers after reload and played a separate practice round. Three existing sports also passed phone and desktop checks. The NHL media guide and The Hockey Writers archive independently confirm the two finalists for each year. All 32 focused tests and eight browser journeys passed.
+
 ### November 26, 2026. Name a full historical starting XI
 
 Missing XI has an optional Full XI archive. Choose a real match, name starters in any order and use individual hints. Each side keeps a separate unassisted best. All 2,277 published starter entries across 207 team sheets completed their XI, including 81 extra spellings from the two-source ledger. The 2011 Barcelona team was played at 320, 390 and 1366 pixels. A full game found all 11 with one hint for 10 unassisted. A partial game revealed the rest at five. Reload and a poorer second attempt retained the result and earlier best. The Daily receipt stayed unchanged and a stale tab and failed write preserved progress. Seven focused tests and both archive simulations passed.

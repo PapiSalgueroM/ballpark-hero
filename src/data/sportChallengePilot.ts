@@ -1,4 +1,4 @@
-export const pilotSports = ['soccer', 'nba', 'nfl'] as const;
+export const pilotSports = ['soccer', 'nba', 'nfl', 'nhl'] as const;
 export type PilotSport = typeof pilotSports[number];
 
 // The two names are the actual finalists, including the losing finalist.
@@ -47,16 +47,33 @@ export const finals: Record<PilotSport, readonly Final[]> = {
     [1998, 20, 'Denver Broncos', 'Green Bay Packers'],
     [2001, 20, 'Baltimore Ravens', 'New York Giants'],
   ],
+  // Difficulty follows the era of the final.
+  nhl: [
+    [2019, 10, 'St. Louis Blues', 'Boston Bruins'],
+    [2021, 10, 'Tampa Bay Lightning', 'Montreal Canadiens'],
+    [2023, 10, 'Vegas Golden Knights', 'Florida Panthers'],
+    [2024, 10, 'Florida Panthers', 'Edmonton Oilers'],
+    [2003, 15, 'New Jersey Devils', 'Mighty Ducks of Anaheim'],
+    [2006, 15, 'Carolina Hurricanes', 'Edmonton Oilers'],
+    [2010, 15, 'Chicago Blackhawks', 'Philadelphia Flyers'],
+    [2014, 15, 'Los Angeles Kings', 'New York Rangers'],
+    [1967, 20, 'Toronto Maple Leafs', 'Montreal Canadiens'],
+    [1983, 20, 'New York Islanders', 'Edmonton Oilers'],
+    [1991, 20, 'Pittsburgh Penguins', 'Minnesota North Stars'],
+    [1994, 20, 'New York Rangers', 'Vancouver Canucks'],
+  ],
 };
 
 export const factCheckDate = '2026-11-26';
 export const independentSource: Record<PilotSport, string> = {
   soccer: 'https://www.rsssf.org/tablesw/worldcup.html',
   nba: 'https://www.ultimatenba.com/en/history/finals/',
+  nhl: 'https://thehockeywriters.com/docs/stanley-cup/',
   nfl: 'https://static.www.nfl.com/league/apps/league-site/media-guides/2024/2024-Record-and-Fact-Book.pdf',
 };
 
 export function finalsSource(sport: PilotSport, year: number) {
+  if (sport === 'nhl') return 'https://media.nhl.com/site/asset/public/ext/2025-26/2026StanleyCupFinal.pdf';
   if (sport === 'nfl') return 'https://www.foxsports.com/nfl-super-bowl-winners-and-results';
   if (sport === 'nba') return 'https://www.nba.com/news/history-nba-champions';
   const article = year <= 1978
@@ -82,4 +99,14 @@ export const teamAliases: Record<string, string[]> = {
   'New York Giants': ['NYG', 'NY Giants'], 'Pittsburgh Steelers': ['PIT'], 'Arizona Cardinals': ['ARI'],
   'New Orleans Saints': ['NO'], 'Indianapolis Colts': ['IND'], 'Green Bay Packers': ['GB'],
   'Chicago Bears': ['CHI'], 'Dallas Cowboys': ['DAL'], 'Buffalo Bills': ['BUF'], 'Baltimore Ravens': ['BAL'],
+  'St. Louis Blues': ['St Louis', 'Blues'], 'Boston Bruins': ['Boston', 'Bruins'],
+  'Tampa Bay Lightning': ['Tampa Bay', 'Lightning'], 'Montreal Canadiens': ['Montreal', 'Canadiens', 'Habs'],
+  'Vegas Golden Knights': ['Vegas', 'Golden Knights', 'Knights'], 'Florida Panthers': ['Florida', 'Panthers'],
+  'Edmonton Oilers': ['Edmonton', 'Oilers'], 'New Jersey Devils': ['New Jersey', 'Devils'],
+  'Mighty Ducks of Anaheim': ['Anaheim', 'Mighty Ducks', 'Anaheim Mighty Ducks', 'Ducks', 'Anaheim Ducks'],
+  'Carolina Hurricanes': ['Carolina', 'Hurricanes'], 'Chicago Blackhawks': ['Chicago', 'Blackhawks'],
+  'Philadelphia Flyers': ['Philadelphia', 'Flyers'], 'Los Angeles Kings': ['Kings', 'LA Kings'],
+  'New York Rangers': ['Rangers', 'NY Rangers'], 'Toronto Maple Leafs': ['Toronto', 'Maple Leafs', 'Leafs'],
+  'New York Islanders': ['Islanders', 'NY Islanders'], 'Pittsburgh Penguins': ['Pittsburgh', 'Penguins'],
+  'Minnesota North Stars': ['Minnesota', 'North Stars'], 'Vancouver Canucks': ['Vancouver', 'Canucks'],
 };
