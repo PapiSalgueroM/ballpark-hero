@@ -1,3 +1,7 @@
+## November 26 Soccer Career retirement replay verification
+
+The Keep Playing compatibility harness once again reconstructs the earlier engine with the current rating helpers, historical-arrival hooks and page call. The normal CLI passed 1,461 checks over 180 careers, with no skipped years and 106 correctly recorded injury seasons. Restoring the old decline behavior in the test engine produced 532 failures, including 24 reloaded careers losing the pending season. The repair only changes the test harness.
+
 ## November 26 local Stadium Tycoon match programmes
 
 Ground owners can compare a short and bulk print order before a fixture, pay up front and see the actual income from that matchday crowd. The archive keeps printed and sold copies with the price and cost. At 390 and 1366 pixels, a short run sold 15/15 and cleared $15. A separate bulk run sold 17/50 to a crowd of 69 and lost $24. The season archive survived reload, and a refused write kept the original balance and allowed the same purchase on retry. The existing economy simulation and 21 focused programme, pricing and integration checks passed.
