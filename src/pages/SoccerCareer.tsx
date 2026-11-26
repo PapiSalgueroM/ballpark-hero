@@ -2664,7 +2664,12 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: 
       badge={n => <FlagImg name={n.nationality} size={14} />}
       detail={n => `${n.position} · ${n.club}`}
       score={n => `${n.points}pts`}
-      scoreDetail={n => `${n.goals}G${n.assists === undefined ? "" : ` · ${n.assists}A`}${n.trophies.length > 0 ? ` · ${n.trophies.join(", ")}` : ""}`}
+      scoreDetail={n => <>
+        {`${n.goals}G${n.assists === undefined ? "" : ` · ${n.assists}A`}${n.trophies.length > 0 ? ` · ${n.trophies.join(", ")}` : ""}`}
+        {n.performance && Number.isFinite(n.performance.rating) && Number.isInteger(n.performance.apps) && <span className="block">{n.performance.rating.toFixed(1)} avg · {n.performance.apps} apps
+          {n.performance.cleanSheets !== undefined && <span className="block">{n.performance.cleanSheets} clean sheets</span>}
+        </span>}
+      </>}
       onDismiss={onDismiss}
       speech={{
         open: bdorSpeechOpen(career),

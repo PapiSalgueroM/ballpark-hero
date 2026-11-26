@@ -68,7 +68,7 @@ import type { PhoneState, WorldSeason } from "./soccerPhone";
 /* Round 1523: morale that plays (src/lib/careerForm.ts). */
 import { dressingRoomApps, soccerMoraleRating } from "./careerForm";
 /* Round 1525: the season awards, won against a field, only in the seasons they were given for. */
-import { soccerAwardWon, type SoccerAwardSeason, type SoccerSeasonAward } from "./soccerSeasonAwards";
+import { soccerAwardWon, soccerField, type SoccerAwardSeason, type SoccerSeasonAward } from "./soccerSeasonAwards";
 /* Round 134: money stops being a number that only goes up. A savings account,
    a market of five things whose prices move every season whether you are
    watching or not, a statement with a limit on it, and the two small things
@@ -426,6 +426,7 @@ export interface BallonDorNominee extends AwardsCandidate {
   position: string;
   goals: number;
   assists?: number;
+  performance?: BallotPerformance;
   trophies: string[];
   generatedId?: number;
   generatedAge?: number;
@@ -647,7 +648,7 @@ export interface RivalPlayer {
   careerGoals: number;
   careerAssists: number;
   careerApps: number;
-  lastSeason?: Pick<SeasonRecord, "year" | "club" | "apps" | "goals" | "assists">;
+  lastSeason?: Pick<SeasonRecord, "year" | "club" | "apps" | "goals" | "assists"> & { performance?: BallotPerformance };
   leagueTitles: number;
   championsLeagues: number;
   worldCups: number;
@@ -7793,12 +7794,45 @@ function getClubLeagueEra(club: string, leagueMap: Record<string, string[]>): st
   return null;
 }
 
-function calcBdorPoints(goals: number, assists: number, overall: number, clubTier: number, trophies: string[], club: string, topClubs: string[]): number {
+type BallotPerformance = { apps: number; rating: number; cleanSheets?: number };
+
+function ballotRole(position: string) {
+  if (["GK", "CB", "LB", "RB"].includes(position)) return "back";
+  if (position === "CDM") return "holding";
+  if (position === "CM" || position === "CAM") return "creative";
+  return null;
+}
+
+function simulatedBallotLine(seed: string, position: string, overall: number, tier: number, goals: number, source: number | { apps: number; assists: number }): { assists: number; performance?: BallotPerformance } {
+  const role = ballotRole(position);
+  const initialAssists = typeof source === "number" ? 3 + Math.floor(source * 16) : source.assists;
+  if (!role) return { assists: initialAssists };
+  const roll = keyedRng(seed);
+  const apps = typeof source === "number" ? 28 + Math.floor(roll() * 25) : source.apps;
+  const assists = typeof source === "number" && role !== "creative" ? calcAssists(position, apps, overall, 1, source) : initialAssists;
+  const cleanSheets = role === "back" ? Math.round(apps * (0.20 + roll() * 0.25)) : undefined;
+  const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets ?? 0, overall, tier, 0, roll());
+  return { assists, performance: { apps, rating, ...(cleanSheets !== undefined ? { cleanSheets } : {}) } };
+}
+
+function ballotRolePoints(position: string, tier: number, assists: number, season?: BallotPerformance): number {
+  const role = ballotRole(position);
+  if (!role || !season || season.apps < 20) return 0;
+  const { mean, sd } = soccerField(position);
+  // Compare to the position's simulated rating distribution at the same club level.
+  const above = Math.max(0, (seasonLevel(season.rating, tier) - mean) / sd - 1);
+  const weight = Math.min(1, season.apps / 38);
+  const evidence = role === "back" ? Math.max(0, (season.cleanSheets ?? 0) - 8) * 1.3 : Math.min(9, assists * (role === "holding" ? 0.8 : 0.4));
+  return Math.min(58, Math.round(weight * (above * (role === "holding" ? 24 : 17) + evidence)));
+}
+
+function calcBdorPoints(goals: number, assists: number, overall: number, clubTier: number, trophies: string[], club: string, topClubs: string[], rolePoints = 0): number {
   let pts = 0;
   // Goals: 0.7pt each, max 28 (reduced from 1pt/max 40)
   pts += Math.min(goals * 0.7, 28);
   // Assists: 0.3 each, max 8 (reduced from 0.5/max 15)
   pts += Math.min(assists * 0.3, 8);
+  pts = Math.max(pts, rolePoints);
   // Trophies
   if (trophies.includes("UCL")) pts += 25;
   /* Round 972: a continental club cup outside UEFA, under its own name. Worth
@@ -7868,8 +7902,9 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // --- Player eligibility ---
   const isLowTierClub = state.currentClubTier >= 3;
   const hasMajorTrophy = season.leagueTitle || season.championsLeague || season.worldCup;
-  const playerEligible = !isLowTierClub || (season.goals >= 40 && hasMajorTrophy);
-  const playerCanContend = (state.currentClubTier <= 2) || (isLowTierClub && season.goals >= 40 && hasMajorTrophy);
+  const playerRolePoints = ballotRolePoints(state.position, season.clubTier, season.assists, season);
+  const eliteRole = playerRolePoints >= 34 && season.apps >= 30;
+  const playerCanContend = !isLowTierClub || (hasMajorTrophy && (season.goals >= 40 || eliteRole));
 
   // Calculate player points (reduced scaling)
   const playerTrophies: string[] = [];
@@ -7884,7 +7919,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
 
   let playerPoints = 0;
   if (playerCanContend) {
-    playerPoints = calcBdorPoints(season.goals, season.assists, state.overall, state.currentClubTier, playerTrophies, state.currentClub, eraTopClubs);
+    playerPoints = calcBdorPoints(season.goals, season.assists, state.overall, state.currentClubTier, playerTrophies, state.currentClub, eraTopClubs, playerRolePoints);
   }
   const playerNominated = playerCanContend && playerPoints > 45;
 
@@ -7942,7 +7977,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
       if (usedNames.has(star.name)) continue;
       usedNames.add(star.name);
       const goals = rand(star.baseGoals[0], star.baseGoals[1]);
-      const assists = rand(3, 18);
+      const assistRoll = Math.random();
       /* Round 130: if the sim has moved him, he is at the club the sim moved
          him to. One truth, shared with the phone's transfer feed. */
       const starClub = worldClubOf(state, star.name) ?? star.club;
@@ -7953,10 +7988,11 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
       if (starIntl) trophies.push(starIntl);
 
       const overall = clamp(82 + star.power + rand(-2, 2), 78, 96);
-      const pts = calcBdorPoints(goals, assists, overall, 1, trophies, starClub, eraTopClubs) + star.power * rand(1, 3);
+      const { assists, performance } = simulatedBallotLine(`${soccerDeckIdentity(state)}|${year}|${star.name}|ballot`, star.position, overall, 1, goals, assistRoll);
+      const pts = calcBdorPoints(goals, assists, overall, 1, trophies, starClub, eraTopClubs, ballotRolePoints(star.position, 1, assists, performance)) + star.power * rand(1, 3);
       allNomineeData.push({
         name: star.name, nationality: star.nationality, position: star.position,
-        club: starClub, points: pts, goals, assists, trophies, isPlayer: false,
+        club: starClub, points: pts, goals, assists, trophies, performance, isPlayer: false,
       });
     }
   }
@@ -7967,15 +8003,16 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
       if (usedNames.has(gen.name)) continue;
       usedNames.add(gen.name);
       const goals = rand(gen.baseGoals[0], gen.baseGoals[1]);
-      const assists = rand(3, 18);
+      const assistRoll = Math.random();
       const trophies = clubHonours(gen.club);
       const genIntl = intlHonour(gen.nationality);
       if (genIntl) trophies.push(genIntl);
       const overall = clamp(rand(83, 93), 75, 95);
-      const pts = calcBdorPoints(goals, assists, overall, 1, trophies, gen.club, eraTopClubs);
+      const { assists, performance } = simulatedBallotLine(`${soccerDeckIdentity(state)}|${year}|${gen.name}|ballot`, gen.position, overall, 1, goals, assistRoll);
+      const pts = calcBdorPoints(goals, assists, overall, 1, trophies, gen.club, eraTopClubs, ballotRolePoints(gen.position, 1, assists, performance));
       allNomineeData.push({
         name: gen.name, nationality: gen.nationality, position: gen.position,
-        club: gen.club, points: pts, goals, assists, trophies, isPlayer: false,
+        club: gen.club, points: pts, goals, assists, trophies, performance, isPlayer: false,
         generatedId: gen.generatedId, generatedAge: gen.generatedAge,
       });
     }
@@ -7993,10 +8030,11 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     const rivalTrophies = clubHonours(state.rival.club);
     const rivalIntl = intlHonour(state.rival.nationality);
     if (rivalIntl) rivalTrophies.push(rivalIntl);
-    const rivalPts = calcBdorPoints(rivalGoals, rivalAssists, state.rival.overall, state.rival.clubTier, rivalTrophies, state.rival.club, eraTopClubs);
+    const { performance } = state.rival.lastSeason;
+    const rivalPts = calcBdorPoints(rivalGoals, rivalAssists, state.rival.overall, state.rival.clubTier, rivalTrophies, state.rival.club, eraTopClubs, ballotRolePoints(state.rival.position, state.rival.clubTier, rivalAssists, performance));
     allNomineeData.push({
       name: state.rival.name, nationality: state.rival.nationality, position: state.rival.position,
-      club: state.rival.club, points: rivalPts, goals: rivalGoals, assists: rivalAssists, trophies: rivalTrophies, isPlayer: false, isCareerRival: true,
+      club: state.rival.club, points: rivalPts, goals: rivalGoals, assists: rivalAssists, trophies: rivalTrophies, performance, isPlayer: false, isCareerRival: true,
     });
   }
 
@@ -8016,8 +8054,8 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // carries goals + trophies, so score the player and the field on the same
   // scale and let the numbers speak. Reputation still decides close years, but
   // it can no longer beat a season that objectively led the world.
-  const productionScore = (goals: number, assists: number, trophies: string[]): number => {
-    let p = goals + assists * 0.5;
+  const productionScore = (goals: number, assists: number, trophies: string[], rolePoints: number): number => {
+    let p = Math.max(goals + assists * 0.5, rolePoints * 0.85);
     if (trophies.includes("World Cup")) p += 22;
     if (trophies.includes("Continental")) p += 11;
     if (trophies.includes("UCL")) p += 18;
@@ -8026,7 +8064,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     if (trophies.includes("Cup")) p += 3;
     return p;
   };
-  const playerProduction = productionScore(season.goals, season.assists, playerTrophies);
+  const playerProduction = productionScore(season.goals, season.assists, playerTrophies, playerRolePoints);
   /* Round 292: "the field" is the ten men the ceremony puts on screen, not
      every name the era pool produced. A 44 goal forward at a mid table club
      sits outside the shortlist on the points formula (goals are capped at 28
@@ -8049,10 +8087,12 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
      nothing by it. */
   const visibleField = allNomineeData.slice(0, SOCCER_BALLON_DOR.award.shortlistSize - 1);
   lastJudged = { year, names: visibleField.map(n => n.name) };
-  const fieldBest = visibleField.reduce(
-    (mx, n) => Math.max(mx, productionScore(n.goals, n.assists ?? 0, n.trophies)),
-    0,
-  );
+  const fieldBest = visibleField.reduce((best, nominee) => {
+    const assists = nominee.assists ?? 0;
+    const tier = nominee.isCareerRival && state.rival ? state.rival.clubTier : 1;
+    const rolePoints = ballotRolePoints(nominee.position, tier, assists, nominee.performance);
+    return Math.max(best, productionScore(nominee.goals, assists, nominee.trophies, rolePoints));
+  }, 0);
   const gaTotal = season.goals + season.assists;
   const trebleSeason = season.leagueTitle && season.championsLeague && season.domesticCup;
   const statMonster = gaTotal >= 55 || season.goals >= 45 || (gaTotal >= 45 && (season.leagueTitle || season.championsLeague || season.worldCup));
@@ -8096,6 +8136,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     player: playerInTop10 ? {
       name: state.playerName, nationality: state.nationality, position: state.position,
       club: state.currentClub, points: playerPoints, goals: season.goals, assists: season.assists, trophies: playerTrophies, isPlayer: true,
+      performance: ballotRole(state.position) ? { apps: season.apps, rating: season.rating, ...(ballotRole(state.position) === "back" ? { cleanSheets: season.cleanSheets } : {}) } : undefined,
     } : null,
     playerPoints,
     // Filler nominees (only needed if the era pool somehow ran short)
@@ -8135,7 +8176,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
           const hasWorldCup = season.worldCup;
           const has30PlusGoals = season.goals >= BDOR_WIN_MIN_GOALS;
           const bigInvolvementPlusTrophy = gaTotal >= 45 && (season.leagueTitle || season.championsLeague);
-          const meetsWinCondition = has30PlusGoals || hasUCLAndLeague || hasWorldCup || trebleSeason || bigInvolvementPlusTrophy;
+          const meetsWinCondition = has30PlusGoals || hasUCLAndLeague || hasWorldCup || trebleSeason || bigInvolvementPlusTrophy || eliteRole;
           if (!meetsWinCondition) {
             // Demote player to 2nd, they weren't dominant enough
             const playerEntry = top10.find(n => n.isPlayer);
@@ -8668,7 +8709,8 @@ function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[], year: number
   const apps = rand(20, 36);
   const goals = calcGoals(r.position, apps, r.overall);
   const assists = calcAssists(r.position, apps, r.overall);
-  r.lastSeason = { year, club: r.club, apps, goals, assists };
+  const { performance } = simulatedBallotLine(`${year}|${r.name}|${r.club}|rival-season`, r.position, r.overall, r.clubTier, goals, { apps, assists });
+  r.lastSeason = { year, club: r.club, apps, goals, assists, ...(performance && { performance }) };
   r.careerApps += apps;
   r.careerGoals += goals;
   r.careerAssists += assists;

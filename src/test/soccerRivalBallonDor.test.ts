@@ -57,9 +57,14 @@ describe("Soccer Career rival Ballon d'Or", () => {
       if (nominee) {
         nominated++;
         expect(nominee).toMatchObject({ club: current.club, goals, assists });
+        expect(nominee.performance).toEqual(current.lastSeason?.performance);
       }
-      expect(current.lastSeason).toEqual({ year: season.year, club: current.club, apps, goals, assists });
-      if (position === 'GK') expect(goals).toBe(0);
+      expect(current.lastSeason).toMatchObject({ year: season.year, club: current.club, apps, goals, assists });
+      if (position === 'GK') {
+        expect(goals).toBe(0);
+        expect(current.lastSeason?.performance?.apps).toBe(apps);
+        expect(current.lastSeason?.performance?.cleanSheets).toBeGreaterThan(0);
+      }
     }
     expect(nominated).toBeGreaterThan(0);
   });
@@ -83,7 +88,7 @@ describe("Soccer Career rival Ballon d'Or", () => {
   it.each([
     { year: 2005, seed: 21, rank: 1, winner: 'player' },
     { year: 2005, seed: 6, rank: null, winner: 'other' },
-    { year: 2035, seed: 45, rank: 2, winner: 'rival' },
+    { year: 2035, seed: 209, rank: 2, winner: 'rival' },
     { year: 2035, seed: 121, rank: 11, winner: 'rival' },
   ])('credits only the $winner win at player rank $rank', ({ year, seed, rank, winner }) => {
     const signed = signedCareer(year);

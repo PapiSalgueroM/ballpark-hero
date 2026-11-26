@@ -1,3 +1,7 @@
+### November 26, 2026. Soccer Career award voting by position
+
+New ballots judge midfield and defensive performances against the same role in the field. Appearing regularly, keeping clean sheets or creating chances can change the vote. The ceremony shows the recorded rating, appearances and clean sheets where available. A five-season comparison over three eras and two club tiers yielded 53 holding midfielder, 51 centre-back and 87 keeper wins per 1,080 seasons at each position, compared with zero, one and two before. The attacking midfielder sample held at 130 wins versus 129. The 50-goal striker and reduced-appearances controls passed. Existing awards are read as recorded.
+
 ### November 26, 2026. Australian Grand Finals in Finals Sprint
 
 The opt-in AFL and NRL packs each cover 12 Grand Finals. The clues use the competition and club names from each year, including the 1977 VFL and 2010 AFL replays, Footscray in 1954 and the ARL final in the split 1997 rugby league season. Club names and deciding scores were checked against the [AFL](https://www.afl.com.au/stats/premiership-winners), [MCG](https://www.mcg.org.au/about/history/australian-football/vflafl-grand-final-results), [NRL](https://www.nrl.com/operations/the-game/premiership-winners/) and [Rugby League Project](https://www.rugbyleagueproject.org/competitions/nrl/finals.html) archives.
