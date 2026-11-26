@@ -1,3 +1,11 @@
+## 2026-11-25, Admin report filters and email timeouts
+
+Admin Reports filters Ideas and other reports by email status alongside the existing triage filters. Email badges show provider acceptance, an unconfirmed attempt, or an unknown status. Provider acceptance does not establish Gmail delivery.
+
+Read-only production records showed that recent unconfirmed attempts aligned with the six-second provider deadline. The relay now acknowledges the stored report and gives a single background email attempt up to 12 seconds. Failure logs carry only a reason and HTTP status when available.
+
+The offline relay replay covers a nine-second acceptance, the new timeout, refused and malformed responses, and database failures. The mounted admin checks and 320/1280 pixel browser fixture exercise the combined filters. Deployment and inbox verification are pending.
+
 ## 2026-11-23, Alisson's verified Liverpool assists
 
 Both Alisson spellings use 0, 1, 0, 1, 1, 0 and 0 Liverpool assists across 2018-19 through 2024-25. Career Quiz, Career Ladder and the Quiz fallback display the same counts. The migration checks fourteen stints and updates seven assist cells. The rebake ledger catches all seven stale values. [Liverpool assist audit](audits/alisson-liverpool-assists.md)

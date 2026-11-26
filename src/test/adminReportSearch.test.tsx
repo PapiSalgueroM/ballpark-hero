@@ -105,6 +105,77 @@ describe('admin report queue', () => {
     expect(screen.getByText('Players left for free')).toBeVisible();
   });
 
+  it('combines report type and email status with search and the active queue', async () => {
+    const acceptedIdea = { ...contract, id: 'idea-accepted', description: 'Idea: Add cup fixtures' };
+    const pendingIdea = { ...contract, id: 'idea-pending', description: 'Idea: Add cup tables', emailed: false };
+    const pendingBug = { ...contract, id: 'bug-pending', description: 'Bug: Idea: panel will not open', emailed: false };
+    const fixedIdea = { ...archive, description: 'Idea: Add a cup history tab' };
+    serve([contract, acceptedIdea, pendingIdea, pendingBug, fixedIdea, scoring]);
+    openQueue();
+    await screen.findByText(acceptedIdea.description);
+    const game = screen.getByRole('combobox', { name: 'Game' });
+    const type = screen.getByRole('combobox', { name: 'Report type' });
+    const email = screen.getByRole('combobox', { name: 'Email status' });
+    const priority = screen.getByRole('combobox', { name: 'Filter by priority' });
+    const search = screen.getByRole('searchbox', { name: 'Search reports' });
+    const status = within(screen.getByRole('group', { name: 'Filter by status' }));
+
+    fireEvent.change(game, { target: { value: 'Club Manager' } });
+    fireEvent.change(type, { target: { value: 'ideas' } });
+    expect(status.getByRole('button', { name: 'Open (2)' })).toBeVisible();
+    expect(status.getByRole('button', { name: 'Fixed (1)' })).toBeVisible();
+    expect(screen.queryByText(pendingBug.description)).not.toBeInTheDocument();
+    fireEvent.change(email, { target: { value: 'unconfirmed' } });
+    fireEvent.change(priority, { target: { value: 'high' } });
+    fireEvent.change(search, { target: { value: 'cup tables' } });
+    expect(screen.getByText(pendingIdea.description)).toBeVisible();
+    expect(screen.queryByText(acceptedIdea.description)).not.toBeInTheDocument();
+    expect(status.getByRole('button', { name: 'All (1)' })).toBeVisible();
+
+    fireEvent.change(email, { target: { value: 'unknown' } });
+    expect(screen.getByText('No reports match these filters.')).toBeVisible();
+    fireEvent.click(screen.getByRole('button', { name: 'Clear search and refinements' }));
+    expect(game).toHaveValue('Club Manager');
+    expect(type).toHaveValue('all');
+    expect(email).toHaveValue('all');
+    expect(priority).toHaveValue('all');
+    expect(search).toHaveValue('');
+    expect(status.getByRole('button', { name: 'Open (4)' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.queryByText(scoring.description)).not.toBeInTheDocument();
+
+    fireEvent.change(type, { target: { value: 'other' } });
+    fireEvent.change(email, { target: { value: 'unconfirmed' } });
+    expect(screen.getByText(pendingBug.description)).toBeVisible();
+    expect(screen.queryByText(pendingIdea.description)).not.toBeInTheDocument();
+  });
+
+  it('distinguishes provider acceptance, unconfirmed email and unknown results', async () => {
+    const unconfirmed = { ...fixture, emailed: false };
+    const unknown = { ...scoring, emailed: null };
+    const missing = { ...scoring, id: 'missing', description: 'Old report', emailed: undefined };
+    serve([contract, unconfirmed, unknown, missing]);
+    openQueue();
+    await screen.findByText(contract.description);
+    const label = (description: string, text: string) => within(
+      screen.getByText(description).closest('[data-report]') as HTMLElement,
+    ).getByText(text);
+    expect(label(contract.description, 'Email accepted'))
+      .toHaveAttribute('title', expect.stringMatching(/inbox delivery remains unverified/i));
+    expect(label(unconfirmed.description, 'Email unconfirmed'))
+      .toHaveAttribute('title', expect.stringMatching(/provider acceptance was not recorded/i));
+    expect(label(unknown.description, 'Email status unknown')).toBeVisible();
+    expect(label(missing.description, 'Email status unknown')).toBeVisible();
+
+    const email = screen.getByRole('combobox', { name: 'Email status' });
+    fireEvent.change(email, { target: { value: 'unknown' } });
+    expect(screen.getByText(unknown.description)).toBeVisible();
+    expect(screen.getByText(missing.description)).toBeVisible();
+    expect(screen.queryByText(unconfirmed.description)).not.toBeInTheDocument();
+    fireEvent.change(email, { target: { value: 'accepted' } });
+    expect(screen.getByText(contract.description)).toBeVisible();
+    expect(screen.queryByText(unknown.description)).not.toBeInTheDocument();
+  });
+
   it('confirms a status move after the report leaves the queue and keeps keyboard focus', async () => {
     openQueue();
     const report = await screen.findByText(contract.description);
