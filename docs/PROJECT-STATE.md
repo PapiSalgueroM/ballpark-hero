@@ -1,3 +1,7 @@
+### November 26, 2026. Verified deployed edge receipts
+
+A read-only comparison of six deployed function bundles found all thirteen bundled files match the repository after line-ending normalization. Updated only the version, date and hashes in the deployment ledger from those live records. The edge sync check passed, and deliberate edits to the entrypoint and its supporting file each failed.
+
 ### November 26, 2026. Soccer Career award voting by position
 
 New ballots judge midfield and defensive performances against the same role in the field. Appearing regularly, keeping clean sheets or creating chances can change the vote. The ceremony shows the recorded rating, appearances and clean sheets where available. A five-season comparison over three eras and two club tiers yielded 53 holding midfielder, 51 centre-back and 87 keeper wins per 1,080 seasons at each position, compared with zero, one and two before. The attacking midfielder sample held at 130 wins versus 129. The 50-goal striker and reduced-appearances controls passed. Existing awards are read as recorded.
