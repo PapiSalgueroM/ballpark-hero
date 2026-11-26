@@ -20,6 +20,8 @@ The phone opens Street League, Match Lab, Players’ Council and Fan Radio. Each
 
 The seeded season fixture preserves the full simulated season and random draws against the ordinary path, then reloads the actual receipt. Chromium at 320 and 1440 pixels opens the phone app, commits a choice and reloads the saved commitment.
 
+The fresh-save browser replay in `scripts/playSoccerCareerFreshProject.mjs` starts two 390px careers with empty browser storage. Both replay a West Ham academy year with Pace focus and sign the first senior contract. The Street League run meets Open signups with 22 appearances against a target of eight. The same season without a commitment ends at 72 morale, and the Street League run ends at 74 with the same match stats. Reloading and reopening the phone leaves the saved bytes identical, with one receipt for Morale +2. The replay fixes the random seed and uses the shipped club fallback with external requests blocked.
+
 ## 2026-11-25, Admin report filters and email timeouts
 
 Admin Reports filters Ideas and other reports by email status alongside the existing triage filters. Email badges show provider acceptance, an unconfirmed attempt, or an unknown status. Provider acceptance does not establish Gmail delivery.
