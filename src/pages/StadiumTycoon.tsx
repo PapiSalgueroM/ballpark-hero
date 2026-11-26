@@ -46,7 +46,7 @@ import {
   GOAL_BONUS_SEC, WIN_BONUS_SEC, PROMOTION_BONUS_SEC, scoringFacts,
   canSetMatchPlan, MATCH_PLANS, MATCH_PLAN_END, SCOUTING_REDUCTION, matchScoutingDetails, graduateAttackFixture,
   STADIUM_SPONSORS, stadiumSponsorOffers, stadiumSponsorPayout,
-  reserveSeasonTickets, seasonTicketQuote, seasonTicketGateRate, ticketEconomy,
+  reserveSeasonTickets, seasonTicketQuote, seasonTicketGateRate, ticketEconomy, juniorDayOffer, programmeFixture,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
@@ -296,6 +296,8 @@ function helpFacts() {
     ticketPremiumDemand: Math.round((TICKET_POLICIES.find(p => p.id === 'premium')?.demand ?? 1) * 100),
     ticketPremiumGrowth: Math.round((1 - (TICKET_POLICIES.find(p => p.id === 'premium')?.growth ?? 1)) * 100),
     freshSeats: capacity(fresh),
+    juniorExample: juniorDayOffer({ ...fresh, fanbase: capacity(fresh) }),
+    programmeExample: programmeFixture(fresh)?.short,
     freshPremiumCrowd: attendance({ ...fresh, ticketPolicy: 'premium' }),
     rate400: incomePerSec(full),
     goal400: goalBonus(full),
@@ -1153,7 +1155,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               {targetSeats === null ? (
                 openStandLevels > 0 ? (
                   <>
-                    <p className="text-muted-foreground">Pick how many seats to add next. The seats count once the stands open.</p>
+                    <p className="text-muted-foreground">Pick how many seats to add next. The seats count when the stands open.</p>
                     <div className="flex flex-wrap gap-2">
                       <button type="button" className="min-h-11 rounded-lg border border-border px-3 font-semibold" onClick={() => g.doExpansionTarget(1)}>
                         +{STANDS_SEATS_PER_LEVEL} seats
@@ -1253,8 +1255,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about {h.evenFor} goals to their {h.evenAgainst}, and each Squad level adds about {h.levelGoals} of a goal a match to your side and takes up to as much off theirs. A goal pays {h.goalSec} seconds of your income, a win {h.winSec} seconds and going up a division {h.promotionMin} minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you win the league.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
               <p>Schedule one Stands level in Upgrades for 20% less. You pay upfront and the new seats open after two matches finish, including any played while you are away.</p>
-              <p>In Ticket offer, Junior matchday reserves one in ten seats for the next scheduled home league fixture. Hosting costs $1 per guest. Juniors buy no tickets but count toward concessions, programme sales and the sponsor crowd. One in four becomes a supporter at full time. With 120 seats and 120 paying fans, the 12 guests replace 12 walk-ups. Season passes keep priority.</p>
-              <p>Under Ticket offer, you can print match programmes before a league fixture. One in four fans at full time buys a copy while stock lasts. At the first ground, printing 15 costs $30. Selling ten at $3 each covers the bill. Unsold copies expire after that match.</p>
+              <p>In Ticket offer, you can pay to host juniors at the next home league fixture. They enter free and count toward concessions, programme sales and the sponsor crowd. Season passes keep priority.{h.juniorExample && <> At a sold-out {h.freshSeats}-seat ground, inviting {h.juniorExample.seats} juniors costs ${h.juniorExample.seats}, displaces {h.juniorExample.displaced} walk-ups and adds {h.juniorExample.newFans} supporters at full time.</>}</p>
+              <p>Under Ticket offer, print match programmes before a league fixture. The crowd at full time determines how many sell. Unsold copies expire after the match.{h.programmeExample && <> At your starting ground, printing {h.programmeExample.copies} costs ${h.programmeExample.cost}. Sell {Math.ceil(h.programmeExample.cost / h.programmeExample.price)} at ${h.programmeExample.price} each to break even.</>}</p>
               <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>
               <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. In League, open Results this season to see each recorded score and any second-half plan. Open Latest season and choose a completed season to see its final table, recorded match scores and sponsorship. If your club wins Muddy Meadows, for example, you can reopen its final table and scores while playing in Gravel Lane. Recorded seasons stay with this ground until you sell up.</p>

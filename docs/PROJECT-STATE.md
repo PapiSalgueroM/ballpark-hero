@@ -1,3 +1,7 @@
+Stadium help follows the actual matchday offer
+
+The worked examples use the engine quotes for junior admissions and programme sales. At a 120-seat ground the offer sets aside 12 places and adds three supporters. Printing 15 programmes costs $30 and breaks even at ten $3 sales.
+
 Release browser fonts and career save fixtures
 
 The release browser verifier now checks the self-hosted font manifest, then verifies the bytes Chrome actually used. Three screen sizes passed. An empty receipt was rejected. Updated test fixtures cover the shared games-played bonus receipt, unchanged Season Centre markup and the expanded rival ballot.
