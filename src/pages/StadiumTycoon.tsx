@@ -54,6 +54,7 @@ import VictoryMoment from '@/components/tycoon/TycoonVictoryMoment';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import TycoonPitch from '@/components/tycoon/TycoonPitch';
 import TicketPolicyCard from '@/components/tycoon/TicketPolicyCard';
+import MatchProgrammeCard from '@/components/tycoon/MatchProgrammeCard';
 import TycoonSaleReview from '@/components/tycoon/TycoonSaleReview';
 import { useTycoonRewards } from '@/hooks/useTycoonRewards';
 import { balance, GEM_PAY, loadLedger } from '@/lib/tycoonRewards';
@@ -321,7 +322,7 @@ export function SeasonMatchResults({ league, current = false }: { league: Tycoon
     {results.length === 0 ? <p className="pb-2 text-muted-foreground">Scores for these matchdays were not recorded.</p> : <>
       {results.length < league.matchday && <p className="pb-2 text-muted-foreground">Earlier scores were not recorded.</p>}
       <ol className="space-y-2 pb-3">
-        {results.map(({ day, gf, ga, attendance, ticketOffer, seasonTicketFans, plan, scouting, graduateAttack }) => <li key={day} className="flex items-baseline justify-between gap-2">
+        {results.map(({ day, gf, ga, attendance, ticketOffer, seasonTicketFans, plan, scouting, programmes, graduateAttack }) => <li key={day} className="flex items-baseline justify-between gap-2">
           <div>
             <span>Matchday {day} · {league.clubs[yourOpponentIndex(league, day - 1)].name}</span>
             {attendance !== undefined && <span className="block text-muted-foreground">
@@ -336,6 +337,9 @@ export function SeasonMatchResults({ league, current = false }: { league: Tycoon
             {plan && <span className="block text-muted-foreground">{MATCH_PLANS[plan.kind].label} from {plan.minute}′</span>}
             {scouting && <span className="block text-muted-foreground">
               Scouting · {fmtMoney(scouting.fee)} paid · {scouting.reduction}% lower opponent scoring chance
+            </span>}
+            {programmes && <span className="block text-muted-foreground">
+              Programmes · {formatNumber(programmes.sold)}/{formatNumber(programmes.copies)} sold · {fmtMoney(programmes.cost)} printing · {fmtMoney(programmes.sold * programmes.price)} sales · {fmtMoney(Math.abs(programmes.sold * programmes.price - programmes.cost))} {programmes.sold * programmes.price < programmes.cost ? 'loss' : 'net'}
             </span>}
             {graduateAttack && <span className="block text-muted-foreground">
               {graduateAttack.share > 0
@@ -1002,7 +1006,10 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         </div>
         </>)}
 
-        {panel === 'tickets' && <TicketPolicyCard state={s} onSelect={g.doSetTicketPolicy} saveFailed={g.ticketSaveFailed} onRetrySave={g.retryTicketSave} showSaveNotice={false} />}
+        {panel === 'tickets' && <>
+          <MatchProgrammeCard state={s} onOrder={g.doOrderProgrammes} saveFailed={g.programmeSaveFailed} />
+          <TicketPolicyCard state={s} onSelect={g.doSetTicketPolicy} saveFailed={g.ticketSaveFailed} onRetrySave={g.retryTicketSave} showSaveNotice={false} />
+        </>}
 
         {/* Round 162: the payroll. Staff earn every second, forever, and the
             tiers escalate the way an idle game should: each one about five
@@ -1243,6 +1250,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about {h.evenFor} goals to their {h.evenAgainst}, and each Squad level adds about {h.levelGoals} of a goal a match to your side and takes up to as much off theirs. A goal pays {h.goalSec} seconds of your income, a win {h.winSec} seconds and going up a division {h.promotionMin} minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you win the league.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
               <p>Schedule one Stands level in Upgrades for 20% less. You pay upfront and the new seats open after two matches finish, including any played while you are away.</p>
+              <p>Under Ticket offer, you can print match programmes before a league fixture. One in four fans at full time buys a copy while stock lasts. At the first ground, printing 15 costs $30. Selling ten at $3 each covers the bill. Unsold copies expire after that match.</p>
               <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>
               <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. In League, open Results this season to see each recorded score and any second-half plan. Open Latest season and choose a completed season to see its final table, recorded match scores and sponsorship. If your club wins Muddy Meadows, for example, you can reopen its final table and scores while playing in Gravel Lane. Recorded seasons stay with this ground until you sell up.</p>

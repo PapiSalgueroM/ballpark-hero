@@ -19,7 +19,7 @@ import {
   awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
   setPieceOffer, beginSetPiece, awardSetPieceGoal,
   setTicketPolicy, setMatchPlan, matchPlanForecast, signStadiumSponsor, bookMatchScouting, bookStandsConstruction,
-  bookGraduateAttack, reserveSeasonTickets, updateExpansionTarget,
+  bookGraduateAttack, reserveSeasonTickets, updateExpansionTarget, orderMatchProgrammes, type ProgrammeQuote,
 } from '@/lib/stadiumTycoon';
 import type { GoldenKind, AwayMatch, SetPieceOffer, TicketPolicy, MatchPlanKind, StadiumSponsor, SeasonTicketAllocation, ExpansionTargetAction } from '@/lib/stadiumTycoon';
 import type { GraduateAttackOption } from '@/lib/wonderkidFactory';
@@ -129,6 +129,7 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
   const [sponsorSaveError, setSponsorSaveError] = useState<{ ground: number; season: number } | null>(null);
   const [seasonTicketSaveError, setSeasonTicketSaveError] = useState<{ ground: number; season: number } | null>(null);
   const [matchPlanError, setMatchPlanError] = useState<number | null>(null);
+  const [programmeSaveError, setProgrammeSaveError] = useState<{ ground: number; match: number } | null>(null);
   const [scoutingSaveError, setScoutingSaveError] = useState<{ ground: number; match: number } | null>(null);
   const [standsConstructionSaveError, setStandsConstructionSaveError] = useState<number | null>(null);
   const [expansionTargetSaveFailed, setExpansionTargetSaveFailed] = useState(false);
@@ -357,7 +358,7 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
             const season = events.find(e => (e.kind === 'title' || e.kind === 'seasonEnd') && e.position !== undefined);
             let allowGear = true;
             const openedStands = before.standsOpenAfterMatch !== undefined && next.standsOpenAfterMatch === undefined;
-            if (season || openedStands) {
+            if (season || openedStands || (before.programmeOrder && !next.programmeOrder)) {
               // Save completed construction at full time, and the final table before a title can award gear.
               const saved = graduateBoundary ? 'written' : saveTicketState(next);
               if (saved === 'moved') return false;
@@ -540,6 +541,21 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
       return;
     }
     setMatchPlanError(null);
+    commit(next);
+    markSessionPlay();
+  }, [commit, markSessionPlay, writeStadium, stadiumActionsBlocked]);
+
+  const doOrderProgrammes = useCallback((ground: number, match: number, quote: ProgrammeQuote) => {
+    if (document.hidden || stadiumActionsBlocked()) return;
+    const before = stateRef.current;
+    const next = orderMatchProgrammes(before, ground, match, quote);
+    if (next === before) return;
+    const saved = writeStadium(next);
+    if (saved !== 'written') {
+      if (saved === 'failed') setProgrammeSaveError({ ground, match });
+      return;
+    }
+    setProgrammeSaveError(null);
     commit(next);
     markSessionPlay();
   }, [commit, markSessionPlay, writeStadium, stadiumActionsBlocked]);
@@ -751,7 +767,8 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
     state, floaters, awayPay, awayTrip, dismissAway, confetti, gearSaveBlocked, saveMoved,
     doSetTicketPolicy, ticketSaveFailed, retryTicketSave, doSetMatchPlan, doSignSponsor, doBookScouting,
     sponsorSaveFailed: sponsorSaveError?.ground === state.rep && sponsorSaveError.season === state.league?.season,
-    doReserveSeasonTickets,
+    doReserveSeasonTickets, doOrderProgrammes,
+    programmeSaveFailed: programmeSaveError?.ground === state.rep && programmeSaveError.match === state.matchNo + 1,
     seasonTicketSaveFailed: seasonTicketSaveError?.ground === state.rep && seasonTicketSaveError.season === state.league?.season,
     matchPlanSaveFailed: matchPlanError === state.matchNo,
     scoutingSaveFailed: scoutingSaveError?.ground === state.rep && scoutingSaveError.match === state.matchNo + 1,

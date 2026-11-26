@@ -1,3 +1,7 @@
+## November 26 local Stadium Tycoon match programmes
+
+Ground owners can compare a short and bulk print order before a fixture, pay up front and see the actual income from that matchday crowd. The archive keeps printed and sold copies with the price and cost. At 390 and 1366 pixels, a short run sold 15/15 and cleared $15. A separate bulk run sold 17/50 to a crowd of 69 and lost $24. The season archive survived reload, and a refused write kept the original balance and allowed the same purchase on retry. The existing economy simulation and 21 focused programme, pricing and integration checks passed.
+
 ## November 26 local Soccer Career academy coaching
 
 After playing in three senior seasons, a player can volunteer to mentor one generated academy prospect. Coaching five passing situations and banking at least three correct reads uses the personal training slot for that season. Five appearances at the same club then count for mentoring, subject to the usual injury and absence rules. A signed-out Columbus Crew career played six appearances on phone and laptop. Its 4/5 clinic advanced the prospect from zero to one year and the Record Book kept the receipt after reloading. The same seeded season without coaching paused at zero years. Three deliberately broken engine variants lost the expected effect, training cost or archived score.

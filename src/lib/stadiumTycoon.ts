@@ -486,6 +486,7 @@ export interface TycoonState {
   matchPlan?: MatchPlan & { match: number };
   scouting?: MatchScouting & { match: number };
   graduateAttack?: GraduateAttackBooking;
+  programmeOrder?: ProgrammeQuote & { match: number };
   /** Absence is the original Standard offer. A new ground starts Standard. */
   ticketPolicy?: 'community' | 'premium';
   money: number;
@@ -740,7 +741,7 @@ export interface TycoonLeague {
   baseMatchNo?: number;
   /** Index 0 is you. */
   clubs: LeagueClub[];
-  results?: { day: number; gf: number; ga: number; attendance?: number; ticketOffer?: { policy: TicketPolicy; seats: number }; seasonTicketFans?: number; plan?: MatchPlan; scouting?: MatchScouting; graduateAttack?: GraduateAttackReceipt }[];
+  results?: { day: number; gf: number; ga: number; attendance?: number; ticketOffer?: { policy: TicketPolicy; seats: number }; seasonTicketFans?: number; plan?: MatchPlan; scouting?: MatchScouting; programmes?: ProgrammeReceipt; graduateAttack?: GraduateAttackReceipt }[];
   sponsor?: StadiumSponsorDeal;
   seasonTickets?: SeasonTicketAllocation;
   /** An older save's match in progress when it first loaded: played to full
@@ -992,12 +993,23 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
   const plan = st.matchPlan;
   const scouting = activeMatchScouting(st);
   const graduate = activeGraduateAttack(st);
+  const order = st.programmeOrder;
+  let programmes: ProgrammeReceipt | undefined;
+  if (order?.match === st.matchNo) {
+    const { run, copies, cost, price } = order;
+    const sold = Math.min(copies, Math.floor(crowdAtFullTime / 4));
+    programmes = { run, copies, cost, price, sold };
+    st.money += sold * price;
+    st.lifetime += sold * price;
+    delete st.programmeOrder;
+  }
   const result = {
     day: matchday, gf, ga, attendance: crowdAtFullTime,
     ticketOffer: { policy: ticketPolicyOf(st), seats: capacity(st) },
     ...(lg.seasonTickets ? { seasonTicketFans: Math.min(lg.seasonTickets.seats, crowdAtFullTime) } : {}),
     ...(plan ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
     ...(scouting ? { scouting: { fee: scouting.fee, reduction: scouting.reduction } } : {}),
+    ...(programmes ? { programmes } : {}),
     ...(graduate && graduate.played !== undefined ? { graduateAttack: { name: graduate.name, share: graduate.played?.attack ?? 0 } } : {}),
   };
   const played: TycoonLeague = { ...lg, clubs, matchday, results: [...(lg.results ?? []), result] };
@@ -1335,6 +1347,42 @@ function knownLeagueRound(s: TycoonState, match: number): number | null {
   if (offset < 0 || offset > 1 || (offset === 0 && lg.carryover)) return null;
   const round = lg.matchday + Number(offset === 1 && !lg.carryover);
   return round < leagueShape(lg.division).matchdays ? round : null;
+}
+
+export type ProgrammeRun = 'short' | 'bulk';
+export interface ProgrammeQuote { run: ProgrammeRun; copies: number; cost: number; price: number }
+interface ProgrammeReceipt extends ProgrammeQuote { sold: number }
+
+function programmeQuote(seats: number, division: number, run: ProgrammeRun): ProgrammeQuote {
+  const copies = seats / (run === 'short' ? 8 : 4);
+  const tier = division + 1;
+  return { run, copies, cost: Math.ceil(copies * tier * (run === 'short' ? 2 : 1.5)), price: 3 * tier };
+}
+
+function validProgrammeQuote(order: ProgrammeQuote | undefined, division: number, seatsAvailable: number): boolean {
+  if (!order || (order.run !== 'short' && order.run !== 'bulk') || !Number.isSafeInteger(order.copies)) return false;
+  const seats = order.copies * (order.run === 'short' ? 8 : 4);
+  if (seats < seatCount(0) || seats > seatsAvailable || (seats - seatCount(0)) % STANDS_SEATS_PER_LEVEL !== 0) return false;
+  const quote = programmeQuote(seats, division, order.run);
+  return order.cost === quote.cost && order.price === quote.price;
+}
+
+export function programmeFixture(s: TycoonState) {
+  const league = s.league;
+  const match = s.programmeOrder?.match ?? s.matchNo + 1;
+  const round = knownLeagueRound(s, match);
+  if (!league || round === null) return null;
+  return { match, day: round + 1, opponent: league.clubs[yourOpponentIndex(league, round)].name,
+    short: programmeQuote(capacity(s), league.division, 'short'), bulk: programmeQuote(capacity(s), league.division, 'bulk') };
+}
+
+export function orderMatchProgrammes(s: TycoonState, ground: number, match: number, quote: ProgrammeQuote): TycoonState {
+  if (s.rep !== ground || s.programmeOrder || (quote.run !== 'short' && quote.run !== 'bulk')) return s;
+  const fixture = programmeFixture(s);
+  const current = fixture?.[quote.run];
+  if (!current || fixture.match !== match || current.cost !== quote.cost || current.copies !== quote.copies
+    || current.price !== quote.price || s.money < current.cost) return s;
+  return { ...s, money: s.money - current.cost, programmeOrder: { ...current, match } };
 }
 
 export function matchScoutingDetails(s: TycoonState) {
@@ -1955,7 +2003,7 @@ function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: n
       return true;
     }) && (['w', 'd', 'l', 'gf', 'ga'] as const).every(key => first === 1 ? tally[key] === own[key] : tally[key] <= own[key])) {
       const maxSeats = seatCount(trackById('stands').maxLevel);
-      out.results = r.results.map(({ day, gf, ga, attendance, ticketOffer, seasonTicketFans, plan, scouting, graduateAttack }) => {
+      out.results = r.results.map(({ day, gf, ga, attendance, ticketOffer, seasonTicketFans, plan, scouting, programmes, graduateAttack }) => {
         const validCrowd = typeof attendance === 'number' && Number.isInteger(attendance) && attendance >= 0 && attendance <= maxSeats;
         return {
           day, gf, ga,
@@ -1967,6 +2015,9 @@ function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: n
           ...(validCrowd && out.seasonTickets && seasonTicketFans === Math.min(attendance, out.seasonTickets.seats) ? { seasonTicketFans } : {}),
           ...(validMatchPlan(plan) ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
           ...(validScouting(scouting) ? { scouting: { fee: scouting.fee, reduction: scouting.reduction } } : {}),
+          ...(validCrowd && programmes && validProgrammeQuote(programmes, out.division, maxSeats)
+            && programmes.sold === Math.min(programmes.copies, Math.floor(attendance / 4))
+            ? { programmes: { run: programmes.run, copies: programmes.copies, cost: programmes.cost, price: programmes.price, sold: programmes.sold } } : {}),
           ...(graduateAttack && validGraduateName(graduateAttack.name) && validGraduateShare(graduateAttack.share)
             ? { graduateAttack: { name: graduateAttack.name, share: graduateAttack.share } } : {}),
         };
@@ -2109,6 +2160,8 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
        the opponent it was already playing, outside the table. */
     const rawLeague = (p as { league?: unknown }).league;
     const plan = s.matchPlan;
+    const programmes = s.programmeOrder;
+    delete s.programmeOrder;
     const scouting = s.scouting;
     const graduate = s.graduateAttack;
     delete s.matchPlan;
@@ -2157,6 +2210,10 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
       }
       if (activeLeague && !activeLeague.carryover && validMatchPlan(plan) && plan.match === s.matchNo && plan.minute <= s.minute) {
         s.matchPlan = { match: plan.match, minute: plan.minute, kind: plan.kind };
+      }
+      if (activeLeague && programmes && validProgrammeQuote(programmes, activeLeague.division, capacity(s)) && knownLeagueRound(s, programmes.match) !== null) {
+        const { run, copies, cost, price, match } = programmes;
+        s.programmeOrder = { run, copies, cost, price, match };
       }
       if (activeLeague && validScouting(scouting) && knownLeagueRound(s, scouting.match) !== null) {
         s.scouting = { match: scouting.match, fee: scouting.fee, reduction: scouting.reduction };
