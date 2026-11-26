@@ -1,3 +1,7 @@
+## 2026-11-26, Build Your XI opening rules
+
+Build Your XI now has one help button. Its opening sheet fits three steps, a goalkeeper example and the dismiss button on a phone. Full rules and scoring reopen inside the same sheet. On the 390-pixel replay the first example moved from 904 pixels below the rules region's top to 196 pixels. On the 1366-pixel replay it moved from 804 to 196. Both fresh drafts dismissed the rules, reopened the detailed guide, selected a formation and retained the draft on reload.
+
 ## 2026-11-26, NFL Finals Sprint preview
 
 The existing Finals Sprint now offers an NFL Daily and practice board with twelve Super Bowls. The year is when the game was played. The answer key was checked against the 2024 NFL Record and Fact Book and FOX Sports' Super Bowl results table. Six native phone and laptop runs, covering soccer, NBA and NFL, earned 100 after a defer, reopened the same recap after reload, then timed out and replayed practice. Each sport's 366-day rotation passed the two-clues-per-difficulty and distinct-answer checks. Sources: https://static.www.nfl.com/league/apps/league-site/media-guides/2024/2024-Record-and-Fact-Book.pdf and https://www.foxsports.com/nfl-super-bowl-winners-and-results

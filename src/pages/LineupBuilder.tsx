@@ -406,6 +406,7 @@ const LineupBuilder = () => {
       />
       <GameShell
         width="wide"
+        help="none"
         title="BUILD YOUR XI"
         subtitle={isClubYear && phase !== 'formation'
           ? (draftChoice.mode === 'club-era'
@@ -416,7 +417,7 @@ const LineupBuilder = () => {
           <div className="flex justify-center">
             <button
               onClick={() => setShowRules(true)}
-              className="mt-1 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
+              className="mt-1 inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
               aria-label="How to play"
             >
               <HelpCircle className="w-4 h-4" /> How to play
