@@ -7,8 +7,10 @@ const base = new URL(process.env.BASE || 'http://127.0.0.1:4173');
 assert.ok(base.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].includes(base.hostname));
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH || undefined });
 const key = 'dukb-club-manager-save';
+const width = Number(process.env.WIDTH || 390);
+const file = width === 390 ? 'club-manager-u21' : 'club-manager-u21-' + width;
 try {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce', serviceWorkers: 'block' });
+  const context = await browser.newContext({ viewport: { width, height: width < 600 ? 844 : 900 }, reducedMotion: 'reduce', serviceWorkers: 'block' });
   await context.route('**/*', route => new URL(route.request().url()).origin === base.origin && route.request().method() === 'GET' ? route.continue() : route.abort());
   await context.routeWebSocket('**/*', socket => socket.close());
   const page = await context.newPage();
@@ -73,8 +75,8 @@ try {
   assert.deepEqual(errors, []);
   if (process.env.OUTPUT) {
     await mkdir(process.env.OUTPUT, { recursive: true });
-    await panel.screenshot({ path: path.join(process.env.OUTPUT, 'club-manager-u21.png') });
-    await writeFile(path.join(process.env.OUTPUT, 'club-manager-u21.json'), JSON.stringify({ seniorFixtures, startingBudget: 100, afterFounding: 55, campaign, errors }, null, 2));
+    await panel.screenshot({ path: path.join(process.env.OUTPUT, file + '.png') });
+    await writeFile(path.join(process.env.OUTPUT, file + '.json'), JSON.stringify({ width, seniorFixtures, startingBudget: 100, afterFounding: 55, campaign, errors }, null, 2));
   }
   console.log('Six U21 fixtures retained after reload, featured prospect grew from 62 to 64, one founding charge, senior fixtures:', seniorFixtures);
 } finally {
