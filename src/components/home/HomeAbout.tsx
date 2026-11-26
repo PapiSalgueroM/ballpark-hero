@@ -12,9 +12,8 @@ import { HOME_COPY, type HomeCopyBlock, type HomeCopyLine } from '@/data/homeCop
  * games on purpose: the first screen still belongs to something to play, and
  * scripts/playHomeFold.mjs holds the first tile where it was.
  *
- * Visible text, not a toggle and not hidden: a reader can read it, which is the
- * point. Small headings and the site's own body type, in two columns on a wide
- * screen so it stays compact.
+ * Keep the introduction in view. The rest is available in a native disclosure
+ * and stays in the rendered page.
  */
 function Line({ parts }: { parts: HomeCopyLine }) {
   return (
@@ -50,26 +49,31 @@ function Block({ block }: { block: HomeCopyBlock }) {
 
 export function HomeAbout() {
   return (
-    <section data-home-about="" aria-labelledby="home-about-heading" className="mt-10 border-t border-border pt-8">
+    <section data-home-about="" aria-labelledby="home-about-heading" className="mt-10 border-t border-border pt-6">
       <h2 id="home-about-heading" className="text-lg font-display font-bold text-foreground">
         {HOME_COPY.aboutHeading}
       </h2>
       <p className="mt-2 max-w-3xl text-sm leading-6 text-muted-foreground">
         <Line parts={HOME_COPY.intro} />
       </p>
-      <div className="mt-6 text-sm leading-6 text-muted-foreground md:columns-2 md:gap-10">
-        {HOME_COPY.sections.map(section => (
-          <div key={section.heading} className="mb-6 break-inside-avoid">
-            <h3 className="text-sm font-semibold text-foreground">{section.heading}</h3>
-            {section.blocks.map((block, i) => (
-              <Block key={i} block={block} />
-            ))}
-          </div>
-        ))}
-      </div>
-      <p className="text-xs leading-6 text-muted-foreground">
-        <Line parts={HOME_COPY.closing} />
-      </p>
+      <details className="mt-1">
+        <summary className="w-fit cursor-pointer rounded-sm py-2 pr-2 text-sm font-medium text-primary focus-visible:outline-ring">
+          Read more
+        </summary>
+        <div className="mt-3 text-sm leading-6 text-muted-foreground md:columns-2 md:gap-10">
+          {HOME_COPY.sections.map(section => (
+            <div key={section.heading} className="mb-6 break-inside-avoid">
+              <h3 className="text-sm font-semibold text-foreground">{section.heading}</h3>
+              {section.blocks.map((block, i) => (
+                <Block key={i} block={block} />
+              ))}
+            </div>
+          ))}
+        </div>
+        <p className="text-xs leading-6 text-muted-foreground">
+          <Line parts={HOME_COPY.closing} />
+        </p>
+      </details>
     </section>
   );
 }

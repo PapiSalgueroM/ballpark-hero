@@ -43,6 +43,12 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
   g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'> & Partial<Pick<ReturnType<typeof useClubManager>, 'pointsSlot' | 'renew' | 'playNextNationalQualifier' | 'playNextNationalFinal'>>;
 }) {
   const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
+  const reviewedSeason = c.history.find(row => row.season === sm.season && row.club === sm.club);
+  const lastSeason = reviewedSeason?.leagueId && reviewedSeason.leagueSize
+    ? c.history.find(row => row.season === sm.season - 1 && row.club === reviewedSeason.club
+      && row.leagueId === reviewedSeason.leagueId && row.leagueSize === reviewedSeason.leagueSize)
+    : undefined;
+  const pointsChange = lastSeason ? sm.points - lastSeason.points : 0;
   /* Optional: a summary stored before Round 633 carries no breakdown, and the
      block below simply does not render for it. */
   const parts = sm.seasonScoreParts;
@@ -246,6 +252,13 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
             </div>
           }
         >
+          {lastSeason && (
+            <p className="mb-2 text-left text-xs tabular-nums text-muted-foreground">
+              <span className="font-semibold text-foreground">Last season (S{lastSeason.season})</span>
+              {' · '}#{lastSeason.position} · {lastSeason.points} pts
+              {' · '}{pointsChange === 0 ? 'Same points this season' : `${pointsChange > 0 ? '+' : ''}${pointsChange} pts this season`}
+            </p>
+          )}
           {/* Round 530: every line below ticks in on its own beat, keyed on
               the season. ResultScreen mounts CelebrationStyles, so the
               classes are live here. A trophy line glows once it has landed:

@@ -55,7 +55,8 @@
  *      section is a lazy chunk, which a server render prints as its empty
  *      fallback, so it renders on its own through the same router: every
  *      heading, paragraph and list item of the module in order, with every
- *      link, every paragraph of 120 characters or more, no h1, not hidden.
+ *      link and long paragraph. The heading and intro stay visible, and the
+ *      remaining blocks sit in a native disclosure the visitor can open.
  *   9. IT IS A LAZY CHUNK EVERY VISITOR STILL GETS. Index.tsx (code, not
  *      comments) declares the About component with React.lazy at module
  *      level and mounts it once, alone in <Suspense fallback={null}>, at
@@ -627,7 +628,7 @@ console.log('7) the home page as React renders it: one h1, the template\'s, all 
     const missingLong = longBlocks.filter(b => !pageText.includes(b.text));
     if (missingLong.length) fail(`${missingLong.length} of the ${longBlocks.length} paragraphs of 120+ characters are not in the rendered About section, first ${JSON.stringify(missingLong[0].text.slice(0, 60))}`);
 
-    /* the section itself: every block in order, every link, and visible */
+    /* the section itself: every block and link in order, with a visible introduction */
     const at = aboutMarkup.indexOf('<section data-home-about');
     if (at < 0) {
       fail('the About module renders no About section (section[data-home-about])');
@@ -659,9 +660,21 @@ console.log('7) the home page as React renders it: one h1, the template\'s, all 
         firedChecks.add('aboutHidden');
         fail(`the About section carries ${JSON.stringify(hiders)}, which hides copy that is meant to be read`);
       }
-      if (/aria-hidden="true"|<details\b/.test(sec)) fail('the About section is hidden from readers or collapsed behind a details element');
+      const disclosures = [...sec.matchAll(/<details\b([^>]*)>([\s\S]*?)<\/details>/g)];
+      const panel = disclosures[0];
+      const summary = panel?.[2].match(/^\s*<summary\b[^>]*>([\s\S]*?)<\/summary>/);
+      if (/aria-hidden="true"/.test(sec) || disclosures.length !== 1 || !summary || !plain(summary[1])
+        || /(?:^|\s)open(?=[=\s]|$)/.test(panel[1])) {
+        fail('the About section must offer one closed native disclosure with a visible summary');
+      }
+      const outside = panel ? sec.replace(panel[0], '') : sec;
+      const visibleBlocks = [...outside.matchAll(/<(h2|h3|h4|p|li)\b[^>]*>([\s\S]*?)<\/\1>/g)]
+        .map(m => key({ tag: m[1], text: plain(m[2]) }));
+      if (JSON.stringify(visibleBlocks) !== JSON.stringify(moduleBlocks.slice(0, 2).map(key))) {
+        fail('the About heading and introduction are the only copy blocks outside the disclosure');
+      }
       if (!failedParts.has('7')) {
-        console.log(`   the page: one h1, ${JSON.stringify(h1s[0])}, nothing in it hidden, ${tiles} game tiles; the About module: all ${got.length} blocks and ${links.length} links in order, nothing hiding it`);
+        console.log(`   the page: one h1, ${JSON.stringify(h1s[0])}, nothing in it hidden, ${tiles} game tiles; the About module: all ${got.length} blocks and ${links.length} links in order, with the heading and intro outside the disclosure`);
         console.log(`   all ${longBlocks.length} paragraphs of 120+ characters are in the rendered About section (${pageText.length} characters)`);
       }
     }

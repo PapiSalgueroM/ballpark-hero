@@ -20,7 +20,7 @@ const controls = {
   history: [".gte('completed_on', start.slice(0, 10))\n            .lte('completed_on', end.slice(0, 10))\n            .gte('created_at', start)\n            .lt('created_at', end).abortSignal(controller.signal),", '.abortSignal(controller.signal),', 'does not query unused traffic counts or unbounded lifetime history'],
   count: ['return bestRes;\n            }),', "return bestRes;\n            }),\n          supabase.from('daily_completions').select('user_id', { count: 'exact', head: true }),", 'does not query unused traffic counts or unbounded lifetime history'],
   bestTiming: [bestTimingAnchor, bestTimingReplacement, 'healthy tile bests appear while rank remains pending'],
-  fallback: ["const [authOpen, setAuthOpen] = useState(false);", "const [authOpen, setAuthOpen] = useState(false);\n  useEffect(() => { if (!user) void loadSupabase().then(supabase => supabase.rpc('most_played_today', { p_min: 3, p_limit: 3 })); }, [user]);", baselines[0]],
+  fallback: ["const [sportsOpen, setSportsOpen] = useState(false);", "const [sportsOpen, setSportsOpen] = useState(false);\n  useEffect(() => { if (!user) void loadSupabase().then(supabase => supabase.rpc('most_played_today', { p_min: 3, p_limit: 3 })); }, [user]);", baselines[0]],
 };
 const control = process.env.HOME_PERSONAL_READ_CONTROL || '';
 assert.ok(!control || control in controls, 'Known homepage read control');

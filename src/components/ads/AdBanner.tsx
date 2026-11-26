@@ -14,6 +14,7 @@ interface AdBannerProps {
   layout?: string;
   layoutKey?: string;
   className?: string;
+  mobileBanner?: boolean;
 }
 
 // Reserve vertical space up front so the ad slot does not shift page
@@ -81,7 +82,7 @@ function readStoredConsent(): boolean {
   return getEffectiveConsent().advertising;
 }
 
-const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '' }: AdBannerProps) => {
+const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '', mobileBanner = false }: AdBannerProps) => {
   const adRef = useRef<HTMLModElement>(null);
   const pushed = useRef(false);
   const [consent, setConsent] = useState<boolean>(readStoredConsent);
@@ -161,7 +162,7 @@ const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '' }: 
   // Nothing came, and nothing is coming. Take the space back.
   if (state === 'empty') return null;
 
-  const minHeight = MIN_HEIGHT_BY_FORMAT[format] ?? 100;
+  const minHeight = mobileBanner ? 100 : MIN_HEIGHT_BY_FORMAT[format] ?? 100;
 
   return (
     <div
@@ -185,14 +186,16 @@ const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '' }: 
           Advertisement
         </span>
       )}
+      {/* Google's exact-size responsive example omits the automatic size attributes. */}
+      {mobileBanner && <style>{'.dukb_mobile_display{width:320px;height:100px}@media(max-width:335px){.dukb_mobile_display{width:300px}}'}</style>}
       <ins
         ref={adRef}
-        className="adsbygoogle w-full"
-        style={{ display: 'block', minHeight }}
+        className={mobileBanner ? 'adsbygoogle dukb_mobile_display' : 'adsbygoogle w-full'}
+        style={{ display: 'block', minHeight: mobileBanner ? undefined : minHeight }}
         data-ad-client="ca-pub-2929318086316376"
         data-ad-slot={slot}
-        data-ad-format={format}
-        data-full-width-responsive="true"
+        data-ad-format={mobileBanner ? undefined : format}
+        data-full-width-responsive={mobileBanner ? undefined : 'true'}
         {...(layout ? { 'data-ad-layout': layout } : {})}
         {...(layoutKey ? { 'data-ad-layout-key': layoutKey } : {})}
       />

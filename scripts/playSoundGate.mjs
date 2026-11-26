@@ -382,6 +382,13 @@ if (runs(1)) {
 
 /* ---------- 2. the switch ---------- */
 const FOOT = 'footer [data-sound-toggle="text"]';
+async function revealSoundSwitch(page) {
+  const toggle = page.locator(FOOT);
+  await toggle.waitFor({ state: 'attached' });
+  const more = page.locator('footer details:not([open]) > summary');
+  if (await more.count()) await more.click();
+  return toggle;
+}
 if (runs(2) && !MOUNTED.footer) skipped(2, 'no switch is mounted in the footer');
 if (runs(2) && MOUNTED.footer) {
   head(2, 'The switch');
@@ -389,7 +396,7 @@ if (runs(2) && MOUNTED.footer) {
     const o = await open({ width, height, save: SAVES.out });
     await o.page.goto(`${BASE}/soccer-career`, { waitUntil: 'load', timeout: 60000 });
     await settle(o.page);
-    const sw = o.page.locator(FOOT);
+    const sw = await revealSoundSwitch(o.page);
     await sw.scrollIntoViewIfNeeded();
     await o.page.waitForTimeout(400);
     const look = () => o.page.evaluate(sel => {
@@ -445,7 +452,7 @@ if (runs(8) && (MOUNTED.footer || MOUNTED.header)) {
         const o = await open({ width, height });
         await o.page.goto(`${BASE}${route}`, { waitUntil: 'load', timeout: 60000 });
         await settle(o.page);
-        const sw = o.page.locator(FOOT);
+        const sw = await revealSoundSwitch(o.page);
         await sw.scrollIntoViewIfNeeded();
         const offShape = await shape(o.page, FOOT);
         await sw.click(); await o.page.waitForTimeout(500);

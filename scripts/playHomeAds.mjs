@@ -60,7 +60,9 @@ async function pendingSlot(page, requestedAds) {
   await page.waitForFunction(() => window.__homeAdFixtureLoaded && window.adsbygoogle?.length === 1);
   assert.equal(await page.locator(manualSlot).count(), 1, 'Expected one home slot on the page');
   assert.equal(await slot.getAttribute('data-ad-slot'), '7540487748');
-  assert.equal(await slot.getAttribute('data-full-width-responsive'), 'true');
+  const phonePlacement = await ad.evaluate(element => element.parentElement.hasAttribute('data-home-sport-catalogue'));
+  assert.equal(await slot.getAttribute('data-full-width-responsive'), phonePlacement ? null : 'true');
+  assert.equal(await slot.getAttribute('data-ad-format'), phonePlacement ? null : 'horizontal');
   assert.equal(await ad.getByText('Advertisement', { exact: true }).count(), 0, 'A pending slot claimed to have filled');
   assert.equal(requestedAds.length, 1, 'Expected exactly one intercepted loader');
   return { ad, slot };
@@ -72,36 +74,46 @@ async function assertPlacement(slot, width) {
     const wrapper = ad.getBoundingClientRect();
     const box = element.getBoundingClientRect();
     const about = document.querySelector('[data-home-about]').getBoundingClientRect();
-    const catalogue = document.querySelector('[data-home-sport-catalogue]').getBoundingClientRect();
+    const catalogue = document.querySelector('[data-home-sport-catalogue]');
+    const firstSport = catalogue.querySelector(':scope > section[data-sport]');
     const footer = document.querySelector('footer[data-site-chrome]').getBoundingClientRect();
-    const controls = [...document.querySelectorAll('main :is(a[href], button, input, select), footer :is(a[href], button)')]
-      .filter(control => !ad.contains(control) && control.getClientRects().length && getComputedStyle(control).visibility === 'visible')
+    const protectedContent = document.querySelector('[google-side-rail-overlap="false"]');
+    const controls = [...document.querySelectorAll('main :is(a[href], button, input, select, summary), footer :is(a[href], button, summary)')]
+      .filter(control => !ad.contains(control) && control.checkVisibility({ contentVisibilityAuto: true, visibilityProperty: true }))
       .map(control => control.getBoundingClientRect())
       .filter(rect => rect.right > box.left && rect.left < box.right);
     return {
       pageWidth: document.documentElement.scrollWidth,
       viewport: innerWidth,
-      contentViewport: document.documentElement.clientWidth,
       wrapperWidth: wrapper.width,
       slotWidth: box.width,
+      slotHeight: box.height,
       slotLeft: box.left,
       slotRight: box.right,
-      afterContent: wrapper.top >= Math.max(about.bottom, catalogue.bottom) - 1,
+      protectedGames: Boolean(protectedContent?.contains(catalogue) && protectedContent.contains(document.querySelector('[data-stage-card]'))),
+      betweenSports: ad.previousElementSibling === firstSport && ad.nextElementSibling?.matches('section[data-sport]'),
+      afterContent: wrapper.top >= Math.max(about.bottom, catalogue.getBoundingClientRect().bottom) - 1,
       beforeFooter: wrapper.bottom <= footer.top + 1,
       aboveGap: Math.min(...controls.filter(rect => rect.bottom <= box.top).map(rect => box.top - rect.bottom)),
       overlapsControl: controls.some(rect => rect.bottom > box.top + 1 && rect.top < box.bottom - 1),
     };
   });
 
-  assert(geometry.afterContent && geometry.beforeFooter, 'The ad must sit below the catalogue and About copy and before the footer');
+  assert(geometry.protectedGames, 'Desktop rails must keep clear of the featured games and catalogue');
+  if (width <= 430) {
+    assert(geometry.betweenSports, 'The phone ad goes after the first sport and before the next one');
+    assert.equal(geometry.slotWidth, width <= 335 ? 300 : 320);
+    assert.equal(geometry.slotHeight, 100);
+  } else {
+    assert(geometry.afterContent && geometry.beforeFooter, 'The desktop ad goes below About and before the footer');
+  }
   assert(geometry.pageWidth <= geometry.viewport + 1, 'The home ad caused horizontal scrolling');
   assert(geometry.slotLeft >= -1 && geometry.slotRight <= geometry.viewport + 1, 'The ad extends outside the viewport');
   assert(geometry.slotWidth >= 250 && geometry.slotWidth <= geometry.wrapperWidth + 1, 'The ad needs usable responsive width');
   assert(geometry.slotWidth <= 729, 'The ad exceeds its desktop cap');
-  if (width <= 430) assert(Math.abs(geometry.slotWidth - geometry.contentViewport) <= 1, 'The phone ad should span the viewport');
   assert(Number.isFinite(geometry.aboveGap) && geometry.aboveGap >= 149, 'The ad needs 150px of space from controls above it');
   assert.equal(geometry.overlapsControl, false, 'The ad overlaps an interactive control');
-  console.log(width + 'px: filled at ' + Math.round(geometry.slotWidth) + 'px with ' + Math.round(geometry.aboveGap) + 'px clearance');
+  console.log(width + 'px: filled at ' + Math.round(geometry.slotWidth) + '×' + Math.round(geometry.slotHeight) + 'px with ' + Math.round(geometry.aboveGap) + 'px clearance');
 }
 
 try {
@@ -136,6 +148,11 @@ try {
       });
       await ad.getByText('Advertisement', { exact: true }).waitFor({ state: 'visible' });
       await assertPlacement(slot, width);
+
+      if (width === 1440) {
+        await page.locator('[data-home-about] summary').click();
+        await assertPlacement(slot, width);
+      }
 
       if (width === 390) {
         await page.getByLabel('Search games', { exact: true }).fill('soccer');

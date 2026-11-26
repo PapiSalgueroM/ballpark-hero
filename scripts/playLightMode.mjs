@@ -162,7 +162,13 @@ console.log('1) the default is dark, exactly as before this round');
 console.log('2) the footer toggle works and the choice is kept');
 {
   const toggle = page.locator('footer [data-theme-toggle]');
-  await toggle.scrollIntoViewIfNeeded();
+  const revealToggle = async () => {
+    await toggle.waitFor({ state: 'attached' });
+    const more = page.locator('footer details:not([open]) > summary');
+    if (await more.count()) await more.click();
+    await toggle.scrollIntoViewIfNeeded();
+  };
+  await revealToggle();
   await toggle.click();
   let lum = await bodyLuminance();
   const litUp = lum !== null && lum > 0.8;
@@ -182,9 +188,8 @@ console.log('2) the footer toggle works and the choice is kept');
   await page.reload({ waitUntil: 'networkidle' });
   lum = await bodyLuminance();
   if (lum === null || lum < 0.8) fail(`after a reload the light choice was lost (luminance ${lum?.toFixed(3)})`);
-  const back = page.locator('footer [data-theme-toggle]');
-  await back.scrollIntoViewIfNeeded();
-  await back.click();
+  await revealToggle();
+  await toggle.click();
   lum = await bodyLuminance();
   if (lum === null || lum > 0.2) fail(`toggling back did not land dark (luminance ${lum?.toFixed(3)})`);
   console.log('   toggled light, survived a reload, toggled back dark');

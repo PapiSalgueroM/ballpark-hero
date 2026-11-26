@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, useDeferredValue, lazy, memo, Suspense, type MouseEvent, type ReactNode } from 'react';
+import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, useDeferredValue, lazy, memo, Fragment, Suspense, type MouseEvent, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin, CalendarDays } from 'lucide-react';
@@ -17,7 +17,6 @@ import { FavouriteSport, browseSportName } from '@/components/home/FavouriteSpor
 import { SportGlyph, sportStyle } from '@/components/home/SportGlyph';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { useStreaks } from '@/hooks/useStreaks';
-import { AuthModal } from '@/components/auth/AuthModal';
 
 import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, GAME_COUNT_LABEL, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
 import { CATEGORY_SPORT, sportOf, readFavouriteSport, favouriteFirst, FAVOURITE_SPORT_KEY, type SportKey } from '@/data/homeFront';
@@ -105,7 +104,6 @@ export default function Index() {
   // of it only for signed-in players. Guests get a sign-up nudge instead.
   const { globalCurrentStreak } = useStreaks();
   const [gamesToday, setGamesToday] = useState(0);
-  const [authOpen, setAuthOpen] = useState(false);
   const [worldRank, setWorldRank] = useState<number | null>(null);
   // Same identity game_completions rows are written under (guest handle or
   // profile display name), mirrors useGameNavbarStats.
@@ -150,6 +148,11 @@ export default function Index() {
   const [searchQuery, setSearchQuery] = useState(gameReturn?.query ?? '');
   const [searchSport, setSearchSport] = useState<SportKey | ''>(gameReturn?.sport ?? '');
   const [sportsOpen, setSportsOpen] = useState(false);
+  // Keep one placement for the visit, including when a phone rotates.
+  const [homeAdPlacement] = useState(() => {
+    if (typeof window === 'undefined' || window.innerWidth < 320) return null;
+    return window.matchMedia?.('(max-width: 639px)').matches ? 'phone' : 'footer';
+  });
   const [expandedSports, setExpandedSports] = useState<SportKey[]>(gameReturn?.expandedSports ?? []);
   const deferredQuery = useDeferredValue(searchQuery);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -378,30 +381,7 @@ export default function Index() {
         </div>
       </div>
 
-      <div className="space-y-4">
-        {/* A line, not a gate. Everything on this site plays signed
-            out, so the account is an upsell and belongs where an
-            upsell goes: after the games, not in front of them. The nav
-            still carries Sign Up for anyone who came here to make one. */}
-        {!user && (
-          <p className="text-xs text-muted-foreground">
-            Every game here plays without an account.{' '}
-            {/* Round 285: py-2 with a matching negative margin.
-                sweepPhone measured this control at 16px tall on a
-                phone, which is half the tap target floor. The padding
-                grows the hit area to 32px; the negative margin keeps
-                the sentence's line spacing exactly where it was. */}
-            <button
-              onClick={() => setAuthOpen(true)}
-              className="text-primary font-medium underline underline-offset-2 hover:opacity-80 py-2 -my-2"
-            >
-              Make a free one
-            </button>{' '}
-            and your streak, points and world rank start counting.
-          </p>
-        )}
-        <StreakReminder />
-      </div>
+      <StreakReminder />
 
       <div className="min-w-0 space-y-6">
         <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="flex flex-wrap items-center justify-between gap-3 scroll-mt-36 border-b border-border pb-3 focus-visible:outline-primary sm:scroll-mt-28">
@@ -417,14 +397,15 @@ export default function Index() {
           <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} />
         </section>
         <div data-home-sport-catalogue className="min-w-0 space-y-7 lg:space-y-9">
-          {sportSections.map(cat => {
+          {sportSections.map((cat, index) => {
             const sport = CATEGORY_SPORT[cat.title];
             const extraGames = cat.games.slice(SPORT_PREVIEW_GAMES);
             const expanded = expandedSports.includes(sport);
             const moreId = `home-more-${sport}`;
             const hub = hubForCategory(cat.title);
             return (
-            <section key={cat.title} data-sport={sport}>
+            <Fragment key={cat.title}>
+            <section data-sport={sport}>
               {/* Round 658: the sport's drawn glyph in its own ink leads
                   every section, so the colour on the cards below always
                   has a shape and a name beside it. */}
@@ -479,12 +460,14 @@ export default function Index() {
                 </>
               )}
             </section>
+            {index === 0 && homeAdPlacement === 'phone' && !isSearching && <HomeBanner phone />}
+            </Fragment>
             );
           })}
         </div>
       </div>
     </div>
-  ), [badgeDate, bestScores, expandedSports, favSport, gamePicks, jumpToSport, pickSport, pickableSports, sportSections, toggleGamePick, user]);
+  ), [badgeDate, bestScores, expandedSports, favSport, gamePicks, homeAdPlacement, isSearching, jumpToSport, pickSport, pickableSports, sportSections, toggleGamePick]);
 
   return (
     <>
@@ -515,7 +498,7 @@ export default function Index() {
       <HomeTileStyles />
       {/* Round 215: the skip link in App.tsx points here. */}
       <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground">
-        <div className="max-w-6xl mx-auto px-4 pb-12">
+        <div google-side-rail-overlap="false" className="max-w-6xl mx-auto px-4 pb-12">
 
           {/* ─── TITLE ROW ───
               ROUND 283 took the hero down to what was carrying weight, and
@@ -715,13 +698,7 @@ export default function Index() {
           <Suspense fallback={null}>
             <HomeAbout />
           </Suspense>
-          {!isSearching && (
-            <div className="-mx-4 sm:mx-0" data-home-ad="">
-              <Suspense fallback={null}>
-                <AdBanner slot="7540487748" format="horizontal" className="mx-auto w-full max-w-[728px]" />
-              </Suspense>
-            </div>
-          )}
+          {!isSearching && homeAdPlacement === 'footer' && <HomeBanner />}
 
           {/* Golf went live 2026-08-05 (Guess The Golfer + Golf Higher or
               Lower), so the old Coming Soon placeholder is gone; the Golf
@@ -730,7 +707,6 @@ export default function Index() {
           {/* Round 91: the owner asked for the rounds-played social proof
               block to go. Removed. */}
 
-          <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} defaultTab="signup" />
         </div>
       </main>
     </>
@@ -742,6 +718,16 @@ export default function Index() {
    observer stands between a visitor (or a renderer) and the words. */
 const HomeAbout = lazy(() => import('@/components/home/HomeAbout').then(m => ({ default: m.HomeAbout })));
 const AdBanner = lazy(() => import('@/components/ads/AdBanner'));
+
+function HomeBanner({ phone = false }: { phone?: boolean }) {
+  return (
+    <div className="-mx-4 empty:hidden sm:mx-0" data-home-ad="">
+      <Suspense fallback={null}>
+        <AdBanner slot="7540487748" format="horizontal" mobileBanner={phone} className="mx-auto w-full max-w-[728px]" />
+      </Suspense>
+    </div>
+  );
+}
 
 /** One signed-in stat, in the second row below xl and inline at xl.
     Unit words drop on phones so all three chips keep their values visible. */
