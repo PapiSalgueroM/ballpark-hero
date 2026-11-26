@@ -106,6 +106,31 @@ describe('Stadium Tycoon season sponsors', () => {
     expect(screen.getByText('5 of 5 matchdays drew at least 96 fans.')).toBeVisible();
   });
 
+  it('compares recorded crowds with the new quote after moving to a longer division', async () => {
+    vi.spyOn(Date, 'now').mockReturnValue(now);
+    vi.stubGlobal('requestAnimationFrame', () => 1);
+    vi.stubGlobal('cancelAnimationFrame', () => {});
+    vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
+    let s = newTycoon(now);
+    s = { ...s, levels: { ...s.levels, stands: 1 }, fanbase: 145 };
+    for (let div = 0; div < 3; div++) s = finish(s);
+    expect([s.lastCompletedLeague?.division, s.league?.division]).toEqual([2, 3]);
+    const previous = s.lastCompletedLeague!;
+    const crowds = [127, 128, 129, undefined, undefined];
+    previous.results!.forEach((row, i) => { row.attendance = crowds[i]; });
+    const { fixed, rate, target } = stadiumSponsorOffers(s, s.league!);
+    expect(target).toBe(128);
+    expect(8 * rate).toBeLessThan(fixed);
+    expect(9 * rate).toBe(fixed);
+    expect(10 * rate).toBeGreaterThan(fixed);
+    localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(s, now));
+    mountPage(<StadiumTycoon />, '/stadium-tycoon');
+    fireEvent.click(await screen.findByRole('button', { name: /League/ }));
+    fireEvent.click(screen.getByText('Season sponsorship'));
+    expect(screen.getByText('9 of 14 qualifying matchdays match the fixed fee this season.')).toBeVisible();
+    expect(screen.getByText(/2 of 3 recorded crowds last season/)).toHaveTextContent('Attendance was recorded for 3 of 5 matchdays.');
+  });
+
   it('only signs once its save succeeds and opens on the saved deal', async () => {
     vi.spyOn(Date, 'now').mockReturnValue(now);
     vi.stubGlobal('requestAnimationFrame', () => 1);

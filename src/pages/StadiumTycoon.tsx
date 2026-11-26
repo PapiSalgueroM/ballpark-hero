@@ -439,6 +439,7 @@ function LeagueRoom({ g, visible, attackOptions }: { g: ReturnType<typeof useSta
   const last = s.lastCompletedLeague ?? s.completedLeagueHistory?.at(-1);
   const sponsor = lg.sponsor;
   const offers = !sponsor && preseason ? stadiumSponsorOffers(s, lg) : null;
+  const lastCrowds = offers ? (last?.results ?? []).flatMap(row => row.attendance === undefined ? [] : [row.attendance]) : [];
   const seasonTicketOffer = seasonTicketQuote(s);
   const tickets = lg.seasonTickets;
   const seasonTicketPreview = seasonTicketOffer
@@ -516,6 +517,10 @@ function LeagueRoom({ g, visible, attackOptions }: { g: ReturnType<typeof useSta
         <summary className="min-h-11 cursor-pointer py-3 font-bold">Season sponsorship</summary>
         <p className="pb-2 text-muted-foreground">Choose one fictional sponsor before the first league match finishes. Both deals pay in game cash when you complete the season.</p>
         <p className="pb-2 text-muted-foreground">Current crowd {formatNumber(attendance(s))} · Target {formatNumber(offers.target)}</p>
+        <p className="pb-2 text-muted-foreground">{offers.fixed / offers.rate} of {shape.matchdays} qualifying matchdays match the fixed fee this season.</p>
+        {last && <p className="pb-2 text-muted-foreground">{lastCrowds.length > 0
+          ? `${lastCrowds.filter(fans => fans >= offers.target).length} of ${lastCrowds.length} recorded crowds last season reached today's target.${lastCrowds.length < last.matchday ? ` Attendance was recorded for ${lastCrowds.length} of ${last.matchday} matchdays.` : ''}`
+          : 'Attendance was not recorded last season.'}</p>}
         {g.sponsorSaveFailed && <p role="alert" className="pb-2 text-destructive">Could not save the deal. Choose a sponsor again to retry.</p>}
         <div className="grid gap-2 pb-3 sm:grid-cols-2">
           <button type="button" className="min-h-11 min-w-0 rounded-lg border border-border bg-background px-3 py-2 text-left" onClick={() => g.doSignSponsor(s.rep, lg.season, 'fixed')}>

@@ -1,3 +1,7 @@
+## November 26 local review, Stadium Tycoon sponsor decision
+
+Stadium Tycoon compares the guaranteed sponsor payout against this season's qualifying matchdays and last season's recorded attendance. Partial crowd history shows its coverage. In a local Chrome replay an engine-promoted club had a $2,403 guarantee against $267 per qualifying date. The phone and laptop both showed a nine-date break-even across the new fourteen-game schedule. With three known crowds in a five-match fixture, two reached 128, including one exactly at the target. The seven sponsor tests passed.
+
 ## November 26 local review, UFC Guesser clue board
 
 Two daily guesses exposed a 529-pixel horizontal overflow on a 390-pixel phone. Each guess now has a nine-clue card view on small screens. Visitors can switch guesses and read the clue value, match and direction. The full comparison board fits its 864-pixel laptop container. A private Chrome replay submitted two fighters at each width, switched the phone selection and reopened the same saved guesses after reload. The mounted test and damaged Daily-save check passed.
