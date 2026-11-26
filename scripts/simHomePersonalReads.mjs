@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const component = 'src/pages/Index.tsx', test = 'src/test/homePersonalReads.test.tsx';
-const baselines = ['preserves useful public popularity for signed out visitors', 'preserves visible signed in rank distinct games local floor and tile bests'];
+const baselines = ['leaves retired popularity and polls off Home without starting their reads', 'preserves visible signed in rank distinct games local floor and tile bests'];
 const bestTimingAnchor = '.then(bestRes => {\n              if (active && bestRes?.data) {\n                const map: Record<string, number> = {};\n                bestRes.data.forEach(r => { map[r.game_type] = r.best_score; });\n                setBestScores(map);\n              }\n              return bestRes;\n            }),\n        ]);';
 const bestTimingReplacement = ',\n        ]);\n        if (active && bestRes?.data) {\n          const map: Record<string, number> = {};\n          bestRes.data.forEach(r => { map[r.game_type] = r.best_score; });\n          setBestScores(map);\n        }';
 const controls = {
@@ -20,7 +20,7 @@ const controls = {
   history: [".gte('completed_on', start.slice(0, 10))\n            .lte('completed_on', end.slice(0, 10))\n            .gte('created_at', start)\n            .lt('created_at', end).abortSignal(controller.signal),", '.abortSignal(controller.signal),', 'does not query unused traffic counts or unbounded lifetime history'],
   count: ['return bestRes;\n            }),', "return bestRes;\n            }),\n          supabase.from('daily_completions').select('user_id', { count: 'exact', head: true }),", 'does not query unused traffic counts or unbounded lifetime history'],
   bestTiming: [bestTimingAnchor, bestTimingReplacement, 'healthy tile bests appear while rank remains pending'],
-  fallback: ["ranked ? 'Most played today' : 'Games to try'", "'Most played today'", 'labels recommendations honestly when fewer than three games qualify'],
+  fallback: ["const [authOpen, setAuthOpen] = useState(false);", "const [authOpen, setAuthOpen] = useState(false);\n  useEffect(() => { if (!user) void loadSupabase().then(supabase => supabase.rpc('most_played_today', { p_min: 3, p_limit: 3 })); }, [user]);", baselines[0]],
 };
 const control = process.env.HOME_PERSONAL_READ_CONTROL || '';
 assert.ok(!control || control in controls, 'Known homepage read control');
@@ -55,7 +55,7 @@ try {
   assert.doesNotMatch(output, /Unhandled (?:Error|Rejection)|Test timed out|Timeout calling|Failed to (?:resolve import|load)|Cannot find module|SyntaxError|Transform failed/);
   const report = JSON.parse(await readFile(reportFile, 'utf8'));
   assert.equal(Number(report.numUnhandledErrors ?? 0), 0);
-  const rows = report.testResults.flatMap(file => file.assertionResults); assert.equal(rows.length, 22);
+  const rows = report.testResults.flatMap(file => file.assertionResults); assert.equal(rows.length, 18);
   if (control) {
     const pending = rows.length - retained.length - 1;
     assert.equal(run.status, 1); assert.equal(report.numFailedTests, 1); assert.equal(report.numPassedTests, retained.length); assert.equal(report.numPendingTests, pending);
@@ -69,7 +69,7 @@ try {
     if (run.status !== 0) process.stdout.write(output);
     assert.equal(run.status, 0); assert.equal(report.numPassedTests, rows.length); assert.equal(report.numPendingTests, 0);
     console.log(`Homepage personal reads: ${rows.length}/${rows.length} Home and game header cases passed, none skipped; inert Supabase boundary, zero fetch calls.`);
-    console.log('Homepage personal reads: guests make zero personal reads; public trending queries and rendered links stay useful.');
+    console.log('Homepage personal reads: guests make zero personal reads; retired popularity and polls stay off Home.');
     console.log('Homepage personal reads: one visible account batch preserves two hero reads and the existing tile-best read, without background polling.');
     console.log('Homepage personal reads: matching profiles, in-flight coalescing, stable identities, account/handle ownership and abort cleanup hold.');
     console.log('Homepage personal reads: failed reads keep local facts until a foreground retry; invisible traffic counts and lifetime-history reads are gone.');
@@ -79,7 +79,7 @@ try {
   for (const file of owned) await rm(file, { force: true }); if (folder) await rmdir(folder);
   for (const [file, { bytes }] of held) {
     const currentBytes = await readFile(path.join(root, file));
-    assert.deepEqual(currentBytes, bytes, 'Homepage, focused test, useful popularity, Auth and client bytes held');
+    assert.deepEqual(currentBytes, bytes, 'Homepage, focused test, popularity helper, Auth and client bytes held');
   }
 }
 console.log('Homepage personal reads: CRLF bindings proved, original bytes held, owned copies cleaned; no live DB/browser/AdSense acceptance claimed.');

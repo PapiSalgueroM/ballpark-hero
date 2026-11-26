@@ -83,19 +83,29 @@ describe('browser-local game picks', () => {
   });
 
   it('keeps the complete sport index in the single Home Browse sports menu', async () => {
-    const view = await mount();
-    const browse = view.getByRole('region', { name: 'All games' });
-    expect(browse).toHaveAttribute('id', 'browse-sports');
-    expect(browse).toHaveAttribute('tabindex', '-1');
-    expect(within(browse).getByRole('combobox', { name: 'Show first' })).toBeVisible();
-    expect(within(browse).queryByRole('button', { name: 'Jump to sport' })).toBeNull();
-    fireEvent.click(view.getByRole('button', { name: /^Browse sports$/ }));
-    const sports = within(view.getByRole('dialog', { name: 'Browse sports' })).getAllByRole('link')
-      .filter(link => link.getAttribute('href')?.startsWith('#sport-'));
-    const sectionIds = Array.from(view.container.querySelectorAll('section[data-sport] > div > h2'), heading => '#' + heading.id);
-    expect(sports.map(link => link.getAttribute('href'))).toEqual(sectionIds);
-    expect(sports.length).toBeGreaterThan(0);
-    expect(view.queryByRole('link', { name: /^All sports$/ })).toBeNull();
+    const { container } = await mount();
+    const catalogue = container.querySelector('#browse-sports');
+    expect(catalogue).toHaveAttribute('aria-labelledby', 'browse-sports-heading');
+    expect(catalogue).toHaveAttribute('tabindex', '-1');
+    expect(catalogue?.querySelector('h2')).toHaveTextContent(/^All games$/);
+    const order = catalogue?.querySelector('select');
+    expect(order).toBeVisible();
+    expect(order).toHaveAccessibleName('Show first');
+
+    const launchers = [...container.querySelectorAll('button')].filter(button => button.textContent?.trim() === 'Browse sports');
+    expect(launchers).toHaveLength(1);
+    expect([...container.querySelectorAll('button, a')].filter(control => (
+      /^(Jump to sport|All sports)$/.test(control.textContent?.trim() ?? '')
+    ))).toEqual([]);
+
+    fireEvent.click(launchers[0]);
+    const menu = document.querySelector('[role="dialog"][aria-label="Browse sports"]');
+    expect(menu).toBeVisible();
+    const sectionIds = [...container.querySelectorAll('[data-home-sport-catalogue] section[data-sport] h2')]
+      .map(heading => '#' + heading.id);
+    const sportLinks = [...menu!.querySelectorAll('a[href^="#sport-"]')].map(link => link.getAttribute('href'));
+    expect(sectionIds.length).toBeGreaterThan(0);
+    expect(sportLinks).toEqual(sectionIds);
   });
 
   it('pins NHL Connections from Search and restores both exact Home destinations after remount', async () => {

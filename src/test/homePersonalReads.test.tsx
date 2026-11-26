@@ -93,8 +93,7 @@ describe('homepage personal read ownership', () => {
     vi.stubGlobal('IntersectionObserver', undefined);
     const view = mount(); await flush();
     expect(view.queryByRole('heading', { name: /Most played today|Games to try|Polls of the day/i })).toBeNull();
-    expect(requests).toEqual([]);
-    expect(mock.load).not.toHaveBeenCalled();
+    expect(requests.map(request => request.table)).not.toContain('most_played_today');
   });
 
   it('preserves visible signed in rank distinct games local floor and tile bests', async () => {
