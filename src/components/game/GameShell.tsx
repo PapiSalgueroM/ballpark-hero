@@ -11,6 +11,8 @@ interface GameShellProps {
    *  wide (max-w-4xl) for search+board games. */
   width: 'narrow' | 'wide';
   showNavbar?: boolean;
+  /** Opt in to a protected desktop rail frame without changing game width. */
+  protectFromSideRails?: boolean;
   /** Game title. It is the page h1 by default. Omit to render no heading block. */
   title?: string;
   /** Use level 2 only when another component on the page owns the single h1. */
@@ -53,6 +55,7 @@ interface GameShellProps {
 export function GameShell({
   width,
   showNavbar = true,
+  protectFromSideRails = false,
   title,
   headingLevel = 1,
   emoji,
@@ -81,6 +84,8 @@ export function GameShell({
     <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background">
       {showNavbar && <GameNavbar />}
       <div
+        data-dukb-side-rail-frame={protectFromSideRails ? "" : undefined}
+        google-side-rail-overlap={protectFromSideRails ? "false" : undefined}
         className={cn(
           /* Round 288: relative, so RulesGate's floating "?" (absolute top-0
              right-0) lands at the top right of this column beside the game's

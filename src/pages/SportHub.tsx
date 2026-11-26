@@ -1,3 +1,4 @@
+import railGeometry from "@/components/ads/SideRailGeometry.module.css";
 /**
  * Round 270: the one page that draws every sport hub.
  *
@@ -64,7 +65,7 @@ const SportHub = ({ route }: { route: string }) => {
     <div className="min-h-screen flex flex-col bg-background">
       <PageSeo title={hub.seoTitle} description={hub.seoDescription} path={hub.route} />
       <GameNavbar />
-      <main id="dukb-main" className="flex-1 max-w-6xl mx-auto w-full px-4 pt-4 pb-16">
+      <main id="dukb-main" data-dukb-side-rail-frame="" google-side-rail-overlap="false" className={`flex-1 max-w-6xl mx-auto w-full px-4 pt-4 pb-16 ${railGeometry.catalogue}`}>
         <HubExperience key={hub.route} hub={hub} games={games} />
 
         <div className="mx-auto max-w-4xl">

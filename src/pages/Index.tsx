@@ -1,3 +1,4 @@
+import railGeometry from "@/components/ads/SideRailGeometry.module.css";
 import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, useDeferredValue, lazy, memo, Fragment, Suspense, type MouseEvent, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
@@ -498,7 +499,7 @@ export default function Index() {
       <HomeTileStyles />
       {/* Round 215: the skip link in App.tsx points here. */}
       <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground">
-        <div google-side-rail-overlap="false" className="max-w-6xl mx-auto px-4 pb-12">
+        <div data-dukb-side-rail-frame="" google-side-rail-overlap="false" className={`max-w-6xl mx-auto px-4 pb-12 ${railGeometry.catalogue}`}>
 
           {/* ─── TITLE ROW ───
               ROUND 283 took the hero down to what was carrying weight, and
