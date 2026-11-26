@@ -11,11 +11,29 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..')
 const OUT = path.join(ROOT, 'free-kick-lab-artifacts/native');
 const CACHE = path.resolve(process.env.FREE_KICK_FONT_CACHE || path.join(ROOT, 'free-kick-lab-artifacts/font-cache'));
 const sheetURL = [...fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8').matchAll(/<link\s+href="(https:\/\/fonts\.googleapis\.com\/[^\"]+)"\s+rel="stylesheet"/g)].map(match => new URL(match[1]).href);
-assert.equal(sheetURL.length, 1, 'Read the actual template font stylesheet');
+const localFonts = sheetURL.length === 0;
+if (localFonts) {
+  const sourceStyle = fs.readFileSync(path.join(ROOT, 'src/index.css'), 'utf8');
+  assert.match(sourceStyle, /@import ['"]\.\/assets\/fonts\/fonts\.css['"];/, 'Read the actual imported site font stylesheet');
+  const dir = path.join(ROOT, 'src/assets/fonts');
+  const css = fs.readFileSync(path.join(dir, 'fonts.css'), 'utf8');
+  for (const family of ['inter', 'space-grotesk']) {
+    const file = family + '-latin.woff2';
+    assert(css.includes('url(./' + file + ')'), 'Expected shipped font in the stylesheet: ' + file);
+    assert.equal(fs.readFileSync(path.join(dir, file)).subarray(0, 4).toString(), 'wOF2', 'Expected checked-in WOFF2 bytes');
+  }
+} else {
+  assert.equal(sheetURL.length, 1, 'Read the actual template font stylesheet');
+}
 if (process.argv.includes('--prefetch-fonts-only')) {
   assert(process.env.CI, 'Font dependency downloads are remote CI only');
   fs.mkdirSync(CACHE, { recursive: true });
   const manifest = [];
+  if (localFonts) {
+    fs.writeFileSync(path.join(CACHE, 'manifest.json'), JSON.stringify(manifest));
+    console.log('The actual site fonts are checked-in WOFF2 assets; no external font downloads.');
+    process.exit(0);
+  }
   const download = async url => {
     assert(['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(new URL(url).origin));
     const response = await fetch(url, { redirect: 'error', signal: AbortSignal.timeout(20000), headers: { 'User-Agent': 'Mozilla/5.0 Chrome/131.0.0.0 Safari/537.36' } });
@@ -40,7 +58,9 @@ const fontCache = new Map(JSON.parse(fs.readFileSync(path.join(CACHE, 'manifest.
   assert.equal(createHash('sha256').update(body).digest('hex'), entry.sha256);
   return [entry.url, { body, contentType: entry.contentType }];
 }));
-assert(fontCache.has(sheetURL[0]), 'Prepare current template fonts before guarded native run');
+if (localFonts) assert.equal(fontCache.size, 0, 'Self-hosted fonts need no external fixture');
+else assert(fontCache.has(sheetURL[0]), 'Prepare current template fonts before guarded native run');
+const { captureShippedFonts } = localFonts ? await import('../lib/captureShippedFonts.mjs') : {};
 const { chromium } = await import('../lib/playwrightLoader.mjs');
 const DATE = '2026-10-06', DAILY = `free-kick-daily-${DATE}`;
 const dailyBytes = JSON.stringify({ score: 173, goals: 4, v: 1, date: DATE });
@@ -134,6 +154,7 @@ try {
     });
     await context.routeWebSocket('**/*', socket => socket.close());
     const page = await context.newPage(); page.setDefaultTimeout(12000);
+    const shippedFonts = captureShippedFonts?.(page, BASE);
     await page.addInitScript(({ keys, date }) => {
       const OriginalDate = Date, now = new OriginalDate(date + 'T16:00:00Z').getTime();
       window.Date = class extends OriginalDate { constructor(...args) { super(...(args.length ? args : [now])); } static now() { return now; } };
@@ -194,6 +215,7 @@ try {
         } await document.fonts.ready; return result;
       });
       assert(row.fonts.length === 8 && row.fonts.every(face => face.loaded), 'Eight actual font faces loaded');
+      if (shippedFonts) row.shippedFonts = await shippedFonts();
       const before = await protectedState(page);
       await activate(entry); const dialog = page.getByRole('dialog', { name: 'Shot lab rules', exact: true }); await dialogReady(dialog);
       assert(/example/i.test(await dialog.innerText()), 'Worked example appears before play');
