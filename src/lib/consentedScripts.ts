@@ -34,23 +34,43 @@ function updateGoogleConsent(purposes: ConsentPurposes): void {
   });
 }
 
+type AdSenseQueue = unknown[] & { requestNonPersonalizedAds?: number; pauseAdRequests?: number };
+const AD_LOADER = 'script[src*="adsbygoogle.js"]';
+
 export function loadAdSense(): boolean {
   try {
     if (!getEffectiveConsent().advertising) return false;
     if (document.querySelector('meta[name="robots"][content*="noindex"]')) return false;
     if (!document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]')) return false;
-    updateGoogleConsent(getEffectiveConsent());
-    if (document.querySelector('script[src*="adsbygoogle.js"]')) return true;
-    const w = window as Window & { adsbygoogle?: unknown[] & { requestNonPersonalizedAds?: number } };
-    w.adsbygoogle = w.adsbygoogle || [];
-    w.adsbygoogle.requestNonPersonalizedAds = 1;
-    const s = document.createElement('script');
-    s.async = true;
-    s.crossOrigin = 'anonymous';
-    s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
-    document.head.appendChild(s);
-    return true;
+    return startAdSense();
   } catch { return false; }
+}
+
+/** Auto side rails use the publisher tag, not a hidden or duplicated manual slot. */
+export function loadGameSideRailAds(game: HTMLDivElement): boolean {
+  try {
+    const consent = getEffectiveConsent();
+    if (!consent.advertising || !game.isConnected || !game.matches('[data-game-desktop-rails][google-side-rail-overlap="false"]')) return false;
+    if (document.querySelector('meta[name="robots"][content*="noindex" i]')) return false;
+    if (!game.querySelector('main, [role="main"], #dukb-main')) return false;
+    const bounds = game.getBoundingClientRect();
+    if (bounds.left < 159 || document.documentElement.clientWidth - bounds.right < 159) return false;
+    return startAdSense();
+  } catch { return false; }
+}
+
+function startAdSense(): boolean {
+  updateGoogleConsent(getEffectiveConsent());
+  if (document.querySelector(AD_LOADER)) return true;
+  const w = window as Window & { adsbygoogle?: AdSenseQueue };
+  w.adsbygoogle = w.adsbygoogle || [];
+  w.adsbygoogle.requestNonPersonalizedAds = 1;
+  const s = document.createElement('script');
+  s.async = true;
+  s.crossOrigin = 'anonymous';
+  s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
+  document.head.appendChild(s);
+  return true;
 }
 
 // Analytics stays paused until collection settings and a new implementation are reviewed.
@@ -92,7 +112,10 @@ export function stopRevokedServices(revoked: ConsentPurposes, next = getEffectiv
   if (revoked.advertising) {
     document.querySelectorAll('[data-dukb-manual-ad] iframe, script[src*="adsbygoogle.js"]').forEach(el => el.remove());
     const queue = Reflect.get(window, 'adsbygoogle');
-    if (Array.isArray(queue)) queue.length = 0;
+    if (Array.isArray(queue)) {
+      (queue as AdSenseQueue).pauseAdRequests = 1;
+      queue.length = 0;
+    }
   }
   clearPurposeCookies(revoked);
 }
