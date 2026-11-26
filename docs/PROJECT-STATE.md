@@ -1,3 +1,7 @@
+## November 26 local Soccer Career academy coaching
+
+After playing in three senior seasons, a player can volunteer to mentor one generated academy prospect. Coaching five passing situations and banking at least three correct reads uses the personal training slot for that season. Five appearances at the same club then count for mentoring, subject to the usual injury and absence rules. A signed-out Columbus Crew career played six appearances on phone and laptop. Its 4/5 clinic advanced the prospect from zero to one year and the Record Book kept the receipt after reloading. The same seeded season without coaching paused at zero years. Three deliberately broken engine variants lost the expected effect, training cost or archived score.
+
 ## November 26 local Player Bingo board recall
 
 A finished board now reopens with the original 24 tiles, placements, strikes and score. Players can answer up to three questions about their own placements, pause and resume. On phone and laptop, a seeded local production board accepted Kevin De Bruyne for Chelsea, banked one 100-point completion with zero strikes and restored a 2/3 recall after two reloads. The player pool and completion endpoint in these playthroughs used local fixtures. Mounted coverage also preserved a zero-point loss and 1,700-point blackout.

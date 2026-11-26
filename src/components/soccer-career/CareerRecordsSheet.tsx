@@ -2,14 +2,17 @@ import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { careerCompetitionRecords, careerRecordAppearances, careerRecordBook } from '@/lib/soccerCareerRecords';
 import { formatNumber } from '@/lib/formatNumber';
+import { validMentor, type CareerMentor } from '@/lib/soccerCareerMentor';
 import { SeasonAmbitionResult } from './SeasonAmbitionTile';
 
 const yearLabel = (year: number) => `${year}/${String((year + 1) % 100).padStart(2, '0')}`;
 const countStat = (count: number, stat: string) => `${formatNumber(count)} ${stat}${count === 1 ? '' : 's'}`;
 const button = 'min-h-11 rounded-xl border border-border px-3 py-2 text-sm font-semibold';
 
-function SeasonLine({ season, split }: { season: SeasonRecord; split: ReturnType<typeof careerRecordAppearances> }) {
+function SeasonLine({ season, split, mentor }: { season: SeasonRecord; split: ReturnType<typeof careerRecordAppearances>; mentor: CareerMentor | null }) {
   const prior = split?.prior;
+  const clinic = mentor?.club === season.club
+    ? mentor.history.find(row => row.year === season.year && row.club === season.club && row.clinicReads !== undefined) : undefined;
   const change = prior && (prior.delta === 0 ? 'Same league apps as' : `${prior.delta > 0 ? '+' : ''}${prior.delta} league apps vs.`);
   return <li className="rounded-xl border border-border p-3 text-sm" data-record-season={season.year}>
     <p className="font-bold">{yearLabel(season.year)} · {season.club}</p>
@@ -19,6 +22,7 @@ function SeasonLine({ season, split }: { season: SeasonRecord; split: ReturnType
     {prior && <p className="text-xs text-muted-foreground">{change} {yearLabel(prior.year)} · {prior.club}</p>}
     <p className="text-xs text-muted-foreground">Rating {season.apps > 0 ? season.rating.toFixed(1) : 'not recorded'}{season.ovr !== undefined ? ` · OVR ${season.ovr}` : ''}</p>
     <SeasonAmbitionResult season={season} archived />
+    {clinic && <p className="mt-1 text-xs font-semibold">Academy clinic · {mentor?.name} · {clinic.clinicReads}/5 passing reads{clinic.reason === 'clinic' && ' · Mentoring year earned'}</p>}
   </li>;
 }
 
@@ -27,6 +31,7 @@ export default function CareerRecordsSheet({ career, onClose }: { career: Career
   const [selected, setSelected] = useState<number | null>(null);
   const panel = useRef<HTMLDivElement>(null);
   const book = careerRecordBook(career);
+  const mentor = validMentor(career.mentor);
   const competitionBook = screen === 'competitions' ? careerCompetitionRecords(career) : null;
   useEffect(() => {
     const before = document.body.style.overflow;
@@ -54,7 +59,7 @@ export default function CareerRecordsSheet({ career, onClose }: { career: Career
         <button type="button" aria-label="Record book help" className={`${button} min-w-11`} onClick={() => { setSelected(null); setScreen('help'); }}>?</button>
       </div>
       <div className="min-h-0 overflow-y-auto p-4 space-y-3">
-        {detail ? <ul className="space-y-2">{detail.map(r => <SeasonLine key={r.index} season={r.season} split={careerRecordAppearances(r.season, book.rows)} />)}</ul> : screen === 'help' ? <>
+        {detail ? <ul className="space-y-2">{detail.map(r => <SeasonLine key={r.index} season={r.season} split={careerRecordAppearances(r.season, book.rows)} mentor={mentor} />)}</ul> : screen === 'help' ? <>
           <p className="text-sm">This is your simulated career, read from saved senior club seasons. Academy years and jobs after retirement stay out.</p>
           <p className="text-sm">Best rating needs at least 10 appearances. Ties keep the earliest season. Returning to a club starts another spell, and loans name the parent club.</p>
           <p className="text-sm">Example: 12 goals in one season and 15 the next gives a best of 15, with 27 goals across that club spell.</p>

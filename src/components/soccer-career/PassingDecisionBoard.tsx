@@ -38,18 +38,19 @@ const situations = [
   },
 ];
 
-function Rules() {
+function Rules({ coaching }: { coaching: boolean }) {
   return <div className="rounded-xl border border-border bg-primary/5 p-3 text-xs leading-relaxed space-y-2">
     <p>Read five fictional passing situations. The passing options are onside. Pick the open lane or useful support move. There is no timer. Your first answer in each situation is final.</p>
     <p>Each correct read earns 20 points. Three correct reads score 60; four score 80.</p>
     <p>Worked example: a defender blocks one teammate, while another has a clear passing lane. Choose the clear lane to keep the ball away from the defender.</p>
-    <p>Banking 50+ earns +1 to the listed skill next season; 80+ earns +2. Current attributes do not rise here. Only one session can be banked each season. Further runs are free practice.</p>
+    <p>{coaching ? 'Get at least three reads right to use your seasonal training slot on the academy player. A coached season needs five senior appearances at your shared club to count for mentoring.' : 'Banking 50+ earns +1 to the listed skill next season; 80+ earns +2. Current attributes do not rise here. Only one session can be banked each season. Further runs are free practice.'}</p>
   </div>;
 }
 
-export default function PassingDecisionBoard({ onComplete, onBack }: {
+export default function PassingDecisionBoard({ onComplete, onBack, coaching = false }: {
   onComplete: (score: number) => void;
   onBack: () => void;
+  coaching?: boolean;
 }) {
   const [index, setIndex] = useState(-1);
   const [answers, setAnswers] = useState<number[]>([]);
@@ -79,12 +80,12 @@ export default function PassingDecisionBoard({ onComplete, onBack }: {
 
   return <section className="p-4 space-y-3" aria-label="Read the pass">
     <div className="flex items-center justify-between gap-2">
-      <button type="button" className={control + ' border border-border'} onClick={onBack}>Back to drills</button>
+      <button type="button" className={control + ' border border-border'} onClick={onBack}>{coaching ? 'Back to academy' : 'Back to drills'}</button>
       <button type="button" aria-label="Reading session rules" aria-expanded={index < 0 || help}
         className={control + ' min-w-11 bg-muted/30'} onClick={() => setHelp(value => !value)}>?</button>
     </div>
     <h3 className="text-base font-black">Read the pass</h3>
-    {(index < 0 || help) && <Rules />}
+    {(index < 0 || help) && <Rules coaching={coaching} />}
     {index < 0 ? <button type="button" className={control + ' w-full bg-emerald-600 text-black'}
       onClick={() => { if (current.current !== -1) return; current.current = 0; setHelp(false); setIndex(0); }}>Start reading session</button>
       : <>

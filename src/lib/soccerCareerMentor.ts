@@ -2,7 +2,7 @@ import type { CareerState, SeasonRecord } from './soccerCareerEngine';
 import { familyFor, intlName } from './intlNames';
 
 export type CareerMentorStatus = 'active' | 'paused' | 'ended' | 'graduated';
-export type CareerMentorReason = 'season' | 'few-apps' | 'serious-injury' | 'banned' | 'prison' | 'club-move';
+export type CareerMentorReason = 'season' | 'clinic' | 'few-apps' | 'serious-injury' | 'banned' | 'prison' | 'club-move';
 export interface CareerMentorSeason {
   year: number;
   club: string;
@@ -10,6 +10,7 @@ export interface CareerMentorSeason {
   progress: number;
   status: CareerMentorStatus;
   reason: CareerMentorReason;
+  clinicReads?: number;
 }
 export interface CareerMentor {
   generated: true;
@@ -23,14 +24,16 @@ export interface CareerMentor {
   status: CareerMentorStatus;
   endReason?: 'club-move' | 'retirement';
   history: CareerMentorSeason[];
+  clinic?: { year: number; reads: number };
 }
 
 const YEAR_OUT = ['BANNED', 'BANNED (PED)', 'PRISON', 'CONVICTED'];
 const POSITIONS = ['GK', 'CB', 'LB', 'RB', 'CDM', 'CM', 'CAM', 'LW', 'RW', 'ST'];
 const STATUSES: readonly string[] = ['active', 'paused', 'ended', 'graduated'];
-const REASONS: readonly string[] = ['season', 'few-apps', 'serious-injury', 'banned', 'prison', 'club-move'];
+const REASONS: readonly string[] = ['season', 'clinic', 'few-apps', 'serious-injury', 'banned', 'prison', 'club-move'];
 const whole = (value: unknown): value is number => typeof value === 'number' && Number.isInteger(value);
 const words = (value: unknown): value is string => typeof value === 'string' && value.length > 0;
+const qualifyingReads = (value: unknown): value is number => whole(value) && value >= 3 && value <= 5;
 
 /** Release AT: a damaged saved mentor is no mentorship at all.
  *  The other three fields this train saves (the season target, the preseason plan, the smaller role) are
@@ -52,6 +55,12 @@ export function validMentor(value: unknown): CareerMentor | null {
     const e = entry as Partial<CareerMentorSeason>;
     if (!whole(e.year) || !words(e.club) || !whole(e.age) || !whole(e.progress)
       || !STATUSES.includes(e.status as string) || !REASONS.includes(e.reason as string)) return null;
+    if (e.clinicReads !== undefined && !qualifyingReads(e.clinicReads)) return null;
+  }
+  if (m.clinic !== undefined && (!m.clinic || !whole(m.clinic.year) || !qualifyingReads(m.clinic.reads))) {
+    const repaired = { ...m };
+    delete repaired.clinic;
+    return repaired as CareerMentor;
   }
   return value as CareerMentor;
 }
@@ -85,22 +94,47 @@ export function createCareerMentor(state: CareerState): CareerState {
     `🤝 Started academy mentorship with generated player ${name} at ${mentor.club}.`] };
 }
 
+export function canVolunteerAtAcademy(state: CareerState): boolean {
+  return state.phase === 'playing' && !state.retired && !state.mentor && !!state.currentClub
+    && !YEAR_OUT.includes(state.currentClub) && state.seasons.filter(row => row.type === 'playing' && row.apps > 0).length >= 3;
+}
+
+export function mentorClinicYear(state: CareerState): number | null {
+  const mentor = validMentor(state.mentor);
+  const last = state.seasons.at(-1)?.year;
+  if (!mentor || !whole(last) || state.retired || state.phase !== 'playing' || mentor.club !== state.currentClub
+    || (mentor.status !== 'active' && mentor.status !== 'paused') || mentor.lastYear > last
+    || state.trainingSeasonYear === last || mentor.clinic?.year === last + 1) return null;
+  return last + 1;
+}
+
+export function bankMentorClinic(state: CareerState, year: number, club: string, name: string, reads: number): CareerState {
+  const mentor = validMentor(state.mentor);
+  if (!mentor || mentor.name !== name || state.currentClub !== club || mentorClinicYear(state) !== year
+    || !qualifyingReads(reads)) return state;
+  return { ...state, trainingSeasonYear: year - 1, mentor: { ...mentor, clinic: { year, reads } } };
+}
+
 /** Only a newly appended senior season can advance or pause the saved spell. */
 export function recordMentorSeason(state: CareerState, row: SeasonRecord): CareerState {
   const mentor = validMentor(state.mentor);
   if (!mentor || mentor.status === 'ended' || mentor.status === 'graduated' || row.type !== 'playing'
     || !state.seasons.includes(row) || row.year <= mentor.lastYear || row.year < mentor.startYear) return state;
+  const clinic = mentor.clinic;
+  const reads = clinic?.year === row.year ? clinic.reads : undefined;
   const reason: CareerMentorReason = row.club === 'PRISON' || row.club === 'CONVICTED' ? 'prison'
     : YEAR_OUT.includes(row.club) ? 'banned'
       : row.club !== mentor.club ? 'club-move'
-        : row.injurySevere ? 'serious-injury' : !(row.apps >= 10) ? 'few-apps' : 'season';
-  const progress = mentor.progress + (reason === 'season' ? 1 : 0);
+        : row.injurySevere ? 'serious-injury' : row.apps >= 10 ? 'season' : reads && row.apps >= 5 ? 'clinic' : 'few-apps';
+  const qualified = reason === 'season' || reason === 'clinic';
+  const progress = mentor.progress + (qualified ? 1 : 0);
   const status: CareerMentorStatus = reason === 'club-move' ? 'ended'
-    : reason !== 'season' ? 'paused' : progress === 3 ? 'graduated' : 'active';
+    : !qualified ? 'paused' : progress === 3 ? 'graduated' : 'active';
   const age = 16 + row.year - mentor.startYear + 1;
-  const entry: CareerMentorSeason = { year: row.year, club: row.club, age, progress, status, reason };
+  const entry: CareerMentorSeason = { year: row.year, club: row.club, age, progress, status, reason, ...(reads ? { clinicReads: reads } : {}) };
   const nextMentor: CareerMentor = { ...mentor, lastYear: row.year, age, progress, status,
     ...(reason === 'club-move' ? { endReason: 'club-move' as const } : {}), history: [...mentor.history, entry] };
+  delete nextMentor.clinic;
   const detail = status === 'graduated' ? 'completed three mentoring seasons'
     : status === 'ended' ? 'shared-club mentorship ended after your move'
       : status === 'paused' ? 'mentorship paused for this saved season'

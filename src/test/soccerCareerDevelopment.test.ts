@@ -7,7 +7,9 @@ import { managerTrust, squadNow } from '@/lib/soccerClubSquad';
 import { planLine, trustLines } from '@/lib/soccerClubSquadSheet';
 import { applyCareerPreparation, pickCareerPreparation, preparationForSeason, preparationInjuryDelta,
   preparationSkill, settleCareerPreparation } from '@/lib/soccerCareerPreparation';
-import { createCareerMentor, endCareerMentorForMove, endCareerMentorForRetirement, recordMentorSeason } from '@/lib/soccerCareerMentor';
+import { bankMentorClinic, canVolunteerAtAcademy, createCareerMentor, endCareerMentorForMove, endCareerMentorForRetirement, mentorClinicYear, recordMentorSeason, validMentor } from '@/lib/soccerCareerMentor';
+import { applyTrainingResult, trainingAvailable } from '@/lib/soccerCareerEngine';
+import { parseSoccerCareerSave, serializeSoccerCareerSave } from '@/lib/soccerCareerSave';
 
 function career(): CareerState {
   const data = JSON.parse(readFileSync(resolve(process.cwd(), 'scripts/data/careerLeagueWorldSaves1100.json'), 'utf8'));
@@ -146,6 +148,49 @@ describe('Soccer Career preseason preparation', () => {
 });
 
 describe('Soccer Career generated academy mentorship', () => {
+  it('opens volunteering after three senior seasons with appearances', () => {
+    const c = career(), last = c.seasons.at(-1)!, third = previous(c, { year: last.year + 1 });
+    expect(canVolunteerAtAcademy(c)).toBe(false);
+    const mature = { ...c, seasons: [...c.seasons, third] };
+    expect(canVolunteerAtAcademy(mature)).toBe(true);
+    expect(canVolunteerAtAcademy({ ...mature, retired: true })).toBe(false);
+    expect(canVolunteerAtAcademy(createCareerMentor(mature))).toBe(false);
+    expect(canVolunteerAtAcademy({ ...c, seasons: [...c.seasons, { ...third, apps: 0 }] })).toBe(false);
+  });
+  it('spends the personal training slot only on a qualifying read for the current prospect', () => {
+    const c = createCareerMentor(career()), { startYear: year, club, name } = c.mentor!;
+    expect(mentorClinicYear(c)).toBe(year);
+    for (const reads of [-1, 2, 3.5, 6, NaN]) expect(bankMentorClinic(c, year, club, name, reads)).toBe(c);
+    expect(bankMentorClinic(c, year + 1, club, name, 3)).toBe(c);
+    expect(bankMentorClinic(c, year, 'Other club', name, 3)).toBe(c);
+    expect(bankMentorClinic(c, year, club, 'Other prospect', 3)).toBe(c);
+    const coached = bankMentorClinic(c, year, club, name, 3);
+    expect(coached).toEqual({ ...c, trainingSeasonYear: year - 1, mentor: { ...c.mentor, clinic: { year, reads: 3 } } });
+    expect(trainingAvailable(coached)).toBe(false);
+    expect(applyTrainingResult(coached, 'passing', 100)).toBe(coached);
+    expect(bankMentorClinic(coached, year, club, name, 5)).toBe(coached);
+    const trained = applyTrainingResult(c, 'passing', 100);
+    expect(bankMentorClinic(trained, year, club, name, 5)).toBe(trained);
+    const moved = endCareerMentorForMove(c, 'Other club');
+    expect(bankMentorClinic(moved, year, club, name, 5)).toBe(moved);
+    expect(validMentor({ ...c.mentor, clinic: { year, reads: {} } })).toEqual(c.mentor);
+  });
+  it.each([[4, false, 'few-apps'], [5, false, 'clinic'], [9, false, 'clinic'], [10, false, 'season'], [8, true, 'serious-injury']] as const)(
+    'records the actual clinic at %s appearances with severe injury %s', (apps, injurySevere, reason) => {
+      const c = createCareerMentor(career()), { startYear: year, club, name } = c.mentor!;
+      const coached = parseSoccerCareerSave(serializeSoccerCareerSave(bankMentorClinic(c, year, club, name, 4))) as CareerState;
+      const row = previous(coached, { year, apps, injurySevere });
+      const withClinic = recordMentorSeason({ ...coached, seasons: [...coached.seasons, row] }, row);
+      const control = recordMentorSeason({ ...c, seasons: [...c.seasons, row] }, row);
+      const loaded = parseSoccerCareerSave(serializeSoccerCareerSave(withClinic)) as CareerState;
+      expect(loaded.mentor!.history).toEqual([{ year, club, age: 17, progress: reason === 'season' || reason === 'clinic' ? 1 : 0,
+        status: reason === 'season' || reason === 'clinic' ? 'active' : 'paused', reason, clinicReads: 4 }]);
+      expect(loaded.mentor!.clinic).toBeUndefined();
+      expect(control.mentor!.progress).toBe(apps >= 10 && !injurySevere ? 1 : 0);
+      expect(recordMentorSeason(withClinic, row)).toBe(withClinic);
+      expect(trainingAvailable(loaded)).toBe(true);
+    },
+  );
   it('creates one deterministic fictional player without a main random draw', () => {
     const c = career(), before = structuredClone(c);
     const random = vi.spyOn(Math, 'random').mockImplementation(() => { throw new Error('mentorship must use its private generator'); });

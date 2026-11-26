@@ -3905,7 +3905,7 @@ function GameScreen({ career, clubs, resumeGame, onNextSeason, onAcceptOffer, on
           {career.phase === "playing" && <SquadTile career={career} />}
           {career.phase === "playing" && onCareerPatch && <SeasonAmbitionTile career={career} onCareer={onCareerPatch} />}
           {career.phase === "playing" && onCareerPatch && <PreseasonPlanTile career={career} onCareer={onCareerPatch} />}
-          {(career.phase === "playing" || career.phase === "retired") && <CareerMentorTile career={career} />}
+          {(career.phase === "playing" || career.phase === "retired") && <CareerMentorTile career={career} onCareer={onCareerPatch} />}
           {career.phase === "playing" && <ReducedRolePlanNote career={career} />}
           {(career.phase === "playing" || career.phase === "transfer_window" || career.phase === "contract_offer") && onCareerPatch && (
             <button type="button" data-soccer-programme-open onClick={() => setProgrammeOpen(true)} className="min-h-[44px] w-full rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3 text-left">
