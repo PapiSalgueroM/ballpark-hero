@@ -45,6 +45,10 @@
     z-index: auto;
   }
 
+  body[data-consent-pending] .game [data-career-utility] {
+    bottom: auto;
+  }
+
   .game [data-career-utility] > span:nth-child(2) {
     display: inline;
   }
