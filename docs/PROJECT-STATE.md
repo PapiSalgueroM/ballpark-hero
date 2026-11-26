@@ -1,3 +1,9 @@
+## 2026-11-26, Soccer Conquest call results
+
+The Soccer Conquest round recap shows the club you picked, the winner and the call points earned. A Daily reload rebuilds the same receipt from the saved calls and match results. The next fixture opens with a fresh choice.
+
+The previous build recorded a correct first call at 320 pixels but omitted the persistent receipt. Four offline browser cases played the actual first Daily fixture with correct and missed calls at 320 and 1440 pixels. Each kept the same pick, winner and +25 or +0 call points across reload and opened the next match from Continue. The Daily simulation restored all 13 Soccer rounds and found no score gain on reload. This is a local candidate.
+
 ## 2026-11-25, Quieter ads and career season comparisons
 
 AdSense anchor and vignette ads are off for douknowball.com. Home shows one in-page banner after the first sport on phones and above the footer on desktop. The phone slot uses a 100-pixel-tall display unit. AdSense allows desktop side rails on either edge. The homepage marks the game area with Google’s overlap protection. AdSense confirmed the save and says propagation can take up to an hour.
