@@ -36,7 +36,7 @@ const controls = {
   random: { file: core, from: 'const label = name.trim().replace', to: 'Math.random();\n  const label = name.trim().replace', test: cases.capture },
   hookSave: { file: hook, from: "const next = savePlan(now, slot, name);", to: "const next = now;", test: cases.mounted },
   hookApply: { file: hook, from: "const next = applyPlan(now, slot);", to: "const next = now;", test: cases.mounted },
-  persistence: { file: hook, from: 'const ok = saveCareer(c);', to: 'const ok = true;', test: cases.mounted },
+  persistence: { file: hook, from: '      acknowledge: raw => { keepClubManagerCheckpoint(storage, source, raw); },\n    }) : saveCareer(c);', to: '      acknowledge: raw => { keepClubManagerCheckpoint(storage, source, raw); },\n    }) : true;', test: cases.mounted },
   applyFormation: { file: core, from: '...career, formationIndex: plan.formationIndex, mentality: plan.mentality,', to: '...career, formationIndex: career.formationIndex, mentality: plan.mentality,', test: cases.mounted },
   applyMentality: { file: core, from: '...career, formationIndex: plan.formationIndex, mentality: plan.mentality,', to: '...career, formationIndex: plan.formationIndex, mentality: career.mentality,', test: cases.mounted },
   replacements: { file: helper, from: 'player: kickoff?.p ?? null, duty:', to: 'player: picked, duty:', test: cases.preview },
