@@ -217,26 +217,32 @@ describe('Europa League scorer settlement', () => {
     expect(state.week).toBe(34);
     const player = state.squad.find(p => p.name === 'Antony');
     if (!player) throw new Error('The fixture lost its managed scorer');
-    expect(player.comp?.uel?.goals).toBe(4);
+    expect(player.comp?.uel?.goals).toBe(2);
     expect(player.worldRosterKey).toBeUndefined();
     const before = state.worldComps?.uel?.scorers?.players.filter(([, name]) => name === player.name);
-    expect(before).toHaveLength(1);
+    expect(before).toEqual([[expect.any(String), player.name, 'Real Betis', 2]]);
+    expectReconciled(state);
+    const buyer = 'Villarreal';
+    expect(state.worldComps?.uel?.clubs).toContain(buyer);
     const listed = setTransferStatus(state, player.id, 'listed');
     tape(1029, () => generateIncomingBids(listed));
-    expect(listed.incomingBids?.find(bid => bid.playerId === player.id)?.club).toBe('Real Sociedad');
+    expect(listed.incomingBids?.find(bid => bid.playerId === player.id)?.club).toBe(buyer);
     const sold = acceptBid(listed, player.id);
     expect(sold?.squad.some(p => p.id === player.id)).toBe(false);
-    const ownedKey = worldRosterFor(sold!, 'Real Sociedad').find(p => p.n === player.name)?.worldRosterKey;
+    const ownedKey = worldRosterFor(sold!, buyer).find(p => p.n === player.name)?.worldRosterKey;
     state = sold!;
-    for (let replayStep = step + 1; state.week < 36; replayStep++) {
+    for (let replayStep = step + 1; state.week < 38; replayStep++) {
       state = tape(seed + 162 + replayStep, () => playNextEntry(state, quick)).value.state;
       if (replayStep >= step + 5) throw new Error('The buyer did not reach its next scoring night');
     }
     const next = state.worldComps?.uel?.scorers?.players.filter(([, name]) => name === player.name);
     expect(ownedKey).toBeDefined();
-    expect(next).toEqual([[ownedKey, player.name, 'Real Sociedad', 5]]);
+    expect(next).toEqual([[ownedKey, player.name, buyer, 4]]);
     expect(before?.[0][0]).toBe(ownedKey);
     expectReconciled(state);
+    const reloaded = loadCareer(serializeParkedCareer(state))!;
+    expect(reloaded.worldComps?.uel?.scorers).toEqual(state.worldComps?.uel?.scorers);
+    expect(worldRosterFor(reloaded, buyer).find(p => p.n === player.name)?.worldRosterKey).toBe(ownedKey);
   });
 
   function playTitleFinal() {

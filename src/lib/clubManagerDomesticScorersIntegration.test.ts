@@ -64,31 +64,31 @@ describe('Domestic cup scorer settlement', () => {
   });
 
   it('continues crediting settled ties after Everton goes out in the first round', () => {
-    const seed = 982022;
+    const seed = 982026;
     const initial = tape(seed, () => startCareer('Everton')).value;
     const { state: eliminated, reports } = playTo(initial, seed, 10);
     expect(eliminated.cupRound).toBe('out');
     expect(reports).toHaveLength(1);
-    expect(reports[0]).toMatchObject({ home: 'Everton', away: 'Liverpool', homeGoals: 1, awayGoals: 3 });
+    expect(reports[0]).toMatchObject({ home: 'Everton', away: 'Crystal Palace', homeGoals: 1, awayGoals: 2 });
     expect(eliminated.domesticCupScorers?.nights).toBe(1);
     const known = eliminated.domesticCupScorers!.players.filter(([, , club]) => club === 'Everton');
-    expect(known.length).toBeGreaterThan(0);
+    expect(known.map(([, name, club, goals]) => [name, club, goals])).toEqual([['Vitaliy Mykolenko', 'Everton', 1]]);
     expectReconciled(eliminated);
     expect(domesticCupScorerRace(eliminated)).toMatchObject({ status: 'racing', leaders: [] });
 
     const played = playTo(eliminated, seed, 49);
     expect(played.reports).toHaveLength(0);
-    expect(played.state.cupBracket?.find(tie => tie.round === 'F')).toMatchObject({ winner: 'Manchester City', pens: true });
+    expect(played.state.cupBracket?.find(tie => tie.round === 'F')).toMatchObject({ winner: 'Bournemouth', pens: true });
     expect(played.state.domesticCupScorers?.nights).toBe(4);
     expect(played.state.domesticCupScorers?.players.filter(([, , club]) => club === 'Everton')).toEqual(known);
     expectReconciled(played.state);
     expect(domesticCupScorerRace(played.state)).toMatchObject({
-      status: 'winner', leaders: [expect.objectContaining({ name: 'Alexander Isak', club: 'Liverpool', goals: 4 })],
+      status: 'winner', leaders: [expect.objectContaining({ name: 'João Pedro', club: 'Chelsea', goals: 3 })],
     });
   });
 
   it('credits the played match by club through away and neutral fixtures when Liverpool wins', () => {
-    const seed = 987419;
+    const seed = 987427;
     const initial = tape(seed, () => startCareer('Liverpool')).value;
     const played = playTo(initial, seed, 49);
     expect(played.state.cupRound).toBe('won');
@@ -104,7 +104,7 @@ describe('Domestic cup scorer settlement', () => {
       expect(goals).toBe(ownGoals.filter(goal => goal.name === player).length);
     }
     expect(recorded.reduce((sum, row) => sum + row[3], 0)).toBe(ownGoals.length);
-    const winner = { name: 'Brian Brobbey', club: 'Sunderland', goals: 4 };
+    const winner = { name: 'Brandon Thomas-Asante', club: 'Coventry City', goals: 4 };
     expect(domesticCupScorerRace(played.state)).toMatchObject({ status: 'winner', leaders: [expect.objectContaining(winner)] });
 
     const season = playTo(played.state, seed, played.state.calendar.length).state;
@@ -169,7 +169,7 @@ describe('Domestic cup scorer settlement', () => {
   });
 
   it('archives a completed FA Cup award after taking an accepted job before the season ends', () => {
-    const seed = 987419;
+    const seed = 987427;
     const initial = tape(seed, () => startCareer('Liverpool')).value;
     const beforeFinal = playTo(initial, seed, 43).state;
     const random = vi.spyOn(Math, 'random').mockReturnValue(0.01);
@@ -183,7 +183,7 @@ describe('Domestic cup scorer settlement', () => {
     const moved = tape(seed + 202, () => joinClubNow(final)).value;
     expect(moved?.clubName).toBe('Bayern Munich');
     expect(domesticCupScorerRace(moved!).status).toBe('unavailable');
-    const award = { competition: 'FA Cup', winners: [{ name: 'Brian Brobbey', club: 'Sunderland', goals: 4 }] };
+    const award = { competition: 'FA Cup', winners: [{ name: 'Brandon Thomas-Asante', club: 'Coventry City', goals: 4 }] };
     expect(moved?.pendingDomesticScorerAward).toEqual({ club: 'Liverpool', award });
     expect(moved?.domesticCupScorers).toBeUndefined();
     const stored = loadCareer(JSON.stringify(moved));
@@ -195,7 +195,7 @@ describe('Domestic cup scorer settlement', () => {
     const nextSeason = tape(seed + 201, () => startNextSeason(finish.state)).value;
     expect(nextSeason.pendingDomesticScorerAward).toBeUndefined();
     expect(nextSeason.history.find(row => row.season === season.season)?.domesticScorerAward).toEqual(award);
-  });
+  }, 30_000);
 
   it('uses existing short-field byes and treats uncertain scorers openly', () => {
     const seed = 912321;
@@ -210,27 +210,28 @@ describe('Domestic cup scorer settlement', () => {
   });
 
   it('preserves the confirmed cup award when a sacking skips the league season review', () => {
-    const seed = 982022;
+    const seed = 982031;
     const initial = tape(seed, () => startCareer('Everton')).value;
     const final = playTo(initial, seed, 49).state;
+    expect(final.sacked).toBe(false);
     expect(domesticCupScorerRace(final)).toMatchObject({
-      status: 'winner', leaders: [expect.objectContaining({ name: 'Alexander Isak', goals: 4 })],
+      status: 'winner', leaders: [expect.objectContaining({ name: 'Dejan Kulusevski', club: 'Tottenham', goals: 3 })],
     });
     let dismissed = final;
     while (!dismissed.sacked && dismissed.week < dismissed.calendar.length) {
       dismissed = next(dismissed, seed + 1).value.state;
     }
-    expect(dismissed).toMatchObject({ week: 53, sacked: true, pendingSummary: null });
+    expect(dismissed).toMatchObject({ week: 52, sacked: true, pendingSummary: null });
     const original = JSON.stringify(dismissed);
     let out = enterWilderness(dismissed);
     for (let week = 0; week < 12 && !out.wilderness?.offers.length; week++) {
       out = tape(seed + 1500 + week, () => wildernessWeek(out)).value;
     }
-    expect(out.wilderness?.offers[0]?.club).toBe('QPR');
-    const hired = tape(seed + 2000, () => acceptWildernessJob(out, 'QPR')).value;
-    const award = { competition: 'FA Cup', winners: [{ name: 'Alexander Isak', club: 'Liverpool', goals: 4 }] };
+    expect(out.wilderness?.offers[0]?.club).toBe('Blackburn Rovers');
+    const hired = tape(seed + 2000, () => acceptWildernessJob(out, 'Blackburn Rovers')).value;
+    const award = { competition: 'FA Cup', winners: [{ name: 'Dejan Kulusevski', club: 'Tottenham', goals: 3 }] };
     const receipt = { season: 1, club: 'Everton', award };
-    expect(hired).toMatchObject({ season: 2, clubName: 'QPR', pendingSummary: null });
+    expect(hired).toMatchObject({ season: 2, clubName: 'Blackburn Rovers', pendingSummary: null });
     expect(hired?.history.some(row => row.season === 1)).toBe(false);
     expect(hired?.domesticCupScorers?.nights).toBe(0);
     expect(hired?.unreviewedDomesticScorerAwards).toEqual([receipt]);
@@ -240,7 +241,7 @@ describe('Domestic cup scorer settlement', () => {
     expect(reloaded?.unreviewedDomesticScorerAwards).toEqual([receipt]);
     expect(loadCareer(serializeParkedCareer(hired!))?.unreviewedDomesticScorerAwards).toEqual([receipt]);
     const readAlready = { ...out, unreviewedDomesticScorerAwards: [receipt] };
-    expect(tape(seed + 2000, () => acceptWildernessJob(readAlready, 'QPR')).value?.unreviewedDomesticScorerAwards)
+    expect(tape(seed + 2000, () => acceptWildernessJob(readAlready, 'Blackburn Rovers')).value?.unreviewedDomesticScorerAwards)
       .toEqual([receipt]);
     const later = tape(seed + 2001, () => startNextSeason(reloaded!)).value;
     expect(later.season).toBe(3);

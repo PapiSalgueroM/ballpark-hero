@@ -1,3 +1,7 @@
+## November 26 verified cup scorer playthroughs and Lexar builds
+
+All 39 Club Manager scorer integration tests now pass on the current fixture calendar, including 23 Champions League, seven domestic and nine Europa cases. The test scenarios reach wins, exits, transfers and appointments through the game engine, preserve exact player and club attribution after reload and reconcile goals to the recorded matches. Reclassifying a managed own goal failed the Madrid final and splitting the January transfer's scorer identity failed the Europa check. The 17 previously failing tests used seeded results from before calendar-based recovery. Two consecutive plain npm production builds succeeded in the Lexar worktree, including the rebuild into an existing dist. Eighteen selected site and game simulations and the browser snapshot startup passed on the standard output.
+
 ## November 26 local season-target verification
 
 The season-target simulation now reports its measured injury, suspension and conviction cases. The generic site runner had categorized its three-line output as empty even though the assertions executed. Its default output check now recognizes the same 16 paired careers and seven interruption paths. All 18 selected game and site harnesses and the browser snapshot startup check passed against the latest local production build.
