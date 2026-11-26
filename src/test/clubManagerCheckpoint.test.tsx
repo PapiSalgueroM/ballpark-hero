@@ -5,7 +5,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import everton from '../../scripts/data/cmBookSaveEvertonFixture.json';
 import { useClubManager } from '@/hooks/useClubManager';
 import { SavePointsScreen } from '@/components/club-manager/SavePointsScreen';
-import { clubAvailableInCareer, finishSeason, loadCareer, trimCareer, type CareerState } from '@/lib/clubManager';
+import { clubAvailableInCareer, finishSeason, loadCareer, startCareer, trimCareer, type CareerState } from '@/lib/clubManager';
+import { simToWeek as runCalendar } from '@/lib/clubManagerCalendar';
 import { packCareerPairs } from '@/lib/clubManagerParkedSave';
 import { SAVE_KEY, SLOTS_INDEX_KEY, parkedKey } from '@/lib/clubManagerSaveKeys';
 import { fenceKeyOf, saveFence } from '@/lib/saveFence';
@@ -70,24 +71,69 @@ afterEach(() => {
 });
 
 describe('Club Manager season settlement', () => {
-  it('records one completion when the review action is pressed twice before the season end renders', () => {
+  it.each([
+    ['play', false],
+    ['play', true],
+    ['continueFromReport', false],
+    ['continueFromReport', true],
+  ] as const)('settles once through %s before re-render (restored=%s)', (action, restored) => {
     const starting = loadCareer(JSON.stringify(everton))!;
-    const unreviewed = { ...starting, week: starting.calendar.length, live: undefined, pendingSummary: null };
+    const unreviewed = {
+      ...starting, week: starting.calendar.length, live: undefined, pendingSummary: null,
+      restoredFromCheckpoint: restored,
+    };
     localStorage.setItem(SAVE_KEY, JSON.stringify(trimCareer(unreviewed)));
     const hook = renderHook(() => useClubManager());
     act(() => hook.result.current.resume());
     expect(hook.result.current.phase).toBe('hub');
+    expect(postsScore(hook.result.current.career!)).toBe(!restored);
 
-    const reviewSeason = hook.result.current.play;
+    const reviewSeason = hook.result.current[action];
     act(() => {
       reviewSeason();
       reviewSeason();
     });
 
     expect(hook.result.current.phase).toBe('seasonEnd');
-    expect(vi.mocked(recordCompletion).mock.calls).toEqual([['/club-manager', expect.any(Number)]]);
     const saved = loadCareer()!;
     expect(saved.pendingSummary).toEqual(hook.result.current.summary);
+    expect(typeof saved.pendingSummary?.seasonScore).toBe('number');
+    expect(vi.mocked(recordCompletion).mock.calls).toEqual(
+      restored ? [['/club-manager']] : [['/club-manager', saved.pendingSummary?.seasonScore]],
+    );
+    expect(saved.history.filter(row => row.season === saved.season)).toHaveLength(1);
+  });
+
+  it.each([false, true])('settles directly from a background-only calendar final (restored=%s)', restored => {
+    const starting = startCareer('Inter Miami');
+    expect(starting.uclGroup).toBeNull();
+    expect(starting.calendar.at(-1)).toMatchObject({ type: 'uclKo', uclRound: 'F' });
+    const end = starting.calendar.length;
+    const before = { ...starting, week: end - 1, live: undefined, pendingSummary: null, restoredFromCheckpoint: restored };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(trimCareer(before)));
+    const hook = renderHook(() => useClubManager());
+    act(() => hook.result.current.resume());
+    const loaded = hook.result.current.career!;
+    expect(loaded.week).toBe(end - 1);
+    expect(postsScore(loaded)).toBe(!restored);
+    const probe = runCalendar(structuredClone(loaded), end);
+    expect(probe.halt).toBe('seasonOver');
+    expect(probe.state.week).toBe(end);
+    expect(probe.lastReport).toBeNull();
+
+    const advance = hook.result.current.simToWeek;
+    act(() => {
+      advance(end);
+      advance(end);
+    });
+
+    expect(hook.result.current.phase).toBe('seasonEnd');
+    const saved = loadCareer()!;
+    expect(saved.pendingSummary).toEqual(hook.result.current.summary);
+    expect(typeof saved.pendingSummary?.seasonScore).toBe('number');
+    expect(vi.mocked(recordCompletion).mock.calls).toEqual(
+      restored ? [['/club-manager']] : [['/club-manager', saved.pendingSummary?.seasonScore]],
+    );
     expect(saved.history.filter(row => row.season === saved.season)).toHaveLength(1);
   });
 });

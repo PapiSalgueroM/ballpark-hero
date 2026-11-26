@@ -132,8 +132,9 @@ const stripComments = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:'"`
 const ENGINE = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
 const CARD = path.join(ROOT, 'src', 'components', 'club-manager', 'MatchReportCard.tsx');
 const PAGE = path.join(ROOT, 'src', 'pages', 'ClubManager.tsx');
+const HUB = path.join(ROOT, 'src', 'components', 'club-manager', 'ClubManagerDeferredViews.tsx');
 const sourceBefore = {}, verifySources = [];
-for (const file of [ENGINE, CARD, PAGE]) {
+for (const file of [ENGINE, CARD, PAGE, HUB]) {
   const bytes = fs.readFileSync(file);
   sourceBefore[path.relative(ROOT, file).replaceAll('\\', '/')] = createHash('sha256').update(bytes).digest('hex');
   verifySources.push(() => assert.deepEqual(fs.readFileSync(file), bytes, 'Original match sources remain unchanged'));
@@ -584,15 +585,18 @@ console.log(`   ${pairs} fixtures replayed both ways, ${scorelines.size} distinc
   if (coached.length !== 2) fail(`${coached.length} Quick paths use the same coach and settlement; both must`);
   const coachSwitch = engineSrc.match(/const coached = \(s: CareerState\): CareerState => \(opts\?\.noCoach \? s : coachQuickMatch\(s\)\);/g) ?? [];
   if (coachSwitch.length !== 1) fail(`${coachSwitch.length} switches decide whether the quick sim coach runs; there is one, and it calls the coach unless noCoach is passed`);
-  const kickOffs = engineSrc.match(/\bkickOff\(state, entry(?:, opts\?\.varReviews)?\)/g) ?? [];
+  const kickOffs = engineSrc.match(/\bkickOff\(state, entry(?:, opts\?\.varReviews(?:, !opts\?\.noBook)?)?\)/g) ?? [];
   if (kickOffs.length !== 1) fail(`${kickOffs.length} places kick a match off, and there is one`);
   /* And the two screens that start a match. The hub is counted in the source
      because it only draws with a save; the Match Centre is rendered and every
      button on it counted, so a third way of playing a match fails here
      whether or not whoever adds it marks it as one. */
   const pageSrc = stripComments(lf(fs.readFileSync(PAGE, 'utf8')));
-  const hubWays = (pageSrc.match(/data-cm-way="/g) ?? []).length;
-  if (hubWays !== 2) fail(`the hub offers ${hubWays} ways into a match, and it offers two`);
+  const hubSrc = stripComments(lf(fs.readFileSync(HUB, 'utf8')));
+  const hubWays = [...(pageSrc + '\n' + hubSrc).matchAll(/data-cm-way="([^"]+)"/g)].map(m => m[1]);
+  if (hubWays.length !== 2 || !hubWays.includes('live') || !hubWays.includes('quick')) {
+    fail(`the hub offers ${hubWays.length} ways into a match (${hubWays.join(', ')}), and it offers live and quick`);
+  }
   const facts = cm.matchFacts(startCareer('Everton'));
   const centre = render(MatchCentre, {
     career: startCareer('Everton'), facts, clubColor: '#ffffff',
@@ -604,8 +608,12 @@ console.log(`   ${pairs} fixtures replayed both ways, ${scorelines.size} distinc
   if (centreWays.length !== 2 || !centreWays.includes('live') || !centreWays.includes('quick')) {
     fail(`the Match Centre offers ${centreWays.length} ways into a match (${centreWays.join(', ')}), and it offers live and quick`);
   }
-  if (centreButtons !== 7) {
-    fail(`the Match Centre draws ${centreButtons} buttons; it draws 7 (back, four team talk tones, and the two ways to play), so a new one has appeared`);
+  // The separately shipped Starter fitness disclosure is not a match entry.
+  const fitness = [...centre.matchAll(/<button\b[^>]*aria-expanded="false"[^>]*>\s*Starter fitness\s*<\/button>/g)];
+  if (fitness.length !== 1) fail(`the Match Centre shows ${fitness.length} closed Starter fitness disclosures; it must show exactly one`);
+  const buttonsWithoutFitness = centreButtons - fitness.length;
+  if (buttonsWithoutFitness !== 7) {
+    fail(`the Match Centre draws ${buttonsWithoutFitness} buttons besides the verified Starter fitness disclosure; it must draw 7 (back, four tones, live and quick)`);
   }
   console.log(`   the engine plays a match in ${calls.length} places, both off one kick off, and each of the two screens offers exactly 2 ways in (${centreButtons} buttons on the Match Centre)`);
 }
@@ -631,7 +639,7 @@ await new Promise(resolve => setImmediate(resolve));
 assert.deepEqual(runtimeErrors, [], 'Neither the control nor its baseline produces a runtime error');
 for (const verify of verifySources) verify();
 const sourceAfter = {};
-for (const file of [ENGINE, CARD, PAGE]) {
+for (const file of [ENGINE, CARD, PAGE, HUB]) {
   const bytes = fs.readFileSync(file);
   sourceAfter[path.relative(ROOT, file).replaceAll('\\', '/')] = createHash('sha256').update(bytes).digest('hex');
 }

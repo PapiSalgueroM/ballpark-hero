@@ -109,6 +109,7 @@
 import './lib/seedRandom.mjs';
 import { execSync } from 'node:child_process';
 import fs from 'node:fs';
+import { managerSeasonSettlementProblems } from './lib/cmSeasonSettlementContract.mjs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -903,10 +904,10 @@ console.log('9) SAVE_VERSION did not move and the new field is optional');
   /* And the call shapes three other harnesses string match must still exist. */
   const hook = codeOf(fs.readFileSync(path.join(ROOT, 'src', 'hooks', 'useClubManager.ts'), 'utf8'));
   const pings = [...hook.matchAll(/recordActivity\('\/club-manager', currentSeasonScore\(/g)].length;
-  const ends = [...hook.matchAll(/recordCompletion\('\/club-manager', sm\.seasonScore\)/g)].length;
-  console.log(`   useClubManager still has ${pings} match pings and ${ends} season end completions`);
+  const settlementProblems = managerSeasonSettlementProblems(hook);
+  console.log(`   useClubManager still has ${pings} match pings and guards all three season-end callbacks`);
   if (pings < 3) fail(`only ${pings} recordActivity pings left; simSessionMarks section 5 and simActivityNotCompletion's control both string match that literal`);
-  if (ends < 3) fail(`only ${ends} recordCompletion(sm.seasonScore) calls left; simSessionMarks section 5 expects 3`);
+  for (const problem of settlementProblems) fail(problem);
 }
 
 /* ---------- 10. The help screen and the constants agree ---------- */

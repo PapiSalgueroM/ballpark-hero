@@ -48,19 +48,36 @@ console.log('1) Nations and leagues');
 /* Round 140 added Portugal, Scotland and Turkey. Every nation must map to
    real leagues and every league to a nation, so the count is derived rather
    than pinned, and a nation with no playable league is the failure mode. */
-if (NATIONS.length !== 21) fail(`expected 21 nations, got ${NATIONS.length}`);  // Round 177: Austria and Greece; Round 185: Denmark and Switzerland; Round 189: Croatia; Round 876: Brazil; Round 883: Mexico; Round 1035: Australia; Round 1052: Russia
+// PR #509 adds South Korea without changing the previous 21 nations.
+if (NATIONS.length !== 22) fail(`expected 22 nations, got ${NATIONS.length}`);
+const koreanNation = NATIONS.find(n => n.name === 'South Korea');
+if (koreanNation?.leagueIds.join('|') !== 'kleague1') fail('South Korea must expose exactly K League 1');
 const mappedLeagueIds = new Set(NATIONS.flatMap(n => n.leagueIds));
 for (const lg of REAL_LEAGUES) {
   if (!mappedLeagueIds.has(lg.id)) fail(`league ${lg.id} belongs to no nation, it is unreachable from the picker`);
 }
 let totalClubs = 0;
+const allClubNames = [];
 for (const n of NATIONS) {
   for (const leagueId of n.leagueIds) {
     const clubs = playableClubs(leagueId);
     totalClubs += clubs.length;
     const lg = REAL_LEAGUES.find(l => l.id === leagueId);
     if (!lg) { fail(`nation ${n.name} points at missing league ${leagueId}`); continue; }
-    if (clubs.length !== lg.clubs.length) fail(`${lg.name}: ${clubs.length} playable vs ${lg.clubs.length} in league`);
+    const playableNames = new Set(clubs.map(c => c.name));
+    const excluded = lg.clubs.filter(name => !playableNames.has(name));
+    const unexpected = [...playableNames].filter(name => !lg.clubs.includes(name));
+    if (leagueId === 'kleague1') {
+      if (lg.clubs.length !== 12 || clubs.length !== 11 || excluded.join('|') !== 'Gimcheon Sangmu') {
+        fail(`K League 1: expected 12 scheduled members, 11 start destinations and only Gimcheon Sangmu held; found ${lg.clubs.length}, ${clubs.length}, held [${excluded}]`);
+      }
+    } else if (excluded.length || clubs.length !== lg.clubs.length) {
+      fail(`${lg.name}: ${clubs.length} playable vs ${lg.clubs.length} in league; excluded [${excluded}]`);
+    }
+    if (unexpected.length || playableNames.size !== clubs.length) {
+      fail(`${lg.name}: duplicate or non-member ordinary destinations [${unexpected}]`);
+    }
+    allClubNames.push(...playableNames);
     for (const c of clubs) {
       if (!isNum(c.budget) || c.budget < 5) fail(`${c.name}: bad budget ${c.budget}`);
       if (!isNum(c.expectation) || c.expectation < 1 || c.expectation > lg.clubs.length) fail(`${c.name}: bad expectation ${c.expectation}`);
@@ -70,7 +87,7 @@ for (const n of NATIONS) {
     }
   }
 }
-if (totalClubs !== 454) fail(`expected 454 playable clubs (186, plus 48 in Round 140, 18 in Round 142, 18 in Round 143, 12 plus 14 in Round 177, 12 plus 12 in Round 185, 10 in Round 189, 20 in Round 876, 18 in Round 883, 12 in Round 1035, 20 in Round 1040's Serie B, 18 in its Ligue 2, 20 in its Segunda División, 16 in Round 1052's Russian Premier League), got ${totalClubs}`);
+if (totalClubs !== 465 || new Set(allClubNames).size !== 465) fail(`expected 465 distinct playable clubs (454 before PR #509 plus 11 K League 1 jobs), got ${totalClubs} entries and ${new Set(allClubNames).size} distinct names`);
 const ordering = [
   ['Real Madrid', 'Racing Santander'], ['Bayern Munich', 'Paderborn'], ['PSG', 'Le Havre'],
   ['Liverpool', 'Hull City'], ['Wolves', 'Lincoln City'], ['Al-Hilal', 'Al-Riyadh'],
@@ -107,9 +124,14 @@ if (rosterHas('Barcelona', 'Lewandowski')) fail('Lewandowski still at Barcelona 
   }
 }
 
-/* ---------- 2. Every club can start ---------- */
-console.log('2) startCareer for all 186 clubs');
-const allClubNames = REAL_LEAGUES.flatMap(l => l.clubs);
+/* ---------- 2. Every ordinary job can start ---------- */
+console.log('2) startCareer for every ordinary job; the scheduled Gimcheon opponent stays held');
+try {
+  startCareer('Gimcheon Sangmu');
+  fail('Gimcheon Sangmu opened an ordinary career despite held access');
+} catch (error) {
+  if (error?.message !== 'CM_CLUB_ACCESS_HELD') fail(`Gimcheon Sangmu was refused with an unexpected error: ${error}`);
+}
 for (const name of allClubNames) {
   const s = startCareer(name);
   if (s.clubName !== name) fail(`${name}: career started as ${s.clubName}`);

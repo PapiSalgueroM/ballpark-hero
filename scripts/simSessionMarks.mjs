@@ -55,6 +55,7 @@
  * Run: node scripts/simSessionMarks.mjs
  */
 import fs from 'node:fs';
+import { managerSeasonSettlementProblems } from './lib/cmSeasonSettlementContract.mjs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { US_CAREER_BOARD, US_CAREER_SPORTS, readUsSource, stripComments, wrapperProblems } from './lib/usCareerFiles.mjs';
@@ -200,10 +201,10 @@ console.log('5) Club Manager pings a match and completes a season; Soccer Career
 {
   const cm = read('src/hooks/useClubManager.ts');
   const pings = [...cm.matchAll(/recordActivity\('\/club-manager', currentSeasonScore\(/g)].length;
-  const seasons = [...cm.matchAll(/recordCompletion\('\/club-manager', sm\.seasonScore\)/g)].length;
+  const settlementProblems = managerSeasonSettlementProblems(cm);
   const perMatch = [...cm.matchAll(/recordCompletion\('\/club-manager', currentSeasonScore\((res\.)?state\)\)/g)].length;
   if (pings < 3) fail(`useClubManager: only ${pings} match pings (recordActivity with the running score), Round 392 expects the match, the quick sim run and the second half`);
-  if (seasons < 3) fail(`useClubManager: only ${seasons} season end completions (recordCompletion with sm.seasonScore), Round 157 expects the season over, the quick sim season over and the report's season end`);
+  for (const problem of settlementProblems) fail(problem);
   if (perMatch > 0) fail(`useClubManager: ${perMatch} match result(s) recorded as a full completion, which adds the running season score to a signed in player's points every match (the Round 392 regression)`);
   const soccer = read('src/pages/SoccerCareer.tsx');
   if (!soccer.includes("recordActivity('/soccer-career');")) {
