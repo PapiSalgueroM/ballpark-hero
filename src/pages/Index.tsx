@@ -461,14 +461,13 @@ export default function Index() {
                 </>
               )}
             </section>
-            {index === 0 && homeAdPlacement === 'phone' && !isSearching && <HomeBanner phone />}
             </Fragment>
             );
           })}
         </div>
       </div>
     </div>
-  ), [badgeDate, bestScores, expandedSports, favSport, gamePicks, homeAdPlacement, isSearching, jumpToSport, pickSport, pickableSports, sportSections, toggleGamePick]);
+  ), [badgeDate, bestScores, expandedSports, favSport, gamePicks, jumpToSport, pickSport, pickableSports, sportSections, toggleGamePick]);
 
   return (
     <>
@@ -700,7 +699,7 @@ export default function Index() {
           <Suspense fallback={null}>
             <HomeAbout />
           </Suspense>
-          {!isSearching && homeAdPlacement === 'footer' && <HomeBanner />}
+          {!isSearching && homeAdPlacement && <HomeBanner phone={homeAdPlacement === 'phone'} />}
 
           {/* Golf went live 2026-08-05 (Guess The Golfer + Golf Higher or
               Lower), so the old Coming Soon placeholder is gone; the Golf

@@ -6,6 +6,10 @@ on:
       - .github/workflows/game-desktop-rails.yml
       - scripts/playGameDesktopRails.mjs
       - scripts/playGameAutoRails.mjs
+      - scripts/playHomeAds.mjs
+      - src/components/ads/PublicFooterAd.tsx
+      - src/components/CookieConsent.tsx
+      - src/pages/Index.tsx
       - scripts/simAdsense.mjs
       - src/lib/consentedScripts.ts
       - src/lib/consentPreferences.ts
@@ -56,6 +60,7 @@ jobs:
           curl -fs -o /dev/null http://127.0.0.1:4173/
           node scripts/playGameDesktopRails.mjs
           node scripts/playGameAutoRails.mjs
+          node scripts/playHomeAds.mjs
       - name: Verify privacy and manual ad guards
         run: |
           node scripts/simAdsense.mjs

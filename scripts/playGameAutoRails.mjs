@@ -17,7 +17,7 @@ const paths = [...new Set([...ALL_GAMES.map(game => game.path), ...HUB_NAV.map(h
 assert(paths.length > 100);
 const browser = await chromium.launch();
 
-async function check(path, { width = 1280, advertising = true, expected = 1, gpc = false, accept = false } = {}) {
+async function check(path, { width = 1280, advertising = true, expected = 1, gpc = false, accept = false, footerSlot = false } = {}) {
   const context = await browser.newContext({ viewport: { width, height: 900 }, serviceWorkers: 'block' });
   try {
     await context.addInitScript(({ advertising, gpc }) => {
@@ -55,6 +55,14 @@ async function check(path, { width = 1280, advertising = true, expected = 1, gpc
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
     }
     assert.equal(intercepted.length, expected, path);
+    if (footerSlot) {
+      const slot = page.locator('[data-public-footer-ad] ins.adsbygoogle[data-ad-slot="7540487748"]');
+      await slot.waitFor({ state: 'visible' });
+      assert.equal(await slot.count(), 1);
+      const box = await slot.boundingBox(), footer = await page.locator('footer').boundingBox();
+      assert(box && footer && box.y >= footer.y + footer.height + 149, path + ': footer safety gap');
+      assert(box.x >= 0 && box.x + box.width <= width, path + ': footer slot is within viewport');
+    }
   } finally {
     await context.close();
   }
@@ -68,8 +76,12 @@ try {
   for (const path of ['/soccer-career', '/nba-my-career', '/nfl-my-career', '/stadium-tycoon', '/world-cup-bracket', '/soccer']) {
     await check(path, { advertising: false, expected: 0 });
   }
-  await check('/soccer-career', { width: 390, expected: 0 });
-  await check('/soccer-career', { width: 1279, expected: 0 });
+  for (const path of ['/soccer-career', '/club-manager', '/soccer', '/nba-my-career']) {
+    for (const width of [320, 390, 1280, 1366]) await check(path, { width, footerSlot: true });
+  }
+  await check('/soccer-career', { width: 1279, footerSlot: true });
+  await check('/soccer-career', { width: 390, advertising: false, expected: 0 });
+  await check('/soccer-career', { width: 390, advertising: null, accept: true, footerSlot: true });
   await check('/soccer-career?view=saves', { expected: 0 });
   await check('/soccer-career#shared', { expected: 0 });
   await check('/soccer-career', { gpc: true, expected: 0 });
@@ -77,7 +89,7 @@ try {
   for (const path of ['/privacy', '/reset-password', '/admin/login', '/missing-game-rail-test']) {
     await check(path, { expected: 0 });
   }
-  console.log('Declined, pending, GPC, private, narrow, query and fragment cases passed');
+  console.log('Declined, pending, GPC, private, footer, query and fragment cases passed');
 } finally {
   await browser.close();
 }
