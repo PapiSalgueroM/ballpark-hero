@@ -19,7 +19,7 @@ import {
   awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
   setPieceOffer, beginSetPiece, awardSetPieceGoal,
   setTicketPolicy, setMatchPlan, matchPlanForecast, signStadiumSponsor, bookMatchScouting, bookStandsConstruction,
-  bookGraduateAttack, reserveSeasonTickets, updateExpansionTarget, orderMatchProgrammes, type ProgrammeQuote,
+  bookGraduateAttack, bookJuniorDay, reserveSeasonTickets, updateExpansionTarget, orderMatchProgrammes, type ProgrammeQuote,
 } from '@/lib/stadiumTycoon';
 import type { GoldenKind, AwayMatch, SetPieceOffer, TicketPolicy, MatchPlanKind, StadiumSponsor, SeasonTicketAllocation, ExpansionTargetAction } from '@/lib/stadiumTycoon';
 import type { GraduateAttackOption } from '@/lib/wonderkidFactory';
@@ -129,6 +129,7 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
   const [sponsorSaveError, setSponsorSaveError] = useState<{ ground: number; season: number } | null>(null);
   const [seasonTicketSaveError, setSeasonTicketSaveError] = useState<{ ground: number; season: number } | null>(null);
   const [matchPlanError, setMatchPlanError] = useState<number | null>(null);
+  const [juniorSaveError, setJuniorSaveError] = useState<{ ground: number; match: number } | null>(null);
   const [programmeSaveError, setProgrammeSaveError] = useState<{ ground: number; match: number } | null>(null);
   const [scoutingSaveError, setScoutingSaveError] = useState<{ ground: number; match: number } | null>(null);
   const [standsConstructionSaveError, setStandsConstructionSaveError] = useState<number | null>(null);
@@ -358,7 +359,7 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
             const season = events.find(e => (e.kind === 'title' || e.kind === 'seasonEnd') && e.position !== undefined);
             let allowGear = true;
             const openedStands = before.standsOpenAfterMatch !== undefined && next.standsOpenAfterMatch === undefined;
-            if (season || openedStands || (before.programmeOrder && !next.programmeOrder)) {
+            if (season || openedStands || (before.programmeOrder && !next.programmeOrder) || (before.juniorDay && !next.juniorDay)) {
               // Save completed construction at full time, and the final table before a title can award gear.
               const saved = graduateBoundary ? 'written' : saveTicketState(next);
               if (saved === 'moved') return false;
@@ -541,6 +542,21 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
       return;
     }
     setMatchPlanError(null);
+    commit(next);
+    markSessionPlay();
+  }, [commit, markSessionPlay, writeStadium, stadiumActionsBlocked]);
+
+  const doBookJuniorDay = useCallback((ground: number, match: number, seats: number) => {
+    if (document.hidden || stadiumActionsBlocked()) return;
+    const before = stateRef.current;
+    const next = bookJuniorDay(before, ground, match, seats);
+    if (next === before) return;
+    const saved = writeStadium(next);
+    if (saved !== 'written') {
+      if (saved === 'failed') setJuniorSaveError({ ground, match });
+      return;
+    }
+    setJuniorSaveError(null);
     commit(next);
     markSessionPlay();
   }, [commit, markSessionPlay, writeStadium, stadiumActionsBlocked]);
@@ -767,7 +783,8 @@ export function useStadiumTycoon(getEdge?: () => number, getAttackOptions?: () =
     state, floaters, awayPay, awayTrip, dismissAway, confetti, gearSaveBlocked, saveMoved,
     doSetTicketPolicy, ticketSaveFailed, retryTicketSave, doSetMatchPlan, doSignSponsor, doBookScouting,
     sponsorSaveFailed: sponsorSaveError?.ground === state.rep && sponsorSaveError.season === state.league?.season,
-    doReserveSeasonTickets, doOrderProgrammes,
+    doReserveSeasonTickets, doOrderProgrammes, doBookJuniorDay,
+    juniorSaveError: juniorSaveError?.ground === state.rep ? juniorSaveError.match : null,
     programmeSaveFailed: programmeSaveError?.ground === state.rep && programmeSaveError.match === state.matchNo + 1,
     seasonTicketSaveFailed: seasonTicketSaveError?.ground === state.rep && seasonTicketSaveError.season === state.league?.season,
     matchPlanSaveFailed: matchPlanError === state.matchNo,

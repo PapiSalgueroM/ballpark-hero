@@ -1,3 +1,7 @@
+### November 26, 2026. Stadium Tycoon junior matchdays
+
+At a 120-seat ground, a manager can spend $12 to reserve 12 places for juniors at the next bookable home league fixture. Season pass holders keep their seats. Juniors buy no tickets, count toward concessions, programmes and sponsor attendance targets, and three become regular supporters after the match. In signed-out Chrome the phone booking raised attendance from 40 to 52. The laptop stayed at 120 and displaced 12 paying walk-ups. Both receipts survived the season change and reload. All 48 focused checks and the Stadium Tycoon simulation passed. Across 15 earlier saves, skipping the offer reproduced every one of 8,100 original clock ticks.
+
 ### November 26, 2026. Soccer Career rival season comparisons
 
 The rivalry screen compares the last shared club season by appearances, goals and assists. Future Ballon d'Or ballots read the rival's simulated club line, score recorded nominee assists and use the destination tier after a transfer. Existing ballots keep their recorded results. Offline Chrome at 390 and 1366 px showed the same keeper with 29 appearances, zero goals and two assists after reload. The fairness sim passed 134 required wins, 354 podiums and 1,382 seated-field checks.
