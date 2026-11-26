@@ -19,7 +19,7 @@ export function UfcHowToPlay({ open, onOpenChange }: UfcHowToPlayProps) {
         </DialogHeader>
         <div className="space-y-4 text-sm text-muted-foreground">
           <p>Guess the mystery UFC fighter in <strong className="text-foreground">8 tries</strong>.</p>
-          <p>Every guess colors in clues about the fighter you're chasing:</p>
+          <p>Each guess reveals nine clues. Higher and Lower describe the mystery fighter. For example, 12 wins with Higher means the answer has more than 12 wins.</p>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <div className="w-5 h-5 rounded bg-correct" />

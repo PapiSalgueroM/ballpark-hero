@@ -1,3 +1,7 @@
+## November 26 local review, UFC Guesser clue board
+
+Two daily guesses exposed a 529-pixel horizontal overflow on a 390-pixel phone. Each guess now has a nine-clue card view on small screens. Visitors can switch guesses and read the clue value, match and direction. The full comparison board fits its 864-pixel laptop container. A private Chrome replay submitted two fighters at each width, switched the phone selection and reopened the same saved guesses after reload. The mounted test and damaged Daily-save check passed.
+
 ## 2026-11-26, Rotate academy prospects during a U21 campaign
 
 A Club Manager can assign the next two league dates to another academy prospect after U21 match two or four. Earlier development stays with the player who earned it. Across seven senior fixtures on phone and laptop, two prospects gained two points and one point respectively. Their separate credits and all six scores survived midseason reloads and entry into the following campaign. The proof supplied late-game funds and two test prospects, then used the game's academy and match controls.

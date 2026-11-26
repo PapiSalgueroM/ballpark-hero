@@ -50,6 +50,7 @@ const UfcGame = () => {
       />
       <GameShell
         width="wide"
+        help="none"
         title="UFC GUESSER"
         subtitle="Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia, no login needed."
         headerExtra={
@@ -104,7 +105,7 @@ const UfcGame = () => {
           </div>
         ) : null}
 
-        <UfcGameBoard guesses={guesses} maxGuesses={maxGuesses} />
+        <UfcGameBoard key={mode} guesses={guesses} maxGuesses={maxGuesses} />
 
         {gameStatus !== 'playing' && (
           <div className="mt-8 flex justify-center">
