@@ -51,7 +51,20 @@ describe('Club Manager U21 side', () => {
     expect(reopened.academy!.prospects[0].rating).toBe(64);
     expect(enterYouthCampaign(reopened, 'test-youth')).toBe(reopened);
     const next = { ...reopened, season: reopened.season + 1, budget: 30 };
-    expect(enterYouthCampaign(next, 'test-youth').budget).toBe(18);
+    const broke = { ...next, budget: 11 };
+    expect(enterYouthCampaign(broke, 'test-youth')).toBe(broke);
+    const enteredAgain = enterYouthCampaign(next, 'test-youth');
+    expect(enteredAgain.budget).toBe(18);
+    expect(enteredAgain.academy!.youthTeam!.history).toEqual([reopened.academy!.youthTeam!.campaign]);
+    expect(enterYouthCampaign(enteredAgain, 'test-youth')).toBe(enteredAgain);
+    expect(saveCareer(enteredAgain)).toBe(true);
+    const archive = loadCareer()!;
+    expect(archive.academy!.youthTeam).toEqual(enteredAgain.academy!.youthTeam);
+    render(<YouthTeamPanel career={archive} onFound={vi.fn()} onEnter={vi.fn()} />);
+    fireEvent.click(screen.getByText('Manchester City U21'));
+    fireEvent.click(screen.getByText('Past U21 campaigns (1)'));
+    expect(screen.getByText('Season 1 · Academy prospect')).toBeVisible();
+    expect(screen.getByText('Development: +2 rating')).toBeVisible();
   });
 
   it('blocks unaffordable entry, does not train a released prospect or repeat a fixture, and reads older saves', () => {

@@ -8,21 +8,37 @@ export const YOUTH_FACILITY_LEVEL = 12;
 
 interface YouthFixture { season: number; round: number; opponent: string; gf: number; ga: number; gain: number }
 interface YouthCampaign { season: number; prospectId: string; name: string; fixtures: YouthFixture[] }
-export interface YouthTeam { club: string; campaign?: YouthCampaign }
+export interface YouthTeam { club: string; campaign?: YouthCampaign; history?: YouthCampaign[] }
+
+export function youthCampaignRecord(campaign: YouthCampaign) {
+  const record = { wins: 0, draws: 0, losses: 0, gf: 0, ga: 0, gain: 0 };
+  for (const match of campaign.fixtures) {
+    if (match.gf > match.ga) record.wins++;
+    else if (match.gf === match.ga) record.draws++;
+    else record.losses++;
+    record.gf += match.gf;
+    record.ga += match.ga;
+    record.gain += match.gain;
+  }
+  return record;
+}
+
+function isYouthCampaign(c: YouthCampaign | undefined): c is YouthCampaign {
+  return !!c && Number.isInteger(c.season) && typeof c.prospectId === 'string' && typeof c.name === 'string' &&
+    Array.isArray(c.fixtures) && c.fixtures.length <= YOUTH_MATCHES && c.fixtures.every(m => m &&
+      Number.isInteger(m.season) && Number.isInteger(m.round) && typeof m.opponent === 'string' &&
+      [m.gf, m.ga].every(g => Number.isInteger(g) && g >= 0 && g <= 4) && (m.gain === 0 || m.gain === 1));
+}
 
 export function restoreYouthTeam(career: CareerState): void {
   const academy = career.academy;
   if (!academy || academy.youthTeam === undefined) return;
   const team = academy.youthTeam;
   if (!team || team.club !== career.clubName) { delete academy.youthTeam; return; }
-  const c = team.campaign;
-  if (c === undefined) return;
-  if (!c || !Number.isInteger(c.season) || typeof c.prospectId !== 'string' || typeof c.name !== 'string' ||
-      !Array.isArray(c.fixtures) || c.fixtures.length > YOUTH_MATCHES || c.fixtures.some(m => !m ||
-        !Number.isInteger(m.season) || !Number.isInteger(m.round) || typeof m.opponent !== 'string' ||
-        ![m.gf, m.ga].every(g => Number.isInteger(g) && g >= 0 && g <= 4) || (m.gain !== 0 && m.gain !== 1))) {
-    delete team.campaign;
-  }
+  if (team.campaign !== undefined && !isYouthCampaign(team.campaign)) delete team.campaign;
+  if (Array.isArray(team.history)) {
+    team.history = team.history.filter(c => isYouthCampaign(c) && c.fixtures.length === YOUTH_MATCHES);
+  } else if (team.history !== undefined) delete team.history;
 }
 
 export function foundYouthTeam(career: CareerState): CareerState {
@@ -42,7 +58,8 @@ export function enterYouthCampaign(career: CareerState, prospectId: string): Car
   const cost = last ? YOUTH_ENTRY_COST : 0;
   if (career.budget < cost) return career;
   return { ...career, budget: Math.round((career.budget - cost) * 10) / 10, academy: { ...academy,
-    youthTeam: { ...team, campaign: { season: career.season, prospectId, name: prospect.name, fixtures: [] } } } };
+    youthTeam: { ...team, ...(last && { history: [...(team.history ?? []), last] }),
+      campaign: { season: career.season, prospectId, name: prospect.name, fixtures: [] } } } };
 }
 
 // Called on the engine's own match copy, once the senior league result is final.

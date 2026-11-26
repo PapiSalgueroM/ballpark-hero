@@ -1,3 +1,7 @@
+## 2026-11-26, Past U21 campaigns
+
+Paying for the next U21 season now keeps the previous prospect, all six fixtures, W/D/L record, goals and earned development in Academy. A second registration charged 12 million once and retained the results of the first six played fixtures on phone and desktop after reload. The browser test advanced the season number to reopen registration.
+
 ## 2026-11-26, US player appearance requirements
 
 NBA, NFL, MLB and NHL My Career now retain the number of games played and the required minimum with each newly settled contract target. The review can explain why a strong rate or longest kick did not earn a bonus in a short season. Earlier receipts still use the figures they recorded.

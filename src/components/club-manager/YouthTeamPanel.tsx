@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { moneyIn, type CareerState } from '@/lib/clubManager';
-import { YOUTH_ENTRY_COST, YOUTH_FACILITY_LEVEL, YOUTH_MATCHES, YOUTH_TEAM_COST } from '@/lib/clubManagerYouthTeam';
+import { YOUTH_ENTRY_COST, YOUTH_FACILITY_LEVEL, YOUTH_MATCHES, YOUTH_TEAM_COST, youthCampaignRecord } from '@/lib/clubManagerYouthTeam';
 
 export default function YouthTeamPanel({ career, onFound, onEnter }: {
   career: CareerState; onFound: () => void; onEnter: (id: string) => void;
@@ -44,6 +44,17 @@ export default function YouthTeamPanel({ career, onFound, onEnter }: {
           </> : <p>Send a scout or wait for your next academy intake to register a prospect.</p>}
         </>}
         {done && campaign.season === career.season && <p>Registration opens again next season.</p>}
+        {!!team.history?.length && <details className="border-t border-border">
+          <summary className="min-h-11 cursor-pointer py-3 font-semibold">Past U21 campaigns ({team.history.length})</summary>
+          <ol className="space-y-2">{[...team.history].reverse().map(past => {
+            const record = youthCampaignRecord(past);
+            return <li key={past.season} className="rounded-md bg-secondary/40 px-2 py-1">
+              <p className="font-semibold">Season {past.season} · {past.name}</p>
+              <p>{record.wins}W {record.draws}D {record.losses}L · {record.wins * 3 + record.draws} pts · {record.gf} for, {record.ga} against</p>
+              <p>Development: +{record.gain} rating</p>
+            </li>;
+          })}</ol>
+        </details>}
       </>}
     </div>
   </details>;

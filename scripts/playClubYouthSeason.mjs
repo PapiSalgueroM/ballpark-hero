@@ -79,6 +79,34 @@ try {
     await writeFile(path.join(process.env.OUTPUT, file + '.json'), JSON.stringify({ width, seniorFixtures, startingBudget: 100, afterFounding: 55, campaign, errors }, null, 2));
   }
   console.log('Six U21 fixtures retained after reload, featured prospect grew from 62 to 64, one founding charge, senior fixtures:', seniorFixtures);
+  // The six archived fixtures are the ones just played. Move the registration
+  // clock to next season so the manager can enter again on the same save.
+  if (process.env.U21_TEST_REENTRY === '1') {
+    await page.addInitScript(key => {
+      if (sessionStorage.getItem('u21-registration-opened')) return;
+      sessionStorage.setItem('u21-registration-opened', '1');
+      const next = JSON.parse(localStorage.getItem(key));
+      next.season++;
+      next.budget = 30;
+      localStorage.setItem(key, JSON.stringify(next));
+    }, key);
+    await page.reload(); await click(/^Resume Career$/i); await openAcademy(); await heading.click();
+    await click(/Enter next campaign/);
+    await page.getByText('Past U21 campaigns (1)', { exact: true }).click();
+    await page.getByText('Development: +2 rating', { exact: true }).waitFor();
+    const next = await save();
+    assert.equal(next.budget, 18);
+    assert.deepEqual(next.academy.youthTeam.history, [campaign]);
+    assert.equal(next.academy.youthTeam.campaign.fixtures.length, 0);
+    await page.reload(); await click(/^Resume Career$/i); await openAcademy(); await heading.click();
+    await page.getByText('Past U21 campaigns (1)', { exact: true }).click();
+    await page.getByText('Development: +2 rating', { exact: true }).waitFor();
+    assert.deepEqual((await save()).academy.youthTeam, next.academy.youthTeam);
+    assert.equal((await save()).budget, 18);
+    if (process.env.OUTPUT) await panel.screenshot({ path: path.join(process.env.OUTPUT, file + '-archive.png') });
+    assert.deepEqual(errors, []);
+    console.log('Second registration cost 12 million. All six prior fixtures and the +2 rating record survived another reload.');
+  }
 } finally {
   await browser.close();
 }
