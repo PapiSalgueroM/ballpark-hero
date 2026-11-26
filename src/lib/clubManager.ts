@@ -1,4 +1,5 @@
 import { playYouthFixture, restoreYouthTeam } from '@/lib/clubManagerYouthTeam';
+import { closeSeniorSeason, type SeniorClub } from '@/lib/clubManagerSecondClub';
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
@@ -3245,6 +3246,7 @@ export interface SeasonSummary {
 }
 
 export interface CareerState {
+  seniorClub?: SeniorClub;
   saveVersion: number;
   /** A career opened from a portable file keeps playing without posting scores. */
   importedFromFile?: true;
@@ -24648,6 +24650,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   state.history = keepTeams(state.history);
   /* Round 1601: write down the season every man of mine played, after everything above; it draws nothing. */
   archiveCareerSeason(state);
+  closeSeniorSeason(state);
   state.pendingSummary = summary;
   return { state, summary };
 }
@@ -25056,6 +25059,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   if (playedFinals?.played.length && playedFinals.next) return career;
   const requestedClub = career.jobHunt?.summerMove?.club ?? acceptOfferClub;
   if (requestedClub && requestedClub !== career.clubName && !clubAvailableInCareer(career, requestedClub)) return career;
+  if (career.seniorClub) {
+    career = { ...career };
+    closeSeniorSeason(career);
+  }
   const reviewedThisSeason = career.history.some(row => row.season === career.season);
   const unreviewedUclAward = !reviewedThisSeason
     && !career.unreviewedUclScorerAwards?.some(row => row.season === career.season)

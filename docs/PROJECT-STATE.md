@@ -1,3 +1,7 @@
+## November 26 local review, owning a second senior club
+
+A club with academy facilities at level 12 or higher can buy the fictional Foundry Vale for 90m in preseason. The purchase includes 12m in separate operating cash. Its board can spend 4m on the squad or keep reserves, follow an eight-club home-and-away league, and read the final table and accounts before and after rollover. In fresh late-game fixtures Manchester City paid once, then the phone squad-investment campaign ended fourth with 11m and the laptop reserve campaign sixth with 14m. Both played through the calendar and reopened season one in year two. The manager cannot take the asset to another employer. Simulated job changes, dismissal, duplicate settlement and a failed save followed by retry were tested.
+
 ## November 26 local review, player loans and their purchase options
 
 Managers can now offer a lower-fee straight loan from the Sell screen's loan plan. They can see the purchase price on standard deals and incoming loan bids before agreeing. Choosing a host uses the actual leagues in this save. Two fresh Everton browser careers sent Harrison Armstrong to Ajax for a simulated 400k with no purchase option, against the standard simulated 700k with a 10.1m buy option. Both receipts and budgets survived reload. A paired summer exercised the standard option and returned the same contracted player on a straight loan. The mounted and engine checks cover stale quotes, failed writes, double placement, existing offers and recovery after reload.

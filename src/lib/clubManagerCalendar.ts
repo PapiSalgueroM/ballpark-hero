@@ -45,6 +45,7 @@ import type { WorldCompKey } from '@/lib/worldCompetition';
 import type { CareerState, CalendarEntry, Competition, FormResult, LeagueRatingChange, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
 import { BOARD_FRESH, LEGACY_BOARD_START, LEGACY_NEW_JOB_BOARD } from '@/lib/clubManagerBoardVerdict';
 import { applyNewJobDials } from '@/lib/clubManagerDifficulty';
+import { carrySeniorClub } from '@/lib/clubManagerSecondClub';
 import type { CmVarAsk } from '@/lib/clubManagerVar';
 import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';
 import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobHunt';
@@ -1174,6 +1175,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
      entrant of a night still ahead (the critic's corrections 6 to 8). */
   carryOneOffs(career, joined);
   /* Round 1501: the level's cheque and wage room on the new job (the identity on Normal). */
+  carrySeniorClub(career, joined);
   return applyNewJobDials(joined);
 }
 

@@ -1416,7 +1416,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     setCareer(prev => (prev ? loanOutPlayer(prev, playerId) ?? prev : prev));
   }, []);
 
-  const commitLoanPlan = useCallback((make: (c: CareerState) => CareerState | null): boolean => {
+  const commitClubAction = useCallback((make: (c: CareerState) => CareerState | null): boolean => {
     if (phase !== 'hub' || !holdsActiveSlot() || movedOn()) return false;
     const now = careerRef.current;
     if (!now) return false;
@@ -1660,7 +1660,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint, updateManager,
     setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
     acceptIncomingBid, rejectIncomingBid,
-    setStatus, loanOut, commitLoanPlan, commitRecruitment, renew, renewWithClause, terminate, signFree, setRole,
+    setStatus, loanOut, commitLoanPlan: commitClubAction, commitClubAction, commitRecruitment, renew, renewWithClause, terminate, signFree, setRole,
     upgradeFacility, openYouthTeam, fundYouthTeam, rotateYouth, sendScout, callScoutHome, promote, release, setTraining,
     subAtHalftime, shapeAtHalftime, changeAtHalftime, secondHalf, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,

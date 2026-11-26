@@ -106,6 +106,7 @@ const HalftimeScreen = lazy(() => import('@/components/club-manager/HalftimeScre
 const MatchReportCard = lazy(() => import('@/components/club-manager/MatchReportCard').then(m => ({ default: m.MatchReportCard })));
 const AcademyScreen = lazy(() => import('@/components/club-manager/AcademyScreen').then(m => ({ default: m.AcademyScreen })));
 const YouthTeamPanel = lazy(() => import('@/components/club-manager/YouthTeamPanel'));
+const SecondClubPanel = lazy(() => import('@/components/club-manager/SecondClubPanel'));
 const TrainingScreen = lazy(() => import('@/components/club-manager/TrainingScreen').then(m => ({ default: m.TrainingScreen })));
 const RolesScreen = lazy(() => import('@/components/club-manager/RolesScreen').then(m => ({ default: m.RolesScreen })));
 const XpScreen = lazy(() => import('@/components/club-manager/XpScreen').then(m => ({ default: m.XpScreen })));
@@ -770,6 +771,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">SEASON {sm.season} COMPLETE</h1>
         <p className="text-muted-foreground text-sm mb-5">{sm.club} · finished <span className="text-foreground font-bold">#{sm.position}</span> with {sm.points} pts</p>
         <ScreenLoading><ClubManagerSeasonSummary sm={sm} c={c} g={g} /></ScreenLoading>
+        {c.seniorClub && <ScreenLoading><SecondClubPanel career={c} /></ScreenLoading>}
         {/* Round 1343: retire here, before the summer. */}
         <div className="mt-4 mx-auto max-w-sm"><Suspense fallback={<div className="min-h-11" />}><CmRetireDoor c={c} retire={g.retire} onOpen={preloadFarewell} /></Suspense></div>
         {/* Round 928 review: the managers are a tap away here too, not only on the hub. */}
@@ -1260,7 +1262,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                   onBuyWageRoom={g.addWageRoom}
                   onSponsor={g.takeSponsor}
                   onPush={g.pushSponsorOffer}
-                /></ScreenLoading>
+                /><SecondClubPanel career={c} onCommit={g.commitClubAction} /></ScreenLoading>
               )}
 
               {/* Round 467: the facilities desk. The ground card that lived on
