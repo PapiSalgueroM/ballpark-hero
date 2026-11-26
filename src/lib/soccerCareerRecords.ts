@@ -10,6 +10,10 @@ export interface CareerBest {
   index: number;
   ties: number;
 }
+interface CareerRecordSeason {
+  season: SeasonRecord;
+  index: number;
+}
 export interface ClubStint {
   club: string;
   parent: string | null;
@@ -19,7 +23,27 @@ export interface ClubStint {
   goals: number;
   assists: number;
   cleanSheets: number;
-  rows: { season: SeasonRecord; index: number }[];
+  rows: CareerRecordSeason[];
+}
+
+function savedLeagueApps(season: SeasonRecord) {
+  const league = season.leagueApps;
+  return typeof league === 'number' && Number.isSafeInteger(league) && league >= 0
+    && Number.isSafeInteger(season.apps) && league <= season.apps ? league : null;
+}
+
+export function careerRecordAppearances(season: SeasonRecord, seniorSeasons: readonly CareerRecordSeason[]) {
+  const league = savedLeagueApps(season);
+  if (league === null) return null;
+
+  let prior: { year: number; club: string; delta: number } | null = null;
+  for (const { season: candidate } of seniorSeasons) {
+    if (!Number.isSafeInteger(candidate.year) || !(candidate.year < season.year)
+      || (prior && candidate.year < prior.year)) continue;
+    const previousLeague = savedLeagueApps(candidate);
+    if (previousLeague !== null) prior = { year: candidate.year, club: candidate.club, delta: league - previousLeague };
+  }
+  return { league, otherClub: season.apps - league, prior };
 }
 
 /** Only the senior club record, never academy or post-retirement work. */

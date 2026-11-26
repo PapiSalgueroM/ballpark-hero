@@ -1,3 +1,11 @@
+## 2026-11-25, Quieter ads and career season comparisons
+
+AdSense anchor and vignette ads are off for douknowball.com. Home shows one in-page banner after the first sport on phones and above the footer on desktop. The phone slot uses a 100-pixel-tall display unit. AdSense allows desktop side rails on either edge. The homepage marks the game area with Google’s overlap protection. AdSense confirmed the save and says propagation can take up to an hour.
+
+Home removes its repeated signup line. The About intro stays visible, with the detailed copy under Read more. The footer keeps the primary links and choices visible and groups the full trademark notice and secondary links under More links.
+
+Recent Lovable pageviews put Soccer Career and Club Manager first among game pages. Soccer Career’s Record Book uses saved league appearances to show league and other club apps and compare an earlier recorded season. Club Manager’s season review compares points and finish with the previous year for the same club, league and table size. Keep the documented recorded finishers sample as a guide for the next games, since pageviews measure visits and incomplete careers may have no finish event.
+
 ## 2026-11-25, Homepage game discovery and banner placement
 
 Home brings Search and one Browse sports menu into a single All games catalogue. Continue Playing, Your picks, the featured games and Daily puzzles stay near the top. Most Played Today, Just Shipped, the separate Dynasty & Career Sims shelf, repeated sport navigation and Poll of the Day come off Home. The existing catalogue bookmarks still land on All games.

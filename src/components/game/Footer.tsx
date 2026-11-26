@@ -5,16 +5,20 @@ import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import { HUB_NAV } from '@/lib/sportHubNav';
 import { openConsentChoices } from '@/lib/consentPreferences';
 
+const linkClass = 'inline-flex min-h-8 items-center rounded-sm underline transition-colors hover:text-foreground focus-visible:outline-ring';
+
 /* Opening preferences preserves the current choice until the visitor saves. */
 export function Footer({ soccerControls = false }: { soccerControls?: boolean } = {}) {
   /* data-site-chrome: this is on every page, so the prerenderer keeps it out
      of the text the sitemap dates a page by (Round 286). A footer change is
      not a reason for Google to recrawl 126 pages. */
+  // Snapshot capture reads innerText, which is empty inside a closed disclosure.
+  const prerender = typeof window !== 'undefined' && !!(window as Window & { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__;
   return (
-    <footer data-site-chrome="" className="mt-12 pb-8 text-center text-xs text-muted-foreground space-y-3">
+    <footer data-site-chrome="" className="mt-10 border-t border-border px-4 pb-6 pt-3 text-center text-xs text-muted-foreground">
       {soccerControls && (
         <a href="#dukb-main" data-soccer-control-return="" data-no-prerender=""
-          className="mx-auto inline-flex min-h-11 items-center rounded-md border border-border px-3 font-semibold text-foreground hover:bg-muted focus-visible:outline-ring"
+          className="mx-auto mb-3 inline-flex min-h-11 items-center rounded-md border border-border px-3 font-semibold text-foreground hover:bg-muted focus-visible:outline-ring"
           onClick={event => {
             const main = document.getElementById('dukb-main');
             if (!main) return;
@@ -23,100 +27,39 @@ export function Footer({ soccerControls = false }: { soccerControls?: boolean } 
             main.focus({ preventScroll: true });
           }}>Back to career controls</a>
       )}
-      <p className="max-w-lg mx-auto leading-relaxed">
-        All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall
-      </p>
-      {/* Round 285: ALL SIX SPORT HUBS, NOT ONE. Round 266 put /college in this
-          footer because it was an orphan, and left the other five hubs where
-          they were, which was seven inbound links each: the home page and the
-          six hubs pointing at one another. Measured across the 126 shipped
-          documents on 2026-08-25: /college 132 inbound, /soccer, /pro-football,
-          /pro-basketball, /baseball and /hockey 6 each. Eighteen to one in
-          favour of the smallest section over the largest, on five pages Google
-          has never indexed. The list is read from sportHubNav.ts (Round 672:
-          the short list, so every page stops downloading the hubs' prose),
-          which simHubs holds equal to sportHub.ts; simInternalLinks holds
-          every hub to the same floor. Round 654: the words are each hub's
-          navLabel, so the NFL hub is NFL here rather than Football. */}
-      <nav aria-label="Sports" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4">
-        {HUB_NAV.map((hub, i) => (
-          <span key={hub.route} className="inline-flex items-center gap-x-3">
-            {i > 0 && <span aria-hidden="true">·</span>}
-            <Link to={hub.route} className="underline hover:text-foreground transition-colors">
-              {hub.navLabel}
-            </Link>
-          </span>
-        ))}
-      </nav>
-      <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4">
-        {/* Round 526: the way in to /search, and it is here rather than in the
-            header on purpose. Round 320 got that header row to fit a 320px
-            phone almost exactly (the worst case, a streaked signed out guest,
-            measures 347px at 360 and only fits because the mark sits out below
-            360), and one more control in it is how Sign Up ended up 37px off
-            the right edge last time. This row wraps, so it fits any width, and
-            it is on every page of the site. */}
-        <Link to="/search" className="underline hover:text-foreground transition-colors">
-          Search Games
-        </Link>
-        <span>·</span>
-        <Link to="/about" className="underline hover:text-foreground transition-colors">
-          About
-        </Link>
-        <span>·</span>
-        <Link to="/contact" className="underline hover:text-foreground transition-colors">
-          Contact
-        </Link>
-        <span>·</span>
-        <Link to="/whats-new" className="underline hover:text-foreground transition-colors">
-          What's New
-        </Link>
-        <span>·</span>
-        <Link to="/records" className="underline hover:text-foreground transition-colors">
-          Record Books
-        </Link>
-        <span>·</span>
-        {/* Round 266: this one was an ORPHAN. It is in the sitemap and had not
-            a single inbound link from any page a crawler can read, measured
-            across all 122 prerendered documents, which is precisely the shape
-            that produces "discovered but not indexed": Google knows the
-            address from the sitemap and nothing on the site argues it is
-            worth having. simInternalLinks fails if any sitemap route ever
-            goes back to zero inbound links. */}
-        <Link to="/leaderboard" className="underline hover:text-foreground transition-colors">
-          Leaderboard
-        </Link>
-        <span>·</span>
-        <Link to="/privacy" className="underline hover:text-foreground transition-colors">
-          Privacy Policy
-        </Link>
-        <span>·</span>
-        <Link to="/cookie-policy" className="underline hover:text-foreground transition-colors">
-          Cookie Policy
-        </Link>
-        <span>·</span>
-        <Link to="/terms" className="underline hover:text-foreground transition-colors">
-          Terms of Service
-        </Link>
-          <span>·</span>
-          <Link to="/accessibility" className="underline hover:text-foreground transition-colors">
-            Accessibility
-          </Link>
-        <span>·</span>
-        <button
-          type="button"
-          onClick={event => openConsentChoices(event.currentTarget)}
-          className="underline hover:text-foreground transition-colors"
-        >
+      <nav aria-label="Site links" className="flex flex-wrap items-center justify-center gap-x-3">
+        <Link to="/about" className={linkClass}>About</Link>
+        <Link to="/contact" className={linkClass}>Contact</Link>
+        <Link to="/privacy" className={linkClass}>Privacy Policy</Link>
+        <Link to="/terms" className={linkClass}>Terms of Service</Link>
+        <button type="button" onClick={event => openConsentChoices(event.currentTarget)} className={linkClass}>
           Cookie choices
         </button>
-        <span>·</span>
-        <ThemeToggle variant="footer" />
-        <span>·</span>
-        <SoundToggle variant="text" />
-        <span>·</span>
         <ReportSiteIssue />
-      </div>
+      </nav>
+      <details className="mt-1" open={prerender || undefined}>
+        <summary className="mx-auto min-h-8 w-fit cursor-pointer rounded-sm px-2 py-2 font-medium text-foreground focus-visible:outline-ring">
+          More links
+        </summary>
+        <nav aria-label="Sports" className="mt-2 flex flex-wrap items-center justify-center gap-x-3">
+          {HUB_NAV.map(hub => (
+            <Link key={hub.route} to={hub.route} className={linkClass}>{hub.navLabel}</Link>
+          ))}
+        </nav>
+        <div className="flex flex-wrap items-center justify-center gap-x-3">
+          <Link to="/search" className={linkClass}>Search Games</Link>
+          <Link to="/records" className={linkClass}>Record Books</Link>
+          <Link to="/whats-new" className={linkClass}>What's New</Link>
+          <Link to="/leaderboard" className={linkClass}>Leaderboard</Link>
+          <Link to="/cookie-policy" className={linkClass}>Cookie Policy</Link>
+          <Link to="/accessibility" className={linkClass}>Accessibility</Link>
+          <ThemeToggle variant="footer" />
+          <SoundToggle variant="text" />
+        </div>
+        <p className="mx-auto mt-4 max-w-lg leading-relaxed">
+          All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall
+        </p>
+      </details>
     </footer>
   );
 }

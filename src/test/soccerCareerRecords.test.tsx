@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import type { CareerState, SeasonRecord } from '@/lib/soccerCareerEngine';
 import { careerCompetitionRecords, careerRecordBook } from '@/lib/soccerCareerRecords';
 import CareerRecordsSheet from '@/components/soccer-career/CareerRecordsSheet';
@@ -71,6 +71,40 @@ describe('Soccer Career record book', () => {
     fireEvent.click(screen.getByRole('button', { name: /loan from Parent United/ }));
     expect(screen.getByText('On loan from Parent United')).toBeInTheDocument();
     expect(screen.getByText('Rating 7.2 · OVR 81')).toBeInTheDocument();
+  });
+  it('shows a zero league count and compares it with the last recorded senior season', () => {
+    render(<CareerRecordsSheet career={career([
+      row({ year: 2024, club: 'Old City', leagueApps: 14 }),
+      row({ year: 2025, club: 'Prior City', leagueApps: 24 }),
+      row({ year: 2026, club: 'Unrecorded City' }),
+      row({ year: 2026, type: 'youth', leagueApps: 25 }),
+      row({ year: 2027, club: 'Test City', onLoanFrom: 'Parent United', apps: 9, leagueApps: 0, intApps: 6 }),
+    ])} onClose={() => {}} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Club history' }));
+    fireEvent.click(screen.getByRole('button', { name: /loan from Parent United/ }));
+    expect(screen.getByText('2027/28 · Test City')).toBeInTheDocument();
+    expect(screen.getByText('On loan from Parent United')).toBeInTheDocument();
+    expect(screen.getByText('0 league apps · 9 other club apps')).toBeInTheDocument();
+    expect(screen.getByText('-24 league apps vs. 2025/26 · Prior City')).toBeInTheDocument();
+  });
+  it('leaves the league split unavailable for missing or invalid saved counts', () => {
+    const seasons = [undefined, -1, 31, 12.5, NaN].map((leagueApps, index) => row({ year: 2026 + index, leagueApps }));
+    seasons.push(row({ year: 2031, apps: 8.5, leagueApps: 6 }));
+    render(<CareerRecordsSheet career={career(seasons)} onClose={() => {}} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Club history' }));
+    fireEvent.click(screen.getByRole('button', { name: /Test City/ }));
+    const savedSeasons = within(screen.getByRole('list'));
+    expect(savedSeasons.getAllByText('League split not recorded')).toHaveLength(seasons.length);
+    expect(savedSeasons.queryByText(/other club apps|league apps vs\./)).not.toBeInTheDocument();
+  });
+  it('shows a comparison on a personal best when both seasons have the same league count', () => {
+    render(<CareerRecordsSheet career={career([
+      row({ year: 2026, leagueApps: 24 }),
+      row({ year: 2027, goals: 20, leagueApps: 24 }),
+    ])} onClose={() => {}} />);
+    fireEvent.click(screen.getByRole('button', { name: /Most goals/ }));
+    expect(screen.getByText('24 league apps · 6 other club apps')).toBeInTheDocument();
+    expect(screen.getByText('Same league apps as 2026/27 · Test City')).toBeInTheDocument();
   });
   it('keeps help, worked example, close and Escape reachable', () => {
     let closed = 0;

@@ -22,12 +22,16 @@ function run(file) {
 }
 try {
   const healthy = run();
-  if (healthy.status !== 0 || healthy.assertions.length !== 12 || healthy.assertions.some(a => a.status !== 'passed')) throw new Error('record-book outcomes failed or were skipped');
+  if (healthy.status !== 0 || healthy.assertions.length !== 16 || healthy.assertions.some(a => a.status !== 'passed')) throw new Error('record-book outcomes failed or were skipped');
   const original = fs.readFileSync(source, 'utf8');
   const controls = [
     { name: 'academy counted', from: ".filter(r => r.season.type === 'playing')", to: '.filter(() => true)', test: 'counts only saved senior club stats' },
     { name: 'loan merged', from: ' || stint.parent !== parent', to: '', test: 'separates a loan from a permanent spell' },
     { name: 'short rating season', from: 'r.season.apps >= minApps', to: 'r.season.apps >= 1', test: 'uses actual records, keeps ties earliest' },
+    { name: 'zero league count discarded', from: 'league >= 0', to: 'league > 0', test: 'shows a zero league count' },
+    { name: 'impossible league count accepted', from: ' && league <= season.apps', to: '', test: 'leaves the league split unavailable' },
+    { name: 'oldest league comparison preferred', from: 'candidate.year < prior.year', to: 'candidate.year > prior.year', test: 'shows a zero league count' },
+    { name: 'club appearance remainder miscounted', from: 'otherClub: season.apps - league', to: 'otherClub: season.apps', test: 'shows a comparison on a personal best' },
   ];
   for (const c of controls) {
     if (original.split(c.from).length !== 2) throw new Error(`${c.name} anchor not unique`);
@@ -38,5 +42,5 @@ try {
     if (result.status !== 1 || !result.assertions.some(a => a.status === 'failed' && a.fullName.includes(c.test))) throw new Error(`${c.name} escaped its outcome check`);
     console.log(`ok copied ${c.name} defect fired in its required outcome check`);
   }
-  console.log('simSoccerCareerRecords: 12 outcome checks green, three effective controls caught');
+  console.log(`simSoccerCareerRecords: ${healthy.assertions.length} outcome checks green, ${controls.length} effective controls caught`);
 } finally { if (fs.existsSync(copy)) fs.unlinkSync(copy); }

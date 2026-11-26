@@ -283,6 +283,8 @@ try {
       for (const theme of themes) {
         if (theme === 'light') {
           const before = await snapshot(); const lightToggle = page.locator('footer').getByRole('button', { name: 'Light mode', exact: true });
+          const more = page.locator('footer details:not([open]) > summary');
+          if (await more.count()) await activate(more, 'open footer links');
           await activate(lightToggle, 'actual footer Light mode');
           assert(await page.evaluate(() => document.documentElement.classList.contains('light'))); assert.equal(await lightToggle.count(), 0, 'The real footer control changed to Dark mode');
           const after = await snapshot(); assert.equal(after.avatarSvg, before.avatarSvg, 'Native theme choice preserves exact appearance SVG'); assert.equal(after.previewText, before.previewText, 'Native theme choice preserves actual preview state');
