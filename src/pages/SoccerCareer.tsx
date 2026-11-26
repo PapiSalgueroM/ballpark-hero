@@ -1720,6 +1720,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
                 onAnswer={handlePhoneAnswer}
                 onMoney={handleMoney}
                 onBuyItem={handlePurchase}
+                onCareerPatch={handleCareerPatch}
                 onClose={() => setPhoneOpen(false)}
               />
             )}
