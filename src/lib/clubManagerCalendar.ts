@@ -30,7 +30,7 @@ import {
   cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives, seasonScoreLeaguePoints,
   /* Round 783: the mid season takeover an accepted application walks into. */
   startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, livingWorldOf, customExitUclField, SAVE_CAPS,
-  completedChampionsLeagueScorerAward, completedDomesticScorerAward,
+  completedChampionsLeagueScorerAward, completedDomesticScorerAward, completedEuropaScorerAward,
   clubAvailableInCareer, careerHasKLeagueWorld, careerScopedLeagueId, promotionAppointmentHeld, promotionEntryLabel,
   /* Round 1335: the old season rules' switch, read by both handovers. */
   legacySeason,
@@ -1116,7 +1116,9 @@ export function joinClubNow(career: CareerState): CareerState | null {
     history: career.history,
     uclScorers: undefined,
     pendingUclScorerAward,
+    pendingUelScorerAward: completedEuropaScorerAward(career),
     ...(career.unreviewedUclScorerAwards ? { unreviewedUclScorerAwards: career.unreviewedUclScorerAwards } : {}),
+    ...(career.unreviewedUelScorerAwards ? { unreviewedUelScorerAwards: career.unreviewedUelScorerAwards } : {}),
     domesticCupScorers: undefined,
     pendingDomesticScorerAward,
     ...(career.unreviewedDomesticScorerAwards ? { unreviewedDomesticScorerAwards: career.unreviewedDomesticScorerAwards } : {}),

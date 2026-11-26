@@ -1122,6 +1122,8 @@ export function TransferScreen({
                     </span>
                     <span className={cn('font-bold font-display', ratingTint(l.player.rating))}>{l.player.rating}</span>
                   </div>
+                  {Number.isFinite(l.player.fitness) && <p className="text-[10px] text-muted-foreground">{l.player.fitness}% fitness{l.player.injuryWeeks > 0 &&
+                    ` · Injured for ${l.player.injuryWeeks} more ${l.player.injuryWeeks === 1 ? 'week' : 'weeks'}`}</p>}
                   {/* Round 508: the two figures agreed when he left, the mirror
                       of what a loan IN has carried since Round 506. */}
                   {(l.optionFee !== undefined || l.recallFee !== undefined) && (

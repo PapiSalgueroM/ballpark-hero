@@ -1,3 +1,7 @@
+## November 26 local Club Manager cup awards and loan fitness
+
+A confirmed Europa League Golden Boot stays with its originating club when a manager changes jobs or skips the season review. Past winners now explicitly labels cup scorers from the club you managed that season. Outgoing loans recover toward selection fitness, minor injuries serve elapsed days and major injuries retain their medical return dates. Two local production-browser runs accepted a Chelsea job after Everton's controlled Europa final and reopened the Everton award. On phone and laptop a separate January recall returned a player at 80 fitness without an injury, after leaving at 37 with three weeks to serve. Five focused regressions passed. The same 17 broader cup tests failed on the previous tree and candidate, independently of these fixes.
+
 ## November 26 verified pro career regression fixtures
 
 The normal NFL, NBA, MLB and NHL compatibility run now passes all 58 position and era groups, covering 464 seeded 14-season careers. For the 16 previously failing groups, reversing the earlier approved playoff rule changes in memory reproduced 128 original whole saves and their lowest bank balances. The scoped recorder changed exactly 43 career entries and matched 16 independently predicted group hashes. Among the traced rules were backup quarterback usage, NBA Finals MVP selection, pitcher decision limits and postseason goalie workload. No gameplay code or player saves changed in this fixture update.

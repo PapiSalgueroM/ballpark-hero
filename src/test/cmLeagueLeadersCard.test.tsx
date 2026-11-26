@@ -438,6 +438,30 @@ describe('past winners', () => {
     expect(p.q('[data-cm-past-league]')).toBeNull();
   });
 
+  it('opens the saved Europa Golden Boot from Past winners without a league review', () => {
+    const s = everton();
+    s.history = [];
+    s.unreviewedUelScorerAwards = [{ season: 1, club: 'Everton',
+      winners: [{ name: 'Academy Forward', club: 'Everton', goals: 8, generated: true }] }];
+    const tiles = draw(s);
+    fireEvent.click(tiles.q('[data-cm-leaders-tile="past"]')!);
+    expect(tiles.onBoard).toHaveBeenCalledWith('past');
+    cleanup();
+    const award = draw(s, 'past').q('[data-cm-uel-award="winner"]');
+    expect(award).toHaveTextContent('Europa League Golden Boot');
+    expect(award).toHaveTextContent('Academy Forward');
+    expect(award?.querySelector('[data-mine]')).toHaveTextContent('Academy Forward');
+    expect(award).toHaveTextContent('Your club that season');
+    cleanup();
+    const afterJobChange = { ...s, unreviewedUelScorerAwards: [], history: [{ position: 1, points: 60, trophies: [],
+      season: 1, club: 'Chelsea', uelScorerClub: 'Everton', uelScorerAward: s.unreviewedUelScorerAwards[0].winners }] };
+    expect(draw(afterJobChange, 'past').q('[data-cm-uel-award] [data-mine]')).toHaveTextContent('Academy Forward');
+    cleanup();
+    const rivalWinner = { ...s, unreviewedUelScorerAwards: [{ season: 1, club: 'Fulham',
+      winners: s.unreviewedUelScorerAwards[0].winners }] };
+    expect(draw(rivalWinner, 'past').q('[data-cm-uel-award]')).not.toHaveTextContent('Your club that season');
+  });
+
   it('offers no Past winners tile before any season has closed with awards', () => {
     const s = everton();
     s.history = s.history.map(h => { const { awards, ...rest } = h; void awards; return rest; });

@@ -1484,6 +1484,8 @@ export interface CupTie {
 export interface LoanOut {
   player: CMPlayer;
   ratingGains?: number;
+  /** Days already served toward the next full week of a minor injury. */
+  injuryRecoveryDays?: number;
   /** Where he is playing. */
   club: string;
   /** Loan fee banked when he left. */
@@ -2555,6 +2557,7 @@ export interface SeasonRecord {
   awards?: SeasonAwards;
   uclScorerAward?: CupScorerWinner[];
   uelScorerAward?: SeasonSummary['uelScorerAward'];
+  uelScorerClub?: string;
   domesticScorerAward?: SeasonSummary['domesticScorerAward'];
   ballonDor?: NonNullable<SeasonSummary['ballonDor']>;
   ballonDorShortlist?: BallonDorCandidate[];
@@ -3220,6 +3223,7 @@ export interface SeasonSummary {
   uclScorerAward?: CupScorerWinner[];
   /** Confirmed top scorers of this save's Europa League edition. */
   uelScorerAward?: Array<{ name: string; club: string; goals: number; generated?: true }>;
+  uelScorerClub?: string;
   domesticScorerAward?: { competition: string; winners: CupScorerWinner[] };
   signings: TransferRecord[];
   offers: JobOffer[];
@@ -3334,6 +3338,8 @@ export interface CareerState {
   pendingUclScorerAward?: { club: string; winners: CupScorerWinner[] };
   /** Confirmed Champions League awards from seasons with no league review. */
   unreviewedUclScorerAwards?: { season: number; club: string; winners: CupScorerWinner[] }[];
+  pendingUelScorerAward?: { club: string; winners: CupScorerWinner[] };
+  unreviewedUelScorerAwards?: { season: number; club: string; winners: CupScorerWinner[] }[];
   /** A confirmed cup award kept through a job move before the season review. */
   pendingDomesticScorerAward?: { club: string; award: NonNullable<SeasonSummary['domesticScorerAward']> };
   /** Confirmed cup awards from seasons that ended without a league review. */
@@ -7998,7 +8004,7 @@ export function autoPickXI(squad: CMPlayer[], formation: Formation, fresh = fals
   const used = new Set<string>();
   const xi: (string | null)[] = [];
   const order = (a: CMPlayer, b: CMPlayer) =>
-    (fresh ? Number(b.fitness >= 80) - Number(a.fitness >= 80) : 0) || b.rating - a.rating;
+    (fresh ? Number(b.fitness >= MATCH_READY_FITNESS) - Number(a.fitness >= MATCH_READY_FITNESS) : 0) || b.rating - a.rating;
   for (const slot of formation.slots) {
     /* Round 505: a position he has retrained into is his too. */
     const fits = squad
@@ -15709,6 +15715,17 @@ export function completedChampionsLeagueScorerAward(state: CareerState): CupScor
   }));
 }
 
+export function completedEuropaScorerAward(state: CareerState): CareerState['pendingUelScorerAward'] {
+  if (state.pendingUelScorerAward) return state.pendingUelScorerAward;
+  const ledger = state.worldComps?.uel?.scorers;
+  if (!isCupScorerLedger(ledger)) return undefined;
+  const result = evalWorldComp(state, 'uel');
+  if (!result?.done) return undefined;
+  const { leaders } = cupScorerRace(ledger, result.nightsDone, true);
+  if (leaders.length) return { club: state.worldComps?.uel?.me ?? state.clubName,
+    winners: leaders.map(({ name, club, goals, generated }) => ({ name, club, goals, ...(generated ? { generated: true } : {}) })) };
+}
+
 function cupScorerCredit(state: CareerState, club: string, player: CMPlayer, projected?: ProjectedPlayer): CupScorerCredit {
   if (club === LJUBICIC_LOAN.borrower && player.worldRosterKey === LJUBICIC_LOAN.key && openingLoanActive(state)) {
     return { id: LJUBICIC_LOAN.key, name: player.name, club };
@@ -18276,20 +18293,23 @@ function classifyMatchInjury(state: CareerState, live: LiveMatch, injury: Injury
 }
 
 function updateMajorInjuryClock(state: CareerState, date?: CalDate): void {
-  if (!state.squad.some(p => p.majorInjury)) return;
+  const inSquad = state.squad.some(p => p.majorInjury), away = state.loanedOut?.some(l => l.player.majorInjury);
+  if (!inSquad && !away) return;
   if (!date) {
     const dates = entryDatesOf(state);
     date = dates[state.week - 1] ?? kickoffOf(state);
   }
-  state.squad = state.squad.map(p => {
+  const update = (p: CMPlayer): CMPlayer => {
     if (!p.majorInjury) return p;
     const expected = readMajorInjury(p.majorInjury);
-    const injuryWeeks = expected ? Math.max(0, Math.ceil(daysBetween(date, expected) / 7)) : p.injuryWeeks;
+    const injuryWeeks = expected ? Math.max(0, Math.ceil(daysBetween(date!, expected) / 7)) : p.injuryWeeks;
     if (expected && injuryWeeks > 0) return { ...p, injuryWeeks };
     const ready = { ...p, injuryWeeks };
     delete ready.majorInjury;
     return ready;
-  });
+  };
+  if (inSquad) state.squad = state.squad.map(update);
+  if (away) state.loanedOut = state.loanedOut!.map(l => l.player.majorInjury ? { ...l, player: update(l.player) } : l);
 }
 
 /**
@@ -19973,6 +19993,7 @@ export function liveStatsAt(
  *  match after next by the same numbers (unchanged from Round 95). */
 export const MATCH_FITNESS_COST = 20;
 export const MATCH_FITNESS_SPREAD = 8;
+const MATCH_READY_FITNESS = 80;
 
 /** Round 116's week of recovery by the training plan, read by tickWeek and by a night (Round 1510). */
 function weekRecoveryOf(state: CareerState, intensity = (state.training ?? DEFAULT_TRAINING).intensity): { recoveryMod: number; flat: number } {
@@ -19999,6 +20020,26 @@ function fitnessAfterWeek(fitness: number, played: boolean, recoveryMod: number,
   return clamp(fitness + recovery - cost, 20, 100);
 }
 
+function recoverOutgoingLoans(state: CareerState, days: number): void {
+  const needsRecovery = (p: CMPlayer) => p.fitness < MATCH_READY_FITNESS || (!p.majorInjury && p.injuryWeeks > 0);
+  if (days <= 0 || !state.loanedOut?.some(l => needsRecovery(l.player))) return;
+  const { recoveryMod, flat } = weekRecoveryOf(state, 'normal');
+  state.loanedOut = state.loanedOut.map(loan => {
+    const p = loan.player;
+    if (!needsRecovery(p)) return loan;
+    // The host's lineup is unknown. Restore tired legs to selection fitness without crediting a host match or a week on the bench.
+    const fitness = p.fitness < MATCH_READY_FITNESS
+      ? Math.min(MATCH_READY_FITNESS, fitnessAfterWeek(p.fitness, false, recoveryMod, flat, days)) : p.fitness;
+    const partial = loan.injuryRecoveryDays ?? 0;
+    const elapsed = days + (Number.isInteger(partial) && partial >= 0 && partial < 7 ? partial : 0);
+    const injuryWeeks = !p.majorInjury && p.injuryWeeks > 0 ? Math.max(0, p.injuryWeeks - Math.floor(elapsed / 7)) : p.injuryWeeks;
+    const next = { ...loan, player: { ...p, fitness, injuryWeeks } };
+    if (!p.majorInjury && injuryWeeks > 0 && elapsed % 7) next.injuryRecoveryDays = elapsed % 7;
+    else delete next.injuryRecoveryDays;
+    return next;
+  });
+}
+
 export function trainingFitnessIfRested(state: CareerState, fitness: number, intensity: TrainingIntensity): number {
   const { recoveryMod, flat } = weekRecoveryOf(state, intensity);
   return fitnessAfterWeek(fitness, false, recoveryMod, flat, fitnessDaysAfter(state, state.week));
@@ -20013,11 +20054,13 @@ export function trainingFitnessIfRested(state: CareerState, fitness: number, int
 function nightSquadTick(state: CareerState, playedIds: Set<string>): void {
   const { recoveryMod, flat } = weekRecoveryOf(state);
   const days = fitnessDaysAfter(state, state.week);
+  recoverOutgoingLoans(state, days);
   state.squad = state.squad.map(p => ({ ...p, fitness: fitnessAfterWeek(p.fitness, playedIds.has(p.id), recoveryMod, flat, days) }));
 }
 
 function tickWeek(state: CareerState, playedIds: Set<string> | null, settledWeek = state.week): void {
   const days = fitnessDaysAfter(state, settledWeek);
+  recoverOutgoingLoans(state, days);
   /* Round 619: a settlement counts down HERE, in the same function that charges
      the wage bill, and a row at zero is gone.
 
@@ -22852,7 +22895,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
        fixture on the same seed could end 2-1 one way and 0-0 the other and
        the game had two engines wearing one name. Everything kicks off here
        now; quick sims use the same legal changes to look after the team. */
-    if (state.squad.some(p => p.majorInjury)) updateMajorInjuryClock(state, entryDatesOf(state)[state.week]);
+    if (state.squad.some(p => p.majorInjury) || state.loanedOut?.some(l => l.player.majorInjury)) updateMajorInjuryClock(state, entryDatesOf(state)[state.week]);
     // An older save can start tracking at its first untouched cup kickoff.
     if (entry.type === 'cup' && entry.cupRound === 'R16' && !opts?.noBook && !state.handover && !state.midSeasonStart
       && !state.worldRatingRunIn && state.domesticCupScorers === undefined && state.cupBracket?.length
@@ -24566,17 +24609,9 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   const reviewed = state.history.find(row => row.season === state.season);
   const uclScorerAward = reviewed?.uclScorerAward ?? state.pendingUclScorerAward?.winners
     ?? completedChampionsLeagueScorerAward(state);
-  let uelScorerAward = reviewed?.uelScorerAward;
-  const uelScorers = state.worldComps?.uel?.scorers;
-  if (!uelScorerAward?.length && isCupScorerLedger(uelScorers)) {
-    const result = evalWorldComp(state, 'uel');
-    if (result?.done) {
-      const { leaders } = cupScorerRace(uelScorers, result.nightsDone, true);
-      uelScorerAward = leaders.map(({ name, club, goals, generated }) => ({
-        name, club, goals, ...(generated ? { generated: true } : {}),
-      }));
-    }
-  }
+  const uel = completedEuropaScorerAward(state);
+  const uelScorerAward = reviewed?.uelScorerAward ?? uel?.winners;
+  const uelScorerClub = reviewed?.uelScorerAward?.length ? reviewed.uelScorerClub ?? reviewed.club : uel?.club;
   const domesticScorerAward = completedDomesticScorerAward(state);
 
   const summary: SeasonSummary = {
@@ -24602,6 +24637,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     ...(uelRunWords(state) ? { uelRun: uelRunWords(state) as string } : {}),
     ...(uclScorerAward?.length ? { uclScorerAward } : {}),
     ...(uelScorerAward?.length ? { uelScorerAward } : {}),
+    ...(uelScorerAward?.length && uelScorerClub && uelScorerClub !== state.clubName ? { uelScorerClub } : {}),
     ...(domesticScorerAward ? { domesticScorerAward } : {}),
     signings: state.seasonSignings,
     offers,
@@ -24644,6 +24680,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
       ...(clubSeasonAward ? { clubSeasonAward } : {}),
       ...(uclScorerAward?.length ? { uclScorerAward } : {}),
       ...(uelScorerAward?.length ? { uelScorerAward } : {}),
+      ...(uelScorerAward?.length && uelScorerClub && uelScorerClub !== state.clubName ? { uelScorerClub } : {}),
       ...(domesticScorerAward ? { domesticScorerAward } : {}),
       ...(awards ? { awards } : {}), ...(fate ? { fate } : {}) },
   ];
@@ -25068,6 +25105,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     && !career.unreviewedUclScorerAwards?.some(row => row.season === career.season)
     ? career.pendingUclScorerAward?.winners ?? completedChampionsLeagueScorerAward(career) : undefined;
   const unreviewedUclClub = career.pendingUclScorerAward?.club ?? career.clubName;
+  const unreviewedUelAward = !reviewedThisSeason && !career.unreviewedUelScorerAwards?.some(row => row.season === career.season)
+    ? completedEuropaScorerAward(career) : undefined;
   const unreviewedCupAward = !reviewedThisSeason
     && !career.unreviewedDomesticScorerAwards?.some(row => row.season === career.season)
     ? completedDomesticScorerAward(career) : undefined;
@@ -25520,6 +25559,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     ...(unreviewedUclAward?.length ? { unreviewedUclScorerAwards: [
       ...(career.unreviewedUclScorerAwards ?? []),
       { season: career.season, club: unreviewedUclClub, winners: unreviewedUclAward },
+    ] } : {}),
+    pendingUelScorerAward: undefined,
+    ...(unreviewedUelAward ? { unreviewedUelScorerAwards: [
+      ...(career.unreviewedUelScorerAwards ?? []),
+      { season: career.season, ...unreviewedUelAward },
     ] } : {}),
     pendingDomesticScorerAward: undefined,
     ...(unreviewedCupAward ? { unreviewedDomesticScorerAwards: [

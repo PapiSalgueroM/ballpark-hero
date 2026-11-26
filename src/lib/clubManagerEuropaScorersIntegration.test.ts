@@ -1,9 +1,9 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import {
-  acceptBid, benchFor, engineRegistrations, evalWorldComp, finishSeason, generateIncomingBids,
+  acceptBid, acceptWildernessJob, benchFor, engineRegistrations, enterWilderness, evalWorldComp, finishSeason, generateIncomingBids,
   loadCareer, makeHalftimeSub, playNextEntry, REAL_LEAGUES, restoreEngineRegistrations,
   resumeMatch, saveCareer, setTransferStatus, startCareer, startNextSeason, uelParticipant,
-  worldCompNightsDone, worldRosterFor, type CareerState,
+  wildernessWeek, worldCompNightsDone, worldRosterFor, type CareerState,
 } from './clubManager';
 import { joinClubNow } from './clubManagerCalendar';
 import { cupScorerRace } from './clubManagerCupScorers';
@@ -239,7 +239,7 @@ describe('Europa League scorer settlement', () => {
     expectReconciled(state);
   });
 
-  it('keeps a confirmed title-run scoring award through save, reload and summer when the next edition replaces its ledger', () => {
+  function playTitleFinal() {
     let state = copy(entry);
     let sawExtraTimeSub = false;
     for (let step = 0; step < 400 && state.week < state.calendar.length; step++) {
@@ -300,6 +300,11 @@ describe('Europa League scorer settlement', () => {
     expect(race.status).toBe('winner');
     const leader = race.leaders[0];
     expect(leader.club).toBe('Everton');
+    return { state, leader };
+  }
+
+  it('keeps a confirmed title-run scoring award through save, reload and summer when the next edition replaces its ledger', () => {
+    const { state, leader } = playTitleFinal();
     const finished = tape(0x20000, () => finishSeason(state)).value;
     expect(finished.summary.uelScorerAward).toEqual([expect.objectContaining({
       name: leader.name, club: leader.club, goals: leader.goals,
@@ -314,5 +319,48 @@ describe('Europa League scorer settlement', () => {
     expect(next.season).toBe(state.season + 1);
     expect(next.worldComps?.uel?.scorers?.nights ?? 0).toBe(0);
     expect(next.history.find(row => row.season === state.season)?.uelScorerAward).toEqual(finished.summary.uelScorerAward);
+    expect(next.unreviewedUelScorerAwards).toBeUndefined();
   });
+
+  it('keeps the confirmed Europa award once after a wilderness job skips the season review', () => {
+    const { state, leader } = playTitleFinal();
+    let out = enterWilderness({ ...state, sacked: true });
+    for (let n = 0; n < 24 && !out.wilderness?.offers.length; n++) out = tape(4100 + n, () => wildernessWeek(out)).value;
+    const club = out.wilderness!.offers[0]?.club;
+    expect(club).toBeTruthy();
+    const take = (s: CareerState) => tape(4200, () => acceptWildernessJob(s, club!)).value!;
+    const next = take(out);
+    expect(next).toMatchObject({ season: state.season + 1, clubName: club, pendingSummary: null });
+    expect(next.history.some(row => row.season === state.season)).toBe(false);
+    const receipt = { season: state.season, club: 'Everton', winners: [{ name: leader.name, club: leader.club, goals: leader.goals }] };
+    expect(next.unreviewedUelScorerAwards).toEqual([receipt]);
+    expect(saveCareer(next)).toBe(true);
+    expect(loadCareer()?.unreviewedUelScorerAwards).toEqual([receipt]);
+    expect(loadCareer(serializeParkedCareer(next))?.unreviewedUelScorerAwards).toEqual([receipt]);
+    expect(take({ ...out, unreviewedUelScorerAwards: [receipt] }).unreviewedUelScorerAwards).toEqual([receipt]);
+    const missing = copy(out);
+    delete missing.worldComps!.uel!.scorers;
+    expect(take(missing).unreviewedUelScorerAwards).toBeUndefined();
+  }, 30_000);
+
+  it('keeps the Europa scorer with his original club when a direct appointment changes the edition before review', () => {
+    const { state, leader } = playTitleFinal();
+    state.jobHunt = { open: { club: 'Chelsea', league: 'premier', tier: 1, season: state.season, week: state.week,
+      matchesLeft: 0, roll: 0, status: 'accepted' }, cooldowns: [], sentSeason: state.season, sent: 1, summerMove: null };
+    const joined = tape(4120, () => joinClubNow(state)).value!;
+    expect(joined.clubName).toBe('Chelsea');
+    const receipt = { club: 'Everton', winners: [{ name: leader.name, club: leader.club, goals: leader.goals }] };
+    expect(joined.pendingUelScorerAward).toEqual(receipt);
+    const reloaded = loadCareer(JSON.stringify(joined))!;
+    // A conflicting new European field can replace the previous edition at a job change.
+    delete reloaded.worldComps?.uel;
+    const { state: reviewed, summary } = tape(4200, () => finishSeason(reloaded)).value;
+    expect(summary).toMatchObject({ club: 'Chelsea', uelScorerClub: receipt.club, uelScorerAward: receipt.winners });
+    expect(reviewed.history.find(h => h.season === state.season)).toMatchObject({ club: 'Chelsea', uelScorerClub: receipt.club, uelScorerAward: receipt.winners });
+    const next = tape(4300, () => startNextSeason(reviewed)).value;
+    expect(next.pendingUelScorerAward).toBeUndefined();
+    expect(next.unreviewedUelScorerAwards).toBeUndefined();
+    const skipped = tape(4300, () => startNextSeason(reloaded)).value;
+    expect(skipped.unreviewedUelScorerAwards).toEqual([{ season: state.season, ...receipt }]);
+  }, 30_000);
 });
