@@ -1,4 +1,4 @@
-// Real homepage and popularity hook, with inert deferred account reads only.
+// Real homepage with inert deferred account reads.
 import { act, cleanup, render, renderHook } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -14,26 +14,8 @@ vi.mock('@/integrations/supabase/loadClient', () => ({ loadSupabase: async () =>
 vi.mock('@/components/auth/AuthModal', () => ({ AuthModal: () => null }));
 vi.mock('@/components/game/StreakReminder', () => ({ StreakReminder: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
-vi.mock('@/components/home/PollOfTheDay', () => ({ PollOfTheDay: () => <div>Polls are mounted</div> }));
 import Index from '@/pages/Index';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
-
-const nearObservers = new Map<Element, { callback: IntersectionObserverCallback; rootMargin?: string }>();
-function showIntersection(node: Element, intersecting: boolean) {
-  const observed = nearObservers.get(node);
-  expect(observed).toBeDefined();
-  const rect = node.getBoundingClientRect();
-  const entry: IntersectionObserverEntry = { target: node, isIntersecting: intersecting, boundingClientRect: rect,
-    intersectionRatio: Number(intersecting), intersectionRect: rect, rootBounds: null, time: 0 };
-  const send = () => act(() => observed!.callback([entry], {} as IntersectionObserver));
-  send();
-  return send;
-}
-
-function revealPopularity(view: ReturnType<typeof render>) {
-  const section = view.getByRole('region', { name: 'Game picks' });
-  return showIntersection(section, true);
-}
 
 function deferred() {
   let resolve!: (value: any) => void;
@@ -57,7 +39,7 @@ function builder(table: string, args?: Record<string, unknown>) {
   };
   return query;
 }
-const personal = () => requests.filter(r => r.table !== 'most_played_today');
+const personal = () => requests;
 const hero = () => personal().filter(r => r.table === 'global_rank' || r.table === 'game_completions');
 const tree = () => <MemoryRouter><Index /></MemoryRouter>;
 const mount = () => render(tree());
@@ -100,81 +82,18 @@ beforeEach(() => {
   vi.useFakeTimers(); vi.setSystemTime(new Date('2026-10-02T23:00:00Z'));
   localStorage.clear(); requests.length = 0; mock.localGames = 1; mock.auth = { user: null, profile: null };
   visibility = 'visible'; Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => visibility });
-  mock.rpc.mockReset(); mock.from.mockReset(); mock.load.mockReset(); nearObservers.clear(); mock.from.mockImplementation(table => builder(table));
-  mock.rpc.mockImplementation((table, args) => {
-    if (table !== 'most_played_today') return builder(table, args);
-    requests.push({ table, args, filters: [], reply: deferred() });
-    return Promise.resolve({ data: [{ game: 'soccer-grid', plays: 17 }, { game: 'perfect-season-nba', plays: 12 }, { game: 'transfer-path', plays: 9 }], error: null });
-  });
+  mock.rpc.mockReset(); mock.from.mockReset(); mock.load.mockReset(); mock.from.mockImplementation(table => builder(table));
+  mock.rpc.mockImplementation((table, args) => builder(table, args));
   vi.stubGlobal('fetch', vi.fn(() => { throw new Error('Offline homepage fixture must not fetch'); }));
-  vi.stubGlobal('IntersectionObserver', class {
-    private nodes: Element[] = [];
-    constructor(private callback: IntersectionObserverCallback, private options?: IntersectionObserverInit) {}
-    observe(node: Element) { this.nodes.push(node); nearObservers.set(node, { callback: this.callback, rootMargin: this.options?.rootMargin }); }
-    disconnect() { this.nodes.forEach(node => nearObservers.delete(node)); }
-  });
 });
 afterEach(() => { cleanup(); expect(globalThis.fetch).not.toHaveBeenCalled(); vi.useRealTimers(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
 
 describe('homepage personal read ownership', () => {
-  it('preserves useful public popularity for signed out visitors', async () => {
-    const view = mount(); await flush();
-    expect(view.getByRole('heading', { name: 'Games to try' })).toBeInTheDocument();
-    revealPopularity(view); await flush();
-    expect(view.getByRole('heading', { name: 'Most played today' })).toBeInTheDocument();
-    expect(view.getAllByText('Trending')).toHaveLength(3);
-    expect(requests.filter(r => r.table === 'most_played_today')).toHaveLength(1);
-    expect(mock.rpc).toHaveBeenCalledWith('most_played_today', { p_min: 3, p_limit: 3 });
-  });
-
-  it('keeps below-fold popularity usable without loading the account client', async () => {
-    const view = mount(); await flush();
-    const section = view.getByRole('heading', { name: 'Games to try' }).closest('section')!;
-    expect(section.querySelectorAll('ul a')).toHaveLength(3);
-    expect(view.queryAllByText('Trending')).toHaveLength(0);
-    expect(mock.load).not.toHaveBeenCalled();
-    expect(mock.rpc).not.toHaveBeenCalled();
-    const queuedIntersection = revealPopularity(view); await flush();
-    expect(mock.load).toHaveBeenCalledOnce();
-    expect(view.getAllByText('Trending')).toHaveLength(3);
-    queuedIntersection(); await flush();
-    expect(mock.rpc).toHaveBeenCalledOnce();
-  });
-
-  it('labels recommendations honestly when fewer than three games qualify', async () => {
-    mock.rpc.mockResolvedValueOnce({ data: [{ game: 'club-manager', plays: 4 }], error: null });
-    const view = mount();
-    revealPopularity(view); await flush();
-    expect(view.queryByRole('heading', { name: 'Most played today' })).toBeNull();
-    expect(view.getByRole('heading', { name: 'Games to try' })).toBeInTheDocument();
-    expect(view.getByRole('region', { name: 'Game picks' }).querySelectorAll('ul a')).toHaveLength(3);
-    expect(view.queryAllByText('Trending')).toHaveLength(0);
-  });
-
-  it('loads popularity without an IntersectionObserver implementation', async () => {
+  it('leaves retired popularity and polls off Home without starting their reads', async () => {
     vi.stubGlobal('IntersectionObserver', undefined);
     const view = mount(); await flush();
-    expect(view.getAllByText('Trending')).toHaveLength(3);
-    expect(mock.rpc).toHaveBeenCalledWith('most_played_today', { p_min: 3, p_limit: 3 });
-    await act(async () => { await vi.dynamicImportSettled(); });
-    expect(view.getByText('Polls are mounted')).toBeVisible();
-  });
-
-  it('keeps the poll placeholder until its section intersects the actual viewport', async () => {
-    const view = mount(); await flush();
-    const placeholder = view.getByRole('heading', { name: 'Polls of the day' }).closest('section')!;
-    const wrapper = placeholder.parentElement!;
-    const observed = nearObservers.get(wrapper);
-    expect(observed?.rootMargin ?? '0px').toMatch(/^0px(?: 0px){0,3}$/);
-    showIntersection(wrapper, false);
-    expect(placeholder).toHaveAttribute('aria-busy', 'true');
-    expect(placeholder.querySelectorAll('[data-poll-skeleton]')).toHaveLength(2);
-    expect(view.queryByText('Polls are mounted')).toBeNull();
-
-    showIntersection(wrapper, true);
-    await act(async () => { await vi.dynamicImportSettled(); });
-    expect(view.getByText('Polls are mounted')).toBeVisible();
-    expect(nearObservers.has(wrapper)).toBe(false);
+    expect(view.queryByRole('heading', { name: /Most played today|Games to try|Polls of the day/i })).toBeNull();
+    expect(requests).toEqual([]);
     expect(mock.load).not.toHaveBeenCalled();
   });
 
@@ -196,10 +115,9 @@ describe('homepage personal read ownership', () => {
   });
 
   it('guests make zero personal reads through focus visibility and idle time', async () => {
-    const view = mount(); await flush(); revealPopularity(view); await flush(); event('focus'); show('hidden'); show('visible');
+    const view = mount(); await flush(); event('focus'); show('hidden'); show('visible');
     await act(async () => { await vi.advanceTimersByTimeAsync(15 * 60 * 1000); });
     expect(personal()).toHaveLength(0);
-    expect(requests.filter(r => r.table === 'most_played_today')).toHaveLength(1);
   });
 
   it('hidden eligible accounts defer reads until one foreground batch', async () => {

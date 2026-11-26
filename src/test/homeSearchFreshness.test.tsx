@@ -1,25 +1,15 @@
 import { act, cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
-import { useSyncExternalStore } from 'react';
 import { BrowserRouter, Link, MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { afterEach, expect, it, vi } from 'vitest';
 import Index from '@/pages/Index';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { ScrollToTop } from '@/App';
-import { ALL_GAMES, VISIBLE_CATEGORIES } from '@/data/gameRegistry';
-import type { useMostPlayed } from '@/hooks/useMostPlayed';
+import { VISIBLE_CATEGORIES } from '@/data/gameRegistry';
+import { CATEGORY_SPORT } from '@/data/homeFront';
 import { scoreGuess, type WhoAmIPlayer } from '@/lib/whoAmI';
 import { WHO_AM_I_ROUND_KEY } from '@/lib/whoAmIRoundSave';
 
-const state = vi.hoisted(() => ({
-  heldQuery: undefined as string | undefined,
-  popular: undefined as ReturnType<typeof useMostPlayed> | undefined,
-  popularListeners: new Set<() => void>(),
-}));
-const subscribePopular = (listener: () => void) => {
-  state.popularListeners.add(listener);
-  return () => { state.popularListeners.delete(listener); };
-};
-const readPopular = () => state.popular;
+const state = vi.hoisted(() => ({ heldQuery: undefined as string | undefined }));
 vi.mock('react', async importOriginal => {
   const react = await importOriginal<typeof import('react')>();
   return { ...react, useDeferredValue: <T,>(value: T) => state.heldQuery ?? value };
@@ -27,19 +17,11 @@ vi.mock('react', async importOriginal => {
 vi.mock('@/contexts/AuthContext', () => ({ useAuth: () => ({ user: null, profile: null }) }));
 vi.mock('@/lib/completions', () => ({ getCurrentPlayerName: () => 'Search fixture', getLocalTodayCount: () => 0 }));
 vi.mock('@/hooks/useStreaks', () => ({ useStreaks: () => ({ globalCurrentStreak: 0 }) }));
-vi.mock('@/hooks/useMostPlayed', async importOriginal => {
-  const actual = await importOriginal<typeof import('@/hooks/useMostPlayed')>();
-  return { useMostPlayed: (enabled?: boolean) => {
-    const fixture = useSyncExternalStore(subscribePopular, readPopular);
-    const live = actual.useMostPlayed(fixture ? false : enabled);
-    return fixture ?? live;
-  } };
-});
 vi.mock('@/components/auth/AuthModal', () => ({ AuthModal: () => null }));
 vi.mock('@/components/game/StreakReminder', () => ({ StreakReminder: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
 
-afterEach(() => { cleanup(); localStorage.clear(); state.heldQuery = undefined; state.popular = undefined; vi.unstubAllGlobals(); });
+afterEach(() => { cleanup(); localStorage.clear(); state.heldQuery = undefined; vi.unstubAllGlobals(); });
 
 function home() {
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
@@ -51,21 +33,30 @@ function home() {
   return { main, field, change, release: () => { state.heldQuery = undefined; view.rerender(tree()); } };
 }
 
-function catalogueViewport(desktop: boolean) {
-  const query = '(min-width: 1024px)';
-  const matchMedia = window.matchMedia;
-  const changes = new EventTarget();
-  const catalogue = {
-    ...matchMedia(query), matches: desktop,
-    addEventListener: changes.addEventListener.bind(changes),
-    removeEventListener: changes.removeEventListener.bind(changes),
-  };
-  vi.stubGlobal('matchMedia', (requested: string) => requested === query ? catalogue : matchMedia(requested));
-  return (wide: boolean) => {
-    catalogue.matches = wide;
-    changes.dispatchEvent(new Event('change'));
-  };
-}
+it('keeps one Browse sports launcher and one All games catalogue without repeated shelves', () => {
+  const { main } = home();
+  expect(main.querySelector('#browse-sports-heading')).toHaveTextContent(/^All games$/);
+  const browse = [...main.querySelectorAll('button')].filter(button => button.textContent?.trim() === 'Browse sports');
+  expect(browse).toHaveLength(1);
+  expect([...main.querySelectorAll('button, a')].filter(control => (
+    /^(Jump to sport|All sports)$/.test(control.textContent?.trim() ?? '')
+  ))).toEqual([]);
+  const headings = [...main.querySelectorAll('h2, h3')].map(heading => heading.textContent?.trim());
+  expect(headings.filter(heading => (
+    /Most played today|Games to try|Just shipped|Dynasty & Career Sims|Polls of the day/i.test(heading ?? '')
+  ))).toEqual([]);
+  for (const id of ['browse-sports', 'home-career-sims', 'home-game-picks']) {
+    expect(main.querySelectorAll('[id="' + id + '"]'), id).toHaveLength(1);
+  }
+
+  fireEvent.click(browse[0]);
+  const menu = document.querySelector('[role="dialog"][aria-label="Browse sports"]');
+  expect(menu).toBeVisible();
+  const sports = [...main.querySelectorAll('[data-home-sport-catalogue] section[data-sport] h2')];
+  const links = [...menu!.querySelectorAll('a[href]')].map(link => link.getAttribute('href'));
+  expect(sports).toHaveLength(VISIBLE_CATEGORIES.length);
+  expect(links).toEqual(['#home-dailies', ...sports.map(heading => '#' + heading.id)]);
+});
 
 it('links the saved Club Manager flagship to active resume and keeps the fresh entry bare', () => {
   const { main } = home();
@@ -82,15 +73,13 @@ it('links the saved Club Manager flagship to active resume and keeps the fresh e
   expect(main.querySelector('[data-continue-card="/club-manager"]')).toHaveAttribute('href', '/club-manager?slot=1');
 });
 
-it('keeps every desktop sport jump and saves the order through one labelled control', () => {
-  catalogueViewport(true);
+it('keeps one labelled catalogue order control and restores its saved sport', () => {
   const { main } = home();
-  const catalogue = within(main).getByRole('navigation', { name: 'Browse sports' });
-  const links = within(catalogue).getAllByRole('link');
-  const order = within(catalogue).getByRole<HTMLSelectElement>('combobox', { name: 'Show first' });
-  expect(links).toHaveLength(VISIBLE_CATEGORIES.length);
-  expect(within(catalogue).queryAllByRole('button')).toHaveLength(0);
-  expect([...order.options].map(option => option.value)).toEqual(['', ...links.map(link => link.getAttribute('href')?.replace('#sport-', ''))]);
+  const order = within(main).getByRole<HTMLSelectElement>('combobox', { name: 'Show first' });
+  expect(within(main).getAllByRole('combobox', { name: 'Show first' })).toHaveLength(1);
+  expect([...order.options].map(option => option.value)).toEqual([
+    '', ...VISIBLE_CATEGORIES.map(category => CATEGORY_SPORT[category.title]),
+  ]);
   expect(order).toHaveDisplayValue('Default order');
   const firstSport = () => screen.getByRole('main').querySelector('section[data-sport]')?.getAttribute('data-sport');
   expect(firstSport()).toBe('soccer');
@@ -111,74 +100,51 @@ it('keeps every desktop sport jump and saves the order through one labelled cont
   expect(localStorage.getItem('dukb-fav-sport')).toBeNull();
 });
 
-it.each([[false, false], [false, true], [true, false]])(
-  'restores the sport opener across Back and Forward with desktop=%s then desktop=%s',
-  async (desktop, desktopOnReturn) => {
-    const resize = catalogueViewport(desktop);
-    vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
-    vi.stubGlobal('scrollTo', vi.fn());
-    const originalScroll = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'scrollIntoView');
-    const scrollIntoView = vi.fn();
-    Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', { configurable: true, value: scrollIntoView });
-    function HistoryControls() {
-      const navigate = useNavigate();
-      return <>
-        <output aria-label="Current anchor">{useLocation().hash}</output>
-        <button onClick={() => navigate(-1)}>Back one anchor</button>
-        <button onClick={() => navigate(1)}>Forward one anchor</button>
-      </>;
-    }
-    try {
-      render(<MemoryRouter initialEntries={[{ pathname: '/', hash: '#browse-sports', key: 'catalogue-' + desktop + desktopOnReturn }]}>
-        <Index />
-        <HistoryControls />
-      </MemoryRouter>);
-      const nav = screen.getByRole('navigation', { name: 'Browse sports' });
-      const trigger = () => within(nav).getByRole('button', { name: 'Jump to sport' });
-      const heading = document.getElementById('sport-rugby')!;
-      const order = within(nav).getByRole('combobox', { name: 'Show first' });
-      expect(order).toHaveValue('');
-      let link: HTMLElement;
-      if (desktop) {
-        expect(within(nav).queryByRole('button', { name: 'Jump to sport' })).toBeNull();
-        link = within(nav).getByRole('link', { name: 'Rugby League' });
-      } else {
-        expect(within(nav).queryByRole('link')).toBeNull();
-        expect(trigger()).toHaveAttribute('aria-expanded', 'false');
-        fireEvent.click(trigger());
-        let dialog = screen.getByRole('dialog', { name: 'Jump to sport' });
-        expect(within(dialog).getAllByRole('link')).toHaveLength(VISIBLE_CATEGORIES.length);
-        fireEvent.keyDown(document, { key: 'Escape' });
-        await waitFor(() => expect(trigger()).toHaveFocus());
-        expect(trigger()).toHaveAttribute('aria-expanded', 'false');
-        fireEvent.click(trigger());
-        dialog = screen.getByRole('dialog', { name: 'Jump to sport' });
-        link = within(dialog).getByRole('link', { name: 'Rugby League' });
-      }
+it('restores the single sport opener across Escape, Back and Forward', async () => {
+  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
+  const scrollTo = vi.fn();
+  vi.stubGlobal('scrollTo', scrollTo);
+  function HistoryControls() {
+    const navigate = useNavigate();
+    return <>
+      <output aria-label="Current anchor">{useLocation().hash}</output>
+      <button onClick={() => navigate(-1)}>Back one anchor</button>
+      <button onClick={() => navigate(1)}>Forward one anchor</button>
+    </>;
+  }
+  render(<MemoryRouter initialEntries={[{ pathname: '/', hash: '#browse-sports', key: 'catalogue-jump' }]}>
+    <Index />
+    <HistoryControls />
+  </MemoryRouter>);
+  const trigger = screen.getByRole('button', { name: /^Browse sports$/ });
+  const heading = document.getElementById('sport-rugby')!;
+  heading.scrollIntoView = vi.fn();
+  const order = screen.getByRole('combobox', { name: 'Show first' });
+  expect(order).toHaveValue('');
 
-      link.focus();
-      fireEvent.click(link);
-      await waitFor(() => expect(screen.queryByRole('dialog', { name: 'Jump to sport' })).toBeNull());
-      expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#sport-rugby');
-      expect(heading).toHaveFocus();
-      expect(order).toHaveValue('');
-      expect(localStorage.getItem('dukb-fav-sport')).toBeNull();
+  trigger.focus();
+  fireEvent.click(trigger);
+  fireEvent.keyDown(document, { key: 'Escape' });
+  await waitFor(() => expect(trigger).toHaveFocus());
+  expect(trigger).toHaveAttribute('aria-expanded', 'false');
+  fireEvent.click(trigger);
+  const menu = screen.getByRole('dialog', { name: /^Browse sports$/ });
+  fireEvent.click(within(menu).getByRole('link', { name: 'Rugby League' }));
+  expect(screen.queryByRole('dialog', { name: 'Browse sports' })).toBeNull();
+  expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#sport-rugby');
+  expect(heading).toHaveFocus();
+  expect(heading.scrollIntoView).toHaveBeenCalledWith({ block: 'start', behavior: 'instant' });
+  expect(order).toHaveValue('');
+  expect(localStorage.getItem('dukb-fav-sport')).toBeNull();
 
-      act(() => resize(desktopOnReturn));
-      fireEvent.click(screen.getByRole('button', { name: 'Back one anchor' }));
-      expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#browse-sports');
-      const opener = desktopOnReturn ? within(nav).getByRole('link', { name: 'Rugby League' }) : trigger();
-      expect(opener).toHaveFocus();
-      if (desktop !== desktopOnReturn) expect(scrollIntoView.mock.contexts.at(-1)).toBe(opener);
-      fireEvent.click(screen.getByRole('button', { name: 'Forward one anchor' }));
-      expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#sport-rugby');
-      expect(heading).toHaveFocus();
-    } finally {
-      if (originalScroll) Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', originalScroll);
-      else Reflect.deleteProperty(HTMLElement.prototype, 'scrollIntoView');
-    }
-  },
-);
+  fireEvent.click(screen.getByRole('button', { name: 'Back one anchor' }));
+  expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#browse-sports');
+  expect(trigger).toHaveFocus();
+  expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'instant' });
+  fireEvent.click(screen.getByRole('button', { name: 'Forward one anchor' }));
+  expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#sport-rugby');
+  expect(heading).toHaveFocus();
+});
 
 it('holds the old results in place without exposing old links or pin controls during rapid input', async () => {
   const { main, field, change, release } = home();
@@ -258,8 +224,7 @@ it('finds the right game from a first-time visitor’s description', async () =>
   expect(results[0]).toHaveFocus();
 });
 
-it('opens a league career by intent on narrow Home and restores the filtered result on Back', async () => {
-  catalogueViewport(false);
+it('opens a league career by intent and restores the filtered result on Back', async () => {
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
   function Game() {
     const navigate = useNavigate();
@@ -511,8 +476,6 @@ it.each([
   ['Main event', 'a[data-stage-card]', '/soccer-career'],
   ['NRL launch on the featured deck', 'a[data-home-nrl-launch]', '/nrl-team-manager'],
   ['Aussie Rules launch on the featured deck', 'a[data-home-manager-launch="aussie"]', '/aussie-rules-manager'],
-  ['Most played', 'a[data-home-popular-game]', '/soccer-grid'],
-  ['Just shipped', '[data-home-shipped] [data-home-game-card] a', '/nrl-team-manager'],
 ])('focuses the exact %s opener when navigating back to Home', (_label, selector, href) => {
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
   localStorage.setItem('dukb-game-picks-v1', '["/hockey-higher-lower"]');
@@ -533,7 +496,7 @@ it.each([
     <Route path="*" element={<Game />} />
   </Routes></MemoryRouter>);
   const card = () => container.querySelector<HTMLAnchorElement>(selector + '[href="' + href + '"]')!;
-  if (href === '/soccer-grid') fireEvent.click(screen.getByRole('button', { name: /^Show \d+ more Soccer games$/ }));
+  if (href === '/soccer-career') fireEvent.click(screen.getByRole('button', { name: /^Show \d+ more Soccer games$/ }));
   expect(container.querySelector('[data-catalog-card] a[href="' + href.split('?')[0] + '"]')).toBeInTheDocument();
   card().focus();
   fireEvent.click(card());
@@ -602,46 +565,8 @@ it.each([false, true])('restores the Soccer hub link with its catalogue expanded
   }
 });
 
-it.each([false, true])('jumps from Browse sports to game picks and restores the opener with a saved pin=%s', pinned => {
-  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
-  const scrollTo = vi.fn();
-  vi.stubGlobal('scrollTo', scrollTo);
-  if (pinned) localStorage.setItem('dukb-game-picks-v1', JSON.stringify(['/soccer-grid']));
-  function HistoryControls() {
-    const navigate = useNavigate();
-    const { hash } = useLocation();
-    return <><button onClick={() => navigate(-1)}>Go back</button><output aria-label="Current anchor">{hash}</output></>;
-  }
-  const { container } = render(<MemoryRouter initialEntries={[{ pathname: '/', key: 'home-picks-discovery-entry-' + pinned }]}><Index /><HistoryControls /></MemoryRouter>);
-  const trigger = screen.getByRole('button', { name: 'Browse sports' });
-  const target = screen.getByRole('heading', { name: 'Games to try' });
-  target.scrollIntoView = vi.fn();
-  if (pinned) {
-    const shelf = screen.getByRole('region', { name: 'Your picks' });
-    within(shelf).getByRole('heading', { name: 'Your picks' }).scrollIntoView = vi.fn();
-    expect(within(shelf).getByRole('link')).toHaveAttribute('href', '/soccer-grid');
-  }
-  trigger.focus();
-  fireEvent.click(trigger);
-  const menu = screen.getByRole('dialog', { name: 'Browse sports' });
-  expect(within(menu).getByRole('link', { name: 'Rugby League' })).toHaveAttribute('href', '#sport-rugby');
-  fireEvent.click(within(menu).getByRole('link', { name: 'Game picks' }));
-  expect(screen.queryByRole('dialog', { name: 'Browse sports' })).toBeNull();
-  expect(screen.getByLabelText('Current anchor')).toHaveTextContent('#home-game-picks');
-  expect(target).toHaveFocus();
-  expect(target.scrollIntoView).toHaveBeenCalledWith({ block: 'start', behavior: 'instant' });
-  expect(container.querySelectorAll('[id="home-game-picks"]')).toHaveLength(1);
-
-  fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
-  expect(screen.getByLabelText('Current anchor')).toBeEmptyDOMElement();
-  expect(scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'instant' });
-  expect(trigger).toHaveFocus();
-});
-
-it.each([
-  ['Daily puzzles', 'Daily puzzles', '#home-dailies'],
-  ['Career sims', 'Dynasty & Career Sims', '#home-career-sims'],
-])('opens %s from the header and restores its history focus', (label, title, hash) => {
+it('opens Daily puzzles from the header and restores its history focus', () => {
+  const hash = '#home-dailies';
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
   const scrollTo = vi.fn();
   vi.stubGlobal('scrollTo', scrollTo);
@@ -654,17 +579,17 @@ it.each([
       <button onClick={() => navigate(1)}>Forward one shelf</button>
     </>;
   }
-  const { container } = render(<MemoryRouter initialEntries={[{ pathname: '/', key: 'home-shelf-' + label }]}>
+  const { container } = render(<MemoryRouter initialEntries={[{ pathname: '/', key: 'home-daily-shortcut' }]}>
     <Index /><HistoryControls />
   </MemoryRouter>);
   const trigger = screen.getByRole('button', { name: 'Browse sports' });
-  const heading = screen.getByRole('heading', { name: title });
+  const heading = screen.getByRole('heading', { name: 'Daily puzzles' });
   heading.scrollIntoView = vi.fn();
 
   trigger.focus();
   fireEvent.click(trigger);
   const menu = screen.getByRole('dialog', { name: 'Browse sports' });
-  const shortcut = within(menu).getByRole('link', { name: label });
+  const shortcut = within(menu).getByRole('link', { name: 'Daily puzzles' });
   expect(shortcut).toHaveAttribute('href', hash);
   fireEvent.click(shortcut);
   expect(screen.queryByRole('dialog', { name: 'Browse sports' })).toBeNull();
@@ -684,7 +609,6 @@ it.each([
 });
 
 it('keeps the sport heading when native history reuses the initial key for a different fragment', () => {
-  catalogueViewport(true);
   vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
   const scrollTo = vi.fn();
   vi.stubGlobal('scrollTo', scrollTo);
@@ -694,8 +618,9 @@ it('keeps the sport heading when native history reuses the initial key for a dif
   window.history.replaceState({ idx: 0, key: initialKey }, '', '/#browse-sports');
   try {
     render(<BrowserRouter><Index /></BrowserRouter>);
-    const catalogue = screen.getByRole('navigation', { name: 'Browse sports' });
-    const link = within(catalogue).getByRole('link', { name: 'Rugby League' });
+    fireEvent.click(screen.getByRole('button', { name: /^Browse sports$/ }));
+    const menu = screen.getByRole('dialog', { name: /^Browse sports$/ });
+    const link = within(menu).getByRole('link', { name: 'Rugby League' });
     const heading = screen.getByRole('heading', { name: /^Rugby League/, level: 2 });
     heading.scrollIntoView = vi.fn();
     fireEvent.click(link);
@@ -714,7 +639,7 @@ it('keeps the sport heading when native history reuses the initial key for a dif
   }
 });
 
-it('stops the previous Home scroll restore on a second browser Back from Game picks', () => {
+it('stops the previous Home scroll restore on a second browser Back from the legacy Game picks fragment', () => {
   const scrollTo = vi.fn();
   const requestFrame = vi.fn((_callback: FrameRequestCallback) => 1);
   vi.stubGlobal('scrollTo', scrollTo);
@@ -743,49 +668,5 @@ it('stops the previous Home scroll restore on a second browser Back from Game pi
     expect(scrollTo).not.toHaveBeenCalled();
   } finally {
     sessionStorage.removeItem('home-scroll-y');
-  }
-});
-
-it.each(['same game', 'different games', 'focus moved'])('restores focus after Back when the ranking returns with %s', async scenario => {
-  vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} });
-  const entry = (path: string, isFallback: boolean) => ({
-    game: ALL_GAMES.find(game => game.path === path)!, count: isFallback ? 0 : 9, isFallback,
-  });
-  const ranked = { loading: false, entries: ['/soccer-career', '/club-manager', '/nba-my-career'].map(path => entry(path, false)) };
-  const loading = { loading: true, entries: ['/soccer-grid', '/perfect-season-nba', '/transfer-path'].map(path => entry(path, true)) };
-  state.popular = ranked;
-  function Game() {
-    const navigate = useNavigate();
-    return <button onClick={() => navigate(-1)}>Go back</button>;
-  }
-  const tree = () => <MemoryRouter><Routes>
-    <Route path="/" element={<Index />} />
-    <Route path="*" element={<Game />} />
-  </Routes></MemoryRouter>;
-  const view = render(tree());
-  const opener = () => view.container.querySelector('a[data-home-popular-game][href="/soccer-career"]')!;
-  fireEvent.click(opener());
-  state.popular = loading;
-  fireEvent.click(screen.getByRole('button', { name: 'Go back' }));
-  expect(opener()).toBeNull();
-  const search = screen.getByRole('textbox', { name: 'Search games' });
-  if (scenario === 'focus moved') {
-    await act(async () => {
-      search.focus();
-      await vi.dynamicImportSettled();
-    });
-  }
-  act(() => {
-    state.popular = scenario === 'different games'
-      ? { ...ranked, entries: [entry('/higher-lower', false), ...ranked.entries.slice(1)] }
-      : ranked;
-    state.popularListeners.forEach(listener => listener());
-  });
-  if (scenario === 'different games') {
-    expect(opener()).toBeNull();
-    expect(screen.getByRole('heading', { name: 'Most played today' })).toHaveFocus();
-  } else {
-    expect(opener()).toBeInTheDocument();
-    expect(scenario === 'focus moved' ? search : opener()).toHaveFocus();
   }
 });

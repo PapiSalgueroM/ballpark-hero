@@ -11,7 +11,6 @@ vi.mock('@/integrations/supabase/client', () => ({ supabase: {}, SUPABASE_URL: '
 vi.mock('sonner', () => ({ toast: { warning: vi.fn() } }));
 vi.mock('@/lib/completions', () => ({ getCurrentPlayerName: () => 'Fixture', getLocalTodayCount: () => 0, recordCompletion: network.recordCompletion }));
 vi.mock('@/hooks/useStreaks', () => ({ useStreaks: () => ({ globalCurrentStreak: 0 }) }));
-vi.mock('@/hooks/useMostPlayed', () => ({ useMostPlayed: () => ({ entries: [], loading: false }) }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
 vi.mock('@/components/auth/AuthModal', () => ({ AuthModal: () => null }));
 vi.mock('@/components/game/StreakReminder', () => ({ StreakReminder: () => null }));
@@ -21,9 +20,7 @@ vi.mock('@/components/home/DailyRail', async importOriginal => ({
   ...await importOriginal<typeof import('@/components/home/DailyRail')>(),
   DailyRail: () => <a href="/daily-fixture">Daily fixture</a>,
 }));
-vi.mock('@/components/home/JustShipped', () => ({ JustShipped: () => null }));
 vi.mock('@/components/home/HomeAbout', () => ({ HomeAbout: () => null }));
-vi.mock('@/components/home/PollOfTheDay', () => ({ PollOfTheDay: () => null }));
 
 const KEY = 'dukb-game-picks-v1';
 const warning = 'Picks last for this visit. This browser could not save them.';
@@ -85,22 +82,20 @@ describe('browser-local game picks', () => {
     expect(protectedBytes()).toEqual(before);
   });
 
-  it('gives every sport in the Home catalogue a return link to Browse sports', async () => {
+  it('keeps the complete sport index in the single Home Browse sports menu', async () => {
     const view = await mount();
-    const browse = view.getByRole('region', { name: 'Browse sports' });
+    const browse = view.getByRole('region', { name: 'All games' });
     expect(browse).toHaveAttribute('id', 'browse-sports');
     expect(browse).toHaveAttribute('tabindex', '-1');
-    fireEvent.click(within(browse).getByRole('button', { name: 'Jump to sport' }));
-    const sports = within(view.getByRole('dialog', { name: 'Jump to sport' })).getAllByRole('link');
-    const sectionIds = Array.from(view.container.querySelectorAll('section[data-sport] > div > h2'), heading => `#${heading.id}`);
+    expect(within(browse).getByRole('combobox', { name: 'Show first' })).toBeVisible();
+    expect(within(browse).queryByRole('button', { name: 'Jump to sport' })).toBeNull();
+    fireEvent.click(view.getByRole('button', { name: /^Browse sports$/ }));
+    const sports = within(view.getByRole('dialog', { name: 'Browse sports' })).getAllByRole('link')
+      .filter(link => link.getAttribute('href')?.startsWith('#sport-'));
+    const sectionIds = Array.from(view.container.querySelectorAll('section[data-sport] > div > h2'), heading => '#' + heading.id);
     expect(sports.map(link => link.getAttribute('href'))).toEqual(sectionIds);
-    for (const sport of sports) {
-      const id = sport.getAttribute('href')!.slice(1);
-      const section = view.container.querySelector<HTMLElement>(`section[data-sport="${id.slice(6)}"]`)!;
-      expect(section.querySelector(`[id="${id}"]`)).toBeInTheDocument();
-      const back = within(section).queryByRole('link', { name: 'All sports' });
-      expect(back?.getAttribute('href')).toBe('#browse-sports');
-    }
+    expect(sports.length).toBeGreaterThan(0);
+    expect(view.queryByRole('link', { name: /^All sports$/ })).toBeNull();
   });
 
   it('pins NHL Connections from Search and restores both exact Home destinations after remount', async () => {

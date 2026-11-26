@@ -166,21 +166,10 @@ async function look(width, height) {
       rows.get(bucket).push(a.t);
     }
     const prompts = [...rows.entries()].sort((a, b) => a[0] - b[0]).map(([b, ts]) => `y~${b * 24}: ${ts.join(' + ')}`);
-    /* THE SUBTITLES IN ONE SECTION, not across the page. The defect was three
-       tiles in the same row reading "Popular pick", the same two words under
-       three different games. The first draft of this check swept every tile on
-       the page and flagged the NEW badge, which sits on three genuinely new
-       games and is telling the truth: a repeated BADGE is a fact about several
-       games, a repeated SUBTITLE is a constant standing in for a description.
-       So it is scoped to the section the defect was in, and anything short
-       enough to be a badge is ignored. */
-    const section = document.querySelector('section[aria-label="Game picks"]');
-    const subtitles = !section ? [] : [...section.querySelectorAll('a[href^="/"]')]
-      .map(a => {
-        const spans = [...a.querySelectorAll('span')].map(x => (x.innerText || '').trim()).filter(Boolean);
-        return spans.length > 1 ? spans[spans.length - 1] : null;
-      })
-      .filter(t => t && t.length > 6);
+    // Read the game summaries by themselves so badges never look like descriptions.
+    const firstSport = document.querySelector('section[data-sport]');
+    const subtitles = [...(firstSport?.querySelectorAll('[data-catalog-card] .home-tile-summary') ?? [])]
+      .map(summary => (summary.innerText || '').trim()).filter(Boolean);
     /* Round 658: the h1, read as the page renders it. Round 840: read twice,
        WHOLE (every text node, which is what a parser, a renderer and a screen
        reader get) and as SHOWN (only the text nodes a visitor can see). The
@@ -266,7 +255,7 @@ console.log('3) the tiles say what the games are');
   for (const s of subs) counts.set(s, (counts.get(s) || 0) + 1);
   const repeated = [...counts.entries()].filter(([, n]) => n >= Math.min(3, subs.length));
   if (!subs.length) {
-    say(false, 'no game pick subtitles could be read');
+    say(false, 'no catalogue game descriptions could be read');
   } else {
     say(repeated.length === 0,
       repeated.length
@@ -501,8 +490,8 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
   say(lines.every(l => l.got === l.want), `[6c] the cards read the saves: ${lines.map(l => `${l.p} "${l.got}"`).join(', ')}`);
   const small = [...planted.cards.filter(c => c.h < 32 || c.w < 32).map(c => c.p),
     ...planted.controls.filter(c => c.h < 44 || c.w < 44).map(c => c.name)];
-  say(planted.links === 0 && planted.controls.length === 2 && planted.order !== null && small.length === 0 && planted.pageWide <= 390,
-    `[6d] ${planted.cards.length} cards at least 32px, two catalogue controls at least 44px (${small.join(', ') || 'none undersize'}), page ${planted.pageWide}px wide`);
+  say(planted.links === 0 && planted.controls.length === 1 && planted.order !== null && small.length === 0 && planted.pageWide <= 390,
+    `[6d] ${planted.cards.length} cards at least 32px, the order control at least 44px (${small.join(', ') || 'none undersize'}), page ${planted.pageWide}px wide`);
   const hockey = await visit({ fav: 'hockey' });
   say(fresh.firstSport === 'soccer' && hockey.firstSport === 'hockey' && hockey.order === 'hockey',
     `[6e] a stored hockey pick leads the sport sections (first section: fresh ${fresh.firstSport}, picked ${hockey.firstSport}) and the order control shows hockey`);
@@ -514,65 +503,53 @@ console.log('6) a returning player: saves bring a Continue row before the stage,
     `[6g] choosing Golf moves golf first (${picked.firstSport}), remembers it (${c?.stored}), and holds scroll (scroll ${c?.before.y} to ${c?.after.y}, sport index at ${Math.round(c?.before.top ?? -1)} to ${Math.round(c?.after.top ?? -1)})`);
 }
 
-console.log('7) direct Browse sports and All sports links keep the first game visible');
+console.log('7) legacy Home links reach All games with the first game visible');
 for (const [width, height] of [[320, 568], [390, 640], [430, 844], [1440, 844]]) {
   const ctx = await browser.newContext({ viewport: { width, height } });
   try {
-    const page = await ctx.newPage();
-    await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
-    await page.addInitScript(() => localStorage.setItem('cookie-consent', 'essential'));
-    await page.goto(BASE + '/#browse-sports', { waitUntil: 'domcontentloaded' });
-    const target = page.locator('#browse-sports');
-    await target.waitFor();
-    const atBrowse = () => {
-      const section = document.getElementById('browse-sports');
-      return section && Math.abs(section.getBoundingClientRect().top - parseFloat(getComputedStyle(section).scrollMarginTop)) <= 3;
-    };
-    const reached = await page.waitForFunction(atBrowse, null, { timeout: 2500 }).then(() => true, () => false);
-    const position = await target.evaluate(section => ({
-      top: Math.round(section.getBoundingClientRect().top),
-      focus: document.activeElement === document.body,
-    }));
-    say(reached && position.focus, width + 'px direct link reaches Browse sports at y=' + position.top + ' with no focus change');
-    const measureCatalogue = () => page.evaluate(() => {
-      const index = document.getElementById('browse-sports');
-      const firstGame = document.querySelector('section[data-sport] [data-catalog-card] a[href]');
-      const card = firstGame?.closest('[data-catalog-card]')?.getBoundingClientRect();
-      const indexBox = index?.firstElementChild?.getBoundingClientRect();
-      const order = index?.querySelector('select')?.getBoundingClientRect();
-      const summary = firstGame?.querySelector('.home-tile-summary');
-      const lines = summary ? summary.getBoundingClientRect().height / parseFloat(getComputedStyle(summary).lineHeight) : 0;
-      const orderInView = !!order && !!indexBox && order.top >= Math.max(indexBox.top, 0) && order.bottom <= Math.min(indexBox.bottom, innerHeight);
-      return card && indexBox ? { cardTop: Math.round(card.top), cardBottom: Math.ceil(card.bottom), beside: card.left >= indexBox.right, indexTop: Math.round(indexBox.top), lines, orderInView } : null;
-    });
-    const catalogue = await measureCatalogue();
-    say(Boolean(catalogue && catalogue.cardTop > 0 && catalogue.cardBottom <= height
-      && (width < 1024 ? !catalogue.beside : catalogue.beside && catalogue.cardTop - catalogue.indexTop < 100)),
-    `${width} by ${height} shows a whole catalogue card at y=${catalogue?.cardTop ?? 'missing'}–${catalogue?.cardBottom ?? 'missing'}`);
-    say(Boolean(catalogue?.orderInView), width + 'px the order control is fully visible without scrolling the sport list');
-    say(Boolean(catalogue && catalogue.lines >= 0.9 && catalogue.lines <= (width < 640 ? 1.1 : 2.1)),
-      width + 'px catalogue shows a compact game description (' + (catalogue?.lines ?? 0).toFixed(2) + ' lines)');
-    if (width < 1024) {
-      await page.goto(BASE + '/#sport-rugby', { waitUntil: 'domcontentloaded' });
-      await page.locator('#home-all-sports-rugby').click();
-      // The URL can change before React commits the focus and scroll.
-      const arrived = await page.waitForFunction(() => {
-        const section = document.getElementById('browse-sports');
-        const card = document.querySelector('section[data-sport] [data-catalog-card]')?.getBoundingClientRect();
-        return location.hash === '#browse-sports' && section === document.activeElement
-          && card && card.top > 0 && card.bottom <= innerHeight;
-      }, null, { timeout: 2500 }).then(() => true, () => false);
-      const focused = await target.evaluate(section => document.activeElement === section);
-      const afterJump = await measureCatalogue();
-      say(arrived && focused && Boolean(afterJump && afterJump.cardTop > 0 && afterJump.cardBottom <= height),
-        `${width} by ${height} All sports lands on the catalogue with a whole game in view`);
+    await ctx.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
+    await ctx.addInitScript(() => localStorage.setItem('cookie-consent', 'essential'));
+    for (const hash of ['#browse-sports', '#home-career-sims', '#home-game-picks']) {
+      const page = await ctx.newPage();
+      await page.goto(BASE + '/' + hash, { waitUntil: 'domcontentloaded' });
+      const measureCatalogue = () => {
+        const catalogue = document.getElementById('browse-sports');
+        const order = document.querySelector('[data-home-fav-sport] select')?.getBoundingClientRect();
+        const firstGame = document.querySelector('section[data-sport] [data-catalog-card] a[href]');
+        const card = firstGame?.closest('[data-catalog-card]')?.getBoundingClientRect();
+        if (!catalogue || !order || !card) return null;
+        const top = catalogue.getBoundingClientRect().top;
+        const margin = parseFloat(getComputedStyle(catalogue).scrollMarginTop);
+        const summary = firstGame.querySelector('.home-tile-summary');
+        const lines = summary ? summary.getBoundingClientRect().height / parseFloat(getComputedStyle(summary).lineHeight) : 0;
+        return {
+          hash: location.hash, noFocusChange: document.activeElement === document.body,
+          cardTop: Math.round(card.top), cardBottom: Math.ceil(card.bottom), lines,
+          catalogueAtAnchor: Math.abs(top - margin) <= 3,
+          orderInView: order.top >= 0 && order.bottom <= innerHeight && order.left >= 0 && order.right <= innerWidth,
+        };
+      };
+      await page.getByRole('heading', { name: 'All games', exact: true }).waitFor({ timeout: 5000 }).catch(() => {});
+      await page.waitForFunction(() => {
+        const catalogue = document.getElementById('browse-sports');
+        return catalogue && Math.abs(catalogue.getBoundingClientRect().top - parseFloat(getComputedStyle(catalogue).scrollMarginTop)) <= 3;
+      }, null, { timeout: 2500 }).catch(() => {});
+      const catalogue = await page.evaluate(measureCatalogue);
+      say(Boolean(catalogue?.hash === hash && catalogue.catalogueAtAnchor && catalogue.noFocusChange),
+        width + 'px ' + hash + ' reaches All games with no focus change');
+      say(Boolean(catalogue && catalogue.cardTop > 0 && catalogue.cardBottom <= height),
+        width + ' by ' + height + ' shows a whole catalogue card from ' + hash);
+      say(Boolean(catalogue?.orderInView), width + 'px Show first is fully visible from ' + hash);
+      say(Boolean(catalogue && catalogue.lines >= 0.9 && catalogue.lines <= (width < 640 ? 1.1 : 2.1)),
+        width + 'px catalogue shows a compact game description');
+      await page.close();
     }
   } finally {
     await ctx.close();
   }
 }
 
-console.log('8) the sport index jumps to a heading without changing the favourite');
+console.log('8) Browse sports jumps to a heading without changing the favourite');
 for (const [width, height] of [[320, 568], [390, 640], [1280, 250], [1440, 844]]) {
   const touch = width === 390;
   const ctx = await browser.newContext({ viewport: { width, height }, reducedMotion: 'reduce', hasTouch: touch });
@@ -580,32 +557,27 @@ for (const [width, height] of [[320, 568], [390, 640], [1280, 250], [1440, 844]]
     const page = await ctx.newPage();
     await page.route('**/*', r => new URL(r.request().url()).origin === new URL(BASE).origin ? r.continue() : r.abort());
     await page.addInitScript(() => localStorage.setItem('cookie-consent', 'essential'));
-    await page.goto(BASE + '/#browse-sports', { waitUntil: 'domcontentloaded' });
-    const index = page.getByRole('navigation', { name: 'Browse sports' });
-    const picker = index.getByRole('button', { name: 'Jump to sport', exact: true });
-    const menu = page.getByRole('dialog', { name: 'Jump to sport' });
-    const compact = width < 1024;
-    if (compact) {
-      await picker.waitFor();
-      say(await index.getByRole('link').count() === 0 && await picker.getAttribute('aria-expanded') === 'false',
-        `${width}px catalogue opens with a collapsed sport picker`);
-      await picker.press('Enter');
-      await menu.waitFor();
-      const links = await menu.getByRole('link').evaluateAll(items => items.map(item => {
-        const { width, height } = item.getBoundingClientRect();
-        return { href: item.getAttribute('href'), width, height };
-      }));
-      const all = await index.locator('select option').evaluateAll(options => options.slice(1).map(option => '#sport-' + option.value));
-      say(JSON.stringify(links.map(link => link.href)) === JSON.stringify(all)
-        && links.every(link => link.width >= 44 && link.height >= 44), `${width}px catalogue picker offers every sport at full tap size`);
-      await page.keyboard.press('Escape');
-      await menu.waitFor({ state: 'hidden' });
-      await page.waitForFunction(() => document.activeElement?.id === 'home-catalogue-sport-trigger', null, { timeout: 5000 }).catch(() => {});
-      say(await picker.evaluate(trigger => trigger === document.activeElement), `${width}px Escape restores the catalogue picker`);
-      if (touch) await picker.tap();
-      else await picker.press('Enter');
-    }
-    const link = (compact ? menu : index).getByRole('link', { name: 'Rugby League', exact: true });
+    await page.goto(BASE + '/', { waitUntil: 'domcontentloaded' });
+    const picker = page.getByRole('button', { name: 'Browse sports', exact: true });
+    const menu = page.getByRole('dialog', { name: 'Browse sports' });
+    await picker.waitFor();
+    say(await picker.getAttribute('aria-expanded') === 'false', width + 'px Browse sports starts closed');
+    await picker.press('Enter');
+    await menu.waitFor();
+    const links = await menu.locator('a[href^="#sport-"]').evaluateAll(items => items.map(item => {
+      const { width, height } = item.getBoundingClientRect();
+      return { href: item.getAttribute('href'), width, height };
+    }));
+    const all = await page.locator('[data-home-fav-sport] select option').evaluateAll(options => options.slice(1).map(option => '#sport-' + option.value));
+    say(links.length === all.length && all.every(href => links.some(link => link.href === href && link.width >= 44 && link.height >= 44)),
+      width + 'px Browse sports offers every sport at full tap size');
+    await page.keyboard.press('Escape');
+    await menu.waitFor({ state: 'hidden' });
+    await page.waitForFunction(() => document.activeElement?.id === 'home-browse-sports-trigger', null, { timeout: 5000 }).catch(() => {});
+    say(await picker.evaluate(trigger => trigger === document.activeElement), width + 'px Escape restores Browse sports');
+    if (touch) await picker.tap();
+    else await picker.press('Enter');
+    const link = menu.getByRole('link', { name: 'Rugby League', exact: true });
     if (height === 250) {
       const usable = await link.click({ trial: true, timeout: 5000 }).then(() => true, () => false);
       say(usable, `${width} by ${height} desktop can scroll to and click Rugby League`);
@@ -625,33 +597,30 @@ for (const [width, height] of [[320, 568], [390, 640], [1280, 250], [1440, 844]]
     const first = await page.locator('section[data-sport]').first().getAttribute('data-sport');
     say(landed && focused && first === 'soccer' && changed === null, `${width}px ${touch ? 'touch' : 'keyboard'} jump focuses Rugby League with the original order`);
     await page.goBack({ waitUntil: 'domcontentloaded' });
-    const openerId = compact ? 'home-catalogue-sport-trigger' : 'home-sport-index-rugby';
+    const openerId = 'home-browse-sports-trigger';
     const back = await page.waitForFunction(id => document.activeElement?.id === id, openerId, { timeout: 5000 })
       .then(() => true, () => false);
     const backTop = await page.evaluate(() => window.scrollY);
-    say(back && Math.abs(originTop - backTop) <= 3, `${width}px Back restores the exact catalogue control and scroll`);
+    say(back && Math.abs(originTop - backTop) <= 3, `${width}px Back restores Browse sports and its scroll`);
     await page.goForward({ waitUntil: 'domcontentloaded' });
     say(await land() && await target.evaluate(heading => document.activeElement === heading), `${width}px Forward restores the sport heading`);
-    await page.goto(BASE + '/#sport-rugby', { waitUntil: 'domcontentloaded' });
-    await page.reload({ waitUntil: 'domcontentloaded' });
-    say(await land(), `${width}px a direct Rugby League link remains reachable on reload`);
     if (width === 320) {
-      await page.goto(BASE + '/#browse-sports', { waitUntil: 'domcontentloaded' });
-      await picker.press('Enter');
-      await menu.getByRole('link', { name: 'Rugby League', exact: true }).press('Enter');
-      await land();
       await page.setViewportSize({ width: 1280, height: 800 });
-      await page.locator('#home-sport-index-rugby').waitFor({ state: 'attached' });
+      await picker.waitFor();
       await page.goBack({ waitUntil: 'domcontentloaded' });
       const visible = await page.waitForFunction(() => {
-        const opener = document.getElementById('home-sport-index-rugby');
-        if (opener !== document.activeElement) return false;
+        const opener = document.getElementById('home-browse-sports-trigger');
+        if (!opener || opener !== document.activeElement || location.hash) return false;
         const box = opener.getBoundingClientRect();
         return box.top >= 0 && box.bottom <= innerHeight
           && opener.contains(document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2));
       }, null, { timeout: 5000 }).then(() => true, () => false);
-      say(visible, '320px to 1280px Back reveals the corresponding desktop sport link');
+      say(visible, '320px to 1280px Back reveals the same Browse sports trigger');
+      await page.setViewportSize({ width, height });
     }
+    await page.goto(BASE + '/#sport-rugby', { waitUntil: 'domcontentloaded' });
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    say(await land(), `${width}px a direct Rugby League link remains reachable on reload`);
   } finally {
     await ctx.close();
   }
@@ -674,11 +643,14 @@ for (const width of [320, 390, 430, 1440]) {
       say(false, width + 'px Home has a Browse sports button beside search');
       continue;
     }
-    say(await page.evaluate(() => {
-      const polls = document.getElementById('home-polls');
-      const gameSections = [document.getElementById('home-career-sims'), document.querySelector('[data-home-sport-catalogue]')];
-      return !!polls && gameSections.every(section => section && (section.compareDocumentPosition(polls) & Node.DOCUMENT_POSITION_FOLLOWING));
-    }), width + 'px career games and sport catalogue sit above the late-loading polls');
+    say(await trigger.count() === 1 && await page.getByRole('textbox', { name: 'Search games' }).count() === 1,
+      width + 'px Home has one Browse sports control beside Search games');
+    say(await page.getByRole('button', { name: 'Jump to sport', exact: true }).count() === 0
+      && await page.locator('[data-home-fav-sport] a[href^="#sport-"], section[data-sport] a[href="#browse-sports"]').count() === 0,
+      width + 'px there is no second sport navigator');
+    say(await page.locator('[data-home-popular-game], [data-home-shipped], #home-polls').count() === 0
+      && await page.getByRole('heading', { name: 'Dynasty & Career Sims', exact: true }).count() === 0,
+      width + 'px the removed discovery shelves stay off the page');
     await trigger.focus();
     await trigger.press('Enter');
     const quick = page.getByRole('dialog', { name: 'Browse sports' });
@@ -688,6 +660,8 @@ for (const width of [320, 390, 430, 1440]) {
     const sections = await page.locator('section[data-sport] > div > h2').evaluateAll(headings => headings.map(h => '#' + h.id));
     const stayedAtTop = await page.evaluate(() => scrollY === 0 && document.documentElement.scrollWidth <= innerWidth);
     const sportLinks = links.filter(link => link.href?.startsWith('#sport-'));
+    say(links.length === sportLinks.length + 1 && links.filter(link => link.href === '#home-dailies').length === 1,
+      width + 'px Daily puzzles is the only non-sport shortcut');
     say(stayedAtTop && sportLinks.length === sections.length && sportLinks.every(link => sections.includes(link.href) && link.height >= 44),
       width + 'px header opens every sport at the top with 44px targets');
     await page.keyboard.press('Escape');
@@ -713,30 +687,9 @@ for (const width of [320, 390, 430, 1440]) {
       && Math.abs(heading.getBoundingClientRect().top - parseFloat(getComputedStyle(heading).scrollMarginTop)) <= 3);
     say(advanced, width + 'px browser Forward restores the selected sport heading');
     await page.goBack();
-    await trigger.press('Enter');
-    await quick.waitFor();
-    const picks = quick.getByRole('link', { name: 'Game picks', exact: true });
-    if (await picks.count() !== 1) {
-      say(false, width + 'px Browse sports has a Game picks shortcut');
-      continue;
-    }
-    const picksBox = await picks.boundingBox();
-    say(links.filter(link => link.href === '#home-game-picks').length === 1 && picksBox?.height >= 44,
-      width + 'px Browse sports has a single full-size Game picks shortcut');
-    if (width < 768) await picks.tap();
-    else { await picks.focus(); await picks.press('Enter'); }
-    await quick.waitFor({ state: 'hidden' });
-    const picksHeading = page.locator('#home-game-picks');
-    say(await picksHeading.evaluate(heading => document.activeElement === heading && location.hash === '#home-game-picks'
-      && Math.abs(heading.getBoundingClientRect().top - parseFloat(getComputedStyle(heading).scrollMarginTop)) <= 3),
-      width + 'px Game picks opens the discovery shelf with focus below the header');
-    await page.goBack();
-    say(await trigger.evaluate(button => document.activeElement === button && !location.hash && scrollY === 0),
-      width + 'px Back from Game picks restores the opener at the top');
 
     for (const shortcut of [
       { label: 'Daily puzzles', hash: '#home-dailies', card: '[data-daily-spotlight]' },
-      { label: 'Career sims', hash: '#home-career-sims', card: '[data-catalog-card] a[href]' },
     ]) {
       await trigger.press('Enter');
       await quick.waitFor();

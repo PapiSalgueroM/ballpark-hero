@@ -900,13 +900,13 @@ console.log('8) the favourite sport moves its own section first and nothing else
     .map(([, value, attributes, label]) => ({ value, label, selected: /\bselected=""/.test(attributes) }));
   const options = readOptions(html);
   const selected = options.filter(option => option.selected).map(option => option.value);
-  if (JSON.stringify(jumps) !== JSON.stringify(sports)) fail(8, 'the catalogue does not link to each sport in index order');
+  if (jumps.length) fail(8, 'the order control repeats the sport links from the main Browse sports menu');
   if ((html.match(/<select\b/g) ?? []).length !== 1 || /<button\b/.test(html)) fail(8, 'the index needs one shared order control');
   if (options[0]?.label !== 'Default order' || JSON.stringify(options.map(option => option.value)) !== JSON.stringify(['', ...sports])) fail(8, 'the labelled order control does not offer Default order and every sport in index order');
   if (selected.length !== 1 || selected[0] !== 'hockey') fail(8, `with hockey picked the control reads ${JSON.stringify(selected)}`);
   const defaults = readOptions(front.renderFav(sports, null)).filter(option => option.selected).map(option => option.value);
   if (defaults.length !== 1 || defaults[0] !== '') fail(8, 'the control does not show Default order with no pick');
-  if (!failedSections.has(8)) console.log(`   ${sports.length} sport links, each pick moves only its own section first, 8 bad stored values read as no pick, one labelled order control`);
+  if (!failedSections.has(8)) console.log(`   ${sports.length} sport options, each pick moves only its own section first, 8 bad stored values read as no pick, one labelled order control`);
 }
 
 /* ── the verdict ──────────────────────────────────────────────────────── */

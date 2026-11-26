@@ -1,17 +1,14 @@
 import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, useDeferredValue, lazy, memo, Suspense, type MouseEvent, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
-import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin, ArrowUp, CalendarDays } from 'lucide-react';
+import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin, CalendarDays } from 'lucide-react';
 import { loadSupabase } from '@/integrations/supabase/loadClient';
 import PageSeo from '@/components/seo/PageSeo';
 
 import { StreakReminder } from '@/components/game/StreakReminder';
-import { useMostPlayed } from '@/hooks/useMostPlayed';
-import { PollsPlaceholder } from '@/components/home/PollsPlaceholder';
 import HomeSearchUnavailable from '@/components/home/HomeSearchUnavailable';
 import { FeaturedStage } from '@/components/home/FeaturedStage';
 import { DailyRail, HOME_DAILIES_ID } from '@/components/home/DailyRail';
-import { JustShipped } from '@/components/home/JustShipped';
 import { ContinueRow } from '@/components/home/ContinueRow';
 import { GamePicksRow } from '@/components/home/GamePicksRow';
 import { GamePickButton, GamePicksWarning } from '@/components/game/GamePickButton';
@@ -22,7 +19,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
-import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, GAME_COUNT_LABEL, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
+import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, GAME_COUNT_LABEL, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
 import { CATEGORY_SPORT, sportOf, readFavouriteSport, favouriteFirst, FAVOURITE_SPORT_KEY, type SportKey } from '@/data/homeFront';
 import { isNewGame } from '@/lib/newBadge';
 /* Round 659: the search engine loads the first time somebody reaches for
@@ -70,9 +67,7 @@ const CONTINUE_GAME_LINK = 'a[data-continue-card]';
 const PICK_GAME_LINK = 'a[data-game-pick-link]';
 const FEATURED_GAME_LINK = 'a[data-stage-card]';
 const MANAGER_GAME_LINK = 'a[data-home-manager-launch]';
-const POPULAR_GAME_LINK = 'a[data-home-popular-game]';
-const RECENT_GAME_LINK = '[data-home-shipped] [data-home-game-card] a[href]';
-const HOME_GAME_SHELVES = [CATALOGUE_GAME_LINK, CATALOGUE_HUB_LINK, CONTINUE_GAME_LINK, PICK_GAME_LINK, FEATURED_GAME_LINK, MANAGER_GAME_LINK, POPULAR_GAME_LINK, RECENT_GAME_LINK];
+const HOME_GAME_SHELVES = [CATALOGUE_GAME_LINK, CATALOGUE_HUB_LINK, CONTINUE_GAME_LINK, PICK_GAME_LINK, FEATURED_GAME_LINK, MANAGER_GAME_LINK];
 const SPORT_PREVIEW_GAMES = 12;
 type GameReturn = {
   query: string;
@@ -87,7 +82,7 @@ const gameReturns = new Map<string, GameReturn>();
 const BROWSE_SPORTS_TRIGGER = 'home-browse-sports-trigger';
 const HOME_GAME_PICKS_ID = 'home-game-picks';
 const HOME_CAREER_ID = 'home-career-sims';
-const sportReturns = new Map<string, { hash: string; top: number; opener: string; fallback?: string }>();
+const sportReturns = new Map<string, { hash: string; top: number; opener: string }>();
 
 function revealSport(target: HTMLElement) {
   target.scrollIntoView({ block: 'start', behavior: 'instant' });
@@ -121,7 +116,7 @@ export default function Index() {
   const navigate = useNavigate();
   const navigationType = useNavigationType();
   const previousHomeEntry = useRef(homeEntry);
-  const jumpToSport = useCallback((event: MouseEvent<HTMLAnchorElement>, opener = event.currentTarget.id, fallback?: string) => {
+  const jumpToSport = useCallback((event: MouseEvent<HTMLAnchorElement>, opener = event.currentTarget.id) => {
     if (event.defaultPrevented || event.button !== 0 || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return false;
     const nextHash = event.currentTarget.hash;
     const target = document.getElementById(nextHash.slice(1));
@@ -132,7 +127,7 @@ export default function Index() {
       return true;
     }
     sportReturns.delete(homeEntry);
-    sportReturns.set(homeEntry, { hash, top: window.scrollY, opener, fallback });
+    sportReturns.set(homeEntry, { hash, top: window.scrollY, opener });
     if (sportReturns.size > 20) sportReturns.delete(sportReturns.keys().next().value);
     navigate({ search, hash: nextHash }, { state: { homeSportAnchor: nextHash } });
     return true;
@@ -144,20 +139,14 @@ export default function Index() {
     const returned = navigationType === 'POP' && sportReturns.get(homeEntry);
     // Native fragment navigation can reuse the initial Router key.
     if (returned && returned.hash === hash) {
-      const opener = document.getElementById(returned.opener);
-      const alternate = !opener && returned.fallback && document.getElementById(returned.fallback);
-      if (alternate) revealSport(alternate);
-      else {
-        window.scrollTo({ top: returned.top, behavior: 'instant' });
-        opener?.focus({ preventScroll: true });
-      }
+      window.scrollTo({ top: returned.top, behavior: 'instant' });
+      document.getElementById(returned.opener)?.focus({ preventScroll: true });
     } else if (state?.homeSportAnchor === hash) {
       const target = document.getElementById(hash.slice(1));
       if (target) revealSport(target);
     }
   }, [hash, homeEntry, navigationType, state]);
   const [gameReturn] = useState(() => navigationType === 'POP' ? gameReturns.get(homeEntry) : undefined);
-  const popularReturnPath = gameReturn?.selector === POPULAR_GAME_LINK ? gameReturn.path : undefined;
   const [searchQuery, setSearchQuery] = useState(gameReturn?.query ?? '');
   const [searchSport, setSearchSport] = useState<SportKey | ''>(gameReturn?.sport ?? '');
   const [sportsOpen, setSportsOpen] = useState(false);
@@ -266,7 +255,7 @@ export default function Index() {
     const opener = pendingGameReturn.current;
     if (!opener || (isSearching && !querySettled && !searchFailed)) return;
     pendingGameReturn.current = undefined;
-    if (opener.selector === POPULAR_GAME_LINK || document.activeElement !== document.body) return;
+    if (document.activeElement !== document.body) return;
     const scope = isSearching ? searchResultsRef.current : opener.catalogueSport
       ? catalogueRef.current?.querySelector(`section[data-sport="${opener.catalogueSport}"]`) : catalogueRef.current;
     const returned = Array.from(scope?.querySelectorAll<HTMLAnchorElement>(opener.selector) ?? [])
@@ -414,56 +403,18 @@ export default function Index() {
         <StreakReminder />
       </div>
 
-      {/* Most played stays, per the same 2026-08-26 document, and
-          still counts real people with its curated fallback. Round
-          659 sets Just shipped beside it on a wide screen. */}
-      {/* grid-cols-1 is minmax(0, 1fr), not auto: with an auto track a
-          long real Most Played description (the truncate is nowrap)
-          widened the column to its full text and the whole phone
-          page with it, measured at 915px with live data */}
-      <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-8">
-        <MostPlayedToday returnPath={popularReturnPath} />
-        <JustShipped>
-          {games => (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {games.map(game => (
-                <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} />
-              ))}
-            </div>
-          )}
-        </JustShipped>
-      </div>
-
-      {/* ROUND 382: the maker's note is gone from here, on the owner's
-          instruction: "it shouldnt pop up there I would rather you put it
-          in one the small like tabs on the bottom like near the privacy
-          policy". It now lives on /about, which is the first link in that
-          small footer row, and it no longer carries his name. Round 346
-          put it here and that was his idea at the time; changing his mind
-          about his own voice on his own site is his call. */}
-
-      <section aria-labelledby={HOME_CAREER_ID}>
-        <h2 id={HOME_CAREER_ID} tabIndex={-1} className="mb-3 flex scroll-mt-36 items-center gap-2 font-display text-lg font-bold text-foreground focus-visible:outline-primary sm:scroll-mt-28">
-          <Trophy aria-hidden="true" className="h-4 w-4 shrink-0 text-gold" />
-          Dynasty & Career Sims
-        </h2>
-        <div className="grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4" data-home-catalogue="">
-          {FEATURED_GAMES.map(game => (
-            <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
-          ))}
-        </div>
-      </section>
-
-      <div className="grid min-w-0 gap-6 lg:grid-cols-[12rem_minmax(0,1fr)] lg:gap-8 xl:grid-cols-[14rem_minmax(0,1fr)]">
-        <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="scroll-mt-36 focus-visible:outline-primary sm:scroll-mt-28">
-          <div className="rounded-xl border border-border bg-surface-1 p-3 lg:top-28 lg:flex lg:flex-col lg:[@media(min-height:540px)]:sticky lg:[@media(min-height:540px)]:max-h-[calc(100dvh-8rem)] xl:p-4">
-            <h2 id="browse-sports-heading" className="font-display text-lg font-bold">Browse sports</h2>
-            <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} onJump={jumpToSport} />
-            <p className="mt-3 flex items-start gap-2 text-xs text-muted-foreground">
-              <Pin aria-hidden="true" className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold" />
-              Pin a game to keep it in Your picks on Home.
+      <div className="min-w-0 space-y-6">
+        <section id="browse-sports" tabIndex={-1} aria-labelledby="browse-sports-heading" className="flex flex-wrap items-center justify-between gap-3 scroll-mt-36 border-b border-border pb-3 focus-visible:outline-primary sm:scroll-mt-28">
+          <div>
+            <span id={HOME_GAME_PICKS_ID} tabIndex={-1} className="block scroll-mt-36 sm:scroll-mt-28" />
+            <span id={HOME_CAREER_ID} tabIndex={-1} className="block scroll-mt-36 sm:scroll-mt-28" />
+            <h2 id="browse-sports-heading" className="font-display text-lg font-bold">All games</h2>
+            <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+              <Pin aria-hidden="true" className="h-3.5 w-3.5 shrink-0 text-gold" />
+              Pin games to keep them in Your picks.
             </p>
           </div>
+          <FavouriteSport sports={pickableSports} value={favSport} onPick={pickSport} />
         </section>
         <div data-home-sport-catalogue className="min-w-0 space-y-7 lg:space-y-9">
           {sportSections.map(cat => {
@@ -500,12 +451,9 @@ export default function Index() {
                       Hub
                     </Link>
                   )}
-                  <a id={`home-all-sports-${CATEGORY_SPORT[cat.title]}`} href="#browse-sports" onClick={jumpToSport} className="inline-flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted-foreground hover:text-primary focus-visible:outline-primary">
-                    All sports <ArrowUp aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
-                  </a>
                 </div>
               </div>
-              <div className="grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3" data-home-catalogue="">
+              <div className="grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4" data-home-catalogue="">
                 {cat.games.slice(0, SPORT_PREVIEW_GAMES).map(game => (
                   <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
                 ))}
@@ -521,7 +469,7 @@ export default function Index() {
                   </button>
                   <div id={moreId}>
                     {expanded && (
-                      <div className="mt-2 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-2 xl:grid-cols-3" data-home-catalogue="">
+                      <div className="mt-2 grid grid-cols-1 gap-2 min-[480px]:grid-cols-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4" data-home-catalogue="">
                         {extraGames.map(game => (
                           <GameCard key={game.path} game={game} badgeDate={badgeDate} bestScore={bestScores[game.path.slice(1)]} pinned={gamePicks.includes(game.path)} onTogglePick={toggleGamePick} compact />
                         ))}
@@ -535,10 +483,8 @@ export default function Index() {
           })}
         </div>
       </div>
-      {/* Late poll results should never shift a game destination. */}
-      <PollsWhenNear />
     </div>
-  ), [badgeDate, bestScores, expandedSports, favSport, gamePicks, jumpToSport, pickSport, pickableSports, popularReturnPath, sportSections, toggleGamePick, user]);
+  ), [badgeDate, bestScores, expandedSports, favSport, gamePicks, jumpToSport, pickSport, pickableSports, sportSections, toggleGamePick, user]);
 
   return (
     <>
@@ -680,7 +626,7 @@ export default function Index() {
                     className="max-h-[var(--radix-popover-content-available-height)] w-[19rem] max-w-[calc(100vw-1.5rem)] overflow-auto rounded-xl px-2 py-1"
                     onCloseAutoFocus={event => {
                       const target = document.activeElement?.id;
-                      if (target === HOME_GAME_PICKS_ID || target === HOME_DAILIES_ID || target === HOME_CAREER_ID || target?.startsWith('sport-')) event.preventDefault();
+                      if (target === HOME_DAILIES_ID || target?.startsWith('sport-')) event.preventDefault();
                     }}
                   >
                     <ul className="grid grid-cols-2 gap-x-1">
@@ -689,20 +635,6 @@ export default function Index() {
                           className="flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-semibold hover:bg-accent focus-visible:bg-accent focus-visible:outline-primary">
                           <CalendarDays aria-hidden="true" className="h-4 w-4 shrink-0 text-primary" />
                           Daily puzzles
-                        </a>
-                      </li>
-                      <li>
-                        <a href={'#' + HOME_CAREER_ID} onClick={event => { jumpToSport(event, BROWSE_SPORTS_TRIGGER); setSportsOpen(false); }}
-                          className="flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-semibold hover:bg-accent focus-visible:bg-accent focus-visible:outline-primary">
-                          <Trophy aria-hidden="true" className="h-4 w-4 shrink-0 text-gold" />
-                          Career sims
-                        </a>
-                      </li>
-                      <li className="col-span-2 border-b border-border">
-                        <a href={`#${HOME_GAME_PICKS_ID}`} onClick={event => { jumpToSport(event, BROWSE_SPORTS_TRIGGER); setSportsOpen(false); }}
-                          className="flex min-h-11 items-center gap-2 rounded-lg px-2 text-sm font-semibold hover:bg-accent focus-visible:bg-accent focus-visible:outline-primary">
-                          <Flame aria-hidden="true" className="h-4 w-4 shrink-0 text-warn" />
-                          Game picks
                         </a>
                       </li>
                       {sportSections.map(category => {
@@ -783,6 +715,13 @@ export default function Index() {
           <Suspense fallback={null}>
             <HomeAbout />
           </Suspense>
+          {!isSearching && (
+            <div className="-mx-4 sm:mx-0" data-home-ad="">
+              <Suspense fallback={null}>
+                <AdBanner slot="7540487748" format="horizontal" className="mx-auto w-full max-w-[728px]" />
+              </Suspense>
+            </div>
+          )}
 
           {/* Golf went live 2026-08-05 (Guess The Golfer + Golf Higher or
               Lower), so the old Coming Soon placeholder is gone; the Golf
@@ -798,41 +737,11 @@ export default function Index() {
   );
 }
 
-/* The polls sit below the games, so their code (the poll card, the flags,
-   the fixture pool) loads when the section enters the viewport. The
-   placeholder holds the section's space until the polls are ready. */
-const LazyPolls = lazy(() => import('@/components/home/PollOfTheDay').then(m => ({ default: m.PollOfTheDay })));
-
 /* Round 840: the About copy, its own chunk. Mounted unconditionally above,
    so React asks for it on the page's first render: no scroll, no idle, no
    observer stands between a visitor (or a renderer) and the words. */
 const HomeAbout = lazy(() => import('@/components/home/HomeAbout').then(m => ({ default: m.HomeAbout })));
-
-function PollsWhenNear() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [near, setNear] = useState(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (typeof IntersectionObserver === 'undefined') { setNear(true); return; }
-    const io = new IntersectionObserver(entries => {
-      if (entries.some(e => e.isIntersecting)) { setNear(true); io.disconnect(); }
-    });
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-  return (
-    <div ref={ref}>
-      {near ? (
-        <Suspense fallback={<PollsPlaceholder />}>
-          <LazyPolls />
-        </Suspense>
-      ) : (
-        <PollsPlaceholder />
-      )}
-    </div>
-  );
-}
+const AdBanner = lazy(() => import('@/components/ads/AdBanner'));
 
 /** One signed-in stat, in the second row below xl and inline at xl.
     Unit words drop on phones so all three chips keep their values visible. */
@@ -844,117 +753,6 @@ function StatChip({ icon, label, value, unit }: { icon: ReactNode; label: string
       <strong className="text-foreground">{value}</strong>
       {unit && <span className="hidden sm:inline">{unit}</span>}
     </span>
-  );
-}
-
-/**
- * Wave 3 / item #11: wired to public.game_completions via useMostPlayed.
- * Renders unconditionally on every breakpoint (no md: hidden class) so it
- * always shows on mobile. The heading and ordered list describe live play
- * only after at least three games qualify. Until then, show three recommendations.
- */
-function MostPlayedToday({ returnPath }: { returnPath?: string }) {
-  const section = useRef<HTMLElement>(null);
-  const title = useRef<HTMLHeadingElement>(null);
-  const pendingPath = useRef(returnPath);
-  const restoredFocus = useRef<HTMLElement | null>(null);
-  const [near, setNear] = useState(false);
-  const { entries, loading } = useMostPlayed(near);
-  useEffect(() => {
-    if (!section.current) return;
-    if (typeof IntersectionObserver === 'undefined') { setNear(true); return; }
-    const observer = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting)) { setNear(true); observer.disconnect(); }
-    });
-    observer.observe(section.current);
-    return () => observer.disconnect();
-  }, []);
-
-  useLayoutEffect(() => {
-    const path = pendingPath.current;
-    if (!path || !section.current) return;
-    const previous = restoredFocus.current;
-    // The ranked list can replace the fallback while a visitor is coming back.
-    // Follow that replacement only while focus still belongs to this return.
-    if (document.activeElement !== (previous?.isConnected ? previous : document.body)) {
-      pendingPath.current = undefined;
-      return;
-    }
-    const link = Array.from(section.current.querySelectorAll<HTMLAnchorElement>(POPULAR_GAME_LINK))
-      .find(candidate => candidate.getAttribute('href') === path);
-    const target = link ?? title.current;
-    target?.focus({ preventScroll: true });
-    restoredFocus.current = target;
-    if (!loading) pendingPath.current = undefined;
-  }, [entries, loading]);
-
-  const ranked = entries.length > 0 && entries.every(entry => !entry.isFallback);
-  const List = ranked ? 'ol' : 'ul';
-  const heading = (
-    <h2 id={HOME_GAME_PICKS_ID} ref={title} tabIndex={-1} className="mb-3 flex scroll-mt-36 items-center gap-2.5 text-lg font-display font-bold text-foreground focus-visible:outline-primary sm:scroll-mt-28">
-      <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-warn/15 text-warn ring-1 ring-inset ring-warn/30">
-        <Flame className="h-4 w-4" />
-      </span>
-      {ranked ? 'Most played today' : 'Games to try'}
-    </h2>
-  );
-
-  if (loading && entries.length === 0) {
-    return (
-      <section ref={section} aria-label="Game picks">
-        {heading}
-        <div className="grid gap-2">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="h-[68px] rounded-xl bg-muted/30 animate-pulse" />
-          ))}
-        </div>
-      </section>
-    );
-  }
-
-  if (entries.length === 0) return null;
-
-  return (
-    <section ref={section} aria-label="Game picks">
-      {heading}
-      <List className="grid grid-cols-1 gap-2">
-        {entries.map(({ game, isFallback }, rank) => {
-          const sport = sportOf(game.path);
-          return (
-            <li key={game.path}>
-              <Link
-                to={game.path}
-                data-home-popular-game=""
-                style={sportStyle(sport)}
-                className="group flex h-[68px] min-w-0 items-center gap-3 rounded-xl border border-border/80 bg-surface-1 px-3 transition-colors hover:border-tile/50 hover:bg-surface-2"
-              >
-                {ranked && <span aria-hidden="true" className="w-6 shrink-0 text-center font-display text-2xl font-bold tabular-nums text-tile">{rank + 1}</span>}
-                <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-tile/15 text-xl ring-1 ring-inset ring-tile/25">{game.emoji}</span>
-                <div className="min-w-0 flex-1">
-                  <span className="flex items-center gap-2">
-                    <span className="truncate text-sm font-bold text-foreground group-hover:text-primary">{game.label}</span>
-                    {!isFallback && (
-                      <span className="shrink-0 rounded bg-warn/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-warn">Trending</span>
-                    )}
-                  </span>
-                  {/* ROUND 283: all three of these tiles read "Popular pick",
-                      the same two words under three different games, because
-                      the fallback label was a constant. Every game in the
-                      registry carries its own one line description and that is
-                      what a person needs in order to choose between three
-                      tiles. Round 659 does the same for the real ranking,
-                      which used to print "Trending today" under all three:
-                      that fact is a small tag beside the name now, and the
-                      last line is always the game's own description, which
-                      playHomeFold section 3 reads as each tile's LAST span. */}
-                  <span className="block truncate text-xs text-muted-foreground">{game.description}</span>
-                </div>
-              </Link>
-            </li>
-          );
-        })}
-      </List>
-    </section>
   );
 }
 
