@@ -10,7 +10,7 @@ const self = fileURLToPath(import.meta.url);
 const hook = 'src/hooks/useGamePicks.ts', row = 'src/components/home/GamePicksRow.tsx';
 const button = 'src/components/game/GamePickButton.tsx', test = 'src/test/gamePicks.test.tsx';
 const titles = {
-  browse: 'gives every sport in the Home catalogue a return link to Browse sports',
+  browse: 'keeps the complete sport index in the single Home Browse sports menu',
   pin: 'pins Footle from Home without opening a game or touching saves and scores',
   restore: 'pins NHL Connections from Search and restores both exact Home destinations after remount',
   remove: 'removes only the chosen pick and launches the retained game through its real link',
@@ -23,7 +23,7 @@ const titles = {
   baseline: 'keeps the original Search result link and arrow-key launch flow with no picks',
 };
 const controls = {
-  browse: { file: 'src/pages/Index.tsx', from: 'href="#browse-sports" onClick={jumpToSport}', to: 'href="#main-content" onClick={jumpToSport}', test: titles.browse },
+  browse: { file: 'src/pages/Index.tsx', from: 'href={`#sport-${sport}`}', to: 'href={`#missing-sport-${sport}`}', test: titles.browse },
   pin: { file: button, from: 'onClick={() => onToggle(game.path)}', to: 'onClick={() => {}}', test: titles.pin },
   persist: { file: hook, from: 'window.localStorage.setItem(GAME_PICKS_KEY, JSON.stringify(paths));', to: 'void paths;', test: titles.pin },
   restore: { file: hook, from: 'return storedPicks(window.localStorage.getItem(GAME_PICKS_KEY));', to: 'return { paths: [], storageFailed: false };', test: titles.restore },

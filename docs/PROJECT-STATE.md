@@ -1,3 +1,11 @@
+## 2026-11-25, Homepage game discovery and banner placement
+
+Home brings Search and one Browse sports menu into a single All games catalogue. Continue Playing, Your picks, the featured games and Daily puzzles stay near the top. Most Played Today, Just Shipped, the separate Dynasty & Career Sims shelf, repeated sport navigation and Poll of the Day come off Home. The existing catalogue bookmarks still land on All games.
+
+Home uses one consent-gated AdSense banner after the catalogue and About copy. It stays in the page flow, collapses when unfilled and is absent during search. Simulated fills fit at 320, 390, 430 and 1440 pixels with 198 pixels between the banner and the nearest preceding control.
+
+At 390 pixels the catalogue heading moved from y2521 to y988, with the first playable tile still at y248 in the same browser fixture. The browser checks cover links, navigation history, focus, search and ad consent.
+
 ## 2026-11-25, Admin report filters and email timeouts
 
 Admin Reports filters Ideas and other reports by email status alongside the existing triage filters. Email badges show provider acceptance, an unconfirmed attempt, or an unknown status. Provider acceptance does not establish Gmail delivery.

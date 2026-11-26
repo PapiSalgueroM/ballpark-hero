@@ -45,7 +45,7 @@ const CONTROL_FAILURES = {
   'ad-status-behavior': ['AdBanner does not read and watch data-ad-status, so it cannot know whether an ad ever arrived'],
   'snapshot-loader': ['public/privacy/index.html contains an executable adsbygoogle.js loader'],
   'placeholder-slot': ['src/pages/Footle.tsx uses AdBanner slot 1234567890 instead of 7540487748'],
-  'missing-slot': ['found 79 source AdBanner callers, expected exactly 80'],
+  'missing-slot': ['found 80 source AdBanner callers, expected exactly 81'],
   'privacy-npa-bridge': ["the privacy policy does not distinguish Google's general disclosure from this site's non-personalized ad request"],
   'delayed-consent': ['AdBanner does not read stored consent before its first render'],
   'analytics-collection': ['paused loadAnalytics has executable collection code'],
@@ -457,7 +457,7 @@ console.log('6c) no global Auto Ads eligibility on non-content routes');
 /* ── 7: every manual ad uses the real display unit ────────────────────── */
 console.log('7) one production slot on every AdBanner caller');
 const EXPECTED_SLOT = '7540487748';
-const EXPECTED_CALLERS = 80; /* Round 724: +1, NhlGauntletDraft.tsx (release K). Before that Round 720: +1, ContractChaos.tsx (release G). Before that Round 538: +1, MlbGauntletDraft.tsx. Before that Round 522: +2, NbaGauntletDraft.tsx and NflGauntletDraft.tsx */
+const EXPECTED_CALLERS = 81; /* Home: +1, Index.tsx using the same unit. Round 724: +1, NhlGauntletDraft.tsx (release K). Before that Round 720: +1, ContractChaos.tsx (release G). Before that Round 538: +1, MlbGauntletDraft.tsx. Before that Round 522: +2, NbaGauntletDraft.tsx and NflGauntletDraft.tsx */
 const srcDir = path.join(ROOT, 'src');
 const adCallers = [];
 const walk = d => {
