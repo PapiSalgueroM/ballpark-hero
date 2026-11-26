@@ -1,3 +1,7 @@
+## 2026-11-26, Cup Golden Boot on the full-time report
+
+Domestic and European full-time reports now show the club's scorer and whether the Golden Boot is still open, outright, shared or unconfirmed. In the local fresh-season replay, Everton's quarter-final exit kept the race open, and the final award was saved after the other sides played on. After Manchester City's 2-0 win in the Champions League final, the report named Erling Haaland as the simulated winner with ten goals. Both careers resumed their original season reviews after reload.
+
 ## 2026-11-26, Rest between Club Manager fixtures
 
 Player recovery and the individual training preview now follow the next fixture date. A seven-day interval keeps its existing recovery. Starting all 20 players at 65 fitness and replaying the same Everton fixture, the old engine gave identical results with seven and four days to recover. The revised four-day domestic cup and Champions League turnarounds both left every player eight points below the full-week result.

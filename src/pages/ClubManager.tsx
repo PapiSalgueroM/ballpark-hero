@@ -743,7 +743,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
         <header className="text-center mb-4">
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">FULL TIME</h1>
         </header>
-        <ScreenLoading><MatchReportCard report={g.report} clubName={g.career.clubName} onContinue={g.continueFromReport} noSack={noSackFrom(g.career) !== null} /></ScreenLoading>
+        <ScreenLoading><MatchReportCard report={g.report} career={g.career} clubName={g.career.clubName} onContinue={g.continueFromReport} noSack={noSackFrom(g.career) !== null} /></ScreenLoading>
       </div>
     );
   }

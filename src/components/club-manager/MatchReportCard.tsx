@@ -4,7 +4,8 @@ import { ChevronRight, ChevronDown } from 'lucide-react';
 import { minuteLabel } from '@/lib/clubManager';
 import { majorInjuryLabel } from '@/lib/clubManagerInjuries';
 import { scorerLine } from '@/lib/clubManagerScorerLine';
-import type { MatchWeekReport, MatchStats } from '@/lib/clubManager';
+import type { CareerState, MatchWeekReport, MatchStats } from '@/lib/clubManager';
+import { MatchGoldenBoot } from '@/components/club-manager/CupScorersCard';
 import { AI_STYLES, instructionsSummary, type TeamInstructions } from '@/lib/clubManagerTactics';
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
@@ -163,6 +164,7 @@ function MomentumArea({ momentum }: { momentum: number[] }) {
 
 interface MatchReportCardProps {
   report: MatchWeekReport;
+  career?: CareerState;
   clubName: string;
   onContinue: () => void;
   /** Round 1340: the career plays under No sacking, so the board word says what the header's meter says there. */
@@ -182,7 +184,7 @@ interface MatchReportCardProps {
  * the scoreboard itself is the true final score from the first frame, a
  * line playClubManager enforces (see the comment inside).
  */
-export function MatchReportCard({ report, clubName, onContinue, noSack = false }: MatchReportCardProps) {
+export function MatchReportCard({ report, career, clubName, onContinue, noSack = false }: MatchReportCardProps) {
   const r = report;
   /* Round 472. His words: real team names, never "them". The other club is on
      the report twice already, as home or away, so every heading that used to
@@ -653,6 +655,8 @@ export function MatchReportCard({ report, clubName, onContinue, noSack = false }
             <div className={cn('text-[9px]', boardTone)} data-cm-board-word={board.tone}>{boardWord}</div>
           </div>
         </div>
+
+        {career && <MatchGoldenBoot career={career} competition={r.competition} />}
 
         <button
           onClick={onContinue}
