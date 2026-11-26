@@ -321,11 +321,14 @@ export function SeasonMatchResults({ league, current = false }: { league: Tycoon
     {results.length === 0 ? <p className="pb-2 text-muted-foreground">Scores for these matchdays were not recorded.</p> : <>
       {results.length < league.matchday && <p className="pb-2 text-muted-foreground">Earlier scores were not recorded.</p>}
       <ol className="space-y-2 pb-3">
-        {results.map(({ day, gf, ga, attendance, seasonTicketFans, plan, scouting, graduateAttack }) => <li key={day} className="flex items-baseline justify-between gap-2">
+        {results.map(({ day, gf, ga, attendance, ticketOffer, seasonTicketFans, plan, scouting, graduateAttack }) => <li key={day} className="flex items-baseline justify-between gap-2">
           <div>
             <span>Matchday {day} · {league.clubs[yourOpponentIndex(league, day - 1)].name}</span>
             {attendance !== undefined && <span className="block text-muted-foreground">
               {formatNumber(attendance)} fans{crowdTarget === undefined ? '' : attendance >= crowdTarget ? ' · Reached sponsor target' : ' · Missed sponsor target'}
+            </span>}
+            {ticketOffer && <span className="block text-muted-foreground">
+              {TICKET_POLICIES.find(p => p.id === ticketOffer.policy)?.label} tickets · {formatNumber(ticketOffer.seats)} seats
             </span>}
             {seasonTicketFans !== undefined && attendance !== undefined && <span className="block text-muted-foreground">
               {formatNumber(seasonTicketFans)} season-ticket holders · {formatNumber(attendance - seasonTicketFans)} walk-ups

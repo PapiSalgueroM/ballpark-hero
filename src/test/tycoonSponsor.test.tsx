@@ -74,6 +74,8 @@ describe('Stadium Tycoon season sponsors', () => {
     fireEvent.click(screen.getByRole('button', { name: /Latest season/ }));
     fireEvent.click(screen.getByText('Match results'));
     expect(screen.getByText('90 fans · Missed sponsor target')).toBeVisible();
+    expect(screen.getByText('Premium tickets · 120 seats')).toBeVisible();
+    expect(screen.getAllByText('Standard tickets · 120 seats')).toHaveLength(4);
     expect(screen.getAllByText('120 fans · Reached sponsor target')).toHaveLength(4);
     expect(final.league?.sponsor).toBeUndefined();
     const ordinary = nextMatch(reload(final));

@@ -19,7 +19,7 @@ const hook = 'src/hooks/useStadiumTycoon.ts';
 const card = 'src/components/tycoon/TicketPolicyCard.tsx';
 const baseline = 'independent upgrade purchase keeps original cost and money accounting';
 const bindingCase = 'rules modal keeps distinct Premium gate demand and growth cells separate';
-const COUNT = 23;
+const COUNT = 25;
 const read = file => fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n');
 const hash = text => crypto.createHash('sha256').update(text).digest('hex');
 const held = [engine, hook, card, 'src/pages/StadiumTycoon.tsx', test, 'src/test/tycoonPitch.test.tsx',
@@ -37,6 +37,8 @@ process.on('exit', () => write('source-after.json', sourceHashes()));
 
 const controls = [
   ['legacy', engine, 'levels: { ...base.levels, ...(p.levels ?? {}) },\n    };', 'levels: { ...base.levels, ...(p.levels ?? {}) },\n    };\n    s.money += 1;', 'existing save corpus keeps the exact original normalized shape'],
+  ['history', engine, 'ticketOffer: { policy: ticketPolicyOf(st), seats: capacity(st) },', '', 'keeps each matchday offer and crowd after new stands, another season and a reload'],
+  ['historymigration', engine, ' && (ticketOffer.seats - seatCount(0)) % STANDS_SEATS_PER_LEVEL === 0', '', 'shows older results without inventing a price or capacity'],
   ['standard', engine, "if (ticketPolicyOf(s) === 'standard') return gate + sn * 0.009 + sh * 0.016;", "if (ticketPolicyOf(s) === 'standard') return gate + 0.01 + sn * 0.009 + sh * 0.016;", 'Standard keeps exact original trajectories events and random draws'],
   ['demand', engine, "gate: 1.25, demand: 0.75, growth: 0.75", "gate: 1.25, demand: 1, growth: 0.75", 'actual tick earnings and crowd follow the offered gate and finite demand'],
   ['gate', engine, "gate: 1.25, demand: 0.75, growth: 0.75", "gate: 1, demand: 0.75, growth: 0.75", 'actual tick earnings and crowd follow the offered gate and finite demand'],

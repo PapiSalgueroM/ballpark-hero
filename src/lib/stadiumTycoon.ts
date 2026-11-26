@@ -740,7 +740,7 @@ export interface TycoonLeague {
   baseMatchNo?: number;
   /** Index 0 is you. */
   clubs: LeagueClub[];
-  results?: { day: number; gf: number; ga: number; attendance?: number; seasonTicketFans?: number; plan?: MatchPlan; scouting?: MatchScouting; graduateAttack?: GraduateAttackReceipt }[];
+  results?: { day: number; gf: number; ga: number; attendance?: number; ticketOffer?: { policy: TicketPolicy; seats: number }; seasonTicketFans?: number; plan?: MatchPlan; scouting?: MatchScouting; graduateAttack?: GraduateAttackReceipt }[];
   sponsor?: StadiumSponsorDeal;
   seasonTickets?: SeasonTicketAllocation;
   /** An older save's match in progress when it first loaded: played to full
@@ -994,6 +994,7 @@ function playMatchday(st: TycoonState, gf: number, ga: number, events: TickEvent
   const graduate = activeGraduateAttack(st);
   const result = {
     day: matchday, gf, ga, attendance: crowdAtFullTime,
+    ticketOffer: { policy: ticketPolicyOf(st), seats: capacity(st) },
     ...(lg.seasonTickets ? { seasonTicketFans: Math.min(lg.seasonTickets.seats, crowdAtFullTime) } : {}),
     ...(plan ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
     ...(scouting ? { scouting: { fee: scouting.fee, reduction: scouting.reduction } } : {}),
@@ -1954,11 +1955,15 @@ function cleanLeague(raw: unknown, clubName: string | undefined, bestDivision: n
       return true;
     }) && (['w', 'd', 'l', 'gf', 'ga'] as const).every(key => first === 1 ? tally[key] === own[key] : tally[key] <= own[key])) {
       const maxSeats = seatCount(trackById('stands').maxLevel);
-      out.results = r.results.map(({ day, gf, ga, attendance, seasonTicketFans, plan, scouting, graduateAttack }) => {
+      out.results = r.results.map(({ day, gf, ga, attendance, ticketOffer, seasonTicketFans, plan, scouting, graduateAttack }) => {
         const validCrowd = typeof attendance === 'number' && Number.isInteger(attendance) && attendance >= 0 && attendance <= maxSeats;
         return {
           day, gf, ga,
           ...(validCrowd ? { attendance } : {}),
+          ...(validCrowd && ticketOffer && TICKET_POLICIES.some(p => p.id === ticketOffer.policy) &&
+            Number.isSafeInteger(ticketOffer.seats) && ticketOffer.seats >= Math.max(seatCount(0), attendance) &&
+            ticketOffer.seats <= maxSeats && (ticketOffer.seats - seatCount(0)) % STANDS_SEATS_PER_LEVEL === 0
+            ? { ticketOffer: { policy: ticketOffer.policy, seats: ticketOffer.seats } } : {}),
           ...(validCrowd && out.seasonTickets && seasonTicketFans === Math.min(attendance, out.seasonTickets.seats) ? { seasonTicketFans } : {}),
           ...(validMatchPlan(plan) ? { plan: { minute: plan.minute, kind: plan.kind } } : {}),
           ...(validScouting(scouting) ? { scouting: { fee: scouting.fee, reduction: scouting.reduction } } : {}),

@@ -21,6 +21,10 @@ const dollars = (value: number) => `$${value.toLocaleString('en-US', { minimumFr
 export default function TicketPolicyCard({ state, onSelect, saveFailed, onRetrySave, showSaveNotice = true }: TicketPolicyCardProps) {
   const quotesId = useId();
   const current = ticketEconomy(state);
+  const recent = [state.lastCompletedLeague, state.league].flatMap(league =>
+    league?.results?.flatMap(match => match.ticketOffer && match.attendance !== undefined
+      ? [{ season: league.season + 1, day: match.day, offer: match.ticketOffer, fans: match.attendance }]
+      : []) ?? []).slice(-3).reverse();
   const early = newTycoon(0);
   const full = { ...early, fanbase: 240 };
   const earlyStandard = ticketEconomy(early);
@@ -65,6 +69,15 @@ export default function TicketPolicyCard({ state, onSelect, saveFailed, onRetryS
     </dl>
     <p className="text-muted-foreground mt-2">{formatNumber(current.supporters)} supporters. Each tap pays {dollars(current.tap)} from this income. Live boosts are included above.</p>
     {!saveFailed && <p className="text-muted-foreground mt-2">Active now. The offer applies to future earnings. Selling the ground resets it to Standard.</p>}
+    {recent.length > 0 && <details className="mt-2">
+      <summary className="min-h-11 flex items-center cursor-pointer font-bold">Recent ticket offers at full time</summary>
+      <ol className="divide-y divide-border">
+        {recent.map(({ season, day, offer, fans }) => <li key={season + '/' + day} className="flex flex-wrap justify-between gap-x-2 py-2">
+          <span>Season {season}, match {day} · {TICKET_POLICIES.find(p => p.id === offer.policy)?.label}</span>
+          <span className="tabular-nums">{formatNumber(fans)} / {formatNumber(offer.seats)} seats filled</span>
+        </li>)}
+      </ol>
+    </details>}
     <details className="mt-2">
       <summary className="min-h-[44px] flex items-center cursor-pointer font-bold">How ticket offers work</summary>
       <p>These are game rates. Crowd never exceeds your supporters or seats. Only admission prices change; snacks and the shop follow the crowd. Parking and payroll keep their own rates. Goal and win bonuses pay seconds of your income before live boosts, so they follow what the offer earns. Community grows your supporter pool faster, which can fill empty seats later.</p>
