@@ -1,3 +1,7 @@
+## November 26 local season-target verification
+
+The season-target simulation now reports its measured injury, suspension and conviction cases. The generic site runner had categorized its three-line output as empty even though the assertions executed. Its default output check now recognizes the same 16 paired careers and seven interruption paths. All 18 selected game and site harnesses and the browser snapshot startup check passed against the latest local production build.
+
 ## November 26 local Club Manager cup awards and loan fitness
 
 A confirmed Europa League Golden Boot stays with its originating club when a manager changes jobs or skips the season review. Past winners now explicitly labels cup scorers from the club you managed that season. Outgoing loans recover toward selection fitness, minor injuries serve elapsed days and major injuries retain their medical return dates. Two local production-browser runs accepted a Chelsea job after Everton's controlled Europa final and reopened the Everton award. On phone and laptop a separate January recall returned a player at 80 fitness without an injury, after leaving at 37 with three weeks to serve. Five focused regressions passed. The same 17 broader cup tests failed on the previous tree and candidate, independently of these fixes.

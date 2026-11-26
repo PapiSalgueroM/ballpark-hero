@@ -164,6 +164,7 @@ for (let seed = 0; seed < 64 && (!severe || !ped || !conviction); seed++) {
   }
 }
 assert.ok(severe && ped && conviction, 'the bounded actual engine probe must exercise all three interruption branches');
+console.log(`ok   interrupted seasons without a reward: ${severe} serious injury, ${ped} suspension, ${conviction} conviction`);
 const legacy = A.pickCareerAmbition(career(), 'goals');
 const trial = run(B, { ...legacy, phase: 'newspaper', pendingSummary: null, prisonSeasons: 1 }, 118020, 'dismissNewspaper').state;
 assert.equal(trial.seasons.at(-1).club, 'CONVICTED');
