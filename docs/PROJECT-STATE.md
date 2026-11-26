@@ -1,3 +1,7 @@
+## November 26 local review, player loans and their purchase options
+
+Managers can now offer a lower-fee straight loan from the Sell screen's loan plan. They can see the purchase price on standard deals and incoming loan bids before agreeing. Choosing a host uses the actual leagues in this save. Two fresh Everton browser careers sent Harrison Armstrong to Ajax for a simulated 400k with no purchase option, against the standard simulated 700k with a 10.1m buy option. Both receipts and budgets survived reload. A paired summer exercised the standard option and returned the same contracted player on a straight loan. The mounted and engine checks cover stale quotes, failed writes, double placement, existing offers and recovery after reload.
+
 ## November 26 local review, Conquest match odds
 
 The shared Conquest board now uses the same territory and streaks as the match simulation for the featured call. In the November 26 Soccer Daily, Arsenal opened matchday seven against Rennes at 85% on phone and laptop, replacing the stale 81% figure. Each fresh session played six rounds and restored the same seventh-round board after reload. Daily and seeded Free Play controls reproduced both entire prior seasons, including the match outcomes, scores, champions and number of random draws. The score cap matched the measured maximum of 1,037 in the read-only database check.

@@ -157,7 +157,7 @@ import {
   OPENING_PATIENCE_SPREAD, askingTerms, counterTerms, dealCloseness, loanTermsFor,
   loanOutTermsFor, offerVerdict, patienceCost, termsNote, termsVerdict,
 } from '@/lib/clubManagerDeals';
-import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
+import type { LoanTerms, OutgoingLoanKind, PersonalTerms } from '@/lib/clubManagerDeals';
 /* Round 513: manager XP and the seven trees, in their own file for the same
    reason the deals and the staff are in theirs. */
 import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';
@@ -12612,7 +12612,7 @@ function actingClubsByLeague(state: CareerState): ClubDef[][] {
 }
 
 /** The top eight buyers in each league of this save's world. */
-function buyerPool(state: CareerState): ClubDef[] {
+export function buyerPool(state: CareerState): ClubDef[] {
   return actingClubsByLeague(state).flatMap(clubs => clubs.slice(0, 8))
     .filter(club => club.name !== state.clubName);
 }
@@ -12654,8 +12654,9 @@ export function setTransferStatus(
 }
 
 /** What a rival pays to borrow him for the season. */
-export function loanOutFee(p: CMPlayer): number {
-  return Math.max(0.2, Math.round(sellValue(p) * 0.08 * 10) / 10);
+export function loanOutFee(p: CMPlayer, kind: OutgoingLoanKind = 'option'): number {
+  const standard = Math.max(0.2, Math.round(sellValue(p) * 0.08 * 10) / 10);
+  return kind === 'straight' ? Math.round((standard / 2) * 10) / 10 : standard;
 }
 
 /**
@@ -12738,6 +12739,7 @@ export function loanOutPlayer(
   playerId: string,
   toClub?: string,
   agreedFee?: number,
+  kind: OutgoingLoanKind = 'option',
 ): CareerState | null {
   if (career.transferWindow === null) return null;
   const p = career.squad.find(x => x.id === playerId);
@@ -12761,7 +12763,7 @@ export function loanOutPlayer(
      took another. */
   const fee = agreedFee !== undefined && Number.isFinite(agreedFee) && agreedFee >= 0
     ? Math.round(agreedFee * 10) / 10
-    : loanOutFee(p);
+    : loanOutFee(p, kind);
   const state: CareerState = {
     ...career,
     budget: Math.round((career.budget + fee) * 10) / 10,
@@ -12783,7 +12785,7 @@ export function loanOutPlayer(
         club,
         fee,
         season: career.season,
-        ...loanOutTermsFor(sellValue(p), fee),
+        ...loanOutTermsFor(sellValue(p), fee, kind),
       },
     ],
     careerStats: { ...career.careerStats },

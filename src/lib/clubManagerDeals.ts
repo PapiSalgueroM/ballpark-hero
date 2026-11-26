@@ -186,7 +186,11 @@ export interface LoanTerms {
  * that the borrowing club wants to keep him; the recall figure is the way back
  * when the man in front of him gets hurt in November.
  */
-export function loanOutTermsFor(sellVal: number, loanFee: number): { optionFee: number; recallFee: number } {
+export type OutgoingLoanKind = 'option' | 'straight';
+
+export function loanOutTermsFor(sellVal: number, loanFee: number): { optionFee: number; recallFee: number };
+export function loanOutTermsFor(sellVal: number, loanFee: number, kind: OutgoingLoanKind): { optionFee?: number; recallFee: number };
+export function loanOutTermsFor(sellVal: number, loanFee: number, kind: OutgoingLoanKind = 'option'): { optionFee?: number; recallFee: number } {
   /* They pay a premium over what he is worth today, for the same reason you do
      on the way in: they are buying the right to decide at the end of a season
      in which he may have grown. */
@@ -194,7 +198,7 @@ export function loanOutTermsFor(sellVal: number, loanFee: number): { optionFee: 
   /* Breaking your own loan costs you, so a recall is a real decision rather
      than a free undo. Half the fee you were paid, and you keep the rest. */
   const recallFee = Math.max(0.1, Math.round(loanFee * 0.5 * 10) / 10);
-  return { optionFee, recallFee };
+  return kind === 'straight' ? { recallFee } : { optionFee, recallFee };
 }
 
 /** The two figures on the table for a loan, both in millions. */

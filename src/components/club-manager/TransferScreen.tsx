@@ -19,7 +19,7 @@ import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } 
    what happens when you press send can never disagree. */
 import {
   MAX_TERMS_YEARS, MIN_TERMS_YEARS, dealCloseness, offerVerdict, termsCloseness,
-  termsVerdict, valuationLine, wageRoom, wageRoomLine,
+  termsVerdict, valuationLine, wageRoom, wageRoomLine, loanOutTermsFor,
 } from '@/lib/clubManagerDeals';
 import type { PersonalTerms } from '@/lib/clubManagerDeals';
 import { ROLE_INFO, ROLE_LADDER, wageBill, wageCapOf } from '@/lib/clubManager';
@@ -1071,6 +1071,7 @@ export function TransferScreen({
                         {b.status === 'improved' && <span className="text-[9px] text-emerald-400 ml-1">(improved, final)</span>}
                       </div>
                       {/* Round 193: a met clause is not a negotiation. */}
+                      {p && b.loan && <div className="text-[10px] text-muted-foreground">The host can buy him for {money(loanOutTermsFor(sellValue(p), b.offer).optionFee)}.</div>}
                       {registration && <div className="text-[9px] text-muted-foreground">{registration}</div>}
                       {b.clauseMet && !registration && (
                         <div className="text-[9px] text-red-400 truncate">You signed this exit door at his renewal. It cannot be rejected, and it executes itself on deadline day.</div>
@@ -1267,7 +1268,7 @@ export function TransferScreen({
                               !outWhy ? 'bg-card border-sky-500/50 text-sky-400 hover:border-sky-400'
                                 : 'bg-secondary border-border text-muted-foreground cursor-not-allowed')}
                           >
-                            {usedUp ? 'Loaned out once this season' : <>Loan out now +{money(loanOutFee(p))}</>}
+                            {usedUp ? 'Loaned out once this season' : <>Loan out now +{money(loanOutFee(p))} · Buy option {money(loanOutTermsFor(sellValue(p), loanOutFee(p)).optionFee)}</>}
                           </button>
                         );
                       })()}
