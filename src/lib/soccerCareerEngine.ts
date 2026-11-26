@@ -23,6 +23,7 @@ import { readSeasonRatingPath } from './careerSeasonRatings';
 import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';
 import { createCareerMentor, recordMentorSeason, endCareerMentorForMove, endCareerMentorForRetirement, validMentor, type CareerMentor } from './soccerCareerMentor';
 import { settleSoccerPress, type SoccerPressState } from './soccerCareerPress';
+import { normalizeCareerProjects, resolveCareerProject, type CareerProjects } from './soccerCareerProjects';
 /* Round 546: the competition's real format per season, two source verified and
    importing nothing, so the knockout ladder and the leg count are read rather
    than kept as a second hardcoded copy here. */
@@ -974,6 +975,7 @@ export interface CareerState {
   leagueWorld?: CareerLeagueWorld;
   /** Optional public answers and their recorded follow-up seasons. */
   pressRoom?: SoccerPressState;
+  careerProjects?: CareerProjects;
   contractYearsLeft: number;
   weeklyWage: number;
   marketValue: number;
@@ -2910,6 +2912,11 @@ export function repairCareer<T extends CareerState>(state: T): T {
      This is the only place that runs on load, so it is where they come back. */
   if (s.phase === "season_summary" && !s.pendingSummary) s.phase = "playing";
   reconcileRetirement(s);
+  if (s.careerProjects !== undefined) {
+    const projects = normalizeCareerProjects(s.careerProjects, Array.isArray(s.seasons) ? s.seasons.at(-1)?.year : undefined);
+    if (projects) s.careerProjects = projects;
+    else delete s.careerProjects;
+  }
   // No rehab card can render without the saved choice. Use the same fallback as dismissing it.
   if (s.phase === "rehab_choice" && s.pendingRehab == null) s.phase = applyRehabChoice(s, 1).phase;
   if (!Object.prototype.hasOwnProperty.call(SOCCER_PRIME_WINDOWS, s.primeType)) s.primeType = rollPrimeType();
@@ -6345,6 +6352,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   settleCareerAmbition(s, season);
   settleCareerPreparation(s, season);
   Object.assign(s, recordMentorSeason(s, season));
+  Object.assign(s, resolveCareerProject(s, season));
 
   /* Release AQ: the settle reads the saved season and nothing else
      (settledLeagueOrder), so the engine no longer imports the Season Centre's
