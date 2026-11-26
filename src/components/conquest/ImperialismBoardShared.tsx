@@ -12,9 +12,10 @@ import type { ConquestMapSport } from '@/lib/conquestMapLook';
 import { bboxArea, pathBoundingBox } from '@/lib/conquestMapGeometry';
 import { arrowAngle, buildScenes, wheelSpec } from '@/lib/conquestScenes';
 import {
-  empireCounts, landlessTeams, statesOf, homeWinProb, teamLabel, recordLabel, regionNoun,
+  empireCounts, landlessTeams, statesOf, homeWinProb, matchupMomentum, teamLabel, recordLabel, regionNoun,
   type ImperialismSport, type ImperialismTeam, type ImperialismGameSpec,
 } from '@/lib/imperialismEngine';
+import { edgeNote } from '@/lib/conquestMomentum';
 import {
   startRun, playRound, continueRun, runScore, roundLabel as labelOfRound,
   featuredPairing, restoreDailyRun, dailyRunRecord, seasonRecords, type ConquestRun,
@@ -177,6 +178,9 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
   const roundLabel = run ? labelOfRound(sport, run) : '';
 
   const featured = useMemo(() => (run ? featuredPairing(sport, run) : null), [sport, run]);
+  const callContext = phase === 'preview' && featured ? matchupMomentum(featured[0], featured[1], owners, records) : undefined;
+  const homePercent = featured && callContext ? Math.round(100 * homeWinProb(sport, featured[0], featured[1], callContext)) : 0;
+  const callNote = callContext ? edgeNote(callContext) : null;
   const score = run ? runScore(run) : 0;
 
   /* Round 529: the round just settled, as scenes. Empty after a reload or
@@ -516,7 +520,7 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
             </p>
             <div className="mt-3 flex items-center justify-center gap-2">
               {[featured[0], featured[1]].map((tid, i) => {
-                const p = i === 0 ? homeWinProb(sport, featured[0], featured[1]) : 1 - homeWinProb(sport, featured[0], featured[1]);
+                const percent = i === 0 ? homePercent : 100 - homePercent;
                 return (
                   <button
                     key={tid}
@@ -530,12 +534,13 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
                     <span className="block h-1.5 w-full rounded-full" style={{ background: colorOf(tid) }} />
                     <span className="mt-1.5 block truncate text-sm font-bold text-foreground">{label(tid)}</span>
                     <span className="block text-[10px] text-muted-foreground">
-                      {regionCountLabel(counts.get(tid) ?? 0)} · {recordLabel(records[tid])} · {Math.round(p * 100)}% to win
+                      {regionCountLabel(counts.get(tid) ?? 0)} · {recordLabel(records[tid])} · {percent}% to win
                     </span>
                   </button>
                 );
               })}
             </div>
+            {callNote && <p className="mt-2 text-xs text-muted-foreground">{callNote}</p>}
             <button
               data-conquest-play
               onClick={play}

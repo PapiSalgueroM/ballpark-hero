@@ -1,3 +1,7 @@
+## November 26 local review, Conquest match odds
+
+The shared Conquest board now uses the same territory and streaks as the match simulation for the featured call. In the November 26 Soccer Daily, Arsenal opened matchday seven against Rennes at 85% on phone and laptop, replacing the stale 81% figure. Each fresh session played six rounds and restored the same seventh-round board after reload. Daily and seeded Free Play controls reproduced both entire prior seasons, including the match outcomes, scores, champions and number of random draws. The score cap matched the measured maximum of 1,037 in the read-only database check.
+
 ## November 26 local review, compact UFC Guesser phones
 
 At 320 pixels, three clue columns split the word Heavyweight inside a card. The small-phone layout now gives each clue one of two columns. Chrome measured two columns at 320 pixels, three at 390 pixels and an unclipped 864-pixel comparison board at both laptop widths. All four two-guess daily saves survived reload.
