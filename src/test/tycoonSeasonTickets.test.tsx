@@ -53,7 +53,7 @@ describe('Stadium Tycoon season tickets', () => {
     const signed = signStadiumSponsor(initial, initial.rep, initial.league!.season, 'attendance');
     const reserved = reload(book(signed));
     expect(reserved.league?.sponsor).toEqual(signed.league?.sponsor);
-    const expected = { day: 1, gf: 0, ga: 0, attendance: 101, seasonTicketFans: 30 };
+    const expected = { day: 1, gf: 0, ga: 0, attendance: 101, seasonTicketFans: 30, ticketOffer: { policy: 'premium', seats: 120 } };
     const watched = reload(play(reserved));
     const away = reload(playAwayMatchdays(reserved, 1, () => 1).state);
     expect(watched.league?.results).toEqual([expected]);
@@ -92,9 +92,9 @@ describe('Stadium Tycoon season tickets', () => {
     const watched = play(reserved);
     const corrupt = structuredClone(watched);
     corrupt.league!.results![0].seasonTicketFans = 31;
-    expect(reload(corrupt).league?.results).toEqual([{ day: 1, gf: 0, ga: 0, attendance: 101 }]);
+    expect(reload(corrupt).league?.results).toEqual([{ day: 1, gf: 0, ga: 0, attendance: 101, ticketOffer: { policy: 'premium', seats: 120 } }]);
     const oldResult = reload(late).league!.results![0];
-    expect(oldResult).toEqual({ day: 1, gf: 0, ga: 0, attendance: 93 });
+    expect(oldResult).toEqual({ day: 1, gf: 0, ga: 0, attendance: 93, ticketOffer: { policy: 'premium', seats: 120 } });
   });
 
   it('shows exact season-ticket quotes in League and retains the offer after a refused save', async () => {

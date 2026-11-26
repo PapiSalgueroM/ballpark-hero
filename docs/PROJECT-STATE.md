@@ -1,3 +1,7 @@
+## 2026-11-26, Stadium Tycoon matchday ticket history
+
+The ticket office shows the last three recorded offers alongside the seats filled at full time. League results keep the offer and capacity that applied to each fixture, including past seasons. Existing score and crowd history still loads when these two details were never recorded. Focused tests cover the switch from Premium to Community, seats opening after a fixture, sponsor results, the season boundary, and reload. An offline browser started a blank club, selected Premium, bought its first $30 stand, and switched to Community. The phone and desktop replays kept both crowds after reload, 67 of 120 seats and 90 of 160. This is a local review branch.
+
 ## 2026-11-26, Replay targets and better records in eight games
 
 The Nov 15 recorded-finishers sample set the remaining eight after Soccer Career and Club Manager. NBA, NFL, NHL and MLB My Career each add a position-specific alternate performance target in the Season Programme. Existing season results settle it through the normal in-game bonus. Career Log adds defensive and efficiency figures for NBA and NFL, plus position-aware hockey and baseball rates using saved appearances.
