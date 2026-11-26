@@ -155,7 +155,17 @@ export function mlbSeasonReview(s: MlbSeasonLine, pos: MlbCareerPos): CareerRevi
     ? [text('Bullpen role', s.bullpenRole === 'closer' ? 'Closer' : 'Setup')] : [];
   const battingApproach = pos !== 'SP' && pos !== 'RP' && s.contactApproach === true
     ? [text('Batting approach', 'Shorter swing'), number('Hits', s.hits), number('At-bats', s.ab)] : [];
-  return { ...stats(s.teamResult, [...regular, ...rates, ...bullpenRole, ...battingApproach], [number('Team postseason games', s.poGames), text('Performance', s.poLine)]), gamesLabel: pos === 'SP' ? 'Starts' : pos === 'RP' ? 'Appearances' : 'Games' };
+  let postseason = [number('Team postseason games', s.poGames)];
+  if (pos === 'RP' && recorded(s.poAppearances) && Number.isSafeInteger(s.poAppearances) && s.poAppearances >= 0
+    && recorded(s.poGames) && Number.isSafeInteger(s.poGames) && s.poGames > 0 && s.poAppearances <= s.poGames) {
+    postseason.push(number('Appearances', s.poAppearances));
+    if (s.poAppearances > 0) postseason.push(number('Strikeouts', s.poStrikeouts), number('ERA', s.poEra, 2));
+  } else if (s.teamResult === 'Missed October' && (s.poGames === undefined || s.poGames === 0) && !s.poLine) {
+    postseason = [text('Postseason', 'Your team missed the playoffs')];
+  } else {
+    postseason.push(text('Performance', s.poLine));
+  }
+  return { ...stats(s.teamResult, [...regular, ...rates, ...bullpenRole, ...battingApproach], postseason), gamesLabel: pos === 'SP' ? 'Starts' : pos === 'RP' ? 'Appearances' : 'Games' };
 }
 
 export function nhlSeasonReview(s: NhlSeasonLine, pos: NhlCareerPos): CareerReviewStats {

@@ -54,7 +54,7 @@ import { careerRecoveryRisk } from './usCareerRecovery';
 import { hallCalibrationOf, legacyRead, type HallCalibration, type LegacyRead, type LegacyWeights } from './careerHallOfFame';
 import { moraleForm } from './careerForm';
 import { stageUsSeasonRating, type UsSeasonRating } from './usInSeasonRating';
-import { MLB_SPOT_START_INJURY_POINTS, mlbSpotStartsAvailable, type ProgrammePreparation } from './usCareerProgramme';
+import { MLB_EXTRA_RELIEF_HEALTH, MLB_SPOT_START_INJURY_POINTS, mlbSpotStartsAvailable, type ProgrammePreparation } from './usCareerProgramme';
 /* Round 422: the share of gross pay that actually reaches the bank, after tax,
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
@@ -175,6 +175,7 @@ export interface MlbSeasonLine {
   bullpenRole?: MlbBullpenRole;
   /** Round 103: October, which is the only month anyone remembers. */
   poGames?: number; poLine?: string;
+  poAppearances?: number; poStrikeouts?: number; poEra?: number; poExtraRelief?: true;
   awards: string[];
   teamResult: string;
   salary: number;
@@ -632,7 +633,11 @@ export function simMlbSeason(
   const useSpotStarts = spotStartPlan !== null && mlbSpotStartsAvailable(c);
   const { games, note, preFatigueGames } = gamesFor(c, rng, useSpotStarts);
   let fullGames = games;
-  if (note) { notes.push(`🚑 ${note}`); c.health -= 8; }
+  if (note) {
+    notes.push(`🚑 ${note}`);
+    // Restore removes the training adjustment after this season.
+    c.health = Math.max(programme?.healthDelta ?? 0, c.health - 8);
+  }
   if (spotStartPlan && c.role === 'starter') notes.push('Spot-start plan unused. You earned a regular rotation spot in camp.');
   /* Round 183: the lineup card decides the workload. A bench bat gets
      half the games, a long-relief arm gets spot starts, relievers are
@@ -730,10 +735,27 @@ export function simMlbSeason(
     const pf = form + clutch - 2;     // you face nothing but their best arms
     line.poGames = poG;
     if (c.pos === 'SP' || c.pos === 'RP') {
-      const starts = c.pos === 'SP' ? Math.max(1, Math.round(poG / 4)) : poG;
+      let appearances = Math.max(1, Math.round(poG / 4));
+      if (c.pos === 'RP') {
+        const workload = Math.min(1, line.games / slate);
+        const rounding = keyedRng(JSON.stringify(['mlb-playoff-relief', c.name, c.team, c.year]))();
+        appearances = Math.floor(poG * workload + rounding);
+        if (programme?.plan.tactics === 'extra-relief' && c.contractYears > 0 && appearances < poG
+          && c.health - programme.healthDelta >= MLB_EXTRA_RELIEF_HEALTH) {
+          appearances += 1;
+          line.poExtraRelief = true;
+          notes.push(`One extra playoff outing cost ${MLB_EXTRA_RELIEF_HEALTH} health.`);
+        }
+        line.poAppearances = appearances;
+      }
       const era = Math.max(0.0, Math.round((5.2 - (pf - 62) * 0.08 + rng() * 0.9) * 100) / 100);
-      const k = Math.max(0, Math.round(starts * (c.pos === 'SP' ? 5.4 : 1.1) * (1 + (pf - 62) * 0.012)));
-      line.poLine = `${starts} appearance${starts === 1 ? '' : 's'}, ${era.toFixed(2)} ERA, ${k} K`;
+      const k = Math.max(0, Math.round(appearances * (c.pos === 'SP' ? 5.4 : 1.1) * (1 + (pf - 62) * 0.012)));
+      if (c.pos === 'RP' && appearances > 0) {
+        line.poStrikeouts = k;
+        line.poEra = era;
+      }
+      line.poLine = appearances === 0 ? 'No pitching appearances'
+        : `${appearances} appearance${appearances === 1 ? '' : 's'}, ${era.toFixed(2)} ERA, ${k} K`;
     } else {
       const ab = Math.max(1, poG * 4);
       const drawn = Math.min(0.5, Math.max(0.0, Math.round((0.216 + (pf - 62) * 0.0028 * prof.contact + rng() * 0.03) * 1000) / 1000));
@@ -747,7 +769,7 @@ export function simMlbSeason(
       line.poLine = `${hits} for ${ab} (.${String(Math.round(shown * 1000)).padStart(3, '0')}), ${hr} HR`;
     }
     notes.push(`📊 Postseason: ${poG} game${poG === 1 ? '' : 's'}, ${line.poLine}.`);
-    const cn = clutchNote(clutch, depth, 'mlb', pf);
+    const cn = line.poAppearances === 0 ? null : clutchNote(clutch, depth, 'mlb', pf);
     if (cn) notes.push(cn);
   }
 

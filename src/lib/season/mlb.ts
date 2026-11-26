@@ -704,7 +704,7 @@ export const MLB_SEASON: UsSeasonBind = {
     /* the season card and every line of this view print an average as .276; the board's review holds 0.276 */
     tileText: (label, value) => (label === 'Batting average' && value.startsWith('0.') ? value.slice(1) : value),
     /* "Your playoffs: 7 games, 9 for 28 (.321), 2 HR", as the NBA's and the NFL's line reads */
-    postLabels: { 'Team postseason games': 'games' },
+    postLabels: { 'Team postseason games': 'games', ERA: 'ERA' },
     groupWords: ['Division', 'League'],
     noPathNote,
     help: (named, opp, pos) => usHelp({

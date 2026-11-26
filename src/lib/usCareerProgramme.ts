@@ -3,10 +3,10 @@ import type { UsSport } from './usCoachCareer';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 
 export type ProgrammeSection = 'workload' | 'tactics' | 'expectation' | 'partnership' | 'bonus' | 'reinvention';
-export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain';
+export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain';
 export interface ProgrammeChoices {
   workload: 'normal' | 'push' | 'recover';
-  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts';
+  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief';
   expectation: 'normal' | 'steady' | 'stretch';
   partnership: 'normal' | 'build';
   bonus: 'normal' | 'steady' | 'stretch' | 'alternate';
@@ -57,6 +57,8 @@ export const NFL_INSIDE_TD_COST = 10;
 const NFL_INSIDE_ROUTES_LABEL = 'Inside routes';
 export const MLB_SPOT_START_INJURY_POINTS = 10;
 const MLB_SPOT_START_LABEL = 'Stretch out for spot starts';
+const MLB_EXTRA_RELIEF_LABEL = 'Take one extra playoff outing';
+export const MLB_EXTRA_RELIEF_HEALTH = 3;
 
 export function nflInsideRoutesAvailable(c: UsCareerCore): boolean {
   return c.pos === 'WR' && c.role !== 'backup' && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0);
@@ -168,6 +170,7 @@ function validPlan(c: UsCareerCore, sport: UsSport, plan: UsCareerProgramme): bo
       if (key === 'tactics' && plan.tactics === 'inside') return sport === 'nfl' && c.pos === 'WR';
       if (key === 'tactics' && plan.tactics === 'playoff-minutes') return sport === 'nba';
       if (key === 'tactics' && plan.tactics === 'spot-starts') return sport === 'mlb' && c.pos === 'SP';
+      if (key === 'tactics' && plan.tactics === 'extra-relief') return sport === 'mlb' && c.pos === 'RP';
       return usProgrammeMenus(c, sport).find(menu => menu.id === key)?.options.some(o => o.id === plan[key]);
     });
 }
@@ -313,6 +316,10 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
       { id: 'normal', label: spotStarts ? 'Usual spot duty' : 'Your usual approach', effect: spotStarts ? 'Keep your usual long-relief and spot-start workload.' : 'Keep your current style.' },
       { id: 'attack', label: attack, effect: attackEffect },
       { id: 'support', label: support, effect: supportEffect },
+      ...(sport === 'mlb' && c.pos === 'RP' && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0) ? [{
+        id: 'extra-relief' as const, label: MLB_EXTRA_RELIEF_LABEL,
+        effect: `Your usual playoff appearances follow your regular season workload. If your club qualifies and you have ${MLB_EXTRA_RELIEF_HEALTH} health to spend, pitch in one more team game. You pay only if you take the mound an extra time.`,
+      }] : []),
       ...(spotStarts ? [{
         id: 'spot-starts' as const,
         label: MLB_SPOT_START_LABEL,
@@ -439,7 +446,8 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
     const playoffMinutes = section === 'tactics' && choice === 'playoff-minutes';
     const spotStarts = section === 'tactics' && choice === 'spot-starts';
     const secondUnitRequest = section === 'tactics' && secondUnit;
-    const label = insideRoutes ? NFL_INSIDE_ROUTES_LABEL : playoffMinutes ? NBA_PLAYOFF_MINUTES_LABEL
+    const extraRelief = section === 'tactics' && choice === 'extra-relief';
+    const label = extraRelief ? MLB_EXTRA_RELIEF_LABEL : insideRoutes ? NFL_INSIDE_ROUTES_LABEL : playoffMinutes ? NBA_PLAYOFF_MINUTES_LABEL
       : spotStarts ? MLB_SPOT_START_LABEL : secondUnitRequest ? NBA_SECOND_UNIT_LABEL
         : menus.find(m => m.id === section)?.options.find(o => o.id === choice)?.label ?? section;
     const decision: ProgrammeDecision = { section, label, outcome: played ? 'completed' : 'interrupted' };
@@ -484,6 +492,13 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
         decision.actual = line.games;
         decision.unit = 'starts';
       }
+    }
+    if (played && extraRelief) {
+      if ('poExtraRelief' in line && line.poExtraRelief === true) {
+        c.health -= MLB_EXTRA_RELIEF_HEALTH;
+        decision.actual = 1;
+        decision.unit = 'extra playoff appearance';
+      } else decision.outcome = 'unused';
     }
     if (played && section === 'expectation') {
       decision.target = gamesTarget({ ...c, year: plan.year, seasons: c.seasons.filter(s => s !== line) }, sport, choice === 'stretch');

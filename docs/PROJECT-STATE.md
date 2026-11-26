@@ -1,3 +1,7 @@
+## November 26 local MLB postseason workload
+
+Relievers now log their own playoff outings, strikeouts and ERA beside the team schedule. A signed reliever can volunteer for one extra appearance for three health, charged once only when played. Historical saves retain their original pitching line. Local production Chromium on phone and laptop verified a ten-game playoff run, the extra outing, a missed postseason and saved results after reload. Eight focused tests passed, and 176 paired simulated careers retained the same underlying seasons and awards.
+
 ## November 26 local verification, NBA scoreboards
 
 The normal NBA, NFL and MLB Season Center simulation passed all 160 checks. It counted final scores in 4,043 NBA schedules and matched every saved record. It also replayed each season without the saved wins and losses to verify the original placement ranges and repair rates. With the exact-record fix disabled in memory, only 267 of 4,043 records matched. That check was the sole failure of the full negative-control run.
