@@ -42,6 +42,7 @@ export function ClubManagerFrame({ catalogue, children }: { catalogue: ReactNode
       <GameShell
         help="none"
         width="wide"
+        protectFromSideRails
         showReportQuestion
         reportGameType="club-manager"
       >

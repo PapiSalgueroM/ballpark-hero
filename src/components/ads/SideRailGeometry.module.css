@@ -1,0 +1,13 @@
+/* Keep the playable width. Bias only where a small offset can leave useful rail space. */
+.catalogue { --dukb-rail-content: 72rem; }
+.soccerCareer { --dukb-rail-content: 64rem; }
+@media (min-width: 1280px) {
+  :is(.catalogue, .soccerCareer)[data-dukb-side-rail-frame] {
+    --dukb-half-gutter: calc((100% - var(--dukb-rail-content)) / 2);
+    margin-inline-start: calc(var(--dukb-half-gutter) - clamp(0px, calc(160px - var(--dukb-half-gutter)), 32px));
+    margin-inline-end: auto;
+  }
+}
+@media (1280px <= width < 1408px) {
+  .catalogue[data-dukb-side-rail-frame] { margin-inline: auto; }
+}

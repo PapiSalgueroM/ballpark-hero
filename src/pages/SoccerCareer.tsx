@@ -1,3 +1,4 @@
+import railGeometry from "@/components/ads/SideRailGeometry.module.css";
 import { SoccerCareerFrame } from "@/components/soccer-career/SoccerCareerFrame";
 import { CentreMountBoundary, keepTabInside, completedRecordsStorage, SaveMovedNotice, useSoccerPastCareers } from "@/components/soccer-career/SoccerCareerOverlays";
 import { SAVE_KEY, adoptSoccerCareerSave } from "@/lib/soccerCareerSaveEntry";
@@ -1573,7 +1574,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
             },
           }}
       >
-        <main ref={mainRef} id="dukb-main" tabIndex={-1} className="flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4">
+        <main ref={mainRef} id="dukb-main" tabIndex={-1} data-dukb-side-rail-frame="" google-side-rail-overlap="false" className={`flex-1 w-full max-w-5xl mx-auto px-3 sm:px-4 py-4 ${railGeometry.soccerCareer}`}>
           {saveMoved && <Suspense fallback={null}><SaveMovedNotice message={rawMoved
             ? "This slot changed. Reload to open the saved career."
             : "This career moved on in another tab. Reload to carry on."} /></Suspense>}
@@ -1613,7 +1614,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
           {career && (
             <div data-career-utilities className="mb-3 flex gap-2 min-[1200px]:contents">
               {!career.retired && (
-                <button type="button" ref={trainingTriggerRef} data-career-utility="training"
+                <button type="button" ref={trainingTriggerRef} data-career-utility="training" google-side-rail-overlap="false"
                   onClick={() => setTrainingOpen(true)} aria-label="Open the training ground"
                   className="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white min-[1200px]:fixed min-[1200px]:bottom-[5.5rem] min-[1200px]:[body[data-consent-pending]_&]:bottom-[calc(var(--dukb-consent-height,230px)_+_5.5rem)] min-[1200px]:right-4 min-[1200px]:z-40 min-[1200px]:w-14 min-[1200px]:h-14 min-[1200px]:flex-none min-[1200px]:px-0 min-[1200px]:text-2xl min-[1200px]:shadow-xl min-[1200px]:[translate:0_var(--career-footer-lift,0px)] data-[career-dock-parked]:invisible hover:bg-zinc-800 active:bg-zinc-700">
                   <span aria-hidden="true">🏋️</span><span className="min-[1200px]:hidden">Training</span>
@@ -1622,7 +1623,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
                   )}
                 </button>
               )}
-              <button type="button" data-career-utility="phone" onClick={() => setPhoneOpen(true)} aria-label="Open your phone"
+              <button type="button" data-career-utility="phone" google-side-rail-overlap="false" onClick={() => setPhoneOpen(true)} aria-label="Open your phone"
                 className="relative min-h-11 flex-1 rounded-xl bg-zinc-900 border-2 border-zinc-700 flex items-center justify-center gap-2 px-3 text-sm font-bold text-white min-[1200px]:fixed min-[1200px]:bottom-5 min-[1200px]:[body[data-consent-pending]_&]:bottom-[calc(var(--dukb-consent-height,230px)_+_1.25rem)] min-[1200px]:right-4 min-[1200px]:z-40 min-[1200px]:w-14 min-[1200px]:h-14 min-[1200px]:flex-none min-[1200px]:px-0 min-[1200px]:text-2xl min-[1200px]:shadow-xl min-[1200px]:[translate:0_var(--career-footer-lift,0px)] data-[career-dock-parked]:invisible hover:bg-zinc-800 active:bg-zinc-700">
                 <span aria-hidden="true">📱</span><span className="min-[1200px]:hidden">Phone</span>
                 {unreadPhoneCount(career) > 0 && (
@@ -4219,7 +4220,7 @@ function GameScreen({ career, clubs, resumeGame, onNextSeason, onAcceptOffer, on
           size and the decorative chevron goes. No label is cut or shortened
           and none changes its name, and the bar stays one row. */}
       <div
-        data-career-action-bar={actionBarFloats ? 'floating' : 'inline'}
+        data-career-action-bar={actionBarFloats ? 'floating' : 'inline'} google-side-rail-overlap="false"
         className={`flex items-center gap-3 max-[399px]:gap-2 ${actionBarFloats ? 'fixed bottom-0 left-0 right-0 z-40 bg-background/95 backdrop-blur border-t border-border px-3 max-[399px]:px-2 sm:px-4 py-3 max-w-5xl mx-auto [translate:0_var(--career-footer-lift,0px)] data-[career-dock-parked]:invisible [body[data-consent-pending]_&]:bottom-[var(--dukb-consent-height,230px)]' : ''}`}
       >
         {career.phase === "retired" ? (
