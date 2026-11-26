@@ -2536,6 +2536,7 @@ export interface UclTie {
 }
 
 export interface SeasonRecord {
+  leagueRecord?: Pick<TableRow, 'w' | 'd' | 'l' | 'gf' | 'ga'>;
   season: number;
   club: string;
   position: number;
@@ -25555,6 +25556,14 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     // was registered above, so a reload registers the same world back.
     leagueOverrides: pr.overrides ?? undefined,
   };
+  // Keep the review's final table line before the new season resets the league.
+  if (summary && summary.season === career.season && summary.club === career.clubName) {
+    const record = state.history.find(row => row.season === summary.season && row.club === summary.club);
+    const { wins: w, draws: d, losses: l, gf, ga } = summary;
+    if (record && [w, d, l, gf, ga].every(n => Number.isSafeInteger(n) && n >= 0)) {
+      record.leagueRecord = { w, d, l, gf, ga };
+    }
+  }
   delete state.realLeagueFixtures;
   if (worldRosterView(rosterCareer)) state.worldRoster = plainCopy(rosterCareer.worldRoster);
   /* Round 154: the deep copy above carried the old spec either way, so make

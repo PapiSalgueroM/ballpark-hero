@@ -100,7 +100,10 @@ describe('Club Manager automatic season checkpoints', () => {
     expect(localStorage.getItem(checkpoint(2))).toBeNull();
     act(() => hook.result.current.nextSeason());
     expect(hook.result.current.phase).toBe('hub');
-    expect(loadCareer()?.season).toBe(career.season + 1);
+    const next = loadCareer()!;
+    expect(next.season).toBe(career.season + 1);
+    const { wins: w, draws: d, losses: l, gf, ga } = career.pendingSummary!;
+    expect(next.history.find(row => row.season === career.season && row.club === career.clubName)?.leagueRecord).toEqual({ w, d, l, gf, ga });
     expect(localStorage.getItem(checkpoint(2)) === original).toBe(true);
     expect(localStorage.getItem(checkpoint(1))).toBeNull();
     expect(localStorage.getItem(parkedKey(3)) === peer).toBe(true);

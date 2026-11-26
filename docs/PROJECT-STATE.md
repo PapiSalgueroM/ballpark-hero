@@ -1,3 +1,7 @@
+## 2026-11-26, League seasons on the manager record
+
+Advancing to summer now copies the final league wins, draws, losses, goals for and goals against from the completed review into that season’s saved record. Manager > League seasons also shows earlier finishes with their original points. A blank 390px browser career played 42 fixtures at Everton and finished 15th with 39 points. Its 9W 12D 17L, 42 goals for and 58 against still appeared after renewing or releasing contracts, continuing to season two and reloading. This is a local review branch.
+
 ## 2026-11-26, Club Manager U21 campaigns
 
 Managers with academy facilities at level 12 can found their own U21 side for 45 million in the save's currency. The first six-match campaign is included. Later entries cost 12 million. Pick one of the club's own under-21 prospects and follow the team's scores on senior league dates. Every second youth fixture can develop the featured prospect, capped at potential. Senior cup dates and reloading do not award extra fixtures.
