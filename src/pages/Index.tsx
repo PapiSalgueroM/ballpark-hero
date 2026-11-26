@@ -499,6 +499,7 @@ export default function Index() {
       <HomeTileStyles />
       {/* Round 215: the skip link in App.tsx points here. */}
       <main id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground">
+        {/* Keep Auto ads outside the home content, with matching desktop gutters. */}
         <div google-side-rail-overlap="false" className={`max-w-6xl mx-auto px-4 pb-12 ${rails.content}`}>
 
           {/* ─── TITLE ROW ───
