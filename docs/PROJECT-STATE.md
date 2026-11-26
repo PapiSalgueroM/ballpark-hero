@@ -1,3 +1,7 @@
+### November 26, 2026. Keep a refused Daily Sprint answer on screen
+
+The local Finals Sprint daily was showing newly started rounds and points even when the browser rejected their saves. A failed start now leaves the start button available. A failed answer or defer keeps the same clue and input. A timed-out result can retry its save. Practice keeps its existing in-memory fallback. Chrome at 390 and 1366 pixels refused the start, first and sixth answer, then restored storage and saved all six once. Both expired a second daily, retried the failed result write, and persisted the finish. A baseline browser reproduced two losses. Five component tests passed.
+
 ### November 26, 2026. Fund a second U21 prospect
 
 Managers can buy an extra development place for 18m per six-game U21 campaign. Founding and renewal costs now reach Finances and a free entry preserves the exact balance. In both phone and laptop playthroughs a funded prospect rose from 65 to 68 over six U21 appearances. Reload kept the growth, fixtures and payment. Across thirty simulated club-seasons, eight funded campaigns produced 48 extra appearances and 24 rating points. All three comparison arms kept the same 461 senior results. The clubs could still accumulate large balances. Thirteen focused tests passed.

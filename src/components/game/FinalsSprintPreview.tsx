@@ -5,7 +5,7 @@ import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import PageSeo from '@/components/seo/PageSeo';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { getEasternDayRange } from '@/lib/dateUtils';
-import { safeLocalStorage } from '@/lib/safeStorage';
+import { safeLocalStorage, safeSetItem } from '@/lib/safeStorage';
 import { shareResult } from '@/lib/share';
 import {
   createPilotRun, currentPilotPrompt, pilotRecap, pilotScore, pilotStorageKey, readPilotRun, updatePilotRun,
@@ -62,6 +62,7 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
   const [seconds, setSeconds] = useState(() => remainingSeconds(run, Date.now()));
   const [input, setInput] = useState('');
   const [feedback, setFeedback] = useState('');
+  const [saveIssue, setSaveIssue] = useState<'start' | 'move' | 'result' | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const resultRef = useRef<HTMLHeadingElement>(null);
   const sportRef = useRef<HTMLButtonElement>(null);
@@ -81,7 +82,13 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
         setFeedback(message);
         if (clear) setInput('');
       };
-      const save = (next: PilotRun) => safeLocalStorage.setItem(storageKey, JSON.stringify(next));
+      const save = (next: PilotRun, step: NonNullable<typeof saveIssue>) => {
+        const encoded = JSON.stringify(next);
+        if (mode === 'practice') safeLocalStorage.setItem(storageKey, encoded);
+        else if (!safeSetItem(storageKey, encoded)) { setSaveIssue(step); return false; }
+        setSaveIssue(null);
+        return true;
+      };
 
       if (action.type === 'start') {
         if (latest && (!latest.completed || mode === 'daily')) {
@@ -89,8 +96,7 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
           return;
         }
         const next = createPilotRun(sport, mode, now);
-        save(next);
-        reveal(next);
+        if (save(next, 'start')) reveal(next);
         return;
       }
       if (!run || !latest || run.day !== latest.day || run.startedAt !== latest.startedAt || run.deadline !== latest.deadline) {
@@ -98,7 +104,7 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
         return;
       }
       if (latest.completed) {
-        save(latest);
+        save(latest, 'result');
         reveal(latest);
         return;
       }
@@ -108,7 +114,7 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
         return;
       }
       const result = updatePilotRun(latest, action, now);
-      if (result.run !== latest) save(result.run);
+      if (result.run !== latest && !save(result.run, 'move')) return;
       reveal(result.run, result.feedback, result.run.completed || currentPilotPrompt(result.run)?.id !== latestPrompt?.id);
     });
   }, [storageKey, read, sport, mode, run, prompt?.id]);
@@ -142,6 +148,7 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
       setRun(next);
       setSeconds(remainingSeconds(next, now));
       setFeedback('');
+      setSaveIssue(null);
     };
     const id = window.setTimeout(rollover, Math.max(0, midnight - Date.now()));
     window.addEventListener('focus', rollover);
@@ -160,6 +167,7 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
       setSeconds(remainingSeconds(next, now));
       setInput('');
       setFeedback('');
+      setSaveIssue(null);
     };
     window.addEventListener('storage', refresh);
     return () => window.removeEventListener('storage', refresh);
@@ -198,6 +206,12 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
       </header>
 
       <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Finals Sprint preview</h1>
+      {saveIssue && <div role="alert" className="mb-3 rounded-lg border border-border p-3 text-sm">
+        {saveIssue === 'start' ? 'Your browser could not start this round. Try again or play Practice.'
+          : saveIssue === 'move' ? 'Your browser could not save this move. Try again while the clock is running.'
+          : 'Time is up. Your browser could not save the finish.'}
+        {saveIssue === 'result' && <button type="button" className={SECONDARY + ' ml-2'} onClick={() => change({ type: 'tick' })}>Retry saving result</button>}
+      </div>}
       {!prompt && <p className="mb-5 mt-1 text-sm text-muted-foreground">Play a 60-second round on this device.</p>}
 
       {!prompt && (

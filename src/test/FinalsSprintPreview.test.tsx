@@ -160,6 +160,42 @@ describe('Alphabet Sprint Finals preview', () => {
     expect(pilotScore(receipt())).toBe(0);
   });
 
+  it('retains the daily clue and typed answer when storage is full, then credits the successful retry once', async () => {
+    const write = Storage.prototype.setItem;
+    let denied = true;
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
+      if (denied && key === dailyKey) throw new DOMException('Storage full', 'QuotaExceededError');
+      write.call(this, key, value);
+    });
+    show(PREVIEW);
+    const start = await screen.findByRole('button', { name: 'Start daily preview' });
+    fireEvent.click(start);
+    expect(screen.getByRole('alert')).toHaveTextContent('could not start');
+    expect(localStorage.getItem(dailyKey)).toBeNull();
+    denied = false;
+    fireEvent.click(start);
+    const first = currentPilotPrompt(receipt())!;
+    denied = true;
+    submit(first.finalists[0]);
+    expect(screen.getByRole('alert')).toHaveTextContent('could not save this move');
+    expect(activeClue()).toHaveTextContent(first.text);
+    expect(screen.getByRole('textbox', { name: 'Team name' })).toHaveValue(first.finalists[0]);
+    expect(receipt().answers).toHaveLength(0);
+    denied = false;
+    submit(first.finalists[0]);
+    expect(receipt().answers).toHaveLength(1);
+    denied = true;
+    now += 61000;
+    fireEvent(window, new Event('focus'));
+    expect(await screen.findByRole('region', { name: 'Round results' })).toBeVisible();
+    expect(JSON.parse(localStorage.getItem(dailyKey)!).completed).toBe(false);
+    denied = false;
+    fireEvent.click(screen.getByRole('button', { name: 'Retry saving result' }));
+    expect(JSON.parse(localStorage.getItem(dailyKey)!).completed).toBe(true);
+    expect(screen.queryByRole('alert')).toBeNull();
+    expect(pilotScore(receipt())).toBe(first.points);
+  });
+
   it('keeps the practice round playable and replayable when the browser refuses storage writes', async () => {
     const write = Storage.prototype.setItem;
     vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (this: Storage, key, value) {
