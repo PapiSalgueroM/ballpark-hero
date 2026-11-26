@@ -1,3 +1,13 @@
+## 2026-11-26, Soccer and NBA Finals Sprint preview
+
+A link inside Alphabet Sprint opens six typed Finals questions. Each board uses two clues at each editorial difficulty, and accepts either finalist until a team has been used. One clue can be deferred. The local Daily rolls over at Eastern midnight and Practice has unlimited rounds. The preview uses its own device saves. The score maxes out at 100.
+
+The version 1 fact bank checks 12 men's World Cup finals and 12 NBA Finals series. Only the two teams that played that year's final qualify. NBA years use the year the Finals ended. The data file records the official and independent historical sources. The bank is a limited pilot. Publication of a broader Daily and a ranked scoreboard are separate milestones.
+
+Two controls cover the tricky paths. The browser replay in scripts/qa/playFinalsSprintPreview.mjs completes both sports from Alphabet Sprint with remote requests blocked. It tests defer, type and submit, mid-round reload, settled score, source links, timeout and practice replay at phone and desktop widths. Across 732 daily boards all legal answer sequences left a path to a full clear. Disabling the solvability filter allowed a dead end on 266 boards in the same sample.
+
+Rollback is a revert of the pilot commit. Classic Sprint scores and saves use separate keys.
+
 ## 2026-11-26, Soccer Conquest call results
 
 The Soccer Conquest round recap shows the club you picked, the winner and the call points earned. A Daily reload rebuilds the same receipt from the saved calls and match results. The next fixture opens with a fresh choice.

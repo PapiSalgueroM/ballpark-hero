@@ -15,10 +15,10 @@
  * All users share the same puzzle rollover at midnight ET, regardless of
  * their local clock or browser timezone.
  */
-export function getTodayET(): string {
+export function getTodayET(now = new Date()): string {
   return new Intl.DateTimeFormat('en-CA', {
     timeZone: 'America/New_York',
-  }).format(new Date()); // e.g. "2026-05-25"
+  }).format(now); // e.g. "2026-05-25"
 }
 
 /** UTC bounds for the given Eastern calendar day, with an exclusive end. */
