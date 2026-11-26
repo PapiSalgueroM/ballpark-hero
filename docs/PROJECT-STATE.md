@@ -1,3 +1,7 @@
+## November 26 local NHL checking assignments
+
+Signed centres and wings can trade personal postseason scoring for a higher chance of winning each series. The plan records the actual series bonus and scoring cost in the Career Log and expires unused if the team misses the playoffs. Two fresh Toronto draftees played three seasons on the local phone and desktop production build. Both missed twice, then reached Round 2 in 2028. The fourth-line centre played 13 playoff games, finished with four goals and four assists, and reopened the two-point cost after reload. A 280-pair simulation kept regular seasons and qualification identical. All 464 default-path careers still matched their committed historical digests.
+
 ## November 26 Soccer Career retirement replay verification
 
 The Keep Playing compatibility harness once again reconstructs the earlier engine with the current rating helpers, historical-arrival hooks and page call. The normal CLI passed 1,461 checks over 180 careers, with no skipped years and 106 correctly recorded injury seasons. Restoring the old decline behavior in the test engine produced 532 failures, including 24 reloaded careers losing the pending season. The repair only changes the test harness.

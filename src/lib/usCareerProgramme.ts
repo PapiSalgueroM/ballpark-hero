@@ -3,10 +3,10 @@ import type { UsSport } from './usCoachCareer';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 
 export type ProgrammeSection = 'workload' | 'tactics' | 'expectation' | 'partnership' | 'bonus' | 'reinvention';
-export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain';
+export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'playoff-checking' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain';
 export interface ProgrammeChoices {
   workload: 'normal' | 'push' | 'recover';
-  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief';
+  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'playoff-checking';
   expectation: 'normal' | 'steady' | 'stretch';
   partnership: 'normal' | 'build';
   bonus: 'normal' | 'steady' | 'stretch' | 'alternate';
@@ -49,6 +49,10 @@ export const NBA_EXTRA_PLAYOFF_MINUTES = 3;
 export const NBA_PLAYOFF_HEALTH_COST = 4;
 const NBA_PLAYOFF_MINUTES_LABEL = 'Take extra playoff minutes';
 const NBA_SECOND_UNIT_LABEL = 'Lead the second unit';
+export const NHL_CHECKING_SERIES_POINTS = 4;
+export const NHL_CHECKING_SCORING_COST = 20;
+const NHL_CHECKING_LABEL = 'Take a playoff checking role';
+export const nhlCheckingForward = (pos: string) => pos === 'C' || pos === 'LW' || pos === 'RW';
 export const NHL_SHUTDOWN_BERTH_POINTS = 6;
 export const NHL_SHUTDOWN_OFFENSIVE_COST = 10;
 export const NFL_WR_REC_CAP = 145;
@@ -170,6 +174,7 @@ function validPlan(c: UsCareerCore, sport: UsSport, plan: UsCareerProgramme): bo
       if (key === 'tactics' && plan.tactics === 'inside') return sport === 'nfl' && c.pos === 'WR';
       if (key === 'tactics' && plan.tactics === 'playoff-minutes') return sport === 'nba';
       if (key === 'tactics' && plan.tactics === 'spot-starts') return sport === 'mlb' && c.pos === 'SP';
+      if (key === 'tactics' && plan.tactics === 'playoff-checking') return sport === 'nhl' && nhlCheckingForward(c.pos);
       if (key === 'tactics' && plan.tactics === 'extra-relief') return sport === 'mlb' && c.pos === 'RP';
       return usProgrammeMenus(c, sport).find(menu => menu.id === key)?.options.some(o => o.id === plan[key]);
     });
@@ -345,6 +350,10 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
         label: NBA_PLAYOFF_MINUTES_LABEL,
         effect: `Signed starters who have played a season can add 1–${NBA_EXTRA_PLAYOFF_MINUTES} minutes per playoff game, up to ${NBA_PLAYOFF_MINUTES_CAP}. Keep your starting spot after camp, make the playoffs and have at least ${NBA_PLAYOFF_HEALTH_COST} health after the regular season. You spend ${NBA_PLAYOFF_HEALTH_COST} health after the season only if you play extra minutes.`,
       }] : []),
+      ...(sport === 'nhl' && nhlCheckingForward(c.pos) && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0) ? [{
+        id: 'playoff-checking' as const, label: NHL_CHECKING_LABEL,
+        effect: `Check the opponent's scoring line. Each playoff series gets +${NHL_CHECKING_SERIES_POINTS} percentage points to advance (+${NHL_CHECKING_SERIES_POINTS / 2} from the fourth line). Your goals and assists in those games drop by ${NHL_CHECKING_SCORING_COST}% before rounding. Missing the playoffs leaves the plan unused.`,
+      }] : []),
       ...(sport === 'nhl' && c.pos === 'D' ? [{
         id: 'defend' as const,
         label: 'Shutdown assignment',
@@ -447,7 +456,8 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
     const spotStarts = section === 'tactics' && choice === 'spot-starts';
     const secondUnitRequest = section === 'tactics' && secondUnit;
     const extraRelief = section === 'tactics' && choice === 'extra-relief';
-    const label = extraRelief ? MLB_EXTRA_RELIEF_LABEL : insideRoutes ? NFL_INSIDE_ROUTES_LABEL : playoffMinutes ? NBA_PLAYOFF_MINUTES_LABEL
+    const checking = sport === 'nhl' && section === 'tactics' && choice === 'playoff-checking';
+    const label = checking ? NHL_CHECKING_LABEL : extraRelief ? MLB_EXTRA_RELIEF_LABEL : insideRoutes ? NFL_INSIDE_ROUTES_LABEL : playoffMinutes ? NBA_PLAYOFF_MINUTES_LABEL
       : spotStarts ? MLB_SPOT_START_LABEL : secondUnitRequest ? NBA_SECOND_UNIT_LABEL
         : menus.find(m => m.id === section)?.options.find(o => o.id === choice)?.label ?? section;
     const decision: ProgrammeDecision = { section, label, outcome: played ? 'completed' : 'interrupted' };
@@ -462,6 +472,13 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
     if (played && sport === 'nhl' && section === 'tactics' && choice === 'defend' && preparation?.nhlShutdownBerthGain !== undefined) {
       decision.actual = preparation.nhlShutdownBerthGain;
       decision.unit = 'percentage points of playoff qualification';
+    }
+    if (played && checking) {
+      const saved = (line as UsCareerSeason & { poChecking?: { pointsTraded: number } }).poChecking;
+      if (saved && validNumber(saved.pointsTraded)) {
+        decision.actual = saved.pointsTraded;
+        decision.unit = 'points traded for checking in this playoff run';
+      } else decision.outcome = 'unused';
     }
     if (played && insideRoutes && preparation?.nflInsideRoutesGain !== undefined) {
       decision.actual = preparation.nflInsideRoutesGain;

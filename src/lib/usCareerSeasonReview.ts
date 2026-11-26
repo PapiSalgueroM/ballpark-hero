@@ -184,7 +184,10 @@ export function nhlSeasonReview(s: NhlSeasonLine, pos: NhlCareerPos): CareerRevi
       : [number('Goals', s.goals), number('Assists', s.assists), number('Points', s.points),
         ...perOpportunity('Points per game', s.points, s.games)],
     pos === 'G' ? goaliePostseason
-      : [number('Games', s.poGames), number('Goals', s.poGoals), number('Assists', s.poAssists), number('Points', s.poPoints)]);
+      : [number('Games', s.poGames), number('Goals', s.poGoals), number('Assists', s.poAssists), number('Points', s.poPoints),
+        ...(s.poChecking && recorded(s.poChecking.seriesEdge) && recorded(s.poChecking.pointsTraded)
+          ? [text('Playoff role', 'Checking line'), number('Series win chance added (percentage points)', s.poChecking.seriesEdge),
+             number('Points traded in this run', s.poChecking.pointsTraded)] : [])]);
   return tandem ? { ...detail, gamesLabel: 'Starts' } : detail;
 }
 
