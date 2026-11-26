@@ -53,7 +53,7 @@ const AcademyProspects = lazy(() => import('@/components/tycoon/AcademyProspects
 type Panel = 'scouting' | 'coaching' | 'dorms' | 'agents' | 'legacy' | 'packs' | 'firstTeam' | null;
 
 export default function AcademyPanel({ visible = true, stylesReady = false, onStatus, onSnapshot }: { visible?: boolean; stylesReady?: boolean; onStatus?: (s: AcademyStatus) => void; onSnapshot?: (s: FactoryState, readOwnedSnapshot: () => FactoryState | null) => void }) {
-  const { state: s, readOwnedSnapshot, saveMoved, recovery, retryAcademySave, floaters, doBuy, doSetCoachingFocus, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked, doPromote, doSellSenior, academySaveBlocked, doEquipBoot, doUpgradeBoot, gearSaveBlocked } = useWonderkidFactory();
+  const { state: s, readOwnedSnapshot, saveMoved, recovery, retryAcademySave, floaters, doBuy, doSetCoachingFocus, doDevelopmentTarget, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked, doPromote, doSellSenior, academySaveBlocked, doEquipBoot, doUpgradeBoot, gearSaveBlocked } = useWonderkidFactory();
   /* Round 585: the gem ledger, shared with the stadium that earns it. */
   const ledger = useTycoonRewards();
   const [panel, setPanel] = useState<Panel>(null);
@@ -319,7 +319,7 @@ export default function AcademyPanel({ visible = true, stylesReady = false, onSt
         <div className="space-y-2">
           <HubPanelHeader title={FACILITIES.find(f => f.id === panel)!.label} onBack={() => setPanel(null)} />
           <Suspense fallback={<p data-no-prerender role="status" className="min-h-48 p-3 text-sm text-muted-foreground">Opening facility...</p>}>
-            <AcademyFacilityPanel s={s} panel={panel} cap={cap} doBuy={doBuy} onFocus={doSetCoachingFocus} />
+            <AcademyFacilityPanel s={s} panel={panel} cap={cap} doBuy={doBuy} onFocus={doSetCoachingFocus} onDevelopmentTarget={doDevelopmentTarget} />
           </Suspense>
         </div>
       )}

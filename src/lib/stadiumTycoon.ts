@@ -511,6 +511,8 @@ export interface TycoonState {
   matchNo: number;
   /** Full-time count after which the prepaid Stands level opens. */
   standsOpenAfterMatch?: number;
+  expansionTarget?: number;
+  expansionTargetsCompleted?: number;
   /** Wall-clock ms of the last save, for offline earnings. */
   savedAt: number;
   /** Lifetime counters for the header and the harness. */
@@ -1096,6 +1098,33 @@ const sponsorCrowdTarget = (stands: number) => Math.ceil(seatCount(stands) * 0.8
 /** Seats in the ground. The starting ground is a fence and two benches. */
 export function capacity(s: TycoonState): number {
   return seatCount(levelOf(s, 'stands'));
+}
+
+export type ExpansionTargetAction = 1 | 2 | 'claim' | 'cancel';
+
+export function updateExpansionTarget(s: TycoonState, action: ExpansionTargetAction): TycoonState {
+  const stands = levelOf(s, 'stands');
+  if (action === 'claim') {
+    if (s.expansionTarget === undefined || stands < s.expansionTarget) return s;
+    return { ...s, expansionTarget: undefined, expansionTargetsCompleted: Math.min(Number.MAX_SAFE_INTEGER, (s.expansionTargetsCompleted ?? 0) + 1) };
+  }
+  if (action === 'cancel') return s.expansionTarget === undefined ? s : { ...s, expansionTarget: undefined };
+  if (s.expansionTarget !== undefined || stands + action > trackById('stands').maxLevel) return s;
+  return { ...s, expansionTarget: stands + action };
+}
+
+export function recordedLeagueCrowd(s: TycoonState): { average: number; matches: number } | null {
+  const leagues = [...(s.completedLeagueHistory ?? []), s.lastCompletedLeague, s.league];
+  let total = 0;
+  let matches = 0;
+  for (const league of leagues) {
+    for (const match of league?.results ?? []) {
+      if (match.attendance === undefined) continue;
+      total += match.attendance;
+      matches++;
+    }
+  }
+  return matches ? { average: Math.round(total / matches), matches } : null;
 }
 
 export type TicketPolicy = 'standard' | 'community' | 'premium';
@@ -1819,6 +1848,7 @@ export function prestige(s: TycoonState, now: number): TycoonState {
     league: newLeague(s.rep + 1, 0, 0, s.clubName === YOUR_CLUB ? undefined : s.clubName, 0),
     leagueTitles: s.leagueTitles ?? 0,
     ...(s.clubName ? { clubName: s.clubName } : {}),
+    ...(s.expansionTargetsCompleted === undefined ? {} : { expansionTargetsCompleted: s.expansionTargetsCompleted }),
   };
 }
 
@@ -1974,6 +2004,11 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
       cleanLevels[t.id] = Number.isFinite(lvl) && lvl > 0 ? Math.min(Math.floor(lvl), t.maxLevel) : 0;
     }
     s.levels = cleanLevels;
+    if (s.expansionTarget !== undefined && (!Number.isSafeInteger(s.expansionTarget) || s.expansionTarget < 1
+      || s.expansionTarget > Math.min(trackById('stands').maxLevel, levelOf(s, 'stands') + 2))) delete s.expansionTarget;
+    if (s.expansionTargetsCompleted !== undefined && (!Number.isSafeInteger(s.expansionTargetsCompleted) || s.expansionTargetsCompleted < 0)) {
+      delete s.expansionTargetsCompleted;
+    }
     /* Round 581: the match and the counters. A whole minute from 0 to 89, the
        banked seconds inside one match minute, goals a match can hold, and
        counters that are whole and never negative. matchSec stays absent on a

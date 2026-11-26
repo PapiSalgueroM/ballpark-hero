@@ -20,6 +20,26 @@ const squad = (keeperValue = 29): WxPlayer[] => cards.map(([name, country, posit
 const shape = '4-3-3';
 
 describe('World XI season approach', () => {
+  it('replays a riskier fixture, preserves expected points and reconciles home and away points', () => {
+    for (const players of [squad(), squad().map(p => ({ ...p, value: 0 })), squad().map(p => ({ ...p, value: 1_000_000_000 }))]) {
+      const balanced = worldXiMatchOdds(players, 'balanced');
+      const attack = worldXiMatchOdds(players, 'attack');
+      expect(attack.win).toBeGreaterThan(balanced.win);
+      expect(attack.draw).toBeLessThan(balanced.draw);
+      expect(attack.loss).toBeGreaterThan(balanced.loss);
+      expect(attack.win + attack.draw + attack.loss).toBeCloseTo(1, 12);
+      expect(attack.win * 3 + attack.draw).toBeCloseTo(balanced.win * 3 + balanced.draw, 12);
+    }
+    const players = squad();
+    const report = simulateWorldXiSeason(players, shape, undefined, 'attack');
+    expect(simulateWorldXiSeason(players, shape, undefined, 'attack')).toEqual(report);
+    expect(report.narrative).toContain('On the same rolls, Balanced would finish 3rd with 105 points and 0 draws.');
+    expect(report.venuePoints!.home + report.venuePoints!.away).toBe(report.points);
+    expect(report.venuePoints!.home).toBeLessThanOrEqual(57);
+    expect(report.venuePoints!.away).toBeLessThanOrEqual(57);
+    expect(simulateWorldXiSeason(players, shape, undefined, 'protect').venuePoints).toBeUndefined();
+  });
+
   it('previews the same expected points with more draws and fewer wins and losses', () => {
     for (const players of [squad(), squad().map(p => ({ ...p, value: 0 })), squad().map(p => ({ ...p, value: 1_000_000_000 }))]) {
       const balanced = worldXiMatchOdds(players, 'balanced');

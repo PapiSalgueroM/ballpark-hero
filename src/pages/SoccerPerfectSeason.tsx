@@ -85,6 +85,7 @@ function DraftPanel({ view, game, act }: { view: View; game: Game; act: ButtonAc
 }
 
 function ModeMenu({ game, act }: { game: Game; act: ButtonAction }) {
+  const [noRerolls, setNoRerolls] = useState(false);
   const { savedDaily, savedUnlimited } = game;
   const daily = savedDaily.run;
   const unlimited = savedUnlimited.run;
@@ -111,10 +112,15 @@ function ModeMenu({ game, act }: { game: Game; act: ButtonAction }) {
       {savedUnlimited.invalid && <p className="text-xs text-yellow-400">The saved Unlimited season could not be read.</p>}
       {unlimited && <button type="button" data-soccer-ps-action="resume-unlimited" className={cn(secondaryButton, 'w-full')}
         onClick={event => act(event, game.resumeUnlimited)}>
-        {unlimited.completionRecorded ? 'View Unlimited result' : 'Resume Unlimited'}
+        {unlimited.completionRecorded ? 'View Unlimited result' : 'Resume Unlimited'}{unlimited.noRerolls && ' (No Rerolls)'}
       </button>}
+      <label className="flex min-h-11 cursor-pointer items-center gap-2 text-sm font-semibold">
+        <input type="checkbox" checked={noRerolls} onChange={event => setNoRerolls(event.currentTarget.checked)} className="h-4 w-4 accent-primary" />
+        No Rerolls practice
+      </label>
+      {noRerolls && <p className="text-xs text-muted-foreground">Pick from every club in the opening draw. Practice runs stay off the site leaderboard.</p>}
       <button type="button" data-soccer-ps-action="unlimited" className={cn(primaryButton, 'w-full')}
-        onClick={event => act(event, game.startUnlimited)}>New Unlimited</button>
+        onClick={event => act(event, () => game.startUnlimited(noRerolls))}>New Unlimited</button>
       {unlimited && <p className="text-xs text-muted-foreground">{game.pendingUnlimited
         ? 'A new draw discards your unsaved result.' : 'A new draw replaces your last Unlimited run.'}</p>}
     </div>
@@ -154,10 +160,14 @@ function SeasonPanel({ game, view, act, freshFinish }: { game: Game; view: View;
         outcome={record.perfect ? 'win' : 'close'}
         score={`${record.wins}/${SOCCER_PS_GAMES}`} scoreLabel="wins"
         outcomeEmoji={record.perfect ? '🏆' : '⚽'} headline={headline} statLine={recordLine}
-        statRow={[{ label: 'Site score', value: `${record.score}/100` }]}
+        statRow={[
+          { label: run.noRerolls ? 'Practice score' : 'Site score', value: `${record.score}/100` },
+          { label: 'Best win run', value: record.longestWinRun },
+          { label: 'Best unbeaten run', value: record.longestUnbeatenRun },
+        ]}
         emojiGrid={season.games.map(outcome => OUTCOME_EMOJI[outcome]).join('')}
         share={{ score: recordLine, gameName: TITLE, gamePath: SOCCER_PS_PATH }}
-        onPlayAgain={run.mode === 'unlimited' && !game.pendingUnlimited ? game.startUnlimited : undefined}
+        onPlayAgain={run.mode === 'unlimited' && !game.pendingUnlimited ? () => game.startUnlimited(run.noRerolls) : undefined}
         playAgainLabel="New Unlimited"
       />
     </RestoredResult> : <>
@@ -224,12 +234,12 @@ export default function SoccerPerfectSeason() {
         {view && <StartingXI view={view} />}
         <section key={panelKey} ref={revealRef} data-soccer-ps={phase} className="space-y-3">
           {game.canRetrySave && <div className="rounded-xl border border-border bg-card p-3 text-sm">
-            <p role="status">Your result could not be saved. Retry to submit your score.</p>
+            <p role="status">{run?.noRerolls ? "Your practice result could not be saved. Try saving it again." : "Your result could not be saved. Retry to submit your score."}</p>
             <button type="button" className={cn(secondaryButton, 'mt-2')}
               onClick={event => act(event, game.retrySave)}>Retry save</button>
           </div>}
           {!run || !view ? <ModeMenu game={game} act={act} /> : <>
-            <p className="text-xs font-semibold text-muted-foreground">{run.mode === 'daily' ? `Daily · ${run.date}` : 'Unlimited'}</p>
+            <p className="text-xs font-semibold text-muted-foreground">{run.mode === 'daily' ? `Daily · ${run.date}` : run.noRerolls ? 'Unlimited · No Rerolls practice' : 'Unlimited'}</p>
             {view.currentClub ? <DraftPanel view={view} game={game} act={act} />
               : <SeasonPanel view={view} game={game} act={act} freshFinish={freshFinish} />}
             <button type="button" data-soccer-ps-action="back-menu"

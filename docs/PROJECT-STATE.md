@@ -1,3 +1,11 @@
+## 2026-11-26, Replay targets and better records in eight games
+
+The Nov 15 recorded-finishers sample set the remaining eight after Soccer Career and Club Manager. NBA, NFL, NHL and MLB My Career each add a position-specific alternate performance target in the Season Programme. Existing season results settle it through the normal in-game bonus. Career Log adds defensive and efficiency figures for NBA and NFL, plus position-aware hockey and baseball rates using saved appearances.
+
+Soccer Perfect Season adds an optional No rerolls Unlimited run and longest streaks from the played matches. World XI adds Go for the win, a more volatile tactical choice that can turn draws into a win or a loss. Its report shows home and away points. All three World XI reports show goal difference.
+
+Stadium Tycoon tracks competitive home attendance and lets a manager record an expansion after the new stands open. Wonderkid Factory tracks academy rating and lets a manager pick a prospect for a development goal. These two achievements are career records.
+
 ## 2026-11-25, Quieter ads and career season comparisons
 
 AdSense anchor and vignette ads are off for douknowball.com. Home shows one in-page banner after the first sport on phones and above the footer on desktop. The phone slot uses a 100-pixel-tall display unit. AdSense allows desktop side rails on either edge. The homepage marks the game area with Google’s overlap protection. AdSense confirmed the save and says propagation can take up to an hour.

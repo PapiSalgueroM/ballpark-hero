@@ -2,7 +2,7 @@ import type { CareerPos, SeasonLine } from '@/lib/nflMyCareer';
 import type { NbaSeasonLine } from '@/lib/nbaMyCareer';
 import type { MlbCareerPos, MlbSeasonLine } from '@/lib/mlbMyCareer';
 import type { NhlCareerPos, NhlSeasonLine } from '@/lib/nhlMyCareer';
-import type { UsCareerCore, UsCareerSport } from '@/lib/usCareerSport';
+import type { UsCareerCore, UsCareerSeason, UsCareerSport } from '@/lib/usCareerSport';
 import { formatNumber } from '@/lib/formatNumber';
 
 export interface CareerReviewStat { label: string; value: string; numeric?: { raw?: number; digits?: number } }
@@ -14,6 +14,11 @@ const number = (label: string, value: number | undefined, digits?: number): Care
   value: recorded(value) ? formatNumber(digits === undefined ? value : value.toFixed(digits)) : 'Not recorded',
   numeric: { raw: recorded(value) ? value : undefined, digits },
 });
+function perOpportunity(label: string, count: number | undefined, opportunities: number, scale = 1): CareerReviewStat[] {
+  if (!recorded(count) || !Number.isSafeInteger(count) || count < 0
+    || !Number.isSafeInteger(opportunities) || opportunities <= 0) return [];
+  return [number(label, count / opportunities * scale, scale === 1 ? 2 : 1)];
+}
 const text = (label: string, value: string | undefined): CareerReviewStat => ({ label, value: typeof value === 'string' && value.trim() ? value : 'Not recorded' });
 const stats = (result: string, regular: CareerReviewStat[], postseason: CareerReviewStat[]): CareerReviewStats =>
   result === 'SUSPENDED'
@@ -66,7 +71,45 @@ export function nbaSeasonReview(s: NbaSeasonLine): CareerReviewStats {
   return stats(s.teamResult, regular, postseason);
 }
 
+const nflOverviewRates: Partial<Record<CareerPos, { key: keyof SeasonLine; label: string }>> = {
+  QB: { key: 'passYds', label: 'Passing yards per appearance' },
+  RB: { key: 'rushYds', label: 'Rushing yards per appearance' },
+  WR: { key: 'recYds', label: 'Receiving yards per appearance' },
+  TE: { key: 'recYds', label: 'Receiving yards per appearance' },
+  LB: { key: 'tackles', label: 'Tackles per appearance' },
+  CB: { key: 'passDef', label: 'Passes defended per appearance' },
+  EDGE: { key: 'sacks', label: 'Sacks per appearance' },
+};
+
+export function careerSeasonOverviewStat(season: UsCareerSeason, sport: UsCareerSport['slug'], pos: string) {
+  if (season.teamResult === 'SUSPENDED' || !Number.isSafeInteger(season.games) || season.games <= 0) return null;
+  if (sport === 'nba') {
+    const line = season as NbaSeasonLine;
+    const big = pos === 'C' || pos === 'PF';
+    const value = big ? line.bpg : line.spg;
+    return recorded(value) && value >= 0 ? { label: big ? 'Blocks per game' : 'Steals per game', value: value.toFixed(1) } : null;
+  }
+  if (sport !== 'nfl') return null;
+  const line = season as SeasonLine;
+  if (pos === 'K') {
+    const { fgMade, fgAtt } = line;
+    return recorded(fgMade) && recorded(fgAtt) && Number.isSafeInteger(fgMade) && Number.isSafeInteger(fgAtt)
+      && fgAtt > 0 && fgMade >= 0 && fgMade <= fgAtt
+      ? { label: 'Field goal percentage', value: `${(100 * fgMade / fgAtt).toFixed(1)}%` } : null;
+  }
+  const rate = nflOverviewRates[pos as CareerPos];
+  if (!rate) return null;
+  const value = line[rate.key];
+  return typeof value === 'number' && Number.isFinite(value) && value >= 0
+    ? { label: rate.label, value: formatNumber((value / season.games).toFixed(1)) } : null;
+}
+
 export function mlbSeasonReview(s: MlbSeasonLine, pos: MlbCareerPos): CareerReviewStats {
+  const rates = pos === 'SP' ? perOpportunity('Strikeouts per start', s.so, s.games)
+    : pos === 'RP' ? [
+      ...perOpportunity('Strikeouts per appearance', s.so, s.games),
+      ...perOpportunity('Saves per 100 appearances', recorded(s.saves) && s.saves <= s.games ? s.saves : undefined, s.games, 100),
+    ] : perOpportunity('Doubles per 100 games', s.doubles, s.games, 100);
   const regular = pos === 'SP'
     ? [number('Wins', s.wins), number('Losses', s.lossesP), number('ERA', s.era, 2), number('Strikeouts', s.so)]
     : pos === 'RP'
@@ -77,7 +120,7 @@ export function mlbSeasonReview(s: MlbSeasonLine, pos: MlbCareerPos): CareerRevi
     ? [text('Bullpen role', s.bullpenRole === 'closer' ? 'Closer' : 'Setup')] : [];
   const battingApproach = pos !== 'SP' && pos !== 'RP' && s.contactApproach === true
     ? [text('Batting approach', 'Shorter swing'), number('Hits', s.hits), number('At-bats', s.ab)] : [];
-  return { ...stats(s.teamResult, [...regular, ...bullpenRole, ...battingApproach], [number('Team postseason games', s.poGames), text('Performance', s.poLine)]), gamesLabel: pos === 'SP' ? 'Starts' : pos === 'RP' ? 'Appearances' : 'Games' };
+  return { ...stats(s.teamResult, [...regular, ...rates, ...bullpenRole, ...battingApproach], [number('Team postseason games', s.poGames), text('Performance', s.poLine)]), gamesLabel: pos === 'SP' ? 'Starts' : pos === 'RP' ? 'Appearances' : 'Games' };
 }
 
 export function nhlSeasonReview(s: NhlSeasonLine, pos: NhlCareerPos): CareerReviewStats {
@@ -91,8 +134,10 @@ export function nhlSeasonReview(s: NhlSeasonLine, pos: NhlCareerPos): CareerRevi
     : [number('Games', poGames), ...goalieResults];
   const detail = stats(s.teamResult,
     pos === 'G' ? [number('Wins', s.wins), number('Save percentage', s.svpct, 3),
+      ...perOpportunity('Wins per 100 appearances', recorded(s.wins) && s.wins <= s.games ? s.wins : undefined, s.games, 100),
       ...(tandem ? [text('Goalie workload', 'Shared crease'), number('Planned starts', s.tandemStarts)] : [])]
-      : [number('Goals', s.goals), number('Assists', s.assists), number('Points', s.points)],
+      : [number('Goals', s.goals), number('Assists', s.assists), number('Points', s.points),
+        ...perOpportunity('Points per game', s.points, s.games)],
     pos === 'G' ? goaliePostseason
       : [number('Games', s.poGames), number('Goals', s.poGoals), number('Assists', s.poAssists), number('Points', s.poPoints)]);
   return tandem ? { ...detail, gamesLabel: 'Starts' } : detail;
