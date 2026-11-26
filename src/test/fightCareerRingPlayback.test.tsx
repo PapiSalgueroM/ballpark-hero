@@ -62,6 +62,31 @@ function startSavedBout() {
 }
 
 describe('Fight Career ring playback', () => {
+  it('reopens the settled bout card after reloading, including between-fight events', () => {
+    const { view, savedBytes, expected } = startSavedBout();
+    view.unmount();
+    const reopened = render(<FightCareerBoard />);
+    fireEvent.click(reopened.getByText('Fight record (1)'));
+    fireEvent.click(reopened.getByLabelText('Scorecard for bout 1 against Recap Opponent'));
+    const table = reopened.getByRole('table');
+    const rows = [...table.querySelectorAll('tbody tr')].map(row => [...row.children].map(cell => cell.textContent));
+    expect(rows).toEqual(expected.result.rounds.map(r => [String(r.round), r.playerScore + '-' + r.oppScore, r.playerLanded + '-' + r.oppLanded]));
+    expect(table.querySelector('tfoot')?.textContent).toContain(expected.result.playerCard + '-' + expected.result.oppCard);
+    fireEvent.click(reopened.getByLabelText('Scorecard for bout 1 against Recap Opponent'));
+    expect(localStorage.getItem(SAVE_KEY)).toBe(savedBytes);
+    reopened.unmount();
+    const old = JSON.parse(savedBytes!);
+    delete old.st.history[0].scorecard;
+    const original = JSON.stringify(old);
+    localStorage.setItem(SAVE_KEY, original);
+    const legacy = render(<FightCareerBoard />);
+    fireEvent.click(legacy.getByText('Fight record (1)'));
+    expect(legacy.getByText(/Recap Opponent/)).toBeInTheDocument();
+    expect(legacy.queryByLabelText(/Scorecard for bout/)).toBeNull();
+    expect(localStorage.getItem(SAVE_KEY)).toBe(original);
+  });
+
+
   it('shows a boxing ring when the real saved-plan Fight action starts its recap', () => {
     const { view, savedBytes } = startSavedBout();
     expect(view.queryByRole('img', { name: /boxing ring/i })).toBeInTheDocument();

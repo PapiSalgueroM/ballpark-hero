@@ -716,6 +716,7 @@ export function simBout(input: BoutInput, rng: () => number): BoutResult {
 /* ─────────────────────────── the career ─────────────────────────── */
 
 export interface FightLine {
+  scorecard?: Pick<RoundLog, 'round' | 'playerScore' | 'oppScore' | 'playerLanded' | 'oppLanded'>[];
   no: number;
   opponent: string;
   result: 'W' | 'L' | 'D';
@@ -1022,6 +1023,8 @@ export function applyResult(st: FightCareerState, offer: Offer, res: BoutResult)
   next.earnings = Math.round((next.earnings + offer.purse) * 100) / 100;
   next.history.push({
     no: next.fightNo,
+    scorecard: res.rounds.map(({ round, playerScore, oppScore, playerLanded, oppLanded }) =>
+      ({ round, playerScore, oppScore, playerLanded, oppLanded })),
     opponent: offer.opponent.name,
     result: won ? 'W' : drew ? 'D' : 'L',
     method: res.method,

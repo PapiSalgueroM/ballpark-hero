@@ -19,6 +19,7 @@ import {
    engine functions this file used to call directly. */
 import { lifeSharpness, type FightLife, type TrainerId, type ManagerId } from '@/lib/fightCareerLife';
 import { lifeNewCareer, lifeRunCamp, lifeTakeFight, lifeRetire, nextLifeStep, lifeLoadState } from '@/lib/fightCareerLifeFlow';
+import { FightRecord } from '@/components/fight-career/FightRecord';
 import { fmtBank } from '@/lib/fightCareerMoney';
 import { CornerPicker, LifeStepCard, LifeTiles, LifePanel, type LifeView } from '@/components/fight-career/FightLifePanels';
 
@@ -374,6 +375,7 @@ export default function FightCareerBoard() {
             {legacy.bullets.map((b, i) => <li key={i} className="text-muted-foreground">{b}</li>)}
           </ul>
         </div>
+        <FightRecord history={st.history} />
         <ShareButtons
           gameName="Fight Career"
           gamePath="/fight-career"
@@ -398,6 +400,7 @@ export default function FightCareerBoard() {
         <div className="space-y-4" ref={revealRef}>
           {Header}
           <LifeStepCard st={st} step={step} onChange={keep} />
+          <FightRecord history={st.history} />
         </div>
       );
     }
@@ -444,22 +447,7 @@ export default function FightCareerBoard() {
             })}
           </div>
         </div>
-        {st.history.length > 0 && (
-          <div className="rounded-lg border bg-card p-3">
-            <p className="mb-1 text-xs uppercase tracking-wide text-muted-foreground">Record</p>
-            <div className="max-h-40 space-y-0.5 overflow-y-auto text-xs">
-              {st.history.slice().reverse().map(h => (
-                <div key={h.no} className="flex justify-between gap-2 tabular-nums">
-                  <span className={cn('font-semibold', h.result === 'W' ? 'text-emerald-500' : h.result === 'L' ? 'text-destructive' : 'text-muted-foreground')}>
-                    {h.result}
-                  </span>
-                  <span className="flex-1 truncate text-muted-foreground">{h.opponent}</span>
-                  <span className="text-muted-foreground">{h.method}{h.method === 'KO' || h.method === 'TKO' ? ` R${h.round}` : ''}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        <FightRecord history={st.history} />
         <div className="rounded-lg border bg-card p-3">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">

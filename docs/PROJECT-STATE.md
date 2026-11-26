@@ -1,3 +1,9 @@
+## 2026-11-26, Fight Career scorecards
+
+Fight record now reopens the rounds from completed bouts at the gym, during between-fight decisions and at retirement. Each round shows both scores and punches landed. The totals come from the original bout, including fights stopped early. Older results still show the opponent, outcome and method.
+
+In fresh private browser careers at 390 and 1366 pixels, a fighter turned pro, chose the first offer, trained for six weeks and won an eight-round decision 79-73. All eight round scores and punch counts matched the saved bout after reload. Reading the card preserved the career bytes.
+
 ## 2026-11-26, XI trophy totals
 
 The shared XI result counter shows three trophies for a treble. It still shows the treble achievement and all three competition names in the season summary. Existing saved trophy lists are read as recorded.
