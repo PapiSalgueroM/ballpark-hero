@@ -79,10 +79,15 @@ interface MatchInjuries { out: Record<string, number>; report: string[] }
 type HalftimeInterchange = { outId: string; inId: string } & (
   { outcome: 'planned' | 'applied' } | { outcome: 'skipped'; reason: 'cancelled' | 'selection' | 'limit' }
 );
+interface SummerTrade {
+  fromClub: string; playerId: string; playerName: string; role: Role; pick: number;
+  drafted?: { id: string; name: string };
+}
 export interface HistoryRow {
   season: number; place: number; w: number; d: number; l: number; pf: number; pa: number; exit: FinalsExit;
   premier: string; runnerUp: string; gf: { home: string; away: string; homeScore: Score; awayScore: Score };
   leadingGoalkicker: { name: string; club: string; goals: number };
+  trade?: SummerTrade;
   delisted?: { playerId: string; playerName: string; role: Role; picksBefore: number };
 }
 export interface LeagueState {
@@ -111,6 +116,7 @@ export type LeagueAction =
   | { type: 'cancelHalftime' }
   | { type: 'next' }
   | { type: 'simWeek' }
+  | { type: 'tradePick'; season: number; fromClub: string; playerId: string; pick: number }
   | { type: 'delist'; season: number; playerId: string }
   | { type: 'pick'; prospectId: string }
   | { type: 'draftAuto' };
@@ -577,6 +583,14 @@ export function reduceLeague(state: LeagueState, action: LeagueAction): LeagueSt
   }
   if (action.type === 'swap') return swapAtBreak(state, action.outId, action.inId);
   if (action.type === 'simWeek') return state.stage === 'finals' && state.phase === 'prepare' && !state.match ? playRestOfWeek(state, null, false) : state;
+  if (action.type === 'tradePick') {
+    if (state.phase !== 'summer' || action.season !== state.season) return state;
+    const offer = summerTradeOffer(state);
+    if (!offer || offer.fromClub !== action.fromClub || offer.pick !== action.pick || offer.player.id !== action.playerId) return state;
+    const { fromClub, pick, player } = offer;
+    const trade = { fromClub, pick, playerId: player.id, playerName: player.name, role: player.role };
+    return openDraft(state, trade);
+  }
   if (action.type === 'delist') {
     if (action.season !== state.season) return state;
     const candidates = summerDelistCandidates(state);
@@ -600,10 +614,7 @@ function advance(state: LeagueState): LeagueState {
     return state.week < lastWeek(state.format) ? openWeek({ ...career, clubs }, state.week + 1) : closeSeason(career);
   }
   if (state.phase === 'seasonOver') return runSummer(state);
-  if (state.phase === 'summer') {
-    const { ratingReview: _review, skillReviews: _archive, ...career } = state;
-    return openDraft(career);
-  }
+  if (state.phase === 'summer') return openDraft(state);
   if (state.phase === 'draft' && state.draft && state.draft.at >= state.draft.order.length) return freshSeason({ ...state, draft: null }, state.season + 1);
   return state;
 }
@@ -716,6 +727,38 @@ export function draftBaseOrder(state: Pick<LeagueState, 'clubs' | 'results' | 'f
     .sort((a, b) => a.week - b.week || b.index - a.index).map(value => value.id);
   return [...missed, ...finalists];
 }
+function returningClubs(state: LeagueState): LeagueClub[] {
+  const out = retirees(state);
+  const delisted = currentDelisting(state);
+  if (delisted) out.add(delisted.playerId);
+  return state.clubs.map(club => ({ ...club, players: club.players.filter(player => !out.has(player.id)) }));
+}
+
+function summerOrder(state: LeagueState, clubs: LeagueClub[]): string[] {
+  return expandOrder(draftBaseOrder(state), new Map(clubs.map(c => [c.id, LIST_SIZE - c.players.length])));
+}
+
+/** In this game the rival offers a returning senior player who consents to a move for more opportunity. */
+export function summerTradeOffer(state: LeagueState) {
+  if (state.phase !== 'summer' || state.history.at(-1)?.season !== state.season) return null;
+  const clubs = returningClubs(state);
+  const mine = clubs.find(c => c.id === state.myClub)!;
+  const pick = summerOrder(state, clubs).indexOf(mine.id) + 1;
+  if (!pick) return null;
+  const remainingPicks = LIST_SIZE - mine.players.length - 1;
+  const deficits = roleDeficits(mine);
+  const totalNeeded = Object.values(deficits).reduce((sum, count) => sum + count, 0);
+  const offers = clubs.filter(c => c.id !== mine.id).flatMap(club => {
+    const counts = roleCounts(club.players);
+    const regulars = new Set(ROLES.flatMap(role => club.players.filter(p => p.role === role)
+      .sort((a, b) => b.skill - a.skill).slice(0, ROLE_COUNTS[role]).map(p => p.id)));
+    const player = club.players.filter(p => p.age < 30 && !regulars.has(p.id) && counts[p.role] > ROLE_FLOORS[p.role]
+      && totalNeeded - Math.min(1, deficits[p.role]) <= remainingPicks).sort((a, b) => b.skill - a.skill)[0];
+    return player ? [{ fromClub: club.id, pick, player }] : [];
+  });
+  return offers.length ? offers[hashLabel(`${state.seed}|${state.season}|trade|${mine.id}`) % offers.length] : null;
+}
+
 const idNumber = (id: string) => Number(id.slice(2));
 const grade = (prospect: Prospect) => prospect.skill + prospect.potential;
 const bestOf = (list: Prospect[]) => [...list].sort((a, b) => grade(b) - grade(a) || idNumber(a.id) - idNumber(b.id))[0];
@@ -745,7 +788,11 @@ function applyPick(state: LeagueState, clubId: string, prospect: Prospect): Leag
   const player: LeaguePlayer = { id: prospect.id, name: prospect.name, role: prospect.role, skill: prospect.skill, stamina, fatigue: 0, prep: 0, age: prospect.age, potential: prospect.potential };
   const clubs = state.clubs.map(club => club.id === clubId ? { ...club, players: [...club.players, player] } : club);
   const draft = state.draft!;
-  return { ...state, clubs, draft: { ...draft, made: [...draft.made, { clubId, prospectId: prospect.id }], at: draft.at + 1 } };
+  const latest = state.history.at(-1)!;
+  const trade = latest.trade;
+  const history = trade && trade.pick === draft.at + 1 && trade.fromClub === clubId
+    ? [...state.history.slice(0, -1), { ...latest, trade: { ...trade, drafted: { id: prospect.id, name: prospect.name } } }] : state.history;
+  return { ...state, clubs, history, draft: { ...draft, made: [...draft.made, { clubId, prospectId: prospect.id }], at: draft.at + 1 } };
 }
 function runRivalPicks(state: LeagueState): LeagueState {
   let next = state;
@@ -792,13 +839,19 @@ function autoDraft(state: LeagueState): LeagueState {
   return next;
 }
 /** Retirements leave, the order and the pool are set, and the rivals pick up to your first turn. */
-function openDraft(state: LeagueState): LeagueState {
-  const out = retirees(state);
-  const delisted = currentDelisting(state);
-  if (delisted) out.add(delisted.playerId);
-  const clubs = state.clubs.map(club => ({ ...club, players: club.players.filter(player => !out.has(player.id)) }));
-  const vacancies = new Map(clubs.map(club => [club.id, LIST_SIZE - club.players.length]));
-  const order = expandOrder(draftBaseOrder(state), vacancies);
+function openDraft(state: LeagueState, trade?: SummerTrade): LeagueState {
+  const { ratingReview: _review, skillReviews: _archive, ...career } = state;
+  const clubs = returningClubs(state);
+  const order = summerOrder(state, clubs);
+  let history = state.history;
+  if (trade) {
+    const seller = clubs.find(c => c.id === trade.fromClub)!;
+    const player = seller.players.find(p => p.id === trade.playerId)!;
+    seller.players = seller.players.filter(p => p.id !== player.id);
+    clubs.find(c => c.id === state.myClub)!.players.push(player);
+    order[trade.pick - 1] = seller.id;
+    history = [...history.slice(0, -1), { ...history.at(-1)!, trade }];
+  }
   const rng = rngFrom(hashLabel(`${state.seed}|${state.season}|draft`));
   const roles: Role[] = [];
   // Every role a list is short of comes into the pool twice over plus two; the rest follow the list shape (12, 10, 4, 10).
@@ -815,7 +868,7 @@ function openDraft(state: LeagueState): LeagueState {
     const skill = 38 + Math.floor(rng() * 25);
     return { id: `p-${nextId++}`, name: freshName(rng, used), role, age: DRAFT_AGE, skill, potential: Math.max(skill, 55 + Math.floor(rng() * 41)) };
   });
-  return runRivalPicks({ ...state, clubs, nextId, phase: 'draft', starters: [], bench: [], match: null, preparation: null, swapsThisBreak: 0, draft: { order, pool, made: [], at: 0 } });
+  return runRivalPicks({ ...career, clubs, history, nextId, phase: 'draft', starters: [], bench: [], match: null, preparation: null, swapsThisBreak: 0, draft: { order, pool, made: [], at: 0 } });
 }
 /** The fogged read of a prospect's ceiling you see on draft night: a band, fixed per name and season. */
 export function scoutedPotential(state: Pick<LeagueState, 'season'>, prospect: Prospect): { low: number; high: number; mid: number } {
@@ -840,6 +893,8 @@ export function isLeagueAction(value: unknown): value is LeagueAction {
   if (item.type === 'prepare') return exactKeys(item, ['type', 'choice']) && (item.choice === 'train' || item.choice === 'rest');
   if (item.type === 'play' || item.type === 'playMatch') return exactKeys(item, ['type', 'tactic']) && TACTIC_IDS.includes(item.tactic as string);
   if (item.type === 'swap' || item.type === 'planHalftime') return exactKeys(item, ['type', 'outId', 'inId']) && isPlayerId(item.outId) && isPlayerId(item.inId);
+  if (item.type === 'tradePick') return exactKeys(item, ['type', 'season', 'fromClub', 'playerId', 'pick']) && int(item.season, 1, 10000)
+    && isClubId(item.fromClub) && isPlayerId(item.playerId) && int(item.pick, 1, CLUB_COUNT);
   if (item.type === 'delist') return exactKeys(item, ['type', 'season', 'playerId']) && int(item.season, 1, 10000) && isPlayerId(item.playerId);
   if (item.type === 'pick') return exactKeys(item, ['type', 'prospectId']) && isPlayerId(item.prospectId);
   return item.type === 'lineup' && exactKeys(item, ['type', 'starters', 'bench']) && Array.isArray(item.starters) && Array.isArray(item.bench)
@@ -918,7 +973,18 @@ function validHistory(row: unknown): row is HistoryRow {
   const keys = ['season', 'place', 'w', 'd', 'l', 'pf', 'pa', 'exit', 'premier', 'runnerUp', 'gf', 'leadingGoalkicker'];
   const hasDelisting = !!row && typeof row === 'object' && Object.prototype.hasOwnProperty.call(row, 'delisted');
   if (hasDelisting) keys.push('delisted');
+  if (row && typeof row === 'object' && 'trade' in row) keys.push('trade');
   if (!exactKeys(row, keys)) return false;
+  if ('trade' in row) {
+    const trade = row.trade;
+    if (!trade || typeof trade !== 'object') return false;
+    const hasPick = 'drafted' in trade;
+    if (!exactKeys(trade, ['fromClub', 'playerId', 'playerName', 'role', 'pick', ...(hasPick ? ['drafted'] : [])])
+      || !isClubId(trade.fromClub) || !isPlayerId(trade.playerId) || typeof trade.playerName !== 'string' || !trade.playerName.trim()
+      || !ROLES.includes(trade.role as Role) || !int(trade.pick, 1, CLUB_COUNT)) return false;
+    if (hasPick && (!exactKeys(trade.drafted, ['id', 'name']) || !isPlayerId(trade.drafted.id) || trade.drafted.id === trade.playerId
+      || typeof trade.drafted.name !== 'string' || !trade.drafted.name.trim())) return false;
+  }
   const { delisted } = row;
   if (hasDelisting && (!exactKeys(delisted, ['playerId', 'playerName', 'role', 'picksBefore']) || !isPlayerId(delisted.playerId)
     || typeof delisted.playerName !== 'string' || !delisted.playerName.trim() || !ROLES.includes(delisted.role as Role)
@@ -947,9 +1013,25 @@ function validDraft(s: LeagueState): boolean {
   const listed = new Set(s.clubs.flatMap(club => club.players.map(player => player.id)));
   if ([...pool.keys()].some(id => !made.has(id) && listed.has(id))) return false;
   const before = new Map(s.clubs.map(club => [club.id, LIST_SIZE - (club.players.length - (draft.made as { clubId: string }[]).filter(pick => pick.clubId === club.id).length)]));
+  const trade = s.history.at(-1)?.trade;
+  if (trade) {
+    const signed = clubOf(s, s.myClub)!.players.find(p => p.id === trade.playerId);
+    if (!signed || signed.name !== trade.playerName || signed.role !== trade.role || pool.has(signed.id)) return false;
+    before.set(s.myClub, before.get(s.myClub)! + 1);
+    before.set(trade.fromClub, before.get(trade.fromClub)! - 1);
+    if (before.get(trade.fromClub)! < 0) return false;
+    const selection = s.draft!.made[trade.pick - 1];
+    if (selection ? !trade.drafted || selection.clubId !== trade.fromClub || selection.prospectId !== trade.drafted.id
+      || pool.get(selection.prospectId)?.name !== trade.drafted.name : !!trade.drafted) return false;
+  }
   const delisted = currentDelisting(s);
   if (delisted && before.get(s.myClub) !== delisted.picksBefore + 1) return false;
-  if (!sameIds(expandOrder(draftBaseOrder(s), before), draft.order as string[])) return false;
+  const order = expandOrder(draftBaseOrder(s), before);
+  if (trade) {
+    if (order.indexOf(s.myClub) !== trade.pick - 1) return false;
+    order[trade.pick - 1] = trade.fromClub;
+  }
+  if (!sameIds(order, draft.order as string[])) return false;
   if ((draft.at as number) < draft.order.length && draft.order[draft.at as number] !== s.myClub) return false;
   return s.clubs.every(club => club.players.length + picksLeft(s, club.id) === LIST_SIZE && ROLES.reduce((sum, role) => sum + roleDeficits(club)[role], 0) <= picksLeft(s, club.id));
 }
@@ -1020,6 +1102,9 @@ export function validLeagueState(value: unknown): value is LeagueState {
   if (!s.goals || typeof s.goals !== 'object' || Array.isArray(s.goals) || !Object.entries(s.goals).every(([id, goals]) => isPlayerId(id) && int(goals, 1, 9999))) return false;
   const closed = s.phase === 'seasonOver' || s.phase === 'summer' || s.phase === 'draft';
   if (!Array.isArray(s.history) || !s.history.every(validHistory) || s.history.length !== s.season - (closed ? 0 : 1)) return false;
+  if (!s.history.every((row, i) => !row.trade || (row.season === i + 1 && row.trade.fromClub !== s.myClub
+    && idNumber(row.trade.playerId) < s.nextId && (!row.trade.drafted || idNumber(row.trade.drafted.id) < s.nextId)
+    && (row.season === s.season ? s.phase === 'draft' : !!row.trade.drafted)))) return false;
   const releases = s.history.filter(row => row.delisted);
   if (releases.length) {
     const listed = new Set(s.clubs.flatMap(club => club.players.map(player => player.id)));

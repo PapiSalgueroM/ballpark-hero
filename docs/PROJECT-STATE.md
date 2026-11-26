@@ -1,3 +1,7 @@
+### November 26, 2026. Trade a current national draft pick in Aussie Rules Manager
+
+An eligible club can now exchange its own first available selection for a willing generated senior player. The selling club uses that exact pick. Both players and their clubs remain in the season history. Geelong traded pick two for a defender; the seller used it on a new prospect. At 390 and 1366 pixels both registrations and the second-season history survived reload. Passing kept the original pick. In 24 simulated summers passing reproduced the original drafts exactly; all 17 available accepted offers finished with 648 distinct senior players, 36 per club, and legal role coverage. The 48 focused checks passed.
+
 Named NRL halves and five-eighth eligibility
 
 In the named 2026 opening squads, the game now recognises the four recipients of the previous two seasons of halves honours when generating initial abilities. Tom Dearden can play halfback or five-eighth. Across 256 fresh Cowboys saves his median simulated overall rose from 68 to 81. On phone and desktop, moving another player to halfback and starting Dearden at five-eighth survived reload. A saved 71-rated Dearden reopened unchanged. All 18 focused tests passed and all 4,352 sampled team lists retained their original salary cap.
