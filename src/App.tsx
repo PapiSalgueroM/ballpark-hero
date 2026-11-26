@@ -2,6 +2,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { CookieConsent } from "@/components/CookieConsent";
 import { StorageNotice, isGameRoute } from "@/components/StorageNotice";
 import { GameAdInventory } from "@/components/ads/GameAdInventory";
+import { GameDesktopRails, isPublicDesktopRailRoute } from "@/components/ads/GameDesktopRails";
 import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
 import RouteErrorBoundary from "@/components/RouteErrorBoundary";
@@ -398,6 +399,7 @@ const AppContent = () => {
           root and the visitor got a white page with no way off it. Changing
           routes or switching Soccer Career slots clears it. */}
       <RouteErrorBoundary resetKey={boundaryKey}>
+      <GameDesktopRails active={gameRoute || isPublicDesktopRailRoute(pathname)}>
       <Routes>
         <Route path="/" element={<Index />} />
         <Route path="/footle" element={<Footle />} />
@@ -621,6 +623,7 @@ const AppContent = () => {
           while a save it set aside exists, offers to put it back. Inside the
           boundary, so a throw here costs the page and not the site. */}
       <BrokenSaveRestore pathname={/^\/(?:soccer-career|nrl-team-manager|fight-promoter)\/*$/.test(pathname) ? pathname + search : pathname} />
+      </GameDesktopRails>
       {/* Round 49: one global footer on every page (legal disclaimer, About/Contact/
           What's New links, and the Report a bug button), instead of 33 pages
           importing their own copy and 95 pages having none.
