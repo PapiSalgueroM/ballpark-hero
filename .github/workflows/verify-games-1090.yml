@@ -1,0 +1,184 @@
+name: Frozen game release simulations
+
+on:
+  push:
+    branches: [codex/verify-games-1090]
+
+permissions:
+  contents: read
+
+env:
+  RELEASE: 6ac84551f4f226b9053a61714fa3b9ed35aae816
+  SIM_NETWORK: offline
+  ENGINES: chromium
+  TZ: UTC
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 6ac84551f4f226b9053a61714fa3b9ed35aae816
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - name: Build the frozen release and enumerate the official plan
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$RELEASE"
+          mkdir "$RUNNER_TEMP/release"
+          npm ci --no-audit --no-fund
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          npm run build
+          node scripts/runAllSims.mjs --plan-json > "$RUNNER_TEMP/release/plan.json"
+          jq -e '(.nodeGroup | length) > 0 and (.browserGroup | type) == "array"' "$RUNNER_TEMP/release/plan.json"
+          tar -czf "$RUNNER_TEMP/release/dist.tar.gz" -C dist .
+          echo "$RELEASE" > "$RUNNER_TEMP/release/sha.txt"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frozen-build
+          path: ${{ runner.temp }}/release/
+          retention-days: 3
+
+  suite:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    env:
+      SHARD: ${{ matrix.shard }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 6ac84551f4f226b9053a61714fa3b9ed35aae816
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+      - uses: actions/download-artifact@v4
+        with:
+          name: frozen-build
+          path: ${{ runner.temp }}/release
+      - name: Restore the completed build and assign the exact shard
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$RELEASE"
+          test "$(cat "$RUNNER_TEMP/release/sha.txt")" = "$RELEASE"
+          mkdir -p dist "$RUNNER_TEMP/evidence/logs"
+          tar -xzf "$RUNNER_TEMP/release/dist.tar.gz" -C dist
+          cp "$RUNNER_TEMP/release/"{plan.json,sha.txt} "$RUNNER_TEMP/evidence/"
+          jq -r --argjson shard "$SHARD" '.nodeGroup | to_entries[] | select(.key % 12 == $shard) | .value' "$RUNNER_TEMP/release/plan.json" > "$RUNNER_TEMP/evidence/assigned.txt"
+          test -s "$RUNNER_TEMP/evidence/assigned.txt"
+      - name: Install the locked application and standard browser and font tools
+        run: |
+          set -euo pipefail
+          npm ci --no-audit --no-fund
+          browser="$RUNNER_TEMP/browser"
+          npm install --prefix "$browser" --no-save --package-lock=false --no-audit --no-fund playwright@1.64.0
+          ln -s "$browser/node_modules/playwright" node_modules/playwright
+          ln -s "$browser/node_modules/playwright-core" node_modules/playwright-core
+          node "$browser/node_modules/playwright/cli.js" install --with-deps chromium
+          python -m pip install fonttools pillow
+          FREE_KICK_FONT_CACHE="$RUNNER_TEMP/fonts" node scripts/qa/freeKickLab1070.mjs --prefetch-fonts-only
+      - name: Run the official harnesses with loopback-only network
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/run-shard" <<'SH'
+          set -euo pipefail
+          out="$RUNNER_TEMP/evidence"
+          export FREE_KICK_FONT_CACHE="$RUNNER_TEMP/fonts" BASE=http://127.0.0.1:4173 SWEEP_BASE=http://127.0.0.1:4173
+          export SIM_NETWORK=offline SIM_FULL_OUTPUT=1 ENGINES=chromium TZ=UTC
+          export NODE_OPTIONS="--require=$PWD/scripts/lib/offlineTransport.cjs"
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$out/server.log" 2>&1 &
+          server=$!; trap 'kill "$server" 2>/dev/null || true' EXIT
+          curl -fsS --retry 15 --retry-connrefused --retry-delay 1 "$BASE/" -o /dev/null
+          printf 'harness\texit\tverdict\tseconds\n' > "$out/results.tsv"
+          failed=0
+          while IFS= read -r file; do
+            echo "Running $file"
+            start=$SECONDS; status=0
+            SIM_OFFLINE_RECEIPT="$out/logs/$file.transport" ONLY="$file" timeout --kill-after=15s 60m node scripts/runAllSims.mjs > "$out/logs/$file.log" 2>&1 || status=$?
+            verdict=$(awk -v f="$file" '$2 == f && $1 ~ /^(PASS|FAIL|SKIP|EMPTY)$/ {r=$1} END {print r}' "$out/logs/$file.log")
+            if [[ "$status" == 124 || "$status" == 137 ]]; then verdict=TIMEOUT; fi
+            verdict=${verdict:-UNVERIFIED}
+            printf '%s\t%s\t%s\t%s\n' "$file" "$status" "$verdict" "$((SECONDS-start))" | tee -a "$out/results.tsv"
+            if [[ "$status" != 0 || ( "$verdict" != PASS && "$verdict" != SKIP ) ]]; then failed=1; fi
+          done < "$out/assigned.txt"
+          exit "$failed"
+          SH
+          # External tools and browsers also inherit a loopback-only network.
+          sudo env "PATH=$PATH" "HOME=$HOME" "RUNNER_TEMP=$RUNNER_TEMP" CI=true unshare --net bash -c 'ip link set lo up; exec setpriv --reuid "$1" --regid "$2" --init-groups -- bash "$3"' _ "$(id -u)" "$(id -g)" "$RUNNER_TEMP/run-shard"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: node-shard-${{ matrix.shard }}
+          path: ${{ runner.temp }}/evidence/
+          retention-days: 5
+          if-no-files-found: error
+
+  coverage:
+    needs: [build, suite]
+    if: ${{ !cancelled() && needs.build.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: node-shard-*
+          path: shards
+      - uses: actions/download-artifact@v4
+        with:
+          name: frozen-build
+          path: build
+      - name: Reconcile every planned result
+        run: |
+          python - <<'PY'
+          import csv, json, os, pathlib
+          from collections import Counter
+          master = json.loads(pathlib.Path('build/plan.json').read_text())
+          planned, rows, issues = master['nodeGroup'], [], []
+          for i in range(12):
+              directory = pathlib.Path('shards', 'node-shard-' + str(i))
+              try:
+                  expected = planned[i::12]
+                  assert (directory / 'sha.txt').read_text().strip() == os.environ['RELEASE']
+                  assert (directory / 'assigned.txt').read_text().splitlines() == expected
+                  with (directory / 'results.tsv').open() as log:
+                      actual = list(csv.DictReader(log, delimiter='\t'))
+                  rows.extend(dict(r, shard=i) for r in actual)
+                  assert [r['harness'] for r in actual] == expected
+              except (OSError, AssertionError) as e:
+                  issues.append(f'Shard {i}: missing or inconsistent evidence ({e!r})')
+          if Counter(r['harness'] for r in rows) != Counter(planned):
+              issues.append('Coverage differs from the frozen Node plan')
+          counts = Counter(r['verdict'] for r in rows)
+          faults = [r for r in rows if r['exit'] != '0' or r['verdict'] not in ('PASS', 'SKIP')]
+          summary = dict(release=os.environ['RELEASE'], planned=len(planned), recorded=len(rows), counts=counts, failures=faults,
+                         issues=issues, browserOutsideGate=master['browserGroup'], results=rows)
+          pathlib.Path('coverage.json').write_text(json.dumps(summary, indent=2))
+          print(f"{len(planned)} planned; {len(rows)} recorded; {dict(counts)}; {len(master['browserGroup'])} browser harnesses outside gate")
+          for issue in issues: print(issue)
+          raise SystemExit(bool(issues or faults))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: exact-coverage
+          path: coverage.json
+          retention-days: 5
