@@ -45,7 +45,7 @@ import {
   captureClubManagerCheckpoint, checkpointClaimIsCurrent, checkpointSourceIsCurrent, keepClubManagerCheckpoint, type ClubManagerCheckpointSource,
 } from '@/lib/clubManagerCheckpoint';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
-import { foundYouthTeam, enterYouthCampaign } from '@/lib/clubManagerYouthTeam';
+import { foundYouthTeam, enterYouthCampaign, rotateYouthProspect } from '@/lib/clubManagerYouthTeam';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
 import type { PersonalTerms } from '@/lib/clubManagerDeals';
@@ -1483,6 +1483,10 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     setCareer(prev => prev && enterYouthCampaign(prev, id));
   }, []);
 
+  const rotateYouth = useCallback((season: number, after: 2 | 4, id: string) => {
+    setCareer(prev => prev && rotateYouthProspect(prev, season, after, id));
+  }, []);
+
   const sendScout = useCallback((candidateId: string, regionId: string, weeks: number) => {
     setCareer(prev => (prev ? hireScout(prev, candidateId, regionId, weeks) ?? prev : prev));
   }, []);
@@ -1657,7 +1661,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, commitLoanPlan, commitRecruitment, renew, renewWithClause, terminate, signFree, setRole,
-    upgradeFacility, openYouthTeam, fundYouthTeam, sendScout, callScoutHome, promote, release, setTraining,
+    upgradeFacility, openYouthTeam, fundYouthTeam, rotateYouth, sendScout, callScoutHome, promote, release, setTraining,
     subAtHalftime, shapeAtHalftime, changeAtHalftime, secondHalf, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,
     answer,

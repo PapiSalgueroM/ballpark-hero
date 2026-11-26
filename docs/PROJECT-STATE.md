@@ -1,3 +1,7 @@
+## 2026-11-26, Rotate academy prospects during a U21 campaign
+
+A Club Manager can assign the next two league dates to another academy prospect after U21 match two or four. Earlier development stays with the player who earned it. Across seven senior fixtures on phone and laptop, two prospects gained two points and one point respectively. Their separate credits and all six scores survived midseason reloads and entry into the following campaign. The proof supplied late-game funds and two test prospects, then used the game's academy and match controls.
+
 ## 2026-11-26, Build Your XI opening rules
 
 Build Your XI now has one help button. Its opening sheet fits three steps, a goalkeeper example and the dismiss button on a phone. Full rules and scoring reopen inside the same sheet. On the 390-pixel replay the first example moved from 904 pixels below the rules region's top to 196 pixels. On the 1366-pixel replay it moved from 804 to 196. Both fresh drafts dismissed the rules, reopened the detailed guide, selected a formation and retained the draft on reload.

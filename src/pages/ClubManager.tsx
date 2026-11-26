@@ -1208,7 +1208,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                   onRecall={g.callScoutHome}
                   onPromote={g.promote}
                   onRelease={g.release}
-                /><YouthTeamPanel career={c} onFound={g.openYouthTeam} onEnter={g.fundYouthTeam} /></ScreenLoading>
+                /><YouthTeamPanel career={c} onFound={g.openYouthTeam} onEnter={g.fundYouthTeam} onRotate={g.rotateYouth} /></ScreenLoading>
               )}
 
               {hubPanel === 'training' && (

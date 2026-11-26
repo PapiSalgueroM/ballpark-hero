@@ -8,7 +8,8 @@ assert.ok(base.protocol === 'http:' && ['127.0.0.1', 'localhost', '[::1]'].inclu
 const browser = await chromium.launch({ headless: true, executablePath: process.env.CHROME_PATH || undefined });
 const key = 'dukb-club-manager-save';
 const width = Number(process.env.WIDTH || 390);
-const file = width === 390 ? 'club-manager-u21' : 'club-manager-u21-' + width;
+const rotate = process.env.U21_TEST_ROTATION === '1';
+const file = 'club-manager-u21' + (rotate ? '-rotation' : '') + (width === 390 ? '' : '-' + width);
 try {
   const context = await browser.newContext({ viewport: { width, height: width < 600 ? 844 : 900 }, reducedMotion: 'reduce', serviceWorkers: 'block' });
   await context.route('**/*', route => new URL(route.request().url()).origin === base.origin && route.request().method() === 'GET' ? route.continue() : route.abort());
@@ -31,16 +32,18 @@ try {
   const fresh = await save();
   assert.equal(fresh.academy?.youthTeam, undefined);
   // Set the late-game prerequisites only. Every payment, fixture and rating change goes through the game.
-  await page.addInitScript(({ key }) => {
+  await page.addInitScript(({ key, rotate }) => {
     if (sessionStorage.getItem('u21-fixture-loaded')) return;
     const c = JSON.parse(localStorage.getItem(key));
     c.budget = 100;
     c.academy.facilities = 16;
     c.academy.prospects.push({ id: 'u21-proof', name: 'Test Academy Prospect', position: 'CM', age: 17, rating: 62,
       potential: 64, lowGuess: 62, highGuess: 70, source: 'Academy', flag: '', fee: 0, season: c.season });
+    if (rotate) c.academy.prospects.push({ ...c.academy.prospects.at(-1), id: 'u21-second',
+      name: 'Second Academy Prospect', position: 'RB', rating: 58, potential: 60 });
     localStorage.setItem(key, JSON.stringify(c));
     sessionStorage.setItem('u21-fixture-loaded', '1');
-  }, { key });
+  }, { key, rotate });
   await page.reload();
   await click(/^Resume Career$/i);
   await openAcademy();
@@ -51,22 +54,54 @@ try {
   await page.waitForFunction(k => JSON.parse(localStorage.getItem(k))?.academy?.youthTeam?.campaign?.prospectId === 'u21-proof', key);
   assert.equal((await save()).budget, 55);
   await click(/^Club home$/i);
-  let seniorFixtures = 0;
+  let seniorFixtures = 0, midweekDates = 0;
+  const rotations = new Set();
+  const heading = page.getByText('Manchester City U21', { exact: true });
   for (; seniorFixtures < 22; seniorFixtures++) {
     const before = await save();
-    if (before.academy.youthTeam.campaign.fixtures.length === 6) break;
+    const count = before.academy.youthTeam.campaign.fixtures.length;
+    if (count === 6) break;
+    if (rotate && (count === 2 || count === 4) && !rotations.has(count)) {
+      await openAcademy(); await heading.click();
+      await page.getByText('Rotate your prospect', { exact: true }).click();
+      const id = count === 2 ? 'u21-second' : 'u21-proof';
+      await page.getByLabel('Next two matches').selectOption(id);
+      await click(/^Confirm rotation$/i);
+      await page.waitForFunction(([k, id]) => JSON.parse(localStorage.getItem(k))?.academy.youthTeam.campaign.rotations?.at(-1)?.prospectId === id, [key, id]);
+      const changed = await save();
+      assert.equal(changed.budget, before.budget);
+      assert.deepEqual(changed.academy.youthTeam.campaign.fixtures, before.academy.youthTeam.campaign.fixtures);
+      await page.reload(); await click(/^Resume Career$/i); await openAcademy(); await heading.click();
+      assert.equal(await page.getByText('Rotate your prospect', { exact: true }).count(), 0);
+      assert.deepEqual((await save()).academy.youthTeam.campaign, changed.academy.youthTeam.campaign);
+      if (process.env.OUTPUT && count === 2) {
+        await mkdir(process.env.OUTPUT, { recursive: true });
+        await heading.locator('..').screenshot({ path: path.join(process.env.OUTPUT, file + '-midseason.png') });
+      }
+      await click(/^Club home$/i);
+      rotations.add(count);
+    }
     await page.locator('[data-cm-way="quick"]').first().click();
     await page.getByText(/^Full time$/i).first().waitFor();
     await click(/^Continue$/i);
     await page.waitForFunction(([k, w]) => JSON.parse(localStorage.getItem(k)).week > w, [key, before.week]);
+    const next = await save();
+    if (before.calendar[before.week].type !== 'league') {
+      midweekDates++;
+      assert.equal(next.academy.youthTeam.campaign.fixtures.length, count);
+    }
   }
   const played = await save();
   const campaign = played.academy.youthTeam.campaign;
   assert.equal(campaign.fixtures.length, 6);
-  assert.deepEqual(campaign.fixtures.map(m => m.gain), [0, 1, 0, 1, 0, 0]);
+  assert.deepEqual(campaign.fixtures.map(m => m.gain), [0, 1, 0, 1, 0, rotate ? 1 : 0]);
+  if (rotate) {
+    assert.deepEqual([...rotations], [2, 4]);
+    assert.equal(played.academy.prospects.find(p => p.id === 'u21-second').rating, 59);
+    assert.ok(midweekDates > 0);
+  }
   assert.equal(played.academy.prospects.find(p => p.id === 'u21-proof').rating, 64);
   await page.reload(); await click(/^Resume Career$/i); await openAcademy();
-  const heading = page.getByText('Manchester City U21', { exact: true });
   await heading.click();
   const panel = heading.locator('..');
   assert.match(await panel.innerText(), /Campaign complete/);
@@ -76,7 +111,8 @@ try {
   if (process.env.OUTPUT) {
     await mkdir(process.env.OUTPUT, { recursive: true });
     await panel.screenshot({ path: path.join(process.env.OUTPUT, file + '.png') });
-    await writeFile(path.join(process.env.OUTPUT, file + '.json'), JSON.stringify({ width, seniorFixtures, startingBudget: 100, afterFounding: 55, campaign, errors }, null, 2));
+    await writeFile(path.join(process.env.OUTPUT, file + '.json'), JSON.stringify({ width, seniorFixtures, startingBudget: 100, afterFounding: 55, campaign, midweekDates,
+      development: played.academy.prospects.filter(p => p.id === 'u21-proof' || p.id === 'u21-second').map(p => ({ name: p.name, rating: p.rating })), errors }, null, 2));
   }
   console.log('Six U21 fixtures retained after reload, featured prospect grew from 62 to 64, one founding charge, senior fixtures:', seniorFixtures);
   // The six archived fixtures are the ones just played. Move the registration
@@ -93,19 +129,20 @@ try {
     await page.reload(); await click(/^Resume Career$/i); await openAcademy(); await heading.click();
     await click(/Enter next campaign/);
     await page.getByText('Past U21 campaigns (1)', { exact: true }).click();
-    await page.getByText('Development: +2 rating', { exact: true }).waitFor();
+    await page.getByText('Development: +' + (rotate ? 3 : 2) + ' rating', { exact: true }).waitFor();
+    if (rotate) await page.getByText('Test Academy Prospect +2 · Second Academy Prospect +1', { exact: true }).waitFor();
     const next = await save();
     assert.equal(next.budget, 18);
     assert.deepEqual(next.academy.youthTeam.history, [campaign]);
     assert.equal(next.academy.youthTeam.campaign.fixtures.length, 0);
     await page.reload(); await click(/^Resume Career$/i); await openAcademy(); await heading.click();
     await page.getByText('Past U21 campaigns (1)', { exact: true }).click();
-    await page.getByText('Development: +2 rating', { exact: true }).waitFor();
+    await page.getByText('Development: +' + (rotate ? 3 : 2) + ' rating', { exact: true }).waitFor();
     assert.deepEqual((await save()).academy.youthTeam, next.academy.youthTeam);
     assert.equal((await save()).budget, 18);
     if (process.env.OUTPUT) await panel.screenshot({ path: path.join(process.env.OUTPUT, file + '-archive.png') });
     assert.deepEqual(errors, []);
-    console.log('Second registration cost 12 million. All six prior fixtures and the +2 rating record survived another reload.');
+    console.log('Second registration cost 12 million. All six prior results and the named development record survived another reload.');
   }
 } finally {
   await browser.close();
