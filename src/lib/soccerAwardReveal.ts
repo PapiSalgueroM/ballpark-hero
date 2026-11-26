@@ -18,8 +18,13 @@ export function careerBeforeBallonDorReveal(career: CareerState): CareerState {
   const year = ballonDorAwaitingReveal(career);
   if (year === null) return career;
   const awardLine = (line: string) => /ballon d'or|golden ball/i.test(line);
+  const rival = career.rival;
+  const winner = career.pendingBallonDor?.nominees?.[0];
   return {
     ...career,
+    rival: rival && winner?.isCareerRival === true && !winner.isPlayer
+      ? { ...rival, ballonDors: Math.max(0, rival.ballonDors - 1) }
+      : rival,
     seasons: career.seasons.map(row => ballonDorSeasonForDisplay(career, row)),
     pendingSummary: career.pendingSummary ? ballonDorSeasonForDisplay(career, career.pendingSummary) : null,
     awards: career.awards.filter(a => a.year !== year || a.name !== "Ballon d'Or"),
