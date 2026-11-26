@@ -149,7 +149,7 @@ it('US review regular values highs and original saved text remain truthful', () 
   click(view.container, '[data-season-tile="1"]'); click(view.container, '[data-season-tab="Regular season"]');
   check('actual review yards', stats(view.container), { 'Passing yards': '12,345', 'Passing touchdowns': '31', 'Interceptions thrown': '8' });
   click(view.container, '[data-season-tab="Postseason"]');
-  check('saved postseason prose remains exact', stats(view.container), { Games: '3', Performance: '12345 yds, 6 TD, 1 INT' });
+  check('saved postseason prose remains exact', stats(view.container), { 'Team games': '3', Performance: '12345 yds, 6 TD, 1 INT' });
   fireEvent.click(view.getByRole('button', { name: 'Back to seasons' })); click(view.container, '[data-season-highs-open]'); click(view.container, '[data-season-highs-stat="Passing yards"]');
   check('actual saved high', view.container.querySelector('[data-season-highs-value]')?.textContent, '12,345');
   held('review and highs preserve the complete save', before, career, bytes);

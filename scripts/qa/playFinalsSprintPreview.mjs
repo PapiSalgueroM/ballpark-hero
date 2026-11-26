@@ -1,0 +1,107 @@
+// BASE must be a loopback build. Answer only local fixture prompts.
+import '../lib/offlineTransport.cjs';
+import assert from 'node:assert/strict';
+import { mkdir, writeFile } from 'node:fs/promises';
+import path from 'node:path';
+import { buildSync } from 'esbuild';
+import { chromium } from '../lib/playwrightLoader.mjs';
+
+const aussieAliases = { 'North Melbourne': 'Kangaroos', Footscray: 'Bulldogs', Collingwood: 'Magpies', 'Sydney Swans': 'Swans',
+  'St Kilda': 'Saints', 'Port Adelaide': 'Power', 'GWS Giants': 'GWS', 'Parramatta Eels': 'Eels', 'Penrith Panthers': 'Panthers',
+  'Canberra Raiders': 'Raiders', 'Melbourne Storm': 'Storm', 'Newcastle Knights': 'Knights', 'Sydney Roosters': 'Roosters', 'North Queensland Cowboys': 'Cowboys' };
+const base = new URL(process.env.BASE ?? 'http://127.0.0.1:4271');
+assert.equal(base.hostname, '127.0.0.1');
+assert.equal(base.protocol, 'http:');
+const data = buildSync({entryPoints: ['src/data/sportChallengePilot.ts'], write: false, format: 'esm', bundle: true});
+const { finals } = await import('data:text/javascript;base64,' + Buffer.from(data.outputFiles[0].text).toString('base64'));
+const browser = await chromium.launch({args: ['--no-proxy-server', '--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1']});
+try {
+  for (const [width, sport] of [[320, 'soccer'], [390, 'nba'], [390, 'nfl'], [1366, 'soccer'], [1366, 'nba'], [1366, 'nfl'], [390, 'nhl'], [1366, 'nhl'], [390, 'mlb'], [1366, 'mlb'], [390, 'afl'], [1366, 'afl'], [390, 'nrl'], [1366, 'nrl']]) {
+    const context = await browser.newContext({viewport: {width, height: 844}, reducedMotion: 'reduce', serviceWorkers: 'block'});
+    await context.addInitScript(() => localStorage.setItem('cookie-consent-v2', JSON.stringify({
+      version: 2, advertising: false, analytics: false, updatedAt: Date.now(),
+    })));
+    await context.routeWebSocket('**/*', ws => ws.close());
+    await context.route('**/*', async route => {
+      const req = route.request();
+      const url = new URL(req.url());
+      if (url.origin !== base.origin || req.method() !== 'GET') return route.abort();
+      const response = await fetch(url, {redirect: 'manual'});
+      if (response.status >= 300 && response.status < 400) return route.abort();
+      return route.fulfill({status: response.status, contentType: response.headers.get('content-type') ?? undefined,
+        body: Buffer.from(await response.arrayBuffer())});
+    });
+    const page = await context.newPage();
+    await page.clock.install({time: new Date('2026-11-26T16:00:00Z')});
+    await page.goto(base.origin + '/alphabet-sprint');
+    await page.getByRole('link', {name: /try the finals sprint preview/i}).click();
+    await page.getByRole('button', {name: 'How to play Finals Sprint'}).click();
+    await page.keyboard.press('Escape');
+    if (sport !== 'soccer') await page.getByRole('button', {name: sport.toUpperCase(), exact: true}).click();
+    if (sport === 'afl') await page.getByRole('region', {name: 'Before you start'}).getByText(/Older clues use the VFL name/).waitFor();
+    if (sport === 'nrl') await page.getByRole('region', {name: 'Before you start'}).getByText(/The ARL and Super League held separate/).waitFor();
+    if (sport === 'mlb') await page.getByRole('region', {name: 'Before you start'}).getByText('Use the team name from that year. A nickname like D-backs counts.').waitFor();
+    await page.getByRole('button', {name: 'Start daily preview'}).click();
+    const current = page.getByRole('region', {name: 'Current round'});
+    const clue = current.getByRole('heading');
+    const first = await clue.innerText();
+    await page.getByRole('button', {name: 'Defer clue'}).click();
+    await page.waitForFunction(previous => document.querySelector('[aria-label="Current round"] h2')?.textContent !== previous, first);
+    const used = new Set();
+    for (let i = 0; i < 6; i++) {
+      const question = await clue.innerText();
+      const year = Number(question.match(/\d{4}/)?.[0]);
+      const [, , ...teams] = finals[sport].find(row => row[0] === year);
+      const answer = teams.find(team => !used.has(team));
+      assert(answer, 'no unused finalist');
+      if (i === 5) assert.equal(question, first);
+      const input = page.getByRole('textbox', {name: 'Team name'});
+      const typed = sport === 'mlb' ? (answer === 'Arizona Diamondbacks' ? 'D-backs' : answer === 'Boston Red Sox' ? 'Red Sox' : answer.split(' ').at(-1)) : (aussieAliases[answer] ?? answer);
+      await input.fill(typed);
+      await input.press('Enter');
+      used.add(answer);
+      await page.waitForFunction(previous => document.querySelector('[aria-label="Current round"] h2')?.textContent !== previous, question);
+      if (i === 1) {
+        const next = await clue.innerText();
+        await page.reload();
+        assert.equal(await clue.innerText(), next);
+      }
+    }
+    const results = page.getByRole('region', {name: 'Round results'});
+    assert.equal(await results.getByRole('heading').innerText(), '100 points');
+    const roundKey = 'dukb-finals-v1-' + sport + '-daily';
+    const settled = await page.evaluate(key => localStorage.getItem(key), roundKey);
+    assert.ok(settled);
+    await page.reload();
+    assert.equal(await results.getByRole('heading').innerText(), '100 points');
+    await results.getByText('Show recap and sources').click();
+    assert.equal(await results.getByRole('link', {name: /^Source for/}).count(), 6);
+    assert.equal(await page.evaluate(key => localStorage.getItem(key), roundKey), settled);
+    if (['nhl', 'mlb', 'afl', 'nrl'].includes(sport)) {
+      const links = await results.getByRole('link', {name: /^Source for/}).evaluateAll(nodes => nodes.map(n => n.href));
+      if (sport === 'mlb') assert.deepEqual(links, JSON.parse(settled).order.map(year => 'https://www.mlb.com/postseason/history/' + year));
+      else if (sport === 'nhl') assert.ok(links.every(link => link.includes('media.nhl.com/')));
+      else if (sport === 'afl') assert.ok(links.every(link => link === 'https://www.afl.com.au/stats/premiership-winners'));
+      else assert.deepEqual(links, JSON.parse(settled).order.map(y => y === '1997' ? 'https://www.nrl.com/draw/nrl-premiership/1997/arl-grand-final/knights-v-sea-eagles/' : 'https://www.nrl.com/operations/the-game/premiership-winners/'));
+      if (process.env.OUTPUT) {
+        await mkdir(process.env.OUTPUT, {recursive: true});
+        const stem = path.join(process.env.OUTPUT, sport + '-' + width);
+        await results.getByRole('heading').scrollIntoViewIfNeeded();
+        await page.screenshot({path: stem + '-recap.png'});
+        await writeFile(stem + '.json', JSON.stringify({width, base: base.origin, score: 100, afterReload: JSON.parse(settled), links, recap: await results.innerText()}, null, 2));
+      }
+    }
+    assert(await page.evaluate(() => document.documentElement.scrollWidth <= document.documentElement.clientWidth + 1));
+    await results.getByRole('button', {name: 'Switch to practice'}).click();
+    await page.getByRole('button', {name: 'Start practice'}).click();
+    await clue.waitFor();
+    await page.clock.fastForward(61000);
+    assert.equal(await results.getByRole('heading').innerText(), '0 points');
+    await page.getByRole('button', {name: 'Play again'}).click();
+    await clue.waitFor();
+    await context.close();
+    console.log(sport, width, 'passed daily, defer, keyboard, reload, sources, timeout and replay');
+  }
+} finally {
+  await browser.close();
+}

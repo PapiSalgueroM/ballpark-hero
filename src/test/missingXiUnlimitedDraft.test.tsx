@@ -3,6 +3,7 @@ import { cleanup, fireEvent, screen } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import MissingXi from '@/pages/MissingXi';
 import { getTodayET } from '@/lib/dateUtils';
+import { pickDailyPuzzle } from '@/lib/missingXi';
 import { click, mountPage, typeInto } from './dailyReload/harness';
 import { recordCompletion } from '@/lib/completions';
 
@@ -31,6 +32,34 @@ async function miss() {
 beforeEach(() => { localStorage.clear(); vi.mocked(recordCompletion).mockClear(); vi.spyOn(Math, 'random').mockReturnValue(0); });
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
+it('keeps the open Daily on its dealt Eastern date and opens a fresh board after midnight', async () => {
+  vi.useFakeTimers({ toFake: ['Date'] });
+  try {
+    vi.setSystemTime(new Date('2026-11-27T04:59:45Z'));
+    const original = pickDailyPuzzle();
+    const firstKey = dailyKey();
+    const page = await mount();
+    expect(screen.getByText(/2026-11-26\. Same puzzle/)).toBeInTheDocument();
+    vi.setSystemTime(new Date('2026-11-27T05:00:15Z'));
+    await miss();
+    expect(screen.getByText(/2026-11-26\. Same puzzle/)).toBeInTheDocument();
+    expect(screen.getByText(original.lineup.dateLabel)).toBeInTheDocument();
+    await click(screen.getByRole('button', { name: 'Give up' }));
+    await click(screen.getByRole('button', { name: 'Yes, reveal it' }));
+    expect(JSON.parse(localStorage.getItem(firstKey)!)).toMatchObject({ date: '2026-11-26', gameStatus: 'lost' });
+    expect(localStorage.getItem(dailyKey())).toBeNull();
+    expect(screen.getByRole('link', { name: "Play today's lineup" })).toHaveAttribute('href', '/missing-xi');
+    page.unmount();
+    await mount();
+    expect(screen.getByText(/2026-11-27\. Same puzzle/)).toBeInTheDocument();
+    expect(screen.getByText(pickDailyPuzzle().lineup.dateLabel)).toBeInTheDocument();
+    expect(pickDailyPuzzle().lineup.id).not.toBe(original.lineup.id);
+    expect(guess(1)).toBeInTheDocument();
+  } finally {
+    vi.useRealTimers();
+  }
+});
+
 it('restores the exact Unlimited clue, accepted miss and guess count after a remount', async () => {
   const page = await mount();
   await click(unlimited());
@@ -56,7 +85,7 @@ it('keeps Daily selected through a remount and resumes the saved Unlimited round
   page.unmount();
 
   await mount();
-  expect(screen.getByText(/Today's lineup/)).toBeInTheDocument();
+  expect(screen.getByText(/Daily lineup/)).toBeInTheDocument();
   await click(unlimited());
   expect(guess(2)).toBeInTheDocument();
   expect(screen.getByText(tried)).toBeInTheDocument();
@@ -73,7 +102,7 @@ it('ignores an invalid archive choice until a player starts an Unlimited round',
   const invalid = '{"lineupId":"missing-lineup","slotIndex":0,"misses":["Gianluigi Buffon"],"active":true}';
   localStorage.setItem(draftKey, invalid);
   await mount();
-  expect(screen.getByText(/Today's lineup/)).toBeInTheDocument();
+  expect(screen.getByText(/Daily lineup/)).toBeInTheDocument();
   expect(localStorage.getItem(draftKey)).toBe(invalid);
   await click(unlimited());
   expect(guess(1)).toBeInTheDocument();

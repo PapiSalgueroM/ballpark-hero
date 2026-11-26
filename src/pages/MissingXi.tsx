@@ -1,4 +1,4 @@
-import { useState, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
+import { useState, useCallback, useEffect, useLayoutEffect, useMemo, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -15,8 +15,10 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { encodeMissingXiUnlimitedDraft, loadMissingXiUnlimitedDraft, writeMissingXiUnlimitedDraft } from '@/lib/missingXiUnlimitedDraft';
-import { getTodayET } from '@/lib/dateUtils';
+import { getEasternDayRange, getTodayET } from '@/lib/dateUtils';
 import { flagForClub } from '@/lib/careerLadder';
+import { safeSessionStorage } from '@/lib/safeStorage';
+import FullXiRecall from '@/components/missing-xi/FullXiRecall';
 import { FlagFromEmoji } from '@/components/FlagImg';
 import {
   pickDailyPuzzle,
@@ -70,14 +72,15 @@ function isXiAction(a: unknown): a is XiAction {
 const MissingXi = () => {
   const [saved] = useState(loadMissingXiUnlimitedDraft);
   const [playMode, setPlayMode] = useState<PlayMode>(saved.draft?.active ? 'unlimited' : 'daily');
+  const [fullXi, setFullXi] = useState(() => safeSessionStorage.getItem('missing-xi-full-open') === '1');
 
-  const dailyPuzzle = useMemo<ActivePuzzle>(() => pickDailyPuzzle(), []);
   const [unlimitedPuzzle, setUnlimitedPuzzle] = useState<ActivePuzzle | null>(saved.draft?.puzzle ?? null);
 
   const {
     guesses: dailyActions,
     addGuess: addDailyAction,
     gameStatus: rawDailyStatus,
+    todayStr: editionDate,
     isLoading,
   } = useDailyPuzzle<{ id: string }, XiAction>({
     gameSlug: 'missing-xi',
@@ -87,6 +90,13 @@ const MissingXi = () => {
     isLost: g => g.filter(a => a.t === 'miss').length >= MAX_GUESSES || g.some(a => a.t === 'give'),
     deserializeGuesses: raw => (Array.isArray(raw) ? raw.filter(isXiAction) : []),
   });
+  const dailyPuzzle = useMemo(() => pickDailyPuzzle(undefined, editionDate), [editionDate]);
+  const [nextEditionReady, setNextEditionReady] = useState(false);
+  useEffect(() => {
+    const midnight = Date.parse(getEasternDayRange(editionDate).end);
+    const timer = window.setTimeout(() => setNextEditionReady(true), Math.max(0, midnight - Date.now()));
+    return () => window.clearTimeout(timer);
+  }, [editionDate]);
 
   const [unlimitedActions, setUnlimitedActions] = useState<XiAction[]>(
     () => saved.draft?.misses.map(name => ({ t: 'miss', name })) ?? [],
@@ -218,7 +228,7 @@ const MissingXi = () => {
       <GameShell help="none"
         width="wide"
         title="MISSING XI"
-        subtitle="One player is missing from this famous lineup. Name him in 3 guesses."
+        subtitle={fullXi ? 'Name all eleven starters from a famous match.' : 'One player is missing from this famous lineup. Name him in 3 guesses.'}
         headerExtra={
           <>
             <RulesGate title="How to Play Missing XI">
@@ -253,37 +263,48 @@ const MissingXi = () => {
                   this browser. Choose New Lineup to draw another from the archive.
                 </p>
               </section>
+              <section>
+                <h3 className="font-bold text-foreground mb-2">Full XI</h3>
+                <p className="text-muted-foreground">Choose a historical match and name the team in any order. Full names and unique surnames count. Tap a position for the first letter. If you find nine starters and used a hint for one, your unassisted total is eight. Each match keeps its own best.</p>
+              </section>
             </RulesGate>
 
             {/* Daily / Unlimited toggle */}
             <div className="flex items-center justify-center gap-1 mt-6 bg-secondary rounded-full p-1 w-fit mx-auto">
-              {(['daily', 'unlimited'] as const).map(m => (
+              {(['daily', 'unlimited', 'full'] as const).map(m => (
                 <button
                   key={m}
-                  onClick={() => switchPlayMode(m)}
+                  type="button"
+                  aria-pressed={fullXi ? m === 'full' : playMode === m}
+                  onClick={() => {
+                    setFullXi(m === 'full');
+                    if (m === 'full') safeSessionStorage.setItem('missing-xi-full-open', '1');
+                    else { safeSessionStorage.removeItem('missing-xi-full-open'); switchPlayMode(m); }
+                  }}
                   className={cn(
-                    'px-5 py-2 rounded-full text-sm font-semibold transition-all',
-                    playMode === m ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
+                    'min-h-11 whitespace-nowrap px-2.5 sm:px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all',
+                    (fullXi ? m === 'full' : playMode === m) ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground',
                   )}
                 >
-                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                  {m === 'daily' ? '📅 Daily' : m === 'unlimited' ? '∞ Unlimited' : 'Full XI'}
                 </button>
               ))}
             </div>
 
-            {playMode === 'daily' && (
-              <p className="text-xs text-muted-foreground mt-3">Today's lineup, {getTodayET()}. Same puzzle for everyone.</p>
+            {!fullXi && playMode === 'daily' && (
+              <p data-no-prerender className="text-xs text-muted-foreground mt-3">Daily lineup, {editionDate}. Same puzzle for everyone.</p>
             )}
           </>
         }
       >
-        {(isLoading || !puzzle) && (
+        {fullXi && <FullXiRecall />}
+        {!fullXi && (isLoading || !puzzle) && (
           <div className="flex justify-center py-16">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         )}
 
-        {!isLoading && puzzle && (
+        {!fullXi && !isLoading && puzzle && (
           <div className="space-y-5">
             <div className="bg-surface-1 border border-border rounded-2xl p-5 text-center">
               <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-1">
@@ -411,7 +432,11 @@ const MissingXi = () => {
                   }}
                   onPlayAgain={() => startRun('unlimited', playMode === 'unlimited')}
                   playAgainLabel={playMode === 'daily' ? 'Play Unlimited' : 'New Lineup'}
-                  playNext={playMode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new lineup!</p> : undefined}
+                  playNext={playMode === 'daily' ? (
+                    nextEditionReady || editionDate !== getTodayET()
+                      ? <a href="/missing-xi" className="text-sm font-semibold text-primary underline">Play today's lineup</a>
+                      : <p className="text-sm text-muted-foreground">The next lineup opens at midnight Eastern.</p>
+                  ) : undefined}
                 />
               </div>
             )}

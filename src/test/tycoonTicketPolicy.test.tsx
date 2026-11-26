@@ -125,7 +125,7 @@ describe('Stadium ticket policy', () => {
         const settledDay = current.state.league?.matchday;
         if (settledDay !== live.league?.matchday) {
           const crowd = engine.attendance({ ...live, fanbase: live.fanbase + engine.fanGrowthPerSec(live) * 0.208 });
-          expect(current.state.league?.results?.at(-1)).toEqual({ day: settledDay, gf: 0, ga: 0, attendance: crowd });
+          expect(current.state.league?.results?.at(-1)).toEqual({ day: settledDay, gf: 0, ga: 0, attendance: crowd, ticketOffer: { policy: 'standard', seats: engine.capacity(live) } });
         }
         expect({ ...current, state: ownRow(current.state) }).toEqual({ ...baseline, state: ownRow(baseline.state as TycoonState) });
         live = current.state; old = baseline.state;
@@ -135,6 +135,50 @@ describe('Stadium ticket policy', () => {
       const saved = (text: string) => ownRow(JSON.parse(text));
       expect(saved(engine.serializeTycoon(live, EPOCH))).toEqual(saved(original.serializeTycoon(old, EPOCH)));
       expect(engine.offlineEarnings(live, EPOCH + 36_000_000)).toBe(original.offlineEarnings(old, EPOCH + 36_000_000));
+    }
+  });
+
+  it('keeps each matchday offer and crowd after new stands, another season and a reload', () => {
+    const finish = (state: TycoonState) => engine.tick({ ...state, minute: 89 }, 1.5, () => 1).state;
+    let state = { ...engine.newTycoon(EPOCH), fanbase: 200 };
+    state = engine.setTicketPolicy(state, 'premium');
+    const quote = engine.standsConstructionQuote(state)!;
+    state = engine.bookStandsConstruction(state, state.rep, quote.opensAfterMatch, quote.cost);
+    state = finish(finish(state));
+    expect(engine.capacity(state)).toBe(160);
+    state = engine.setTicketPolicy(state, 'community');
+    for (let day = 2; day < engine.leagueShape(0).matchdays; day += 1) state = finish(state);
+    state = engine.playAwayMatchdays(state, 1, () => 1).state;
+    const loaded = engine.deserializeTycoon(engine.serializeTycoon(state, EPOCH), EPOCH)!;
+    const firstSeason = loaded.lastCompletedLeague!;
+    expect(firstSeason.results?.slice(0, 2).map(row => [row.ticketOffer, row.attendance])).toEqual([
+      [{ policy: 'premium', seats: 120 }, 120],
+      [{ policy: 'premium', seats: 120 }, 120],
+    ]);
+    expect(firstSeason.results?.[2]).toMatchObject({ ticketOffer: { policy: 'community', seats: 160 }, attendance: 160 });
+    expect(loaded.league!.results?.[0]).toMatchObject({ ticketOffer: { policy: 'community', seats: 160 } });
+    render(<TicketPolicyCard state={loaded} onSelect={vi.fn()} saveFailed={false} onRetrySave={vi.fn()} />);
+    const recent = screen.getByText('Recent ticket offers at full time').closest('details')!;
+    fireEvent.click(recent.querySelector('summary')!);
+    expect([...recent.querySelectorAll('li')].map(row => row.textContent)).toEqual([
+      'Season 2, match 1 · Community160 / 160 seats filled',
+      'Season 1, match 5 · Community160 / 160 seats filled',
+      'Season 1, match 4 · Community160 / 160 seats filled',
+    ]);
+  });
+
+  it('shows older results without inventing a price or capacity', () => {
+    const settled = engine.playAwayMatchdays(engine.newTycoon(EPOCH), 1, () => 1).state;
+    const row = settled.league!.results![0];
+    const { ticketOffer: offer, ...legacy } = row;
+    expect(offer).toEqual({ policy: 'standard', seats: 120 });
+    for (const invalid of [undefined, { policy: 'unknown', seats: 120 }, { policy: 'premium', seats: 121 }, { policy: 'community', seats: 0 }]) {
+      const raw = JSON.stringify({ ...settled, league: { ...settled.league, results: [{ ...row, ticketOffer: invalid }] } });
+      const loaded = engine.deserializeTycoon(raw, EPOCH)!;
+      expect(loaded.league?.results).toEqual([legacy]);
+      const view = render(<TicketPolicyCard state={loaded} onSelect={vi.fn()} saveFailed={false} onRetrySave={vi.fn()} />);
+      expect(screen.queryByText('Recent ticket offers at full time')).toBeNull();
+      view.unmount();
     }
   });
 
@@ -228,7 +272,7 @@ describe('Stadium ticket policy', () => {
         state = next.state;
         const league = state.league;
         firstCrowd ??= league?.results?.[0]?.attendance;
-        const results = league?.results?.map(({ attendance: _attendance, ...result }) => result);
+        const results = league?.results?.map(({ attendance: _attendance, ticketOffer: _offer, ...result }) => result);
         scores.push([state.minute, state.goalsFor, state.goalsAgainst, state.totalGoals, state.totalWins, state.totalMatches,
           league && { ...league, results }]);
       }

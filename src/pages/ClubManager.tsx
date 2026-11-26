@@ -1,3 +1,4 @@
+import { fundSecondYouthPlace } from '@/lib/clubManagerYouthTeam';
 import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import type { MutableRefObject, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
@@ -105,6 +106,8 @@ const TransferScreen = lazy(() => import('@/components/club-manager/TransferScre
 const HalftimeScreen = lazy(() => import('@/components/club-manager/HalftimeScreen').then(m => ({ default: m.HalftimeScreen })));
 const MatchReportCard = lazy(() => import('@/components/club-manager/MatchReportCard').then(m => ({ default: m.MatchReportCard })));
 const AcademyScreen = lazy(() => import('@/components/club-manager/AcademyScreen').then(m => ({ default: m.AcademyScreen })));
+const YouthTeamPanel = lazy(() => import('@/components/club-manager/YouthTeamPanel'));
+const SecondClubPanel = lazy(() => import('@/components/club-manager/SecondClubPanel'));
 const TrainingScreen = lazy(() => import('@/components/club-manager/TrainingScreen').then(m => ({ default: m.TrainingScreen })));
 const RolesScreen = lazy(() => import('@/components/club-manager/RolesScreen').then(m => ({ default: m.RolesScreen })));
 const XpScreen = lazy(() => import('@/components/club-manager/XpScreen').then(m => ({ default: m.XpScreen })));
@@ -742,7 +745,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
         <header className="text-center mb-4">
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">FULL TIME</h1>
         </header>
-        <ScreenLoading><MatchReportCard report={g.report} clubName={g.career.clubName} onContinue={g.continueFromReport} noSack={noSackFrom(g.career) !== null} /></ScreenLoading>
+        <ScreenLoading><MatchReportCard report={g.report} career={g.career} clubName={g.career.clubName} onContinue={g.continueFromReport} noSack={noSackFrom(g.career) !== null} /></ScreenLoading>
       </div>
     );
   }
@@ -769,6 +772,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">SEASON {sm.season} COMPLETE</h1>
         <p className="text-muted-foreground text-sm mb-5">{sm.club} · finished <span className="text-foreground font-bold">#{sm.position}</span> with {sm.points} pts</p>
         <ScreenLoading><ClubManagerSeasonSummary sm={sm} c={c} g={g} /></ScreenLoading>
+        {c.seniorClub && <ScreenLoading><SecondClubPanel career={c} /></ScreenLoading>}
         {/* Round 1343: retire here, before the summer. */}
         <div className="mt-4 mx-auto max-w-sm"><Suspense fallback={<div className="min-h-11" />}><CmRetireDoor c={c} retire={g.retire} onOpen={preloadFarewell} /></Suspense></div>
         {/* Round 928 review: the managers are a tap away here too, not only on the hub. */}
@@ -932,6 +936,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                 onTone={g.talk}
                 talkRead={matchRead}
                 talkStale={!!press && press.lastTone === c.teamTalk && press.toneRun >= 3}
+                onChangeLineup={() => { setTacticsTile(null); g.setActiveTab('tactics'); }}
                 onQuickSim={() => { setHubPanel(null); setWatchMode(false); g.quickPlay(); }}
                 onLive={() => { setHubPanel(null); setWatchMode(true); g.play(); }}
                 onBack={() => setHubPanel(null)}
@@ -1207,7 +1212,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                   onRecall={g.callScoutHome}
                   onPromote={g.promote}
                   onRelease={g.release}
-                /></ScreenLoading>
+                /><YouthTeamPanel career={c} onFound={g.openYouthTeam} onEnter={g.fundYouthTeam} onRotate={g.rotateYouth} onSecondPlace={(club, season, id) => g.commitClubAction(c => fundSecondYouthPlace(c, club, season, id))} /></ScreenLoading>
               )}
 
               {hubPanel === 'training' && (
@@ -1259,7 +1264,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                   onBuyWageRoom={g.addWageRoom}
                   onSponsor={g.takeSponsor}
                   onPush={g.pushSponsorOffer}
-                /></ScreenLoading>
+                /><SecondClubPanel career={c} onCommit={g.commitClubAction} /></ScreenLoading>
               )}
 
               {/* Round 467: the facilities desk. The ground card that lived on

@@ -265,8 +265,7 @@ try {
       assert.deepEqual(await optionValues(firstSeason), ['0', '1']);
       assert.deepEqual(await optionValues(secondSeason), ['0', '2']);
       assert.equal(await comparison.locator('[data-season-compare-title]').evaluate(el => el === document.activeElement), true, 'Comparison opens with its heading focused');
-      assert.deepEqual(await comparison.locator('[data-season-compare-tab]').allTextContents(), ['Overview', 'Regular season']);
-      assert.equal(await comparison.getByRole('button', { name: 'Postseason', exact: true }).count(), 0);
+      assert.deepEqual(await comparison.locator('[data-season-compare-tab]').allTextContents(), ['Overview', 'Regular season', 'Postseason']);
       const compareOverview = await inspect('compare-overview');
       assert(Math.abs(compareOverview.scrollY - pickerGeometry.scrollY) <= 2, 'Opening comparison keeps the visible picker position');
       assert.deepEqual(await comparisonStats(page), {
@@ -274,12 +273,17 @@ try {
         'Age that season': ['25', '26', '+1'], 'Season salary': ['$12.75M', '$14M', '+$1.25M'],
       });
       await unchanged(before, 'default comparison');
+      await activate(comparison.getByRole('button', { name: 'Postseason', exact: true }), profile.input);
+      assert.equal((await comparisonStats(page)).Outcome[0], 'Fixture conference final');
       await activate(comparison.getByRole('button', { name: 'Regular season', exact: true }), profile.input);
       const compareRegular = await inspect('compare-regular');
       assert(Math.abs(compareRegular.scrollY - compareOverview.scrollY) <= 2, 'Comparison tab changes do not jump the page');
       const preciseZero = { 'Batting average': '0.000', 'On base percentage': '0.000', ERA: '0.00', 'Save percentage': '0.000' };
-      const expectedRegular = Object.fromEntries(Object.entries(fixture.regular).map(([label, value]) => [label, [value, value, preciseZero[label] || '0']]));
-      assert.deepEqual(await comparisonStats(page), expectedRegular);
+      const expectedRegular = side => Object.fromEntries(Object.entries(fixture.regular).map(([label, value]) => {
+        const [other, delta] = fixture.rateComparisons?.[label]?.[side] ?? [value, preciseZero[label] || '0'];
+        return [label, side === 'earliest' ? [other, value, delta] : [value, other, delta]];
+      }));
+      assert.deepEqual(await comparisonStats(page), expectedRegular('latest'));
       await chooseSeason(firstSeason, '0', profile.input);
       assert.deepEqual(await optionValues(secondSeason), ['1', '2']);
       await chooseSeason(secondSeason, '1', profile.input);
@@ -287,7 +291,7 @@ try {
       assert.equal(await comparison.getByRole('button', { name: 'Regular season', exact: true }).getAttribute('aria-pressed'), 'true', 'Changing seasons preserves the selected comparison tab');
       const selectedRegular = await inspect('compare-selected-regular');
       assert(Math.abs(selectedRegular.scrollY - compareRegular.scrollY) <= 2, 'Changing compared seasons does not jump the page');
-      assert.deepEqual(await comparisonStats(page), expectedRegular);
+      assert.deepEqual(await comparisonStats(page), expectedRegular('earliest'));
       await activate(comparison.getByRole('button', { name: 'Overview', exact: true }), profile.input);
       const selectedOverview = await inspect('compare-selected-overview');
       assert(Math.abs(selectedOverview.scrollY - selectedRegular.scrollY) <= 2, 'Returning to comparison Overview does not jump the page');

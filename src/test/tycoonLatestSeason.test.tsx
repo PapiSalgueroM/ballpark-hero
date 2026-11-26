@@ -90,7 +90,7 @@ describe('Stadium Tycoon: the Latest season review', () => {
     delete old.league!.results;
     const next = finish(deserializeTycoon(serializeTycoon(old, now), now)!);
     const reopened = deserializeTycoon(serializeTycoon(next, now), now)!;
-    expect(reopened.league?.results).toEqual([{ day: 3, gf: 3, ga: 0, attendance: attendance(old) }]);
+    expect(reopened.league?.results).toEqual([{ day: 3, gf: 3, ga: 0, attendance: attendance(old), ticketOffer: { policy: 'standard', seats: 120 } }]);
     const malformed = structuredClone(reopened);
     malformed.league!.results![0].attendance = -5;
     expect(deserializeTycoon(serializeTycoon(malformed, now), now)?.league?.results).toEqual([{ day: 3, gf: 3, ga: 0 }]);

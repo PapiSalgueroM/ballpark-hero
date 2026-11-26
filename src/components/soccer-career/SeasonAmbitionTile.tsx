@@ -36,12 +36,12 @@ export function SeasonAmbitionTile({ career, onCareer }: { career: CareerState; 
   </>;
 }
 
-export function SeasonAmbitionResult({ season }: { season: SeasonRecord }) {
+export function SeasonAmbitionResult({ season, archived = false }: { season: SeasonRecord; archived?: boolean }) {
   const result = season.ambition;
   if (!result) return null;
   return <div data-season-ambition-result={result.outcome} className="rounded-xl border border-border bg-muted/20 p-3 text-sm">
     <p className="font-semibold">🎯 {result.outcome === 'achieved' ? 'Target met' : result.outcome === 'interrupted' ? 'Target interrupted' : 'Target missed'}</p>
     <p className="text-xs text-muted-foreground">{result.label}. Finished on {result.actual}.</p>
-    {result.rewardStat && <p className="text-xs mt-1">+1 {labels[result.rewardStat]} queued for next season's growth.</p>}
+    {result.rewardStat && <p className="text-xs mt-1">{archived ? `Earned +1 ${labels[result.rewardStat]} for the following season's growth.` : `+1 ${labels[result.rewardStat]} queued for next season's growth.`}</p>}
   </div>;
 }

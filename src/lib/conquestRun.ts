@@ -1,7 +1,7 @@
 import { dailyConquestRng, loadDailyRun, type ConquestDailyRun } from './conquestDaily';
 import {
   seedEmpires, randomPairings, resolveGame, buildHeadlines, emptyRecords, applyRecords,
-  empireCounts, playoffSeeds, totalConquest, finalScore, statesOf, teamLabel, regionNoun,
+  empireCounts, playoffSeeds, totalConquest, finalScore, statesOf, teamLabel, regionNoun, POINTS_PER_CALL,
   type ImperialismSport, type ImpGame, type ImpRoundResult, type ImpRecords,
 } from './imperialismEngine';
 
@@ -46,6 +46,7 @@ export interface ConquestRun {
   bracket: ConquestBracket | null;
   pairings: [string, string][];
   lastRound: ImpRoundResult | null;
+  lastCall: { pick: string; winner: string; points: number } | null;
   champion: string | null;
   madePlayoffs: boolean;
   /** The winner called on each settled round, in order. This is the log. */
@@ -94,6 +95,7 @@ export function startRun(sport: ImperialismSport, favorite: string, rng: () => n
     bracket: null,
     pairings: randomPairings(sport, rng),
     lastRound: null,
+    lastCall: null,
     champion: null,
     madePlayoffs: false,
     picks: [],
@@ -115,7 +117,9 @@ export function playRound(sport: ImperialismSport, run: ConquestRun, call: strin
   const settled = featured
     ? games.find(g => (g.home === featured[0] && g.away === featured[1]) || (g.home === featured[1] && g.away === featured[0]))
     : undefined;
-  const hits = run.hits + (settled && settled.winner === call ? 1 : 0);
+  const correct = settled?.winner === call;
+  const hits = run.hits + (correct ? 1 : 0);
+  const lastCall = settled ? { pick: call, winner: settled.winner, points: correct ? POINTS_PER_CALL : 0 } : null;
 
   const lastRound: ImpRoundResult = {
     round: run.round,
@@ -144,7 +148,7 @@ export function playRound(sport: ImperialismSport, run: ConquestRun, call: strin
 
   return {
     ...run,
-    owners, records, round, bracket, lastRound, champion, madePlayoffs,
+    owners, records, round, bracket, lastRound, lastCall, champion, madePlayoffs,
     picks: [...run.picks, call],
     hits,
     phase: 'recap',

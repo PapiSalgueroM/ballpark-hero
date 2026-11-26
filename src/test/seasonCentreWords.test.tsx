@@ -184,7 +184,7 @@ describe('Season Centre: a sport that brings its own words (Round 1048)', () => 
     expect(screens.review.match(/data-playoff-round=/g)).toHaveLength(2);
     expect(screens.review).toContain('data-playoff-round="W"');
     expect(screens.review).toContain('data-playoff-round="L"');
-    expect(screens.review).toContain('Your playoffs: 11 games');
+    expect(screens.review).toContain('Your playoffs: 11 team games');
     expect(screens.review).toContain('All-NBA');
   });
 });

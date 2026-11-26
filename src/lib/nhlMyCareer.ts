@@ -11,7 +11,7 @@ import { formatNumber } from './formatNumber';
 
 import { NHL_TEAMS } from '@/data/conquestDataNhl';
 import { NHL_PLAYOFF_FORMAT } from '@/data/usSeasonLedgerNhl';
-import { NHL_SHUTDOWN_BERTH_POINTS, NHL_SHUTDOWN_OFFENSIVE_COST, type ProgrammePreparation } from './usCareerProgramme';
+import { nhlCheckingForward, NHL_CHECKING_SERIES_POINTS, NHL_CHECKING_SCORING_COST, NHL_SHUTDOWN_BERTH_POINTS, NHL_SHUTDOWN_OFFENSIVE_COST, type ProgrammePreparation } from './usCareerProgramme';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
 import { nhlSeasonScore, wonAward } from './careerAwards';
 import { US_ENGINE_SEASON, seasonLength, toSlate, fullSeasonOf } from './usSeasonShape';
@@ -136,6 +136,7 @@ export interface NhlSeasonLine {
   /** Personal postseason starts for a goalie who entered the season as the backup. */
   poStarts?: number;
   poWins?: number; poSvpct?: number;
+  poChecking?: { seriesEdge: number; pointsTraded: number };
   awards: string[];
   teamResult: string;
   salary: number;
@@ -563,7 +564,11 @@ export function simNhlSeason(
   let poStage = -1;
   if (rng() < playoffOdds) {
     let stage = 0;
-    while (stage < 4 && rng() < 0.42 + (strength - 78) / 85) stage++;
+    const usualSeriesOdds = 0.42 + (strength - 78) / 85;
+    const checking = programme?.plan.sport === 'nhl' && programme.plan.tactics === 'playoff-checking' && nhlCheckingForward(c.pos);
+    const edge = checking ? Math.min(Math.max(0, (1 - usualSeriesOdds) * 100), NHL_CHECKING_SERIES_POINTS / (c.role === 'backup' ? 2 : 1)) : 0;
+    if (edge > 0) line.poChecking = { seriesEdge: edge, pointsTraded: 0 };
+    while (stage < 4 && rng() < usualSeriesOdds + edge / 100) stage++;
     poStage = stage;
     result = NHL_CAREER_PLAYOFF_RESULTS[stage];
     if (result === 'WON THE STANLEY CUP') {
@@ -610,6 +615,14 @@ export function simNhlSeason(
       const off = (NHL_POS_PROFILE[c.pos] ?? NHL_POS_PROFILE.C).offense;
       line.poGoals = Math.max(0, Math.round((4 + (poForm - 62) * 1.35) * c.archetype.scoringMult * off * pg + rng() * 2));
       line.poAssists = Math.max(0, Math.round((7 + (poForm - 62) * 1.5) * (c.pos === 'D' ? 1.15 : 1.05 - (c.archetype.scoringMult - 1) * 0.5) * pg + rng() * 3));
+      if (line.poChecking) {
+        const original = line.poGoals + line.poAssists;
+        const attacks = 1 - NHL_CHECKING_SCORING_COST / 100;
+        line.poGoals = Math.round(line.poGoals * attacks);
+        line.poAssists = Math.round(line.poAssists * attacks);
+        line.poChecking.pointsTraded = original - line.poGoals - line.poAssists;
+        notes.push(`Checking line: +${line.poChecking.seriesEdge} percentage points in each series. ${countOf(line.poChecking.pointsTraded, 'point', 'points')} traded in this run.`);
+      }
       line.poPoints = (line.poGoals ?? 0) + (line.poAssists ?? 0);
       notes.push(`📊 Playoffs: ${poG} games, ${line.poGoals}G ${line.poAssists}A ${line.poPoints}P.`);
     }

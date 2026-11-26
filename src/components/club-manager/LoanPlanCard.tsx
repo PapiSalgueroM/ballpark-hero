@@ -19,6 +19,7 @@ const ROLE = { leading: 'Leading on ratings', competing: 'Competing for a place'
 export function LoanPlanCard({ career, onCommit }: LoanPlanCardProps) {
   const [open, setOpen] = useState(false), [rules, setRules] = useState(true);
   const [playerId, setPlayerId] = useState(''), [host, setHost] = useState('');
+  const [straight, setStraight] = useState(false);
   const [preview, setPreview] = useState<LoanPlanPreview | null>(null), [notice, setNotice] = useState('');
   const trigger = useRef<HTMLButtonElement>(null);
   const money = moneyIn(career), player = career.squad.find(p => p.id === playerId);
@@ -51,7 +52,7 @@ export function LoanPlanCard({ career, onCommit }: LoanPlanCardProps) {
       {rules && <p data-testid="loan-plan-rules" className="rounded-lg bg-muted p-3 leading-relaxed">
         Opportunity compares named players at the same recorded primary position. It is an estimate, not promised starts or minutes, and does not add a growth bonus.
         For example, two higher-rated players at his position means competition for a place, even if the fee looks good.
-        Standard terms use the normal loan fee; a current offer keeps its actual price. Confirm sends the player out and banks that fee.
+        A straight loan earns a smaller fee and keeps the host from buying your player at the end of the loan. A loan with a purchase option pays the full fee. An incoming offer keeps its own terms.
         Reviews save his actual rating and where he stands at the host, not invented host stats. Ratings move in the summer, so any growth from the loan is added when he comes home. A recall still needs an open window, its agreed fee and squad room. One loan out per player per season.
       </p>}
       <label className="block">Player
@@ -69,16 +70,20 @@ export function LoanPlanCard({ career, onCommit }: LoanPlanCardProps) {
           {hosts.map(club => <option key={club} value={club}>{club}</option>)}
         </select>
       </label>
+      <label className="flex min-h-11 items-center gap-2">
+        <input type="checkbox" checked={straight} onChange={e => { setStraight(e.target.checked); reset(); }} />
+        Straight loan (smaller fee, no purchase option)
+      </label>
       <div className="flex flex-wrap gap-2">
-        <button type="button" className={button} disabled={!player || !host} onClick={() => showPreview('standard')}>Preview terms</button>
-        {bid && <button type="button" className={button} onClick={() => showPreview('bid', bid.club)}>Use current loan offer</button>}
+        <button type="button" className={button} disabled={!player || !host} onClick={() => showPreview(straight ? 'straight' : 'standard')}>Preview terms</button>
+        {bid && <button type="button" className={button} onClick={() => { setStraight(false); showPreview('bid', bid.club); }}>Use current loan offer</button>}
       </div>
       <div ref={reveal} className="space-y-3">
         {preview && <div data-testid="loan-plan-preview" data-player={preview.playerId} data-host={preview.hostClub} data-source={preview.source} data-token={preview.token} className="rounded-lg border border-primary/40 p-3 space-y-2">
-          <p className="font-semibold">{preview.source === 'bid' ? 'Current offer' : 'Standard terms'}: {preview.hostClub}</p>
+          <p className="font-semibold">{preview.source === 'bid' ? 'Current offer' : preview.source === 'straight' ? 'Straight loan' : 'Standard terms'}: {preview.hostClub}</p>
           <p>Loan fee {money(preview.quote.offer.fee)}.
             {preview.quote.offer.recallFee !== undefined && <> Recall {money(preview.quote.offer.recallFee)}.</>}
-            {preview.quote.offer.optionFee !== undefined && <> Purchase option {money(preview.quote.offer.optionFee)}.</>}
+            {preview.quote.offer.optionFee !== undefined ? <> Purchase option {money(preview.quote.offer.optionFee)}.</> : ' No purchase option.'}
           </p>
           <p>Projected opportunity: {ROLE[preview.quote.opportunity.estimatedRole]}.
             {' '}{preview.quote.opportunity.higherRated} higher-rated and {preview.quote.opportunity.equallyRated} equally-rated players
@@ -102,6 +107,7 @@ export function LoanPlanCard({ career, onCommit }: LoanPlanCardProps) {
             && loan.recallFee <= career.budget && career.squad.length < 30;
           return <div key={record.id} className="rounded-lg border p-3 space-y-2">
             <p className="font-semibold">{loan.player.name} at {loan.club}</p>
+            <p>{loan.optionFee === undefined ? 'No purchase option.' : <>The host can buy him for {money(loan.optionFee)}.</>}</p>
             <p>Agreed fee {money(record.fee)}. Rated {loan.player.rating} while away; any growth from the loan is added when he comes home in the summer.</p>
             <p>{current.partial === false
               ? 'Projected opportunity: ' + ROLE[current.estimatedRole] + '. ' + current.higherRated + ' higher-rated players at this primary position.'

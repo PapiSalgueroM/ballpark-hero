@@ -143,7 +143,7 @@ function ClubChooser({ year, onYear, onStart, disabled, loading, loadFailed }: {
           <span>
             <span className="block font-semibold">{year === 2026 ? '2026 opening matchday names' : 'Perth Bears confirmed signings'}</span>
             <span className="block text-muted-foreground">{year === 2026
-              ? 'Start each club with 19 verified names and opening ages, plus 11 generated players. Ratings, wages and contracts are simulated.'
+              ? 'Start each club with 19 verified names and opening ages, plus 11 generated players. Ratings, wages and contracts are simulated. Halves who won their position at the 2024 or 2025 Dally M Awards start at least as high as the top quarter of club strength ratings.'
               : 'Start as Perth with 27 confirmed signings and three generated players. Ages, ratings, contracts and the draw are simulated. Other clubs use generated squads.'}</span>
           </span>
         </label>
@@ -2293,7 +2293,7 @@ function PositionTraining({ career, onAction, disabled }: {
             ? 'New courses need four regular-season rounds remaining.' : 'No fit player is eligible for a new course.'}</p>}
         {trained.length > 0 && (
           <>
-            <h3 className="font-semibold">Learned positions</h3>
+            <h3 className="font-semibold">Additional positions</h3>
             <ul className="space-y-1 text-muted-foreground">
               {trained.map(player => <li key={player.id}>{player.name} · {player.secondaryRole}</li>)}
             </ul>

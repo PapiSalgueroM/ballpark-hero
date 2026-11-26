@@ -1,3 +1,305 @@
+Stadium help follows the actual matchday offer
+
+The worked examples use the engine quotes for junior admissions and programme sales. At a 120-seat ground the offer sets aside 12 places and adds three supporters. Printing 15 programmes costs $30 and breaks even at ten $3 sales.
+
+Release browser fonts and career save fixtures
+
+The release browser verifier now checks the self-hosted font manifest, then verifies the bytes Chrome actually used. Three screen sizes passed. An empty receipt was rejected. Updated test fixtures cover the shared games-played bonus receipt, unchanged Season Centre markup and the expanded rival ballot.
+
+### November 26, 2026. Verified deployed edge receipts
+
+A read-only comparison of six deployed function bundles found all thirteen bundled files match the repository after line-ending normalization. Updated only the version, date and hashes in the deployment ledger from those live records. The edge sync check passed, and deliberate edits to the entrypoint and its supporting file each failed.
+
+### November 26, 2026. Soccer Career award voting by position
+
+New ballots judge midfield and defensive performances against the same role in the field. Appearing regularly, keeping clean sheets or creating chances can change the vote. The ceremony shows the recorded rating, appearances and clean sheets where available. A five-season comparison over three eras and two club tiers yielded 53 holding midfielder, 51 centre-back and 87 keeper wins per 1,080 seasons at each position, compared with zero, one and two before. The attacking midfielder sample held at 130 wins versus 129. The 50-goal striker and reduced-appearances controls passed. Existing awards are read as recorded.
+
+### November 26, 2026. Australian Grand Finals in Finals Sprint
+
+The opt-in AFL and NRL packs each cover 12 Grand Finals. The clues use the competition and club names from each year, including the 1977 VFL and 2010 AFL replays, Footscray in 1954 and the ARL final in the split 1997 rugby league season. Club names and deciding scores were checked against the [AFL](https://www.afl.com.au/stats/premiership-winners), [MCG](https://www.mcg.org.au/about/history/australian-football/vflafl-grand-final-results), [NRL](https://www.nrl.com/operations/the-game/premiership-winners/) and [Rugby League Project](https://www.rugbyleagueproject.org/competitions/nrl/finals.html) archives.
+
+Across 366 daily dates, AFL produced 82 distinct sets of six years and NRL produced 151. Both sports completed and restored all 366 rounds. On phone and laptop, both saved six answers and 100 points through reload, then switched to a fresh practice game. All 69 focused tests and 14 signed-out browser journeys passed. The five earlier sports kept their saved editions.
+
+### November 26, 2026. Stadium Tycoon junior matchdays
+
+At a 120-seat ground, a manager can spend $12 to reserve 12 places for juniors at the next bookable home league fixture. Season pass holders keep their seats. Juniors buy no tickets, count toward concessions, programmes and sponsor attendance targets, and three become regular supporters after the match. In signed-out Chrome the phone booking raised attendance from 40 to 52. The laptop stayed at 120 and displaced 12 paying walk-ups. Both receipts survived the season change and reload. All 48 focused checks and the Stadium Tycoon simulation passed. Across 15 earlier saves, skipping the offer reproduced every one of 8,100 original clock ticks.
+
+### November 26, 2026. Soccer Career rival season comparisons
+
+The rivalry screen compares the last shared club season by appearances, goals and assists. Future Ballon d'Or ballots read the rival's simulated club line, score recorded nominee assists and use the destination tier after a transfer. Existing ballots keep their recorded results. Offline Chrome at 390 and 1366 px showed the same keeper with 29 appearances, zero goals and two assists after reload. The fairness sim passed 134 required wins, 354 podiums and 1,382 seated-field checks.
+
+### November 26, 2026. Baseline for seasonal awards by role and era
+
+A wider Soccer Career comparison covered 6,480 played seasons across 1995, 2005 and 2020 starts, starting ratings of 78, 90 and 94, and tier one and two clubs. Every combination used 12 common seeds and five consecutive senior seasons per position. Per 1,080 seasons, ST won 360 awards, CAM 126, CM 28, CDM zero, CB one and GK one. At the 90th percentile, centre-backs had 19 clean sheets, goalkeepers had 20 and defensive midfielders had zero recorded. The three defensive roles need distinct evidence for any future vote model. The measured baseline and paired pre-ceremony experiment are in the private batch audit.
+
+### November 26, 2026. Soccer Career awards and traffic evidence
+
+The earlier striker balance proposal remains on hold. A private baseline followed 32 common starting seeds at each of ST, CAM, CM, CDM, CB and GK through five consecutive senior seasons at an initial overall of 90. The six roles had 49, 13, 2, 0, 0 and 0 wins from 160 seasons each. A separate direct ceremony comparison kept club, goals, assists, trophies, overall and randomness fixed. Changing six clean sheets, 42 appearances and a 7.0 rating to 26 clean sheets, 49 appearances and an 8.6 rating changed zero of 144 ballots. The scoring positive control changed all 144. Further balancing needs same-role rivals, multiple eras and different ability levels. This entry records evidence only. For prioritisation, the 30 daily Lovable sitewide pageview totals reconciled to 257,224 for October 27 through November 25 UTC. The daily Soccer Career Pages rows summed to 66,064 against 65,656 in the direct monthly report. Use the monthly report for game rankings. It identifies six games in ten page rows.
+
+### November 26, 2026. Build Your XI rival matches
+
+In a new completed draft, Head to head opens the rival that took the most points off the XI. All 19 opponents show the two actual simulated fixtures, scores, scorers and assists. Phone Club Year and desktop Mixed each drafted all eleven and finished on 104 points. All 38 games on each device survived reload with one completion. A saved 102-point season from the previous build reopened with its original 11,514 bytes and final table. The repeatable parity replay compared 72 reports and 1,368 fixtures against the earlier engine with 859,753 identical random draws. Fifteen focused tests, application types, the production build, 19 selected simulations and snapshot startup passed. Lint found zero new diagnostics across this review series.
+
+### November 26, 2026. World Series editions in Finals Sprint
+
+The optional MLB pack covers 12 World Series from 1955 through 2023. Each clue accepts either finalist and displays its own MLB postseason source. Historical answers keep names such as Brooklyn Dodgers, Florida Marlins, Cleveland Indians and Anaheim Angels in the years they played. Phone and laptop finished six clues for 100 and restored the exact completed Daily. Practice timed out and replayed. The four previous sports also passed their browser controls. The MLB source pages and Baseball Almanac agree on each finalist. All 46 focused tests and ten signed-out browser journeys passed.
+
+### November 26, 2026. Missing XI across midnight Eastern
+
+Daily now deals the board, labels it and saves the result under a single Eastern edition date. When the next edition opens, the completed board offers a link to play it. The old screen reproduced the wrong date after the first missed guess following midnight. In a signed-out phone and laptop test the November 26 Croatia result stayed settled, then the link opened the November 27 Inter Milan lineup on guess one. The eight focused archive and Daily checks passed.
+
+### November 26, 2026. Trade a current national draft pick in Aussie Rules Manager
+
+An eligible club can now exchange its own first available selection for a willing generated senior player. The selling club uses that exact pick. Both players and their clubs remain in the season history. Geelong traded pick two for a defender; the seller used it on a new prospect. At 390 and 1366 pixels both registrations and the second-season history survived reload. Passing kept the original pick. In 24 simulated summers passing reproduced the original drafts exactly; all 17 available accepted offers finished with 648 distinct senior players, 36 per club, and legal role coverage. The 48 focused checks passed.
+
+### November 26, 2026. Named NRL halves and five-eighth eligibility
+
+In the named 2026 opening squads, the game now recognises the four recipients of the previous two seasons of halves honours when generating initial abilities. Tom Dearden can play halfback or five-eighth. Across 256 fresh Cowboys saves his median simulated overall rose from 68 to 81. On phone and desktop, moving another player to halfback and starting Dearden at five-eighth survived reload. A saved 71-rated Dearden reopened unchanged. All 18 focused tests passed and all 4,352 sampled team lists retained their original salary cap.
+
+### November 26, 2026. Stanley Cup finalists in Finals Sprint
+
+The optional Finals Sprint in Alphabet Sprint now has 12 verified NHL finals from 1967 through 2024. Each saved Daily keeps its deal, accepted names and score. Signed-out Chrome at 390 and 1366 pixels finished all six clues for 100, restored the same answers after reload and played a separate practice round. Three existing sports also passed phone and desktop checks. The NHL media guide and The Hockey Writers archive independently confirm the two finalists for each year. All 32 focused tests and eight browser journeys passed.
+
+### November 26, 2026. Name a full historical starting XI
+
+Missing XI has an optional Full XI archive. Choose a real match, name starters in any order and use individual hints. Each side keeps a separate unassisted best. All 2,277 published starter entries across 207 team sheets completed their XI, including 81 extra spellings from the two-source ledger. The 2011 Barcelona team was played at 320, 390 and 1366 pixels. A full game found all 11 with one hint for 10 unassisted. A partial game revealed the rest at five. Reload and a poorer second attempt retained the result and earlier best. The Daily receipt stayed unchanged and a stale tab and failed write preserved progress. Seven focused tests and both archive simulations passed.
+
+### November 26, 2026. Keep a refused Daily Sprint answer on screen
+
+The local Finals Sprint daily was showing newly started rounds and points even when the browser rejected their saves. A failed start now leaves the start button available. A failed answer or defer keeps the same clue and input. A timed-out result can retry its save. Practice keeps its existing in-memory fallback. Chrome at 390 and 1366 pixels refused the start, first and sixth answer, then restored storage and saved all six once. Both expired a second daily, retried the failed result write, and persisted the finish. A baseline browser reproduced two losses. Five component tests passed.
+
+### November 26, 2026. Fund a second U21 prospect
+
+Managers can buy an extra development place for 18m per six-game U21 campaign. Founding and renewal costs now reach Finances and a free entry preserves the exact balance. In both phone and laptop playthroughs a funded prospect rose from 65 to 68 over six U21 appearances. Reload kept the growth, fixtures and payment. Across thirty simulated club-seasons, eight funded campaigns produced 48 extra appearances and 24 rating points. All three comparison arms kept the same 461 senior results. The clubs could still accumulate large balances. Thirteen focused tests passed.
+
+### November 26, 2026. Verified career cards in the XI bench browser
+
+Mixed mode replacement browsing now merges verified fallback cards alongside club market rows. Richard Ríos for Benfica and Casemiro for Manchester United were already available in typed search. A signed-out phone and desktop each drafted all eleven, replaced Kobbie Mainoo with Casemiro at CDM after the United market query returned no rows, and restored the identical saved XI after reload. Mounted regressions covered both replacements. Sixty-nine focused tests passed, including the Bayern right-back and Chelsea career cases.
+
+### November 26, 2026. UFC division run
+
+Players choose a weight class and identify three fighters with eight guesses shared across the run. The recap keeps each guess and its exact clue count. Signed-out Chrome at 320 pixels ended on a miss with two fighters found. At 390 and 1366 pixels the final correct name landed on guess eight. Each result and its clue history survived reload with the prior Daily save intact. A denied save and a stale tab preserved the original run. Escape followed by Enter spends zero guesses, and the next round keeps keyboard focus. Six UFC tests, the standard production build, 16 site simulations and the browser snapshot startup passed.
+
+### November 26, 2026. Plan two Fantasy Draft picks
+
+The planner uses the same legal shortlist as the rival, considers both rival picks in snake order and lets the player reverse the targets. Signed-out phone and laptop drafts each picked all 22 players in four complete formations across the two runs. Taking Hakimi first left a 69% chance of reaching Haaland. Reversing them gave 100% for Hakimi. The real pick and the next two rival picks survived reload. Both games settled once at 74/100 with local fixtures. A comparison across 168 drafts preserved all prior rival selections.
+
+### November 26, 2026. Preview starter fitness before kickoff
+
+Match Centre shows the actual starting XI and its play or rest projection using the dates of the next confirmed fixture and current training. Fresh XI can be applied from the card. Local signed-out phone and laptop playthroughs changed the lineup, reloaded and played both games. All 22 settled values matched. Rest took Donnarumma from 70% to 85% in three days and Pickford from 79% to 98% in seven. Twelve focused tests passed. Fixing recovery at seven days or removing appearance workload each broke all 11 rows in a separate three-day replay.
+
+## November 26 local NHL checking assignments
+
+Signed centres and wings can trade personal postseason scoring for a higher chance of winning each series. The plan records the actual series bonus and scoring cost in the Career Log and expires unused if the team misses the playoffs. Two fresh Toronto draftees played three seasons on the local phone and desktop production build. Both missed twice, then reached Round 2 in 2028. The fourth-line centre played 13 playoff games, finished with four goals and four assists, and reopened the two-point cost after reload. A 280-pair simulation kept regular seasons and qualification identical. All 464 default-path careers still matched their committed historical digests.
+
+## November 26 Soccer Career retirement replay verification
+
+The Keep Playing compatibility harness once again reconstructs the earlier engine with the current rating helpers, historical-arrival hooks and page call. The normal CLI passed 1,461 checks over 180 careers, with no skipped years and 106 correctly recorded injury seasons. Restoring the old decline behavior in the test engine produced 532 failures, including 24 reloaded careers losing the pending season. The repair only changes the test harness.
+
+## November 26 local Stadium Tycoon match programmes
+
+Ground owners can compare a short and bulk print order before a fixture, pay up front and see the actual income from that matchday crowd. The archive keeps printed and sold copies with the price and cost. At 390 and 1366 pixels, a short run sold 15/15 and cleared $15. A separate bulk run sold 17/50 to a crowd of 69 and lost $24. The season archive survived reload, and a refused write kept the original balance and allowed the same purchase on retry. The existing economy simulation and 21 focused programme, pricing and integration checks passed.
+
+## November 26 local Soccer Career academy coaching
+
+After playing in three senior seasons, a player can volunteer to mentor one generated academy prospect. Coaching five passing situations and banking at least three correct reads uses the personal training slot for that season. Five appearances at the same club then count for mentoring, subject to the usual injury and absence rules. A signed-out Columbus Crew career played six appearances on phone and laptop. Its 4/5 clinic advanced the prospect from zero to one year and the Record Book kept the receipt after reloading. The same seeded season without coaching paused at zero years. Three deliberately broken engine variants lost the expected effect, training cost or archived score.
+
+## November 26 local Player Bingo board recall
+
+A finished board now reopens with the original 24 tiles, placements, strikes and score. Players can answer up to three questions about their own placements, pause and resume. On phone and laptop, a seeded local production board accepted Kevin De Bruyne for Chelsea, banked one 100-point completion with zero strikes and restored a 2/3 recall after two reloads. The player pool and completion endpoint in these playthroughs used local fixtures. Mounted coverage also preserved a zero-point loss and 1,700-point blackout.
+
+## November 26 verified cup scorer playthroughs and Lexar builds
+
+All 39 Club Manager scorer integration tests now pass on the current fixture calendar, including 23 Champions League, seven domestic and nine Europa cases. The test scenarios reach wins, exits, transfers and appointments through the game engine, preserve exact player and club attribution after reload and reconcile goals to the recorded matches. Reclassifying a managed own goal failed the Madrid final and splitting the January transfer's scorer identity failed the Europa check. The 17 previously failing tests used seeded results from before calendar-based recovery. Two consecutive plain npm production builds succeeded in the Lexar worktree, including the rebuild into an existing dist. Eighteen selected site and game simulations and the browser snapshot startup passed on the standard output.
+
+## November 26 local season-target verification
+
+The season-target simulation now reports its measured injury, suspension and conviction cases. The generic site runner had categorized its three-line output as empty even though the assertions executed. Its default output check now recognizes the same 16 paired careers and seven interruption paths. All 18 selected game and site harnesses and the browser snapshot startup check passed against the latest local production build.
+
+## November 26 local Club Manager cup awards and loan fitness
+
+A confirmed Europa League Golden Boot stays with its originating club when a manager changes jobs or skips the season review. Past winners now explicitly labels cup scorers from the club you managed that season. Outgoing loans recover toward selection fitness, minor injuries serve elapsed days and major injuries retain their medical return dates. Two local production-browser runs accepted a Chelsea job after Everton's controlled Europa final and reopened the Everton award. On phone and laptop a separate January recall returned a player at 80 fitness without an injury, after leaving at 37 with three weeks to serve. Five focused regressions passed. The same 17 broader cup tests failed on the previous tree and candidate, independently of these fixes.
+
+## November 26 verified pro career regression fixtures
+
+The normal NFL, NBA, MLB and NHL compatibility run now passes all 58 position and era groups, covering 464 seeded 14-season careers. For the 16 previously failing groups, reversing the earlier approved playoff rule changes in memory reproduced 128 original whole saves and their lowest bank balances. The scoped recorder changed exactly 43 career entries and matched 16 independently predicted group hashes. Among the traced rules were backup quarterback usage, NBA Finals MVP selection, pitcher decision limits and postseason goalie workload. No gameplay code or player saves changed in this fixture update.
+
+## November 26 local Soccer Career academy startup
+
+A development-only JSX tagger inserted attributes before an explicit component type on the awards card. The flagship module returned HTTP 500, which made the academy creator report that its clubs could not load. Type inference from the saved ballot supplies the same nominee type. The module now returns HTTP 200 locally. Fresh phone and laptop careers both reached the first senior season in development and retained their earned target after reload. All 27 focused awards tests passed.
+
+## November 26 local Soccer Career season target archive
+
+A completed season now shows its saved personal target, actual result and recorded training reward in the Record Book. Missing targets stay blank. In two fresh signed-out production-browser careers Nottingham Forest's striker played 30 times, scored six against a five-goal target and retained the exact same save bytes and +1 Shooting after reopening club history on phone and laptop. A Millwall striker who scored twice missed the same target and received no reward. All 20 Record Book tests passed, including an interrupted season and an older season.
+
+## November 26 local Build Your XI league approach
+
+Players can pick a balanced, attacking or protective approach before submitting their eleven. The choice survives draft reload, changes the simulated league and stays with the completed result. Home and away points are retained when recorded. Two signed-out local production-browser drafts finished with all eleven identities, 102 and 104 points, and one intercepted completion each after reload. No paid evaluator was called.
+
+## November 26 local Foundry Vale player loans
+
+Owners can give one eligible young parent player a full season at their second club. The boardroom tracks his starts, substitute appearances, minutes and rating through all 14 circuit dates and the summer return. Two signed-out production-browser runs from funded saves showed 1,080 and 1,084 minutes and a return from 87 to 89 OVR after reload. The assignment and existing second-club tests passed locally.
+
+## November 26 local MLB postseason workload
+
+Relievers now log their own playoff outings, strikeouts and ERA beside the team schedule. A signed reliever can volunteer for one extra appearance for three health, charged once only when played. Historical saves retain their original pitching line. Local production Chromium on phone and laptop verified a ten-game playoff run, the extra outing, a missed postseason and saved results after reload. Eight focused tests passed, and 176 paired simulated careers retained the same underlying seasons and awards.
+
+## November 26 local verification, NBA scoreboards
+
+The normal NBA, NFL and MLB Season Center simulation passed all 160 checks. It counted final scores in 4,043 NBA schedules and matched every saved record. It also replayed each season without the saved wins and losses to verify the original placement ranges and repair rates. With the exact-record fix disabled in memory, only 267 of 4,043 records matched. That check was the sole failure of the full negative-control run.
+
+## November 26 local review, career playoff records
+
+NBA and NFL Career Log now shows saved defensive production, distinguishes team playoff games from individual appearances, and lets players compare two postseasons. NBA archives also show the saved club record and minutes. New NFL box scores keep the original playoff sentence for older saves. NBA reconstructions finish with the recorded wins and losses when the save contains a complete, consistent record. In a paired 48-career test, the prior replay missed 44 team records. The new replay matched all 48, and 528 partial, absent or invalid record controls reproduced the old games. Four signed-out production-build Chrome careers played two seasons and reloaded at 390 and 1366 pixels. The NBA season review finished 49-33 for Houston and 20-62 for Memphis, matching both saves. The app typecheck, production build, 14 offline site gates and snapshot startup passed. Full-save comparisons preserved every previously recorded value across 208 NFL and NBA careers. The historical all-sport save digest has the same 16 failing entries on the prior commit and the local revision, and the older soccer Season Center markup snapshot also fails on both. Local review only.
+
+## November 26 local review, Soccer Perfect Season draft comparisons
+
+After match 38 a player can try an eligible teammate from the same club in the same position. The comparison uses the original match rolls, identifies the individual results that changed and preserves the official XI and score. Two native sessions drafted eleven players with a fourth-turn reroll and restored the exact original save after comparing. On the November 26 phone Daily, Fabian Schär for Malick Thiaw changed match 23 from a win to a draw, 104 hypothetical points versus the recorded 106. Tests also played the alternative through the ordinary draft API for a prior Daily, Unlimited and No Rerolls.
+
+## November 26 local review, owning a second senior club
+
+A club with academy facilities at level 12 or higher can buy the fictional Foundry Vale for 90m in preseason. The purchase includes 12m in separate operating cash. Its board can spend 4m on the squad or keep reserves, follow an eight-club home-and-away league, and read the final table and accounts before and after rollover. In fresh late-game fixtures Manchester City paid once, then the phone squad-investment campaign ended fourth with 11m and the laptop reserve campaign sixth with 14m. Both played through the calendar and reopened season one in year two. The manager cannot take the asset to another employer. Simulated job changes, dismissal, duplicate settlement and a failed save followed by retry were tested.
+
+## November 26 local review, player loans and their purchase options
+
+Managers can now offer a lower-fee straight loan from the Sell screen's loan plan. They can see the purchase price on standard deals and incoming loan bids before agreeing. Choosing a host uses the actual leagues in this save. Two fresh Everton browser careers sent Harrison Armstrong to Ajax for a simulated 400k with no purchase option, against the standard simulated 700k with a 10.1m buy option. Both receipts and budgets survived reload. A paired summer exercised the standard option and returned the same contracted player on a straight loan. The mounted and engine checks cover stale quotes, failed writes, double placement, existing offers and recovery after reload.
+
+## November 26 local review, Conquest match odds
+
+The shared Conquest board now uses the same territory and streaks as the match simulation for the featured call. In the November 26 Soccer Daily, Arsenal opened matchday seven against Rennes at 85% on phone and laptop, replacing the stale 81% figure. Each fresh session played six rounds and restored the same seventh-round board after reload. Daily and seeded Free Play controls reproduced both entire prior seasons, including the match outcomes, scores, champions and number of random draws. The score cap matched the measured maximum of 1,037 in the read-only database check.
+
+## November 26 local review, compact UFC Guesser phones
+
+At 320 pixels, three clue columns split the word Heavyweight inside a card. The small-phone layout now gives each clue one of two columns. Chrome measured two columns at 320 pixels, three at 390 pixels and an unclipped 864-pixel comparison board at both laptop widths. All four two-guess daily saves survived reload.
+
+## November 26 local review, Stadium Tycoon sponsor decision
+
+Stadium Tycoon compares the guaranteed sponsor payout against this season's qualifying matchdays and last season's recorded attendance. Partial crowd history shows its coverage. In a local Chrome replay an engine-promoted club had a $2,403 guarantee against $267 per qualifying date. The phone and laptop both showed a nine-date break-even across the new fourteen-game schedule. With three known crowds in a five-match fixture, two reached 128, including one exactly at the target. The seven sponsor tests passed.
+
+## November 26 local review, UFC Guesser clue board
+
+Two daily guesses exposed a 529-pixel horizontal overflow on a 390-pixel phone. Each guess now has a nine-clue card view on small screens. Visitors can switch guesses and read the clue value, match and direction. The full comparison board fits its 864-pixel laptop container. A private Chrome replay submitted two fighters at each width, switched the phone selection and reopened the same saved guesses after reload. The mounted test and damaged Daily-save check passed.
+
+## 2026-11-26, Rotate academy prospects during a U21 campaign
+
+A Club Manager can assign the next two league dates to another academy prospect after U21 match two or four. Earlier development stays with the player who earned it. Across seven senior fixtures on phone and laptop, two prospects gained two points and one point respectively. Their separate credits and all six scores survived midseason reloads and entry into the following campaign. The proof supplied late-game funds and two test prospects, then used the game's academy and match controls.
+
+## 2026-11-26, Build Your XI opening rules
+
+Build Your XI now has one help button. Its opening sheet fits three steps, a goalkeeper example and the dismiss button on a phone. Full rules and scoring reopen inside the same sheet. On the 390-pixel replay the first example moved from 904 pixels below the rules region's top to 196 pixels. On the 1366-pixel replay it moved from 804 to 196. Both fresh drafts dismissed the rules, reopened the detailed guide, selected a formation and retained the draft on reload.
+
+## 2026-11-26, NFL Finals Sprint preview
+
+The existing Finals Sprint now offers an NFL Daily and practice board with twelve Super Bowls. The year is when the game was played. The answer key was checked against the 2024 NFL Record and Fact Book and FOX Sports' Super Bowl results table. Six native phone and laptop runs, covering soccer, NBA and NFL, earned 100 after a defer, reopened the same recap after reload, then timed out and replayed practice. Each sport's 366-day rotation passed the two-clues-per-difficulty and distinct-answer checks. Sources: https://static.www.nfl.com/league/apps/league-site/media-guides/2024/2024-Record-and-Fact-Book.pdf and https://www.foxsports.com/nfl-super-bowl-winners-and-results
+
+## 2026-11-26, Soccer Career cup campaigns in the record book
+
+After a senior season, Career Stats opens the record book even during headlines and transfers. Competitions now opens individual editions with the club or country, result, and any recorded player totals or continental top-scorer award. Domestic cups show the recorded round or club win without assigning team goals to the player. Fresh phone and laptop careers went from West Ham Youth to 22 senior appearances and an early 2022/23 FA Cup exit. Both opened the same record before advancing the headlines and after reload, with identical save bytes.
+
+## 2026-11-26, College Grid missed picks
+
+At the end of a lost daily, College Grid now shows the names you tried on each open cell beside examples that fit its two clues. Repeat misses appear once in that cell. A save made before the update still shows the available examples. All 75 boards finished under both winning and losing play, and a fresh 15-guess board restored the original review and identical save bytes on phone and laptop.
+
+## 2026-11-26, Cup Golden Boot on the full-time report
+
+Domestic and European full-time reports now show the club's scorer and whether the Golden Boot is still open, outright, shared or unconfirmed. In the local fresh-season replay, Everton's quarter-final exit kept the race open, and the final award was saved after the other sides played on. After Manchester City's 2-0 win in the Champions League final, the report named Erling Haaland as the simulated winner with ten goals. Both careers resumed their original season reviews after reload.
+
+## 2026-11-26, Rest between Club Manager fixtures
+
+Player recovery and the individual training preview now follow the next fixture date. A seven-day interval keeps its existing recovery. Starting all 20 players at 65 fitness and replaying the same Everton fixture, the old engine gave identical results with seven and four days to recover. The revised four-day domestic cup and Champions League turnarounds both left every player eight points below the full-week result.
+
+## 2026-11-26, Past U21 campaigns
+
+Paying for the next U21 season now keeps the previous prospect, all six fixtures, W/D/L record, goals and earned development in Academy. A second registration charged 12 million once and retained the results of the first six played fixtures on phone and desktop after reload. The browser test advanced the season number to reopen registration.
+
+## 2026-11-26, US player appearance requirements
+
+NBA, NFL, MLB and NHL My Career now retain the number of games played and the required minimum with each newly settled contract target. The review can explain why a strong rate or longest kick did not earn a bonus in a short season. Earlier receipts still use the figures they recorded.
+
+## 2026-11-26, Fight Career scorecards
+
+Fight record now reopens the rounds from completed bouts at the gym, during between-fight decisions and at retirement. Each round shows both scores and punches landed. The totals come from the original bout, including fights stopped early. Older results still show the opponent, outcome and method.
+
+In fresh private browser careers at 390 and 1366 pixels, a fighter turned pro, chose the first offer, trained for six weeks and won an eight-round decision 79-73. All eight round scores and punch counts matched the saved bout after reload. Reading the card preserved the career bytes.
+
+## 2026-11-26, XI trophy totals
+
+The shared XI result counter shows three trophies for a treble. It still shows the treble achievement and all three competition names in the season summary. Existing saved trophy lists are read as recorded.
+
+## 2026-11-26, Build Your XI league standings
+
+Newly submitted lineups play in a 20-team simulated table. Every pair meets home and away. Managers can open League table to inspect the wins, draws, losses and points behind their finish. The saved table reopens with its XI. Existing completed results keep the originally saved finish. World XI's existing season format stays available.
+
+The same Mixed 4-3-3 which previously finished fifth on 104 points exposed the old independent rival totals. Engine checks account for all 380 matches, mirror results on both sides, and reconcile each finish to its standings and its alternate-formation replay.
+
+## 2026-11-26, Soccer and NBA Finals Sprint preview
+
+A link inside Alphabet Sprint opens six typed Finals questions. Each board uses two clues at each editorial difficulty, and accepts either finalist until a team has been used. One clue can be deferred. The local Daily rolls over at Eastern midnight and Practice has unlimited rounds. The preview uses its own device saves. The score maxes out at 100.
+
+The version 1 fact bank checks 12 men's World Cup finals and 12 NBA Finals series. Only the two teams that played that year's final qualify. NBA years use the year the Finals ended. The data file records the official and independent historical sources. The bank is a limited pilot. Publication of a broader Daily and a ranked scoreboard are separate milestones.
+
+Two controls cover the tricky paths. The browser replay in scripts/qa/playFinalsSprintPreview.mjs completes both sports from Alphabet Sprint with remote requests blocked. It tests defer, type and submit, mid-round reload, settled score, source links, timeout and practice replay at phone and desktop widths. Across 732 daily boards all legal answer sequences left a path to a full clear. Disabling the solvability filter allowed a dead end on 266 boards in the same sample.
+
+Rollback is a revert of the pilot commit. Classic Sprint scores and saves use separate keys.
+
+## 2026-11-26, Soccer Conquest call results
+
+The Soccer Conquest round recap shows the club you picked, the winner and the call points earned. A Daily reload rebuilds the same receipt from the saved calls and match results. The next fixture opens with a fresh choice.
+
+The previous build recorded a correct first call at 320 pixels but omitted the persistent receipt. Four offline browser cases played the actual first Daily fixture with correct and missed calls at 320 and 1440 pixels. Each kept the same pick, winner and +25 or +0 call points across reload and opened the next match from Continue. The Daily simulation restored all 13 Soccer rounds and found no score gain on reload. This is a local candidate.
+
+## 2026-11-26, Stadium Tycoon matchday ticket history
+
+The ticket office shows the last three recorded offers alongside the seats filled at full time. League results keep the offer and capacity that applied to each fixture, including past seasons. Existing score and crowd history still loads when these two details were never recorded. Focused tests cover the switch from Premium to Community, seats opening after a fixture, sponsor results, the season boundary, and reload. An offline browser started a blank club, selected Premium, bought its first $30 stand, and switched to Community. The phone and desktop replays kept both crowds after reload, 67 of 120 seats and 90 of 160. This is a local review branch.
+
+The away-match simulation now passes the same graduate resolver as the game when it injects its test faults. The economy, league and away-match simulations, all 171 stadium tests, and all 15 built-site checks passed.
+
+## 2026-11-26, Replay targets and better records in eight games
+
+The Nov 15 recorded-finishers sample set the remaining eight after Soccer Career and Club Manager. NBA, NFL, NHL and MLB My Career each add a position-specific alternate performance target in the Season Programme. Existing season results settle it through the normal in-game bonus. Career Log adds defensive and efficiency figures for NBA and NFL, plus position-aware hockey and baseball rates using saved appearances.
+
+Fresh 390px browser replays in `scripts/playUsCareerFreshTargets.mjs` go through quick draft and one complete season with each role. Memphis's point guard hit 1.3 steals per game against 0.8 and earned $50K gross. Denver's kicker made a 55-yard field goal against a 45-yard target and earned $24K gross. Neither bonus reached the bank's $0.1M increment. Indiana's center posted 0.4 blocks per game against 1.0 and earned no bonus. The Career Log figures, exact targets and outcomes, one saved result, and finances survived reload. The replay uses fixed seeds and blocks external requests.
+
+Soccer Perfect Season adds an optional No rerolls Unlimited run and longest streaks from the played matches. World XI adds Go for the win, a more volatile tactical choice that can turn draws into a win or a loss. Its report shows home and away points. All three World XI reports show goal difference.
+
+Stadium Tycoon tracks competitive home attendance and lets a manager record an expansion after the new stands open. Wonderkid Factory tracks academy rating and lets a manager pick a prospect for a development goal. These two achievements are career records.
+
+## 2026-11-26, Soccer Career rival awards
+
+The rival's Ballon d'Or count now goes up only if that rival finishes first on the same ranked ballot the player sees. The comparison panel shows the new count once the list is revealed. Older saves keep their existing totals because they do not retain a ballot for every season. An older save paused on the rivalry card now shows the motivation it grants without claiming who won or where the player finished.
+
+The regression reproduced a season where the player finished first and the rival's lifetime count still rose from two to three. The replay now keeps it at two. The focused tests also cover a rival winning when the player finishes second or eleventh, another candidate winning, and the restored rivalry card applying its existing effect once. The production build and 32 focused tests passed. Local Chromium at 390px and 1440px followed the ranked ceremony into the rivalry card, reloaded there, and confirmed the same result and effect in the saved career.
+
+The full app typecheck, rivalry simulation and all 15 built-site checks passed. The separate historical awards-night replay stops at a stale source anchor in the Round 1334 inverse, which also fails on the base commit.
+
+## 2026-11-26, League seasons on the manager record
+
+Advancing to summer now copies the final league wins, draws, losses, goals for and goals against from the completed review into that season’s saved record. Manager > League seasons also shows earlier finishes with their original points. A blank 390px browser career played 42 fixtures at Everton and finished 15th with 39 points. Its 9W 12D 17L, 42 goals for and 58 against still appeared after renewing or releasing contracts, continuing to season two and reloading. This is a local review branch.
+
+## 2026-11-26, Club Manager U21 campaigns
+
+Managers with academy facilities at level 12 can found their own U21 side for 45 million in the save's currency. The first six-match campaign is included. Later entries cost 12 million. Pick one of the club's own under-21 prospects and follow the team's scores on senior league dates. Every second youth fixture can develop the featured prospect, capped at potential. Senior cup dates and reloading do not award extra fixtures.
+
+In a private 390px browser replay, a fresh Manchester City save received late-game facilities, budget and one test academy prospect. Through the normal Academy and Matchday screens, the budget went from 100 to 55 million, seven senior fixtures produced six U21 results, and the prospect improved from 62 to 64. All six results and earned growth survived reopening the career. Local review build.
+
+## 2026-11-26, Club Manager season settlement
+
+Club Manager accepts a finished season once from the current screen before recording the result. Repeating See Season Review before the screen changes used to post two scored completions for an older career. Normal review, the calendar sim and the last match report use the same settlement check. The dismissal report also checks that it still owns the career before posting.
+
+The Everton regression reproduced two 9-point completion calls on the previous hook and one on the candidate. The 320px plain save and 1440px packed save opened the normal review, reloaded it without another completion and rolled over with one history row. The browser used only local fixtures. This is a local candidate.
+
+## 2026-11-26, Build Your XI completed draft recovery
+
+Submitting a full XI now saves its eleven selected records, verdict and full season report together. The result opens on return with its original player stats and month-by-month numbers. Older unfinished drafts still open at their next pick or at review. Play Again clears the finished XI. Mounted tests cover canceled and conflicting picks, a failed write and retry, an unrated report, and a completed season restored with its simulator disabled. Local review only.
+
+Four native 11-player drafts covered Mixed and the 2026 Club Year at 390 and 1366 pixels with recorded market fixtures. Reload retained every player, position, stat, verdict and saved season with one intercepted completion. The original browser control lost its finished draft at submission. The 2026 test XI won its league on 104 points with one trophy.
+
+## 2026-11-26, Build Your XI draft position picker
+
+Build Your XI now puts its open positions beside the assigned club or nation. Repeated roles have separate options, and the pitch can still select the same open positions. The search opens after a position is chosen, then keyboard focus returns to the picker after a successful pick. The draft saves and validates players through its existing rules.
+
+The 320-pixel first session put the goalkeeper button below the fold at y910 before the change. In the offline recorded-year replay, the new 44-pixel picker sat at y424 on the phone and y487 at 1366 pixels. Both replays selected a goalkeeper without a scroll jump, accepted the matching fixture record, and kept the filled slot after reload. The Mixed draft regression also covers duplicate roles, keyboard search and reload.
+
 ## 2026-11-25, Quieter ads and career season comparisons
 
 AdSense anchor and vignette ads are off for douknowball.com. Home shows one in-page banner after the first sport on phones and above the footer on desktop. The phone slot uses a 100-pixel-tall display unit. AdSense allows desktop side rails on either edge. The homepage marks the game area with Google’s overlap protection. AdSense confirmed the save and says propagation can take up to an hour.
@@ -13,6 +315,14 @@ Home brings Search and one Browse sports menu into a single All games catalogue.
 Home uses one consent-gated AdSense banner after the catalogue and About copy. It stays in the page flow, collapses when unfilled and is absent during search. Simulated fills fit at 320, 390, 430 and 1440 pixels with 198 pixels between the banner and the nearest preceding control.
 
 At 390 pixels the catalogue heading moved from y2521 to y988, with the first playable tile still at y248 in the same browser fixture. The browser checks cover links, navigation history, focus, search and ad consent.
+
+## 2026-11-26, Soccer Career Projects review
+
+The phone opens Street League, Match Lab, Players’ Council and Fan Radio. Each project has three chapters with two distinct commitments. Play the next eligible senior season to see the reward or tradeoff in the project history. Actual appearances, rating or discipline decide outcomes. Skipped seasons keep the commitment. The project effects apply once to morale or popularity.
+
+The seeded season fixture preserves the full simulated season and random draws against the ordinary path, then reloads the actual receipt. Chromium at 320 and 1440 pixels opens the phone app, commits a choice and reloads the saved commitment.
+
+The fresh-save browser replay in `scripts/playSoccerCareerFreshProject.mjs` starts two 390px careers with empty browser storage. Both replay a West Ham academy year with Pace focus and sign the first senior contract. The Street League run meets Open signups with 22 appearances against a target of eight. The same season without a commitment ends at 72 morale, and the Street League run ends at 74 with the same match stats. Reloading and reopening the phone leaves the saved bytes identical, with one receipt for Morale +2. The replay fixes the random seed and uses the shipped club fallback with external requests blocked.
 
 ## 2026-11-25, Admin report filters and email timeouts
 

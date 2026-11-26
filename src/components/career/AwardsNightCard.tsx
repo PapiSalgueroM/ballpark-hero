@@ -29,7 +29,7 @@ export function AwardsNightCard<C extends AwardsCandidate>({
   badge?: (c: C) => ReactNode;
   detail: (c: C) => string;
   score: (c: C) => string;
-  scoreDetail: (c: C) => string;
+  scoreDetail: (c: C) => ReactNode;
   onDismiss: () => void;
   /** When supplied, names and result enter the DOM only as the list arrives. */
   reveal?: { complete: boolean; onComplete: () => void };

@@ -1,4 +1,4 @@
-import { useState, type MouseEvent } from 'react';
+import { useMemo, useState, type MouseEvent } from 'react';
 import { ArrowLeft, RotateCcw } from 'lucide-react';
 import { GameHelp } from '@/components/game/GameHelp';
 import { GameNav } from '@/components/game/GameNav';
@@ -10,7 +10,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import { SOCCER_PS_PATH, useSoccerPerfectSeason } from '@/hooks/useSoccerPerfectSeason';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { getTodayET } from '@/lib/dateUtils';
-import { SOCCER_PS_GAMES, SOCCER_PS_SLOTS, type SoccerPSOutcome } from '@/lib/soccerPerfectSeason';
+import { SOCCER_PS_GAMES, SOCCER_PS_SLOTS, previewSoccerSwap, type SoccerPSRun, type SoccerPSOutcome } from '@/lib/soccerPerfectSeason';
 import { cn } from '@/lib/utils';
 
 const TITLE = 'Soccer Perfect Season';
@@ -85,6 +85,7 @@ function DraftPanel({ view, game, act }: { view: View; game: Game; act: ButtonAc
 }
 
 function ModeMenu({ game, act }: { game: Game; act: ButtonAction }) {
+  const [noRerolls, setNoRerolls] = useState(false);
   const { savedDaily, savedUnlimited } = game;
   const daily = savedDaily.run;
   const unlimited = savedUnlimited.run;
@@ -111,10 +112,15 @@ function ModeMenu({ game, act }: { game: Game; act: ButtonAction }) {
       {savedUnlimited.invalid && <p className="text-xs text-yellow-400">The saved Unlimited season could not be read.</p>}
       {unlimited && <button type="button" data-soccer-ps-action="resume-unlimited" className={cn(secondaryButton, 'w-full')}
         onClick={event => act(event, game.resumeUnlimited)}>
-        {unlimited.completionRecorded ? 'View Unlimited result' : 'Resume Unlimited'}
+        {unlimited.completionRecorded ? 'View Unlimited result' : 'Resume Unlimited'}{unlimited.noRerolls && ' (No Rerolls)'}
       </button>}
+      <label className="flex min-h-11 cursor-pointer items-center gap-2 text-sm font-semibold">
+        <input type="checkbox" checked={noRerolls} onChange={event => setNoRerolls(event.currentTarget.checked)} className="h-4 w-4 accent-primary" />
+        No Rerolls practice
+      </label>
+      {noRerolls && <p className="text-xs text-muted-foreground">Pick from every club in the opening draw. Practice runs stay off the site leaderboard.</p>}
       <button type="button" data-soccer-ps-action="unlimited" className={cn(primaryButton, 'w-full')}
-        onClick={event => act(event, game.startUnlimited)}>New Unlimited</button>
+        onClick={event => act(event, () => game.startUnlimited(noRerolls))}>New Unlimited</button>
       {unlimited && <p className="text-xs text-muted-foreground">{game.pendingUnlimited
         ? 'A new draw discards your unsaved result.' : 'A new draw replaces your last Unlimited run.'}</p>}
     </div>
@@ -141,6 +147,41 @@ function StartingXI({ view }: { view: View }) {
   </div>;
 }
 
+function SwapReview({ run, view }: { run: SoccerPSRun; view: View }) {
+  const [key, setKey] = useState('');
+  const option = view.swaps.find(swap => swap.slot + ':' + swap.playerId === key);
+  const replay = useMemo(() => option ? previewSoccerSwap(run, option) : null, [run, option]);
+  const changed = view.season?.games.flatMap((outcome, i) => replay && replay.games[i] !== outcome
+    ? [{ day: i + 1, before: outcome, after: replay.games[i] }] : []) ?? [];
+  if (!view.swaps.length) return null;
+  return <details className="rounded-xl border border-border bg-card px-3 text-sm">
+    <summary className="min-h-11 cursor-pointer py-3 font-semibold">Try a different draft pick</summary>
+    <p className="mb-2 text-muted-foreground">Compare the same 38 matches with one teammate in the same position. Your recorded result stays on file.</p>
+    <label className="block pb-3">Replacement
+      <select value={key} onChange={event => setKey(event.currentTarget.value)} className="mt-1 block min-h-11 w-full min-w-0 rounded-lg border border-border bg-background px-2">
+        <option value="">Choose a player</option>
+        {SOCCER_PS_SLOTS.map(slot => {
+          const choices = view.swaps.filter(swap => swap.slot === slot.key);
+          return choices.length > 0 && <optgroup key={slot.key} label={slot.key + ' · ' + view.picks[slot.key]?.name + ' · ' + choices[0].club}>
+            {choices.map(swap => <option key={swap.playerId} value={swap.slot + ':' + swap.playerId}>{swap.name} · {swap.rating}</option>)}
+          </optgroup>;
+        })}
+      </select>
+    </label>
+    {option && replay && <div className="space-y-1 pb-3" role="status" data-soccer-swap-result>
+      <p className="font-semibold">{option.name} for {view.picks[option.slot]?.name} · {option.slot}</p>
+      <p>With this pick · {replay.wins}W · {replay.draws}D · {replay.losses}L · {replay.points} points</p>
+      <p className="text-muted-foreground">Recorded XI · {view.record.wins}W · {view.record.draws}D · {view.record.losses}L · {view.record.points} points</p>
+      {changed.length ? <details>
+        <summary className="min-h-11 cursor-pointer py-3">{changed.length} {changed.length === 1 ? 'match changed' : 'matches changed'}</summary>
+        <ul className="grid grid-cols-2 gap-1 text-xs">
+          {changed.map(row => <li key={row.day}>Match {row.day} · {row.before} to {row.after}</li>)}
+        </ul>
+      </details> : <p>All 38 results stay the same.</p>}
+    </div>}
+  </details>;
+}
+
 function SeasonPanel({ game, view, act, freshFinish }: { game: Game; view: View; act: ButtonAction; freshFinish: boolean }) {
   const { run } = game;
   const { odds, record, season, finished } = view;
@@ -154,10 +195,14 @@ function SeasonPanel({ game, view, act, freshFinish }: { game: Game; view: View;
         outcome={record.perfect ? 'win' : 'close'}
         score={`${record.wins}/${SOCCER_PS_GAMES}`} scoreLabel="wins"
         outcomeEmoji={record.perfect ? '🏆' : '⚽'} headline={headline} statLine={recordLine}
-        statRow={[{ label: 'Site score', value: `${record.score}/100` }]}
+        statRow={[
+          { label: run.noRerolls ? 'Practice score' : 'Site score', value: `${record.score}/100` },
+          { label: 'Best win run', value: record.longestWinRun },
+          { label: 'Best unbeaten run', value: record.longestUnbeatenRun },
+        ]}
         emojiGrid={season.games.map(outcome => OUTCOME_EMOJI[outcome]).join('')}
         share={{ score: recordLine, gameName: TITLE, gamePath: SOCCER_PS_PATH }}
-        onPlayAgain={run.mode === 'unlimited' && !game.pendingUnlimited ? game.startUnlimited : undefined}
+        onPlayAgain={run.mode === 'unlimited' && !game.pendingUnlimited ? () => game.startUnlimited(run.noRerolls) : undefined}
         playAgainLabel="New Unlimited"
       />
     </RestoredResult> : <>
@@ -172,6 +217,7 @@ function SeasonPanel({ game, view, act, freshFinish }: { game: Game; view: View;
         <button type="button" data-soccer-ps-action="finish-season" className={secondaryButton} onClick={event => act(event, game.finishSeason)}>Finish season</button>
       </div>
     </>}
+    {finished && <SwapReview run={run} view={view} />}
     <ol aria-label="Match results" className="grid grid-cols-8 gap-1 sm:grid-cols-10">
       {season.games.map((outcome, index) => <li key={index}
         aria-label={`Match ${index + 1}: ${index < run.revealed ? OUTCOME_LABELS[outcome] : 'not played yet'}`}
@@ -224,12 +270,12 @@ export default function SoccerPerfectSeason() {
         {view && <StartingXI view={view} />}
         <section key={panelKey} ref={revealRef} data-soccer-ps={phase} className="space-y-3">
           {game.canRetrySave && <div className="rounded-xl border border-border bg-card p-3 text-sm">
-            <p role="status">Your result could not be saved. Retry to submit your score.</p>
+            <p role="status">{run?.noRerolls ? "Your practice result could not be saved. Try saving it again." : "Your result could not be saved. Retry to submit your score."}</p>
             <button type="button" className={cn(secondaryButton, 'mt-2')}
               onClick={event => act(event, game.retrySave)}>Retry save</button>
           </div>}
           {!run || !view ? <ModeMenu game={game} act={act} /> : <>
-            <p className="text-xs font-semibold text-muted-foreground">{run.mode === 'daily' ? `Daily · ${run.date}` : 'Unlimited'}</p>
+            <p className="text-xs font-semibold text-muted-foreground">{run.mode === 'daily' ? `Daily · ${run.date}` : run.noRerolls ? 'Unlimited · No Rerolls practice' : 'Unlimited'}</p>
             {view.currentClub ? <DraftPanel view={view} game={game} act={act} />
               : <SeasonPanel view={view} game={game} act={act} freshFinish={freshFinish} />}
             <button type="button" data-soccer-ps-action="back-menu"

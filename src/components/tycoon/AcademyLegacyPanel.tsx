@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { REGIONS, canMoveUp, fmtCash, FACILITIES, facilityCost, findSec, trainMult, priceMult, coachingFocus, COACHING_FOCUS_SHARE } from '@/lib/wonderkidFactory';
-import type { FactoryState, FacilityId } from '@/lib/wonderkidFactory';
+import type { DevelopmentTargetAction, FactoryState, FacilityId } from '@/lib/wonderkidFactory';
 
 export default function AcademyLegacyPanel({ s, region, goal, goalPct, doMoveUp }: {
   s: FactoryState;
@@ -44,15 +44,22 @@ export default function AcademyLegacyPanel({ s, region, goal, goalPct, doMoveUp 
   );
 }
 
-export function AcademyFacilityPanel({ s, panel, cap, doBuy, onFocus }: {
+export function AcademyFacilityPanel({ s, panel, cap, doBuy, onFocus, onDevelopmentTarget }: {
   s: FactoryState;
   panel: FacilityId;
   cap: number;
   doBuy: (id: FacilityId) => void;
   onFocus?: (id: number | null) => void;
+  onDevelopmentTarget?: (action: DevelopmentTargetAction) => void;
 }) {
   const focused = coachingFocus(s);
   const trainable = panel === 'coaching' ? s.prospects.filter(p => p.rating < p.potential) : [];
+  const target = s.developmentTarget;
+  const targetPlayer = panel === 'coaching' && target ? s.prospects.find(p => p.id === target.id) : undefined;
+  const targetChoices = targetPlayer && !trainable.includes(targetPlayer) ? [...trainable, targetPlayer] : trainable;
+  const averageRating = panel === 'coaching' && s.prospects.length
+    ? (s.prospects.reduce((total, p) => total + p.rating, 0) / s.prospects.length).toFixed(1)
+    : null;
   return (
 (() => {
             const f = FACILITIES.find(x => x.id === panel)!;
@@ -96,6 +103,32 @@ export function AcademyFacilityPanel({ s, panel, cap, doBuy, onFocus }: {
                       </select>
                     </label>
                     {focused && trainable.length === 1 && <p className="text-muted-foreground">Priority starts when another prospect can train.</p>}
+                  </section>
+                )}
+                {panel === 'coaching' && onDevelopmentTarget && (
+                  <section aria-label="Development target" className="space-y-2 border-t border-border pt-3 text-xs">
+                    {averageRating !== null && <p className="text-muted-foreground">Average prospect rating {averageRating}</p>}
+                    <p className="text-muted-foreground">Train one prospect to the next rating point. Record the target before they leave the academy.</p>
+                    <label className="block font-semibold">
+                      Training target prospect
+                      <select value={targetPlayer?.id ?? ''} disabled={targetChoices.length === 0}
+                        onChange={event => onDevelopmentTarget(event.currentTarget.value === '' ? 'cancel' : Number(event.currentTarget.value))}
+                        className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-background px-2">
+                        <option value="">{targetChoices.length ? 'No target' : 'No prospects can train yet'}</option>
+                        {targetChoices.map(p => <option key={p.id} value={p.id}>{p.name}</option>)}
+                      </select>
+                    </label>
+                    {target && targetPlayer && (
+                      <>
+                        <p className="text-muted-foreground">Rating {Math.floor(targetPlayer.rating)} · {target.rating} goal</p>
+                        <button type="button" disabled={targetPlayer.rating < target.rating}
+                          className="min-h-11 rounded-lg border border-border px-3 font-semibold disabled:opacity-50"
+                          onClick={() => onDevelopmentTarget('claim')}>Record development</button>
+                      </>
+                    )}
+                    {(s.developmentTargetsCompleted ?? 0) > 0 && (
+                      <p className="text-muted-foreground">{s.developmentTargetsCompleted} recorded across your career</p>
+                    )}
                   </section>
                 )}
               </div>

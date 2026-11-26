@@ -105,6 +105,24 @@ describe('World XI ratings and club chemistry display', () => {
     expect(view.getByRole('radio', { name: 'Balanced' })).toBeChecked();
   });
 
+  it('can go for the win and replay a different approach with the same drafted XI', async () => {
+    const view = await mount(), chosen = await complete(view);
+    fireEvent.click(view.getByRole('radio', { name: 'Go for the win' }));
+    simulate(view);
+    expect(H.simulate.mock.calls[0][0]).toHaveLength(11);
+    expect(H.simulate.mock.calls[0][0]).toEqual(expect.arrayContaining(chosen));
+    expect(H.simulate.mock.calls[0][3]).toBe('attack');
+    expect(view.getByText(/Home points/)).toBeVisible();
+    expect(view.getByText(/Away points/)).toBeVisible();
+
+    fireEvent.click(view.getByRole('button', { name: 'Try another approach' }));
+    fireEvent.click(view.getByRole('radio', { name: 'Balanced' }));
+    simulate(view);
+    expect(H.simulate).toHaveBeenCalledTimes(2);
+    expect(H.simulate.mock.calls[1][0]).toEqual(H.simulate.mock.calls[0][0]);
+    expect(H.simulate.mock.calls[1][3]).toBe('balanced');
+  });
+
   it('shows the exact card overall for every player after simulation', async () => {
     const view = await mount(), chosen = await complete(view);
     expect(view.queryByLabelText(`Overall for ${chosen[0].name}`)).toBeNull();

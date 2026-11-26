@@ -3,9 +3,9 @@ import { nrlSeasonPlan } from '@/data/nrlManagerSeasons';
 import { NRL_OPENING_MATCHDAY_2026 } from '@/data/nrlOpeningMatchday2026';
 import {
   createNrlCareer, createNrlOpeningMatchdayCareer, loadNrlPerthSigningsCareer, nrlCareerCap, nrlCareerSquad, readNrlCareerSave, reduceNrlCareer,
-  type NrlCareerState,
+  type NrlCareerState, type NrlOpeningMatchdayRoster,
 } from '@/lib/nrlCareer';
-import { createNrlSeason, nrlNextRound, NRL_ROLES } from '@/lib/nrlManager';
+import { createNrlSeason, nrlNextRound, nrlStarterOptions, NRL_ROLES } from '@/lib/nrlManager';
 import { nrlOriginEligibility } from '@/lib/nrlOrigin';
 import { sameNrlCareer } from '@/lib/nrlSaveSlots';
 
@@ -49,6 +49,41 @@ describe('NRL 2026 opening matchday names', () => {
     }
     expect(ids.size).toBe(323);
     expect(names.size).toBe(323);
+  });
+
+  it('uses the complete two-season halves honours for new named starts and preserves previous ratings on reload', () => {
+    const honours = Object.values(NRL_OPENING_MATCHDAY_2026).flat().filter(row => row[4]);
+    expect(honours.map(row => [row[1], ...row[4]!]).sort()).toEqual([
+      ['Ethan Strange', 2025, 'Five-eighth'], ['Jahrome Hughes', 2024, 'Halfback'],
+      ['Nathan Cleary', 2025, 'Halfback'], ['Tom Dearden', 2024, 'Five-eighth'],
+    ]);
+    const formerRoster: NrlOpeningMatchdayRoster = Object.fromEntries(Object.entries(NRL_OPENING_MATCHDAY_2026)
+      .map(([club, rows]) => [club, rows.map(([id, name, age, role]) => [id, name, age, role] as const)]));
+    const strengths = nrlSeasonPlan(2026).clubs.map(c => c.strength).sort((a, b) => a - b);
+    const floor = strengths[Math.floor(strengths.length * 0.75)];
+    const ids = new Set(honours.map(row => real(row[0])));
+    for (const seed of [0, 1, 3, 15, 64]) {
+      const old = createNrlOpeningMatchdayCareer('cowboys', seed, formerRoster);
+      expect(bytes(readNrlCareerSave(bytes(old)))).toBe(bytes(old));
+      const now = createNrlOpeningMatchdayCareer('cowboys', seed, NRL_OPENING_MATCHDAY_2026);
+      for (const [i, player] of now.players.entries()) {
+        const previous = old.players[i];
+        expect(player.id).toBe(previous.id);
+        expect(player.rating).toBe(ids.has(player.id) ? Math.max(floor, previous.rating) : previous.rating);
+        expect(player.age).toBe(previous.age);
+        expect(player.potential).toBeGreaterThanOrEqual(player.rating);
+        if (!ids.has(player.id)) expect(player.potential).toBe(previous.potential);
+      }
+    }
+    const c = createNrlOpeningMatchdayCareer('cowboys', 0, NRL_OPENING_MATCHDAY_2026), id = real(506424);
+    expect(c.season.lineup.Halfback).toBe(id);
+    const otherHalf = nrlStarterOptions(c.season, 'Halfback').find(p => p.id !== id)!;
+    expect(otherHalf).toBeDefined();
+    const free = reduceNrlCareer(c, { type: 'selectStarter', role: 'Halfback', playerId: otherHalf.id });
+    expect(nrlStarterOptions(free.season, 'Five-eighth').map(p => p.id)).toContain(id);
+    const switched = reduceNrlCareer(free, { type: 'selectStarter', role: 'Five-eighth', playerId: id });
+    expect(switched.season.lineup['Five-eighth']).toBe(id);
+    expect(readNrlCareerSave(bytes(switched))?.season.lineup).toEqual(switched.season.lineup);
   });
 
   it('retains a sourced player through a full season and a fictional Perth expansion', () => {

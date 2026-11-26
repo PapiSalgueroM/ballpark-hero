@@ -46,6 +46,7 @@ export function CupScorerHonour({ award, myClub, competition, scope }: {
         <p key={index} className="text-xs break-words">
           <Name name={row.name} flags={(row.generated ? 1 : 0) | (row.club === myClub ? 2 : 0)} />
           {' '}{row.club} · {row.goals} {row.goals === 1 ? 'goal' : 'goals'}
+          {row.club === myClub && ' · Your club that season'}
         </p>
       ))}
     </div>

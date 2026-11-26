@@ -185,7 +185,7 @@ if (CONTROL) {
     /* Round 508: send a loan out with no option and no recall figure, which is
        exactly what a loan out was before this round. Section 8 must then find
        both figures missing and be unable to recall anybody. */
-    engine = swap(engine, '        ...loanOutTermsFor(sellValue(p), fee),', '', 'clubManager.ts');
+    engine = swap(engine, '        ...loanOutTermsFor(sellValue(p), fee, kind),', '', 'clubManager.ts');
   } else if (CONTROL === 'refeeloan') {
     /* Round 508: put back the line that recomputed a loan fee from loanOutFee
        and threw the agreed number away. Section 9 must catch it. */

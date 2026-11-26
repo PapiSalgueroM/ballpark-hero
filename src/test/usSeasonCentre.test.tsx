@@ -80,6 +80,8 @@ describe('the US Season Center, mounted by itself', () => {
     press('Sim the rest');
     const review = document.querySelector('[data-review]')!;
     expect(review.querySelector('[data-review-finish]')!.textContent).toContain(row.teamResult);
+    const recorded = row as UsRow;
+    expect(review.querySelector('[data-review-finish]')!.textContent).toContain(`${recorded.clubWins}-${recorded.clubLosses}`);
     expect(review.querySelector('[data-review-tile="Games"]')!.textContent).toContain(String(row.games));
     expect(review.querySelector('[data-review-tile="PPG"]')!.textContent).toContain(String((row as unknown as { ppg: number }).ppg));
     act(() => { fireEvent.click(document.querySelector('[data-centre-exit]')!); });
@@ -87,6 +89,21 @@ describe('the US Season Center, mounted by itself', () => {
     /* nothing but the help flag was written, and the career in memory is untouched */
     expect(JSON.stringify(career)).toBe(saved);
     expect(Object.keys(localStorage)).toEqual(['seasonCentre:help:nba']);
+  });
+
+  it('replays the saved NBA record while incomplete records keep their original reconstruction', () => {
+    const career = playNba('record-archive', 1);
+    const row = career.seasons[0] as UsRow;
+    const scores = (input: UsRow) => {
+      const built = buildUsSeason(NBA_SEASON, career, input, NBA_CAREER_SPORT.teamLabelOf);
+      if (built.ok !== true) throw new Error('Expected a playable NBA season');
+      const games = deriveSeason(built.sport, input, built.ctx)!.games;
+      return games.map(game => game.us > game.them);
+    };
+    const archived = scores({ ...row, clubWins: undefined, clubLosses: undefined });
+    expect(scores({ ...row, clubLosses: undefined })).toEqual(archived);
+    expect(scores({ ...row, clubWins: 50, clubLosses: 99 })).toEqual(archived);
+    expect(scores(row).filter(Boolean)).toHaveLength(Number(row.clubWins));
   });
 
   it('shows one honest tile for a year whose real length is not the one the career plays', async () => {
@@ -218,11 +235,11 @@ describe('the US Season Center with the NFL bound', () => {
       return path;
     };
     const lost = read({ teamResult: NFL_SEASON.results[0], poGames: 1, poLine: '238 yds, 2 TD, 1 INT' });
-    expect(lost.line).toBe('Your playoffs: 1 game, 238 yds, 2 TD, 1 INT');
+    expect(lost.line).toBe('Your playoffs: 1 team game, 238 yds, 2 TD, 1 INT');
     expect(lost.steps.map(st => [st.label, st.won])).toEqual([['Wild Card', false]]);
     expect(lost.steps[0].text).toMatch(/^lost to the \S/);
     const two = read({ teamResult: NFL_SEASON.results[1], poGames: 2, poLine: '4 of 5 on field goals' });
-    expect(two.line).toBe('Your playoffs: 2 games, 4 of 5 on field goals');
+    expect(two.line).toBe('Your playoffs: 2 team games, 4 of 5 on field goals');
     expect(two.steps.map(st => [st.label, st.won])).toEqual([['Wild Card', true], ['Divisional', false]]);
     /* the save holds no playoff score, so no round prints one (a keyed score could not be held to "4 of 5") */
     for (const st of [...lost.steps, ...two.steps]) expect(st.text).not.toMatch(/\d+-\d+/);

@@ -58,11 +58,13 @@ import { soccerEarnedBadges } from "@/lib/soccerCareerBadges";
 import { soccerCriticName, soccerCriticNow, soccerCriticColumns } from "@/lib/soccerCareerCritic";
 import { STANCE_LABEL } from "@/lib/careerCritic";
 import type { SpendingCategory } from "@/lib/soccerCareerEngine";
+import CareerProjectsPanel from "@/components/soccer-career/CareerProjectsPanel";
+import { chooseCareerProject } from "@/lib/soccerCareerProjects";
 
 type AppId =
   | "home" | "messages" | "thread" | "contacts" | "contact" | "news"
   | "bank" | "social" | "player" | "life" | "peaks" | "column"
-  | "market" | "asset" | "shop" | "shopcat" | "arcade" | "cards";
+  | "market" | "asset" | "shop" | "shopcat" | "arcade" | "cards" | "projects";
 
 const fmtFollowers = (m: number) => m >= 1 ? `${m.toFixed(1)}M` : `${Math.round(m * 1000)}K`;
 const fmtMoney = (m: number) => {
@@ -107,13 +109,14 @@ const HISTORICAL_ENTRY_SOURCES = {
   ],
 } as const;
 
-export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClose }: {
+export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onCareerPatch, onClose }: {
   career: CareerState;
   onAnswer: (msgId: string, choiceIdx: number) => void;
   /** Round 134: every money tap, on one prop, the same way every message tap
    *  rides on onAnswer. */
   onMoney: (action: MoneyAction) => void;
   onBuyItem: (itemId: string) => void;
+  onCareerPatch?: (update: (previous: CareerState) => CareerState) => void;
   onClose: () => void;
 }) {
   const [app, setApp] = useState<AppId>("home");
@@ -220,6 +223,7 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
     { id: "player", label: "My Player", emoji: "⭐" },
     { id: "peaks", label: "Peaks", emoji: "🎖️" },
     { id: "life", label: "Life", emoji: kt.emoji },
+    ...(onCareerPatch ? [{ id: "projects" as const, label: "Projects", emoji: "🧭" }] : []),
   ];
 
   /* Round 319, review item 11: the gram told a goalkeeper to score more
@@ -460,6 +464,15 @@ export default function PhonePanel({ career, onAnswer, onMoney, onBuyItem, onClo
 
           {app === "cards" && (
             <CardsScreen career={career} onBack={() => setApp("home")} onMoney={onMoney} />
+          )}
+
+          {app === "projects" && onCareerPatch && (
+            <CareerProjectsPanel
+              career={career}
+              onChoose={(projectId, choiceId) => onCareerPatch(previous => chooseCareerProject(previous, projectId, choiceId))}
+              onBack={() => setApp("home")}
+              renderHeader={(title, backLabel, onBack) => <AppHeader title={title} backLabel={backLabel} onBack={onBack} />}
+            />
           )}
 
           {app === "social" && (

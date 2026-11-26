@@ -290,6 +290,7 @@ const MLB_HELD = 'src/lib/mlbSeasonHeld.ts';
 const MLB_LEDGER = 'src/data/usSeasonLedgerMlb.ts';
 const WINDOW = { file: 'src/data/usLeagueShape.ts', from: "  { sport: 'nba', era: 'now', from: 2025, to: null, shape: NBA_2025 },", to: "  { sport: 'nba', era: 'now', from: 2025, to: null, shape: NBA_2025 },\n  { sport: 'nba', era: 'y2004', from: 2003, to: null, shape: NBA_2025 }," };
 const CONTROLS = {
+  savedRecord: { section: 3, label: 'scoreboard matches the saved team record', patches: [{ file: US, from: 'const band = hasClubRecord ? [clubWins, clubWins] : resultBand;', to: 'const band = resultBand;' }] },
   stream: { section: 6, patches: [{ file: US, from: 'const key = usSeasonKey(bind, career, row);', to: 'const key = usSeasonKey(bind, career, row); Math.random();' }] },
   record: { section: 3, patches: [{ file: US, from: "const target: TeamTarget = band ? { kind: 'record', winsMin: band[0], winsMax: band[1] } : { kind: 'none' };", to: "const target: TeamTarget = { kind: 'none' };" }] },
   length: { section: 2, patches: [{ file: US, from: 'if (length === null || length !== bind.fullSeason) {', to: 'if (length === null) {' }] },
@@ -391,6 +392,7 @@ const CONTROLS = {
 CONTROLS.seam = CONTROLS.lay;
 /* which sport a control needs in the run (its patched file is only bundled with that sport) */
 const CONTROL_SPORT = {
+  savedRecord: 'nba',
   stage: 'nba', names: 'nba', window: 'nba', formula: 'nba', hot: 'nba', sum: 'nfl', kick: 'nfl', nflstage: 'nfl', nflformula: 'nfl', days: 'nfl',
   poscore: 'nfl', nflheld: 'nfl', lumpy: 'nfl', flat: 'nfl', tdform: 'nfl', minutes: 'nfl', order: 'nfl', points: 'nfl', forty: 'nfl', level: 'nfl', oddtd: 'nfl', bigkick: 'nfl',
   oddsack: 'nfl', short82: 'nba', lawdrift: 'nfl',
@@ -1398,6 +1400,15 @@ function observe(c, line, who) {
   /* the fix pass of Round 1212: baseball's older save twin (see mlbOldTwin); null when the season is not one */
   if (who.slug === 'mlb') rec.old = mlbOldTwin(bind, SB, career);
   const band = ownBand(who.slug, row.teamResult, row.year);
+  if (who.slug === 'nba') {
+    if (band) rec.exactRecord = rec.wins === row.clubWins && s.games.filter(game => game.us < game.them).length === row.clubLosses;
+    const { clubWins, clubLosses, ...archive } = row;
+    const old = M.buildUsSeason(bind, career, archive, SB.teamLabelOf);
+    const games = old.ok && M.deriveSeasonOrWhy(old.sport, archive, old.ctx);
+    if (games && typeof games !== 'string') {
+      rec.bandRecord = { wins: games.games.filter(game => game.us > game.them).length, repairs: games.repairs, seedset: rec.seedset, teamResult: row.teamResult };
+    }
+  }
   if (band && (rec.wins < band[0] || rec.wins > band[1])) rec.p3.push(`wins ${rec.wins} outside ${band[0]} to ${band[1]} for "${row.teamResult}"`);
   if (!band && s.target.kind !== 'none') rec.p3.push(`a band for the unknown result "${row.teamResult}"`);
   /* section 4 */
@@ -1816,15 +1827,21 @@ for (const slug of SPORTS) {
   tally('6', `${slug} deriving twice, from a JSON round trip, gives the same season, path and totals`, derived.filter(r => r.p6.length).map(r => `${r.year}: ${r.p6[0]}`), derived.length);
 
   /* 7 */
-  const noRepair = derived.filter(r => r.repairs === 0).length;
-  console.log(`     repairs: none in ${share(noRepair, derived.length)}, median ${median(derived.map(r => r.repairs))}, p90 ${pct(derived.map(r => r.repairs), 0.9)}; attempts after the first in ${share(derived.filter(r => r.attempt > 0).length, derived.length)}`);
+  const bandRecords = slug === 'nba' ? derived.map(r => r.bandRecord).filter(Boolean) : derived;
+  if (slug === 'nba') {
+    check('7', bandRecords.length === derived.length && bandRecords.length > 0, 'nba every reconstructed season also plays with its archived record omitted');
+    const saved = derived.filter(r => r.exactRecord !== undefined);
+    check('3', saved.length > 0 && saved.every(r => r.exactRecord), `nba scoreboard matches the saved team record (${saved.filter(r => r.exactRecord).length} of ${saved.length})`);
+  }
+  const noRepair = bandRecords.filter(r => r.repairs === 0).length;
+  console.log(`     band-generated records: no repair in ${share(noRepair, bandRecords.length)}, median ${median(bandRecords.map(r => r.repairs))}, p90 ${pct(bandRecords.map(r => r.repairs), 0.9)}; attempts after the first on the played seasons in ${share(derived.filter(r => r.attempt > 0).length, derived.length)}`);
   for (const ss of SEEDSETS) {
-    const dd = derived.filter(r => r.seedset === ss);
+    const dd = bandRecords.filter(r => r.seedset === ss);
     console.log(`       seed set ${ss}: ${dd.length} derived, no repair ${share(dd.filter(r => r.repairs === 0).length, dd.length)}, refused ${share(open.filter(r => r.seedset === ss && !r.derived).length, open.filter(r => r.seedset === ss).length)}`);
   }
-  check('7', noRepair >= derived.length * (NO_REPAIR_MIN[slug] ?? 1), `${slug} at least ${(100 * (NO_REPAIR_MIN[slug] ?? 1)).toFixed(0)}% of seasons need no repair (${share(noRepair, derived.length)})`);
+  check('7', noRepair >= bandRecords.length * (NO_REPAIR_MIN[slug] ?? 1), `${slug} at least ${(100 * (NO_REPAIR_MIN[slug] ?? 1)).toFixed(0)}% of band-generated seasons need no repair (${share(noRepair, bandRecords.length)})`);
   [o.missed, ...o.results].forEach((t, i) => {
-    const w = derived.filter(r => r.teamResult === t).map(r => r.wins);
+    const w = bandRecords.filter(r => r.teamResult === t).map(r => r.wins);
     const [lo, hi] = o.bands[i];
     const q1 = lo + (hi - lo) * 0.25; const q3 = lo + (hi - lo) * 0.75;
     const med = median(w);

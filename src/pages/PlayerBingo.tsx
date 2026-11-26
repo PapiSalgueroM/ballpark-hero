@@ -27,7 +27,10 @@ import {
 import { FirstLineBanner, LineFlash } from '@/components/player-bingo/LineBanner';
 
 /** Why the run ended, for result-screen copy. */
-type EndReason = 'deck' | 'strikes' | 'banked' | 'blackout' | null;
+import { BoardRecall } from '@/components/player-bingo/BoardRecall';
+import { clearFinishedBingo, readFinishedBingo, saveFinishedBingo, type BingoEnd, type BingoTile } from '@/lib/playerBingoRecall';
+
+type EndReason = BingoEnd | null;
 
 type Phase = 'boot' | 'error' | 'playing' | 'won' | 'lost';
 
@@ -42,25 +45,30 @@ const PlayerBingo = () => {
   // Every hook sits above any conditional rendering, so the hook count can
   // never change between renders (the React error #310 trap documented in
   // CLAUDE.md: the loading check must sit below every hook).
-  const [phase, setPhase] = useState<Phase>('boot');
+  const [restored, setRestored] = useState(readFinishedBingo);
+  const archiveAtEntry = useRef(!!restored);
+  const boardId = useRef(restored?.id ?? '');
+  const [answers, setAnswers] = useState<string[]>(restored?.answers ?? []);
+  const [phase, setPhase] = useState<Phase>(restored?.phase ?? 'boot');
   const [data, setData] = useState<BingoData | null>(null);
   const [board, setBoard] = useState<BingoCriterion[]>([]);
-  const [locked, setLocked] = useState<Record<string, string>>({}); // criterion id -> player name
+  const [locked, setLocked] = useState<Record<string, string>>(restored?.locked ?? {}); // criterion id -> player name
   const [deck, setDeck] = useState<BingoPlayer[]>([]);
   const [pos, setPos] = useState(0);
-  const [strikes, setStrikes] = useState(0);
+  const [strikes, setStrikes] = useState(restored?.strikes ?? 0);
   const [shakeId, setShakeId] = useState<string | null>(null);
-  const [gaveUp, setGaveUp] = useState(false);
+  const [gaveUp, setGaveUp] = useState(restored?.gaveUp ?? false);
   const [best, setBest] = useState(() => loadBest());
-  const [extended, setExtended] = useState(false); // accepted "keep playing" after the first bingo
+  const [extended, setExtended] = useState(restored?.extended ?? false); // accepted "keep playing" after the first bingo
   const [choice, setChoice] = useState(false); // first-line bank/continue prompt is open
   const [lineFlash, setLineFlash] = useState<{ lines: number; points: number } | null>(null); // transient extra-line banner
-  const [endReason, setEndReason] = useState<EndReason>(null);
+  const [endReason, setEndReason] = useState<EndReason>(restored?.endReason ?? null);
   const [lastRejected, setLastRejected] = useState<{ playerName: string; playerYear: number; playerNationality: string; playerPosition: string; playerClub: string; criterionId: string } | null>(null);
   const loadRef = useRef<{ controller: AbortController; timer: ReturnType<typeof setTimeout> } | null>(null);
 
   const criteria = useMemo(() => (data ? buildCriteria(data) : []), [data]);
-  const cells = useMemo(() => layoutGrid(board), [board]);
+  const shownTiles: BingoTile[] = restored?.tiles ?? board;
+  const cells = useMemo(() => layoutGrid(shownTiles), [shownTiles]);
 
   const boot = useCallback(async () => {
     if (loadRef.current) return;
@@ -98,6 +106,10 @@ const PlayerBingo = () => {
         setPhase('error');
         return;
       }
+      if (boardId.current) clearFinishedBingo(boardId.current);
+      boardId.current = '';
+      setRestored(null);
+      setAnswers([]);
       setBoard(b);
       setDeck(buildDeck(sourceData.pool, b));
       setLocked({});
@@ -116,7 +128,7 @@ const PlayerBingo = () => {
   );
 
   useEffect(() => {
-    boot();
+    if (!archiveAtEntry.current) void boot();
     return () => {
       const request = loadRef.current;
       loadRef.current = null;
@@ -149,7 +161,7 @@ const PlayerBingo = () => {
   }, [lineFlash]);
 
   const current = deck[pos];
-  const seenCount = deck.length > 0 ? Math.min(pos + 1, deck.length) : 0;
+  const seenCount = restored?.seen ?? (deck.length > 0 ? Math.min(pos + 1, deck.length) : 0);
 
   const lockedIndexes = useMemo(() => {
     const idxs = new Set<number>();
@@ -169,6 +181,15 @@ const PlayerBingo = () => {
   const maxStrikes = START_LIVES + (extended ? 1 : 0);
   const blackout = tilesFilled >= BOARD_SIZE;
   const score = linesCompleted * 100 + (blackout ? 500 : 0);
+  useEffect(() => {
+    if ((phase !== 'won' && phase !== 'lost') || !endReason) return;
+    const firstSave = !boardId.current;
+    if (firstSave) boardId.current = crypto.randomUUID();
+    saveFinishedBingo({ id: boardId.current, phase, endReason,
+      tiles: shownTiles.map(({ id, label, icon }) => ({ id, label, icon })), locked, strikes,
+      seen: seenCount, gaveUp, extended, answers }, firstSave);
+  }, [phase, endReason, shownTiles, locked, strikes, seenCount, gaveUp, extended, answers]);
+  const newBoard = () => { if (data) start(data, criteria); else void boot(); };
 
   /** Move to the next reveal, or end the run if the deck is spent. */
   const advanceOrEnd = (linesNow: number) => {
@@ -256,7 +277,7 @@ const PlayerBingo = () => {
     setPos(p => p + 1);
   };
 
-  const emojiGrid = `${buildShareGrid(board, locked)}\n${linesCompleted}/12 lines · ${score} pts${blackout ? ' · BLACKOUT' : ''} · ${strikes}/${maxStrikes} strikes · ${seenCount} players seen`;
+  const emojiGrid = `${buildShareGrid(shownTiles, locked)}\n${linesCompleted}/12 lines · ${score} pts${blackout ? ' · BLACKOUT' : ''} · ${strikes}/${maxStrikes} strikes · ${seenCount} players seen`;
 
   const lostHeadline = strikes >= START_LIVES ? 'Three strikes' : gaveUp ? 'Gave up' : 'Out of players';
   const lostCopy =
@@ -282,7 +303,7 @@ const PlayerBingo = () => {
         reportGameContext={{
           mode: extended ? 'extended' : 'standard', phase,
           currentPlayer: current ? { name: current.name, nationality: current.nationality, position: current.position, club: current.club, year: current.year } : null,
-          playerIndex: pos, strikes, criterionIds: board.map(cell => cell.id), claimedCells: [...lockedIndexes], choice, endReason, lastRejected,
+          playerIndex: restored ? seenCount - 1 : pos, strikes, criterionIds: shownTiles.map(cell => cell.id), claimedCells: [...lockedIndexes], choice, endReason, lastRejected,
         }}
         headerExtra={
           <>
@@ -343,6 +364,7 @@ const PlayerBingo = () => {
                   after a bingo never takes the win away.
                 </p>
               </section>
+              <section><h3 className="font-bold text-foreground mb-2">Recall your board</h3><p className="text-muted-foreground">Place two different players and finish your board to quiz yourself on who you put where. Your bingo points stay banked.</p></section>
             </RulesGate>
             {best > 0 && (
               <p className="text-xs text-muted-foreground mt-3">
@@ -433,7 +455,7 @@ const PlayerBingo = () => {
                 return (
                   <button
                     key={cell.id}
-                    onClick={() => tapTile(cell)}
+                    onClick={() => { const playable = board.find(tile => tile.id === cell.id); if (playable) tapTile(playable); }}
                     disabled={phase !== 'playing' || !!lockedBy || choice}
                     title={cell.label}
                     className={cn(
@@ -458,13 +480,17 @@ const PlayerBingo = () => {
               })}
             </div>
 
+            {(phase === 'won' || phase === 'lost') && <div className="text-center">
+              <BoardRecall tiles={shownTiles} locked={locked} answers={answers} onAnswer={(index, answer) =>
+                setAnswers(previous => previous.length === index ? [...previous, answer] : previous)} />
+            </div>}
             {/* Round 644: both screens record the score they show. Before it
                 neither passed one, so 1,966 finishes stored no score and a
                 blackout earned nothing on the board. The most a board pays is
                 1,700: all twelve lines at 100 plus the 500 blackout bonus. */}
             {phase === 'won' && (
               <ResultScreen
-                recordCompletionOnMount
+                recordCompletionOnMount={!restored}
                 completionScore={score}
                 won
                 outcomeEmoji={blackout ? '🏆' : linesCompleted >= 3 ? '🎉' : linesCompleted >= 2 ? '🔥' : '🐐'}
@@ -491,14 +517,14 @@ const PlayerBingo = () => {
                 }
                 emojiGrid={emojiGrid}
                 share={{ score: `${linesCompleted}/12 lines · ${score} pts`, gameName: 'Player Bingo', gamePath: '/player-bingo' }}
-                onPlayAgain={() => data && start(data, criteria)}
+                onPlayAgain={newBoard}
                 playAgainLabel="New board"
               />
             )}
 
             {phase === 'lost' && (
               <ResultScreen
-                recordCompletionOnMount
+                recordCompletionOnMount={!restored}
                 completionScore={score}
                 won={false}
                 outcomeEmoji={tilesFilled >= 8 ? '😩' : tilesFilled >= 4 ? '😅' : '🫠'}
@@ -511,7 +537,7 @@ const PlayerBingo = () => {
                 funFact={`${lostCopy} You saw ${seenCount} players.`}
                 emojiGrid={emojiGrid}
                 share={{ score: `${linesCompleted}/12 lines`, gameName: 'Player Bingo', gamePath: '/player-bingo' }}
-                onPlayAgain={() => data && start(data, criteria)}
+                onPlayAgain={newBoard}
                 playAgainLabel="Try a new board"
               />
             )}

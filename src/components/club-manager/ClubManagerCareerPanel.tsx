@@ -299,6 +299,15 @@ export function ManagerRecordLines({ c, ended = false }: { c: CareerState; /** O
   const counted = high?.missed ? Math.max(0, c.careerStats.played - high.missed) : 0;
   return (
                   <div data-cm-career-lines className="space-y-0.5 text-xs text-muted-foreground">
+                    {Array.isArray(c.history) && c.history.length > 0 && <details>
+                      <summary className="min-h-11 cursor-pointer py-3 font-semibold text-foreground">League seasons</summary>
+                      <ol className="space-y-2 pb-2 tabular-nums">
+                        {[...c.history].reverse().map(row => <li key={row.season}>
+                          <span className="block font-semibold text-foreground">Season {row.season} · {row.club} · #{row.position} · {row.points} pts</span>
+                          {row.leagueRecord ? <span>{row.leagueRecord.w}W {row.leagueRecord.d}D {row.leagueRecord.l}L · GF {row.leagueRecord.gf} GA {row.leagueRecord.ga}</span> : 'Match totals were not recorded.'}
+                        </li>)}
+                      </ol>
+                    </details>}
                     {c.careerStats.biggestWin && (
                       <p>🎉 Biggest win: <span className="text-foreground font-semibold">{c.careerStats.biggestWin.score}</span> vs {c.careerStats.biggestWin.opp}</p>
                     )}

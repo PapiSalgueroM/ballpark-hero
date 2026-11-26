@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import type { SeasonReport } from '@/lib/worldXi';
+import { tablePoints, type SeasonReport } from '@/lib/worldXi';
 
 /**
  * Round 726: the month by month form line and the per player season stats,
@@ -12,7 +12,7 @@ import type { SeasonReport } from '@/lib/worldXi';
  * here, which is the whole of the backwards compatibility: the fields are
  * optional on SeasonReport and this reads them as such.
  */
-type Panel = 'months' | 'players';
+type Panel = 'months' | 'players' | 'table' | 'meetings';
 
 const POSITION_ORDER = ['GK', 'CB', 'LB', 'RB', 'LWB', 'RWB', 'CDM', 'CM', 'CAM', 'LM', 'RM', 'LW', 'RW', 'CF', 'ST'];
 
@@ -27,7 +27,8 @@ export function SeasonReportTabs({ report, className, initialPanel = null }: Sea
   const [open, setOpen] = useState<Panel | null>(initialPanel);
   const months = report.months ?? [];
   const stats = report.playerStats ?? [];
-  if (months.length === 0 && stats.length === 0) return null;
+  const table = report.leagueTable ?? [];
+  if (months.length === 0 && stats.length === 0 && table.length === 0) return null;
 
   const toggle = (panel: Panel) => setOpen(current => (current === panel ? null : panel));
   const ordered = [...stats].sort((a, b) => POSITION_ORDER.indexOf(a.position) - POSITION_ORDER.indexOf(b.position) || b.avgRating - a.avgRating);
@@ -35,6 +36,12 @@ export function SeasonReportTabs({ report, className, initialPanel = null }: Sea
   return (
     <div className={cn('mt-4', className)}>
       <div className="flex flex-wrap justify-center gap-2">
+        {table.length > 0 && <button type="button" onClick={() => toggle('table')} aria-expanded={open === 'table'}
+          className={cn('min-h-11 rounded-full border px-3 text-xs font-semibold',
+            open === 'table' ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-secondary/40 text-foreground')}>League table</button>}
+        {report.meetings && table.length > 0 && <button type="button" onClick={() => toggle('meetings')} aria-expanded={open === 'meetings'}
+          className={cn('min-h-11 rounded-full border px-3 text-xs font-semibold',
+            open === 'meetings' ? 'border-primary bg-primary text-primary-foreground' : 'border-border bg-secondary/40 text-foreground')}>Head to head</button>}
         {months.length > 0 && (
           <button
             type="button"
@@ -68,6 +75,15 @@ export function SeasonReportTabs({ report, className, initialPanel = null }: Sea
           player table left the name column 0px wide. Below sm a month's
           standout takes its own line and a player's numbers sit under his
           name; from sm up it is the one line table. */}
+      {open === 'meetings' && report.meetings && table.length > 0 && <RivalMeetings table={table} meetings={report.meetings} />}
+      {open === 'table' && <table className="mt-3 w-full text-right text-xs tabular-nums">
+        <caption className="mb-2 text-left text-muted-foreground">38 matches per side. Three points for a win, one for a draw. Your XI wins ties on points.</caption>
+        <thead><tr>{['Pos', 'Club', 'W', 'D', 'L', 'Pts'].map(label => <th key={label} scope="col" className={cn('px-1 py-2', label === 'Club' && 'text-left')}>{label}</th>)}</tr></thead>
+        <tbody>{table.map((row, i) => <tr key={row.team} className={cn('border-t border-border', row.team === 0 && 'bg-primary/10 font-bold')}>
+          <td className="p-1">{i + 1}</td><th scope="row" className="p-1 text-left">{row.team === 0 ? 'Your XI' : 'Rival ' + row.team}</th>
+          <td className="p-1">{row.wins}</td><td className="p-1">{row.draws}</td><td className="p-1">{row.losses}</td><td className="p-1">{tablePoints(row)}</td>
+        </tr>)}</tbody>
+      </table>}
       {open === 'months' && (
         <div className="mt-3 grid grid-cols-1 gap-1.5 text-left">
           {months.map(m => (
@@ -125,5 +141,45 @@ export function SeasonReportTabs({ report, className, initialPanel = null }: Sea
         </div>
       )}
     </div>
+  );
+}
+
+function RivalMeetings({ table, meetings }: {
+  table: NonNullable<SeasonReport['leagueTable']>;
+  meetings: NonNullable<SeasonReport['meetings']>;
+}) {
+  const [selected, setSelected] = useState<number | null>(null);
+  const points = new Map<number, number>();
+  for (const match of meetings) {
+    const earned = match.goals.length > match.goalsAgainst ? 3 : match.goals.length === match.goalsAgainst ? 1 : 0;
+    points.set(match.rival, (points.get(match.rival) ?? 0) + earned);
+  }
+  // For equal head-to-head points keep the higher finisher first.
+  const rivals = table.filter(row => points.has(row.team)).sort((a, b) => points.get(a.team)! - points.get(b.team)!);
+  const rival = selected ?? rivals[0]?.team;
+  if (!rival) return null;
+  return (
+    <section aria-label="Head to head" className="mt-3 space-y-3 rounded-xl border border-border p-3 text-left text-sm">
+      <label className="block font-semibold">
+        League opponent
+        <select value={rival} onChange={e => setSelected(Number(e.target.value))}
+          className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-background px-2">
+          {rivals.map(row => <option value={row.team} key={row.team}>Rival {row.team} · Your XI took {points.get(row.team)}/6 pts</option>)}
+        </select>
+      </label>
+      <p className="text-xs text-muted-foreground">Scores show your XI first.</p>
+      {meetings.map((match, i) => {
+        if (match.rival !== rival) return null;
+        const scored = match.goals.length;
+        const outcome = scored > match.goalsAgainst ? 'Win' : scored === match.goalsAgainst ? 'Draw' : 'Loss';
+        return <article aria-label={`Matchday ${i + 1}`} key={i} className="rounded-lg bg-secondary/45 p-3">
+          <p className="text-xs text-muted-foreground">Matchday {i + 1} · {match.home ? 'Home' : 'Away'}</p>
+          <p className="font-bold tabular-nums">{outcome} · {scored} - {match.goalsAgainst}</p>
+          {scored > 0 ? <ul className="mt-1 text-xs">{match.goals.map((g, n) =>
+            <li key={n}>{g.scorer}{g.assist && ` (assisted by ${g.assist})`}</li>)}</ul>
+            : <p className="mt-1 text-xs text-muted-foreground">Your XI did not score.</p>}
+        </article>;
+      })}
+    </section>
   );
 }

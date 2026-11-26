@@ -108,8 +108,23 @@ describe('Player Bingo earned line feedback', () => {
     fireEvent.click(view.getByRole('button', { name: 'Bank the win' }));
     expect(view.container.querySelector('[data-fixture-share]')).toHaveAttribute('data-fixture-share', '1/12 lines · 100 pts');
     expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/player-bingo', 100, 'Tester');
-    view.rerender(<HelmetProvider><MemoryRouter><PlayerBingo /></MemoryRouter></HelmetProvider>);
-    expect(recordCompletion).toHaveBeenCalledTimes(1);
+    fireEvent.click(view.getByRole('button', { name: 'Recall your board' }));
+    fireEvent.click(view.getByRole('button', { name: 'Fictional Reveal 1' }));
+    view.unmount();
+    const reopen = () => render(<HelmetProvider><MemoryRouter initialEntries={['/player-bingo']}><PlayerBingo /></MemoryRouter></HelmetProvider>);
+    const resumed = reopen();
+    for (let i = 0; i < 5; i++) expect(resumed.getByTitle(`Fixture tile ${19 + i}`)).toHaveTextContent(`Fictional Reveal ${i}`);
+    expect(resumed.container.querySelector('[data-fixture-share]')).toHaveAttribute('data-fixture-share', '1/12 lines · 100 pts');
+    fireEvent.click(resumed.getByRole('button', { name: 'Continue board recall' }));
+    expect(resumed.getByText(/You picked Fictional Reveal 1\. Your placement was Fictional Reveal 0\./)).toBeVisible();
+    fireEvent.click(resumed.getByRole('button', { name: 'Fictional Reveal 2' }));
+    fireEvent.click(resumed.getByRole('button', { name: 'Fictional Reveal 4' }));
+    expect(resumed.getByText('You remembered 2 of 3 placements.')).toBeVisible();
+    resumed.unmount();
+    const completed = reopen();
+    expect(completed.getByRole('button', { name: 'Board recall 2/3' })).toBeEnabled();
+    expect(completed.getByRole('heading', { name: 'BINGO!' })).toBeVisible();
+    expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/player-bingo', 100, 'Tester');
   });
 
   it('preserves full blackout 1700 and original share and completion', async () => {

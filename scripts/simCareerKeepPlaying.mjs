@@ -142,10 +142,10 @@ function swap(src, from, to, label) {
    comment, and the old lazy match ran through that code to the comment, so the
    baseline lost the award and every pre-850 career threw "awardAllTimeTopScorer
    is not defined" (red on main since AH; no gate list carried this harness).
-   The comment part now cannot cross a closing comment mark, and whatever sits
-   between the two functions is kept: it moves to the end of the baseline, where
+   Anchor the end at the declaration. All intervening code and comments
+   move to the end of the baseline, where
    its top level declarations mean the same thing (nothing runs them at load). */
-const SPLIT_RE = /  return playPendingProSeason\(s, clubs\);\n\}\n\n([^]*?)\/\*(?:[^*]|\*(?!\/))*\*\/\nfunction playPendingProSeason\(s: CareerState, clubs: ClubData\[\]\): CareerState \{\n/g;
+const SPLIT_RE = /  return playPendingProSeason\(s, clubs\);\n\}\n\n([^]*?)^function playPendingProSeason\(s: CareerState, clubs: ClubData\[\]\): CareerState \{\n/gm;
 const DECLINE_RE = /export function declineRetirementSuggestion\(prev: CareerState, clubs: ClubData\[\]\): CareerState \{\n[^]*?\n\}\n/g;
 const OLD_DECLINE = 'export function declineRetirementSuggestion(prev: CareerState): CareerState {\n'
   + '  const s = { ...prev };\n'
@@ -172,11 +172,11 @@ const TRIAL_FAREWELL = '    if (farewellSeasonComplete(s)) s.pendingSummary = s.
    that anchored on the line above the money keep their meaning: the line they remove is the same one as before. */
 const TRIAL_PRESS = '    settleSoccerPress(s, s.seasons[s.seasons.length - 1]);\n';
 const ROWS = {
-  conviction: ['    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];\n' + TRIAL_PRESS + '    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n' + TRIAL_SUMMER + TRIAL_HOOKS + TRIAL_FAREWELL + '    s.phase = "newspaper";', '    s.phase = "newspaper";'],
+  conviction: ['    s.seasons = [...s.seasons, yearOutRow(s, "CONVICTED")];\n    recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);\n' + TRIAL_PRESS + '    simulateSeasonFinances(s, s.seasons[s.seasons.length - 1]);\n' + TRIAL_SUMMER + TRIAL_HOOKS + TRIAL_FAREWELL + '    s.phase = "newspaper";', '    s.phase = "newspaper";'],
   /* Release AU: PR216 (Rounds 1197 to 1208) settles the season plan on the injury row, between the money and the summer, so
      that call sits inside this row as well and goes with it, for the reason written above: a career in this harness
      holds no plan for it to act on. */
-  rehab: ['      s.seasons = [...s.seasons, injuryRow];\n      settleReducedRole(s, injuryRow);\n      settleSoccerPress(s, injuryRow);\n      simulateSeasonFinances(s, injuryRow);\n      settleSoccerProgramme(s, injuryRow);\n      runTournamentSummer(s, injuryRow, injuryRow.year, true);\n' + REHAB_HOOKS + '      s.phase = "rehab_choice";', '      s.phase = "rehab_choice";'],
+  rehab: ['      s.seasons = [...s.seasons, injuryRow];\n      recordSoccerHistoricalArrivals(s, s.seasons[s.seasons.length - 1].year);\n      settleReducedRole(s, injuryRow);\n      settleSoccerPress(s, injuryRow);\n      simulateSeasonFinances(s, injuryRow);\n      settleSoccerProgramme(s, injuryRow);\n      runTournamentSummer(s, injuryRow, injuryRow.year, true);\n' + REHAB_HOOKS + '      s.phase = "rehab_choice";', '      s.phase = "rehab_choice";'],
   rehabSave: ['  if (lastRow && lastRow.age < s.age) {\n    const row = yearOutRow(s, null);', '  if (false) {\n    const row = yearOutRow(s, null);'],
   newsSave: ['    if (lastRow && lastRow.age < s.age) {\n      s.events = [...s.events];', '    if (false) {\n      s.events = [...s.events];'],
 };
@@ -192,16 +192,17 @@ if (between) BASELINE_SRC += `\n${between}`;
 for (const [k, [from, to]] of Object.entries(ROWS)) BASELINE_SRC = swap(BASELINE_SRC, from, to, `revert ${k}`);
 
 /* the negative controls mutate the CURRENT engine */
-const RESUME = '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  return playPendingProSeason(s, clubs);';
+const RESUME_PREFIX = '    if (!s.retired) s.phase = "playing";\n    return s;\n  }\n';
+const RESUME = RESUME_PREFIX + '  return playPendingProSeason(s, clubs);';
 const PUSH_LINE = '  s.events = [...s.events, "\u{1F4AA} Decided to push on, not ready to hang up the boots yet"];\n';
 /* Release AW: the farewell season (Rounds 1238 to 1240) put its guard between the head and the copy, so the anchor
    carries that line and the control leaves it standing. The line the control changes is the same one as before. */
 const ACCEPT_GUARD = '  if (readSoccerFarewell(prev) && (prev.retired || farewellSeasonComplete(prev))) return prev;\n';
 const ACCEPT_HEAD = 'export function acceptRetirementSuggestion(prev: CareerState): CareerState {\n' + ACCEPT_GUARD + '  const s = { ...prev };';
 const CONTROLS = {
-  olddecline: [RESUME, '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  s.phase = "playing";\n  return s;'],
-  readvance: [RESUME, '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  return advanceProSeason({ ...s, phase: "playing" }, clubs);'],
-  stuck: [RESUME, '|| prev.retired) {\n    s.phase = "playing";\n    return s;\n  }\n  return { ...playPendingProSeason(s, clubs), phase: "retirement_suggestion" };'],
+  olddecline: [RESUME, RESUME_PREFIX + '  s.phase = "playing";\n  return s;'],
+  readvance: [RESUME, RESUME_PREFIX + '  return advanceProSeason({ ...s, phase: "playing" }, clubs);'],
+  stuck: [RESUME, RESUME_PREFIX + '  return { ...playPendingProSeason(s, clubs), phase: "retirement_suggestion" };'],
   offphase: ['  if (prev.phase !== "retirement_suggestion" || prev.retired) {', '  if (prev.retired) {'],
   pushtwice: [PUSH_LINE, PUSH_LINE + PUSH_LINE],
   acceptresume: [ACCEPT_HEAD, 'export function acceptRetirementSuggestion(prev: CareerState): CareerState {\n' + ACCEPT_GUARD + '  const s = { ...playPendingProSeason(repairCareer({ ...prev }), FALLBACK_CLUBS) };'],
@@ -220,8 +221,8 @@ const CONTROLS = {
   nosummersave: ['    simulateSeasonFinances(s, row);\n    runTournamentSummer(s, row, row.year, true);', '    simulateSeasonFinances(s, row);'],
 };
 /* and one that mutates the page's call instead of the engine */
-const PAGE_CALL = "setCareer(declineRetirementSuggestion(career, clubs));";
-const PAGE_CONTROLS = { pageclubs: [PAGE_CALL, "setCareer(declineRetirementSuggestion(career, []));"] };
+const PAGE_CALL = "setCareer(declineRetirementSuggestion({ ...career, inSeasonRatings: true }, clubs));";
+const PAGE_CONTROLS = { pageclubs: [PAGE_CALL, "setCareer(declineRetirementSuggestion({ ...career, inSeasonRatings: true }, []));"] };
 let CURRENT_SRC = SRC;
 if (CONTROL) {
   if (!CONTROLS[CONTROL] && !PAGE_CONTROLS[CONTROL]) { console.error(`  FAIL: unknown KEEP_PLAYING_CONTROL=${CONTROL}`); process.exit(1); }

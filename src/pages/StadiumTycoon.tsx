@@ -30,7 +30,8 @@ import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
-  TRACKS, levelOf, costOf, canBuy, upgradePurchase, standsConstructionQuote, STANDS_SEATS_PER_LEVEL, capacity, attendance, incomePerSec,
+  TRACKS, trackById, levelOf, costOf, canBuy, upgradePurchase, standsConstructionQuote, STANDS_SEATS_PER_LEVEL, capacity, attendance, incomePerSec,
+  recordedLeagueCrowd,
   ticketPolicyOf, TICKET_POLICIES,
   tapValue, repMult, streakMult, prestigeThreshold, canPrestige, fmtMoney as tycoonMoney,
   boostReady, boostActive, boostChargeSecOf, MILESTONES, opponentName,
@@ -45,7 +46,7 @@ import {
   GOAL_BONUS_SEC, WIN_BONUS_SEC, PROMOTION_BONUS_SEC, scoringFacts,
   canSetMatchPlan, MATCH_PLANS, MATCH_PLAN_END, SCOUTING_REDUCTION, matchScoutingDetails, graduateAttackFixture,
   STADIUM_SPONSORS, stadiumSponsorOffers, stadiumSponsorPayout,
-  reserveSeasonTickets, seasonTicketQuote, seasonTicketGateRate, ticketEconomy,
+  reserveSeasonTickets, seasonTicketQuote, seasonTicketGateRate, ticketEconomy, juniorDayOffer, programmeFixture,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
@@ -53,6 +54,8 @@ import VictoryMoment from '@/components/tycoon/TycoonVictoryMoment';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import TycoonPitch from '@/components/tycoon/TycoonPitch';
 import TicketPolicyCard from '@/components/tycoon/TicketPolicyCard';
+import JuniorMatchdayCard from '@/components/tycoon/JuniorMatchdayCard';
+import MatchProgrammeCard from '@/components/tycoon/MatchProgrammeCard';
 import TycoonSaleReview from '@/components/tycoon/TycoonSaleReview';
 import { useTycoonRewards } from '@/hooks/useTycoonRewards';
 import { balance, GEM_PAY, loadLedger } from '@/lib/tycoonRewards';
@@ -293,6 +296,8 @@ function helpFacts() {
     ticketPremiumDemand: Math.round((TICKET_POLICIES.find(p => p.id === 'premium')?.demand ?? 1) * 100),
     ticketPremiumGrowth: Math.round((1 - (TICKET_POLICIES.find(p => p.id === 'premium')?.growth ?? 1)) * 100),
     freshSeats: capacity(fresh),
+    juniorExample: juniorDayOffer({ ...fresh, fanbase: capacity(fresh) }),
+    programmeExample: programmeFixture(fresh)?.short,
     freshPremiumCrowd: attendance({ ...fresh, ticketPolicy: 'premium' }),
     rate400: incomePerSec(full),
     goal400: goalBonus(full),
@@ -320,11 +325,14 @@ export function SeasonMatchResults({ league, current = false }: { league: Tycoon
     {results.length === 0 ? <p className="pb-2 text-muted-foreground">Scores for these matchdays were not recorded.</p> : <>
       {results.length < league.matchday && <p className="pb-2 text-muted-foreground">Earlier scores were not recorded.</p>}
       <ol className="space-y-2 pb-3">
-        {results.map(({ day, gf, ga, attendance, seasonTicketFans, plan, scouting, graduateAttack }) => <li key={day} className="flex items-baseline justify-between gap-2">
+        {results.map(({ day, gf, ga, attendance, ticketOffer, seasonTicketFans, plan, scouting, programmes, juniors, graduateAttack }) => <li key={day} className="flex items-baseline justify-between gap-2">
           <div>
             <span>Matchday {day} · {league.clubs[yourOpponentIndex(league, day - 1)].name}</span>
             {attendance !== undefined && <span className="block text-muted-foreground">
               {formatNumber(attendance)} fans{crowdTarget === undefined ? '' : attendance >= crowdTarget ? ' · Reached sponsor target' : ' · Missed sponsor target'}
+            </span>}
+            {ticketOffer && <span className="block text-muted-foreground">
+              {TICKET_POLICIES.find(p => p.id === ticketOffer.policy)?.label} tickets · {formatNumber(ticketOffer.seats)} seats
             </span>}
             {seasonTicketFans !== undefined && attendance !== undefined && <span className="block text-muted-foreground">
               {formatNumber(seasonTicketFans)} season-ticket holders · {formatNumber(attendance - seasonTicketFans)} walk-ups
@@ -332,6 +340,10 @@ export function SeasonMatchResults({ league, current = false }: { league: Tycoon
             {plan && <span className="block text-muted-foreground">{MATCH_PLANS[plan.kind].label} from {plan.minute}′</span>}
             {scouting && <span className="block text-muted-foreground">
               Scouting · {fmtMoney(scouting.fee)} paid · {scouting.reduction}% lower opponent scoring chance
+            </span>}
+            {juniors && <span className="block text-muted-foreground">Junior day · {juniors.admitted} guests · {juniors.displaced} walk-ups displaced · {juniors.newFans} new supporters · {fmtMoney(juniors.admitted)} hosting</span>}
+            {programmes && <span className="block text-muted-foreground">
+              Programmes · {formatNumber(programmes.sold)}/{formatNumber(programmes.copies)} sold · {fmtMoney(programmes.cost)} printing · {fmtMoney(programmes.sold * programmes.price)} sales · {fmtMoney(Math.abs(programmes.sold * programmes.price - programmes.cost))} {programmes.sold * programmes.price < programmes.cost ? 'loss' : 'net'}
             </span>}
             {graduateAttack && <span className="block text-muted-foreground">
               {graduateAttack.share > 0
@@ -435,6 +447,7 @@ function LeagueRoom({ g, visible, attackOptions }: { g: ReturnType<typeof useSta
   const last = s.lastCompletedLeague ?? s.completedLeagueHistory?.at(-1);
   const sponsor = lg.sponsor;
   const offers = !sponsor && preseason ? stadiumSponsorOffers(s, lg) : null;
+  const lastCrowds = offers ? (last?.results ?? []).flatMap(row => row.attendance === undefined ? [] : [row.attendance]) : [];
   const seasonTicketOffer = seasonTicketQuote(s);
   const tickets = lg.seasonTickets;
   const seasonTicketPreview = seasonTicketOffer
@@ -512,6 +525,10 @@ function LeagueRoom({ g, visible, attackOptions }: { g: ReturnType<typeof useSta
         <summary className="min-h-11 cursor-pointer py-3 font-bold">Season sponsorship</summary>
         <p className="pb-2 text-muted-foreground">Choose one fictional sponsor before the first league match finishes. Both deals pay in game cash when you complete the season.</p>
         <p className="pb-2 text-muted-foreground">Current crowd {formatNumber(attendance(s))} · Target {formatNumber(offers.target)}</p>
+        <p className="pb-2 text-muted-foreground">{offers.fixed / offers.rate} of {shape.matchdays} qualifying matchdays match the fixed fee this season.</p>
+        {last && <p className="pb-2 text-muted-foreground">{lastCrowds.length > 0
+          ? `${lastCrowds.filter(fans => fans >= offers.target).length} of ${lastCrowds.length} recorded crowds last season reached today's target.${lastCrowds.length < last.matchday ? ` Attendance was recorded for ${lastCrowds.length} of ${last.matchday} matchdays.` : ''}`
+          : 'Attendance was not recorded last season.'}</p>}
         {g.sponsorSaveFailed && <p role="alert" className="pb-2 text-destructive">Could not save the deal. Choose a sponsor again to retry.</p>}
         <div className="grid gap-2 pb-3 sm:grid-cols-2">
           <button type="button" className="min-h-11 min-w-0 rounded-lg border border-border bg-background px-3 py-2 text-left" onClick={() => g.doSignSponsor(s.rep, lg.season, 'fixed')}>
@@ -588,6 +605,10 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
 
   const fans = attendance(s);
   const cap = capacity(s);
+  const standLevel = levelOf(s, 'stands');
+  const openStandLevels = trackById('stands').maxLevel - standLevel;
+  const targetSeats = s.expansionTarget === undefined ? null : cap + (s.expansionTarget - standLevel) * STANDS_SEATS_PER_LEVEL;
+  const crowd = panel === 'stats' ? recordedLeagueCrowd(s) : null;
   const rate = incomePerSec(s);
   const div = divisionOf(s);
   /* Round 582: where this ground stands in its league. */
@@ -989,7 +1010,11 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         </div>
         </>)}
 
-        {panel === 'tickets' && <TicketPolicyCard state={s} onSelect={g.doSetTicketPolicy} saveFailed={g.ticketSaveFailed} onRetrySave={g.retryTicketSave} showSaveNotice={false} />}
+        {panel === 'tickets' && <>
+          <JuniorMatchdayCard state={s} onBook={g.doBookJuniorDay} failedMatch={g.juniorSaveError} />
+          <MatchProgrammeCard state={s} onOrder={g.doOrderProgrammes} saveFailed={g.programmeSaveFailed} />
+          <TicketPolicyCard state={s} onSelect={g.doSetTicketPolicy} saveFailed={g.ticketSaveFailed} onRetrySave={g.retryTicketSave} showSaveNotice={false} />
+        </>}
 
         {/* Round 162: the payroll. Staff earn every second, forever, and the
             tiers escalate the way an idle game should: each one about five
@@ -1106,6 +1131,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                 ['Career wins', s.totalWins.toLocaleString('en-US')],
                 ['Career goals', s.totalGoals.toLocaleString('en-US')],
                 ['Matches played', (s.totalMatches ?? 0).toLocaleString('en-US')],
+                ...(crowd ? [[`Avg. league crowd · ${formatNumber(crowd.matches)} ${crowd.matches === 1 ? 'match' : 'matches'}`, formatNumber(crowd.average)]] : []),
                 ['Taps', s.totalTaps.toLocaleString('en-US')],
                 ['Best division', `${DIVISIONS[Math.min(s.bestDivision ?? 0, DIVISIONS.length - 1)].emoji} ${DIVISIONS[Math.min(s.bestDivision ?? 0, DIVISIONS.length - 1)].name}`],
                 ['Golden whistles caught', (s.goldenCaught ?? 0).toLocaleString('en-US')],
@@ -1120,6 +1146,39 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                 </div>
               ))}
             </div>
+            <section aria-label="Expansion target" className="mt-3 space-y-2 border-t border-border pt-3 text-xs">
+              <p className="font-semibold">Expansion target</p>
+              {(s.expansionTargetsCompleted ?? 0) > 0 && (
+                <p className="text-muted-foreground">{formatNumber(s.expansionTargetsCompleted!)} recorded across your career</p>
+              )}
+              {g.expansionTargetSaveFailed && <p role="alert" className="text-destructive">Could not save your expansion target. Try again.</p>}
+              {targetSeats === null ? (
+                openStandLevels > 0 ? (
+                  <>
+                    <p className="text-muted-foreground">Pick how many seats to add next. The seats count when the stands open.</p>
+                    <div className="flex flex-wrap gap-2">
+                      <button type="button" className="min-h-11 rounded-lg border border-border px-3 font-semibold" onClick={() => g.doExpansionTarget(1)}>
+                        +{STANDS_SEATS_PER_LEVEL} seats
+                      </button>
+                      {openStandLevels >= 2 && (
+                        <button type="button" className="min-h-11 rounded-lg border border-border px-3 font-semibold" onClick={() => g.doExpansionTarget(2)}>
+                          +{STANDS_SEATS_PER_LEVEL * 2} seats
+                        </button>
+                      )}
+                    </div>
+                  </>
+                ) : <p className="text-muted-foreground">Your stands are fully built.</p>
+              ) : (
+                <>
+                  <p className="text-muted-foreground">{formatNumber(cap)} seats open · {formatNumber(targetSeats)} goal</p>
+                  <div className="flex flex-wrap gap-2">
+                    <button type="button" disabled={cap < targetSeats} className="min-h-11 rounded-lg border border-border px-3 font-semibold disabled:opacity-50"
+                      onClick={() => g.doExpansionTarget('claim')}>Record expansion</button>
+                    <button type="button" className="min-h-11 px-2 text-muted-foreground" onClick={() => g.doExpansionTarget('cancel')}>Cancel target</button>
+                  </div>
+                </>
+              )}
+            </section>
           </div>
         )}
 
@@ -1196,6 +1255,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>The match on screen is real and plays like football: your Squad against today's rival decides who is favourite, but favourites drop points and plenty of matches end level. Against a rival as strong as you, you expect about {h.evenFor} goals to their {h.evenAgainst}, and each Squad level adds about {h.levelGoals} of a goal a match to your side and takes up to as much off theirs. A goal pays {h.goalSec} seconds of your income, a win {h.winSec} seconds and going up a division {h.promotionMin} minutes, and wins extend a streak that multiplies everything and pulls in new fans. Every division up sends stronger rivals, and they stay that strong until you win the league.</p>
               <p>Tap the stadium for instant cash (Megaphone makes taps stronger). Buy Stands when the ground is full, spending tracks when it is not.</p>
               <p>Schedule one Stands level in Upgrades for 20% less. You pay upfront and the new seats open after two matches finish, including any played while you are away.</p>
+              <p>In Ticket offer, you can pay to host juniors at the next home league fixture. They enter free and count toward concessions, programme sales and the sponsor crowd. Season passes keep priority.{h.juniorExample && <> At a sold-out {h.freshSeats}-seat ground, inviting {h.juniorExample.seats} juniors costs ${h.juniorExample.seats}, displaces {h.juniorExample.displaced} walk-ups and adds {h.juniorExample.newFans} supporters at full time.</>}</p>
+              <p>Under Ticket offer, print match programmes before a league fixture. The crowd at full time determines how many sell. Unsold copies expire after the match.{h.programmeExample && <> At your starting ground, printing {h.programmeExample.copies} costs ${h.programmeExample.cost}. Sell {Math.ceil(h.programmeExample.cost / h.programmeExample.price)} at ${h.programmeExample.price} each to break even.</>}</p>
               <p>The Ticket offer tile sets your matchday price, and switching is free at any time. Standard is the regular game. Community takes {h.ticketCommunityCut}% off the gate money each fan pays and your supporters grow {h.ticketCommunityGrowth}% faster. Premium adds {h.ticketPremiumGate}% to the gate money each fan pays, but only {h.ticketPremiumDemand}% of your supporters turn up and they grow {h.ticketPremiumGrowth}% slower. Only the ticket price moves: snacks, the shop, parking and the payroll keep their own rates. Example: a new {h.freshSeats} seat ground with {h.freshFans} supporters draws {h.freshPremiumCrowd} on Premium, so Premium pays less there, and it pays more once {h.ticketPremiumDemand}% of your supporters still fill the ground. Selling up puts the offer back to Standard.</p>
               <p>Matchday Hype charges over {h.chargeMin} minutes of play (Stadium Voltage in the boardroom trims that to {h.voltage1}, then {h.voltage2}). Press it and your income pays double for {h.hypeSec} seconds, and your taps rise with it; goal and win bonuses are not doubled. It does not charge or burn while you are away.</p>
               <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. In League, open Results this season to see each recorded score and any second-half plan. Open Latest season and choose a completed season to see its final table, recorded match scores and sponsorship. If your club wins Muddy Meadows, for example, you can reopen its final table and scores while playing in Gravel Lane. Recorded seasons stay with this ground until you sell up.</p>

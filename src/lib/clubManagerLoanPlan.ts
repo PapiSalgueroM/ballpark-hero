@@ -1,6 +1,6 @@
 import {
-  acceptBid, isPartialClub, loanOutFee, loanOutPlayer, loanOutRefusal, isHistoricEra, ERA_LEAGUES, eraClubDefFor,
-  REAL_LEAGUES, playableClubs, oppRosterFor, recallLoanedPlayer, sellValue, worldYear,
+  acceptBid, buyerPool, isPartialClub, loanOutFee, loanOutPlayer, loanOutRefusal,
+  oppRosterFor, recallLoanedPlayer, sellValue, worldYear,
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, LoanOut } from '@/lib/clubManager';
 import { loanOutTermsFor } from '@/lib/clubManagerDeals';
@@ -16,7 +16,7 @@ import type {
 } from '@/lib/clubManagerLoanDevelopment';
 
 export interface LoanPlanRequest {
-  playerId: string; hostClub: string; source: 'standard' | 'bid'; token: string;
+  playerId: string; hostClub: string; source: 'standard' | 'straight' | 'bid'; token: string;
 }
 export interface LoanPlanPreview extends LoanPlanRequest { quote: LoanDevelopmentQuote }
 export interface PlannedLoan extends LoanOut { development?: LoanDevelopmentRecord }
@@ -41,21 +41,6 @@ export function loanPlanRecordOf(c: CareerState, loan: PlannedLoan): LoanDevelop
   const record = loan.development;
   return loanDevelopmentMatches(record, context(c, loan.player), fact(c, loan)) ? record : null;
 }
-/** Read-only projection of the unchanged authority's eligible destinations. */
-function eligibleHostPool(state: CareerState): string[] {
-  if (state.eraId && isHistoricEra(state.eraId)) {
-    const leagues = ERA_LEAGUES[state.eraId] ?? [];
-    return leagues
-      .flatMap(l => l.clubs
-        .map(c => eraClubDefFor(c, state.eraId))
-        .sort((a, b) => a.expectation - b.expectation)
-        .slice(0, 8)
-        .map(c => c.name))
-      .filter(n => n !== state.clubName);
-  }
-  return REAL_LEAGUES.flatMap(l => playableClubs(l.id).slice(0, 8).map(c => c.name))
-    .filter(n => n !== state.clubName);
-}
 function hostFacts(c: CareerState, player: CMPlayer, clubName: string): LoanDevelopmentHost {
   const partial = isPartialClub(clubName, c.eraId);
   const snapshot = partial ? [] : oppRosterFor(c, clubName);
@@ -71,7 +56,7 @@ function displayedToken(quote: LoanDevelopmentQuote, source: LoanPlanRequest['so
   ] : null]);
 }
 export function loanPlanHosts(c: CareerState): string[] {
-  return available(c) ? [...new Set(eligibleHostPool(c))].sort((a, b) => a.localeCompare(b)) : [];
+  return available(c) ? [...new Set(buyerPool(c).map(club => club.name))].sort((a, b) => a.localeCompare(b)) : [];
 }
 export function loanPlanUnavailableReason(c: CareerState, id: string, host: string): string {
   return loanOutRefusal(c, id) ?? (isPartialClub(host, c.eraId)
@@ -81,15 +66,16 @@ export function loanPlanUnavailableReason(c: CareerState, id: string, host: stri
 export function loanPlanPreview(
   c: CareerState, playerId: string, hostClub: string, source: LoanPlanRequest['source'],
 ): LoanPlanPreview | null {
-  if (!available(c) || !['standard', 'bid'].includes(source) || !eligibleHostPool(c).includes(hostClub)) return null;
+  if (!available(c) || !['standard', 'straight', 'bid'].includes(source) || !buyerPool(c).some(club => club.name === hostClub)) return null;
   const players = c.squad.filter(p => p.id === playerId);
   if (players.length !== 1) return null;
   const player = players[0], bid = c.incomingBids?.find(b => b.playerId === playerId);
   if (source === 'bid' && (!bid?.loan || bid.club !== hostClub || !Number.isFinite(bid.offer) || bid.offer < 0)) return null;
-  const fee = source === 'bid' ? Math.round(bid!.offer * 10) / 10 : loanOutFee(player);
+  const kind = source === 'straight' ? 'straight' : 'option';
+  const fee = source === 'bid' ? Math.round(bid!.offer * 10) / 10 : loanOutFee(player, kind);
   const quote = quoteLoanDevelopment(context(c, player),
     { key: playerKey(player), name: player.name, position: player.position, rating: player.rating },
-    { clubName: hostClub, fee, ...loanOutTermsFor(sellValue(player), fee) }, hostFacts(c, player, hostClub));
+    { clubName: hostClub, fee, ...loanOutTermsFor(sellValue(player), fee, kind) }, hostFacts(c, player, hostClub));
   if (!quote) return null;
   return { playerId, hostClub, source, quote, token: displayedToken(quote, source, c, playerId) };
 }
@@ -98,7 +84,7 @@ export function agreeLoanPlan(c: CareerState, request: LoanPlanRequest): LoanPla
   if (!preview || preview.token !== request.token) return null;
   const copy = plainCopy(c);
   const next = request.source === 'bid' ? acceptBid(copy, request.playerId)
-    : loanOutPlayer(copy, request.playerId, request.hostClub, preview.quote.offer.fee);
+    : loanOutPlayer(copy, request.playerId, request.hostClub, undefined, request.source === 'straight' ? 'straight' : 'option');
   if (!next) return null;
   const loans = loanPlanLoans(next);
   const matches = loans.filter(l => l.player.id === request.playerId && l.club === request.hostClub && l.season === c.season);

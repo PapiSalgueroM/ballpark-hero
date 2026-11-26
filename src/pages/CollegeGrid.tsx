@@ -137,11 +137,16 @@ const CollegeGrid = () => {
                       <span aria-hidden="true" className="text-muted-foreground">{missedExamples.length}</span>
                     </summary>
                     <dl className="divide-y divide-border pb-2">
-                      {missedExamples.map(({ index, school, criterion, names }) => (
+                      {missedExamples.map(({ index, school, criterion, names, missedPicks }) => (
                         <div key={index} className="py-2">
                           <dt className="text-sm font-semibold text-foreground">{school} + {criterion}</dt>
+                          {missedPicks.length > 0 && (
+                            <dd className="mt-1 text-xs leading-5 text-muted-foreground">
+                              <span className="font-medium text-foreground">Your misses</span> · {missedPicks.join(', ')}
+                            </dd>
+                          )}
                           <dd className="mt-1 text-xs leading-5 text-muted-foreground">
-                            {names.length ? names.join(', ') : 'No unused example on record.'}
+                            {names.length ? <><span className="font-medium text-foreground">Possible picks</span> · {names.join(', ')}</> : 'No unused example on record.'}
                           </dd>
                         </div>
                       ))}

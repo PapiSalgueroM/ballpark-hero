@@ -30,7 +30,7 @@ import {
   cupProgressRank, uclProgressRank, objectiveStatuses, openObjectives, seasonScoreLeaguePoints,
   /* Round 783: the mid season takeover an accepted application walks into. */
   startCareer, interimManagerName, refreshWorldRoster, worldSeedOf, livingWorldOf, customExitUclField, SAVE_CAPS,
-  completedChampionsLeagueScorerAward, completedDomesticScorerAward,
+  completedChampionsLeagueScorerAward, completedDomesticScorerAward, completedEuropaScorerAward,
   clubAvailableInCareer, careerHasKLeagueWorld, careerScopedLeagueId, promotionAppointmentHeld, promotionEntryLabel,
   /* Round 1335: the old season rules' switch, read by both handovers. */
   legacySeason,
@@ -45,6 +45,7 @@ import type { WorldCompKey } from '@/lib/worldCompetition';
 import type { CareerState, CalendarEntry, Competition, FormResult, LeagueRatingChange, MatchWeekReport, PlayerMessage } from '@/lib/clubManager';
 import { BOARD_FRESH, LEGACY_BOARD_START, LEGACY_NEW_JOB_BOARD } from '@/lib/clubManagerBoardVerdict';
 import { applyNewJobDials } from '@/lib/clubManagerDifficulty';
+import { carrySeniorClub } from '@/lib/clubManagerSecondClub';
 import type { CmVarAsk } from '@/lib/clubManagerVar';
 import { CM_BASE_YEAR, DEFAULT_ERA_ID, eraById, isHistoricEra } from '@/lib/clubManagerEras';
 import { closeOnJoiningNow, jobHuntOf, leavingLine } from '@/lib/clubManagerJobHunt';
@@ -1115,7 +1116,9 @@ export function joinClubNow(career: CareerState): CareerState | null {
     history: career.history,
     uclScorers: undefined,
     pendingUclScorerAward,
+    pendingUelScorerAward: completedEuropaScorerAward(career),
     ...(career.unreviewedUclScorerAwards ? { unreviewedUclScorerAwards: career.unreviewedUclScorerAwards } : {}),
+    ...(career.unreviewedUelScorerAwards ? { unreviewedUelScorerAwards: career.unreviewedUelScorerAwards } : {}),
     domesticCupScorers: undefined,
     pendingDomesticScorerAward,
     ...(career.unreviewedDomesticScorerAwards ? { unreviewedDomesticScorerAwards: career.unreviewedDomesticScorerAwards } : {}),
@@ -1174,6 +1177,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
      entrant of a night still ahead (the critic's corrections 6 to 8). */
   carryOneOffs(career, joined);
   /* Round 1501: the level's cheque and wage room on the new job (the identity on Normal). */
+  carrySeniorClub(career, joined);
   return applyNewJobDials(joined);
 }
 

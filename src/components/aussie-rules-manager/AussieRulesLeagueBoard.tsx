@@ -9,7 +9,7 @@ import { lineupStrength, prepareClubs, PREPARATIONS, ROLE_LABELS, ROLES, TACTICS
 import { EXIT_LABELS } from '@/lib/aussieRulesFormat';
 import {
   CLUBS, clubFull, clubIdentities, clubOf, clubShort, CURRENT_CLUB_SET, draftPool, hubTiles, injuryAbsence, lastWeek, leagueLadder, leaguePlayer, myFinalsTie, nextSeasonLineupPreview, opponentPlays, ordinal, pickRefusal, picksLeft, retirees,
-  LIST_SIZE, roleDeficits, ROUNDS, scoutedPotential, summerDelistCandidates, tieName, type LeagueAction, type LeagueState,
+  LIST_SIZE, roleDeficits, ROUNDS, scoutedPotential, summerDelistCandidates, summerTradeOffer, tieName, type LeagueAction, type LeagueState,
 } from '@/lib/aussieRulesLeague';
 import styles from './AussieRulesManagerBoard.module.css';
 import own from './AussieRulesLeagueBoard.module.css';
@@ -276,9 +276,16 @@ function ClubPanel({ state, onSwitch }: { state: LeagueState; onSwitch: () => bo
     <h3>Honour board</h3>
     {rows.length ? <ul className={own.list}>{rows.map(row => <li key={row.season} data-arl-history={row.season}>
       <strong>Season {row.season}</strong>: {ordinal(row.place)} on the ladder ({row.w}-{row.d}-{row.l}), {EXIT_LABELS[row.exit].toLowerCase()}. Premiers: {clubShort(state, row.premier)}, beating {clubShort(state, row.runnerUp)} {score(row.gf.home === row.premier ? row.gf.homeScore : row.gf.awayScore)} to {score(row.gf.home === row.premier ? row.gf.awayScore : row.gf.homeScore)}. Most goals: {row.leadingGoalkicker.name} ({clubShort(state, row.leadingGoalkicker.club)}), {row.leadingGoalkicker.goals}.
+      {row.trade && <p>{row.trade.playerName} arrived from {clubShort(state, row.trade.fromClub)} for pick {row.trade.pick}.{row.trade.drafted && ` They selected ${row.trade.drafted.name}.`}</p>}
       {row.delisted && <p>{row.delisted.playerName} delisted to open one more draft pick.</p>}
     </li>)}</ul> : <p className={styles.muted}>Your first season is under way. Every season you finish goes up here.</p>}
   </div>;
+}
+
+function TradeReceipt({ state }: { state: LeagueState }) {
+  const trade = state.history.at(-1)?.trade;
+  if (!trade) return null;
+  return <p role="status">{trade.playerName} has joined your list. Pick {trade.pick} went to {clubShort(state, trade.fromClub)}{trade.drafted ? `, who selected ${trade.drafted.name}.` : '.'}</p>;
 }
 
 function DraftPanel({ state, act }: { state: LeagueState; act: (action: LeagueAction) => boolean }) {
@@ -308,6 +315,7 @@ function DraftPanel({ state, act }: { state: LeagueState; act: (action: LeagueAc
   return <div className={styles.card} data-arl-draft>
     <h3>{draft.at >= draft.order.length ? 'The draft is done' : myTurn ? `Your pick: number ${draft.at + 1} of ${draft.order.length}` : 'The other clubs are picking'}</h3>
     <p className={styles.muted}>Picks go to clubs that missed the finals first, worst first, then finalists by the week they went out, the premier last. Ceilings are your scouts' read, a range, not a promise.</p>
+    {state.history.at(-1)?.trade && <TradeReceipt state={state} />}
     {night && <DraftNightCard night={night} onContinue={() => setNightFrom(null)} />}
     {refusal && <p role="alert" data-arl-refusal className={own.refusal}>{refusal}</p>}
     {myTurn && <><div className={styles.actions}><button className={styles.secondary} data-arl-draftauto onClick={() => act({ type: 'draftAuto' })}>Let the list manager make all {mineLeft} {mineLeft === 1 ? 'pick' : 'picks'}</button></div>
@@ -347,6 +355,7 @@ function StatusCard({ state, act }: { state: LeagueState; act: (action: LeagueAc
     const out = retirees(state);
     const mine = clubOf(state, state.myClub)!.players.filter(p => out.has(p.id));
     const candidates = summerDelistCandidates(state);
+    const offer = summerTradeOffer(state);
     const player = selection?.season === state.season ? candidates.find(candidate => candidate.id === selection.playerId) : undefined;
     const deficits = player && roleDeficits({ players: candidates.filter(candidate => candidate.id !== player.id) });
     const needs = deficits && ROLES.filter(role => deficits[role] > 0)
@@ -372,6 +381,15 @@ function StatusCard({ state, act }: { state: LeagueState; act: (action: LeagueAc
               onClick={() => player && act({ type: 'delist', season: state.season, playerId: player.id })}>Confirm delisting</button>
           </div>
         </details>}
+      {offer && <details className={styles.events} data-arl-trade>
+        <summary>Trade offer for pick {offer.pick}</summary>
+        <div className={styles.swap}>
+          <p><strong>{offer.player.name}</strong> · {ROLE_LABELS[offer.player.role]} · Age {offer.player.age} · Skill {offer.player.skill}</p>
+          <p>{clubShort(state, offer.fromClub)} will take your pick {offer.pick}. Their player has agreed to join your senior list. Opening the draft without accepting keeps the pick.</p>
+          <button type="button" className={styles.secondary} onClick={() => act({ type: 'tradePick', season: state.season,
+            fromClub: offer.fromClub, playerId: offer.player.id, pick: offer.pick })}>Trade pick {offer.pick} and open the draft</button>
+        </div>
+      </details>}
       <button className={styles.action} data-arl-next onClick={() => act({ type: 'next' })}>Open the draft</button></div>;
   }
   if (state.phase === 'draft') return <div className={styles.card}><p>Draft night. Open the Draft box to make your picks.</p></div>;

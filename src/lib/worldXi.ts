@@ -499,7 +499,7 @@ export interface SeasonInjury {
 }
 
 export type MatchResult = 'W' | 'D' | 'L';
-export type WorldXiSeasonApproach = 'balanced' | 'protect';
+export type WorldXiSeasonApproach = 'balanced' | 'protect' | 'attack';
 
 /* Round 726, the other half of his "more in the season report". Everything
    in these four shapes is read off the eleven's real positions, ages and card
@@ -547,7 +547,18 @@ export interface WhatIf {
   line: string;
 }
 
+export interface XiTableRow { team: number; wins: number; draws: number; losses: number }
+export const xiTrophyCount = (trophies: readonly string[]) => trophies.filter(title => title !== 'THE TREBLE').length;
+export const tablePoints = (row: XiTableRow) => row.wins * 3 + row.draws;
+
 export interface SeasonReport {
+  leagueTable?: XiTableRow[];
+  meetings?: {
+    rival: number;
+    home: boolean;
+    goalsAgainst: number;
+    goals: { scorer: string; assist: string | null }[];
+  }[];
   squadRating: number; // 0-100 overall, drives the whole report
   tablePosition: number; // 1-20, 1 is champions
   points: number;
@@ -577,6 +588,7 @@ export interface SeasonReport {
   playerStats?: PlayerSeasonStats[];
   awards?: SeasonAwards;
   whatIf?: WhatIf;
+  venuePoints?: { home: number; away: number };
   /** Round 825, Build Your XI only. Optional: World XI never passes a
    *  breakdown, and a report built before this round has none. */
   fit?: SeasonFit;
@@ -658,12 +670,59 @@ interface LeagueRun {
   unbeatenRun: number;
   rivalPoints: number[];
   tablePosition: number;
+  sharedFixtures?: { rival: number; home: boolean }[];
+  leagueTable?: XiTableRow[];
+}
+
+// Each round pairs every club once. Reversing venues for the second half gives
+// every pairing two fixtures and makes both clubs share each result.
+export function settleXiTable(seed: number, results: MatchResult[]) {
+  const roll = rng(seed ^ 0x4c1f);
+  const rivals = Array.from({ length: LEAGUE_TEAMS - 1 }, (_, i) => i + 1);
+  const slots = [0, ...shuffleWith(roll, rivals)];
+  const rows = [0, ...rivals].map(team => ({ team, wins: 0, draws: 0, losses: 0 }));
+  const strength = rows.map(() => roll());
+  const sharedFixtures: { rival: number; home: boolean }[] = [];
+  for (let day = 0; day < results.length; day++) {
+    for (let pair = 0; pair < LEAGUE_TEAMS / 2; pair++) {
+      const left = slots[pair], right = slots[LEAGUE_TEAMS - 1 - pair];
+      const leftHome = (day % rivals.length + pair) % 2 === (day < rivals.length ? 0 : 1);
+      const home = leftHome ? left : right;
+      const away = leftHome ? right : left;
+      let homeResult: MatchResult;
+      if (home === 0 || away === 0) {
+        sharedFixtures.push({ rival: (home === 0 ? away : home) - 1, home: home === 0 });
+        const result = results[day];
+        homeResult = home === 0 || result === 'D' ? result : result === 'W' ? 'L' : 'W';
+      } else {
+        const winShare = 1 / (1 + Math.exp(-3 * (strength[home] - strength[away]) - 0.16));
+        const chance = roll();
+        homeResult = chance < DRAW_SHARE ? 'D' : chance < DRAW_SHARE + (1 - DRAW_SHARE) * winShare ? 'W' : 'L';
+      }
+      if (homeResult === 'D') {
+        rows[home].draws++;
+        rows[away].draws++;
+      } else {
+        rows[homeResult === 'W' ? home : away].wins++;
+        rows[homeResult === 'W' ? away : home].losses++;
+      }
+    }
+    slots.splice(1, 0, slots.pop()!);
+  }
+  const rivalPoints = rows.slice(1).map(tablePoints);
+  const leagueTable = rows.sort((a, b) => tablePoints(b) - tablePoints(a) || a.team - b.team);
+  return { sharedFixtures, leagueTable, rivalPoints, tablePosition: leagueTable.findIndex(row => row.team === 0) + 1 };
 }
 
 function leagueOdds(win: number, approach: WorldXiSeasonApproach) {
   const draw = (1 - win) * DRAW_SHARE;
   const loss = 1 - win - draw;
   if (approach === 'balanced') return { win, draw, loss };
+  if (approach === 'attack') {
+    // Three draws yield the same points as one win and two losses.
+    const trade = Math.min(0.035, draw / 3);
+    return { win: win + trade, draw: Math.max(0, draw - 3 * trade), loss: loss + 2 * trade };
+  }
   // Each win traded for a draw costs two points. Two losses traded for draws repay them.
   const trade = Math.min(0.035, win, loss / 2);
   return { win: win - trade, draw: draw + 3 * trade, loss: loss - 2 * trade };
@@ -675,7 +734,7 @@ function leagueOdds(win: number, approach: WorldXiSeasonApproach) {
  * Lifted out of simulateWorldXiSeason in Round 726 so the "what would have
  * changed" line can replay the same rolls under a different shape or rating.
  */
-function playLeague(rand: () => number, baseWinP: number, approach: WorldXiSeasonApproach = 'balanced'): LeagueRun {
+function playLeague(rand: () => number, baseWinP: number, approach: WorldXiSeasonApproach = 'balanced', tableSeed?: number): LeagueRun {
   const { win: winP, draw: drawP } = leagueOdds(baseWinP, approach);
   const results: MatchResult[] = [];
   let points = 0;
@@ -692,6 +751,12 @@ function playLeague(rand: () => number, baseWinP: number, approach: WorldXiSeaso
     else { losses++; currentRun = 0; }
     if (currentRun > unbeatenRun) unbeatenRun = currentRun;
     results.push(roll < winP ? 'W' : roll < winP + drawP ? 'D' : 'L');
+  }
+
+  if (tableSeed !== undefined) {
+    // Keep the cup and player-stat draws aligned with earlier seasons.
+    for (let i = 0; i < (LEAGUE_TEAMS - 1) * (1 + LEAGUE_MATCHES); i++) rand();
+    return { results, points, wins, draws, losses, unbeatenRun, ...settleXiTable(tableSeed, results) };
   }
 
   // Table position: rank this points total against 19 simulated rivals whose
@@ -794,7 +859,7 @@ export function formationMisfits(players: WxPlayer[], formationName: string): nu
 export function whatIfFinish(
   filled: WxPlayer[],
   formationName: string,
-  alt: { formation?: string; liftWeakest?: boolean; adjust?: number; approach?: WorldXiSeasonApproach } = {},
+  alt: { formation?: string; liftWeakest?: boolean; adjust?: number; approach?: WorldXiSeasonApproach; table?: 'round-robin' } = {},
 ): { points: number; tablePosition: number } {
   const players = filled.filter((p): p is WxPlayer => p !== null);
   const seed = squadSeed(players);
@@ -805,7 +870,7 @@ export function whatIfFinish(
     squadRating = squadRatingOf(ratings.filter((_, i) => i !== weakest));
   }
   const penalty = shapePenalty(players, formationName, alt.formation);
-  const run = playLeague(rng(seed), winProbability(ratingToOverall(squadRating + (alt.adjust ?? 0)) - penalty), alt.approach);
+  const run = playLeague(rng(seed), winProbability(ratingToOverall(squadRating + (alt.adjust ?? 0)) - penalty), alt.approach, alt.table ? seed : undefined);
   return { points: run.points, tablePosition: run.tablePosition };
 }
 
@@ -971,6 +1036,7 @@ function counted(n: number, word: string): string {
 }
 
 interface SeasonExtras {
+  meetings?: SeasonReport['meetings'];
   goalsFor: number;
   goalsAgainst: number;
   cleanSheets: number;
@@ -979,6 +1045,7 @@ interface SeasonExtras {
   playerStats: PlayerSeasonStats[];
   awards: SeasonAwards;
   whatIf: WhatIf;
+  venuePoints?: SeasonReport['venuePoints'];
 }
 
 /**
@@ -1061,8 +1128,14 @@ function buildSeasonExtras(
 
   /* Fixtures: every rival home and away, in a seeded order. */
   const fixtureDeck = shuffleWith(rand, rivalPoints.flatMap((_, r) => [{ rival: r, home: true }, { rival: r, home: false }]));
-  const fixtures = results.map((_, i) => fixtureDeck[i % Math.max(1, fixtureDeck.length)] ?? { rival: 0, home: true });
+  const fixtures = league.sharedFixtures ?? results.map((_, i) => fixtureDeck[i % Math.max(1, fixtureDeck.length)] ?? { rival: 0, home: true });
 
+  const venuePoints = approach === 'attack' ? { home: 0, away: 0 } : undefined;
+  if (venuePoints) {
+    results.forEach((result, i) => {
+      venuePoints[fixtures[i].home ? 'home' : 'away'] += result === 'W' ? 3 : result === 'D' ? 1 : 0;
+    });
+  }
   /* Scorelines consistent with the result, built from the scorers. Every win
      first gets one goal from a man who played in it, then each man's other
      goals land in matches he played, wins first. */
@@ -1117,6 +1190,15 @@ function buildSeasonExtras(
   }
   const playerAssists = players.map((_, i) => goals.filter(g => g.assister === i).length);
   const assists = playerAssists.reduce((s, a) => s + a, 0);
+  const meetings = league.sharedFixtures?.map((fixture, match) => ({
+    rival: fixture.rival + 1,
+    home: fixture.home,
+    goalsAgainst: ga[match],
+    goals: goals.filter(g => g.match === match).map(g => ({
+      scorer: players[g.scorer].name,
+      assist: g.assister === null ? null : players[g.assister].name,
+    })),
+  }));
 
   /* A man's clean sheets are the shutouts in the games he played, so the
      keeper and the back four each count their own and never the team's. */
@@ -1246,18 +1328,19 @@ function buildSeasonExtras(
      sim's arithmetic and never as a certainty. A shape can only cost the
      side here, so when the shape is the mover the chosen one was right. */
   const finish = { points, tablePosition };
+  const table = league.leagueTable ? 'round-robin' : undefined;
   const swing = (alt: { points: number; tablePosition: number }) =>
     Math.abs(alt.tablePosition - finish.tablePosition) * 1000 + Math.abs(alt.points - finish.points);
   let bestShape: { name: string; misfits: number; points: number; tablePosition: number } | null = null;
   if (FORMATIONS.some(f => f.name === formationName)) {
     for (const f of FORMATIONS) {
       if (f.name === formationName) continue;
-      const alt = whatIfFinish(players, formationName, { formation: f.name, adjust, approach });
+      const alt = whatIfFinish(players, formationName, { formation: f.name, adjust, approach, table });
       if (!bestShape || swing(alt) > swing(bestShape)) bestShape = { name: f.name, misfits: formationMisfits(players, f.name), ...alt };
     }
   }
   const weakest = ratings.length >= 2 ? ratings.indexOf(Math.min(...ratings)) : -1;
-  const lifted = weakest >= 0 ? whatIfFinish(players, formationName, { liftWeakest: true, adjust, approach }) : null;
+  const lifted = weakest >= 0 ? whatIfFinish(players, formationName, { liftWeakest: true, adjust, approach, table }) : null;
   const liftedRating = weakest >= 0 ? squadRatingOf(ratings.filter((_, i) => i !== weakest)) : squadRating;
   const from = ordinal(finish.tablePosition);
   /* Said the way it moved: a change of place names both places, and a
@@ -1325,6 +1408,8 @@ function buildSeasonExtras(
     playerStats,
     awards: { youngPlayer, goalOfSeason },
     whatIf,
+    venuePoints,
+    meetings,
   };
 }
 
@@ -1346,6 +1431,7 @@ export function simulateWorldXiSeason(
   formationName: string,
   fit?: XiFitAdjust,
   approach: WorldXiSeasonApproach = 'balanced',
+  table?: 'round-robin',
 ): SeasonReport {
   const players = filled.filter((p): p is WxPlayer => p !== null);
   const seed = squadSeed(players);
@@ -1360,7 +1446,8 @@ export function simulateWorldXiSeason(
   const adjust = fit ? fit.roleFit + fit.chemistry + fit.balance : 0;
   const overall = ratingToOverall(squadRating + adjust);
   const winP = winProbability(overall);
-  const league = playLeague(rand, winP, approach);
+  const tableSeed = table ? seed : undefined;
+  const league = playLeague(rand, winP, approach, tableSeed);
   const { points, wins, draws, losses, unbeatenRun, rivalPoints, tablePosition } = league;
 
   /* Round 825: what each of the three was worth, the same rolls replayed
@@ -1459,8 +1546,8 @@ export function simulateWorldXiSeason(
     positionLine,
     `Finished ${ordinal(tablePosition)} with ${points} points (${wins}W ${draws}D ${losses}L).`,
   ];
-  if (approach === 'protect') {
-    const balanced = playLeague(rng(seed), winP);
+  if (approach !== 'balanced') {
+    const balanced = playLeague(rng(seed), winP, 'balanced', tableSeed);
     narrative.push(`On the same rolls, Balanced would finish ${ordinal(balanced.tablePosition)} with ${counted(balanced.points, 'point')} and ${counted(balanced.draws, 'draw')}.`);
   }
   /* Round 455, his "more in the season report". Everything below is read off
@@ -1513,6 +1600,9 @@ export function simulateWorldXiSeason(
     playerStats: extras.playerStats,
     awards: extras.awards,
     whatIf: extras.whatIf,
+    ...(extras.venuePoints ? { venuePoints: extras.venuePoints } : {}),
+    ...(league.leagueTable ? { leagueTable: league.leagueTable } : {}),
+    ...(extras.meetings ? { meetings: extras.meetings } : {}),
     ...(seasonFit ? { fit: seasonFit } : {}),
   };
 }

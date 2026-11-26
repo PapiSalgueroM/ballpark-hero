@@ -64,7 +64,8 @@ describe('NFL backup quarterback postseason appearances', () => {
     }
     expect(nflSeasonBeats(c)).toContain('playoffs');
     expect(sport.reviewStats(line, 'QB').postseason.map(({ label, value }) => [label, value])).toEqual([
-      ['Team games', String(teamGames)], ['Appearances', String(apps)], ...(box ? [['Performance', box]] : []),
+      ['Team games', String(teamGames)], ['Appearances', String(apps)],
+      ...(box ? [['Passing yards', '232'], ['Passing touchdowns', '2'], ['Interceptions thrown', '1']] : []),
     ]);
 
     const saved = JSON.parse(JSON.stringify(line));
@@ -94,10 +95,11 @@ describe('NFL backup quarterback postseason appearances', () => {
     expect(line.poGames).toBe(4);
     expect(line.poLine).toBeTruthy();
     expect(line).not.toHaveProperty('poPlayerGames');
-    expect(sport.reviewStats(line, 'WR').postseason[0]).toMatchObject({ label: 'Games', value: '4' });
+    expect(sport.reviewStats(line, 'WR').postseason[0]).toMatchObject({ label: 'Team games', value: '4' });
     const legacy = { ...starter.seasons.at(-1)!, games: 4 };
+    delete legacy.poStats;
     expect(sport.reviewStats(legacy, 'QB').postseason.map(({ label, value }) => [label, value])).toEqual([
-      ['Games', '4'], ['Performance', '926 yds, 6 TD, 2 INT'],
+      ['Team games', '4'], ['Performance', '926 yds, 6 TD, 2 INT'],
     ]);
   });
 
@@ -125,8 +127,12 @@ describe('NFL backup quarterback postseason appearances', () => {
     const stat = (label: string) => reloaded.container.querySelector(`[data-season-stat="${label}"] dd`);
     expect(stat('Team games')).toHaveTextContent(String(teamGames));
     expect(stat('Appearances')).toHaveTextContent(String(apps));
-    if (wildCard) expect(stat('Performance')).toBeNull();
-    else expect(stat('Performance')).toHaveTextContent('232 yds, 2 TD, 1 INT');
+    if (wildCard) expect(stat('Passing yards')).toBeNull();
+    else {
+      expect(stat('Passing yards')).toHaveTextContent('232');
+      expect(stat('Passing touchdowns')).toHaveTextContent('2');
+      expect(stat('Interceptions thrown')).toHaveTextContent('1');
+    }
     expect(localStorage.getItem(sport.saveKey)).toBe(settled);
   });
 });

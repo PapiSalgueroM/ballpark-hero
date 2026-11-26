@@ -22,7 +22,7 @@ import {
   type CareerState, type SeasonRecord, type ClubData, type ContractOffer, type TransferSituation,
   type RandomEvent, type EventChoice, type WorldCupResult, type WCMatch,
   type RivalPlayer, type RivalryEvent, type RivalrySummary,
-  type LifestyleLevel, type FamilyStatus, type BallonDorResult, type BallonDorNominee,
+  type LifestyleLevel, type FamilyStatus, type BallonDorResult,
   type UCLResult, type UCLKnockoutMatch, type Award,
   type LegacyResult, type LegacyTier, type PostRetirementChoice, type ManagerState,
   type PunditState, type OwnerState, type PunditAction,
@@ -1720,6 +1720,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
                 onAnswer={handlePhoneAnswer}
                 onMoney={handleMoney}
                 onBuyItem={handlePurchase}
+                onCareerPatch={handleCareerPatch}
                 onClose={() => setPhoneOpen(false)}
               />
             )}
@@ -2346,7 +2347,9 @@ function RivalComparisonPanel({ career }: { career: CareerState }) {
   const rival = career.rival;
   if (!rival) return null;
   const totals = getCareerTotals(career.seasons);
-  
+  const rivalSeason = rival.lastSeason;
+  const playerSeason = rivalSeason && career.seasons.find(s => s.year === rivalSeason.year);
+
   const rows = [
     { l: "Overall", p: career.overall, r: rival.overall },
     { l: "Career Goals", p: totals.goals, r: rival.careerGoals },
@@ -2375,6 +2378,18 @@ function RivalComparisonPanel({ career }: { career: CareerState }) {
       <div className="text-[10px] text-center text-muted-foreground mb-1">
         {rival.club} · OVR {rival.overall} · Age {rival.age}
       </div>
+      {rivalSeason && playerSeason && (
+        <details className="rounded-lg border border-border px-3 py-2 text-xs">
+          <summary className="cursor-pointer font-semibold">Compare the {rivalSeason.year}/{String(rivalSeason.year + 1).slice(-2)} season</summary>
+          <table className="mt-2 w-full text-center tabular-nums">
+            <thead className="text-muted-foreground"><tr><th scope="col" className="text-left">Player</th><th scope="col">Apps</th><th scope="col">Goals</th><th scope="col">Assists</th></tr></thead>
+            <tbody>
+              <tr><th scope="row" className="py-1 text-left">{career.playerName}</th><td>{playerSeason.apps}</td><td>{playerSeason.goals}</td><td>{playerSeason.assists}</td></tr>
+              <tr><th scope="row" className="text-left">{rival.name}</th><td>{rivalSeason.apps}</td><td>{rivalSeason.goals}</td><td>{rivalSeason.assists}</td></tr>
+            </tbody>
+          </table>
+        </details>
+      )}
       {rows.map(r => (
         <div key={r.l} className="flex items-center justify-between text-xs">
           <span className={`font-bold w-12 text-right ${r.p > r.r ? "text-emerald-400" : r.p < r.r ? "text-muted-foreground" : "text-foreground"}`}>
@@ -2636,7 +2651,7 @@ function FinancialPanel({ career, onCurrencyChange, onAgentChange }: { career: C
 function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: { bdor: BallonDorResult; career: CareerState; onDismiss: () => void; onSpeech: (choice: BdorSpeechChoice) => void; onReveal?: () => void }) {
   const copy = SOCCER_BALLON_DOR.copy;
   return (
-    <AwardsNightCard<BallonDorNominee>
+    <AwardsNightCard
       key={bdor.year}
       night={bdor}
       reveal={{ complete: !!bdor.revealed || !!bdor.speech, onComplete: () => onReveal?.() }}
@@ -2649,7 +2664,12 @@ function BallonDorCeremonyCard({ bdor, career, onDismiss, onSpeech, onReveal }: 
       badge={n => <FlagImg name={n.nationality} size={14} />}
       detail={n => `${n.position} · ${n.club}`}
       score={n => `${n.points}pts`}
-      scoreDetail={n => `${n.goals}G${n.trophies.length > 0 ? ` · ${n.trophies.join(", ")}` : ""}`}
+      scoreDetail={n => <>
+        {`${n.goals}G${n.assists === undefined ? "" : ` · ${n.assists}A`}${n.trophies.length > 0 ? ` · ${n.trophies.join(", ")}` : ""}`}
+        {n.performance && Number.isFinite(n.performance.rating) && Number.isInteger(n.performance.apps) && <span className="block">{n.performance.rating.toFixed(1)} avg · {n.performance.apps} apps
+          {n.performance.cleanSheets !== undefined && <span className="block">{n.performance.cleanSheets} clean sheets</span>}
+        </span>}
+      </>}
       onDismiss={onDismiss}
       speech={{
         open: bdorSpeechOpen(career),
@@ -3904,8 +3924,7 @@ function GameScreen({ career, clubs, resumeGame, onNextSeason, onAcceptOffer, on
           {career.phase === "playing" && <SquadTile career={career} />}
           {career.phase === "playing" && onCareerPatch && <SeasonAmbitionTile career={career} onCareer={onCareerPatch} />}
           {career.phase === "playing" && onCareerPatch && <PreseasonPlanTile career={career} onCareer={onCareerPatch} />}
-          {(career.phase === "playing" || career.phase === "retired") && <CareerMentorTile career={career} />}
-          {(career.phase === "playing" || career.phase === "retired") && <CareerRecordsTile career={career} />}
+          {(career.phase === "playing" || career.phase === "retired") && <CareerMentorTile career={career} onCareer={onCareerPatch} />}
           {career.phase === "playing" && <ReducedRolePlanNote career={career} />}
           {(career.phase === "playing" || career.phase === "transfer_window" || career.phase === "contract_offer") && onCareerPatch && (
             <button type="button" data-soccer-programme-open onClick={() => setProgrammeOpen(true)} className="min-h-[44px] w-full rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3 text-left">
@@ -3967,6 +3986,9 @@ function GameScreen({ career, clubs, resumeGame, onNextSeason, onAcceptOffer, on
 
           {/* Career totals, position-specific */}
           <CareerStatsCard career={career} totals={totals} onDerbyHistory={() => setDerbyHistoryOpen(true)} />
+          {(career.phase === "playing" || career.phase === "retired" || visibleCareer.seasons.some(row => row.type === "playing")) && (
+            <CareerRecordsTile career={visibleCareer} />
+          )}
 
           {/* Trophies */}
           <div className="bg-card border border-border rounded-xl p-4">

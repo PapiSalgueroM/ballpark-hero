@@ -275,9 +275,10 @@ export interface NrlCareerState {
   contractApproach?: NrlContractApproach;
   selectionPromise?: NrlSelectionPromise;
 }
-type NrlOpeningMatchdayPlayer = readonly [id: number, name: string, age: number, role: NrlRole];
+type HalvesHonour = readonly [year: 2024 | 2025, role: 'Halfback' | 'Five-eighth'];
+type NrlOpeningMatchdayPlayer = readonly [id: number, name: string, age: number, role: NrlRole, recentDallyM?: HalvesHonour];
 export type NrlOpeningMatchdayRoster = Readonly<Record<string, readonly NrlOpeningMatchdayPlayer[]>>;
-type NrlOpeningRosterPlayer = readonly [id: number | string, name: string, age: number | undefined, role: NrlRole];
+type NrlOpeningRosterPlayer = readonly [id: number | string, name: string, age: number | undefined, role: NrlRole, recentDallyM?: HalvesHonour];
 const PERTH_SIGNINGS_COUNT = 27;
 export const isNrlNamedPlayer = (id: string): boolean => /^nrl-real-(?:\d+|perth-[a-z]+(?:-[a-z]+)*)$/.test(id);
 
@@ -509,10 +510,17 @@ function enrichPlayer(player: NrlPlayer, rng: () => number, rookie = false, open
 function initialSquad(club: NrlClub, year: number, seed: number, taken: Set<string>, starting: NrlPlayer[] = [],
   openingTeam?: readonly NrlOpeningRosterPlayer[]): NrlCareerPlayer[] {
   const rng = rngFor(seed, `squad|${club.id}|${year}`);
-  const players = openingTeam ? openingTeam.map(([id, name, age, role], index) => {
-    const rating = clampi(club.strength + (rng() - 0.5) * 14 - (year === 2026 && index >= NRL_ROLES.length ? 5 : 0), 40, 98);
+  // An individual award supplies a floor on the game's scale, independent of the player's club.
+  const strengths = openingTeam?.some(row => row[4]) && year === 2026
+    ? nrlSeasonPlan(year).clubs.map(c => c.strength).sort((a, b) => a - b) : [];
+  const honoursFloor = strengths[Math.floor(strengths.length * 0.75)] ?? 0;
+  const players = openingTeam ? openingTeam.map(([id, name, age, role, recentDallyM], index) => {
+    const honour = year === 2026 ? recentDallyM : undefined;
+    const drawnRating = clampi(club.strength + (rng() - 0.5) * 14 - (year === 2026 && index >= NRL_ROLES.length ? 5 : 0), 40, 98);
+    const rating = honour ? Math.max(drawnRating, honoursFloor) : drawnRating;
+    const secondaryRole = honour && honour[1] !== role ? honour[1] : undefined;
     const playerId = typeof id === 'number' ? `nrl-real-${id}` : `nrl-real-perth-${id}`;
-    return enrichPlayer({ id: playerId, name, role, rating, fitness: 100 }, rng, false, age);
+    return enrichPlayer({ id: playerId, name, role, rating, fitness: 100, ...(secondaryRole && { secondaryRole }) }, rng, false, age);
   }) : starting.map(player => enrichPlayer(player, rng));
   for (let index = players.length; index < SQUAD_SIZE; index++) {
     const role = openingTeam ? nextRole(players) : NRL_ROLES[index % NRL_ROLES.length];

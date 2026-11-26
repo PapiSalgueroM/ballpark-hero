@@ -167,6 +167,21 @@ export function homeWinProb(sport: ImperialismSport, home: string, away: string,
   return applyMomentum(base, ctx);
 }
 
+export function matchupMomentum(
+  home: string,
+  away: string,
+  owners: Record<string, string>,
+  records?: Record<string, { streak: number }>,
+): MomentumCtx {
+  return {
+    homeLand: statesOf(owners, home).length,
+    awayLand: statesOf(owners, away).length,
+    totalLand: Object.keys(owners).length,
+    homeStreak: records?.[home]?.streak ?? 0,
+    awayStreak: records?.[away]?.streak ?? 0,
+  };
+}
+
 export function resolveGame(
   sport: ImperialismSport,
   home: string,
@@ -175,22 +190,15 @@ export function resolveGame(
   rng: () => number = Math.random,
   records?: Record<string, { streak: number }>,
 ): ImpGame {
-  const ctx: MomentumCtx = {
-    homeLand: statesOf(owners, home).length,
-    awayLand: statesOf(owners, away).length,
-    totalLand: Object.keys(owners).length,
-    homeStreak: records?.[home]?.streak ?? 0,
-    awayStreak: records?.[away]?.streak ?? 0,
-  };
-  const pHome = homeWinProb(sport, home, away, ctx);
+  const pHome = homeWinProb(sport, home, away, matchupMomentum(home, away, owners, records));
   const roll = rng();
   const winner = roll < pHome ? home : away;
   const loser = winner === home ? away : home;
   const overtime = Math.abs(roll - pHome) < sport.tieBreakWindow;
-  let [w, l] = sport.score.pair(rng);
-  if (overtime) l = sport.score.tieBreak(w, rng);
-  const homeScore = winner === home ? w : l;
-  const awayScore = winner === home ? l : w;
+  const [winnerScore, regulationLoserScore] = sport.score.pair(rng);
+  const loserScore = overtime ? sport.score.tieBreak(winnerScore, rng) : regulationLoserScore;
+  const homeScore = winner === home ? winnerScore : loserScore;
+  const awayScore = winner === home ? loserScore : winnerScore;
 
   const loserStates = statesOf(owners, loser);
   const winnerHadNothing = statesOf(owners, winner).length === 0;

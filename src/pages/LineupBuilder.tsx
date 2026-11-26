@@ -22,13 +22,18 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { supabase } from '@/integrations/supabase/client';
 import { StatTile } from '@/components/game/StatTile';
 import { normalizePosition, playerRating } from '@/lib/squadDeal';
-import { ordinal, simulateWorldXiSeason, type WxPlayer } from '@/lib/worldXi';
+import { ordinal, simulateWorldXiSeason, xiTrophyCount, type WxPlayer } from '@/lib/worldXi';
 import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
 import { lineupFitSlots, seasonAdjust, xiFitBreakdown, type XiFitSlot } from '@/lib/xiFit';
 import { XiFitBreakdown, XiFitWorth } from '@/components/lineup/XiFitBreakdown';
 import { safeSetItem } from '@/lib/safeStorage';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
+const leagueApproaches = {
+  balanced: { label: 'Balanced', hint: 'Play for the usual mix of wins, draws and defeats.' },
+  protect: { label: 'Protect the point', hint: 'Trade some wins and defeats for more draws.' },
+  attack: { label: 'Go for the win', hint: 'Turn some draws into wins, at the risk of more defeats.' },
+} as const;
 
 const LineupBuilder = () => {
   const {
@@ -41,7 +46,7 @@ const LineupBuilder = () => {
     filledSlots,
     filledSlotsArray,
     filledCount,
-    verdict,
+    verdict, savedSeason, seasonApproach, chooseSeasonApproach,
     isEvaluating,
     isValidating,
     validationError,
@@ -72,6 +77,8 @@ const LineupBuilder = () => {
   const [browseActivation, setBrowseActivation] = useState(0);
   const inputOwner = useRef<HTMLDivElement>(null);
   const focusPickInput = useRef(false);
+  const positionPicker = useRef<HTMLSelectElement>(null);
+  const selectingFromPicker = useRef(false);
   const isClubYear = draftChoice.mode !== 'mixed';
   const recordedYear = isClubYear ? draftChoice.year : null;
   const lastYear = isClubYear ? lastRecordedYear(draftChoice) : null;
@@ -93,6 +100,20 @@ const LineupBuilder = () => {
     focusPickInput.current = false;
     inputOwner.current?.querySelector('input')?.focus();
   }, [phase, selectedPositionIndex, filledCount]);
+
+  useLayoutEffect(() => {
+    if (phase === 'building' && selectedPositionIndex === null && filledCount > 0 && selectingFromPicker.current) {
+      positionPicker.current?.focus({ preventScroll: true });
+    }
+  }, [phase, selectedPositionIndex, filledCount]);
+
+  const chooseDraftPosition = (index: number) => {
+    selectingFromPicker.current = true;
+    inputRevision.current += 1;
+    setPlayerInput('');
+    setBrowsingPlayers(false);
+    selectPosition(index);
+  };
 
   const reopenLastPick = () => {
     if (!undoLastPick()) return;
@@ -267,7 +288,7 @@ const LineupBuilder = () => {
             browsePageSize={browsingPlayers ? 50 : undefined}
             placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
             disabled={searchDisabled}
-            autoFocus={!isClubYear}
+            autoFocus={!isClubYear && !selectingFromPicker.current}
             showRecordedYear={draftChoice.mode === 'club-era'}
             emptyText={replacingSlot ? 'No matching records. Try another name or keep your current pick.' : isClubYear ? 'No matching records. Try another name or reroll the club.' : undefined}
             validateOnly
@@ -290,6 +311,11 @@ const LineupBuilder = () => {
   const fitSlots: XiFitSlot[] = useMemo(() => lineupFitSlots(positions, filledSlots), [positions, filledSlots]);
   const fitBreakdown = useMemo(() => xiFitBreakdown(fitSlots), [fitSlots]);
   const slotLabels = useMemo(() => positions.map((p) => p.label), [positions]);
+  const pickerLabels = useMemo(() => slotLabels.map((label, index) => {
+    if (slotLabels.indexOf(label) === slotLabels.lastIndexOf(label)) return label;
+    const instance = slotLabels.slice(0, index + 1).filter(slot => slot === label).length;
+    return `${label} ${instance}`;
+  }), [slotLabels]);
 
   /* Round 442, his "the simulation wasnt that good like other games and the
      details were bland". The result was one AI paragraph and a list of names.
@@ -320,9 +346,9 @@ const LineupBuilder = () => {
      row that has one, so this is a guard rather than a common case: if a squad
      ever reaches the result screen without values, it gets the verdict and no
      invented season. */
-  const canShowSeasonReport = phase === 'result' || (isClubYear && phase === 'reviewing');
   const seasonReport = useMemo(() => {
-    if (!canShowSeasonReport || ratedXi.length !== 11 || ratedXi.some((r) => r.value <= 0)
+    if (phase === 'result') return savedSeason;
+    if (phase !== 'reviewing' || ratedXi.length !== 11 || ratedXi.some((r) => r.value <= 0)
       || (isClubYear && ratedXi.some((r) => r.rating === null))) return null;
     const squad: WxPlayer[] = ratedXi.map(({ slot, value }) => ({
       name: buildXiReportName(slot, filledSlotsArray),
@@ -332,8 +358,8 @@ const LineupBuilder = () => {
       value,
       age: slot.pick?.age,
     }));
-    return simulateWorldXiSeason(squad, formation ?? '4-3-3', seasonAdjust(fitBreakdown));
-  }, [canShowSeasonReport, ratedXi, filledSlotsArray, formation, fitBreakdown, isClubYear]);
+    return simulateWorldXiSeason(squad, formation ?? '4-3-3', seasonAdjust(fitBreakdown), seasonApproach, 'round-robin');
+  }, [phase, savedSeason, ratedXi, filledSlotsArray, formation, fitBreakdown, isClubYear, seasonApproach]);
 
   const recordedYearVerdict = useMemo<AIVerdict | null>(() => {
     if (recordedYear === null) return null;
@@ -385,6 +411,7 @@ const LineupBuilder = () => {
       />
       <GameShell
         width="wide"
+        help="none"
         title="BUILD YOUR XI"
         subtitle={isClubYear && phase !== 'formation'
           ? (draftChoice.mode === 'club-era'
@@ -395,7 +422,7 @@ const LineupBuilder = () => {
           <div className="flex justify-center">
             <button
               onClick={() => setShowRules(true)}
-              className="mt-1 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
+              className="mt-1 inline-flex min-h-11 items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
               aria-label="How to play"
             >
               <HelpCircle className="w-4 h-4" /> How to play
@@ -504,6 +531,23 @@ const LineupBuilder = () => {
                 )}
               </div>
 
+              <div className="flex items-center gap-3">
+                <label htmlFor="lineup-draft-position" className="shrink-0 text-sm font-semibold text-foreground">Position to fill</label>
+                <select
+                  id="lineup-draft-position"
+                  ref={positionPicker}
+                  value={selectedPositionIndex ?? ''}
+                  onChange={event => chooseDraftPosition(Number(event.target.value))}
+                  disabled={isValidating}
+                  className="min-h-11 min-w-0 flex-1 rounded-xl border border-border bg-card px-2 text-base text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+                >
+                  <option value="" disabled>Choose a position</option>
+                  {pickerLabels.map((label, index) => (
+                    !filledSlots.has(index) && <option key={index} value={index}>{label}</option>
+                  ))}
+                </select>
+              </div>
+
               {/* Input area */}
               {/* Round 413: once the day allowance is spent the search box
                   would only hand back the same refusal, so the strip says so
@@ -514,14 +558,8 @@ const LineupBuilder = () => {
                 </p>
               )}
 
-              {(isClubYear || (selectedPositionIndex !== null && currentTeam && !isSpinning && !checkingDown)) && (
-                <div className="animate-fade-in space-y-3">
-                  <p className="text-sm text-center text-muted-foreground">
-                    {selectedPositionIndex === null ? 'Select a position on the pitch' : <>Filling: <span className="font-bold text-primary">{positions[selectedPositionIndex]?.label}</span></>}
-                  </p>
-
-                  {pickSearch}
-                </div>
+              {selectedPositionIndex !== null && currentTeam && !isSpinning && (isClubYear || !checkingDown) && (
+                <div className="animate-fade-in space-y-3">{pickSearch}</div>
               )}
 
               {validationError && (
@@ -531,11 +569,6 @@ const LineupBuilder = () => {
                 </div>
               )}
 
-              {!isClubYear && selectedPositionIndex === null && !isSpinning && (
-                <p className="text-center text-sm text-muted-foreground animate-fade-in">
-                  ↓ Select a position on the pitch
-                </p>
-              )}
             </div>
 
             {/* Formation Pitch on bottom */}
@@ -547,7 +580,10 @@ const LineupBuilder = () => {
                 positions={positions}
                 filledSlots={filledSlots}
                 selectedIndex={selectedPositionIndex}
-                onSelectPosition={selectPosition}
+                onSelectPosition={index => {
+                  selectingFromPicker.current = false;
+                  selectPosition(index);
+                }}
               />
             </div>
 
@@ -602,6 +638,15 @@ const LineupBuilder = () => {
               <XiFitBreakdown breakdown={fitBreakdown} slots={fitSlots} labels={slotLabels} className="mt-4" />
             </div>
 
+            {seasonReport && <div className="rounded-2xl border border-border bg-card p-4">
+              <label htmlFor="xi-league-approach" className="block text-sm font-semibold">League approach</label>
+              <select id="xi-league-approach" aria-describedby="xi-approach-hint" value={seasonApproach}
+                disabled={isEvaluating || !!replacingSlot} onChange={event => chooseSeasonApproach(event.target.value as keyof typeof leagueApproaches)}
+                className="mt-2 min-h-11 w-full rounded-lg border border-border bg-background px-3 text-sm">
+                {Object.entries(leagueApproaches).map(([value, option]) => <option key={value} value={value}>{option.label}</option>)}
+              </select>
+              <p id="xi-approach-hint" className="mt-2 text-xs text-muted-foreground">{leagueApproaches[seasonApproach].hint}</p>
+            </div>}
             {validationError && <p role="alert" className="text-center text-sm text-destructive">{validationError}</p>}
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button type="button" onClick={reopenLastPick} className="min-h-11 rounded-full px-4 text-sm font-semibold text-foreground hover:bg-secondary">
@@ -617,8 +662,8 @@ const LineupBuilder = () => {
               <button
                 onClick={() => {
                   if (isClubYear) {
-                    if (recordedYearVerdict) completeRecordedYearDraft(recordedYearVerdict);
-                  } else void evaluateTeam();
+                    if (recordedYearVerdict) completeRecordedYearDraft(recordedYearVerdict, seasonReport);
+                  } else void evaluateTeam(seasonReport);
                 }}
                 disabled={isEvaluating || !!replacingSlot}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
@@ -633,6 +678,7 @@ const LineupBuilder = () => {
         {/* Result Phase */}
         {phase === 'result' && verdict && (
           <div className="max-w-xl mx-auto">
+            {validationError && <p role="alert" className="text-center text-sm text-destructive">{validationError}</p>}
             <ResultScreen
               outcomeEmoji={<Trophy className="w-12 h-12 text-primary mx-auto" />}
               headline={verdict.rating}
@@ -643,6 +689,7 @@ const LineupBuilder = () => {
                   ? [
                       `Build Your XI: ${formation} rated ${verdict.rating}${isClubYear ? ` (${recordedPeriod})` : ''}`,
                       `Season sim: ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)} with ${seasonReport.points} points`,
+                      ...(seasonApproach !== 'balanced' ? [`League approach: ${leagueApproaches[seasonApproach].label}`] : []),
                       ...(seasonReport.topScorer ? [`Top scorer: ${seasonReport.topScorer.name} (${seasonReport.topScorer.goals})`] : []),
                       ...(seasonReport.playerOfSeason ? [`Player of the season: ${seasonReport.playerOfSeason.name}`] : []),
                     ].join('\n')
@@ -691,6 +738,8 @@ const LineupBuilder = () => {
                   <div className="text-center mb-3">
                     <div className="text-2xl mb-1">📋</div>
                     <h3 className="text-base font-bold text-primary font-display">Season Report</h3>
+                    <p className="text-xs font-semibold">League approach: {leagueApproaches[seasonApproach].label}</p>
+                    {seasonReport.venuePoints && <p className="text-xs text-muted-foreground">Home points: {seasonReport.venuePoints.home} · Away points: {seasonReport.venuePoints.away}</p>}
                     <p className="text-xs text-muted-foreground">{isClubYear ? `A fictional season from your selected ${yearsLabel} records` : 'One season with this XI, every player at his peak'}</p>
                   </div>
 
@@ -704,7 +753,7 @@ const LineupBuilder = () => {
                     <StatTile label="Points" value={seasonReport.points} state="pending" />
                     <StatTile
                       label="Trophies"
-                      value={seasonReport.trophies.length}
+                      value={xiTrophyCount(seasonReport.trophies)}
                       state={seasonReport.trophies.length > 0 ? 'correct' : 'incorrect'}
                     />
                   </div>
@@ -752,6 +801,7 @@ const LineupBuilder = () => {
             "Use Browse players in either club draft to see the records available for that club and period",
             "Check the role fit, chemistry and balance tiles under the pitch: the season sim plays all three",
             "In review, replace any starter with another eligible player from the same draw before you submit",
+            "Choose your league approach before submitting a rated XI. You can play for more draws or risk defeats to chase wins.",
             "Submit your full XI. Mixed uses its scouting evaluation. Club drafts use your selected records for a fictional season report",
           ]}
           examples={[

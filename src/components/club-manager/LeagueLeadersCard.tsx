@@ -109,8 +109,12 @@ function PastWinners({ career, onBack }: { career: CareerState; onBack: () => vo
       const rec = records.get(season) ?? { season, club };
       if (!rec.uclScorerAward?.length) records.set(season, { ...rec, uclScorerAward: winners, uclAwardClub: club });
     }
+    for (const { season, club, winners } of Array.isArray(career.unreviewedUelScorerAwards) ? career.unreviewedUelScorerAwards : []) {
+      const rec = records.get(season) ?? { season, club };
+      if (!rec.uelScorerAward?.length) records.set(season, { ...rec, uelScorerAward: winners, uelScorerClub: club });
+    }
     return [...records.values()].sort((a, b) => b.season - a.season);
-  }, [career.history, career.unreviewedDomesticScorerAwards, career.unreviewedUclScorerAwards]);
+  }, [career.history, career.unreviewedDomesticScorerAwards, career.unreviewedUclScorerAwards, career.unreviewedUelScorerAwards]);
   const [at, setAt] = useState(0);
   const i = Math.min(at, Math.max(0, seasons.length - 1));
   const rec = seasons[i];
@@ -132,7 +136,7 @@ function PastWinners({ career, onBack }: { career: CareerState; onBack: () => vo
             <div className="text-xs text-muted-foreground">Season {rec.season} · {rec.club}{leagueName && <span data-cm-past-league> · {leagueName}</span>}</div>
             {aw && <SeasonHonoursCard awards={aw} recent={career.history.filter(h => h.awards && h.season > rec.season).length < TEAMS_KEPT} />}
             <CupScorerHonour award={rec.uclScorerAward} myClub={rec.uclAwardClub ?? rec.club} competition="Champions League" scope="ucl" />
-            <CupScorerHonour award={rec.uelScorerAward} myClub={rec.club} competition="Europa League" scope="uel" />
+            <CupScorerHonour award={rec.uelScorerAward} myClub={rec.uelScorerClub ?? rec.club} competition="Europa League" scope="uel" />
             {rec.domesticScorerAward && <CupScorerHonour award={rec.domesticScorerAward.winners} myClub={rec.domesticAwardClub ?? rec.club}
               competition={rec.domesticScorerAward.competition} scope="cup" />}
             {aw && aw.cov < BOOK_FULL_SHARE && <p className="text-[9px] text-yellow-500/80">The data covered only part of that league: {aw.cov} in 100 of the other clubs' goals had a name on them.</p>}
@@ -200,6 +204,7 @@ export function LeagueLeadersCard({ career, board, onBoard }: CardProps) {
   if (board === 'past') return <PastWinners career={career} onBack={() => onBoard(null)} />;
   const hasPast = (Array.isArray(career.unreviewedDomesticScorerAwards) && career.unreviewedDomesticScorerAwards.length > 0)
     || (Array.isArray(career.unreviewedUclScorerAwards) && career.unreviewedUclScorerAwards.length > 0)
+    || (Array.isArray(career.unreviewedUelScorerAwards) && career.unreviewedUelScorerAwards.length > 0)
     || career.history.some(h => h.awards || h.ballonDor || h.leagueCoachAward || h.uclScorerAward?.length || h.uelScorerAward?.length
       || h.domesticScorerAward?.winners?.length);
   const pastTile = hasPast && (

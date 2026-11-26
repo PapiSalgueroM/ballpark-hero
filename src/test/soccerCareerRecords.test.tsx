@@ -62,6 +62,7 @@ describe('Soccer Career record book', () => {
     fireEvent.click(screen.getByRole('button', { name: /Most goals/ }));
     expect(screen.getByText('2026/27 · Test City')).toBeInTheDocument();
     expect(screen.queryByText(/OVR/)).not.toBeInTheDocument();
+    expect(document.querySelector('[data-season-ambition-result]')).toBeNull();
     fireEvent.click(screen.getByRole('button', { name: /Back/ }));
     expect(screen.getByRole('button', { name: 'Club history' })).toBeInTheDocument();
   });
@@ -71,6 +72,30 @@ describe('Soccer Career record book', () => {
     fireEvent.click(screen.getByRole('button', { name: /loan from Parent United/ }));
     expect(screen.getByText('On loan from Parent United')).toBeInTheDocument();
     expect(screen.getByText('Rating 7.2 · OVR 81')).toBeInTheDocument();
+  });
+  it.each([
+    { outcome: 'achieved' as const, actual: 13, rewardStat: 'shooting' as const },
+    { outcome: 'missed' as const, actual: 11 },
+    { outcome: 'interrupted' as const, actual: 2 },
+  ])('reopens the $outcome target in its own season after reload', receipt => {
+    const saved = JSON.stringify(career([
+      row({ goals: receipt.actual, ambition: { label: 'Score 13 club goals', target: 13, ...receipt } }),
+      row({ year: 2027, goals: 0 }),
+    ]));
+    const book = render(<CareerRecordsSheet career={JSON.parse(saved)} onClose={() => {}} />);
+    fireEvent.click(screen.getByRole('button', { name: /Most goals/ }));
+    const resultText = `Score 13 club goals. Finished on ${receipt.actual}.`;
+    expect(screen.getByText(resultText)).toBeVisible();
+    expect(!!screen.queryByText(/Earned \+1 Shooting/)).toBe(receipt.outcome === 'achieved');
+    expect(book.container.querySelector(`[data-season-ambition-result="${receipt.outcome}"]`)).toBeInTheDocument();
+    book.unmount();
+    const restored = JSON.parse(saved);
+    const reopened = render(<CareerRecordsSheet career={restored} onClose={() => {}} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Club history' }));
+    fireEvent.click(screen.getByRole('button', { name: /Test City/ }));
+    expect(within(reopened.container.querySelector<HTMLElement>('[data-record-season="2026"]')!).getByText(resultText)).toBeVisible();
+    expect(reopened.container.querySelector('[data-record-season="2027"] [data-season-ambition-result]')).toBeNull();
+    expect(JSON.stringify(restored)).toBe(saved);
   });
   it('shows a zero league count and compares it with the last recorded senior season', () => {
     render(<CareerRecordsSheet career={career([
@@ -122,12 +147,32 @@ describe('Soccer Career record book', () => {
     expect(document.body.style.overflow).toBe('scroll');
     document.body.style.overflow = '';
   });
+  it('keeps domestic cup exits and older wins without attributing team goals to the player', () => {
+    const c = career([
+      row({ year: 2024, domesticCup: true }),
+      row({ year: 2025, cupRun: { cup: 'FA Cup', stages: [{ stage: 'early', won: false }] } }),
+      row({ year: 2026 }),
+    ]);
+    render(<CareerRecordsSheet career={c} onClose={() => {}} />);
+    fireEvent.click(screen.getByRole('button', { name: 'Competitions' }));
+    const openRun = (name: string) => {
+      const open = screen.getByLabelText(`View campaigns for ${name}`);
+      fireEvent.click(open);
+      return within(open.closest('li')!);
+    };
+    const faCup = openRun('FA Cup');
+    expect(faCup.getByText('2025/26 · Test City · Early rounds')).toBeVisible();
+    expect(faCup.getByText('Individual stats not recorded')).toBeVisible();
+    expect(faCup.queryByText(/0 goals/)).toBeNull();
+    expect(openRun('Domestic cup').getByText('2024/25 · Test City · Club won')).toBeVisible();
+    expect(screen.queryByText('2026/27 · Test City')).toBeNull();
+  });
   it('groups exact recorded goals and assists, keeps missing totals separate and leaves the save alone', () => {
     const first = row({ club: 'Chelsea', year: 2025, clubCupRun: {
       qualified: true, seasonYear: 2025, club: 'Chelsea', result: 'Final', competition: 'Champions League', playerGoals: 2, isTopScorer: false,
       matches: [{ opponent: 'Arsenal', round: 'Final', leg: 1, home: false, goalsFor: 3, goalsAgainst: 4, playerGoals: 2, won: false }],
     } });
-    const second = row({ club: 'Chelsea', year: 2026, clubCupRun: { ...first.clubCupRun!, seasonYear: 2026, playerAssists: 1 } });
+    const second = row({ club: 'Chelsea', year: 2026, clubCupRun: { ...first.clubCupRun!, seasonYear: 2026, playerAssists: 1, isTopScorer: true } });
     const damaged = row({ club: 'Chelsea', year: 2027, clubCupRun: { ...first.clubCupRun!, seasonYear: 2027, playerGoals: 25 } });
     const c: CareerState = { ...career([first, second, damaged]), intlHistory: [
       { year: 2026, short: 'World Cup', nation: 'England', champion: 'France', myResult: 'Quarter-final', apps: 5, goals: 4 },
@@ -136,12 +181,26 @@ describe('Soccer Career record book', () => {
     ] };
     const before = JSON.stringify(c);
     const ledger = careerCompetitionRecords(c);
-    expect(ledger.club).toEqual([{ name: 'Champions League', campaigns: 2, goals: 4, apps: null, assists: 1, campaignsWithAssists: 1 }]);
-    expect(ledger.international).toEqual([{ name: 'World Cup', campaigns: 2, goals: 10, apps: 12, assists: 3, campaignsWithAssists: 1 }]);
+    expect(ledger.club).toMatchObject([{ name: 'Champions League', campaigns: 2, goals: 4, apps: null, assists: 1, campaignsWithAssists: 1 }]);
+    expect(ledger.international).toMatchObject([{ name: 'World Cup', campaigns: 2, goals: 10, apps: 12, assists: 3, campaignsWithAssists: 1 }]);
     render(<CareerRecordsSheet career={c} onClose={() => {}} />);
     fireEvent.click(screen.getByRole('button', { name: 'Competitions' }));
     expect(screen.getByText('2 campaigns · 4 goals')).toBeVisible();
     expect(screen.getByText('3 assists in 1 of 2 campaigns')).toBeVisible();
+    const clubRuns = screen.getByLabelText('View campaigns for Champions League');
+    fireEvent.click(clubRuns);
+    const clubYears = within(clubRuns.closest('details')!).getAllByRole('listitem');
+    expect(clubYears.map(entry => entry.textContent)).toEqual([
+      '2026/27 · Chelsea · Final2 goals · 1 assistCompetition top scorer',
+      '2025/26 · Chelsea · Final2 goals · Assists not recorded',
+    ]);
+    const worldCups = screen.getByLabelText('View campaigns for World Cup');
+    fireEvent.click(worldCups);
+    const internationalYears = within(worldCups.closest('details')!).getAllByRole('listitem');
+    expect(internationalYears.map(entry => entry.textContent)).toEqual([
+      '2030 · England · Winner7 apps · 6 goals · 3 assists',
+      '2026 · England · Quarter-final5 apps · 4 goals · Assists not recorded',
+    ]);
     expect(JSON.stringify(c)).toBe(before);
   });
 });

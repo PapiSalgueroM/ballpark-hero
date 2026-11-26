@@ -331,7 +331,7 @@ export function TrainingScreen({ career, onSetPlan, onRetrain, onStopRetrain }: 
               {career.squad.map(p => <option key={p.id} value={p.id}>{p.position} {p.name} ({p.fitness}% fitness)</option>)}
             </select>
             {pickedRecovery && <p className="mt-1 text-[10px] text-muted-foreground" data-cm-individual-training-fitness>
-              Fitness after a paid week if he sits out. Light {trainingFitnessIfRested(career, pickedRecovery.fitness, 'light')}% · Double {trainingFitnessIfRested(career, pickedRecovery.fitness, 'double')}%
+              Fitness after this training interval if he sits out. Light {trainingFitnessIfRested(career, pickedRecovery.fitness, 'light')}% · Double {trainingFitnessIfRested(career, pickedRecovery.fitness, 'double')}%
             </p>}
             <div className="flex flex-wrap gap-2 mt-2">
               <button type="button" disabled={!pickedRecovery}

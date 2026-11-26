@@ -1,3 +1,5 @@
+import { playYouthFixture, restoreYouthTeam } from '@/lib/clubManagerYouthTeam';
+import { closeSeniorSeason, type SeniorClub } from '@/lib/clubManagerSecondClub';
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { nameModerationError } from '@/lib/nameModeration';
 import { realLeagueFixtureKeyForStart, realLeagueFixturePairs, realLeagueFixtureCoverage } from '@/lib/clubManagerFixtures';
@@ -156,7 +158,7 @@ import {
   OPENING_PATIENCE_SPREAD, askingTerms, counterTerms, dealCloseness, loanTermsFor,
   loanOutTermsFor, offerVerdict, patienceCost, termsNote, termsVerdict,
 } from '@/lib/clubManagerDeals';
-import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
+import type { LoanTerms, OutgoingLoanKind, PersonalTerms } from '@/lib/clubManagerDeals';
 /* Round 513: manager XP and the seven trees, in their own file for the same
    reason the deals and the staff are in theirs. */
 import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';
@@ -1482,6 +1484,8 @@ export interface CupTie {
 export interface LoanOut {
   player: CMPlayer;
   ratingGains?: number;
+  /** Days already served toward the next full week of a minor injury. */
+  injuryRecoveryDays?: number;
   /** Where he is playing. */
   club: string;
   /** Loan fee banked when he left. */
@@ -1865,6 +1869,7 @@ export type FacilityKind = 'recruitment' | 'coaching' | 'facilities';
 
 /** The club's youth setup. Everything here is upgradable and everything bites. */
 export interface Academy {
+  youthTeam?: import('@/lib/clubManagerYouthTeam').YouthTeam;
   /** 1 to 20. How good the club is at getting the best juniors in the door. */
   recruitment: number;
   /** 1 to 20. Coaching quality, which drives development for the WHOLE squad. */
@@ -2534,6 +2539,7 @@ export interface UclTie {
 }
 
 export interface SeasonRecord {
+  leagueRecord?: Pick<TableRow, 'w' | 'd' | 'l' | 'gf' | 'ga'>;
   season: number;
   club: string;
   position: number;
@@ -2551,6 +2557,7 @@ export interface SeasonRecord {
   awards?: SeasonAwards;
   uclScorerAward?: CupScorerWinner[];
   uelScorerAward?: SeasonSummary['uelScorerAward'];
+  uelScorerClub?: string;
   domesticScorerAward?: SeasonSummary['domesticScorerAward'];
   ballonDor?: NonNullable<SeasonSummary['ballonDor']>;
   ballonDorShortlist?: BallonDorCandidate[];
@@ -3216,6 +3223,7 @@ export interface SeasonSummary {
   uclScorerAward?: CupScorerWinner[];
   /** Confirmed top scorers of this save's Europa League edition. */
   uelScorerAward?: Array<{ name: string; club: string; goals: number; generated?: true }>;
+  uelScorerClub?: string;
   domesticScorerAward?: { competition: string; winners: CupScorerWinner[] };
   signings: TransferRecord[];
   offers: JobOffer[];
@@ -3242,6 +3250,7 @@ export interface SeasonSummary {
 }
 
 export interface CareerState {
+  seniorClub?: SeniorClub;
   saveVersion: number;
   /** A career opened from a portable file keeps playing without posting scores. */
   importedFromFile?: true;
@@ -3329,6 +3338,8 @@ export interface CareerState {
   pendingUclScorerAward?: { club: string; winners: CupScorerWinner[] };
   /** Confirmed Champions League awards from seasons with no league review. */
   unreviewedUclScorerAwards?: { season: number; club: string; winners: CupScorerWinner[] }[];
+  pendingUelScorerAward?: { club: string; winners: CupScorerWinner[] };
+  unreviewedUelScorerAwards?: { season: number; club: string; winners: CupScorerWinner[] }[];
   /** A confirmed cup award kept through a job move before the season review. */
   pendingDomesticScorerAward?: { club: string; award: NonNullable<SeasonSummary['domesticScorerAward']> };
   /** Confirmed cup awards from seasons that ended without a league review. */
@@ -7993,7 +8004,7 @@ export function autoPickXI(squad: CMPlayer[], formation: Formation, fresh = fals
   const used = new Set<string>();
   const xi: (string | null)[] = [];
   const order = (a: CMPlayer, b: CMPlayer) =>
-    (fresh ? Number(b.fitness >= 80) - Number(a.fitness >= 80) : 0) || b.rating - a.rating;
+    (fresh ? Number(b.fitness >= MATCH_READY_FITNESS) - Number(a.fitness >= MATCH_READY_FITNESS) : 0) || b.rating - a.rating;
   for (const slot of formation.slots) {
     /* Round 505: a position he has retrained into is his too. */
     const fits = squad
@@ -12609,7 +12620,7 @@ function actingClubsByLeague(state: CareerState): ClubDef[][] {
 }
 
 /** The top eight buyers in each league of this save's world. */
-function buyerPool(state: CareerState): ClubDef[] {
+export function buyerPool(state: CareerState): ClubDef[] {
   return actingClubsByLeague(state).flatMap(clubs => clubs.slice(0, 8))
     .filter(club => club.name !== state.clubName);
 }
@@ -12651,8 +12662,9 @@ export function setTransferStatus(
 }
 
 /** What a rival pays to borrow him for the season. */
-export function loanOutFee(p: CMPlayer): number {
-  return Math.max(0.2, Math.round(sellValue(p) * 0.08 * 10) / 10);
+export function loanOutFee(p: CMPlayer, kind: OutgoingLoanKind = 'option'): number {
+  const standard = Math.max(0.2, Math.round(sellValue(p) * 0.08 * 10) / 10);
+  return kind === 'straight' ? Math.round((standard / 2) * 10) / 10 : standard;
 }
 
 /**
@@ -12735,6 +12747,7 @@ export function loanOutPlayer(
   playerId: string,
   toClub?: string,
   agreedFee?: number,
+  kind: OutgoingLoanKind = 'option',
 ): CareerState | null {
   if (career.transferWindow === null) return null;
   const p = career.squad.find(x => x.id === playerId);
@@ -12758,7 +12771,7 @@ export function loanOutPlayer(
      took another. */
   const fee = agreedFee !== undefined && Number.isFinite(agreedFee) && agreedFee >= 0
     ? Math.round(agreedFee * 10) / 10
-    : loanOutFee(p);
+    : loanOutFee(p, kind);
   const state: CareerState = {
     ...career,
     budget: Math.round((career.budget + fee) * 10) / 10,
@@ -12780,7 +12793,7 @@ export function loanOutPlayer(
         club,
         fee,
         season: career.season,
-        ...loanOutTermsFor(sellValue(p), fee),
+        ...loanOutTermsFor(sellValue(p), fee, kind),
       },
     ],
     careerStats: { ...career.careerStats },
@@ -15702,6 +15715,17 @@ export function completedChampionsLeagueScorerAward(state: CareerState): CupScor
   }));
 }
 
+export function completedEuropaScorerAward(state: CareerState): CareerState['pendingUelScorerAward'] {
+  if (state.pendingUelScorerAward) return state.pendingUelScorerAward;
+  const ledger = state.worldComps?.uel?.scorers;
+  if (!isCupScorerLedger(ledger)) return undefined;
+  const result = evalWorldComp(state, 'uel');
+  if (!result?.done) return undefined;
+  const { leaders } = cupScorerRace(ledger, result.nightsDone, true);
+  if (leaders.length) return { club: state.worldComps?.uel?.me ?? state.clubName,
+    winners: leaders.map(({ name, club, goals, generated }) => ({ name, club, goals, ...(generated ? { generated: true } : {}) })) };
+}
+
 function cupScorerCredit(state: CareerState, club: string, player: CMPlayer, projected?: ProjectedPlayer): CupScorerCredit {
   if (club === LJUBICIC_LOAN.borrower && player.worldRosterKey === LJUBICIC_LOAN.key && openingLoanActive(state)) {
     return { id: LJUBICIC_LOAN.key, name: player.name, club };
@@ -18269,20 +18293,23 @@ function classifyMatchInjury(state: CareerState, live: LiveMatch, injury: Injury
 }
 
 function updateMajorInjuryClock(state: CareerState, date?: CalDate): void {
-  if (!state.squad.some(p => p.majorInjury)) return;
+  const inSquad = state.squad.some(p => p.majorInjury), away = state.loanedOut?.some(l => l.player.majorInjury);
+  if (!inSquad && !away) return;
   if (!date) {
     const dates = entryDatesOf(state);
     date = dates[state.week - 1] ?? kickoffOf(state);
   }
-  state.squad = state.squad.map(p => {
+  const update = (p: CMPlayer): CMPlayer => {
     if (!p.majorInjury) return p;
     const expected = readMajorInjury(p.majorInjury);
-    const injuryWeeks = expected ? Math.max(0, Math.ceil(daysBetween(date, expected) / 7)) : p.injuryWeeks;
+    const injuryWeeks = expected ? Math.max(0, Math.ceil(daysBetween(date!, expected) / 7)) : p.injuryWeeks;
     if (expected && injuryWeeks > 0) return { ...p, injuryWeeks };
     const ready = { ...p, injuryWeeks };
     delete ready.majorInjury;
     return ready;
-  });
+  };
+  if (inSquad) state.squad = state.squad.map(update);
+  if (away) state.loanedOut = state.loanedOut!.map(l => l.player.majorInjury ? { ...l, player: update(l.player) } : l);
 }
 
 /**
@@ -19966,6 +19993,7 @@ export function liveStatsAt(
  *  match after next by the same numbers (unchanged from Round 95). */
 export const MATCH_FITNESS_COST = 20;
 export const MATCH_FITNESS_SPREAD = 8;
+const MATCH_READY_FITNESS = 80;
 
 /** Round 116's week of recovery by the training plan, read by tickWeek and by a night (Round 1510). */
 function weekRecoveryOf(state: CareerState, intensity = (state.training ?? DEFAULT_TRAINING).intensity): { recoveryMod: number; flat: number } {
@@ -19975,16 +20003,81 @@ function weekRecoveryOf(state: CareerState, intensity = (state.training ?? DEFAU
   };
 }
 
-/** One man's fitness after a week's recovery and, if he played, the match's cost (its spread is the week's draw). */
-function fitnessAfterWeek(fitness: number, played: boolean, recoveryMod: number, flat: number): number {
-  const recovery = Math.round((100 - fitness) * 0.71 * recoveryMod) + flat;
-  const cost = played ? MATCH_FITNESS_COST + ri(0, MATCH_FITNESS_SPREAD) : 0;
+/** Unplayed extra nights skip their whole tick, so carry their days to the next tick that actually runs. */
+function nextFitnessEntry(state: CareerState, week: number): number {
+  let next = week + 1;
+  while (next < state.calendar.length && (state.calendar[next].night || state.calendar[next].type === 'promotion')
+    && !entryInvolvesMe(state, state.calendar[next])) next++;
+  return next;
+}
+
+function fitnessDaysAfter(state: CareerState, week: number): number {
+  const dates = entryDatesOf(state);
+  const next = nextFitnessEntry(state, week);
+  return dates[week] && dates[next] ? Math.max(0, daysBetween(dates[week], dates[next])) : 7;
+}
+
+function fitnessAfterCost(fitness: number, cost: number, recoveryMod: number, flat: number, days: number): number {
+  const weeklyRate = 0.71 * recoveryMod;
+  const recovery = days === 7 ? Math.round((100 - fitness) * weeklyRate) + flat
+    : Math.round((100 - fitness + flat / weeklyRate) * (1 - (1 - weeklyRate) ** (days / 7)));
   return clamp(fitness + recovery - cost, 20, 100);
+}
+
+function fitnessAfterWeek(fitness: number, played: boolean, recoveryMod: number, flat: number, days: number): number {
+  const cost = played ? MATCH_FITNESS_COST + ri(0, MATCH_FITNESS_SPREAD) : 0;
+  return fitnessAfterCost(fitness, cost, recoveryMod, flat, days);
+}
+
+/** Base fitness for the next known match with the present training orders. No match rolls are drawn. */
+export function starterFitnessPreview(state: CareerState) {
+  const xi = effectiveXIWithSlots(state);
+  const rows = xi.map(({ p, slot }) => ({ id: p.id, name: p.name, slot: slot.label, now: p.fitness }));
+  const week = nextFitnessEntry(state, state.week - 1);
+  const entry = state.calendar[week];
+  const next = nextFitnessEntry(state, week);
+  const following = state.calendar[next];
+  const dates = entryDatesOf(state);
+  const upcoming = following && fixtureFor(state, following);
+  // A later knockout night may depend on winning the match still to play.
+  const contingent = state.calendar.slice(week + 1, next).some(e => e.type === entry?.type
+    && (e.type === 'promotion' || (e.night && e.night.k === entry.night?.k)));
+  if (!entry || !fixtureFor(state, entry) || !upcoming || contingent || !dates[week] || !dates[next]) return { rows, forecast: null };
+  const days = Math.max(0, daysBetween(dates[week], dates[next]));
+  const recovery = recoveryWeekOf(state.training?.recoveryWeek);
+  const individual = !entry.night && recovery?.club === state.clubName && recovery.season === state.season ? recovery : null;
+  const values = rows.map(row => {
+    const intensity = individual?.playerId === row.id ? (individual.v === 2 ? individual.intensity : 'light') : undefined;
+    const { recoveryMod, flat } = weekRecoveryOf(state, intensity);
+    const after = (cost: number) => fitnessAfterCost(row.now, cost, recoveryMod, flat, days);
+    return { ...row, low: after(MATCH_FITNESS_COST + MATCH_FITNESS_SPREAD), high: after(MATCH_FITNESS_COST), rest: after(0) };
+  });
+  return { rows, forecast: { days, start: dates[week], finish: dates[next], opponent: upcoming.opponent, competition: upcoming.compLabel, values } };
+}
+
+function recoverOutgoingLoans(state: CareerState, days: number): void {
+  const needsRecovery = (p: CMPlayer) => p.fitness < MATCH_READY_FITNESS || (!p.majorInjury && p.injuryWeeks > 0);
+  if (days <= 0 || !state.loanedOut?.some(l => needsRecovery(l.player))) return;
+  const { recoveryMod, flat } = weekRecoveryOf(state, 'normal');
+  state.loanedOut = state.loanedOut.map(loan => {
+    const p = loan.player;
+    if (!needsRecovery(p)) return loan;
+    // The host's lineup is unknown. Restore tired legs to selection fitness without crediting a host match or a week on the bench.
+    const fitness = p.fitness < MATCH_READY_FITNESS
+      ? Math.min(MATCH_READY_FITNESS, fitnessAfterWeek(p.fitness, false, recoveryMod, flat, days)) : p.fitness;
+    const partial = loan.injuryRecoveryDays ?? 0;
+    const elapsed = days + (Number.isInteger(partial) && partial >= 0 && partial < 7 ? partial : 0);
+    const injuryWeeks = !p.majorInjury && p.injuryWeeks > 0 ? Math.max(0, p.injuryWeeks - Math.floor(elapsed / 7)) : p.injuryWeeks;
+    const next = { ...loan, player: { ...p, fitness, injuryWeeks } };
+    if (!p.majorInjury && injuryWeeks > 0 && elapsed % 7) next.injuryRecoveryDays = elapsed % 7;
+    else delete next.injuryRecoveryDays;
+    return next;
+  });
 }
 
 export function trainingFitnessIfRested(state: CareerState, fitness: number, intensity: TrainingIntensity): number {
   const { recoveryMod, flat } = weekRecoveryOf(state, intensity);
-  return fitnessAfterWeek(fitness, false, recoveryMod, flat);
+  return fitnessAfterWeek(fitness, false, recoveryMod, flat, fitnessDaysAfter(state, state.week));
 }
 
 /**
@@ -19995,10 +20088,14 @@ export function trainingFitnessIfRested(state: CareerState, fitness: number, int
  */
 function nightSquadTick(state: CareerState, playedIds: Set<string>): void {
   const { recoveryMod, flat } = weekRecoveryOf(state);
-  state.squad = state.squad.map(p => ({ ...p, fitness: fitnessAfterWeek(p.fitness, playedIds.has(p.id), recoveryMod, flat) }));
+  const days = fitnessDaysAfter(state, state.week);
+  recoverOutgoingLoans(state, days);
+  state.squad = state.squad.map(p => ({ ...p, fitness: fitnessAfterWeek(p.fitness, playedIds.has(p.id), recoveryMod, flat, days) }));
 }
 
-function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
+function tickWeek(state: CareerState, playedIds: Set<string> | null, settledWeek = state.week): void {
+  const days = fitnessDaysAfter(state, settledWeek);
+  recoverOutgoingLoans(state, days);
   /* Round 619: a settlement counts down HERE, in the same function that charges
      the wage bill, and a row at zero is gone.
 
@@ -20033,7 +20130,7 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     const played = playedIds ? playedIds.has(p.id) : false;
     const hasOrder = p.id === trainedId;
     const intensity = hasOrder ? individualIntensity : plan.intensity;
-    const fitness = fitnessAfterWeek(p.fitness, played, hasOrder ? individual.recoveryMod : recoveryMod, hasOrder ? individual.flat : flat);
+    const fitness = fitnessAfterWeek(p.fitness, played, hasOrder ? individual.recoveryMod : recoveryMod, hasOrder ? individual.flat : flat, days);
     let injuryWeeks = p.majorInjury ? p.injuryWeeks : Math.max(0, p.injuryWeeks - 1);
     if (intensity === 'double' && injuryWeeks === 0) {
       const random = plan.intensity === 'double' ? Math.random
@@ -21520,6 +21617,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const tacticsDay = logEverSet(live.instrLog) ? tacticsImpl()?.day(state, fx, live, second, lastMinute) ?? null : null;
   if (entry.night) nightSquadTick(state, new Set(xi.map(p => p.id)));
   else tickWeek(state, new Set(xi.map(p => p.id)));
+  if (entry.type === 'league') playYouthFixture(state, entry.round, fx.opponent);
   const ratingsActive = state.inSeasonRatings && !state.worldRatingRunIn;
   if (ratingsActive && entry.type === 'league') {
     const ratingChanges = applyLeagueRatingChanges(state, events);
@@ -22749,7 +22847,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
     if (entry.type === 'window') {
       state.week += 1;
       advanceEuropaScorers(state);
-      tickWeek(state, null);
+      tickWeek(state, null, state.week - 1);
       advanceIntercontinentalCup(state, state.week - 1);
       state.transferWindow = 'january';
       // Round 141: January runs three match weeks before the deadline.
@@ -22813,7 +22911,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       state.week += 1;
       advanceEuropaScorers(state, entry.type === 'uel');
       /* Round 1510 (ruling 2a): a night I do not play (a semi final lost, a stub) moves the week on and ticks nothing. */
-      if (!entry.night && entry.type !== 'promotion') tickWeek(state, null);
+      if (!entry.night && entry.type !== 'promotion') tickWeek(state, null, state.week - 1);
       advanceIntercontinentalCup(state, state.week - 1);
       continue;
     }
@@ -22832,7 +22930,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
        fixture on the same seed could end 2-1 one way and 0-0 the other and
        the game had two engines wearing one name. Everything kicks off here
        now; quick sims use the same legal changes to look after the team. */
-    if (state.squad.some(p => p.majorInjury)) updateMajorInjuryClock(state, entryDatesOf(state)[state.week]);
+    if (state.squad.some(p => p.majorInjury) || state.loanedOut?.some(l => l.player.majorInjury)) updateMajorInjuryClock(state, entryDatesOf(state)[state.week]);
     // An older save can start tracking at its first untouched cup kickoff.
     if (entry.type === 'cup' && entry.cupRound === 'R16' && !opts?.noBook && !state.handover && !state.midSeasonStart
       && !state.worldRatingRunIn && state.domesticCupScorers === undefined && state.cupBracket?.length
@@ -24546,17 +24644,9 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   const reviewed = state.history.find(row => row.season === state.season);
   const uclScorerAward = reviewed?.uclScorerAward ?? state.pendingUclScorerAward?.winners
     ?? completedChampionsLeagueScorerAward(state);
-  let uelScorerAward = reviewed?.uelScorerAward;
-  const uelScorers = state.worldComps?.uel?.scorers;
-  if (!uelScorerAward?.length && isCupScorerLedger(uelScorers)) {
-    const result = evalWorldComp(state, 'uel');
-    if (result?.done) {
-      const { leaders } = cupScorerRace(uelScorers, result.nightsDone, true);
-      uelScorerAward = leaders.map(({ name, club, goals, generated }) => ({
-        name, club, goals, ...(generated ? { generated: true } : {}),
-      }));
-    }
-  }
+  const uel = completedEuropaScorerAward(state);
+  const uelScorerAward = reviewed?.uelScorerAward ?? uel?.winners;
+  const uelScorerClub = reviewed?.uelScorerAward?.length ? reviewed.uelScorerClub ?? reviewed.club : uel?.club;
   const domesticScorerAward = completedDomesticScorerAward(state);
 
   const summary: SeasonSummary = {
@@ -24582,6 +24672,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     ...(uelRunWords(state) ? { uelRun: uelRunWords(state) as string } : {}),
     ...(uclScorerAward?.length ? { uclScorerAward } : {}),
     ...(uelScorerAward?.length ? { uelScorerAward } : {}),
+    ...(uelScorerAward?.length && uelScorerClub && uelScorerClub !== state.clubName ? { uelScorerClub } : {}),
     ...(domesticScorerAward ? { domesticScorerAward } : {}),
     signings: state.seasonSignings,
     offers,
@@ -24624,12 +24715,14 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
       ...(clubSeasonAward ? { clubSeasonAward } : {}),
       ...(uclScorerAward?.length ? { uclScorerAward } : {}),
       ...(uelScorerAward?.length ? { uelScorerAward } : {}),
+      ...(uelScorerAward?.length && uelScorerClub && uelScorerClub !== state.clubName ? { uelScorerClub } : {}),
       ...(domesticScorerAward ? { domesticScorerAward } : {}),
       ...(awards ? { awards } : {}), ...(fate ? { fate } : {}) },
   ];
   state.history = keepTeams(state.history);
   /* Round 1601: write down the season every man of mine played, after everything above; it draws nothing. */
   archiveCareerSeason(state);
+  closeSeniorSeason(state);
   state.pendingSummary = summary;
   return { state, summary };
 }
@@ -25038,11 +25131,17 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   if (playedFinals?.played.length && playedFinals.next) return career;
   const requestedClub = career.jobHunt?.summerMove?.club ?? acceptOfferClub;
   if (requestedClub && requestedClub !== career.clubName && !clubAvailableInCareer(career, requestedClub)) return career;
+  if (career.seniorClub) {
+    career = { ...career };
+    closeSeniorSeason(career);
+  }
   const reviewedThisSeason = career.history.some(row => row.season === career.season);
   const unreviewedUclAward = !reviewedThisSeason
     && !career.unreviewedUclScorerAwards?.some(row => row.season === career.season)
     ? career.pendingUclScorerAward?.winners ?? completedChampionsLeagueScorerAward(career) : undefined;
   const unreviewedUclClub = career.pendingUclScorerAward?.club ?? career.clubName;
+  const unreviewedUelAward = !reviewedThisSeason && !career.unreviewedUelScorerAwards?.some(row => row.season === career.season)
+    ? completedEuropaScorerAward(career) : undefined;
   const unreviewedCupAward = !reviewedThisSeason
     && !career.unreviewedDomesticScorerAwards?.some(row => row.season === career.season)
     ? completedDomesticScorerAward(career) : undefined;
@@ -25496,6 +25595,11 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       ...(career.unreviewedUclScorerAwards ?? []),
       { season: career.season, club: unreviewedUclClub, winners: unreviewedUclAward },
     ] } : {}),
+    pendingUelScorerAward: undefined,
+    ...(unreviewedUelAward ? { unreviewedUelScorerAwards: [
+      ...(career.unreviewedUelScorerAwards ?? []),
+      { season: career.season, ...unreviewedUelAward },
+    ] } : {}),
     pendingDomesticScorerAward: undefined,
     ...(unreviewedCupAward ? { unreviewedDomesticScorerAwards: [
       ...(career.unreviewedDomesticScorerAwards ?? []),
@@ -25552,6 +25656,14 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     // was registered above, so a reload registers the same world back.
     leagueOverrides: pr.overrides ?? undefined,
   };
+  // Keep the review's final table line before the new season resets the league.
+  if (summary && summary.season === career.season && summary.club === career.clubName) {
+    const record = state.history.find(row => row.season === summary.season && row.club === summary.club);
+    const { wins: w, draws: d, losses: l, gf, ga } = summary;
+    if (record && [w, d, l, gf, ga].every(n => Number.isSafeInteger(n) && n >= 0)) {
+      record.leagueRecord = { w, d, l, gf, ga };
+    }
+  }
   delete state.realLeagueFixtures;
   if (worldRosterView(rosterCareer)) state.worldRoster = plainCopy(rosterCareer.worldRoster);
   /* Round 154: the deep copy above carried the old spec either way, so make
@@ -26121,6 +26233,7 @@ export function loadCareer(slotSave?: string): CareerState | null {
       return null;
     }
     parsed = restoreTrimmedContracts(parsed);
+    restoreYouthTeam(parsed);
     /* Round 127: repair the save the moment it is opened rather than on the
        first kick off. ensureRoles has always run at the top of playNextEntry,
        which is the house pattern and is enough for the engine, but it is NOT

@@ -1,4 +1,6 @@
-import type { CupScorerRace, CupScorerRow } from '@/lib/clubManagerCupScorers';
+import { cupScorerRace, type CupScorerRace, type CupScorerRow } from '@/lib/clubManagerCupScorers';
+import { careerLeagueOf, championsLeagueScorerRace, domesticCupScorerRace, evalWorldComp, type CareerState, type Competition } from '@/lib/clubManager';
+import { CupScorerHonour } from '@/components/club-manager/SeasonHonoursCard';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 
 const SCORER_STATUS: Record<CupScorerRace['status'], string> = {
@@ -69,4 +71,32 @@ export function CupScorersCard({ race, myClub, competition, scope }: {
       )}
     </section>
   );
+}
+
+/** Show the same race as the Cups desk at the whistle, including when our cup run ends. */
+export function MatchGoldenBoot({ career, competition }: { career: CareerState; competition: Competition }) {
+  if (competition === 'cup') return <GoldenBootResult race={domesticCupScorerRace(career)} myClub={career.clubName}
+    name={careerLeagueOf(career).cupName ?? 'Domestic cup'} scope="cup" />;
+  if (competition === 'uclGroup' || competition === 'uclKo') return <GoldenBootResult race={championsLeagueScorerRace(career)}
+    myClub={career.clubName} name="Champions League" scope="ucl" />;
+  if (competition === 'uel') {
+    const edition = evalWorldComp(career, 'uel');
+    const race = cupScorerRace(career.worldComps?.uel?.scorers, edition?.nightsDone ?? 0, !!edition?.done);
+    return <GoldenBootResult race={race} myClub={career.clubName} name="Europa League" scope="uel" />;
+  }
+  return null;
+}
+
+export function GoldenBootResult({ race, myClub, name, scope }: { race: CupScorerRace; myClub: string; name: string; scope: CupScorerScope }) {
+  const mine = race.rows.find(row => row.club === myClub);
+  return <section aria-label={name + ' Golden Boot'} className="rounded-xl border border-border bg-card p-3 text-left text-xs">
+    {race.leaders.length > 0 ? <>
+      <CupScorerHonour award={race.leaders} myClub={myClub} competition={name} scope={scope} />
+      <p className="mt-1">{race.leaders.some(row => row.club === myClub) ? (race.leaders.length === 1 ? 'Your club won the award.' : 'Your club shared the award.') : 'The award went to another club.'}</p>
+    </> : <>
+      <p className="font-bold">{name} Golden Boot</p>
+      <p>{race.status === 'racing' || race.status === 'ahead' ? 'The race stays open until the final. Follow it in Cups.' : cupScorerStatusLabel(race.status, scope)}</p>
+    </>}
+    {mine && !race.leaders.includes(mine) && <p className="mt-1 text-muted-foreground">Your leading scorer: {mine.name}{mine.generated && <MadeUpTag className="ml-1" />} · {mine.goals} {mine.goals === 1 ? 'goal' : 'goals'}</p>}
+  </section>;
 }

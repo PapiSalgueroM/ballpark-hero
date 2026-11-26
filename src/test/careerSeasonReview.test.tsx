@@ -25,7 +25,7 @@ import { hallWallKey, wallKeyOf } from '@/lib/usCareerHallWall';
 const boards: Record<string, ComponentType> = { nba: NbaMyCareerBoard, nfl: NflMyCareerBoard, mlb: MlbMyCareerBoard, nhl: NhlMyCareerBoard };
 const field = (name: string) => document.querySelector(`[data-season-${name}]`)?.textContent;
 // Literal display-only overlays. The original numeric fixtures and saved text remain untouched.
-const groupedReviewDisplay = (value: string) => ({ '4123': '4,123', '4312': '4,312', '1281': '1,281', '1142': '1,142', '1122': '1,122', '1023': '1,023' } as Record<string, string>)[value] ?? value;
+const groupedReviewDisplay = (value: string) => ({ '4123': '4,123', '4312': '4,312', '1333': '1,333', '1281': '1,281', '1142': '1,142', '1122': '1,122', '1023': '1,023' } as Record<string, string>)[value] ?? value;
 const stats = () => Object.fromEntries([...document.querySelectorAll('[data-season-stat]')].map(el => [el.getAttribute('data-season-stat'), el.querySelector('dd')?.textContent]));
 const comparisons = () => Object.fromEntries([...document.querySelectorAll('[data-season-compare-stat]')].map(el => [el.getAttribute('data-season-compare-stat'),
   ['first', 'second', 'delta'].map(side => el.querySelector(`[data-compare-${side}]`)?.textContent)]));
@@ -299,7 +299,7 @@ describe('saved career season review', () => {
     fireEvent.change(first, { target: { value: '0' } }); fireEvent.change(second, { target: { value: '1' } });
     expect(comparisons()['Season OVR']).toEqual(['71', '84', '+13']);
     click('Regular season');
-    expect(screen.queryByRole('button', { name: 'Postseason' })).toBeNull();
+    expect(screen.getByRole('button', { name: 'Postseason' })).toHaveAttribute('aria-pressed', 'false');
     click('Back to seasons');
     expect(document.activeElement).toBe(screen.getByRole('button', { name: 'Compare seasons' }));
     click('Compare seasons');
@@ -315,22 +315,41 @@ describe('saved career season review', () => {
   });
   it('compares every saved position field in its existing units without postseason prose', () => {
     const extraNfl: Pick<ReviewFixture, 'pos' | 'fields' | 'regular'>[] = [
-      { pos: 'RB', fields: { rushYds: 1122, rushTd: 12, rec: 31, recYds: 211 }, regular: { 'Rushing yards': '1122', 'Rushing touchdowns': '12', Receptions: '31', 'Receiving yards': '211' } },
+      { pos: 'RB', fields: { rushYds: 1122, rushTd: 12, rec: 31, recYds: 211 }, regular: { 'Rushing yards': '1122', 'Rushing touchdowns': '12', Receptions: '31', 'Receiving yards': '211', 'Yards from scrimmage': '1,333' } },
       ...['WR', 'TE'].map(pos => ({ pos, fields: { rec: 71, recYds: 1023, recTd: 9 }, regular: { Receptions: '71', 'Receiving yards': '1023', 'Receiving touchdowns': '9' } })),
       { pos: 'LB', fields: { tackles: 114, sacks: 4.5, picks: 3 }, regular: { Tackles: '114', Sacks: '4.5', Interceptions: '3' } },
       { pos: 'CB', fields: { picks: 4, passDef: 17, tackles: 43 }, regular: { Interceptions: '4', 'Passes defended': '17', Tackles: '43' } },
       { pos: 'K', fields: { fgMade: 29, fgAtt: 32, longFg: 58 }, regular: { 'Field goals made': '29', 'Field goals attempted': '32', 'Longest field goal': '58' } },
     ];
-    for (const fixture of [...reviewFixtures, ...extraNfl.map(fixture => ({ ...fixture, slug: 'nfl', games: 16, gamesLabel: 'Games', postseason: {} }))]) {
+    const fixtures: ReviewFixture[] = [...reviewFixtures, ...extraNfl.map(fixture => ({ ...fixture, slug: 'nfl', games: 16, gamesLabel: 'Games', postseason: {} }))];
+    for (const fixture of fixtures) {
       const view = mountReview(fixture); click('Compare seasons');
       expect(comparisons()[fixture.gamesLabel]).toEqual([String(fixture.games), String(fixture.games - 1), '-1']);
       click('Regular season');
-      expect(comparisons()).toEqual(Object.fromEntries(Object.entries(fixture.regular).map(([label, value]) => [label,
-        [groupedReviewDisplay(value), groupedReviewDisplay(value), label === 'ERA' ? '0.00' : ['Batting average', 'On base percentage', 'Save percentage'].includes(label) ? '0.000' : '0']])));
-      expect(screen.queryByRole('button', { name: 'Postseason' })).toBeNull();
+      expect(comparisons()).toEqual(Object.fromEntries(Object.entries(fixture.regular).map(([label, value]) => {
+        const [right, delta] = fixture.rateComparisons?.[label]?.latest ??
+          [value, label === 'ERA' ? '0.00' : ['Batting average', 'On base percentage', 'Save percentage'].includes(label) ? '0.000' : '0'];
+        return [label, [groupedReviewDisplay(value), groupedReviewDisplay(right), delta]];
+      })));
+      expect(screen.getByRole('button', { name: 'Postseason' })).toHaveAttribute('aria-pressed', 'false');
       expect(document.querySelector('[data-career-season-comparison]')?.textContent).not.toContain('Fixture conference final');
       view.unmount();
     }
+  });
+  it('compares saved playoff boxes without treating a legacy sentence as a numeric total', () => {
+    const fixture = reviewFixtures.find(row => row.slug === 'nfl' && row.pos === 'QB')!;
+    const career = makeReviewCareer(fixture);
+    Object.assign(career.seasons[1], { poGames: 1, poLine: '100 yds, 1 TD, 0 INT' });
+    Object.assign(career.seasons[2], { poGames: 4, poPlayerGames: 1, poStats: { passYds: 232, passTd: 2, ints: 0 } });
+    const bytes = JSON.stringify(career);
+    mountReview(fixture, career); click('Compare seasons'); click('Postseason');
+    expect(comparisons()['Team games']).toEqual(['1', '4', '+3']);
+    expect(comparisons().Appearances).toEqual(['Not recorded', '1', 'Not recorded']);
+    expect(comparisons().Performance).toEqual(['100 yds, 1 TD, 0 INT', 'Not recorded', 'Not applicable']);
+    expect(comparisons()['Interceptions thrown']).toEqual(['Not recorded', '0', 'Not recorded']);
+    click('Regular season');
+    expect(comparisons().Outcome).toBeUndefined();
+    expect(JSON.stringify(career)).toBe(bytes);
   });
   it('subtracts raw saved rates before rounding and keeps neutral reversed changes', () => {
     const fixture = reviewFixtures.find(f => f.slug === 'mlb' && f.pos === 'CF')!, career = makeReviewCareer(fixture);
@@ -434,7 +453,7 @@ describe('saved career season review', () => {
     click('Regular season');
     expect(stats()).toEqual({ 'Points per game': 'Not recorded', 'Rebounds per game': 'Not recorded', 'Assists per game': '0' });
     click('Postseason');
-    expect(stats()).toEqual({ Games: 'Not recorded', 'Points per game': 'Not recorded', 'Rebounds per game': 'Not recorded', 'Assists per game': 'Not recorded' });
+    expect(stats()).toEqual({ 'Team games': 'Not recorded', 'Points per game': 'Not recorded', 'Rebounds per game': 'Not recorded', 'Assists per game': 'Not recorded' });
     expect(document.body.textContent).not.toMatch(/undefined|NaN|null/);
     expect(JSON.stringify(career)).toBe(before);
     unmount();

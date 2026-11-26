@@ -88,6 +88,24 @@ describe('US programme choices and restoration', () => {
     document.querySelectorAll('[data-us-programme-choice]').forEach(button => expect(button).toBeDisabled());
     expect(changed).not.toHaveBeenCalled(); expect(document.querySelector('[data-us-programme-result]')).toBeNull();
   });
+  it.each([
+    { sport: 'nba', actual: 1.3, target: 0.8, unit: 'steals per game', played: 50, minimum: 55 },
+    { sport: 'nfl', actual: 55, target: 45, unit: 'yards on your longest field goal', played: 9, minimum: 10 },
+    { sport: 'mlb', actual: 25, target: 20, unit: 'home runs', played: 90, minimum: 100 },
+    { sport: 'nhl', actual: 30, target: 25, unit: 'goals', played: 50, minimum: 55 },
+  ] as const)('$sport explains a missed games requirement and preserves a legacy receipt', ({ sport, actual, target, unit, played, minimum }) => {
+    const c = fixture();
+    const decision = { section: 'bonus' as const, label: 'Chase a different stat', outcome: 'missed' as const, actual, target, unit };
+    c.programmeResults = [{ year: 2025, sport, team: c.team, outcome: 'completed', bonusGross: 0, bonusNet: 0, partnershipProgress: 0, decisions: [decision] }];
+    const legacy = mount(c, sport);
+    expect(screen.getByText(/Chase a different stat: missed/)).toHaveTextContent(unit);
+    expect(screen.queryByText(/games played/)).toBeNull();
+    legacy.unmount();
+    c.programmeResults[0].decisions = [{ ...decision, games: { played, minimum } }];
+    mount(c, sport);
+    expect(screen.getByText(played + ' games played, ' + minimum + ' required.')).toBeInTheDocument();
+  });
+
   it('does not offer veteran adaptation before age 30', async () => {
     mount({ ...fixture(), age: 29 }); await open(); start(); fireEvent.click(tile('reinvention'));
     expect(document.querySelector('[data-us-programme-choice="reinvention:maintain"]')).toBeNull();

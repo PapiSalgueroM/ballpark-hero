@@ -23,6 +23,7 @@ import { readSeasonRatingPath } from './careerSeasonRatings';
 import { applyCareerPreparation, preparationInjuryDelta, settleCareerPreparation, type CareerPreparationPlan, type PreparationResult } from './soccerCareerPreparation';
 import { createCareerMentor, recordMentorSeason, endCareerMentorForMove, endCareerMentorForRetirement, validMentor, type CareerMentor } from './soccerCareerMentor';
 import { settleSoccerPress, type SoccerPressState } from './soccerCareerPress';
+import { normalizeCareerProjects, resolveCareerProject, type CareerProjects } from './soccerCareerProjects';
 /* Round 546: the competition's real format per season, two source verified and
    importing nothing, so the knockout ladder and the leg count are read rather
    than kept as a second hardcoded copy here. */
@@ -67,7 +68,7 @@ import type { PhoneState, WorldSeason } from "./soccerPhone";
 /* Round 1523: morale that plays (src/lib/careerForm.ts). */
 import { dressingRoomApps, soccerMoraleRating } from "./careerForm";
 /* Round 1525: the season awards, won against a field, only in the seasons they were given for. */
-import { soccerAwardWon, type SoccerAwardSeason, type SoccerSeasonAward } from "./soccerSeasonAwards";
+import { soccerAwardWon, soccerField, type SoccerAwardSeason, type SoccerSeasonAward } from "./soccerSeasonAwards";
 /* Round 134: money stops being a number that only goes up. A savings account,
    a market of five things whose prices move every season whether you are
    watching or not, a statement with a limit on it, and the two small things
@@ -418,15 +419,20 @@ interface GeneratedBallonPool {
   year: number;
   nextId: number;
   entries: GeneratedBallonCandidate[];
+  defensiveEntries?: BallonDefender[];
 }
 export interface BallonDorNominee extends AwardsCandidate {
   nationality: string;
   club: string;
   position: string;
   goals: number;
+  assists?: number;
+  performance?: BallotPerformance;
   trophies: string[];
   generatedId?: number;
   generatedAge?: number;
+  generatedDefenderSeed?: number;
+  isCareerRival?: true;
 }
 
 /** playerRank: 1-10 if nominated, 11-30 in the wider world ranking, else null. */
@@ -644,6 +650,7 @@ export interface RivalPlayer {
   careerGoals: number;
   careerAssists: number;
   careerApps: number;
+  lastSeason?: Pick<SeasonRecord, "year" | "club" | "apps" | "goals" | "assists"> & { performance?: BallotPerformance };
   leagueTitles: number;
   championsLeagues: number;
   worldCups: number;
@@ -974,6 +981,7 @@ export interface CareerState {
   leagueWorld?: CareerLeagueWorld;
   /** Optional public answers and their recorded follow-up seasons. */
   pressRoom?: SoccerPressState;
+  careerProjects?: CareerProjects;
   contractYearsLeft: number;
   weeklyWage: number;
   marketValue: number;
@@ -2909,7 +2917,19 @@ export function repairCareer<T extends CareerState>(state: T): T {
      it is in localStorage, and every reload restores the same blank screen.
      This is the only place that runs on load, so it is where they come back. */
   if (s.phase === "season_summary" && !s.pendingSummary) s.phase = "playing";
+  if (s.pendingRivalryEvent?.id === RIVAL_AWARD_MOTIVATION.id && s.rival) {
+    s.pendingRivalryEvent = {
+      ...s.pendingRivalryEvent,
+      title: RIVAL_AWARD_MOTIVATION.title,
+      description: RIVAL_AWARD_MOTIVATION.description(s, s.rival),
+    };
+  }
   reconcileRetirement(s);
+  if (s.careerProjects !== undefined) {
+    const projects = normalizeCareerProjects(s.careerProjects, Array.isArray(s.seasons) ? s.seasons.at(-1)?.year : undefined);
+    if (projects) s.careerProjects = projects;
+    else delete s.careerProjects;
+  }
   // No rehab card can render without the saved choice. Use the same fallback as dismissing it.
   if (s.phase === "rehab_choice" && s.pendingRehab == null) s.phase = applyRehabChoice(s, 1).phase;
   if (!Object.prototype.hasOwnProperty.call(SOCCER_PRIME_WINDOWS, s.primeType)) s.primeType = rollPrimeType();
@@ -6330,7 +6350,11 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   // Ballon d'Or calculation. Round 834: what the night writes on the save (the
   // staged ceremony, the place on the season, the cabinet, the winner's and the
   // podium's consequences) is the shared settle, bound by SOCCER_BALLON_DOR.
-  settleAwardsNight(SOCCER_BALLON_DOR, s, season, calculateBallonDor(s, season, thisYear, world));
+  const ballot = calculateBallonDor(s, season, thisYear, world);
+  settleAwardsNight(SOCCER_BALLON_DOR, s, season, ballot);
+  if (s.rival && ballot.nominees[0]?.isCareerRival) {
+    s.rival = { ...s.rival, ballonDors: s.rival.ballonDors + 1 };
+  }
 
   // International debut event
   if (s.intStats.debutYear === thisYear) {
@@ -6345,6 +6369,7 @@ function playPendingProSeason(s: CareerState, clubs: ClubData[]): CareerState {
   settleCareerAmbition(s, season);
   settleCareerPreparation(s, season);
   Object.assign(s, recordMentorSeason(s, season));
+  Object.assign(s, resolveCareerProject(s, season));
 
   /* Release AQ: the settle reads the saved season and nothing else
      (settledLeagueOrder), so the engine no longer imports the Season Centre's
@@ -7755,6 +7780,56 @@ function generateContender(usedNames: Set<string>, seed: number, startAge = rand
   const club = GEN_CLUBS[(seed * 13 + 2) % GEN_CLUBS.length];
   return { name, nationality: nat, position: p.pos, club, baseGoals: p.goals, startAge };
 }
+type BallonDefender = { position: 'GK' | 'LB' | 'RB'; firstYear: number; seed: number; name: string; club: string; nationality: string; entryAge: number };
+
+function defenderProfile(seed: number) {
+  const roll = keyedRng(`ballon-defender|${seed}`);
+  const nationality = GEN_NATIONALITIES[Math.floor(roll() * GEN_NATIONALITIES.length)];
+  const club = GEN_CLUBS[Math.floor(roll() * GEN_CLUBS.length)];
+  return { name: intlName(nationality, seed), club, nationality, entryAge: 19 + Math.floor(roll() * 10) };
+}
+
+const BALLOT_BACK_POSITIONS = ['GK', 'LB', 'RB'] as const;
+
+function readBallonDefenders(pool: GeneratedBallonPool, year: number): BallonDefender[] {
+  const stored = pool.defensiveEntries;
+  if (!Array.isArray(stored) || stored.length > (year - 2031) * 3) return [];
+  const seeds = new Set<number>();
+  const openings = new Set<string>();
+  for (const e of stored) {
+    if (!e || !BALLOT_BACK_POSITIONS.includes(e.position) || !Number.isSafeInteger(e.firstYear)
+      || e.firstYear < 2032 || e.firstYear > year || !Number.isSafeInteger(e.seed) || e.seed < 0 || e.seed > 0x7fffffff
+      || !Number.isInteger(e.entryAge) || e.entryAge < 19 || e.entryAge > 28
+      || typeof e.name !== "string" || !e.name.trim() || typeof e.club !== "string" || !e.club.trim()
+      || typeof e.nationality !== "string" || !e.nationality.trim() || seeds.has(e.seed) || openings.has(e.position + e.firstYear)) return [];
+    seeds.add(e.seed);
+    openings.add(e.position + e.firstYear);
+  }
+  return stored;
+}
+
+// The original seven-position entries retain their ids and remain readable by earlier versions.
+function futureBallonDefenders(pool: GeneratedBallonPool, year: number, usedNames: Set<string>, careerId: string) {
+  const ledger = [...readBallonDefenders(pool, year)];
+  const reserved = new Set([...usedNames, ...pool.entries.map(e => e.name), ...ledger.map(e => e.name)]);
+  const active = BALLOT_BACK_POSITIONS.flatMap(position => {
+    let entry = ledger.slice().reverse().find(e => e.position === position);
+    if (!entry || entry.entryAge + year - entry.firstYear >= 37 || usedNames.has(entry.name)) {
+      let seed = Math.floor(keyedRng(`ballon-defender|${careerId}|${position}|${year}`)() * 0x40000000);
+      let profile = defenderProfile(seed);
+      for (let attempt = 0; reserved.has(profile.name) && attempt < 64; attempt++) profile = defenderProfile(++seed);
+      if (reserved.has(profile.name)) return [];
+      entry = { ...profile, position, firstYear: year, seed };
+      ledger.push(entry);
+      reserved.add(profile.name);
+    }
+    usedNames.add(entry.name);
+    return [{ ...entry, age: entry.entryAge + year - entry.firstYear }];
+  });
+  pool.defensiveEntries = ledger;
+  return active;
+}
+
 const TOP_6_CLUBS = ["Real Madrid", "Man City", "Barcelona", "Bayern Munich", "Arsenal", "Liverpool"];
 const LEAGUE_CLUBS: Record<string, string[]> = {
   "Premier League": ["Man City", "Arsenal", "Liverpool", "Man United", "Chelsea", "Tottenham"],
@@ -7771,12 +7846,45 @@ function getClubLeagueEra(club: string, leagueMap: Record<string, string[]>): st
   return null;
 }
 
-function calcBdorPoints(goals: number, assists: number, overall: number, clubTier: number, trophies: string[], club: string, topClubs: string[]): number {
+type BallotPerformance = { apps: number; rating: number; cleanSheets?: number };
+
+function ballotRole(position: string) {
+  if (["GK", "CB", "LB", "RB"].includes(position)) return "back";
+  if (position === "CDM") return "holding";
+  if (position === "CM" || position === "CAM") return "creative";
+  return null;
+}
+
+function simulatedBallotLine(seed: string, position: string, overall: number, tier: number, goals: number, source: number | { apps: number; assists: number }): { assists: number; performance?: BallotPerformance } {
+  const role = ballotRole(position);
+  const initialAssists = typeof source === "number" ? 3 + Math.floor(source * 16) : source.assists;
+  if (!role) return { assists: initialAssists };
+  const roll = keyedRng(seed);
+  const apps = typeof source === "number" ? 28 + Math.floor(roll() * 25) : source.apps;
+  const assists = typeof source === "number" && role !== "creative" ? calcAssists(position, apps, overall, 1, source) : initialAssists;
+  const cleanSheets = role === "back" ? Math.round(apps * (0.20 + roll() * 0.25)) : undefined;
+  const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets ?? 0, overall, tier, 0, roll());
+  return { assists, performance: { apps, rating, ...(cleanSheets !== undefined ? { cleanSheets } : {}) } };
+}
+
+function ballotRolePoints(position: string, tier: number, assists: number, season?: BallotPerformance): number {
+  const role = ballotRole(position);
+  if (!role || !season || season.apps < 20) return 0;
+  const { mean, sd } = soccerField(position);
+  // Compare to the position's simulated rating distribution at the same club level.
+  const above = Math.max(0, (seasonLevel(season.rating, tier) - mean) / sd - 1);
+  const weight = Math.min(1, season.apps / 38);
+  const evidence = role === "back" ? Math.max(0, (season.cleanSheets ?? 0) - 8) * 1.3 : Math.min(9, assists * (role === "holding" ? 0.8 : 0.4));
+  return Math.min(58, Math.round(weight * (above * (role === "holding" ? 24 : 17) + evidence)));
+}
+
+function calcBdorPoints(goals: number, assists: number, overall: number, clubTier: number, trophies: string[], club: string, topClubs: string[], rolePoints = 0): number {
   let pts = 0;
   // Goals: 0.7pt each, max 28 (reduced from 1pt/max 40)
   pts += Math.min(goals * 0.7, 28);
   // Assists: 0.3 each, max 8 (reduced from 0.5/max 15)
   pts += Math.min(assists * 0.3, 8);
+  pts = Math.max(pts, rolePoints);
   // Trophies
   if (trophies.includes("UCL")) pts += 25;
   /* Round 972: a continental club cup outside UEFA, under its own name. Worth
@@ -7846,8 +7954,9 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // --- Player eligibility ---
   const isLowTierClub = state.currentClubTier >= 3;
   const hasMajorTrophy = season.leagueTitle || season.championsLeague || season.worldCup;
-  const playerEligible = !isLowTierClub || (season.goals >= 40 && hasMajorTrophy);
-  const playerCanContend = (state.currentClubTier <= 2) || (isLowTierClub && season.goals >= 40 && hasMajorTrophy);
+  const playerRolePoints = ballotRolePoints(state.position, season.clubTier, season.assists, season);
+  const eliteRole = playerRolePoints >= 34 && season.apps >= 30;
+  const playerCanContend = !isLowTierClub || (hasMajorTrophy && (season.goals >= 40 || eliteRole));
 
   // Calculate player points (reduced scaling)
   const playerTrophies: string[] = [];
@@ -7862,7 +7971,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
 
   let playerPoints = 0;
   if (playerCanContend) {
-    playerPoints = calcBdorPoints(season.goals, season.assists, state.overall, state.currentClubTier, playerTrophies, state.currentClub, eraTopClubs);
+    playerPoints = calcBdorPoints(season.goals, season.assists, state.overall, state.currentClubTier, playerTrophies, state.currentClub, eraTopClubs, playerRolePoints);
   }
   const playerNominated = playerCanContend && playerPoints > 45;
 
@@ -7903,6 +8012,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     if (!entry) {
       const seed = pool.entries.some(row => row.role === role && row.slot === slot) ? 9900 + pool.nextId : initialSeed;
       const reserved = new Set([...usedNames, ...pool.entries.map(row => row.name)]);
+      for (const back of readBallonDefenders(pool, year)) reserved.add(back.name);
       const { startAge, ...profile } = generateContender(reserved, seed, entryAge);
       const baseName = profile.name;
       let suffix = 1;
@@ -7920,7 +8030,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
       if (usedNames.has(star.name)) continue;
       usedNames.add(star.name);
       const goals = rand(star.baseGoals[0], star.baseGoals[1]);
-      const assists = rand(3, 18);
+      const assistRoll = Math.random();
       /* Round 130: if the sim has moved him, he is at the club the sim moved
          him to. One truth, shared with the phone's transfer feed. */
       const starClub = worldClubOf(state, star.name) ?? star.club;
@@ -7931,10 +8041,11 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
       if (starIntl) trophies.push(starIntl);
 
       const overall = clamp(82 + star.power + rand(-2, 2), 78, 96);
-      const pts = calcBdorPoints(goals, assists, overall, 1, trophies, starClub, eraTopClubs) + star.power * rand(1, 3);
+      const { assists, performance } = simulatedBallotLine(`${soccerDeckIdentity(state)}|${year}|${star.name}|ballot`, star.position, overall, 1, goals, assistRoll);
+      const pts = calcBdorPoints(goals, assists, overall, 1, trophies, starClub, eraTopClubs, ballotRolePoints(star.position, 1, assists, performance)) + star.power * rand(1, 3);
       allNomineeData.push({
         name: star.name, nationality: star.nationality, position: star.position,
-        club: starClub, points: pts, goals, trophies, isPlayer: false,
+        club: starClub, points: pts, goals, assists, trophies, performance, isPlayer: false,
       });
     }
   }
@@ -7945,32 +8056,58 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
       if (usedNames.has(gen.name)) continue;
       usedNames.add(gen.name);
       const goals = rand(gen.baseGoals[0], gen.baseGoals[1]);
-      const assists = rand(3, 18);
+      const assistRoll = Math.random();
       const trophies = clubHonours(gen.club);
       const genIntl = intlHonour(gen.nationality);
       if (genIntl) trophies.push(genIntl);
       const overall = clamp(rand(83, 93), 75, 95);
-      const pts = calcBdorPoints(goals, assists, overall, 1, trophies, gen.club, eraTopClubs);
+      const { assists, performance } = simulatedBallotLine(`${soccerDeckIdentity(state)}|${year}|${gen.name}|ballot`, gen.position, overall, 1, goals, assistRoll);
+      const pts = calcBdorPoints(goals, assists, overall, 1, trophies, gen.club, eraTopClubs, ballotRolePoints(gen.position, 1, assists, performance));
       allNomineeData.push({
         name: gen.name, nationality: gen.nationality, position: gen.position,
-        club: gen.club, points: pts, goals, trophies, isPlayer: false,
+        club: gen.club, points: pts, goals, assists, trophies, performance, isPlayer: false,
         generatedId: gen.generatedId, generatedAge: gen.generatedAge,
       });
     }
   }
 
+  if (year >= 2032 && state.generatedBallonPool) {
+    for (const player of futureBallonDefenders(state.generatedBallonPool, year, usedNames, soccerDeckIdentity(state))) {
+      const roll = keyedRng(`ballon-defender-season|${soccerDeckIdentity(state)}|${year}|${player.seed}`);
+      const overall = 83 + Math.floor(roll() * 11);
+      const apps = 28 + Math.floor(roll() * 25);
+      const goals = calcGoals(player.position, apps, overall, 1, roll());
+      const earnedAssists = calcAssists(player.position, apps, overall, 1, roll());
+      const { assists, performance } = simulatedBallotLine(`${soccerDeckIdentity(state)}|${year}|${player.name}|ballot`,
+        player.position, overall, 1, goals, { apps, assists: earnedAssists });
+      const trophies = clubHonours(player.club);
+      const international = intlHonour(player.nationality);
+      if (international) trophies.push(international);
+      const points = calcBdorPoints(goals, assists, overall, 1, trophies, player.club, eraTopClubs, ballotRolePoints(player.position, 1, assists, performance));
+      allNomineeData.push({
+        name: player.name, nationality: player.nationality, club: player.club, position: player.position,
+        goals, assists, performance, trophies, points, isPlayer: false, generatedAge: player.age, generatedDefenderSeed: player.seed,
+      });
+    }
+  }
+
   // Add rival
-  if (state.rival && !state.rival.retired && state.rival.clubTier <= 2) {
-    const rivalGoals = state.rival.careerGoals > 0 ? rand(12, 30) : rand(5, 15);
-    const rivalAssists = rand(3, 12);
+  if (state.rival?.lastSeason?.year === year && state.rival.clubTier <= 2) {
+    const { goals: rivalGoals, assists: rivalAssists } = state.rival.lastSeason;
+    if (!state.rival.retired) {
+      // Keep later season events on their original random stream.
+      Math.random();
+      Math.random();
+    }
     // The rival holds whatever his club won this season, nothing rolled
     const rivalTrophies = clubHonours(state.rival.club);
     const rivalIntl = intlHonour(state.rival.nationality);
     if (rivalIntl) rivalTrophies.push(rivalIntl);
-    const rivalPts = calcBdorPoints(rivalGoals, rivalAssists, state.rival.overall, state.rival.clubTier, rivalTrophies, state.rival.club, eraTopClubs);
+    const { performance } = state.rival.lastSeason;
+    const rivalPts = calcBdorPoints(rivalGoals, rivalAssists, state.rival.overall, state.rival.clubTier, rivalTrophies, state.rival.club, eraTopClubs, ballotRolePoints(state.rival.position, state.rival.clubTier, rivalAssists, performance));
     allNomineeData.push({
       name: state.rival.name, nationality: state.rival.nationality, position: state.rival.position,
-      club: state.rival.club, points: rivalPts, goals: rivalGoals, trophies: rivalTrophies, isPlayer: false,
+      club: state.rival.club, points: rivalPts, goals: rivalGoals, assists: rivalAssists, trophies: rivalTrophies, performance, isPlayer: false, isCareerRival: true,
     });
   }
 
@@ -7990,8 +8127,8 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
   // carries goals + trophies, so score the player and the field on the same
   // scale and let the numbers speak. Reputation still decides close years, but
   // it can no longer beat a season that objectively led the world.
-  const productionScore = (goals: number, assists: number, trophies: string[]): number => {
-    let p = goals + assists * 0.5;
+  const productionScore = (goals: number, assists: number, trophies: string[], rolePoints: number): number => {
+    let p = Math.max(goals + assists * 0.5, rolePoints * 0.85);
     if (trophies.includes("World Cup")) p += 22;
     if (trophies.includes("Continental")) p += 11;
     if (trophies.includes("UCL")) p += 18;
@@ -8000,9 +8137,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     if (trophies.includes("Cup")) p += 3;
     return p;
   };
-  const playerProduction = productionScore(season.goals, season.assists, playerTrophies);
-  // Nominees do not expose assists, so give every one of them a generous
-  // benefit-of-the-doubt assist total (12) rather than assuming zero.
+  const playerProduction = productionScore(season.goals, season.assists, playerTrophies, playerRolePoints);
   /* Round 292: "the field" is the ten men the ceremony puts on screen, not
      every name the era pool produced. A 44 goal forward at a mid table club
      sits outside the shortlist on the points formula (goals are capped at 28
@@ -8025,10 +8160,12 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
      nothing by it. */
   const visibleField = allNomineeData.slice(0, SOCCER_BALLON_DOR.award.shortlistSize - 1);
   lastJudged = { year, names: visibleField.map(n => n.name) };
-  const fieldBest = visibleField.reduce(
-    (mx, n) => Math.max(mx, productionScore(n.goals, 12, n.trophies)),
-    0,
-  );
+  const fieldBest = visibleField.reduce((best, nominee) => {
+    const assists = nominee.assists ?? 0;
+    const tier = nominee.isCareerRival && state.rival ? state.rival.clubTier : 1;
+    const rolePoints = ballotRolePoints(nominee.position, tier, assists, nominee.performance);
+    return Math.max(best, productionScore(nominee.goals, assists, nominee.trophies, rolePoints));
+  }, 0);
   const gaTotal = season.goals + season.assists;
   const trebleSeason = season.leagueTitle && season.championsLeague && season.domesticCup;
   const statMonster = gaTotal >= 55 || season.goals >= 45 || (gaTotal >= 45 && (season.leagueTitle || season.championsLeague || season.worldCup));
@@ -8071,7 +8208,8 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     // Add player if nominated (or if the season was flat out dominant)
     player: playerInTop10 ? {
       name: state.playerName, nationality: state.nationality, position: state.position,
-      club: state.currentClub, points: playerPoints, goals: season.goals, trophies: playerTrophies, isPlayer: true,
+      club: state.currentClub, points: playerPoints, goals: season.goals, assists: season.assists, trophies: playerTrophies, isPlayer: true,
+      performance: ballotRole(state.position) ? { apps: season.apps, rating: season.rating, ...(ballotRole(state.position) === "back" ? { cleanSheets: season.cleanSheets } : {}) } : undefined,
     } : null,
     playerPoints,
     // Filler nominees (only needed if the era pool somehow ran short)
@@ -8111,7 +8249,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
           const hasWorldCup = season.worldCup;
           const has30PlusGoals = season.goals >= BDOR_WIN_MIN_GOALS;
           const bigInvolvementPlusTrophy = gaTotal >= 45 && (season.leagueTitle || season.championsLeague);
-          const meetsWinCondition = has30PlusGoals || hasUCLAndLeague || hasWorldCup || trebleSeason || bigInvolvementPlusTrophy;
+          const meetsWinCondition = has30PlusGoals || hasUCLAndLeague || hasWorldCup || trebleSeason || bigInvolvementPlusTrophy || eliteRole;
           if (!meetsWinCondition) {
             // Demote player to 2nd, they weren't dominant enough
             const playerEntry = top10.find(n => n.isPlayer);
@@ -8618,8 +8756,8 @@ function createRival(state: CareerState, clubs: ClubData[]): RivalPlayer {
   };
 }
 
-function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[], year?: number): RivalPlayer {
-  if (year !== undefined) clubs = adjustClubsForYear(clubs, year);
+function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[], year: number): RivalPlayer {
+  clubs = adjustClubsForYear(clubs, year);
   const r = { ...rival };
   if (r.retired) return r;
   r.age += 1;
@@ -8633,13 +8771,19 @@ function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[], year?: numbe
   if (Math.random() < 0.15) {
     const tiers = r.overall >= 82 ? [1] : r.overall >= 72 ? [1, 2] : r.overall >= 62 ? [2, 3] : [3, 4];
     const candidates = clubs.filter(c => tiers.includes(c.tier) && c.name !== r.club);
-    if (candidates.length > 0) r.club = pick(candidates).name;
+    if (candidates.length > 0) {
+      const destination = pick(candidates);
+      r.club = destination.name;
+      r.clubTier = destination.tier;
+    }
   }
   
   // Season stats
   const apps = rand(20, 36);
-  const goals = calcGoals(r.position, apps);
-  const assists = calcAssists(r.position, apps);
+  const goals = calcGoals(r.position, apps, r.overall);
+  const assists = calcAssists(r.position, apps, r.overall);
+  const { performance } = simulatedBallotLine(`${year}|${r.name}|${r.club}|rival-season`, r.position, r.overall, r.clubTier, goals, { apps, assists });
+  r.lastSeason = { year, club: r.club, apps, goals, assists, ...(performance && { performance }) };
   r.careerApps += apps;
   r.careerGoals += goals;
   r.careerAssists += assists;
@@ -8649,7 +8793,8 @@ function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[], year?: numbe
   if (clubTier <= 2 && Math.random() < 0.2 / clubTier) r.leagueTitles += 1;
   if (clubTier === 1 && r.overall >= 78 && Math.random() < 0.06) r.championsLeagues += 1;
   if (r.overall >= 80 && Math.random() < 0.04) r.worldCups += 1;
-  if (r.overall >= 88 && Math.random() < 0.08) r.ballonDors += 1;
+  // Consume the retired award roll to keep the season's random stream in order.
+  if (r.overall >= 88) Math.random();
   
   // International
   if (r.overall >= 72 && r.age <= 33) {
@@ -8666,21 +8811,19 @@ function simulateRivalSeason(rival: RivalPlayer, clubs: ClubData[], year?: numbe
   return r;
 }
 
-/* Round 521: the eighteen beats, lifted onto careerRivalryEvents.ts's
-   descriptor shape. Every `when`, every description and every mutation
-   below is the exact one the un-lifted switch statement had; only the
-   plumbing moved. */
-export const SOCCER_RIVALRY_EVENTS: RivalryEventDef<CareerState, RivalPlayer>[] = [
-  {
-    id: 101, emoji: "🏅", title: "Rival Wins Ballon d'Or",
-    description: (_s, r) => `${r.name} won the Ballon d'Or. You finished 3rd.`,
-    consequence: "Motivation boost: stats +1 next season",
-    when: (_s, r) => r.ballonDors > 0,
-    apply: s => {
-      s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1, dribbling: (s.statBoostNextSeason.dribbling || 0) + 1 };
-      s.morale = clamp(s.morale - 5, 0, 100);
-    },
+const RIVAL_AWARD_MOTIVATION: RivalryEventDef<CareerState, RivalPlayer> = {
+  id: 101, emoji: "🏅", title: "Rivalry Motivation",
+  description: (_s, r) => `Your rivalry with ${r.name} pushes you to work harder next season.`,
+  consequence: "Motivation boost: stats +1 next season",
+  when: (_s, r) => r.ballonDors > 0,
+  apply: s => {
+    s.statBoostNextSeason = { ...s.statBoostNextSeason, shooting: (s.statBoostNextSeason.shooting || 0) + 1, dribbling: (s.statBoostNextSeason.dribbling || 0) + 1 };
+    s.morale = clamp(s.morale - 5, 0, 100);
   },
+};
+
+export const SOCCER_RIVALRY_EVENTS: RivalryEventDef<CareerState, RivalPlayer>[] = [
+  RIVAL_AWARD_MOTIVATION,
   {
     id: 102, emoji: "🏠", title: "Transfer Battle",
     description: (_s, r) => `You and ${r.name} both want to sign for the same club. The club chose your rival.`,

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { currentUsCareerProgramme, saveUsCareerProgramme, usProgrammeDefaults, usProgrammeMenus, usProgrammeResults, usProgrammeStateValid, type ProgrammeCareer, type ProgrammeChoice, type ProgrammeChoices, type ProgrammeSection } from '@/lib/usCareerProgramme';
+import { currentUsCareerProgramme, formatUsProgrammeValue, saveUsCareerProgramme, usProgrammeDefaults, usProgrammeMenus, usProgrammeResults, usProgrammeStateValid, type ProgrammeCareer, type ProgrammeChoice, type ProgrammeChoices, type ProgrammeSection } from '@/lib/usCareerProgramme';
 import type { UsSport } from '@/lib/usCoachCareer';
 
 /** A gross bonus the way a player reads money: thousands under a tenth of a million, millions above. */
@@ -56,7 +56,9 @@ export default function UsCareerProgramme({ career, sport, saveMoved = false, on
     <p className="mt-1 text-xs text-muted-foreground">{held ? 'Programme saved for ' + career.year + ' at ' + career.team + '.' : 'Choose how to approach the season. Your usual routine stays available.'}</p>
     {last && <div data-us-programme-result className="mt-2 text-xs">
       <p className="font-bold">{last.year}: {last.outcome === 'interrupted' ? 'Programme interrupted' : 'Programme completed'}</p>
-      {last.decisions.map(d => <p key={d.section}>{d.label}: {d.outcome === 'unused' ? 'not used, it had nothing to add and cost nothing' : d.outcome}{d.target !== undefined ? ' (' + (d.actual ?? 'not recorded') + '/' + d.target + ' ' + d.unit + ')' : d.actual !== undefined && d.unit ? ' (' + d.actual.toFixed(1) + ' ' + d.unit + ')' : ''}.</p>)}
+      {last.decisions.map(d => <p key={d.section}>{d.label}: {d.outcome === 'unused' ? 'not used, it had nothing to add and cost nothing' : d.outcome}{d.target !== undefined ? ' (' + (d.actual === undefined ? 'not recorded' : formatUsProgrammeValue(d.actual, d.unit)) + '/' + formatUsProgrammeValue(d.target, d.unit) + ' ' + d.unit + ')' : d.actual !== undefined && d.unit ? ' (' + d.actual.toFixed(1) + ' ' + d.unit + ')' : ''}.
+        {d.games && <span className="block">{d.games.played} {d.games.played === 1 ? 'game' : 'games'} played, {d.games.minimum} required.</span>}
+      </p>)}
       {last.bonusGross > 0 && <p data-us-programme-bonus>Bonus: {grossMoney(last.bonusGross)} gross, {last.bonusNet >= 0.05 ? '$' + last.bonusNet.toFixed(1) + 'M banked.' : 'none of it banked (the 45% share was under the $0.1M the bank counts in).'}</p>}
       {last.partnershipProgress > 0 && <p>Partnership progress: {last.partnershipProgress}/3.</p>}
     </div>}
@@ -96,6 +98,7 @@ export default function UsCareerProgramme({ career, sport, saveMoved = false, on
             {sport === 'nba' && <p>Pressure the ball gives PG, SG and SF more steals. Protect the rim gives PF and C more blocks. The trade only applies in the regular season. A guard averaging 20.0 points and 1.5 steals per game on their usual plan would get 18.4 points and 1.8 steals. If the defensive stat is already capped, scoring stays the same.</p>}
             <p>Coach targets use games played. Partnership progress needs enough games at this team in consecutive seasons. A missed year resets its progress. Teammates are described by role, with no invented real player.</p>
             <p>Bonus targets use your saved position stats and enough games played. A successful challenge adds 2% or 5% of that season's salary to gross earnings. 45% of it reaches the bank, counted in tenths of a million like the rest of your bank, so each card shows what your salary would bank. Targets and rewards never alter the recorded stats.</p>
+            <p>Chase a different stat is a 2% bonus you can choose instead. A basketball guard can aim for steals, a receiver can aim for catches, and a hockey goalie can aim for save percentage.</p>
             <p>Veteran adaptation is available from age 30. It trades form for durability this season and earns health +3 for next year after games played. It cannot promise another contract or prevent retirement.</p>
             <p>Each card shows what its choice adds as things stand. Health and morale top out at 100 and durability has a ceiling too: a choice with nothing left to add says so and costs nothing, and the training camp can still move your morale before the season starts.</p>
             <p>Try a plan to compare the current choices with a preview. Preview choices do not change your programme until you apply the whole plan. Discard or close to keep your current plan.</p>

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import {
   SAVE_KEY, isPartialClub, loanOutFee, loanOutPlayer, loanOutRefusal,
-  recallLoanedPlayer, saveCareer, loadCareer, startCareer,
+  recallLoanedPlayer, saveCareer, loadCareer, startCareer, startNextSeason,
 } from '@/lib/clubManager';
 import { plainCopy, worldRosterKey } from '@/lib/clubManagerWorldRoster';
 import { agreeLoanPlan, loanPlanHosts, loanPlanLoans, loanPlanHistoryOf, loanPlanPreview, recallPlannedLoanee, reviewLoanPlan } from '@/lib/clubManagerLoanPlan';
@@ -18,6 +18,52 @@ function scene() {
 }
 
 describe('Loan plan authority and refusal boundaries', () => {
+  it('only offers loan hosts that participate in the saved career world', () => {
+    const old = startCareer('Everton', undefined, undefined, undefined, undefined, undefined, { kLeagueActive: false });
+    expect(loanPlanHosts(old)).toContain('Ajax');
+    expect(loanPlanHosts(old)).not.toContain('FC Anyang');
+    expect(loanPlanHosts(startCareer('Kashima Antlers'))).toContain('Mito Hollyhock');
+  });
+
+  it('trades loan income for keeping the sale decision through a save and summer', () => {
+    function seeded<T>(seed: number, action: () => T) {
+      const random = vi.spyOn(Math, 'random').mockImplementation(() => {
+        seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0;
+        return seed / 4294967296;
+      });
+      try { return action(); } finally { random.mockRestore(); }
+    }
+    const { c, p, host } = seeded(1079, scene);
+    Object.assign(p, { age: 20, rating: 82, contractYears: 4 });
+    const standard = loanPlanPreview(c, p.id, host, 'standard')!;
+    const straight = loanPlanPreview(c, p.id, host, 'straight')!;
+    expect(standard.quote.offer.optionFee).toBeGreaterThan(0);
+    expect(straight.quote.offer.optionFee).toBeUndefined();
+    expect(straight.quote.offer.fee).toBe(Math.round(standard.quote.offer.fee * 5) / 10);
+    expect(straight.quote.offer.fee).toBeLessThan(standard.quote.offer.fee);
+    expect(agreeLoanPlan(c, { ...standard, source: 'straight' })).toBeNull();
+    const placed = agreeLoanPlan(c, straight)!;
+    expect(placed.budget).toBe(Math.round((c.budget + straight.quote.offer.fee) * 10) / 10);
+    expect(placed.seasonSignings.at(-1)?.fee).toBe(straight.quote.offer.fee);
+    expect(agreeLoanPlan(placed, straight)).toBeNull();
+    expect(saveCareer(placed)).toBe(true);
+    const restored = loadCareer()!;
+    expect(restored.loanedOut?.find(loan => loan.player.id === p.id)).toMatchObject({ fee: straight.quote.offer.fee });
+    const ordinary = agreeLoanPlan(c, standard)!;
+    function summer(career: typeof c, seed: number) {
+      return seeded(seed, () => startNextSeason(plainCopy(career)));
+    }
+    const bought = (s: typeof c) => s.transferLog.some(row => !row.loan && row.name === p.name && row.from === c.clubName && row.to === host && row.fee === standard.quote.offer.optionFee);
+    expect(bought(summer(ordinary, 8))).toBe(true);
+    const returned = summer(restored, 8);
+    expect(returned.season).toBe(c.season + 1);
+    expect(bought(returned)).toBe(false);
+    expect(returned.squad.some(player => player.name === p.name && !player.onLoan)).toBe(true);
+    expect(saveCareer(returned)).toBe(true);
+    expect(loadCareer()!.squad.some(player => player.name === p.name)).toBe(true);
+    localStorage.removeItem(SAVE_KEY);
+  });
+
   it('refuses partial and unknown previews without a global draw or input-state materialization', () => {
     const { c, p } = scene();
     const partial = loanPlanHosts(c).find(club => isPartialClub(club, c.eraId))!;

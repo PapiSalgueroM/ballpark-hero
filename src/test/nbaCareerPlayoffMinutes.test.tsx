@@ -43,7 +43,7 @@ function play(c: Career, quality = 86, random: () => number = () => 0.25) {
 }
 
 function regularAndBracket(line: NbaSeasonLine) {
-  const { poPpg, poRpg, poApg, poMpg, awards, ...regular } = line;
+  const { poPpg, poRpg, poApg, poMpg, poSpg, poBpg, awards, ...regular } = line;
   return { ...regular, awards: awards.filter(award => award !== 'Finals MVP') };
 }
 
@@ -73,11 +73,36 @@ describe('NBA career extra playoff minutes', () => {
     expect(extra.c.health).toBe(usual.c.health - 4);
     expect(extra.receipt?.decisions).toEqual([{ section: 'tactics', label, outcome: 'completed', actual: 3, unit: 'extra minutes per playoff game' }]);
     expect(nbaSeasonReview(extra.line).postseason).toContainEqual(expect.objectContaining({ label: 'Minutes per game', numeric: { raw: extra.line.poMpg, digits: 1 } }));
-    expect(nbaSeasonReview(usual.line).postseason.some(stat => stat.label === 'Minutes per game')).toBe(false);
+    expect(extra.line.poMpg).toBeGreaterThan(usual.line.poMpg!);
+    expect(nbaSeasonReview(usual.line).postseason).toEqual(expect.arrayContaining([
+      expect.objectContaining({ label: 'Team games', value: String(usual.line.poGames) }),
+      expect.objectContaining({ label: 'Minutes per game', value: usual.line.poMpg!.toFixed(1) }),
+      expect.objectContaining({ label: 'Steals per game', value: usual.line.poSpg!.toFixed(1) }),
+      expect.objectContaining({ label: 'Blocks per game', value: usual.line.poBpg!.toFixed(1) }),
+    ]));
 
     const settled = JSON.stringify(extra.c);
     expect(settleUsCareerProgramme(extra.c, extra.line, 'nba', extra.prep)).toBeNull();
     expect(JSON.stringify(extra.c)).toBe(settled);
+  });
+
+  it('keeps recorded zeroes and never fills in an older season from a newer one', () => {
+    const { line } = play(starter());
+    const regular = nbaSeasonReview({ ...line, spg: 0, bpg: 0, benchAppearances: 5 }).regular;
+    expect(regular.filter(stat => stat.label === 'Minutes per game')).toHaveLength(1);
+    expect(regular).toEqual(expect.arrayContaining([
+      expect.objectContaining({ label: 'Team record', value: `${line.clubWins} wins, ${line.clubLosses} losses` }),
+      expect.objectContaining({ label: 'Steals per game', value: '0.0' }),
+      expect.objectContaining({ label: 'Blocks per game', value: '0.0' }),
+    ]));
+    const legacy = nbaSeasonReview({ ...line, mpg: undefined, spg: undefined, bpg: undefined, clubLosses: undefined,
+      poMpg: undefined, poSpg: undefined, poBpg: undefined });
+    expect(legacy.regular.map(stat => stat.label)).toEqual(['Points per game', 'Rebounds per game', 'Assists per game']);
+    expect(legacy.postseason.map(stat => stat.label)).toEqual(['Team games', 'Points per game', 'Rebounds per game', 'Assists per game']);
+    const missed = play(starter(), 40, () => 0.99).line;
+    expect(missed.teamResult).toBe('Missed the playoffs');
+    expect(missed.poMpg).toBeUndefined();
+    expect(nbaSeasonReview(missed).postseason).toEqual([{ label: 'Postseason', value: 'Your team missed the playoffs' }]);
   });
 
   it('can cost games in the next season on the same injury draw', () => {

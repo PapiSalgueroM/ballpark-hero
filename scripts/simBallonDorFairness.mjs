@@ -102,7 +102,8 @@
                   on the ballot, every seed
      eight        Round 1023 review: the engine judges eight rivals, one
                   seated man unjudged: the judged = seated check, every seed
-   Each control refuses to run unless the exact text it replaces is present.
+   stalevote  replays the already settled ballot for both controlled lines.
+   Engine mutations refuse to run unless the exact text they replace is present.
 
    Run: node scripts/simBallonDorFairness.mjs   (BDOR_FAIRNESS_SEED=<n> to
    move the base seed)
@@ -110,10 +111,8 @@
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 
 import { build } from "esbuild";
-import os from 'node:os';
 import path from 'node:path';
-import { readFileSync, unlinkSync } from "node:fs";
-import { pathToFileURL } from "node:url";
+import { readFileSync } from "node:fs";
 
 const BASE_SEED = Number(process.env.BDOR_FAIRNESS_SEED || 0xb4110) >>> 0;
 const SEEDS = [0, 1, 2, 3].map(k => (BASE_SEED + k * 7919) >>> 0);
@@ -128,8 +127,8 @@ const CONTROLS = {
   /* Round 1023 review: one man short, a seated rival nobody judges. */
   eight: ["  const visibleField = allNomineeData.slice(0, SOCCER_BALLON_DOR.award.shortlistSize - 1);", "  const visibleField = allNomineeData.slice(0, SOCCER_BALLON_DOR.award.shortlistSize - 2);"],
 };
-if (CONTROL && !CONTROLS[CONTROL]) {
-  console.error(`unknown BDOR_FAIRNESS_CONTROL=${CONTROL} (known: ${Object.keys(CONTROLS).join(", ")})`);
+if (CONTROL && CONTROL !== "stalevote" && !CONTROLS[CONTROL]) {
+  console.error(`unknown BDOR_FAIRNESS_CONTROL=${CONTROL} (known: ${[...Object.keys(CONTROLS), "stalevote"].join(", ")})`);
   process.exit(2);
 }
 if (CONTROL) console.log(`CONTROL ${CONTROL}: the engine is mutated, this run must go red`);
@@ -146,27 +145,32 @@ function seedRandom(seed) {
   };
 }
 
-const OUT = path.join(os.tmpdir(), `sc-bdor-${process.pid}.mjs`);
 const ENGINE = path.resolve("src/lib/soccerCareerEngine.ts").replaceAll("\\", "/").toLowerCase();
-await build({
+const { outputFiles } = await build({
   entryPoints: ["src/lib/soccerCareerEngine.ts"],
-  bundle: true, format: "esm", platform: "node", outfile: OUT,
+  bundle: true, format: "esm", platform: "node", write: false,
   logLevel: "error", alias: { "@": "./src" },
-  plugins: CONTROL ? [{
+  plugins: [{
     name: "fairness-control",
     setup(b) {
       b.onLoad({ filter: /soccerCareerEngine\.ts$/ }, args => {
         if (args.path.replaceAll("\\", "/").toLowerCase() !== ENGINE) return undefined;
-        const src = readFileSync(args.path, "utf8").replace(/\r\n/g, "\n");
-        const [from, to] = CONTROLS[CONTROL];
-        if (!src.includes(from)) throw new Error(`control ${CONTROL} refused: the engine does not contain ${JSON.stringify(from)}`);
-        return { contents: src.replace(from, to), loader: "ts" };
+        let src = readFileSync(args.path, "utf8").replace(/\r\n/g, "\n");
+        if (CONTROLS[CONTROL]) {
+          const [from, to] = CONTROLS[CONTROL];
+          if (src.split(from).length !== 2) throw new Error(`control ${CONTROL} refused: expected exactly one occurrence of ${JSON.stringify(from)}`);
+          src = src.replace(from, to);
+        }
+        // Expose the private vote only inside this offline bundle.
+        const auditVote = CONTROL === "stalevote"
+          ? "export const auditVote = state => state.pendingBallonDor;"
+          : "export { calculateBallonDor as auditVote };";
+        return { contents: src + "\n" + auditVote, loader: "ts" };
       });
     },
-  }] : [],
+  }],
 });
-const eng = await import(pathToFileURL(OUT).href);
-unlinkSync(OUT);
+const eng = await import("data:text/javascript;base64," + Buffer.from(outputFiles[0].contents).toString("base64"));
 const { initCareer, advanceYouthYear, acceptOffer, advanceProSeason, FALLBACK_CLUBS } = eng;
 
 const clubs = FALLBACK_CLUBS;
@@ -187,30 +191,32 @@ function eliteStriker(seed) {
 /** One seed: the same procedure the harness always ran, counted. */
 function runSeed(seed) {
   seedRandom(seed);
-  const r = { seed, mustWin: 0, won: 0, snubs: [], mustPodium: 0, podium: 0, offPodium: [], onBallot: 0, misjudged: [] };
+  const r = { seed, controlled: 0, controlledWins: 0, controlledPodiums: 0, separated: 0, mustWin: 0, won: 0, snubs: [], mustPodium: 0, podium: 0, offPodium: [], onBallot: 0, misjudged: [] };
 
-  /* Case 1: a statistically dominant season must win the award. Kept as it
-     was: the ceremony is module private, so this finds no hook and only
-     plays its seasons (their draws are part of every measured seed). */
+  // Keep the natural season stream intact while replaying two lines against the same field.
   for (let i = 0; i < 200; i++) {
-    let s = eliteStriker(i);
-    s = advanceProSeason(s, clubs);
-    const last = s.seasons[s.seasons.length - 1];
-    if (!last || last.type !== "playing") continue;
-    last.goals = 48;
-    last.assists = 14;
-    last.apps = 52;
-    last.rating = 8.6;
-    last.leagueTitle = true;
-    last.championsLeague = true;
-    const bd = eng.__testCalculateBallonDor ? eng.__testCalculateBallonDor(s, last, last.year) : null;
-    if (bd) {
-      r.mustWin++;
-      if (bd.playerRank === 1) r.won++;
-      else r.snubs.push({ rank: bd.playerRank, pts: bd.playerPoints, top: bd.nominees[0] && bd.nominees[0].points });
+    const career = advanceProSeason(eliteStriker(i), clubs);
+    const last = career.seasons.at(-1);
+    if (last?.type !== "playing" || career.pendingBallonDor?.year !== last.year || career.phone?.world?.year !== last.year) continue;
+    const world = career.phone.world;
+    const honours = { ...world, ucl: career.currentClub,
+      leagues: { ...world.leagues, [career.currentLeague]: career.currentClub } };
+    const double = { ...last, leagueTitle: true, championsLeague: true };
+    const naturalRandom = Math.random;
+    const ballotSeed = (seed + i * 31) >>> 0;
+    try {
+      seedRandom(ballotSeed);
+      const ordinary = eng.auditVote(structuredClone(career), { ...double, goals: 2, assists: 3 }, last.year, honours);
+      seedRandom(ballotSeed);
+      const standout = eng.auditVote(structuredClone(career), { ...double, goals: 48, assists: 14 }, last.year, honours);
+      r.controlled++;
+      if (standout.playerRank === 1) r.controlledWins++;
+      if (standout.playerRank !== null && standout.playerRank <= 3) r.controlledPodiums++;
+      if (ordinary.playerRank !== 1 && standout.playerPoints > ordinary.playerPoints) r.separated++;
+    } finally {
+      Math.random = naturalRandom;
     }
   }
-  if (r.mustWin > 0) return r;
 
   /* The black-box path: simulate many elite seasons for real. */
   for (let i = 0; i < 400; i++) {
@@ -280,11 +286,13 @@ function runSeed(seed) {
 
 const runs = SEEDS.map(runSeed);
 const sum = k => runs.reduce((a, r) => a + (Array.isArray(r[k]) ? r[k].length : r[k]), 0);
+const controlled = sum("controlled"), controlledWins = sum("controlledWins"), controlledPodiums = sum("controlledPodiums"), separated = sum("separated");
 const mustWin = sum("mustWin"), won = sum("won"), snubs = sum("snubs");
 const mustPodium = sum("mustPodium"), podium = sum("podium"), offPodium = sum("offPodium");
 const winRate = mustWin ? won / mustWin : 0;
 
 console.log("\n=== BALLON D'OR FAIRNESS ===");
+console.log(`paired striker ballots: ${controlledWins}/${controlled} standout wins, ${controlledPodiums}/${controlled} standout podiums, ${separated}/${controlled} pairs with higher standout points and no ordinary win`);
 for (const r of runs) console.log(`seed ${r.seed}: must-win ${r.won}/${r.mustWin}, must-podium ${r.podium}/${r.mustPodium}, judged the seated rivals on ${r.onBallot - r.misjudged.length}/${r.onBallot} nights on the ballot`);
 console.log(`must-win seasons tested : ${mustWin}   (outscored the field on screen by 5+ AND won a major, ${SEEDS.length} seeds pooled)`);
 console.log(`  won the award         : ${won}   (${(winRate * 100).toFixed(1)}%, floor ${MUST_WIN_FLOOR * 100}%)`);
@@ -302,7 +310,7 @@ const misjudgedSeeds = runs.filter(r => r.misjudged.length).length;
 console.log(`judged field = seated   : ${sum("onBallot") - misjudged} of ${sum("onBallot")} nights on the ballot (${misjudgedSeeds} of ${runs.length} seeds with a mismatch)`);
 if (misjudged) console.log(runs.flatMap(r => r.misjudged).slice(0, 5));
 
-if (mustWin < 60 || mustPodium < 200) {
+if (runs.some(r => r.controlled === 0) || mustWin < 60 || mustPodium < 200) {
   console.log(`\nINCONCLUSIVE: too few dominant seasons to judge (${mustWin} must-win, ${mustPodium} must-podium)`);
   process.exit(2);
 }
@@ -310,8 +318,9 @@ if (mustWin < 60 || mustPodium < 200) {
    that outscored them by five with a major is dominant by the engine's own
    rule and the dominance verdict puts it first. Every must-win season wins,
    the same kind of invariant as the podium floor; the rate floor stays. */
-const ok = winRate >= MUST_WIN_FLOOR && snubs === 0 && offPodium === 0 && misjudged === 0 && blindSeeds.length === 0;
+const controlledOk = controlledPodiums === controlled && separated === controlled;
+const ok = controlledOk && winRate >= MUST_WIN_FLOOR && snubs === 0 && offPodium === 0 && misjudged === 0 && blindSeeds.length === 0;
 console.log(ok
   ? `\nPASS: ${(winRate * 100).toFixed(1)}% of must-win seasons won, every monster season podiumed, every night on the ballot judged the rivals it seats`
-  : `\nFAIL: ${winRate < MUST_WIN_FLOOR ? `must-win seasons won ${(winRate * 100).toFixed(1)}%, under ${MUST_WIN_FLOOR * 100}%` : ""}${snubs ? ` ${snubs} must-win seasons lost the award` : ""}${offPodium ? ` ${offPodium} monster seasons pushed off the podium` : ""}${misjudged ? ` ${misjudged} nights judged dominance against other rivals than the card seats (${misjudgedSeeds} of ${runs.length} seeds)` : ""}${blindSeeds.length ? ` no night on the ballot on seed ${blindSeeds.join(", ")}, so the judged field was never checked` : ""}`);
+  : `\nFAIL: ${controlledOk ? "" : "controlled striker ballot failed. "}${winRate < MUST_WIN_FLOOR ? `must-win seasons won ${(winRate * 100).toFixed(1)}%, under ${MUST_WIN_FLOOR * 100}%` : ""}${snubs ? ` ${snubs} must-win seasons lost the award` : ""}${offPodium ? ` ${offPodium} monster seasons pushed off the podium` : ""}${misjudged ? ` ${misjudged} nights judged dominance against other rivals than the card seats (${misjudgedSeeds} of ${runs.length} seeds)` : ""}${blindSeeds.length ? ` no night on the ballot on seed ${blindSeeds.join(", ")}, so the judged field was never checked` : ""}`);
 process.exit(ok ? 0 : 1);

@@ -80,7 +80,7 @@ export function useSoccerPerfectSeason() {
     }
     remember(mode, { run: next, invalid: false, raw: written ? bytes : before, refused: !written });
     if (runRef.current?.mode === mode) activate(next);
-    if (written) recordCompletion(SOCCER_PS_PATH, deriveSoccerRun(next).record.score);
+    if (written && !next.noRerolls) recordCompletion(SOCCER_PS_PATH, deriveSoccerRun(next).record.score);
     return written;
   }, [activate, remember]);
 
@@ -124,7 +124,7 @@ export function useSoccerPerfectSeason() {
     return true;
   };
 
-  const startUnlimited = () => apply(createSoccerRun('unlimited', null, randomSeed()), readRaw('unlimited'));
+  const startUnlimited = (noRerolls = false) => apply(createSoccerRun('unlimited', null, randomSeed(), noRerolls), readRaw('unlimited'));
 
   const syncStoredRun = (current: SoccerPSRun) => {
     try {

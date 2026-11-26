@@ -1253,8 +1253,8 @@ export function generateBoard(criteria: BingoCriterion[]): BingoCriterion[] {
  * Lays 24 criteria into a 5x5 grid around a FREE center cell (index 12).
  * Returns exactly GRID*GRID cells; the FREE cell holds `null`.
  */
-export function layoutGrid(board: BingoCriterion[]): (BingoCriterion | null)[] {
-  const cells: (BingoCriterion | null)[] = [];
+export function layoutGrid<T>(board: T[]): (T | null)[] {
+  const cells: (T | null)[] = [];
   let bi = 0;
   for (let i = 0; i < GRID * GRID; i++) {
     if (i === FREE_INDEX) {
@@ -1338,7 +1338,7 @@ export function buildDeck(pool: BingoPlayer[], board: BingoCriterion[]): BingoPl
 }
 
 /** 5x5 grid of green/white/star squares, in board display order (FREE center is a star). */
-export function buildShareGrid(board: BingoCriterion[], locked: Record<string, string>): string {
+export function buildShareGrid(board: Pick<BingoCriterion, 'id'>[], locked: Record<string, string>): string {
   const cells = layoutGrid(board);
   const rows: string[] = [];
   for (let r = 0; r < GRID; r++) {

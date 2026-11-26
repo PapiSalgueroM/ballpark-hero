@@ -69,7 +69,15 @@ function expectReconciled(state: CareerState, count: number, goals: number) {
 
 function madridBeforeFinal() {
   const madrid = tape(MADRID, () => startCareer('Real Madrid')).value;
-  return playTo(madrid, MADRID, 53).state;
+  // Seed the first two group nights and the knockout rounds through normal calendar play.
+  const beforeOpener = playTo(madrid, MADRID, 3).state;
+  const opener = next(beforeOpener, 116141).value.state;
+  const beforeSecond = playTo(opener, MADRID, 7).state;
+  const second = next(beforeSecond, 116217).value.state;
+  const quarterFinals = playTo(second, MADRID, 32).state;
+  const semiReturn = playTo(quarterFinals, 116138, 44).state;
+  const finalists = next(semiReturn, 116170).value.state;
+  return playTo(finalists, MADRID, 53).state;
 }
 
 function goalsFor(state: CareerState, club: string, name: string) {
@@ -128,15 +136,15 @@ describe('Owned Champions League scorer settlement', () => {
   it('records the managed opener and other groups on the same Champions League matchday', () => {
     const fresh = tape(BRUGGE, () => startCareer('Club Brugge')).value;
     const before = playTo(fresh, BRUGGE, 3).state;
-    const opener = next(before, BRUGGE).value;
+    const opener = next(before, 115454).value;
     expect(opener.report).toMatchObject({
       competition: 'uclGroup', home: 'Club Brugge', away: 'Real Madrid', homeGoals: 1, awayGoals: 3,
-      myScorers: [expect.objectContaining({ name: 'Hans Vanaken', minute: 87 })],
+      myScorers: [expect.objectContaining({ name: 'Hans Vanaken', minute: 9 })],
     });
     expect(opener.state.uclScorers?.nights).toBe(1);
     expect(goalsFor(opener.state, 'Club Brugge', 'Hans Vanaken')).toBe(1);
     expect(opener.state.uclScorers?.players.some(([, , club]) => !['Club Brugge', 'Real Madrid'].includes(club))).toBe(true);
-    expectReconciled(opener.state, 16, 44);
+    expectReconciled(opener.state, 16, 40);
   });
 
   it('starts a pristine older draw whose other groups are created at the opening whistle', () => {
@@ -203,7 +211,7 @@ describe('Owned Champions League scorer settlement', () => {
     const exit = playTo(brugge, BRUGGE, 21).state;
     expect(exit).toMatchObject({ uclKoRound: 'out', uclExit: 'group' });
     expect(exit.uclScorers?.nights).toBe(6);
-    expectReconciled(exit, 96, 255);
+    expectReconciled(exit, 96, 279);
     const own = exit.uclScorers?.players.filter(([, , club]) => club === 'Club Brugge');
 
     const beforeAI = playTo(exit, BRUGGE, 32).state;
@@ -211,15 +219,15 @@ describe('Owned Champions League scorer settlement', () => {
     const quarterFinals = next(beforeAI, BRUGGE).value;
     expect(quarterFinals.report).toBeUndefined();
     expect(quarterFinals.state.uclScorers?.nights).toBe(7);
-    expectReconciled(quarterFinals.state, 104, 270);
+    expectReconciled(quarterFinals.state, 104, 293);
 
     const finished = playTo(quarterFinals.state, BRUGGE, 50).state;
     expect(finished.uclBracket?.find(tie => tie.round === 'F')).toMatchObject({
-      home: 'Real Madrid', away: 'Arsenal', homeGoals: 1, awayGoals: 2, winner: 'Arsenal', aet: true, mine: false,
+      home: 'PSG', away: 'Roma', homeGoals: 1, awayGoals: 1, winner: 'Roma', aet: true, pens: true, mine: false,
     });
     expect(finished.uclScorers?.nights).toBe(9);
     expect(finished.uclScorers?.players.filter(([, , club]) => club === 'Club Brugge')).toEqual(own);
-    expectReconciled(finished, 109, 281);
+    expectReconciled(finished, 109, 303);
   });
 
   it('fills only anonymous LASK goals from verified players available in the opening season', () => {
@@ -227,8 +235,9 @@ describe('Owned Champions League scorer settlement', () => {
     const pending = playTo(madrid, MADRID, 3).state;
     const verified = ['Samuel Adeniran', 'Moses Usor', 'Sascha Horvath', 'Alessandro Schöpf'];
     const goneNames = [...(pending.goneNames ?? []), ...verified.map(name => name.replace('ö', 'o'))];
-    const control = next({ ...pending, goneNames }, MADRID);
-    const tracked = next(pending, MADRID);
+    const matchSeed = 116483;
+    const control = next({ ...pending, goneNames }, matchSeed);
+    const tracked = next(pending, matchSeed);
     const results = tracked.value.state.pairResults?.[UCL_GROUP_LEDGER];
     expect(results?.['Galatasaray|LASK']).toEqual([0, 2]);
     expect(results).toEqual(control.value.state.pairResults?.[UCL_GROUP_LEDGER]);
@@ -242,8 +251,8 @@ describe('Owned Champions League scorer settlement', () => {
     expect(lask.every(([id, name, club, , generated]) => verified.includes(name)
       && id === JSON.stringify(['now', club, name]) && generated === undefined)).toBe(true);
     expect(ledger.players.filter(([, , club]) => club !== 'LASK')).toEqual(controlLedger.players);
-    expect(ledger).toMatchObject({ unresolved: 0, ownGoals: 1 });
-    expect(controlLedger).toMatchObject({ unresolved: 2, ownGoals: 1 });
+    expect(ledger).toMatchObject({ unresolved: 0, ownGoals: 0 });
+    expect(controlLedger).toMatchObject({ unresolved: 2, ownGoals: 0 });
     expect(loadCareer(serializeParkedCareer(tracked.value.state))?.uclScorers).toEqual(ledger);
     expect(loadCareer(serializeParkedCareer(control.value.state))?.uclScorers).toEqual(controlLedger);
   });
@@ -252,7 +261,7 @@ describe('Owned Champions League scorer settlement', () => {
     const seed = 119735;
     const madrid = tape(seed, () => startCareer('Real Madrid')).value;
     const pending = playTo(madrid, seed, 3).state;
-    const settled = next(pending, seed).value.state;
+    const settled = next(pending, 119781).value.state;
     expect(settled.pairResults?.[UCL_GROUP_LEDGER]?.['LASK|Sporting CP']).toEqual([1, 1]);
     const lask = settled.uclScorers?.players.filter(([, , club]) => club === 'LASK');
     expect(lask).toHaveLength(1);
@@ -273,15 +282,16 @@ describe('Owned Champions League scorer settlement', () => {
 
   it('keeps the Roma first-leg credits through active and parked reloads without changing either leg', () => {
     const madrid = tape(MADRID, () => startCareer('Real Madrid')).value;
-    const before = playTo(madrid, MADRID, 32).state;
-    const tracked = next(before, MADRID);
-    const control = next(scoreOnly(before), MADRID);
+    const before = playTo(madrid, 116144, 32).state;
+    const firstLegSeed = 116241;
+    const tracked = next(before, firstLegSeed);
+    const control = next(scoreOnly(before), firstLegSeed);
     expect(tracked.draws).toEqual(control.draws);
     expect(tracked.value.report).toEqual(control.value.report);
     expect(tracked.value.report).toMatchObject({
       home: 'Real Madrid', away: 'Roma', homeGoals: 1, awayGoals: 1, tie: { leg: 1 },
-      myScorers: [expect.objectContaining({ name: 'Vinicius Junior', minute: 90, plus: 3 })],
-      oppScorers: [expect.objectContaining({ name: 'Donyell Malen', minute: 34 })],
+      myScorers: [expect.objectContaining({ name: 'Vinicius Junior', minute: 60 })],
+      oppScorers: [expect.objectContaining({ name: 'Donyell Malen', minute: 46 })],
     });
     const first = tracked.value.state;
     expect(first.uclScorers?.nights).toBe(6);
@@ -296,7 +306,7 @@ describe('Owned Champions League scorer settlement', () => {
     expect(first.uclBracket?.find(tie => tie.mine)).toMatchObject({
       leg1: { homeGoals: 1, awayGoals: 1 }, winner: null, homeGoals: null, awayGoals: null,
     });
-    expectReconciled(first, 97, 251);
+    expectReconciled(first, 97, 248);
     expect(saveCareer(first)).toBe(true);
     const active = loadCareer();
     const parkedRaw = serializeParkedCareer(first);
@@ -331,7 +341,7 @@ describe('Owned Champions League scorer settlement', () => {
     expect(resumed.state.uclScorers).toEqual(alternate.state.uclScorers);
     expect(resumed.state.uclScorers?.nights).toBe(7);
     expect(resumed.state.uclScorers?.firstLeg).toBeUndefined();
-    expectReconciled(resumed.state, 104, 264);
+    expectReconciled(resumed.state, 104, 265);
     expect(goalsFor(resumed.state, 'Real Madrid', 'Vinicius Junior')).toBe(goalsFor(before, 'Real Madrid', 'Vinicius Junior') + 1);
     expect(goalsFor(resumed.state, 'Roma', 'Donyell Malen')).toBe(goalsFor(before, 'Roma', 'Donyell Malen') + 1);
     expect(scoreOnlyResumed.state.uclScorers).toBeUndefined();
@@ -340,14 +350,16 @@ describe('Owned Champions League scorer settlement', () => {
 
   it('credits the natural Madrid final without giving Porto a player goal for the own goal', () => {
     const before = madridBeforeFinal();
-    const final = next(before, MADRID).value;
+    const kickoff = tape(MADRID + before.week + 1, () => playNextEntry(before)).value;
+    expect(kickoff.kind).toBe('halftime');
+    const final = tape(116171, () => resumeMatch(kickoff.state)).value;
     expect(final.report).toMatchObject({
       home: 'Real Madrid', away: 'Porto', homeGoals: 2, awayGoals: 1, detail: { venue: 'neutral' },
       myScorers: [
         expect.objectContaining({ name: 'Jude Bellingham', minute: 40 }),
-        expect.objectContaining({ name: 'Rodrygo', minute: 72 }),
+        expect.objectContaining({ name: 'Rodrygo', minute: 87 }),
       ],
-      oppScorers: [expect.objectContaining({ name: 'Dean Huijsen', minute: 31, og: true })],
+      oppScorers: [expect.objectContaining({ name: 'Dean Huijsen', minute: 31, drawn: 'Samu Aghehowa', og: true })],
     });
     expect(uclHolderOf(final.state)).toBe('Real Madrid');
     expect(final.state.uclScorers?.nights).toBe(9);
@@ -355,12 +367,13 @@ describe('Owned Champions League scorer settlement', () => {
     for (const name of ['Jude Bellingham', 'Rodrygo']) {
       expect(goalsFor(final.state, 'Real Madrid', name)).toBe(goalsFor(before, 'Real Madrid', name) + 1);
     }
+    expect(goalsFor(final.state, 'Real Madrid', 'Dean Huijsen')).toBe(goalsFor(before, 'Real Madrid', 'Dean Huijsen'));
     expect(final.state.uclScorers?.players.filter(([, , club]) => club === 'Porto'))
       .toEqual(before.uclScorers?.players.filter(([, , club]) => club === 'Porto'));
-    expectReconciled(final.state, 109, 273);
-    const winner = { name: 'Samu Aghehowa', club: 'Porto', goals: 8 };
+    expectReconciled(final.state, 109, 291);
+    const winner = { name: 'Samu Aghehowa', club: 'Porto', goals: 13 };
     expect(championsLeagueScorerRace(final.state)).toMatchObject({
-      status: 'winner', leaders: [winner], unresolved: 1,
+      status: 'winner', leaders: [winner], unresolved: 2,
     });
     expect(tape(MADRID + 0xa01, () => finishSeason(final.state)).value.summary.uclScorerAward)
       .toMatchObject([winner]);
@@ -408,36 +421,38 @@ describe('Owned Champions League scorer settlement', () => {
       expect(goalShots).toEqual(goals);
       for (const { name } of goals) expect(goalsFor(throughGroup.state, club, name)).toBeGreaterThan(0);
     }
-    const before = playTo(throughGroup.state, MADRID, 55).state;
+    const knockoutSeed = 116138;
+    const before = playTo(throughGroup.state, knockoutSeed, 55).state;
     expect(before.uclExit).toBe('R16');
     const reopened = loadCareer(serializeParkedCareer(before));
     expect(reopened?.uclScorers).toEqual(before.uclScorers);
     const snapshot = JSON.stringify(reopened!.uclScorers);
-    const { value: final } = next(reopened!, MADRID);
+    const { value: final } = next(reopened!, knockoutSeed);
     expect(final.report).toBeUndefined();
     expect(final.state.uclBracket?.find(tie => tie.round === 'F')).toMatchObject({
-      home: 'Arsenal', away: 'Ajax', homeGoals: 4, awayGoals: 2, winner: 'Arsenal', mine: false,
+      home: 'Barcelona', away: 'Manchester United', homeGoals: 1, awayGoals: 2, winner: 'Manchester United', mine: false,
     });
-    expectReconciled(final.state, 125, 335);
+    expectReconciled(final.state, 125, 330);
     const goalsForClub = (state: CareerState, club: string) => state.uclScorers!.players
       .filter(row => row[2] === club).reduce((sum, row) => sum + row[3], 0);
-    expect(goalsForClub(final.state, 'Ajax') - goalsForClub(before, 'Ajax')).toBe(2);
+    expect(goalsForClub(final.state, 'Barcelona') - goalsForClub(before, 'Barcelona')).toBe(1);
+    expect(goalsForClub(final.state, 'Manchester United') - goalsForClub(before, 'Manchester United')).toBe(2);
     for (const [club, count, laterArrival] of [
-      ['Ajax', 19, 'Klaas-Jan Huntelaar'],
-      ['Rosenborg', 17, 'Steffen Iversen'],
-      ['Olympiacos', 14, 'Michał Żewłakow'],
-      ['Fenerbahçe', 13, 'Zafer Biryol'],
-      ['Benfica', 12, 'Fabrizio Miccoli'],
-      ['Rangers', 11, 'Kris Boyd'],
+      ['Ajax', 9, 'Klaas-Jan Huntelaar'],
+      ['Rosenborg', 9, 'Steffen Iversen'],
+      ['Olympiacos', 18, 'Michał Żewłakow'],
+      ['Fenerbahçe', 9, 'Zafer Biryol'],
+      ['Benfica', 9, 'Fabrizio Miccoli'],
+      ['Rangers', 10, 'Kris Boyd'],
       ['Rapid Vienna', 11, 'Mario Bazina'],
-      ['Club Brugge', 9, 'Javier Portillo'],
-      ['Sparta Prague', 9, 'Tomáš Poláček'],
-      ['Anderlecht', 8, 'Roland Juhász'],
-      ['Porto', 7, 'Marek Čech'],
-      ['Panathinaikos', 6, 'Sándor Torghelle'],
-      ['PSV', 4, 'Arouna Koné'],
-      ['Artmedia Bratislava', 6, 'Peter Petráš'],
-      ['Thun', 4, 'Grégory Duruz'],
+      ['Club Brugge', 12, 'Javier Portillo'],
+      ['Sparta Prague', 12, 'Tomáš Poláček'],
+      ['Anderlecht', 7, 'Roland Juhász'],
+      ['Porto', 6, 'Marek Čech'],
+      ['Panathinaikos', 4, 'Sándor Torghelle'],
+      ['PSV', 7, 'Arouna Koné'],
+      ['Artmedia Bratislava', 16, 'Peter Petráš'],
+      ['Thun', 10, 'Grégory Duruz'],
     ] as const) {
       expect(goalsForClub(final.state, club), club).toBe(count);
       const roster = HISTORIC_2005_CUP_ROSTERS.get(club)!;
@@ -454,18 +469,18 @@ describe('Owned Champions League scorer settlement', () => {
     expect(scorerNames).toEqual(expect.arrayContaining(['Dani García', 'Haruna Babangida']));
     expect(final.state.uclScorers?.players.some(row => row[1] === 'Barry Ferguson' && row[2] === 'Rangers')).toBe(true);
     expect(final.state.uclScorers?.unresolved).toBe(0);
-    expect(final.state.uclScorers?.ownGoals).toBe(12);
+    expect(final.state.uclScorers?.ownGoals).toBe(11);
     expect(championsLeagueScorerRace(final.state)).toMatchObject({
-      status: 'winner', leaders: [{ name: 'Fernando Morientes', club: 'Liverpool', goals: 7 }],
+      status: 'winner', leaders: [{ name: 'Ruud van Nistelrooy', club: 'Manchester United', goals: 9 }],
     });
     expect(JSON.stringify(reopened!.uclScorers)).toBe(snapshot);
   });
 
   it.each([
-    { name: 'Dani García', id: 'p-dani-garcia', from: 'Espanyol', cupClub: 'Olympiacos', position: 'ST', age: 30, rating: 68, value: 1.5, seed: MADRID, week: 3 },
+    { name: 'Dani García', id: 'p-dani-garcia', from: 'Espanyol', cupClub: 'Olympiacos', position: 'ST', age: 30, rating: 68, value: 1.5, seed: 116151, week: 3 },
     { name: 'Barry Ferguson', id: 'p-barry-ferguson', from: 'Blackburn Rovers', cupClub: 'Rangers', position: 'CDM', age: 26, rating: 76, value: 6.8, seed: MADRID, week: 3 },
     { name: 'Ivan Leko', id: 'p-ivan-leko', from: 'Málaga', cupClub: 'Club Brugge', position: 'CAM', age: 26, rating: 70, value: 2.3, seed: 116148, week: 7 },
-    { name: 'Igor Biscan', scorerName: 'Igor Bišćan', id: 'p-igor-biscan', from: 'Liverpool', cupClub: 'Panathinaikos', position: 'CDM', age: 26, rating: 73, value: 3.8, seed: MADRID, week: 3 },
+    { name: 'Igor Biscan', scorerName: 'Igor Bišćan', id: 'p-igor-biscan', from: 'Liverpool', cupClub: 'Panathinaikos', position: 'CDM', age: 26, rating: 73, value: 3.8, seed: 116151, week: 3 },
   ] as const)('respects a 2005 save that already moved $name to another club', async (fixture) => {
     const { name, id, from, cupClub, position, age, rating, value, seed, week } = fixture;
     const scorerName = 'scorerName' in fixture ? fixture.scorerName : name;
@@ -474,8 +489,10 @@ describe('Owned Champions League scorer settlement', () => {
     const samePosition = madrid.squad.find(player => player.position === position)!;
     const player = { ...samePosition, id, name, position, age, rating, value };
     const pending = playTo(madrid, seed, week).state;
-    const hasCredit = (state: CareerState) => state.uclScorers?.players.some(row => row[1] === scorerName && row[2] === cupClub);
+    const hasCredit = (state: CareerState) => state.uclScorers?.players
+      .some(row => row[1] === scorerName && row[2] === cupClub) ?? false;
     const available = next(pending, seed).value.state;
+    expect(hasCredit(pending)).toBe(false);
     expect(hasCredit(available)).toBe(true);
 
     const legacy = recordWorldRosterTransfer(pending, {
@@ -489,6 +506,14 @@ describe('Owned Champions League scorer settlement', () => {
     expect(replayed.pairResults?.[UCL_GROUP_LEDGER]).toEqual(available.pairResults?.[UCL_GROUP_LEDGER]);
     expect(hasCredit(replayed)).toBe(false);
     expect(replayed.uclScorers?.players.some(row => row[1] === name && row[2] === cupClub)).toBe(false);
+    const scores = Object.values(available.pairResults?.[UCL_GROUP_LEDGER] ?? {});
+    const total = scores.reduce((sum, [home, away]) => sum + home + away, 0);
+    expect(scores.length).toBeGreaterThan(0);
+    expectReconciled(available, scores.length, total);
+    expectReconciled(replayed, scores.length, total);
+    const restored = loadCareer(serializeParkedCareer(replayed))!;
+    expect(restored.uclScorers).toEqual(replayed.uclScorers);
+    expect(worldRosterOwner(restored, key)).toBe('Sevilla');
   });
 
   it('keeps a decisive award in the review and past season after normal rollover', () => {

@@ -111,7 +111,7 @@ export interface NbaSeasonLine {
   apg: number;
   /** Round 103: what you did once the regular season ended. */
   poGames?: number; poPpg?: number; poRpg?: number; poApg?: number;
-  poMpg?: number;
+  poMpg?: number; poSpg?: number; poBpg?: number;
   awards: string[];
   teamResult: string;
   salary: number;
@@ -932,9 +932,11 @@ export function simNbaSeason(
     line.poPpg = po.ppg;
     line.poRpg = po.rpg;
     line.poApg = po.apg;
+    line.poMpg = po.mpg;
+    line.poSpg = po.spg;
+    line.poBpg = po.bpg;
     if (playoffMinutes && po.extraMpg) {
       playoffMinutes.nbaExtraPlayoffMinutes = po.extraMpg;
-      line.poMpg = po.mpg;
       notes.push(`🏀 Extra playoff minutes: +${po.extraMpg.toFixed(1)} minutes per game, costing ${NBA_PLAYOFF_HEALTH_COST} health after the season.`);
     }
     notes.push(`📊 Playoffs: ${poG} games, ${po.ppg.toFixed(1)} ppg, ${po.rpg.toFixed(1)} rpg, ${po.apg.toFixed(1)} apg.`);

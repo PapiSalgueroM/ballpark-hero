@@ -82,6 +82,28 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); localStorage.clear(); });
 
 describe('Loan plan through the actual transfer screen and saved hook', () => {
+  it('previews a straight loan, preserves the incoming bid terms and reloads the signed deal', async () => {
+    const c = fixture(), p = eligible(c);
+    c.incomingBids = [{ playerId: p.id, playerName: p.name, club: 'Ajax', offer: 5.5, status: 'open', loan: true }];
+    const view = await mountCareer(c); await openPlan();
+    const toggle = screen.getByRole('checkbox', { name: /Straight loan/ });
+    fireEvent.click(toggle); selectStandard(p.id);
+    expect(screen.getByTestId('loan-plan-preview')).toHaveTextContent('No purchase option.');
+    fireEvent.click(screen.getByRole('button', { name: 'Use current loan offer' }));
+    expect(toggle).not.toBeChecked();
+    expect(screen.getByTestId('loan-plan-preview')).toHaveTextContent(/Purchase option/);
+    fireEvent.click(toggle);
+    expect(screen.queryByTestId('loan-plan-preview')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Preview terms' })); confirm();
+    await waitFor(() => expect(planOf(api.career!)).toBeTruthy());
+    expect(api.career!.loanedOut![0].optionFee).toBeUndefined();
+    expect(api.career!.loanedOut![0].fee).toBe(loanOutFee(p, 'straight'));
+    view.unmount();
+    render(<Harness />);
+    await waitFor(() => expect(api.phase).toBe('resume')); act(() => api.resume()); await openPlan();
+    expect(screen.getByTestId('loan-plan-active')).toHaveTextContent('No purchase option.');
+  });
+
   it('keeps a default explicit-host loan free of plan metadata and additional random draws', () => {
     const c = fixture(), p = eligible(c);
     const run = () => {

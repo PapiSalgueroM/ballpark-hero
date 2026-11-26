@@ -1,5 +1,6 @@
 import { FlagImg } from '@/components/FlagImg';
-import { useState, useEffect, useCallback, useRef, KeyboardEvent } from 'react';
+import { lazy, Suspense, useState, useEffect, useCallback, useRef, KeyboardEvent } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 import { Loader2, Play, RotateCcw, SkipForward } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
@@ -49,7 +50,9 @@ function loadBest(): BestMap {
   }
 }
 
-const AlphabetSprint = () => {
+const FinalsSprintPreview = lazy(() => import('@/components/game/FinalsSprintPreview'));
+
+const ClassicSprint = () => {
   const [phase, setPhase] = useState<Phase>('boot');
   const [pool, setPool] = useState<SprintPlayer[]>([]);
   const [playable, setPlayable] = useState<Set<string>>(() => new Set<string>());
@@ -424,6 +427,13 @@ const AlphabetSprint = () => {
           </div>
         )}
 
+        {(phase === 'idle' || phase === 'error') && (
+          <Link to="/alphabet-sprint?preview=finals" data-no-prerender=""
+            className="mt-4 flex min-h-11 items-center justify-center rounded-xl border border-border px-3 py-2 text-sm font-semibold text-foreground hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+            Try the Finals Sprint preview
+          </Link>
+        )}
+
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
 
 
@@ -451,4 +461,12 @@ const AlphabetSprint = () => {
   );
 };
 
-export default AlphabetSprint;
+export default function AlphabetSprint() {
+  const [params] = useSearchParams();
+  if (params.get('preview') !== 'finals') return <ClassicSprint />;
+  return (
+    <Suspense fallback={<main id="dukb-main" className="min-h-screen bg-background px-4 py-6"><p role="status">Loading Finals Sprint preview…</p></main>}>
+      <FinalsSprintPreview />
+    </Suspense>
+  );
+}

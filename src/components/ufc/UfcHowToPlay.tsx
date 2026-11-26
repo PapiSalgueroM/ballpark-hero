@@ -13,13 +13,14 @@ interface UfcHowToPlayProps {
 export function UfcHowToPlay({ open, onOpenChange }: UfcHowToPlayProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-h-[85dvh] max-w-md overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-2xl font-display">How to Play 🥊</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 text-sm text-muted-foreground">
           <p>Guess the mystery UFC fighter in <strong className="text-foreground">8 tries</strong>.</p>
-          <p>Every guess colors in clues about the fighter you're chasing:</p>
+          <p>Each guess reveals nine clues. Higher and Lower describe the mystery fighter. For example, 12 wins with Higher means the answer has more than 12 wins.</p>
+          <p>In a Division run, all three mystery fighters come from the weight class you choose. A fighter's division comes from their last UFC bout in the game's records. Every guess costs one of your eight tries. Finding a fighter opens the next round with a fresh clue board.</p>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <div className="w-5 h-5 rounded bg-correct" />

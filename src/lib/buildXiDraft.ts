@@ -3,6 +3,7 @@ import { ALL_POSITIONS, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionFit';
 import { safeLocalStorage } from '@/lib/safeStorage';
 import { normalizePosition } from '@/lib/squadShape';
 import type { Position } from '@/types/game';
+import type { WorldXiSeasonApproach } from '@/lib/worldXi';
 import { FORMATIONS, lastRecordedYear } from '@/types/lineupBuilder';
 import type { DraftChoice, FilledSlot, Formation, PickMeta, RecordedClubDraft, TeamAssignment } from '@/types/lineupBuilder';
 
@@ -13,6 +14,7 @@ type Draft = {
   draftChoice: DraftChoice;
   teamAssignments: TeamAssignment[];
   slots: [number, FilledSlot][];
+  seasonApproach?: WorldXiSeasonApproach;
 };
 
 function record(value: unknown): value is Record<string, unknown> {
@@ -58,7 +60,7 @@ export function recordedPickVerifies(team: TeamAssignment, role: Position, pick:
     && clubPickVerifies(team, role, pick);
 }
 
-function readDraft(value: unknown): Draft | null {
+export function readBuildXiPicks(value: unknown): Draft | null {
   if (!record(value) || typeof value.formation !== 'string' || !Object.prototype.hasOwnProperty.call(FORMATIONS, value.formation)
     || !isDraftChoice(value.draftChoice) || !Array.isArray(value.teamAssignments) || !Array.isArray(value.slots)) return null;
   const formation = value.formation as Formation;
@@ -92,20 +94,16 @@ function readDraft(value: unknown): Draft | null {
   if (new Set(slots.map(([index]) => index)).size !== slots.length) return null;
   if (draftChoice.mode !== 'mixed' && slots.some(([, slot], pickIndex) =>
     !recordedPickVerifies(assignments[pickIndex], slot.role, slot.pick, draftChoice))) return null;
-  return { formation, draftChoice, teamAssignments: assignments, slots };
+  const approach = value.seasonApproach;
+  return { formation, draftChoice, teamAssignments: assignments, slots, ...(approach === 'protect' || approach === 'attack' ? { seasonApproach: approach } : {}) };
 }
 
 export function readBuildXiDraft(raw: string | null): Draft | null {
   try {
-    return raw ? readDraft(JSON.parse(raw)) : null;
+    return raw ? readBuildXiPicks(JSON.parse(raw)) : null;
   } catch {
     return null;
   }
-}
-
-export function loadBuildXiDraft(): { raw: string | null; draft: Draft | null } {
-  const raw = safeLocalStorage.getItem(BUILD_XI_DRAFT_KEY);
-  return { raw, draft: readBuildXiDraft(raw) };
 }
 
 export function isCurrentBuildXiDraft(previous: string | null): boolean {

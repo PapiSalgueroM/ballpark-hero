@@ -13,9 +13,9 @@ import {
   FactoryState, FacilityId, SAVE_KEY,
   newFactory, deserialize, serialize, applyOffline, advanceClock,
   buyFacility, salePrice, sellProspect, startShowcase, moveUp, setCoachingFocus,
-  bedFree, deliverPack, makeProspectInBand, promote, sellSenior, equipBoot,
+  bedFree, deliverPack, makeProspectInBand, promote, sellSenior, equipBoot, updateDevelopmentTarget,
 } from '@/lib/wonderkidFactory';
-import type { PackId } from '@/lib/wonderkidFactory';
+import type { DevelopmentTargetAction, PackId } from '@/lib/wonderkidFactory';
 import { commitOpenPack, clearPendingPack, loadLedger, commitUpgradeBoot } from '@/lib/tycoonRewards';
 import { recordCompletion } from '@/lib/completions';
 import { backupKeysOf, copyAside, dismissBackup, routeSaveEntry } from '@/lib/brokenSaveRecovery';
@@ -315,6 +315,13 @@ export function useWonderkidFactory() {
     if (setCoachingFocus(next, id) && commitAcademy(next)) markSessionPlay();
   }, [actionsBlocked, commitAcademy, markSessionPlay]);
 
+  const doDevelopmentTarget = useCallback((action: DevelopmentTargetAction) => {
+    if (actionsBlocked()) return;
+    const before = stateRef.current!;
+    const next = updateDevelopmentTarget(before, action);
+    if (next !== before) commitAcademy(next);
+  }, [actionsBlocked, commitAcademy]);
+
   const doMoveUp = useCallback(() => {
     if (actionsBlocked()) return;
     const next = copyAcademy(stateRef.current!);
@@ -407,6 +414,7 @@ export function useWonderkidFactory() {
     floaters,
     doBuy,
     doSetCoachingFocus,
+    doDevelopmentTarget,
     doSell,
     doShowcase,
     doMoveUp,

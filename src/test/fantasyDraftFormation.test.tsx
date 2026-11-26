@@ -131,6 +131,32 @@ afterEach(() => {
 describe('Fantasy Draft unfinished receipt', () => {
   const key = () => `fantasy-draft-in-progress-${getTodayET()}`;
 
+  it('prices both snake orders without picking, then commits and resumes the chosen player once', async () => {
+    remote.criteria = 'Under 25s: Every player must be 25 or younger';
+    const view = await openDraft();
+    const rolls = vi.mocked(Math.random).mock.calls.length;
+    fireEvent.click(view.getByRole('button', { name: 'Plan two picks' }));
+    fireEvent.change(view.getByLabelText('First pick'), { target: { value: 'fixture-DEF-0' } });
+    fireEvent.change(view.getByLabelText('Next target'), { target: { value: 'fixture-FWD-0' } });
+    expect(view.getByLabelText('Draft forecast')).toHaveTextContent('69%');
+    fireEvent.click(view.getByRole('button', { name: 'Reverse order' }));
+    expect(view.getByLabelText('Draft forecast')).toHaveTextContent('100%');
+    expect(localStorage.getItem(key())).toBeNull();
+    expect(vi.mocked(Math.random).mock.calls.length).toBe(rolls);
+    fireEvent.click(view.getByRole('button', { name: 'Draft Fixture FWD 00' }));
+    expect(JSON.parse(localStorage.getItem(key())!).picks).toEqual(['fixture-FWD-0']);
+    view.unmount();
+    const again = render(<FantasyDraft />);
+    fireEvent.click(again.getByRole('button', { name: 'Resume Draft' }));
+    await act(async () => {});
+    await userTurn(again);
+    expect(roster(again, 'Your XI').map(p => p.id)).toEqual(['fixture-FWD-0']);
+    expect(roster(again, 'AI XI').map(p => p.id)).toEqual(['fixture-FWD-1', 'fixture-FWD-2']);
+    fireEvent.click(again.getByRole('button', { name: 'Plan two picks' }));
+    expect(again.getByLabelText('Draft forecast')).toHaveTextContent('You pick again immediately.');
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
   it('restores the original rule, snake order and both sides mid-AI, then settles once', async () => {
     const rule = 'Under 25s: Every player must be 25 or younger';
     remote.criteria = rule;

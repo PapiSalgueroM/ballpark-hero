@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   SOCCER_PS_GAMES, SOCCER_PS_MAX_REROLLS, SOCCER_PS_SLOTS,
-  applySoccerAction, createSoccerRun, deriveSoccerRun, restoreSoccerRun, scoreSoccerMatches,
+  applySoccerAction, createSoccerRun, deriveSoccerRun, previewSoccerSwap, restoreSoccerRun, scoreSoccerMatches,
   type SoccerPSRun,
 } from '@/lib/soccerPerfectSeason';
 
@@ -16,6 +16,43 @@ function draftPicks(run: SoccerPSRun, choose: 'best' | 'worst', count: number = 
   }
   return next;
 }
+
+describe('finished XI comparisons', () => {
+  it.each([
+    { initial: createSoccerRun('daily', '2026-11-03'), reroll: true },
+    { initial: createSoccerRun('unlimited', null, 78), reroll: true },
+    { initial: createSoccerRun('unlimited', null, 78, true), reroll: false },
+  ])('replays an eligible $initial.mode alternative on the same 38 matchdays with reroll $reroll', ({ initial, reroll }) => {
+    let prefix = draftPicks(initial, 'best', 3);
+    if (reroll) prefix = applySoccerAction(prefix, { type: 'reroll' })!;
+    const draft = draftPicks(prefix, 'best', 8);
+    const done = { ...draft, revealed: SOCCER_PS_GAMES, completionRecorded: true };
+    const saved = JSON.stringify(done);
+    const view = deriveSoccerRun(done);
+    const different = view.swaps.find(swap => previewSoccerSwap(done, swap)!.points < view.record.points)!;
+    expect(different).toBeTruthy();
+    const pick = view.picks[different.slot]!;
+    expect(previewSoccerSwap(draft, different)).toBeNull();
+    expect(previewSoccerSwap({ ...done, completionRecorded: false }, different)).toBeNull();
+    expect(previewSoccerSwap(done, { slot: different.slot, playerId: 'unknown' })).toBeNull();
+    expect(previewSoccerSwap(done, { slot: different.slot, playerId: pick.playerId })).toBeNull();
+    let other = initial;
+    for (const action of done.actions) {
+      if (action.type === 'pick' && action.slot === different.slot) {
+        expect(deriveSoccerRun(other).offers.some(card => card.playerId === different.playerId && card.eligible.includes(action.slot))).toBe(true);
+        other = applySoccerAction(other, { type: 'pick', slot: action.slot, playerId: different.playerId })!;
+      } else other = applySoccerAction(other, action)!;
+    }
+    const expected = deriveSoccerRun({ ...other, revealed: SOCCER_PS_GAMES }).season!;
+    const preview = previewSoccerSwap(done, different)!;
+    expect(preview).toEqual(expected);
+    expect(preview.games).toHaveLength(38);
+    expect(preview.games).not.toEqual(view.season!.games);
+    expect(preview.points).toBeLessThan(view.record.points);
+    expect(JSON.stringify(done)).toBe(saved);
+    expect(deriveSoccerRun(restoreSoccerRun(saved)!).season).toEqual(view.season);
+  });
+});
 
 function finishDraft(run: SoccerPSRun, choose: 'best' | 'worst') {
   return deriveSoccerRun(draftPicks(run, choose));
@@ -32,6 +69,22 @@ function playFinalClub(run: SoccerPSRun, reroll: boolean) {
 }
 
 describe('Soccer Perfect Season', () => {
+  it('keeps practice on its opening clubs, saves the restriction and counts only revealed streaks', () => {
+    const normal = createSoccerRun('unlimited', null, 78);
+    const practice = createSoccerRun('unlimited', null, 78, true);
+    expect(deriveSoccerRun(practice).clubOrder).toEqual(deriveSoccerRun(normal).clubOrder);
+    expect(deriveSoccerRun(practice).rerollsLeft).toBe(0);
+    expect(applySoccerAction(practice, { type: 'reroll' })).toBeNull();
+    const rerolled = applySoccerAction(normal, { type: 'reroll' })!;
+    expect(restoreSoccerRun({ ...rerolled, noRerolls: true })).toBeNull();
+    expect(restoreSoccerRun({ ...createSoccerRun('daily', '2026-11-12'), noRerolls: true })).toBeNull();
+    const partial = { ...draftPicks(practice, 'best'), revealed: 3 };
+    const restored = restoreSoccerRun(JSON.stringify(partial))!;
+    expect(restored.noRerolls).toBe(true);
+    expect(deriveSoccerRun(restored).record).toMatchObject({ longestWinRun: 3, longestUnbeatenRun: 3 });
+    expect(scoreSoccerMatches(['W', 'W', 'D', 'W', 'L', 'D'])).toMatchObject({ longestWinRun: 2, longestUnbeatenRun: 4 });
+  });
+
   it('freezes a Daily club order across reloads and keeps Unlimited independent', () => {
     const daily = createSoccerRun('daily', '2026-11-12');
     const sequence = deriveSoccerRun(daily).clubOrder;

@@ -148,7 +148,7 @@ function installTransport() {
     return hold(kind, name, init?.signal ?? undefined);
   }));
 }
-function field() { return screen.getByRole('combobox') as HTMLInputElement; }
+function field() { return screen.getByRole('combobox', { name: /search/i }) as HTMLInputElement; }
 async function chooseSlot() { fireEvent.click(screen.getAllByRole('button', { name: /^ST$/ })[0]); await flush(); }
 async function type(value: string) { fireEvent.change(field(), { target: { value } }); await advance(210); }
 async function pick(name: string) {

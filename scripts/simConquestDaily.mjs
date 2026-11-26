@@ -214,6 +214,7 @@ const canon = run => JSON.stringify({
   favorite: run.favorite, owners: run.owners, records: run.records, round: run.round,
   bracket: run.bracket, pairings: run.pairings, champion: run.champion,
   madePlayoffs: run.madePlayoffs, picks: run.picks, hits: run.hits, phase: run.phase,
+  lastCall: run.lastCall,
   lastRound: run.lastRound && { round: run.lastRound.round, label: run.lastRound.label, headlines: run.lastRound.headlines, games: run.lastRound.games },
 });
 
@@ -233,8 +234,16 @@ const played = new Map();
     for (let i = 0; i < live.snaps.length; i++) {
       const restored = restoreInto(live.snaps[i].store, sport);
       if (!restored) { differed.push(`round ${i + 1}: nothing restored`); continue; }
-      if (canon(restored.run) === canon(live.snaps[i].run)) same += 1;
+      const expected = live.snaps[i].run;
+      if (canon(restored.run) === canon(expected)) same += 1;
       else differed.push(`round ${i + 1}: the restored run is not the live one`);
+      const matchup = runlib.featuredPairing(sport, { ...expected, owners: expected.history[i] });
+      const winner = runlib.featuredResult(expected, matchup)?.winner;
+      const pick = expected.picks[i];
+      const points = pick === winner ? eng.POINTS_PER_CALL : 0;
+      if (restored.run.lastCall?.pick !== pick || restored.run.lastCall?.winner !== winner || restored.run.lastCall?.points !== points) {
+        differed.push(`round ${i + 1}: call receipt does not match the played match`);
+      }
     }
     console.log(`   ${sport.key}: ${live.snaps.length} settled rounds, ${same} restored identical, ${live.run.hits}/${live.run.picks.length} called, champion ${live.run.champion}, score ${live.result.score}`);
     for (const d of differed.slice(0, 3)) fail(`${sport.key} ${d}`);

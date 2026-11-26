@@ -7,7 +7,7 @@ import { formatNumber } from '@/lib/formatNumber';
 const finite = (value: unknown): value is number => typeof value === 'number' && Number.isFinite(value);
 const recorded = (value: unknown) => finite(value) ? String(value) : 'Not recorded';
 const control = 'min-h-[44px] min-w-0 rounded-xl border border-border bg-card px-3 py-2 text-sm font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary';
-const tabs = ['Overview', 'Regular season'] as const;
+const tabs = ['Overview', 'Regular season', 'Postseason'] as const;
 
 function delta(first: CareerReviewStat, second: CareerReviewStat, money: boolean) {
   const a = first.numeric?.raw, b = second.numeric?.raw;
@@ -34,7 +34,13 @@ export default function CareerSeasonComparison({ career, sport, onBack }: {
     { label: 'Age that season', value: recorded(season.age), numeric: { raw: season.age } },
     { label: 'Season salary', value: finite(season.salary) ? `$${formatNumber(season.salary)}M` : 'Not recorded', numeric: { raw: season.salary } },
   ]);
-  const sides = tab === 'Overview' ? overview : details.map(detail => detail.regularValues.filter(stat => stat.numeric));
+  const sides: CareerReviewStat[][] = details.map((detail, index) => {
+    if (tab === 'Overview') return overview[index];
+    if (tab === 'Regular season') return detail.regularValues.filter(stat => stat.numeric);
+    const outcome = detail.postseason.find(stat => stat.label === 'Postseason')?.value || seasons[index].teamResult;
+    const rows = detail.postseason.filter(stat => stat.label !== 'Postseason' && stat.value !== 'Not recorded');
+    return outcome ? [{ label: 'Outcome', value: outcome }, ...rows] : rows;
+  });
   const labels = [...new Set(sides.flat().map(stat => stat.label))];
   const choices = career.seasons.map((season, index) => ({ season, index })).reverse();
   const suspended = tab === 'Regular season' && seasons.some(season => season.teamResult === 'SUSPENDED');
@@ -53,7 +59,7 @@ export default function CareerSeasonComparison({ career, sport, onBack }: {
         <span className="block break-words font-normal text-muted-foreground">{career.seasons[value].team ? sport.teamLabelOf(career.seasons[value].team, career.eraId) : 'Team not recorded'}</span>
       </label>)}
     </div>
-    <div role="group" aria-label="Comparison details" className="grid grid-cols-2 gap-2">
+    <div role="group" aria-label="Comparison details" className="grid grid-cols-3 gap-1">
       {tabs.map(value => <button key={value} data-season-compare-tab={value} aria-pressed={tab === value} onClick={() => setTab(value)}
         className={cn(control, tab === value && 'border-primary bg-primary text-primary-foreground')}>{value}</button>)}
     </div>
@@ -61,18 +67,19 @@ export default function CareerSeasonComparison({ career, sport, onBack }: {
       <div className="grid grid-cols-3 gap-2 pb-2 text-center text-xs text-muted-foreground"><span>First season</span><span>Second season</span><span>Change</span></div>
       <dl className="space-y-1">
         {labels.map(label => {
-          const stats = sides.map(side => side.find(stat => stat.label === label) ?? { label, value: 'Not recorded' });
+          const stats: CareerReviewStat[] = sides.map(side => side.find(stat => stat.label === label) ?? { label, value: 'Not recorded' });
+          const textual = tab === 'Postseason' && !stats.some(stat => stat.numeric);
           return <div key={label} data-season-compare-stat={label} className="rounded-xl bg-secondary/50 px-2 py-1">
             <dt className="mb-1 text-xs text-muted-foreground">{label}</dt>
             <div className="grid grid-cols-3 gap-2 text-center text-sm font-semibold tabular-nums">
               <dd data-compare-first="" className="min-w-0 break-words">{tab === 'Regular season' && seasons[0].teamResult === 'SUSPENDED' ? 'Not played' : stats[0].value}</dd>
               <dd data-compare-second="" className="min-w-0 break-words">{tab === 'Regular season' && seasons[1].teamResult === 'SUSPENDED' ? 'Not played' : stats[1].value}</dd>
-              <dd data-compare-delta="" className="min-w-0 break-words">{suspended ? 'Not played' : delta(stats[0], stats[1], label === 'Season salary')}</dd>
+              <dd data-compare-delta="" className="min-w-0 break-words">{suspended ? 'Not played' : textual ? 'Not applicable' : delta(stats[0], stats[1], label === 'Season salary')}</dd>
             </div>
           </div>;
         })}
       </dl>
-      {labels.length === 0 && <p className="text-sm text-muted-foreground">No recorded numbers to compare for this position.</p>}
+      {labels.length === 0 && <p className="text-sm text-muted-foreground">{tab === 'Postseason' ? 'No postseason details were recorded for either season.' : 'No recorded numbers to compare for this position.'}</p>}
     </div>
   </section>;
 }
