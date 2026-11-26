@@ -30,6 +30,15 @@ function promptFor(sport: PilotSport, year: number) {
   switch (sport) {
     case 'soccer': return `Name either country in the ${year} men's World Cup final.`;
     case 'nba': return `Name either team in the ${year} NBA Finals.`;
+    case 'afl': {
+      const competition = year < 1990 ? 'VFL' : 'AFL';
+      const event = year === 1977 || year === 2010 ? 'Grand Final replay' : 'Grand Final';
+      return `Name either club in the ${year} ${competition} ${event}.`;
+    }
+    case 'nrl': {
+      const competition = year === 1981 ? 'NSWRFL' : year < 1995 ? 'NSWRL' : year < 1998 ? 'ARL' : 'NRL';
+      return `Name either club in the ${year} ${competition} Grand Final.`;
+    }
     case 'mlb': return `Name either team in the ${year} World Series.`;
     case 'nhl': return `Name either team in the ${year} Stanley Cup Final.`;
     case 'nfl': return `Name either team in the Super Bowl played in ${year}.`;

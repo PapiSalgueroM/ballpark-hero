@@ -1,3 +1,9 @@
+### November 26, 2026. Australian Grand Finals in Finals Sprint
+
+The opt-in AFL and NRL packs each cover 12 Grand Finals. The clues use the competition and club names from each year, including the 1977 VFL and 2010 AFL replays, Footscray in 1954 and the ARL final in the split 1997 rugby league season. Club names and deciding scores were checked against the [AFL](https://www.afl.com.au/stats/premiership-winners), [MCG](https://www.mcg.org.au/about/history/australian-football/vflafl-grand-final-results), [NRL](https://www.nrl.com/operations/the-game/premiership-winners/) and [Rugby League Project](https://www.rugbyleagueproject.org/competitions/nrl/finals.html) archives.
+
+Across 366 daily dates, AFL produced 82 distinct sets of six years and NRL produced 151. Both sports completed and restored all 366 rounds. On phone and laptop, both saved six answers and 100 points through reload, then switched to a fresh practice game. All 69 focused tests and 14 signed-out browser journeys passed. The five earlier sports kept their saved editions.
+
 ### November 26, 2026. Stadium Tycoon junior matchdays
 
 At a 120-seat ground, a manager can spend $12 to reserve 12 places for juniors at the next bookable home league fixture. Season pass holders keep their seats. Juniors buy no tickets, count toward concessions, programmes and sponsor attendance targets, and three become regular supporters after the match. In signed-out Chrome the phone booking raised attendance from 40 to 52. The laptop stayed at 120 and displaced 12 paying walk-ups. Both receipts survived the season change and reload. All 48 focused checks and the Stadium Tycoon simulation passed. Across 15 earlier saves, skipping the offer reproduced every one of 8,100 original clock ticks.

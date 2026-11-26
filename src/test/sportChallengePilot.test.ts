@@ -135,17 +135,46 @@ it.each([
   ['nba', ['2014','2009','2022','2019','2004','2023'], 'Miami Heat', 15],
   ['nfl', ['2010','2021','1993','2001','2022','2008'], 'Indianapolis Colts', 15],
   ['nhl', ['1994','2003','1991','2006','2024','2019'], 'Vancouver Canucks', 20],
-] as const)('reopens a frozen %s daily from before the World Series pack with an answer and a defer', (sport, order, answerId, points) => {
+  ['mlb', ['2021','2002','2016','2004','1979','1969'], 'Houston Astros', 10],
+] as const)('reopens a frozen %s daily from before the Australian packs with an answer and a defer', (sport, order, answerId, points) => {
   const saved = {version: 1, sport, mode: 'daily', day: '2026-11-26', startedAt: start,
     deadline: start + 60000, order, answers: [{promptId: order[0], answerId, points}],
     deferred: true, deferredAt: 1, completed: false};
   expect(readPilotRun(JSON.stringify(saved), sport, 'daily', start + 12000)).toEqual(saved);
   expect(pilotStorageKey(sport, 'daily')).toBe(`dukb-finals-v1-${sport}-daily`);
 });
-it.each(['nhl', 'mlb'] as const)('deals three weeks of distinct %s question sets even before clue order is considered', sport => {
+it.each(['nhl', 'mlb', 'afl', 'nrl'] as const)('deals three weeks of distinct %s question sets even before clue order is considered', sport => {
   const sets = Array.from({length: 21}, (_, i) => createPilotRun(sport, 'daily', start + i * day).order.slice().sort().join('/'));
   expect(new Set(sets).size).toBe(21);
 });
+function findOpening(sport: PilotSport, id: string): PilotRun {
+  for (let i = 0; i < 1000; i++) {
+    const candidate = createPilotRun(sport, 'practice', start + i);
+    if (candidate.order[0] === id) return candidate;
+  }
+  throw Error('No opening clue for ' + id);
+}
+
+it.each([
+  ['afl', '1954', 'VFL Grand Final', 'Footscray Bulldogs', 'Footscray', ['Western Bulldogs', 'North Melbourne']],
+  ['afl', '1977', 'VFL Grand Final replay', 'Kangaroos', 'North Melbourne', ['Melbourne', 'St Kilda']],
+  ['afl', '1989', 'VFL Grand Final', 'Cats', 'Geelong', ['Crows']],
+  ['afl', '2010', 'AFL Grand Final replay', 'Saints', 'St Kilda', ['North Melbourne']],
+  ['afl', '2004', 'AFL Grand Final', 'Power', 'Port Adelaide', ['Adelaide', 'Adelaide Crows']],
+  ['afl', '2019', 'AFL Grand Final', 'Greater Western Sydney', 'GWS Giants', ['Sydney Swans']],
+  ['nrl', '1981', 'NSWRFL Grand Final', 'Jets', 'Newtown Jets', ['Newcastle Knights']],
+  ['nrl', '1989', 'NSWRL Grand Final', 'Balmain', 'Balmain Tigers', ['Wests Tigers']],
+  ['nrl', '1993', 'NSWRL Grand Final', 'St. George', 'St George Dragons', ['St George Illawarra Dragons']],
+  ['nrl', '1997', 'ARL Grand Final', 'Sea Eagles', 'Manly-Warringah Sea Eagles', ['Brisbane Broncos', 'Cronulla-Sutherland Sharks']],
+  ['nrl', '1999', 'NRL Grand Final', 'St George Illawarra', 'St George Illawarra Dragons', ['St George Dragons']],
+  ['nrl', '2005', 'NRL Grand Final', 'Wests', 'Wests Tigers', ['Balmain Tigers']],
+] as const)('uses the %s competition and club from %s for %s', (sport, id, event, alias, expected, reject) => {
+  const run = findOpening(sport, id);
+  expect(currentPilotPrompt(run)!.text).toBe(`Name either club in the ${id} ${event}.`);
+  for (const wrong of reject) expect(play(run, wrong)).toBe(run);
+  expect(play(run, alias).answers[0].answerId).toBe(expected);
+});
+
 it.each([
   ['nhl', '1967', 'Maple Leafs', 'Toronto Maple Leafs', ['Toronto Maple', 'Maple']],
   ['nhl', '1967', 'Habs', 'Montreal Canadiens', ['Canadians']],
@@ -162,12 +191,7 @@ it.each([
   ['mlb', '2016', 'Cleveland', 'Cleveland Indians', ['Cleveland Guardians', 'Chicago']],
   ['mlb', '2023', 'D-backs', 'Arizona Diamondbacks', ['Arizona Cardinals']],
 ] as const)('accepts the historical %s club for %s from %s', (sport, id, alias, expected, invalid) => {
-  let run: PilotRun | undefined;
-  for (let i = 0; i < 1000; i++) {
-    const candidate = createPilotRun(sport, 'practice', start + i);
-    if (candidate.order[0] === id) { run = candidate; break; }
-  }
-  if (!run) throw Error('No opening clue for ' + id);
+  const run = findOpening(sport, id);
   expect(currentPilotPrompt(run)!.text).toBe(`Name either team in the ${id} ${sport === 'nhl' ? 'Stanley Cup Final' : 'World Series'}.`);
   for (const wrong of invalid) expect(play(run, wrong)).toBe(run);
   expect(play(run, alias).answers[0].answerId).toBe(expected);

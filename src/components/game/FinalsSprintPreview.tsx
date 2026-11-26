@@ -14,8 +14,13 @@ import {
 
 import { pilotSports } from '@/data/sportChallengePilot';
 
-const SPORTS = { soccer: 'Soccer', nba: 'NBA', nfl: 'NFL', nhl: 'NHL', mlb: 'MLB' } as const;
+const SPORTS = { soccer: 'Soccer', nba: 'NBA', nfl: 'NFL', nhl: 'NHL', mlb: 'MLB', afl: 'AFL', nrl: 'NRL' } as const;
 const MODES = { daily: 'Daily preview', practice: 'Practice' } as const;
+const SPORT_RULES: Partial<Record<PilotSport, string>> = {
+  mlb: 'Use the team name from that year. A nickname like D-backs counts.',
+  afl: 'Older clues use the VFL name. A replay is the match that decided a drawn Grand Final.',
+  nrl: 'Use the competition named in the clue. The ARL and Super League held separate Grand Finals in 1997.',
+};
 const RULES = [
   'Type one finalist for each of six clues. A team can only count once.',
   'You have 60 seconds. Defer sends one clue to the end of the round.',
@@ -71,7 +76,8 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
   const prompt = run && !run.completed ? currentPilotPrompt(run) : undefined;
   const revealResult = useRevealScroll(run?.completed);
   const score = run ? pilotScore(run) : 0;
-  const rules = sport === 'mlb' ? [...RULES, 'Use the team name from that year. A nickname like D-backs counts.'] : RULES;
+  const extra = SPORT_RULES[sport];
+  const rules = extra ? [...RULES, extra] : RULES;
 
   const change = useCallback((action: RoundAction) => {
     withRoundLock(storageKey, () => {

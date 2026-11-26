@@ -1,4 +1,4 @@
-export const pilotSports = ['soccer', 'nba', 'nfl', 'nhl', 'mlb'] as const;
+export const pilotSports = ['soccer', 'nba', 'nfl', 'nhl', 'mlb', 'afl', 'nrl'] as const;
 export type PilotSport = typeof pilotSports[number];
 
 // The two names are the actual finalists, including the losing finalist.
@@ -77,18 +77,52 @@ export const finals: Record<PilotSport, readonly Final[]> = {
     [1979, 20, 'Pittsburgh Pirates', 'Baltimore Orioles'],
     [1984, 20, 'Detroit Tigers', 'San Diego Padres'],
   ],
+  afl: [
+    [2018, 10, 'West Coast Eagles', 'Collingwood'],
+    [2019, 10, 'Richmond', 'GWS Giants'],
+    [2022, 10, 'Geelong', 'Sydney Swans'],
+    [2023, 10, 'Collingwood', 'Brisbane Lions'],
+    [1997, 15, 'Adelaide', 'St Kilda'],
+    [2004, 15, 'Port Adelaide', 'Brisbane Lions'],
+    [2005, 15, 'Sydney Swans', 'West Coast Eagles'],
+    [2010, 15, 'Collingwood', 'St Kilda'],
+    [1954, 20, 'Footscray', 'Melbourne'],
+    [1968, 20, 'Carlton', 'Essendon'],
+    [1977, 20, 'North Melbourne', 'Collingwood'],
+    [1989, 20, 'Hawthorn', 'Geelong'],
+  ],
+  nrl: [
+    [2016, 10, 'Cronulla-Sutherland Sharks', 'Melbourne Storm'],
+    [2018, 10, 'Sydney Roosters', 'Melbourne Storm'],
+    [2021, 10, 'Penrith Panthers', 'South Sydney Rabbitohs'],
+    [2023, 10, 'Penrith Panthers', 'Brisbane Broncos'],
+    [1999, 15, 'Melbourne Storm', 'St George Illawarra Dragons'],
+    [2001, 15, 'Newcastle Knights', 'Parramatta Eels'],
+    [2005, 15, 'Wests Tigers', 'North Queensland Cowboys'],
+    [2015, 15, 'North Queensland Cowboys', 'Brisbane Broncos'],
+    [1981, 20, 'Parramatta Eels', 'Newtown Jets'],
+    [1989, 20, 'Canberra Raiders', 'Balmain Tigers'],
+    [1993, 20, 'Brisbane Broncos', 'St George Dragons'],
+    [1997, 20, 'Newcastle Knights', 'Manly-Warringah Sea Eagles'],
+  ],
 };
 
 export const factCheckDate = '2026-11-26';
 export const independentSource: Record<PilotSport, string> = {
   soccer: 'https://www.rsssf.org/tablesw/worldcup.html',
   nba: 'https://www.ultimatenba.com/en/history/finals/',
+  afl: 'https://www.mcg.org.au/about/history/australian-football/vflafl-grand-final-results',
+  nrl: 'https://www.rugbyleagueproject.org/competitions/nrl/finals.html',
   mlb: 'https://www.baseball-almanac.com/ws/wsmenu.shtml',
   nhl: 'https://thehockeywriters.com/docs/stanley-cup/',
   nfl: 'https://static.www.nfl.com/league/apps/league-site/media-guides/2024/2024-Record-and-Fact-Book.pdf',
 };
 
 export function finalsSource(sport: PilotSport, year: number) {
+  if (sport === 'afl') return 'https://www.afl.com.au/stats/premiership-winners';
+  if (sport === 'nrl') return year === 1997
+    ? 'https://www.nrl.com/draw/nrl-premiership/1997/arl-grand-final/knights-v-sea-eagles/'
+    : 'https://www.nrl.com/operations/the-game/premiership-winners/';
   if (sport === 'mlb') return 'https://www.mlb.com/postseason/history/' + year;
   if (sport === 'nhl') return 'https://media.nhl.com/site/asset/public/ext/2025-26/2026StanleyCupFinal.pdf';
   if (sport === 'nfl') return 'https://www.foxsports.com/nfl-super-bowl-winners-and-results';
@@ -147,4 +181,35 @@ export const teamAliases: Record<string, string[]> = {
   'Pittsburgh Pirates': ['Pittsburgh', 'Pirates'],
   'Detroit Tigers': ['Detroit', 'Tigers'],
   'San Diego Padres': ['San Diego', 'Padres'],
+  'West Coast Eagles': ['West Coast', 'Eagles'],
+  'Collingwood': ['Collingwood Magpies', 'Magpies'],
+  'Richmond': ['Richmond Tigers', 'Tigers'],
+  'GWS Giants': ['GWS', 'Giants', 'Greater Western Sydney', 'Greater Western Sydney Giants'],
+  'Geelong': ['Geelong Cats', 'Cats'],
+  'Sydney Swans': ['Sydney', 'Swans'],
+  'Brisbane Lions': ['Brisbane', 'Lions'],
+  'Adelaide': ['Adelaide Crows', 'Crows'],
+  'St Kilda': ['St Kilda Saints', 'Saints'],
+  'Port Adelaide': ['Port Adelaide Power', 'Power'],
+  Carlton: ['Carlton Blues', 'Blues'], Essendon: ['Essendon Bombers', 'Bombers'],
+  'Footscray': ['Footscray Bulldogs', 'Bulldogs'],
+  'Melbourne': ['Melbourne Demons', 'Demons'],
+  'North Melbourne': ['North Melbourne Kangaroos', 'Kangaroos'],
+  'Hawthorn': ['Hawthorn Hawks', 'Hawks'],
+  'Cronulla-Sutherland Sharks': ['Cronulla', 'Cronulla Sharks', 'Sharks'],
+  'Melbourne Storm': ['Melbourne', 'Storm'],
+  'Sydney Roosters': ['Roosters'],
+  'Penrith Panthers': ['Penrith', 'Panthers'],
+  'South Sydney Rabbitohs': ['South Sydney', 'Souths', 'Rabbitohs'],
+  'Brisbane Broncos': ['Brisbane', 'Broncos'],
+  'St George Illawarra Dragons': ['St George Illawarra', 'Dragons'],
+  'Newcastle Knights': ['Newcastle', 'Knights'],
+  'Parramatta Eels': ['Parramatta', 'Eels'],
+  'Wests Tigers': ['Wests', 'Tigers'],
+  'North Queensland Cowboys': ['North Queensland', 'Cowboys'],
+  'Newtown Jets': ['Newtown', 'Jets'],
+  'Canberra Raiders': ['Canberra', 'Raiders'],
+  'Balmain Tigers': ['Balmain', 'Tigers'],
+  'St George Dragons': ['St George', 'Dragons'],
+  'Manly-Warringah Sea Eagles': ['Manly', 'Manly Warringah', 'Manly Sea Eagles', 'Sea Eagles'],
 };

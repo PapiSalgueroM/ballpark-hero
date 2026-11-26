@@ -6,6 +6,9 @@ import path from 'node:path';
 import { buildSync } from 'esbuild';
 import { chromium } from '../lib/playwrightLoader.mjs';
 
+const aussieAliases = { 'North Melbourne': 'Kangaroos', Footscray: 'Bulldogs', Collingwood: 'Magpies', 'Sydney Swans': 'Swans',
+  'St Kilda': 'Saints', 'Port Adelaide': 'Power', 'GWS Giants': 'GWS', 'Parramatta Eels': 'Eels', 'Penrith Panthers': 'Panthers',
+  'Canberra Raiders': 'Raiders', 'Melbourne Storm': 'Storm', 'Newcastle Knights': 'Knights', 'Sydney Roosters': 'Roosters', 'North Queensland Cowboys': 'Cowboys' };
 const base = new URL(process.env.BASE ?? 'http://127.0.0.1:4271');
 assert.equal(base.hostname, '127.0.0.1');
 assert.equal(base.protocol, 'http:');
@@ -13,7 +16,7 @@ const data = buildSync({entryPoints: ['src/data/sportChallengePilot.ts'], write:
 const { finals } = await import('data:text/javascript;base64,' + Buffer.from(data.outputFiles[0].text).toString('base64'));
 const browser = await chromium.launch({args: ['--no-proxy-server', '--host-resolver-rules=MAP * ~NOTFOUND, EXCLUDE 127.0.0.1']});
 try {
-  for (const [width, sport] of [[320, 'soccer'], [390, 'nba'], [390, 'nfl'], [1366, 'soccer'], [1366, 'nba'], [1366, 'nfl'], [390, 'nhl'], [1366, 'nhl'], [390, 'mlb'], [1366, 'mlb']]) {
+  for (const [width, sport] of [[320, 'soccer'], [390, 'nba'], [390, 'nfl'], [1366, 'soccer'], [1366, 'nba'], [1366, 'nfl'], [390, 'nhl'], [1366, 'nhl'], [390, 'mlb'], [1366, 'mlb'], [390, 'afl'], [1366, 'afl'], [390, 'nrl'], [1366, 'nrl']]) {
     const context = await browser.newContext({viewport: {width, height: 844}, reducedMotion: 'reduce', serviceWorkers: 'block'});
     await context.addInitScript(() => localStorage.setItem('cookie-consent-v2', JSON.stringify({
       version: 2, advertising: false, analytics: false, updatedAt: Date.now(),
@@ -35,6 +38,8 @@ try {
     await page.getByRole('button', {name: 'How to play Finals Sprint'}).click();
     await page.keyboard.press('Escape');
     if (sport !== 'soccer') await page.getByRole('button', {name: sport.toUpperCase(), exact: true}).click();
+    if (sport === 'afl') await page.getByRole('region', {name: 'Before you start'}).getByText(/Older clues use the VFL name/).waitFor();
+    if (sport === 'nrl') await page.getByRole('region', {name: 'Before you start'}).getByText(/The ARL and Super League held separate/).waitFor();
     if (sport === 'mlb') await page.getByRole('region', {name: 'Before you start'}).getByText('Use the team name from that year. A nickname like D-backs counts.').waitFor();
     await page.getByRole('button', {name: 'Start daily preview'}).click();
     const current = page.getByRole('region', {name: 'Current round'});
@@ -51,7 +56,7 @@ try {
       assert(answer, 'no unused finalist');
       if (i === 5) assert.equal(question, first);
       const input = page.getByRole('textbox', {name: 'Team name'});
-      const typed = sport === 'mlb' ? (answer === 'Arizona Diamondbacks' ? 'D-backs' : answer === 'Boston Red Sox' ? 'Red Sox' : answer.split(' ').at(-1)) : answer;
+      const typed = sport === 'mlb' ? (answer === 'Arizona Diamondbacks' ? 'D-backs' : answer === 'Boston Red Sox' ? 'Red Sox' : answer.split(' ').at(-1)) : (aussieAliases[answer] ?? answer);
       await input.fill(typed);
       await input.press('Enter');
       used.add(answer);
@@ -72,10 +77,12 @@ try {
     await results.getByText('Show recap and sources').click();
     assert.equal(await results.getByRole('link', {name: /^Source for/}).count(), 6);
     assert.equal(await page.evaluate(key => localStorage.getItem(key), roundKey), settled);
-    if (sport === 'nhl' || sport === 'mlb') {
+    if (['nhl', 'mlb', 'afl', 'nrl'].includes(sport)) {
       const links = await results.getByRole('link', {name: /^Source for/}).evaluateAll(nodes => nodes.map(n => n.href));
       if (sport === 'mlb') assert.deepEqual(links, JSON.parse(settled).order.map(year => 'https://www.mlb.com/postseason/history/' + year));
-      else assert.ok(links.every(link => link.includes('media.nhl.com/')));
+      else if (sport === 'nhl') assert.ok(links.every(link => link.includes('media.nhl.com/')));
+      else if (sport === 'afl') assert.ok(links.every(link => link === 'https://www.afl.com.au/stats/premiership-winners'));
+      else assert.deepEqual(links, JSON.parse(settled).order.map(y => y === '1997' ? 'https://www.nrl.com/draw/nrl-premiership/1997/arl-grand-final/knights-v-sea-eagles/' : 'https://www.nrl.com/operations/the-game/premiership-winners/'));
       if (process.env.OUTPUT) {
         await mkdir(process.env.OUTPUT, {recursive: true});
         const stem = path.join(process.env.OUTPUT, sport + '-' + width);
