@@ -29,6 +29,11 @@ import { XiFitBreakdown, XiFitWorth } from '@/components/lineup/XiFitBreakdown';
 import { safeSetItem } from '@/lib/safeStorage';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
+const leagueApproaches = {
+  balanced: { label: 'Balanced', hint: 'Play for the usual mix of wins, draws and defeats.' },
+  protect: { label: 'Protect the point', hint: 'Trade some wins and defeats for more draws.' },
+  attack: { label: 'Go for the win', hint: 'Turn some draws into wins, at the risk of more defeats.' },
+} as const;
 
 const LineupBuilder = () => {
   const {
@@ -41,7 +46,7 @@ const LineupBuilder = () => {
     filledSlots,
     filledSlotsArray,
     filledCount,
-    verdict, savedSeason,
+    verdict, savedSeason, seasonApproach, chooseSeasonApproach,
     isEvaluating,
     isValidating,
     validationError,
@@ -353,8 +358,8 @@ const LineupBuilder = () => {
       value,
       age: slot.pick?.age,
     }));
-    return simulateWorldXiSeason(squad, formation ?? '4-3-3', seasonAdjust(fitBreakdown), 'balanced', 'round-robin');
-  }, [phase, savedSeason, ratedXi, filledSlotsArray, formation, fitBreakdown, isClubYear]);
+    return simulateWorldXiSeason(squad, formation ?? '4-3-3', seasonAdjust(fitBreakdown), seasonApproach, 'round-robin');
+  }, [phase, savedSeason, ratedXi, filledSlotsArray, formation, fitBreakdown, isClubYear, seasonApproach]);
 
   const recordedYearVerdict = useMemo<AIVerdict | null>(() => {
     if (recordedYear === null) return null;
@@ -633,6 +638,15 @@ const LineupBuilder = () => {
               <XiFitBreakdown breakdown={fitBreakdown} slots={fitSlots} labels={slotLabels} className="mt-4" />
             </div>
 
+            {seasonReport && <div className="rounded-2xl border border-border bg-card p-4">
+              <label htmlFor="xi-league-approach" className="block text-sm font-semibold">League approach</label>
+              <select id="xi-league-approach" aria-describedby="xi-approach-hint" value={seasonApproach}
+                disabled={isEvaluating || !!replacingSlot} onChange={event => chooseSeasonApproach(event.target.value as keyof typeof leagueApproaches)}
+                className="mt-2 min-h-11 w-full rounded-lg border border-border bg-background px-3 text-sm">
+                {Object.entries(leagueApproaches).map(([value, option]) => <option key={value} value={value}>{option.label}</option>)}
+              </select>
+              <p id="xi-approach-hint" className="mt-2 text-xs text-muted-foreground">{leagueApproaches[seasonApproach].hint}</p>
+            </div>}
             {validationError && <p role="alert" className="text-center text-sm text-destructive">{validationError}</p>}
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button type="button" onClick={reopenLastPick} className="min-h-11 rounded-full px-4 text-sm font-semibold text-foreground hover:bg-secondary">
@@ -675,6 +689,7 @@ const LineupBuilder = () => {
                   ? [
                       `Build Your XI: ${formation} rated ${verdict.rating}${isClubYear ? ` (${recordedPeriod})` : ''}`,
                       `Season sim: ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)} with ${seasonReport.points} points`,
+                      ...(seasonApproach !== 'balanced' ? [`League approach: ${leagueApproaches[seasonApproach].label}`] : []),
                       ...(seasonReport.topScorer ? [`Top scorer: ${seasonReport.topScorer.name} (${seasonReport.topScorer.goals})`] : []),
                       ...(seasonReport.playerOfSeason ? [`Player of the season: ${seasonReport.playerOfSeason.name}`] : []),
                     ].join('\n')
@@ -723,6 +738,8 @@ const LineupBuilder = () => {
                   <div className="text-center mb-3">
                     <div className="text-2xl mb-1">📋</div>
                     <h3 className="text-base font-bold text-primary font-display">Season Report</h3>
+                    <p className="text-xs font-semibold">League approach: {leagueApproaches[seasonApproach].label}</p>
+                    {seasonReport.venuePoints && <p className="text-xs text-muted-foreground">Home points: {seasonReport.venuePoints.home} · Away points: {seasonReport.venuePoints.away}</p>}
                     <p className="text-xs text-muted-foreground">{isClubYear ? `A fictional season from your selected ${yearsLabel} records` : 'One season with this XI, every player at his peak'}</p>
                   </div>
 
@@ -784,6 +801,7 @@ const LineupBuilder = () => {
             "Use Browse players in either club draft to see the records available for that club and period",
             "Check the role fit, chemistry and balance tiles under the pitch: the season sim plays all three",
             "In review, replace any starter with another eligible player from the same draw before you submit",
+            "Choose your league approach before submitting a rated XI. You can play for more draws or risk defeats to chase wins.",
             "Submit your full XI. Mixed uses its scouting evaluation. Club drafts use your selected records for a fictional season report",
           ]}
           examples={[

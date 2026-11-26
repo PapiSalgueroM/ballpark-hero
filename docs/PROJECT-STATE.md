@@ -1,3 +1,7 @@
+## November 26 local Build Your XI league approach
+
+Players can pick a balanced, attacking or protective approach before submitting their eleven. The choice survives draft reload, changes the simulated league and stays with the completed result. Home and away points are retained when recorded. Two signed-out local production-browser drafts finished with all eleven identities, 102 and 104 points, and one intercepted completion each after reload. No paid evaluator was called.
+
 ## November 26 local Foundry Vale player loans
 
 Owners can give one eligible young parent player a full season at their second club. The boardroom tracks his starts, substitute appearances, minutes and rating through all 14 circuit dates and the summer return. Two signed-out production-browser runs from funded saves showed 1,080 and 1,084 minutes and a return from 87 to 89 OVR after reload. The assignment and existing second-club tests passed locally.

@@ -17,6 +17,7 @@ const season = z.object({
   record: z.object({ wins: number, draws: number, losses: number }), unbeatenRun: number, gapToTop: number, marginAsChampion: number,
   playerOfSeason: z.object({ name: string, rating: number }).nullable(),
   goalsFor: number.optional(), goalsAgainst: number.optional(), cleanSheets: number.optional(), assists: number.optional(),
+  venuePoints: z.object({ home: number.int().nonnegative(), away: number.int().nonnegative() }).optional(),
   months: z.array(z.object({ month: string, played: number, wins: number, draws: number, losses: number, goalsFor: number, goalsAgainst: number,
     standout: z.object({ name: string, goals: number, assists: number, cleanSheets: number }).nullable(), moment: string })).optional(),
   playerStats: z.array(z.object({ name: string, position: z.custom<Position>(p => ALL_POSITIONS.some(role => role === p)),

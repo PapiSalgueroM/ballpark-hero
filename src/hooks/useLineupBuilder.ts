@@ -11,7 +11,7 @@ import { normalizePosition } from '@/lib/squadDeal';
 import { BUILD_XI_DRAFT_KEY, clubPickVerifies, isCurrentBuildXiDraft, recordedPickVerifies, writeBuildXiDraft } from '@/lib/buildXiDraft';
 import { loadBuildXiDraft, type BuildXiResult } from '@/lib/buildXiResult';
 import { recheckStorageWrites, safeSetItem } from '@/lib/safeStorage';
-import type { SeasonReport } from '@/lib/worldXi';
+import type { SeasonReport, WorldXiSeasonApproach } from '@/lib/worldXi';
 import { buildXiAlreadyPicked, buildXiExclusions, buildXiNamesake, buildXiReviewedName } from '@/lib/buildXiPlayers';
 import { normalizeName } from '@/lib/playerSearch';
 import { verifiedPositionFallback } from '@/data/verifiedSoccerPositions';
@@ -98,6 +98,8 @@ export function useLineupBuilder() {
     return saved.draft.slots.length === 11 ? 'reviewing' : 'building';
   });
   const [draftChoice, setDraftChoice] = useState<DraftChoice>(saved.draft?.draftChoice ?? { mode: 'mixed' });
+  const [seasonApproach, setSeasonApproach] = useState<WorldXiSeasonApproach>(saved.draft?.seasonApproach ?? 'balanced');
+  const savedApproach = useMemo(() => seasonApproach === 'balanced' ? {} : { seasonApproach }, [seasonApproach]);
   const [selectedPositionIndex, setSelectedPositionIndex] = useState<number | null>(null);
   const [filledSlots, setFilledSlots] = useState(() => new Map<number, FilledSlot>(saved.draft?.slots));
   const [teamAssignments, setTeamAssignments] = useState<TeamAssignment[]>(saved.draft?.teamAssignments ?? []);
@@ -120,9 +122,9 @@ export function useLineupBuilder() {
   useLayoutEffect(() => {
     if (phase === 'result') return;
     const draft = formation && (phase === 'building' || phase === 'reviewing')
-      ? JSON.stringify({ formation, draftChoice, teamAssignments, slots: [...filledSlots] }) : null;
+      ? JSON.stringify({ formation, draftChoice, teamAssignments, slots: [...filledSlots], ...savedApproach }) : null;
     if (draft !== previousDraft.current && !persistDraft(draft)) previousDraft.current = draft;
-  }, [formation, phase, draftChoice, teamAssignments, filledSlots, persistDraft]);
+  }, [formation, phase, draftChoice, teamAssignments, filledSlots, persistDraft, savedApproach]);
   /* Round 1138: the validator call in flight, so a reroll, a new formation, a
      reset, leaving the page or a Cancel button can give up on it. A cancelled
      call ends as unverified: nothing filled, no message, not busy. pickRun
@@ -142,8 +144,11 @@ export function useLineupBuilder() {
   useEffect(() => cancelValidation, [cancelValidation]);
 
   const evaluationRun = useRef(0);
+  const activeEvaluation = useRef(false);
+  const settled = useRef(!!saved.result);
   const cancelEvaluation = useCallback(() => {
     evaluationRun.current += 1;
+    activeEvaluation.current = false;
     setIsEvaluating(false);
   }, []);
   useEffect(() => () => { evaluationRun.current += 1; }, []);
@@ -162,6 +167,8 @@ export function useLineupBuilder() {
     cancelEvaluation();
     const selectedDraft: DraftChoice = choice.mode === 'mixed' ? { mode: 'mixed' } : { mode: choice.mode, year: choice.year };
     setDraftChoice(selectedDraft);
+    setSeasonApproach('balanced');
+    settled.current = false;
     setFormation(f);
     setTeamAssignments(selectedDraft.mode === 'mixed' ? getRandomTeamAssignments(11)
       : [...(selectedDraft.mode === 'club-era' ? clubEraClubs : clubYearClubs)]
@@ -227,7 +234,7 @@ export function useLineupBuilder() {
     if (pick) {
       const next = [...teamAssignments];
       next[filledCount] = pick;
-      const draft = JSON.stringify({ formation, draftChoice, teamAssignments: next, slots: [...filledSlots] });
+      const draft = JSON.stringify({ formation, draftChoice, teamAssignments: next, slots: [...filledSlots], ...savedApproach });
       if (!persistDraft(draft)) {
         setValidationError(STALE_DRAFT_MESSAGE);
         return;
@@ -237,7 +244,7 @@ export function useLineupBuilder() {
     setSelectedPositionIndex(null);
     setValidationError(null);
     startSpin();
-  }, [phase, filledCount, startSpin, cancelValidation, draftChoice, teamAssignments, formation, filledSlots, persistDraft]);
+  }, [phase, filledCount, startSpin, cancelValidation, draftChoice, teamAssignments, formation, filledSlots, persistDraft, savedApproach]);
 
   const undoLastPick = useCallback(() => {
     if (filledCount === 0 || (phase !== 'building' && phase !== 'reviewing')) return false;
@@ -420,7 +427,7 @@ export function useLineupBuilder() {
 
       const next = new Map(filledSlots);
       next.set(selectedPositionIndex, slot);
-      const draft = JSON.stringify({ formation, draftChoice, teamAssignments, slots: [...next] });
+      const draft = JSON.stringify({ formation, draftChoice, teamAssignments, slots: [...next], ...savedApproach });
       if (!persistDraft(draft)) {
         setIsValidating(false);
         setValidationError(STALE_DRAFT_MESSAGE);
@@ -438,7 +445,7 @@ export function useLineupBuilder() {
         startSpin();
       }
     },
-    [selectedPositionIndex, currentTeam, positions, filledSlots, filledCount, startSpin, draftChoice, replacingSlot, cancelValidation, formation, teamAssignments, persistDraft]
+    [selectedPositionIndex, currentTeam, positions, filledSlots, filledCount, startSpin, draftChoice, replacingSlot, cancelValidation, formation, teamAssignments, persistDraft, savedApproach]
   );
 
   const filledSlotsArray = useMemo(() => {
@@ -447,23 +454,38 @@ export function useLineupBuilder() {
       .map(([, slot]) => slot);
   }, [filledSlots]);
 
+  const chooseSeasonApproach = useCallback((next: WorldXiSeasonApproach) => {
+    if (phase !== 'reviewing' || replacingSlot || activeEvaluation.current || settled.current || next === seasonApproach) return;
+    if (!isCurrentBuildXiDraft(storedDraft.current)) { setValidationError(STALE_DRAFT_MESSAGE); return; }
+    const raw = JSON.stringify({ formation, draftChoice, teamAssignments, slots: [...filledSlots], ...(next === 'balanced' ? {} : { seasonApproach: next }) });
+    if (recheckStorageWrites() === 'full' || !safeSetItem(BUILD_XI_DRAFT_KEY, raw)) {
+      setValidationError('Free up browser storage and try choosing your league approach again.');
+      return;
+    }
+    storedDraft.current = previousDraft.current = raw;
+    setSeasonApproach(next);
+    setValidationError(null);
+  }, [phase, replacingSlot, seasonApproach, formation, draftChoice, teamAssignments, filledSlots]);
+
   const finishDraft = useCallback((verdict: AIVerdict, season: SeasonReport | null) => {
+    if (settled.current) return;
     if (!isCurrentBuildXiDraft(storedDraft.current)) {
       setValidationError(STALE_DRAFT_MESSAGE);
       return;
     }
     const result = { verdict, season };
-    const raw = JSON.stringify({ version: 2, draft: { formation, draftChoice, teamAssignments, slots: [...filledSlots] }, result });
+    const raw = JSON.stringify({ version: 2, draft: { formation, draftChoice, teamAssignments, slots: [...filledSlots], ...savedApproach }, result });
     if (recheckStorageWrites() === 'full' || !safeSetItem(BUILD_XI_DRAFT_KEY, raw)) {
       setValidationError('Your XI is still in review. Free up browser storage and submit again to save the result.');
       return;
     }
     storedDraft.current = raw;
     previousDraft.current = raw;
+    settled.current = true;
     setResult(result);
     setValidationError(null);
     setPhase('result');
-  }, [formation, draftChoice, teamAssignments, filledSlots]);
+  }, [formation, draftChoice, teamAssignments, filledSlots, savedApproach]);
 
   const completeRecordedYearDraft = useCallback((nextVerdict: AIVerdict, season: SeasonReport | null = null) => {
     if (draftChoice.mode === 'mixed' || phase !== 'reviewing' || replacingSlot || filledSlotsArray.length !== 11
@@ -477,13 +499,14 @@ export function useLineupBuilder() {
   }, [draftChoice, phase, replacingSlot, filledSlotsArray, cancelEvaluation, finishDraft]);
 
   const evaluateTeam = useCallback(async (season: SeasonReport | null = null) => {
-    if (draftChoice.mode !== 'mixed' || phase !== 'reviewing' || replacingSlot) return;
+    if (draftChoice.mode !== 'mixed' || phase !== 'reviewing' || replacingSlot || activeEvaluation.current || settled.current) return;
     if (filledSlotsArray.length !== 11) return;
     if (!isCurrentBuildXiDraft(storedDraft.current)) {
       setValidationError(STALE_DRAFT_MESSAGE);
       return;
     }
     const run = ++evaluationRun.current;
+    activeEvaluation.current = true;
     setIsEvaluating(true);
     try {
       const resp = await fetch(
@@ -521,7 +544,10 @@ export function useLineupBuilder() {
         if (run === evaluationRun.current) setValidationError('Could not evaluate your XI. Your picks are saved. Try submitting again.');
       }
     } finally {
-      if (run === evaluationRun.current) setIsEvaluating(false);
+      if (run === evaluationRun.current) {
+        activeEvaluation.current = false;
+        setIsEvaluating(false);
+      }
     }
   }, [filledSlotsArray, formation, draftChoice, phase, replacingSlot, finishDraft]);
 
@@ -533,6 +559,8 @@ export function useLineupBuilder() {
     cancelValidation();
     cancelEvaluation();
     setFormation(null);
+    setSeasonApproach('balanced');
+    settled.current = false;
     setPhase('formation');
     setSelectedPositionIndex(null);
     setFilledSlots(new Map());
@@ -545,7 +573,7 @@ export function useLineupBuilder() {
   useGameCompletion('build-your-xi', phase === 'result', verdict ? 500 : 0);
 
   return {
-    formation, phase, draftChoice, selectedPositionIndex, currentTeam, positions,
+    formation, phase, draftChoice, seasonApproach, chooseSeasonApproach, selectedPositionIndex, currentTeam, positions,
     filledSlots, filledSlotsArray, filledCount, verdict, savedSeason: result?.season ?? null, isEvaluating,
     isValidating, validationError, isSpinning, spinTeamIndex, setSpinTeamIndex,
     /* Round 1138: never true any more. An allowance answer blocks the one

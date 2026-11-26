@@ -13,6 +13,8 @@ const output = process.env.OUTPUT;
 const width = Number(process.env.WIDTH || 390);
 const expectedLoss = process.env.XI_EXPECT_ORIGINAL_LOSS === '1';
 const mixed = process.env.XI_MODE === 'mixed';
+const approach = process.env.XI_APPROACH;
+assert.ok(approach === undefined || ['balanced', 'protect', 'attack'].includes(approach));
 const nameStem = 'build-xi-finished-' + (mixed ? 'mixed-' : '') + width + (expectedLoss ? '-baseline' : '');
 const positions = ['GK', 'LB', 'CB', 'CB', 'RB', 'CM', 'CM', 'CM', 'LW', 'ST', 'RW'];
 const picks = [
@@ -110,6 +112,13 @@ try {
   }
   assert.equal(new Set(report.picks.map(p => p.index)).size,11);
   assert.equal(report.completions.length, 0);
+  if (approach) {
+    const picker = page.getByRole('combobox', { name: 'League approach' });
+    await picker.selectOption(approach);
+    await page.reload({ waitUntil: 'networkidle' });
+    assert.equal(await picker.inputValue(), approach);
+    assert.equal(report.completions.length, 0);
+  }
   await page.getByRole('button', { name: 'Submit Team', exact: true }).click();
   const season = page.getByRole('heading', { name: 'Season Report', exact: true });
   const collect = async () => {
@@ -134,6 +143,17 @@ try {
     const seasonStats = await panel.innerText();
     await players.click();
     const data = await page.evaluate(key => Object.fromEntries([key,'dukb-local-completions','dukb-streaks-v1'].map(k=>[k,localStorage.getItem(k)])),saveKey);
+    if (approach) {
+      const { draft, result } = JSON.parse(data[saveKey]);
+      assert.equal(draft.seasonApproach ?? 'balanced', approach);
+      const label = { attack: 'Go for the win', protect: 'Protect the point', balanced: 'Balanced' }[approach];
+      assert.ok(await panel.getByText('League approach: ' + label, { exact: true }).isVisible());
+      if (approach === 'attack') {
+        const { home, away } = result.season.venuePoints;
+        assert.equal(home + away, result.season.points);
+        assert.ok(await panel.getByText(`Home points: ${home} · Away points: ${away}`, { exact: true }).isVisible());
+      }
+    }
     let leagueTable;
     if (process.env.XI_EXPECT_TABLE === '1') {
       const titles = JSON.parse(data[saveKey]).result.season.trophies;
