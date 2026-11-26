@@ -12,7 +12,7 @@ function run(file) {
   if (fs.existsSync(report)) fs.unlinkSync(report);
   const env = { ...process.env };
   if (file) { env.US_BOARD_CONTROL_ALIAS = '@/lib/soccerCareerRecords'; env.US_BOARD_CONTROL_FILE = file; }
-  const r = spawnSync(process.execPath, ['node_modules/vitest/vitest.mjs', 'run', 'src/test/soccerCareerRecords.test.tsx', '--maxWorkers=1', '--minWorkers=1', '--reporter=default', '--reporter=json', `--outputFile.json=${report}`], { cwd: ROOT, env, encoding: 'utf8', timeout: 180000 });
+  const r = spawnSync(process.execPath, [fileURLToPath(new URL('vitest.mjs', import.meta.resolve('vitest/package.json'))), 'run', 'src/test/soccerCareerRecords.test.tsx', '--maxWorkers=1', '--minWorkers=1', '--reporter=default', '--reporter=json', `--outputFile.json=${report}`], { cwd: ROOT, env, encoding: 'utf8', timeout: 180000 });
   process.stdout.write(r.stdout || ''); process.stderr.write(r.stderr || '');
   if (r.error || r.signal) throw r.error || new Error(`test stopped ${r.signal}`);
   if (!fs.existsSync(report)) throw new Error('test assertion report missing');
@@ -22,9 +22,11 @@ function run(file) {
 }
 try {
   const healthy = run();
-  if (healthy.status !== 0 || healthy.assertions.length !== 16 || healthy.assertions.some(a => a.status !== 'passed')) throw new Error('record-book outcomes failed or were skipped');
+  if (healthy.status !== 0 || healthy.assertions.length !== 17 || healthy.assertions.some(a => a.status !== 'passed')) throw new Error('record-book outcomes failed or were skipped');
   const original = fs.readFileSync(source, 'utf8');
   const controls = [
+    { name: 'lost cup runs dropped', from: 'if (domestic || season.domesticCup)', to: 'if (season.domesticCup)', test: 'keeps domestic cup exits' },
+    { name: 'campaign awards guessed', from: 'topScorer: run.isTopScorer', to: 'topScorer: true', test: 'groups exact recorded goals' },
     { name: 'academy counted', from: ".filter(r => r.season.type === 'playing')", to: '.filter(() => true)', test: 'counts only saved senior club stats' },
     { name: 'loan merged', from: ' || stint.parent !== parent', to: '', test: 'separates a loan from a permanent spell' },
     { name: 'short rating season', from: 'r.season.apps >= minApps', to: 'r.season.apps >= 1', test: 'uses actual records, keeps ties earliest' },

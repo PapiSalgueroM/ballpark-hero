@@ -4,6 +4,7 @@ import { careerCompetitionRecords, careerRecordAppearances, careerRecordBook } f
 import { formatNumber } from '@/lib/formatNumber';
 
 const yearLabel = (year: number) => `${year}/${String((year + 1) % 100).padStart(2, '0')}`;
+const countStat = (count: number, stat: string) => `${formatNumber(count)} ${stat}${count === 1 ? '' : 's'}`;
 const button = 'min-h-11 rounded-xl border border-border px-3 py-2 text-sm font-semibold';
 
 function SeasonLine({ season, split }: { season: SeasonRecord; split: ReturnType<typeof careerRecordAppearances> }) {
@@ -35,7 +36,7 @@ export default function CareerRecordsSheet({ career, onClose }: { career: Career
   const keyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     if (event.key === 'Escape') { event.preventDefault(); if (selected !== null) back(); else onClose(); }
     if (event.key !== 'Tab') return;
-    const stops = Array.from(panel.current?.querySelectorAll<HTMLButtonElement>('button:not(:disabled)') ?? []);
+    const stops = Array.from(panel.current?.querySelectorAll<HTMLElement>('button:not(:disabled), summary') ?? []);
     const first = stops[0], last = stops[stops.length - 1];
     if (!first) return;
     const at = document.activeElement;
@@ -74,8 +75,18 @@ export default function CareerRecordsSheet({ career, onClose }: { career: Career
               <h3 className="text-sm font-bold">{heading}</h3>
               {entries.length ? <ul className="space-y-2">{entries.map(row => <li key={row.name} className="rounded-xl border border-border p-3 text-sm">
                 <p className="font-semibold">{row.name}</p>
-                <p className="text-xs mt-1">{row.campaigns} {row.campaigns === 1 ? 'campaign' : 'campaigns'} · {row.apps !== null && `${formatNumber(row.apps)} apps · `}{formatNumber(row.goals)} goals</p>
-                <p className="text-xs text-muted-foreground mt-1">{row.assists === null ? 'Assists not recorded' : `${formatNumber(row.assists)} assists${row.campaignsWithAssists < row.campaigns ? ` in ${row.campaignsWithAssists} of ${row.campaigns} campaigns` : ''}`}</p>
+                <p className="text-xs mt-1">{row.campaigns} {row.campaigns === 1 ? 'campaign' : 'campaigns'}{row.apps !== null && ` · ${countStat(row.apps, 'app')}`}{row.goals !== null && ` · ${countStat(row.goals, 'goal')}`}</p>
+                <p className="text-xs text-muted-foreground mt-1">{row.assists === null ? (row.goals === null ? 'Individual stats not recorded' : 'Assists not recorded') : `${countStat(row.assists, 'assist')}${row.campaignsWithAssists < row.campaigns ? ` in ${row.campaignsWithAssists} of ${row.campaigns} campaigns` : ''}`}</p>
+                <details className="mt-1">
+                  <summary className="min-h-11 cursor-pointer py-3 text-xs font-semibold" aria-label={`View campaigns for ${row.name}`}>View campaigns</summary>
+                  <ol className="divide-y divide-border">
+                    {row.editions.slice().sort((a, b) => b.year - a.year).map((entry, index) => <li key={index} className="py-2 text-xs">
+                      <p className="font-semibold">{entry.season ? yearLabel(entry.year) : entry.year} · {entry.team}{entry.result && ` · ${entry.result}`}</p>
+                      {entry.goals !== null && <p>{entry.apps !== null && `${countStat(entry.apps, 'app')} · `}{countStat(entry.goals, 'goal')} · {entry.assists === null ? 'Assists not recorded' : countStat(entry.assists, 'assist')}</p>}
+                      {entry.topScorer && <p className="font-semibold text-primary">Competition top scorer</p>}
+                    </li>)}
+                  </ol>
+                </details>
               </li>)}</ul> : <p className="text-xs text-muted-foreground">No campaign stats saved yet.</p>}
             </section>
           ))}

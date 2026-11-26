@@ -1,3 +1,7 @@
+## 2026-11-26, Soccer Career cup campaigns in the record book
+
+After a senior season, Career Stats opens the record book even during headlines and transfers. Competitions now opens individual editions with the club or country, result, and any recorded player totals or continental top-scorer award. Domestic cups show the recorded round or club win without assigning team goals to the player. Fresh phone and laptop careers went from West Ham Youth to 22 senior appearances and an early 2022/23 FA Cup exit. Both opened the same record before advancing the headlines and after reload, with identical save bytes.
+
 ## 2026-11-26, College Grid missed picks
 
 At the end of a lost daily, College Grid now shows the names you tried on each open cell beside examples that fit its two clues. Repeat misses appear once in that cell. A save made before the update still shows the available examples. All 75 boards finished under both winning and losing play, and a fresh 15-guess board restored the original review and identical save bytes on phone and laptop.
