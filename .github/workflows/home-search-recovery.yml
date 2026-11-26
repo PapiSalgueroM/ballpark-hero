@@ -187,8 +187,22 @@ jobs:
           exit "$failed"
       - name: Preserve engines data fixtures dependencies and source
         if: ${{ !cancelled() }}
+        env:
+          HOME_SEARCH_PR_BASE: ${{ github.event.pull_request.base.sha }}
         run: |
-          git diff --exit-code 5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f HEAD -- src/lib src/data src/hooks src/integrations src/types scripts/fixtures package.json package-lock.json
+          # Check a PR against its immutable event base. Retain the historical
+          # evidence baseline for the original proof branch and manual runs.
+          if [[ "$GITHUB_EVENT_NAME" == pull_request ]]; then
+            test -n "$HOME_SEARCH_PR_BASE"
+            baseline="$HOME_SEARCH_PR_BASE"
+          else
+            baseline=5b70b05f6df7b15f64b8c5ddf1f4b7d0c7cd4c7f
+          fi
+          [[ "$baseline" =~ ^[0-9a-f]{40}$ ]]
+          git cat-file -e "${baseline}^{commit}"
+          git merge-base --is-ancestor "$baseline" HEAD
+          printf '%s\n' "$baseline" > home-search-recovery-artifacts/protected-baseline.txt
+          git diff --exit-code "$baseline" HEAD -- src/lib src/data src/hooks src/integrations src/types scripts/fixtures package.json package-lock.json
           git diff --exit-code HEAD -- src scripts .github/workflows/home-search-recovery.yml
           sha256sum package.json package-lock.json > home-search-recovery-artifacts/dependencies-after.txt
           cmp home-search-recovery-artifacts/dependencies-before.txt home-search-recovery-artifacts/dependencies-after.txt

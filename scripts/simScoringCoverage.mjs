@@ -28,6 +28,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import ts from 'typescript';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -84,6 +85,7 @@ console.log('1) every registry game reaches the scoring pipeline from its routed
     const file = lazies[r[2]];
     if (!file) { fail(`${gp} routes to ${r[2]}, which is not a lazy page import; route it the standard way or teach this harness the new shape`); continue; }
     const seen = new Set();
+    const deferredEntry = /Entry$/.test(file);
     let hit = false;
     const walk = (f, d) => {
       if (hit || d > 3 || seen.has(f)) return;
@@ -109,8 +111,38 @@ console.log('1) every registry game reaches the scoring pipeline from its routed
          that sentence alone was counting pages as wired. The lookbehind keeps
          a URL's double slash from being read as a comment. */
       const code = s.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/(?<!:)\/\/[^\n]*/g, ' ');
-      if (/\b(recordCompletion|useGameCompletion)\s*\(/.test(code)) { hit = true; return; }
-      for (const m of s.matchAll(/from ['"]@\/([^'"]+)['"]/g)) walk(path.join(ROOT, 'src', m[1]), d + 1);
+      if (!deferredEntry && /\b(recordCompletion|useGameCompletion)\s*\(/.test(code)) { hit = true; return; }
+      // Career entry pages defer the game with dynamic imports. Only
+      // runtime import edges count; comments and type references do not.
+      const source = ts.createSourceFile(f + '.tsx', s, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+      const visit = node => {
+        // A lazy entry can also import shared result UI that records credit
+        // for its own caller. It is not proof this route records its credit.
+        if (deferredEntry && ts.isCallExpression(node) && ts.isIdentifier(node.expression)
+            && ['recordCompletion', 'useGameCompletion'].includes(node.expression.text)) {
+          const slug = node.arguments[0];
+          if (slug && ts.isStringLiteral(slug) && '/' + slug.text.replace(/^\//, '') === gp) {
+            hit = true;
+            return;
+          }
+        }
+        let specifier;
+        if (ts.isImportDeclaration(node) && !node.importClause?.isTypeOnly
+            && ts.isStringLiteral(node.moduleSpecifier)) {
+          const clause = node.importClause, bindings = clause?.namedBindings;
+          const onlyTypeNames = !clause?.name && bindings && ts.isNamedImports(bindings)
+            && bindings.elements.length > 0 && bindings.elements.every(element => element.isTypeOnly);
+          if (!onlyTypeNames) specifier = node.moduleSpecifier.text;
+        } else if (ts.isCallExpression(node) && node.expression.kind === ts.SyntaxKind.ImportKeyword
+            && node.arguments.length > 0 && ts.isStringLiteral(node.arguments[0])) {
+          specifier = node.arguments[0].text;
+        }
+        const target = specifier?.startsWith('@/') ? path.join(ROOT, 'src', specifier.slice(2))
+          : specifier?.startsWith('.') ? path.resolve(path.dirname(f), specifier) : undefined;
+        if (target?.startsWith(path.join(ROOT, 'src') + path.sep)) walk(target, d + 1);
+        if (!hit) ts.forEachChild(node, visit);
+      };
+      visit(source);
     };
     walk(file, 0);
     if (hit) covered += 1;
