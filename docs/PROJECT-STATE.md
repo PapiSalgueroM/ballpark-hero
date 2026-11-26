@@ -1,3 +1,7 @@
+## November 26 local review, Soccer Perfect Season draft comparisons
+
+After match 38 a player can try an eligible teammate from the same club in the same position. The comparison uses the original match rolls, identifies the individual results that changed and preserves the official XI and score. Two native sessions drafted eleven players with a fourth-turn reroll and restored the exact original save after comparing. On the November 26 phone Daily, Fabian Schär for Malick Thiaw changed match 23 from a win to a draw, 104 hypothetical points versus the recorded 106. Tests also played the alternative through the ordinary draft API for a prior Daily, Unlimited and No Rerolls.
+
 ## November 26 local review, owning a second senior club
 
 A club with academy facilities at level 12 or higher can buy the fictional Foundry Vale for 90m in preseason. The purchase includes 12m in separate operating cash. Its board can spend 4m on the squad or keep reserves, follow an eight-club home-and-away league, and read the final table and accounts before and after rollover. In fresh late-game fixtures Manchester City paid once, then the phone squad-investment campaign ended fourth with 11m and the laptop reserve campaign sixth with 14m. Both played through the calendar and reopened season one in year two. The manager cannot take the asset to another employer. Simulated job changes, dismissal, duplicate settlement and a failed save followed by retry were tested.

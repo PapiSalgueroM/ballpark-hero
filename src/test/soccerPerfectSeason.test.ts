@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   SOCCER_PS_GAMES, SOCCER_PS_MAX_REROLLS, SOCCER_PS_SLOTS,
-  applySoccerAction, createSoccerRun, deriveSoccerRun, restoreSoccerRun, scoreSoccerMatches,
+  applySoccerAction, createSoccerRun, deriveSoccerRun, previewSoccerSwap, restoreSoccerRun, scoreSoccerMatches,
   type SoccerPSRun,
 } from '@/lib/soccerPerfectSeason';
 
@@ -16,6 +16,43 @@ function draftPicks(run: SoccerPSRun, choose: 'best' | 'worst', count: number = 
   }
   return next;
 }
+
+describe('finished XI comparisons', () => {
+  it.each([
+    { initial: createSoccerRun('daily', '2026-11-03'), reroll: true },
+    { initial: createSoccerRun('unlimited', null, 78), reroll: true },
+    { initial: createSoccerRun('unlimited', null, 78, true), reroll: false },
+  ])('replays an eligible $initial.mode alternative on the same 38 matchdays with reroll $reroll', ({ initial, reroll }) => {
+    let prefix = draftPicks(initial, 'best', 3);
+    if (reroll) prefix = applySoccerAction(prefix, { type: 'reroll' })!;
+    const draft = draftPicks(prefix, 'best', 8);
+    const done = { ...draft, revealed: SOCCER_PS_GAMES, completionRecorded: true };
+    const saved = JSON.stringify(done);
+    const view = deriveSoccerRun(done);
+    const different = view.swaps.find(swap => previewSoccerSwap(done, swap)!.points < view.record.points)!;
+    expect(different).toBeTruthy();
+    const pick = view.picks[different.slot]!;
+    expect(previewSoccerSwap(draft, different)).toBeNull();
+    expect(previewSoccerSwap({ ...done, completionRecorded: false }, different)).toBeNull();
+    expect(previewSoccerSwap(done, { slot: different.slot, playerId: 'unknown' })).toBeNull();
+    expect(previewSoccerSwap(done, { slot: different.slot, playerId: pick.playerId })).toBeNull();
+    let other = initial;
+    for (const action of done.actions) {
+      if (action.type === 'pick' && action.slot === different.slot) {
+        expect(deriveSoccerRun(other).offers.some(card => card.playerId === different.playerId && card.eligible.includes(action.slot))).toBe(true);
+        other = applySoccerAction(other, { type: 'pick', slot: action.slot, playerId: different.playerId })!;
+      } else other = applySoccerAction(other, action)!;
+    }
+    const expected = deriveSoccerRun({ ...other, revealed: SOCCER_PS_GAMES }).season!;
+    const preview = previewSoccerSwap(done, different)!;
+    expect(preview).toEqual(expected);
+    expect(preview.games).toHaveLength(38);
+    expect(preview.games).not.toEqual(view.season!.games);
+    expect(preview.points).toBeLessThan(view.record.points);
+    expect(JSON.stringify(done)).toBe(saved);
+    expect(deriveSoccerRun(restoreSoccerRun(saved)!).season).toEqual(view.season);
+  });
+});
 
 function finishDraft(run: SoccerPSRun, choose: 'best' | 'worst') {
   return deriveSoccerRun(draftPicks(run, choose));

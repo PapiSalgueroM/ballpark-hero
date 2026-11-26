@@ -240,6 +240,16 @@ function simulateSoccerSeason(win: number, seed: number) {
   return { ...scoreSoccerMatches(games), games };
 }
 
+/** Replay a finished XI with a single eligible teammate in the same slot. */
+export function previewSoccerSwap(run: SoccerPSRun, replacement: SoccerPSPick) {
+  if (!run.completionRecorded || run.revealed !== SOCCER_PS_GAMES) return null;
+  const current = run.actions.find(action => action.type === 'pick' && action.slot === replacement.slot);
+  if (!current || current.type !== 'pick' || current.playerId === replacement.playerId) return null;
+  const actions = run.actions.map(action => action === current ? { type: 'pick' as const, slot: replacement.slot, playerId: replacement.playerId } : action);
+  if (!replayDraft(run.seed, actions)) return null;
+  return deriveSoccerRun({ ...run, actions }).season;
+}
+
 export function deriveSoccerRun(run: SoccerPSRun) {
   const state = replayDraft(run.seed, run.actions);
   if (!state) throw new Error('Invalid draft');
@@ -274,7 +284,15 @@ export function deriveSoccerRun(run: SoccerPSRun) {
   const bestStrength = current ? null : strengthSolver(targetClubs)(0, SLOT_MASK)[1];
   const odds = bestStrength === null ? null : soccerSeasonOdds(state.strength, bestStrength);
   const season = odds ? simulateSoccerSeason(odds.win, run.seed) : null;
+  const finished = run.revealed === SOCCER_PS_GAMES;
+  const swaps = finished ? run.actions.filter(action => action.type === 'pick').flatMap((pick, turn) => {
+    const club = state.clubs[turn];
+    return club.roster.filter(card => card.playerId !== pick.playerId && card.eligible.includes(pick.slot)).map(card => ({
+      slot: pick.slot, playerId: card.playerId, name: card.name, rating: card.rating, club: club.name,
+    }));
+  }) : [];
   return {
+    swaps, finished,
     turn: state.turn,
     clubOrder: state.clubs.map(club => club.id),
     currentClub: current?.name,
@@ -286,6 +304,5 @@ export function deriveSoccerRun(run: SoccerPSRun) {
     overall: state.strength / TOTAL_WEIGHT,
     bestOverall: bestStrength === null ? null : bestStrength / TOTAL_WEIGHT,
     record: scoreSoccerMatches(season?.games.slice(0, run.revealed) ?? []),
-    finished: run.revealed === SOCCER_PS_GAMES,
   };
 }
