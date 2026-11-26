@@ -1,0 +1,11 @@
+/* Leave one useful desktop gutter when two do not fit. Keep the two
+   naturally centered gutters on wide windows, and leave phones unchanged. */
+@media (min-width: 1280px) {
+  .content[google-side-rail-overlap="false"] {
+    --home-content-width: min(72rem, calc(100% - 184px));
+    --home-space: calc(100% - var(--home-content-width));
+    max-width: var(--home-content-width);
+    margin-inline-start: max(24px, min(calc(var(--home-space) / 2), calc(var(--home-space) - 160px)));
+    margin-inline-end: auto;
+  }
+}
