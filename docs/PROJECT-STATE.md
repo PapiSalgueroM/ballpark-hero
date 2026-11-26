@@ -1,3 +1,7 @@
+## 2026-11-26, Rest between Club Manager fixtures
+
+Player recovery and the individual training preview now follow the next fixture date. A seven-day interval keeps its existing recovery. Starting all 20 players at 65 fitness and replaying the same Everton fixture, the old engine gave identical results with seven and four days to recover. The revised four-day domestic cup and Champions League turnarounds both left every player eight points below the full-week result.
+
 ## 2026-11-26, Past U21 campaigns
 
 Paying for the next U21 season now keeps the previous prospect, all six fixtures, W/D/L record, goals and earned development in Academy. A second registration charged 12 million once and retained the results of the first six played fixtures on phone and desktop after reload. The browser test advanced the season number to reopen registration.

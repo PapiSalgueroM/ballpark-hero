@@ -19978,16 +19978,26 @@ function weekRecoveryOf(state: CareerState, intensity = (state.training ?? DEFAU
   };
 }
 
-/** One man's fitness after a week's recovery and, if he played, the match's cost (its spread is the week's draw). */
-function fitnessAfterWeek(fitness: number, played: boolean, recoveryMod: number, flat: number): number {
-  const recovery = Math.round((100 - fitness) * 0.71 * recoveryMod) + flat;
+/** Unplayed extra nights skip their whole tick, so carry their days to the next tick that actually runs. */
+function fitnessDaysAfter(state: CareerState, week: number): number {
+  const dates = entryDatesOf(state);
+  let next = week + 1;
+  while (next < dates.length && (state.calendar[next].night || state.calendar[next].type === 'promotion')
+    && !entryInvolvesMe(state, state.calendar[next])) next++;
+  return dates[week] && dates[next] ? Math.max(0, daysBetween(dates[week], dates[next])) : 7;
+}
+
+function fitnessAfterWeek(fitness: number, played: boolean, recoveryMod: number, flat: number, days: number): number {
+  const weeklyRate = 0.71 * recoveryMod;
+  const recovery = days === 7 ? Math.round((100 - fitness) * weeklyRate) + flat
+    : Math.round((100 - fitness + flat / weeklyRate) * (1 - (1 - weeklyRate) ** (days / 7)));
   const cost = played ? MATCH_FITNESS_COST + ri(0, MATCH_FITNESS_SPREAD) : 0;
   return clamp(fitness + recovery - cost, 20, 100);
 }
 
 export function trainingFitnessIfRested(state: CareerState, fitness: number, intensity: TrainingIntensity): number {
   const { recoveryMod, flat } = weekRecoveryOf(state, intensity);
-  return fitnessAfterWeek(fitness, false, recoveryMod, flat);
+  return fitnessAfterWeek(fitness, false, recoveryMod, flat, fitnessDaysAfter(state, state.week));
 }
 
 /**
@@ -19998,10 +20008,12 @@ export function trainingFitnessIfRested(state: CareerState, fitness: number, int
  */
 function nightSquadTick(state: CareerState, playedIds: Set<string>): void {
   const { recoveryMod, flat } = weekRecoveryOf(state);
-  state.squad = state.squad.map(p => ({ ...p, fitness: fitnessAfterWeek(p.fitness, playedIds.has(p.id), recoveryMod, flat) }));
+  const days = fitnessDaysAfter(state, state.week);
+  state.squad = state.squad.map(p => ({ ...p, fitness: fitnessAfterWeek(p.fitness, playedIds.has(p.id), recoveryMod, flat, days) }));
 }
 
-function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
+function tickWeek(state: CareerState, playedIds: Set<string> | null, settledWeek = state.week): void {
+  const days = fitnessDaysAfter(state, settledWeek);
   /* Round 619: a settlement counts down HERE, in the same function that charges
      the wage bill, and a row at zero is gone.
 
@@ -20036,7 +20048,7 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
     const played = playedIds ? playedIds.has(p.id) : false;
     const hasOrder = p.id === trainedId;
     const intensity = hasOrder ? individualIntensity : plan.intensity;
-    const fitness = fitnessAfterWeek(p.fitness, played, hasOrder ? individual.recoveryMod : recoveryMod, hasOrder ? individual.flat : flat);
+    const fitness = fitnessAfterWeek(p.fitness, played, hasOrder ? individual.recoveryMod : recoveryMod, hasOrder ? individual.flat : flat, days);
     let injuryWeeks = p.majorInjury ? p.injuryWeeks : Math.max(0, p.injuryWeeks - 1);
     if (intensity === 'double' && injuryWeeks === 0) {
       const random = plan.intensity === 'double' ? Math.random
@@ -22753,7 +22765,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
     if (entry.type === 'window') {
       state.week += 1;
       advanceEuropaScorers(state);
-      tickWeek(state, null);
+      tickWeek(state, null, state.week - 1);
       advanceIntercontinentalCup(state, state.week - 1);
       state.transferWindow = 'january';
       // Round 141: January runs three match weeks before the deadline.
@@ -22817,7 +22829,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       state.week += 1;
       advanceEuropaScorers(state, entry.type === 'uel');
       /* Round 1510 (ruling 2a): a night I do not play (a semi final lost, a stub) moves the week on and ticks nothing. */
-      if (!entry.night && entry.type !== 'promotion') tickWeek(state, null);
+      if (!entry.night && entry.type !== 'promotion') tickWeek(state, null, state.week - 1);
       advanceIntercontinentalCup(state, state.week - 1);
       continue;
     }
