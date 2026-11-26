@@ -7,6 +7,7 @@ const base = new URL(process.env.BASE ?? 'http://127.0.0.1:4173');
 assert.equal(base.protocol, 'http:');
 assert.equal(base.hostname, '127.0.0.1');
 const vendor = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+const publisherTag = vendor + '?client=ca-pub-2929318086316376';
 const result = await build({
   stdin: { resolveDir: process.cwd(), contents: "export { ALL_GAMES } from './src/data/gameRegistry';" },
   bundle: true, format: 'esm', platform: 'node', write: false,
@@ -46,6 +47,9 @@ async function check(path, { width = 1280, advertising = true, expected = 1, gpc
       await page.waitForFunction(() => window.__loadedGameAdFixture, null, { timeout: 6000 })
         .catch(error => { throw new Error(path + ': publisher tag did not start', { cause: error }); });
       assert.equal(await page.evaluate(() => window.adsbygoogle?.requestNonPersonalizedAds), 1, path);
+      assert.deepEqual(intercepted, [publisherTag], path + ': exact publisher URL once');
+      const attributes = await page.locator('script[src*="adsbygoogle.js"]').evaluate(el => ({ async: el.async, crossOrigin: el.crossOrigin }));
+      assert.deepEqual(attributes, { async: true, crossOrigin: 'anonymous' }, path + ': standard publisher tag settings');
     } else {
       // The check runs after the app and its footer have mounted, including the rail eligibility effect.
       await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));

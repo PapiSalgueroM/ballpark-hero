@@ -62,7 +62,7 @@ async function verify(page, path, width, requiredDocks = 0) {
 }
 
 try {
-  for (const [width, paths] of [[390, games], [1279, games], [1280, all], [1440, games]]) {
+  for (const [width, paths] of [[390, games], [1242, games], [1279, games], [1280, all], [1366, all], [1440, games]]) {
     const ctx = await context(width);
     await Promise.all(Array.from({ length: 4 }, async (_, worker) => {
       const page = await ctx.newPage();
