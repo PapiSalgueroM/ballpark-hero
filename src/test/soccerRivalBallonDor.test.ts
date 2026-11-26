@@ -88,8 +88,8 @@ describe("Soccer Career rival Ballon d'Or", () => {
   it.each([
     { year: 2005, seed: 21, rank: 1, winner: 'player' },
     { year: 2005, seed: 6, rank: null, winner: 'other' },
-    { year: 2035, seed: 209, rank: 2, winner: 'rival' },
-    { year: 2035, seed: 121, rank: 11, winner: 'rival' },
+    { year: 2037, seed: 45, rank: 2, winner: 'rival' },
+    { year: 2035, seed: 968, rank: 11, winner: 'rival' },
   ])('credits only the $winner win at player rank $rank', ({ year, seed, rank, winner }) => {
     const signed = signedCareer(year);
     vi.mocked(Math.random).mockImplementation(seeded(seed));
