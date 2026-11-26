@@ -17,7 +17,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     howToPlaySections: [
       {
         heading: "Choose Daily or Unlimited",
-        items: ["Choose Daily for the same club draw everyone gets that Eastern date, or Unlimited for a fresh draw. No Rerolls practice keeps the opening clubs and stays off the site leaderboard."],
+        items: ["Choose Daily for the same club draw everyone gets that Eastern date, or Unlimited for a fresh draw. In Unlimited, No Rerolls practice keeps the opening clubs and stays off the site leaderboard."],
       },
       {
         heading: "Fit the players into your XI",
@@ -805,7 +805,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         heading: "Filling all eleven and simulating a season",
         items: [
           "Fill all 11 to win, then check squad value and chemistry, and simulate a season if you are curious. The report has a month by month tab, a player stats tab and a share card with your finish, top scorer and player of the season.",
-          "Preview Balanced, Protect the point, or Go for the win. Protect the point trades some wins and losses for draws. Go for the win turns some draws into wins or losses. Try another approach to replay the same XI on the same league rolls.",
+          "Before you simulate, preview the league match odds for Balanced, Protect the point, or Go for the win. Protect the point trades some wins and losses for draws. Go for the win turns some draws into wins or losses. Both tactics show how Balanced would have finished on the same rolls. Choose Try another approach to replay the season with the same XI.",
         ],
       },
     ],

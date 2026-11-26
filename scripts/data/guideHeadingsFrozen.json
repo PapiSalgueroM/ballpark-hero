@@ -3419,9 +3419,9 @@
     },
     "/soccer-perfect-season": {
       "howToPlay": [
-        "Choose Daily for the same club draw everyone gets that Eastern date, or Unlimited for a fresh draw.",
+        "Choose Daily for the same club draw everyone gets that Eastern date, or Unlimited for a fresh draw. In Unlimited, No Rerolls practice keeps the opening clubs and stays off the site leaderboard.",
         "Pick one player from the club on screen. Place them in a slot the game offers. You can open Upcoming clubs to see which players and ratings are coming.",
-        "Reroll up to twice in the draft. It replaces only the current club and keeps the others in order.",
+        "Reroll up to twice in a regular draft. It replaces only the current club and keeps the others in order.",
         "Once the XI is full, reveal results one at a time with Next match or finish all 38 in one go."
       ],
       "rules": [
@@ -3883,7 +3883,7 @@
         "The pool uses 2026 and 2025 records. Club, age and value come from each player's latest stored record, so some entries show an older club or age.",
         "Wrong position picks bounce off harmlessly with an explanation. Confirmed picks lock for good.",
         "Fill all 11 to win, then check squad value and chemistry, and simulate a season if you are curious. The report has a month by month tab, a player stats tab and a share card with your finish, top scorer and player of the season.",
-        "Before you simulate, preview the league match odds for Balanced or Protect the point. Protect the point trades some wins and losses for draws, and its report compares your finish with Balanced on the same rolls."
+        "Before you simulate, preview the league match odds for Balanced, Protect the point, or Go for the win. Protect the point trades some wins and losses for draws. Go for the win turns some draws into wins or losses. Both tactics show how Balanced would have finished on the same rolls. Choose Try another approach to replay the season with the same XI."
       ],
       "rules": [
         "Expanded uses more nations from the existing player pool, including countries that only cover a few positions. Every drawn nation still needs a player who fits its assigned slot, and all eleven nations are different.",
