@@ -30,6 +30,7 @@ function promptFor(sport: PilotSport, year: number) {
   switch (sport) {
     case 'soccer': return `Name either country in the ${year} men's World Cup final.`;
     case 'nba': return `Name either team in the ${year} NBA Finals.`;
+    case 'mlb': return `Name either team in the ${year} World Series.`;
     case 'nhl': return `Name either team in the ${year} Stanley Cup Final.`;
     case 'nfl': return `Name either team in the Super Bowl played in ${year}.`;
   }

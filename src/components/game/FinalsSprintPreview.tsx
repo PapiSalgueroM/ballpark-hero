@@ -14,7 +14,7 @@ import {
 
 import { pilotSports } from '@/data/sportChallengePilot';
 
-const SPORTS = { soccer: 'Soccer', nba: 'NBA', nfl: 'NFL', nhl: 'NHL' } as const;
+const SPORTS = { soccer: 'Soccer', nba: 'NBA', nfl: 'NFL', nhl: 'NHL', mlb: 'MLB' } as const;
 const MODES = { daily: 'Daily preview', practice: 'Practice' } as const;
 const RULES = [
   'Type one finalist for each of six clues. A team can only count once.',
@@ -71,6 +71,7 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
   const prompt = run && !run.completed ? currentPilotPrompt(run) : undefined;
   const revealResult = useRevealScroll(run?.completed);
   const score = run ? pilotScore(run) : 0;
+  const rules = sport === 'mlb' ? [...RULES, 'Use the team name from that year. A nickname like D-backs counts.'] : RULES;
 
   const change = useCallback((action: RoundAction) => {
     withRoundLock(storageKey, () => {
@@ -200,7 +201,7 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
         </Link>
         <HowToPlayPopover title="Finals Sprint rules" triggerLabel="How to play Finals Sprint"
           floatingTrigger={false} className="inline-flex size-11 shrink-0 items-center justify-center">
-          <ul className="list-disc space-y-2 pl-5">{RULES.map(rule => <li key={rule}>{rule}</li>)}</ul>
+          <ul className="list-disc space-y-2 pl-5">{rules.map(rule => <li key={rule}>{rule}</li>)}</ul>
           <p>{EXAMPLE}</p>
         </HowToPlayPopover>
       </header>
@@ -218,7 +219,7 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
         <div className="mb-4 grid gap-3 sm:grid-cols-2">
           <fieldset>
             <legend className="mb-1 text-sm font-semibold">Sport</legend>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {pilotSports.map(option => (
                 <button key={option} type="button" ref={sport === option ? sportRef : undefined}
                   aria-pressed={sport === option} onClick={() => choose(option, mode)}
@@ -249,7 +250,7 @@ function FinalsRound({ sport, mode, choose, pickerToFocus }: {
             ? 'One attempt per sport, per Eastern day on this browser.'
             : 'Play as many rounds as you like.'}</p>
           <ul className="list-disc space-y-1 pl-5 text-sm text-muted-foreground">
-            {RULES.map(rule => <li key={rule}>{rule}</li>)}
+            {rules.map(rule => <li key={rule}>{rule}</li>)}
           </ul>
           <p className="text-sm text-muted-foreground">{EXAMPLE}</p>
           <button type="button" className={PRIMARY + ' w-full sm:w-auto'} onClick={() => change({ type: 'start' })}>
@@ -341,7 +342,7 @@ export default function FinalsSprintPreview() {
 
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
-      <PageSeo title="Finals Sprint preview | DoUKnowBall" description="Type your way through six soccer, NBA, NFL or NHL finals clues."
+      <PageSeo title="Finals Sprint preview | DoUKnowBall" description="Name the teams that played for a championship in six timed clues."
         path="/alphabet-sprint" />
       <div className="mx-auto max-w-2xl px-3 py-4 sm:px-4 sm:py-6">
         <FinalsRound key={sport + ':' + mode} sport={sport} mode={mode} choose={choose} pickerToFocus={pickerToFocus} />

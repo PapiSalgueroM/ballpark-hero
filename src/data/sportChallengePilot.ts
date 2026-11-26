@@ -1,4 +1,4 @@
-export const pilotSports = ['soccer', 'nba', 'nfl', 'nhl'] as const;
+export const pilotSports = ['soccer', 'nba', 'nfl', 'nhl', 'mlb'] as const;
 export type PilotSport = typeof pilotSports[number];
 
 // The two names are the actual finalists, including the losing finalist.
@@ -62,17 +62,34 @@ export const finals: Record<PilotSport, readonly Final[]> = {
     [1991, 20, 'Pittsburgh Penguins', 'Minnesota North Stars'],
     [1994, 20, 'New York Rangers', 'Vancouver Canucks'],
   ],
+  // Recent finals score 10, the 1997 to 2008 group scores 15, and earlier finals score 20.
+  mlb: [
+    [2016, 10, 'Chicago Cubs', 'Cleveland Indians'],
+    [2019, 10, 'Washington Nationals', 'Houston Astros'],
+    [2021, 10, 'Atlanta Braves', 'Houston Astros'],
+    [2023, 10, 'Texas Rangers', 'Arizona Diamondbacks'],
+    [1997, 15, 'Florida Marlins', 'Cleveland Indians'],
+    [2002, 15, 'Anaheim Angels', 'San Francisco Giants'],
+    [2004, 15, 'Boston Red Sox', 'St. Louis Cardinals'],
+    [2008, 15, 'Philadelphia Phillies', 'Tampa Bay Rays'],
+    [1955, 20, 'Brooklyn Dodgers', 'New York Yankees'],
+    [1969, 20, 'New York Mets', 'Baltimore Orioles'],
+    [1979, 20, 'Pittsburgh Pirates', 'Baltimore Orioles'],
+    [1984, 20, 'Detroit Tigers', 'San Diego Padres'],
+  ],
 };
 
 export const factCheckDate = '2026-11-26';
 export const independentSource: Record<PilotSport, string> = {
   soccer: 'https://www.rsssf.org/tablesw/worldcup.html',
   nba: 'https://www.ultimatenba.com/en/history/finals/',
+  mlb: 'https://www.baseball-almanac.com/ws/wsmenu.shtml',
   nhl: 'https://thehockeywriters.com/docs/stanley-cup/',
   nfl: 'https://static.www.nfl.com/league/apps/league-site/media-guides/2024/2024-Record-and-Fact-Book.pdf',
 };
 
 export function finalsSource(sport: PilotSport, year: number) {
+  if (sport === 'mlb') return 'https://www.mlb.com/postseason/history/' + year;
   if (sport === 'nhl') return 'https://media.nhl.com/site/asset/public/ext/2025-26/2026StanleyCupFinal.pdf';
   if (sport === 'nfl') return 'https://www.foxsports.com/nfl-super-bowl-winners-and-results';
   if (sport === 'nba') return 'https://www.nba.com/news/history-nba-champions';
@@ -109,4 +126,25 @@ export const teamAliases: Record<string, string[]> = {
   'New York Rangers': ['Rangers', 'NY Rangers'], 'Toronto Maple Leafs': ['Toronto', 'Maple Leafs', 'Leafs'],
   'New York Islanders': ['Islanders', 'NY Islanders'], 'Pittsburgh Penguins': ['Pittsburgh', 'Penguins'],
   'Minnesota North Stars': ['Minnesota', 'North Stars'], 'Vancouver Canucks': ['Vancouver', 'Canucks'],
+  'Chicago Cubs': ['Cubs'],
+  'Cleveland Indians': ['Cleveland', 'Indians'],
+  'Washington Nationals': ['Washington', 'Nationals', 'Nats'],
+  'Houston Astros': ['Houston', 'Astros'],
+  'Atlanta Braves': ['Atlanta', 'Braves'],
+  'Texas Rangers': ['Texas', 'Rangers'],
+  'Arizona Diamondbacks': ['Arizona', 'Diamondbacks', 'D-backs'],
+  'Florida Marlins': ['Florida', 'Marlins'],
+  'Anaheim Angels': ['Anaheim', 'Angels'],
+  'San Francisco Giants': ['San Francisco', 'SF Giants', 'Giants'],
+  'Boston Red Sox': ['Boston', 'Red Sox'],
+  'St. Louis Cardinals': ['St Louis', 'Cardinals'],
+  'Philadelphia Phillies': ['Philadelphia', 'Phillies'],
+  'Tampa Bay Rays': ['Tampa Bay', 'Rays'],
+  'Brooklyn Dodgers': ['Brooklyn', 'Dodgers'],
+  'New York Yankees': ['NY Yankees', 'Yankees'],
+  'New York Mets': ['NY Mets', 'Mets'],
+  'Baltimore Orioles': ['Baltimore', 'Orioles'],
+  'Pittsburgh Pirates': ['Pittsburgh', 'Pirates'],
+  'Detroit Tigers': ['Detroit', 'Tigers'],
+  'San Diego Padres': ['San Diego', 'Padres'],
 };

@@ -1,3 +1,7 @@
+### November 26, 2026. World Series editions in Finals Sprint
+
+The optional MLB pack covers 12 World Series from 1955 through 2023. Each clue accepts either finalist and displays its own MLB postseason source. Historical answers keep names such as Brooklyn Dodgers, Florida Marlins, Cleveland Indians and Anaheim Angels in the years they played. Phone and laptop finished six clues for 100 and restored the exact completed Daily. Practice timed out and replayed. The four previous sports also passed their browser controls. The MLB source pages and Baseball Almanac agree on each finalist. All 46 focused tests and ten signed-out browser journeys passed.
+
 ### November 26, 2026. Missing XI across midnight Eastern
 
 Daily now deals the board, labels it and saves the result under a single Eastern edition date. When the next edition opens, the completed board offers a link to play it. The old screen reproduced the wrong date after the first missed guess following midnight. In a signed-out phone and laptop test the November 26 Croatia result stayed settled, then the link opened the November 27 Inter Milan lineup on guess one. The eight focused archive and Daily checks passed.
