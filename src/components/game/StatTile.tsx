@@ -36,7 +36,7 @@ export function StatTile({ label, value, state = 'pending', direction, animate =
     <div
       className={cn(
         'rounded-xl border p-4 text-center flex flex-col items-center gap-1 transition-all duration-200',
-        state === 'correct' && 'bg-correct/15 border-correct text-correct-foreground',
+        state === 'correct' && 'bg-correct/15 border-correct text-foreground',
         state === 'close' && 'bg-close/15 border-close',
         state === 'incorrect' && 'bg-surface-2 border-border text-muted-foreground',
         state === 'pending' && 'bg-surface-1 border-border/60',

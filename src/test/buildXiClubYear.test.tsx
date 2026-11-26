@@ -143,7 +143,11 @@ async function openPage(year: number) {
   fireEvent.click(screen.getByRole('button', { name: /^4-4-2\s*11 players$/ }));
   await flush();
 }
-function field() { return screen.getByRole('combobox') as HTMLInputElement; }
+function playerOptions() {
+  const list = screen.queryByRole('listbox');
+  return list ? within(list).queryAllByRole('option') : [];
+}
+function field() { return screen.getByRole('combobox', { name: /search/i }) as HTMLInputElement; }
 async function chooseSlot(role: PositionRole) {
   await advance(3100);
   const slot = screen.getAllByRole('button', { name: new RegExp('^' + role + '$') })
@@ -157,7 +161,7 @@ async function browse() {
   return field();
 }
 function option(name: string) {
-  const found = screen.getAllByRole('option').find(node => within(node).queryByText(displayName(name), { exact: true }));
+  const found = playerOptions().find(node => within(node).queryByText(displayName(name), { exact: true }));
   expect(found, 'Actual shared picker must offer the exact fixture record').toBeDefined();
   return found!;
 }
@@ -391,7 +395,7 @@ describe('Build Your XI historical club picks', () => {
     useSplitRows();
     openSavedDraft(choice, [team], [5]);
     await searchClubPick(name);
-    expect(screen.queryByRole('option')).toBeNull();
+    expect(playerOptions()).toHaveLength(0);
     expect(io.queries.length).toBeGreaterThan(0);
   });
 });
@@ -449,7 +453,7 @@ describe('Build Your XI recorded year admissions', () => {
       expect(operation(query, 'in', 'club')).toEqual(['Real Madrid']);
       expect(operation(query, 'eq', 'year')).toBeUndefined();
     }
-    const target = screen.getAllByRole('option').find(node => within(node).queryByText(/Record: 2014$/));
+    const target = playerOptions().find(node => within(node).queryByText(/Record: 2014$/));
     expect(target).toBeDefined();
     expect(target).toHaveTextContent('Record: 2014');
     fireEvent.click(target!);
@@ -643,6 +647,8 @@ describe('Build Your XI unfinished draft', () => {
     act(() => api(first).completeRecordedYearDraft!(VERDICT));
     act(() => api(first).selectFormation('3-5-2', { mode: 'club-era', year: 2020 }));
     const newer = localStorage.getItem(draftKey);
+    act(() => api(older).completeRecordedYearDraft!(VERDICT));
+    expect(api(older).phase).toBe('reviewing');
     expect(newer).toContain('"year":2020');
     act(() => { expect(api(older).undoLastPick()).toBe(false); });
     expect(api(older).filledCount).toBe(11);
@@ -705,7 +711,7 @@ describe('Build Your XI unfinished draft', () => {
     act(() => api(current).selectFormation('4-4-2'));
     const older = render(<MemoryRouter><LineupBuilder /></MemoryRouter>);
     const reroll = within(older.container).getByTitle('Reroll: get a different team');
-    expect(within(older.container).queryByRole('combobox')).toBeNull();
+    expect(within(older.container).queryByRole('combobox', { name: /search/i })).toBeNull();
     const club = api(current).currentTeam!.name;
     act(() => api(current).selectPosition(0));
     await act(async () => api(current).submitPlayer('Fixture Saved Keeper', meta(club, 2010, 'GK', 'Fixture Saved Keeper')));
@@ -723,7 +729,7 @@ describe('Build Your XI unfinished draft', () => {
     legacyQuiet();
   });
 
-  it('keeps the review ready for submission and clears it after a result', async () => {
+  it('restores the submitted XI and its verdict until Play Again', async () => {
     const view = await startHook(2010);
     await fillHook(view, 2010);
     const slots = api(view).filledSlotsArray;
@@ -737,9 +743,37 @@ describe('Build Your XI unfinished draft', () => {
     expect(api(reopened).phase).toBe('result');
     reopened.unmount();
     const fresh = renderHook(() => useLineupBuilder());
+    expect(api(fresh).phase).toBe('result');
+    expect(api(fresh).verdict).toEqual(VERDICT);
+    expect(api(fresh).filledSlotsArray).toEqual(slots);
+    act(() => api(fresh).resetGame());
+    expect(localStorage.getItem(draftKey)).toBeNull();
     expect(api(fresh).phase).toBe('formation');
-    expect(api(fresh).verdict).toBeNull();
     legacyQuiet();
+  });
+
+  it('holds the completed XI in review if saving fails, then settles on retry', async () => {
+    const view = await startHook(2010);
+    await fillHook(view, 2010);
+    const draft = localStorage.getItem(draftKey);
+    const setItem = Storage.prototype.setItem;
+    const failure = vi.spyOn(Storage.prototype, 'setItem').mockImplementation(function (key, value) {
+      if (key === draftKey) throw new DOMException('Full', 'QuotaExceededError');
+      setItem.call(this, key, value);
+    });
+    act(() => api(view).completeRecordedYearDraft!(VERDICT));
+    expect(api(view).phase).toBe('reviewing');
+    expect(api(view).validationError).toMatch(/storage/);
+    expect(localStorage.getItem(draftKey)).toBe(draft);
+    failure.mockRestore();
+    act(() => api(view).completeRecordedYearDraft!(VERDICT));
+    expect(api(view).phase).toBe('result');
+    const settled = JSON.parse(localStorage.getItem(draftKey)!);
+    expect(settled.result.verdict).toEqual(VERDICT);
+    view.unmount();
+    localStorage.setItem(draftKey, JSON.stringify({ ...settled, result: { ...settled.result, season: { narrative: {} } } }));
+    const damaged = renderHook(() => useLineupBuilder());
+    expect(api(damaged).phase).toBe('formation');
   });
 
   it('replaces an early starter under the original draw without losing the other ten picks', async () => {
@@ -774,7 +808,7 @@ describe('Build Your XI unfinished draft', () => {
     expect(api(reopened).filledCount).toBe(11);
     act(() => api(reopened).completeRecordedYearDraft!(VERDICT));
     expect(api(reopened).phase).toBe('result');
-    expect(localStorage.getItem(draftKey)).toBeNull();
+    expect(JSON.parse(localStorage.getItem(draftKey)!).draft.slots[0][1].playerName).toBe(candidate);
     legacyQuiet();
   });
 
@@ -1057,26 +1091,26 @@ describe('Build Your XI Club year Browse on the real page', () => {
 
   it('browses past eight records and reopens after Escape and outside focus', async () => {
     await openPage(2010); await chooseSlot('GK');
-    expect(screen.queryAllByRole('option')).toHaveLength(0);
+    expect(playerOptions()).toHaveLength(0);
     let input = await browse();
     expect(input).toHaveValue(''); expect(input).toHaveFocus(); assertYearQueries(2010);
-    expect(screen.queryAllByRole('option'), 'XI_CLUB_YEAR_BROWSE: fifteen matching records').toHaveLength(15);
+    expect(playerOptions(), 'XI_CLUB_YEAR_BROWSE: fifteen matching records').toHaveLength(15);
     expect(option('Fixture Keeper 2010')).toBeVisible(); assertYearQueries(2010);
     fireEvent.keyDown(input, { key: 'Escape' });
     expect(screen.queryByRole('listbox')).toBeNull();
-    input = await browse(); expect(input).toHaveFocus(); expect(screen.queryAllByRole('option'), 'XI_CLUB_YEAR_BROWSE: fifteen matching records').toHaveLength(15);
+    input = await browse(); expect(input).toHaveFocus(); expect(playerOptions(), 'XI_CLUB_YEAR_BROWSE: fifteen matching records').toHaveLength(15);
     fireEvent.blur(input, { relatedTarget: document.body });
     expect(screen.queryByRole('listbox')).toBeNull();
-    input = await browse(); expect(input).toHaveFocus(); expect(screen.queryAllByRole('option'), 'XI_CLUB_YEAR_BROWSE: fifteen matching records').toHaveLength(15);
+    input = await browse(); expect(input).toHaveFocus(); expect(playerOptions(), 'XI_CLUB_YEAR_BROWSE: fifteen matching records').toHaveLength(15);
     expect(screen.getByText('0/11', { exact: true })).toBeVisible(); legacyQuiet();
   });
 
   it('keeps typed search at eight and admits the keyboard-selected matching keeper once', async () => {
     await openPage(2010); await chooseSlot('GK'); await browse();
     fireEvent.change(field(), { target: { value: 'Fixture' } }); await advance(220); await flush();
-    expect(screen.getAllByRole('option'), 'XI_CLUB_YEAR_TYPED: original typed cap stays eight').toHaveLength(8);
+    expect(playerOptions(), 'XI_CLUB_YEAR_TYPED: original typed cap stays eight').toHaveLength(8);
     expect(screen.queryByText('Fixture Keeper 2010', { exact: true })).toBeNull();
-    const input = await browse(); expect(screen.queryAllByRole('option'), 'XI_CLUB_YEAR_BROWSE: fifteen matching records').toHaveLength(15);
+    const input = await browse(); expect(playerOptions(), 'XI_CLUB_YEAR_BROWSE: fifteen matching records').toHaveLength(15);
     fireEvent.keyDown(input, { key: 'ArrowUp' }); fireEvent.keyDown(input, { key: 'Enter' }); await flush();
     expect(screen.getByText('1/11', { exact: true })).toBeVisible();
     expect(screen.getAllByText('Fixture Keeper 2010', { exact: true })).toHaveLength(1);
@@ -1086,7 +1120,7 @@ describe('Build Your XI Club year Browse on the real page', () => {
   it('distinguishes an empty matching record list from a failed read', async () => {
     await openPage(2010); await chooseSlot('GK'); io.market = 'empty'; await browse();
     expect(screen.getByText('No matching records. Try another name or reroll the club.', { exact: true })).toBeVisible();
-    expect(screen.queryAllByRole('option')).toHaveLength(0);
+    expect(playerOptions()).toHaveLength(0);
     io.market = 'error'; await browse(); await advance(1250); await flush();
     expect(screen.getByText('Could not load players', { exact: false })).toBeVisible();
     expect(screen.queryByText('No matching records. Try another name or reroll the club.', { exact: true })).toBeNull();
@@ -1104,6 +1138,15 @@ describe('Build Your XI Club year Browse on the real page', () => {
     expect(screen.getByText('Season Report', { exact: true })).toBeVisible();
     expect(io.simulate, 'XI_CLUB_YEAR_SIM: moving to result cannot resimulate').toHaveBeenCalledTimes(1);
     expect(screen.getAllByText(/2026 value/)).toHaveLength(11); assertYearQueries(2026); legacyQuiet();
+    const completed = localStorage.getItem(draftKey)!;
+    cleanup();
+    io.simulate.mockImplementation(() => { throw new Error('A completed season was simulated again'); });
+    render(<MemoryRouter><LineupBuilder /></MemoryRouter>);
+    expect(screen.getByRole('button', { name: /Play Again/i })).toBeVisible();
+    expect(screen.getByText('Season Report', { exact: true })).toBeVisible();
+    expect(screen.getAllByText(/2026 value/)).toHaveLength(11);
+    expect(io.simulate).toHaveBeenCalledTimes(1);
+    expect(localStorage.getItem(draftKey)).toBe(completed);
     fireEvent.click(screen.getByRole('button', { name: /Play Again/i })); await flush();
     expect(screen.getByRole('combobox', { name: 'Recorded year' })).toHaveValue('2026');
     expect(screen.getByRole('heading', { name: 'Choose Your Formation' })).toBeVisible();
@@ -1134,7 +1177,7 @@ describe('Build Your XI Club year Browse on the real page', () => {
     expect(screen.getByRole('button', { name: 'Submit Team' })).toBeDisabled();
     fireEvent.change(within(edit).getByRole('combobox'), { target: { value: 'Target' } });
     await advance(220); await flush();
-    const offered = screen.getAllByRole('option');
+    const offered = playerOptions();
     const target = offered.find(node => node.textContent?.includes('Target Keeper'));
     expect(target, offered.map(node => node.textContent).join(' | ')).toBeDefined();
     fireEvent.click(target!); await flush();
@@ -1165,6 +1208,7 @@ describe('Build Your XI Club year Browse on the real page', () => {
       expect(screen.queryByRole('heading', { name: /unrated/i }), 'XI_CLUB_YEAR_UNRATED: missing ' + missing + ' stays unrated').not.toBeNull();
       expect(screen.queryByText('Season Report', { exact: true })).toBeNull();
       expect(io.simulate).not.toHaveBeenCalled(); legacyQuiet();
+      fireEvent.click(screen.getByRole('button', { name: /Play Again/i }));
       cleanup();
     }
   }, 30000);

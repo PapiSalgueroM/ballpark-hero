@@ -28,7 +28,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
               <li>• Type a player who plays or played for that team and submit</li>
               <li>• If your pick checks out, the slot fills</li>
               <li>• Undo last pick reopens that position with the same club or nation. Earlier picks stay in place.</li>
-              <li>• Your unfinished draft stays in this browser. Reopen Build Your XI to continue, or choose Start Over to clear it.</li>
+              <li>• Reopen Build Your XI here to continue a draft or see your finished lineup and season report. Play Again starts a new draft.</li>
             </ul>
           </section>
 

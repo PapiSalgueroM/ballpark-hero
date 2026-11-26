@@ -73,7 +73,7 @@ describe('Build Your XI quick position picker', () => {
     const restored = screen.getByRole('combobox', { name: 'Position to fill' });
     expect(within(restored).queryByRole('option', { name: 'GK' })).toBeNull();
     expect(screen.getByRole('button', { name: /GK Fixture Keeper/ })).toBeDisabled();
-    fireEvent.click(screen.getByRole('button', { name: 'LB', exact: true }));
+    fireEvent.click(screen.getByRole('button', { name: 'LB' }));
     expect(restored).toHaveValue('1');
   });
 });

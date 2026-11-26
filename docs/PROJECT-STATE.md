@@ -1,3 +1,9 @@
+## 2026-11-26, Build Your XI completed draft recovery
+
+Submitting a full XI now saves its eleven selected records, verdict and full season report together. The result opens on return with its original player stats and month-by-month numbers. Older unfinished drafts still open at their next pick or at review. Play Again clears the finished XI. Mounted tests cover canceled and conflicting picks, a failed write and retry, an unrated report, and a completed season restored with its simulator disabled. Local review only.
+
+Four native 11-player drafts covered Mixed and the 2026 Club Year at 390 and 1366 pixels with recorded market fixtures. Reload retained every player, position, stat, verdict and saved season with one intercepted completion. The original browser control lost its finished draft at submission. The 2026 test XI won its league on 104 points with one trophy.
+
 ## 2026-11-26, Build Your XI draft position picker
 
 Build Your XI now puts its open positions beside the assigned club or nation. Repeated roles have separate options, and the pitch can still select the same open positions. The search opens after a position is chosen, then keyboard focus returns to the picker after a successful pick. The draft saves and validates players through its existing rules.

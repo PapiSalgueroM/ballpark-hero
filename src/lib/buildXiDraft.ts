@@ -58,7 +58,7 @@ export function recordedPickVerifies(team: TeamAssignment, role: Position, pick:
     && clubPickVerifies(team, role, pick);
 }
 
-function readDraft(value: unknown): Draft | null {
+export function readBuildXiPicks(value: unknown): Draft | null {
   if (!record(value) || typeof value.formation !== 'string' || !Object.prototype.hasOwnProperty.call(FORMATIONS, value.formation)
     || !isDraftChoice(value.draftChoice) || !Array.isArray(value.teamAssignments) || !Array.isArray(value.slots)) return null;
   const formation = value.formation as Formation;
@@ -97,15 +97,10 @@ function readDraft(value: unknown): Draft | null {
 
 export function readBuildXiDraft(raw: string | null): Draft | null {
   try {
-    return raw ? readDraft(JSON.parse(raw)) : null;
+    return raw ? readBuildXiPicks(JSON.parse(raw)) : null;
   } catch {
     return null;
   }
-}
-
-export function loadBuildXiDraft(): { raw: string | null; draft: Draft | null } {
-  const raw = safeLocalStorage.getItem(BUILD_XI_DRAFT_KEY);
-  return { raw, draft: readBuildXiDraft(raw) };
 }
 
 export function isCurrentBuildXiDraft(previous: string | null): boolean {

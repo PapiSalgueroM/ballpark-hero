@@ -41,7 +41,7 @@ const LineupBuilder = () => {
     filledSlots,
     filledSlotsArray,
     filledCount,
-    verdict,
+    verdict, savedSeason,
     isEvaluating,
     isValidating,
     validationError,
@@ -341,9 +341,9 @@ const LineupBuilder = () => {
      row that has one, so this is a guard rather than a common case: if a squad
      ever reaches the result screen without values, it gets the verdict and no
      invented season. */
-  const canShowSeasonReport = phase === 'result' || (isClubYear && phase === 'reviewing');
   const seasonReport = useMemo(() => {
-    if (!canShowSeasonReport || ratedXi.length !== 11 || ratedXi.some((r) => r.value <= 0)
+    if (phase === 'result') return savedSeason;
+    if (phase !== 'reviewing' || ratedXi.length !== 11 || ratedXi.some((r) => r.value <= 0)
       || (isClubYear && ratedXi.some((r) => r.rating === null))) return null;
     const squad: WxPlayer[] = ratedXi.map(({ slot, value }) => ({
       name: buildXiReportName(slot, filledSlotsArray),
@@ -354,7 +354,7 @@ const LineupBuilder = () => {
       age: slot.pick?.age,
     }));
     return simulateWorldXiSeason(squad, formation ?? '4-3-3', seasonAdjust(fitBreakdown));
-  }, [canShowSeasonReport, ratedXi, filledSlotsArray, formation, fitBreakdown, isClubYear]);
+  }, [phase, savedSeason, ratedXi, filledSlotsArray, formation, fitBreakdown, isClubYear]);
 
   const recordedYearVerdict = useMemo<AIVerdict | null>(() => {
     if (recordedYear === null) return null;
@@ -647,8 +647,8 @@ const LineupBuilder = () => {
               <button
                 onClick={() => {
                   if (isClubYear) {
-                    if (recordedYearVerdict) completeRecordedYearDraft(recordedYearVerdict);
-                  } else void evaluateTeam();
+                    if (recordedYearVerdict) completeRecordedYearDraft(recordedYearVerdict, seasonReport);
+                  } else void evaluateTeam(seasonReport);
                 }}
                 disabled={isEvaluating || !!replacingSlot}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
@@ -663,6 +663,7 @@ const LineupBuilder = () => {
         {/* Result Phase */}
         {phase === 'result' && verdict && (
           <div className="max-w-xl mx-auto">
+            {validationError && <p role="alert" className="text-center text-sm text-destructive">{validationError}</p>}
             <ResultScreen
               outcomeEmoji={<Trophy className="w-12 h-12 text-primary mx-auto" />}
               headline={verdict.rating}
