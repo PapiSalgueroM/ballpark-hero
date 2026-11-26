@@ -9,11 +9,11 @@ assert.equal(base.hostname, '127.0.0.1');
 const vendor = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
 const publisherTag = vendor + '?client=ca-pub-2929318086316376';
 const result = await build({
-  stdin: { resolveDir: process.cwd(), contents: "export { ALL_GAMES } from './src/data/gameRegistry'; export { HUB_NAV } from './src/lib/sportHubNav';" },
+  stdin: { resolveDir: process.cwd(), contents: "export { ALL_GAMES } from './src/data/gameRegistry'; export { HUB_NAV } from './src/lib/sportHubNav'; export { EDITORIAL_RAIL_ROUTES } from './src/components/ads/editorialRailRoutes';" },
   bundle: true, format: 'esm', platform: 'node', write: false,
 });
-const { ALL_GAMES, HUB_NAV } = await import('data:text/javascript;base64,' + Buffer.from(result.outputFiles[0].text).toString('base64'));
-const paths = [...new Set([...ALL_GAMES.map(game => game.path), ...HUB_NAV.map(hub => hub.route)])];
+const { ALL_GAMES, HUB_NAV, EDITORIAL_RAIL_ROUTES } = await import('data:text/javascript;base64,' + Buffer.from(result.outputFiles[0].text).toString('base64'));
+const paths = [...new Set([...ALL_GAMES.map(game => game.path), ...HUB_NAV.map(hub => hub.route), ...EDITORIAL_RAIL_ROUTES])];
 assert(paths.length > 100);
 const browser = await chromium.launch();
 
@@ -64,7 +64,7 @@ try {
   await Promise.all(Array.from({ length: 4 }, async (_, thread) => {
     for (const path of paths.filter((_, i) => i % 4 === thread)) await check(path);
   }));
-  console.log(`${paths.length} game and hub routes loaded exactly one mocked publisher tag with desktop clearance and consent`);
+  console.log(`${paths.length} game, hub, and editorial routes loaded exactly one mocked publisher tag with desktop clearance and consent`);
   for (const path of ['/soccer-career', '/nba-my-career', '/nfl-my-career', '/stadium-tycoon', '/world-cup-bracket', '/soccer']) {
     await check(path, { advertising: false, expected: 0 });
   }

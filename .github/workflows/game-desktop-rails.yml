@@ -11,6 +11,7 @@ on:
       - src/lib/consentPreferences.ts
       - src/App.tsx
       - src/components/ads/GameDesktopRails*
+      - src/components/ads/editorialRailRoutes.ts
       - src/components/StorageNotice.tsx
       - src/components/BrokenSaveRestore.tsx
       - src/components/club-manager/CustomClubForm.tsx

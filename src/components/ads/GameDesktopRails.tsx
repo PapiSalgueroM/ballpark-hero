@@ -5,10 +5,12 @@ import { HUB_NAV } from '@/lib/sportHubNav';
 import { CONSENT_CHANGED_EVENT, CONSENT_EFFECTIVE_CHANGED_EVENT, getEffectiveConsent } from '@/lib/consentPreferences';
 import { loadGameSideRailAds } from '@/lib/consentedScripts';
 import styles from './GameDesktopRails.module.css';
+import { EDITORIAL_RAIL_ROUTES } from './editorialRailRoutes';
 
 export const PUBLIC_DESKTOP_RAIL_ROUTES = [
   ...ALL_GAMES.map(game => game.path),
   ...HUB_NAV.map(hub => hub.route),
+  ...EDITORIAL_RAIL_ROUTES,
 ] as const;
 const eligiblePublicRoutes: ReadonlySet<string> = new Set(PUBLIC_DESKTOP_RAIL_ROUTES);
 export const isPublicDesktopRailRoute = (path: string): boolean => eligiblePublicRoutes.has(path);

@@ -10,15 +10,15 @@ assert.equal(origin.hostname, '127.0.0.1');
 const bundle = await build({
   stdin: { resolveDir: process.cwd(), contents: `
     export { ALL_GAMES } from './src/data/gameRegistry';
-    export { HUB_NAV } from './src/lib/sportHubNav';
+    export { HUB_NAV } from './src/lib/sportHubNav'; export { EDITORIAL_RAIL_ROUTES } from './src/components/ads/editorialRailRoutes';
     export { initCareer, FALLBACK_CLUBS } from './src/lib/soccerCareerEngine';
     export { serializeSoccerCareerSave } from './src/lib/soccerCareerSave';
   ` },
   bundle: true, platform: 'node', format: 'esm', write: false, logLevel: 'error',
 });
-const { ALL_GAMES, HUB_NAV, initCareer, FALLBACK_CLUBS, serializeSoccerCareerSave } =
+const { ALL_GAMES, HUB_NAV, EDITORIAL_RAIL_ROUTES, initCareer, FALLBACK_CLUBS, serializeSoccerCareerSave } =
   await import('data:text/javascript;base64,' + Buffer.from(bundle.outputFiles[0].text).toString('base64'));
-const all = [...new Set([...ALL_GAMES.map(game => game.path), ...HUB_NAV.map(hub => hub.route)])];
+const all = [...new Set([...ALL_GAMES.map(game => game.path), ...HUB_NAV.map(hub => hub.route), ...EDITORIAL_RAIL_ROUTES])];
 assert(all.length > 100);
 const key = '[data-game-desktop-rails]';
 const games = ['/soccer-career', '/club-manager', '/nba-my-career', '/nfl-my-career', '/stadium-tycoon',
