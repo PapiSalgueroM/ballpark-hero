@@ -1,3 +1,7 @@
+## 2026-11-26, XI trophy totals
+
+The shared XI result counter shows three trophies for a treble. It still shows the treble achievement and all three competition names in the season summary. Existing saved trophy lists are read as recorded.
+
 ## 2026-11-26, Build Your XI league standings
 
 Newly submitted lineups play in a 20-team simulated table. Every pair meets home and away. Managers can open League table to inspect the wins, draws, losses and points behind their finish. The saved table reopens with its XI. Existing completed results keep the originally saved finish. World XI's existing season format stays available.

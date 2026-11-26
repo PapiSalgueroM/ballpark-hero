@@ -136,6 +136,8 @@ try {
     const data = await page.evaluate(key => Object.fromEntries([key,'dukb-local-completions','dukb-streaks-v1'].map(k=>[k,localStorage.getItem(k)])),saveKey);
     let leagueTable;
     if (process.env.XI_EXPECT_TABLE === '1') {
+      const titles = JSON.parse(data[saveKey]).result.season.trophies;
+      assert.equal(Number(metrics.Trophies), titles.filter(title => title !== 'THE TREBLE').length);
       const toggle = panel.getByRole('button', { name: 'League table', exact: true });
       await toggle.click();
       const table = panel.getByRole('table');

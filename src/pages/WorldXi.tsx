@@ -31,6 +31,7 @@ import {
   shuffle,
   respinSlotCountry,
   simulateWorldXiSeason,
+  xiTrophyCount,
   worldXiMatchOdds,
   type WorldXiSeasonApproach,
   ratingsFor,
@@ -818,7 +819,7 @@ const WorldXi = () => {
                   <StatTile label="Points" value={seasonReport.points} state="pending" />
                   <StatTile
                     label="Trophies"
-                    value={seasonReport.trophies.length > 0 ? seasonReport.trophies.length : '0'}
+                    value={xiTrophyCount(seasonReport.trophies)}
                     state={seasonReport.trophies.length > 0 ? 'correct' : 'incorrect'}
                   />
                 </div>

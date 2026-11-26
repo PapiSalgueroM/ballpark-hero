@@ -548,6 +548,7 @@ export interface WhatIf {
 }
 
 export interface XiTableRow { team: number; wins: number; draws: number; losses: number }
+export const xiTrophyCount = (trophies: readonly string[]) => trophies.filter(title => title !== 'THE TREBLE').length;
 export const tablePoints = (row: XiTableRow) => row.wins * 3 + row.draws;
 
 export interface SeasonReport {

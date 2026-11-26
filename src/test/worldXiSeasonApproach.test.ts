@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { simulateWorldXiSeason, whatIfFinish, worldXiMatchOdds, settleXiTable, tablePoints, type WxPlayer } from '@/lib/worldXi';
+import { simulateWorldXiSeason, whatIfFinish, worldXiMatchOdds, settleXiTable, tablePoints, xiTrophyCount, type WxPlayer } from '@/lib/worldXi';
 
 const cards: [string, string, WxPlayer['position'], number, number][] = [
   ['Alisson', 'Brazil', 'GK', 31, 29],
@@ -18,6 +18,14 @@ const squad = (keeperValue = 29): WxPlayer[] => cards.map(([name, country, posit
   name, country, position, age, value: Math.round((index === 0 ? keeperValue : value) * 1_000_000), club: 'Fixture club',
 }));
 const shape = '4-3-3';
+
+it('counts the three competitions in a treble and keeps the saved achievement', () => {
+  const titles = ['THE TREBLE', 'League Title', 'Domestic Cup', 'Champions League'];
+  expect(xiTrophyCount(titles)).toBe(3);
+  expect(titles).toHaveLength(4);
+  expect(xiTrophyCount([])).toBe(0);
+  expect(xiTrophyCount(['Domestic Cup'])).toBe(1);
+});
 
 describe('World XI season approach', () => {
   it('replays a riskier fixture, preserves expected points and reconciles home and away points', () => {

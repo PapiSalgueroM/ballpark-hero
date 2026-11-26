@@ -22,7 +22,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { supabase } from '@/integrations/supabase/client';
 import { StatTile } from '@/components/game/StatTile';
 import { normalizePosition, playerRating } from '@/lib/squadDeal';
-import { ordinal, simulateWorldXiSeason, type WxPlayer } from '@/lib/worldXi';
+import { ordinal, simulateWorldXiSeason, xiTrophyCount, type WxPlayer } from '@/lib/worldXi';
 import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
 import { lineupFitSlots, seasonAdjust, xiFitBreakdown, type XiFitSlot } from '@/lib/xiFit';
 import { XiFitBreakdown, XiFitWorth } from '@/components/lineup/XiFitBreakdown';
@@ -735,7 +735,7 @@ const LineupBuilder = () => {
                     <StatTile label="Points" value={seasonReport.points} state="pending" />
                     <StatTile
                       label="Trophies"
-                      value={seasonReport.trophies.length}
+                      value={xiTrophyCount(seasonReport.trophies)}
                       state={seasonReport.trophies.length > 0 ? 'correct' : 'incorrect'}
                     />
                   </div>
