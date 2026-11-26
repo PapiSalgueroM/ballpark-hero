@@ -39,7 +39,7 @@ function ClueCards({ guesses }: { guesses: UfcGuessResult[] }) {
         value={index} onChange={e => setSelection({ index: Number(e.target.value), count: guesses.length })}>
         {guesses.map((item, i) => <option value={i} key={i}>{i + 1}. {item.fighterName}</option>)}
       </select>
-      <dl className="mt-2 grid grid-cols-3 gap-1.5">
+      <dl className="mt-2 grid grid-cols-2 gap-1.5 min-[360px]:grid-cols-3">
         {clues.map(({ key, label }) => {
           const cell = guess.cells[key];
           return <div data-ufc-clue={key} key={key} className={cn('min-w-0 rounded-lg p-2 [overflow-wrap:anywhere]', statusClass[cell.status])}>

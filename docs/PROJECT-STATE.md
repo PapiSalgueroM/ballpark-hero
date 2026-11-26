@@ -1,3 +1,7 @@
+## November 26 local review, compact UFC Guesser phones
+
+At 320 pixels, three clue columns split the word Heavyweight inside a card. The small-phone layout now gives each clue one of two columns. Chrome measured two columns at 320 pixels, three at 390 pixels and an unclipped 864-pixel comparison board at both laptop widths. All four two-guess daily saves survived reload.
+
 ## November 26 local review, Stadium Tycoon sponsor decision
 
 Stadium Tycoon compares the guaranteed sponsor payout against this season's qualifying matchdays and last season's recorded attendance. Partial crowd history shows its coverage. In a local Chrome replay an engine-promoted club had a $2,403 guarantee against $267 per qualifying date. The phone and laptop both showed a nine-date break-even across the new fourteen-game schedule. With three known crowds in a five-match fixture, two reached 128, including one exactly at the target. The seven sponsor tests passed.
