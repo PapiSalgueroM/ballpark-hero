@@ -69,6 +69,29 @@ afterEach(() => {
   saveFence.release(SAVE_KEY);
 });
 
+describe('Club Manager season settlement', () => {
+  it('records one completion when the review action is pressed twice before the season end renders', () => {
+    const starting = loadCareer(JSON.stringify(everton))!;
+    const unreviewed = { ...starting, week: starting.calendar.length, live: undefined, pendingSummary: null };
+    localStorage.setItem(SAVE_KEY, JSON.stringify(trimCareer(unreviewed)));
+    const hook = renderHook(() => useClubManager());
+    act(() => hook.result.current.resume());
+    expect(hook.result.current.phase).toBe('hub');
+
+    const reviewSeason = hook.result.current.play;
+    act(() => {
+      reviewSeason();
+      reviewSeason();
+    });
+
+    expect(hook.result.current.phase).toBe('seasonEnd');
+    expect(vi.mocked(recordCompletion).mock.calls).toEqual([['/club-manager', expect.any(Number)]]);
+    const saved = loadCareer()!;
+    expect(saved.pendingSummary).toEqual(hook.result.current.summary);
+    expect(saved.history.filter(row => row.season === saved.season)).toHaveLength(1);
+  });
+});
+
 describe('Club Manager automatic season checkpoints', () => {
   it.each(['plain', 'packed'] as const)('keeps an exact %s review after the real rollover saves', format => {
     const { hook, original, career } = openSeasonReview(format);

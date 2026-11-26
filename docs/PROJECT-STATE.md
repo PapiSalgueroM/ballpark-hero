@@ -1,3 +1,15 @@
+## 2026-11-26, Club Manager U21 campaigns
+
+Managers with academy facilities at level 12 can found their own U21 side for 45 million in the save's currency. The first six-match campaign is included. Later entries cost 12 million. Pick one of the club's own under-21 prospects and follow the team's scores on senior league dates. Every second youth fixture can develop the featured prospect, capped at potential. Senior cup dates and reloading do not award extra fixtures.
+
+In a private 390px browser replay, a fresh Manchester City save received late-game facilities, budget and one test academy prospect. Through the normal Academy and Matchday screens, the budget went from 100 to 55 million, seven senior fixtures produced six U21 results, and the prospect improved from 62 to 64. All six results and earned growth survived reopening the career. Local review build.
+
+## 2026-11-26, Club Manager season settlement
+
+Club Manager accepts a finished season once from the current screen before recording the result. Repeating See Season Review before the screen changes used to post two scored completions for an older career. Normal review, the calendar sim and the last match report use the same settlement check. The dismissal report also checks that it still owns the career before posting.
+
+The Everton regression reproduced two 9-point completion calls on the previous hook and one on the candidate. The 320px plain save and 1440px packed save opened the normal review, reloaded it without another completion and rolled over with one history row. The browser used only local fixtures. This is a local candidate.
+
 ## 2026-11-26, Build Your XI completed draft recovery
 
 Submitting a full XI now saves its eleven selected records, verdict and full season report together. The result opens on return with its original player stats and month-by-month numbers. Older unfinished drafts still open at their next pick or at review. Play Again clears the finished XI. Mounted tests cover canceled and conflicting picks, a failed write and retry, an unrated report, and a completed season restored with its simulator disabled. Local review only.

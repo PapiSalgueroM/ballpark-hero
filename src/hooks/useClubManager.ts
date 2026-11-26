@@ -45,6 +45,7 @@ import {
   captureClubManagerCheckpoint, checkpointClaimIsCurrent, checkpointSourceIsCurrent, keepClubManagerCheckpoint, type ClubManagerCheckpointSource,
 } from '@/lib/clubManagerCheckpoint';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
+import { foundYouthTeam, enterYouthCampaign } from '@/lib/clubManagerYouthTeam';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
 import type { PersonalTerms } from '@/lib/clubManagerDeals';
@@ -1030,11 +1031,31 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
   }, []);
 
   /* ---------- season progression ---------- */
+  const canSettle = useCallback((source: CareerState) =>
+    careerRef.current === source && holdsActiveSlot() && !movedOn(), [holdsActiveSlot, movedOn]);
+
+  const settleSeason = useCallback((source: CareerState, finished: CareerState) => {
+    if (!canSettle(source)) return;
+    const { state, summary: review } = finishSeason(finished);
+    // Claim this transition before a second press can reach the same handler.
+    careerRef.current = state;
+    if (postsScore(state)) recordCompletion('/club-manager', review.seasonScore);
+    else recordCompletion('/club-manager');
+    creditSeason(state);
+    setCareer(state);
+    setSummary(review);
+    setPhase('seasonEnd');
+  }, [canSettle]);
+
   const runEntry = useCallback((skipHalftime: boolean) => {
     if (!career) return;
     if (heldForTactics(() => { runEntry(skipHalftime); })) return;
     const res = playNextEntry(career, { skipHalftime, ...cmVarGameAsk(CM_VAR_LIVE) });
     if (res.blocked === 'position-state-invalid') { setPositionBlockedFor(career); return; }
+    if (res.kind === 'seasonOver') {
+      settleSeason(career, res.state);
+      return;
+    }
     setCareer(res.state);
     /* Round 119: the match stops at the interval now. Everything this game has
        built for eleven rounds happens between fixtures; this is the one moment
@@ -1062,16 +1083,8 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
       recordStreakDay('/club-manager');
       setReport(res.report);
       setPhase('matchResult');
-    } else if (res.kind === 'seasonOver') {
-      const { state, summary: sm } = finishSeason(res.state);
-      if (postsScore(state)) recordCompletion('/club-manager', sm.seasonScore);
-      else recordCompletion('/club-manager');
-      creditSeason(state);
-      setCareer(state);
-      setSummary(sm);
-      setPhase('seasonEnd');
     }
-  }, [career]);
+  }, [career, settleSeason]);
 
   const play = useCallback(() => runEntry(false), [runEntry]);
   /** Round 157: the quick sim. One tap, full result, no dressing room stop. */
@@ -1099,13 +1112,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
       return;
     }
     if (run.halt === 'seasonOver') {
-      const { state: done, summary: sm } = finishSeason(run.state);
-      if (postsScore(done)) recordCompletion('/club-manager', sm.seasonScore);
-      else recordCompletion('/club-manager');
-      creditSeason(done);
-      setCareer(done);
-      setSummary(sm);
-      setPhase('seasonEnd');
+      settleSeason(career, run.state);
       return;
     }
     setCareer(run.state);
@@ -1117,35 +1124,30 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
       setReport(run.lastReport);
       setPhase('matchResult');
     }
-  }, [career]);
+  }, [career, settleSeason]);
 
   const continueFromReport = useCallback(() => {
     if (!career) return;
     if (career.sacked) {
+      if (career.wilderness || !canSettle(career)) return;
+      /* Round 201: the sack opens the wilderness rather than closing the save. */
+      const next = enterWilderness(career);
+      careerRef.current = next;
       if (postsScore(career)) recordCompletion('/club-manager', currentSeasonScore(career));
       else recordCompletion('/club-manager');
       creditSeason(career);
-      /* Round 201: the sack opens the wilderness rather than closing the
-         save. The screen is the same route ('sacked'), what changed is that
-         it now has a way onward. */
-      setCareer(prev => (prev ? enterWilderness(prev) : prev));
+      setCareer(next);
       setPhase('sacked');
       return;
     }
     if (career.week >= career.calendar.length) {
-      const { state, summary: sm } = finishSeason(career);
-      if (postsScore(state)) recordCompletion('/club-manager', sm.seasonScore);
-      else recordCompletion('/club-manager');
-      creditSeason(state);
-      setCareer(state);
-      setSummary(sm);
-      setPhase('seasonEnd');
+      settleSeason(career, career);
       return;
     }
     setReport(null);
     setActiveTab('overview');
     setPhase('hub');
-  }, [career]);
+  }, [career, canSettle, settleSeason]);
 
   const nextSeason = useCallback((acceptOfferClub?: string) => {
     if (!career) return;
@@ -1474,6 +1476,13 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     setCareer(prev => (prev ? upgradeAcademy(prev, kind) ?? prev : prev));
   }, []);
 
+  const openYouthTeam = useCallback(() => {
+    setCareer(prev => prev && foundYouthTeam(prev));
+  }, []);
+  const fundYouthTeam = useCallback((id: string) => {
+    setCareer(prev => prev && enterYouthCampaign(prev, id));
+  }, []);
+
   const sendScout = useCallback((candidateId: string, regionId: string, weeks: number) => {
     setCareer(prev => (prev ? hireScout(prev, candidateId, regionId, weeks) ?? prev : prev));
   }, []);
@@ -1648,7 +1657,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     setCurrency, setNationJobs, setStrictness, turnOnNoSack, setDifficulty,
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, commitLoanPlan, commitRecruitment, renew, renewWithClause, terminate, signFree, setRole,
-    upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
+    upgradeFacility, openYouthTeam, fundYouthTeam, sendScout, callScoutHome, promote, release, setTraining,
     subAtHalftime, shapeAtHalftime, changeAtHalftime, secondHalf, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,
     answer,

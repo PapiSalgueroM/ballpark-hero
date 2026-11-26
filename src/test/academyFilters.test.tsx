@@ -22,6 +22,7 @@ vi.mock('@/lib/clubManager', () => ({
   SCOUT_TRIPS: [{ weeks: 1 }, { weeks: 2 }],
   MAX_SCOUTS: 3,
   MAX_PROSPECTS: 20,
+  prospectRegistrationRefusal: () => null,
   academyUpgradeCost: () => 1,
   tripCost: () => 1,
   money: (n: number) => `£${n}`,
