@@ -1,3 +1,7 @@
+## 2026-11-26, League seasons on the manager record
+
+Advancing to summer now copies the final league wins, draws, losses, goals for and goals against from the completed review into that season’s saved record. Manager > League seasons also shows earlier finishes with their original points. A blank 390px browser career played 42 fixtures at Everton and finished 15th with 39 points. Its 9W 12D 17L, 42 goals for and 58 against still appeared after renewing or releasing contracts, continuing to season two and reloading. This is a local review branch.
+
 ## 2026-11-26, Club Manager season settlement
 
 Club Manager accepts a finished season once from the current screen before recording the result. Repeating See Season Review before the screen changes used to post two scored completions for an older career. Normal review, the calendar sim and the last match report use the same settlement check. The dismissal report also checks that it still owns the career before posting.
