@@ -7,6 +7,8 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { Button } from '@/components/ui/button';
 import { Sparkles, Shield, Trophy, Target, Loader2, User, Bot, CheckCircle2, Zap } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
+import { fantasyAiShortlist, rivalPicksBeforeNextTurn } from '@/lib/fantasyDraftPlan';
+import { FantasyPickPlanner } from '@/components/fantasy-draft/FantasyPickPlanner';
 import { PlayerPool, type DraftPlayer } from '@/components/fantasy-draft/PlayerPool';
 import { DraftRoster } from '@/components/fantasy-draft/DraftRoster';
 import { SeasonStory } from '@/components/fantasy-draft/SeasonStory';
@@ -21,7 +23,7 @@ import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import { settleSeason, type SdSeason } from '@/lib/searchDiscard';
 import type { Player } from '@/types/game';
 import { getTodayET } from '@/lib/dateUtils';
-import { FANTASY_TEAM_SIZE as TEAM_SIZE, FANTASY_TOTAL_PICKS as TOTAL_PICKS, getPickOwner,
+import { FANTASY_TOTAL_PICKS as TOTAL_PICKS, getPickOwner,
   parseFantasyDraft, readFantasyDraft, restoreFantasyDraft, withFantasyDraftLock, type FantasyDraftSave } from '@/lib/fantasyDraftSave';
 
 /** The settle engine reads marketValue, age and name; this table's rows map
@@ -135,6 +137,7 @@ const FantasyDraft = () => {
   const userOptions = fantasyDraftCandidates(rule, userTeam, players, draftedIds);
   const userPickIds = new Set(userOptions.players.map(p => p.id));
   const activeOptions = currentTurn === 'user' ? userOptions : fantasyDraftCandidates(rule, aiTeam, players, draftedIds);
+  const rivalPicks = rivalPicksBeforeNextTurn(pickIndex, userFirst);
 
   // Fetch daily criteria
   useEffect(() => {
@@ -271,20 +274,8 @@ const FantasyDraft = () => {
     if (draftComplete || currentTurn !== 'ai' || players.length === 0) return;
     aiTimerRef.current = window.setTimeout(() => {
       const pool = fantasyDraftCandidates(rule, aiTeam, players, draftedIds).players;
-      if (pool.length === 0) return;
-      // Needs a keeper by the end: if the AI has no GK and keepers are
-      // getting scarce, grab one now.
-      const aiHasGk = aiTeam.some((p) => p.position === 'GK');
-      const gksLeft = pool.filter((p) => p.position === 'GK');
-      const slotsLeft = TEAM_SIZE - aiTeam.length;
-      let candidates = pool;
-      if (!aiHasGk && gksLeft.length > 0 && (gksLeft.length <= 2 || slotsLeft <= 2)) {
-        candidates = gksLeft;
-      }
-      const sorted = [...candidates].sort(
-        (a, b) => (b.market_value_millions || 0) - (a.market_value_millions || 0),
-      );
-      const topN = sorted.slice(0, Math.min(6, sorted.length));
+      const topN = fantasyAiShortlist(aiTeam, pool);
+      if (!topN.length) return;
       const pick = topN[Math.floor(Math.random() * topN.length)];
       draftPlayer(pick, 'ai');
     }, 2000);
@@ -496,6 +487,7 @@ const FantasyDraft = () => {
                       </div>
                       {!draftComplete && (
                         <div className="flex-1 order-1 lg:order-2">
+                          {currentTurn === 'user' && rivalPicks !== null && userOptions.players.length > 0 && <FantasyPickPlanner key={pickIndex} userTeam={userTeam} aiTeam={aiTeam} pool={players} claimed={draftedIds} eligible={userOptions.players} rule={rule} rivalPicks={rivalPicks} onPick={handleUserPick} />}
                           <PlayerPool
                             players={players}
                             draftedIds={draftedIds}
@@ -585,6 +577,7 @@ const FantasyDraft = () => {
           title="Fantasy Draft: Soccer Team Builder | DoUKnowBall"
           description="Draft your ultimate soccer squad against an AI opponent. Pick 11 players in a snake draft, then simulate a full season to see who built the better team."
           howToPlay={[
+            "Plan two picks to see the chance your second target survives the rival's turns. Reverse them to compare the order before you draft.",
             "Take turns drafting soccer players with the AI in a snake draft format (you pick, AI picks, repeat).",
             "Both sides build a 4-3-3: 1 goalkeeper, 4 defenders, 3 midfielders and 3 forwards. Daily criteria can relax for a needed position, never for an extra player in a full position.",
             "The moment the draft completes, both XIs play the same simulated 38 game season and the table names the winner. The narrated season stories and the community vote follow underneath."

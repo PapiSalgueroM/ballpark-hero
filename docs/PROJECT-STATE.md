@@ -1,3 +1,7 @@
+### November 26, 2026. Plan two Fantasy Draft picks
+
+The planner uses the same legal shortlist as the rival, considers both rival picks in snake order and lets the player reverse the targets. Signed-out phone and laptop drafts each picked all 22 players in four complete formations across the two runs. Taking Hakimi first left a 69% chance of reaching Haaland. Reversing them gave 100% for Hakimi. The real pick and the next two rival picks survived reload. Both games settled once at 74/100 with local fixtures. A comparison across 168 drafts preserved all prior rival selections.
+
 ### November 26, 2026. Preview starter fitness before kickoff
 
 Match Centre shows the actual starting XI and its play or rest projection using the dates of the next confirmed fixture and current training. Fresh XI can be applied from the card. Local signed-out phone and laptop playthroughs changed the lineup, reloaded and played both games. All 22 settled values matched. Rest took Donnarumma from 70% to 85% in three days and Pickford from 79% to 98% in seven. Twelve focused tests passed. Fixing recovery at seven days or removing appearance workload each broke all 11 rows in a separate three-day replay.
