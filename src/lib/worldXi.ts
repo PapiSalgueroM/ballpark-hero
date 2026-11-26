@@ -553,6 +553,12 @@ export const tablePoints = (row: XiTableRow) => row.wins * 3 + row.draws;
 
 export interface SeasonReport {
   leagueTable?: XiTableRow[];
+  meetings?: {
+    rival: number;
+    home: boolean;
+    goalsAgainst: number;
+    goals: { scorer: string; assist: string | null }[];
+  }[];
   squadRating: number; // 0-100 overall, drives the whole report
   tablePosition: number; // 1-20, 1 is champions
   points: number;
@@ -1030,6 +1036,7 @@ function counted(n: number, word: string): string {
 }
 
 interface SeasonExtras {
+  meetings?: SeasonReport['meetings'];
   goalsFor: number;
   goalsAgainst: number;
   cleanSheets: number;
@@ -1183,6 +1190,15 @@ function buildSeasonExtras(
   }
   const playerAssists = players.map((_, i) => goals.filter(g => g.assister === i).length);
   const assists = playerAssists.reduce((s, a) => s + a, 0);
+  const meetings = league.sharedFixtures?.map((fixture, match) => ({
+    rival: fixture.rival + 1,
+    home: fixture.home,
+    goalsAgainst: ga[match],
+    goals: goals.filter(g => g.match === match).map(g => ({
+      scorer: players[g.scorer].name,
+      assist: g.assister === null ? null : players[g.assister].name,
+    })),
+  }));
 
   /* A man's clean sheets are the shutouts in the games he played, so the
      keeper and the back four each count their own and never the team's. */
@@ -1393,6 +1409,7 @@ function buildSeasonExtras(
     awards: { youngPlayer, goalOfSeason },
     whatIf,
     venuePoints,
+    meetings,
   };
 }
 
@@ -1585,6 +1602,7 @@ export function simulateWorldXiSeason(
     whatIf: extras.whatIf,
     ...(extras.venuePoints ? { venuePoints: extras.venuePoints } : {}),
     ...(league.leagueTable ? { leagueTable: league.leagueTable } : {}),
+    ...(extras.meetings ? { meetings: extras.meetings } : {}),
     ...(seasonFit ? { fit: seasonFit } : {}),
   };
 }

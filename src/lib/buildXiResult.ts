@@ -10,6 +10,10 @@ const number = z.number().finite();
 const string = z.string();
 const fit = z.object({ roleFit: number, chemistry: number, balance: number });
 const season = z.object({
+  meetings: z.array(z.object({
+    rival: number.int().min(1).max(19), home: z.boolean(), goalsAgainst: number.int().nonnegative(),
+    goals: z.array(z.object({ scorer: string.min(1), assist: string.min(1).nullable() })),
+  })).length(38).refine(rows => new Set(rows.map(r => r.rival + ':' + r.home)).size === 38).optional().catch(undefined),
   leagueTable: z.array(z.object({ team: number.int().min(0).max(19), wins: number.int().nonnegative(),
     draws: number.int().nonnegative(), losses: number.int().nonnegative() })).length(20).optional(),
   squadRating: number, tablePosition: number, points: number, topScorer: z.object({ name: string, goals: number }).nullable(),

@@ -1,3 +1,7 @@
+### November 26, 2026. Build Your XI rival matches
+
+In a new completed draft, Head to head opens the rival that took the most points off the XI. All 19 opponents show the two actual simulated fixtures, scores, scorers and assists. Phone Club Year and desktop Mixed each drafted all eleven and finished on 104 points. All 38 games on each device survived reload with one completion. A saved 102-point season from the previous build reopened with its original 11,514 bytes and final table. The repeatable parity replay compared 72 reports and 1,368 fixtures against the earlier engine with 859,753 identical random draws. Fifteen focused tests, application types, the production build, 19 selected simulations and snapshot startup passed. Lint found zero new diagnostics across this review series.
+
 ### November 26, 2026. World Series editions in Finals Sprint
 
 The optional MLB pack covers 12 World Series from 1955 through 2023. Each clue accepts either finalist and displays its own MLB postseason source. Historical answers keep names such as Brooklyn Dodgers, Florida Marlins, Cleveland Indians and Anaheim Angels in the years they played. Phone and laptop finished six clues for 100 and restored the exact completed Daily. Practice timed out and replayed. The four previous sports also passed their browser controls. The MLB source pages and Baseball Almanac agree on each finalist. All 46 focused tests and ten signed-out browser journeys passed.
@@ -10,11 +14,11 @@ Daily now deals the board, labels it and saves the result under a single Eastern
 
 An eligible club can now exchange its own first available selection for a willing generated senior player. The selling club uses that exact pick. Both players and their clubs remain in the season history. Geelong traded pick two for a defender; the seller used it on a new prospect. At 390 and 1366 pixels both registrations and the second-season history survived reload. Passing kept the original pick. In 24 simulated summers passing reproduced the original drafts exactly; all 17 available accepted offers finished with 648 distinct senior players, 36 per club, and legal role coverage. The 48 focused checks passed.
 
-Named NRL halves and five-eighth eligibility
+### November 26, 2026. Named NRL halves and five-eighth eligibility
 
 In the named 2026 opening squads, the game now recognises the four recipients of the previous two seasons of halves honours when generating initial abilities. Tom Dearden can play halfback or five-eighth. Across 256 fresh Cowboys saves his median simulated overall rose from 68 to 81. On phone and desktop, moving another player to halfback and starting Dearden at five-eighth survived reload. A saved 71-rated Dearden reopened unchanged. All 18 focused tests passed and all 4,352 sampled team lists retained their original salary cap.
 
-Stanley Cup finalists in Finals Sprint
+### November 26, 2026. Stanley Cup finalists in Finals Sprint
 
 The optional Finals Sprint in Alphabet Sprint now has 12 verified NHL finals from 1967 through 2024. Each saved Daily keeps its deal, accepted names and score. Signed-out Chrome at 390 and 1366 pixels finished all six clues for 100, restored the same answers after reload and played a separate practice round. Three existing sports also passed phone and desktop checks. The NHL media guide and The Hockey Writers archive independently confirm the two finalists for each year. All 32 focused tests and eight browser journeys passed.
 

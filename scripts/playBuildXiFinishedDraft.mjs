@@ -30,6 +30,47 @@ const dataset = market.map(row => ({ ...row, year: 2026, name_folded: fold(row.p
 const saveKey = 'dukb-build-your-xi-draft-v1';
 const report = { width, mode: mixed ? 'mixed' : 'club-year', evaluations: 0, fixture: 'Committed 600-row 2026 market snapshot', picks: [], completions: [], errors: [] };
 const api = 'https://flawuiqbvjobmkfkauhw.supabase.co';
+async function checkMeetings(panel, season, stage) {
+  const { meetings } = season;
+  assert.equal(meetings.length, 38, 'A completed season has 38 matchdays');
+  const toggle = panel.getByRole('button', { name: 'Head to head', exact: true });
+  await toggle.click();
+  const section = panel.getByRole('region', { name: 'Head to head', exact: true });
+  const select = section.getByRole('combobox', { name: 'League opponent' });
+  const options = await select.locator('option').evaluateAll(nodes => nodes.map(node => ({ id: Number(node.value), label: node.textContent })));
+  assert.deepEqual(options.map(row => row.id).sort((a, b) => a - b), Array.from({length: 19}, (_, i) => i + 1));
+  const result = [];
+  for (const { id, label } of options) {
+    const pairs = meetings.map((match, i) => ({ ...match, day: i + 1 })).filter(m => m.rival === id);
+    assert.equal(pairs.length, 2);
+    assert.deepEqual(pairs.map(m => m.home).sort(), [false, true]);
+    const points = pairs.reduce((sum, m) => sum + (m.goals.length > m.goalsAgainst ? 3 : m.goals.length === m.goalsAgainst ? 1 : 0), 0);
+    assert.equal(label, 'Rival ' + id + ' · Your XI took ' + points + '/6 pts');
+    await select.selectOption(String(id));
+    await section.getByRole('article', { name: 'Matchday ' + pairs[0].day, exact: true }).waitFor();
+    const displayed = await section.getByRole('article').evaluateAll(articles => articles.map(article => ({
+      day: article.getAttribute('aria-label'), lines: Array.from(article.querySelectorAll('p'), p => p.textContent),
+      goals: Array.from(article.querySelectorAll('li'), li => li.textContent),
+    })));
+    assert.equal(displayed.length, 2);
+    for (const [i, match] of pairs.entries()) {
+      const scored = match.goals.length;
+      const day = 'Matchday ' + match.day, outcome = scored > match.goalsAgainst ? 'Win' : scored === match.goalsAgainst ? 'Draw' : 'Loss';
+      assert.equal(displayed[i].day, day);
+      assert.equal(displayed[i].lines[0], day + ' · ' + (match.home ? 'Home' : 'Away'));
+      assert.equal(displayed[i].lines[1], outcome + ' · ' + scored + ' - ' + match.goalsAgainst);
+      assert.deepEqual(displayed[i].goals, match.goals.map(g => g.scorer + (g.assist ? ' (assisted by ' + g.assist + ')' : '')));
+    }
+    result.push({ rival: id, points, displayed });
+    if (output && (id === options[0].id || id === options.at(-1).id)) {
+      await mkdir(output, {recursive: true});
+      await section.screenshot({path: path.join(output, nameStem + '-head-to-head-' + stage + '-rival-' + id + '.png')});
+    }
+  }
+  await toggle.click();
+  return result;
+}
+
 const browser = await chromium.launch({ ...(process.env.CHROME_PATH && { executablePath: process.env.CHROME_PATH }), args: ['--no-proxy-server'] });
 try {
   const context = await browser.newContext({ viewport: { width, height: width < 600 ? 844 : 900 }, reducedMotion: 'reduce', serviceWorkers: 'block' });
@@ -121,7 +162,7 @@ try {
   }
   await page.getByRole('button', { name: 'Submit Team', exact: true }).click();
   const season = page.getByRole('heading', { name: 'Season Report', exact: true });
-  const collect = async () => {
+  const collect = async stage => {
     await season.waitFor();
     const xi = page.getByText('Your 4-3-3 XI', { exact: true }).locator('..');
     const lineup = await xi.locator(':scope > div').first().locator(':scope > div').evaluateAll(rows =>
@@ -174,9 +215,10 @@ try {
       }
       await toggle.click();
     }
-    return { lineup, metrics, verdict, seasonStats, data, leagueTable };
+    const meetings = process.env.XI_EXPECT_MEETINGS === '1' ? await checkMeetings(panel, JSON.parse(data[saveKey]).result.season, stage) : undefined;
+    return { lineup, metrics, verdict, seasonStats, data, leagueTable, meetings };
   };
-  report.before = await collect();
+  report.before = await collect('submitted');
   await page.waitForLoadState('networkidle');
   assert.equal(report.completions.length, 1, 'Submit records one completed game');
   assert.equal(report.completions[0].game, 'build-your-xi');
@@ -189,7 +231,7 @@ try {
     assert.equal(report.before.data[saveKey],null);
     report.outcome='Original build discarded the submitted XI and verdict';
   } else {
-    report.after = await collect();
+    report.after = await collect('reloaded');
     assert.deepEqual(report.after, report.before, 'Entire rendered lineup, match stats, verdict and saved bytes survive reload');
     assert.ok(report.after.data[saveKey]);
     report.outcome='Finished lineup and result survived a genuine reload';

@@ -101,6 +101,32 @@ describe('World XI season approach', () => {
 });
 
 describe('Build Your XI head-to-head standings', () => {
+  it('accounts for every goal, assist and league point in the two meetings with each rival', () => {
+    for (const approach of ['balanced', 'attack', 'protect'] as const) {
+      const report = simulateWorldXiSeason(squad(), shape, undefined, approach, 'round-robin');
+      const games = report.meetings!;
+      expect(games).toHaveLength(38);
+      expect(new Set(games.map(g => g.rival + ':' + g.home)).size).toBe(38);
+      expect(games.filter(g => g.home)).toHaveLength(19);
+      for (const row of report.leagueTable!.filter(row => row.team !== 0)) {
+        expect(games.filter(g => g.rival === row.team)).toHaveLength(2);
+      }
+      const goals = games.flatMap(g => g.goals);
+      expect(goals).toHaveLength(report.goalsFor!);
+      expect(games.reduce((sum, g) => sum + g.goalsAgainst, 0)).toBe(report.goalsAgainst);
+      expect(games.filter(g => g.goalsAgainst === 0)).toHaveLength(report.cleanSheets!);
+      const wins = games.filter(g => g.goals.length > g.goalsAgainst).length;
+      const draws = games.filter(g => g.goals.length === g.goalsAgainst).length;
+      expect({ wins, draws, losses: games.length - wins - draws }).toEqual(report.record);
+      expect(wins * 3 + draws).toBe(report.points);
+      for (const player of report.playerStats!) {
+        expect(goals.filter(g => g.scorer === player.name)).toHaveLength(player.goals);
+        expect(goals.filter(g => g.assist === player.name)).toHaveLength(player.assists);
+      }
+      expect(goals.every(g => g.scorer !== g.assist)).toBe(true);
+    }
+    expect(simulateWorldXiSeason(squad(), shape).meetings).toBeUndefined();
+  });
   it('gives every rival the opposite result from each home and away game against your XI', () => {
     const won = settleXiTable(17, Array(38).fill('W'));
     const lost = settleXiTable(17, Array(38).fill('L'));
