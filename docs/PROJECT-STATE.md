@@ -1,3 +1,7 @@
+## November 26 verified pro career regression fixtures
+
+The normal NFL, NBA, MLB and NHL compatibility run now passes all 58 position and era groups, covering 464 seeded 14-season careers. For the 16 previously failing groups, reversing the earlier approved playoff rule changes in memory reproduced 128 original whole saves and their lowest bank balances. The scoped recorder changed exactly 43 career entries and matched 16 independently predicted group hashes. Among the traced rules were backup quarterback usage, NBA Finals MVP selection, pitcher decision limits and postseason goalie workload. No gameplay code or player saves changed in this fixture update.
+
 ## November 26 local Soccer Career academy startup
 
 A development-only JSX tagger inserted attributes before an explicit component type on the awards card. The flagship module returned HTTP 500, which made the academy creator report that its clubs could not load. Type inference from the saved ballot supplies the same nominee type. The module now returns HTTP 200 locally. Fresh phone and laptop careers both reached the first senior season in development and retained their earned target after reload. All 27 focused awards tests passed.
