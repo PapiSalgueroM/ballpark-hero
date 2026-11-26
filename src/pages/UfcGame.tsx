@@ -3,6 +3,7 @@ import { useUfcGame } from '@/hooks/useUfcGame';
 import { UfcFighterSearch } from '@/components/ufc/UfcFighterSearch';
 import { UfcGameBoard } from '@/components/ufc/UfcGameBoard';
 import { UfcHowToPlay } from '@/components/ufc/UfcHowToPlay';
+import UfcDivisionRun from '@/components/ufc/UfcDivisionRun';
 import { GameNav } from '@/components/game/GameNav';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import { GameShell } from '@/components/game/GameShell';
@@ -13,7 +14,7 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { cn } from '@/lib/utils';
-import { safeSetItem } from '@/lib/safeStorage';
+import { safeSessionStorage, safeSetItem } from '@/lib/safeStorage';
 
 const UfcGame = () => {
   const {
@@ -32,6 +33,7 @@ const UfcGame = () => {
   } = useUfcGame();
 
   const [showRules, setShowRules] = useState(false);
+  const [division, setDivision] = useState(() => safeSessionStorage.getItem('ufc-division-open') === '1');
 
   useEffect(() => {
     const seen = localStorage.getItem('ufc-rules-seen');
@@ -52,31 +54,36 @@ const UfcGame = () => {
         width="wide"
         help="none"
         title="UFC GUESSER"
-        subtitle="Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia, no login needed."
+        subtitle={division ? 'Find three fighters from one weight class in eight guesses.' : 'Guess the UFC fighter in 8 tries using clues like weight class, record, and nationality. Free MMA trivia, no login needed.'}
         headerExtra={
           <>
-            {/* Daily / Unlimited toggle */}
-            <div className="flex items-center justify-center gap-1 mt-6 bg-secondary rounded-full p-1 w-fit mx-auto">
-              {(['daily', 'unlimited'] as const).map((m) => (
+            <div className="flex max-w-full items-center justify-center gap-1 mt-6 bg-secondary rounded-full p-1 w-fit mx-auto">
+              {(['daily', 'unlimited', 'division'] as const).map((m) => (
                 <button
                   key={m}
-                  onClick={() => switchMode(m)}
+                  type="button"
+                  aria-pressed={division ? m === 'division' : mode === m}
+                  onClick={() => {
+                    setDivision(m === 'division');
+                    if (m === 'division') safeSessionStorage.setItem('ufc-division-open', '1');
+                    else { safeSessionStorage.removeItem('ufc-division-open'); switchMode(m); }
+                  }}
                   className={cn(
-                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
-                    mode === m
+                    'min-h-11 whitespace-nowrap px-2.5 sm:px-5 py-1.5 rounded-full text-xs sm:text-sm font-semibold transition-all',
+                    (division ? m === 'division' : mode === m)
                       ? 'bg-background text-foreground shadow-sm'
                       : 'text-muted-foreground hover:text-foreground'
                   )}
                 >
-                  {m === 'daily' ? '📅 Daily' : '∞ Unlimited'}
+                  {m === 'daily' ? '📅 Daily' : m === 'unlimited' ? '∞ Unlimited' : 'Division run'}
                 </button>
               ))}
             </div>
 
-            <p className="text-sm text-muted-foreground mt-4">
+            {!division && <p className="text-sm text-muted-foreground mt-4">
               Guesses:{' '}
               <span className="text-foreground font-semibold">{guesses.length}</span> / {maxGuesses}
-            </p>
+            </p>}
 
             <button
               onClick={() => setShowRules(true)}
@@ -88,6 +95,7 @@ const UfcGame = () => {
           </>
         }
       >
+        {division ? <UfcDivisionRun /> : <>
         {isLoading ? (
           <div className="mb-8 flex justify-center">
             <p data-no-prerender className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
@@ -140,6 +148,7 @@ const UfcGame = () => {
           </div>
         )}
 
+        </>}
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-xs text-muted-foreground">
           <div className="flex items-center gap-1.5">
             <div className="w-4 h-4 rounded bg-correct" />
@@ -160,7 +169,7 @@ const UfcGame = () => {
         </div>
 
         <GameSeoContent
-          reportControl={<ReportQuestion gameType="ufc" gameContext={{ targetFighter: targetFighter?.name }} />}
+          reportControl={<ReportQuestion gameType="ufc" gameContext={division ? { mode: 'division' } : { mode, targetFighter: targetFighter?.name }} />}
           pageHasOwnH1
           title="UFC Guesser: Guess the MMA Fighter | DoUKnowBall"
           description="Test your UFC and MMA knowledge with daily trivia puzzles covering fighters, records, weight classes and championship history."

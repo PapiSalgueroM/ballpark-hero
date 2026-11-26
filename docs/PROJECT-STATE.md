@@ -1,3 +1,7 @@
+### November 26, 2026. UFC division run
+
+Players choose a weight class and identify three fighters with eight guesses shared across the run. The recap keeps each guess and its exact clue count. Signed-out Chrome at 320 pixels ended on a miss with two fighters found. At 390 and 1366 pixels the final correct name landed on guess eight. Each result and its clue history survived reload with the prior Daily save intact. A denied save and a stale tab preserved the original run. Escape followed by Enter spends zero guesses, and the next round keeps keyboard focus. Six UFC tests, the standard production build, 16 site simulations and the browser snapshot startup passed.
+
 ### November 26, 2026. Plan two Fantasy Draft picks
 
 The planner uses the same legal shortlist as the rival, considers both rival picks in snake order and lets the player reverse the targets. Signed-out phone and laptop drafts each picked all 22 players in four complete formations across the two runs. Taking Hakimi first left a 69% chance of reaching Haaland. Reversing them gave 100% for Hakimi. The real pick and the next two rival picks survived reload. Both games settled once at 74/100 with local fixtures. A comparison across 168 drafts preserved all prior rival selections.

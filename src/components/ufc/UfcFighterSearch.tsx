@@ -44,10 +44,11 @@ export function UfcFighterSearch({ fighters, guessedNames, onSelect }: UfcFighte
   }, [onSelect]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (!isOpen) return;
     if (e.key === 'Escape') setIsOpen(false);
     else if (e.key === 'ArrowDown') { e.preventDefault(); setHighlightIndex(i => Math.min(i + 1, filtered.length - 1)); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); setHighlightIndex(i => Math.max(i - 1, 0)); }
-    else if (e.key === 'Enter' && filtered.length > 0) { e.preventDefault(); handleSelect(filtered[highlightIndex]); }
+    else if (e.key === 'Enter' && filtered[highlightIndex]) { e.preventDefault(); handleSelect(filtered[highlightIndex]); }
   };
 
   const renderName = (name: string) => {
