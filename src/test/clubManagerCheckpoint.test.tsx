@@ -80,7 +80,7 @@ describe('Club Manager season settlement', () => {
     const starting = loadCareer(JSON.stringify(everton))!;
     const unreviewed = {
       ...starting, week: starting.calendar.length, live: undefined, pendingSummary: null,
-      restoredFromCheckpoint: restored,
+      restoredFromCheckpoint: restored ? (true as const) : undefined,
     };
     localStorage.setItem(SAVE_KEY, JSON.stringify(trimCareer(unreviewed)));
     const hook = renderHook(() => useClubManager());
@@ -109,7 +109,7 @@ describe('Club Manager season settlement', () => {
     expect(starting.uclGroup).toBeNull();
     expect(starting.calendar.at(-1)).toMatchObject({ type: 'uclKo', uclRound: 'F' });
     const end = starting.calendar.length;
-    const before = { ...starting, week: end - 1, live: undefined, pendingSummary: null, restoredFromCheckpoint: restored };
+    const before = { ...starting, week: end - 1, live: undefined, pendingSummary: null, restoredFromCheckpoint: restored ? (true as const) : undefined };
     localStorage.setItem(SAVE_KEY, JSON.stringify(trimCareer(before)));
     const hook = renderHook(() => useClubManager());
     act(() => hook.result.current.resume());
