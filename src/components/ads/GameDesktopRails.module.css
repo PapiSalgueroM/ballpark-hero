@@ -14,6 +14,12 @@
     right: calc(var(--game-ad-rail) + 1rem);
   }
 
+  /* A kept-aside save notice must not sit in a rail or cover the career tools. */
+  .game [data-dukb-set-aside] {
+    left: calc(var(--game-ad-rail) + 1rem);
+    right: auto;
+  }
+
   .game :is([data-career-action-bar="floating"], [data-game-rail-dock="full"]) {
     left: var(--game-ad-rail);
     right: var(--game-ad-rail);
