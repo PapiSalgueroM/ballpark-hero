@@ -41,7 +41,7 @@ const LineupBuilder = () => {
     filledSlots,
     filledSlotsArray,
     filledCount,
-    verdict,
+    verdict, savedSeason,
     isEvaluating,
     isValidating,
     validationError,
@@ -72,6 +72,8 @@ const LineupBuilder = () => {
   const [browseActivation, setBrowseActivation] = useState(0);
   const inputOwner = useRef<HTMLDivElement>(null);
   const focusPickInput = useRef(false);
+  const positionPicker = useRef<HTMLSelectElement>(null);
+  const selectingFromPicker = useRef(false);
   const isClubYear = draftChoice.mode !== 'mixed';
   const recordedYear = isClubYear ? draftChoice.year : null;
   const lastYear = isClubYear ? lastRecordedYear(draftChoice) : null;
@@ -93,6 +95,20 @@ const LineupBuilder = () => {
     focusPickInput.current = false;
     inputOwner.current?.querySelector('input')?.focus();
   }, [phase, selectedPositionIndex, filledCount]);
+
+  useLayoutEffect(() => {
+    if (phase === 'building' && selectedPositionIndex === null && filledCount > 0 && selectingFromPicker.current) {
+      positionPicker.current?.focus({ preventScroll: true });
+    }
+  }, [phase, selectedPositionIndex, filledCount]);
+
+  const chooseDraftPosition = (index: number) => {
+    selectingFromPicker.current = true;
+    inputRevision.current += 1;
+    setPlayerInput('');
+    setBrowsingPlayers(false);
+    selectPosition(index);
+  };
 
   const reopenLastPick = () => {
     if (!undoLastPick()) return;
@@ -267,7 +283,7 @@ const LineupBuilder = () => {
             browsePageSize={browsingPlayers ? 50 : undefined}
             placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
             disabled={searchDisabled}
-            autoFocus={!isClubYear}
+            autoFocus={!isClubYear && !selectingFromPicker.current}
             showRecordedYear={draftChoice.mode === 'club-era'}
             emptyText={replacingSlot ? 'No matching records. Try another name or keep your current pick.' : isClubYear ? 'No matching records. Try another name or reroll the club.' : undefined}
             validateOnly
@@ -290,6 +306,11 @@ const LineupBuilder = () => {
   const fitSlots: XiFitSlot[] = useMemo(() => lineupFitSlots(positions, filledSlots), [positions, filledSlots]);
   const fitBreakdown = useMemo(() => xiFitBreakdown(fitSlots), [fitSlots]);
   const slotLabels = useMemo(() => positions.map((p) => p.label), [positions]);
+  const pickerLabels = useMemo(() => slotLabels.map((label, index) => {
+    if (slotLabels.indexOf(label) === slotLabels.lastIndexOf(label)) return label;
+    const instance = slotLabels.slice(0, index + 1).filter(slot => slot === label).length;
+    return `${label} ${instance}`;
+  }), [slotLabels]);
 
   /* Round 442, his "the simulation wasnt that good like other games and the
      details were bland". The result was one AI paragraph and a list of names.
@@ -320,9 +341,9 @@ const LineupBuilder = () => {
      row that has one, so this is a guard rather than a common case: if a squad
      ever reaches the result screen without values, it gets the verdict and no
      invented season. */
-  const canShowSeasonReport = phase === 'result' || (isClubYear && phase === 'reviewing');
   const seasonReport = useMemo(() => {
-    if (!canShowSeasonReport || ratedXi.length !== 11 || ratedXi.some((r) => r.value <= 0)
+    if (phase === 'result') return savedSeason;
+    if (phase !== 'reviewing' || ratedXi.length !== 11 || ratedXi.some((r) => r.value <= 0)
       || (isClubYear && ratedXi.some((r) => r.rating === null))) return null;
     const squad: WxPlayer[] = ratedXi.map(({ slot, value }) => ({
       name: buildXiReportName(slot, filledSlotsArray),
@@ -333,7 +354,7 @@ const LineupBuilder = () => {
       age: slot.pick?.age,
     }));
     return simulateWorldXiSeason(squad, formation ?? '4-3-3', seasonAdjust(fitBreakdown));
-  }, [canShowSeasonReport, ratedXi, filledSlotsArray, formation, fitBreakdown, isClubYear]);
+  }, [phase, savedSeason, ratedXi, filledSlotsArray, formation, fitBreakdown, isClubYear]);
 
   const recordedYearVerdict = useMemo<AIVerdict | null>(() => {
     if (recordedYear === null) return null;
@@ -504,6 +525,23 @@ const LineupBuilder = () => {
                 )}
               </div>
 
+              <div className="flex items-center gap-3">
+                <label htmlFor="lineup-draft-position" className="shrink-0 text-sm font-semibold text-foreground">Position to fill</label>
+                <select
+                  id="lineup-draft-position"
+                  ref={positionPicker}
+                  value={selectedPositionIndex ?? ''}
+                  onChange={event => chooseDraftPosition(Number(event.target.value))}
+                  disabled={isValidating}
+                  className="min-h-11 min-w-0 flex-1 rounded-xl border border-border bg-card px-2 text-base text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+                >
+                  <option value="" disabled>Choose a position</option>
+                  {pickerLabels.map((label, index) => (
+                    !filledSlots.has(index) && <option key={index} value={index}>{label}</option>
+                  ))}
+                </select>
+              </div>
+
               {/* Input area */}
               {/* Round 413: once the day allowance is spent the search box
                   would only hand back the same refusal, so the strip says so
@@ -514,14 +552,8 @@ const LineupBuilder = () => {
                 </p>
               )}
 
-              {(isClubYear || (selectedPositionIndex !== null && currentTeam && !isSpinning && !checkingDown)) && (
-                <div className="animate-fade-in space-y-3">
-                  <p className="text-sm text-center text-muted-foreground">
-                    {selectedPositionIndex === null ? 'Select a position on the pitch' : <>Filling: <span className="font-bold text-primary">{positions[selectedPositionIndex]?.label}</span></>}
-                  </p>
-
-                  {pickSearch}
-                </div>
+              {selectedPositionIndex !== null && currentTeam && !isSpinning && (isClubYear || !checkingDown) && (
+                <div className="animate-fade-in space-y-3">{pickSearch}</div>
               )}
 
               {validationError && (
@@ -531,11 +563,6 @@ const LineupBuilder = () => {
                 </div>
               )}
 
-              {!isClubYear && selectedPositionIndex === null && !isSpinning && (
-                <p className="text-center text-sm text-muted-foreground animate-fade-in">
-                  ↓ Select a position on the pitch
-                </p>
-              )}
             </div>
 
             {/* Formation Pitch on bottom */}
@@ -547,7 +574,10 @@ const LineupBuilder = () => {
                 positions={positions}
                 filledSlots={filledSlots}
                 selectedIndex={selectedPositionIndex}
-                onSelectPosition={selectPosition}
+                onSelectPosition={index => {
+                  selectingFromPicker.current = false;
+                  selectPosition(index);
+                }}
               />
             </div>
 
@@ -617,8 +647,8 @@ const LineupBuilder = () => {
               <button
                 onClick={() => {
                   if (isClubYear) {
-                    if (recordedYearVerdict) completeRecordedYearDraft(recordedYearVerdict);
-                  } else void evaluateTeam();
+                    if (recordedYearVerdict) completeRecordedYearDraft(recordedYearVerdict, seasonReport);
+                  } else void evaluateTeam(seasonReport);
                 }}
                 disabled={isEvaluating || !!replacingSlot}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
@@ -633,6 +663,7 @@ const LineupBuilder = () => {
         {/* Result Phase */}
         {phase === 'result' && verdict && (
           <div className="max-w-xl mx-auto">
+            {validationError && <p role="alert" className="text-center text-sm text-destructive">{validationError}</p>}
             <ResultScreen
               outcomeEmoji={<Trophy className="w-12 h-12 text-primary mx-auto" />}
               headline={verdict.rating}

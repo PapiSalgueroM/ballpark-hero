@@ -8,7 +8,10 @@ import { FORMATIONS, lastRecordedYear, recordedYearsLabel } from '@/types/lineup
 import { checkLineupPick, gradeFit, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionFit';
 import type { Position } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
-import { clubPickVerifies, isCurrentBuildXiDraft, loadBuildXiDraft, recordedPickVerifies, writeBuildXiDraft } from '@/lib/buildXiDraft';
+import { BUILD_XI_DRAFT_KEY, clubPickVerifies, isCurrentBuildXiDraft, recordedPickVerifies, writeBuildXiDraft } from '@/lib/buildXiDraft';
+import { loadBuildXiDraft, type BuildXiResult } from '@/lib/buildXiResult';
+import { recheckStorageWrites, safeSetItem } from '@/lib/safeStorage';
+import type { SeasonReport } from '@/lib/worldXi';
 import { buildXiAlreadyPicked, buildXiExclusions, buildXiNamesake, buildXiReviewedName } from '@/lib/buildXiPlayers';
 import { normalizeName } from '@/lib/playerSearch';
 import { verifiedPositionFallback } from '@/data/verifiedSoccerPositions';
@@ -90,6 +93,7 @@ export function useLineupBuilder() {
   const [saved] = useState(loadBuildXiDraft);
   const [formation, setFormation] = useState<Formation | null>(saved.draft?.formation ?? null);
   const [phase, setPhase] = useState<GamePhase>(() => {
+    if (saved.result) return 'result';
     if (!saved.draft) return 'formation';
     return saved.draft.slots.length === 11 ? 'reviewing' : 'building';
   });
@@ -97,7 +101,8 @@ export function useLineupBuilder() {
   const [selectedPositionIndex, setSelectedPositionIndex] = useState<number | null>(null);
   const [filledSlots, setFilledSlots] = useState(() => new Map<number, FilledSlot>(saved.draft?.slots));
   const [teamAssignments, setTeamAssignments] = useState<TeamAssignment[]>(saved.draft?.teamAssignments ?? []);
-  const [verdict, setVerdict] = useState<AIVerdict | null>(null);
+  const [result, setResult] = useState<BuildXiResult | null>(saved.result);
+  const verdict = result?.verdict ?? null;
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -113,6 +118,7 @@ export function useLineupBuilder() {
     return true;
   }, []);
   useLayoutEffect(() => {
+    if (phase === 'result') return;
     const draft = formation && (phase === 'building' || phase === 'reviewing')
       ? JSON.stringify({ formation, draftChoice, teamAssignments, slots: [...filledSlots] }) : null;
     if (draft !== previousDraft.current && !persistDraft(draft)) previousDraft.current = draft;
@@ -163,7 +169,7 @@ export function useLineupBuilder() {
     setPhase('building');
     setSelectedPositionIndex(null);
     setFilledSlots(new Map());
-    setVerdict(null);
+    setResult(null);
     setValidationError(null);
   }, [cancelValidation, cancelEvaluation]);
 
@@ -441,7 +447,25 @@ export function useLineupBuilder() {
       .map(([, slot]) => slot);
   }, [filledSlots]);
 
-  const completeRecordedYearDraft = useCallback((nextVerdict: AIVerdict) => {
+  const finishDraft = useCallback((verdict: AIVerdict, season: SeasonReport | null) => {
+    if (!isCurrentBuildXiDraft(storedDraft.current)) {
+      setValidationError(STALE_DRAFT_MESSAGE);
+      return;
+    }
+    const result = { verdict, season };
+    const raw = JSON.stringify({ version: 2, draft: { formation, draftChoice, teamAssignments, slots: [...filledSlots] }, result });
+    if (recheckStorageWrites() === 'full' || !safeSetItem(BUILD_XI_DRAFT_KEY, raw)) {
+      setValidationError('Your XI is still in review. Free up browser storage and submit again to save the result.');
+      return;
+    }
+    storedDraft.current = raw;
+    previousDraft.current = raw;
+    setResult(result);
+    setValidationError(null);
+    setPhase('result');
+  }, [formation, draftChoice, teamAssignments, filledSlots]);
+
+  const completeRecordedYearDraft = useCallback((nextVerdict: AIVerdict, season: SeasonReport | null = null) => {
     if (draftChoice.mode === 'mixed' || phase !== 'reviewing' || replacingSlot || filledSlotsArray.length !== 11
       || filledSlotsArray.some((slot, index) =>
         buildXiAlreadyPicked(buildXiExclusions(filledSlotsArray.slice(0, index)), slot.playerName, slot.pick))
@@ -449,13 +473,16 @@ export function useLineupBuilder() {
         { name: slot.assignedTeam, isNation: slot.isNation }, slot.role, slot.pick, draftChoice,
       ))) return;
     cancelEvaluation();
-    setVerdict(nextVerdict);
-    setPhase('result');
-  }, [draftChoice, phase, replacingSlot, filledSlotsArray, cancelEvaluation]);
+    finishDraft(nextVerdict, season);
+  }, [draftChoice, phase, replacingSlot, filledSlotsArray, cancelEvaluation, finishDraft]);
 
-  const evaluateTeam = useCallback(async () => {
+  const evaluateTeam = useCallback(async (season: SeasonReport | null = null) => {
     if (draftChoice.mode !== 'mixed' || phase !== 'reviewing' || replacingSlot) return;
     if (filledSlotsArray.length !== 11) return;
+    if (!isCurrentBuildXiDraft(storedDraft.current)) {
+      setValidationError(STALE_DRAFT_MESSAGE);
+      return;
+    }
     const run = ++evaluationRun.current;
     setIsEvaluating(true);
     try {
@@ -477,46 +504,32 @@ export function useLineupBuilder() {
         }
       );
       if (run !== evaluationRun.current) return;
+      if (!resp.ok) throw new Error('Scouting report unavailable');
       const data = await resp.json();
       if (run !== evaluationRun.current) return;
-      
-      if (!resp.ok) {
-        // AI referee down/out of quota -> offline judge, never a dead-end
-        const local = await localEvaluateSoccerXI(filledSlotsArray);
-        if (run !== evaluationRun.current) return;
-        setVerdict(local);
-        setPhase('result');
-        return;
-      }
-      
-      if (!data.rating || !data.analysis) {
-        setVerdict({
-          rating: data.rating || 'Mid-Table 😐',
-          headline: data.headline || 'Squad evaluated',
-          analysis: data.analysis || 'Your squad has been evaluated.',
-        });
-      } else {
-        setVerdict(data);
-      }
-      setPhase('result');
-    } catch (err) {
+      const text = (value: unknown, fallback: string) => typeof value === 'string' && value.trim() ? value : fallback;
+      finishDraft({
+        rating: text(data.rating, 'Mid-Table 😐'), headline: text(data.headline, 'Squad evaluated'),
+        analysis: text(data.analysis, 'Your squad has been evaluated.'),
+      }, season);
+    } catch {
       if (run !== evaluationRun.current) return;
-      console.error('Evaluation error:', err);
       try {
         const local = await localEvaluateSoccerXI(filledSlotsArray);
-        if (run !== evaluationRun.current) return;
-        setVerdict(local);
+        if (run === evaluationRun.current) finishDraft(local, season);
       } catch {
-        if (run !== evaluationRun.current) return;
-        setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: 'Network error. Please check your connection and try again.' });
+        if (run === evaluationRun.current) setValidationError('Could not evaluate your XI. Your picks are saved. Try submitting again.');
       }
-      setPhase('result');
     } finally {
       if (run === evaluationRun.current) setIsEvaluating(false);
     }
-  }, [filledSlotsArray, formation, draftChoice, phase, replacingSlot]);
+  }, [filledSlotsArray, formation, draftChoice, phase, replacingSlot, finishDraft]);
 
   const resetGame = useCallback(() => {
+    if (!persistDraft(null)) {
+      setValidationError(STALE_DRAFT_MESSAGE);
+      return;
+    }
     cancelValidation();
     cancelEvaluation();
     setFormation(null);
@@ -524,16 +537,16 @@ export function useLineupBuilder() {
     setSelectedPositionIndex(null);
     setFilledSlots(new Map());
     setTeamAssignments([]);
-    setVerdict(null);
+    setResult(null);
     setValidationError(null);
     setIsSpinning(false);
-  }, [cancelValidation, cancelEvaluation]);
+  }, [cancelValidation, cancelEvaluation, persistDraft]);
 
   useGameCompletion('build-your-xi', phase === 'result', verdict ? 500 : 0);
 
   return {
     formation, phase, draftChoice, selectedPositionIndex, currentTeam, positions,
-    filledSlots, filledSlotsArray, filledCount, verdict, isEvaluating,
+    filledSlots, filledSlotsArray, filledCount, verdict, savedSeason: result?.season ?? null, isEvaluating,
     isValidating, validationError, isSpinning, spinTeamIndex, setSpinTeamIndex,
     /* Round 1138: never true any more. An allowance answer blocks the one
        pick and keeps the search box, so nothing sets this. The key stays

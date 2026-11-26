@@ -28,7 +28,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
               <li>• Type a player who plays or played for that team and submit</li>
               <li>• If your pick checks out, the slot fills</li>
               <li>• Undo last pick reopens that position with the same club or nation. Earlier picks stay in place.</li>
-              <li>• Your unfinished draft stays in this browser. Reopen Build Your XI to continue, or choose Start Over to clear it.</li>
+              <li>• Reopen Build Your XI here to continue a draft or see your finished lineup and season report. Play Again starts a new draft.</li>
             </ul>
           </section>
 
@@ -46,7 +46,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
             <ul className="space-y-1.5 text-muted-foreground">
               <li>• Choose a recorded year before your formation. Every draw and reroll uses clubs only, and your year stays fixed</li>
               <li>• Club era draft works across five recorded years, and adds Boca Juniors, River Plate, Flamengo, Grêmio and Santos to the draw</li>
-              <li>• Tap any empty position, then search or use Browse players and Next to page through the player list. Some players may be missing</li>
+              <li>• Choose an empty position, then search or use Browse players and Next to page through the player list. Some players may be missing</li>
               <li>• The selected record must match the club and year, and the position still has to fit</li>
               <li>• If there is no match, try another player or reroll the club</li>
               <li>• Ratings use the value and age on your selected records. If either is missing, the draft can finish without a rating</li>
@@ -59,7 +59,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
           <section>
             <h3 className="font-bold text-foreground mb-2">📝 Filling Positions</h3>
             <ul className="space-y-1.5 text-muted-foreground">
-              <li>• Tap any empty position on the pitch to select it</li>
+              <li>• Choose any empty position in the picker or on the pitch</li>
               <li>• Type a player name and pick from the suggestions</li>
               <li>• Each player gets used <span className="text-primary font-semibold">once</span></li>
               <li>• Fill all 11 spots to complete your squad</li>
