@@ -1,7 +1,7 @@
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { CookieConsent } from "@/components/CookieConsent";
 import { StorageNotice, isGameRoute } from "@/components/StorageNotice";
-import { GameAdInventory } from "@/components/ads/GameAdInventory";
+import { PublicFooterAd } from "@/components/ads/PublicFooterAd";
 import { GameDesktopRails, isPublicDesktopRailRoute } from "@/components/ads/GameDesktopRails";
 import { lazy, Suspense, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigationType } from "react-router-dom";
@@ -643,7 +643,7 @@ const AppContent = () => {
       </RouteErrorBoundary>
       {opensCareerRules && <CookieConsent inline />}
       {normalizeRoutePath(pathname) === "/soccer-career" ? <Footer soccerControls /> : <Footer />}
-      {gameRoute && <GameAdInventory />}
+      <PublicFooterAd />
       </Suspense>
     </SiteMenuProvider>
   );

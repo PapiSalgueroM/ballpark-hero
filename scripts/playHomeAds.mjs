@@ -60,7 +60,7 @@ async function pendingSlot(page, requestedAds) {
   await page.waitForFunction(() => window.__homeAdFixtureLoaded && window.adsbygoogle?.length === 1);
   assert.equal(await page.locator(manualSlot).count(), 1, 'Expected one home slot on the page');
   assert.equal(await slot.getAttribute('data-ad-slot'), '7540487748');
-  const phonePlacement = await ad.evaluate(element => element.parentElement.hasAttribute('data-home-sport-catalogue'));
+  const phonePlacement = await page.evaluate(() => innerWidth <= 639);
   assert.equal(await slot.getAttribute('data-full-width-responsive'), phonePlacement ? null : 'true');
   assert.equal(await slot.getAttribute('data-ad-format'), phonePlacement ? null : 'horizontal');
   assert.equal(await ad.getByText('Advertisement', { exact: true }).count(), 0, 'A pending slot claimed to have filled');
@@ -101,7 +101,7 @@ async function assertPlacement(slot, width) {
 
   assert(geometry.protectedGames, 'Desktop rails must keep clear of the featured games and catalogue');
   if (width <= 430) {
-    assert(geometry.betweenSports, 'The phone ad goes after the first sport and before the next one');
+    assert(geometry.afterContent && geometry.beforeFooter, 'The phone ad goes below the page content and before the footer');
     assert.equal(geometry.slotWidth, width <= 335 ? 300 : 320);
     assert.equal(geometry.slotHeight, 100);
   } else {
