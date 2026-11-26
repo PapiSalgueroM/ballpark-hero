@@ -419,6 +419,7 @@ interface GeneratedBallonPool {
   year: number;
   nextId: number;
   entries: GeneratedBallonCandidate[];
+  defensiveEntries?: BallonDefender[];
 }
 export interface BallonDorNominee extends AwardsCandidate {
   nationality: string;
@@ -430,6 +431,7 @@ export interface BallonDorNominee extends AwardsCandidate {
   trophies: string[];
   generatedId?: number;
   generatedAge?: number;
+  generatedDefenderSeed?: number;
   isCareerRival?: true;
 }
 
@@ -7778,6 +7780,56 @@ function generateContender(usedNames: Set<string>, seed: number, startAge = rand
   const club = GEN_CLUBS[(seed * 13 + 2) % GEN_CLUBS.length];
   return { name, nationality: nat, position: p.pos, club, baseGoals: p.goals, startAge };
 }
+type BallonDefender = { position: 'GK' | 'LB' | 'RB'; firstYear: number; seed: number; name: string; club: string; nationality: string; entryAge: number };
+
+function defenderProfile(seed: number) {
+  const roll = keyedRng(`ballon-defender|${seed}`);
+  const nationality = GEN_NATIONALITIES[Math.floor(roll() * GEN_NATIONALITIES.length)];
+  const club = GEN_CLUBS[Math.floor(roll() * GEN_CLUBS.length)];
+  return { name: intlName(nationality, seed), club, nationality, entryAge: 19 + Math.floor(roll() * 10) };
+}
+
+const BALLOT_BACK_POSITIONS = ['GK', 'LB', 'RB'] as const;
+
+function readBallonDefenders(pool: GeneratedBallonPool, year: number): BallonDefender[] {
+  const stored = pool.defensiveEntries;
+  if (!Array.isArray(stored) || stored.length > (year - 2031) * 3) return [];
+  const seeds = new Set<number>();
+  const openings = new Set<string>();
+  for (const e of stored) {
+    if (!e || !BALLOT_BACK_POSITIONS.includes(e.position) || !Number.isSafeInteger(e.firstYear)
+      || e.firstYear < 2032 || e.firstYear > year || !Number.isSafeInteger(e.seed) || e.seed < 0 || e.seed > 0x7fffffff
+      || !Number.isInteger(e.entryAge) || e.entryAge < 19 || e.entryAge > 28
+      || typeof e.name !== "string" || !e.name.trim() || typeof e.club !== "string" || !e.club.trim()
+      || typeof e.nationality !== "string" || !e.nationality.trim() || seeds.has(e.seed) || openings.has(e.position + e.firstYear)) return [];
+    seeds.add(e.seed);
+    openings.add(e.position + e.firstYear);
+  }
+  return stored;
+}
+
+// The original seven-position entries retain their ids and remain readable by earlier versions.
+function futureBallonDefenders(pool: GeneratedBallonPool, year: number, usedNames: Set<string>, careerId: string) {
+  const ledger = [...readBallonDefenders(pool, year)];
+  const reserved = new Set([...usedNames, ...pool.entries.map(e => e.name), ...ledger.map(e => e.name)]);
+  const active = BALLOT_BACK_POSITIONS.flatMap(position => {
+    let entry = ledger.slice().reverse().find(e => e.position === position);
+    if (!entry || entry.entryAge + year - entry.firstYear >= 37 || usedNames.has(entry.name)) {
+      let seed = Math.floor(keyedRng(`ballon-defender|${careerId}|${position}|${year}`)() * 0x40000000);
+      let profile = defenderProfile(seed);
+      for (let attempt = 0; reserved.has(profile.name) && attempt < 64; attempt++) profile = defenderProfile(++seed);
+      if (reserved.has(profile.name)) return [];
+      entry = { ...profile, position, firstYear: year, seed };
+      ledger.push(entry);
+      reserved.add(profile.name);
+    }
+    usedNames.add(entry.name);
+    return [{ ...entry, age: entry.entryAge + year - entry.firstYear }];
+  });
+  pool.defensiveEntries = ledger;
+  return active;
+}
+
 const TOP_6_CLUBS = ["Real Madrid", "Man City", "Barcelona", "Bayern Munich", "Arsenal", "Liverpool"];
 const LEAGUE_CLUBS: Record<string, string[]> = {
   "Premier League": ["Man City", "Arsenal", "Liverpool", "Man United", "Chelsea", "Tottenham"],
@@ -7960,6 +8012,7 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
     if (!entry) {
       const seed = pool.entries.some(row => row.role === role && row.slot === slot) ? 9900 + pool.nextId : initialSeed;
       const reserved = new Set([...usedNames, ...pool.entries.map(row => row.name)]);
+      for (const back of readBallonDefenders(pool, year)) reserved.add(back.name);
       const { startAge, ...profile } = generateContender(reserved, seed, entryAge);
       const baseName = profile.name;
       let suffix = 1;
@@ -8014,6 +8067,26 @@ function calculateBallonDor(state: CareerState, season: SeasonRecord, year: numb
         name: gen.name, nationality: gen.nationality, position: gen.position,
         club: gen.club, points: pts, goals, assists, trophies, performance, isPlayer: false,
         generatedId: gen.generatedId, generatedAge: gen.generatedAge,
+      });
+    }
+  }
+
+  if (year >= 2032 && state.generatedBallonPool) {
+    for (const player of futureBallonDefenders(state.generatedBallonPool, year, usedNames, soccerDeckIdentity(state))) {
+      const roll = keyedRng(`ballon-defender-season|${soccerDeckIdentity(state)}|${year}|${player.seed}`);
+      const overall = 83 + Math.floor(roll() * 11);
+      const apps = 28 + Math.floor(roll() * 25);
+      const goals = calcGoals(player.position, apps, overall, 1, roll());
+      const earnedAssists = calcAssists(player.position, apps, overall, 1, roll());
+      const { assists, performance } = simulatedBallotLine(`${soccerDeckIdentity(state)}|${year}|${player.name}|ballot`,
+        player.position, overall, 1, goals, { apps, assists: earnedAssists });
+      const trophies = clubHonours(player.club);
+      const international = intlHonour(player.nationality);
+      if (international) trophies.push(international);
+      const points = calcBdorPoints(goals, assists, overall, 1, trophies, player.club, eraTopClubs, ballotRolePoints(player.position, 1, assists, performance));
+      allNomineeData.push({
+        name: player.name, nationality: player.nationality, club: player.club, position: player.position,
+        goals, assists, performance, trophies, points, isPlayer: false, generatedAge: player.age, generatedDefenderSeed: player.seed,
       });
     }
   }
