@@ -4,6 +4,7 @@ import type { CareerState, MatchFacts, FormResult, TalkTone } from '@/lib/clubMa
 import { toLeague, dugoutOf } from '@/lib/clubManager';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { DUGOUT_MADE_UP_TITLE, DUGOUT_PARTIAL_TITLE } from '@/lib/realDugouts';
+import { StarterFitnessCard } from '@/components/club-manager/StarterFitnessCard';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
 import { inFixtureOrder, myClubFirst } from '@/lib/cmMatchDisplay';
 import { AI_STYLES, opponentStyle } from '@/lib/clubManagerTactics';
@@ -50,6 +51,7 @@ interface MatchCentreProps {
   onTone: (tone: TalkTone) => void;
   talkRead: string | null;
   talkStale: boolean;
+  onChangeLineup?: () => void;
   onQuickSim: () => void;
   /** Round 158's animated viewer, which Round 472 made the one live way in. */
   onLive: () => void;
@@ -57,7 +59,7 @@ interface MatchCentreProps {
 }
 
 export function MatchCentre({
-  career, facts, clubColor, tone, onTone, talkRead, talkStale, onQuickSim, onLive, onBack,
+  career, facts, clubColor, tone, onTone, talkRead, talkStale, onQuickSim, onLive, onBack, onChangeLineup,
 }: MatchCentreProps) {
   const f = facts;
   /* Round 1522: the style they play (keyed, no draw), the one the engine reads. */
@@ -168,6 +170,8 @@ export function MatchCentre({
           <div className="text-[8px] text-muted-foreground/70 mt-0.5">Engine odds, from the same maths the match is played with.</div>
         </div>
       </div>
+
+      <StarterFitnessCard career={career} onChangeLineup={onChangeLineup} />
 
       {/* Ones to watch */}
       {(f.myDanger.length > 0 || f.oppDanger.length > 0) && (

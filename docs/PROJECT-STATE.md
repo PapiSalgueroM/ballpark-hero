@@ -1,3 +1,7 @@
+### November 26, 2026. Preview starter fitness before kickoff
+
+Match Centre shows the actual starting XI and its play or rest projection using the dates of the next confirmed fixture and current training. Fresh XI can be applied from the card. Local signed-out phone and laptop playthroughs changed the lineup, reloaded and played both games. All 22 settled values matched. Rest took Donnarumma from 70% to 85% in three days and Pickford from 79% to 98% in seven. Twelve focused tests passed. Fixing recovery at seven days or removing appearance workload each broke all 11 rows in a separate three-day replay.
+
 ## November 26 local NHL checking assignments
 
 Signed centres and wings can trade personal postseason scoring for a higher chance of winning each series. The plan records the actual series bonus and scoring cost in the Career Log and expires unused if the team misses the playoffs. Two fresh Toronto draftees played three seasons on the local phone and desktop production build. Both missed twice, then reached Round 2 in 2028. The fourth-line centre played 13 playoff games, finished with four goals and four assists, and reopened the two-point cost after reload. A 280-pair simulation kept regular seasons and qualification identical. All 464 default-path careers still matched their committed historical digests.

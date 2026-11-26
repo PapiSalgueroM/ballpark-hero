@@ -20004,20 +20004,55 @@ function weekRecoveryOf(state: CareerState, intensity = (state.training ?? DEFAU
 }
 
 /** Unplayed extra nights skip their whole tick, so carry their days to the next tick that actually runs. */
+function nextFitnessEntry(state: CareerState, week: number): number {
+  let next = week + 1;
+  while (next < state.calendar.length && (state.calendar[next].night || state.calendar[next].type === 'promotion')
+    && !entryInvolvesMe(state, state.calendar[next])) next++;
+  return next;
+}
+
 function fitnessDaysAfter(state: CareerState, week: number): number {
   const dates = entryDatesOf(state);
-  let next = week + 1;
-  while (next < dates.length && (state.calendar[next].night || state.calendar[next].type === 'promotion')
-    && !entryInvolvesMe(state, state.calendar[next])) next++;
+  const next = nextFitnessEntry(state, week);
   return dates[week] && dates[next] ? Math.max(0, daysBetween(dates[week], dates[next])) : 7;
 }
 
-function fitnessAfterWeek(fitness: number, played: boolean, recoveryMod: number, flat: number, days: number): number {
+function fitnessAfterCost(fitness: number, cost: number, recoveryMod: number, flat: number, days: number): number {
   const weeklyRate = 0.71 * recoveryMod;
   const recovery = days === 7 ? Math.round((100 - fitness) * weeklyRate) + flat
     : Math.round((100 - fitness + flat / weeklyRate) * (1 - (1 - weeklyRate) ** (days / 7)));
-  const cost = played ? MATCH_FITNESS_COST + ri(0, MATCH_FITNESS_SPREAD) : 0;
   return clamp(fitness + recovery - cost, 20, 100);
+}
+
+function fitnessAfterWeek(fitness: number, played: boolean, recoveryMod: number, flat: number, days: number): number {
+  const cost = played ? MATCH_FITNESS_COST + ri(0, MATCH_FITNESS_SPREAD) : 0;
+  return fitnessAfterCost(fitness, cost, recoveryMod, flat, days);
+}
+
+/** Base fitness for the next known match with the present training orders. No match rolls are drawn. */
+export function starterFitnessPreview(state: CareerState) {
+  const xi = effectiveXIWithSlots(state);
+  const rows = xi.map(({ p, slot }) => ({ id: p.id, name: p.name, slot: slot.label, now: p.fitness }));
+  const week = nextFitnessEntry(state, state.week - 1);
+  const entry = state.calendar[week];
+  const next = nextFitnessEntry(state, week);
+  const following = state.calendar[next];
+  const dates = entryDatesOf(state);
+  const upcoming = following && fixtureFor(state, following);
+  // A later knockout night may depend on winning the match still to play.
+  const contingent = state.calendar.slice(week + 1, next).some(e => e.type === entry?.type
+    && (e.type === 'promotion' || (e.night && e.night.k === entry.night?.k)));
+  if (!entry || !fixtureFor(state, entry) || !upcoming || contingent || !dates[week] || !dates[next]) return { rows, forecast: null };
+  const days = Math.max(0, daysBetween(dates[week], dates[next]));
+  const recovery = recoveryWeekOf(state.training?.recoveryWeek);
+  const individual = !entry.night && recovery?.club === state.clubName && recovery.season === state.season ? recovery : null;
+  const values = rows.map(row => {
+    const intensity = individual?.playerId === row.id ? (individual.v === 2 ? individual.intensity : 'light') : undefined;
+    const { recoveryMod, flat } = weekRecoveryOf(state, intensity);
+    const after = (cost: number) => fitnessAfterCost(row.now, cost, recoveryMod, flat, days);
+    return { ...row, low: after(MATCH_FITNESS_COST + MATCH_FITNESS_SPREAD), high: after(MATCH_FITNESS_COST), rest: after(0) };
+  });
+  return { rows, forecast: { days, start: dates[week], finish: dates[next], opponent: upcoming.opponent, competition: upcoming.compLabel, values } };
 }
 
 function recoverOutgoingLoans(state: CareerState, days: number): void {
