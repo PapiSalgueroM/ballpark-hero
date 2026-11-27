@@ -78,7 +78,7 @@ interface TacticsScreenProps {
   onHalftimePlan?: (plan: HalftimePlan | 'off') => boolean;
   /** Round 782: the hub's pre match card can ask for the shootout tile to be
    *  open on arrival; the screen opens it once and says so. */
-  openTileRequest?: 'shootout' | null;
+  openTileRequest?: 'shootout' | 'setpieces' | null;
   onOpenTileRequestDone?: () => void;
 }
 
@@ -167,13 +167,13 @@ export function TacticsScreen({
   /* Round 505 review: the bench and the set pieces are tiles under the pitch
      that open one at a time, so the tab is the pitch plus two headers rather
      than a long stack with a scroll list inside it. */
-  const [openTile, setOpenTile] = useState<'bench' | 'setpieces' | 'shootout' | 'plans' | null>(() => (openTileRequest === 'shootout' ? 'shootout' : null));
+  const [openTile, setOpenTile] = useState<'bench' | 'setpieces' | 'shootout' | 'plans' | null>(openTileRequest ?? null);
 
   /* Round 782: the pre match card's shortcut lands here with the shootout
      tile asked for; open it once and hand the request back. */
   useEffect(() => {
-    if (openTileRequest !== 'shootout') return;
-    setOpenTile('shootout');
+    if (!openTileRequest) return;
+    setOpenTile(openTileRequest);
     onOpenTileRequestDone?.();
   }, [openTileRequest, onOpenTileRequestDone]);
 

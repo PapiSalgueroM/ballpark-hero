@@ -286,7 +286,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
   const [watchMode, setWatchMode] = useState(false);
   /* Round 782: the pre match card's shortcut to the shootout order asks the
      tactics tab to open that tile on arrival; the tab hands the request back. */
-  const [tacticsTile, setTacticsTile] = useState<'shootout' | null>(null);
+  const [tacticsTile, setTacticsTile] = useState<'shootout' | 'setpieces' | null>(null);
   /* Round 1597 review fix: each press of the hub's deals line, and the last one the desk has answered (DeskInView). */
   const [deskJump, setDeskJump] = useState(0);
   const deskServed = useRef(0);
@@ -1229,7 +1229,9 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
               )}
 
               {hubPanel === 'training' && (
-                <ScreenLoading><TrainingScreen career={c} onSetPlan={g.setTraining} onRetrain={g.retrain} onStopRetrain={g.stopRetrain} /></ScreenLoading>
+                <ScreenLoading><TrainingScreen career={c} onSetPlan={g.setTraining} onRetrain={g.retrain} onStopRetrain={g.stopRetrain}
+                  cornerActions={{ onBook: g.bookCornerTraining, onCancel: g.cancelCornerTraining,
+                    onChooseTaker: () => { setTacticsTile('setpieces'); g.setActiveTab('tactics'); } }} /></ScreenLoading>
               )}
 
               {hubPanel === 'roles' && <ScreenLoading><RolesScreen career={c} onSetRole={g.setRole} /></ScreenLoading>}
