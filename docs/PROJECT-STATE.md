@@ -1,3 +1,11 @@
+### November 27, 2026. Missing XI duels, College Grid scouting and MLB bullpens
+
+Missing XI Duel lets a player name three starters in different positions for up to 300 points, then challenge a friend to the same match and blanks in order. A phone guest and a separate desktop guest played the same side for 270 and 200 points. The archive check covered 172 eligible sides. Back and Forward can reopen the last 12 played cards in the same tab. The normal Daily and Unlimited games keep their existing progress. Incoming challenge links keep the site's existing ad exclusion for URL fragments. With analytics consent the page view sends only the public path.
+
+College Grid has separate draft and position scouting rooms. Each deals three players from one school and three roles, with one scouting report and two chances to sign the class. Across both rooms on 75 daily boards, every checked deal had exactly one complete assignment. Scouting and resuming leave daily guesses alone.
+
+MLB Front Office's Round tab lets a manager book the two healthy lead relievers across three fixture pairs. Opponent records and division rivals are shown next to each choice. Each assigned game settles with the named arm and records the actual W or L in the saved round. Across 858 pairs of six-game simulations with matched draws, switching the arms changed 56 game results. Equal-rated relievers produced identical outcomes.
+
 ### November 27, 2026. Fantasy Draft playing board
 
 Fantasy Draft keeps its 380px desktop roster beside the player pool. The playing board uses the measured room between the side ads. At 1280px and 1366px, both ads stayed at least 151px from the board through planning and drafting. Each desktop visit requested two side ads and one footer. Phones requested one footer.

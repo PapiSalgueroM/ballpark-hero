@@ -27,6 +27,9 @@ const WhatsNew = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">November 27, 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
+            <li>Pick Duel in <Link to="/missing-xi" className="text-primary hover:underline">Missing XI</Link>. Name three missing starters, then send a friend the same lineup. Your scorecard shows who solved each blank in fewer guesses.</li>
+            <li>Try the scouting challenge in <Link to="/college-grid" className="text-primary hover:underline">College Grid</Link>. Fit three former players from one school into the draft room or position room. You can scout one player before signing your class, and your daily guesses stay available.</li>
+            <li>Open Round in <Link to="/mlb-front-office" className="text-primary hover:underline">MLB Front Office</Link> to book your bullpen. Save your stronger reliever for a division rival or give them the earlier game. The round report tells you who pitched each assigned matchup and who won.</li>
             <li>Open Training in <Link to="/soccer-career" className="text-primary hover:underline">Soccer Career</Link> and pick Break the Press. Draw two defenders out of position and find a teammate in the end zone. Each of the three pitches keeps your shortest winning sequence.</li>
             <li>Open Matchday Director in <Link to="/stadium-tycoon" className="text-primary hover:underline">Stadium Tycoon</Link>. Can you get 680 fans through the gates in six fixtures? Set ticket prices, staff the food counters and put your best signed contract on the books.</li>
             <li>After drafting your <Link to="/nba-starting-5" className="text-primary hover:underline">NBA Starting 5</Link>, coach them in a best-of-three exhibition. Name a ball handler and decide who shoots when the defense sends a second defender.</li>
