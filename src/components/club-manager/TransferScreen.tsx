@@ -12,6 +12,7 @@ import { groupByConfederation } from '@/lib/confederationGroups';
 import { Input } from '@/components/ui/input';
 import { currencySymbol } from '@/lib/clubManagerStart';
 import { FreeAgentPool } from '@/components/club-manager/FreeAgentPool';
+import { AppearanceFeeOffer } from './AppearanceFeeCard';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
 import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, careerLeagueOf, loanOutRefusal, shownNation, foreignRosterSlots, incomingBidRegistrationRefusal } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } from '@/lib/clubManager';
@@ -145,6 +146,7 @@ export function TransferScreen({
   const [sortKey, setSortKey] = useState<SortKey>('rating');
   /* Round 161: the deal structure being offered right now. */
   const [addOn, setAddOn] = useState(0);
+  const [appearanceTrigger, setAppearanceTrigger] = useState<5 | 15>();
   const [sellOnPct, setSellOnPct] = useState(0);
   const [swapId, setSwapId] = useState<string | null>(null);
   /* Round 506: his "YOU type the bid". The presets below still fire straight
@@ -170,15 +172,19 @@ export function TransferScreen({
   const bids = career.incomingBids ?? [];
   const log = career.transferLog ?? [];
 
-  /* A fresh negotiation starts with a clean structure. */
-  const negName = neg?.player.name ?? null;
-  useEffect(() => {
-    setAddOn(0);
-    setSellOnPct(0);
-    setSwapId(null);
+  /* Restore a submitted appearance offer as one package when reopening its table. */
+  const table = neg ? JSON.stringify([neg.player.club, neg.player.name]) : null;
+  const [lastTable, setLastTable] = useState<string | null>(null);
+  if (table !== lastTable) {
+    setLastTable(table);
+    const saved = neg?.lastExtras?.appearanceTrigger ? neg.lastExtras : undefined;
+    setAddOn(saved?.addOn ?? 0);
+    setAppearanceTrigger(saved?.appearanceTrigger);
+    setSellOnPct(saved?.sellOnPct ?? 0);
+    setSwapId(saved?.swapId ?? null);
     setBid('');
     setTerms(null);
-  }, [negName]);
+  }
 
   /* Round 927: the deal moment. A negotiation leaving 'open' used to change a
      border colour and three words. Now the card lands (or stings) ONCE, at the
@@ -207,7 +213,9 @@ export function TransferScreen({
   const slipExtras: string[] = [];
   if (neg && neg.status === 'agreed' && neg.agreedExtras) {
     const x = neg.agreedExtras;
-    if (x.addOn) slipExtras.push(`plus ${money(x.addOn)} in add-ons`);
+    if (x.addOn) slipExtras.push(x.appearanceTrigger
+      ? `plus ${money(x.addOn)} after ${x.appearanceTrigger} league appearances for ${career.clubName}`
+      : `plus ${money(x.addOn)} in add-ons`);
     if (x.sellOnPct) slipExtras.push(`a ${x.sellOnPct} percent sell-on`);
     if (x.swapId) {
       const rows = career.seasonSignings ?? [];
@@ -306,11 +314,17 @@ export function TransferScreen({
   /* Round 161: the structure travels with every offer button. */
   const dealExtras: DealExtras | undefined =
     addOn > 0 || sellOnPct > 0 || swapId
-      ? { addOn: addOn || undefined, sellOnPct: sellOnPct || undefined, swapId: swapId ?? undefined }
+      ? { addOn: addOn || undefined, sellOnPct: sellOnPct || undefined, swapId: swapId ?? undefined,
+          ...(addOn && appearanceTrigger ? { appearanceTrigger } : {}) }
       : undefined;
   const structureBonus = neg && neg.status === 'open'
     ? dealPackageValue(career, neg.theirAsk, 0, dealExtras)
     : 0;
+  const rivalPrice = neg?.rivalBidder ? neg.rivalOffer : null;
+  const closingLabel = rivalPrice != null ? 'Beat rival' : 'Meet ask';
+  const closingBid = !neg ? 0 : rivalPrice != null
+    ? Math.max(rivalPrice * 1.06 - structureBonus, neg.theirAsk * 0.97 - structureBonus)
+    : Math.max(0.1, neg.theirAsk - structureBonus);
 
   /* Round 506: the closeness meter, read off the same two functions the
      engine judges with. It reads the whole PACKAGE rather than the cash, so
@@ -500,19 +514,23 @@ export function TransferScreen({
                   players plus money". Everything below rides on top of
                   whichever cash button you press. */}
               <div className="rounded-lg border border-border/60 bg-background/40 p-2 mb-2 space-y-1.5">
-                <div className="flex items-center gap-1.5 flex-wrap">
+                <div role="group" aria-label="Transfer add-ons" className="flex items-center gap-1.5 flex-wrap">
                   <span className="text-[9px] text-muted-foreground uppercase tracking-wider w-14 shrink-0">Add-ons</span>
                   {[0, 2, 5, 10].map(a => (
                     <button
                       key={a}
-                      onClick={() => setAddOn(a)}
-                      className={cn('px-2 py-0.5 rounded text-[9px] font-bold border transition-all',
+                      aria-pressed={addOn === a}
+                      onClick={() => { setAddOn(a); if (!a) setAppearanceTrigger(undefined); }}
+                      className={cn('min-h-11 min-w-11 px-2 py-0.5 rounded text-xs font-bold border transition-all',
                         addOn === a ? 'bg-primary/15 border-primary text-primary' : 'border-border text-muted-foreground hover:border-primary/50')}
                     >
                       {a === 0 ? 'None' : money(a)}
                     </button>
                   ))}
                 </div>
+                {addOn > 0 && <AppearanceFeeOffer career={career} amount={addOn} threshold={appearanceTrigger}
+                  cash={typedBid || Math.round(closingBid * 10) / 10} offerLabel={typedBid ? 'Your bid' : closingLabel}
+                  onChange={setAppearanceTrigger} />}
                 <div className="flex items-center gap-1.5 flex-wrap">
                   <span className="text-[9px] text-muted-foreground uppercase tracking-wider w-14 shrink-0">Sell-on</span>
                   {[0, 10, 20, 30].map(s => (
@@ -542,7 +560,9 @@ export function TransferScreen({
                 </div>
                 {structureBonus > 0 && (
                   <div className="text-[9px] text-muted-foreground">
-                    This structure reads like <span className="text-gold font-bold">{money(structureBonus)}</span> to them, on top of whatever cash you press below. Add-ons cost real money in later summers; a sell-on takes its cut when you resell him.
+                    The seller values these extras at <span className="text-gold font-bold">{money(structureBonus)}</span> on top of your cash offer.
+                    {addOn > 0 && !appearanceTrigger && ' The performance bonus is reviewed in summer.'}
+                    {sellOnPct > 0 && ' The selling club takes its cut when you resell him.'}
                   </div>
                 )}
               </div>
@@ -616,9 +636,7 @@ export function TransferScreen({
                 {offerBtn('Lowball', neg.theirAsk * 0.72, 'risky')}
                 {offerBtn('Haggle', neg.theirAsk * 0.88)}
                 {neg.myOffer !== null && offerBtn('Split it', (neg.theirAsk + neg.myOffer) / 2)}
-                {neg.rivalBidder && neg.rivalOffer !== null
-                  ? offerBtn('Beat rival', Math.max(neg.rivalOffer * 1.06 - structureBonus, neg.theirAsk * 0.97 - structureBonus), 'close')
-                  : offerBtn('Meet ask', Math.max(0.1, neg.theirAsk - structureBonus), 'close')}
+                {offerBtn(closingLabel, closingBid, 'close')}
                 <button
                   onClick={onWalk}
                   className="px-2.5 py-1.5 rounded-lg text-[10px] font-bold border border-border bg-card text-muted-foreground hover:text-foreground transition-all"
@@ -637,6 +655,10 @@ export function TransferScreen({
           {neg.status === 'open' && neg.phase === 'terms' && want && terms && (
             <>
               <p className="text-[11px] italic text-muted-foreground mb-2">"{neg.terms?.note}"</p>
+              {neg.agreedExtras?.appearanceTrigger && <p className="mb-2 rounded-md border border-border p-2 text-xs">
+                {money(neg.agreedFee ?? 0)} transfer fee at signing. {money(neg.agreedExtras.addOn ?? 0)} more if {neg.player.name} makes {neg.agreedExtras.appearanceTrigger} league appearances for {career.clubName}.
+                {' '}Maximum transfer fee {money((neg.agreedFee ?? 0) + (neg.agreedExtras.addOn ?? 0))}. His signing bonus and wages are separate.
+              </p>}
               <div className="flex items-center gap-3 text-[11px] mb-1.5">
                 <span className="text-foreground">Fee agreed: <span className="font-bold text-gold">{money(neg.agreedFee ?? 0)}</span></span>
                 <span className="text-muted-foreground ml-auto" title="Rounds his agent will keep talking.">

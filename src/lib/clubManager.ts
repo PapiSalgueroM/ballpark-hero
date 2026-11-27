@@ -221,6 +221,8 @@ import {
 import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
+import { addAppearanceFee, appearanceFeeTerms, canBookAppearanceFee, recordFeeAppearances, seasonAppearanceFeeSpend, settleAppearanceFees, voidAppearanceFee, type AppearanceFee } from '@/lib/clubManagerAppearanceFees';
+export { appearanceFeeClubs, appearanceFeeDesk, appearanceFeeTerms, canBookAppearanceFee, type AppearanceFee } from '@/lib/clubManagerAppearanceFees';
 import { cornerAssistId, resolveCornerDeliveries, type CornerDelivery } from '@/lib/clubManagerCornerDelivery';
 import type { FlankMove, FlankPlan } from '@/lib/clubManagerFlank';
 import type { ReturnPressEvent, ReturnPressOrder } from '@/lib/clubManagerReturnPress';
@@ -770,6 +772,7 @@ function actualRosterTransferSource(state: CareerState, player: CMPlayer, from: 
 }
 
 function recordActualRosterTransfer(state: CareerState, player: CMPlayer, from: string, to: string | null, kind: 'permanent' | 'release' | 'retire', pack = true): CareerState {
+  if (state.appearanceFees && from !== to) state = voidAppearanceFee(state,player,from);
   /* Release AZ, the lead's ruling Y1: a career with no world seed (every save from before this release, and a
      Hot Seat day handed over) never writes a ledger, so it plays on exactly as it did. A readable ledger alone
      turns on the same branches the seed does, so this is the one place both are kept off together.
@@ -1517,6 +1520,7 @@ export interface LoanOut {
 }
 
 export interface CMPlayer {
+  appearanceFeeId?: string;
   worldRosterKey?: string;
   worldRosterSince?: number;
   worldRatingForecast?: { year: number; ratings: ProjectedRatingForecast };
@@ -2028,6 +2032,7 @@ export interface TransferRecord {
 
 /** Round 161: everything a deal can carry beyond the cash. */
 export interface DealExtras {
+  appearanceTrigger?: 5 | 15;
   /** Performance add-ons in £m: paid later if they come due, not now. */
   addOn?: number;
   /** Sell-on percentage promised to the seller, 0-30. */
@@ -3274,6 +3279,7 @@ export interface SeasonSummary {
 }
 
 export interface CareerState {
+  appearanceFees?: AppearanceFee[];
   seniorClub?: SeniorClub;
   saveVersion: number;
   /** A career opened from a portable file keeps playing without posting scores. */
@@ -12189,7 +12195,9 @@ export function dealPackageValue(career: CareerState, ask: number, amount: numbe
   const swap = extras?.swapId ? career.squad.find(p => p.id === extras.swapId) : null;
   const swapVal = swap && canLeaveSquad(career, swap) ? Math.round(sellValue(swap) * 0.85 * 10) / 10 : 0;
   const sellOnVal = Math.round(ask * (sellOnPct / 100) * 0.35 * 10) / 10;
-  return Math.round((amount + addOn * 0.6 + sellOnVal + swapVal) * 10) / 10;
+  const bonusValue = extras?.appearanceTrigger === undefined ? addOn * 0.6
+    : appearanceFeeTerms(extras.addOn,extras.appearanceTrigger)?.sellerValue ?? 0;
+  return Math.round((amount + bonusValue + sellOnVal + swapVal) * 10) / 10;
 }
 
 /**
@@ -12206,6 +12214,7 @@ export function dealPackageValue(career: CareerState, ask: number, amount: numbe
  */
 export function makeOffer(career: CareerState, amount: number, extras?: DealExtras): CareerState | null {
   const neg = career.negotiation;
+  if (extras?.appearanceTrigger !== undefined && (!appearanceFeeTerms(extras.addOn,extras.appearanceTrigger) || !canBookAppearanceFee(career))) return null;
   if (!neg || neg.status !== 'open') return null;
   /* Round 506: once the clubs have shaken hands the fee is closed and the only
      table left is his. Without this an offer made while the terms panel was
@@ -12474,6 +12483,8 @@ export function offerTerms(career: CareerState, offer: PersonalTerms): CareerSta
 function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: PersonalTerms): CareerState | null {
   const amount = neg.agreedFee ?? 0;
   const extras = neg.agreedExtras;
+  const contingent = appearanceFeeTerms(extras?.addOn,extras?.appearanceTrigger);
+  if (extras?.appearanceTrigger !== undefined && (!contingent || !canBookAppearanceFee(career))) return null;
   const swap = extras?.swapId ? career.squad.find(p => p.id === extras.swapId) : null;
   /* Round 507 fix, the belt to canLeaveSquad's braces: if the seller priced a
      man into this package and he is not in the squad any more, the deal cannot
@@ -12525,11 +12536,17 @@ function settleAgreedDeal(career: CareerState, neg: Negotiation, terms: Personal
       p.name === neg.player.name ? { ...p, sellOnOwed: { club: neg.player.club, pct: sellOnPct } } : p);
   }
   const addOn = clamp(Math.round((extras?.addOn ?? 0) * 10) / 10, 0, 40);
-  if (addOn > 0) {
+  if (contingent) {
+    const arrival = signed.squad.find(p => !career.squad.some(old => old.id === p.id));
+    if (!arrival) return null;
+    addAppearanceFee(signed,arrival,neg.player.club,contingent.amount,contingent.threshold);
+  } else if (addOn > 0) {
     signed.pendingAddOns = [...(signed.pendingAddOns ?? []), { name: neg.player.name, to: neg.player.club, amount: addOn }];
   }
-  const bits: string[] = [`${money(amount)} up front`];
-  if (addOn > 0) bits.push(`${money(addOn)} in add-ons`);
+  const feeMoney = contingent ? moneyIn(signed) : money;
+  const bits: string[] = [`${feeMoney(amount)} up front`];
+  if (contingent) bits.push(`${feeMoney(contingent.amount)} after ${contingent.threshold} senior league appearances for ${signed.clubName}`);
+  else if (addOn > 0) bits.push(`${money(addOn)} in add-ons`);
   if (sellOnPct > 0) bits.push(`a ${sellOnPct} percent sell-on`);
   if (swap) bits.push(`${swap.name} going the other way`);
   bits.push(`${terms.years} years at ${terms.wage}k a week`);
@@ -17419,7 +17436,7 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
          0.045, roughly 15m on a 60m target, so a board objective could be
          reported as met while the kitty said otherwise. */
       const net = (career.seasonSignings ?? []).reduce(
-        (s, x) => s + (x.dir === 'out' ? x.fee : -(x.fee + (x.bonus ?? 0))), 0);
+        (s, x) => s + (x.dir === 'out' ? x.fee : -(x.fee + (x.bonus ?? 0))), 0) - seasonAppearanceFeeSpend(career);
       if (seasonDone) {
         status = net >= 0 ? 'done' : 'failed';
       } else {
@@ -21176,6 +21193,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     ...(live.subs ?? []).map(sb => sb.onId).filter((id): id is string => !!id),
   ])];
   const xi = squadByIds(state, ids);
+  if (state.appearanceFees && entry.type === 'league') recordFeeAppearances(state,{season:state.season,week:live.week},xi);
   let decidedBy: 'regular' | 'aet' | 'pens' = 'regular';
   /* Round 507: who won the shootout, kept apart from who won the night. */
   let shootoutWon: boolean | null = null;
@@ -22129,6 +22147,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   });
   if (live.cornerRoutine && isCornerRoutine(live.cornerRoutine)) detail.cornerRoutine = { ...live.cornerRoutine };
   if (live.returnPressUsed === true) detail.returnPressUsed = true;
+  if (state.appearanceFees) settleAppearanceFees(state,{season:state.season,week:live.week});
 
   const iAmHome = fx.home !== false; // neutral finals list us first
   return {
@@ -25804,8 +25823,8 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   }
 
   rosterCareer = { ...rosterCareer, season, clubName, squad };
+  for (const exit of rosterExits) rosterCareer = recordActualRosterTransfer(rosterCareer, exit.player, career.clubName, null, exit.kind);
   if (worldRosterView(rosterCareer) || worldSeedOf(rosterCareer) !== undefined) {
-    for (const exit of rosterExits) rosterCareer = recordActualRosterTransfer(rosterCareer, exit.player, career.clubName, null, exit.kind);
     for (const [name, club] of emergencyFrom) {
       const man = squad.find(p => p.name === name);
       if (man) rosterCareer = recordActualRosterTransfer(rosterCareer, man, club, clubName, 'permanent');
@@ -25877,7 +25896,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     : career.uclExit === 'QF' ? 2
     : career.uclExit === 'R16' ? 1
     : 0;
-  const seasonIn = career.seasonSignings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0);
+  const seasonIn = career.seasonSignings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0) + seasonAppearanceFeeSpend(career);
   const seasonOut = career.seasonSignings.filter(t => t.dir === 'out').reduce((n, t) => n + t.fee, 0);
   const xpAward = seasonXp({
     wins: myTableRow ? myTableRow.w : 0,
@@ -25981,6 +26000,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
 
   const state: CareerState = {
     ...JSON.parse(JSON.stringify(career)) as CareerState,
+    ...(Array.isArray(rosterCareer.appearanceFees) ? {appearanceFees:rosterCareer.appearanceFees.map(row =>
+      row?.status === 'void' && career.appearanceFees?.some(old => old?.id === row.id && old.status === 'tracking')
+        ? { ...row, closed:{season,week:0} } : row)} : {}),
     clubName,
     season,
     ...(career.asianSquadLeague === undefined && isAsianSquadLeague(playedLeague.id) && !historic
@@ -26467,6 +26489,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   /* Round 310: promotion and relegation lead the whole summer, same seat,
      same reason, prepended last so they sit on top of the feed. */
   if (pr.lines.length) state.aiHeadlines = [...pr.lines, ...state.aiHeadlines].slice(0, 8);
+  if (state.appearanceFees) settleAppearanceFees(state,{season,week:0});
   if (moving) delete state.summerBudget;
   else state.summerBudget = {
     club: state.clubName, unspent, allocation, carried,

@@ -73,6 +73,7 @@ import {
 } from '@/lib/clubManager';
 import { facilityLevel, facilitiesOf, stadiumConcessionMult } from '@/lib/clubManagerFacilities';
 import { seniorClubSpend } from '@/lib/clubManagerSecondClub';
+import { seasonAppearanceFeeSpend } from '@/lib/clubManagerAppearanceFees';
 /* Round 471: the four staff posts pay a wage every week and cost fees when
    you change them, so both belong in this ledger. */
 import { staffOf, staffPayrollWeekly } from '@/lib/clubManagerStaff';
@@ -567,7 +568,7 @@ export function projectFinances(state: CareerState): FinanceProjection {
   /* Round 507: a signing on fee leaves the same kitty as the transfer fee, so
      the books count both. It is a separate field because the fee column is what the
      selling club got and the news feed prints that number. */
-  const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0));
+  const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0) + seasonAppearanceFeeSpend(state));
   const facilities = facilitiesOf(state).seasonSpend;
   /* Round 471: fees and severance on the staff desk. It leaves the kitty, so
      it has to appear here: money that goes and shows up nowhere is a lie the
@@ -626,7 +627,7 @@ export function closeLedger(state: CareerState): ClosedLedger {
   /* Round 507: a signing on fee leaves the same kitty as the transfer fee, so
      the books count both. It is a separate field because the fee column is what the
      selling club got and the news feed prints that number. */
-  const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0));
+  const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0) + seasonAppearanceFeeSpend(state));
   const facilities = round2(facilitiesOf(state).seasonSpend);
   const staffFees = round2(staffOf(state).seasonSpend);
   const retail = readShirtSales(s.shirts);

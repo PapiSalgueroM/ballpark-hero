@@ -1124,6 +1124,7 @@ export function joinClubNow(career: CareerState): CareerState | null {
     ...(career.unreviewedDomesticScorerAwards ? { unreviewedDomesticScorerAwards: career.unreviewedDomesticScorerAwards } : {}),
     leagueCoachBook: undefined,
     careerStats: { ...career.careerStats, clubsManaged: [...managed] },
+    ...(career.appearanceFees !== undefined ? { appearanceFees:plainCopy(career.appearanceFees) } : {}),
     manager: career.manager,
     managerXp: career.managerXp,
     nationJob: career.nationJob,
