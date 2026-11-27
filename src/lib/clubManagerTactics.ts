@@ -43,6 +43,7 @@ import {
 } from '@/lib/clubManagerTacticsCore';
 
 import { drawFlankPlay, isFlankPlan, ordinaryChanceShare } from '@/lib/clubManagerFlank';
+import { drawPhaseMoves, setPhaseOrder, recordPhaseShape, payPhaseCosts } from './clubManagerPhaseShapes';
 import { drawReturnPress } from '@/lib/clubManagerReturnPress';
 export { BALANCED, INSTRUCTION_KEYS, isBalanced, readInstructions, logEverSet } from '@/lib/clubManagerTacticsCore';
 export type { AiStyleId, InstructionKey, InstructionStep, Setting, TacticStats, TeamInstructions } from '@/lib/clubManagerTacticsCore';
@@ -414,6 +415,7 @@ function change(state: CareerState, live: LiveMatch, ch: LiveChange, m: number, 
 }
 
 setTacticsImpl({
+  phaseMoves: drawPhaseMoves, setPhase: setPhaseOrder, recordPhase: recordPhaseShape, payPhaseCosts,
   returnPress: drawReturnPress,
   pressTempo: (state,club) => AI_STYLES[opponentStyle(state,club)].instructions.tempo,
   flank: drawFlankPlay,

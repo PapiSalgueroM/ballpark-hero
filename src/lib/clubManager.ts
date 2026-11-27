@@ -225,6 +225,7 @@ import { addAppearanceFee, appearanceFeeTerms, canBookAppearanceFee, recordFeeAp
 export { appearanceFeeClubs, appearanceFeeDesk, appearanceFeeTerms, canBookAppearanceFee, type AppearanceFee } from '@/lib/clubManagerAppearanceFees';
 import { cornerAssistId, resolveCornerDeliveries, type CornerDelivery } from '@/lib/clubManagerCornerDelivery';
 import type { FlankMove, FlankPlan } from '@/lib/clubManagerFlank';
+import type { PhaseOrder, PhaseStep, PhaseMove } from '@/lib/clubManagerPhaseShapes';
 import type { ReturnPressEvent, ReturnPressOrder } from '@/lib/clubManagerReturnPress';
 /* Round 1522: team instructions. The engine carries only the small core (clubManagerTacticsCore.ts): the types,
    balanced, and the slot clubManagerTactics.ts fills when it loads. Every reader below is a no op on balanced
@@ -1225,7 +1226,7 @@ function noteBookMine(
       man = p ? { n: p.n, p: p.p, r: p.r, ...(p.g ? { g: true } : {}) } : null;
     }
     if (!creditGoal(book, opp, man) || !man || line.penalty || line.freeKick) return;
-    const assist = line.pressChance && line.assist ? bookNamed(theirs, line.assist) : dealAssist(`${key}|${i}`, man, there, rules);
+    const assist = line.phaseChance ? (line.assist ? bookNamed(theirs, line.assist) : null) : line.pressChance && line.assist ? bookNamed(theirs, line.assist) : dealAssist(`${key}|${i}`, man, there, rules);
     if (assist) creditAssist(book, opp, assist);
   });
   for (let i = lines.length; i < oppGoals; i++) creditGoal(book, opp, null);
@@ -2138,6 +2139,7 @@ export function weighedTrophies(list: readonly Trophy[]): Trophy[] {
 }
 
 export interface ScorerLine {
+  phaseChance?: string;
   pressChance?: string;
   name: string;
   minute: number;
@@ -2219,6 +2221,8 @@ export type PlayKind = 'shot' | 'corner' | 'throwin' | 'foul' | 'var' | 'buildup
  *  is not a goal is a save. `who` is the man on the ball (the shooter, the
  *  fouler, the taker), or '' when the opposition has no named eleven. */
 export interface PlayEvent {
+  phaseMove?: PhaseMove;
+  phaseChance?: string;
   minute: number;
   side: 'me' | 'opp';
   kind: PlayKind;
@@ -2249,6 +2253,8 @@ export interface PlayEvent {
  *  whether it came from the spot or a free kick, in which case `id` and
  *  `name` are the assigned taker's when he was on the pitch. */
 export interface MyGoalLine {
+  phaseChance?: string;
+  phaseAssistId?: string;
   pressChance?: string;
   cornerChance?: string;
   id: string;
@@ -2326,6 +2332,7 @@ export interface PlayerRatingLine {
 }
 
 export interface MatchDetail {
+  phaseHistory?: PhaseStep[];
   returnPressUsed?: true;
   cornerRoutine?: CornerRoutine;
   stats: MatchStats;
@@ -3773,6 +3780,8 @@ export type NextFixtureInfo =
  * halftime and picked back up.
  */
 export interface LiveMatch {
+  phaseOrder?: PhaseOrder;
+  phaseHistory?: PhaseStep[];
   returnPress?: ReturnPressOrder;
   returnPressUsed?: true;
   cornerRoutine?: CornerRoutine;
@@ -17976,6 +17985,7 @@ function creditMyScorers(
     }
     // A jump that wins the return is a solo finish.
     if (line.pressChance) assister = null;
+    if (line.phaseChance) assister = state.squad.find(p => p.id === line.phaseAssistId);
     if (assister && !own) {
       assistCounts.set(assister.id, (assistCounts.get(assister.id) ?? 0) + 1);
       const aq = state.squad.find(p => p.id === assister.id);
@@ -19491,7 +19501,7 @@ function tagOwnGoals(state: CareerState, live: LiveMatch, fx: MyFixture, half: 1
   const keyOf = (g: { minute: number; plus?: number; name: string }, side: 'me' | 'opp'): string =>
     `${match}|${g.minute + (g.plus ?? 0)}|${side}|${g.name}`;
   /* Never a goal from the spot or a direct free kick, and never a goal already tagged. */
-  const eligible = (g: { og?: unknown; penalty?: boolean; freeKick?: boolean; cornerChance?: string; pressChance?: string }): boolean => !g.og && !g.penalty && !g.freeKick && !g.cornerChance && !g.pressChance;
+  const eligible = (g: { og?: unknown; penalty?: boolean; freeKick?: boolean; cornerChance?: string; pressChance?: string; phaseChance?: string }): boolean => !g.og && !g.penalty && !g.freeKick && !g.cornerChance && !g.pressChance && !g.phaseChance;
   for (const g of mine) {
     if (!eligible(g)) continue;
     const key = keyOf(g, 'me');
@@ -19716,6 +19726,17 @@ function drawSegment(
       }
     }
   }
+  if (live.phaseOrder) {
+    const built = tacticsImpl()?.phaseMoves(live, play, mineAt, m => oppAt(live, m) ?? [],
+      [worldYear(state), state.clubName, live.week, live.opponent, half].join('/'), reviewKinds.includes('goal'));
+    if (built) {
+      play.push(...built.play);
+      me.goals.push(...built.mine);
+      oppGoals.push(...built.theirs);
+      if (half === 1) { live.h1My!.push(...built.mine); live.h1Opp!.push(...built.theirs); }
+      else { live.h2My!.push(...built.mine); live.h2Opp!.push(...built.theirs); }
+    }
+  }
   if (half === 1) live.h1Play = [...(live.h1Play ?? []), ...play];
   else live.h2Play = [...(live.h2Play ?? []), ...play];
   /* Round 781: everything drawn past the period's last minute is in its
@@ -19782,6 +19803,7 @@ function drawSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
     live.mentality = call.mentality;
     live.halftimePlanCall = call;
     live.shapeChanges = [...(live.shapeChanges ?? []), { minute: 46, mentality: call.mentality }];
+    if (live.phaseOrder) tacticsImpl()?.recordPhase(state, live, { minute: 46 });
   }
   const fx = fixtureFor(state, entry)!;
   const off = offPitchIds(live);
@@ -20985,7 +21007,7 @@ function buildMatchDetail(args: {
           base + g * 0.9 + (Math.random() * 1.2 - 0.6) + (theirCleanSheet && defensive ? 0.5 : 0) + saveBonus,
           4.5, 10,
         );
-        const assists = args.oppScorers.filter(sc => sc.pressChance && sc.assist === pl.n).length;
+        const assists = args.oppScorers.filter(sc => (sc.pressChance || sc.phaseChance) && sc.assist === pl.n).length;
         return { name: pl.n, pos: pl.p, rating: Math.round(r * 10) / 10, goals: g, assists, ...(pl.g ? { gen: true } : {}) };
       }).sort((a, b) => b.rating - a.rating);
     }
@@ -21304,6 +21326,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     : {
         name: l.name, minute: l.minute, assist: assistNames[i] ?? undefined,
         ...(l.pressChance ? { pressChance: l.pressChance } : {}),
+        ...(l.phaseChance ? { phaseChance: l.phaseChance } : {}),
         ...(l.penalty ? { penalty: true } : {}), ...(l.freeKick ? { freeKick: true } : {}), ...plusOf(l),
       }));
   const oppScorers: ScorerLine[] = [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])];
@@ -22017,6 +22040,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     const played = new Set(xi.map(p => p.id));
     state.squad = state.squad.map(p => (played.has(p.id) ? { ...p, fitness: clamp(p.fitness - tacticsDay.stats.legs, 20, 100) } : p));
   }
+  if (live.phaseHistory) tacticsImpl()?.payPhaseCosts(state, live);
   if (live.returnPressUsed === true) {
     for (const e of [...(live.h1Play ?? []), ...(live.h2Play ?? [])]) {
       const trap = e.returnPress;
@@ -22146,6 +22170,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     added: live.added,
   });
   if (live.cornerRoutine && isCornerRoutine(live.cornerRoutine)) detail.cornerRoutine = { ...live.cornerRoutine };
+  if (live.phaseHistory) detail.phaseHistory = live.phaseHistory;
   if (live.returnPressUsed === true) detail.returnPressUsed = true;
   if (state.appearanceFees) settleAppearanceFees(state,{season:state.season,week:live.week});
 
@@ -23157,7 +23182,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean; benchOrder?: BenchOrder; flankPlan?: FlankPlan }): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean; benchOrder?: BenchOrder; flankPlan?: FlankPlan; phaseOrder?: PhaseOrder }): PlayResult {
   if (career.live?.penaltyCalls) return { state: career, kind: 'halftime', live: career.live };
   if (career.live && !livePositionsValid(career.live)) return { state: career, kind: 'halftime', live: career.live, blocked: 'position-state-invalid' };
   const state: CareerState = JSON.parse(JSON.stringify(career));
@@ -23214,7 +23239,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
      daily games' (Manager Hot Seat passes it beside noCoach, for the same reason: a daily is a seed
      replayed through this function and never carries a book). */
   if (!opts?.noBook) ensureLeagueBook(state);
-  const expected = opts?.flankPlan && !state.live && opts.untilWeek === undefined ? nextFixture(state) : null;
+  const expected = (opts?.flankPlan || opts?.phaseOrder) && !state.live && opts.untilWeek === undefined ? nextFixture(state) : null;
   const flankOrder = expected?.kind === 'match' && opts?.flankPlan ? { fixture: expected, plan: opts.flankPlan } : undefined;
   while (state.week < state.calendar.length) {
     /* Round 466: a sim to a day stops at the first entry the day does not
@@ -23332,7 +23357,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       state.domesticCupScorers = newCupScorerLedger();
     }
     if (!opts?.noBook && entry.type === 'uclGroup' && entry.round === 0) openChampionsLeagueScorers(state);
-    const live = kickOff(state, entry, opts?.varReviews, !opts?.noBook, flankOrder);
+    const phase = expected?.kind === 'match' && opts?.phaseOrder ? { fixture: expected, order: opts.phaseOrder } : undefined;
+    const live = kickOff(state, entry, opts?.varReviews, !opts?.noBook, flankOrder, phase);
     if (!opts?.skipHalftime) {
       state.live = live;
       return { state, kind: 'halftime', live };
@@ -23354,7 +23380,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
  * dressing room where changing something changes what happens next.
  */
 function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk = false, careerMatch = false,
-  flankOrder?: { fixture: Extract<NextFixtureInfo, {kind: 'match'}>; plan: FlankPlan }): LiveMatch {
+  flankOrder?: { fixture: Extract<NextFixtureInfo, {kind: 'match'}>; plan: FlankPlan },
+  phase?: { fixture: Extract<NextFixtureInfo, {kind: 'match'}>; order: PhaseOrder }): LiveMatch {
   /* Round 1303: the kinds of review the caller asked for (the game asks with the ledger's list, CM_VAR_KINDS). */
   const varKinds = cmVarKindsAsked(varReviews);
   const fx = fixtureFor(state, entry)!;
@@ -23438,6 +23465,9 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
       live.cornerRoutine = { ...prepared.order };
     }
     delete state.cornerTraining;
+  }
+  if (phase && phase.fixture.opponent === fx.opponent && phase.fixture.compLabel === fx.compLabel && phase.fixture.home === fx.home) {
+    tacticsImpl()?.setPhase(state, live, phase.order, { minute: 0 });
   }
   if (flankOrder && target?.opponent === fx.opponent && target.compLabel === fx.compLabel && target.home === fx.home) {
     tacticsImpl()?.change(state, live, { kind: 'flank', plan: flankOrder.plan }, 0, 0);
@@ -23634,6 +23664,7 @@ export function changeRoom(career: CareerState, live: LiveMatch, minute: number,
 }
 
 export type LiveChange =
+  | { kind: 'phaseOrder'; order: PhaseOrder | null }
   | { kind: 'returnPress'; target: string | null }
   | { kind: 'flank'; plan: FlankPlan | null }
   | { kind: 'sub'; outId: string; inId: string }
@@ -23724,6 +23755,8 @@ export function changeLive(
       off: going?.name ?? change.outId, on: coming.name, minute: m, offId: change.outId, onId: change.inId,
       ...plusOf({ plus: p }), ...(inPlay ? { stop: true as const } : {}),
     }];
+  } else if (change.kind === 'phaseOrder') {
+    if (!tacticsImpl()?.setPhase(state, live, change.order, { minute: m, ...plusOf({ plus: p }) })) return null;
   } else if (change.kind === 'returnPress') {
     if (!tacticsImpl() || live.penaltyCalls || (live.returnPress !== undefined && !isReturnPress(live.returnPress))) return null;
     if (change.target === null) {
@@ -23755,6 +23788,9 @@ export function changeLive(
     }
   }
   if (!livePositionsValid(live)) return null;
+  if (live.phaseOrder && ['sub','shape','formation'].includes(change.kind)) {
+    tacticsImpl()?.recordPhase(state, live, { minute: m, ...plusOf({ plus: p }) });
+  }
   live.minute = m;
   const entry = state.calendar[live.week];
   if (entry && m < 45) recutFirstHalf(state, entry, live, m);
