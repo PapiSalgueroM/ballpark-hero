@@ -43,6 +43,7 @@ import {
 } from '@/lib/clubManagerTacticsCore';
 
 import { drawFlankPlay, isFlankPlan, ordinaryChanceShare } from '@/lib/clubManagerFlank';
+import { drawReturnPress } from '@/lib/clubManagerReturnPress';
 export { BALANCED, INSTRUCTION_KEYS, isBalanced, readInstructions, logEverSet } from '@/lib/clubManagerTacticsCore';
 export type { AiStyleId, InstructionKey, InstructionStep, Setting, TacticStats, TeamInstructions } from '@/lib/clubManagerTacticsCore';
 
@@ -413,6 +414,8 @@ function change(state: CareerState, live: LiveMatch, ch: LiveChange, m: number, 
 }
 
 setTacticsImpl({
+  returnPress: drawReturnPress,
+  pressTempo: (state,club) => AI_STYLES[opponentStyle(state,club)].instructions.tempo,
   flank: drawFlankPlay,
   ordinaryChanceShare,
   edge: (state, fx: MyFixture, xi: XiSlot[], instr, half, oppStyle) => tacticBoost({
