@@ -62,6 +62,7 @@ export function ImperialismHowToPlay({ open, onOpenChange, sport, game }: Imperi
               <li>The wheel spins and lands on the attacker. The needle points the way to the defender. Then the map zooms in, the score lands, and the loser's land turns the winner's colour.</li>
               <li>Every game in the {round} plays out like that, one after the other, in the order they were drawn. Skip jumps to the results whenever you like.</li>
               <li>The ring on each empire marks where that {team}'s land started. Tap a {team} in Teams Remaining to light up its empire, and hold the timeline to see the map after any earlier {round}.</li>
+              <li>Open Territory history to look up a place or {team} by name. Choose a completed {round} and turn on Show changes only to see which territories switched hands and who held them before.</li>
             </ul>
           </section>
 
