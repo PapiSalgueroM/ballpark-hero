@@ -800,7 +800,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Unlocking clues in a fixed order",
         items: [
-          "Every wrong guess reveals the next clue, in a fixed order: draft, college, first team, career stat, team history, jersey numbers.",
+          "Choose Reveal next clue or guess a player. A miss or a request moves you one step along the same path from draft to college, first team, career stat, team history and jersey numbers.",
         ],
         subsections: [
           {
@@ -820,9 +820,9 @@ export const FOOTBALL_CONTENT: GameContentMap = {
     ],
     ruleSections: [
       {
-        heading: "Six clues and six total guesses",
+        heading: "Six clues and one final guess",
         items: [
-          "There are 6 clues and 6 guesses, one wrong answer per clue.",
+          "Each extra clue costs 1 point, whether you request it or miss a guess. Only names you enter go in your guess history. The sixth clue leaves one final guess worth 1 point.",
         ],
       },
       {
@@ -834,7 +834,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Daily puzzles versus unlimited mode",
         items: [
-          "Daily serves everyone the same mystery player, fresh at midnight Eastern. Your Daily guesses stay in this browser so you can finish later. Unlimited deals random players back to back.",
+          "Daily serves everyone the same mystery player, fresh at midnight Eastern. Your Daily clues and guesses stay in this browser so you can finish later. Unlimited deals random players back to back.",
         ],
         subsections: [
           {
