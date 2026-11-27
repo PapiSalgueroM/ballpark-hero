@@ -1,6 +1,6 @@
 ### November 27, 2026. Wider game boards, pinned games and Budget Builder
 
-Career Quiz and the five Connect Four games center their boards between desktop ads and wrap long clues. All seven columns remain reachable after a selection. Players can pin a game from its menu and jump to their picks on Home. Horizontally scrolling pinned games and saved careers retain both Home ads when there is enough clearance.
+Career Quiz and the five Connect Four games center their boards between desktop ads and wrap long clues. All seven Connect Four columns remain reachable after a selection. The World Cup Bracket keeps group choices, Rankings and Auto Fill in the playable area, with at least 166px of clearance in the tested desktop layouts. Players can pin a game from its menu and jump to their picks on Home. Horizontally scrolling pinned games and saved careers retain both Home ads when there is enough clearance.
 
 Budget Builder shows the Money XI's actual lineup, prices and formation before the final. A signing that fills the last shirt or replaces a starter previews the squad rating, savings and board points before the final. The score breakdown uses the same calculation as the leaderboard and the shared result.
 

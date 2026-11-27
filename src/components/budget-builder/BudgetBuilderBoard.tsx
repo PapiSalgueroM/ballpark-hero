@@ -227,7 +227,7 @@ export function BudgetBuilderBoard() {
       </div>
 
       {/* Controls */}
-      <details className="mt-3 rounded-xl border border-border bg-card px-3 text-sm">
+      <details data-no-prerender="" className="mt-3 rounded-xl border border-border bg-card px-3 text-sm">
         <summary className="cursor-pointer py-3 font-semibold">Scout the Money XI</summary>
         <p className="text-xs text-muted-foreground">Your opponent fills each shirt in formation order with the most expensive eligible player still available in this market. Its budget is unlimited.</p>
         <ul className="my-3 grid gap-x-4 gap-y-2 text-xs sm:grid-cols-2">
