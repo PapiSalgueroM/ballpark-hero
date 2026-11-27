@@ -3,13 +3,14 @@ import type { UsSport } from './usCoachCareer';
 import { usSeasonLength } from '@/data/usSeasonLengths';
 import { NHL_DRAW_ASSIGNMENT, NHL_DRAW_CAMP_EDGE, NHL_DRAW_CAMP_MINIMUM, NHL_DRAW_ICE_COST, type NhlDefensiveDraws } from './nhlDefensiveDraws';
 import { nbaLateClockOptions, type LateClockRead, type LateClockResult } from './nbaLateClock';
+import { isShootoutStance, nhlShootoutOptions, NHL_SHOOTOUT_STANCES, type ShootoutStance, type NhlShootoutResult } from '@/lib/nhlShootout';
 import { CHANGEUP_LABEL, CHANGEUP_REPS, changeupExperience, type MlbChangeupLine } from './mlbChangeup';
 
 export type ProgrammeSection = 'workload' | 'tactics' | 'expectation' | 'partnership' | 'bonus' | 'reinvention';
-export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'third-down-rush' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'two-strike-changeup' | 'playoff-checking' | 'zone-draws' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain' | LateClockRead;
+export type ProgrammeChoice = 'normal' | 'push' | 'recover' | 'attack' | 'support' | 'defend' | 'third-down-rush' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'two-strike-changeup' | 'playoff-checking' | 'zone-draws' | 'steady' | 'stretch' | 'alternate' | 'build' | 'maintain' | LateClockRead | ShootoutStance;
 export interface ProgrammeChoices {
   workload: 'normal' | 'push' | 'recover';
-  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'third-down-rush' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'two-strike-changeup' | 'playoff-checking' | 'zone-draws' | LateClockRead;
+  tactics: 'normal' | 'attack' | 'support' | 'defend' | 'third-down-rush' | 'inside' | 'playoff-minutes' | 'second-unit' | 'spot-starts' | 'extra-relief' | 'two-strike-changeup' | 'playoff-checking' | 'zone-draws' | LateClockRead | ShootoutStance;
   expectation: 'normal' | 'steady' | 'stretch';
   partnership: 'normal' | 'build';
   bonus: 'normal' | 'steady' | 'stretch' | 'alternate';
@@ -179,6 +180,7 @@ function validPlan(c: UsCareerCore, sport: UsSport, plan: UsCareerProgramme): bo
       if (key === 'tactics' && plan.tactics === 'spot-starts') return sport === 'mlb' && c.pos === 'SP';
       if (key === 'tactics' && plan.tactics === 'playoff-checking') return sport === 'nhl' && nhlCheckingForward(c.pos);
       if (key === 'tactics' && plan.tactics === 'zone-draws') return sport === 'nhl' && c.pos === 'C';
+      if (key === 'tactics' && isShootoutStance(plan.tactics)) return sport === 'nhl' && c.pos === 'G';
       if (key === 'tactics' && plan.tactics === 'extra-relief') return sport === 'mlb' && c.pos === 'RP';
       if (key === 'tactics' && plan.tactics === 'two-strike-changeup') return sport === 'mlb' && (c.pos === 'SP' || c.pos === 'RP');
       return usProgrammeMenus(c, sport).find(menu => menu.id === key)?.options.some(o => o.id === plan[key]);
@@ -360,6 +362,7 @@ export function usProgrammeMenus(c: UsCareerCore, sport: UsSport, chosen: Partia
         effect: 'Come off the bench during the regular season. Bench roles play fewer minutes and can earn Sixth Man of the Year. Moving to the bench clears booked starter rest. If camp already assigns you to the bench, the plan goes unused.',
       }] : []),
       ...(sport === 'nba' ? nbaLateClockOptions(c) : []),
+      ...(sport === 'nhl' ? nhlShootoutOptions(c) : []),
       ...(sport === 'nba' && nbaExtraPlayoffMinutesAvailable(c) ? [{
         id: 'playoff-minutes' as const,
         label: NBA_PLAYOFF_MINUTES_LABEL,
@@ -494,6 +497,14 @@ export function settleUsCareerProgramme(c: ProgrammeCareer, line: UsCareerSeason
         decision.actual = draws.won;
         decision.unit = 'defensive draws won';
       } else decision.outcome = 'unused';
+    }
+    if (section === 'tactics' && sport === 'nhl' && isShootoutStance(choice)) {
+      decision.label = NHL_SHOOTOUT_STANCES[choice];
+      const shootout = (line as UsCareerSeason & { shootout?: NhlShootoutResult }).shootout;
+      if (played && shootout?.stance === choice) {
+        decision.actual = shootout.wins;
+        decision.unit = 'shootout wins';
+      } else if (played) decision.outcome = 'unused';
     }
     if (played && sport === 'nba' && section === 'tactics' && choice === 'defend' && !preparation?.idle?.includes(section)) {
       const defence = nbaDefensiveAssignment(c.pos);

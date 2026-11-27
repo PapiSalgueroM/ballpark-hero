@@ -11,6 +11,7 @@ import { formatNumber } from './formatNumber';
 
 import { NHL_TEAMS } from '@/data/conquestDataNhl';
 import { NHL_PLAYOFF_FORMAT } from '@/data/usSeasonLedgerNhl';
+import { isShootoutStance, playGoalieShootouts, type NhlShootoutResult } from '@/lib/nhlShootout';
 import { earnedDrawTrust, NHL_DRAW_CAMP_EDGE, NHL_DRAW_ICE_COST, playDefensiveDraws, type NhlDefensiveDraws } from './nhlDefensiveDraws';
 import { nhlCheckingForward, NHL_CHECKING_SERIES_POINTS, NHL_CHECKING_SCORING_COST, NHL_SHUTDOWN_BERTH_POINTS, NHL_SHUTDOWN_OFFENSIVE_COST, type ProgrammePreparation } from './usCareerProgramme';
 import { seasonSwing, swingNote, playoffDepthOf, playoffGames, clutchSwing, clutchNote } from './careerVariance';
@@ -133,6 +134,7 @@ export interface NhlSeasonLine {
   /** Planned starts on the actual slate before any injury, when the goalie shared the crease. */
   tandemStarts?: number;
   defensiveDraws?: NhlDefensiveDraws;
+  shootout?: NhlShootoutResult;
   /** Round 103: the run to the Cup, or the four games that ended it. */
   poGames?: number; poGoals?: number; poAssists?: number; poPoints?: number;
   /** Personal postseason starts for a goalie who entered the season as the backup. */
@@ -561,6 +563,17 @@ export function simNhlSeason(
   if (slate !== US_ENGINE_SEASON.nhl) full.slate = slate;
   Object.assign(full, nhlStatLineFor({ form, pos: c.pos, scoringMult: c.archetype.scoringMult, games: fullGames, iceShare: offensiveIceShare }, rng));
   const line = nhlLineOnSlate(full, work);
+  const plan = programme?.plan;
+  if (c.pos === 'G' && c.contractYears > 0 && !c.retired && !(c.suspendedSeasons ?? 0)
+    && plan?.sport === 'nhl' && plan.year === c.year && plan.team === c.team && isShootoutStance(plan.tactics)
+    && line.games >= 6 && line.wins !== undefined && line.wins <= line.games) {
+    const shootout = playGoalieShootouts(c, plan.tactics, line.games, line.wins);
+    line.shootout = shootout;
+    const change = shootout.wins - shootout.usualWins;
+    line.wins += change;
+    if (line !== full && full.wins !== undefined) full.wins = Math.max(0, Math.min(fullGames, full.wins + Math.round(change * US_ENGINE_SEASON.nhl / work)));
+    notes.push(`Shootouts: you won ${shootout.wins} of ${shootout.earlyShots + shootout.dekes}. Your usual depth would have won ${shootout.usualWins}.`);
+  }
   if (zoneDraws && line.games > 0) {
     const draws = playDefensiveDraws(c, line.games, form);
     line.defensiveDraws = draws;

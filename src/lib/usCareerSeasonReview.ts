@@ -5,6 +5,7 @@ import type { NhlCareerPos, NhlSeasonLine } from '@/lib/nhlMyCareer';
 import type { UsCareerCore, UsCareerSeason, UsCareerSport } from '@/lib/usCareerSport';
 import { formatNumber } from '@/lib/formatNumber';
 import { earnedDrawTrust } from '@/lib/nhlDefensiveDraws';
+import { NHL_SHOOTOUT_STANCES } from '@/lib/nhlShootout';
 import { CHANGEUP_REPS } from '@/lib/mlbChangeup';
 
 export interface CareerReviewStat { label: string; value: string; numeric?: { raw?: number; digits?: number } }
@@ -187,6 +188,7 @@ export function mlbSeasonReview(s: MlbSeasonLine, pos: MlbCareerPos): CareerRevi
 export function nhlSeasonReview(s: NhlSeasonLine, pos: NhlCareerPos): CareerReviewStats {
   const draws = pos === 'C' ? s.defensiveDraws : undefined;
   const tandem = pos === 'G' && recorded(s.tandemStarts);
+  const shootout = pos === 'G' ? s.shootout : undefined;
   const { poGames, poStarts } = s;
   const hasStarts = recorded(poStarts) && Number.isInteger(poStarts) && poStarts >= 0
     && recorded(poGames) && Number.isInteger(poGames) && poGames > 0 && poStarts <= poGames;
@@ -197,7 +199,11 @@ export function nhlSeasonReview(s: NhlSeasonLine, pos: NhlCareerPos): CareerRevi
   const detail = stats(s.teamResult,
     pos === 'G' ? [number('Wins', s.wins), number('Save percentage', s.svpct, 3),
       ...perOpportunity('Wins per 100 appearances', recorded(s.wins) && s.wins <= s.games ? s.wins : undefined, s.games, 100),
-      ...(tandem ? [text('Goalie workload', 'Shared crease'), number('Planned starts', s.tandemStarts)] : [])]
+      ...(tandem ? [text('Goalie workload', 'Shared crease'), number('Planned starts', s.tandemStarts)] : []),
+      ...(shootout ? [text('Shootout stance', NHL_SHOOTOUT_STANCES[shootout.stance]),
+        number('Early shots faced', shootout.earlyShots), number('Dekes faced', shootout.dekes),
+        number('Shootout wins', shootout.wins), number('Shootout wins at usual depth', shootout.usualWins),
+        ...(recorded(shootout.recoveries) ? [number('Wins saved by a practiced stance', shootout.recoveries)] : [])] : [])]
       : [number('Goals', s.goals), number('Assists', s.assists), number('Points', s.points),
         ...perOpportunity('Points per game', s.points, s.games),
         ...(draws ? [number('Defensive draws won', draws.won), number('Defensive draws lost', draws.taken - draws.won),
