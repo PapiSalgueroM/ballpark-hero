@@ -10,7 +10,7 @@ afterEach(() => { vi.restoreAllMocks(); safeLocalStorage.clear(); localStorage.c
 describe('withdrawal cannot reload into a durable old grant or discard a held save', () => {
   // Break caught: safe seam readback is mistaken for durable deletion proof.
   it('stays in the page if a refused write and removal leave a durable advertising grant', () => {
-    localStorage.setItem(KEY, oldGrant());
+    saveConsentPreferences({ advertising: true, analytics: false });
     const remove = Storage.prototype.removeItem;
     const write = Storage.prototype.setItem;
     vi.spyOn(Storage.prototype, 'removeItem').mockImplementation(function(this: Storage, key: string) {
@@ -60,7 +60,7 @@ describe('withdrawal cannot reload into a durable old grant or discard a held sa
 
   it('requires a new analytics opt-in even when a previous record contains analytics true', () => {
     localStorage.setItem(KEY, oldGrant());
-    expect(getEffectiveConsent()).toEqual({ advertising: true, analytics: false });
+    expect(getEffectiveConsent()).toEqual({ advertising: false, analytics: false });
     saveConsentPreferences({ advertising: false, analytics: true });
     expect(JSON.parse(localStorage.getItem(KEY)!)).toMatchObject({ advertising: false, analytics: true, analyticsOptIn: 1 });
     expect(getEffectiveConsent()).toEqual({ advertising: false, analytics: true });

@@ -27,15 +27,16 @@ async function mount() {
 const checkbox = (name: string) => screen.getByRole('checkbox', { name });
 const choose = (name: string) => fireEvent.click(screen.getByRole('button', { name }));
 
-it.each([false, true])('reopens an older saved ad grant with analytics unchecked (old analytics=%s)', async oldAnalytics => {
+it.each([false, true])('renews an older saved ad grant with analytics unchecked (old analytics=%s)', async oldAnalytics => {
   localStorage.setItem('cookie-consent-v2', JSON.stringify({
     version: 2, advertising: true, analytics: oldAnalytics, updatedAt: Date.now(),
   }));
   const consent = await mount();
-  expect(consent.getEffectiveConsent()).toEqual({ advertising: true, analytics: false });
+  expect(consent.getEffectiveConsent()).toEqual({ advertising: false, analytics: false });
   act(() => consent.openConsentChoices());
-  expect(checkbox('Advertising')).toBeChecked();
+  expect(checkbox('Advertising')).not.toBeChecked();
   expect(checkbox('Google Analytics')).not.toBeChecked();
+  fireEvent.click(checkbox('Advertising'));
   choose('Save choices');
   expect(consent.getEffectiveConsent()).toEqual({ advertising: true, analytics: false });
 });
@@ -61,6 +62,8 @@ it.each([
 it('keeps advertising off under GPC when the visitor accepts all', async () => {
   Object.defineProperty(navigator, 'globalPrivacyControl', { configurable: true, value: true });
   const consent = await mount();
+  expect(screen.queryByRole('region', { name: 'Cookie choices' })).toBeNull();
+  act(() => consent.openConsentChoices());
   expect(checkbox('Advertising')).toBeDisabled();
   expect(checkbox('Google Analytics')).toBeEnabled();
   choose('Accept all');

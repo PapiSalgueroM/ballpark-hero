@@ -1,4 +1,4 @@
-import { hasRegionalAdDefault } from './advertisingRegion';
+import { hasRegionalAdDefault, regionalLookupPending } from '@/lib/advertisingRegion';
 import { getStorageTrouble, safeLocalStorage, settlePendingSaves } from '@/lib/safeStorage';
 
 export const CONSENT_KEY = 'cookie-consent-v2';
@@ -6,6 +6,7 @@ export const CONSENT_CHANGED_EVENT = 'dukb-consent-changed';
 export const CONSENT_OPEN_EVENT = 'dukb-consent-open';
 export const CONSENT_EFFECTIVE_CHANGED_EVENT = 'dukb-consent-effective-changed';
 export const CONSENT_MAX_AGE_MS = 180 * 24 * 60 * 60 * 1000;
+export const AD_CONFIRMATION_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000;
 export const ANALYTICS_READY: boolean = true;
 
 export interface ConsentPreferences {
@@ -13,6 +14,7 @@ export interface ConsentPreferences {
   advertising: boolean;
   analytics: boolean;
   updatedAt: number;
+  advertisingConfirmedAt?: number;
 }
 export interface ConsentPurposes { advertising: boolean; analytics: boolean }
 let pendingWithdrawal: ConsentPurposes = { advertising: false, analytics: false };
@@ -29,17 +31,32 @@ export function getPendingConsentWithdrawal(): ConsentPurposes {
   return { ...pendingWithdrawal };
 }
 
-export function parseConsentPreferences(raw: string | null, now = Date.now()): ConsentPreferences | null {
+function storedPreferences(raw: string | null, now = Date.now()): ConsentPreferences | null {
   if (!raw) return null;
   try {
     const value = JSON.parse(raw);
     if (!value || value.version !== 2 || typeof value.advertising !== 'boolean'
       || typeof value.analytics !== 'boolean' || typeof value.updatedAt !== 'number'
-      || !Number.isFinite(value.updatedAt) || value.updatedAt < 0 || value.updatedAt > now
-      || now - value.updatedAt >= CONSENT_MAX_AGE_MS) return null;
-    // A choice saved before the separate GA4 opt-in still controls Advertising.
-    return { version: 2, advertising: value.advertising, analytics: value.analytics && value.analyticsOptIn === 1, updatedAt: value.updatedAt };
+      || !Number.isFinite(value.updatedAt) || value.updatedAt < 0 || value.updatedAt > now) return null;
+    const at = value.advertisingConfirmedAt;
+    return { version: 2, advertising: value.advertising,
+      analytics: value.analytics && value.analyticsOptIn === 1 && now - value.updatedAt < CONSENT_MAX_AGE_MS,
+      updatedAt: value.updatedAt, ...(Number.isFinite(at) && at >= 0 && at <= now && { advertisingConfirmedAt: at }) };
   } catch { return null; }
+}
+
+function currentAdChoice(value: ConsentPreferences, now: number): boolean {
+  return value.advertising
+    ? value.advertisingConfirmedAt !== undefined && now - value.advertisingConfirmedAt < AD_CONFIRMATION_MAX_AGE_MS
+    : now - (value.advertisingConfirmedAt ?? value.updatedAt) < CONSENT_MAX_AGE_MS;
+}
+
+export function parseConsentPreferences(raw: string | null, now = Date.now()): ConsentPreferences | null {
+  const value = storedPreferences(raw, now);
+  if (!value) return null;
+  const current = currentAdChoice(value, now);
+  if (!current && now - value.updatedAt >= CONSENT_MAX_AGE_MS) return null;
+  return { ...value, advertising: value.advertising && current };
 }
 
 export function readConsentPreferences(): ConsentPreferences | null {
@@ -53,8 +70,19 @@ export function isGlobalPrivacyControlEnabled(): boolean {
 }
 
 export function mayUseRegionalDefault(): boolean {
-  return !pendingWithdrawal.advertising && !isGlobalPrivacyControlEnabled() && getStorageTrouble() === null &&
-    safeLocalStorage.getItem(CONSENT_KEY) === null && safeLocalStorage.getItem('cookie-consent') === null;
+  if (pendingWithdrawal.advertising || isGlobalPrivacyControlEnabled() || getStorageTrouble() !== null) return false;
+  const raw = safeLocalStorage.getItem(CONSENT_KEY);
+  const legacy = safeLocalStorage.getItem('cookie-consent');
+  return (legacy === null || legacy === 'accepted') && (raw === null || storedPreferences(raw)?.advertising === true);
+}
+
+export function consentPrompt(): 'choices' | 'renew' | null {
+  if (isGlobalPrivacyControlEnabled() || safeLocalStorage.getItem('cookie-consent') === 'essential') return null;
+  if (getStorageTrouble() === null && (hasRegionalAdDefault() || regionalLookupPending())) return null;
+  const raw = safeLocalStorage.getItem(CONSENT_KEY);
+  const value = storedPreferences(raw);
+  if (value && currentAdChoice(value, Date.now())) return null;
+  return value?.advertising || (raw === null && safeLocalStorage.getItem('cookie-consent') === 'accepted') ? 'renew' : 'choices';
 }
 
 export function getEffectiveConsent(): ConsentPurposes {
@@ -76,12 +104,13 @@ export function migrateConsentPreferences(): 'accepted' | 'essential' | null {
   return legacy === 'accepted' || legacy === 'essential' ? legacy : null;
 }
 
-function writeConsentPreferences(purposes: ConsentPurposes): ConsentPreferences {
+function writeConsentPreferences(purposes: ConsentPurposes, analyticsUpdatedAt = Date.now()): ConsentPreferences {
   const next: ConsentPreferences = {
     version: 2,
     advertising: !pendingWithdrawal.advertising && purposes.advertising && !isGlobalPrivacyControlEnabled(),
     analytics: !pendingWithdrawal.analytics && ANALYTICS_READY && purposes.analytics,
-    updatedAt: Date.now(),
+    updatedAt: analyticsUpdatedAt,
+    advertisingConfirmedAt: Date.now(),
   };
   // Removing the previous choice first frees space and prevents a durable old
   // grant surviving a replacement refused by a full store. The existing seam
@@ -98,10 +127,16 @@ export function saveConsentPreferences(purposes: ConsentPurposes): ConsentPrefer
   return next;
 }
 
+export function saveAdvertisingChoice(advertising: boolean): void {
+  const previous = storedPreferences(safeLocalStorage.getItem(CONSENT_KEY));
+  writeConsentPreferences({ advertising, analytics: previous?.analytics ?? false }, previous?.updatedAt);
+  window.dispatchEvent(new Event(CONSENT_CHANGED_EVENT));
+}
+
 export function enforceGlobalPrivacyControl(): void {
-  const saved = readConsentPreferences();
+  const saved = storedPreferences(safeLocalStorage.getItem(CONSENT_KEY));
   if (isGlobalPrivacyControlEnabled() && saved?.advertising) {
-    writeConsentPreferences({ advertising: false, analytics: saved.analytics });
+    writeConsentPreferences({ advertising: false, analytics: saved.analytics }, saved.updatedAt);
   }
 }
 
@@ -124,7 +159,10 @@ export function canReloadAfterWithdrawal(revoked: ConsentPurposes): boolean {
   try {
     // A full store's safe seam can shadow a refused removal or write. Only the
     // actual browser record tells us what the next template would receive.
-    const durable = parseConsentPreferences(window.localStorage.getItem(CONSENT_KEY));
+    const raw = window.localStorage.getItem(CONSENT_KEY);
+    const durable = parseConsentPreferences(raw);
+    if (revoked.advertising && hasRegionalAdDefault() && !isGlobalPrivacyControlEnabled() &&
+      (raw === null || storedPreferences(raw)?.advertising)) return false;
     return !durable || ((!revoked.advertising || !durable.advertising)
       && (!revoked.analytics || !ANALYTICS_READY || !durable.analytics));
   } catch { return false; }

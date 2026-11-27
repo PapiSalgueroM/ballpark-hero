@@ -7,7 +7,7 @@ import { safeLocalStorage } from '@/lib/safeStorage';
 const gpcDescriptor = Object.getOwnPropertyDescriptor(window.navigator, 'globalPrivacyControl');
 const originalPath = `${location.pathname}${location.search}${location.hash}`;
 const grantBoth = () => safeLocalStorage.setItem('cookie-consent-v2', JSON.stringify({
-  version: 2, advertising: true, analytics: true, analyticsOptIn: 1, updatedAt: Date.now(),
+  version: 2, advertising: true, analytics: true, analyticsOptIn: 1, advertisingConfirmedAt: Date.now(), updatedAt: Date.now(),
 }));
 
 beforeEach(() => {

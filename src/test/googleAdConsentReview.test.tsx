@@ -7,7 +7,7 @@ import { CONSENT_KEY, openConsentChoices } from '@/lib/consentPreferences';
 type Readiness = { CONSENT_DATA_READY: () => void };
 const review = () => screen.queryByRole('button', { name: 'Review Google’s European ad consent' });
 function open(advertising = true) {
-  localStorage.setItem(CONSENT_KEY, JSON.stringify({ version: 2, advertising, analytics: false, updatedAt: Date.now() }));
+  localStorage.setItem(CONSENT_KEY, JSON.stringify({ version: 2, advertising, analytics: false, advertisingConfirmedAt: Date.now(), updatedAt: Date.now() }));
   render(<MemoryRouter><CookieConsent /></MemoryRouter>);
   act(() => openConsentChoices());
 }

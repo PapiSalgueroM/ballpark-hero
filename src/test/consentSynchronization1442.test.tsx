@@ -11,7 +11,7 @@ let loadAdSense: typeof import('@/lib/consentedScripts').loadAdSense;
 
 const KEY = 'cookie-consent-v2';
 const gpcDescriptor = Object.getOwnPropertyDescriptor(navigator, 'globalPrivacyControl');
-const value = (advertising: boolean) => JSON.stringify({ version: 2, advertising, analytics: false, updatedAt: Date.now() });
+const value = (advertising: boolean) => JSON.stringify({ version: 2, advertising, analytics: false, advertisingConfirmedAt: Date.now(), updatedAt: Date.now() });
 let release: (() => void) | undefined;
 beforeEach(async () => {
   vi.resetModules();

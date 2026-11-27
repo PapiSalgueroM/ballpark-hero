@@ -10,7 +10,7 @@ const adScripts = () => document.querySelectorAll('script[src*="adsbygoogle.js"]
 const analyticsScripts = () => document.querySelectorAll('script[src*="googletagmanager.com/gtag/js"]');
 
 function record(advertising: boolean, analytics: boolean, updatedAt = Date.now()) {
-  return JSON.stringify({ version: 2, advertising, analytics, ...(analytics && { analyticsOptIn: 1 }), updatedAt });
+  return JSON.stringify({ version: 2, advertising, analytics, ...(analytics && { analyticsOptIn: 1 }), advertisingConfirmedAt: updatedAt, updatedAt });
 }
 
 beforeEach(() => {
