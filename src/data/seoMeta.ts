@@ -25,6 +25,10 @@ export interface SeoMeta {
 }
 
 export const SEO_META: Record<string, SeoMeta> = {
+  '/two-minute-drive': {
+    title: 'Two-Minute Drive: NFL Play Calling Game',
+    description: 'Call the final possession in a free NFL football game. Read the coverage, manage your timeouts and decide when to kick or keep driving for a touchdown.',
+  },
   '/cage-clash': {
     title: 'Cage Clash: Pixel MMA Fighting Game',
     description: 'Free pixel MMA fighting game. Move, block, punch and kick, then clinch, take your opponent down and work for a submission. Play on phone or keyboard.',

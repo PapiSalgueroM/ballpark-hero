@@ -78,6 +78,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/nfl-gauntlet-draft': 'football',
   '/nfl-higher-lower': 'football',
   '/nfl-my-career': 'football',
+  '/two-minute-drive': 'football',
   '/perfect-season-nfl': 'football',
   /* hockey */
   '/conquest-nhl': 'hockey',

@@ -2,6 +2,44 @@ import type { GameContentMap } from './types';
 
 // Pro football game guides. Casual human tone, no em dashes anywhere.
 export const FOOTBALL_CONTENT: GameContentMap = {
+  '/two-minute-drive': {
+    intro: [
+      'Take over a football offense for its final possession. The scoreboard tells you what you need. The defenders lining up across from you tell you where you might find it.',
+      'Four practice drives give you different starting field positions, clocks and deficits. Practice is also available inside NFL My Career. Both entrances use the same saved drives in this browser.',
+      'Choose Playoff Run to link three possessions. You have one timeout for the entire run from the wild card to the championship. Spend it in the opener and a speed out or a spike can buy you another snap later.',
+    ],
+    introLinks: [{ paragraph: 1, text: 'NFL My Career', to: '/nfl-my-career' }],
+    howToPlay: [
+      'Pick Blitz alley, Steal three, No timeouts or Fourth and short. Check your down, yards to the first down, timeouts and the points you are chasing.',
+      'Read the defensive look before each snap. A draw attacks a light box. The speed out goes to the boundary. A deep seam attacks the middle, and a slip screen can get behind a blitz.',
+      'After each play, check where the ball finished and whether the clock is running. Call a timeout or spike the ball when the seconds matter more than another immediate gain.',
+      'Once the ball reaches the opposing 38 or closer, a field goal is available. Check the scoreboard before you kick. A touchdown wins all four opening situations.',
+      'In Playoff Run, win the wild card to reach the conference final. Win that to play the championship. The wild card starts two points down. In the next two rounds, you need a touchdown.',
+    ],
+    rules: [
+      'Gain ten yards to earn a first down. Fail to convert on fourth down and the possession ends. A play snapped before the clock reaches zero can still score.',
+      'A catch on a speed out or an incomplete pass stops the clock. An interior gain keeps it running. The offense needs eight seconds to line up for its next ordinary snap while the clock runs.',
+      'A timeout stops the running clock without using a down. A spike takes three seconds and uses the down. On fourth down that spike turns the ball over.',
+      'The defense rotates its looks. Call the same play twice in a row and the defense adjusts to that call. Check the next look even if your last two snaps worked.',
+      'The kicker makes any available field goal from 55 yards or closer. Three points can win, force overtime or leave you behind. The challenge ends on the kick.',
+    ],
+    example: [
+      'Open Steal three. You start on your own 36, down two with 30 seconds and one timeout. Both safeties are deep. Call a speed out to take nine yards and stop the clock at 25 seconds.',
+      'The corners move to the sideline. Send the deep seam through the middle for 18 yards. Now you are on the opposing 37, with 17 seconds left and the clock running.',
+      'Spend the timeout and kick from 54 yards. The kick gives you the lead with 13 seconds left. Kicking immediately also wins here, but lining up costs eight seconds of your best finish.',
+    ],
+    tips: [
+      'In No timeouts, look at how the play ends. A longer gain in bounds can leave you stranded while a shorter completion at the boundary gives you another snap.',
+      'In Fourth and short, get the first down before worrying about the rest of the field. An incomplete pass ends the challenge right there.',
+      'In Blitz alley you are four points behind. Entering field goal range gives you a button, but it still takes a touchdown to win.',
+    ],
+    faqs: [
+      { q: 'Can I finish a drive later?', a: 'Yes. Open the same challenge in the same browser to resume at your last play. The four practice drives save separately and work signed out.' },
+      { q: 'What counts as my best drive?', a: 'Each challenge keeps the win with the most seconds left. Try a different call or a better timed timeout to beat it.' },
+      { q: 'What happens if I kick while I am three points down?', a: 'The kick forces overtime and ends this possession as a tie. To win outright in Fourth and short, keep playing for the end zone.' },
+      { q: 'Can I try the same playoff draw again?', a: 'After the run ends, Replay this draw brings back the same starting spots, clocks and defensive looks. New playoff draw changes the setup. In either case you get one timeout to share across all three rounds.' },
+    ],
+  },
   '/perfect-season-nfl': {
     intro: [
       "Spin a wheel of real pro football team seasons from 1999 to 2024, draft one player wherever it lands, and build a cross-era offense the sim then runs through a 17 game season.",

@@ -2,10 +2,14 @@
    edit this folder: edit src/data/seoMeta.ts. Every vite build rewrites what
    has fallen behind, and simSeoTitles section 6 fails if the committed copy
    is not what the source makes. */
-/* Part 22 of 32: 4 entries. */
+/* Part 22 of 32: 5 entries. */
 import type { SeoMeta } from '../seoMeta';
 
 export const SEO_META_PART: Record<string, SeoMeta> = {
+  "/two-minute-drive": {
+    title: "Two-Minute Drive: NFL Play Calling Game",
+    description: "Call the final possession in a free NFL football game. Read the coverage, manage your timeouts and decide when to kick or keep driving for a touchdown.",
+  },
   "/build-your-xi": {
     title: "Build Your XI: Soccer Lineup Builder Game",
     description: "A slot machine gives each position a random club or country. Name a player who fits each slot, then an AI grades your XI and a season plays out. Free soccer.",
