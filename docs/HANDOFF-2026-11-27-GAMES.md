@@ -1,6 +1,6 @@
 # DoUKnowBall release handoff, November 27, 2026
 
-The original four-mode release was published and replayed on `index-CcQ7--q_.js`. Five subsequent Club Manager releases reached the custom domain. The latest application revision is `fbe6b0305`, serving `index-Cdnjm2PD.js`. Managers can scout and sign players for a brief, plan squad succession, give conditional bench orders, practice and call competitive shootouts, choose flank tactics before kickoff or during a match, and rehearse a named pair for a competitive corner. See [Project state](PROJECT-STATE.md) for the native results and [the expansion ledger](EXPANSION-IMPLEMENTATION-LEDGER.md) for the continuing manager work. The December 4 revenue comparison remains scheduled.
+The original four-mode release was published and replayed on `index-CcQ7--q_.js`. Six subsequent Club Manager releases reached the custom domain. The latest application revision is `3ed70de6f`, serving `index-1FTU3NOv.js`. Managers can scout and sign players for a brief, plan squad succession, give conditional bench orders, practice and call competitive shootouts, choose flank tactics before kickoff or during a match, rehearse a named pair for a competitive corner, and press a chosen defender at throw-ins. See [Project state](PROJECT-STATE.md) for the native results and [the expansion ledger](EXPANSION-IMPLEMENTATION-LEDGER.md) for the continuing manager work. The December 4 revenue comparison remains scheduled.
 
 ## What players can do in the candidate
 
