@@ -60,6 +60,9 @@ export function PhasePositionMap({ positions, order }: { positions: PhasePositio
       <p className="text-center text-[11px] text-muted-foreground">
         {phase === 'return' ? 'Lines show how far each player has to recover.' : 'Your team attacks toward the top.'}
       </p>
+      {positions.missingSlots.length > 0 && <p className="text-center text-xs text-amber-200">
+        {positions.missingSlots.length} vacant {positions.missingSlots.length === 1 ? 'outfield position' : 'outfield positions'}
+      </p>}
     </figure>
     <details>
       <summary className="min-h-11 cursor-pointer py-3 text-xs font-semibold">Player assignments</summary>
@@ -104,7 +107,7 @@ export function PhaseShapePicker({ order, positionsFor, onChange }: {
       {!active ? <button type="button" disabled={!positions.available || order != null}
         className="min-h-11 rounded-md border border-primary px-2 font-semibold text-primary disabled:border-border disabled:text-muted-foreground"
         onClick={() => onChange(DEFAULT_ORDER)}>Use separate shapes</button> : <>
-        <div className="grid gap-2 sm:grid-cols-2">
+        <fieldset disabled={!positions.available} className="grid gap-2 sm:grid-cols-2 disabled:opacity-70">
           <label className="font-semibold">With the ball
             <select className={selectClass} value={draft.withBall} onChange={e => change({ withBall: e.target.value as PhaseOrder['withBall'] })}>
               <option value="secure-3-2-5">{shapes['secure-3-2-5']}</option>
@@ -129,11 +132,11 @@ export function PhaseShapePicker({ order, positionsFor, onChange }: {
               <option value="challenge">Step up to challenge</option>
             </select>
           </label>
-        </div>
+        </fieldset>
         <button type="button" className="min-h-11 rounded-md border border-border px-2 font-semibold"
           onClick={() => onChange(null)}>Return to one shape</button>
       </>}
-      {positions.available && <>
+      {positions.rows.length > 0 && (positions.available || active) && <>
         {!active && <p className="font-semibold">Preview of the starting phase order</p>}
         <PhasePositionMap positions={positions} order={draft} />
       </>}

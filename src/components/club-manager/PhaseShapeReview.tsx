@@ -72,9 +72,10 @@ export function PhaseShapeReview({ play, history, live = false }: {
           {changes.map((step, index) => <option key={index} value={index}>{step.minute === 0 ? 'Kickoff' : minuteLabel(step)} · {step.order ? 'Phase shapes' : 'One shape'}</option>)}
         </select>
       </label>}
-      {latestShape?.order && latestShape.positions?.available ?
+      {latestShape?.positions?.reason && <p>{latestShape.positions.reason}</p>}
+      {latestShape?.order && latestShape.positions?.rows.length ?
         <PhasePositionMap positions={latestShape.positions} order={latestShape.order} /> :
-        <p>{latestShape?.positions?.reason ?? 'The team used one shape.'}</p>}
+        !latestShape?.positions?.reason && <p>The team used one shape.</p>}
     </details>}
     {!moves.length && <p>The match recorded no phase-shape move while the order was active.</p>}
   </section>;
