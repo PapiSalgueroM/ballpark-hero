@@ -3,11 +3,21 @@ import { createServer } from 'node:net';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { chromium } from './playwrightLoader.mjs';
+import { build } from 'esbuild';
 
 const exec = promisify(execFile);
 const memo = new Map();
 const waiting = [];
 let active = 0;
+
+export async function soccerCareerReplaySave() {
+  const bundle = await build({ stdin: { resolveDir: process.cwd(), contents:
+    "export { initCareer, FALLBACK_CLUBS } from './src/lib/soccerCareerEngine'; export { serializeSoccerCareerSave } from './src/lib/soccerCareerSave';" },
+    bundle: true, platform: 'node', format: 'esm', write: false, logLevel: 'error' });
+  const { initCareer, FALLBACK_CLUBS, serializeSoccerCareerSave } = await import('data:text/javascript;base64,' + Buffer.from(bundle.outputFiles[0].text).toString('base64'));
+  const attrs = { pace: 62, shooting: 62, passing: 62, dribbling: 62, defending: 62, physical: 62, reflexes: 62 };
+  return serializeSoccerCareerSave(initCareer('Career Reader', 'England', 'ST', '2020s', attrs, 62, 2020, FALLBACK_CLUBS, null), 1);
+}
 
 // A browser request that misses interception reaches a closed local socket.
 export async function guardedAdBrowser() {
@@ -21,7 +31,7 @@ export async function guardedAdBrowser() {
 }
 
 export function isSiteAsset(url) {
-  return !url.search && /^\/(?:assets\/[\w./-]+\.(?:js|css|woff2?|png|svg|webp|jpe?g|json)|(?:favicon|apple-touch-icon)[\w.-]*\.(?:png|svg|ico))$/i.test(url.pathname);
+  return !url.search && /^\/(?:assets\/[\w./-]+\.(?:js|css|woff2?|png|svg|webp|jpe?g|json)|home-art\/pitch-(?:small|wide)\.webp|(?:favicon|apple-touch-icon)[\w.-]*\.(?:png|svg|ico))$/i.test(url.pathname);
 }
 
 // Callers allowlist the exact document or asset first. No cookies, referrer,

@@ -1,12 +1,14 @@
-/* After npm run build, serve dist locally and run this against the preview.
- * This test never contacts an advertising provider or the production site. */
+/* Run against a built loopback site using BASE. --published reads only the
+ * public site's HTML and assets and defaults to a 1366px catalog pass.
+ * RAIL_WIDTHS and ONLY accept comma-separated widths and paths for replays.
+ * The publisher and every fill are local fixtures in both modes. */
 import assert from 'node:assert/strict';
 import { build } from 'esbuild';
 import { guardedAdBrowser, isSiteAsset, staticReply } from './lib/playwrightAdReplay.mjs';
 
-const origin = new URL(process.env.BASE ?? 'http://127.0.0.1:4173');
-assert.equal(origin.protocol, 'http:');
-assert.equal(origin.hostname, '127.0.0.1');
+const published = process.argv.includes('--published');
+const origin = new URL(published ? 'https://douknowball.com' : process.env.BASE ?? 'http://127.0.0.1:4173');
+if (!published) assert(origin.protocol === 'http:' && origin.hostname === '127.0.0.1');
 const bundle = await build({
   stdin: { resolveDir: process.cwd(), contents: `
     export { ALL_GAMES } from './src/data/gameRegistry';
@@ -218,7 +220,7 @@ async function verify(page, path, width, requiredDocks = 0) {
 }
 
 try {
-  const widths = (process.env.RAIL_WIDTHS ?? '1280,1366,1920,390,320,1242,1279').split(',').map(Number);
+  const widths = (process.env.RAIL_WIDTHS ?? (published ? '1366' : '1280,1366,1920,390,320,1242,1279')).split(',').map(Number);
   const narrowed = process.env.ONLY?.split(',');
   const failures = [];
   for (const width of widths) {

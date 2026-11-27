@@ -5,9 +5,8 @@
  * Nothing from this replay is sent to an advertising or analytics provider. */
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { build } from 'esbuild';
 import { answerConsent } from './lib/answerConsent.mjs';
-import { guardedAdBrowser, isSiteAsset, staticReply } from './lib/playwrightAdReplay.mjs';
+import { guardedAdBrowser, isSiteAsset, soccerCareerReplaySave, staticReply } from './lib/playwrightAdReplay.mjs';
 
 const published = process.argv.includes('--published');
 const origin = new URL(published ? 'https://douknowball.com' : process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://127.0.0.1:4173');
@@ -20,12 +19,7 @@ const selection = '[data-game-desktop-rails] :is(button, a[href], input, select,
 const guard = await guardedAdBrowser();
 const { browser } = guard;
 const widths = [320, 390, 1280, 1366, 1920];
-const fixture = await build({ stdin: { resolveDir: process.cwd(), contents:
-  "export { initCareer, FALLBACK_CLUBS } from './src/lib/soccerCareerEngine'; export { serializeSoccerCareerSave } from './src/lib/soccerCareerSave';" },
-  bundle: true, platform: 'node', format: 'esm', write: false, logLevel: 'error' });
-const { initCareer, FALLBACK_CLUBS, serializeSoccerCareerSave } = await import('data:text/javascript;base64,' + Buffer.from(fixture.outputFiles[0].text).toString('base64'));
-const attrs = { pace: 62, shooting: 62, passing: 62, dribbling: 62, defending: 62, physical: 62, reflexes: 62 };
-const initialCareer = initCareer('Career Reader', 'England', 'ST', '2020s', attrs, 62, 2020, FALLBACK_CLUBS, null);
+const initialCareer = await soccerCareerReplaySave();
 
 async function profile(width, { soccer = false, gpc = false, returning = false } = {}) {
   const ctx = await browser.newContext({ viewport: { width, height: width === 320 ? 640 : width === 390 ? 844 : 960 },
@@ -37,7 +31,7 @@ async function profile(width, { soccer = false, gpc = false, returning = false }
     if (returning) localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: Date.now() }));
     localStorage.setItem('rules-gate-seen:/soccer-career', '1');
     localStorage.setItem('rules-gate-seen:/club-manager', '1');
-  }, { soccer, save: soccer ? serializeSoccerCareerSave(initialCareer, 1) : null, gpc, returning });
+  }, { soccer, save: soccer ? initialCareer : null, gpc, returning });
   await ctx.routeWebSocket('**/*', socket => socket.close());
   await ctx.route('**/*', async route => {
     const req = route.request(), url = new URL(req.url());

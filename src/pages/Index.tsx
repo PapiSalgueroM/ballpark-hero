@@ -508,7 +508,7 @@ export default function Index() {
               no guard behind it.
 
               Account stats have their own row on narrow screens when signed in. */}
-          <div className="pb-4 pt-4 md:flex md:items-end md:justify-between md:gap-8 md:pb-6 md:pt-7">
+          <div className="pb-1 pt-2 md:flex md:items-end md:justify-between md:gap-8 md:pb-6 md:pt-7">
             <div className="min-w-0">
               <div className="grid items-center gap-y-2 xl:flex xl:flex-wrap xl:gap-3">
                 {/* Round 1449: the page's short descriptive headline. A literal

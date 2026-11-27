@@ -8,6 +8,8 @@ Use `node scripts/playAdRelease.mjs` against the built site for ranked direct vi
 
 The separate, unchanged Club Manager replay reports the same shootout-heading and season-review navigation findings on the pre-release build. The first career save-and-resume flows complete. Search Console supplies the 25 search landing pages, and Lovable exposes ten most-viewed pages. Use the matched AdSense and Lovable reports for sitewide revenue and reach.
 
+The all-page layout replay covered 172 routes at 320, 390, 1280, 1366 and 1920 pixels, including all 135 registered games. Every registered game received a footer on entry. Side pairs appeared on 131, 128 and 134 game entries at the three desktop widths. The exact allocation depends on the controls the game draws. Google's real library requested the two compact-desktop side units and the footer on the Soccer Career entry page. Active careers on this build used the footer, and the save picker made zero requests. The owner restored Google-managed optimization. The account has Auto ads, Auto optimize, banner, anchor and side rail formats enabled. Vignettes remain off because the width setting cannot ensure phone-only delivery.
+
 ### November 26, 2026. Shared display ads
 
 Eligible pages use one responsive display unit below the global footer. At desktop widths of at least 1280px the shared layout can also request two equal side units. A game keeps its natural width. Both side units are skipped when either would come within 150px of the play area or its controls. Soccer Career and Build Your XI use the footer alone at 1280px and 1366px. College Grid and NFL Career Path have room for the pair at both sizes.
