@@ -42,6 +42,7 @@ import { DIFFICULTY_INFO } from '@/lib/managerDifficulty';
 import { POINTS_CAP, readPointsIndex } from '@/lib/cmSavePointsStore';
 import type { CareerSetup } from '@/lib/clubManagerStart';
 import type { ClubManagerSlotRequest } from '@/lib/clubManagerSaveKeys';
+import { hasClubManagerBootData } from '@/lib/clubManagerOpening';
 import { withWorldEdit, worldEditMoves, realLeagueIdOf } from '@/lib/clubManagerWorldEdit';
 import type { WorldEdit } from '@/lib/clubManagerWorldEdit';
 import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
@@ -360,6 +361,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
           writes nothing more and covers itself until it is reloaded. */}
       {g.saveMoved && <Suspense fallback={null}><SaveMovedNotice message="This career moved on in another tab. Reload to carry on." /></Suspense>}
       {g.positionNotice && <div role="alert" data-testid="cm-position-blocked" className="mb-4 rounded-xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-sm text-foreground">{g.positionNotice}</div>}
+      {g.career && g.phase !== 'boot' && g.phase !== 'resume' && <span hidden data-cm-playing="" />}
       {inner}
     </>
   );
@@ -391,7 +393,8 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
         </div>,
       );
     }
-    return shell(<ClubManagerStartup className="animate-pulse">Loading…</ClubManagerStartup>);
+    const loadingPublicSetup = Boolean(initialEra) && requestedSlot === undefined && !hasClubManagerBootData();
+    return shell(<ClubManagerStartup readingSave={!loadingPublicSetup} className="animate-pulse">Loading…</ClubManagerStartup>);
   }
 
   /* ================= MANAGER SLOTS (Round 928, where the resume prompt was) ================= */
@@ -636,7 +639,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                 bottom of the screen the moment a club is picked. */}
             {g.pendingClub && (
               <div data-game-rail-dock="full" className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/95 backdrop-blur-sm [body[data-consent-pending]_&]:bottom-[var(--dukb-consent-height,230px)]">
-                <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+                <div data-cm-job-row="" className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
                   <div className="min-w-0">
                     <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Your club</div>
                     <div className="text-sm font-bold text-foreground truncate">{g.pendingClub}</div>
@@ -913,7 +916,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
       />}
 
       <ScreenLoading hub><Tabs value={g.activeTab} onValueChange={(v) => g.setActiveTab(v as HubTab)}>
-        <TabsList className="grid grid-cols-5 w-full mb-4">
+        <TabsList data-cm-main-tabs="" className="grid grid-cols-5 w-full mb-4">
           <TabsTrigger value="overview" className="text-[10px] md:text-xs">Home</TabsTrigger>
           <TabsTrigger value="squad" className="text-[10px] md:text-xs">Squad</TabsTrigger>
           <TabsTrigger value="tactics" className="text-[10px] md:text-xs">Tactics</TabsTrigger>

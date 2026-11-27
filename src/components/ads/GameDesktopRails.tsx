@@ -30,7 +30,7 @@ function safeRailOffset(frame: HTMLElement, content: HTMLElement, path: string):
   const belowNav = navBottom + AD_CONTROL_GAP_PX;
   const shelf = content.querySelector('[data-home-continue] [data-home-shelf-rail]');
   const shelfBox = shelf && getComputedStyle(shelf).overflowX === 'auto' ? shelf.getBoundingClientRect() : null;
-  const firstScreen = path === '/' || (path === '/soccer-career' && !!content.querySelector('[data-active-career-saves]'));
+  const firstScreen = path === '/' || path === '/club-manager' || (path === '/soccer-career' && !!content.querySelector('[data-active-career-saves]'));
   // Each complete row must stay clear as its controls scroll past the rails.
   const chromeRows = firstScreen ? [...document.querySelectorAll<HTMLElement>(
     'header[data-site-chrome] > div:first-child, section[aria-label="Live scores ticker"] > div:first-child, nav[data-site-chrome] > div:first-child'
@@ -115,6 +115,7 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
     if (!element || typeof ResizeObserver === 'undefined') return;
     const media = window.matchMedia(DESKTOP_RAIL_MEDIA);
     const measure = (width: number) => {
+      element.style.setProperty('--ad-frame-width', width + 'px');
       const pageWidth = document.documentElement.clientWidth;
       // A native scrollbar narrows the full page, including its rail frame.
       setFits(width >= 1280 || (media.matches && pageWidth > 0 && Math.round(width) >= pageWidth));
@@ -168,7 +169,7 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
       else schedule();
     });
     changed.observe(game, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['class', 'style', 'hidden', 'open', 'aria-busy', 'data-seo-content'] });
-    if (path === '/' || path === '/soccer-career') {
+    if (path === '/' || path === '/soccer-career' || path === '/club-manager') {
       for (const chrome of document.querySelectorAll('header[data-site-chrome], section[aria-label="Live scores ticker"]')) {
         resized.observe(chrome);
         changed.observe(chrome, { subtree: true, childList: true, attributes: true, attributeFilter: ['class', 'style', 'hidden'] });
@@ -200,7 +201,7 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
   if (!active) return children;
   const showRails = eligible && fits && clearPath === path;
   return (
-    <div ref={frame} className={styles.frame} data-desktop-room={fits ? '' : undefined} data-playable-route={playable ? '' : undefined} data-home-route={path === '/' ? '' : undefined}>
+    <div ref={frame} className={styles.frame} data-desktop-room={fits ? '' : undefined} data-playable-route={playable ? '' : undefined} data-manager-ad-layout={path === '/club-manager' && eligible && fits ? '' : undefined} data-home-route={path === '/' ? '' : undefined}>
       <div ref={content} className={styles.game} data-game-desktop-rails="" google-side-rail-overlap="false">
         {children}
       </div>

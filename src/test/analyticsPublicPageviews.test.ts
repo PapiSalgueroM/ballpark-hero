@@ -27,6 +27,14 @@ beforeEach(() => {
 });
 
 describe('consented GA4 public pageviews', () => {
+  it('sends just the public game path when Home resumes a Club Manager save', () => {
+    consent.analytics = true;
+    visit('/club-manager?resume=active');
+    tag()!.dispatchEvent(new Event('load'));
+    expect(events()).toEqual([{ page_location: 'https://douknowball.com/club-manager', page_title: expect.any(String),
+      page_referrer: '', send_to: GA_MEASUREMENT_ID }]);
+  });
+
   it('waits for a separate analytics choice and counts genuine visits once, including return visits', () => {
     consent.advertising = true;
     visit('/?utm_source=PRIVATE-CAMPAIGN');

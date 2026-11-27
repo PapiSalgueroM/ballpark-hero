@@ -29,7 +29,7 @@ type Props = {
 export default function ClubManagerTeamPicker({ rows, editing, wrapNames, historicalEra, onPick, onCreate }: Props) {
   const historicalRosters = historicalEra && eraRostersRaw(historicalEra.id);
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+    <div data-cm-club-grid="" className="grid grid-cols-2 sm:grid-cols-3 gap-2">
       {rows.map(c => (
         <button
           key={c.name}

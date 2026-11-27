@@ -118,7 +118,7 @@ export default function ManagerSaveFiles({ onClose, onImported, restoreFocus }: 
     job.current?.abort();
     onClose();
   }}>
-    <DialogContent
+    <DialogContent data-cm-save-files=""
       className="max-h-[85dvh] w-[calc(100%-1.5rem)] max-w-md overflow-y-auto rounded-xl p-4 [&>button:last-child]:min-h-11 [&>button:last-child]:min-w-11"
       onCloseAutoFocus={event => { event.preventDefault(); restoreFocus(); }}
     >

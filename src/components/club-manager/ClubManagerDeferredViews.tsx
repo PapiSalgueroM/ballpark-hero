@@ -269,7 +269,7 @@ const HUB_TILES = [
 
 export function HubTiles({ rows }: { rows: readonly (HubTileValues | null)[] }) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+    <div data-cm-hub-tiles="" className="grid grid-cols-2 md:grid-cols-3 gap-2">
       {/* Round 471: the staff desk. Accented while a rival has an
                   approach on the table, because that one is on a clock. */}
       {/* Round 513: the manager's own progression. Accented only while

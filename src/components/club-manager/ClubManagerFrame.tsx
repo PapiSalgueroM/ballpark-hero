@@ -27,8 +27,8 @@ export function ManagerSaveFilesButton({ children, onImported }: { children: Rea
 }
 
 /** Keep the guide below the fold while the stacked phone slots load. */
-export function ClubManagerStartup({ className = "", children }: { className?: string; children: ReactNode }) {
-  return <div role="status" data-cm-startup className={`max-sm:min-h-svh min-h-48 py-12 text-sm text-center text-muted-foreground ${className}`}>{children}</div>;
+export function ClubManagerStartup({ className = "", readingSave = true, children }: { className?: string; readingSave?: boolean; children: ReactNode }) {
+  return <div role="status" data-cm-startup={readingSave ? '' : undefined} className={`max-sm:min-h-svh min-h-48 py-12 text-sm text-center text-muted-foreground ${className}`}>{children}</div>;
 }
 
 export function ClubManagerFrame({ catalogue, children }: { catalogue: ReactNode; children: ReactNode }) {
@@ -45,7 +45,7 @@ export function ClubManagerFrame({ catalogue, children }: { catalogue: ReactNode
         showReportQuestion
         reportGameType="club-manager"
       >
-        <div className="relative">
+        <div data-cm-surface="" className="relative">
           {/* Round 1328: the "?" is 44 by 44 now, pulled 8px further into the
               corner so it covers no more of the screen than the old 36px one. */}
           <HowToPlayPopover title="How to Play Club Manager" triggerSide="right" className="-mr-2 -mt-2 inline-flex min-h-[44px] min-w-[44px] items-center justify-center">

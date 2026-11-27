@@ -14,7 +14,7 @@ if (!published) assert(origin.protocol === 'http:' && origin.hostname === '127.0
 const publisher = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2929318086316376';
 const localCreative = '/__ad-career-replay__/creative';
 const slots = '[data-dukb-manual-ad] ins.adsbygoogle';
-const privateScreen = '#soccer-career-slots, [data-testid="cm-slots"], [data-testid="cm-points"], [data-dukb-set-aside], [data-cm-startup]';
+const privateScreen = '#soccer-career-slots, [data-testid="cm-slots"], [data-testid="cm-points"], [data-dukb-set-aside], [data-cm-startup], [data-cm-save-files]';
 const selection = '[data-game-desktop-rails] :is(button, a[href], input, select, textarea, summary, [contenteditable="true"], [tabindex]:not([tabindex="-1"]), [draggable="true"], .cursor-pointer, canvas, video, table, [role="button"], [role="grid"], [role="application"], [data-cm-pitch])';
 const guard = await guardedAdBrowser();
 const { browser } = guard;
@@ -52,7 +52,8 @@ async function profile(width, { soccer = false, gpc = false, returning = false }
           url.searchParams.set('id', el.dataset.fixtureRequest);
           url.searchParams.set('role', el.closest('[data-dukb-manual-ad]').dataset.dukbManualAd);
           url.searchParams.set('slot', el.dataset.adSlot);
-          url.searchParams.set('private', String(Boolean(location.search || location.hash || document.querySelector(${JSON.stringify(privateScreen)}))));
+          const publicResume = location.pathname === '/club-manager' && location.search === '?resume=active' && document.querySelector('[data-cm-playing]');
+          url.searchParams.set('private', String(Boolean((location.search && !publicResume) || location.hash || document.querySelector(${JSON.stringify(privateScreen)}))));
           fetch(url).then(response => { if (response.ok && el.isConnected) el.setAttribute('data-ad-status', 'filled'); });
           return push(entry);
         };
@@ -206,7 +207,12 @@ async function manager(width) {
     const button = name => page.getByRole('button', { name }).first();
     await button(/2026-27/).waitFor();
     assert.equal(await answerConsent(page, { choice: 'accept' }), 'accepted');
-    for (const name of [/2026-27/, /England/i, /Premier League/i, /Crystal Palace/i, /Take the job/i, /skip.*just manage/i]) await button(name).click();
+    await button(/2026-27/).click();
+    await button(/England/i).waitFor();
+    await checkActive(page, evidence, 'Manager public team setup');
+    const expectedRails = width >= 1280 ? 2 : 0;
+    assert.equal(await page.locator('[data-ad-rail] ins').count(), expectedRails, 'Manager nation picker');
+    for (const name of [/England/i, /Premier League/i, /Crystal Palace/i, /Take the job/i, /skip.*just manage/i]) await button(name).click();
     const managers = page.getByTestId('cm-show-slots');
     await managers.waitFor();
     await page.getByRole('tab', { name: 'Market', exact: true }).click();
@@ -218,6 +224,7 @@ async function manager(width) {
     assert.equal(saved.clubName, 'Crystal Palace');
     assert(saved.recruitment.targets.some(target => target.name === 'Cole Palmer'));
     await checkActive(page, evidence, 'Manager shortlisted a player');
+    assert.equal(await page.locator('[data-ad-rail] ins').count(), expectedRails, 'Manager active market');
     const before = counts(evidence);
     await managers.click();
     await page.getByTestId('cm-slots').waitFor();
@@ -228,6 +235,13 @@ async function manager(width) {
     await page.getByTestId('cm-slot-1').getByRole('button', { name: /Resume Career/i }).click();
     await managers.waitFor();
     await checkActive(page, evidence, 'Manager resumed');
+    assert.equal(await page.locator('[data-ad-rail] ins').count(), expectedRails, 'Manager resumed from a save slot');
+    await open(page, '/');
+    await page.locator('a[href="/club-manager?resume=active"]').first().click();
+    await managers.waitFor();
+    assert.equal(new URL(page.url()).search, '?resume=active');
+    await checkActive(page, evidence, 'Manager resumed from Home');
+    assert.equal(await page.locator('[data-ad-rail] ins').count(), expectedRails, 'Manager resumed from Home');
     const resumed = await stored(page, 'dukb-club-manager-save');
     assert.deepEqual(resumed.recruitment.targets, saved.recruitment.targets);
     assert.equal(resumed.budget, saved.budget);
