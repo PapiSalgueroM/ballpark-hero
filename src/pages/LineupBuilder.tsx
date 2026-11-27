@@ -26,6 +26,7 @@ import { ordinal, simulateWorldXiSeason, whatIfFinish, xiTrophyCount, type WxPla
 import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
 import { lineupFitSlots, seasonAdjust, xiFitBreakdown, type XiFitSlot } from '@/lib/xiFit';
 import { XiFitBreakdown, XiFitWorth } from '@/components/lineup/XiFitBreakdown';
+import { XiTacticalCup } from '@/components/lineup/XiTacticalCup';
 import { safeSetItem } from '@/lib/safeStorage';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
@@ -625,6 +626,10 @@ const LineupBuilder = () => {
               </button>
             </div>
           </div>
+        )}
+
+        {formation && (phase === 'reviewing' || phase === 'result') && filledCount === 11 && !replacingSlot && (
+          <XiTacticalCup formation={formation} slots={filledSlotsArray} />
         )}
 
         {/* Review Phase */}
