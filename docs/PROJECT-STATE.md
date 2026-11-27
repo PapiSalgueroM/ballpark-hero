@@ -1,3 +1,13 @@
+### November 27, 2026. Club Manager corner routines
+
+Home, Training, Corner routines lets the manager rehearse a far-post delivery or a short return pass. Choose the flag and a starting outfielder to work with its assigned taker. The pair spend up to three fitness points each after recovery in the next paid training week. The ready card shows the actual amount. Calling off a booking before training costs nothing. Standing down a ready routine keeps its training cost. The next managed fixture uses the prepared routine when the correct pair is on the pitch for that flag.
+
+Across 540 paired second halves for Brentford, Sevilla and Parma, the far-post option created 276 shots and 456 clearances from 900 eligible corners. The short option created 147 shots and 173 clearances, and recycled the ball 580 times. The teams scored 435 times under ordinary play, 456 with the far-post preparation and 447 with the short delivery. Opponents scored 318 in each arm. Repeated deliveries were more often read. These are simulation outcomes from matched draws.
+
+The final local entry was `index-BTJpkEzQ.js`. In two earned corners at 23 minutes against Leeds on matched draws, one far-post delivery produced a Nathan Collins goal assisted by Dango Ouattara. Choosing the short return instead produced an Ouattara goal assisted by Collins. Both scorer and assist appeared in the ordinary match report. In this simulation Brentford won 3-2 with either finish. Ordinary play finished 2-2 with the same full saved state before and after this change. A separately trained side earned zero qualifying deliveries at 320 pixels, and its report showed zero.
+
+Across 159 comparisons to the preceding published source, complete career saves, random draws and reports matched whenever the manager left training alone. Ten deliberate changes broke the comparison as expected. Another 135 ordinary fixtures matched all 188,714 random draws against the same revision. The Club Manager opening used 204.499 KiB across 25 files against a 226 KiB budget.
+
 ### November 27, 2026. Match Centre kickoff buildup published in Club Manager
 
 Lovable published `0434dedab` in deployment `98d85efd-4dad-4da5-a609-049bdc5ea4a6`. Home, Club Manager and What's New served `index-EBLumSbB.js`. Both updated raw snapshots matched the repository. All 176 sitemap URLs passed the custom-domain crawler audit, and IndexNow accepted the two changed URLs with HTTP 200. The opening screen used 204.4 KiB of its 226 KiB transfer budget. All 23 release and match simulation checks passed before publication.
