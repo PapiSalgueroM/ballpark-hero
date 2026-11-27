@@ -11,6 +11,11 @@ export const closingScenarios = [
 export const CLOSING_KEY = 'dukb-nba-closing-time-v1';
 export type ClosingFinish = 'Win' | 'Overtime earned' | 'Loss';
 export interface ClosingReceipt { game: number; home: number; away: number; result: ClosingFinish }
+export function closingScore(receipts: readonly ClosingReceipt[]): number {
+  const earned = receipts.reduce((total, game) => total + (game.result === 'Win' ? 2 : game.result === 'Overtime earned' ? 1 : 0), 0);
+  return Math.round(100 * earned / (2 * closingScenarios.length));
+}
+
 export interface ClosingState {
   game: number;
   home: number;

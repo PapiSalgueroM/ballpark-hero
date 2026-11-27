@@ -54,5 +54,6 @@ export const REPORT_ROUTES_WITHOUT_QUESTIONS: ReadonlySet<string> = new Set([
   '/hall-of-champions', '/idle-arena',
   '/budget-builder', '/dart-draft', '/fantasy-draft', '/mystery-box', '/sign-the-player', '/perfect-season-nba',
   '/buzzer-beater', '/cage-clash', '/free-kick', '/world-cup-bracket',
+  '/closing-time',
   '/two-minute-drive',
 ]);

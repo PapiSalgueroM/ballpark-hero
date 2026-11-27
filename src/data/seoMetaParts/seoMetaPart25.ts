@@ -2,10 +2,14 @@
    edit this folder: edit src/data/seoMeta.ts. Every vite build rewrites what
    has fallen behind, and simSeoTitles section 6 fails if the committed copy
    is not what the source makes. */
-/* Part 25 of 32: 5 entries. */
+/* Part 25 of 32: 6 entries. */
 import type { SeoMeta } from '../seoMeta';
 
 export const SEO_META_PART: Record<string, SeoMeta> = {
+  "/closing-time": {
+    title: "Closing Time: Basketball Clock Management Game",
+    description: "Coach both ends of three fourth quarters in this free basketball game. Read the coverage, manage the shot clock and use a timeout to set up a winning shot.",
+  },
   "/rebuild": {
     title: "Rebuild Challenge: Soccer Club Management Game",
     description: "Take over a real club, spin the wheel for each shirt, keep the player or sell him and answer to the board. Free soccer rebuild game for up to four players.",

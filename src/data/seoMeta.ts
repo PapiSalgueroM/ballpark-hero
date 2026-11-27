@@ -25,6 +25,10 @@ export interface SeoMeta {
 }
 
 export const SEO_META: Record<string, SeoMeta> = {
+  '/closing-time': {
+    title: 'Closing Time: Basketball Clock Management Game',
+    description: 'Coach both ends of three fourth quarters in this free basketball game. Read the coverage, manage the shot clock and use a timeout to set up a winning shot.',
+  },
   '/two-minute-drive': {
     title: 'Two-Minute Drive: NFL Play Calling Game',
     description: 'Call the final possession in a free NFL football game. Read the coverage, manage your timeouts and decide when to kick or keep driving for a touchdown.',

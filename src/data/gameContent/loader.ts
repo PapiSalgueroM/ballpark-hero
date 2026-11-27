@@ -53,6 +53,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/nba-gauntlet-draft': 'basketball',
   '/nba-grid': 'basketball',
   '/nba-higher-lower': 'basketball',
+  '/closing-time': 'basketball',
   '/nba-my-career': 'nbaMyCareer',
   '/nba-starting-5': 'basketball',
   '/nba-stat-line': 'basketball',

@@ -2,6 +2,40 @@ import type { GameContentMap } from './types';
 
 // Pro basketball game guides. Casual human tone, no em dashes anywhere.
 export const BASKETBALL_CONTENT: GameContentMap = {
+  '/closing-time': {
+    intro: [
+      'The scoreboard says you need three. The game clock says five seconds. What you can actually run depends on where the inbound starts. Closing Time puts you in charge of three simulated basketball finishes, calling the offense and the defense one possession at a time.',
+      'You can play signed out from this page or open the same court in NBA My Career. Both entrances keep one set on this device. Leave after a pass and the receiver, coverage, score, timeout and both clocks are there when you return.',
+    ],
+    introLinks: [{ paragraph: 1, text: 'NBA My Career', to: '/nba-my-career' }],
+    howToPlay: [
+      'Start the set with Two for one. Your side trails 96 to 94 with 39 seconds left. The first court shows the ball on the wing, the open rim and the time each action will take.',
+      'Tap the spot holding the ball to shoot. Tap another spot to pass or cut there. A covered receiver draws help away from the passer, so a return pass can produce a better shot.',
+      'When the other side takes possession, read its first look and check the ballhandler for an outlet. Cover the rim, deny the corner, trap the ballhandler or foul to stop the clock.',
+      'Play all three finishes. Protect the lead starts on defense, while One timeout left starts a point behind with seven seconds left. The same set is available for a rematch after the final horn.',
+    ],
+    rules: [
+      'The clocks advance only when you make a call. Crossing from the backcourt costs four seconds. Passing or shooting takes two seconds, and cutting to the rim takes three. Advancing with your timeout skips the crossing without changing either clock.',
+      'In these drills an open rim shot scores two and an open wing or corner shot scores three. A covered shot misses and the defender rebounds. Holding the ball can take the last shot away from the opponent or use the seconds you needed yourself.',
+      'A trap returns the ball in four seconds against an isolated ballhandler. A ready outlet passes out for a corner three. Fouling costs two seconds, with the number of made free throws shown before the call.',
+      'A regulation win earns two set points, reaching overtime earns one, and a loss earns zero. The standalone score is the percentage of the six points earned across all three games, rounded to the nearest whole number.',
+    ],
+    example: [
+      'In One timeout left you start down 102 to 101 with seven seconds on the game clock. The opponents can hold to the horn. Fouling stops them in two seconds and their one made free throw makes it 103 to 101.',
+      'Your inbound is in the backcourt. Advance with the timeout, pass to the open corner and shoot. The two calls use four of the five remaining seconds. Your three gives you a 104 to 103 lead with one second for the other side.',
+    ],
+    tips: [
+      'Check the game clock against the shot clock before holding. With 23 seconds left and your own clock also at 23, holding can end regulation. It is a good call up two and a very different call when tied.',
+      'Compare the cost of a pass with the entire possession you have left. Reaching a teammate before the horn still leaves that teammate needing time to shoot.',
+      'Look at the outlet as well as the first shot. The four seconds a trap takes can buy another possession. Trapping a guard who can see the corner gives the opponent three points instead.',
+    ],
+    faqs: [
+      { q: 'Does the clock run while I read the court?', a: 'No. You can inspect each spot, the scout report and the rules before calling a play.' },
+      { q: 'What happens if I finish level?', a: 'The drill records Overtime earned and awards one set point. It ends at the regulation horn.' },
+      { q: 'Can I carry a possession between this page and my career?', a: 'Yes. Use Resume closing set from either entrance in the same browser. The set has its own save and career season statistics stay separate.' },
+      { q: 'How do I keep a score?', a: 'Finish the third situation from the standalone game to record the set score. Your on-device results also reopen after leaving or reloading.' },
+    ],
+  },
   '/buzzer-beater': {
     intro: [
       "Most of this site asks you a question. This one asks you to make the shot. Ten jump shots, you back up on every single one, and there is a hand coming at you on nine of them.",

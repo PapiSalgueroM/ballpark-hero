@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { safeLocalStorage, safeSetItem } from '@/lib/safeStorage';
 import {
-  CLOSING_KEY, closingCost, closingScenarios, closingSpots, hasOutlet, opponentLook, playClosing, readClosing, startClosing,
+  CLOSING_KEY, closingCost, closingScenarios, closingScore, closingSpots, hasOutlet, opponentLook, playClosing, readClosing, startClosing,
   type ClosingCall, type ClosingState, type Spot,
 } from '@/lib/nbaClosingTime';
 
@@ -39,14 +39,12 @@ function HalfCourt({ state, play }: { state: ClosingState; play: (call: ClosingC
   </div>;
 }
 
-export default function NbaClosingTime() {
+export function ClosingTimeBoard({ resume = false, onFinish }: { resume?: boolean; onFinish?: (score: number) => void }) {
   const [initial] = useState(() => safeLocalStorage.getItem(CLOSING_KEY));
   const lastRaw = useRef(initial);
   const [run, setRun] = useState(() => readClosing(initial));
-  const [open, setOpen] = useState(false);
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(resume && run !== null);
   const [warning, setWarning] = useState('');
-  const heading = useRef<HTMLHeadingElement>(null);
   const focusResult = useRef<HTMLHeadingElement>(null);
   const state = run?.state ?? startClosing();
   const scenario = closingScenarios[state.game];
@@ -68,20 +66,20 @@ export default function NbaClosingTime() {
     setRun({ moves, state: next });
     setPlaying(true);
     setWarning(saved ? '' : 'Your set is available for this visit. This browser could not save it.');
+    return saved;
   };
   const play = (call: ClosingCall) => {
     if (!run) return;
     const next = playClosing(state, call);
-    if (next) save([...run.moves, call], next);
+    if (!next) return;
+    const committed = save([...run.moves, call], next);
+    if (committed && next.side === 'result' && next.game === closingScenarios.length - 1) {
+      onFinish?.(closingScore(next.receipts));
+    }
   };
-  return <Dialog open={open} onOpenChange={show => { setOpen(show); if (!show) setPlaying(false); }}>
-    <DialogTrigger asChild><button type="button" className={button + ' mt-3 w-full'}>Closing Time</button></DialogTrigger>
-    <DialogContent data-nba-closing-time="" className="max-h-[90dvh] w-[calc(100%-1rem)] max-w-md gap-3 overflow-y-auto rounded-xl p-4 sm:p-5"
-      onOpenAutoFocus={event => { event.preventDefault(); heading.current?.focus({ preventScroll: true }); }}>
-      <DialogTitle ref={heading} tabIndex={-1}>Closing Time</DialogTitle>
-      <DialogDescription>Coach both ends of three simulated fourth quarters. Win before the horn or earn overtime. Your practice set saves on this device.</DialogDescription>
+  return <section aria-label="Closing Time court" className="grid gap-3">
       <details open={!playing || undefined} className="rounded-lg border px-3 text-sm">
-        <summary className="min-h-11 cursor-pointer py-3 font-bold">Rules and example</summary>
+        <summary className="min-h-11 cursor-pointer py-3 font-bold"><span aria-hidden="true">? </span>Rules and example</summary>
         <div className="space-y-2 pb-3 text-xs">
           <p>The clocks move when you act. On offense, tap the player with the ball to shoot or send it to another spot. In this drill open shots go in, guarded shots miss, and the defense rebounds every miss. Rim shots score two, wing or corner shots score three.</p>
           <p>Crossing half court takes four seconds. A pass takes two, a cut to the rim takes three and a shot takes two. Pass into coverage and help leaves your passer open for a return. Use one timeout per game to inbound in the frontcourt.</p>
@@ -118,6 +116,18 @@ export default function NbaClosingTime() {
         </>}
         {state.log.length > 0 && <div aria-live="polite" className="rounded-lg border px-3 py-2 text-xs">{state.log[state.log.length - 1]}</div>}
       </>}
+  </section>;
+}
+
+export default function NbaClosingTime() {
+  const heading = useRef<HTMLHeadingElement>(null);
+  return <Dialog>
+    <DialogTrigger asChild><button type="button" className={button + ' mt-3 w-full'}>Closing Time</button></DialogTrigger>
+    <DialogContent data-nba-closing-time="" className="max-h-[90dvh] w-[calc(100%-1rem)] max-w-md gap-3 overflow-y-auto rounded-xl p-4 sm:p-5"
+      onOpenAutoFocus={event => { event.preventDefault(); heading.current?.focus({ preventScroll: true }); }}>
+      <DialogTitle ref={heading} tabIndex={-1}>Closing Time</DialogTitle>
+      <DialogDescription>Coach both ends of three simulated fourth quarters. Win before the horn or earn overtime. Your practice set saves on this device.</DialogDescription>
+      <ClosingTimeBoard />
       <DialogClose asChild><button className={button}>Back to career</button></DialogClose>
     </DialogContent>
   </Dialog>;

@@ -5,6 +5,7 @@ import {
 } from '@/lib/fightPromoterRoutes';
 import { parkedKey, readClubManagerActiveSlot, readableClubManagerSave, SLOT_COUNT } from '@/lib/clubManagerSaveKeys';
 import { restoreParkedCareer } from '@/lib/clubManagerParkedSave';
+import { CLOSING_KEY, closingScenarios, readClosing } from '@/lib/nbaClosingTime';
 import { unfinishedDrives } from '@/lib/twoMinuteDrive';
 
 /**
@@ -130,7 +131,7 @@ export interface SavedGame {
   game: GameDef;
   slot?: number;
   description?: string | null;
-  resumeState?: { resumeTwoMinute: true };
+  resumeState?: { resumeTwoMinute: true } | { resumeClosingTime: true };
 }
 
 /**
@@ -181,6 +182,18 @@ export function savedGames(storage: Pick<Storage, 'getItem'> | null | undefined,
       }
     }
   }
+  try {
+    const closing = readClosing(storage.getItem(CLOSING_KEY));
+    if (closing?.moves.length && closing.state.receipts.length < closingScenarios.length) {
+      const game = ALL_GAMES.find(g => g.path === '/closing-time');
+      const { state } = closing;
+      const clock = '0:' + String(state.clock).padStart(2, '0');
+      if (game) out.push({
+        entry: { path: game.path, saveKey: CLOSING_KEY }, game, resumeState: { resumeClosingTime: true },
+        description: closingScenarios[state.game].name + ' · ' + state.home + '-' + state.away + ' · ' + clock,
+      });
+    }
+  } catch { /* Continue can still show the other saved games. */ }
   const drives = unfinishedDrives(storage);
   const football = drives.length && ALL_GAMES.find(game => game.path === '/two-minute-drive');
   if (football) out.push({
