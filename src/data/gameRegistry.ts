@@ -151,7 +151,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/perfect-season-nfl', label: '17-0 NFL Perfect Season', emoji: '🏆', description: 'Draft an offense across eras, run the table', addedOn: '2026-07-01' },
       { path: '/front-office', label: 'NFL Front Office', emoji: '🏢', description: 'Full GM sim with real rosters: cap, trades, drafts, dynasties', addedOn: '2026-08-11', featured: true },
       { path: '/nfl-my-career', label: 'NFL My Career', emoji: '🌟', description: 'Draft night to Canton. 8 positions, 100+ crossroads, and a very tempting envelope', addedOn: '2026-08-11', featured: true },
-      { path: '/two-minute-drive', label: 'Two-Minute Drive', emoji: '🏈', description: 'Read the defense, call the plays and beat the clock on the final possession', addedOn: '2026-11-27' },
+      { path: '/two-minute-drive', label: 'Two-Minute Drive', emoji: '🏈', description: 'Test your play calling and clock management in four drills or a three-drive playoff', addedOn: '2026-11-27' },
       { path: '/football-grid', label: 'NFL Grid', emoji: '🏈', description: '3×3 grid puzzle with rarity scores', daily: true, addedOn: '2026-03-08' },
       // retired 2026-07-08 per owner review: "too easy and boring... unless ur going to add to it, discard it". Route kept for direct links; uncomment to revive.
       // { path: '/football-timeline', label: 'Timeline', emoji: '📅', description: 'Order players by draft year', daily: true },

@@ -17,7 +17,9 @@ afterEach(cleanup);
 const press = (name: RegExp | string) => fireEvent.click(screen.getByRole('button', { name }));
 
 it('finds the route from the catalog and loads the football guide with the kick example', async () => {
-  expect(searchSite('two minute drive')[0]).toMatchObject({ game: { path: '/two-minute-drive' }, category: 'Pro Football' });
+  for (const phrase of ['two minute drive', 'two minute drill', 'NFL play calling', 'clock management', 'playoff drive']) {
+    expect(searchSite(phrase)[0]).toMatchObject({ game: { path: '/two-minute-drive' }, category: 'Pro Football' });
+  }
   const guide = await loadGameContent('/two-minute-drive');
   expect(guide?.example?.join(' ')).toContain('54 yards');
 });
