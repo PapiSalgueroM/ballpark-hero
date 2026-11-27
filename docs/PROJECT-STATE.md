@@ -1,3 +1,11 @@
+### November 27, 2026. Game discovery, third-down defense and pitch development
+
+Home lets players preview four featured games using arrows or a keyboard, with one launch link for the selected game. A saved career opens its existing slot. The art changes only on request, and the feature keeps the same space as players browse. Play Next opens with its three daily picks. Players can switch to their sport or daily games and deal three more without leaving the current game. Keyboard focus stays on the selected control. Players who prefer reduced motion get an immediate card change.
+
+NFL My Career linebackers and edge rushers can trade run stops for extra pass rushes on third down. The review records actual rushes, sacks and tackles. MLB My Career starters and relievers can work on a two-strike changeup. Using it against one hitter per outing can add strikeouts or walks. Pitch command develops across 40 outings and follows the pitcher to a new club. A default season in each career still uses the original simulation.
+
+The preceding public release passed 860 placement checks across 172 routes at five widths. All 135 registered games had paired desktop slots and a responsive footer, with a footer on phones. The 39 priority URLs include the ten pages visible in Lovable, the top 25 Google Search landing pages and the sport hubs. AdSense reported 132 actual Club Manager impressions on the morning of November 27. Soccer Career requested both desktop rails in the browser test. The December 4 report compares earnings and impressions per 1,000 Lovable page views.
+
 ### November 27, 2026. Wider game boards, pinned games and Budget Builder
 
 Career Quiz and the five Connect Four games center their boards between desktop ads and wrap long clues. All seven Connect Four columns remain reachable after a selection. The World Cup Bracket keeps group choices, Rankings and Auto Fill in the playable area, with at least 166px of clearance in the tested desktop layouts. Players can pin a game from its menu and jump to their picks on Home. Horizontally scrolling pinned games and saved careers retain both Home ads when there is enough clearance.
