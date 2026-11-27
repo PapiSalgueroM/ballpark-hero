@@ -26,6 +26,70 @@ afterEach(() => {
 const guessesFor = (target: string) => names.filter(name => name !== target).slice(0, 2);
 
 describe('NFL Career Path Daily progress', () => {
+  it('charges the same point for a requested clue as a miss and only logs names actually guessed', () => {
+    const view = renderHook(useNFLCareer);
+    const target = view.result.current.targetPlayer.name;
+    const [miss] = guessesFor(target);
+    act(() => view.result.current.requestClue());
+    expect(view.result.current.clues.at(-1)?.label).toBe('College');
+    expect(view.result.current.score).toBe(5);
+    expect(view.result.current.guessHistory).toEqual([]);
+    const daily = localStorage.getItem(key);
+    act(() => view.result.current.switchMode('unlimited'));
+    act(() => view.result.current.toggleHard());
+    act(() => view.result.current.makeGuess(guessesFor(view.result.current.targetPlayer.name)[0]));
+    expect(view.result.current.clues.map(c => c.label)).toEqual(['College']);
+    expect(view.result.current.score).toBe(5);
+    act(() => view.result.current.requestClue());
+    expect(view.result.current.clues.map(c => c.label)).toEqual(['First Team']);
+    expect(localStorage.getItem(key)).toBe(daily);
+    view.unmount();
+    const restored = renderHook(useNFLCareer);
+    expect(restored.result.current.score).toBe(5);
+    act(() => restored.result.current.makeGuess(miss));
+    expect(restored.result.current.score).toBe(4);
+    act(() => restored.result.current.makeGuess(target));
+    expect(restored.result.current.guessHistory).toEqual([miss, target]);
+    expect(recordCompletion.mock.calls.map(([path, score]) => [path, score])).toEqual([['/nfl-career', 4]]);
+    restored.unmount();
+    expect(renderHook(useNFLCareer).result.current.gameStatus).toBe('won');
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
+  it.each(['win', 'miss'])('keeps a last-clue %s available after five voluntary clues', outcome => {
+    const v = renderHook(useNFLCareer);
+    for (let clue = 2; clue <= 6; clue++) {
+      act(() => v.result.current.requestClue());
+      expect(v.result.current.cluesRevealed).toBe(clue);
+      expect(v.result.current.score).toBe(7 - clue);
+    }
+    const held = localStorage.getItem(key);
+    act(() => v.result.current.requestClue());
+    expect(localStorage.getItem(key)).toBe(held);
+    expect(v.result.current.gameStatus).toBe('playing');
+    const target = v.result.current.targetPlayer.name;
+    act(() => v.result.current.makeGuess(outcome === 'win' ? target : guessesFor(target)[0]));
+    expect(v.result.current.gameStatus).toBe(outcome === 'win' ? 'won' : 'lost');
+    expect(recordCompletion.mock.calls.map(([, score]) => score)).toEqual([outcome === 'win' ? 1 : 0]);
+    act(() => v.result.current.requestClue());
+    expect(recordCompletion).toHaveBeenCalledTimes(1);
+  });
+
+  it('drops a second action priced on the old board, including another tab', () => {
+    const a = renderHook(useNFLCareer), b = renderHook(useNFLCareer);
+    const before = a.result.current;
+    act(() => { before.requestClue(); before.requestClue(); before.makeGuess('Wrong player'); });
+    expect(a.result.current.cluesRevealed).toBe(2);
+    expect(a.result.current.guessHistory).toEqual([]);
+    const bytes = localStorage.getItem(key);
+    act(() => b.result.current.requestClue());
+    expect(localStorage.getItem(key)).toBe(bytes);
+    expect(b.result.current.cluesRevealed).toBe(2);
+    act(() => b.result.current.requestClue());
+    expect(b.result.current.cluesRevealed).toBe(3);
+    expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
   it('retains accepted misses and clue score across Unlimited and remount', () => {
     let view = renderHook(useNFLCareer);
     const target = view.result.current.targetPlayer.name;
@@ -130,5 +194,22 @@ describe('NFL Career Path Daily progress', () => {
     expect(fresh.result.current.guessHistory).toEqual([]);
     expect(localStorage.getItem(key)).toBe(wrongTarget);
     expect(recordCompletion).not.toHaveBeenCalled();
+  });
+
+  it('opens an old in-progress save and rejects a clue count it does not account for', () => {
+    const cold = renderHook(useNFLCareer);
+    const player = cold.result.current.targetPlayer.name;
+    cold.unmount();
+    const legacy = { date: day, player, status: 'playing', cluesRevealed: 2, guesses: guessesFor(player).slice(0, 1) };
+    const oldBytes = JSON.stringify(legacy);
+    localStorage.setItem(key, oldBytes);
+    const v = renderHook(useNFLCareer);
+    expect(v.result.current.guessHistory).toEqual(legacy.guesses);
+    expect(localStorage.getItem(key)).toBe(oldBytes);
+    act(() => v.result.current.requestClue());
+    expect(JSON.parse(localStorage.getItem(key)!)).toMatchObject({ guesses: legacy.guesses, cluesRevealed: 3, requestedClues: 1 });
+    v.unmount();
+    localStorage.setItem(key, JSON.stringify({ ...legacy, cluesRevealed: 5, requestedClues: 1 }));
+    expect(renderHook(useNFLCareer).result.current.cluesRevealed).toBe(1);
   });
 });

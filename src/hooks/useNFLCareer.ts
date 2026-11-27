@@ -16,7 +16,7 @@ function getDailyIndex(day: string): number {
 }
 
 type RoundStatus = 'playing' | 'won' | 'lost';
-interface NflRound { status: RoundStatus; cluesRevealed: number; guesses: string[] }
+interface NflRound { status: RoundStatus; cluesRevealed: number; guesses: string[]; requestedClues?: number }
 type NflDailySave = (NflRound & { date: string }) & (
   { status: 'playing'; player: string } | { status: 'won' | 'lost' }
 );
@@ -31,8 +31,10 @@ function parseDailySave(raw: string | null): NflDailySave | null {
       || !Number.isInteger(s.cluesRevealed) || s.cluesRevealed < 1 || s.cluesRevealed > TOTAL_CLUES
       || !Array.isArray(s.guesses) || s.guesses.length > TOTAL_CLUES
       || !s.guesses.every((name: unknown) => typeof name === 'string' && name.trim().length > 0)) return null;
+    const requested = s.requestedClues === undefined ? 0 : s.requestedClues;
+    if (!Number.isInteger(requested) || requested < 0 || requested >= s.cluesRevealed) return null;
     if (s.status === 'won' || s.status === 'lost') return s;
-    if (s.status !== 'playing' || s.guesses.length !== s.cluesRevealed - 1) return null;
+    if (s.status !== 'playing' || s.guesses.length + requested !== s.cluesRevealed - 1) return null;
     const player = nflCareerPlayers[getDailyIndex(s.date)];
     const guesses = s.guesses.map(normalizeName);
     return player?.name === s.player && !guesses.includes(normalizeName(player.name))
@@ -45,8 +47,8 @@ function loadDailyBytes(): string | null {
   catch { return null; }
 }
 
-function persistDaily(date: string, status: RoundStatus, cluesRevealed: number, guesses: string[]): string | null {
-  const save = { date, status, cluesRevealed, guesses };
+function persistDaily(date: string, { status, cluesRevealed, guesses, requestedClues }: NflRound): string | null {
+  const save = { date, status, cluesRevealed, guesses, ...(requestedClues ? { requestedClues } : {}) };
   const raw = JSON.stringify(status === 'playing' ? { ...save, player: nflCareerPlayers[getDailyIndex(date)].name } : save);
   try { localStorage.setItem(DAILY_KEY, raw); return raw; }
   catch { return null; }
@@ -106,14 +108,16 @@ export function useNFLCareer() {
   }, []);
   const [saveWarning, setSaveWarning] = useState(false);
   const saveRound = useCallback((day: string, next: NflRound) => {
-    const raw = persistDaily(day, next.status, next.cluesRevealed, next.guesses);
+    const raw = persistDaily(day, next);
     dailyRef.current = { day, round: next, bytes: raw ?? dailyRef.current.bytes };
     setSaveWarning(raw === null);
   }, []);
-  const finishDaily = useCallback((status: 'won' | 'lost', clues: number, guesses: string[]) => {
-    saveRound(dailyRef.current.day, { status, cluesRevealed: clues, guesses });
-    setDailyFinish({ date: dealtDay, score: dailyScoreOf(status, clues) });
-  }, [dealtDay, saveRound]);
+  const commitRound = useCallback((next: NflRound) => {
+    applyRound(next);
+    if (mode !== 'daily') return;
+    saveRound(dailyRef.current.day, next);
+    if (next.status !== 'playing') setDailyFinish({ date: dealtDay, score: dailyScoreOf(next.status, next.cluesRevealed) });
+  }, [applyRound, dealtDay, mode, saveRound]);
   const dailyDone = dailyFinish !== null && dailyFinish.date === dealtDay;
 
   const openDaily = useCallback((day: string, next: NflRound, bytes: string | null) => {
@@ -135,7 +139,7 @@ export function useNFLCareer() {
     const saved = parseDailySave(raw);
     if (!saved || saved.date < current.day || saved.date > getTodayET()) return false;
     if (saved.date === current.day && saved.status === 'playing'
-      && (current.round.status !== 'playing' || saved.guesses.length < current.round.guesses.length)) return false;
+      && (current.round.status !== 'playing' || saved.cluesRevealed < current.round.cluesRevealed)) return false;
     openDaily(saved.date, saved, raw);
     droppingDailyAction.current = true;
     setSaveWarning(false);
@@ -177,7 +181,7 @@ export function useNFLCareer() {
       const saved = parseDailySave(raw);
       const current = dailyRef.current;
       const keepCurrent = current.day === day && (raw === current.bytes || saved?.date !== day
-        || (saved.status === 'playing' && (current.round.status !== 'playing' || saved.guesses.length < current.round.guesses.length)));
+        || (saved.status === 'playing' && (current.round.status !== 'playing' || saved.cluesRevealed < current.round.cluesRevealed)));
       openDaily(day, keepCurrent ? current.round : saved?.date === day ? saved : freshRound, raw);
       if (!keepCurrent) setSaveWarning(false);
     } else {
@@ -196,7 +200,7 @@ export function useNFLCareer() {
 
   const score = useMemo(() => Math.max(1, TOTAL_CLUES + 1 - cluesRevealed), [cluesRevealed]);
 
-  const clues = useMemo(() => {
+  const { clues, nextClueLabel } = useMemo(() => {
     const all = [
       { label: 'Draft', value: `Round ${targetPlayer.draftRound}, ${targetPlayer.draftYear}` },
       { label: 'College', value: targetPlayer.college },
@@ -207,21 +211,20 @@ export function useNFLCareer() {
     ];
     // HARD (task #12): hide the easiest leading clues (display-only).
     const start = hard ? Math.min(2, Math.max(0, cluesRevealed - 1)) : 0;
-    return all.slice(start, cluesRevealed);
+    return { clues: all.slice(start, cluesRevealed), nextClueLabel: all[cluesRevealed]?.label };
   }, [targetPlayer, cluesRevealed, hard]);
 
   const makeGuess = useCallback((name: string) => {
     if (mode === 'daily' && takeNewerDaily()) return;
     const current = roundRef.current;
-    if (current.status !== 'playing') return;
+    if (current !== round || current.status !== 'playing') return;
     const trimmed = name.trim();
     const normalized = normalizeName(trimmed);
     if (!normalized || current.guesses.some(guess => normalizeName(guess) === normalized)) return;
     const guesses = [...current.guesses, trimmed];
     const clues = current.cluesRevealed;
     if (normalized === normalizeName(targetPlayer.name)) {
-      applyRound({ status: 'won', cluesRevealed: clues, guesses });
-      if (mode === 'daily') finishDaily('won', clues, guesses);
+      commitRound({ ...current, status: 'won', guesses });
       toast.success(`🎉 Correct! You scored ${dailyScoreOf('won', clues)} points!`);
       return;
     }
@@ -229,23 +232,25 @@ export function useNFLCareer() {
     toast.error(`❌ Not ${trimmed}`);
 
     if (clues >= TOTAL_CLUES) {
-      applyRound({ status: 'lost', cluesRevealed: clues, guesses });
-      if (mode === 'daily') finishDaily('lost', clues, guesses);
+      commitRound({ ...current, status: 'lost', guesses });
       toast.error(`The player was ${targetPlayer.name}`);
     } else {
-      const next: NflRound = { status: 'playing', cluesRevealed: clues + 1, guesses };
-      applyRound(next);
-      if (mode === 'daily') saveRound(dailyRef.current.day, next);
+      commitRound({ ...current, cluesRevealed: clues + 1, guesses });
     }
-  }, [targetPlayer, mode, applyRound, finishDaily, saveRound, takeNewerDaily]);
+  }, [targetPlayer, mode, round, commitRound, takeNewerDaily]);
+
+  const requestClue = useCallback(() => {
+    if (mode === 'daily' && takeNewerDaily()) return;
+    if (roundRef.current !== round || round.status !== 'playing' || round.cluesRevealed >= TOTAL_CLUES) return;
+    commitRound({ ...round, cluesRevealed: round.cluesRevealed + 1, requestedClues: (round.requestedClues ?? 0) + 1 });
+  }, [mode, round, commitRound, takeNewerDaily]);
 
   const giveUp = useCallback(() => {
     if (mode === 'daily' && takeNewerDaily()) return;
     const current = roundRef.current;
     if (current.status !== 'playing') return;
-    applyRound({ ...current, status: 'lost' });
-    if (mode === 'daily') finishDaily('lost', current.cluesRevealed, current.guesses);
-  }, [mode, applyRound, finishDaily, takeNewerDaily]);
+    commitRound({ ...current, status: 'lost' });
+  }, [mode, commitRound, takeNewerDaily]);
 
   const resetGame = useCallback(() => {
     // In unlimited: deal the next random player in place. From the daily:
@@ -283,6 +288,7 @@ export function useNFLCareer() {
     hard, toggleHard,
     targetPlayer,
     clues,
+    nextClueLabel,
     cluesRevealed,
     totalClues: TOTAL_CLUES,
     score,
@@ -292,6 +298,7 @@ export function useNFLCareer() {
     retrySave,
     excludedNames,
     makeGuess,
+    requestClue,
     giveUp,
     resetGame,
     shareText,

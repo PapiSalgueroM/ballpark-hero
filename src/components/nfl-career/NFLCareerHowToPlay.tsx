@@ -20,12 +20,12 @@ export function NFLCareerHowToPlay({ open, onOpenChange }: Props) {
         <div className="space-y-3 text-sm text-muted-foreground">
           <p>🏈 Guess the NFL player from clues about their career.</p>
           <ol className="list-decimal list-inside space-y-1.5">
-            <li>Each round reveals a new clue about the mystery player</li>
-            <li>Type your guess in the search bar after each clue</li>
+            <li>Guess from the first clue for 6 points.</li>
+            <li>A miss or a requested clue reveals the next clue and costs 1 point. Only guesses go in your history.</li>
             <li>Clues: Draft, College, First Team, Stats, Teams, Jersey Number</li>
-            <li>Guess early for more points: 6 max, 1 min</li>
+            <li>On the final clue, a correct guess earns 1 point and a miss ends the round with 0.</li>
           </ol>
-          <p className="text-xs">New daily challenge at midnight Eastern. Your Daily guesses stay in this browser so you can finish later.</p>
+          <p className="text-xs">For example, reveal College after Draft and a correct first guess earns 5 points. Daily clues and guesses stay in this browser until the next challenge at midnight Eastern.</p>
         </div>
       </DialogContent>
     </Dialog>

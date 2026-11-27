@@ -17,6 +17,7 @@ const NFLCareer = () => {
   const {
     targetPlayer,
     clues,
+    nextClueLabel,
     cluesRevealed,
     totalClues,
     score,
@@ -27,6 +28,7 @@ const NFLCareer = () => {
     excludedNames,
     playerNames,
     makeGuess,
+    requestClue,
     giveUp,
     shareText,
     hard, toggleHard,
@@ -77,7 +79,7 @@ const NFLCareer = () => {
                 className={'text-xs px-3 py-2 rounded-full border transition-all ' + (hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground')}
               >😈 Hard: {hard ? 'ON' : 'off'}</button>
             </div>
-            <div className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
+            <div aria-live="polite" aria-atomic="true" className="flex items-center justify-center gap-4 mt-2 text-xs text-muted-foreground">
               <span>Clue <span className="text-foreground font-semibold">{cluesRevealed}/{totalClues}</span></span>
               <span>Score if correct: <span className="text-correct font-semibold">{score}</span></span>
             </div>
@@ -123,7 +125,14 @@ const NFLCareer = () => {
               validateOnly
               localNames={playerNames}
             />
-            <div className="flex justify-center mt-4">
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+              {nextClueLabel ? (
+                <button type="button" onClick={event => { if (event.detail <= 1) requestClue(); }}
+                  className="min-h-11 rounded-lg border border-border bg-card px-4 py-2 text-sm font-semibold hover:border-primary">
+                  Reveal next clue · {nextClueLabel}
+                  <span className="block text-xs font-normal text-muted-foreground">Costs 1 point · {score - 1} left if correct</span>
+                </button>
+              ) : <p className="text-sm text-muted-foreground">Final clue. Your next guess decides the round.</p>}
               <GiveUpButton onGiveUp={giveUp} />
             </div>
           </div>
@@ -160,14 +169,14 @@ const NFLCareer = () => {
                 gameStatus === 'won' ? (
                   <>
                     The player was <span className="font-bold text-primary">{targetPlayer.name}</span>. You got it in{' '}
-                    {cluesRevealed} clue{cluesRevealed > 1 ? 's' : ''}, {score} points!
+                    {cluesRevealed} clue{cluesRevealed > 1 ? 's' : ''}, {score} {score === 1 ? 'point' : 'points'}!
                   </>
                 ) : (
                   <>The player was <span className="font-bold text-primary">{targetPlayer.name}</span></>
                 )
               }
               funFact={
-                <>💡 Did you know? {targetPlayer.name} was drafted in round {targetPlayer.draftRound} ({targetPlayer.draftYear}) out of {targetPlayer.college}{targetPlayer.careerStat ? `, known for ${targetPlayer.careerStat}` : ''}.</>
+                <>Your last clue was <strong>{clues[clues.length - 1].label}</strong> · {clues[clues.length - 1].value}</>
               }
               emojiGrid={gameStatus === 'won' ? `NFL Career Path: solved in ${cluesRevealed} clue${cluesRevealed > 1 ? 's' : ''}` : 'NFL Career Path: not solved'}
               share={{
