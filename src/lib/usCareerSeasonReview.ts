@@ -4,6 +4,7 @@ import type { MlbCareerPos, MlbSeasonLine } from '@/lib/mlbMyCareer';
 import type { NhlCareerPos, NhlSeasonLine } from '@/lib/nhlMyCareer';
 import type { UsCareerCore, UsCareerSeason, UsCareerSport } from '@/lib/usCareerSport';
 import { formatNumber } from '@/lib/formatNumber';
+import { earnedDrawTrust } from '@/lib/nhlDefensiveDraws';
 
 export interface CareerReviewStat { label: string; value: string; numeric?: { raw?: number; digits?: number } }
 export interface CareerReviewStats { regular: CareerReviewStat[]; postseason: CareerReviewStat[]; gamesLabel: string; regularValues: CareerReviewStat[] }
@@ -169,6 +170,7 @@ export function mlbSeasonReview(s: MlbSeasonLine, pos: MlbCareerPos): CareerRevi
 }
 
 export function nhlSeasonReview(s: NhlSeasonLine, pos: NhlCareerPos): CareerReviewStats {
+  const draws = pos === 'C' ? s.defensiveDraws : undefined;
   const tandem = pos === 'G' && recorded(s.tandemStarts);
   const { poGames, poStarts } = s;
   const hasStarts = recorded(poStarts) && Number.isInteger(poStarts) && poStarts >= 0
@@ -182,7 +184,9 @@ export function nhlSeasonReview(s: NhlSeasonLine, pos: NhlCareerPos): CareerRevi
       ...perOpportunity('Wins per 100 appearances', recorded(s.wins) && s.wins <= s.games ? s.wins : undefined, s.games, 100),
       ...(tandem ? [text('Goalie workload', 'Shared crease'), number('Planned starts', s.tandemStarts)] : [])]
       : [number('Goals', s.goals), number('Assists', s.assists), number('Points', s.points),
-        ...perOpportunity('Points per game', s.points, s.games)],
+        ...perOpportunity('Points per game', s.points, s.games),
+        ...(draws ? [number('Defensive draws won', draws.won), number('Defensive draws lost', draws.taken - draws.won),
+          text('Next camp with this club', earnedDrawTrust(draws) ? 'Faceoff edge earned' : 'Usual evaluation')] : [])],
     pos === 'G' ? goaliePostseason
       : [number('Games', s.poGames), number('Goals', s.poGoals), number('Assists', s.poAssists), number('Points', s.poPoints),
         ...(s.poChecking && recorded(s.poChecking.seriesEdge) && recorded(s.poChecking.pointsTraded)
