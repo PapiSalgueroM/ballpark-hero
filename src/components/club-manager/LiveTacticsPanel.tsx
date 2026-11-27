@@ -17,6 +17,7 @@ import { FlankRoutePicker } from './FlankRoutePicker';
 import { ReturnPressPicker } from './ReturnPressPicker';
 import { PhaseShapePicker } from './PhaseShapePicker';
 import { phasePositions } from '@/lib/clubManagerPhaseShapes';
+import { AnalystDesk } from './AnalystDesk';
 
 export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live', minute, plus }: {
   career: CareerState;
@@ -44,6 +45,10 @@ export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live', mi
       <PhaseShapePicker order={live.phaseOrder}
         positionsFor={order => phasePositions(career, live, minute === undefined ? undefined : { minute, plus }, order)}
         onChange={order => onChange({ kind: 'phaseOrder', order })} />
+      <AnalystDesk career={career} opponent={live.opponent} live={live}
+        clock={{ minute: minute ?? 45, plus: minute === undefined ? live.added?.h1 : plus }}
+        onMode={mode => onChange({ kind: 'analystWatch', mode })}
+        onPress={target => onChange({ kind: 'returnPress', target })} />
       <InstructionsPicker
         value={liveInstructions(live)}
         onChange={instructions => onChange({ kind: 'instructions', instructions })}
