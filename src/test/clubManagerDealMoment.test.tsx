@@ -145,6 +145,9 @@ describe('Club Manager: the deal moment', () => {
     expect(screen.getByRole('region')).toHaveTextContent(`£2,630,000 remains due from ${original.buyer}`);
     view.rerender(<AppearanceFeeLedger career={open} />);
     expect(screen.queryByText('Transfer fee commitments')).toBeNull();
+    const future = JSON.parse(JSON.stringify({ ...original, version: 2 }));
+    view.rerender(<AppearanceFeeLedger career={{ ...open, appearanceFees: [future] }} />);
+    expect(screen.getByText(/This version cannot read the agreements/)).toBeVisible();
   });
 
   it('offers the full eligible squad and completes a deal with a reserve', () => {

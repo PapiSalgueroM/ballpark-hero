@@ -43,7 +43,10 @@ export function AppearanceFeeLedger({ career }: { career: CareerState }) {
   const previous = appearanceFeeClubs(career).filter(club => club !== career.clubName).flatMap(club => appearanceFeeDesk(career, club));
   const rows = [...current, ...previous];
   const fee = rows.find(row => row.id === selected) ?? rows[0];
-  if (!fee) return null;
+  const complete = canBookAppearanceFee(career);
+  if (!fee) return complete ? null : <p className="rounded-md border border-border p-3 text-xs">
+    Transfer fee commitments are saved here. This version cannot read the agreements.
+  </p>;
   const fmt = (amount: number) => `${currencySymbol(career)}${formatNumber(Math.round(amount * 1_000_000))}`;
   const due = current.filter(row => row.status === 'due').reduce((sum, row) => sum + row.amount - row.paid, 0);
   const possible = current.filter(row => row.status === 'tracking').reduce((sum, row) => sum + row.amount, 0);
@@ -51,6 +54,7 @@ export function AppearanceFeeLedger({ career }: { career: CareerState }) {
   return <details className="rounded-xl border border-border bg-card px-3">
     <summary className="min-h-11 cursor-pointer py-3 text-sm font-bold">Transfer fee commitments</summary>
     <section aria-label="Transfer fee commitments" className="space-y-2 pb-3 text-xs">
+      {!complete && <p>These totals cover the agreements this version can read.</p>}
       <p><strong>{career.clubName}</strong> paid {fmt(paidThisSeason)} in appearance fees this season. {fmt(due)} is due now. A further {fmt(possible)} depends on future appearances.</p>
       <label className="block font-semibold">Transfer agreement
         <select className="mt-1 min-h-11 w-full min-w-0 rounded-md border border-border bg-background px-2"
