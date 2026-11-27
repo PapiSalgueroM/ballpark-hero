@@ -114,7 +114,7 @@ export function scoutBrief(career: CareerState, market: readonly MarketPlayer[],
     if (resolveRecruitmentTarget(career, recruitmentTarget(career, report.player), market)) reports.push(report);
     if (reports.length === 3) break;
   }
-  return { comparison, limit, reports };
+  return { comparison, reports };
 }
 export function addRecruitment(career: CareerState, player: MarketPlayer, fromBrief?: RecruitmentBrief): CareerState | null {
   const market = marketForScreen(career);

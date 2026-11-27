@@ -180,4 +180,20 @@ describe('Club Manager current recruitment identities and explicit metadata writ
     expect(recruitmentOf(cleared)?.brief?.job).toBe('cover');
     expect(saveRecruitmentBrief(changed, { ...brief, job: 'constructor' } as unknown as RecruitmentBrief)).toBeNull();
   });
+  it('finds affordable cover for a vacant position and uses the sole incumbent when there is one', () => {
+    const { career, market } = fixture();
+    const brief: RecruitmentBrief = { position: 'CB', job: 'cover', budgetShare: 50 };
+    const missing = { ...career, squad: career.squad.filter(p => p.position !== brief.position) };
+    const vacant = scoutBrief(missing, market, brief);
+    expect(vacant.comparison).toBeUndefined();
+    expect(vacant.reports).toHaveLength(3);
+    const costs = vacant.reports.map(r => r.terms.total);
+    expect(costs).toEqual([...costs].sort((a, b) => a - b));
+    const incumbent = career.squad.find(p => p.position === brief.position)!;
+    const occupied = scoutBrief({ ...missing, squad: [...missing.squad, incumbent] }, market, brief);
+    expect(occupied.comparison).toBe(incumbent);
+    expect(occupied.reports[0].player.rating).toBeGreaterThan(vacant.reports[0].player.rating);
+    const ambiguous = vacant.reports.flatMap(({ player }) => [player, { ...player }]);
+    expect(scoutBrief(missing, ambiguous, brief).reports).toHaveLength(0);
+  });
 });

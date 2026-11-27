@@ -9,7 +9,6 @@ import {
 
 const field = 'min-h-11 w-full rounded-lg border border-border bg-card px-2 text-sm';
 const button = 'min-h-11 rounded-lg border border-border px-3 py-2 text-sm font-bold';
-const jobs = Object.entries(BRIEF_JOBS) as [RecruitmentBrief['job'], string][];
 
 export function RecruitmentBriefDesk({ career, market, onCommit, onBack }: {
   career: CareerState; market: MarketPlayer[]; onCommit: RecruitmentCommit; onBack: () => void;
@@ -64,7 +63,7 @@ export function RecruitmentBriefDesk({ career, market, onCommit, onBack }: {
           {[25, 50, 100].map(n => <option key={n} value={n}>{n}% · {cash(career.budget * n / 100)}</option>)}
         </select></label>
         <label className="col-span-2 block text-sm">Squad job<select className={field} value={draft.job} onChange={e => change({ ...draft, job: e.target.value as RecruitmentBrief['job'] })}>
-          {jobs.map(([key, name]) => <option key={key} value={key}>{name}</option>)}
+          {Object.entries(BRIEF_JOBS).map(([key, name]) => <option key={key} value={key}>{name}</option>)}
         </select></label>
       </div>
       <p className="text-xs text-muted-foreground">{draft.job === 'cover'
