@@ -5,7 +5,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { afterEach, expect, it } from 'vitest';
 import viteConfig from '../../vite.config';
-import { COOKIE_CHOICE_INTRO } from '../lib/cookieChoiceCopy';
+import { COOKIE_CHOICE_DURATION, COOKIE_CHOICE_INTRO } from '../lib/cookieChoiceCopy';
 
 const template = readFileSync('index.html', 'utf8');
 const marker = /<script data-dukb-host-analytics-default(?:="")?>([\s\S]*?)<\/script>/g;
@@ -16,6 +16,7 @@ const oldIntro = 'Essential storage keeps games working. Advertising is optional
 const adIntro = 'Ads help keep DoUKnowBall free. Accepting advertising helps support the site. You can still play if you reject.';
 const readyIntro = 'Ads help keep DoUKnowBall free. Google Analytics helps us see which pages people visit. You choose each separately and can still play if you reject both.';
 const notice = (intro: string, status?: string) => `<p>${intro} We ask again in 180 days. <a href="/privacy">Learn more</a></p>${status ? '\n<p>' + status + '</p>' : ''}`;
+const currentNotice = `<p>${COOKIE_CHOICE_INTRO} ${COOKIE_CHOICE_DURATION} <a href="/privacy">Learn more</a></p>`;
 const temp = mkdtempSync(path.join(tmpdir(), 'dukb-host-consent-'));
 afterEach(() => rmSync(temp, { recursive: true, force: true }));
 
@@ -52,10 +53,10 @@ it('queues only denied host analytics consent before the deferred SDK on every e
     const body = original.split('<body>')[1];
     const builtBody = html.split('<body>')[1];
     const priorBody = body.includes('id="dukb-boot"') ? builtBody : builtBody.replace(/\n<div id="dukb-boot"[^>]*><img[^>]+><\/div>/, '');
-    const expected = body.replace(notice(oldIntro, oldBanner), notice(COOKIE_CHOICE_INTRO))
-      .replace(notice(oldIntro, pausedBanner), notice(COOKIE_CHOICE_INTRO))
-      .replace(notice(adIntro, pausedBanner), notice(COOKIE_CHOICE_INTRO))
-      .replace(notice(readyIntro), notice(COOKIE_CHOICE_INTRO));
+    const expected = body.replace(notice(oldIntro, oldBanner), currentNotice)
+      .replace(notice(oldIntro, pausedBanner), currentNotice)
+      .replace(notice(adIntro, pausedBanner), currentNotice)
+      .replace(notice(readyIntro), currentNotice);
     expect(priorBody, name).toBe(expected);
     const window: { dataLayer?: unknown[]; gtag?: unknown; __DUKB_HOST_ANALYTICS_DEFAULT__?: unknown } = { dataLayer: [{ unrelated: true }] };
     vm.runInNewContext(matches[0][1], { window });

@@ -56,7 +56,8 @@ const quiet = (state: Awaited<ReturnType<typeof start>>) => {
 
 describe('actual NBA Stat Line season picker', () => {
   it('holds manual ads off loading and failed pool states while retaining retry and guide', async () => {
-    localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: Date.now() }));
+    const confirmedAt = Date.now();
+    localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: confirmedAt, advertisingConfirmedAt: confirmedAt }));
     window.adsbygoogle = [];
     const guideText = 'A target per-36 stat line from real NBA history, five player seasons of your choosing, and one minutes weighted combined line scored 0 to 100 by similarity. A shared daily target with one scored run, plus an unlimited mode with a fresh target every time.';
     for (const failure of ['empty', 'rejected'] as const) {
@@ -78,7 +79,8 @@ describe('actual NBA Stat Line season picker', () => {
   });
 
   it('keeps setup, all five picks and the result free of in-game ad slots and requests', async () => {
-    localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: Date.now() })); window.adsbygoogle = [];
+    const confirmedAt = Date.now();
+    localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: confirmedAt, advertisingConfirmedAt: confirmedAt })); window.adsbygoogle = [];
     const view = render(frame()), menu = await view.findByRole('button', { name: /^Daily target/ });
     expect(view.container.querySelector('ins.adsbygoogle')).toBeNull();
     expect(window.adsbygoogle).toHaveLength(0);

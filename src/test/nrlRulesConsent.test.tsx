@@ -63,7 +63,8 @@ it('opens first NRL rules with one cookie region and no intermediate inline copy
 });
 
 it('opens Rules but leaves no consent prompt when choices were already accepted', async () => {
-  const saved = JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: Date.now() });
+  const confirmedAt = Date.now();
+  const saved = JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: confirmedAt, advertisingConfirmedAt: confirmedAt });
   localStorage.setItem(choiceKey, saved);
   renderRoute();
   await screen.findByRole('dialog', { name: rulesName });
