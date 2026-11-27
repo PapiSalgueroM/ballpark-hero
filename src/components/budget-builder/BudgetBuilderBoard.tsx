@@ -1,4 +1,7 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { BudgetEnduranceCup } from '@/components/budget-builder/BudgetEnduranceCup';
+import { CUP_KEY, readBudgetCup, startBudgetCup, type BudgetCup } from '@/lib/budgetEnduranceCup';
+import { safeLocalStorage, safeSessionStorage, safeSetItem } from '@/lib/safeStorage';
 import { Check, Copy, RotateCcw, Swords, X } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
@@ -25,6 +28,35 @@ export function BudgetBuilderBoard() {
   // squad, and the verdict card appears at the bottom, so it pulls itself into
   // view the moment the team is done.
   const revealRef = useRevealScroll<HTMLDivElement>(complete);
+  const [cupRaw, setCupRaw] = useState(() => safeLocalStorage.getItem(CUP_KEY));
+  const cup = useMemo(() => readBudgetCup(cupRaw), [cupRaw]);
+  const [showCup, setShowCup] = useState(() => safeSessionStorage.getItem(CUP_KEY) === 'open');
+  const [cupMessage, setCupMessage] = useState('');
+  const cupLauncher = useRef<HTMLButtonElement>(null);
+  const returningFromCup = useRef(false);
+  useLayoutEffect(() => {
+    if (!showCup && returningFromCup.current) {
+      returningFromCup.current = false;
+      cupLauncher.current?.focus({ preventScroll: true });
+    }
+  }, [showCup]);
+  useEffect(() => {
+    const sync = (e: StorageEvent) => { if (e.key === CUP_KEY || e.key === null) setCupRaw(safeLocalStorage.getItem(CUP_KEY)); };
+    window.addEventListener('storage', sync);
+    return () => window.removeEventListener('storage', sync);
+  }, []);
+  function openCup(open: boolean) {
+    returningFromCup.current = !open;
+    setShowCup(open);
+    if (open) safeSessionStorage.setItem(CUP_KEY, 'open'); else safeSessionStorage.removeItem(CUP_KEY);
+  }
+  function saveCup(next: BudgetCup) {
+    const prior = safeLocalStorage.getItem(CUP_KEY);
+    if (prior !== cupRaw) { setCupRaw(prior); setCupMessage('The cup changed in another tab. Check the latest plans.'); return false; }
+    const raw = JSON.stringify(next);
+    if (!safeSetItem(CUP_KEY, raw)) { setCupMessage('Could not save this cup. Free some browser storage and try again.'); return false; }
+    setCupRaw(raw); setCupMessage(''); return true;
+  }
   const [copied, setCopied] = useState(false);
   const [choice, setChoice] = useState<Player | null>(null);
   const [marketPage, setMarketPage] = useState(0);
@@ -120,6 +152,13 @@ export function BudgetBuilderBoard() {
     } catch { /* clipboard blocked */ }
   };
 
+  if (showCup && cup) return <>
+    {cupMessage && <p role="status" className="text-center text-sm">{cupMessage}</p>}
+    <BudgetEnduranceCup cup={cup} save={saveCup} leave={() => openCup(false)} />
+  </>;
+  const resumeCup = cup && <button ref={cupLauncher} type="button" className="mb-3 min-h-11 rounded-xl border border-border px-4 text-sm font-semibold" onClick={() => openCup(true)}>
+    {cup.played.length === 3 ? 'View Endurance Cup receipts' : 'Resume Endurance Cup'}
+  </button>;
   const marketPicker = (
     <div className="mb-3 grid grid-cols-3 gap-2">
       {BB_ERAS.map(e => (
@@ -141,6 +180,7 @@ export function BudgetBuilderBoard() {
   if (loading || marketUnavailable) {
     return (
       <div className={`${styles.board} mx-auto max-w-3xl px-4 py-6`}>
+        {resumeCup}
         {marketPicker}
         <div data-no-prerender className="py-10 text-center">
           {loading ? (
@@ -174,6 +214,7 @@ export function BudgetBuilderBoard() {
 
   return (
     <div className={`${styles.board} mx-auto max-w-3xl px-4 py-6`} data-budget-builder>
+      {(!complete || cup?.played.length === 3) && resumeCup}
       {/* Era picker (owner task 49: eras) */}
       {marketPicker}
 
@@ -486,6 +527,20 @@ export function BudgetBuilderBoard() {
             </div>
           )}
 
+          <div className="mt-4 border-t border-border pt-3">
+            <h3 className="font-bold">Endurance Cup</h3>
+            <p className="text-sm text-muted-foreground">Use your XI and its remaining ${remaining}M across three fixtures. Two reserves can cover tired starters.</p>
+            {(!cup || cup.played.length === 3) ? <button type="button" disabled={moneyXi.some(p => !p)}
+              className="mt-2 min-h-11 rounded-xl border border-border px-4 text-sm font-semibold disabled:opacity-50"
+              onClick={() => {
+                const next = startBudgetCup(formation, era.label, budget, formation.slots.map((_, i) => squad[i]!), moneyXi, pool, {
+                  score: finalScore, legs: series ? series.legs.map(leg => [leg.userGoals, leg.aiGoals]) : null,
+                });
+                if (next && saveCup(next)) openCup(true);
+              }}>{cup ? 'Start new cup with this XI' : 'Enter Endurance Cup'}</button> : resumeCup}
+            {moneyXi.some(p => !p) && <p className="text-sm">Choose a market with a complete Money XI to enter.</p>}
+            {cupMessage && <p role="status" className="text-sm">{cupMessage}</p>}
+          </div>
           <button
             onClick={copyShare}
             className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
