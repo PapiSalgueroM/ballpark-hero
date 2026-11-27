@@ -18,15 +18,21 @@ it('mounts one shared ad after the footer and excludes private, legal and unknow
 
 it('requires 1280px of actual frame space and keeps the same game mounted through a resize', () => {
   let reportWidth: (width: number) => void;
+  vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
+    const side = this.getAttribute('data-rail-edge');
+    const x = side === 'right' ? 1160 : this.tagName === 'INPUT' ? 350 : 0;
+    const width = side ? 120 : this.tagName === 'INPUT' ? 400 : 1280;
+    return { left: x, right: x + width, top: 0, bottom: 2000, width, height: 2000 } as DOMRect;
+  });
   vi.stubGlobal('ResizeObserver', class {
     constructor(callback: ResizeObserverCallback) {
-      reportWidth = width => callback([{ contentRect: { width } } as ResizeObserverEntry], this);
+      reportWidth ??= width => callback([{ contentRect: { width } } as ResizeObserverEntry], this);
     }
     observe() {}
     unobserve() {}
     disconnect() {}
   });
-  const view = render(<MemoryRouter><GameDesktopRails active><input aria-label="Guess" /></GameDesktopRails></MemoryRouter>);
+  const view = render(<MemoryRouter><GameDesktopRails active><main><input aria-label="Guess" /></main></GameDesktopRails></MemoryRouter>);
   const input = view.getByRole('textbox');
   fireEvent.change(input, { target: { value: 'in-progress guess' } });
   const rails = () => Array.from(view.container.querySelectorAll('[data-ad-rail]'), el => el.getAttribute('data-ad-rail'));
@@ -41,38 +47,92 @@ it('requires 1280px of actual frame space and keeps the same game mounted throug
   expect(input).toHaveValue('in-progress guess');
 });
 
-it('skips both game rails when a control comes within 149px of either edge', async () => {
+it.each(['/footle', '/soccer', '/'])('measures the controls inside wide wrappers and skips both rails inside 150px on %s', async path => {
   let left = 270, right = 1010;
+  let controlTop = 400;
+  let boardTop = 919;
+  let guideTop = 0;
   vi.spyOn(Element.prototype, 'clientWidth', 'get').mockReturnValue(1280);
   vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
     const side = this.getAttribute('data-rail-edge');
     const box = this.hasAttribute('data-game-play-area');
     const help = this.classList.contains('mx-auto');
-    const x = side === 'right' ? 1160 : this.tagName === 'BUTTON' ? left : box ? 270 : help ? 180 : 0;
-    const width = side ? 120 : this.tagName === 'BUTTON' ? right - left : box ? 740 : help ? 920 : 1280;
-    const height = help ? 0 : 44;
-    return { x, left: x, right: x + width, width, y: 0, top: 0, bottom: height, height } as DOMRect;
+    let x = 0, y = 0, width = 1280, height = 1700;
+    if (side) { x = side === 'right' ? 1160 : 0; width = 120; }
+    if (box) { x = 270; width = 740; }
+    if (help) { x = 180; y = guideTop; width = 920; height = 0; }
+    if (this.tagName === 'BUTTON') { x = left; y = controlTop; width = right - left; height = 44; }
+    if (this.tagName === 'CANVAS') { y = boardTop; width = 700; height = 320; }
+    return { x, left: x, right: x + width, width, y, top: y, bottom: y + height, height } as DOMRect;
   });
   vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} });
-  const view = render(<MemoryRouter initialEntries={['/footle']}><GameDesktopRails active><main><div data-game-play-area=""><button>Play</button></div><div data-testid="help" className="mx-auto max-w-4xl" /></main></GameDesktopRails></MemoryRouter>);
+  const view = render(<MemoryRouter initialEntries={[path]}><GameDesktopRails active><main><div data-game-play-area=""><button>Play</button></div><div data-testid="help" className="mx-auto max-w-4xl" data-seo-content="loading" /></main></GameDesktopRails></MemoryRouter>);
   const control = view.getByRole('button'), rails = () => view.container.querySelectorAll('[data-ad-rail]').length;
   expect(rails()).toBe(0);
   const help = view.getByTestId('help');
-  help.className = '';
-  help.setAttribute('data-seo-content', 'loading');
-  expect(rails()).toBe(0);
+  const pendingHelp = document.createElement('span');
+  pendingHelp.hidden = true;
+  pendingHelp.setAttribute('data-game-help-pending', '');
+  help.append(pendingHelp);
   help.setAttribute('data-seo-content', 'ready');
+  await act(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
+  expect(rails()).toBe(0);
+  pendingHelp.remove();
   await waitFor(() => expect(rails()).toBe(2));
+  control.focus();
   left = 269;
   control.className = 'left';
   await waitFor(() => expect(rails()).toBe(0));
+  if (path === '/footle') {
+    guideTop = 1100;
+    fireEvent.scroll(control);
+    await waitFor(() => expect(rails()).toBe(2));
+    const frame = control.closest('[data-playable-route]') as HTMLElement;
+    expect(parseFloat(frame.style.getPropertyValue('--rail-start'))).toBe(462);
+    guideTop = 0;
+  }
   left = 270;
   control.className = 'center';
   await waitFor(() => expect(rails()).toBe(2));
   right = 1011;
   control.className = 'right';
   await waitFor(() => expect(rails()).toBe(0));
+  controlTop = 1200;
+  control.className = 'below';
+  await waitFor(() => expect(rails()).toBe(2));
+  control.style.position = 'fixed';
+  await waitFor(() => expect(rails()).toBe(0));
+  control.style.removeProperty('position');
+  await waitFor(() => expect(rails()).toBe(2));
+  const board = document.createElement('canvas');
+  control.after(board);
+  await waitFor(() => expect(rails()).toBe(0));
+  boardTop = 920;
+  board.className = 'below';
+  await waitFor(() => expect(rails()).toBe(2));
+  boardTop = 919;
+  fireEvent.scroll(window);
+  await act(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
+  expect(rails()).toBe(2);
+  fireEvent.scroll(board);
+  await waitFor(() => expect(rails()).toBe(0));
+  boardTop = 920;
+  fireEvent.scroll(board);
+  await waitFor(() => expect(rails()).toBe(2));
   expect(view.getByRole('button')).toBe(control);
+  expect(control).toHaveFocus();
+  const menu = document.createElement('button');
+  menu.setAttribute('aria-label', 'Open site menu');
+  document.body.append(menu);
+  try {
+    menu.setAttribute('aria-expanded', 'true');
+    await waitFor(() => expect(rails()).toBe(0));
+    menu.setAttribute('aria-expanded', 'false');
+    await act(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
+    expect(rails()).toBe(0);
+  } finally {
+    menu.remove();
+  }
 });
 
 it('keeps all standard reservations empty and inaccessible', () => {

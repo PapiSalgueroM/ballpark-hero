@@ -1,6 +1,6 @@
 import { Fragment, lazy, Suspense, useCallback, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ALL_GAMES, type GameDef } from '@/data/gameRegistry';
 import { HOME_STAGE, sportOf, type StageEntry } from '@/data/homeFront';
@@ -24,6 +24,7 @@ const managerLinks = [
   { path: '/nrl-team-manager', sport: 'rugby' },
   { path: '/aussie-rules-manager', sport: 'aussie' },
 ] as const;
+const moreCareerPaths = ['/nfl-my-career', '/mlb-my-career', '/nhl-my-career', '/fight-career'];
 
 function stageSaves(storage: Storage | null): string[] {
   return [...stageSaveKeys].filter(key => {
@@ -74,6 +75,22 @@ export function FeaturedStage() {
           </Fragment>
         ))}
       </div>
+      <details className={styles.careerMenu}>
+        <summary>More career games<ChevronDown aria-hidden="true" /></summary>
+        <div className={styles.careerChoices}>
+          {moreCareerPaths.map(path => {
+            const game = ALL_GAMES.find(candidate => candidate.path === path);
+            if (!game) return null;
+            const sport = sportOf(path);
+            return (
+              <Link key={path} to={path} data-google-vignette="false" style={sportStyle(sport)} className={styles.managerLaunch}>
+                <SportGlyph sport={sport} className={styles.managerGlyph} />
+                <span>{game.label}</span><ArrowRight aria-hidden="true" className={styles.launchArrow} />
+              </Link>
+            );
+          })}
+        </div>
+      </details>
     </section>
   );
 }
@@ -89,7 +106,10 @@ function StageCard({ card, lead, resumeTo }: { card: Card; lead: boolean; resume
     <Link to={to} data-google-vignette="false" style={sportStyle(sport)} data-stage-card={game.path}
       className={cn(styles.game, lead && styles.lead)}>
       <span aria-hidden="true" className={styles.art}>
-        <Suspense fallback={null}><HomeArt art={entry.art} /></Suspense>
+        {lead ? <picture>
+          <source media="(min-width: 640px)" srcSet="/home-art/pitch-wide.webp" />
+          <img src="/home-art/pitch-small.webp" width={672} height={224} alt="" />
+        </picture> : <Suspense fallback={null}><HomeArt art={entry.art} /></Suspense>}
       </span>
       <span aria-hidden="true" className={styles.shade} />
       <div className={styles.copy}>

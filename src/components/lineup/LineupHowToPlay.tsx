@@ -19,6 +19,7 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
           <DialogDescription className="text-center">
             Draft 11 players and see how your team does over a season.
           </DialogDescription>
+          {open && <div data-dukb-help-cookie-choices="" className="empty:hidden" />}
 
           <ol className="list-decimal space-y-2 pl-6 text-muted-foreground">
             <li>Choose a draft mode and formation.</li>

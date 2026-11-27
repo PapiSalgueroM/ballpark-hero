@@ -4,6 +4,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CookieConsent } from '@/components/CookieConsent';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
+import { LineupHowToPlay } from '@/components/lineup/LineupHowToPlay';
 import { openConsentChoices } from '@/lib/consentPreferences';
 
 const essentialChoice = () => JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() });
@@ -37,6 +38,21 @@ afterEach(() => {
 });
 
 describe('pending cookie choices belong to the open help focus scope', () => {
+  it('lets a new Build Your XI player reject inside the guide and keep reading', async () => {
+    render(<MemoryRouter>
+      <CookieConsent inline />
+      <LineupHowToPlay open onOpenChange={() => {}} />
+    </MemoryRouter>);
+    const guide = screen.getByRole('dialog', { name: 'How to Play: Build Your XI' });
+    const choices = await within(guide).findByRole('region', { name: 'Cookie choices' });
+    expect(within(choices).getByRole('checkbox', { name: 'Advertising' })).not.toBeChecked();
+    expect(within(choices).getByRole('checkbox', { name: 'Google Analytics' })).not.toBeChecked();
+    fireEvent.click(within(choices).getByRole('button', { name: 'Reject all' }));
+    expect(JSON.parse(localStorage.getItem('cookie-consent-v2')!)).toMatchObject({ advertising: false, analytics: false });
+    expect(within(guide).getByRole('button', { name: 'Got it!' })).toBeVisible();
+    expect(consent.load).not.toHaveBeenCalled();
+  });
+
   it('places pending choices inside a newly opened rules dialog before its first paint', async () => {
     render(<Fixture initialOpen={false} inline />);
     const opener = screen.getByRole('button', { name: 'How to play' });

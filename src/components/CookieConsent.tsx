@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal, flushSync } from 'react-dom';
 import { Link } from 'react-router-dom';
+import { GoogleAdConsentReview } from './GoogleAdConsentReview';
 import { loadConsentedScripts, stopRevokedServices } from '@/lib/consentedScripts';
 import {
   ANALYTICS_READY, CONSENT_CHANGED_EVENT, CONSENT_EFFECTIVE_CHANGED_EVENT, CONSENT_KEY, CONSENT_MAX_AGE_MS, CONSENT_OPEN_EVENT,
@@ -9,6 +10,7 @@ import {
   type ConsentPurposes,
 } from '@/lib/consentPreferences';
 import { safeLocalStorage } from '@/lib/safeStorage';
+import { ADVERTISING_ONLY_INTRO, COOKIE_CHOICE_INTRO } from '@/lib/cookieChoiceCopy';
 
 export function CookieConsent({ inline = false, compactInitial = false, waitForRulesHost = false }: {
   inline?: boolean; compactInitial?: boolean; waitForRulesHost?: boolean;
@@ -211,9 +213,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
       <div className={`max-w-3xl mx-auto ${compact ? 'space-y-2' : 'space-y-3'} text-sm text-muted-foreground`}>
         {/* Reserve the narrow inline layout's extra text line before Inter arrives. */}
         <p className={inlineNotice ? 'max-[369px]:min-h-[3.75rem]' : undefined}>
-          {ANALYTICS_READY
-            ? 'Ads help keep DoUKnowBall free. Google Analytics helps us see which pages people visit. You choose each separately and can still play if you reject both.'
-            : 'Ads help keep DoUKnowBall free. Accepting advertising helps support the site. You can still play if you reject.'} We ask again in 180 days.{' '}
+          {ANALYTICS_READY ? COOKIE_CHOICE_INTRO : ADVERTISING_ONLY_INTRO} We ask again in 180 days.{' '}
           <Link to="/privacy" data-google-vignette="false" className="underline hover:text-foreground font-medium">Learn more</Link>
         </p>
         {!compact && <div className="flex flex-wrap gap-x-6 gap-y-2">
@@ -229,6 +229,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
           </p>}
         </div>}
         {gpc && <p>Your browser's Global Privacy Control keeps advertising off.</p>}
+        {showDetails && !insideHelp && preferences?.advertising && !gpc && !pendingReload && <GoogleAdConsentReview />}
         {pendingReload && <p role="status">{ANALYTICS_READY ? 'Your updated choices apply to this visit.' : 'Advertising is off for this visit.'} Save your game or allow site storage, then choose Save choices to refresh. Already-loaded vendor code may keep running until then.</p>}
         <div className={inlineNotice || compact
           ? `grid grid-cols-3 gap-2 sm:flex sm:flex-wrap sm:items-center ${inlineNotice ? 'max-[358px]:min-h-[3.5rem] [&>button]:break-words' : ''}`

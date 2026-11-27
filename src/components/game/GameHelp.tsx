@@ -35,14 +35,14 @@ interface GameHelpProps {
 
 export function GameHelp({ side = 'left', inline = false, className, firstVisit = false, extraRules }: GameHelpProps = {}) {
   const pathname = useRoutePath();
-  const [content, setContent] = useState<GameContent | null>(null);
+  const [content, setContent] = useState<GameContent | null>();
   const [open, setOpen] = useState(false);
   const localStorageKey = `rules-gate-seen:${pathname}`;
   const prerender = typeof window !== 'undefined' && !!(window as Window & { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__;
 
   useEffect(() => {
     let cancelled = false;
-    setContent(null);
+    setContent(undefined);
     setOpen(false);
     loadGameContent(pathname).then(c => {
       if (cancelled) return;
@@ -60,6 +60,7 @@ export function GameHelp({ side = 'left', inline = false, className, firstVisit 
   /* Round 638: a converted guide keeps its sentences in sections, so read the
      flat lists through the accessor. */
   const guide = content ? flatGuide(content) : null;
+  if (content === undefined && !prerender) return <span hidden data-game-help-pending="" />;
   if (!guide || guide.howToPlay.length === 0) return null;
   const rules = [...guide.rules, ...(extraRules ?? []).filter(r => !guide.rules.includes(r))];
 

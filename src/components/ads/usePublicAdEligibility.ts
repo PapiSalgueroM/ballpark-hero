@@ -1,4 +1,4 @@
-import { useLayoutEffect, useState } from 'react';
+import { useLayoutEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CONSENT_CHANGED_EVENT, CONSENT_EFFECTIVE_CHANGED_EVENT, getEffectiveConsent } from '@/lib/consentPreferences';
 import { normalizeRoutePath } from '@/lib/routePath';
@@ -8,6 +8,8 @@ export function usePublicAdEligibility(mediaQuery: string): boolean {
   const { pathname, search, hash } = useLocation();
   const path = normalizeRoutePath(pathname);
   const [allowedPath, setAllowedPath] = useState<string | null>(null);
+  const home = useRef({ hadSlot: false, retired: false });
+  useLayoutEffect(() => { home.current = { hadSlot: false, retired: false }; }, [path]);
 
   useLayoutEffect(() => {
     if (search || hash || !isPublicDesktopRailRoute(path)) {
@@ -15,10 +17,25 @@ export function usePublicAdEligibility(mediaQuery: string): boolean {
       return;
     }
     const media = window.matchMedia(mediaQuery);
-    const check = () => setAllowedPath(media.matches && getEffectiveConsent().advertising && isPublicAdDocument() ? path : null);
+    let watchHomeSlot = false;
+    const rememberHomeSlot = () => {
+      if (watchHomeSlot && document.querySelector('[data-dukb-manual-ad]')) {
+        home.current.hadSlot = true;
+        watchHomeSlot = false;
+      }
+    };
+    const check = () => {
+      const advertising = getEffectiveConsent().advertising;
+      watchHomeSlot = path === '/' && advertising && !home.current.hadSlot;
+      rememberHomeSlot();
+      if (path === '/' && home.current.hadSlot && document.querySelector('[data-home-search-active]')) home.current.retired = true;
+      setAllowedPath(!home.current.retired && media.matches && advertising && isPublicAdDocument() ? path : null);
+    };
     const head = new MutationObserver(check);
     head.observe(document.head, { childList: true, subtree: true, attributes: true, attributeFilter: ['href', 'content', 'name', 'rel'] });
     const screen = new MutationObserver(records => {
+      // Preserve the first allocation even if the publisher later reports it unfilled.
+      rememberHomeSlot();
       for (const record of records) {
         if (record.type === 'attributes' || [...record.addedNodes, ...record.removedNodes].some(node =>
           node instanceof Element && (node.matches(AD_EXCLUDED_SCREEN) || node.querySelector(AD_EXCLUDED_SCREEN)))) {

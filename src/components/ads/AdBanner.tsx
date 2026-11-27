@@ -39,6 +39,8 @@ interface AdBannerProps {
  * the promise is now true rather than true by luck.
  */
 export const AD_CONTROL_GAP_PX = 150;
+export const AD_RAIL_HEIGHT_PX = 600;
+export const AD_RAIL_LABEL_PX = 20;
 
 /* Round 274: an ad box that is never going to hold an ad must not sit there
    calling itself an advertisement.
@@ -180,16 +182,16 @@ function PublicDisplayAd({ slot, placement, className = '' }: AdBannerProps & { 
     <div
       data-dukb-manual-ad={placement}
       className={`ad-container flex w-full flex-col items-center gap-1 ${className}`}
-      style={footer ? { paddingTop: AD_CONTROL_GAP_PX } : undefined}
+      style={footer ? { paddingTop: AD_CONTROL_GAP_PX } : { position: 'relative', paddingTop: AD_RAIL_LABEL_PX }}
     >
       {state === 'filled' && (
-        <span className="text-[10px] uppercase tracking-wide text-muted-foreground/70 select-none">Advertisement</span>
+        <span className="text-[10px] uppercase tracking-wide text-muted-foreground/70 select-none" style={footer ? undefined : { position: 'absolute', top: 0 }}>Advertisement</span>
       )}
       {footer && <style>{'.dukb-footer-display{width:100%;max-width:320px;height:100px}@media(max-width:335px){.dukb-footer-display{max-width:300px}}@media(min-width:768px){.dukb-footer-display{max-width:728px;height:90px}}'}</style>}
       <ins
         ref={adRef}
         className={footer ? 'adsbygoogle dukb-footer-display' : 'adsbygoogle'}
-        style={footer ? { display: 'block' } : { display: 'block', width: '100%', maxWidth: 160, height: 600 }}
+        style={footer ? { display: 'block' } : { display: 'block', width: '100%', maxWidth: 160, height: AD_RAIL_HEIGHT_PX }}
         data-ad-client="ca-pub-2929318086316376"
         data-ad-slot={slot}
       />

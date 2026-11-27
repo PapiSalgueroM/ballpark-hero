@@ -1034,7 +1034,9 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
 
   useEffect(() => {
     if (career && timelineRef.current) {
-      timelineRef.current.scrollTop = timelineRef.current.scrollHeight;
+      const timeline = timelineRef.current;
+      timeline.scrollTop = timeline.scrollHeight;
+      if (getComputedStyle(timeline).display === 'flex') timeline.scrollLeft = timeline.scrollWidth;
     }
   }, [career?.seasons.length]);
 
@@ -1645,7 +1647,7 @@ export default function SoccerCareer({ entry }: { entry?: SoccerCareerAdmission 
               )}
             </div>
           )}
-          <div className={`mb-3 grid gap-2 ${!career || isRetired ? 'grid-cols-2' : ''}`}>
+          <div data-active-career-saves={career ? '' : undefined} className={`mb-3 grid gap-2 ${!career || isRetired ? 'grid-cols-2' : ''}`}>
             {!restoredSave.unsupported && <Button type="button" variant="outline" className="min-h-11 whitespace-normal" onClick={openCareerSaves}>Career saves</Button>}
             {(!career || isRetired) && (
               <Button ref={pastCareersTrigger} variant="outline" className="min-h-11 whitespace-normal" onClick={openPastCareers}>Past careers</Button>
@@ -3480,7 +3482,7 @@ function GameScreen({ career, clubs, resumeGame, onNextSeason, onAcceptOffer, on
           again at a narrower width. Below 480 the identity now takes its own
           full line and the buttons drop underneath, right aligned; from 480
           up the single row is exactly what it was. */}
-      <div ref={playerCardRef} className="flex flex-wrap items-center justify-between gap-2">
+      <div ref={playerCardRef} data-career-player-row="" className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2.5 min-w-0 w-full min-[480px]:w-auto min-[480px]:flex-1">
           {/* Round 54: your face, on your career, everywhere */}
           {career.appearance && (
@@ -3571,7 +3573,7 @@ function GameScreen({ career, clubs, resumeGame, onNextSeason, onAcceptOffer, on
 
       {/* Main panels */}
       {(career.phase === "playing" || (career.phase !== "retirement_suggestion" && readSoccerFarewell(career))) && <FarewellSeasonCard career={career} onAnnounce={onAnnounceFarewell} />}
-      <div className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-3">
+      <div data-career-panels="" className="grid grid-cols-1 md:grid-cols-[260px_1fr] gap-3">
         {/* LEFT, Timeline. md:self-start (Release AM): the card ends where its
             list ends, where it used to stretch the full height of the hub beside
             it and stand mostly empty. */}
@@ -3580,7 +3582,8 @@ function GameScreen({ career, clubs, resumeGame, onNextSeason, onAcceptOffer, on
             <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Career Timeline</span>
           </div>
 
-          <div ref={timelineRef} className="max-h-[280px] md:max-h-[480px] overflow-y-auto p-2 space-y-0.5 scrollbar-thin">
+          <div ref={timelineRef} data-career-timeline-list="" role="region" aria-label="Career timeline"
+            tabIndex={visibleCareer.seasons.length > 1 ? 0 : undefined} className="max-h-[280px] md:max-h-[480px] overflow-y-auto p-2 space-y-0.5 scrollbar-thin">
             {visibleCareer.seasons.map((s, i) => (
               <TimelineEntry key={s.year + s.club} season={s} position={career.position} isCurrent={i === career.seasons.length - 1} isLast={i === career.seasons.length - 1} shieldWin={shieldWinningYears.has(s.year) && readCommunityShield(s)?.player.title === true} germanSupercupWin={germanWinningYears.has(s.year) && readGermanSupercup(s)?.player.title === true} />
             ))}

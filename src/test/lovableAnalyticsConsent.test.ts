@@ -5,6 +5,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { afterEach, expect, it } from 'vitest';
 import viteConfig from '../../vite.config';
+import { COOKIE_CHOICE_INTRO } from '../lib/cookieChoiceCopy';
 
 const template = readFileSync('index.html', 'utf8');
 const marker = /<script data-dukb-host-analytics-default(?:="")?>([\s\S]*?)<\/script>/g;
@@ -25,6 +26,7 @@ it('queues only denied host analytics consent before the deferred SDK on every e
     'profile/index.html': readFileSync('public/profile/index.html', 'utf8'),
     'legacy-banner/index.html': `<html><head></head><body>${notice(oldIntro, oldBanner)}</body></html>`,
     'ad-banner/index.html': `<html><head></head><body>${notice(adIntro, pausedBanner)}</body></html>`,
+    'analytics-banner/index.html': `<html><head></head><body>${notice(readyIntro)}</body></html>`,
     'old/index.html': '<html><head><title>Retired route</title></head><body>Retired text</body></html>',
     'other.html': '<html><head><title>Another route</title></head><body>Route text</body></html>',
   };
@@ -50,9 +52,10 @@ it('queues only denied host analytics consent before the deferred SDK on every e
     const body = original.split('<body>')[1];
     const builtBody = html.split('<body>')[1];
     const priorBody = body.includes('id="dukb-boot"') ? builtBody : builtBody.replace(/\n<div id="dukb-boot"[^>]*><img[^>]+><\/div>/, '');
-    const expected = body.replace(notice(oldIntro, oldBanner), notice(readyIntro))
-      .replace(notice(oldIntro, pausedBanner), notice(readyIntro))
-      .replace(notice(adIntro, pausedBanner), notice(readyIntro));
+    const expected = body.replace(notice(oldIntro, oldBanner), notice(COOKIE_CHOICE_INTRO))
+      .replace(notice(oldIntro, pausedBanner), notice(COOKIE_CHOICE_INTRO))
+      .replace(notice(adIntro, pausedBanner), notice(COOKIE_CHOICE_INTRO))
+      .replace(notice(readyIntro), notice(COOKIE_CHOICE_INTRO));
     expect(priorBody, name).toBe(expected);
     const window: { dataLayer?: unknown[]; gtag?: unknown; __DUKB_HOST_ANALYTICS_DEFAULT__?: unknown } = { dataLayer: [{ unrelated: true }] };
     vm.runInNewContext(matches[0][1], { window });

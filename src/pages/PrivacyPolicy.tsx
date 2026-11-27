@@ -20,7 +20,7 @@ const PrivacyPolicy = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Privacy Policy</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: November 26, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: November 27, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -40,7 +40,7 @@ const PrivacyPolicy = () => {
           <h2 className="text-lg font-semibold text-foreground mb-2">2. Cookies &amp; Local Storage</h2>
           <p>This site uses browser local storage to save your game progress, best scores, preferences, and UI state, and to remember your optional cookie choices. Local storage data stays on your device and is not transmitted to our servers except as described in Section 1.</p>
           <p className="mt-2">Advertising starts off. <strong>Accept all</strong> turns it on, <strong>Reject all</strong> keeps it off, and <strong>Save choices</strong> applies your selection. {ANALYTICS_READY ? 'You can turn Google Analytics on or off separately in Cookie choices.' : 'Google Analytics 4 stays paused.'} Lovable's basic visitor analytics continues under either choice, as described in Section 10. If your browser exposes a <strong>Global Privacy Control</strong> signal to the site, Advertising stays off even if you previously enabled it. You can play the games with Advertising off. We ask you to choose again after 180 days.</p>
-          <p className="mt-2">You can open <strong>Cookie choices</strong> here or in the footer without changing your saved setting. You can turn Advertising off and choose <strong>Save choices</strong>. Saving a withdrawal clears the relevant optional cookies our code can access on this site. We normally reload to stop scripts that are already loaded. If your choice cannot be saved or a game has unsaved progress, optional loading stays paused and a notice asks you to refresh when it is safe. This does not erase information already received by a provider or remove cookies controlled by another site or inaccessible to our code. You can also manage cookies and clear stored site data in your browser settings. For requests concerning data already collected, see Section 6.</p>
+          <p className="mt-2">You can open <strong>Cookie choices</strong> here or in the footer without changing your saved setting. You can turn Advertising off and choose <strong>Save choices</strong>. Saving a withdrawal clears the relevant optional cookies our code can access on this site. We normally reload to stop scripts that are already loaded. If your choice cannot be saved or a game has unsaved progress, new advertising requests stay off and a notice asks you to refresh when it is safe. Your Google Analytics choice stays separate. This does not erase information already received by a provider or remove cookies controlled by another site or inaccessible to our code. You can also manage cookies and clear stored site data in your browser settings. For requests concerning data already collected, see Section 6.</p>
           <p className="mt-2">Read our <Link to="/cookie-policy" className="underline hover:text-foreground transition-colors">Cookie Policy</Link> for a focused guide to browser storage and changing your choices.</p>
           <button type="button" data-no-prerender="" onClick={event => openConsentChoices(event.currentTarget)}
             className="mt-2 inline-flex min-h-11 items-center rounded-md border border-border px-3 font-medium text-foreground underline hover:bg-muted focus-visible:outline-ring">
@@ -85,7 +85,7 @@ const PrivacyPolicy = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">5. Advertising and Your Choices</h2>
-          <p>Advertising can help cover hosting costs and keep the games free. We request non-personalized Google AdSense ads on eligible pages after you turn on Advertising in Cookie choices. Google may not show an ad on every visit. Here is what using Google advertising means in practice:</p>
+          <p>Advertising can help cover hosting costs and keep the games free. We request non-personalized Google AdSense ads on eligible public pages, including games and sports hubs, after you turn on Advertising in Cookie choices. Google may not show an ad on every visit. Here is what using Google advertising means in practice:</p>
           <p className="mt-2">The first two bullets below are Google's general publisher disclosure. The prior-visit and cross-site personalization described in them are not the ad-selection mode this Site requests. Before Google's advertising script loads, this Site sets Google's non-personalized ads flag. Google may still use cookies and identifiers for frequency capping, aggregate reporting, fraud prevention, and similar purposes.</p>
           <ul className="list-disc pl-5 mt-2 space-y-1">
             <li>Third party vendors, including Google, use cookies to serve ads based on a user's prior visits to this website or to other websites.</li>
