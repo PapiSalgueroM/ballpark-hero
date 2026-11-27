@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { PassingPitch } from '@/components/soccer-career/PassingPitch';
+import { PassingPitch, PitchBall } from '@/components/soccer-career/PassingPitch';
 import { pressBoards, squareName } from '@/lib/breakThePress';
 import { safeLocalStorage, safeSetItem } from '@/lib/safeStorage';
 import {
@@ -20,7 +20,7 @@ function DefensivePitch({ state, onMove }: { state: CupState; onMove: (square: n
   return <div className="space-y-2">
     <p className="rounded-lg border bg-muted/20 p-2 text-sm">{counter.scout}</p>
     <p role="status" className="text-sm font-semibold">Pass {state.beat + 1} of {counter.route.length - 1}. Ball at {squareName(ball)}, receiver at {squareName(receiver)}. You defend from {squareName(state.defender)}.</p>
-    <div ref={pitch} tabIndex={-1} role="group" data-game-play-area aria-label="Defensive pitch" className="grid grid-cols-5 overflow-hidden rounded-lg border-2 border-emerald-800 bg-emerald-950 text-white">
+    <div ref={pitch} tabIndex={-1} role="group" data-game-play-area aria-label="Defensive pitch" className="relative grid grid-cols-5 overflow-hidden rounded-lg border-2 border-emerald-800 bg-emerald-950 text-white">
       {Array.from({ length: 25 }, (_, square) => {
         const distance = coverDistance(state.defender, square);
         const enabled = distance <= 1 || (state.recovery && armed && distance === 2);
@@ -29,11 +29,12 @@ function DefensivePitch({ state, onMove }: { state: CupState; onMove: (square: n
           className={'relative grid min-h-11 place-items-center border border-white/20 text-[11px] focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-white ' + (enabled ? 'bg-emerald-800' : '')}
           onClick={event => { if (event.detail === 0) pitch.current?.focus({ preventScroll: true }); move(square); }}>
           <span className="absolute left-1 top-0 text-[9px] opacity-75">{squareName(square)}</span>
-          <span className="font-black">{square === state.defender ? 'D' : ''}{square === ball ? '●' : square === receiver ? 'R' : square === runner ? '↗' : ''}</span>
+          <span className="font-black">{square === state.defender ? 'D' : ''}{square === receiver ? 'R' : square === runner ? '↗' : ''}</span>
         </button>;
       })}
+      <PitchBall square={ball} />
     </div>
-    <p className="text-xs text-muted-foreground">D is your defender. The ball (●) travels to R. The arrow marks the following run. Move onto the pass or the receiver to intercept.</p>
+    <p className="text-xs text-muted-foreground">D is your defender. The ball travels to R. The arrow marks the following run. Move onto the pass or the receiver to intercept.</p>
     {state.recovery
       ? <button type="button" aria-pressed={armed} className={button} onClick={() => setArmed(!armed)}>{armed ? 'Cancel recovery run' : 'Use recovery run'}</button>
       : <p className="text-xs font-bold">Recovery run used</p>}

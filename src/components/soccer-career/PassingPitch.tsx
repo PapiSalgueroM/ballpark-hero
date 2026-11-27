@@ -1,6 +1,14 @@
 import { useEffect, useRef } from 'react';
 import { passLane, squareName, type PressState } from '@/lib/breakThePress';
 
+export function PitchBall({ square }: { square: number }) {
+  return <span aria-hidden="true" data-pitch-ball={squareName(square)}
+    className="pointer-events-none absolute left-0 top-0 grid h-1/5 w-1/5 place-items-center motion-safe:transition-transform motion-safe:duration-200 motion-safe:ease-out"
+    style={{ transform: `translate(${square % 5 * 100}%, ${Math.floor(square / 5) * 100}%)` }}>
+    <span className="translate-x-3 translate-y-2.5 text-sm leading-none drop-shadow">⚽</span>
+  </span>;
+}
+
 export function PassingPitch({ state, active, onPass }: { state: PressState; active: boolean; onPass: (receiver: number) => void }) {
   const pitch = useRef<HTMLDivElement>(null);
   useEffect(() => { if (active) pitch.current?.focus({ preventScroll: true }); }, [active]);
@@ -11,7 +19,7 @@ export function PassingPitch({ state, active, onPass }: { state: PressState; act
       e.preventDefault();
       e.currentTarget.focus({ preventScroll: true });
       onPass(Number(e.key) - 1);
-    }} className="grid grid-cols-5 overflow-hidden rounded-xl border-2 border-emerald-800 bg-emerald-950 text-white">
+    }} className="relative grid grid-cols-5 overflow-hidden rounded-xl border-2 border-emerald-800 bg-emerald-950 text-white">
       {Array.from({ length: 25 }, (_, square) => {
         const player = state.teammates.indexOf(square);
         const marker = state.markers.includes(square);
@@ -31,6 +39,7 @@ export function PassingPitch({ state, active, onPass }: { state: PressState; act
           {marker && <span aria-label={`Defender at ${spot}`} role="img" className={`pointer-events-none grid place-items-center rounded-sm bg-red-700 font-bold text-white ${player >= 0 ? 'absolute bottom-0 right-0 h-4 w-4 text-[10px]' : 'h-7 w-7 text-xs'}`}>D</span>}
         </div>;
       })}
+      <PitchBall square={state.teammates[state.carrier]} />
     </div>
     <p className="text-[11px] text-muted-foreground">Gold has the ball. White rings mark teammates in range. Red squares are defenders.</p>
   </>;
