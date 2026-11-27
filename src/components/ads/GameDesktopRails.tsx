@@ -28,6 +28,8 @@ function safeRailOffset(frame: HTMLElement, content: HTMLElement): number | null
   const nav = content.querySelector('nav[data-site-chrome]');
   const navBottom = Math.max(frameTop, nav?.getBoundingClientRect().bottom ?? frameTop);
   const belowNav = navBottom + AD_CONTROL_GAP_PX;
+  const shelf = content.querySelector('[data-home-continue] [data-home-shelf-rail]');
+  const shelfBox = shelf && getComputedStyle(shelf).overflowX === 'auto' ? shelf.getBoundingClientRect() : null;
   let top = belowNav;
   let hasControl = false;
   const near: { box: DOMRect; horizontal: number }[] = [];
@@ -42,7 +44,8 @@ function safeRailOffset(frame: HTMLElement, content: HTMLElement): number | null
   };
   for (const target of content.querySelectorAll(playTargets)) {
     if (target.closest('[data-site-chrome]')) continue;
-    const box = target.getBoundingClientRect();
+    // The whole saved-game scroller, including its scrollbar, bounds the cards a visitor can reach.
+    const box = shelfBox && shelf?.contains(target) && scrollsWithPage(target) ? shelfBox : target.getBoundingClientRect();
     if (box.width <= 1 || box.height <= 1 || getComputedStyle(target).visibility === 'hidden') continue;
     if (!target.closest('[data-seo-content]')) hasControl = true;
     const horizontal = Math.max(0, Math.min(box.left - left.right, right.left - box.right));

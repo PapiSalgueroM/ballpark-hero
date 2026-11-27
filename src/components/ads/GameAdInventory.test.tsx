@@ -52,6 +52,33 @@ it.each([1280, 1254])('fits the full desktop frame beside a native scrollbar at 
   expect(input).toHaveValue('in-progress guess');
 });
 
+it('respects the scrollable Continue playing shelf, including its scrollbar and clipped save cards', async () => {
+  let shelfLeft = 270;
+  vi.spyOn(Element.prototype, 'clientWidth', 'get').mockReturnValue(1280);
+  vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
+    let x = 0, y = 0, width = 1280, height = 1800;
+    const side = this.getAttribute('data-rail-edge');
+    if (side) { x = side === 'right' ? 1160 : 0; width = 120; }
+    if (this.hasAttribute('data-home-shelf-rail')) { x = shelfLeft; y = 300; width = 500; height = 65; }
+    if (this.tagName === 'A') { x = 1060; y = 310; width = 250; height = 40; }
+    return { left: x, top: y, right: x + width, bottom: y + height, width, height } as DOMRect;
+  });
+  vi.stubGlobal('ResizeObserver', class { observe() {} disconnect() {} });
+  const view = render(<MemoryRouter><GameDesktopRails active><main><section data-home-continue="">
+    <div data-testid="shelf" data-home-shelf-rail="" style={{ overflowX: 'auto' }}><a data-continue-card="" href="/club-manager?slot=2">Resume slot 2</a></div>
+  </section></main></GameDesktopRails></MemoryRouter>);
+  const shelf = view.getByTestId('shelf'), rails = () => view.container.querySelectorAll('[data-ad-rail]').length;
+  await waitFor(() => expect(rails()).toBe(2));
+  shelfLeft = 269;
+  fireEvent.scroll(shelf);
+  await waitFor(() => expect(rails()).toBe(0));
+  shelfLeft = 270;
+  shelf.style.overflowX = 'visible';
+  fireEvent.scroll(shelf);
+  await act(() => new Promise<void>(resolve => requestAnimationFrame(() => resolve())));
+  expect(rails()).toBe(0);
+});
+
 it.each(['/footle', '/soccer', '/'])('measures the controls inside wide wrappers and skips both rails inside 150px on %s', async path => {
   let left = 270, right = 1010;
   let controlTop = 400;
