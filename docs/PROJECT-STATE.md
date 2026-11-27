@@ -2,6 +2,8 @@
 
 The saved MLB hub places its Start over button beside the title at desktop widths where the outside gutter is too narrow. The button scrolls with the page. On Windows Chrome with a 15px scrollbar, the two 120px side slots cleared controls by at least 181px at 1280 and 201px at 1366 through Training, Pinch-Hit Series and the restart confirmation. The Training card remained 606px wide. Phones kept the below-content footer and the 1920px layout kept its two 160px side slots.
 
+In MLB, NFL, NBA and NHL career Training, choosing a drill with the keyboard keeps focus inside the practice dialog. Escape closes the drill and returns to Start practice. The shared training and career save tests cover selection, retry and closing.
+
 ### November 27, 2026. Two-Minute Drive, MLB pinch hitting and the hockey Cup
 
 Two-Minute Drive is a standalone football game in the Pro Football catalog and a practice option in NFL My Career. Four late-game situations teach coverage reads, clock management and field goal range. Playoff Run links a wild card, conference final and championship with one timeout for all three. Each of the 9,999 draw numbers has a verified championship path. On draw 1 the same five championship plays produce a touchdown with the timeout saved or finish on the opposing 20 if the timeout was spent in the wild card. Completed standalone possessions use the existing scoreboard. Reopening a result gives no extra credit. Run `node scripts/simTwoMinuteDrive.mjs` for all draws and set `SIM_TWO_MINUTE_CONTROL=defense` for its negative control.
