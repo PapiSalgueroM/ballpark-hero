@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { RecruitmentBoard } from '@/components/club-manager/RecruitmentBoard';
 import { TransferScreen } from '@/components/club-manager/TransferScreen';
 import { marketForScreen, moneyIn, startCareer, type CareerState, type MarketPlayer } from '@/lib/clubManager';
-import { addRecruitment, recruitmentOf, type RecruitmentCommit, type RecruitmentPick } from '@/lib/clubManagerRecruitment';
+import { addRecruitment, recruitmentOf, scoutBrief, type RecruitmentCommit, type RecruitmentPick } from '@/lib/clubManagerRecruitment';
 
 const noop = () => {};
 beforeEach(() => {
@@ -141,6 +141,43 @@ describe('actual recruitment board and ordinary Buy return', () => {
     expect(screen.getByRole('button', { name: /^Talk ·/ })).toBeVisible();
     expect(app.talk).not.toHaveBeenCalled(); expect(app.clause).not.toHaveBeenCalled(); expect(app.loan).not.toHaveBeenCalled();
     expect(app.writes).toHaveLength(0); expect(JSON.stringify(app.latest())).toBe(before);
+  });
+  it('runs two briefs against one market, resumes the new search and hands its earlier target to ordinary Buy', async () => {
+    const { career, market } = fixture(), original = JSON.stringify(career);
+    const first = scoutBrief(career, market, { position: 'CB', job: 'starter', budgetShare: 50 }).reports[0];
+    const cover = scoutBrief(career, market, { position: 'CB', job: 'cover', budgetShare: 50 }).reports[0];
+    expect(first.player.rating).toBeGreaterThan(cover.player.rating);
+    expect(first.terms.total).toBeGreaterThan(cover.terms.total);
+    const open = async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Shortlist' }));
+      fireEvent.click(await screen.findByRole('button', { name: 'Recruitment brief', exact: true }));
+    };
+    const marketRows = [first.player, cover.player];
+    const app = mount(career, marketRows, { transfer: true });
+    await open();
+    expect(app.writes).toHaveLength(0);
+    fireEvent.click(screen.getByRole('button', { name: 'Run this brief' }));
+    const firstCard = screen.getByRole('article', { name: 'Report on ' + first.player.name });
+    expect(within(firstCard).getByText(new RegExp('Estimated commitment'))).toHaveTextContent(moneyIn(career)(first.terms.total));
+    fireEvent.click(within(firstCard).getByRole('button', { name: 'Shortlist from this brief' }));
+    fireEvent.change(screen.getByRole('combobox', { name: 'Squad job' }), { target: { value: 'cover' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Run this brief' }));
+    expect(screen.getByRole('article', { name: 'Report on ' + cover.player.name })).toBeVisible();
+    const current = app.latest();
+    expect(recruitmentOf(current)?.targets[0].fromBrief?.job).toBe('starter');
+    const { recruitment: _, ...untouched } = current as typeof current & { recruitment?: unknown };
+    expect(JSON.stringify(untouched)).toBe(original);
+    cleanup();
+    const restored = mount(JSON.parse(JSON.stringify(current)), marketRows, { transfer: true });
+    await open();
+    expect(screen.getByRole('combobox', { name: 'Squad job' })).toHaveValue('cover');
+    expect(screen.getByRole('article', { name: 'Report on ' + cover.player.name })).toBeVisible();
+    fireEvent.click(screen.getByRole('button', { name: 'Back to shortlist' }));
+    expect(screen.getByText(/Scouted for CB/)).toHaveTextContent('First-team challenger');
+    fireEvent.click(screen.getByRole('button', { name: 'Find ' + first.player.name + ' in Buy' }));
+    fireEvent.click(screen.getByRole('button', { name: /Talk ·/ }));
+    expect(restored.talk).toHaveBeenCalledWith(first.player);
+    expect(restored.writes).toHaveLength(0);
   });
   it('shows twelve saved targets as compact View tiles and opens only one current detail before Back with no write or draw', () => {
     const career = startCareer('Brentford'), market = marketForScreen(career), players = market.slice(0, 12);

@@ -2,9 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { moneyIn, type CareerState, type MarketPlayer } from '@/lib/clubManager';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import {
-  addRecruitment, removeRecruitment, recruitmentOf, recruitmentKey, resolveRecruitmentTarget, RECRUITMENT_LIMIT,
+  addRecruitment, BRIEF_JOBS, removeRecruitment, recruitmentOf, recruitmentKey, resolveRecruitmentTarget, reportTerms, validBrief, RECRUITMENT_LIMIT,
   type RecruitmentCommit, type RecruitmentPick, type RecruitmentTarget,
 } from '@/lib/clubManagerRecruitment';
+import { RecruitmentBriefDesk } from './RecruitmentBriefDesk';
 
 interface Props {
   career: CareerState;
@@ -18,6 +19,8 @@ const button = 'min-h-11 min-w-11 rounded-lg border border-border px-3 py-2 text
 export function RecruitmentBoard({ career, market, initial, onCommit, onBack, onFind }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
   const [help, setHelp] = useState(false);
+  const [briefOpen, setBriefOpen] = useState(false);
+  const briefButton = useRef<HTMLButtonElement>(null);
   const root = useRevealScroll<HTMLElement>(help ? 'recruitment-help' : selected ?? 'recruitment', { skipFirst: false });
   const heading = useRef<HTMLHeadingElement>(null);
   const detailHeading = useRef<HTMLHeadingElement>(null);
@@ -45,6 +48,11 @@ export function RecruitmentBoard({ career, market, initial, onCommit, onBack, on
     setMessage(ok ? 'Target removed.' : 'Could not remove this target. Check the save notice and try again.');
     if (ok) { setSelected(null); requestAnimationFrame(() => heading.current?.focus({ preventScroll: true })); }
   };
+  if (briefOpen) return <RecruitmentBriefDesk career={career} market={market} onCommit={onCommit} onBack={() => {
+    setBriefOpen(false);
+    setMessage('');
+    requestAnimationFrame(() => briefButton.current?.focus({ preventScroll: true }));
+  }} />;
   return (
     <section ref={root} aria-labelledby="cm-recruitment-title" className="min-w-0 space-y-3">
       <div className="flex items-start justify-between gap-2">
@@ -69,11 +77,13 @@ export function RecruitmentBoard({ career, market, initial, onCommit, onBack, on
           <h4 className="font-bold">Keep a few options</h4>
           <p>Save up to 12 players from Buy. Open this list between windows to compare their current asking price, age, rating and primary position with your current squad.</p>
           <p>For example, save two centre-backs, compare their current numbers, then use Find in Buy when the window opens. Any talks and payment happen on the ordinary Buy desk.</p>
+          <p>Open Recruitment brief to ask for a first-team challenger, affordable cover or an under-21 successor. Choose a position and a spending limit, then compare the scouts' picks.</p>
           <p>Older records can become unavailable after a club move. If a player cannot be matched safely, the entry stays here so you can remove it.</p>
           <p>The list belongs to this club and this saved world. Remove clears an entry. Nothing here promises minutes, growth, a transfer or a future price.</p>
         </div>
       ) : (
         <div className="space-y-3">
+          <button ref={briefButton} className={button + ' w-full'} onClick={() => setBriefOpen(true)}>Recruitment brief</button>
           {closed && <p className="text-sm text-muted-foreground">The transfer window is shut. You can compare and remove targets; Find in Buy returns when it opens.</p>}
           {!targets.length && <p className="rounded-xl border border-border p-3 text-sm">No saved targets for this club and world. Use Save beside a player on Buy.</p>}
           {overview ? <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -95,6 +105,7 @@ export function RecruitmentBoard({ career, market, initial, onCommit, onBack, on
             return (
               <article key={recruitmentKey(target)} aria-label={name} className="min-w-0 rounded-xl border border-border bg-card p-3 space-y-3">
                 <h4 ref={detailHeading} tabIndex={-1} className="font-bold break-words">{name}</h4>
+                {validBrief(target.fromBrief) && <p className="text-sm">Scouted for {target.fromBrief.position} · {BRIEF_JOBS[target.fromBrief.job]} · {target.fromBrief.budgetShare}% of the transfer kitty.</p>}
                 {player ? <>
                   <p className="text-xs text-muted-foreground break-words">{player.club}{player.generated ? ' · MADE UP' : ''}</p>
                   <dl className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-sm">
@@ -103,6 +114,7 @@ export function RecruitmentBoard({ career, market, initial, onCommit, onBack, on
                     ))}
                   </dl>
                   {player.joinedThisSeason && <p className="text-xs text-muted-foreground">Joined this club this season. The ordinary Buy desk keeps its sale restrictions.</p>}
+                  {validBrief(target.fromBrief) && <p className="text-sm">Estimated commitment at current asking terms {cash(reportTerms(player).total)}, including the fee, signing bonus and wages.</p>}
                   <div className="text-xs space-y-1">
                     <p className="text-muted-foreground">Highest-rated current players at {player.position}, up to 3:</p>
                     {peers.length ? peers.map(p => <p key={p.id} className="break-words">{p.name} · {p.age}y · {p.rating} · {p.position}</p>) : <p>No current player at this primary position.</p>}

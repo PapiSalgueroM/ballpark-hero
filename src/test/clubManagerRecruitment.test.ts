@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { marketForScreen, startCareer, worldYear, type MarketPlayer } from '@/lib/clubManager';
+import { makeOffer, marketForScreen, offerTerms, startCareer, startNegotiation, worldYear, type MarketPlayer } from '@/lib/clubManager';
 import {
   addRecruitment, removeRecruitment, recruitmentContext, recruitmentKey, recruitmentOf, recruitmentTarget, resolveRecruitmentTarget,
-  type RecruitmentCareer,
+  saveRecruitmentBrief, scoutBrief, type RecruitmentBrief, type RecruitmentCareer,
 } from '@/lib/clubManagerRecruitment';
 
 beforeEach(() => {
@@ -143,5 +143,41 @@ describe('Club Manager current recruitment identities and explicit metadata writ
     const prior: RecruitmentCareer = { ...career, recruitment: { version: 1, ...recruitmentContext(career), targets: [legacy] } };
     expect(addRecruitment(prior, player)).toBe(prior);
     expect(recruitmentOf(prior)!.targets).toHaveLength(1);
+  });
+  it('quotes an affordable role and full wage term, then the real signing records both negotiated costs', () => {
+    const { career, market } = fixture();
+    const brief: RecruitmentBrief = { position: 'CB', job: 'cover', budgetShare: 25 };
+    const draws = vi.mocked(Math.random).mock.calls.length;
+    const { player, terms } = scoutBrief(career, market, brief).reports[0];
+    expect(terms.upfront).toBeLessThanOrEqual(career.budget / 4);
+    expect(['backup', 'prospect', 'rotation']).toContain(terms.role);
+    expect(terms.total).toBeCloseTo(player.price + terms.bonus + terms.wage * terms.years * 52 / 1000);
+    expect(vi.mocked(Math.random).mock.calls).toHaveLength(draws);
+    const talk = startNegotiation(career, player)!;
+    const fee = talk.negotiation!.theirAsk;
+    const agreed = makeOffer(talk, fee)!;
+    const want = agreed.negotiation!.terms!.want;
+    expect(want).toEqual({ wage: terms.wage, years: terms.years, role: terms.role, bonus: terms.bonus });
+    const signed = offerTerms(agreed, want)!;
+    expect(signed.squad.find(p => p.name === player.name)?.signedTerms).toMatchObject({ years: terms.years, wage: terms.wage, role: terms.role });
+    expect(signed.budget).toBeCloseTo(career.budget - fee - terms.bonus, 1);
+  });
+  it('respects cash, age, availability and the original brief when changing the search', () => {
+    const { career, market } = fixture(), brief: RecruitmentBrief = { position: 'CB', job: 'successor', budgetShare: 50 };
+    const { reports } = scoutBrief(career, market, brief);
+    expect(reports).toHaveLength(3);
+    expect(reports.every(r => r.player.age < 21 && r.player.position === 'CB')).toBe(true);
+    const empty = { ...career, budget: 0 };
+    expect(scoutBrief(empty, market, brief).reports).toHaveLength(0);
+    expect(scoutBrief(career, reports.map(r => ({ ...r.player, joinedThisSeason: true })), brief).reports).toHaveLength(0);
+    const saved = saveRecruitmentBrief(career, brief)!;
+    const next = addRecruitment(saved, reports[0].player, brief)!;
+    const changed = saveRecruitmentBrief(next, { ...brief, job: 'cover' })!;
+    expect(addRecruitment(changed, reports[1].player, brief)).toBeNull();
+    const target = recruitmentOf(changed)!.targets[0];
+    expect(target.fromBrief).toEqual(brief);
+    const cleared = removeRecruitment(changed, target)!;
+    expect(recruitmentOf(cleared)?.brief?.job).toBe('cover');
+    expect(saveRecruitmentBrief(changed, { ...brief, job: 'constructor' } as unknown as RecruitmentBrief)).toBeNull();
   });
 });
