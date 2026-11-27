@@ -33,7 +33,7 @@
 
 import { rngFrom, clamp } from '@/lib/careerEngine';
 import {
-  WEIGHT_CLASSES, offersFor, genFighterName, makeFighter, ratingOf, campGain,
+  WEIGHT_CLASSES, offersFor, genFighterName, makeFighter, ratingOf, campGain, winBonusRemaining,
   type FightCareerState, type Fighter, type Offer, type CampPlan, type FightMods,
   type WeightId, type FightStyle,
 } from '@/lib/fightCareer';
@@ -182,6 +182,7 @@ export interface FightLife {
   carry: Partial<Record<keyof CampPlan, number>>;
   /** Fights left on an exclusive promoter deal. */
   promoterFights: number;
+  winBonusEndsAt?: number;
   /** The last man to beat you, kept for the rematch clause. */
   lastBeatenBy: Fighter | null;
   /** Fights done when he beat you. The clause runs out REMATCH_WINDOW fights
@@ -584,6 +585,8 @@ export function ensureLifeBlock(st: FightCareerState): FightLife {
     cooldowns,
     sharp: Math.round(numOr(raw.sharp, 0, -SHARP_CAP, SHARP_CAP)),
     carry,
+    ...(typeof raw.winBonusEndsAt === 'number' && winBonusRemaining(raw.winBonusEndsAt, st.fightNo)
+      ? { winBonusEndsAt: raw.winBonusEndsAt } : {}),
     promoterFights: Math.floor(numOr(raw.promoterFights, 0, 0, 20)),
     lastBeatenBy: beaten,
     ...(beatenAt !== undefined ? { lastBeatenAt: beatenAt } : {}),

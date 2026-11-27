@@ -10,7 +10,7 @@
  */
 
 import {
-  newFightCareer, runCamp, takeFight, retireByChoice,
+  newFightCareer, runCamp, takeFight, retireByChoice, winBonusRemaining,
   type FightCareerState, type CampPlan, type Tactic, type BoutResult, type Offer,
   type WeightId, type FightStyle,
 } from '@/lib/fightCareer';
@@ -45,10 +45,13 @@ export function lifeNewCareer(
 }
 
 /** The camp, then the specialty of the trainer and the shop's coaches on top. */
-export function lifeRunCamp(st: FightCareerState, plan: CampPlan): Live {
+export function lifeRunCamp(st: FightCareerState, plan: CampPlan, signWinBonus = false): Live {
   const live = cloneForLife(st);
   const after = cloneForLife(runCamp(live, plan));
   settleCampCarry(live, after, plan);
+  if (signWinBonus && !st.retired && !winBonusRemaining(live.life.winBonusEndsAt, st.fightNo)) {
+    after.life.winBonusEndsAt = st.fightNo + 2;
+  }
   return after;
 }
 
@@ -79,6 +82,14 @@ export function lifeTakeFight(st: FightCareerState, offerId: string, tactics: Ta
 
   const takeHome = lifeTakeHome(next, offer.purse);
   life.bank = round2(life.bank + takeHome);
+  const remaining = winBonusRemaining(before.life.winBonusEndsAt, before.fightNo);
+  if (remaining) {
+    const lastBout = next.history[next.history.length - 1];
+    const listed = before.offers.find(o => o.id === offerId)!.purse;
+    lastBout.purseStatement = {
+      bout: remaining === 2 ? 1 : 2, listed, corner: round2(offer.purse - takeHome), banked: takeHome,
+    };
+  }
   life.fanbase = fansAfter(life, won, drew, stoppage, won && offer.title && !before.champion);
   life.sharp = 0;
   /* Morale settles back toward 50 after every fight, so a mood is something

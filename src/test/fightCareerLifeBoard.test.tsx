@@ -43,6 +43,25 @@ describe('Fight Career board, the life between fights', () => {
     expect(saved.st).toEqual(expected);
   });
 
+  it.each(['camp', 'plan'])("protects another tab's signed terms and bank from a stale %s", async phase => {
+    const st = lifeNewCareer('Contract Rookie', 'welter', 'outboxer', 'allround', 'family', 'terms-0');
+    const offer = st.offers[0];
+    const old = phase === 'camp' ? { st, phase: 'hub' } : { st: lifeRunCamp(st, PLAN), phase: 'plan', offerId: offer.id };
+    localStorage.setItem(KEY, JSON.stringify(old));
+    const view = render(<FightCareerBoard />);
+    if (phase === 'camp') fireEvent.click(await view.findByText(offer.label));
+    const pending = await view.findByRole('button', { name: phase === 'camp' ? 'Finish camp' : 'Fight' });
+    const signed = lifeRunCamp(st, PLAN, true);
+    const newer = phase === 'camp'
+      ? { st: signed, phase: 'plan', offerId: offer.id }
+      : { st: lifeTakeFight(signed, offer.id, [...LOOKS])!.state, phase: 'hub' };
+    const committed = JSON.stringify(newer);
+    localStorage.setItem(KEY, committed);
+    fireEvent.click(pending);
+    expect(view.getByRole('button', { name: 'Reload career' })).toBeVisible();
+    expect(localStorage.getItem(KEY)).toBe(committed);
+  });
+
   it('opens a save from before the round on the hub, record intact, tiles showing', async () => {
     let st = newFightCareer('Old Timer', 'light', 'swarmer', 'board-v1');
     st = takeFight(runCamp(st, PLAN), st.offers[0].id, [...LOOKS])!.state;

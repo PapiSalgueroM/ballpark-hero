@@ -17,6 +17,14 @@ function Scorecard({ rounds }: { rounds: NonNullable<FightLine['scorecard']> }) 
   </table>;
 }
 
+export function PurseStatement({ fight }: { fight: FightLine }) {
+  const terms = fight.purseStatement;
+  if (!terms) return null;
+  return <p className="py-2 text-xs text-muted-foreground">
+    Win bonus, bout {terms.bout} of 2. Listed {terms.listed.toFixed(2)}m · paid {fight.purse.toFixed(2)}m · corner {terms.corner.toFixed(2)}m · banked {terms.banked.toFixed(2)}m.
+  </p>;
+}
+
 export function FightRecord({ history }: { history: FightLine[] }) {
   if (!history.length) return null;
   return <details className="rounded-lg border bg-card px-3">
@@ -24,6 +32,7 @@ export function FightRecord({ history }: { history: FightLine[] }) {
     <ol className="pb-2 text-sm">{[...history].reverse().map(fight => {
       const label = <><strong>{fight.result}</strong> · {fight.opponent} · {fight.method}{fight.method === 'KO' || fight.method === 'TKO' ? ' R' + fight.round : ''}</>;
       return <li key={fight.no} className="border-t border-border">
+        {fight.purseStatement && <PurseStatement fight={fight} />}
         {Array.isArray(fight.scorecard) && fight.scorecard.length > 0 ? <details name="career-bout-card">
           <summary className="min-h-11 cursor-pointer py-3" aria-label={'Scorecard for bout ' + fight.no + ' against ' + fight.opponent}>{label}</summary>
           <Scorecard rounds={fight.scorecard} />

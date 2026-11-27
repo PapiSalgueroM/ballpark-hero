@@ -716,6 +716,7 @@ export function simBout(input: BoutInput, rng: () => number): BoutResult {
 /* ─────────────────────────── the career ─────────────────────────── */
 
 export interface FightLine {
+  purseStatement?: { bout: 1 | 2; listed: number; corner: number; banked: number };
   scorecard?: Pick<RoundLog, 'round' | 'playerScore' | 'oppScore' | 'playerLanded' | 'oppLanded'>[];
   no: number;
   opponent: string;
@@ -737,6 +738,17 @@ export interface FightLine {
    */
   oppRating: number;
   myRating: number;
+}
+
+/** A signed purse agreement runs through its second scheduled bout. */
+export function winBonusRemaining(endsAt: unknown, completed: number): 0 | 1 | 2 {
+  const remaining = typeof endsAt === 'number' ? endsAt - completed : 0;
+  return remaining === 1 || remaining === 2 ? remaining : 0;
+}
+
+export function winBonusGross(listed: number, won: boolean): number {
+  const cents = Math.round(listed * 100);
+  return Math.round(cents * (won ? 1.25 : 0.75)) / 100;
 }
 
 export interface Offer {
@@ -979,7 +991,10 @@ export function takeFight(st: FightCareerState, offerId: string, tactics: Tactic
     ? fought
     : { ...fought, damageTaken: Math.round(fought.damageTaken * mods.damageMul * 100) / 100 };
   done(offer.rounds * 6 + 4);
-  return { state: applyResult(st, offer, result), result, offer };
+  const paid = winBonusRemaining(st.life?.winBonusEndsAt, st.fightNo)
+    ? { ...offer, purse: winBonusGross(offer.purse, result.winner === 'player') }
+    : offer;
+  return { state: applyResult(st, paid, result), result, offer: paid };
 }
 
 export function applyResult(st: FightCareerState, offer: Offer, res: BoutResult): FightCareerState {

@@ -9,7 +9,7 @@ import { Confetti, ConditionBar, HitFlash } from '@/components/soccer-career/Car
 import FightRing from '@/components/fight-career/FightRing';
 import {
   WEIGHT_CLASSES, STYLES, TACTICS, weightById,
-  legacyOf, ratingOf, effectiveAttrs,
+  legacyOf, ratingOf, effectiveAttrs, winBonusRemaining,
   conditionTrack, canRetire, RETIRE_MIN_FIGHTS, archiveCareer, sanitizePastFighters,
   type PastFighter, type FightCareerState, type Offer, type BoutResult, type CampPlan, type RoundLog,
   type Tactic, type FightStyle, type WeightId,
@@ -19,7 +19,8 @@ import {
    engine functions this file used to call directly. */
 import { lifeSharpness, type FightLife, type TrainerId, type ManagerId } from '@/lib/fightCareerLife';
 import { lifeNewCareer, lifeRunCamp, lifeTakeFight, lifeRetire, nextLifeStep, lifeLoadState } from '@/lib/fightCareerLifeFlow';
-import { FightRecord } from '@/components/fight-career/FightRecord';
+import { FightRecord, PurseStatement } from '@/components/fight-career/FightRecord';
+import { PurseTerms } from '@/components/fight-career/PurseTerms';
 import { fmtBank } from '@/lib/fightCareerMoney';
 import { CornerPicker, LifeStepCard, LifeTiles, LifePanel, type LifeView } from '@/components/fight-career/FightLifePanels';
 
@@ -68,6 +69,9 @@ export default function FightCareerBoard() {
   const [manager, setManager] = useState<ManagerId>('family');
   /* Which hub panel is open. Not saved: a reload lands on the hub itself. */
   const [view, setView] = useState<LifeView>('main');
+  const lastSave = useRef<string | null>(null);
+  const [staleSave, setStaleSave] = useState(false);
+  const [signWinBonus, setSignWinBonus] = useState(false);
   const [takeHome, setTakeHome] = useState(0);
   const [offer, setOffer] = useState<Offer | null>(null);
   const [camp, setCamp] = useState<CampPlan>({ conditioning: 2, power: 2, defence: 1, speed: 1 });
@@ -98,6 +102,7 @@ export default function FightCareerBoard() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(SAVE_KEY);
+      lastSave.current = raw;
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s?.st?.fighter?.name) return;
@@ -147,14 +152,33 @@ export default function FightCareerBoard() {
     } catch { /* the career itself is still on its save */ }
   }, [st]);
 
-  const persist = useCallback((next: LiveState, ph: Phase, offerId?: string) => {
+  const currentSave = () => {
+    try {
+      if (localStorage.getItem(SAVE_KEY) !== lastSave.current) {
+        setStaleSave(true);
+        return false;
+      }
+    } catch { /* The career can still run in memory. */ }
+    return true;
+  };
+
+  const writeSave = (save: SaveShape) => {
+    try {
+      const raw = JSON.stringify(save);
+      localStorage.setItem(SAVE_KEY, raw);
+      lastSave.current = raw;
+    } catch { /* The career can still run in memory. */ }
+  };
+
+  const persist = (next: LiveState, ph: Phase, offerId?: string) => {
+    if (!currentSave()) return;
     setSt(next);
     setPhase(ph);
     /* While a restored camp is waiting for its fight, the save keeps saying
        "plan" so a second reload still knows the camp was run. */
     const stored = ph === 'hub' && campDoneRef.current ? 'plan' : ph;
-    try { localStorage.setItem(SAVE_KEY, JSON.stringify({ st: next, phase: stored, offerId })); } catch { /* ignore */ }
-  }, []);
+    writeSave({ st: next, phase: stored, offerId });
+  };
 
   /* ── the bout reveal, beat by beat, and always skippable ── */
   const timer = useRef<number | null>(null);
@@ -199,6 +223,7 @@ export default function FightCareerBoard() {
        was waiting on its second tap, as Fight Gym does when a fight is picked. */
     setConfirmExit(null);
     setOffer(o);
+    setSignWinBonus(false);
     if (campDone && st) {
       setCampDone(false);
       campDoneRef.current = false;
@@ -211,20 +236,21 @@ export default function FightCareerBoard() {
   const intoCamp = () => {
     if (!st) return;
     if (!offer) return;
-    persist(lifeRunCamp(st, camp), 'plan', offer.id);
+    persist(lifeRunCamp(st, camp, signWinBonus), 'plan', offer.id);
   };
 
   const fight = () => {
-    if (!st || !offer) return;
+    if (!st || !offer || !currentSave()) return;
     const res = lifeTakeFight(st, offer.id, tactics);
     if (!res) return;
+    setOffer(res.offer);
     setTakeHome(res.takeHome);
     setResult(res.result);
     setShown(animate ? 0 : res.result.rounds.length);
     setPaused(false);
     setSt(res.state);
     setPhase('fight');
-    try { localStorage.setItem(SAVE_KEY, JSON.stringify({ st: res.state, phase: 'hub' })); } catch { /* ignore */ }
+    writeSave({ st: res.state, phase: 'hub' });
   };
 
   const backToHub = () => {
@@ -239,7 +265,8 @@ export default function FightCareerBoard() {
   };
 
   const reset = () => {
-    try { localStorage.removeItem(SAVE_KEY); } catch { /* ignore */ }
+    if (!currentSave()) return;
+    try { localStorage.removeItem(SAVE_KEY); lastSave.current = null; } catch { /* ignore */ }
     setSt(null); setResult(null); setOffer(null); setShown(0); setView('main'); setPhase('setup'); setCampDone(false);
     setConfirmExit(null);
   };
@@ -258,6 +285,10 @@ export default function FightCareerBoard() {
   const campTotal = camp.conditioning + camp.power + camp.defence + camp.speed;
 
   /* ═══════════════ setup ═══════════════ */
+  if (staleSave) return <div className="space-y-3 rounded-lg border bg-card p-4">
+    <p role="status">This career changed in another tab. Reload to see your latest offer, agreement and bank.</p>
+    <button onClick={() => window.location.reload()} className="min-h-11 rounded-md border px-4">Reload career</button>
+  </div>;
   if (phase === 'setup' || !st) {
     return (
       <div className="space-y-4">
@@ -330,6 +361,7 @@ export default function FightCareerBoard() {
     );
   }
 
+  const remaining = winBonusRemaining(st.life.winBonusEndsAt, st.fightNo);
   const f = st.fighter;
   const ea = effectiveAttrs(f);
   const rankLabel = st.champion ? 'CHAMPION' : f.rank >= 99 ? 'Unranked' : `#${f.rank}`;
@@ -419,6 +451,9 @@ export default function FightCareerBoard() {
           <p className="mb-2 text-xs uppercase tracking-wide text-muted-foreground">
             {st.champion ? 'Defend the title' : 'What do you take?'}
           </p>
+          {remaining > 0 && <p className="mb-2 text-sm font-semibold">
+            Signed win bonus · {remaining === 1 ? '1 bout left' : '2 bouts left'}. Each offer shows its listed purse.
+          </p>}
           {campDone && (
             <p className="mb-2 rounded-md border border-primary/40 bg-primary/5 p-2 text-xs">
               Your camp is already done. Pick the fight it was for and go straight to the game plan.
@@ -544,6 +579,7 @@ export default function FightCareerBoard() {
             ))}
           </div>
         </div>
+        <PurseTerms st={st} offer={offer} signed={remaining > 0} selected={signWinBonus} onSelect={setSignWinBonus} />
         <button onClick={intoCamp}
           className="min-h-[48px] w-full rounded-md bg-primary px-4 py-3 font-semibold text-primary-foreground">
           Finish camp
@@ -570,6 +606,7 @@ export default function FightCareerBoard() {
             </p>
           )}
         </div>
+        {remaining > 0 && <PurseTerms st={st} offer={offer} signed />}
         <div className="space-y-3">
           {[0, 1, 2].map(i => (
             <div key={i}>
@@ -697,9 +734,11 @@ export default function FightCareerBoard() {
               <p className="text-sm text-muted-foreground">
                 Cards {result.playerCard} to {result.oppCard} · purse {offer.purse.toFixed(2)}m
               </p>
-              <p className="text-xs text-muted-foreground">
-                {takeHome.toFixed(2)}m of it reaches your bank once the corner is paid.
-              </p>
+              {st.history[st.history.length - 1]?.purseStatement
+                ? <PurseStatement fight={st.history[st.history.length - 1]} />
+                : <p className="text-xs text-muted-foreground">
+                    {takeHome.toFixed(2)}m of it reaches your bank once the corner is paid.
+                  </p>}
               <p className="mt-1 flex items-center justify-center gap-1 text-xs text-muted-foreground">
                 <HeartPulse className="h-3 w-3" />
                 You took {result.damageTaken.toFixed(1)} damage tonight, and you keep it.
