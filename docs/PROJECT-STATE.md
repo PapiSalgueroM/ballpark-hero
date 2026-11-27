@@ -1,4 +1,10 @@
-### November 27, 2026. Competitive shootouts and squad succession in Club Manager
+### November 27, 2026. Competitive shootouts and squad succession live in Club Manager
+
+Lovable published `1bf51cc5c` in deployment `f9cde862-0cd9-4b79-b74a-ccac086bac35`. Home, Club Manager and What's New served `index-DTFhNy8c.js`. Both changed snapshots matched the release. All 176 sitemap pages passed the custom-domain crawler audit, and IndexNow accepted both updated URLs.
+
+On this published entry, all six native shootout cases and six succession decisions passed. Cup and aggregate replays included a mid-shootout delegation, phone reloads and competing desktop tabs. Both affected screens passed 50 ad and control checks each across 320, 390, 1280, 1366 and 1920 pixels. Compact desktops could retire rails during live play. With analytics consent, Home, Club Manager and Back produced one GA4 page view apiece. Scouting, viewing terms and completing a renewal produced none. The QA fixtures intercepted ad and analytics requests.
+
+The four original modes also passed their guarded native replays on this entry. One Gate Control run stopped at the 390-pixel geometry check without recording dimensions. The unchanged driver then passed at all three widths. Twelve fresh phone observations measured all seven controls at least 44 pixels tall on the first wave. Both strategies, all quoted admissions and saved checkpoints reproduced. The cause of the first observation remains unknown.
 
 The new Play Live option lets the manager call the next taker in a deciding knockout match. Kicks survive a reload and a manager can hand the remaining kicks to the coach. A controlled 0-0 cup tie against Alavés finished 2-3 on penalties with the manager's calls or 6-5 when delegated. Another draw produced a 2-3 loss or a 4-3 win on aggregate penalties against Arsenal. Only ten available finishers could kick in that tie. The injured player was excluded. Each settlement advanced one week and recorded one result. A second tab could not add a kick over the newer save.
 

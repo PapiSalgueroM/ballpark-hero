@@ -17,6 +17,8 @@ The owner wants the next rounds concentrated on managing the club. The November 
 
 ## November 27, 2026. CM-16 and CM-20, Penalty Room
 
+The subsequent competitive shootout and squad succession update is live on `index-DTFhNy8c.js`. The documented cup results and renewal versus transfer decisions all reproduced on the custom domain.
+
 CM-16 and CM-19 also cover the competitive knockout viewer. Opt in during a deciding match to choose takers from the finishing team. The kick, both scores and the remaining choices survive a reload. Delegation uses the current score and any calls already made. Electing to call kicks is optional. Group-stage games and first legs retain their usual results.
 
 CM-30 now connects the contracts and scouting desks through Squad succession. The manager reviews either of the next two summers, sees eligible primary-position cover outside the starting eleven and checks any purchase option on an outgoing loan. A plain renewal spends the quoted fee. A replacement brief opens for the selected player's position and leads to the normal buying desk. The view reads the current squad and deals at every visit. Players' intentions and longer-range retirement forecasts remain open.
