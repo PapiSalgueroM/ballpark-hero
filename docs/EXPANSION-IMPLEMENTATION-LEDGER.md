@@ -6,6 +6,10 @@ The owner's ongoing instruction is to keep improving the most popular pages, esp
 
 ## November 27, 2026. Club Manager is the owner's first development priority
 
+CM-11, CM-14, CM-16, CM-17 and CM-18 now share one competitive match decision. In Play Live, send either fullback beyond the winger or protect the space behind him. The opponent shifts cover after three successful entries on one side. Both the live clock and the final report read the recorded play, including shots and counterattacks that can decide the real fixture. A change of plan affects future play. Existing careers can continue using normal buildup.
+
+`node scripts/simCmFlankBalance.mjs` plays the same 360 league fixtures with normal buildup, a protected left side and an overlapping left fullback from halftime. Six clubs and two second-half draws per fixture yielded 1,047 entries with cover and 1,690 with the overlap. The overlap let in 410 counter shots against 131 with cover. Its higher attacking return changed the result in both directions. This covers wide buildup and the opponent's response in that fixture. Whole-team shapes in and out of possession, pressing triggers and analysis across opponents' previous fixtures remain open.
+
 The scouting brief, Quick Sim bench order and Penalty Room are live in `490f639b5`. The published entry was `index-CjQYhOEW.js`. Phone and desktop replays are recorded in Project state.
 
 The owner wants the next rounds concentrated on managing the club. The November 26 host ranking put Club Manager third overall behind Soccer Career and Home. The manager chapter contains 60 recommendations. Check each against the current game before implementing or marking it complete.

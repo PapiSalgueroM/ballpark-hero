@@ -13,6 +13,7 @@ import {
 import { DUTY_INFO } from '@/lib/clubManagerUiInfo';
 import { InstructionsPicker } from '@/components/club-manager/InstructionsPicker';
 import { opponentStyle } from '@/lib/clubManagerTactics';
+import { isFlankPlan } from '@/lib/clubManagerFlank';
 
 export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live', minute, plus }: {
   career: CareerState;
@@ -34,6 +35,23 @@ export function LiveTacticsPanel({ career, live, onChange, idPrefix = 'live', mi
       <p className="text-[10px] text-muted-foreground leading-snug">
         For this match only, from the next minute. Your standing plan stays on the Tactics tab.
       </p>
+      <details className="rounded-lg border border-border bg-card px-2">
+        <summary className="min-h-11 cursor-pointer py-3 text-xs font-bold">Flank buildup</summary>
+        <p className="mb-2 text-xs">Send your fullback beyond the winger for a second passing option, or hold the fullback behind the ball. After three entries on one flank the opponent shifts cover there. Try switching sides when that happens.</p>
+        <label className="block pb-2 text-xs font-bold">Buildup route
+          <select className="mt-1 min-h-11 w-full rounded border border-border bg-background px-2"
+            value={isFlankPlan(live.flankPlan) ? live.flankPlan.side + '/' + live.flankPlan.support : ''}
+            onChange={e => {
+              const [side, support] = e.target.value.split('/');
+              const plan = { side, support };
+              onChange({ kind: 'flank', plan: isFlankPlan(plan) ? plan : null });
+            }}>
+            <option value="">Normal buildup</option>
+            <option value="left/overlap">Overlap on the left</option><option value="right/overlap">Overlap on the right</option>
+            <option value="left/hold">Protect the left</option><option value="right/hold">Protect the right</option>
+          </select>
+        </label>
+      </details>
       <InstructionsPicker
         value={liveInstructions(live)}
         onChange={instructions => onChange({ kind: 'instructions', instructions })}

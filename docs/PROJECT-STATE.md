@@ -1,3 +1,9 @@
+### November 27, 2026. Club Manager flank buildup
+
+Play Live now lets a manager send the fullback past the winger or keep cover behind the ball, on either side. Three successful entries down one side draw extra cover there. The manager can switch sides during play. The report follows the named passers, receivers, covering players and resulting shots from the same match.
+
+On local production entry `index-2o0yo6I5.js`, 99 focused tests passed. Across 360 paired halftime decisions in six clubs' league schedules, overlaps created 625 shots and conceded 410 counter shots. Holding cover created 226 shots and conceded 131. Compared with holding cover, overlapping improved nine results and worsened 25. Mean total goals were 2.67 with ordinary play, 2.56 with cover and 2.86 with the overlap. Both deliberate regressions, ignoring the overlap and stacking extra chances on top of ordinary attacks, failed the new simulation check.
+
 ### November 27, 2026. Competitive shootouts and squad succession live in Club Manager
 
 Lovable published `1bf51cc5c` in deployment `f9cde862-0cd9-4b79-b74a-ccac086bac35`. Home, Club Manager and What's New served `index-DTFhNy8c.js`. Both changed snapshots matched the release. All 176 sitemap pages passed the custom-domain crawler audit, and IndexNow accepted both updated URLs.

@@ -221,6 +221,7 @@ import {
 import { UCL_LEAGUE, drawUclLeaguePhase } from '@/lib/uclLeaguePhase';
 /* Round 781: the match clock with the board in it. The module imports nothing. */
 import { clockOrder, playedBy } from '@/lib/clubManagerClock';
+import type { FlankMove, FlankPlan } from '@/lib/clubManagerFlank';
 /* Round 1522: team instructions. The engine carries only the small core (clubManagerTacticsCore.ts): the types,
    balanced, and the slot clubManagerTactics.ts fills when it loads. Every reader below is a no op on balanced
    (it adds zero or multiplies by one), and with the slot empty plays balanced, so a career that never sets one
@@ -2202,7 +2203,7 @@ export interface SubLine {
 }
 export interface InjuryLine { name: string; minute: number; weeks: number; id?: string; plus?: number; majorInjury?: MajorInjury; }
 
-export type PlayKind = 'shot' | 'corner' | 'throwin' | 'foul' | 'var';
+export type PlayKind = 'shot' | 'corner' | 'throwin' | 'foul' | 'var' | 'buildup';
 
 /** Round 504: one moment of play the engine committed, so the live viewer
  *  shows the same chances the report counts. A goal is a shot with `goal`
@@ -2214,6 +2215,9 @@ export interface PlayEvent {
   side: 'me' | 'opp';
   kind: PlayKind;
   who: string;
+  flankMove?: FlankMove;
+  flankChance?: 'entry' | 'counter';
+  whoGenerated?: true;
   review?: CmVarDecision;
   on?: boolean;
   goal?: boolean;
@@ -3735,6 +3739,8 @@ export type NextFixtureInfo =
  * halftime and picked back up.
  */
 export interface LiveMatch {
+  flankPlan?: FlankPlan;
+  flankDraw?: number;
   callPenalties?: true;
   penaltyCalls?: { fixture: string; draw: number; picks: string[] };
   halftimePlanCall?: HalftimePlanCall;
@@ -18877,7 +18883,7 @@ function drawSegmentPlay(inp: SegmentPlayIn): PlayEvent[] {
 }
 
 /** Inside a minute, a throw in before a foul before a corner before a shot. Round 781: hoisted so the board fold can keep it. */
-const PLAY_ORDER: Record<PlayKind, number> = { throwin: 0, foul: 1, corner: 2, var: 2.5, shot: 3 };
+const PLAY_ORDER: Record<PlayKind, number> = { throwin: 0, foul: 1, corner: 2, buildup: 2.25, var: 2.5, shot: 3 };
 
 /** The expected goals a half actually carried: each stretch's full half lambda by its share of the 45. */
 function effectiveLambdas(segs: LamSegment[]): { lamMine: number; lamOpp: number } {
@@ -19459,6 +19465,11 @@ function drawSegment(
      in a match that does not review goals. */
   const reviewKinds = cmVarKindsOf(live);
   const goalLift = cmVarGoalLift(reviewKinds);
+  if (live.flankPlan) {
+    const share = tacticsImpl()?.ordinaryChanceShare(live) ?? 1;
+    segM *= share;
+    segO *= share;
+  }
   const nMine = poisson(segM * goalLift);
   const nOpp = poisson(segO * goalLift);
   const period = periodEnding(live, to);
@@ -19564,6 +19575,22 @@ function drawSegment(
     play.push(...(myReview?.reviews ?? []), ...(theirReview?.reviews ?? []), ...(awards?.reviews ?? []), ...(penaltyKind ? penaltyReviews(play, reviewKey) : []));
     if (half === 1) { live.h1My!.sort(clockOrder); live.h1Opp!.sort(clockOrder); }
     else { live.h2My!.sort(clockOrder); live.h2Opp!.sort(clockOrder); }
+  }
+  if (live.flankPlan) {
+    const formationIndex = live.formationIndex ?? state.formationIndex;
+    const custom = live.positionRules === 1 && live.customShape
+      ? readCustomShape(live.customShape, formationIndex, FORMATIONS[formationIndex].slots) : null;
+    const positioned = pairs.map(pair => pair.slot ? { ...pair, slot: { ...pair.slot,
+      ...slotPosition(pair.slot, live.mentality, custom?.points[live.onPitch.indexOf(pair.p.id)]) } } : pair);
+    const built = tacticsImpl()?.flank({ live, from, to: Math.min(to, half === 1 ? 45 : live.et?.to ?? 90), pairs: positioned, play, mineAt,
+      theirsAt: m => oppAt(live, m), oppStrength: oppStrengthVsMe(state, fx.opponent), reviewGoals: reviewKinds.includes('goal'), reviewKey });
+    if (built) {
+      play.push(...built.play);
+      me.goals.push(...built.mine);
+      oppGoals.push(...built.theirs);
+      if (half === 1) { live.h1My!.push(...built.mine); live.h1Opp!.push(...built.theirs); }
+      else { live.h2My!.push(...built.mine); live.h2Opp!.push(...built.theirs); }
+    }
   }
   if (half === 1) live.h1Play = [...(live.h1Play ?? []), ...play];
   else live.h2Play = [...(live.h2Play ?? []), ...play];
@@ -23379,6 +23406,7 @@ export function changeRoom(career: CareerState, live: LiveMatch, minute: number,
 }
 
 export type LiveChange =
+  | { kind: 'flank'; plan: FlankPlan | null }
   | { kind: 'sub'; outId: string; inId: string }
   | { kind: 'shape'; mentality: Mentality }
   /* Round 1522: the four instructions, a new formation (the men on the pitch carried across by carryShape's

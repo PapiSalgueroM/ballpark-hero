@@ -55,7 +55,7 @@ export function liveFeed(live: LiveMatch): LiveFeedEvent[] {
   for (const g of [...(live.h1My ?? []), ...(live.h2My ?? [])]) out.push({ minute: g.minute, side: 'me', kind: 'goal', text: g.og ? g.og.n : g.name, ...flags(g), ...(g.og ? { og: true } : {}), ...plusOf(g) });
   for (const g of [...(live.h1Opp ?? []), ...(live.h2Opp ?? [])]) out.push({ minute: g.minute, side: 'opp', kind: 'goal', text: g.name, ...flags(g), ...(g.og ? { og: true } : {}), ...plusOf(g) });
   for (const e of [...(live.h1Play ?? []), ...(live.h2Play ?? [])]) {
-    if (e.goal) continue;
+    if (e.goal || e.kind === 'buildup') continue;
     out.push({
       minute: e.minute, side: e.side, kind: e.kind === 'shot' ? (e.on ? 'save' : 'shot') : e.kind, text: e.who,
       ...(e.flank ? { flank: e.flank } : {}), ...(e.penalty ? { penalty: true } : {}), ...(e.review ? { review: e.review } : {}), ...plusOf(e),
