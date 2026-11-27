@@ -144,11 +144,54 @@
 /* Home's 16px content padding adds to the space beside its launch links. */
 :global(#root):has(.frame[data-desktop-room][data-home-route]) {
   --creative-width: 160px;
-  --browse-rail-space: max(300px, calc(var(--game-ad-rail) + 110px));
+  --browse-rail-space: calc(var(--creative-width) + 135px);
+}
+
+.frame[data-desktop-room][data-home-route] [data-home-content] {
+  container: home / inline-size;
 }
 
 .frame[data-desktop-room][data-home-route] [data-home-search-tools] {
-  width: clamp(14rem, 36%, 26rem);
+  width: clamp(20rem, 38%, 26rem);
+}
+
+/* The content between two ads can be tablet-sized on a desktop screen. */
+@container home (max-width: 48rem) {
+  [data-home-heading] {
+    display: grid;
+    gap: 0.75rem;
+    padding-block: 1rem;
+  }
+
+  .frame[data-desktop-room][data-home-route] [data-home-search-tools] {
+    width: 100%;
+  }
+
+  [data-home-feature-grid] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  [data-home-dailies] ul {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  [data-home-dailies] li:first-child {
+    grid-row: span 2;
+  }
+
+  [data-home-catalogue] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@container home (min-width: 48.01rem) and (max-width: 62rem) {
+  [data-home-feature-grid] {
+    grid-template-columns: minmax(0, 1fr) minmax(17rem, 35%);
+  }
+
+  [data-home-catalogue] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .frame[data-desktop-room][data-home-route] [data-home-dailies] select {
@@ -164,6 +207,5 @@
 @media (min-width: 1920px) {
   :global(#root):has(.frame[data-desktop-room][data-home-route]) {
     --creative-width: 300px;
-    --browse-rail-space: 440px;
   }
 }

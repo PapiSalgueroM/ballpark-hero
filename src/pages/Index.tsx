@@ -365,7 +365,7 @@ export default function Index() {
   // A search hides the catalogue without rebuilding its cards on each key.
   const catalogue = useMemo(() => (
     <div className="space-y-8 lg:space-y-10">
-      <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <div data-home-feature-grid="" className="grid grid-cols-1 items-start gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <div ref={launchGamesRef} className="min-w-0 space-y-4">
           <ContinueRow />
           <GamePicksRow paths={gamePicks} onToggle={toggleGamePick} onEmpty={() => launchGamesRef.current?.querySelector<HTMLAnchorElement>('[data-stage-card]')?.focus({ preventScroll: true })} />
@@ -492,7 +492,7 @@ export default function Index() {
       <HomeTileStyles />
       {/* Round 215: the skip link in App.tsx points here. */}
       <main id="dukb-main" tabIndex={-1} data-home-search-active={isSearching ? '' : undefined} className="min-h-screen bg-background text-foreground">
-        <div className="max-w-6xl mx-auto px-4 pb-12">
+        <div data-home-content="" className="max-w-6xl mx-auto px-4 pb-12">
 
           {/* ─── TITLE ROW ───
               ROUND 283 took the hero down to what was carrying weight, and
@@ -508,7 +508,7 @@ export default function Index() {
               no guard behind it.
 
               Account stats have their own row on narrow screens when signed in. */}
-          <div className="pb-1 pt-2 md:flex md:items-end md:justify-between md:gap-8 md:pb-6 md:pt-7">
+          <div data-home-heading="" className="pb-1 pt-2 md:flex md:items-end md:justify-between md:gap-8 md:pb-6 md:pt-7">
             <div className="min-w-0">
               <div className="grid items-center gap-y-2 xl:flex xl:flex-wrap xl:gap-3">
                 {/* Round 1449: the page's short descriptive headline. A literal
