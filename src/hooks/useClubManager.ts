@@ -24,6 +24,7 @@ import {
 } from '@/lib/clubManager';
 import type { MarketDoor } from '@/lib/clubManager';
 import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation } from '@/lib/clubManager';
+import type { FlankPlan } from '@/lib/clubManagerFlank';
 import { tacticsImpl, type TeamInstructions } from '@/lib/clubManagerTacticsCore';
 import { carryShape } from '@/lib/clubManagerCarry';
 import type { Position } from '@/types/game';
@@ -506,9 +507,9 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
      module that cannot load says so on the page instead of leaving the tap dead. The live and dressing room actions
      need no hold: only the live screen and the dressing room call them, and both import the module. */
   const tacticsHeld = useRef<{ c: CareerState; run: () => void } | null>(null);
-  const heldForTactics = useCallback((run: () => void): boolean => {
+  const heldForTactics = useCallback((run: () => void, kickoffOrder = false): boolean => {
     const c = careerRef.current;
-    if (!c || !tacticsWait(c)) return false;
+    if (!c || (kickoffOrder ? tacticsImpl() !== null : !tacticsWait(c))) return false;
     tacticsHeld.current = { c, run };
     loadTactics().then(() => setTacticsIn(true), () => setTacticsFailed(true));
     return true;
@@ -1050,15 +1051,16 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     setPhase('seasonEnd');
   }, [canSettle]);
 
-  const runEntry = useCallback((skipHalftime: boolean, benchOrder?: BenchOrder) => {
-    if (!career) return;
-    if (heldForTactics(() => { runEntry(skipHalftime, benchOrder); })) return;
-    const res = playNextEntry(career, { skipHalftime, benchOrder, ...cmVarGameAsk(CM_VAR_LIVE) });
+  const runEntry = useCallback((skipHalftime: boolean, benchOrder?: BenchOrder, flankPlan?: FlankPlan) => {
+    if (!career || !canSettle(career)) return;
+    if (heldForTactics(() => { runEntry(skipHalftime, benchOrder, flankPlan); }, !!flankPlan && !career.live)) return;
+    const res = playNextEntry(career, { skipHalftime, benchOrder, flankPlan, ...cmVarGameAsk(CM_VAR_LIVE) });
     if (res.blocked === 'position-state-invalid') { setPositionBlockedFor(career); return; }
     if (res.kind === 'seasonOver') {
       settleSeason(career, res.state);
       return;
     }
+    careerRef.current = res.state;
     setCareer(res.state);
     /* Round 119: the match stops at the interval now. Everything this game has
        built for eleven rounds happens between fixtures; this is the one moment
@@ -1087,11 +1089,11 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
       setReport(res.report);
       setPhase('matchResult');
     }
-  }, [career, settleSeason]);
+  }, [career, canSettle, heldForTactics, settleSeason]);
 
-  const play = useCallback(() => runEntry(false), [runEntry]);
+  const play = useCallback((flankPlan?: FlankPlan) => runEntry(false, undefined, flankPlan), [runEntry]);
   /** Round 157: the quick sim. One tap, full result, no dressing room stop. */
-  const quickPlay = useCallback((order?: BenchOrder) => runEntry(true, order), [runEntry]);
+  const quickPlay = useCallback((order?: BenchOrder, flankPlan?: FlankPlan) => runEntry(true, order, flankPlan), [runEntry]);
 
   /* Round 93: his calendar complaint. "u can click through and sim much
      faster... simulate through date or play match or whatever." Quick sim

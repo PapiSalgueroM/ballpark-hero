@@ -3973,6 +3973,13 @@ export function slotPosition(slot: FormationSlot, m: Mentality, base?: CustomSha
   };
 }
 
+export function positionFlankPairs(pairs: XiSlot[], formationIndex: number, mentality: Mentality, onPitch: string[], rawShape: unknown): XiSlot[] {
+  const formation = FORMATIONS[formationIndex];
+  const custom = rawShape && formation ? readCustomShape(rawShape, formationIndex, formation.slots) : null;
+  return pairs.map(pair => pair.slot ? { ...pair, slot: { ...pair.slot,
+    ...slotPosition(pair.slot, mentality, custom?.points[onPitch.indexOf(pair.p.id)]) } } : pair);
+}
+
 /** Average height of the back line, which is the number a manager actually feels. */
 export function defensiveLineY(formation: Formation, m: Mentality): number {
   const back = formation.slots.filter(sl => pitchLineOf(sl) === 'defence');
@@ -19578,10 +19585,8 @@ function drawSegment(
   }
   if (live.flankPlan) {
     const formationIndex = live.formationIndex ?? state.formationIndex;
-    const custom = live.positionRules === 1 && live.customShape
-      ? readCustomShape(live.customShape, formationIndex, FORMATIONS[formationIndex].slots) : null;
-    const positioned = pairs.map(pair => pair.slot ? { ...pair, slot: { ...pair.slot,
-      ...slotPosition(pair.slot, live.mentality, custom?.points[live.onPitch.indexOf(pair.p.id)]) } } : pair);
+    const positioned = positionFlankPairs(pairs, formationIndex, live.mentality, live.onPitch,
+      live.positionRules === 1 ? live.customShape : undefined);
     const built = tacticsImpl()?.flank({ live, from, to: Math.min(to, half === 1 ? 45 : live.et?.to ?? 90), pairs: positioned, play, mineAt,
       theirsAt: m => oppAt(live, m), oppStrength: oppStrengthVsMe(state, fx.opponent), reviewGoals: reviewKinds.includes('goal'), reviewKey });
     if (built) {
@@ -22943,7 +22948,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean; benchOrder?: BenchOrder }): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean; benchOrder?: BenchOrder; flankPlan?: FlankPlan }): PlayResult {
   if (career.live?.penaltyCalls) return { state: career, kind: 'halftime', live: career.live };
   if (career.live && !livePositionsValid(career.live)) return { state: career, kind: 'halftime', live: career.live, blocked: 'position-state-invalid' };
   const state: CareerState = JSON.parse(JSON.stringify(career));
@@ -23000,6 +23005,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
      daily games' (Manager Hot Seat passes it beside noCoach, for the same reason: a daily is a seed
      replayed through this function and never carries a book). */
   if (!opts?.noBook) ensureLeagueBook(state);
+  const expected = opts?.flankPlan && !state.live && opts.untilWeek === undefined ? nextFixture(state) : null;
+  const flankOrder = expected?.kind === 'match' && opts?.flankPlan ? { fixture: expected, plan: opts.flankPlan } : undefined;
   while (state.week < state.calendar.length) {
     /* Round 466: a sim to a day stops at the first entry the day does not
        cover. The entries before it have been played or skipped through this
@@ -23116,7 +23123,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       state.domesticCupScorers = newCupScorerLedger();
     }
     if (!opts?.noBook && entry.type === 'uclGroup' && entry.round === 0) openChampionsLeagueScorers(state);
-    const live = kickOff(state, entry, opts?.varReviews, !opts?.noBook);
+    const live = kickOff(state, entry, opts?.varReviews, !opts?.noBook, flankOrder);
     if (!opts?.skipHalftime) {
       state.live = live;
       return { state, kind: 'halftime', live };
@@ -23137,7 +23144,8 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
  * point where the manager gets to manage: a real half, a real score, and a
  * dressing room where changing something changes what happens next.
  */
-function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk = false, careerMatch = false): LiveMatch {
+function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk = false, careerMatch = false,
+  flankOrder?: { fixture: Extract<NextFixtureInfo, {kind: 'match'}>; plan: FlankPlan }): LiveMatch {
   /* Round 1303: the kinds of review the caller asked for (the game asks with the ledger's list, CM_VAR_KINDS). */
   const varKinds = cmVarKindsAsked(varReviews);
   const fx = fixtureFor(state, entry)!;
@@ -23214,6 +23222,10 @@ function kickOff(state: CareerState, entry: CalendarEntry, varReviews: CmVarAsk 
      once, at the whistle, never here. Round 504: and the rest of the half
      with them: cards, an injury, every chance, corner, foul and throw in,
      with minutes, through the one segment draw every half uses. */
+  const target = flankOrder?.fixture;
+  if (flankOrder && target?.opponent === fx.opponent && target.compLabel === fx.compLabel && target.home === fx.home) {
+    tacticsImpl()?.change(state, live, { kind: 'flank', plan: flankOrder.plan }, 0, 0);
+  }
   drawSegment(state, live, fx, 1, 0, 45, lamMine, lamOpp);
   live.myGoals = (live.h1My ?? []).length;
   live.oppGoals = (live.h1Opp ?? []).length;

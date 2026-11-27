@@ -1,6 +1,6 @@
 import { keyedRng } from '@/lib/keyedRng';
 import { settleGoalReviews } from '@/lib/clubManagerVar';
-import type { CMPlayer, LiveMatch, MyGoalLine, OppXiLine, PlayEvent, ScorerLine, XiSlot } from '@/lib/clubManager';
+import { effectiveXIWithSlots, positionFlankPairs, type CareerState, type CMPlayer, type LiveMatch, type MyGoalLine, type OppXiLine, type PlayEvent, type ScorerLine, type XiSlot } from '@/lib/clubManager';
 
 export interface FlankPlan { side: 'left' | 'right'; support: 'overlap' | 'hold' }
 export interface FlankMove extends FlankPlan {
@@ -45,6 +45,20 @@ function nearSlot(pairs: XiSlot[], x: number, y: number, omit?: CMPlayer) {
   return { nearest, distance };
 }
 
+function flankPair(pairs: XiSlot[], side: FlankPlan['side']) {
+  const x = side === 'left' ? 14 : 86;
+  const back = nearSlot(pairs, x, 73), wide = nearSlot(pairs, x, 30, back.nearest?.p);
+  if (!back.nearest || !wide.nearest) return null;
+  return { back: back.nearest, wide: wide.nearest, distance: back.distance + wide.distance };
+}
+
+export function kickoffFlankPlayers(career: CareerState, side: FlankPlan['side']): { fullback: CMPlayer; winger: CMPlayer } | null {
+  const xi = effectiveXIWithSlots(career);
+  const pairs = positionFlankPairs(xi, career.formationIndex, career.mentality, xi.map(({ p }) => p.id), career.customShape);
+  const pair = flankPair(pairs, side);
+  return pair ? { fullback: pair.back.p, winger: pair.wide.p } : null;
+}
+
 /** A shared opportunity clock lets a change of side or support compare the same passing windows. */
 export function drawFlankPlay(input: FlankSegment) {
   const { live, from, to } = input, plan = live.flankPlan;
@@ -59,7 +73,6 @@ export function drawFlankPlay(input: FlankSegment) {
     else entries = e.flankMove!.side === plan.side ? entries + 1 : 0;
   }
   const taken = new Set(input.play.filter(e => e.goal || e.kind === 'var').map(e => e.minute));
-  const x = plan.side === 'left' ? 14 : 86;
   const overlap = plan.support === 'overlap';
   for (let bin = Math.floor(from / 6); bin * 6 < to; bin++) {
     const random = keyedRng('cm-flank/' + live.flankDraw + '/' + bin);
@@ -67,11 +80,11 @@ export function drawFlankPlay(input: FlankSegment) {
     if (minute <= from || minute > to || taken.has(minute)) continue;
     const on = new Set(input.mineAt(minute).map(p => p.id));
     const pairs = input.pairs.filter(pair => on.has(pair.p.id));
-    const back = nearSlot(pairs, x, 73), wide = nearSlot(pairs, x, 30, back.nearest?.p);
-    if (!back.nearest || !wide.nearest) continue;
-    const fullback = back.nearest.p, winger = wide.nearest.p;
-    const properPair = back.nearest.slot!.allowed.includes(fullback.position) && wide.nearest.slot!.allowed.includes(winger.position);
-    const fit = clamp(1 - (back.distance + wide.distance) / 115 - (properPair ? 0 : 0.25)
+    const pair = flankPair(pairs, plan.side);
+    if (!pair) continue;
+    const fullback = pair.back.p, winger = pair.wide.p;
+    const properPair = pair.back.slot!.allowed.includes(fullback.position) && pair.wide.slot!.allowed.includes(winger.position);
+    const fit = clamp(1 - pair.distance / 115 - (properPair ? 0 : 0.25)
       - Math.max(0, 80 - (fullback.fitness + winger.fitness) / 2) / 120, 0.15, 1);
     const passer = overlap ? winger : fullback, receiver = overlap ? fullback : winger;
     const covered = coveredSide === plan.side;
