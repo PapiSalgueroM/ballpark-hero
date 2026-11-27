@@ -42,7 +42,7 @@ import {
   type AiStyleId, type InstructionKey, type InstructionStep, type Setting, type TacticStats, type TeamInstructions,
 } from '@/lib/clubManagerTacticsCore';
 
-import { drawFlankPlay, isFlankPlan } from '@/lib/clubManagerFlank';
+import { drawFlankPlay, isFlankPlan, ordinaryChanceShare } from '@/lib/clubManagerFlank';
 export { BALANCED, INSTRUCTION_KEYS, isBalanced, readInstructions, logEverSet } from '@/lib/clubManagerTacticsCore';
 export type { AiStyleId, InstructionKey, InstructionStep, Setting, TacticStats, TeamInstructions } from '@/lib/clubManagerTacticsCore';
 
@@ -414,6 +414,7 @@ function change(state: CareerState, live: LiveMatch, ch: LiveChange, m: number, 
 
 setTacticsImpl({
   flank: drawFlankPlay,
+  ordinaryChanceShare,
   edge: (state, fx: MyFixture, xi: XiSlot[], instr, half, oppStyle) => tacticBoost({
     mine: instr, theirs: AI_STYLES[matchOpponentStyle(state, fx.opponent, oppStyle)].instructions, half,
     fit: xi.length ? xi.reduce((s, x) => s + x.p.fitness, 0) / xi.length : 80, duties: xi.map(x => x.duty),

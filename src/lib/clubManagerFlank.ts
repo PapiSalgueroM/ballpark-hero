@@ -27,6 +27,12 @@ export function isFlankPlan(value: unknown): value is FlankPlan {
   return (plan.side === 'left' || plan.side === 'right') && (plan.support === 'overlap' || plan.support === 'hold');
 }
 
+/** The called route replaces part of ordinary play for both teams. Its actual chances settle below. */
+export function ordinaryChanceShare(live: LiveMatch): number {
+  const draw = live.flankDraw;
+  return isFlankPlan(live.flankPlan) && typeof draw === 'number' && Number.isInteger(draw) && draw >= 0 && draw <= 0xffffffff ? 0.8 : 1;
+}
+
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
 function nearSlot(pairs: XiSlot[], x: number, y: number, omit?: CMPlayer) {
@@ -43,7 +49,7 @@ function nearSlot(pairs: XiSlot[], x: number, y: number, omit?: CMPlayer) {
 export function drawFlankPlay(input: FlankSegment) {
   const { live, from, to } = input, plan = live.flankPlan;
   const play: PlayEvent[] = [], mine: MyGoalLine[] = [], theirs: ScorerLine[] = [];
-  if (!isFlankPlan(plan) || !Number.isInteger(live.flankDraw) || live.flankDraw! < 0 || live.flankDraw! > 0xffffffff) return { play, mine, theirs };
+  if (!plan || ordinaryChanceShare(live) === 1) return { play, mine, theirs };
   const earlier = [...(live.h1Play ?? []), ...(live.h2Play ?? [])]
     .filter(e => e.flankMove?.outcome === 'entry').sort((a, b) => a.minute - b.minute || (a.plus ?? 0) - (b.plus ?? 0));
   let coveredSide: FlankPlan['side'] | undefined;
@@ -89,7 +95,7 @@ export function drawFlankPlay(input: FlankSegment) {
       return rank(b) - rank(a);
     })[0];
     const counterQuality = clamp(((outlet?.r ?? input.oppStrength) - 55) / 35, 0.12, 1);
-    const ourShot = outcome === 'entry' && chanceRoll < (overlap ? 0.30 : 0.18) + 0.10 * fit;
+    const ourShot = outcome === 'entry' && chanceRoll < (overlap ? 0.30 : 0.13) + 0.10 * fit;
     const protection = cover ? clamp((cover.rating + cover.fitness - 130) / 55, 0, 1) : 0;
     const theirShot = outcome === 'turnover' && chanceRoll < (overlap ? 0.43 : 0.16) + 0.36 * counterQuality - 0.10 * protection;
     if (!ourShot && !theirShot) continue;

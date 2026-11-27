@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 import '@/lib/clubManagerTactics';
 import {
   changeLive, engineRegistrations, liveStatsAt, playNextEntry, restoreEngineRegistrations, resumeMatch, startCareer, startSecondHalf,
@@ -110,15 +110,20 @@ describe('open-play flank buildup in Club Manager', () => {
     expect(changedResults).toBeGreaterThan(5);
   }, 30000);
 
-  it('watched and skipped second halves settle one ledger, including after a reload', () => {
+  it('watched and skipped second halves settle one ledger, including after a reload', async () => {
     const prepared = change(copy(halftime, 29), 46, overlap)!;
-    // Keep the unrelated, process-sequenced press invitation out of this two-replay fixture.
-    prepared.press!.lastWeek = prepared.week;
-    const skipped = seeded(333, () => resumeMatch(prepared));
-    const watched = seeded(333, () => {
-      const second = startSecondHalf(prepared)!;
-      return resumeMatch(JSON.parse(JSON.stringify(second)));
-    });
+    // Fresh sessions start the existing inbox and press counters at the same serial.
+    const replay = async (watch: boolean) => {
+      vi.resetModules();
+      await import('@/lib/clubManagerTactics');
+      const engine = await import('@/lib/clubManager');
+      const saved = JSON.parse(JSON.stringify(prepared));
+      return seeded(333, () => watch
+        ? engine.resumeMatch(JSON.parse(JSON.stringify(engine.startSecondHalf(saved))))
+        : engine.resumeMatch(saved));
+    };
+    const skipped = await replay(false);
+    const watched = await replay(true);
     expect(watched.report).toEqual(skipped.report);
     expect(watched.state).toEqual(skipped.state);
     expect(skipped.report!.detail!.play!.some(e => e.flankMove)).toBe(true);

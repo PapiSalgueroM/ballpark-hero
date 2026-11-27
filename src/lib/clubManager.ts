@@ -19465,6 +19465,11 @@ function drawSegment(
      in a match that does not review goals. */
   const reviewKinds = cmVarKindsOf(live);
   const goalLift = cmVarGoalLift(reviewKinds);
+  if (live.flankPlan) {
+    const share = tacticsImpl()?.ordinaryChanceShare(live) ?? 1;
+    segM *= share;
+    segO *= share;
+  }
   const nMine = poisson(segM * goalLift);
   const nOpp = poisson(segO * goalLift);
   const period = periodEnding(live, to);
