@@ -14,6 +14,7 @@ import { kittyChange } from '@/lib/clubManagerHubLines';
 import type { ConcessionTier, FinanceProjection, ProjectionLine, ShirtSalesLedger } from '@/lib/clubManagerFinances';
 import { currencySymbol } from '@/lib/clubManagerStart';
 import { formatNumber } from '@/lib/formatNumber';
+import { AppearanceFeeLedger } from './AppearanceFeeCard';
 
 /* ─── Round 467: the finances desk. ───
    The projection first, because it is the screen he asked for and it has to
@@ -155,6 +156,7 @@ export function FinancesScreen({ career: c, onTickets, onConcessions, onBuyWageR
         </p>
       </div>
 
+      <AppearanceFeeLedger career={c} />
       <section aria-labelledby="transfer-wage-room" className="bg-card border border-border rounded-xl p-3 space-y-2">
         <h3 id="transfer-wage-room" className="text-sm font-bold text-foreground">Transfer budget to wages</h3>
         <p className="text-xs text-muted-foreground">The board offers {money(WAGE_ROOM_STEP.weekly / 1000)} more per week for every {money(WAGE_ROOM_STEP.cost)} you move from your transfer budget. The higher ceiling lasts until the season ends.</p>
