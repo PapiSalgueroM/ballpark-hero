@@ -27,6 +27,7 @@ const WhatsNew = () => {
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">November 27, 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
+            <li>Take charge of a shootout in the Penalty Room under <Link to="/club-manager" className="text-primary hover:underline">Club Manager</Link> Tactics. Send a starter up for each kick, try a different order on the same draw and use your tested list the next time a cup tie goes to penalties.</li>
             <li>In <Link to="/club-manager" className="text-primary hover:underline">Club Manager</Link>, open Tactics and rehearse the final half hour against your next opponent. Try protecting a lead or chasing an equalizer with your selected eleven. You can use your final instructions at the real kickoff.</li>
             <li>Seat the crowd in <Link to="/stadium-tycoon" className="text-primary hover:underline">Stadium Tycoon</Link>. Open Matchday Director, then Gate Control. Move your scanning crew or divert a queue before kickoff. Three fixtures share one kickoff hold, and the turnstiles you install carry into the next match.</li>
             <li>Take the mound in <Link to="/mlb-my-career" className="text-primary hover:underline">MLB My Career</Link>. In Training, starting and relief pitchers can play Inherited Runners. Protect three one-run leads with runners already on base. Set a hitter up with a fastball, then decide whether to change speeds or pitch for a double play.</li>

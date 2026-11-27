@@ -18,6 +18,7 @@ import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { MatchPlansCard } from '@/components/club-manager/MatchPlansCard';
 import { readCustomShape, type CustomShapePoint } from '@/lib/clubManagerPositions';
 
+const PenaltyRoom = lazy(() => import('@/components/club-manager/PenaltyRoom'));
 const TouchlineRehearsal = lazy(() => import('@/components/club-manager/TouchlineRehearsal'));
 
 const lastName = (n: string) => n.replace(' (Youth)', '').split(' ').slice(-1)[0];
@@ -70,7 +71,7 @@ interface TacticsScreenProps {
   onSetPiece: (key: SetPieceKey, playerId: string | null) => void;
   onAutoSetPieces: () => void;
   /** Round 782: the shootout order, player ids in kicking order; an empty list clears it. */
-  onShootoutOrder: (ids: string[]) => void;
+  onShootoutOrder: (ids: string[], expected?: CareerState) => void;
   onSaveMatchPlan?: (slot: number, name: string) => boolean;
   onApplyMatchPlan?: (slot: number) => boolean;
   onDeleteMatchPlan?: (slot: number) => boolean;
@@ -130,6 +131,7 @@ export function TacticsScreen({
   const [openSlot, setOpenSlot] = useState<number | null>(null);
   /* Round 1522: the instructions tile, folded until asked for. */
   const [instrOpen, setInstrOpen] = useState(false);
+  const [penaltyOpen, setPenaltyOpen] = useState(false);
   const [rehearsalOpen, setRehearsalOpen] = useState(false);
   // A one-shot pitch flourish on top of the shape move, keyed so it replays.
   const [mentPulse, setMentPulse] = useState(0);
@@ -586,6 +588,15 @@ export function TacticsScreen({
         </div>
       )}
 
+      {theirOpponent && !career.live && !career.sacked && !career.wilderness && <Dialog open={penaltyOpen} onOpenChange={setPenaltyOpen}>
+        <DialogTrigger asChild><button type="button" className="min-h-11 w-full rounded-lg border border-border bg-card px-3 py-2 text-left text-sm font-semibold">
+          Penalty Room<span className="block text-xs font-normal text-muted-foreground">Call the takers against {theirOpponent} and try a different order.</span>
+        </button></DialogTrigger>
+        <DialogContent className="max-h-[85dvh] max-w-lg overflow-y-auto">
+          <DialogHeader><DialogTitle>Penalty Room</DialogTitle><DialogDescription>Your selected eleven against {theirOpponent} in a practice shootout.</DialogDescription></DialogHeader>
+          {penaltyOpen && <Suspense fallback={<p role="status">Loading shootout...</p>}><PenaltyRoom career={career} onApply={onShootoutOrder}/></Suspense>}
+        </DialogContent>
+      </Dialog>}
       {theirOpponent && onInstructions && !career.live && !career.sacked && !career.wilderness && <Dialog open={rehearsalOpen} onOpenChange={setRehearsalOpen}>
         <DialogTrigger asChild><button type="button" className="min-h-11 w-full rounded-lg border border-border bg-card px-3 py-2 text-left text-sm font-semibold">
           Rehearse the next match<span className="block text-xs font-normal text-muted-foreground">Coach the last 30 minutes against {theirOpponent}.</span>

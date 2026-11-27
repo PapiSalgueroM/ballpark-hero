@@ -1,3 +1,9 @@
+### November 27, 2026. Club Manager Penalty Room release candidate
+
+Open Tactics, then Penalty Room. Send one starter up for each kick against your next opponent, or take over after two takers. After the shootout, compare the reference order on the same rolls. You can apply the tested order to competitive shootouts. The match uses the players still on the pitch at the whistle.
+
+On local entry `index-Aq7mBnPE.js`, the same Brentford eleven won 4 to 3 or lost 4 to 5 against Tottenham on draw 165. Chrome reproduced both results at 320, 390 and 1366 pixels. An unfinished run resumed at taker three. Applying the order changed only the shootout list in the career save and survived a reload. Before applying, the career save was byte-identical. The real cup simulator used all four tested takers who remained eligible in a separate knockout replay. This candidate awaits integration and custom-domain play.
+
 ### November 27, 2026. Four game upgrades ready for release verification
 
 Club Manager has a two-spell rehearsal against your next opponent. MLB My Career pitchers inherit three late-inning jams, Missing XI has an optional scouting challenge, and Stadium Tycoon has a three-fixture gate-management game. In Gate Control all 64 schedules have a winning route. Repeating the same scanner assignment every wave misses at least one target on all 64. The local production build passed with entry `index-CBE6ynNH.js`. The last verified custom-domain entry at this handoff was `index-C_DFbd-D.js`.

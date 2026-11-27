@@ -4,6 +4,14 @@ Reference: DoUKnowBall_Game_Expansion_Masterplan.txt, research snapshot November
 
 The owner's ongoing instruction is to keep improving the most popular pages, especially Soccer Career and Club Manager, and push and publish completed work. The document is a design reference. Its embedded implementation prompt is not new release authority. The base for this round is 978e9f7081a36c6ab105adf92d7696b715e6122d, following published PR477 and receipt PR478.
 
+## November 27, 2026. CM-16 and CM-20, Penalty Room
+
+The new Tactics drill uses the selected eleven, the projected opposition, both keepers and the competitive shootout engine. The manager picks each next taker after seeing the latest kicks. The second entry hands over after two takers from the reference order. The finished drill compares that reference order on the same rolls and can set the tested order through Club Manager's existing competitive save action. Old careers need no migration. Practice and competitive matches draw separately.
+
+`node scripts/simCmPenaltyRoom.mjs` compared 512 matched draws. Calling higher-rated starters first turned six losses into wins compared with reversing that order. The ignored-picks control (`PENALTY_CONTROL=ignore-picks`) produced zero reversals and failed. All 1,024 completed runs restored. A real domestic cup shootout called the four eligible tested takers in order. The focused tests also restore each intermediate call and reject invalid or stale fixture data. `scripts/playCmPenaltyRoom.mjs` takes `BASE` and the exact `PENALTY_ENTRY`. Three native widths reproduced draw 165, resumed the unfinished shootout, applied the winners' list and reloaded the resulting career.
+
+This is a practice lab with an optional competitive order. Calling each kick during an actual knockout remains open. Its current settlement processes a one-leg or aggregate result, the shootout and progression in one operation. Interactive competitive kicks need a resumable match phase.
+
 ## November 23, 2026 expansion audit
 
 Source checked at published main `1c85db5905701168f9933ee57a1a47c8dee401e7`. Release and fixture evidence comes from the November 23 save entries. [Project state](PROJECT-STATE.md)

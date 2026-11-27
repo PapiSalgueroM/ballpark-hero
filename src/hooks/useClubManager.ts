@@ -970,9 +970,10 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
   }, [phase, holdsActiveSlot, persist]);
 
   /** Round 782: the shootout order, player ids in kicking order; an empty list clears it. A bad id leaves the save alone. */
-  const setShootoutOrderIds = useCallback((ids: string[]) => {
-    setCareer(prev => (prev ? setShootoutOrder(prev, ids) ?? prev : prev));
-  }, []);
+  const setShootoutOrderIds = useCallback((ids: string[], expected?: CareerState) => {
+    if (expected && (phase !== 'hub' || !holdsActiveSlot())) return;
+    setCareer(prev => (prev && (!expected || prev === expected) ? setShootoutOrder(prev, ids) ?? prev : prev));
+  }, [phase, holdsActiveSlot]);
 
   /** Put an outfielder to work on a second position. A refusal leaves the save alone; the screen prints why. */
   const retrain = useCallback((playerId: string, to: Position, paused?: boolean, replace?: Position) => {
