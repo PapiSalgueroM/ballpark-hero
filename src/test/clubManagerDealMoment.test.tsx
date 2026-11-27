@@ -3,6 +3,7 @@ import { cleanup, fireEvent, render, screen, within } from '@testing-library/rea
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TransferScreen } from '@/components/club-manager/TransferScreen';
 import { AppearanceFeeLedger } from '@/components/club-manager/AppearanceFeeCard';
+import { settleAppearanceFees } from '@/lib/clubManagerAppearanceFees';
 import {
   buildMarket, canLeaveSquad, makeOffer, moneyIn, offerTerms, sellValue, startCareer, startNegotiation,
   type CareerState, type DealExtras, type MarketPlayer, type Negotiation,
@@ -131,14 +132,15 @@ describe('Club Manager: the deal moment', () => {
     const signed = offerTerms(agreed, agreed.negotiation!.terms!.want)!;
     const original = signed.appearanceFees![0];
     const date = { season: signed.season, week: 5 };
-    const partial = { ...original, lastAppearance: date, triggered: date, appearances: 5,
-      status: 'due' as const, paid: 2.37, payments: [{ ...date, amount: 2.37 }] };
-    const view = render(<AppearanceFeeLedger career={{ ...signed, appearanceFees: [partial] }} />);
+    const earned = { ...original, lastAppearance: date, triggered: date, appearances: 5, status: 'due' as const };
+    const lowBudget = { ...signed, budget: 7.37, appearanceFees: [earned] };
+    settleAppearanceFees(lowBudget, date);
+    const view = render(<AppearanceFeeLedger career={lowBudget} />);
     fireEvent.click(screen.getByText('Transfer fee commitments'));
     expect(screen.getByRole('region')).toHaveTextContent('paid £2,370,000 in appearance fees this season. £2,630,000 is due now');
     fireEvent.click(screen.getByText('Payment history'));
     expect(screen.getByRole('listitem')).toHaveTextContent('week 6 · £2,370,000 paid');
-    view.rerender(<AppearanceFeeLedger career={{ ...signed, clubName: original.seller, appearanceFees: [partial] }} />);
+    view.rerender(<AppearanceFeeLedger career={{ ...lowBudget, clubName: original.seller }} />);
     expect(screen.getByRole('region')).toHaveTextContent('paid £0 in appearance fees this season. £0 is due now');
     expect(screen.getByRole('region')).toHaveTextContent(`£2,630,000 remains due from ${original.buyer}`);
     view.rerender(<AppearanceFeeLedger career={open} />);

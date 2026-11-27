@@ -560,7 +560,9 @@ export function TransferScreen({
                 </div>
                 {structureBonus > 0 && (
                   <div className="text-[9px] text-muted-foreground">
-                    This structure reads like <span className="text-gold font-bold">{money(structureBonus)}</span> to them, on top of whatever cash you press below. Add-ons cost real money in later summers; a sell-on takes its cut when you resell him.
+                    The seller values these extras at <span className="text-gold font-bold">{money(structureBonus)}</span> on top of your cash offer.
+                    {addOn > 0 && !appearanceTrigger && ' The performance bonus is reviewed in summer.'}
+                    {sellOnPct > 0 && ' The selling club takes its cut when you resell him.'}
                   </div>
                 )}
               </div>
