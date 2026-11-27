@@ -258,21 +258,57 @@ try {
   const stats = { pace: 62, shooting: 62, passing: 62, dribbling: 62, defending: 62, physical: 62, reflexes: 62 };
   const career = initCareer('Rail Probe', 'England', 'ST', '2020s', stats, 62, 2020, FALLBACK_CLUBS, null);
   const bytes = serializeSoccerCareerSave(career, 1);
-  for (const width of [1280, 1440, 1536]) {
+  for (const width of [390, 1280, 1366, 1920]) {
     const session = await context(width);
     const active = await session.newPage();
     await active.addInitScript(save => {
       localStorage.setItem('rules-gate-seen:/soccer-career', '1');
-      localStorage.setItem('soccerCareerSave', save);
+      if (!localStorage.getItem('soccerCareerSave')) localStorage.setItem('soccerCareerSave', save);
     }, bytes);
-    await verify(active, '/soccer-career', width, 3);
+    const initial = await verify(active, '/soccer-career', width, 3);
+    assert.equal(initial.roles.length, width < 1280 ? 1 : 3, 'Unexpected active career inventory at ' + width);
+    if (width >= 1280) {
+      const sizes = await active.locator('[data-career-panels]').evaluate(el =>
+        [el.closest('main').getBoundingClientRect().width, el.lastElementChild.getBoundingClientRect().width]);
+      assert.deepEqual(sizes, [1024, 720], 'Career reading and skill panel widths at ' + width);
+    }
+    const confirmClear = async stage => {
+      await active.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+      const snap = await active.evaluate(readPlacements, { key, placement, privateScreen });
+      assert.equal(snap.requests.length, initial.requests, 'A career action repeated an ad request');
+      assert.deepEqual(snap.placements.map(ad => ad.role).sort(), initial.roles, stage + ': inventory changed');
+      assert(snap.placements.every(ad => ad.nearest === null || ad.nearest.px >= 149.5), JSON.stringify(snap.placements));
+      console.log(JSON.stringify({ width, stage, requests: snap.requests.length, nearest: snap.placements.map(ad => [ad.role, ad.nearest?.px ?? null]) }));
+    };
     const saveBefore = await active.evaluate(() => localStorage.getItem('soccerCareerSave'));
     assert(saveBefore);
     await active.locator('[data-career-utility="phone"]').click({ timeout: 5000 });
     await active.getByRole('dialog', { name: 'Your phone', exact: true }).waitFor({ timeout: 5000 });
     assert.equal(await active.evaluate(() => localStorage.getItem('soccerCareerSave')), saveBefore);
+    await confirmClear('Phone open');
+    await active.keyboard.press('Escape');
+    await active.locator('[data-career-utility="training"]').click();
+    const training = active.getByRole('dialog').filter({ has: active.getByRole('heading', { name: /Training Ground/i }) });
+    await training.waitFor();
+    await confirmClear('Training open');
+    await training.getByRole('button', { name: 'Close', exact: true }).click();
+    const focus = active.getByRole('button', { name: 'Passing', exact: true });
+    await focus.focus();
+    await active.keyboard.press('Enter');
+    assert.equal(await focus.getAttribute('aria-pressed'), 'true');
+    await active.getByRole('button', { name: 'Next Year', exact: true }).click();
+    const offer = active.getByRole('button', { name: /^Review contract with / }).first();
+    const club = (await offer.getAttribute('aria-label')).slice('Review contract with '.length);
+    await offer.click();
+    await confirmClear('Contract review');
+    await active.getByRole('button', {name:'Sign contract',exact:true}).click();
+    await active.waitForFunction(club => JSON.parse(localStorage.getItem('soccerCareerSave')).currentClub === club, club);
+    await confirmClear('Signed contract');
+    await active.reload({ waitUntil: 'domcontentloaded' });
+    await active.locator('[data-career-utility="phone"]').waitFor();
+    assert.equal(await active.evaluate(() => JSON.parse(localStorage.getItem('soccerCareerSave')).currentClub), club);
     await session.close();
-    console.log(`Active Soccer Career at ${width}px: existing dock and phone survived`);
+    console.log(`Active Soccer Career at ${width}px: practice, contract signing, resume and ad clearance passed`);
   }
   console.log('Non-game exclusions and active Soccer Career controls passed');
   assert.deepEqual(failures, []);

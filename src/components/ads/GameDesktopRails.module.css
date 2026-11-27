@@ -56,7 +56,7 @@
   }
 
   /* Viewport-fixed controls do not inherit the content column's width. */
-  :where(.frame[data-desktop-room]) .game :is([data-career-utility], [data-game-rail-dock="end"]) {
+  :where(.frame[data-desktop-room]) .game [data-game-rail-dock="end"] {
     right: calc(var(--game-ad-rail) + 1rem);
   }
 
@@ -66,17 +66,25 @@
     right: auto;
   }
 
-  :where(.frame[data-desktop-room]) .game :is([data-career-action-bar="floating"], [data-game-rail-dock="full"]) {
+  :where(.frame[data-desktop-room]) .game [data-game-rail-dock="full"] {
     left: var(--game-ad-rail);
     right: var(--game-ad-rail);
   }
-}
 
-/* On a compact desktop the career bar already occupies the whole middle.
-   Use the same inline utility row as mobile rather than stacking two controls. */
-@media (1280px <= width < 1536px) {
+  .game [data-career-action-bar="floating"] {
+    left: var(--browse-rail-space);
+    right: var(--browse-rail-space);
+  }
+
+  .game :is([data-active-career-saves], [data-career-player-row]) {
+    max-width: 45rem;
+    margin-inline: auto;
+  }
+
   .game [data-career-utilities] {
     display: flex;
+    max-width: 36rem;
+    margin-inline: auto;
   }
 
   .game [data-career-utility] {
@@ -97,5 +105,27 @@
 
   .game [data-career-utility] > span:nth-child(2) {
     display: inline;
+  }
+}
+
+/* Keep the 720px stats panel the same size as in the two-column dashboard.
+   Seasons run across the row above it until there is room for a sidebar. */
+@media (1280px <= width < 1664px) {
+  .game [data-career-panels] {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 45rem;
+    margin-inline: auto;
+  }
+
+  .game [data-career-timeline-list] {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .game [data-career-timeline-list] > * {
+    flex: 0 0 16.25rem;
+    margin-block: 0;
   }
 }
