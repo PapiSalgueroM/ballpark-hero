@@ -1,3 +1,11 @@
+### November 27, 2026. Four game upgrades ready for release verification
+
+Club Manager has a two-spell rehearsal against your next opponent. MLB My Career pitchers inherit three late-inning jams, Missing XI has an optional scouting challenge, and Stadium Tycoon has a three-fixture gate-management game. In Gate Control all 64 schedules have a winning route. Repeating the same scanner assignment every wave misses at least one target on all 64. The local production build passed with entry `index-CBE6ynNH.js`. The last verified custom-domain entry at this handoff was `index-C_DFbd-D.js`.
+
+App TypeScript, 22 focused tests, all 15 release checks and the Gate Control simulation passed. Native tests played all four modes in the assembled candidate. On the same Missing XI lineup a correct scout pick produced 11/11, while a miss locked that shirt at 10/11. The five refreshed URLs passed prerendering and the sitemap still has 176 entries.
+
+The [release handoff](HANDOFF-2026-11-27-GAMES.md) has the game entry points, remaining publication checks and the December 4 revenue comparison.
+
 ### November 27, 2026. Basketball closing possessions, the Tactical Cup and Conquest road trips
 
 Closing Time opens directly at /closing-time, from Pro Basketball or inside NBA My Career practice. The home and hub Continue playing cards reopen the same possession. Closing Time lets you coach offense and defense in three fourth quarters. The game and shot clocks count down on every call. You can send the ball to the wing, rim or corner, switch a defender, trap, foul or use one timeout to advance the inbound. Tied regulation earns an overtime result. In the third scenario, fouling and advancing the ball leaves time for the game-winning corner three. The same play from the backcourt runs out of time. NBA practice keeps this set outside the pro career save. The standalone leaderboard has a 100-point cap. Chrome replayed simultaneous final moves in two tabs at 320, 390 and 1366 pixels. Each pair earned one completion, while opening the result again earned none. The site tests intercepted those submissions.
