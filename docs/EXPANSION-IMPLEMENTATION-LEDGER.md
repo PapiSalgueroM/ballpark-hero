@@ -14,6 +14,8 @@ The scouting brief, Quick Sim bench order and Penalty Room are live in `490f639b
 
 The Match Centre extends the wide-buildup loop to kickoff. The manager can compare the projected left and right partnerships, then use either Play Live or Quick Sim. A selected bench order can run alongside the flank order. Changing the team in the live viewer changes only future play. These routes are one-match decisions. The ordinary fixture, an older live save and subsequent weeks keep their existing plans.
 
+CM-15 remains open. A November 27 baseline covered ten league fixtures apiece for Brentford, Real Madrid, Everton and Valencia in the simulator. All 245 corners for the managed sides named a taker. None recorded a target. Of the 240 corners with unambiguous exit times, substitutes were available as targets on 79. The engine draws shots before counting corners and assigning their minutes. A future rehearsed corner must record the delivery, an eligible receiver at the actual minute, the chance and its result together. A shot sharing a minute with a corner cannot establish that the delivery created it.
+
 The owner wants the next rounds concentrated on managing the club. The November 26 host ranking put Club Manager third overall behind Soccer Career and Home. The manager chapter contains 60 recommendations. Check each against the current game before implementing or marking it complete.
 
 | Masterplan item | What the manager can do in this build | What remains open |
