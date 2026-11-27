@@ -105,15 +105,14 @@ function detail(messages) {
 const sectionOf = title => Number((title.match(/^(\d+)/) || [])[1] || 0);
 
 const PAGE_LINES = {
-  hook: '  const g = useStadiumTycoon(getEdge);\n',
+  hook: '  const g = useStadiumTycoon(getEdge, getAttackOptions);\n',
   roomSignature: 'function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadiumTycoon>; visible: boolean; onNeedsYou: (v: boolean) => void }) {\n',
   roomMount: "<StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />",
   academyMount: '{academyOpened && (',
   onStatus: 'onStatus={setAcademyStatus}',
   unseenTimer: 'if (!g.promotion || !visible) return;',
   hookImport: "import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';\n",
-  leagueMount: "        <LeagueRoom g={g} visible={room === 'league'} />\n",
-  gearNotice: '        {g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}\n',
+  leagueMount: "        <LeagueRoom g={g} visible={room === 'league'} attackOptions={room === 'league' && academyRef.current\n          ? graduateAttackOptions(academyRef.current, loadLedger().gearLevel) : []} />\n",
 };
 
 /** Each control: the rewrites it plants, and the sections it must turn red and
@@ -123,13 +122,12 @@ const PAGE_CONTROLS = [
     name: 'remount',
     why: "the stadium's hook lives in the room, so opening the Academy unmounts it",
     rewrites: [
-      [PAGE_LINES.hook, ''],
+      /* The page's save notices have no errors to display in this control. */
+      [PAGE_LINES.hook, '  const g = { gearSaveBlocked: false, saveMoved: false, ticketSaveFailed: false, retryTicketSave: undefined };\n'],
       [PAGE_LINES.roomSignature, 'function StadiumRoom({ visible, onNeedsYou }: { visible: boolean; onNeedsYou: (v: boolean) => void }) {\n  const g = useStadiumTycoon();\n'],
       [PAGE_LINES.roomMount, "{room === 'stadium' && <StadiumRoom visible onNeedsYou={setStadiumNeedsYou} />}"],
       /* Round 582: the League room reads the page's hook too, so it goes with it. */
       [PAGE_LINES.leagueMount, ''],
-      /* Round 588: the page-level equipment notice also reads the moved hook. */
-      [PAGE_LINES.gearNotice, ''],
     ],
     red: [2],
     green: [1, 3, 4, 5, 6],
