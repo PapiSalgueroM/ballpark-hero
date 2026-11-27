@@ -25,7 +25,7 @@ export function ReturnPressReview({ play, live = false }: { play: PlayEvent[]; l
     {!live && <p>{won} won high · {bypassed} beaten · {throws.length - won - bypassed} direct</p>}
     <div aria-live="polite" aria-atomic="true" className="space-y-1 border-l-2 border-primary pl-2.5">
       <p className="font-bold">{minuteLabel(event)} · {event.who}{press.targetGenerated && <MadeUpTag className="ml-1" />} took the throw</p>
-      {press.outcome === 'direct' ? <p>The throw went straight to {press.outlet}{press.outletGenerated && <MadeUpTag className="ml-1" />}. Your winger held position.</p> : <>
+      {press.outcome === 'direct' ? <p>The throw went straight to {press.outlet}{press.outletGenerated && <MadeUpTag className="ml-1" />}. Your wide player held position.</p> : <>
         <p>{press.outlet}{press.outletGenerated && <MadeUpTag className="ml-1" />} played the ball back.
           {' '}{press.winger}{press.wingerGenerated && <MadeUpTag className="ml-1" />}
           {press.outcome === 'won' ? ' won it high.' : ' was beaten, leaving space behind.'}</p>

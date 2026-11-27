@@ -19,7 +19,7 @@ it('offers only the actual opposing wide defenders, shows who can close down and
   fireEvent.click(screen.getByText('Press the return pass'));
   const region = screen.getByRole('region', { name: 'Return-pass instructions' });
   fireEvent.click(within(region).getByRole('button', { name: 'Return-pass press rules' }));
-  expect(region).toHaveTextContent('A long throw costs your winger nothing');
+  expect(region).toHaveTextContent('A long throw costs your wide player nothing');
   const targetButton = within(region).getByRole('button', { name: new RegExp(target.n) });
   expect(targetButton).toHaveTextContent(winger.name);
   fireEvent.click(targetButton);

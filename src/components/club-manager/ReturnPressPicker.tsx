@@ -22,11 +22,11 @@ export function ReturnPressPicker({ career, live, minute, plus, onSelect }: {
     </summary>
     <section aria-label="Return-pass instructions" className="space-y-2 pb-2 text-xs">
       <div className="flex items-center justify-between gap-2">
-        <p>Send a winger after the ball when a fullback throws short and asks for it back. If the press is beaten, the wing is open.</p>
+        <p>Send your wide player after the ball when a defender throws short and asks for it back. If the press is beaten, the wing is open.</p>
         <button type="button" className="grid h-11 w-11 shrink-0 place-items-center rounded-md border border-border"
           aria-label="Return-pass press rules" aria-expanded={help} onClick={() => setHelp(!help)}><HelpCircle size={16} /></button>
       </div>
-      {help && <p className="rounded-md bg-secondary/50 p-2">For example, target their right-back. A long throw costs your winger nothing. Jumping the return can cost a fitness point. Stand down to keep your shape on later throws.</p>}
+      {help && <p className="rounded-md bg-secondary/50 p-2">For example, target their right-back. A long throw costs your wide player nothing. Jumping the return can cost a fitness point. Stand down to keep your shape on later throws.</p>}
       {unfamiliar ? <p>This save uses a newer pressing instruction.</p> : <>
         <p className="font-semibold">{plan && assigned
           ? <>{assigned.name}{assigned.generated && <MadeUpTag className="ml-1" />} is assigned to {plan.target}{assignedTarget?.g && <MadeUpTag className="ml-1" />}.</>
