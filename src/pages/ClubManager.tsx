@@ -940,6 +940,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
           {hubPanel === 'matchCentre' && g.facts ? (
             <div ref={panelRef}>
               <ScreenLoading><MatchCentre
+                key={JSON.stringify([c.clubName, c.season, c.week, g.facts.opponent])}
                 career={c}
                 facts={g.facts}
                 clubColor={club.color}
@@ -948,8 +949,8 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                 talkRead={matchRead}
                 talkStale={!!press && press.lastTone === c.teamTalk && press.toneRun >= 3}
                 onChangeLineup={() => { setTacticsTile(null); g.setActiveTab('tactics'); }}
-                onQuickSim={order => { setHubPanel(null); setWatchMode(false); g.quickPlay(order); }}
-                onLive={() => { setHubPanel(null); setWatchMode(true); g.play(); }}
+                onQuickSim={(order, flankPlan) => { setHubPanel(null); setWatchMode(false); g.quickPlay(order, flankPlan); }}
+                onLive={flankPlan => { setHubPanel(null); setWatchMode(true); g.play(flankPlan); }}
                 onBack={() => setHubPanel(null)}
               /></ScreenLoading>
             </div>
@@ -981,8 +982,8 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                 label: (() => { const n = shootoutOrderOf(c)?.length ?? 0; return n ? `${n} of ${SHOOTOUT_MAX_ORDER} listed` : 'not set, tap to pick your takers'; })(),
               } : null,
             } : null}
-            windowAction={fx && fx.kind === 'window' ? g.play : null}
-            seasonAction={fx && fx.kind === 'seasonOver' ? g.play : null}
+            windowAction={fx && fx.kind === 'window' ? () => g.play() : null}
+            seasonAction={fx && fx.kind === 'seasonOver' ? () => g.play() : null}
           /></ScreenLoading>
           {/* Round 74: the tile rule. Everything below the next match is a
               box; tapping one opens its own screen instead of one long page
