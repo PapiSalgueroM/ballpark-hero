@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, Play, Zap } from 'lucide-react';
 import type { BenchOrder, CareerState, MatchFacts, FormResult, TalkTone } from '@/lib/clubManager';
@@ -9,6 +10,8 @@ import { BenchOrderCard } from '@/components/club-manager/BenchOrderCard';
 import { TeamTalkRow } from '@/components/club-manager/TeamTalkRow';
 import { inFixtureOrder, myClubFirst } from '@/lib/cmMatchDisplay';
 import { AI_STYLES, opponentStyle } from '@/lib/clubManagerTactics';
+import { kickoffFlankPlayers, type FlankPlan } from '@/lib/clubManagerFlank';
+import { FlankRoutePicker } from './FlankRoutePicker';
 
 /**
  * Round 157: the pre-match facts screen, modelled on what a matchday app
@@ -53,9 +56,9 @@ interface MatchCentreProps {
   talkRead: string | null;
   talkStale: boolean;
   onChangeLineup?: () => void;
-  onQuickSim: (order?: BenchOrder) => void;
+  onQuickSim: (order?: BenchOrder, flankPlan?: FlankPlan) => void;
   /** Round 158's animated viewer, which Round 472 made the one live way in. */
-  onLive: () => void;
+  onLive: (flankPlan?: FlankPlan) => void;
   onBack: () => void;
 }
 
@@ -63,6 +66,9 @@ export function MatchCentre({
   career, facts, clubColor, tone, onTone, talkRead, talkStale, onQuickSim, onLive, onBack, onChangeLineup,
 }: MatchCentreProps) {
   const f = facts;
+  const [flankPlan, setFlankPlan] = useState<FlankPlan | null>(null);
+  const pair = flankPlan && kickoffFlankPlayers(career, flankPlan.side);
+  const startQuick = (order?: BenchOrder) => onQuickSim(order, flankPlan ?? undefined);
   /* Round 1522: the style they play (keyed, no draw), the one the engine reads. */
   const style = career?.clubStrengths ? opponentStyle(career, f.opponent) : null;
   const venue = f.home === true ? 'Home' : f.home === false ? 'Away' : 'Neutral venue';
@@ -168,7 +174,7 @@ export function MatchCentre({
             <span>Draw {f.odds.draw}%</span>
             <span className="text-red-400 font-bold">They win {f.odds.loss}%</span>
           </div>
-          <div className="text-[8px] text-muted-foreground/70 mt-0.5">Engine odds, from the same maths the match is played with.</div>
+          <div className="text-[8px] text-muted-foreground/70 mt-0.5">Engine odds for normal buildup, before the team talk and matchday changes.</div>
         </div>
       </div>
 
@@ -206,7 +212,18 @@ export function MatchCentre({
       {/* The talk, if you want one. Optional by design. */}
       <TeamTalkRow tone={tone} onTone={onTone} read={talkRead} when="before kick off" stale={talkStale} />
 
-      <BenchOrderCard key={career.season + ':' + career.week} career={career} onSim={onQuickSim} />
+      <FlankRoutePicker title="Kickoff buildup" plan={flankPlan} onChange={setFlankPlan}>
+        <p className="pb-2 text-xs">Choose how to start against {f.opponent}. Play Live and Quick Sim both use this call for this match.</p>
+        {pair && <dl className="grid grid-cols-2 gap-2 pb-2 text-xs" aria-label="Starting flank pair">
+          {([['Fullback', pair.fullback], ['Winger', pair.winger]] as const).map(([role, player]) =>
+            <div key={role} className="min-w-0 rounded-md bg-secondary/50 p-2">
+              <dt className="text-muted-foreground">{role}</dt>
+              <dd className="break-words font-bold">{player.name}{player.generated && <MadeUpTag className="ml-1" />}</dd>
+              <dd>{player.fitness}% fit</dd>
+            </div>)}
+        </dl>}
+      </FlankRoutePicker>
+      <BenchOrderCard key={career.season + ':' + career.week} career={career} onSim={startQuick} />
 
       {/* Actions. Round 472: one match, two ways through it. There used to be
           three buttons here and two of them were the same fixture with the
@@ -215,14 +232,14 @@ export function MatchCentre({
           quick one costs you nothing but the ninety minutes. */}
       <div className="grid grid-cols-2 gap-2">
         <button
-          onClick={onLive}
+          onClick={() => onLive(flankPlan ?? undefined)}
           data-cm-way="live"
           className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-primary text-primary-foreground rounded-xl font-bold text-sm hover:opacity-90 transition-opacity"
         >
           <Play className="w-4 h-4" /> Play Live
         </button>
         <button
-          onClick={() => onQuickSim()}
+          onClick={() => startQuick()}
           data-cm-way="quick"
           className="inline-flex items-center justify-center gap-1 px-2 py-3 bg-secondary text-foreground rounded-xl font-bold text-sm hover:bg-secondary/70 transition-colors"
         >
