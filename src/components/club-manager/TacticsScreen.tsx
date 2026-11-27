@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { ArrowLeft, ChevronDown, Wand2, X } from 'lucide-react';
 import {
   FORMATIONS, MENTALITIES, resolveXI, isAvailable, xiFitReport, fitGrade, FIT_PENALTY,
@@ -17,6 +17,8 @@ import { ratingTint, SecondPositionChips } from '@/components/club-manager/Squad
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { MatchPlansCard } from '@/components/club-manager/MatchPlansCard';
 import { readCustomShape, type CustomShapePoint } from '@/lib/clubManagerPositions';
+
+const TouchlineRehearsal = lazy(() => import('@/components/club-manager/TouchlineRehearsal'));
 
 const lastName = (n: string) => n.replace(' (Youth)', '').split(' ').slice(-1)[0];
 
@@ -56,7 +58,7 @@ interface TacticsScreenProps {
   onFormation: (idx: number) => void;
   onMentality: (m: Mentality) => void;
   /** Round 1522: the four standing instructions. Without it the block is not drawn. */
-  onInstructions?: (i: TeamInstructions) => void;
+  onInstructions?: (i: TeamInstructions, expected?: CareerState) => void;
   /** Round 1522: the next opponent, for the line on how they play and what tends to work against it. */
   theirOpponent?: string | null;
   onSlot: (slotIdx: number, playerId: string | null) => void;
@@ -128,6 +130,7 @@ export function TacticsScreen({
   const [openSlot, setOpenSlot] = useState<number | null>(null);
   /* Round 1522: the instructions tile, folded until asked for. */
   const [instrOpen, setInstrOpen] = useState(false);
+  const [rehearsalOpen, setRehearsalOpen] = useState(false);
   // A one-shot pitch flourish on top of the shape move, keyed so it replays.
   const [mentPulse, setMentPulse] = useState(0);
   const pitchRef = useRef<HTMLDivElement>(null);
@@ -582,6 +585,16 @@ export function TacticsScreen({
           )}
         </div>
       )}
+
+      {theirOpponent && onInstructions && !career.live && !career.sacked && !career.wilderness && <Dialog open={rehearsalOpen} onOpenChange={setRehearsalOpen}>
+        <DialogTrigger asChild><button type="button" className="min-h-11 w-full rounded-lg border border-border bg-card px-3 py-2 text-left text-sm font-semibold">
+          Rehearse the next match<span className="block text-xs font-normal text-muted-foreground">Coach the last 30 minutes against {theirOpponent}.</span>
+        </button></DialogTrigger>
+        <DialogContent className="max-h-[85dvh] max-w-lg overflow-y-auto">
+          <DialogHeader><DialogTitle>Touchline rehearsal</DialogTitle><DialogDescription>Your starting XI against {theirOpponent} in practice.</DialogDescription></DialogHeader>
+          {rehearsalOpen && <Suspense fallback={<p role="status">Loading rehearsal...</p>}><TouchlineRehearsal career={career} onApply={onInstructions}/></Suspense>}
+        </DialogContent>
+      </Dialog>}
 
 
       {onCustomShape && <div className="rounded-xl border border-border bg-card p-2 space-y-2" style={{ overflowAnchor: 'none' }}>

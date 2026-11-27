@@ -991,8 +991,8 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
 
   /* Round 1522: the four standing instructions, between matches (the engine refuses with a match on, and drops
      the field when all four are back on balanced). */
-  const setTeamInstructions = useCallback((i: TeamInstructions) => {
-    setCareer(prev => (prev ? setInstructions(prev, i) ?? prev : prev));
+  const setTeamInstructions = useCallback((i: TeamInstructions, expected?: CareerState) => {
+    setCareer(prev => (prev && (!expected || prev === expected) ? setInstructions(prev, i) ?? prev : prev));
   }, []);
 
   const setXiSlot = useCallback((slotIdx: number, playerId: string | null) => {

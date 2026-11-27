@@ -17415,7 +17415,7 @@ const MENT_MOD: Record<Mentality, { atk: number; def: number }> = {
    then, so withSeed's swap in the dailies still holds); the watched
    Champions League passes a keyed stream per fixture so it never touches
    the game's own. */
-function poisson(lambda: number, rand: () => number = Math.random): number {
+export function poisson(lambda: number, rand: () => number = Math.random): number {
   const L = Math.exp(-lambda);
   let k = 0;
   let p = 1;
@@ -19052,7 +19052,7 @@ function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: 
 }
 
 /** Round 1522: the instructions in force in a live match now (its log's last entry), balanced when it has none. */
-export function liveInstructions(live: LiveMatch): TeamInstructions {
+export function liveInstructions(live: Pick<LiveMatch, 'instrLog'>): TeamInstructions {
   const log = live.instrLog;
   return log && log.length ? log[log.length - 1].instructions : BALANCED;
 }
@@ -19074,7 +19074,7 @@ function copyCustomShape(shape: CustomShape): CustomShape {
   return { v: 1, formationIndex: shape.formationIndex, points: shape.points.map(p => ({ x: p.x, y: p.y })) };
 }
 
-function livePositionSnapshot(live: LiveMatch): PositionSnapshot | null {
+function livePositionSnapshot(live: Pick<LiveMatch, 'positionRules' | 'formationIndex' | 'customShape'>): PositionSnapshot | null {
   return live.positionRules === 1 && live.formationIndex !== undefined
     ? { formationIndex: live.formationIndex, ...(Object.prototype.hasOwnProperty.call(live, 'customShape') ? { customShape: live.customShape } : {}) }
     : null;
@@ -19158,8 +19158,8 @@ function etScale(fx: MyFixture): number { return fx.extraTime ? ET_DEFLATOR : 1;
  * is newer is in their ears, the other dugout reacts to the score, the
  * shape is whatever the manager sent them out in.
  */
-function secondHalfLambdas(
-  state: CareerState, fx: MyFixture, live: LiveMatch, xi: XiSlot[], scoreMine: number, scoreOpp: number,
+export function secondHalfLambdas(
+  state: CareerState, fx: MyFixture, live: Pick<LiveMatch, 'myGoals' | 'oppGoals' | 'talk' | 'mentality' | 'instrLog' | 'oppStyle' | 'positionRules' | 'formationIndex' | 'customShape'>, xi: XiSlot[], scoreMine: number, scoreOpp: number,
 ): { lamMine: number; lamOpp: number; mine: number; oppS: number } {
   const oppS = oppStrengthVsMe(state, fx.opponent);
   const homeAtk = fx.home === true ? 0.28 : fx.home === false ? -0.12 : 0.08;
