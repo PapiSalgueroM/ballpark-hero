@@ -63,6 +63,11 @@ export function loadAdSense(requestedSlot?: HTMLModElement | null): boolean {
   } catch { return false; }
 }
 
+// The publisher can optimize an eligible page even when a manual unit cannot fit.
+export function loadPublicAdPublisher(): void {
+  if (getEffectiveConsent().advertising && isPublicAdDocument()) startAdSense();
+}
+
 function startAdSense(): boolean {
   if (getAdSenseScript()) return true;
   updateGoogleConsent(getEffectiveConsent());

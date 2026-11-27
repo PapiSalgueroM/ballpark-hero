@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal, flushSync } from 'react-dom';
 import { Link } from 'react-router-dom';
+import { hasRegionalAdDefault, regionalLookupPending, resolveAdvertisingRegion } from '@/lib/advertisingRegion';
 import { GoogleAdConsentReview } from './GoogleAdConsentReview';
 import { loadConsentedScripts, stopRevokedServices } from '@/lib/consentedScripts';
 import {
   ANALYTICS_READY, CONSENT_CHANGED_EVENT, CONSENT_EFFECTIVE_CHANGED_EVENT, CONSENT_KEY, CONSENT_MAX_AGE_MS, CONSENT_OPEN_EVENT,
   canReloadAfterWithdrawal, enforceGlobalPrivacyControl, getEffectiveConsent, getPendingConsentWithdrawal, isGlobalPrivacyControlEnabled,
-  migrateConsentPreferences, readConsentPreferences, saveConsentPreferences, setPendingConsentWithdrawal, synchronizeConsentStorageEvent,
+  mayUseRegionalDefault, migrateConsentPreferences, readConsentPreferences, saveConsentPreferences, setPendingConsentWithdrawal, synchronizeConsentStorageEvent,
   type ConsentPurposes,
 } from '@/lib/consentPreferences';
 import { safeLocalStorage } from '@/lib/safeStorage';
@@ -16,7 +17,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
   inline?: boolean; compactInitial?: boolean; waitForRulesHost?: boolean;
 }) {
   const [preferences, setPreferences] = useState(readConsentPreferences);
-  const [visible, setVisible] = useState(() => inline && !preferences && safeLocalStorage.getItem('cookie-consent') !== 'essential');
+  const [visible, setVisible] = useState(() => inline && !preferences && !(mayUseRegionalDefault() && regionalLookupPending()) && safeLocalStorage.getItem('cookie-consent') !== 'essential');
   const [showDetails, setShowDetails] = useState(false);
   const [helpTarget, setHelpTarget] = useState<HTMLElement | null>(null);
   const [advertising, setAdvertising] = useState(false);
@@ -55,8 +56,8 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
       }
       setGpc(isGlobalPrivacyControlEnabled());
       setPreferences(saved);
-      setVisible(!saved || explicitlyOpen.current);
-      if (!saved) {
+      setVisible((!saved && !(mayUseRegionalDefault() && (hasRegionalAdDefault() || regionalLookupPending()))) || explicitlyOpen.current);
+      if (!saved && !explicitlyOpen.current) {
         setAdvertising(false);
         setAnalytics(false);
       }
@@ -80,6 +81,8 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
         expiryTimer = window.setTimeout(reconcile, Math.min(2147483647, Math.max(50, remaining)));
       }
     };
+    let mounted = true;
+    if (mayUseRegionalDefault()) void resolveAdvertisingRegion().then(() => { if (mounted) reconcile(); });
     const legacy = migrateConsentPreferences();
     // Old analytics cookies/code can survive a previous release even when the
     // new effective analytics choice is false. Pause those without loading a vendor.
@@ -107,6 +110,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
     window.addEventListener('focus', reconcile);
     document.addEventListener('visibilitychange', reconcile);
     return () => {
+      mounted = false;
       window.clearTimeout(expiryTimer);
       window.removeEventListener('storage', onStorage);
       window.removeEventListener(CONSENT_CHANGED_EVENT, reconcile);
@@ -213,16 +217,18 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
       <div className={`max-w-3xl mx-auto ${compact ? 'space-y-2' : 'space-y-3'} text-sm text-muted-foreground`}>
         {/* Reserve the narrow inline layout's extra text line before Inter arrives. */}
         <p className={inlineNotice ? 'max-[369px]:min-h-[3.75rem]' : undefined}>
-          {ANALYTICS_READY ? COOKIE_CHOICE_INTRO : ADVERTISING_ONLY_INTRO} We ask again in 180 days.{' '}
+          {hasRegionalAdDefault() && mayUseRegionalDefault()
+            ? 'Advertising is on by default in your region. Turn it off here at any time. Google Analytics only runs if you choose it.'
+            : ANALYTICS_READY ? COOKIE_CHOICE_INTRO : ADVERTISING_ONLY_INTRO} We remember your choice for 180 days.{' '}
           <Link to="/privacy" data-google-vignette="false" className="underline hover:text-foreground font-medium">Learn more</Link>
         </p>
         {!compact && <div className="flex flex-wrap gap-x-6 gap-y-2">
           <label className="inline-flex min-h-11 items-center gap-2 text-foreground">
-            <input type="checkbox" checked={advertising && !gpc} disabled={gpc || pendingReload} onChange={event => setAdvertising(event.target.checked)} />
+            <input type="checkbox" checked={advertising && !gpc} disabled={gpc || pendingReload} onChange={event => { explicitlyOpen.current = true; setAdvertising(event.target.checked); }} />
             Advertising
           </label>
           {ANALYTICS_READY ? <label className="inline-flex min-h-11 items-center gap-2 text-foreground">
-            <input type="checkbox" checked={analytics} disabled={pendingReload} onChange={event => setAnalytics(event.target.checked)} />
+            <input type="checkbox" checked={analytics} disabled={pendingReload} onChange={event => { explicitlyOpen.current = true; setAnalytics(event.target.checked); }} />
             Google Analytics
           </label> : <p data-analytics-paused-status="">
             <strong>Google Analytics is paused.</strong> Lovable still measures basic visits.
@@ -237,9 +243,9 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
           <button type="button" onClick={() => save({ advertising: false, analytics: false })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Reject all</button>
           <button type="button" disabled={pendingReload} onClick={() => save({ advertising: true, analytics: ANALYTICS_READY })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Accept all</button>
           {compact
-            ? <button type="button" onClick={() => setShowDetails(true)} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Manage choices</button>
+            ? <button type="button" onClick={() => { explicitlyOpen.current = true; setShowDetails(true); }} className={`min-h-11 ${buttonPadding} py-2 rounded-lg border border-border text-foreground font-medium hover:bg-muted transition-colors`}>Manage choices</button>
             : <button type="button" onClick={() => save({ advertising, analytics })} className={`min-h-11 ${buttonPadding} py-2 rounded-lg bg-primary text-primary-foreground font-semibold hover:opacity-90 transition-opacity`}>Save choices</button>}
-          {preferences && !pendingReload && <button type="button" onClick={cancel} className={`min-h-11 ${buttonPadding} py-2 underline hover:text-foreground`}>Cancel</button>}
+          {(preferences || explicitlyOpen.current) && !pendingReload && <button type="button" onClick={cancel} className={`min-h-11 ${buttonPadding} py-2 underline hover:text-foreground`}>Cancel</button>}
         </div>
       </div>
     </div>

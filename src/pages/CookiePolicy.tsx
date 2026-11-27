@@ -27,8 +27,9 @@ const CookiePolicy = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Your choices</h2>
-          <p>{ANALYTICS_READY ? 'Advertising and Google Analytics start off. You can choose either one separately.' : 'Advertising starts off. Google Analytics 4 stays paused.'} Advertising stays off if your browser exposes Global Privacy Control to the site, even if you previously turned Advertising on.</p>
+          <p>For a new visitor in the EEA, UK or Switzerland, Advertising stays off until you choose it. We also ask first if we cannot confirm your region. Elsewhere, Advertising starts on and you can turn it off in Cookie choices. An existing choice takes priority. Google Analytics always requires a separate opt-in. Advertising stays off if your browser exposes Global Privacy Control to the site, even if you previously turned Advertising on.</p>
           <p className="mt-2">{ANALYTICS_READY ? 'Reject all keeps both options off. Accept all turns on both available options.' : 'Reject all keeps Advertising off. Accept all turns Advertising on where available.'} Save choices applies your selection. We ask again after 180 days. That period applies to your cookie choice, not a promise to delete game saves or provider records after 180 days.</p>
+          <p className="mt-2">For a new visitor, our browser code reads the country code from Cloudflare on this site. It keeps only the applicable ad setting in memory for this visit. We do not save the country or IP address for this check.</p>
           <p className="mt-2">Open Cookie choices here or in the footer whenever you want. Opening the settings does not change your saved choice.</p>
           <button type="button" data-no-prerender="" onClick={event => openConsentChoices(event.currentTarget)}
             className="mt-2 inline-flex min-h-11 items-center rounded-md border border-border px-3 font-medium text-foreground underline hover:bg-muted focus-visible:outline-ring">
@@ -38,7 +39,7 @@ const CookiePolicy = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">Advertising</h2>
-          <p>Ads help pay for the free games. If you turn Advertising on, the site can request Google AdSense ads on eligible public pages, including games and sports hubs. Google may not show an ad on every visit. We request non-personalized ads. These may still use cookies and identifiers for delivery, frequency limits, measurement and fraud prevention. They are not anonymous ads. See the <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>'s advertising section and <a href="https://policies.google.com/technologies/partner-sites" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">Google's linked privacy information</a> for more detail.</p>
+          <p>Ads help pay for the free games. When Advertising is on, the site can request Google AdSense ads on eligible public pages, including games and sports hubs. Google may not show an ad on every visit. We request non-personalized ads. These may still use cookies and identifiers for delivery, frequency limits, measurement and fraud prevention. They are not anonymous ads. See the <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link>'s advertising section and <a href="https://policies.google.com/technologies/partner-sites" className="underline hover:text-foreground transition-colors" target="_blank" rel="noopener noreferrer">Google's linked privacy information</a> for more detail.</p>
         </div>
 
         <div>

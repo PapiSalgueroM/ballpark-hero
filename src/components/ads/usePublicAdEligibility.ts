@@ -4,7 +4,7 @@ import { CONSENT_CHANGED_EVENT, CONSENT_EFFECTIVE_CHANGED_EVENT, getEffectiveCon
 import { normalizeRoutePath } from '@/lib/routePath';
 import { AD_EXCLUDED_SCREEN, isPublicAdAddress, isPublicAdDocument } from './publicAdEligibility';
 
-export function usePublicAdEligibility(mediaQuery: string): boolean {
+export function usePublicAdEligibility(mediaQuery: string, onPublicVisit?: () => void): boolean {
   const { pathname, search, hash } = useLocation();
   const path = normalizeRoutePath(pathname);
   const publicAddress = isPublicAdAddress(path, search, hash);
@@ -30,7 +30,9 @@ export function usePublicAdEligibility(mediaQuery: string): boolean {
       watchHomeSlot = path === '/' && advertising && !home.current.hadSlot;
       rememberHomeSlot();
       if (path === '/' && home.current.hadSlot && document.querySelector('[data-home-search-active]')) home.current.retired = true;
-      setAllowedPath(!home.current.retired && media.matches && advertising && isPublicAdDocument() ? path : null);
+      const allowed = !home.current.retired && advertising && isPublicAdDocument();
+      if (allowed) onPublicVisit?.();
+      setAllowedPath(allowed && media.matches ? path : null);
     };
     const head = new MutationObserver(check);
     head.observe(document.head, { childList: true, subtree: true, attributes: true, attributeFilter: ['href', 'content', 'name', 'rel'] });
@@ -57,7 +59,7 @@ export function usePublicAdEligibility(mediaQuery: string): boolean {
       window.removeEventListener(CONSENT_CHANGED_EVENT, check);
       window.removeEventListener(CONSENT_EFFECTIVE_CHANGED_EVENT, check);
     };
-  }, [path, publicAddress, mediaQuery]);
+  }, [path, publicAddress, mediaQuery, onPublicVisit]);
 
   return publicAddress && allowedPath === path;
 }

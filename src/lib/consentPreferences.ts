@@ -1,3 +1,4 @@
+import { hasRegionalAdDefault } from './advertisingRegion';
 import { getStorageTrouble, safeLocalStorage, settlePendingSaves } from '@/lib/safeStorage';
 
 export const CONSENT_KEY = 'cookie-consent-v2';
@@ -51,11 +52,16 @@ export function isGlobalPrivacyControlEnabled(): boolean {
   catch { return false; }
 }
 
+export function mayUseRegionalDefault(): boolean {
+  return !pendingWithdrawal.advertising && !isGlobalPrivacyControlEnabled() && getStorageTrouble() === null &&
+    safeLocalStorage.getItem(CONSENT_KEY) === null && safeLocalStorage.getItem('cookie-consent') === null;
+}
+
 export function getEffectiveConsent(): ConsentPurposes {
   const value = readConsentPreferences();
   const legacyDenial = safeLocalStorage.getItem('cookie-consent') === 'essential';
   return {
-    advertising: !pendingWithdrawal.advertising && !legacyDenial && value?.advertising === true && !isGlobalPrivacyControlEnabled(),
+    advertising: !pendingWithdrawal.advertising && !legacyDenial && (value?.advertising === true || (hasRegionalAdDefault() && mayUseRegionalDefault())) && !isGlobalPrivacyControlEnabled(),
     analytics: !pendingWithdrawal.analytics && !legacyDenial && ANALYTICS_READY && value?.analytics === true,
   };
 }
@@ -66,7 +72,7 @@ export function migrateConsentPreferences(): 'accepted' | 'essential' | null {
     safeLocalStorage.setItem(CONSENT_KEY, JSON.stringify({ version: 2, advertising: false, analytics: false, updatedAt: Date.now() }));
   }
   // Never turn the old bundled grant into permission for separate purposes.
-  if (legacy !== null) safeLocalStorage.removeItem('cookie-consent');
+  if (legacy !== null && (legacy !== 'accepted' || safeLocalStorage.getItem(CONSENT_KEY) !== null)) safeLocalStorage.removeItem('cookie-consent');
   return legacy === 'accepted' || legacy === 'essential' ? legacy : null;
 }
 

@@ -3,6 +3,17 @@
 <head>
 
     
+    <script data-dukb-host-analytics-default="">
+      // Lovable reads Consent Mode before the app mounts. Queue its default without loading a tag.
+      (function () {
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+          window.__DUKB_HOST_ANALYTICS_DEFAULT__ = arguments;
+          window.dataLayer.push(arguments);
+        }
+        gtag('consent', 'default', { analytics_storage: 'denied' });
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Round 90: index.html must never be cached. The hashed asset files
          under /assets are immutable and still cache normally; only this
@@ -238,6 +249,27 @@
        moment the app appears. The cap on the copy stays so the document
        cannot scroll during the wait. -->
   
+  <script data-dukb-home-boot="">
+    (function () {
+      var page = document.documentElement;
+      page.classList.add('dukb-js');
+      if (location.pathname !== '/' || window.__DUKB_PRERENDER__) return;
+
+      function revealGuide() {
+        window.clearTimeout(deadline);
+        window.removeEventListener('error', onEntryError, true);
+        if (document.getElementById('dukb-boot')) page.classList.add('dukb-home-boot-failed');
+      }
+
+      function onEntryError(event) {
+        if (event.target === document.querySelector('script[type="module"][src]')) revealGuide();
+      }
+
+      // Entry errors and a stalled mount both leave the original guide available.
+      var deadline = window.setTimeout(revealGuide, 12000);
+      window.addEventListener('error', onEntryError, true);
+    })();
+  </script>
   <noscript></noscript>
   
   
@@ -257,11 +289,12 @@
 <h2>Cookies and storage</h2>
 <p>DoUKnowBall uses browser storage for game progress, scores, streaks, settings and your cookie choices. Account features also use our sign-in service. Some gameplay data is sent to our database as explained in the <a href="/privacy">Privacy Policy</a>. You can play without an account and with optional advertising off.</p>
 <h2>Your choices</h2>
-<p>Advertising and Google Analytics start off. You can choose either one separately. Advertising stays off if your browser exposes Global Privacy Control to the site, even if you previously turned Advertising on.</p>
+<p>For a new visitor in the EEA, UK or Switzerland, Advertising stays off until you choose it. We also ask first if we cannot confirm your region. Elsewhere, Advertising starts on and you can turn it off in Cookie choices. An existing choice takes priority. Google Analytics always requires a separate opt-in. Advertising stays off if your browser exposes Global Privacy Control to the site, even if you previously turned Advertising on.</p>
 <p>Reject all keeps both options off. Accept all turns on both available options. Save choices applies your selection. We ask again after 180 days. That period applies to your cookie choice, not a promise to delete game saves or provider records after 180 days.</p>
+<p>For a new visitor, our browser code reads the country code from Cloudflare on this site. It keeps only the applicable ad setting in memory for this visit. We do not save the country or IP address for this check.</p>
 <p>Open Cookie choices here or in the footer whenever you want. Opening the settings does not change your saved choice.</p>
 <h2>Advertising</h2>
-<p>Ads help pay for the free games. If you turn Advertising on, the site can request Google AdSense ads on eligible public pages, including games and sports hubs. Google may not show an ad on every visit. We request non-personalized ads. These may still use cookies and identifiers for delivery, frequency limits, measurement and fraud prevention. They are not anonymous ads. See the <a href="/privacy">Privacy Policy</a>'s advertising section and <a href="https://policies.google.com/technologies/partner-sites">Google's linked privacy information</a> for more detail.</p>
+<p>Ads help pay for the free games. When Advertising is on, the site can request Google AdSense ads on eligible public pages, including games and sports hubs. Google may not show an ad on every visit. We request non-personalized ads. These may still use cookies and identifiers for delivery, frequency limits, measurement and fraud prevention. They are not anonymous ads. See the <a href="/privacy">Privacy Policy</a>'s advertising section and <a href="https://policies.google.com/technologies/partner-sites">Google's linked privacy information</a> for more detail.</p>
 <h2>Turning advertising off</h2>
 <p>If Google's European consent message applies and has loaded, reopen Cookie choices in the footer and select Review Google’s European ad consent to change your answer to Google. You can also turn off site advertising in Cookie choices.</p>
 <p>Open Cookie choices, turn Advertising off and choose Save choices. We stop new advertising requests and clear matching advertising cookies our code can access. Your Google Analytics choice stays separate. We normally reload to stop already-loaded scripts. If your choice cannot be saved or a game has unsaved progress, a notice asks you to refresh when it is safe; already-loaded code may continue until then.</p>
@@ -272,7 +305,10 @@
 <p>Cloudflare helps protect our hosted site from automated traffic. It can set a security cookie called __cf_bm. Cloudflare says the cookie holds encrypted bot-detection information and expires after 30 minutes of continuous inactivity. It is separate from optional Advertising and Analytics. See <a href="https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/#__cf_bm-cookie-for-cloudflare-bot-products">Cloudflare's cookie information</a>.</p>
 <p>For privacy or deletion requests, use the contact details and rights process in the <a href="/privacy">Privacy Policy</a>.</p>
 <div data-site-chrome>
-<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
 <a href="/soccer">Soccer</a>
 <a href="/pro-basketball">NBA</a>
 <a href="/hockey">NHL</a>
@@ -280,16 +316,13 @@
 <a href="/baseball">MLB</a>
 <a href="/college">College</a>
 <a href="/search">Search Games</a>
-<a href="/about">About</a>
-<a href="/contact">Contact</a>
-<a href="/whats-new">What's New</a>
 <a href="/records">Record Books</a>
+<a href="/whats-new">What's New</a>
 <a href="/leaderboard">Leaderboard</a>
-<a href="/privacy">Privacy Policy</a>
 <a href="/cookie-policy">Cookie Policy</a>
-<a href="/terms">Terms of Service</a>
 <a href="/accessibility">Accessibility</a>
-<p>Ads help keep DoUKnowBall free. Google Analytics helps us see which pages people visit. You choose each separately and can still play if you reject both. We ask again in 180 days. <a href="/privacy">Learn more</a></p>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<p>Ads help keep the games free. Choose whether Google AdSense may use cookies for non-personalized ads. Google Analytics measures page visits. You can play with either or both off. We remember your choice for 180 days. <a href="/privacy">Learn more</a></p>
 </div>
 </div>
 </div>
