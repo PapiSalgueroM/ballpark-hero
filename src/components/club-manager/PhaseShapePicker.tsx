@@ -7,7 +7,7 @@ const DEFAULT_ORDER: PhaseOrder = {
   v: 1, withBall: 'secure-3-2-5', withoutBall: 'screen-4-1-4-1', outlet: 'near', recovery: 'screen',
 };
 
-const shapes = {
+export const PHASE_SHAPE_NAMES = {
   'secure-3-2-5': '3-2-5 buildup',
   'wide-2-3-5': '2-3-5 wide buildup',
   'screen-4-1-4-1': '4-1-4-1 midfield screen',
@@ -31,7 +31,7 @@ export function PhasePositionMap({ positions, order }: { positions: PhasePositio
     </div>
     <figure className="mx-auto max-w-80 space-y-1">
       <figcaption className="text-center text-xs font-bold">
-        {phase === 'return' ? 'From attack back into defensive shape' : shapes[order[selectedShape]]}
+        {phase === 'return' ? 'From attack back into defensive shape' : PHASE_SHAPE_NAMES[order[selectedShape]]}
       </figcaption>
       <div aria-hidden="true" className="relative aspect-square overflow-hidden rounded-md border border-emerald-300/50 bg-emerald-950">
         <div className="absolute inset-[4%] rounded-sm border border-emerald-300/35" />
@@ -110,14 +110,14 @@ export function PhaseShapePicker({ order, positionsFor, onChange }: {
         <fieldset disabled={!positions.available} className="grid gap-2 sm:grid-cols-2 disabled:opacity-70">
           <label className="font-semibold">With the ball
             <select className={selectClass} value={draft.withBall} onChange={e => change({ withBall: e.target.value as PhaseOrder['withBall'] })}>
-              <option value="secure-3-2-5">{shapes['secure-3-2-5']}</option>
-              <option value="wide-2-3-5">{shapes['wide-2-3-5']}</option>
+              <option value="secure-3-2-5">{PHASE_SHAPE_NAMES['secure-3-2-5']}</option>
+              <option value="wide-2-3-5">{PHASE_SHAPE_NAMES['wide-2-3-5']}</option>
             </select>
           </label>
           <label className="font-semibold">Without the ball
             <select className={selectClass} value={draft.withoutBall} onChange={e => change({ withoutBall: e.target.value as PhaseOrder['withoutBall'] })}>
-              <option value="screen-4-1-4-1">{shapes['screen-4-1-4-1']}</option>
-              <option value="step-4-4-2">{shapes['step-4-4-2']}</option>
+              <option value="screen-4-1-4-1">{PHASE_SHAPE_NAMES['screen-4-1-4-1']}</option>
+              <option value="step-4-4-2">{PHASE_SHAPE_NAMES['step-4-4-2']}</option>
             </select>
           </label>
           <label className="font-semibold">First pass after a save

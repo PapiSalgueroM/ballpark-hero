@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { minuteLabel, type PlayEvent } from '@/lib/clubManager';
 import { isPhaseMove, readPhaseHistory, type PhaseMove, type PhaseStep } from '@/lib/clubManagerPhaseShapes';
-import { PhasePositionMap } from './PhaseShapePicker';
+import { PHASE_SHAPE_NAMES, PhasePositionMap } from './PhaseShapePicker';
 import { MadeUpTag } from './SquadScreen';
 
 type PhaseEvent = PlayEvent & { phaseMove: PhaseMove };
@@ -57,10 +57,10 @@ export function PhaseShapeReview({ play, history, live = false }: {
         chance && <>{chance.who ? named({ name: chance.who, generated: chance.whoGenerated }) : 'The player'} {chance.goal ? 'scored.' : chance.on ? 'shot on target.' : 'shot off target.'}</>}</p>}
     </div>}
     {!live && moves.length > 1 && <div className="flex items-center justify-between gap-2">
-      <button type="button" aria-label="Previous phase event" className="min-h-11 rounded-md border border-border px-2 disabled:opacity-40"
+      <button type="button" aria-label="Previous phase event" className="min-h-11 min-w-11 rounded-md border border-border px-2 disabled:opacity-40"
         disabled={shown === 0} onClick={() => setDecision(shown - 1)}>Previous</button>
       <span className="tabular-nums">{shown + 1} of {moves.length}</span>
-      <button type="button" aria-label="Next phase event" className="min-h-11 rounded-md border border-border px-2 disabled:opacity-40"
+      <button type="button" aria-label="Next phase event" className="min-h-11 min-w-11 rounded-md border border-border px-2 disabled:opacity-40"
         disabled={shown >= moves.length - 1} onClick={() => setDecision(shown + 1)}>Next</button>
     </div>}
     {!live && changes.length > 0 && <details>
@@ -69,7 +69,11 @@ export function PhaseShapeReview({ play, history, live = false }: {
         Match time
         <select className="mt-1 min-h-11 w-full rounded-md border border-border bg-background px-2"
           value={Math.min(shape, changes.length - 1)} onChange={e => setShape(Number(e.target.value))}>
-          {changes.map((step, index) => <option key={index} value={index}>{step.minute === 0 ? 'Kickoff' : minuteLabel(step)} · {step.order ? 'Phase shapes' : 'One shape'}</option>)}
+          {changes.map((step, index) => <option key={index} value={index}>
+            {step.minute === 0 ? 'Kickoff' : minuteLabel(step)} · {step.order
+              ? `${PHASE_SHAPE_NAMES[step.order.withBall].split(' ')[0]} / ${PHASE_SHAPE_NAMES[step.order.withoutBall].split(' ')[0]}`
+              : 'One shape'}{step.positions?.missingSlots.length ? ' · Short-handed' : ''}
+          </option>)}
         </select>
       </label>}
       {latestShape?.positions?.reason && <p>{latestShape.positions.reason}</p>}

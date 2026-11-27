@@ -374,9 +374,11 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
      the engine's own words (doorRefusal, loanOutRefusal), or null when it went
      through. A refused press used to be a dead button. */
   const [deskNote, setDeskNote] = useState<string | null>(null);
-  const [positionBlockedFor, setPositionBlockedFor] = useState<CareerState | null>(null);
-  const positionNotice = career && positionBlockedFor === career
-    ? 'This match could not continue. Its saved positioning data needs review. Your saved data has been kept.'
+  const [positionBlock, setPositionBlock] = useState<{ career: CareerState; phaseOrder?: true } | null>(null);
+  const positionNotice = career && positionBlock?.career === career
+    ? positionBlock.phaseOrder
+      ? 'Your phase shapes could not start with this lineup. Check the team sheet, then choose a shape order again in Match Centre.'
+      : 'This match could not continue. Its saved positioning data needs review. Your saved data has been kept.'
     : null;
 
   // Persist the career on every change.
@@ -1058,7 +1060,8 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     if (!career || !canSettle(career)) return;
     if (heldForTactics(() => { runEntry(skipHalftime, benchOrder, flankPlan, phaseOrder); }, !!(flankPlan || phaseOrder) && !career.live)) return;
     const res = playNextEntry(career, { skipHalftime, benchOrder, flankPlan, phaseOrder, ...cmVarGameAsk(CM_VAR_LIVE) });
-    if (res.blocked === 'position-state-invalid') { setPositionBlockedFor(career); return; }
+    if (res.blocked === 'position-state-invalid') { setPositionBlock({ career }); return; }
+    if (res.blocked === 'phase-order-unavailable') { setPositionBlock({ career, phaseOrder: true }); return; }
     if (res.kind === 'seasonOver') {
       settleSeason(career, res.state);
       return;
@@ -1112,7 +1115,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     if (!career) return;
     if (heldForTactics(() => { simToWeek(targetWeek); })) return;
     const run = runSimToWeek(career, targetWeek, cmVarGameAsk(CM_VAR_LIVE));
-    if (run.halt === 'position-state-invalid') { setPositionBlockedFor(career); return; }
+    if (run.halt === 'position-state-invalid') { setPositionBlock({ career }); return; }
     if (run.halt === 'window') {
       setCareer(run.state);
       setActiveTab('transfers');
@@ -1569,7 +1572,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
       if (live.penaltyCalls && !finishPenalties) return;
     }
     const res = resumeMatch(career, finishPenalties);
-    if (res.blocked === 'position-state-invalid') { setPositionBlockedFor(career); return; }
+    if (res.blocked === 'position-state-invalid') { setPositionBlock({ career }); return; }
     if (live?.callPenalties || live?.penaltyCalls) {
       if (!persist(res.state)) return;
       careerRef.current = res.state;
