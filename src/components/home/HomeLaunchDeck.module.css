@@ -97,7 +97,7 @@
   .lead .art { left: 22%; }
   .lead .shade { background: linear-gradient(90deg, hsl(var(--surface-1)) 0%, hsl(var(--surface-1) / 0.93) 36%, hsl(var(--surface-1) / 0.2) 100%); }
   .lead .description { max-width: 310px; font-size: 14px; }
-  .game:not(.lead) .art { top: -6px; right: -10px; width: 130px; height: 98px; }
+  .game:not(.lead) .art { top: -6px; right: 0; width: 130px; height: 98px; }
 }
 
 /* The lead card has its own night palette in both site themes. */
