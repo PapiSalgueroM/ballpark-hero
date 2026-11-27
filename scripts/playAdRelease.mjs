@@ -262,7 +262,18 @@ async function privacy(width, gpc) {
   const {ctx, page, evidence} = await profile(width, { gpc });
   try {
     await open(page, '/');
-    await page.getByRole('region', { name: 'Cookie choices' }).waitFor();
+    const notice = page.getByRole('region', { name: 'Cookie choices' });
+    if (gpc) {
+      const choices = page.getByRole('button', { name: 'Cookie choices', exact: true });
+      await choices.waitFor();
+      assert.equal(await notice.isVisible(), false, 'GPC visitor was asked automatically');
+      await choices.click();
+      const advertising = notice.getByRole('checkbox', { name: 'Advertising', exact: true });
+      await advertising.waitFor();
+      assert(await advertising.isDisabled());
+      assert.equal(await advertising.isChecked(), false);
+    }
+    await notice.waitFor();
     await excluded(page, evidence, [0, 0], 'Before a choice');
     const choice = gpc ? 'accept' : 'reject';
     assert.equal(await answerConsent(page, { choice }), gpc ? 'accepted' : 'rejected');
