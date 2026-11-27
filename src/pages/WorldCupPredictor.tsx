@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, ChevronDown, Swords, CalendarClock, Shuffle, RotateCcw, Trash2, Check, ChevronRight, Save, Link2, Eye, Loader2, Zap } from "lucide-react";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import PageSeo from "@/components/seo/PageSeo";
@@ -1262,6 +1262,7 @@ const WorldCupPredictor = () => {
   }, [bestThirds]);
 
   const [rankingsOpen, setRankingsOpen] = useState(false);
+  const rankingsButton = useRef<HTMLButtonElement>(null);
 
   return (
     <div id="dukb-main" tabIndex={-1} className="min-h-screen text-white overflow-x-hidden" style={{ background: "linear-gradient(180deg, hsl(220, 20%, 8%) 0%, hsl(230, 18%, 6%) 50%, hsl(220, 20%, 8%) 100%)" }}>
@@ -1294,31 +1295,15 @@ const WorldCupPredictor = () => {
         </div>
       )}
 
-      {/* FIFA Rankings Sidebar, Sheet gives a backdrop, Escape-to-close, and a
-          focus-trapped panel, so there is always a way out on mobile (tap the
-          backdrop, tap the X, or press Escape) instead of a bare fixed div. */}
-      {/* Toggle button */}
-      {!rankingsOpen && (
-        <button
-          onClick={() => setRankingsOpen(true)}
-          data-game-rail-dock="end"
-          className="fixed top-4 right-4 z-50 flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold
-            bg-[hsl(220,15%,15%)] border border-[hsl(220,15%,25%)] text-[hsl(45,90%,60%)]
-            hover:bg-[hsl(220,15%,20%)] transition-colors shadow-lg"
-        >
-          🌍 FIFA Rankings <ChevronRight className="w-3.5 h-3.5" />
-        </button>
-      )}
-
       {/* Rankings panel */}
-      <Sheet open={rankingsOpen} onOpenChange={setRankingsOpen}>
-        <SheetContent
-          side="right"
-          className="w-3/4 sm:max-w-sm bg-[hsl(220,18%,10%)] border-[hsl(220,15%,20%)] text-white p-0 flex flex-col"
+      <Dialog open={rankingsOpen} onOpenChange={setRankingsOpen}>
+        <DialogContent aria-describedby={undefined}
+          onCloseAutoFocus={event => { event.preventDefault(); rankingsButton.current?.focus({ preventScroll: true }); }}
+          className="flex max-h-[80dvh] w-[calc(100%_-_2rem)] max-w-sm flex-col gap-0 overflow-hidden border-[hsl(220,15%,20%)] bg-[hsl(220,18%,10%)] p-0 text-white"
         >
-          <SheetHeader className="px-4 py-3 border-b border-[hsl(220,15%,20%)] text-left">
-            <SheetTitle className="text-sm font-bold text-[hsl(45,90%,60%)]">🌍 FIFA World Rankings</SheetTitle>
-          </SheetHeader>
+          <DialogHeader className="px-4 py-3 border-b border-[hsl(220,15%,20%)] text-left">
+            <DialogTitle className="text-sm font-bold text-[hsl(45,90%,60%)]">🌍 FIFA World Rankings</DialogTitle>
+          </DialogHeader>
           <div className="flex-1 overflow-y-auto">
             <table className="w-full text-xs">
               <thead className="sticky top-0 bg-[hsl(220,18%,10%)]">
@@ -1351,10 +1336,10 @@ const WorldCupPredictor = () => {
               </tbody>
             </table>
           </div>
-        </SheetContent>
-      </Sheet>
+        </DialogContent>
+      </Dialog>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="mx-auto max-w-7xl px-4 py-8" style={{ width: "calc(100% - var(--browse-rail-space, 0px) - var(--browse-rail-space, 0px))" }}>
         {/* Header */}
         <div className="text-center mb-10">
           <div className="flex items-center justify-center gap-3 mb-2">
@@ -1411,12 +1396,27 @@ const WorldCupPredictor = () => {
           )}
         </div>
 
+        <div role="group" aria-label="Bracket tools" className="mb-6 flex flex-wrap items-center justify-center gap-2">
+          <button type="button" ref={rankingsButton} aria-haspopup="dialog" aria-expanded={rankingsOpen}
+            onClick={() => setRankingsOpen(true)}
+            className="flex min-h-11 items-center gap-1.5 rounded-lg border border-[hsl(220,15%,25%)] bg-[hsl(220,15%,15%)] px-3 text-sm font-bold text-[hsl(45,90%,60%)] hover:bg-[hsl(220,15%,20%)]">
+            🌍 FIFA Rankings <ChevronRight className="h-3.5 w-3.5" />
+          </button>
+          {!viewingSharedBracket && (
+            <button type="button" onClick={handleAutoFillEverything} disabled={autoFillEverythingLoading}
+              className="flex min-h-11 items-center gap-2 rounded-lg bg-gradient-to-r from-[hsl(45,90%,45%)] to-[hsl(35,90%,50%)] px-4 text-sm font-bold text-[hsl(220,20%,8%)] hover:from-[hsl(45,90%,50%)] hover:to-[hsl(35,90%,55%)] disabled:opacity-60">
+              {autoFillEverythingLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <span aria-hidden="true">⚡</span>}
+              {autoFillEverythingLoading ? "Filling..." : "Auto Fill Everything"}
+            </button>
+          )}
+        </div>
+
         {/* Playoff Slots Panel */}
         {!viewingSharedBracket && playoffMatchups.length > 0 && (
           <PlayoffSlotsPanel picks={playoffPicks} onPick={handlePlayoffPick} onAutoPickPlayoffs={handleAutoPickPlayoffs} />
         )}
 
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-white mb-1">Predict Group Stage</h2>
             <p className="text-[hsl(150,15%,50%)] text-xs sm:text-sm">
@@ -1427,7 +1427,7 @@ const WorldCupPredictor = () => {
             </p>
           </div>
           {!viewingSharedBracket && (
-            <div className="flex gap-2 flex-shrink-0 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               <SmallAutoButton
                 label="Fill by Rank"
                 loading={false}
@@ -1452,7 +1452,7 @@ const WorldCupPredictor = () => {
         </div>
 
         {/* Group Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div role="group" aria-label="Group predictions" className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-4">
           {resolvedGroups.map((group) => (
             <GroupPredictionCard
               key={group.letter}
@@ -1609,25 +1609,6 @@ const WorldCupPredictor = () => {
           <BracketResults seeds={allGroupsFilled ? groupSeeds : {}} thirds={userSelectedThirdsForBracket.map((t) => t.team)} rounds={bracketRounds} awards={awardPicks} />
         )}
 
-        {/* Fixed "Auto Fill Everything" button */}
-        {!viewingSharedBracket && (
-          <button
-            onClick={handleAutoFillEverything}
-            data-game-rail-dock="end"
-            disabled={autoFillEverythingLoading}
-            className="fixed bottom-6 [body[data-consent-pending]_&]:bottom-[calc(var(--dukb-consent-height,230px)_+_1.5rem)] right-6 z-50 flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm
-              bg-gradient-to-r from-[hsl(45,90%,45%)] to-[hsl(35,90%,50%)] hover:from-[hsl(45,90%,50%)] hover:to-[hsl(35,90%,55%)]
-              text-[hsl(220,20%,8%)] shadow-xl shadow-[hsl(45,90%,45%)]/30
-              disabled:opacity-60 transition-all motion-reduce:transition-none transform hover:scale-105"
-          >
-            {autoFillEverythingLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <span className="text-lg">⚡</span>
-            )}
-            {autoFillEverythingLoading ? "Filling..." : "Auto Fill Everything"}
-          </button>
-        )}
       </div>
       <div className="max-w-5xl mx-auto px-4">
         <GameSeoContent
