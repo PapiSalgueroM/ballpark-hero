@@ -16,7 +16,7 @@ const careerKey = 'mlb-my-career-save-v1';
 
 function seed(pos: MlbCareerPos) {
   const c = startMlbCareer('Archive arm', pos, MLB_ARCHETYPES[pos][0], keyedRng('bullpen:' + pos), null, 'y2004');
-  delete c.summerSalt;
+  expect(c).not.toHaveProperty('summerSalt');
   localStorage.setItem(careerKey, JSON.stringify({ c, phase: 'season', teamQuality: 72, coach: null }));
 }
 
