@@ -106,6 +106,14 @@
   .game [data-career-utility] > span:nth-child(2) {
     display: inline;
   }
+
+  .game main:has([data-nrl-club-grid]) {
+    width: min(100%, calc(100% - 2 * var(--browse-rail-space) + 40px));
+  }
+
+  .game [data-nrl-club-grid] {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 218px), 1fr));
+  }
 }
 
 /* Keep the 720px stats panel the same size as in the two-column dashboard.
