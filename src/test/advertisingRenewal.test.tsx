@@ -29,7 +29,7 @@ afterEach(() => {
 async function mount(country: string, saved?: ReturnType<typeof choice> | 'accepted' | 'essential') {
   if (typeof saved === 'string') localStorage.setItem('cookie-consent', saved);
   else if (saved) localStorage.setItem(key, JSON.stringify(saved));
-  vi.stubGlobal('fetch', async () => new Response('h=douknowball.com\nloc=' + country + '\n', { headers: { 'Content-Type': 'text/plain' } }));
+  vi.stubGlobal('fetch', vi.fn(async () => new Response('h=douknowball.com\nloc=' + country + '\n', { headers: { 'Content-Type': 'text/plain' } })));
   const { CookieConsent } = await import('@/components/CookieConsent');
   const { PublicFooterAd } = await import('@/components/ads/PublicFooterAd');
   const preferences = await import('@/lib/consentPreferences');
@@ -107,4 +107,13 @@ it('rejects a future ad timestamp while preserving independently granted analyti
   expect(consent.getEffectiveConsent()).toEqual({ advertising: false, analytics: true });
   expect(screen.getByRole('button', { name: 'Allow advertising' })).toBeVisible();
   expect(document.querySelector(ad)).toBeNull();
+});
+it.each([
+  [choice(true, false, 179, 29), true], [choice(false, true, 179), false],
+] as const)('skips the country lookup while an existing decision settles advertising everywhere', async (saved, allowed) => {
+  const consent = await mount('US', saved);
+  expect(fetch).not.toHaveBeenCalled();
+  expect(consent.getEffectiveConsent().advertising).toBe(allowed);
+  expect(screen.queryByRole('region', { name: 'Cookie choices' })).toBeNull();
+  expect(document.querySelectorAll(ad)).toHaveLength(allowed ? 1 : 0);
 });

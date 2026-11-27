@@ -69,6 +69,12 @@ export function isGlobalPrivacyControlEnabled(): boolean {
   catch { return false; }
 }
 
+export function needsAdvertisingRegion(): boolean {
+  if (isGlobalPrivacyControlEnabled() || safeLocalStorage.getItem('cookie-consent') === 'essential') return false;
+  const saved = storedPreferences(safeLocalStorage.getItem(CONSENT_KEY));
+  return !saved || !currentAdChoice(saved, Date.now());
+}
+
 export function mayUseRegionalDefault(): boolean {
   if (pendingWithdrawal.advertising || isGlobalPrivacyControlEnabled() || getStorageTrouble() !== null) return false;
   const raw = safeLocalStorage.getItem(CONSENT_KEY);

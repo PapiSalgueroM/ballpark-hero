@@ -8,7 +8,7 @@ import { loadConsentedScripts, stopRevokedServices } from '@/lib/consentedScript
 import {
   AD_CONFIRMATION_MAX_AGE_MS, ANALYTICS_READY, CONSENT_CHANGED_EVENT, CONSENT_EFFECTIVE_CHANGED_EVENT, CONSENT_KEY, CONSENT_MAX_AGE_MS, CONSENT_OPEN_EVENT,
   canReloadAfterWithdrawal, enforceGlobalPrivacyControl, getEffectiveConsent, getPendingConsentWithdrawal, isGlobalPrivacyControlEnabled,
-  consentPrompt, mayUseRegionalDefault, migrateConsentPreferences, readConsentPreferences, saveAdvertisingChoice, saveConsentPreferences, setPendingConsentWithdrawal, synchronizeConsentStorageEvent,
+  consentPrompt, mayUseRegionalDefault, migrateConsentPreferences, needsAdvertisingRegion, readConsentPreferences, saveAdvertisingChoice, saveConsentPreferences, setPendingConsentWithdrawal, synchronizeConsentStorageEvent,
   type ConsentPurposes,
 } from '@/lib/consentPreferences';
 import { probeStorageWrites } from '@/lib/safeStorage';
@@ -59,7 +59,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
       window.clearTimeout(expiryTimer);
       migrateConsentPreferences();
       enforceGlobalPrivacyControl();
-      if (!resolving && regionalLookupPending() && !isGlobalPrivacyControlEnabled() && probeStorageWrites() === null) {
+      if (!resolving && regionalLookupPending() && needsAdvertisingRegion() && probeStorageWrites() === null) {
         resolving = true;
         void resolveAdvertisingRegion().then(() => { if (mounted) reconcile(); });
       }
