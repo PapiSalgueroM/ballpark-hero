@@ -17,6 +17,7 @@ import { ShootoutKicks } from '@/components/club-manager/ShootoutKicks';
 import { FlankPlayReview } from '@/components/club-manager/FlankPlayReview';
 import { RehearsedCornerReview } from './RehearsedCornerReview';
 import { ReturnPressReview } from './ReturnPressReview';
+import { PhaseShapeReview } from './PhaseShapeReview';
 import { inFixtureOrder, mineFirstOfReport } from '@/lib/cmMatchDisplay';
 import { BOARD_EDGE, boardMeter } from '@/lib/clubManagerMeters';
 import type { MeterTone } from '@/lib/clubManagerMeters';
@@ -519,6 +520,7 @@ export function MatchReportCard({ report, career, clubName, onContinue, noSack =
             {detail.play && <FlankPlayReview play={detail.play} opponent={opponent} />}
             {detail.cornerRoutine && <RehearsedCornerReview routine={detail.cornerRoutine} play={detail.play ?? []} />}
             {detail.returnPressUsed === true && <ReturnPressReview play={detail.play ?? []} />}
+            {detail.phaseHistory && <PhaseShapeReview play={detail.play ?? []} history={detail.phaseHistory} />}
             {detail.tactics && (
               <TacticsDayBlock
                 tactics={detail.tactics}

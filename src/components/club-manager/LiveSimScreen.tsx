@@ -40,6 +40,7 @@ import { inFixtureOrder, mineFirstOfReport, myClubFirst, pitchInitials, pitchNam
 import { LiveTacticsPanel } from '@/components/club-manager/LiveTacticsPanel';
 import { FlankPlayReview } from '@/components/club-manager/FlankPlayReview';
 import { ReturnPressReview } from './ReturnPressReview';
+import { PhaseShapeReview } from './PhaseShapeReview';
 import { RehearsedCornerReview } from './RehearsedCornerReview';
 
 /**
@@ -757,6 +758,9 @@ export function LiveSimScreen({
   const cornerPlay = useMemo(() => liveNow?.cornerRoutine
     ? [...(liveNow.h1Play ?? []), ...(liveNow.h2Play ?? [])].filter(e => e.cornerDelivery || e.cornerChance)
     : [], [liveNow?.cornerRoutine, liveNow?.h1Play, liveNow?.h2Play]);
+  const phasePlay = useMemo(() => liveNow?.phaseHistory?.length
+    ? [...(liveNow.h1Play ?? []), ...(liveNow.h2Play ?? [])].filter(e => e.phaseMove || e.phaseChance)
+    : [], [liveNow?.phaseHistory, liveNow?.h1Play, liveNow?.h2Play]);
   const nextReview = feed.find(e => e.kind === 'var' && e.review && !settledReviews.has(e.review.id)
     && e.minute >= (stage === 'first' ? 0 : stage === 'extra' ? 91 : 46) && e.minute <= stageEnd
     && placeOf(e) >= openedAt.current);
@@ -2093,6 +2097,7 @@ export function LiveSimScreen({
               {stage !== 'done' && flankMoves.length > 0 && <FlankPlayReview live play={flankMoves.filter(happened)} opponent={opponent} />}
               {stage !== 'done' && liveNow?.cornerRoutine && <RehearsedCornerReview live routine={liveNow.cornerRoutine} play={cornerPlay.filter(happened)} />}
               {stage !== 'done' && pressPlay.length > 0 && <ReturnPressReview live play={pressPlay.filter(happened)} />}
+              {stage !== 'done' && phasePlay.length > 0 && <PhaseShapeReview live play={phasePlay.filter(happened)} />}
             </div>
 
             {/* The side: beside the pitch on a wide screen, a sheet over its foot on a phone. One panel at a time. */}

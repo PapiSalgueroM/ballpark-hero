@@ -25,6 +25,7 @@ import {
 import type { MarketDoor } from '@/lib/clubManager';
 import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation } from '@/lib/clubManager';
 import type { FlankPlan } from '@/lib/clubManagerFlank';
+import type { PhaseOrder } from '@/lib/clubManagerPhaseShapes';
 import { bookCornerRoutine, cancelCornerRoutine, type CornerRoutine } from '@/lib/clubManager';
 import { tacticsImpl, type TeamInstructions } from '@/lib/clubManagerTacticsCore';
 import { carryShape } from '@/lib/clubManagerCarry';
@@ -111,7 +112,8 @@ function carryAcross(state: CareerState, from: Formation, to: Formation): { xiId
    needs it before any match of it is played; until it is in, every match action below waits (does nothing), and
    the effect in the hook loads it. The screens that set instructions import it themselves. */
 const needsTactics = (c: CareerState | null | undefined): boolean =>
-  !!c && (!!c.instructions || !!c.live?.flankPlan || !!c.live?.returnPress || c.live?.returnPressUsed === true || !!c.live?.instrLog?.length || !!c.live?.formChanges?.length);
+  !!c && (!!c.instructions || !!c.live?.flankPlan || !!c.live?.phaseOrder || !!c.live?.phaseHistory?.length ||
+    !!c.live?.returnPress || c.live?.returnPressUsed === true || !!c.live?.instrLog?.length || !!c.live?.formChanges?.length);
 const tacticsWait = (c: CareerState | null | undefined): boolean => needsTactics(c) && tacticsImpl() === null;
 const loadTactics = (): Promise<unknown> => import('@/lib/clubManagerTactics');
 
@@ -1052,10 +1054,10 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     setPhase('seasonEnd');
   }, [canSettle]);
 
-  const runEntry = useCallback((skipHalftime: boolean, benchOrder?: BenchOrder, flankPlan?: FlankPlan) => {
+  const runEntry = useCallback((skipHalftime: boolean, benchOrder?: BenchOrder, flankPlan?: FlankPlan, phaseOrder?: PhaseOrder) => {
     if (!career || !canSettle(career)) return;
-    if (heldForTactics(() => { runEntry(skipHalftime, benchOrder, flankPlan); }, !!flankPlan && !career.live)) return;
-    const res = playNextEntry(career, { skipHalftime, benchOrder, flankPlan, ...cmVarGameAsk(CM_VAR_LIVE) });
+    if (heldForTactics(() => { runEntry(skipHalftime, benchOrder, flankPlan, phaseOrder); }, !!(flankPlan || phaseOrder) && !career.live)) return;
+    const res = playNextEntry(career, { skipHalftime, benchOrder, flankPlan, phaseOrder, ...cmVarGameAsk(CM_VAR_LIVE) });
     if (res.blocked === 'position-state-invalid') { setPositionBlockedFor(career); return; }
     if (res.kind === 'seasonOver') {
       settleSeason(career, res.state);
@@ -1092,9 +1094,9 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     }
   }, [career, canSettle, heldForTactics, settleSeason]);
 
-  const play = useCallback((flankPlan?: FlankPlan) => runEntry(false, undefined, flankPlan), [runEntry]);
+  const play = useCallback((flankPlan?: FlankPlan, phaseOrder?: PhaseOrder) => runEntry(false, undefined, flankPlan, phaseOrder), [runEntry]);
   /** Round 157: the quick sim. One tap, full result, no dressing room stop. */
-  const quickPlay = useCallback((order?: BenchOrder, flankPlan?: FlankPlan) => runEntry(true, order, flankPlan), [runEntry]);
+  const quickPlay = useCallback((order?: BenchOrder, flankPlan?: FlankPlan, phaseOrder?: PhaseOrder) => runEntry(true, order, flankPlan, phaseOrder), [runEntry]);
 
   /* Round 93: his calendar complaint. "u can click through and sim much
      faster... simulate through date or play match or whatever." Quick sim
