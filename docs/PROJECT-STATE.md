@@ -1,3 +1,11 @@
+### November 27, 2026. NHL faceoffs, Conquest history and ranked game fixes
+
+Verified on a local production build. NHL My Career centers can take defensive-zone draws and trade offensive ice time for a chance to earn a camp edge with the same club next season. Across 128 paired seasons the assignment produced 24,138 draws, 12,706 wins and 89 earned camp edges. All 128 pairs had identical games played. The ordinary role scored 6,202 points across those seasons and the assignment scored 5,758. Chrome restored both the assignment and the season result after reload on phone and desktop. The 400-career NHL simulation passed.
+
+In Soccer, NFL, NBA, MLB and NHL Conquest, players can revisit a completed round's standings and look up who previously held a territory. The round label advances when the player chooses Continue. Signed-out Chrome played three rounds in each sport at 390px and 1366px, then checked the standings and both territory owners against the saved moves. All ten runs retained their results across two reloads apiece.
+
+Club Manager's transfer market finds original player and club names from plain keyboard input. In a fresh Crystal Palace career, `joao felix` and `odegaard` each found the intended player and `atletico madrid` found the same 24 rows as the accented spelling. Ederson and Éderson remained separate shortlist choices after reload. Stadium Tycoon's current and archived match reports now separate junior guests from walk-ups. A 120-person gate with 30 season-ticket holders and 12 junior guests showed 78 walk-ups. UFC Guesser shares the nine clues from each played row and the score without disclosing the fighter. Chrome checked wins, losses, giving up before guessing and Unlimited mode, including a downloaded result image. The NHL, Conquest and three ranked game suites passed 35 focused tests in total.
+
 ### November 26, 2026. Career records, drafts and auctions
 
 Soccer Career now caps league appearances at the season total after an injury, including leagues without a simulated table. A 20-week injury that previously produced 31 league appearances in 25 matches now shows 25 on the record book, including after reload. Of 1,200 paired seasons, all 60 invalid splits were corrected and the other 1,140 careers stayed identical. Existing season records keep their saved values.
