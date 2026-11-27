@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, expect, it, vi } from 'vitest';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { ContinueRow } from '@/components/home/ContinueRow';
@@ -15,8 +15,18 @@ vi.mock('@/components/game/GameShell', () => ({ GameShell: ({ children }: { chil
 vi.mock('@/components/seo/GameSeoContent', () => ({ default: () => null }));
 vi.mock('@/components/seo/PageSeo', () => ({ default: () => null }));
 vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn() }));
-beforeEach(() => { localStorage.clear(); vi.clearAllMocks(); });
-afterEach(cleanup);
+const originalLocks = Object.getOwnPropertyDescriptor(navigator, 'locks');
+const setLocks = (value: unknown) => Object.defineProperty(navigator, 'locks', { configurable: true, value });
+beforeEach(() => {
+  localStorage.clear();
+  vi.clearAllMocks();
+  setLocks({ request: (_key: string, held: () => void) => { held(); return Promise.resolve(); } });
+});
+afterEach(() => {
+  cleanup();
+  if (originalLocks) Object.defineProperty(navigator, 'locks', originalLocks);
+  else Reflect.deleteProperty(navigator, 'locks');
+});
 const click = (name: string) => fireEvent.click(screen.getByRole('button', { name }));
 const direct = () => render(<MemoryRouter><ClosingTime /></MemoryRouter>);
 const firstTwo = ['rim','shoot','deny-rim','corner','shoot','deny-corner','hold','next','deny-corner','hold','next','foul'];
@@ -80,4 +90,50 @@ it('records the percentage actually earned and leaves malformed saves and career
   click('Resume closing set');
   click('Pass to corner');
   expect(recordCompletion).not.toHaveBeenCalled();
+});
+
+it('serializes two simultaneous final possessions and credits exactly once inside the winning lock', () => {
+  const pending: (() => void)[] = [];
+  let locked = false;
+  const key = JSON.stringify([...firstTwo, 'timeout', 'corner', 'shoot']);
+  localStorage.setItem(CLOSING_KEY, key);
+  setLocks({ request: (name: string, callback: () => void) => {
+    expect(name).toBe(CLOSING_KEY);
+    pending.push(() => { locked = true; callback(); locked = false; });
+    return Promise.resolve();
+  } });
+  vi.mocked(recordCompletion).mockImplementationOnce(() => expect(locked).toBe(true));
+  const a = direct(), b = direct();
+  for (const view of [a, b]) {
+    fireEvent.click(within(view.container).getByRole('button', { name: 'Resume closing set' }));
+    fireEvent.click(within(view.container).getByRole('button', { name: 'Protect the rim' }));
+  }
+  expect(pending).toHaveLength(2);
+  expect(localStorage.getItem(CLOSING_KEY)).toBe(key);
+  expect(recordCompletion).not.toHaveBeenCalled();
+  act(() => { pending[0](); pending[1](); });
+  expect(recordCompletion).toHaveBeenCalledExactlyOnceWith('/closing-time', 100);
+  expect(JSON.parse(localStorage.getItem(CLOSING_KEY)!)).toEqual([...JSON.parse(key), 'deny-rim']);
+  expect(within(b.container).getByText(/changed in another tab/)).toBeVisible();
+});
+
+it('keeps a local final when a lock or a durable write is unavailable', async () => {
+  for (const reason of ['missing', 'refused', 'full']) {
+    const key = JSON.stringify([...firstTwo, 'timeout', 'corner', 'shoot']);
+    localStorage.setItem(CLOSING_KEY, key);
+    if (reason === 'missing') setLocks(undefined);
+    if (reason === 'refused') setLocks({ request: () => Promise.reject(new Error('Blocked')) });
+    if (reason === 'full') setLocks({ request: (_name: string, callback: () => void) => { callback(); return Promise.resolve(); } });
+    const refusal = reason === 'full' ? vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => { throw new Error('Full'); }) : null;
+    direct();
+    click('Resume closing set');
+    await act(async () => { click('Protect the rim'); });
+    expect(screen.getByText('3 of 3 won in regulation.')).toBeVisible();
+    expect(recordCompletion).not.toHaveBeenCalled();
+    if (refusal) {
+      expect(screen.getByText(/could not save it/)).toBeVisible();
+      refusal.mockRestore();
+    } else expect(screen.getByText(/result is saved on this device/)).toBeVisible();
+    cleanup();
+  }
 });

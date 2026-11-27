@@ -52,30 +52,45 @@ export function ClosingTimeBoard({ resume = false, onFinish }: { resume?: boolea
   useEffect(() => {
     if (playing) focusResult.current?.focus({ preventScroll: true });
   }, [playing, state.game, state.side]);
-  const save = (moves: ClosingCall[], next: ClosingState) => {
-    const raw = safeLocalStorage.getItem(CLOSING_KEY);
-    if (raw !== lastRaw.current) {
-      lastRaw.current = raw;
-      setRun(readClosing(raw));
-      setPlaying(false);
-      setWarning('This set changed in another tab. Resume the latest possession.');
-      return;
+  const save = (moves: ClosingCall[], next: ClosingState, finished = false) => {
+    const expected = lastRaw.current;
+    const commit = (canCredit: boolean) => {
+      const raw = safeLocalStorage.getItem(CLOSING_KEY);
+      if (raw !== expected) {
+        if (raw === lastRaw.current) return;
+        lastRaw.current = raw;
+        setRun(readClosing(raw));
+        setPlaying(false);
+        setWarning('This set changed in another tab. Resume the latest possession.');
+        return;
+      }
+      const saved = safeSetItem(CLOSING_KEY, JSON.stringify(moves));
+      lastRaw.current = safeLocalStorage.getItem(CLOSING_KEY);
+      setRun({ moves, state: next });
+      setPlaying(true);
+      if (!saved) setWarning('Your set is available for this visit. This browser could not save it.');
+      else if (finished && onFinish && !canCredit) setWarning('Your result is saved on this device. This browser could not safely submit a score.');
+      else setWarning('');
+      if (saved && finished && canCredit) onFinish?.(closingScore(next.receipts));
+    };
+    let acquired = false;
+    try {
+      if (!navigator.locks) {
+        commit(false);
+        return;
+      }
+      void navigator.locks.request(CLOSING_KEY, () => {
+        acquired = true;
+        commit(true);
+      }).catch(() => { if (!acquired) commit(false); });
+    } catch {
+      if (!acquired) commit(false);
     }
-    const saved = safeSetItem(CLOSING_KEY, JSON.stringify(moves));
-    lastRaw.current = safeLocalStorage.getItem(CLOSING_KEY);
-    setRun({ moves, state: next });
-    setPlaying(true);
-    setWarning(saved ? '' : 'Your set is available for this visit. This browser could not save it.');
-    return saved;
   };
   const play = (call: ClosingCall) => {
     if (!run) return;
     const next = playClosing(state, call);
-    if (!next) return;
-    const committed = save([...run.moves, call], next);
-    if (committed && next.side === 'result' && next.game === closingScenarios.length - 1) {
-      onFinish?.(closingScore(next.receipts));
-    }
+    if (next) save([...run.moves, call], next, next.side === 'result' && next.game === closingScenarios.length - 1);
   };
   return <section aria-label="Closing Time court" className="grid gap-3">
       <details open={!playing || undefined} className="rounded-lg border px-3 text-sm">
