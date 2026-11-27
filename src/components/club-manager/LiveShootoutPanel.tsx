@@ -17,9 +17,9 @@ export function LiveShootoutPanel({ career, onKick, onFinish }: {
   const lastOwn = own[own.length - 1];
   const latest = run && lastOwn ? run.kicks.slice(run.kicks.indexOf(lastOwn)) : run?.kicks ?? [];
   return <section aria-labelledby="live-pens-title" className="mx-auto max-w-md min-w-0 space-y-3 rounded-xl border border-border bg-card p-3">
-    <header className="flex items-center justify-between gap-2">
-      <h1 id="live-pens-title" ref={heading} tabIndex={-1} className="text-lg font-black">Penalty shootout</h1>
+    <header className="flex items-center gap-2">
       <button type="button" className="min-h-11 min-w-11 rounded-lg border border-border" aria-label="Shootout rules" aria-expanded={help} onClick={() => setHelp(!help)}>?</button>
+      <h1 id="live-pens-title" ref={heading} tabIndex={-1} className="text-lg font-black">Penalty shootout</h1>
     </header>
     <p className="text-sm">Five kicks each, then sudden death if level. Only the players who finished the match can take one. Save your striker for the fifth kick or send him up first.</p>
     {help && <p className="rounded-lg bg-secondary/40 p-3 text-sm">The shootout ends early if one side is out of reach. Everyone takes one before anyone goes again. In sudden death, each pair can win it. Taker and opposing keeper ratings affect the chance. Delegate to let the coach finish from this score using your eligible takers.</p>}
