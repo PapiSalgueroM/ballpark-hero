@@ -59,7 +59,7 @@ export const MLB_CAREER_SPORT: UsCareerSport<MlbCareerState, MlbSeasonLine> = wi
   gameSlug: 'mlb-my-career',
   gameName: 'MLB My Career',
   practiceLabel: 'Training diamond',
-  PracticeRoom: lazy(() => import('@/components/mlb-my-career/MlbPinchHitSeries')),
+  PracticeRoom: lazy(() => import('@/components/mlb-my-career/MlbPracticeRoom')),
   loadTraining: pos => import('@/lib/mlbCareerTraining').then(m => m.mlbTraining(pos as MlbCareerPos)),
   firstRoundEnd: 30,
   create: {
