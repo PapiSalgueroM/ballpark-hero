@@ -140,7 +140,7 @@ export const HOME_COPY: HomeCopy = {
       blocks: [
         list(
           [a('/soccer', 'Soccer games'), ', the deepest section here by a distance'],
-          [a('/pro-basketball', 'Basketball games'), ', grids, career paths and the front office'],
+          [a('/pro-basketball', 'Basketball games'), ', including ', a('/closing-time', 'Closing Time'), '. Coach both ends of three fourth quarters.'],
           [a('/pro-football', 'Football games'), ', rarity scored grids and a full GM job'],
           [a('/baseball', 'Baseball games'), ', franchise grids and a career to Cooperstown'],
           [a('/hockey', 'Hockey games'), ', franchise grids and a hard cap sim'],
