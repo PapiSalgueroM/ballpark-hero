@@ -142,3 +142,32 @@ it('the real hook makes a single claim for double taps, resumes the stored live 
   expect(recordActivity).toHaveBeenCalledTimes(1);
   expect(api.report!.detail!.play!.some(e => e.minute <= 45 && e.flankMove?.side === 'right')).toBe(true);
 });
+
+it('allows consecutive ordinary weeks and a new kickoff after a settled live match', async () => {
+  const initial = newClub();
+  await mount(initial);
+  for (let count = 1; count <= 4; count++) {
+    const before = api.career!, opponent = nextFixture(before), quick = api.quickPlay;
+    expect(opponent.kind).toBe('match');
+    if (count === 3) {
+      act(() => api.play(left));
+      await waitFor(() => expect(api.phase).toBe('halftime'));
+      expect(api.career!.live!.flankPlan).toEqual(left);
+      act(() => api.secondHalf());
+    } else {
+      act(() => { quick(); quick(); });
+    }
+    await waitFor(() => expect(api.phase).toBe('matchResult'));
+    expect(api.career!.week).toBeGreaterThan(before.week);
+    expect(api.career!.resultLog).toHaveLength(count);
+    expect(api.report!.detail!.play!.some(e => e.flankMove)).toBe(count === 3);
+    expect(recordActivity).toHaveBeenCalledTimes(count);
+    act(() => api.continueFromReport());
+    await waitFor(() => expect(api.phase).toBe('hub'));
+  }
+  const next = nextFixture(api.career!);
+  act(() => api.play(right));
+  await waitFor(() => expect(api.phase).toBe('halftime'));
+  expect(next).toMatchObject({ kind: 'match', opponent: api.career!.live!.opponent });
+  expect(api.career!.live!.flankPlan).toEqual(right);
+});
