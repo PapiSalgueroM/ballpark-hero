@@ -10,7 +10,7 @@ import {
   mayUseRegionalDefault, migrateConsentPreferences, readConsentPreferences, saveConsentPreferences, setPendingConsentWithdrawal, synchronizeConsentStorageEvent,
   type ConsentPurposes,
 } from '@/lib/consentPreferences';
-import { safeLocalStorage } from '@/lib/safeStorage';
+import { probeStorageWrites, safeLocalStorage } from '@/lib/safeStorage';
 import { ADVERTISING_ONLY_INTRO, COOKIE_CHOICE_INTRO } from '@/lib/cookieChoiceCopy';
 
 export function CookieConsent({ inline = false, compactInitial = false, waitForRulesHost = false }: {
@@ -81,7 +81,7 @@ export function CookieConsent({ inline = false, compactInitial = false, waitForR
       }
     };
     let mounted = true;
-    if (mayUseRegionalDefault()) void resolveAdvertisingRegion().then(() => { if (mounted) reconcile(); });
+    if (mayUseRegionalDefault() && probeStorageWrites() === null) void resolveAdvertisingRegion().then(() => { if (mounted) reconcile(); });
     const legacy = migrateConsentPreferences();
     // Old analytics cookies/code can survive a previous release even when the
     // new effective analytics choice is false. Pause those without loading a vendor.

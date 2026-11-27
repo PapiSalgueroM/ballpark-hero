@@ -9,7 +9,7 @@
  */
 import { publicAdCanonical } from './fixtures/publicAdSlot';
 import { createElement } from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 
@@ -34,18 +34,21 @@ async function mountBanner() {
   vi.resetModules();
   const seam = await import('@/lib/safeStorage');
   const { CookieConsent } = await import('@/components/CookieConsent');
-  const view = render(<MemoryRouter><CookieConsent /></MemoryRouter>);
+  let view!: ReturnType<typeof render>;
+  await act(async () => { view = render(<MemoryRouter><CookieConsent /></MemoryRouter>); });
   return { seam, view, CookieConsent };
 }
 const banner = () => screen.queryByRole('region', { name: 'Cookie choices' });
 
 beforeEach(() => {
+  vi.stubGlobal('fetch', vi.fn(async () => new Response(null, { status: 503 })));
   for (const name of NAMES) original.set(name, Object.getOwnPropertyDescriptor(window, name));
   window.localStorage.clear();
 });
 afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
+  vi.unstubAllGlobals();
   for (const name of NAMES) {
     const d = original.get(name);
     if (d) Object.defineProperty(window, name, d); else delete (window as unknown as Record<string, unknown>)[name];
@@ -63,8 +66,8 @@ describe.each(['blocked', 'full'] as const)('the cookie banner with storage %s',
   it('Reject all: the banner leaves, the answer holds for the visit, and no analytics load', async () => {
     breakStorage(kind);
     const { seam, view, CookieConsent } = await mountBanner();
-    /* blocked is known from the first read; full is only known once a write was refused */
-    expect(seam.getStorageTrouble()).toBe(kind === 'blocked' ? 'blocked' : null);
+    // An implicit default requires enough storage to remember a later opt-out.
+    expect(seam.getStorageTrouble()).toBe(kind);
     expect(banner()).not.toBeNull();
     fireEvent.click(screen.getByRole('button', { name: 'Reject all' }));
     expect(banner()).toBeNull();
