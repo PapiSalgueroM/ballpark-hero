@@ -22,7 +22,7 @@ import type { PitchStagedAction } from '@/components/pitch-motion/scene';
  * the plan is rebuilt only when what they HOLD changes, so an action is never restarted by that.
  */
 export function PitchMotion({
-  mine, theirs, feed, span, kickoffs, possession, seed, colors, clock, playing, reducedMotion, orientation = 'portrait', onMoment, className,
+  mine, theirs, feed, span, kickoffs, possession, seed, build, colors, clock, playing, reducedMotion, orientation = 'portrait', onMoment, className,
 }: PitchMotionProps) {
   /* The frozen frame: while `playing` is false the part goes on reading the last clock it was playing at. */
   const held = useRef(clock);
@@ -30,12 +30,12 @@ export function PitchMotion({
   const now = held.current;
   /* Keyed on content. With stable arrays the key itself is only worked out when one of them changes. */
   const planKey = useMemo(
-    () => JSON.stringify({ mine, theirs, feed, span: { from: span.from, to: span.to }, kickoffs, possession, seed }),
-    [mine, theirs, feed, span.from, span.to, kickoffs, possession, seed],
+    () => JSON.stringify({ mine, theirs, feed, span: { from: span.from, to: span.to }, kickoffs, possession, seed, build }),
+    [mine, theirs, feed, span.from, span.to, kickoffs, possession, seed, build],
   );
   // The key is the input's whole content, so the plan survives a render that handed over equal arrays.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const plan = useMemo(() => pitchPlan({ mine, theirs, feed, span: { from: span.from, to: span.to }, kickoffs, possession, seed }), [planKey]);
+  const plan = useMemo(() => pitchPlan({ mine, theirs, feed, span: { from: span.from, to: span.to }, kickoffs, possession, seed, build }), [planKey]);
   const sceneKey = pitchSceneKey(plan, now);
   // The key changes exactly when the scene does, so the clock itself is deliberately not a dependency.
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,7 +82,7 @@ export function PitchMotion({
   });
 
   return (
-    <PitchSurface frame={frame} orientation={orientation} className={className}>
+    <PitchSurface frame={frame} orientation={orientation} className={className} lift={!!build}>
       {frame.theirs.map(p => (
         <div key={p.key} className="pm-figure" data-pm-figure="opp" style={pitchSpot(p, orientation)}>
           <LivePitchPlayer color={colors.theirs} keeper={p.keeper} pose={frame.poses[p.key]} />
