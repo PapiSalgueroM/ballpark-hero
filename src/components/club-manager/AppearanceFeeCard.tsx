@@ -1,34 +1,37 @@
 import { useState } from 'react';
-import { appearanceFeeClubs, appearanceFeeDesk, appearanceFeeTerms, moneyIn, type CareerState } from '@/lib/clubManager';
+import { appearanceFeeClubs, appearanceFeeDesk, appearanceFeeTerms, canBookAppearanceFee, moneyIn, type CareerState } from '@/lib/clubManager';
+import { currencySymbol } from '@/lib/clubManagerStart';
+import { formatNumber } from '@/lib/formatNumber';
 import { MadeUpTag } from './SquadScreen';
 
-export function AppearanceFeeOffer({ career, amount, threshold, bid, ask, onChange }: {
+export function AppearanceFeeOffer({ career, amount, threshold, cash, offerLabel, onChange }: {
   career: CareerState;
   amount: number;
   threshold?: 5 | 15;
-  bid: number;
-  ask: number;
+  cash: number;
+  offerLabel: string;
   onChange: (threshold?: 5 | 15) => void;
 }) {
   const fmt = moneyIn(career), terms = appearanceFeeTerms(amount, threshold);
-  const cash = bid > 0 ? bid : ask;
+  const available = canBookAppearanceFee(career);
   return <div className="space-y-2 border-t border-border pt-2 text-xs">
     <label className="block font-semibold">When the add-on is paid
       <select className="mt-1 min-h-11 w-full rounded-md border border-border bg-background px-2"
         value={threshold ?? 'summer'} onChange={e => onChange(e.target.value === '5' ? 5 : e.target.value === '15' ? 15 : undefined)}>
         <option value="summer">Summer performance review</option>
-        <option value="5">After 5 league appearances</option>
-        <option value="15">After 15 league appearances</option>
+        <option value="5" disabled={!available}>After 5 league appearances</option>
+        <option value="15" disabled={!available}>After 15 league appearances</option>
       </select>
     </label>
     {terms ? <>
       <p>The seller counts <strong>{fmt(terms.sellerValue)}</strong> toward your offer. The full {fmt(terms.amount)} becomes due after {terms.threshold} league appearances for {career.clubName}.</p>
-      <p>{bid > 0 ? 'At your cash bid' : 'At their asking price'}, the cash fee and this bonus together could cost <strong>{fmt(cash + terms.amount)}</strong>.</p>
+      <p>{offerLabel} offers <strong>{fmt(cash)}</strong> at signing. With the appearance fee, the clubs could exchange <strong>{fmt(cash + terms.amount)}</strong> in cash.</p>
       <details>
         <summary className="min-h-11 cursor-pointer py-3 font-semibold">Appearance fee rules and example</summary>
         <p>{terms.threshold - 1} league starts and one substitute appearance would trigger this fee. Loans pause the count. A permanent departure before the target closes the clause. Track payments and any balance in Finances.</p>
       </details>
     </> : <p>The performance bonus is reviewed in summer.</p>}
+    {!available && <p>This save has an agreement this version cannot read. Choose the summer review to keep negotiating.</p>}
   </div>;
 }
 
@@ -41,7 +44,7 @@ export function AppearanceFeeLedger({ career }: { career: CareerState }) {
   const rows = [...current, ...previous];
   const fee = rows.find(row => row.id === selected) ?? rows[0];
   if (!fee) return null;
-  const fmt = moneyIn(career);
+  const fmt = (amount: number) => `${currencySymbol(career)}${formatNumber(Math.round(amount * 1_000_000))}`;
   const due = current.filter(row => row.status === 'due').reduce((sum, row) => sum + row.amount - row.paid, 0);
   const possible = current.filter(row => row.status === 'tracking').reduce((sum, row) => sum + row.amount, 0);
   const paidThisSeason = current.flatMap(row => row.payments).filter(p => p.season === career.season).reduce((sum, p) => sum + p.amount, 0);

@@ -172,21 +172,19 @@ export function TransferScreen({
   const bids = career.incomingBids ?? [];
   const log = career.transferLog ?? [];
 
-  /* A fresh negotiation starts with a clean structure. */
-  const negName = neg?.player.name ?? null;
-  const negClub = neg?.player.club ?? null;
-  const offeredTrigger = neg?.lastExtras?.appearanceTrigger;
-  const offeredAmount = offeredTrigger ? neg?.lastExtras?.addOn : undefined;
-  useEffect(() => {
-    setAddOn(offeredTrigger ? offeredAmount ?? 0 : 0);
-    setAppearanceTrigger(offeredTrigger);
-  }, [negName, negClub, offeredTrigger, offeredAmount]);
-  useEffect(() => {
-    setSellOnPct(0);
-    setSwapId(null);
+  /* Restore a submitted appearance offer as one package when reopening its table. */
+  const table = neg ? JSON.stringify([neg.player.club, neg.player.name]) : null;
+  const [lastTable, setLastTable] = useState<string | null>(null);
+  if (table !== lastTable) {
+    setLastTable(table);
+    const saved = neg?.lastExtras?.appearanceTrigger ? neg.lastExtras : undefined;
+    setAddOn(saved?.addOn ?? 0);
+    setAppearanceTrigger(saved?.appearanceTrigger);
+    setSellOnPct(saved?.sellOnPct ?? 0);
+    setSwapId(saved?.swapId ?? null);
     setBid('');
     setTerms(null);
-  }, [negName, negClub]);
+  }
 
   /* Round 927: the deal moment. A negotiation leaving 'open' used to change a
      border colour and three words. Now the card lands (or stings) ONCE, at the
@@ -322,6 +320,11 @@ export function TransferScreen({
   const structureBonus = neg && neg.status === 'open'
     ? dealPackageValue(career, neg.theirAsk, 0, dealExtras)
     : 0;
+  const rivalPrice = neg?.rivalBidder ? neg.rivalOffer : null;
+  const closingLabel = rivalPrice != null ? 'Beat rival' : 'Meet ask';
+  const closingBid = !neg ? 0 : rivalPrice != null
+    ? Math.max(rivalPrice * 1.06 - structureBonus, neg.theirAsk * 0.97 - structureBonus)
+    : Math.max(0.1, neg.theirAsk - structureBonus);
 
   /* Round 506: the closeness meter, read off the same two functions the
      engine judges with. It reads the whole PACKAGE rather than the cash, so
@@ -526,7 +529,8 @@ export function TransferScreen({
                   ))}
                 </div>
                 {addOn > 0 && <AppearanceFeeOffer career={career} amount={addOn} threshold={appearanceTrigger}
-                  bid={typedBid} ask={neg.theirAsk} onChange={setAppearanceTrigger} />}
+                  cash={typedBid || Math.round(closingBid * 10) / 10} offerLabel={typedBid ? 'Your bid' : closingLabel}
+                  onChange={setAppearanceTrigger} />}
                 <div className="flex items-center gap-1.5 flex-wrap">
                   <span className="text-[9px] text-muted-foreground uppercase tracking-wider w-14 shrink-0">Sell-on</span>
                   {[0, 10, 20, 30].map(s => (
@@ -630,9 +634,7 @@ export function TransferScreen({
                 {offerBtn('Lowball', neg.theirAsk * 0.72, 'risky')}
                 {offerBtn('Haggle', neg.theirAsk * 0.88)}
                 {neg.myOffer !== null && offerBtn('Split it', (neg.theirAsk + neg.myOffer) / 2)}
-                {neg.rivalBidder && neg.rivalOffer !== null
-                  ? offerBtn('Beat rival', Math.max(neg.rivalOffer * 1.06 - structureBonus, neg.theirAsk * 0.97 - structureBonus), 'close')
-                  : offerBtn('Meet ask', Math.max(0.1, neg.theirAsk - structureBonus), 'close')}
+                {offerBtn(closingLabel, closingBid, 'close')}
                 <button
                   onClick={onWalk}
                   className="px-2.5 py-1.5 rounded-lg text-[10px] font-bold border border-border bg-card text-muted-foreground hover:text-foreground transition-all"

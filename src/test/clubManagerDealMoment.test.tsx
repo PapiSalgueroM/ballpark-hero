@@ -1,7 +1,8 @@
 import type { ComponentProps } from 'react';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { cleanup, fireEvent, render, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { TransferScreen } from '@/components/club-manager/TransferScreen';
+import { AppearanceFeeLedger } from '@/components/club-manager/AppearanceFeeCard';
 import {
   buildMarket, canLeaveSquad, makeOffer, moneyIn, offerTerms, sellValue, startCareer, startNegotiation,
   type CareerState, type DealExtras, type MarketPlayer, type Negotiation,
@@ -81,6 +82,69 @@ beforeEach(() => seedRandom(927));
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 
 describe('Club Manager: the deal moment', () => {
+  it('carries the chosen appearance target through the fee table, reloaded personal terms and signed receipt', () => {
+    const { market, open } = playDeal();
+    let career = open;
+    const onOffer = (amount: number, extras?: DealExtras) => { career = makeOffer(career, amount, extras)!; };
+    const view = render(<Screen career={career} market={market} onOffer={onOffer} />);
+    const group = screen.getByRole('group', { name: 'Transfer add-ons' });
+    fireEvent.click(within(group).getByRole('button', { name: '£5m' }));
+    const when = screen.getByLabelText('When the add-on is paid');
+    expect(when).toHaveValue('summer');
+    fireEvent.change(when, { target: { value: '15' } });
+    expect(screen.getByText('£2.8m', { selector: 'strong' })).toBeVisible();
+    fireEvent.click(screen.getByText('Appearance fee rules and example'));
+    expect(screen.getByText(/14 league starts and one substitute/)).toBeVisible();
+    fireEvent.change(when, { target: { value: '5' } });
+    expect(screen.getByText('£4m', { selector: 'strong' })).toBeVisible();
+    fireEvent.click(within(group).getByRole('button', { name: 'None' }));
+    expect(screen.queryByLabelText('When the add-on is paid')).toBeNull();
+    fireEvent.click(within(group).getByRole('button', { name: '£5m' }));
+    expect(screen.getByLabelText('When the add-on is paid')).toHaveValue('summer');
+    fireEvent.change(screen.getByLabelText('When the add-on is paid'), { target: { value: '5' } });
+    const cashQuote = screen.getByText(/the clubs could exchange/).textContent;
+    fireEvent.click(screen.getByRole('button', { name: /^(Meet ask|Beat rival)/ }));
+    expect(career.negotiation?.agreedExtras).toMatchObject({ addOn: 5, appearanceTrigger: 5 });
+    const fee = career.negotiation!.agreedFee!;
+    expect(cashQuote).toContain(`offers ${moneyIn(career)(fee)} at signing`);
+    expect(cashQuote).toContain(`exchange ${moneyIn(career)(fee + 5)} in cash`);
+    const terms = JSON.parse(JSON.stringify(career)) as CareerState;
+    view.unmount();
+    const reopened = render(<Screen career={terms} market={market} />);
+    expect(screen.getByText(/Maximum transfer fee/)).toHaveTextContent('5 league appearances');
+    career = offerTerms(terms, terms.negotiation!.terms!.want)!;
+    reopened.rerender(<Screen career={career} market={market} />);
+    expect(screen.getByTestId('cm-deal-slip')).toHaveTextContent('plus £5m after 5 league appearances');
+    reopened.unmount();
+    const receipt = render(<Screen career={JSON.parse(JSON.stringify(career))} market={market} />);
+    expect(screen.getByText(/plus £5m after 5 league appearances/)).toBeVisible();
+    receipt.unmount();
+    render(<AppearanceFeeLedger career={career} />);
+    fireEvent.click(screen.getByText('Transfer fee commitments'));
+    expect(screen.getByRole('region')).toHaveTextContent('0 of 5 league appearances');
+    expect(screen.getByRole('region')).toHaveTextContent('£5,000,000 depends on future appearances');
+  });
+
+  it('shows precise partial payments and keeps a former employer out of the current budget', () => {
+    const { open } = playDeal();
+    const agreed = makeOffer(open, open.negotiation!.theirAsk, { addOn: 5, appearanceTrigger: 5 })!;
+    const signed = offerTerms(agreed, agreed.negotiation!.terms!.want)!;
+    const original = signed.appearanceFees![0];
+    const date = { season: signed.season, week: 5 };
+    const partial = { ...original, lastAppearance: date, triggered: date, appearances: 5,
+      status: 'due' as const, paid: 2.37, payments: [{ ...date, amount: 2.37 }] };
+    const view = render(<AppearanceFeeLedger career={{ ...signed, appearanceFees: [partial] }} />);
+    fireEvent.click(screen.getByText('Transfer fee commitments'));
+    expect(screen.getByRole('region')).toHaveTextContent('paid £2,370,000 in appearance fees this season. £2,630,000 is due now');
+    fireEvent.click(screen.getByText('Payment history'));
+    expect(screen.getByRole('listitem')).toHaveTextContent('week 6 · £2,370,000 paid');
+    view.rerender(<AppearanceFeeLedger career={{ ...signed, clubName: original.seller, appearanceFees: [partial] }} />);
+    expect(screen.getByRole('region')).toHaveTextContent('paid £0 in appearance fees this season. £0 is due now');
+    expect(screen.getByRole('region')).toHaveTextContent(`£2,630,000 remains due from ${original.buyer}`);
+    view.rerender(<AppearanceFeeLedger career={open} />);
+    expect(screen.queryByText('Transfer fee commitments')).toBeNull();
+  });
+
   it('offers the full eligible squad and completes a deal with a reserve', () => {
     const { market, open } = playDeal();
     const owned = open.squad.filter(player => canLeaveSquad(open, player))
