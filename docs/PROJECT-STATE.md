@@ -1,3 +1,15 @@
+### November 27, 2026. Separate playing shapes published in Club Manager
+
+Lovable published revision `cb3b35dcc` in deployment `6ea5939c-c885-4b83-8278-ecf1ebaa06c8`. Home, Club Manager and What's New served `index-Bnt2eEMy.js`, SHA256 `6701a926a90a7e3471dd0b2fc34e986a2fab0086368902b09cbed207d216e8d8`. Both public guide snapshots matched the repository. All 176 sitemap URLs passed the raw production audit and IndexNow accepted both changed URLs with HTTP 200.
+
+Match Centre and live tactics can use separate shapes with and without the ball. The displayed assignments are the real eleven in the save. The recovery map shows the trip back from each attacking position. A red card or injury can leave a vacancy in the recorded shape, and a replacement can restore it. The first match decisions this feature changes are the outlet after the keeper saves and the recovery when the opposition keeper starts play.
+
+In the live production replays, Brentford challenged the pass and Mamadou Sangaré won it back and scored the 83rd-minute winner in a 3-2 match against Tottenham. In a different fixture Pedro Porro scored when Tottenham got past the challenge at 68 minutes. In Quick Sim, Caoimhín Kelleher's 45+1 save led to Mamadou Sangaré finding Dango Ouattara for a goal. That report recorded four nearby passing options, two teammates in cover and one actual point of fitness spent. Watching and skipping with the same orders matched the whole career, reported moves and shape assignments. Turning the order off at 57 minutes after changing it at 53 preserved the earlier events through two reloads.
+
+The app TypeScript project, 32 focused tests and all 17 site checks passed. The 159 competitive comparisons against the preceding published source matched complete saves and reports, including all 77,079 ordinary random draws. Ten altered controls exposed differences as expected. Another 135 ordinary fixtures matched 188,714 draws. Six arms each shared the same 1,168 source saves in 360 matched starts. The independently changed outlet, recovery and shape options are tabulated in the [expansion ledger](EXPANSION-IMPLEMENTATION-LEDGER.md).
+
+Ten public match cases and the four earlier starter games passed on the published entry. At five widths from 320 to 1920 px, the ad replay covered 350 layout states, including 310 control samples. The minimum unobscured test ad gap was 156 px. All 31 separate controls accepted taps while the stylesheet was held. Seven intercepted GA cases returned one page view per eligible page change and zero for internal shape actions. Thirteen consent cases passed, with a real US lookup and controlled other regional branches. No paid impressions were sent by the replay.
+
 ### November 27, 2026. Appearance fees published in Club Manager
 
 Lovable published application revision `cc017b9af` in deployment `4abf8bb6-91d0-4924-b7d8-4d9c0a7810b4`. Home, Club Manager and What's New serve `index-ChF0yBgi.js`, SHA256 `85e5dd2aae3eb90c507b76c1ebce1fc7fb2a51713a211eafcd7e1a1d9903d67f`. Both raw guide snapshots match the repository. The live HTML audit passed all 176 sitemap URLs. IndexNow accepted both changed URLs with HTTP 200.
