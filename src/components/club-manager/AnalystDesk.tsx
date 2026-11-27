@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { isReturnPress, minuteLabel, type CareerState, type LiveMatch } from '@/lib/clubManager';
 import type { ClockPoint } from '@/lib/clubManagerClock';
 import {
@@ -65,14 +65,17 @@ export function AnalystDesk({ career, opponent, mode, onMode, live, clock, onPre
   const [opened, setOpened] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const [pastIndex, setPastIndex] = useState(0);
-  const current = opened && live && clock ? analystCurrent(career, live, clock) : null;
+  const minute = clock?.minute, plus = clock?.plus;
+  const current = useMemo(() => opened && live && minute !== undefined
+    ? analystCurrent(career, live, { minute, plus }) : null,
+  [career, live, minute, opened, plus]);
   const notes = opened ? current?.history ?? analystHistory(career, opponent) : [];
   const past = notes[Math.min(pastIndex, notes.length - 1)];
   const watch = isAnalystWatch(live?.analystWatch) ? live.analystWatch : null;
   const active = watch?.mode ?? mode;
   const recommendation = current?.recommendation;
   const press = isReturnPress(live?.returnPress) ? live.returnPress : null;
-  const available = canUseAnalyst(career) && (!live?.analystWatch || !!watch);
+  const available = opened && canUseAnalyst(career) && (!live?.analystWatch || !!watch);
   const recurring = new Map<string, { player: AnalystPlayer; actions: number; meetings: number }>();
   for (const note of notes) for (const player of note.throws.players) {
     const key = JSON.stringify([player.name, player.generated === true]);
