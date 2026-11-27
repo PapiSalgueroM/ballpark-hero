@@ -38,7 +38,7 @@ export function SoccerCareerFrame({ active = false, children, reportGameContext 
           the lift measurement. */}
       <div className={`min-h-screen bg-background text-foreground flex flex-col ${active ? 'pb-[88px]' : ''}`}>
         <GameNavbar />
-        <div className={`relative z-10 mx-auto w-full max-w-4xl ${active ? "h-11 sm:h-0" : ""}`}>
+        <div data-active-career-help={active ? '' : undefined} className={`relative z-10 mx-auto w-full max-w-4xl ${active ? "h-11 sm:h-0" : ""}`}>
           <GameHelp extraRules={[...DERBY_HELP_RULES,
             'Community Shield: the previous Premier League and FA Cup winners qualify. If one club wins both, the league runner-up takes the second spot. Your club after the transfer window determines whether you can play. A personal trophy requires appearing for the winner.',
             'German Supercup: the previous Bundesliga and DFB-Pokal winners qualify. If one club wins both, the league runner-up takes the second spot. A draw after 90 minutes goes straight to penalties.',

@@ -18,7 +18,7 @@ const playTargets = [
 const menuTrigger = 'button[aria-label="Open site menu"]';
 const menuPanel = '[role="dialog"][data-site-chrome]';
 
-function safeRailOffset(frame: HTMLElement, content: HTMLElement): number | null {
+function safeRailOffset(frame: HTMLElement, content: HTMLElement, path: string): number | null {
   const left = frame.querySelector('[data-rail-edge="left"]')?.getBoundingClientRect();
   const right = frame.querySelector('[data-rail-edge="right"]')?.getBoundingClientRect();
   const main = content.querySelector('main, [role="main"], #dukb-main');
@@ -30,7 +30,17 @@ function safeRailOffset(frame: HTMLElement, content: HTMLElement): number | null
   const belowNav = navBottom + AD_CONTROL_GAP_PX;
   const shelf = content.querySelector('[data-home-continue] [data-home-shelf-rail]');
   const shelfBox = shelf && getComputedStyle(shelf).overflowX === 'auto' ? shelf.getBoundingClientRect() : null;
-  let top = belowNav;
+  const firstScreen = path === '/' || (path === '/soccer-career' && !!content.querySelector('[data-active-career-saves]'));
+  // Each complete row must stay clear as its controls scroll past the rails.
+  const chromeRows = firstScreen ? [...document.querySelectorAll<HTMLElement>(
+    'header[data-site-chrome] > div:first-child, section[aria-label="Live scores ticker"] > div:first-child, nav[data-site-chrome] > div:first-child'
+  )].filter(row => row.clientWidth > 0) : [];
+  if (chromeRows.some(row => {
+    const box = row.getBoundingClientRect();
+    return row.scrollWidth > row.clientWidth + 1 || box.left - left.right < AD_CONTROL_GAP_PX || right.left - box.right < AD_CONTROL_GAP_PX;
+  })) return null;
+  const lift = chromeRows.length > 0;
+  let top = lift ? frameTop : belowNav;
   let hasControl = false;
   const near: { box: DOMRect; horizontal: number }[] = [];
   const pinned = new Map<Element, boolean>();
@@ -42,8 +52,10 @@ function safeRailOffset(frame: HTMLElement, content: HTMLElement): number | null
     }
     return !pinned.get(el);
   };
-  for (const target of content.querySelectorAll(playTargets)) {
-    if (target.closest('[data-site-chrome]')) continue;
+  const targets = [...content.querySelectorAll(playTargets)];
+  if (lift) targets.push(...document.querySelectorAll('header[data-site-chrome] :is(a[href], button, input, select, summary, [role="button"])'));
+  for (const target of targets) {
+    if (!lift && target.closest('[data-site-chrome]')) continue;
     // The whole saved-game scroller, including its scrollbar, bounds the cards a visitor can reach.
     const box = shelfBox && shelf?.contains(target) && scrollsWithPage(target) ? shelfBox : target.getBoundingClientRect();
     if (box.width <= 1 || box.height <= 1 || getComputedStyle(target).visibility === 'hidden') continue;
@@ -53,7 +65,7 @@ function safeRailOffset(frame: HTMLElement, content: HTMLElement): number | null
     // A fixed or sticky target can pass the full rail as the player scrolls.
     if (!scrollsWithPage(target)) return null;
     // Start below near-edge controls in the navigation band, including Help.
-    if (box.top >= navBottom - 1 && box.bottom <= belowNav) top = Math.max(top, box.bottom + AD_CONTROL_GAP_PX);
+    if (!lift && box.top >= navBottom - 1 && box.bottom <= belowNav) top = Math.max(top, box.bottom + AD_CONTROL_GAP_PX);
     near.push({ box, horizontal });
   }
   const height = AD_RAIL_LABEL_PX + AD_RAIL_HEIGHT_PX;
@@ -125,7 +137,7 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
     const measure = (beforePaint = false) => {
       // The edge drawer covers a rail. Closing it must not buy another impression.
       if (document.querySelector(menuTrigger + '[aria-expanded="true"]')) visit.current.retired = true;
-      const offset = visit.current.retired || document.querySelector(menuPanel) ? null : safeRailOffset(container, game);
+      const offset = visit.current.retired || document.querySelector(menuPanel) ? null : safeRailOffset(container, game, path);
       if (offset === null && visit.current.allocated) {
         visit.current.retired = true;
         if (beforePaint) {
@@ -156,6 +168,12 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
       else schedule();
     });
     changed.observe(game, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['class', 'style', 'hidden', 'open', 'aria-busy', 'data-seo-content'] });
+    if (path === '/' || path === '/soccer-career') {
+      for (const chrome of document.querySelectorAll('header[data-site-chrome], section[aria-label="Live scores ticker"]')) {
+        resized.observe(chrome);
+        changed.observe(chrome, { subtree: true, childList: true, attributes: true, attributeFilter: ['class', 'style', 'hidden'] });
+      }
+    }
     const menu = new MutationObserver(records => {
       if (records.some(record => (record.target instanceof Element && record.target.matches(menuTrigger)) ||
         [...record.addedNodes, ...record.removedNodes].some(node => node instanceof Element && node.matches(menuPanel)))) measure();

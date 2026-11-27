@@ -14,7 +14,9 @@
   }
 
   /* Sticky controls pass the rails on scroll. Keep their rows in the safe middle. */
-  :global(#root):has(.frame[data-desktop-room]) :is(header[data-site-chrome] > div:first-child, section[aria-label="Live scores ticker"] > div:first-child) {
+  :global(#root):has(.frame[data-desktop-room]) :is(header[data-site-chrome] > div:first-child, section[aria-label="Live scores ticker"] > div:first-child),
+  .frame[data-desktop-room]:has([data-active-career-help]) nav[data-site-chrome] > div:first-child,
+  .frame[data-desktop-room] [data-active-career-help] {
     max-width: calc(100% - var(--browse-rail-space) - var(--browse-rail-space));
     margin-inline: auto;
   }
@@ -77,6 +79,7 @@
   }
 
   .game :is([data-active-career-saves], [data-career-player-row]) {
+    padding-inline: 0.5rem;
     max-width: 45rem;
     margin-inline: auto;
   }

@@ -121,6 +121,14 @@ async function distances(page) {
   }, { slots, selection });
 }
 
+async function checkRailStart(page) {
+  const rails = page.locator('[data-rail-edge]:has([data-ad-rail] ins)');
+  await rails.first().waitFor({ state: 'visible' });
+  const offsets = await rails.evaluateAll(els => els.map(el =>
+    Math.round(el.getBoundingClientRect().top - el.parentElement.getBoundingClientRect().top)));
+  assert.deepEqual(offsets, [0, 0], 'Clear navigation rows should allow the two rails to start with the page content');
+}
+
 async function checkActive(page, evidence, label) {
   const footer = page.locator('[data-public-footer-ad] ins[data-ad-status="filled"]');
   await footer.waitFor();
@@ -170,6 +178,7 @@ async function soccer(width) {
     await next.waitFor();
     await excluded(page, evidence, [0, 0], 'Before accepting');
     assert.equal(await answerConsent(page, { choice: 'accept' }), 'accepted');
+    if (width >= 1280) await checkRailStart(page);
     const start = await stored(page, 'soccerCareerSave');
     await next.click();
     await page.waitForFunction(age => JSON.parse(localStorage.getItem('soccerCareerSave')).age > age, start.age);
@@ -352,6 +361,7 @@ async function ranked() {
             if (width === 1280 && path === '/build-your-xi') {
               assert.equal(roles.length, process.argv.includes('--baseline') ? 1 : 3, 'Build Your XI compact-desktop allocation');
             }
+            if (width >= 1280 && path === '/' && !process.argv.includes('--baseline')) await checkRailStart(page);
             const playable = !!await page.locator('[data-playable-route]').count();
             const samples = await distances(page);
             await page.locator('[data-public-footer-ad] ins').evaluate(el => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
