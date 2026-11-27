@@ -137,3 +137,30 @@
     margin-block: 0;
   }
 }
+
+/* Home's 16px content padding adds to the space beside its launch links. */
+:global(#root):has(.frame[data-desktop-room][data-home-route]) {
+  --creative-width: 160px;
+  --browse-rail-space: max(300px, calc(var(--game-ad-rail) + 110px));
+}
+
+.frame[data-desktop-room][data-home-route] [data-home-search-tools] {
+  width: clamp(14rem, 36%, 26rem);
+}
+
+.frame[data-desktop-room][data-home-route] [data-home-dailies] select {
+  min-width: min(10rem, 100%);
+}
+
+@media (min-width: 1366px) {
+  :global(#root):has(.frame[data-desktop-room] [data-career-utilities]) {
+    --creative-width: 160px;
+  }
+}
+
+@media (min-width: 1920px) {
+  :global(#root):has(.frame[data-desktop-room][data-home-route]) {
+    --creative-width: 300px;
+    --browse-rail-space: 440px;
+  }
+}

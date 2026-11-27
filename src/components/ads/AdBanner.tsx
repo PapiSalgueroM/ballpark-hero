@@ -191,7 +191,7 @@ function PublicDisplayAd({ slot, placement, className = '' }: AdBannerProps & { 
       <ins
         ref={adRef}
         className={footer ? 'adsbygoogle dukb-footer-display' : 'adsbygoogle'}
-        style={footer ? { display: 'block' } : { display: 'block', width: '100%', maxWidth: 160, height: AD_RAIL_HEIGHT_PX }}
+        style={footer ? { display: 'block' } : { display: 'block', width: '100%', maxWidth: 'var(--creative-width, 160px)', height: AD_RAIL_HEIGHT_PX }}
         data-ad-client="ca-pub-2929318086316376"
         data-ad-slot={slot}
       />

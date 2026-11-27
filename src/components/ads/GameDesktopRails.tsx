@@ -86,10 +86,14 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
   const content = useRef<HTMLDivElement>(null);
   const [fits, setFits] = useState(false);
   const [clearPath, setClearPath] = useState<string | null>(null);
-  const visit = useRef({ allocated: false, retired: false });
-  useLayoutEffect(() => { visit.current = { allocated: false, retired: false }; }, [path]);
+  const visit = useRef({ allocated: false, retired: false, issuedWidth: 0 });
+  useLayoutEffect(() => { visit.current = { allocated: false, retired: false, issuedWidth: 0 }; }, [path]);
   useLayoutEffect(() => {
-    if (clearPath === path && frame.current?.querySelector('[data-ad-rail] ins')) visit.current.allocated = true;
+    const unit = frame.current?.querySelector('[data-ad-rail] ins');
+    if (clearPath === path && unit && !visit.current.allocated) {
+      visit.current.issuedWidth = unit.getBoundingClientRect().width;
+      visit.current.allocated = true;
+    }
   }, [clearPath, eligible, fits, path]);
   useLayoutEffect(() => {
     const element = frame.current;
@@ -133,8 +137,16 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
     const schedule = () => {
       if (!pending) pending = requestAnimationFrame(() => { pending = 0; measure(); });
     };
-    const resized = new ResizeObserver(schedule);
+    const edge = container.querySelector('[data-rail-edge="left"]');
+    const resized = new ResizeObserver(() => {
+      // A delivered creative can retain its original width when the window shrinks.
+      if (!visit.current.retired && edge && edge.getBoundingClientRect().width + 0.5 < visit.current.issuedWidth) {
+        visit.current.retired = true;
+        flushSync(() => setClearPath(null));
+      } else schedule();
+    });
     resized.observe(game);
+    if (edge) resized.observe(edge);
     const changed = new MutationObserver(() => {
       // A newly rendered board can cover a filled rail before the next animation frame.
       if (visit.current.allocated && !visit.current.retired) measure(true);
@@ -167,7 +179,7 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
   if (!active) return children;
   const showRails = eligible && fits && clearPath === path;
   return (
-    <div ref={frame} className={styles.frame} data-desktop-room={fits ? '' : undefined} data-playable-route={playable ? '' : undefined}>
+    <div ref={frame} className={styles.frame} data-desktop-room={fits ? '' : undefined} data-playable-route={playable ? '' : undefined} data-home-route={path === '/' ? '' : undefined}>
       <div ref={content} className={styles.game} data-game-desktop-rails="" google-side-rail-overlap="false">
         {children}
       </div>
