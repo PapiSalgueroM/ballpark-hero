@@ -16,7 +16,12 @@ it('mounts one shared ad after the footer and excludes private, legal and unknow
   expect(['/profile', '/admin', '/privacy', '/terms', '/absent'].some(isPublicDesktopRailRoute)).toBe(false);
 });
 
-it('requires 1280px of actual frame space and keeps the same game mounted through a resize', () => {
+it.each([1280, 1254])('fits the full desktop frame beside a native scrollbar at %ipx without remounting play', viewport => {
+  const frameWidth = viewport - 15;
+  vi.stubGlobal('innerWidth', viewport);
+  vi.spyOn(document.documentElement, 'clientWidth', 'get').mockReturnValue(frameWidth);
+  const media = window.matchMedia('(hover: hover)');
+  vi.spyOn(window, 'matchMedia').mockReturnValue({ ...media, matches: true });
   let reportWidth: (width: number) => void;
   vi.spyOn(Element.prototype, 'getBoundingClientRect').mockImplementation(function (this: Element) {
     const side = this.getAttribute('data-rail-edge');
@@ -37,11 +42,11 @@ it('requires 1280px of actual frame space and keeps the same game mounted throug
   fireEvent.change(input, { target: { value: 'in-progress guess' } });
   const rails = () => Array.from(view.container.querySelectorAll('[data-ad-rail]'), el => el.getAttribute('data-ad-rail'));
   expect(rails()).toEqual([]);
-  act(() => reportWidth(1279));
+  act(() => reportWidth(frameWidth - 1));
   expect(rails()).toEqual([]);
-  act(() => reportWidth(1280));
+  act(() => reportWidth(frameWidth));
   expect(rails()).toEqual(['left', 'right']);
-  act(() => reportWidth(1279));
+  act(() => reportWidth(frameWidth - 1));
   expect(rails()).toEqual([]);
   expect(view.getByRole('textbox')).toBe(input);
   expect(input).toHaveValue('in-progress guess');

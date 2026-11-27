@@ -2,7 +2,7 @@ import { ANALYTICS_READY, getEffectiveConsent, type ConsentPurposes } from '@/li
 import { ALL_GAMES } from '@/data/gameRegistry';
 import { HUB_NAV } from '@/lib/sportHubNav';
 import { EDITORIAL_RAIL_ROUTES } from '@/components/ads/editorialRailRoutes';
-import { isPublicAdDocument } from '@/components/ads/publicAdEligibility';
+import { DESKTOP_RAIL_MEDIA, isPublicAdDocument } from '@/components/ads/publicAdEligibility';
 import { normalizeRoutePath } from '@/lib/routePath';
 export { CONSENT_CHANGED_EVENT } from '@/lib/consentPreferences';
 
@@ -58,7 +58,7 @@ export function loadAdSense(requestedSlot?: HTMLModElement | null): boolean {
     if (!isPublicAdDocument()) return false;
     const slot = requestedSlot === undefined ? document.querySelector(PUBLIC_AD_SLOT) : requestedSlot;
     if (!slot?.isConnected || !slot.matches(PUBLIC_AD_SLOT)) return false;
-    if (window.innerWidth < (slot.closest('[data-ad-rail]') ? 1280 : 320)) return false;
+    if (slot.closest('[data-ad-rail]') ? !window.matchMedia(DESKTOP_RAIL_MEDIA).matches : window.innerWidth < 320) return false;
     return startAdSense();
   } catch { return false; }
 }

@@ -3,6 +3,8 @@ import { normalizeRoutePath } from '@/lib/routePath';
 import { HUB_NAV } from '@/lib/sportHubNav';
 import { EDITORIAL_RAIL_ROUTES } from './editorialRailRoutes';
 
+export const DESKTOP_RAIL_MEDIA = '(min-width: 1280px), (min-width: 1254px) and (hover: hover) and (pointer: fine)';
+
 const routes = new Set([
   '/', ...ALL_GAMES.map(game => game.path), ...HUB_NAV.map(hub => hub.route), ...EDITORIAL_RAIL_ROUTES,
 ]);

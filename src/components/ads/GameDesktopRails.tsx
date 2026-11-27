@@ -5,6 +5,7 @@ import { normalizeRoutePath } from '@/lib/routePath';
 import { isGameRoute } from '@/components/StorageNotice';
 import AdBanner, { AD_CONTROL_GAP_PX, AD_RAIL_HEIGHT_PX, AD_RAIL_LABEL_PX } from './AdBanner';
 import { usePublicAdEligibility } from './usePublicAdEligibility';
+import { DESKTOP_RAIL_MEDIA } from './publicAdEligibility';
 import styles from './GameDesktopRails.module.css';
 export { isPublicDesktopRailRoute } from './publicAdEligibility';
 
@@ -80,7 +81,7 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
   const { pathname } = useLocation();
   const path = normalizeRoutePath(pathname);
   const playable = isGameRoute(path);
-  const eligible = usePublicAdEligibility('(min-width: 1280px)');
+  const eligible = usePublicAdEligibility(DESKTOP_RAIL_MEDIA);
   const frame = useRef<HTMLDivElement>(null);
   const content = useRef<HTMLDivElement>(null);
   const [fits, setFits] = useState(false);
@@ -93,10 +94,18 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
   useLayoutEffect(() => {
     const element = frame.current;
     if (!element || typeof ResizeObserver === 'undefined') return;
-    setFits(element.clientWidth >= 1280);
-    const observer = new ResizeObserver(([entry]) => setFits(entry.contentRect.width >= 1280));
+    const media = window.matchMedia(DESKTOP_RAIL_MEDIA);
+    const measure = (width: number) => {
+      const pageWidth = document.documentElement.clientWidth;
+      // A native scrollbar narrows the full page, including its rail frame.
+      setFits(width >= 1280 || (media.matches && pageWidth > 0 && width >= pageWidth));
+    };
+    const check = () => measure(element.clientWidth);
+    check();
+    const observer = new ResizeObserver(([entry]) => measure(entry.contentRect.width));
     observer.observe(element);
-    return () => observer.disconnect();
+    media.addEventListener('change', check);
+    return () => { observer.disconnect(); media.removeEventListener('change', check); };
   }, [active]);
 
   useLayoutEffect(() => {

@@ -41,6 +41,22 @@ it('leaves legacy game placements empty and refuses a misplaced display unit', (
   expect(tags()).toHaveLength(0);
 });
 
+it.each([true, false])('requires desktop pointer and hover in the extra rail width band (matched: %s)', matched => {
+  publicAdCanonical();
+  const display = mountPublicFooterSlot();
+  const wrapper = display.parentElement!;
+  wrapper.dataset.dukbManualAd = 'left-rail';
+  wrapper.parentElement!.dataset.adRail = 'left';
+  const viewport = vi.spyOn(window, 'innerWidth', 'get').mockReturnValue(1254);
+  const query = vi.spyOn(window, 'matchMedia').mockImplementation(value => ({
+    ...originalMedia(value), matches: matched && value.includes('(hover: hover)') && value.includes('(pointer: fine)'),
+  }));
+  expect(loadAdSense(display)).toBe(matched);
+  expect(tags()).toHaveLength(matched ? 1 : 0);
+  expect(query).toHaveBeenCalled();
+  viewport.mockRestore();
+});
+
 it.each([manifest.start_url, ...manifest.shortcuts.map(shortcut => shortcut.url)])(
   'loads one publisher tag on the installed app launch %s', async address => {
     history.replaceState({}, '', address);
