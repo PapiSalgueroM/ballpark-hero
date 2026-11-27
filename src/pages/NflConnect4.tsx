@@ -127,7 +127,7 @@ const NflConnect4 = () => {
         </p>
 
         {/* The Grid */}
-        <div className="overflow-x-auto pb-4">
+        <div data-rail-play-board="" className="overflow-x-auto pb-4">
           <div className="inline-block min-w-[700px] mx-auto">
             {/* Column headers */}
             <div className="grid gap-1" style={{ gridTemplateColumns: `100px repeat(${COLS}, 1fr)` }}>

@@ -68,7 +68,7 @@ function readPlacements({ key, placement, privateScreen }) {
   const frame = document.querySelector(key), viewport = document.documentElement.clientWidth;
   const left = document.querySelector('[data-rail-edge=left]')?.getBoundingClientRect();
   const right = document.querySelector('[data-rail-edge=right]')?.getBoundingClientRect();
-  const targets = 'a[href],button,input,select,textarea,summary,form,table,canvas,video,svg[viewBox],[role=grid],[role=button],[role=application],[tabindex]:not([tabindex="-1"]),[contenteditable=true],[draggable=true],.cursor-pointer,[class*="aspect-"],[data-cm-pitch],[data-drill-board],[data-first-touch-board],[data-through-ball-board],[data-soccer-moment-board]';
+  const targets = 'a[href],button,input,select,textarea,summary,form,table,canvas,video,svg[viewBox],[role=grid],[role=button],[role=application],[tabindex]:not([tabindex="-1"]),[contenteditable=true],[draggable=true],.cursor-pointer,[class*="aspect-"],[data-cm-pitch],[data-drill-board],[data-first-touch-board],[data-through-ball-board],[data-soccer-moment-board],[data-rail-play-board]';
   const boxes = [];
   for (const el of document.querySelectorAll(targets)) {
     if (el.closest('[data-dukb-manual-ad]') || !el.checkVisibility({ visibilityProperty: true, opacityProperty: true })) continue;
@@ -160,6 +160,17 @@ async function verify(page, path, width, requiredDocks = 0) {
   assert.equal(new Set(first.requests.map(hit => hit.role)).size, first.requests.length, path + ': repeated request for the same placement');
   assert(roles.every(role=>first.requests.some(hit=>hit.role===role)), path + ': mounted unit lacked a local fixture request');
   assert.deepEqual(roles, noAds ? [] : roles.length === 3 ? ['left-rail','public-footer','right-rail'] : ['public-footer'], path + ': placement set');
+  if (width >= 1280 && (path === '/career' || path.endsWith('-connect-4'))) {
+    const board = wrapper.locator('[data-rail-play-board]');
+    assert(await board.evaluate(el => el.scrollWidth <= el.clientWidth + 1), path + ': desktop board lost a column');
+    assert.deepEqual(roles, ['left-rail','public-footer','right-rail'], path + ': desktop board allocations');
+    const row = board.locator('.grid').filter({ has: page.getByRole('button') }).first();
+    await row.getByRole('button').last().click();
+    await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
+    const played = await capture();
+    assert.deepEqual(played.placements.map(ad => ad.role).sort(), roles, path + ': opening a cell changed the placements');
+    assert.deepEqual(played.requests, first.requests, path + ': opening a cell made another request');
+  }
   if (width >= 1280 && (path === '/' || (path === '/soccer-career' && requiredDocks))) {
     const wanted = path === '/' ? (width >= 1920 ? 300 : 160) : (width >= 1366 ? 160 : 120);
     assert.deepEqual(first.requests.filter(hit => hit.role !== 'public-footer').map(hit => hit.width), [wanted, wanted], path + ': issued creative widths at ' + width);

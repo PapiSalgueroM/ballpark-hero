@@ -13,7 +13,7 @@ const playTargets = [
   'a[href], button, input, select, textarea, summary, form, [role="button"], [contenteditable="true"]',
   '[tabindex]:not([tabindex="-1"]), [draggable="true"], .cursor-pointer',
   'canvas, video, svg[viewBox], table, [role="grid"], [role="application"], [class*="aspect-"]',
-  '[data-cm-pitch], [data-drill-board], [data-first-touch-board], [data-through-ball-board], [data-soccer-moment-board]',
+  '[data-cm-pitch], [data-drill-board], [data-first-touch-board], [data-through-ball-board], [data-soccer-moment-board], [data-rail-play-board]',
 ].join(', ');
 const menuTrigger = 'button[aria-label="Open site menu"]';
 const menuPanel = '[role="dialog"][data-site-chrome]';
@@ -201,7 +201,7 @@ export function GameDesktopRails({ active, children }: { active: boolean; childr
   if (!active) return children;
   const showRails = eligible && fits && clearPath === path;
   return (
-    <div ref={frame} className={styles.frame} data-desktop-room={fits ? '' : undefined} data-playable-route={playable ? '' : undefined} data-manager-ad-layout={path === '/club-manager' && eligible && fits ? '' : undefined} data-home-route={path === '/' ? '' : undefined}>
+    <div ref={frame} className={styles.frame} data-desktop-room={fits ? '' : undefined} data-public-ad-layout={eligible && fits ? '' : undefined} data-playable-route={playable ? '' : undefined} data-manager-ad-layout={path === '/club-manager' && eligible && fits ? '' : undefined} data-home-route={path === '/' ? '' : undefined}>
       <div ref={content} className={styles.game} data-game-desktop-rails="" google-side-rail-overlap="false">
         {children}
       </div>
