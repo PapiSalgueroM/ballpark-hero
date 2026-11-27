@@ -38,6 +38,7 @@ import { readCustomShape, type CustomShapePoint } from '@/lib/clubManagerPositio
 import { ClubManagerVarReview } from '@/components/club-manager/ClubManagerVarReview';
 import { inFixtureOrder, mineFirstOfReport, myClubFirst, pitchInitials, pitchName } from '@/lib/cmMatchDisplay';
 import { LiveTacticsPanel } from '@/components/club-manager/LiveTacticsPanel';
+import { FlankPlayReview } from '@/components/club-manager/FlankPlayReview';
 
 /**
  * Round 158: the Live Sim. His words, the ones he said to really pay
@@ -747,6 +748,7 @@ export function LiveSimScreen({
 
   /* ---- the truth this walk goes through ---- */
   const feed: LiveFeedEvent[] = useMemo(() => (liveNow ? liveFeed(liveNow) : []), [liveNow]);
+  const flankMoves = useMemo(() => [...(liveNow?.h1Play ?? []), ...(liveNow?.h2Play ?? [])].filter(e => e.flankMove), [liveNow?.h1Play, liveNow?.h2Play]);
   const nextReview = feed.find(e => e.kind === 'var' && e.review && !settledReviews.has(e.review.id)
     && e.minute >= (stage === 'first' ? 0 : stage === 'extra' ? 91 : 46) && e.minute <= stageEnd
     && placeOf(e) >= openedAt.current);
@@ -2080,6 +2082,7 @@ export function LiveSimScreen({
                   </button>
                 )}
               </div>
+              {stage !== 'done' && flankMoves.length > 0 && <FlankPlayReview live play={flankMoves.filter(happened)} opponent={opponent} />}
             </div>
 
             {/* The side: beside the pitch on a wide screen, a sheet over its foot on a phone. One panel at a time. */}

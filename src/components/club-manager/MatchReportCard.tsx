@@ -14,6 +14,7 @@ import { cardsAndSubsAt, reportLines } from '@/lib/clubManagerMatchCentre';
 import type { CardsAndSubs } from '@/lib/clubManagerMatchCentre';
 import { MatchTimeline } from '@/components/club-manager/MatchTimeline';
 import { ShootoutKicks } from '@/components/club-manager/ShootoutKicks';
+import { FlankPlayReview } from '@/components/club-manager/FlankPlayReview';
 import { inFixtureOrder, mineFirstOfReport } from '@/lib/cmMatchDisplay';
 import { BOARD_EDGE, boardMeter } from '@/lib/clubManagerMeters';
 import type { MeterTone } from '@/lib/clubManagerMeters';
@@ -513,6 +514,7 @@ export function MatchReportCard({ report, career, clubName, onContinue, noSack =
               {statsHeadSecond}
             </div>
             <StatsBlock stats={detail.stats} counts={detailCounts} mineFirst={mineFirst} />
+            {detail.play && <FlankPlayReview play={detail.play} opponent={opponent} />}
             {detail.tactics && (
               <TacticsDayBlock
                 tactics={detail.tactics}
