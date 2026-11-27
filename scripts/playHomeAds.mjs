@@ -23,8 +23,9 @@ async function withHome(width, advertising, run) {
   try {
     if (advertising !== null) {
       await context.addInitScript(value => {
+        const now = Date.now();
         localStorage.setItem('cookie-consent-v2', JSON.stringify({
-          version: 2, advertising: value, analytics: false, updatedAt: Date.now(),
+          version: 2, advertising: value, analytics: false, updatedAt: now, ...(value ? { advertisingConfirmedAt: now } : {}),
         }));
       }, advertising);
     }

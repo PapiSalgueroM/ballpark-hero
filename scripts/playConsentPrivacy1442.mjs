@@ -10,8 +10,11 @@ fs.mkdirSync(out, { recursive: true });
 const report = { cases: [], externalRequests: [], actualOutbound: 0, complete: false };
 const SITE = 'https://douknowball.com';
 const key = 'cookie-consent-v2';
-const choice = (advertising, analytics) => JSON.stringify({ version: 2, advertising, analytics,
-  ...(analytics ? { analyticsOptIn: 1 } : {}), updatedAt: Date.now() });
+const choice = (advertising, analytics) => {
+  const now = Date.now();
+  return JSON.stringify({ version: 2, advertising, analytics, updatedAt: now,
+    ...(advertising ? { advertisingConfirmedAt: now } : {}), ...(analytics ? { analyticsOptIn: 1 } : {}) });
+};
 const vendors = rows => rows.filter(url => /googletagmanager|googlesyndication|google-analytics/.test(url));
 const browser = await chromium.launch({ headless: true });
 async function context(options = {}) {

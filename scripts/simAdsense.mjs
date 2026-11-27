@@ -358,7 +358,9 @@ console.log('5b) analytics stays off in the template and every saved head');
     };
     const values = [null, '{', JSON.stringify({ version: 3, advertising: true, analytics: true, updatedAt: Date.now() })];
     for (const advertising of [false, true]) for (const analytics of [false, true]) {
-      values.push(JSON.stringify({ version: 2, advertising, analytics, updatedAt: Date.now() }));
+      const choice = { version: 2, advertising, analytics, updatedAt: Date.now() };
+      values.push(JSON.stringify(choice));
+      if (advertising) values.push(JSON.stringify({ ...choice, advertisingConfirmedAt: choice.updatedAt, ...(analytics ? { analyticsOptIn: 1 } : {}) }));
     }
     for (const value of values) if (execute(script, value).length) fail('paused template analytics still loads an optional script');
     const forced = script + '\ndocument.head.appendChild({src:"https://www.googletagmanager.com/gtag/js?id=fixture"});';

@@ -35,9 +35,12 @@ async function session(width, advertising = true, gpc = false) {
   const context = await browser.newContext({ viewport: { width, height: width === 390 ? 844 : 900 },
     reducedMotion: 'reduce', serviceWorkers: 'block' });
   await context.addInitScript(({ advertising, gpc }) => {
-    if (advertising !== null) localStorage.setItem('cookie-consent-v2', JSON.stringify({
-      version: 2, advertising, analytics: false, updatedAt: Date.now(),
-    }));
+    if (advertising !== null) {
+      const now = Date.now();
+      localStorage.setItem('cookie-consent-v2', JSON.stringify({
+        version: 2, advertising, analytics: false, updatedAt: now, ...(advertising ? { advertisingConfirmedAt: now } : {}),
+      }));
+    }
     if (gpc) Object.defineProperty(navigator, 'globalPrivacyControl', { value: true });
   }, { advertising, gpc });
   await context.routeWebSocket('**/*', ws => ws.close());

@@ -36,7 +36,10 @@ const { browser } = guard;
 async function context(width) {
   const ctx = await browser.newContext({ viewport: { width, height: width < 390 ? 640 : width < 768 ? 844 : 900 },
     hasTouch: width < 768, isMobile: width < 768, reducedMotion: 'reduce', serviceWorkers: 'block' });
-  await ctx.addInitScript(() => localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: Date.now() })));
+  await ctx.addInitScript(() => {
+    const now = Date.now();
+    localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: now, advertisingConfirmedAt: now }));
+  });
   await ctx.routeWebSocket('**/*', ws => ws.close());
   await ctx.route('**/*', async route => {
     const req = route.request(), url = new URL(req.url());

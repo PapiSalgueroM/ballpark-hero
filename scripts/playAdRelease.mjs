@@ -28,7 +28,10 @@ async function profile(width, { soccer = false, gpc = false, returning = false }
   await ctx.addInitScript(({ soccer, save, gpc, returning }) => {
     if (gpc) Object.defineProperty(navigator, 'globalPrivacyControl', { value: true });
     if (soccer && !localStorage.getItem('soccerCareerSave')) localStorage.setItem('soccerCareerSave', save);
-    if (returning) localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: Date.now() }));
+    if (returning) {
+      const now = Date.now();
+      localStorage.setItem('cookie-consent-v2', JSON.stringify({ version: 2, advertising: true, analytics: false, updatedAt: now, advertisingConfirmedAt: now }));
+    }
     localStorage.setItem('rules-gate-seen:/soccer-career', '1');
     localStorage.setItem('rules-gate-seen:/club-manager', '1');
   }, { soccer, save: soccer ? initialCareer : null, gpc, returning });

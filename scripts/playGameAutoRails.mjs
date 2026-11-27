@@ -22,8 +22,12 @@ async function check(path, { width = 1280, advertising = true, expected = 1, gpc
   try {
     await context.addInitScript(({ advertising, gpc }) => {
       if (gpc) Object.defineProperty(navigator, 'globalPrivacyControl', { value: true });
-      if (advertising !== null) localStorage.setItem('cookie-consent-v2',
-        JSON.stringify({ version: 2, advertising, analytics: false, updatedAt: Date.now() }));
+      if (advertising !== null) {
+        const now = Date.now();
+        localStorage.setItem('cookie-consent-v2', JSON.stringify({
+          version: 2, advertising, analytics: false, updatedAt: now, ...(advertising ? { advertisingConfirmedAt: now } : {}),
+        }));
+      }
     }, { advertising, gpc });
 
     const intercepted = [];
