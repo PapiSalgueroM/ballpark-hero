@@ -8,6 +8,7 @@ import { DERBY_HELP_RULES } from "@/lib/soccerCareerDerbyHelp";
 import { SOCCER_DECK_HELP_RULES } from "@/lib/soccerDeckGate";
 
 const STORY_ROLE_HELP_RULES = [
+  'At 16 you can give up two academy matchdays to train with the senior team. Sign your first contract there and up to three league appearances are added to your first season plan. For example, 18 planned games can become 21 before injury or suspension. Sign elsewhere and the place goes to someone else.',
   'Phone and Training sit above your player on a phone. Career Story opens your saved chapters; Previous and Next move between them, and All seasons returns to the tile you opened.',
   `Accepting a smaller role from a new manager means ${REDUCED_ROLE_GAMES} fewer planned league games next season at that club. It lasts one recorded season; a move, loan or retirement clears it. Example: a selection of 30 becomes ${30 - REDUCED_ROLE_GAMES} before existing selection limits, injuries and bans.`,
   'Personal goal milestones count the goals of your recorded senior club seasons, excluding academy and international goals. Example: 99 senior club goals plus 2 this season takes you past 100, with a new total of 101. The summary shows that crossing.',

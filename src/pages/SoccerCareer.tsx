@@ -121,10 +121,10 @@ import { SignedSlip } from "@/components/soccer-career/SignedSlip";
 const SoccerOfferReview = lazy(() => import("@/components/soccer-career/SoccerOfferReview").then(m => ({ default: m.SoccerOfferReview })));
 import { buildSoccerOfferReview } from "@/lib/soccerOfferReview";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
-import { AcademyFocusPicker, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";
+import { AcademyFocusPicker, AcademyPlacementRecord, AcademyReportCard } from "@/components/soccer-career/AcademyReportCard";
 import { InternationalReturnCard } from "@/components/soccer-career/InternationalReturnCard";
 import { internationalReturnEligibility, makeInternationallyAvailable } from "@/lib/soccerInternationalReturn";
-import { savedAcademyReport, academyFocusOf, withAcademyFocus, type AcademyFocus } from "@/lib/soccerCareerAcademy";
+import { savedAcademyReport, academyFocusOf, academyPlacementOf, hasFirstTeamPlacement, PLACEMENT_SENIOR_GAMES, PLACEMENT_YOUTH_GAMES, withAcademyFocus, withFirstTeamTraining, type AcademyFocus } from "@/lib/soccerCareerAcademy";
 import { heatLabel } from "@/lib/soccerCareerCorruption";
 import ShareButtons from "@/components/game/ShareButtons";
 import { FlagImg, FlagFromEmoji, TextWithFlags } from "@/components/FlagImg";
@@ -415,6 +415,7 @@ function TimelineEntry({ season, position, isCurrent, isLast, shieldWin = false,
           </div>
         )}
         {season.type === "youth" && <span className="text-[10px] text-amber-400/70">Youth Academy</span>}
+        <AcademyPlacementRecord season={season} />
         {season.type === "retired" && <span className="text-[10px] text-muted-foreground">Retired</span>}
       </div>
     </div>
@@ -462,6 +463,10 @@ function OfferCard({ offer, onAccept, career }: { offer: ContractOffer; onAccept
   /* Round 1037: the league the club is in the season this contract starts */
   const leagueLine = leagueSeasonLine(offer.club, nextSeasonYear(career));
   const review = buildSoccerOfferReview(career, offer);
+  const placement = career.phase === "contract_offer" ? academyPlacementOf(career.seasons[career.seasons.length - 1]) : undefined;
+  const placementTerms = placement && (placement.club === offer.club.name
+    ? `Your first-team training at ${placement.club} earns up to ${PLACEMENT_SENIOR_GAMES} extra planned league appearances here in your first senior season.`
+    : `Signing here gives up the first-team place you trained for at ${placement.club}.`);
   return (
     <div className="bg-card border border-border rounded-xl p-4 space-y-3">
       <div className="flex items-center gap-3">
@@ -487,7 +492,7 @@ function OfferCard({ offer, onAccept, career }: { offer: ContractOffer; onAccept
       {review.loyaltyForfeitEuros && <p data-loyalty-forfeit className="text-xs text-amber-400">A permanent move here forfeits {moneyLine('€' + review.loyaltyForfeitEuros.toLocaleString('en-US'))} of unpaid loyalty pay.</p>}
       {career && <OfferFitLine offer={offer} career={career} />}
       <Suspense fallback={<div role="status" data-offer-review-loading className="flex h-11 items-center justify-center rounded-lg border border-border text-sm text-muted-foreground">Opening contract review...</div>}>
-        <SoccerOfferReview club={offer.club.name} review={review} onAccept={onAccept} />
+        <SoccerOfferReview club={offer.club.name} review={review} onAccept={onAccept} placementTerms={placementTerms} />
       </Suspense>
     </div>
   );
@@ -647,6 +652,7 @@ function SeasonSummaryCard({ season, position, onContinue, continueRef, appearan
       <SeasonAmbitionResult season={season} />
       <PreseasonPlanResult season={season} />
       <ReducedRoleSeasonNote season={season} />
+      <AcademyPlacementRecord season={season} />
       {goalMilestone && <p data-career-goal-milestone className="rounded-lg bg-emerald-500/10 p-3 text-xs">
         You reached {goalMilestone.threshold} senior club goals this season. Your recorded tally went from {goalMilestone.previous} to {goalMilestone.total}.
       </p>}
@@ -3919,6 +3925,15 @@ function GameScreen({ career, clubs, resumeGame, onNextSeason, onAcceptOffer, on
           {career.phase === "youth" && onAcademyFocus && (
             <AcademyFocusPicker position={career.position} focus={academyFocusOf(career)} onPick={onAcademyFocus} />
           )}
+          {career.phase === "youth" && onCareerPatch && (
+            <label className="flex min-h-11 cursor-pointer items-start gap-3 rounded-xl border border-border bg-card p-4">
+              <input type="checkbox" className="mt-1 h-4 w-4 shrink-0" checked={career.academyPlacementBooked === true}
+                onChange={event => { const booked = event.currentTarget.checked; onCareerPatch(prev => withFirstTeamTraining(prev, booked)); }} />
+              <span className="text-sm font-bold">Train with the first team
+                <span className="mt-1 block text-xs font-normal text-muted-foreground">Give up {PLACEMENT_YOUTH_GAMES} academy matchdays. Sign for your academy club and you get up to {PLACEMENT_SENIOR_GAMES} extra league appearances in the coach's plans for your first senior season. You can still sign elsewhere.</span>
+              </span>
+            </label>
+          )}
 
           {/* Round 262: your place in the squad, above the money because on a
               given season it matters more. Renders only while you are actually
@@ -3929,6 +3944,9 @@ function GameScreen({ career, clubs, resumeGame, onNextSeason, onAcceptOffer, on
           {career.phase === "playing" && onCareerPatch && <PreseasonPlanTile career={career} onCareer={onCareerPatch} />}
           {(career.phase === "playing" || career.phase === "retired") && <CareerMentorTile career={career} onCareer={onCareerPatch} />}
           {career.phase === "playing" && <ReducedRolePlanNote career={career} />}
+          {career.phase === "playing" && hasFirstTeamPlacement(career) && (
+            <p data-academy-first-team-plan className="rounded-xl border border-border bg-card p-3 text-sm">Your first season with {career.currentClub}: the coach has up to {PLACEMENT_SENIOR_GAMES} extra league appearances planned for you. Injuries and suspensions can cost you games.</p>
+          )}
           {(career.phase === "playing" || career.phase === "transfer_window" || career.phase === "contract_offer") && onCareerPatch && (
             <button type="button" data-soccer-programme-open onClick={() => setProgrammeOpen(true)} className="min-h-[44px] w-full rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-3 text-left">
               <span className="block text-sm font-bold">Your next season</span>

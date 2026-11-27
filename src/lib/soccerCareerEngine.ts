@@ -168,7 +168,7 @@ import { getCriticEvents, soccerCriticArticle, soccerCriticDisgraceArticle } fro
 import { getBootEvents } from "./soccerCareerBoot";
 /* Round 973: the academy focus. soccerCareerAcademy imports nothing from
    here, so this is a one way edge. */
-import { academyReportReceipt, applyAcademyFocus, type AcademyReportReceipt } from "./soccerCareerAcademy";
+import { academyPlacementOf, academyReportReceipt, applyAcademyFocus, hasFirstTeamPlacement, PLACEMENT_SENIOR_GAMES, PLACEMENT_YOUTH_GAMES, type AcademyReportReceipt } from "./soccerCareerAcademy";
 /* Round 1047: the Season Centre's moments ledger. momentsSave imports
    nothing, so this is a one way edge too. */
 import { readSeasonMoments, type SeasonMomentsSave } from "./season/momentsSave";
@@ -214,6 +214,8 @@ export interface SeasonRecord {
   ratingPath?: [opening: number, early: number, middle: number, late: number, closing: number];
   rehabOverall?: [before: number, after: number];
   academyReport?: AcademyReportReceipt;
+  academyPlacement?: { club: string; signedWith?: string };
+  academySelectionPlaces?: number;
   extraCups?: CommunityShieldResult[];
   germanSupercup?: GermanSupercupResult;
   /** Round 1180: the chosen personal target and its actual club season result. */
@@ -1198,6 +1200,7 @@ export interface CareerState {
   dirtyMoney?: number;       // millions of unexplained income. Spends like cash, feeds heat every season
   prisonSeasons?: number;    // >0 = doing time. Season is skipped, stats rot, papers feast
   academyClubName?: string;  // parent club of the academy you came up at (no " Youth" suffix)
+  academyPlacementBooked?: true;
 }
 
 /* ─── Moral Dilemma System ─── */
@@ -4045,7 +4048,7 @@ const MORALE_AT_PRESS = new WeakMap<CareerState, number>();
 const moraleAtPress = (state: CareerState): number => MORALE_AT_PRESS.get(state) ?? state.morale;
 
 /* exported for simLoanSpell, which proves the projection and the draw share one table */
-export function calcAppearances(overall: number, clubTier: number, age: number, state?: CareerState, fx: BuildEffects = NEUTRAL_EFFECTS): { apps: number; leagueApps: number; injured: boolean; injuryWeeks: number; injuryName: string | null; injurySevere: boolean } {
+export function calcAppearances(overall: number, clubTier: number, age: number, state?: CareerState, fx: BuildEffects = NEUTRAL_EFFECTS): { apps: number; leagueApps: number; academySelectionPlaces?: number; injured: boolean; injuryWeeks: number; injuryName: string | null; injurySevere: boolean } {
   const clubAvg = clubAverageRating(clubTier);
   const diff = overall - clubAvg;
 
@@ -4064,6 +4067,15 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
   /* Round 1523: and his head, a step of up to two games from his morale, capped together with the dressing room
      at three either way (careerForm.ts dressingRoomApps), so a warm phone and a happy head never stack past it. */
   if (state) leagueApps = clamp(leagueApps + dressingRoomApps(phoneAppsSwing(state), moraleAtPress(state)) + recentClubForm(state).swing + reducedRoleSwing(state), 0, 38);
+
+  let academySelectionPlaces: number | undefined;
+  if (state && hasFirstTeamPlacement(state)) {
+    const year = state.seasons[state.seasons.length - 1].year + 1;
+    const field = state.leagueWorld?.year === year ? state.leagueWorld.leagues[state.currentLeague] : undefined;
+    const calendar = field ? Math.min(38, 2 * (field.length - 1)) : state.currentLeague === "Russian Premier League" && year >= 2026 ? 30 : 38;
+    academySelectionPlaces = clamp(calendar - leagueApps, 0, PLACEMENT_SENIOR_GAMES);
+    leagueApps += academySelectionPlaces;
+  }
 
   /* Round 257: frozen out. You told the club you were staying, the club told
      you what that means. A quarter of the minutes you would otherwise have
@@ -4191,7 +4203,7 @@ export function calcAppearances(overall: number, clubTier: number, age: number, 
 
   leagueApps = Math.min(leagueApps, apps);
   if (russiaYear >= 2026 && state?.currentLeague === "Russian Premier League") leagueApps = Math.min(leagueApps, 30, apps);
-  return { apps, leagueApps, injured, injuryWeeks, injuryName, injurySevere };
+  return { apps, leagueApps, injured, injuryWeeks, injuryName, injurySevere, ...(academySelectionPlaces !== undefined ? { academySelectionPlaces } : {}) };
 }
 
 /* ─── Goals per 38 apps by position & overall rating ───
@@ -4437,6 +4449,7 @@ function generateSeasonStats(state: CareerState, clubs: ClubData[], rateSeason?:
     year: lastYear + 1, age,
     club: state.currentClub, clubCountry: state.currentClubCountry, clubTier: currentClubTier,
     apps, leagueApps: leagueGames, goals, assists, cleanSheets, yellowCards, redCards, rating,
+    ...(appearance.academySelectionPlaces !== undefined ? { academySelectionPlaces: appearance.academySelectionPlaces } : {}),
     ...(served > 0 ? { suspensionMatches: served } : {}),
     ovr: effectiveOvr,
     ...(ratingPath ? { ratingPath } : {}),
@@ -5194,6 +5207,17 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[], inSeasonR
     // "<Club> Youth" naming convention on the fly.
     const academyName = s.academyClubName || (s.currentClub.endsWith(" Youth") ? s.currentClub.slice(0, -6) : undefined);
     s.pendingOffers = generateContractOffers(adjustClubsForYear(clubs, lastYear + 1), s.overall, s.age, academyName);
+    if (prev.phase === "youth" && s.academyPlacementBooked === true) {
+      const home = s.pendingOffers.find(offer => offer.isHomegrown);
+      if (home) {
+        const row = s.seasons[s.seasons.length - 1];
+        row.apps -= PLACEMENT_YOUTH_GAMES;
+        row.academyPlacement = { club: home.club.name };
+      } else {
+        s.events.push("No senior offer came from your academy club. You kept both academy matchdays.");
+      }
+      delete s.academyPlacementBooked;
+    }
     s.phase = "contract_offer";
   }
   s.marketValue = calcMarketValue(s.overall, s.age, s.position);
@@ -5207,6 +5231,11 @@ export function acceptOffer(prev: CareerState, offer: ContractOffer, clubDirecte
   if (!clubDirected && !canAcceptLoyaltyOffer(prev, offer, loyaltyBaseWage)) return prev;
   const s = { ...prev };
   if (offer.club.name !== prev.currentClub || prev.loan) cancelReducedRole(s);
+  const last = prev.seasons[prev.seasons.length - 1];
+  const placement = prev.phase === "contract_offer" ? academyPlacementOf(last) : undefined;
+  if (placement && !placement.signedWith && prev.pendingOffers.some(o => o.club.name === offer.club.name)) {
+    s.seasons = [...prev.seasons.slice(0, -1), { ...last, academyPlacement: { ...placement, signedWith: offer.club.name } }];
+  }
   clearTransferBrief(s, prev, projectLeagueApps);
   s.currentClub = offer.club.name; s.currentClubCountry = offer.club.country;
   if (s.currentClub !== prev.currentClub) {

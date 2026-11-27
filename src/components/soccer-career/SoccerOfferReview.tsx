@@ -5,8 +5,8 @@ import { formatNumber } from '@/lib/formatNumber';
 import type { SoccerOfferReviewData } from '@/lib/soccerOfferReview';
 import { localizeMoney as money, rateNote } from '@/lib/soccerCurrency';
 
-export function SoccerOfferReview({ club, review, onAccept }: {
-  club: string; review: SoccerOfferReviewData; onAccept: () => void;
+export function SoccerOfferReview({ club, review, onAccept, placementTerms }: {
+  club: string; review: SoccerOfferReviewData; onAccept: () => void; placementTerms?: string;
 }) {
   const [open, setOpen] = useState(false);
   const [help, setHelp] = useState(false);
@@ -77,6 +77,7 @@ export function SoccerOfferReview({ club, review, onAccept }: {
                   </dd>
                 </div>
               </dl>
+              {placementTerms && <p data-academy-offer-terms className="rounded-lg bg-muted/40 p-3">{placementTerms}</p>}
               {review.wageDelta !== null && <p data-offer-wage-delta={review.wageDelta} className="font-semibold">
                 {review.wageDelta === 0 ? 'Same weekly wage as your current deal.' : `${wage(Math.abs(review.wageDelta))} ${review.wageDelta > 0 ? 'more' : 'less'} than your current deal.`}
               </p>}
