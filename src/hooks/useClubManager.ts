@@ -2,7 +2,7 @@ import { useState, useEffect, useLayoutEffect, useMemo, useCallback, useRef } fr
 import { recordCompletion, recordActivity, recordStreakDay } from '@/lib/completions';
 import { saveMatchPlan as savePlan, applyMatchPlan as applyPlan, deleteMatchPlan as deletePlan } from '@/lib/clubManagerMatchPlansCore';
 import {
-  CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality,
+  CareerState, MatchWeekReport, SeasonSummary, MarketPlayer, Mentality, type BenchOrder,
   FORMATIONS, startCareer, playNextEntry, finishSeason, startNextSeason, beginLeagueCoachSeason,
   marketForScreen, buyPlayer, autoPickXI, nextFixture, sortedLeagueTable,
   leaguePosition, currentSeasonScore, saveCareer, loadCareer, clearCareer, savedCareerEraId, savedCareerFixtureKey, leagueOf,
@@ -970,9 +970,10 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
   }, [phase, holdsActiveSlot, persist]);
 
   /** Round 782: the shootout order, player ids in kicking order; an empty list clears it. A bad id leaves the save alone. */
-  const setShootoutOrderIds = useCallback((ids: string[]) => {
-    setCareer(prev => (prev ? setShootoutOrder(prev, ids) ?? prev : prev));
-  }, []);
+  const setShootoutOrderIds = useCallback((ids: string[], expected?: CareerState) => {
+    if (expected && (phase !== 'hub' || !holdsActiveSlot())) return;
+    setCareer(prev => (prev && (!expected || prev === expected) ? setShootoutOrder(prev, ids) ?? prev : prev));
+  }, [phase, holdsActiveSlot]);
 
   /** Put an outfielder to work on a second position. A refusal leaves the save alone; the screen prints why. */
   const retrain = useCallback((playerId: string, to: Position, paused?: boolean, replace?: Position) => {
@@ -1047,10 +1048,10 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
     setPhase('seasonEnd');
   }, [canSettle]);
 
-  const runEntry = useCallback((skipHalftime: boolean) => {
+  const runEntry = useCallback((skipHalftime: boolean, benchOrder?: BenchOrder) => {
     if (!career) return;
-    if (heldForTactics(() => { runEntry(skipHalftime); })) return;
-    const res = playNextEntry(career, { skipHalftime, ...cmVarGameAsk(CM_VAR_LIVE) });
+    if (heldForTactics(() => { runEntry(skipHalftime, benchOrder); })) return;
+    const res = playNextEntry(career, { skipHalftime, benchOrder, ...cmVarGameAsk(CM_VAR_LIVE) });
     if (res.blocked === 'position-state-invalid') { setPositionBlockedFor(career); return; }
     if (res.kind === 'seasonOver') {
       settleSeason(career, res.state);
@@ -1088,7 +1089,7 @@ export function useClubManager(requestedSlot?: ClubManagerSlotRequest) {
 
   const play = useCallback(() => runEntry(false), [runEntry]);
   /** Round 157: the quick sim. One tap, full result, no dressing room stop. */
-  const quickPlay = useCallback(() => runEntry(true), [runEntry]);
+  const quickPlay = useCallback((order?: BenchOrder) => runEntry(true, order), [runEntry]);
 
   /* Round 93: his calendar complaint. "u can click through and sim much
      faster... simulate through date or play match or whatever." Quick sim

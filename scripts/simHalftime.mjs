@@ -55,7 +55,7 @@ if (CONTROL && CONTROL !== 'deaf') {
 }
 // These historical skip/watch/react comparisons deliberately omit the new Quick coach.
 const noCoachPath = path.join(WORK, 'clubManager.halftimeNoCoach.ts');
-const coachHeader = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
+const coachHeader = 'export function coachQuickMatch(career: CareerState, order?: BenchOrder): CareerState {\n';
 let engineSource = fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf8').replaceAll('\r\n', '\n');
 if (engineSource.split(coachHeader).length !== 2) throw new Error('One coach export is required for the historical halftime arm');
 engineSource = engineSource.replace(coachHeader, coachHeader + '  return career;\n');

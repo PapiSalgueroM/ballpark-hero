@@ -1,3 +1,31 @@
+### November 27, 2026. Club Manager scouting, bench orders and penalties ready for publication
+
+Transfers now lets the manager write a scouting brief and sign a recommended player through the usual negotiations. On the same £69m Brentford budget, a starting centre-back brief signed a player for £14.4m plus a £2.1m bonus. The cover brief signed a player for £3.6m plus £0.8m. The shortlisted player kept the brief that found him after the search changed.
+
+The Match Centre lets the manager send on a named substitute in Quick Sim when a chosen score condition holds. On one draw the substitution happened at 62 minutes and Brentford won 1-0. The opposite instruction kept the coach in charge and the match ended 1-1. Penalty Room in Tactics lets the manager choose each kicker and carry the finished order into competitive shootouts.
+
+The combined candidate `index-ChagElSZ.js` passed the app type check, production build, all 52 focused tests, the bench order, penalty and Gate Control simulations, and all 15 release checks. Phone and desktop replays at 320, 390 and 1366 pixels signed both scouting choices, settled and reloaded nine competitive fixtures, and reproduced two shootout outcomes. Only the Club Manager and What's New snapshots changed. All 176 URLs remain in the sitemap.
+
+Across 120 competitive cup fixtures, the complete returned career, match report and every random draw matched the published four-game engine when the manager gave no bench order. This covered 60 fixtures with an existing custom penalty order and 60 with ordinary takers, including ten shootouts. Two older historical comparisons remain open. The no-coach source reconstruction in `simCmShootoutOrder` stops at its world-seed assumption on both revisions. `simCmShootoutResults` cannot build its historical engine with current dependencies on either revision.
+
+### November 27, 2026. Four new modes verified on the custom domain
+
+Lovable published `d62f4a860` in deployment `24d56257-27d9-4ac6-8e15-076a9a16b03a`. Home, all four games and What's New served `index-CcQ7--q_.js`. The five changed HTML snapshots matched the checked-in content. All 176 sitemap pages passed the live crawler audit. IndexNow accepted the five changed URLs with HTTP 200. Search engines decide when to index them.
+
+Google URL Inspection on November 27 showed Club Manager, Missing XI, MLB My Career and What's New indexed with their own canonicals. Stadium Tycoon showed “Crawled, currently not indexed.” Its October 25 crawl succeeded with crawling and indexing permitted. All five reported crawls predated this release.
+
+Phone and desktop replays confirmed Brentford could draw 2-2 or lose 2-3 against Tottenham on the same rehearsal. Applying the final call carried it into kickoff. Stadium Tycoon could meet all three gate targets or miss all three. MLB pitchers held all three leads or lost all three, and hitters kept their usual practice. Missing XI finished at 11/11 or 10/11 on the same lineup. Each game resumed from its saved checkpoint.
+
+The app type check, independent production build, 22 focused tests and 15 build checks passed. The wider suite is still under investigation. The real GA tag produced one page view per eligible navigation with consent. The refusal and ads-only cases generated no GA requests. All QA analytics collections and ad auctions were intercepted. The December 4 comparison remains scheduled for November 27 through December 3.
+
+The ad layout check covered 174 routes at 320, 390, 1280, 1366 and 1920 pixels. All 169 eligible pages had both desktop rails and a footer, and a footer on phones. Five unlisted routes showed none. One of the original 870 observations read Stat Detective before its fixture request arrived. All eight isolated repeats passed and delaying the fixture publisher reproduced the timing gap. Active career controls cleared the ads by at least 152 pixels on the two compact desktops. All 41 regional cases passed. One used a real U.S. edge response. The other regions and error responses used controlled inputs.
+
+### November 27, 2026. Club Manager Penalty Room release candidate
+
+Open Tactics, then Penalty Room. Send one starter up for each kick against your next opponent, or take over after two takers. After the shootout, compare the reference order on the same rolls. You can apply the tested order to competitive shootouts. The match uses the players still on the pitch at the whistle.
+
+On local entry `index-Aq7mBnPE.js`, the same Brentford eleven won 4 to 3 or lost 4 to 5 against Tottenham on draw 165. Chrome reproduced both results at 320, 390 and 1366 pixels. An unfinished run resumed at taker three. Applying the order changed only the shootout list in the career save and survived a reload. Before applying, the career save was byte-identical. The real cup simulator used all four tested takers who remained eligible in a separate knockout replay. This candidate awaits integration and custom-domain play.
+
 ### November 27, 2026. Four game upgrades ready for release verification
 
 Club Manager has a two-spell rehearsal against your next opponent. MLB My Career pitchers inherit three late-inning jams, Missing XI has an optional scouting challenge, and Stadium Tycoon has a three-fixture gate-management game. In Gate Control all 64 schedules have a winning route. Repeating the same scanner assignment every wave misses at least one target on all 64. The local production build passed with entry `index-CBE6ynNH.js`. The last verified custom-domain entry at this handoff was `index-C_DFbd-D.js`.

@@ -23,6 +23,7 @@ assert.equal(forecast(0, 'left'), 10);
 assert.equal(gateStep(0, start, { ...scan, late: true }), null);
 assert.equal(gateStep(0, start, { upgrade: 1 }), null);
 assert.equal(readGateRun('{"draw":0,"moves":[{"gate":7}]}'), null);
+console.log('Opening north gate forecast: scanner admits 10, right diversion 11, left diversion 10.');
 
 // Keep the best legal four-wave route for each fixture, rotation and installed capacity.
 const cache = new Map();
@@ -78,4 +79,6 @@ for (let draw = 0; draw < 64; draw++) {
 }
 assert(earlyHolds > 0 && lateHolds > 0);
 assert.equal(losingSeasons, 64);
-console.log('Gate Control: all 64 schedules can meet three targets and all 64 punish the same fixed strategy. Winning kickoff holds in opener/final: ' + earlyHolds + '/' + lateHolds + '. Every winning wave conserves the crowd and restores from its transcript.');
+console.log('All 64 schedules met all three targets and restored every winning checkpoint.');
+console.log(`Winning schedules with the kickoff held in the opener: ${earlyHolds}. With the hold in the final: ${lateHolds}.`);
+console.log(`Scanning the same gate every wave missed a target on ${losingSeasons} of 64 schedules.`);

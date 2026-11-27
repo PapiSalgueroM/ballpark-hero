@@ -281,7 +281,7 @@ if (CONTROL) {
    temp name so seeds and controls can run side by side. */
 // Keep the old unmanaged arm and its faults separate from automatic Quick coaching.
 const noCoachPath = `${TMP}/clubManager.liveNoCoach.${process.pid}.ts`;
-const coachHeader = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
+const coachHeader = 'export function coachQuickMatch(career: CareerState, order?: BenchOrder): CareerState {\n';
 const paritySource = lf(fs.readFileSync(enginePath, 'utf8'));
 if (paritySource.split(coachHeader).length !== 2) throw new Error('One coach export is required for historical parity');
 fs.writeFileSync(noCoachPath, paritySource.replace(coachHeader, coachHeader + '  return career;\n'));

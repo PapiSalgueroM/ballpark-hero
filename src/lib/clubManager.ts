@@ -3736,6 +3736,7 @@ export type NextFixtureInfo =
  */
 export interface LiveMatch {
   halftimePlanCall?: HalftimePlanCall;
+  benchOrderReport?: string;
   positionRules?: number;
   customShape?: unknown;
   /** Simplified reviews enabled only by a new modern Club Manager kickoff. */
@@ -19644,10 +19645,10 @@ function drawSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
   live.h2Drawn = true;
 }
 
-/** Round 670: goals at or before the ninetieth minute, mine and theirs. */
-function scoreAt90(live: LiveMatch): { mine: number; opp: number } {
-  const upTo90 = (xs: { minute: number }[] | undefined): number => (xs ?? []).filter(g => g.minute <= 90).length;
-  return { mine: live.myGoals + upTo90(live.h2My), opp: live.oppGoals + upTo90(live.h2Opp) };
+/** Score on the night at a second-half checkpoint, including the whole first half. */
+function secondHalfScoreAt(live: LiveMatch, minute: number): { mine: number; opp: number } {
+  const goals = (xs: { minute: number }[] | undefined): number => (xs ?? []).filter(g => g.minute <= minute).length;
+  return { mine: live.myGoals + goals(live.h2My), opp: live.oppGoals + goals(live.h2Opp) };
 }
 
 /**
@@ -19658,7 +19659,7 @@ function scoreAt90(live: LiveMatch): { mine: number; opp: number } {
  */
 function extraTimeDue(state: CareerState, entry: CalendarEntry, live: LiveMatch): boolean {
   if (live.et || !live.h2Drawn || !playsExtraTime(state, entry)) return false;
-  const { mine, opp } = scoreAt90(live);
+  const { mine, opp } = secondHalfScoreAt(live, 90);
   if (secondLegTonight(state, entry)) return secondLegOutcomeTonight(state, entry, mine, opp).out.winner === null;
   return mine === opp;
 }
@@ -19715,7 +19716,7 @@ export function halftimePlanLine(call: HalftimePlanCall): string {
  */
 function levelAt90Words(state: CareerState, entry: CalendarEntry, live: LiveMatch): string {
   if (!secondLegTonight(state, entry)) return 'Level after 90 minutes';
-  const { mine, opp } = scoreAt90(live);
+  const { mine, opp } = secondHalfScoreAt(live, 90);
   const { iAmHome, out } = secondLegOutcomeTonight(state, entry, mine, opp);
   const aggMine = iAmHome ? out.homeAgg : out.awayAgg;
   const aggTheirs = iAmHome ? out.awayAgg : out.homeAgg;
@@ -19741,7 +19742,7 @@ function drawExtraTime(state: CareerState, entry: CalendarEntry, live: LiveMatch
   const fx = fixtureFor(state, entry)!;
   const off = offPitchIds(live);
   const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
-  const { mine, opp } = scoreAt90(live);
+  const { mine, opp } = secondHalfScoreAt(live, 90);
   const { lamMine, lamOpp } = secondHalfLambdas(state, fx, live, xi, mine, opp);
   const from = 90;
   const to = from + ET_MINUTES;
@@ -20957,7 +20958,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   const reactWon = tieJudged ? advanced : won;
   const reactDrawn = tieJudged ? false : drawn;
 
-  const events: string[] = [];
+  const events: string[] = typeof live.benchOrderReport === 'string' ? [live.benchOrderReport] : [];
   let trophyWon: string | null = null;
 
   /* Round 504: the scorers were committed with their halves; the whistle
@@ -22822,7 +22823,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
  * ties after elimination), opens the January window, or plays my next match.
  * Never mutates the input state.
  */
-export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean }): PlayResult {
+export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boolean; untilWeek?: number; noCoach?: boolean; varReviews?: CmVarAsk; noBook?: boolean; benchOrder?: BenchOrder }): PlayResult {
   if (career.live && !livePositionsValid(career.live)) return { state: career, kind: 'halftime', live: career.live, blocked: 'position-state-invalid' };
   const state: CareerState = JSON.parse(JSON.stringify(career));
   /* Release AL: `noCoach` plays a quick sim the way it was played before
@@ -22831,7 +22832,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
      so a coach who changes results would hand today's players a different job
      from the one the morning's players got, and turn a finished run into an
      unfinished one. */
-  const coached = (s: CareerState): CareerState => (opts?.noCoach ? s : coachQuickMatch(s));
+  const coached = (s: CareerState): CareerState => (opts?.noCoach ? s : coachQuickMatch(s, opts?.benchOrder));
   // Round 95: a save made before the world existed repairs itself here, and
   // a save made after this is a no-op because it is already in step.
   if (!state.world) syncWorld(state, myRoundsPlayed(state, state.week));
@@ -23540,8 +23541,15 @@ export function quickLegsMinutes(state: CareerState, live: LiveMatch): number[] 
   return QUICK_LEGS_WINDOWS.map(([lo, hi], i) => lo + Math.floor(keyedRng(`${key}|${i}`)() * (hi - lo + 1)));
 }
 
+export interface BenchOrder {
+  outId: string;
+  inId: string;
+  window: 'hour' | 'late';
+  when: 'any' | 'ahead' | 'not-ahead';
+}
+
 /** Quick sim coaching uses the real clock and changes, without settling the match. */
-export function coachQuickMatch(career: CareerState): CareerState {
+export function coachQuickMatch(career: CareerState, order?: BenchOrder): CareerState {
   if (!career.live || !livePositionsValid(career.live)) return career;
   let state: CareerState = JSON.parse(JSON.stringify(career));
   const entry = state.calendar[state.live!.week];
@@ -23643,8 +23651,26 @@ export function coachQuickMatch(career: CareerState): CareerState {
   }
   /* Round 1146: twice after the break he looks at his bench. Whatever happens
      before each look (an injury) is dealt with first, in clock order. */
-  for (const at of quickLegsMinutes(state, state.live!)) {
+  for (const [index, at] of quickLegsMinutes(state, state.live!).entries()) {
     injuriesThrough(at);
+    if (order && order.window === (index === 0 ? 'hour' : 'late')) {
+      const live = state.live!;
+      const { mine, opp: theirs } = secondHalfScoreAt(live, at);
+      const prefix = `Bench order at ${at}' (${state.clubName} ${mine}-${theirs} ${live.opponent}): `;
+      if ((order.when === 'ahead' && mine <= theirs) || (order.when === 'not-ahead' && mine > theirs)) {
+        live.benchOrderReport = prefix + 'score condition missed. The coach kept control of the bench.';
+      } else {
+        const next = (live.minute ?? 0) <= at && live.onPitch.includes(order.outId)
+          ? changeLive(state, at, { kind: 'sub', outId: order.outId, inId: order.inId }) : null;
+        if (next?.live) {
+          const sub = next.live.subs!.at(-1)!;
+          next.live.benchOrderReport = prefix + `${sub.on} came on for ${sub.off} as instructed.`;
+          state = next;
+          continue;
+        }
+        live.benchOrderReport = prefix + 'the selected change was no longer available.';
+      }
+    }
     restLegs(at);
   }
   injuriesThrough(90);

@@ -458,7 +458,7 @@ function withRound1326WordsBack(text) {
 }
 function unmanagedSource(text) {
   const source = withRound1326WordsBack(text);
-  const header = 'export function coachQuickMatch(career: CareerState): CareerState {\n';
+  const header = 'export function coachQuickMatch(career: CareerState, order?: BenchOrder): CareerState {\n';
   if (source.split(header).length - 1 !== 1) abort('Historical no-coach arm needs one executable coach header');
   /* Round 1146: and with no own goals. Since that round the engine now and
      then re-labels a goal the match already had as an own goal (a keyed tag,

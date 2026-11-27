@@ -942,7 +942,7 @@ const ClubManager = ({ initialEra, requestedSlot }: { initialEra?: string | null
                 talkRead={matchRead}
                 talkStale={!!press && press.lastTone === c.teamTalk && press.toneRun >= 3}
                 onChangeLineup={() => { setTacticsTile(null); g.setActiveTab('tactics'); }}
-                onQuickSim={() => { setHubPanel(null); setWatchMode(false); g.quickPlay(); }}
+                onQuickSim={order => { setHubPanel(null); setWatchMode(false); g.quickPlay(order); }}
                 onLive={() => { setHubPanel(null); setWatchMode(true); g.play(); }}
                 onBack={() => setHubPanel(null)}
               /></ScreenLoading>
