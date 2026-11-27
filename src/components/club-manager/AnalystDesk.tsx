@@ -33,12 +33,12 @@ function Observation({ note }: { note: AnalystObservation }) {
     <p><strong>Recorded window</strong> · {from} to {minuteLabel(note.to)}</p>
     <SampleTally title="Opposing throw-ins" sample={note.throws} throws />
     {note.shots && <SampleTally title="Opposing shots" sample={note.shots} />}
-    {note.starters && <details>
+    {note.starters ? <details>
       <summary className="min-h-11 cursor-pointer py-3 font-semibold">Observed starting eleven{note.formation && ` · ${note.formation}`}</summary>
       <ul className="grid grid-cols-2 gap-1">
-        {note.starters.map(player => <li className="break-words" key={player.name}><PlayerName player={player} /> <span className="text-muted-foreground">{player.position}</span></li>)}
+        {note.starters.map((player, slot) => <li className="break-words" key={slot}><PlayerName player={player} /> <span className="text-muted-foreground">{player.position}</span></li>)}
       </ul>
-    </details>}
+    </details> : <p className="text-muted-foreground">The match had incomplete starting lineup coverage.</p>}
   </div>;
 }
 
@@ -89,7 +89,8 @@ export function AnalystDesk({ career, opponent, mode, onMode, live, clock, onPre
     {opened && <section aria-label="Opponent notebook" className="space-y-2 pb-2 text-xs">
       <p><strong>{opponent}</strong> · {notes.length ? `${notes.length} observed ${notes.length === 1 ? 'meeting' : 'meetings'} for ${career.clubName}` : `No observed meetings for ${career.clubName} yet`}</p>
       {notes.length === 1 && <p className="text-muted-foreground">One meeting gives you a lead to check in this match.</p>}
-      {recurringThrower && <p><PlayerName player={recurringThrower.player} /> took {recurringThrower.actions} of {priorNamedThrows} attributed throws across the sample and appeared in {recurringThrower.meetings} of those meetings.</p>}
+      {recurringThrower && <p><PlayerName player={recurringThrower.player} /> took {recurringThrower.actions} of {priorNamedThrows} attributed throws across the sample, with throws recorded in {recurringThrower.meetings} meetings.</p>}
+      {!live && notes.some(note => note.starters) && <p className="text-muted-foreground">The analyst compares the starting elevens at kickoff.</p>}
       <button type="button" className="min-h-11 rounded-md border border-border px-2 font-semibold"
         aria-expanded={helpOpen} onClick={() => setHelpOpen(!helpOpen)}>Notebook rules and example</button>
       {helpOpen && <p className="rounded-md bg-secondary/40 p-2">
@@ -104,7 +105,10 @@ export function AnalystDesk({ career, opponent, mode, onMode, live, clock, onPre
         </select>
       </label> : <p role="status">This save has a notebook this version cannot read.</p>}
       {live && active && <p className="text-muted-foreground">Changing the watch starts a fresh observation from this minute.</p>}
-      {current?.lineup && <p>{current.lineup.overlap} of {current.lineup.compared} compared starters also started the observed match in season {current.lineup.previous.season}, week {current.lineup.previous.week + 1}.</p>}
+      {current?.lineup && <p>
+        {current.lineup.overlap} of {current.lineup.compared} compared starters also started the observed match in season {current.lineup.previous.season}, week {current.lineup.previous.week + 1}.
+        {current.lineup.changedRole > 0 && ` ${current.lineup.changedRole} returned in a different ${current.lineup.changedRole === 1 ? 'position' : 'set of positions'}.`}
+      </p>}
       {recommendation && <div className="space-y-1 rounded-md border border-primary/50 p-2" aria-label="Pressing recommendation">
         <p><PlayerName player={recommendation.target} /> has taken {recommendation.todayThrows} watched {recommendation.todayThrows === 1 ? 'throw' : 'throws'} today{recommendation.pastThrows > 0 && ` and ${recommendation.pastThrows} across ${recommendation.pastMeetings} earlier observed ${recommendation.pastMeetings === 1 ? 'meeting' : 'meetings'}`}.</p>
         {press?.target === recommendation.target.name
