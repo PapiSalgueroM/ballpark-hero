@@ -1,0 +1,22 @@
+/* The narrow desktop gutter cannot fit both the restart pill and the rail clearance. */
+@media (1280px <= width < 1568px), (1254px <= width < 1280px) and (hover: hover) and (pointer: fine) {
+  :global([data-public-ad-layout]) .career:has([data-career-hub-buttons]) {
+    position: relative;
+  }
+
+  :global([data-public-ad-layout]) .career:has([data-career-hub-buttons]) > .heading {
+    max-width: calc(100% - 16rem);
+    margin-inline: auto;
+  }
+
+  :global([data-public-ad-layout]) .career:has([data-career-hub-buttons]) [data-career-start-over] {
+    position: absolute;
+    top: 1.5rem;
+    right: 1rem;
+    height: auto;
+  }
+
+  :global([data-public-ad-layout]) .career:has([data-career-hub-buttons]) [data-career-start-over] button {
+    transform: none;
+  }
+}
