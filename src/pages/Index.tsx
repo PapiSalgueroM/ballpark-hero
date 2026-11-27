@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, useDeferredValue, lazy, memo, Fragment, Suspense, type MouseEvent, type ReactNode } from 'react';
+import { useState, useEffect, useLayoutEffect, useMemo, useRef, useCallback, useDeferredValue, useSyncExternalStore, lazy, memo, Fragment, Suspense, type MouseEvent, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link, useLocation, useNavigate, useNavigationType } from 'react-router-dom';
 import { Trophy, Flame, Sparkles, Users, Search, X, Globe, ChevronDown, Pin, CalendarDays } from 'lucide-react';
@@ -88,7 +88,15 @@ function revealSport(target: HTMLElement) {
   target.focus({ preventScroll: true });
 }
 
-function HomeTagline({ className }: { className: string }) {
+const narrowHomeQuery = '(width < 430px)';
+function subscribeNarrowHome(change: () => void) {
+  const query = window.matchMedia?.(narrowHomeQuery);
+  query?.addEventListener('change', change);
+  return () => query?.removeEventListener('change', change);
+}
+const readNarrowHome = () => !!window.matchMedia?.(narrowHomeQuery)?.matches;
+
+function HomeTagline({ className = '' }: { className?: string }) {
   return <p className={`text-[13px] leading-5 text-muted-foreground md:text-base md:leading-6 ${className}`}>
     {`Sports trivia, daily puzzles and career sims. ${GAME_COUNT_LABEL} free games, no account needed.`}
   </p>;
@@ -102,6 +110,7 @@ function getPopularFallbackGames(): GameDef[] {
 }
 
 export default function Index() {
+  const narrowHome = useSyncExternalStore(subscribeNarrowHome, readNarrowHome, () => false);
   // Pin one Eastern date for all New badges during this Home visit.
   const [badgeDate] = useState(getTodayET);
   const { user, profile } = useAuth();
@@ -376,7 +385,7 @@ export default function Index() {
           <ContinueRow />
           <GamePicksRow paths={gamePicks} onToggle={toggleGamePick} onEmpty={() => launchGamesRef.current?.querySelector<HTMLAnchorElement>('[data-stage-card]')?.focus({ preventScroll: true })} />
           <FeaturedStage />
-          <HomeTagline className="min-[430px]:hidden" />
+          {narrowHome && !isSearching && <HomeTagline />}
         </div>
         <div className="min-w-0">
           <DailyRail />
@@ -468,7 +477,7 @@ export default function Index() {
         </div>
       </div>
     </div>
-  ), [badgeDate, bestScores, expandedSports, favSport, gamePicks, jumpToSport, pickSport, pickableSports, sportSections, toggleGamePick]);
+  ), [badgeDate, bestScores, expandedSports, favSport, gamePicks, isSearching, jumpToSport, narrowHome, pickSport, pickableSports, sportSections, toggleGamePick]);
 
   return (
     <>
@@ -548,7 +557,7 @@ export default function Index() {
                   his shape. The Round 297 honesty rule survives the cut: the
                   account claim stays phrased as what is true, every game plays
                   without one. The legal disclaimer lives in the footer. */}
-              <HomeTagline className="mt-1 hidden min-[430px]:block md:mt-1.5" />
+              {!narrowHome && <HomeTagline className="mt-1 md:mt-1.5" />}
             </div>
 
             <div data-home-search-tools="" className="mt-2 flex items-center gap-2 min-[430px]:mt-3 md:mt-0 md:w-[23rem] md:shrink-0 lg:w-[26rem]">
@@ -685,6 +694,7 @@ export default function Index() {
             </div>
           )}
           <div ref={catalogueRef} onClickCapture={rememberGameLink} hidden={isSearching}>{catalogue}</div>
+          {narrowHome && isSearching && <HomeTagline className="mt-3" />}
 
           {/* Round 840: the words, below every tile and above the footer, for
               every visitor and outside every condition (a search result list
